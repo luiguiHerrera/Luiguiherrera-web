@@ -6,5 +6,5 @@ export function RiskPill({ label, tone = "neutral" }: { label: string; tone?: "l
     neutral: "border-line bg-panelSoft text-muted",
   };
 
-  return <span className={`inline-flex rounded-full border px-3 py-1 text-sm ${tones[tone]}`}>{label}</span>;
+  return <span className={`inline-flex rounded-full border px-3 py-1 text-sm font-medium ${tones[tone]}`}>{label}</span>;
 }

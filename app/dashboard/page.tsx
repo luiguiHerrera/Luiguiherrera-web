@@ -19,14 +19,21 @@ export default function DashboardPage() {
         </DisclaimerBox>
       </div>
 
-      <section className="mt-10 rounded-lg border border-line bg-panel p-6">
-        <RegimeBadge label={regimeSummary.current} />
-        <p className="mt-4 max-w-3xl text-sm leading-6 text-muted">
-          La lectura combina señales mockeadas de liquidez, rotación, volatilidad y flujos. Sirve para ordenar contexto, no para ejecutar operaciones.
-        </p>
-        <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
-          <MetricCard label="Risk-On" value={`${regimeSummary.riskOn}%`} />
-          <MetricCard label="Risk-Off" value={`${regimeSummary.riskOff}%`} />
+      <section className="mt-10 rounded-lg border border-petrol/40 bg-panel p-6 shadow-quiet md:p-8">
+        <div className="grid gap-8 lg:grid-cols-[0.82fr_1.18fr] lg:items-end">
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-brass">Régimen actual mockeado</p>
+            <div className="mt-4"><RegimeBadge label={regimeSummary.current} /></div>
+            <p className="mt-4 max-w-xl text-sm leading-6 text-muted">
+              La lectura combina señales mockeadas de liquidez, rotación, volatilidad y flujos. Sirve para ordenar contexto, no para ejecutar operaciones.
+            </p>
+          </div>
+          <div className="grid gap-4 sm:grid-cols-2">
+            <MetricCard label="Risk-On" value={`${regimeSummary.riskOn}%`} emphasis />
+            <MetricCard label="Risk-Off" value={`${regimeSummary.riskOff}%`} emphasis />
+          </div>
+        </div>
+        <div className="mt-5 grid gap-4 sm:grid-cols-3">
           <MetricCard label="Señales mixtas" value={`${regimeSummary.mixed}%`} />
           <MetricCard label="Confianza" value={regimeSummary.confidence} />
           <MetricCard label="Actualización" value={regimeSummary.updatedAt} />

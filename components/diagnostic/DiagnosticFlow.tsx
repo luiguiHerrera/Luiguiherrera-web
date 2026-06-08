@@ -106,24 +106,38 @@ export function DiagnosticFlow() {
   if (completed) {
     return (
       <div className="grid gap-6 lg:grid-cols-[1fr_0.8fr]">
-        <section className="rounded-lg border border-line bg-panel p-6">
-          <RiskPill label={result.profile} />
-          <h2 className="mt-5 text-3xl font-semibold text-white">Resultado educativo</h2>
-          <div className="mt-6 grid gap-4 sm:grid-cols-3">
-            <RiskPill label={`Riesgo emocional: ${result.emotionalRisk}`} tone={result.emotionalRisk === "Alto" ? "high" : "medium"} />
-            <RiskPill label={`Liquidez: ${result.liquidityRisk}`} tone={result.liquidityRisk === "Alto" ? "high" : "medium"} />
-            <RiskPill label={`Concentración: ${result.concentrationRisk}`} tone={result.concentrationRisk === "Alto" ? "high" : result.concentrationRisk === "Medio" ? "medium" : "low"} />
+        <section className="rounded-lg border border-line bg-panel p-6 shadow-quiet md:p-8">
+          <div className="flex flex-col gap-4 border-b border-line pb-6 md:flex-row md:items-start md:justify-between">
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-brass">Ficha educativa</p>
+              <h2 className="mt-3 text-3xl font-semibold text-white">Resultado de esta sesión</h2>
+            </div>
+            <RiskPill label={result.profile} />
           </div>
-          <h3 className="mt-8 font-semibold text-white">Vulnerabilidades principales</h3>
-          <ul className="mt-3 space-y-2 text-sm leading-6 text-muted">
-            {result.vulnerabilities.map((item) => <li key={item}>{item}</li>)}
-          </ul>
+          <div className="mt-6 grid gap-4 sm:grid-cols-3">
+            {[
+              ["Riesgo emocional", result.emotionalRisk, result.emotionalRisk === "Alto" ? "high" : "medium"],
+              ["Liquidez", result.liquidityRisk, result.liquidityRisk === "Alto" ? "high" : "medium"],
+              ["Concentración", result.concentrationRisk, result.concentrationRisk === "Alto" ? "high" : result.concentrationRisk === "Medio" ? "medium" : "low"],
+            ].map(([label, value, tone]) => (
+              <div key={label} className="rounded border border-line bg-panelSoft p-4">
+                <p className="text-xs uppercase tracking-[0.16em] text-muted">{label}</p>
+                <div className="mt-3"><RiskPill label={value} tone={tone as "low" | "medium" | "high"} /></div>
+              </div>
+            ))}
+          </div>
+          <div className="mt-6 rounded border border-line bg-ink/35 p-5">
+            <h3 className="font-semibold text-white">Vulnerabilidades principales</h3>
+            <ul className="mt-4 grid gap-3 text-sm leading-6 text-muted">
+              {result.vulnerabilities.map((item) => <li key={item} className="border-l border-brass/50 pl-4">{item}</li>)}
+            </ul>
+          </div>
         </section>
         <aside className="space-y-5">
-          <div className="rounded-lg border border-line bg-panel p-6">
+          <div className="rounded-lg border border-line bg-panel p-6 shadow-quiet">
             <h3 className="font-semibold text-white">Preguntas antes de invertir más</h3>
             <ul className="mt-4 space-y-3 text-sm leading-6 text-muted">
-              {result.questions.map((item) => <li key={item}>{item}</li>)}
+              {result.questions.map((item, index) => <li key={item} className="flex gap-3"><span className="text-brass">{index + 1}.</span>{item}</li>)}
             </ul>
           </div>
           <DisclaimerBox>
@@ -135,45 +149,51 @@ export function DiagnosticFlow() {
   }
 
   return (
-    <section className="rounded-lg border border-line bg-panel p-6 md:p-8">
+    <section className="rounded-lg border border-line bg-panel p-5 shadow-quiet md:p-8">
       <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
         <div>
           <p className="text-sm uppercase tracking-[0.16em] text-brass">Paso {step + 1} de {steps.length}</p>
           <h2 className="mt-2 text-3xl font-semibold text-white">{current.title}</h2>
           <p className="mt-3 max-w-2xl text-sm leading-6 text-muted">{current.intro}</p>
         </div>
-        <div className="w-full md:w-64"><ProgressBar value={progress} /></div>
+        <div className="w-full md:w-72">
+          <div className="mb-2 flex justify-between text-xs text-muted">
+            <span>Progreso</span>
+            <span>{Math.round(progress)}%</span>
+          </div>
+          <ProgressBar value={progress} />
+        </div>
       </div>
 
       {current.allocation ? (
         <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {allocationFields.map(([id, label]) => (
-            <label key={id} className="rounded border border-line bg-panelSoft p-4 transition focus-within:border-petrol">
-              <span className="text-sm text-muted">{label}</span>
+            <label key={id} className="rounded-lg border border-line bg-panelSoft p-4 transition focus-within:border-petrol">
+              <span className="text-sm font-medium text-white">{label}</span>
               <input
                 min="0"
                 max="100"
                 type="number"
                 value={answers[id] ?? ""}
                 onChange={(event) => updateAnswer(id, Math.max(0, Math.min(100, Number(event.target.value))))}
-                className="mt-3 w-full rounded border border-line bg-ink px-3 py-2 text-white outline-none focus:border-petrol"
+                className="mt-3 w-full rounded border border-line bg-ink px-3 py-3 text-white outline-none transition focus:border-petrol"
                 placeholder="%"
               />
             </label>
           ))}
         </div>
       ) : (
-        <div className="mt-8 space-y-7">
+        <div className="mt-8 space-y-5">
           {current.questions.map((question) => (
-            <div key={question.id} className="rounded border border-line bg-panelSoft p-5">
+            <div key={question.id} className="rounded-lg border border-line bg-panelSoft p-5 shadow-[inset_0_1px_0_rgba(255,255,255,0.035)] md:p-6">
               <p className="font-semibold text-white">{question.label}</p>
               <p className="mt-2 text-sm leading-6 text-muted">{question.help}</p>
-              <div className="mt-3 flex flex-wrap gap-3">
+              <div className="mt-4 grid gap-3 sm:grid-cols-3">
                 {question.options.map((option) => (
                   <button
                     key={option}
                     onClick={() => updateAnswer(question.id, option)}
-                    className={`rounded border px-4 py-3 text-sm transition ${answers[question.id] === option ? "border-petrol bg-petrol/20 text-white" : "border-line bg-panelSoft text-muted hover:text-white"}`}
+                    className={`min-h-12 rounded border px-4 py-3 text-left text-sm transition ${answers[question.id] === option ? "border-sage bg-sage/15 text-white" : "border-line bg-ink/35 text-muted hover:border-petrol hover:text-white"}`}
                   >
                     {option}
                   </button>
@@ -188,15 +208,15 @@ export function DiagnosticFlow() {
         Respuestas de este paso: {answeredInStep} de {current.questions.length || allocationFields.length}. Puedes continuar si algo no aplica; el resultado será una lectura aproximada.
       </div>
 
-      <div className="mt-8 flex justify-between gap-3">
+      <div className="mt-8 flex flex-col-reverse justify-between gap-3 sm:flex-row">
         <button
           onClick={() => setStep((currentStep) => Math.max(0, currentStep - 1))}
           disabled={step === 0}
-          className="rounded border border-line px-4 py-2 text-sm text-muted disabled:opacity-40"
+          className="rounded border border-line bg-ink/20 px-5 py-3 text-sm font-medium text-muted transition hover:text-white disabled:opacity-40"
         >
           Atrás
         </button>
-        <button onClick={nextStep} className="rounded bg-sage px-5 py-2 text-sm font-semibold text-ink">
+        <button onClick={nextStep} className="rounded bg-sage px-5 py-3 text-sm font-semibold text-ink transition hover:bg-white">
           {step === steps.length - 1 ? "Ver resultado" : "Continuar"}
         </button>
       </div>

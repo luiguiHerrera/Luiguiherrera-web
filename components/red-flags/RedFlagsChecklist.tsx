@@ -24,19 +24,19 @@ export function RedFlagsChecklist() {
   }
 
   return (
-    <div className="grid gap-6 lg:grid-cols-[1fr_0.7fr]">
-      <section className="rounded-lg border border-line bg-panel p-6">
-        <div className="space-y-3">
+    <div className="grid gap-6 lg:grid-cols-[1fr_0.68fr]">
+      <section className="rounded-lg border border-line bg-panel p-5 shadow-quiet md:p-6">
+        <div className="grid gap-3">
           {redFlagQuestions.map((item, index) => (
             <label
               key={item.question}
-              className={`flex cursor-pointer gap-4 rounded border p-4 transition ${checked[index] ? "border-brass/60 bg-brass/10" : "border-line bg-panelSoft hover:border-petrol/70"}`}
+              className={`flex cursor-pointer gap-4 rounded-lg border p-4 transition ${checked[index] ? "border-brass/70 bg-brass/10 shadow-[inset_3px_0_0_rgba(199,163,90,0.8)]" : "border-line bg-panelSoft hover:border-petrol/70"}`}
             >
               <input
                 type="checkbox"
                 checked={Boolean(checked[index])}
                 onChange={() => toggle(index)}
-                className="mt-1 h-4 w-4 accent-[#9dbb9b]"
+                className="mt-1 h-5 w-5 shrink-0 accent-[#9dbb9b]"
               />
               <span>
                 <span className="block text-xs font-semibold uppercase tracking-[0.14em] text-brass">{item.category}</span>
@@ -46,13 +46,19 @@ export function RedFlagsChecklist() {
             </label>
           ))}
         </div>
-        <button onClick={complete} className="mt-6 rounded bg-sage px-5 py-2 text-sm font-semibold text-ink">
+        <button onClick={complete} className="mt-6 w-full rounded bg-sage px-5 py-3 text-sm font-semibold text-ink transition hover:bg-white sm:w-auto">
           Calcular lectura
         </button>
       </section>
       <aside className="space-y-5">
-        <div className="rounded-lg border border-line bg-panel p-6">
-          {reviewed ? <RiskPill label={result.label} tone={result.tone} /> : <RiskPill label="Lectura pendiente" />}
+        <div className="rounded-lg border border-line bg-panel p-6 shadow-quiet lg:sticky lg:top-28">
+          <div className="flex items-center justify-between gap-3 border-b border-line pb-5">
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-[0.16em] text-brass">Resultado</p>
+              <p className="mt-2 text-3xl font-semibold text-white">{count}/{redFlagQuestions.length}</p>
+            </div>
+            {reviewed ? <RiskPill label={result.label} tone={result.tone} /> : <RiskPill label="Lectura pendiente" />}
+          </div>
           <p className="mt-5 leading-7 text-muted">
             {reviewed ? result.text : "Marca las señales que veas y calcula una lectura prudente. La herramienta no declara que algo sea legal, ilegal, bueno o malo."}
           </p>
