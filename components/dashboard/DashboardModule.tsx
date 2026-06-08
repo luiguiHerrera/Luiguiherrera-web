@@ -2,10 +2,10 @@
 
 import { useState } from "react";
 import { RiskPill } from "@/components/ui/RiskPill";
-import { trackEvent } from "@/lib/analytics/trackEvent";
+import { DashboardModuleId, trackEvent } from "@/lib/analytics/trackEvent";
 
 type DashboardModuleProps = {
-  id: string;
+  id: DashboardModuleId;
   title: string;
   status: string;
   lookingAt: string;
@@ -27,11 +27,11 @@ export function DashboardModule({ id, title, status, lookingAt, why, how, notMea
   }
 
   return (
-    <section className="rounded-lg border border-line bg-panel p-6">
+    <section className="rounded-lg border border-line bg-panel p-6 shadow-quiet">
       <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
         <div>
           <h2 className="text-2xl font-semibold text-white">{title}</h2>
-          <p className="mt-2 text-sm text-muted">{lookingAt}</p>
+          <p className="mt-2 text-sm leading-6 text-muted">Qué mira: {lookingAt}</p>
         </div>
         <RiskPill label={status} />
       </div>
@@ -54,9 +54,9 @@ export function DashboardModule({ id, title, status, lookingAt, why, how, notMea
 
       {open ? (
         <div className="mt-5 grid gap-4 text-sm leading-6 text-muted md:grid-cols-3">
-          <p><span className="text-white">Por qué importa:</span> {why}</p>
-          <p><span className="text-white">Cómo leerlo:</span> {how}</p>
-          <p><span className="text-white">Qué NO significa:</span> {notMeaning}</p>
+          <div className="rounded border border-line bg-ink/35 p-4"><span className="block text-white">Por qué importa</span>{why}</div>
+          <div className="rounded border border-line bg-ink/35 p-4"><span className="block text-white">Cómo leerlo</span>{how}</div>
+          <div className="rounded border border-line bg-ink/35 p-4"><span className="block text-white">Qué NO significa</span>{notMeaning}</div>
         </div>
       ) : null}
     </section>

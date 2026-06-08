@@ -9,10 +9,10 @@ export default function DiagnosticoPage() {
         <SectionHeader
           eyebrow="Diagnóstico del inversionista"
           title="Antes de mirar el mercado, conviene mirar al inversionista."
-          subtitle="Una lectura educativa de objetivo, experiencia, tolerancia a caídas, liquidez y concentración. Las respuestas se pierden al recargar."
+          subtitle="Una lectura educativa de objetivo, experiencia, tolerancia a caídas, liquidez y concentración. Todo se calcula en tu navegador durante esta sesión."
         />
         <DisclaimerBox>
-          Este diagnóstico es educativo y se basa en tus respuestas durante esta sesión. No constituye asesoramiento financiero, recomendación personalizada ni una propuesta de inversión.
+          No guardamos respuestas, portafolios ni resultados individuales. Si recargas la página, la sesión se pierde. Este diagnóstico no constituye asesoramiento financiero ni recomendación personalizada.
         </DisclaimerBox>
       </div>
       <DiagnosticFlow />

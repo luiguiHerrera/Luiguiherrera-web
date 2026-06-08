@@ -12,7 +12,7 @@ export default function DashboardPage() {
         <SectionHeader
           eyebrow="Lectura de régimen"
           title="Market Regime Dashboard"
-          subtitle="No te dice qué comprar. Te ayuda a entender qué señales está dejando el mercado."
+          subtitle="No te dice qué comprar ni cuándo actuar. Te ayuda a entender qué señales está dejando el mercado."
         />
         <DisclaimerBox>
           Este panel no predice el mercado. Organiza señales. El mercado, como siempre, conserva su derecho constitucional a humillarnos.
@@ -21,6 +21,9 @@ export default function DashboardPage() {
 
       <section className="mt-10 rounded-lg border border-line bg-panel p-6">
         <RegimeBadge label={regimeSummary.current} />
+        <p className="mt-4 max-w-3xl text-sm leading-6 text-muted">
+          La lectura combina señales mockeadas de liquidez, rotación, volatilidad y flujos. Sirve para ordenar contexto, no para ejecutar operaciones.
+        </p>
         <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
           <MetricCard label="Risk-On" value={`${regimeSummary.riskOn}%`} />
           <MetricCard label="Risk-Off" value={`${regimeSummary.riskOff}%`} />
@@ -38,7 +41,7 @@ export default function DashboardPage() {
         <div className="max-w-3xl">
           <h2 className="text-2xl font-semibold text-white">Radar de señales cruzadas</h2>
           <p className="mt-3 leading-7 text-muted">
-            Esta lista no muestra oportunidades de compra. Muestra empresas donde existe tensión entre escepticismo del mercado y presencia de inversores reconocidos. Son casos para estudiar, no señales para ejecutar.
+            Esta lista no muestra oportunidades de compra. Muestra empresas donde existe tensión entre escepticismo del mercado y presencia de inversores reconocidos. Son casos para estudiar con calma, no señales para ejecutar.
           </p>
         </div>
         <div className="mt-6 overflow-x-auto">

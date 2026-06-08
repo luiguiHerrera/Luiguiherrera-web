@@ -10,51 +10,57 @@ import { DiagnosticAnswers, scoreDiagnostic } from "@/lib/scoring/diagnostic";
 const steps = [
   {
     title: "Objetivo",
+    intro: "Ubica primero la función del dinero. No todo capital debería asumir el mismo tipo de riesgo.",
     questions: [
-      { id: "purpose", label: "¿Para qué inviertes?", options: ["Preservar", "Crecer", "Ingresos futuros"] },
-      { id: "horizon", label: "¿Cuándo podrías necesitar ese dinero?", options: ["Menos de 1 año", "1 a 5 años", "Más de 10 años"] },
-      { id: "priority", label: "¿Qué te importa más?", options: ["Preservar", "Crecer", "Liquidez"] },
+      { id: "purpose", label: "¿Para qué inviertes principalmente?", help: "Piensa en el objetivo dominante, aunque tengas varios.", options: ["Preservar", "Crecer", "Ingresos futuros"] },
+      { id: "horizon", label: "¿Cuándo podrías necesitar ese dinero?", help: "El plazo cambia mucho la tolerancia real al riesgo.", options: ["Menos de 1 año", "1 a 5 años", "Más de 10 años"] },
+      { id: "priority", label: "Si tienes que elegir una prioridad, ¿cuál pesa más?", help: "No hay respuesta perfecta; buscamos coherencia.", options: ["Preservar", "Crecer", "Liquidez"] },
     ],
   },
   {
     title: "Experiencia",
+    intro: "La experiencia no elimina errores, pero ayuda a saber qué tan conocida es la incomodidad.",
     questions: [
-      { id: "experience", label: "¿Has invertido antes?", options: ["No", "Sí, poco", "Sí, varios años"] },
-      { id: "assets", label: "¿Qué activos entiendes mejor?", options: ["Efectivo y bonos", "Acciones", "Cripto y alternativos"] },
-      { id: "crash", label: "¿Has vivido una caída fuerte de mercado?", options: ["No", "Sí, y vendí", "Sí, y mantuve"] },
+      { id: "experience", label: "¿Has invertido antes?", help: "Incluye fondos, acciones, bonos, cripto o productos similares.", options: ["No", "Sí, poco", "Sí, varios años"] },
+      { id: "assets", label: "¿Qué activos entiendes mejor?", help: "Elige lo que podrías explicar sin mirar una presentación.", options: ["Efectivo y bonos", "Acciones", "Cripto y alternativos"] },
+      { id: "crash", label: "¿Has vivido una caída fuerte de mercado?", help: "La reacción pasada suele decir más que la tolerancia imaginada.", options: ["No", "Sí, y vendí", "Sí, y mantuve"] },
     ],
   },
   {
     title: "Tolerancia a caídas",
+    intro: "Un portafolio no se entiende cuando todo sube. Se entiende cuando algo se rompe.",
     questions: [
-      { id: "drop10", label: "Si tu portafolio cae 10%, ¿qué haces?", options: ["Comprar más", "Mantener", "Vender una parte"] },
-      { id: "drop25", label: "Si cae 25%, ¿qué haces?", options: ["Comprar más", "Mantener", "Vender una parte"] },
-      { id: "drop40", label: "Si cae 40%, ¿qué haces?", options: ["Comprar más", "Mantener", "Vender todo"] },
+      { id: "drop10", label: "Si tu portafolio cae 10%, ¿qué harías?", help: "Una caída manejable también puede sentirse incómoda.", options: ["Comprar más", "Mantener", "Vender una parte"] },
+      { id: "drop25", label: "Si cae 25%, ¿qué harías?", help: "Aquí empieza a aparecer el comportamiento real.", options: ["Comprar más", "Mantener", "Vender una parte"] },
+      { id: "drop40", label: "Si cae 40%, ¿qué harías?", help: "No respondas lo que suena racional; responde lo que crees posible.", options: ["Comprar más", "Mantener", "Vender todo"] },
     ],
   },
   {
     title: "Capacidad real de pérdida",
+    intro: "La tolerancia emocional no sirve de mucho si el dinero se necesita pronto.",
     questions: [
-      { id: "wealthShare", label: "¿Qué parte de tu patrimonio representa lo invertido?", options: ["Menos de 10%", "10% a 40%", "Más de 40%"] },
-      { id: "emergency", label: "¿Tienes fondo de emergencia?", options: ["Sí", "Parcial", "No"] },
-      { id: "debt", label: "¿Tienes deudas relevantes?", options: ["No", "Algunas", "Sí"] },
-      { id: "dependency", label: "¿Dependes de ese dinero en el corto plazo?", options: ["No", "Parcialmente", "Sí, dependo de él"] },
+      { id: "wealthShare", label: "¿Qué parte de tu patrimonio representa lo invertido?", help: "No escribas montos. Solo una aproximación amplia.", options: ["Menos de 10%", "10% a 40%", "Más de 40%"] },
+      { id: "emergency", label: "¿Tienes fondo de emergencia?", help: "Liquidez separada para gastos imprevistos.", options: ["Sí", "Parcial", "No"] },
+      { id: "debt", label: "¿Tienes deudas relevantes?", help: "Deudas que condicionan tu tranquilidad o flujo de caja.", options: ["No", "Algunas", "Sí"] },
+      { id: "dependency", label: "¿Dependes de ese dinero en el corto plazo?", help: "Si dependes de él, el riesgo real sube aunque el mercado parezca atractivo.", options: ["No", "Parcialmente", "Sí, dependo de él"] },
     ],
   },
   {
     title: "Portafolio actual simplificado",
+    intro: "Introduce porcentajes aproximados. Se usan solo en memoria para estimar concentración; no se guardan.",
     allocation: true,
     questions: [],
   },
   {
     title: "Mini stress test educativo",
+    intro: "No busca adivinar el futuro. Solo ordena qué escenarios podrían incomodar más.",
     questions: [
-      { id: "equityStress", label: "Mercado accionario cae fuerte", options: ["Me afecta poco", "Me preocupa", "Me obliga a vender"] },
-      { id: "cryptoStress", label: "Cripto cae fuerte", options: ["No tengo exposición", "Lo tolero", "Me golpea mucho"] },
-      { id: "ratesStress", label: "Tasas suben", options: ["Lo entiendo", "No lo tengo claro", "Me afecta bastante"] },
-      { id: "inflationStress", label: "Inflación alta", options: ["Estoy preparado", "Tengo dudas", "Me afecta mucho"] },
-      { id: "dollarStress", label: "Dólar se mueve en contra", options: ["Riesgo bajo", "Riesgo medio", "Riesgo alto"] },
-      { id: "recessionStress", label: "Recesión", options: ["Tengo margen", "Depende", "No tengo margen"] },
+      { id: "equityStress", label: "Mercado accionario cae fuerte", help: "Imagina una caída rápida, no una corrección suave.", options: ["Me afecta poco", "Me preocupa", "Me obliga a vender"] },
+      { id: "cryptoStress", label: "Cripto cae fuerte", help: "Aplica aunque tu exposición sea indirecta.", options: ["No tengo exposición", "Lo tolero", "Me golpea mucho"] },
+      { id: "ratesStress", label: "Tasas suben", help: "Puede afectar bonos, crédito, acciones y valoración de activos.", options: ["Lo entiendo", "No lo tengo claro", "Me afecta bastante"] },
+      { id: "inflationStress", label: "Inflación alta", help: "Revisa si tu liquidez pierde poder adquisitivo o si tus costes suben.", options: ["Estoy preparado", "Tengo dudas", "Me afecta mucho"] },
+      { id: "dollarStress", label: "Dólar se mueve en contra", help: "Importa si tus gastos, ingresos o activos están en monedas distintas.", options: ["Riesgo bajo", "Riesgo medio", "Riesgo alto"] },
+      { id: "recessionStress", label: "Recesión", help: "Cruza portafolio, empleo, negocio y liquidez disponible.", options: ["Tengo margen", "Depende", "No tengo margen"] },
     ],
   },
 ];
@@ -74,7 +80,10 @@ export function DiagnosticFlow() {
   const [answers, setAnswers] = useState<DiagnosticAnswers>({});
   const [completed, setCompleted] = useState(false);
   const current = steps[step];
-  const progress = completed ? 100 : (step / steps.length) * 100;
+  const answeredInStep = current.allocation
+    ? allocationFields.filter(([id]) => Number(answers[id] ?? 0) > 0).length
+    : current.questions.filter((question) => answers[question.id]).length;
+  const progress = completed ? 100 : ((step + answeredInStep / Math.max(1, current.questions.length || allocationFields.length)) / steps.length) * 100;
   const result = useMemo(() => scoreDiagnostic(answers), [answers]);
 
   function updateAnswer(id: string, value: string | number) {
@@ -85,7 +94,7 @@ export function DiagnosticFlow() {
     if (step === 0) {
       trackEvent("diagnostic_started");
     }
-    trackEvent("diagnostic_step_completed", { step: current.title });
+    trackEvent("diagnostic_step_completed", { step_index: step + 1 });
     if (step < steps.length - 1) {
       setStep((currentStep) => currentStep + 1);
       return;
@@ -131,6 +140,7 @@ export function DiagnosticFlow() {
         <div>
           <p className="text-sm uppercase tracking-[0.16em] text-brass">Paso {step + 1} de {steps.length}</p>
           <h2 className="mt-2 text-3xl font-semibold text-white">{current.title}</h2>
+          <p className="mt-3 max-w-2xl text-sm leading-6 text-muted">{current.intro}</p>
         </div>
         <div className="w-full md:w-64"><ProgressBar value={progress} /></div>
       </div>
@@ -138,7 +148,7 @@ export function DiagnosticFlow() {
       {current.allocation ? (
         <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {allocationFields.map(([id, label]) => (
-            <label key={id} className="rounded border border-line bg-panelSoft p-4">
+            <label key={id} className="rounded border border-line bg-panelSoft p-4 transition focus-within:border-petrol">
               <span className="text-sm text-muted">{label}</span>
               <input
                 min="0"
@@ -155,8 +165,9 @@ export function DiagnosticFlow() {
       ) : (
         <div className="mt-8 space-y-7">
           {current.questions.map((question) => (
-            <div key={question.id}>
+            <div key={question.id} className="rounded border border-line bg-panelSoft p-5">
               <p className="font-semibold text-white">{question.label}</p>
+              <p className="mt-2 text-sm leading-6 text-muted">{question.help}</p>
               <div className="mt-3 flex flex-wrap gap-3">
                 {question.options.map((option) => (
                   <button
@@ -173,7 +184,11 @@ export function DiagnosticFlow() {
         </div>
       )}
 
-      <div className="mt-8 flex justify-between">
+      <div className="mt-6 rounded border border-line bg-ink/30 p-4 text-sm leading-6 text-muted">
+        Respuestas de este paso: {answeredInStep} de {current.questions.length || allocationFields.length}. Puedes continuar si algo no aplica; el resultado será una lectura aproximada.
+      </div>
+
+      <div className="mt-8 flex justify-between gap-3">
         <button
           onClick={() => setStep((currentStep) => Math.max(0, currentStep - 1))}
           disabled={step === 0}
