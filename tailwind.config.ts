@@ -13,7 +13,7 @@ const config: Config = {
         muted: "#686c70",
         petrol: "#4f6870",
         sage: "#6f8f80",
-        brass: "#85745b",
+        brass: "#75634c",
         danger: "#b94743",
       },
       boxShadow: {
