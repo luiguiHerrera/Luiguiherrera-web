@@ -18,7 +18,7 @@ export default function LegalPage() {
           title="Legal"
           subtitle="Textos base para operar el MVP con límites claros desde el primer día."
         />
-        <div className="rounded-lg border border-line bg-panel p-6 text-sm leading-7 text-muted shadow-quiet">
+        <div className="border border-line bg-panel p-6 text-sm leading-7 text-muted">
           Esta página resume límites operativos del MVP. La idea es que privacidad, alcance educativo y ausencia de asesoría estén visibles, no escondidos al final.
         </div>
       </div>

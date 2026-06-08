@@ -25,12 +25,12 @@ export function RedFlagsChecklist() {
 
   return (
     <div className="grid gap-6 lg:grid-cols-[1fr_0.68fr]">
-      <section className="rounded-lg border border-line bg-panel p-5 shadow-quiet md:p-6">
+      <section className="border border-line bg-panel p-5 md:p-6">
         <div className="grid gap-3">
           {redFlagQuestions.map((item, index) => (
             <label
               key={item.question}
-              className={`flex cursor-pointer gap-4 rounded-lg border p-4 transition ${checked[index] ? "border-brass/70 bg-brass/10 shadow-[inset_3px_0_0_rgba(199,163,90,0.8)]" : "border-line bg-panelSoft hover:border-petrol/70"}`}
+              className={`flex cursor-pointer gap-4 border p-4 transition ${checked[index] ? "border-brass/70 bg-brass/10 shadow-[inset_3px_0_0_rgba(133,116,91,0.65)]" : "border-line bg-panelSoft hover:border-petrol/70"}`}
             >
               <input
                 type="checkbox"
@@ -40,22 +40,22 @@ export function RedFlagsChecklist() {
               />
               <span>
                 <span className="block text-xs font-semibold uppercase tracking-[0.14em] text-brass">{item.category}</span>
-                <span className="mt-1 block leading-6 text-white">{item.question}</span>
+                <span className="mt-1 block leading-6 text-ink">{item.question}</span>
                 <span className="mt-2 block text-sm leading-6 text-muted">{item.why}</span>
               </span>
             </label>
           ))}
         </div>
-        <button onClick={complete} className="mt-6 w-full rounded bg-sage px-5 py-3 text-sm font-semibold text-ink transition hover:bg-white sm:w-auto">
+        <button onClick={complete} className="mt-6 w-full border border-ink bg-ink px-5 py-3 text-sm font-semibold text-white transition hover:bg-panel hover:text-ink sm:w-auto">
           Calcular lectura
         </button>
       </section>
       <aside className="space-y-5">
-        <div className="rounded-lg border border-line bg-panel p-6 shadow-quiet lg:sticky lg:top-28">
+        <div className="border border-line bg-panel p-6 lg:sticky lg:top-28">
           <div className="flex items-center justify-between gap-3 border-b border-line pb-5">
             <div>
               <p className="text-xs font-semibold uppercase tracking-[0.16em] text-brass">Resultado</p>
-              <p className="mt-2 text-3xl font-semibold text-white">{count}/{redFlagQuestions.length}</p>
+              <p className="mt-2 text-3xl font-semibold text-ink">{count}/{redFlagQuestions.length}</p>
             </div>
             {reviewed ? <RiskPill label={result.label} tone={result.tone} /> : <RiskPill label="Lectura pendiente" />}
           </div>
@@ -63,8 +63,8 @@ export function RedFlagsChecklist() {
             {reviewed ? result.text : "Marca las señales que veas y calcula una lectura prudente. La herramienta no declara que algo sea legal, ilegal, adecuado o inadecuado."}
           </p>
           {reviewed ? (
-            <div className="mt-5 rounded border border-line bg-panelSoft p-4 text-sm leading-6 text-muted">
-              <span className="block font-semibold text-white">Siguiente paso prudente</span>
+            <div className="mt-5 border border-line bg-panelSoft p-4 text-sm leading-6 text-muted">
+              <span className="block font-semibold text-ink">Siguiente paso prudente</span>
               {result.nextStep}
             </div>
           ) : null}

@@ -19,7 +19,7 @@ export default function DashboardPage() {
         </DisclaimerBox>
       </div>
 
-      <section className="mt-10 rounded-lg border border-petrol/40 bg-panel p-6 shadow-quiet md:p-8">
+      <section className="mt-10 border border-petrol/40 bg-panel p-6 md:p-8">
         <div className="grid gap-8 lg:grid-cols-[0.82fr_1.18fr] lg:items-end">
           <div>
             <p className="text-xs font-semibold uppercase tracking-[0.2em] text-brass">Régimen actual mockeado</p>
@@ -44,9 +44,9 @@ export default function DashboardPage() {
         {dashboardModules.map((module) => <DashboardModule key={module.id} {...module} />)}
       </div>
 
-      <section className="mt-6 rounded-lg border border-line bg-panel p-6">
+      <section className="mt-6 border border-line bg-panel p-6">
         <div className="max-w-3xl">
-          <h2 className="text-2xl font-semibold text-white">Radar de señales cruzadas</h2>
+          <h2 className="text-2xl font-semibold text-ink">Radar de señales cruzadas</h2>
           <p className="mt-3 leading-7 text-muted">
             Esta lista no muestra ideas accionables. Muestra empresas donde existe tensión entre escepticismo del mercado y presencia de inversores reconocidos. Son casos para estudiar con calma, no señales para ejecutar.
           </p>
@@ -64,7 +64,7 @@ export default function DashboardPage() {
             <tbody>
               {crossSignalRadar.map((row) => (
                 <tr key={row.company} className="border-b border-line/70">
-                  <td className="py-4 pr-4 font-semibold text-white">{row.company}</td>
+                  <td className="py-4 pr-4 font-semibold text-ink">{row.company}</td>
                   <td className="py-4 pr-4 text-muted">{row.shortInterest}</td>
                   <td className="py-4 pr-4 text-muted">{row.superinvestors}</td>
                   <td className="py-4 pr-4 text-muted">{row.comment}</td>
