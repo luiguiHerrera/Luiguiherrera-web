@@ -64,8 +64,8 @@ export default function Home() {
   return (
     <div>
       <section className="relative overflow-hidden border-b border-line bg-panel">
-        <div className="mx-auto grid min-h-[560px] max-w-7xl grid-cols-1 px-5 py-14 md:min-h-[650px] md:py-20 lg:grid-cols-[0.72fr_1fr] lg:items-center">
-          <div className="relative z-10 max-w-2xl">
+        <div className="mx-auto grid min-h-[560px] max-w-7xl grid-cols-1 px-5 py-14 md:min-h-[650px] md:py-20 lg:grid-cols-[0.7fr_1fr] lg:items-center">
+          <div className="relative z-20 max-w-2xl">
             <h1 className="text-5xl font-semibold leading-[0.98] text-ink md:text-7xl">
               Herramientas para invertir con más criterio y menos impulso
             </h1>
@@ -81,16 +81,17 @@ export default function Home() {
               </Link>
             </div>
           </div>
-          <div className="absolute inset-y-0 right-0 hidden w-[68%] lg:block">
+          <div className="absolute inset-y-0 right-0 block w-full md:w-[72%]">
             <Image
-              src="/images/hero-abstract-architecture.png"
+              src="/images/hero-family-ascent.png"
               alt=""
               fill
               priority
-              sizes="68vw"
-              className="object-cover object-center opacity-80"
+              sizes="(min-width: 1024px) 72vw, 100vw"
+              className="object-cover object-[70%_50%] opacity-35 sm:opacity-55 md:object-[60%_50%] md:opacity-90 lg:object-[58%_50%]"
             />
-            <div className="absolute inset-0 bg-gradient-to-r from-panel via-panel/65 to-transparent" />
+            <div className="absolute inset-0 bg-gradient-to-r from-panel via-panel/90 via-55% to-panel/30 md:via-panel/80 md:via-45% md:to-panel/5" />
+            <div className="absolute inset-y-0 left-0 w-2/3 bg-panel/45 md:w-1/2 md:bg-panel/35" />
           </div>
         </div>
       </section>
