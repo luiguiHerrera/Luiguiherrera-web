@@ -16,7 +16,7 @@ const tools = [
     label: "02",
     meta: "Contexto",
     href: "/dashboard",
-    description: "No te dice qué comprar. Ordena señales públicas para leer el contexto de riesgo.",
+    description: "No elige activos por ti. Ordena señales públicas para leer el contexto de riesgo.",
   },
   {
     title: "Quant / TD3 Lab",
@@ -30,7 +30,7 @@ const tools = [
     label: "04",
     meta: "Red flags",
     href: "/protege-tu-dinero",
-    description: "Checklist de señales de alerta antes de perseguir rentabilidad.",
+    description: "Checklist de señales de alerta antes de evaluar una propuesta de inversión.",
   },
 ];
 
@@ -56,7 +56,7 @@ export default function Home() {
         <div className="space-y-4">
           <div className="rounded-lg border border-line bg-panel p-6 shadow-quiet">
             <p className="text-sm uppercase tracking-[0.16em] text-brass">Idea central</p>
-            <p className="mt-4 text-2xl leading-9 text-white">No te digo qué comprar. Te muestro cómo está respirando el mercado.</p>
+            <p className="mt-4 text-2xl leading-9 text-white">No te digo qué activo elegir. Te muestro cómo está respirando el mercado.</p>
             <div className="mt-6 grid grid-cols-3 gap-3 border-t border-line pt-5 text-sm">
               <div>
                 <p className="text-lg font-semibold text-white">Riesgo</p>
@@ -79,7 +79,7 @@ export default function Home() {
       <section className="mt-14 rounded-lg border border-line bg-panel/70 p-6 md:p-8">
         <p className="text-xs font-semibold uppercase tracking-[0.2em] text-brass">Filosofía</p>
         <p className="mt-4 max-w-4xl text-2xl leading-10 text-white">
-          No te digo qué comprar. Te ayudo a entender el riesgo, el contexto y tus propias decisiones.
+          No te digo qué activo elegir. Te ayudo a entender el riesgo, el contexto y tus propias decisiones.
         </p>
       </section>
 

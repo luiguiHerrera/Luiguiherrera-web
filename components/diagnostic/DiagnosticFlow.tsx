@@ -30,9 +30,9 @@ const steps = [
     title: "Tolerancia a caídas",
     intro: "Un portafolio no se entiende cuando todo sube. Se entiende cuando algo se rompe.",
     questions: [
-      { id: "drop10", label: "Si tu portafolio cae 10%, ¿qué harías?", help: "Una caída manejable también puede sentirse incómoda.", options: ["Comprar más", "Mantener", "Vender una parte"] },
-      { id: "drop25", label: "Si cae 25%, ¿qué harías?", help: "Aquí empieza a aparecer el comportamiento real.", options: ["Comprar más", "Mantener", "Vender una parte"] },
-      { id: "drop40", label: "Si cae 40%, ¿qué harías?", help: "No respondas lo que suena racional; responde lo que crees posible.", options: ["Comprar más", "Mantener", "Vender todo"] },
+      { id: "drop10", label: "Si tu portafolio cae 10%, ¿qué harías?", help: "Una caída manejable también puede sentirse incómoda.", options: ["Revisaría si aumentar exposición encaja con mi plan", "Mantendría el plan", "Reduciría una parte"] },
+      { id: "drop25", label: "Si cae 25%, ¿qué harías?", help: "Aquí empieza a aparecer el comportamiento real.", options: ["Revisaría si aumentar exposición encaja con mi plan", "Mantendría el plan", "Reduciría una parte"] },
+      { id: "drop40", label: "Si cae 40%, ¿qué harías?", help: "No respondas lo que suena racional; responde lo que crees posible.", options: ["Revisaría si aumentar exposición encaja con mi plan", "Mantendría el plan", "Saldría completamente"] },
     ],
   },
   {
@@ -55,11 +55,11 @@ const steps = [
     title: "Mini stress test educativo",
     intro: "No busca adivinar el futuro. Solo ordena qué escenarios podrían incomodar más.",
     questions: [
-      { id: "equityStress", label: "Mercado accionario cae fuerte", help: "Imagina una caída rápida, no una corrección suave.", options: ["Me afecta poco", "Me preocupa", "Me obliga a vender"] },
+      { id: "equityStress", label: "Mercado accionario cae fuerte", help: "Imagina una caída rápida, no una corrección suave.", options: ["Me afecta poco", "Me preocupa", "Me obligaría a reducir exposición"] },
       { id: "cryptoStress", label: "Cripto cae fuerte", help: "Aplica aunque tu exposición sea indirecta.", options: ["No tengo exposición", "Lo tolero", "Me golpea mucho"] },
       { id: "ratesStress", label: "Tasas suben", help: "Puede afectar bonos, crédito, acciones y valoración de activos.", options: ["Lo entiendo", "No lo tengo claro", "Me afecta bastante"] },
       { id: "inflationStress", label: "Inflación alta", help: "Revisa si tu liquidez pierde poder adquisitivo o si tus costes suben.", options: ["Estoy preparado", "Tengo dudas", "Me afecta mucho"] },
-      { id: "dollarStress", label: "Dólar se mueve en contra", help: "Importa si tus gastos, ingresos o activos están en monedas distintas.", options: ["Riesgo bajo", "Riesgo medio", "Riesgo alto"] },
+      { id: "dollarStress", label: "Dólar se mueve en contra", help: "Importa si tus gastos, ingresos o activos están en monedas distintas.", options: ["Impacto limitado", "Impacto medio", "Impacto alto"] },
       { id: "recessionStress", label: "Recesión", help: "Cruza portafolio, empleo, negocio y liquidez disponible.", options: ["Tengo margen", "Depende", "No tengo margen"] },
     ],
   },
@@ -141,7 +141,7 @@ export function DiagnosticFlow() {
             </ul>
           </div>
           <DisclaimerBox>
-            Este diagnóstico es educativo y se basa en tus respuestas durante esta sesión. No constituye asesoramiento financiero, recomendación personalizada ni una propuesta de inversión.
+            Este diagnóstico es educativo y se basa en tus respuestas durante esta sesión. No es una evaluación regulatoria de idoneidad, no constituye asesoramiento financiero, recomendación personalizada ni una propuesta de inversión.
           </DisclaimerBox>
         </aside>
       </div>

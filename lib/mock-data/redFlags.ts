@@ -1,7 +1,7 @@
 export const redFlagQuestions = [
   {
     category: "Promesa",
-    question: "¿Prometen rentabilidad alta con riesgo bajo o casi inexistente?",
+    question: "¿Prometen retornos altos con poca explicación del riesgo?",
     why: "Riesgo y retorno nunca desaparecen; solo cambian de lugar.",
   },
   {
@@ -36,7 +36,7 @@ export const redFlagQuestions = [
   },
   {
     category: "Exclusividad",
-    question: "¿Te dicen que es una oportunidad exclusiva, secreta o urgente?",
+    question: "¿Te dicen que es una propuesta exclusiva, secreta o urgente?",
     why: "La exclusividad puede usarse para reducir preguntas incómodas.",
   },
 ];

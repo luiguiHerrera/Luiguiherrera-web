@@ -28,7 +28,7 @@ export const dashboardModules: DashboardModuleMock[] = [
     lookingAt: "Probabilidades implícitas para la próxima decisión de política monetaria.",
     why: "Las tasas afectan el costo del dinero, la valoración de activos y el apetito por riesgo.",
     how: "Más probabilidad de recorte puede sugerir condiciones menos restrictivas; más probabilidad de subida suele apuntar a condiciones más exigentes.",
-    notMeaning: "No es una instrucción para comprar bonos, acciones, divisas o cualquier otro activo.",
+    notMeaning: "No es una instrucción para operar bonos, acciones, divisas o cualquier otro activo.",
     data: [
       ["Próxima reunión", "31 julio 2026"],
       ["Mantener tasas", "58%"],
@@ -44,7 +44,7 @@ export const dashboardModules: DashboardModuleMock[] = [
     lookingAt: "Sectores que lideran y sectores que pierden fuerza en una semana.",
     why: "La rotación sectorial ayuda a ver qué partes del mercado están liderando y cuáles están perdiendo fuerza.",
     how: "Liderazgo defensivo puede sugerir cautela; liderazgo cíclico puede sugerir mayor apetito por actividad económica.",
-    notMeaning: "No convierte a un sector ganador en una recomendación ni a un sector rezagado en descarte automático.",
+    notMeaning: "No convierte a un sector ganador en una instrucción operativa ni a un sector rezagado en descarte automático.",
     data: [
       ["Ganadores 1 semana", "Utilities, Salud, Consumo básico"],
       ["Perdedores 1 semana", "Semiconductores, Retail, Small caps"],

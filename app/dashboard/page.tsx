@@ -12,7 +12,7 @@ export default function DashboardPage() {
         <SectionHeader
           eyebrow="Lectura de régimen"
           title="Market Regime Dashboard"
-          subtitle="No te dice qué comprar ni cuándo actuar. Te ayuda a entender qué señales está dejando el mercado."
+          subtitle="No elige activos ni momentos de ejecución. Te ayuda a entender qué señales está dejando el mercado."
         />
         <DisclaimerBox>
           Este panel no predice el mercado. Organiza señales. El mercado, como siempre, conserva su derecho constitucional a humillarnos.
@@ -48,7 +48,7 @@ export default function DashboardPage() {
         <div className="max-w-3xl">
           <h2 className="text-2xl font-semibold text-white">Radar de señales cruzadas</h2>
           <p className="mt-3 leading-7 text-muted">
-            Esta lista no muestra oportunidades de compra. Muestra empresas donde existe tensión entre escepticismo del mercado y presencia de inversores reconocidos. Son casos para estudiar con calma, no señales para ejecutar.
+            Esta lista no muestra ideas accionables. Muestra empresas donde existe tensión entre escepticismo del mercado y presencia de inversores reconocidos. Son casos para estudiar con calma, no señales para ejecutar.
           </p>
         </div>
         <div className="mt-6 overflow-x-auto">
@@ -77,7 +77,7 @@ export default function DashboardPage() {
 
       <div className="mt-6">
         <DisclaimerBox>
-          Este panel organiza señales públicas de mercado. No predice precios, no recomienda comprar o vender activos y no sustituye un análisis personalizado.
+          Este panel organiza señales públicas de mercado. No predice precios, no recomienda operaciones con activos y no sustituye un análisis personalizado.
         </DisclaimerBox>
       </div>
     </div>

@@ -9,8 +9,8 @@ export type DiagnosticResult = {
   questions: string[];
 };
 
-const defensiveAnswers = new Set(["Preservar", "Menos de 1 año", "Vender una parte", "Vender todo", "Sí, dependo de él"]);
-const aggressiveAnswers = new Set(["Crecer", "Más de 10 años", "Comprar más", "Mantener", "Más de 40%"]);
+const defensiveAnswers = new Set(["Preservar", "Menos de 1 año", "Reduciría una parte", "Saldría completamente", "Sí, dependo de él"]);
+const aggressiveAnswers = new Set(["Crecer", "Más de 10 años", "Revisaría si aumentar exposición encaja con mi plan", "Mantendría el plan", "Más de 40%"]);
 
 export function scoreDiagnostic(answers: DiagnosticAnswers): DiagnosticResult {
   const values = Object.values(answers).map(String);
@@ -28,7 +28,7 @@ export function scoreDiagnostic(answers: DiagnosticAnswers): DiagnosticResult {
         ? "Crecimiento con alta tolerancia declarada"
         : "Balanceado con señales mixtas";
 
-  const emotionalRisk = values.includes("Vender todo") || values.includes("Vender una parte") ? "Alto" : "Medio";
+  const emotionalRisk = values.includes("Saldría completamente") || values.includes("Reduciría una parte") ? "Alto" : "Medio";
   const liquidityRisk = values.includes("Menos de 1 año") || values.includes("Sí, dependo de él") || cash < 10 ? "Alto" : "Medio";
   const concentrationRisk = crypto + stocks > 75 || realEstate > 60 ? "Alto" : crypto + stocks > 50 ? "Medio" : "Bajo";
 
@@ -40,7 +40,7 @@ export function scoreDiagnostic(answers: DiagnosticAnswers): DiagnosticResult {
     vulnerabilities: [
       liquidityRisk === "Alto" ? "Dependencia de dinero que podría necesitarse pronto." : "La liquidez parece manejable, pero debe revisarse con datos reales.",
       concentrationRisk === "Alto" ? "Exposición concentrada a pocos motores de riesgo." : "Concentración no extrema en esta lectura inicial.",
-      emotionalRisk === "Alto" ? "Riesgo de vender en momentos de estrés." : "Tolerancia emocional declarada razonable, pendiente de contrastar con experiencia real.",
+      emotionalRisk === "Alto" ? "Riesgo de cambiar el plan en momentos de estrés." : "Tolerancia emocional declarada razonable, pendiente de contrastar con experiencia real.",
     ],
     questions: [
       "¿Qué pérdida temporal podrías tolerar sin cambiar el plan?",

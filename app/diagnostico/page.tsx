@@ -12,7 +12,7 @@ export default function DiagnosticoPage() {
           subtitle="Una lectura educativa de objetivo, experiencia, tolerancia a caídas, liquidez y concentración. Todo se calcula en tu navegador durante esta sesión."
         />
         <DisclaimerBox>
-          No guardamos respuestas, portafolios ni resultados individuales. Si recargas la página, la sesión se pierde. Este diagnóstico no constituye asesoramiento financiero ni recomendación personalizada.
+          No guardamos respuestas, portafolios ni resultados individuales. Si recargas la página, la sesión se pierde. Este diagnóstico no es una evaluación formal de idoneidad ni constituye asesoramiento financiero o recomendación personalizada.
         </DisclaimerBox>
       </div>
       <DiagnosticFlow />

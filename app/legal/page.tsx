@@ -5,7 +5,7 @@ const legalSections = [
   ["Aviso legal", "La plataforma ofrece contenido educativo y herramientas de análisis general. No presta asesoría financiera, legal, fiscal ni patrimonial."],
   ["Privacidad", "Como MVP no se guardan respuestas del diagnóstico, portafolios, patrimonio, tolerancia al riesgo ni resultados individuales."],
   ["Cookies y analítica", "No se implementan cookies de marketing. La futura analítica debe ser agregada, anónima y sin inputs financieros del usuario."],
-  ["Disclaimer financiero", "Ninguna herramienta predice precios, recomienda comprar o vender activos ni sustituye un análisis personalizado."],
+  ["Disclaimer financiero", "Ninguna herramienta predice precios, recomienda operaciones con activos ni sustituye un análisis personalizado."],
   ["Seguridad de datos", "No hay login, cuentas, base de datos ni API keys en frontend. Los eventos permitidos no incluyen respuestas financieras ni mensajes libres."],
 ];
 

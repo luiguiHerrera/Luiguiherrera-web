@@ -8,7 +8,7 @@ export default function ProtegeTuDineroPage() {
         <SectionHeader
           eyebrow="Detector de red flags"
           title="Protege tu dinero"
-          subtitle="Antes de perseguir rentabilidad, conviene revisar si la oportunidad tiene señales de alarma."
+          subtitle="Antes de evaluar una propuesta de inversión, conviene revisar si tiene señales de alarma."
         />
       </div>
       <RedFlagsChecklist />

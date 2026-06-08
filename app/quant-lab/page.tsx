@@ -63,7 +63,7 @@ export default function QuantLabPage() {
       <section className="mt-6 grid gap-8 lg:grid-cols-[0.9fr_1.1fr]">
         <div className="rounded-lg border border-line bg-panel p-6 shadow-quiet">
           <h2 className="text-2xl font-semibold text-white">Comparación contra benchmarks</h2>
-          <p className="mt-3 text-sm leading-6 text-muted">Comparar ayuda a ver coste de oportunidad y riesgo relativo. No prueba que una estrategia vaya a superar al benchmark.</p>
+          <p className="mt-3 text-sm leading-6 text-muted">Comparar ayuda a ver coste de oportunidad y riesgo relativo. No prueba que una estrategia vaya a tener mejor resultado que el benchmark.</p>
           <div className="mt-5 divide-y divide-line rounded border border-line bg-panelSoft">
             {benchmarks.map((item) => (
               <div key={item.benchmark} className="grid gap-2 p-4 sm:grid-cols-[1fr_auto] sm:items-center">

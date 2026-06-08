@@ -60,7 +60,7 @@ export function RedFlagsChecklist() {
             {reviewed ? <RiskPill label={result.label} tone={result.tone} /> : <RiskPill label="Lectura pendiente" />}
           </div>
           <p className="mt-5 leading-7 text-muted">
-            {reviewed ? result.text : "Marca las señales que veas y calcula una lectura prudente. La herramienta no declara que algo sea legal, ilegal, bueno o malo."}
+            {reviewed ? result.text : "Marca las señales que veas y calcula una lectura prudente. La herramienta no declara que algo sea legal, ilegal, adecuado o inadecuado."}
           </p>
           {reviewed ? (
             <div className="mt-5 rounded border border-line bg-panelSoft p-4 text-sm leading-6 text-muted">
@@ -71,7 +71,7 @@ export function RedFlagsChecklist() {
           <p className="mt-5 text-sm text-muted">Señales marcadas: {count} de {redFlagQuestions.length}</p>
         </div>
         <DisclaimerBox>
-          Esta herramienta no determina si una oportunidad es legal o ilegal. Solo organiza señales de alerta comunes para ayudarte a investigar mejor.
+          Esta herramienta no determina si una propuesta es legal o ilegal. Solo organiza señales de alerta comunes para ayudarte a investigar mejor.
         </DisclaimerBox>
       </aside>
     </div>
