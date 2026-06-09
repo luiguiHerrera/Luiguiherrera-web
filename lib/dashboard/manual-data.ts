@@ -1,0 +1,151 @@
+import type { CrossSignalRadarRow, DashboardModuleData } from "@/lib/dashboard/types";
+
+// Future adapters can map live or vendor data into these same shapes:
+// - FedWatch adapter: CME FedWatch / Fed Funds futures probabilities.
+// - Sector ETF adapter: XLK, XLF, XLV, XLE, XLY, XLP, XLI, XLB, XLU, XLRE, XLC.
+// - VIX adapter: CBOE VIX spot and front futures term structure.
+// - BTC ETF flows adapter: Farside BTC ETF flows.
+// - Short interest / 13F adapter: reported short interest and delayed 13F filings.
+
+export const dashboardModules: DashboardModuleData[] = [
+  {
+    id: "rates",
+    title: "Tasas / FedWatch",
+    status: "Datos demo",
+    sourceName: "CME FedWatch Tool",
+    sourceUrl: "https://www.cmegroup.com/markets/interest-rates/cme-fedwatch-tool.html",
+    lastUpdated: "Demo manual: 2026-06-07",
+    updateFrequency: "Cuando se automatice: intradía o cierre diario",
+    dataStatus: "demo",
+    reliabilityNote: "Valores de ejemplo para diseñar lectura. No provienen de una consulta actual a CME.",
+    observedData: [
+      ["Dato observado", "Probabilidades implícitas de tasa a partir de futuros Fed Funds"],
+      ["Próxima reunión", "31 Jul 2026"],
+      ["Mantener tasa", "58%"],
+      ["Recorte", "35%"],
+      ["Subida", "7%"],
+      ["Cambio manual observado", "+6 pp en probabilidad de recorte vs muestra previa"],
+    ],
+    interpretation: {
+      lookingAt: "Probabilidades implícitas de tasa derivadas de futuros Fed Funds.",
+      why: "Importa porque el costo del dinero influye en valoración de activos, liquidez y apetito por riesgo.",
+      how: "Más probabilidad de recortes puede sugerir expectativa de condiciones menos restrictivas; más probabilidad de subidas puede sugerir una lectura de política más exigente.",
+      whatItDoesNotMean: "No es una señal de compra o venta, no anticipa por sí sola el mercado y no sustituye análisis de escenario.",
+    },
+  },
+  {
+    id: "sectors",
+    title: "Rotación sectorial por ETFs",
+    status: "Datos manuales",
+    sourceName: "ETFs sectoriales SPDR como proxies conceptuales",
+    lastUpdated: "Manual: 2026-06-07",
+    updateFrequency: "Cuando se automatice: cierre diario o semanal",
+    dataStatus: "manual",
+    reliabilityNote: "Aproximación por proxies sectoriales; no sustituye un análisis completo de composición, factores o liquidez.",
+    observedData: [
+      ["Universo proxy", "XLK, XLF, XLV, XLE, XLY, XLP, XLI, XLB, XLU, XLRE, XLC"],
+      ["Top 1 semana", "XLU +1.2%, XLP +0.9%, XLV +0.7%"],
+      ["Bottom 1 semana", "XLK -1.4%, XLY -0.8%, XLE -0.5%"],
+      ["Top 1 mes", "XLF +3.0%, XLI +2.4%, XLV +2.1%"],
+      ["Bottom 1 mes", "XLRE -1.2%, XLE -0.9%, XLC -0.4%"],
+      ["Lectura", "Mixta con sesgo defensivo moderado"],
+    ],
+    interpretation: {
+      lookingAt: "Performance de ETFs sectoriales como aproximación de liderazgo y rezago por sectores.",
+      why: "Ayuda a ver si el liderazgo se concentra en sectores growth, value, cíclicos o defensivos.",
+      how: "Liderazgo defensivo puede sugerir cautela; liderazgo cíclico/growth puede sugerir mayor apetito por riesgo o crecimiento.",
+      whatItDoesNotMean: "No convierte a un sector líder en una instrucción operativa ni a un sector rezagado en descarte automático.",
+    },
+  },
+  {
+    id: "vix",
+    title: "VIX Term Structure",
+    status: "Datos demo",
+    sourceName: "CBOE / VIX futures term structure",
+    sourceUrl: "https://www.cboe.com/tradable_products/vix/",
+    lastUpdated: "Demo manual: 2026-06-07",
+    updateFrequency: "Cuando se automatice: intradía o cierre diario",
+    dataStatus: "demo",
+    reliabilityNote: "Valores de ejemplo para explicar lectura de estructura. No son cotizaciones actuales.",
+    observedData: [
+      ["VIX spot", "17.8"],
+      ["Futuro 1", "18.6"],
+      ["Futuro 2", "19.1"],
+      ["Estructura", "Contango"],
+      ["Diferencial M2-M1", "+0.5 pts"],
+      ["Estado de volatilidad", "Normal"],
+    ],
+    interpretation: {
+      lookingAt: "Relación entre VIX spot y futuros cercanos para observar si el mercado paga más por protección inmediata o futura.",
+      why: "La estructura temporal puede señalar estrés inmediato, normalización o demanda de cobertura.",
+      how: "Contango suele indicar menor estrés inmediato; backwardation suele indicar tensión.",
+      whatItDoesNotMean: "No predice automáticamente la dirección del mercado ni marca puntos de entrada o salida.",
+    },
+  },
+  {
+    id: "btc-flows",
+    title: "BTC ETF Flows",
+    status: "Datos manuales",
+    sourceName: "Farside BTC ETF flows",
+    sourceUrl: "https://farside.co.uk/btc/",
+    lastUpdated: "Manual: 2026-06-07",
+    updateFrequency: "Cuando se automatice: cierre diario",
+    dataStatus: "manual",
+    reliabilityNote: "Datos manuales de ejemplo para representar el formato; revisar metodología y cobertura antes de automatizar.",
+    observedData: [
+      ["Flujo diario neto", "+120 M USD"],
+      ["Flujo semanal neto", "+410 M USD"],
+      ["Flujo 20 días", "+1.8 B USD"],
+      ["Racha", "3 días de entradas"],
+      ["Principales contribuyentes", "IBIT +95 M, FBTC +40 M, salidas menores en otros vehículos"],
+    ],
+    interpretation: {
+      lookingAt: "Flujos netos hacia o desde ETFs spot de Bitcoin como proxy de demanda por exposición vía vehículo regulado.",
+      why: "Ayuda a observar presión de demanda/salida en productos ETF, separada del precio spot diario.",
+      how: "Entradas persistentes sugieren demanda por el vehículo; salidas persistentes sugieren menor apetito por esa exposición.",
+      whatItDoesNotMean: "No elimina la volatilidad de Bitcoin, no valida precio y no es una señal de ejecución.",
+    },
+  },
+];
+
+export const crossSignalRadar: CrossSignalRadarRow[] = [
+  {
+    ticker: "ACME",
+    shortInterest: "18.4% del float",
+    institutionalPresence: "12 superinvestors reportados",
+    shortInterestDate: "2026-05-31",
+    form13FDate: "2026-03-31",
+    sourceName: "Short interest reportado + 13F agregados",
+    lastUpdated: "Manual: 2026-06-07",
+    updateFrequency: "Cuando se automatice: quincenal para short interest; trimestral para 13F",
+    dataStatus: "manual",
+    reliabilityNote: "Short interest y 13F tienen retrasos, metodologías distintas y no capturan toda la actividad institucional.",
+    note: "Cruce útil para estudiar tensión entre escepticismo reportado e interés institucional con retraso.",
+  },
+  {
+    ticker: "NSTR",
+    shortInterest: "24.1% del float",
+    institutionalPresence: "5 superinvestors reportados",
+    shortInterestDate: "2026-05-31",
+    form13FDate: "2026-03-31",
+    sourceName: "Short interest reportado + 13F agregados",
+    lastUpdated: "Manual: 2026-06-07",
+    updateFrequency: "Cuando se automatice: quincenal para short interest; trimestral para 13F",
+    dataStatus: "manual",
+    reliabilityNote: "La presencia en 13F no revela precio de entrada, tesis completa ni operaciones posteriores.",
+    note: "Punto de partida para revisar deuda, márgenes, liquidez y narrativa de recuperación.",
+  },
+  {
+    ticker: "HLIO",
+    shortInterest: "11.7% del float",
+    institutionalPresence: "18 superinvestors reportados",
+    shortInterestDate: "2026-05-31",
+    form13FDate: "2026-03-31",
+    sourceName: "Short interest reportado + 13F agregados",
+    lastUpdated: "Manual: 2026-06-07",
+    updateFrequency: "Cuando se automatice: quincenal para short interest; trimestral para 13F",
+    dataStatus: "manual",
+    reliabilityNote: "La señal cruzada puede cambiar rápido y debe contrastarse con fundamentos, liquidez y eventos corporativos.",
+    note: "Caso para observar tensión narrativa; no reduce por sí solo la incertidumbre del negocio.",
+  },
+];

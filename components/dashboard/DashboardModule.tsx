@@ -2,20 +2,30 @@
 
 import { useState } from "react";
 import { RiskPill } from "@/components/ui/RiskPill";
-import { DashboardModuleId, trackEvent } from "@/lib/analytics/trackEvent";
+import { trackEvent } from "@/lib/analytics/trackEvent";
+import type { DashboardModuleData, DataStatus } from "@/lib/dashboard/types";
 
-type DashboardModuleProps = {
-  id: DashboardModuleId;
-  title: string;
-  status: string;
-  lookingAt: string;
-  why: string;
-  how: string;
-  notMeaning: string;
-  data: string[][];
+type DashboardModuleProps = DashboardModuleData;
+
+const dataStatusLabels: Record<DataStatus, string> = {
+  demo: "Datos demo",
+  manual: "Datos manuales",
+  live_pending: "Pendiente de automatización",
 };
 
-export function DashboardModule({ id, title, status, lookingAt, why, how, notMeaning, data }: DashboardModuleProps) {
+export function DashboardModule({
+  id,
+  title,
+  status,
+  sourceName,
+  sourceUrl,
+  lastUpdated,
+  updateFrequency,
+  dataStatus,
+  reliabilityNote,
+  observedData,
+  interpretation,
+}: DashboardModuleProps) {
   const [open, setOpen] = useState(false);
 
   function toggleOpen() {
@@ -31,13 +41,37 @@ export function DashboardModule({ id, title, status, lookingAt, why, how, notMea
       <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
         <div>
           <h2 className="text-2xl font-semibold text-ink">{title}</h2>
-          <p className="mt-2 text-sm leading-6 text-muted">Qué mira: {lookingAt}</p>
+          <p className="mt-2 text-sm leading-6 text-muted">Qué mira: {interpretation.lookingAt}</p>
         </div>
-        <RiskPill label={status} />
+        <div className="flex flex-wrap gap-2">
+          <RiskPill label={status} />
+          <RiskPill label={dataStatusLabels[dataStatus]} />
+        </div>
+      </div>
+
+      <div className="mt-5 grid gap-3 border-y border-line py-4 text-sm leading-6 text-muted md:grid-cols-3">
+        <div>
+          <span className="block text-xs font-semibold uppercase tracking-[0.14em] text-brass">Fuente conceptual</span>
+          {sourceUrl ? (
+            <a href={sourceUrl} className="mt-1 inline-block text-ink underline-offset-4 hover:underline" target="_blank" rel="noreferrer">
+              {sourceName}
+            </a>
+          ) : (
+            <span className="mt-1 block text-ink">{sourceName}</span>
+          )}
+        </div>
+        <div>
+          <span className="block text-xs font-semibold uppercase tracking-[0.14em] text-brass">Actualización</span>
+          <span className="mt-1 block text-ink">{lastUpdated}</span>
+        </div>
+        <div>
+          <span className="block text-xs font-semibold uppercase tracking-[0.14em] text-brass">Frecuencia esperada</span>
+          <span className="mt-1 block text-ink">{updateFrequency}</span>
+        </div>
       </div>
 
       <div className="mt-6 grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
-        {data.map(([label, value]) => (
+        {observedData.map(([label, value]) => (
           <div key={label} className="border border-line bg-panelSoft p-4">
             <p className="text-xs uppercase tracking-[0.14em] text-muted">{label}</p>
             <p className="mt-2 font-semibold text-ink">{value}</p>
@@ -53,10 +87,11 @@ export function DashboardModule({ id, title, status, lookingAt, why, how, notMea
       </button>
 
       {open ? (
-        <div className="mt-5 grid gap-4 text-sm leading-6 text-muted lg:grid-cols-3">
-          <div className="border border-line bg-panelSoft p-4"><span className="block font-semibold text-ink">Por qué importa</span>{why}</div>
-          <div className="border border-line bg-panelSoft p-4"><span className="block font-semibold text-ink">Cómo leerlo</span>{how}</div>
-          <div className="border border-line bg-panelSoft p-4"><span className="block font-semibold text-ink">Qué NO significa</span>{notMeaning}</div>
+        <div className="mt-5 grid gap-4 text-sm leading-6 text-muted lg:grid-cols-4">
+          <div className="border border-line bg-panelSoft p-4"><span className="block font-semibold text-ink">Por qué importa</span>{interpretation.why}</div>
+          <div className="border border-line bg-panelSoft p-4"><span className="block font-semibold text-ink">Cómo leerlo</span>{interpretation.how}</div>
+          <div className="border border-line bg-panelSoft p-4"><span className="block font-semibold text-ink">Qué NO significa</span>{interpretation.whatItDoesNotMean}</div>
+          <div className="border border-line bg-panelSoft p-4"><span className="block font-semibold text-ink">Confiabilidad</span>{reliabilityNote}</div>
         </div>
       ) : null}
     </section>
