@@ -81,17 +81,17 @@ export default function Home() {
               </Link>
             </div>
           </div>
-          <div className="absolute inset-y-0 right-0 block w-full md:w-[72%]">
+          <div className="absolute bottom-0 right-0 block h-[30%] w-full md:inset-y-0 md:h-auto md:w-[72%]">
             <Image
               src="/images/hero-family-ascent.png"
               alt=""
               fill
               priority
               sizes="(min-width: 1024px) 72vw, 100vw"
-              className="object-cover object-[70%_50%] opacity-35 sm:opacity-55 md:object-[60%_50%] md:opacity-90 lg:object-[58%_50%]"
+              className="object-contain object-[100%_100%] opacity-30 sm:opacity-45 md:object-cover md:object-[60%_50%] md:opacity-90 lg:object-[58%_50%]"
             />
-            <div className="absolute inset-0 bg-gradient-to-r from-panel via-panel/90 via-55% to-panel/30 md:via-panel/80 md:via-45% md:to-panel/5" />
-            <div className="absolute inset-y-0 left-0 w-2/3 bg-panel/45 md:w-1/2 md:bg-panel/35" />
+            <div className="absolute inset-0 bg-gradient-to-t from-panel/10 via-panel/40 to-panel md:bg-gradient-to-r md:from-panel md:via-panel/80 md:via-45% md:to-panel/5" />
+            <div className="absolute inset-y-0 left-0 w-1/3 bg-panel/55 md:w-1/2 md:bg-panel/35" />
           </div>
         </div>
       </section>
