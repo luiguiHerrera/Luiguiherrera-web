@@ -155,7 +155,7 @@ export function SectorRotationChart({ data }: SectorRotationChartProps) {
               const barWidth = value === null || value === 0 ? 0 : Math.max(rawWidth, 1.25);
               const isPositive = (value ?? 0) > 0;
               const isNegative = (value ?? 0) < 0;
-              const barColor = isPositive ? "var(--sage)" : isNegative ? "var(--rust)" : "rgba(107, 114, 128, 0.45)";
+              const barColor = isPositive ? "#6f8f7b" : isNegative ? "#a86464" : "#a8a29e";
 
               return (
                 <button
@@ -174,14 +174,16 @@ export function SectorRotationChart({ data }: SectorRotationChartProps) {
                     </div>
                     <span className="font-semibold text-ink md:hidden">{formatPercent(value)}</span>
                   </div>
-                  <svg viewBox="0 0 100 12" className="h-7 w-full" aria-hidden="true" preserveAspectRatio="none">
-                    <line x1="50" x2="50" y1="0" y2="12" stroke="rgba(17, 24, 39, 0.3)" strokeWidth="0.8" vectorEffect="non-scaling-stroke" />
+                  <svg viewBox="0 0 100 14" className="h-7 w-full" aria-hidden="true" preserveAspectRatio="none">
+                    <line x1="2" x2="98" y1="7" y2="7" stroke="#e7e2dc" strokeWidth="0.6" vectorEffect="non-scaling-stroke" />
+                    <line x1="50" x2="50" y1="1" y2="13" stroke="#b8b2aa" strokeWidth="0.8" vectorEffect="non-scaling-stroke" />
                     {value !== null ? (
                       <rect
                         x={isNegative ? 50 - barWidth : 50}
-                        y="3"
+                        y="4"
                         width={barWidth}
                         height="6"
+                        rx="1.5"
                         fill={barColor}
                       />
                     ) : null}
