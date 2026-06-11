@@ -2,6 +2,7 @@ import { DashboardModule } from "@/components/dashboard/DashboardModule";
 import { QuantRiskPanel } from "@/components/dashboard/QuantRiskPanel";
 import { RegimeBadge } from "@/components/dashboard/RegimeBadge";
 import { SectorRotationChart } from "@/components/dashboard/SectorRotationChart";
+import { VixModule } from "@/components/dashboard/VixModule";
 import { DisclaimerBox } from "@/components/ui/DisclaimerBox";
 import { MetricCard } from "@/components/ui/MetricCard";
 import { SectionHeader } from "@/components/ui/SectionHeader";
@@ -11,9 +12,9 @@ import { dataStatusLabels } from "@/lib/dashboard/status";
 export const revalidate = 86400;
 
 export default async function DashboardPage() {
-  const { crossSignalRadar, dashboardModules, quantRisk, regimeSummary, sectorRotation } = await getDashboardData();
+  const { crossSignalRadar, dashboardModules, quantRisk, regimeSummary, sectorRotation, vix } = await getDashboardData();
   const ratesModule = dashboardModules.find((module) => module.id === "rates");
-  const remainingModules = dashboardModules.filter((module) => module.id !== "rates" && module.id !== "sectors");
+  const remainingModules = dashboardModules.filter((module) => module.id !== "rates" && module.id !== "sectors" && module.id !== "vix");
 
   return (
     <div className="mx-auto max-w-7xl px-5 py-12 md:py-16">
@@ -76,6 +77,7 @@ export default async function DashboardPage() {
         {ratesModule ? <DashboardModule {...ratesModule} /> : null}
         {sectorRotation ? <SectorRotationChart data={sectorRotation} /> : null}
         {quantRisk ? <QuantRiskPanel data={quantRisk} /> : null}
+        {vix ? <VixModule data={vix} /> : null}
         {remainingModules.map((module) => <DashboardModule key={module.id} {...module} />)}
       </div>
 

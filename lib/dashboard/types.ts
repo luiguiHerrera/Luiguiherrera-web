@@ -34,6 +34,9 @@ export type SectorDetailPeriod = "30d" | "63d" | "252d";
 export type VolatilityStatus = "normal" | "elevated" | "stress";
 export type GarchModelStatus = "estimated" | "fallback_ewma" | "insufficient_data";
 export type FragilityLabel = "Baja" | "Media" | "Alta";
+export type VixState = "normal" | "attention" | "stress";
+export type VixTrend = "falling" | "stable" | "rising";
+export type VixCurveState = "contango" | "flat" | "backwardation" | "live_pending";
 
 export type SectorDetailSeries = {
   period: SectorDetailPeriod;
@@ -99,6 +102,39 @@ export type QuantRiskData = DashboardDataSource & {
   fragilityInterpretation: string;
 };
 
+export type VixHistoryPoint = {
+  date: string;
+  value: number;
+};
+
+export type VixSpotData = DashboardDataSource & {
+  latestVix: number | null;
+  previousVix: number | null;
+  change1d: number | null;
+  change5d: number | null;
+  change21d: number | null;
+  vixPercentile: number | null;
+  vixState: VixState;
+  vixTrend: VixTrend;
+  history: VixHistoryPoint[];
+  interpretation: DashboardModuleData["interpretation"];
+};
+
+export type VixTermStructureData = DashboardDataSource & {
+  spot: number | null;
+  futureMonth1: number | null;
+  futureMonth2: number | null;
+  spreadM2M1: number | null;
+  curveState: VixCurveState;
+  interpretation: DashboardModuleData["interpretation"];
+};
+
+export type VixDashboardData = {
+  spot: VixSpotData;
+  termStructure: VixTermStructureData;
+  module: DashboardModuleData;
+};
+
 export type RegimeSignal = {
   label: string;
   detail: string;
@@ -127,4 +163,5 @@ export type DashboardData = {
   regimeSummary: RegimeSummary;
   sectorRotation: SectorRotationData | null;
   quantRisk: QuantRiskData | null;
+  vix: VixDashboardData | null;
 };
