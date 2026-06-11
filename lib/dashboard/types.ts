@@ -41,9 +41,15 @@ export type SectorEtfSnapshot = {
   return1w: number;
   return1m: number;
   return3m: number | null;
+  previousReturn1w: number | null;
+  previousReturn1m: number | null;
+  previousReturn3m: number | null;
   rank1w: number;
   rank1m: number;
   rank3m: number | null;
+  previousRank1w: number | null;
+  previousRank1m: number | null;
+  previousRank3m: number | null;
   sparkline30d: number[];
   trend: SectorTrend;
   lastUpdated: string;

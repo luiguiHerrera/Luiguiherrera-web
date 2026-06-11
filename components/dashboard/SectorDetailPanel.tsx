@@ -72,7 +72,14 @@ function MiniReturnChart({ values }: { values: number[] }) {
         ))}
         <line x1={chartLeft} x2={chartLeft} y1={chartTop} y2={chartBottom} stroke="currentColor" strokeOpacity="0.18" vectorEffect="non-scaling-stroke" />
         <line x1={chartLeft} x2={chartRight} y1={chartBottom} y2={chartBottom} stroke="currentColor" strokeOpacity="0.18" vectorEffect="non-scaling-stroke" />
-        <polyline points={points} fill="none" stroke="currentColor" strokeWidth="2" vectorEffect="non-scaling-stroke" />
+        <polyline points={points} fill="none" stroke="currentColor" strokeWidth="1.5" vectorEffect="non-scaling-stroke" />
+        {returns.map((value, index) => {
+          if (index % 5 !== 0 && index !== returns.length - 1) return null;
+
+          const x = chartLeft + (index / Math.max(returns.length - 1, 1)) * chartWidth;
+          const y = chartBottom - ((value - min) / range) * chartHeight;
+          return <circle key={`${index}-${value}`} cx={x} cy={y} r="1.2" fill="currentColor" opacity="0.55" />;
+        })}
         <circle cx={finalX} cy={finalY} r="3" fill="currentColor" />
         <text x={chartLeft} y="88" className="fill-muted text-[9px]">-30 sesiones</text>
         <text x={chartRight - 16} y="88" className="fill-muted text-[9px]">Hoy</text>

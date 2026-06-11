@@ -85,9 +85,15 @@ function fallbackSectorResult(reason: string): SectorEtfsResult {
         return1w: Number(return1w),
         return1m: Number(return1m),
         return3m: Number(return3m),
+        previousReturn1w: Number(return1w) - 0.6,
+        previousReturn1m: Number(return1m) - 1.1,
+        previousReturn3m: Number(return3m) - 1.4,
         rank1w: 0,
         rank1m: 0,
         rank3m: null,
+        previousRank1w: null,
+        previousRank1m: null,
+        previousRank3m: null,
         sparkline30d,
         trend: trendFromSparkline(sparkline30d),
         lastUpdated: FALLBACK_VISIBLE_MESSAGE,
@@ -155,7 +161,7 @@ function calculateDailyReturns(pricesAscending: PricePoint[]) {
   return returns;
 }
 
-function rankBy(sectors: SectorEtfSnapshot[], key: "return1w" | "return1m" | "return3m") {
+function rankBy(sectors: SectorEtfSnapshot[], key: "return1w" | "return1m" | "return3m" | "previousReturn1w" | "previousReturn1m" | "previousReturn3m") {
   return [...sectors]
     .filter((sector) => sector[key] !== null)
     .sort((a, b) => (b[key] ?? Number.NEGATIVE_INFINITY) - (a[key] ?? Number.NEGATIVE_INFINITY))
@@ -166,12 +172,18 @@ function applyRanks(sectors: SectorEtfSnapshot[]) {
   const rank1w = rankBy(sectors, "return1w");
   const rank1m = rankBy(sectors, "return1m");
   const rank3m = rankBy(sectors, "return3m");
+  const previousRank1w = rankBy(sectors, "previousReturn1w");
+  const previousRank1m = rankBy(sectors, "previousReturn1m");
+  const previousRank3m = rankBy(sectors, "previousReturn3m");
 
   return sectors.map((sector) => ({
     ...sector,
     rank1w: rank1w.find((rank) => rank.ticker === sector.etfTicker)?.rank ?? sector.rank1w,
     rank1m: rank1m.find((rank) => rank.ticker === sector.etfTicker)?.rank ?? sector.rank1m,
     rank3m: rank3m.find((rank) => rank.ticker === sector.etfTicker)?.rank ?? null,
+    previousRank1w: previousRank1w.find((rank) => rank.ticker === sector.etfTicker)?.rank ?? null,
+    previousRank1m: previousRank1m.find((rank) => rank.ticker === sector.etfTicker)?.rank ?? null,
+    previousRank3m: previousRank3m.find((rank) => rank.ticker === sector.etfTicker)?.rank ?? null,
   }));
 }
 
@@ -225,7 +237,7 @@ async function fetchSectorHistory(symbol: string, apiKey: string): Promise<Secto
   const url = new URL("https://www.alphavantage.co/query");
   url.searchParams.set("function", "TIME_SERIES_DAILY_ADJUSTED");
   url.searchParams.set("symbol", symbol);
-  url.searchParams.set("outputsize", "compact");
+  url.searchParams.set("outputsize", "full");
   url.searchParams.set("apikey", apiKey);
 
   const response = await fetch(url, {
@@ -278,9 +290,15 @@ function buildSectorSnapshot(history: SectorHistory): SectorEtfSnapshot {
     return1w: calculateReturn(latest.close, history.prices[5].close),
     return1m: calculateReturn(latest.close, history.prices[21].close),
     return3m: history.prices[63] ? calculateReturn(latest.close, history.prices[63].close) : null,
+    previousReturn1w: history.prices[10] ? calculateReturn(history.prices[5].close, history.prices[10].close) : null,
+    previousReturn1m: history.prices[42] ? calculateReturn(history.prices[21].close, history.prices[42].close) : null,
+    previousReturn3m: history.prices[126] ? calculateReturn(history.prices[63].close, history.prices[126].close) : null,
     rank1w: 0,
     rank1m: 0,
     rank3m: null,
+    previousRank1w: null,
+    previousRank1m: null,
+    previousRank3m: null,
     sparkline30d,
     trend: trendFromSparkline(sparkline30d),
     lastUpdated: latest.date,
