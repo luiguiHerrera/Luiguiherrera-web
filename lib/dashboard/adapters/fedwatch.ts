@@ -207,21 +207,128 @@ function shapeSummary(payload: unknown) {
   return typeof payload;
 }
 
+function envLength(value: string | undefined) {
+  return value ? value.length : 0;
+}
+
+function endpointWithForecasts(baseUrl: string) {
+  const clean = baseUrl.replace(/\/+$/, "").replace(/\/forecasts$/, "");
+  return `${clean}/forecasts`;
+}
+
+function basicAuthHeader(clientId: string, clientSecret: string) {
+  return `Basic ${Buffer.from(`${clientId}:${clientSecret}`).toString("base64")}`;
+}
+
+function logFedWatchEnv() {
+  const apiUrl = process.env.CME_FEDWATCH_API_URL;
+  const tokenUrl = process.env.CME_OAUTH_TOKEN_URL;
+  const clientId = process.env.CME_FEDWATCH_CLIENT_ID;
+  const clientSecret = process.env.CME_FEDWATCH_CLIENT_SECRET;
+
+  logFedWatch("cme_fedwatch_env", {
+    hasApiUrl: Boolean(apiUrl),
+    hasOAuthTokenUrl: Boolean(tokenUrl),
+    hasClientId: Boolean(clientId),
+    hasClientSecret: Boolean(clientSecret),
+    clientIdLength: envLength(clientId),
+    clientSecretLength: envLength(clientSecret),
+    authMode: tokenUrl && clientId && clientSecret ? "oauth" : clientId && clientSecret ? "basic" : "none",
+    endpointFinal: apiUrl ? endpointWithForecasts(apiUrl) : null,
+  });
+}
+
+async function fetchCmeAccessToken() {
+  const tokenUrl = process.env.CME_OAUTH_TOKEN_URL;
+  const clientId = process.env.CME_FEDWATCH_CLIENT_ID;
+  const clientSecret = process.env.CME_FEDWATCH_CLIENT_SECRET;
+
+  if (!tokenUrl || !clientId || !clientSecret) {
+    if (clientId && clientSecret && !tokenUrl) {
+      logFedWatchFallback("auth_mode_mismatch_possible", {
+        hasOAuthTokenUrl: false,
+        hasClientId: true,
+        hasClientSecret: true,
+        note: "Client credentials exist but no OAuth token URL is configured.",
+      });
+    }
+    logFedWatchFallback("missing_cme_oauth_config", {
+      hasOAuthTokenUrl: Boolean(tokenUrl),
+      hasClientId: Boolean(clientId),
+      hasClientSecret: Boolean(clientSecret),
+      clientIdLength: envLength(clientId),
+      clientSecretLength: envLength(clientSecret),
+    });
+    return null;
+  }
+
+  const response = await fetch(tokenUrl, {
+    method: "POST",
+    headers: {
+      Accept: "application/json",
+      Authorization: basicAuthHeader(clientId, clientSecret),
+      "Content-Type": "application/x-www-form-urlencoded",
+    },
+    body: new URLSearchParams({ grant_type: "client_credentials" }).toString(),
+    cache: "no-store",
+    signal: AbortSignal.timeout(REQUEST_TIMEOUT_MS),
+  });
+  const text = await response.text();
+  let json: unknown = null;
+  try {
+    json = JSON.parse(text);
+  } catch {
+    logFedWatchFallback("cme_oauth_non_json_response", {
+      tokenStatus: response.status,
+      textLength: text.length,
+    });
+    return null;
+  }
+
+  const accessToken = isRecord(json) ? asString(json.access_token) : null;
+  const expiresIn = isRecord(json) ? asNumber(json.expires_in) : null;
+  logFedWatch("cme_oauth_response", {
+    tokenStatus: response.status,
+    topLevelKeys: isRecord(json) ? Object.keys(json) : [],
+    hasAccessToken: Boolean(accessToken),
+    hasExpiresIn: expiresIn !== null,
+  });
+
+  if (!response.ok || !accessToken) {
+    logFedWatchFallback("cme_oauth_failed", {
+      tokenStatus: response.status,
+      topLevelKeys: isRecord(json) ? Object.keys(json) : [],
+      hasAccessToken: Boolean(accessToken),
+    });
+    return null;
+  }
+
+  return accessToken;
+}
+
 async function fetchCmeFedWatchPayload() {
-  const endpoint = process.env.CME_FEDWATCH_API_URL;
-  if (!endpoint) {
+  logFedWatchEnv();
+
+  const apiUrl = process.env.CME_FEDWATCH_API_URL;
+  if (!apiUrl) {
     logFedWatchFallback("missing_cme_fedwatch_endpoint", { expectedEnv: "CME_FEDWATCH_API_URL" });
     return null;
   }
 
-  const headers: HeadersInit = { Accept: "application/json" };
-  const apiKey = process.env.CME_FEDWATCH_API_KEY;
-  if (apiKey) {
-    headers.Authorization = `Bearer ${apiKey}`;
+  const accessToken = await fetchCmeAccessToken();
+  if (!accessToken) {
+    logFedWatchFallback("skip_fedwatch_request_without_access_token", {
+      endpointFinal: endpointWithForecasts(apiUrl),
+    });
+    return null;
   }
 
+  const endpoint = endpointWithForecasts(apiUrl);
   const response = await fetch(endpoint, {
-    headers,
+    headers: {
+      Accept: "application/json",
+      Authorization: `Bearer ${accessToken}`,
+    },
     next: { revalidate: 86400 },
     signal: AbortSignal.timeout(REQUEST_TIMEOUT_MS),
   });
@@ -242,7 +349,12 @@ async function fetchCmeFedWatchPayload() {
   });
 
   if (!response.ok) {
-    logFedWatchFallback("cme_fedwatch_http_error", { endpoint, status: response.status });
+    logFedWatchFallback("cme_fedwatch_http_error", {
+      endpoint,
+      status: response.status,
+      likelyReason: response.status === 401 ? "token_rejected_or_invalid_credentials" : response.status === 403 ? "entitlement_missing_or_forbidden" : "endpoint_or_provider_error",
+      topLevelKeys: isRecord(json) ? Object.keys(json) : [],
+    });
     return null;
   }
 
