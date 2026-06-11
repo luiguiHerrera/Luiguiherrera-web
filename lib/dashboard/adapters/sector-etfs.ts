@@ -3,8 +3,11 @@ import { buildQuantRiskData } from "@/lib/dashboard/risk-models";
 import type { DashboardModuleData, QuantRiskData, SectorDetailSeries, SectorEtfSnapshot, SectorLeadership, SectorRotationData, SectorRotationMetrics } from "@/lib/dashboard/types";
 
 const REVALIDATE_SECONDS = 60 * 60 * 24;
-const CLOSE_CONVENTION = "adjusted_close";
+const CLOSE_CONVENTION = "close";
 const FALLBACK_VISIBLE_MESSAGE = "Datos automáticos no disponibles temporalmente. Mostrando datos demo para mantener la estructura visual.";
+const ALPHA_VANTAGE_ENDPOINT = "TIME_SERIES_DAILY";
+const ALPHA_VANTAGE_OUTPUTSIZE = "compact";
+const ALPHA_VANTAGE_REQUEST_DELAY_MS = 1200;
 
 const sectorEtfs = [
   { symbol: "XLK", name: "Tecnología", group: "growth" },
@@ -40,6 +43,7 @@ type SectorHistory = {
   group: SectorGroup;
   latestDate: string;
   prices: PricePoint[];
+  closeConvention: typeof CLOSE_CONVENTION;
 };
 
 export type SectorEtfsResult = {
@@ -52,6 +56,32 @@ function formatPercent(value: number | null) {
   if (value === null) return "Pendiente de datos suficientes";
   const sign = value > 0 ? "+" : "";
   return `${sign}${value.toFixed(1)}%`;
+}
+
+function logAlphaVantageDiagnostic(
+  symbol: string,
+  details: {
+    endpoint: string;
+    status?: number;
+    topLevelKeys?: string[];
+    note?: string;
+    information?: string;
+    errorMessage?: string;
+    parsedRows?: number;
+    reason?: string;
+  },
+) {
+  console.warn("[dashboard:sector-etfs]", {
+    symbol,
+    endpoint: details.endpoint,
+    status: details.status,
+    topLevelKeys: details.topLevelKeys,
+    hasNote: Boolean(details.note),
+    hasInformation: Boolean(details.information),
+    hasErrorMessage: Boolean(details.errorMessage),
+    message: details.errorMessage ?? details.information ?? details.note ?? details.reason,
+    parsedRows: details.parsedRows,
+  });
 }
 
 function fallbackSectorResult(reason: string): SectorEtfsResult {
@@ -247,35 +277,13 @@ function buildDetailSeries(pricesAscending: number[]): SectorDetailSeries[] {
   });
 }
 
-async function fetchSectorHistory(symbol: string, apiKey: string): Promise<SectorHistory> {
-  const meta = sectorEtfs.find((etf) => etf.symbol === symbol);
+function getAlphaVantageMessage(payload: AlphaVantageDailyResponse) {
+  return payload["Error Message"] ?? payload.Information ?? payload.Note;
+}
 
-  if (!meta) {
-    throw new Error(`Unknown ETF symbol: ${symbol}`);
-  }
-
-  const url = new URL("https://www.alphavantage.co/query");
-  url.searchParams.set("function", "TIME_SERIES_DAILY_ADJUSTED");
-  url.searchParams.set("symbol", symbol);
-  url.searchParams.set("outputsize", "full");
-  url.searchParams.set("apikey", apiKey);
-
-  const response = await fetch(url, {
-    next: { revalidate: REVALIDATE_SECONDS },
-  });
-
-  if (!response.ok) {
-    throw new Error(`Alpha Vantage ${symbol} HTTP ${response.status}`);
-  }
-
-  const payload = (await response.json()) as AlphaVantageDailyResponse;
-
-  if (payload["Error Message"] || payload.Note || payload.Information) {
-    throw new Error(`Alpha Vantage ${symbol} did not return daily prices`);
-  }
-
+function parseAlphaVantagePrices(payload: AlphaVantageDailyResponse) {
   const series = payload["Time Series (Daily)"];
-  const prices = series
+  return series
     ? Object.entries(series)
         .map(([date, values]) => ({
           date,
@@ -284,8 +292,65 @@ async function fetchSectorHistory(symbol: string, apiKey: string): Promise<Secto
         .filter((row) => Number.isFinite(row.close))
         .sort((a, b) => b.date.localeCompare(a.date))
     : [];
+}
+
+async function fetchAlphaVantageDaily(symbol: string, apiKey: string, endpoint: "TIME_SERIES_DAILY_ADJUSTED" | "TIME_SERIES_DAILY") {
+  const url = new URL("https://www.alphavantage.co/query");
+  url.searchParams.set("function", endpoint);
+  url.searchParams.set("symbol", symbol);
+  url.searchParams.set("outputsize", ALPHA_VANTAGE_OUTPUTSIZE);
+  url.searchParams.set("apikey", apiKey);
+
+  const response = await fetch(url, {
+    next: { revalidate: REVALIDATE_SECONDS },
+  });
+
+  if (!response.ok) {
+    logAlphaVantageDiagnostic(symbol, {
+      endpoint,
+      status: response.status,
+      reason: `HTTP ${response.status}`,
+    });
+    throw new Error(`Alpha Vantage ${symbol} HTTP ${response.status}`);
+  }
+
+  const payload = (await response.json()) as AlphaVantageDailyResponse;
+  const prices = parseAlphaVantagePrices(payload);
+  const message = getAlphaVantageMessage(payload);
+
+  logAlphaVantageDiagnostic(symbol, {
+    endpoint,
+    status: response.status,
+    topLevelKeys: Object.keys(payload).slice(0, 8),
+    note: payload.Note,
+    information: payload.Information,
+    errorMessage: payload["Error Message"],
+    parsedRows: prices.length,
+  });
+
+  return { message, payload, prices };
+}
+
+async function fetchSectorHistory(symbol: string, apiKey: string): Promise<SectorHistory> {
+  const meta = sectorEtfs.find((etf) => etf.symbol === symbol);
+
+  if (!meta) {
+    throw new Error(`Unknown ETF symbol: ${symbol}`);
+  }
+
+  const daily = await fetchAlphaVantageDaily(symbol, apiKey, ALPHA_VANTAGE_ENDPOINT);
+  const prices = daily.prices;
+
+  if (daily.message || prices.length === 0) {
+    throw new Error(`Alpha Vantage ${symbol} did not return daily prices`);
+  }
 
   if (prices.length < 64) {
+    logAlphaVantageDiagnostic(symbol, {
+      endpoint: ALPHA_VANTAGE_ENDPOINT,
+      parsedRows: prices.length,
+      reason: "insufficient market sessions",
+    });
     throw new Error(`Alpha Vantage ${symbol} returned insufficient market sessions`);
   }
 
@@ -295,6 +360,7 @@ async function fetchSectorHistory(symbol: string, apiKey: string): Promise<Secto
     group: meta.group,
     latestDate: prices[0].date,
     prices,
+    closeConvention: CLOSE_CONVENTION,
   };
 }
 
@@ -337,7 +403,16 @@ export async function getSectorEtfsData(): Promise<SectorEtfsResult> {
   }
 
   try {
-    const histories = await Promise.all(sectorEtfs.map((etf) => fetchSectorHistory(etf.symbol, apiKey)));
+    const histories: SectorHistory[] = [];
+
+    for (const etf of sectorEtfs) {
+      histories.push(await fetchSectorHistory(etf.symbol, apiKey));
+
+      if (histories.length < sectorEtfs.length) {
+        await new Promise((resolve) => setTimeout(resolve, ALPHA_VANTAGE_REQUEST_DELAY_MS));
+      }
+    }
+
     const sectors = applyRanks(histories.map(buildSectorSnapshot));
     const metrics = buildMetrics(sectors);
     const latestDate = sectors.map((sector) => sector.lastUpdated).sort().at(-1) ?? "fecha no disponible";
@@ -345,7 +420,7 @@ export async function getSectorEtfsData(): Promise<SectorEtfsResult> {
     const byMonth = [...sectors].sort((a, b) => b.return1m - a.return1m);
     const byQuarter = [...sectors].sort((a, b) => (b.return3m ?? Number.NEGATIVE_INFINITY) - (a.return3m ?? Number.NEGATIVE_INFINITY));
     const rotation: SectorRotationData = {
-      sourceName: "Alpha Vantage: precios diarios ajustados de ETFs sectoriales",
+      sourceName: "Alpha Vantage: precios diarios de ETFs sectoriales",
       sourceUrl: "https://www.alphavantage.co/documentation/",
       lastUpdated: `Automático con fuente pública: ${latestDate}`,
       updateFrequency: "Automática server-side con caché diaria; revisión semanal sugerida",
@@ -366,7 +441,7 @@ export async function getSectorEtfsData(): Promise<SectorEtfsResult> {
         lastUpdated: rotation.lastUpdated,
         updateFrequency: rotation.updateFrequency,
         dataStatus: "automated",
-        reliabilityNote: `${rotation.reliabilityNote} Convención usada: cierre ajustado diario; 1W = 5 sesiones, 1M = 21 sesiones, 3M = 63 sesiones.`,
+        reliabilityNote: `${rotation.reliabilityNote} Convención usada: cierre diario; 1W = 5 sesiones, 1M = 21 sesiones, 3M = 63 sesiones.`,
         observedData: [
           ["Universo proxy", sectorEtfs.map((etf) => `${etf.symbol} ${etf.name}`).join(", ")],
           ["Top 1W", byWeek.slice(0, 3).map((sector) => `${sector.etfTicker} ${formatPercent(sector.return1w)}`).join(", ")],
