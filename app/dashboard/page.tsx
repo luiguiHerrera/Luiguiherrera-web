@@ -13,7 +13,6 @@ export const revalidate = 86400;
 export default async function DashboardPage() {
   const { crossSignalRadar, dashboardModules, quantRisk, regimeSummary, sectorRotation } = await getDashboardData();
   const ratesModule = dashboardModules.find((module) => module.id === "rates");
-  const sectorsModule = dashboardModules.find((module) => module.id === "sectors");
   const remainingModules = dashboardModules.filter((module) => module.id !== "rates" && module.id !== "sectors");
 
   return (
@@ -75,7 +74,6 @@ export default async function DashboardPage() {
 
       <div className="mt-8 space-y-6">
         {ratesModule ? <DashboardModule {...ratesModule} /> : null}
-        {sectorsModule ? <DashboardModule {...sectorsModule} /> : null}
         {sectorRotation ? <SectorRotationChart data={sectorRotation} /> : null}
         {quantRisk ? <QuantRiskPanel data={quantRisk} /> : null}
         {remainingModules.map((module) => <DashboardModule key={module.id} {...module} />)}

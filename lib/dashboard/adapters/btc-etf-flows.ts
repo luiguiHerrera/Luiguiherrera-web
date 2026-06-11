@@ -19,10 +19,10 @@ function fallbackBtcFlowsModule(reason: string): DashboardModuleData {
 
   return {
     ...fallback,
-    status: "Fallback manual",
+    status: "Datos manuales",
     dataStatus: "manual",
-    lastUpdated: "Fallback manual",
-    reliabilityNote: `${fallback.reliabilityNote} Fallback activo: ${reason}.`,
+    lastUpdated: "Datos automáticos no disponibles temporalmente. Mostrando datos demo para mantener la estructura visual.",
+    reliabilityNote: `${fallback.reliabilityNote} Datos automáticos no disponibles temporalmente; se mantiene una lectura manual/demo prudente.`,
   };
 }
 
@@ -179,7 +179,7 @@ export async function getBtcEtfFlowsModule(): Promise<DashboardModuleData> {
         ["Flujo 5 días", formatUsdMillions(fiveDayFlow)],
         ["Flujo 20 días", formatUsdMillions(twentyDayFlow)],
         ["Racha", formatStreak(rows)],
-        ["Principales contribuyentes", contributors || "No disponible en la tabla interpretada"],
+        ["Principales contribuyentes", contributors || "Pendiente de datos suficientes"],
       ],
       interpretation: {
         lookingAt: "Flujos netos hacia o desde ETFs spot de Bitcoin como proxy de demanda por exposición vía vehículo regulado.",

@@ -19,7 +19,7 @@ function formatCorrelation(value: number | null) {
 function modelStatusLabel(status: QuantRiskData["modelStatus"]) {
   if (status === "estimated") return "Estimado";
   if (status === "fallback_ewma") return "Fallback EWMA";
-  return "Datos insuficientes";
+  return "En espera de historial suficiente";
 }
 
 export function QuantRiskPanel({ data }: QuantRiskPanelProps) {
