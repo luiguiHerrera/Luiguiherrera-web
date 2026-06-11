@@ -197,6 +197,43 @@ export type BtcEtfFlowsDashboardData = {
   module: DashboardModuleData;
 };
 
+export type FedWatchConviction = "Alta" | "Media" | "Baja / dispersa";
+
+export type FedWatchRateRange = {
+  label: string;
+  lowerBps: number | null;
+  upperBps: number | null;
+  probability: number;
+};
+
+export type FedWatchMeeting = {
+  date: string;
+  dominantRange: string;
+  dominantProbability: number | null;
+  cutProbability: number | null;
+  pauseProbability: number | null;
+  hikeProbability: number | null;
+  conviction: FedWatchConviction;
+  ranges: FedWatchRateRange[];
+};
+
+export type FedWatchData = DashboardDataSource & {
+  currentTargetRange: string | null;
+  nextMeeting: FedWatchMeeting | null;
+  meetings: FedWatchMeeting[];
+  readingLabel: string;
+  readingSubtext: string;
+  policyPath: string[];
+  firstRelevantCutMeeting: string | null;
+  rawShapeSummary: string;
+  interpretation: DashboardModuleData["interpretation"];
+};
+
+export type FedWatchDashboardData = {
+  fedWatch: FedWatchData;
+  module: DashboardModuleData;
+};
+
 export type RegimeSignal = {
   label: string;
   detail: string;
@@ -225,6 +262,7 @@ export type DashboardData = {
   regimeSummary: RegimeSummary;
   sectorRotation: SectorRotationData | null;
   quantRisk: QuantRiskData | null;
+  fedWatch: FedWatchDashboardData | null;
   vix: VixDashboardData | null;
   btcEtfFlows: BtcEtfFlowsDashboardData | null;
 };

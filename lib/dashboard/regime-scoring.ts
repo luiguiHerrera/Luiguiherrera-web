@@ -1,5 +1,6 @@
 import type { RegimeSummary } from "@/lib/dashboard/types";
 
+// FedWatch can be added to scoring after licensing/usage confirmation.
 export const regimeSummary: RegimeSummary = {
   current: "Defensivo",
   bias: "Risk-off",

@@ -1,5 +1,6 @@
 import { BtcEtfFlowsModule } from "@/components/dashboard/BtcEtfFlowsModule";
 import { DashboardModule } from "@/components/dashboard/DashboardModule";
+import { FedWatchModule } from "@/components/dashboard/FedWatchModule";
 import { QuantRiskPanel } from "@/components/dashboard/QuantRiskPanel";
 import { RegimeBadge } from "@/components/dashboard/RegimeBadge";
 import { SectorRotationChart } from "@/components/dashboard/SectorRotationChart";
@@ -13,8 +14,7 @@ import { dataStatusLabels } from "@/lib/dashboard/status";
 export const revalidate = 86400;
 
 export default async function DashboardPage() {
-  const { btcEtfFlows, crossSignalRadar, dashboardModules, quantRisk, regimeSummary, sectorRotation, vix } = await getDashboardData();
-  const ratesModule = dashboardModules.find((module) => module.id === "rates");
+  const { btcEtfFlows, crossSignalRadar, dashboardModules, fedWatch, quantRisk, regimeSummary, sectorRotation, vix } = await getDashboardData();
   const remainingModules = dashboardModules.filter((module) => module.id !== "rates" && module.id !== "sectors" && module.id !== "vix" && module.id !== "btc-flows");
 
   return (
@@ -75,7 +75,7 @@ export default async function DashboardPage() {
       </section>
 
       <div className="mt-8 space-y-6">
-        {ratesModule ? <DashboardModule {...ratesModule} /> : null}
+        {fedWatch ? <FedWatchModule data={fedWatch} /> : null}
         {sectorRotation ? <SectorRotationChart data={sectorRotation} /> : null}
         {quantRisk ? <QuantRiskPanel data={quantRisk} /> : null}
         {vix ? <VixModule data={vix} /> : null}
