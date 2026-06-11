@@ -91,7 +91,7 @@ export function SectorRotationChart({ data }: SectorRotationChartProps) {
   const values = sortedSectors.map((sector) => metricValue(sector, period)).filter((value): value is number => value !== null);
   const minValue = Math.min(...values, 0);
   const maxValue = Math.max(...values, 0);
-  const scaleBound = Math.max(Math.abs(minValue), Math.abs(maxValue), 1);
+  const maxAbs = Math.max(...values.map((value) => Math.abs(value)), 0.01);
   const traction = tractionRows(data.sectors, period);
 
   return (
@@ -151,10 +151,9 @@ export function SectorRotationChart({ data }: SectorRotationChartProps) {
           <div className="mt-3 grid gap-2">
             {sortedSectors.map((sector) => {
               const value = metricValue(sector, period);
-              const magnitude = value === null ? 0 : Math.min(Math.abs(value) / scaleBound, 1) * 100;
-              const barWidth = value === null ? "0%" : `${Math.max(magnitude, Math.abs(value) < 0.05 ? 2 : 3)}%`;
-              const isPositive = (value ?? 0) > 0.05;
-              const isNegative = (value ?? 0) < -0.05;
+              const barWidth = value === null ? 0 : Math.min(Math.abs(value) / maxAbs, 1) * 50;
+              const isPositive = (value ?? 0) > 0;
+              const isNegative = (value ?? 0) < 0;
               const barColor = isPositive ? "bg-sage" : isNegative ? "bg-rust" : "bg-muted/40";
 
               return (
@@ -177,14 +176,14 @@ export function SectorRotationChart({ data }: SectorRotationChartProps) {
                   <div className="relative h-7 bg-panel">
                     <div className="absolute left-1/2 top-0 h-full border-l border-ink/25" aria-hidden="true" />
                     {value !== null ? (
-                      <>
-                        <div className="absolute left-0 top-0 flex h-full w-1/2 items-center justify-end">
-                          {isNegative ? <div className={`h-3 ${barColor}`} style={{ width: barWidth }} /> : null}
-                        </div>
-                        <div className="absolute right-0 top-0 flex h-full w-1/2 items-center justify-start">
-                          {isPositive || (!isNegative && !isPositive) ? <div className={`h-3 ${barColor}`} style={{ width: barWidth }} /> : null}
-                        </div>
-                      </>
+                      <div
+                        className={`absolute top-1/2 h-3 -translate-y-1/2 ${barColor}`}
+                        style={
+                          isNegative
+                            ? { right: "50%", width: `${barWidth}%` }
+                            : { left: "50%", width: `${Math.max(barWidth, 2)}%` }
+                        }
+                      />
                     ) : null}
                   </div>
                   <span className="hidden text-right font-semibold text-ink md:block">{formatPercent(value)}</span>
