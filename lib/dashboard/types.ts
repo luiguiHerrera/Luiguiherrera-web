@@ -30,9 +30,17 @@ export type DashboardModuleData = DashboardDataSource & {
 
 export type SectorTrend = "up" | "flat" | "down";
 export type SectorLeadership = "defensiva" | "growth" | "cíclica" | "mixta";
+export type SectorDetailPeriod = "30d" | "63d" | "252d";
 export type VolatilityStatus = "normal" | "elevated" | "stress";
 export type GarchModelStatus = "estimated" | "fallback_ewma" | "insufficient_data";
 export type FragilityLabel = "Baja" | "Media" | "Alta";
+
+export type SectorDetailSeries = {
+  period: SectorDetailPeriod;
+  points: number[];
+  label: string;
+  availableSessions: number;
+};
 
 export type SectorEtfSnapshot = {
   sectorName: string;
@@ -51,6 +59,7 @@ export type SectorEtfSnapshot = {
   previousRank1m: number | null;
   previousRank3m: number | null;
   sparkline30d: number[];
+  detailSeries: SectorDetailSeries[];
   trend: SectorTrend;
   lastUpdated: string;
   group: "defensive" | "growth" | "cyclical";

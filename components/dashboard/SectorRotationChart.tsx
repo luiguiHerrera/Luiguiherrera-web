@@ -152,7 +152,7 @@ export function SectorRotationChart({ data }: SectorRotationChartProps) {
             {sortedSectors.map((sector) => {
               const value = metricValue(sector, period);
               const magnitude = Math.min((Math.abs(value ?? 0) / scaleBound) * 50, 50);
-              const barWidth = value === null ? "0%" : `${Math.max(magnitude, Math.abs(value) < 0.05 ? 2 : 3)}%`;
+              const barWidth = value === null ? "0%" : `${Math.max(magnitude * 2, Math.abs(value) < 0.05 ? 2 : 3)}%`;
               const positive = (value ?? 0) > 0.05;
               const negative = (value ?? 0) < -0.05;
               const barColor = positive ? "bg-sage" : negative ? "bg-rust" : "bg-muted/40";
@@ -174,13 +174,17 @@ export function SectorRotationChart({ data }: SectorRotationChartProps) {
                     </div>
                     <span className="font-semibold text-ink md:hidden">{formatPercent(value)}</span>
                   </div>
-                  <div className="relative h-7 bg-panel">
+                  <div className="relative grid h-7 grid-cols-2 bg-panel">
                     <div className="absolute left-1/2 top-0 h-full border-l border-ink/25" aria-hidden="true" />
                     {value !== null ? (
-                      <div
-                        className={`absolute top-1/2 h-3 -translate-y-1/2 ${barColor}`}
-                        style={value >= 0 ? { left: "50%", width: barWidth } : { right: "50%", width: barWidth }}
-                      />
+                      <>
+                        <div className="flex items-center justify-end">
+                          {value < 0 ? <div className={`h-3 ${barColor}`} style={{ width: barWidth }} /> : null}
+                        </div>
+                        <div className="flex items-center justify-start">
+                          {value >= 0 ? <div className={`h-3 ${barColor}`} style={{ width: barWidth }} /> : null}
+                        </div>
+                      </>
                     ) : null}
                   </div>
                   <span className="hidden text-right font-semibold text-ink md:block">{formatPercent(value)}</span>
@@ -234,7 +238,7 @@ export function SectorRotationChart({ data }: SectorRotationChartProps) {
 
       {selectedSector ? (
         <div className="mt-5">
-          <SectorDetailPanel sector={selectedSector} selectedRank={metricRank(selectedSector, period)} />
+          <SectorDetailPanel sector={selectedSector} selectedPeriod={period} selectedRank={metricRank(selectedSector, period)} />
         </div>
       ) : null}
 

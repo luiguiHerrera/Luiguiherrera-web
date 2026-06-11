@@ -1,6 +1,6 @@
 import { dashboardModules } from "@/lib/dashboard/manual-data";
 import { buildQuantRiskData } from "@/lib/dashboard/risk-models";
-import type { DashboardModuleData, QuantRiskData, SectorEtfSnapshot, SectorLeadership, SectorRotationData, SectorRotationMetrics } from "@/lib/dashboard/types";
+import type { DashboardModuleData, QuantRiskData, SectorDetailSeries, SectorEtfSnapshot, SectorLeadership, SectorRotationData, SectorRotationMetrics } from "@/lib/dashboard/types";
 
 const REVALIDATE_SECONDS = 60 * 60 * 24;
 const CLOSE_CONVENTION = "adjusted_close";
@@ -76,7 +76,8 @@ function fallbackSectorResult(reason: string): SectorEtfsResult {
       ["Comunicación", "XLC", "growth", -0.4, -0.4, 2.7],
     ].map(([sectorName, etfTicker, group, return1w, return1m, return3m], index) => {
       const base = 100 + index;
-      const sparkline30d = Array.from({ length: 30 }, (_, day) => base + Math.sin(day / 4) * 1.5 + (Number(return1m) / 29) * day);
+      const demo252d = Array.from({ length: 252 }, (_, day) => base + Math.sin(day / 9) * 1.8 + (Number(return3m) / 251) * day);
+      const sparkline30d = demo252d.slice(-30);
 
       return {
         sectorName: String(sectorName),
@@ -95,6 +96,7 @@ function fallbackSectorResult(reason: string): SectorEtfsResult {
         previousRank1m: null,
         previousRank3m: null,
         sparkline30d,
+        detailSeries: buildDetailSeries(demo252d),
         trend: trendFromSparkline(sparkline30d),
         lastUpdated: FALLBACK_VISIBLE_MESSAGE,
         group: group as SectorGroup,
@@ -227,6 +229,24 @@ function trendFromSparkline(values: number[]) {
   return "flat";
 }
 
+function buildDetailSeries(pricesAscending: number[]): SectorDetailSeries[] {
+  const seriesConfig = [
+    { period: "30d" as const, sessions: 30, label: "Retorno acumulado · 30 sesiones" },
+    { period: "63d" as const, sessions: 63, label: "Retorno acumulado · 3 meses aprox." },
+    { period: "252d" as const, sessions: 252, label: "Retorno acumulado · 12 meses aprox." },
+  ];
+
+  return seriesConfig.map(({ label, period, sessions }) => {
+    const points = pricesAscending.slice(-sessions);
+    return {
+      period,
+      points,
+      label: points.length >= sessions ? label : `Historial disponible · ${points.length} sesiones`,
+      availableSessions: points.length,
+    };
+  });
+}
+
 async function fetchSectorHistory(symbol: string, apiKey: string): Promise<SectorHistory> {
   const meta = sectorEtfs.find((etf) => etf.symbol === symbol);
 
@@ -282,6 +302,7 @@ function buildSectorSnapshot(history: SectorHistory): SectorEtfSnapshot {
   const latest = history.prices[0];
   const pricesAscending = [...history.prices].reverse();
   const sparkline30d = history.prices.slice(0, 30).reverse().map((point) => point.close);
+  const detailPrices = pricesAscending.map((point) => point.close);
 
   return {
     sectorName: history.name,
@@ -300,6 +321,7 @@ function buildSectorSnapshot(history: SectorHistory): SectorEtfSnapshot {
     previousRank1m: null,
     previousRank3m: null,
     sparkline30d,
+    detailSeries: buildDetailSeries(detailPrices),
     trend: trendFromSparkline(sparkline30d),
     lastUpdated: latest.date,
     group: history.group,

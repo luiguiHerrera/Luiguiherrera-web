@@ -2,8 +2,15 @@ import type { SectorEtfSnapshot } from "@/lib/dashboard/types";
 
 type SectorDetailPanelProps = {
   sector: SectorEtfSnapshot;
+  selectedPeriod: "1W" | "1M" | "3M";
   selectedRank: number | null;
 };
+
+const detailPeriodMap = {
+  "1W": "30d",
+  "1M": "63d",
+  "3M": "252d",
+} as const;
 
 function formatPercent(value: number | null) {
   if (value === null) return "Pendiente de datos suficientes";
@@ -24,11 +31,22 @@ function trendLabel(trend: SectorEtfSnapshot["trend"]) {
   return "Lateral";
 }
 
-function MiniReturnChart({ values }: { values: number[] }) {
+function trendFromValues(values: number[]): SectorEtfSnapshot["trend"] {
+  if (values.length < 10) return "flat";
+  const start = values.slice(0, 5).reduce((sum, value) => sum + value, 0) / 5;
+  const end = values.slice(-5).reduce((sum, value) => sum + value, 0) / 5;
+  const change = ((end / start) - 1) * 100;
+
+  if (change > 1) return "up";
+  if (change < -1) return "down";
+  return "flat";
+}
+
+function MiniReturnChart({ label, values }: { label: string; values: number[] }) {
   if (values.length < 2) {
     return (
       <div className="border border-line bg-panel p-4 text-sm text-muted">
-        Historial insuficiente
+        Historial insuficiente para esta vista
       </div>
     );
   }
@@ -60,7 +78,7 @@ function MiniReturnChart({ values }: { values: number[] }) {
   return (
     <div className="border border-line bg-panel p-3">
       <div className="mb-2 flex items-center justify-between text-xs uppercase tracking-[0.12em] text-muted">
-        <span>Retorno acumulado 30 sesiones</span>
+        <span>{label}</span>
         <span className="font-semibold text-ink">{formatPercent(finalValue)}</span>
       </div>
       <svg viewBox="0 0 190 92" className="h-32 w-full text-petrol" role="img" aria-label="Retorno acumulado de los últimos 30 cierres ajustados">
@@ -88,7 +106,19 @@ function MiniReturnChart({ values }: { values: number[] }) {
   );
 }
 
-export function SectorDetailPanel({ sector, selectedRank }: SectorDetailPanelProps) {
+export function SectorDetailPanel({ sector, selectedPeriod, selectedRank }: SectorDetailPanelProps) {
+  const selectedSeries = sector.detailSeries.find((series) => series.period === detailPeriodMap[selectedPeriod]);
+  const detailPoints = selectedSeries?.points ?? sector.sparkline30d;
+  const trend = trendFromValues(detailPoints);
+  const trendLabelText =
+    selectedPeriod === "1W"
+      ? "Tendencia 30 sesiones"
+      : selectedPeriod === "1M"
+        ? "Tendencia 63 sesiones"
+        : selectedSeries && selectedSeries.availableSessions >= 252
+          ? "Tendencia 252 sesiones"
+          : "Tendencia historial disponible";
+
   return (
     <div className="border border-line bg-panelSoft p-4">
       <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
@@ -118,17 +148,17 @@ export function SectorDetailPanel({ sector, selectedRank }: SectorDetailPanelPro
           <span className="mt-1 block font-semibold text-ink">{formatPercent(sector.return3m)}</span>
         </div>
         <div>
-          <span className="block text-xs uppercase tracking-[0.14em] text-muted">Tendencia 30 sesiones</span>
-          <span className="mt-1 block font-semibold text-ink">{trendLabel(sector.trend)}</span>
+          <span className="block text-xs uppercase tracking-[0.14em] text-muted">{trendLabelText}</span>
+          <span className="mt-1 block font-semibold text-ink">{trendLabel(trend)}</span>
         </div>
       </div>
 
       <div className="mt-4">
-        <MiniReturnChart values={sector.sparkline30d} />
+        <MiniReturnChart label={selectedSeries?.label ?? "Historial disponible"} values={detailPoints} />
       </div>
 
       <p className="mt-4 text-sm leading-6 text-muted">
-        Tendencia calculada sobre los últimos 30 cierres ajustados, comparando el tramo inicial con el tramo final. Proxy sectorial para contexto, no personalizado.
+        Tendencia calculada sobre cierres ajustados, comparando el tramo inicial con el tramo final del periodo mostrado. Proxy sectorial para contexto, no personalizado.
       </p>
     </div>
   );
