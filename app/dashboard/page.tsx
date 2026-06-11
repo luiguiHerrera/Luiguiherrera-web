@@ -1,3 +1,4 @@
+import { BtcEtfFlowsModule } from "@/components/dashboard/BtcEtfFlowsModule";
 import { DashboardModule } from "@/components/dashboard/DashboardModule";
 import { QuantRiskPanel } from "@/components/dashboard/QuantRiskPanel";
 import { RegimeBadge } from "@/components/dashboard/RegimeBadge";
@@ -12,9 +13,9 @@ import { dataStatusLabels } from "@/lib/dashboard/status";
 export const revalidate = 86400;
 
 export default async function DashboardPage() {
-  const { crossSignalRadar, dashboardModules, quantRisk, regimeSummary, sectorRotation, vix } = await getDashboardData();
+  const { btcEtfFlows, crossSignalRadar, dashboardModules, quantRisk, regimeSummary, sectorRotation, vix } = await getDashboardData();
   const ratesModule = dashboardModules.find((module) => module.id === "rates");
-  const remainingModules = dashboardModules.filter((module) => module.id !== "rates" && module.id !== "sectors" && module.id !== "vix");
+  const remainingModules = dashboardModules.filter((module) => module.id !== "rates" && module.id !== "sectors" && module.id !== "vix" && module.id !== "btc-flows");
 
   return (
     <div className="mx-auto max-w-7xl px-5 py-12 md:py-16">
@@ -78,6 +79,7 @@ export default async function DashboardPage() {
         {sectorRotation ? <SectorRotationChart data={sectorRotation} /> : null}
         {quantRisk ? <QuantRiskPanel data={quantRisk} /> : null}
         {vix ? <VixModule data={vix} /> : null}
+        {btcEtfFlows ? <BtcEtfFlowsModule data={btcEtfFlows} /> : null}
         {remainingModules.map((module) => <DashboardModule key={module.id} {...module} />)}
       </div>
 

@@ -5,4 +5,6 @@ export const dataStatusLabels: Record<DataStatus, string> = {
   manual: "Datos manuales",
   live_pending: "Pendiente de automatización",
   automated: "Datos automatizados",
+  fallback: "Fallback demo",
+  delayed: "Actualización pendiente",
 };

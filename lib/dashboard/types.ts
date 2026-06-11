@@ -1,6 +1,6 @@
 import type { DashboardModuleId } from "@/lib/analytics/trackEvent";
 
-export type DataStatus = "demo" | "manual" | "live_pending" | "automated";
+export type DataStatus = "demo" | "manual" | "live_pending" | "automated" | "fallback" | "delayed";
 
 export type RegimeLabel = "Constructivo" | "Neutral" | "Defensivo" | "Estrés";
 export type RegimeBias = "Risk-on" | "Mixto" | "Risk-off";
@@ -140,6 +140,63 @@ export type VixDashboardData = {
   module: DashboardModuleData;
 };
 
+export type BtcEtfFundFlow = {
+  ticker: string;
+  flow: number;
+};
+
+export type BtcFlowBreadth = {
+  positive: number;
+  negative: number;
+  flatOrMissing: number;
+};
+
+export type BtcFlowStreak = {
+  direction: "inflow" | "outflow" | "none";
+  count: number;
+  label: string;
+};
+
+export type BtcFlowLevel = "strong_inflow" | "moderate_inflow" | "neutral" | "moderate_outflow" | "strong_outflow" | "pending";
+export type BtcFlowTrend = "sustained_accumulation" | "moderate_inflows" | "mixed" | "moderate_outflows" | "outflow_pressure" | "pending";
+export type BtcFlowSeverity = "positive" | "neutral" | "negative" | "pending";
+
+export type BtcEtfFlowPoint = {
+  date: string;
+  totalNetFlow: number;
+};
+
+export type BtcEtfFlowsData = DashboardDataSource & {
+  latestDate: string;
+  latestTotalNetFlow: number | null;
+  latestFundFlows: BtcEtfFundFlow[];
+  rolling5dNetFlow: number | null;
+  rolling10dNetFlow: number | null;
+  rolling20dNetFlow: number | null;
+  positiveDaysLast10: number;
+  negativeDaysLast10: number;
+  flowStreak: BtcFlowStreak;
+  cumulativeNetFlow: number | null;
+  largestInflowFundLatestDay: BtcEtfFundFlow | null;
+  largestOutflowFundLatestDay: BtcEtfFundFlow | null;
+  dominantFlowDriver: string;
+  breadth: BtcFlowBreadth;
+  dailyLevel: BtcFlowLevel;
+  recentTrend: BtcFlowTrend;
+  readingLabel: string;
+  readingSubtext: string;
+  readingSeverity: BtcFlowSeverity;
+  calculatedTotal: boolean;
+  rowsParsed: number;
+  history: BtcEtfFlowPoint[];
+  interpretation: DashboardModuleData["interpretation"];
+};
+
+export type BtcEtfFlowsDashboardData = {
+  flows: BtcEtfFlowsData;
+  module: DashboardModuleData;
+};
+
 export type RegimeSignal = {
   label: string;
   detail: string;
@@ -169,4 +226,5 @@ export type DashboardData = {
   sectorRotation: SectorRotationData | null;
   quantRisk: QuantRiskData | null;
   vix: VixDashboardData | null;
+  btcEtfFlows: BtcEtfFlowsDashboardData | null;
 };

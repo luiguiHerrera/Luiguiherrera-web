@@ -101,7 +101,7 @@ export const dashboardModules: DashboardModuleData[] = [
       lookingAt: "Flujos netos hacia o desde ETFs spot de Bitcoin como proxy de demanda por exposición vía vehículo regulado.",
       why: "Ayuda a observar presión de demanda/salida en productos ETF, separada del precio spot diario.",
       how: "Entradas persistentes sugieren demanda por el vehículo; salidas persistentes sugieren menor apetito por esa exposición.",
-      whatItDoesNotMean: "No elimina la volatilidad de Bitcoin, no valida precio y no es una señal de ejecución.",
+      whatItDoesNotMean: "No elimina la volatilidad de Bitcoin, no valida precio y no es una instrucción de ejecución.",
     },
   },
 ];

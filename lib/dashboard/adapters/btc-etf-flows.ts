@@ -1,29 +1,82 @@
 import { dashboardModules } from "@/lib/dashboard/manual-data";
-import type { DashboardModuleData } from "@/lib/dashboard/types";
+import type {
+  BtcEtfFlowPoint,
+  BtcEtfFlowsDashboardData,
+  BtcEtfFlowsData,
+  BtcEtfFundFlow,
+  BtcFlowBreadth,
+  BtcFlowLevel,
+  BtcFlowStreak,
+  BtcFlowTrend,
+  DashboardModuleData,
+} from "@/lib/dashboard/types";
 
 const REVALIDATE_SECONDS = 60 * 60 * 24;
+const BITBO_URL = "https://bitbo.io/treasuries/etf-flows/";
 const FARSIDE_URL = "https://farside.co.uk/btc/";
+const FARSIDE_ALL_DATA_URL = "https://farside.co.uk/bitcoin-etf-flow-all-data/";
+const FARSIDE_URLS = [FARSIDE_ALL_DATA_URL, FARSIDE_URL];
+const REQUEST_TIMEOUT_MS = 8000;
+const FALLBACK_MESSAGE = "Datos automáticos no disponibles temporalmente. Mostrando lectura demo para mantener la estructura visual.";
+const BITBO_EXPECTED_COLUMNS = ["Date", "IBIT", "FBTC", "GBTC", "BTC", "BITB", "ARKB", "HODL", "BTCO", "BRRR", "EZBC", "MSBT", "BTCW", "DEFI", "Totals"];
+const FARSIDE_EXPECTED_COLUMNS = ["Date", "IBIT", "FBTC", "BITB", "ARKB", "BTCO", "EZBC", "BRRR", "HODL", "BTCW", "MSBT", "GBTC", "BTC", "Total"];
+const AGGREGATE_ROWS = new Set(["total", "totals", "average", "maximum", "minimum"]);
 
-type FlowRow = {
-  date: string;
-  total: number;
-  contributors: Array<{ ticker: string; flow: number }>;
+type SourceConfig = {
+  id: "bitbo" | "farside";
+  label: string;
+  urls: string[];
+  expectedColumns: string[];
+  reliabilityNote: string;
 };
 
-function fallbackBtcFlowsModule(reason: string): DashboardModuleData {
-  const fallback = dashboardModules.find((module) => module.id === "btc-flows");
+const SOURCE_CONFIGS: SourceConfig[] = [
+  {
+    id: "bitbo",
+    label: "Bitbo / BitcoinTreasuries",
+    urls: [BITBO_URL],
+    expectedColumns: BITBO_EXPECTED_COLUMNS,
+    reliabilityNote: "Datos obtenidos desde tabla pública de Bitbo. El historial visible puede estar limitado a las filas publicadas en la página.",
+  },
+  {
+    id: "farside",
+    label: "Farside Investors",
+    urls: FARSIDE_URLS,
+    expectedColumns: FARSIDE_EXPECTED_COLUMNS,
+    reliabilityNote: "Fallback experimental sobre tabla pública de Farside Investors. La fuente puede bloquear solicitudes server-side o cambiar estructura.",
+  },
+];
 
+type ParsedFlowRow = {
+  date: string;
+  timestamp: number;
+  totalNetFlow: number;
+  latestFundFlows: BtcEtfFundFlow[];
+  calculatedTotal: boolean;
+};
+
+type ParsedFarsideTable = {
+  rows: ParsedFlowRow[];
+  columns: string[];
+  calculatedTotal: boolean;
+  source: SourceConfig;
+  sourceUrl: string;
+};
+
+function getFallbackModule() {
+  const fallback = dashboardModules.find((module) => module.id === "btc-flows");
   if (!fallback) {
     throw new Error("Missing BTC ETF flows fallback module");
   }
+  return fallback;
+}
 
-  return {
-    ...fallback,
-    status: "Datos manuales",
-    dataStatus: "manual",
-    lastUpdated: "Datos automáticos no disponibles temporalmente. Mostrando datos demo para mantener la estructura visual.",
-    reliabilityNote: `${fallback.reliabilityNote} Datos automáticos no disponibles temporalmente; se mantiene una lectura manual/demo prudente.`,
-  };
+function logBtcFlows(message: string, details: Record<string, unknown> = {}) {
+  console.info("[dashboard:btc-etf-flows]", { message, ...details });
+}
+
+function logBtcFlowsFallback(reason: string, details: Record<string, unknown> = {}) {
+  console.warn("[dashboard:btc-etf-flows]", { reason, ...details });
 }
 
 function stripHtml(value: string) {
@@ -32,54 +85,186 @@ function stripHtml(value: string) {
     .replace(/<style[\s\S]*?<\/style>/gi, "")
     .replace(/<[^>]+>/g, " ")
     .replace(/&nbsp;/g, " ")
+    .replace(/&#8211;|&#8212;|&ndash;|&mdash;/g, "-")
     .replace(/&amp;/g, "&")
     .replace(/\s+/g, " ")
     .trim();
 }
 
-function parseFlowValue(value: string) {
+function normalizeHeader(value: string) {
+  return value.toLowerCase().replace(/\s+/g, " ").trim();
+}
+
+function expectedFundColumns(expectedColumns: string[]) {
+  return new Set(expectedColumns.filter((column) => !["date", "total", "totals"].includes(normalizeHeader(column))).map(normalizeHeader));
+}
+
+function matchingExpectedColumns(headers: string[], expectedColumns: string[]) {
+  const normalized = headers.map(normalizeHeader);
+  return expectedColumns.filter((column) => normalized.includes(normalizeHeader(column)));
+}
+
+function parseFlowValue(value: string): number | null {
   const clean = value
     .replace(/,/g, "")
     .replace(/\$/g, "")
     .replace(/m$/i, "")
+    .replace(/[–—]/g, "-")
     .trim();
 
   if (!clean || clean === "-" || clean.toLowerCase() === "n/a") {
-    return 0;
+    return null;
   }
 
   const parenthetical = clean.match(/^\(([-\d.]+)\)$/);
   const normalized = parenthetical ? `-${parenthetical[1]}` : clean;
   const parsed = Number(normalized);
-  return Number.isFinite(parsed) ? parsed : 0;
+  if (!Number.isFinite(parsed)) return null;
+  return Math.abs(parsed) < 0.000001 ? 0 : parsed;
 }
 
-function formatUsdMillions(value: number) {
+function parseFarsideDate(value: string) {
+  const clean = value.replace(/(\d+)(st|nd|rd|th)/gi, "$1").trim();
+  const timestamp = Date.parse(`${clean} UTC`);
+  return Number.isFinite(timestamp) ? timestamp : null;
+}
+
+function formatUsdMillions(value: number | null) {
+  if (value === null) return "Dato pendiente";
   const sign = value > 0 ? "+" : "";
   return `${sign}${value.toFixed(0)} M USD`;
 }
 
-function formatStreak(rows: FlowRow[]) {
-  const firstDirection = rows[0]?.total > 0 ? "entrada" : rows[0]?.total < 0 ? "salida" : "neutral";
-
-  if (firstDirection === "neutral") {
-    return "Último dato neutral";
-  }
-
-  let count = 0;
-  for (const row of rows) {
-    if ((firstDirection === "entrada" && row.total > 0) || (firstDirection === "salida" && row.total < 0)) {
-      count += 1;
-    } else {
-      break;
-    }
-  }
-
-  return `${count} día${count === 1 ? "" : "s"} de ${firstDirection}${count === 1 ? "" : "s"}`;
+function formatRollingFlow(value: number | null) {
+  return value === null ? "Historial insuficiente" : formatUsdMillions(value);
 }
 
-function parseFarsideRows(html: string): FlowRow[] {
+function formatPositiveFundFlow(flow: BtcEtfFundFlow | null) {
+  return flow ? `${flow.ticker} ${formatUsdMillions(flow.flow)}` : "Sin entradas positivas";
+}
+
+function formatNegativeFundFlow(flow: BtcEtfFundFlow | null) {
+  return flow ? `${flow.ticker} ${formatUsdMillions(flow.flow)}` : "Sin salidas negativas";
+}
+
+function dataStatusForTimestamp(timestamp: number): BtcEtfFlowsData["dataStatus"] {
+  const staleAfterMs = 4 * 24 * 60 * 60 * 1000;
+  return Date.now() - timestamp > staleAfterMs ? "delayed" : "automated";
+}
+
+function sumRows(rows: ParsedFlowRow[], count: number) {
+  return rows.length >= count ? rows.slice(0, count).reduce((sum, row) => sum + row.totalNetFlow, 0) : null;
+}
+
+function latestFundBreadth(fundFlows: BtcEtfFundFlow[]): BtcFlowBreadth {
+  return fundFlows.reduce<BtcFlowBreadth>(
+    (breadth, fund) => {
+      if (fund.flow > 0) return { ...breadth, positive: breadth.positive + 1 };
+      if (fund.flow < 0) return { ...breadth, negative: breadth.negative + 1 };
+      return { ...breadth, flatOrMissing: breadth.flatOrMissing + 1 };
+    },
+    { positive: 0, negative: 0, flatOrMissing: 0 },
+  );
+}
+
+function positiveNegativeDays(rows: ParsedFlowRow[]) {
+  return rows.slice(0, 10).reduce(
+    (counts, row) => ({
+      positive: counts.positive + (row.totalNetFlow > 0 ? 1 : 0),
+      negative: counts.negative + (row.totalNetFlow < 0 ? 1 : 0),
+    }),
+    { positive: 0, negative: 0 },
+  );
+}
+
+function flowStreak(rows: ParsedFlowRow[]): BtcFlowStreak {
+  const direction = rows[0]?.totalNetFlow > 0 ? "inflow" : rows[0]?.totalNetFlow < 0 ? "outflow" : "none";
+  if (direction === "none") {
+    return { direction, count: 0, label: "Sin racha clara" };
+  }
+
+  const count = rows.findIndex((row) => (direction === "inflow" ? row.totalNetFlow <= 0 : row.totalNetFlow >= 0));
+  const streakCount = count === -1 ? rows.length : count;
+  const noun = direction === "inflow" ? "entradas" : "salidas";
+  return {
+    direction,
+    count: streakCount,
+    label: streakCount > 1 ? `Racha de ${streakCount} días de ${noun}` : `Racha de ${noun}`,
+  };
+}
+
+function dailyLevel(value: number | null): BtcFlowLevel {
+  if (value === null) return "pending";
+  if (value > 300) return "strong_inflow";
+  if (value >= 50) return "moderate_inflow";
+  if (value < -300) return "strong_outflow";
+  if (value <= -50) return "moderate_outflow";
+  return "neutral";
+}
+
+function recentTrend(rolling5d: number | null, rolling20d: number | null): BtcFlowTrend {
+  if (rolling5d === null || rolling20d === null) return "pending";
+  if (rolling5d > 1000 || rolling20d > 3000) return "sustained_accumulation";
+  if (rolling5d >= 250 || rolling20d >= 750) return "moderate_inflows";
+  if (rolling5d < -1000 || rolling20d < -3000) return "outflow_pressure";
+  if (rolling5d <= -250 || rolling20d <= -750) return "moderate_outflows";
+  return "mixed";
+}
+
+function classifyFlowReading(
+  latestTotalNetFlow: number | null,
+  rolling5dNetFlow: number | null,
+  rolling20dNetFlow: number | null,
+  breadth: BtcFlowBreadth,
+  streak: BtcFlowStreak,
+): Pick<BtcEtfFlowsData, "readingLabel" | "readingSubtext" | "readingSeverity"> {
+  if (latestTotalNetFlow === null || rolling5dNetFlow === null) {
+    return {
+      readingLabel: "Datos pendientes",
+      readingSubtext: "La fuente aún no ha publicado o completado la actualización diaria.",
+      readingSeverity: "pending",
+    };
+  }
+
+  if ((rolling5dNetFlow > 250 && (rolling20dNetFlow === null || rolling20dNetFlow > 750)) || (latestTotalNetFlow > 300 && breadth.positive > breadth.negative)) {
+    return {
+      readingLabel: "Entradas sostenidas",
+      readingSubtext: rolling20dNetFlow === null ? "La ventana reciente muestra demanda neta positiva; historial insuficiente para 20D." : streak.direction === "inflow" ? "Los ETFs spot de Bitcoin muestran demanda neta positiva en la ventana reciente." : "La ventana reciente mantiene demanda neta positiva vía ETFs.",
+      readingSeverity: "positive",
+    };
+  }
+
+  if ((rolling5dNetFlow < -250 && (rolling20dNetFlow === null || rolling20dNetFlow < -750)) || (latestTotalNetFlow < -300 && breadth.negative > breadth.positive)) {
+    return {
+      readingLabel: "Presión de salidas",
+      readingSubtext: rolling20dNetFlow === null ? "La ventana reciente muestra reducción neta de exposición; historial insuficiente para 20D." : "Los flujos recientes muestran reducción neta de exposición vía ETFs.",
+      readingSeverity: "negative",
+    };
+  }
+
+  return {
+    readingLabel: "Flujos mixtos",
+    readingSubtext: "No hay una dirección dominante clara en los flujos recientes.",
+    readingSeverity: "neutral",
+  };
+}
+
+function strongestPositive(fundFlows: BtcEtfFundFlow[]) {
+  return fundFlows.filter((fund) => fund.flow > 0).sort((a, b) => b.flow - a.flow)[0] ?? null;
+}
+
+function strongestNegative(fundFlows: BtcEtfFundFlow[]) {
+  return fundFlows.filter((fund) => fund.flow < 0).sort((a, b) => a.flow - b.flow)[0] ?? null;
+}
+
+function dominantDriver(fundFlows: BtcEtfFundFlow[]) {
+  const driver = [...fundFlows].sort((a, b) => Math.abs(b.flow) - Math.abs(a.flow))[0];
+  return driver && driver.flow !== 0 ? driver.ticker : "Sin aportante dominante";
+}
+
+function parsePublicFlowRows(html: string, source: SourceConfig, sourceUrl: string): ParsedFarsideTable {
   const tableMatches = html.match(/<table[\s\S]*?<\/table>/gi) ?? [];
+  const fundColumns = expectedFundColumns(source.expectedColumns);
 
   for (const table of tableMatches) {
     const rawRows = table.match(/<tr[\s\S]*?<\/tr>/gi) ?? [];
@@ -87,109 +272,299 @@ function parseFarsideRows(html: string): FlowRow[] {
       const cellMatches = row.match(/<t[dh][\s\S]*?<\/t[dh]>/gi) ?? [];
       return cellMatches.map(stripHtml);
     });
-    const headerIndex = parsedRows.findIndex((row) => row.some((cell) => cell.toLowerCase() === "date") && row.some((cell) => cell.toLowerCase() === "total"));
+    const headerIndex = parsedRows.findIndex((row) => {
+      const normalized = row.map(normalizeHeader);
+      const expectedFundMatches = normalized.filter((cell) => fundColumns.has(cell)).length;
+      const hasTotal = normalized.some((cell) => cell === "total" || cell === "totals" || cell.includes("total"));
+      return normalized.includes("date") && (hasTotal || expectedFundMatches >= 3);
+    });
 
-    if (headerIndex === -1) {
-      continue;
-    }
+    if (headerIndex === -1) continue;
 
     const headers = parsedRows[headerIndex];
-    const totalIndex = headers.findIndex((cell) => cell.toLowerCase() === "total");
-    const dateIndex = headers.findIndex((cell) => cell.toLowerCase() === "date");
+    const normalizedHeaders = headers.map(normalizeHeader);
+    const dateIndex = normalizedHeaders.findIndex((cell) => cell === "date");
+    const totalIndex = normalizedHeaders.findIndex((cell) => cell === "total" || cell === "totals" || cell.includes("total"));
 
-    if (dateIndex === -1 || totalIndex === -1) {
-      continue;
-    }
+    if (dateIndex === -1) continue;
 
     const rows = parsedRows
       .slice(headerIndex + 1)
       .map((cells) => {
-        const date = cells[dateIndex];
-        const total = parseFlowValue(cells[totalIndex] ?? "");
-        const contributors = headers
-          .map((ticker, index) => ({ ticker, flow: parseFlowValue(cells[index] ?? "") }))
-          .filter(({ ticker }, index) => index !== dateIndex && index !== totalIndex && ticker.length > 0)
-          .sort((a, b) => Math.abs(b.flow) - Math.abs(a.flow))
-          .slice(0, 3);
+        const date = cells[dateIndex] ?? "";
+        if (AGGREGATE_ROWS.has(normalizeHeader(date))) return null;
+        const timestamp = parseFarsideDate(date);
+        if (timestamp === null) return null;
 
-        return { date, total, contributors };
+        const fundFlows = headers
+          .map((ticker, index) => ({ ticker: ticker.trim(), normalizedTicker: normalizeHeader(ticker), flow: parseFlowValue(cells[index] ?? "") }))
+          .filter(({ normalizedTicker }, index) => index !== dateIndex && index !== totalIndex && fundColumns.has(normalizedTicker))
+          .map(({ ticker, flow }) => ({ ticker, flow: flow ?? 0 }));
+        const calculatedTotal = totalIndex === -1;
+        const totalFromTable = totalIndex === -1 ? null : parseFlowValue(cells[totalIndex] ?? "");
+        const totalNetFlow = totalFromTable ?? fundFlows.reduce((sum, fund) => sum + fund.flow, 0);
+
+        return { date, timestamp, totalNetFlow, latestFundFlows: fundFlows, calculatedTotal };
       })
-      .filter((row) => row.date && Number.isFinite(row.total));
+      .filter((row): row is ParsedFlowRow => row !== null && Number.isFinite(row.totalNetFlow))
+      .sort((a, b) => b.timestamp - a.timestamp);
 
     if (rows.length >= 5) {
-      return rows;
+      return {
+        rows,
+        columns: headers,
+        calculatedTotal: rows.some((row) => row.calculatedTotal),
+        source,
+        sourceUrl,
+      };
     }
   }
 
-  return [];
+  return { rows: [], columns: [], calculatedTotal: false, source, sourceUrl };
 }
 
-async function fetchFarsideHtml() {
-  const controller = new AbortController();
-  const timeout = setTimeout(() => controller.abort(), 8000);
+async function fetchSourceHtml(url: string, source: SourceConfig) {
+  let lastError: Error | null = null;
 
-  try {
-    const response = await fetch(FARSIDE_URL, {
-      headers: {
-        "User-Agent": "MarketRegimeDashboard/1.0",
-      },
-      next: { revalidate: REVALIDATE_SECONDS },
-      signal: controller.signal,
-    });
+  for (let attempt = 1; attempt <= 2; attempt += 1) {
+    try {
+      const response = await fetch(url, {
+        headers: {
+          "User-Agent": "MarketRegimeDashboard/1.0 (+https://market-lab.local)",
+          Accept: "text/html",
+          "Accept-Language": "en-US,en;q=0.9",
+        },
+        next: { revalidate: REVALIDATE_SECONDS },
+        signal: AbortSignal.timeout(REQUEST_TIMEOUT_MS),
+      });
 
-    if (!response.ok) {
-      throw new Error(`Farside HTTP ${response.status}`);
+      const html = await response.text();
+      logBtcFlows("source_response", {
+        source: source.id,
+        url,
+        attempt,
+        status: response.status,
+        htmlLength: html.length,
+      });
+
+      if (!response.ok) {
+        lastError = new Error(`${source.label} HTTP ${response.status}`);
+        continue;
+      }
+
+      return html;
+    } catch (error) {
+      lastError = error instanceof Error ? error : new Error("unknown Farside request error");
+      logBtcFlowsFallback("source_request_attempt_failed", {
+        source: source.id,
+        url,
+        attempt,
+        message: lastError.message,
+      });
     }
-
-    return await response.text();
-  } finally {
-    clearTimeout(timeout);
   }
+
+  throw lastError ?? new Error(`${source.label} request failed`);
 }
 
-export async function getBtcEtfFlowsModule(): Promise<DashboardModuleData> {
-  try {
-    const html = await fetchFarsideHtml();
-    const rows = parseFarsideRows(html);
+async function getParsedSourceTable(source: SourceConfig) {
+  const errors: string[] = [];
 
-    if (rows.length < 5) {
-      throw new Error("no se pudo interpretar la tabla pública de Farside");
+  for (const url of source.urls) {
+    try {
+      const html = await fetchSourceHtml(url, source);
+      const parsed = parsePublicFlowRows(html, source, url);
+      logBtcFlows("source_parse", {
+        source: source.id,
+        url,
+        tableFound: parsed.rows.length > 0,
+        rowsParsed: parsed.rows.length,
+        latestDates: parsed.rows.slice(0, 3).map((row) => row.date),
+        columns: parsed.columns,
+        expectedColumnsDetected: matchingExpectedColumns(parsed.columns, source.expectedColumns),
+        calculatedTotal: parsed.calculatedTotal,
+        rolling20dAvailable: parsed.rows.length >= 20,
+      });
+
+      if (parsed.rows.length >= 5) {
+        return parsed;
+      }
+      errors.push(`${url}: no usable table`);
+    } catch (error) {
+      const message = error instanceof Error ? error.message : "unknown error";
+      errors.push(`${url}: ${message}`);
+      logBtcFlowsFallback("source_fetch_or_parse_failed", { source: source.id, url, message });
     }
+  }
 
-    const latest = rows[0];
-    const fiveDayFlow = rows.slice(0, 5).reduce((sum, row) => sum + row.total, 0);
-    const twentyDayFlow = rows.slice(0, 20).reduce((sum, row) => sum + row.total, 0);
-    const contributors = latest.contributors
-      .filter((contributor) => contributor.flow !== 0)
-      .map((contributor) => `${contributor.ticker} ${formatUsdMillions(contributor.flow)}`)
-      .join(", ");
+  throw new Error(errors.join(" | "));
+}
 
+async function getParsedBtcFlowTable() {
+  const errors: string[] = [];
+
+  for (const source of SOURCE_CONFIGS) {
+    try {
+      return await getParsedSourceTable(source);
+    } catch (error) {
+      const message = error instanceof Error ? error.message : "unknown source error";
+      errors.push(`${source.label}: ${message}`);
+      logBtcFlowsFallback("btc_flow_source_failed", { source: source.id, message });
+    }
+  }
+
+  throw new Error(errors.join(" | "));
+}
+
+function buildBtcDataFromRows(parsed: ParsedFarsideTable): BtcEtfFlowsData {
+  const { calculatedTotal, rows, source, sourceUrl } = parsed;
+  const latest = rows[0];
+  const rolling5dNetFlow = sumRows(rows, 5);
+  const rolling10dNetFlow = sumRows(rows, 10);
+  const rolling20dNetFlow = sumRows(rows, 20);
+  const dayCounts = positiveNegativeDays(rows);
+  const streak = flowStreak(rows);
+  const breadth = latestFundBreadth(latest.latestFundFlows);
+  const largestInflowFundLatestDay = strongestPositive(latest.latestFundFlows);
+  const largestOutflowFundLatestDay = strongestNegative(latest.latestFundFlows);
+  const reading = classifyFlowReading(latest.totalNetFlow, rolling5dNetFlow, rolling20dNetFlow, breadth, streak);
+
+  return {
+    sourceName: source.label,
+    sourceUrl,
+    lastUpdated: `Última actualización disponible: ${latest.date}`,
+    updateFrequency: "Diaria / según disponibilidad de la fuente",
+    dataStatus: dataStatusForTimestamp(latest.timestamp),
+    reliabilityNote: source.reliabilityNote,
+    latestDate: latest.date,
+    latestTotalNetFlow: latest.totalNetFlow,
+    latestFundFlows: latest.latestFundFlows,
+    rolling5dNetFlow,
+    rolling10dNetFlow,
+    rolling20dNetFlow,
+    positiveDaysLast10: dayCounts.positive,
+    negativeDaysLast10: dayCounts.negative,
+    flowStreak: streak,
+    cumulativeNetFlow: rows.reduce((sum, row) => sum + row.totalNetFlow, 0),
+    largestInflowFundLatestDay,
+    largestOutflowFundLatestDay,
+    dominantFlowDriver: dominantDriver(latest.latestFundFlows),
+    breadth,
+    dailyLevel: dailyLevel(latest.totalNetFlow),
+    recentTrend: recentTrend(rolling5dNetFlow, rolling20dNetFlow),
+    calculatedTotal,
+    rowsParsed: rows.length,
+    history: rows.slice(0, 30).reverse().map<BtcEtfFlowPoint>((row) => ({ date: row.date, totalNetFlow: row.totalNetFlow })),
+    interpretation: {
+      lookingAt: "Flujos netos hacia o desde ETFs spot de Bitcoin de EE. UU. como proxy de demanda vía vehículos regulados.",
+      why: "Ayuda a observar presión de flujos y absorción institucional separada del movimiento diario del precio spot.",
+      how: "Lectura aproximada basada en flujos netos diarios y acumulados recientes. Ventanas positivas sugieren demanda vía ETFs; ventanas negativas sugieren reducción de exposición vía ETFs.",
+      whatItDoesNotMean: "Entradas netas no garantizan subidas del precio de Bitcoin. Salidas netas tampoco implican caídas futuras. Los flujos son una pieza de contexto junto con precio, liquidez, volatilidad y régimen macro.",
+    },
+    ...reading,
+  };
+}
+
+function buildModuleFromData(data: BtcEtfFlowsData, fallback: DashboardModuleData): DashboardModuleData {
+  const driverSummary = [
+    `Mayor aporte positivo: ${formatPositiveFundFlow(data.largestInflowFundLatestDay)}`,
+    `Mayor aporte negativo: ${formatNegativeFundFlow(data.largestOutflowFundLatestDay)}`,
+  ].join(" · ");
+
+  return {
+    ...fallback,
+    status: data.readingLabel,
+    sourceName: data.sourceName,
+    sourceUrl: data.sourceUrl,
+    lastUpdated: data.lastUpdated,
+    updateFrequency: data.updateFrequency,
+    dataStatus: data.dataStatus,
+    reliabilityNote: data.reliabilityNote,
+    observedData: [
+      ["Flujo neto último día", formatUsdMillions(data.latestTotalNetFlow)],
+      ["Rolling 5D", formatUsdMillions(data.rolling5dNetFlow)],
+      ["Rolling 20D", formatRollingFlow(data.rolling20dNetFlow)],
+      ["Racha", data.flowStreak.label],
+      ["Aportantes", driverSummary],
+    ],
+    interpretation: data.interpretation,
+  };
+}
+
+function fallbackBtcFlowsData(fallback: DashboardModuleData, reason: string): BtcEtfFlowsDashboardData {
+  logBtcFlowsFallback("using_btc_flows_fallback", { reason });
+  const demoFlows: BtcEtfFundFlow[] = [
+    { ticker: "IBIT", flow: 95 },
+    { ticker: "FBTC", flow: 40 },
+    { ticker: "ARKB", flow: 8 },
+    { ticker: "GBTC", flow: -23 },
+    { ticker: "BITB", flow: 0 },
+  ];
+  const history = [
+    -80, 45, 130, 220, -35, 90, 160, 120, 40, -70, 180, 240, 80, -25, 60, 110, 140, 75, -55, 120,
+  ].map((totalNetFlow, index) => ({ date: `demo-${index + 1}`, totalNetFlow }));
+  const rows = history.slice().reverse().map<ParsedFlowRow>((point, index) => ({
+    date: point.date,
+    timestamp: index,
+    totalNetFlow: point.totalNetFlow,
+    latestFundFlows: demoFlows,
+    calculatedTotal: false,
+  }));
+  const data: BtcEtfFlowsData = {
+    sourceName: "Bitbo / BitcoinTreasuries",
+    sourceUrl: BITBO_URL,
+    lastUpdated: FALLBACK_MESSAGE,
+    updateFrequency: "Diaria / según disponibilidad de la fuente",
+    dataStatus: "fallback",
+    reliabilityNote: `${FALLBACK_MESSAGE} Detalle técnico disponible solo en logs server-side.`,
+    latestDate: "Demo",
+    latestTotalNetFlow: 120,
+    latestFundFlows: demoFlows,
+    rolling5dNetFlow: sumRows(rows, 5),
+    rolling10dNetFlow: sumRows(rows, 10),
+    rolling20dNetFlow: sumRows(rows, 20),
+    positiveDaysLast10: positiveNegativeDays(rows).positive,
+    negativeDaysLast10: positiveNegativeDays(rows).negative,
+    flowStreak: { direction: "inflow", count: 3, label: "Racha de 3 días de entradas" },
+    cumulativeNetFlow: rows.reduce((sum, row) => sum + row.totalNetFlow, 0),
+    largestInflowFundLatestDay: strongestPositive(demoFlows),
+    largestOutflowFundLatestDay: strongestNegative(demoFlows),
+    dominantFlowDriver: "IBIT",
+    breadth: latestFundBreadth(demoFlows),
+    dailyLevel: "moderate_inflow",
+    recentTrend: "moderate_inflows",
+    readingLabel: "Datos pendientes",
+    readingSubtext: "La fuente aún no ha publicado o completado la actualización diaria.",
+    readingSeverity: "pending",
+    calculatedTotal: false,
+    rowsParsed: 0,
+    history,
+    interpretation: {
+      lookingAt: "Flujos netos hacia o desde ETFs spot de Bitcoin de EE. UU. como proxy de demanda vía vehículos regulados.",
+      why: "Ayuda a observar presión de flujos y absorción institucional separada del movimiento diario del precio spot.",
+      how: "Lectura aproximada basada en flujos netos diarios y acumulados recientes.",
+      whatItDoesNotMean: "Entradas netas no garantizan subidas del precio de Bitcoin. Salidas netas tampoco implican caídas futuras. Los flujos son una pieza de contexto junto con precio, liquidez, volatilidad y régimen macro.",
+    },
+  };
+
+  return {
+    flows: data,
+    module: buildModuleFromData(data, fallback),
+  };
+}
+
+export async function getBtcEtfFlowsData(): Promise<BtcEtfFlowsDashboardData> {
+  const fallback = getFallbackModule();
+
+  try {
+    const parsed = await getParsedBtcFlowTable();
+    const data = buildBtcDataFromRows(parsed);
     return {
-      id: "btc-flows",
-      title: "BTC ETF Flows",
-      status: latest.total >= 0 ? "Entradas netas" : "Salidas netas",
-      sourceName: "Farside BTC ETF flows",
-      sourceUrl: FARSIDE_URL,
-      lastUpdated: `Automático con fuente pública: ${latest.date}`,
-      updateFrequency: "Automática server-side con caché diaria; revisión semanal sugerida",
-      dataStatus: "automated",
-      reliabilityNote: "Adapter experimental sobre tabla pública de Farside. La estructura de la fuente puede cambiar y los datos deben tratarse como informativos, con posible retraso y necesidad de verificación manual.",
-      observedData: [
-        ["Último flujo diario neto", formatUsdMillions(latest.total)],
-        ["Flujo 5 días", formatUsdMillions(fiveDayFlow)],
-        ["Flujo 20 días", formatUsdMillions(twentyDayFlow)],
-        ["Racha", formatStreak(rows)],
-        ["Principales contribuyentes", contributors || "Pendiente de datos suficientes"],
-      ],
-      interpretation: {
-        lookingAt: "Flujos netos hacia o desde ETFs spot de Bitcoin como proxy de demanda por exposición vía vehículo regulado.",
-        why: "Ayuda a observar presión de demanda o salida en productos ETF, separada del precio spot diario.",
-        how: "Entradas persistentes sugieren demanda por el vehículo; salidas persistentes sugieren menor apetito por esa exposición.",
-        whatItDoesNotMean: "Los flujos ayudan a leer demanda por exposición a Bitcoin vía ETF, pero no eliminan la volatilidad ni son una señal de ejecución.",
-      },
+      flows: data,
+      module: buildModuleFromData(data, fallback),
     };
   } catch (error) {
     const reason = error instanceof Error ? error.message : "error desconocido de fuente";
-    return fallbackBtcFlowsModule(reason);
+    return fallbackBtcFlowsData(fallback, reason);
   }
 }
