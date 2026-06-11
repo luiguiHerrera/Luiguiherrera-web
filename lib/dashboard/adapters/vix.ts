@@ -142,16 +142,66 @@ function formatChange(value: number | null) {
   return `${sign}${value.toFixed(1)} pts`;
 }
 
-function vixStateFor(latestVix: number): VixSpotData["vixState"] {
-  if (latestVix >= 30) return "stress";
-  if (latestVix >= 20) return "attention";
-  return "normal";
+function vixLevelFor(latestVix: number): Pick<VixSpotData, "vixLevelLabel" | "vixSeverity" | "vixDescription"> {
+  if (latestVix >= 40) {
+    return {
+      vixLevelLabel: "Estrés extremo",
+      vixSeverity: "extreme",
+      vixDescription: "Lectura excepcionalmente elevada de volatilidad implícita.",
+    };
+  }
+  if (latestVix >= 30) {
+    return {
+      vixLevelLabel: "Estrés",
+      vixSeverity: "stress",
+      vixDescription: "Volatilidad implícita alta, normalmente asociada a mayor demanda de protección.",
+    };
+  }
+  if (latestVix >= 25) {
+    return {
+      vixLevelLabel: "Tensión",
+      vixSeverity: "elevated",
+      vixDescription: "Presión de volatilidad elevada frente a condiciones normales.",
+    };
+  }
+  if (latestVix >= 20) {
+    return {
+      vixLevelLabel: "Vigilancia",
+      vixSeverity: "watch",
+      vixDescription: "La volatilidad entra en una zona donde suele aumentar la sensibilidad del mercado.",
+    };
+  }
+  if (latestVix >= 16) {
+    return {
+      vixLevelLabel: "Normal alto",
+      vixSeverity: "watch",
+      vixDescription: "Volatilidad todavía moderada, pero acercándose a zona de vigilancia.",
+    };
+  }
+  if (latestVix >= 12) {
+    return {
+      vixLevelLabel: "Normal bajo",
+      vixSeverity: "normal",
+      vixDescription: "Entorno de volatilidad contenido.",
+    };
+  }
+  return {
+    vixLevelLabel: "Complacencia",
+    vixSeverity: "low",
+    vixDescription: "Volatilidad implícita muy baja frente a rangos habituales.",
+  };
 }
 
-function vixTrendFor(change5d: number | null): VixSpotData["vixTrend"] {
-  if (change5d === null) return "stable";
-  if (change5d > 1) return "rising";
-  if (change5d < -1) return "falling";
+function relativeChange(current: number, previous: number | null | undefined) {
+  if (!previous || previous <= 0) return null;
+  return ((current - previous) / previous) * 100;
+}
+
+function vixTrendFor(change1dPct: number | null, change5dPct: number | null): VixSpotData["vixTrend"] {
+  if (change5dPct === null && change1dPct === null) return "stable";
+  if ((change5dPct ?? Number.NEGATIVE_INFINITY) >= 15 || (change1dPct ?? Number.NEGATIVE_INFINITY) >= 8) return "rising_fast";
+  if ((change5dPct ?? Number.NEGATIVE_INFINITY) >= 5) return "rising";
+  if ((change5dPct ?? Number.POSITIVE_INFINITY) <= -10) return "falling";
   return "stable";
 }
 
@@ -159,6 +209,70 @@ function percentileFor(history: VixHistoryPoint[], latestVix: number) {
   if (history.length < 252) return null;
   const belowOrEqual = history.filter((point) => point.value <= latestVix).length;
   return (belowOrEqual / history.length) * 100;
+}
+
+function percentileLabelFor(percentile: number | null) {
+  if (percentile === null) return "Historial insuficiente";
+  if (percentile >= 95) return "Extremo frente a su historia";
+  if (percentile >= 80) return "Alto frente a su historia";
+  if (percentile >= 60) return "Por encima de lo habitual";
+  if (percentile >= 25) return "En rango habitual";
+  return "Bajo frente a su historia reciente";
+}
+
+function compositeReadingFor(
+  latestVix: number,
+  level: Pick<VixSpotData, "vixLevelLabel" | "vixSeverity">,
+  percentile: number | null,
+  trend: VixSpotData["vixTrend"],
+): Pick<VixSpotData, "vixCompositeLabel" | "vixCompositeSubtext" | "vixSeverity"> {
+  if (latestVix >= 40) {
+    return {
+      vixCompositeLabel: "Estrés extremo",
+      vixCompositeSubtext: "Lectura excepcional de presión de volatilidad.",
+      vixSeverity: "extreme",
+    };
+  }
+  if (latestVix >= 30) {
+    return {
+      vixCompositeLabel: "Estrés",
+      vixCompositeSubtext: "Mayor demanda implícita de protección.",
+      vixSeverity: "stress",
+    };
+  }
+  if (latestVix >= 25) {
+    return {
+      vixCompositeLabel: "Tensión",
+      vixCompositeSubtext: "Estrés de mercado por encima de rangos normales.",
+      vixSeverity: "elevated",
+    };
+  }
+  if (latestVix >= 20) {
+    return {
+      vixCompositeLabel: "Vigilancia",
+      vixCompositeSubtext: trend === "rising" || trend === "rising_fast" ? "Presión de volatilidad en aumento." : "Volatilidad en zona de mayor sensibilidad.",
+      vixSeverity: "watch",
+    };
+  }
+  if (latestVix >= 18 && (trend === "rising" || trend === "rising_fast" || (percentile ?? 0) > 60)) {
+    return {
+      vixCompositeLabel: "Vigilancia",
+      vixCompositeSubtext: "Volatilidad acercándose a zona de tensión.",
+      vixSeverity: "watch",
+    };
+  }
+  if (latestVix >= 18) {
+    return {
+      vixCompositeLabel: "Normal alto",
+      vixCompositeSubtext: "Cerca de zona de vigilancia.",
+      vixSeverity: "watch",
+    };
+  }
+  return {
+    vixCompositeLabel: level.vixLevelLabel,
+    vixCompositeSubtext: level.vixSeverity === "low" ? "Volatilidad implícita muy contenida." : "Presión de volatilidad contenida.",
+    vixSeverity: level.vixSeverity,
+  };
 }
 
 function buildTermStructureFallback(latestVix: number | null, lastUpdated: string): VixTermStructureData {
@@ -178,7 +292,7 @@ function buildTermStructureFallback(latestVix: number | null, lastUpdated: strin
       lookingAt: "Relación entre VIX spot y futuros cercanos para observar si se paga más por protección cercana o futura.",
       why: "Ayuda a diferenciar tensión inmediata de una curva más normalizada.",
       how: "Contango suele asociarse con menor tensión inmediata; backwardation suele indicar más estrés cercano.",
-      whatItDoesNotMean: "No predice por sí sola la dirección del mercado ni marca puntos de entrada o salida.",
+      whatItDoesNotMean: "No anticipa por sí sola la dirección del mercado ni marca puntos de entrada o salida.",
     },
   };
 }
@@ -199,8 +313,13 @@ function buildFallbackVixData(fallback: DashboardModuleData): VixDashboardData {
     change5d: -0.8,
     change21d: 1.2,
     vixPercentile: 42,
-    vixState: "normal",
-    vixTrend: "falling",
+    vixLevelLabel: "Normal alto",
+    vixSeverity: "watch",
+    vixDescription: "Volatilidad todavía moderada, pero acercándose a zona de vigilancia.",
+    vixCompositeLabel: "Normal alto",
+    vixCompositeSubtext: "Cerca de zona de vigilancia.",
+    vixPercentileLabel: "En rango habitual",
+    vixTrend: "stable",
     history: [
       18.4, 18.2, 18.9, 19.6, 18.8, 18.1, 17.6, 17.9, 18.5, 18.0, 17.4, 17.8,
       18.3, 19.1, 18.7, 18.0, 17.7, 17.2, 17.5, 18.1, 18.6, 18.2, 17.9, 17.8,
@@ -209,7 +328,7 @@ function buildFallbackVixData(fallback: DashboardModuleData): VixDashboardData {
       lookingAt: "Último cierre disponible del VIX y cambios recientes de volatilidad implícita del S&P 500.",
       why: "El VIX resume expectativas de volatilidad implícita y ayuda a leer presión de riesgo.",
       how: "Lectura aproximada basada en umbrales habituales y datos históricos; niveles más altos sugieren mayor tensión de volatilidad.",
-      whatItDoesNotMean: "No predice dirección del mercado, no es una recomendación y no sustituye análisis de escenario.",
+      whatItDoesNotMean: "Un VIX alto no significa automáticamente caída futura del mercado. Un VIX bajo tampoco elimina el riesgo. Mide expectativas implícitas de volatilidad, no dirección ni retorno esperado.",
     },
   };
 
@@ -230,7 +349,7 @@ function buildFallbackVixData(fallback: DashboardModuleData): VixDashboardData {
         ["VIX último cierre", formatVix(spot.latestVix)],
         ["Cambio 1D", formatChange(spot.change1d)],
         ["Cambio 5D", formatChange(spot.change5d)],
-        ["Estado", "Normal"],
+        ["Lectura", spot.vixCompositeLabel],
       ],
       interpretation: spot.interpretation,
     },
@@ -258,8 +377,11 @@ export async function getVixData(): Promise<VixDashboardData> {
   const change5d = history.length >= 6 ? latest.value - history[history.length - 6].value : null;
   const change21d = history.length >= 22 ? latest.value - history[history.length - 22].value : null;
   const percentile = percentileFor(history, latest.value);
-  const state = vixStateFor(latest.value);
-  const trend = vixTrendFor(change5d);
+  const level = vixLevelFor(latest.value);
+  const change1dPct = relativeChange(latest.value, previous.value);
+  const change5dPct = relativeChange(latest.value, history.at(-6)?.value);
+  const trend = vixTrendFor(change1dPct, change5dPct);
+  const composite = compositeReadingFor(latest.value, level, percentile, trend);
   const lastUpdated = `Último cierre disponible: ${formatDate(latest.date)}`;
 
   const spot: VixSpotData = {
@@ -275,25 +397,29 @@ export async function getVixData(): Promise<VixDashboardData> {
     change5d,
     change21d,
     vixPercentile: percentile,
-    vixState: state,
+    vixLevelLabel: level.vixLevelLabel,
+    vixSeverity: composite.vixSeverity,
+    vixDescription: level.vixDescription,
+    vixCompositeLabel: composite.vixCompositeLabel,
+    vixCompositeSubtext: composite.vixCompositeSubtext,
+    vixPercentileLabel: percentileLabelFor(percentile),
     vixTrend: trend,
     history: history.slice(-60),
     interpretation: {
       lookingAt: "Último cierre disponible del VIX y cambios recientes de volatilidad implícita del S&P 500.",
-      why: "El VIX resume expectativas de volatilidad implícita. Es una lectura de presión de riesgo, no una predicción de dirección del mercado.",
-      how: "Lectura aproximada basada en umbrales habituales y datos históricos. VIX bajo sugiere menor presión; VIX alto sugiere más tensión de volatilidad.",
-      whatItDoesNotMean: "No predice dirección, no recomienda comprar o vender y no sustituye una lectura completa de escenario.",
+      why: "El VIX resume expectativas de volatilidad implícita del S&P 500 a partir de opciones. Es una lectura de presión de riesgo, no una lectura de dirección del mercado.",
+      how: "Lectura compuesta basada en nivel absoluto, percentil histórico y momentum reciente. Niveles más altos suelen sugerir más tensión de volatilidad.",
+      whatItDoesNotMean: "Un VIX alto no significa automáticamente caída futura del mercado. Un VIX bajo tampoco elimina el riesgo. Mide expectativas implícitas de volatilidad, no dirección ni retorno esperado.",
     },
   };
 
-  const stateLabel = state === "stress" ? "Estrés" : state === "attention" ? "Atención" : "Normal";
   return {
     spot,
     termStructure: buildTermStructureFallback(latest.value, lastUpdated),
     module: {
       ...fallback,
       title: "VIX / volatilidad",
-      status: stateLabel,
+      status: spot.vixCompositeLabel,
       sourceName: spot.sourceName,
       sourceUrl: spot.sourceUrl,
       lastUpdated,
@@ -305,7 +431,7 @@ export async function getVixData(): Promise<VixDashboardData> {
         ["Cambio 1D", formatChange(spot.change1d)],
         ["Cambio 5D", formatChange(spot.change5d)],
         ["Cambio 21D", formatChange(spot.change21d)],
-        ["Estado", stateLabel],
+        ["Lectura", spot.vixCompositeLabel],
       ],
       interpretation: spot.interpretation,
     },

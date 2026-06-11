@@ -34,8 +34,8 @@ export type SectorDetailPeriod = "30d" | "63d" | "252d";
 export type VolatilityStatus = "normal" | "elevated" | "stress";
 export type GarchModelStatus = "estimated" | "fallback_ewma" | "insufficient_data";
 export type FragilityLabel = "Baja" | "Media" | "Alta";
-export type VixState = "normal" | "attention" | "stress";
-export type VixTrend = "falling" | "stable" | "rising";
+export type VixSeverity = "low" | "normal" | "watch" | "elevated" | "stress" | "extreme";
+export type VixTrend = "falling" | "stable" | "rising" | "rising_fast";
 export type VixCurveState = "contango" | "flat" | "backwardation" | "live_pending";
 
 export type SectorDetailSeries = {
@@ -114,7 +114,12 @@ export type VixSpotData = DashboardDataSource & {
   change5d: number | null;
   change21d: number | null;
   vixPercentile: number | null;
-  vixState: VixState;
+  vixLevelLabel: string;
+  vixSeverity: VixSeverity;
+  vixDescription: string;
+  vixCompositeLabel: string;
+  vixCompositeSubtext: string;
+  vixPercentileLabel: string;
   vixTrend: VixTrend;
   history: VixHistoryPoint[];
   interpretation: DashboardModuleData["interpretation"];

@@ -15,26 +15,16 @@ function formatChange(value: number | null) {
   return `${sign}${value.toFixed(1)} pts`;
 }
 
-function formatPercentile(value: number | null) {
-  if (value === null) return "Historial insuficiente";
-  return `Percentil ${Math.round(value)}`;
-}
-
-function stateLabel(state: VixSpotData["vixState"]) {
-  if (state === "stress") return "Estrés";
-  if (state === "attention") return "Atención";
-  return "Normal";
-}
-
 function trendLabel(trend: VixSpotData["vixTrend"]) {
+  if (trend === "rising_fast") return "Subiendo rápido";
   if (trend === "rising") return "Subiendo";
   if (trend === "falling") return "Bajando";
   return "Estable";
 }
 
-function stateClass(state: VixSpotData["vixState"]) {
-  if (state === "stress") return "border-[#a86464]/40 bg-[#a86464]/10 text-[#7b3f3f]";
-  if (state === "attention") return "border-[#b6905b]/40 bg-[#b6905b]/10 text-[#76562d]";
+function severityClass(severity: VixSpotData["vixSeverity"]) {
+  if (severity === "extreme" || severity === "stress" || severity === "elevated") return "border-[#a86464]/40 bg-[#a86464]/10 text-[#7b3f3f]";
+  if (severity === "watch") return "border-[#b6905b]/40 bg-[#b6905b]/10 text-[#76562d]";
   return "border-[#6f8f7b]/40 bg-[#6f8f7b]/10 text-[#47604f]";
 }
 
@@ -130,7 +120,7 @@ export function VixModule({ data }: VixModuleProps) {
     ["Cambio 1D", formatChange(spot.change1d)],
     ["Cambio 5D", formatChange(spot.change5d)],
     ["Cambio 21D", formatChange(spot.change21d)],
-    ["Percentil histórico", formatPercentile(spot.vixPercentile)],
+    ["Percentil histórico", spot.vixPercentile === null ? spot.vixPercentileLabel : `${spot.vixPercentileLabel} · p${Math.round(spot.vixPercentile)}`],
     ["Tendencia", trendLabel(spot.vixTrend)],
     ["Estado de datos", dataStatusLabels[spot.dataStatus]],
   ];
@@ -142,19 +132,20 @@ export function VixModule({ data }: VixModuleProps) {
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-brass">VIX / volatilidad</p>
           <h2 className="mt-2 text-2xl font-semibold text-ink">Estrés de mercado</h2>
           <p className="mt-3 text-sm leading-6 text-muted">
-            El VIX resume expectativas de volatilidad implícita del S&amp;P 500. Es una lectura de presión de riesgo, no una predicción de dirección del mercado.
+            El VIX resume expectativas de volatilidad implícita del S&amp;P 500 a partir de opciones. Es una lectura de presión de riesgo, no una lectura de dirección del mercado.
           </p>
 
           <div className="mt-6 border border-line bg-panelSoft p-5">
             <p className="text-xs font-semibold uppercase tracking-[0.14em] text-brass">VIX último cierre disponible</p>
             <div className="mt-3 flex flex-wrap items-end gap-3">
               <span className="text-5xl font-semibold leading-none text-ink">{formatNumber(spot.latestVix)}</span>
-              <span className={`mb-1 border px-3 py-1 text-sm font-semibold ${stateClass(spot.vixState)}`}>
-                {stateLabel(spot.vixState)}
+              <span className={`mb-1 border px-3 py-1 text-sm font-semibold ${severityClass(spot.vixSeverity)}`}>
+                {spot.vixCompositeLabel}
               </span>
             </div>
+            <p className="mt-3 font-semibold text-ink">{spot.vixCompositeSubtext}</p>
             <p className="mt-4 text-sm leading-6 text-muted">
-              Lectura aproximada basada en umbrales habituales y datos históricos. La fuente es diaria y de cierre.
+              {spot.vixDescription} La lectura combina nivel absoluto, percentil histórico y momentum reciente. La fuente es diaria y de cierre.
             </p>
           </div>
         </div>
