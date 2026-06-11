@@ -28,7 +28,7 @@ export const dashboardModules: DashboardModuleData[] = [
       lookingAt: "Probabilidades implícitas de tasa derivadas de futuros Fed Funds.",
       why: "Importa porque el costo del dinero influye en valoración de activos, liquidez y apetito por riesgo.",
       how: "Más probabilidad de recortes puede sugerir expectativa de condiciones menos restrictivas; más probabilidad de subidas puede sugerir una lectura de política más exigente.",
-      whatItDoesNotMean: "No es una señal de compra o venta, no anticipa por sí sola el mercado y no sustituye análisis de escenario.",
+      whatItDoesNotMean: "No es una instrucción operativa, no anticipa por sí sola el mercado y no sustituye análisis de escenario.",
     },
   },
   {

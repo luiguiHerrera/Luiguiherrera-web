@@ -1,5 +1,7 @@
 import { DashboardModule } from "@/components/dashboard/DashboardModule";
+import { QuantRiskPanel } from "@/components/dashboard/QuantRiskPanel";
 import { RegimeBadge } from "@/components/dashboard/RegimeBadge";
+import { SectorRotationChart } from "@/components/dashboard/SectorRotationChart";
 import { DisclaimerBox } from "@/components/ui/DisclaimerBox";
 import { MetricCard } from "@/components/ui/MetricCard";
 import { SectionHeader } from "@/components/ui/SectionHeader";
@@ -9,7 +11,10 @@ import { dataStatusLabels } from "@/lib/dashboard/status";
 export const revalidate = 86400;
 
 export default async function DashboardPage() {
-  const { crossSignalRadar, dashboardModules, regimeSummary } = await getDashboardData();
+  const { crossSignalRadar, dashboardModules, quantRisk, regimeSummary, sectorRotation } = await getDashboardData();
+  const ratesModule = dashboardModules.find((module) => module.id === "rates");
+  const sectorsModule = dashboardModules.find((module) => module.id === "sectors");
+  const remainingModules = dashboardModules.filter((module) => module.id !== "rates" && module.id !== "sectors");
 
   return (
     <div className="mx-auto max-w-7xl px-5 py-12 md:py-16">
@@ -69,14 +74,18 @@ export default async function DashboardPage() {
       </section>
 
       <div className="mt-8 space-y-6">
-        {dashboardModules.map((module) => <DashboardModule key={module.id} {...module} />)}
+        {ratesModule ? <DashboardModule {...ratesModule} /> : null}
+        {sectorsModule ? <DashboardModule {...sectorsModule} /> : null}
+        {sectorRotation ? <SectorRotationChart data={sectorRotation} /> : null}
+        {quantRisk ? <QuantRiskPanel data={quantRisk} /> : null}
+        {remainingModules.map((module) => <DashboardModule key={module.id} {...module} />)}
       </div>
 
       <section className="mt-6 border border-line bg-panel p-6">
         <div className="max-w-3xl">
           <h2 className="text-2xl font-semibold text-ink">Radar de señales cruzadas</h2>
           <p className="mt-3 leading-7 text-muted">
-            Esta tabla no muestra ideas para comprar. Muestra casos donde hay señales públicas en tensión: short interest reportado como escepticismo o presión bajista, y presencia en 13F/superinvestors como interés institucional reportado con retraso. Son puntos de partida para investigación, no señales de ejecución.
+            Esta tabla no muestra ideas accionables. Muestra casos donde hay señales públicas en tensión: short interest reportado como escepticismo o presión bajista, y presencia en 13F/superinvestors como interés institucional reportado con retraso. Son puntos de partida para investigación, no señales de ejecución.
           </p>
         </div>
         <div className="mt-6 overflow-x-auto">

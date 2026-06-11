@@ -28,6 +28,62 @@ export type DashboardModuleData = DashboardDataSource & {
   };
 };
 
+export type SectorTrend = "up" | "flat" | "down";
+export type SectorLeadership = "defensiva" | "growth" | "cíclica" | "mixta";
+export type VolatilityStatus = "normal" | "elevated" | "stress";
+export type GarchModelStatus = "estimated" | "fallback_ewma" | "insufficient_data";
+export type FragilityLabel = "Baja" | "Media" | "Alta";
+
+export type SectorEtfSnapshot = {
+  sectorName: string;
+  etfTicker: string;
+  latestClose: number;
+  return1w: number;
+  return1m: number;
+  return3m: number | null;
+  rank1w: number;
+  rank1m: number;
+  rank3m: number | null;
+  sparkline30d: number[];
+  trend: SectorTrend;
+  lastUpdated: string;
+  group: "defensive" | "growth" | "cyclical";
+  dailyReturns: number[];
+};
+
+export type SectorRotationMetrics = {
+  sectorDispersion1w: number;
+  sectorDispersion1m: number;
+  defensiveLeadership: number;
+  growthLeadership: number;
+  cyclicalLeadership: number;
+  reading: SectorLeadership;
+  interpretation: string;
+};
+
+export type SectorRotationData = DashboardDataSource & {
+  sectors: SectorEtfSnapshot[];
+  metrics: SectorRotationMetrics;
+  closeConvention: "adjusted_close" | "close";
+};
+
+export type QuantRiskData = DashboardDataSource & {
+  ewmaVolAnnualized: number | null;
+  ewmaVolChange: number | null;
+  ewmaStatus: VolatilityStatus;
+  garchVolForecast: number | null;
+  garchStatus: VolatilityStatus;
+  modelStatus: GarchModelStatus;
+  averageCorrelation21d: number | null;
+  averageCorrelation63d: number | null;
+  defensiveGrowthCorrelation21d: number | null;
+  sectorDispersion1w: number;
+  sectorDispersion1m: number;
+  fragilityScore: number;
+  fragilityLabel: FragilityLabel;
+  fragilityInterpretation: string;
+};
+
 export type RegimeSignal = {
   label: string;
   detail: string;
@@ -54,4 +110,6 @@ export type DashboardData = {
   dashboardModules: DashboardModuleData[];
   crossSignalRadar: CrossSignalRadarRow[];
   regimeSummary: RegimeSummary;
+  sectorRotation: SectorRotationData | null;
+  quantRisk: QuantRiskData | null;
 };

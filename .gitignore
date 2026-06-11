@@ -16,3 +16,4 @@ pnpm-debug.log*
 out/
 .vercel/
 *.zip
+.env.local

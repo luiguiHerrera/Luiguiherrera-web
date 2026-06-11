@@ -1,19 +1,21 @@
 import { dashboardModules } from "@/lib/dashboard/manual-data";
-import type { DashboardModuleData } from "@/lib/dashboard/types";
+import { buildQuantRiskData } from "@/lib/dashboard/risk-models";
+import type { DashboardModuleData, QuantRiskData, SectorEtfSnapshot, SectorLeadership, SectorRotationData, SectorRotationMetrics } from "@/lib/dashboard/types";
 
 const REVALIDATE_SECONDS = 60 * 60 * 24;
+const CLOSE_CONVENTION = "adjusted_close";
 
 const sectorEtfs = [
   { symbol: "XLK", name: "Tecnología", group: "growth" },
   { symbol: "XLF", name: "Financieras", group: "cyclical" },
   { symbol: "XLV", name: "Salud", group: "defensive" },
   { symbol: "XLE", name: "Energía", group: "cyclical" },
-  { symbol: "XLY", name: "Consumo discrecional", group: "cyclical" },
-  { symbol: "XLP", name: "Consumo defensivo", group: "defensive" },
+  { symbol: "XLY", name: "Consumo discrecional", group: "growth" },
+  { symbol: "XLP", name: "Consumo básico/defensivo", group: "defensive" },
   { symbol: "XLI", name: "Industriales", group: "cyclical" },
   { symbol: "XLB", name: "Materiales", group: "cyclical" },
   { symbol: "XLU", name: "Utilities", group: "defensive" },
-  { symbol: "XLRE", name: "Real Estate", group: "cyclical" },
+  { symbol: "XLRE", name: "Real Estate", group: "defensive" },
   { symbol: "XLC", name: "Comunicación", group: "growth" },
 ] as const;
 
@@ -26,33 +28,115 @@ type AlphaVantageDailyResponse = {
   Information?: string;
 };
 
-type SectorReturn = {
+type PricePoint = {
+  date: string;
+  close: number;
+};
+
+type SectorHistory = {
   symbol: string;
   name: string;
   group: SectorGroup;
   latestDate: string;
-  weekReturn: number;
-  monthReturn: number;
+  prices: PricePoint[];
 };
 
-function formatPercent(value: number) {
+export type SectorEtfsResult = {
+  module: DashboardModuleData;
+  rotation: SectorRotationData | null;
+  quantRisk: QuantRiskData | null;
+};
+
+function formatPercent(value: number | null) {
+  if (value === null) return "No disponible";
   const sign = value > 0 ? "+" : "";
   return `${sign}${value.toFixed(1)}%`;
 }
 
-function fallbackSectorModule(reason: string): DashboardModuleData {
+function fallbackSectorResult(reason: string): SectorEtfsResult {
   const fallback = dashboardModules.find((module) => module.id === "sectors");
 
   if (!fallback) {
     throw new Error("Missing sector fallback module");
   }
 
-  return {
-    ...fallback,
-    status: "Fallback demo",
-    dataStatus: "demo",
+  const demoSectors = applyRanks(
+    [
+      ["Tecnología", "XLK", "growth", -1.4, 2.1, 5.2],
+      ["Financieras", "XLF", "cyclical", 0.4, 3.0, 4.8],
+      ["Salud", "XLV", "defensive", 0.7, 2.1, 2.8],
+      ["Energía", "XLE", "cyclical", -0.5, -0.9, 1.4],
+      ["Consumo discrecional", "XLY", "growth", -0.8, 1.2, 3.5],
+      ["Consumo básico/defensivo", "XLP", "defensive", 0.9, 1.8, 2.4],
+      ["Industriales", "XLI", "cyclical", 0.2, 2.4, 3.2],
+      ["Materiales", "XLB", "cyclical", -0.2, 1.1, 1.9],
+      ["Utilities", "XLU", "defensive", 1.2, 1.7, 0.9],
+      ["Real Estate", "XLRE", "defensive", -0.3, -1.2, -0.7],
+      ["Comunicación", "XLC", "growth", -0.4, -0.4, 2.7],
+    ].map(([sectorName, etfTicker, group, return1w, return1m, return3m], index) => {
+      const base = 100 + index;
+      const sparkline30d = Array.from({ length: 30 }, (_, day) => base + Math.sin(day / 4) * 1.5 + (Number(return1m) / 29) * day);
+
+      return {
+        sectorName: String(sectorName),
+        etfTicker: String(etfTicker),
+        latestClose: sparkline30d.at(-1) ?? base,
+        return1w: Number(return1w),
+        return1m: Number(return1m),
+        return3m: Number(return3m),
+        rank1w: 0,
+        rank1m: 0,
+        rank3m: null,
+        sparkline30d,
+        trend: trendFromSparkline(sparkline30d),
+        lastUpdated: "Fallback demo",
+        group: group as SectorGroup,
+        dailyReturns: [],
+      };
+    }),
+  );
+  const metrics = buildMetrics(demoSectors);
+  const rotation: SectorRotationData = {
+    sourceName: "Fallback demo de ETFs sectoriales",
     lastUpdated: "Fallback demo",
-    reliabilityNote: `${fallback.reliabilityNote} Fallback activo: ${reason}.`,
+    updateFrequency: "Automática server-side con caché diaria cuando exista fuente disponible",
+    dataStatus: "demo",
+    reliabilityNote: `Datos demo para mantener la lectura disponible. Fallback activo: ${reason}.`,
+    sectors: demoSectors,
+    metrics,
+    closeConvention: CLOSE_CONVENTION,
+  };
+
+  return {
+    module: {
+      ...fallback,
+      status: "Fallback demo",
+      dataStatus: "demo",
+      lastUpdated: "Fallback demo",
+      reliabilityNote: `${fallback.reliabilityNote} Fallback activo: ${reason}.`,
+    },
+    rotation,
+    quantRisk: {
+      sourceName: "Fallback demo sobre ETFs sectoriales",
+      lastUpdated: "Fallback demo",
+      updateFrequency: "Automática server-side con caché diaria cuando exista fuente disponible",
+      dataStatus: "demo",
+      reliabilityNote: `Los modelos cuantitativos requieren historial suficiente. Fallback activo: ${reason}. No predicen dirección de mercado.`,
+      ewmaVolAnnualized: null,
+      ewmaVolChange: null,
+      ewmaStatus: "stress",
+      garchVolForecast: null,
+      garchStatus: "stress",
+      modelStatus: "insufficient_data",
+      averageCorrelation21d: null,
+      averageCorrelation63d: null,
+      defensiveGrowthCorrelation21d: null,
+      sectorDispersion1w: metrics.sectorDispersion1w,
+      sectorDispersion1m: metrics.sectorDispersion1m,
+      fragilityScore: 0,
+      fragilityLabel: "Baja",
+      fragilityInterpretation: "La lectura cuantitativa está en fallback demo por falta de datos automatizados suficientes. Es contexto operativo, no una estimación activa.",
+    },
   };
 }
 
@@ -60,24 +144,77 @@ function calculateReturn(latest: number, previous: number) {
   return ((latest / previous) - 1) * 100;
 }
 
-function classifyLeadership(topWeek: SectorReturn[], topMonth: SectorReturn[]) {
-  const counts: Record<SectorGroup, number> = {
-    defensive: 0,
-    cyclical: 0,
-    growth: 0,
-  };
+function calculateDailyReturns(pricesAscending: PricePoint[]) {
+  const returns: number[] = [];
 
-  [...topWeek, ...topMonth].forEach((sector) => {
-    counts[sector.group] += 1;
-  });
+  for (let index = 1; index < pricesAscending.length; index += 1) {
+    returns.push((pricesAscending[index].close / pricesAscending[index - 1].close) - 1);
+  }
 
-  if (counts.defensive >= 3) return "Liderazgo defensivo";
-  if (counts.growth >= 3) return "Liderazgo growth";
-  if (counts.cyclical >= 4) return "Liderazgo cíclico";
-  return "Mixto";
+  return returns;
 }
 
-async function fetchSectorReturn(symbol: string, apiKey: string): Promise<SectorReturn> {
+function rankBy(sectors: SectorEtfSnapshot[], key: "return1w" | "return1m" | "return3m") {
+  return [...sectors]
+    .filter((sector) => sector[key] !== null)
+    .sort((a, b) => (b[key] ?? Number.NEGATIVE_INFINITY) - (a[key] ?? Number.NEGATIVE_INFINITY))
+    .map((sector, index) => ({ ticker: sector.etfTicker, rank: index + 1 }));
+}
+
+function applyRanks(sectors: SectorEtfSnapshot[]) {
+  const rank1w = rankBy(sectors, "return1w");
+  const rank1m = rankBy(sectors, "return1m");
+  const rank3m = rankBy(sectors, "return3m");
+
+  return sectors.map((sector) => ({
+    ...sector,
+    rank1w: rank1w.find((rank) => rank.ticker === sector.etfTicker)?.rank ?? sector.rank1w,
+    rank1m: rank1m.find((rank) => rank.ticker === sector.etfTicker)?.rank ?? sector.rank1m,
+    rank3m: rank3m.find((rank) => rank.ticker === sector.etfTicker)?.rank ?? null,
+  }));
+}
+
+function averageGroupReturn(sectors: SectorEtfSnapshot[], group: SectorGroup) {
+  const values = sectors.filter((sector) => sector.group === group).map((sector) => sector.return1m);
+  return values.reduce((sum, value) => sum + value, 0) / values.length;
+}
+
+function buildMetrics(sectors: SectorEtfSnapshot[]): SectorRotationMetrics {
+  const returns1w = sectors.map((sector) => sector.return1w);
+  const returns1m = sectors.map((sector) => sector.return1m);
+  const defensiveLeadership = averageGroupReturn(sectors, "defensive");
+  const growthLeadership = averageGroupReturn(sectors, "growth");
+  const cyclicalLeadership = averageGroupReturn(sectors, "cyclical");
+  const leaders = [
+    { label: "defensiva" as SectorLeadership, value: defensiveLeadership },
+    { label: "growth" as SectorLeadership, value: growthLeadership },
+    { label: "cíclica" as SectorLeadership, value: cyclicalLeadership },
+  ].sort((a, b) => b.value - a.value);
+  const reading = leaders[0].value - leaders[1].value >= 1 ? leaders[0].label : "mixta";
+
+  return {
+    sectorDispersion1w: Math.max(...returns1w) - Math.min(...returns1w),
+    sectorDispersion1m: Math.max(...returns1m) - Math.min(...returns1m),
+    defensiveLeadership,
+    growthLeadership,
+    cyclicalLeadership,
+    reading,
+    interpretation: `La lectura sugiere una rotación ${reading}. No implica dirección futura del mercado.`,
+  };
+}
+
+function trendFromSparkline(values: number[]) {
+  if (values.length < 10) return "flat";
+  const start = values.slice(0, 5).reduce((sum, value) => sum + value, 0) / 5;
+  const end = values.slice(-5).reduce((sum, value) => sum + value, 0) / 5;
+  const change = ((end / start) - 1) * 100;
+
+  if (change > 1) return "up";
+  if (change < -1) return "down";
+  return "flat";
+}
+
+async function fetchSectorHistory(symbol: string, apiKey: string): Promise<SectorHistory> {
   const meta = sectorEtfs.find((etf) => etf.symbol === symbol);
 
   if (!meta) {
@@ -105,7 +242,7 @@ async function fetchSectorReturn(symbol: string, apiKey: string): Promise<Sector
   }
 
   const series = payload["Time Series (Daily)"];
-  const rows = series
+  const prices = series
     ? Object.entries(series)
         .map(([date, values]) => ({
           date,
@@ -115,65 +252,100 @@ async function fetchSectorReturn(symbol: string, apiKey: string): Promise<Sector
         .sort((a, b) => b.date.localeCompare(a.date))
     : [];
 
-  if (rows.length < 22) {
-    throw new Error(`Alpha Vantage ${symbol} returned insufficient history`);
+  if (prices.length < 64) {
+    throw new Error(`Alpha Vantage ${symbol} returned insufficient market sessions`);
   }
 
   return {
     symbol,
     name: meta.name,
     group: meta.group,
-    latestDate: rows[0].date,
-    weekReturn: calculateReturn(rows[0].close, rows[5].close),
-    monthReturn: calculateReturn(rows[0].close, rows[21].close),
+    latestDate: prices[0].date,
+    prices,
   };
 }
 
-export async function getSectorEtfsModule(): Promise<DashboardModuleData> {
+function buildSectorSnapshot(history: SectorHistory): SectorEtfSnapshot {
+  const latest = history.prices[0];
+  const pricesAscending = [...history.prices].reverse();
+  const sparkline30d = history.prices.slice(0, 30).reverse().map((point) => point.close);
+
+  return {
+    sectorName: history.name,
+    etfTicker: history.symbol,
+    latestClose: latest.close,
+    return1w: calculateReturn(latest.close, history.prices[5].close),
+    return1m: calculateReturn(latest.close, history.prices[21].close),
+    return3m: history.prices[63] ? calculateReturn(latest.close, history.prices[63].close) : null,
+    rank1w: 0,
+    rank1m: 0,
+    rank3m: null,
+    sparkline30d,
+    trend: trendFromSparkline(sparkline30d),
+    lastUpdated: latest.date,
+    group: history.group,
+    dailyReturns: calculateDailyReturns(pricesAscending),
+  };
+}
+
+export async function getSectorEtfsData(): Promise<SectorEtfsResult> {
   const apiKey = process.env.ALPHA_VANTAGE_API_KEY;
 
   if (!apiKey) {
-    return fallbackSectorModule("falta ALPHA_VANTAGE_API_KEY");
+    return fallbackSectorResult("falta ALPHA_VANTAGE_API_KEY");
   }
 
   try {
-    const results = await Promise.all(sectorEtfs.map((etf) => fetchSectorReturn(etf.symbol, apiKey)));
-    const byWeek = [...results].sort((a, b) => b.weekReturn - a.weekReturn);
-    const byMonth = [...results].sort((a, b) => b.monthReturn - a.monthReturn);
-    const topWeek = byWeek.slice(0, 3);
-    const bottomWeek = byWeek.slice(-3).reverse();
-    const topMonth = byMonth.slice(0, 3);
-    const bottomMonth = byMonth.slice(-3).reverse();
-    const reading = classifyLeadership(topWeek, topMonth);
-    const latestDate = results.map((result) => result.latestDate).sort().at(-1) ?? "fecha no disponible";
-
-    return {
-      id: "sectors",
-      title: "Rotación sectorial por ETFs",
-      status: reading,
-      sourceName: "Alpha Vantage: precios diarios de ETFs sectoriales",
+    const histories = await Promise.all(sectorEtfs.map((etf) => fetchSectorHistory(etf.symbol, apiKey)));
+    const sectors = applyRanks(histories.map(buildSectorSnapshot));
+    const metrics = buildMetrics(sectors);
+    const latestDate = sectors.map((sector) => sector.lastUpdated).sort().at(-1) ?? "fecha no disponible";
+    const byWeek = [...sectors].sort((a, b) => b.return1w - a.return1w);
+    const byMonth = [...sectors].sort((a, b) => b.return1m - a.return1m);
+    const byQuarter = [...sectors].sort((a, b) => (b.return3m ?? Number.NEGATIVE_INFINITY) - (a.return3m ?? Number.NEGATIVE_INFINITY));
+    const rotation: SectorRotationData = {
+      sourceName: "Alpha Vantage: precios diarios ajustados de ETFs sectoriales",
       sourceUrl: "https://www.alphavantage.co/documentation/",
       lastUpdated: `Automático con fuente pública: ${latestDate}`,
       updateFrequency: "Automática server-side con caché diaria; revisión semanal sugerida",
       dataStatus: "automated",
-      reliabilityNote: "Lectura calculada con precios diarios de ETFs sectoriales como proxies. Puede tener retrasos, límites de API o diferencias frente a datos intradía. No sustituye un análisis completo.",
-      observedData: [
-        ["Universo proxy", sectorEtfs.map((etf) => `${etf.symbol} ${etf.name}`).join(", ")],
-        ["Top 1 semana", topWeek.map((sector) => `${sector.symbol} ${formatPercent(sector.weekReturn)}`).join(", ")],
-        ["Bottom 1 semana", bottomWeek.map((sector) => `${sector.symbol} ${formatPercent(sector.weekReturn)}`).join(", ")],
-        ["Top 1 mes", topMonth.map((sector) => `${sector.symbol} ${formatPercent(sector.monthReturn)}`).join(", ")],
-        ["Bottom 1 mes", bottomMonth.map((sector) => `${sector.symbol} ${formatPercent(sector.monthReturn)}`).join(", ")],
-        ["Lectura", reading],
-      ],
-      interpretation: {
-        lookingAt: "Performance aproximada de ETFs sectoriales para observar liderazgo y rezago por sectores.",
-        why: "Ayuda a ver si el liderazgo se concentra en sectores defensivos, cíclicos o growth.",
-        how: "Liderazgo defensivo puede sugerir cautela; liderazgo cíclico o growth puede sugerir mayor apetito por riesgo o crecimiento.",
-        whatItDoesNotMean: "Estos datos son una aproximación por proxies sectoriales y no sustituyen un análisis completo ni una instrucción operativa.",
+      reliabilityNote: "La rotación se estima mediante ETFs sectoriales líquidos como proxies. Puede diferir de índices o grupos sectoriales de otros proveedores.",
+      sectors,
+      metrics,
+      closeConvention: CLOSE_CONVENTION,
+    };
+
+    return {
+      module: {
+        id: "sectors",
+        title: "Rotación sectorial por ETFs",
+        status: metrics.reading === "mixta" ? "Lectura mixta" : `Lectura ${metrics.reading}`,
+        sourceName: rotation.sourceName,
+        sourceUrl: rotation.sourceUrl,
+        lastUpdated: rotation.lastUpdated,
+        updateFrequency: rotation.updateFrequency,
+        dataStatus: "automated",
+        reliabilityNote: `${rotation.reliabilityNote} Convención usada: cierre ajustado diario; 1W = 5 sesiones, 1M = 21 sesiones, 3M = 63 sesiones.`,
+        observedData: [
+          ["Universo proxy", sectorEtfs.map((etf) => `${etf.symbol} ${etf.name}`).join(", ")],
+          ["Top 1W", byWeek.slice(0, 3).map((sector) => `${sector.etfTicker} ${formatPercent(sector.return1w)}`).join(", ")],
+          ["Bottom 1W", byWeek.slice(-3).reverse().map((sector) => `${sector.etfTicker} ${formatPercent(sector.return1w)}`).join(", ")],
+          ["Top 1M", byMonth.slice(0, 3).map((sector) => `${sector.etfTicker} ${formatPercent(sector.return1m)}`).join(", ")],
+          ["Top 3M", byQuarter.slice(0, 3).map((sector) => `${sector.etfTicker} ${formatPercent(sector.return3m)}`).join(", ")],
+          ["Lectura", metrics.interpretation],
+        ],
+        interpretation: {
+          lookingAt: "Performance de ETFs sectoriales con retornos por sesiones de mercado: 5, 21 y 63 sesiones.",
+          why: "Ayuda a observar si la presión relativa se concentra en sectores defensivos, cíclicos o growth.",
+          how: "La rotación apunta a una lectura prudente de liderazgo relativo; diferencias pequeñas deben tratarse como mixtas.",
+          whatItDoesNotMean: "No implica dirección futura del mercado, no muestra acciones individuales y no es recomendación de inversión.",
+        },
       },
+      rotation,
+      quantRisk: buildQuantRiskData(sectors, metrics, rotation.lastUpdated),
     };
   } catch (error) {
     const reason = error instanceof Error ? error.message : "error desconocido de fuente";
-    return fallbackSectorModule(reason);
+    return fallbackSectorResult(reason);
   }
 }
