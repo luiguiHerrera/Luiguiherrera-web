@@ -151,11 +151,11 @@ export function SectorRotationChart({ data }: SectorRotationChartProps) {
           <div className="mt-3 grid gap-2">
             {sortedSectors.map((sector) => {
               const value = metricValue(sector, period);
-              const magnitude = Math.min((Math.abs(value ?? 0) / scaleBound) * 50, 50);
-              const barWidth = value === null ? "0%" : `${Math.max(magnitude * 2, Math.abs(value) < 0.05 ? 2 : 3)}%`;
-              const positive = (value ?? 0) > 0.05;
-              const negative = (value ?? 0) < -0.05;
-              const barColor = positive ? "bg-sage" : negative ? "bg-rust" : "bg-muted/40";
+              const magnitude = value === null ? 0 : Math.min(Math.abs(value) / scaleBound, 1) * 100;
+              const barWidth = value === null ? "0%" : `${Math.max(magnitude, Math.abs(value) < 0.05 ? 2 : 3)}%`;
+              const isPositive = (value ?? 0) > 0.05;
+              const isNegative = (value ?? 0) < -0.05;
+              const barColor = isPositive ? "bg-sage" : isNegative ? "bg-rust" : "bg-muted/40";
 
               return (
                 <button
@@ -174,15 +174,15 @@ export function SectorRotationChart({ data }: SectorRotationChartProps) {
                     </div>
                     <span className="font-semibold text-ink md:hidden">{formatPercent(value)}</span>
                   </div>
-                  <div className="relative grid h-7 grid-cols-2 bg-panel">
+                  <div className="relative h-7 bg-panel">
                     <div className="absolute left-1/2 top-0 h-full border-l border-ink/25" aria-hidden="true" />
                     {value !== null ? (
                       <>
-                        <div className="flex items-center justify-end">
-                          {value < 0 ? <div className={`h-3 ${barColor}`} style={{ width: barWidth }} /> : null}
+                        <div className="absolute left-0 top-0 flex h-full w-1/2 items-center justify-end">
+                          {isNegative ? <div className={`h-3 ${barColor}`} style={{ width: barWidth }} /> : null}
                         </div>
-                        <div className="flex items-center justify-start">
-                          {value >= 0 ? <div className={`h-3 ${barColor}`} style={{ width: barWidth }} /> : null}
+                        <div className="absolute right-0 top-0 flex h-full w-1/2 items-center justify-start">
+                          {isPositive || (!isNegative && !isPositive) ? <div className={`h-3 ${barColor}`} style={{ width: barWidth }} /> : null}
                         </div>
                       </>
                     ) : null}
