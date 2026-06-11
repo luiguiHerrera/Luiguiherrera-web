@@ -23,10 +23,10 @@ export default async function DashboardPage() {
         <SectionHeader
           eyebrow="Lectura de régimen"
           title="Market Regime Dashboard"
-          subtitle="No elige activos ni momentos de ejecución. Te ayuda a entender qué señales está dejando el mercado."
+          subtitle="No elige activos ni momentos de ejecución. Te ayuda a ordenar volatilidad, rotación y flujos."
         />
         <DisclaimerBox>
-          Esta lectura no predice el mercado. Resume señales públicas para entender el contexto.
+          Esta lectura no anticipa el mercado. Resume datos públicos para entender el contexto.
         </DisclaimerBox>
       </div>
 
@@ -36,12 +36,13 @@ export default async function DashboardPage() {
             <p className="text-xs font-semibold uppercase tracking-[0.2em] text-brass">Régimen actual</p>
             <div className="mt-4"><RegimeBadge label={regimeSummary.current} /></div>
             <p className="mt-4 max-w-xl text-sm leading-6 text-muted">
-              Lectura compuesta manual basada en tasas, rotación sectorial, volatilidad y flujos. Sirve para ordenar contexto, no para ejecutar operaciones.
+              {regimeSummary.interpretation}
             </p>
           </div>
           <div className="grid gap-4 sm:grid-cols-2">
             <MetricCard label="Sesgo" value={regimeSummary.bias} emphasis />
-            <MetricCard label="Confianza de lectura" value={regimeSummary.confidence} emphasis />
+            <MetricCard label="Score de régimen" value={`${regimeSummary.regimeScore}/100`} emphasis />
+            <MetricCard label="Confianza de lectura" value={`${regimeSummary.confidence}%`} emphasis />
           </div>
         </div>
         <div className="mt-5 grid gap-4 md:grid-cols-3">
@@ -51,7 +52,7 @@ export default async function DashboardPage() {
         </div>
         <div className="mt-5 grid gap-5 lg:grid-cols-2">
           <div className="border border-line bg-panelSoft p-5">
-            <h3 className="font-semibold text-ink">Señales a favor del riesgo</h3>
+            <h3 className="font-semibold text-ink">Lecturas a favor del riesgo</h3>
             <ul className="mt-4 grid gap-3 text-sm leading-6 text-muted">
               {regimeSummary.riskSupportSignals.map((signal) => (
                 <li key={signal.label} className="border-l border-sage/70 pl-4">
@@ -61,7 +62,7 @@ export default async function DashboardPage() {
             </ul>
           </div>
           <div className="border border-line bg-panelSoft p-5">
-            <h3 className="font-semibold text-ink">Señales de cautela</h3>
+            <h3 className="font-semibold text-ink">Lecturas de cautela</h3>
             <ul className="mt-4 grid gap-3 text-sm leading-6 text-muted">
               {regimeSummary.cautionSignals.map((signal) => (
                 <li key={signal.label} className="border-l border-brass/70 pl-4">
@@ -71,7 +72,11 @@ export default async function DashboardPage() {
             </ul>
           </div>
         </div>
-        <p className="mt-5 border-t border-line pt-4 text-sm leading-6 text-muted">{regimeSummary.reliabilityNote}</p>
+        <div className="mt-5 border-t border-line pt-4 text-sm leading-6 text-muted">
+          <p>{regimeSummary.dataQualityNote}</p>
+          <p className="mt-2">{regimeSummary.reliabilityNote}</p>
+          <p className="mt-2">{regimeSummary.whatItDoesNotMean}</p>
+        </div>
       </section>
 
       <div className="mt-8 space-y-6">

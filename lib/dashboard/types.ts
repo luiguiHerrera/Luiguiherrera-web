@@ -2,9 +2,8 @@ import type { DashboardModuleId } from "@/lib/analytics/trackEvent";
 
 export type DataStatus = "demo" | "manual" | "live_pending" | "automated" | "fallback" | "delayed";
 
-export type RegimeLabel = "Constructivo" | "Neutral" | "Defensivo" | "Estrés";
-export type RegimeBias = "Risk-on" | "Mixto" | "Risk-off";
-export type RegimeConfidence = "Baja" | "Media" | "Alta";
+export type RegimeLabel = "Risk-on constructivo" | "Risk-on selectivo" | "Neutral / mixto" | "Cautela" | "Estrés";
+export type RegimeBias = "favorable" | "neutral" | "cautious" | "stress";
 
 export type DashboardDataSource = {
   sourceName: string;
@@ -242,7 +241,11 @@ export type RegimeSignal = {
 export type RegimeSummary = DashboardDataSource & {
   current: RegimeLabel;
   bias: RegimeBias;
-  confidence: RegimeConfidence;
+  confidence: number;
+  regimeScore: number;
+  interpretation: string;
+  whatItDoesNotMean: string;
+  dataQualityNote: string;
   riskSupportSignals: RegimeSignal[];
   cautionSignals: RegimeSignal[];
 };
