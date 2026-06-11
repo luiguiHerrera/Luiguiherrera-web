@@ -151,10 +151,11 @@ export function SectorRotationChart({ data }: SectorRotationChartProps) {
           <div className="mt-3 grid gap-2">
             {sortedSectors.map((sector) => {
               const value = metricValue(sector, period);
-              const barWidth = value === null ? 0 : Math.min(Math.abs(value) / maxAbs, 1) * 50;
+              const rawWidth = value === null ? 0 : (Math.abs(value) / maxAbs) * 48;
+              const barWidth = value === null || value === 0 ? 0 : Math.max(rawWidth, 1.25);
               const isPositive = (value ?? 0) > 0;
               const isNegative = (value ?? 0) < 0;
-              const barColor = isPositive ? "bg-sage" : isNegative ? "bg-rust" : "bg-muted/40";
+              const barColor = isPositive ? "var(--sage)" : isNegative ? "var(--rust)" : "rgba(107, 114, 128, 0.45)";
 
               return (
                 <button
@@ -173,19 +174,18 @@ export function SectorRotationChart({ data }: SectorRotationChartProps) {
                     </div>
                     <span className="font-semibold text-ink md:hidden">{formatPercent(value)}</span>
                   </div>
-                  <div className="relative h-7 bg-panel">
-                    <div className="absolute left-1/2 top-0 h-full border-l border-ink/25" aria-hidden="true" />
+                  <svg viewBox="0 0 100 12" className="h-7 w-full" aria-hidden="true" preserveAspectRatio="none">
+                    <line x1="50" x2="50" y1="0" y2="12" stroke="rgba(17, 24, 39, 0.3)" strokeWidth="0.8" vectorEffect="non-scaling-stroke" />
                     {value !== null ? (
-                      <div
-                        className={`absolute top-1/2 h-3 -translate-y-1/2 ${barColor}`}
-                        style={
-                          isNegative
-                            ? { right: "50%", width: `${barWidth}%` }
-                            : { left: "50%", width: `${Math.max(barWidth, 2)}%` }
-                        }
+                      <rect
+                        x={isNegative ? 50 - barWidth : 50}
+                        y="3"
+                        width={barWidth}
+                        height="6"
+                        fill={barColor}
                       />
                     ) : null}
-                  </div>
+                  </svg>
                   <span className="hidden text-right font-semibold text-ink md:block">{formatPercent(value)}</span>
                 </button>
               );
