@@ -99,7 +99,7 @@ function MiniReturnChart({ label, values }: { label: string; values: number[] })
           return <circle key={`${index}-${value}`} cx={x} cy={y} r="1.2" fill="currentColor" opacity="0.55" />;
         })}
         <circle cx={finalX} cy={finalY} r="3" fill="currentColor" />
-        <text x={chartLeft} y="88" className="fill-muted text-[9px]">-30 sesiones</text>
+        <text x={chartLeft} y="88" className="fill-muted text-[9px]">-{values.length} sesiones</text>
         <text x={chartRight - 16} y="88" className="fill-muted text-[9px]">Hoy</text>
       </svg>
     </div>
