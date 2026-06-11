@@ -25,7 +25,7 @@ const tools = [
     title: "Quant / TD3 Lab",
     label: "03",
     href: "/quant-lab",
-    description: "Señales cuantitativas, backtests y análisis sistemático.",
+    description: "Lecturas cuantitativas, backtests y análisis sistemático.",
   },
   {
     title: "Protege tu dinero",
@@ -35,27 +35,36 @@ const tools = [
   },
 ];
 
-const fedRows = [
-  ["17 Jun 2026", "0.0%", "2.0%", "98.0%", "0.0%", "0.0%"],
-  ["29 Jul 2026", "0.0%", "1.7%", "83.7%", "14.7%", "0.0%"],
-  ["16 Sep 2026", "0.0%", "1.1%", "54.4%", "39.3%", "5.2%"],
-  ["28 Oct 2026", "0.0%", "0.8%", "41.4%", "43.0%", "13.5%"],
-  ["09 Dec 2026", "0.0%", "0.5%", "24.4%", "42.3%", "25.8%"],
+const dashboardPreviews = [
+  {
+    title: "Régimen integrado",
+    text: "Combina volatilidad, rotación sectorial y flujos de ETF Bitcoin para leer si el entorno favorece riesgo, neutralidad o cautela.",
+    tags: ["VIX", "Rotación", "BTC ETF flows"],
+    source: "FedWatch se integrará cuando la fuente automatizada quede habilitada.",
+  },
+  {
+    title: "Mapa relativo por sectores",
+    text: "Compara el comportamiento reciente de ETFs sectoriales para observar liderazgo, defensivos y dispersión del mercado.",
+    tags: ["1W", "1M", "3M"],
+    source: "Alpha Vantage · actualización diaria",
+  },
+  {
+    title: "Presión de volatilidad",
+    text: "Clasifica el VIX por nivel absoluto, percentil histórico y momentum reciente, sin presentarlo como anticipación de dirección.",
+    tags: ["Nivel", "Percentil", "Momentum"],
+    source: "FRED VIXCLS · último cierre disponible",
+  },
+  {
+    title: "Flujos de ETFs Bitcoin",
+    text: "Observa entradas, salidas, rachas y presión reciente de flujos en ETFs spot de Bitcoin de EE. UU.",
+    tags: ["5D", "20D", "Rachas"],
+    source: "Bitbo · según disponibilidad de la fuente",
+  },
 ];
 
-const sectors = [
-  ["Energia", "+1.70%", 86, "pos"],
-  ["Real Estate", "+0.93%", 58, "pos"],
-  ["Healthcare", "+0.80%", 51, "pos"],
-  ["Cons. Defensivo", "+0.79%", 49, "pos"],
-  ["Industriales", "-0.48%", 24, "neg"],
-  ["Utilities", "-0.89%", 34, "neg"],
-  ["Tecnologia", "-4.62%", 82, "neg"],
-  ["Materiales Basicos", "-5.54%", 88, "neg"],
-];
 
 const quantRows = [
-  ["TD3 Trend", "Seguimiento de tendencia", "Largo", "2.41%", "6.78%", "1.32", "-6.21%", "Activo"],
+  ["TD3 Trend", "Seguimiento de tendencia", "Direccional", "2.41%", "6.78%", "1.32", "-6.21%", "Activo"],
   ["TD3 Macro", "Regimen macro", "Neutral", "0.83%", "2.11%", "0.74", "-4.17%", "Activo"],
   ["TD3 Volatility", "Volatilidad relativa", "Cobertura", "-0.56%", "1.05%", "0.35", "-2.93%", "Activo"],
 ];
@@ -122,59 +131,33 @@ export default function Home() {
       <section className="border-b border-line bg-[#f7f6f2]">
         <div className="mx-auto max-w-7xl px-5 py-12">
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-brass">Market Regime Dashboard</p>
-          <h2 className="mt-4 max-w-xl text-3xl font-semibold leading-tight text-ink md:text-4xl">El contexto, en tiempo real</h2>
-          <p className="mt-4 max-w-xl leading-7 text-muted">Tres pilares para entender el régimen actual y anticipar escenarios.</p>
+          <h2 className="mt-4 max-w-xl text-3xl font-semibold leading-tight text-ink md:text-4xl">Lectura diaria del régimen de mercado</h2>
+          <p className="mt-4 max-w-2xl leading-7 text-muted">Volatilidad, rotación sectorial y flujos institucionales organizados en una lectura clara del contexto.</p>
 
-          <div className="mt-8 grid gap-6 lg:grid-cols-3">
-            <div className="min-w-0 border border-line bg-panel p-5">
-              <h3 className="font-semibold text-ink">Probabilidades FedWatch</h3>
-              <div className="mt-4 min-w-0 overflow-x-auto">
-                <table className="w-full min-w-[420px] text-left text-xs">
-                  <thead className="text-muted">
-                    <tr className="border-b border-line">
-                      {["Reunion", "300-325", "325-350", "350-375", "375-400", "400-425"].map((h) => <th key={h} className="py-2 pr-3 font-medium">{h}</th>)}
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {fedRows.map((row) => (
-                      <tr key={row[0]} className="border-b border-line/70">
-                        {row.map((cell, index) => <td key={`${row[0]}-${index}`} className={`py-2 pr-3 ${index === 3 ? "bg-[#edf2ef] text-ink" : "text-muted"}`}>{cell}</td>)}
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-              <p className="mt-4 text-xs text-muted">Fuente: CME FedWatch Tool</p>
-            </div>
-
-            <div className="min-w-0 border border-line bg-panel p-5">
-              <h3 className="font-semibold text-ink">Desempeño por sector (1 semana)</h3>
-              <div className="mt-4 space-y-2">
-                {sectors.map(([name, value, width, tone]) => (
-                  <div key={name} className="grid grid-cols-[7rem_1fr_3.5rem] items-center gap-3 text-xs">
-                    <span className="text-muted">{name}</span>
-                    <span className="h-3 bg-panelSoft">
-                      <span className={`block h-3 ${tone === "pos" ? "bg-sage" : "bg-danger"}`} style={{ width: `${width}%` }} />
+          <div className="mt-8 grid gap-6 md:grid-cols-2 xl:grid-cols-4">
+            {dashboardPreviews.map((preview) => (
+              <div key={preview.title} className="flex min-h-[260px] flex-col border border-line bg-panel p-5">
+                <h3 className="font-semibold text-ink">{preview.title}</h3>
+                <p className="mt-4 text-sm leading-6 text-muted">{preview.text}</p>
+                <div className="mt-5 flex flex-wrap gap-2">
+                  {preview.tags.map((tag) => (
+                    <span key={tag} className="border border-line bg-panelSoft px-2.5 py-1 text-xs font-semibold text-muted">
+                      {tag}
                     </span>
-                    <span className={tone === "pos" ? "text-[#476b5a]" : "text-danger"}>{value}</span>
-                  </div>
-                ))}
+                  ))}
+                </div>
+                <p className="mt-auto pt-6 text-xs leading-5 text-muted">{preview.source}</p>
               </div>
-              <p className="mt-4 text-xs text-muted">Fuente: Datos de mercado</p>
-            </div>
+            ))}
+          </div>
 
-            <div className="min-w-0 border border-line bg-panel p-5">
-              <h3 className="font-semibold text-ink">Estructura a plazo del VIX</h3>
-              <div className="mt-5 flex h-44 items-end gap-3 border-b border-line px-1">
-                {[42, 58, 67, 76, 82, 81, 78, 84].map((height, index) => (
-                  <div key={`${height}-${index}`} className="flex flex-1 flex-col items-center gap-2">
-                    <span className="w-full border-t-2 border-petrol" style={{ height: `${height}%` }} />
-                    <span className="text-[10px] text-muted">{["Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic", "Ene"][index]}</span>
-                  </div>
-                ))}
-              </div>
-              <p className="mt-4 text-xs text-muted">Fuente: CBOE (cotizaciones con retraso)</p>
-            </div>
+          <div className="mt-8 flex flex-col gap-4 border-t border-line pt-6 md:flex-row md:items-center md:justify-between">
+            <p className="max-w-2xl text-sm leading-6 text-muted">
+              Lectura educativa de contexto. No es recomendación de inversión, no elige activos y no anticipa retornos futuros.
+            </p>
+            <Link href="/dashboard" className="w-fit border border-ink bg-ink px-5 py-3 text-sm font-semibold text-white transition hover:bg-panel hover:text-ink">
+              Ver dashboard de mercado
+            </Link>
           </div>
         </div>
       </section>
@@ -184,13 +167,13 @@ export default function Home() {
           <div>
             <p className="text-xs font-semibold uppercase tracking-[0.2em] text-brass">Quant Lab Preview</p>
             <h2 className="mt-4 text-2xl font-semibold leading-tight text-ink">Ideas sistemáticas. Proceso disciplinado.</h2>
-            <p className="mt-4 text-sm leading-6 text-muted">Señales basadas en datos y reglas claras. Backtests transparentes. Resultados medibles.</p>
+            <p className="mt-4 text-sm leading-6 text-muted">Lecturas basadas en datos y reglas claras. Backtests transparentes. Resultados medibles.</p>
           </div>
           <div className="min-w-0 overflow-x-auto">
             <table className="w-full min-w-[820px] border-collapse text-left text-sm">
               <thead className="text-xs uppercase text-muted">
                 <tr className="border-b border-line">
-                  {["Estrategia", "Enfoque", "Señal actual", "Rend. 1M", "Rend. 3M", "Sharpe", "Max DD", "Estado"].map((h) => <th key={h} className="py-3 pr-5 font-semibold">{h}</th>)}
+                  {["Estrategia", "Enfoque", "Lectura actual", "Rend. 1M", "Rend. 3M", "Sharpe", "Max DD", "Estado"].map((h) => <th key={h} className="py-3 pr-5 font-semibold">{h}</th>)}
                 </tr>
               </thead>
               <tbody>

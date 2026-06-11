@@ -10,8 +10,16 @@ import { MetricCard } from "@/components/ui/MetricCard";
 import { SectionHeader } from "@/components/ui/SectionHeader";
 import { getDashboardData } from "@/lib/dashboard/get-dashboard-data";
 import { dataStatusLabels } from "@/lib/dashboard/status";
+import type { RegimeBias } from "@/lib/dashboard/types";
 
 export const revalidate = 86400;
+
+const riskBiasLabels: Record<RegimeBias, string> = {
+  favorable: "Favorable",
+  neutral: "Neutral",
+  cautious: "Cauteloso",
+  stress: "Estrés",
+};
 
 export default async function DashboardPage() {
   const { btcEtfFlows, crossSignalRadar, dashboardModules, fedWatch, quantRisk, regimeSummary, sectorRotation, vix } = await getDashboardData();
@@ -40,7 +48,7 @@ export default async function DashboardPage() {
             </p>
           </div>
           <div className="grid gap-4 sm:grid-cols-2">
-            <MetricCard label="Sesgo" value={regimeSummary.bias} emphasis />
+            <MetricCard label="Sesgo" value={riskBiasLabels[regimeSummary.bias]} emphasis />
             <MetricCard label="Score de régimen" value={`${regimeSummary.regimeScore}/100`} emphasis />
             <MetricCard label="Confianza de lectura" value={`${regimeSummary.confidence}%`} emphasis />
           </div>
@@ -54,11 +62,17 @@ export default async function DashboardPage() {
           <div className="border border-line bg-panelSoft p-5">
             <h3 className="font-semibold text-ink">Lecturas a favor del riesgo</h3>
             <ul className="mt-4 grid gap-3 text-sm leading-6 text-muted">
-              {regimeSummary.riskSupportSignals.map((signal) => (
-                <li key={signal.label} className="border-l border-sage/70 pl-4">
-                  <span className="font-semibold text-ink">{signal.label}: </span>{signal.detail}
+              {regimeSummary.riskSupportSignals.length > 0 ? (
+                regimeSummary.riskSupportSignals.map((signal) => (
+                  <li key={signal.label} className="border-l border-sage/70 pl-4">
+                    <span className="font-semibold text-ink">{signal.label}: </span>{signal.detail}
+                  </li>
+                ))
+              ) : (
+                <li className="border-l border-line pl-4">
+                  Sin lecturas dominantes a favor del riesgo en este momento.
                 </li>
-              ))}
+              )}
             </ul>
           </div>
           <div className="border border-line bg-panelSoft p-5">
@@ -90,9 +104,9 @@ export default async function DashboardPage() {
 
       <section className="mt-6 border border-line bg-panel p-6">
         <div className="max-w-3xl">
-          <h2 className="text-2xl font-semibold text-ink">Radar de señales cruzadas</h2>
+          <h2 className="text-2xl font-semibold text-ink">Radar de lecturas cruzadas</h2>
           <p className="mt-3 leading-7 text-muted">
-            Esta tabla no muestra ideas accionables. Muestra casos donde hay señales públicas en tensión: short interest reportado como escepticismo o presión bajista, y presencia en 13F/superinvestors como interés institucional reportado con retraso. Son puntos de partida para investigación, no señales de ejecución.
+            Esta tabla no muestra ideas accionables. Muestra casos donde hay lecturas públicas en tensión: short interest reportado como escepticismo o presión bajista, y presencia en 13F/superinvestors como interés institucional reportado con retraso. Son puntos de partida para investigación, no instrucciones de ejecución.
           </p>
         </div>
         <div className="mt-6 overflow-x-auto">
@@ -130,7 +144,7 @@ export default async function DashboardPage() {
 
       <div className="mt-6">
         <DisclaimerBox>
-          Este panel organiza señales públicas de mercado. No predice precios, no recomienda operaciones con activos y no sustituye un análisis personalizado.
+          Este panel organiza lecturas públicas de mercado. No anticipa precios, no recomienda operaciones con activos y no sustituye un análisis personalizado.
         </DisclaimerBox>
       </div>
     </div>

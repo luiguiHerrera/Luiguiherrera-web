@@ -36,7 +36,7 @@ export function FedWatchModule({ data }: FedWatchModuleProps) {
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-brass">FedWatch / tasas</p>
           <h2 className="mt-2 text-2xl font-semibold text-ink">Expectativas de política monetaria</h2>
           <p className="mt-3 text-sm leading-6 text-muted">
-            FedWatch resume probabilidades implícitas en futuros de Fed Funds para próximas reuniones de la Reserva Federal. Es una lectura de expectativas de política monetaria, no una predicción propia ni una recomendación de inversión.
+            FedWatch resume probabilidades implícitas en futuros de Fed Funds para próximas reuniones de la Reserva Federal. Es una lectura de expectativas de política monetaria, no una anticipación propia ni una recomendación de inversión.
           </p>
 
           <div className="mt-6 border border-line bg-panelSoft p-5">

@@ -54,6 +54,17 @@ function trendLabel(trend: BtcEtfFlowsData["recentTrend"]) {
   return "Mixto";
 }
 
+function windowDirectionLabel(value: number | null) {
+  if (value === null) return "historial insuficiente";
+  if (value > 0) return "positivo";
+  if (value < 0) return "negativo";
+  return "neutral";
+}
+
+function recentWindowsLabel(flows: BtcEtfFlowsData) {
+  return `5D ${windowDirectionLabel(flows.rolling5dNetFlow)} · 20D ${windowDirectionLabel(flows.rolling20dNetFlow)}`;
+}
+
 function buildBarPath(history: BtcEtfFlowPoint[]) {
   const maxAbs = Math.max(...history.map((point) => Math.abs(point.totalNetFlow)), 1);
   return { maxAbs };
@@ -124,7 +135,7 @@ export function BtcEtfFlowsModule({ data }: BtcEtfFlowsModuleProps) {
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-brass">BTC ETF flows</p>
           <h2 className="mt-2 text-2xl font-semibold text-ink">Presión de flujos vía ETFs</h2>
           <p className="mt-3 text-sm leading-6 text-muted">
-            Los flujos de ETFs spot de Bitcoin ayudan a observar demanda o reducción de exposición a través de vehículos regulados en EE. UU. Son una lectura de presión de flujos, no una predicción del precio de Bitcoin.
+            Los flujos de ETFs spot de Bitcoin ayudan a observar demanda o reducción de exposición a través de vehículos regulados en EE. UU. Son una lectura de presión de flujos, no una anticipación del precio de Bitcoin.
           </p>
 
           <div className="mt-6 border border-line bg-panelSoft p-5">
@@ -159,7 +170,7 @@ export function BtcEtfFlowsModule({ data }: BtcEtfFlowsModuleProps) {
             <span className="block font-semibold text-ink">Lectura compuesta</span>
             <div className="mt-3 grid gap-2">
               <p><span className="font-semibold text-ink">Día:</span> {levelLabel(flows.dailyLevel)}</p>
-              <p><span className="font-semibold text-ink">Ventanas recientes:</span> {trendLabel(flows.recentTrend)}</p>
+              <p><span className="font-semibold text-ink">Ventanas recientes:</span> {recentWindowsLabel(flows)}</p>
               <p><span className="font-semibold text-ink">Driver dominante:</span> {flows.dominantFlowDriver}</p>
             </div>
           </div>
