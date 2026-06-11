@@ -3,15 +3,10 @@
 import { useState } from "react";
 import { RiskPill } from "@/components/ui/RiskPill";
 import { trackEvent } from "@/lib/analytics/trackEvent";
-import type { DashboardModuleData, DataStatus } from "@/lib/dashboard/types";
+import { dataStatusLabels } from "@/lib/dashboard/status";
+import type { DashboardModuleData } from "@/lib/dashboard/types";
 
 type DashboardModuleProps = DashboardModuleData;
-
-const dataStatusLabels: Record<DataStatus, string> = {
-  demo: "Datos demo",
-  manual: "Datos manuales",
-  live_pending: "Pendiente de automatización",
-};
 
 export function DashboardModule({
   id,

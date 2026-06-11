@@ -46,7 +46,7 @@ En cada actualizacion revisar estos campos:
 
 - `lastUpdated`: fecha o etiqueta de actualizacion. Debe dejar claro si es demo, manual o automatizado.
 - `updateFrequency`: frecuencia esperada de mantenimiento o automatizacion.
-- `dataStatus`: estado del dato: `demo`, `manual` o `live_pending`.
+- `dataStatus`: estado del dato: `demo`, `manual`, `live_pending` o `automated`.
 - `observedData`: datos observados que se muestran en tarjetas o tablas.
 - `interpretation`: explicacion de que mira el modulo, por que importa y como leerlo.
 - `whatItDoesNotMean`: aclaracion explicita de lo que el dato no permite concluir.
@@ -57,6 +57,7 @@ En cada actualizacion revisar estos campos:
 - `demo`: datos de ejemplo para mostrar formato, estructura o logica de lectura. No deben presentarse como actuales.
 - `manual`: datos ingresados o revisados manualmente. Deben incluir fecha de actualizacion y fuente conceptual.
 - `live_pending`: modulo preparado para automatizacion futura, pero aun sin conexion real a datos vivos.
+- `automated`: datos obtenidos server-side desde una fuente publica o proveedor configurado, con cache, timestamp visible y fallback prudente.
 
 ## Reglas de tono
 

@@ -1,11 +1,9 @@
 import type { CrossSignalRadarRow, DashboardModuleData } from "@/lib/dashboard/types";
 
-// Future adapters can map live or vendor data into these same shapes:
-// - FedWatch adapter: CME FedWatch / Fed Funds futures probabilities.
-// - Sector ETF adapter: XLK, XLF, XLV, XLE, XLY, XLP, XLI, XLB, XLU, XLRE, XLC.
-// - VIX adapter: CBOE VIX spot and front futures term structure.
-// - BTC ETF flows adapter: Farside BTC ETF flows.
-// - Short interest / 13F adapter: reported short interest and delayed 13F filings.
+// Adapters map live, public or vendor data into these same shapes.
+// Sprint 1 automates Sector ETFs and BTC ETF flows server-side with fallbacks.
+// FedWatch, VIX and Short interest / 13F remain pending until source permissions
+// and reliable provider contracts are reviewed.
 
 export const dashboardModules: DashboardModuleData[] = [
   {

@@ -3,16 +3,14 @@ import { RegimeBadge } from "@/components/dashboard/RegimeBadge";
 import { DisclaimerBox } from "@/components/ui/DisclaimerBox";
 import { MetricCard } from "@/components/ui/MetricCard";
 import { SectionHeader } from "@/components/ui/SectionHeader";
-import { crossSignalRadar, dashboardModules, regimeSummary } from "@/lib/mock-data/dashboard";
-import type { DataStatus } from "@/lib/dashboard/types";
+import { getDashboardData } from "@/lib/dashboard/get-dashboard-data";
+import { dataStatusLabels } from "@/lib/dashboard/status";
 
-const dataStatusLabels: Record<DataStatus, string> = {
-  demo: "Datos demo",
-  manual: "Datos manuales",
-  live_pending: "Pendiente de automatización",
-};
+export const revalidate = 86400;
 
-export default function DashboardPage() {
+export default async function DashboardPage() {
+  const { crossSignalRadar, dashboardModules, regimeSummary } = await getDashboardData();
+
   return (
     <div className="mx-auto max-w-7xl px-5 py-12 md:py-16">
       <div className="grid gap-8 lg:grid-cols-[1fr_0.8fr] lg:items-end">

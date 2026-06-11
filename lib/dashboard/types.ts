@@ -1,6 +1,6 @@
 import type { DashboardModuleId } from "@/lib/analytics/trackEvent";
 
-export type DataStatus = "demo" | "manual" | "live_pending";
+export type DataStatus = "demo" | "manual" | "live_pending" | "automated";
 
 export type RegimeLabel = "Constructivo" | "Neutral" | "Defensivo" | "Estrés";
 export type RegimeBias = "Risk-on" | "Mixto" | "Risk-off";
@@ -48,4 +48,10 @@ export type CrossSignalRadarRow = DashboardDataSource & {
   shortInterestDate: string;
   form13FDate: string;
   note: string;
+};
+
+export type DashboardData = {
+  dashboardModules: DashboardModuleData[];
+  crossSignalRadar: CrossSignalRadarRow[];
+  regimeSummary: RegimeSummary;
 };
