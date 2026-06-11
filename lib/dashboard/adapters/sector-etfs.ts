@@ -4,6 +4,7 @@ import type { DashboardModuleData, QuantRiskData, SectorEtfSnapshot, SectorLeade
 
 const REVALIDATE_SECONDS = 60 * 60 * 24;
 const CLOSE_CONVENTION = "adjusted_close";
+const FALLBACK_VISIBLE_MESSAGE = "Datos automáticos no disponibles temporalmente. Mostrando datos demo para mantener la estructura visual.";
 
 const sectorEtfs = [
   { symbol: "XLK", name: "Tecnología", group: "growth" },
@@ -48,7 +49,7 @@ export type SectorEtfsResult = {
 };
 
 function formatPercent(value: number | null) {
-  if (value === null) return "No disponible";
+  if (value === null) return "Pendiente de datos suficientes";
   const sign = value > 0 ? "+" : "";
   return `${sign}${value.toFixed(1)}%`;
 }
@@ -89,7 +90,7 @@ function fallbackSectorResult(reason: string): SectorEtfsResult {
         rank3m: null,
         sparkline30d,
         trend: trendFromSparkline(sparkline30d),
-        lastUpdated: "Fallback demo",
+        lastUpdated: FALLBACK_VISIBLE_MESSAGE,
         group: group as SectorGroup,
         dailyReturns: [],
       };
@@ -97,8 +98,8 @@ function fallbackSectorResult(reason: string): SectorEtfsResult {
   );
   const metrics = buildMetrics(demoSectors);
   const rotation: SectorRotationData = {
-    sourceName: "Fallback demo de ETFs sectoriales",
-    lastUpdated: "Fallback demo",
+    sourceName: "ETFs sectoriales como proxies",
+    lastUpdated: FALLBACK_VISIBLE_MESSAGE,
     updateFrequency: "Automática server-side con caché diaria cuando exista fuente disponible",
     dataStatus: "demo",
     reliabilityNote: `Datos demo para mantener la lectura disponible. Fallback activo: ${reason}.`,
@@ -110,15 +111,15 @@ function fallbackSectorResult(reason: string): SectorEtfsResult {
   return {
     module: {
       ...fallback,
-      status: "Fallback demo",
+      status: "Datos demo",
       dataStatus: "demo",
-      lastUpdated: "Fallback demo",
+      lastUpdated: FALLBACK_VISIBLE_MESSAGE,
       reliabilityNote: `${fallback.reliabilityNote} Fallback activo: ${reason}.`,
     },
     rotation,
     quantRisk: {
-      sourceName: "Fallback demo sobre ETFs sectoriales",
-      lastUpdated: "Fallback demo",
+      sourceName: "Cálculos propios sobre ETFs sectoriales vía proveedor de precios",
+      lastUpdated: FALLBACK_VISIBLE_MESSAGE,
       updateFrequency: "Automática server-side con caché diaria cuando exista fuente disponible",
       dataStatus: "demo",
       reliabilityNote: `Los modelos cuantitativos requieren historial suficiente. Fallback activo: ${reason}. No predicen dirección de mercado.`,
@@ -135,7 +136,7 @@ function fallbackSectorResult(reason: string): SectorEtfsResult {
       sectorDispersion1m: metrics.sectorDispersion1m,
       fragilityScore: 0,
       fragilityLabel: "Baja",
-      fragilityInterpretation: "La lectura cuantitativa está en fallback demo por falta de datos automatizados suficientes. Es contexto operativo, no una estimación activa.",
+      fragilityInterpretation: FALLBACK_VISIBLE_MESSAGE,
     },
   };
 }

@@ -6,13 +6,13 @@ type QuantRiskPanelProps = {
 };
 
 function formatPercent(value: number | null) {
-  if (value === null) return "No disponible";
+  if (value === null) return "Pendiente de datos suficientes";
   const sign = value > 0 ? "+" : "";
   return `${sign}${value.toFixed(1)}%`;
 }
 
 function formatCorrelation(value: number | null) {
-  if (value === null) return "No disponible";
+  if (value === null) return "Pendiente de datos suficientes";
   return value.toFixed(2);
 }
 
