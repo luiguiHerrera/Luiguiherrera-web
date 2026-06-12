@@ -116,6 +116,7 @@ export type CalendarFrequencyPoint = {
   label: string;
   highs: number;
   lows: number;
+  periods: number;
 };
 
 export type NewHighLowStats = {
@@ -154,6 +155,26 @@ export type MlFeatureSet = {
   range_percentile: number | null;
   close_location: number | null;
   correlation_to_selected_average: number | null;
+};
+
+export type KeyStatisticalLevelSet = {
+  available: boolean;
+  statusNote: string;
+  periods: number;
+  currentOpen: number | null;
+  lastClose: number | null;
+  avgHigherExtension: number | null;
+  stdHigherExtension: number | null;
+  avgLowerExtension: number | null;
+  stdLowerExtension: number | null;
+  levels: Record<string, number | null>;
+  distances: Record<string, number | null>;
+  location: string;
+};
+
+export type AssetKeyStatisticalLevels = {
+  weekly: KeyStatisticalLevelSet;
+  monthly: KeyStatisticalLevelSet;
 };
 
 export type FrequencyMetricSet = {
@@ -214,6 +235,7 @@ export type AssetStatRecord = {
   compactSeries: CompactPricePoint[];
   windows: Record<StatisticalWindow, WindowMetric>;
   frequencies: Record<StatisticalFrequency, FrequencyMetricSet>;
+  keyStatisticalLevels: AssetKeyStatisticalLevels;
 };
 
 export type StatisticalLevelsGeneratedData = {

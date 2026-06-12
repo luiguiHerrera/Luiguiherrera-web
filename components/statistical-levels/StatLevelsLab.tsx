@@ -7,6 +7,7 @@ import { AssetStatCard } from "@/components/statistical-levels/AssetStatCard";
 import { CalendarExtremesPanel } from "@/components/statistical-levels/CalendarExtremesPanel";
 import { CorrelationMiniMatrix } from "@/components/statistical-levels/CorrelationMiniMatrix";
 import { FocusedAssetPanel } from "@/components/statistical-levels/FocusedAssetPanel";
+import { KeyStatisticalLevelsPanel } from "@/components/statistical-levels/KeyStatisticalLevelsPanel";
 import { LabOverviewStrip } from "@/components/statistical-levels/LabOverviewStrip";
 import { MlFeaturesPanel } from "@/components/statistical-levels/MlFeaturesPanel";
 import { MovementSummaryTable } from "@/components/statistical-levels/MovementSummaryTable";
@@ -74,7 +75,7 @@ export function StatLevelsLab() {
   const primaryAsset = selectedAssets.find((asset) => asset.ticker === focusTicker) ?? selectedAssets[0] ?? null;
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-5">
       <section className="grid gap-4 md:grid-cols-3">
         {Object.entries(statusCounts).map(([status, count]) => (
           <div key={status} className="border border-line bg-panel p-4">
@@ -86,14 +87,14 @@ export function StatLevelsLab() {
 
       <AssetSelector catalog={statisticalLevelsData.catalog} query={query} selected={selected} setQuery={setQuery} toggleAsset={toggleAsset} />
 
-      <section className="border border-line bg-panel p-5 md:p-6">
+      <section className="border border-line bg-panel p-4 md:p-5">
         <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
           <div>
             <p className="text-xs font-semibold uppercase tracking-[0.18em] text-brass">Frecuencia y ventana comparable</p>
-            <h2 className="mt-2 text-2xl font-semibold text-ink">Prioriza semanal y mensual para reducir ruido</h2>
+            <h2 className="mt-1 text-xl font-semibold text-ink">Prioriza semanal y mensual para reducir ruido</h2>
             <p className="mt-2 max-w-2xl text-sm leading-6 text-muted">
               La frecuencia semanal y mensual reduce ruido de corto plazo y puede ser más útil para análisis de régimen y modelos cuantitativos.
-              No implica mejor capacidad predictiva por sí sola.
+              No implica dirección futura por sí sola.
             </p>
           </div>
           <div className="flex flex-col gap-3">
@@ -139,6 +140,7 @@ export function StatLevelsLab() {
       </section>
 
       <FocusedAssetPanel assets={selectedAssets} focusTicker={primaryAsset?.ticker ?? null} setFocusTicker={setFocusTicker} frequency={frequency} window={window} />
+      <KeyStatisticalLevelsPanel asset={primaryAsset} />
       <div className="grid gap-6 xl:grid-cols-[1fr_0.9fr]">
         <UnderwaterDrawdownChart asset={primaryAsset} frequency={frequency} window={window} />
         <ReturnHeatmap asset={primaryAsset} frequency={frequency} />
@@ -149,7 +151,7 @@ export function StatLevelsLab() {
       <PeriodExplorerTable asset={primaryAsset} frequency={frequency} />
       <AssetComparisonTable assets={selectedAssets} frequency={frequency} window={window} />
       <CorrelationMiniMatrix assets={selectedAssets} frequency={frequency} window={window} />
-      <MlFeaturesPanel assets={selectedAssets} frequency={frequency} />
+      <MlFeaturesPanel assets={selectedAssets} frequency={frequency} focusAsset={primaryAsset} />
 
       <section className="border border-line bg-panel p-5 md:p-6">
         <h2 className="text-2xl font-semibold text-ink">Cómo leer esta herramienta</h2>

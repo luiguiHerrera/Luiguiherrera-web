@@ -539,15 +539,16 @@ function buildOpeningLocation(moves) {
   };
 }
 
-function buildCalendarExtremes(rows, frequency) {
+function buildCalendarExtremes(rows, frequency, lookback) {
   const labels =
     frequency === "monthly"
-      ? ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"]
+      ? ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"]
       : frequency === "weekly"
         ? ["Semana 1", "Semana 2", "Semana 3", "Semana 4", "Semana 5"]
-        : ["Lun", "Mar", "Mié", "Jue", "Vie", "Sáb", "Dom"];
-  const counts = new Map(labels.map((label) => [label, { label, highs: 0, lows: 0 }]));
-  for (const row of rows) {
+        : ["Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo"];
+  const counts = new Map(labels.map((label) => [label, { label, highs: 0, lows: 0, periods: 0 }]));
+  for (let index = lookback; index < rows.length; index += 1) {
+    const row = rows[index];
     const date = new Date(`${row.periodEnd}T00:00:00Z`);
     const label =
       frequency === "monthly"
@@ -556,10 +557,100 @@ function buildCalendarExtremes(rows, frequency) {
           ? labels[Math.min(Math.floor((date.getUTCDate() - 1) / 7), 4)]
           : labels[(date.getUTCDay() + 6) % 7];
     const item = counts.get(label);
-    if (row.adjustedHigh >= Math.max(...rows.filter((itemRow) => itemRow.periodEnd === row.periodEnd).map((itemRow) => itemRow.adjustedHigh))) item.highs += 1;
-    if (row.adjustedLow <= Math.min(...rows.filter((itemRow) => itemRow.periodEnd === row.periodEnd).map((itemRow) => itemRow.adjustedLow))) item.lows += 1;
+    const slice = rows.slice(index - lookback, index);
+    const previousHigh = Math.max(...slice.map((itemRow) => itemRow.adjustedHigh));
+    const previousLow = Math.min(...slice.map((itemRow) => itemRow.adjustedLow));
+    item.periods += 1;
+    if (row.adjustedHigh > previousHigh) item.highs += 1;
+    if (row.adjustedLow < previousLow) item.lows += 1;
   }
   return Array.from(counts.values());
+}
+
+function unavailableKeyLevels(prefix, periods = 0) {
+  const keys = prefix === "W" ? ["WSHE", "WAHE", "WALE", "WSLE"] : ["MSHE", "MAHE", "MALE", "MSLE"];
+  return {
+    available: false,
+    statusNote: "Historial insuficiente para calcular niveles de extensión.",
+    periods,
+    currentOpen: null,
+    lastClose: null,
+    avgHigherExtension: null,
+    stdHigherExtension: null,
+    avgLowerExtension: null,
+    stdLowerExtension: null,
+    levels: Object.fromEntries(keys.map((key) => [key, null])),
+    distances: Object.fromEntries(keys.map((key) => [key, null])),
+    location: "Historial insuficiente",
+  };
+}
+
+function describeLevelLocation(lastClose, levels, frequency) {
+  const isWeekly = frequency === "weekly";
+  const highExtreme = levels[isWeekly ? "WSHE" : "MSHE"];
+  const highAverage = levels[isWeekly ? "WAHE" : "MAHE"];
+  const lowAverage = levels[isWeekly ? "WALE" : "MALE"];
+  const lowExtreme = levels[isWeekly ? "WSLE" : "MSLE"];
+  const periodLabel = isWeekly ? "semanal" : "mensual";
+  if (lastClose > highExtreme) return `Por encima de extensión ${periodLabel} extrema`;
+  if (lastClose >= highAverage) return `Cerca de extensión ${periodLabel} alta`;
+  if (lastClose <= lowExtreme) return `Por debajo de extensión ${periodLabel} extrema`;
+  if (lastClose <= lowAverage) return `Cerca de extensión ${periodLabel} baja`;
+  return `Dentro del rango ${periodLabel} medio`;
+}
+
+function buildKeyLevels(periodRows, frequency) {
+  const prefix = frequency === "weekly" ? "W" : "M";
+  const minimumHistory = frequency === "weekly" ? 52 : 24;
+  const completedRows = periodRows.slice(0, -1);
+  const current = periodRows.at(-1);
+  if (!current || completedRows.length < minimumHistory) return unavailableKeyLevels(prefix, completedRows.length);
+
+  const higherExtensions = completedRows
+    .map((row) => (row.adjustedOpen && row.adjustedHigh ? row.adjustedHigh / row.adjustedOpen - 1 : null))
+    .filter(Number.isFinite);
+  const lowerExtensions = completedRows
+    .map((row) => (row.adjustedOpen && row.adjustedLow ? row.adjustedOpen / row.adjustedLow - 1 : null))
+    .filter(Number.isFinite);
+  const avgHigher = mean(higherExtensions);
+  const stdHigher = standardDeviation(higherExtensions);
+  const avgLower = mean(lowerExtensions);
+  const stdLower = standardDeviation(lowerExtensions);
+  const currentOpen = current.adjustedOpen;
+  const lastClose = current.adjustedClose;
+  if (![avgHigher, stdHigher, avgLower, stdLower, currentOpen, lastClose].every(Number.isFinite)) return unavailableKeyLevels(prefix, completedRows.length);
+
+  const levels =
+    frequency === "weekly"
+      ? {
+          WSHE: currentOpen * (1 + avgHigher + stdHigher),
+          WAHE: currentOpen * (1 + avgHigher),
+          WALE: currentOpen * (1 - avgLower),
+          WSLE: currentOpen * (1 - avgLower - stdLower),
+        }
+      : {
+          MSHE: currentOpen * (1 + avgHigher + stdHigher),
+          MAHE: currentOpen * (1 + avgHigher),
+          MALE: currentOpen * (1 - avgLower),
+          MSLE: currentOpen * (1 - avgLower - stdLower),
+        };
+  const roundedLevels = Object.fromEntries(Object.entries(levels).map(([key, value]) => [key, clampPrecision(value, 2)]));
+  const distances = Object.fromEntries(Object.entries(levels).map(([key, value]) => [key, clampPrecision(lastClose / value - 1)]));
+
+  return {
+    available: true,
+    statusNote: `Calculado con ${completedRows.length} periodos completados.`,
+    periods: completedRows.length,
+    currentOpen: clampPrecision(currentOpen, 2),
+    lastClose: clampPrecision(lastClose, 2),
+    avgHigherExtension: clampPrecision(avgHigher),
+    stdHigherExtension: clampPrecision(stdHigher),
+    avgLowerExtension: clampPrecision(avgLower),
+    stdLowerExtension: clampPrecision(stdLower),
+    levels: roundedLevels,
+    distances,
+    location: describeLevelLocation(lastClose, levels, frequency),
+  };
 }
 
 function buildNewHighLow(rows, lookback) {
@@ -704,7 +795,7 @@ function buildFrequencyMetrics(rows, frequency) {
     windows: Object.fromEntries(Object.entries(windows).map(([key, sizes]) => [key, buildWindowMetric(closes, sizes[frequency], config)])),
     changeMoves: buildChangeMoves(moves),
     openingLocation: buildOpeningLocation(moves),
-    calendarExtremes: buildCalendarExtremes(periodRows.slice(-config.chartLimit), frequency),
+    calendarExtremes: buildCalendarExtremes(periodRows, frequency, config.newHighLowLookback),
     newHighLow: buildNewHighLow(periodRows, config.newHighLowLookback),
     recentPeriods: moves.slice(-80).reverse().map((row) => ({
       period: row.period,
@@ -774,6 +865,8 @@ function buildUnavailableFrequency(periods = 0) {
 
 function buildAssetRecord(asset, rows, provider) {
   const { yahooSymbol, ...catalogAsset } = asset;
+  const weeklyRows = rows.length ? aggregateRows(rows, "weekly") : [];
+  const monthlyRows = rows.length ? aggregateRows(rows, "monthly") : [];
   const frequencies = rows.length
     ? {
         daily: buildFrequencyMetrics(rows, "daily"),
@@ -785,6 +878,10 @@ function buildAssetRecord(asset, rows, provider) {
         weekly: buildUnavailableFrequency(0),
         monthly: buildUnavailableFrequency(0),
       };
+  const keyStatisticalLevels = {
+    weekly: buildKeyLevels(weeklyRows, "weekly"),
+    monthly: buildKeyLevels(monthlyRows, "monthly"),
+  };
   const daily = frequencies.daily;
   const status = daily.status === "ok" && frequencies.weekly.status === "ok" && frequencies.monthly.status === "ok" ? "ok" : "limited_history";
   return {
@@ -813,6 +910,7 @@ function buildAssetRecord(asset, rows, provider) {
     compactSeries: daily.compactSeries,
     windows: daily.windows,
     frequencies,
+    keyStatisticalLevels,
   };
 }
 
