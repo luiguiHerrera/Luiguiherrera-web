@@ -1125,7 +1125,7 @@ export const td3PerformanceRows: QuantPerformanceRow[] = [
 ];
 
 export const td3PerformanceMeta = {
-  generatedAt: "2026-06-12T19:53:44.850Z",
+  generatedAt: "2026-06-12T20:44:36.894Z",
   sourceFiles: [
   "final_corrected_bil_cash_mandate_profile_comparison/mandate_profile_rankings.csv",
   "final_corrected_zero_cash_mandate_profile_comparison/mandate_profile_rankings.csv"

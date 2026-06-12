@@ -21,6 +21,8 @@ const cashLabels: Record<CashAssumption, string> = {
   "zero-cash": "Zero-CASH",
 };
 
+const profileOrder: QuantProfile[] = ["conservative", "moderate", "aggressive"];
+
 const strategyOrder = [
   "TD3 constrained",
   "Equal Weight",
@@ -51,6 +53,11 @@ function getSelectedCash(cashParam?: string) {
 
 function performanceHref(profile: string, cash: CashAssumption) {
   return `/quant-lab?profile=${encodeURIComponent(profile)}&cash=${encodeURIComponent(cash)}#td3-performance`;
+}
+
+function getOrderedProfiles() {
+  const profiles = td3PerformanceMeta.availableProfiles;
+  return profileOrder.filter((profile) => profiles.includes(profile)).concat(profiles.filter((profile) => !profileOrder.includes(profile)));
 }
 
 function formatPercent(value: number | null) {
@@ -84,6 +91,21 @@ function orderRows(rows: QuantPerformanceRow[]) {
     const bIndex = strategyOrderMap.get(b.displayName) ?? strategyOrder.length;
     return aIndex - bIndex || a.displayName.localeCompare(b.displayName);
   });
+}
+
+function td3MetricsCoincideAcrossProfiles(cash: CashAssumption) {
+  const td3Rows = profileOrder
+    .map((profile) => td3PerformanceRows.find((row) => row.cashAssumption === cash && row.profile === profile && row.strategyType === "td3"))
+    .filter(Boolean) as QuantPerformanceRow[];
+
+  if (td3Rows.length < 2) return false;
+
+  const signature = (row: QuantPerformanceRow) =>
+    [row.strategyName, row.annualizedReturn, row.sharpe, row.maxDrawdown, row.averageTurnover, row.averageMaxWeight, row.effectiveAssets]
+      .map((value) => String(value))
+      .join("|");
+
+  return new Set(td3Rows.map(signature)).size === 1;
 }
 
 function MandateStatus({ row }: { row: QuantPerformanceRow }) {
@@ -182,8 +204,10 @@ export function Td3PerformanceTable({ selectedCashParam, selectedProfileParam }:
 
   const sourceFiles = useMemo(() => [...new Set(rows.map((row) => row.sourceFile))], [rows]);
   const selectedTd3 = rows.find((row) => row.strategyType === "td3");
+  const orderedProfiles = getOrderedProfiles();
   const selectedProfileLabel = profileLabels[selectedProfile] ?? selectedProfile;
   const selectedCashLabel = cashLabels[selectedCash] ?? selectedCash;
+  const td3MetricsCoincide = td3MetricsCoincideAcrossProfiles(selectedCash);
 
   return (
     <div id="td3-performance">
@@ -204,7 +228,7 @@ export function Td3PerformanceTable({ selectedCashParam, selectedProfileParam }:
         <div>
           <p className="text-xs font-semibold uppercase tracking-[0.14em] text-muted">Perfil</p>
           <div className="mt-2 flex flex-wrap gap-2">
-            {td3PerformanceMeta.availableProfiles.map((profile) => (
+            {orderedProfiles.map((profile) => (
               <Link
                 key={profile}
                 href={performanceHref(profile, selectedCash)}
@@ -258,6 +282,33 @@ export function Td3PerformanceTable({ selectedCashParam, selectedProfileParam }:
           <span className="font-semibold text-ink">{selectedTd3?.strategyName ?? "N/D"}</span>
         </p>
       </div>
+
+      {selectedTd3 ? (
+        <div className="mt-3 grid gap-2 border border-line bg-panelSoft p-3 text-xs leading-5 text-muted md:grid-cols-4">
+          <p>
+            <span className="block font-semibold uppercase tracking-[0.12em] text-brass">Retorno anualizado</span>
+            <span className="font-semibold text-ink">{formatPercent(selectedTd3.annualizedReturn)}</span>
+          </p>
+          <p>
+            <span className="block font-semibold uppercase tracking-[0.12em] text-brass">Sharpe</span>
+            <span className="font-semibold text-ink">{formatNumber(selectedTd3.sharpe)}</span>
+          </p>
+          <p>
+            <span className="block font-semibold uppercase tracking-[0.12em] text-brass">Max drawdown</span>
+            <span className="font-semibold text-ink">{formatPercent(selectedTd3.maxDrawdown)}</span>
+          </p>
+          <p>
+            <span className="block font-semibold uppercase tracking-[0.12em] text-brass">Mandato</span>
+            <span className="font-semibold text-ink">{selectedTd3.mandateEligible ? "Cumple" : `No cumple${selectedTd3.failedConstraints ? `: ${formatFailedConstraints(selectedTd3.failedConstraints)}` : ""}`}</span>
+          </p>
+        </div>
+      ) : null}
+
+      {td3MetricsCoincide ? (
+        <p className="mt-3 border border-line bg-panelSoft p-3 text-xs leading-5 text-muted">
+          En esta fuente agregada, las métricas TD3 coinciden entre perfiles para {selectedCashLabel}. Lo que cambia es la evaluación del mandato y las restricciones aplicadas a cada perfil.
+        </p>
+      ) : null}
 
       {rows.length > 0 ? (
         <>
