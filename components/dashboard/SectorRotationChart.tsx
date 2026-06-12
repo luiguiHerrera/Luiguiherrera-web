@@ -72,7 +72,7 @@ function tractionRows(sectors: SectorEtfSnapshot[], period: Period) {
     })
     .filter((row) => row.currentRank !== null && row.priorRank !== null && row.returnChange !== null)
     .sort((a, b) => Math.abs(b.rankChange ?? 0) - Math.abs(a.rankChange ?? 0) || Math.abs(b.returnChange ?? 0) - Math.abs(a.returnChange ?? 0))
-    .slice(0, 6);
+    .slice(0, 4);
 }
 
 function tractionArrow(rankChange: number | null) {
@@ -121,7 +121,7 @@ export function SectorRotationChart({ data }: SectorRotationChartProps) {
         </div>
       </div>
 
-      <div className="mt-5 grid gap-3 border-y border-line py-4 text-sm leading-6 text-muted md:grid-cols-4">
+      <div className="mt-4 grid gap-3 border-y border-line py-3 text-sm leading-6 text-muted md:grid-cols-4">
         <div>
           <span className="block text-xs font-semibold uppercase tracking-[0.14em] text-brass">Estado</span>
           <span className="mt-1 block text-ink">{dataStatusLabels[data.dataStatus]}</span>
@@ -140,7 +140,7 @@ export function SectorRotationChart({ data }: SectorRotationChartProps) {
         </div>
       </div>
 
-      <div className="mt-6 grid gap-6 xl:grid-cols-[1.42fr_0.58fr] xl:items-start">
+      <div className="mt-5 grid gap-5 xl:grid-cols-[1.48fr_0.52fr] xl:items-start">
         <div>
           <div className="grid grid-cols-[1fr_1fr] border-b border-line pb-2 text-xs uppercase tracking-[0.12em] text-muted">
             <span>{formatPercent(minValue)}</span>
@@ -148,7 +148,7 @@ export function SectorRotationChart({ data }: SectorRotationChartProps) {
             <span className="col-span-2 text-center text-brass">0%</span>
           </div>
 
-          <div className="mt-3 grid gap-2">
+          <div className="mt-3 grid gap-1.5">
             {sortedSectors.map((sector) => {
               const value = metricValue(sector, period);
               const rawWidth = value === null ? 0 : (Math.abs(value) / maxAbs) * 48;
@@ -163,18 +163,19 @@ export function SectorRotationChart({ data }: SectorRotationChartProps) {
                   type="button"
                   onClick={() => setSelectedTicker(sector.etfTicker)}
                   title={`${sector.sectorName} ${sector.etfTicker}: ${formatPercent(value)}`}
-                  className={`group grid gap-3 border border-line bg-panelSoft p-3 text-left transition hover:border-petrol focus:border-petrol focus:outline-none md:grid-cols-[180px_1fr_82px] md:items-center ${
+                  className={`group grid gap-2 border border-line bg-panelSoft px-3 py-2 text-left transition hover:border-petrol focus:border-petrol focus:outline-none md:grid-cols-[2.7rem_minmax(8rem,0.74fr)_minmax(0,1fr)_4.4rem] md:items-center ${
                     selectedSector?.etfTicker === sector.etfTicker ? "border-petrol" : ""
                   }`}
                 >
+                  <span className="hidden text-xs font-semibold text-brass md:block">#{metricRank(sector, period) ?? "-"}</span>
                   <div className="flex items-baseline justify-between gap-3 md:block">
                     <div>
-                      <span className="block font-semibold text-ink">{sector.sectorName}</span>
-                      <span className="text-xs uppercase tracking-[0.14em] text-muted">#{metricRank(sector, period) ?? "Pendiente"} · {sector.etfTicker}</span>
+                      <span className="block text-sm font-semibold text-ink">{sector.sectorName}</span>
+                      <span className="text-xs uppercase tracking-[0.12em] text-muted">{sector.etfTicker}</span>
                     </div>
                     <span className="font-semibold text-ink md:hidden">{formatPercent(value)}</span>
                   </div>
-                  <svg viewBox="0 0 100 14" className="h-7 w-full" aria-hidden="true" preserveAspectRatio="none">
+                  <svg viewBox="0 0 100 14" className="h-5 w-full" aria-hidden="true" preserveAspectRatio="none">
                     <line x1="2" x2="98" y1="7" y2="7" stroke="#e7e2dc" strokeWidth="0.6" vectorEffect="non-scaling-stroke" />
                     <line x1="50" x2="50" y1="1" y2="13" stroke="#b8b2aa" strokeWidth="0.8" vectorEffect="non-scaling-stroke" />
                     {value !== null ? (
@@ -195,31 +196,31 @@ export function SectorRotationChart({ data }: SectorRotationChartProps) {
           </div>
         </div>
 
-        <aside className="border border-line bg-panelSoft p-4">
+        <aside className="border border-line bg-panelSoft p-3">
           <p className="text-xs font-semibold uppercase tracking-[0.16em] text-brass">Cambio de tracción</p>
-          <h3 className="mt-2 text-lg font-semibold text-ink">Tracción relativa</h3>
-          <p className="mt-2 text-sm leading-6 text-muted">
-            Compara la ventana seleccionada contra la ventana inmediatamente anterior del mismo tamaño.
+          <h3 className="mt-1 text-base font-semibold text-ink">Tracción relativa</h3>
+          <p className="mt-2 text-xs leading-5 text-muted">
+            Compara la ventana seleccionada contra una referencia más amplia. No representa flujos.
           </p>
           {traction.length > 0 ? (
-            <div className="mt-4 grid gap-3">
+            <div className="mt-3 grid gap-2">
               {traction.map(({ currentRank, priorRank, rankChange, returnChange, sector }) => (
                 <button
                   key={sector.etfTicker}
                   type="button"
                   onClick={() => setSelectedTicker(sector.etfTicker)}
-                  className={`border border-line bg-panel p-3 text-left transition hover:border-petrol focus:border-petrol focus:outline-none ${
+                  className={`border border-line bg-panel px-3 py-2 text-left transition hover:border-petrol focus:border-petrol focus:outline-none ${
                     selectedSector?.etfTicker === sector.etfTicker ? "border-petrol" : ""
                   }`}
                 >
                   <div className="flex items-start justify-between gap-3">
                     <div>
-                      <span className="block font-semibold text-ink">{sector.sectorName}</span>
-                      <span className="text-xs uppercase tracking-[0.14em] text-muted">{sector.etfTicker}</span>
+                      <span className="block text-sm font-semibold text-ink">{sector.sectorName}</span>
+                      <span className="text-xs uppercase tracking-[0.12em] text-muted">{sector.etfTicker}</span>
                     </div>
-                    <span className="text-lg font-semibold text-ink">{tractionArrow(rankChange)}</span>
+                    <span className="text-base font-semibold text-ink">{tractionArrow(rankChange)}</span>
                   </div>
-                  <div className="mt-3 flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-muted">
+                  <div className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-muted">
                     <span>#{priorRank ?? "Pendiente"} → #{currentRank ?? "Pendiente"}</span>
                     <span className="font-semibold text-ink">{formatPoints(returnChange)}</span>
                   </div>
@@ -231,7 +232,7 @@ export function SectorRotationChart({ data }: SectorRotationChartProps) {
               Historial insuficiente para comparar tracción
             </div>
           )}
-          <p className="mt-4 border-t border-line pt-3 text-xs leading-5 text-muted">
+          <p className="mt-3 border-t border-line pt-3 text-xs leading-5 text-muted">
             No representa flujos ni entradas/salidas de capital. Es una comparación de rendimiento relativo por ETFs proxy.
           </p>
         </aside>

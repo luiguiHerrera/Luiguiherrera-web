@@ -38,55 +38,66 @@ export default async function DashboardPage() {
         </DisclaimerBox>
       </div>
 
-      <section className="mt-8 border border-petrol/40 bg-panel p-5 md:p-7">
-        <div className="grid gap-8 lg:grid-cols-[0.82fr_1.18fr] lg:items-end">
-          <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-brass">Régimen actual</p>
-            <div className="mt-4"><RegimeBadge label={regimeSummary.current} /></div>
-            <p className="mt-4 max-w-xl text-sm leading-6 text-muted">
-              {regimeSummary.interpretation}
-            </p>
+      <section className="mt-8 border border-petrol/40 bg-panel p-4 md:p-5">
+        <div className="grid gap-3 md:grid-cols-4">
+          <div className="border border-line bg-panelSoft p-4">
+            <p className="text-xs font-semibold uppercase tracking-[0.16em] text-brass">Régimen actual</p>
+            <div className="mt-3"><RegimeBadge label={regimeSummary.current} /></div>
           </div>
-          <div className="grid gap-4 sm:grid-cols-2">
-            <MetricCard label="Sesgo" value={riskBiasLabels[regimeSummary.bias]} emphasis />
-            <MetricCard label="Score de régimen" value={`${regimeSummary.regimeScore}/100`} emphasis />
-            <MetricCard label="Confianza de lectura" value={`${regimeSummary.confidence}%`} emphasis />
-          </div>
+          <MetricCard label="Sesgo" value={riskBiasLabels[regimeSummary.bias]} emphasis />
+          <MetricCard label="Score" value={`${regimeSummary.regimeScore}/100`} emphasis />
+          <MetricCard label="Confianza" value={`${regimeSummary.confidence}%`} emphasis />
         </div>
-        <div className="mt-5 grid gap-4 md:grid-cols-3">
-          <MetricCard label="Última actualización" value={regimeSummary.lastUpdated} />
-          <MetricCard label="Estado de datos" value={dataStatusLabels[regimeSummary.dataStatus]} />
-          <MetricCard label="Fuente" value={regimeSummary.sourceName} />
+
+        <div className="mt-3 grid gap-3 border-y border-line py-4 text-sm leading-6 text-muted lg:grid-cols-[1.35fr_0.7fr_0.7fr_0.95fr]">
+          <p>{regimeSummary.interpretation}</p>
+          <p>
+            <span className="block text-xs font-semibold uppercase tracking-[0.14em] text-brass">Estado</span>
+            <span className="font-semibold text-ink">{dataStatusLabels[regimeSummary.dataStatus]}</span>
+          </p>
+          <p>
+            <span className="block text-xs font-semibold uppercase tracking-[0.14em] text-brass">Actualización</span>
+            <span className="font-semibold text-ink">{regimeSummary.lastUpdated}</span>
+          </p>
+          <p>
+            <span className="block text-xs font-semibold uppercase tracking-[0.14em] text-brass">Fuentes activas</span>
+            <span className="font-semibold text-ink">{regimeSummary.sourceName}</span>
+          </p>
         </div>
-        <div className="mt-5 grid gap-5 lg:grid-cols-2">
-          <div className="border border-line bg-panelSoft p-5">
-            <h3 className="font-semibold text-ink">Lecturas a favor del riesgo</h3>
-            <ul className="mt-4 grid gap-3 text-sm leading-6 text-muted">
+
+        <p className="mt-3 border border-line bg-panelSoft px-3 py-2 text-xs leading-5 text-muted">
+          FedWatch permanece pendiente y no aporta peso al score mientras su estado sea live_pending.
+        </p>
+
+        <div className="mt-3 grid gap-3 lg:grid-cols-2">
+          <div className="border border-line bg-panelSoft p-4">
+            <h3 className="text-sm font-semibold text-ink">Soportes de riesgo</h3>
+            <ul className="mt-3 grid gap-2 text-sm leading-6 text-muted">
               {regimeSummary.riskSupportSignals.length > 0 ? (
                 regimeSummary.riskSupportSignals.map((signal) => (
-                  <li key={signal.label} className="border-l border-sage/70 pl-4">
+                  <li key={signal.label} className="border-l border-sage/70 pl-3">
                     <span className="font-semibold text-ink">{signal.label}: </span>{signal.detail}
                   </li>
                 ))
               ) : (
-                <li className="border-l border-line pl-4">
+                <li className="border-l border-line pl-3">
                   Sin lecturas dominantes a favor del riesgo en este momento.
                 </li>
               )}
             </ul>
           </div>
-          <div className="border border-line bg-panelSoft p-5">
-            <h3 className="font-semibold text-ink">Lecturas de cautela</h3>
-            <ul className="mt-4 grid gap-3 text-sm leading-6 text-muted">
+          <div className="border border-line bg-panelSoft p-4">
+            <h3 className="text-sm font-semibold text-ink">Lecturas de cautela</h3>
+            <ul className="mt-3 grid gap-2 text-sm leading-6 text-muted">
               {regimeSummary.cautionSignals.map((signal) => (
-                <li key={signal.label} className="border-l border-brass/70 pl-4">
+                <li key={signal.label} className="border-l border-brass/70 pl-3">
                   <span className="font-semibold text-ink">{signal.label}: </span>{signal.detail}
                 </li>
               ))}
             </ul>
           </div>
         </div>
-        <div className="mt-5 border-t border-line pt-4 text-sm leading-6 text-muted">
+        <div className="mt-3 border-t border-line pt-3 text-xs leading-5 text-muted">
           <p>{regimeSummary.dataQualityNote}</p>
           <p className="mt-2">{regimeSummary.reliabilityNote}</p>
           <p className="mt-2">{regimeSummary.whatItDoesNotMean}</p>

@@ -70,7 +70,7 @@ function buildBarPath(history: BtcEtfFlowPoint[]) {
   return { maxAbs };
 }
 
-function FlowBarChart({ history }: { history: BtcEtfFlowPoint[] }) {
+function FlowBarChart({ compact = false, history }: { compact?: boolean; history: BtcEtfFlowPoint[] }) {
   const { maxAbs } = buildBarPath(history);
   const width = 100;
   const height = 56;
@@ -78,16 +78,16 @@ function FlowBarChart({ history }: { history: BtcEtfFlowPoint[] }) {
   const barWidth = history.length ? Math.max((width - gap * (history.length - 1)) / history.length, 1.2) : 1.2;
 
   return (
-    <div className="border border-line bg-panelSoft p-4">
+    <div className={compact ? "mt-4" : "border border-line bg-panelSoft p-4"}>
       <div className="flex items-start justify-between gap-4">
         <div>
           <p className="text-xs font-semibold uppercase tracking-[0.14em] text-brass">Últimas sesiones</p>
-          <h3 className="mt-2 font-semibold text-ink">Flujo neto diario</h3>
+          <h3 className="mt-1 text-sm font-semibold text-ink">Flujo neto diario</h3>
         </div>
         <p className="max-w-[12rem] text-right text-xs leading-5 text-muted">US$ millones, según disponibilidad de la fuente</p>
       </div>
 
-      <svg viewBox={`0 0 ${width} ${height}`} className="mt-4 h-36 w-full" preserveAspectRatio="none" aria-hidden="true">
+      <svg viewBox={`0 0 ${width} ${height}`} className={`${compact ? "h-24" : "h-32"} mt-3 w-full`} preserveAspectRatio="none" aria-hidden="true">
         <line x1="0" x2="100" y1="28" y2="28" stroke="#d8d1c8" strokeWidth="0.8" vectorEffect="non-scaling-stroke" />
         {history.map((point, index) => {
           const magnitude = (Math.abs(point.totalNetFlow) / maxAbs) * 24;
@@ -130,15 +130,15 @@ export function BtcEtfFlowsModule({ data }: BtcEtfFlowsModuleProps) {
 
   return (
     <section className="border border-line bg-panel p-4 md:p-5">
-      <div className="grid gap-6 xl:grid-cols-[0.78fr_1.22fr] xl:items-start">
-        <div>
+      <div className="grid gap-5 xl:grid-cols-[0.88fr_1.12fr] xl:items-start">
+        <div className="border border-line bg-panelSoft p-4">
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-brass">BTC ETF flows</p>
           <h2 className="mt-2 text-xl font-semibold text-ink">Presión de flujos vía ETFs</h2>
           <p className="mt-3 text-sm leading-6 text-muted">
             Los flujos de ETFs spot de Bitcoin ayudan a observar demanda o reducción de exposición a través de vehículos regulados en EE. UU. Son una lectura de presión de flujos, no una anticipación del precio de Bitcoin.
           </p>
 
-          <div className="mt-6 border border-line bg-panelSoft p-5">
+          <div className="mt-4">
             <p className="text-xs font-semibold uppercase tracking-[0.14em] text-brass">Flujo neto último día</p>
             <div className="mt-3 flex flex-wrap items-end gap-3">
               <span className="text-4xl font-semibold leading-none text-ink md:text-5xl">{formatUsdMillions(flows.latestTotalNetFlow)}</span>
@@ -151,11 +151,12 @@ export function BtcEtfFlowsModule({ data }: BtcEtfFlowsModuleProps) {
               Lectura aproximada basada en flujos netos diarios y acumulados recientes. Última fecha detectada: {flows.latestDate}.
             </p>
           </div>
+          <FlowBarChart compact history={flows.history} />
         </div>
 
         <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
           {metrics.map(([label, value]) => (
-            <div key={label} className="border border-line bg-panelSoft p-4">
+            <div key={label} className="border border-line bg-panelSoft p-3">
               <p className="text-xs uppercase tracking-[0.14em] text-muted">{label}</p>
               <p className="mt-2 font-semibold text-ink">{value}</p>
             </div>
@@ -163,27 +164,30 @@ export function BtcEtfFlowsModule({ data }: BtcEtfFlowsModuleProps) {
         </div>
       </div>
 
-      <div className="mt-6 grid gap-5 xl:grid-cols-[1.15fr_0.85fr]">
-        <FlowBarChart history={flows.history} />
-        <div className="grid gap-4 text-sm leading-6 text-muted">
-          <div className="border border-line bg-panelSoft p-4">
-            <span className="block font-semibold text-ink">Lectura compuesta</span>
-            <div className="mt-3 grid gap-2">
-              <p><span className="font-semibold text-ink">Día:</span> {levelLabel(flows.dailyLevel)}</p>
-              <p><span className="font-semibold text-ink">Ventanas recientes:</span> {recentWindowsLabel(flows)}</p>
-              <p><span className="font-semibold text-ink">Driver dominante:</span> {flows.dominantFlowDriver}</p>
-            </div>
-          </div>
-          <div className="border border-line bg-panelSoft p-4">
-            <span className="block font-semibold text-ink">Breadth último día</span>
-            <p className="mt-2">
-              {flows.breadth.positive} con entrada · {flows.breadth.negative} con salida · {flows.breadth.flatOrMissing} sin dato o sin cambio
-            </p>
-          </div>
+      <div className="mt-4 grid gap-3 text-sm leading-6 text-muted lg:grid-cols-3">
+        <div className="border border-line bg-panelSoft p-3">
+          <span className="block text-sm font-semibold text-ink">Driver dominante</span>
+          <p className="mt-2">{flows.dominantFlowDriver}</p>
+          <p className="mt-2 text-xs">{levelLabel(flows.dailyLevel)} · {recentWindowsLabel(flows)}</p>
+        </div>
+        <div className="border border-line bg-panelSoft p-3">
+          <span className="block text-sm font-semibold text-ink">Breadth último día</span>
+          <p className="mt-2">
+            {flows.breadth.positive} con entrada · {flows.breadth.negative} con salida · {flows.breadth.flatOrMissing} sin dato o sin cambio
+          </p>
+        </div>
+        <div className="border border-line bg-panelSoft p-3">
+          <span className="block text-sm font-semibold text-ink">Lectura resumida</span>
+          <p className="mt-2">{flows.interpretation.how}</p>
         </div>
       </div>
 
-      <div className="mt-5 grid gap-3 border-t border-line pt-4 text-sm leading-6 text-muted md:grid-cols-3">
+      <div className="mt-4 border border-line bg-panelSoft p-3 text-sm leading-6 text-muted">
+        <span className="font-semibold text-ink">Qué NO significa: </span>
+        {flows.interpretation.whatItDoesNotMean}
+      </div>
+
+      <div className="mt-4 grid gap-3 border-t border-line pt-4 text-sm leading-6 text-muted md:grid-cols-3">
         <div>
           <span className="block text-xs font-semibold uppercase tracking-[0.14em] text-brass">Fuente</span>
           {flows.sourceUrl ? (
@@ -204,17 +208,7 @@ export function BtcEtfFlowsModule({ data }: BtcEtfFlowsModuleProps) {
         </div>
       </div>
 
-      <div className="mt-5 grid gap-4 text-sm leading-6 text-muted lg:grid-cols-2">
-        <div className="border border-line bg-panelSoft p-4">
-          <span className="block font-semibold text-ink">Interpretación prudente</span>
-          <p className="mt-2">{flows.interpretation.how}</p>
-        </div>
-        <div className="border border-line bg-panelSoft p-4">
-          <span className="block font-semibold text-ink">Qué NO significa</span>
-          <p className="mt-2">{flows.interpretation.whatItDoesNotMean}</p>
-        </div>
-      </div>
-      <p className="mt-4 text-sm leading-6 text-muted">{flows.reliabilityNote}</p>
+      <p className="mt-3 text-sm leading-6 text-muted">{flows.reliabilityNote}</p>
     </section>
   );
 }

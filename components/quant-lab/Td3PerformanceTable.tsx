@@ -1,6 +1,7 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import Link from "next/link";
+import { useMemo } from "react";
 import {
   td3PerformanceMeta,
   td3PerformanceRows,
@@ -20,9 +21,36 @@ const cashLabels: Record<CashAssumption, string> = {
   "zero-cash": "Zero-CASH",
 };
 
-function getInitialProfile() {
+const strategyOrder = [
+  "TD3 constrained",
+  "Equal Weight",
+  "60/40 SPY/TLT",
+  "Buy & Hold SPY",
+  "Buy & Hold GLD",
+  "Buy & Hold TLT",
+  "Buy & Hold BTC",
+];
+
+const strategyOrderMap = new Map(strategyOrder.map((name, index) => [name, index]));
+
+type Td3PerformanceTableProps = {
+  selectedCashParam?: string;
+  selectedProfileParam?: string;
+};
+
+function getSelectedProfile(profileParam?: string) {
   const profiles = td3PerformanceMeta.availableProfiles;
+  if (profileParam && profiles.includes(profileParam)) return profileParam;
   return profiles.includes("moderate") ? "moderate" : profiles[0] ?? "moderate";
+}
+
+function getSelectedCash(cashParam?: string) {
+  const availableCash = td3PerformanceMeta.availableCashAssumptions as CashAssumption[];
+  return cashParam === "zero-cash" && availableCash.includes("zero-cash") ? "zero-cash" : "bil-cash";
+}
+
+function performanceHref(profile: string, cash: CashAssumption) {
+  return `/quant-lab?profile=${encodeURIComponent(profile)}&cash=${encodeURIComponent(cash)}#td3-performance`;
 }
 
 function formatPercent(value: number | null) {
@@ -50,6 +78,14 @@ function formatFailedConstraints(value: string | null) {
     .join(", ");
 }
 
+function orderRows(rows: QuantPerformanceRow[]) {
+  return [...rows].sort((a, b) => {
+    const aIndex = strategyOrderMap.get(a.displayName) ?? strategyOrder.length;
+    const bIndex = strategyOrderMap.get(b.displayName) ?? strategyOrder.length;
+    return aIndex - bIndex || a.displayName.localeCompare(b.displayName);
+  });
+}
+
 function MandateStatus({ row }: { row: QuantPerformanceRow }) {
   if (row.mandateEligible == null) {
     return <span className="text-muted">N/D</span>;
@@ -69,21 +105,32 @@ function MandateStatus({ row }: { row: QuantPerformanceRow }) {
   );
 }
 
-function SharpeDrawdownChart({ rows }: { rows: QuantPerformanceRow[] }) {
+function SharpeDrawdownChart({
+  cashLabel,
+  profileLabel,
+  rows,
+}: {
+  cashLabel: string;
+  profileLabel: string;
+  rows: QuantPerformanceRow[];
+}) {
   const maxSharpe = Math.max(...rows.map((row) => Math.abs(row.sharpe ?? 0)), 0.01);
   const maxDrawdown = Math.max(...rows.map((row) => Math.abs(row.maxDrawdown ?? 0)), 0.01);
 
   return (
-    <div className="mt-6 border border-line bg-panelSoft p-4">
+    <div className="mt-5 border border-line bg-panelSoft p-4">
       <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
         <div>
           <h3 className="text-sm font-semibold text-ink">Comparación Sharpe / Drawdown</h3>
           <p className="mt-1 text-xs leading-5 text-muted">
-            La comparación es experimental y depende del perfil de mandato y supuesto de cash seleccionado.
+            Vista activa: {profileLabel} · {cashLabel}. El gráfico se recalcula con el mismo filtro que la tabla.
           </p>
         </div>
+        <span className="w-fit border border-line bg-panel px-2.5 py-1 text-xs font-semibold text-muted">
+          Orden fijo de benchmarks
+        </span>
       </div>
-      <div className="mt-5 grid gap-4">
+      <div className="mt-4 grid gap-3">
         {rows.map((row) => {
           const sharpeWidth = Math.min(Math.abs(row.sharpe ?? 0) / maxSharpe, 1) * 100;
           const drawdownWidth = Math.min(Math.abs(row.maxDrawdown ?? 0) / maxDrawdown, 1) * 100;
@@ -118,24 +165,28 @@ function SharpeDrawdownChart({ rows }: { rows: QuantPerformanceRow[] }) {
   );
 }
 
-export function Td3PerformanceTable() {
-  const [selectedProfile, setSelectedProfile] = useState<QuantProfile>(getInitialProfile);
-  const [selectedCash, setSelectedCash] = useState<CashAssumption>("bil-cash");
-
+export function Td3PerformanceTable({ selectedCashParam, selectedProfileParam }: Td3PerformanceTableProps) {
+  const selectedProfile = getSelectedProfile(selectedProfileParam);
+  const selectedCash = getSelectedCash(selectedCashParam);
   const availableCash = td3PerformanceMeta.availableCashAssumptions as CashAssumption[];
 
   const rows = useMemo(
     () =>
-      td3PerformanceRows.filter(
-        (row) => row.profile === selectedProfile && row.cashAssumption === selectedCash,
+      orderRows(
+        td3PerformanceRows.filter(
+          (row) => row.profile === selectedProfile && row.cashAssumption === selectedCash,
+        ),
       ),
     [selectedCash, selectedProfile],
   );
 
   const sourceFiles = useMemo(() => [...new Set(rows.map((row) => row.sourceFile))], [rows]);
+  const selectedTd3 = rows.find((row) => row.strategyType === "td3");
+  const selectedProfileLabel = profileLabels[selectedProfile] ?? selectedProfile;
+  const selectedCashLabel = cashLabels[selectedCash] ?? selectedCash;
 
   return (
-    <div>
+    <div id="td3-performance">
       <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
         <div>
           <p className="text-xs font-semibold uppercase tracking-[0.18em] text-brass">Outputs completos</p>
@@ -154,16 +205,15 @@ export function Td3PerformanceTable() {
           <p className="text-xs font-semibold uppercase tracking-[0.14em] text-muted">Perfil</p>
           <div className="mt-2 flex flex-wrap gap-2">
             {td3PerformanceMeta.availableProfiles.map((profile) => (
-              <button
+              <Link
                 key={profile}
-                type="button"
-                onClick={() => setSelectedProfile(profile)}
-                className={`min-h-9 border px-4 text-sm font-semibold transition focus:outline-none focus:ring-2 focus:ring-ink/30 ${
+                href={performanceHref(profile, selectedCash)}
+                className={`inline-flex min-h-9 items-center border px-4 text-sm font-semibold transition focus:outline-none focus:ring-2 focus:ring-ink/30 ${
                   selectedProfile === profile ? "border-ink bg-ink text-white" : "border-line bg-panelSoft text-ink hover:border-ink"
                 }`}
               >
                 {profileLabels[profile] ?? profile}
-              </button>
+              </Link>
             ))}
           </div>
         </div>
@@ -173,18 +223,18 @@ export function Td3PerformanceTable() {
           <div className="mt-2 flex flex-wrap gap-2">
             {(["bil-cash", "zero-cash"] as CashAssumption[]).map((cash) => {
               const isAvailable = availableCash.includes(cash);
-              return (
-                <button
-                  key={cash}
-                  type="button"
-                  disabled={!isAvailable}
-                  onClick={() => setSelectedCash(cash)}
-                  className={`min-h-9 border px-4 text-sm font-semibold transition focus:outline-none focus:ring-2 focus:ring-ink/30 disabled:cursor-not-allowed disabled:opacity-45 ${
-                    selectedCash === cash ? "border-ink bg-ink text-white" : "border-line bg-panelSoft text-ink hover:border-ink"
-                  }`}
-                >
+              const className = `inline-flex min-h-9 items-center border px-4 text-sm font-semibold transition focus:outline-none focus:ring-2 focus:ring-ink/30 ${
+                selectedCash === cash ? "border-ink bg-ink text-white" : "border-line bg-panelSoft text-ink hover:border-ink"
+              }`;
+
+              return isAvailable ? (
+                <Link key={cash} href={performanceHref(selectedProfile, cash)} className={className}>
                   {cashLabels[cash]}
-                </button>
+                </Link>
+              ) : (
+                <span key={cash} className={`${className} cursor-not-allowed opacity-45`}>
+                  {cashLabels[cash]}
+                </span>
               );
             })}
           </div>
@@ -194,9 +244,29 @@ export function Td3PerformanceTable() {
         </div>
       </div>
 
+      <div className="mt-4 grid gap-3 border border-line bg-panelSoft p-3 text-xs leading-5 text-muted md:grid-cols-[0.55fr_0.55fr_1.4fr]">
+        <p>
+          <span className="block font-semibold uppercase tracking-[0.12em] text-brass">Perfil activo</span>
+          <span className="font-semibold text-ink">{selectedProfileLabel}</span>
+        </p>
+        <p>
+          <span className="block font-semibold uppercase tracking-[0.12em] text-brass">Cash activo</span>
+          <span className="font-semibold text-ink">{selectedCashLabel}</span>
+        </p>
+        <p>
+          <span className="block font-semibold uppercase tracking-[0.12em] text-brass">TD3 seleccionado</span>
+          <span className="font-semibold text-ink">{selectedTd3?.strategyName ?? "N/D"}</span>
+        </p>
+      </div>
+
       {rows.length > 0 ? (
         <>
-          <SharpeDrawdownChart rows={rows} />
+          <SharpeDrawdownChart
+            key={`${selectedProfile}-${selectedCash}`}
+            cashLabel={selectedCashLabel}
+            profileLabel={selectedProfileLabel}
+            rows={rows}
+          />
 
           <div className="mt-6 max-w-full overflow-x-auto [contain:paint]">
             <table className="w-full min-w-[1120px] border-collapse text-left text-[13px]">

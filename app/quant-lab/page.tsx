@@ -220,7 +220,16 @@ function EvaluationStackChart() {
   );
 }
 
-export default function QuantLabPage() {
+type QuantLabPageProps = {
+  searchParams?: Promise<{
+    cash?: string;
+    profile?: string;
+  }>;
+};
+
+export default async function QuantLabPage({ searchParams }: QuantLabPageProps) {
+  const params = await searchParams;
+
   return (
     <div className="mx-auto max-w-7xl px-5 py-10 md:py-14">
       <section className="grid gap-8 border-b border-line pb-9 lg:grid-cols-[1fr_0.72fr] lg:items-end">
@@ -460,7 +469,7 @@ export default function QuantLabPage() {
       </Panel>
 
       <Panel className="mt-6">
-        <Td3PerformanceTable />
+        <Td3PerformanceTable selectedCashParam={params?.cash} selectedProfileParam={params?.profile} />
       </Panel>
 
       <div className="mt-6 grid gap-6 lg:grid-cols-[0.92fr_1.08fr]">

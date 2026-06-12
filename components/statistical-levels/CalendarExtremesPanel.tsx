@@ -22,6 +22,26 @@ function reading(balance: number | null) {
   return "Balance mixto";
 }
 
+function formatCalendarLabel(label: string, frequency: StatisticalFrequency) {
+  if (frequency !== "weekly") return label;
+
+  const weekRanges: Record<string, string> = {
+    "Semana 1": "01-07",
+    "Semana 2": "08-14",
+    "Semana 3": "15-21",
+    "Semana 4": "22-28",
+    "Semana 5": "29-31",
+  };
+
+  return weekRanges[label] ?? label;
+}
+
+function calendarHeader(frequency: StatisticalFrequency) {
+  if (frequency === "weekly") return "Días del mes";
+  if (frequency === "monthly") return "Mes";
+  return "Día";
+}
+
 export function CalendarExtremesPanel({ asset, frequency }: CalendarExtremesPanelProps) {
   const data = asset?.frequencies[frequency];
   const rows =
@@ -48,7 +68,7 @@ export function CalendarExtremesPanel({ asset, frequency }: CalendarExtremesPane
           <table className="w-full min-w-[780px] border-collapse text-left text-[13px]">
             <thead className="text-muted">
               <tr className="border-b border-line">
-                <th className="py-2.5 pr-4 font-medium">Calendario</th>
+                <th className="py-2.5 pr-4 font-medium">{calendarHeader(frequency)}</th>
                 <th className="py-2.5 pr-4 font-medium">% nuevos máximos</th>
                 <th className="py-2.5 pr-4 font-medium">% nuevos mínimos</th>
                 <th className="py-2.5 pr-4 font-medium">Balance</th>
@@ -58,7 +78,7 @@ export function CalendarExtremesPanel({ asset, frequency }: CalendarExtremesPane
             <tbody>
               {rows.map((item) => (
                 <tr key={item.label} className="border-b border-line/70">
-                  <td className="py-3 pr-4 font-semibold text-ink">{item.label}</td>
+                  <td className="py-3 pr-4 font-semibold text-ink">{formatCalendarLabel(item.label, frequency)}</td>
                   <td className="py-3 pr-4">
                     <CompactBar value={item.highRate} color="#6f8f7b" />
                   </td>
