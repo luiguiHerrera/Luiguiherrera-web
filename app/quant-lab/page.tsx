@@ -1,5 +1,15 @@
 import Link from "next/link";
 import { DisclaimerBox } from "@/components/ui/DisclaimerBox";
+import {
+  benchmarkRankingResults,
+  capSensitivityResults,
+  completePerformanceStatus,
+  correctedProtocol,
+  evaluationStack,
+  featureFamilies,
+  statisticalValidation,
+  td3Project,
+} from "@/lib/quant-lab/td3-results";
 
 const chips = ["Deep Reinforcement Learning", "Validación fuera de muestra", "Restricciones realistas"];
 
@@ -101,7 +111,7 @@ function Eyebrow({ children }: { children: React.ReactNode }) {
 }
 
 function Panel({ children, className = "" }: { children: React.ReactNode; className?: string }) {
-  return <section className={`border border-line bg-panel p-5 md:p-7 ${className}`}>{children}</section>;
+  return <section className={`min-w-0 border border-line bg-panel p-5 md:p-7 ${className}`}>{children}</section>;
 }
 
 function SectionTitle({ eyebrow, title, text }: { eyebrow?: string; title: string; text?: string }) {
@@ -111,6 +121,124 @@ function SectionTitle({ eyebrow, title, text }: { eyebrow?: string; title: strin
       <h2 className="mt-2 text-2xl font-semibold text-ink md:text-3xl">{title}</h2>
       {text ? <p className="mt-3 max-w-3xl text-sm leading-6 text-muted md:text-base md:leading-7">{text}</p> : null}
     </div>
+  );
+}
+
+function formatScore(value: number) {
+  return value.toFixed(6);
+}
+
+function formatDecimal(value: number, digits = 4) {
+  return value.toFixed(digits);
+}
+
+function formatProbability(value: number) {
+  return `${(value * 100).toFixed(1)}%`;
+}
+
+function ScoreBar({ label, value, tone = "sage" }: { label: string; value: number; tone?: "sage" | "brass" }) {
+  const color = tone === "sage" ? "#6f8f7b" : "#b18b5a";
+  return (
+    <div>
+      <div className="flex items-center justify-between gap-3 text-xs text-muted">
+        <span>{label}</span>
+        <span className="font-semibold text-ink">{formatScore(value)}</span>
+      </div>
+      <div className="mt-2 h-2 bg-panel">
+        <div className="h-2" style={{ width: `${Math.min(value, 1) * 100}%`, backgroundColor: color }} />
+      </div>
+    </div>
+  );
+}
+
+function CapSensitivityChart() {
+  return (
+    <Panel>
+      <SectionTitle
+        eyebrow="Resultados disponibles"
+        title="TD3-only cap sensitivity"
+        text="La hipótesis de cash afecta la selección del modelo. Estos scores resumen rankings TD3 bajo dos supuestos de cash, no una tabla completa de performance."
+      />
+      <div className="mt-6 grid min-w-0 gap-4 lg:grid-cols-2">
+        {capSensitivityResults.map((result) => (
+          <div key={result.cashAssumption} className="min-w-0 border border-line bg-panelSoft p-4">
+            <p className="text-xs font-semibold uppercase tracking-[0.14em] text-brass">{result.cashAssumption}</p>
+            <h3 className="mt-3 break-all text-lg font-semibold text-ink">{result.model}</h3>
+            <div className="mt-5 grid gap-4">
+              <ScoreBar label="Mandate-aware score" value={result.mandateAwareScore} />
+              <ScoreBar label="Robust score" value={result.robustScore} tone="brass" />
+            </div>
+          </div>
+        ))}
+      </div>
+      <p className="mt-5 text-sm leading-6 text-muted">
+        Competitivo no significa dominante. Un ranking experimental no equivale a evidencia estadística de superioridad.
+      </p>
+    </Panel>
+  );
+}
+
+function ValidationChart() {
+  const min = -1;
+  const max = 1;
+  const x = (value: number) => ((value - min) / (max - min)) * 100;
+
+  return (
+    <Panel>
+      <SectionTitle
+        eyebrow="Validación estadística"
+        title="Intervalos y White Reality Check"
+        text="Los intervalos cruzan cero y los p-values WRC son altos; no hay evidencia suficiente para afirmar superioridad estadística."
+      />
+      <div className="mt-6 grid gap-5">
+        {statisticalValidation.map((row) => (
+          <div key={row.cashAssumption} className="border border-line bg-panelSoft p-4">
+            <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
+              <div>
+                <p className="text-xs font-semibold uppercase tracking-[0.14em] text-brass">{row.cashAssumption}</p>
+                <p className="mt-1 text-sm text-muted">
+                  Sharpe delta {formatDecimal(row.sharpeDelta)} · P(TD3 beats) {formatProbability(row.td3Probability)} · WRC p-value {formatDecimal(row.wrcPValue)}
+                </p>
+              </div>
+            </div>
+            <svg viewBox="0 0 100 24" className="mt-4 h-12 w-full" role="img" aria-label={`Validación estadística ${row.cashAssumption}`}>
+              <line x1="0" x2="100" y1="12" y2="12" stroke="#ded8d0" strokeWidth="1" />
+              <line x1={x(0)} x2={x(0)} y1="4" y2="20" stroke="#8d8580" strokeWidth="0.8" />
+              <line x1={x(row.bootstrapCi[0])} x2={x(row.bootstrapCi[1])} y1="12" y2="12" stroke="#6f7478" strokeWidth="2.2" strokeLinecap="round" />
+              <circle cx={x(row.sharpeDelta)} cy="12" r="2.8" fill="#6f8f7b" />
+              <text x="0" y="23" fontSize="4" fill="#6f7478">{row.bootstrapCi[0].toFixed(2)}</text>
+              <text x="50" y="23" fontSize="4" fill="#6f7478" textAnchor="middle">0</text>
+              <text x="100" y="23" fontSize="4" fill="#6f7478" textAnchor="end">{row.bootstrapCi[1].toFixed(2)}</text>
+            </svg>
+          </div>
+        ))}
+      </div>
+      <p className="mt-5 border-t border-line pt-4 text-sm leading-6 text-muted">
+        TD3 no sobrevive pruebas de superioridad estadística. No debe hacerse una afirmación de dominancia.
+      </p>
+    </Panel>
+  );
+}
+
+function EvaluationStackChart() {
+  return (
+    <Panel>
+      <SectionTitle
+        eyebrow="Marco de evaluación"
+        title="Capas de evaluación"
+        text="El laboratorio no se queda en un ranking superficial. La lectura avanza desde rankings internos hasta restricciones, validación estadística y análisis por régimen."
+      />
+      <div className="mt-6 grid gap-2">
+        {evaluationStack.map((item, index) => (
+          <div key={item} className="grid grid-cols-[3rem_1fr] items-center gap-3">
+            <span className="text-xs font-semibold text-brass">{String(index + 1).padStart(2, "0")}</span>
+            <div className="border border-line bg-panelSoft p-3 text-sm font-semibold text-ink" style={{ marginLeft: `${index * 10}px` }}>
+              {item}
+            </div>
+          </div>
+        ))}
+      </div>
+    </Panel>
   );
 }
 
@@ -143,7 +271,34 @@ export default function QuantLabPage() {
         </DisclaimerBox>
       </section>
 
-      <div className="mt-8 grid gap-6 lg:grid-cols-[0.9fr_1.1fr]">
+      <section className="mt-8 grid gap-6 lg:grid-cols-[1fr_0.82fr]">
+        <Panel>
+          <SectionTitle eyebrow="Repositorio" title="Repositorio del proyecto" text="Código, documentación, pruebas y protocolo experimental del laboratorio TD3." />
+          <div className="mt-5 border border-line bg-panelSoft p-5">
+            <p className="text-sm font-semibold text-ink">{td3Project.title}</p>
+            <p className="mt-2 text-sm leading-6 text-muted">{td3Project.description}</p>
+            <p className="mt-4 text-sm leading-6 text-muted">
+              Los resultados mostrados aquí son un resumen metodológico. Los outputs completos pueden vivir fuera del repositorio principal cuando son demasiado pesados.
+            </p>
+            <a
+              href={td3Project.repoUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mt-5 inline-flex min-h-10 items-center border border-ink px-4 text-sm font-semibold text-ink transition hover:bg-ink hover:text-white"
+            >
+              Ver repositorio en GitHub
+            </a>
+          </div>
+        </Panel>
+
+        <Panel>
+          <SectionTitle eyebrow="Conclusión general" title="Competitivo no significa dominante" />
+          <p className="mt-4 text-sm leading-6 text-muted">{td3Project.focus}</p>
+          <p className="mt-4 border-t border-line pt-4 text-sm leading-6 text-muted">{td3Project.conclusion}</p>
+        </Panel>
+      </section>
+
+      <div className="mt-6 grid gap-6 lg:grid-cols-[0.9fr_1.1fr]">
         <Panel>
           <SectionTitle
             eyebrow="El problema"
@@ -185,8 +340,8 @@ export default function QuantLabPage() {
           title="Arquitectura del experimento"
           text="TD3 se usa aquí como marco de investigación para políticas continuas. La política propone pesos simulados y el entorno evalúa su comportamiento bajo restricciones, costes y métricas de riesgo."
         />
-        <div className="mt-7 overflow-x-auto">
-          <div className="grid min-w-[900px] grid-cols-6 gap-3">
+        <div className="mt-7 max-w-full overflow-x-auto">
+          <div className="grid min-w-0 gap-3 sm:grid-cols-2 xl:min-w-[900px] xl:grid-cols-6">
             {architectureSteps.map(([title, text], index) => (
               <div key={title} className="relative border border-line bg-panelSoft p-4">
                 <span className="text-xs font-semibold uppercase tracking-[0.14em] text-brass">0{index + 1}</span>
@@ -222,6 +377,15 @@ export default function QuantLabPage() {
               </p>
             ))}
           </div>
+          <div className="mt-6 border border-line bg-panelSoft p-4 text-sm leading-6 text-muted">
+            <p><span className="font-semibold text-ink">Assets:</span> {correctedProtocol.assets.join(" · ")}</p>
+            <p><span className="font-semibold text-ink">Portfolio:</span> {correctedProtocol.portfolio}</p>
+            <p><span className="font-semibold text-ink">Costs:</span> {correctedProtocol.costs.join(" · ")}</p>
+            <p><span className="font-semibold text-ink">BIL robustness:</span> {correctedProtocol.bilRobustness}</p>
+            <p><span className="font-semibold text-ink">Reward:</span> {correctedProtocol.reward}</p>
+            <p><span className="font-semibold text-ink">Risk:</span> {correctedProtocol.risk}</p>
+            <p><span className="font-semibold text-ink">Macro:</span> {correctedProtocol.macro}</p>
+          </div>
         </Panel>
 
         <Panel>
@@ -245,18 +409,90 @@ export default function QuantLabPage() {
         </Panel>
       </div>
 
+      <section className="mt-6 grid min-w-0 gap-6 xl:grid-cols-[minmax(0,1fr)_minmax(0,0.95fr)]">
+        <CapSensitivityChart />
+        <ValidationChart />
+      </section>
+
+      <section className="mt-6 grid min-w-0 gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,0.86fr)]">
+        <Panel>
+          <SectionTitle
+            eyebrow="Resultados disponibles"
+            title="TD3 + benchmark ranking"
+            text="Estos rankings son informativos, pero no constituyen evidencia de superioridad estadística."
+          />
+          <div className="mt-6 max-w-full overflow-x-auto [contain:paint]">
+            <table className="w-full min-w-[760px] border-collapse text-left text-sm">
+              <thead className="text-muted">
+                <tr className="border-b border-line">
+                  <th className="py-3 pr-4 font-medium">Cash assumption</th>
+                  <th className="py-3 pr-4 font-medium">Modelo TD3 destacado</th>
+                  <th className="py-3 pr-4 font-medium">Benchmark destacado</th>
+                </tr>
+              </thead>
+              <tbody>
+                {benchmarkRankingResults.map((row) => (
+                  <tr key={row.cashAssumption} className="border-b border-line/70">
+                    <td className="py-4 pr-4 font-semibold text-ink">{row.cashAssumption}</td>
+                    <td className="py-4 pr-4 text-muted">{row.topTd3Model}</td>
+                    <td className="py-4 pr-4 text-muted">{row.benchmarkReference}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <p className="mt-5 text-sm leading-6 text-muted">
+            El análisis por régimen muestra competitividad seleccionada, no dominancia amplia. Los benchmarks siguen ganando segmentos relevantes.
+          </p>
+        </Panel>
+
+        <EvaluationStackChart />
+      </section>
+
+      <Panel className="mt-6">
+        <div className="grid gap-6 lg:grid-cols-[0.8fr_1fr]">
+          <div>
+            <SectionTitle
+              eyebrow="Feature families"
+              title="Familias evaluadas"
+              text="Las familias resumen bloques de variables y variantes de macro, volatilidad y estado financiero evaluadas dentro del protocolo."
+            />
+            <div className="mt-6 grid gap-2">
+              {featureFamilies.map((family) => (
+                <p key={family} className="break-words border border-line bg-panelSoft px-3 py-2 text-sm font-semibold text-ink">
+                  {family}
+                </p>
+              ))}
+            </div>
+          </div>
+          <div>
+            <SectionTitle eyebrow="Mandato" title="Constraint-first canonical hard constraints" />
+            <div className="mt-6 grid gap-3 sm:grid-cols-2">
+              {correctedProtocol.mandate.map((item) => (
+                <p key={item} className="border-l border-line bg-panelSoft px-4 py-3 text-sm font-semibold text-ink">
+                  {item}
+                </p>
+              ))}
+            </div>
+            <p className="mt-5 text-sm leading-6 text-muted">
+              Los resultados dependen del universo, costes, cash assumption, ventanas, restricciones y protocolo de validación.
+            </p>
+          </div>
+        </div>
+      </Panel>
+
       <Panel className="mt-6">
         <div className="flex flex-col gap-3 lg:flex-row lg:items-end lg:justify-between">
           <SectionTitle
-            eyebrow="Benchmarks"
-            title="Comparación contra benchmarks"
-            text="La estructura está preparada para resultados precalculados. No se muestran cifras de performance hasta cargar una fuente interna reproducible."
+            eyebrow="Outputs completos"
+            title="Tabla de performance completa"
+            text={completePerformanceStatus.note}
           />
           <span className="w-fit border border-line bg-panelSoft px-3 py-2 text-xs font-semibold uppercase tracking-[0.12em] text-muted">
-            Resultados precalculados pendientes de carga
+            {completePerformanceStatus.label}
           </span>
         </div>
-        <div className="mt-6 overflow-x-auto">
+        <div className="mt-6 max-w-full overflow-x-auto [contain:paint]">
           <table className="w-full min-w-[1120px] border-collapse text-left text-sm">
             <thead className="text-muted">
               <tr className="border-b border-line">
