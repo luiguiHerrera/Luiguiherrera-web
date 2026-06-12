@@ -36,11 +36,11 @@ export function UnderwaterDrawdownChart({ asset, frequency, window }: Underwater
   const area = path ? `${path} L 100 8 L 0 8 Z` : "";
 
   return (
-    <section className="min-w-0 border border-line bg-panel p-5 md:p-6">
+    <section className="min-w-0 border border-line bg-panel p-4 md:p-5">
       <div className="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
         <div>
           <p className="text-xs font-semibold uppercase tracking-[0.18em] text-brass">Activo foco</p>
-          <h2 className="mt-2 text-2xl font-semibold text-ink">Historial de drawdown</h2>
+          <h2 className="mt-2 text-xl font-semibold text-ink">Historial de drawdown</h2>
           <p className="mt-2 max-w-3xl text-sm leading-6 text-muted">
             Distancia frente a máximos previos dentro de la ventana seleccionada.
           </p>

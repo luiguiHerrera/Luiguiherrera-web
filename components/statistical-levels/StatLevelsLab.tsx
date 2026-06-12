@@ -80,7 +80,7 @@ export function StatLevelsLab() {
         {Object.entries(statusCounts).map(([status, count]) => (
           <div key={status} className="border border-line bg-panel p-4">
             <p className="text-xs uppercase tracking-[0.14em] text-muted">{statusLabels[status as AssetDataStatus]}</p>
-            <p className="mt-2 text-3xl font-semibold text-ink">{count}</p>
+            <p className="mt-2 text-xl font-semibold text-ink">{count}</p>
           </div>
         ))}
       </section>
@@ -104,7 +104,7 @@ export function StatLevelsLab() {
                   key={item}
                   type="button"
                   onClick={() => setFrequency(item)}
-                  className={`min-h-10 px-4 text-sm font-semibold transition ${frequency === item ? "bg-ink text-white" : "text-muted hover:text-ink"}`}
+                  className={`min-h-9 px-4 text-sm font-semibold transition ${frequency === item ? "bg-ink text-white" : "text-muted hover:text-ink"}`}
                 >
                   {frequencyLabels[item]}
                 </button>
@@ -116,7 +116,7 @@ export function StatLevelsLab() {
                   key={item}
                   type="button"
                   onClick={() => setWindow(item)}
-                  className={`min-h-10 px-4 text-sm font-semibold transition ${window === item ? "bg-ink text-white" : "text-muted hover:text-ink"}`}
+                  className={`min-h-9 px-4 text-sm font-semibold transition ${window === item ? "bg-ink text-white" : "text-muted hover:text-ink"}`}
                 >
                   {item}
                 </button>
@@ -153,8 +153,8 @@ export function StatLevelsLab() {
       <CorrelationMiniMatrix assets={selectedAssets} frequency={frequency} window={window} />
       <MlFeaturesPanel assets={selectedAssets} frequency={frequency} focusAsset={primaryAsset} />
 
-      <section className="border border-line bg-panel p-5 md:p-6">
-        <h2 className="text-2xl font-semibold text-ink">Cómo leer esta herramienta</h2>
+      <section className="border border-line bg-panel p-4 md:p-5">
+        <h2 className="text-xl font-semibold text-ink">Cómo leer esta herramienta</h2>
         <div className="mt-5 grid gap-5 text-sm leading-6 text-muted md:grid-cols-2">
           <p><span className="font-semibold text-ink">Z-score:</span> mide cuántas desviaciones se aleja una métrica de su media histórica dentro de la ventana seleccionada.</p>
           <p><span className="font-semibold text-ink">Percentil:</span> ubica el dato actual frente a observaciones previas de la misma ventana.</p>

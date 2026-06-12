@@ -33,8 +33,8 @@ export function PositioningScatter({ assets, frequency, window }: PositioningSca
 
   if (points.length < 2) {
     return (
-      <section className="border border-line bg-panel p-5 md:p-6">
-        <h2 className="text-2xl font-semibold text-ink">Mapa de posicionamiento estadístico</h2>
+      <section className="border border-line bg-panel p-4 md:p-5">
+        <h2 className="text-xl font-semibold text-ink">Mapa de posicionamiento estadístico</h2>
         <p className="mt-3 text-sm leading-6 text-muted">Selecciona al menos dos activos para comparar posicionamiento.</p>
       </section>
     );
@@ -45,11 +45,11 @@ export function PositioningScatter({ assets, frequency, window }: PositioningSca
   const volMax = Math.max(0.01, ...points.map((point) => point.volatility ?? 0));
 
   return (
-    <section className="border border-line bg-panel p-5 md:p-6">
+    <section className="border border-line bg-panel p-4 md:p-5">
       <div className="flex flex-col gap-2 md:flex-row md:items-end md:justify-between">
         <div>
           <p className="text-xs font-semibold uppercase tracking-[0.18em] text-brass">Posicionamiento</p>
-          <h2 className="mt-2 text-2xl font-semibold text-ink">Mapa de posicionamiento estadístico</h2>
+          <h2 className="mt-2 text-xl font-semibold text-ink">Mapa de posicionamiento estadístico</h2>
           <p className="mt-2 max-w-3xl text-sm leading-6 text-muted">
             Extensión, retorno y volatilidad de los activos seleccionados en la frecuencia activa.
           </p>

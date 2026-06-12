@@ -42,7 +42,7 @@ const legalSections = [
 
 export default function LegalPage() {
   return (
-    <div className="mx-auto max-w-7xl px-5 py-12 md:py-16">
+    <div className="mx-auto max-w-7xl px-5 py-10 md:py-14">
       <div className="grid gap-8 lg:grid-cols-[0.85fr_1.15fr] lg:items-start">
         <SectionHeader
           eyebrow="Estructura inicial"
@@ -53,7 +53,7 @@ export default function LegalPage() {
           Esta página resume límites operativos del MVP. La idea es que privacidad, alcance educativo y ausencia de asesoría estén visibles, no escondidos al final.
         </div>
       </div>
-      <section className="mt-10 grid gap-5 md:grid-cols-2">
+      <section className="mt-8 grid gap-5 md:grid-cols-2">
         {legalSections.map(([title, text]) => <MethodologyNote key={title} title={title} text={text} />)}
       </section>
     </div>

@@ -42,11 +42,11 @@ export function AssetStatCard({ asset, frequency, window }: AssetStatCardProps) 
   const longMa = frequencyData.longMovingAverageKey;
 
   return (
-    <article className="border border-line bg-panel p-5 md:p-6">
+    <article className="border border-line bg-panel p-4 md:p-5">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
         <div>
           <div className="flex flex-wrap items-center gap-3">
-            <h3 className="text-2xl font-semibold text-ink">{asset.ticker}</h3>
+            <h3 className="text-xl font-semibold text-ink">{asset.ticker}</h3>
             <RiskPill label={asset.status === "ok" ? "ok" : asset.status === "limited_history" ? "Historial limitado" : "No disponible"} tone={statusTone(asset.status)} />
           </div>
           <p className="mt-1 text-sm leading-6 text-muted">{asset.name}</p>

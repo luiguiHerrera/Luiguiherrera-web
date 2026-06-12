@@ -20,18 +20,18 @@ export function CorrelationMiniMatrix({ assets, frequency, window }: Correlation
   const available = assets.filter((asset) => asset.frequencies[frequency].windows[window].windowReturns.length >= 20);
   if (available.length < 2) {
     return (
-      <section className="border border-line bg-panel p-5 md:p-6">
-        <h2 className="text-2xl font-semibold text-ink">Correlación</h2>
+      <section className="border border-line bg-panel p-4 md:p-5">
+        <h2 className="text-xl font-semibold text-ink">Correlación</h2>
         <p className="mt-3 text-sm leading-6 text-muted">Historial insuficiente para calcular matriz entre activos seleccionados.</p>
       </section>
     );
   }
 
   return (
-    <section className="border border-line bg-panel p-5 md:p-6">
+    <section className="border border-line bg-panel p-4 md:p-5">
       <p className="text-xs font-semibold uppercase tracking-[0.18em] text-brass">Correlación</p>
       <div className="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
-        <h2 className="mt-2 text-2xl font-semibold text-ink">Relación reciente entre seleccionados</h2>
+        <h2 className="mt-2 text-xl font-semibold text-ink">Relación reciente entre seleccionados</h2>
         <div className="flex gap-2 text-xs text-muted">
           <span className="border border-line bg-panelSoft px-2 py-1">baja</span>
           <span className="border border-line bg-[#eef3f2] px-2 py-1">media</span>

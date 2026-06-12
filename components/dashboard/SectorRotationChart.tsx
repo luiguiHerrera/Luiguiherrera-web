@@ -95,11 +95,11 @@ export function SectorRotationChart({ data }: SectorRotationChartProps) {
   const traction = tractionRows(data.sectors, period);
 
   return (
-    <section className="border border-line bg-panel p-5 md:p-6">
+    <section className="border border-line bg-panel p-4 md:p-5">
       <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
         <div>
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-brass">Rotación sectorial</p>
-          <h2 className="mt-2 text-2xl font-semibold text-ink">Mapa relativo por ETFs</h2>
+          <h2 className="mt-2 text-xl font-semibold text-ink">Mapa relativo por ETFs</h2>
           <p className="mt-2 max-w-3xl text-sm leading-6 text-muted">
             Liderazgo y rezago sectorial con ETFs SPDR como proxies. Retornos por sesiones: 1W = 5, 1M = 21, 3M = 63.
           </p>
@@ -110,7 +110,7 @@ export function SectorRotationChart({ data }: SectorRotationChartProps) {
               key={option}
               type="button"
               onClick={() => setPeriod(option)}
-              className={`min-h-10 px-4 text-sm font-semibold transition ${
+              className={`min-h-9 px-4 text-sm font-semibold transition ${
                 period === option ? "bg-ink text-white" : "text-muted hover:text-ink focus:text-ink"
               }`}
               aria-pressed={period === option}

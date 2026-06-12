@@ -3,7 +3,7 @@ import { SectionHeader } from "@/components/ui/SectionHeader";
 
 export default function ProtegeTuDineroPage() {
   return (
-    <div className="mx-auto max-w-7xl px-5 py-12 md:py-16">
+    <div className="mx-auto max-w-7xl px-5 py-10 md:py-14">
       <div className="mb-10">
         <SectionHeader
           eyebrow="Detector de red flags"

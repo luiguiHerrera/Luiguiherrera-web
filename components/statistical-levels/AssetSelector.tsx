@@ -17,11 +17,11 @@ export function AssetSelector({ catalog, query, selected, setQuery, toggleAsset 
   const filtered = catalog.filter((asset) => `${asset.ticker} ${asset.name} ${asset.category}`.toLowerCase().includes(normalized));
 
   return (
-    <section className="border border-line bg-panel p-5 md:p-6">
+    <section className="border border-line bg-panel p-4 md:p-5">
       <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
         <div>
           <p className="text-xs font-semibold uppercase tracking-[0.18em] text-brass">Selector</p>
-          <h2 className="mt-2 text-2xl font-semibold text-ink">Activos del universo curado</h2>
+          <h2 className="mt-2 text-xl font-semibold text-ink">Activos del universo curado</h2>
           <p className="mt-2 text-sm leading-6 text-muted">Selecciona hasta 5 activos. La selección vive solo en memoria durante esta sesión.</p>
         </div>
         <label className="w-full md:w-80">

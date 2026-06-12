@@ -26,11 +26,11 @@ export function FocusedAssetPanel({ assets, focusTicker, setFocusTicker, frequen
   const longMa = data?.longMovingAverageKey;
 
   return (
-    <section className="border border-line bg-panel p-5 md:p-6">
+    <section className="border border-line bg-panel p-4 md:p-5">
       <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
         <div>
           <p className="text-xs font-semibold uppercase tracking-[0.18em] text-brass">Activo foco</p>
-          <h2 className="mt-2 text-3xl font-semibold text-ink">{focus ? `${focus.ticker} · ${focus.name}` : "Selecciona un activo"}</h2>
+          <h2 className="mt-2 text-xl font-semibold text-ink">{focus ? `${focus.ticker} · ${focus.name}` : "Selecciona un activo"}</h2>
           <p className="mt-2 max-w-3xl text-sm leading-6 text-muted">
             Los paneles detallados usan este activo como foco. Cambiarlo no guarda información ni altera datos.
           </p>

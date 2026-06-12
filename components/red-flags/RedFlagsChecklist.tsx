@@ -25,7 +25,7 @@ export function RedFlagsChecklist() {
 
   return (
     <div className="grid gap-6 lg:grid-cols-[1fr_0.68fr]">
-      <section className="border border-line bg-panel p-5 md:p-6">
+      <section className="border border-line bg-panel p-4 md:p-5">
         <div className="grid gap-3">
           {redFlagQuestions.map((item, index) => (
             <label
@@ -46,7 +46,7 @@ export function RedFlagsChecklist() {
             </label>
           ))}
         </div>
-        <button onClick={complete} className="mt-6 w-full border border-ink bg-ink px-5 py-3 text-sm font-semibold text-white transition hover:bg-panel hover:text-ink sm:w-auto">
+        <button onClick={complete} className="mt-6 w-full border border-ink bg-ink px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-panel hover:text-ink sm:w-auto">
           Calcular lectura
         </button>
       </section>
@@ -55,7 +55,7 @@ export function RedFlagsChecklist() {
           <div className="flex items-center justify-between gap-3 border-b border-line pb-5">
             <div>
               <p className="text-xs font-semibold uppercase tracking-[0.16em] text-brass">Resultado</p>
-              <p className="mt-2 text-3xl font-semibold text-ink">{count}/{redFlagQuestions.length}</p>
+              <p className="mt-2 text-xl font-semibold text-ink">{count}/{redFlagQuestions.length}</p>
             </div>
             {reviewed ? <RiskPill label={result.label} tone={result.tone} /> : <RiskPill label="Lectura pendiente" />}
           </div>

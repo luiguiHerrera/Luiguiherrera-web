@@ -1,6 +1,6 @@
 export function DisclaimerBox({ children }: { children: React.ReactNode }) {
   return (
-    <div className="border border-brass/30 bg-[#f7f1e5] px-4 py-3 text-sm leading-6 text-[#5f553f]">
+    <div className="border border-brass/20 bg-[#fbf7ee] px-4 py-3 text-[13px] leading-6 text-[#675c47]">
       {children}
     </div>
   );

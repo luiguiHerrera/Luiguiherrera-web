@@ -49,7 +49,7 @@ export function MlFeaturesPanel({ assets, frequency, focusAsset }: MlFeaturesPan
         <button
           type="button"
           onClick={() => setOpen((value) => !value)}
-          className="min-h-10 w-fit border border-line px-4 text-sm font-semibold text-ink transition hover:border-ink focus:outline-none focus:ring-2 focus:ring-ink/20"
+          className="min-h-9 w-fit border border-line px-4 text-sm font-semibold text-ink transition hover:border-ink focus:outline-none focus:ring-2 focus:ring-ink/20"
         >
           {open ? "Ocultar variables" : "Ver variables cuantitativas"}
         </button>
@@ -78,11 +78,11 @@ export function MlFeaturesPanel({ assets, frequency, focusAsset }: MlFeaturesPan
       {open ? (
         <>
           <div className="mt-5 overflow-x-auto">
-            <table className="w-full min-w-[980px] border-collapse text-left text-sm">
+            <table className="w-full min-w-[980px] border-collapse text-left text-[13px]">
               <thead className="text-muted">
                 <tr className="border-b border-line">
-                  <th className="py-3 pr-4 font-medium">Activo</th>
-                  {featureGroups.flatMap(([, items]) => items).map(([, label]) => <th key={label} className="py-3 pr-4 font-medium">{label}</th>)}
+                  <th className="py-2.5 pr-4 font-medium">Activo</th>
+                  {featureGroups.flatMap(([, items]) => items).map(([, label]) => <th key={label} className="py-2.5 pr-4 font-medium">{label}</th>)}
                 </tr>
               </thead>
               <tbody>
@@ -90,8 +90,8 @@ export function MlFeaturesPanel({ assets, frequency, focusAsset }: MlFeaturesPan
                   const features = asset.frequencies[frequency].mlFeatures;
                   return (
                     <tr key={asset.ticker} className="border-b border-line/70">
-                      <td className="py-4 pr-4 font-semibold text-ink">{asset.ticker}</td>
-                      {featureGroups.flatMap(([, items]) => items).map(([key]) => <td key={key} className="py-4 pr-4 text-muted">{formatFeature(features[key])}</td>)}
+                      <td className="py-3 pr-4 font-semibold text-ink">{asset.ticker}</td>
+                      {featureGroups.flatMap(([, items]) => items).map(([key]) => <td key={key} className="py-3 pr-4 text-muted">{formatFeature(features[key])}</td>)}
                     </tr>
                   );
                 })}

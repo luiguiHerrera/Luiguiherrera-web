@@ -42,14 +42,14 @@ export function LabOverviewStrip({ assets, frequency, window }: LabOverviewStrip
   ];
 
   return (
-    <section className="border border-line bg-panel p-5 md:p-6">
+    <section className="border border-line bg-panel p-4 md:p-5">
       <p className="text-xs font-semibold uppercase tracking-[0.18em] text-brass">Mapa rápido de seleccionados</p>
       <div className="mt-4 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
         {items.map((item) => (
           <div key={item.label} className="border border-line bg-panelSoft p-4">
             <p className="text-xs uppercase tracking-[0.12em] text-muted">{item.label}</p>
             <div className="mt-3 flex items-end justify-between gap-3">
-              <span className="text-2xl font-semibold text-ink">{item.row?.asset.ticker ?? "n/d"}</span>
+              <span className="text-xl font-semibold text-ink">{item.row?.asset.ticker ?? "n/d"}</span>
               <span className="text-sm font-semibold text-muted">{item.value}</span>
             </div>
             <div className="mt-3 h-1.5 bg-white">

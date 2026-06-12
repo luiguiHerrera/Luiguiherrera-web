@@ -31,13 +31,13 @@ const notes = [
 
 export default function MetodologiaPage() {
   return (
-    <div className="mx-auto max-w-7xl px-5 py-12 md:py-16">
+    <div className="mx-auto max-w-7xl px-5 py-10 md:py-14">
       <SectionHeader
         eyebrow="Cómo leer la plataforma"
         title="Metodología"
         subtitle="La plataforma organiza datos de mercado para construir una lectura educativa del contexto. No anticipa precios, no recomienda activos y no sustituye análisis personalizado."
       />
-      <section className="mt-10 grid gap-5 md:grid-cols-2">
+      <section className="mt-8 grid gap-5 md:grid-cols-2">
         {notes.map(([title, text]) => <MethodologyNote key={title} title={title} text={text} />)}
       </section>
       <div className="mt-8">

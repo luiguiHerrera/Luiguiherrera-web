@@ -139,7 +139,7 @@ export function Td3PerformanceTable() {
       <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
         <div>
           <p className="text-xs font-semibold uppercase tracking-[0.18em] text-brass">Outputs completos</p>
-          <h2 className="mt-2 text-2xl font-semibold text-ink md:text-3xl">Tabla de performance completa</h2>
+          <h2 className="mt-2 text-xl font-semibold text-ink md:text-3xl">Tabla de performance completa</h2>
           <p className="mt-3 max-w-3xl text-sm leading-6 text-muted md:text-base md:leading-7">
             Resultados trazables desde mandate_profile_rankings.csv. Sortino no se muestra porque no está disponible en esta tabla agregada.
           </p>
@@ -158,7 +158,7 @@ export function Td3PerformanceTable() {
                 key={profile}
                 type="button"
                 onClick={() => setSelectedProfile(profile)}
-                className={`min-h-10 border px-4 text-sm font-semibold transition focus:outline-none focus:ring-2 focus:ring-ink/30 ${
+                className={`min-h-9 border px-4 text-sm font-semibold transition focus:outline-none focus:ring-2 focus:ring-ink/30 ${
                   selectedProfile === profile ? "border-ink bg-ink text-white" : "border-line bg-panelSoft text-ink hover:border-ink"
                 }`}
               >
@@ -179,7 +179,7 @@ export function Td3PerformanceTable() {
                   type="button"
                   disabled={!isAvailable}
                   onClick={() => setSelectedCash(cash)}
-                  className={`min-h-10 border px-4 text-sm font-semibold transition focus:outline-none focus:ring-2 focus:ring-ink/30 disabled:cursor-not-allowed disabled:opacity-45 ${
+                  className={`min-h-9 border px-4 text-sm font-semibold transition focus:outline-none focus:ring-2 focus:ring-ink/30 disabled:cursor-not-allowed disabled:opacity-45 ${
                     selectedCash === cash ? "border-ink bg-ink text-white" : "border-line bg-panelSoft text-ink hover:border-ink"
                   }`}
                 >
@@ -199,37 +199,37 @@ export function Td3PerformanceTable() {
           <SharpeDrawdownChart rows={rows} />
 
           <div className="mt-6 max-w-full overflow-x-auto [contain:paint]">
-            <table className="w-full min-w-[1120px] border-collapse text-left text-sm">
+            <table className="w-full min-w-[1120px] border-collapse text-left text-[13px]">
               <thead className="text-muted">
                 <tr className="border-b border-line">
-                  <th className="py-3 pr-4 font-medium">Benchmark / estrategia</th>
-                  <th className="py-3 pr-4 font-medium">Retorno anualizado</th>
-                  <th className="py-3 pr-4 font-medium">Volatilidad anualizada</th>
-                  <th className="py-3 pr-4 font-medium">Sharpe</th>
-                  <th className="py-3 pr-4 font-medium">Sortino</th>
-                  <th className="py-3 pr-4 font-medium">Max drawdown</th>
-                  <th className="py-3 pr-4 font-medium">Turnover</th>
-                  <th className="py-3 pr-4 font-medium">Concentración máxima</th>
-                  <th className="py-3 pr-4 font-medium">N. efectivo de activos</th>
-                  <th className="py-3 pr-4 font-medium">Cumplimiento de mandato</th>
+                  <th className="py-2.5 pr-4 font-medium">Benchmark / estrategia</th>
+                  <th className="py-2.5 pr-4 font-medium">Retorno anualizado</th>
+                  <th className="py-2.5 pr-4 font-medium">Volatilidad anualizada</th>
+                  <th className="py-2.5 pr-4 font-medium">Sharpe</th>
+                  <th className="py-2.5 pr-4 font-medium">Sortino</th>
+                  <th className="py-2.5 pr-4 font-medium">Max drawdown</th>
+                  <th className="py-2.5 pr-4 font-medium">Turnover</th>
+                  <th className="py-2.5 pr-4 font-medium">Concentración máxima</th>
+                  <th className="py-2.5 pr-4 font-medium">N. efectivo de activos</th>
+                  <th className="py-2.5 pr-4 font-medium">Cumplimiento de mandato</th>
                 </tr>
               </thead>
               <tbody>
                 {rows.map((row) => (
                   <tr key={`${row.cashAssumption}-${row.profile}-${row.strategyName}`} className="border-b border-line/70 align-top">
-                    <td className="py-4 pr-4">
+                    <td className="py-3 pr-4">
                       <span className="block font-semibold text-ink">{row.displayName}</span>
                       {row.strategyType === "td3" ? <span className="mt-1 block max-w-[18rem] text-xs leading-5 text-muted">{row.strategyName}</span> : null}
                     </td>
-                    <td className="py-4 pr-4 text-muted">{formatPercent(row.annualizedReturn)}</td>
-                    <td className="py-4 pr-4 text-muted">{formatPercent(row.annualizedVolatility)}</td>
-                    <td className="py-4 pr-4 text-muted">{formatNumber(row.sharpe)}</td>
-                    <td className="py-4 pr-4 text-muted">N/D</td>
-                    <td className="py-4 pr-4 text-muted">{formatPercent(row.maxDrawdown)}</td>
-                    <td className="py-4 pr-4 text-muted">{formatPercent(row.averageTurnover)}</td>
-                    <td className="py-4 pr-4 text-muted">{formatPercent(row.averageMaxWeight)}</td>
-                    <td className="py-4 pr-4 text-muted">{formatNumber(row.effectiveAssets)}</td>
-                    <td className="py-4 pr-4 text-muted">
+                    <td className="py-3 pr-4 text-muted">{formatPercent(row.annualizedReturn)}</td>
+                    <td className="py-3 pr-4 text-muted">{formatPercent(row.annualizedVolatility)}</td>
+                    <td className="py-3 pr-4 text-muted">{formatNumber(row.sharpe)}</td>
+                    <td className="py-3 pr-4 text-muted">N/D</td>
+                    <td className="py-3 pr-4 text-muted">{formatPercent(row.maxDrawdown)}</td>
+                    <td className="py-3 pr-4 text-muted">{formatPercent(row.averageTurnover)}</td>
+                    <td className="py-3 pr-4 text-muted">{formatPercent(row.averageMaxWeight)}</td>
+                    <td className="py-3 pr-4 text-muted">{formatNumber(row.effectiveAssets)}</td>
+                    <td className="py-3 pr-4 text-muted">
                       <MandateStatus row={row} />
                     </td>
                   </tr>
@@ -247,7 +247,7 @@ export function Td3PerformanceTable() {
             </p>
           </div>
           {sourceFiles.length > 0 ? (
-            <p className="mt-4 text-xs leading-5 text-muted">
+            <p className="mt-4 break-all text-xs leading-5 text-muted">
               Fuente estática: {sourceFiles.join(" · ")} · Generado: {new Date(td3PerformanceMeta.generatedAt).toISOString().slice(0, 10)}
             </p>
           ) : null}

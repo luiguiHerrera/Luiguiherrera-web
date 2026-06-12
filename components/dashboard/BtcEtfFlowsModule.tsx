@@ -129,11 +129,11 @@ export function BtcEtfFlowsModule({ data }: BtcEtfFlowsModuleProps) {
   ];
 
   return (
-    <section className="border border-line bg-panel p-5 md:p-6">
+    <section className="border border-line bg-panel p-4 md:p-5">
       <div className="grid gap-6 xl:grid-cols-[0.78fr_1.22fr] xl:items-start">
         <div>
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-brass">BTC ETF flows</p>
-          <h2 className="mt-2 text-2xl font-semibold text-ink">Presión de flujos vía ETFs</h2>
+          <h2 className="mt-2 text-xl font-semibold text-ink">Presión de flujos vía ETFs</h2>
           <p className="mt-3 text-sm leading-6 text-muted">
             Los flujos de ETFs spot de Bitcoin ayudan a observar demanda o reducción de exposición a través de vehículos regulados en EE. UU. Son una lectura de presión de flujos, no una anticipación del precio de Bitcoin.
           </p>

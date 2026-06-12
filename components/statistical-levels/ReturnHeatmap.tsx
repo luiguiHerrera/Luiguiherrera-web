@@ -181,7 +181,7 @@ function WeeklyHeatmap({ points, maxAbs }: { points: HeatmapPoint[]; maxAbs: num
               <div className="py-2 text-sm font-semibold text-ink">Bloque {blockIndex + 1}</div>
               {Array.from({ length: 13 }).map((_, index) => {
                 const point = block[index];
-                return <HeatmapCell key={`${blockIndex}-${index}`} point={point} maxAbs={maxAbs} className="min-h-10" showValue />;
+                return <HeatmapCell key={`${blockIndex}-${index}`} point={point} maxAbs={maxAbs} className="min-h-9" showValue />;
               })}
             </div>
           ))}

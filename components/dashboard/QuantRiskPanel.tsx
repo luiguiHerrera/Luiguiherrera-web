@@ -33,11 +33,11 @@ export function QuantRiskPanel({ data }: QuantRiskPanelProps) {
   ];
 
   return (
-    <section className="border border-line bg-panel p-5 md:p-6">
+    <section className="border border-line bg-panel p-4 md:p-5">
       <div className="grid gap-5 lg:grid-cols-[0.78fr_1.22fr] lg:items-start">
         <div>
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-brass">Radar cuantitativo de riesgo</p>
-          <h2 className="mt-2 text-2xl font-semibold text-ink">Condiciones estadísticas</h2>
+          <h2 className="mt-2 text-xl font-semibold text-ink">Condiciones estadísticas</h2>
           <p className="mt-3 text-sm leading-6 text-muted">
             Estos modelos estiman condiciones estadísticas de riesgo bajo supuestos históricos; no anticipan por sí solos el comportamiento del mercado.
           </p>

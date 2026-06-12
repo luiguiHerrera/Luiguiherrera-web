@@ -53,7 +53,7 @@ function ModeCard({
       className={`border p-5 text-left transition md:p-6 ${active ? "border-petrol bg-[#eef3f2]" : "border-line bg-panel hover:border-ink"}`}
     >
       <span className="text-xs font-semibold uppercase tracking-[0.16em] text-brass">{duration}</span>
-      <h3 className="mt-4 text-2xl font-semibold text-ink">{title}</h3>
+      <h3 className="mt-4 text-xl font-semibold text-ink">{title}</h3>
       <p className="mt-3 text-sm leading-6 text-muted">{description}</p>
       <p className="mt-5 border-t border-line pt-4 text-sm font-semibold text-ink">{questions}</p>
     </button>
@@ -62,11 +62,11 @@ function ModeCard({
 
 function StartScreen({ mode, setMode, start }: { mode: DiagnosticMode; setMode: (mode: DiagnosticMode) => void; start: () => void }) {
   return (
-    <section className="border border-line bg-panel p-6 md:p-8">
+    <section className="border border-line bg-panel p-5 md:p-7">
       <div className="grid gap-8 lg:grid-cols-[0.74fr_1.26fr] lg:items-start">
         <div>
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-brass">Elige profundidad</p>
-          <h2 className="mt-3 text-3xl font-semibold leading-tight text-ink md:text-4xl">Un diagnóstico, dos niveles de detalle</h2>
+          <h2 className="mt-3 text-2xl font-semibold leading-tight text-ink md:text-3xl">Un diagnóstico, dos niveles de detalle</h2>
           <p className="mt-4 text-sm leading-7 text-muted">
             Este diagnóstico educativo cruza conocimientos, experiencia, tolerancia psicológica y capacidad real de asumir riesgo. No sustituye una evaluación formal de idoneidad ni constituye asesoría personalizada.
           </p>
@@ -95,7 +95,7 @@ function StartScreen({ mode, setMode, start }: { mode: DiagnosticMode; setMode: 
         <p className="max-w-2xl text-sm leading-6 text-muted">
           No se guardan respuestas. No se envían a servidores externos. Si recargas la página, la sesión se pierde.
         </p>
-        <button type="button" onClick={start} className="w-fit border border-ink bg-ink px-6 py-3 text-sm font-semibold text-white transition hover:bg-panel hover:text-ink">
+        <button type="button" onClick={start} className="w-fit border border-ink bg-ink px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-panel hover:text-ink">
           Empezar
         </button>
       </div>
@@ -140,8 +140,8 @@ function QuestionScreen({
         </div>
       </div>
 
-      <div className="mt-10 max-w-4xl">
-        <h2 className="text-3xl font-semibold leading-tight text-ink md:text-5xl">{question.prompt}</h2>
+      <div className="mt-8 max-w-4xl">
+        <h2 className="text-2xl font-semibold leading-tight text-ink md:text-4xl">{question.prompt}</h2>
         <p className="mt-5 max-w-2xl text-base leading-7 text-muted">{question.helper}</p>
       </div>
 
@@ -165,14 +165,14 @@ function QuestionScreen({
       </div>
 
       <div className="mt-8 flex flex-col-reverse justify-between gap-3 sm:flex-row">
-        <button type="button" onClick={onBack} className="border border-line bg-panel px-5 py-3 text-sm font-medium text-muted transition hover:border-ink hover:text-ink">
+        <button type="button" onClick={onBack} className="border border-line bg-panel px-4 py-2.5 text-sm font-medium text-muted transition hover:border-ink hover:text-ink">
           Atrás
         </button>
         <button
           type="button"
           onClick={onNext}
           disabled={!answer}
-          className="border border-ink bg-ink px-5 py-3 text-sm font-semibold text-white transition hover:bg-panel hover:text-ink disabled:cursor-not-allowed disabled:opacity-35"
+          className="border border-ink bg-ink px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-panel hover:text-ink disabled:cursor-not-allowed disabled:opacity-35"
         >
           {currentIndex === total - 1 ? "Ver resultado" : "Continuar"}
         </button>
@@ -204,11 +204,11 @@ function ResultScreen({ answers, mode, restart }: { answers: DiagnosticAnswers; 
 
   return (
     <div className="grid gap-6 xl:grid-cols-[1.05fr_0.95fr]">
-      <section className="border border-line bg-panel p-6 md:p-8">
+      <section className="border border-line bg-panel p-5 md:p-7">
         <div className="flex flex-col gap-5 border-b border-line pb-6 md:flex-row md:items-start md:justify-between">
           <div>
             <p className="text-xs font-semibold uppercase tracking-[0.18em] text-brass">Resultado educativo</p>
-            <h2 className="mt-3 text-3xl font-semibold leading-tight text-ink md:text-4xl">{result.profile}</h2>
+            <h2 className="mt-3 text-2xl font-semibold leading-tight text-ink md:text-3xl">{result.profile}</h2>
             <p className="mt-4 max-w-2xl text-sm leading-7 text-muted">{result.summary}</p>
           </div>
           <RiskPill label={`Confianza ${result.confidenceLabel}`} tone={result.confidenceLabel === "Alta" ? "low" : result.confidenceLabel === "Media" ? "medium" : "high"} />
@@ -269,7 +269,7 @@ function ResultScreen({ answers, mode, restart }: { answers: DiagnosticAnswers; 
 
         <DisclaimerBox>{result.disclaimer}</DisclaimerBox>
 
-        <button type="button" onClick={restart} className="w-full border border-ink bg-ink px-5 py-3 text-sm font-semibold text-white transition hover:bg-panel hover:text-ink">
+        <button type="button" onClick={restart} className="w-full border border-ink bg-ink px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-panel hover:text-ink">
           Empezar de nuevo
         </button>
       </aside>

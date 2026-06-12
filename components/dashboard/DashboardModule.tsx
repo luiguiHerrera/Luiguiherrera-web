@@ -32,10 +32,10 @@ export function DashboardModule({
   }
 
   return (
-    <section className="border border-line bg-panel p-5 md:p-6">
+    <section className="border border-line bg-panel p-4 md:p-5">
       <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
         <div>
-          <h2 className="text-2xl font-semibold text-ink">{title}</h2>
+          <h2 className="text-xl font-semibold text-ink">{title}</h2>
           <p className="mt-2 text-sm leading-6 text-muted">Qué mira: {interpretation.lookingAt}</p>
         </div>
         <div className="flex flex-wrap gap-2">

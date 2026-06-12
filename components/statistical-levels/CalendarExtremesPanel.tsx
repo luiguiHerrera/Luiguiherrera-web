@@ -45,14 +45,14 @@ export function CalendarExtremesPanel({ asset, frequency }: CalendarExtremesPane
       </div>
       <div className="mt-5 grid gap-5 lg:grid-cols-[1fr_17rem]">
         <div className="overflow-x-auto">
-          <table className="w-full min-w-[780px] border-collapse text-left text-sm">
+          <table className="w-full min-w-[780px] border-collapse text-left text-[13px]">
             <thead className="text-muted">
               <tr className="border-b border-line">
-                <th className="py-3 pr-4 font-medium">Calendario</th>
-                <th className="py-3 pr-4 font-medium">% nuevos máximos</th>
-                <th className="py-3 pr-4 font-medium">% nuevos mínimos</th>
-                <th className="py-3 pr-4 font-medium">Balance</th>
-                <th className="py-3 pr-4 font-medium">Lectura</th>
+                <th className="py-2.5 pr-4 font-medium">Calendario</th>
+                <th className="py-2.5 pr-4 font-medium">% nuevos máximos</th>
+                <th className="py-2.5 pr-4 font-medium">% nuevos mínimos</th>
+                <th className="py-2.5 pr-4 font-medium">Balance</th>
+                <th className="py-2.5 pr-4 font-medium">Lectura</th>
               </tr>
             </thead>
             <tbody>

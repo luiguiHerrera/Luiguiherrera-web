@@ -30,9 +30,9 @@ function formatStat(value: number | null, isRatio = true) {
 export function MovementSummaryTable({ asset, frequency }: MovementSummaryTableProps) {
   const data = asset?.frequencies[frequency].changeMoves;
   return (
-    <section className="border border-line bg-panel p-5 md:p-6">
+    <section className="border border-line bg-panel p-4 md:p-5">
       <p className="text-xs font-semibold uppercase tracking-[0.18em] text-brass">Resumen de movimientos</p>
-      <h2 className="mt-2 text-2xl font-semibold text-ink">{asset ? asset.ticker : "Sin activo seleccionado"}</h2>
+      <h2 className="mt-2 text-xl font-semibold text-ink">{asset ? asset.ticker : "Sin activo seleccionado"}</h2>
       <p className="mt-2 max-w-3xl text-sm leading-6 text-muted">
         Distribución histórica de cambios por periodo. Es una lectura estadística de comportamiento pasado; no implica dirección futura.
       </p>
@@ -62,17 +62,17 @@ export function MovementSummaryTable({ asset, frequency }: MovementSummaryTableP
         })}
       </div>
       <div className="mt-5 overflow-x-auto">
-        <table className="w-full min-w-[780px] border-collapse text-left text-sm">
+        <table className="w-full min-w-[780px] border-collapse text-left text-[13px]">
           <thead className="text-muted">
             <tr className="border-b border-line">
-              <th className="py-3 pr-4 font-medium">Métrica</th>
-              <th className="py-3 pr-4 font-medium">mean</th>
-              <th className="py-3 pr-4 font-medium">std</th>
-              <th className="py-3 pr-4 font-medium">p25</th>
-              <th className="py-3 pr-4 font-medium">p50</th>
-              <th className="py-3 pr-4 font-medium">p75</th>
-              <th className="py-3 pr-4 font-medium">max</th>
-              <th className="py-3 pr-4 font-medium">min</th>
+              <th className="py-2.5 pr-4 font-medium">Métrica</th>
+              <th className="py-2.5 pr-4 font-medium">mean</th>
+              <th className="py-2.5 pr-4 font-medium">std</th>
+              <th className="py-2.5 pr-4 font-medium">p25</th>
+              <th className="py-2.5 pr-4 font-medium">p50</th>
+              <th className="py-2.5 pr-4 font-medium">p75</th>
+              <th className="py-2.5 pr-4 font-medium">max</th>
+              <th className="py-2.5 pr-4 font-medium">min</th>
             </tr>
           </thead>
           <tbody>
@@ -81,14 +81,14 @@ export function MovementSummaryTable({ asset, frequency }: MovementSummaryTableP
               const isRatio = metric !== "closeLocation";
               return (
                 <tr key={metric} className="border-b border-line/70">
-                  <td className="py-4 pr-4 font-semibold text-ink">{labels[metric]}</td>
-                  <td className="py-4 pr-4 text-muted">{formatStat(row?.mean ?? null, isRatio)}</td>
-                  <td className="py-4 pr-4 text-muted">{formatStat(row?.std ?? null, isRatio)}</td>
-                  <td className="py-4 pr-4 text-muted">{formatStat(row?.p25 ?? null, isRatio)}</td>
-                  <td className="py-4 pr-4 text-muted">{formatStat(row?.p50 ?? null, isRatio)}</td>
-                  <td className="py-4 pr-4 text-muted">{formatStat(row?.p75 ?? null, isRatio)}</td>
-                  <td className="py-4 pr-4 text-muted">{formatStat(row?.max ?? null, isRatio)}</td>
-                  <td className="py-4 pr-4 text-muted">{formatStat(row?.min ?? null, isRatio)}</td>
+                  <td className="py-3 pr-4 font-semibold text-ink">{labels[metric]}</td>
+                  <td className="py-3 pr-4 text-muted">{formatStat(row?.mean ?? null, isRatio)}</td>
+                  <td className="py-3 pr-4 text-muted">{formatStat(row?.std ?? null, isRatio)}</td>
+                  <td className="py-3 pr-4 text-muted">{formatStat(row?.p25 ?? null, isRatio)}</td>
+                  <td className="py-3 pr-4 text-muted">{formatStat(row?.p50 ?? null, isRatio)}</td>
+                  <td className="py-3 pr-4 text-muted">{formatStat(row?.p75 ?? null, isRatio)}</td>
+                  <td className="py-3 pr-4 text-muted">{formatStat(row?.max ?? null, isRatio)}</td>
+                  <td className="py-3 pr-4 text-muted">{formatStat(row?.min ?? null, isRatio)}</td>
                 </tr>
               );
             })}

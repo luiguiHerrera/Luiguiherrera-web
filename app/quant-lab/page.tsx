@@ -89,14 +89,14 @@ function Eyebrow({ children }: { children: React.ReactNode }) {
 }
 
 function Panel({ children, className = "" }: { children: React.ReactNode; className?: string }) {
-  return <section className={`min-w-0 border border-line bg-panel p-5 md:p-7 ${className}`}>{children}</section>;
+  return <section className={`min-w-0 border border-line bg-panel p-5 md:p-6 ${className}`}>{children}</section>;
 }
 
 function SectionTitle({ eyebrow, title, text }: { eyebrow?: string; title: string; text?: string }) {
   return (
     <div>
       {eyebrow ? <Eyebrow>{eyebrow}</Eyebrow> : null}
-      <h2 className="mt-2 text-2xl font-semibold text-ink md:text-3xl">{title}</h2>
+      <h2 className="mt-2 text-xl font-semibold text-ink md:text-3xl">{title}</h2>
       {text ? <p className="mt-3 max-w-3xl text-sm leading-6 text-muted md:text-base md:leading-7">{text}</p> : null}
     </div>
   );
@@ -222,11 +222,11 @@ function EvaluationStackChart() {
 
 export default function QuantLabPage() {
   return (
-    <div className="mx-auto max-w-7xl px-5 py-12 md:py-16">
-      <section className="grid gap-8 border-b border-line pb-10 lg:grid-cols-[1fr_0.72fr] lg:items-end">
+    <div className="mx-auto max-w-7xl px-5 py-10 md:py-14">
+      <section className="grid gap-8 border-b border-line pb-9 lg:grid-cols-[1fr_0.72fr] lg:items-end">
         <div>
           <Eyebrow>Investigación cuantitativa</Eyebrow>
-          <h1 className="mt-4 max-w-4xl text-5xl font-semibold leading-[0.96] tracking-[-0.02em] text-ink md:text-7xl">
+          <h1 className="mt-4 max-w-4xl text-4xl font-semibold leading-[1.02] text-ink md:text-6xl">
             TD3 Portfolio Research Lab
           </h1>
           <p className="mt-6 max-w-3xl text-lg leading-8 text-muted">
@@ -400,20 +400,20 @@ export default function QuantLabPage() {
             text="Estos rankings son informativos, pero no constituyen evidencia de superioridad estadística."
           />
           <div className="mt-6 max-w-full overflow-x-auto [contain:paint]">
-            <table className="w-full min-w-[760px] border-collapse text-left text-sm">
+            <table className="w-full min-w-[760px] border-collapse text-left text-[13px]">
               <thead className="text-muted">
                 <tr className="border-b border-line">
-                  <th className="py-3 pr-4 font-medium">Cash assumption</th>
-                  <th className="py-3 pr-4 font-medium">Modelo TD3 destacado</th>
-                  <th className="py-3 pr-4 font-medium">Benchmark destacado</th>
+                  <th className="py-2.5 pr-4 font-medium">Cash assumption</th>
+                  <th className="py-2.5 pr-4 font-medium">Modelo TD3 destacado</th>
+                  <th className="py-2.5 pr-4 font-medium">Benchmark destacado</th>
                 </tr>
               </thead>
               <tbody>
                 {benchmarkRankingResults.map((row) => (
                   <tr key={row.cashAssumption} className="border-b border-line/70">
-                    <td className="py-4 pr-4 font-semibold text-ink">{row.cashAssumption}</td>
-                    <td className="py-4 pr-4 text-muted">{row.topTd3Model}</td>
-                    <td className="py-4 pr-4 text-muted">{row.benchmarkReference}</td>
+                    <td className="py-3 pr-4 font-semibold text-ink">{row.cashAssumption}</td>
+                    <td className="py-3 pr-4 text-muted">{row.topTd3Model}</td>
+                    <td className="py-3 pr-4 text-muted">{row.benchmarkReference}</td>
                   </tr>
                 ))}
               </tbody>
@@ -437,7 +437,7 @@ export default function QuantLabPage() {
             />
             <div className="mt-6 grid gap-2">
               {featureFamilies.map((family) => (
-                <p key={family} className="break-words border border-line bg-panelSoft px-3 py-2 text-sm font-semibold text-ink">
+                <p key={family} className="break-all border border-line bg-panelSoft px-3 py-2 text-sm font-semibold text-ink">
                   {family}
                 </p>
               ))}

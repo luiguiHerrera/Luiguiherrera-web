@@ -76,7 +76,7 @@ export function PeriodExplorerTable({ asset, frequency }: PeriodExplorerTablePro
         <button
           type="button"
           onClick={() => setOpen((value) => !value)}
-          className="min-h-10 w-fit border border-line px-4 text-sm font-semibold text-ink transition hover:border-ink focus:outline-none focus:ring-2 focus:ring-ink/20"
+          className="min-h-9 w-fit border border-line px-4 text-sm font-semibold text-ink transition hover:border-ink focus:outline-none focus:ring-2 focus:ring-ink/20"
         >
           {open ? "Ocultar explorador" : "Ver explorador de periodos"}
         </button>
@@ -105,34 +105,34 @@ export function PeriodExplorerTable({ asset, frequency }: PeriodExplorerTablePro
             ))}
           </div>
           <div className="mt-4 overflow-x-auto">
-            <table className="w-full min-w-[980px] border-collapse text-left text-sm">
+            <table className="w-full min-w-[980px] border-collapse text-left text-[13px]">
               <thead className="text-muted">
                 <tr className="border-b border-line">
-                  <th className="py-3 pr-4 font-medium">Periodo</th>
-                  <th className="py-3 pr-4 font-medium">Open</th>
-                  <th className="py-3 pr-4 font-medium">High</th>
-                  <th className="py-3 pr-4 font-medium">Low</th>
-                  <th className="py-3 pr-4 font-medium">Close</th>
-                  <th className="py-3 pr-4 font-medium">Change</th>
-                  <th className="py-3 pr-4 font-medium">OpenGap</th>
-                  <th className="py-3 pr-4 font-medium">Range</th>
-                  <th className="py-3 pr-4 font-medium">CloseLocation</th>
-                  <th className="py-3 pr-4 font-medium">Clasificación</th>
+                  <th className="py-2.5 pr-4 font-medium">Periodo</th>
+                  <th className="py-2.5 pr-4 font-medium">Open</th>
+                  <th className="py-2.5 pr-4 font-medium">High</th>
+                  <th className="py-2.5 pr-4 font-medium">Low</th>
+                  <th className="py-2.5 pr-4 font-medium">Close</th>
+                  <th className="py-2.5 pr-4 font-medium">Change</th>
+                  <th className="py-2.5 pr-4 font-medium">OpenGap</th>
+                  <th className="py-2.5 pr-4 font-medium">Range</th>
+                  <th className="py-2.5 pr-4 font-medium">CloseLocation</th>
+                  <th className="py-2.5 pr-4 font-medium">Clasificación</th>
                 </tr>
               </thead>
               <tbody>
                 {filteredRows.map((row) => (
                   <tr key={`${row.period}-${row.openingRangeCategory}`} className="border-b border-line/70">
-                    <td className="py-4 pr-4 font-semibold text-ink">{row.period}</td>
-                    <td className="py-4 pr-4 text-muted">{formatNumber(row.open)}</td>
-                    <td className="py-4 pr-4 text-muted">{formatNumber(row.high)}</td>
-                    <td className="py-4 pr-4 text-muted">{formatNumber(row.low)}</td>
-                    <td className="py-4 pr-4 text-muted">{formatNumber(row.close)}</td>
-                    <td className="py-4 pr-4 text-muted">{formatPercent(row.change)}</td>
-                    <td className="py-4 pr-4 text-muted">{formatPercent(row.openGap)}</td>
-                    <td className="py-4 pr-4 text-muted">{formatPercent(row.range)}</td>
-                    <td className="py-4 pr-4 text-muted">{row.closeLocation === null ? "n/d" : row.closeLocation.toFixed(2)}</td>
-                    <td className="py-4 pr-4 text-muted">{row.classification}</td>
+                    <td className="py-3 pr-4 font-semibold text-ink">{row.period}</td>
+                    <td className="py-3 pr-4 text-muted">{formatNumber(row.open)}</td>
+                    <td className="py-3 pr-4 text-muted">{formatNumber(row.high)}</td>
+                    <td className="py-3 pr-4 text-muted">{formatNumber(row.low)}</td>
+                    <td className="py-3 pr-4 text-muted">{formatNumber(row.close)}</td>
+                    <td className="py-3 pr-4 text-muted">{formatPercent(row.change)}</td>
+                    <td className="py-3 pr-4 text-muted">{formatPercent(row.openGap)}</td>
+                    <td className="py-3 pr-4 text-muted">{formatPercent(row.range)}</td>
+                    <td className="py-3 pr-4 text-muted">{row.closeLocation === null ? "n/d" : row.closeLocation.toFixed(2)}</td>
+                    <td className="py-3 pr-4 text-muted">{row.classification}</td>
                   </tr>
                 ))}
               </tbody>

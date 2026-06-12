@@ -39,9 +39,9 @@ export function OpeningLocationPanel({ asset, frequency }: OpeningLocationPanelP
   const highestReturn = [...allRows].sort((a, b) => (b.averageForwardReturn ?? -Infinity) - (a.averageForwardReturn ?? -Infinity))[0];
   const lowestReturn = [...allRows].sort((a, b) => (a.averageForwardReturn ?? Infinity) - (b.averageForwardReturn ?? Infinity))[0];
   return (
-    <section className="border border-line bg-panel p-5 md:p-6">
+    <section className="border border-line bg-panel p-4 md:p-5">
       <p className="text-xs font-semibold uppercase tracking-[0.18em] text-brass">Opening Location</p>
-      <h2 className="mt-2 text-2xl font-semibold text-ink">Ubicación de apertura</h2>
+      <h2 className="mt-2 text-xl font-semibold text-ink">Ubicación de apertura</h2>
       <div className="mt-5 grid gap-3 md:grid-cols-4">
         {[
           ["Mayor frecuencia rango", mostFrequentRange?.category ?? "n/d", formatPercent(mostFrequentRange?.proportion ?? null)],

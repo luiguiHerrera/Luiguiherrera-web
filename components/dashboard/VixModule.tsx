@@ -126,11 +126,11 @@ export function VixModule({ data }: VixModuleProps) {
   ];
 
   return (
-    <section className="border border-line bg-panel p-5 md:p-6">
+    <section className="border border-line bg-panel p-4 md:p-5">
       <div className="grid gap-6 xl:grid-cols-[0.78fr_1.22fr] xl:items-start">
         <div>
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-brass">VIX / volatilidad</p>
-          <h2 className="mt-2 text-2xl font-semibold text-ink">Estrés de mercado</h2>
+          <h2 className="mt-2 text-xl font-semibold text-ink">Estrés de mercado</h2>
           <p className="mt-3 text-sm leading-6 text-muted">
             El VIX resume expectativas de volatilidad implícita del S&amp;P 500 a partir de opciones. Es una lectura de presión de riesgo, no una lectura de dirección del mercado.
           </p>

@@ -26,7 +26,7 @@ export default async function DashboardPage() {
   const remainingModules = dashboardModules.filter((module) => module.id !== "rates" && module.id !== "sectors" && module.id !== "vix" && module.id !== "btc-flows");
 
   return (
-    <div className="mx-auto max-w-7xl px-5 py-12 md:py-16">
+    <div className="mx-auto max-w-7xl px-5 py-10 md:py-14">
       <div className="grid gap-8 lg:grid-cols-[1fr_0.8fr] lg:items-end">
         <SectionHeader
           eyebrow="Lectura de régimen"
@@ -38,7 +38,7 @@ export default async function DashboardPage() {
         </DisclaimerBox>
       </div>
 
-      <section className="mt-10 border border-petrol/40 bg-panel p-6 md:p-8">
+      <section className="mt-8 border border-petrol/40 bg-panel p-5 md:p-7">
         <div className="grid gap-8 lg:grid-cols-[0.82fr_1.18fr] lg:items-end">
           <div>
             <p className="text-xs font-semibold uppercase tracking-[0.2em] text-brass">Régimen actual</p>
@@ -104,34 +104,34 @@ export default async function DashboardPage() {
 
       <section className="mt-6 border border-line bg-panel p-6">
         <div className="max-w-3xl">
-          <h2 className="text-2xl font-semibold text-ink">Radar de lecturas cruzadas</h2>
+          <h2 className="text-xl font-semibold text-ink">Radar de lecturas cruzadas</h2>
           <p className="mt-3 leading-7 text-muted">
             Esta tabla no muestra ideas accionables. Muestra casos donde hay lecturas públicas en tensión: short interest reportado como escepticismo o presión bajista, y presencia en 13F/superinvestors como interés institucional reportado con retraso. Son puntos de partida para investigación, no instrucciones de ejecución.
           </p>
         </div>
         <div className="mt-6 overflow-x-auto">
-          <table className="w-full min-w-[980px] border-collapse text-left text-sm">
+          <table className="w-full min-w-[980px] border-collapse text-left text-[13px]">
             <thead className="text-muted">
               <tr className="border-b border-line">
-                <th className="py-3 pr-4 font-medium">Ticker</th>
-                <th className="py-3 pr-4 font-medium">Short interest</th>
-                <th className="py-3 pr-4 font-medium">Presencia institucional</th>
-                <th className="py-3 pr-4 font-medium">Fecha short interest</th>
-                <th className="py-3 pr-4 font-medium">Fecha 13F</th>
-                <th className="py-3 pr-4 font-medium">Estado</th>
-                <th className="py-3 pr-4 font-medium">Nota prudente</th>
+                <th className="py-2.5 pr-4 font-medium">Ticker</th>
+                <th className="py-2.5 pr-4 font-medium">Short interest</th>
+                <th className="py-2.5 pr-4 font-medium">Presencia institucional</th>
+                <th className="py-2.5 pr-4 font-medium">Fecha short interest</th>
+                <th className="py-2.5 pr-4 font-medium">Fecha 13F</th>
+                <th className="py-2.5 pr-4 font-medium">Estado</th>
+                <th className="py-2.5 pr-4 font-medium">Nota prudente</th>
               </tr>
             </thead>
             <tbody>
               {crossSignalRadar.map((row) => (
                 <tr key={row.ticker} className="border-b border-line/70">
-                  <td className="py-4 pr-4 font-semibold text-ink">{row.ticker}</td>
-                  <td className="py-4 pr-4 text-muted">{row.shortInterest}</td>
-                  <td className="py-4 pr-4 text-muted">{row.institutionalPresence}</td>
-                  <td className="py-4 pr-4 text-muted">{row.shortInterestDate}</td>
-                  <td className="py-4 pr-4 text-muted">{row.form13FDate}</td>
-                  <td className="py-4 pr-4 text-muted">{dataStatusLabels[row.dataStatus]}</td>
-                  <td className="py-4 pr-4 text-muted">{row.note}</td>
+                  <td className="py-3 pr-4 font-semibold text-ink">{row.ticker}</td>
+                  <td className="py-3 pr-4 text-muted">{row.shortInterest}</td>
+                  <td className="py-3 pr-4 text-muted">{row.institutionalPresence}</td>
+                  <td className="py-3 pr-4 text-muted">{row.shortInterestDate}</td>
+                  <td className="py-3 pr-4 text-muted">{row.form13FDate}</td>
+                  <td className="py-3 pr-4 text-muted">{dataStatusLabels[row.dataStatus]}</td>
+                  <td className="py-3 pr-4 text-muted">{row.note}</td>
                 </tr>
               ))}
             </tbody>

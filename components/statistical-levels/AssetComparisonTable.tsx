@@ -26,23 +26,23 @@ export function AssetComparisonTable({ assets, frequency, window }: AssetCompari
   const maxDrawdown = Math.max(...rows.map((row) => Math.abs(row.metric.currentDrawdown ?? 0)), 0.01);
   const maxVol = Math.max(...rows.map((row) => row.metric.annualizedVolatilityWindow ?? 0), 0.01);
   return (
-    <section className="border border-line bg-panel p-5 md:p-6">
+    <section className="border border-line bg-panel p-4 md:p-5">
       <div>
         <p className="text-xs font-semibold uppercase tracking-[0.18em] text-brass">Comparativo</p>
-        <h2 className="mt-2 text-2xl font-semibold text-ink">Ranking relativo de seleccionados</h2>
+        <h2 className="mt-2 text-xl font-semibold text-ink">Ranking relativo de seleccionados</h2>
       </div>
       <div className="mt-5 overflow-x-auto">
-        <table className="w-full min-w-[880px] border-collapse text-left text-sm">
+        <table className="w-full min-w-[880px] border-collapse text-left text-[13px]">
           <thead className="text-muted">
             <tr className="border-b border-line">
-              <th className="py-3 pr-4 font-medium">Activo</th>
-              <th className="py-3 pr-4 font-medium">Extensión z</th>
-              <th className="py-3 pr-4 font-medium">Drawdown</th>
-              <th className="py-3 pr-4 font-medium">Volatilidad</th>
-              <th className="py-3 pr-4 font-medium">Retorno 4P</th>
-              <th className="py-3 pr-4 font-medium">Retorno 12P</th>
-              <th className="py-3 pr-4 font-medium">Distancia media larga</th>
-              <th className="py-3 pr-4 font-medium">Estado</th>
+              <th className="py-2.5 pr-4 font-medium">Activo</th>
+              <th className="py-2.5 pr-4 font-medium">Extensión z</th>
+              <th className="py-2.5 pr-4 font-medium">Drawdown</th>
+              <th className="py-2.5 pr-4 font-medium">Volatilidad</th>
+              <th className="py-2.5 pr-4 font-medium">Retorno 4P</th>
+              <th className="py-2.5 pr-4 font-medium">Retorno 12P</th>
+              <th className="py-2.5 pr-4 font-medium">Distancia media larga</th>
+              <th className="py-2.5 pr-4 font-medium">Estado</th>
             </tr>
           </thead>
           <tbody>
@@ -53,11 +53,11 @@ export function AssetComparisonTable({ assets, frequency, window }: AssetCompari
               const longMa = frequencyData.longMovingAverageKey;
               return (
                 <tr key={asset.ticker} className="border-b border-line/70">
-                  <td className="py-4 pr-4">
+                  <td className="py-3 pr-4">
                     <span className="font-semibold text-ink">{asset.ticker}</span>
                     <span className="ml-2 text-xs text-muted">{asset.category}</span>
                   </td>
-                  <td className="py-4 pr-4">
+                  <td className="py-3 pr-4">
                     <div className="grid grid-cols-[1fr_3rem] items-center gap-3">
                       <svg viewBox="0 0 100 10" className="h-4 w-full" preserveAspectRatio="none" aria-hidden="true">
                         <line x1="4" x2="96" y1="5" y2="5" stroke="#e7e2dc" strokeWidth="0.7" vectorEffect="non-scaling-stroke" />
@@ -67,22 +67,22 @@ export function AssetComparisonTable({ assets, frequency, window }: AssetCompari
                       <span className="text-right font-semibold text-ink">{z === null ? "n/d" : z.toFixed(2)}</span>
                     </div>
                   </td>
-                  <td className="py-4 pr-4 text-muted">
+                  <td className="py-3 pr-4 text-muted">
                     <div className="grid grid-cols-[1fr_4rem] items-center gap-3">
                       <div className="h-1.5 bg-panelSoft"><div className="h-1.5 bg-[#a86464]" style={{ width: `${simpleWidth(metric.currentDrawdown, maxDrawdown)}%` }} /></div>
                       <span className="text-right">{formatPercent(metric.currentDrawdown)}</span>
                     </div>
                   </td>
-                  <td className="py-4 pr-4 text-muted">
+                  <td className="py-3 pr-4 text-muted">
                     <div className="grid grid-cols-[1fr_4rem] items-center gap-3">
                       <div className="h-1.5 bg-panelSoft"><div className="h-1.5 bg-[#7d8f9a]" style={{ width: `${simpleWidth(metric.annualizedVolatilityWindow, maxVol)}%` }} /></div>
                       <span className="text-right">{formatPercent(metric.annualizedVolatilityWindow)}</span>
                     </div>
                   </td>
-                  <td className="py-4 pr-4 text-muted">{formatPercent(frequencyData.returns["4P"])}</td>
-                  <td className="py-4 pr-4 text-muted">{formatPercent(frequencyData.returns["12P"])}</td>
-                  <td className="py-4 pr-4 text-muted">{formatPercent(frequencyData.distanceToMovingAverages[longMa] ?? null)}</td>
-                  <td className="py-4 pr-4 text-muted">{frequencyData.status === "ok" ? "Disponible" : frequencyData.status === "limited_history" ? "Limitado" : "No disponible"}</td>
+                  <td className="py-3 pr-4 text-muted">{formatPercent(frequencyData.returns["4P"])}</td>
+                  <td className="py-3 pr-4 text-muted">{formatPercent(frequencyData.returns["12P"])}</td>
+                  <td className="py-3 pr-4 text-muted">{formatPercent(frequencyData.distanceToMovingAverages[longMa] ?? null)}</td>
+                  <td className="py-3 pr-4 text-muted">{frequencyData.status === "ok" ? "Disponible" : frequencyData.status === "limited_history" ? "Limitado" : "No disponible"}</td>
                 </tr>
               );
             })}

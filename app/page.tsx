@@ -95,7 +95,7 @@ function RegimePreviewPanel() {
         </div>
         <div className="text-left md:text-right">
           <p className="text-xs font-semibold uppercase tracking-[0.14em] text-muted">Confianza</p>
-          <p className="mt-1 text-3xl font-semibold text-ink">{regimePreview.confidence}%</p>
+          <p className="mt-1 text-xl font-semibold text-ink">{regimePreview.confidence}%</p>
         </div>
       </div>
 
@@ -103,7 +103,7 @@ function RegimePreviewPanel() {
         <div className="flex items-end justify-between gap-4">
           <div>
             <p className="text-xs font-semibold uppercase tracking-[0.14em] text-muted">Score compuesto</p>
-            <p className="mt-2 text-6xl font-semibold leading-none text-ink md:text-7xl">{regimePreview.score}</p>
+            <p className="mt-2 text-5xl font-semibold leading-none text-ink md:text-6xl">{regimePreview.score}</p>
           </div>
           <p className="max-w-[12rem] text-right text-sm leading-6 text-muted">
             Volatilidad, rotación y flujos organizados en una lectura común.
@@ -242,17 +242,17 @@ export default function Home() {
       <section className="relative overflow-hidden border-b border-line bg-panel">
         <div className="mx-auto grid min-h-[560px] max-w-7xl grid-cols-1 px-5 py-14 md:min-h-[650px] md:py-20 lg:grid-cols-[0.7fr_1fr] lg:items-center">
           <div className="relative z-20 max-w-2xl">
-            <h1 className="text-5xl font-semibold leading-[0.98] text-ink md:text-7xl">
+            <h1 className="text-4xl font-semibold leading-[1.02] text-ink md:text-6xl">
               Herramientas para invertir con más criterio y menos impulso
             </h1>
             <p className="mt-7 max-w-xl text-base leading-7 text-muted md:text-lg">
               Entiende el contexto. Gestiona el riesgo. Toma decisiones basadas en datos, no en ruido.
             </p>
             <div className="mt-8 flex flex-wrap gap-4">
-              <Link href="/dashboard" className="border border-ink bg-ink px-6 py-3 text-sm font-semibold text-white transition hover:bg-panel hover:text-ink">
+              <Link href="/dashboard" className="border border-ink bg-ink px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-panel hover:text-ink">
                 Explorar dashboard
               </Link>
-              <Link href="/diagnostico" className="border border-line bg-panel px-6 py-3 text-sm font-semibold text-ink transition hover:border-ink">
+              <Link href="/diagnostico" className="border border-line bg-panel px-5 py-2.5 text-sm font-semibold text-ink transition hover:border-ink">
                 Empezar diagnóstico
               </Link>
             </div>
@@ -300,7 +300,7 @@ export default function Home() {
           <div className="grid gap-6 lg:grid-cols-[0.56fr_0.44fr] lg:items-end">
             <div>
               <p className="text-xs font-semibold uppercase tracking-[0.2em] text-brass">Market Regime Dashboard</p>
-              <h2 className="mt-4 max-w-2xl text-3xl font-semibold leading-tight text-ink md:text-4xl">Lectura diaria del régimen de mercado</h2>
+              <h2 className="mt-4 max-w-2xl text-2xl font-semibold leading-tight text-ink md:text-3xl">Lectura diaria del régimen de mercado</h2>
             </div>
             <p className="max-w-xl leading-7 text-muted lg:justify-self-end">
               Volatilidad, rotación sectorial y flujos institucionales organizados en una lectura clara del contexto.
@@ -322,7 +322,7 @@ export default function Home() {
             <p className="max-w-2xl text-sm leading-6 text-muted">
               Lectura educativa de contexto. No es recomendación de inversión, no elige activos y no anticipa retornos futuros.
             </p>
-            <Link href="/dashboard" className="w-fit border border-ink bg-ink px-5 py-3 text-sm font-semibold text-white transition hover:bg-panel hover:text-ink">
+            <Link href="/dashboard" className="w-fit border border-ink bg-ink px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-panel hover:text-ink">
               Ver dashboard de mercado
             </Link>
           </div>
@@ -337,7 +337,7 @@ export default function Home() {
             <p className="mt-4 text-sm leading-6 text-muted">Lecturas basadas en datos y reglas claras. Backtests transparentes. Resultados medibles.</p>
           </div>
           <div className="min-w-0 overflow-x-auto">
-            <table className="w-full min-w-[820px] border-collapse text-left text-sm">
+            <table className="w-full min-w-[820px] border-collapse text-left text-[13px]">
               <thead className="text-xs uppercase text-muted">
                 <tr className="border-b border-line">
                   {["Estrategia", "Enfoque", "Lectura actual", "Rend. 1M", "Rend. 3M", "Sharpe", "Max DD", "Estado"].map((h) => <th key={h} className="py-3 pr-5 font-semibold">{h}</th>)}

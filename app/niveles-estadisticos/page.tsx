@@ -5,7 +5,7 @@ import { statisticalLevelsData } from "@/lib/statistical-levels/generated-data";
 
 export default function NivelesEstadisticosPage() {
   return (
-    <div className="mx-auto max-w-7xl px-5 py-12 md:py-16">
+    <div className="mx-auto max-w-7xl px-5 py-10 md:py-14">
       <div className="grid gap-8 lg:grid-cols-[1fr_0.76fr] lg:items-end">
         <SectionHeader
           eyebrow="Laboratorio"
