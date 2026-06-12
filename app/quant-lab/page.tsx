@@ -1,9 +1,9 @@
 import Link from "next/link";
+import { Td3PerformanceTable } from "@/components/quant-lab/Td3PerformanceTable";
 import { DisclaimerBox } from "@/components/ui/DisclaimerBox";
 import {
   benchmarkRankingResults,
   capSensitivityResults,
-  completePerformanceStatus,
   correctedProtocol,
   evaluationStack,
   featureFamilies,
@@ -44,28 +44,6 @@ const protocol = [
   ["Validation", "Se ajustan hiperparámetros y restricciones sin mirar el tramo final."],
   ["Test", "Evaluación fuera de muestra con métricas comparables."],
   ["Walk-forward", "Repetición por ventanas para observar estabilidad temporal."],
-];
-
-const benchmarkRows = [
-  "TD3 constrained",
-  "Equal Weight",
-  "60/40",
-  "Buy & Hold SPY",
-  "Buy & Hold GLD",
-  "Buy & Hold TLT",
-  "Buy & Hold BTC",
-];
-
-const benchmarkColumns = [
-  "Retorno anualizado",
-  "Volatilidad anualizada",
-  "Sharpe",
-  "Sortino",
-  "Max drawdown",
-  "Turnover",
-  "Concentración máxima",
-  "N. efectivo de activos",
-  "Cumplimiento de mandato",
 ];
 
 const riskMetrics = [
@@ -482,38 +460,7 @@ export default function QuantLabPage() {
       </Panel>
 
       <Panel className="mt-6">
-        <div className="flex flex-col gap-3 lg:flex-row lg:items-end lg:justify-between">
-          <SectionTitle
-            eyebrow="Outputs completos"
-            title="Tabla de performance completa"
-            text={completePerformanceStatus.note}
-          />
-          <span className="w-fit border border-line bg-panelSoft px-3 py-2 text-xs font-semibold uppercase tracking-[0.12em] text-muted">
-            {completePerformanceStatus.label}
-          </span>
-        </div>
-        <div className="mt-6 max-w-full overflow-x-auto [contain:paint]">
-          <table className="w-full min-w-[1120px] border-collapse text-left text-sm">
-            <thead className="text-muted">
-              <tr className="border-b border-line">
-                <th className="py-3 pr-4 font-medium">Benchmark</th>
-                {benchmarkColumns.map((column) => (
-                  <th key={column} className="py-3 pr-4 font-medium">{column}</th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {benchmarkRows.map((row) => (
-                <tr key={row} className="border-b border-line/70">
-                  <td className="py-4 pr-4 font-semibold text-ink">{row}</td>
-                  {benchmarkColumns.map((column) => (
-                    <td key={column} className="py-4 pr-4 text-muted">Pendiente</td>
-                  ))}
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+        <Td3PerformanceTable />
       </Panel>
 
       <div className="mt-6 grid gap-6 lg:grid-cols-[0.92fr_1.08fr]">

@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "build:stat-levels": "node scripts/build-statistical-levels.mjs",
+    "build:td3-performance": "node scripts/build-td3-performance.mjs",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
