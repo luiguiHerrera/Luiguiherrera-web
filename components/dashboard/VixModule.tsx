@@ -1,5 +1,5 @@
 import { dataStatusLabels } from "@/lib/dashboard/status";
-import type { VixDashboardData, VixHistoryPoint, VixSpotData, VixTermStructureData } from "@/lib/dashboard/types";
+import type { LegacyVixTermStructureData, VixDashboardData, VixHistoryPoint, VixSpotData } from "@/lib/dashboard/types";
 
 type VixModuleProps = {
   data: VixDashboardData;
@@ -77,7 +77,7 @@ function MiniVixChart({ history }: { history: VixHistoryPoint[] }) {
   );
 }
 
-function TermStructurePanel({ data }: { data: VixTermStructureData }) {
+function TermStructurePanel({ data }: { data: LegacyVixTermStructureData }) {
   const metrics = [
     ["VIX spot", formatNumber(data.spot)],
     ["Futuro mes 1", formatNumber(data.futureMonth1)],

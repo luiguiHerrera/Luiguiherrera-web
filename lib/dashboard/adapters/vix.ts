@@ -1,5 +1,5 @@
 import { dashboardModules } from "@/lib/dashboard/manual-data";
-import type { DashboardModuleData, VixDashboardData, VixHistoryPoint, VixSpotData, VixTermStructureData } from "@/lib/dashboard/types";
+import type { DashboardModuleData, LegacyVixTermStructureData, VixDashboardData, VixHistoryPoint, VixSpotData } from "@/lib/dashboard/types";
 
 type FredObservation = {
   date: string;
@@ -275,7 +275,7 @@ function compositeReadingFor(
   };
 }
 
-function buildTermStructureFallback(latestVix: number | null, lastUpdated: string): VixTermStructureData {
+function buildTermStructureFallback(latestVix: number | null, lastUpdated: string): LegacyVixTermStructureData {
   return {
     sourceName: "CBOE / VIX futures term structure",
     sourceUrl: "https://www.cboe.com/tradable_products/vix/",

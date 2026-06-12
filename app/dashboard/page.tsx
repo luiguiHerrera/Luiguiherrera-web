@@ -5,6 +5,7 @@ import { QuantRiskPanel } from "@/components/dashboard/QuantRiskPanel";
 import { RegimeBadge } from "@/components/dashboard/RegimeBadge";
 import { SectorRotationChart } from "@/components/dashboard/SectorRotationChart";
 import { VixModule } from "@/components/dashboard/VixModule";
+import { VixTermStructureModule } from "@/components/dashboard/VixTermStructureModule";
 import { DisclaimerBox } from "@/components/ui/DisclaimerBox";
 import { MetricCard } from "@/components/ui/MetricCard";
 import { SectionHeader } from "@/components/ui/SectionHeader";
@@ -22,7 +23,7 @@ const riskBiasLabels: Record<RegimeBias, string> = {
 };
 
 export default async function DashboardPage() {
-  const { btcEtfFlows, crossSignalRadar, dashboardModules, fedWatch, quantRisk, regimeSummary, sectorRotation, vix } = await getDashboardData();
+  const { btcEtfFlows, crossSignalRadar, dashboardModules, fedWatch, quantRisk, regimeSummary, sectorRotation, vix, vixTermStructure } = await getDashboardData();
   const remainingModules = dashboardModules.filter((module) => module.id !== "rates" && module.id !== "sectors" && module.id !== "vix" && module.id !== "btc-flows");
 
   return (
@@ -109,6 +110,7 @@ export default async function DashboardPage() {
         {sectorRotation ? <SectorRotationChart data={sectorRotation} /> : null}
         {quantRisk ? <QuantRiskPanel data={quantRisk} /> : null}
         {vix ? <VixModule data={vix} /> : null}
+        {vixTermStructure ? <VixTermStructureModule data={vixTermStructure} /> : null}
         {btcEtfFlows ? <BtcEtfFlowsModule data={btcEtfFlows} /> : null}
         {remainingModules.map((module) => <DashboardModule key={module.id} {...module} />)}
       </div>

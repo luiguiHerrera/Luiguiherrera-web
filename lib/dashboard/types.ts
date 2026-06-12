@@ -106,6 +106,22 @@ export type VixHistoryPoint = {
   value: number;
 };
 
+export type VixTermStructurePoint = {
+  label: string;
+  contract: string | null;
+  value: number | null;
+};
+
+export type VixTermStructureSourceStatus = "automated" | "manual_fallback" | "pending" | "unavailable";
+
+export type VixTermStructureClassification =
+  | "Fuerte contango"
+  | "Contango moderado"
+  | "Plano"
+  | "Backwardation moderada"
+  | "Backwardation fuerte"
+  | "Pendiente";
+
 export type VixSpotData = DashboardDataSource & {
   latestVix: number | null;
   previousVix: number | null;
@@ -124,7 +140,7 @@ export type VixSpotData = DashboardDataSource & {
   interpretation: DashboardModuleData["interpretation"];
 };
 
-export type VixTermStructureData = DashboardDataSource & {
+export type LegacyVixTermStructureData = DashboardDataSource & {
   spot: number | null;
   futureMonth1: number | null;
   futureMonth2: number | null;
@@ -133,9 +149,25 @@ export type VixTermStructureData = DashboardDataSource & {
   interpretation: DashboardModuleData["interpretation"];
 };
 
+export type VixTermStructureData = {
+  source: string;
+  sourceUrl?: string;
+  sourceStatus: VixTermStructureSourceStatus;
+  lastUpdated: string | null;
+  points: VixTermStructurePoint[];
+  m1m2Spread: number | null;
+  m1m2SlopePct: number | null;
+  m1m3Spread: number | null;
+  m1m3SlopePct: number | null;
+  classification: VixTermStructureClassification;
+  interpretation: string;
+  whatItDoesNotMean: string;
+  reliabilityNote: string;
+};
+
 export type VixDashboardData = {
   spot: VixSpotData;
-  termStructure: VixTermStructureData;
+  termStructure: LegacyVixTermStructureData;
   module: DashboardModuleData;
 };
 
@@ -267,5 +299,6 @@ export type DashboardData = {
   quantRisk: QuantRiskData | null;
   fedWatch: FedWatchDashboardData | null;
   vix: VixDashboardData | null;
+  vixTermStructure: VixTermStructureData | null;
   btcEtfFlows: BtcEtfFlowsDashboardData | null;
 };
