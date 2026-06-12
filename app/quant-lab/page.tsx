@@ -1,100 +1,368 @@
+import Link from "next/link";
 import { DisclaimerBox } from "@/components/ui/DisclaimerBox";
-import { MethodologyNote } from "@/components/ui/MethodologyNote";
-import { SectionHeader } from "@/components/ui/SectionHeader";
-import { benchmarks, portfolioSimulations, riskMetrics } from "@/lib/mock-data/quant";
+
+const chips = ["Deep Reinforcement Learning", "Validación fuera de muestra", "Restricciones realistas"];
+
+const problemItems = [
+  "controlar drawdown",
+  "evitar concentración excesiva",
+  "gestionar turnover",
+  "sobrevivir a cambios de régimen",
+  "comparar contra benchmarks simples",
+  "distinguir robustez de sobreajuste",
+];
+
+const architectureSteps = [
+  ["Estado del mercado", "Retornos, volatilidad, drawdown y variables de contexto disponibles para el experimento."],
+  ["Actor", "Propone pesos porcentuales simulados dentro del universo experimental."],
+  ["Entorno de portafolio", "Aplica costes, límites de concentración, cash y evolución histórica del portafolio."],
+  ["Recompensa ajustada", "Evalúa retorno neto, riesgo, turnover y restricciones."],
+  ["Críticos", "Dos evaluadores reducen estimaciones inestables durante el aprendizaje."],
+  ["Actualización", "La política se ajusta en entrenamiento y se valida fuera de muestra."],
+];
+
+const universe = [
+  ["SPY", "Renta variable", "Proxy amplio de renta variable estadounidense."],
+  ["TLT", "Bonos largos", "Duración larga del Tesoro estadounidense."],
+  ["GLD", "Oro", "Activo defensivo y reserva histórica de valor."],
+  ["BTC", "Criptoactivo", "Componente de alta volatilidad para pruebas de sensibilidad."],
+  ["CASH", "Liquidez", "Posición defensiva y punto de control del mandato."],
+];
+
+const protocol = [
+  ["Train", "La política aprende con datos históricos separados de la evaluación final."],
+  ["Validation", "Se ajustan hiperparámetros y restricciones sin mirar el tramo final."],
+  ["Test", "Evaluación fuera de muestra con métricas comparables."],
+  ["Walk-forward", "Repetición por ventanas para observar estabilidad temporal."],
+];
+
+const benchmarkRows = [
+  "TD3 constrained",
+  "Equal Weight",
+  "60/40",
+  "Buy & Hold SPY",
+  "Buy & Hold GLD",
+  "Buy & Hold TLT",
+  "Buy & Hold BTC",
+];
+
+const benchmarkColumns = [
+  "Retorno anualizado",
+  "Volatilidad anualizada",
+  "Sharpe",
+  "Sortino",
+  "Max drawdown",
+  "Turnover",
+  "Concentración máxima",
+  "N. efectivo de activos",
+  "Cumplimiento de mandato",
+];
+
+const riskMetrics = [
+  ["Max Drawdown", "Profundidad máxima desde un pico hasta un valle dentro del experimento."],
+  ["Volatilidad", "Variabilidad anualizada de retornos en la política simulada."],
+  ["Turnover", "Magnitud de rotación de pesos y fricción potencial de costes."],
+  ["Concentración", "Peso máximo permitido o realizado por activo."],
+  ["Effective number of assets", "Diversificación efectiva, no solo número nominal de activos."],
+  ["Costes", "Penalización por cambios de asignación y fricción transaccional."],
+];
+
+const robustnessItems = [
+  ["Múltiples seeds", "Repetir entrenamientos para observar dispersión de resultados."],
+  ["Costes", "Medir sensibilidad cuando sube la fricción transaccional."],
+  ["Concentración", "Comparar políticas bajo límites más estrictos."],
+  ["Benchmarks", "Contrastar con reglas simples y transparentes."],
+  ["Walk-forward", "Evaluar estabilidad por ventanas históricas."],
+  ["Out-of-sample", "Separar evaluación final del proceso de entrenamiento."],
+];
+
+const notMeaning = [
+  "No es una recomendación.",
+  "No es asesoría financiera.",
+  "No es optimización personalizada.",
+  "No anticipa retornos futuros.",
+  "No garantiza robustez futura.",
+  "No reemplaza análisis humano ni criterios patrimoniales.",
+  "No está conectado a cuentas ni portafolios reales.",
+];
+
+const roadmap = [
+  "cargar resultados precalculados del paper",
+  "comparar diferentes límites de concentración",
+  "agregar sensibilidad a costes",
+  "agregar escenarios macro",
+  "visualizar pesos históricos",
+  "integrar métricas de estabilidad",
+  "documentar protocolo completo",
+];
+
+function Eyebrow({ children }: { children: React.ReactNode }) {
+  return <p className="text-xs font-semibold uppercase tracking-[0.18em] text-brass">{children}</p>;
+}
+
+function Panel({ children, className = "" }: { children: React.ReactNode; className?: string }) {
+  return <section className={`border border-line bg-panel p-5 md:p-7 ${className}`}>{children}</section>;
+}
+
+function SectionTitle({ eyebrow, title, text }: { eyebrow?: string; title: string; text?: string }) {
+  return (
+    <div>
+      {eyebrow ? <Eyebrow>{eyebrow}</Eyebrow> : null}
+      <h2 className="mt-2 text-2xl font-semibold text-ink md:text-3xl">{title}</h2>
+      {text ? <p className="mt-3 max-w-3xl text-sm leading-6 text-muted md:text-base md:leading-7">{text}</p> : null}
+    </div>
+  );
+}
 
 export default function QuantLabPage() {
   return (
     <div className="mx-auto max-w-7xl px-5 py-12 md:py-16">
-      <div className="grid gap-8 lg:grid-cols-[1fr_0.75fr] lg:items-end">
-        <SectionHeader
-          eyebrow="Investigación aplicada"
-          title="Quant / TD3 Lab"
-          subtitle="Modelos, simulaciones y métricas de riesgo para estudiar portafolios con más método y menos intuición suelta. Nada aquí predice el mercado."
-        />
+      <section className="grid gap-8 border-b border-line pb-10 lg:grid-cols-[1fr_0.72fr] lg:items-end">
+        <div>
+          <Eyebrow>Investigación cuantitativa</Eyebrow>
+          <h1 className="mt-4 max-w-4xl text-5xl font-semibold leading-[0.96] tracking-[-0.02em] text-ink md:text-7xl">
+            TD3 Portfolio Research Lab
+          </h1>
+          <p className="mt-6 max-w-3xl text-lg leading-8 text-muted">
+            Evaluación experimental de políticas de asignación de portafolios bajo restricciones, costes y validación fuera de muestra.
+          </p>
+          <p className="mt-5 max-w-3xl text-sm leading-6 text-muted">
+            El objetivo no es mostrar una IA que adivina el mercado. El objetivo es evaluar si una política de asignación puede mantenerse robusta
+            cuando se enfrenta a costes, límites de concentración, turnover y benchmarks exigentes.
+          </p>
+          <div className="mt-6 flex flex-wrap gap-2">
+            {chips.map((chip) => (
+              <span key={chip} className="border border-line bg-panelSoft px-3 py-2 text-xs font-semibold uppercase tracking-[0.12em] text-muted">
+                {chip}
+              </span>
+            ))}
+          </div>
+        </div>
         <DisclaimerBox>
-          Las simulaciones históricas y modelos experimentales no garantizan resultados futuros. Este laboratorio tiene fines educativos y de investigación, no de recomendación de inversión.
+          Este laboratorio es educativo y metodológico. No genera recomendaciones de inversión, no optimiza portafolios personales y no constituye asesoría financiera.
         </DisclaimerBox>
-      </div>
-
-      <section className="mt-10 border-y border-line py-8">
-        <h2 className="text-2xl font-semibold text-ink">Qué es este laboratorio</h2>
-        <p className="mt-3 max-w-3xl leading-7 text-muted">
-          Un espacio para probar modelos experimentales, simulaciones históricas y métricas de riesgo. TD3 Demo es una etiqueta de investigación con datos mockeados; no predice precios, no promete retornos y no decide por el usuario.
-        </p>
       </section>
 
-      <section className="mt-6 border border-line bg-panel p-6 md:p-8">
-        <div className="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
-          <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-brass">Demo mockeada</p>
-            <h2 className="mt-3 text-2xl font-semibold text-ink">Simulación demo de portafolio</h2>
+      <div className="mt-8 grid gap-6 lg:grid-cols-[0.9fr_1.1fr]">
+        <Panel>
+          <SectionTitle
+            eyebrow="El problema"
+            title="Asignar capital no es solo maximizar retorno"
+            text="Una estrategia puede verse atractiva en una simulación simple y deteriorarse cuando se incorporan costes, restricciones de concentración, ventanas fuera de muestra y comparación contra benchmarks. Este laboratorio parte de esa tensión."
+          />
+          <div className="mt-6 grid gap-3 sm:grid-cols-2">
+            {problemItems.map((item) => (
+              <div key={item} className="border-l border-line bg-panelSoft px-4 py-3 text-sm font-semibold text-ink">
+                {item}
+              </div>
+            ))}
           </div>
-          <p className="max-w-xl text-sm leading-6 text-muted">
-            Las cifras son ejemplos para diseñar la interfaz y explicar métricas. No son backtests definitivos ni resultados reales.
-          </p>
+        </Panel>
+
+        <Panel>
+          <SectionTitle
+            eyebrow="Universo experimental"
+            title="Cinco motores para una prueba interpretable"
+            text="El universo es deliberadamente reducido para facilitar interpretación, comparación y control experimental. No representa una recomendación de asignación ni una cartera sugerida."
+          />
+          <div className="mt-6 grid gap-3">
+            {universe.map(([ticker, label, text]) => (
+              <div key={ticker} className="grid gap-3 border border-line bg-panelSoft p-4 sm:grid-cols-[5rem_1fr]">
+                <p className="text-xl font-semibold text-ink">{ticker}</p>
+                <div>
+                  <p className="text-sm font-semibold text-ink">{label}</p>
+                  <p className="mt-1 text-sm leading-6 text-muted">{text}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </Panel>
+      </div>
+
+      <Panel className="mt-6">
+        <SectionTitle
+          eyebrow="Arquitectura TD3"
+          title="Arquitectura del experimento"
+          text="TD3 se usa aquí como marco de investigación para políticas continuas. La política propone pesos simulados y el entorno evalúa su comportamiento bajo restricciones, costes y métricas de riesgo."
+        />
+        <div className="mt-7 overflow-x-auto">
+          <div className="grid min-w-[900px] grid-cols-6 gap-3">
+            {architectureSteps.map(([title, text], index) => (
+              <div key={title} className="relative border border-line bg-panelSoft p-4">
+                <span className="text-xs font-semibold uppercase tracking-[0.14em] text-brass">0{index + 1}</span>
+                <h3 className="mt-3 text-base font-semibold text-ink">{title}</h3>
+                <p className="mt-3 text-sm leading-6 text-muted">{text}</p>
+                {index < architectureSteps.length - 1 ? <span className="absolute -right-3 top-1/2 hidden text-muted xl:block">→</span> : null}
+              </div>
+            ))}
+          </div>
+        </div>
+      </Panel>
+
+      <div className="mt-6 grid gap-6 lg:grid-cols-[1fr_0.9fr]">
+        <Panel>
+          <SectionTitle
+            eyebrow="Protocolo"
+            title="Protocolo experimental"
+            text="La evaluación separa entrenamiento, validación y prueba. La prioridad no es maximizar una corrida aislada, sino observar estabilidad, robustez y comportamiento bajo restricciones."
+          />
+          <div className="mt-6 grid gap-3 md:grid-cols-4">
+            {protocol.map(([title, text], index) => (
+              <div key={title} className="border-t border-line pt-4">
+                <p className="text-xs font-semibold uppercase tracking-[0.14em] text-brass">Fase {index + 1}</p>
+                <h3 className="mt-2 text-lg font-semibold text-ink">{title}</h3>
+                <p className="mt-2 text-sm leading-6 text-muted">{text}</p>
+              </div>
+            ))}
+          </div>
+          <div className="mt-6 grid gap-3 text-sm leading-6 text-muted sm:grid-cols-2">
+            {["múltiples seeds", "benchmarks", "costes de transacción", "control de concentración", "cash", "restricciones realistas"].map((item) => (
+              <p key={item} className="border border-line bg-panelSoft p-3">
+                {item}
+              </p>
+            ))}
+          </div>
+        </Panel>
+
+        <Panel>
+          <SectionTitle
+            eyebrow="Recompensa"
+            title="Recompensa y restricciones"
+            text="La recompensa es una construcción experimental. Cambiarla puede alterar materialmente los resultados."
+          />
+          <div className="mt-6 border border-line bg-panelSoft p-5">
+            <p className="font-mono text-sm font-semibold text-ink">
+              Reward = retorno - costes - penalización por drawdown - penalización por turnover
+            </p>
+          </div>
+          <div className="mt-5 grid gap-3 text-sm leading-6 text-muted">
+            {["retorno neto", "penalización por drawdown", "penalización por turnover", "control de costes", "componente Sharpe/Sortino si aplica", "restricciones de concentración"].map((item) => (
+              <p key={item} className="border-l border-line pl-4">
+                {item}
+              </p>
+            ))}
+          </div>
+        </Panel>
+      </div>
+
+      <Panel className="mt-6">
+        <div className="flex flex-col gap-3 lg:flex-row lg:items-end lg:justify-between">
+          <SectionTitle
+            eyebrow="Benchmarks"
+            title="Comparación contra benchmarks"
+            text="La estructura está preparada para resultados precalculados. No se muestran cifras de performance hasta cargar una fuente interna reproducible."
+          />
+          <span className="w-fit border border-line bg-panelSoft px-3 py-2 text-xs font-semibold uppercase tracking-[0.12em] text-muted">
+            Resultados precalculados pendientes de carga
+          </span>
         </div>
         <div className="mt-6 overflow-x-auto">
-          <table className="w-full min-w-[820px] border-separate border-spacing-0 text-left text-sm">
+          <table className="w-full min-w-[1120px] border-collapse text-left text-sm">
             <thead className="text-muted">
               <tr className="border-b border-line">
-                {["Estrategia", "Retorno anualizado demo", "Volatilidad", "Máx. drawdown", "Sharpe", "Turnover", "Concentración"].map((header) => (
-                  <th key={header} className="border-b border-line bg-panelSoft px-4 py-3 font-medium">{header}</th>
+                <th className="py-3 pr-4 font-medium">Benchmark</th>
+                {benchmarkColumns.map((column) => (
+                  <th key={column} className="py-3 pr-4 font-medium">{column}</th>
                 ))}
               </tr>
             </thead>
             <tbody>
-              {portfolioSimulations.map((row) => (
-                <tr key={row.name}>
-                  <td className="border-b border-line/70 px-4 py-4 font-semibold text-ink">{row.name}</td>
-                  <td className="border-b border-line/70 px-4 py-4 text-muted">{row.annualReturn}</td>
-                  <td className="border-b border-line/70 px-4 py-4 text-muted">{row.volatility}</td>
-                  <td className="border-b border-line/70 px-4 py-4 text-muted">{row.maxDrawdown}</td>
-                  <td className="border-b border-line/70 px-4 py-4 text-muted">{row.sharpe}</td>
-                  <td className="border-b border-line/70 px-4 py-4 text-muted">{row.turnover}</td>
-                  <td className="border-b border-line/70 px-4 py-4 text-muted">{row.concentration}</td>
+              {benchmarkRows.map((row) => (
+                <tr key={row} className="border-b border-line/70">
+                  <td className="py-4 pr-4 font-semibold text-ink">{row}</td>
+                  {benchmarkColumns.map((column) => (
+                    <td key={column} className="py-4 pr-4 text-muted">Pendiente</td>
+                  ))}
                 </tr>
               ))}
             </tbody>
           </table>
         </div>
-      </section>
+      </Panel>
 
-      <section className="mt-6 grid gap-8 lg:grid-cols-[0.9fr_1.1fr]">
-        <div className="border border-line bg-panel p-6">
-          <h2 className="text-2xl font-semibold text-ink">Comparación contra benchmarks</h2>
-          <p className="mt-3 text-sm leading-6 text-muted">Comparar ayuda a ver coste de oportunidad y riesgo relativo. No prueba que una estrategia vaya a tener mejor resultado que el benchmark.</p>
-          <div className="mt-5 divide-y divide-line border border-line bg-panelSoft">
-            {benchmarks.map((item) => (
-              <div key={item.benchmark} className="grid gap-2 p-4 sm:grid-cols-[1fr_auto] sm:items-center">
-                <div>
-                  <p className="font-semibold text-ink">{item.benchmark}</p>
-                  <p className="mt-1 text-sm text-muted">Vol. {item.volatility} · Drawdown {item.drawdown}</p>
-                </div>
-                <p className="text-2xl font-semibold text-ink">{item.return}</p>
+      <div className="mt-6 grid gap-6 lg:grid-cols-[0.92fr_1.08fr]">
+        <Panel>
+          <SectionTitle
+            eyebrow="Riesgo"
+            title="Riesgo antes que narrativa"
+            text="Una política que obtiene retorno pero concentra demasiado, rota en exceso o falla fuera de muestra no es robusta para asignación patrimonial."
+          />
+          <div className="mt-6 grid gap-3 sm:grid-cols-2">
+            {riskMetrics.map(([title, text]) => (
+              <div key={title} className="border border-line bg-panelSoft p-4">
+                <h3 className="font-semibold text-ink">{title}</h3>
+                <p className="mt-2 text-sm leading-6 text-muted">{text}</p>
               </div>
             ))}
           </div>
-        </div>
-        <div>
-          <h2 className="text-2xl font-semibold text-ink">Métricas de riesgo</h2>
-          <div className="mt-5 grid gap-4 sm:grid-cols-2">
-            {riskMetrics.map(([title, text]) => <MethodologyNote key={title} title={title} text={text} />)}
+        </Panel>
+
+        <Panel>
+          <SectionTitle
+            eyebrow="Robustez"
+            title="Robustez y sensibilidad"
+            text="La robustez importa más que una simulación llamativa. El valor del laboratorio está en observar qué se sostiene cuando cambian supuestos y restricciones."
+          />
+          <div className="mt-6 grid gap-3 sm:grid-cols-2">
+            {robustnessItems.map(([title, text]) => (
+              <div key={title} className="border-l border-line bg-panelSoft px-4 py-3">
+                <p className="font-semibold text-ink">{title}</p>
+                <p className="mt-1 text-sm leading-6 text-muted">{text}</p>
+              </div>
+            ))}
+          </div>
+        </Panel>
+      </div>
+
+      <Panel className="mt-6">
+        <div className="grid gap-6 lg:grid-cols-[0.78fr_1fr] lg:items-center">
+          <SectionTitle
+            eyebrow="Variables"
+            title="De variables estadísticas a modelos"
+            text="El laboratorio de niveles estadísticos muestra variables como retornos por periodo, drawdown, volatilidad, distancia a medias, percentiles y z-scores. Estas variables pueden alimentar análisis cuantitativos. TD3 aborda otro nivel del problema: aprender una política de asignación continua bajo restricciones."
+          />
+          <div className="border border-line bg-panelSoft p-5">
+            <p className="text-sm leading-6 text-muted">
+              La conexión es metodológica: primero se entiende la estructura estadística de los activos; después se evalúa cómo una política simulada podría responder bajo un entorno definido.
+            </p>
+            <Link
+              href="/niveles-estadisticos"
+              className="mt-5 inline-flex min-h-10 items-center border border-ink px-4 text-sm font-semibold text-ink transition hover:bg-ink hover:text-white"
+            >
+              Explorar niveles estadísticos
+            </Link>
           </div>
         </div>
-      </section>
+      </Panel>
 
-      <section className="mt-6 border border-line bg-panel p-6 md:p-8">
-        <h2 className="text-2xl font-semibold text-ink">Roadmap del laboratorio</h2>
-        <div className="mt-5 grid gap-3 md:grid-cols-4">
-          {["Integrar resultados reproducibles del modelo TD3", "Añadir universos demo", "Añadir escenarios macro", "Añadir comparación con benchmarks dinámicos"].map((item, index) => (
-            <div key={item} className="border border-line bg-panelSoft p-4 text-sm leading-6 text-muted">
-              <span className="mb-3 block text-xs font-semibold uppercase tracking-[0.16em] text-brass">Paso {index + 1}</span>
-              {item}
-            </div>
-          ))}
-        </div>
-      </section>
+      <div className="mt-6 grid gap-6 lg:grid-cols-[1fr_0.85fr]">
+        <Panel>
+          <SectionTitle
+            eyebrow="Interpretación"
+            title="Qué no debe interpretarse"
+            text="Un buen resultado experimental no convierte al modelo en una instrucción de inversión. La utilidad del laboratorio está en evaluar metodología, restricciones y comportamiento comparado, no en producir órdenes operativas."
+          />
+          <div className="mt-6 grid gap-3 sm:grid-cols-2">
+            {notMeaning.map((item) => (
+              <p key={item} className="border border-line bg-panelSoft p-3 text-sm font-semibold text-ink">
+                {item}
+              </p>
+            ))}
+          </div>
+        </Panel>
+
+        <Panel>
+          <SectionTitle eyebrow="Roadmap" title="Próximas mejoras del laboratorio" text="Lista de trabajo metodológico, no promesa de disponibilidad ni de resultado." />
+          <div className="mt-6 grid gap-3">
+            {roadmap.map((item, index) => (
+              <div key={item} className="grid grid-cols-[2.4rem_1fr] gap-3 border-b border-line pb-3 text-sm leading-6 text-muted">
+                <span className="font-semibold text-brass">{String(index + 1).padStart(2, "0")}</span>
+                <span>{item}</span>
+              </div>
+            ))}
+          </div>
+        </Panel>
+      </div>
     </div>
   );
 }
