@@ -1,9 +1,10 @@
 import { Fragment } from "react";
 import { correlation } from "@/lib/statistical-levels/calculations";
-import type { AssetStatRecord, StatisticalWindow } from "@/lib/statistical-levels/types";
+import type { AssetStatRecord, StatisticalFrequency, StatisticalWindow } from "@/lib/statistical-levels/types";
 
 type CorrelationMiniMatrixProps = {
   assets: AssetStatRecord[];
+  frequency: StatisticalFrequency;
   window: StatisticalWindow;
 };
 
@@ -15,8 +16,8 @@ function tone(value: number | null) {
   return "bg-panelSoft text-muted";
 }
 
-export function CorrelationMiniMatrix({ assets, window }: CorrelationMiniMatrixProps) {
-  const available = assets.filter((asset) => asset.windows[window].windowReturns.length >= 20);
+export function CorrelationMiniMatrix({ assets, frequency, window }: CorrelationMiniMatrixProps) {
+  const available = assets.filter((asset) => asset.frequencies[frequency].windows[window].windowReturns.length >= 20);
   if (available.length < 2) {
     return (
       <section className="border border-line bg-panel p-5 md:p-6">
@@ -38,7 +39,10 @@ export function CorrelationMiniMatrix({ assets, window }: CorrelationMiniMatrixP
             <Fragment key={row.ticker}>
               <div className="border-b border-line p-2 text-sm font-semibold text-ink">{row.ticker}</div>
               {available.map((column) => {
-                const value = row.ticker === column.ticker ? 1 : correlation(row.windows[window].windowReturns, column.windows[window].windowReturns);
+                const value =
+                  row.ticker === column.ticker
+                    ? 1
+                    : correlation(row.frequencies[frequency].windows[window].windowReturns, column.frequencies[frequency].windows[window].windowReturns);
                 return (
                   <div key={`${row.ticker}-${column.ticker}`} className={`border-b border-line p-2 text-center text-sm font-semibold ${tone(value)}`}>
                     {value === null ? "n/d" : value.toFixed(2)}

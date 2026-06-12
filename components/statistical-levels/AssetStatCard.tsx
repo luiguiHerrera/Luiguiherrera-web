@@ -1,9 +1,10 @@
 import { RiskPill } from "@/components/ui/RiskPill";
 import { StatBandsChart } from "@/components/statistical-levels/StatBandsChart";
-import type { AssetStatRecord, StatisticalWindow } from "@/lib/statistical-levels/types";
+import type { AssetStatRecord, StatisticalFrequency, StatisticalWindow } from "@/lib/statistical-levels/types";
 
 type AssetStatCardProps = {
   asset: AssetStatRecord;
+  frequency: StatisticalFrequency;
   window: StatisticalWindow;
 };
 
@@ -23,8 +24,16 @@ function statusTone(status: AssetStatRecord["status"]) {
   return "high";
 }
 
-export function AssetStatCard({ asset, window }: AssetStatCardProps) {
-  const metric = asset.windows[window];
+const frequencyLabels: Record<StatisticalFrequency, string> = {
+  daily: "Diario",
+  weekly: "Semanal",
+  monthly: "Mensual",
+};
+
+export function AssetStatCard({ asset, frequency, window }: AssetStatCardProps) {
+  const frequencyData = asset.frequencies[frequency];
+  const metric = frequencyData.windows[window];
+  const longMa = frequencyData.longMovingAverageKey;
 
   return (
     <article className="border border-line bg-panel p-5 md:p-6">
@@ -35,17 +44,17 @@ export function AssetStatCard({ asset, window }: AssetStatCardProps) {
             <RiskPill label={asset.status === "ok" ? "ok" : asset.status === "limited_history" ? "Historial limitado" : "No disponible"} tone={statusTone(asset.status)} />
           </div>
           <p className="mt-1 text-sm leading-6 text-muted">{asset.name}</p>
-          <p className="mt-1 text-xs uppercase tracking-[0.14em] text-brass">{asset.category}</p>
+          <p className="mt-1 text-xs uppercase tracking-[0.14em] text-brass">{asset.category} · {frequencyLabels[frequency]}</p>
         </div>
         <div className="text-left sm:text-right">
-          <p className="text-xs uppercase tracking-[0.14em] text-muted">Último cierre</p>
-          <p className="mt-1 text-xl font-semibold text-ink">{formatNumber(asset.lastClose)}</p>
-          <p className="mt-1 text-xs text-muted">{asset.lastDate ?? "Sin fecha disponible"}</p>
+          <p className="text-xs uppercase tracking-[0.14em] text-muted">Último cierre ajustado</p>
+          <p className="mt-1 text-xl font-semibold text-ink">{formatNumber(frequencyData.lastClose)}</p>
+          <p className="mt-1 text-xs text-muted">{frequencyData.lastDate ?? "Sin fecha disponible"}</p>
         </div>
       </div>
 
       <div className="mt-5">
-        <StatBandsChart series={asset.compactSeries} />
+        <StatBandsChart series={frequencyData.compactSeries} />
       </div>
 
       <div className="mt-5 grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
@@ -55,10 +64,10 @@ export function AssetStatCard({ asset, window }: AssetStatCardProps) {
           ["Percentil extensión", metric.ma200ExtensionPercentile === null ? "n/d" : `${metric.ma200ExtensionPercentile.toFixed(1)}%`],
           ["Drawdown actual", formatPercent(metric.currentDrawdown)],
           ["Vol. anualizada", formatPercent(metric.annualizedVolatilityWindow)],
-          ["Distancia MA200", formatPercent(asset.distanceToMovingAverages.ma200)],
-          ["Retorno 1M", formatPercent(asset.returns["1M"])],
-          ["Retorno 3M", formatPercent(asset.returns["3M"])],
-          ["Sesiones ventana", metric.available ? String(metric.sessions) : "Insuficiente"],
+          [`Distancia ${longMa}`, formatPercent(frequencyData.distanceToMovingAverages[longMa] ?? null)],
+          ["Retorno 4 periodos", formatPercent(frequencyData.returns["4P"])],
+          ["Retorno 12 periodos", formatPercent(frequencyData.returns["12P"])],
+          ["Periodos ventana", metric.available ? String(metric.sessions) : "Insuficiente"],
         ].map(([label, value]) => (
           <div key={label} className="border border-line bg-panelSoft p-3">
             <p className="text-[11px] uppercase tracking-[0.12em] text-muted">{label}</p>
@@ -67,7 +76,7 @@ export function AssetStatCard({ asset, window }: AssetStatCardProps) {
         ))}
       </div>
 
-      <p className="mt-4 border-t border-line pt-4 text-xs leading-5 text-muted">{asset.statusNote}</p>
+      <p className="mt-4 border-t border-line pt-4 text-xs leading-5 text-muted">{frequencyData.statusNote}</p>
     </article>
   );
 }

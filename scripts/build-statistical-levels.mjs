@@ -6,11 +6,41 @@ const requestTimeoutMs = 8000;
 const requestPauseMs = 250;
 
 const windows = {
-  "1Y": 252,
-  "3Y": 756,
-  "5Y": 1260,
-  "10Y": 2520,
-  Full: null,
+  "1Y": { daily: 252, weekly: 52, monthly: 12 },
+  "3Y": { daily: 756, weekly: 156, monthly: 36 },
+  "5Y": { daily: 1260, weekly: 260, monthly: 60 },
+  "10Y": { daily: 2520, weekly: 520, monthly: 120 },
+  Full: { daily: null, weekly: null, monthly: null },
+};
+
+const frequencyConfig = {
+  daily: {
+    label: "Diario",
+    annualization: Math.sqrt(252),
+    minPeriods: 252,
+    chartLimit: 500,
+    movingAverages: { short: 20, medium: 50, long: 200 },
+    longKey: "MA200",
+    newHighLowLookback: 252,
+  },
+  weekly: {
+    label: "Semanal",
+    annualization: Math.sqrt(52),
+    minPeriods: 104,
+    chartLimit: 520,
+    movingAverages: { short: 10, medium: 30, long: 40, extra: 52 },
+    longKey: "MA40",
+    newHighLowLookback: 52,
+  },
+  monthly: {
+    label: "Mensual",
+    annualization: Math.sqrt(12),
+    minPeriods: 36,
+    chartLimit: 240,
+    movingAverages: { short: 6, medium: 10, long: 12, extra: 24 },
+    longKey: "MA12",
+    newHighLowLookback: 12,
+  },
 };
 
 const universe = [
@@ -47,17 +77,28 @@ const universe = [
 ].map(([ticker, name, category, stooqSymbol, yahooSymbol]) => ({ ticker, name, category, stooqSymbol, yahooSymbol }));
 
 const catalog = universe.map(({ yahooSymbol, ...asset }) => asset);
-
 const diagnostics = [];
 
 function mean(values) {
-  return values.length ? values.reduce((sum, value) => sum + value, 0) / values.length : null;
+  const clean = values.filter(Number.isFinite);
+  return clean.length ? clean.reduce((sum, value) => sum + value, 0) / clean.length : null;
 }
 
 function standardDeviation(values) {
-  const avg = mean(values);
-  if (avg === null || values.length < 2) return null;
-  return Math.sqrt(values.reduce((sum, value) => sum + (value - avg) ** 2, 0) / (values.length - 1));
+  const clean = values.filter(Number.isFinite);
+  const avg = mean(clean);
+  if (avg === null || clean.length < 2) return null;
+  return Math.sqrt(clean.reduce((sum, value) => sum + (value - avg) ** 2, 0) / (clean.length - 1));
+}
+
+function quantile(values, percentile) {
+  const clean = values.filter(Number.isFinite).sort((a, b) => a - b);
+  if (!clean.length) return null;
+  const index = (clean.length - 1) * percentile;
+  const lower = Math.floor(index);
+  const upper = Math.ceil(index);
+  if (lower === upper) return clean[lower];
+  return clean[lower] + (clean[upper] - clean[lower]) * (index - lower);
 }
 
 function percentileRank(values, value) {
@@ -74,7 +115,7 @@ function zScore(values, value) {
 }
 
 function clampPrecision(value, digits = 4) {
-  return value === null || !Number.isFinite(value) ? null : Number(value.toFixed(digits));
+  return value === null || value === undefined || !Number.isFinite(value) ? null : Number(value.toFixed(digits));
 }
 
 function extensionLabel(value) {
@@ -95,13 +136,13 @@ function percentileLabel(value) {
   return "Zona históricamente alta";
 }
 
-function rollingReturn(closes, sessions, index = closes.length - 1) {
-  const start = index - sessions;
+function rollingReturn(closes, periods, index = closes.length - 1) {
+  const start = index - periods;
   if (start < 0 || !closes[index] || !closes[start]) return null;
   return closes[index] / closes[start] - 1;
 }
 
-function dailyReturns(closes) {
+function periodReturns(closes) {
   const returns = [];
   for (let index = 1; index < closes.length; index += 1) {
     if (closes[index - 1] > 0 && closes[index] > 0) returns.push(closes[index] / closes[index - 1] - 1);
@@ -109,9 +150,9 @@ function dailyReturns(closes) {
   return returns;
 }
 
-function annualizedVolatility(returns) {
+function annualizedVolatility(returns, annualization) {
   const sd = standardDeviation(returns);
-  return sd === null ? null : sd * Math.sqrt(252);
+  return sd === null ? null : sd * annualization;
 }
 
 function movingAverage(values, window, index = values.length - 1) {
@@ -131,6 +172,17 @@ function drawdownSeries(closes) {
 function maxDrawdown(closes) {
   const drawdowns = drawdownSeries(closes);
   return drawdowns.length ? Math.min(...drawdowns) : null;
+}
+
+function linearSlope(values) {
+  const clean = values.filter(Number.isFinite);
+  if (clean.length < 3) return null;
+  const xMean = (clean.length - 1) / 2;
+  const yMean = mean(clean);
+  const denominator = clean.reduce((sum, _, index) => sum + (index - xMean) ** 2, 0);
+  if (!denominator || yMean === null || yMean === 0) return null;
+  const numerator = clean.reduce((sum, value, index) => sum + (index - xMean) * (value - yMean), 0);
+  return numerator / denominator / yMean;
 }
 
 function normalizeBodyPreview(text) {
@@ -157,41 +209,51 @@ function splitDelimitedLine(line, delimiter) {
   return line.split(delimiter).map((value) => value.replace(/^\uFEFF/, "").trim());
 }
 
+function normalizeRow(row) {
+  const factor = row.adjustedClose && row.close ? row.adjustedClose / row.close : 1;
+  return {
+    ...row,
+    adjustedOpen: clampPrecision(row.open * factor, 6),
+    adjustedHigh: clampPrecision(row.high * factor, 6),
+    adjustedLow: clampPrecision(row.low * factor, 6),
+    adjustedClose: clampPrecision(row.adjustedClose ?? row.close, 6),
+  };
+}
+
 function parseCsv(text) {
   const bodyReason = detectBodyReason(text);
   if (bodyReason) return { rows: [], reason: bodyReason };
-
   const lines = text.replace(/^\uFEFF/, "").split(/\r?\n/).filter((line) => line.trim().length > 0);
   if (lines.length < 2) return { rows: [], reason: "not_enough_lines" };
-
   const delimiter = lines[0].includes(";") && !lines[0].includes(",") ? ";" : ",";
   const headers = splitDelimitedLine(lines[0], delimiter).map((header) => header.toLowerCase());
   const dateIndex = headers.indexOf("date");
-  const closeIndex = headers.indexOf("close");
   const openIndex = headers.indexOf("open");
   const highIndex = headers.indexOf("high");
   const lowIndex = headers.indexOf("low");
+  const closeIndex = headers.indexOf("close");
+  const adjustedIndex = headers.findIndex((header) => ["adj close", "adjclose", "adjustedclose"].includes(header));
   const volumeIndex = headers.indexOf("volume");
-
   if (dateIndex === -1 || closeIndex === -1) return { rows: [], reason: "unexpected_headers" };
-
   const rows = lines
     .slice(1)
     .map((line) => {
       const values = splitDelimitedLine(line, delimiter);
       const close = parseNumber(values[closeIndex]);
-      return {
+      return normalizeRow({
         date: values[dateIndex],
+        periodStart: values[dateIndex],
+        periodEnd: values[dateIndex],
         close,
-        open: parseNumber(values[openIndex]),
-        high: parseNumber(values[highIndex]),
-        low: parseNumber(values[lowIndex]),
+        open: parseNumber(values[openIndex]) ?? close,
+        high: parseNumber(values[highIndex]) ?? close,
+        low: parseNumber(values[lowIndex]) ?? close,
+        adjustedClose: adjustedIndex >= 0 ? parseNumber(values[adjustedIndex]) : close,
         volume: parseNumber(values[volumeIndex]) ?? 0,
-      };
+      });
     })
-    .filter((row) => /^\d{4}-\d{2}-\d{2}$/.test(row.date) && Number.isFinite(row.close) && row.close > 0)
+    .filter((row) => /^\d{4}-\d{2}-\d{2}$/.test(row.date) && Number.isFinite(row.adjustedClose) && row.adjustedClose > 0)
     .sort((a, b) => a.date.localeCompare(b.date));
-
   return { rows, reason: rows.length ? null : "no_parseable_rows" };
 }
 
@@ -231,12 +293,7 @@ async function fetchText(url, accept = "text/csv,text/plain,*/*") {
       },
     });
     const text = await response.text();
-    return {
-      url,
-      status: response.status,
-      contentType: response.headers.get("content-type") ?? "unknown",
-      body: text,
-    };
+    return { url, status: response.status, contentType: response.headers.get("content-type") ?? "unknown", body: text };
   } finally {
     clearTimeout(timeout);
   }
@@ -248,19 +305,7 @@ async function fetchStooq(asset) {
     await sleep(requestPauseMs);
     const attempt = await fetchText(url);
     const parsed = parseCsv(attempt.body);
-    finalAttempt = {
-      provider: "stooq",
-      ticker: asset.ticker,
-      symbol: asset.stooqSymbol,
-      url,
-      status: attempt.status,
-      contentType: attempt.contentType,
-      bodyPreview: normalizeBodyPreview(attempt.body),
-      detectedHtml: detectBodyReason(attempt.body) === "html_or_browser_verification",
-      detectedNoData: detectBodyReason(attempt.body) === "no_data",
-      parsedRows: parsed.rows.length,
-      reason: parsed.reason,
-    };
+    finalAttempt = diagnosticFromAttempt("stooq", asset.ticker, asset.stooqSymbol, url, attempt, parsed);
     if (attempt.status >= 200 && attempt.status < 300 && parsed.rows.length > 0) return { rows: parsed.rows, diagnostic: finalAttempt };
   }
   return { rows: [], diagnostic: finalAttempt };
@@ -273,30 +318,30 @@ function parseYahooChart(text) {
   } catch {
     return { rows: [], reason: "invalid_json" };
   }
-
   const result = payload?.chart?.result?.[0];
   const error = payload?.chart?.error;
   if (error) return { rows: [], reason: `yahoo_error:${error.code ?? "unknown"}` };
   if (!result?.timestamp?.length) return { rows: [], reason: "missing_timestamp" };
-
   const quote = result.indicators?.quote?.[0] ?? {};
   const adjusted = result.indicators?.adjclose?.[0]?.adjclose ?? [];
   const rows = result.timestamp
     .map((timestamp, index) => {
-      const close = parseNumber(adjusted[index] ?? quote.close?.[index]);
-      const date = new Date(timestamp * 1000).toISOString().slice(0, 10);
-      return {
-        date,
+      const close = parseNumber(quote.close?.[index]);
+      const adjustedClose = parseNumber(adjusted[index] ?? close);
+      return normalizeRow({
+        date: new Date(timestamp * 1000).toISOString().slice(0, 10),
+        periodStart: new Date(timestamp * 1000).toISOString().slice(0, 10),
+        periodEnd: new Date(timestamp * 1000).toISOString().slice(0, 10),
+        open: parseNumber(quote.open?.[index]) ?? close,
+        high: parseNumber(quote.high?.[index]) ?? close,
+        low: parseNumber(quote.low?.[index]) ?? close,
         close,
-        open: parseNumber(quote.open?.[index]),
-        high: parseNumber(quote.high?.[index]),
-        low: parseNumber(quote.low?.[index]),
+        adjustedClose,
         volume: parseNumber(quote.volume?.[index]) ?? 0,
-      };
+      });
     })
-    .filter((row) => /^\d{4}-\d{2}-\d{2}$/.test(row.date) && Number.isFinite(row.close) && row.close > 0)
+    .filter((row) => /^\d{4}-\d{2}-\d{2}$/.test(row.date) && Number.isFinite(row.adjustedClose) && row.adjustedClose > 0)
     .sort((a, b) => a.date.localeCompare(b.date));
-
   return { rows, reason: rows.length ? null : "no_parseable_rows" };
 }
 
@@ -305,21 +350,22 @@ async function fetchYahooFallback(asset) {
   await sleep(requestPauseMs);
   const attempt = await fetchText(url, "application/json,text/plain,*/*");
   const parsed = parseYahooChart(attempt.body);
+  return { rows: parsed.rows, diagnostic: diagnosticFromAttempt("yahoo_fallback", asset.ticker, asset.yahooSymbol, url, attempt, parsed) };
+}
+
+function diagnosticFromAttempt(provider, ticker, symbol, url, attempt, parsed) {
   return {
-    rows: parsed.rows,
-    diagnostic: {
-      provider: "yahoo_fallback",
-      ticker: asset.ticker,
-      symbol: asset.yahooSymbol,
-      url,
-      status: attempt.status,
-      contentType: attempt.contentType,
-      bodyPreview: normalizeBodyPreview(attempt.body),
-      detectedHtml: detectBodyReason(attempt.body) === "html_or_browser_verification",
-      detectedNoData: detectBodyReason(attempt.body) === "no_data",
-      parsedRows: parsed.rows.length,
-      reason: parsed.reason,
-    },
+    provider,
+    ticker,
+    symbol,
+    url,
+    status: attempt.status,
+    contentType: attempt.contentType,
+    bodyPreview: normalizeBodyPreview(attempt.body),
+    detectedHtml: detectBodyReason(attempt.body) === "html_or_browser_verification",
+    detectedNoData: detectBodyReason(attempt.body) === "no_data",
+    parsedRows: parsed.rows.length,
+    reason: parsed.reason,
   };
 }
 
@@ -328,12 +374,10 @@ async function fetchMarketData(asset) {
   diagnostics.push(stooq.diagnostic);
   logDiagnostic(stooq.diagnostic);
   if (stooq.rows.length > 0) return { rows: stooq.rows, provider: "Stooq", diagnostic: stooq.diagnostic };
-
   const yahoo = await fetchYahooFallback(asset);
   diagnostics.push(yahoo.diagnostic);
   logDiagnostic(yahoo.diagnostic);
   if (yahoo.rows.length > 0) return { rows: yahoo.rows, provider: "Yahoo Finance fallback", diagnostic: yahoo.diagnostic };
-
   return { rows: [], provider: "unavailable", diagnostic: yahoo.diagnostic };
 }
 
@@ -348,67 +392,225 @@ function logDiagnostic(diagnostic) {
   );
 }
 
-function compactSeries(rows) {
-  const step = Math.max(1, Math.floor(rows.length / 180));
-  return rows
-    .filter((_, index) => index % step === 0 || index === rows.length - 1)
-    .slice(-180)
-    .map((row) => {
-      const originalIndex = rows.findIndex((candidate) => candidate.date === row.date);
+function weekKey(dateString) {
+  const date = new Date(`${dateString}T00:00:00Z`);
+  const day = date.getUTCDay() || 7;
+  date.setUTCDate(date.getUTCDate() + 4 - day);
+  const yearStart = new Date(Date.UTC(date.getUTCFullYear(), 0, 1));
+  const week = Math.ceil(((date - yearStart) / 86400000 + 1) / 7);
+  return `${date.getUTCFullYear()}-W${String(week).padStart(2, "0")}`;
+}
+
+function monthKey(dateString) {
+  return dateString.slice(0, 7);
+}
+
+function aggregateRows(rows, frequency) {
+  if (frequency === "daily") return rows;
+  const groups = new Map();
+  for (const row of rows) {
+    const key = frequency === "weekly" ? weekKey(row.date) : monthKey(row.date);
+    if (!groups.has(key)) groups.set(key, []);
+    groups.get(key).push(row);
+  }
+  return Array.from(groups.values()).map((items) => {
+    const first = items[0];
+    const last = items.at(-1);
+    const raw = {
+      date: last.date,
+      periodStart: first.date,
+      periodEnd: last.date,
+      open: first.open,
+      high: Math.max(...items.map((item) => item.high)),
+      low: Math.min(...items.map((item) => item.low)),
+      close: last.close,
+      adjustedClose: last.adjustedClose,
+      volume: items.reduce((sum, item) => sum + (item.volume ?? 0), 0),
+    };
+    return normalizeRow(raw);
+  });
+}
+
+function compactSeries(rows, limit, longMa) {
+  const source = rows.length > limit ? rows.slice(-limit) : rows;
+  return source.map((row, index) => {
+    const originalIndex = rows.length - source.length + index;
+    return {
+      date: row.periodEnd,
+      close: clampPrecision(row.adjustedClose, 2),
+      ma200: clampPrecision(movingAverage(rows.map((item) => item.adjustedClose), longMa, originalIndex), 2),
+    };
+  });
+}
+
+function movementRows(rows) {
+  const result = [];
+  for (let index = 1; index < rows.length; index += 1) {
+    const current = rows[index];
+    const previous = rows[index - 1];
+    const prevClose = previous.adjustedClose;
+    const open = current.adjustedOpen;
+    const high = current.adjustedHigh;
+    const low = current.adjustedLow;
+    const close = current.adjustedClose;
+    if (![prevClose, open, high, low, close].every((value) => Number.isFinite(value) && value > 0)) continue;
+    const highLowRange = high - low;
+    const openGap = open / prevClose - 1;
+    const change = close / prevClose - 1;
+    const closeLocation = highLowRange === 0 ? 0.5 : Math.max(0, Math.min(1, (close - low) / highLowRange));
+    result.push({
+      period: current.periodEnd,
+      periodStart: current.periodStart,
+      periodEnd: current.periodEnd,
+      open,
+      high,
+      low,
+      close,
+      change,
+      openGap,
+      highExtensionFromOpen: high / open - 1,
+      lowExtensionFromOpen: low / open - 1,
+      highExtensionFromPrevClose: high / prevClose - 1,
+      lowExtensionFromPrevClose: low / prevClose - 1,
+      closeLocation,
+      upperFade: (high - close) / open,
+      lowerRecovery: (close - low) / open,
+      range: high / low - 1,
+      openingRangeCategory: open > previous.adjustedHigh ? "Above previous range" : open < previous.adjustedLow ? "Below previous range" : "Inside previous range",
+      openingCloseCategory: null,
+    });
+  }
+  const averageAbsMove = mean(result.map((row) => Math.abs(row.change))) ?? 0;
+  const nearThreshold = Math.max(0.001, averageAbsMove * 0.15);
+  return result.map((row) => ({
+    ...row,
+    openingCloseCategory:
+      Math.abs(row.openGap) <= nearThreshold ? "Near previous close" : row.openGap > 0 ? "Above previous close" : "Below previous close",
+  }));
+}
+
+function summarizeMovement(values) {
+  const clean = values.filter(Number.isFinite);
+  return {
+    mean: clampPrecision(mean(clean)),
+    std: clampPrecision(standardDeviation(clean)),
+    p10: clampPrecision(quantile(clean, 0.1)),
+    p25: clampPrecision(quantile(clean, 0.25)),
+    p50: clampPrecision(quantile(clean, 0.5)),
+    p75: clampPrecision(quantile(clean, 0.75)),
+    p90: clampPrecision(quantile(clean, 0.9)),
+    min: clampPrecision(clean.length ? Math.min(...clean) : null),
+    max: clampPrecision(clean.length ? Math.max(...clean) : null),
+  };
+}
+
+function buildChangeMoves(moves) {
+  const keys = [
+    "change",
+    "openGap",
+    "highExtensionFromOpen",
+    "lowExtensionFromOpen",
+    "highExtensionFromPrevClose",
+    "lowExtensionFromPrevClose",
+    "closeLocation",
+    "upperFade",
+    "lowerRecovery",
+    "range",
+  ];
+  return Object.fromEntries(keys.map((key) => [key, summarizeMovement(moves.map((row) => row[key]))]));
+}
+
+function buildOpeningLocation(moves) {
+  const build = (key, categories) =>
+    categories.map((category) => {
+      const rows = moves.filter((row) => row[key] === category);
       return {
-        date: row.date,
-        close: clampPrecision(row.close, 2),
-        ma200: clampPrecision(movingAverage(rows.map((item) => item.close), 200, originalIndex), 2),
+        category,
+        count: rows.length,
+        proportion: moves.length ? clampPrecision(rows.length / moves.length) : null,
+        averageForwardReturn: clampPrecision(mean(rows.map((row) => row.change))),
+        averageVolatility: clampPrecision(mean(rows.map((row) => row.range))),
+        positiveRate: rows.length ? clampPrecision(rows.filter((row) => row.change > 0).length / rows.length) : null,
       };
     });
+  return {
+    range: build("openingRangeCategory", ["Above previous range", "Inside previous range", "Below previous range"]),
+    close: build("openingCloseCategory", ["Above previous close", "Near previous close", "Below previous close"]),
+  };
 }
 
-function oneMonthReturnsForWindow(closes) {
-  const values = [];
-  for (let index = 21; index < closes.length; index += 1) {
-    const value = rollingReturn(closes, 21, index);
-    if (value !== null) values.push(value);
+function buildCalendarExtremes(rows, frequency) {
+  const labels =
+    frequency === "monthly"
+      ? ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"]
+      : frequency === "weekly"
+        ? ["Semana 1", "Semana 2", "Semana 3", "Semana 4", "Semana 5"]
+        : ["Lun", "Mar", "Mié", "Jue", "Vie", "Sáb", "Dom"];
+  const counts = new Map(labels.map((label) => [label, { label, highs: 0, lows: 0 }]));
+  for (const row of rows) {
+    const date = new Date(`${row.periodEnd}T00:00:00Z`);
+    const label =
+      frequency === "monthly"
+        ? labels[date.getUTCMonth()]
+        : frequency === "weekly"
+          ? labels[Math.min(Math.floor((date.getUTCDate() - 1) / 7), 4)]
+          : labels[(date.getUTCDay() + 6) % 7];
+    const item = counts.get(label);
+    if (row.adjustedHigh >= Math.max(...rows.filter((itemRow) => itemRow.periodEnd === row.periodEnd).map((itemRow) => itemRow.adjustedHigh))) item.highs += 1;
+    if (row.adjustedLow <= Math.min(...rows.filter((itemRow) => itemRow.periodEnd === row.periodEnd).map((itemRow) => itemRow.adjustedLow))) item.lows += 1;
   }
-  return values;
+  return Array.from(counts.values());
 }
 
-function ma200ExtensionsForWindow(closes) {
-  const values = [];
-  for (let index = 199; index < closes.length; index += 1) {
-    const ma200 = movingAverage(closes, 200, index);
-    if (ma200) values.push(closes[index] / ma200 - 1);
+function buildNewHighLow(rows, lookback) {
+  let newHighCount = 0;
+  let newLowCount = 0;
+  let eligible = 0;
+  for (let index = lookback; index < rows.length; index += 1) {
+    const slice = rows.slice(index - lookback, index);
+    const previousHigh = Math.max(...slice.map((row) => row.adjustedHigh));
+    const previousLow = Math.min(...slice.map((row) => row.adjustedLow));
+    eligible += 1;
+    if (rows[index].adjustedHigh > previousHigh) newHighCount += 1;
+    if (rows[index].adjustedLow < previousLow) newLowCount += 1;
   }
-  return values;
+  return {
+    lookback,
+    newHighCount,
+    newLowCount,
+    newHighRate: eligible ? clampPrecision(newHighCount / eligible) : null,
+    newLowRate: eligible ? clampPrecision(newLowCount / eligible) : null,
+  };
 }
 
-function volatilitySeriesForWindow(closes) {
-  const returns = dailyReturns(closes);
-  const values = [];
-  for (let index = 63; index <= returns.length; index += 1) {
-    const vol = annualizedVolatility(returns.slice(index - 63, index));
-    if (vol !== null) values.push(vol);
-  }
-  return values;
-}
-
-function buildWindowMetric(allCloses, windowSize) {
+function buildWindowMetric(allCloses, windowSize, config) {
   const closes = windowSize ? allCloses.slice(-windowSize) : [...allCloses];
-  if (windowSize && allCloses.length < windowSize) {
-    return unavailableWindow(allCloses.length);
-  }
-  if (closes.length < 252) return unavailableWindow(closes.length);
+  if (windowSize && allCloses.length < windowSize) return unavailableWindow(allCloses.length);
+  if (closes.length < config.minPeriods) return unavailableWindow(closes.length);
 
-  const returns = dailyReturns(closes);
+  const returns = periodReturns(closes);
   const drawdowns = drawdownSeries(closes);
   const lastClose = closes.at(-1);
-  const currentReturn1m = rollingReturn(closes, 21);
-  const currentMa200 = movingAverage(closes, 200);
-  const currentExtension = currentMa200 ? lastClose / currentMa200 - 1 : null;
-  const extensionHistory = ma200ExtensionsForWindow(closes);
-  const return1mHistory = oneMonthReturnsForWindow(closes);
-  const volHistory = volatilitySeriesForWindow(closes);
-  const currentVol63 = annualizedVolatility(returns.slice(-63));
-  const currentVol252 = annualizedVolatility(returns.slice(-252));
+  const currentReturn = rollingReturn(closes, 1);
+  const currentLongMa = movingAverage(closes, config.movingAverages.long);
+  const currentExtension = currentLongMa ? lastClose / currentLongMa - 1 : null;
+  const extensionHistory = [];
+  for (let index = config.movingAverages.long - 1; index < closes.length; index += 1) {
+    const ma = movingAverage(closes, config.movingAverages.long, index);
+    if (ma) extensionHistory.push(closes[index] / ma - 1);
+  }
+  const returnHistory = [];
+  for (let index = 1; index < closes.length; index += 1) {
+    const value = rollingReturn(closes, 1, index);
+    if (value !== null) returnHistory.push(value);
+  }
+  const volatilityWindow = Math.min(52, Math.max(12, Math.floor(config.minPeriods / 4)));
+  const volHistory = [];
+  for (let index = volatilityWindow; index <= returns.length; index += 1) {
+    const vol = annualizedVolatility(returns.slice(index - volatilityWindow, index), config.annualization);
+    if (vol !== null) volHistory.push(vol);
+  }
+  const currentVol = annualizedVolatility(returns.slice(-volatilityWindow), config.annualization);
   const currentDrawdown = drawdowns.at(-1) ?? null;
   const extensionZ = currentExtension === null ? null : zScore(extensionHistory, currentExtension);
   const extensionPct = currentExtension === null ? null : percentileRank(extensionHistory, currentExtension);
@@ -416,22 +618,22 @@ function buildWindowMetric(allCloses, windowSize) {
   return {
     available: true,
     sessions: closes.length,
-    annualizedVolatility63d: clampPrecision(currentVol63),
-    annualizedVolatility252d: clampPrecision(currentVol252),
-    annualizedVolatilityWindow: clampPrecision(annualizedVolatility(returns)),
+    annualizedVolatility63d: clampPrecision(currentVol),
+    annualizedVolatility252d: clampPrecision(annualizedVolatility(returns, config.annualization)),
+    annualizedVolatilityWindow: clampPrecision(annualizedVolatility(returns, config.annualization)),
     currentDrawdown: clampPrecision(currentDrawdown),
     maxDrawdown: clampPrecision(maxDrawdown(closes)),
     pricePercentile: clampPrecision(percentileRank(closes, lastClose), 1),
-    return1mPercentile: currentReturn1m === null ? null : clampPrecision(percentileRank(return1mHistory, currentReturn1m), 1),
-    return1mZScore: currentReturn1m === null ? null : clampPrecision(zScore(return1mHistory, currentReturn1m), 2),
+    return1mPercentile: currentReturn === null ? null : clampPrecision(percentileRank(returnHistory, currentReturn), 1),
+    return1mZScore: currentReturn === null ? null : clampPrecision(zScore(returnHistory, currentReturn), 2),
     ma200Extension: clampPrecision(currentExtension),
     ma200ExtensionZScore: clampPrecision(extensionZ, 2),
     ma200ExtensionPercentile: clampPrecision(extensionPct, 1),
     drawdownPercentile: currentDrawdown === null ? null : clampPrecision(percentileRank(drawdowns, currentDrawdown), 1),
-    volatilityPercentile: currentVol63 === null ? null : clampPrecision(percentileRank(volHistory, currentVol63), 1),
+    volatilityPercentile: currentVol === null ? null : clampPrecision(percentileRank(volHistory, currentVol), 1),
     extensionLabel: extensionLabel(extensionZ),
     extensionPercentileLabel: percentileLabel(extensionPct),
-    windowReturns: returns.slice(-2520).map((value) => clampPrecision(value, 6)),
+    windowReturns: returns.slice(-config.chartLimit).map((value) => clampPrecision(value, 6)),
   };
 }
 
@@ -458,63 +660,159 @@ function unavailableWindow(sessions) {
   };
 }
 
-function buildUnavailableRecord(asset, rows, reason = "Sin datos suficientes desde fuentes públicas.") {
-  const { yahooSymbol, ...catalogAsset } = asset;
+function buildFrequencyMetrics(rows, frequency) {
+  const config = frequencyConfig[frequency];
+  const periodRows = aggregateRows(rows, frequency);
+  const closes = periodRows.map((row) => row.adjustedClose);
+  const returns = periodReturns(closes);
+  const moves = movementRows(periodRows);
+  const latest = periodRows.at(-1);
+  const status = periodRows.length >= config.minPeriods ? "ok" : periodRows.length >= Math.floor(config.minPeriods / 2) ? "limited_history" : "unavailable";
+  const movingAverages = {};
+  const distanceToMovingAverages = {};
+  for (const [key, value] of Object.entries(config.movingAverages)) {
+    const label = `MA${value}`;
+    const ma = movingAverage(closes, value);
+    movingAverages[label] = clampPrecision(ma, 2);
+    distanceToMovingAverages[label] = ma && latest?.adjustedClose ? clampPrecision(latest.adjustedClose / ma - 1) : null;
+  }
+  const longMaValue = movingAverages[config.longKey];
+  const rangeValues = moves.map((row) => row.range);
+  const latestMove = moves.at(-1);
+  const trendWindow = closes.slice(-Math.min(26, closes.length));
+
   return {
-    ...catalogAsset,
+    status,
+    statusNote:
+      status === "ok"
+        ? `Historial suficiente para frecuencia ${config.label.toLowerCase()}.`
+        : `Historial limitado para esta frecuencia: ${periodRows.length} periodos.`,
+    periods: periodRows.length,
+    lastClose: clampPrecision(latest?.adjustedClose ?? null, 2),
+    lastDate: latest?.periodEnd ?? null,
+    returns: {
+      "1P": clampPrecision(rollingReturn(closes, 1)),
+      "4P": clampPrecision(rollingReturn(closes, 4)),
+      "12P": clampPrecision(rollingReturn(closes, 12)),
+      "26P": clampPrecision(rollingReturn(closes, 26)),
+      "52P": clampPrecision(rollingReturn(closes, 52)),
+    },
+    movingAverages,
+    distanceToMovingAverages,
+    longMovingAverageKey: config.longKey,
+    compactSeries: compactSeries(periodRows, config.chartLimit, config.movingAverages.long),
+    windows: Object.fromEntries(Object.entries(windows).map(([key, sizes]) => [key, buildWindowMetric(closes, sizes[frequency], config)])),
+    changeMoves: buildChangeMoves(moves),
+    openingLocation: buildOpeningLocation(moves),
+    calendarExtremes: buildCalendarExtremes(periodRows.slice(-config.chartLimit), frequency),
+    newHighLow: buildNewHighLow(periodRows, config.newHighLowLookback),
+    recentPeriods: moves.slice(-80).reverse().map((row) => ({
+      period: row.period,
+      periodStart: row.periodStart,
+      periodEnd: row.periodEnd,
+      open: clampPrecision(row.open, 2),
+      high: clampPrecision(row.high, 2),
+      low: clampPrecision(row.low, 2),
+      close: clampPrecision(row.close, 2),
+      change: clampPrecision(row.change),
+      openGap: clampPrecision(row.openGap),
+      range: clampPrecision(row.range),
+      closeLocation: clampPrecision(row.closeLocation, 3),
+      classification: extensionLabel(zScore(moves.map((item) => item.change), row.change)),
+      openingRangeCategory: row.openingRangeCategory,
+    })),
+    mlFeatures: {
+      return_1p: clampPrecision(rollingReturn(closes, 1)),
+      return_4p: clampPrecision(rollingReturn(closes, 4)),
+      return_12p: clampPrecision(rollingReturn(closes, 12)),
+      volatility: clampPrecision(annualizedVolatility(returns.slice(-Math.min(52, returns.length)), config.annualization)),
+      drawdown: clampPrecision(drawdownSeries(closes).at(-1) ?? null),
+      trend_slope: clampPrecision(linearSlope(trendWindow), 6),
+      distance_to_long_ma: longMaValue && latest?.adjustedClose ? clampPrecision(latest.adjustedClose / longMaValue - 1) : null,
+      extension_zscore: buildWindowMetric(closes, windows["5Y"][frequency], config).ma200ExtensionZScore,
+      range_percentile: latestMove?.range === undefined ? null : clampPrecision(percentileRank(rangeValues, latestMove.range), 1),
+      close_location: clampPrecision(latestMove?.closeLocation ?? null, 3),
+      correlation_to_selected_average: null,
+    },
+  };
+}
+
+function buildUnavailableFrequency(periods = 0) {
+  const changeMoves = buildChangeMoves([]);
+  return {
     status: "unavailable",
-    statusNote: reason,
+    statusNote: "Historial limitado para esta frecuencia.",
+    periods,
     lastClose: null,
     lastDate: null,
-    returns: { "1W": null, "1M": null, "3M": null, "6M": null, "1Y": null },
-    movingAverages: { ma20: null, ma50: null, ma200: null },
-    distanceToMovingAverages: { ma20: null, ma50: null, ma200: null },
+    returns: { "1P": null, "4P": null, "12P": null, "26P": null, "52P": null },
+    movingAverages: {},
+    distanceToMovingAverages: {},
+    longMovingAverageKey: "MA200",
     compactSeries: [],
-    windows: Object.fromEntries(Object.keys(windows).map((key) => [key, unavailableWindow(rows.length)])),
+    windows: Object.fromEntries(Object.keys(windows).map((key) => [key, unavailableWindow(periods)])),
+    changeMoves,
+    openingLocation: { range: [], close: [] },
+    calendarExtremes: [],
+    newHighLow: { lookback: 0, newHighCount: 0, newLowCount: 0, newHighRate: null, newLowRate: null },
+    recentPeriods: [],
+    mlFeatures: {
+      return_1p: null,
+      return_4p: null,
+      return_12p: null,
+      volatility: null,
+      drawdown: null,
+      trend_slope: null,
+      distance_to_long_ma: null,
+      extension_zscore: null,
+      range_percentile: null,
+      close_location: null,
+      correlation_to_selected_average: null,
+    },
   };
 }
 
 function buildAssetRecord(asset, rows, provider) {
-  if (rows.length < 252) {
-    return buildUnavailableRecord(asset, rows, `Historial insuficiente desde ${provider}: ${rows.length} sesiones.`);
-  }
-
   const { yahooSymbol, ...catalogAsset } = asset;
-  const closes = rows.map((row) => row.close);
-  const lastClose = closes.at(-1);
-  const ma20 = movingAverage(closes, 20);
-  const ma50 = movingAverage(closes, 50);
-  const ma200 = movingAverage(closes, 200);
-  const status = rows.length < 756 ? "limited_history" : "ok";
-
+  const frequencies = rows.length
+    ? {
+        daily: buildFrequencyMetrics(rows, "daily"),
+        weekly: buildFrequencyMetrics(rows, "weekly"),
+        monthly: buildFrequencyMetrics(rows, "monthly"),
+      }
+    : {
+        daily: buildUnavailableFrequency(0),
+        weekly: buildUnavailableFrequency(0),
+        monthly: buildUnavailableFrequency(0),
+      };
+  const daily = frequencies.daily;
+  const status = daily.status === "ok" && frequencies.weekly.status === "ok" && frequencies.monthly.status === "ok" ? "ok" : "limited_history";
   return {
     ...catalogAsset,
-    status,
-    statusNote:
-      status === "ok"
-        ? `Datos históricos disponibles vía ${provider}.`
-        : `Historial limitado vía ${provider}; algunas ventanas no estarán disponibles.`,
-    lastClose: clampPrecision(lastClose, 2),
-    lastDate: rows.at(-1).date,
+    status: rows.length ? status : "unavailable",
+    statusNote: rows.length ? `Datos públicos procesados vía ${provider}.` : "Sin datos suficientes desde fuentes públicas.",
+    lastClose: daily.lastClose,
+    lastDate: daily.lastDate,
     returns: {
-      "1W": clampPrecision(rollingReturn(closes, 5)),
-      "1M": clampPrecision(rollingReturn(closes, 21)),
-      "3M": clampPrecision(rollingReturn(closes, 63)),
-      "6M": clampPrecision(rollingReturn(closes, 126)),
-      "1Y": clampPrecision(rollingReturn(closes, 252)),
+      "1W": daily.returns["4P"],
+      "1M": daily.returns["12P"],
+      "3M": daily.returns["52P"],
+      "6M": clampPrecision(rollingReturn(rows.map((row) => row.adjustedClose), 126)),
+      "1Y": clampPrecision(rollingReturn(rows.map((row) => row.adjustedClose), 252)),
     },
     movingAverages: {
-      ma20: clampPrecision(ma20, 2),
-      ma50: clampPrecision(ma50, 2),
-      ma200: clampPrecision(ma200, 2),
+      ma20: daily.movingAverages.MA20 ?? null,
+      ma50: daily.movingAverages.MA50 ?? null,
+      ma200: daily.movingAverages.MA200 ?? null,
     },
     distanceToMovingAverages: {
-      ma20: ma20 ? clampPrecision(lastClose / ma20 - 1) : null,
-      ma50: ma50 ? clampPrecision(lastClose / ma50 - 1) : null,
-      ma200: ma200 ? clampPrecision(lastClose / ma200 - 1) : null,
+      ma20: daily.distanceToMovingAverages.MA20 ?? null,
+      ma50: daily.distanceToMovingAverages.MA50 ?? null,
+      ma200: daily.distanceToMovingAverages.MA200 ?? null,
     },
-    compactSeries: compactSeries(rows),
-    windows: Object.fromEntries(Object.entries(windows).map(([key, size]) => [key, buildWindowMetric(closes, size)])),
+    compactSeries: daily.compactSeries,
+    windows: daily.windows,
+    frequencies,
   };
 }
 
@@ -523,29 +821,28 @@ function sleep(ms) {
 }
 
 function summarizeAssets(assets) {
-  const summary = {
-    ok: 0,
-    limited_history: 0,
-    unavailable: 0,
-  };
-  for (const asset of assets) summary[asset.status] += 1;
-  return summary;
+  return assets.reduce(
+    (counts, asset) => {
+      counts[asset.status] += 1;
+      return counts;
+    },
+    { ok: 0, limited_history: 0, unavailable: 0 },
+  );
 }
 
 const assets = [];
 for (const asset of universe) {
   try {
-    const { rows, provider, diagnostic } = await fetchMarketData(asset);
-    const reason = diagnostic?.reason ? `Razón interna: ${diagnostic.reason}.` : "Sin datos suficientes desde fuentes públicas.";
-    const record = rows.length ? buildAssetRecord(asset, rows, provider) : buildUnavailableRecord(asset, rows, reason);
+    const { rows, provider } = await fetchMarketData(asset);
+    const record = buildAssetRecord(asset, rows, provider);
     assets.push(record);
     console.log(
-      `[stat-levels] ${asset.ticker}: ${record.status} (${rows.length} rows, last ${record.lastDate ?? "n/a"}, provider ${provider})`,
+      `[stat-levels] ${asset.ticker}: ${record.status} (${rows.length} daily rows, weekly ${record.frequencies.weekly.periods}, monthly ${record.frequencies.monthly.periods}, provider ${provider})`,
     );
   } catch (error) {
     const message = error instanceof Error ? error.message : "unknown error";
     console.warn(`[stat-levels] ${asset.ticker}: unavailable (${message})`);
-    assets.push(buildUnavailableRecord(asset, [], `Error de ingesta: ${message}.`));
+    assets.push(buildAssetRecord(asset, [], "unavailable"));
   }
 }
 
@@ -562,9 +859,11 @@ const unavailableReasons = diagnostics
 
 const data = {
   generatedAt,
-  source: "Stooq como fuente primaria; Yahoo Finance como fallback · cálculos propios",
+  source: "Datos públicos de mercado procesados en actualización estática · cálculos propios",
   sourceUrl: "https://stooq.com/",
   defaultWindow: "5Y",
+  defaultFrequency: "weekly",
+  frequencies: ["daily", "weekly", "monthly"],
   windows: Object.keys(windows),
   catalog,
   assets,
@@ -573,7 +872,7 @@ const data = {
 await mkdir(path.dirname(outputPath), { recursive: true });
 await writeFile(
   outputPath,
-  `import type { StatisticalLevelsGeneratedData } from "@/lib/statistical-levels/types";\n\nexport const statisticalLevelsData = ${JSON.stringify(data, null, 2)} satisfies StatisticalLevelsGeneratedData;\n`,
+  `import type { StatisticalLevelsGeneratedData } from "@/lib/statistical-levels/types";\n\nexport const statisticalLevelsData = ${JSON.stringify(data)} satisfies StatisticalLevelsGeneratedData;\n`,
 );
 
 console.log("[stat-levels] summary", summary);

@@ -1,5 +1,7 @@
 export type StatisticalWindow = "1Y" | "3Y" | "5Y" | "10Y" | "Full";
 
+export type StatisticalFrequency = "daily" | "weekly" | "monthly";
+
 export type AssetCategory =
   | "Índices / ETFs"
   | "Bonos"
@@ -37,6 +39,21 @@ export type CompactPricePoint = {
   ma200: number | null;
 };
 
+export type PeriodPricePoint = {
+  date: string;
+  periodStart: string;
+  periodEnd: string;
+  open: number;
+  high: number;
+  low: number;
+  close: number;
+  adjustedOpen: number | null;
+  adjustedHigh: number | null;
+  adjustedLow: number | null;
+  adjustedClose: number | null;
+  volume: number;
+};
+
 export type WindowMetric = {
   available: boolean;
   sessions: number;
@@ -56,6 +73,116 @@ export type WindowMetric = {
   extensionLabel: ExtensionLabel;
   extensionPercentileLabel: PercentileLabel;
   windowReturns: number[];
+};
+
+export type MovementSummary = {
+  mean: number | null;
+  std: number | null;
+  p10: number | null;
+  p25: number | null;
+  p50: number | null;
+  p75: number | null;
+  p90: number | null;
+  min: number | null;
+  max: number | null;
+};
+
+export type ChangeMoveMetric =
+  | "change"
+  | "openGap"
+  | "highExtensionFromOpen"
+  | "lowExtensionFromOpen"
+  | "highExtensionFromPrevClose"
+  | "lowExtensionFromPrevClose"
+  | "closeLocation"
+  | "upperFade"
+  | "lowerRecovery"
+  | "range";
+
+export type OpeningRangeCategory = "Above previous range" | "Inside previous range" | "Below previous range";
+
+export type OpeningCloseCategory = "Above previous close" | "Near previous close" | "Below previous close";
+
+export type OpeningCategoryStats = {
+  category: string;
+  count: number;
+  proportion: number;
+  averageForwardReturn: number | null;
+  averageVolatility: number | null;
+  positiveRate: number | null;
+};
+
+export type CalendarFrequencyPoint = {
+  label: string;
+  highs: number;
+  lows: number;
+};
+
+export type NewHighLowStats = {
+  lookback: number;
+  newHighCount: number;
+  newLowCount: number;
+  newHighRate: number | null;
+  newLowRate: number | null;
+};
+
+export type PeriodExplorerRow = {
+  period: string;
+  periodStart: string;
+  periodEnd: string;
+  open: number | null;
+  high: number | null;
+  low: number | null;
+  close: number | null;
+  change: number | null;
+  openGap: number | null;
+  range: number | null;
+  closeLocation: number | null;
+  classification: string;
+  openingRangeCategory: OpeningRangeCategory | null;
+};
+
+export type MlFeatureSet = {
+  return_1p: number | null;
+  return_4p: number | null;
+  return_12p: number | null;
+  volatility: number | null;
+  drawdown: number | null;
+  trend_slope: number | null;
+  distance_to_long_ma: number | null;
+  extension_zscore: number | null;
+  range_percentile: number | null;
+  close_location: number | null;
+  correlation_to_selected_average: number | null;
+};
+
+export type FrequencyMetricSet = {
+  status: AssetDataStatus;
+  statusNote: string;
+  periods: number;
+  lastClose: number | null;
+  lastDate: string | null;
+  returns: {
+    "1P": number | null;
+    "4P": number | null;
+    "12P": number | null;
+    "26P": number | null;
+    "52P": number | null;
+  };
+  movingAverages: Record<string, number | null>;
+  distanceToMovingAverages: Record<string, number | null>;
+  longMovingAverageKey: string;
+  compactSeries: CompactPricePoint[];
+  windows: Record<StatisticalWindow, WindowMetric>;
+  changeMoves: Record<ChangeMoveMetric, MovementSummary>;
+  openingLocation: {
+    range: OpeningCategoryStats[];
+    close: OpeningCategoryStats[];
+  };
+  calendarExtremes: CalendarFrequencyPoint[];
+  newHighLow: NewHighLowStats;
+  recentPeriods: PeriodExplorerRow[];
+  mlFeatures: MlFeatureSet;
 };
 
 export type AssetStatRecord = {
@@ -86,6 +213,7 @@ export type AssetStatRecord = {
   };
   compactSeries: CompactPricePoint[];
   windows: Record<StatisticalWindow, WindowMetric>;
+  frequencies: Record<StatisticalFrequency, FrequencyMetricSet>;
 };
 
 export type StatisticalLevelsGeneratedData = {
@@ -93,6 +221,8 @@ export type StatisticalLevelsGeneratedData = {
   source: string;
   sourceUrl: string;
   defaultWindow: StatisticalWindow;
+  defaultFrequency: StatisticalFrequency;
+  frequencies: StatisticalFrequency[];
   windows: StatisticalWindow[];
   catalog: AssetCatalogItem[];
   assets: AssetStatRecord[];

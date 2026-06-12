@@ -1,7 +1,8 @@
-import type { AssetStatRecord, StatisticalWindow } from "@/lib/statistical-levels/types";
+import type { AssetStatRecord, StatisticalFrequency, StatisticalWindow } from "@/lib/statistical-levels/types";
 
 type AssetComparisonTableProps = {
   assets: AssetStatRecord[];
+  frequency: StatisticalFrequency;
   window: StatisticalWindow;
 };
 
@@ -15,7 +16,7 @@ function zBar(value: number | null) {
   return Math.min(Math.abs(value) / 3, 1) * 50;
 }
 
-export function AssetComparisonTable({ assets, window }: AssetComparisonTableProps) {
+export function AssetComparisonTable({ assets, frequency, window }: AssetComparisonTableProps) {
   return (
     <section className="border border-line bg-panel p-5 md:p-6">
       <div>
@@ -30,16 +31,20 @@ export function AssetComparisonTable({ assets, window }: AssetComparisonTablePro
               <th className="py-3 pr-4 font-medium">Extensión z</th>
               <th className="py-3 pr-4 font-medium">Drawdown</th>
               <th className="py-3 pr-4 font-medium">Volatilidad</th>
-              <th className="py-3 pr-4 font-medium">Retorno 3M</th>
+              <th className="py-3 pr-4 font-medium">Retorno 4P</th>
+              <th className="py-3 pr-4 font-medium">Retorno 12P</th>
+              <th className="py-3 pr-4 font-medium">Distancia media larga</th>
               <th className="py-3 pr-4 font-medium">Estado</th>
             </tr>
           </thead>
           <tbody>
             {assets.map((asset) => {
-              const metric = asset.windows[window];
+              const frequencyData = asset.frequencies[frequency];
+              const metric = frequencyData.windows[window];
               const z = metric.ma200ExtensionZScore;
               const isPositive = (z ?? 0) >= 0;
               const width = zBar(z);
+              const longMa = frequencyData.longMovingAverageKey;
               return (
                 <tr key={asset.ticker} className="border-b border-line/70">
                   <td className="py-4 pr-4">
@@ -58,8 +63,10 @@ export function AssetComparisonTable({ assets, window }: AssetComparisonTablePro
                   </td>
                   <td className="py-4 pr-4 text-muted">{formatPercent(metric.currentDrawdown)}</td>
                   <td className="py-4 pr-4 text-muted">{formatPercent(metric.annualizedVolatilityWindow)}</td>
-                  <td className="py-4 pr-4 text-muted">{formatPercent(asset.returns["3M"])}</td>
-                  <td className="py-4 pr-4 text-muted">{asset.status === "ok" ? "Disponible" : asset.status === "limited_history" ? "Limitado" : "No disponible"}</td>
+                  <td className="py-4 pr-4 text-muted">{formatPercent(frequencyData.returns["4P"])}</td>
+                  <td className="py-4 pr-4 text-muted">{formatPercent(frequencyData.returns["12P"])}</td>
+                  <td className="py-4 pr-4 text-muted">{formatPercent(frequencyData.distanceToMovingAverages[longMa] ?? null)}</td>
+                  <td className="py-4 pr-4 text-muted">{frequencyData.status === "ok" ? "Disponible" : frequencyData.status === "limited_history" ? "Limitado" : "No disponible"}</td>
                 </tr>
               );
             })}
