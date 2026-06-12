@@ -35,32 +35,25 @@ const tools = [
   },
 ];
 
-const dashboardPreviews = [
-  {
-    title: "Régimen integrado",
-    text: "Combina volatilidad, rotación sectorial y flujos de ETF Bitcoin para leer si el entorno favorece riesgo, neutralidad o cautela.",
-    tags: ["VIX", "Rotación", "BTC ETF flows"],
-    source: "FedWatch se integrará cuando la fuente automatizada quede habilitada.",
-  },
-  {
-    title: "Mapa relativo por sectores",
-    text: "Compara el comportamiento reciente de ETFs sectoriales para observar liderazgo, defensivos y dispersión del mercado.",
-    tags: ["1W", "1M", "3M"],
-    source: "Alpha Vantage · actualización diaria",
-  },
-  {
-    title: "Presión de volatilidad",
-    text: "Clasifica el VIX por nivel absoluto, percentil histórico y momentum reciente, sin presentarlo como anticipación de dirección.",
-    tags: ["Nivel", "Percentil", "Momentum"],
-    source: "FRED VIXCLS · último cierre disponible",
-  },
-  {
-    title: "Flujos de ETFs Bitcoin",
-    text: "Observa entradas, salidas, rachas y presión reciente de flujos en ETFs spot de Bitcoin de EE. UU.",
-    tags: ["5D", "20D", "Rachas"],
-    source: "Bitbo · según disponibilidad de la fuente",
-  },
+const regimePreview = {
+  label: "Cautela",
+  score: 14,
+  confidence: 74,
+  bias: "Cauteloso",
+  readings: ["Rotación defensiva", "VIX en vigilancia", "BTC ETF flows con salidas"],
+};
+
+const sectorPreviewRows = [
+  { name: "Consumo defensivo", ticker: "XLP", value: 4.1 },
+  { name: "Salud", ticker: "XLV", value: 3.6 },
+  { name: "Real Estate", ticker: "XLRE", value: 3.4 },
+  { name: "Comunicación", ticker: "XLC", value: -6.4 },
+  { name: "Consumo discrecional", ticker: "XLY", value: -7.8 },
+  { name: "Tecnología", ticker: "XLK", value: -10.0 },
 ];
+
+const vixPreviewSeries = [15.3, 16.8, 17.4, 18.1, 17.7, 19.2, 18.6, 19.9];
+const btcFlowPreview = [0, -220, -420, -35, -842, 7, -12, -426, -83];
 
 
 const quantRows = [
@@ -68,6 +61,180 @@ const quantRows = [
   ["TD3 Macro", "Regimen macro", "Neutral", "0.83%", "2.11%", "0.74", "-4.17%", "Activo"],
   ["TD3 Volatility", "Volatilidad relativa", "Cobertura", "-0.56%", "1.05%", "0.35", "-2.93%", "Activo"],
 ];
+
+function formatPreviewPercent(value: number) {
+  return `${value > 0 ? "+" : ""}${value.toFixed(1)}%`;
+}
+
+function sparklinePath(values: number[], width = 100, height = 40) {
+  const min = Math.min(...values);
+  const max = Math.max(...values);
+  const spread = Math.max(max - min, 1);
+
+  return values
+    .map((value, index) => {
+      const x = (index / Math.max(values.length - 1, 1)) * width;
+      const y = height - ((value - min) / spread) * (height - 8) - 4;
+      return `${index === 0 ? "M" : "L"} ${x.toFixed(2)} ${y.toFixed(2)}`;
+    })
+    .join(" ");
+}
+
+function RegimePreviewPanel() {
+  return (
+    <div className="border border-petrol/30 bg-panel p-6 md:p-7">
+      <div className="flex flex-col gap-6 md:flex-row md:items-start md:justify-between">
+        <div>
+          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-brass">Régimen integrado</p>
+          <div className="mt-4 flex flex-wrap items-end gap-3">
+            <span className="inline-flex border border-petrol/40 bg-[#edf3f1] px-4 py-2 text-sm font-semibold text-petrol">
+              {regimePreview.label}
+            </span>
+            <span className="pb-1 text-sm text-muted">Sesgo {regimePreview.bias.toLowerCase()}</span>
+          </div>
+        </div>
+        <div className="text-left md:text-right">
+          <p className="text-xs font-semibold uppercase tracking-[0.14em] text-muted">Confianza</p>
+          <p className="mt-1 text-3xl font-semibold text-ink">{regimePreview.confidence}%</p>
+        </div>
+      </div>
+
+      <div className="mt-8">
+        <div className="flex items-end justify-between gap-4">
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-[0.14em] text-muted">Score compuesto</p>
+            <p className="mt-2 text-6xl font-semibold leading-none text-ink md:text-7xl">{regimePreview.score}</p>
+          </div>
+          <p className="max-w-[12rem] text-right text-sm leading-6 text-muted">
+            Volatilidad, rotación y flujos organizados en una lectura común.
+          </p>
+        </div>
+        <div className="mt-5 h-2 border border-line bg-panelSoft">
+          <div className="h-full bg-[#a86464]" style={{ width: `${regimePreview.score}%` }} />
+        </div>
+        <div className="mt-2 flex justify-between text-[11px] uppercase tracking-[0.12em] text-muted">
+          <span>Cautela</span>
+          <span>Neutral</span>
+          <span>Riesgo</span>
+        </div>
+      </div>
+
+      <div className="mt-7 grid gap-3 md:grid-cols-3">
+        {regimePreview.readings.map((reading) => (
+          <div key={reading} className="border-l border-brass/60 bg-panelSoft px-4 py-3">
+            <p className="text-sm font-semibold leading-5 text-ink">{reading}</p>
+          </div>
+        ))}
+      </div>
+      <p className="mt-6 border-t border-line pt-4 text-xs leading-5 text-muted">
+        FedWatch queda como contexto pendiente hasta confirmar fuente automatizada estable.
+      </p>
+    </div>
+  );
+}
+
+function SectorMiniChart() {
+  const maxAbs = Math.max(...sectorPreviewRows.map((row) => Math.abs(row.value)), 1);
+
+  return (
+    <div className="border border-line bg-panel p-5">
+      <div className="flex items-start justify-between gap-4">
+        <div>
+          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-brass">Rotación sectorial</p>
+          <h3 className="mt-2 font-semibold text-ink">Mapa relativo 1W</h3>
+        </div>
+        <span className="border border-line bg-panelSoft px-2.5 py-1 text-xs font-semibold text-muted">Alpha Vantage</span>
+      </div>
+      <div className="mt-5 grid gap-2">
+        {sectorPreviewRows.map((row) => {
+          const width = Math.max((Math.abs(row.value) / maxAbs) * 46, 2);
+          const isPositive = row.value > 0;
+          const fill = isPositive ? "#6f8f7b" : "#a86464";
+
+          return (
+            <div key={row.ticker} className="grid grid-cols-[minmax(6.5rem,0.8fr)_1fr_3.4rem] items-center gap-3 text-xs">
+              <div className="min-w-0">
+                <p className="truncate font-semibold text-ink">{row.name}</p>
+                <p className="text-[10px] uppercase tracking-[0.12em] text-muted">{row.ticker}</p>
+              </div>
+              <svg viewBox="0 0 100 12" className="h-5 w-full" preserveAspectRatio="none" aria-hidden="true">
+                <line x1="4" x2="96" y1="6" y2="6" stroke="#e7e2dc" strokeWidth="0.7" vectorEffect="non-scaling-stroke" />
+                <line x1="50" x2="50" y1="1" y2="11" stroke="#b8b2aa" strokeWidth="0.8" vectorEffect="non-scaling-stroke" />
+                <rect
+                  x={isPositive ? 50 : 50 - width}
+                  y="4"
+                  width={width}
+                  height="4"
+                  rx="1.2"
+                  fill={fill}
+                />
+              </svg>
+              <span className={isPositive ? "text-right font-semibold text-[#47604f]" : "text-right font-semibold text-[#7b3f3f]"}>
+                {formatPreviewPercent(row.value)}
+              </span>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+function VixMiniPanel() {
+  return (
+    <div className="border border-line bg-panel p-5">
+      <p className="text-xs font-semibold uppercase tracking-[0.18em] text-brass">Volatilidad</p>
+      <div className="mt-4 flex items-start justify-between gap-4">
+        <div>
+          <h3 className="text-3xl font-semibold leading-none text-ink">19.9</h3>
+          <p className="mt-2 text-sm font-semibold text-ink">Vigilancia</p>
+        </div>
+        <div className="text-right text-xs leading-5 text-muted">
+          <p>Momentum: subiendo</p>
+          <p>Contexto: zona media-alta</p>
+        </div>
+      </div>
+      <svg viewBox="0 0 100 40" className="mt-5 h-20 w-full" preserveAspectRatio="none" aria-hidden="true">
+        <line x1="0" x2="100" y1="30" y2="30" stroke="#e7e2dc" strokeWidth="0.7" vectorEffect="non-scaling-stroke" />
+        <path d={sparklinePath(vixPreviewSeries)} fill="none" stroke="#6f8f7b" strokeWidth="1.8" vectorEffect="non-scaling-stroke" />
+      </svg>
+      <p className="mt-4 border-t border-line pt-3 text-xs leading-5 text-muted">FRED VIXCLS · último cierre disponible</p>
+    </div>
+  );
+}
+
+function BtcFlowsMiniPanel() {
+  const maxAbs = Math.max(...btcFlowPreview.map((value) => Math.abs(value)), 1);
+  const barWidth = 100 / btcFlowPreview.length;
+
+  return (
+    <div className="border border-line bg-panel p-5">
+      <p className="text-xs font-semibold uppercase tracking-[0.18em] text-brass">BTC ETF flows</p>
+      <div className="mt-4 flex items-start justify-between gap-4">
+        <div>
+          <h3 className="text-3xl font-semibold leading-none text-ink">-83M</h3>
+          <p className="mt-2 text-sm font-semibold text-ink">Último flujo neto</p>
+        </div>
+        <div className="text-right text-xs leading-5 text-muted">
+          <p>5D -1.393M</p>
+          <p>Racha: 3 salidas</p>
+        </div>
+      </div>
+      <svg viewBox="0 0 100 44" className="mt-5 h-20 w-full" preserveAspectRatio="none" aria-hidden="true">
+        <line x1="0" x2="100" y1="22" y2="22" stroke="#d8d1c8" strokeWidth="0.8" vectorEffect="non-scaling-stroke" />
+        {btcFlowPreview.map((value, index) => {
+          const magnitude = Math.max((Math.abs(value) / maxAbs) * 18, 0.7);
+          const x = index * barWidth + 0.8;
+          const y = value >= 0 ? 22 - magnitude : 22;
+          const fill = value > 0 ? "#6f8f7b" : value < 0 ? "#a86464" : "#a8a29e";
+
+          return <rect key={`${value}-${index}`} x={x} y={y} width={Math.max(barWidth - 1.6, 2)} height={magnitude} rx="0.9" fill={fill} />;
+        })}
+      </svg>
+      <p className="mt-4 border-t border-line pt-3 text-xs leading-5 text-muted">Bitbo · según disponibilidad de la fuente</p>
+    </div>
+  );
+}
 
 export default function Home() {
   return (
@@ -129,26 +296,26 @@ export default function Home() {
       </section>
 
       <section className="border-b border-line bg-[#f7f6f2]">
-        <div className="mx-auto max-w-7xl px-5 py-12">
-          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-brass">Market Regime Dashboard</p>
-          <h2 className="mt-4 max-w-xl text-3xl font-semibold leading-tight text-ink md:text-4xl">Lectura diaria del régimen de mercado</h2>
-          <p className="mt-4 max-w-2xl leading-7 text-muted">Volatilidad, rotación sectorial y flujos institucionales organizados en una lectura clara del contexto.</p>
+        <div className="mx-auto max-w-7xl px-5 py-14 md:py-16">
+          <div className="grid gap-6 lg:grid-cols-[0.56fr_0.44fr] lg:items-end">
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-brass">Market Regime Dashboard</p>
+              <h2 className="mt-4 max-w-2xl text-3xl font-semibold leading-tight text-ink md:text-4xl">Lectura diaria del régimen de mercado</h2>
+            </div>
+            <p className="max-w-xl leading-7 text-muted lg:justify-self-end">
+              Volatilidad, rotación sectorial y flujos institucionales organizados en una lectura clara del contexto.
+            </p>
+          </div>
 
-          <div className="mt-8 grid gap-6 md:grid-cols-2 xl:grid-cols-4">
-            {dashboardPreviews.map((preview) => (
-              <div key={preview.title} className="flex min-h-[260px] flex-col border border-line bg-panel p-5">
-                <h3 className="font-semibold text-ink">{preview.title}</h3>
-                <p className="mt-4 text-sm leading-6 text-muted">{preview.text}</p>
-                <div className="mt-5 flex flex-wrap gap-2">
-                  {preview.tags.map((tag) => (
-                    <span key={tag} className="border border-line bg-panelSoft px-2.5 py-1 text-xs font-semibold text-muted">
-                      {tag}
-                    </span>
-                  ))}
-                </div>
-                <p className="mt-auto pt-6 text-xs leading-5 text-muted">{preview.source}</p>
+          <div className="mt-9 grid gap-5 lg:grid-cols-[1.05fr_0.95fr]">
+            <RegimePreviewPanel />
+            <div className="grid gap-5">
+              <SectorMiniChart />
+              <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2">
+                <VixMiniPanel />
+                <BtcFlowsMiniPanel />
               </div>
-            ))}
+            </div>
           </div>
 
           <div className="mt-8 flex flex-col gap-4 border-t border-line pt-6 md:flex-row md:items-center md:justify-between">
