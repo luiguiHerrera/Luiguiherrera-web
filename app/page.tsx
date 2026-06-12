@@ -183,7 +183,7 @@ function SectorMiniChart() {
 function VixMiniPanel() {
   return (
     <div className="border border-line bg-panel p-5">
-      <p className="text-xs font-semibold uppercase tracking-[0.18em] text-brass">Volatilidad</p>
+      <p className="text-xs font-semibold uppercase tracking-[0.18em] text-brass">VIX</p>
       <div className="mt-4 flex items-start justify-between gap-4">
         <div>
           <h3 className="text-3xl font-semibold leading-none text-ink">19.9</h3>

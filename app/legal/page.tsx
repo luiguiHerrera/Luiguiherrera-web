@@ -2,11 +2,42 @@ import { MethodologyNote } from "@/components/ui/MethodologyNote";
 import { SectionHeader } from "@/components/ui/SectionHeader";
 
 const legalSections = [
-  ["Aviso legal", "La plataforma ofrece contenido educativo y herramientas de análisis general. No presta asesoría financiera, legal, fiscal ni patrimonial."],
-  ["Privacidad", "Como MVP no se guardan respuestas del diagnóstico, portafolios, patrimonio, tolerancia al riesgo ni resultados individuales."],
-  ["Cookies y analítica", "No se implementan cookies de marketing. La futura analítica debe ser agregada, anónima y sin inputs financieros del usuario."],
-  ["Disclaimer financiero", "Ninguna herramienta predice precios, recomienda operaciones con activos ni sustituye un análisis personalizado."],
-  ["Seguridad de datos", "No hay login, cuentas, base de datos ni API keys en frontend. Los eventos permitidos no incluyen respuestas financieras ni mensajes libres."],
+  [
+    "No asesoría personalizada",
+    "El contenido es educativo e informativo. No constituye asesoría financiera, legal, fiscal, patrimonial ni recomendación personalizada. Ninguna herramienta evalúa formalmente idoneidad, conveniencia ni adecuación regulatoria del usuario.",
+  ],
+  [
+    "Sin recomendaciones de inversión",
+    "La plataforma no recomienda comprar, vender, mantener ni contratar activos, productos financieros o estrategias. Las lecturas del dashboard son contexto general y no deben usarse como única base para tomar decisiones de inversión.",
+  ],
+  [
+    "Datos de terceros",
+    "Algunas secciones usan datos de proveedores externos. Estos datos pueden estar retrasados, incompletos, sujetos a revisión, contener errores o dejar de estar disponibles. La plataforma no garantiza exactitud, continuidad ni actualización permanente de las fuentes.",
+  ],
+  [
+    "Régimen de mercado",
+    "El régimen de mercado es una clasificación educativa construida a partir de variables observables. No anticipa retornos futuros, no anticipa movimientos de precio y no representa una instrucción operativa.",
+  ],
+  [
+    "Fallbacks y estados pendientes",
+    "Cuando una fuente falla o no está disponible, el sitio puede mostrar estados pendientes, estructuras educativas, fallback visual o datos demo claramente identificados. Esos estados no deben interpretarse como datos actuales de mercado.",
+  ],
+  [
+    "Privacidad",
+    "Como MVP no se guardan respuestas del diagnóstico, portafolios, patrimonio, tolerancia al riesgo ni resultados individuales. No hay cuentas de usuario, login ni base de datos de perfiles personales en esta versión.",
+  ],
+  [
+    "Cookies y analítica",
+    "No se implementan cookies de marketing. La futura analítica debe ser agregada, anónima y sin inputs financieros del usuario.",
+  ],
+  [
+    "Seguridad de datos",
+    "No hay API keys en frontend. La configuración sensible debe permanecer server-side y no debe exponerse al navegador.",
+  ],
+  [
+    "Uso bajo responsabilidad del usuario",
+    "El usuario es responsable de contrastar la información y, cuando corresponda, consultar profesionales autorizados antes de tomar decisiones financieras, fiscales, legales o patrimoniales.",
+  ],
 ];
 
 export default function LegalPage() {
