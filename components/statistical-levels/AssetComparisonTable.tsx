@@ -16,7 +16,15 @@ function zBar(value: number | null) {
   return Math.min(Math.abs(value) / 3, 1) * 50;
 }
 
+function simpleWidth(value: number | null, max: number) {
+  if (value === null || max <= 0) return 0;
+  return Math.min(Math.abs(value) / max, 1) * 100;
+}
+
 export function AssetComparisonTable({ assets, frequency, window }: AssetComparisonTableProps) {
+  const rows = assets.map((asset) => ({ asset, data: asset.frequencies[frequency], metric: asset.frequencies[frequency].windows[window] }));
+  const maxDrawdown = Math.max(...rows.map((row) => Math.abs(row.metric.currentDrawdown ?? 0)), 0.01);
+  const maxVol = Math.max(...rows.map((row) => row.metric.annualizedVolatilityWindow ?? 0), 0.01);
   return (
     <section className="border border-line bg-panel p-5 md:p-6">
       <div>
@@ -38,9 +46,7 @@ export function AssetComparisonTable({ assets, frequency, window }: AssetCompari
             </tr>
           </thead>
           <tbody>
-            {assets.map((asset) => {
-              const frequencyData = asset.frequencies[frequency];
-              const metric = frequencyData.windows[window];
+            {rows.map(({ asset, data: frequencyData, metric }) => {
               const z = metric.ma200ExtensionZScore;
               const isPositive = (z ?? 0) >= 0;
               const width = zBar(z);
@@ -61,8 +67,18 @@ export function AssetComparisonTable({ assets, frequency, window }: AssetCompari
                       <span className="text-right font-semibold text-ink">{z === null ? "n/d" : z.toFixed(2)}</span>
                     </div>
                   </td>
-                  <td className="py-4 pr-4 text-muted">{formatPercent(metric.currentDrawdown)}</td>
-                  <td className="py-4 pr-4 text-muted">{formatPercent(metric.annualizedVolatilityWindow)}</td>
+                  <td className="py-4 pr-4 text-muted">
+                    <div className="grid grid-cols-[1fr_4rem] items-center gap-3">
+                      <div className="h-1.5 bg-panelSoft"><div className="h-1.5 bg-[#a86464]" style={{ width: `${simpleWidth(metric.currentDrawdown, maxDrawdown)}%` }} /></div>
+                      <span className="text-right">{formatPercent(metric.currentDrawdown)}</span>
+                    </div>
+                  </td>
+                  <td className="py-4 pr-4 text-muted">
+                    <div className="grid grid-cols-[1fr_4rem] items-center gap-3">
+                      <div className="h-1.5 bg-panelSoft"><div className="h-1.5 bg-[#7d8f9a]" style={{ width: `${simpleWidth(metric.annualizedVolatilityWindow, maxVol)}%` }} /></div>
+                      <span className="text-right">{formatPercent(metric.annualizedVolatilityWindow)}</span>
+                    </div>
+                  </td>
                   <td className="py-4 pr-4 text-muted">{formatPercent(frequencyData.returns["4P"])}</td>
                   <td className="py-4 pr-4 text-muted">{formatPercent(frequencyData.returns["12P"])}</td>
                   <td className="py-4 pr-4 text-muted">{formatPercent(frequencyData.distanceToMovingAverages[longMa] ?? null)}</td>

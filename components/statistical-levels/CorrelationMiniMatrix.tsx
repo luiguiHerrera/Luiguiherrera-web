@@ -30,7 +30,14 @@ export function CorrelationMiniMatrix({ assets, frequency, window }: Correlation
   return (
     <section className="border border-line bg-panel p-5 md:p-6">
       <p className="text-xs font-semibold uppercase tracking-[0.18em] text-brass">Correlación</p>
-      <h2 className="mt-2 text-2xl font-semibold text-ink">Relación reciente entre seleccionados</h2>
+      <div className="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
+        <h2 className="mt-2 text-2xl font-semibold text-ink">Relación reciente entre seleccionados</h2>
+        <div className="flex gap-2 text-xs text-muted">
+          <span className="border border-line bg-panelSoft px-2 py-1">baja</span>
+          <span className="border border-line bg-[#eef3f2] px-2 py-1">media</span>
+          <span className="border border-line bg-[#dfe9e4] px-2 py-1">alta</span>
+        </div>
+      </div>
       <div className="mt-5 overflow-x-auto">
         <div className="grid min-w-[520px]" style={{ gridTemplateColumns: `8rem repeat(${available.length}, minmax(4.5rem, 1fr))` }}>
           <div />

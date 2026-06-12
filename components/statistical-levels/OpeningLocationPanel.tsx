@@ -33,10 +33,29 @@ function CategoryBars({ rows }: { rows: OpeningCategoryStats[] }) {
 
 export function OpeningLocationPanel({ asset, frequency }: OpeningLocationPanelProps) {
   const location = asset?.frequencies[frequency].openingLocation;
+  const allRows = [...(location?.range ?? []), ...(location?.close ?? [])];
+  const mostFrequentRange = [...(location?.range ?? [])].sort((a, b) => b.count - a.count)[0];
+  const mostFrequentClose = [...(location?.close ?? [])].sort((a, b) => b.count - a.count)[0];
+  const highestReturn = [...allRows].sort((a, b) => (b.averageForwardReturn ?? -Infinity) - (a.averageForwardReturn ?? -Infinity))[0];
+  const lowestReturn = [...allRows].sort((a, b) => (a.averageForwardReturn ?? Infinity) - (b.averageForwardReturn ?? Infinity))[0];
   return (
     <section className="border border-line bg-panel p-5 md:p-6">
       <p className="text-xs font-semibold uppercase tracking-[0.18em] text-brass">Opening Location</p>
       <h2 className="mt-2 text-2xl font-semibold text-ink">Ubicación de apertura</h2>
+      <div className="mt-5 grid gap-3 md:grid-cols-4">
+        {[
+          ["Mayor frecuencia rango", mostFrequentRange?.category ?? "n/d", formatPercent(mostFrequentRange?.proportion ?? null)],
+          ["Mayor frecuencia cierre", mostFrequentClose?.category ?? "n/d", formatPercent(mostFrequentClose?.proportion ?? null)],
+          ["Mayor retorno posterior histórico", highestReturn?.category ?? "n/d", formatPercent(highestReturn?.averageForwardReturn ?? null)],
+          ["Menor retorno posterior histórico", lowestReturn?.category ?? "n/d", formatPercent(lowestReturn?.averageForwardReturn ?? null)],
+        ].map(([label, value, detail]) => (
+          <div key={label} className="border border-line bg-panelSoft p-3">
+            <p className="text-[11px] uppercase tracking-[0.11em] text-muted">{label}</p>
+            <p className="mt-2 text-sm font-semibold text-ink">{value}</p>
+            <p className="mt-1 text-xs text-muted">{detail}</p>
+          </div>
+        ))}
+      </div>
       <div className="mt-5 grid gap-6 lg:grid-cols-2">
         <div>
           <h3 className="text-sm font-semibold text-ink">Respecto al rango previo</h3>

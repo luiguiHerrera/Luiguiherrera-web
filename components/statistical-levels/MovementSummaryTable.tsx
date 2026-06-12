@@ -19,6 +19,7 @@ const labels: Record<ChangeMoveMetric, string> = {
 };
 
 const visibleMetrics: ChangeMoveMetric[] = ["change", "openGap", "highExtensionFromOpen", "lowExtensionFromOpen", "range", "closeLocation"];
+const miniMetrics: ChangeMoveMetric[] = ["change", "openGap", "range", "closeLocation"];
 
 function formatStat(value: number | null, isRatio = true) {
   if (value === null) return "n/d";
@@ -35,6 +36,31 @@ export function MovementSummaryTable({ asset, frequency }: MovementSummaryTableP
       <p className="mt-2 max-w-3xl text-sm leading-6 text-muted">
         Distribución histórica de cambios por periodo. Es una lectura estadística de comportamiento pasado; no implica dirección futura.
       </p>
+      <div className="mt-5 grid gap-4 lg:grid-cols-4">
+        {miniMetrics.map((metric) => {
+          const row = data?.[metric];
+          const min = row?.min ?? null;
+          const max = row?.max ?? null;
+          const span = min !== null && max !== null && max !== min ? max - min : 1;
+          const left = row?.p25 === null || min === null ? 0 : ((row?.p25 ?? 0) - min) / span * 100;
+          const width = row?.p75 === null || min === null ? 0 : (((row?.p75 ?? 0) - (row?.p25 ?? 0)) / span) * 100;
+          const median = row?.p50 === null || min === null ? null : (((row?.p50 ?? 0) - min) / span) * 100;
+          return (
+            <div key={metric} className="border border-line bg-panelSoft p-4">
+              <p className="text-sm font-semibold text-ink">{labels[metric]}</p>
+              <div className="relative mt-4 h-2 bg-white">
+                <div className="absolute top-1/2 h-px w-full -translate-y-1/2 bg-[#d8d2ca]" />
+                <div className="absolute top-0 h-2 bg-[#cfdcd3]" style={{ left: `${left}%`, width: `${width}%` }} />
+                {median !== null ? <div className="absolute top-1/2 h-4 w-px -translate-y-1/2 bg-ink" style={{ left: `${median}%` }} /> : null}
+              </div>
+              <div className="mt-2 flex justify-between text-xs text-muted">
+                <span>{formatStat(row?.min ?? null, metric !== "closeLocation")}</span>
+                <span>{formatStat(row?.max ?? null, metric !== "closeLocation")}</span>
+              </div>
+            </div>
+          );
+        })}
+      </div>
       <div className="mt-5 overflow-x-auto">
         <table className="w-full min-w-[780px] border-collapse text-left text-sm">
           <thead className="text-muted">

@@ -6,10 +6,15 @@ import { AssetSelector } from "@/components/statistical-levels/AssetSelector";
 import { AssetStatCard } from "@/components/statistical-levels/AssetStatCard";
 import { CalendarExtremesPanel } from "@/components/statistical-levels/CalendarExtremesPanel";
 import { CorrelationMiniMatrix } from "@/components/statistical-levels/CorrelationMiniMatrix";
+import { FocusedAssetPanel } from "@/components/statistical-levels/FocusedAssetPanel";
+import { LabOverviewStrip } from "@/components/statistical-levels/LabOverviewStrip";
 import { MlFeaturesPanel } from "@/components/statistical-levels/MlFeaturesPanel";
 import { MovementSummaryTable } from "@/components/statistical-levels/MovementSummaryTable";
 import { OpeningLocationPanel } from "@/components/statistical-levels/OpeningLocationPanel";
 import { PeriodExplorerTable } from "@/components/statistical-levels/PeriodExplorerTable";
+import { PositioningScatter } from "@/components/statistical-levels/PositioningScatter";
+import { ReturnHeatmap } from "@/components/statistical-levels/ReturnHeatmap";
+import { UnderwaterDrawdownChart } from "@/components/statistical-levels/UnderwaterDrawdownChart";
 import { defaultStatisticalSelection } from "@/lib/statistical-levels/asset-universe";
 import { statisticalLevelsData } from "@/lib/statistical-levels/generated-data";
 import type { AssetDataStatus, AssetStatRecord, StatisticalFrequency, StatisticalWindow } from "@/lib/statistical-levels/types";
@@ -33,6 +38,7 @@ export function StatLevelsLab() {
   const [query, setQuery] = useState("");
   const [window, setWindow] = useState<StatisticalWindow>(statisticalLevelsData.defaultWindow);
   const [frequency, setFrequency] = useState<StatisticalFrequency>(statisticalLevelsData.defaultFrequency);
+  const [focusTicker, setFocusTicker] = useState<string | null>(availableDefaults[0] ?? null);
 
   const selectedAssets = useMemo(
     () =>
@@ -54,13 +60,18 @@ export function StatLevelsLab() {
 
   function toggleAsset(ticker: string) {
     setSelected((current) => {
-      if (current.includes(ticker)) return current.filter((item) => item !== ticker);
+      if (current.includes(ticker)) {
+        const next = current.filter((item) => item !== ticker);
+        if (focusTicker === ticker) setFocusTicker(next[0] ?? null);
+        return next;
+      }
       if (current.length >= 5) return current;
+      if (!focusTicker) setFocusTicker(ticker);
       return [...current, ticker];
     });
   }
 
-  const primaryAsset = selectedAssets[0] ?? null;
+  const primaryAsset = selectedAssets.find((asset) => asset.ticker === focusTicker) ?? selectedAssets[0] ?? null;
 
   return (
     <div className="space-y-6">
@@ -120,10 +131,18 @@ export function StatLevelsLab() {
         </div>
       </section>
 
+      <LabOverviewStrip assets={selectedAssets} frequency={frequency} window={window} />
+      <PositioningScatter assets={selectedAssets} frequency={frequency} window={window} />
+
       <section className="grid gap-5 xl:grid-cols-2">
         {selectedAssets.map((asset) => <AssetStatCard key={asset.ticker} asset={asset} frequency={frequency} window={window} />)}
       </section>
 
+      <FocusedAssetPanel assets={selectedAssets} focusTicker={primaryAsset?.ticker ?? null} setFocusTicker={setFocusTicker} frequency={frequency} window={window} />
+      <div className="grid gap-6 xl:grid-cols-[1fr_0.9fr]">
+        <UnderwaterDrawdownChart asset={primaryAsset} frequency={frequency} window={window} />
+        <ReturnHeatmap asset={primaryAsset} frequency={frequency} />
+      </div>
       <MovementSummaryTable asset={primaryAsset} frequency={frequency} />
       <OpeningLocationPanel asset={primaryAsset} frequency={frequency} />
       <CalendarExtremesPanel asset={primaryAsset} frequency={frequency} />

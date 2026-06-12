@@ -1,4 +1,5 @@
 import { RiskPill } from "@/components/ui/RiskPill";
+import { PercentileRangeBar } from "@/components/statistical-levels/PercentileRangeBar";
 import { StatBandsChart } from "@/components/statistical-levels/StatBandsChart";
 import type { AssetStatRecord, StatisticalFrequency, StatisticalWindow } from "@/lib/statistical-levels/types";
 
@@ -22,6 +23,11 @@ function statusTone(status: AssetStatRecord["status"]) {
   if (status === "ok") return "low";
   if (status === "limited_history") return "medium";
   return "high";
+}
+
+function drawdownWidth(value: number | null) {
+  if (value === null) return 0;
+  return Math.min(Math.abs(value) / 0.35, 1) * 100;
 }
 
 const frequencyLabels: Record<StatisticalFrequency, string> = {
@@ -57,13 +63,31 @@ export function AssetStatCard({ asset, frequency, window }: AssetStatCardProps) 
         <StatBandsChart series={frequencyData.compactSeries} />
       </div>
 
-      <div className="mt-5 grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
+      <div className="mt-5 grid gap-4 lg:grid-cols-[1fr_1fr]">
+        <div className="border border-line bg-panelSoft p-4">
+          <div className="flex items-center justify-between gap-3">
+            <p className="text-xs uppercase tracking-[0.12em] text-muted">Clasificación estadística</p>
+            <span className="bg-white px-2 py-1 text-xs font-semibold text-ink">{metric.available ? metric.extensionLabel : "Historial insuficiente"}</span>
+          </div>
+          <div className="mt-4">
+            <PercentileRangeBar label="Percentil extensión" value={metric.ma200ExtensionPercentile} />
+          </div>
+        </div>
+        <div className="border border-line bg-panelSoft p-4">
+          <div className="flex items-center justify-between gap-3 text-xs">
+            <span className="font-semibold uppercase tracking-[0.12em] text-muted">Drawdown actual</span>
+            <span className="font-semibold text-ink">{formatPercent(metric.currentDrawdown)}</span>
+          </div>
+          <div className="mt-3 h-2 bg-white">
+            <div className="h-2 bg-[#a86464]" style={{ width: `${drawdownWidth(metric.currentDrawdown)}%` }} />
+          </div>
+          <p className="mt-3 text-xs text-muted">Vol. anualizada {formatPercent(metric.annualizedVolatilityWindow)}</p>
+        </div>
+      </div>
+
+      <div className="mt-4 grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
         {[
-          ["Clasificación", metric.available ? metric.extensionLabel : "Historial insuficiente"],
           ["Z extensión", formatNumber(metric.ma200ExtensionZScore)],
-          ["Percentil extensión", metric.ma200ExtensionPercentile === null ? "n/d" : `${metric.ma200ExtensionPercentile.toFixed(1)}%`],
-          ["Drawdown actual", formatPercent(metric.currentDrawdown)],
-          ["Vol. anualizada", formatPercent(metric.annualizedVolatilityWindow)],
           [`Distancia ${longMa}`, formatPercent(frequencyData.distanceToMovingAverages[longMa] ?? null)],
           ["Retorno 4 periodos", formatPercent(frequencyData.returns["4P"])],
           ["Retorno 12 periodos", formatPercent(frequencyData.returns["12P"])],
