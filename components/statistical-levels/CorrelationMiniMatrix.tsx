@@ -1,0 +1,54 @@
+import { Fragment } from "react";
+import { correlation } from "@/lib/statistical-levels/calculations";
+import type { AssetStatRecord, StatisticalWindow } from "@/lib/statistical-levels/types";
+
+type CorrelationMiniMatrixProps = {
+  assets: AssetStatRecord[];
+  window: StatisticalWindow;
+};
+
+function tone(value: number | null) {
+  if (value === null) return "bg-panelSoft text-muted";
+  if (value > 0.75) return "bg-[#dfe9e4] text-[#385242]";
+  if (value > 0.35) return "bg-[#eef3f2] text-[#47604f]";
+  if (value < -0.35) return "bg-[#f5e8e8] text-[#7b3f3f]";
+  return "bg-panelSoft text-muted";
+}
+
+export function CorrelationMiniMatrix({ assets, window }: CorrelationMiniMatrixProps) {
+  const available = assets.filter((asset) => asset.windows[window].windowReturns.length >= 20);
+  if (available.length < 2) {
+    return (
+      <section className="border border-line bg-panel p-5 md:p-6">
+        <h2 className="text-2xl font-semibold text-ink">Correlación</h2>
+        <p className="mt-3 text-sm leading-6 text-muted">Historial insuficiente para calcular matriz entre activos seleccionados.</p>
+      </section>
+    );
+  }
+
+  return (
+    <section className="border border-line bg-panel p-5 md:p-6">
+      <p className="text-xs font-semibold uppercase tracking-[0.18em] text-brass">Correlación</p>
+      <h2 className="mt-2 text-2xl font-semibold text-ink">Relación reciente entre seleccionados</h2>
+      <div className="mt-5 overflow-x-auto">
+        <div className="grid min-w-[520px]" style={{ gridTemplateColumns: `8rem repeat(${available.length}, minmax(4.5rem, 1fr))` }}>
+          <div />
+          {available.map((asset) => <div key={asset.ticker} className="border-b border-line p-2 text-center text-xs font-semibold text-muted">{asset.ticker}</div>)}
+          {available.map((row) => (
+            <Fragment key={row.ticker}>
+              <div className="border-b border-line p-2 text-sm font-semibold text-ink">{row.ticker}</div>
+              {available.map((column) => {
+                const value = row.ticker === column.ticker ? 1 : correlation(row.windows[window].windowReturns, column.windows[window].windowReturns);
+                return (
+                  <div key={`${row.ticker}-${column.ticker}`} className={`border-b border-line p-2 text-center text-sm font-semibold ${tone(value)}`}>
+                    {value === null ? "n/d" : value.toFixed(2)}
+                  </div>
+                );
+              })}
+            </Fragment>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}

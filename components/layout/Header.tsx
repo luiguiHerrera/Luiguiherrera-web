@@ -4,6 +4,7 @@ const navItems = [
   { href: "/", label: "Inicio" },
   { href: "/diagnostico", label: "Diagnóstico" },
   { href: "/dashboard", label: "Dashboard" },
+  { href: "/niveles-estadisticos", label: "Niveles estadísticos" },
   { href: "/quant-lab", label: "Quant Lab" },
   { href: "/protege-tu-dinero", label: "Protege tu dinero" },
   { href: "/metodologia", label: "Metodología" },

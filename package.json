@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "build:stat-levels": "node scripts/build-statistical-levels.mjs",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
