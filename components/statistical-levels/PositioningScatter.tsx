@@ -56,8 +56,8 @@ export function PositioningScatter({ assets, frequency, window }: PositioningSca
         </div>
         <p className="text-xs text-muted">X: z-score · Y: retorno 12P · tamaño: volatilidad</p>
       </div>
-      <div className="mt-5 overflow-x-auto">
-        <svg viewBox="0 0 760 360" className="h-[360px] min-w-[680px] w-full" role="img" aria-label="Mapa de posicionamiento estadístico">
+      <div className="mt-5 max-w-full overflow-x-auto [contain:paint]">
+        <svg viewBox="0 0 760 360" className="block h-[300px] min-w-0 w-full md:h-[360px] md:min-w-[680px]" role="img" aria-label="Mapa de posicionamiento estadístico">
           <rect x="0" y="0" width="760" height="360" fill="#fbfaf8" />
           <line x1="80" x2="720" y1="180" y2="180" stroke="#d8d2ca" strokeWidth="1" />
           <line x1="400" x2="400" y1="32" y2="308" stroke="#d8d2ca" strokeWidth="1" />

@@ -141,7 +141,7 @@ export function StatLevelsLab() {
 
       <FocusedAssetPanel assets={selectedAssets} focusTicker={primaryAsset?.ticker ?? null} setFocusTicker={setFocusTicker} frequency={frequency} window={window} />
       <KeyStatisticalLevelsPanel asset={primaryAsset} />
-      <div className="grid gap-6 xl:grid-cols-[1fr_0.9fr]">
+      <div className="grid min-w-0 gap-6 xl:grid-cols-[minmax(0,1fr)_minmax(0,0.9fr)]">
         <UnderwaterDrawdownChart asset={primaryAsset} frequency={frequency} window={window} />
         <ReturnHeatmap asset={primaryAsset} frequency={frequency} />
       </div>

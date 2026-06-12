@@ -67,7 +67,7 @@ function LevelLadder({ data, kind, ticker }: { data: KeyStatisticalLevelSet; kin
         </div>
       </div>
 
-      <div className="mt-5">
+      <div className="mt-5 overflow-hidden">
         <div className="relative h-12">
           <div className="absolute left-0 right-0 top-6 h-px bg-line" />
           {values.map((item) => (

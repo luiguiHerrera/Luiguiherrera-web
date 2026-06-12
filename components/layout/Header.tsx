@@ -17,8 +17,8 @@ export function Header() {
         <Link href="/" className="w-fit text-sm font-semibold uppercase tracking-[0.18em] text-ink">
           Market Lab
         </Link>
-        <div className="flex w-full min-w-0 items-center gap-4 overflow-x-auto lg:w-auto lg:overflow-visible">
-          <nav className="-mx-1 flex min-w-max gap-2 pb-1 text-sm text-muted lg:mx-0 lg:flex-wrap lg:overflow-visible lg:pb-0">
+        <div className="flex w-full min-w-0 items-center gap-4 overflow-x-auto [contain:paint] lg:w-auto lg:overflow-visible">
+          <nav className="-mx-1 flex w-max max-w-none gap-2 pb-1 text-sm text-muted lg:mx-0 lg:flex-wrap lg:overflow-visible lg:pb-0">
             {navItems.map((item) => (
               <Link
                 key={item.href}

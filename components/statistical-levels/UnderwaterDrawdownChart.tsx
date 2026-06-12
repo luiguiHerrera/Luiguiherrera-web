@@ -36,7 +36,7 @@ export function UnderwaterDrawdownChart({ asset, frequency, window }: Underwater
   const area = path ? `${path} L 100 8 L 0 8 Z` : "";
 
   return (
-    <section className="border border-line bg-panel p-5 md:p-6">
+    <section className="min-w-0 border border-line bg-panel p-5 md:p-6">
       <div className="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
         <div>
           <p className="text-xs font-semibold uppercase tracking-[0.18em] text-brass">Activo foco</p>
