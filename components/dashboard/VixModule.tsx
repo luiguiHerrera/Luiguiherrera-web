@@ -1,5 +1,5 @@
 import { dataStatusLabels } from "@/lib/dashboard/status";
-import type { LegacyVixTermStructureData, VixDashboardData, VixHistoryPoint, VixSpotData } from "@/lib/dashboard/types";
+import type { VixDashboardData, VixHistoryPoint, VixSpotData } from "@/lib/dashboard/types";
 
 type VixModuleProps = {
   data: VixDashboardData;
@@ -28,7 +28,7 @@ function severityClass(severity: VixSpotData["vixSeverity"]) {
   return "border-[#6f8f7b]/40 bg-[#6f8f7b]/10 text-[#47604f]";
 }
 
-function buildSparklinePath(history: VixHistoryPoint[]) {
+function buildVixPath(history: VixHistoryPoint[]) {
   if (history.length < 2) return "";
   const values = history.map((point) => point.value);
   const min = Math.min(...values);
@@ -38,24 +38,24 @@ function buildSparklinePath(history: VixHistoryPoint[]) {
   return history
     .map((point, index) => {
       const x = (index / (history.length - 1)) * 100;
-      const y = 44 - ((point.value - min) / range) * 34;
+      const y = 50 - ((point.value - min) / range) * 38;
       return `${index === 0 ? "M" : "L"} ${x.toFixed(2)} ${y.toFixed(2)}`;
     })
     .join(" ");
 }
 
-function MiniVixChart({ history }: { history: VixHistoryPoint[] }) {
-  const path = buildSparklinePath(history);
+function VixLineChart({ history }: { history: VixHistoryPoint[] }) {
+  const path = buildVixPath(history);
   const values = history.map((point) => point.value);
   const min = values.length ? Math.min(...values) : null;
   const max = values.length ? Math.max(...values) : null;
 
   return (
-    <div className="mt-4">
+    <div className="min-w-0">
       <div className="flex items-start justify-between gap-4">
         <div>
-          <p className="text-xs font-semibold uppercase tracking-[0.14em] text-brass">Últimas sesiones</p>
-          <h3 className="mt-1 text-sm font-semibold text-ink">Presión de volatilidad</h3>
+          <p className="text-xs font-semibold uppercase tracking-[0.14em] text-brass">Evolución reciente</p>
+          <h3 className="mt-1 text-sm font-semibold text-ink">Últimas {history.length} sesiones</h3>
         </div>
         <div className="text-right text-xs leading-5 text-muted">
           <span className="block">Máx. {formatNumber(max)}</span>
@@ -63,53 +63,15 @@ function MiniVixChart({ history }: { history: VixHistoryPoint[] }) {
         </div>
       </div>
 
-      <svg viewBox="0 0 100 52" className="mt-3 h-24 w-full" preserveAspectRatio="none" aria-hidden="true">
-        <line x1="0" x2="100" y1="10" y2="10" stroke="#e7e2dc" strokeWidth="0.6" vectorEffect="non-scaling-stroke" />
-        <line x1="0" x2="100" y1="27" y2="27" stroke="#eee9e3" strokeWidth="0.6" vectorEffect="non-scaling-stroke" />
-        <line x1="0" x2="100" y1="44" y2="44" stroke="#e7e2dc" strokeWidth="0.6" vectorEffect="non-scaling-stroke" />
-        {path ? <path d={path} fill="none" stroke="#6f8f7b" strokeWidth="1.8" vectorEffect="non-scaling-stroke" /> : null}
+      <svg viewBox="0 0 100 58" className="mt-5 h-52 w-full md:h-64" preserveAspectRatio="none" aria-hidden="true">
+        <line x1="0" x2="100" y1="12" y2="12" stroke="#eee9e3" strokeWidth="0.7" vectorEffect="non-scaling-stroke" />
+        <line x1="0" x2="100" y1="50" y2="50" stroke="#e7e2dc" strokeWidth="0.8" vectorEffect="non-scaling-stroke" />
+        {path ? <path d={path} fill="none" stroke="#6f8f7b" strokeWidth="2.2" vectorEffect="non-scaling-stroke" /> : null}
       </svg>
       <div className="mt-2 flex justify-between text-xs text-muted">
         <span>-{history.length} sesiones</span>
         <span>Último cierre</span>
       </div>
-    </div>
-  );
-}
-
-function TermStructurePanel({ data }: { data: LegacyVixTermStructureData }) {
-  const metrics = [
-    ["VIX spot", formatNumber(data.spot)],
-    ["Futuro mes 1", formatNumber(data.futureMonth1)],
-    ["Futuro mes 2", formatNumber(data.futureMonth2)],
-    ["Spread M2-M1", data.spreadM2M1 === null ? "Pendiente de fuente estable" : formatChange(data.spreadM2M1)],
-  ];
-
-  return (
-    <div className="border border-line bg-panelSoft p-5">
-      <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
-        <div>
-          <p className="text-xs font-semibold uppercase tracking-[0.14em] text-brass">Estructura a plazo</p>
-          <h3 className="mt-2 text-lg font-semibold text-ink">VIX futures cercanos</h3>
-          <p className="mt-2 text-sm leading-6 text-muted">
-            La estructura a plazo del VIX ayuda a observar si el mercado está pagando más por protección cercana o futura.
-          </p>
-        </div>
-        <span className="w-fit border border-line bg-panel px-3 py-1 text-xs font-semibold text-muted">
-          {dataStatusLabels[data.dataStatus]}
-        </span>
-      </div>
-
-      <div className="mt-4 grid gap-3 sm:grid-cols-2">
-        {metrics.map(([label, value]) => (
-          <div key={label} className="border border-line bg-panel p-3">
-            <p className="text-xs uppercase tracking-[0.12em] text-muted">{label}</p>
-            <p className="mt-2 font-semibold text-ink">{value}</p>
-          </div>
-        ))}
-      </div>
-      <p className="mt-4 text-sm leading-6 text-muted">{data.interpretation.how}</p>
-      <p className="mt-3 border-t border-line pt-3 text-sm leading-6 text-muted">{data.reliabilityNote}</p>
     </div>
   );
 }
@@ -126,53 +88,53 @@ export function VixModule({ data }: VixModuleProps) {
   ];
 
   return (
-    <section className="border border-line bg-panel p-4 md:p-5">
-      <div className="grid gap-5 xl:grid-cols-[0.88fr_1.12fr] xl:items-start">
-        <div className="border border-line bg-panelSoft p-4">
-          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-brass">VIX / volatilidad</p>
-          <h2 className="mt-2 text-xl font-semibold text-ink">Estrés de mercado</h2>
-          <p className="mt-3 text-sm leading-6 text-muted">
-            El VIX resume expectativas de volatilidad implícita del S&amp;P 500 a partir de opciones. Es una lectura de presión de riesgo, no una lectura de dirección del mercado.
+    <section className="border border-line bg-panel p-5 md:p-6">
+      <div className="grid gap-8 xl:grid-cols-[0.42fr_0.58fr] xl:items-start">
+        <div>
+          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-brass">VIX</p>
+          <h2 className="mt-2 text-2xl font-semibold text-ink">Presión de volatilidad</h2>
+          <p className="mt-3 max-w-xl text-sm leading-6 text-muted">
+            El VIX resume volatilidad implícita del S&amp;P 500. Es una lectura de presión de riesgo, no de dirección del mercado.
           </p>
 
-          <div className="mt-4">
-            <p className="text-xs font-semibold uppercase tracking-[0.14em] text-brass">VIX último cierre disponible</p>
-            <div className="mt-3 flex flex-wrap items-end gap-3">
-              <span className="text-4xl font-semibold leading-none text-ink md:text-5xl">{formatNumber(spot.latestVix)}</span>
-              <span className={`mb-1 border px-3 py-1 text-sm font-semibold ${severityClass(spot.vixSeverity)}`}>
+          <div className="mt-8">
+            <div className="flex flex-wrap items-end gap-3">
+              <span className="text-6xl font-semibold leading-none text-ink md:text-7xl">{formatNumber(spot.latestVix)}</span>
+              <span className={`mb-2 border px-3 py-1 text-sm font-semibold ${severityClass(spot.vixSeverity)}`}>
                 {spot.vixCompositeLabel}
               </span>
             </div>
-            <p className="mt-3 font-semibold text-ink">{spot.vixCompositeSubtext}</p>
+            <p className="mt-4 text-base font-semibold text-ink">{spot.vixCompositeSubtext}</p>
             <p className="mt-3 text-sm leading-6 text-muted">
-              {spot.vixDescription} La lectura combina nivel absoluto, percentil histórico y momentum reciente. La fuente es diaria y de cierre.
+              {spot.vixDescription} La lectura combina nivel absoluto, percentil histórico y momentum reciente.
             </p>
           </div>
-          <MiniVixChart history={spot.history} />
+
+          <div className="mt-7 grid gap-x-5 gap-y-4 border-y border-line py-4 sm:grid-cols-2">
+            {metrics.map(([label, value]) => (
+              <div key={label}>
+                <p className="text-[11px] uppercase tracking-[0.14em] text-muted">{label}</p>
+                <p className="mt-1 text-sm font-semibold text-ink">{value}</p>
+              </div>
+            ))}
+          </div>
         </div>
 
-        <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
-          {metrics.map(([label, value]) => (
-            <div key={label} className="border border-line bg-panelSoft p-3">
-              <p className="text-xs uppercase tracking-[0.14em] text-muted">{label}</p>
-              <p className="mt-2 font-semibold text-ink">{value}</p>
-            </div>
-          ))}
-        </div>
+        <VixLineChart history={spot.history} />
       </div>
 
-      <div className="mt-4 grid gap-3 text-sm leading-6 text-muted lg:grid-cols-2">
-          <div className="border border-line bg-panelSoft p-3">
-            <span className="block text-sm font-semibold text-ink">Interpretación prudente</span>
-            <p className="mt-2">{spot.interpretation.how}</p>
-          </div>
-          <div className="border border-line bg-panelSoft p-3">
-            <span className="block text-sm font-semibold text-ink">Qué NO significa</span>
-            <p className="mt-2">{spot.interpretation.whatItDoesNotMean}</p>
-          </div>
+      <div className="mt-6 grid gap-4 border-t border-line pt-5 text-sm leading-6 text-muted lg:grid-cols-2">
+          <p>
+            <span className="font-semibold text-ink">Interpretación prudente: </span>
+            {spot.interpretation.how}
+          </p>
+          <p>
+            <span className="font-semibold text-ink">Qué NO significa: </span>
+            {spot.interpretation.whatItDoesNotMean}
+          </p>
       </div>
 
-      <div className="mt-4 grid gap-3 border-t border-line pt-4 text-sm leading-6 text-muted md:grid-cols-3">
+      <div className="mt-5 grid gap-3 border-t border-line pt-4 text-sm leading-6 text-muted md:grid-cols-3">
         <div>
           <span className="block text-xs font-semibold uppercase tracking-[0.14em] text-brass">Fuente</span>
           {spot.sourceUrl ? (
@@ -193,10 +155,6 @@ export function VixModule({ data }: VixModuleProps) {
         </div>
       </div>
       <p className="mt-3 text-sm leading-6 text-muted">{spot.reliabilityNote}</p>
-
-      <div className="mt-5">
-        <TermStructurePanel data={data.termStructure} />
-      </div>
     </section>
   );
 }

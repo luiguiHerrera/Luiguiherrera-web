@@ -182,23 +182,29 @@ function SectorMiniChart() {
 
 function VixMiniPanel() {
   return (
-    <div className="border border-line bg-panel p-5">
-      <p className="text-xs font-semibold uppercase tracking-[0.18em] text-brass">VIX</p>
-      <div className="mt-4 flex items-start justify-between gap-4">
+    <div className="border border-line bg-panel p-5 md:p-6">
+      <div className="flex items-start justify-between gap-4">
         <div>
-          <h3 className="text-3xl font-semibold leading-none text-ink">19.9</h3>
-          <p className="mt-2 text-sm font-semibold text-ink">Vigilancia</p>
+          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-brass">VIX</p>
+          <h3 className="mt-3 text-5xl font-semibold leading-none text-ink">19.9</h3>
+          <p className="mt-3 text-sm font-semibold text-ink">Vigilancia</p>
         </div>
-        <div className="text-right text-xs leading-5 text-muted">
-          <p>Momentum: subiendo</p>
-          <p>Contexto: zona media-alta</p>
-        </div>
+        <span className="border border-[#b6905b]/40 bg-[#b6905b]/10 px-2.5 py-1 text-xs font-semibold text-[#76562d]">
+          Subiendo
+        </span>
       </div>
-      <svg viewBox="0 0 100 40" className="mt-5 h-20 w-full" preserveAspectRatio="none" aria-hidden="true">
-        <line x1="0" x2="100" y1="30" y2="30" stroke="#e7e2dc" strokeWidth="0.7" vectorEffect="non-scaling-stroke" />
-        <path d={sparklinePath(vixPreviewSeries)} fill="none" stroke="#6f8f7b" strokeWidth="1.8" vectorEffect="non-scaling-stroke" />
+      <p className="mt-4 max-w-sm text-sm leading-6 text-muted">
+        Volatilidad implícita en zona de mayor sensibilidad, sin lectura direccional por sí sola.
+      </p>
+      <svg viewBox="0 0 100 46" className="mt-6 h-28 w-full" preserveAspectRatio="none" aria-hidden="true">
+        <line x1="0" x2="100" y1="10" y2="10" stroke="#eee9e3" strokeWidth="0.7" vectorEffect="non-scaling-stroke" />
+        <line x1="0" x2="100" y1="38" y2="38" stroke="#e7e2dc" strokeWidth="0.8" vectorEffect="non-scaling-stroke" />
+        <path d={sparklinePath(vixPreviewSeries, 100, 46)} fill="none" stroke="#6f8f7b" strokeWidth="2.1" vectorEffect="non-scaling-stroke" />
       </svg>
-      <p className="mt-4 border-t border-line pt-3 text-xs leading-5 text-muted">FRED VIXCLS · último cierre disponible</p>
+      <div className="mt-3 flex justify-between border-t border-line pt-3 text-xs leading-5 text-muted">
+        <span>FRED VIXCLS</span>
+        <span>Último cierre</span>
+      </div>
     </div>
   );
 }
