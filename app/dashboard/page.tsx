@@ -75,8 +75,8 @@ export default async function DashboardPage() {
             <h3 className="text-sm font-semibold text-ink">Soportes de riesgo</h3>
             <ul className="mt-3 grid gap-2 text-sm leading-6 text-muted">
               {regimeSummary.riskSupportSignals.length > 0 ? (
-                regimeSummary.riskSupportSignals.map((signal) => (
-                  <li key={signal.label} className="border-l border-sage/70 pl-3">
+                regimeSummary.riskSupportSignals.map((signal, index) => (
+                  <li key={`support-${signal.label}-${index}`} className="border-l border-sage/70 pl-3">
                     <span className="font-semibold text-ink">{signal.label}: </span>{signal.detail}
                   </li>
                 ))
@@ -90,8 +90,8 @@ export default async function DashboardPage() {
           <div className="border border-line bg-panelSoft p-4">
             <h3 className="text-sm font-semibold text-ink">Lecturas de cautela</h3>
             <ul className="mt-3 grid gap-2 text-sm leading-6 text-muted">
-              {regimeSummary.cautionSignals.map((signal) => (
-                <li key={signal.label} className="border-l border-brass/70 pl-3">
+              {regimeSummary.cautionSignals.map((signal, index) => (
+                <li key={`caution-${signal.label}-${index}`} className="border-l border-brass/70 pl-3">
                   <span className="font-semibold text-ink">{signal.label}: </span>{signal.detail}
                 </li>
               ))}

@@ -28,8 +28,9 @@ function formatSlope(value: number | null) {
 }
 
 function classificationClass(classification: VixTermStructureData["classification"]) {
-  if (classification.includes("Backwardation")) return "border-[#a86464]/40 bg-[#a86464]/10 text-[#7b3f3f]";
-  if (classification.includes("Contango")) return "border-[#6f8f7b]/40 bg-[#6f8f7b]/10 text-[#47604f]";
+  const normalized = classification.toLowerCase();
+  if (normalized.includes("backwardation")) return "border-[#a86464]/40 bg-[#a86464]/10 text-[#7b3f3f]";
+  if (normalized.includes("contango")) return "border-[#6f8f7b]/40 bg-[#6f8f7b]/10 text-[#47604f]";
   if (classification === "Plano") return "border-[#b6905b]/40 bg-[#b6905b]/10 text-[#76562d]";
   return "border-[#a8a29e]/40 bg-[#a8a29e]/10 text-[#5f5a54]";
 }
@@ -55,6 +56,7 @@ function buildCurvePath(points: VixTermStructurePoint[]) {
 
 function TermStructureChart({ data }: { data: VixTermStructureData }) {
   const curvePath = buildCurvePath(data.points);
+  const hasCurve = Boolean(curvePath);
 
   return (
     <div className="border border-line bg-panelSoft p-4">
@@ -72,7 +74,7 @@ function TermStructureChart({ data }: { data: VixTermStructureData }) {
         <line x1="0" x2="100" y1="14" y2="14" stroke="#eee9e3" strokeWidth="0.7" vectorEffect="non-scaling-stroke" />
         <line x1="0" x2="100" y1="29" y2="29" stroke="#e7e2dc" strokeWidth="0.8" vectorEffect="non-scaling-stroke" />
         <line x1="0" x2="100" y1="44" y2="44" stroke="#eee9e3" strokeWidth="0.7" vectorEffect="non-scaling-stroke" />
-        {curvePath ? (
+        {hasCurve ? (
           <path d={curvePath} fill="none" stroke="#6f8f7b" strokeWidth="2" vectorEffect="non-scaling-stroke" />
         ) : (
           <text x="50" y="31" textAnchor="middle" className="fill-muted text-[4px]">
@@ -84,9 +86,15 @@ function TermStructureChart({ data }: { data: VixTermStructureData }) {
       <div className="mt-3 grid gap-2 sm:grid-cols-3">
         {data.points.map((point) => (
           <div key={point.label} className="border border-line bg-panel px-3 py-2">
-            <p className="text-xs uppercase tracking-[0.12em] text-muted">{point.label}</p>
+            <div className="flex items-center justify-between gap-3">
+              <p className="text-xs uppercase tracking-[0.12em] text-muted">{point.label}</p>
+              <p className="text-[10px] font-semibold uppercase tracking-[0.12em] text-muted">{point.symbol ?? "Pendiente"}</p>
+            </div>
             <p className="mt-1 font-semibold text-ink">{formatPointValue(point.value)}</p>
-            <p className="mt-1 text-xs text-muted">{point.contract ?? "Contrato pendiente"}</p>
+            <p className="mt-1 text-xs text-muted">
+              {point.contract ?? "Contrato pendiente"}
+              {point.expirationDate ? ` · ${point.expirationDate}` : ""}
+            </p>
           </div>
         ))}
       </div>
@@ -123,7 +131,7 @@ export function VixTermStructureModule({ data }: VixTermStructureModuleProps) {
 
           <p className="mt-4 text-sm leading-6 text-muted">{data.interpretation}</p>
           <p className="mt-3 border-t border-line pt-3 text-xs leading-5 text-muted">
-            Este módulo es lectura contextual y todavía no entra al score principal del régimen.
+            Lectura contextual; no incluida todavía en el score compuesto.
           </p>
         </div>
 
