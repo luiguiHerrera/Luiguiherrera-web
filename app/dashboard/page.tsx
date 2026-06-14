@@ -32,7 +32,7 @@ export default async function DashboardPage() {
         <SectionHeader
           eyebrow="Lectura de régimen"
           title="Market Regime Dashboard"
-          subtitle="No elige activos ni momentos de ejecución. Te ayuda a ordenar volatilidad, rotación y flujos."
+          subtitle="No elegimos activos ni momentos de ejecución. Te ayudamos a ordenar volatilidad, rotación y flujos."
         />
         <DisclaimerBox>
           Esta lectura no anticipa el mercado. Resume datos públicos para entender el contexto.
@@ -115,22 +115,32 @@ export default async function DashboardPage() {
         {remainingModules.map((module) => <DashboardModule key={module.id} {...module} />)}
       </div>
 
-      <section className="mt-6 border border-line bg-panel p-6">
-        <div className="max-w-3xl">
-          <h2 className="text-xl font-semibold text-ink">Radar de lecturas cruzadas</h2>
-          <p className="mt-3 leading-7 text-muted">
-            Esta tabla no muestra ideas accionables. Muestra casos donde hay lecturas públicas en tensión: short interest reportado como escepticismo o presión bajista, y presencia en 13F/superinvestors como interés institucional reportado con retraso. Son puntos de partida para investigación, no instrucciones de ejecución.
-          </p>
+      <section className="mt-6 border border-line bg-panel p-5 md:p-6">
+        <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
+          <div className="max-w-3xl">
+            <h2 className="text-xl font-semibold text-ink">Radar de lecturas cruzadas</h2>
+            <p className="mt-3 text-sm leading-6 text-muted">
+              Esta tabla no muestra ideas accionables. Cruza lecturas públicas con retraso para detectar tensiones que pueden servir como punto de partida de investigación.
+            </p>
+          </div>
+          <span className="w-fit border border-line bg-panelSoft px-3 py-1 text-xs font-semibold text-muted">
+            Actualización manual
+          </span>
         </div>
-        <div className="mt-6 overflow-x-auto">
+
+        <p className="mt-4 border border-line bg-panelSoft px-3 py-2 text-xs leading-5 text-muted">
+          Modo de actualización: manual/curado hasta activar fuentes automatizadas estables.
+        </p>
+
+        <div className="mt-5 overflow-x-auto">
           <table className="w-full min-w-[980px] border-collapse text-left text-[13px]">
             <thead className="text-muted">
               <tr className="border-b border-line">
                 <th className="py-2.5 pr-4 font-medium">Ticker</th>
-                <th className="py-2.5 pr-4 font-medium">Short interest</th>
-                <th className="py-2.5 pr-4 font-medium">Presencia institucional</th>
+                <th className="py-2.5 pr-4 font-medium">Short interest reportado</th>
+                <th className="py-2.5 pr-4 font-medium">Presencia institucional / 13F</th>
                 <th className="py-2.5 pr-4 font-medium">Fecha short interest</th>
-                <th className="py-2.5 pr-4 font-medium">Fecha 13F</th>
+                <th className="py-2.5 pr-4 font-medium">Fecha 13F o última revisión</th>
                 <th className="py-2.5 pr-4 font-medium">Estado</th>
                 <th className="py-2.5 pr-4 font-medium">Nota prudente</th>
               </tr>
@@ -143,15 +153,20 @@ export default async function DashboardPage() {
                   <td className="py-3 pr-4 text-muted">{row.institutionalPresence}</td>
                   <td className="py-3 pr-4 text-muted">{row.shortInterestDate}</td>
                   <td className="py-3 pr-4 text-muted">{row.form13FDate}</td>
-                  <td className="py-3 pr-4 text-muted">{dataStatusLabels[row.dataStatus]}</td>
+                  <td className="py-3 pr-4">
+                    <span className="border border-line bg-panelSoft px-2 py-1 text-xs font-semibold text-muted">
+                      Actualización manual
+                    </span>
+                  </td>
                   <td className="py-3 pr-4 text-muted">{row.note}</td>
                 </tr>
               ))}
             </tbody>
           </table>
         </div>
+
         <p className="mt-5 border-t border-line pt-4 text-sm leading-6 text-muted">
-          Fuente conceptual: short interest reportado y formularios 13F. Los datos tienen retrasos, cobertura incompleta y metodología variable.
+          Fuentes conceptuales: short interest reportado, formularios 13F y reportes institucionales con retraso. La cobertura puede ser incompleta y las fechas pueden diferir entre proveedores.
         </p>
       </section>
 

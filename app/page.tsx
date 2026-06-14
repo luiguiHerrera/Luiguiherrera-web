@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { ToolCard } from "@/components/ui/ToolCard";
+import { TypewriterPrinciples } from "@/components/home/TypewriterPrinciples";
 
 const principles = [
   ["Entender el contexto", "Datos que explican lo que realmente importa."],
@@ -55,6 +56,11 @@ const sectorPreviewRows = [
 const vixPreviewSeries = [15.3, 16.8, 17.4, 18.1, 17.7, 19.2, 18.6, 19.9];
 const btcFlowPreview = [0, -220, -420, -35, -842, 7, -12, -426, -83];
 
+const statisticalLevelsPreview = [
+  { ticker: "SPY", percentile: 72, zScore: "+0.8", distance: "+6.4%" },
+  { ticker: "GLD", percentile: 84, zScore: "+1.2", distance: "+9.1%" },
+  { ticker: "IBIT", percentile: 38, zScore: "-0.3", distance: "-2.6%" },
+];
 
 const quantRows = [
   ["TD3 Trend", "Seguimiento de tendencia", "Direccional", "2.41%", "6.78%", "1.32", "-6.21%", "Activo"],
@@ -242,6 +248,44 @@ function BtcFlowsMiniPanel() {
   );
 }
 
+function StatisticalLevelsMiniPanel() {
+  return (
+    <div className="border border-line bg-panel p-5 md:p-6">
+      <div className="flex items-start justify-between gap-4">
+        <div>
+          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-brass">Niveles estadísticos</p>
+          <h3 className="mt-2 font-semibold text-ink">Posición actual frente a su propio historial</h3>
+        </div>
+        <Link href="/niveles-estadisticos" className="shrink-0 text-xs font-semibold text-ink underline-offset-4 hover:underline">
+          Abrir laboratorio
+        </Link>
+      </div>
+
+      <div className="mt-5 grid gap-3">
+        {statisticalLevelsPreview.map((asset) => (
+          <div key={asset.ticker} className="grid gap-2 border-b border-line/70 pb-3 last:border-b-0 last:pb-0">
+            <div className="flex items-center justify-between gap-4">
+              <span className="font-semibold text-ink">{asset.ticker}</span>
+              <span className="text-xs text-muted">Percentil {asset.percentile}</span>
+            </div>
+            <div className="h-1.5 border border-line bg-panelSoft">
+              <div className="h-full bg-[#6f8f7b]" style={{ width: `${asset.percentile}%` }} />
+            </div>
+            <div className="grid grid-cols-2 gap-3 text-xs text-muted">
+              <span>z-score <strong className="font-semibold text-ink">{asset.zScore}</strong></span>
+              <span className="text-right">media larga <strong className="font-semibold text-ink">{asset.distance}</strong></span>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <p className="mt-4 border-t border-line pt-3 text-xs leading-5 text-muted">
+        Vista resumida del laboratorio. Las lecturas comparan cada activo contra su propio historial y no representan una instrucción de inversión.
+      </p>
+    </div>
+  );
+}
+
 export default function Home() {
   return (
     <div>
@@ -249,17 +293,15 @@ export default function Home() {
         <div className="mx-auto grid min-h-[560px] max-w-7xl grid-cols-1 px-5 py-14 md:min-h-[650px] md:py-20 lg:grid-cols-[0.7fr_1fr] lg:items-center">
           <div className="relative z-20 max-w-2xl">
             <h1 className="text-4xl font-semibold leading-[1.02] text-ink md:text-6xl">
-              Herramientas para invertir con más criterio y menos impulso
+              Antes de invertir, entiende cómo respira el mercado
             </h1>
-            <p className="mt-7 max-w-xl text-base leading-7 text-muted md:text-lg">
-              Entiende el contexto. Gestiona el riesgo. Toma decisiones basadas en datos, no en ruido.
-            </p>
+            <TypewriterPrinciples />
             <div className="mt-8 flex flex-wrap gap-4">
               <Link href="/dashboard" className="border border-ink bg-ink px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-panel hover:text-ink">
-                Explorar dashboard
+                Ver régimen de mercado
               </Link>
               <Link href="/diagnostico" className="border border-line bg-panel px-5 py-2.5 text-sm font-semibold text-ink transition hover:border-ink">
-                Empezar diagnóstico
+                Diagnosticar mi perfil
               </Link>
             </div>
           </div>
@@ -282,7 +324,7 @@ export default function Home() {
         <div className="mx-auto grid max-w-7xl gap-8 px-5 py-8 md:grid-cols-[0.35fr_1fr_0.95fr] md:items-start">
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-brass">Nuestra filosofía</p>
           <p className="text-xl leading-8 text-ink md:text-2xl">
-            Los mercados cambian. El riesgo también. Esta plataforma te ayuda a ver el panorama completo antes de tomar decisiones.
+            El mercado cambia rápido. El riesgo también. La ventaja está en tener un proceso antes de actuar.
           </p>
           <div className="grid gap-4 md:grid-cols-3">
             {principles.map(([title, text]) => (
@@ -321,6 +363,7 @@ export default function Home() {
                 <VixMiniPanel />
                 <BtcFlowsMiniPanel />
               </div>
+              <StatisticalLevelsMiniPanel />
             </div>
           </div>
 

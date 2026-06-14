@@ -67,33 +67,50 @@ function recentWindowsLabel(flows: BtcEtfFlowsData) {
 
 function buildBarPath(history: BtcEtfFlowPoint[]) {
   const maxAbs = Math.max(...history.map((point) => Math.abs(point.totalNetFlow)), 1);
-  return { maxAbs };
+  const cumulative = history.reduce<number[]>((acc, point) => {
+    const previous = acc.at(-1) ?? 0;
+    acc.push(previous + point.totalNetFlow);
+    return acc;
+  }, []);
+  const cumulativeMin = cumulative.length ? Math.min(...cumulative) : 0;
+  const cumulativeMax = cumulative.length ? Math.max(...cumulative) : 0;
+  const cumulativeRange = Math.max(cumulativeMax - cumulativeMin, 1);
+  const cumulativePath = cumulative
+    .map((value, index) => {
+      const x = history.length <= 1 ? 50 : (index / (history.length - 1)) * 100;
+      const y = 10 + (1 - (value - cumulativeMin) / cumulativeRange) * 28;
+      return `${index === 0 ? "M" : "L"} ${x.toFixed(2)} ${y.toFixed(2)}`;
+    })
+    .join(" ");
+
+  return { cumulativePath, maxAbs };
 }
 
-function FlowBarChart({ compact = false, history }: { compact?: boolean; history: BtcEtfFlowPoint[] }) {
-  const { maxAbs } = buildBarPath(history);
+function FlowBarChart({ history }: { history: BtcEtfFlowPoint[] }) {
+  const { cumulativePath, maxAbs } = buildBarPath(history);
   const width = 100;
-  const height = 56;
+  const height = 62;
   const gap = 0.8;
   const barWidth = history.length ? Math.max((width - gap * (history.length - 1)) / history.length, 1.2) : 1.2;
 
   return (
-    <div className={compact ? "mt-4" : "border border-line bg-panelSoft p-4"}>
+    <div className="min-w-0">
       <div className="flex items-start justify-between gap-4">
         <div>
           <p className="text-xs font-semibold uppercase tracking-[0.14em] text-brass">Últimas sesiones</p>
-          <h3 className="mt-1 text-sm font-semibold text-ink">Flujo neto diario</h3>
+          <h3 className="mt-1 text-sm font-semibold text-ink">Flujo neto diario y acumulado disponible</h3>
         </div>
         <p className="max-w-[12rem] text-right text-xs leading-5 text-muted">US$ millones, según disponibilidad de la fuente</p>
       </div>
 
-      <svg viewBox={`0 0 ${width} ${height}`} className={`${compact ? "h-24" : "h-32"} mt-3 w-full`} preserveAspectRatio="none" aria-hidden="true">
-        <line x1="0" x2="100" y1="28" y2="28" stroke="#d8d1c8" strokeWidth="0.8" vectorEffect="non-scaling-stroke" />
+      <svg viewBox={`0 0 ${width} ${height}`} className="mt-4 h-56 w-full" preserveAspectRatio="none" aria-hidden="true">
+        <line x1="0" x2="100" y1="38" y2="38" stroke="#d8d1c8" strokeWidth="0.8" vectorEffect="non-scaling-stroke" />
+        {cumulativePath ? <path d={cumulativePath} fill="none" stroke="#7d8f9a" strokeWidth="1.4" vectorEffect="non-scaling-stroke" /> : null}
         {history.map((point, index) => {
-          const magnitude = (Math.abs(point.totalNetFlow) / maxAbs) * 24;
+          const magnitude = (Math.abs(point.totalNetFlow) / maxAbs) * 20;
           const x = index * (barWidth + gap);
           const isPositive = point.totalNetFlow > 0;
-          const y = isPositive ? 28 - magnitude : 28;
+          const y = isPositive ? 38 - magnitude : 38;
           const fill = isPositive ? "#6f8f7b" : point.totalNetFlow < 0 ? "#a86464" : "#a8a29e";
 
           return (
@@ -103,7 +120,7 @@ function FlowBarChart({ compact = false, history }: { compact?: boolean; history
               y={y}
               width={barWidth}
               height={Math.max(magnitude, 0.8)}
-              rx="0.8"
+              rx="1"
               fill={fill}
             />
           );
@@ -129,60 +146,60 @@ export function BtcEtfFlowsModule({ data }: BtcEtfFlowsModuleProps) {
   ];
 
   return (
-    <section className="border border-line bg-panel p-4 md:p-5">
-      <div className="grid gap-5 xl:grid-cols-[0.88fr_1.12fr] xl:items-start">
-        <div className="border border-line bg-panelSoft p-4">
+    <section className="border border-line bg-panel p-5 md:p-6">
+      <div className="grid gap-8 xl:grid-cols-[0.42fr_0.58fr] xl:items-start">
+        <div>
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-brass">BTC ETF flows</p>
-          <h2 className="mt-2 text-xl font-semibold text-ink">Presión de flujos vía ETFs</h2>
+          <h2 className="mt-2 text-2xl font-semibold text-ink">Presión de flujos vía ETFs</h2>
           <p className="mt-3 text-sm leading-6 text-muted">
-            Los flujos de ETFs spot de Bitcoin ayudan a observar demanda o reducción de exposición a través de vehículos regulados en EE. UU. Son una lectura de presión de flujos, no una anticipación del precio de Bitcoin.
+            Los flujos muestran entradas o salidas netas reportadas en ETFs spot de Bitcoin. Son una lectura de presión de exposición, no una predicción del precio de Bitcoin.
           </p>
 
-          <div className="mt-4">
-            <p className="text-xs font-semibold uppercase tracking-[0.14em] text-brass">Flujo neto último día</p>
-            <div className="mt-3 flex flex-wrap items-end gap-3">
-              <span className="text-4xl font-semibold leading-none text-ink md:text-5xl">{formatUsdMillions(flows.latestTotalNetFlow)}</span>
-              <span className={`mb-1 border px-3 py-1 text-sm font-semibold ${severityClass(flows.readingSeverity)}`}>
+          <div className="mt-8">
+            <div className="flex flex-wrap items-end gap-3">
+              <span className="text-5xl font-semibold leading-none text-ink md:text-6xl">{formatUsdMillions(flows.latestTotalNetFlow)}</span>
+              <span className={`mb-2 border px-3 py-1 text-sm font-semibold ${severityClass(flows.readingSeverity)}`}>
                 {flows.readingLabel}
               </span>
             </div>
-            <p className="mt-3 font-semibold text-ink">{flows.readingSubtext}</p>
-            <p className="mt-4 text-sm leading-6 text-muted">
+            <p className="mt-4 font-semibold text-ink">{flows.readingSubtext}</p>
+            <p className="mt-3 text-sm leading-6 text-muted">
               Lectura aproximada basada en flujos netos diarios y acumulados recientes. Última fecha detectada: {flows.latestDate}.
             </p>
           </div>
-          <FlowBarChart compact history={flows.history} />
+
+          <div className="mt-7 grid gap-x-5 gap-y-4 border-y border-line py-4 sm:grid-cols-2">
+            {metrics.map(([label, value]) => (
+              <div key={label}>
+                <p className="text-[11px] uppercase tracking-[0.14em] text-muted">{label}</p>
+                <p className="mt-1 text-sm font-semibold text-ink">{value}</p>
+              </div>
+            ))}
+          </div>
         </div>
 
-        <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
-          {metrics.map(([label, value]) => (
-            <div key={label} className="border border-line bg-panelSoft p-3">
-              <p className="text-xs uppercase tracking-[0.14em] text-muted">{label}</p>
-              <p className="mt-2 font-semibold text-ink">{value}</p>
-            </div>
-          ))}
-        </div>
+        <FlowBarChart history={flows.history} />
       </div>
 
-      <div className="mt-4 grid gap-3 text-sm leading-6 text-muted lg:grid-cols-3">
-        <div className="border border-line bg-panelSoft p-3">
+      <div className="mt-6 grid gap-4 border-t border-line pt-5 text-sm leading-6 text-muted lg:grid-cols-3">
+        <div>
           <span className="block text-sm font-semibold text-ink">Driver dominante</span>
           <p className="mt-2">{flows.dominantFlowDriver}</p>
           <p className="mt-2 text-xs">{levelLabel(flows.dailyLevel)} · {recentWindowsLabel(flows)}</p>
         </div>
-        <div className="border border-line bg-panelSoft p-3">
+        <div>
           <span className="block text-sm font-semibold text-ink">Breadth último día</span>
           <p className="mt-2">
             {flows.breadth.positive} con entrada · {flows.breadth.negative} con salida · {flows.breadth.flatOrMissing} sin dato o sin cambio
           </p>
         </div>
-        <div className="border border-line bg-panelSoft p-3">
+        <div>
           <span className="block text-sm font-semibold text-ink">Lectura resumida</span>
           <p className="mt-2">{flows.interpretation.how}</p>
         </div>
       </div>
 
-      <div className="mt-4 border border-line bg-panelSoft p-3 text-sm leading-6 text-muted">
+      <div className="mt-5 border-t border-line pt-4 text-sm leading-6 text-muted">
         <span className="font-semibold text-ink">Qué NO significa: </span>
         {flows.interpretation.whatItDoesNotMean}
       </div>
