@@ -4,9 +4,9 @@ import { ToolCard } from "@/components/ui/ToolCard";
 import { TypewriterPrinciples } from "@/components/home/TypewriterPrinciples";
 
 const principles = [
-  ["Entender el contexto", "Datos que explican lo que realmente importa."],
-  ["Gestionar el riesgo", "No se trata de acertar, sino de sobrevivir y avanzar."],
-  ["Decidir con criterio", "Menos impulso. Más proceso."],
+  ["Entender el contexto", "Leer el tablero antes de mover la ficha."],
+  ["Gestionar el riesgo", "Regla número 1: nunca pierdas dinero."],
+  ["Decidir con criterio", "Menos reacción. Más método."],
 ];
 
 const tools = [
@@ -32,7 +32,7 @@ const tools = [
     title: "Protege tu dinero",
     label: "04",
     href: "/protege-tu-dinero",
-    description: "Estrategias y checklist para preservar tu capital en la tormenta.",
+    description: "Checklist para detectar señales raras antes de entregar capital.",
   },
 ];
 
@@ -135,6 +135,9 @@ function RegimePreviewPanel() {
       <p className="mt-6 border-t border-line pt-4 text-xs leading-5 text-muted">
         FedWatch queda como contexto pendiente hasta confirmar fuente automatizada estable.
       </p>
+      <div className="mt-6">
+        <StatisticalLevelsMiniPanel />
+      </div>
     </div>
   );
 }
@@ -324,7 +327,7 @@ export default function Home() {
         <div className="mx-auto grid max-w-7xl gap-8 px-5 py-8 md:grid-cols-[0.35fr_1fr_0.95fr] md:items-start">
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-brass">Nuestra filosofía</p>
           <p className="text-xl leading-8 text-ink md:text-2xl">
-            El mercado cambia rápido. El riesgo también. La ventaja está en tener un proceso antes de actuar.
+            El mercado cambia rápido. El riesgo también. El edge está en tener la informacion organizada para las decisiones adecuadas.
           </p>
           <div className="grid gap-4 md:grid-cols-3">
             {principles.map(([title, text]) => (
@@ -363,7 +366,6 @@ export default function Home() {
                 <VixMiniPanel />
                 <BtcFlowsMiniPanel />
               </div>
-              <StatisticalLevelsMiniPanel />
             </div>
           </div>
 
