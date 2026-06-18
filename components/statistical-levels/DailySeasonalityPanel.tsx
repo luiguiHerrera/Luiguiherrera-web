@@ -4,6 +4,7 @@ import { useMemo, useState } from "react";
 import { PresidentialCycleSeasonality } from "@/components/statistical-levels/PresidentialCycleSeasonality";
 import { SeasonalityHeatmap } from "@/components/statistical-levels/SeasonalityHeatmap";
 import { SeasonalityMonthExplorer } from "@/components/statistical-levels/SeasonalityMonthExplorer";
+import { ExpandableInsightCard } from "@/components/ui/ExpandableInsightCard";
 import type { AssetCatalogItem, DailySeasonalityData, PresidentialCyclePhase, SeasonalityWindow } from "@/lib/statistical-levels/types";
 
 type DailySeasonalityPanelProps = {
@@ -29,19 +30,30 @@ export function DailySeasonalityPanel({ catalog, data, generatedAt, initialTicke
 
   const selectedAsset = useMemo(() => catalog.find((asset) => asset.ticker === (data?.asset ?? initialTicker)), [catalog, data?.asset, initialTicker]);
   const windowData = data?.windows[window] ?? null;
+  const monthCells = windowData?.general.filter((cell) => cell.month === month && cell.sampleSize > 0) ?? [];
+  const averageMonthReturn =
+    monthCells.length > 0 ? monthCells.reduce((sum, cell) => sum + (cell.averageReturn ?? 0), 0) / monthCells.length : null;
+  const medianSample = monthCells.length > 0 ? Math.round(monthCells.reduce((sum, cell) => sum + cell.sampleSize, 0) / monthCells.length) : 0;
+
+  function formatPercent(value: number | null) {
+    if (value === null) return "n/d";
+    return `${value > 0 ? "+" : ""}${(value * 100).toFixed(2)}%`;
+  }
 
   return (
-    <section className="border border-line bg-panel p-4 md:p-5">
-      <div className="flex flex-col gap-5 xl:flex-row xl:items-start xl:justify-between">
-        <div>
-          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-brass">Estacionalidad diaria</p>
-          <h2 className="mt-2 text-xl font-semibold text-ink">Patrones históricos por día del mes</h2>
-          <p className="mt-2 max-w-3xl text-sm leading-6 text-muted">
-            Muestra patrones históricos por día del mes. Úsalo como contexto, junto con régimen, riesgo y precio actual.
-          </p>
-        </div>
-
-        <div className="grid gap-3 sm:grid-cols-2 xl:min-w-[24rem]">
+    <ExpandableInsightCard
+      eyebrow="Estacionalidad diaria"
+      title="Patrones históricos por día del mes"
+      reading="Ubica el comportamiento diario del activo seleccionado por ventana histórica y mes calendario."
+      status={selectedAsset ? selectedAsset.ticker : data?.asset ?? "n/d"}
+      metrics={[
+        { label: "Ventana", value: window },
+        { label: "Mes", value: monthNames[month - 1] },
+        { label: "Promedio diario del mes", value: formatPercent(averageMonthReturn), tone: averageMonthReturn !== null && averageMonthReturn >= 0 ? "sage" : "danger" },
+        { label: "Muestra media", value: medianSample ? `N ${medianSample}` : "n/d" },
+      ]}
+      summaryExtra={
+        <div className="grid gap-2.5 sm:grid-cols-2 xl:max-w-[24rem]">
           <label className="grid gap-1 text-xs font-semibold uppercase tracking-[0.12em] text-muted">
             Ventana
             <select
@@ -63,7 +75,8 @@ export function DailySeasonalityPanel({ catalog, data, generatedAt, initialTicke
             </select>
           </label>
         </div>
-      </div>
+      }
+    >
 
       <div className="mt-4 grid gap-3 border-y border-line py-3 text-sm leading-6 text-muted md:grid-cols-3">
         <p><span className="font-semibold text-ink">Activo:</span> {selectedAsset ? `${selectedAsset.ticker} · ${selectedAsset.name}` : data?.asset ?? "n/d"}</p>
@@ -72,9 +85,9 @@ export function DailySeasonalityPanel({ catalog, data, generatedAt, initialTicke
       </div>
 
       {windowData ? (
-        <div className="mt-5 grid gap-5">
+        <div className="mt-4 grid gap-4 md:mt-5 md:gap-5">
           <SeasonalityMonthExplorer cells={windowData.general} month={month} />
-          <div className="border border-line bg-panelSoft p-4">
+          <div className="border border-line bg-panelSoft p-3.5 md:p-4">
             <div>
               <p className="text-xs font-semibold uppercase tracking-[0.16em] text-brass">Heatmap</p>
               <h3 className="mt-2 text-lg font-semibold text-ink">Retorno promedio diario por mes</h3>
@@ -88,6 +101,6 @@ export function DailySeasonalityPanel({ catalog, data, generatedAt, initialTicke
           Historial insuficiente para construir estacionalidad diaria de este activo.
         </div>
       )}
-    </section>
+    </ExpandableInsightCard>
   );
 }

@@ -17,7 +17,7 @@ export function AssetSelector({ catalog, query, selected, setQuery, selectAsset 
   const filtered = catalog.filter((asset) => `${asset.ticker} ${asset.name} ${asset.category}`.toLowerCase().includes(normalized));
 
   return (
-    <section className="border border-line bg-panel p-4 md:p-5">
+    <section className="border border-line bg-panel p-3.5 md:p-5">
       <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
         <div>
           <p className="text-xs font-semibold uppercase tracking-[0.18em] text-brass">Selector</p>
@@ -35,14 +35,14 @@ export function AssetSelector({ catalog, query, selected, setQuery, selectAsset 
         </label>
       </div>
 
-      <div className="mt-6 grid gap-5">
+      <div className="mt-5 grid gap-4 md:mt-6 md:gap-5">
         {categoryOrder.map((category) => {
           const assets = filtered.filter((asset) => asset.category === category);
           if (!assets.length) return null;
           return (
             <div key={category}>
               <p className="mb-3 text-xs font-semibold uppercase tracking-[0.14em] text-muted">{category}</p>
-              <div className="flex flex-wrap gap-2">
+              <div className="flex max-h-48 flex-wrap gap-1.5 overflow-y-auto pr-1 md:max-h-none md:gap-2 md:overflow-visible md:pr-0">
                 {assets.map((asset) => {
                   const active = selected.includes(asset.ticker);
                   return (
@@ -51,7 +51,7 @@ export function AssetSelector({ catalog, query, selected, setQuery, selectAsset 
                       type="button"
                       onClick={() => selectAsset(asset.ticker)}
                       title={asset.name}
-                      className={`border px-3 py-2 text-sm font-semibold transition ${active ? "border-petrol bg-[#eef3f2] text-petrol" : "border-line bg-panelSoft text-muted hover:border-ink hover:text-ink"}`}
+                      className={`border px-2.5 py-1.5 text-xs font-semibold transition md:px-3 md:py-2 md:text-sm ${active ? "border-petrol bg-[#eef3f2] text-petrol" : "border-line bg-panelSoft text-muted hover:border-ink hover:text-ink"}`}
                     >
                       {asset.ticker}
                     </button>

@@ -1,3 +1,4 @@
+import { ExpandableInsightCard } from "@/components/ui/ExpandableInsightCard";
 import type { VixTermStructureData, VixTermStructurePoint, VixTermStructureSourceStatus } from "@/lib/dashboard/types";
 
 type VixTermStructureModuleProps = {
@@ -111,7 +112,18 @@ export function VixTermStructureModule({ data }: VixTermStructureModuleProps) {
   ];
 
   return (
-    <section className="border border-line bg-panel p-4 md:p-5">
+    <ExpandableInsightCard
+      eyebrow="VIX term structure"
+      title="Contango / Backwardation"
+      reading={data.interpretation}
+      status={sourceStatusLabels[data.sourceStatus]}
+      metrics={[
+        { label: "Clasificación", value: data.classification, tone: data.classification.toLowerCase().includes("backwardation") ? "danger" : data.classification.toLowerCase().includes("contango") ? "sage" : "brass" },
+        { label: "Spread VX2-VX1", value: formatSpread(data.m1m2Spread) },
+        { label: "Pendiente VX1-VX2", value: formatSlope(data.m1m2SlopePct) },
+        { label: "Spread VX3-VX1", value: formatSpread(data.m1m3Spread) },
+      ]}
+    >
       <div className="grid gap-5 xl:grid-cols-[0.88fr_1.12fr] xl:items-start">
         <div className="border border-line bg-panelSoft p-4">
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-brass">VIX term structure</p>
@@ -131,7 +143,7 @@ export function VixTermStructureModule({ data }: VixTermStructureModuleProps) {
 
           <p className="mt-4 text-sm leading-6 text-muted">{data.interpretation}</p>
           <p className="mt-3 border-t border-line pt-3 text-xs leading-5 text-muted">
-            Lectura contextual; no incluida todavía en el score compuesto.
+            Lectura contextual para ubicar la demanda relativa de protección entre vencimientos cercanos.
           </p>
         </div>
 
@@ -178,6 +190,6 @@ export function VixTermStructureModule({ data }: VixTermStructureModuleProps) {
           <span className="mt-1 block text-ink">{sourceStatusLabels[data.sourceStatus]}</span>
         </div>
       </div>
-    </section>
+    </ExpandableInsightCard>
   );
 }

@@ -12,8 +12,8 @@ export default async function NivelesEstadisticosPage({ searchParams }: NivelesE
   const { asset, manifest, seasonality, selection } = await getStatisticalLevelsPageData(resolvedSearchParams);
 
   return (
-    <div className="mx-auto max-w-7xl px-5 py-10 md:py-14">
-      <div className="grid gap-8 lg:grid-cols-[1fr_0.76fr] lg:items-end">
+    <div className="mx-auto max-w-7xl px-4 py-8 md:px-5 md:py-14">
+      <div className="grid gap-5 md:gap-8 lg:grid-cols-[1fr_0.76fr] lg:items-end">
         <SectionHeader
           eyebrow="Laboratorio"
           title="Laboratorio de niveles estadísticos"
@@ -24,7 +24,7 @@ export default async function NivelesEstadisticosPage({ searchParams }: NivelesE
         </DisclaimerBox>
       </div>
 
-      <div className="mt-8 grid gap-4 border-y border-line py-5 text-sm leading-6 text-muted md:grid-cols-3">
+      <div className="mt-6 grid gap-4 border-y border-line py-4 text-sm leading-6 text-muted md:mt-8 md:grid-cols-3 md:py-5">
         <div>
           <span className="block text-xs font-semibold uppercase tracking-[0.14em] text-brass">Datos actualizados hasta</span>
           <span className="mt-1 block font-semibold text-ink">{manifest.generatedAt}</span>
@@ -41,7 +41,7 @@ export default async function NivelesEstadisticosPage({ searchParams }: NivelesE
         </div>
       </div>
 
-      <div className="mt-8">
+      <div className="mt-6 md:mt-8">
         <StatLevelsLab asset={asset} manifest={manifest} seasonality={seasonality} selection={selection} />
       </div>
     </div>

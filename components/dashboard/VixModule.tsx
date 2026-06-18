@@ -1,4 +1,5 @@
 import { dataStatusLabels } from "@/lib/dashboard/status";
+import { ExpandableInsightCard } from "@/components/ui/ExpandableInsightCard";
 import type { VixDashboardData, VixHistoryPoint, VixSpotData } from "@/lib/dashboard/types";
 
 type VixModuleProps = {
@@ -88,29 +89,25 @@ export function VixModule({ data }: VixModuleProps) {
   ];
 
   return (
-    <section className="border border-line bg-panel p-5 md:p-6">
+    <ExpandableInsightCard
+      eyebrow="VIX"
+      title="Presión de volatilidad"
+      reading={spot.vixCompositeSubtext}
+      status={dataStatusLabels[spot.dataStatus]}
+      metrics={[
+        { label: "VIX actual", value: formatNumber(spot.latestVix), tone: spot.vixSeverity === "watch" ? "brass" : spot.vixSeverity === "normal" || spot.vixSeverity === "low" ? "sage" : "danger" },
+        { label: "Clasificación", value: spot.vixCompositeLabel },
+        { label: "Momentum", value: trendLabel(spot.vixTrend) },
+        { label: "Percentil", value: spot.vixPercentile === null ? spot.vixPercentileLabel : `${spot.vixPercentileLabel} · p${Math.round(spot.vixPercentile)}` },
+      ]}
+    >
       <div className="grid gap-8 xl:grid-cols-[0.42fr_0.58fr] xl:items-start">
-        <div>
-          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-brass">VIX</p>
-          <h2 className="mt-2 text-2xl font-semibold text-ink">Presión de volatilidad</h2>
-          <p className="mt-3 max-w-xl text-sm leading-6 text-muted">
-            El VIX resume volatilidad implícita del S&amp;P 500. Es una lectura de presión de riesgo, no de dirección del mercado.
+        <div className="border border-line bg-panel p-4">
+          <p className="text-xs font-semibold uppercase tracking-[0.16em] text-brass">Lectura ampliada</p>
+          <p className="mt-3 text-sm leading-6 text-muted">
+            {spot.vixDescription} La lectura combina nivel absoluto, percentil histórico y momentum reciente.
           </p>
-
-          <div className="mt-8">
-            <div className="flex flex-wrap items-end gap-3">
-              <span className="text-6xl font-semibold leading-none text-ink md:text-7xl">{formatNumber(spot.latestVix)}</span>
-              <span className={`mb-2 border px-3 py-1 text-sm font-semibold ${severityClass(spot.vixSeverity)}`}>
-                {spot.vixCompositeLabel}
-              </span>
-            </div>
-            <p className="mt-4 text-base font-semibold text-ink">{spot.vixCompositeSubtext}</p>
-            <p className="mt-3 text-sm leading-6 text-muted">
-              {spot.vixDescription} La lectura combina nivel absoluto, percentil histórico y momentum reciente.
-            </p>
-          </div>
-
-          <div className="mt-7 grid gap-x-5 gap-y-4 border-y border-line py-4 sm:grid-cols-2">
+          <div className="mt-5 grid gap-x-5 gap-y-4 border-y border-line py-4 sm:grid-cols-2">
             {metrics.map(([label, value]) => (
               <div key={label}>
                 <p className="text-[11px] uppercase tracking-[0.14em] text-muted">{label}</p>
@@ -119,7 +116,6 @@ export function VixModule({ data }: VixModuleProps) {
             ))}
           </div>
         </div>
-
         <VixLineChart history={spot.history} />
       </div>
 
@@ -155,6 +151,6 @@ export function VixModule({ data }: VixModuleProps) {
         </div>
       </div>
       <p className="mt-3 text-sm leading-6 text-muted">{spot.reliabilityNote}</p>
-    </section>
+    </ExpandableInsightCard>
   );
 }

@@ -51,7 +51,7 @@ export function MlFeaturesPanel({ assets, frequency, focusAsset }: MlFeaturesPan
           onClick={() => setOpen((value) => !value)}
           className="min-h-9 w-fit border border-line px-4 text-sm font-semibold text-ink transition hover:border-ink focus:outline-none focus:ring-2 focus:ring-ink/20"
         >
-          {open ? "Ocultar variables" : "Ver variables cuantitativas"}
+          {open ? "Contraer contexto" : "Ampliar contexto"}
         </button>
       </div>
       <p className="mt-3 max-w-3xl text-sm leading-6 text-muted">

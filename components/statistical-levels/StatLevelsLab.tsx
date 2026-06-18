@@ -64,10 +64,10 @@ export function StatLevelsLab({ asset, manifest, seasonality, selection }: StatL
   }
 
   return (
-    <div className="space-y-5">
-      <section className="grid gap-4 md:grid-cols-3">
+    <div className="min-w-0 space-y-4 md:space-y-5">
+      <section className="grid gap-3 md:grid-cols-3 md:gap-4">
         {Object.entries(statusCounts).map(([status, count]) => (
-          <div key={status} className="border border-line bg-panel p-4">
+          <div key={status} className="border border-line bg-panel p-3.5 md:p-4">
             <p className="text-xs uppercase tracking-[0.14em] text-muted">{statusLabels[status as AssetDataStatus]}</p>
             <p className="mt-2 text-xl font-semibold text-ink">{count}</p>
           </div>
@@ -76,7 +76,7 @@ export function StatLevelsLab({ asset, manifest, seasonality, selection }: StatL
 
       <AssetSelector catalog={manifest.catalog} query={query} selected={[asset.ticker]} setQuery={setQuery} selectAsset={(ticker) => navigate({ asset: ticker })} />
 
-      <section className="border border-line bg-panel p-4 md:p-5">
+      <section className="border border-line bg-panel p-3.5 md:p-5">
         <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
           <div>
             <p className="text-xs font-semibold uppercase tracking-[0.18em] text-brass">Frecuencia y ventana comparable</p>
@@ -86,26 +86,26 @@ export function StatLevelsLab({ asset, manifest, seasonality, selection }: StatL
               No implica dirección futura por sí sola.
             </p>
           </div>
-          <div className="flex flex-col gap-3">
-            <div className="flex w-fit flex-wrap border border-line bg-panelSoft p-1">
+          <div className="flex min-w-0 flex-col gap-2.5 md:gap-3">
+            <div className="flex w-full flex-wrap border border-line bg-panelSoft p-1 sm:w-fit">
               {manifest.frequencies.map((item) => (
                 <button
                   key={item}
                   type="button"
                   onClick={() => navigate({ frequency: item })}
-                  className={`min-h-9 px-4 text-sm font-semibold transition ${frequency === item ? "bg-ink text-white" : "text-muted hover:text-ink"}`}
+                  className={`min-h-9 flex-1 px-3 text-sm font-semibold transition sm:flex-none md:px-4 ${frequency === item ? "bg-ink text-white" : "text-muted hover:text-ink"}`}
                 >
                   {frequencyLabels[item]}
                 </button>
               ))}
             </div>
-            <div className="flex w-fit flex-wrap border border-line bg-panelSoft p-1">
+            <div className="flex w-full flex-wrap border border-line bg-panelSoft p-1 sm:w-fit">
               {manifest.windows.map((item) => (
                 <button
                   key={item}
                   type="button"
                   onClick={() => navigate({ window: item })}
-                  className={`min-h-9 px-4 text-sm font-semibold transition ${window === item ? "bg-ink text-white" : "text-muted hover:text-ink"}`}
+                  className={`min-h-9 flex-1 px-3 text-sm font-semibold transition sm:flex-none md:px-4 ${window === item ? "bg-ink text-white" : "text-muted hover:text-ink"}`}
                 >
                   {item}
                 </button>

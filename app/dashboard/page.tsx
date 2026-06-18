@@ -7,6 +7,7 @@ import { SectorRotationChart } from "@/components/dashboard/SectorRotationChart"
 import { VixModule } from "@/components/dashboard/VixModule";
 import { VixTermStructureModule } from "@/components/dashboard/VixTermStructureModule";
 import { DisclaimerBox } from "@/components/ui/DisclaimerBox";
+import { ExpandableInsightCard } from "@/components/ui/ExpandableInsightCard";
 import { MetricCard } from "@/components/ui/MetricCard";
 import { SectionHeader } from "@/components/ui/SectionHeader";
 import { getDashboardData } from "@/lib/dashboard/get-dashboard-data";
@@ -27,8 +28,8 @@ export default async function DashboardPage() {
   const remainingModules = dashboardModules.filter((module) => module.id !== "rates" && module.id !== "sectors" && module.id !== "vix" && module.id !== "btc-flows");
 
   return (
-    <div className="mx-auto max-w-7xl px-5 py-10 md:py-14">
-      <div className="grid gap-8 lg:grid-cols-[1fr_0.8fr] lg:items-end">
+    <div className="mx-auto max-w-7xl px-4 py-8 md:px-5 md:py-14">
+      <div className="grid gap-5 md:gap-8 lg:grid-cols-[1fr_0.8fr] lg:items-end">
         <SectionHeader
           eyebrow="Lectura de régimen"
           title="Market Regime Dashboard"
@@ -39,7 +40,19 @@ export default async function DashboardPage() {
         </DisclaimerBox>
       </div>
 
-      <section className="mt-8 border border-petrol/40 bg-panel p-4 md:p-5">
+      <div className="mt-6 md:mt-8">
+        <ExpandableInsightCard
+          eyebrow="Régimen integrado"
+          title="Lectura compuesta del mercado"
+          reading={regimeSummary.interpretation}
+          status={dataStatusLabels[regimeSummary.dataStatus]}
+          metrics={[
+            { label: "Régimen actual", value: regimeSummary.current, tone: "sage" },
+            { label: "Sesgo", value: riskBiasLabels[regimeSummary.bias] },
+            { label: "Score", value: `${regimeSummary.regimeScore}/100`, tone: regimeSummary.bias === "stress" || regimeSummary.bias === "cautious" ? "brass" : "sage" },
+            { label: "Confianza", value: `${regimeSummary.confidence}%` },
+          ]}
+        >
         <div className="grid gap-3 md:grid-cols-4">
           <div className="border border-line bg-panelSoft p-4">
             <p className="text-xs font-semibold uppercase tracking-[0.16em] text-brass">Régimen actual</p>
@@ -103,9 +116,10 @@ export default async function DashboardPage() {
           <p className="mt-2">{regimeSummary.reliabilityNote}</p>
           <p className="mt-2">{regimeSummary.whatItDoesNotMean}</p>
         </div>
-      </section>
+        </ExpandableInsightCard>
+      </div>
 
-      <div className="mt-8 space-y-6">
+      <div className="mt-6 space-y-4 md:mt-8 md:space-y-6">
         {fedWatch ? <FedWatchModule data={fedWatch} /> : null}
         {sectorRotation ? <SectorRotationChart data={sectorRotation} /> : null}
         {quantRisk ? <QuantRiskPanel data={quantRisk} /> : null}
@@ -115,19 +129,18 @@ export default async function DashboardPage() {
         {remainingModules.map((module) => <DashboardModule key={module.id} {...module} />)}
       </div>
 
-      <section className="mt-6 border border-line bg-panel p-5 md:p-6">
-        <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
-          <div className="max-w-3xl">
-            <h2 className="text-xl font-semibold text-ink">Radar de lecturas cruzadas</h2>
-            <p className="mt-3 text-sm leading-6 text-muted">
-              Esta tabla no muestra ideas accionables. Cruza lecturas públicas con retraso para detectar tensiones que pueden servir como punto de partida de investigación.
-            </p>
-          </div>
-          <span className="w-fit border border-line bg-panelSoft px-3 py-1 text-xs font-semibold text-muted">
-            Actualización manual
-          </span>
-        </div>
-
+      <div className="mt-6">
+        <ExpandableInsightCard
+          eyebrow="Radar"
+          title="Lecturas cruzadas"
+          reading="Cruza short interest, presencia institucional y notas prudentes para ordenar posibles tensiones de seguimiento."
+          status="Actualización manual"
+          metrics={[
+            { label: "Tickers revisados", value: String(crossSignalRadar.length) },
+            { label: "Modo", value: "Curado" },
+            { label: "Uso", value: "Investigación" },
+          ]}
+        >
         <p className="mt-4 border border-line bg-panelSoft px-3 py-2 text-xs leading-5 text-muted">
           Modo de actualización: manual/curado hasta activar fuentes automatizadas estables.
         </p>
@@ -168,7 +181,8 @@ export default async function DashboardPage() {
         <p className="mt-5 border-t border-line pt-4 text-sm leading-6 text-muted">
           Fuentes conceptuales: short interest reportado, formularios 13F y reportes institucionales con retraso. La cobertura puede ser incompleta y las fechas pueden diferir entre proveedores.
         </p>
-      </section>
+        </ExpandableInsightCard>
+      </div>
 
       <div className="mt-6">
         <DisclaimerBox>

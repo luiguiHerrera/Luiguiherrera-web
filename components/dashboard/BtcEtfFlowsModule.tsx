@@ -1,4 +1,5 @@
 import { dataStatusLabels } from "@/lib/dashboard/status";
+import { ExpandableInsightCard } from "@/components/ui/ExpandableInsightCard";
 import type { BtcEtfFlowPoint, BtcEtfFlowsDashboardData, BtcEtfFlowsData, BtcEtfFundFlow } from "@/lib/dashboard/types";
 
 type BtcEtfFlowsModuleProps = {
@@ -146,29 +147,25 @@ export function BtcEtfFlowsModule({ data }: BtcEtfFlowsModuleProps) {
   ];
 
   return (
-    <section className="border border-line bg-panel p-5 md:p-6">
+    <ExpandableInsightCard
+      eyebrow="BTC ETF flows"
+      title="Presión de flujos vía ETFs"
+      reading={flows.readingSubtext}
+      status={dataStatusLabels[flows.dataStatus]}
+      metrics={[
+        { label: "Último flujo neto", value: formatUsdMillions(flows.latestTotalNetFlow), tone: flows.readingSeverity === "positive" ? "sage" : flows.readingSeverity === "negative" ? "danger" : "brass" },
+        { label: "Lectura", value: flows.readingLabel },
+        { label: "Rolling 5D", value: formatUsdMillions(flows.rolling5dNetFlow) },
+        { label: "Racha", value: flows.flowStreak.label },
+      ]}
+    >
       <div className="grid gap-8 xl:grid-cols-[0.42fr_0.58fr] xl:items-start">
-        <div>
-          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-brass">BTC ETF flows</p>
-          <h2 className="mt-2 text-2xl font-semibold text-ink">Presión de flujos vía ETFs</h2>
+        <div className="border border-line bg-panel p-4">
+          <p className="text-xs font-semibold uppercase tracking-[0.16em] text-brass">Lectura ampliada</p>
           <p className="mt-3 text-sm leading-6 text-muted">
-            Los flujos muestran entradas o salidas netas reportadas en ETFs spot de Bitcoin. Son una lectura de presión de exposición, no una predicción del precio de Bitcoin.
+            Lectura basada en flujos netos diarios y acumulados recientes. Última fecha detectada: {flows.latestDate}.
           </p>
-
-          <div className="mt-8">
-            <div className="flex flex-wrap items-end gap-3">
-              <span className="text-5xl font-semibold leading-none text-ink md:text-6xl">{formatUsdMillions(flows.latestTotalNetFlow)}</span>
-              <span className={`mb-2 border px-3 py-1 text-sm font-semibold ${severityClass(flows.readingSeverity)}`}>
-                {flows.readingLabel}
-              </span>
-            </div>
-            <p className="mt-4 font-semibold text-ink">{flows.readingSubtext}</p>
-            <p className="mt-3 text-sm leading-6 text-muted">
-              Lectura aproximada basada en flujos netos diarios y acumulados recientes. Última fecha detectada: {flows.latestDate}.
-            </p>
-          </div>
-
-          <div className="mt-7 grid gap-x-5 gap-y-4 border-y border-line py-4 sm:grid-cols-2">
+          <div className="mt-5 grid gap-x-5 gap-y-4 border-y border-line py-4 sm:grid-cols-2">
             {metrics.map(([label, value]) => (
               <div key={label}>
                 <p className="text-[11px] uppercase tracking-[0.14em] text-muted">{label}</p>
@@ -177,7 +174,6 @@ export function BtcEtfFlowsModule({ data }: BtcEtfFlowsModuleProps) {
             ))}
           </div>
         </div>
-
         <FlowBarChart history={flows.history} />
       </div>
 
@@ -226,6 +222,6 @@ export function BtcEtfFlowsModule({ data }: BtcEtfFlowsModuleProps) {
       </div>
 
       <p className="mt-3 text-sm leading-6 text-muted">{flows.reliabilityNote}</p>
-    </section>
+    </ExpandableInsightCard>
   );
 }

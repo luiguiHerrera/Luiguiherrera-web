@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from "react";
 import { SectorDetailPanel } from "@/components/dashboard/SectorDetailPanel";
+import { ExpandableInsightCard } from "@/components/ui/ExpandableInsightCard";
 import { dataStatusLabels } from "@/lib/dashboard/status";
 import type { SectorEtfSnapshot, SectorRotationData } from "@/lib/dashboard/types";
 
@@ -93,17 +94,27 @@ export function SectorRotationChart({ data }: SectorRotationChartProps) {
   const maxValue = Math.max(...values, 0);
   const maxAbs = Math.max(...values.map((value) => Math.abs(value)), 0.01);
   const traction = tractionRows(data.sectors, period);
+  const leader = sortedSectors[0];
+  const laggard = sortedSectors.at(-1);
 
   return (
-    <section className="border border-line bg-panel p-4 md:p-5">
+    <ExpandableInsightCard
+      eyebrow="Rotación sectorial"
+      title="Mapa relativo por ETFs"
+      reading={data.metrics.interpretation}
+      status={dataStatusLabels[data.dataStatus]}
+      metrics={[
+        { label: `Líder ${period}`, value: leader ? `${leader.etfTicker} ${formatPercent(metricValue(leader, period))}` : "Pendiente", tone: "sage" },
+        { label: `Rezago ${period}`, value: laggard ? `${laggard.etfTicker} ${formatPercent(metricValue(laggard, period))}` : "Pendiente", tone: "danger" },
+        { label: "Dispersión 1W", value: formatPercent(data.metrics.sectorDispersion1w) },
+        { label: "Actualización", value: data.lastUpdated },
+      ]}
+      defaultOpen={false}
+    >
       <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
-        <div>
-          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-brass">Rotación sectorial</p>
-          <h2 className="mt-2 text-xl font-semibold text-ink">Mapa relativo por ETFs</h2>
-          <p className="mt-2 max-w-3xl text-sm leading-6 text-muted">
-            Liderazgo y rezago sectorial con ETFs SPDR como proxies. Retornos por sesiones: 1W = 5, 1M = 21, 3M = 63.
-          </p>
-        </div>
+        <p className="max-w-3xl text-sm leading-6 text-muted">
+          Liderazgo y rezago sectorial con ETFs SPDR como proxies. Retornos por sesiones: 1W = 5, 1M = 21, 3M = 63.
+        </p>
         <div className="flex w-fit border border-line bg-panelSoft p-1">
           {(["1W", "1M", "3M"] as Period[]).map((option) => (
             <button
@@ -245,6 +256,6 @@ export function SectorRotationChart({ data }: SectorRotationChartProps) {
       ) : null}
 
       <p className="mt-5 text-sm leading-6 text-muted">{data.reliabilityNote}</p>
-    </section>
+    </ExpandableInsightCard>
   );
 }
