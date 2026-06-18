@@ -1,6 +1,8 @@
 "use client";
 
 import { useState } from "react";
+import { usePathname } from "next/navigation";
+import { localeFromPathname } from "@/lib/i18n/locales";
 
 type ExpandableInsightCardProps = {
   eyebrow?: string;
@@ -33,6 +35,9 @@ export function ExpandableInsightCard({
   className = "",
 }: ExpandableInsightCardProps) {
   const [open, setOpen] = useState(defaultOpen);
+  const pathname = usePathname();
+  const locale = localeFromPathname(pathname);
+  const buttonLabel = locale === "en" ? (open ? "Collapse context" : "Expand context") : (open ? "Contraer contexto" : "Ampliar contexto");
 
   return (
     <section className={`border border-line/90 bg-panel shadow-[0_8px_26px_rgba(31,35,40,0.035)] transition duration-200 hover:border-line ${className}`}>
@@ -55,7 +60,7 @@ export function ExpandableInsightCard({
               aria-expanded={open}
               className="shrink-0 border border-ink/80 bg-ink px-3 py-1.5 text-xs font-semibold text-white transition hover:bg-panel hover:text-ink focus:outline-none focus:ring-2 focus:ring-ink/20 md:px-4 md:py-2 md:text-sm"
             >
-              {open ? "Contraer contexto" : "Ampliar contexto"}
+              {buttonLabel}
             </button>
           </div>
         </div>
