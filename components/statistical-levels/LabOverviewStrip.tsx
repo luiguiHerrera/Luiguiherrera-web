@@ -27,29 +27,27 @@ export function LabOverviewStrip({ assets, frequency, window }: LabOverviewStrip
     const metric = data.windows[window];
     return { asset, data, metric };
   });
-  const mostPositive = rows.reduce((best, row) => ((row.metric.ma200ExtensionZScore ?? -Infinity) > (best?.metric.ma200ExtensionZScore ?? -Infinity) ? row : best), rows[0]);
-  const mostNegative = rows.reduce((best, row) => ((row.metric.ma200ExtensionZScore ?? Infinity) < (best?.metric.ma200ExtensionZScore ?? Infinity) ? row : best), rows[0]);
-  const highestVol = rows.reduce((best, row) => ((row.metric.annualizedVolatilityWindow ?? -Infinity) > (best?.metric.annualizedVolatilityWindow ?? -Infinity) ? row : best), rows[0]);
-  const deepestDrawdown = rows.reduce((best, row) => ((row.metric.currentDrawdown ?? Infinity) < (best?.metric.currentDrawdown ?? Infinity) ? row : best), rows[0]);
+  const active = rows[0];
+  const longMa = active?.data.longMovingAverageKey;
   const maxZ = Math.max(...rows.map((row) => Math.abs(row.metric.ma200ExtensionZScore ?? 0)), 1);
   const maxVol = Math.max(...rows.map((row) => row.metric.annualizedVolatilityWindow ?? 0), 0.01);
   const maxDrawdown = Math.max(...rows.map((row) => Math.abs(row.metric.currentDrawdown ?? 0)), 0.01);
   const items = [
-    { label: "Mayor extensión positiva", row: mostPositive, value: formatNumber(mostPositive?.metric.ma200ExtensionZScore ?? null), width: magnitude(mostPositive?.metric.ma200ExtensionZScore ?? null, maxZ), tone: "bg-[#6f8f7b]" },
-    { label: "Mayor extensión negativa", row: mostNegative, value: formatNumber(mostNegative?.metric.ma200ExtensionZScore ?? null), width: magnitude(mostNegative?.metric.ma200ExtensionZScore ?? null, maxZ), tone: "bg-[#a86464]" },
-    { label: "Mayor volatilidad anualizada", row: highestVol, value: formatPercent(highestVol?.metric.annualizedVolatilityWindow ?? null), width: magnitude(highestVol?.metric.annualizedVolatilityWindow ?? null, maxVol), tone: "bg-[#7d8f9a]" },
-    { label: "Mayor drawdown actual", row: deepestDrawdown, value: formatPercent(deepestDrawdown?.metric.currentDrawdown ?? null), width: magnitude(deepestDrawdown?.metric.currentDrawdown ?? null, maxDrawdown), tone: "bg-[#9d8176]" },
+    { label: "Extensión actual", value: formatNumber(active?.metric.ma200ExtensionZScore ?? null), width: magnitude(active?.metric.ma200ExtensionZScore ?? null, maxZ), tone: "bg-[#6f8f7b]" },
+    { label: "Volatilidad anualizada", value: formatPercent(active?.metric.annualizedVolatilityWindow ?? null), width: magnitude(active?.metric.annualizedVolatilityWindow ?? null, maxVol), tone: "bg-[#7d8f9a]" },
+    { label: "Drawdown actual", value: formatPercent(active?.metric.currentDrawdown ?? null), width: magnitude(active?.metric.currentDrawdown ?? null, maxDrawdown), tone: "bg-[#9d8176]" },
+    { label: "Distancia a media larga", value: formatPercent(longMa ? active?.data.distanceToMovingAverages[longMa] ?? null : null), width: magnitude(longMa ? active?.data.distanceToMovingAverages[longMa] ?? null : null, 0.25), tone: "bg-[#b6905b]" },
   ];
 
   return (
     <section className="border border-line bg-panel p-4 md:p-5">
-      <p className="text-xs font-semibold uppercase tracking-[0.18em] text-brass">Mapa rápido de seleccionados</p>
+      <p className="text-xs font-semibold uppercase tracking-[0.18em] text-brass">Resumen rápido del activo seleccionado</p>
       <div className="mt-4 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
         {items.map((item) => (
           <div key={item.label} className="border border-line bg-panelSoft p-4">
             <p className="text-xs uppercase tracking-[0.12em] text-muted">{item.label}</p>
             <div className="mt-3 flex items-end justify-between gap-3">
-              <span className="text-xl font-semibold text-ink">{item.row?.asset.ticker ?? "n/d"}</span>
+              <span className="text-xl font-semibold text-ink">{active?.asset.ticker ?? "n/d"}</span>
               <span className="text-sm font-semibold text-muted">{item.value}</span>
             </div>
             <div className="mt-3 h-1.5 bg-white">

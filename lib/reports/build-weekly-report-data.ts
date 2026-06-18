@@ -45,7 +45,7 @@ function weekLabel(dateString: string) {
 }
 
 function rankedSeasonality(cells: DailySeasonalityCell[], month: number) {
-  const monthCells = cells.filter((cell) => cell.month === month && cell.sampleSize > 0);
+  const monthCells = cells.filter((cell) => cell.month === month && cell.sampleSize >= 5);
   const sorted = [...monthCells].sort((a, b) => (b.averageReturn ?? Number.NEGATIVE_INFINITY) - (a.averageReturn ?? Number.NEGATIVE_INFINITY));
   return {
     best: sorted.slice(0, 5),

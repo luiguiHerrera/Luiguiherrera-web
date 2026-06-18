@@ -35,7 +35,7 @@ export function PositioningScatter({ assets, frequency, window }: PositioningSca
     return (
       <section className="border border-line bg-panel p-4 md:p-5">
         <h2 className="text-xl font-semibold text-ink">Mapa de posicionamiento estadístico</h2>
-        <p className="mt-3 text-sm leading-6 text-muted">Selecciona al menos dos activos para comparar posicionamiento.</p>
+        <p className="mt-3 text-sm leading-6 text-muted">Mapa comparativo reservado para vistas con varios activos. Esta vista carga solo el activo seleccionado para mantener el payload ligero.</p>
       </section>
     );
   }
@@ -51,7 +51,7 @@ export function PositioningScatter({ assets, frequency, window }: PositioningSca
           <p className="text-xs font-semibold uppercase tracking-[0.18em] text-brass">Posicionamiento</p>
           <h2 className="mt-2 text-xl font-semibold text-ink">Mapa de posicionamiento estadístico</h2>
           <p className="mt-2 max-w-3xl text-sm leading-6 text-muted">
-            Extensión, retorno y volatilidad de los activos seleccionados en la frecuencia activa.
+            Extensión, retorno y volatilidad de los activos disponibles en la frecuencia activa.
           </p>
         </div>
         <p className="text-xs text-muted">X: z-score · Y: retorno 12P · tamaño: volatilidad</p>

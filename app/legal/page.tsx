@@ -24,7 +24,7 @@ const legalSections = [
   ],
   [
     "Privacidad",
-    "Como MVP no se guardan respuestas del diagnóstico, portafolios, patrimonio, tolerancia al riesgo ni resultados individuales. No hay cuentas de usuario, login ni base de datos de perfiles personales en esta versión.",
+    "No se guardan respuestas del diagnóstico, portafolios, patrimonio, tolerancia al riesgo ni resultados individuales. No hay cuentas de usuario, login ni base de datos de perfiles personales.",
   ],
   [
     "Cookies y analítica",
@@ -45,12 +45,12 @@ export default function LegalPage() {
     <div className="mx-auto max-w-7xl px-5 py-10 md:py-14">
       <div className="grid gap-8 lg:grid-cols-[0.85fr_1.15fr] lg:items-start">
         <SectionHeader
-          eyebrow="Estructura inicial"
-          title="Legal"
-          subtitle="Textos base para operar el MVP con límites claros desde el primer día."
+          eyebrow="Marco de uso"
+          title="Aviso legal y límites de uso"
+          subtitle="Alcance educativo, privacidad, fuentes de datos y responsabilidad del usuario."
         />
         <div className="border border-line bg-panel p-6 text-sm leading-7 text-muted">
-          Esta página resume límites operativos del MVP. La idea es que privacidad, alcance educativo y ausencia de asesoría estén visibles, no escondidos al final.
+          Esta página resume el alcance educativo de la plataforma, sus límites de uso, el tratamiento de datos y la responsabilidad del usuario.
         </div>
       </div>
       <section className="mt-8 grid gap-5 md:grid-cols-2">

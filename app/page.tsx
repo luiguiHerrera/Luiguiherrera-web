@@ -7,7 +7,7 @@ import type { BtcEtfFlowsDashboardData, RegimeBias, RegimeSignal, RegimeSummary,
 
 const principles = [
   ["Entender el contexto", "Leer el tablero antes de mover la ficha."],
-  ["Gestionar el riesgo", "Regla número 1: nunca pierdas dinero."],
+  ["Gestionar el riesgo", "Primero proteger el margen de error. Después buscar rendimiento."],
   ["Decidir con criterio", "Menos reacción. Más método."],
 ];
 
@@ -361,7 +361,7 @@ export default async function Home() {
         <div className="mx-auto grid max-w-7xl gap-8 px-5 py-8 md:grid-cols-[0.35fr_1fr_0.95fr] md:items-start">
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-brass">Nuestra filosofía</p>
           <p className="text-xl leading-8 text-ink md:text-2xl">
-            El mercado cambia rápido. El riesgo también. El edge está en tener la información organizada para las decisiones adecuadas.
+            El mercado cambia rápido. El riesgo también. La ventaja está en ordenar la información antes de decidir.
           </p>
           <div className="grid gap-4 md:grid-cols-3">
             {principles.map(([title, text]) => (

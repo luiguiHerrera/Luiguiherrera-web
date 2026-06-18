@@ -28,8 +28,8 @@ export function AssetComparisonTable({ assets, frequency, window }: AssetCompari
   return (
     <section className="border border-line bg-panel p-4 md:p-5">
       <div>
-        <p className="text-xs font-semibold uppercase tracking-[0.18em] text-brass">Comparativo</p>
-        <h2 className="mt-2 text-xl font-semibold text-ink">Ranking relativo de seleccionados</h2>
+        <p className="text-xs font-semibold uppercase tracking-[0.18em] text-brass">Detalle</p>
+        <h2 className="mt-2 text-xl font-semibold text-ink">Lectura tabular del activo seleccionado</h2>
       </div>
       <div className="mt-5 overflow-x-auto">
         <table className="w-full min-w-[880px] border-collapse text-left text-[13px]">
