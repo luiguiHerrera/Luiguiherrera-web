@@ -100,12 +100,12 @@ export function SectorRotationChart({ data }: SectorRotationChartProps) {
   return (
     <ExpandableInsightCard
       eyebrow="Rotación sectorial"
-      title="Mapa relativo por ETFs"
+      title="Mapa relativo sectorial"
       reading={data.metrics.interpretation}
       status={dataStatusLabels[data.dataStatus]}
       metrics={[
-        { label: `Líder ${period}`, value: leader ? `${leader.etfTicker} ${formatPercent(metricValue(leader, period))}` : "Pendiente", tone: "sage" },
-        { label: `Rezago ${period}`, value: laggard ? `${laggard.etfTicker} ${formatPercent(metricValue(laggard, period))}` : "Pendiente", tone: "danger" },
+        { label: `Líder ${period}`, value: leader ? `${leader.sectorName} (${leader.etfTicker}) ${formatPercent(metricValue(leader, period))}` : "Pendiente", tone: "sage" },
+        { label: `Rezago ${period}`, value: laggard ? `${laggard.sectorName} (${laggard.etfTicker}) ${formatPercent(metricValue(laggard, period))}` : "Pendiente", tone: "danger" },
         { label: "Dispersión 1W", value: formatPercent(data.metrics.sectorDispersion1w) },
         { label: "Actualización", value: data.lastUpdated },
       ]}
@@ -182,7 +182,7 @@ export function SectorRotationChart({ data }: SectorRotationChartProps) {
                   <div className="flex items-baseline justify-between gap-3 md:block">
                     <div>
                       <span className="block text-sm font-semibold text-ink">{sector.sectorName}</span>
-                      <span className="text-xs uppercase tracking-[0.12em] text-muted">{sector.etfTicker}</span>
+                      <span className="text-xs uppercase tracking-[0.12em] text-muted">{sector.etfTicker} · proxy sectorial</span>
                     </div>
                     <span className="font-semibold text-ink md:hidden">{formatPercent(value)}</span>
                   </div>
@@ -227,7 +227,7 @@ export function SectorRotationChart({ data }: SectorRotationChartProps) {
                   <div className="flex items-start justify-between gap-3">
                     <div>
                       <span className="block text-sm font-semibold text-ink">{sector.sectorName}</span>
-                      <span className="text-xs uppercase tracking-[0.12em] text-muted">{sector.etfTicker}</span>
+                      <span className="text-xs uppercase tracking-[0.12em] text-muted">{sector.etfTicker} · proxy sectorial</span>
                     </div>
                     <span className="text-base font-semibold text-ink">{tractionArrow(rankChange)}</span>
                   </div>

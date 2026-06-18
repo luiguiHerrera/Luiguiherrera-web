@@ -33,7 +33,7 @@ function formatPercent(value: number | null) {
 
 function markerPosition(value: number | null, min: number, max: number) {
   if (value === null || max <= min) return 50;
-  return Math.min(100, Math.max(0, ((value - min) / (max - min)) * 100));
+  return Math.min(94, Math.max(6, ((value - min) / (max - min)) * 100));
 }
 
 const monthlyScriptUrl = "https://www.tradingview.com/script/ziflzOXv-Monthly-Statistical-Levels/";
@@ -71,7 +71,7 @@ function LevelLadder({ data, kind, ticker }: { data: KeyStatisticalLevelSet; kin
       </div>
 
       <div className="mt-5 overflow-x-auto">
-        <div className="relative h-12 min-w-[520px]">
+        <div className="relative h-12 min-w-[560px] px-3">
           <div className="absolute left-0 right-0 top-6 h-px bg-line" />
           {values.map((item) => (
             <div key={item.key} className="absolute top-3 -translate-x-1/2" style={{ left: `${markerPosition(item.value, min, max)}%` }}>

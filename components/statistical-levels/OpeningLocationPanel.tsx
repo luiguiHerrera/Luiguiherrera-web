@@ -34,18 +34,43 @@ function CategoryBars({ rows }: { rows: OpeningCategoryStats[] }) {
   );
 }
 
+function average(values: number[]) {
+  if (!values.length) return null;
+  return values.reduce((sum, value) => sum + value, 0) / values.length;
+}
+
 export function OpeningLocationPanel({ asset, frequency }: OpeningLocationPanelProps) {
   const [mode, setMode] = useState<"opening" | "close">("opening");
   const location = asset?.frequencies[frequency].openingLocation;
   const periods = asset?.frequencies[frequency].recentPeriods ?? [];
-  const closeBuckets = [
-    { label: "Cierre cerca del mínimo", rows: periods.filter((row) => (row.closeLocation ?? 0.5) <= 0.33) },
-    { label: "Cierre en zona media", rows: periods.filter((row) => (row.closeLocation ?? 0.5) > 0.33 && (row.closeLocation ?? 0.5) < 0.67) },
-    { label: "Cierre cerca del máximo", rows: periods.filter((row) => (row.closeLocation ?? 0.5) >= 0.67) },
-  ];
+  const closeRows: OpeningCategoryStats[] = [
+    { category: "Cierre cerca del mínimo", count: 0, proportion: 0, averageForwardReturn: null, averageVolatility: null, positiveRate: null },
+    { category: "Cierre en zona media", count: 0, proportion: 0, averageForwardReturn: null, averageVolatility: null, positiveRate: null },
+    { category: "Cierre cerca del máximo", count: 0, proportion: 0, averageForwardReturn: null, averageVolatility: null, positiveRate: null },
+  ].map((bucket) => {
+    const rows = periods.filter((row) => {
+      const closeLocation = row.closeLocation ?? 0.5;
+      if (bucket.category.includes("mínimo")) return closeLocation <= 0.33;
+      if (bucket.category.includes("máximo")) return closeLocation >= 0.67;
+      return closeLocation > 0.33 && closeLocation < 0.67;
+    });
+    const changes = rows.map((row) => row.change).filter((value): value is number => value !== null && Number.isFinite(value));
+    const ranges = rows.map((row) => row.range).filter((value): value is number => value !== null && Number.isFinite(value));
+    return {
+      category: bucket.category,
+      count: rows.length,
+      proportion: periods.length ? rows.length / periods.length : 0,
+      averageForwardReturn: average(changes),
+      averageVolatility: average(ranges),
+      positiveRate: changes.length ? changes.filter((value) => value > 0).length / changes.length : null,
+    };
+  });
   const allRows = [...(location?.range ?? []), ...(location?.close ?? [])];
   const mostFrequentRange = [...(location?.range ?? [])].sort((a, b) => b.count - a.count)[0];
   const mostFrequentClose = [...(location?.close ?? [])].sort((a, b) => b.count - a.count)[0];
+  const mostFrequentCloseLocation = [...closeRows].sort((a, b) => b.count - a.count)[0];
+  const strongestCloseLocation = [...closeRows].sort((a, b) => (b.averageForwardReturn ?? -Infinity) - (a.averageForwardReturn ?? -Infinity))[0];
+  const weakestCloseLocation = [...closeRows].sort((a, b) => (a.averageForwardReturn ?? Infinity) - (b.averageForwardReturn ?? Infinity))[0];
   const highestReturn = [...allRows].sort((a, b) => (b.averageForwardReturn ?? -Infinity) - (a.averageForwardReturn ?? -Infinity))[0];
   const lowestReturn = [...allRows].sort((a, b) => (a.averageForwardReturn ?? Infinity) - (b.averageForwardReturn ?? Infinity))[0];
   return (
@@ -72,26 +97,33 @@ export function OpeningLocationPanel({ asset, frequency }: OpeningLocationPanelP
         </div>
       </div>
       {mode === "close" ? (
-        <div className="mt-5 grid gap-3 md:grid-cols-3">
-          {closeBuckets.map((bucket) => {
-            const proportion = periods.length ? bucket.rows.length / periods.length : null;
-            const avgReturn = bucket.rows.length
-              ? bucket.rows.reduce((sum, row) => sum + (row.change ?? 0), 0) / bucket.rows.length
-              : null;
-            return (
-              <div key={bucket.label} className="border border-line bg-panelSoft p-4">
-                <p className="text-sm font-semibold text-ink">{bucket.label}</p>
-                <p className="mt-2 text-xs leading-5 text-muted">Frecuencia histórica: {formatPercent(proportion)}</p>
-                <p className="mt-1 text-xs leading-5 text-muted">Cambio medio: {formatPercent(avgReturn)}</p>
+        <>
+          <div className="mt-5 grid gap-3 md:grid-cols-3">
+            {[
+              ["Mayor frecuencia", mostFrequentCloseLocation?.category ?? "n/d", formatPercent(mostFrequentCloseLocation?.proportion ?? null)],
+              ["Mayor cambio histórico", strongestCloseLocation?.category ?? "n/d", formatPercent(strongestCloseLocation?.averageForwardReturn ?? null)],
+              ["Menor cambio histórico", weakestCloseLocation?.category ?? "n/d", formatPercent(weakestCloseLocation?.averageForwardReturn ?? null)],
+            ].map(([label, value, detail]) => (
+              <div key={label} className="border border-line bg-panelSoft p-3">
+                <p className="text-[11px] uppercase tracking-[0.11em] text-muted">{label}</p>
+                <p className="mt-2 text-sm font-semibold text-ink">{value}</p>
+                <p className="mt-1 text-xs text-muted">{detail}</p>
               </div>
-            );
-          })}
-          {!periods.length ? (
-            <p className="md:col-span-3 border border-line bg-panelSoft p-4 text-sm leading-6 text-muted">
-              Close location pendiente de datos suficientes.
-            </p>
-          ) : null}
-        </div>
+            ))}
+          </div>
+          <div className="mt-5 border border-line bg-panelSoft p-4">
+            {periods.length ? (
+              <>
+                <h3 className="text-sm font-semibold text-ink">Distribución del cierre dentro del rango</h3>
+                <div className="mt-4">
+                  <CategoryBars rows={closeRows} />
+                </div>
+              </>
+            ) : (
+              <p className="text-sm leading-6 text-muted">Close location pendiente de datos suficientes.</p>
+            )}
+          </div>
+        </>
       ) : (
         <>
       <div className="mt-5 grid gap-3 md:grid-cols-4">

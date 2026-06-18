@@ -196,9 +196,9 @@ function ComparisonSection({
       <div className="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
         <div>
           <p className="text-xs font-semibold uppercase tracking-[0.18em] text-brass">Comparar activos</p>
-          <h2 className="mt-2 text-xl font-semibold text-ink">Vista ligera desde manifest</h2>
+          <h2 className="mt-2 text-xl font-semibold text-ink">Lectura relativa del universo</h2>
           <p className="mt-2 max-w-3xl text-sm leading-6 text-muted">
-            Comparación compacta con resúmenes precalculados. Para correlación completa se necesita una matriz ligera precomputada, sin cargar series completas al cliente.
+            Vista ligera para contrastar activos del universo curado sin cargar series completas.
           </p>
         </div>
         <span className="border border-line bg-panelSoft px-3 py-2 text-xs font-semibold uppercase tracking-[0.12em] text-muted">
@@ -226,7 +226,7 @@ function ComparisonSection({
       </div>
 
       <div className="mt-5 border border-line bg-panelSoft p-4 text-sm leading-6 text-muted">
-        Compara varios activos para ver el mapa completo cuando exista una matriz precomputada de correlación/posicionamiento. Esta versión mantiene el payload ligero y evita cargar el universo completo.
+        La comparación muestra lecturas resumidas por activo. La matriz completa de correlación se incorporará cuando esté disponible en formato ligero.
       </div>
     </section>
   );

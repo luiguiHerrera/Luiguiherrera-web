@@ -34,6 +34,7 @@ export function UnderwaterDrawdownChart({ asset, frequency, window }: Underwater
   });
   const path = buildPath(drawdowns);
   const area = path ? `${path} L 100 8 L 0 8 Z` : "";
+  const minDrawdown = Math.min(-0.01, ...drawdowns);
 
   return (
     <section className="min-w-0 border border-line bg-panel p-4 md:p-5">
@@ -59,6 +60,15 @@ export function UnderwaterDrawdownChart({ asset, frequency, window }: Underwater
           <line x1="0" x2="100" y1="8" y2="8" stroke="#b8b2aa" strokeWidth="0.45" vectorEffect="non-scaling-stroke" />
           {area ? <path d={area} fill="#eadfdd" /> : null}
           {path ? <path d={path} fill="none" stroke="#a86464" strokeWidth="1.4" vectorEffect="non-scaling-stroke" /> : null}
+          {drawdowns.map((value, index) => {
+            const x = drawdowns.length === 1 ? 0 : (index / (drawdowns.length - 1)) * 100;
+            const y = 8 + (Math.abs(value) / Math.abs(minDrawdown)) * 82;
+            return (
+              <circle key={`${series[index]?.date ?? index}-${index}`} cx={x} cy={y} r="2.6" fill="transparent" stroke="transparent" vectorEffect="non-scaling-stroke">
+                <title>{`${series[index]?.date ?? "Fecha pendiente"} · ${formatPercent(value)}`}</title>
+              </circle>
+            );
+          })}
         </svg>
       </div>
       <p className="mt-3 text-xs leading-5 text-muted">

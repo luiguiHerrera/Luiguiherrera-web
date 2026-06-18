@@ -36,28 +36,32 @@ function classificationClass(classification: VixTermStructureData["classificatio
   return "border-[#a8a29e]/40 bg-[#a8a29e]/10 text-[#5f5a54]";
 }
 
-function buildCurvePath(points: VixTermStructurePoint[]) {
+function curvePoints(points: VixTermStructurePoint[]) {
   const validPoints = points.filter((point): point is VixTermStructurePoint & { value: number } => point.value !== null);
-  if (validPoints.length < 2) return "";
+  if (!validPoints.length) return [];
 
   const values = validPoints.map((point) => point.value);
   const min = Math.min(...values);
   const max = Math.max(...values);
-  const range = Math.max(max - min, 0.01);
-  const step = 88 / Math.max(validPoints.length - 1, 1);
+  const padding = Math.max((max - min) * 0.18, 0.25);
+  const domainMin = min - padding;
+  const domainMax = max + padding;
+  const range = Math.max(domainMax - domainMin, 0.01);
+  const step = 76 / Math.max(validPoints.length - 1, 1);
 
-  return validPoints
-    .map((point, index) => {
-      const x = 6 + index * step;
-      const y = 44 - ((point.value - min) / range) * 30;
-      return `${index === 0 ? "M" : "L"} ${x.toFixed(2)} ${y.toFixed(2)}`;
-    })
-    .join(" ");
+  return validPoints.map((point, index) => ({
+    point,
+    x: 12 + index * step,
+    y: 42 - ((point.value - domainMin) / range) * 28,
+  }));
 }
 
 function TermStructureChart({ data }: { data: VixTermStructureData }) {
-  const curvePath = buildCurvePath(data.points);
-  const hasCurve = Boolean(curvePath);
+  const plottedPoints = curvePoints(data.points);
+  const curvePath = plottedPoints
+    .map(({ x, y }, index) => `${index === 0 ? "M" : "L"} ${x.toFixed(2)} ${y.toFixed(2)}`)
+    .join(" ");
+  const hasCurve = plottedPoints.length >= 2;
 
   return (
     <div className="border border-line bg-panelSoft p-4">
@@ -71,12 +75,24 @@ function TermStructureChart({ data }: { data: VixTermStructureData }) {
         </span>
       </div>
 
-      <svg viewBox="0 0 100 54" className="mt-4 h-28 w-full" preserveAspectRatio="none" aria-hidden="true">
-        <line x1="0" x2="100" y1="14" y2="14" stroke="#eee9e3" strokeWidth="0.7" vectorEffect="non-scaling-stroke" />
-        <line x1="0" x2="100" y1="29" y2="29" stroke="#e7e2dc" strokeWidth="0.8" vectorEffect="non-scaling-stroke" />
-        <line x1="0" x2="100" y1="44" y2="44" stroke="#eee9e3" strokeWidth="0.7" vectorEffect="non-scaling-stroke" />
+      <svg viewBox="0 0 100 58" className="mt-4 h-36 w-full" aria-hidden="true">
+        <line x1="7" x2="95" y1="42" y2="42" stroke="#d8d1c8" strokeWidth="0.7" vectorEffect="non-scaling-stroke" />
+        <line x1="7" x2="95" y1="28" y2="28" stroke="#eee9e3" strokeWidth="0.6" vectorEffect="non-scaling-stroke" />
         {hasCurve ? (
-          <path d={curvePath} fill="none" stroke="#6f8f7b" strokeWidth="2" vectorEffect="non-scaling-stroke" />
+          <>
+            <path d={curvePath} fill="none" stroke="#6f8f7b" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" vectorEffect="non-scaling-stroke" />
+            {plottedPoints.map(({ point, x, y }) => (
+              <g key={point.label}>
+                <circle cx={x} cy={y} r="2.4" fill="#fbfaf8" stroke="#47604f" strokeWidth="1.3" vectorEffect="non-scaling-stroke" />
+                <text x={x} y={Math.max(8, y - 5)} textAnchor="middle" className="fill-ink text-[4.2px] font-semibold">
+                  {formatPointValue(point.value)}
+                </text>
+                <text x={x} y="53" textAnchor="middle" className="fill-muted text-[3.6px] font-semibold">
+                  {point.label}
+                </text>
+              </g>
+            ))}
+          </>
         ) : (
           <text x="50" y="31" textAnchor="middle" className="fill-muted text-[4px]">
             Estructura VIX pendiente de fuente automatizada estable.

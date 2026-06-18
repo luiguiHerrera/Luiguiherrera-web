@@ -182,7 +182,7 @@ export default function MetodologiaPage() {
 
         <div className="border border-line bg-panel p-5 md:p-6">
           <Eyebrow>Límites</Eyebrow>
-          <h2 className="mt-2 text-2xl font-semibold text-ink">Lo que la plataforma no debe prometer</h2>
+          <h2 className="mt-2 text-2xl font-semibold text-ink">Lo que la plataforma no promete</h2>
           <ul className="mt-5 grid gap-2 text-sm leading-6 text-muted">
             {limits.map((item) => (
               <li key={item} className="border-l border-line pl-3">{item}</li>

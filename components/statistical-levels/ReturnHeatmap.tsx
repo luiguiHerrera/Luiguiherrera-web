@@ -166,8 +166,8 @@ function WeeklyHeatmap({ points, maxAbs }: { points: HeatmapPoint[]; maxAbs: num
   const visible = points.slice(-52);
   const blocks: HeatmapPoint[][] = [];
   for (let index = 0; index < visible.length; index += 13) blocks.push(visible.slice(index, index + 13));
-  const labels = ["-52", "-39", "-26", "-13", "Actual"];
-  const blockLabels = ["-3 meses", "-2 meses", "-1 mes", "Más reciente"];
+  const labels = ["Inicio", "+3s", "+6s", "+9s", "Actual"];
+  const blockLabels = ["Hace 52-40 semanas", "Hace 39-27 semanas", "Hace 26-14 semanas", "Últimas 13 semanas"];
 
   return (
     <div className="mt-5 max-w-full overflow-x-auto [contain:paint]">
