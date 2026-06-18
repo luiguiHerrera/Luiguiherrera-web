@@ -2,7 +2,10 @@ import { mkdir, writeFile } from "node:fs/promises";
 import path from "node:path";
 
 const outputPath = path.join(process.cwd(), "lib/statistical-levels/generated-data.ts");
-const seasonalityOutputPath = path.join(process.cwd(), "lib/statistical-levels/generated-seasonality-data.json");
+const generatedDir = path.join(process.cwd(), "lib/statistical-levels/generated");
+const manifestOutputPath = path.join(generatedDir, "manifest.json");
+const assetOutputDir = path.join(generatedDir, "assets");
+const seasonalityOutputDir = path.join(generatedDir, "seasonality");
 const requestTimeoutMs = 8000;
 const requestPauseMs = 250;
 
@@ -1024,6 +1027,24 @@ function summarizeAssets(assets) {
   );
 }
 
+function summarizeAssetForManifest(asset) {
+  return {
+    ticker: asset.ticker,
+    name: asset.name,
+    category: asset.category,
+    status: asset.status,
+    lastClose: asset.lastClose,
+    lastDate: asset.lastDate,
+    returns: asset.returns,
+    distanceToMovingAverages: asset.distanceToMovingAverages,
+    extension: {
+      zScore5Y: asset.windows["5Y"].ma200ExtensionZScore,
+      percentile5Y: asset.windows["5Y"].ma200ExtensionPercentile,
+      currentDrawdownFull: asset.windows.Full.currentDrawdown,
+    },
+  };
+}
+
 const assets = [];
 const dailySeasonality = [];
 for (const asset of universe) {
@@ -1080,14 +1101,50 @@ const seasonalityData = {
   },
 };
 
+const manifest = {
+  generatedAt: data.generatedAt,
+  source: data.source,
+  sourceUrl: data.sourceUrl,
+  defaultAsset: "SPY",
+  defaultWindow: data.defaultWindow,
+  defaultFrequency: data.defaultFrequency,
+  frequencies: data.frequencies,
+  windows: data.windows,
+  catalog: assets.map(({ ticker, name, category, stooqSymbol, status, statusNote, lastClose, lastDate }) => ({
+    ticker,
+    name,
+    category,
+    stooqSymbol,
+    status,
+    statusNote,
+    lastClose,
+    lastDate,
+  })),
+  summaries: assets.map(summarizeAssetForManifest),
+  statusCounts: summary,
+  seasonality: {
+    presidentialCycleSeasonality: seasonalityData.presidentialCycleSeasonality,
+  },
+};
+
 await mkdir(path.dirname(outputPath), { recursive: true });
+await mkdir(assetOutputDir, { recursive: true });
+await mkdir(seasonalityOutputDir, { recursive: true });
+await writeFile(manifestOutputPath, JSON.stringify(manifest));
+await Promise.all(
+  assets.map((asset) => writeFile(path.join(assetOutputDir, `${asset.ticker}.json`), JSON.stringify(asset))),
+);
+await Promise.all(
+  dailySeasonality.map((assetSeasonality) => writeFile(path.join(seasonalityOutputDir, `${assetSeasonality.asset}.json`), JSON.stringify(assetSeasonality))),
+);
 await writeFile(
   outputPath,
-  `import type { StatisticalLevelsGeneratedData } from "@/lib/statistical-levels/types";\n\nexport const statisticalLevelsData = ${JSON.stringify(data)} as StatisticalLevelsGeneratedData;\n`,
+  `import type { StatisticalLevelsGeneratedData } from "@/lib/statistical-levels/types";\n\nexport const statisticalLevelsData = ${JSON.stringify({ ...data, assets: [] })} as StatisticalLevelsGeneratedData;\n`,
 );
-await writeFile(seasonalityOutputPath, JSON.stringify(seasonalityData));
 
 console.log("[stat-levels] summary", summary);
 console.log("[stat-levels] unavailable reasons", unavailableReasons);
+console.log(`[stat-levels] wrote ${manifestOutputPath}`);
+console.log(`[stat-levels] wrote ${assetOutputDir}/{ticker}.json`);
+console.log(`[stat-levels] wrote ${seasonalityOutputDir}/{ticker}.json`);
 console.log(`[stat-levels] wrote ${outputPath}`);
-console.log(`[stat-levels] wrote ${seasonalityOutputPath}`);

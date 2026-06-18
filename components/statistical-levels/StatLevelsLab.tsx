@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { AssetComparisonTable } from "@/components/statistical-levels/AssetComparisonTable";
 import { AssetSelector } from "@/components/statistical-levels/AssetSelector";
 import { AssetStatCard } from "@/components/statistical-levels/AssetStatCard";
@@ -17,9 +18,7 @@ import { PeriodExplorerTable } from "@/components/statistical-levels/PeriodExplo
 import { PositioningScatter } from "@/components/statistical-levels/PositioningScatter";
 import { ReturnHeatmap } from "@/components/statistical-levels/ReturnHeatmap";
 import { UnderwaterDrawdownChart } from "@/components/statistical-levels/UnderwaterDrawdownChart";
-import { defaultStatisticalSelection } from "@/lib/statistical-levels/asset-universe";
-import { statisticalLevelsData } from "@/lib/statistical-levels/generated-data";
-import type { AssetDataStatus, AssetStatRecord, StatisticalFrequency, StatisticalLevelsSeasonalityGeneratedData, StatisticalWindow } from "@/lib/statistical-levels/types";
+import type { AssetDataStatus, AssetStatRecord, DailySeasonalityData, StatisticalFrequency, StatisticalLevelsManifest, StatisticalWindow } from "@/lib/statistical-levels/types";
 
 const statusLabels: Record<AssetDataStatus, string> = {
   ok: "Datos ok",
@@ -34,50 +33,35 @@ const frequencyLabels: Record<StatisticalFrequency, string> = {
 };
 
 type StatLevelsLabProps = {
-  seasonalityData: StatisticalLevelsSeasonalityGeneratedData;
+  asset: AssetStatRecord;
+  manifest: StatisticalLevelsManifest;
+  seasonality: DailySeasonalityData;
+  selection: {
+    asset: string;
+    frequency: StatisticalFrequency;
+    window: StatisticalWindow;
+  };
 };
 
-export function StatLevelsLab({ seasonalityData }: StatLevelsLabProps) {
-  const assets = statisticalLevelsData.assets as readonly AssetStatRecord[];
-  const availableDefaults = defaultStatisticalSelection.filter((ticker) => assets.some((asset) => asset.ticker === ticker));
-  const [selected, setSelected] = useState<string[]>(availableDefaults.slice(0, 5));
+export function StatLevelsLab({ asset, manifest, seasonality, selection }: StatLevelsLabProps) {
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const assets = useMemo(() => [asset], [asset]);
   const [query, setQuery] = useState("");
-  const [window, setWindow] = useState<StatisticalWindow>(statisticalLevelsData.defaultWindow);
-  const [frequency, setFrequency] = useState<StatisticalFrequency>(statisticalLevelsData.defaultFrequency);
-  const [focusTicker, setFocusTicker] = useState<string | null>(availableDefaults[0] ?? null);
+  const selectedAssets = assets;
+  const statusCounts = manifest.statusCounts;
+  const frequency = selection.frequency;
+  const window = selection.window;
+  const primaryAsset = asset;
 
-  const selectedAssets = useMemo(
-    () =>
-      selected
-        .map((ticker) => assets.find((asset) => asset.ticker === ticker))
-        .filter((asset): asset is AssetStatRecord => asset !== undefined),
-    [assets, selected],
-  );
-
-  const statusCounts = useMemo(() => {
-    return assets.reduce(
-      (counts, asset) => {
-        counts[asset.status] += 1;
-        return counts;
-      },
-      { ok: 0, limited_history: 0, unavailable: 0 } as Record<AssetDataStatus, number>,
-    );
-  }, [assets]);
-
-  function toggleAsset(ticker: string) {
-    setSelected((current) => {
-      if (current.includes(ticker)) {
-        const next = current.filter((item) => item !== ticker);
-        if (focusTicker === ticker) setFocusTicker(next[0] ?? null);
-        return next;
-      }
-      if (current.length >= 5) return current;
-      if (!focusTicker) setFocusTicker(ticker);
-      return [...current, ticker];
-    });
+  function navigate(next: Partial<{ asset: string; frequency: StatisticalFrequency; window: StatisticalWindow }>) {
+    const params = new URLSearchParams(searchParams.toString());
+    params.set("asset", next.asset ?? selection.asset);
+    params.set("frequency", next.frequency ?? frequency);
+    params.set("window", next.window ?? window);
+    router.push(`${pathname}?${params.toString()}`);
   }
-
-  const primaryAsset = selectedAssets.find((asset) => asset.ticker === focusTicker) ?? selectedAssets[0] ?? null;
 
   return (
     <div className="space-y-5">
@@ -90,7 +74,7 @@ export function StatLevelsLab({ seasonalityData }: StatLevelsLabProps) {
         ))}
       </section>
 
-      <AssetSelector catalog={statisticalLevelsData.catalog} query={query} selected={selected} setQuery={setQuery} toggleAsset={toggleAsset} />
+      <AssetSelector catalog={manifest.catalog} query={query} selected={[asset.ticker]} setQuery={setQuery} selectAsset={(ticker) => navigate({ asset: ticker })} />
 
       <section className="border border-line bg-panel p-4 md:p-5">
         <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
@@ -104,11 +88,11 @@ export function StatLevelsLab({ seasonalityData }: StatLevelsLabProps) {
           </div>
           <div className="flex flex-col gap-3">
             <div className="flex w-fit flex-wrap border border-line bg-panelSoft p-1">
-              {statisticalLevelsData.frequencies.map((item) => (
+              {manifest.frequencies.map((item) => (
                 <button
                   key={item}
                   type="button"
-                  onClick={() => setFrequency(item)}
+                  onClick={() => navigate({ frequency: item })}
                   className={`min-h-9 px-4 text-sm font-semibold transition ${frequency === item ? "bg-ink text-white" : "text-muted hover:text-ink"}`}
                 >
                   {frequencyLabels[item]}
@@ -116,11 +100,11 @@ export function StatLevelsLab({ seasonalityData }: StatLevelsLabProps) {
               ))}
             </div>
             <div className="flex w-fit flex-wrap border border-line bg-panelSoft p-1">
-              {statisticalLevelsData.windows.map((item) => (
+              {manifest.windows.map((item) => (
                 <button
                   key={item}
                   type="button"
-                  onClick={() => setWindow(item)}
+                  onClick={() => navigate({ window: item })}
                   className={`min-h-9 px-4 text-sm font-semibold transition ${window === item ? "bg-ink text-white" : "text-muted hover:text-ink"}`}
                 >
                   {item}
@@ -132,8 +116,8 @@ export function StatLevelsLab({ seasonalityData }: StatLevelsLabProps) {
         <div className="mt-5 grid gap-3 border-t border-line pt-5 text-sm text-muted md:grid-cols-3">
           <p><span className="font-semibold text-ink">Frecuencia:</span> {frequencyLabels[frequency]}</p>
           <p><span className="font-semibold text-ink">Ventana:</span> {window}</p>
-          <p><span className="font-semibold text-ink">Actualización:</span> {statisticalLevelsData.generatedAt}</p>
-          <p className="md:col-span-3"><span className="font-semibold text-ink">Fuente:</span> {statisticalLevelsData.source}</p>
+          <p><span className="font-semibold text-ink">Actualización:</span> {manifest.generatedAt}</p>
+          <p className="md:col-span-3"><span className="font-semibold text-ink">Fuente:</span> {manifest.source}</p>
         </div>
       </section>
 
@@ -144,7 +128,7 @@ export function StatLevelsLab({ seasonalityData }: StatLevelsLabProps) {
         {selectedAssets.map((asset) => <AssetStatCard key={asset.ticker} asset={asset} frequency={frequency} window={window} />)}
       </section>
 
-      <FocusedAssetPanel assets={selectedAssets} focusTicker={primaryAsset?.ticker ?? null} setFocusTicker={setFocusTicker} frequency={frequency} window={window} />
+      <FocusedAssetPanel assets={selectedAssets} focusTicker={primaryAsset?.ticker ?? null} setFocusTicker={(ticker) => navigate({ asset: ticker })} frequency={frequency} window={window} />
       <KeyStatisticalLevelsPanel asset={primaryAsset} />
       <div className="grid min-w-0 gap-6 xl:grid-cols-[minmax(0,1fr)_minmax(0,0.9fr)]">
         <UnderwaterDrawdownChart asset={primaryAsset} frequency={frequency} window={window} />
@@ -154,9 +138,9 @@ export function StatLevelsLab({ seasonalityData }: StatLevelsLabProps) {
       <OpeningLocationPanel asset={primaryAsset} frequency={frequency} />
       <CalendarExtremesPanel asset={primaryAsset} frequency={frequency} />
       <DailySeasonalityPanel
-        catalog={statisticalLevelsData.catalog}
-        data={seasonalityData.dailySeasonality}
-        generatedAt={statisticalLevelsData.generatedAt}
+        catalog={manifest.catalog}
+        data={seasonality}
+        generatedAt={manifest.generatedAt}
         initialTicker={primaryAsset?.ticker ?? null}
       />
       <PeriodExplorerTable asset={primaryAsset} frequency={frequency} />

@@ -1,11 +1,15 @@
 import { StatLevelsLab } from "@/components/statistical-levels/StatLevelsLab";
 import { DisclaimerBox } from "@/components/ui/DisclaimerBox";
 import { SectionHeader } from "@/components/ui/SectionHeader";
-import { statisticalLevelsData } from "@/lib/statistical-levels/generated-data";
-import { getStatisticalLevelsSeasonalityData } from "@/lib/statistical-levels/get-seasonality-data";
+import { getStatisticalLevelsPageData } from "@/lib/statistical-levels/get-statistical-levels-data";
 
-export default async function NivelesEstadisticosPage() {
-  const seasonalityData = await getStatisticalLevelsSeasonalityData();
+type NivelesEstadisticosPageProps = {
+  searchParams?: Promise<Record<string, string | string[] | undefined>>;
+};
+
+export default async function NivelesEstadisticosPage({ searchParams }: NivelesEstadisticosPageProps) {
+  const resolvedSearchParams = searchParams ? await searchParams : {};
+  const { asset, manifest, seasonality, selection } = await getStatisticalLevelsPageData(resolvedSearchParams);
 
   return (
     <div className="mx-auto max-w-7xl px-5 py-10 md:py-14">
@@ -23,12 +27,12 @@ export default async function NivelesEstadisticosPage() {
       <div className="mt-8 grid gap-4 border-y border-line py-5 text-sm leading-6 text-muted md:grid-cols-3">
         <div>
           <span className="block text-xs font-semibold uppercase tracking-[0.14em] text-brass">Datos actualizados hasta</span>
-          <span className="mt-1 block font-semibold text-ink">{statisticalLevelsData.generatedAt}</span>
+          <span className="mt-1 block font-semibold text-ink">{manifest.generatedAt}</span>
         </div>
         <div>
           <span className="block text-xs font-semibold uppercase tracking-[0.14em] text-brass">Fuente</span>
-          <a href={statisticalLevelsData.sourceUrl} className="mt-1 inline-block font-semibold text-ink underline-offset-4 hover:underline" target="_blank" rel="noreferrer">
-            {statisticalLevelsData.source}
+          <a href={manifest.sourceUrl} className="mt-1 inline-block font-semibold text-ink underline-offset-4 hover:underline" target="_blank" rel="noreferrer">
+            {manifest.source}
           </a>
         </div>
         <div>
@@ -38,7 +42,7 @@ export default async function NivelesEstadisticosPage() {
       </div>
 
       <div className="mt-8">
-        <StatLevelsLab seasonalityData={seasonalityData} />
+        <StatLevelsLab asset={asset} manifest={manifest} seasonality={seasonality} selection={selection} />
       </div>
     </div>
   );

@@ -35,6 +35,13 @@ export type AssetCatalogItem = {
   stooqSymbol: string;
 };
 
+export type AssetManifestItem = AssetCatalogItem & {
+  status: AssetDataStatus;
+  statusNote: string;
+  lastClose: number | null;
+  lastDate: string | null;
+};
+
 export type CompactPricePoint = {
   date: string;
   close: number;
@@ -274,6 +281,39 @@ export type AssetStatRecord = {
   windows: Record<StatisticalWindow, WindowMetric>;
   frequencies: Record<StatisticalFrequency, FrequencyMetricSet>;
   keyStatisticalLevels: AssetKeyStatisticalLevels;
+};
+
+export type AssetStatSummary = {
+  ticker: string;
+  name: string;
+  category: AssetCategory;
+  status: AssetDataStatus;
+  lastClose: number | null;
+  lastDate: string | null;
+  returns: AssetStatRecord["returns"];
+  distanceToMovingAverages: AssetStatRecord["distanceToMovingAverages"];
+  extension: {
+    zScore5Y: number | null;
+    percentile5Y: number | null;
+    currentDrawdownFull: number | null;
+  };
+};
+
+export type StatisticalLevelsManifest = {
+  generatedAt: string;
+  source: string;
+  sourceUrl: string;
+  defaultAsset: string;
+  defaultWindow: StatisticalWindow;
+  defaultFrequency: StatisticalFrequency;
+  frequencies: StatisticalFrequency[];
+  windows: StatisticalWindow[];
+  catalog: AssetManifestItem[];
+  summaries: AssetStatSummary[];
+  statusCounts: Record<AssetDataStatus, number>;
+  seasonality: {
+    presidentialCycleSeasonality: PresidentialCycleSeasonalityIndex;
+  };
 };
 
 export type StatisticalLevelsGeneratedData = {

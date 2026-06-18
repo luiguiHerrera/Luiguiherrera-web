@@ -7,12 +7,12 @@ type AssetSelectorProps = {
   query: string;
   selected: string[];
   setQuery: (value: string) => void;
-  toggleAsset: (ticker: string) => void;
+  selectAsset: (ticker: string) => void;
 };
 
 const categoryOrder: AssetCategory[] = ["Índices / ETFs", "Bonos", "Oro y materias primas", "Sectores", "Cripto", "Internacional"];
 
-export function AssetSelector({ catalog, query, selected, setQuery, toggleAsset }: AssetSelectorProps) {
+export function AssetSelector({ catalog, query, selected, setQuery, selectAsset }: AssetSelectorProps) {
   const normalized = query.trim().toLowerCase();
   const filtered = catalog.filter((asset) => `${asset.ticker} ${asset.name} ${asset.category}`.toLowerCase().includes(normalized));
 
@@ -22,7 +22,7 @@ export function AssetSelector({ catalog, query, selected, setQuery, toggleAsset 
         <div>
           <p className="text-xs font-semibold uppercase tracking-[0.18em] text-brass">Selector</p>
           <h2 className="mt-2 text-xl font-semibold text-ink">Activos del universo curado</h2>
-          <p className="mt-2 text-sm leading-6 text-muted">Selecciona hasta 5 activos. La selección vive solo en memoria durante esta sesión.</p>
+          <p className="mt-2 text-sm leading-6 text-muted">Elige un activo para cargar solo sus niveles y estacionalidad desde servidor.</p>
         </div>
         <label className="w-full md:w-80">
           <span className="sr-only">Buscar activo</span>
@@ -45,15 +45,13 @@ export function AssetSelector({ catalog, query, selected, setQuery, toggleAsset 
               <div className="flex flex-wrap gap-2">
                 {assets.map((asset) => {
                   const active = selected.includes(asset.ticker);
-                  const disabled = !active && selected.length >= 5;
                   return (
                     <button
                       key={asset.ticker}
                       type="button"
-                      onClick={() => toggleAsset(asset.ticker)}
-                      disabled={disabled}
+                      onClick={() => selectAsset(asset.ticker)}
                       title={asset.name}
-                      className={`border px-3 py-2 text-sm font-semibold transition disabled:cursor-not-allowed disabled:opacity-35 ${active ? "border-petrol bg-[#eef3f2] text-petrol" : "border-line bg-panelSoft text-muted hover:border-ink hover:text-ink"}`}
+                      className={`border px-3 py-2 text-sm font-semibold transition ${active ? "border-petrol bg-[#eef3f2] text-petrol" : "border-line bg-panelSoft text-muted hover:border-ink hover:text-ink"}`}
                     >
                       {asset.ticker}
                     </button>

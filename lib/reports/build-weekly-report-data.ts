@@ -1,7 +1,10 @@
 import { getDashboardData } from "@/lib/dashboard/get-dashboard-data";
-import { statisticalLevelsData } from "@/lib/statistical-levels/generated-data";
-import { getStatisticalLevelsSeasonalityData } from "@/lib/statistical-levels/get-seasonality-data";
-import type { AssetStatRecord, DailySeasonalityCell, PresidentialCyclePhase } from "@/lib/statistical-levels/types";
+import {
+  getStatisticalLevelsAsset,
+  getStatisticalLevelsAssetSeasonality,
+  getStatisticalLevelsManifest,
+} from "@/lib/statistical-levels/get-statistical-levels-data";
+import type { AssetStatRecord, AssetStatSummary, DailySeasonalityCell, PresidentialCyclePhase } from "@/lib/statistical-levels/types";
 
 const coreEtfs = ["SPY", "QQQ", "DIA", "IWM"];
 
@@ -50,15 +53,15 @@ function rankedSeasonality(cells: DailySeasonalityCell[], month: number) {
   };
 }
 
-function extensionHighlights(assets: AssetStatRecord[]) {
+function extensionHighlights(assets: AssetStatSummary[]) {
   return assets
     .map((asset) => ({
       ticker: asset.ticker,
       name: asset.name,
-      zScore: asset.windows["5Y"].ma200ExtensionZScore,
-      percentile: asset.windows["5Y"].ma200ExtensionPercentile,
+      zScore: asset.extension.zScore5Y,
+      percentile: asset.extension.percentile5Y,
       distanceToLongAverage: asset.distanceToMovingAverages.ma200,
-      currentDrawdown: asset.windows.Full.currentDrawdown,
+      currentDrawdown: asset.extension.currentDrawdownFull,
     }))
     .filter((asset) => asset.zScore !== null || asset.percentile !== null)
     .sort((a, b) => Math.abs(b.zScore ?? 0) - Math.abs(a.zScore ?? 0))
@@ -67,12 +70,12 @@ function extensionHighlights(assets: AssetStatRecord[]) {
 
 export async function buildWeeklyReportData() {
   const dashboard = await getDashboardData();
-  const seasonalityData = await getStatisticalLevelsSeasonalityData();
-  const assets = statisticalLevelsData.assets as AssetStatRecord[];
-  const generatedAt = statisticalLevelsData.generatedAt;
+  const manifest = await getStatisticalLevelsManifest();
+  const assets = await Promise.all(coreEtfs.map((ticker) => getStatisticalLevelsAsset(ticker)));
+  const generatedAt = manifest.generatedAt;
   const { month, year } = dateParts(generatedAt);
   const cyclePhase = presidentialCyclePhase(year);
-  const spySeasonality = seasonalityData.dailySeasonality.find((item) => item.asset === "SPY");
+  const spySeasonality = await getStatisticalLevelsAssetSeasonality("SPY");
   const seasonalityWindow = spySeasonality?.windows["10Y"] ?? spySeasonality?.windows.Full ?? null;
   const seasonality = seasonalityWindow
     ? {
@@ -124,7 +127,7 @@ export async function buildWeeklyReportData() {
       btcEtfFlows: dashboard.btcEtfFlows,
       generalEtfFlowsStatus: "Pendiente de fuente automatizada clara.",
     },
-    statisticalLevels: extensionHighlights(assets),
+    statisticalLevels: extensionHighlights(manifest.summaries),
     seasonality,
     crossSignalRadar: dashboard.crossSignalRadar,
     roadmapItems,

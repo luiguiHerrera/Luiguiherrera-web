@@ -8,7 +8,7 @@ import type { AssetCatalogItem, DailySeasonalityData, PresidentialCyclePhase, Se
 
 type DailySeasonalityPanelProps = {
   catalog: AssetCatalogItem[];
-  data: DailySeasonalityData[];
+  data: DailySeasonalityData | null;
   generatedAt: string;
   initialTicker: string | null;
 };
@@ -23,16 +23,12 @@ function monthFromGeneratedAt(generatedAt: string) {
 }
 
 export function DailySeasonalityPanel({ catalog, data, generatedAt, initialTicker }: DailySeasonalityPanelProps) {
-  const availableTickers = useMemo(() => new Set(data.map((item) => item.asset)), [data]);
-  const defaultTicker = initialTicker && availableTickers.has(initialTicker) ? initialTicker : data[0]?.asset ?? "";
-  const [ticker, setTicker] = useState(defaultTicker);
   const [window, setWindow] = useState<SeasonalityWindow>("5Y");
   const [month, setMonth] = useState(monthFromGeneratedAt(generatedAt));
   const [phase, setPhase] = useState<PresidentialCyclePhase>("all");
 
-  const selected = data.find((item) => item.asset === ticker) ?? data[0] ?? null;
-  const windowData = selected?.windows[window] ?? null;
-  const selectedAsset = catalog.find((asset) => asset.ticker === selected?.asset);
+  const selectedAsset = useMemo(() => catalog.find((asset) => asset.ticker === (data?.asset ?? initialTicker)), [catalog, data?.asset, initialTicker]);
+  const windowData = data?.windows[window] ?? null;
 
   return (
     <section className="border border-line bg-panel p-4 md:p-5">
@@ -45,19 +41,7 @@ export function DailySeasonalityPanel({ catalog, data, generatedAt, initialTicke
           </p>
         </div>
 
-        <div className="grid gap-3 sm:grid-cols-3 xl:min-w-[34rem]">
-          <label className="grid gap-1 text-xs font-semibold uppercase tracking-[0.12em] text-muted">
-            Activo
-            <select
-              value={selected?.asset ?? ""}
-              onChange={(event) => setTicker(event.target.value)}
-              className="border border-line bg-panelSoft px-3 py-2 text-sm font-semibold normal-case tracking-normal text-ink outline-none transition focus:border-petrol"
-            >
-              {catalog.filter((asset) => availableTickers.has(asset.ticker)).map((asset) => (
-                <option key={asset.ticker} value={asset.ticker}>{asset.ticker}</option>
-              ))}
-            </select>
-          </label>
+        <div className="grid gap-3 sm:grid-cols-2 xl:min-w-[24rem]">
           <label className="grid gap-1 text-xs font-semibold uppercase tracking-[0.12em] text-muted">
             Ventana
             <select
@@ -82,7 +66,7 @@ export function DailySeasonalityPanel({ catalog, data, generatedAt, initialTicke
       </div>
 
       <div className="mt-4 grid gap-3 border-y border-line py-3 text-sm leading-6 text-muted md:grid-cols-3">
-        <p><span className="font-semibold text-ink">Activo:</span> {selectedAsset ? `${selectedAsset.ticker} · ${selectedAsset.name}` : selected?.asset ?? "n/d"}</p>
+        <p><span className="font-semibold text-ink">Activo:</span> {selectedAsset ? `${selectedAsset.ticker} · ${selectedAsset.name}` : data?.asset ?? "n/d"}</p>
         <p><span className="font-semibold text-ink">Ventana histórica:</span> {window}</p>
         <p><span className="font-semibold text-ink">Mes:</span> {monthNames[month - 1]}</p>
       </div>
