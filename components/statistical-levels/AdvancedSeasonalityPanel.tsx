@@ -19,13 +19,20 @@ type AdvancedSeasonalityPanelProps = {
   data: DailySeasonalityData | null;
   frequency: StatisticalFrequency;
   generatedAt: string;
+  locale?: "es" | "en";
   ticker: string;
 };
 
 const windowOptions: SeasonalityWindow[] = ["3Y", "5Y", "10Y", "All"];
-const metricOptions: Array<{ key: SeasonalityMetric; label: string }> = [
+const spanishMetricOptions: Array<{ key: SeasonalityMetric; label: string }> = [
   { key: "averageReturn", label: "Promedio" },
   { key: "medianReturn", label: "Mediana" },
+  { key: "winRate", label: "Win rate" },
+  { key: "sampleSize", label: "N" },
+];
+const englishMetricOptions: Array<{ key: SeasonalityMetric; label: string }> = [
+  { key: "averageReturn", label: "Average" },
+  { key: "medianReturn", label: "Median" },
   { key: "winRate", label: "Win rate" },
   { key: "sampleSize", label: "N" },
 ];
@@ -38,6 +45,8 @@ const phaseOptions: Array<{ key: PresidentialCyclePhase; label: string }> = [
 ];
 const monthNames = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
 const shortMonths = ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"];
+const englishMonthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+const englishShortMonths = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
 function monthFromGeneratedAt(generatedAt: string) {
   const parsed = new Date(`${generatedAt}T00:00:00Z`);
@@ -83,8 +92,8 @@ function colorFor(value: number | null, metric: SeasonalityMetric, scale: number
   return `rgba(168, 100, 100, ${0.2 + intensity * 0.6})`;
 }
 
-function cellTitle(label: string, cell: SeasonalityCell | undefined) {
-  if (!cell) return `${label} · sin muestra`;
+function cellTitle(label: string, cell: SeasonalityCell | undefined, locale: "es" | "en") {
+  if (!cell) return locale === "en" ? `${label} · no observations` : `${label} · sin muestra`;
   return `${label} · promedio ${formatPercent(cell.averageReturn)} · mediana ${formatPercent(cell.medianReturn)} · win rate ${formatMetric(cell.winRate, "winRate")} · N ${cell.sampleSize}`;
 }
 
@@ -100,18 +109,22 @@ function bestAndWeakest(cells: SeasonalityCell[]) {
   return { best: sorted[0], weakest: sorted.at(-1) };
 }
 
-function labelForCell(cell: SeasonalityCell | undefined) {
+function labelForCell(cell: SeasonalityCell | undefined, locale: "es" | "en") {
+  const months = locale === "en" ? englishMonthNames : monthNames;
+  const short = locale === "en" ? englishShortMonths : shortMonths;
   if (!cell) return "n/d";
-  if ("day" in cell) return `${cell.day} ${shortMonths[cell.month - 1]}`;
-  if ("weekOfMonth" in cell) return `${shortMonths[cell.month - 1]} · Semana ${cell.weekOfMonth}`;
-  return monthNames[cell.month - 1];
+  if ("day" in cell) return `${cell.day} ${short[cell.month - 1]}`;
+  if ("weekOfMonth" in cell) return `${short[cell.month - 1]} · ${locale === "en" ? "Week" : "Semana"} ${cell.weekOfMonth}`;
+  return months[cell.month - 1];
 }
 
-export function AdvancedSeasonalityPanel({ data, frequency, generatedAt, ticker }: AdvancedSeasonalityPanelProps) {
+export function AdvancedSeasonalityPanel({ data, frequency, generatedAt, locale = "es", ticker }: AdvancedSeasonalityPanelProps) {
   const [window, setWindow] = useState<SeasonalityWindow>("5Y");
   const [phase, setPhase] = useState<PresidentialCyclePhase>("all");
   const [metric, setMetric] = useState<SeasonalityMetric>("averageReturn");
   const [month, setMonth] = useState(monthFromGeneratedAt(generatedAt));
+  const metricOptions = locale === "en" ? englishMetricOptions : spanishMetricOptions;
+  const months = locale === "en" ? englishMonthNames : monthNames;
   const windowData = data?.windows[window] ?? (window === "All" ? data?.windows.Full : null);
   const dimension = frequency === "monthly" ? windowData?.monthly : frequency === "weekly" ? windowData?.weekly : windowData?.daily;
   const cells = useMemo(() => {
@@ -121,31 +134,89 @@ export function AdvancedSeasonalityPanel({ data, frequency, generatedAt, ticker 
   const monthCells = cells.filter((cell) => cell.month === month && cell.sampleSize > 0);
   const { best, weakest } = bestAndWeakest(frequency === "daily" || frequency === "weekly" ? monthCells : cells);
   const sampleAverage = average(cells.map((cell) => cell.sampleSize));
-  const reading = frequency === "monthly"
-    ? "Patrones históricos por mes calendario del activo seleccionado."
-    : frequency === "weekly"
-      ? "Agrupa semanas completadas dentro del mes seleccionado. Para lectura por día calendario usa la pestaña Diario."
-      : "Lectura diaria por calendario. Usa días del mes y datos históricos diarios; no incluye comportamiento intradía.";
+  const copy = locale === "en"
+    ? {
+        eyebrow: frequency === "monthly" ? "Monthly seasonality" : frequency === "weekly" ? "Weekly seasonality" : "Daily seasonality",
+        title: "Historical calendar patterns",
+        reading: frequency === "monthly"
+          ? "Historical patterns by calendar month for the selected asset."
+          : frequency === "weekly"
+            ? "Groups completed weeks inside the selected month. Use the Daily tab for calendar-day analysis."
+            : "Daily calendar view using historical daily data; it does not include intraday behavior.",
+        window: "Window",
+        presidentialCycle: "Presidential cycle",
+        metric: "Metric",
+        averageN: "Average N",
+        month: "Month",
+        bestMonth: "Best month",
+        weakMonth: "Weakest month",
+        strongWeek: "Strongest week",
+        weakWeek: "Weakest week",
+        strongDay: "Strongest day",
+        weakDay: "Weakest day",
+        averageReturn: "Average return",
+        averageWinRate: "Average win rate",
+        lowSample: "Low sample",
+        emptyWeekly: "Not enough observations for this window, cycle and month.",
+        emptyGeneral: "Not enough history to build advanced seasonality for this asset.",
+        methodology: "Completed weeks are grouped by weekly close date. Week 1 = days 1-7; Week 5 = days 29-31.",
+        footer: "Average and median help separate historical tendency from outliers. Sample size matters: low N requires careful reading.",
+        topStrong: "Top 5 strong",
+        topWeak: "Top 5 weak",
+        day: "Day",
+        week: "Week",
+      }
+    : {
+        eyebrow: frequency === "monthly" ? "Estacionalidad mensual" : frequency === "weekly" ? "Estacionalidad semanal" : "Estacionalidad diaria",
+        title: "Patrones históricos por calendario",
+        reading: frequency === "monthly"
+          ? "Patrones históricos por mes calendario del activo seleccionado."
+          : frequency === "weekly"
+            ? "Agrupa semanas completadas dentro del mes seleccionado. Para lectura por día calendario usa la pestaña Diario."
+            : "Lectura diaria por calendario. Usa días del mes y datos históricos diarios; no incluye comportamiento intradía.",
+        window: "Ventana",
+        presidentialCycle: "Ciclo presidencial",
+        metric: "Métrica",
+        averageN: "N promedio",
+        month: "Mes",
+        bestMonth: "Mejor mes",
+        weakMonth: "Mes débil",
+        strongWeek: "Semana fuerte",
+        weakWeek: "Semana débil",
+        strongDay: "Día fuerte",
+        weakDay: "Día débil",
+        averageReturn: "Retorno medio",
+        averageWinRate: "Win rate medio",
+        lowSample: "Muestra baja",
+        emptyWeekly: "No hay muestra suficiente para esta combinación de ventana, ciclo y mes.",
+        emptyGeneral: "Historial insuficiente para construir estacionalidad avanzada de este activo.",
+        methodology: "Semanas agregadas por fecha de cierre semanal. Semana 1 = días 1-7 del mes; Semana 5 = días 29-31.",
+        footer: "Promedio y mediana ayudan a separar tendencia histórica de valores extremos. La muestra importa: N bajo requiere lectura prudente.",
+        topStrong: "Top 5 fuertes",
+        topWeak: "Top 5 débiles",
+        day: "Día",
+        week: "Semana",
+      };
 
   return (
     <ExpandableInsightCard
-      eyebrow={frequency === "monthly" ? "Estacionalidad mensual" : frequency === "weekly" ? "Estacionalidad semanal" : "Estacionalidad diaria"}
-      title="Patrones históricos por calendario"
-      reading={reading}
+      eyebrow={copy.eyebrow}
+      title={copy.title}
+      reading={copy.reading}
       status={ticker}
       metrics={[
-        { label: "Ventana", value: window },
-        { label: "Ciclo presidencial", value: phaseOptions.find((item) => item.key === phase)?.label ?? "Off" },
-        { label: "Métrica", value: metricOptions.find((item) => item.key === metric)?.label ?? "Promedio" },
-        { label: "N promedio", value: sampleAverage === null ? "n/d" : sampleAverage.toFixed(0) },
+        { label: copy.window, value: window },
+        { label: copy.presidentialCycle, value: phaseOptions.find((item) => item.key === phase)?.label ?? "Off" },
+        { label: copy.metric, value: metricOptions.find((item) => item.key === metric)?.label ?? "Promedio" },
+        { label: copy.averageN, value: sampleAverage === null ? "n/d" : sampleAverage.toFixed(0) },
       ]}
       summaryExtra={
         <div className="grid gap-2.5 sm:grid-cols-2 xl:grid-cols-4">
-          <Control label="Ventana" value={window} setValue={(value) => setWindow(value as SeasonalityWindow)} options={windowOptions.map((item) => [item, item])} />
-          <Control label="Ciclo" value={phase} setValue={(value) => setPhase(value as PresidentialCyclePhase)} options={phaseOptions.map((item) => [item.key, item.label])} />
-          <Control label="Métrica" value={metric} setValue={(value) => setMetric(value as SeasonalityMetric)} options={metricOptions.map((item) => [item.key, item.label])} />
+          <Control label={copy.window} value={window} setValue={(value) => setWindow(value as SeasonalityWindow)} options={windowOptions.map((item) => [item, item])} />
+          <Control label={copy.presidentialCycle} value={phase} setValue={(value) => setPhase(value as PresidentialCyclePhase)} options={phaseOptions.map((item) => [item.key, item.label])} />
+          <Control label={copy.metric} value={metric} setValue={(value) => setMetric(value as SeasonalityMetric)} options={metricOptions.map((item) => [item.key, item.label])} />
           {frequency !== "monthly" ? (
-            <Control label="Mes" value={String(month)} setValue={(value) => setMonth(Number(value))} options={monthNames.map((name, index) => [String(index + 1), name])} />
+            <Control label={copy.month} value={String(month)} setValue={(value) => setMonth(Number(value))} options={months.map((name, index) => [String(index + 1), name])} />
           ) : null}
         </div>
       }
@@ -153,23 +224,23 @@ export function AdvancedSeasonalityPanel({ data, frequency, generatedAt, ticker 
       {dimension ? (
         <div className="grid gap-5">
           <div className="grid gap-3 md:grid-cols-4">
-            <Summary label={frequency === "monthly" ? "Mejor mes" : frequency === "weekly" ? "Semana fuerte" : "Día fuerte"} cell={best} />
-            <Summary label={frequency === "monthly" ? "Mes débil" : frequency === "weekly" ? "Semana débil" : "Día débil"} cell={weakest} />
-            <MetricBox label="Retorno medio" value={formatPercent(average(cells.map((cell) => cell.averageReturn)))} />
-            <MetricBox label="Win rate medio" value={formatMetric(average(cells.map((cell) => cell.winRate)), "winRate")} />
+            <Summary label={frequency === "monthly" ? copy.bestMonth : frequency === "weekly" ? copy.strongWeek : copy.strongDay} cell={best} locale={locale} lowSampleLabel={copy.lowSample} />
+            <Summary label={frequency === "monthly" ? copy.weakMonth : frequency === "weekly" ? copy.weakWeek : copy.weakDay} cell={weakest} locale={locale} lowSampleLabel={copy.lowSample} />
+            <MetricBox label={copy.averageReturn} value={formatPercent(average(cells.map((cell) => cell.averageReturn)))} />
+            <MetricBox label={copy.averageWinRate} value={formatMetric(average(cells.map((cell) => cell.winRate)), "winRate")} />
           </div>
 
-          {frequency === "monthly" ? <MonthlyView cells={cells as CalendarMonthSeasonalityCell[]} metric={metric} /> : null}
-          {frequency === "weekly" ? <WeeklyView cells={monthCells as CalendarWeekSeasonalityCell[]} metric={metric} month={month} methodology={windowData?.weekly?.methodology} /> : null}
-          {frequency === "daily" ? <DailyView cells={cells as CalendarDaySeasonalityCell[]} metric={metric} month={month} /> : null}
+          {frequency === "monthly" ? <MonthlyView cells={cells as CalendarMonthSeasonalityCell[]} locale={locale} metric={metric} /> : null}
+          {frequency === "weekly" ? <WeeklyView cells={monthCells as CalendarWeekSeasonalityCell[]} copy={copy} locale={locale} metric={metric} month={month} monthNames={months} /> : null}
+          {frequency === "daily" ? <DailyView cells={cells as CalendarDaySeasonalityCell[]} copy={copy} locale={locale} metric={metric} month={month} monthNames={months} /> : null}
 
           <p className="border-t border-line pt-4 text-xs leading-5 text-muted">
-            Promedio y mediana ayudan a separar tendencia histórica de valores extremos. La muestra importa: N bajo requiere lectura prudente.
+            {copy.footer}
           </p>
         </div>
       ) : (
         <div className="mt-5 border border-line bg-panelSoft p-4 text-sm leading-6 text-muted">
-          Historial insuficiente para construir estacionalidad avanzada de este activo.
+          {copy.emptyGeneral}
         </div>
       )}
     </ExpandableInsightCard>
@@ -200,19 +271,21 @@ function MetricBox({ label, value }: { label: string; value: string }) {
   );
 }
 
-function Summary({ cell, label }: { cell: SeasonalityCell | undefined; label: string }) {
+function Summary({ cell, label, locale, lowSampleLabel }: { cell: SeasonalityCell | undefined; label: string; locale: "es" | "en"; lowSampleLabel: string }) {
   return (
     <div className="border border-line bg-panelSoft p-3">
       <p className="text-[11px] uppercase tracking-[0.12em] text-muted">{label}</p>
-      <p className="mt-2 font-semibold text-ink">{labelForCell(cell)}</p>
-      <p className="mt-1 text-xs text-muted">{cell ? `${formatPercent(cell.averageReturn)} · N ${cell.sampleSize}${cell.sampleSize < 5 ? " · Muestra baja" : ""}` : "n/d"}</p>
+      <p className="mt-2 font-semibold text-ink">{labelForCell(cell, locale)}</p>
+      <p className="mt-1 text-xs text-muted">{cell ? `${formatPercent(cell.averageReturn)} · N ${cell.sampleSize}${cell.sampleSize < 5 ? ` · ${lowSampleLabel}` : ""}` : "n/d"}</p>
     </div>
   );
 }
 
-function MonthlyView({ cells, metric }: { cells: CalendarMonthSeasonalityCell[]; metric: SeasonalityMetric }) {
+function MonthlyView({ cells, locale, metric }: { cells: CalendarMonthSeasonalityCell[]; locale: "es" | "en"; metric: SeasonalityMetric }) {
   const byMonth = new Map(cells.map((cell) => [cell.month, cell]));
   const scale = maxAbs(cells, metric);
+  const months = locale === "en" ? englishMonthNames : monthNames;
+  const short = locale === "en" ? englishShortMonths : shortMonths;
   return (
     <div className="border border-line bg-panelSoft p-4">
       <div className="grid min-h-56 grid-cols-12 items-end gap-2">
@@ -222,9 +295,9 @@ function MonthlyView({ cells, metric }: { cells: CalendarMonthSeasonalityCell[];
           const value = metricValue(cell, metric);
           const height = metric === "sampleSize" ? Math.max(8, ((value ?? 0) / scale) * 100) : Math.max(8, (Math.abs(value ?? 0) / scale) * 100);
           return (
-            <div key={month} className="flex min-w-0 flex-col items-center justify-end gap-2" title={cellTitle(monthNames[index], cell)}>
+            <div key={month} className="flex min-w-0 flex-col items-center justify-end gap-2" title={cellTitle(months[index], cell, locale)}>
               <div className="w-full border border-white" style={{ height: `${height}%`, backgroundColor: colorFor(value, metric, scale) }} />
-              <span className="text-[10px] font-semibold text-muted">{shortMonths[index]}</span>
+              <span className="text-[10px] font-semibold text-muted">{short[index]}</span>
             </div>
           );
         })}
@@ -233,12 +306,33 @@ function MonthlyView({ cells, metric }: { cells: CalendarMonthSeasonalityCell[];
   );
 }
 
-function WeeklyView({ cells, metric, month, methodology }: { cells: CalendarWeekSeasonalityCell[]; metric: SeasonalityMetric; month: number; methodology?: string }) {
+function WeeklyView({
+  cells,
+  copy,
+  locale,
+  metric,
+  month,
+  monthNames,
+}: {
+  cells: CalendarWeekSeasonalityCell[];
+  copy: { emptyWeekly: string; lowSample: string; methodology: string; week: string };
+  locale: "es" | "en";
+  metric: SeasonalityMetric;
+  month: number;
+  monthNames: string[];
+}) {
   const byWeek = new Map(cells.map((cell) => [cell.weekOfMonth, cell]));
   const scale = maxAbs(cells, metric);
+  if (!cells.length) {
+    return (
+      <div className="border border-line bg-panelSoft p-4 text-sm leading-6 text-muted">
+        {copy.emptyWeekly}
+      </div>
+    );
+  }
   return (
     <div className="border border-line bg-panelSoft p-4">
-      <p className="text-sm leading-6 text-muted">{methodology}</p>
+      <p className="text-sm leading-6 text-muted">{copy.methodology}</p>
       <div className="mt-5 grid min-h-52 grid-cols-5 items-end gap-3">
         {Array.from({ length: 5 }).map((_, index) => {
           const week = index + 1;
@@ -246,9 +340,10 @@ function WeeklyView({ cells, metric, month, methodology }: { cells: CalendarWeek
           const value = metricValue(cell, metric);
           const height = metric === "sampleSize" ? Math.max(8, ((value ?? 0) / scale) * 100) : Math.max(8, (Math.abs(value ?? 0) / scale) * 100);
           return (
-            <div key={week} className="flex min-w-0 flex-col items-center justify-end gap-2" title={cellTitle(`${monthNames[month - 1]} · Semana ${week}`, cell)}>
-              <div className="w-full border border-white" style={{ height: `${height}%`, backgroundColor: colorFor(value, metric, scale) }} />
-              <span className="text-center text-[10px] font-semibold text-muted">Semana {week}</span>
+            <div key={week} className="flex min-w-0 flex-col items-center justify-end gap-2" title={cellTitle(`${monthNames[month - 1]} · ${copy.week} ${week}`, cell, locale)}>
+              <div className="w-full border border-white shadow-[0_8px_18px_rgba(31,35,40,0.05)]" style={{ height: `${height}%`, backgroundColor: colorFor(value, metric, scale) }} />
+              <span className="text-center text-[10px] font-semibold text-muted">{copy.week} {week}</span>
+              {cell && cell.sampleSize < 5 ? <span className="text-center text-[10px] font-semibold text-brass">{copy.lowSample}</span> : <span className="h-3" aria-hidden="true" />}
             </div>
           );
         })}
@@ -257,7 +352,21 @@ function WeeklyView({ cells, metric, month, methodology }: { cells: CalendarWeek
   );
 }
 
-function DailyView({ cells, metric, month }: { cells: CalendarDaySeasonalityCell[]; metric: SeasonalityMetric; month: number }) {
+function DailyView({
+  cells,
+  copy,
+  locale,
+  metric,
+  month,
+  monthNames,
+}: {
+  cells: CalendarDaySeasonalityCell[];
+  copy: { day: string; lowSample: string; topStrong: string; topWeak: string };
+  locale: "es" | "en";
+  metric: SeasonalityMetric;
+  month: number;
+  monthNames: string[];
+}) {
   const byKey = new Map(cells.map((cell) => [cellKey(cell), cell]));
   const monthCells = cells.filter((cell) => cell.month === month && cell.sampleSize > 0);
   const strongest = [...monthCells].sort((a, b) => (b.averageReturn ?? -Infinity) - (a.averageReturn ?? -Infinity)).slice(0, 5);
@@ -281,7 +390,7 @@ function DailyView({ cells, metric, month }: { cells: CalendarDaySeasonalityCell
                   return (
                     <div
                       key={`${rowMonth}-${day}`}
-                      title={cellTitle(`${day}/${rowMonth}`, cell)}
+                      title={cellTitle(`${day}/${rowMonth}`, cell, locale)}
                       className="flex min-h-8 items-center justify-center border border-white px-1 text-center text-[10px] font-semibold text-ink"
                       style={{ backgroundColor: colorFor(value, metric, scale) }}
                     >
@@ -295,22 +404,22 @@ function DailyView({ cells, metric, month }: { cells: CalendarDaySeasonalityCell
         </div>
       </div>
       <div className="grid gap-3 md:grid-cols-2">
-        <DayList title={`Top 5 fuertes · ${monthNames[month - 1]}`} cells={strongest} />
-        <DayList title={`Top 5 débiles · ${monthNames[month - 1]}`} cells={weakest} />
+        <DayList cells={strongest} copy={copy} title={`${copy.topStrong} · ${monthNames[month - 1]}`} />
+        <DayList cells={weakest} copy={copy} title={`${copy.topWeak} · ${monthNames[month - 1]}`} />
       </div>
     </div>
   );
 }
 
-function DayList({ cells, title }: { cells: CalendarDaySeasonalityCell[]; title: string }) {
+function DayList({ cells, copy, title }: { cells: CalendarDaySeasonalityCell[]; copy: { day: string; lowSample: string }; title: string }) {
   return (
     <div className="border border-line bg-panelSoft p-4">
       <h3 className="text-sm font-semibold text-ink">{title}</h3>
       <div className="mt-3 grid gap-2">
         {cells.length ? cells.map((cell) => (
           <div key={`${title}-${cell.month}-${cell.day}`} className="flex items-center justify-between gap-3 border-b border-line/70 pb-2 text-sm last:border-b-0 last:pb-0">
-            <span className="font-semibold text-ink">Día {cell.day}</span>
-            <span className="text-right text-muted">{formatPercent(cell.averageReturn)} · N {cell.sampleSize}{cell.sampleSize < 5 ? " · Muestra baja" : ""}</span>
+            <span className="font-semibold text-ink">{copy.day} {cell.day}</span>
+            <span className="text-right text-muted">{formatPercent(cell.averageReturn)} · N {cell.sampleSize}{cell.sampleSize < 5 ? ` · ${copy.lowSample}` : ""}</span>
           </div>
         )) : <p className="text-sm leading-6 text-muted">Historial insuficiente para este mes.</p>}
       </div>

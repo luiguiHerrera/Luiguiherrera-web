@@ -1,3 +1,4 @@
+import { ExpandableInsightCard } from "@/components/ui/ExpandableInsightCard";
 import type { AssetStatRecord, PeriodExplorerRow, StatisticalFrequency } from "@/lib/statistical-levels/types";
 
 type ReturnHeatmapProps = {
@@ -166,13 +167,13 @@ function WeeklyHeatmap({ points, maxAbs }: { points: HeatmapPoint[]; maxAbs: num
   const visible = points.slice(-52);
   const blocks: HeatmapPoint[][] = [];
   for (let index = 0; index < visible.length; index += 13) blocks.push(visible.slice(index, index + 13));
-  const labels = ["Inicio", "+3s", "+6s", "+9s", "Actual"];
-  const blockLabels = ["Hace 52-40 semanas", "Hace 39-27 semanas", "Hace 26-14 semanas", "Últimas 13 semanas"];
+  const labels = ["Inicio", "+3 semanas", "+6 semanas", "+9 semanas", "Actual"];
+  const blockLabels = ["52-40 semanas atrás", "39-27 semanas atrás", "26-14 semanas atrás", "Últimas 13 semanas"];
 
   return (
     <div className="mt-5 max-w-full overflow-x-auto [contain:paint]">
       <div className="min-w-[760px]">
-        <div className="grid gap-1 text-xs font-semibold text-muted" style={{ gridTemplateColumns: "5rem repeat(13, minmax(2.6rem, 1fr))" }}>
+        <div className="grid gap-1 text-xs font-semibold text-muted" style={{ gridTemplateColumns: "7.5rem repeat(13, minmax(2.7rem, 1fr))" }}>
           <div />
           {Array.from({ length: 13 }).map((_, index) => (
             <div key={index} className="text-center">{index === 0 ? labels[0] : index === 3 ? labels[1] : index === 6 ? labels[2] : index === 9 ? labels[3] : index === 12 ? labels[4] : ""}</div>
@@ -248,21 +249,24 @@ function HeatmapCell({
   );
 }
 
-const titles: Record<StatisticalFrequency, { title: string; subtitle: string; limit: number }> = {
+const titles: Record<StatisticalFrequency, { title: string; subtitle: string; limit: number; unit: string }> = {
   monthly: {
-    title: "Retornos mensuales",
-    subtitle: "Cada celda muestra el retorno del mes para el activo foco.",
+    title: "Historial reciente de retornos",
+    subtitle: "Muestra los últimos meses visibles en grupos temporales para revisar continuidad y dispersión reciente.",
     limit: 120,
+    unit: "Mensual",
   },
   weekly: {
-    title: "Retornos semanales recientes",
-    subtitle: "Cada celda muestra el retorno semanal. Se priorizan los últimos periodos para mantener legibilidad.",
+    title: "Historial reciente de retornos",
+    subtitle: "Muestra los últimos periodos visibles en grupos temporales para revisar continuidad y dispersión reciente.",
     limit: 52,
+    unit: "Semanal",
   },
   daily: {
-    title: "Retornos diarios recientes",
-    subtitle: "Cada celda muestra el retorno diario de los últimos periodos disponibles.",
+    title: "Historial reciente de retornos",
+    subtitle: "Muestra los últimos días visibles en grupos temporales para revisar continuidad y dispersión reciente.",
     limit: 90,
+    unit: "Diario",
   },
 };
 
@@ -273,18 +277,19 @@ export function ReturnHeatmap({ asset, frequency }: ReturnHeatmapProps) {
   const maxAbs = maxAbsForScale(points);
 
   return (
-    <section className="min-w-0 border border-line bg-panel p-4 md:p-5">
-      <div className="flex flex-col gap-2 md:flex-row md:items-end md:justify-between">
-        <div>
-          <p className="text-xs font-semibold uppercase tracking-[0.16em] text-brass">Retornos</p>
-          <h2 className="mt-1 text-xl font-semibold text-ink">{config.title}</h2>
-          <p className="mt-2 max-w-3xl text-sm leading-6 text-muted">{config.subtitle}</p>
-        </div>
-        <div className="text-sm text-muted md:text-right">
-          <p>Activo foco: <span className="font-semibold text-ink">{asset?.ticker ?? "n/d"}</span></p>
-          <p>Frecuencia: <span className="font-semibold text-ink">{frequency === "daily" ? "Diario" : frequency === "weekly" ? "Semanal" : "Mensual"}</span></p>
-        </div>
-      </div>
+    <ExpandableInsightCard
+      eyebrow="Contexto técnico"
+      title={config.title}
+      reading={config.subtitle}
+      status={asset?.ticker ?? "n/d"}
+      defaultOpen={false}
+      metrics={[
+        { label: "Frecuencia", value: config.unit },
+        { label: "Periodos visibles", value: String(points.length) },
+        { label: "Retorno medio", value: formatPercent(summarize(points).avg) },
+        { label: "% positivos", value: formatRate(summarize(points).positiveRate) },
+      ]}
+    >
       {points.length ? <SummaryStrip points={points} /> : null}
       <Legend maxAbs={maxAbs} />
       {frequency === "monthly" ? <MonthlyHeatmap points={points} maxAbs={maxAbs} /> : null}
@@ -293,6 +298,6 @@ export function ReturnHeatmap({ asset, frequency }: ReturnHeatmapProps) {
       <p className="mt-3 text-xs leading-5 text-muted">
         Escala divergente centrada en 0; la intensidad se limita con el percentil 95 de magnitudes visibles para reducir el peso de valores extremos.
       </p>
-    </section>
+    </ExpandableInsightCard>
   );
 }
