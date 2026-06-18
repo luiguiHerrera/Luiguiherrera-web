@@ -167,6 +167,7 @@ function WeeklyHeatmap({ points, maxAbs }: { points: HeatmapPoint[]; maxAbs: num
   const blocks: HeatmapPoint[][] = [];
   for (let index = 0; index < visible.length; index += 13) blocks.push(visible.slice(index, index + 13));
   const labels = ["-52", "-39", "-26", "-13", "Actual"];
+  const blockLabels = ["-3 meses", "-2 meses", "-1 mes", "Más reciente"];
 
   return (
     <div className="mt-5 max-w-full overflow-x-auto [contain:paint]">
@@ -178,7 +179,7 @@ function WeeklyHeatmap({ points, maxAbs }: { points: HeatmapPoint[]; maxAbs: num
           ))}
           {blocks.map((block, blockIndex) => (
             <div key={blockIndex} className="contents">
-              <div className="py-2 text-sm font-semibold text-ink">Bloque {blockIndex + 1}</div>
+              <div className="py-2 text-sm font-semibold text-ink">{blockLabels[blockIndex] ?? `-${blocks.length - blockIndex - 1} bloques`}</div>
               {Array.from({ length: 13 }).map((_, index) => {
                 const point = block[index];
                 return <HeatmapCell key={`${blockIndex}-${index}`} point={point} maxAbs={maxAbs} className="min-h-9" showValue />;

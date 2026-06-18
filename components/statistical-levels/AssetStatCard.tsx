@@ -1,4 +1,5 @@
 import { RiskPill } from "@/components/ui/RiskPill";
+import { MetricHelpTooltip } from "@/components/ui/MetricHelpTooltip";
 import { PercentileRangeBar } from "@/components/statistical-levels/PercentileRangeBar";
 import { StatBandsChart } from "@/components/statistical-levels/StatBandsChart";
 import type { AssetStatRecord, StatisticalFrequency, StatisticalWindow } from "@/lib/statistical-levels/types";
@@ -40,6 +41,13 @@ export function AssetStatCard({ asset, frequency, window }: AssetStatCardProps) 
   const frequencyData = asset.frequencies[frequency];
   const metric = frequencyData.windows[window];
   const longMa = frequencyData.longMovingAverageKey;
+  const metricHelp: Record<string, string> = {
+    "Z extensión": "Mide cuántas desviaciones estándar está la lectura frente a su media histórica.",
+    [`Distancia ${longMa}`]: "Distancia entre el precio actual y la media larga seleccionada.",
+    "Retorno 4 periodos": "Cambio acumulado de los últimos 4 periodos de la frecuencia seleccionada.",
+    "Retorno 12 periodos": "Cambio acumulado de los últimos 12 periodos de la frecuencia seleccionada.",
+    "Periodos ventana": "Cantidad de periodos usados para calcular la ventana seleccionada.",
+  };
 
   return (
     <article className="border border-line bg-panel p-4 md:p-5">
@@ -66,7 +74,10 @@ export function AssetStatCard({ asset, frequency, window }: AssetStatCardProps) 
       <div className="mt-5 grid gap-4 lg:grid-cols-[1fr_1fr]">
         <div className="border border-line bg-panelSoft p-4">
           <div className="flex items-center justify-between gap-3">
-            <p className="text-xs uppercase tracking-[0.12em] text-muted">Clasificación estadística</p>
+            <p className="text-xs uppercase tracking-[0.12em] text-muted">
+              Clasificación estadística
+              <MetricHelpTooltip label="Percentil extensión" text="Ubica la extensión actual frente al historial del activo. Percentiles altos indican lectura relativamente extendida." />
+            </p>
             <span className="bg-white px-2 py-1 text-xs font-semibold text-ink">{metric.available ? metric.extensionLabel : "Historial insuficiente"}</span>
           </div>
           <div className="mt-4">
@@ -75,7 +86,10 @@ export function AssetStatCard({ asset, frequency, window }: AssetStatCardProps) 
         </div>
         <div className="border border-line bg-panelSoft p-4">
           <div className="flex items-center justify-between gap-3 text-xs">
-            <span className="font-semibold uppercase tracking-[0.12em] text-muted">Drawdown actual</span>
+            <span className="font-semibold uppercase tracking-[0.12em] text-muted">
+              Drawdown actual
+              <MetricHelpTooltip label="Drawdown actual" text="Distancia desde el máximo previo dentro de la ventana analizada." />
+            </span>
             <span className="font-semibold text-ink">{formatPercent(metric.currentDrawdown)}</span>
           </div>
           <div className="mt-3 h-2 bg-white">
@@ -94,7 +108,10 @@ export function AssetStatCard({ asset, frequency, window }: AssetStatCardProps) 
           ["Periodos ventana", metric.available ? String(metric.sessions) : "Insuficiente"],
         ].map(([label, value]) => (
           <div key={label} className="border border-line bg-panelSoft p-3">
-            <p className="text-[11px] uppercase tracking-[0.12em] text-muted">{label}</p>
+            <p className="text-[11px] uppercase tracking-[0.12em] text-muted">
+              {label}
+              <MetricHelpTooltip label={label} text={metricHelp[label] ?? "Métrica estadística de la ventana seleccionada."} />
+            </p>
             <p className="mt-2 text-sm font-semibold text-ink">{value}</p>
           </div>
         ))}

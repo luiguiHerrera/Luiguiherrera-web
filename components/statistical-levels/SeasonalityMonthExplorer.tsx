@@ -24,8 +24,8 @@ function usableCells(cells: DailySeasonalityCell[], month: number) {
 export function SeasonalityMonthExplorer({ cells, month }: SeasonalityMonthExplorerProps) {
   const rows = usableCells(cells, month);
   const ranked = [...rows].sort((a, b) => (b.averageReturn ?? Number.NEGATIVE_INFINITY) - (a.averageReturn ?? Number.NEGATIVE_INFINITY));
-  const best = ranked.slice(0, 3);
-  const weakest = ranked.slice(-3).reverse();
+  const best = ranked.slice(0, 5);
+  const weakest = ranked.slice(-5).reverse();
   const average = rows.length ? rows.reduce((sum, cell) => sum + (cell.averageReturn ?? 0), 0) / rows.length : null;
   const averageWinRate = rows.length ? rows.reduce((sum, cell) => sum + (cell.winRate ?? 0), 0) / rows.length : null;
 
@@ -68,11 +68,11 @@ function DayList({ title, cells }: { title: string; cells: DailySeasonalityCell[
       <div className="mt-3 grid gap-2">
         {cells.length ? (
           cells.map((cell) => (
-            <div key={`${title}-${cell.month}-${cell.day}`} className="grid grid-cols-[2.5rem_1fr_3.5rem_3rem] items-center gap-3 border-b border-line/70 pb-2 text-sm last:border-b-0 last:pb-0">
+            <div key={`${title}-${cell.month}-${cell.day}`} className="grid grid-cols-[2.5rem_1fr_3.5rem_4.4rem] items-center gap-3 border-b border-line/70 pb-2 text-sm last:border-b-0 last:pb-0">
               <span className="font-semibold text-ink">{cell.day}</span>
               <span className="text-muted">Retorno medio</span>
               <span className="text-right font-semibold text-ink">{formatPercent(cell.averageReturn)}</span>
-              <span className="text-right text-xs text-muted">N {cell.sampleSize}</span>
+              <span className="text-right text-xs text-muted">{cell.sampleSize < 5 ? "Muestra baja" : `N ${cell.sampleSize}`}</span>
             </div>
           ))
         ) : (

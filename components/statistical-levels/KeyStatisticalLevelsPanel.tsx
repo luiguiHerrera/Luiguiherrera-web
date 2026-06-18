@@ -2,6 +2,7 @@ import type { AssetStatRecord, KeyStatisticalLevelSet } from "@/lib/statistical-
 
 type KeyStatisticalLevelsPanelProps = {
   asset: AssetStatRecord | null;
+  frequency?: "weekly" | "monthly";
 };
 
 const levelLabels = {
@@ -35,6 +36,8 @@ function markerPosition(value: number | null, min: number, max: number) {
   return Math.min(100, Math.max(0, ((value - min) / (max - min)) * 100));
 }
 
+const monthlyScriptUrl = "https://www.tradingview.com/script/ziflzOXv-Monthly-Statistical-Levels/";
+
 function LevelLadder({ data, kind, ticker }: { data: KeyStatisticalLevelSet; kind: "weekly" | "monthly"; ticker?: string }) {
   const labels = levelLabels[kind];
   const values = labels
@@ -67,8 +70,8 @@ function LevelLadder({ data, kind, ticker }: { data: KeyStatisticalLevelSet; kin
         </div>
       </div>
 
-      <div className="mt-5 overflow-hidden">
-        <div className="relative h-12">
+      <div className="mt-5 overflow-x-auto">
+        <div className="relative h-12 min-w-[520px]">
           <div className="absolute left-0 right-0 top-6 h-px bg-line" />
           {values.map((item) => (
             <div key={item.key} className="absolute top-3 -translate-x-1/2" style={{ left: `${markerPosition(item.value, min, max)}%` }}>
@@ -98,11 +101,25 @@ function LevelLadder({ data, kind, ticker }: { data: KeyStatisticalLevelSet; kin
         ))}
       </div>
       <p className="mt-3 text-xs leading-5 text-muted">{data.statusNote}</p>
+      {kind === "monthly" ? (
+        <a
+          href={monthlyScriptUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="mt-4 inline-flex border border-ink bg-ink px-3 py-2 text-xs font-semibold text-white transition hover:bg-panel hover:text-ink"
+        >
+          Ver script Monthly Statistical Levels
+        </a>
+      ) : null}
     </div>
   );
 }
 
-export function KeyStatisticalLevelsPanel({ asset }: KeyStatisticalLevelsPanelProps) {
+export function KeyStatisticalLevelsPanel({ asset, frequency }: KeyStatisticalLevelsPanelProps) {
+  const ladders = frequency
+    ? [frequency]
+    : (["weekly", "monthly"] as const);
+
   return (
     <section className="border border-line bg-panel p-4 md:p-5">
       <div className="flex flex-col gap-2 md:flex-row md:items-end md:justify-between">
@@ -115,8 +132,14 @@ export function KeyStatisticalLevelsPanel({ asset }: KeyStatisticalLevelsPanelPr
         </p>
       </div>
       <div className="mt-5 grid gap-4 xl:grid-cols-2">
-        <LevelLadder data={asset?.keyStatisticalLevels.weekly ?? fallbackLevels("W")} kind="weekly" ticker={asset?.ticker} />
-        <LevelLadder data={asset?.keyStatisticalLevels.monthly ?? fallbackLevels("M")} kind="monthly" ticker={asset?.ticker} />
+        {ladders.map((kind) => (
+          <LevelLadder
+            key={kind}
+            data={kind === "weekly" ? asset?.keyStatisticalLevels.weekly ?? fallbackLevels("W") : asset?.keyStatisticalLevels.monthly ?? fallbackLevels("M")}
+            kind={kind}
+            ticker={asset?.ticker}
+          />
+        ))}
       </div>
     </section>
   );

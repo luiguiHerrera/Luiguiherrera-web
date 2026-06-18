@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import { MetricHelpTooltip } from "@/components/ui/MetricHelpTooltip";
 import type { AssetStatRecord, PeriodExplorerRow, StatisticalFrequency } from "@/lib/statistical-levels/types";
 
 type PeriodExplorerTableProps = {
@@ -34,6 +35,13 @@ const frequencyLabels: Record<StatisticalFrequency, string> = {
   daily: "Diario",
   weekly: "Semanal",
   monthly: "Mensual",
+};
+
+const headerHelp: Record<string, string> = {
+  Change: "Cambio del periodo analizado.",
+  OpenGap: "Diferencia entre la apertura del periodo y el cierre previo.",
+  Range: "Amplitud entre máximo y mínimo del periodo.",
+  CloseLocation: "Posición del cierre dentro del rango. 0 cerca del mínimo y 1 cerca del máximo.",
 };
 
 function matchesFilter(row: PeriodExplorerRow, filter: FilterKey) {
@@ -113,10 +121,12 @@ export function PeriodExplorerTable({ asset, frequency }: PeriodExplorerTablePro
                   <th className="py-2.5 pr-4 font-medium">High</th>
                   <th className="py-2.5 pr-4 font-medium">Low</th>
                   <th className="py-2.5 pr-4 font-medium">Close</th>
-                  <th className="py-2.5 pr-4 font-medium">Change</th>
-                  <th className="py-2.5 pr-4 font-medium">OpenGap</th>
-                  <th className="py-2.5 pr-4 font-medium">Range</th>
-                  <th className="py-2.5 pr-4 font-medium">CloseLocation</th>
+                  {["Change", "OpenGap", "Range", "CloseLocation"].map((label) => (
+                    <th key={label} className="py-2.5 pr-4 font-medium">
+                      {label}
+                      <MetricHelpTooltip label={label} text={headerHelp[label]} />
+                    </th>
+                  ))}
                   <th className="py-2.5 pr-4 font-medium">Clasificación</th>
                 </tr>
               </thead>

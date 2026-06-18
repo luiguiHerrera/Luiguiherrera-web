@@ -89,7 +89,7 @@ export function Header() {
               </Link>
             ))}
           </nav>
-          <div className="hidden sm:block">
+          <div className="hidden sm:block lg:ml-1">
             <LanguageSwitcher />
           </div>
           <Link href={hrefs.diagnostic} className="hidden shrink-0 border border-ink bg-ink px-3.5 py-1.5 text-xs font-semibold text-white transition hover:bg-panel hover:text-ink sm:inline-flex">

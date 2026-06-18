@@ -44,6 +44,9 @@ export function UnderwaterDrawdownChart({ asset, frequency, window }: Underwater
           <p className="mt-2 max-w-3xl text-sm leading-6 text-muted">
             Distancia frente a máximos previos dentro de la ventana seleccionada.
           </p>
+          <p className="mt-1 text-xs leading-5 text-muted">
+            Ventana analizada: {metric?.sessions ?? series.length} periodos.
+          </p>
         </div>
         <div className="text-sm text-muted md:text-right">
           <p>Actual: <span className="font-semibold text-ink">{formatPercent(metric?.currentDrawdown ?? null)}</span></p>

@@ -47,18 +47,18 @@ export function SeasonalityHeatmap({ cells }: SeasonalityHeatmapProps) {
   return (
     <div>
       <div className="mt-4 max-w-full overflow-x-auto [contain:paint]">
-        <div className="grid min-w-[820px] gap-1" style={{ gridTemplateColumns: "3.25rem repeat(12, minmax(3.65rem, 1fr))" }}>
+        <div className="grid min-w-[1120px] gap-1" style={{ gridTemplateColumns: "3.25rem repeat(31, minmax(2rem, 1fr))" }}>
           <div />
-          {monthLabels.map((month) => (
-            <div key={month} className="pb-1 text-center text-xs font-semibold text-muted">{month}</div>
+          {Array.from({ length: 31 }).map((_, index) => (
+            <div key={index + 1} className="pb-1 text-center text-xs font-semibold text-muted">{index + 1}</div>
           ))}
-          {Array.from({ length: 31 }).map((_, index) => {
-            const day = index + 1;
+          {monthLabels.map((monthLabel, monthIndex) => {
+            const month = monthIndex + 1;
             return (
-              <div key={day} className="contents">
-                <div className="py-1.5 text-sm font-semibold text-ink">{day}</div>
-                {monthLabels.map((_, monthIndex) => {
-                  const month = monthIndex + 1;
+              <div key={monthLabel} className="contents">
+                <div className="py-1.5 text-sm font-semibold text-ink">{monthLabel}</div>
+                {Array.from({ length: 31 }).map((_, index) => {
+                  const day = index + 1;
                   const cell = byKey.get(`${month}-${day}`);
                   const value = cell?.averageReturn ?? null;
                   const sampleSize = cell?.sampleSize ?? 0;
@@ -66,7 +66,7 @@ export function SeasonalityHeatmap({ cells }: SeasonalityHeatmapProps) {
                     <div
                       key={`${month}-${day}`}
                       title={`${day}/${month} · retorno medio ${formatPercent(value)} · win rate ${cell?.winRate === null || cell?.winRate === undefined ? "n/d" : `${(cell.winRate * 100).toFixed(0)}%`} · N ${sampleSize}`}
-                      className={`flex min-h-9 items-center justify-center border border-white px-1 text-center text-[11px] font-semibold ${textColor(value, maxAbs)}`}
+                      className={`flex min-h-8 items-center justify-center border border-white px-1 text-center text-[10px] font-semibold ${textColor(value, maxAbs)}`}
                       style={{ backgroundColor: cellColor(value, maxAbs) }}
                     >
                       {sampleSize > 0 && sampleSize < 3 ? `N${sampleSize}` : formatPercent(value, 1)}

@@ -1,4 +1,5 @@
 import type { AssetStatRecord, ChangeMoveMetric, StatisticalFrequency } from "@/lib/statistical-levels/types";
+import { MetricHelpTooltip } from "@/components/ui/MetricHelpTooltip";
 
 type MovementSummaryTableProps = {
   asset: AssetStatRecord | null;
@@ -16,6 +17,13 @@ const labels: Record<ChangeMoveMetric, string> = {
   upperFade: "upperFade",
   lowerRecovery: "lowerRecovery",
   range: "range",
+};
+
+const help: Partial<Record<ChangeMoveMetric, string>> = {
+  change: "Cambio del periodo analizado.",
+  openGap: "Diferencia entre la apertura del periodo y el cierre previo.",
+  range: "Amplitud entre máximo y mínimo del periodo.",
+  closeLocation: "Posición del cierre dentro del rango. 0 cerca del mínimo y 1 cerca del máximo.",
 };
 
 const visibleMetrics: ChangeMoveMetric[] = ["change", "openGap", "highExtensionFromOpen", "lowExtensionFromOpen", "range", "closeLocation"];
@@ -47,7 +55,10 @@ export function MovementSummaryTable({ asset, frequency }: MovementSummaryTableP
           const median = row?.p50 === null || min === null ? null : (((row?.p50 ?? 0) - min) / span) * 100;
           return (
             <div key={metric} className="border border-line bg-panelSoft p-4">
-              <p className="text-sm font-semibold text-ink">{labels[metric]}</p>
+              <p className="text-sm font-semibold text-ink">
+                {labels[metric]}
+                {help[metric] ? <MetricHelpTooltip label={labels[metric]} text={help[metric]} /> : null}
+              </p>
               <div className="relative mt-4 h-2 bg-white">
                 <div className="absolute top-1/2 h-px w-full -translate-y-1/2 bg-[#d8d2ca]" />
                 <div className="absolute top-0 h-2 bg-[#cfdcd3]" style={{ left: `${left}%`, width: `${width}%` }} />
@@ -81,7 +92,10 @@ export function MovementSummaryTable({ asset, frequency }: MovementSummaryTableP
               const isRatio = metric !== "closeLocation";
               return (
                 <tr key={metric} className="border-b border-line/70">
-                  <td className="py-3 pr-4 font-semibold text-ink">{labels[metric]}</td>
+                  <td className="py-3 pr-4 font-semibold text-ink">
+                    {labels[metric]}
+                    {help[metric] ? <MetricHelpTooltip label={labels[metric]} text={help[metric]} /> : null}
+                  </td>
                   <td className="py-3 pr-4 text-muted">{formatStat(row?.mean ?? null, isRatio)}</td>
                   <td className="py-3 pr-4 text-muted">{formatStat(row?.std ?? null, isRatio)}</td>
                   <td className="py-3 pr-4 text-muted">{formatStat(row?.p25 ?? null, isRatio)}</td>

@@ -22,7 +22,7 @@ export function CorrelationMiniMatrix({ assets, frequency, window }: Correlation
     return (
       <section className="border border-line bg-panel p-4 md:p-5">
         <h2 className="text-xl font-semibold text-ink">Correlación</h2>
-        <p className="mt-3 text-sm leading-6 text-muted">La matriz de correlación requiere varios activos cargados en la misma vista. Esta página prioriza el activo seleccionado para reducir payload.</p>
+        <p className="mt-3 text-sm leading-6 text-muted">Compara varios activos para activar una matriz de correlación ligera. La vista foco mantiene el payload acotado.</p>
       </section>
     );
   }

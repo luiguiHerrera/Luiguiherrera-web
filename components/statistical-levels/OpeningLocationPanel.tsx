@@ -1,3 +1,6 @@
+"use client";
+
+import { useState } from "react";
 import type { AssetStatRecord, OpeningCategoryStats, StatisticalFrequency } from "@/lib/statistical-levels/types";
 
 type OpeningLocationPanelProps = {
@@ -32,7 +35,14 @@ function CategoryBars({ rows }: { rows: OpeningCategoryStats[] }) {
 }
 
 export function OpeningLocationPanel({ asset, frequency }: OpeningLocationPanelProps) {
+  const [mode, setMode] = useState<"opening" | "close">("opening");
   const location = asset?.frequencies[frequency].openingLocation;
+  const periods = asset?.frequencies[frequency].recentPeriods ?? [];
+  const closeBuckets = [
+    { label: "Cierre cerca del mínimo", rows: periods.filter((row) => (row.closeLocation ?? 0.5) <= 0.33) },
+    { label: "Cierre en zona media", rows: periods.filter((row) => (row.closeLocation ?? 0.5) > 0.33 && (row.closeLocation ?? 0.5) < 0.67) },
+    { label: "Cierre cerca del máximo", rows: periods.filter((row) => (row.closeLocation ?? 0.5) >= 0.67) },
+  ];
   const allRows = [...(location?.range ?? []), ...(location?.close ?? [])];
   const mostFrequentRange = [...(location?.range ?? [])].sort((a, b) => b.count - a.count)[0];
   const mostFrequentClose = [...(location?.close ?? [])].sort((a, b) => b.count - a.count)[0];
@@ -40,8 +50,50 @@ export function OpeningLocationPanel({ asset, frequency }: OpeningLocationPanelP
   const lowestReturn = [...allRows].sort((a, b) => (a.averageForwardReturn ?? Infinity) - (b.averageForwardReturn ?? Infinity))[0];
   return (
     <section className="border border-line bg-panel p-4 md:p-5">
-      <p className="text-xs font-semibold uppercase tracking-[0.18em] text-brass">Opening Location</p>
-      <h2 className="mt-2 text-xl font-semibold text-ink">Ubicación de apertura</h2>
+      <div className="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
+        <div>
+          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-brass">Opening / Close location</p>
+          <h2 className="mt-2 text-xl font-semibold text-ink">{mode === "opening" ? "Ubicación de apertura" : "Ubicación de cierre"}</h2>
+        </div>
+        <div className="flex w-full border border-line bg-panelSoft p-1 sm:w-fit">
+          {[
+            ["opening", "Opening location"],
+            ["close", "Close location"],
+          ].map(([key, label]) => (
+            <button
+              key={key}
+              type="button"
+              onClick={() => setMode(key as "opening" | "close")}
+              className={`min-h-9 flex-1 px-3 text-xs font-semibold transition sm:flex-none ${mode === key ? "bg-ink text-white" : "text-muted hover:text-ink"}`}
+            >
+              {label}
+            </button>
+          ))}
+        </div>
+      </div>
+      {mode === "close" ? (
+        <div className="mt-5 grid gap-3 md:grid-cols-3">
+          {closeBuckets.map((bucket) => {
+            const proportion = periods.length ? bucket.rows.length / periods.length : null;
+            const avgReturn = bucket.rows.length
+              ? bucket.rows.reduce((sum, row) => sum + (row.change ?? 0), 0) / bucket.rows.length
+              : null;
+            return (
+              <div key={bucket.label} className="border border-line bg-panelSoft p-4">
+                <p className="text-sm font-semibold text-ink">{bucket.label}</p>
+                <p className="mt-2 text-xs leading-5 text-muted">Frecuencia histórica: {formatPercent(proportion)}</p>
+                <p className="mt-1 text-xs leading-5 text-muted">Cambio medio: {formatPercent(avgReturn)}</p>
+              </div>
+            );
+          })}
+          {!periods.length ? (
+            <p className="md:col-span-3 border border-line bg-panelSoft p-4 text-sm leading-6 text-muted">
+              Close location pendiente de datos suficientes.
+            </p>
+          ) : null}
+        </div>
+      ) : (
+        <>
       <div className="mt-5 grid gap-3 md:grid-cols-4">
         {[
           ["Mayor frecuencia rango", mostFrequentRange?.category ?? "n/d", formatPercent(mostFrequentRange?.proportion ?? null)],
@@ -70,6 +122,8 @@ export function OpeningLocationPanel({ asset, frequency }: OpeningLocationPanelP
           </div>
         </div>
       </div>
+        </>
+      )}
     </section>
   );
 }
