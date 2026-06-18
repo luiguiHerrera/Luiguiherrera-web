@@ -2,6 +2,7 @@ import { mkdir, writeFile } from "node:fs/promises";
 import path from "node:path";
 
 const outputPath = path.join(process.cwd(), "lib/statistical-levels/generated-data.ts");
+const seasonalityOutputPath = path.join(process.cwd(), "lib/statistical-levels/generated-seasonality-data.json");
 const requestTimeoutMs = 8000;
 const requestPauseMs = 250;
 
@@ -12,6 +13,9 @@ const windows = {
   "10Y": { daily: 2520, weekly: 520, monthly: 120 },
   Full: { daily: null, weekly: null, monthly: null },
 };
+
+const seasonalityWindows = ["3Y", "5Y", "10Y", "Full"];
+const presidentialCyclePhases = ["all", "post_election", "midterm", "pre_election", "election"];
 
 const frequencyConfig = {
   daily: {
@@ -116,6 +120,23 @@ function zScore(values, value) {
 
 function clampPrecision(value, digits = 4) {
   return value === null || value === undefined || !Number.isFinite(value) ? null : Number(value.toFixed(digits));
+}
+
+function dateParts(dateString) {
+  const date = new Date(`${dateString}T00:00:00Z`);
+  return {
+    year: date.getUTCFullYear(),
+    month: date.getUTCMonth() + 1,
+    day: date.getUTCDate(),
+  };
+}
+
+function presidentialCyclePhase(year) {
+  const offset = ((year % 4) + 4) % 4;
+  if (offset === 0) return "election";
+  if (offset === 1) return "post_election";
+  if (offset === 2) return "midterm";
+  return "pre_election";
 }
 
 function extensionLabel(value) {
@@ -674,6 +695,81 @@ function buildNewHighLow(rows, lookback) {
   };
 }
 
+function summarizeSeasonalityBucket(values, month, day) {
+  return {
+    month,
+    day,
+    averageReturn: clampPrecision(mean(values), 6),
+    medianReturn: clampPrecision(quantile(values, 0.5), 6),
+    winRate: values.length ? clampPrecision(values.filter((value) => value > 0).length / values.length, 4) : null,
+    sampleSize: values.length,
+  };
+}
+
+function buildSeasonalityCells(observations) {
+  const buckets = new Map();
+  for (const observation of observations) {
+    const key = `${observation.month}-${observation.day}`;
+    if (!buckets.has(key)) buckets.set(key, []);
+    buckets.get(key).push(observation.returnValue);
+  }
+
+  return Array.from(buckets.entries())
+    .map(([key, values]) => {
+      const [month, day] = key.split("-").map(Number);
+      return summarizeSeasonalityBucket(values, month, day);
+    })
+    .sort((a, b) => a.month - b.month || a.day - b.day);
+}
+
+function dailySeasonalityObservations(rows) {
+  const observations = [];
+  for (let index = 1; index < rows.length; index += 1) {
+    const previous = rows[index - 1];
+    const current = rows[index];
+    if (!previous?.adjustedClose || !current?.adjustedClose) continue;
+    const returnValue = current.adjustedClose / previous.adjustedClose - 1;
+    if (!Number.isFinite(returnValue)) continue;
+    const parts = dateParts(current.periodEnd);
+    observations.push({
+      date: current.periodEnd,
+      year: parts.year,
+      month: parts.month,
+      day: parts.day,
+      phase: presidentialCyclePhase(parts.year),
+      returnValue,
+    });
+  }
+  return observations;
+}
+
+function buildDailySeasonalityData(ticker, rows) {
+  const observations = dailySeasonalityObservations(rows);
+  const windowEntries = seasonalityWindows.map((windowKey) => {
+    const sessions = windows[windowKey].daily;
+    const windowObservations = sessions ? observations.slice(-sessions) : observations;
+    const presidentialCycle = Object.fromEntries(
+      presidentialCyclePhases.map((phase) => [
+        phase,
+        buildSeasonalityCells(phase === "all" ? windowObservations : windowObservations.filter((observation) => observation.phase === phase)),
+      ]),
+    );
+
+    return [
+      windowKey,
+      {
+        general: buildSeasonalityCells(windowObservations),
+        presidentialCycle,
+      },
+    ];
+  });
+
+  return {
+    asset: ticker,
+    windows: Object.fromEntries(windowEntries),
+  };
+}
+
 function buildWindowMetric(allCloses, windowSize, config) {
   const closes = windowSize ? allCloses.slice(-windowSize) : [...allCloses];
   if (windowSize && allCloses.length < windowSize) return unavailableWindow(allCloses.length);
@@ -929,11 +1025,13 @@ function summarizeAssets(assets) {
 }
 
 const assets = [];
+const dailySeasonality = [];
 for (const asset of universe) {
   try {
     const { rows, provider } = await fetchMarketData(asset);
     const record = buildAssetRecord(asset, rows, provider);
     assets.push(record);
+    dailySeasonality.push(buildDailySeasonalityData(asset.ticker, rows));
     console.log(
       `[stat-levels] ${asset.ticker}: ${record.status} (${rows.length} daily rows, weekly ${record.frequencies.weekly.periods}, monthly ${record.frequencies.monthly.periods}, provider ${provider})`,
     );
@@ -941,6 +1039,7 @@ for (const asset of universe) {
     const message = error instanceof Error ? error.message : "unknown error";
     console.warn(`[stat-levels] ${asset.ticker}: unavailable (${message})`);
     assets.push(buildAssetRecord(asset, [], "unavailable"));
+    dailySeasonality.push(buildDailySeasonalityData(asset.ticker, []));
   }
 }
 
@@ -967,12 +1066,28 @@ const data = {
   assets,
 };
 
+const seasonalityData = {
+  dailySeasonality,
+  presidentialCycleSeasonality: {
+    phases: {
+      all: "Todos los años",
+      post_election: "Año 1 posterior a elección presidencial",
+      midterm: "Año 2 / midterm",
+      pre_election: "Año 3 / pre-elección",
+      election: "Año 4 / elección presidencial",
+    },
+    methodology: "Clasificación por año calendario: años divisibles por 4 son election; +1 post_election; +2 midterm; +3 pre_election.",
+  },
+};
+
 await mkdir(path.dirname(outputPath), { recursive: true });
 await writeFile(
   outputPath,
-  `import type { StatisticalLevelsGeneratedData } from "@/lib/statistical-levels/types";\n\nexport const statisticalLevelsData = ${JSON.stringify(data)} satisfies StatisticalLevelsGeneratedData;\n`,
+  `import type { StatisticalLevelsGeneratedData } from "@/lib/statistical-levels/types";\n\nexport const statisticalLevelsData = ${JSON.stringify(data)} as StatisticalLevelsGeneratedData;\n`,
 );
+await writeFile(seasonalityOutputPath, JSON.stringify(seasonalityData));
 
 console.log("[stat-levels] summary", summary);
 console.log("[stat-levels] unavailable reasons", unavailableReasons);
 console.log(`[stat-levels] wrote ${outputPath}`);
+console.log(`[stat-levels] wrote ${seasonalityOutputPath}`);

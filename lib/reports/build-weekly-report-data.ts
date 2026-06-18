@@ -1,0 +1,134 @@
+import { getDashboardData } from "@/lib/dashboard/get-dashboard-data";
+import { statisticalLevelsData } from "@/lib/statistical-levels/generated-data";
+import { getStatisticalLevelsSeasonalityData } from "@/lib/statistical-levels/get-seasonality-data";
+import type { AssetStatRecord, DailySeasonalityCell, PresidentialCyclePhase } from "@/lib/statistical-levels/types";
+
+const coreEtfs = ["SPY", "QQQ", "DIA", "IWM"];
+
+const roadmapItems = [
+  "Inflow/outflow general de ETFs",
+  "Mayor premium",
+  "Acciones líderes por índice",
+  "Acciones del día",
+  "WL Momentum",
+  "Posiciones HT",
+  "Earnings",
+  "Fuerza relativa por industria",
+];
+
+function dateParts(dateString: string) {
+  const date = new Date(`${dateString}T00:00:00Z`);
+  return {
+    year: date.getUTCFullYear(),
+    month: date.getUTCMonth() + 1,
+  };
+}
+
+function presidentialCyclePhase(year: number): PresidentialCyclePhase {
+  const offset = ((year % 4) + 4) % 4;
+  if (offset === 0) return "election";
+  if (offset === 1) return "post_election";
+  if (offset === 2) return "midterm";
+  return "pre_election";
+}
+
+function weekLabel(dateString: string) {
+  const date = new Date(`${dateString}T00:00:00Z`);
+  const day = date.getUTCDay() || 7;
+  date.setUTCDate(date.getUTCDate() + 4 - day);
+  const yearStart = new Date(Date.UTC(date.getUTCFullYear(), 0, 1));
+  const week = Math.ceil(((date.getTime() - yearStart.getTime()) / 86400000 + 1) / 7);
+  return `${date.getUTCFullYear()} · Semana ${String(week).padStart(2, "0")}`;
+}
+
+function rankedSeasonality(cells: DailySeasonalityCell[], month: number) {
+  const monthCells = cells.filter((cell) => cell.month === month && cell.sampleSize > 0);
+  const sorted = [...monthCells].sort((a, b) => (b.averageReturn ?? Number.NEGATIVE_INFINITY) - (a.averageReturn ?? Number.NEGATIVE_INFINITY));
+  return {
+    best: sorted.slice(0, 5),
+    weakest: sorted.slice(-5).reverse(),
+  };
+}
+
+function extensionHighlights(assets: AssetStatRecord[]) {
+  return assets
+    .map((asset) => ({
+      ticker: asset.ticker,
+      name: asset.name,
+      zScore: asset.windows["5Y"].ma200ExtensionZScore,
+      percentile: asset.windows["5Y"].ma200ExtensionPercentile,
+      distanceToLongAverage: asset.distanceToMovingAverages.ma200,
+      currentDrawdown: asset.windows.Full.currentDrawdown,
+    }))
+    .filter((asset) => asset.zScore !== null || asset.percentile !== null)
+    .sort((a, b) => Math.abs(b.zScore ?? 0) - Math.abs(a.zScore ?? 0))
+    .slice(0, 8);
+}
+
+export async function buildWeeklyReportData() {
+  const dashboard = await getDashboardData();
+  const seasonalityData = await getStatisticalLevelsSeasonalityData();
+  const assets = statisticalLevelsData.assets as AssetStatRecord[];
+  const generatedAt = statisticalLevelsData.generatedAt;
+  const { month, year } = dateParts(generatedAt);
+  const cyclePhase = presidentialCyclePhase(year);
+  const spySeasonality = seasonalityData.dailySeasonality.find((item) => item.asset === "SPY");
+  const seasonalityWindow = spySeasonality?.windows["10Y"] ?? spySeasonality?.windows.Full ?? null;
+  const seasonality = seasonalityWindow
+    ? {
+        month,
+        phase: cyclePhase,
+        allYears: rankedSeasonality(seasonalityWindow.general, month),
+        cycle: rankedSeasonality(seasonalityWindow.presidentialCycle[cyclePhase], month),
+      }
+    : null;
+
+  const sectorLeaders = dashboard.sectorRotation
+    ? [...dashboard.sectorRotation.sectors].sort((a, b) => b.return1w - a.return1w).slice(0, 5)
+    : [];
+  const sectorLaggards = dashboard.sectorRotation
+    ? [...dashboard.sectorRotation.sectors].sort((a, b) => a.return1w - b.return1w).slice(0, 5)
+    : [];
+
+  return {
+    generatedAt,
+    weekLabel: weekLabel(generatedAt),
+    regimeSummary: dashboard.regimeSummary,
+    executiveSummary: {
+      helped: dashboard.regimeSummary.riskSupportSignals.slice(0, 3),
+      weighed: dashboard.regimeSummary.cautionSignals.slice(0, 3),
+      riskReading: dashboard.regimeSummary.interpretation,
+    },
+    coreEtfs: coreEtfs
+      .map((ticker) => assets.find((asset) => asset.ticker === ticker))
+      .filter((asset): asset is AssetStatRecord => asset !== undefined)
+      .map((asset) => ({
+        ticker: asset.ticker,
+        name: asset.name,
+        weeklyReturn: asset.returns["1W"],
+        distanceToAth: asset.windows.Full.currentDrawdown,
+        distanceToMa20: asset.distanceToMovingAverages.ma20,
+        distanceToMa50: asset.distanceToMovingAverages.ma50,
+        distanceToMa200: asset.distanceToMovingAverages.ma200,
+      })),
+    sectors: {
+      data: dashboard.sectorRotation,
+      leaders: sectorLeaders,
+      laggards: sectorLaggards,
+    },
+    volatility: {
+      vix: dashboard.vix,
+      termStructure: dashboard.vixTermStructure,
+    },
+    flows: {
+      btcEtfFlows: dashboard.btcEtfFlows,
+      generalEtfFlowsStatus: "Pendiente de fuente automatizada clara.",
+    },
+    statisticalLevels: extensionHighlights(assets),
+    seasonality,
+    crossSignalRadar: dashboard.crossSignalRadar,
+    roadmapItems,
+  };
+}
+
+export type WeeklyReportData = Awaited<ReturnType<typeof buildWeeklyReportData>>;

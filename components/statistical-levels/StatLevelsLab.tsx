@@ -6,6 +6,7 @@ import { AssetSelector } from "@/components/statistical-levels/AssetSelector";
 import { AssetStatCard } from "@/components/statistical-levels/AssetStatCard";
 import { CalendarExtremesPanel } from "@/components/statistical-levels/CalendarExtremesPanel";
 import { CorrelationMiniMatrix } from "@/components/statistical-levels/CorrelationMiniMatrix";
+import { DailySeasonalityPanel } from "@/components/statistical-levels/DailySeasonalityPanel";
 import { FocusedAssetPanel } from "@/components/statistical-levels/FocusedAssetPanel";
 import { KeyStatisticalLevelsPanel } from "@/components/statistical-levels/KeyStatisticalLevelsPanel";
 import { LabOverviewStrip } from "@/components/statistical-levels/LabOverviewStrip";
@@ -18,7 +19,7 @@ import { ReturnHeatmap } from "@/components/statistical-levels/ReturnHeatmap";
 import { UnderwaterDrawdownChart } from "@/components/statistical-levels/UnderwaterDrawdownChart";
 import { defaultStatisticalSelection } from "@/lib/statistical-levels/asset-universe";
 import { statisticalLevelsData } from "@/lib/statistical-levels/generated-data";
-import type { AssetDataStatus, AssetStatRecord, StatisticalFrequency, StatisticalWindow } from "@/lib/statistical-levels/types";
+import type { AssetDataStatus, AssetStatRecord, StatisticalFrequency, StatisticalLevelsSeasonalityGeneratedData, StatisticalWindow } from "@/lib/statistical-levels/types";
 
 const statusLabels: Record<AssetDataStatus, string> = {
   ok: "Datos ok",
@@ -32,7 +33,11 @@ const frequencyLabels: Record<StatisticalFrequency, string> = {
   monthly: "Mensual",
 };
 
-export function StatLevelsLab() {
+type StatLevelsLabProps = {
+  seasonalityData: StatisticalLevelsSeasonalityGeneratedData;
+};
+
+export function StatLevelsLab({ seasonalityData }: StatLevelsLabProps) {
   const assets = statisticalLevelsData.assets as readonly AssetStatRecord[];
   const availableDefaults = defaultStatisticalSelection.filter((ticker) => assets.some((asset) => asset.ticker === ticker));
   const [selected, setSelected] = useState<string[]>(availableDefaults.slice(0, 5));
@@ -148,6 +153,12 @@ export function StatLevelsLab() {
       <MovementSummaryTable asset={primaryAsset} frequency={frequency} />
       <OpeningLocationPanel asset={primaryAsset} frequency={frequency} />
       <CalendarExtremesPanel asset={primaryAsset} frequency={frequency} />
+      <DailySeasonalityPanel
+        catalog={statisticalLevelsData.catalog}
+        data={seasonalityData.dailySeasonality}
+        generatedAt={statisticalLevelsData.generatedAt}
+        initialTicker={primaryAsset?.ticker ?? null}
+      />
       <PeriodExplorerTable asset={primaryAsset} frequency={frequency} />
       <AssetComparisonTable assets={selectedAssets} frequency={frequency} window={window} />
       <CorrelationMiniMatrix assets={selectedAssets} frequency={frequency} window={window} />

@@ -2,8 +2,11 @@ import { StatLevelsLab } from "@/components/statistical-levels/StatLevelsLab";
 import { DisclaimerBox } from "@/components/ui/DisclaimerBox";
 import { SectionHeader } from "@/components/ui/SectionHeader";
 import { statisticalLevelsData } from "@/lib/statistical-levels/generated-data";
+import { getStatisticalLevelsSeasonalityData } from "@/lib/statistical-levels/get-seasonality-data";
 
-export default function NivelesEstadisticosPage() {
+export default async function NivelesEstadisticosPage() {
+  const seasonalityData = await getStatisticalLevelsSeasonalityData();
+
   return (
     <div className="mx-auto max-w-7xl px-5 py-10 md:py-14">
       <div className="grid gap-8 lg:grid-cols-[1fr_0.76fr] lg:items-end">
@@ -35,7 +38,7 @@ export default function NivelesEstadisticosPage() {
       </div>
 
       <div className="mt-8">
-        <StatLevelsLab />
+        <StatLevelsLab seasonalityData={seasonalityData} />
       </div>
     </div>
   );

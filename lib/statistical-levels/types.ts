@@ -1,5 +1,7 @@
 export type StatisticalWindow = "1Y" | "3Y" | "5Y" | "10Y" | "Full";
 
+export type SeasonalityWindow = "3Y" | "5Y" | "10Y" | "Full";
+
 export type StatisticalFrequency = "daily" | "weekly" | "monthly";
 
 export type AssetCategory =
@@ -175,6 +177,42 @@ export type KeyStatisticalLevelSet = {
 export type AssetKeyStatisticalLevels = {
   weekly: KeyStatisticalLevelSet;
   monthly: KeyStatisticalLevelSet;
+};
+
+export type DailySeasonalityCell = {
+  month: number;
+  day: number;
+  averageReturn: number | null;
+  medianReturn: number | null;
+  winRate: number | null;
+  sampleSize: number;
+};
+
+export type PresidentialCyclePhase =
+  | "all"
+  | "post_election"
+  | "midterm"
+  | "pre_election"
+  | "election";
+
+export type DailySeasonalityWindowData = {
+  general: DailySeasonalityCell[];
+  presidentialCycle: Record<PresidentialCyclePhase, DailySeasonalityCell[]>;
+};
+
+export type DailySeasonalityData = {
+  asset: string;
+  windows: Record<SeasonalityWindow, DailySeasonalityWindowData>;
+};
+
+export type PresidentialCycleSeasonalityIndex = {
+  phases: Record<PresidentialCyclePhase, string>;
+  methodology: string;
+};
+
+export type StatisticalLevelsSeasonalityGeneratedData = {
+  dailySeasonality: DailySeasonalityData[];
+  presidentialCycleSeasonality: PresidentialCycleSeasonalityIndex;
 };
 
 export type FrequencyMetricSet = {

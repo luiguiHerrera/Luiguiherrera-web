@@ -1,13 +1,12 @@
 import Link from "next/link";
 
 const navItems = [
-  { href: "/", label: "Inicio" },
+  { href: "/", label: "Home" },
+  { href: "/mercado", label: "Mercado" },
   { href: "/diagnostico", label: "Diagnóstico" },
-  { href: "/dashboard", label: "Dashboard" },
-  { href: "/niveles-estadisticos", label: "Niveles estadísticos" },
-  { href: "/quant-lab", label: "Quant Lab" },
-  { href: "/protege-tu-dinero", label: "Protege tu dinero" },
-  { href: "/metodologia", label: "Metodología" },
+  { href: "/investigacion", label: "Investigación" },
+  { href: "/proteccion", label: "Protección" },
+  { href: "/recursos", label: "Recursos" },
 ];
 
 export function Header() {
