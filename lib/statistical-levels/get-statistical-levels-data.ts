@@ -37,7 +37,8 @@ function sanitizeFrequency(value: string | string[] | undefined, fallback: Stati
 }
 
 function sanitizeWindow(value: string | string[] | undefined, fallback: StatisticalWindow) {
-  const window = firstParam(value) as StatisticalWindow | undefined;
+  const rawWindow = firstParam(value);
+  const window = (rawWindow === "All" ? "Full" : rawWindow) as StatisticalWindow | undefined;
   return window && validWindows.has(window) ? window : fallback;
 }
 

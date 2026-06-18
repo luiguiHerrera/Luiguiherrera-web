@@ -2,11 +2,11 @@
 
 import { useMemo, useState } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { AdvancedSeasonalityPanel } from "@/components/statistical-levels/AdvancedSeasonalityPanel";
 import { AssetComparisonTable } from "@/components/statistical-levels/AssetComparisonTable";
 import { AssetSelector } from "@/components/statistical-levels/AssetSelector";
 import { AssetStatCard } from "@/components/statistical-levels/AssetStatCard";
 import { CalendarExtremesPanel } from "@/components/statistical-levels/CalendarExtremesPanel";
-import { DailySeasonalityPanel } from "@/components/statistical-levels/DailySeasonalityPanel";
 import { KeyStatisticalLevelsPanel } from "@/components/statistical-levels/KeyStatisticalLevelsPanel";
 import { LabOverviewStrip } from "@/components/statistical-levels/LabOverviewStrip";
 import { MovementSummaryTable } from "@/components/statistical-levels/MovementSummaryTable";
@@ -129,6 +129,7 @@ export function StatLevelsLab({ asset, manifest, seasonality, selection }: StatL
 
       {frequency === "monthly" ? (
         <div className="grid gap-5">
+          <AdvancedSeasonalityPanel data={seasonality} frequency="monthly" generatedAt={manifest.generatedAt} ticker={asset.ticker} />
           <KeyStatisticalLevelsPanel asset={asset} frequency="monthly" />
           <MovementSummaryTable asset={asset} frequency="monthly" />
           <OpeningLocationPanel asset={asset} frequency="monthly" />
@@ -138,6 +139,7 @@ export function StatLevelsLab({ asset, manifest, seasonality, selection }: StatL
 
       {frequency === "weekly" ? (
         <div className="grid gap-5">
+          <AdvancedSeasonalityPanel data={seasonality} frequency="weekly" generatedAt={manifest.generatedAt} ticker={asset.ticker} />
           <KeyStatisticalLevelsPanel asset={asset} frequency="weekly" />
           <PeriodExplorerTable asset={asset} frequency="weekly" />
           <OpeningLocationPanel asset={asset} frequency="weekly" />
@@ -148,12 +150,7 @@ export function StatLevelsLab({ asset, manifest, seasonality, selection }: StatL
 
       {frequency === "daily" ? (
         <div className="grid gap-5">
-          <DailySeasonalityPanel
-            catalog={manifest.catalog}
-            data={seasonality}
-            generatedAt={manifest.generatedAt}
-            initialTicker={asset.ticker}
-          />
+          <AdvancedSeasonalityPanel data={seasonality} frequency="daily" generatedAt={manifest.generatedAt} ticker={asset.ticker} />
           <ReturnHeatmap asset={asset} frequency="daily" />
           <CalendarExtremesPanel asset={asset} frequency="daily" />
           <MovementSummaryTable asset={asset} frequency="daily" />

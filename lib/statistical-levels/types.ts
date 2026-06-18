@@ -1,6 +1,6 @@
 export type StatisticalWindow = "1Y" | "3Y" | "5Y" | "10Y" | "Full";
 
-export type SeasonalityWindow = "3Y" | "5Y" | "10Y" | "Full";
+export type SeasonalityWindow = "3Y" | "5Y" | "10Y" | "Full" | "All";
 
 export type StatisticalFrequency = "daily" | "weekly" | "monthly";
 
@@ -195,6 +195,25 @@ export type DailySeasonalityCell = {
   sampleSize: number;
 };
 
+export type CalendarMonthSeasonalityCell = {
+  month: number;
+  averageReturn: number | null;
+  medianReturn: number | null;
+  winRate: number | null;
+  sampleSize: number;
+};
+
+export type CalendarWeekSeasonalityCell = {
+  month: number;
+  weekOfMonth: number;
+  averageReturn: number | null;
+  medianReturn: number | null;
+  winRate: number | null;
+  sampleSize: number;
+};
+
+export type CalendarDaySeasonalityCell = DailySeasonalityCell;
+
 export type PresidentialCyclePhase =
   | "all"
   | "post_election"
@@ -205,6 +224,19 @@ export type PresidentialCyclePhase =
 export type DailySeasonalityWindowData = {
   general: DailySeasonalityCell[];
   presidentialCycle: Record<PresidentialCyclePhase, DailySeasonalityCell[]>;
+  monthly?: {
+    general: CalendarMonthSeasonalityCell[];
+    presidentialCycle: Record<PresidentialCyclePhase, CalendarMonthSeasonalityCell[]>;
+  };
+  weekly?: {
+    general: CalendarWeekSeasonalityCell[];
+    presidentialCycle: Record<PresidentialCyclePhase, CalendarWeekSeasonalityCell[]>;
+    methodology: string;
+  };
+  daily?: {
+    general: CalendarDaySeasonalityCell[];
+    presidentialCycle: Record<PresidentialCyclePhase, CalendarDaySeasonalityCell[]>;
+  };
 };
 
 export type DailySeasonalityData = {

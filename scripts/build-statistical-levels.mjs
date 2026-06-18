@@ -17,7 +17,7 @@ const windows = {
   Full: { daily: null, weekly: null, monthly: null },
 };
 
-const seasonalityWindows = ["3Y", "5Y", "10Y", "Full"];
+const seasonalityWindows = ["3Y", "5Y", "10Y", "All"];
 const presidentialCyclePhases = ["all", "post_election", "midterm", "pre_election", "election"];
 
 const frequencyConfig = {
@@ -698,10 +698,14 @@ function buildNewHighLow(rows, lookback) {
   };
 }
 
-function summarizeSeasonalityBucket(values, month, day) {
+function seasonalitySessions(windowKey, frequency) {
+  const normalizedWindow = windowKey === "All" ? "Full" : windowKey;
+  return windows[normalizedWindow]?.[frequency] ?? null;
+}
+
+function summarizeSeasonalityBucket(values, dimensions) {
   return {
-    month,
-    day,
+    ...dimensions,
     averageReturn: clampPrecision(mean(values), 6),
     medianReturn: clampPrecision(quantile(values, 0.5), 6),
     winRate: values.length ? clampPrecision(values.filter((value) => value > 0).length / values.length, 4) : null,
@@ -709,27 +713,60 @@ function summarizeSeasonalityBucket(values, month, day) {
   };
 }
 
-function buildSeasonalityCells(observations) {
+function buildSeasonalityCells(observations, keyBuilder, dimensionsBuilder, sorter) {
   const buckets = new Map();
   for (const observation of observations) {
-    const key = `${observation.month}-${observation.day}`;
+    const key = keyBuilder(observation);
     if (!buckets.has(key)) buckets.set(key, []);
     buckets.get(key).push(observation.returnValue);
   }
 
   return Array.from(buckets.entries())
     .map(([key, values]) => {
-      const [month, day] = key.split("-").map(Number);
-      return summarizeSeasonalityBucket(values, month, day);
+      return summarizeSeasonalityBucket(values, dimensionsBuilder(key), key);
     })
-    .sort((a, b) => a.month - b.month || a.day - b.day);
+    .sort(sorter);
 }
 
-function dailySeasonalityObservations(rows) {
+function buildDailySeasonalityCells(observations) {
+  return buildSeasonalityCells(
+    observations,
+    (observation) => `${observation.month}-${observation.day}`,
+    (key) => {
+      const [month, day] = key.split("-").map(Number);
+      return { month, day };
+    },
+    (a, b) => a.month - b.month || a.day - b.day,
+  );
+}
+
+function buildMonthlySeasonalityCells(observations) {
+  return buildSeasonalityCells(
+    observations,
+    (observation) => String(observation.month),
+    (key) => ({ month: Number(key) }),
+    (a, b) => a.month - b.month,
+  );
+}
+
+function buildWeeklySeasonalityCells(observations) {
+  return buildSeasonalityCells(
+    observations,
+    (observation) => `${observation.month}-${observation.weekOfMonth}`,
+    (key) => {
+      const [month, weekOfMonth] = key.split("-").map(Number);
+      return { month, weekOfMonth };
+    },
+    (a, b) => a.month - b.month || a.weekOfMonth - b.weekOfMonth,
+  );
+}
+
+function seasonalityObservations(rows, frequency) {
+  const periodRows = frequency === "daily" ? rows : aggregateRows(rows, frequency);
   const observations = [];
-  for (let index = 1; index < rows.length; index += 1) {
-    const previous = rows[index - 1];
-    const current = rows[index];
+  for (let index = 1; index < periodRows.length; index += 1) {
+    const previous = periodRows[index - 1];
+    const current = periodRows[index];
     if (!previous?.adjustedClose || !current?.adjustedClose) continue;
     const returnValue = current.adjustedClose / previous.adjustedClose - 1;
     if (!Number.isFinite(returnValue)) continue;
@@ -739,6 +776,7 @@ function dailySeasonalityObservations(rows) {
       year: parts.year,
       month: parts.month,
       day: parts.day,
+      weekOfMonth: Math.min(5, Math.floor((parts.day - 1) / 7) + 1),
       phase: presidentialCyclePhase(parts.year),
       returnValue,
     });
@@ -746,23 +784,46 @@ function dailySeasonalityObservations(rows) {
   return observations;
 }
 
-function buildDailySeasonalityData(ticker, rows) {
-  const observations = dailySeasonalityObservations(rows);
-  const windowEntries = seasonalityWindows.map((windowKey) => {
-    const sessions = windows[windowKey].daily;
-    const windowObservations = sessions ? observations.slice(-sessions) : observations;
-    const presidentialCycle = Object.fromEntries(
+function buildSeasonalityDimension(observations, cellBuilder) {
+  return {
+    general: cellBuilder(observations),
+    presidentialCycle: Object.fromEntries(
       presidentialCyclePhases.map((phase) => [
         phase,
-        buildSeasonalityCells(phase === "all" ? windowObservations : windowObservations.filter((observation) => observation.phase === phase)),
+        cellBuilder(phase === "all" ? observations : observations.filter((observation) => observation.phase === phase)),
       ]),
-    );
+    ),
+  };
+}
+
+function buildDailySeasonalityData(ticker, rows) {
+  const observationsByFrequency = {
+    daily: seasonalityObservations(rows, "daily"),
+    weekly: seasonalityObservations(rows, "weekly"),
+    monthly: seasonalityObservations(rows, "monthly"),
+  };
+  const windowEntries = seasonalityWindows.map((windowKey) => {
+    const dailySessions = seasonalitySessions(windowKey, "daily");
+    const weeklySessions = seasonalitySessions(windowKey, "weekly");
+    const monthlySessions = seasonalitySessions(windowKey, "monthly");
+    const dailyObservations = dailySessions ? observationsByFrequency.daily.slice(-dailySessions) : observationsByFrequency.daily;
+    const weeklyObservations = weeklySessions ? observationsByFrequency.weekly.slice(-weeklySessions) : observationsByFrequency.weekly;
+    const monthlyObservations = monthlySessions ? observationsByFrequency.monthly.slice(-monthlySessions) : observationsByFrequency.monthly;
+    const daily = buildSeasonalityDimension(dailyObservations, buildDailySeasonalityCells);
+    const weekly = {
+      ...buildSeasonalityDimension(weeklyObservations, buildWeeklySeasonalityCells),
+      methodology: "Semanas agregadas por fecha de cierre semanal. Semana 1 = días 1-7 del mes; Semana 5 = días 29-31.",
+    };
+    const monthly = buildSeasonalityDimension(monthlyObservations, buildMonthlySeasonalityCells);
 
     return [
       windowKey,
       {
-        general: buildSeasonalityCells(windowObservations),
-        presidentialCycle,
+        general: daily.general,
+        presidentialCycle: daily.presidentialCycle,
+        monthly,
+        weekly,
+        daily,
       },
     ];
   });
