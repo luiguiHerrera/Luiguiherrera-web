@@ -4,6 +4,8 @@ export type SeasonalityWindow = "3Y" | "5Y" | "10Y" | "Full" | "All";
 
 export type StatisticalFrequency = "daily" | "weekly" | "monthly";
 
+export type CorrelationWindowKey = "3Y" | "5Y" | "10Y" | "All";
+
 export type AssetCategory =
   | "Índices / ETFs"
   | "Bonos"
@@ -331,6 +333,14 @@ export type AssetStatSummary = {
   };
 };
 
+export type CorrelationMatrix = {
+  tickers: string[];
+  minObservations: number;
+  values: Record<string, Record<string, number | null>>;
+};
+
+export type StatisticalLevelsCorrelation = Record<StatisticalFrequency, Record<CorrelationWindowKey, CorrelationMatrix>>;
+
 export type StatisticalLevelsManifest = {
   generatedAt: string;
   source: string;
@@ -342,6 +352,7 @@ export type StatisticalLevelsManifest = {
   windows: StatisticalWindow[];
   catalog: AssetManifestItem[];
   summaries: AssetStatSummary[];
+  correlation?: StatisticalLevelsCorrelation;
   statusCounts: Record<AssetDataStatus, number>;
   seasonality: {
     presidentialCycleSeasonality: PresidentialCycleSeasonalityIndex;

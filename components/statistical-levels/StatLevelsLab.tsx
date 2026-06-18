@@ -13,7 +13,18 @@ import { OpeningLocationPanel } from "@/components/statistical-levels/OpeningLoc
 import { PeriodExplorerTable } from "@/components/statistical-levels/PeriodExplorerTable";
 import { ReturnHeatmap } from "@/components/statistical-levels/ReturnHeatmap";
 import { UnderwaterDrawdownChart } from "@/components/statistical-levels/UnderwaterDrawdownChart";
-import type { AssetDataStatus, AssetStatRecord, AssetStatSummary, DailySeasonalityData, StatisticalFrequency, StatisticalLevelsManifest, StatisticalWindow } from "@/lib/statistical-levels/types";
+import type {
+  AssetCategory,
+  AssetDataStatus,
+  AssetStatRecord,
+  AssetStatSummary,
+  CorrelationMatrix,
+  DailySeasonalityData,
+  StatisticalFrequency,
+  StatisticalLevelsCorrelation,
+  StatisticalLevelsManifest,
+  StatisticalWindow,
+} from "@/lib/statistical-levels/types";
 
 const statusLabels: Record<AssetDataStatus, string> = {
   ok: "Datos ok",
@@ -32,6 +43,15 @@ const englishFrequencyLabels: Record<StatisticalFrequency, string> = {
   weekly: "Weekly",
   monthly: "Monthly",
 };
+
+const categoryOrder: AssetCategory[] = [
+  "Índices / ETFs",
+  "Bonos",
+  "Oro y materias primas",
+  "Sectores",
+  "Cripto",
+  "Internacional",
+];
 
 const frameTabs: Array<{ key: StatisticalFrequency; label: string; description: string }> = [
   { key: "monthly", label: "Mensual", description: "Niveles de referencia, apertura mensual y contexto de rango." },
@@ -197,7 +217,14 @@ export function StatLevelsLab({ asset, manifest, seasonality, selection }: StatL
         </div>
       ) : null}
 
-      <ComparisonSection summaries={manifest.summaries} focusTicker={asset.ticker} frequency={frequency} window={window} locale={locale} />
+      <ComparisonSection
+        correlation={manifest.correlation}
+        summaries={manifest.summaries}
+        focusTicker={asset.ticker}
+        frequency={frequency}
+        window={window}
+        locale={locale}
+      />
 
       <section className="border border-line bg-panel p-4 md:p-5">
         <h2 className="text-xl font-semibold text-ink">{labels.howToRead}</h2>
@@ -213,12 +240,14 @@ export function StatLevelsLab({ asset, manifest, seasonality, selection }: StatL
 }
 
 function ComparisonSection({
+  correlation,
   focusTicker,
   frequency,
   locale,
   summaries,
   window,
 }: {
+  correlation?: StatisticalLevelsCorrelation;
   focusTicker: string;
   frequency: StatisticalFrequency;
   locale: "es" | "en";
@@ -232,6 +261,14 @@ function ComparisonSection({
   const selectedSet = new Set(selectedTickers);
   const selected = summaries.filter((asset) => selectedSet.has(asset.ticker));
   const filtered = summaries.filter((asset) => `${asset.ticker} ${asset.name} ${asset.category}`.toLowerCase().includes(normalizedQuery));
+  const groupedAssets = categoryOrder
+    .map((category) => ({
+      category,
+      assets: filtered.filter((asset) => asset.category === category),
+    }))
+    .filter((group) => group.assets.length > 0);
+  const correlationWindow = window === "3Y" || window === "5Y" || window === "10Y" ? window : "All";
+  const correlationMatrix = correlation?.[frequency]?.[correlationWindow] ?? null;
   const copy = locale === "en"
     ? {
         eyebrow: "Compare assets",
@@ -244,7 +281,10 @@ function ComparisonSection({
         extension: "Extension percentile",
         zScore: "Z-score",
         longAverage: "Long average",
-        correlation: "The full correlation matrix will be added when it is available in a light format.",
+        category: "Group",
+        correlationTitle: "Correlation matrix",
+        correlationBody: "Precomputed lightweight correlation by frequency and window. It uses the selected assets without loading full series in the browser.",
+        correlationEmpty: "The light correlation matrix is not available for this combination yet.",
       }
     : {
         eyebrow: "Comparar activos",
@@ -257,7 +297,10 @@ function ComparisonSection({
         extension: "Percentil extensión",
         zScore: "Z-score",
         longAverage: "Media larga",
-        correlation: "La matriz completa de correlación se incorporará cuando esté disponible en formato ligero.",
+        category: "Grupo",
+        correlationTitle: "Matriz de correlación",
+        correlationBody: "Correlación ligera precalculada por frecuencia y ventana. Usa los activos seleccionados sin cargar series completas en el navegador.",
+        correlationEmpty: "La matriz ligera de correlación no está disponible para esta combinación todavía.",
       };
 
   function toggleTicker(ticker: string) {
@@ -293,22 +336,29 @@ function ComparisonSection({
             className="w-full border border-line bg-panelSoft px-4 py-3 text-sm text-ink outline-none transition focus:border-petrol"
           />
         </label>
-        <div className="flex max-h-36 flex-wrap gap-1.5 overflow-y-auto border border-line bg-panelSoft p-2">
-          {filtered.map((asset) => {
-            const active = selectedTickers.includes(asset.ticker);
-            return (
-              <button
-                key={asset.ticker}
-                type="button"
-                onClick={() => toggleTicker(asset.ticker)}
-                title={asset.name}
-                aria-pressed={active}
-                className={`border px-2.5 py-1.5 text-xs font-semibold transition ${active ? "border-petrol bg-[#eef3f2] text-petrol" : "border-line bg-panel text-muted hover:border-ink hover:text-ink"}`}
-              >
-                {asset.ticker}
-              </button>
-            );
-          })}
+        <div className="max-h-64 space-y-3 overflow-y-auto border border-line bg-panelSoft p-3">
+          {groupedAssets.map((group) => (
+            <div key={group.category}>
+              <p className="mb-2 text-[11px] font-semibold uppercase tracking-[0.12em] text-muted">{group.category}</p>
+              <div className="flex flex-wrap gap-1.5">
+                {group.assets.map((asset) => {
+                  const active = selectedTickers.includes(asset.ticker);
+                  return (
+                    <button
+                      key={asset.ticker}
+                      type="button"
+                      onClick={() => toggleTicker(asset.ticker)}
+                      title={asset.name}
+                      aria-pressed={active}
+                      className={`border px-2.5 py-1.5 text-xs font-semibold transition ${active ? "border-petrol bg-[#eef3f2] text-petrol" : "border-line bg-panel text-muted hover:border-ink hover:text-ink"}`}
+                    >
+                      {asset.ticker}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          ))}
         </div>
       </div>
 
@@ -319,6 +369,7 @@ function ComparisonSection({
               <div>
                 <p className="font-semibold text-ink">{asset.ticker}</p>
                 <p className="mt-1 text-xs leading-5 text-muted">{asset.name}</p>
+                <p className="mt-1 text-[11px] font-semibold uppercase tracking-[0.1em] text-muted">{asset.category}</p>
               </div>
               {asset.ticker === focusTicker ? <span className="text-xs font-semibold text-petrol">{copy.focus}</span> : null}
             </div>
@@ -331,9 +382,88 @@ function ComparisonSection({
         ))}
       </div>
 
-      <div className="mt-5 border border-line bg-panelSoft p-4 text-sm leading-6 text-muted">
-        {copy.correlation}
+      <div className="mt-5 border border-line bg-panelSoft p-4">
+        <div className="flex flex-col gap-2 md:flex-row md:items-end md:justify-between">
+          <div>
+            <h3 className="text-base font-semibold text-ink">{copy.correlationTitle}</h3>
+            <p className="mt-1 text-sm leading-6 text-muted">{copy.correlationBody}</p>
+          </div>
+          <span className="w-fit border border-line bg-panel px-2.5 py-1 text-[11px] font-semibold uppercase tracking-[0.12em] text-muted">
+            {(locale === "en" ? englishFrequencyLabels : frequencyLabels)[frequency]} · {correlationWindow}
+          </span>
+        </div>
+        <CorrelationHeatmap matrix={correlationMatrix} selectedTickers={selectedTickers} emptyLabel={copy.correlationEmpty} />
       </div>
     </section>
   );
+}
+
+function CorrelationHeatmap({
+  emptyLabel,
+  matrix,
+  selectedTickers,
+}: {
+  emptyLabel: string;
+  matrix: CorrelationMatrix | null;
+  selectedTickers: string[];
+}) {
+  const available = matrix ? selectedTickers.filter((ticker) => matrix.tickers.includes(ticker)).slice(0, 30) : [];
+
+  if (!matrix || available.length < 2) {
+    return <p className="mt-4 border border-line bg-panel px-3 py-3 text-sm leading-6 text-muted">{emptyLabel}</p>;
+  }
+
+  return (
+    <div className="mt-4 max-w-full overflow-x-auto [contain:paint]">
+      <div
+        className="grid min-w-[720px] border border-line bg-panel text-xs"
+        style={{ gridTemplateColumns: `5rem repeat(${available.length}, minmax(3.2rem, 1fr))` }}
+      >
+        <div className="border-b border-line bg-panelSoft p-2" />
+        {available.map((ticker) => (
+          <div key={ticker} className="border-b border-l border-line bg-panelSoft p-2 text-center font-semibold text-ink">
+            {ticker}
+          </div>
+        ))}
+        {available.map((rowTicker) => (
+          <RowCells key={rowTicker} matrix={matrix} rowTicker={rowTicker} tickers={available} />
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function RowCells({ matrix, rowTicker, tickers }: { matrix: CorrelationMatrix; rowTicker: string; tickers: string[] }) {
+  return (
+    <>
+      <div className="border-t border-line bg-panelSoft p-2 font-semibold text-ink">{rowTicker}</div>
+      {tickers.map((columnTicker) => {
+        const value = matrix.values[rowTicker]?.[columnTicker] ?? null;
+        return (
+          <div
+            key={`${rowTicker}-${columnTicker}`}
+            className="border-l border-t border-line p-2 text-center font-semibold text-ink"
+            style={{ backgroundColor: correlationColor(value) }}
+            title={`${rowTicker} / ${columnTicker}: ${formatCorrelation(value)}`}
+          >
+            {formatCorrelation(value)}
+          </div>
+        );
+      })}
+    </>
+  );
+}
+
+function formatCorrelation(value: number | null) {
+  return value === null ? "n/d" : value.toFixed(2);
+}
+
+function correlationColor(value: number | null) {
+  if (value === null) return "#f6f1ea";
+  if (value >= 0.75) return "#d8e4dc";
+  if (value >= 0.45) return "#e8eee9";
+  if (value >= 0.15) return "#f2f0ea";
+  if (value > -0.15) return "#f6f1ea";
+  if (value > -0.45) return "#efe4dd";
+  return "#e7d4cc";
 }

@@ -39,10 +39,25 @@ function average(values: number[]) {
   return values.reduce((sum, value) => sum + value, 0) / values.length;
 }
 
+function cleanAverage(values: Array<number | null>) {
+  return average(values.filter((value): value is number => value !== null && Number.isFinite(value)));
+}
+
 export function OpeningLocationPanel({ asset, frequency }: OpeningLocationPanelProps) {
   const [mode, setMode] = useState<"opening" | "close">("opening");
   const location = asset?.frequencies[frequency].openingLocation;
   const periods = asset?.frequencies[frequency].recentPeriods ?? [];
+  const openToCloseReturns = periods
+    .map((row) => (row.open && row.close && row.open > 0 ? row.close / row.open - 1 : null))
+    .filter((value): value is number => value !== null && Number.isFinite(value));
+  const openToCloseAverage = average(openToCloseReturns);
+  const closeAboveOpenRate = openToCloseReturns.length ? openToCloseReturns.filter((value) => value > 0).length / openToCloseReturns.length : null;
+  const openToCloseReading =
+    openToCloseAverage === null
+      ? "Historial reciente insuficiente para resumir sesión vs apertura."
+      : openToCloseAverage >= 0
+        ? "En la muestra reciente, el cierre tiende a quedar por encima de la apertura."
+        : "En la muestra reciente, el cierre tiende a quedar por debajo de la apertura.";
   const closeRows: OpeningCategoryStats[] = [
     { category: "Cierre cerca del mínimo", count: 0, proportion: 0, averageForwardReturn: null, averageVolatility: null, positiveRate: null },
     { category: "Cierre en zona media", count: 0, proportion: 0, averageForwardReturn: null, averageVolatility: null, positiveRate: null },
@@ -55,13 +70,12 @@ export function OpeningLocationPanel({ asset, frequency }: OpeningLocationPanelP
       return closeLocation > 0.33 && closeLocation < 0.67;
     });
     const changes = rows.map((row) => row.change).filter((value): value is number => value !== null && Number.isFinite(value));
-    const ranges = rows.map((row) => row.range).filter((value): value is number => value !== null && Number.isFinite(value));
     return {
       category: bucket.category,
       count: rows.length,
       proportion: periods.length ? rows.length / periods.length : 0,
       averageForwardReturn: average(changes),
-      averageVolatility: average(ranges),
+      averageVolatility: cleanAverage(rows.map((row) => row.range)),
       positiveRate: changes.length ? changes.filter((value) => value > 0).length / changes.length : null,
     };
   });
@@ -79,6 +93,11 @@ export function OpeningLocationPanel({ asset, frequency }: OpeningLocationPanelP
         <div>
           <p className="text-xs font-semibold uppercase tracking-[0.18em] text-brass">Opening / Close location</p>
           <h2 className="mt-2 text-xl font-semibold text-ink">{mode === "opening" ? "Ubicación de apertura" : "Ubicación de cierre"}</h2>
+          <p className="mt-2 max-w-3xl text-sm leading-6 text-muted">
+            {mode === "opening"
+              ? "Opening location ubica la apertura actual frente al rango y al cierre previos."
+              : "Close location ubica cada cierre dentro del máximo-mínimo de su propio periodo. Para comparar cierre contra apertura, revisa el resumen de sesión."}
+          </p>
         </div>
         <div className="flex w-full border border-line bg-panelSoft p-1 sm:w-fit">
           {[
@@ -95,6 +114,19 @@ export function OpeningLocationPanel({ asset, frequency }: OpeningLocationPanelP
             </button>
           ))}
         </div>
+      </div>
+      <div className="mt-5 grid gap-3 md:grid-cols-[1fr_1fr_2fr]">
+        {[
+          ["Sesión vs apertura", "Retorno medio cierre/apertura", formatPercent(openToCloseAverage)],
+          ["Cierres sobre apertura", "Proporción de periodos", formatPercent(closeAboveOpenRate)],
+          ["Lectura breve", "Open to Close", openToCloseReading],
+        ].map(([label, detail, value]) => (
+          <div key={label} className="border border-line bg-panelSoft p-3">
+            <p className="text-[11px] uppercase tracking-[0.11em] text-muted">{label}</p>
+            <p className="mt-2 text-sm font-semibold text-ink">{value}</p>
+            <p className="mt-1 text-xs text-muted">{detail}</p>
+          </div>
+        ))}
       </div>
       {mode === "close" ? (
         <>

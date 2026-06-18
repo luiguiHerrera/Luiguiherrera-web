@@ -31,11 +31,6 @@ function formatPercent(value: number | null) {
   return `${value > 0 ? "+" : ""}${(value * 100).toFixed(2)}%`;
 }
 
-function markerPosition(value: number | null, min: number, max: number) {
-  if (value === null || max <= min) return 50;
-  return Math.min(88, Math.max(12, ((value - min) / (max - min)) * 100));
-}
-
 const monthlyScriptUrl = "https://www.tradingview.com/script/ziflzOXv-Monthly-Statistical-Levels/";
 
 function levelTone(key: string) {
@@ -54,6 +49,33 @@ function LevelLadder({ data, kind, ticker }: { data: KeyStatisticalLevelSet; kin
   const min = allValues.length ? Math.min(...allValues) : 0;
   const max = allValues.length ? Math.max(...allValues) : 1;
   const rangeLabel = allValues.length ? `${formatPrice(min, ticker)} - ${formatPrice(max, ticker)}` : "n/d";
+  const markers = [
+    ...values.map((item) => {
+      const meta = labels.find(([key]) => key === item.key);
+      return {
+        key: item.key,
+        value: item.value,
+        description: meta?.[1] ?? "Nivel estadístico",
+        group: meta?.[2] ?? "Nivel",
+        distance: data.distances[item.key] ?? null,
+        tone: levelTone(item.key),
+        type: "level" as const,
+      };
+    }),
+    ...(data.lastClose === null
+      ? []
+      : [
+          {
+            key: "Precio actual",
+            value: data.lastClose,
+            description: "Último cierre disponible",
+            group: "Referencia",
+            distance: null,
+            tone: "border-ink bg-ink text-white",
+            type: "price" as const,
+          },
+        ]),
+  ].sort((left, right) => left.value - right.value);
 
   if (!data.available) {
     return (
@@ -94,32 +116,35 @@ function LevelLadder({ data, kind, ticker }: { data: KeyStatisticalLevelSet; kin
       </div>
 
       <div className="mt-5 max-w-full overflow-x-auto [contain:paint]">
-        <div className="relative h-32 min-w-[760px] px-14">
-          <div className="absolute left-12 right-12 top-14 h-px bg-line" />
-          <div className="absolute left-12 top-[3.15rem] h-4 w-px bg-line" />
-          <div className="absolute right-12 top-[3.15rem] h-4 w-px bg-line" />
-          <span className="absolute left-12 top-[4.35rem] text-[10px] font-semibold text-muted">{formatPrice(min, ticker)}</span>
-          <span className="absolute right-12 top-[4.35rem] -translate-x-full text-[10px] font-semibold text-muted">{formatPrice(max, ticker)}</span>
-
-          {values.map((item, index) => {
-            const meta = labels.find(([key]) => key === item.key);
-            return (
-              <div key={item.key} className="absolute top-9 -translate-x-1/2" style={{ left: `${markerPosition(item.value, min, max)}%` }}>
-                <div className="mx-auto h-9 w-px bg-[#a8a29e]" />
-                <div className={`mt-1 w-28 border bg-panel px-2 py-1 text-center shadow-[0_8px_18px_rgba(31,35,40,0.06)] ${levelTone(item.key)} ${index % 2 === 0 ? "" : "translate-y-6"}`}>
-                  <p className="whitespace-nowrap text-[11px] font-semibold">{item.key}</p>
-                  <p className="mt-0.5 whitespace-nowrap text-[10px] opacity-80">{meta?.[1] ?? "Nivel estadístico"}</p>
+        <div className="min-w-[820px] border border-line bg-panel p-4">
+          <div className="flex items-center justify-between gap-4 text-[11px] font-semibold uppercase tracking-[0.12em] text-muted">
+            <span>{formatPrice(min, ticker)}</span>
+            <span>Escala ordenada por precio</span>
+            <span>{formatPrice(max, ticker)}</span>
+          </div>
+          <div className="relative mt-4">
+            <div className="absolute left-8 right-8 top-[5.45rem] h-px bg-line" />
+            <div
+              className="grid gap-3"
+              style={{ gridTemplateColumns: `repeat(${Math.max(markers.length, 1)}, minmax(7.5rem, 1fr))` }}
+            >
+              {markers.map((marker) => (
+                <div key={marker.key} className="relative z-10 flex min-h-[9.25rem] min-w-0 flex-col items-center text-center">
+                  <div
+                    className={`flex min-h-[4.7rem] w-full flex-col justify-center border px-2.5 py-2 shadow-[0_10px_22px_rgba(31,35,40,0.05)] ${marker.tone}`}
+                    title={`${marker.key}: ${marker.description}`}
+                  >
+                    <p className={`text-[11px] font-semibold ${marker.type === "price" ? "text-white" : ""}`}>{marker.key}</p>
+                    <p className={`mt-1 text-xs font-semibold ${marker.type === "price" ? "text-white" : "text-ink"}`}>{formatPrice(marker.value, ticker)}</p>
+                    <p className={`mt-1 text-[10px] leading-4 ${marker.type === "price" ? "text-white/70" : "opacity-80"}`}>{marker.description}</p>
+                  </div>
+                  <div className={`mt-3 h-7 w-px ${marker.type === "price" ? "bg-ink" : "bg-[#a8a29e]"}`} />
+                  <div className={`h-3 w-3 rotate-45 border ${marker.type === "price" ? "border-ink bg-ink" : "border-line bg-panelSoft"}`} />
+                  <p className="mt-2 text-[10px] font-semibold uppercase tracking-[0.1em] text-muted">{marker.group}</p>
+                  {marker.distance !== null ? <p className="mt-1 text-[11px] text-muted">{formatPercent(marker.distance)}</p> : null}
                 </div>
-              </div>
-            );
-          })}
-
-          <div className="absolute top-0 -translate-x-1/2" style={{ left: `${markerPosition(data.lastClose, min, max)}%` }}>
-            <div className="mx-auto border border-ink bg-ink px-2.5 py-1 text-center text-white shadow-[0_10px_24px_rgba(31,35,40,0.14)]">
-              <p className="whitespace-nowrap text-[10px] font-semibold uppercase tracking-[0.1em] text-white/70">Precio actual</p>
-              <p className="whitespace-nowrap text-xs font-semibold">{formatPrice(data.lastClose, ticker)}</p>
+              ))}
             </div>
-            <div className="mx-auto h-14 w-px bg-ink" />
           </div>
         </div>
       </div>

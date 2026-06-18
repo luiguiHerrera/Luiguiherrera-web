@@ -18,6 +18,7 @@ const windows = {
 };
 
 const seasonalityWindows = ["3Y", "5Y", "10Y", "All"];
+const correlationWindows = ["3Y", "5Y", "10Y", "All"];
 const presidentialCyclePhases = ["all", "post_election", "midterm", "pre_election", "election"];
 
 const frequencyConfig = {
@@ -123,6 +124,29 @@ function zScore(values, value) {
 
 function clampPrecision(value, digits = 4) {
   return value === null || value === undefined || !Number.isFinite(value) ? null : Number(value.toFixed(digits));
+}
+
+function correlation(first, second) {
+  const length = Math.min(first.length, second.length);
+  if (length < 20) return null;
+  const x = first.slice(-length).filter(Number.isFinite);
+  const y = second.slice(-length).filter(Number.isFinite);
+  if (x.length !== y.length || x.length < 20) return null;
+  const xMean = mean(x);
+  const yMean = mean(y);
+  if (xMean === null || yMean === null) return null;
+  let numerator = 0;
+  let xDenominator = 0;
+  let yDenominator = 0;
+  for (let index = 0; index < x.length; index += 1) {
+    const xDelta = x[index] - xMean;
+    const yDelta = y[index] - yMean;
+    numerator += xDelta * yDelta;
+    xDenominator += xDelta ** 2;
+    yDenominator += yDelta ** 2;
+  }
+  const denominator = Math.sqrt(xDenominator * yDenominator);
+  return denominator === 0 ? null : clampPrecision(numerator / denominator, 3);
 }
 
 function dateParts(dateString) {
@@ -1106,14 +1130,62 @@ function summarizeAssetForManifest(asset) {
   };
 }
 
+function buildCorrelationSource(rows) {
+  return Object.fromEntries(
+    ["daily", "weekly", "monthly"].map((frequency) => {
+      const periodRows = aggregateRows(rows, frequency);
+      return [frequency, periodReturns(periodRows.map((row) => row.adjustedClose))];
+    }),
+  );
+}
+
+function buildCorrelationMatrix(assets, sources, frequency, windowKey) {
+  const tickers = assets.filter((asset) => asset.status !== "unavailable").map((asset) => asset.ticker);
+  const sessionLimit = windowKey === "All" ? null : windows[windowKey]?.[frequency] ?? null;
+  const seriesByTicker = Object.fromEntries(
+    tickers.map((ticker) => {
+      const source = sources.get(ticker)?.[frequency] ?? [];
+      return [ticker, sessionLimit ? source.slice(-sessionLimit) : source];
+    }),
+  );
+  const values = Object.fromEntries(
+    tickers.map((rowTicker) => [
+      rowTicker,
+      Object.fromEntries(
+        tickers.map((columnTicker) => [
+          columnTicker,
+          rowTicker === columnTicker ? 1 : correlation(seriesByTicker[rowTicker] ?? [], seriesByTicker[columnTicker] ?? []),
+        ]),
+      ),
+    ]),
+  );
+
+  return {
+    tickers,
+    minObservations: 20,
+    values,
+  };
+}
+
+function buildCorrelationData(assets, sources) {
+  return Object.fromEntries(
+    ["daily", "weekly", "monthly"].map((frequency) => [
+      frequency,
+      Object.fromEntries(correlationWindows.map((windowKey) => [windowKey, buildCorrelationMatrix(assets, sources, frequency, windowKey)])),
+    ]),
+  );
+}
+
 const assets = [];
 const dailySeasonality = [];
+const correlationSources = new Map();
 for (const asset of universe) {
   try {
     const { rows, provider } = await fetchMarketData(asset);
     const record = buildAssetRecord(asset, rows, provider);
     assets.push(record);
     dailySeasonality.push(buildDailySeasonalityData(asset.ticker, rows));
+    correlationSources.set(asset.ticker, buildCorrelationSource(rows));
     console.log(
       `[stat-levels] ${asset.ticker}: ${record.status} (${rows.length} daily rows, weekly ${record.frequencies.weekly.periods}, monthly ${record.frequencies.monthly.periods}, provider ${provider})`,
     );
@@ -1122,6 +1194,7 @@ for (const asset of universe) {
     console.warn(`[stat-levels] ${asset.ticker}: unavailable (${message})`);
     assets.push(buildAssetRecord(asset, [], "unavailable"));
     dailySeasonality.push(buildDailySeasonalityData(asset.ticker, []));
+    correlationSources.set(asset.ticker, buildCorrelationSource([]));
   }
 }
 
@@ -1182,6 +1255,7 @@ const manifest = {
     lastDate,
   })),
   summaries: assets.map(summarizeAssetForManifest),
+  correlation: buildCorrelationData(assets, correlationSources),
   statusCounts: summary,
   seasonality: {
     presidentialCycleSeasonality: seasonalityData.presidentialCycleSeasonality,
