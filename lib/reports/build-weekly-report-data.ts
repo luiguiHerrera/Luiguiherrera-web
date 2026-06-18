@@ -7,6 +7,7 @@ import {
 import type { AssetStatRecord, AssetStatSummary, DailySeasonalityCell, PresidentialCyclePhase } from "@/lib/statistical-levels/types";
 
 const coreEtfs = ["SPY", "QQQ", "DIA", "IWM"];
+const statisticalHighlightTickers = ["SPY", "QQQ", "GLD", "IBIT"];
 
 const roadmapItems = [
   "Inflow/outflow general de ETFs",
@@ -53,8 +54,11 @@ function rankedSeasonality(cells: DailySeasonalityCell[], month: number) {
   };
 }
 
-function extensionHighlights(assets: AssetStatSummary[]) {
-  return assets
+function extensionHighlights(assets: AssetStatSummary[], preferredTickers: string[]) {
+  const byTicker = new Map(assets.map((asset) => [asset.ticker, asset]));
+  return preferredTickers
+    .map((ticker) => byTicker.get(ticker))
+    .filter((asset): asset is AssetStatSummary => asset !== undefined)
     .map((asset) => ({
       ticker: asset.ticker,
       name: asset.name,
@@ -62,10 +66,7 @@ function extensionHighlights(assets: AssetStatSummary[]) {
       percentile: asset.extension.percentile5Y,
       distanceToLongAverage: asset.distanceToMovingAverages.ma200,
       currentDrawdown: asset.extension.currentDrawdownFull,
-    }))
-    .filter((asset) => asset.zScore !== null || asset.percentile !== null)
-    .sort((a, b) => Math.abs(b.zScore ?? 0) - Math.abs(a.zScore ?? 0))
-    .slice(0, 8);
+    }));
 }
 
 export async function buildWeeklyReportData() {
@@ -127,7 +128,7 @@ export async function buildWeeklyReportData() {
       btcEtfFlows: dashboard.btcEtfFlows,
       generalEtfFlowsStatus: "Pendiente de fuente automatizada clara.",
     },
-    statisticalLevels: extensionHighlights(manifest.summaries),
+    statisticalLevels: extensionHighlights(manifest.summaries, statisticalHighlightTickers),
     seasonality,
     crossSignalRadar: dashboard.crossSignalRadar,
     roadmapItems,
