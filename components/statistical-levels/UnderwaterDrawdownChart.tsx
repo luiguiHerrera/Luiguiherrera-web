@@ -24,6 +24,17 @@ function buildPath(values: number[]) {
     .join(" ");
 }
 
+function periodLabel(frequency: StatisticalFrequency, locale: "es" | "en") {
+  if (locale === "en") {
+    if (frequency === "daily") return "daily periods";
+    if (frequency === "weekly") return "weekly periods";
+    return "monthly periods";
+  }
+  if (frequency === "daily") return "periodos diarios";
+  if (frequency === "weekly") return "periodos semanales";
+  return "periodos mensuales";
+}
+
 export function UnderwaterDrawdownChart({ asset, frequency, locale = "es", window }: UnderwaterDrawdownChartProps) {
   const data = asset?.frequencies[frequency];
   const metric = data?.windows[window];
@@ -36,6 +47,7 @@ export function UnderwaterDrawdownChart({ asset, frequency, locale = "es", windo
   const path = buildPath(drawdowns);
   const area = path ? `${path} L 100 8 L 0 8 Z` : "";
   const minDrawdown = Math.min(-0.01, ...drawdowns);
+  const periodCount = metric?.sessions ?? series.length;
 
   const copy = locale === "en"
     ? {
@@ -43,7 +55,7 @@ export function UnderwaterDrawdownChart({ asset, frequency, locale = "es", windo
         title: "Drawdown history",
         body: "Distance from prior highs within the selected window.",
         analyzedWindow: "Analyzed window",
-        periods: "periods",
+        calculatedOver: "Calculated over",
         current: "Current",
         windowMaximum: "Window maximum",
         aria: "Drawdown history",
@@ -55,7 +67,7 @@ export function UnderwaterDrawdownChart({ asset, frequency, locale = "es", windo
         title: "Historial de drawdown",
         body: "Distancia frente a máximos previos dentro de la ventana seleccionada.",
         analyzedWindow: "Ventana analizada",
-        periods: "periodos",
+        calculatedOver: "Calculado sobre",
         current: "Actual",
         windowMaximum: "Máximo ventana",
         aria: "Historial de drawdown",
@@ -73,7 +85,7 @@ export function UnderwaterDrawdownChart({ asset, frequency, locale = "es", windo
             {copy.body}
           </p>
           <p className="mt-1 text-xs leading-5 text-muted">
-            {copy.analyzedWindow}: {metric?.sessions ?? series.length} {copy.periods}.
+            {copy.analyzedWindow}: {window}. {copy.calculatedOver} {periodCount} {periodLabel(frequency, locale)}.
           </p>
         </div>
         <div className="text-sm text-muted md:text-right">
@@ -92,7 +104,7 @@ export function UnderwaterDrawdownChart({ asset, frequency, locale = "es", windo
             const y = 8 + (Math.abs(value) / Math.abs(minDrawdown)) * 82;
             return (
               <circle key={`${series[index]?.date ?? index}-${index}`} cx={x} cy={y} r="2.6" fill="transparent" stroke="transparent" vectorEffect="non-scaling-stroke">
-                <title>{`${series[index]?.date ?? copy.pendingDate} · ${formatPercent(value)}`}</title>
+                <title>{`${series[index]?.date ?? copy.pendingDate} · DD ${formatPercent(value)}`}</title>
               </circle>
             );
           })}
