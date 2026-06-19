@@ -168,8 +168,8 @@ function LevelLadder({ data, kind, locale, ticker }: { data: KeyStatisticalLevel
         </div>
       </div>
 
-      <div className="mt-5 max-w-full overflow-x-auto [contain:paint]">
-        <div className="min-w-[820px] border border-line bg-panel p-4">
+      <div className="mt-5 max-w-full overflow-x-auto lg:overflow-visible">
+        <div className="w-full min-w-[760px] border border-line bg-panel p-4 lg:min-w-0">
           <div className="flex items-center justify-between gap-4 text-[11px] font-semibold uppercase tracking-[0.12em] text-muted">
             <span>{formatPrice(min, ticker)}</span>
             <span>{copy.priceScale}</span>
@@ -251,7 +251,7 @@ export function KeyStatisticalLevelsPanel({ asset, frequency, locale = "es" }: K
             : "Extensiones históricas desde la apertura del periodo. No implican soporte, resistencia ni dirección futura."}
         </p>
       </div>
-      <div className="mt-5 grid gap-4 xl:grid-cols-2">
+      <div className={`mt-5 grid gap-4 ${ladders.length > 1 ? "xl:grid-cols-2" : ""}`}>
         {ladders.map((kind) => (
           <LevelLadder
             key={kind}

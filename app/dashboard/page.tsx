@@ -146,7 +146,7 @@ export async function DashboardContent({ locale = "es" }: { locale?: "es" | "en"
         </div>
 
         <div className="mt-3 grid gap-3 border-y border-line py-4 text-sm leading-6 text-muted lg:grid-cols-[1.35fr_0.7fr_0.7fr_0.95fr]">
-          <p>{regimeSummary.interpretation}</p>
+          <p>{t(regimeSummary.interpretation)}</p>
           <p>
             <span className="block text-xs font-semibold uppercase tracking-[0.14em] text-brass">{copy.status}</span>
             <span className="font-semibold text-ink">{t(dataStatusLabels[regimeSummary.dataStatus])}</span>
@@ -202,13 +202,13 @@ export async function DashboardContent({ locale = "es" }: { locale?: "es" | "en"
       </div>
 
       <div className="mt-6 space-y-4 md:mt-8 md:space-y-6">
-        {fedWatch ? <FedWatchModule data={fedWatch} /> : null}
+        {fedWatch ? <FedWatchModule data={fedWatch} locale={locale} /> : null}
         {sectorRotation ? <SectorRotationChart data={sectorRotation} /> : null}
         {quantRisk ? <QuantRiskPanel data={quantRisk} locale={locale} /> : null}
         {vix ? <VixModule data={vix} /> : null}
         {vixTermStructure ? <VixTermStructureModule data={vixTermStructure} /> : null}
         {btcEtfFlows ? <BtcEtfFlowsModule data={btcEtfFlows} /> : null}
-        {remainingModules.map((module) => <DashboardModule key={module.id} {...module} />)}
+        {remainingModules.map((module) => <DashboardModule key={module.id} {...module} locale={locale} />)}
       </div>
 
       <div className="mt-6">
@@ -244,8 +244,8 @@ export async function DashboardContent({ locale = "es" }: { locale?: "es" | "en"
               {crossSignalRadar.map((row) => (
                 <tr key={row.ticker} className="border-b border-line/70">
                   <td className="py-3 pr-4 font-semibold text-ink">{row.ticker}</td>
-                  <td className="py-3 pr-4 text-muted">{row.shortInterest}</td>
-                  <td className="py-3 pr-4 text-muted">{row.institutionalPresence}</td>
+                  <td className="py-3 pr-4 text-muted">{t(row.shortInterest)}</td>
+                  <td className="py-3 pr-4 text-muted">{t(row.institutionalPresence)}</td>
                   <td className="py-3 pr-4 text-muted">{row.shortInterestDate}</td>
                   <td className="py-3 pr-4 text-muted">{row.form13FDate}</td>
                   <td className="py-3 pr-4">

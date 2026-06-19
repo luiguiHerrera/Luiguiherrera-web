@@ -374,8 +374,8 @@ export function WeeklyReport({ data, locale = "es" }: WeeklyReportProps) {
               {data.crossSignalRadar.map((row) => (
                 <tr key={row.ticker} className="border-b border-line/70">
                   <td className="py-3 pr-4 font-semibold text-ink">{row.ticker}</td>
-                  <td className="py-3 pr-4 text-muted">{row.shortInterest}</td>
-                  <td className="py-3 pr-4 text-muted">{row.institutionalPresence}</td>
+                  <td className="py-3 pr-4 text-muted">{t(row.shortInterest)}</td>
+                  <td className="py-3 pr-4 text-muted">{t(row.institutionalPresence)}</td>
                   <td className="py-3 pr-4 text-muted">{t(row.note)}</td>
                 </tr>
               ))}

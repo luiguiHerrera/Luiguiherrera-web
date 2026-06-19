@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { TypewriterPrinciples } from "@/components/home/TypewriterPrinciples";
 import { getHomeDashboardPreviewData } from "@/lib/dashboard/get-home-dashboard-preview-data";
 import { translateBiasLabel, translateDashboardText, translateRegimeLabel } from "@/lib/dashboard/translate-dashboard-copy";
@@ -19,8 +20,8 @@ export default async function EnglishHomePage() {
   return (
     <div>
       <section className="border-b border-line bg-panel">
-        <div className="mx-auto grid max-w-7xl gap-8 px-4 py-12 md:px-5 md:py-18 lg:grid-cols-[0.75fr_0.55fr] lg:items-end">
-          <div>
+        <div className="relative mx-auto grid min-h-[470px] max-w-7xl grid-cols-1 gap-8 overflow-hidden px-4 py-12 md:min-h-[650px] md:px-5 md:py-20 lg:grid-cols-[0.72fr_1fr] lg:items-center">
+          <div className="relative z-20 max-w-2xl">
             <p className="text-xs font-semibold uppercase tracking-[0.2em] text-brass">Market Lab</p>
             <h1 className="mt-4 max-w-4xl text-4xl font-semibold leading-[1.04] text-ink md:text-6xl">
               Before investing, understand how the market breathes.
@@ -38,18 +39,45 @@ export default async function EnglishHomePage() {
               </Link>
             </div>
           </div>
-          <div className="border border-petrol/30 bg-[#f7f6f2] p-4 md:p-6">
+          <div className="absolute bottom-0 right-0 block h-[30%] w-full md:inset-y-0 md:h-auto md:w-[72%]">
+            <Image
+              src="/images/hero-family-ascent.png"
+              alt=""
+              fill
+              priority
+              sizes="(min-width: 1024px) 72vw, 100vw"
+              className="object-contain object-[100%_100%] opacity-30 sm:opacity-45 md:object-cover md:object-[60%_50%] md:opacity-90 lg:object-[58%_50%]"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-panel/10 via-panel/40 to-panel md:bg-gradient-to-r md:from-panel md:via-panel/80 md:via-45% md:to-panel/5" />
+            <div className="absolute inset-y-0 left-0 w-1/3 bg-panel/55 md:w-1/2 md:bg-panel/35" />
+          </div>
+        </div>
+      </section>
+
+      <section className="border-b border-line bg-[#f7f6f2]">
+        <div className="mx-auto max-w-7xl px-4 py-10 md:px-5 md:py-16">
+          <div className="grid gap-6 lg:grid-cols-[0.56fr_0.44fr] lg:items-end">
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-brass">Market Regime Dashboard</p>
+              <h2 className="mt-4 max-w-2xl text-2xl font-semibold leading-tight text-ink md:text-3xl">Daily market regime read</h2>
+            </div>
+            <p className="max-w-xl leading-7 text-muted lg:justify-self-end">
+              Current regime summary using the same dashboard readings.
+            </p>
+          </div>
+
+          <div className="mt-6 border border-petrol/30 bg-panel p-4 md:mt-9 md:p-7">
             <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
               <div>
-                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-brass">Current regime</p>
-                <div className="mt-4 flex flex-wrap items-end gap-3">
+                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-brass">Integrated regime</p>
+                <div className="mt-4 flex flex-wrap items-center gap-3">
                   <span className="inline-flex border border-petrol/40 bg-[#edf3f1] px-4 py-2 text-sm font-semibold text-petrol">
                     {translateRegimeLabel(regimeSummary.current)}
                   </span>
-                  <span className="pb-1 text-sm text-muted">Bias {translateBiasLabel(regimeSummary.bias).toLowerCase()}</span>
+                  <span className="text-sm text-muted">Bias: {translateBiasLabel(regimeSummary.bias).toLowerCase()}</span>
                 </div>
               </div>
-              <div className="text-right">
+              <div className="text-left md:text-right">
                 <p className="text-xs font-semibold uppercase tracking-[0.14em] text-muted">Confidence</p>
                 <p className="mt-1 text-xl font-semibold text-ink">{regimeSummary.confidence}%</p>
               </div>
@@ -84,6 +112,9 @@ export default async function EnglishHomePage() {
               ))}
             </div>
             <p className="mt-5 text-sm leading-6 text-muted">{translateDashboardText(regimeSummary.interpretation)}</p>
+            <p className="mt-6 border-t border-line pt-4 text-xs leading-5 text-muted">
+              {translateDashboardText(regimeSummary.dataQualityNote)}
+            </p>
           </div>
         </div>
       </section>
