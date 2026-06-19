@@ -1,9 +1,11 @@
 import type { SectorEtfSnapshot } from "@/lib/dashboard/types";
+import { translateDashboardText } from "@/lib/dashboard/translate-dashboard-copy";
 
 type SectorDetailPanelProps = {
   sector: SectorEtfSnapshot;
   selectedPeriod: "1W" | "1M" | "3M";
   selectedRank: number | null;
+  locale?: "es" | "en";
 };
 
 const detailPeriodMap = {
@@ -12,8 +14,8 @@ const detailPeriodMap = {
   "3M": "252d",
 } as const;
 
-function formatPercent(value: number | null) {
-  if (value === null) return "Pendiente de datos suficientes";
+function formatPercent(value: number | null, locale: "es" | "en" = "es") {
+  if (value === null) return locale === "en" ? "Not enough data" : "Pendiente de datos suficientes";
   const sign = value > 0 ? "+" : "";
   return `${sign}${value.toFixed(1)}%`;
 }
@@ -25,10 +27,10 @@ function formatCurrency(value: number) {
   });
 }
 
-function trendLabel(trend: SectorEtfSnapshot["trend"]) {
-  if (trend === "up") return "Ascendente";
-  if (trend === "down") return "Descendente";
-  return "Lateral";
+function trendLabel(trend: SectorEtfSnapshot["trend"], locale: "es" | "en" = "es") {
+  if (trend === "up") return locale === "en" ? "Uptrend" : "Ascendente";
+  if (trend === "down") return locale === "en" ? "Downtrend" : "Descendente";
+  return locale === "en" ? "Sideways" : "Lateral";
 }
 
 function trendFromValues(values: number[]): SectorEtfSnapshot["trend"] {
@@ -42,11 +44,11 @@ function trendFromValues(values: number[]): SectorEtfSnapshot["trend"] {
   return "flat";
 }
 
-function MiniReturnChart({ label, values }: { label: string; values: number[] }) {
+function MiniReturnChart({ label, values, locale = "es" }: { label: string; values: number[]; locale?: "es" | "en" }) {
   if (values.length < 2) {
     return (
       <div className="border border-line bg-panel p-4 text-sm text-muted">
-        Historial insuficiente para esta vista
+        {locale === "en" ? "Not enough history for this view" : "Historial insuficiente para esta vista"}
       </div>
     );
   }
@@ -79,13 +81,13 @@ function MiniReturnChart({ label, values }: { label: string; values: number[] })
     <div className="border border-line bg-panel p-3">
       <div className="mb-2 flex items-center justify-between text-xs uppercase tracking-[0.12em] text-muted">
         <span>{label}</span>
-        <span className="font-semibold text-ink">{formatPercent(finalValue)}</span>
+        <span className="font-semibold text-ink">{formatPercent(finalValue, locale)}</span>
       </div>
       <svg viewBox="0 0 190 92" className="h-32 w-full text-petrol" role="img" aria-label="Retorno acumulado de los cierres diarios mostrados">
         {[max, middle, min].map((tick) => (
           <g key={tick}>
             <line x1={chartLeft} x2={chartRight} y1={yFor(tick)} y2={yFor(tick)} stroke="currentColor" strokeOpacity="0.12" vectorEffect="non-scaling-stroke" />
-            <text x="2" y={yFor(tick) + 3} className="fill-muted text-[9px]">{formatPercent(tick)}</text>
+            <text x="2" y={yFor(tick) + 3} className="fill-muted text-[9px]">{formatPercent(tick, locale)}</text>
           </g>
         ))}
         <line x1={chartLeft} x2={chartLeft} y1={chartTop} y2={chartBottom} stroke="currentColor" strokeOpacity="0.18" vectorEffect="non-scaling-stroke" />
@@ -99,66 +101,71 @@ function MiniReturnChart({ label, values }: { label: string; values: number[] })
           return <circle key={`${index}-${value}`} cx={x} cy={y} r="1.2" fill="currentColor" opacity="0.55" />;
         })}
         <circle cx={finalX} cy={finalY} r="3" fill="currentColor" />
-        <text x={chartLeft} y="88" className="fill-muted text-[9px]">-{values.length} sesiones</text>
-        <text x={chartRight - 16} y="88" className="fill-muted text-[9px]">Hoy</text>
+        <text x={chartLeft} y="88" className="fill-muted text-[9px]">-{values.length} {locale === "en" ? "sessions" : "sesiones"}</text>
+        <text x={chartRight - 16} y="88" className="fill-muted text-[9px]">{locale === "en" ? "Today" : "Hoy"}</text>
       </svg>
     </div>
   );
 }
 
-export function SectorDetailPanel({ sector, selectedPeriod, selectedRank }: SectorDetailPanelProps) {
+export function SectorDetailPanel({ sector, selectedPeriod, selectedRank, locale = "es" }: SectorDetailPanelProps) {
+  const t = (value: string | null | undefined) => locale === "en" ? translateDashboardText(value) : value ?? "";
   const selectedSeries = sector.detailSeries.find((series) => series.period === detailPeriodMap[selectedPeriod]);
   const detailPoints = selectedSeries?.points ?? sector.sparkline30d;
   const trend = trendFromValues(detailPoints);
   const trendLabelText =
     selectedPeriod === "1W"
-      ? "Tendencia 30 sesiones"
+      ? locale === "en" ? "30-session trend" : "Tendencia 30 sesiones"
       : selectedPeriod === "1M"
-        ? "Tendencia 63 sesiones"
+        ? locale === "en" ? "63-session trend" : "Tendencia 63 sesiones"
         : selectedSeries && selectedSeries.availableSessions >= 252
-          ? "Tendencia 252 sesiones"
-          : "Tendencia historial disponible";
+          ? locale === "en" ? "252-session trend" : "Tendencia 252 sesiones"
+          : locale === "en" ? "Available-history trend" : "Tendencia historial disponible";
 
   return (
     <div className="border border-line bg-panelSoft p-4">
       <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
         <div>
-          <p className="text-xs font-semibold uppercase tracking-[0.16em] text-brass">Detalle sectorial</p>
-          <h3 className="mt-1 text-xl font-semibold text-ink">{sector.sectorName}</h3>
-          <p className="mt-1 text-sm text-muted">{sector.etfTicker} como proxy sectorial</p>
+          <p className="text-xs font-semibold uppercase tracking-[0.16em] text-brass">{locale === "en" ? "Sector detail" : "Detalle sectorial"}</p>
+          <h3 className="mt-1 text-xl font-semibold text-ink">{t(sector.sectorName)}</h3>
+          <p className="mt-1 text-sm text-muted">{sector.etfTicker} {locale === "en" ? "as sector proxy" : "como proxy sectorial"}</p>
         </div>
-        <p className="text-sm font-semibold text-ink">Ranking actual: {selectedRank ?? "Pendiente de datos suficientes"}</p>
+        <p className="text-sm font-semibold text-ink">
+          {locale === "en" ? "Current rank" : "Ranking actual"}: {selectedRank ?? (locale === "en" ? "Not enough data" : "Pendiente de datos suficientes")}
+        </p>
       </div>
 
       <div className="mt-4 grid gap-3 text-sm sm:grid-cols-2 lg:grid-cols-5">
         <div>
-          <span className="block text-xs uppercase tracking-[0.14em] text-muted">Último cierre</span>
+          <span className="block text-xs uppercase tracking-[0.14em] text-muted">{locale === "en" ? "Latest close" : "Último cierre"}</span>
           <span className="mt-1 block font-semibold text-ink">{formatCurrency(sector.latestClose)}</span>
         </div>
         <div>
           <span className="block text-xs uppercase tracking-[0.14em] text-muted">1W</span>
-          <span className="mt-1 block font-semibold text-ink">{formatPercent(sector.return1w)}</span>
+          <span className="mt-1 block font-semibold text-ink">{formatPercent(sector.return1w, locale)}</span>
         </div>
         <div>
           <span className="block text-xs uppercase tracking-[0.14em] text-muted">1M</span>
-          <span className="mt-1 block font-semibold text-ink">{formatPercent(sector.return1m)}</span>
+          <span className="mt-1 block font-semibold text-ink">{formatPercent(sector.return1m, locale)}</span>
         </div>
         <div>
           <span className="block text-xs uppercase tracking-[0.14em] text-muted">3M</span>
-          <span className="mt-1 block font-semibold text-ink">{formatPercent(sector.return3m)}</span>
+          <span className="mt-1 block font-semibold text-ink">{formatPercent(sector.return3m, locale)}</span>
         </div>
         <div>
           <span className="block text-xs uppercase tracking-[0.14em] text-muted">{trendLabelText}</span>
-          <span className="mt-1 block font-semibold text-ink">{trendLabel(trend)}</span>
+          <span className="mt-1 block font-semibold text-ink">{trendLabel(trend, locale)}</span>
         </div>
       </div>
 
       <div className="mt-4">
-        <MiniReturnChart label={selectedSeries?.label ?? "Historial disponible"} values={detailPoints} />
+        <MiniReturnChart label={selectedSeries?.label ?? (locale === "en" ? "Available history" : "Historial disponible")} values={detailPoints} locale={locale} />
       </div>
 
       <p className="mt-4 text-sm leading-6 text-muted">
-        Tendencia calculada sobre cierres diarios, comparando el tramo inicial con el tramo final del periodo mostrado. Proxy sectorial para contexto, no personalizado.
+        {locale === "en"
+          ? "Trend is calculated on daily closes, comparing the first segment with the final segment of the displayed period. Sector proxy for context."
+          : "Tendencia calculada sobre cierres diarios, comparando el tramo inicial con el tramo final del periodo mostrado. Proxy sectorial para contexto, no personalizado."}
       </p>
     </div>
   );

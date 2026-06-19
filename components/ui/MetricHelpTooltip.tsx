@@ -13,7 +13,7 @@ export function MetricHelpTooltip({ label, text }: MetricHelpTooltipProps) {
       >
         ?
       </button>
-      <span className="pointer-events-none absolute right-0 top-full z-30 mt-2 hidden w-[min(18rem,calc(100vw-2rem))] border border-line bg-ink px-3 py-2 text-xs normal-case leading-5 tracking-normal text-white shadow-[0_12px_28px_rgba(31,35,40,0.16)] group-hover:block group-focus-within:block sm:bottom-full sm:left-1/2 sm:right-auto sm:top-auto sm:mb-2 sm:mt-0 sm:w-64 sm:-translate-x-1/2">
+      <span className="pointer-events-none absolute right-0 top-full z-50 mt-2 hidden max-w-[260px] whitespace-normal break-words border border-line bg-ink px-3 py-2 text-left text-xs normal-case leading-5 tracking-normal text-white shadow-[0_12px_28px_rgba(31,35,40,0.16)] group-hover:block group-focus-within:block sm:left-auto sm:right-0 sm:w-64">
         {text}
       </span>
     </span>

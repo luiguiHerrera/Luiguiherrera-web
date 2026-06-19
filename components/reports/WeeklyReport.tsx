@@ -1,5 +1,6 @@
 import { ReportSection } from "@/components/reports/ReportSection";
 import { ExpandableInsightCard } from "@/components/ui/ExpandableInsightCard";
+import { translateDashboardText, translateRegimeLabel } from "@/lib/dashboard/translate-dashboard-copy";
 import type { WeeklyReportData } from "@/lib/reports/build-weekly-report-data";
 import type { DailySeasonalityCell, PresidentialCyclePhase } from "@/lib/statistical-levels/types";
 
@@ -26,23 +27,23 @@ const englishPhaseLabels: Record<PresidentialCyclePhase, string> = {
 };
 const englishMonthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
-function formatPercent(value: number | null | undefined, digits = 1) {
-  if (value === null || value === undefined) return "Pendiente";
+function formatPercent(value: number | null | undefined, digits = 1, locale: "es" | "en" = "es") {
+  if (value === null || value === undefined) return locale === "en" ? "Pending" : "Pendiente";
   return `${value > 0 ? "+" : ""}${(value * 100).toFixed(digits)}%`;
 }
 
-function formatSectorPercent(value: number | null | undefined) {
-  if (value === null || value === undefined) return "Pendiente";
+function formatSectorPercent(value: number | null | undefined, locale: "es" | "en" = "es") {
+  if (value === null || value === undefined) return locale === "en" ? "Pending" : "Pendiente";
   return `${value > 0 ? "+" : ""}${value.toFixed(1)}%`;
 }
 
-function formatNumber(value: number | null | undefined, digits = 1) {
-  if (value === null || value === undefined) return "Pendiente";
+function formatNumber(value: number | null | undefined, digits = 1, locale: "es" | "en" = "es") {
+  if (value === null || value === undefined) return locale === "en" ? "Pending" : "Pendiente";
   return value.toFixed(digits);
 }
 
-function formatUsdMillions(value: number | null | undefined) {
-  if (value === null || value === undefined) return "Pendiente";
+function formatUsdMillions(value: number | null | undefined, locale: "es" | "en" = "es") {
+  if (value === null || value === undefined) return locale === "en" ? "Pending" : "Pendiente";
   return `${value > 0 ? "+" : ""}${value.toFixed(0)} M USD`;
 }
 
@@ -76,6 +77,10 @@ function structureLabel(distanceToMa200: number | null | undefined, locale: "es"
 
 function limitItems(items: string[]) {
   return items.slice(0, 3);
+}
+
+function formatWeekLabel(value: string, locale: "es" | "en") {
+  return locale === "en" ? translateDashboardText(value) : value;
 }
 
 export function WeeklyReport({ data, locale = "es" }: WeeklyReportProps) {
@@ -200,10 +205,11 @@ export function WeeklyReport({ data, locale = "es" }: WeeklyReportProps) {
       };
   const phases = locale === "en" ? englishPhaseLabels : phaseLabels;
   const months = locale === "en" ? englishMonthNames : monthNames;
+  const t = (value: string | null | undefined) => locale === "en" ? translateDashboardText(value) : value ?? "";
   const watchItems = limitItems([
-    data.volatility.termStructure?.classification ? `Curva VIX: ${data.volatility.termStructure.classification}` : "",
-    data.flows.btcEtfFlows?.flows.readingLabel ? `Flujos BTC ETF: ${data.flows.btcEtfFlows.flows.readingLabel}` : "",
-    data.sectors.data?.metrics.interpretation ?? "",
+    data.volatility.termStructure?.classification ? `${locale === "en" ? "VIX curve" : "Curva VIX"}: ${t(data.volatility.termStructure.classification)}` : "",
+    data.flows.btcEtfFlows?.flows.readingLabel ? `${locale === "en" ? "BTC ETF flows" : "Flujos BTC ETF"}: ${t(data.flows.btcEtfFlows.flows.readingLabel)}` : "",
+    t(data.sectors.data?.metrics.interpretation),
   ].filter(Boolean));
   const radarPreview = data.crossSignalRadar.slice(0, 3);
 
@@ -215,13 +221,13 @@ export function WeeklyReport({ data, locale = "es" }: WeeklyReportProps) {
           <div>
             <h1 className="text-3xl font-semibold leading-tight text-ink md:text-5xl">{copy.closeRead}</h1>
             <p className="mt-4 max-w-3xl text-base leading-7 text-ink md:text-lg">
-              {data.regimeSummary.interpretation}
+              {t(data.regimeSummary.interpretation)}
             </p>
           </div>
           <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-1">
             <Metric label={copy.date} value={data.generatedAt} />
-            <Metric label={copy.week} value={data.weekLabel} />
-            <Metric label={copy.regime} value={data.regimeSummary.current} />
+            <Metric label={copy.week} value={formatWeekLabel(data.weekLabel, locale)} />
+            <Metric label={copy.regime} value={locale === "en" ? translateRegimeLabel(data.regimeSummary.current) : data.regimeSummary.current} />
             <div className="grid grid-cols-2 gap-2">
               <Metric label="Score" value={`${data.regimeSummary.regimeScore}/100`} emphasis />
               <Metric label={copy.confidence} value={`${data.regimeSummary.confidence}%`} emphasis />
@@ -232,8 +238,8 @@ export function WeeklyReport({ data, locale = "es" }: WeeklyReportProps) {
 
       <ReportSection eyebrow="01" title={copy.executive}>
         <div className="grid gap-3 lg:grid-cols-3">
-          <SignalList title={copy.helped} items={limitItems(data.executiveSummary.helped.map((signal) => `${signal.label}: ${signal.detail}`))} emptyLabel={copy.empty} />
-          <SignalList title={copy.weighed} items={limitItems(data.executiveSummary.weighed.map((signal) => `${signal.label}: ${signal.detail}`))} emptyLabel={copy.empty} />
+          <SignalList title={copy.helped} items={limitItems(data.executiveSummary.helped.map((signal) => `${t(signal.label)}: ${t(signal.detail)}`))} emptyLabel={copy.empty} />
+          <SignalList title={copy.weighed} items={limitItems(data.executiveSummary.weighed.map((signal) => `${t(signal.label)}: ${t(signal.detail)}`))} emptyLabel={copy.empty} />
           <SignalList title={copy.watch} items={watchItems} emptyLabel={copy.empty} />
         </div>
       </ReportSection>
@@ -247,12 +253,12 @@ export function WeeklyReport({ data, locale = "es" }: WeeklyReportProps) {
                   <p className="text-lg font-semibold text-ink">{asset.ticker}</p>
                   <p className="mt-1 text-xs leading-5 text-muted">{asset.name}</p>
                 </div>
-                <span className="text-right text-lg font-semibold text-ink">{formatPercent(asset.weeklyReturn)}</span>
+                <span className="text-right text-lg font-semibold text-ink">{formatPercent(asset.weeklyReturn, 1, locale)}</span>
               </div>
               <div className="mt-4 grid gap-2 text-sm leading-6 text-muted">
                 <p><span className="font-semibold text-ink">{structureLabel(asset.distanceToMa200, locale)}</span></p>
-                <p>{copy.longAverage}: <span className="font-semibold text-ink">{formatPercent(asset.distanceToMa200)}</span></p>
-                <p>{copy.distanceToHighs}: <span className="font-semibold text-ink">{formatPercent(asset.distanceToAth)}</span></p>
+                <p>{copy.longAverage}: <span className="font-semibold text-ink">{formatPercent(asset.distanceToMa200, 1, locale)}</span></p>
+                <p>{copy.distanceToHighs}: <span className="font-semibold text-ink">{formatPercent(asset.distanceToAth, 1, locale)}</span></p>
               </div>
             </article>
           ))}
@@ -261,12 +267,12 @@ export function WeeklyReport({ data, locale = "es" }: WeeklyReportProps) {
 
       <ReportSection eyebrow="03" title={copy.sectors}>
         <div className="grid gap-3 lg:grid-cols-[0.75fr_0.75fr_1fr]">
-          <SignalList title={copy.leaders} items={limitItems(data.sectors.leaders.map((sector) => `${sector.etfTicker} · ${sector.sectorName}: ${formatSectorPercent(sector.return1w)}`))} emptyLabel={copy.empty} />
-          <SignalList title={copy.laggards} items={limitItems(data.sectors.laggards.map((sector) => `${sector.etfTicker} · ${sector.sectorName}: ${formatSectorPercent(sector.return1w)}`))} emptyLabel={copy.empty} />
+          <SignalList title={copy.leaders} items={limitItems(data.sectors.leaders.map((sector) => `${sector.etfTicker} · ${t(sector.sectorName)}: ${formatSectorPercent(sector.return1w, locale)}`))} emptyLabel={copy.empty} />
+          <SignalList title={copy.laggards} items={limitItems(data.sectors.laggards.map((sector) => `${sector.etfTicker} · ${t(sector.sectorName)}: ${formatSectorPercent(sector.return1w, locale)}`))} emptyLabel={copy.empty} />
           <EditorialNote
             title={copy.rotationRead}
-            body={data.sectors.data?.metrics.interpretation ?? copy.pendingRotation}
-            footer={`${copy.dispersion}: ${formatSectorPercent(data.sectors.data?.metrics.sectorDispersion1w)}`}
+            body={t(data.sectors.data?.metrics.interpretation) || copy.pendingRotation}
+            footer={`${copy.dispersion}: ${formatSectorPercent(data.sectors.data?.metrics.sectorDispersion1w, locale)}`}
           />
         </div>
       </ReportSection>
@@ -274,25 +280,25 @@ export function WeeklyReport({ data, locale = "es" }: WeeklyReportProps) {
       <div className="grid gap-5 lg:grid-cols-2">
         <ReportSection eyebrow="04" title={copy.volatility}>
           <div className="grid gap-2 sm:grid-cols-2">
-            <Metric label="VIX spot" value={formatNumber(data.volatility.vix?.spot.latestVix)} emphasis />
+            <Metric label="VIX spot" value={formatNumber(data.volatility.vix?.spot.latestVix, 1, locale)} emphasis />
             <Metric label={copy.vixMomentum} value={vixTrendLabel(data.volatility.vix?.spot.vixTrend, locale)} />
-            <Metric label={copy.vixCurve} value={data.volatility.termStructure?.classification ?? copy.pending} />
+            <Metric label={copy.vixCurve} value={t(data.volatility.termStructure?.classification) || copy.pending} />
             <Metric label="M1/M2" value={data.volatility.termStructure?.m1m2SlopePct === null || data.volatility.termStructure?.m1m2SlopePct === undefined ? copy.pending : `${data.volatility.termStructure.m1m2SlopePct.toFixed(1)}%`} />
           </div>
           <p className="mt-4 text-sm leading-6 text-muted">
-            {data.volatility.termStructure?.interpretation ?? data.volatility.vix?.spot.vixCompositeSubtext ?? copy.pendingVol}
+            {t(data.volatility.termStructure?.interpretation) || t(data.volatility.vix?.spot.vixCompositeSubtext) || copy.pendingVol}
           </p>
         </ReportSection>
 
         <ReportSection eyebrow="05" title={copy.flows}>
           <div className="grid gap-2 sm:grid-cols-2">
-            <Metric label={copy.latestBtc} value={formatUsdMillions(data.flows.btcEtfFlows?.flows.latestTotalNetFlow)} emphasis />
-            <Metric label="BTC ETF 5D" value={formatUsdMillions(data.flows.btcEtfFlows?.flows.rolling5dNetFlow)} />
-            <Metric label="Streak" value={data.flows.btcEtfFlows?.flows.flowStreak.label ?? copy.pending} />
-            <Metric label={copy.read} value={data.flows.btcEtfFlows?.flows.readingLabel ?? copy.pending} />
+            <Metric label={copy.latestBtc} value={formatUsdMillions(data.flows.btcEtfFlows?.flows.latestTotalNetFlow, locale)} emphasis />
+            <Metric label="BTC ETF 5D" value={formatUsdMillions(data.flows.btcEtfFlows?.flows.rolling5dNetFlow, locale)} />
+            <Metric label="Streak" value={t(data.flows.btcEtfFlows?.flows.flowStreak.label) || copy.pending} />
+            <Metric label={copy.read} value={t(data.flows.btcEtfFlows?.flows.readingLabel) || copy.pending} />
           </div>
           <p className="mt-4 text-sm leading-6 text-muted">
-            {data.flows.btcEtfFlows?.flows.readingSubtext ?? copy.pendingFlows}
+            {t(data.flows.btcEtfFlows?.flows.readingSubtext) || copy.pendingFlows}
           </p>
         </ReportSection>
       </div>
@@ -306,7 +312,7 @@ export function WeeklyReport({ data, locale = "es" }: WeeklyReportProps) {
               <div className="mt-4 grid gap-2 text-sm text-muted">
                 <p>{copy.percentile} <span className="font-semibold text-ink">{asset.percentile === null ? "n/d" : asset.percentile.toFixed(1)}</span></p>
                 <p>Z-score <span className="font-semibold text-ink">{asset.zScore === null ? "n/d" : asset.zScore.toFixed(2)}</span></p>
-                <p>{copy.longAverage} <span className="font-semibold text-ink">{formatPercent(asset.distanceToLongAverage)}</span></p>
+                <p>{copy.longAverage} <span className="font-semibold text-ink">{formatPercent(asset.distanceToLongAverage, 1, locale)}</span></p>
               </div>
             </article>
           ))}
@@ -322,10 +328,10 @@ export function WeeklyReport({ data, locale = "es" }: WeeklyReportProps) {
               footer={data.seasonality.cycle.best.length < 3 || data.seasonality.cycle.weakest.length < 3 ? copy.limitedCycle : copy.enoughSample}
             />
             <div className="grid gap-3 md:grid-cols-2">
-              <SeasonalityList title={copy.bestDays} cells={data.seasonality.allYears.best} emptyLabel={copy.lowSample} />
-              <SeasonalityList title={copy.weakDays} cells={data.seasonality.allYears.weakest} emptyLabel={copy.lowSample} />
-              <SeasonalityList title={copy.cycleBestDays} cells={data.seasonality.cycle.best} emptyLabel={copy.lowSample} />
-              <SeasonalityList title={copy.cycleWeakDays} cells={data.seasonality.cycle.weakest} emptyLabel={copy.lowSample} />
+              <SeasonalityList title={copy.bestDays} cells={data.seasonality.allYears.best} emptyLabel={copy.lowSample} locale={locale} />
+              <SeasonalityList title={copy.weakDays} cells={data.seasonality.allYears.weakest} emptyLabel={copy.lowSample} locale={locale} />
+              <SeasonalityList title={copy.cycleBestDays} cells={data.seasonality.cycle.best} emptyLabel={copy.lowSample} locale={locale} />
+              <SeasonalityList title={copy.cycleWeakDays} cells={data.seasonality.cycle.weakest} emptyLabel={copy.lowSample} locale={locale} />
             </div>
           </div>
         ) : (
@@ -348,7 +354,7 @@ export function WeeklyReport({ data, locale = "es" }: WeeklyReportProps) {
             {radarPreview.map((row) => (
               <div key={row.ticker} className="border border-line bg-panelSoft p-3 text-sm leading-6 text-muted">
                 <p className="font-semibold text-ink">{row.ticker}</p>
-                <p className="mt-1">{row.note}</p>
+                <p className="mt-1">{t(row.note)}</p>
               </div>
             ))}
           </div>
@@ -370,7 +376,7 @@ export function WeeklyReport({ data, locale = "es" }: WeeklyReportProps) {
                   <td className="py-3 pr-4 font-semibold text-ink">{row.ticker}</td>
                   <td className="py-3 pr-4 text-muted">{row.shortInterest}</td>
                   <td className="py-3 pr-4 text-muted">{row.institutionalPresence}</td>
-                  <td className="py-3 pr-4 text-muted">{row.note}</td>
+                  <td className="py-3 pr-4 text-muted">{t(row.note)}</td>
                 </tr>
               ))}
             </tbody>
@@ -419,7 +425,7 @@ function EditorialNote({ body, footer, title }: { body: string; footer?: string;
   );
 }
 
-function SeasonalityList({ cells, emptyLabel, title }: { cells: DailySeasonalityCell[]; emptyLabel: string; title: string }) {
+function SeasonalityList({ cells, emptyLabel, locale = "es", title }: { cells: DailySeasonalityCell[]; emptyLabel: string; locale?: "es" | "en"; title: string }) {
   const visibleCells = cells.filter((cell) => cell.sampleSize >= 5).slice(0, 3);
 
   return (
@@ -431,7 +437,7 @@ function SeasonalityList({ cells, emptyLabel, title }: { cells: DailySeasonality
             <div key={`${title}-${cell.month}-${cell.day}`} className="grid grid-cols-[2rem_1fr_3.5rem_3rem] items-center gap-2 border-b border-line/70 pb-2 last:border-b-0 last:pb-0">
               <span className="font-semibold text-ink">{cell.day}</span>
               <span className="text-muted">Win rate {cell.winRate === null ? "n/d" : `${(cell.winRate * 100).toFixed(0)}%`}</span>
-              <span className="text-right font-semibold text-ink">{formatPercent(cell.averageReturn)}</span>
+              <span className="text-right font-semibold text-ink">{formatPercent(cell.averageReturn, 1, locale)}</span>
               <span className="text-right text-xs text-muted">N {cell.sampleSize}</span>
             </div>
           ))

@@ -2,13 +2,19 @@
 
 import { useEffect, useMemo, useState } from "react";
 
-const phrases = [
+const defaultPhrases = [
   "Entiende el contexto.",
   "Gestiona el riesgo.",
   "Decide con datos y menos ruido.",
 ];
 
-export function TypewriterPrinciples() {
+export function TypewriterPrinciples({
+  eyebrow = "Proceso antes que impulso",
+  phrases = defaultPhrases,
+}: {
+  eyebrow?: string;
+  phrases?: string[];
+}) {
   const [phraseIndex, setPhraseIndex] = useState(0);
   const [visibleChars, setVisibleChars] = useState(0);
   const [deleting, setDeleting] = useState(false);
@@ -46,7 +52,7 @@ export function TypewriterPrinciples() {
 
         if (deleting && visibleChars === 0) {
           setDeleting(false);
-          setPhraseIndex((value) => (value + 1) % phrases.length);
+        setPhraseIndex((value) => (value + 1) % phrases.length);
         }
       },
       !deleting && visibleChars === currentPhrase.length
@@ -57,12 +63,12 @@ export function TypewriterPrinciples() {
     );
 
     return () => window.clearTimeout(timeout);
-  }, [currentPhrase, deleting, visibleChars]);
+  }, [currentPhrase, deleting, phrases.length, visibleChars]);
 
   return (
     <div className="mt-7 max-w-xl border-l border-brass/60 pl-4">
       <p className="text-xs font-semibold uppercase tracking-[0.18em] text-brass">
-        Proceso antes que impulso
+        {eyebrow}
       </p>
       <p className="mt-3 min-h-[2rem] text-base leading-7 text-muted md:text-lg">
         <span>{currentPhrase.slice(0, visibleChars)}</span>

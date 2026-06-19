@@ -324,8 +324,9 @@ function WeeklyView({
   monthNames: string[];
 }) {
   const byWeek = new Map(cells.map((cell) => [cell.weekOfMonth, cell]));
+  const hasUsableData = cells.some((cell) => cell.sampleSize > 0 && metricValue(cell, metric) !== null);
   const scale = maxAbs(cells, metric);
-  if (!cells.length) {
+  if (!cells.length || !hasUsableData) {
     return (
       <div className="border border-line bg-panelSoft p-4 text-sm leading-6 text-muted">
         {copy.emptyWeekly}
@@ -340,10 +341,25 @@ function WeeklyView({
           const week = index + 1;
           const cell = byWeek.get(week);
           const value = metricValue(cell, metric);
-          const height = metric === "sampleSize" ? Math.max(8, ((value ?? 0) / scale) * 100) : Math.max(8, (Math.abs(value ?? 0) / scale) * 100);
+          const hasValue = cell && value !== null;
+          const height = hasValue
+            ? metric === "sampleSize"
+              ? Math.max(16, ((value ?? 0) / scale) * 100)
+              : Math.max(16, (Math.abs(value ?? 0) / scale) * 100)
+            : 0;
           return (
             <div key={week} className="flex min-w-0 flex-col items-center justify-end gap-2" title={cellTitle(`${monthNames[month - 1]} · ${copy.week} ${week}`, cell, locale)}>
-              <div className="w-full border border-white shadow-[0_8px_18px_rgba(31,35,40,0.05)]" style={{ height: `${height}%`, backgroundColor: colorFor(value, metric, scale) }} />
+              <div className="flex h-40 w-full items-end border-b border-line/70">
+                {hasValue ? (
+                  <div
+                    className="w-full border border-white shadow-[0_8px_18px_rgba(31,35,40,0.05)]"
+                    style={{ height: `${height}%`, backgroundColor: colorFor(value, metric, scale) }}
+                  />
+                ) : (
+                  <div className="h-2 w-full border border-dashed border-line bg-panel" />
+                )}
+              </div>
+              <span className="text-center text-[11px] font-semibold text-ink">{hasValue ? formatMetric(value, metric) : "n/d"}</span>
               <span className="text-center text-[10px] font-semibold text-muted">{copy.week} {week}</span>
               {cell && cell.sampleSize < 5 ? <span className="text-center text-[10px] font-semibold text-brass">{copy.lowSample}</span> : <span className="h-3" aria-hidden="true" />}
             </div>

@@ -1,9 +1,11 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import { usePathname } from "next/navigation";
 import { SectorDetailPanel } from "@/components/dashboard/SectorDetailPanel";
 import { ExpandableInsightCard } from "@/components/ui/ExpandableInsightCard";
 import { dataStatusLabels } from "@/lib/dashboard/status";
+import { translateDashboardText } from "@/lib/dashboard/translate-dashboard-copy";
 import type { SectorEtfSnapshot, SectorRotationData } from "@/lib/dashboard/types";
 
 type Period = "1W" | "1M" | "3M";
@@ -82,6 +84,39 @@ function tractionArrow(rankChange: number | null) {
 }
 
 export function SectorRotationChart({ data }: SectorRotationChartProps) {
+  const locale = usePathname().startsWith("/en") ? "en" : "es";
+  const t = (value: string | null | undefined) => locale === "en" ? translateDashboardText(value) : value ?? "";
+  const copy = locale === "en"
+    ? {
+        eyebrow: "Sector rotation",
+        title: "Relative sector map",
+        leader: "Leader",
+        laggard: "Laggard",
+        dispersion: "1W dispersion",
+        updated: "Updated",
+        pending: "Pending",
+        status: "Status",
+        reading: "Reading",
+        body: "Sector leadership and laggards using SPDR ETFs as proxies. Returns by sessions: 1W = 5, 1M = 21, 3M = 63.",
+        tractionEyebrow: "Traction change",
+        tractionTitle: "Relative traction",
+        tractionBody: "Compares the selected window against a broader reference. It does not represent flows.",
+      }
+    : {
+        eyebrow: "Rotación sectorial",
+        title: "Mapa relativo sectorial",
+        leader: "Líder",
+        laggard: "Rezago",
+        dispersion: "Dispersión 1W",
+        updated: "Actualización",
+        pending: "Pendiente",
+        status: "Estado",
+        reading: "Lectura",
+        body: "Liderazgo y rezago sectorial con ETFs SPDR como proxies. Retornos por sesiones: 1W = 5, 1M = 21, 3M = 63.",
+        tractionEyebrow: "Cambio de tracción",
+        tractionTitle: "Tracción relativa",
+        tractionBody: "Compara la ventana seleccionada contra una referencia más amplia. No representa flujos.",
+      };
   const [period, setPeriod] = useState<Period>("1W");
   const [selectedTicker, setSelectedTicker] = useState(data.sectors[0]?.etfTicker ?? "");
   const sortedSectors = useMemo(
@@ -99,21 +134,21 @@ export function SectorRotationChart({ data }: SectorRotationChartProps) {
 
   return (
     <ExpandableInsightCard
-      eyebrow="Rotación sectorial"
-      title="Mapa relativo sectorial"
-      reading={data.metrics.interpretation}
-      status={dataStatusLabels[data.dataStatus]}
+      eyebrow={copy.eyebrow}
+      title={copy.title}
+      reading={t(data.metrics.interpretation)}
+      status={t(dataStatusLabels[data.dataStatus])}
       metrics={[
-        { label: `Líder ${period}`, value: leader ? `${leader.sectorName} (${leader.etfTicker}) ${formatPercent(metricValue(leader, period))}` : "Pendiente", tone: "sage" },
-        { label: `Rezago ${period}`, value: laggard ? `${laggard.sectorName} (${laggard.etfTicker}) ${formatPercent(metricValue(laggard, period))}` : "Pendiente", tone: "danger" },
-        { label: "Dispersión 1W", value: formatPercent(data.metrics.sectorDispersion1w) },
-        { label: "Actualización", value: data.lastUpdated },
+        { label: `${copy.leader} ${period}`, value: leader ? `${t(leader.sectorName)} (${leader.etfTicker}) ${formatPercent(metricValue(leader, period))}` : copy.pending, tone: "sage" },
+        { label: `${copy.laggard} ${period}`, value: laggard ? `${t(laggard.sectorName)} (${laggard.etfTicker}) ${formatPercent(metricValue(laggard, period))}` : copy.pending, tone: "danger" },
+        { label: copy.dispersion, value: formatPercent(data.metrics.sectorDispersion1w) },
+        { label: copy.updated, value: data.lastUpdated },
       ]}
       defaultOpen={false}
     >
       <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
         <p className="max-w-3xl text-sm leading-6 text-muted">
-          Liderazgo y rezago sectorial con ETFs SPDR como proxies. Retornos por sesiones: 1W = 5, 1M = 21, 3M = 63.
+          {copy.body}
         </p>
         <div className="flex w-fit border border-line bg-panelSoft p-1">
           {(["1W", "1M", "3M"] as Period[]).map((option) => (
@@ -134,20 +169,20 @@ export function SectorRotationChart({ data }: SectorRotationChartProps) {
 
       <div className="mt-4 grid gap-3 border-y border-line py-3 text-sm leading-6 text-muted md:grid-cols-4">
         <div>
-          <span className="block text-xs font-semibold uppercase tracking-[0.14em] text-brass">Estado</span>
-          <span className="mt-1 block text-ink">{dataStatusLabels[data.dataStatus]}</span>
+          <span className="block text-xs font-semibold uppercase tracking-[0.14em] text-brass">{copy.status}</span>
+          <span className="mt-1 block text-ink">{t(dataStatusLabels[data.dataStatus])}</span>
         </div>
         <div>
-          <span className="block text-xs font-semibold uppercase tracking-[0.14em] text-brass">Actualización</span>
+          <span className="block text-xs font-semibold uppercase tracking-[0.14em] text-brass">{copy.updated}</span>
           <span className="mt-1 block text-ink">{data.lastUpdated}</span>
         </div>
         <div>
-          <span className="block text-xs font-semibold uppercase tracking-[0.14em] text-brass">Dispersión 1W</span>
+          <span className="block text-xs font-semibold uppercase tracking-[0.14em] text-brass">{copy.dispersion}</span>
           <span className="mt-1 block text-ink">{formatPercent(data.metrics.sectorDispersion1w)}</span>
         </div>
         <div>
-          <span className="block text-xs font-semibold uppercase tracking-[0.14em] text-brass">Lectura</span>
-          <span className="mt-1 block text-ink">{data.metrics.interpretation}</span>
+          <span className="block text-xs font-semibold uppercase tracking-[0.14em] text-brass">{copy.reading}</span>
+          <span className="mt-1 block text-ink">{t(data.metrics.interpretation)}</span>
         </div>
       </div>
 
@@ -181,8 +216,8 @@ export function SectorRotationChart({ data }: SectorRotationChartProps) {
                   <span className="hidden text-xs font-semibold text-brass md:block">#{metricRank(sector, period) ?? "-"}</span>
                   <div className="flex items-baseline justify-between gap-3 md:block">
                     <div>
-                      <span className="block text-sm font-semibold text-ink">{sector.sectorName}</span>
-                      <span className="text-xs uppercase tracking-[0.12em] text-muted">{sector.etfTicker} · proxy sectorial</span>
+                      <span className="block text-sm font-semibold text-ink">{t(sector.sectorName)}</span>
+                      <span className="text-xs uppercase tracking-[0.12em] text-muted">{sector.etfTicker} · {locale === "en" ? "sector proxy" : "proxy sectorial"}</span>
                     </div>
                     <span className="font-semibold text-ink md:hidden">{formatPercent(value)}</span>
                   </div>
@@ -208,10 +243,10 @@ export function SectorRotationChart({ data }: SectorRotationChartProps) {
         </div>
 
         <aside className="border border-line bg-panelSoft p-3">
-          <p className="text-xs font-semibold uppercase tracking-[0.16em] text-brass">Cambio de tracción</p>
-          <h3 className="mt-1 text-base font-semibold text-ink">Tracción relativa</h3>
+          <p className="text-xs font-semibold uppercase tracking-[0.16em] text-brass">{copy.tractionEyebrow}</p>
+          <h3 className="mt-1 text-base font-semibold text-ink">{copy.tractionTitle}</h3>
           <p className="mt-2 text-xs leading-5 text-muted">
-            Compara la ventana seleccionada contra una referencia más amplia. No representa flujos.
+            {copy.tractionBody}
           </p>
           {traction.length > 0 ? (
             <div className="mt-3 grid gap-2">
@@ -226,13 +261,13 @@ export function SectorRotationChart({ data }: SectorRotationChartProps) {
                 >
                   <div className="flex items-start justify-between gap-3">
                     <div>
-                      <span className="block text-sm font-semibold text-ink">{sector.sectorName}</span>
-                      <span className="text-xs uppercase tracking-[0.12em] text-muted">{sector.etfTicker} · proxy sectorial</span>
+                      <span className="block text-sm font-semibold text-ink">{t(sector.sectorName)}</span>
+                      <span className="text-xs uppercase tracking-[0.12em] text-muted">{sector.etfTicker} · {locale === "en" ? "sector proxy" : "proxy sectorial"}</span>
                     </div>
                     <span className="text-base font-semibold text-ink">{tractionArrow(rankChange)}</span>
                   </div>
                   <div className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-muted">
-                    <span>#{priorRank ?? "Pendiente"} → #{currentRank ?? "Pendiente"}</span>
+                    <span>#{priorRank ?? copy.pending} → #{currentRank ?? copy.pending}</span>
                     <span className="font-semibold text-ink">{formatPoints(returnChange)}</span>
                   </div>
                 </button>
@@ -240,22 +275,24 @@ export function SectorRotationChart({ data }: SectorRotationChartProps) {
             </div>
           ) : (
             <div className="mt-4 border border-line bg-panel p-4 text-sm leading-6 text-muted">
-              Historial insuficiente para comparar tracción
+              {locale === "en" ? "Not enough history to compare traction" : "Historial insuficiente para comparar tracción"}
             </div>
           )}
           <p className="mt-3 border-t border-line pt-3 text-xs leading-5 text-muted">
-            No representa flujos ni entradas/salidas de capital. Es una comparación de rendimiento relativo por ETFs proxy.
+            {locale === "en"
+              ? "This compares relative performance through proxy ETFs; it does not represent capital flows."
+              : "No representa flujos ni entradas/salidas de capital. Es una comparación de rendimiento relativo por ETFs proxy."}
           </p>
         </aside>
       </div>
 
       {selectedSector ? (
         <div className="mt-5">
-          <SectorDetailPanel sector={selectedSector} selectedPeriod={period} selectedRank={metricRank(selectedSector, period)} />
+          <SectorDetailPanel sector={selectedSector} selectedPeriod={period} selectedRank={metricRank(selectedSector, period)} locale={locale} />
         </div>
       ) : null}
 
-      <p className="mt-5 text-sm leading-6 text-muted">{data.reliabilityNote}</p>
+      <p className="mt-5 text-sm leading-6 text-muted">{t(data.reliabilityNote)}</p>
     </ExpandableInsightCard>
   );
 }

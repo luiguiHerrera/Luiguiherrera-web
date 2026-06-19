@@ -1,26 +1,30 @@
+"use client";
+
+import { usePathname } from "next/navigation";
 import { dataStatusLabels } from "@/lib/dashboard/status";
 import { ExpandableInsightCard } from "@/components/ui/ExpandableInsightCard";
+import { translateDashboardText } from "@/lib/dashboard/translate-dashboard-copy";
 import type { VixDashboardData, VixHistoryPoint, VixSpotData } from "@/lib/dashboard/types";
 
 type VixModuleProps = {
   data: VixDashboardData;
 };
 
-function formatNumber(value: number | null, decimals = 1) {
-  return value === null ? "Dato no disponible temporalmente" : value.toFixed(decimals);
+function formatNumber(value: number | null, decimals = 1, locale: "es" | "en" = "es") {
+  return value === null ? locale === "en" ? "Temporarily unavailable" : "Dato no disponible temporalmente" : value.toFixed(decimals);
 }
 
-function formatChange(value: number | null) {
-  if (value === null) return "Historial insuficiente";
+function formatChange(value: number | null, locale: "es" | "en" = "es") {
+  if (value === null) return locale === "en" ? "Not enough history" : "Historial insuficiente";
   const sign = value > 0 ? "+" : "";
   return `${sign}${value.toFixed(1)} pts`;
 }
 
-function trendLabel(trend: VixSpotData["vixTrend"]) {
-  if (trend === "rising_fast") return "Subiendo rápido";
-  if (trend === "rising") return "Subiendo";
-  if (trend === "falling") return "Bajando";
-  return "Estable";
+function trendLabel(trend: VixSpotData["vixTrend"], locale: "es" | "en" = "es") {
+  if (trend === "rising_fast") return locale === "en" ? "Rising fast" : "Subiendo rápido";
+  if (trend === "rising") return locale === "en" ? "Rising" : "Subiendo";
+  if (trend === "falling") return locale === "en" ? "Falling" : "Bajando";
+  return locale === "en" ? "Stable" : "Estable";
 }
 
 function severityClass(severity: VixSpotData["vixSeverity"]) {
@@ -45,7 +49,7 @@ function buildVixPath(history: VixHistoryPoint[]) {
     .join(" ");
 }
 
-function VixLineChart({ history }: { history: VixHistoryPoint[] }) {
+function VixLineChart({ history, locale = "es" }: { history: VixHistoryPoint[]; locale?: "es" | "en" }) {
   const path = buildVixPath(history);
   const values = history.map((point) => point.value);
   const min = values.length ? Math.min(...values) : null;
@@ -55,12 +59,12 @@ function VixLineChart({ history }: { history: VixHistoryPoint[] }) {
     <div className="min-w-0">
       <div className="flex items-start justify-between gap-4">
         <div>
-          <p className="text-xs font-semibold uppercase tracking-[0.14em] text-brass">Evolución reciente</p>
-          <h3 className="mt-1 text-sm font-semibold text-ink">Últimas {history.length} sesiones</h3>
+          <p className="text-xs font-semibold uppercase tracking-[0.14em] text-brass">{locale === "en" ? "Recent evolution" : "Evolución reciente"}</p>
+          <h3 className="mt-1 text-sm font-semibold text-ink">{locale === "en" ? `Last ${history.length} sessions` : `Últimas ${history.length} sesiones`}</h3>
         </div>
         <div className="text-right text-xs leading-5 text-muted">
-          <span className="block">Máx. {formatNumber(max)}</span>
-          <span className="block">Mín. {formatNumber(min)}</span>
+          <span className="block">{locale === "en" ? "Max." : "Máx."} {formatNumber(max, 1, locale)}</span>
+          <span className="block">{locale === "en" ? "Min." : "Mín."} {formatNumber(min, 1, locale)}</span>
         </div>
       </div>
 
@@ -70,42 +74,44 @@ function VixLineChart({ history }: { history: VixHistoryPoint[] }) {
         {path ? <path d={path} fill="none" stroke="#6f8f7b" strokeWidth="2.2" vectorEffect="non-scaling-stroke" /> : null}
       </svg>
       <div className="mt-2 flex justify-between text-xs text-muted">
-        <span>-{history.length} sesiones</span>
-        <span>Último cierre</span>
+        <span>-{history.length} {locale === "en" ? "sessions" : "sesiones"}</span>
+        <span>{locale === "en" ? "Latest close" : "Último cierre"}</span>
       </div>
     </div>
   );
 }
 
 export function VixModule({ data }: VixModuleProps) {
+  const locale = usePathname().startsWith("/en") ? "en" : "es";
+  const t = (value: string | null | undefined) => locale === "en" ? translateDashboardText(value) : value ?? "";
   const spot = data.spot;
   const metrics = [
-    ["Cambio 1D", formatChange(spot.change1d)],
-    ["Cambio 5D", formatChange(spot.change5d)],
-    ["Cambio 21D", formatChange(spot.change21d)],
-    ["Percentil histórico", spot.vixPercentile === null ? spot.vixPercentileLabel : `${spot.vixPercentileLabel} · p${Math.round(spot.vixPercentile)}`],
-    ["Tendencia", trendLabel(spot.vixTrend)],
-    ["Estado de datos", dataStatusLabels[spot.dataStatus]],
+    [locale === "en" ? "1D change" : "Cambio 1D", formatChange(spot.change1d, locale)],
+    [locale === "en" ? "5D change" : "Cambio 5D", formatChange(spot.change5d, locale)],
+    [locale === "en" ? "21D change" : "Cambio 21D", formatChange(spot.change21d, locale)],
+    [locale === "en" ? "Historical percentile" : "Percentil histórico", spot.vixPercentile === null ? t(spot.vixPercentileLabel) : `${t(spot.vixPercentileLabel)} · p${Math.round(spot.vixPercentile)}`],
+    [locale === "en" ? "Trend" : "Tendencia", trendLabel(spot.vixTrend, locale)],
+    [locale === "en" ? "Data status" : "Estado de datos", t(dataStatusLabels[spot.dataStatus])],
   ];
 
   return (
     <ExpandableInsightCard
       eyebrow="VIX"
-      title="Presión de volatilidad"
-      reading={spot.vixCompositeSubtext}
-      status={dataStatusLabels[spot.dataStatus]}
+      title={locale === "en" ? "Volatility pressure" : "Presión de volatilidad"}
+      reading={t(spot.vixCompositeSubtext)}
+      status={t(dataStatusLabels[spot.dataStatus])}
       metrics={[
-        { label: "VIX actual", value: formatNumber(spot.latestVix), tone: spot.vixSeverity === "watch" ? "brass" : spot.vixSeverity === "normal" || spot.vixSeverity === "low" ? "sage" : "danger" },
-        { label: "Clasificación", value: spot.vixCompositeLabel },
-        { label: "Momentum", value: trendLabel(spot.vixTrend) },
-        { label: "Percentil", value: spot.vixPercentile === null ? spot.vixPercentileLabel : `${spot.vixPercentileLabel} · p${Math.round(spot.vixPercentile)}` },
+        { label: locale === "en" ? "Current VIX" : "VIX actual", value: formatNumber(spot.latestVix, 1, locale), tone: spot.vixSeverity === "watch" ? "brass" : spot.vixSeverity === "normal" || spot.vixSeverity === "low" ? "sage" : "danger" },
+        { label: locale === "en" ? "Classification" : "Clasificación", value: t(spot.vixCompositeLabel) },
+        { label: "Momentum", value: trendLabel(spot.vixTrend, locale) },
+        { label: locale === "en" ? "Percentile" : "Percentil", value: spot.vixPercentile === null ? t(spot.vixPercentileLabel) : `${t(spot.vixPercentileLabel)} · p${Math.round(spot.vixPercentile)}` },
       ]}
     >
       <div className="grid gap-8 xl:grid-cols-[0.42fr_0.58fr] xl:items-start">
         <div className="border border-line bg-panel p-4">
-          <p className="text-xs font-semibold uppercase tracking-[0.16em] text-brass">Lectura ampliada</p>
+          <p className="text-xs font-semibold uppercase tracking-[0.16em] text-brass">{locale === "en" ? "Expanded read" : "Lectura ampliada"}</p>
           <p className="mt-3 text-sm leading-6 text-muted">
-            {spot.vixDescription} La lectura combina nivel absoluto, percentil histórico y momentum reciente.
+            {t(spot.vixDescription)} {locale === "en" ? "The read combines absolute level, historical percentile and recent momentum." : "La lectura combina nivel absoluto, percentil histórico y momentum reciente."}
           </p>
           <div className="mt-5 grid gap-x-5 gap-y-4 border-y border-line py-4 sm:grid-cols-2">
             {metrics.map(([label, value]) => (
@@ -116,41 +122,41 @@ export function VixModule({ data }: VixModuleProps) {
             ))}
           </div>
         </div>
-        <VixLineChart history={spot.history} />
+        <VixLineChart history={spot.history} locale={locale} />
       </div>
 
       <div className="mt-6 grid gap-4 border-t border-line pt-5 text-sm leading-6 text-muted lg:grid-cols-2">
           <p>
-            <span className="font-semibold text-ink">Interpretación prudente: </span>
-            {spot.interpretation.how}
+            <span className="font-semibold text-ink">{locale === "en" ? "Prudent interpretation" : "Interpretación prudente"}: </span>
+            {t(spot.interpretation.how)}
           </p>
           <p>
-            <span className="font-semibold text-ink">Qué NO significa: </span>
-            {spot.interpretation.whatItDoesNotMean}
+            <span className="font-semibold text-ink">{locale === "en" ? "Reading limit" : "Qué NO significa"}: </span>
+            {t(spot.interpretation.whatItDoesNotMean)}
           </p>
       </div>
 
       <div className="mt-5 grid gap-3 border-t border-line pt-4 text-sm leading-6 text-muted md:grid-cols-3">
         <div>
-          <span className="block text-xs font-semibold uppercase tracking-[0.14em] text-brass">Fuente</span>
+          <span className="block text-xs font-semibold uppercase tracking-[0.14em] text-brass">{locale === "en" ? "Source" : "Fuente"}</span>
           {spot.sourceUrl ? (
             <a href={spot.sourceUrl} className="mt-1 inline-block text-ink underline-offset-4 hover:underline" target="_blank" rel="noreferrer">
-              {spot.sourceName}
+              {t(spot.sourceName)}
             </a>
           ) : (
-            <span className="mt-1 block text-ink">{spot.sourceName}</span>
+            <span className="mt-1 block text-ink">{t(spot.sourceName)}</span>
           )}
         </div>
         <div>
-          <span className="block text-xs font-semibold uppercase tracking-[0.14em] text-brass">Actualización</span>
+          <span className="block text-xs font-semibold uppercase tracking-[0.14em] text-brass">{locale === "en" ? "Updated" : "Actualización"}</span>
           <span className="mt-1 block text-ink">{spot.lastUpdated}</span>
         </div>
         <div>
-          <span className="block text-xs font-semibold uppercase tracking-[0.14em] text-brass">Frecuencia</span>
-          <span className="mt-1 block text-ink">{spot.updateFrequency}</span>
+          <span className="block text-xs font-semibold uppercase tracking-[0.14em] text-brass">{locale === "en" ? "Frequency" : "Frecuencia"}</span>
+          <span className="mt-1 block text-ink">{t(spot.updateFrequency)}</span>
         </div>
       </div>
-      <p className="mt-3 text-sm leading-6 text-muted">{spot.reliabilityNote}</p>
+      <p className="mt-3 text-sm leading-6 text-muted">{t(spot.reliabilityNote)}</p>
     </ExpandableInsightCard>
   );
 }

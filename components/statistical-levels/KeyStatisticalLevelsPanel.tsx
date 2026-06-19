@@ -108,8 +108,8 @@ function LevelLadder({ data, kind, locale, ticker }: { data: KeyStatisticalLevel
       return {
         key: item.key,
         value: item.value,
-        description: meta?.[1] ?? "Nivel estadístico",
-        group: meta?.[2] ?? "Nivel",
+        description: translateLevelText(meta?.[1] ?? "Nivel estadístico", locale),
+        group: translateLevelText(meta?.[2] ?? "Nivel", locale),
         distance: data.distances[item.key] ?? null,
         tone: levelTone(item.key),
         type: "level" as const,
@@ -175,26 +175,25 @@ function LevelLadder({ data, kind, locale, ticker }: { data: KeyStatisticalLevel
             <span>{copy.priceScale}</span>
             <span>{formatPrice(max, ticker)}</span>
           </div>
-          <div className="relative mt-4">
-            <div className="absolute left-8 right-8 top-[5.45rem] h-px bg-line" />
+          <div className="mt-5">
             <div
-              className="grid gap-3"
-              style={{ gridTemplateColumns: `repeat(${Math.max(markers.length, 1)}, minmax(7.5rem, 1fr))` }}
+              className="grid items-start gap-3"
+              style={{ gridTemplateColumns: `repeat(${Math.max(markers.length, 1)}, minmax(8.5rem, 1fr))` }}
             >
               {markers.map((marker) => (
-                <div key={marker.key} className="relative z-10 flex min-h-[9.25rem] min-w-0 flex-col items-center text-center">
-                  <div
-                    className={`flex min-h-[4.7rem] w-full flex-col justify-center border px-2.5 py-2 shadow-[0_10px_22px_rgba(31,35,40,0.05)] ${marker.tone}`}
-                    title={`${marker.key}: ${marker.description}`}
-                  >
-                    <p className={`text-[11px] font-semibold ${marker.type === "price" ? "text-white" : ""}`}>{marker.key}</p>
-                    <p className={`mt-1 text-xs font-semibold ${marker.type === "price" ? "text-white" : "text-ink"}`}>{formatPrice(marker.value, ticker)}</p>
-                    <p className={`mt-1 text-[10px] leading-4 ${marker.type === "price" ? "text-white/70" : "opacity-80"}`}>{marker.description}</p>
+                <div key={marker.key} className="min-w-0 text-center">
+                  <div className={`mx-auto h-3 w-3 rotate-45 border ${marker.type === "price" ? "border-ink bg-ink" : "border-line bg-panelSoft"}`} />
+                  <div className={`mx-auto h-8 w-px ${marker.type === "price" ? "bg-ink" : "bg-[#a8a29e]"}`} />
+                  <div className="h-px bg-line" />
+                  <div className="mt-3 min-w-0">
+                    <p className={`text-xs font-semibold ${marker.type === "price" ? "text-ink" : "text-ink"}`}>{marker.key}</p>
+                    <p className="mt-1 text-sm font-semibold text-ink">{formatPrice(marker.value, ticker)}</p>
+                    <p className="mt-1 text-[11px] leading-4 text-muted">{marker.description}</p>
+                    <span className={`mt-2 inline-flex border px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.1em] ${marker.tone}`}>
+                      {marker.group}
+                    </span>
+                    {marker.distance !== null ? <p className="mt-1 text-[11px] text-muted">{formatPercent(marker.distance)}</p> : null}
                   </div>
-                  <div className={`mt-3 h-7 w-px ${marker.type === "price" ? "bg-ink" : "bg-[#a8a29e]"}`} />
-                  <div className={`h-3 w-3 rotate-45 border ${marker.type === "price" ? "border-ink bg-ink" : "border-line bg-panelSoft"}`} />
-                  <p className="mt-2 text-[10px] font-semibold uppercase tracking-[0.1em] text-muted">{marker.group}</p>
-                  {marker.distance !== null ? <p className="mt-1 text-[11px] text-muted">{formatPercent(marker.distance)}</p> : null}
                 </div>
               ))}
             </div>

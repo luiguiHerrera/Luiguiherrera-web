@@ -239,7 +239,7 @@ export function StatLevelsLab({ asset, locale: localeProp, manifest, seasonality
           <AdvancedSeasonalityPanel data={seasonality} frequency="daily" generatedAt={manifest.generatedAt} locale={locale} ticker={asset.ticker} />
           <ReturnHeatmap asset={asset} frequency="daily" locale={locale} />
           <CalendarExtremesPanel asset={asset} frequency="daily" locale={locale} />
-          <MovementSummaryTable asset={asset} frequency="daily" />
+          <MovementSummaryTable asset={asset} frequency="daily" locale={locale} />
         </div>
       ) : null}
 
@@ -476,11 +476,12 @@ function RowCells({ matrix, rowTicker, tickers }: { matrix: CorrelationMatrix; r
       <div className="border-t border-line bg-panelSoft p-2 font-semibold text-ink">{rowTicker}</div>
       {tickers.map((columnTicker) => {
         const value = matrix.values[rowTicker]?.[columnTicker] ?? null;
+        const diagonal = rowTicker === columnTicker;
         return (
           <div
             key={`${rowTicker}-${columnTicker}`}
-            className="border-l border-t border-line p-2 text-center font-semibold text-ink"
-            style={{ backgroundColor: correlationColor(value) }}
+            className={`border-l border-t border-line p-2 text-center font-semibold ${diagonal ? "text-white" : "text-ink"}`}
+            style={{ backgroundColor: correlationColor(value, diagonal) }}
             title={`${rowTicker} / ${columnTicker}: ${formatCorrelation(value)}`}
           >
             {formatCorrelation(value)}
@@ -495,12 +496,14 @@ function formatCorrelation(value: number | null) {
   return value === null ? "n/d" : value.toFixed(2);
 }
 
-function correlationColor(value: number | null) {
+function correlationColor(value: number | null, diagonal = false) {
+  if (diagonal) return "#536b5d";
   if (value === null) return "#f6f1ea";
-  if (value >= 0.75) return "#d8e4dc";
-  if (value >= 0.45) return "#e8eee9";
-  if (value >= 0.15) return "#f2f0ea";
+  if (value >= 0.8) return "#bfd1c5";
+  if (value >= 0.6) return "#d4e0d8";
+  if (value >= 0.3) return "#e6eee8";
+  if (value >= 0.15) return "#f0f2ed";
   if (value > -0.15) return "#f6f1ea";
-  if (value > -0.45) return "#efe4dd";
-  return "#e7d4cc";
+  if (value > -0.45) return "#efe1dc";
+  return "#dfc7c1";
 }
