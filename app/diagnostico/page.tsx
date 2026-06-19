@@ -1,8 +1,16 @@
 import { DiagnosticFlow } from "@/components/diagnostic/DiagnosticFlow";
 import { DisclaimerBox } from "@/components/ui/DisclaimerBox";
 import { SectionHeader } from "@/components/ui/SectionHeader";
+import type { DiagnosticMode } from "@/lib/diagnostic/types";
 
-export default function DiagnosticoPage() {
+function modeFromSearchParam(mode: string | string[] | undefined): DiagnosticMode {
+  return mode === "complete" ? "complete" : "quick";
+}
+
+export default async function DiagnosticoPage({ searchParams }: { searchParams?: Promise<{ mode?: string | string[] }> }) {
+  const params = await searchParams;
+  const initialMode = modeFromSearchParam(params?.mode);
+
   return (
     <div className="mx-auto max-w-7xl px-5 py-10 md:py-14">
       <div className="mb-10 grid gap-6 lg:grid-cols-[1fr_0.72fr] lg:items-end">
@@ -15,7 +23,7 @@ export default function DiagnosticoPage() {
           No guardamos respuestas, portafolios ni resultados individuales. Si recargas la página, la sesión se pierde. Este diagnóstico no es una evaluación formal de idoneidad ni constituye asesoramiento financiero o recomendación personalizada.
         </DisclaimerBox>
       </div>
-      <DiagnosticFlow />
+      <DiagnosticFlow initialMode={initialMode} />
     </div>
   );
 }

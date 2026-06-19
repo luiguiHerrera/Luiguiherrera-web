@@ -149,7 +149,7 @@ export function VixModule({ data }: VixModuleProps) {
         </div>
         <div>
           <span className="block text-xs font-semibold uppercase tracking-[0.14em] text-brass">{locale === "en" ? "Updated" : "Actualización"}</span>
-          <span className="mt-1 block text-ink">{spot.lastUpdated}</span>
+          <span className="mt-1 block text-ink">{t(spot.lastUpdated)}</span>
         </div>
         <div>
           <span className="block text-xs font-semibold uppercase tracking-[0.14em] text-brass">{locale === "en" ? "Frequency" : "Frecuencia"}</span>

@@ -1,4 +1,6 @@
 import Link from "next/link";
+import { Sp500StatLevelsPreview } from "@/components/market/Sp500StatLevelsPreview";
+import { getSp500StatLevelsPreviewData } from "@/lib/market/sp500-stat-levels-preview";
 
 const marketTools = [
   {
@@ -21,7 +23,9 @@ const marketTools = [
   },
 ];
 
-export default function EnglishMarketPage() {
+export default async function EnglishMarketPage() {
+  const sp500Preview = await getSp500StatLevelsPreviewData();
+
   return (
     <div className="mx-auto max-w-7xl px-4 py-10 md:px-5 md:py-14">
       <section className="border-b border-line pb-10">
@@ -31,6 +35,8 @@ export default function EnglishMarketPage() {
           Regime, levels, seasonality and weekly reports to understand the terrain before acting.
         </p>
       </section>
+
+      <Sp500StatLevelsPreview data={sp500Preview} locale="en" />
 
       <section className="mt-8 grid gap-5 lg:grid-cols-3">
         {marketTools.map((tool) => (

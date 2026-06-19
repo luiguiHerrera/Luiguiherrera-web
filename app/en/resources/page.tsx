@@ -17,7 +17,7 @@ export default function EnglishResourcesPage() {
           Public tools and scripts to support your investment process.
         </p>
       </section>
-      <section className="mt-8">
+      <section id="tradingview-scripts" className="mt-8 scroll-mt-28">
         <div className="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
           <div>
             <p className="text-xs font-semibold uppercase tracking-[0.18em] text-brass">TradingView</p>

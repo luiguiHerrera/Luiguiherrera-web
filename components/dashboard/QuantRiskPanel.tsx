@@ -70,7 +70,7 @@ export function QuantRiskPanel({ data, locale = "es" }: QuantRiskPanelProps) {
         </div>
         <div>
           <span className="block text-xs font-semibold uppercase tracking-[0.14em] text-brass">{locale === "en" ? "Updated" : "Actualización"}</span>
-          <span className="mt-1 block text-ink">{data.lastUpdated}</span>
+          <span className="mt-1 block text-ink">{t(data.lastUpdated)}</span>
         </div>
       </div>
 

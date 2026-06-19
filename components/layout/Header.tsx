@@ -25,12 +25,53 @@ const navHrefs = {
   },
 };
 
+type NavDropdownItem = {
+  description: string;
+  href: string;
+  label: string;
+  shortLabel: string;
+};
+
+function DesktopDropdown({ href, items, label }: { href: string; items: NavDropdownItem[]; label: string }) {
+  return (
+    <div className="group relative shrink-0">
+      <Link
+        href={href}
+        className="block border-b border-transparent px-2 py-1.5 transition hover:border-ink hover:text-ink focus-visible:border-ink focus-visible:text-ink focus-visible:outline-none"
+      >
+        {label}
+      </Link>
+      <div className="invisible absolute left-0 top-full z-50 hidden w-[21rem] pt-3 opacity-0 transition duration-150 group-hover:visible group-hover:opacity-100 group-focus-within:visible group-focus-within:opacity-100 lg:block">
+        <div className="grid gap-1 border border-line/80 bg-panel p-2 shadow-[0_14px_34px_rgba(31,35,40,0.10)]">
+          {items.map((item) => (
+            <Link
+              key={item.href}
+              href={item.href}
+              className="block px-3 py-2.5 text-[11px] text-muted transition hover:bg-panelSoft hover:text-ink focus-visible:bg-panelSoft focus-visible:text-ink focus-visible:outline-none"
+            >
+              <span className="block font-semibold text-ink">{item.label}</span>
+              <span className="block pt-1 leading-5">{item.description}</span>
+            </Link>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export function Header() {
   const pathname = usePathname();
   const locale = localeFromPathname(pathname);
   const dictionary = getDictionary(locale);
   const hrefs = navHrefs[locale];
-  const marketItems = dictionary.layout.marketItems;
+  const navGroups = [
+    { href: hrefs.market, label: dictionary.layout.nav.market, items: dictionary.layout.marketItems },
+    { href: hrefs.diagnostic, label: dictionary.layout.nav.diagnostic, items: dictionary.layout.diagnosticItems },
+    { href: hrefs.research, label: dictionary.layout.nav.research, items: dictionary.layout.researchItems },
+    { href: hrefs.protection, label: dictionary.layout.nav.protection, items: dictionary.layout.protectionItems },
+    { href: hrefs.resources, label: dictionary.layout.nav.resources, items: dictionary.layout.resourcesItems },
+  ];
+  const mobileItems = navGroups.flatMap((group) => group.items);
 
   return (
     <header className="sticky top-0 z-50 border-b border-line/80 bg-panel/92 shadow-[0_1px_18px_rgba(31,35,40,0.04)] backdrop-blur-xl">
@@ -54,39 +95,8 @@ export function Header() {
             >
               {dictionary.layout.nav.home}
             </Link>
-            <div className="group relative shrink-0">
-              <Link
-                href={hrefs.market}
-                className="block border-b border-transparent px-2 py-1.5 transition hover:border-ink hover:text-ink focus-visible:border-ink focus-visible:text-ink focus-visible:outline-none"
-              >
-                {dictionary.layout.nav.market}
-              </Link>
-              <div className="invisible absolute left-0 top-full z-50 mt-2 hidden w-[21rem] gap-1 border border-line/80 bg-panel p-2 opacity-0 shadow-[0_14px_34px_rgba(31,35,40,0.10)] transition duration-150 group-hover:visible group-hover:opacity-100 group-focus-within:visible group-focus-within:opacity-100 lg:grid">
-                {marketItems.map((item) => (
-                  <Link
-                    key={item.href}
-                    href={item.href}
-                    className="block px-2 py-1.5 text-[11px] text-muted transition hover:bg-panelSoft hover:text-ink focus-visible:bg-panelSoft focus-visible:text-ink focus-visible:outline-none lg:px-3 lg:py-2.5"
-                  >
-                    <span className="block font-semibold text-ink">{item.label}</span>
-                    <span className="hidden pt-1 leading-5 lg:block">{item.description}</span>
-                  </Link>
-                ))}
-              </div>
-            </div>
-            {[
-              { href: hrefs.diagnostic, label: dictionary.layout.nav.diagnostic },
-              { href: hrefs.research, label: dictionary.layout.nav.research },
-              { href: hrefs.protection, label: dictionary.layout.nav.protection },
-              { href: hrefs.resources, label: dictionary.layout.nav.resources },
-            ].map((item) => (
-              <Link
-                key={item.href}
-                href={item.href}
-                className="shrink-0 border-b border-transparent px-2 py-1.5 transition hover:border-ink hover:text-ink focus-visible:border-ink focus-visible:text-ink focus-visible:outline-none"
-              >
-                {item.label}
-              </Link>
+            {navGroups.map((group) => (
+              <DesktopDropdown key={group.href} href={group.href} label={group.label} items={group.items} />
             ))}
           </nav>
           <div className="hidden sm:block lg:ml-1">
@@ -97,7 +107,7 @@ export function Header() {
           </Link>
         </div>
         <nav className="-mx-1 flex gap-1 overflow-x-auto border-t border-line/60 pt-1.5 text-[11px] text-muted [scrollbar-width:none] lg:hidden">
-          {marketItems.map((item) => (
+          {mobileItems.map((item) => (
             <Link
               key={item.href}
               href={item.href}

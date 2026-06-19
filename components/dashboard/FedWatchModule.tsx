@@ -78,11 +78,11 @@ export function FedWatchModule({ data, locale = "es" }: FedWatchModuleProps) {
       };
   const metrics = [
     [copy.nextMeeting, next?.date ?? copy.pending],
-    [copy.dominantRange, next?.dominantRange ?? copy.unavailable],
+    [copy.dominantRange, t(next?.dominantRange) || copy.unavailable],
     [copy.dominantProbability, formatPercent(next?.dominantProbability ?? null, locale)],
     [copy.conviction, t(next?.conviction) || copy.lowConviction],
-    [copy.firstCut, fedWatch.firstRelevantCutMeeting ?? copy.unidentified],
-    [copy.currentRange, fedWatch.currentTargetRange ?? copy.unidentified],
+    [copy.firstCut, t(fedWatch.firstRelevantCutMeeting) || copy.unidentified],
+    [copy.currentRange, t(fedWatch.currentTargetRange) || copy.unidentified],
   ];
 
   return (
@@ -137,7 +137,7 @@ export function FedWatchModule({ data, locale = "es" }: FedWatchModuleProps) {
             {meetingRows(fedWatch.meetings).map((meeting) => (
               <tr key={`${meeting.date}-${meeting.dominantRange}`} className="border-b border-line/70">
                 <td className="py-4 pr-4 font-semibold text-ink">{meeting.date}</td>
-                <td className="py-4 pr-4 text-muted">{meeting.dominantRange}</td>
+                <td className="py-4 pr-4 text-muted">{t(meeting.dominantRange)}</td>
                 <td className="py-4 pr-4 text-muted">{formatPercent(meeting.dominantProbability, locale)}</td>
                 <td className="py-4 pr-4 text-muted">{aggregateLabel(meeting.cutProbability, locale)}</td>
                 <td className="py-4 pr-4 text-muted">{aggregateLabel(meeting.pauseProbability, locale)}</td>
@@ -162,7 +162,7 @@ export function FedWatchModule({ data, locale = "es" }: FedWatchModuleProps) {
         </div>
         <div>
           <span className="block text-xs font-semibold uppercase tracking-[0.14em] text-brass">{copy.updated}</span>
-          <span className="mt-1 block text-ink">{fedWatch.lastUpdated}</span>
+          <span className="mt-1 block text-ink">{t(fedWatch.lastUpdated)}</span>
         </div>
         <div>
           <span className="block text-xs font-semibold uppercase tracking-[0.14em] text-brass">{copy.frequency}</span>

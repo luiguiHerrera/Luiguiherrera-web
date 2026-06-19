@@ -1,8 +1,16 @@
 import { DiagnosticFlow } from "@/components/diagnostic/DiagnosticFlow";
 import { DisclaimerBox } from "@/components/ui/DisclaimerBox";
 import { SectionHeader } from "@/components/ui/SectionHeader";
+import type { DiagnosticMode } from "@/lib/diagnostic/types";
 
-export default function EnglishDiagnosticPage() {
+function modeFromSearchParam(mode: string | string[] | undefined): DiagnosticMode {
+  return mode === "complete" ? "complete" : "quick";
+}
+
+export default async function EnglishDiagnosticPage({ searchParams }: { searchParams?: Promise<{ mode?: string | string[] }> }) {
+  const params = await searchParams;
+  const initialMode = modeFromSearchParam(params?.mode);
+
   return (
     <div className="mx-auto max-w-7xl px-4 py-10 md:px-5 md:py-14">
       <div className="mb-10 grid gap-6 lg:grid-cols-[1fr_0.72fr] lg:items-end">
@@ -15,7 +23,7 @@ export default function EnglishDiagnosticPage() {
           We do not store answers, portfolios or individual results. Reloading the page resets the session. This diagnostic is educational and does not replace a formal suitability assessment.
         </DisclaimerBox>
       </div>
-      <DiagnosticFlow />
+      <DiagnosticFlow initialMode={initialMode} locale="en" />
     </div>
   );
 }

@@ -153,7 +153,7 @@ export async function DashboardContent({ locale = "es" }: { locale?: "es" | "en"
           </p>
           <p>
             <span className="block text-xs font-semibold uppercase tracking-[0.14em] text-brass">{copy.updated}</span>
-            <span className="font-semibold text-ink">{regimeSummary.lastUpdated}</span>
+            <span className="font-semibold text-ink">{t(regimeSummary.lastUpdated)}</span>
           </p>
           <p>
             <span className="block text-xs font-semibold uppercase tracking-[0.14em] text-brass">{copy.activeSources}</span>
@@ -211,7 +211,7 @@ export async function DashboardContent({ locale = "es" }: { locale?: "es" | "en"
         {remainingModules.map((module) => <DashboardModule key={module.id} {...module} locale={locale} />)}
       </div>
 
-      <div className="mt-6">
+      <div id="radar" className="mt-6 scroll-mt-28">
         <ExpandableInsightCard
           eyebrow={copy.radar}
           title={copy.crossReadings}

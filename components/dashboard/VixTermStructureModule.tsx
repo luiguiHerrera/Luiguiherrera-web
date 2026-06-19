@@ -210,15 +210,15 @@ export function VixTermStructureModule({ data }: VixTermStructureModuleProps) {
           <span className="block text-xs font-semibold uppercase tracking-[0.14em] text-brass">{locale === "en" ? "Source" : "Fuente"}</span>
           {data.sourceUrl ? (
             <a href={data.sourceUrl} className="mt-1 inline-block text-ink underline-offset-4 hover:underline" target="_blank" rel="noreferrer">
-              {data.source}
+              {t(data.source)}
             </a>
           ) : (
-            <span className="mt-1 block text-ink">{data.source}</span>
+            <span className="mt-1 block text-ink">{t(data.source)}</span>
           )}
         </div>
         <div>
           <span className="block text-xs font-semibold uppercase tracking-[0.14em] text-brass">{locale === "en" ? "Updated" : "Actualización"}</span>
-          <span className="mt-1 block text-ink">{data.lastUpdated ?? (locale === "en" ? "Pending" : "Pendiente")}</span>
+          <span className="mt-1 block text-ink">{data.lastUpdated ? t(data.lastUpdated) : locale === "en" ? "Pending" : "Pendiente"}</span>
         </div>
         <div>
           <span className="block text-xs font-semibold uppercase tracking-[0.14em] text-brass">{locale === "en" ? "Status" : "Estado"}</span>

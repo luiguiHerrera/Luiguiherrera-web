@@ -29,14 +29,14 @@ const periodConfig: Record<
   "3M": { label: "3M", key: "return3m", rank: "rank3m", previousKey: "previousReturn3m", previousRank: "previousRank3m" },
 };
 
-function formatPercent(value: number | null) {
-  if (value === null) return "Pendiente";
+function formatPercent(value: number | null, locale: "es" | "en" = "es") {
+  if (value === null) return locale === "en" ? "Pending" : "Pendiente";
   const sign = value > 0 ? "+" : "";
   return `${sign}${value.toFixed(1)}%`;
 }
 
-function formatPoints(value: number | null) {
-  if (value === null) return "Pendiente";
+function formatPoints(value: number | null, locale: "es" | "en" = "es") {
+  if (value === null) return locale === "en" ? "Pending" : "Pendiente";
   const sign = value > 0 ? "+" : "";
   return `${sign}${value.toFixed(1)} pp`;
 }
@@ -139,10 +139,10 @@ export function SectorRotationChart({ data }: SectorRotationChartProps) {
       reading={t(data.metrics.interpretation)}
       status={t(dataStatusLabels[data.dataStatus])}
       metrics={[
-        { label: `${copy.leader} ${period}`, value: leader ? `${t(leader.sectorName)} (${leader.etfTicker}) ${formatPercent(metricValue(leader, period))}` : copy.pending, tone: "sage" },
-        { label: `${copy.laggard} ${period}`, value: laggard ? `${t(laggard.sectorName)} (${laggard.etfTicker}) ${formatPercent(metricValue(laggard, period))}` : copy.pending, tone: "danger" },
-        { label: copy.dispersion, value: formatPercent(data.metrics.sectorDispersion1w) },
-        { label: copy.updated, value: data.lastUpdated },
+        { label: `${copy.leader} ${period}`, value: leader ? `${t(leader.sectorName)} (${leader.etfTicker}) ${formatPercent(metricValue(leader, period), locale)}` : copy.pending, tone: "sage" },
+        { label: `${copy.laggard} ${period}`, value: laggard ? `${t(laggard.sectorName)} (${laggard.etfTicker}) ${formatPercent(metricValue(laggard, period), locale)}` : copy.pending, tone: "danger" },
+        { label: copy.dispersion, value: formatPercent(data.metrics.sectorDispersion1w, locale) },
+        { label: copy.updated, value: t(data.lastUpdated) },
       ]}
       defaultOpen={false}
     >
@@ -174,11 +174,11 @@ export function SectorRotationChart({ data }: SectorRotationChartProps) {
         </div>
         <div>
           <span className="block text-xs font-semibold uppercase tracking-[0.14em] text-brass">{copy.updated}</span>
-          <span className="mt-1 block text-ink">{data.lastUpdated}</span>
+          <span className="mt-1 block text-ink">{t(data.lastUpdated)}</span>
         </div>
         <div>
           <span className="block text-xs font-semibold uppercase tracking-[0.14em] text-brass">{copy.dispersion}</span>
-          <span className="mt-1 block text-ink">{formatPercent(data.metrics.sectorDispersion1w)}</span>
+          <span className="mt-1 block text-ink">{formatPercent(data.metrics.sectorDispersion1w, locale)}</span>
         </div>
         <div>
           <span className="block text-xs font-semibold uppercase tracking-[0.14em] text-brass">{copy.reading}</span>
@@ -189,8 +189,8 @@ export function SectorRotationChart({ data }: SectorRotationChartProps) {
       <div className="mt-5 grid gap-5 xl:grid-cols-[1.48fr_0.52fr] xl:items-start">
         <div>
           <div className="grid grid-cols-[1fr_1fr] border-b border-line pb-2 text-xs uppercase tracking-[0.12em] text-muted">
-            <span>{formatPercent(minValue)}</span>
-            <span className="text-right">{formatPercent(maxValue)}</span>
+            <span>{formatPercent(minValue, locale)}</span>
+            <span className="text-right">{formatPercent(maxValue, locale)}</span>
             <span className="col-span-2 text-center text-brass">0%</span>
           </div>
 
@@ -208,7 +208,7 @@ export function SectorRotationChart({ data }: SectorRotationChartProps) {
                   key={sector.etfTicker}
                   type="button"
                   onClick={() => setSelectedTicker(sector.etfTicker)}
-                  title={`${sector.sectorName} ${sector.etfTicker}: ${formatPercent(value)}`}
+                  title={`${t(sector.sectorName)} ${sector.etfTicker}: ${formatPercent(value, locale)}`}
                   className={`group grid gap-2 border border-line bg-panelSoft px-3 py-2 text-left transition hover:border-petrol focus:border-petrol focus:outline-none md:grid-cols-[2.7rem_minmax(8rem,0.74fr)_minmax(0,1fr)_4.4rem] md:items-center ${
                     selectedSector?.etfTicker === sector.etfTicker ? "border-petrol" : ""
                   }`}
@@ -219,7 +219,7 @@ export function SectorRotationChart({ data }: SectorRotationChartProps) {
                       <span className="block text-sm font-semibold text-ink">{t(sector.sectorName)}</span>
                       <span className="text-xs uppercase tracking-[0.12em] text-muted">{sector.etfTicker} · {locale === "en" ? "sector proxy" : "proxy sectorial"}</span>
                     </div>
-                    <span className="font-semibold text-ink md:hidden">{formatPercent(value)}</span>
+                    <span className="font-semibold text-ink md:hidden">{formatPercent(value, locale)}</span>
                   </div>
                   <svg viewBox="0 0 100 14" className="h-5 w-full" aria-hidden="true" preserveAspectRatio="none">
                     <line x1="2" x2="98" y1="7" y2="7" stroke="#e7e2dc" strokeWidth="0.6" vectorEffect="non-scaling-stroke" />
@@ -235,7 +235,7 @@ export function SectorRotationChart({ data }: SectorRotationChartProps) {
                       />
                     ) : null}
                   </svg>
-                  <span className="hidden text-right font-semibold text-ink md:block">{formatPercent(value)}</span>
+                  <span className="hidden text-right font-semibold text-ink md:block">{formatPercent(value, locale)}</span>
                 </button>
               );
             })}
@@ -268,7 +268,7 @@ export function SectorRotationChart({ data }: SectorRotationChartProps) {
                   </div>
                   <div className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-muted">
                     <span>#{priorRank ?? copy.pending} → #{currentRank ?? copy.pending}</span>
-                    <span className="font-semibold text-ink">{formatPoints(returnChange)}</span>
+                    <span className="font-semibold text-ink">{formatPoints(returnChange, locale)}</span>
                   </div>
                 </button>
               ))}

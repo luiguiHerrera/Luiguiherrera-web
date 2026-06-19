@@ -31,6 +31,75 @@ const productTone: Record<ProductConvenience, "low" | "medium" | "high" | "neutr
   "Evitar hasta comprender riesgos": "high",
 };
 
+type DiagnosticLocale = "es" | "en";
+
+const flowCopy = {
+  es: {
+    areasTraining: "Áreas que requieren más formación",
+    back: "Atrás",
+    chooseDepth: "Elige profundidad",
+    confidence: "Confianza",
+    continue: "Continuar",
+    currentCapacity: "Capacidad actual",
+    depthTitle: "Un diagnóstico, dos niveles de detalle",
+    educationAlerts: "Alertas educativas",
+    educationalConvenience: "Conveniencia educativa por productos",
+    educationalResult: "Resultado educativo",
+    fullDescription: "Lectura granular por bloques: capacidad, objetivos, conducta, conocimiento, experiencia y consistencia.",
+    fullDuration: "18-25 minutos",
+    fullQuestions: "50 preguntas",
+    fullTitle: "Diagnóstico completo",
+    knowledge: "Conocimiento",
+    mode: "Modo",
+    modeComplete: "Completo",
+    modeQuick: "Rápido",
+    progress: "Progreso",
+    question: "Pregunta",
+    questionOf: "de",
+    quickDescription: "Lectura inicial para ubicar horizonte, liquidez, tolerancia, conocimiento básico y sesgos principales.",
+    quickDuration: "8-10 minutos",
+    quickQuestions: "20 preguntas",
+    quickTitle: "Diagnóstico rápido",
+    restart: "Empezar de nuevo",
+    seeResult: "Ver resultado",
+    start: "Empezar",
+    startDescription: "Este diagnóstico educativo cruza conocimientos, experiencia, tolerancia psicológica y capacidad real de asumir riesgo. No sustituye una evaluación formal de idoneidad ni constituye asesoría personalizada.",
+    storageNote: "No se guardan respuestas. No se envían a servidores externos. Si recargas la página, la sesión se pierde.",
+  },
+  en: {
+    areasTraining: "Areas that need more training",
+    back: "Back",
+    chooseDepth: "Choose depth",
+    confidence: "Confidence",
+    continue: "Continue",
+    currentCapacity: "Current capacity",
+    depthTitle: "One diagnostic, two levels of detail",
+    educationAlerts: "Educational alerts",
+    educationalConvenience: "Educational product convenience",
+    educationalResult: "Educational result",
+    fullDescription: "Granular block-by-block read: capacity, goals, behavior, knowledge, experience and consistency.",
+    fullDuration: "18-25 minutes",
+    fullQuestions: "50 questions",
+    fullTitle: "Full diagnostic",
+    knowledge: "Knowledge",
+    mode: "Mode",
+    modeComplete: "Full",
+    modeQuick: "Quick",
+    progress: "Progress",
+    question: "Question",
+    questionOf: "of",
+    quickDescription: "Initial read to place horizon, liquidity, tolerance, basic knowledge and main biases.",
+    quickDuration: "8-10 minutes",
+    quickQuestions: "20 questions",
+    quickTitle: "Quick diagnostic",
+    restart: "Start again",
+    seeResult: "View result",
+    start: "Start",
+    startDescription: "This educational diagnostic connects knowledge, experience, psychological tolerance and real risk capacity. It does not replace a formal suitability assessment or personalized advice.",
+    storageNote: "Answers are not stored or sent to external servers. Reloading the page resets the session.",
+  },
+};
+
 function ModeCard({
   active,
   description,
@@ -60,43 +129,45 @@ function ModeCard({
   );
 }
 
-function StartScreen({ mode, setMode, start }: { mode: DiagnosticMode; setMode: (mode: DiagnosticMode) => void; start: () => void }) {
+function StartScreen({ locale, mode, setMode, start }: { locale: DiagnosticLocale; mode: DiagnosticMode; setMode: (mode: DiagnosticMode) => void; start: () => void }) {
+  const copy = flowCopy[locale];
+
   return (
     <section className="border border-line bg-panel p-5 md:p-7">
       <div className="grid gap-8 lg:grid-cols-[0.74fr_1.26fr] lg:items-start">
         <div>
-          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-brass">Elige profundidad</p>
-          <h2 className="mt-3 text-2xl font-semibold leading-tight text-ink md:text-3xl">Un diagnóstico, dos niveles de detalle</h2>
+          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-brass">{copy.chooseDepth}</p>
+          <h2 className="mt-3 text-2xl font-semibold leading-tight text-ink md:text-3xl">{copy.depthTitle}</h2>
           <p className="mt-4 text-sm leading-7 text-muted">
-            Este diagnóstico educativo cruza conocimientos, experiencia, tolerancia psicológica y capacidad real de asumir riesgo. No sustituye una evaluación formal de idoneidad ni constituye asesoría personalizada.
+            {copy.startDescription}
           </p>
         </div>
         <div className="grid gap-4 md:grid-cols-2">
           <ModeCard
             active={mode === "quick"}
-            description="Lectura inicial para ubicar horizonte, liquidez, tolerancia, conocimiento básico y sesgos principales."
-            duration="8-10 minutos"
+            description={copy.quickDescription}
+            duration={copy.quickDuration}
             onClick={() => setMode("quick")}
-            questions="20 preguntas"
-            title="Diagnóstico rápido"
+            questions={copy.quickQuestions}
+            title={copy.quickTitle}
           />
           <ModeCard
             active={mode === "complete"}
-            description="Lectura granular por bloques: capacidad, objetivos, conducta, conocimiento, experiencia y consistencia."
-            duration="18-25 minutos"
+            description={copy.fullDescription}
+            duration={copy.fullDuration}
             onClick={() => setMode("complete")}
-            questions="50 preguntas"
-            title="Diagnóstico completo"
+            questions={copy.fullQuestions}
+            title={copy.fullTitle}
           />
         </div>
       </div>
 
       <div className="mt-8 flex flex-col gap-4 border-t border-line pt-6 md:flex-row md:items-center md:justify-between">
         <p className="max-w-2xl text-sm leading-6 text-muted">
-          No se guardan respuestas. No se envían a servidores externos. Si recargas la página, la sesión se pierde.
+          {copy.storageNote}
         </p>
         <button type="button" onClick={start} className="w-fit border border-ink bg-ink px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-panel hover:text-ink">
-          Empezar
+          {copy.start}
         </button>
       </div>
     </section>
@@ -106,6 +177,7 @@ function StartScreen({ mode, setMode, start }: { mode: DiagnosticMode; setMode: 
 function QuestionScreen({
   answer,
   currentIndex,
+  locale,
   mode,
   onAnswer,
   onBack,
@@ -115,6 +187,7 @@ function QuestionScreen({
 }: {
   answer: string | undefined;
   currentIndex: number;
+  locale: DiagnosticLocale;
   mode: DiagnosticMode;
   onAnswer: (value: string) => void;
   onBack: () => void;
@@ -123,17 +196,18 @@ function QuestionScreen({
   total: number;
 }) {
   const progress = ((currentIndex + (answer ? 1 : 0)) / total) * 100;
+  const copy = flowCopy[locale];
 
   return (
     <section className="border border-line bg-panel p-5 md:p-8">
       <div className="grid gap-6 lg:grid-cols-[0.72fr_0.28fr] lg:items-start">
         <div>
-          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-brass">{mode === "quick" ? "Diagnóstico rápido" : "Diagnóstico completo"}</p>
-          <p className="mt-4 text-sm font-semibold text-muted">Pregunta {currentIndex + 1} de {total} · {question.block}</p>
+          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-brass">{mode === "quick" ? copy.quickTitle : copy.fullTitle}</p>
+          <p className="mt-4 text-sm font-semibold text-muted">{copy.question} {currentIndex + 1} {copy.questionOf} {total} · {question.block}</p>
         </div>
         <div>
           <div className="mb-2 flex justify-between text-xs text-muted">
-            <span>Progreso</span>
+            <span>{copy.progress}</span>
             <span>{Math.round(progress)}%</span>
           </div>
           <ProgressBar value={progress} />
@@ -166,7 +240,7 @@ function QuestionScreen({
 
       <div className="mt-8 flex flex-col-reverse justify-between gap-3 sm:flex-row">
         <button type="button" onClick={onBack} className="border border-line bg-panel px-4 py-2.5 text-sm font-medium text-muted transition hover:border-ink hover:text-ink">
-          Atrás
+          {copy.back}
         </button>
         <button
           type="button"
@@ -174,7 +248,7 @@ function QuestionScreen({
           disabled={!answer}
           className="border border-ink bg-ink px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-panel hover:text-ink disabled:cursor-not-allowed disabled:opacity-35"
         >
-          {currentIndex === total - 1 ? "Ver resultado" : "Continuar"}
+          {currentIndex === total - 1 ? copy.seeResult : copy.continue}
         </button>
       </div>
     </section>
@@ -198,34 +272,35 @@ function DimensionBar({ label, value, helper }: { label: string; value: number; 
   );
 }
 
-function ResultScreen({ answers, mode, restart }: { answers: DiagnosticAnswers; mode: DiagnosticMode; restart: () => void }) {
+function ResultScreen({ answers, locale, mode, restart }: { answers: DiagnosticAnswers; locale: DiagnosticLocale; mode: DiagnosticMode; restart: () => void }) {
   const result = useMemo(() => scoreDiagnostic(answers, mode), [answers, mode]);
   const productsNeedingTraining = result.productConvenience.filter((row) => row.status !== "Adecuado para aprender");
+  const copy = flowCopy[locale];
 
   return (
     <div className="grid gap-6 xl:grid-cols-[1.05fr_0.95fr]">
       <section className="border border-line bg-panel p-5 md:p-7">
         <div className="flex flex-col gap-5 border-b border-line pb-6 md:flex-row md:items-start md:justify-between">
           <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-brass">Resultado educativo</p>
+            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-brass">{copy.educationalResult}</p>
             <h2 className="mt-3 text-2xl font-semibold leading-tight text-ink md:text-3xl">{result.profile}</h2>
             <p className="mt-4 max-w-2xl text-sm leading-7 text-muted">{result.summary}</p>
           </div>
-          <RiskPill label={`Confianza ${result.confidenceLabel}`} tone={result.confidenceLabel === "Alta" ? "low" : result.confidenceLabel === "Media" ? "medium" : "high"} />
+          <RiskPill label={`${copy.confidence} ${result.confidenceLabel}`} tone={result.confidenceLabel === "Alta" ? "low" : result.confidenceLabel === "Media" ? "medium" : "high"} />
         </div>
 
         <div className="mt-6 grid gap-4 md:grid-cols-3">
           <div className="border border-line bg-panelSoft p-4">
-            <p className="text-xs uppercase tracking-[0.14em] text-muted">Capacidad actual</p>
+            <p className="text-xs uppercase tracking-[0.14em] text-muted">{copy.currentCapacity}</p>
             <p className="mt-2 text-xl font-semibold text-ink">{result.capacityLabel}</p>
           </div>
           <div className="border border-line bg-panelSoft p-4">
-            <p className="text-xs uppercase tracking-[0.14em] text-muted">Conocimiento</p>
+            <p className="text-xs uppercase tracking-[0.14em] text-muted">{copy.knowledge}</p>
             <p className="mt-2 text-xl font-semibold text-ink">{result.knowledgeLabel}</p>
           </div>
           <div className="border border-line bg-panelSoft p-4">
-            <p className="text-xs uppercase tracking-[0.14em] text-muted">Modo</p>
-            <p className="mt-2 text-xl font-semibold text-ink">{mode === "quick" ? "Rápido" : "Completo"}</p>
+            <p className="text-xs uppercase tracking-[0.14em] text-muted">{copy.mode}</p>
+            <p className="mt-2 text-xl font-semibold text-ink">{mode === "quick" ? copy.modeQuick : copy.modeComplete}</p>
           </div>
         </div>
 
@@ -236,7 +311,7 @@ function ResultScreen({ answers, mode, restart }: { answers: DiagnosticAnswers; 
         </div>
 
         <div className="mt-6 border border-line bg-panelSoft p-5">
-          <h3 className="font-semibold text-ink">Alertas educativas</h3>
+          <h3 className="font-semibold text-ink">{copy.educationAlerts}</h3>
           <ul className="mt-4 grid gap-3 text-sm leading-6 text-muted">
             {result.alerts.map((alert) => <li key={alert} className="border-l border-brass/60 pl-4">{alert}</li>)}
           </ul>
@@ -245,7 +320,7 @@ function ResultScreen({ answers, mode, restart }: { answers: DiagnosticAnswers; 
 
       <aside className="space-y-5">
         <section className="border border-line bg-panel p-6">
-          <h3 className="text-xl font-semibold text-ink">Conveniencia educativa por productos</h3>
+          <h3 className="text-xl font-semibold text-ink">{copy.educationalConvenience}</h3>
           <div className="mt-5 grid gap-3">
             {result.productConvenience.map((row) => (
               <div key={row.product} className="border border-line bg-panelSoft p-4">
@@ -260,7 +335,7 @@ function ResultScreen({ answers, mode, restart }: { answers: DiagnosticAnswers; 
         </section>
 
         <section className="border border-line bg-panel p-6">
-          <h3 className="font-semibold text-ink">Áreas que requieren más formación</h3>
+          <h3 className="font-semibold text-ink">{copy.areasTraining}</h3>
           <ul className="mt-4 grid gap-3 text-sm leading-6 text-muted">
             {productsNeedingTraining.slice(0, 5).map((row) => <li key={row.product} className="border-l border-line pl-4">{row.product}: {row.status}</li>)}
           </ul>
@@ -270,21 +345,25 @@ function ResultScreen({ answers, mode, restart }: { answers: DiagnosticAnswers; 
         <DisclaimerBox>{result.disclaimer}</DisclaimerBox>
 
         <button type="button" onClick={restart} className="w-full border border-ink bg-ink px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-panel hover:text-ink">
-          Empezar de nuevo
+          {copy.restart}
         </button>
       </aside>
     </div>
   );
 }
 
-export function DiagnosticFlow() {
-  const [mode, setMode] = useState<DiagnosticMode>("quick");
+export function DiagnosticFlow({ initialMode = "quick", locale = "es" }: { initialMode?: DiagnosticMode; locale?: DiagnosticLocale }) {
+  const [mode, setMode] = useState<DiagnosticMode>(initialMode);
   const [started, setStarted] = useState(false);
   const [index, setIndex] = useState(0);
   const [answers, setAnswers] = useState<DiagnosticAnswers>({});
   const [completed, setCompleted] = useState(false);
   const questions = useMemo(() => getQuestionsForMode(mode), [mode]);
   const question = questions[index];
+
+  useEffect(() => {
+    if (!started) setMode(initialMode);
+  }, [initialMode, started]);
 
   useEffect(() => {
     function onKeyDown(event: KeyboardEvent) {
@@ -339,17 +418,18 @@ export function DiagnosticFlow() {
   }
 
   if (!started) {
-    return <StartScreen mode={mode} setMode={setMode} start={start} />;
+    return <StartScreen locale={locale} mode={mode} setMode={setMode} start={start} />;
   }
 
   if (completed) {
-    return <ResultScreen answers={answers} mode={mode} restart={restart} />;
+    return <ResultScreen answers={answers} locale={locale} mode={mode} restart={restart} />;
   }
 
   return (
     <QuestionScreen
       answer={answers[question.id]}
       currentIndex={index}
+      locale={locale}
       mode={mode}
       onAnswer={updateAnswer}
       onBack={goBack}

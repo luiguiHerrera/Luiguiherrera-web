@@ -229,7 +229,7 @@ export function BtcEtfFlowsModule({ data }: BtcEtfFlowsModuleProps) {
         </div>
         <div>
           <span className="block text-xs font-semibold uppercase tracking-[0.14em] text-brass">{locale === "en" ? "Updated" : "Actualización"}</span>
-          <span className="mt-1 block text-ink">{flows.lastUpdated}</span>
+          <span className="mt-1 block text-ink">{t(flows.lastUpdated)}</span>
         </div>
         <div>
           <span className="block text-xs font-semibold uppercase tracking-[0.14em] text-brass">{locale === "en" ? "Status" : "Estado"}</span>
