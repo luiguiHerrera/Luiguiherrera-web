@@ -32,6 +32,12 @@ const statusLabels: Record<AssetDataStatus, string> = {
   unavailable: "No disponible",
 };
 
+const englishStatusLabels: Record<AssetDataStatus, string> = {
+  ok: "Data OK",
+  limited_history: "Limited history",
+  unavailable: "Unavailable",
+};
+
 const frequencyLabels: Record<StatisticalFrequency, string> = {
   daily: "Diario",
   weekly: "Semanal",
@@ -53,6 +59,25 @@ const categoryOrder: AssetCategory[] = [
   "Internacional",
 ];
 
+const localizedCategoryLabels: Record<"es" | "en", Record<AssetCategory, string>> = {
+  es: {
+    "Índices / ETFs": "Índices / ETFs",
+    Bonos: "Bonos",
+    "Oro y materias primas": "Oro y materias primas",
+    Sectores: "Sectores",
+    Cripto: "Cripto",
+    Internacional: "Internacional",
+  },
+  en: {
+    "Índices / ETFs": "Indices / ETFs",
+    Bonos: "Bonds",
+    "Oro y materias primas": "Gold & commodities",
+    Sectores: "Sectors",
+    Cripto: "Crypto",
+    Internacional: "International",
+  },
+};
+
 const frameTabs: Array<{ key: StatisticalFrequency; label: string; description: string }> = [
   { key: "monthly", label: "Mensual", description: "Niveles de referencia, apertura mensual y contexto de rango." },
   { key: "weekly", label: "Semanal", description: "Retornos recientes, drawdown y comportamiento semanal." },
@@ -61,6 +86,7 @@ const frameTabs: Array<{ key: StatisticalFrequency; label: string; description: 
 
 type StatLevelsLabProps = {
   asset: AssetStatRecord;
+  locale?: "es" | "en";
   manifest: StatisticalLevelsManifest;
   seasonality: DailySeasonalityData;
   selection: {
@@ -70,7 +96,7 @@ type StatLevelsLabProps = {
   };
 };
 
-export function StatLevelsLab({ asset, manifest, seasonality, selection }: StatLevelsLabProps) {
+export function StatLevelsLab({ asset, locale: localeProp, manifest, seasonality, selection }: StatLevelsLabProps) {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -79,7 +105,7 @@ export function StatLevelsLab({ asset, manifest, seasonality, selection }: StatL
   const statusCounts = manifest.statusCounts;
   const frequency = selection.frequency;
   const window = selection.window;
-  const locale = pathname.startsWith("/en") ? "en" : "es";
+  const locale = localeProp ?? (pathname.startsWith("/en") ? "en" : "es");
   const labels = locale === "en"
     ? {
         frameEyebrow: "Time frame",
@@ -129,7 +155,7 @@ export function StatLevelsLab({ asset, manifest, seasonality, selection }: StatL
       <section className="grid gap-3 md:grid-cols-3 md:gap-4">
         {Object.entries(statusCounts).map(([status, count]) => (
           <div key={status} className="border border-line bg-panel p-3.5 md:p-4">
-            <p className="text-xs uppercase tracking-[0.14em] text-muted">{statusLabels[status as AssetDataStatus]}</p>
+            <p className="text-xs uppercase tracking-[0.14em] text-muted">{(locale === "en" ? englishStatusLabels : statusLabels)[status as AssetDataStatus]}</p>
             <p className="mt-2 text-xl font-semibold text-ink">{count}</p>
           </div>
         ))}
@@ -180,39 +206,39 @@ export function StatLevelsLab({ asset, manifest, seasonality, selection }: StatL
         </div>
       </section>
 
-      <LabOverviewStrip assets={assets} frequency={frequency} window={window} />
+      <LabOverviewStrip assets={assets} frequency={frequency} window={window} locale={locale} />
 
       <section className="grid gap-5 xl:grid-cols-2">
-        <AssetStatCard key={asset.ticker} asset={asset} frequency={frequency} window={window} />
-        <UnderwaterDrawdownChart asset={asset} frequency={frequency} window={window} />
+        <AssetStatCard key={asset.ticker} asset={asset} frequency={frequency} window={window} locale={locale} />
+        <UnderwaterDrawdownChart asset={asset} frequency={frequency} window={window} locale={locale} />
       </section>
 
       {frequency === "monthly" ? (
         <div className="grid gap-5">
           <AdvancedSeasonalityPanel data={seasonality} frequency="monthly" generatedAt={manifest.generatedAt} locale={locale} ticker={asset.ticker} />
-          <KeyStatisticalLevelsPanel asset={asset} frequency="monthly" />
-          <MovementSummaryTable asset={asset} frequency="monthly" />
-          <OpeningLocationPanel asset={asset} frequency="monthly" />
-          <PeriodExplorerTable asset={asset} frequency="monthly" />
+          <KeyStatisticalLevelsPanel asset={asset} frequency="monthly" locale={locale} />
+          <MovementSummaryTable asset={asset} frequency="monthly" locale={locale} />
+          <OpeningLocationPanel asset={asset} frequency="monthly" locale={locale} />
+          <PeriodExplorerTable asset={asset} frequency="monthly" locale={locale} />
         </div>
       ) : null}
 
       {frequency === "weekly" ? (
         <div className="grid gap-5">
           <AdvancedSeasonalityPanel data={seasonality} frequency="weekly" generatedAt={manifest.generatedAt} locale={locale} ticker={asset.ticker} />
-          <KeyStatisticalLevelsPanel asset={asset} frequency="weekly" />
-          <PeriodExplorerTable asset={asset} frequency="weekly" />
-          <OpeningLocationPanel asset={asset} frequency="weekly" />
-          <MovementSummaryTable asset={asset} frequency="weekly" />
-          <ReturnHeatmap asset={asset} frequency="weekly" />
+          <KeyStatisticalLevelsPanel asset={asset} frequency="weekly" locale={locale} />
+          <PeriodExplorerTable asset={asset} frequency="weekly" locale={locale} />
+          <OpeningLocationPanel asset={asset} frequency="weekly" locale={locale} />
+          <MovementSummaryTable asset={asset} frequency="weekly" locale={locale} />
+          <ReturnHeatmap asset={asset} frequency="weekly" locale={locale} />
         </div>
       ) : null}
 
       {frequency === "daily" ? (
         <div className="grid gap-5">
           <AdvancedSeasonalityPanel data={seasonality} frequency="daily" generatedAt={manifest.generatedAt} locale={locale} ticker={asset.ticker} />
-          <ReturnHeatmap asset={asset} frequency="daily" />
-          <CalendarExtremesPanel asset={asset} frequency="daily" />
+          <ReturnHeatmap asset={asset} frequency="daily" locale={locale} />
+          <CalendarExtremesPanel asset={asset} frequency="daily" locale={locale} />
           <MovementSummaryTable asset={asset} frequency="daily" />
         </div>
       ) : null}
@@ -229,10 +255,21 @@ export function StatLevelsLab({ asset, manifest, seasonality, selection }: StatL
       <section className="border border-line bg-panel p-4 md:p-5">
         <h2 className="text-xl font-semibold text-ink">{labels.howToRead}</h2>
         <div className="mt-5 grid gap-5 text-sm leading-6 text-muted md:grid-cols-2">
-          <p><span className="font-semibold text-ink">Z-score:</span> mide cuántas desviaciones se aleja una métrica de su media histórica dentro de la ventana seleccionada.</p>
-          <p><span className="font-semibold text-ink">Percentil:</span> ubica el dato actual frente a observaciones previas de la misma ventana.</p>
-          <p><span className="font-semibold text-ink">Drawdown:</span> muestra distancia desde el máximo de la ventana analizada.</p>
-          <p><span className="font-semibold text-ink">Distancia a media:</span> compara el precio con medias móviles adaptadas a frecuencia diaria, semanal o mensual.</p>
+          {locale === "en" ? (
+            <>
+              <p><span className="font-semibold text-ink">Z-score:</span> measures how many standard deviations a metric sits away from its historical average in the selected window.</p>
+              <p><span className="font-semibold text-ink">Percentile:</span> places the current reading against prior observations in the same window.</p>
+              <p><span className="font-semibold text-ink">Drawdown:</span> shows distance from the high inside the analyzed window.</p>
+              <p><span className="font-semibold text-ink">Distance to average:</span> compares price with moving averages adapted to daily, weekly or monthly frequency.</p>
+            </>
+          ) : (
+            <>
+              <p><span className="font-semibold text-ink">Z-score:</span> mide cuántas desviaciones se aleja una métrica de su media histórica dentro de la ventana seleccionada.</p>
+              <p><span className="font-semibold text-ink">Percentil:</span> ubica el dato actual frente a observaciones previas de la misma ventana.</p>
+              <p><span className="font-semibold text-ink">Drawdown:</span> muestra distancia desde el máximo de la ventana analizada.</p>
+              <p><span className="font-semibold text-ink">Distancia a media:</span> compara el precio con medias móviles adaptadas a frecuencia diaria, semanal o mensual.</p>
+            </>
+          )}
         </div>
       </section>
     </div>
@@ -339,7 +376,7 @@ function ComparisonSection({
         <div className="max-h-64 space-y-3 overflow-y-auto border border-line bg-panelSoft p-3">
           {groupedAssets.map((group) => (
             <div key={group.category}>
-              <p className="mb-2 text-[11px] font-semibold uppercase tracking-[0.12em] text-muted">{group.category}</p>
+              <p className="mb-2 text-[11px] font-semibold uppercase tracking-[0.12em] text-muted">{localizedCategoryLabels[locale][group.category]}</p>
               <div className="flex flex-wrap gap-1.5">
                 {group.assets.map((asset) => {
                   const active = selectedTickers.includes(asset.ticker);
@@ -369,7 +406,7 @@ function ComparisonSection({
               <div>
                 <p className="font-semibold text-ink">{asset.ticker}</p>
                 <p className="mt-1 text-xs leading-5 text-muted">{asset.name}</p>
-                <p className="mt-1 text-[11px] font-semibold uppercase tracking-[0.1em] text-muted">{asset.category}</p>
+                <p className="mt-1 text-[11px] font-semibold uppercase tracking-[0.1em] text-muted">{localizedCategoryLabels[locale][asset.category]}</p>
               </div>
               {asset.ticker === focusTicker ? <span className="text-xs font-semibold text-petrol">{copy.focus}</span> : null}
             </div>

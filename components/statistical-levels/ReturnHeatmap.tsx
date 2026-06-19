@@ -4,6 +4,7 @@ import type { AssetStatRecord, PeriodExplorerRow, StatisticalFrequency } from "@
 type ReturnHeatmapProps = {
   asset: AssetStatRecord | null;
   frequency: StatisticalFrequency;
+  locale?: "es" | "en";
 };
 
 type HeatmapPoint = {
@@ -12,8 +13,14 @@ type HeatmapPoint = {
   value: number | null;
 };
 
-const monthLabels = ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"];
-const weekdayLabels = ["Lun", "Mar", "Mié", "Jue", "Vie", "Sáb", "Dom"];
+const monthLabels = {
+  es: ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"],
+  en: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+};
+const weekdayLabels = {
+  es: ["Lun", "Mar", "Mié", "Jue", "Vie", "Sáb", "Dom"],
+  en: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
+};
 
 function formatPercent(value: number | null, digits = 1) {
   if (value === null) return "n/d";
@@ -92,15 +99,18 @@ function weekKey(dateString: string) {
   return `${date.getUTCFullYear()}-W${String(week).padStart(2, "0")}`;
 }
 
-function SummaryStrip({ points }: { points: HeatmapPoint[] }) {
+function SummaryStrip({ locale, points }: { locale: "es" | "en"; points: HeatmapPoint[] }) {
   const summary = summarize(points);
+  const copy = locale === "en"
+    ? { periods: "Visible periods", average: "Average return", positive: "% positive", highest: "Highest return", lowest: "Lowest return" }
+    : { periods: "Periodos visibles", average: "Retorno medio", positive: "% positivos", highest: "Mayor retorno", lowest: "Menor retorno" };
   return (
     <div className="mt-4 grid gap-2 text-sm sm:grid-cols-2 xl:grid-cols-5">
-      <SummaryItem label="Periodos visibles" value={String(summary.count)} />
-      <SummaryItem label="Retorno medio" value={formatPercent(summary.avg)} />
-      <SummaryItem label="% positivos" value={formatRate(summary.positiveRate)} />
-      <SummaryItem label="Mayor retorno" value={formatPercent(summary.highest)} />
-      <SummaryItem label="Menor retorno" value={formatPercent(summary.lowest)} />
+      <SummaryItem label={copy.periods} value={String(summary.count)} />
+      <SummaryItem label={copy.average} value={formatPercent(summary.avg)} />
+      <SummaryItem label={copy.positive} value={formatRate(summary.positiveRate)} />
+      <SummaryItem label={copy.highest} value={formatPercent(summary.highest)} />
+      <SummaryItem label={copy.lowest} value={formatPercent(summary.lowest)} />
     </div>
   );
 }
@@ -114,43 +124,45 @@ function SummaryItem({ label, value }: { label: string; value: string }) {
   );
 }
 
-function Legend({ maxAbs }: { maxAbs: number }) {
+function Legend({ locale, maxAbs }: { locale: "es" | "en"; maxAbs: number }) {
+  const labels = locale === "en" ? ["Negative", "Neutral", "Positive"] : ["Negativo", "Neutro", "Positivo"];
   return (
     <div className="mt-4 flex flex-wrap items-center gap-3 text-xs text-muted">
-      <span>Negativo</span>
+      <span>{labels[0]}</span>
       <div className="flex items-center gap-1">
         {[-1, -0.55, -0.12, 0, 0.12, 0.55, 1].map((value) => (
           <span key={value} className="h-3 w-7 border border-white" style={{ backgroundColor: color(value * maxAbs, maxAbs) }} />
         ))}
       </div>
-      <span>Neutro</span>
-      <span>Positivo</span>
+      <span>{labels[1]}</span>
+      <span>{labels[2]}</span>
     </div>
   );
 }
 
-function EmptyState() {
+function EmptyState({ locale }: { locale: "es" | "en" }) {
   return (
     <div className="mt-5 border border-line bg-panelSoft p-4 text-sm leading-6 text-muted">
-      Historial insuficiente para construir el mapa de retornos en esta frecuencia.
+      {locale === "en" ? "Not enough history to build the return map for this frequency." : "Historial insuficiente para construir el mapa de retornos en esta frecuencia."}
     </div>
   );
 }
 
-function MonthlyHeatmap({ points, maxAbs }: { points: HeatmapPoint[]; maxAbs: number }) {
-  if (points.length < 12) return <EmptyState />;
+function MonthlyHeatmap({ locale, points, maxAbs }: { locale: "es" | "en"; points: HeatmapPoint[]; maxAbs: number }) {
+  if (points.length < 12) return <EmptyState locale={locale} />;
   const byMonth = new Map(points.map((point) => [point.label.slice(0, 7), point]));
   const years = Array.from(new Set(points.map((point) => point.label.slice(0, 4)))).sort().reverse();
+  const labels = monthLabels[locale];
 
   return (
     <div className="mt-5 max-w-full overflow-x-auto [contain:paint]">
       <div className="grid min-w-[760px] gap-1" style={{ gridTemplateColumns: "4.5rem repeat(12, minmax(3.2rem, 1fr))" }}>
         <div />
-        {monthLabels.map((month) => <div key={month} className="pb-1 text-center text-xs font-semibold text-muted">{month}</div>)}
+        {labels.map((month) => <div key={month} className="pb-1 text-center text-xs font-semibold text-muted">{month}</div>)}
         {years.map((year) => (
           <div key={year} className="contents">
             <div className="py-2 text-sm font-semibold text-ink">{year}</div>
-            {monthLabels.map((_, monthIndex) => {
+            {labels.map((_, monthIndex) => {
               const key = `${year}-${String(monthIndex + 1).padStart(2, "0")}`;
               const point = byMonth.get(key);
               return <HeatmapCell key={key} point={point} maxAbs={maxAbs} className="min-h-11" showValue />;
@@ -162,13 +174,13 @@ function MonthlyHeatmap({ points, maxAbs }: { points: HeatmapPoint[]; maxAbs: nu
   );
 }
 
-function WeeklyHeatmap({ points, maxAbs }: { points: HeatmapPoint[]; maxAbs: number }) {
-  if (points.length < 13) return <EmptyState />;
+function WeeklyHeatmap({ locale, points, maxAbs }: { locale: "es" | "en"; points: HeatmapPoint[]; maxAbs: number }) {
+  if (points.length < 13) return <EmptyState locale={locale} />;
   const visible = points.slice(-52);
   const blocks: HeatmapPoint[][] = [];
   for (let index = 0; index < visible.length; index += 13) blocks.push(visible.slice(index, index + 13));
-  const labels = ["Inicio", "+3 semanas", "+6 semanas", "+9 semanas", "Actual"];
-  const blockLabels = ["52-40 semanas atrás", "39-27 semanas atrás", "26-14 semanas atrás", "Últimas 13 semanas"];
+  const labels = locale === "en" ? ["Start", "+3 weeks", "+6 weeks", "+9 weeks", "Current"] : ["Inicio", "+3 semanas", "+6 semanas", "+9 semanas", "Actual"];
+  const blockLabels = locale === "en" ? ["52-40 weeks ago", "39-27 weeks ago", "26-14 weeks ago", "Last 13 weeks"] : ["52-40 semanas atrás", "39-27 semanas atrás", "26-14 semanas atrás", "Últimas 13 semanas"];
 
   return (
     <div className="mt-5 max-w-full overflow-x-auto [contain:paint]">
@@ -193,11 +205,11 @@ function WeeklyHeatmap({ points, maxAbs }: { points: HeatmapPoint[]; maxAbs: num
   );
 }
 
-function DailyHeatmap({ points, maxAbs }: { points: HeatmapPoint[]; maxAbs: number }) {
-  if (points.length < 10) return <EmptyState />;
+function DailyHeatmap({ locale, points, maxAbs }: { locale: "es" | "en"; points: HeatmapPoint[]; maxAbs: number }) {
+  if (points.length < 10) return <EmptyState locale={locale} />;
   const visible = points.slice(-90);
   const hasWeekend = visible.some((point) => weekdayIndex(point.date) > 4);
-  const columns = hasWeekend ? weekdayLabels : weekdayLabels.slice(0, 5);
+  const columns = hasWeekend ? weekdayLabels[locale] : weekdayLabels[locale].slice(0, 5);
   const weeks = new Map<string, Array<HeatmapPoint | null>>();
   for (const point of visible) {
     const key = weekKey(point.date);
@@ -270,33 +282,57 @@ const titles: Record<StatisticalFrequency, { title: string; subtitle: string; li
   },
 };
 
-export function ReturnHeatmap({ asset, frequency }: ReturnHeatmapProps) {
+export function ReturnHeatmap({ asset, frequency, locale = "es" }: ReturnHeatmapProps) {
   const rows = asset?.frequencies[frequency].recentPeriods ?? [];
   const config = titles[frequency];
   const points = toPoints(rows).slice(-config.limit);
   const maxAbs = maxAbsForScale(points);
+  const copy = locale === "en"
+    ? {
+        eyebrow: "Technical context",
+        frequency: "Frequency",
+        visiblePeriods: "Visible periods",
+        averageReturn: "Average return",
+        positive: "% positive",
+        footer: "Diverging scale centered on 0; intensity is capped at the 95th percentile of visible magnitudes to reduce the weight of outliers.",
+      }
+    : {
+        eyebrow: "Contexto técnico",
+        frequency: "Frecuencia",
+        visiblePeriods: "Periodos visibles",
+        averageReturn: "Retorno medio",
+        positive: "% positivos",
+        footer: "Escala divergente centrada en 0; la intensidad se limita con el percentil 95 de magnitudes visibles para reducir el peso de valores extremos.",
+      };
+  const localizedTitles = locale === "en"
+    ? {
+        monthly: { title: "Recent return history", subtitle: "Shows the latest visible months in time groups to review recent continuity and dispersion.", unit: "Monthly" },
+        weekly: { title: "Recent return history", subtitle: "Shows the latest visible periods in time groups to review recent continuity and dispersion.", unit: "Weekly" },
+        daily: { title: "Recent return history", subtitle: "Shows the latest visible days in time groups to review recent continuity and dispersion.", unit: "Daily" },
+      }
+    : titles;
 
   return (
     <ExpandableInsightCard
-      eyebrow="Contexto técnico"
-      title={config.title}
-      reading={config.subtitle}
+      eyebrow={copy.eyebrow}
+      title={localizedTitles[frequency].title}
+      reading={localizedTitles[frequency].subtitle}
       status={asset?.ticker ?? "n/d"}
       defaultOpen={false}
       metrics={[
-        { label: "Frecuencia", value: config.unit },
-        { label: "Periodos visibles", value: String(points.length) },
-        { label: "Retorno medio", value: formatPercent(summarize(points).avg) },
-        { label: "% positivos", value: formatRate(summarize(points).positiveRate) },
+        { label: copy.frequency, value: localizedTitles[frequency].unit },
+        { label: copy.visiblePeriods, value: String(points.length) },
+        { label: copy.averageReturn, value: formatPercent(summarize(points).avg) },
+        { label: copy.positive, value: formatRate(summarize(points).positiveRate) },
       ]}
     >
-      {points.length ? <SummaryStrip points={points} /> : null}
-      <Legend maxAbs={maxAbs} />
-      {frequency === "monthly" ? <MonthlyHeatmap points={points} maxAbs={maxAbs} /> : null}
-      {frequency === "weekly" ? <WeeklyHeatmap points={points} maxAbs={maxAbs} /> : null}
-      {frequency === "daily" ? <DailyHeatmap points={points} maxAbs={maxAbs} /> : null}
+      {points.length ? <SummaryStrip locale={locale} points={points} /> : null}
+      <Legend locale={locale} maxAbs={maxAbs} />
+      {frequency === "monthly" ? <MonthlyHeatmap locale={locale} points={points} maxAbs={maxAbs} /> : null}
+      {frequency === "weekly" ? <WeeklyHeatmap locale={locale} points={points} maxAbs={maxAbs} /> : null}
+      {frequency === "daily" ? <DailyHeatmap locale={locale} points={points} maxAbs={maxAbs} /> : null}
       <p className="mt-3 text-xs leading-5 text-muted">
-        Escala divergente centrada en 0; la intensidad se limita con el percentil 95 de magnitudes visibles para reducir el peso de valores extremos.
+        {copy.footer}
       </p>
     </ExpandableInsightCard>
   );

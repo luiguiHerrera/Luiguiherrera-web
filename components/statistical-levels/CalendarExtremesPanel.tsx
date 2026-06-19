@@ -3,6 +3,7 @@ import type { AssetStatRecord, StatisticalFrequency } from "@/lib/statistical-le
 type CalendarExtremesPanelProps = {
   asset: AssetStatRecord | null;
   frequency: StatisticalFrequency;
+  locale?: "es" | "en";
 };
 
 function formatPercent(value: number | null) {
@@ -15,14 +16,14 @@ function formatPp(value: number | null) {
   return `${value > 0 ? "+" : ""}${(value * 100).toFixed(1)} pp`;
 }
 
-function reading(balance: number | null) {
-  if (balance === null) return "Historial insuficiente";
-  if (balance > 0.05) return "Mayor presencia de máximos";
-  if (balance < -0.05) return "Mayor presencia de mínimos";
-  return "Balance mixto";
+function reading(balance: number | null, locale: "es" | "en") {
+  if (balance === null) return locale === "en" ? "Not enough history" : "Historial insuficiente";
+  if (balance > 0.05) return locale === "en" ? "More frequent highs" : "Mayor presencia de máximos";
+  if (balance < -0.05) return locale === "en" ? "More frequent lows" : "Mayor presencia de mínimos";
+  return locale === "en" ? "Mixed balance" : "Balance mixto";
 }
 
-function formatCalendarLabel(label: string, frequency: StatisticalFrequency) {
+function formatCalendarLabel(label: string, frequency: StatisticalFrequency, locale: "es" | "en") {
   if (frequency !== "weekly") return label;
 
   const weekRanges: Record<string, string> = {
@@ -33,16 +34,16 @@ function formatCalendarLabel(label: string, frequency: StatisticalFrequency) {
     "Semana 5": "29-31",
   };
 
-  return weekRanges[label] ?? label;
+  return weekRanges[label] ?? (locale === "en" ? label.replace("Semana", "Week") : label);
 }
 
-function calendarHeader(frequency: StatisticalFrequency) {
-  if (frequency === "weekly") return "Días del mes";
-  if (frequency === "monthly") return "Mes";
-  return "Día";
+function calendarHeader(frequency: StatisticalFrequency, locale: "es" | "en") {
+  if (frequency === "weekly") return locale === "en" ? "Days of month" : "Días del mes";
+  if (frequency === "monthly") return locale === "en" ? "Month" : "Mes";
+  return locale === "en" ? "Day" : "Día";
 }
 
-export function CalendarExtremesPanel({ asset, frequency }: CalendarExtremesPanelProps) {
+export function CalendarExtremesPanel({ asset, frequency, locale = "es" }: CalendarExtremesPanelProps) {
   const data = asset?.frequencies[frequency];
   const rows =
     data?.calendarExtremes.map((item) => {
@@ -57,10 +58,12 @@ export function CalendarExtremesPanel({ asset, frequency }: CalendarExtremesPane
       <div className="flex flex-col gap-2 lg:flex-row lg:items-end lg:justify-between">
         <div>
           <p className="text-xs font-semibold uppercase tracking-[0.16em] text-brass">Calendario</p>
-          <h2 className="mt-1 text-xl font-semibold text-ink">Extremos por calendario</h2>
+          <h2 className="mt-1 text-xl font-semibold text-ink">{locale === "en" ? "Calendar extremes" : "Extremos por calendario"}</h2>
         </div>
         <p className="max-w-xl text-sm leading-6 text-muted">
-          Frecuencia histórica de nuevos máximos y nuevos mínimos dentro de la ventana seleccionada.
+          {locale === "en"
+            ? "Historical frequency of new highs and new lows inside the selected window."
+            : "Frecuencia histórica de nuevos máximos y nuevos mínimos dentro de la ventana seleccionada."}
         </p>
       </div>
       <div className="mt-5 grid gap-5 lg:grid-cols-[1fr_17rem]">
@@ -68,17 +71,17 @@ export function CalendarExtremesPanel({ asset, frequency }: CalendarExtremesPane
           <table className="w-full min-w-[780px] border-collapse text-left text-[13px]">
             <thead className="text-muted">
               <tr className="border-b border-line">
-                <th className="py-2.5 pr-4 font-medium">{calendarHeader(frequency)}</th>
-                <th className="py-2.5 pr-4 font-medium">% nuevos máximos</th>
-                <th className="py-2.5 pr-4 font-medium">% nuevos mínimos</th>
+                <th className="py-2.5 pr-4 font-medium">{calendarHeader(frequency, locale)}</th>
+                <th className="py-2.5 pr-4 font-medium">{locale === "en" ? "% new highs" : "% nuevos máximos"}</th>
+                <th className="py-2.5 pr-4 font-medium">{locale === "en" ? "% new lows" : "% nuevos mínimos"}</th>
                 <th className="py-2.5 pr-4 font-medium">Balance</th>
-                <th className="py-2.5 pr-4 font-medium">Lectura</th>
+                <th className="py-2.5 pr-4 font-medium">{locale === "en" ? "Reading" : "Lectura"}</th>
               </tr>
             </thead>
             <tbody>
               {rows.map((item) => (
                 <tr key={item.label} className="border-b border-line/70">
-                  <td className="py-3 pr-4 font-semibold text-ink">{formatCalendarLabel(item.label, frequency)}</td>
+                  <td className="py-3 pr-4 font-semibold text-ink">{formatCalendarLabel(item.label, frequency, locale)}</td>
                   <td className="py-3 pr-4">
                     <CompactBar value={item.highRate} color="#6f8f7b" />
                   </td>
@@ -86,7 +89,7 @@ export function CalendarExtremesPanel({ asset, frequency }: CalendarExtremesPane
                     <CompactBar value={item.lowRate} color="#a86464" />
                   </td>
                   <td className="py-3 pr-4 font-semibold text-ink">{formatPp(item.balance)}</td>
-                  <td className="py-3 pr-4 text-muted">{reading(item.balance)}</td>
+                  <td className="py-3 pr-4 text-muted">{reading(item.balance, locale)}</td>
                 </tr>
               ))}
             </tbody>
@@ -95,10 +98,10 @@ export function CalendarExtremesPanel({ asset, frequency }: CalendarExtremesPane
         <div className="border border-line bg-panelSoft p-4">
           <p className="text-sm font-semibold text-ink">New high / new low</p>
           <div className="mt-4 space-y-3 text-sm text-muted">
-            <p>Ventana: {data?.newHighLow.lookback ?? "n/d"} periodos</p>
-            <p>Nuevos máximos: <span className="font-semibold text-ink">{data?.newHighLow.newHighCount ?? "n/d"}</span> · {formatPercent(data?.newHighLow.newHighRate ?? null)}</p>
-            <p>Nuevos mínimos: <span className="font-semibold text-ink">{data?.newHighLow.newLowCount ?? "n/d"}</span> · {formatPercent(data?.newHighLow.newLowRate ?? null)}</p>
-            <p className="text-xs leading-5">Conteo sobre ventanas históricas con datos disponibles para {asset?.ticker ?? "el activo seleccionado"}.</p>
+            <p>{locale === "en" ? "Window" : "Ventana"}: {data?.newHighLow.lookback ?? "n/d"} {locale === "en" ? "periods" : "periodos"}</p>
+            <p>{locale === "en" ? "New highs" : "Nuevos máximos"}: <span className="font-semibold text-ink">{data?.newHighLow.newHighCount ?? "n/d"}</span> · {formatPercent(data?.newHighLow.newHighRate ?? null)}</p>
+            <p>{locale === "en" ? "New lows" : "Nuevos mínimos"}: <span className="font-semibold text-ink">{data?.newHighLow.newLowCount ?? "n/d"}</span> · {formatPercent(data?.newHighLow.newLowRate ?? null)}</p>
+            <p className="text-xs leading-5">{locale === "en" ? `Count across historical windows with available data for ${asset?.ticker ?? "the selected asset"}.` : `Conteo sobre ventanas históricas con datos disponibles para ${asset?.ticker ?? "el activo seleccionado"}.`}</p>
           </div>
         </div>
       </div>

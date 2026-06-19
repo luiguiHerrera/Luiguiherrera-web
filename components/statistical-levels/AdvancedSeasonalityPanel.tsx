@@ -94,7 +94,9 @@ function colorFor(value: number | null, metric: SeasonalityMetric, scale: number
 
 function cellTitle(label: string, cell: SeasonalityCell | undefined, locale: "es" | "en") {
   if (!cell) return locale === "en" ? `${label} · no observations` : `${label} · sin muestra`;
-  return `${label} · promedio ${formatPercent(cell.averageReturn)} · mediana ${formatPercent(cell.medianReturn)} · win rate ${formatMetric(cell.winRate, "winRate")} · N ${cell.sampleSize}`;
+  const average = locale === "en" ? "average" : "promedio";
+  const median = locale === "en" ? "median" : "mediana";
+  return `${label} · ${average} ${formatPercent(cell.averageReturn)} · ${median} ${formatPercent(cell.medianReturn)} · win rate ${formatMetric(cell.winRate, "winRate")} · N ${cell.sampleSize}`;
 }
 
 function cellKey(cell: SeasonalityCell) {
@@ -361,13 +363,14 @@ function DailyView({
   monthNames,
 }: {
   cells: CalendarDaySeasonalityCell[];
-  copy: { day: string; lowSample: string; topStrong: string; topWeak: string };
+  copy: { day: string; emptyGeneral: string; lowSample: string; topStrong: string; topWeak: string };
   locale: "es" | "en";
   metric: SeasonalityMetric;
   month: number;
   monthNames: string[];
 }) {
   const byKey = new Map(cells.map((cell) => [cellKey(cell), cell]));
+  const short = locale === "en" ? englishShortMonths : shortMonths;
   const monthCells = cells.filter((cell) => cell.month === month && cell.sampleSize > 0);
   const strongest = [...monthCells].sort((a, b) => (b.averageReturn ?? -Infinity) - (a.averageReturn ?? -Infinity)).slice(0, 5);
   const weakest = [...monthCells].sort((a, b) => (a.averageReturn ?? Infinity) - (b.averageReturn ?? Infinity)).slice(0, 5);
@@ -378,7 +381,7 @@ function DailyView({
         <div className="grid min-w-[1120px] gap-1" style={{ gridTemplateColumns: "3.25rem repeat(31, minmax(2rem, 1fr))" }}>
           <div />
           {Array.from({ length: 31 }).map((_, index) => <div key={index + 1} className="pb-1 text-center text-xs font-semibold text-muted">{index + 1}</div>)}
-          {shortMonths.map((monthLabel, monthIndex) => {
+          {short.map((monthLabel, monthIndex) => {
             const rowMonth = monthIndex + 1;
             return (
               <div key={monthLabel} className="contents">
@@ -411,7 +414,7 @@ function DailyView({
   );
 }
 
-function DayList({ cells, copy, title }: { cells: CalendarDaySeasonalityCell[]; copy: { day: string; lowSample: string }; title: string }) {
+function DayList({ cells, copy, title }: { cells: CalendarDaySeasonalityCell[]; copy: { day: string; emptyGeneral: string; lowSample: string }; title: string }) {
   return (
     <div className="border border-line bg-panelSoft p-4">
       <h3 className="text-sm font-semibold text-ink">{title}</h3>
@@ -421,7 +424,7 @@ function DayList({ cells, copy, title }: { cells: CalendarDaySeasonalityCell[]; 
             <span className="font-semibold text-ink">{copy.day} {cell.day}</span>
             <span className="text-right text-muted">{formatPercent(cell.averageReturn)} · N {cell.sampleSize}{cell.sampleSize < 5 ? ` · ${copy.lowSample}` : ""}</span>
           </div>
-        )) : <p className="text-sm leading-6 text-muted">Historial insuficiente para este mes.</p>}
+        )) : <p className="text-sm leading-6 text-muted">{copy.emptyGeneral}</p>}
       </div>
     </div>
   );

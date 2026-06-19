@@ -7,6 +7,7 @@ import type { AssetStatRecord, PeriodExplorerRow, StatisticalFrequency } from "@
 type PeriodExplorerTableProps = {
   asset: AssetStatRecord | null;
   frequency: StatisticalFrequency;
+  locale?: "es" | "en";
 };
 
 const filters = [
@@ -36,12 +37,23 @@ const frequencyLabels: Record<StatisticalFrequency, string> = {
   weekly: "Semanal",
   monthly: "Mensual",
 };
+const englishFrequencyLabels: Record<StatisticalFrequency, string> = {
+  daily: "Daily",
+  weekly: "Weekly",
+  monthly: "Monthly",
+};
 
 const headerHelp: Record<string, string> = {
   Change: "Cambio del periodo analizado.",
   OpenGap: "Diferencia entre la apertura del periodo y el cierre previo.",
   Range: "Amplitud entre máximo y mínimo del periodo.",
   CloseLocation: "Posición del cierre dentro del rango. 0 cerca del mínimo y 1 cerca del máximo.",
+};
+const englishHeaderHelp: Record<string, string> = {
+  Change: "Change over the analyzed period.",
+  OpenGap: "Difference between the period open and the prior close.",
+  Range: "Range between the period high and low.",
+  CloseLocation: "Close position within the period range. 0 is near the low and 1 is near the high.",
 };
 
 function matchesFilter(row: PeriodExplorerRow, filter: FilterKey) {
@@ -54,9 +66,33 @@ function matchesFilter(row: PeriodExplorerRow, filter: FilterKey) {
   return row.openingRangeCategory === "Below previous range";
 }
 
-export function PeriodExplorerTable({ asset, frequency }: PeriodExplorerTableProps) {
+function classificationLabel(value: string, locale: "es" | "en") {
+  if (locale === "es") return value;
+  const labels: Record<string, string> = {
+    "Extensión negativa extrema": "Extreme negative extension",
+    "Extensión negativa": "Negative extension",
+    "Zona media": "Middle zone",
+    "Extensión positiva": "Positive extension",
+    "Extensión positiva extrema": "Extreme positive extension",
+  };
+  return labels[value] ?? value;
+}
+
+export function PeriodExplorerTable({ asset, frequency, locale = "es" }: PeriodExplorerTableProps) {
   const [filter, setFilter] = useState<FilterKey>("all");
   const [open, setOpen] = useState(false);
+  const localizedFilters = locale === "en"
+    ? [
+        ["all", "All"],
+        ["positive", "Positive"],
+        ["negative", "Negative"],
+        ["positive_extreme", "Extreme positive extension"],
+        ["negative_extreme", "Extreme negative extension"],
+        ["above_previous_range", "Above previous range"],
+        ["below_previous_range", "Below previous range"],
+      ] as const
+    : filters;
+  const localizedHeaderHelp = locale === "en" ? englishHeaderHelp : headerHelp;
   const rows = asset?.frequencies[frequency].recentPeriods ?? [];
   const filteredRows = useMemo(() => rows.filter((row) => matchesFilter(row, filter)).slice(0, 36), [filter, rows]);
   const summary = useMemo(() => {
@@ -78,30 +114,30 @@ export function PeriodExplorerTable({ asset, frequency }: PeriodExplorerTablePro
     <section className="border border-line bg-panel p-4 md:p-5">
       <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
         <div>
-          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-brass">Explorador de periodos</p>
-          <h2 className="mt-1 text-xl font-semibold text-ink">{asset ? asset.ticker : "Sin activo seleccionado"}</h2>
+          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-brass">{locale === "en" ? "Period explorer" : "Explorador de periodos"}</p>
+          <h2 className="mt-1 text-xl font-semibold text-ink">{asset ? asset.ticker : locale === "en" ? "No asset selected" : "Sin activo seleccionado"}</h2>
         </div>
         <button
           type="button"
           onClick={() => setOpen((value) => !value)}
           className="min-h-9 w-fit border border-line px-4 text-sm font-semibold text-ink transition hover:border-ink focus:outline-none focus:ring-2 focus:ring-ink/20"
         >
-          {open ? "Ocultar explorador" : "Ver explorador de periodos"}
+          {open ? (locale === "en" ? "Hide explorer" : "Ocultar explorador") : (locale === "en" ? "Show period explorer" : "Ver explorador de periodos")}
         </button>
       </div>
 
       <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
-        <SummaryItem label="Activo foco" value={asset?.ticker ?? "n/d"} />
-        <SummaryItem label="Frecuencia" value={frequencyLabels[frequency]} />
-        <SummaryItem label="Periodos" value={String(rows.length)} />
-        <SummaryItem label="Positivos / negativos" value={`${formatPercent(summary.positiveRate)} / ${formatPercent(summary.negativeRate)}`} />
-        <SummaryItem label="Extremos" value={`${summary.positiveExtreme} altos · ${summary.negativeExtreme} bajos`} />
+        <SummaryItem label={locale === "en" ? "Focus asset" : "Activo foco"} value={asset?.ticker ?? "n/d"} />
+        <SummaryItem label={locale === "en" ? "Frequency" : "Frecuencia"} value={(locale === "en" ? englishFrequencyLabels : frequencyLabels)[frequency]} />
+        <SummaryItem label={locale === "en" ? "Periods" : "Periodos"} value={String(rows.length)} />
+        <SummaryItem label={locale === "en" ? "Positive / negative" : "Positivos / negativos"} value={`${formatPercent(summary.positiveRate)} / ${formatPercent(summary.negativeRate)}`} />
+        <SummaryItem label={locale === "en" ? "Extremes" : "Extremos"} value={locale === "en" ? `${summary.positiveExtreme} high · ${summary.negativeExtreme} low` : `${summary.positiveExtreme} altos · ${summary.negativeExtreme} bajos`} />
       </div>
 
       {open ? (
         <>
           <div className="mt-5 flex flex-wrap border border-line bg-panelSoft p-1">
-            {filters.map(([key, label]) => (
+            {localizedFilters.map(([key, label]) => (
               <button
                 key={key}
                 type="button"
@@ -116,7 +152,7 @@ export function PeriodExplorerTable({ asset, frequency }: PeriodExplorerTablePro
             <table className="w-full min-w-[980px] border-collapse text-left text-[13px]">
               <thead className="text-muted">
                 <tr className="border-b border-line">
-                  <th className="py-2.5 pr-4 font-medium">Periodo</th>
+                  <th className="py-2.5 pr-4 font-medium">{locale === "en" ? "Period" : "Periodo"}</th>
                   <th className="py-2.5 pr-4 font-medium">Open</th>
                   <th className="py-2.5 pr-4 font-medium">High</th>
                   <th className="py-2.5 pr-4 font-medium">Low</th>
@@ -124,10 +160,10 @@ export function PeriodExplorerTable({ asset, frequency }: PeriodExplorerTablePro
                   {["Change", "OpenGap", "Range", "CloseLocation"].map((label) => (
                     <th key={label} className="py-2.5 pr-4 font-medium">
                       {label}
-                      <MetricHelpTooltip label={label} text={headerHelp[label]} />
+                      <MetricHelpTooltip label={label} text={localizedHeaderHelp[label]} />
                     </th>
                   ))}
-                  <th className="py-2.5 pr-4 font-medium">Clasificación</th>
+                  <th className="py-2.5 pr-4 font-medium">{locale === "en" ? "Classification" : "Clasificación"}</th>
                 </tr>
               </thead>
               <tbody>
@@ -142,7 +178,7 @@ export function PeriodExplorerTable({ asset, frequency }: PeriodExplorerTablePro
                     <td className="py-3 pr-4 text-muted">{formatPercent(row.openGap)}</td>
                     <td className="py-3 pr-4 text-muted">{formatPercent(row.range)}</td>
                     <td className="py-3 pr-4 text-muted">{row.closeLocation === null ? "n/d" : row.closeLocation.toFixed(2)}</td>
-                    <td className="py-3 pr-4 text-muted">{row.classification}</td>
+                    <td className="py-3 pr-4 text-muted">{classificationLabel(row.classification, locale)}</td>
                   </tr>
                 ))}
               </tbody>

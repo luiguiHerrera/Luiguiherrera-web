@@ -6,6 +6,7 @@ import type { AssetStatRecord, OpeningCategoryStats, StatisticalFrequency } from
 type OpeningLocationPanelProps = {
   asset: AssetStatRecord | null;
   frequency: StatisticalFrequency;
+  locale?: "es" | "en";
 };
 
 function formatPercent(value: number | null) {
@@ -13,20 +14,39 @@ function formatPercent(value: number | null) {
   return `${(value * 100).toFixed(1)}%`;
 }
 
-function CategoryBars({ rows }: { rows: OpeningCategoryStats[] }) {
+function categoryLabel(value: string, locale: "es" | "en") {
+  if (locale === "es") return value;
+  const labels: Record<string, string> = {
+    "Cierre cerca del mínimo": "Close near the low",
+    "Cierre en zona media": "Close in the middle zone",
+    "Cierre cerca del máximo": "Close near the high",
+    "Above previous range": "Above previous range",
+    "Inside previous range": "Inside previous range",
+    "Below previous range": "Below previous range",
+    "Above previous close": "Above prior close",
+    "Near previous close": "Near prior close",
+    "Below previous close": "Below prior close",
+  };
+  return labels[value] ?? value;
+}
+
+function CategoryBars({ locale, rows }: { locale: "es" | "en"; rows: OpeningCategoryStats[] }) {
+  const copy = locale === "en"
+    ? { behavior: "Historical forward behavior", vol: "Average vol.", positive: "Positive periods" }
+    : { behavior: "Comportamiento posterior histórico", vol: "Vol. media", positive: "Positivos" };
   return (
     <div className="space-y-3">
       {rows.map((row) => (
         <div key={row.category}>
           <div className="flex items-center justify-between gap-3 text-sm">
-            <span className="font-medium text-ink">{row.category}</span>
+            <span className="font-medium text-ink">{categoryLabel(row.category, locale)}</span>
             <span className="text-muted">{formatPercent(row.proportion)}</span>
           </div>
           <div className="mt-2 h-2 bg-panelSoft">
             <div className="h-2 bg-[#7f9386]" style={{ width: `${Math.max((row.proportion ?? 0) * 100, row.count ? 2 : 0)}%` }} />
           </div>
           <p className="mt-1 text-xs leading-5 text-muted">
-            Comportamiento posterior histórico: {formatPercent(row.averageForwardReturn)} · Vol. media {formatPercent(row.averageVolatility)} · Positivos {formatPercent(row.positiveRate)}
+            {copy.behavior}: {formatPercent(row.averageForwardReturn)} · {copy.vol} {formatPercent(row.averageVolatility)} · {copy.positive} {formatPercent(row.positiveRate)}
           </p>
         </div>
       ))}
@@ -43,7 +63,7 @@ function cleanAverage(values: Array<number | null>) {
   return average(values.filter((value): value is number => value !== null && Number.isFinite(value)));
 }
 
-export function OpeningLocationPanel({ asset, frequency }: OpeningLocationPanelProps) {
+export function OpeningLocationPanel({ asset, frequency, locale = "es" }: OpeningLocationPanelProps) {
   const [mode, setMode] = useState<"opening" | "close">("opening");
   const location = asset?.frequencies[frequency].openingLocation;
   const periods = asset?.frequencies[frequency].recentPeriods ?? [];
@@ -54,10 +74,10 @@ export function OpeningLocationPanel({ asset, frequency }: OpeningLocationPanelP
   const closeAboveOpenRate = openToCloseReturns.length ? openToCloseReturns.filter((value) => value > 0).length / openToCloseReturns.length : null;
   const openToCloseReading =
     openToCloseAverage === null
-      ? "Historial reciente insuficiente para resumir sesión vs apertura."
+      ? locale === "en" ? "Recent history is not enough to summarize session vs open." : "Historial reciente insuficiente para resumir sesión vs apertura."
       : openToCloseAverage >= 0
-        ? "En la muestra reciente, el cierre tiende a quedar por encima de la apertura."
-        : "En la muestra reciente, el cierre tiende a quedar por debajo de la apertura.";
+        ? locale === "en" ? "In the recent sample, closes tend to finish above the open." : "En la muestra reciente, el cierre tiende a quedar por encima de la apertura."
+        : locale === "en" ? "In the recent sample, closes tend to finish below the open." : "En la muestra reciente, el cierre tiende a quedar por debajo de la apertura.";
   const closeRows: OpeningCategoryStats[] = [
     { category: "Cierre cerca del mínimo", count: 0, proportion: 0, averageForwardReturn: null, averageVolatility: null, positiveRate: null },
     { category: "Cierre en zona media", count: 0, proportion: 0, averageForwardReturn: null, averageVolatility: null, positiveRate: null },
@@ -92,11 +112,11 @@ export function OpeningLocationPanel({ asset, frequency }: OpeningLocationPanelP
       <div className="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
         <div>
           <p className="text-xs font-semibold uppercase tracking-[0.18em] text-brass">Opening / Close location</p>
-          <h2 className="mt-2 text-xl font-semibold text-ink">{mode === "opening" ? "Ubicación de apertura" : "Ubicación de cierre"}</h2>
+          <h2 className="mt-2 text-xl font-semibold text-ink">{mode === "opening" ? (locale === "en" ? "Opening location" : "Ubicación de apertura") : (locale === "en" ? "Close location" : "Ubicación de cierre")}</h2>
           <p className="mt-2 max-w-3xl text-sm leading-6 text-muted">
             {mode === "opening"
-              ? "Opening location ubica la apertura actual frente al rango y al cierre previos."
-              : "Close location ubica cada cierre dentro del máximo-mínimo de su propio periodo. Para comparar cierre contra apertura, revisa el resumen de sesión."}
+              ? locale === "en" ? "Opening location places the current open against the prior range and prior close." : "Opening location ubica la apertura actual frente al rango y al cierre previos."
+              : locale === "en" ? "Close location places each close inside its own period high-low range. Use the session summary for close versus open." : "Close location ubica cada cierre dentro del máximo-mínimo de su propio periodo. Para comparar cierre contra apertura, revisa el resumen de sesión."}
           </p>
         </div>
         <div className="flex w-full border border-line bg-panelSoft p-1 sm:w-fit">
@@ -117,9 +137,9 @@ export function OpeningLocationPanel({ asset, frequency }: OpeningLocationPanelP
       </div>
       <div className="mt-5 grid gap-3 md:grid-cols-[1fr_1fr_2fr]">
         {[
-          ["Sesión vs apertura", "Retorno medio cierre/apertura", formatPercent(openToCloseAverage)],
-          ["Cierres sobre apertura", "Proporción de periodos", formatPercent(closeAboveOpenRate)],
-          ["Lectura breve", "Open to Close", openToCloseReading],
+          [locale === "en" ? "Session vs open" : "Sesión vs apertura", locale === "en" ? "Average close/open return" : "Retorno medio cierre/apertura", formatPercent(openToCloseAverage)],
+          [locale === "en" ? "Closes above open" : "Cierres sobre apertura", locale === "en" ? "Share of periods" : "Proporción de periodos", formatPercent(closeAboveOpenRate)],
+          [locale === "en" ? "Brief reading" : "Lectura breve", "Open to Close", openToCloseReading],
         ].map(([label, detail, value]) => (
           <div key={label} className="border border-line bg-panelSoft p-3">
             <p className="text-[11px] uppercase tracking-[0.11em] text-muted">{label}</p>
@@ -132,9 +152,9 @@ export function OpeningLocationPanel({ asset, frequency }: OpeningLocationPanelP
         <>
           <div className="mt-5 grid gap-3 md:grid-cols-3">
             {[
-              ["Mayor frecuencia", mostFrequentCloseLocation?.category ?? "n/d", formatPercent(mostFrequentCloseLocation?.proportion ?? null)],
-              ["Mayor cambio histórico", strongestCloseLocation?.category ?? "n/d", formatPercent(strongestCloseLocation?.averageForwardReturn ?? null)],
-              ["Menor cambio histórico", weakestCloseLocation?.category ?? "n/d", formatPercent(weakestCloseLocation?.averageForwardReturn ?? null)],
+              [locale === "en" ? "Highest frequency" : "Mayor frecuencia", categoryLabel(mostFrequentCloseLocation?.category ?? "n/d", locale), formatPercent(mostFrequentCloseLocation?.proportion ?? null)],
+              [locale === "en" ? "Strongest historical change" : "Mayor cambio histórico", categoryLabel(strongestCloseLocation?.category ?? "n/d", locale), formatPercent(strongestCloseLocation?.averageForwardReturn ?? null)],
+              [locale === "en" ? "Weakest historical change" : "Menor cambio histórico", categoryLabel(weakestCloseLocation?.category ?? "n/d", locale), formatPercent(weakestCloseLocation?.averageForwardReturn ?? null)],
             ].map(([label, value, detail]) => (
               <div key={label} className="border border-line bg-panelSoft p-3">
                 <p className="text-[11px] uppercase tracking-[0.11em] text-muted">{label}</p>
@@ -146,13 +166,13 @@ export function OpeningLocationPanel({ asset, frequency }: OpeningLocationPanelP
           <div className="mt-5 border border-line bg-panelSoft p-4">
             {periods.length ? (
               <>
-                <h3 className="text-sm font-semibold text-ink">Distribución del cierre dentro del rango</h3>
+                <h3 className="text-sm font-semibold text-ink">{locale === "en" ? "Close distribution inside the range" : "Distribución del cierre dentro del rango"}</h3>
                 <div className="mt-4">
-                  <CategoryBars rows={closeRows} />
+                  <CategoryBars locale={locale} rows={closeRows} />
                 </div>
               </>
             ) : (
-              <p className="text-sm leading-6 text-muted">Close location pendiente de datos suficientes.</p>
+              <p className="text-sm leading-6 text-muted">{locale === "en" ? "Close location is pending enough data." : "Close location pendiente de datos suficientes."}</p>
             )}
           </div>
         </>
@@ -160,10 +180,10 @@ export function OpeningLocationPanel({ asset, frequency }: OpeningLocationPanelP
         <>
       <div className="mt-5 grid gap-3 md:grid-cols-4">
         {[
-          ["Mayor frecuencia rango", mostFrequentRange?.category ?? "n/d", formatPercent(mostFrequentRange?.proportion ?? null)],
-          ["Mayor frecuencia cierre", mostFrequentClose?.category ?? "n/d", formatPercent(mostFrequentClose?.proportion ?? null)],
-          ["Mayor retorno posterior histórico", highestReturn?.category ?? "n/d", formatPercent(highestReturn?.averageForwardReturn ?? null)],
-          ["Menor retorno posterior histórico", lowestReturn?.category ?? "n/d", formatPercent(lowestReturn?.averageForwardReturn ?? null)],
+          [locale === "en" ? "Most frequent range" : "Mayor frecuencia rango", categoryLabel(mostFrequentRange?.category ?? "n/d", locale), formatPercent(mostFrequentRange?.proportion ?? null)],
+          [locale === "en" ? "Most frequent close" : "Mayor frecuencia cierre", categoryLabel(mostFrequentClose?.category ?? "n/d", locale), formatPercent(mostFrequentClose?.proportion ?? null)],
+          [locale === "en" ? "Strongest historical forward return" : "Mayor retorno posterior histórico", categoryLabel(highestReturn?.category ?? "n/d", locale), formatPercent(highestReturn?.averageForwardReturn ?? null)],
+          [locale === "en" ? "Weakest historical forward return" : "Menor retorno posterior histórico", categoryLabel(lowestReturn?.category ?? "n/d", locale), formatPercent(lowestReturn?.averageForwardReturn ?? null)],
         ].map(([label, value, detail]) => (
           <div key={label} className="border border-line bg-panelSoft p-3">
             <p className="text-[11px] uppercase tracking-[0.11em] text-muted">{label}</p>
@@ -174,15 +194,15 @@ export function OpeningLocationPanel({ asset, frequency }: OpeningLocationPanelP
       </div>
       <div className="mt-5 grid gap-6 lg:grid-cols-2">
         <div>
-          <h3 className="text-sm font-semibold text-ink">Respecto al rango previo</h3>
+          <h3 className="text-sm font-semibold text-ink">{locale === "en" ? "Relative to prior range" : "Respecto al rango previo"}</h3>
           <div className="mt-4">
-            <CategoryBars rows={location?.range ?? []} />
+            <CategoryBars locale={locale} rows={location?.range ?? []} />
           </div>
         </div>
         <div>
-          <h3 className="text-sm font-semibold text-ink">Respecto al cierre previo</h3>
+          <h3 className="text-sm font-semibold text-ink">{locale === "en" ? "Relative to prior close" : "Respecto al cierre previo"}</h3>
           <div className="mt-4">
-            <CategoryBars rows={location?.close ?? []} />
+            <CategoryBars locale={locale} rows={location?.close ?? []} />
           </div>
         </div>
       </div>

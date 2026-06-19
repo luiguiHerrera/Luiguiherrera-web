@@ -12,6 +12,24 @@ type AssetSelectorProps = {
 };
 
 const categoryOrder: AssetCategory[] = ["Índices / ETFs", "Bonos", "Oro y materias primas", "Sectores", "Cripto", "Internacional"];
+const categoryLabels: Record<"es" | "en", Record<AssetCategory, string>> = {
+  es: {
+    "Índices / ETFs": "Índices / ETFs",
+    Bonos: "Bonos",
+    "Oro y materias primas": "Oro y materias primas",
+    Sectores: "Sectores",
+    Cripto: "Cripto",
+    Internacional: "Internacional",
+  },
+  en: {
+    "Índices / ETFs": "Indices / ETFs",
+    Bonos: "Bonds",
+    "Oro y materias primas": "Gold & commodities",
+    Sectores: "Sectors",
+    Cripto: "Crypto",
+    Internacional: "International",
+  },
+};
 
 export function AssetSelector({ catalog, locale = "es", query, selected, setQuery, selectAsset }: AssetSelectorProps) {
   const normalized = query.trim().toLowerCase();
@@ -70,7 +88,7 @@ export function AssetSelector({ catalog, locale = "es", query, selected, setQuer
             if (!assets.length) return null;
             return (
               <div key={category}>
-                <p className="mb-3 text-xs font-semibold uppercase tracking-[0.14em] text-muted">{category}</p>
+                <p className="mb-3 text-xs font-semibold uppercase tracking-[0.14em] text-muted">{categoryLabels[locale][category]}</p>
                 <div className="flex max-h-48 flex-wrap gap-1.5 overflow-y-auto pr-1 md:max-h-none md:gap-2 md:overflow-visible md:pr-0">
                   {assets.map((asset) => {
                     const active = selected.includes(asset.ticker);

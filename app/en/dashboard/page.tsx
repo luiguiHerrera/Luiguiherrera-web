@@ -1,3 +1,7 @@
 export const revalidate = 86400;
 
-export { default } from "@/app/dashboard/page";
+import { DashboardContent } from "@/app/dashboard/page";
+
+export default async function EnglishDashboardPage() {
+  return <DashboardContent locale="en" />;
+}

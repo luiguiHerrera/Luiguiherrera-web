@@ -1,6 +1,7 @@
 import type { CompactPricePoint } from "@/lib/statistical-levels/types";
 
 type StatBandsChartProps = {
+  locale?: "es" | "en";
   series: CompactPricePoint[];
 };
 
@@ -22,11 +23,11 @@ function pathFromSeries(series: CompactPricePoint[], key: "close" | "ma200", wid
     .join(" ");
 }
 
-export function StatBandsChart({ series }: StatBandsChartProps) {
+export function StatBandsChart({ locale = "es", series }: StatBandsChartProps) {
   if (series.length < 2) {
     return (
       <div className="flex h-28 items-center justify-center border border-dashed border-line bg-panelSoft text-sm text-muted">
-        Historial insuficiente para gráfico
+        {locale === "en" ? "Not enough history for chart" : "Historial insuficiente para gráfico"}
       </div>
     );
   }

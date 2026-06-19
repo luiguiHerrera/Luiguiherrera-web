@@ -5,6 +5,7 @@ import type { DailySeasonalityCell, PresidentialCyclePhase } from "@/lib/statist
 
 type WeeklyReportProps = {
   data: WeeklyReportData;
+  locale?: "es" | "en";
 };
 
 const phaseLabels: Record<PresidentialCyclePhase, string> = {
@@ -16,6 +17,14 @@ const phaseLabels: Record<PresidentialCyclePhase, string> = {
 };
 
 const monthNames = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
+const englishPhaseLabels: Record<PresidentialCyclePhase, string> = {
+  all: "All years",
+  post_election: "Year 1 · Post-election",
+  midterm: "Year 2 · Midterm",
+  pre_election: "Year 3 · Pre-election",
+  election: "Year 4 · Election",
+};
+const englishMonthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
 function formatPercent(value: number | null | undefined, digits = 1) {
   if (value === null || value === undefined) return "Pendiente";
@@ -37,14 +46,27 @@ function formatUsdMillions(value: number | null | undefined) {
   return `${value > 0 ? "+" : ""}${value.toFixed(0)} M USD`;
 }
 
-function vixTrendLabel(value: string | undefined) {
+function vixTrendLabel(value: string | undefined, locale: "es" | "en") {
+  if (locale === "en") {
+    if (value === "rising_fast") return "Rising fast";
+    if (value === "rising") return "Rising";
+    if (value === "falling") return "Falling";
+    return "Stable";
+  }
   if (value === "rising_fast") return "Subiendo rápido";
   if (value === "rising") return "Subiendo";
   if (value === "falling") return "Bajando";
   return "Estable";
 }
 
-function structureLabel(distanceToMa200: number | null | undefined) {
+function structureLabel(distanceToMa200: number | null | undefined, locale: "es" | "en") {
+  if (locale === "en") {
+    if (distanceToMa200 === null || distanceToMa200 === undefined) return "Structure pending";
+    if (distanceToMa200 > 0.05) return "Above long average";
+    if (distanceToMa200 > 0) return "Near support";
+    if (distanceToMa200 > -0.05) return "Below, without a wide break";
+    return "Weak versus long average";
+  }
   if (distanceToMa200 === null || distanceToMa200 === undefined) return "Estructura pendiente";
   if (distanceToMa200 > 0.05) return "Sobre media larga";
   if (distanceToMa200 > 0) return "Apoyo cercano";
@@ -56,7 +78,128 @@ function limitItems(items: string[]) {
   return items.slice(0, 3);
 }
 
-export function WeeklyReport({ data }: WeeklyReportProps) {
+export function WeeklyReport({ data, locale = "es" }: WeeklyReportProps) {
+  const copy = locale === "en"
+    ? {
+        report: "Weekly Report",
+        closeRead: "Closing read",
+        date: "Date",
+        week: "Week",
+        regime: "Regime",
+        confidence: "Confidence",
+        executive: "Executive summary",
+        helped: "What helped",
+        weighed: "What weighed",
+        watch: "What to watch",
+        coreEtfs: "The 4 ETFs",
+        longAverage: "Long average",
+        distanceToHighs: "Distance to highs",
+        sectors: "Sectors",
+        leaders: "Leaders",
+        laggards: "Laggards",
+        rotationRead: "Rotation read",
+        pendingRotation: "Sector rotation pending.",
+        dispersion: "1W dispersion",
+        volatility: "Volatility",
+        vixMomentum: "VIX momentum",
+        vixCurve: "VIX curve",
+        pending: "Pending",
+        pendingVol: "Volatility pending update.",
+        flows: "Flows",
+        latestBtc: "BTC ETF latest day",
+        read: "Read",
+        pendingFlows: "BTC ETF flows pending update.",
+        levels: "Statistical levels",
+        percentile: "Percentile",
+        seasonality: "Seasonality",
+        seasonalityBody: "Only rankings with at least 5 observations are shown. The read helps locate historical patterns without overstating a single day.",
+        limitedCycle: "Limited presidential-cycle sample: expand the read with care.",
+        enoughSample: "Enough sample for a compact descriptive read.",
+        bestDays: "Best historical days",
+        weakDays: "Weak historical days",
+        cycleBestDays: "Best cycle days",
+        cycleWeakDays: "Weak cycle days",
+        seasonalityPending: "Seasonality pending until data is regenerated.",
+        crossReadings: "Cross-readings",
+        radarReading: "Curated summary of tensions worth keeping on screen without turning the report into a long table.",
+        manualUpdate: "Manual update",
+        reviewedTickers: "Reviewed tickers",
+        initialView: "Initial view",
+        highlights: "highlights",
+        contextUse: "Context",
+        institutional: "Institutional",
+        note: "Note",
+        finalRead: "Final read",
+        context: "Context",
+        risk: "Risk",
+        process: "Process",
+        contextBody: "The regime sets the weekly tone and helps organize volatility, rotation and flows into one read.",
+        riskBody: "The priority is to protect margin for error when several readings start losing alignment.",
+        processBody: "Maintaining process means returning to the map: regime, levels, flows and seasonality before expanding the read.",
+        empty: "No highlighted readings in this block.",
+        lowSample: "Not enough observations to highlight days.",
+      }
+    : {
+        report: "Informe semanal",
+        closeRead: "Lectura de cierre",
+        date: "Fecha",
+        week: "Semana",
+        regime: "Régimen",
+        confidence: "Confianza",
+        executive: "Resumen ejecutivo",
+        helped: "Qué impulsó",
+        weighed: "Qué frenó",
+        watch: "Qué vigilar",
+        coreEtfs: "Los 4 ETFs",
+        longAverage: "Media larga",
+        distanceToHighs: "Distancia a máximos",
+        sectors: "Sectores",
+        leaders: "Líderes",
+        laggards: "Rezagados",
+        rotationRead: "Lectura de rotación",
+        pendingRotation: "Rotación sectorial pendiente.",
+        dispersion: "Dispersión 1W",
+        volatility: "Volatilidad",
+        vixMomentum: "Momentum VIX",
+        vixCurve: "Curva VIX",
+        pending: "Pendiente",
+        pendingVol: "Volatilidad pendiente de actualización.",
+        flows: "Flujos",
+        latestBtc: "BTC ETF último día",
+        read: "Lectura",
+        pendingFlows: "Flujos BTC ETF pendientes de actualización.",
+        levels: "Niveles estadísticos",
+        percentile: "Percentil",
+        seasonality: "Estacionalidad",
+        seasonalityBody: "Se muestran solo rankings con muestra mínima de 5 observaciones. La lectura sirve para ubicar patrones históricos, no para sobredimensionar un día aislado.",
+        limitedCycle: "Muestra acotada en ciclo presidencial: ampliar lectura con prudencia.",
+        enoughSample: "Muestra suficiente para una lectura descriptiva compacta.",
+        bestDays: "Mejores días históricos",
+        weakDays: "Días débiles históricos",
+        cycleBestDays: "Mejores días del ciclo",
+        cycleWeakDays: "Días débiles del ciclo",
+        seasonalityPending: "Estacionalidad pendiente hasta regenerar datos.",
+        crossReadings: "Lecturas cruzadas",
+        radarReading: "Resumen curado de tensiones que conviene mantener en pantalla sin convertir el informe en una tabla larga.",
+        manualUpdate: "Actualización manual",
+        reviewedTickers: "Tickers revisados",
+        initialView: "Vista inicial",
+        highlights: "destacados",
+        contextUse: "Contexto",
+        institutional: "Institucional",
+        note: "Nota",
+        finalRead: "Lectura final",
+        context: "Contexto",
+        risk: "Riesgo",
+        process: "Proceso",
+        contextBody: "El régimen marca el tono de la semana y ayuda a ordenar volatilidad, rotación y flujos en una lectura común.",
+        riskBody: "La prioridad es cuidar el margen de error cuando varias lecturas empiezan a perder alineación.",
+        processBody: "Mantener proceso significa volver al mapa: régimen, niveles, flujo y estacionalidad antes de ampliar lectura.",
+        empty: "Sin lecturas destacadas en este bloque.",
+        lowSample: "Muestra insuficiente para destacar días.",
+      };
+  const phases = locale === "en" ? englishPhaseLabels : phaseLabels;
+  const months = locale === "en" ? englishMonthNames : monthNames;
   const watchItems = limitItems([
     data.volatility.termStructure?.classification ? `Curva VIX: ${data.volatility.termStructure.classification}` : "",
     data.flows.btcEtfFlows?.flows.readingLabel ? `Flujos BTC ETF: ${data.flows.btcEtfFlows.flows.readingLabel}` : "",
@@ -67,35 +210,35 @@ export function WeeklyReport({ data }: WeeklyReportProps) {
   return (
     <div className="space-y-5 md:space-y-7">
       <section className="border border-petrol/35 bg-panel p-4 shadow-[0_10px_30px_rgba(31,35,40,0.035)] md:p-8">
-        <p className="text-xs font-semibold uppercase tracking-[0.2em] text-brass">Informe semanal</p>
+        <p className="text-xs font-semibold uppercase tracking-[0.2em] text-brass">{copy.report}</p>
         <div className="mt-4 grid gap-6 lg:grid-cols-[1fr_0.62fr] lg:items-end">
           <div>
-            <h1 className="text-3xl font-semibold leading-tight text-ink md:text-5xl">Lectura de cierre</h1>
+            <h1 className="text-3xl font-semibold leading-tight text-ink md:text-5xl">{copy.closeRead}</h1>
             <p className="mt-4 max-w-3xl text-base leading-7 text-ink md:text-lg">
               {data.regimeSummary.interpretation}
             </p>
           </div>
           <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-1">
-            <Metric label="Fecha" value={data.generatedAt} />
-            <Metric label="Semana" value={data.weekLabel} />
-            <Metric label="Régimen" value={data.regimeSummary.current} />
+            <Metric label={copy.date} value={data.generatedAt} />
+            <Metric label={copy.week} value={data.weekLabel} />
+            <Metric label={copy.regime} value={data.regimeSummary.current} />
             <div className="grid grid-cols-2 gap-2">
               <Metric label="Score" value={`${data.regimeSummary.regimeScore}/100`} emphasis />
-              <Metric label="Confianza" value={`${data.regimeSummary.confidence}%`} emphasis />
+              <Metric label={copy.confidence} value={`${data.regimeSummary.confidence}%`} emphasis />
             </div>
           </div>
         </div>
       </section>
 
-      <ReportSection eyebrow="01" title="Resumen ejecutivo">
+      <ReportSection eyebrow="01" title={copy.executive}>
         <div className="grid gap-3 lg:grid-cols-3">
-          <SignalList title="Qué impulsó" items={limitItems(data.executiveSummary.helped.map((signal) => `${signal.label}: ${signal.detail}`))} />
-          <SignalList title="Qué frenó" items={limitItems(data.executiveSummary.weighed.map((signal) => `${signal.label}: ${signal.detail}`))} />
-          <SignalList title="Qué vigilar" items={watchItems} />
+          <SignalList title={copy.helped} items={limitItems(data.executiveSummary.helped.map((signal) => `${signal.label}: ${signal.detail}`))} emptyLabel={copy.empty} />
+          <SignalList title={copy.weighed} items={limitItems(data.executiveSummary.weighed.map((signal) => `${signal.label}: ${signal.detail}`))} emptyLabel={copy.empty} />
+          <SignalList title={copy.watch} items={watchItems} emptyLabel={copy.empty} />
         </div>
       </ReportSection>
 
-      <ReportSection eyebrow="02" title="Los 4 ETFs">
+      <ReportSection eyebrow="02" title={copy.coreEtfs}>
         <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-4">
           {data.coreEtfs.map((asset) => (
             <article key={asset.ticker} className="border border-line bg-panelSoft p-4">
@@ -107,98 +250,98 @@ export function WeeklyReport({ data }: WeeklyReportProps) {
                 <span className="text-right text-lg font-semibold text-ink">{formatPercent(asset.weeklyReturn)}</span>
               </div>
               <div className="mt-4 grid gap-2 text-sm leading-6 text-muted">
-                <p><span className="font-semibold text-ink">{structureLabel(asset.distanceToMa200)}</span></p>
-                <p>Media larga: <span className="font-semibold text-ink">{formatPercent(asset.distanceToMa200)}</span></p>
-                <p>Distancia a máximos: <span className="font-semibold text-ink">{formatPercent(asset.distanceToAth)}</span></p>
+                <p><span className="font-semibold text-ink">{structureLabel(asset.distanceToMa200, locale)}</span></p>
+                <p>{copy.longAverage}: <span className="font-semibold text-ink">{formatPercent(asset.distanceToMa200)}</span></p>
+                <p>{copy.distanceToHighs}: <span className="font-semibold text-ink">{formatPercent(asset.distanceToAth)}</span></p>
               </div>
             </article>
           ))}
         </div>
       </ReportSection>
 
-      <ReportSection eyebrow="03" title="Sectores">
+      <ReportSection eyebrow="03" title={copy.sectors}>
         <div className="grid gap-3 lg:grid-cols-[0.75fr_0.75fr_1fr]">
-          <SignalList title="Líderes" items={limitItems(data.sectors.leaders.map((sector) => `${sector.etfTicker} · ${sector.sectorName}: ${formatSectorPercent(sector.return1w)}`))} />
-          <SignalList title="Rezagados" items={limitItems(data.sectors.laggards.map((sector) => `${sector.etfTicker} · ${sector.sectorName}: ${formatSectorPercent(sector.return1w)}`))} />
+          <SignalList title={copy.leaders} items={limitItems(data.sectors.leaders.map((sector) => `${sector.etfTicker} · ${sector.sectorName}: ${formatSectorPercent(sector.return1w)}`))} emptyLabel={copy.empty} />
+          <SignalList title={copy.laggards} items={limitItems(data.sectors.laggards.map((sector) => `${sector.etfTicker} · ${sector.sectorName}: ${formatSectorPercent(sector.return1w)}`))} emptyLabel={copy.empty} />
           <EditorialNote
-            title="Lectura de rotación"
-            body={data.sectors.data?.metrics.interpretation ?? "Rotación sectorial pendiente."}
-            footer={`Dispersión 1W: ${formatSectorPercent(data.sectors.data?.metrics.sectorDispersion1w)}`}
+            title={copy.rotationRead}
+            body={data.sectors.data?.metrics.interpretation ?? copy.pendingRotation}
+            footer={`${copy.dispersion}: ${formatSectorPercent(data.sectors.data?.metrics.sectorDispersion1w)}`}
           />
         </div>
       </ReportSection>
 
       <div className="grid gap-5 lg:grid-cols-2">
-        <ReportSection eyebrow="04" title="Volatilidad">
+        <ReportSection eyebrow="04" title={copy.volatility}>
           <div className="grid gap-2 sm:grid-cols-2">
             <Metric label="VIX spot" value={formatNumber(data.volatility.vix?.spot.latestVix)} emphasis />
-            <Metric label="Momentum VIX" value={vixTrendLabel(data.volatility.vix?.spot.vixTrend)} />
-            <Metric label="Curva VIX" value={data.volatility.termStructure?.classification ?? "Pendiente"} />
-            <Metric label="M1/M2" value={data.volatility.termStructure?.m1m2SlopePct === null || data.volatility.termStructure?.m1m2SlopePct === undefined ? "Pendiente" : `${data.volatility.termStructure.m1m2SlopePct.toFixed(1)}%`} />
+            <Metric label={copy.vixMomentum} value={vixTrendLabel(data.volatility.vix?.spot.vixTrend, locale)} />
+            <Metric label={copy.vixCurve} value={data.volatility.termStructure?.classification ?? copy.pending} />
+            <Metric label="M1/M2" value={data.volatility.termStructure?.m1m2SlopePct === null || data.volatility.termStructure?.m1m2SlopePct === undefined ? copy.pending : `${data.volatility.termStructure.m1m2SlopePct.toFixed(1)}%`} />
           </div>
           <p className="mt-4 text-sm leading-6 text-muted">
-            {data.volatility.termStructure?.interpretation ?? data.volatility.vix?.spot.vixCompositeSubtext ?? "Volatilidad pendiente de actualización."}
+            {data.volatility.termStructure?.interpretation ?? data.volatility.vix?.spot.vixCompositeSubtext ?? copy.pendingVol}
           </p>
         </ReportSection>
 
-        <ReportSection eyebrow="05" title="Flujos">
+        <ReportSection eyebrow="05" title={copy.flows}>
           <div className="grid gap-2 sm:grid-cols-2">
-            <Metric label="BTC ETF último día" value={formatUsdMillions(data.flows.btcEtfFlows?.flows.latestTotalNetFlow)} emphasis />
+            <Metric label={copy.latestBtc} value={formatUsdMillions(data.flows.btcEtfFlows?.flows.latestTotalNetFlow)} emphasis />
             <Metric label="BTC ETF 5D" value={formatUsdMillions(data.flows.btcEtfFlows?.flows.rolling5dNetFlow)} />
-            <Metric label="Racha" value={data.flows.btcEtfFlows?.flows.flowStreak.label ?? "Pendiente"} />
-            <Metric label="Lectura" value={data.flows.btcEtfFlows?.flows.readingLabel ?? "Pendiente"} />
+            <Metric label="Streak" value={data.flows.btcEtfFlows?.flows.flowStreak.label ?? copy.pending} />
+            <Metric label={copy.read} value={data.flows.btcEtfFlows?.flows.readingLabel ?? copy.pending} />
           </div>
           <p className="mt-4 text-sm leading-6 text-muted">
-            {data.flows.btcEtfFlows?.flows.readingSubtext ?? "Flujos BTC ETF pendientes de actualización."}
+            {data.flows.btcEtfFlows?.flows.readingSubtext ?? copy.pendingFlows}
           </p>
         </ReportSection>
       </div>
 
-      <ReportSection eyebrow="06" title="Niveles estadísticos">
+      <ReportSection eyebrow="06" title={copy.levels}>
         <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-4">
           {data.statisticalLevels.map((asset) => (
             <article key={asset.ticker} className="border border-line bg-panelSoft p-4">
               <p className="text-lg font-semibold text-ink">{asset.ticker}</p>
               <p className="mt-1 text-xs leading-5 text-muted">{asset.name}</p>
               <div className="mt-4 grid gap-2 text-sm text-muted">
-                <p>Percentil <span className="font-semibold text-ink">{asset.percentile === null ? "n/d" : asset.percentile.toFixed(1)}</span></p>
+                <p>{copy.percentile} <span className="font-semibold text-ink">{asset.percentile === null ? "n/d" : asset.percentile.toFixed(1)}</span></p>
                 <p>Z-score <span className="font-semibold text-ink">{asset.zScore === null ? "n/d" : asset.zScore.toFixed(2)}</span></p>
-                <p>Media larga <span className="font-semibold text-ink">{formatPercent(asset.distanceToLongAverage)}</span></p>
+                <p>{copy.longAverage} <span className="font-semibold text-ink">{formatPercent(asset.distanceToLongAverage)}</span></p>
               </div>
             </article>
           ))}
         </div>
       </ReportSection>
 
-      <ReportSection eyebrow="07" title="Estacionalidad">
+      <ReportSection eyebrow="07" title={copy.seasonality}>
         {data.seasonality ? (
           <div className="grid gap-4 lg:grid-cols-[0.7fr_1fr]">
             <EditorialNote
-              title={`${monthNames[data.seasonality.month - 1]} · ${phaseLabels[data.seasonality.phase]}`}
-              body="Se muestran solo rankings con muestra mínima de 5 observaciones. La lectura sirve para ubicar patrones históricos, no para sobredimensionar un día aislado."
-              footer={data.seasonality.cycle.best.length < 3 || data.seasonality.cycle.weakest.length < 3 ? "Muestra acotada en ciclo presidencial: ampliar lectura con prudencia." : "Muestra suficiente para una lectura descriptiva compacta."}
+              title={`${months[data.seasonality.month - 1]} · ${phases[data.seasonality.phase]}`}
+              body={copy.seasonalityBody}
+              footer={data.seasonality.cycle.best.length < 3 || data.seasonality.cycle.weakest.length < 3 ? copy.limitedCycle : copy.enoughSample}
             />
             <div className="grid gap-3 md:grid-cols-2">
-              <SeasonalityList title="Mejores días históricos" cells={data.seasonality.allYears.best} />
-              <SeasonalityList title="Días débiles históricos" cells={data.seasonality.allYears.weakest} />
-              <SeasonalityList title="Mejores días del ciclo" cells={data.seasonality.cycle.best} />
-              <SeasonalityList title="Días débiles del ciclo" cells={data.seasonality.cycle.weakest} />
+              <SeasonalityList title={copy.bestDays} cells={data.seasonality.allYears.best} emptyLabel={copy.lowSample} />
+              <SeasonalityList title={copy.weakDays} cells={data.seasonality.allYears.weakest} emptyLabel={copy.lowSample} />
+              <SeasonalityList title={copy.cycleBestDays} cells={data.seasonality.cycle.best} emptyLabel={copy.lowSample} />
+              <SeasonalityList title={copy.cycleWeakDays} cells={data.seasonality.cycle.weakest} emptyLabel={copy.lowSample} />
             </div>
           </div>
         ) : (
-          <p className="text-sm leading-6 text-muted">Estacionalidad pendiente hasta regenerar datos.</p>
+          <p className="text-sm leading-6 text-muted">{copy.seasonalityPending}</p>
         )}
       </ReportSection>
 
       <ExpandableInsightCard
         eyebrow="08 · Radar"
-        title="Lecturas cruzadas"
-        reading="Resumen curado de tensiones que conviene mantener en pantalla sin convertir el informe en una tabla larga."
-        status="Actualización manual"
+        title={copy.crossReadings}
+        reading={copy.radarReading}
+        status={copy.manualUpdate}
         metrics={[
-          { label: "Tickers revisados", value: String(data.crossSignalRadar.length) },
-          { label: "Vista inicial", value: `${radarPreview.length} destacados` },
-          { label: "Uso", value: "Contexto" },
+          { label: copy.reviewedTickers, value: String(data.crossSignalRadar.length) },
+          { label: copy.initialView, value: `${radarPreview.length} ${copy.highlights}` },
+          { label: "Use", value: copy.contextUse },
         ]}
         summaryExtra={
           <div className="grid gap-2 md:grid-cols-3">
@@ -217,8 +360,8 @@ export function WeeklyReport({ data }: WeeklyReportProps) {
               <tr className="border-b border-line">
                 <th className="py-2.5 pr-4 font-semibold">Ticker</th>
                 <th className="py-2.5 pr-4 font-semibold">Short interest</th>
-                <th className="py-2.5 pr-4 font-semibold">Institucional</th>
-                <th className="py-2.5 pr-4 font-semibold">Nota</th>
+                <th className="py-2.5 pr-4 font-semibold">{copy.institutional}</th>
+                <th className="py-2.5 pr-4 font-semibold">{copy.note}</th>
               </tr>
             </thead>
             <tbody>
@@ -235,11 +378,11 @@ export function WeeklyReport({ data }: WeeklyReportProps) {
         </div>
       </ExpandableInsightCard>
 
-      <ReportSection eyebrow="09" title="Lectura final">
+      <ReportSection eyebrow="09" title={copy.finalRead}>
         <div className="grid gap-3 md:grid-cols-3">
-          <EditorialNote title="Contexto" body="El régimen marca el tono de la semana y ayuda a ordenar volatilidad, rotación y flujos en una lectura común." />
-          <EditorialNote title="Riesgo" body="La prioridad es cuidar el margen de error cuando varias lecturas empiezan a perder alineación." />
-          <EditorialNote title="Proceso" body="Mantener proceso significa volver al mapa: régimen, niveles, flujo y estacionalidad antes de ampliar lectura." />
+          <EditorialNote title={copy.context} body={copy.contextBody} />
+          <EditorialNote title={copy.risk} body={copy.riskBody} />
+          <EditorialNote title={copy.process} body={copy.processBody} />
         </div>
       </ReportSection>
     </div>
@@ -255,12 +398,12 @@ function Metric({ emphasis = false, label, value }: { emphasis?: boolean; label:
   );
 }
 
-function SignalList({ title, items }: { title: string; items: string[] }) {
+function SignalList({ emptyLabel, title, items }: { emptyLabel: string; title: string; items: string[] }) {
   return (
     <div className="border border-line bg-panelSoft p-4">
       <p className="text-sm font-semibold text-ink">{title}</p>
       <div className="mt-3 grid gap-2 text-sm leading-6 text-muted">
-        {items.length ? items.map((item, index) => <p key={`${title}-${index}`} className="border-l border-brass/70 pl-3">{item}</p>) : <p>Sin lecturas destacadas en este bloque.</p>}
+        {items.length ? items.map((item, index) => <p key={`${title}-${index}`} className="border-l border-brass/70 pl-3">{item}</p>) : <p>{emptyLabel}</p>}
       </div>
     </div>
   );
@@ -276,7 +419,7 @@ function EditorialNote({ body, footer, title }: { body: string; footer?: string;
   );
 }
 
-function SeasonalityList({ cells, title }: { cells: DailySeasonalityCell[]; title: string }) {
+function SeasonalityList({ cells, emptyLabel, title }: { cells: DailySeasonalityCell[]; emptyLabel: string; title: string }) {
   const visibleCells = cells.filter((cell) => cell.sampleSize >= 5).slice(0, 3);
 
   return (
@@ -293,7 +436,7 @@ function SeasonalityList({ cells, title }: { cells: DailySeasonalityCell[]; titl
             </div>
           ))
         ) : (
-          <p className="text-muted">Muestra insuficiente para destacar días.</p>
+          <p className="text-muted">{emptyLabel}</p>
         )}
       </div>
     </div>
