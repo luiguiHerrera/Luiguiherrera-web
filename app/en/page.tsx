@@ -1,40 +1,340 @@
-import Link from "next/link";
 import Image from "next/image";
+import Link from "next/link";
+import { ToolCard } from "@/components/ui/ToolCard";
 import { TypewriterPrinciples } from "@/components/home/TypewriterPrinciples";
 import { getHomeDashboardPreviewData } from "@/lib/dashboard/get-home-dashboard-preview-data";
 import { translateBiasLabel, translateDashboardText, translateRegimeLabel } from "@/lib/dashboard/translate-dashboard-copy";
+import type { BtcEtfFlowsDashboardData, RegimeSignal, RegimeSummary, SectorRotationData, VixDashboardData } from "@/lib/dashboard/types";
 
-const entryways = [
-  { title: "Read the market", href: "/en/market", description: "Regime, levels and weekly context to read the terrain." },
-  { title: "Know my profile", href: "/en/diagnostic", description: "Risk, horizon and behavior before committing capital." },
-  { title: "Research strategies", href: "/en/research", description: "Models and backtests tested with method." },
-  { title: "Protect capital", href: "/en/protection", description: "Filters and checklists to protect the margin of error." },
-  { title: "Use free resources", href: "/en/resources", description: "Public tools and scripts for your process." },
+const principles = [
+  ["Understand the context", "Read the board before moving the piece."],
+  ["Manage risk", "Protect the margin of error first. Then look for return."],
+  ["Decide with method", "Less reaction. More process."],
 ];
 
-export default async function EnglishHomePage() {
-  const { regimeSummary } = await getHomeDashboardPreviewData();
+const entryways = [
+  {
+    title: "Read the market",
+    label: "01",
+    href: "/en/market",
+    description: "Context, regime and levels to understand the terrain.",
+  },
+  {
+    title: "Know my profile",
+    label: "02",
+    href: "/en/diagnostic",
+    description: "Risk, horizon, biases and capacity before moving capital.",
+  },
+  {
+    label: "03",
+    title: "Research strategies",
+    href: "/en/research",
+    description: "Models and backtests tested with method.",
+  },
+  {
+    label: "04",
+    title: "Protect capital",
+    href: "/en/protection",
+    description: "Filters and checklists to protect the margin of error.",
+  },
+  {
+    title: "Use free resources",
+    label: "05",
+    href: "/en/resources",
+    description: "Public tools and scripts for your process.",
+  },
+];
+
+const statisticalLevelsPreview = [
+  { ticker: "SPY", percentile: 72, zScore: "+0.8", distance: "+6.4%" },
+  { ticker: "GLD", percentile: 84, zScore: "+1.2", distance: "+9.1%" },
+  { ticker: "IBIT", percentile: 38, zScore: "-0.3", distance: "-2.6%" },
+];
+
+function formatPreviewPercent(value: number) {
+  return `${value > 0 ? "+" : ""}${value.toFixed(1)}%`;
+}
+
+function formatCompactUsdMillions(value: number | null) {
+  if (value === null) return "Pending";
+  const sign = value > 0 ? "+" : "";
+  return `${sign}${value.toFixed(0)}M`;
+}
+
+function sparklinePath(values: number[], width = 100, height = 40) {
+  if (values.length === 0) return "";
+
+  const min = Math.min(...values);
+  const max = Math.max(...values);
+  const spread = Math.max(max - min, 1);
+
+  return values
+    .map((value, index) => {
+      const x = (index / Math.max(values.length - 1, 1)) * width;
+      const y = height - ((value - min) / spread) * (height - 8) - 4;
+      return `${index === 0 ? "M" : "L"} ${x.toFixed(2)} ${y.toFixed(2)}`;
+    })
+    .join(" ");
+}
+
+function getPreviewSignals(regimeSummary: RegimeSummary) {
+  const primarySignals = regimeSummary.cautionSignals.length > 0 ? regimeSummary.cautionSignals : regimeSummary.riskSupportSignals;
+  return primarySignals.slice(0, 3);
+}
+
+function RegimePreviewPanel({ regimeSummary }: { regimeSummary: RegimeSummary }) {
+  const signals = getPreviewSignals(regimeSummary);
   const scoreWidth = `${Math.max(0, Math.min(regimeSummary.regimeScore, 100))}%`;
-  const signals = (regimeSummary.cautionSignals.length ? regimeSummary.cautionSignals : regimeSummary.riskSupportSignals).slice(0, 3);
+
+  return (
+    <div className="border border-petrol/30 bg-panel p-4 md:p-7">
+      <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
+        <div>
+          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-brass">Integrated regime</p>
+          <div className="mt-4 flex flex-wrap items-end gap-3">
+            <span className="inline-flex border border-petrol/40 bg-[#edf3f1] px-4 py-2 text-sm font-semibold text-petrol">
+              {translateRegimeLabel(regimeSummary.current)}
+            </span>
+            <span className="pb-1 text-sm text-muted">Bias: {translateBiasLabel(regimeSummary.bias).toLowerCase()}</span>
+          </div>
+        </div>
+        <div className="text-left md:text-right">
+          <p className="text-xs font-semibold uppercase tracking-[0.14em] text-muted">Confidence</p>
+          <p className="mt-1 text-xl font-semibold text-ink">{regimeSummary.confidence}%</p>
+        </div>
+      </div>
+
+      <div className="mt-6 md:mt-8">
+        <div className="flex items-end justify-between gap-4">
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-[0.14em] text-muted">Composite score</p>
+            <p className="mt-2 text-4xl font-semibold leading-none text-ink md:text-6xl">{regimeSummary.regimeScore}</p>
+          </div>
+          <p className="max-w-[11rem] text-right text-xs leading-5 text-muted md:text-sm md:leading-6">
+            Current regime summary using the same dashboard readings.
+          </p>
+        </div>
+        <div className="mt-5 h-2 border border-line bg-panelSoft">
+          <div className="h-full bg-[#a86464]" style={{ width: scoreWidth }} />
+        </div>
+        <div className="mt-2 flex justify-between text-[11px] uppercase tracking-[0.12em] text-muted">
+          <span>Caution</span>
+          <span>Neutral</span>
+          <span>Risk</span>
+        </div>
+      </div>
+
+      <div className="mt-5 grid gap-2 md:mt-7 md:grid-cols-3 md:gap-3">
+        {signals.map((signal: RegimeSignal, index) => (
+          <div key={`${signal.label}-${index}`} className="border-l border-brass/60 bg-panelSoft px-3 py-2.5 md:px-4 md:py-3">
+            <p className="text-sm font-semibold leading-5 text-ink">{translateDashboardText(signal.label)}</p>
+            <p className="mt-1 text-xs leading-5 text-muted">{translateDashboardText(signal.detail)}</p>
+          </div>
+        ))}
+      </div>
+      <p className="mt-5 text-sm leading-6 text-muted">{translateDashboardText(regimeSummary.interpretation)}</p>
+      <p className="mt-6 border-t border-line pt-4 text-xs leading-5 text-muted">
+        {translateDashboardText(regimeSummary.dataQualityNote)}
+      </p>
+      <div className="mt-6">
+        <StatisticalLevelsMiniPanel />
+      </div>
+    </div>
+  );
+}
+
+function SectorMiniChart({ data }: { data: SectorRotationData | null }) {
+  const rows = data
+    ? [
+        ...[...data.sectors].sort((a, b) => b.return1w - a.return1w).slice(0, 3),
+        ...[...data.sectors].sort((a, b) => a.return1w - b.return1w).slice(0, 3),
+      ].map((sector) => ({
+        name: translateDashboardText(sector.sectorName),
+        ticker: sector.etfTicker,
+        value: sector.return1w,
+      }))
+    : [];
+  const maxAbs = Math.max(...rows.map((row) => Math.abs(row.value)), 1);
+
+  return (
+    <div className="border border-line bg-panel p-4 md:p-5">
+      <div className="flex items-start justify-between gap-4">
+        <div>
+          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-brass">Sector rotation</p>
+          <h3 className="mt-2 font-semibold text-ink">Relative 1W map</h3>
+        </div>
+        <span className="border border-line bg-panelSoft px-2.5 py-1 text-xs font-semibold text-muted">
+          {data?.dataStatus === "automated" ? "Alpha Vantage" : "Fallback"}
+        </span>
+      </div>
+      <div className="mt-5 grid gap-2">
+        {rows.map((row) => {
+          const width = Math.max((Math.abs(row.value) / maxAbs) * 46, 2);
+          const isPositive = row.value > 0;
+          const fill = isPositive ? "#6f8f7b" : "#a86464";
+
+          return (
+            <div key={row.ticker} className="grid grid-cols-[minmax(6.5rem,0.8fr)_1fr_3.4rem] items-center gap-3 text-xs">
+              <div className="min-w-0">
+                <p className="truncate font-semibold text-ink">{row.name}</p>
+                <p className="text-[10px] uppercase tracking-[0.12em] text-muted">{row.ticker}</p>
+              </div>
+              <svg viewBox="0 0 100 12" className="h-5 w-full" preserveAspectRatio="none" aria-hidden="true">
+                <line x1="4" x2="96" y1="6" y2="6" stroke="#e7e2dc" strokeWidth="0.7" vectorEffect="non-scaling-stroke" />
+                <line x1="50" x2="50" y1="1" y2="11" stroke="#b8b2aa" strokeWidth="0.8" vectorEffect="non-scaling-stroke" />
+                <rect
+                  x={isPositive ? 50 : 50 - width}
+                  y="4"
+                  width={width}
+                  height="4"
+                  rx="1.2"
+                  fill={fill}
+                />
+              </svg>
+              <span className={isPositive ? "text-right font-semibold text-[#47604f]" : "text-right font-semibold text-[#7b3f3f]"}>
+                {formatPreviewPercent(row.value)}
+              </span>
+            </div>
+          );
+        })}
+      </div>
+      <p className="mt-4 border-t border-line pt-3 text-xs leading-5 text-muted">
+        {translateDashboardText(data?.metrics.interpretation) || "Sector rotation is temporarily unavailable."}
+      </p>
+    </div>
+  );
+}
+
+function VixMiniPanel({ data }: { data: VixDashboardData | null }) {
+  const spot = data?.spot;
+  const latestVix = spot?.latestVix;
+  const history = spot?.history.map((point) => point.value).slice(-24) ?? [];
+  const path = sparklinePath(history, 100, 46);
+  const trendLabel = spot?.vixTrend === "rising_fast" ? "Rising fast" : spot?.vixTrend === "rising" ? "Rising" : spot?.vixTrend === "falling" ? "Falling" : "Stable";
+
+  return (
+    <div className="border border-line bg-panel p-4 md:p-6">
+      <div className="flex items-start justify-between gap-4">
+        <div>
+          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-brass">VIX</p>
+          <h3 className="mt-3 text-4xl font-semibold leading-none text-ink md:text-5xl">{latestVix === null || latestVix === undefined ? "--" : latestVix.toFixed(1)}</h3>
+          <p className="mt-3 text-sm font-semibold text-ink">{translateDashboardText(spot?.vixCompositeLabel) || "Pending data"}</p>
+        </div>
+        <span className="border border-[#b6905b]/40 bg-[#b6905b]/10 px-2.5 py-1 text-xs font-semibold text-[#76562d]">
+          {trendLabel}
+        </span>
+      </div>
+      <p className="mt-4 max-w-sm text-sm leading-6 text-muted">
+        {translateDashboardText(spot?.vixCompositeSubtext) || "Implied volatility pending update."}
+      </p>
+      <svg viewBox="0 0 100 46" className="mt-5 h-20 w-full md:mt-6 md:h-28" preserveAspectRatio="none" aria-hidden="true">
+        <line x1="0" x2="100" y1="10" y2="10" stroke="#eee9e3" strokeWidth="0.7" vectorEffect="non-scaling-stroke" />
+        <line x1="0" x2="100" y1="38" y2="38" stroke="#e7e2dc" strokeWidth="0.8" vectorEffect="non-scaling-stroke" />
+        {path ? <path d={path} fill="none" stroke="#6f8f7b" strokeWidth="2.1" vectorEffect="non-scaling-stroke" /> : null}
+      </svg>
+      <div className="mt-3 flex justify-between border-t border-line pt-3 text-xs leading-5 text-muted">
+        <span>FRED VIXCLS</span>
+        <span>{spot?.dataStatus === "automated" ? "Latest close" : "Fallback"}</span>
+      </div>
+    </div>
+  );
+}
+
+function BtcFlowsMiniPanel({ data }: { data: BtcEtfFlowsDashboardData | null }) {
+  const flows = data?.flows;
+  const history = flows?.history.map((point) => point.totalNetFlow).slice(-12) ?? [];
+  const maxAbs = Math.max(...history.map((value) => Math.abs(value)), 1);
+  const barWidth = history.length > 0 ? 100 / history.length : 100;
+
+  return (
+    <div className="border border-line bg-panel p-4 md:p-5">
+      <p className="text-xs font-semibold uppercase tracking-[0.18em] text-brass">BTC ETF flows</p>
+      <div className="mt-4 flex items-start justify-between gap-4">
+        <div>
+          <h3 className="text-3xl font-semibold leading-none text-ink">{formatCompactUsdMillions(flows?.latestTotalNetFlow ?? null)}</h3>
+          <p className="mt-2 text-sm font-semibold text-ink">Latest net flow</p>
+        </div>
+        <div className="text-right text-xs leading-5 text-muted">
+          <p>5D {formatCompactUsdMillions(flows?.rolling5dNetFlow ?? null)}</p>
+          <p>{translateDashboardText(flows?.flowStreak.label) || "Streak pending"}</p>
+        </div>
+      </div>
+      <svg viewBox="0 0 100 44" className="mt-5 h-20 w-full" preserveAspectRatio="none" aria-hidden="true">
+        <line x1="0" x2="100" y1="22" y2="22" stroke="#d8d1c8" strokeWidth="0.8" vectorEffect="non-scaling-stroke" />
+        {history.map((value, index) => {
+          const magnitude = Math.max((Math.abs(value) / maxAbs) * 18, 0.7);
+          const x = index * barWidth + 0.8;
+          const y = value >= 0 ? 22 - magnitude : 22;
+          const fill = value > 0 ? "#6f8f7b" : value < 0 ? "#a86464" : "#a8a29e";
+
+          return <rect key={`${value}-${index}`} x={x} y={y} width={Math.max(barWidth - 1.6, 2)} height={magnitude} rx="0.9" fill={fill} />;
+        })}
+      </svg>
+      <p className="mt-4 border-t border-line pt-3 text-xs leading-5 text-muted">
+        {flows ? `${translateDashboardText(flows.sourceName)} · ${translateDashboardText(flows.readingLabel)}` : "Source temporarily unavailable"}
+      </p>
+    </div>
+  );
+}
+
+function StatisticalLevelsMiniPanel() {
+  return (
+    <div className="border border-line bg-panel p-4 md:p-6">
+      <div className="flex items-start justify-between gap-4">
+        <div>
+          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-brass">Statistical levels</p>
+          <h3 className="mt-2 font-semibold text-ink">Current position versus its own history</h3>
+        </div>
+        <Link href="/en/statistical-levels" className="shrink-0 text-xs font-semibold text-ink underline-offset-4 hover:underline">
+          Open lab
+        </Link>
+      </div>
+
+      <div className="mt-5 grid gap-3">
+        {statisticalLevelsPreview.map((asset) => (
+          <div key={asset.ticker} className="grid gap-2 border-b border-line/70 pb-3 last:border-b-0 last:pb-0">
+            <div className="flex items-center justify-between gap-4">
+              <span className="font-semibold text-ink">{asset.ticker}</span>
+              <span className="text-xs text-muted">Percentile {asset.percentile}</span>
+            </div>
+            <div className="h-1.5 border border-line bg-panelSoft">
+              <div className="h-full bg-[#6f8f7b]" style={{ width: `${asset.percentile}%` }} />
+            </div>
+            <div className="grid grid-cols-2 gap-3 text-xs text-muted">
+              <span>z-score <strong className="font-semibold text-ink">{asset.zScore}</strong></span>
+              <span className="text-right">long average <strong className="font-semibold text-ink">{asset.distance}</strong></span>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <p className="mt-4 border-t border-line pt-3 text-xs leading-5 text-muted">
+        Compact lab view. Readings compare each asset against its own history.
+      </p>
+    </div>
+  );
+}
+
+export default async function EnglishHomePage() {
+  const { btcEtfFlows, regimeSummary, sectorRotation, vix } = await getHomeDashboardPreviewData();
 
   return (
     <div>
-      <section className="border-b border-line bg-panel">
-        <div className="relative mx-auto grid min-h-[470px] max-w-7xl grid-cols-1 gap-8 overflow-hidden px-4 py-12 md:min-h-[650px] md:px-5 md:py-20 lg:grid-cols-[0.72fr_1fr] lg:items-center">
+      <section className="relative overflow-hidden border-b border-line bg-panel">
+        <div className="mx-auto grid min-h-[470px] max-w-7xl grid-cols-1 px-4 py-10 md:min-h-[650px] md:px-5 md:py-20 lg:grid-cols-[0.7fr_1fr] lg:items-center">
           <div className="relative z-20 max-w-2xl">
-            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-brass">Market Lab</p>
-            <h1 className="mt-4 max-w-4xl text-4xl font-semibold leading-[1.04] text-ink md:text-6xl">
+            <h1 className="text-3xl font-semibold leading-[1.04] text-ink sm:text-4xl md:text-6xl">
               Before investing, understand how the market breathes.
             </h1>
             <TypewriterPrinciples
               eyebrow="Process before impulse"
               phrases={["Understand the context.", "Manage risk.", "Decide with data and less noise."]}
             />
-            <div className="mt-8 flex flex-wrap gap-3">
-              <Link href="/en/market" className="border border-ink bg-ink px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-panel hover:text-ink">
+            <div className="mt-6 flex flex-wrap gap-3 md:mt-8 md:gap-4">
+              <Link href="/en/market" className="border border-ink bg-ink px-4 py-2 text-sm font-semibold text-white transition hover:bg-panel hover:text-ink md:px-5 md:py-2.5">
                 Read the market
               </Link>
-              <Link href="/en/diagnostic" className="border border-line bg-panel px-4 py-2.5 text-sm font-semibold text-ink transition hover:border-ink">
+              <Link href="/en/diagnostic" className="border border-line bg-panel px-4 py-2 text-sm font-semibold text-ink transition hover:border-ink md:px-5 md:py-2.5">
                 Start diagnostic
               </Link>
             </div>
@@ -54,6 +354,37 @@ export default async function EnglishHomePage() {
         </div>
       </section>
 
+      <section className="border-b border-line bg-paper">
+        <div className="mx-auto grid max-w-7xl gap-5 px-4 py-7 md:grid-cols-[0.35fr_1fr_0.95fr] md:items-start md:px-5 md:py-8">
+          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-brass">Our philosophy</p>
+          <p className="text-lg leading-7 text-ink md:text-2xl md:leading-8">
+            Markets change quickly. Risk does too. The edge is organizing information before deciding.
+          </p>
+          <div className="grid gap-4 md:grid-cols-3">
+            {principles.map(([title, text]) => (
+              <div key={title} className="border-l border-line pl-5">
+                <p className="font-semibold text-ink">{title}</p>
+                <p className="mt-1 text-sm leading-6 text-muted">{text}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="border-b border-line bg-paper">
+        <div className="mx-auto max-w-7xl px-4 py-8 md:px-5 md:py-12">
+          <div className="grid gap-6 lg:grid-cols-[0.28fr_1fr] lg:items-start">
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-brass">Entry points</p>
+              <h2 className="mt-3 text-2xl font-semibold leading-tight text-ink">Choose where to enter</h2>
+            </div>
+            <div className="grid gap-3 md:grid-cols-2 md:gap-5 xl:grid-cols-5">
+              {entryways.map((tool) => <ToolCard key={tool.href} {...tool} />)}
+            </div>
+          </div>
+        </div>
+      </section>
+
       <section className="border-b border-line bg-[#f7f6f2]">
         <div className="mx-auto max-w-7xl px-4 py-10 md:px-5 md:py-16">
           <div className="grid gap-6 lg:grid-cols-[0.56fr_0.44fr] lg:items-end">
@@ -66,69 +397,42 @@ export default async function EnglishHomePage() {
             </p>
           </div>
 
-          <div className="mt-6 border border-petrol/30 bg-panel p-4 md:mt-9 md:p-7">
-            <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
-              <div>
-                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-brass">Integrated regime</p>
-                <div className="mt-4 flex flex-wrap items-center gap-3">
-                  <span className="inline-flex border border-petrol/40 bg-[#edf3f1] px-4 py-2 text-sm font-semibold text-petrol">
-                    {translateRegimeLabel(regimeSummary.current)}
-                  </span>
-                  <span className="text-sm text-muted">Bias: {translateBiasLabel(regimeSummary.bias).toLowerCase()}</span>
-                </div>
-              </div>
-              <div className="text-left md:text-right">
-                <p className="text-xs font-semibold uppercase tracking-[0.14em] text-muted">Confidence</p>
-                <p className="mt-1 text-xl font-semibold text-ink">{regimeSummary.confidence}%</p>
+          <div className="mt-6 grid gap-4 md:mt-9 md:gap-5 lg:grid-cols-[1.05fr_0.95fr]">
+            <RegimePreviewPanel regimeSummary={regimeSummary} />
+            <div className="grid gap-4 md:gap-5">
+              <SectorMiniChart data={sectorRotation} />
+              <div className="grid gap-4 md:grid-cols-2 md:gap-5 lg:grid-cols-1 xl:grid-cols-2">
+                <VixMiniPanel data={vix} />
+                <BtcFlowsMiniPanel data={btcEtfFlows} />
               </div>
             </div>
+          </div>
 
-            <div className="mt-6">
-              <div className="flex items-end justify-between gap-4">
-                <div>
-                  <p className="text-xs font-semibold uppercase tracking-[0.14em] text-muted">Score</p>
-                  <p className="mt-2 text-5xl font-semibold leading-none text-ink">{regimeSummary.regimeScore}</p>
-                </div>
-                <p className="max-w-[11rem] text-right text-xs leading-5 text-muted">
-                  Current regime summary using the same dashboard readings.
-                </p>
-              </div>
-              <div className="mt-5 h-2 border border-line bg-panelSoft">
-                <div className="h-full bg-[#a86464]" style={{ width: scoreWidth }} />
-              </div>
-              <div className="mt-2 flex justify-between text-[11px] uppercase tracking-[0.12em] text-muted">
-                <span>Caution</span>
-                <span>Neutral</span>
-                <span>Risk</span>
-              </div>
-            </div>
-
-            <div className="mt-5 grid gap-2 md:grid-cols-3">
-              {signals.map((signal, index) => (
-                <div key={`${signal.label}-${index}`} className="border-l border-brass/60 bg-panelSoft px-3 py-2.5">
-                  <p className="text-sm font-semibold leading-5 text-ink">{translateDashboardText(signal.label)}</p>
-                  <p className="mt-1 text-xs leading-5 text-muted">{translateDashboardText(signal.detail)}</p>
-                </div>
-              ))}
-            </div>
-            <p className="mt-5 text-sm leading-6 text-muted">{translateDashboardText(regimeSummary.interpretation)}</p>
-            <p className="mt-6 border-t border-line pt-4 text-xs leading-5 text-muted">
-              {translateDashboardText(regimeSummary.dataQualityNote)}
+          <div className="mt-8 flex flex-col gap-4 border-t border-line pt-6 md:flex-row md:items-center md:justify-between">
+            <p className="max-w-2xl text-sm leading-6 text-muted">
+              Educational context reading. It does not recommend investments, select assets or forecast future returns.
             </p>
+            <Link href="/en/dashboard" className="w-fit border border-ink bg-ink px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-panel hover:text-ink">
+              View market dashboard
+            </Link>
           </div>
         </div>
       </section>
 
-      <section className="mx-auto max-w-7xl px-4 py-10 md:px-5 md:py-14">
-        <p className="text-xs font-semibold uppercase tracking-[0.2em] text-brass">Entry points</p>
-        <div className="mt-5 grid gap-3 md:grid-cols-2 xl:grid-cols-5">
-          {entryways.map((item) => (
-            <Link key={item.href} href={item.href} className="flex min-h-[11rem] flex-col border border-line bg-panel p-4 transition hover:border-ink">
-              <h2 className="text-xl font-semibold text-ink">{item.title}</h2>
-              <p className="mt-3 text-sm leading-6 text-muted">{item.description}</p>
-              <span className="mt-auto pt-5 text-sm font-semibold text-ink">Open &rarr;</span>
-            </Link>
-          ))}
+      <section className="bg-paper">
+        <div className="mx-auto grid max-w-7xl gap-3 px-4 py-9 md:grid-cols-3 md:gap-5 md:px-5 md:py-12">
+          <Link href="/en/market" className="border border-line bg-panel p-4 transition hover:border-ink md:p-5">
+            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-brass">Market</p>
+            <h2 className="mt-3 text-xl font-semibold text-ink">Regime, levels and weekly report</h2>
+          </Link>
+          <Link href="/en/research" className="border border-line bg-panel p-4 transition hover:border-ink md:p-5">
+            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-brass">Research</p>
+            <h2 className="mt-3 text-xl font-semibold text-ink">Backtests, method and constraints</h2>
+          </Link>
+          <Link href="/en/protection" className="border border-line bg-panel p-4 transition hover:border-ink md:p-5">
+            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-brass">Protection</p>
+            <h2 className="mt-3 text-xl font-semibold text-ink">Checklist before committing capital</h2>
+          </Link>
         </div>
       </section>
     </div>
