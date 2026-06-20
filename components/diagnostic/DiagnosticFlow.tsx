@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import { DisclaimerBox } from "@/components/ui/DisclaimerBox";
 import { ProgressBar } from "@/components/ui/ProgressBar";
 import { RiskPill } from "@/components/ui/RiskPill";
@@ -15,10 +16,10 @@ const copy = {
     chooseDepth: "Elige profundidad",
     continue: "Continuar",
     depthTitle: "Diagnóstico premium retail abierto",
-    fullDescription: "Estructura preparada para más profundidad; en esta fase usa la base premium rápida y adaptativos.",
+    fullDescription: "Lectura más profunda de experiencia, conducta, liquidez, concentración y comprensión de productos.",
     fullDuration: "15-20 minutos",
-    fullQuestions: "Base rápida + adaptativas",
-    fullTitle: "Completo preparado",
+    fullQuestions: "45-55 base + adaptativas",
+    fullTitle: "Diagnóstico completo",
     progress: "Progreso",
     question: "Pregunta",
     questionOf: "de",
@@ -50,10 +51,10 @@ const copy = {
     chooseDepth: "Choose depth",
     continue: "Continue",
     depthTitle: "Open premium retail diagnostic",
-    fullDescription: "Prepared for deeper coverage; this phase uses the premium quick base and adaptive questions.",
+    fullDescription: "Deeper read across experience, behavior, liquidity, concentration and product understanding.",
     fullDuration: "15-20 minutes",
-    fullQuestions: "Quick base + adaptive",
-    fullTitle: "Full prepared",
+    fullQuestions: "45-55 base + adaptive",
+    fullTitle: "Full diagnostic",
     progress: "Progress",
     question: "Question",
     questionOf: "of",
@@ -267,8 +268,9 @@ function ModeCard({ active, description, duration, onClick, questions, title }: 
   );
 }
 
-function StartScreen({ locale, mode, setMode, start }: { locale: DiagnosticLocale; mode: DiagnosticMode; setMode: (mode: DiagnosticMode) => void; start: () => void }) {
+function StartScreen({ locale, mode, setMode, start }: { locale: DiagnosticLocale; mode: DiagnosticMode | undefined; setMode: (mode: DiagnosticMode) => void; start: () => void }) {
   const text = copy[locale];
+  const canStart = Boolean(mode);
   return (
     <section className="border border-line bg-panel p-5 md:p-7">
       <div className="grid gap-8 lg:grid-cols-[0.74fr_1.26fr] lg:items-start">
@@ -284,7 +286,7 @@ function StartScreen({ locale, mode, setMode, start }: { locale: DiagnosticLocal
       </div>
       <div className="mt-8 flex flex-col gap-4 border-t border-line pt-6 md:flex-row md:items-center md:justify-between">
         <p className="max-w-2xl text-sm leading-6 text-muted">{text.storageNote}</p>
-        <button type="button" onClick={start} className="w-fit border border-ink bg-ink px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-panel hover:text-ink">{text.start}</button>
+        <button type="button" onClick={start} disabled={!canStart} className="w-fit border border-ink bg-ink px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-panel hover:text-ink disabled:cursor-not-allowed disabled:opacity-35">{text.start}</button>
       </div>
     </section>
   );
@@ -437,24 +439,31 @@ function ResultScreen({ answers, locale, mode, restart }: { answers: DiagnosticA
   );
 }
 
-export function DiagnosticFlow({ initialMode = "quick", locale = "es" }: { initialMode?: DiagnosticMode; locale?: DiagnosticLocale }) {
-  const [mode, setMode] = useState<DiagnosticMode>(initialMode);
-  const [started, setStarted] = useState(false);
+export function DiagnosticFlow({ initialMode, locale = "es" }: { initialMode?: DiagnosticMode; locale?: DiagnosticLocale }) {
+  const searchParams = useSearchParams();
+  const restartToken = searchParams.get("restart");
+  const [mode, setMode] = useState<DiagnosticMode | undefined>(initialMode);
+  const [started, setStarted] = useState(Boolean(initialMode));
   const [index, setIndex] = useState(0);
   const [answers, setAnswers] = useState<DiagnosticAnswers>({});
   const [completed, setCompleted] = useState(false);
-  const questions = useMemo(() => getQuestionsForMode(mode, answers), [answers, mode]);
+  const questions = useMemo(() => mode ? getQuestionsForMode(mode, answers) : [], [answers, mode]);
   const question = questions[Math.min(index, questions.length - 1)];
 
   useEffect(() => {
-    if (!started) setMode(initialMode);
-  }, [initialMode, started]);
+    setMode(initialMode);
+    setStarted(Boolean(initialMode));
+    setCompleted(false);
+    setIndex(0);
+    setAnswers({});
+  }, [initialMode, restartToken]);
 
   useEffect(() => {
     if (index >= questions.length) setIndex(Math.max(0, questions.length - 1));
   }, [index, questions.length]);
 
   function start() {
+    if (!mode) return;
     setStarted(true);
     setCompleted(false);
     setIndex(0);
@@ -495,6 +504,7 @@ export function DiagnosticFlow({ initialMode = "quick", locale = "es" }: { initi
   }
 
   if (!started) return <StartScreen locale={locale} mode={mode} setMode={setMode} start={start} />;
+  if (!mode) return <StartScreen locale={locale} mode={mode} setMode={setMode} start={start} />;
   if (completed) return <ResultScreen answers={answers} locale={locale} mode={mode} restart={restart} />;
   if (!question) return null;
 

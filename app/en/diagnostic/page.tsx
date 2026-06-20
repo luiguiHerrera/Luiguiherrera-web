@@ -3,8 +3,9 @@ import { DisclaimerBox } from "@/components/ui/DisclaimerBox";
 import { SectionHeader } from "@/components/ui/SectionHeader";
 import type { DiagnosticMode } from "@/lib/diagnostic/types";
 
-function modeFromSearchParam(mode: string | string[] | undefined): DiagnosticMode {
-  return mode === "complete" ? "complete" : "quick";
+function modeFromSearchParam(mode: string | string[] | undefined): DiagnosticMode | undefined {
+  if (mode === "quick" || mode === "complete") return mode;
+  return undefined;
 }
 
 export default async function EnglishDiagnosticPage({ searchParams }: { searchParams?: Promise<{ mode?: string | string[] }> }) {

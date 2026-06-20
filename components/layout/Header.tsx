@@ -1,7 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
+import type { MouseEvent, ReactNode } from "react";
 import { LanguageSwitcher } from "@/components/layout/LanguageSwitcher";
 import { getDictionary } from "@/lib/i18n/get-dictionary";
 import { localeFromPathname } from "@/lib/i18n/locales";
@@ -32,26 +33,58 @@ type NavDropdownItem = {
   shortLabel: string;
 };
 
+function withDiagnosticRestart(href: string) {
+  const [pathAndQuery, hash = ""] = href.split("#");
+  const [path, query = ""] = pathAndQuery.split("?");
+  const params = new URLSearchParams(query);
+  params.set("restart", String(Date.now()));
+  const nextQuery = params.toString();
+  return `${path}${nextQuery ? `?${nextQuery}` : ""}${hash ? `#${hash}` : ""}`;
+}
+
+function isDiagnosticHref(href: string) {
+  return href === "/diagnostico" ||
+    href.startsWith("/diagnostico?") ||
+    href === "/en/diagnostic" ||
+    href.startsWith("/en/diagnostic?");
+}
+
+function HeaderLink({ children, className, href }: { children: ReactNode; className: string; href: string }) {
+  const router = useRouter();
+
+  function handleClick(event: MouseEvent<HTMLAnchorElement>) {
+    if (!isDiagnosticHref(href)) return;
+    event.preventDefault();
+    router.push(withDiagnosticRestart(href));
+  }
+
+  return (
+    <Link href={href} onClick={handleClick} className={className}>
+      {children}
+    </Link>
+  );
+}
+
 function DesktopDropdown({ href, items, label }: { href: string; items: NavDropdownItem[]; label: string }) {
   return (
     <div className="group relative shrink-0">
-      <Link
+      <HeaderLink
         href={href}
         className="block border-b border-transparent px-2 py-1.5 transition hover:border-ink hover:text-ink focus-visible:border-ink focus-visible:text-ink focus-visible:outline-none"
       >
         {label}
-      </Link>
+      </HeaderLink>
       <div className="invisible absolute left-0 top-full z-50 hidden w-[21rem] pt-3 opacity-0 transition duration-150 group-hover:visible group-hover:opacity-100 group-focus-within:visible group-focus-within:opacity-100 lg:block">
         <div className="grid gap-1 border border-line/80 bg-panel p-2 shadow-[0_14px_34px_rgba(31,35,40,0.10)]">
           {items.map((item) => (
-            <Link
+            <HeaderLink
               key={item.href}
               href={item.href}
               className="block px-3 py-2.5 text-[11px] text-muted transition hover:bg-panelSoft hover:text-ink focus-visible:bg-panelSoft focus-visible:text-ink focus-visible:outline-none"
             >
               <span className="block font-semibold text-ink">{item.label}</span>
               <span className="block pt-1 leading-5">{item.description}</span>
-            </Link>
+            </HeaderLink>
           ))}
         </div>
       </div>
@@ -82,9 +115,9 @@ export function Header() {
           </Link>
           <div className="flex items-center gap-2 sm:hidden">
             <LanguageSwitcher />
-            <Link href={hrefs.diagnostic} className="shrink-0 border border-ink bg-ink px-3 py-1.5 text-[11px] font-semibold text-white transition hover:bg-panel hover:text-ink">
+            <HeaderLink href={hrefs.diagnostic} className="shrink-0 border border-ink bg-ink px-3 py-1.5 text-[11px] font-semibold text-white transition hover:bg-panel hover:text-ink">
               {dictionary.layout.cta}
-            </Link>
+            </HeaderLink>
           </div>
         </div>
         <div className="flex w-full min-w-0 items-center gap-3 lg:w-auto">
@@ -102,19 +135,19 @@ export function Header() {
           <div className="hidden sm:block lg:ml-1">
             <LanguageSwitcher />
           </div>
-          <Link href={hrefs.diagnostic} className="hidden shrink-0 border border-ink bg-ink px-3.5 py-1.5 text-xs font-semibold text-white transition hover:bg-panel hover:text-ink sm:inline-flex">
+          <HeaderLink href={hrefs.diagnostic} className="hidden shrink-0 border border-ink bg-ink px-3.5 py-1.5 text-xs font-semibold text-white transition hover:bg-panel hover:text-ink sm:inline-flex">
             {dictionary.layout.cta}
-          </Link>
+          </HeaderLink>
         </div>
         <nav className="-mx-1 flex gap-1 overflow-x-auto border-t border-line/60 pt-1.5 text-[11px] text-muted [scrollbar-width:none] lg:hidden">
           {mobileItems.map((item) => (
-            <Link
+            <HeaderLink
               key={item.href}
               href={item.href}
               className="shrink-0 border border-line/70 bg-panelSoft px-2.5 py-1.5 font-semibold text-ink transition hover:border-ink"
             >
               {item.shortLabel}
-            </Link>
+            </HeaderLink>
           ))}
         </nav>
       </div>
