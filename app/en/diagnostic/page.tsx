@@ -21,7 +21,7 @@ export default async function EnglishDiagnosticPage({ searchParams }: { searchPa
           subtitle="Choose a quick or complete path to organize knowledge, experience, psychological tolerance and real risk capacity. The calculation runs in your browser during this session."
         />
         <DisclaimerBox>
-          We do not store answers, portfolios or individual results. Reloading the page resets the session. This diagnostic is educational and does not replace a formal suitability assessment.
+          We do not store answers, portfolios or individual results. Reloading the page resets the session. This diagnostic is an educational read of current preparation and is not financial advice or a personalized recommendation.
         </DisclaimerBox>
       </div>
       <DiagnosticFlow initialMode={initialMode} locale="en" />

@@ -2,6 +2,10 @@ export type DiagnosticMode = "quick" | "complete";
 export type DiagnosticLocale = "es" | "en";
 
 export type DiagnosticScoreKey =
+  | "incomeStability"
+  | "surplusCashFlow"
+  | "expensiveDebtControl"
+  | "goalClarity"
   | "financialCapacity"
   | "liquidityStrength"
   | "timeHorizon"
@@ -41,6 +45,11 @@ export type DiagnosticProduct =
   | "shortSelling";
 
 export type DiagnosticFlag =
+  | "income_fragility"
+  | "low_surplus"
+  | "expensive_debt"
+  | "low_emergency_fund"
+  | "unclear_horizon"
   | "liquidity_fragility"
   | "near_cash_need"
   | "capital_concentration"
@@ -86,14 +95,57 @@ export type DiagnosticQuestion = {
 
 export type DiagnosticAnswers = Record<string, string | string[]>;
 
-export type DiagnosticProfile =
-  | "Preservación"
-  | "Equilibrio prudente"
-  | "Crecimiento moderado"
-  | "Crecimiento dinámico"
-  | "Riesgo especulativo";
+export const DIAGNOSTIC_PROFILES = [
+  "Preservación",
+  "Equilibrio prudente",
+  "Crecimiento moderado",
+  "Crecimiento dinámico",
+  "Riesgo especulativo",
+] as const;
+
+export type DiagnosticProfile = typeof DIAGNOSTIC_PROFILES[number];
+
+export const DIAGNOSTIC_PROFILE_LABELS: Record<DiagnosticProfile, LocalizedText> = {
+  "Preservación": { es: "Preservación", en: "Preservation" },
+  "Equilibrio prudente": { es: "Equilibrio prudente", en: "Prudent balance" },
+  "Crecimiento moderado": { es: "Crecimiento moderado", en: "Moderate growth" },
+  "Crecimiento dinámico": { es: "Crecimiento dinámico", en: "Dynamic growth" },
+  "Riesgo especulativo": { es: "Riesgo especulativo", en: "Speculative risk" },
+};
 
 export type ComplexityBand = "Básica" | "Intermedia" | "Alta" | "Compleja";
+
+export type PaiDimension = "producir" | "administrar" | "invertir";
+
+export type PaiStage = "orden" | "preparacion" | "expansion";
+
+export type ReadinessLight = "red" | "yellow" | "green";
+
+export type PaiMainWeakness =
+  | "liquidity"
+  | "expensive_debt"
+  | "income_fragility"
+  | "low_emergency_fund"
+  | "unclear_horizon"
+  | "unrealistic_expectations"
+  | "low_product_understanding"
+  | "impulsivity"
+  | "concentration"
+  | "none";
+
+export type PaiReadiness = {
+  stage: PaiStage;
+  light: ReadinessLight;
+  producirScore: number;
+  administrarScore: number;
+  invertirScore: number;
+  invertirRawScore: number;
+  investingCappedByBase: boolean;
+  baseLimitNote: string | null;
+  weakestArea: PaiDimension;
+  mainWeakness: PaiMainWeakness;
+  nextEducationalStep: string;
+};
 
 export type DiagnosticResult = {
   mode: DiagnosticMode;
@@ -127,5 +179,6 @@ export type DiagnosticResult = {
   };
   scores: DiagnosticScores;
   selectedProducts: DiagnosticProduct[];
+  paiReadiness: PaiReadiness;
   disclaimer: string;
 };

@@ -21,7 +21,7 @@ export default async function DiagnosticoPage({ searchParams }: { searchParams?:
           subtitle="Elige una ruta rápida o completa para cruzar conocimientos, experiencia, tolerancia psicológica y capacidad real de asumir riesgo. Todo se calcula en tu navegador durante esta sesión."
         />
         <DisclaimerBox>
-          No guardamos respuestas, portafolios ni resultados individuales. Si recargas la página, la sesión se pierde. Este diagnóstico no es una evaluación formal de idoneidad ni constituye asesoramiento financiero o recomendación personalizada.
+          No guardamos respuestas, portafolios ni resultados individuales. Si recargas la página, la sesión se pierde. Este diagnóstico es una lectura educativa de preparación actual y no constituye asesoramiento financiero o recomendación personalizada.
         </DisclaimerBox>
       </div>
       <DiagnosticFlow initialMode={initialMode} />

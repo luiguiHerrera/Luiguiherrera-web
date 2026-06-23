@@ -4,11 +4,14 @@ import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { DisclaimerBox } from "@/components/ui/DisclaimerBox";
+import { DiagnosticPrintableReport } from "@/components/diagnostic/DiagnosticPrintableReport";
+import { DiagnosticReportActions } from "@/components/diagnostic/DiagnosticReportActions";
 import { ProgressBar } from "@/components/ui/ProgressBar";
 import { RiskPill } from "@/components/ui/RiskPill";
 import { getQuestionsForMode } from "@/lib/diagnostic/questions";
 import { scoreDiagnostic } from "@/lib/diagnostic/scoring";
-import type { DiagnosticAnswers, DiagnosticFlag, DiagnosticLocale, DiagnosticMode, DiagnosticQuestion, DiagnosticScoreKey } from "@/lib/diagnostic/types";
+import { DIAGNOSTIC_PROFILE_LABELS, DIAGNOSTIC_PROFILES } from "@/lib/diagnostic/types";
+import type { DiagnosticAnswers, DiagnosticFlag, DiagnosticLocale, DiagnosticMode, DiagnosticQuestion, DiagnosticScoreKey, PaiDimension, PaiMainWeakness, PaiStage, ReadinessLight } from "@/lib/diagnostic/types";
 
 const copy = {
   es: {
@@ -23,11 +26,11 @@ const copy = {
     progress: "Progreso",
     question: "Pregunta",
     questionOf: "de",
-    quickDescription: "25 preguntas base más 6-12 adaptativas según productos marcados.",
+    quickDescription: "29 preguntas base más adaptativas según productos marcados.",
     quickDuration: "7-10 minutos",
-    quickQuestions: "25 + adaptativas",
+    quickQuestions: "29 + adaptativas",
     quickTitle: "Diagnóstico rápido premium",
-    restart: "Empezar de nuevo",
+    restart: "Volver al inicio del diagnóstico",
     seeResult: "Ver resultado",
     start: "Empezar",
     startDescription: "Perfil, expectativas y capacidad real antes de tomar riesgo. Tu perfil declarado importa, pero tu perfil bajo presión pesa más.",
@@ -39,12 +42,21 @@ const copy = {
     expectation: "Expectativas y tensiones",
     loss: "Capacidad de pérdida",
     knowledge: "Conocimiento validado",
-    complexity: "Complejidad razonable",
+    complexity: "Complejidad a revisar",
+    complexityNote: "La lectura compara productos marcados con comprensión validada, experiencia y conducta bajo presión.",
     alerts: "Alertas principales",
     route: "Ruta sugerida dentro de la web",
     scores: "Mapa interno",
     flags: "Flags detectados",
     noFlags: "Sin flags dominantes",
+    routeNewTab: "Se abrirá en una nueva pestaña para no perder este resultado.",
+    pai: "Preparación para invertir",
+    paiPrudence: "Esta lectura ubica tu base financiera antes de tomar más riesgo. No decide por ti; muestra qué parte conviene reforzar.",
+    paiStage: "Etapa dominante",
+    paiLight: "Semáforo de preparación",
+    paiWeakness: "Principal punto a reforzar",
+    paiNextStep: "Siguiente paso educativo",
+    restartNote: "Puedes repetirlo si tu situación cambió o si quieres revisar tus respuestas con más calma.",
   },
   en: {
     back: "Back",
@@ -58,11 +70,11 @@ const copy = {
     progress: "Progress",
     question: "Question",
     questionOf: "of",
-    quickDescription: "25 base questions plus 6-12 adaptive questions depending on selected products.",
+    quickDescription: "29 base questions plus adaptive questions depending on selected products.",
     quickDuration: "7-10 minutes",
-    quickQuestions: "25 + adaptive",
+    quickQuestions: "29 + adaptive",
     quickTitle: "Premium quick diagnostic",
-    restart: "Start again",
+    restart: "Return to the diagnostic start",
     seeResult: "View result",
     start: "Start",
     startDescription: "Profile, expectations and real capacity before taking risk. Your declared profile matters, but your profile under pressure matters more.",
@@ -74,16 +86,29 @@ const copy = {
     expectation: "Expectations and tensions",
     loss: "Loss capacity",
     knowledge: "Validated knowledge",
-    complexity: "Reasonable complexity",
+    complexity: "Complexity to review",
+    complexityNote: "This compares selected products with validated understanding, experience and behavior under pressure.",
     alerts: "Main alerts",
     route: "Suggested path inside the website",
     scores: "Internal map",
     flags: "Detected flags",
     noFlags: "No dominant flags",
+    routeNewTab: "Opens in a new tab so you do not lose this result.",
+    pai: "Investment readiness",
+    paiPrudence: "This read places your financial base before taking more risk. It does not decide for you; it shows which area may need work.",
+    paiStage: "Dominant stage",
+    paiLight: "Readiness signal",
+    paiWeakness: "Main point to reinforce",
+    paiNextStep: "Next educational step",
+    restartNote: "You can repeat it if your situation changed or if you want to review your answers more calmly.",
   },
 };
 
 const scoreLabels: Record<DiagnosticScoreKey, { es: string; en: string }> = {
+  incomeStability: { es: "Estabilidad de ingresos", en: "Income stability" },
+  surplusCashFlow: { es: "Capacidad de excedente", en: "Surplus capacity" },
+  expensiveDebtControl: { es: "Control de deuda cara", en: "High-cost debt control" },
+  goalClarity: { es: "Claridad de objetivos", en: "Goal clarity" },
   financialCapacity: { es: "Capacidad financiera", en: "Financial capacity" },
   liquidityStrength: { es: "Fortaleza de liquidez", en: "Liquidity strength" },
   timeHorizon: { es: "Horizonte real", en: "Real horizon" },
@@ -100,7 +125,33 @@ const scoreLabels: Record<DiagnosticScoreKey, { es: string; en: string }> = {
   calibration: { es: "Calibración", en: "Calibration" },
 };
 
+const scoreDescriptions: Record<DiagnosticScoreKey, { es: string; en: string }> = {
+  incomeStability: { es: "Qué tan previsible es la fuente principal de ingresos.", en: "How predictable the main income source is." },
+  surplusCashFlow: { es: "Margen que queda después de cubrir gastos normales.", en: "Margin left after covering normal expenses." },
+  expensiveDebtControl: { es: "Nivel de presión de deudas de alto coste o pagos mensuales exigentes.", en: "Pressure from expensive debt or demanding monthly payments." },
+  goalClarity: { es: "Qué tan claro está para qué es el dinero y cuándo podría necesitarse.", en: "How clear the purpose and timing of this money are." },
+  financialCapacity: { es: "Margen financiero para asumir pérdidas sin afectar pagos importantes.", en: "Financial margin to absorb losses without affecting important payments." },
+  liquidityStrength: { es: "Capacidad de cubrir imprevistos sin vender inversiones en mal momento.", en: "Ability to handle surprises without selling investments at a bad time." },
+  timeHorizon: { es: "Tiempo durante el cual el dinero puede permanecer invertido sin necesidad cercana.", en: "How long the money can remain invested without near-term need." },
+  emotionalTolerance: { es: "Probable reacción ante caídas visibles con dinero real.", en: "Likely reaction to visible losses with real money." },
+  patience: { es: "Capacidad de sostener un plan durante periodos lentos o negativos.", en: "Ability to hold a plan through slow or negative periods." },
+  fomoSensitivity: { es: "Tendencia a cambiar de plan por comparación o miedo a quedarse por fuera.", en: "Tendency to change plans due to comparison or fear of missing out." },
+  euphoriaRisk: { es: "Tendencia a aumentar riesgo después de ganancias rápidas.", en: "Tendency to increase risk after quick gains." },
+  knowledgeValidated: { es: "Comprensión demostrada sobre productos y riesgos, no solo declarada.", en: "Demonstrated understanding of products and risks, not only declared." },
+  experienceReal: { es: "Contacto previo con inversiones reales y caídas vividas.", en: "Previous contact with real investments and lived drawdowns." },
+  expectationRealism: { es: "Coherencia entre retorno esperado, pérdida tolerada, liquidez y horizonte.", en: "Consistency between expected return, tolerated loss, liquidity and horizon." },
+  consistency: { es: "Coherencia entre respuestas declaradas y comportamiento bajo presión.", en: "Alignment between stated answers and behavior under pressure." },
+  productComplexity: { es: "Relación entre productos marcados, comprensión y experiencia.", en: "Relationship between selected products, understanding and experience." },
+  overconfidence: { es: "Diferencia entre confianza declarada y comprensión validada.", en: "Gap between stated confidence and validated understanding." },
+  calibration: { es: "Capacidad de reconocer cuándo algo no está claro.", en: "Ability to recognize when something is not clear." },
+};
+
 const flagLabels: Record<DiagnosticFlag, { es: string; en: string }> = {
+  income_fragility: { es: "ingresos frágiles", en: "income fragility" },
+  low_surplus: { es: "excedente bajo", en: "low surplus" },
+  expensive_debt: { es: "deuda cara", en: "high-cost debt" },
+  low_emergency_fund: { es: "fondo de emergencia bajo", en: "low emergency fund" },
+  unclear_horizon: { es: "horizonte poco claro", en: "unclear horizon" },
   liquidity_fragility: { es: "fragilidad de liquidez", en: "liquidity fragility" },
   near_cash_need: { es: "necesidad cercana de caja", en: "near cash need" },
   capital_concentration: { es: "concentración de capital", en: "capital concentration" },
@@ -124,11 +175,6 @@ const flagLabels: Record<DiagnosticFlag, { es: string; en: string }> = {
 };
 
 const translateResult: Record<string, string> = {
-  "Preservación": "Preservation",
-  "Equilibrio prudente": "Prudent balance",
-  "Crecimiento moderado": "Moderate growth",
-  "Crecimiento dinámico": "Dynamic growth",
-  "Riesgo especulativo": "Speculative risk",
   "Frágil": "Fragile",
   "Limitada": "Limited",
   "Suficiente": "Sufficient",
@@ -146,6 +192,72 @@ const translateResult: Record<string, string> = {
   "Explorar niveles estadísticos": "Explore statistical levels",
   "Revisar recursos": "Review resources",
 };
+
+const complexityLabels: Record<string, { es: string; en: string }> = {
+  Básica: { es: "Simple", en: "Simple" },
+  Intermedia: { es: "Moderada", en: "Moderate" },
+  Alta: { es: "Avanzada", en: "Advanced" },
+  Compleja: { es: "Avanzada", en: "Advanced" },
+  excessive: { es: "Excesiva por ahora", en: "Too high for now" },
+};
+
+const paiDimensionLabels: Record<PaiDimension, { es: string; en: string }> = {
+  producir: { es: "Producir", en: "Produce" },
+  administrar: { es: "Administrar", en: "Administer" },
+  invertir: { es: "Invertir", en: "Invest" },
+};
+
+const paiStageLabels: Record<PaiStage, { es: string; en: string }> = {
+  orden: { es: "Orden", en: "Order" },
+  preparacion: { es: "Preparación", en: "Preparation" },
+  expansion: { es: "Expansión", en: "Expansion" },
+};
+
+const paiStageDescriptions: Record<PaiStage, { es: string; en: string }> = {
+  orden: {
+    es: "Primero fortalecer ingresos, liquidez o control financiero.",
+    en: "First strengthen income, liquidity or financial control.",
+  },
+  preparacion: {
+    es: "La base existe, pero hay puntos que conviene reforzar antes de tomar más riesgo.",
+    en: "The base exists, but some areas may need work before taking more risk.",
+  },
+  expansion: {
+    es: "La estructura parece más sólida para estudiar inversión con mayor criterio.",
+    en: "The structure appears stronger for studying investment with more judgment.",
+  },
+};
+
+const paiLightLabels: Record<ReadinessLight, { es: string; en: string }> = {
+  red: { es: "Primero ordenar", en: "Organize first" },
+  yellow: { es: "Preparar antes de avanzar", en: "Prepare before moving forward" },
+  green: { es: "Base más sólida", en: "Stronger base" },
+};
+
+const paiWeaknessLabels: Record<PaiMainWeakness, { es: string; en: string }> = {
+  liquidity: { es: "liquidez", en: "liquidity" },
+  expensive_debt: { es: "deuda cara", en: "high-cost debt" },
+  income_fragility: { es: "ingresos frágiles", en: "income fragility" },
+  low_emergency_fund: { es: "fondo de emergencia bajo", en: "low emergency fund" },
+  unclear_horizon: { es: "horizonte poco claro", en: "unclear horizon" },
+  unrealistic_expectations: { es: "expectativas exigentes", en: "demanding expectations" },
+  low_product_understanding: { es: "comprensión de productos", en: "product understanding" },
+  impulsivity: { es: "impulsividad", en: "impulsivity" },
+  concentration: { es: "concentración", en: "concentration" },
+  none: { es: "sin tensión dominante", en: "no dominant tension" },
+};
+
+function paiStatus(score: number, locale: DiagnosticLocale) {
+  if (score >= 66) return locale === "es" ? "Fuerte" : "Strong";
+  if (score >= 45) return locale === "es" ? "A reforzar" : "Needs work";
+  return locale === "es" ? "Zona de atención" : "Attention zone";
+}
+
+function paiLightClass(light: ReadinessLight) {
+  if (light === "green") return "border-[#6f8f7b] bg-[#eef3f2] text-[#2f5f48]";
+  if (light === "yellow") return "border-brass/60 bg-[#f7f1df] text-[#7a5a18]";
+  return "border-[#b66a5d] bg-[#f8e9e6] text-[#8a3f35]";
+}
 
 function localText(locale: DiagnosticLocale, text: { es: string; en: string }) {
   return text[locale];
@@ -179,9 +291,14 @@ function scenarioFallback(questionId: string, locale: DiagnosticLocale) {
     es: "Una posición sube 45% en pocas semanas y ahora pesa mucho más dentro de tu cartera. ¿Qué haces primero?",
     en: "A position rises 45% in a few weeks and now represents a much larger part of your portfolio. What do you do first?",
   };
+  const concentration60 = {
+    es: "Tener 60% del capital en una sola posición o temática implica principalmente...",
+    en: "Having 60% of capital in a single position or theme mainly implies...",
+  };
   if (questionId === "loss_life_effect") return fall20[locale];
   if (questionId === "pressure_drop") return fall18[locale];
   if (questionId === "fast_gain") return gain45[locale];
+  if (questionId === "stocks_check") return concentration60[locale];
   return null;
 }
 
@@ -195,9 +312,10 @@ function renderQuestionText(question: DiagnosticQuestion, locale: DiagnosticLoca
     amountMinus18: formatMoney(locale, amount * 0.82),
     amountMinus20: formatMoney(locale, amount * 0.8),
     amountPlus45: formatMoney(locale, amount * 1.45),
+    amount60: formatMoney(locale, amount * 0.6),
   };
 
-  return text.replace(/\{(amount|amountMinus18|amountMinus20|amountPlus45)\}/g, (_, key: keyof typeof values) => values[key]);
+  return text.replace(/\{(amount|amountMinus18|amountMinus20|amountPlus45|amount60)\}/g, (_, key: keyof typeof values) => values[key]);
 }
 
 const genericQuestionHints = {
@@ -244,8 +362,22 @@ function getQuestionHint(question: DiagnosticQuestion, locale: DiagnosticLocale)
   return genericQuestionHints[locale][hintIndex(question.id)];
 }
 
+function isDiagnosticProfile(value: string): value is keyof typeof DIAGNOSTIC_PROFILE_LABELS {
+  return value in DIAGNOSTIC_PROFILE_LABELS;
+}
+
 function resultText(locale: DiagnosticLocale, value: string) {
+  if (locale === "en" && isDiagnosticProfile(value)) return DIAGNOSTIC_PROFILE_LABELS[value].en;
   return locale === "en" ? translateResult[value] ?? value : value;
+}
+
+function complexityText(locale: DiagnosticLocale, result: ReturnType<typeof scoreDiagnostic>) {
+  if (result.flags.includes("product_mismatch")) return complexityLabels.excessive[locale];
+  return complexityLabels[result.complexity.band]?.[locale] ?? resultText(locale, result.complexity.band);
+}
+
+function isConservativePressureProfile(profile: ReturnType<typeof scoreDiagnostic>["pressureProfile"]) {
+  return profile === DIAGNOSTIC_PROFILES[0] || profile === DIAGNOSTIC_PROFILES[1];
 }
 
 function routeHref(locale: DiagnosticLocale, href: string) {
@@ -358,25 +490,40 @@ function QuestionScreen({ answer, answers, currentIndex, locale, mode, onAnswer,
   );
 }
 
-function ScoreBar({ label, value }: { label: string; value: number }) {
+function ScoreBar({ description, label, value }: { description: string; label: string; value: number }) {
+  const accessibleLabel = `${label}: ${value}. ${description}`;
   return (
-    <div className="border border-line bg-panelSoft p-3">
+    <div className="group relative border border-line bg-panelSoft p-3" aria-label={accessibleLabel} tabIndex={0}>
       <div className="flex items-center justify-between gap-3">
-        <p className="text-xs font-semibold uppercase tracking-[0.12em] text-muted">{label}</p>
+        <div className="flex min-w-0 items-center gap-2">
+          <p className="text-xs font-semibold uppercase tracking-[0.12em] text-muted">{label}</p>
+          <span aria-hidden="true" className="flex h-5 w-5 shrink-0 items-center justify-center border border-line bg-panel text-[0.7rem] font-semibold text-muted">?</span>
+        </div>
         <p className="text-sm font-semibold text-ink">{value}</p>
       </div>
       <div className="mt-3 h-1.5 bg-panel"><div className="h-1.5 bg-[#6f8f7b]" style={{ width: `${value}%` }} /></div>
+      <div className="pointer-events-none absolute left-3 right-3 top-10 z-20 hidden border border-line bg-panel p-3 text-xs leading-5 text-muted shadow-sm md:group-hover:block md:group-focus:block md:group-focus-within:block">
+        {description}
+      </div>
+      <p className="mt-2 text-xs leading-5 text-muted md:hidden">{description}</p>
     </div>
   );
 }
 
 function ResultScreen({ answers, locale, mode, restart }: { answers: DiagnosticAnswers; locale: DiagnosticLocale; mode: DiagnosticMode; restart: () => void }) {
   const result = useMemo(() => scoreDiagnostic(answers, mode, locale), [answers, locale, mode]);
+  const generatedAt = useMemo(() => new Date(), []);
   const text = copy[locale];
   const scoreEntries = Object.entries(result.scores) as Array<[DiagnosticScoreKey, number]>;
+  const paiMatrix: Array<[PaiDimension, number]> = [
+    ["producir", result.paiReadiness.producirScore],
+    ["administrar", result.paiReadiness.administrarScore],
+    ["invertir", result.paiReadiness.invertirScore],
+  ];
 
   return (
-    <div className="grid gap-6 xl:grid-cols-[1.05fr_0.95fr]">
+    <>
+    <div className="no-print grid gap-6 xl:grid-cols-[1.05fr_0.95fr]">
       <section className="border border-line bg-panel p-5 md:p-7">
         <div className="flex flex-col gap-5 border-b border-line pb-6 md:flex-row md:items-start md:justify-between">
           <div>
@@ -384,19 +531,66 @@ function ResultScreen({ answers, locale, mode, restart }: { answers: DiagnosticA
             <h2 className="mt-3 text-2xl font-semibold leading-tight text-ink md:text-3xl">{resultText(locale, result.profile)}</h2>
             <p className="mt-4 max-w-2xl text-sm leading-7 text-muted">{result.summary}</p>
           </div>
-          <RiskPill label={resultText(locale, result.pressureProfile)} tone={result.pressureProfile === "Preservación" || result.pressureProfile === "Equilibrio prudente" ? "medium" : "low"} />
+          <RiskPill label={resultText(locale, result.pressureProfile)} tone={isConservativePressureProfile(result.pressureProfile) ? "medium" : "low"} />
+        </div>
+
+        <div className="mt-6 border border-line bg-panelSoft p-5">
+          <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
+            <div>
+              <h3 className="text-xl font-semibold text-ink">{text.pai}</h3>
+              <p className="mt-2 max-w-3xl text-sm leading-6 text-muted">{text.paiPrudence}</p>
+            </div>
+            <span className={`w-fit border px-3 py-1.5 text-xs font-semibold uppercase tracking-[0.12em] ${paiLightClass(result.paiReadiness.light)}`}>
+              {paiLightLabels[result.paiReadiness.light][locale]}
+            </span>
+          </div>
+
+          <div className="mt-5 grid gap-4 md:grid-cols-3">
+            <div className="border border-line bg-panel p-4">
+              <p className="text-xs uppercase tracking-[0.14em] text-muted">{text.paiStage}</p>
+              <p className="mt-2 text-2xl font-semibold text-ink">{paiStageLabels[result.paiReadiness.stage][locale]}</p>
+              <p className="mt-2 text-sm leading-6 text-muted">{paiStageDescriptions[result.paiReadiness.stage][locale]}</p>
+            </div>
+            <div className="border border-line bg-panel p-4">
+              <p className="text-xs uppercase tracking-[0.14em] text-muted">{text.paiLight}</p>
+              <p className="mt-2 text-2xl font-semibold text-ink">{paiLightLabels[result.paiReadiness.light][locale]}</p>
+            </div>
+            <div className="border border-line bg-panel p-4">
+              <p className="text-xs uppercase tracking-[0.14em] text-muted">{text.paiWeakness}</p>
+              <p className="mt-2 text-2xl font-semibold text-ink">{paiWeaknessLabels[result.paiReadiness.mainWeakness][locale]}</p>
+            </div>
+          </div>
+
+          <div className="mt-4 grid gap-3 md:grid-cols-3">
+            {paiMatrix.map(([dimension, score]) => (
+              <div key={dimension} className="border border-line bg-panel p-4">
+                <div className="flex items-center justify-between gap-3">
+                  <p className="font-semibold text-ink">{paiDimensionLabels[dimension][locale]}</p>
+                  <p className="text-sm font-semibold text-muted">{score}</p>
+                </div>
+                <div className="mt-3 h-1.5 bg-panelSoft"><div className="h-1.5 bg-[#6f8f7b]" style={{ width: `${score}%` }} /></div>
+                <p className="mt-3 text-sm font-semibold text-muted">{paiStatus(score, locale)}</p>
+              </div>
+            ))}
+          </div>
+
+          <div className="mt-4 border-l border-brass/60 pl-4">
+            <p className="text-xs font-semibold uppercase tracking-[0.14em] text-muted">{text.paiNextStep}</p>
+            <p className="mt-2 text-sm leading-6 text-ink">{result.paiReadiness.nextEducationalStep}</p>
+            {result.paiReadiness.baseLimitNote ? <p className="mt-2 text-sm leading-6 text-muted">{result.paiReadiness.baseLimitNote}</p> : null}
+          </div>
         </div>
 
         <div className="mt-6 grid gap-4 md:grid-cols-3">
           <div className="border border-line bg-panelSoft p-4"><p className="text-xs uppercase tracking-[0.14em] text-muted">{text.declared}</p><p className="mt-2 text-xl font-semibold text-ink">{resultText(locale, result.declaredProfile)}</p></div>
           <div className="border border-line bg-panelSoft p-4"><p className="text-xs uppercase tracking-[0.14em] text-muted">{text.pressure}</p><p className="mt-2 text-xl font-semibold text-ink">{resultText(locale, result.pressureProfile)}</p></div>
-          <div className="border border-line bg-panelSoft p-4"><p className="text-xs uppercase tracking-[0.14em] text-muted">{text.complexity}</p><p className="mt-2 text-xl font-semibold text-ink">{resultText(locale, result.complexity.band)}</p></div>
+          <div className="border border-line bg-panelSoft p-4"><p className="text-xs uppercase tracking-[0.14em] text-muted">{text.complexity}</p><p className="mt-2 text-xl font-semibold text-ink">{complexityText(locale, result)}</p><p className="mt-2 text-sm leading-6 text-muted">{text.complexityNote}</p></div>
         </div>
 
         <div className="mt-6 grid gap-4 md:grid-cols-3">
           <div className="border border-line bg-panelSoft p-4"><p className="font-semibold text-ink">{text.loss}</p><p className="mt-2 text-2xl font-semibold text-ink">{resultText(locale, result.lossCapacity.label)}</p><p className="mt-2 text-sm leading-6 text-muted">{result.lossCapacity.note}</p></div>
           <div className="border border-line bg-panelSoft p-4"><p className="font-semibold text-ink">{text.knowledge}</p><p className="mt-2 text-2xl font-semibold text-ink">{resultText(locale, result.knowledge.label)}</p><p className="mt-2 text-sm leading-6 text-muted">{result.knowledge.note}</p></div>
-          <div className="border border-line bg-panelSoft p-4"><p className="font-semibold text-ink">{text.route}</p><Link href={routeHref(locale, result.route.href)} className="mt-2 inline-block text-xl font-semibold text-ink underline-offset-4 hover:underline">{resultText(locale, result.route.label)}</Link><p className="mt-2 text-sm leading-6 text-muted">{result.route.note}</p></div>
+          <div className="border border-line bg-panelSoft p-4"><p className="font-semibold text-ink">{text.route}</p><Link href={routeHref(locale, result.route.href)} target="_blank" rel="noopener noreferrer" className="mt-2 inline-block text-xl font-semibold text-ink underline-offset-4 hover:underline">{resultText(locale, result.route.label)}</Link><p className="mt-2 text-sm leading-6 text-muted">{result.route.note}</p><p className="mt-2 text-xs leading-5 text-muted">{text.routeNewTab}</p></div>
         </div>
 
         <div className="mt-6 border border-line bg-panelSoft p-5">
@@ -415,10 +609,12 @@ function ResultScreen({ answers, locale, mode, restart }: { answers: DiagnosticA
       </section>
 
       <aside className="space-y-5">
+        <DiagnosticReportActions locale={locale} />
+
         <section className="border border-line bg-panel p-6">
           <h3 className="text-xl font-semibold text-ink">{text.scores}</h3>
           <div className="mt-5 grid gap-3">
-            {scoreEntries.map(([key, value]) => <ScoreBar key={key} label={scoreLabels[key][locale]} value={value} />)}
+            {scoreEntries.map(([key, value]) => <ScoreBar key={key} description={scoreDescriptions[key][locale]} label={scoreLabels[key][locale]} value={value} />)}
           </div>
         </section>
 
@@ -433,9 +629,12 @@ function ResultScreen({ answers, locale, mode, restart }: { answers: DiagnosticA
 
         <DisclaimerBox>{result.disclaimer}</DisclaimerBox>
 
+        <p className="text-sm leading-6 text-muted">{text.restartNote}</p>
         <button type="button" onClick={restart} className="w-full border border-ink bg-ink px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-panel hover:text-ink">{text.restart}</button>
       </aside>
     </div>
+    <DiagnosticPrintableReport generatedAt={generatedAt} locale={locale} result={result} />
+    </>
   );
 }
 
