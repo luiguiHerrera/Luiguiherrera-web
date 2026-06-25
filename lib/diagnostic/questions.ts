@@ -17,6 +17,8 @@ export const diagnosticQuestions: DiagnosticQuestion[] = [
       { id: "10000", label: t("10.000 €", "€10,000") },
       { id: "25000", label: t("25.000 €", "€25,000") },
       { id: "50000", label: t("50.000 €", "€50,000") },
+      { id: "100000", label: t("100.000 €", "€100,000") },
+      { id: "250000", label: t("250.000 €", "€250,000") },
       { id: "generic", label: t("Prefiero ejemplos genéricos", "I prefer generic examples") },
     ],
   },
