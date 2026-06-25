@@ -87,12 +87,12 @@ function RegimePreviewPanel({ regimeSummary }: { regimeSummary: RegimeSummary })
   const scoreWidth = `${Math.max(0, Math.min(regimeSummary.regimeScore, 100))}%`;
 
   return (
-    <div className="border border-petrol/30 bg-panel p-4 md:p-7">
+    <div className="rounded-[6px] border border-petrol/25 bg-white/80 p-4 shadow-[0_18px_48px_rgba(11,52,54,0.07)] md:p-7">
       <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
         <div>
-          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-brass">Integrated regime</p>
+          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-petrol">Integrated regime</p>
           <div className="mt-4 flex flex-wrap items-end gap-3">
-            <span className="inline-flex border border-petrol/40 bg-[#edf3f1] px-4 py-2 text-sm font-semibold text-petrol">
+            <span className="inline-flex rounded-[4px] border border-petrol/35 bg-[#eef5f2] px-4 py-2 text-sm font-semibold text-petrol">
               {translateRegimeLabel(regimeSummary.current)}
             </span>
             <span className="pb-1 text-sm text-muted">Bias: {translateBiasLabel(regimeSummary.bias).toLowerCase()}</span>
@@ -114,8 +114,8 @@ function RegimePreviewPanel({ regimeSummary }: { regimeSummary: RegimeSummary })
             Current regime summary using the same dashboard readings.
           </p>
         </div>
-        <div className="mt-5 h-2 border border-line bg-panelSoft">
-          <div className="h-full bg-[#a86464]" style={{ width: scoreWidth }} />
+        <div className="mt-5 h-2 overflow-hidden rounded-full border border-line bg-panelSoft">
+          <div className="h-full bg-danger" style={{ width: scoreWidth }} />
         </div>
         <div className="mt-2 flex justify-between text-[11px] uppercase tracking-[0.12em] text-muted">
           <span>Caution</span>
@@ -126,7 +126,7 @@ function RegimePreviewPanel({ regimeSummary }: { regimeSummary: RegimeSummary })
 
       <div className="mt-5 grid gap-2 md:mt-7 md:grid-cols-3 md:gap-3">
         {signals.map((signal: RegimeSignal, index) => (
-          <div key={`${signal.label}-${index}`} className="border-l border-brass/60 bg-panelSoft px-3 py-2.5 md:px-4 md:py-3">
+          <div key={`${signal.label}-${index}`} className="rounded-[4px] border-l border-petrol/55 bg-paper px-3 py-2.5 md:px-4 md:py-3">
             <p className="text-sm font-semibold leading-5 text-ink">{translateDashboardText(signal.label)}</p>
             <p className="mt-1 text-xs leading-5 text-muted">{translateDashboardText(signal.detail)}</p>
           </div>
@@ -157,13 +157,13 @@ function SectorMiniChart({ data }: { data: SectorRotationData | null }) {
   const maxAbs = Math.max(...rows.map((row) => Math.abs(row.value)), 1);
 
   return (
-    <div className="border border-line bg-panel p-4 md:p-5">
+    <div className="rounded-[6px] border border-line bg-white/80 p-4 shadow-[0_12px_32px_rgba(11,52,54,0.045)] md:p-5">
       <div className="flex items-start justify-between gap-4">
         <div>
-          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-brass">Sector rotation</p>
+          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-petrol">Sector rotation</p>
           <h3 className="mt-2 font-semibold text-ink">Relative 1W map</h3>
         </div>
-        <span className="border border-line bg-panelSoft px-2.5 py-1 text-xs font-semibold text-muted">
+        <span className="rounded-[4px] border border-line bg-paper px-2.5 py-1 text-xs font-semibold text-muted">
           {data?.dataStatus === "automated" ? "Alpha Vantage" : "Fallback"}
         </span>
       </div>
@@ -171,7 +171,7 @@ function SectorMiniChart({ data }: { data: SectorRotationData | null }) {
         {rows.map((row) => {
           const width = Math.max((Math.abs(row.value) / maxAbs) * 46, 2);
           const isPositive = row.value > 0;
-          const fill = isPositive ? "#6f8f7b" : "#a86464";
+          const fill = isPositive ? "#6F8F82" : "#8A4E45";
 
           return (
             <div key={row.ticker} className="grid grid-cols-[minmax(6.5rem,0.8fr)_1fr_3.4rem] items-center gap-3 text-xs">
@@ -213,14 +213,14 @@ function VixMiniPanel({ data }: { data: VixDashboardData | null }) {
   const trendLabel = spot?.vixTrend === "rising_fast" ? "Rising fast" : spot?.vixTrend === "rising" ? "Rising" : spot?.vixTrend === "falling" ? "Falling" : "Stable";
 
   return (
-    <div className="border border-line bg-panel p-4 md:p-6">
+    <div className="rounded-[6px] border border-line bg-white/80 p-4 shadow-[0_12px_32px_rgba(11,52,54,0.045)] md:p-6">
       <div className="flex items-start justify-between gap-4">
         <div>
-          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-brass">VIX</p>
+          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-petrol">VIX</p>
           <h3 className="mt-3 text-4xl font-semibold leading-none text-ink md:text-5xl">{latestVix === null || latestVix === undefined ? "--" : latestVix.toFixed(1)}</h3>
           <p className="mt-3 text-sm font-semibold text-ink">{translateDashboardText(spot?.vixCompositeLabel) || "Pending data"}</p>
         </div>
-        <span className="border border-[#b6905b]/40 bg-[#b6905b]/10 px-2.5 py-1 text-xs font-semibold text-[#76562d]">
+        <span className="rounded-[4px] border border-brass/35 bg-[#f7f0e2] px-2.5 py-1 text-xs font-semibold text-brass">
           {trendLabel}
         </span>
       </div>
@@ -230,7 +230,7 @@ function VixMiniPanel({ data }: { data: VixDashboardData | null }) {
       <svg viewBox="0 0 100 46" className="mt-5 h-20 w-full md:mt-6 md:h-28" preserveAspectRatio="none" aria-hidden="true">
         <line x1="0" x2="100" y1="10" y2="10" stroke="#eee9e3" strokeWidth="0.7" vectorEffect="non-scaling-stroke" />
         <line x1="0" x2="100" y1="38" y2="38" stroke="#e7e2dc" strokeWidth="0.8" vectorEffect="non-scaling-stroke" />
-        {path ? <path d={path} fill="none" stroke="#6f8f7b" strokeWidth="2.1" vectorEffect="non-scaling-stroke" /> : null}
+        {path ? <path d={path} fill="none" stroke="#6F8F82" strokeWidth="2.1" vectorEffect="non-scaling-stroke" /> : null}
       </svg>
       <div className="mt-3 flex justify-between border-t border-line pt-3 text-xs leading-5 text-muted">
         <span>FRED VIXCLS</span>
@@ -247,8 +247,8 @@ function BtcFlowsMiniPanel({ data }: { data: BtcEtfFlowsDashboardData | null }) 
   const barWidth = history.length > 0 ? 100 / history.length : 100;
 
   return (
-    <div className="border border-line bg-panel p-4 md:p-5">
-      <p className="text-xs font-semibold uppercase tracking-[0.18em] text-brass">BTC ETF flows</p>
+    <div className="rounded-[6px] border border-line bg-white/80 p-4 shadow-[0_12px_32px_rgba(11,52,54,0.045)] md:p-5">
+      <p className="text-xs font-semibold uppercase tracking-[0.18em] text-petrol">BTC ETF flows</p>
       <div className="mt-4 flex items-start justify-between gap-4">
         <div>
           <h3 className="text-3xl font-semibold leading-none text-ink">{formatCompactUsdMillions(flows?.latestTotalNetFlow ?? null)}</h3>
@@ -265,7 +265,7 @@ function BtcFlowsMiniPanel({ data }: { data: BtcEtfFlowsDashboardData | null }) 
           const magnitude = Math.max((Math.abs(value) / maxAbs) * 18, 0.7);
           const x = index * barWidth + 0.8;
           const y = value >= 0 ? 22 - magnitude : 22;
-          const fill = value > 0 ? "#6f8f7b" : value < 0 ? "#a86464" : "#a8a29e";
+          const fill = value > 0 ? "#6F8F82" : value < 0 ? "#8A4E45" : "#a8a29e";
 
           return <rect key={`${value}-${index}`} x={x} y={y} width={Math.max(barWidth - 1.6, 2)} height={magnitude} rx="0.9" fill={fill} />;
         })}
@@ -279,13 +279,13 @@ function BtcFlowsMiniPanel({ data }: { data: BtcEtfFlowsDashboardData | null }) 
 
 function StatisticalLevelsMiniPanel() {
   return (
-    <div className="border border-line bg-panel p-4 md:p-6">
+    <div className="rounded-[6px] border border-line bg-white/80 p-4 shadow-[0_12px_32px_rgba(11,52,54,0.045)] md:p-6">
       <div className="flex items-start justify-between gap-4">
         <div>
-          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-brass">Statistical levels</p>
+          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-petrol">Statistical levels</p>
           <h3 className="mt-2 font-semibold text-ink">Current position versus its own history</h3>
         </div>
-        <Link href="/en/statistical-levels" className="shrink-0 text-xs font-semibold text-ink underline-offset-4 hover:underline">
+        <Link href="/en/statistical-levels" className="shrink-0 text-xs font-semibold text-petrol underline-offset-4 hover:underline">
           Open lab
         </Link>
       </div>
@@ -297,8 +297,8 @@ function StatisticalLevelsMiniPanel() {
               <span className="font-semibold text-ink">{asset.ticker}</span>
               <span className="text-xs text-muted">Percentile {asset.percentile}</span>
             </div>
-            <div className="h-1.5 border border-line bg-panelSoft">
-              <div className="h-full bg-[#6f8f7b]" style={{ width: `${asset.percentile}%` }} />
+            <div className="h-1.5 overflow-hidden rounded-full border border-line bg-panelSoft">
+              <div className="h-full bg-sage" style={{ width: `${asset.percentile}%` }} />
             </div>
             <div className="grid grid-cols-2 gap-3 text-xs text-muted">
               <span>z-score <strong className="font-semibold text-ink">{asset.zScore}</strong></span>
@@ -320,9 +320,12 @@ export default async function EnglishHomePage() {
 
   return (
     <div>
-      <section className="relative overflow-hidden border-b border-line bg-panel">
+      <section className="relative overflow-hidden border-b border-line bg-paper">
         <div className="mx-auto grid min-h-[470px] max-w-7xl grid-cols-1 px-4 py-10 md:min-h-[650px] md:px-5 md:py-20 lg:grid-cols-[0.7fr_1fr] lg:items-center">
           <div className="relative z-20 max-w-2xl">
+            <p className="mb-4 w-fit rounded-full border border-petrol/20 bg-white/65 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-petrol">
+              Quant discipline for investors
+            </p>
             <h1 className="text-3xl font-semibold leading-[1.04] text-ink sm:text-4xl md:text-6xl">
               Before investing, understand how the market breathes.
             </h1>
@@ -330,11 +333,11 @@ export default async function EnglishHomePage() {
               eyebrow="Process before impulse"
               phrases={["Understand the context.", "Manage risk.", "Decide with data and less noise."]}
             />
-            <div className="mt-6 flex flex-wrap gap-3 md:mt-8 md:gap-4">
-              <Link href="/en/market" className="border border-ink bg-ink px-4 py-2 text-sm font-semibold text-white transition hover:bg-panel hover:text-ink md:px-5 md:py-2.5">
+            <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:flex-wrap md:mt-8 md:gap-4">
+              <Link href="/en/market" className="inline-flex w-full items-center justify-center rounded-[4px] border border-petrol bg-petrol px-4 py-2.5 text-sm font-semibold text-white shadow-[0_12px_26px_rgba(11,52,54,0.14)] transition hover:bg-panel hover:text-petrol sm:w-auto md:px-5">
                 Read the market
               </Link>
-              <Link href="/en/diagnostic" className="border border-line bg-panel px-4 py-2 text-sm font-semibold text-ink transition hover:border-ink md:px-5 md:py-2.5">
+              <Link href="/en/diagnostic" className="inline-flex w-full items-center justify-center rounded-[4px] border border-petrol/25 bg-white/70 px-4 py-2.5 text-sm font-semibold text-petrol transition hover:border-petrol hover:bg-white sm:w-auto md:px-5">
                 Start diagnostic
               </Link>
             </div>
@@ -348,21 +351,21 @@ export default async function EnglishHomePage() {
               sizes="(min-width: 1024px) 72vw, 100vw"
               className="object-contain object-[100%_100%] opacity-30 sm:opacity-45 md:object-cover md:object-[60%_50%] md:opacity-90 lg:object-[58%_50%]"
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-panel/10 via-panel/40 to-panel md:bg-gradient-to-r md:from-panel md:via-panel/80 md:via-45% md:to-panel/5" />
-            <div className="absolute inset-y-0 left-0 w-1/3 bg-panel/55 md:w-1/2 md:bg-panel/35" />
+            <div className="absolute inset-0 bg-gradient-to-t from-paper/10 via-paper/45 to-paper md:bg-gradient-to-r md:from-paper md:via-paper/82 md:via-45% md:to-paper/10" />
+            <div className="absolute inset-y-0 left-0 w-1/3 bg-paper/55 md:w-1/2 md:bg-paper/35" />
           </div>
         </div>
       </section>
 
-      <section className="border-b border-line bg-paper">
+      <section className="border-b border-line bg-white/55">
         <div className="mx-auto grid max-w-7xl gap-5 px-4 py-7 md:grid-cols-[0.35fr_1fr_0.95fr] md:items-start md:px-5 md:py-8">
-          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-brass">Our philosophy</p>
+          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-petrol">Our philosophy</p>
           <p className="text-lg leading-7 text-ink md:text-2xl md:leading-8">
             Markets change quickly. Risk does too. The edge is organizing information before deciding.
           </p>
           <div className="grid gap-4 md:grid-cols-3">
             {principles.map(([title, text]) => (
-              <div key={title} className="border-l border-line pl-5">
+              <div key={title} className="border-l border-petrol/25 pl-5">
                 <p className="font-semibold text-ink">{title}</p>
                 <p className="mt-1 text-sm leading-6 text-muted">{text}</p>
               </div>
@@ -375,7 +378,7 @@ export default async function EnglishHomePage() {
         <div className="mx-auto max-w-7xl px-4 py-8 md:px-5 md:py-12">
           <div className="grid gap-6 lg:grid-cols-[0.28fr_1fr] lg:items-start">
             <div>
-              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-brass">Entry points</p>
+              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-petrol">Entry points</p>
               <h2 className="mt-3 text-2xl font-semibold leading-tight text-ink">Choose where to enter</h2>
             </div>
             <div className="grid gap-3 md:grid-cols-2 md:gap-5 xl:grid-cols-5">
@@ -385,11 +388,11 @@ export default async function EnglishHomePage() {
         </div>
       </section>
 
-      <section className="border-b border-line bg-[#f7f6f2]">
+      <section className="border-b border-line bg-[#f3efe6]">
         <div className="mx-auto max-w-7xl px-4 py-10 md:px-5 md:py-16">
           <div className="grid gap-6 lg:grid-cols-[0.56fr_0.44fr] lg:items-end">
             <div>
-              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-brass">Market Regime Dashboard</p>
+              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-petrol">Market Regime Dashboard</p>
               <h2 className="mt-4 max-w-2xl text-2xl font-semibold leading-tight text-ink md:text-3xl">Daily market regime read</h2>
             </div>
             <p className="max-w-xl leading-7 text-muted lg:justify-self-end">
@@ -412,7 +415,7 @@ export default async function EnglishHomePage() {
             <p className="max-w-2xl text-sm leading-6 text-muted">
               Educational context reading. It does not recommend investments, select assets or forecast future returns.
             </p>
-            <Link href="/en/dashboard" className="w-fit border border-ink bg-ink px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-panel hover:text-ink">
+            <Link href="/en/dashboard" className="w-fit rounded-[4px] border border-petrol bg-petrol px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-panel hover:text-petrol">
               View market dashboard
             </Link>
           </div>
@@ -421,16 +424,16 @@ export default async function EnglishHomePage() {
 
       <section className="bg-paper">
         <div className="mx-auto grid max-w-7xl gap-3 px-4 py-9 md:grid-cols-3 md:gap-5 md:px-5 md:py-12">
-          <Link href="/en/market" className="border border-line bg-panel p-4 transition hover:border-ink md:p-5">
-            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-brass">Market</p>
+          <Link href="/en/market" className="rounded-[6px] border border-line bg-white/75 p-4 shadow-[0_10px_28px_rgba(11,52,54,0.035)] transition hover:border-petrol md:p-5">
+            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-petrol">Market</p>
             <h2 className="mt-3 text-xl font-semibold text-ink">Regime, levels and weekly report</h2>
           </Link>
-          <Link href="/en/research" className="border border-line bg-panel p-4 transition hover:border-ink md:p-5">
-            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-brass">Research</p>
+          <Link href="/en/research" className="rounded-[6px] border border-line bg-white/75 p-4 shadow-[0_10px_28px_rgba(11,52,54,0.035)] transition hover:border-petrol md:p-5">
+            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-petrol">Research</p>
             <h2 className="mt-3 text-xl font-semibold text-ink">Backtests, method and constraints</h2>
           </Link>
-          <Link href="/en/protection" className="border border-line bg-panel p-4 transition hover:border-ink md:p-5">
-            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-brass">Protection</p>
+          <Link href="/en/protection" className="rounded-[6px] border border-line bg-white/75 p-4 shadow-[0_10px_28px_rgba(11,52,54,0.035)] transition hover:border-petrol md:p-5">
+            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-petrol">Protection</p>
             <h2 className="mt-3 text-xl font-semibold text-ink">Checklist before committing capital</h2>
           </Link>
         </div>

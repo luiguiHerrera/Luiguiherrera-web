@@ -108,14 +108,14 @@ export function Sp500StatLevelsPreview({ data, locale }: { data: Sp500StatLevels
   ];
 
   return (
-    <section className="mt-8 border border-line bg-panel">
+    <section className="mt-8 rounded-[6px] border border-line bg-white/80 shadow-[0_14px_38px_rgba(11,52,54,0.045)]">
       <div className="grid gap-0 lg:grid-cols-[0.92fr_1.08fr]">
         <div className="flex flex-col border-b border-line p-5 md:p-7 lg:border-b-0 lg:border-r">
-          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-brass">{text.label}</p>
+          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-petrol">{text.label}</p>
           <h2 className="mt-4 max-w-2xl text-2xl font-semibold leading-tight text-ink md:text-4xl">{text.title}</h2>
           <p className="mt-4 max-w-2xl text-sm leading-7 text-muted md:text-base">{text.subtitle}</p>
-          <p className="mt-5 border-l border-line pl-4 text-xs leading-5 text-muted">{text.limit}</p>
-          <Link href={labHref} className="mt-7 w-fit border border-ink bg-ink px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-panel hover:text-ink">
+          <p className="mt-5 border-l border-petrol/25 pl-4 text-xs leading-5 text-muted">{text.limit}</p>
+          <Link href={labHref} className="mt-7 w-fit rounded-[4px] border border-petrol bg-petrol px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-panel hover:text-petrol">
             {text.cta}
           </Link>
         </div>
@@ -127,7 +127,7 @@ export function Sp500StatLevelsPreview({ data, locale }: { data: Sp500StatLevels
               <p className="mt-2 text-4xl font-semibold text-ink">{formatPrice(data.latestClose, locale)}</p>
               {data.latestDate ? <p className="mt-1 text-xs text-muted">{data.latestDate}</p> : null}
             </div>
-            <div className="min-w-[13rem] border border-line bg-panelSoft p-3">
+            <div className="min-w-[13rem] rounded-[4px] border border-line bg-paper p-3">
               <p className="text-xs text-muted">{text.percentile}</p>
               <p className="mt-1 text-2xl font-semibold text-ink">{formatPercentile(data.extensionPercentile, locale)}</p>
             </div>
@@ -144,10 +144,10 @@ export function Sp500StatLevelsPreview({ data, locale }: { data: Sp500StatLevels
           </div>
 
           <div className="mt-5">
-            <div className="relative h-2 bg-panelSoft">
-              <div className="absolute inset-0 border border-line" />
+            <div className="relative h-2 rounded-full bg-panelSoft">
+              <div className="absolute inset-0 rounded-full border border-line" />
               {pricePosition === null ? null : (
-                <span className="absolute top-1/2 h-5 w-px -translate-y-1/2 bg-ink" style={{ left: `${pricePosition}%` }} />
+                <span className="absolute top-1/2 h-5 w-px -translate-y-1/2 bg-petrol" style={{ left: `${pricePosition}%` }} />
               )}
             </div>
             <div className="mt-2 flex justify-between text-xs text-muted">
@@ -158,7 +158,7 @@ export function Sp500StatLevelsPreview({ data, locale }: { data: Sp500StatLevels
 
           <div className="mt-6 grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
             {metrics.map((metric) => (
-              <div key={metric.label} className="border border-line bg-panelSoft p-3">
+              <div key={metric.label} className="rounded-[4px] border border-line bg-paper p-3">
                 <p className="text-[11px] uppercase tracking-[0.12em] text-muted">{metric.label}</p>
                 <p className="mt-2 text-sm font-semibold text-ink">{metric.value}</p>
               </div>

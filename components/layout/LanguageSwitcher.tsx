@@ -16,17 +16,17 @@ export function LanguageSwitcher() {
   }
 
   return (
-    <div className="flex shrink-0 items-center border border-ink/35 bg-white text-[11px] font-semibold uppercase tracking-[0.12em] shadow-[0_4px_14px_rgba(31,35,40,0.08)]">
+    <div className="flex shrink-0 items-center rounded-[4px] border border-petrol/25 bg-white/80 text-[10px] font-semibold uppercase tracking-[0.1em] shadow-[0_4px_14px_rgba(11,52,54,0.06)] sm:text-[11px] sm:tracking-[0.12em]">
       <Link
         href={hrefFor("es")}
-        className={`px-2.5 py-1.5 transition hover:text-ink ${currentLocale === "es" ? "bg-ink text-white" : "text-muted"}`}
+        className={`px-2 py-1.5 transition hover:text-petrol sm:px-2.5 ${currentLocale === "es" ? "bg-petrol text-white" : "text-muted"}`}
         aria-current={currentLocale === "es" ? "page" : undefined}
       >
         ES
       </Link>
       <Link
         href={hrefFor("en")}
-        className={`px-2.5 py-1.5 transition hover:text-ink ${currentLocale === "en" ? "bg-ink text-white" : "text-muted"}`}
+        className={`px-2 py-1.5 transition hover:text-petrol sm:px-2.5 ${currentLocale === "en" ? "bg-petrol text-white" : "text-muted"}`}
         aria-current={currentLocale === "en" ? "page" : undefined}
       >
         EN

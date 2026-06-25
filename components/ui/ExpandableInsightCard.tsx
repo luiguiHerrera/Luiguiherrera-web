@@ -17,10 +17,10 @@ type ExpandableInsightCardProps = {
 };
 
 const toneClass = {
-  neutral: "border-line bg-panelSoft text-ink",
-  sage: "border-[#6f8f7b]/35 bg-[#6f8f7b]/10 text-[#385242]",
-  brass: "border-[#b6905b]/35 bg-[#b6905b]/10 text-[#76562d]",
-  danger: "border-[#a86464]/35 bg-[#a86464]/10 text-[#7b3f3f]",
+  neutral: "border-line bg-white/70 text-ink",
+  sage: "border-sage/35 bg-[#eef5f1] text-[#385242]",
+  brass: "border-brass/35 bg-[#f7f0e2] text-[#76562d]",
+  danger: "border-danger/35 bg-[#f4e9e6] text-[#7b3f3f]",
 };
 
 export function ExpandableInsightCard({
@@ -40,17 +40,17 @@ export function ExpandableInsightCard({
   const buttonLabel = locale === "en" ? (open ? "Collapse context" : "Expand context") : (open ? "Contraer contexto" : "Ampliar contexto");
 
   return (
-    <section className={`border border-line/90 bg-panel shadow-[0_8px_26px_rgba(31,35,40,0.035)] transition duration-200 hover:border-line ${className}`}>
+    <section className={`rounded-[6px] border border-line/90 bg-panel shadow-[0_12px_32px_rgba(11,52,54,0.04)] transition duration-200 hover:border-petrol/35 ${className}`}>
       <div className="p-3.5 md:p-5">
         <div className="flex flex-col gap-3.5 lg:flex-row lg:items-start lg:justify-between">
           <div className="max-w-3xl">
-            {eyebrow ? <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-brass md:text-xs md:tracking-[0.18em]">{eyebrow}</p> : null}
+            {eyebrow ? <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-petrol md:text-xs md:tracking-[0.18em]">{eyebrow}</p> : null}
             <h2 className="mt-1.5 text-lg font-semibold leading-snug text-ink md:mt-2 md:text-2xl">{title}</h2>
             <p className="mt-2 text-sm leading-6 text-muted md:mt-3 md:text-base md:leading-7">{reading}</p>
           </div>
           <div className="flex items-center justify-between gap-2 sm:justify-start lg:flex-col lg:items-end">
             {status ? (
-              <span className="min-w-0 truncate border border-line bg-panelSoft px-2.5 py-1 text-[11px] font-semibold text-muted md:text-xs">
+              <span className="min-w-0 truncate rounded-[4px] border border-line bg-white/70 px-2.5 py-1 text-[11px] font-semibold text-muted md:text-xs">
                 {status}
               </span>
             ) : null}
@@ -58,7 +58,7 @@ export function ExpandableInsightCard({
               type="button"
               onClick={() => setOpen((value) => !value)}
               aria-expanded={open}
-              className="shrink-0 border border-ink/80 bg-ink px-3 py-1.5 text-xs font-semibold text-white transition hover:bg-panel hover:text-ink focus:outline-none focus:ring-2 focus:ring-ink/20 md:px-4 md:py-2 md:text-sm"
+              className="shrink-0 rounded-[4px] border border-petrol bg-petrol px-3 py-1.5 text-xs font-semibold text-white transition hover:bg-panel hover:text-petrol focus:outline-none focus:ring-2 focus:ring-petrol/20 md:px-4 md:py-2 md:text-sm"
             >
               {buttonLabel}
             </button>
@@ -78,7 +78,7 @@ export function ExpandableInsightCard({
         {summaryExtra ? <div className="mt-4 md:mt-5">{summaryExtra}</div> : null}
       </div>
 
-      {open ? <div className="border-t border-line/80 bg-[#fbfaf8] p-3.5 md:p-5">{children}</div> : null}
+      {open ? <div className="border-t border-line/80 bg-paper/55 p-3.5 md:p-5">{children}</div> : null}
     </section>
   );
 }

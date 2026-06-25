@@ -13,14 +13,14 @@ export function Footer() {
   const legalHref = locale === "en" ? "/en/legal" : "/legal";
 
   return (
-    <footer className="border-t border-line bg-panel">
-      <div className="mx-auto flex max-w-7xl flex-col gap-4 px-5 py-8 text-sm text-muted md:flex-row md:items-center md:justify-between">
-        <p>{dictionary.layout.footerText}</p>
-        <div className="flex gap-4">
-          <Link className="hover:text-ink" href={methodologyHref}>
+    <footer className="border-t border-[#19484a] bg-petrol">
+      <div className="mx-auto flex max-w-7xl flex-col gap-5 px-5 py-9 text-sm leading-6 text-white/85 md:flex-row md:items-center md:justify-between md:py-8">
+        <p className="max-w-3xl">{dictionary.layout.footerText}</p>
+        <div className="flex flex-wrap gap-x-5 gap-y-2 border-t border-white/15 pt-4 md:border-t-0 md:pt-0">
+          <Link className="font-semibold text-white transition hover:text-white/80" href={methodologyHref}>
             {dictionary.layout.methodology}
           </Link>
-          <Link className="hover:text-ink" href={legalHref}>
+          <Link className="font-semibold text-white transition hover:text-white/80" href={legalHref}>
             {dictionary.layout.legal}
           </Link>
         </div>

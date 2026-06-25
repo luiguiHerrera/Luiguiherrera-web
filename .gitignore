@@ -17,3 +17,13 @@ out/
 .vercel/
 *.zip
 .env.local
+
+# Local QA artifacts
+qa-*.png
+qa-*.pdf
+qa-production-diagnostic.js
+qa-diagnostic-flow.js
+qa-diagnostic-flow.mjs
+Herramientas para inversionistas*.pdf
+playwright-report/
+test-results/
