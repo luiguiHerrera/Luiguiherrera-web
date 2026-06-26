@@ -21,6 +21,7 @@ export const en = {
     ],
     researchItems: [
       { href: "/en/research", label: "Research overview", shortLabel: "Overview", description: "Frameworks and market context for disciplined research." },
+      { href: "/en/research/td3", label: "Interactive TD3 paper", shortLabel: "TD3 paper", description: "Realistic evaluation of DRL claims under costs, cash and statistical validation." },
       { href: "/en/quant-lab", label: "Quant / TD3 Lab", shortLabel: "Quant Lab", description: "TD3 performance context and quantitative process notes." },
     ],
     protectionItems: [

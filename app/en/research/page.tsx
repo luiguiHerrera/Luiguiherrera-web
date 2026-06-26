@@ -2,6 +2,11 @@ import Link from "next/link";
 import { td3Project } from "@/lib/quant-lab/td3-results";
 
 const researchItems = [
+  {
+    title: "Realistic evaluation of DRL portfolio claims",
+    href: "/en/research/td3",
+    description: "Interactive TD3 paper on costs, cash, matched benchmarks and statistical validation.",
+  },
   { title: "Quant / TD3 Lab", href: "/en/quant-lab", description: "Models, backtests, realistic constraints and benchmarks tested with method." },
   { title: "TD3 Repository", href: td3Project.repoUrl, description: "Research code and traceability for the original TD3 experiment.", external: true },
 ];

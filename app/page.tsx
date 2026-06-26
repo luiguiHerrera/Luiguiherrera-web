@@ -431,9 +431,9 @@ export default async function Home() {
             <p className="text-xs font-semibold uppercase tracking-[0.18em] text-petrol">Mercado</p>
             <h2 className="mt-3 text-xl font-semibold text-ink">Régimen, niveles e informe semanal</h2>
           </Link>
-          <Link href="/investigacion" className="rounded-[6px] border border-line bg-white/75 p-4 shadow-[0_10px_28px_rgba(11,52,54,0.035)] transition hover:border-petrol md:p-5">
+          <Link href="/investigacion/td3" className="rounded-[6px] border border-line bg-white/75 p-4 shadow-[0_10px_28px_rgba(11,52,54,0.035)] transition hover:border-petrol md:p-5">
             <p className="text-xs font-semibold uppercase tracking-[0.18em] text-petrol">Investigación</p>
-            <h2 className="mt-3 text-xl font-semibold text-ink">Backtests, método y restricciones</h2>
+            <h2 className="mt-3 text-xl font-semibold text-ink">Paper interactivo TD3 y protocolo de evidencia</h2>
           </Link>
           <Link href="/proteccion" className="rounded-[6px] border border-line bg-white/75 p-4 shadow-[0_10px_28px_rgba(11,52,54,0.035)] transition hover:border-petrol md:p-5">
             <p className="text-xs font-semibold uppercase tracking-[0.18em] text-petrol">Protección</p>

@@ -3,6 +3,11 @@ import { td3Project } from "@/lib/quant-lab/td3-results";
 
 const researchItems = [
   {
+    title: "Evaluacion realista de claims DRL",
+    href: "/investigacion/td3",
+    description: "Paper interactivo TD3 sobre costes, cash, benchmarks comparables y validacion estadistica.",
+  },
+  {
     title: "Quant / TD3 Lab",
     href: "/quant-lab",
     description: "Modelos, backtests, restricciones realistas y benchmarks evaluados con método.",

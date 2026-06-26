@@ -5,6 +5,7 @@ export const routePairs = [
   { es: "/mercado", en: "/en/market" },
   { es: "/diagnostico", en: "/en/diagnostic" },
   { es: "/investigacion", en: "/en/research" },
+  { es: "/investigacion/td3", en: "/en/research/td3" },
   { es: "/proteccion", en: "/en/protection" },
   { es: "/recursos", en: "/en/resources" },
   { es: "/dashboard", en: "/en/dashboard" },

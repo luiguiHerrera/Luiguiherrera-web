@@ -21,6 +21,7 @@ export const es = {
     ],
     researchItems: [
       { href: "/investigacion", label: "Vista de investigación", shortLabel: "Vista", description: "Marcos y contexto de mercado para investigar con disciplina." },
+      { href: "/investigacion/td3", label: "Paper interactivo TD3", shortLabel: "TD3 paper", description: "Evaluación realista de claims DRL bajo costes, cash y validación estadística." },
       { href: "/quant-lab", label: "Quant / TD3 Lab", shortLabel: "Quant Lab", description: "Contexto de rendimiento TD3 y notas del proceso cuantitativo." },
     ],
     protectionItems: [
