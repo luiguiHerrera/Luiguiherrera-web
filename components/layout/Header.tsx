@@ -112,14 +112,14 @@ export function Header() {
             <span className="h-2 w-2 shrink-0 rounded-full bg-petrol sm:h-2.5 sm:w-2.5" aria-hidden="true" />
             <span className="truncate">{dictionary.layout.brand}</span>
           </Link>
-          <div className="flex shrink-0 items-center gap-1.5 sm:hidden">
-            <LanguageSwitcher />
-            <HeaderLink href={hrefs.diagnostic} className="inline-flex min-h-7 min-w-[4.5rem] shrink-0 items-center justify-center rounded-[4px] border border-petrol bg-petrol px-2.5 py-1 text-[10px] font-semibold text-white transition hover:bg-panel hover:text-petrol">
-              {dictionary.layout.cta}
-            </HeaderLink>
-          </div>
         </div>
-        <div className="flex w-full min-w-0 items-center gap-3 lg:w-auto">
+        <div className="grid grid-cols-[auto_minmax(0,1fr)] items-center gap-2 md:hidden">
+          <LanguageSwitcher />
+          <HeaderLink href={hrefs.diagnostic} className="inline-flex min-h-8 w-full items-center justify-center rounded-[4px] border border-petrol bg-petrol px-3 py-1.5 text-[11px] font-semibold text-white shadow-[0_8px_18px_rgba(11,52,54,0.10)] transition hover:bg-panel hover:text-petrol">
+            {dictionary.layout.cta}
+          </HeaderLink>
+        </div>
+        <div className="hidden w-full min-w-0 items-center gap-3 md:flex lg:w-auto">
           <nav className="-mx-1 flex max-w-full min-w-0 gap-1 overflow-x-auto text-[12px] text-muted [scrollbar-width:none] lg:mx-0 lg:flex-wrap lg:items-center lg:overflow-visible">
             <Link
               href={hrefs.home}
@@ -131,10 +131,10 @@ export function Header() {
               <DesktopDropdown key={group.href} href={group.href} label={group.label} items={group.items} />
             ))}
           </nav>
-          <div className="hidden sm:block lg:ml-1">
+          <div className="hidden md:block lg:ml-1">
             <LanguageSwitcher />
           </div>
-          <HeaderLink href={hrefs.diagnostic} className="hidden shrink-0 rounded-[4px] border border-petrol bg-petrol px-3.5 py-1.5 text-xs font-semibold text-white shadow-[0_8px_18px_rgba(11,52,54,0.12)] transition hover:bg-panel hover:text-petrol sm:inline-flex">
+          <HeaderLink href={hrefs.diagnostic} className="hidden shrink-0 rounded-[4px] border border-petrol bg-petrol px-3.5 py-1.5 text-xs font-semibold text-white shadow-[0_8px_18px_rgba(11,52,54,0.12)] transition hover:bg-panel hover:text-petrol md:inline-flex">
             {dictionary.layout.cta}
           </HeaderLink>
         </div>

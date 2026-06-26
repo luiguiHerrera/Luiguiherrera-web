@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { InvestmentPractice } from "@/components/protection/InvestmentPractice";
 
 const protectionItems = [
   {
@@ -15,7 +16,7 @@ const protectionItems = [
 
 export default function ProteccionPage() {
   return (
-    <div className="mx-auto max-w-7xl px-5 py-10 md:py-14">
+    <div className="mx-auto max-w-7xl overflow-hidden px-4 py-10 md:px-5 md:py-14">
       <section className="border-b border-line pb-10">
         <p className="text-xs font-semibold uppercase tracking-[0.18em] text-petrol">Control de riesgo</p>
         <h1 className="mt-4 text-4xl font-semibold leading-[1.02] text-ink md:text-6xl">Protección</h1>
@@ -23,6 +24,8 @@ export default function ProteccionPage() {
           Checklist, alertas y filtros para cuidar el margen de error antes de entregar capital.
         </p>
       </section>
+
+      <InvestmentPractice locale="es" />
 
       <section className="mt-8 grid gap-5 md:grid-cols-2">
         {protectionItems.map((item) => (
