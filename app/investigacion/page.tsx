@@ -1,11 +1,20 @@
 import Link from "next/link";
 import { td3Project } from "@/lib/quant-lab/td3-results";
 
-const researchItems = [
+type ResearchItem = {
+  title: string;
+  href: string;
+  description: string;
+  external?: boolean;
+  featured?: boolean;
+};
+
+const researchItems: ResearchItem[] = [
   {
-    title: "Evaluacion realista de claims DRL",
+    title: "Evaluación realista de claims DRL",
     href: "/investigacion/td3",
-    description: "Paper interactivo TD3 sobre costes, cash, benchmarks comparables y validacion estadistica.",
+    description: "Paper interactivo sobre costes, cash, benchmarks comparables y validación estadística.",
+    featured: true,
   },
   {
     title: "Quant / TD3 Lab",
@@ -51,7 +60,13 @@ export default function InvestigacionPage() {
               <span className="mt-auto pt-6 text-sm font-semibold text-petrol">Abrir repositorio &rarr;</span>
             </a>
           ) : (
-            <Link key={item.href} href={item.href} className="group flex min-h-[13rem] flex-col rounded-[6px] border border-line bg-white/75 p-5 shadow-[0_12px_32px_rgba(11,52,54,0.045)] transition hover:border-petrol hover:bg-white">
+            <Link
+              key={item.href}
+              href={item.href}
+              className={`group flex min-h-[13rem] flex-col rounded-[6px] border p-5 shadow-[0_12px_32px_rgba(11,52,54,0.045)] transition hover:border-petrol hover:bg-white ${
+                item.featured ? "border-petrol/35 bg-white shadow-[0_18px_42px_rgba(11,52,54,0.075)]" : "border-line bg-white/75"
+              }`}
+            >
               <h2 className="text-2xl font-semibold text-ink">{item.title}</h2>
               <p className="mt-3 text-sm leading-6 text-muted">{item.description}</p>
               <span className="mt-auto pt-6 text-sm font-semibold text-petrol">Explorar &rarr;</span>

@@ -47,10 +47,10 @@ function ProtocolResults({ protocol, locale }: { protocol: CashProtocol; locale:
       : {
           selected: "TD3 seleccionado",
           comparator: "Comparador",
-          td3: "Metricas TD3",
-          benchmark: "Metricas comparador",
-          validation: "Validacion estadistica",
-          interpretation: "Interpretacion",
+          td3: "Métricas TD3",
+          benchmark: "Métricas comparador",
+          validation: "Validación estadística",
+          interpretation: "Interpretación",
         };
 
   return (
@@ -117,18 +117,18 @@ export function Td3InteractivePaper({ content }: Td3InteractivePaperProps) {
           finalEyebrow: "Reading",
         }
       : {
-          thesisEyebrow: "Claim stack",
-          protocolEyebrow: "Mapa de evaluacion",
-          universeEyebrow: "Test bed",
+          thesisEyebrow: "Stack de claims",
+          protocolEyebrow: "Mapa de evaluación",
+          universeEyebrow: "Banco de pruebas",
           cashEyebrow: "Supuestos",
-          resultsEyebrow: "Evidencia, no recomendacion",
-          evidenceClaim: "Claim",
+          resultsEyebrow: "Evidencia, no recomendación",
+          evidenceClaim: "Afirmación",
           evidenceState: "Evidencia",
-          reason: "Por que esta incluido",
-          limitation: "Limitacion",
+          reason: "Por qué está incluido",
+          limitation: "Limitación",
           activeStep: "Capa activa",
-          input: "Input",
-          output: "Output",
+          input: "Entrada",
+          output: "Salida",
           robustnessEyebrow: "Robustez",
           finalEyebrow: "Lectura",
         };
