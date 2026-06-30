@@ -8,6 +8,7 @@ export const en = {
       diagnostic: "Diagnostic",
       research: "Research",
       protection: "Protection",
+      trends: "Trends",
       resources: "Resources",
     },
     marketItems: [
@@ -29,12 +30,16 @@ export const en = {
       { href: "/en/protect-your-money", label: "Protect your money", shortLabel: "Protect", description: "Practical red flags and safeguards for everyday decisions." },
       { href: "/en/dashboard#radar", label: "Cross-readings radar", shortLabel: "Radar", description: "Curated tensions across short interest, institutions and notes." },
     ],
+    trendsItems: [
+      { href: "/en/trends", label: "Trends: from the world to the portfolio", shortLabel: "Trends", description: "Educational framework for turning global change into hypotheses without recommendations." },
+    ],
     resourcesItems: [
       { href: "/en/resources", label: "Resources overview", shortLabel: "Overview", description: "Public tools and scripts to support your investment process." },
       { href: "/en/resources#tradingview-scripts", label: "TradingView scripts", shortLabel: "Scripts", description: "Compact catalog of public TradingView utilities." },
     ],
     footerText: "Educational tools to organize context, risk and process. Final control always stays with the investor.",
     methodology: "Methodology",
+    trends: "Trends",
     legal: "Legal",
   },
 };

@@ -5,10 +5,11 @@ type ToolCardProps = {
   description: string;
   href: string;
   label: string;
+  actionLabel?: string;
   meta?: string;
 };
 
-export function ToolCard({ title, description, href, label, meta }: ToolCardProps) {
+export function ToolCard({ title, description, href, label, actionLabel = "Abrir herramienta", meta }: ToolCardProps) {
   return (
     <Link href={href} className="group flex min-h-[8.5rem] flex-col rounded-[6px] border border-line bg-white/70 p-4 shadow-[0_10px_28px_rgba(11,52,54,0.035)] transition duration-200 hover:border-petrol hover:bg-white">
       <div className="flex items-center justify-between gap-4">
@@ -17,7 +18,7 @@ export function ToolCard({ title, description, href, label, meta }: ToolCardProp
       </div>
       <h2 className="mt-3 text-lg font-semibold text-ink">{title}</h2>
       <p className="mt-2 text-sm leading-6 text-muted">{description}</p>
-      <span className="mt-auto pt-5 text-sm font-semibold text-petrol transition group-hover:translate-x-0.5">Abrir herramienta &rarr;</span>
+      <span className="mt-auto pt-5 text-sm font-semibold text-petrol transition group-hover:translate-x-0.5">{actionLabel} &rarr;</span>
     </Link>
   );
 }

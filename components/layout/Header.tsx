@@ -14,6 +14,7 @@ const navHrefs = {
     diagnostic: "/diagnostico",
     research: "/investigacion",
     protection: "/proteccion",
+    trends: "/tendencias",
     resources: "/recursos",
   },
   en: {
@@ -22,6 +23,7 @@ const navHrefs = {
     diagnostic: "/en/diagnostic",
     research: "/en/research",
     protection: "/en/protection",
+    trends: "/en/trends",
     resources: "/en/resources",
   },
 };
@@ -102,6 +104,7 @@ export function Header() {
     { href: hrefs.diagnostic, label: dictionary.layout.nav.diagnostic, items: dictionary.layout.diagnosticItems },
     { href: hrefs.research, label: dictionary.layout.nav.research, items: dictionary.layout.researchItems },
     { href: hrefs.protection, label: dictionary.layout.nav.protection, items: dictionary.layout.protectionItems },
+    { href: hrefs.trends, label: dictionary.layout.nav.trends, items: dictionary.layout.trendsItems },
     { href: hrefs.resources, label: dictionary.layout.nav.resources, items: dictionary.layout.resourcesItems },
   ];
   return (

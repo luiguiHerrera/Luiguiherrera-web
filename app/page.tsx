@@ -37,8 +37,14 @@ const entryways = [
     description: "Filtros y checklist para cuidar el margen de error.",
   },
   {
-    title: "Usar recursos gratuitos",
     label: "05",
+    title: "Explorar tendencias",
+    href: "/tendencias",
+    description: "Cambios del mundo convertidos en hipótesis educativas.",
+  },
+  {
+    title: "Usar recursos gratuitos",
+    label: "06",
     href: "/recursos",
     description: "Scripts y herramientas públicas para tu proceso.",
   },
@@ -384,7 +390,7 @@ export default async function Home() {
               <p className="text-xs font-semibold uppercase tracking-[0.2em] text-petrol">Puertas de entrada</p>
               <h2 className="mt-3 text-2xl font-semibold leading-tight text-ink">Elige por dónde entrar</h2>
             </div>
-            <div className="grid gap-3 md:grid-cols-2 md:gap-5 xl:grid-cols-5">
+            <div className="grid gap-3 md:grid-cols-2 md:gap-5 xl:grid-cols-6">
               {entryways.map((tool) => <ToolCard key={tool.href} {...tool} />)}
             </div>
           </div>
@@ -426,7 +432,7 @@ export default async function Home() {
       </section>
 
       <section className="bg-paper">
-        <div className="mx-auto grid max-w-7xl gap-3 px-4 py-9 md:grid-cols-3 md:gap-5 md:px-5 md:py-12">
+        <div className="mx-auto grid max-w-7xl gap-3 px-4 py-9 md:grid-cols-4 md:gap-5 md:px-5 md:py-12">
           <Link href="/mercado" className="rounded-[6px] border border-line bg-white/75 p-4 shadow-[0_10px_28px_rgba(11,52,54,0.035)] transition hover:border-petrol md:p-5">
             <p className="text-xs font-semibold uppercase tracking-[0.18em] text-petrol">Mercado</p>
             <h2 className="mt-3 text-xl font-semibold text-ink">Régimen, niveles e informe semanal</h2>
@@ -438,6 +444,10 @@ export default async function Home() {
           <Link href="/proteccion" className="rounded-[6px] border border-line bg-white/75 p-4 shadow-[0_10px_28px_rgba(11,52,54,0.035)] transition hover:border-petrol md:p-5">
             <p className="text-xs font-semibold uppercase tracking-[0.18em] text-petrol">Protección</p>
             <h2 className="mt-3 text-xl font-semibold text-ink">Checklist antes de entregar capital</h2>
+          </Link>
+          <Link href="/tendencias" className="rounded-[6px] border border-line bg-white/75 p-4 shadow-[0_10px_28px_rgba(11,52,54,0.035)] transition hover:border-petrol md:p-5">
+            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-petrol">Tendencias</p>
+            <h2 className="mt-3 text-xl font-semibold text-ink">Del cambio global a una hipótesis educativa</h2>
           </Link>
         </div>
       </section>

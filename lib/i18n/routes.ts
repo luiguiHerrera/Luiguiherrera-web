@@ -7,6 +7,7 @@ export const routePairs = [
   { es: "/investigacion", en: "/en/research" },
   { es: "/investigacion/td3", en: "/en/research/td3" },
   { es: "/proteccion", en: "/en/protection" },
+  { es: "/tendencias", en: "/en/trends" },
   { es: "/recursos", en: "/en/resources" },
   { es: "/dashboard", en: "/en/dashboard" },
   { es: "/niveles-estadisticos", en: "/en/statistical-levels" },

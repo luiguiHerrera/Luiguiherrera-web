@@ -18,30 +18,42 @@ const entryways = [
     label: "01",
     href: "/en/market",
     description: "Context, regime and levels to understand the terrain.",
+    actionLabel: "Open tool",
   },
   {
     title: "Know my profile",
     label: "02",
     href: "/en/diagnostic",
     description: "Risk, horizon, biases and capacity before moving capital.",
+    actionLabel: "Open tool",
   },
   {
     label: "03",
     title: "Research strategies",
     href: "/en/research",
     description: "Models and backtests tested with method.",
+    actionLabel: "Open tool",
   },
   {
     label: "04",
     title: "Protect capital",
     href: "/en/protection",
     description: "Filters and checklists to protect the margin of error.",
+    actionLabel: "Open tool",
+  },
+  {
+    label: "05",
+    title: "Explore trends",
+    href: "/en/trends",
+    description: "World changes translated into educational hypotheses.",
+    actionLabel: "Open tool",
   },
   {
     title: "Use free resources",
-    label: "05",
+    label: "06",
     href: "/en/resources",
     description: "Public tools and scripts for your process.",
+    actionLabel: "Open tool",
   },
 ];
 
@@ -381,7 +393,7 @@ export default async function EnglishHomePage() {
               <p className="text-xs font-semibold uppercase tracking-[0.2em] text-petrol">Entry points</p>
               <h2 className="mt-3 text-2xl font-semibold leading-tight text-ink">Choose where to enter</h2>
             </div>
-            <div className="grid gap-3 md:grid-cols-2 md:gap-5 xl:grid-cols-5">
+            <div className="grid gap-3 md:grid-cols-2 md:gap-5 xl:grid-cols-6">
               {entryways.map((tool) => <ToolCard key={tool.href} {...tool} />)}
             </div>
           </div>
@@ -423,7 +435,7 @@ export default async function EnglishHomePage() {
       </section>
 
       <section className="bg-paper">
-        <div className="mx-auto grid max-w-7xl gap-3 px-4 py-9 md:grid-cols-3 md:gap-5 md:px-5 md:py-12">
+        <div className="mx-auto grid max-w-7xl gap-3 px-4 py-9 md:grid-cols-4 md:gap-5 md:px-5 md:py-12">
           <Link href="/en/market" className="rounded-[6px] border border-line bg-white/75 p-4 shadow-[0_10px_28px_rgba(11,52,54,0.035)] transition hover:border-petrol md:p-5">
             <p className="text-xs font-semibold uppercase tracking-[0.18em] text-petrol">Market</p>
             <h2 className="mt-3 text-xl font-semibold text-ink">Regime, levels and weekly report</h2>
@@ -435,6 +447,10 @@ export default async function EnglishHomePage() {
           <Link href="/en/protection" className="rounded-[6px] border border-line bg-white/75 p-4 shadow-[0_10px_28px_rgba(11,52,54,0.035)] transition hover:border-petrol md:p-5">
             <p className="text-xs font-semibold uppercase tracking-[0.18em] text-petrol">Protection</p>
             <h2 className="mt-3 text-xl font-semibold text-ink">Checklist before committing capital</h2>
+          </Link>
+          <Link href="/en/trends" className="rounded-[6px] border border-line bg-white/75 p-4 shadow-[0_10px_28px_rgba(11,52,54,0.035)] transition hover:border-petrol md:p-5">
+            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-petrol">Trends</p>
+            <h2 className="mt-3 text-xl font-semibold text-ink">From global change to an educational hypothesis</h2>
           </Link>
         </div>
       </section>
