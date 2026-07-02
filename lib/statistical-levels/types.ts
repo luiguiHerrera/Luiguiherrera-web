@@ -12,7 +12,8 @@ export type AssetCategory =
   | "Oro y materias primas"
   | "Sectores"
   | "Cripto"
-  | "Internacional";
+  | "Internacional"
+  | "Temáticos";
 
 export type AssetDataStatus = "ok" | "limited_history" | "unavailable";
 

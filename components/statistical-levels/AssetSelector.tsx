@@ -11,13 +11,14 @@ type AssetSelectorProps = {
   selectAsset: (ticker: string) => void;
 };
 
-const categoryOrder: AssetCategory[] = ["Índices / ETFs", "Bonos", "Oro y materias primas", "Sectores", "Cripto", "Internacional"];
+const categoryOrder: AssetCategory[] = ["Índices / ETFs", "Bonos", "Oro y materias primas", "Sectores", "Temáticos", "Cripto", "Internacional"];
 const categoryLabels: Record<"es" | "en", Record<AssetCategory, string>> = {
   es: {
     "Índices / ETFs": "Índices / ETFs",
     Bonos: "Bonos",
     "Oro y materias primas": "Oro y materias primas",
     Sectores: "Sectores",
+    "Temáticos": "Temáticos",
     Cripto: "Cripto",
     Internacional: "Internacional",
   },
@@ -26,6 +27,7 @@ const categoryLabels: Record<"es" | "en", Record<AssetCategory, string>> = {
     Bonos: "Bonds",
     "Oro y materias primas": "Gold & commodities",
     Sectores: "Sectors",
+    "Temáticos": "Thematic",
     Cripto: "Crypto",
     Internacional: "International",
   },

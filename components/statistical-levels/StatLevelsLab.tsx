@@ -55,6 +55,7 @@ const categoryOrder: AssetCategory[] = [
   "Bonos",
   "Oro y materias primas",
   "Sectores",
+  "Temáticos",
   "Cripto",
   "Internacional",
 ];
@@ -65,6 +66,7 @@ const localizedCategoryLabels: Record<"es" | "en", Record<AssetCategory, string>
     Bonos: "Bonos",
     "Oro y materias primas": "Oro y materias primas",
     Sectores: "Sectores",
+    "Temáticos": "Temáticos",
     Cripto: "Cripto",
     Internacional: "Internacional",
   },
@@ -73,6 +75,7 @@ const localizedCategoryLabels: Record<"es" | "en", Record<AssetCategory, string>
     Bonos: "Bonds",
     "Oro y materias primas": "Gold & commodities",
     Sectores: "Sectors",
+    "Temáticos": "Thematic",
     Cripto: "Crypto",
     Internacional: "International",
   },

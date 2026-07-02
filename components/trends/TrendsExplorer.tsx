@@ -65,6 +65,7 @@ const riskLabels: Record<TrendsContent["locale"], Record<TrendRisk, string>> = {
 const observableKindLabels: Record<TrendsContent["locale"], Record<TrendObservableVehicleKind, string>> = {
   es: {
     "indice amplio": "Índice amplio",
+    "ETF dedicado": "ETF dedicado",
     "ETF sectorial": "ETF sectorial",
     "ETF tematico": "ETF temático",
     "accion liquida": "Acciones líquidas para observación",
@@ -73,6 +74,7 @@ const observableKindLabels: Record<TrendsContent["locale"], Record<TrendObservab
   },
   en: {
     "indice amplio": "Broad index",
+    "ETF dedicado": "Dedicated ETF",
     "ETF sectorial": "Sector ETF",
     "ETF tematico": "Thematic ETF",
     "accion liquida": "Liquid stocks for observation",
@@ -135,11 +137,11 @@ function TrendCard({
         isSelected ? "border-petrol ring-2 ring-petrol/10" : "border-line"
       }`}
     >
-      <div className="flex min-w-0 flex-wrap items-start justify-between gap-2">
-        <h3 className="min-w-0 flex-1 text-lg font-semibold leading-6 text-ink">{trend.name}</h3>
-        <span className="max-w-full rounded-[4px] border border-petrol/20 bg-paper px-2 py-1 text-[10px] font-semibold uppercase tracking-[0.12em] text-petrol [overflow-wrap:anywhere]">
+      <div className="flex min-w-0 flex-col flex-wrap items-start gap-3">
+        <span className="inline-flex w-fit max-w-full self-start whitespace-normal break-words rounded-[4px] border border-petrol/20 bg-paper px-2 py-1 text-[10px] font-semibold uppercase leading-tight tracking-[0.12em] text-petrol [overflow-wrap:anywhere]">
           {trend.educationalState}
         </span>
+        <h3 className="min-w-0 w-full whitespace-normal break-words text-lg font-semibold leading-tight text-ink">{trend.name}</h3>
       </div>
       <p className="mt-3 text-sm leading-6 text-muted">{trend.short}</p>
       <div className="mt-4 flex flex-wrap gap-2">
@@ -243,24 +245,24 @@ export function TrendsExplorer({ content }: { content: TrendsContent }) {
   const selectedTrend = content.trends.find((trend) => trend.id === selectedId) ?? firstTrend;
 
   return (
-    <div className="overflow-hidden">
+    <div className="min-w-0 max-w-full [overflow-wrap:anywhere]">
       <section className="border-b border-line bg-paper">
-        <div className="mx-auto grid max-w-7xl gap-8 px-4 py-10 md:px-5 md:py-16 lg:grid-cols-[0.66fr_0.34fr] lg:items-end">
-          <div>
+        <div className="mx-auto grid min-w-0 max-w-7xl gap-8 px-4 py-10 md:px-5 md:py-16 lg:grid-cols-[0.66fr_0.34fr] lg:items-end">
+          <div className="min-w-0">
             <p className="w-fit rounded-full border border-petrol/20 bg-white/65 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-petrol">
               {content.hero.eyebrow}
             </p>
-            <h1 className="mt-5 max-w-4xl text-4xl font-semibold leading-[1.02] text-ink md:text-6xl">
+            <h1 className="mt-5 max-w-full break-words text-4xl font-semibold leading-[1.02] text-ink md:max-w-4xl md:text-6xl">
               {content.hero.title}
             </h1>
-            <p className="mt-5 max-w-3xl text-xl leading-8 text-petrol md:text-2xl md:leading-9">
+            <p className="mt-5 max-w-full text-xl leading-8 text-petrol md:max-w-3xl md:text-2xl md:leading-9">
               {content.hero.subtitle}
             </p>
-            <p className="mt-5 max-w-3xl text-base leading-7 text-muted md:text-lg md:leading-8">
+            <p className="mt-5 max-w-full text-base leading-7 text-muted md:max-w-3xl md:text-lg md:leading-8">
               {content.hero.text}
             </p>
           </div>
-          <div className="rounded-[6px] border border-line bg-white/75 p-4 shadow-[0_12px_32px_rgba(11,52,54,0.045)] md:p-5">
+          <div className="min-w-0 rounded-[6px] border border-line bg-white/75 p-4 shadow-[0_12px_32px_rgba(11,52,54,0.045)] md:p-5">
             <div className="flex flex-wrap gap-2">
               {content.hero.badges.map((badge) => (
                 <Pill key={badge} tone={badge === "No recomendación" || badge === "No recommendation" ? "strong" : "neutral"}>
@@ -275,13 +277,13 @@ export function TrendsExplorer({ content }: { content: TrendsContent }) {
 
       <section className="border-b border-line bg-white/55">
         <div className="mx-auto max-w-7xl px-4 py-9 md:px-5 md:py-12">
-          <div className="grid gap-6 lg:grid-cols-[0.34fr_1fr] lg:items-start">
-            <div>
+          <div className="grid min-w-0 gap-6 lg:grid-cols-[0.34fr_1fr] lg:items-start">
+            <div className="min-w-0">
               <p className="text-xs font-semibold uppercase tracking-[0.2em] text-petrol">{content.system.eyebrow}</p>
-              <h2 className="mt-3 text-2xl font-semibold leading-tight text-ink">{content.system.title}</h2>
+              <h2 className="mt-3 break-words text-2xl font-semibold leading-tight text-ink">{content.system.title}</h2>
               <p className="mt-4 text-sm leading-6 text-muted">{content.system.intro}</p>
             </div>
-            <div className="grid gap-3 md:grid-cols-3">
+            <div className="grid min-w-0 gap-3 md:grid-cols-3">
               {content.system.items.map((item, index) => (
                 <Link
                   key={item.href}
@@ -301,16 +303,16 @@ export function TrendsExplorer({ content }: { content: TrendsContent }) {
 
       <section className="border-b border-line bg-paper">
         <div className="mx-auto max-w-7xl px-4 py-10 md:px-5 md:py-16">
-          <div className="grid gap-5 lg:grid-cols-[0.45fr_0.55fr] lg:items-end">
-            <div>
+          <div className="grid min-w-0 gap-5 lg:grid-cols-[0.45fr_0.55fr] lg:items-end">
+            <div className="min-w-0">
               <p className="text-xs font-semibold uppercase tracking-[0.2em] text-petrol">{content.map.eyebrow}</p>
-              <h2 className="mt-3 text-3xl font-semibold leading-tight text-ink">{content.map.title}</h2>
+              <h2 className="mt-3 break-words text-3xl font-semibold leading-tight text-ink">{content.map.title}</h2>
             </div>
-            <p className="max-w-2xl text-base leading-7 text-muted lg:justify-self-end">{content.map.intro}</p>
+            <p className="min-w-0 max-w-full text-base leading-7 text-muted md:max-w-2xl lg:justify-self-end">{content.map.intro}</p>
           </div>
 
-          <div className="mt-8 grid gap-5 lg:grid-cols-[minmax(0,1fr)_minmax(21rem,0.45fr)] lg:items-start">
-            <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+          <div className="mt-8 grid min-w-0 gap-5 lg:grid-cols-[minmax(0,1fr)_minmax(21rem,0.45fr)] lg:items-start">
+            <div className="grid min-w-0 gap-4 sm:grid-cols-2 xl:grid-cols-3">
               {content.trends.map((trend) => (
                 <TrendCard
                   key={trend.id}
@@ -327,13 +329,13 @@ export function TrendsExplorer({ content }: { content: TrendsContent }) {
       </section>
 
       <section className="border-b border-line bg-[#f3efe6]">
-        <div className="mx-auto grid max-w-7xl gap-7 px-4 py-10 md:px-5 md:py-14 lg:grid-cols-[0.36fr_1fr]">
-          <div>
+        <div className="mx-auto grid min-w-0 max-w-7xl gap-7 px-4 py-10 md:px-5 md:py-14 lg:grid-cols-[0.36fr_1fr]">
+          <div className="min-w-0">
             <p className="text-xs font-semibold uppercase tracking-[0.2em] text-petrol">{content.methodology.eyebrow}</p>
-            <h2 className="mt-3 text-3xl font-semibold leading-tight text-ink">{content.methodology.title}</h2>
+            <h2 className="mt-3 break-words text-3xl font-semibold leading-tight text-ink">{content.methodology.title}</h2>
             <p className="mt-4 text-base leading-7 text-muted">{content.methodology.intro}</p>
           </div>
-          <div>
+          <div className="min-w-0">
             <div className="grid gap-3 md:grid-cols-2">
               {content.methodology.steps.map((step, index) => (
                 <div key={step} className="rounded-[6px] border border-line bg-white/72 p-4">
@@ -352,12 +354,12 @@ export function TrendsExplorer({ content }: { content: TrendsContent }) {
       </section>
 
       <section className="border-b border-line bg-white/55">
-        <div className="mx-auto grid max-w-7xl gap-7 px-4 py-10 md:px-5 md:py-14 lg:grid-cols-[0.4fr_0.6fr] lg:items-start">
-          <div>
+        <div className="mx-auto grid min-w-0 max-w-7xl gap-7 px-4 py-10 md:px-5 md:py-14 lg:grid-cols-[0.4fr_0.6fr] lg:items-start">
+          <div className="min-w-0">
             <p className="text-xs font-semibold uppercase tracking-[0.2em] text-petrol">{content.tension.title}</p>
             <p className="mt-4 text-lg leading-8 text-ink">{content.tension.text}</p>
           </div>
-          <div className="grid gap-3 sm:grid-cols-2">
+          <div className="grid min-w-0 gap-3 sm:grid-cols-2">
             {content.tension.reasons.map((reason) => (
               <div key={reason} className="border-l border-petrol/25 bg-white/50 px-4 py-3">
                 <p className="text-sm font-semibold leading-6 text-ink">{reason}</p>
@@ -369,13 +371,13 @@ export function TrendsExplorer({ content }: { content: TrendsContent }) {
 
       <section className="bg-paper">
         <div className="mx-auto max-w-7xl px-4 py-10 md:px-5 md:py-14">
-          <div className="grid gap-5 lg:grid-cols-[0.34fr_1fr] lg:items-start">
-            <div>
+          <div className="grid min-w-0 gap-5 lg:grid-cols-[0.34fr_1fr] lg:items-start">
+            <div className="min-w-0">
               <p className="text-xs font-semibold uppercase tracking-[0.2em] text-petrol">{content.sources.eyebrow}</p>
-              <h2 className="mt-3 text-3xl font-semibold leading-tight text-ink">{content.sources.title}</h2>
+              <h2 className="mt-3 break-words text-3xl font-semibold leading-tight text-ink">{content.sources.title}</h2>
               <p className="mt-4 text-base leading-7 text-muted">{content.sources.intro}</p>
             </div>
-            <div className="grid gap-3 md:grid-cols-2">
+            <div className="grid min-w-0 gap-3 md:grid-cols-2">
               {content.sources.items.map((item) => (
                 <div key={item.source} className="rounded-[6px] border border-line bg-white/72 p-4">
                   <h3 className="font-semibold text-ink">{item.source}</h3>
