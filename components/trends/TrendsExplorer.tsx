@@ -3,7 +3,7 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
 import { useState } from "react";
-import type { TrendItem, TrendRisk, TrendRole, TrendVehicle, TrendsContent } from "@/lib/trends/trends-content";
+import type { TrendItem, TrendObservableVehicleKind, TrendRisk, TrendRole, TrendVehicle, TrendsContent } from "@/lib/trends/trends-content";
 
 const vehicleLabels: Record<TrendsContent["locale"], Record<TrendVehicle, string>> = {
   es: {
@@ -62,6 +62,36 @@ const riskLabels: Record<TrendsContent["locale"], Record<TrendRisk, string>> = {
   },
 };
 
+const observableKindLabels: Record<TrendsContent["locale"], Record<TrendObservableVehicleKind, string>> = {
+  es: {
+    "indice amplio": "Índice amplio",
+    "ETF sectorial": "ETF sectorial",
+    "ETF tematico": "ETF temático",
+    "accion liquida": "Acciones líquidas para observación",
+    infraestructura: "Infraestructura",
+    observacion: "Observación",
+  },
+  en: {
+    "indice amplio": "Broad index",
+    "ETF sectorial": "Sector ETF",
+    "ETF tematico": "Thematic ETF",
+    "accion liquida": "Liquid stocks for observation",
+    infraestructura: "Infrastructure",
+    observacion: "Observation",
+  },
+};
+
+const observableCopy = {
+  es: {
+    label: "Ejemplos observables, no recomendaciones.",
+    openLevels: "Ver niveles",
+  },
+  en: {
+    label: "Observable examples, not recommendations.",
+    openLevels: "View levels",
+  },
+};
+
 function Pill({ children, tone = "neutral" }: { children: string; tone?: "neutral" | "strong" }) {
   return (
     <span
@@ -105,9 +135,9 @@ function TrendCard({
         isSelected ? "border-petrol ring-2 ring-petrol/10" : "border-line"
       }`}
     >
-      <div className="flex items-start justify-between gap-3">
-        <h3 className="text-lg font-semibold leading-6 text-ink">{trend.name}</h3>
-        <span className="shrink-0 rounded-[4px] border border-petrol/20 bg-paper px-2 py-1 text-[10px] font-semibold uppercase tracking-[0.12em] text-petrol">
+      <div className="flex min-w-0 flex-wrap items-start justify-between gap-2">
+        <h3 className="min-w-0 flex-1 text-lg font-semibold leading-6 text-ink">{trend.name}</h3>
+        <span className="max-w-full rounded-[4px] border border-petrol/20 bg-paper px-2 py-1 text-[10px] font-semibold uppercase tracking-[0.12em] text-petrol [overflow-wrap:anywhere]">
           {trend.educationalState}
         </span>
       </div>
@@ -126,6 +156,8 @@ function TrendCard({
 
 function TrendDetailPanel({ content, trend }: { content: TrendsContent; trend: TrendItem }) {
   const labels = content.detailLabels;
+  const levelsBasePath = content.locale === "en" ? "/en/statistical-levels" : "/niveles-estadisticos";
+  const copy = observableCopy[content.locale];
 
   return (
     <aside className="rounded-[6px] border border-petrol/25 bg-white/82 p-4 shadow-[0_18px_48px_rgba(11,52,54,0.07)] sm:p-5 lg:sticky lg:top-24">
@@ -145,6 +177,40 @@ function TrendDetailPanel({ content, trend }: { content: TrendsContent; trend: T
               </Pill>
             ))}
           </div>
+          {trend.observableVehicles.length > 0 ? (
+            <div className="mt-4 border-t border-line/80 pt-4">
+              <p className="text-xs font-semibold leading-5 text-ink">{copy.label}</p>
+              <div className="mt-3 grid gap-2">
+                {trend.observableVehicles.map((vehicle) => {
+                  const href = vehicle.statisticalLevelsSymbol
+                    ? `${levelsBasePath}?symbol=${encodeURIComponent(vehicle.statisticalLevelsSymbol)}`
+                    : null;
+                  const body = (
+                    <div className="rounded-[6px] border border-line bg-paper/75 p-3 transition hover:border-petrol">
+                      <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
+                        <div className="min-w-0">
+                          <p className="font-semibold text-ink">
+                            {vehicle.ticker} · {vehicle.name}
+                          </p>
+                          <p className="mt-1 text-xs font-semibold text-petrol">{observableKindLabels[content.locale][vehicle.kind]}</p>
+                        </div>
+                        {href ? <span className="shrink-0 text-xs font-semibold text-petrol">{copy.openLevels} &rarr;</span> : null}
+                      </div>
+                      <p className="mt-2 text-xs leading-5 text-muted">{vehicle.note}</p>
+                    </div>
+                  );
+
+                  return href ? (
+                    <Link key={`${vehicle.ticker}-${vehicle.kind}`} href={href} className="block">
+                      {body}
+                    </Link>
+                  ) : (
+                    <div key={`${vehicle.ticker}-${vehicle.kind}`}>{body}</div>
+                  );
+                })}
+              </div>
+            </div>
+          ) : null}
         </DetailRow>
         <DetailRow label={labels.role}>
           <Pill tone="strong">{roleLabels[content.locale][trend.role]}</Pill>

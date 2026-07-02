@@ -20,6 +20,22 @@ export type TrendRisk =
   | "timing"
   | "liquidez";
 
+export type TrendObservableVehicleKind =
+  | "indice amplio"
+  | "ETF sectorial"
+  | "ETF tematico"
+  | "accion liquida"
+  | "infraestructura"
+  | "observacion";
+
+export type TrendObservableVehicle = {
+  ticker: string;
+  name: string;
+  kind: TrendObservableVehicleKind;
+  note: string;
+  statisticalLevelsSymbol?: string;
+};
+
 export type TrendItem = {
   id: string;
   name: string;
@@ -30,6 +46,7 @@ export type TrendItem = {
   valueChain: string;
   capture: string;
   vehicles: TrendVehicle[];
+  observableVehicles: TrendObservableVehicle[];
   role: TrendRole;
   bullCase: string;
   bearCase: string;
@@ -38,6 +55,8 @@ export type TrendItem = {
   controlQuestion: string;
   nextStep: string;
 };
+
+type TrendBaseItem = Omit<TrendItem, "observableVehicles">;
 
 export type TrendsContent = {
   locale: Locale;
@@ -97,10 +116,10 @@ export type TrendsContent = {
   trends: TrendItem[];
 };
 
-const esControlQuestion = "¿Estoy comprando una tendencia real o una narrativa que me emociona?";
+const esControlQuestion = "¿Estoy evaluando una tendencia real o una narrativa que me emociona?";
 const enControlQuestion = "Am I studying a real trend, or a narrative that excites me?";
 
-const esTrends: TrendItem[] = [
+const esTrends: TrendBaseItem[] = [
   {
     id: "ai",
     name: "Inteligencia artificial",
@@ -337,7 +356,7 @@ const esTrends: TrendItem[] = [
   },
 ];
 
-const enTrends: TrendItem[] = [
+const enTrends: TrendBaseItem[] = [
   {
     id: "ai",
     name: "Artificial intelligence",
@@ -574,6 +593,123 @@ const enTrends: TrendItem[] = [
   },
 ];
 
+const esObservableVehicles: Record<string, TrendObservableVehicle[]> = {
+  ai: [
+    { ticker: "XLK", name: "Technology Select Sector SPDR Fund", kind: "ETF sectorial", note: "Vehículo líquido para observar exposición tecnológica amplia.", statisticalLevelsSymbol: "XLK" },
+    { ticker: "QQQ", name: "Invesco QQQ Trust", kind: "indice amplio", note: "Proxy amplio de crecimiento y tecnología para estudiar concentración y valoración.", statisticalLevelsSymbol: "QQQ" },
+  ],
+  automation: [
+    { ticker: "XLI", name: "Industrial Select Sector SPDR Fund", kind: "ETF sectorial", note: "Vehículo líquido para observar industria, maquinaria e infraestructura operativa.", statisticalLevelsSymbol: "XLI" },
+    { ticker: "XLK", name: "Technology Select Sector SPDR Fund", kind: "ETF sectorial", note: "Proxy para estudiar software y semiconductores vinculados a automatización.", statisticalLevelsSymbol: "XLK" },
+  ],
+  energy: [
+    { ticker: "XLE", name: "Energy Select Sector SPDR Fund", kind: "ETF sectorial", note: "Vehículo líquido para observar energía tradicional y ciclos de commodities.", statisticalLevelsSymbol: "XLE" },
+    { ticker: "XLU", name: "Utilities Select Sector SPDR Fund", kind: "infraestructura", note: "Proxy para observar redes, utilities y demanda eléctrica regulada.", statisticalLevelsSymbol: "XLU" },
+  ],
+  longevity: [
+    { ticker: "XLV", name: "Health Care Select Sector SPDR Fund", kind: "ETF sectorial", note: "Vehículo líquido para observar salud amplia sin depender de una sola terapia.", statisticalLevelsSymbol: "XLV" },
+    { ticker: "SPY", name: "SPDR S&P 500 ETF", kind: "indice amplio", note: "Referencia amplia para comparar si la hipótesis aporta algo distinto al mercado.", statisticalLevelsSymbol: "SPY" },
+  ],
+  cybersecurity: [
+    { ticker: "XLK", name: "Technology Select Sector SPDR Fund", kind: "ETF sectorial", note: "Proxy líquido para estudiar software, plataformas y seguridad digital dentro de tecnología.", statisticalLevelsSymbol: "XLK" },
+    { ticker: "QQQ", name: "Invesco QQQ Trust", kind: "indice amplio", note: "Referencia amplia para observar si la narrativa depende de megacaps tecnológicas.", statisticalLevelsSymbol: "QQQ" },
+  ],
+  fintech: [
+    { ticker: "XLF", name: "Financial Select Sector SPDR Fund", kind: "ETF sectorial", note: "Vehículo líquido para observar bancos, pagos, crédito e infraestructura financiera.", statisticalLevelsSymbol: "XLF" },
+    { ticker: "XLK", name: "Technology Select Sector SPDR Fund", kind: "ETF sectorial", note: "Proxy para estudiar la capa tecnológica de pagos, software y datos.", statisticalLevelsSymbol: "XLK" },
+  ],
+  crypto: [
+    { ticker: "BTCUSD", name: "Bitcoin / US Dollar", kind: "observacion", note: "Serie observable para estudiar el activo digital como variable de contexto.", statisticalLevelsSymbol: "BTCUSD" },
+    { ticker: "IBIT", name: "iShares Bitcoin Trust ETF", kind: "ETF tematico", note: "Vehículo listado para observar exposición regulada a Bitcoin con historial limitado.", statisticalLevelsSymbol: "IBIT" },
+  ],
+  defense: [
+    { ticker: "XLI", name: "Industrial Select Sector SPDR Fund", kind: "ETF sectorial", note: "Proxy líquido para observar industria, aeroespacial y contratistas dentro del sector industrial.", statisticalLevelsSymbol: "XLI" },
+    { ticker: "SPY", name: "SPDR S&P 500 ETF", kind: "indice amplio", note: "Referencia de mercado para contrastar si la exposición sectorial añade concentración.", statisticalLevelsSymbol: "SPY" },
+  ],
+  "water-food": [
+    { ticker: "XLP", name: "Consumer Staples Select Sector SPDR Fund", kind: "ETF sectorial", note: "Proxy líquido para observar alimentos, consumo básico y defensividad.", statisticalLevelsSymbol: "XLP" },
+    { ticker: "XLB", name: "Materials Select Sector SPDR Fund", kind: "ETF sectorial", note: "Proxy para estudiar insumos, químicos y materiales vinculados a agricultura e infraestructura.", statisticalLevelsSymbol: "XLB" },
+  ],
+  infrastructure: [
+    { ticker: "XLI", name: "Industrial Select Sector SPDR Fund", kind: "ETF sectorial", note: "Vehículo líquido para observar industria, transporte y construcción de infraestructura.", statisticalLevelsSymbol: "XLI" },
+    { ticker: "XLU", name: "Utilities Select Sector SPDR Fund", kind: "infraestructura", note: "Proxy para observar redes eléctricas y activos regulados.", statisticalLevelsSymbol: "XLU" },
+  ],
+  robotics: [
+    { ticker: "XLI", name: "Industrial Select Sector SPDR Fund", kind: "ETF sectorial", note: "Proxy para observar automatización física, maquinaria e industriales líquidos.", statisticalLevelsSymbol: "XLI" },
+    { ticker: "XLK", name: "Technology Select Sector SPDR Fund", kind: "ETF sectorial", note: "Proxy para estudiar semiconductores, software y componentes de la cadena robótica.", statisticalLevelsSymbol: "XLK" },
+  ],
+  "digital-education": [
+    { ticker: "XLK", name: "Technology Select Sector SPDR Fund", kind: "ETF sectorial", note: "Proxy líquido para observar software, plataformas y herramientas digitales.", statisticalLevelsSymbol: "XLK" },
+    { ticker: "XLC", name: "Communication Services Select Sector SPDR Fund", kind: "ETF sectorial", note: "Referencia para observar distribución digital, contenidos y plataformas de comunicación.", statisticalLevelsSymbol: "XLC" },
+  ],
+  "premium-consumption": [
+    { ticker: "XLY", name: "Consumer Discretionary Select Sector SPDR Fund", kind: "ETF sectorial", note: "Vehículo líquido para observar consumo discrecional y sensibilidad al ciclo.", statisticalLevelsSymbol: "XLY" },
+    { ticker: "XLP", name: "Consumer Staples Select Sector SPDR Fund", kind: "ETF sectorial", note: "Referencia defensiva para comparar consumo básico frente a consumo aspiracional.", statisticalLevelsSymbol: "XLP" },
+  ],
+};
+
+const enObservableVehicles: Record<string, TrendObservableVehicle[]> = {
+  ai: [
+    { ticker: "XLK", name: "Technology Select Sector SPDR Fund", kind: "ETF sectorial", note: "Liquid vehicle for observing broad technology exposure.", statisticalLevelsSymbol: "XLK" },
+    { ticker: "QQQ", name: "Invesco QQQ Trust", kind: "indice amplio", note: "Broad growth and technology proxy for studying concentration and valuation.", statisticalLevelsSymbol: "QQQ" },
+  ],
+  automation: [
+    { ticker: "XLI", name: "Industrial Select Sector SPDR Fund", kind: "ETF sectorial", note: "Liquid vehicle for observing industry, machinery and operating infrastructure.", statisticalLevelsSymbol: "XLI" },
+    { ticker: "XLK", name: "Technology Select Sector SPDR Fund", kind: "ETF sectorial", note: "Proxy for software and semiconductors linked to automation.", statisticalLevelsSymbol: "XLK" },
+  ],
+  energy: [
+    { ticker: "XLE", name: "Energy Select Sector SPDR Fund", kind: "ETF sectorial", note: "Liquid vehicle for observing traditional energy and commodity cycles.", statisticalLevelsSymbol: "XLE" },
+    { ticker: "XLU", name: "Utilities Select Sector SPDR Fund", kind: "infraestructura", note: "Proxy for grids, utilities and regulated power demand.", statisticalLevelsSymbol: "XLU" },
+  ],
+  longevity: [
+    { ticker: "XLV", name: "Health Care Select Sector SPDR Fund", kind: "ETF sectorial", note: "Liquid vehicle for broad healthcare observation without relying on one therapy.", statisticalLevelsSymbol: "XLV" },
+    { ticker: "SPY", name: "SPDR S&P 500 ETF", kind: "indice amplio", note: "Broad reference for checking whether the hypothesis adds something different from the market.", statisticalLevelsSymbol: "SPY" },
+  ],
+  cybersecurity: [
+    { ticker: "XLK", name: "Technology Select Sector SPDR Fund", kind: "ETF sectorial", note: "Liquid proxy for studying software, platforms and digital security inside technology.", statisticalLevelsSymbol: "XLK" },
+    { ticker: "QQQ", name: "Invesco QQQ Trust", kind: "indice amplio", note: "Broad reference for observing whether the narrative depends on technology megacaps.", statisticalLevelsSymbol: "QQQ" },
+  ],
+  fintech: [
+    { ticker: "XLF", name: "Financial Select Sector SPDR Fund", kind: "ETF sectorial", note: "Liquid vehicle for observing banks, payments, credit and financial infrastructure.", statisticalLevelsSymbol: "XLF" },
+    { ticker: "XLK", name: "Technology Select Sector SPDR Fund", kind: "ETF sectorial", note: "Proxy for the technology layer of payments, software and data.", statisticalLevelsSymbol: "XLK" },
+  ],
+  crypto: [
+    { ticker: "BTCUSD", name: "Bitcoin / US Dollar", kind: "observacion", note: "Observable series for studying the digital asset as context.", statisticalLevelsSymbol: "BTCUSD" },
+    { ticker: "IBIT", name: "iShares Bitcoin Trust ETF", kind: "ETF tematico", note: "Listed vehicle for observing regulated Bitcoin exposure with limited history.", statisticalLevelsSymbol: "IBIT" },
+  ],
+  defense: [
+    { ticker: "XLI", name: "Industrial Select Sector SPDR Fund", kind: "ETF sectorial", note: "Liquid proxy for observing industry, aerospace and contractors inside industrials.", statisticalLevelsSymbol: "XLI" },
+    { ticker: "SPY", name: "SPDR S&P 500 ETF", kind: "indice amplio", note: "Market reference for checking whether sector exposure adds concentration.", statisticalLevelsSymbol: "SPY" },
+  ],
+  "water-food": [
+    { ticker: "XLP", name: "Consumer Staples Select Sector SPDR Fund", kind: "ETF sectorial", note: "Liquid proxy for observing food, staples and defensiveness.", statisticalLevelsSymbol: "XLP" },
+    { ticker: "XLB", name: "Materials Select Sector SPDR Fund", kind: "ETF sectorial", note: "Proxy for inputs, chemicals and materials linked to agriculture and infrastructure.", statisticalLevelsSymbol: "XLB" },
+  ],
+  infrastructure: [
+    { ticker: "XLI", name: "Industrial Select Sector SPDR Fund", kind: "ETF sectorial", note: "Liquid vehicle for observing industrials, transport and infrastructure construction.", statisticalLevelsSymbol: "XLI" },
+    { ticker: "XLU", name: "Utilities Select Sector SPDR Fund", kind: "infraestructura", note: "Proxy for power grids and regulated assets.", statisticalLevelsSymbol: "XLU" },
+  ],
+  robotics: [
+    { ticker: "XLI", name: "Industrial Select Sector SPDR Fund", kind: "ETF sectorial", note: "Proxy for physical automation, machinery and liquid industrials.", statisticalLevelsSymbol: "XLI" },
+    { ticker: "XLK", name: "Technology Select Sector SPDR Fund", kind: "ETF sectorial", note: "Proxy for semiconductors, software and components in the robotics chain.", statisticalLevelsSymbol: "XLK" },
+  ],
+  "digital-education": [
+    { ticker: "XLK", name: "Technology Select Sector SPDR Fund", kind: "ETF sectorial", note: "Liquid proxy for observing software, platforms and digital tools.", statisticalLevelsSymbol: "XLK" },
+    { ticker: "XLC", name: "Communication Services Select Sector SPDR Fund", kind: "ETF sectorial", note: "Reference for observing digital distribution, content and communication platforms.", statisticalLevelsSymbol: "XLC" },
+  ],
+  "premium-consumption": [
+    { ticker: "XLY", name: "Consumer Discretionary Select Sector SPDR Fund", kind: "ETF sectorial", note: "Liquid vehicle for observing discretionary consumption and cycle sensitivity.", statisticalLevelsSymbol: "XLY" },
+    { ticker: "XLP", name: "Consumer Staples Select Sector SPDR Fund", kind: "ETF sectorial", note: "Defensive reference for comparing staples with aspirational consumption.", statisticalLevelsSymbol: "XLP" },
+  ],
+};
+
+function attachObservableVehicles(trends: TrendBaseItem[], vehicles: Record<string, TrendObservableVehicle[]>): TrendItem[] {
+  return trends.map((trend) => ({
+    ...trend,
+    observableVehicles: vehicles[trend.id] ?? [],
+  }));
+}
+
 export const trendsContent: Record<Locale, TrendsContent> = {
   es: {
     locale: "es",
@@ -583,7 +719,7 @@ export const trendsContent: Record<Locale, TrendsContent> = {
       subtitle: "Una tendencia no es una inversión. Es apenas el inicio de una hipótesis.",
       text: "Esta sección ayuda a observar cambios tecnológicos, económicos y sociales sin convertirlos automáticamente en recomendaciones. La pregunta no es solo qué está creciendo, sino quién captura valor, con qué vehículo, a qué precio, con qué riesgo y dentro de qué portafolio.",
       badges: ["Nuevas economías", "Hipótesis", "Riesgos", "Vehículos posibles", "Portafolio", "No recomendación"],
-      note: "Contenido educativo. No es asesoría financiera, recomendación de compra/venta ni evaluación personalizada.",
+      note: "Contenido educativo. No es asesoría financiera, instrucción operativa ni evaluación personalizada.",
     },
     system: {
       eyebrow: "Sistema de decisión",
@@ -658,7 +794,7 @@ export const trendsContent: Record<Locale, TrendsContent> = {
         "Puede concentrar demasiado el portafolio.",
       ],
     },
-    trends: esTrends,
+    trends: attachObservableVehicles(esTrends, esObservableVehicles),
   },
   en: {
     locale: "en",
@@ -668,7 +804,7 @@ export const trendsContent: Record<Locale, TrendsContent> = {
       subtitle: "A trend is not an investment. It is only the beginning of a hypothesis.",
       text: "This section helps observe technological, economic and social change without turning it automatically into recommendations. The question is not only what is growing, but who captures value, through which vehicle, at what price, with which risk and inside which portfolio.",
       badges: ["New economies", "Hypotheses", "Risks", "Possible vehicles", "Portfolio", "No recommendation"],
-      note: "Educational content. Not financial advice, a buy/sell recommendation or a personalized assessment.",
+      note: "Educational content. Not financial advice, an execution instruction or a personalized assessment.",
     },
     system: {
       eyebrow: "Decision system",
@@ -743,6 +879,6 @@ export const trendsContent: Record<Locale, TrendsContent> = {
         "It may concentrate the portfolio too much.",
       ],
     },
-    trends: enTrends,
+    trends: attachObservableVehicles(enTrends, enObservableVehicles),
   },
 };

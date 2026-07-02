@@ -11,7 +11,7 @@ const systemMap = [
   ["Datos públicos / fuentes", "Mercado, volatilidad, flujos, outputs cuantitativos y criterios educativos."],
   ["Procesamiento", "Adapters server-side, cálculos estáticos, validaciones y fallbacks prudentes."],
   ["Lecturas estadísticas", "Régimen, rotación, niveles, drawdowns, métricas y señales relativas."],
-  ["Herramientas educativas", "Diagnóstico, protección, metodología y laboratorios de lectura."],
+  ["Herramientas educativas", "Diagnóstico, protección, tendencias, metodología y laboratorios de lectura."],
   ["Decisión humana", "La persona contrasta, pregunta, documenta y decide fuera de la plataforma."],
 ];
 
@@ -19,7 +19,7 @@ const tools = [
   {
     name: "Dashboard de régimen",
     does: "Ordena volatilidad, rotación sectorial y flujos de ETFs BTC.",
-    doesNot: "No da señales de compra o venta.",
+    doesNot: "No da instrucciones operativas.",
     source: "Alpha Vantage, FRED/VIX, Bitbo y estados pendientes donde aplica.",
     limit: "Fuentes externas pueden retrasarse, fallar o cambiar formato.",
   },
@@ -38,11 +38,18 @@ const tools = [
     limit: "La calidad depende del historial disponible por activo.",
   },
   {
-    name: "Quant Lab",
-    does: "Expone resultados TD3, benchmarks y restricciones del protocolo experimental.",
-    doesNot: "No afirma superioridad estadística ni recomienda asignaciones.",
-    source: "Outputs trazables del repositorio de investigación.",
+    name: "Protocolo de evaluación DRL",
+    does: "Presenta el protocolo, supuestos, costes, cash, benchmarks comparables, bootstrap, White Reality Check y límites prácticos.",
+    doesNot: "No demuestra que TD3 gane siempre, no afirma superioridad estadística general y no recomienda asignaciones.",
+    source: "Paper interactivo de investigación. TD3 se usa como caso de estudio dentro de DRL, no como afirmación de superioridad del algoritmo.",
     limit: "Resultados históricos y experimentales no garantizan comportamiento futuro.",
+  },
+  {
+    name: "Tendencias",
+    does: "Convierte cambios tecnológicos, económicos y sociales en hipótesis educativas de observación.",
+    doesNot: "No recomienda activos, no valida que una tendencia sea buena inversión y no sustituye el análisis de precio, vehículo, horizonte y riesgo.",
+    source: "Marco editorial con fuentes sectoriales, datos macro, reportes institucionales, Google Trends como señal de atención, holdings/13F como observación con retraso y limitaciones.",
+    limit: "Una tendencia real puede seguir siendo una mala inversión si está cara, no tiene vehículo claro, ya está descontada o no encaja en el portafolio.",
   },
   {
     name: "Protege tu dinero",
@@ -55,10 +62,14 @@ const tools = [
 
 const sourceNotes = [
   ["Mercado", "ETFs sectoriales como proxies, VIX de cierre, flujos publicados y datos históricos precalculados."],
-  ["Actualización", "Algunos módulos se actualizan server-side con caché; otros se regeneran mediante scripts estáticos."],
+  ["Niveles estadísticos", "El dataset actual es un snapshot estático generado por script y commiteado; no hay evidencia en el repo de un cron de deploy que lo regenere automáticamente."],
+  ["Actualización", "Algunos módulos se actualizan server-side con caché; otros requieren regeneración explícita mediante scripts estáticos."],
   ["Fallbacks", "Si una fuente falla, el módulo debe mostrar estado prudente sin presentar datos demo como reales."],
   ["FedWatch", "Permanece pendiente o con peso cero hasta que la fuente automatizada esté correctamente habilitada."],
 ];
+
+const researchQuestion =
+  "¿Puede un protocolo de evaluación disciplinado distinguir desempeño DRL estadísticamente creíble y prácticamente viable de simple fortaleza aparente en backtest?";
 
 const privacyItems = ["Sin cuentas", "Sin cookies actuales", "Sin analytics reales", "Sin respuestas personales guardadas", "Sin portafolios almacenados", "Sin persistencia en navegador"];
 
@@ -83,6 +94,15 @@ export default function MetodologiaPage() {
         <h1 className="mt-4 max-w-4xl text-4xl font-semibold leading-[1.02] text-ink md:text-6xl">Metodología</h1>
         <p className="mt-5 max-w-3xl text-lg leading-8 text-muted">
           Cómo se construyen las lecturas, qué datos usan y qué límites tienen.
+        </p>
+      </section>
+
+      <section className="mt-8 border border-line bg-panel p-5 md:p-6">
+        <Eyebrow>Investigación DRL</Eyebrow>
+        <h2 className="mt-2 text-2xl font-semibold text-ink md:text-3xl">Protocolo de evaluación DRL</h2>
+        <p className="mt-4 max-w-4xl text-base leading-7 text-muted">{researchQuestion}</p>
+        <p className="mt-4 max-w-4xl border-l border-petrol/30 pl-4 text-sm leading-6 text-muted">
+          TD3 se usa como caso de estudio dentro de DRL, no como afirmación de superioridad del algoritmo.
         </p>
       </section>
 

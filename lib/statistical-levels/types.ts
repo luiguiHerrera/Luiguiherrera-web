@@ -343,6 +343,7 @@ export type StatisticalLevelsCorrelation = Record<StatisticalFrequency, Record<C
 
 export type StatisticalLevelsManifest = {
   generatedAt: string;
+  snapshotGeneratedAt?: string;
   source: string;
   sourceUrl: string;
   defaultAsset: string;
@@ -361,6 +362,7 @@ export type StatisticalLevelsManifest = {
 
 export type StatisticalLevelsGeneratedData = {
   generatedAt: string;
+  snapshotGeneratedAt?: string;
   source: string;
   sourceUrl: string;
   defaultWindow: StatisticalWindow;

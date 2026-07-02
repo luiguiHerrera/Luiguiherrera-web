@@ -10,7 +10,6 @@ export function Footer() {
   const locale = localeFromPathname(pathname);
   const dictionary = getDictionary(locale);
   const methodologyHref = locale === "en" ? "/en/methodology" : "/metodologia";
-  const trendsHref = locale === "en" ? "/en/trends" : "/tendencias";
   const legalHref = locale === "en" ? "/en/legal" : "/legal";
 
   return (
@@ -20,9 +19,6 @@ export function Footer() {
         <div className="flex flex-wrap gap-x-5 gap-y-2 border-t border-white/15 pt-4 md:border-t-0 md:pt-0">
           <Link className="font-semibold text-white transition hover:text-white/80" href={methodologyHref}>
             {dictionary.layout.methodology}
-          </Link>
-          <Link className="font-semibold text-white transition hover:text-white/80" href={trendsHref}>
-            {dictionary.layout.trends}
           </Link>
           <Link className="font-semibold text-white transition hover:text-white/80" href={legalHref}>
             {dictionary.layout.legal}

@@ -57,7 +57,7 @@ export async function getStatisticalLevelsAssetSeasonality(ticker: string) {
 export async function getStatisticalLevelsPageData(searchParams: Record<string, string | string[] | undefined>) {
   const manifest = await getStatisticalLevelsManifest();
   const catalogTickers = new Set(manifest.catalog.map((asset) => asset.ticker));
-  const requestedTicker = sanitizeTicker(searchParams.asset, manifest.defaultAsset);
+  const requestedTicker = sanitizeTicker(searchParams.symbol ?? searchParams.asset, manifest.defaultAsset);
   const assetTicker = catalogTickers.has(requestedTicker) ? requestedTicker : manifest.defaultAsset;
   const frequency = sanitizeFrequency(searchParams.frequency, manifest.defaultFrequency);
   const window = sanitizeWindow(searchParams.window, manifest.defaultWindow);

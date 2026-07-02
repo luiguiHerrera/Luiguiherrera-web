@@ -78,6 +78,15 @@ const localizedCategoryLabels: Record<"es" | "en", Record<AssetCategory, string>
   },
 };
 
+function daysSince(dateValue: string | null | undefined) {
+  if (!dateValue) return null;
+  const parsed = new Date(`${dateValue}T00:00:00Z`).getTime();
+  if (!Number.isFinite(parsed)) return null;
+  const today = new Date();
+  const todayUtc = Date.UTC(today.getUTCFullYear(), today.getUTCMonth(), today.getUTCDate());
+  return Math.floor((todayUtc - parsed) / 86400000);
+}
+
 const frameTabs: Array<{ key: StatisticalFrequency; label: string; description: string }> = [
   { key: "monthly", label: "Mensual", description: "Niveles de referencia, apertura mensual y contexto de rango." },
   { key: "weekly", label: "Semanal", description: "Retornos recientes, drawdown y comportamiento semanal." },
@@ -113,7 +122,10 @@ export function StatLevelsLab({ asset, locale: localeProp, manifest, seasonality
         frameCopy: "Each tab shows only the context for the selected frame. The window keeps the historical comparison for the selected asset.",
         frequency: "Frequency",
         window: "Window",
-        updated: "Updated",
+        lastMarketData: "Last market data",
+        snapshotGenerated: "Snapshot generated",
+        snapshotNotRecorded: "Not recorded in this snapshot",
+        staleNote: "Data pending automated refresh.",
         source: "Source",
         sourceText: "Public market data processed at static build time · provider by availability · proprietary calculations",
         howToRead: "How to read this tool",
@@ -124,12 +136,17 @@ export function StatLevelsLab({ asset, locale: localeProp, manifest, seasonality
         frameCopy: "Cada pestaña muestra solo el contexto del marco elegido. La ventana mantiene la comparación histórica del activo seleccionado.",
         frequency: "Frecuencia",
         window: "Ventana",
-        updated: "Actualización",
+        lastMarketData: "Último dato de mercado",
+        snapshotGenerated: "Snapshot generado",
+        snapshotNotRecorded: "No registrado en este snapshot",
+        staleNote: "Datos pendientes de actualización automática.",
         source: "Fuente",
         sourceText: "Datos públicos de mercado procesados en build estático · proveedor según disponibilidad · cálculos propios",
         howToRead: "Cómo leer esta herramienta",
       };
   const localizedFrequencyLabels = locale === "en" ? englishFrequencyLabels : frequencyLabels;
+  const staleDays = daysSince(manifest.generatedAt);
+  const isStale = staleDays !== null && staleDays > 7;
   const localizedFrameTabs = frameTabs.map((tab) => locale === "en"
     ? {
         ...tab,
@@ -144,6 +161,7 @@ export function StatLevelsLab({ asset, locale: localeProp, manifest, seasonality
 
   function navigate(next: Partial<{ asset: string; frequency: StatisticalFrequency; window: StatisticalWindow }>) {
     const params = new URLSearchParams(searchParams.toString());
+    params.delete("symbol");
     params.set("asset", next.asset ?? selection.asset);
     params.set("frequency", next.frequency ?? frequency);
     params.set("window", next.window ?? window);
@@ -198,11 +216,15 @@ export function StatLevelsLab({ asset, locale: localeProp, manifest, seasonality
             </button>
           ))}
         </div>
-        <div className="mt-5 grid gap-3 border-t border-line pt-5 text-sm text-muted md:grid-cols-3">
+        <div className="mt-5 grid gap-3 border-t border-line pt-5 text-sm text-muted md:grid-cols-4">
           <p><span className="font-semibold text-ink">{labels.frequency}:</span> {localizedFrequencyLabels[frequency]}</p>
           <p><span className="font-semibold text-ink">{labels.window}:</span> {window}</p>
-          <p><span className="font-semibold text-ink">{labels.updated}:</span> {manifest.generatedAt}</p>
-          <p className="md:col-span-3"><span className="font-semibold text-ink">{labels.source}:</span> {labels.sourceText}</p>
+          <p><span className="font-semibold text-ink">{labels.lastMarketData}:</span> {manifest.generatedAt}</p>
+          <p><span className="font-semibold text-ink">{labels.snapshotGenerated}:</span> {manifest.snapshotGeneratedAt ?? labels.snapshotNotRecorded}</p>
+          {isStale ? (
+            <p className="border-l border-brass/40 pl-3 text-brass md:col-span-4">{labels.staleNote}</p>
+          ) : null}
+          <p className="md:col-span-4"><span className="font-semibold text-ink">{labels.source}:</span> {labels.sourceText}</p>
         </div>
       </section>
 

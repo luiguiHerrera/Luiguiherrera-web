@@ -1200,6 +1200,7 @@ for (const asset of universe) {
 
 const latestDates = assets.map((asset) => asset.lastDate).filter(Boolean).sort();
 const generatedAt = latestDates.at(-1) ?? new Date().toISOString().slice(0, 10);
+const snapshotGeneratedAt = new Date().toISOString().slice(0, 10);
 const summary = summarizeAssets(assets);
 const unavailableReasons = diagnostics
   .filter((item) => item?.parsedRows === 0)
@@ -1211,6 +1212,7 @@ const unavailableReasons = diagnostics
 
 const data = {
   generatedAt,
+  snapshotGeneratedAt,
   source: "Datos públicos de mercado procesados en actualización estática · cálculos propios",
   sourceUrl: "https://stooq.com/",
   defaultWindow: "5Y",
@@ -1237,6 +1239,7 @@ const seasonalityData = {
 
 const manifest = {
   generatedAt: data.generatedAt,
+  snapshotGeneratedAt: data.snapshotGeneratedAt,
   source: data.source,
   sourceUrl: data.sourceUrl,
   defaultAsset: "SPY",
