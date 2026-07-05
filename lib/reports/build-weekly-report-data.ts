@@ -25,6 +25,7 @@ function dateParts(dateString: string) {
   return {
     year: date.getUTCFullYear(),
     month: date.getUTCMonth() + 1,
+    day: date.getUTCDate(),
   };
 }
 
@@ -54,6 +55,24 @@ function rankedSeasonality(cells: DailySeasonalityCell[], month: number) {
   };
 }
 
+function cumulativeSeasonalityPath(cells: DailySeasonalityCell[], month: number) {
+  let cumulativeReturn = 0;
+  const monthCells = cells
+    .filter((cell) => cell.month === month && cell.sampleSize >= 5 && cell.averageReturn !== null)
+    .sort((a, b) => a.day - b.day);
+
+  return [
+    { day: 0, cumulativeReturn: 0 },
+    ...monthCells.map((cell) => {
+      cumulativeReturn += cell.averageReturn ?? 0;
+      return {
+        day: cell.day,
+        cumulativeReturn,
+      };
+    }),
+  ];
+}
+
 function extensionHighlights(assets: AssetStatSummary[], preferredTickers: string[]) {
   const byTicker = new Map(assets.map((asset) => [asset.ticker, asset]));
   return preferredTickers
@@ -74,16 +93,18 @@ export async function buildWeeklyReportData() {
   const manifest = await getStatisticalLevelsManifest();
   const assets = await Promise.all(coreEtfs.map((ticker) => getStatisticalLevelsAsset(ticker)));
   const generatedAt = manifest.generatedAt;
-  const { month, year } = dateParts(generatedAt);
+  const { day, month, year } = dateParts(generatedAt);
   const cyclePhase = presidentialCyclePhase(year);
   const spySeasonality = await getStatisticalLevelsAssetSeasonality("SPY");
   const seasonalityWindow = spySeasonality?.windows["10Y"] ?? spySeasonality?.windows.Full ?? null;
   const seasonality = seasonalityWindow
     ? {
+        currentDay: day,
         month,
         phase: cyclePhase,
         allYears: rankedSeasonality(seasonalityWindow.general, month),
         cycle: rankedSeasonality(seasonalityWindow.presidentialCycle[cyclePhase], month),
+        path: cumulativeSeasonalityPath(seasonalityWindow.general, month),
       }
     : null;
 

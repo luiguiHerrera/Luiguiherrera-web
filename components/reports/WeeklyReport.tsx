@@ -116,8 +116,11 @@ export function WeeklyReport({ data, locale = "es" }: WeeklyReportProps) {
         pendingFlows: "BTC ETF flows pending update.",
         levels: "Statistical levels",
         percentile: "Percentile",
+        percentileLocation: "Relative position versus its own history.",
+        insufficientSample: "Not enough sample",
         seasonality: "Seasonality",
         seasonalityBody: "Only rankings with at least 5 observations are shown. The read helps locate historical patterns without overstating a single day.",
+        seasonalityPathBody: "Historical cumulative path for the selected period. It does not predict the next move.",
         limitedCycle: "Limited presidential-cycle sample: expand the read with care.",
         enoughSample: "Enough sample for a compact descriptive read.",
         bestDays: "Best historical days",
@@ -175,8 +178,11 @@ export function WeeklyReport({ data, locale = "es" }: WeeklyReportProps) {
         pendingFlows: "Flujos BTC ETF pendientes de actualización.",
         levels: "Niveles estadísticos",
         percentile: "Percentil",
+        percentileLocation: "Ubicación relativa frente a su propia historia.",
+        insufficientSample: "Sin muestra suficiente",
         seasonality: "Estacionalidad",
         seasonalityBody: "Se muestran solo rankings con muestra mínima de 5 observaciones. La lectura sirve para ubicar patrones históricos, no para sobredimensionar un día aislado.",
+        seasonalityPathBody: "Trayectoria histórica acumulada del periodo seleccionado. No predice el siguiente movimiento.",
         limitedCycle: "Muestra acotada en ciclo presidencial: ampliar lectura con prudencia.",
         enoughSample: "Muestra suficiente para una lectura descriptiva compacta.",
         bestDays: "Mejores días históricos",
@@ -314,6 +320,11 @@ export function WeeklyReport({ data, locale = "es" }: WeeklyReportProps) {
                 <p>Z-score <span className="font-semibold text-ink">{asset.zScore === null ? "n/d" : asset.zScore.toFixed(2)}</span></p>
                 <p>{copy.longAverage} <span className="font-semibold text-ink">{formatPercent(asset.distanceToLongAverage, 1, locale)}</span></p>
               </div>
+              <StatisticalPercentileBar
+                emptyLabel={copy.insufficientSample}
+                label={copy.percentileLocation}
+                percentile={asset.percentile}
+              />
             </article>
           ))}
         </div>
@@ -327,11 +338,20 @@ export function WeeklyReport({ data, locale = "es" }: WeeklyReportProps) {
               body={copy.seasonalityBody}
               footer={data.seasonality.cycle.best.length < 3 || data.seasonality.cycle.weakest.length < 3 ? copy.limitedCycle : copy.enoughSample}
             />
-            <div className="grid gap-3 md:grid-cols-2">
-              <SeasonalityList title={copy.bestDays} cells={data.seasonality.allYears.best} emptyLabel={copy.lowSample} locale={locale} />
-              <SeasonalityList title={copy.weakDays} cells={data.seasonality.allYears.weakest} emptyLabel={copy.lowSample} locale={locale} />
-              <SeasonalityList title={copy.cycleBestDays} cells={data.seasonality.cycle.best} emptyLabel={copy.lowSample} locale={locale} />
-              <SeasonalityList title={copy.cycleWeakDays} cells={data.seasonality.cycle.weakest} emptyLabel={copy.lowSample} locale={locale} />
+            <div className="grid gap-3">
+              <SeasonalityPathChart
+                currentDay={data.seasonality.currentDay}
+                emptyLabel={copy.lowSample}
+                locale={locale}
+                points={data.seasonality.path}
+                subtitle={copy.seasonalityPathBody}
+              />
+              <div className="grid gap-3 md:grid-cols-2">
+                <SeasonalityList title={copy.bestDays} cells={data.seasonality.allYears.best} emptyLabel={copy.lowSample} locale={locale} />
+                <SeasonalityList title={copy.weakDays} cells={data.seasonality.allYears.weakest} emptyLabel={copy.lowSample} locale={locale} />
+                <SeasonalityList title={copy.cycleBestDays} cells={data.seasonality.cycle.best} emptyLabel={copy.lowSample} locale={locale} />
+                <SeasonalityList title={copy.cycleWeakDays} cells={data.seasonality.cycle.weakest} emptyLabel={copy.lowSample} locale={locale} />
+              </div>
             </div>
           </div>
         ) : (
@@ -421,6 +441,114 @@ function EditorialNote({ body, footer, title }: { body: string; footer?: string;
       <p className="font-semibold text-ink">{title}</p>
       <p className="mt-2">{body}</p>
       {footer ? <p className="mt-3 border-t border-line pt-3 text-xs font-semibold uppercase tracking-[0.12em] text-muted">{footer}</p> : null}
+    </div>
+  );
+}
+
+function StatisticalPercentileBar({ emptyLabel, label, percentile }: { emptyLabel: string; label: string; percentile: number | null }) {
+  const clamped = percentile === null ? null : Math.min(100, Math.max(0, percentile));
+  const indicatorLeft = clamped === null ? "50%" : `${clamped}%`;
+
+  return (
+    <div className="mt-4 border-t border-line pt-4">
+      <div className="flex items-center justify-between gap-3 text-xs">
+        <p className="leading-5 text-muted">{label}</p>
+        <span className="shrink-0 font-semibold text-ink">{clamped === null ? "n/d" : `${clamped.toFixed(1)}`}</span>
+      </div>
+      {clamped === null ? (
+        <p className="mt-3 border border-line bg-panel px-3 py-2 text-xs font-semibold text-muted">{emptyLabel}</p>
+      ) : (
+        <div className="mt-3">
+          <div className="relative h-2.5 overflow-hidden rounded-full border border-line bg-paper">
+            <div className="absolute inset-y-0 left-0 w-[30%] bg-risk/10" />
+            <div className="absolute inset-y-0 left-[30%] w-[40%] bg-brass/10" />
+            <div className="absolute inset-y-0 right-0 w-[30%] bg-petrol/10" />
+            <span
+              className="absolute top-1/2 h-4 w-1 -translate-x-1/2 -translate-y-1/2 rounded-full bg-petrol shadow-[0_0_0_3px_rgba(11,52,54,0.12)]"
+              style={{ left: indicatorLeft }}
+              aria-hidden="true"
+            />
+          </div>
+          <div className="mt-1 flex justify-between text-[10px] font-semibold uppercase tracking-[0.12em] text-muted">
+            <span>0</span>
+            <span>50</span>
+            <span>100</span>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+function SeasonalityPathChart({
+  currentDay,
+  emptyLabel,
+  locale,
+  points,
+  subtitle,
+}: {
+  currentDay: number;
+  emptyLabel: string;
+  locale: "es" | "en";
+  points: Array<{ day: number; cumulativeReturn: number }>;
+  subtitle: string;
+}) {
+  const visiblePoints = points.filter((point) => Number.isFinite(point.day) && Number.isFinite(point.cumulativeReturn));
+  const chartPoints = visiblePoints.length >= 2 ? visiblePoints : [];
+  const width = 340;
+  const height = 170;
+  const padding = { bottom: 28, left: 42, right: 14, top: 18 };
+  const innerWidth = width - padding.left - padding.right;
+  const innerHeight = height - padding.top - padding.bottom;
+  const maxDay = Math.max(31, ...chartPoints.map((point) => point.day), currentDay);
+  const values = chartPoints.map((point) => point.cumulativeReturn);
+  const minValue = Math.min(0, ...values);
+  const maxValue = Math.max(0, ...values);
+  const yRange = maxValue - minValue || 0.01;
+  const xFor = (day: number) => padding.left + (Math.min(maxDay, Math.max(0, day)) / maxDay) * innerWidth;
+  const yFor = (value: number) => padding.top + (1 - (value - minValue) / yRange) * innerHeight;
+  const path = chartPoints.map((point, index) => `${index === 0 ? "M" : "L"} ${xFor(point.day).toFixed(2)} ${yFor(point.cumulativeReturn).toFixed(2)}`).join(" ");
+  const zeroY = yFor(0);
+  const currentX = xFor(currentDay);
+  const yTicks = [minValue, (minValue + maxValue) / 2, maxValue];
+  const formatAxisPercent = (value: number) => `${value > 0 ? "+" : ""}${(value * 100).toFixed(1)}%`;
+
+  return (
+    <div className="border border-line bg-panelSoft p-4">
+      <p className="text-sm font-semibold text-ink">{locale === "en" ? "Cumulative seasonal path" : "Trayectoria estacional acumulada"}</p>
+      <p className="mt-2 text-sm leading-6 text-muted">{subtitle}</p>
+      {chartPoints.length < 2 ? (
+        <p className="mt-4 border border-line bg-panel px-3 py-2 text-sm text-muted">{emptyLabel}</p>
+      ) : (
+        <div className="mt-4 overflow-hidden rounded-[4px] border border-line bg-white">
+          <svg viewBox={`0 0 ${width} ${height}`} role="img" aria-label={locale === "en" ? "Cumulative seasonality chart" : "Gráfico de estacionalidad acumulada"} className="h-auto w-full">
+            <rect width={width} height={height} fill="#fffdf8" />
+            {yTicks.map((tick) => {
+              const y = yFor(tick);
+              return (
+                <g key={tick}>
+                  <line x1={padding.left} x2={width - padding.right} y1={y} y2={y} stroke="#D8D2C8" strokeOpacity="0.7" />
+                  <text x={padding.left - 8} y={y + 4} textAnchor="end" fontSize="10" fill="#69706D">{formatAxisPercent(tick)}</text>
+                </g>
+              );
+            })}
+            {[0, Math.round(maxDay / 2), maxDay].map((day) => {
+              const x = xFor(day);
+              return (
+                <g key={day}>
+                  <line x1={x} x2={x} y1={padding.top} y2={height - padding.bottom} stroke="#D8D2C8" strokeOpacity="0.45" />
+                  <text x={x} y={height - 9} textAnchor="middle" fontSize="10" fill="#69706D">{day}</text>
+                </g>
+              );
+            })}
+            <line x1={padding.left} x2={width - padding.right} y1={zeroY} y2={zeroY} stroke="#9A7A44" strokeOpacity="0.45" strokeDasharray="4 4" />
+            <line x1={currentX} x2={currentX} y1={padding.top} y2={height - padding.bottom} stroke="#69706D" strokeOpacity="0.8" strokeWidth="1.5" />
+            <path d={path} fill="none" stroke="#0B3436" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+            <circle cx={xFor(0)} cy={yFor(0)} r="3" fill="#0B3436" />
+            <text x={currentX + 5} y={padding.top + 11} fontSize="10" fill="#69706D">{locale === "en" ? "Today" : "Hoy"}</text>
+          </svg>
+        </div>
+      )}
     </div>
   );
 }

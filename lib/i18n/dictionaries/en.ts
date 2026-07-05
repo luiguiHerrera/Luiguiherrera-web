@@ -21,17 +21,15 @@ export const en = {
       { href: "/en/diagnostic?mode=complete", label: "Full diagnostic", shortLabel: "Full", description: "A deeper block-by-block assessment across capacity, goals and behavior." },
     ],
     researchItems: [
-      { href: "/en/research", label: "Research overview", shortLabel: "Overview", description: "Frameworks and market context for disciplined research." },
-      { href: "/en/research/td3", label: "Interactive TD3 paper", shortLabel: "TD3 paper", description: "Realistic evaluation of DRL claims under costs, cash and statistical validation." },
+      { href: "/en/research/td3", label: "DRL protocol", shortLabel: "DRL", description: "Realistic evaluation of deep reinforcement learning under costs, cash and statistical validation." },
       { href: "/en/quant-lab", label: "Quant / TD3 Lab", shortLabel: "Quant Lab", description: "TD3 performance context and quantitative process notes." },
     ],
     protectionItems: [
-      { href: "/en/protection", label: "Protection overview", shortLabel: "Overview", description: "Risk-first resources for protecting process and capital." },
       { href: "/en/protect-your-money", label: "Protect your money", shortLabel: "Protect", description: "Practical red flags and safeguards for everyday decisions." },
       { href: "/en/dashboard#radar", label: "Cross-readings radar", shortLabel: "Radar", description: "Curated tensions across short interest, institutions and notes." },
     ],
     trendsItems: [
-      { href: "/en/trends", label: "Trends: from the world to the portfolio", shortLabel: "Trends", description: "Educational framework for turning global change into hypotheses without recommendations." },
+      { href: "/en/trends", label: "Trends: from the world to the portfolio", shortLabel: "Trends", description: "Educational framework for turning global change into hypotheses with care." },
     ],
     resourcesItems: [
       { href: "/en/resources", label: "Resources overview", shortLabel: "Overview", description: "Public tools and scripts to support your investment process." },

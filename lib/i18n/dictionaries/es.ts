@@ -21,17 +21,15 @@ export const es = {
       { href: "/diagnostico?mode=complete", label: "Diagnóstico completo", shortLabel: "Completo", description: "Evaluación más profunda por capacidad, objetivos, conducta y consistencia." },
     ],
     researchItems: [
-      { href: "/investigacion", label: "Vista de investigación", shortLabel: "Vista", description: "Marcos y contexto de mercado para investigar con disciplina." },
-      { href: "/investigacion/td3", label: "Paper interactivo TD3", shortLabel: "TD3 paper", description: "Evaluación realista de claims DRL bajo costes, cash y validación estadística." },
+      { href: "/investigacion/td3", label: "Protocolo DRL", shortLabel: "DRL", description: "Evaluación realista de aprendizaje profundo por refuerzo bajo costes, cash y validación estadística." },
       { href: "/quant-lab", label: "Quant / TD3 Lab", shortLabel: "Quant Lab", description: "Contexto de rendimiento TD3 y notas del proceso cuantitativo." },
     ],
     protectionItems: [
-      { href: "/proteccion", label: "Vista de protección", shortLabel: "Vista", description: "Recursos centrados en riesgo para proteger proceso y capital." },
       { href: "/protege-tu-dinero", label: "Protege tu dinero", shortLabel: "Protege", description: "Alertas prácticas y defensas para decisiones cotidianas." },
       { href: "/dashboard#radar", label: "Radar de lecturas cruzadas", shortLabel: "Radar", description: "Tensiones curadas entre short interest, instituciones y notas." },
     ],
     trendsItems: [
-      { href: "/tendencias", label: "Tendencias: del mundo al portafolio", shortLabel: "Tendencias", description: "Marco educativo para convertir cambios globales en hipótesis sin recomendación." },
+      { href: "/tendencias", label: "Tendencias: del mundo al portafolio", shortLabel: "Tendencias", description: "Marco educativo para convertir cambios globales en hipótesis con prudencia." },
     ],
     resourcesItems: [
       { href: "/recursos", label: "Recursos", shortLabel: "Recursos", description: "Herramientas públicas para complementar tu proceso." },

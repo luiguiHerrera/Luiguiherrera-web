@@ -442,7 +442,7 @@ export default async function EnglishHomePage() {
           </Link>
           <Link href="/en/research/td3" className="rounded-[6px] border border-line bg-white/75 p-4 shadow-[0_10px_28px_rgba(11,52,54,0.035)] transition hover:border-petrol md:p-5">
             <p className="text-xs font-semibold uppercase tracking-[0.18em] text-petrol">Research</p>
-            <h2 className="mt-3 text-xl font-semibold text-ink">Interactive TD3 paper and evidence protocol</h2>
+            <h2 className="mt-3 text-xl font-semibold text-ink">DRL protocol and reproducible evidence</h2>
           </Link>
           <Link href="/en/protection" className="rounded-[6px] border border-line bg-white/75 p-4 shadow-[0_10px_28px_rgba(11,52,54,0.035)] transition hover:border-petrol md:p-5">
             <p className="text-xs font-semibold uppercase tracking-[0.18em] text-petrol">Protection</p>
