@@ -12,8 +12,8 @@ const cards = [
     label: "02",
     meta: "Próximo bloque",
     title: "Antes de invertir: revisa tus deudas",
-    href: "/proteccion",
-    description: "Una deuda cara puede competir contra cualquier inversión incierta. Esta herramienta será el siguiente bloque.",
+    href: "/deudas",
+    description: "Una deuda cara puede competir contra cualquier inversión incierta. Ordena el costo, el flujo y el margen de seguridad.",
   },
   {
     label: "03",

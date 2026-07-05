@@ -84,7 +84,7 @@ function DesktopDropdown({ href, items, label }: { href: string; items: NavDropd
         <div className="grid gap-1 rounded-[6px] border border-line/90 bg-white/95 p-2 shadow-[0_18px_45px_rgba(11,52,54,0.10)] backdrop-blur-xl">
           {items.map((item) => (
             <HeaderLink
-              key={item.href}
+              key={`${item.href}-${item.label}`}
               href={item.href}
               className="block rounded-[4px] px-3 py-2.5 text-[11px] text-muted transition hover:bg-paper hover:text-petrol focus-visible:bg-paper focus-visible:text-petrol focus-visible:outline-none"
             >
@@ -104,8 +104,8 @@ export function Header() {
   const dictionary = getDictionary(locale);
   const hrefs = navHrefs[locale];
   const navGroups = [
-    { href: hrefs.market, label: dictionary.layout.nav.market, items: dictionary.layout.marketItems },
-    { href: hrefs.diagnostic, label: dictionary.layout.nav.diagnostic, items: dictionary.layout.diagnosticItems },
+    { href: hrefs.start, label: dictionary.layout.nav.start, items: dictionary.layout.startItems },
+    { href: hrefs.investor, label: dictionary.layout.nav.investor, items: dictionary.layout.investorItems },
     { href: hrefs.research, label: dictionary.layout.nav.research, items: dictionary.layout.researchItems },
     { href: hrefs.protection, label: dictionary.layout.nav.protection, items: dictionary.layout.protectionItems },
     { href: hrefs.trends, label: dictionary.layout.nav.trends, items: dictionary.layout.trendsItems },
@@ -128,18 +128,6 @@ export function Header() {
         </div>
         <div className="hidden w-full min-w-0 items-center gap-3 md:flex lg:w-auto">
           <nav className="-mx-1 flex max-w-full min-w-0 gap-1 overflow-x-auto text-[12px] text-muted [scrollbar-width:none] lg:mx-0 lg:flex-wrap lg:items-center lg:overflow-visible">
-            <HeaderLink
-              href={hrefs.start}
-              className="shrink-0 border-b border-transparent px-2 py-1.5 font-medium transition hover:border-petrol hover:text-petrol focus-visible:border-petrol focus-visible:text-petrol focus-visible:outline-none"
-            >
-              {dictionary.layout.nav.start}
-            </HeaderLink>
-            <HeaderLink
-              href={hrefs.investor}
-              className="shrink-0 border-b border-transparent px-2 py-1.5 font-medium transition hover:border-petrol hover:text-petrol focus-visible:border-petrol focus-visible:text-petrol focus-visible:outline-none"
-            >
-              {dictionary.layout.nav.investor}
-            </HeaderLink>
             {navGroups.map((group) => (
               <DesktopDropdown key={group.href} href={group.href} label={group.label} items={group.items} />
             ))}

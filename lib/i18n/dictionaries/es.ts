@@ -19,14 +19,16 @@ export const es = {
       { href: "/informe-semanal", label: "Informe semanal", shortLabel: "Informe semanal", description: "Resumen editorial del cierre de mercado." },
     ],
     startItems: [
+      { href: "/empezar", label: "Empezar simple", shortLabel: "Simple", description: "Camino guiado para ordenar lo esencial." },
       { href: "/diagnostico?mode=quick", label: "Diagnóstico rápido", shortLabel: "Rápido", description: "Lectura compacta de horizonte, liquidez, tolerancia y sesgos." },
       { href: "/diagnostico?mode=complete", label: "Diagnóstico completo", shortLabel: "Completo", description: "Evaluación más profunda por capacidad, objetivos, conducta y consistencia." },
-      { href: "/proteccion", label: "Antes de invertir: revisa tus deudas", shortLabel: "Deudas", description: "Próximo bloque defensivo para evaluar deuda antes de invertir." },
+      { href: "/deudas", label: "Antes de invertir: revisa tus deudas", shortLabel: "Deudas", description: "Próximo bloque defensivo para evaluar deuda antes de invertir." },
       { href: "/protege-tu-dinero", label: "Protege tu dinero", shortLabel: "Protege", description: "Señales de alerta antes de entregar capital." },
       { href: "/proteccion", label: "Prácticas de inversión", shortLabel: "Prácticas", description: "Casos realistas para practicar decisiones sin poner dinero en riesgo." },
       { href: "/tendencias", label: "Tendencias sin hype", shortLabel: "Tendencias", description: "Cambios del mundo como hipótesis, no como recomendación." },
     ],
     investorItems: [
+      { href: "/inversionista", label: "Modo inversionista", shortLabel: "Modo", description: "Camino avanzado para reportes, métricas e investigación." },
       { href: "/informe-semanal", label: "Informe semanal", shortLabel: "Informe", description: "Lectura editorial de régimen, ETFs, sectores, niveles y estacionalidad." },
       { href: "/dashboard", label: "Dashboard", shortLabel: "Dashboard", description: "Volatilidad, rotación sectorial, flujos y lecturas cruzadas." },
       { href: "/mercado", label: "Mercado", shortLabel: "Mercado", description: "Contexto de mercado y lecturas públicas." },

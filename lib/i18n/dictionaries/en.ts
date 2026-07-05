@@ -19,14 +19,16 @@ export const en = {
       { href: "/en/weekly-report", label: "Weekly Report", shortLabel: "Weekly Report", description: "Editorial market close read." },
     ],
     startItems: [
+      { href: "/en/start", label: "Start simple", shortLabel: "Simple", description: "Guided path for organizing the essentials." },
       { href: "/en/diagnostic?mode=quick", label: "Quick diagnostic", shortLabel: "Quick", description: "Compact read on horizon, liquidity, tolerance and biases." },
       { href: "/en/diagnostic?mode=complete", label: "Full diagnostic", shortLabel: "Full", description: "Deeper assessment across capacity, goals, behavior and consistency." },
-      { href: "/en/protection", label: "Before investing: review your debt", shortLabel: "Debt", description: "Defensive next block for reviewing debt before investing." },
+      { href: "/en/debt", label: "Before investing: review your debt", shortLabel: "Debt", description: "Defensive next block for reviewing debt before investing." },
       { href: "/en/protect-your-money", label: "Protect your money", shortLabel: "Protect", description: "Red flags before committing capital." },
       { href: "/en/protection", label: "Investment practice", shortLabel: "Practice", description: "Realistic cases to practice decisions without putting money at risk." },
       { href: "/en/trends", label: "Trends without hype", shortLabel: "Trends", description: "Global changes as hypotheses, not recommendations." },
     ],
     investorItems: [
+      { href: "/en/investor", label: "Investor mode", shortLabel: "Mode", description: "Advanced path for reports, metrics and research." },
       { href: "/en/weekly-report", label: "Weekly report", shortLabel: "Weekly", description: "Editorial read on regime, ETFs, sectors, levels and seasonality." },
       { href: "/en/dashboard", label: "Dashboard", shortLabel: "Dashboard", description: "Volatility, sector rotation, flows and cross-readings." },
       { href: "/en/market", label: "Market", shortLabel: "Market", description: "Market context and public readings." },

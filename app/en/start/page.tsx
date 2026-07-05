@@ -12,8 +12,8 @@ const cards = [
     label: "02",
     meta: "Next block",
     title: "Before investing: review your debt",
-    href: "/en/protection",
-    description: "Expensive debt can compete with any uncertain investment. This tool will be the next block.",
+    href: "/en/debt",
+    description: "Expensive debt can compete with any uncertain investment. Organize cost, cash flow, and margin of safety.",
   },
   {
     label: "03",
