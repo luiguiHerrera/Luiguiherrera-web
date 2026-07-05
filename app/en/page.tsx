@@ -57,6 +57,23 @@ const entryways = [
   },
 ];
 
+const homePathways = [
+  {
+    title: "Start simple",
+    href: "/en/start",
+    label: "Path 01",
+    description: "Organize the essentials before metrics, models, or advanced reports.",
+    cta: "Enter the simple path",
+  },
+  {
+    title: "Investor mode",
+    href: "/en/investor",
+    label: "Path 02",
+    description: "Explore the dashboard, weekly report, levels, trends, and quant research.",
+    cta: "Enter investor mode",
+  },
+];
+
 const statisticalLevelsPreview = [
   { ticker: "SPY", percentile: 72, zScore: "+0.8", distance: "+6.4%" },
   { ticker: "GLD", percentile: 84, zScore: "+1.2", distance: "+9.1%" },
@@ -365,6 +382,28 @@ export default async function EnglishHomePage() {
             />
             <div className="absolute inset-0 bg-gradient-to-t from-paper/10 via-paper/45 to-paper md:bg-gradient-to-r md:from-paper md:via-paper/82 md:via-45% md:to-paper/10" />
             <div className="absolute inset-y-0 left-0 w-1/3 bg-paper/55 md:w-1/2 md:bg-paper/35" />
+          </div>
+        </div>
+      </section>
+
+      <section className="border-b border-line bg-white/70">
+        <div className="mx-auto grid max-w-7xl gap-6 px-4 py-8 md:px-5 md:py-10 lg:grid-cols-[0.34fr_1fr] lg:items-start">
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-petrol">Two paths</p>
+            <h2 className="mt-3 text-2xl font-semibold leading-tight text-ink">Choose the level of reading</h2>
+            <p className="mt-3 text-sm leading-6 text-muted">
+              You can start with the essentials or go directly into advanced tools. Both paths are educational and do not save answers.
+            </p>
+          </div>
+          <div className="grid gap-4 md:grid-cols-2">
+            {homePathways.map((pathway) => (
+              <Link key={pathway.href} href={pathway.href} className="group flex min-h-[13rem] flex-col rounded-[6px] border border-line bg-white/75 p-5 shadow-[0_12px_32px_rgba(11,52,54,0.045)] transition hover:border-petrol hover:bg-white">
+                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-petrol">{pathway.label}</p>
+                <h3 className="mt-4 text-2xl font-semibold leading-tight text-ink">{pathway.title}</h3>
+                <p className="mt-3 text-sm leading-6 text-muted">{pathway.description}</p>
+                <span className="mt-auto pt-6 text-sm font-semibold text-petrol transition group-hover:translate-x-0.5">{pathway.cta} &rarr;</span>
+              </Link>
+            ))}
           </div>
         </div>
       </section>

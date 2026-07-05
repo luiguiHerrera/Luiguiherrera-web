@@ -4,6 +4,8 @@ export const es = {
     cta: "Comenzar",
     nav: {
       home: "Home",
+      start: "Empezar",
+      investor: "Inversionista",
       market: "Mercado",
       diagnostic: "Diagnóstico",
       research: "Investigación",
@@ -15,6 +17,24 @@ export const es = {
       { href: "/dashboard", label: "Dashboard de régimen", shortLabel: "Dashboard", description: "Lectura diaria de volatilidad, rotación y flujos." },
       { href: "/niveles-estadisticos", label: "Niveles estadísticos", shortLabel: "Niveles", description: "Precio, percentiles, estacionalidad y contexto histórico." },
       { href: "/informe-semanal", label: "Informe semanal", shortLabel: "Informe semanal", description: "Resumen editorial del cierre de mercado." },
+    ],
+    startItems: [
+      { href: "/diagnostico?mode=quick", label: "Diagnóstico rápido", shortLabel: "Rápido", description: "Lectura compacta de horizonte, liquidez, tolerancia y sesgos." },
+      { href: "/diagnostico?mode=complete", label: "Diagnóstico completo", shortLabel: "Completo", description: "Evaluación más profunda por capacidad, objetivos, conducta y consistencia." },
+      { href: "/proteccion", label: "Antes de invertir: revisa tus deudas", shortLabel: "Deudas", description: "Próximo bloque defensivo para evaluar deuda antes de invertir." },
+      { href: "/protege-tu-dinero", label: "Protege tu dinero", shortLabel: "Protege", description: "Señales de alerta antes de entregar capital." },
+      { href: "/proteccion", label: "Prácticas de inversión", shortLabel: "Prácticas", description: "Casos realistas para practicar decisiones sin poner dinero en riesgo." },
+      { href: "/tendencias", label: "Tendencias sin hype", shortLabel: "Tendencias", description: "Cambios del mundo como hipótesis, no como recomendación." },
+    ],
+    investorItems: [
+      { href: "/informe-semanal", label: "Informe semanal", shortLabel: "Informe", description: "Lectura editorial de régimen, ETFs, sectores, niveles y estacionalidad." },
+      { href: "/dashboard", label: "Dashboard", shortLabel: "Dashboard", description: "Volatilidad, rotación sectorial, flujos y lecturas cruzadas." },
+      { href: "/mercado", label: "Mercado", shortLabel: "Mercado", description: "Contexto de mercado y lecturas públicas." },
+      { href: "/niveles-estadisticos", label: "Niveles estadísticos", shortLabel: "Niveles", description: "Percentiles, z-scores, extensiones, drawdowns y estacionalidad." },
+      { href: "/tendencias", label: "Tendencias", shortLabel: "Tendencias", description: "Mapas editoriales y vehículos observables." },
+      { href: "/quant-lab", label: "Quant Lab", shortLabel: "Quant", description: "Contexto de rendimiento TD3 y proceso cuantitativo." },
+      { href: "/investigacion", label: "Investigación DRL", shortLabel: "DRL", description: "Investigación con costes, cash y validación estadística." },
+      { href: "/recursos", label: "Recursos", shortLabel: "Recursos", description: "Herramientas públicas y scripts." },
     ],
     diagnosticItems: [
       { href: "/diagnostico?mode=quick", label: "Diagnóstico rápido", shortLabel: "Rápido", description: "Lectura compacta de horizonte, liquidez, tolerancia y sesgos principales." },

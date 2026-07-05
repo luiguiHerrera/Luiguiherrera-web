@@ -4,6 +4,8 @@ export const en = {
     cta: "Start",
     nav: {
       home: "Home",
+      start: "Start",
+      investor: "Investor",
       market: "Market",
       diagnostic: "Diagnostic",
       research: "Research",
@@ -15,6 +17,24 @@ export const en = {
       { href: "/en/dashboard", label: "Market Regime Dashboard", shortLabel: "Dashboard", description: "Daily read on volatility, rotation and flows." },
       { href: "/en/statistical-levels", label: "Statistical Levels", shortLabel: "Levels", description: "Price, percentiles, seasonality and historical context." },
       { href: "/en/weekly-report", label: "Weekly Report", shortLabel: "Weekly Report", description: "Editorial market close read." },
+    ],
+    startItems: [
+      { href: "/en/diagnostic?mode=quick", label: "Quick diagnostic", shortLabel: "Quick", description: "Compact read on horizon, liquidity, tolerance and biases." },
+      { href: "/en/diagnostic?mode=complete", label: "Full diagnostic", shortLabel: "Full", description: "Deeper assessment across capacity, goals, behavior and consistency." },
+      { href: "/en/protection", label: "Before investing: review your debt", shortLabel: "Debt", description: "Defensive next block for reviewing debt before investing." },
+      { href: "/en/protect-your-money", label: "Protect your money", shortLabel: "Protect", description: "Red flags before committing capital." },
+      { href: "/en/protection", label: "Investment practice", shortLabel: "Practice", description: "Realistic cases to practice decisions without putting money at risk." },
+      { href: "/en/trends", label: "Trends without hype", shortLabel: "Trends", description: "Global changes as hypotheses, not recommendations." },
+    ],
+    investorItems: [
+      { href: "/en/weekly-report", label: "Weekly report", shortLabel: "Weekly", description: "Editorial read on regime, ETFs, sectors, levels and seasonality." },
+      { href: "/en/dashboard", label: "Dashboard", shortLabel: "Dashboard", description: "Volatility, sector rotation, flows and cross-readings." },
+      { href: "/en/market", label: "Market", shortLabel: "Market", description: "Market context and public readings." },
+      { href: "/en/statistical-levels", label: "Statistical levels", shortLabel: "Levels", description: "Percentiles, z-scores, extensions, drawdowns and seasonality." },
+      { href: "/en/trends", label: "Trends", shortLabel: "Trends", description: "Editorial maps and observable vehicles." },
+      { href: "/en/quant-lab", label: "Quant Lab", shortLabel: "Quant", description: "TD3 performance context and quantitative process." },
+      { href: "/en/research", label: "DRL research", shortLabel: "DRL", description: "Research with costs, cash and statistical validation." },
+      { href: "/en/resources", label: "Resources", shortLabel: "Resources", description: "Public tools and scripts." },
     ],
     diagnosticItems: [
       { href: "/en/diagnostic?mode=quick", label: "Quick diagnostic", shortLabel: "Quick", description: "A concise investor read for horizon, liquidity, tolerance and key biases." },
