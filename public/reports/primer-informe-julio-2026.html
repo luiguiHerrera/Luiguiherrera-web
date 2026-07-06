@@ -1,0 +1,443 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <title>Primer informe de julio - Luigui Herrera</title>
+  <style>
+    @page { size: A4; margin: 18mm 17mm 19mm; }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: #f7f4ec;
+      color: #1f2328;
+      font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+      font-size: 10.2pt;
+      line-height: 1.55;
+    }
+    a { color: #0b3436; text-decoration: none; border-bottom: 0.5pt solid rgba(11,52,54,0.35); }
+    .page { min-height: 260mm; page-break-after: always; position: relative; }
+    .page:last-child { page-break-after: auto; }
+    .cover {
+      display: grid;
+      min-height: 260mm;
+      grid-template-rows: auto 1fr auto;
+      padding: 3mm 0 0;
+    }
+    .kicker, .eyebrow {
+      color: #9a7a45;
+      font-size: 8pt;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+    }
+    .brandline {
+      display: flex;
+      justify-content: space-between;
+      border-bottom: 0.6pt solid #d8d2c6;
+      padding-bottom: 8mm;
+      color: #6e7471;
+      font-size: 8.5pt;
+    }
+    h1, h2, h3 { margin: 0; color: #1f2328; font-weight: 650; letter-spacing: 0; }
+    h1 { max-width: 150mm; font-size: 42pt; line-height: 0.98; }
+    h2 { font-size: 21pt; line-height: 1.08; margin-bottom: 5mm; }
+    h3 { font-size: 12pt; line-height: 1.25; margin-bottom: 2.5mm; }
+    p { margin: 0 0 4mm; }
+    .subtitle { max-width: 145mm; margin-top: 7mm; font-size: 18pt; line-height: 1.2; color: #0b3436; }
+    .cover-question {
+      margin-top: 12mm;
+      color: #1f2328;
+      font-size: 17pt;
+      line-height: 1.24;
+      font-weight: 650;
+    }
+    .editorial-quote {
+      max-width: 132mm;
+      margin-top: 8mm;
+      padding-left: 6mm;
+      border-left: 1.4pt solid #9a7a45;
+      color: #414844;
+      font-size: 14pt;
+      line-height: 1.45;
+    }
+    .footer {
+      display: flex;
+      justify-content: space-between;
+      border-top: 0.6pt solid #d8d2c6;
+      padding-top: 5mm;
+      color: #6e7471;
+      font-size: 8.5pt;
+    }
+    .section {
+      break-inside: avoid;
+      margin-bottom: 11mm;
+      padding-top: 2mm;
+    }
+    .lead {
+      max-width: 160mm;
+      color: #414844;
+      font-size: 12.2pt;
+      line-height: 1.62;
+    }
+    .rule { height: 0.6pt; background: #d8d2c6; margin: 7mm 0; }
+    .grid { display: grid; gap: 5mm; }
+    .grid.two { grid-template-columns: 1fr 1fr; }
+    .grid.three { grid-template-columns: repeat(3, 1fr); }
+    .grid.four { grid-template-columns: repeat(4, 1fr); }
+    .card, .metric, .asset-card, .story-block {
+      background: rgba(239,234,224,0.72);
+      border: 0.65pt solid #d8d2c6;
+      padding: 5.8mm;
+      break-inside: avoid;
+    }
+    .card p, .asset-card p, .story-block p { color: #555d58; }
+    .metric { min-height: 18mm; }
+    .metric span {
+      display: block;
+      color: #6e7471;
+      font-size: 7.6pt;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+    .metric strong {
+      display: block;
+      margin-top: 1.5mm;
+      color: #0b3436;
+      font-size: 12pt;
+      line-height: 1.2;
+    }
+    .metric em {
+      display: block;
+      margin-top: 1.5mm;
+      color: #6e7471;
+      font-size: 8pt;
+      font-style: normal;
+    }
+    .asset-card h3 {
+      display: flex;
+      justify-content: space-between;
+      gap: 3mm;
+    }
+    .badge {
+      color: #9a7a45;
+      font-size: 7.5pt;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+    .asset-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 2mm;
+      margin-top: 3mm;
+      color: #6e7471;
+      font-size: 8pt;
+    }
+    .pill {
+      border: 0.55pt solid #d8d2c6;
+      background: #f7f4ec;
+      padding: 1.2mm 2mm;
+    }
+    .callout {
+      margin: 5mm 0 7mm;
+      padding: 5mm 6mm;
+      border-left: 1.6pt solid #9a7a45;
+      background: rgba(239,234,224,0.72);
+      color: #414844;
+      font-size: 11.3pt;
+      line-height: 1.62;
+    }
+    .story-block { border-left: 1.5pt solid #0b3436; }
+    .numbered {
+      display: grid;
+      grid-template-columns: 8mm 1fr;
+      gap: 3mm;
+      margin-bottom: 3.5mm;
+    }
+    .num {
+      width: 8mm;
+      height: 8mm;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border: 0.7pt solid rgba(154,122,69,0.55);
+      color: #9a7a45;
+      font-weight: 700;
+      font-size: 8pt;
+    }
+    .small { color: #6e7471; font-size: 8.6pt; line-height: 1.5; }
+    .disclaimer {
+      margin-top: 10mm;
+      padding-top: 5mm;
+      border-top: 0.7pt solid #d8d2c6;
+      color: #6e7471;
+      font-size: 8.8pt;
+    }
+  </style>
+</head>
+<body>
+  <section class="page cover">
+    <div class="brandline"><span>Informes de mercado · Julio 2026</span><span>Luigui Herrera · Market Lab</span></div>
+    <div style="align-self:center">
+      <h1>Primer informe de julio</h1>
+      <div class="subtitle">IA, flujos y concentración: un mercado fuerte, pero más mecánico</div>
+      <div class="cover-question">¿Qué sostiene el mercado?</div>
+      <div class="editorial-quote">Cuando el mercado sube, no basta con mirar el precio. Hay que entender quién empuja, quién acompaña y qué parte del movimiento sigue sana.</div>
+    </div>
+    <div class="footer"><span>Documento educativo e informativo.</span><span>Julio 2026</span></div>
+  </section>
+
+  <section class="page">
+    <div class="section">
+      <div class="eyebrow">Tesis ejecutiva</div>
+      <h2>Fuerte por arriba, más exigente por dentro</h2>
+      <p class="lead">Julio arranca con un mercado que todavía se ve fuerte por arriba, pero cuya estructura depende cada vez más de pocos motores: IA, flujos, concentración, opciones y liquidez. La lectura pide calma, detalle y menos ingenuidad.</p>
+      <div class="callout">El mercado mantiene una estructura constructiva, pero exige una lectura menos ingenua. Una cartera no necesita adivinar todo; necesita entender qué la puede mover.</div>
+      <div class="grid three">
+        <article class="card"><div class="eyebrow">01</div><h3>Precio</h3><p>El índice mantiene tono constructivo, pero la lectura cambia cuando se separa índice de amplitud.</p></article>
+        <article class="card"><div class="eyebrow">02</div><h3>Flujo</h3><p>Los ETF, la inversión pasiva y la participación retail siguen funcionando como soporte mecánico.</p></article>
+        <article class="card"><div class="eyebrow">03</div><h3>Riesgo</h3><p>Volatilidad contenida no significa ausencia de fragilidad. A veces solo significa que el ajuste todavía no empezó.</p></article>
+      </div>
+    </div>
+    <div class="section">
+      <div class="eyebrow">Mapa rápido</div>
+      <h2>Activos principales</h2>
+      <div class="grid two">
+        
+          <article class="asset-card">
+            <h3><span>VOO / S&amp;P 500</span><span class="badge">Núcleo</span></h3>
+            <p>El S&amp;P 500 puede seguir subiendo y, aun así, exigir una lectura más fina. Lo importante es identificar cuántas piezas sostienen el movimiento y qué tan dependiente está de pocos motores.</p>
+            <p><strong>Qué esperamos:</strong> Sesgo constructivo mientras flujos, beneficios y amplitud se mantengan alineados.</p>
+            <p><strong>Qué vigilar:</strong> Concentración, VIX, amplitud, resultados y niveles JPM/SPX.</p>
+            <div class="asset-meta"><span class="pill">SPY 1W +2.2%</span><span class="pill">SPY media larga +8.1%</span><span class="pill">percentil 57.1</span></div>
+          </article>
+        
+          <article class="asset-card">
+            <h3><span>GLD / Oro</span><span class="badge">Defensa</span></h3>
+            <p>El oro cumple mejor su papel cuando se lo evalúa como diversificador, no como una carrera diaria contra el índice. Su valor aparece cuando el resto del portafolio se mueve demasiado al mismo ritmo.</p>
+            <p><strong>Qué esperamos:</strong> Puede seguir pausado si domina el apetito por riesgo, pero conserva valor si suben tensiones de tasas, dólar o inflación.</p>
+            <p><strong>Qué vigilar:</strong> Dólar, tasas reales, inflación, estrés financiero y liquidez.</p>
+            <div class="asset-meta"><span class="pill">1W +1.2%</span><span class="pill">media larga -7.8%</span><span class="pill">percentil 3.8</span></div>
+          </article>
+        
+          <article class="asset-card">
+            <h3><span>EWJ / Japón</span><span class="badge">Selectivo</span></h3>
+            <p>Japón sigue siendo una lectura interesante porque combina mercado desarrollado, exposición internacional y una historia distinta a la de Estados Unidos.</p>
+            <p><strong>Qué esperamos:</strong> Puede funcionar como diversificación geográfica con momentum si el apetito por riesgo global se mantiene.</p>
+            <p><strong>Qué vigilar:</strong> Yen, tasas japonesas, flujos internacionales y continuidad del liderazgo regional.</p>
+            <div class="asset-meta"><span class="pill">1W +0.4%</span><span class="pill">media larga +9.8%</span><span class="pill">percentil 75.7</span></div>
+          </article>
+        
+          <article class="asset-card">
+            <h3><span>FXI / China</span><span class="badge">Táctico</span></h3>
+            <p>China puede parecer barata muchas veces antes de estar lista. Por eso la leo como posición táctica, no como confirmación automática de tendencia.</p>
+            <p><strong>Qué esperamos:</strong> Necesita catalizador macro, político o de flujos para cambiar la lectura.</p>
+            <p><strong>Qué vigilar:</strong> Datos chinos, dólar, flujo extranjero y reacción de emergentes.</p>
+            <div class="asset-meta"><span class="pill">1W +1.0%</span><span class="pill">media larga -14.9%</span><span class="pill">percentil 8.4</span></div>
+          </article>
+        
+          <article class="asset-card">
+            <h3><span>BTC/USDT</span><span class="badge">Beta</span></h3>
+            <p>En este informe, cripto se lee como beta, liquidez y apetito por riesgo. Por eso separo precio spot de flujos ETF: son señales relacionadas, pero no equivalentes.</p>
+            <p><strong>Qué esperamos:</strong> Mejor tono si se mantiene la búsqueda de riesgo; vulnerable si sube VIX o se enfría tecnología.</p>
+            <p><strong>Qué vigilar:</strong> BTC spot, dólar, VIX, condiciones financieras y ETF flows.</p>
+            <div class="asset-meta"><span class="pill">1W +2.1%</span><span class="pill">media larga -15.8%</span><span class="pill">percentil 13.8</span></div>
+          </article>
+        
+          <article class="asset-card">
+            <h3><span>ETH/USDT</span><span class="badge">Beta</span></h3>
+            <p>ETH comparte la lectura de liquidez, pero conviene separarlo del bloque de flujos ETF. Precio spot y flows son dos señales distintas.</p>
+            <p><strong>Qué esperamos:</strong> Puede acelerar con apetito por riesgo, pero sigue sensible a tecnología, dólar y liquidez.</p>
+            <p><strong>Qué vigilar:</strong> ETH spot, BTC, spreads de riesgo y actualización de ETF flows.</p>
+            <div class="asset-meta"><span class="pill">1W +3.9%</span><span class="pill">media larga -21.8%</span><span class="pill">percentil 19.7</span></div>
+          </article>
+        
+          <article class="asset-card">
+            <h3><span>Stockpicking</span><span class="badge">Dispersión</span></h3>
+            <p>Cuando baja la correlación y sube la dispersión, el stockpicking vuelve a importar. El índice deja de contar toda la historia y la selección exige más trabajo.</p>
+            <p><strong>Qué esperamos:</strong> Mejor entorno para selección, siempre que beneficios y márgenes confirmen la narrativa.</p>
+            <p><strong>Qué vigilar:</strong> Valoración, guidance, márgenes, capex, balance y exceso de momentum.</p>
+            <div class="asset-meta"><span class="pill">Lectura cualitativa</span><span class="pill">Lectura por compañías</span><span class="pill">Mayor exigencia</span></div>
+          </article>
+        
+      </div>
+    </div>
+    <div class="section">
+      <div class="eyebrow">Activo por activo</div>
+      <h2>Qué pasó / Qué esperamos / Qué vigilar</h2>
+      <p class="lead">La lectura central del informe está en separar precio, expectativa y riesgo de cambio de opinión para cada bloque.</p>
+      <div class="grid two">
+        
+          <article class="asset-card">
+            <h3><span>VOO / S&amp;P 500</span><span class="badge">Núcleo</span></h3>
+            <p><strong>Qué pasó:</strong> El S&amp;P 500 puede seguir subiendo y, aun así, exigir una lectura más fina. Lo importante es identificar cuántas piezas sostienen el movimiento y qué tan dependiente está de pocos motores.</p>
+            <p><strong>Qué esperamos:</strong> Sesgo constructivo mientras flujos, beneficios y amplitud se mantengan alineados.</p>
+            <p><strong>Qué vigilar:</strong> Concentración, VIX, amplitud, resultados y niveles JPM/SPX.</p>
+            <div class="asset-meta"><span class="pill">SPY 1W +2.2%</span><span class="pill">SPY media larga +8.1%</span><span class="pill">percentil 57.1</span></div>
+          </article>
+        
+          <article class="asset-card">
+            <h3><span>GLD / Oro</span><span class="badge">Defensa</span></h3>
+            <p><strong>Qué pasó:</strong> El oro cumple mejor su papel cuando se lo evalúa como diversificador, no como una carrera diaria contra el índice. Su valor aparece cuando el resto del portafolio se mueve demasiado al mismo ritmo.</p>
+            <p><strong>Qué esperamos:</strong> Puede seguir pausado si domina el apetito por riesgo, pero conserva valor si suben tensiones de tasas, dólar o inflación.</p>
+            <p><strong>Qué vigilar:</strong> Dólar, tasas reales, inflación, estrés financiero y liquidez.</p>
+            <div class="asset-meta"><span class="pill">1W +1.2%</span><span class="pill">media larga -7.8%</span><span class="pill">percentil 3.8</span></div>
+          </article>
+        
+          <article class="asset-card">
+            <h3><span>EWJ / Japón</span><span class="badge">Selectivo</span></h3>
+            <p><strong>Qué pasó:</strong> Japón sigue siendo una lectura interesante porque combina mercado desarrollado, exposición internacional y una historia distinta a la de Estados Unidos.</p>
+            <p><strong>Qué esperamos:</strong> Puede funcionar como diversificación geográfica con momentum si el apetito por riesgo global se mantiene.</p>
+            <p><strong>Qué vigilar:</strong> Yen, tasas japonesas, flujos internacionales y continuidad del liderazgo regional.</p>
+            <div class="asset-meta"><span class="pill">1W +0.4%</span><span class="pill">media larga +9.8%</span><span class="pill">percentil 75.7</span></div>
+          </article>
+        
+          <article class="asset-card">
+            <h3><span>FXI / China</span><span class="badge">Táctico</span></h3>
+            <p><strong>Qué pasó:</strong> China puede parecer barata muchas veces antes de estar lista. Por eso la leo como posición táctica, no como confirmación automática de tendencia.</p>
+            <p><strong>Qué esperamos:</strong> Necesita catalizador macro, político o de flujos para cambiar la lectura.</p>
+            <p><strong>Qué vigilar:</strong> Datos chinos, dólar, flujo extranjero y reacción de emergentes.</p>
+            <div class="asset-meta"><span class="pill">1W +1.0%</span><span class="pill">media larga -14.9%</span><span class="pill">percentil 8.4</span></div>
+          </article>
+        
+          <article class="asset-card">
+            <h3><span>BTC/USDT</span><span class="badge">Beta</span></h3>
+            <p><strong>Qué pasó:</strong> En este informe, cripto se lee como beta, liquidez y apetito por riesgo. Por eso separo precio spot de flujos ETF: son señales relacionadas, pero no equivalentes.</p>
+            <p><strong>Qué esperamos:</strong> Mejor tono si se mantiene la búsqueda de riesgo; vulnerable si sube VIX o se enfría tecnología.</p>
+            <p><strong>Qué vigilar:</strong> BTC spot, dólar, VIX, condiciones financieras y ETF flows.</p>
+            <div class="asset-meta"><span class="pill">1W +2.1%</span><span class="pill">media larga -15.8%</span><span class="pill">percentil 13.8</span></div>
+          </article>
+        
+          <article class="asset-card">
+            <h3><span>ETH/USDT</span><span class="badge">Beta</span></h3>
+            <p><strong>Qué pasó:</strong> ETH comparte la lectura de liquidez, pero conviene separarlo del bloque de flujos ETF. Precio spot y flows son dos señales distintas.</p>
+            <p><strong>Qué esperamos:</strong> Puede acelerar con apetito por riesgo, pero sigue sensible a tecnología, dólar y liquidez.</p>
+            <p><strong>Qué vigilar:</strong> ETH spot, BTC, spreads de riesgo y actualización de ETF flows.</p>
+            <div class="asset-meta"><span class="pill">1W +3.9%</span><span class="pill">media larga -21.8%</span><span class="pill">percentil 19.7</span></div>
+          </article>
+        
+      </div>
+    </div>
+  </section>
+
+  <section class="page">
+    <div class="section">
+      <div class="eyebrow">La historia del mercado</div>
+      <h2>El mercado sube por varias fuerzas a la vez</h2>
+      <p class="lead">Cuando demasiadas piezas apuntan hacia el mismo lado, el movimiento puede durar más de lo que parece razonable. El problema es que también se vuelve más mecánico.</p>
+      <div class="grid two">
+        <article class="card"><h3>IA y semiconductores</h3><p>La narrativa de IA ya no vive solo en titulares. Pasa por chips, capex, memoria, centros de datos, energía, software y márgenes. SMH ayuda a seguir esa presión de forma más precisa que tecnología amplia.</p></article>
+        <article class="card"><h3>Concentración</h3><p>Un índice puede subir con pocos líderes. Eso sostiene la foto general, pero vuelve más importante medir amplitud y dispersión.</p></article>
+        <article class="card"><h3>Flujos</h3><p>La inversión pasiva, los ETF y el retail pueden empujar precio antes de que la narrativa fundamental se ordene. El flujo mueve el mercado incluso antes de convertirse en tesis.</p></article>
+        <article class="card"><h3>Opciones</h3><p>Las opciones pueden modificar el movimiento aunque no lo anticipen. A veces basta con que obliguen a cubrir más rápido.</p></article>
+        <article class="card"><h3>Liquidez</h3><p>BTC, ETH, tecnología y activos de beta alta siguen sensibles a condiciones financieras. Cripto aquí se lee como apetito por riesgo.</p></article>
+        <article class="card"><h3>Resultados</h3><p>El mercado ya no solo necesita historias. Necesita beneficios, guidance y márgenes que sostengan múltiplos exigentes.</p></article>
+      </div>
+    </div>
+    <div class="section">
+      <div class="eyebrow">Lecturas automáticas</div>
+      <h2>Datos que acompañan la narrativa</h2>
+      <div class="grid three">
+        <div class="metric"><span>Régimen</span><strong>Neutral / mixto</strong><em>Lectura compuesta de volatilidad, rotación y flujos.</em></div>
+        <div class="metric"><span>SPY</span><strong>+2.2% 1W</strong><em>z-score 0.45; media larga +8.1%</em></div>
+        <div class="metric"><span>SMH</span><strong>94.5 percentil</strong><em>z-score 1.42; media larga +39.1%</em></div>
+        <div class="metric"><span>GLD</span><strong>+1.2% 1W</strong><em>media larga -7.8%</em></div>
+        <div class="metric"><span>BTC/USDT</span><strong>+2.1% 1W</strong><em>spot; BTCUSD como base de niveles</em></div>
+        <div class="metric"><span>ETH/USDT</span><strong>+3.9% 1W</strong><em>spot; flows ETF separados</em></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="page">
+    <div class="section">
+      <div class="eyebrow">Flujos de capital</div>
+      <h2>BTC/ETH ETF flows</h2>
+      <p class="lead">Los flujos ETF ayudan a leer presión marginal de demanda y complementan la lectura spot de BTC/USDT y ETH/USDT.</p>
+      <div class="grid four">
+      </div>
+      <div class="grid three">
+        <div class="metric"><span>BTC último día</span><strong>+32 M USD</strong></div>
+        <div class="metric"><span>BTC ETF 5D</span><strong>-1220 M USD</strong></div>
+        <div class="metric"><span>Racha BTC</span><strong>Racha de entradas</strong></div>
+      </div>
+      <div class="callout">Presión de salidas. ETH ETF flows: pendiente de automatización.</div>
+    </div>
+    <div class="section">
+      <div class="eyebrow">Amplitud</div>
+      <h2>La salud interna importa</h2>
+      <p class="lead">La amplitud importa porque un índice puede verse sano mientras cada vez menos acciones hacen el trabajo pesado.</p>
+      <div class="grid two">
+        <div class="metric"><span>RSP/SPY</span><strong>Plano</strong><em>Proxy de equal weight frente a capitalización.</em></div>
+        <div class="metric"><span>IWM/SPY</span><strong>-2.9 pp</strong><em>Small caps frente al S&amp;P 500.</em></div>
+        <div class="metric"><span>Sectores</span><strong>7 positivos / 4 negativos</strong></div>
+        <div class="metric"><span>Media larga</span><strong>10 de 11 sectores sobre media larga</strong></div>
+      </div>
+      <p class="small">Lectura proxy de amplitud con ETFs líquidos; complementa el advance/decline oficial por componente.</p>
+    </div>
+    <div class="section">
+      <div class="eyebrow">0DTE / opciones</div>
+      <h2>Opciones como amplificador, no como oráculo</h2>
+      <p>Lectura proxy de opciones. La señal 0DTE real queda pendiente hasta tener datos por vencimiento/serie.</p>
+      <div class="grid four">
+        <div class="metric"><span>Total put/call</span><strong>0.79</strong></div>
+        <div class="metric"><span>Index put/call</span><strong>0.97</strong></div>
+        <div class="metric"><span>Equity put/call</span><strong>0.53</strong></div>
+        <div class="metric"><span>SPX + SPXW</span><strong>1.07</strong></div>
+      </div>
+      <p class="small">Fuente proxy: Cboe Daily Market Statistics. La integración 0DTE real queda pendiente hasta tener datos por vencimiento o serie.</p>
+    </div>
+  </section>
+
+  <section class="page">
+    <div class="section">
+      <div class="eyebrow">Dólar, petróleo y semiconductores</div>
+      <h2>Tres piezas que pueden cambiar la lectura</h2>
+      <div class="grid three">
+        <article class="card"><h3>Dólar / UUP</h3><p>UUP funciona como proxy líquido del dólar. Retorno 1W -0.4%; distancia a media larga +3.7%. Si el dólar aprieta, las condiciones financieras fuera de Estados Unidos suelen endurecerse.</p></article>
+        <article class="card"><h3>Petróleo / USO</h3><p>USO funciona como proxy líquido de petróleo, sin equivaler al spot exacto ni a futuros individuales. Percentil 76.6, z-score 0.18, distancia a media larga +9.0%. Importa por inflación, energía y tasas.</p></article>
+        <article class="card"><h3>Semiconductores / SMH</h3><p>SMH es el proxy principal para semiconductores. Percentil 94.5, z-score 1.42, distancia a media larga +39.1%. La narrativa de IA depende de capex, márgenes, guidance e inventarios.</p></article>
+      </div>
+    </div>
+    <div class="section">
+      <div class="eyebrow">Niveles JPM/SPX</div>
+      <h2>Una referencia estructural, no un nivel propio del ETF</h2>
+      <div class="story-block">
+        <p>SPY: percentil 57.1, z-score 0.45, distancia a media larga +8.1%.</p>
+        <p>Pendiente de carga manual de niveles vigentes. Son niveles sobre SPX; se muestran junto al S&P 500 como referencia estructural, no como niveles propios de SPY o VOO.</p>
+        <p>Referencia pública: <a href="https://www.tradingview.com/script/IwGynP3T-JPM-Collar-Levels-SPX/">Indicador TradingView JPM Collar Levels SPX</a></p>
+      </div>
+    </div>
+    <div class="section">
+      <div class="eyebrow">Calendario</div>
+      <h2>Fechas que pueden mover la lectura</h2>
+      <div class="grid two">
+        <article class="card"><div class="eyebrow">Semana del 6 al 10 de julio</div><h3>Servicios, actas FOMC, crédito al consumo, desempleo e inflación China.</h3><p>La semana ayuda a leer crecimiento, liquidez y sensibilidad de tasas.</p></article><article class="card"><div class="eyebrow">Próximos días / semana del 13 de julio</div><h3>Inicio de temporada de resultados, con bancos al frente.</h3><p>Los bancos dan señales tempranas sobre crédito, márgenes, provisiones y apetito por riesgo.</p></article><article class="card"><div class="eyebrow">Próxima ventana de vencimientos</div><h3>Vencimientos de opciones.</h3><p>Puede alterar coberturas, flujos y volatilidad cerca de niveles relevantes.</p></article><article class="card"><div class="eyebrow">Durante julio</div><h3>Resultados de semiconductores y tecnología.</h3><p>La narrativa de IA necesita seguir pasando de precio a beneficios, guidance y márgenes.</p></article>
+      </div>
+    </div>
+  </section>
+
+  <section class="page">
+    <div class="section">
+      <div class="eyebrow">Escenarios</div>
+      <h2>Tres caminos posibles para ordenar la lectura</h2>
+      <div class="grid three">
+        <article class="card"><h3>Base</h3><p>Mercado constructivo, pero selectivo. Tecnología y flujos sostienen la tendencia, con episodios de volatilidad y una amplitud que hay que seguir de cerca.</p></article><article class="card"><h3>Alcista</h3><p>Resultados validan beneficios, flujos hacia tecnología continúan, volatilidad se mantiene controlada y la subida se ensancha.</p></article><article class="card"><h3>Bajista</h3><p>Reversión de flujos, Fed/tasas más duras, decepción en resultados o deterioro de amplitud activa toma de beneficios.</p></article>
+      </div>
+    </div>
+    <div class="section">
+      <div class="eyebrow">Lista final de vigilancia</div>
+      <h2>Lo que miraría antes de cambiar de opinión</h2>
+      <p class="lead">La lectura cambia cuando varias piezas empiezan a decir lo mismo: precio, flujo, amplitud, volatilidad y beneficios.</p>
+      <div class="grid two">
+        <div class="numbered"><span class="num">1</span><p>VIX y estructura de futuros</p></div><div class="numbered"><span class="num">2</span><p>Dólar / UUP</p></div><div class="numbered"><span class="num">3</span><p>Petróleo / USO</p></div><div class="numbered"><span class="num">4</span><p>Tasas y FedWatch</p></div><div class="numbered"><span class="num">5</span><p>Amplitud: RSP/SPY, IWM/SPY y sectores</p></div><div class="numbered"><span class="num">6</span><p>Semiconductores / SMH</p></div><div class="numbered"><span class="num">7</span><p>BTC/USDT y ETH/USDT spot</p></div><div class="numbered"><span class="num">8</span><p>BTC/ETH ETF flows</p></div><div class="numbered"><span class="num">9</span><p>Niveles JPM/SPX</p></div><div class="numbered"><span class="num">10</span><p>Resultados bancarios y semiconductores</p></div>
+      </div>
+    </div>
+    <div class="section">
+      <div class="eyebrow">Cierre</div>
+      <h2>Leer con calma también es una decisión</h2>
+      <p class="lead">El mercado puede seguir fuerte. También puede volverse más sensible a flujos, opciones y resultados. La diferencia está en no confundir movimiento con salud interna, ni precio con tesis completa.</p>
+      <p class="disclaimer">Este documento es educativo e informativo. No constituye asesoría financiera, recomendación de inversión ni invitación a comprar o vender activos. Las lecturas combinan datos de mercado, cálculos propios y referencias públicas disponibles al momento de preparación.</p>
+    </div>
+    <div class="footer"><span>Luigui Herrera · Market Lab</span><span>Primer informe de julio · Julio 2026</span></div>
+  </section>
+</body>
+</html>
