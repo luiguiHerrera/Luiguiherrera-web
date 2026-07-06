@@ -14,14 +14,14 @@ const coverQuestion = "¿Qué sostiene el mercado?";
 const coverQuote =
   "Cuando el mercado sube, no basta con mirar el precio. Hay que entender quién empuja, quién acompaña y qué parte del movimiento sigue sana.";
 const thesisCallout =
-  "El mercado mantiene una estructura constructiva, pero exige una lectura menos ingenua. Una cartera no necesita adivinar todo; necesita entender qué la puede mover.";
+  "El mercado mantiene una estructura constructiva, pero exige leer más allá del índice. Una cartera no necesita adivinar todo; necesita entender qué la puede mover.";
 
 const pageData = {
   btcFlows: {
     latest: "+32 M USD",
     rolling5d: "-1220 M USD",
     streak: "Racha de entradas",
-    reading: "Presión de salidas",
+    reading: "presión de salidas",
   },
   ethFlows: "ETH ETF flows: pendiente de automatización.",
   options: {
@@ -383,15 +383,13 @@ const html = `<!doctype html>
       <div class="eyebrow">Mapa rápido</div>
       <h2>Activos principales</h2>
       <div class="grid two">
-        ${assetReadings.map((item) => `
-          <article class="asset-card">
+        ${assetReadings.map((item) => `<article class="asset-card">
             <h3><span>${esc(item.title)}</span><span class="badge">${esc(item.badge)}</span></h3>
             ${p(item.body)}
             <p><strong>Qué esperamos:</strong> ${esc(item.expect)}</p>
             <p><strong>Qué vigilar:</strong> ${esc(item.watch)}</p>
             <div class="asset-meta">${item.metrics.map((m) => `<span class="pill">${esc(m)}</span>`).join("")}</div>
-          </article>
-        `).join("")}
+          </article>`).join("")}
       </div>
     </div>
     <div class="section">
@@ -399,15 +397,13 @@ const html = `<!doctype html>
       <h2>Qué pasó / Qué esperamos / Qué vigilar</h2>
       <p class="lead">La lectura central del informe está en separar precio, expectativa y riesgo de cambio de opinión para cada bloque.</p>
       <div class="grid two">
-        ${assetReadings.slice(0, 6).map((item) => `
-          <article class="asset-card">
+        ${assetReadings.slice(0, 6).map((item) => `<article class="asset-card">
             <h3><span>${esc(item.title)}</span><span class="badge">${esc(item.badge)}</span></h3>
             <p><strong>Qué pasó:</strong> ${esc(item.body)}</p>
             <p><strong>Qué esperamos:</strong> ${esc(item.expect)}</p>
             <p><strong>Qué vigilar:</strong> ${esc(item.watch)}</p>
             <div class="asset-meta">${item.metrics.map((m) => `<span class="pill">${esc(m)}</span>`).join("")}</div>
-          </article>
-        `).join("")}
+          </article>`).join("")}
       </div>
     </div>
   </section>
@@ -452,7 +448,7 @@ const html = `<!doctype html>
         ${metric("BTC ETF 5D", pageData.btcFlows.rolling5d)}
         ${metric("Racha BTC", pageData.btcFlows.streak)}
       </div>
-      <div class="callout">${esc(pageData.btcFlows.reading)}. ${esc(pageData.ethFlows)}</div>
+      <div class="callout"><p><strong>Lectura BTC:</strong> ${esc(pageData.btcFlows.reading)}.</p><p>${esc(pageData.ethFlows)}</p></div>
     </div>
     <div class="section">
       <div class="eyebrow">Amplitud</div>
@@ -551,7 +547,7 @@ ${thesisCallout}
 
 - SPY 1W ${stats.SPY.oneWeek}; media larga ${stats.SPY.ma200}; percentil ${stats.SPY.percentile}.
 - SMH percentil ${stats.SMH.percentile}; z-score ${stats.SMH.z}; media larga ${stats.SMH.ma200}.
-- BTC ETF flows: último día ${pageData.btcFlows.latest}; 5D ${pageData.btcFlows.rolling5d}; ${pageData.btcFlows.reading}.
+- BTC ETF flows: último día ${pageData.btcFlows.latest}; 5D ${pageData.btcFlows.rolling5d}; lectura BTC: ${pageData.btcFlows.reading}.
 - ${pageData.ethFlows}
 - Cboe put/call: total ${pageData.options.total}; index ${pageData.options.index}; equity ${pageData.options.equity}; SPX + SPXW ${pageData.options.spxSpxw}.
 
@@ -828,9 +824,10 @@ function buildPdf() {
   pdf.metric(219, y, 154, 58, "BTC ETF 5D", pageData.btcFlows.rolling5d);
   pdf.metric(390, y, 154, 58, "Racha BTC", pageData.btcFlows.streak);
   y -= 86;
-  pdf.fillRect(48, y - 45, 500, 38, colors.panel);
-  pdf.fillRect(48, y - 45, 4, 38, colors.brass);
-  pdf.paragraph(`${pageData.btcFlows.reading}. ${pageData.ethFlows}`, 64, y - 20, 458, 10.6, colors.ink, 14);
+  pdf.fillRect(48, y - 58, 500, 50, colors.panel);
+  pdf.fillRect(48, y - 58, 4, 50, colors.brass);
+  pdf.paragraph(`Lectura BTC: ${pageData.btcFlows.reading}.`, 64, y - 22, 458, 10.6, colors.ink, 14);
+  pdf.paragraph(pageData.ethFlows, 64, y - 40, 458, 10.6, colors.ink, 14);
 
   pdf.addPage();
   y = pdf.sectionTitle("Amplitud", "La salud interna importa", 775);
