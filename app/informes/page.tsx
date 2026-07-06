@@ -353,7 +353,7 @@ function getWatchStatuses(data: WeeklyReportData): Record<string, { text: string
   const ethFlows = data.flows.ethEtfFlows?.flows;
   const ethFlowText = ethFlows && ethFlows.rowsParsed > 0
     ? ethFlows.readingSubtext
-    : "ETH ETF flows pendiente de automatización. No se muestran datos inventados.";
+    : "ETH ETF flows pendiente de automatización.";
   const cryptoFlowsText = btcText ? `${btcText} ${ethFlowText}` : ethFlowText;
   const spyLevel = statsByTicker.get("SPY");
   const levelsText = spyLevel
