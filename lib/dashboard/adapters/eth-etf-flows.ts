@@ -335,12 +335,12 @@ function buildEthFlowsFromRows(parsed: ParsedEthFlowTable): BtcEtfFlowsData {
 
 function buildPendingEthFlows(_reason?: string): BtcEtfFlowsData {
   return {
-    sourceName: "Farside ETH ETF flows",
+    sourceName: "Farside Ethereum fund-flow source",
     sourceUrl: FARSIDE_ETH_URL,
     lastUpdated: "Pendiente de automatización",
     updateFrequency: "Según disponibilidad de la fuente",
     dataStatus: "live_pending",
-    reliabilityNote: "ETH ETF flows pendiente de automatización.",
+    reliabilityNote: "Flujos de ETFs de Ethereum pendientes de automatización.",
     latestDate: "Pendiente de automatización",
     latestTotalNetFlow: null,
     latestFundFlows: [],
@@ -357,7 +357,7 @@ function buildPendingEthFlows(_reason?: string): BtcEtfFlowsData {
     cumulativeNetFlow: null,
     largestInflowFundLatestDay: null,
     largestOutflowFundLatestDay: null,
-    dominantFlowDriver: "ETH ETF flows pendiente de automatización.",
+    dominantFlowDriver: "Flujos de ETFs de Ethereum pendientes de automatización.",
     breadth: {
       positive: 0,
       negative: 0,
@@ -366,7 +366,7 @@ function buildPendingEthFlows(_reason?: string): BtcEtfFlowsData {
     dailyLevel: "pending",
     recentTrend: "pending",
     readingLabel: "Pendiente de automatización",
-    readingSubtext: "ETH ETF flows pendiente de automatización.",
+    readingSubtext: "Flujos de ETFs de Ethereum pendientes de automatización.",
     readingSeverity: "pending",
     calculatedTotal: false,
     rowsParsed: 0,
@@ -383,7 +383,7 @@ function buildPendingEthFlows(_reason?: string): BtcEtfFlowsData {
 function buildModuleFromFlows(flows: BtcEtfFlowsData): DashboardModuleData {
   return {
     id: "btc-flows",
-    title: "ETH ETF flows",
+    title: "Ethereum fund flows",
     status: flows.readingLabel,
     sourceName: flows.sourceName,
     sourceUrl: flows.sourceUrl,

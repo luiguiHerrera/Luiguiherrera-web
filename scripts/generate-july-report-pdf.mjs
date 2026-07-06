@@ -23,7 +23,6 @@ const pageData = {
     streak: "Racha de entradas",
     reading: "presión de salidas",
   },
-  ethFlows: "ETH ETF flows: pendiente de automatización.",
   options: {
     total: "0.79",
     index: "0.97",
@@ -140,7 +139,7 @@ const assetReadings = [
     badge: "Beta",
     body: "ETH comparte la lectura de liquidez, pero conviene separarlo del bloque de flujos ETF. Precio spot y flows son dos señales distintas.",
     expect: "Puede acelerar con apetito por riesgo, pero sigue sensible a tecnología, dólar y liquidez.",
-    watch: "ETH spot, BTC, spreads de riesgo y actualización de ETF flows.",
+    watch: "ETH spot, BTC, spreads de riesgo, dólar y liquidez.",
     metrics: [`1W ${stats.ETHUSD.oneWeek}`, `media larga ${stats.ETHUSD.ma200}`, `percentil ${stats.ETHUSD.percentile}`],
   },
   {
@@ -174,7 +173,7 @@ const watchItems = [
   "Amplitud: RSP/SPY, IWM/SPY y sectores",
   "Semiconductores / SMH",
   "BTC/USDT y ETH/USDT spot",
-  "BTC/ETH ETF flows",
+  "BTC ETF flows",
   "Niveles JPM/SPX",
   "Resultados bancarios y semiconductores",
 ];
@@ -439,8 +438,8 @@ const html = `<!doctype html>
   <section class="page">
     <div class="section">
       <div class="eyebrow">Flujos de capital</div>
-      <h2>BTC/ETH ETF flows</h2>
-      <p class="lead">Los flujos ETF ayudan a leer presión marginal de demanda y complementan la lectura spot de BTC/USDT y ETH/USDT.</p>
+      <h2>BTC ETF flows</h2>
+      <p class="lead">Los flujos ETF ayudan a leer presión marginal de demanda y complementan la lectura spot de BTC/USDT.</p>
       <div class="grid four">
       </div>
       <div class="grid three">
@@ -448,7 +447,7 @@ const html = `<!doctype html>
         ${metric("BTC ETF 5D", pageData.btcFlows.rolling5d)}
         ${metric("Racha BTC", pageData.btcFlows.streak)}
       </div>
-      <div class="callout"><p><strong>Lectura BTC:</strong> ${esc(pageData.btcFlows.reading)}.</p><p>${esc(pageData.ethFlows)}</p></div>
+      <div class="callout"><p><strong>Lectura BTC:</strong> ${esc(pageData.btcFlows.reading)}.</p></div>
     </div>
     <div class="section">
       <div class="eyebrow">Amplitud</div>
@@ -548,7 +547,6 @@ ${thesisCallout}
 - SPY 1W ${stats.SPY.oneWeek}; media larga ${stats.SPY.ma200}; percentil ${stats.SPY.percentile}.
 - SMH percentil ${stats.SMH.percentile}; z-score ${stats.SMH.z}; media larga ${stats.SMH.ma200}.
 - BTC ETF flows: último día ${pageData.btcFlows.latest}; 5D ${pageData.btcFlows.rolling5d}; lectura BTC: ${pageData.btcFlows.reading}.
-- ${pageData.ethFlows}
 - Cboe put/call: total ${pageData.options.total}; index ${pageData.options.index}; equity ${pageData.options.equity}; SPX + SPXW ${pageData.options.spxSpxw}.
 
 Fuente visual editable: public/reports/primer-informe-julio-2026.html
@@ -817,17 +815,16 @@ function buildPdf() {
   });
   y -= 185;
   pdf.eyebrow("Flujos de capital", 48, y);
-  y = pdf.h2("BTC/ETH ETF flows", 48, y - 24, 500);
-  y = pdf.paragraph("Los flujos ETF ayudan a leer presión marginal de demanda y complementan la lectura spot de BTC/USDT y ETH/USDT.", 48, y, 500, 11, colors.ink, 15);
+  y = pdf.h2("BTC ETF flows", 48, y - 24, 500);
+  y = pdf.paragraph("Los flujos ETF ayudan a leer presión marginal de demanda y complementan la lectura spot de BTC/USDT.", 48, y, 500, 11, colors.ink, 15);
   y -= 20;
   pdf.metric(48, y, 154, 58, "BTC último día", pageData.btcFlows.latest);
   pdf.metric(219, y, 154, 58, "BTC ETF 5D", pageData.btcFlows.rolling5d);
   pdf.metric(390, y, 154, 58, "Racha BTC", pageData.btcFlows.streak);
   y -= 86;
-  pdf.fillRect(48, y - 58, 500, 50, colors.panel);
-  pdf.fillRect(48, y - 58, 4, 50, colors.brass);
+  pdf.fillRect(48, y - 44, 500, 36, colors.panel);
+  pdf.fillRect(48, y - 44, 4, 36, colors.brass);
   pdf.paragraph(`Lectura BTC: ${pageData.btcFlows.reading}.`, 64, y - 22, 458, 10.6, colors.ink, 14);
-  pdf.paragraph(pageData.ethFlows, 64, y - 40, 458, 10.6, colors.ink, 14);
 
   pdf.addPage();
   y = pdf.sectionTitle("Amplitud", "La salud interna importa", 775);

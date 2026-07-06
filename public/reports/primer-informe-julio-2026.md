@@ -15,7 +15,6 @@ El mercado mantiene una estructura constructiva, pero exige leer más allá del 
 - SPY 1W +2.2%; media larga +8.1%; percentil 57.1.
 - SMH percentil 94.5; z-score 1.42; media larga +39.1%.
 - BTC ETF flows: último día +32 M USD; 5D -1220 M USD; lectura BTC: presión de salidas.
-- ETH ETF flows: pendiente de automatización.
 - Cboe put/call: total 0.79; index 0.97; equity 0.53; SPX + SPXW 1.07.
 
 Fuente visual editable: public/reports/primer-informe-julio-2026.html

@@ -205,18 +205,14 @@ export function AutomaticMarketReadings({ data }: AutomaticMarketReadingsProps) 
               </p>
             </ReportSection>
 
-            <ReportSection eyebrow="Auto 05" title="BTC/ETH ETF flows">
+            <ReportSection eyebrow="Auto 05" title="BTC ETF flows">
               <div className="grid gap-2 sm:grid-cols-2">
                 <Metric label="Último día" value={formatUsdMillions(data.flows.btcEtfFlows?.flows.latestTotalNetFlow)} emphasis />
                 <Metric label="BTC ETF 5D" value={formatUsdMillions(data.flows.btcEtfFlows?.flows.rolling5dNetFlow)} />
                 <Metric label="Racha" value={data.flows.btcEtfFlows?.flows.flowStreak.label ?? "Pendiente"} />
-                <Metric label="ETH ETF flows" value={data.flows.ethEtfFlows?.flows.readingLabel ?? "Pendiente"} />
               </div>
               <p className="mt-4 text-sm leading-6 text-muted">
                 {data.flows.btcEtfFlows?.flows.readingSubtext || "Flujos BTC ETF pendientes de actualización."}
-              </p>
-              <p className="mt-2 text-sm leading-6 text-muted">
-                {data.flows.ethEtfFlows?.flows.readingSubtext || "Flujos ETH ETF pendientes de actualización."}
               </p>
             </ReportSection>
           </div>

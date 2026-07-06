@@ -181,7 +181,7 @@ endobj
 << /Type /Page /Parent 23 0 R /MediaBox [0 0 595.28 841.89] /Resources << /Font << /F1 1 0 R /F2 2 0 R >> >> /Contents 7 0 R >>
 endobj
 9 0 obj
-<< /Length 3988 >>
+<< /Length 3977 >>
 stream
 0.969 0.957 0.925 rg 0.00 0.00 595.28 841.89 re f
 0.70 w 0.847 0.824 0.776 RG 48.00 38.00 m 547.00 38.00 l S
@@ -223,7 +223,7 @@ BT /F1 9.10 Tf 0.431 0.455 0.443 rg 1 0 0 1 64.00 223.36 Tm (flows son dos señal
 BT /F2 7.70 Tf 0.604 0.478 0.271 rg 1 0 0 1 64.00 202.36 Tm (QUÉ ESPERAMOS) Tj ET
 BT /F1 9.10 Tf 0.122 0.137 0.157 rg 1 0 0 1 64.00 186.36 Tm (Puede acelerar con apetito por riesgo, pero sigue sensible a tecnología, dólar y liquidez.) Tj ET
 BT /F2 7.70 Tf 0.604 0.478 0.271 rg 1 0 0 1 64.00 165.36 Tm (QUÉ VIGILAR) Tj ET
-BT /F1 9.10 Tf 0.431 0.455 0.443 rg 1 0 0 1 64.00 149.36 Tm (ETH spot, BTC, spreads de riesgo y actualización de ETF flows.) Tj ET
+BT /F1 9.10 Tf 0.431 0.455 0.443 rg 1 0 0 1 64.00 149.36 Tm (ETH spot, BTC, spreads de riesgo, dólar y liquidez.) Tj ET
 endstream
 endobj
 10 0 obj
@@ -284,7 +284,7 @@ endobj
 << /Type /Page /Parent 23 0 R /MediaBox [0 0 595.28 841.89] /Resources << /Font << /F1 1 0 R /F2 2 0 R >> >> /Contents 11 0 R >>
 endobj
 13 0 obj
-<< /Length 4257 >>
+<< /Length 4129 >>
 stream
 0.969 0.957 0.925 rg 0.00 0.00 595.28 841.89 re f
 0.70 w 0.847 0.824 0.776 RG 48.00 38.00 m 547.00 38.00 l S
@@ -323,9 +323,9 @@ BT /F2 7.30 Tf 0.431 0.455 0.443 rg 1 0 0 1 400.00 623.36 Tm (ETH/USDT) Tj ET
 BT /F1 12.20 Tf 0.043 0.204 0.212 rg 1 0 0 1 400.00 605.36 Tm (+3.9% 1W) Tj ET
 BT /F1 7.70 Tf 0.431 0.455 0.443 rg 1 0 0 1 400.00 590.36 Tm (Spot; flows ETF separados.) Tj ET
 BT /F2 7.70 Tf 0.604 0.478 0.271 rg 1 0 0 1 48.00 533.36 Tm (FLUJOS DE CAPITAL) Tj ET
-BT /F2 22.00 Tf 0.122 0.137 0.157 rg 1 0 0 1 48.00 509.36 Tm (BTC/ETH ETF flows) Tj ET
+BT /F2 22.00 Tf 0.122 0.137 0.157 rg 1 0 0 1 48.00 509.36 Tm (BTC ETF flows) Tj ET
 BT /F1 11.00 Tf 0.122 0.137 0.157 rg 1 0 0 1 48.00 476.72 Tm (Los flujos ETF ayudan a leer presión marginal de demanda y complementan la lectura spot de) Tj ET
-BT /F1 11.00 Tf 0.122 0.137 0.157 rg 1 0 0 1 48.00 461.72 Tm (BTC/USDT y ETH/USDT.) Tj ET
+BT /F1 11.00 Tf 0.122 0.137 0.157 rg 1 0 0 1 48.00 461.72 Tm (BTC/USDT.) Tj ET
 0.937 0.918 0.878 rg 48.00 368.72 154.00 58.00 re f
 0.70 w 0.847 0.824 0.776 RG 48.00 368.72 154.00 58.00 re S
 BT /F2 7.30 Tf 0.431 0.455 0.443 rg 1 0 0 1 60.00 409.72 Tm (BTC ÚLTIMO DÍA) Tj ET
@@ -338,10 +338,9 @@ BT /F1 12.20 Tf 0.043 0.204 0.212 rg 1 0 0 1 231.00 391.72 Tm (-1220 M USD) Tj E
 0.70 w 0.847 0.824 0.776 RG 390.00 368.72 154.00 58.00 re S
 BT /F2 7.30 Tf 0.431 0.455 0.443 rg 1 0 0 1 402.00 409.72 Tm (RACHA BTC) Tj ET
 BT /F1 12.20 Tf 0.043 0.204 0.212 rg 1 0 0 1 402.00 391.72 Tm (Racha de entradas) Tj ET
-0.937 0.918 0.878 rg 48.00 282.72 500.00 50.00 re f
-0.604 0.478 0.271 rg 48.00 282.72 4.00 50.00 re f
+0.937 0.918 0.878 rg 48.00 296.72 500.00 36.00 re f
+0.604 0.478 0.271 rg 48.00 296.72 4.00 36.00 re f
 BT /F1 10.60 Tf 0.122 0.137 0.157 rg 1 0 0 1 64.00 318.72 Tm (Lectura BTC: presión de salidas.) Tj ET
-BT /F1 10.60 Tf 0.122 0.137 0.157 rg 1 0 0 1 64.00 300.72 Tm (ETH ETF flows: pendiente de automatización.) Tj ET
 endstream
 endobj
 14 0 obj
@@ -456,7 +455,7 @@ endobj
 << /Type /Page /Parent 23 0 R /MediaBox [0 0 595.28 841.89] /Resources << /Font << /F1 1 0 R /F2 2 0 R >> >> /Contents 17 0 R >>
 endobj
 19 0 obj
-<< /Length 8167 >>
+<< /Length 8163 >>
 stream
 0.969 0.957 0.925 rg 0.00 0.00 595.28 841.89 re f
 0.70 w 0.847 0.824 0.776 RG 48.00 38.00 m 547.00 38.00 l S
@@ -551,7 +550,7 @@ BT /F1 9.10 Tf 0.122 0.137 0.157 rg 1 0 0 1 75.00 94.08 Tm (BTC/USDT y ETH/USDT 
 0.937 0.918 0.878 rg 308.00 81.08 18.00 18.00 re f
 0.70 w 0.604 0.478 0.271 RG 308.00 81.08 18.00 18.00 re S
 BT /F2 8.00 Tf 0.604 0.478 0.271 rg 1 0 0 1 314.00 87.08 Tm (8) Tj ET
-BT /F1 9.10 Tf 0.122 0.137 0.157 rg 1 0 0 1 335.00 94.08 Tm (BTC/ETH ETF flows) Tj ET
+BT /F1 9.10 Tf 0.122 0.137 0.157 rg 1 0 0 1 335.00 94.08 Tm (BTC ETF flows) Tj ET
 0.937 0.918 0.878 rg 48.00 51.08 18.00 18.00 re f
 0.70 w 0.604 0.478 0.271 RG 48.00 51.08 18.00 18.00 re S
 BT /F2 8.00 Tf 0.604 0.478 0.271 rg 1 0 0 1 54.00 57.08 Tm (9) Tj ET
@@ -612,23 +611,23 @@ xref
 0000009837 00000 n
 0000014171 00000 n
 0000014314 00000 n
-0000018353 00000 n
-0000018497 00000 n
-0000022741 00000 n
-0000022886 00000 n
-0000027195 00000 n
-0000027340 00000 n
-0000029588 00000 n
-0000029733 00000 n
-0000035480 00000 n
-0000035625 00000 n
-0000043844 00000 n
-0000043989 00000 n
-0000046348 00000 n
-0000046493 00000 n
-0000046613 00000 n
+0000018342 00000 n
+0000018486 00000 n
+0000022730 00000 n
+0000022875 00000 n
+0000027056 00000 n
+0000027201 00000 n
+0000029449 00000 n
+0000029594 00000 n
+0000035341 00000 n
+0000035486 00000 n
+0000043701 00000 n
+0000043846 00000 n
+0000046205 00000 n
+0000046350 00000 n
+0000046470 00000 n
 trailer
 << /Size 25 /Root 24 0 R >>
 startxref
-46664
+46521
 %%EOF

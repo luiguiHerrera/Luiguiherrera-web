@@ -297,8 +297,8 @@ export const marketReports: MarketReport[] = [
       },
       {
         key: "btc-etf-flows",
-        name: "BTC/ETH ETF flows",
-        whatLooksAt: "Entradas, salidas, rachas y lectura agregada de ETFs spot de BTC. También se vigilan flujos ETH ETF como lectura complementaria.",
+        name: "BTC ETF flows",
+        whatLooksAt: "Entradas, salidas, rachas y lectura agregada de ETFs spot de BTC.",
         whyItMatters: "Los flujos vía ETF pueden amplificar movimientos de cripto y apetito por riesgo, pero no sustituyen la lectura spot BTC/USDT y ETH/USDT.",
       },
       {
