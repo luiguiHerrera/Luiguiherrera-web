@@ -33,7 +33,7 @@ function formatPercent(value: number | null) {
   return `${value > 0 ? "+" : ""}${(value * 100).toFixed(2)}%`;
 }
 
-const monthlyScriptUrl = "https://www.tradingview.com/script/ziflzOXv-Monthly-Statistical-Levels/";
+const monthlyScriptUrl = "https://www.tradingview.com/script/89W4VF7T/";
 
 function levelTone(key: string) {
   if (key.includes("SHE")) return "border-[#6f8f7b]/40 bg-[#6f8f7b]/10 text-[#47604f]";

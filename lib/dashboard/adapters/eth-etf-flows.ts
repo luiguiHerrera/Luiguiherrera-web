@@ -337,13 +337,13 @@ function buildPendingEthFlows(reason?: string): BtcEtfFlowsData {
   return {
     sourceName: "Farside ETH ETF flows",
     sourceUrl: FARSIDE_ETH_URL,
-    lastUpdated: "Pendiente de integración",
+    lastUpdated: "Pendiente de automatización",
     updateFrequency: "Según disponibilidad de la fuente",
     dataStatus: "live_pending",
     reliabilityNote: reason
       ? `No se muestran datos inventados. Último intento server-side: ${reason}`
       : "Estructura preparada para flujos ETH ETF. No se muestran datos hasta tener parsing server-side estable.",
-    latestDate: "Pendiente",
+    latestDate: "Pendiente de automatización",
     latestTotalNetFlow: null,
     latestFundFlows: [],
     rolling5dNetFlow: null,
@@ -354,12 +354,12 @@ function buildPendingEthFlows(reason?: string): BtcEtfFlowsData {
     flowStreak: {
       direction: "none",
       count: 0,
-      label: "Pendiente",
+      label: "Pendiente de automatización",
     },
     cumulativeNetFlow: null,
     largestInflowFundLatestDay: null,
     largestOutflowFundLatestDay: null,
-    dominantFlowDriver: "Flujos ETH ETF pendientes de actualización.",
+    dominantFlowDriver: "ETH ETF flows pendiente de automatización.",
     breadth: {
       positive: 0,
       negative: 0,
@@ -367,8 +367,8 @@ function buildPendingEthFlows(reason?: string): BtcEtfFlowsData {
     },
     dailyLevel: "pending",
     recentTrend: "pending",
-    readingLabel: "Pendiente",
-    readingSubtext: "Flujos ETH ETF pendientes de actualización.",
+    readingLabel: "Pendiente de automatización",
+    readingSubtext: "ETH ETF flows pendiente de automatización. No se muestran datos inventados.",
     readingSeverity: "pending",
     calculatedTotal: false,
     rowsParsed: 0,

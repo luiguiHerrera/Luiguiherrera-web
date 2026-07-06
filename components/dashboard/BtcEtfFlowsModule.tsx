@@ -150,6 +150,7 @@ export function BtcEtfFlowsModule({ assetLabel = "BTC", data }: BtcEtfFlowsModul
   const locale = usePathname().startsWith("/en") ? "en" : "es";
   const t = (value: string | null | undefined) => locale === "en" ? translateDashboardText(value) : value ?? "";
   const flows = data.flows;
+  const isPendingAutomation = assetLabel === "ETH" && flows.rowsParsed === 0 && flows.latestTotalNetFlow === null;
   const metrics = [
     ["Rolling 5D", formatUsdMillions(flows.rolling5dNetFlow, locale)],
     ["Rolling 20D", formatRollingFlow(flows.rolling20dNetFlow, locale)],
@@ -158,6 +159,50 @@ export function BtcEtfFlowsModule({ assetLabel = "BTC", data }: BtcEtfFlowsModul
     [locale === "en" ? "Largest positive contribution" : "Mayor aporte positivo", formatPositiveFundFlow(flows.largestInflowFundLatestDay, locale)],
     [locale === "en" ? "Largest negative contribution" : "Mayor aporte negativo", formatNegativeFundFlow(flows.largestOutflowFundLatestDay, locale)],
   ];
+
+  if (isPendingAutomation) {
+    return (
+      <ExpandableInsightCard
+        eyebrow={`${assetLabel} ETF flows`}
+        title={locale === "en" ? "Pending ETF flow automation" : "Flujos ETF pendientes de automatización"}
+        reading={t(flows.readingSubtext)}
+        status={t(dataStatusLabels[flows.dataStatus])}
+        metrics={[
+          { label: locale === "en" ? "Status" : "Estado", value: t(flows.readingLabel), tone: "brass" },
+          { label: locale === "en" ? "Latest net flow" : "Último flujo neto", value: locale === "en" ? "Not available" : "No disponible" },
+          { label: locale === "en" ? "Source" : "Fuente", value: t(flows.sourceName) },
+          { label: locale === "en" ? "Updated" : "Actualización", value: t(flows.lastUpdated) },
+        ]}
+      >
+        <div className="border border-line bg-panel p-4">
+          <p className="text-xs font-semibold uppercase tracking-[0.16em] text-brass">{locale === "en" ? "Current state" : "Estado actual"}</p>
+          <p className="mt-3 text-sm leading-6 text-muted">{t(flows.readingSubtext)}</p>
+          <p className="mt-3 text-sm leading-6 text-muted">{t(flows.reliabilityNote)}</p>
+        </div>
+
+        <div className="mt-4 grid gap-3 border-t border-line pt-4 text-sm leading-6 text-muted md:grid-cols-3">
+          <div>
+            <span className="block text-xs font-semibold uppercase tracking-[0.14em] text-brass">{locale === "en" ? "Source" : "Fuente"}</span>
+            {flows.sourceUrl ? (
+              <a href={flows.sourceUrl} className="mt-1 inline-block text-ink underline-offset-4 hover:underline" target="_blank" rel="noreferrer">
+                {t(flows.sourceName)}
+              </a>
+            ) : (
+              <span className="mt-1 block text-ink">{t(flows.sourceName)}</span>
+            )}
+          </div>
+          <div>
+            <span className="block text-xs font-semibold uppercase tracking-[0.14em] text-brass">{locale === "en" ? "Updated" : "Actualización"}</span>
+            <span className="mt-1 block text-ink">{t(flows.lastUpdated)}</span>
+          </div>
+          <div>
+            <span className="block text-xs font-semibold uppercase tracking-[0.14em] text-brass">{locale === "en" ? "Status" : "Estado"}</span>
+            <span className="mt-1 block text-ink">{t(dataStatusLabels[flows.dataStatus])}</span>
+          </div>
+        </div>
+      </ExpandableInsightCard>
+    );
+  }
 
   return (
     <ExpandableInsightCard

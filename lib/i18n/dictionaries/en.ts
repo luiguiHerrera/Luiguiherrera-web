@@ -54,8 +54,8 @@ export const en = {
       { href: "/en/trends", label: "Trends: from the world to the portfolio", shortLabel: "Trends", description: "Educational framework for turning global change into hypotheses with care." },
     ],
     resourcesItems: [
-      { href: "/en/resources", label: "Library", shortLabel: "Library", description: "Public tools and scripts to support your investment process." },
-      { href: "/en/resources#tradingview-scripts", label: "TradingView scripts", shortLabel: "Scripts", description: "Compact catalog of public TradingView utilities." },
+      { href: "/en/resources#tools", label: "Tools by language", shortLabel: "Languages", description: "TradingView is available; Python, R, Stata and C++ are prepared as future resources." },
+      { href: "/en/resources#tradingview", label: "TradingView scripts", shortLabel: "Scripts", description: "Compact catalog of public TradingView utilities." },
     ],
     footerText: "Educational tools to organize context, risk and process. Final control always stays with the investor.",
     methodology: "Methodology",

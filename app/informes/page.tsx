@@ -351,7 +351,9 @@ function getWatchStatuses(data: WeeklyReportData): Record<string, { text: string
     ? `${btcFlows.readingLabel}. Último día: ${formatUsdMillions(btcFlows.latestTotalNetFlow)}; 5D: ${formatUsdMillions(btcFlows.rolling5dNetFlow)}; racha: ${btcFlows.flowStreak.label}.`
     : undefined;
   const ethFlows = data.flows.ethEtfFlows?.flows;
-  const ethFlowText = ethFlows?.readingSubtext ?? "Flujos ETH ETF pendientes de actualización.";
+  const ethFlowText = ethFlows && ethFlows.rowsParsed > 0
+    ? ethFlows.readingSubtext
+    : "ETH ETF flows pendiente de automatización. No se muestran datos inventados.";
   const cryptoFlowsText = btcText ? `${btcText} ${ethFlowText}` : ethFlowText;
   const spyLevel = statsByTicker.get("SPY");
   const levelsText = spyLevel
