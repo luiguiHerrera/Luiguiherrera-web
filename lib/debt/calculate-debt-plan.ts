@@ -44,6 +44,15 @@ function summarize(profile: DebtProfileInput, debts: DebtInput[], references: De
   const monthlyCashAfterExpenses = monthlyNetIncome - fixedMonthlyExpenses;
   const cashAfterDebtPlan = monthlyCashAfterExpenses - availableDebtPayment;
   const minimumPaymentGap = availableDebtPayment - monthlyMinimums;
+  const minimumDebtToIncomeRatio = ratio(monthlyMinimums, monthlyNetIncome);
+  const plannedDebtToIncomeRatio = ratio(availableDebtPayment, monthlyNetIncome);
+  const debtLoadStatus =
+    minimumDebtToIncomeRatio === null ? "incomplete" :
+    minimumDebtToIncomeRatio >= 0.6 ? "strong-alert" :
+    minimumDebtToIncomeRatio > 0.5 ? "high-fragility" :
+    minimumDebtToIncomeRatio > 0.4 ? "high-pressure" :
+    minimumDebtToIncomeRatio > 0.3 ? "attention" :
+    "manageable";
   const payoffStatus =
     minimumPaymentGap > EPSILON ? "extra" :
     minimumPaymentGap < -EPSILON ? "below-minimums" :
@@ -52,20 +61,23 @@ function summarize(profile: DebtProfileInput, debts: DebtInput[], references: De
   const sustainabilityStatus =
     incomeDataIsIncomplete ? "incomplete" :
     fixedMonthlyExpenses + monthlyMinimums > monthlyNetIncome || availableDebtPayment + EPSILON < monthlyMinimums || cashAfterDebtPlan < -EPSILON ? "deficit" :
+    minimumDebtToIncomeRatio !== null && minimumDebtToIncomeRatio > 0.3 ? "tight" :
     cashAfterDebtPlan <= monthlyNetIncome * 0.1 || (ratio(positive(profile.emergencyFund), fixedMonthlyExpenses) ?? Infinity) < 3 ? "tight" :
     "sustainable";
 
   return {
     cashAfterDebtPlan,
     debtToLiquidNetWorth: ratio(totalDebt, positive(profile.liquidNetWorth)),
+    debtLoadStatus,
     emergencyFundMonths: ratio(positive(profile.emergencyFund), fixedMonthlyExpenses),
     estimatedMonthlyMargin: cashAfterDebtPlan,
     fixedAndMinimumsToIncome: ratio(fixedMonthlyExpenses + monthlyMinimums, monthlyNetIncome),
     minimumPaymentGap,
-    minimumsToIncome: ratio(monthlyMinimums, monthlyNetIncome),
+    minimumsToIncome: minimumDebtToIncomeRatio,
     monthlyCashAfterExpenses,
     monthlyMinimums,
     payoffStatus,
+    plannedDebtToIncomeRatio,
     sustainabilityStatus,
     totalDebt,
     weightedAnnualCost,

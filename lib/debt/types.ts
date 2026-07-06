@@ -37,6 +37,7 @@ export type DebtReference = {
 export type DebtSummary = {
   cashAfterDebtPlan: number;
   debtToLiquidNetWorth: number | null;
+  debtLoadStatus: "manageable" | "attention" | "high-pressure" | "high-fragility" | "strong-alert" | "incomplete";
   emergencyFundMonths: number | null;
   estimatedMonthlyMargin: number;
   fixedAndMinimumsToIncome: number | null;
@@ -45,6 +46,7 @@ export type DebtSummary = {
   monthlyCashAfterExpenses: number;
   monthlyMinimums: number;
   payoffStatus: "extra" | "minimums-only" | "below-minimums";
+  plannedDebtToIncomeRatio: number | null;
   sustainabilityStatus: "sustainable" | "tight" | "deficit" | "incomplete";
   totalDebt: number;
   weightedAnnualCost: number | null;
