@@ -18,6 +18,13 @@ export type DebtProfileInput = {
   monthlyNetIncome: number;
 };
 
+export type ExtraContributionInput = {
+  amount: number;
+  id: string;
+  label?: string;
+  monthNumber: number;
+};
+
 export type DebtReference = {
   adjustedAnnualCost: number;
   annualRate: number;
@@ -28,12 +35,17 @@ export type DebtReference = {
 };
 
 export type DebtSummary = {
+  cashAfterDebtPlan: number;
   debtToLiquidNetWorth: number | null;
   emergencyFundMonths: number | null;
   estimatedMonthlyMargin: number;
   fixedAndMinimumsToIncome: number | null;
+  minimumPaymentGap: number;
   minimumsToIncome: number | null;
+  monthlyCashAfterExpenses: number;
   monthlyMinimums: number;
+  payoffStatus: "extra" | "minimums-only" | "below-minimums";
+  sustainabilityStatus: "sustainable" | "tight" | "deficit" | "incomplete";
   totalDebt: number;
   weightedAnnualCost: number | null;
 };
@@ -61,6 +73,7 @@ export type PayoffPlan = {
   estimatedFeeCost: number;
   estimatedInterestCost: number;
   estimatedTotalPayment: number;
+  extraContributionsApplied: number;
   firstDebtName: string | null;
   initialPrincipal: number;
   method: PayoffMethod;

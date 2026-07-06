@@ -1,4 +1,4 @@
-import type { DebtInput, DebtPlanResult, DebtProfileInput, DebtReading, DebtReference, DebtSummary, PayoffMethod, PayoffPlan, PayoffStep } from "@/lib/debt/types";
+import type { DebtInput, DebtPlanResult, DebtProfileInput, DebtReading, DebtReference, DebtSummary, ExtraContributionInput, PayoffMethod, PayoffPlan, PayoffStep } from "@/lib/debt/types";
 
 const MAX_MONTHS = 600;
 const EPSILON = 0.01;
@@ -41,14 +41,32 @@ function summarize(profile: DebtProfileInput, debts: DebtInput[], references: De
   const fixedMonthlyExpenses = positive(profile.fixedMonthlyExpenses);
   const availableDebtPayment = positive(profile.availableDebtPayment);
   const monthlyNetIncome = positive(profile.monthlyNetIncome);
+  const monthlyCashAfterExpenses = monthlyNetIncome - fixedMonthlyExpenses;
+  const cashAfterDebtPlan = monthlyCashAfterExpenses - availableDebtPayment;
+  const minimumPaymentGap = availableDebtPayment - monthlyMinimums;
+  const payoffStatus =
+    minimumPaymentGap > EPSILON ? "extra" :
+    minimumPaymentGap < -EPSILON ? "below-minimums" :
+    "minimums-only";
+  const incomeDataIsIncomplete = monthlyNetIncome <= 0;
+  const sustainabilityStatus =
+    incomeDataIsIncomplete ? "incomplete" :
+    fixedMonthlyExpenses + monthlyMinimums > monthlyNetIncome || availableDebtPayment + EPSILON < monthlyMinimums || cashAfterDebtPlan < -EPSILON ? "deficit" :
+    cashAfterDebtPlan <= monthlyNetIncome * 0.1 || (ratio(positive(profile.emergencyFund), fixedMonthlyExpenses) ?? Infinity) < 3 ? "tight" :
+    "sustainable";
 
   return {
+    cashAfterDebtPlan,
     debtToLiquidNetWorth: ratio(totalDebt, positive(profile.liquidNetWorth)),
     emergencyFundMonths: ratio(positive(profile.emergencyFund), fixedMonthlyExpenses),
-    estimatedMonthlyMargin: monthlyNetIncome - fixedMonthlyExpenses - availableDebtPayment,
+    estimatedMonthlyMargin: cashAfterDebtPlan,
     fixedAndMinimumsToIncome: ratio(fixedMonthlyExpenses + monthlyMinimums, monthlyNetIncome),
+    minimumPaymentGap,
     minimumsToIncome: ratio(monthlyMinimums, monthlyNetIncome),
+    monthlyCashAfterExpenses,
     monthlyMinimums,
+    payoffStatus,
+    sustainabilityStatus,
     totalDebt,
     weightedAnnualCost,
   };
@@ -155,6 +173,7 @@ function activePriorityDebt(method: PayoffMethod, debts: ReturnType<typeof order
 function buildPayoffPlan({
   estimatedFeeCost,
   estimatedInterestCost,
+  extraContributionsApplied,
   firstDebtName,
   initialPrincipal,
   method,
@@ -165,6 +184,7 @@ function buildPayoffPlan({
 }: {
   estimatedFeeCost: number;
   estimatedInterestCost: number;
+  extraContributionsApplied: number;
   firstDebtName: string | null;
   initialPrincipal: number;
   method: PayoffMethod;
@@ -180,6 +200,7 @@ function buildPayoffPlan({
     estimatedFeeCost,
     estimatedInterestCost,
     estimatedTotalPayment: initialPrincipal + totalInterestAndFees,
+    extraContributionsApplied,
     firstDebtName,
     initialPrincipal,
     method,
@@ -193,17 +214,58 @@ function buildPayoffPlan({
   };
 }
 
-function simulatePayoff(method: PayoffMethod, debts: DebtInput[], availablePayment: number): PayoffPlan {
+function normalizeExtraContributions(extraContributions: ExtraContributionInput[] = []) {
+  return extraContributions
+    .map((contribution) => ({
+      ...contribution,
+      amount: positive(contribution.amount),
+      monthNumber: Math.max(1, Math.round(positive(contribution.monthNumber))),
+    }))
+    .filter((contribution) => contribution.amount > EPSILON && contribution.monthNumber >= 1)
+    .sort((a, b) => a.monthNumber - b.monthNumber);
+}
+
+function applyPriorityPayment(
+  method: PayoffMethod,
+  ordered: ReturnType<typeof orderedDebts>,
+  balances: Map<string, number>,
+  payoffMonths: Map<string, number>,
+  amount: number,
+  month: number,
+) {
+  let remainingPayment = positive(amount);
+  let applied = 0;
+
+  while (remainingPayment > EPSILON) {
+    const debt = activePriorityDebt(method, ordered, balances);
+    if (debt === null) break;
+    const balance = balances.get(debt.id) ?? 0;
+    const payment = Math.min(remainingPayment, balance);
+    const nextBalance = balance - payment;
+    balances.set(debt.id, nextBalance);
+    remainingPayment -= payment;
+    applied += payment;
+    if (nextBalance <= EPSILON && !payoffMonths.has(debt.id)) {
+      payoffMonths.set(debt.id, month);
+    }
+  }
+
+  return applied;
+}
+
+function simulatePayoff(method: PayoffMethod, debts: DebtInput[], availablePayment: number, extraContributions: ExtraContributionInput[] = []): PayoffPlan {
   const ordered = orderedDebts(method, debts);
   const firstDebtName = ordered[0]?.name.trim() || (ordered.length > 0 ? "Debt" : null);
   const monthlyPayment = positive(availablePayment);
   const startingMinimums = ordered.reduce((sum, debt) => sum + positive(debt.minimumPayment), 0);
   const initialPrincipal = ordered.reduce((sum, debt) => sum + positive(debt.balance), 0);
+  const normalizedExtraContributions = normalizeExtraContributions(extraContributions);
 
   if (ordered.length === 0) {
     return buildPayoffPlan({
       estimatedFeeCost: 0,
       estimatedInterestCost: 0,
+      extraContributionsApplied: 0,
       firstDebtName,
       initialPrincipal,
       method,
@@ -217,6 +279,7 @@ function simulatePayoff(method: PayoffMethod, debts: DebtInput[], availablePayme
     return buildPayoffPlan({
       estimatedFeeCost: 0,
       estimatedInterestCost: 0,
+      extraContributionsApplied: 0,
       firstDebtName,
       initialPrincipal,
       method,
@@ -230,6 +293,7 @@ function simulatePayoff(method: PayoffMethod, debts: DebtInput[], availablePayme
   const payoffMonths = new Map<string, number>();
   let estimatedFeeCost = 0;
   let estimatedInterestCost = 0;
+  let extraContributionsApplied = 0;
 
   for (let month = 1; month <= MAX_MONTHS; month += 1) {
     let paymentPool = monthlyPayment;
@@ -260,17 +324,16 @@ function simulatePayoff(method: PayoffMethod, debts: DebtInput[], availablePayme
       }
     }
 
-    while (paymentPool > EPSILON) {
-      const debt = activePriorityDebt(method, ordered, balances);
-      if (debt === null) break;
-      const balance = balances.get(debt.id) ?? 0;
-      const extraPayment = Math.min(paymentPool, balance);
-      const nextBalance = balance - extraPayment;
-      balances.set(debt.id, nextBalance);
-      paymentPool -= extraPayment;
-      if (nextBalance <= EPSILON && !payoffMonths.has(debt.id)) {
-        payoffMonths.set(debt.id, month);
-      }
+    if (paymentPool > EPSILON) {
+      paymentPool -= applyPriorityPayment(method, ordered, balances, payoffMonths, paymentPool, month);
+    }
+
+    const monthlyExtraContributions = normalizedExtraContributions
+      .filter((contribution) => contribution.monthNumber === month)
+      .reduce((sum, contribution) => sum + contribution.amount, 0);
+
+    if (monthlyExtraContributions > EPSILON) {
+      extraContributionsApplied += applyPriorityPayment(method, ordered, balances, payoffMonths, monthlyExtraContributions, month);
     }
 
     const remaining = [...balances.values()].reduce((sum, balance) => sum + Math.max(0, balance), 0);
@@ -278,6 +341,7 @@ function simulatePayoff(method: PayoffMethod, debts: DebtInput[], availablePayme
       return buildPayoffPlan({
         estimatedFeeCost,
         estimatedInterestCost,
+        extraContributionsApplied,
         firstDebtName,
         initialPrincipal,
         method,
@@ -292,6 +356,7 @@ function simulatePayoff(method: PayoffMethod, debts: DebtInput[], availablePayme
       return buildPayoffPlan({
         estimatedFeeCost,
         estimatedInterestCost,
+        extraContributionsApplied,
         firstDebtName,
         initialPrincipal,
         method,
@@ -306,6 +371,7 @@ function simulatePayoff(method: PayoffMethod, debts: DebtInput[], availablePayme
   return buildPayoffPlan({
     estimatedFeeCost,
     estimatedInterestCost,
+    extraContributionsApplied,
     firstDebtName,
     initialPrincipal,
     method,
@@ -316,15 +382,16 @@ function simulatePayoff(method: PayoffMethod, debts: DebtInput[], availablePayme
   });
 }
 
-export function calculateDebtPlan(profile: DebtProfileInput, debts: DebtInput[]): DebtPlanResult {
+export function calculateDebtPlan(profile: DebtProfileInput, debts: DebtInput[], options: { extraContributions?: ExtraContributionInput[] } = {}): DebtPlanResult {
   const references = buildReferences(debts);
   const summary = summarize(profile, debts, references);
+  const extraContributions = options.extraContributions ?? [];
 
   return {
-    avalanche: simulatePayoff("avalanche", debts, profile.availableDebtPayment),
+    avalanche: simulatePayoff("avalanche", debts, profile.availableDebtPayment, extraContributions),
     reading: readingFromSummary(summary),
     references,
-    snowball: simulatePayoff("snowball", debts, profile.availableDebtPayment),
+    snowball: simulatePayoff("snowball", debts, profile.availableDebtPayment, extraContributions),
     summary,
   };
 }

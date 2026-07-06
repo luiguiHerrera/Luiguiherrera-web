@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { calculateDebtPlan } from "@/lib/debt/calculate-debt-plan";
-import type { DebtInput, DebtKind, DebtPlanResult, DebtProfileInput, PayoffPlan } from "@/lib/debt/types";
+import type { DebtInput, DebtKind, DebtPlanResult, DebtProfileInput, ExtraContributionInput, PayoffMethod, PayoffPlan } from "@/lib/debt/types";
 
 type Locale = "es" | "en";
 
@@ -43,44 +43,72 @@ const debtNameSuggestions: Record<Locale, string[]> = {
 const copy = {
   es: {
     addDebt: "Agregar deuda",
+    addExtraContribution: "Agregar abono extraordinario",
     adjustedCost: "Costo anual ajustado",
+    amount: "Monto",
     avalanche: "Avalancha",
     avalancheBody: "Prioriza primero la deuda con mayor costo anual ajustado.",
     availableDebtPayment: "Pago mensual para deuda",
     availableDebtPaymentHelp:
-      "Usa aquí el total que puedes destinar a deuda este mes. Debe incluir los pagos mínimos. Si ya metiste los mínimos dentro de gastos fijos, no los dupliques mentalmente: este campo se usa para simular el plan de pago.",
+      "Usa aquí el total que puedes destinar a deuda este mes. Conviene incluir los pagos mínimos. Si ya metiste los mínimos dentro de gastos fijos, no los dupliques mentalmente: este campo se usa para simular el plan de pago.",
     balance: "Saldo pendiente",
     baseline: "Punto de partida",
+    cashAfterDebtPlan: "Margen después del plan",
     compare: "Diferencia entre métodos",
     costAndFeesDifference: "Diferencia de intereses + costos",
+    currentPayment: "Pago mensual actual",
     cheapestMethod: "Método más barato",
     debtName: "Nombre",
     debtSingular: "Deuda",
     debts: "Deudas",
     debtType: "Tipo",
+    deficitCopy: "Si una persona gasta y debe más de lo que ingresa, el primer paso no es elegir una estrategia de pago. Primero debe cerrar el déficit: reajustar gastos, buscar ingresos adicionales, renegociar obligaciones, vender activos si no hay otra salida, o consultar alternativas legales con un profesional. Esto no constituye asesoría financiera ni legal.",
+    deficitTitle: "Déficit mensual",
+    disclaimer: "Esta herramienta es educativa. No reemplaza asesoría financiera, legal, fiscal ni de insolvencia.",
     emergencyFund: "Fondo de emergencia",
     emergencyMonths: "Meses de fondo",
     estimatedMargin: "Margen mensual estimado",
+    estimatedSavings: "Ahorro estimado",
+    extraContributionExamples: "Ejemplos: cesantías, prima, vacaciones, bonus, venta de activo, devolución de impuestos o ingreso extraordinario.",
+    extraContributionImpact: "Impacto estimado de abonos",
+    extraContributionMonth: "Mes",
+    extraContributionName: "Concepto opcional",
+    extraContributionNote: "Los abonos extraordinarios suelen tener más impacto cuando reducen capital de deudas caras. La diferencia aparece en intereses futuros que dejan de causarse.",
+    extraContributionSavings: "Ahorro adicional por abonos",
     extraMargin: "Hay margen mensual disponible",
     extraMarginBody: "Después de gastos fijos y pago mensual de deuda queda aire en el mes. Una posibilidad educativa es usar parte de ese margen para aumentar pagos y reducir intereses; otra es construir fondo de emergencia o invertir con prudencia.",
     extraMarginExample: "Si usas parte de este margen para aumentar pagos, podrías reducir intereses.",
+    extraPayment: "Excedente sobre mínimos",
     fixedAndDebt: "Gastos fijos + mínimos / ingreso",
     fixedExpenses: "Gastos fijos mensuales",
     firstDebt: "Primera deuda priorizada",
     financialTotal: "Total financiero estimado",
+    fixedMonthlyIncrease: "Incremento mensual fijo",
     income: "Ingreso mensual neto",
     liquidity: "Patrimonio líquido",
     minimumPayment: "Pago mínimo mensual",
+    minimumPaymentGap: "Brecha frente a mínimos",
     minimums: "Pago mínimo total",
+    minimumsOnlyCopy: "Tu pago mensual cubre exactamente los mínimos. En este caso, avalancha y bola de nieve pueden verse iguales porque todavía no hay excedente para priorizar una deuda sobre otra.",
+    minimumsOnlySuggestion: "Para ver diferencia entre métodos, aumenta el pago mensual o agrega un abono extraordinario.",
+    minimumsOnlyTitle: "Sin excedente sobre mínimos",
     minimumsToIncome: "Mínimos / ingreso neto",
+    monthlyCashAfterExpenses: "Ingreso libre antes de deuda",
     monthlyFee: "Seguro/comisión mensual",
     months: "Meses estimados",
+    monthsAhead: "Meses adelantados",
+    newPayment: "Nuevo pago mensual",
     paidOffMonth: "Mes de liquidación",
     noDebts: "Agrega al menos una deuda con saldo para ver referencias comparables.",
+    noExtraContributions: "Agrega un abono extraordinario para estimar su impacto.",
+    noViablePlanCopy: "El pago mensual disponible no cubre los mínimos. Antes de comparar estrategias, hay que ajustar gastos, aumentar ingresos, renegociar pagos o revisar alternativas con un profesional.",
+    noViablePlanTitle: "Antes de comparar métodos",
     estimatedLiquidation: "Liquidación estimada",
     order: "Prioridad del método",
     payoffComparisonCopy:
-      "En números, avalancha suele ser más eficiente porque ataca primero la deuda más cara. Bola de nieve puede ser más útil si necesitas victorias rápidas para mantener disciplina: pagar una deuda pequeña pronto puede reducir carga mental y mejorar adherencia al plan. En algunos escenarios ambos métodos pueden acercarse si los pagos mínimos ya liquidan una deuda antes de que reciba pagos extra. Por eso conviene mirar tanto la prioridad como la liquidación estimada.",
+      "En este escenario, la simulación ayuda a comparar coste y tiempo sin convertir el resultado en recomendación personalizada.",
+    paymentIncrease: "¿Cuánto ahorro si pago más?",
+    paymentIncreaseCopy: "Este ahorro no viene de magia. Viene de reducir el tiempo durante el cual la deuda sigue cobrando intereses.",
     payoffSequence: "Prioridad del método",
     principalPaid: "Capital pagado",
     priorityReason: "Motivo",
@@ -89,7 +117,9 @@ const copy = {
     reading: "Lectura educativa",
     references: "Rentabilidad mínima comparable",
     referencesText: "Para que una inversión compita con esta deuda, tendría que superar esta referencia con suficiente margen, después de costes, impuestos y riesgo.",
+    referencesRiskNote: "Renta variable puede implicar pérdida de capital. Y muchas alternativas de renta fija suelen rentar menos que el coste efectivo de una deuda cara. Por eso la comparación no es solo qué rentabilidad espero, sino qué riesgo asumo para intentar superar una obligación que ya tiene coste cierto.",
     remove: "Eliminar",
+    selectedMethod: "Método usado",
     snowball: "Bola de nieve",
     snowballBody: "Prioriza primero la deuda con menor saldo pendiente.",
     snowballPriority: "menor saldo pendiente",
@@ -108,17 +138,26 @@ const copy = {
       emergencyMonths: "Cuánto tiempo podrías cubrir gastos básicos sin ingresos.",
       estimatedMargin: "El aire que queda después de gastos y deuda. Si es negativo, el plan está apretado.",
       fixedAndDebt: "Qué parte del ingreso se va en gastos recurrentes y mínimos de deuda. Si ya contaste mínimos en gastos, léelo con cautela.",
-      minimums: "Lo mínimo que debes pagar al mes para no atrasarte.",
+      minimums: "Lo mínimo exigido al mes para no atrasarse.",
       minimumsToIncome: "Qué parte de tu ingreso mensual se va solo en pagos mínimos.",
-      totalDebt: "Todo lo que todavía debes según las deudas que escribiste.",
+      totalDebt: "Todo lo que todavía está pendiente según las deudas escritas.",
       weightedCost: "Una referencia del costo promedio de tus deudas. Si es alto, invertir tiene que competir contra una deuda cara.",
     },
     namingCopy: "El punto no es etiquetar la deuda como buena o mala por nombre. El punto es mirar tasa, flujo, liquidez y fragilidad.",
+    sameMethodsCopy: "Con los datos actuales, ambos métodos producen el mismo resultado porque no hay excedente sobre pagos mínimos o porque el orden práctico de liquidación no cambia.",
+    sustainability: "Sostenibilidad del flujo",
+    sustainableCopy: "El ingreso cubre gastos y el pago de deuda, y el pago mensual alcanza los mínimos.",
+    sustainableTitle: "Escenario sostenible",
+    tightCopy: "El escenario cubre los mínimos, pero deja poco margen. Educativamente, conviene revisar gastos variables, liquidez y margen de error.",
+    tightTitle: "Escenario ajustado",
+    tradeoffCopy: "Avalancha tiende a buscar menor coste financiero. Bola de nieve puede dar primeras victorias más rápidas si eso ayuda a sostener el hábito.",
     warning: "Advertencia",
   },
   en: {
     addDebt: "Add debt",
+    addExtraContribution: "Add extra principal payment",
     adjustedCost: "Adjusted annual cost",
+    amount: "Amount",
     avalanche: "Avalanche",
     avalancheBody: "Prioritizes the debt with the highest adjusted annual cost first.",
     avalanchePriority: "highest adjusted annual cost",
@@ -127,36 +166,62 @@ const copy = {
       "Use the total amount you can allocate to debt this month. It should include minimum payments. If you already included minimum payments inside fixed expenses, do not mentally double count them: this field is used for the payoff simulation.",
     balance: "Outstanding balance",
     baseline: "Starting point",
+    cashAfterDebtPlan: "Margin after debt plan",
     compare: "Difference between methods",
     costAndFeesDifference: "Interest + costs difference",
+    currentPayment: "Current monthly payment",
     cheapestMethod: "Cheapest method",
     debtName: "Name",
     debtSingular: "Debt",
     debts: "Debt",
     debtType: "Type",
+    deficitCopy: "If a person spends and owes more than they earn, the first step is not choosing a payoff strategy. The first step is closing the deficit: adjusting expenses, seeking additional income, renegotiating obligations, selling assets if there is no other exit, or reviewing legal alternatives with a professional. This is not financial or legal advice.",
+    deficitTitle: "Monthly deficit",
+    disclaimer: "This tool is educational. It does not replace financial, legal, tax, or insolvency advice.",
     emergencyFund: "Emergency fund",
     emergencyMonths: "Emergency fund months",
     estimatedMargin: "Estimated monthly margin",
+    estimatedSavings: "Estimated savings",
+    extraContributionExamples: "Examples: severance, annual bonus, vacation payout, bonus, asset sale, tax refund, or other extraordinary income.",
+    extraContributionImpact: "Estimated impact of extra payments",
+    extraContributionMonth: "Month",
+    extraContributionName: "Optional label",
+    extraContributionNote: "Extra principal payments usually have more impact when they reduce principal on expensive debt. The difference shows up in future interest that stops accruing.",
+    extraContributionSavings: "Additional savings from extra payments",
     extraMargin: "Monthly margin available",
     extraMarginBody: "After fixed expenses and monthly debt payment, there is room left in the month. One educational possibility is using part of that margin to increase payments and reduce interest; another is building an emergency fund or investing prudently.",
     extraMarginExample: "If you use part of this margin to increase payments, you could reduce interest.",
+    extraPayment: "Extra above minimums",
     fixedAndDebt: "Fixed expenses + minimums / income",
     fixedExpenses: "Monthly fixed expenses",
     firstDebt: "First prioritized debt",
     financialTotal: "Estimated financial total",
+    fixedMonthlyIncrease: "Fixed monthly increase",
     income: "Monthly net income",
     liquidity: "Liquid net worth",
     minimumPayment: "Monthly minimum payment",
+    minimumPaymentGap: "Gap versus minimums",
     minimums: "Total minimum payment",
+    minimumsOnlyCopy: "Your monthly payment exactly covers the minimums. In this case, avalanche and snowball can look the same because there is not yet extra money to prioritize one debt over another.",
+    minimumsOnlySuggestion: "To see a difference between methods, increase the monthly payment or add an extra principal payment.",
+    minimumsOnlyTitle: "No extra above minimums",
     minimumsToIncome: "Minimums / net income",
+    monthlyCashAfterExpenses: "Cash before debt",
     monthlyFee: "Monthly insurance/fee",
     months: "Estimated months",
+    monthsAhead: "Months earlier",
+    newPayment: "New monthly payment",
     paidOffMonth: "Payoff month",
     noDebts: "Add at least one debt with balance to see comparable references.",
+    noExtraContributions: "Add an extra principal payment to estimate its impact.",
+    noViablePlanCopy: "The available monthly payment does not cover minimums. Before comparing strategies, the scenario needs expense adjustments, more income, payment renegotiation, or professional review.",
+    noViablePlanTitle: "Before comparing methods",
     estimatedLiquidation: "Estimated liquidation",
     order: "Method priority",
     payoffComparisonCopy:
-      "Numerically, avalanche is often more efficient because it attacks the most expensive debt first. Snowball can be useful if quick wins help you stay consistent: clearing a small debt early can reduce mental load and improve adherence. In some scenarios both methods can come close if minimum payments already clear a debt before it receives extra payments. That is why it helps to read both the priority and the estimated liquidation.",
+      "In this scenario, the simulation helps compare cost and time without turning the result into personalized advice.",
+    paymentIncrease: "How much do I save if I pay more?",
+    paymentIncreaseCopy: "This saving does not come from magic. It comes from reducing the time during which debt continues charging interest.",
     payoffSequence: "Method priority",
     principalPaid: "Principal paid",
     priorityReason: "Reason",
@@ -165,7 +230,9 @@ const copy = {
     reading: "Educational read",
     references: "Comparable minimum return",
     referencesText: "For an investment to compete with this debt, it would need to exceed this reference with enough margin, after costs, taxes and risk.",
+    referencesRiskNote: "Equity investments can lose part or all of their capital. And many fixed-income alternatives often yield less than the effective cost of expensive debt. So the comparison is not only what return I expect, but what risk I take to beat an obligation with a known cost.",
     remove: "Remove",
+    selectedMethod: "Method used",
     snowball: "Snowball",
     snowballBody: "Prioritizes the debt with the lowest outstanding balance first.",
     snowballPriority: "lowest outstanding balance",
@@ -179,16 +246,23 @@ const copy = {
     fragileCopy: "A debt can look reasonable because of rate or purpose, but become fragile if it consumes too much monthly cash flow, reduces liquidity, or blocks a margin of safety.",
     fixedAndMinimumsNote: "This ratio assumes fixed expenses do not already include debt minimums. If you included them there, read this figure with caution.",
     metricInfo: {
-      debtToLiquidity: "Compares what you owe with your available liquid base. It helps show whether debt is heavy relative to your cushion.",
+      debtToLiquidity: "Compares what is owed with the available liquid base. It helps show whether debt is heavy relative to the cushion.",
       emergencyMonths: "How long you could cover basic expenses without income.",
       estimatedMargin: "The room left after expenses and debt. If it is negative, the monthly plan is tight.",
       fixedAndDebt: "How much of income goes to recurring expenses and debt minimums. If you already counted minimums inside expenses, read it with caution.",
       minimums: "The minimum you need to pay each month to avoid falling behind.",
       minimumsToIncome: "How much of monthly income goes only to minimum payments.",
-      totalDebt: "Everything you still owe based on the debts you entered.",
+      totalDebt: "Everything still outstanding based on the debts entered.",
       weightedCost: "A reference for the average cost of your debt. If it is high, investing has to compete with expensive debt.",
     },
     namingCopy: "The point is not to label debt as good or bad by name. The point is to look at rate, cash flow, liquidity and fragility.",
+    sameMethodsCopy: "With the current inputs, both methods produce the same result because there is no extra above minimum payments or because the practical payoff order does not change.",
+    sustainability: "Cash-flow sustainability",
+    sustainableCopy: "Income covers expenses and the debt payment, and the monthly payment reaches the minimums.",
+    sustainableTitle: "Sustainable scenario",
+    tightCopy: "The scenario covers minimums, but leaves little margin. Educationally, it is worth reviewing variable expenses, liquidity, and margin of error.",
+    tightTitle: "Tight scenario",
+    tradeoffCopy: "Avalanche tends to seek lower financial cost. Snowball may deliver earlier wins if that helps maintain the habit.",
     warning: "Warning",
   },
 };
@@ -210,6 +284,15 @@ function emptyDebt(id = "debt-1"): DebtInput {
     monthlyFee: 0,
     name: "",
     type: "card",
+  };
+}
+
+function emptyExtraContribution(id = "extra-1"): ExtraContributionInput {
+  return {
+    amount: 0,
+    id,
+    label: "",
+    monthNumber: 1,
   };
 }
 
@@ -344,6 +427,23 @@ function priorityReasonText(reason: "highest-adjusted-cost" | "lowest-balance", 
   return reason === "highest-adjusted-cost" ? copy[locale].avalanchePriority : copy[locale].snowballPriority;
 }
 
+function planForMethod(result: DebtPlanResult, method: PayoffMethod) {
+  return method === "avalanche" ? result.avalanche : result.snowball;
+}
+
+function plansAreEquivalent(avalanche: PayoffPlan, snowball: PayoffPlan) {
+  return (
+    avalanche.months === snowball.months &&
+    Math.abs(avalanche.totalInterestAndFees - snowball.totalInterestAndFees) < 0.01 &&
+    Math.abs(avalanche.estimatedTotalPayment - snowball.estimatedTotalPayment) < 0.01
+  );
+}
+
+function formatMonthDifference(value: number | null, locale: Locale) {
+  if (value === null) return "n/d";
+  return `${Math.max(0, value)} ${locale === "es" ? "meses" : "months"}`;
+}
+
 function InfoTip({ text }: { text: string }) {
   return (
     <span className="group relative inline-flex">
@@ -387,6 +487,30 @@ function MoneyField({
         onChange={(event) => onChange(moneyInputToNumber(event.target.value))}
         type="text"
         value={formatMoneyInput(value, locale)}
+      />
+    </label>
+  );
+}
+
+function NumberField({
+  label,
+  onChange,
+  value,
+}: {
+  label: string;
+  onChange: (value: number) => void;
+  value: number;
+}) {
+  return (
+    <label className="grid gap-2">
+      <span className="text-xs font-semibold uppercase tracking-[0.14em] text-muted">{label}</span>
+      <input
+        className="rounded-[4px] border border-line bg-white/80 px-2.5 py-2 text-sm font-semibold text-ink outline-none transition focus:border-petrol focus:bg-white"
+        inputMode="numeric"
+        min={1}
+        onChange={(event) => onChange(Math.max(1, Math.round(moneyInputToNumber(event.target.value))))}
+        type="text"
+        value={formatMoneyInput(value, "en")}
       />
     </label>
   );
@@ -517,6 +641,7 @@ function PlanCard({ locale, plan, text }: { locale: Locale; plan: PayoffPlan; te
 function PlanDifference({ locale, result }: { locale: Locale; result: DebtPlanResult }) {
   const labels = copy[locale];
   const { avalanche, snowball } = result;
+  const sameResult = plansAreEquivalent(avalanche, snowball);
   const monthDifference = avalanche.months !== null && snowball.months !== null ? snowball.months - avalanche.months : null;
   const costDifference = snowball.totalInterestAndFees - avalanche.totalInterestAndFees;
   const cheapestMethod =
@@ -533,12 +658,19 @@ function PlanDifference({ locale, result }: { locale: Locale; result: DebtPlanRe
   return (
     <div className="border border-line bg-panelSoft p-4">
       <p className="text-sm font-semibold text-ink">{labels.compare}</p>
-      <div className="mt-3 grid gap-2 text-sm leading-6 text-muted md:grid-cols-2">
-        <p>{labels.months}: <span className="font-semibold text-ink">{monthDifference === null ? "n/d" : `${Math.abs(monthDifference)} ${locale === "es" ? "meses" : "months"}`}</span></p>
-        <p>{labels.costAndFeesDifference}: <span className="font-semibold text-ink">{avalanche.months === null || snowball.months === null ? "n/d" : formatMoney(Math.abs(costDifference), locale)}</span></p>
-        <p>{labels.cheapestMethod}: <span className="font-semibold text-ink">{cheapestMethod}</span></p>
-        <p>{labels.fastestMethod}: <span className="font-semibold text-ink">{fastestMethod}</span></p>
-      </div>
+      {sameResult ? (
+        <p className="mt-3 max-w-3xl text-sm leading-6 text-muted">{labels.sameMethodsCopy}</p>
+      ) : (
+        <>
+          <div className="mt-3 grid gap-2 text-sm leading-6 text-muted md:grid-cols-2">
+            <p>{labels.months}: <span className="font-semibold text-ink">{monthDifference === null ? "n/d" : `${Math.abs(monthDifference)} ${locale === "es" ? "meses" : "months"}`}</span></p>
+            <p>{labels.costAndFeesDifference}: <span className="font-semibold text-ink">{avalanche.months === null || snowball.months === null ? "n/d" : formatMoney(Math.abs(costDifference), locale)}</span></p>
+            <p>{labels.cheapestMethod}: <span className="font-semibold text-ink">{cheapestMethod}</span></p>
+            <p>{labels.fastestMethod}: <span className="font-semibold text-ink">{fastestMethod}</span></p>
+          </div>
+          <p className="mt-3 max-w-3xl text-sm leading-6 text-muted">{labels.tradeoffCopy}</p>
+        </>
+      )}
       <p className="mt-3 max-w-3xl text-sm leading-6 text-muted">{labels.payoffComparisonCopy}</p>
     </div>
   );
@@ -548,7 +680,38 @@ export function DebtPlanner({ locale }: { locale: Locale }) {
   const labels = copy[locale];
   const [profile, setProfile] = useState<DebtProfileInput>(initialProfile);
   const [debts, setDebts] = useState<DebtInput[]>([emptyDebt()]);
-  const result = useMemo(() => calculateDebtPlan(profile, debts), [profile, debts]);
+  const [extraContributions, setExtraContributions] = useState<ExtraContributionInput[]>([]);
+  const [selectedMethod, setSelectedMethod] = useState<PayoffMethod>("avalanche");
+  const [paymentScenario, setPaymentScenario] = useState({ fixedMonthlyIncrease: 0, newDebtPayment: 0 });
+  const baselineResult = useMemo(() => calculateDebtPlan(profile, debts), [profile, debts]);
+  const result = useMemo(() => calculateDebtPlan(profile, debts, { extraContributions }), [profile, debts, extraContributions]);
+  const targetDebtPayment = Math.max(
+    profile.availableDebtPayment,
+    paymentScenario.newDebtPayment,
+    profile.availableDebtPayment + paymentScenario.fixedMonthlyIncrease,
+  );
+  const higherPaymentResult = useMemo(
+    () => calculateDebtPlan({ ...profile, availableDebtPayment: targetDebtPayment }, debts, { extraContributions }),
+    [debts, extraContributions, profile, targetDebtPayment],
+  );
+  const selectedCurrentPlan = planForMethod(result, selectedMethod);
+  const selectedBaselinePlan = planForMethod(baselineResult, selectedMethod);
+  const selectedHigherPaymentPlan = planForMethod(higherPaymentResult, selectedMethod);
+  const monthlyPaymentHasIncrease = targetDebtPayment > profile.availableDebtPayment;
+  const paymentSavings = monthlyPaymentHasIncrease && selectedCurrentPlan.months !== null && selectedHigherPaymentPlan.months !== null
+    ? Math.max(0, selectedCurrentPlan.totalInterestAndFees - selectedHigherPaymentPlan.totalInterestAndFees)
+    : null;
+  const paymentMonthsAhead = monthlyPaymentHasIncrease && selectedCurrentPlan.months !== null && selectedHigherPaymentPlan.months !== null
+    ? Math.max(0, selectedCurrentPlan.months - selectedHigherPaymentPlan.months)
+    : null;
+  const contributionSavings = selectedBaselinePlan.months !== null && selectedCurrentPlan.months !== null
+    ? Math.max(0, selectedBaselinePlan.totalInterestAndFees - selectedCurrentPlan.totalInterestAndFees)
+    : null;
+  const contributionMonthsAhead = selectedBaselinePlan.months !== null && selectedCurrentPlan.months !== null
+    ? Math.max(0, selectedBaselinePlan.months - selectedCurrentPlan.months)
+    : null;
+  const showPlanComparison = result.summary.sustainabilityStatus !== "deficit" && result.summary.payoffStatus !== "below-minimums";
+  const samePlanResult = plansAreEquivalent(result.avalanche, result.snowball);
 
   function updateProfile(field: keyof DebtProfileInput, value: number) {
     setProfile((current) => ({ ...current, [field]: value }));
@@ -564,6 +727,18 @@ export function DebtPlanner({ locale }: { locale: Locale }) {
 
   function removeDebt(id: string) {
     setDebts((current) => current.length <= 1 ? [emptyDebt()] : current.filter((debt) => debt.id !== id));
+  }
+
+  function addExtraContribution() {
+    setExtraContributions((current) => [...current, emptyExtraContribution(`extra-${current.length + 1}-${Date.now()}`)]);
+  }
+
+  function updateExtraContribution(id: string, patch: Partial<ExtraContributionInput>) {
+    setExtraContributions((current) => current.map((contribution) => contribution.id === id ? { ...contribution, ...patch } : contribution));
+  }
+
+  function removeExtraContribution(id: string) {
+    setExtraContributions((current) => current.filter((contribution) => contribution.id !== id));
   }
 
   return (
@@ -665,8 +840,42 @@ export function DebtPlanner({ locale }: { locale: Locale }) {
           <Metric info={labels.metricInfo.fixedAndDebt} label={labels.fixedAndDebt} value={formatPercent(result.summary.fixedAndMinimumsToIncome, locale)} />
           <Metric info={labels.metricInfo.estimatedMargin} label={labels.estimatedMargin} value={formatMoney(result.summary.estimatedMonthlyMargin, locale)} />
           <Metric info={labels.metricInfo.emergencyMonths} label={labels.emergencyMonths} value={result.summary.emergencyFundMonths === null ? "n/d" : result.summary.emergencyFundMonths.toFixed(1)} />
+          <Metric label={labels.monthlyCashAfterExpenses} value={formatMoney(result.summary.monthlyCashAfterExpenses, locale)} />
+          <Metric label={labels.minimumPaymentGap} value={formatMoney(result.summary.minimumPaymentGap, locale)} />
+          <Metric label={labels.extraPayment} value={formatMoney(Math.max(0, result.summary.minimumPaymentGap), locale)} />
+          <Metric label={labels.cashAfterDebtPlan} value={formatMoney(result.summary.cashAfterDebtPlan, locale)} />
         </div>
         <p className="mt-4 max-w-3xl border-l border-line pl-3 text-xs leading-5 text-muted">{labels.fixedAndMinimumsNote}</p>
+        <div className={`mt-4 border p-4 ${
+          result.summary.sustainabilityStatus === "deficit"
+            ? "border-brass/40 bg-[#f7f0e2]"
+            : result.summary.sustainabilityStatus === "tight"
+              ? "border-brass/25 bg-white/70"
+              : "border-petrol/20 bg-white/70"
+        }`}>
+          <p className="text-sm font-semibold text-ink">{labels.sustainability}</p>
+          {result.summary.sustainabilityStatus === "incomplete" ? (
+            <>
+              <p className="mt-2 text-sm font-semibold text-ink">{readingLabel("Insufficient income data", locale)}</p>
+              <p className="mt-2 max-w-4xl text-sm leading-6 text-muted">{locale === "es" ? "Completa ingreso, gastos y pagos mínimos para evaluar sostenibilidad mensual." : "Add income, expenses, and minimum payments to evaluate monthly sustainability."}</p>
+            </>
+          ) : result.summary.sustainabilityStatus === "deficit" ? (
+            <>
+              <p className="mt-2 text-sm font-semibold text-ink">{labels.deficitTitle}</p>
+              <p className="mt-2 max-w-4xl text-sm leading-6 text-muted">{labels.deficitCopy}</p>
+            </>
+          ) : result.summary.sustainabilityStatus === "tight" ? (
+            <>
+              <p className="mt-2 text-sm font-semibold text-ink">{labels.tightTitle}</p>
+              <p className="mt-2 max-w-4xl text-sm leading-6 text-muted">{labels.tightCopy}</p>
+            </>
+          ) : (
+            <>
+              <p className="mt-2 text-sm font-semibold text-ink">{labels.sustainableTitle}</p>
+              <p className="mt-2 max-w-4xl text-sm leading-6 text-muted">{labels.sustainableCopy}</p>
+            </>
+          )}
+        </div>
         {result.summary.estimatedMonthlyMargin > 0 ? (
           <div className="mt-4 border border-petrol/20 bg-white/70 p-4">
             <p className="text-sm font-semibold text-ink">{labels.extraMargin}</p>
@@ -680,6 +889,7 @@ export function DebtPlanner({ locale }: { locale: Locale }) {
         <p className="text-xs font-semibold uppercase tracking-[0.18em] text-petrol">04</p>
         <h2 className="mt-2 text-2xl font-semibold leading-tight text-ink">{labels.references}</h2>
         <p className="mt-3 max-w-3xl text-sm leading-6 text-muted">{labels.referencesText}</p>
+        <p className="mt-3 max-w-3xl border-l border-brass/50 pl-3 text-sm leading-6 text-muted">{labels.referencesRiskNote}</p>
         {result.references.length === 0 ? (
           <p className="mt-5 border border-line bg-panelSoft px-3 py-2 text-sm text-muted">{labels.noDebts}</p>
         ) : (
@@ -700,18 +910,136 @@ export function DebtPlanner({ locale }: { locale: Locale }) {
 
       <section className="rounded-[6px] border border-line bg-panel p-4 shadow-[0_12px_32px_rgba(11,52,54,0.035)] md:p-6">
         <p className="text-xs font-semibold uppercase tracking-[0.18em] text-petrol">05</p>
-        <h2 className="mt-2 text-2xl font-semibold leading-tight text-ink">{locale === "es" ? "Planes de pago" : "Payoff plans"}</h2>
-        <div className="mt-5 grid gap-4 lg:grid-cols-2">
-          <PlanCard locale={locale} plan={result.avalanche} text={labels.avalancheBody} />
-          <PlanCard locale={locale} plan={result.snowball} text={labels.snowballBody} />
+        <h2 className="mt-2 text-2xl font-semibold leading-tight text-ink">{labels.paymentIncrease}</h2>
+        <p className="mt-3 max-w-3xl text-sm leading-6 text-muted">{labels.paymentIncreaseCopy}</p>
+        <div className="mt-5 grid gap-4 md:grid-cols-3">
+          <Metric label={labels.currentPayment} value={formatMoney(profile.availableDebtPayment, locale)} />
+          <MoneyField
+            label={labels.newPayment}
+            locale={locale}
+            onChange={(value) => setPaymentScenario((current) => ({ ...current, newDebtPayment: value }))}
+            value={paymentScenario.newDebtPayment}
+          />
+          <MoneyField
+            label={labels.fixedMonthlyIncrease}
+            locale={locale}
+            onChange={(value) => setPaymentScenario((current) => ({ ...current, fixedMonthlyIncrease: value }))}
+            value={paymentScenario.fixedMonthlyIncrease}
+          />
         </div>
-        <div className="mt-4">
-          <PlanDifference locale={locale} result={result} />
+        <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+          <Metric label={labels.selectedMethod} value={methodName(selectedMethod, locale)} />
+          <Metric label={locale === "es" ? "Pago usado en escenario" : "Scenario payment"} value={formatMoney(targetDebtPayment, locale)} />
+          <Metric label={labels.estimatedSavings} value={paymentSavings === null ? "n/d" : formatMoney(paymentSavings, locale)} />
+          <Metric label={labels.monthsAhead} value={formatMonthDifference(paymentMonthsAhead, locale)} />
         </div>
       </section>
 
+      <section className="rounded-[6px] border border-line bg-panel p-4 shadow-[0_12px_32px_rgba(11,52,54,0.035)] md:p-6">
+        <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-petrol">06</p>
+            <h2 className="mt-2 text-2xl font-semibold leading-tight text-ink">{locale === "es" ? "Abonos extraordinarios" : "Extra principal payments"}</h2>
+            <p className="mt-3 max-w-3xl text-sm leading-6 text-muted">{labels.extraContributionNote}</p>
+          </div>
+          <button type="button" onClick={addExtraContribution} className="w-fit rounded-[4px] border border-petrol bg-petrol px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-panel hover:text-petrol">
+            {labels.addExtraContribution}
+          </button>
+        </div>
+        <p className="mt-3 max-w-3xl text-xs leading-5 text-muted">{labels.extraContributionExamples}</p>
+        <div className="mt-5 grid gap-4">
+          {extraContributions.length === 0 ? (
+            <p className="border border-line bg-panelSoft px-3 py-2 text-sm text-muted">{labels.noExtraContributions}</p>
+          ) : (
+            extraContributions.map((contribution) => (
+              <div key={contribution.id} className="grid gap-4 rounded-[6px] border border-line bg-white/70 p-4 md:grid-cols-[0.5fr_1fr_1.3fr_auto] md:items-end">
+                <NumberField
+                  label={labels.extraContributionMonth}
+                  onChange={(value) => updateExtraContribution(contribution.id, { monthNumber: value })}
+                  value={contribution.monthNumber}
+                />
+                <MoneyField
+                  label={labels.amount}
+                  locale={locale}
+                  onChange={(value) => updateExtraContribution(contribution.id, { amount: value })}
+                  value={contribution.amount}
+                />
+                <label className="grid gap-2">
+                  <span className="text-xs font-semibold uppercase tracking-[0.14em] text-muted">{labels.extraContributionName}</span>
+                  <input
+                    className="rounded-[4px] border border-line bg-white/80 px-3 py-2.5 text-sm font-semibold text-ink outline-none transition focus:border-petrol focus:bg-white"
+                    onChange={(event) => updateExtraContribution(contribution.id, { label: event.target.value })}
+                    type="text"
+                    value={contribution.label ?? ""}
+                  />
+                </label>
+                <button type="button" onClick={() => removeExtraContribution(contribution.id)} className="rounded-[4px] border border-line bg-panel px-3 py-2.5 text-xs font-semibold text-muted transition hover:border-petrol hover:text-petrol">
+                  {labels.remove}
+                </button>
+              </div>
+            ))
+          )}
+        </div>
+        <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+          <Metric label={labels.selectedMethod} value={methodName(selectedMethod, locale)} />
+          <Metric label={labels.extraContributionSavings} value={contributionSavings === null ? "n/d" : formatMoney(contributionSavings, locale)} />
+          <Metric label={labels.monthsAhead} value={formatMonthDifference(contributionMonthsAhead, locale)} />
+          <Metric label={labels.extraContributionImpact} value={formatMoney(selectedCurrentPlan.extraContributionsApplied, locale)} />
+        </div>
+      </section>
+
+      <section className="rounded-[6px] border border-line bg-panel p-4 shadow-[0_12px_32px_rgba(11,52,54,0.035)] md:p-6">
+        <p className="text-xs font-semibold uppercase tracking-[0.18em] text-petrol">07</p>
+        <h2 className="mt-2 text-2xl font-semibold leading-tight text-ink">{locale === "es" ? "Planes de pago" : "Payoff plans"}</h2>
+        <div className="mt-5 flex flex-wrap items-center gap-2">
+          <span className="text-xs font-semibold uppercase tracking-[0.14em] text-muted">{labels.selectedMethod}</span>
+          {(["avalanche", "snowball"] as PayoffMethod[]).map((method) => (
+            <button
+              key={method}
+              className={`rounded-[4px] border px-3 py-2 text-xs font-semibold transition ${
+                selectedMethod === method
+                  ? "border-petrol bg-petrol text-white"
+                  : "border-line bg-white text-muted hover:border-petrol hover:text-petrol"
+              }`}
+              onClick={() => setSelectedMethod(method)}
+              type="button"
+            >
+              {methodName(method, locale)}
+            </button>
+          ))}
+        </div>
+        {result.summary.payoffStatus === "minimums-only" ? (
+          <div className="mt-5 border border-brass/35 bg-[#f7f0e2] p-4">
+            <p className="text-sm font-semibold text-ink">{labels.minimumsOnlyTitle}</p>
+            <p className="mt-2 max-w-4xl text-sm leading-6 text-muted">{labels.minimumsOnlyCopy}</p>
+            <p className="mt-2 max-w-4xl text-sm leading-6 text-muted">{labels.minimumsOnlySuggestion}</p>
+          </div>
+        ) : null}
+        {!showPlanComparison ? (
+          <div className="mt-5 border border-brass/40 bg-[#f7f0e2] p-4">
+            <p className="text-sm font-semibold text-ink">{labels.noViablePlanTitle}</p>
+            <p className="mt-2 max-w-4xl text-sm leading-6 text-muted">{result.summary.sustainabilityStatus === "deficit" ? labels.deficitCopy : labels.noViablePlanCopy}</p>
+          </div>
+        ) : samePlanResult ? (
+          <div className="mt-5 grid gap-4">
+            <PlanCard locale={locale} plan={selectedCurrentPlan} text={selectedMethod === "avalanche" ? labels.avalancheBody : labels.snowballBody} />
+            <PlanDifference locale={locale} result={result} />
+          </div>
+        ) : (
+          <>
+            <div className="mt-5 grid gap-4 lg:grid-cols-2">
+              <PlanCard locale={locale} plan={result.avalanche} text={labels.avalancheBody} />
+              <PlanCard locale={locale} plan={result.snowball} text={labels.snowballBody} />
+            </div>
+            <div className="mt-4">
+              <PlanDifference locale={locale} result={result} />
+            </div>
+          </>
+        )}
+      </section>
+
       <section className="rounded-[6px] border border-petrol/20 bg-[#f3efe6] p-4 shadow-[0_12px_32px_rgba(11,52,54,0.035)] md:p-6">
-        <p className="text-xs font-semibold uppercase tracking-[0.18em] text-petrol">06</p>
+        <p className="text-xs font-semibold uppercase tracking-[0.18em] text-petrol">08</p>
         <h2 className="mt-2 text-2xl font-semibold leading-tight text-ink">{labels.reading}</h2>
         <div className="mt-5 grid gap-3 md:grid-cols-3">
           <Metric label={labels.pressure} value={readingLabel(result.reading.monthlyPressureLabel, locale)} />
@@ -722,6 +1050,7 @@ export function DebtPlanner({ locale }: { locale: Locale }) {
           <p className="max-w-3xl">{emergencyFundCopy(result.summary.emergencyFundMonths, locale)}</p>
           <p className="max-w-3xl">{labels.fragileCopy}</p>
           <p className="max-w-3xl">{labels.namingCopy}</p>
+          <p className="max-w-3xl border-l border-petrol/40 pl-3 text-xs leading-5">{labels.disclaimer}</p>
         </div>
       </section>
     </div>
