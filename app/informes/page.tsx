@@ -332,6 +332,11 @@ function getWatchStatuses(data: WeeklyReportData): Record<string, { text: string
   const financialText = financialSector
     ? `${financialSector.etfTicker} · ${financialSector.sectorName}: retorno 5D ${formatSectorPercent(financialSector.return1w)}, retorno 1M ${formatSectorPercent(financialSector.return1m)}.`
     : undefined;
+  const statsByTicker = new Map(data.statisticalLevels.map((asset) => [asset.ticker, asset]));
+  const usoLevel = statsByTicker.get("USO");
+  const oilText = usoLevel
+    ? `USO como proxy líquido de petróleo. No equivale al spot exacto ni a futuros individuales. Percentil ${formatStat(usoLevel.percentile, 1)}, z-score ${formatStat(usoLevel.zScore, 2)}, distancia a media larga ${formatDashboardPercent(usoLevel.distanceToLongAverage)}.`
+    : undefined;
   const semisSpecific = data.statisticalLevels.find((asset) => ["SMH", "SOXX"].includes(asset.ticker));
   const semisText = semisSpecific
     ? `${semisSpecific.ticker}: percentil ${formatStat(semisSpecific.percentile, 1)}, z-score ${formatStat(semisSpecific.zScore, 2)}, distancia a media larga ${formatDashboardPercent(semisSpecific.distanceToLongAverage)}.`
@@ -345,22 +350,29 @@ function getWatchStatuses(data: WeeklyReportData): Record<string, { text: string
   const ethFlows = data.flows.ethEtfFlows?.flows;
   const ethFlowText = ethFlows?.readingSubtext ?? "Flujos ETH ETF pendientes de actualización.";
   const cryptoFlowsText = btcText ? `${btcText} ${ethFlowText}` : ethFlowText;
-  const spyLevel = data.statisticalLevels.find((asset) => asset.ticker === "SPY");
+  const spyLevel = statsByTicker.get("SPY");
   const levelsText = spyLevel
     ? `SPY: percentil ${formatStat(spyLevel.percentile, 1)}, z-score ${formatStat(spyLevel.zScore, 2)}, distancia a media larga ${formatDashboardPercent(spyLevel.distanceToLongAverage)}.`
     : undefined;
   const seasonalityText = data.seasonality
     ? `Día ${data.seasonality.currentDay} del mes en la muestra de estacionalidad disponible. Referencia descriptiva, no predictiva.`
     : undefined;
-  const statsByTicker = new Map(data.statisticalLevels.map((asset) => [asset.ticker, asset]));
   const rspLevel = statsByTicker.get("RSP");
   const iwmLevel = statsByTicker.get("IWM");
   const sectorStats = data.statisticalLevels.filter((asset) => asset.ticker.startsWith("XL"));
   const sectorsPositive = data.sectors.data?.sectors.filter((sector) => (sector.return1w ?? 0) > 0).length ?? null;
   const sectorsNegative = data.sectors.data?.sectors.filter((sector) => (sector.return1w ?? 0) < 0).length ?? null;
   const sectorsOverLongAverage = sectorStats.filter((asset) => (asset.distanceToLongAverage ?? -Infinity) > 0).length;
+  const relativeRspText = rspLevel && spyLevel
+    ? `RSP/SPY: 5D ${formatDashboardPercent(rspLevel.returns["1W"])} vs ${formatDashboardPercent(spyLevel.returns["1W"])}, 1M ${formatDashboardPercent(rspLevel.returns["1M"])} vs ${formatDashboardPercent(spyLevel.returns["1M"])}.`
+    : "RSP/SPY pendiente o no disponible en snapshot.";
+  const relativeIwmText = iwmLevel && spyLevel
+    ? `IWM/SPY: 5D ${formatDashboardPercent(iwmLevel.returns["1W"])} vs ${formatDashboardPercent(spyLevel.returns["1W"])}, 1M ${formatDashboardPercent(iwmLevel.returns["1M"])} vs ${formatDashboardPercent(spyLevel.returns["1M"])}.`
+    : "IWM/SPY pendiente o no disponible en snapshot.";
   const breadthText = [
-    `Plan mínimo de amplitud preparado: ${breadthProxyPlanText()}.`,
+    `Lectura proxy de amplitud con ETFs líquidos; no sustituye advance/decline oficial por componente. ${breadthProxyPlanText()}.`,
+    relativeRspText,
+    relativeIwmText,
     rspLevel ? `RSP: percentil ${formatStat(rspLevel.percentile, 1)}, distancia a media larga ${formatDashboardPercent(rspLevel.distanceToLongAverage)}.` : "RSP pendiente o no disponible en snapshot.",
     iwmLevel ? `IWM: percentil ${formatStat(iwmLevel.percentile, 1)}, distancia a media larga ${formatDashboardPercent(iwmLevel.distanceToLongAverage)}.` : "IWM pendiente o no disponible en snapshot.",
     sectorsPositive !== null && sectorsNegative !== null ? `Sectores 5D positivos/negativos: ${sectorsPositive}/${sectorsNegative}.` : "Sectores positivos/negativos pendientes.",
@@ -380,11 +392,12 @@ function getWatchStatuses(data: WeeklyReportData): Record<string, { text: string
         }
       : {}),
     ...(techText ? { "tech-flows": { text: techText } } : {}),
+    ...(oilText ? { oil: { text: oilText, href: "/niveles-estadisticos?asset=USO", referenceLabel: "Niveles estadísticos" } } : {}),
     "btc-etf-flows": { text: cryptoFlowsText },
     ...(financialText ? { "bank-earnings": { text: financialText, href: "/dashboard", referenceLabel: "Dashboard" } } : {}),
     ...(semisText ? { "semis-earnings": { text: semisText, href: "/dashboard", referenceLabel: "Dashboard" } } : {}),
     amplitude: { text: breadthText, href: "/niveles-estadisticos?asset=RSP", referenceLabel: "Niveles estadísticos" },
-    levels: { text: levelsText ? `${levelsText} ${jpmSpxText}` : jpmSpxText, href: "/niveles-estadisticos", referenceLabel: "Niveles estadísticos" },
+    levels: { text: levelsText ? `${levelsText} ${jpmSpxText}` : jpmSpxText, href: jpmSpxLevelsContext.sourceUrl, referenceLabel: jpmSpxLevelsContext.sourceLabel },
     options: { text: optionsText },
     ...(seasonalityText
       ? { "july-seasonality": { text: seasonalityText, href: "/niveles-estadisticos", referenceLabel: "Niveles estadísticos" } }

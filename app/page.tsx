@@ -3,6 +3,8 @@ import Link from "next/link";
 import { ToolCard } from "@/components/ui/ToolCard";
 import { TypewriterPrinciples } from "@/components/home/TypewriterPrinciples";
 import { getHomeDashboardPreviewData } from "@/lib/dashboard/get-home-dashboard-preview-data";
+import { displayStatTicker } from "@/lib/statistical-levels/display";
+import { getStatisticalLevelsManifest } from "@/lib/statistical-levels/get-statistical-levels-data";
 import type { BtcEtfFlowsDashboardData, RegimeBias, RegimeSignal, RegimeSummary, SectorRotationData, VixDashboardData } from "@/lib/dashboard/types";
 
 const principles = [
@@ -67,15 +69,16 @@ const homePathways = [
   },
 ];
 
-const statisticalLevelsPreview = [
-  { ticker: "SPY", percentile: 72, zScore: "+0.8", distance: "+6.4%" },
-  { ticker: "GLD", percentile: 84, zScore: "+1.2", distance: "+9.1%" },
-  { ticker: "BTC/USDT", percentile: 38, zScore: "-0.3", distance: "-2.6%" },
-  { ticker: "ETH/USDT", percentile: null, zScore: "n/d", distance: "n/d" },
-];
-
 function formatPreviewPercent(value: number) {
   return `${value > 0 ? "+" : ""}${value.toFixed(1)}%`;
+}
+
+function formatPreviewPercentile(value: number | null | undefined) {
+  return value === null || value === undefined ? "n/d" : value.toFixed(1);
+}
+
+function formatPreviewNumber(value: number | null | undefined) {
+  return value === null || value === undefined ? "n/d" : value.toFixed(2);
 }
 
 function formatCompactUsdMillions(value: number | null) {
@@ -307,7 +310,19 @@ function BtcFlowsMiniPanel({ data }: { data: BtcEtfFlowsDashboardData | null }) 
   );
 }
 
-function StatisticalLevelsMiniPanel() {
+async function StatisticalLevelsMiniPanel() {
+  const manifest = await getStatisticalLevelsManifest();
+  const byTicker = new Map(manifest.summaries.map((asset) => [asset.ticker, asset]));
+  const assets = ["SPY", "GLD", "BTCUSD", "ETHUSD"].map((ticker) => {
+    const asset = byTicker.get(ticker);
+    return {
+      ticker: displayStatTicker(ticker),
+      percentile: asset?.extension.percentile5Y ?? null,
+      zScore: asset?.extension.zScore5Y ?? null,
+      distance: asset?.distanceToMovingAverages.ma200 ?? null,
+    };
+  });
+
   return (
     <div className="rounded-[6px] border border-line bg-white/80 p-4 shadow-[0_12px_32px_rgba(11,52,54,0.045)] md:p-6">
       <div className="flex items-start justify-between gap-4">
@@ -321,18 +336,18 @@ function StatisticalLevelsMiniPanel() {
       </div>
 
       <div className="mt-5 grid gap-3">
-        {statisticalLevelsPreview.map((asset) => (
+        {assets.map((asset) => (
           <div key={asset.ticker} className="grid gap-2 border-b border-line/70 pb-3 last:border-b-0 last:pb-0">
             <div className="flex items-center justify-between gap-4">
               <span className="font-semibold text-ink">{asset.ticker}</span>
-              <span className="text-xs text-muted">Percentil {asset.percentile ?? "n/d"}</span>
+              <span className="text-xs text-muted">Percentil {formatPreviewPercentile(asset.percentile)}</span>
             </div>
             <div className="h-1.5 overflow-hidden rounded-full border border-line bg-panelSoft">
               <div className="h-full bg-sage" style={{ width: `${asset.percentile ?? 0}%` }} />
             </div>
             <div className="grid grid-cols-2 gap-3 text-xs text-muted">
-              <span>z-score <strong className="font-semibold text-ink">{asset.zScore}</strong></span>
-              <span className="text-right">media larga <strong className="font-semibold text-ink">{asset.distance}</strong></span>
+              <span>z-score <strong className="font-semibold text-ink">{formatPreviewNumber(asset.zScore)}</strong></span>
+              <span className="text-right">media larga <strong className="font-semibold text-ink">{asset.distance === null ? "n/d" : formatPreviewPercent(asset.distance)}</strong></span>
             </div>
           </div>
         ))}

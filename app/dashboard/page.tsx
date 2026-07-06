@@ -73,6 +73,9 @@ export async function DashboardContent({ locale = "es" }: { locale?: "es" | "en"
         note: "Prudent note",
         radarFooter: "Conceptual sources: reported short interest, 13F filings and institutional reports with lag. Coverage can be incomplete and dates can differ by provider.",
         finalDisclaimer: "This panel organizes public market readings. It does not forecast prices, recommend trades or replace personalized analysis.",
+        capitalFlows: "Capital flows",
+        capitalFlowsTitle: "BTC and ETH ETF flows",
+        capitalFlowsSubtitle: "Organizes BTC ETF flows, ETH ETF flows and future capital-flow blocks without mixing them with spot statistical levels.",
       }
     : {
         eyebrow: "Lectura de régimen",
@@ -107,6 +110,9 @@ export async function DashboardContent({ locale = "es" }: { locale?: "es" | "en"
         note: "Nota prudente",
         radarFooter: "Fuentes conceptuales: short interest reportado, formularios 13F y reportes institucionales con retraso. La cobertura puede ser incompleta y las fechas pueden diferir entre proveedores.",
         finalDisclaimer: "Este panel organiza lecturas públicas de mercado. No anticipa precios, no recomienda operaciones con activos y no sustituye un análisis personalizado.",
+        capitalFlows: "Flujos de capital",
+        capitalFlowsTitle: "BTC y ETH ETF flows",
+        capitalFlowsSubtitle: "Ordena flujos de ETFs BTC, flujos de ETFs ETH y futuros bloques de capital sin mezclarlos con niveles estadísticos spot.",
       };
 
   return (
@@ -207,8 +213,17 @@ export async function DashboardContent({ locale = "es" }: { locale?: "es" | "en"
         {quantRisk ? <QuantRiskPanel data={quantRisk} locale={locale} /> : null}
         {vix ? <VixModule data={vix} /> : null}
         {vixTermStructure ? <VixTermStructureModule data={vixTermStructure} /> : null}
-        {btcEtfFlows ? <BtcEtfFlowsModule data={btcEtfFlows} /> : null}
-        {ethEtfFlows ? <BtcEtfFlowsModule assetLabel="ETH" data={ethEtfFlows} /> : null}
+        {btcEtfFlows || ethEtfFlows ? (
+          <section className="grid gap-4">
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-[0.16em] text-petrol">{copy.capitalFlows}</p>
+              <h2 className="mt-2 text-2xl font-semibold leading-tight text-ink">{copy.capitalFlowsTitle}</h2>
+              <p className="mt-2 max-w-3xl text-sm leading-6 text-muted">{copy.capitalFlowsSubtitle}</p>
+            </div>
+            {btcEtfFlows ? <BtcEtfFlowsModule data={btcEtfFlows} /> : null}
+            {ethEtfFlows ? <BtcEtfFlowsModule assetLabel="ETH" data={ethEtfFlows} /> : null}
+          </section>
+        ) : null}
         {remainingModules.map((module) => <DashboardModule key={module.id} {...module} locale={locale} />)}
       </div>
 

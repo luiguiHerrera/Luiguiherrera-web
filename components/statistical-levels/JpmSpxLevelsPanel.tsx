@@ -35,6 +35,14 @@ export function JpmSpxLevelsPanel({ locale = "es" }: JpmSpxLevelsPanelProps) {
         <div className="border border-line bg-panelSoft p-4">
           <p className="text-xs font-semibold uppercase tracking-[0.14em] text-muted">{copy.nextStep}</p>
           <p className="mt-2 text-sm leading-6 text-ink">{jpmSpxLevelsContext.nextStep}</p>
+          <a
+            className="mt-3 inline-block border-b border-petrol/30 text-sm font-semibold text-petrol transition hover:border-petrol"
+            href={jpmSpxLevelsContext.sourceUrl}
+            target="_blank"
+            rel="noreferrer"
+          >
+            {jpmSpxLevelsContext.sourceLabel}
+          </a>
         </div>
       </div>
     </section>
