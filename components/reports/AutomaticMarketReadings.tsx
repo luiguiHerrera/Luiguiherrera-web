@@ -1,5 +1,4 @@
 import { ReportSection } from "@/components/reports/ReportSection";
-import { translateDashboardText } from "@/lib/dashboard/translate-dashboard-copy";
 import { displayStatName, displayStatTicker } from "@/lib/statistical-levels/display";
 import type { WeeklyReportData } from "@/lib/reports/build-weekly-report-data";
 
@@ -94,7 +93,6 @@ export function AutomaticMarketReadings({ data }: AutomaticMarketReadingsProps) 
     data.flows.btcEtfFlows?.flows.readingLabel ? `Flujos BTC ETF: ${data.flows.btcEtfFlows.flows.readingLabel}` : "",
     t(data.sectors.data?.metrics.interpretation),
   ].filter(Boolean));
-  const radarPreview = data.crossSignalRadar.slice(0, 3);
   const statisticalLevelsByTicker = new Map(data.statisticalLevels.map((asset) => [asset.ticker, asset]));
   const selectedStatAssets = reportStatAssets.map((item) => ({
     ...item,
@@ -257,17 +255,6 @@ export function AutomaticMarketReadings({ data }: AutomaticMarketReadingsProps) 
             <p className="mt-4 text-sm leading-6 text-muted">
               Estacionalidad de julio integrada como referencia descriptiva. No predice el siguiente movimiento.
             </p>
-          </ReportSection>
-
-          <ReportSection eyebrow="Auto 07" title="Radar de lecturas cruzadas">
-            <div className="grid gap-2 md:grid-cols-3">
-              {radarPreview.map((row) => (
-                <div key={row.ticker} className="border border-line bg-panelSoft p-3 text-sm leading-6 text-muted">
-                  <p className="font-semibold text-ink">{row.ticker}</p>
-                  <p className="mt-1">{translateDashboardText(row.note)}</p>
-                </div>
-              ))}
-            </div>
           </ReportSection>
         </div>
       </div>

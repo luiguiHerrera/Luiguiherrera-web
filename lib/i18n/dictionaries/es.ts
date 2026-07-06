@@ -54,7 +54,7 @@ export const es = {
       { href: "/tendencias", label: "Tendencias: del mundo al portafolio", shortLabel: "Tendencias", description: "Marco educativo para convertir cambios globales en hipótesis con prudencia." },
     ],
     resourcesItems: [
-      { href: "/recursos", label: "Recursos", shortLabel: "Recursos", description: "Herramientas públicas para complementar tu proceso." },
+      { href: "/recursos", label: "Biblioteca", shortLabel: "Biblioteca", description: "Herramientas públicas para complementar tu proceso." },
       { href: "/recursos#tradingview-scripts", label: "Scripts TradingView", shortLabel: "Scripts", description: "Catálogo compacto de utilidades públicas de TradingView." },
     ],
     footerText: "Herramientas educativas para ordenar contexto, riesgo y proceso. El control final siempre queda en manos del inversionista.",

@@ -31,6 +31,16 @@ export const tradingViewScripts: TradingViewScript[] = [
     status: "Publicado",
   },
   {
+    id: "jpm-collar-levels-spx",
+    title: "JPM Collar Levels - SPX",
+    category: "Estructura de mercado",
+    markets: ["SPX", "Índices", "Opciones"],
+    description: "Visualiza niveles trimestrales del collar JPM sobre SPX, con modo activo, histórico y alertas de toque. Herramienta de contexto; no señal de compra o venta.",
+    useCase: "Sirve para ubicar zonas institucionales de referencia sobre SPX y separarlas de niveles propios de ETFs como SPY o VOO.",
+    tradingViewUrl: "https://www.tradingview.com/script/IwGynP3T-JPM-Collar-Levels-SPX/",
+    status: "Publicado",
+  },
+  {
     id: "risk-checklist-overlay",
     title: "Risk Checklist Overlay",
     category: "Riesgo",

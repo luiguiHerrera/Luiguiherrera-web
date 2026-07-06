@@ -228,17 +228,17 @@ export const marketReports: MarketReport[] = [
         whyItMatters: "Dato sensible para crecimiento, salarios y expectativas de política monetaria.",
       },
       {
-        dateLabel: "Durante la semana",
+        dateLabel: "Semana del 6 al 10 de julio",
         event: "Inflación China",
         whyItMatters: "Aporta contexto sobre demanda global, presión deflacionaria y emergentes.",
       },
       {
-        dateLabel: "Próximos días",
+        dateLabel: "Próximos días / semana del 13 de julio",
         event: "Inicio de temporada de resultados",
         whyItMatters: "Los bancos abren una ventana clave para crédito, márgenes y apetito por riesgo.",
       },
       {
-        dateLabel: "Próxima ventana",
+        dateLabel: "Próxima ventana de vencimientos",
         event: "Vencimientos de opciones",
         whyItMatters: "Puede alterar flujos, cobertura y volatilidad alrededor de niveles relevantes.",
       },
@@ -332,7 +332,7 @@ export const marketReports: MarketReport[] = [
       {
         key: "options",
         name: "0DTE/opciones",
-        whatLooksAt: "0DTE real cuando haya datos por vencimiento/serie. Cboe put/call ratios solo funcionaría como proxy de opciones.",
+        whatLooksAt: "0DTE real cuando haya datos por vencimiento/serie. Mientras tanto, Cboe put/call ratios funciona solo como proxy de opciones.",
         whyItMatters:
           "Cuando crece el uso de opciones de vencimiento muy corto, los creadores de mercado pueden ajustar coberturas con mayor frecuencia. No se inventa dato 0DTE si solo existe un proxy de opciones.",
       },

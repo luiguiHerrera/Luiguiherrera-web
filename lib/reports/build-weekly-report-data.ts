@@ -1,4 +1,5 @@
 import { getDashboardData } from "@/lib/dashboard/get-dashboard-data";
+import { getOptionsProxyData } from "@/lib/market/options-proxies";
 import {
   getStatisticalLevelsAsset,
   getStatisticalLevelsAssetSeasonality,
@@ -13,6 +14,7 @@ const statisticalHighlightTickers = [
   "RSP",
   "IWM",
   "USO",
+  "UUP",
   "GLD",
   "EWJ",
   "FXI",
@@ -106,7 +108,10 @@ function extensionHighlights(assets: AssetStatSummary[], preferredTickers: strin
 }
 
 export async function buildWeeklyReportData() {
-  const dashboard = await getDashboardData();
+  const [dashboard, optionsProxy] = await Promise.all([
+    getDashboardData(),
+    getOptionsProxyData(),
+  ]);
   const manifest = await getStatisticalLevelsManifest();
   const assets = await Promise.all(coreEtfs.map((ticker) => getStatisticalLevelsAsset(ticker)));
   const generatedAt = manifest.generatedAt;
@@ -167,6 +172,7 @@ export async function buildWeeklyReportData() {
       ethEtfFlows: dashboard.ethEtfFlows,
       generalEtfFlowsStatus: "Pendiente de fuente automatizada clara.",
     },
+    optionsProxy,
     statisticalLevels: extensionHighlights(manifest.summaries, statisticalHighlightTickers),
     seasonality,
     crossSignalRadar: dashboard.crossSignalRadar,

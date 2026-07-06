@@ -11,6 +11,8 @@ import type {
 } from "@/lib/dashboard/types";
 
 const FARSIDE_ETH_URL = "https://farside.co.uk/eth/";
+const FARSIDE_ETH_ALL_DATA_URL = "https://farside.co.uk/ethereum-etf-flow-all-data/";
+const FARSIDE_ETH_URLS = [FARSIDE_ETH_ALL_DATA_URL, FARSIDE_ETH_URL];
 const REVALIDATE_SECONDS = 60 * 60 * 24;
 const REQUEST_TIMEOUT_MS = 8000;
 const ETH_EXPECTED_COLUMNS = ["Date", "ETHA", "FETH", "ETHW", "CETH", "ETHV", "QETH", "EZET", "ETHE", "ETH", "Total"];
@@ -28,6 +30,7 @@ type ParsedEthFlowTable = {
   rows: ParsedEthFlowRow[];
   columns: string[];
   calculatedTotal: boolean;
+  sourceUrl: string;
 };
 
 function stripHtml(value: string) {
@@ -77,8 +80,8 @@ function isCloudflareChallenge(html: string) {
   return /just a moment/i.test(html) || /challenges\.cloudflare\.com/i.test(html) || /cf[_-]chl/i.test(html);
 }
 
-async function fetchEthHtml() {
-  const response = await fetch(FARSIDE_ETH_URL, {
+async function fetchEthHtml(url: string) {
+  const response = await fetch(url, {
     headers: {
       "User-Agent": "MarketRegimeDashboard/1.0 (+https://market-lab.local)",
       Accept: "text/html",
@@ -99,7 +102,7 @@ async function fetchEthHtml() {
   return html;
 }
 
-function parseEthFlowRows(html: string): ParsedEthFlowTable {
+function parseEthFlowRows(html: string, sourceUrl: string): ParsedEthFlowTable {
   const tableMatches = html.match(/<table[\s\S]*?<\/table>/gi) ?? [];
   const fundColumns = expectedFundColumns();
 
@@ -155,6 +158,7 @@ function parseEthFlowRows(html: string): ParsedEthFlowTable {
         rows,
         columns: headers,
         calculatedTotal: rows.some((row) => row.calculatedTotal),
+        sourceUrl,
       };
     }
   }
@@ -267,6 +271,22 @@ function classifyReading(latestTotalNetFlow: number | null, rolling5dNetFlow: nu
   };
 }
 
+async function getParsedEthFlowTable() {
+  const errors: string[] = [];
+
+  for (const url of FARSIDE_ETH_URLS) {
+    try {
+      const html = await fetchEthHtml(url);
+      return parseEthFlowRows(html, url);
+    } catch (error) {
+      const message = error instanceof Error ? error.message : "error desconocido";
+      errors.push(`${url}: ${message}`);
+    }
+  }
+
+  throw new Error(errors.join(" | "));
+}
+
 function buildEthFlowsFromRows(parsed: ParsedEthFlowTable): BtcEtfFlowsData {
   const latest = parsed.rows[0];
   const rolling5dNetFlow = sumRows(parsed.rows, 5);
@@ -279,7 +299,7 @@ function buildEthFlowsFromRows(parsed: ParsedEthFlowTable): BtcEtfFlowsData {
 
   return {
     sourceName: "Farside Investors",
-    sourceUrl: FARSIDE_ETH_URL,
+    sourceUrl: parsed.sourceUrl,
     lastUpdated: `Última actualización disponible: ${latest.date}`,
     updateFrequency: "Diaria / según disponibilidad de la fuente",
     dataStatus: Date.now() - latest.timestamp > 4 * 24 * 60 * 60 * 1000 ? "delayed" : "automated",
@@ -385,8 +405,7 @@ function buildModuleFromFlows(flows: BtcEtfFlowsData): DashboardModuleData {
 
 export async function getEthEtfFlowsData(): Promise<BtcEtfFlowsDashboardData> {
   try {
-    const html = await fetchEthHtml();
-    const parsed = parseEthFlowRows(html);
+    const parsed = await getParsedEthFlowTable();
     const flows = buildEthFlowsFromRows(parsed);
     return { flows, module: buildModuleFromFlows(flows) };
   } catch (error) {

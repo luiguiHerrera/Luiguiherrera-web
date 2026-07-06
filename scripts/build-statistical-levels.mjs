@@ -58,6 +58,7 @@ const universe = [
   ["DIA", "SPDR Dow Jones Industrial Average ETF", "Índices / ETFs", "dia.us", "DIA"],
   ["VOO", "Vanguard S&P 500 ETF", "Índices / ETFs", "voo.us", "VOO"],
   ["RSP", "Invesco S&P 500 Equal Weight ETF", "Índices / ETFs", "rsp.us", "RSP"],
+  ["UUP", "Invesco DB US Dollar Index Bullish Fund", "Índices / ETFs", "uup.us", "UUP"],
   ["TLT", "iShares 20+ Year Treasury Bond ETF", "Bonos", "tlt.us", "TLT"],
   ["IEF", "iShares 7-10 Year Treasury Bond ETF", "Bonos", "ief.us", "IEF"],
   ["SHY", "iShares 1-3 Year Treasury Bond ETF", "Bonos", "shy.us", "SHY"],

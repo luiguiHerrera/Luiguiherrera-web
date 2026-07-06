@@ -7,6 +7,7 @@ export const statisticalAssetUniverse: AssetCatalogItem[] = [
   { ticker: "DIA", name: "SPDR Dow Jones Industrial Average ETF", category: "Índices / ETFs", stooqSymbol: "dia.us" },
   { ticker: "VOO", name: "Vanguard S&P 500 ETF", category: "Índices / ETFs", stooqSymbol: "voo.us" },
   { ticker: "RSP", name: "Invesco S&P 500 Equal Weight ETF", category: "Índices / ETFs", stooqSymbol: "rsp.us" },
+  { ticker: "UUP", name: "Invesco DB US Dollar Index Bullish Fund", category: "Índices / ETFs", stooqSymbol: "uup.us" },
   { ticker: "TLT", name: "iShares 20+ Year Treasury Bond ETF", category: "Bonos", stooqSymbol: "tlt.us" },
   { ticker: "IEF", name: "iShares 7-10 Year Treasury Bond ETF", category: "Bonos", stooqSymbol: "ief.us" },
   { ticker: "SHY", name: "iShares 1-3 Year Treasury Bond ETF", category: "Bonos", stooqSymbol: "shy.us" },

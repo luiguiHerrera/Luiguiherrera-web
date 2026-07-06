@@ -4,7 +4,6 @@ import { AutomaticMarketReadings } from "@/components/reports/AutomaticMarketRea
 import { buildWeeklyReportData } from "@/lib/reports/build-weekly-report-data";
 import { breadthProxyPlanText } from "@/lib/market/breadth-proxies";
 import { jpmSpxLevelsContext } from "@/lib/market/jpm-spx-levels";
-import { optionsProxyContext } from "@/lib/market/options-proxies";
 import { activeMarketReport, getReportsByMonth } from "@/lib/reports/market-reports";
 import type { WeeklyReportData } from "@/lib/reports/build-weekly-report-data";
 import type { MarketReport, MarketReportWatchItem } from "@/lib/reports/market-reports";
@@ -337,6 +336,10 @@ function getWatchStatuses(data: WeeklyReportData): Record<string, { text: string
   const oilText = usoLevel
     ? `USO como proxy líquido de petróleo. No equivale al spot exacto ni a futuros individuales. Percentil ${formatStat(usoLevel.percentile, 1)}, z-score ${formatStat(usoLevel.zScore, 2)}, distancia a media larga ${formatDashboardPercent(usoLevel.distanceToLongAverage)}.`
     : undefined;
+  const uupLevel = statsByTicker.get("UUP");
+  const dollarText = uupLevel
+    ? `UUP como proxy líquido del dólar. Retorno 1W ${formatDashboardPercent(uupLevel.returns["1W"])}; distancia a media larga ${formatDashboardPercent(uupLevel.distanceToLongAverage)}.`
+    : "No hay fuente de dólar integrada en el snapshot vigente. Pendiente: UUP/DXY.";
   const semisSpecific = data.statisticalLevels.find((asset) => ["SMH", "SOXX"].includes(asset.ticker));
   const semisText = semisSpecific
     ? `${semisSpecific.ticker}: percentil ${formatStat(semisSpecific.percentile, 1)}, z-score ${formatStat(semisSpecific.zScore, 2)}, distancia a media larga ${formatDashboardPercent(semisSpecific.distanceToLongAverage)}.`
@@ -364,10 +367,10 @@ function getWatchStatuses(data: WeeklyReportData): Record<string, { text: string
   const sectorsNegative = data.sectors.data?.sectors.filter((sector) => (sector.return1w ?? 0) < 0).length ?? null;
   const sectorsOverLongAverage = sectorStats.filter((asset) => (asset.distanceToLongAverage ?? -Infinity) > 0).length;
   const relativeRspText = rspLevel && spyLevel
-    ? `RSP/SPY: 5D ${formatDashboardPercent(rspLevel.returns["1W"])} vs ${formatDashboardPercent(spyLevel.returns["1W"])}, 1M ${formatDashboardPercent(rspLevel.returns["1M"])} vs ${formatDashboardPercent(spyLevel.returns["1M"])}.`
+    ? `RSP vs SPY 1W: ${formatPercentagePoints(rspLevel.returns["1W"], spyLevel.returns["1W"])} pp.`
     : "RSP/SPY pendiente o no disponible en snapshot.";
   const relativeIwmText = iwmLevel && spyLevel
-    ? `IWM/SPY: 5D ${formatDashboardPercent(iwmLevel.returns["1W"])} vs ${formatDashboardPercent(spyLevel.returns["1W"])}, 1M ${formatDashboardPercent(iwmLevel.returns["1M"])} vs ${formatDashboardPercent(spyLevel.returns["1M"])}.`
+    ? `IWM vs SPY 1W: ${formatPercentagePoints(iwmLevel.returns["1W"], spyLevel.returns["1W"])} pp.`
     : "IWM/SPY pendiente o no disponible en snapshot.";
   const breadthText = [
     `Lectura proxy de amplitud con ETFs líquidos; no sustituye advance/decline oficial por componente. ${breadthProxyPlanText()}.`,
@@ -379,7 +382,7 @@ function getWatchStatuses(data: WeeklyReportData): Record<string, { text: string
     sectorStats.length ? `Sectores sobre media larga: ${sectorsOverLongAverage}/${sectorStats.length}.` : "Sectores sobre media larga pendientes.",
   ].join(" ");
   const jpmSpxText = `${jpmSpxLevelsContext.statusText} ${jpmSpxLevelsContext.clarification}`;
-  const optionsText = `${optionsProxyContext.statusText} ${optionsProxyContext.proxyClarification}`;
+  const optionsText = `${data.optionsProxy.statusText} ${data.optionsProxy.proxyClarification}`;
 
   return {
     ...(vixText
@@ -392,13 +395,14 @@ function getWatchStatuses(data: WeeklyReportData): Record<string, { text: string
         }
       : {}),
     ...(techText ? { "tech-flows": { text: techText } } : {}),
+    dollar: { text: dollarText, href: uupLevel ? "/niveles-estadisticos?asset=UUP" : undefined, referenceLabel: uupLevel ? "Niveles estadísticos" : undefined },
     ...(oilText ? { oil: { text: oilText, href: "/niveles-estadisticos?asset=USO", referenceLabel: "Niveles estadísticos" } } : {}),
     "btc-etf-flows": { text: cryptoFlowsText },
     ...(financialText ? { "bank-earnings": { text: financialText, href: "/dashboard", referenceLabel: "Dashboard" } } : {}),
     ...(semisText ? { "semis-earnings": { text: semisText, href: "/dashboard", referenceLabel: "Dashboard" } } : {}),
-    amplitude: { text: breadthText, href: "/niveles-estadisticos?asset=RSP", referenceLabel: "Niveles estadísticos" },
+    breadth: { text: breadthText, href: "/niveles-estadisticos?asset=RSP", referenceLabel: "Niveles estadísticos" },
     levels: { text: levelsText ? `${levelsText} ${jpmSpxText}` : jpmSpxText, href: jpmSpxLevelsContext.sourceUrl, referenceLabel: jpmSpxLevelsContext.sourceLabel },
-    options: { text: optionsText },
+    options: { text: optionsText, href: data.optionsProxy.sourceUrl, referenceLabel: data.optionsProxy.sourceName },
     ...(seasonalityText
       ? { "july-seasonality": { text: seasonalityText, href: "/niveles-estadisticos", referenceLabel: "Niveles estadísticos" } }
       : {}),
@@ -418,6 +422,12 @@ function formatStat(value: number | null | undefined, digits = 1) {
 function formatDashboardPercent(value: number | null | undefined) {
   if (value === null || value === undefined) return "pendiente";
   return `${value > 0 ? "+" : ""}${(value * 100).toFixed(1)}%`;
+}
+
+function formatPercentagePoints(value: number | null | undefined, benchmark: number | null | undefined) {
+  if (value === null || value === undefined || benchmark === null || benchmark === undefined) return "pendiente";
+  const spread = (value - benchmark) * 100;
+  return `${spread > 0 ? "+" : ""}${spread.toFixed(1)}`;
 }
 
 function formatSectorPercent(value: number | null | undefined) {

@@ -41,7 +41,7 @@ export function JpmSpxLevelsPanel({ locale = "es" }: JpmSpxLevelsPanelProps) {
             target="_blank"
             rel="noreferrer"
           >
-            {jpmSpxLevelsContext.sourceLabel}
+            {locale === "en" ? "View indicator on TradingView" : "Ver indicador en TradingView"}
           </a>
         </div>
       </div>
