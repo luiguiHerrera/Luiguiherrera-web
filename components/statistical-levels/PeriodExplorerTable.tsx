@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from "react";
 import { MetricHelpTooltip } from "@/components/ui/MetricHelpTooltip";
+import { displayStatTicker } from "@/lib/statistical-levels/display";
 import type { AssetStatRecord, PeriodExplorerRow, StatisticalFrequency } from "@/lib/statistical-levels/types";
 
 type PeriodExplorerTableProps = {
@@ -115,7 +116,7 @@ export function PeriodExplorerTable({ asset, frequency, locale = "es" }: PeriodE
       <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
         <div>
           <p className="text-xs font-semibold uppercase tracking-[0.18em] text-brass">{locale === "en" ? "Period explorer" : "Explorador de periodos"}</p>
-          <h2 className="mt-1 text-xl font-semibold text-ink">{asset ? asset.ticker : locale === "en" ? "No asset selected" : "Sin activo seleccionado"}</h2>
+          <h2 className="mt-1 text-xl font-semibold text-ink">{asset ? displayStatTicker(asset.ticker) : locale === "en" ? "No asset selected" : "Sin activo seleccionado"}</h2>
         </div>
         <button
           type="button"
@@ -127,7 +128,7 @@ export function PeriodExplorerTable({ asset, frequency, locale = "es" }: PeriodE
       </div>
 
       <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
-        <SummaryItem label={locale === "en" ? "Focus asset" : "Activo foco"} value={asset?.ticker ?? "n/d"} />
+        <SummaryItem label={locale === "en" ? "Focus asset" : "Activo foco"} value={asset?.ticker ? displayStatTicker(asset.ticker) : "n/d"} />
         <SummaryItem label={locale === "en" ? "Frequency" : "Frecuencia"} value={(locale === "en" ? englishFrequencyLabels : frequencyLabels)[frequency]} />
         <SummaryItem label={locale === "en" ? "Periods" : "Periodos"} value={String(rows.length)} />
         <SummaryItem label={locale === "en" ? "Positive / negative" : "Positivos / negativos"} value={`${formatPercent(summary.positiveRate)} / ${formatPercent(summary.negativeRate)}`} />

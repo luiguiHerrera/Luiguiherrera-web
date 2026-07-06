@@ -1,5 +1,6 @@
 import type { AssetStatRecord, ChangeMoveMetric, StatisticalFrequency } from "@/lib/statistical-levels/types";
 import { MetricHelpTooltip } from "@/components/ui/MetricHelpTooltip";
+import { displayStatTicker } from "@/lib/statistical-levels/display";
 
 type MovementSummaryTableProps = {
   asset: AssetStatRecord | null;
@@ -63,7 +64,7 @@ export function MovementSummaryTable({ asset, frequency, locale = "es" }: Moveme
   return (
     <section className="border border-line bg-panel p-4 md:p-5">
       <p className="text-xs font-semibold uppercase tracking-[0.18em] text-brass">{locale === "en" ? "Movement summary" : "Resumen de movimientos"}</p>
-      <h2 className="mt-2 text-xl font-semibold text-ink">{asset ? asset.ticker : locale === "en" ? "No asset selected" : "Sin activo seleccionado"}</h2>
+      <h2 className="mt-2 text-xl font-semibold text-ink">{asset ? displayStatTicker(asset.ticker) : locale === "en" ? "No asset selected" : "Sin activo seleccionado"}</h2>
       <p className="mt-2 max-w-3xl text-sm leading-6 text-muted">
         {locale === "en"
           ? "Historical distribution of period moves. This is a statistical read of past behavior for context."

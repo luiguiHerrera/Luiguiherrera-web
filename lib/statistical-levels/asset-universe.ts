@@ -6,6 +6,7 @@ export const statisticalAssetUniverse: AssetCatalogItem[] = [
   { ticker: "IWM", name: "iShares Russell 2000 ETF", category: "Índices / ETFs", stooqSymbol: "iwm.us" },
   { ticker: "DIA", name: "SPDR Dow Jones Industrial Average ETF", category: "Índices / ETFs", stooqSymbol: "dia.us" },
   { ticker: "VOO", name: "Vanguard S&P 500 ETF", category: "Índices / ETFs", stooqSymbol: "voo.us" },
+  { ticker: "RSP", name: "Invesco S&P 500 Equal Weight ETF", category: "Índices / ETFs", stooqSymbol: "rsp.us" },
   { ticker: "TLT", name: "iShares 20+ Year Treasury Bond ETF", category: "Bonos", stooqSymbol: "tlt.us" },
   { ticker: "IEF", name: "iShares 7-10 Year Treasury Bond ETF", category: "Bonos", stooqSymbol: "ief.us" },
   { ticker: "SHY", name: "iShares 1-3 Year Treasury Bond ETF", category: "Bonos", stooqSymbol: "shy.us" },
@@ -32,12 +33,13 @@ export const statisticalAssetUniverse: AssetCatalogItem[] = [
   { ticker: "ITA", name: "iShares U.S. Aerospace & Defense ETF", category: "Temáticos", stooqSymbol: "ita.us" },
   { ticker: "PAVE", name: "Global X U.S. Infrastructure Development ETF", category: "Temáticos", stooqSymbol: "pave.us" },
   { ticker: "PHO", name: "Invesco Water Resources ETF", category: "Temáticos", stooqSymbol: "pho.us" },
-  { ticker: "BTCUSD", name: "Bitcoin / US Dollar", category: "Cripto", stooqSymbol: "btcusd" },
-  { ticker: "IBIT", name: "iShares Bitcoin Trust ETF", category: "Cripto", stooqSymbol: "ibit.us" },
+  { ticker: "SMH", name: "VanEck Semiconductor ETF", category: "Temáticos", stooqSymbol: "smh.us" },
+  { ticker: "BTCUSD", name: "Bitcoin spot", category: "Cripto", stooqSymbol: "btcusd" },
+  { ticker: "ETHUSD", name: "Ethereum spot", category: "Cripto", stooqSymbol: "ethusd" },
   { ticker: "EWJ", name: "iShares MSCI Japan ETF", category: "Internacional", stooqSymbol: "ewj.us" },
   { ticker: "FXI", name: "iShares China Large-Cap ETF", category: "Internacional", stooqSymbol: "fxi.us" },
   { ticker: "EFA", name: "iShares MSCI EAFE ETF", category: "Internacional", stooqSymbol: "efa.us" },
   { ticker: "EEM", name: "iShares MSCI Emerging Markets ETF", category: "Internacional", stooqSymbol: "eem.us" },
 ];
 
-export const defaultStatisticalSelection = ["SPY", "TLT", "GLD", "BTCUSD", "QQQ"];
+export const defaultStatisticalSelection = ["SPY", "RSP", "TLT", "GLD", "BTCUSD", "ETHUSD"];

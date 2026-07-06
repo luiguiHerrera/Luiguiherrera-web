@@ -11,6 +11,7 @@ export const routePairs = [
   { es: "/recursos", en: "/en/resources" },
   { es: "/dashboard", en: "/en/dashboard" },
   { es: "/niveles-estadisticos", en: "/en/statistical-levels" },
+  { es: "/informes", en: "/en/weekly-report" },
   { es: "/informe-semanal", en: "/en/weekly-report" },
   { es: "/quant-lab", en: "/en/quant-lab" },
   { es: "/protege-tu-dinero", en: "/en/protect-your-money" },

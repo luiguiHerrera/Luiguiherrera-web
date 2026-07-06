@@ -7,7 +7,19 @@ import {
 import type { AssetStatRecord, AssetStatSummary, DailySeasonalityCell, PresidentialCyclePhase } from "@/lib/statistical-levels/types";
 
 const coreEtfs = ["SPY", "QQQ", "DIA", "IWM"];
-const statisticalHighlightTickers = ["SPY", "QQQ", "GLD", "IBIT"];
+const sectorBreadthTickers = ["XLK", "XLF", "XLV", "XLE", "XLY", "XLP", "XLI", "XLB", "XLU", "XLRE", "XLC"];
+const statisticalHighlightTickers = [
+  "SPY",
+  "RSP",
+  "IWM",
+  "GLD",
+  "EWJ",
+  "FXI",
+  "SMH",
+  "BTCUSD",
+  "ETHUSD",
+  ...sectorBreadthTickers,
+];
 
 const roadmapItems = [
   "Inflow/outflow general de ETFs",
@@ -85,6 +97,9 @@ function extensionHighlights(assets: AssetStatSummary[], preferredTickers: strin
       percentile: asset.extension.percentile5Y,
       distanceToLongAverage: asset.distanceToMovingAverages.ma200,
       currentDrawdown: asset.extension.currentDrawdownFull,
+      lastClose: asset.lastClose,
+      lastDate: asset.lastDate,
+      status: asset.status,
     }));
 }
 
@@ -147,6 +162,7 @@ export async function buildWeeklyReportData() {
     },
     flows: {
       btcEtfFlows: dashboard.btcEtfFlows,
+      ethEtfFlows: dashboard.ethEtfFlows,
       generalEtfFlowsStatus: "Pendiente de fuente automatizada clara.",
     },
     statisticalLevels: extensionHighlights(manifest.summaries, statisticalHighlightTickers),

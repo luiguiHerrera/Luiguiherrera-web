@@ -1,4 +1,5 @@
 import type { AssetStatRecord, KeyStatisticalLevelSet } from "@/lib/statistical-levels/types";
+import { displayStatTicker } from "@/lib/statistical-levels/display";
 
 type KeyStatisticalLevelsPanelProps = {
   asset: AssetStatRecord | null;
@@ -63,7 +64,7 @@ function translateLevelText(value: string, locale: "es" | "en") {
 
 function translateLocation(value: string, kind: "weekly" | "monthly", locale: "es" | "en") {
   if (locale === "es") return value;
-  const spanishPeriod = kind === "weekly" ? "semanal" : "mensual";
+  const spanishPeriod = kind === "weekly" ? "por semana" : "mensual";
   const englishPeriod = kind === "weekly" ? "weekly" : "monthly";
   return value
     .replace(`Por encima de extensión ${spanishPeriod} extrema`, `Above the extreme ${englishPeriod} extension`)
@@ -87,7 +88,7 @@ function LevelLadder({ data, kind, locale, ticker }: { data: KeyStatisticalLevel
         priceScale: "Price-ordered scale",
       }
     : {
-        weeklyLevels: "Niveles semanales",
+        weeklyLevels: "Niveles por semana",
         monthlyLevels: "Niveles mensuales",
         currentOpen: "Apertura actual",
         open: "Apertura",
@@ -243,7 +244,7 @@ export function KeyStatisticalLevelsPanel({ asset, frequency, locale = "es" }: K
       <div className="flex flex-col gap-2 md:flex-row md:items-end md:justify-between">
         <div>
           <p className="text-xs font-semibold uppercase tracking-[0.16em] text-brass">{locale === "en" ? "Key statistical levels" : "Niveles estadísticos clave"}</p>
-          <h2 className="mt-1 text-xl font-semibold text-ink">{asset ? asset.ticker : locale === "en" ? "No asset selected" : "Sin activo seleccionado"}</h2>
+          <h2 className="mt-1 text-xl font-semibold text-ink">{asset ? displayStatTicker(asset.ticker) : locale === "en" ? "No asset selected" : "Sin activo seleccionado"}</h2>
         </div>
         <p className="max-w-xl text-sm leading-6 text-muted">
           {locale === "en"

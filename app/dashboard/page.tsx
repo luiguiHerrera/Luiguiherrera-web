@@ -35,7 +35,7 @@ export default async function DashboardPage() {
 }
 
 export async function DashboardContent({ locale = "es" }: { locale?: "es" | "en" }) {
-  const { btcEtfFlows, crossSignalRadar, dashboardModules, fedWatch, quantRisk, regimeSummary, sectorRotation, vix, vixTermStructure } = await getDashboardData();
+  const { btcEtfFlows, crossSignalRadar, dashboardModules, ethEtfFlows, fedWatch, quantRisk, regimeSummary, sectorRotation, vix, vixTermStructure } = await getDashboardData();
   const remainingModules = dashboardModules.filter((module) => module.id !== "rates" && module.id !== "sectors" && module.id !== "vix" && module.id !== "btc-flows");
   const biasLabels = locale === "en" ? englishRiskBiasLabels : riskBiasLabels;
   const t = (value: string | null | undefined) => locale === "en" ? translateDashboardText(value) : value ?? "";
@@ -78,7 +78,7 @@ export async function DashboardContent({ locale = "es" }: { locale?: "es" | "en"
         eyebrow: "Lectura de régimen",
         title: "Market Regime Dashboard",
         subtitle: "No elegimos activos ni momentos de ejecución. Te ayudamos a ordenar volatilidad, rotación y flujos.",
-        disclaimer: "Esta lectura no anticipa el mercado. Resume datos públicos para entender el contexto.",
+        disclaimer: "Esta lectura no anticipa el mercado. Resume datos de fuentes abiertas para entender el contexto.",
         integrated: "Régimen integrado",
         composite: "Lectura compuesta del mercado",
         currentRegime: "Régimen actual",
@@ -208,6 +208,7 @@ export async function DashboardContent({ locale = "es" }: { locale?: "es" | "en"
         {vix ? <VixModule data={vix} /> : null}
         {vixTermStructure ? <VixTermStructureModule data={vixTermStructure} /> : null}
         {btcEtfFlows ? <BtcEtfFlowsModule data={btcEtfFlows} /> : null}
+        {ethEtfFlows ? <BtcEtfFlowsModule assetLabel="ETH" data={ethEtfFlows} /> : null}
         {remainingModules.map((module) => <DashboardModule key={module.id} {...module} locale={locale} />)}
       </div>
 

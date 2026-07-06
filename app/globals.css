@@ -71,19 +71,15 @@ th {
   background: rgba(11, 52, 54, 0.16);
 }
 
-.july-report-viewport {
-  max-width: 100%;
-  overflow-wrap: anywhere;
-}
-
-@media (max-width: 639px) {
-  .july-report-viewport {
-    max-width: min(358px, calc(100dvw - 2rem));
-    width: min(358px, calc(100dvw - 2rem));
-  }
-}
-
 .print-only {
+  display: none;
+}
+
+details[open] .details-open-label {
+  display: none;
+}
+
+details:not([open]) .details-close-label {
   display: none;
 }
 

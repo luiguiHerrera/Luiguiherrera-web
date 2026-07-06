@@ -1,5 +1,6 @@
 import type { AssetStatRecord, StatisticalFrequency, StatisticalWindow } from "@/lib/statistical-levels/types";
 import { MetricHelpTooltip } from "@/components/ui/MetricHelpTooltip";
+import { displayStatTicker } from "@/lib/statistical-levels/display";
 
 type LabOverviewStripProps = {
   assets: AssetStatRecord[];
@@ -80,7 +81,7 @@ export function LabOverviewStrip({ assets, frequency, locale = "es", window }: L
               <MetricHelpTooltip label={item.label} text={item.help} />
             </p>
             <div className="mt-3 flex items-end justify-between gap-3">
-              <span className="text-xl font-semibold text-ink">{active?.asset.ticker ?? "n/d"}</span>
+              <span className="text-xl font-semibold text-ink">{active?.asset.ticker ? displayStatTicker(active.asset.ticker) : "n/d"}</span>
               <span className="text-sm font-semibold text-muted">{item.value}</span>
             </div>
             <div className="mt-3 h-1.5 bg-white">

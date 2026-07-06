@@ -423,7 +423,7 @@ export async function getSectorEtfsData(): Promise<SectorEtfsResult> {
       sourceName: "Alpha Vantage: precios diarios de ETFs sectoriales",
       sourceUrl: "https://www.alphavantage.co/documentation/",
       lastUpdated: `Automático con fuente pública: ${latestDate}`,
-      updateFrequency: "Automática server-side con caché diaria; revisión semanal sugerida",
+      updateFrequency: "Automática server-side con caché diaria; revisión periódica sugerida",
       dataStatus: "automated",
       reliabilityNote: "La rotación se estima mediante ETFs sectoriales líquidos como proxies. Puede diferir de índices o grupos sectoriales de otros proveedores.",
       sectors,

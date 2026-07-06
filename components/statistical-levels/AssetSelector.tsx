@@ -1,6 +1,7 @@
 "use client";
 
 import type { AssetCatalogItem, AssetCategory } from "@/lib/statistical-levels/types";
+import { displayStatName, displayStatTicker } from "@/lib/statistical-levels/display";
 
 type AssetSelectorProps = {
   catalog: AssetCatalogItem[];
@@ -35,7 +36,11 @@ const categoryLabels: Record<"es" | "en", Record<AssetCategory, string>> = {
 
 export function AssetSelector({ catalog, locale = "es", query, selected, setQuery, selectAsset }: AssetSelectorProps) {
   const normalized = query.trim().toLowerCase();
-  const filtered = catalog.filter((asset) => `${asset.ticker} ${asset.name} ${asset.category}`.toLowerCase().includes(normalized));
+  const filtered = catalog.filter((asset) =>
+    `${asset.ticker} ${asset.name} ${asset.category} ${displayStatTicker(asset.ticker)} ${displayStatName(asset.ticker, asset.name)}`
+      .toLowerCase()
+      .includes(normalized),
+  );
   const activeAsset = catalog.find((asset) => selected.includes(asset.ticker));
   const copy = locale === "en"
     ? {
@@ -61,7 +66,9 @@ export function AssetSelector({ catalog, locale = "es", query, selected, setQuer
         <div>
           <p className="text-xs font-semibold uppercase tracking-[0.18em] text-brass">{copy.focusAsset}</p>
           <h2 className="mt-1 text-xl font-semibold text-ink">
-            {activeAsset ? `${activeAsset.ticker} · ${activeAsset.name}` : selected[0] ?? "Sin activo seleccionado"}
+            {activeAsset
+              ? `${displayStatTicker(activeAsset.ticker)} · ${displayStatName(activeAsset.ticker, activeAsset.name)}`
+              : selected[0] ? displayStatTicker(selected[0]) : "Sin activo seleccionado"}
           </h2>
           <p className="mt-1 text-sm leading-6 text-muted">{copy.loadNote}</p>
         </div>
@@ -102,7 +109,7 @@ export function AssetSelector({ catalog, locale = "es", query, selected, setQuer
                         title={asset.name}
                         className={`border px-2.5 py-1.5 text-xs font-semibold transition md:px-3 md:py-2 md:text-sm ${active ? "border-petrol bg-[#eef3f2] text-petrol" : "border-line bg-panelSoft text-muted hover:border-ink hover:text-ink"}`}
                       >
-                        {asset.ticker}
+                        {displayStatTicker(asset.ticker)}
                       </button>
                     );
                   })}

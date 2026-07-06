@@ -77,7 +77,8 @@ const homePathways = [
 const statisticalLevelsPreview = [
   { ticker: "SPY", percentile: 72, zScore: "+0.8", distance: "+6.4%" },
   { ticker: "GLD", percentile: 84, zScore: "+1.2", distance: "+9.1%" },
-  { ticker: "IBIT", percentile: 38, zScore: "-0.3", distance: "-2.6%" },
+  { ticker: "BTC/USDT", percentile: 38, zScore: "-0.3", distance: "-2.6%" },
+  { ticker: "ETH/USDT", percentile: null, zScore: "n/d", distance: "n/d" },
 ];
 
 function formatPreviewPercent(value: number) {
@@ -324,10 +325,10 @@ function StatisticalLevelsMiniPanel() {
           <div key={asset.ticker} className="grid gap-2 border-b border-line/70 pb-3 last:border-b-0 last:pb-0">
             <div className="flex items-center justify-between gap-4">
               <span className="font-semibold text-ink">{asset.ticker}</span>
-              <span className="text-xs text-muted">Percentile {asset.percentile}</span>
+              <span className="text-xs text-muted">Percentile {asset.percentile ?? "n/d"}</span>
             </div>
             <div className="h-1.5 overflow-hidden rounded-full border border-line bg-panelSoft">
-              <div className="h-full bg-sage" style={{ width: `${asset.percentile}%` }} />
+              <div className="h-full bg-sage" style={{ width: `${asset.percentile ?? 0}%` }} />
             </div>
             <div className="grid grid-cols-2 gap-3 text-xs text-muted">
               <span>z-score <strong className="font-semibold text-ink">{asset.zScore}</strong></span>

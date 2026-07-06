@@ -252,7 +252,7 @@ function buildDataFromContracts(contracts: CboeSettlementRow[], settlementDate: 
     whatItDoesNotMean:
       "La estructura temporal del VIX no predice por sí sola la dirección del mercado y no representa una señal de compra o venta.",
     reliabilityNote:
-      "Settlements diarios oficiales de Cboe CFE. La lectura usa los tres primeros contratos mensuales VX disponibles y excluye contratos semanales.",
+      "Settlements diarios oficiales de Cboe CFE. La lectura usa los tres primeros contratos mensuales VX disponibles y excluye contratos de vencimiento corto.",
   };
 }
 

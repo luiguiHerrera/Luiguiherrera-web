@@ -16,7 +16,7 @@ export const es = {
     marketItems: [
       { href: "/dashboard", label: "Dashboard de régimen", shortLabel: "Dashboard", description: "Lectura diaria de volatilidad, rotación y flujos." },
       { href: "/niveles-estadisticos", label: "Niveles estadísticos", shortLabel: "Niveles", description: "Precio, percentiles, estacionalidad y contexto histórico." },
-      { href: "/informe-semanal", label: "Informe semanal", shortLabel: "Informe semanal", description: "Resumen editorial del cierre de mercado." },
+      { href: "/informes", label: "Informes de mercado", shortLabel: "Informes", description: "Lecturas editoriales de mercado, flujos y riesgo." },
     ],
     startItems: [
       { href: "/empezar", label: "Empezar simple", shortLabel: "Simple", description: "Camino guiado para ordenar lo esencial." },
@@ -29,7 +29,7 @@ export const es = {
     ],
     investorItems: [
       { href: "/inversionista", label: "Modo inversionista", shortLabel: "Modo", description: "Camino avanzado para reportes, métricas e investigación." },
-      { href: "/informe-semanal", label: "Informe semanal", shortLabel: "Informe", description: "Lectura editorial de régimen, ETFs, sectores, niveles y estacionalidad." },
+      { href: "/informes", label: "Informes de mercado", shortLabel: "Informes", description: "Lecturas de mercado, flujos, riesgo y activos multi-mercado." },
       { href: "/dashboard", label: "Dashboard", shortLabel: "Dashboard", description: "Volatilidad, rotación sectorial, flujos y lecturas cruzadas." },
       { href: "/mercado", label: "Mercado", shortLabel: "Mercado", description: "Contexto de mercado y lecturas públicas." },
       { href: "/niveles-estadisticos", label: "Niveles estadísticos", shortLabel: "Niveles", description: "Percentiles, z-scores, extensiones, drawdowns y estacionalidad." },

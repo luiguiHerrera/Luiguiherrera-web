@@ -72,7 +72,7 @@ export function buildQuantRiskData(sectors: SectorEtfSnapshot[], metrics: Sector
     sourceName: "Cálculos propios sobre ETFs sectoriales vía proveedor de precios",
     sourceUrl: "https://www.alphavantage.co/documentation/",
     lastUpdated,
-    updateFrequency: "Automática server-side con caché diaria; revisión semanal sugerida",
+    updateFrequency: "Automática server-side con caché diaria; revisión periódica sugerida",
     dataStatus: "automated",
     reliabilityNote: "Los modelos cuantitativos son sensibles a ventanas, supuestos y calidad de datos. No predicen dirección de mercado.",
     ewmaVolAnnualized: toPercent(ewmaVol),

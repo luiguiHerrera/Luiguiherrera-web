@@ -148,7 +148,7 @@ export function WeeklyReport({ data, locale = "es" }: WeeklyReportProps) {
         lowSample: "Not enough observations to highlight days.",
       }
     : {
-        report: "Informe semanal",
+        report: "Lectura automática",
         closeRead: "Lectura de cierre",
         date: "Fecha",
         week: "Semana",
@@ -203,7 +203,7 @@ export function WeeklyReport({ data, locale = "es" }: WeeklyReportProps) {
         context: "Contexto",
         risk: "Riesgo",
         process: "Proceso",
-        contextBody: "El régimen marca el tono de la semana y ayuda a ordenar volatilidad, rotación y flujos en una lectura común.",
+        contextBody: "El régimen marca el tono del periodo y ayuda a ordenar volatilidad, rotación y flujos en una lectura común.",
         riskBody: "La prioridad es cuidar el margen de error cuando varias lecturas empiezan a perder alineación.",
         processBody: "Mantener proceso significa volver al mapa: régimen, niveles, flujo y estacionalidad antes de ampliar lectura.",
         empty: "Sin lecturas destacadas en este bloque.",

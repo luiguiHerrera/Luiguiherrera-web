@@ -7,6 +7,7 @@ import { translateDashboardText } from "@/lib/dashboard/translate-dashboard-copy
 import type { BtcEtfFlowPoint, BtcEtfFlowsDashboardData, BtcEtfFlowsData, BtcEtfFundFlow } from "@/lib/dashboard/types";
 
 type BtcEtfFlowsModuleProps = {
+  assetLabel?: "BTC" | "ETH";
   data: BtcEtfFlowsDashboardData;
 };
 
@@ -145,7 +146,7 @@ function FlowBarChart({ history, locale = "es" }: { history: BtcEtfFlowPoint[]; 
   );
 }
 
-export function BtcEtfFlowsModule({ data }: BtcEtfFlowsModuleProps) {
+export function BtcEtfFlowsModule({ assetLabel = "BTC", data }: BtcEtfFlowsModuleProps) {
   const locale = usePathname().startsWith("/en") ? "en" : "es";
   const t = (value: string | null | undefined) => locale === "en" ? translateDashboardText(value) : value ?? "";
   const flows = data.flows;
@@ -160,7 +161,7 @@ export function BtcEtfFlowsModule({ data }: BtcEtfFlowsModuleProps) {
 
   return (
     <ExpandableInsightCard
-      eyebrow="BTC ETF flows"
+      eyebrow={`${assetLabel} ETF flows`}
       title={locale === "en" ? "ETF flow pressure" : "Presión de flujos vía ETFs"}
       reading={t(flows.readingSubtext)}
       status={t(dataStatusLabels[flows.dataStatus])}

@@ -31,7 +31,7 @@ function periodLabel(frequency: StatisticalFrequency, locale: "es" | "en") {
     return "monthly periods";
   }
   if (frequency === "daily") return "periodos diarios";
-  if (frequency === "weekly") return "periodos semanales";
+  if (frequency === "weekly") return "periodos por semana";
   return "periodos mensuales";
 }
 

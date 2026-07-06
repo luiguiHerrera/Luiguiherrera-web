@@ -37,7 +37,7 @@ export const dashboardModules: DashboardModuleData[] = [
     status: "Datos manuales",
     sourceName: "ETFs sectoriales SPDR como proxies conceptuales",
     lastUpdated: "Manual: 2026-06-07",
-    updateFrequency: "Cuando se automatice: cierre diario o semanal",
+    updateFrequency: "Cuando se automatice: cierre diario o periódico",
     dataStatus: "manual",
     reliabilityNote: "Aproximación por proxies sectoriales; no sustituye un análisis completo de composición, factores o liquidez.",
     observedData: [
@@ -92,7 +92,7 @@ export const dashboardModules: DashboardModuleData[] = [
     reliabilityNote: "Datos manuales de ejemplo para representar el formato; revisar metodología y cobertura antes de automatizar.",
     observedData: [
       ["Flujo diario neto", "+120 M USD"],
-      ["Flujo semanal neto", "+410 M USD"],
+      ["Flujo neto del periodo", "+410 M USD"],
       ["Flujo 20 días", "+1.8 B USD"],
       ["Racha", "3 días de entradas"],
       ["Principales contribuyentes", "IBIT +95 M, FBTC +40 M, salidas menores en otros vehículos"],

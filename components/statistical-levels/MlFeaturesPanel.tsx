@@ -62,7 +62,7 @@ export function MlFeaturesPanel({ assets, frequency, focusAsset }: MlFeaturesPan
         <SummaryItem label="Variables base" value={String(featureCount)} />
         <SummaryItem label="Frecuencia" value={frequencyLabels[frequency]} />
         <SummaryItem label="Activo foco" value={focusAsset?.ticker ?? "n/d"} />
-        <SummaryItem label="Niveles semanales" value={weekly?.available ? `${formatPercent(weekly.avgHigherExtension)} / ${formatPercent(weekly.avgLowerExtension)}` : "n/d"} />
+        <SummaryItem label="Niveles por semana" value={weekly?.available ? `${formatPercent(weekly.avgHigherExtension)} / ${formatPercent(weekly.avgLowerExtension)}` : "n/d"} />
         <SummaryItem label="Niveles mensuales" value={monthly?.available ? `${formatPercent(monthly.avgHigherExtension)} / ${formatPercent(monthly.avgLowerExtension)}` : "n/d"} />
       </div>
 
@@ -100,7 +100,7 @@ export function MlFeaturesPanel({ assets, frequency, focusAsset }: MlFeaturesPan
           </div>
           {focusAsset ? (
             <div className="mt-5 grid gap-3 md:grid-cols-2">
-              <LevelFeatureSummary title="Variables de nivel semanal" values={focusAsset.keyStatisticalLevels.weekly} keys={["WSHE", "WAHE", "WALE", "WSLE"]} />
+              <LevelFeatureSummary title="Variables de nivel por semana" values={focusAsset.keyStatisticalLevels.weekly} keys={["WSHE", "WAHE", "WALE", "WSLE"]} />
               <LevelFeatureSummary title="Variables de nivel mensual" values={focusAsset.keyStatisticalLevels.monthly} keys={["MSHE", "MAHE", "MALE", "MSLE"]} />
             </div>
           ) : null}

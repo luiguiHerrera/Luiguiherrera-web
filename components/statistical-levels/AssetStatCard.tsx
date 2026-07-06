@@ -2,6 +2,7 @@ import { RiskPill } from "@/components/ui/RiskPill";
 import { MetricHelpTooltip } from "@/components/ui/MetricHelpTooltip";
 import { PercentileRangeBar } from "@/components/statistical-levels/PercentileRangeBar";
 import { StatBandsChart } from "@/components/statistical-levels/StatBandsChart";
+import { displayStatName, displayStatTicker } from "@/lib/statistical-levels/display";
 import type { AssetStatRecord, StatisticalFrequency, StatisticalWindow } from "@/lib/statistical-levels/types";
 
 type AssetStatCardProps = {
@@ -112,10 +113,10 @@ export function AssetStatCard({ asset, frequency, locale = "es", window }: Asset
       <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
         <div>
           <div className="flex flex-wrap items-center gap-3">
-            <h3 className="text-xl font-semibold text-ink">{asset.ticker}</h3>
+            <h3 className="text-xl font-semibold text-ink">{displayStatTicker(asset.ticker)}</h3>
             <RiskPill label={statusLabel(asset.status, locale)} tone={statusTone(asset.status)} />
           </div>
-          <p className="mt-1 text-sm leading-6 text-muted">{asset.name}</p>
+          <p className="mt-1 text-sm leading-6 text-muted">{displayStatName(asset.ticker, asset.name)}</p>
           <p className="mt-1 text-xs uppercase tracking-[0.14em] text-brass">{asset.category} · {(locale === "en" ? englishFrequencyLabels : frequencyLabels)[frequency]}</p>
         </div>
         <div className="text-left sm:text-right">
@@ -182,7 +183,7 @@ export function AssetStatCard({ asset, frequency, locale = "es", window }: Asset
               .replace("Datos limitados para frecuencia", "Limited data for")
               .replace("Sin datos suficientes para frecuencia", "Not enough data for")
               .replace("diaria", "daily frequency")
-              .replace("semanal", "weekly frequency")
+              .replace("por semana", "weekly frequency")
               .replace("mensual", "monthly frequency")
           : frequencyData.statusNote}
       </p>

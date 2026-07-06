@@ -303,4 +303,5 @@ export type DashboardData = {
   vix: VixDashboardData | null;
   vixTermStructure: VixTermStructureData | null;
   btcEtfFlows: BtcEtfFlowsDashboardData | null;
+  ethEtfFlows: BtcEtfFlowsDashboardData | null;
 };

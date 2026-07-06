@@ -16,10 +16,10 @@ const marketTools = [
     meta: "Laboratorio",
   },
   {
-    title: "Informe semanal",
-    href: "/informe-semanal",
-    description: "Una lectura editorial de cierre con lo que impulsó y frenó al mercado.",
-    meta: "Reporte",
+    title: "Informes de mercado",
+    href: "/informes",
+    description: "Lecturas editoriales con flujos, riesgo, activos y módulos automáticos integrados.",
+    meta: "Informes",
   },
 ];
 

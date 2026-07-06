@@ -54,6 +54,12 @@ function monthFromGeneratedAt(generatedAt: string) {
   return Number.isFinite(month) && month >= 1 && month <= 12 ? month : 1;
 }
 
+function dayFromGeneratedAt(generatedAt: string) {
+  const parsed = new Date(`${generatedAt}T00:00:00Z`);
+  const day = parsed.getUTCDate();
+  return Number.isFinite(day) && day >= 1 && day <= 31 ? day : null;
+}
+
 function formatPercent(value: number | null, digits = 2) {
   if (value === null) return "n/d";
   return `${value > 0 ? "+" : ""}${(value * 100).toFixed(digits)}%`;
@@ -125,6 +131,8 @@ export function AdvancedSeasonalityPanel({ data, frequency, generatedAt, locale 
   const [phase, setPhase] = useState<PresidentialCyclePhase>("all");
   const [metric, setMetric] = useState<SeasonalityMetric>("averageReturn");
   const [month, setMonth] = useState(monthFromGeneratedAt(generatedAt));
+  const currentMonth = monthFromGeneratedAt(generatedAt);
+  const currentDay = dayFromGeneratedAt(generatedAt);
   const metricOptions = locale === "en" ? englishMetricOptions : spanishMetricOptions;
   const months = locale === "en" ? englishMonthNames : monthNames;
   const windowData = data?.windows[window] ?? (window === "All" ? data?.windows.Full : null);
@@ -169,7 +177,7 @@ export function AdvancedSeasonalityPanel({ data, frequency, generatedAt, locale 
         week: "Week",
       }
     : {
-        eyebrow: frequency === "monthly" ? "Estacionalidad mensual" : frequency === "weekly" ? "Estacionalidad semanal" : "Estacionalidad diaria",
+        eyebrow: frequency === "monthly" ? "Estacionalidad mensual" : frequency === "weekly" ? "Estacionalidad por semana" : "Estacionalidad diaria",
         title: "Patrones históricos por calendario",
         reading: frequency === "monthly"
           ? "Patrones históricos por mes calendario del activo seleccionado."
@@ -192,7 +200,7 @@ export function AdvancedSeasonalityPanel({ data, frequency, generatedAt, locale 
         lowSample: "Muestra baja",
         emptyWeekly: "No hay muestra suficiente para esta combinación de ventana, ciclo y mes.",
         emptyGeneral: "Historial insuficiente para construir estacionalidad avanzada de este activo.",
-        methodology: "Semanas agregadas por fecha de cierre semanal. Semana 1 = días 1-7 del mes; Semana 5 = días 29-31.",
+        methodology: "Semanas agregadas por fecha de cierre de semana. Semana 1 = días 1-7 del mes; Semana 5 = días 29-31.",
         footer: "Promedio y mediana ayudan a separar tendencia histórica de valores extremos. La muestra importa: N bajo requiere lectura prudente.",
         topStrong: "Top 5 fuertes",
         topWeak: "Top 5 débiles",
@@ -206,6 +214,7 @@ export function AdvancedSeasonalityPanel({ data, frequency, generatedAt, locale 
       title={copy.title}
       reading={copy.reading}
       status={ticker}
+      defaultOpen={frequency === "daily"}
       metrics={[
         { label: copy.window, value: window },
         { label: copy.presidentialCycle, value: phaseOptions.find((item) => item.key === phase)?.label ?? "Off" },
@@ -234,7 +243,7 @@ export function AdvancedSeasonalityPanel({ data, frequency, generatedAt, locale 
 
           {frequency === "monthly" ? <MonthlyView cells={cells as CalendarMonthSeasonalityCell[]} locale={locale} metric={metric} /> : null}
           {frequency === "weekly" ? <WeeklyView cells={monthCells as CalendarWeekSeasonalityCell[]} copy={copy} locale={locale} metric={metric} month={month} monthNames={months} /> : null}
-          {frequency === "daily" ? <DailyView cells={cells as CalendarDaySeasonalityCell[]} copy={copy} locale={locale} metric={metric} month={month} monthNames={months} /> : null}
+          {frequency === "daily" ? <DailyView cells={cells as CalendarDaySeasonalityCell[]} copy={copy} currentDay={currentDay} currentMonth={currentMonth} locale={locale} metric={metric} month={month} monthNames={months} /> : null}
 
           <p className="border-t border-line pt-4 text-xs leading-5 text-muted">
             {copy.footer}
@@ -373,6 +382,8 @@ function WeeklyView({
 function DailyView({
   cells,
   copy,
+  currentDay,
+  currentMonth,
   locale,
   metric,
   month,
@@ -380,6 +391,8 @@ function DailyView({
 }: {
   cells: CalendarDaySeasonalityCell[];
   copy: { day: string; emptyGeneral: string; lowSample: string; topStrong: string; topWeak: string };
+  currentDay: number | null;
+  currentMonth: number;
   locale: "es" | "en";
   metric: SeasonalityMetric;
   month: number;
@@ -393,6 +406,39 @@ function DailyView({
   const scale = maxAbs(cells, metric);
   return (
     <div className="grid gap-4">
+      <div className="border border-line bg-panelSoft p-4">
+        <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-[0.14em] text-brass">{monthNames[month - 1]}</p>
+            <h3 className="mt-1 text-base font-semibold text-ink">{locale === "en" ? "Days of month table" : "Tabla de días del mes"}</h3>
+          </div>
+          {currentDay && currentMonth === month ? (
+            <span className="w-fit border border-petrol bg-[#eef3f2] px-3 py-1 text-xs font-semibold uppercase text-petrol">
+              {locale === "en" ? `Today marker: day ${currentDay}` : `Marcador hoy: día ${currentDay}`}
+            </span>
+          ) : null}
+        </div>
+        <div className="mt-4 grid grid-cols-7 gap-1.5">
+          {Array.from({ length: 31 }).map((_, index) => {
+            const day = index + 1;
+            const cell = byKey.get(`${month}-${day}`);
+            const value = metricValue(cell, metric);
+            const isToday = currentMonth === month && currentDay === day;
+            return (
+              <div
+                key={`selected-${month}-${day}`}
+                title={cellTitle(`${day}/${month}`, cell, locale)}
+                className={`relative min-h-16 border px-2 py-2 text-left text-[11px] font-semibold text-ink ${isToday ? "border-petrol shadow-[0_0_0_2px_rgba(11,52,54,0.12)]" : "border-white"}`}
+                style={{ backgroundColor: colorFor(value, metric, scale) }}
+              >
+                <span className="block text-xs">{day}</span>
+                <span className="mt-2 block text-[10px] text-ink">{metric === "sampleSize" ? cell?.sampleSize ?? "n/d" : formatMetric(value, metric)}</span>
+                {isToday ? <span className="absolute right-1 top-1 border border-petrol bg-white px-1 text-[9px] uppercase text-petrol">{locale === "en" ? "Today" : "Hoy"}</span> : null}
+              </div>
+            );
+          })}
+        </div>
+      </div>
       <div className="max-w-full overflow-x-auto [contain:paint]">
         <div className="grid min-w-[1120px] gap-1" style={{ gridTemplateColumns: "3.25rem repeat(31, minmax(2rem, 1fr))" }}>
           <div />

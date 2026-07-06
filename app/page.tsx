@@ -62,7 +62,7 @@ const homePathways = [
     title: "Modo inversionista",
     href: "/inversionista",
     label: "Camino 02",
-    description: "Explora dashboard, informe semanal, niveles, tendencias e investigación quant.",
+    description: "Explora dashboard, informes de mercado, niveles, tendencias e investigación quant.",
     cta: "Entrar al modo inversionista",
   },
 ];
@@ -70,7 +70,8 @@ const homePathways = [
 const statisticalLevelsPreview = [
   { ticker: "SPY", percentile: 72, zScore: "+0.8", distance: "+6.4%" },
   { ticker: "GLD", percentile: 84, zScore: "+1.2", distance: "+9.1%" },
-  { ticker: "IBIT", percentile: 38, zScore: "-0.3", distance: "-2.6%" },
+  { ticker: "BTC/USDT", percentile: 38, zScore: "-0.3", distance: "-2.6%" },
+  { ticker: "ETH/USDT", percentile: null, zScore: "n/d", distance: "n/d" },
 ];
 
 function formatPreviewPercent(value: number) {
@@ -324,10 +325,10 @@ function StatisticalLevelsMiniPanel() {
           <div key={asset.ticker} className="grid gap-2 border-b border-line/70 pb-3 last:border-b-0 last:pb-0">
             <div className="flex items-center justify-between gap-4">
               <span className="font-semibold text-ink">{asset.ticker}</span>
-              <span className="text-xs text-muted">Percentil {asset.percentile}</span>
+              <span className="text-xs text-muted">Percentil {asset.percentile ?? "n/d"}</span>
             </div>
             <div className="h-1.5 overflow-hidden rounded-full border border-line bg-panelSoft">
-              <div className="h-full bg-sage" style={{ width: `${asset.percentile}%` }} />
+              <div className="h-full bg-sage" style={{ width: `${asset.percentile ?? 0}%` }} />
             </div>
             <div className="grid grid-cols-2 gap-3 text-xs text-muted">
               <span>z-score <strong className="font-semibold text-ink">{asset.zScore}</strong></span>
@@ -474,7 +475,7 @@ export default async function Home() {
         <div className="mx-auto grid max-w-7xl gap-3 px-4 py-9 md:grid-cols-4 md:gap-5 md:px-5 md:py-12">
           <Link href="/mercado" className="rounded-[6px] border border-line bg-white/75 p-4 shadow-[0_10px_28px_rgba(11,52,54,0.035)] transition hover:border-petrol md:p-5">
             <p className="text-xs font-semibold uppercase tracking-[0.18em] text-petrol">Mercado</p>
-            <h2 className="mt-3 text-xl font-semibold text-ink">Régimen, niveles e informe semanal</h2>
+            <h2 className="mt-3 text-xl font-semibold text-ink">Régimen, niveles e informes de mercado</h2>
           </Link>
           <Link href="/investigacion/td3" className="rounded-[6px] border border-line bg-white/75 p-4 shadow-[0_10px_28px_rgba(11,52,54,0.035)] transition hover:border-petrol md:p-5">
             <p className="text-xs font-semibold uppercase tracking-[0.18em] text-petrol">Investigación</p>

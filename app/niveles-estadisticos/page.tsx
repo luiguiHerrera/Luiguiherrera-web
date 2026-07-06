@@ -47,7 +47,7 @@ export default async function NivelesEstadisticosPage({ searchParams }: NivelesE
         <div>
           <span className="block text-xs font-semibold uppercase tracking-[0.14em] text-brass">Fuente</span>
           <a href={manifest.sourceUrl} className="mt-1 inline-block font-semibold text-ink underline-offset-4 hover:underline" target="_blank" rel="noreferrer">
-            Datos públicos de mercado procesados en build estático · proveedor según disponibilidad · cálculos propios.
+            Datos de mercado de fuentes abiertas procesados en build estático · proveedor según disponibilidad · cálculos propios.
           </a>
         </div>
         <div>

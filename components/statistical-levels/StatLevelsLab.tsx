@@ -7,12 +7,15 @@ import { AssetSelector } from "@/components/statistical-levels/AssetSelector";
 import { AssetStatCard } from "@/components/statistical-levels/AssetStatCard";
 import { CalendarExtremesPanel } from "@/components/statistical-levels/CalendarExtremesPanel";
 import { KeyStatisticalLevelsPanel } from "@/components/statistical-levels/KeyStatisticalLevelsPanel";
+import { JpmSpxLevelsPanel } from "@/components/statistical-levels/JpmSpxLevelsPanel";
 import { LabOverviewStrip } from "@/components/statistical-levels/LabOverviewStrip";
 import { MovementSummaryTable } from "@/components/statistical-levels/MovementSummaryTable";
 import { OpeningLocationPanel } from "@/components/statistical-levels/OpeningLocationPanel";
 import { PeriodExplorerTable } from "@/components/statistical-levels/PeriodExplorerTable";
 import { ReturnHeatmap } from "@/components/statistical-levels/ReturnHeatmap";
 import { UnderwaterDrawdownChart } from "@/components/statistical-levels/UnderwaterDrawdownChart";
+import { displayStatName, displayStatTicker } from "@/lib/statistical-levels/display";
+import { shouldShowJpmSpxLevels } from "@/lib/market/jpm-spx-levels";
 import type {
   AssetCategory,
   AssetDataStatus,
@@ -92,7 +95,7 @@ function daysSince(dateValue: string | null | undefined) {
 
 const frameTabs: Array<{ key: StatisticalFrequency; label: string; description: string }> = [
   { key: "monthly", label: "Mensual", description: "Niveles de referencia, apertura mensual y contexto de rango." },
-  { key: "weekly", label: "Semanal", description: "Retornos recientes, drawdown y comportamiento semanal." },
+  { key: "weekly", label: "Por semana", description: "Retornos recientes, drawdown y comportamiento por semana." },
   { key: "daily", label: "Diario", description: "Estacionalidad, días del mes y ciclo presidencial." },
 ];
 
@@ -135,7 +138,7 @@ export function StatLevelsLab({ asset, locale: localeProp, manifest, seasonality
       }
     : {
         frameEyebrow: "Marco temporal",
-        frameTitle: "Elige una lectura: mensual, semanal o diaria",
+        frameTitle: "Elige una lectura: mensual, por semana o diaria",
         frameCopy: "Cada pestaña muestra solo el contexto del marco elegido. La ventana mantiene la comparación histórica del activo seleccionado.",
         frequency: "Frecuencia",
         window: "Ventana",
@@ -144,7 +147,7 @@ export function StatLevelsLab({ asset, locale: localeProp, manifest, seasonality
         snapshotNotRecorded: "No registrado en este snapshot",
         staleNote: "Datos pendientes de actualización automática.",
         source: "Fuente",
-        sourceText: "Datos públicos de mercado procesados en build estático · proveedor según disponibilidad · cálculos propios",
+        sourceText: "Datos de mercado de fuentes abiertas procesados en build estático · proveedor según disponibilidad · cálculos propios",
         howToRead: "Cómo leer esta herramienta",
       };
   const localizedFrequencyLabels = locale === "en" ? englishFrequencyLabels : frequencyLabels;
@@ -240,8 +243,9 @@ export function StatLevelsLab({ asset, locale: localeProp, manifest, seasonality
 
       {frequency === "monthly" ? (
         <div className="grid gap-5">
-          <AdvancedSeasonalityPanel data={seasonality} frequency="monthly" generatedAt={manifest.generatedAt} locale={locale} ticker={asset.ticker} />
+          <AdvancedSeasonalityPanel data={seasonality} frequency="monthly" generatedAt={manifest.generatedAt} locale={locale} ticker={displayStatTicker(asset.ticker)} />
           <KeyStatisticalLevelsPanel asset={asset} frequency="monthly" locale={locale} />
+          {shouldShowJpmSpxLevels(asset.ticker) ? <JpmSpxLevelsPanel locale={locale} /> : null}
           <MovementSummaryTable asset={asset} frequency="monthly" locale={locale} />
           <OpeningLocationPanel asset={asset} frequency="monthly" locale={locale} />
           <PeriodExplorerTable asset={asset} frequency="monthly" locale={locale} />
@@ -250,8 +254,9 @@ export function StatLevelsLab({ asset, locale: localeProp, manifest, seasonality
 
       {frequency === "weekly" ? (
         <div className="grid gap-5">
-          <AdvancedSeasonalityPanel data={seasonality} frequency="weekly" generatedAt={manifest.generatedAt} locale={locale} ticker={asset.ticker} />
+          <AdvancedSeasonalityPanel data={seasonality} frequency="weekly" generatedAt={manifest.generatedAt} locale={locale} ticker={displayStatTicker(asset.ticker)} />
           <KeyStatisticalLevelsPanel asset={asset} frequency="weekly" locale={locale} />
+          {shouldShowJpmSpxLevels(asset.ticker) ? <JpmSpxLevelsPanel locale={locale} /> : null}
           <PeriodExplorerTable asset={asset} frequency="weekly" locale={locale} />
           <OpeningLocationPanel asset={asset} frequency="weekly" locale={locale} />
           <MovementSummaryTable asset={asset} frequency="weekly" locale={locale} />
@@ -261,7 +266,8 @@ export function StatLevelsLab({ asset, locale: localeProp, manifest, seasonality
 
       {frequency === "daily" ? (
         <div className="grid gap-5">
-          <AdvancedSeasonalityPanel data={seasonality} frequency="daily" generatedAt={manifest.generatedAt} locale={locale} ticker={asset.ticker} />
+          <AdvancedSeasonalityPanel data={seasonality} frequency="daily" generatedAt={manifest.generatedAt} locale={locale} ticker={displayStatTicker(asset.ticker)} />
+          {shouldShowJpmSpxLevels(asset.ticker) ? <JpmSpxLevelsPanel locale={locale} /> : null}
           <ReturnHeatmap asset={asset} frequency="daily" locale={locale} />
           <CalendarExtremesPanel asset={asset} frequency="daily" locale={locale} />
           <MovementSummaryTable asset={asset} frequency="daily" locale={locale} />
@@ -292,7 +298,7 @@ export function StatLevelsLab({ asset, locale: localeProp, manifest, seasonality
               <p><span className="font-semibold text-ink">Z-score:</span> mide cuántas desviaciones se aleja una métrica de su media histórica dentro de la ventana seleccionada.</p>
               <p><span className="font-semibold text-ink">Percentil:</span> ubica el dato actual frente a observaciones previas de la misma ventana.</p>
               <p><span className="font-semibold text-ink">Drawdown:</span> muestra distancia desde el máximo de la ventana analizada.</p>
-              <p><span className="font-semibold text-ink">Distancia a media:</span> compara el precio con medias móviles adaptadas a frecuencia diaria, semanal o mensual.</p>
+              <p><span className="font-semibold text-ink">Distancia a media:</span> compara el precio con medias móviles adaptadas a frecuencia diaria, por semana o mensual.</p>
             </>
           )}
         </div>
@@ -316,13 +322,17 @@ function ComparisonSection({
   summaries: AssetStatSummary[];
   window: StatisticalWindow;
 }) {
-  const defaultTickers = useMemo(() => Array.from(new Set(["SPY", "QQQ", "IWM", "DIA", "TLT", "GLD", "IBIT", focusTicker])), [focusTicker]);
+  const defaultTickers = useMemo(() => Array.from(new Set(["SPY", "QQQ", "IWM", "DIA", "TLT", "GLD", "BTCUSD", "ETHUSD", focusTicker])), [focusTicker]);
   const [query, setQuery] = useState("");
   const [selectedTickers, setSelectedTickers] = useState(defaultTickers);
   const normalizedQuery = query.trim().toLowerCase();
   const selectedSet = new Set(selectedTickers);
   const selected = summaries.filter((asset) => selectedSet.has(asset.ticker));
-  const filtered = summaries.filter((asset) => `${asset.ticker} ${asset.name} ${asset.category}`.toLowerCase().includes(normalizedQuery));
+  const filtered = summaries.filter((asset) =>
+    `${asset.ticker} ${asset.name} ${asset.category} ${displayStatTicker(asset.ticker)} ${displayStatName(asset.ticker, asset.name)}`
+      .toLowerCase()
+      .includes(normalizedQuery),
+  );
   const groupedAssets = categoryOrder
     .map((category) => ({
       category,
@@ -414,7 +424,7 @@ function ComparisonSection({
                       aria-pressed={active}
                       className={`border px-2.5 py-1.5 text-xs font-semibold transition ${active ? "border-petrol bg-[#eef3f2] text-petrol" : "border-line bg-panel text-muted hover:border-ink hover:text-ink"}`}
                     >
-                      {asset.ticker}
+                      {displayStatTicker(asset.ticker)}
                     </button>
                   );
                 })}
@@ -429,8 +439,8 @@ function ComparisonSection({
           <div key={asset.ticker} className={`border p-4 ${asset.ticker === focusTicker ? "border-petrol bg-[#eef3f2]" : "border-line bg-panelSoft"}`}>
             <div className="flex items-start justify-between gap-3">
               <div>
-                <p className="font-semibold text-ink">{asset.ticker}</p>
-                <p className="mt-1 text-xs leading-5 text-muted">{asset.name}</p>
+                <p className="font-semibold text-ink">{displayStatTicker(asset.ticker)}</p>
+                <p className="mt-1 text-xs leading-5 text-muted">{displayStatName(asset.ticker, asset.name)}</p>
                 <p className="mt-1 text-[11px] font-semibold uppercase tracking-[0.1em] text-muted">{localizedCategoryLabels[locale][asset.category]}</p>
               </div>
               {asset.ticker === focusTicker ? <span className="text-xs font-semibold text-petrol">{copy.focus}</span> : null}
@@ -484,7 +494,7 @@ function CorrelationHeatmap({
         <div className="border-b border-line bg-panelSoft p-2" />
         {available.map((ticker) => (
           <div key={ticker} className="border-b border-l border-line bg-panelSoft p-2 text-center font-semibold text-ink">
-            {ticker}
+            {displayStatTicker(ticker)}
           </div>
         ))}
         {available.map((rowTicker) => (
@@ -498,7 +508,7 @@ function CorrelationHeatmap({
 function RowCells({ matrix, rowTicker, tickers }: { matrix: CorrelationMatrix; rowTicker: string; tickers: string[] }) {
   return (
     <>
-      <div className="border-t border-line bg-panelSoft p-2 font-semibold text-ink">{rowTicker}</div>
+      <div className="border-t border-line bg-panelSoft p-2 font-semibold text-ink">{displayStatTicker(rowTicker)}</div>
       {tickers.map((columnTicker) => {
         const value = matrix.values[rowTicker]?.[columnTicker] ?? null;
         const diagonal = rowTicker === columnTicker;

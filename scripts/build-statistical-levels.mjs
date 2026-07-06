@@ -57,6 +57,7 @@ const universe = [
   ["IWM", "iShares Russell 2000 ETF", "Índices / ETFs", "iwm.us", "IWM"],
   ["DIA", "SPDR Dow Jones Industrial Average ETF", "Índices / ETFs", "dia.us", "DIA"],
   ["VOO", "Vanguard S&P 500 ETF", "Índices / ETFs", "voo.us", "VOO"],
+  ["RSP", "Invesco S&P 500 Equal Weight ETF", "Índices / ETFs", "rsp.us", "RSP"],
   ["TLT", "iShares 20+ Year Treasury Bond ETF", "Bonos", "tlt.us", "TLT"],
   ["IEF", "iShares 7-10 Year Treasury Bond ETF", "Bonos", "ief.us", "IEF"],
   ["SHY", "iShares 1-3 Year Treasury Bond ETF", "Bonos", "shy.us", "SHY"],
@@ -83,8 +84,9 @@ const universe = [
   ["ITA", "iShares U.S. Aerospace & Defense ETF", "Temáticos", "ita.us", "ITA"],
   ["PAVE", "Global X U.S. Infrastructure Development ETF", "Temáticos", "pave.us", "PAVE"],
   ["PHO", "Invesco Water Resources ETF", "Temáticos", "pho.us", "PHO"],
-  ["BTCUSD", "Bitcoin / US Dollar", "Cripto", "btcusd", "BTC-USD"],
-  ["IBIT", "iShares Bitcoin Trust ETF", "Cripto", "ibit.us", "IBIT"],
+  ["SMH", "VanEck Semiconductor ETF", "Temáticos", "smh.us", "SMH"],
+  ["BTCUSD", "Bitcoin spot", "Cripto", "btcusd", "BTC-USD"],
+  ["ETHUSD", "Ethereum spot", "Cripto", "ethusd", "ETH-USD"],
   ["EWJ", "iShares MSCI Japan ETF", "Internacional", "ewj.us", "EWJ"],
   ["FXI", "iShares China Large-Cap ETF", "Internacional", "fxi.us", "FXI"],
   ["EFA", "iShares MSCI EAFE ETF", "Internacional", "efa.us", "EFA"],
@@ -646,7 +648,7 @@ function describeLevelLocation(lastClose, levels, frequency) {
   const highAverage = levels[isWeekly ? "WAHE" : "MAHE"];
   const lowAverage = levels[isWeekly ? "WALE" : "MALE"];
   const lowExtreme = levels[isWeekly ? "WSLE" : "MSLE"];
-  const periodLabel = isWeekly ? "semanal" : "mensual";
+  const periodLabel = isWeekly ? "por semana" : "mensual";
   if (lastClose > highExtreme) return `Por encima de extensión ${periodLabel} extrema`;
   if (lastClose >= highAverage) return `Cerca de extensión ${periodLabel} alta`;
   if (lastClose <= lowExtreme) return `Por debajo de extensión ${periodLabel} extrema`;
