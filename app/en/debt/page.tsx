@@ -6,7 +6,7 @@ export default function EnglishDebtPage() {
       <section className="grid gap-8 border-b border-line pb-10 lg:grid-cols-[0.58fr_0.42fr] lg:items-end">
         <div>
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-petrol">Educational tool</p>
-          <h1 className="mt-4 text-4xl font-semibold leading-[1.02] text-ink md:text-6xl">Before investing, review your debt</h1>
+          <h1 className="mt-4 text-4xl font-semibold leading-[1.02] text-ink md:text-6xl">Debt management</h1>
           <p className="mt-5 max-w-3xl text-lg leading-8 text-muted">
             An uncertain investment does not always compete well against expensive debt. This tool estimates the real cost of your debt, compares payoff methods, and checks whether your monthly cash flow has enough margin.
           </p>

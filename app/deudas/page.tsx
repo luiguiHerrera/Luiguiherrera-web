@@ -6,7 +6,7 @@ export default function DeudasPage() {
       <section className="grid gap-8 border-b border-line pb-10 lg:grid-cols-[0.58fr_0.42fr] lg:items-end">
         <div>
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-petrol">Herramienta educativa</p>
-          <h1 className="mt-4 text-4xl font-semibold leading-[1.02] text-ink md:text-6xl">Antes de invertir, revisa tus deudas</h1>
+          <h1 className="mt-4 text-4xl font-semibold leading-[1.02] text-ink md:text-6xl">Gestión de deudas</h1>
           <p className="mt-5 max-w-3xl text-lg leading-8 text-muted">
             Una inversión incierta no siempre compite bien contra una deuda cara y segura. Esta herramienta estima el costo real de tus deudas, compara métodos de pago y revisa si tu flujo mensual tiene margen suficiente.
           </p>
