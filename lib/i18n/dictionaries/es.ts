@@ -22,6 +22,7 @@ export const es = {
       { href: "/empezar", label: "Empezar simple", shortLabel: "Simple", description: "Camino guiado para ordenar lo esencial." },
       { href: "/diagnostico?mode=quick", label: "Diagnóstico rápido", shortLabel: "Rápido", description: "Lectura compacta de horizonte, liquidez, tolerancia y sesgos." },
       { href: "/diagnostico?mode=complete", label: "Diagnóstico completo", shortLabel: "Completo", description: "Evaluación más profunda por capacidad, objetivos, conducta y consistencia." },
+      { href: "/presupuesto", label: "Presupuesto personal", shortLabel: "Presupuesto", description: "Mapa educativo para comparar tu presupuesto actual con una referencia ideal." },
       { href: "/deudas", label: "Gestión de deudas", shortLabel: "Deudas", description: "Próximo bloque defensivo para evaluar deuda antes de invertir." },
       { href: "/protege-tu-dinero", label: "Protege tu dinero", shortLabel: "Protege", description: "Señales de alerta antes de entregar capital." },
       { href: "/proteccion", label: "Prácticas de inversión", shortLabel: "Prácticas", description: "Casos realistas para practicar decisiones sin poner dinero en riesgo." },
