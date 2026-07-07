@@ -92,6 +92,7 @@ const phraseMap: Array<[RegExp, string]> = [
   [/Fuerte contango/g, "Strong contango"],
   [/No implica dirección futura del mercado\./g, "It does not imply future market direction."],
   [/Datos automatizados/g, "Automated data"],
+  [/Datos disponibles · actualización según fuente/g, "Data available · source-based update"],
   [/Datos demo/g, "Demo data"],
   [/Datos manuales/g, "Manual data"],
   [/Actualización manual/g, "Manual update"],

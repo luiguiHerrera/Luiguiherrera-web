@@ -58,15 +58,9 @@ function MarketBreadthPanel({ data, locale }: { data: WeeklyReportData; locale: 
         sectorParticipationHelp: "How many sectors are participating.",
         sectorTrend: "Sectors above long average",
         sectorTrendHelp: "Trend health by sector.",
-        classicTitle: "Classic breadth",
-        classicSubtitle: "Requires real advance/decline and new-high/new-low data. Prepared without live values until an automated source is available.",
-        pendingSource: "Pending automated source",
-        adLine: "Advance-decline line",
-        adLineHelp: "Would accumulate advances minus declines to see whether participation improves or deteriorates over time.",
-        mcclellan: "McClellan oscillator",
-        mcclellanHelp: "Would compare short and medium advance/decline momentum, commonly with 19- and 39-period EMAs.",
-        netHighs: "Net 52-week highs",
-        netHighsHelp: "Would compare new 52-week highs with new 52-week lows.",
+        classicTitle: "Next classic breadth block",
+        classicSubtitle: "Pending automated source for advances/declines and 52-week highs/lows.",
+        classicDetail: "Prepared for the advance-decline line, McClellan oscillator and net 52-week highs once reliable data is available.",
         pending: "pending",
         flat: "flat",
       }
@@ -84,15 +78,9 @@ function MarketBreadthPanel({ data, locale }: { data: WeeklyReportData; locale: 
         sectorParticipationHelp: "Cuántos sectores acompañan.",
         sectorTrend: "Sectores sobre media larga",
         sectorTrendHelp: "Salud de tendencia por sector.",
-        classicTitle: "Amplitud clásica",
-        classicSubtitle: "Requiere datos reales de avances/descensos y nuevos máximos/mínimos. Queda preparado sin valores en vivo hasta tener fuente automatizada.",
-        pendingSource: "Pendiente de fuente automatizada",
-        adLine: "Línea de avance-declive",
-        adLineHelp: "Acumularía avances menos descensos para ver si la participación mejora o se deteriora con el tiempo.",
-        mcclellan: "Oscilador McClellan",
-        mcclellanHelp: "Compararía momentum corto y medio de avances/descensos, normalmente con EMAs de 19 y 39 periodos.",
-        netHighs: "Nuevos máximos netos de 52 semanas",
-        netHighsHelp: "Compararía nuevos máximos de 52 semanas contra nuevos mínimos de 52 semanas.",
+        classicTitle: "Próximo bloque de amplitud clásica",
+        classicSubtitle: "Pendiente de fuente automatizada para avances/descensos y máximos/mínimos de 52 semanas.",
+        classicDetail: "Queda preparado para línea de avance-declive, oscilador McClellan y nuevos máximos netos cuando haya datos confiables.",
         pending: "pendiente",
         flat: "plano",
       };
@@ -123,11 +111,6 @@ function MarketBreadthPanel({ data, locale }: { data: WeeklyReportData; locale: 
       helper: copy.sectorTrendHelp,
     },
   ];
-  const classicMetrics = [
-    { helper: copy.adLineHelp, label: copy.adLine },
-    { helper: copy.mcclellanHelp, label: copy.mcclellan },
-    { helper: copy.netHighsHelp, label: copy.netHighs },
-  ];
 
   return (
     <section className="border border-line bg-panel p-4 md:p-5">
@@ -146,16 +129,10 @@ function MarketBreadthPanel({ data, locale }: { data: WeeklyReportData; locale: 
         ))}
       </div>
       <div className="mt-5 border-t border-line pt-5">
-        <p className="text-sm font-semibold text-ink">{copy.classicTitle}</p>
-        <p className="mt-2 max-w-3xl text-sm leading-6 text-muted">{copy.classicSubtitle}</p>
-        <div className="mt-4 grid gap-3 md:grid-cols-3">
-          {classicMetrics.map((metric) => (
-            <div key={metric.label} className="border border-line bg-white/70 p-4">
-              <p className="text-xs uppercase tracking-[0.14em] text-muted">{metric.label}</p>
-              <p className="mt-2 text-sm font-semibold text-brass">{copy.pendingSource}</p>
-              <p className="mt-2 text-xs leading-5 text-muted">{metric.helper}</p>
-            </div>
-          ))}
+        <div className="border border-line bg-white/70 p-4">
+          <p className="text-sm font-semibold text-ink">{copy.classicTitle}</p>
+          <p className="mt-2 max-w-3xl text-sm leading-6 text-muted">{copy.classicSubtitle}</p>
+          <p className="mt-2 max-w-3xl text-xs leading-5 text-muted">{copy.classicDetail}</p>
         </div>
       </div>
     </section>

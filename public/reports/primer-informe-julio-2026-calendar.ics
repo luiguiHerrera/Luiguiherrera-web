@@ -1,0 +1,55 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Luigui Herrera//Market Reports//ES
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+X-WR-CALNAME:Primer informe de julio
+BEGIN:VEVENT
+UID:primer-informe-julio-2026-ism-pmi-servicios@luigui-herrera
+DTSTAMP:20260707T000000Z
+DTSTART;VALUE=DATE:20260706
+DTEND;VALUE=DATE:20260707
+SUMMARY:Primer informe de julio: ISM / PMI servicios
+DESCRIPTION:Lun. 6 julio. Ayuda a medir actividad y presion de crecimiento.
+END:VEVENT
+BEGIN:VEVENT
+UID:primer-informe-julio-2026-actas-fomc@luigui-herrera
+DTSTAMP:20260707T000000Z
+DTSTART;VALUE=DATE:20260708
+DTEND;VALUE=DATE:20260709
+SUMMARY:Primer informe de julio: Actas FOMC
+DESCRIPTION:Mie. 8 julio. Puede ajustar expectativas sobre tasas y liquidez.
+END:VEVENT
+BEGIN:VEVENT
+UID:primer-informe-julio-2026-credito-al-consumo@luigui-herrera
+DTSTAMP:20260707T000000Z
+DTSTART;VALUE=DATE:20260708
+DTEND;VALUE=DATE:20260709
+SUMMARY:Primer informe de julio: Credito al consumo
+DESCRIPTION:Mie. 8 julio. Lectura adicional sobre demanda y condiciones financieras.
+END:VEVENT
+BEGIN:VEVENT
+UID:primer-informe-julio-2026-solicitudes-de-desempleo@luigui-herrera
+DTSTAMP:20260707T000000Z
+DTSTART;VALUE=DATE:20260709
+DTEND;VALUE=DATE:20260710
+SUMMARY:Primer informe de julio: Solicitudes de desempleo
+DESCRIPTION:Jue. 9 julio. Dato sensible para crecimiento y expectativas de politica monetaria.
+END:VEVENT
+BEGIN:VEVENT
+UID:primer-informe-julio-2026-inflacion-china@luigui-herrera
+DTSTAMP:20260707T000000Z
+DTSTART;VALUE=DATE:20260706
+DTEND;VALUE=DATE:20260711
+SUMMARY:Primer informe de julio: Inflacion China
+DESCRIPTION:Semana del 6 al 10 de julio. Contexto sobre demanda global y emergentes.
+END:VEVENT
+BEGIN:VEVENT
+UID:primer-informe-julio-2026-inicio-temporada-de-resultados@luigui-herrera
+DTSTAMP:20260707T000000Z
+DTSTART;VALUE=DATE:20260713
+DTEND;VALUE=DATE:20260718
+SUMMARY:Primer informe de julio: Inicio de temporada de resultados
+DESCRIPTION:Semana del 13 de julio. Los bancos abren una ventana clave para credito y riesgo.
+END:VEVENT
+END:VCALENDAR

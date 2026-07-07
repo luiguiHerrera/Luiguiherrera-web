@@ -21,6 +21,8 @@ export type MarketReportAssetReading = {
 
 export type MarketReportCalendarItem = {
   dateLabel: string;
+  dateStart?: string;
+  dateEnd?: string;
   event: string;
   whyItMatters: string;
 };
@@ -48,6 +50,7 @@ export type MarketReport = {
   title: string;
   subtitle: string;
   dateLabel: string;
+  calendarHref?: string;
   pdfHref: string;
   status: "actual" | "archivado";
   thesis: string;
@@ -69,6 +72,7 @@ export const marketReports: MarketReport[] = [
     title: "Primer informe de julio",
     subtitle: "IA, flujos y concentración: un mercado fuerte, pero más mecánico",
     dateLabel: "Primera lectura de julio de 2026",
+    calendarHref: "/reports/primer-informe-julio-2026-calendar.ics",
     pdfHref: "/reports/primer-informe-julio-2026.pdf",
     status: "actual",
     thesis:
@@ -209,31 +213,39 @@ export const marketReports: MarketReport[] = [
     calendar: [
       {
         dateLabel: "Lun. 6 julio",
+        dateStart: "2026-07-06",
         event: "ISM / PMI servicios",
         whyItMatters: "Ayuda a medir actividad y presión de crecimiento.",
       },
       {
         dateLabel: "Mié. 8 julio",
+        dateStart: "2026-07-08",
         event: "Actas FOMC",
         whyItMatters: "Puede ajustar expectativas sobre tasas, liquidez y duración del ciclo.",
       },
       {
         dateLabel: "Mié. 8 julio",
+        dateStart: "2026-07-08",
         event: "Crédito al consumo",
         whyItMatters: "Sirve como lectura adicional sobre demanda, balance del hogar y condiciones financieras.",
       },
       {
         dateLabel: "Jue. 9 julio",
+        dateStart: "2026-07-09",
         event: "Solicitudes de desempleo",
         whyItMatters: "Dato sensible para crecimiento, salarios y expectativas de política monetaria.",
       },
       {
         dateLabel: "Semana del 6 al 10 de julio",
+        dateStart: "2026-07-06",
+        dateEnd: "2026-07-10",
         event: "Inflación China",
         whyItMatters: "Aporta contexto sobre demanda global, presión deflacionaria y emergentes.",
       },
       {
         dateLabel: "Próximos días / semana del 13 de julio",
+        dateStart: "2026-07-13",
+        dateEnd: "2026-07-17",
         event: "Inicio de temporada de resultados",
         whyItMatters: "Los bancos abren una ventana clave para crédito, márgenes y apetito por riesgo.",
       },
@@ -334,7 +346,7 @@ export const marketReports: MarketReport[] = [
         name: "0DTE/opciones",
         whatLooksAt: "0DTE real cuando haya datos por vencimiento/serie. Mientras tanto, Cboe put/call ratios funciona solo como proxy de opciones.",
         whyItMatters:
-          "Cuando crece el uso de opciones de vencimiento muy corto, los creadores de mercado pueden ajustar coberturas con mayor frecuencia. No se inventa dato 0DTE si solo existe un proxy de opciones.",
+          "Cuando crece el uso de opciones de vencimiento muy corto, los creadores de mercado pueden ajustar coberturas con mayor frecuencia. Mientras no haya datos por vencimiento/serie, esta lectura se mantiene como proxy de opciones.",
       },
       {
         key: "july-seasonality",

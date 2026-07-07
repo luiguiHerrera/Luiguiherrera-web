@@ -350,8 +350,12 @@ function formatMoney(value: number, locale: Locale) {
   }).format(value);
 }
 
+function pendingLabel(locale: Locale) {
+  return locale === "es" ? "Completa datos" : "Complete data";
+}
+
 function formatPercent(value: number | null, locale: Locale) {
-  if (value === null) return "n/d";
+  if (value === null) return pendingLabel(locale);
   return new Intl.NumberFormat(locale === "es" ? "es-ES" : "en-US", {
     maximumFractionDigits: 1,
     style: "percent",
@@ -359,14 +363,14 @@ function formatPercent(value: number | null, locale: Locale) {
 }
 
 function formatAnnualPercent(value: number | null, locale: Locale) {
-  if (value === null) return "n/d";
+  if (value === null) return pendingLabel(locale);
   return new Intl.NumberFormat(locale === "es" ? "es-ES" : "en-US", {
     maximumFractionDigits: 1,
   }).format(value) + "%";
 }
 
 function formatMonths(months: number | null, locale: Locale) {
-  if (months === null) return "n/d";
+  if (months === null) return pendingLabel(locale);
   const years = Math.floor(months / 12);
   const remainingMonths = months % 12;
   if (years === 0) return locale === "es" ? `${remainingMonths} meses` : `${remainingMonths} months`;
@@ -462,7 +466,7 @@ function plansAreEquivalent(avalanche: PayoffPlan, snowball: PayoffPlan) {
 }
 
 function formatMonthDifference(value: number | null, locale: Locale) {
-  if (value === null) return "n/d";
+  if (value === null) return pendingLabel(locale);
   return `${Math.max(0, value)} ${locale === "es" ? "meses" : "months"}`;
 }
 
@@ -642,8 +646,8 @@ function PlanCard({ locale, plan, text }: { locale: Locale; plan: PayoffPlan; te
         <Metric label={labels.estimatedFees} value={formatMoney(plan.estimatedFeeCost, locale)} />
         <Metric label={labels.totalCost} value={formatMoney(plan.totalInterestAndFees, locale)} />
         <Metric label={labels.financialTotal} value={formatMoney(plan.estimatedTotalPayment, locale)} />
-        <Metric label={labels.firstDebt} value={plan.firstDebtName ?? "n/d"} />
-        <Metric label={labels.order} value={plan.order.length > 0 ? plan.order.join(" -> ") : "n/d"} />
+        <Metric label={labels.firstDebt} value={plan.firstDebtName ?? pendingLabel(locale)} />
+        <Metric label={labels.order} value={plan.order.length > 0 ? plan.order.join(" -> ") : pendingLabel(locale)} />
       </div>
       {plan.prioritySequence.length > 0 ? (
         <div className="mt-4 border border-line bg-panelSoft p-3">
@@ -684,7 +688,7 @@ function PlanCard({ locale, plan, text }: { locale: Locale; plan: PayoffPlan; te
               <div key={step.id} className="flex flex-col gap-1 border-t border-line pt-2 text-sm leading-6 text-muted first:border-t-0 first:pt-0 sm:flex-row sm:items-center sm:justify-between">
                 <p className="font-semibold text-ink">{index + 1}. {step.name}</p>
                 <p>
-                  {labels.paidOffMonth}: <span className="font-semibold text-ink">{step.payoffMonth === null ? "n/d" : step.payoffMonth}</span>
+                    {labels.paidOffMonth}: <span className="font-semibold text-ink">{step.payoffMonth === null ? pendingLabel(locale) : step.payoffMonth}</span>
                 </p>
               </div>
             ))}
@@ -703,12 +707,12 @@ function PlanDifference({ locale, result }: { locale: Locale; result: DebtPlanRe
   const monthDifference = avalanche.months !== null && snowball.months !== null ? snowball.months - avalanche.months : null;
   const costDifference = snowball.totalInterestAndFees - avalanche.totalInterestAndFees;
   const cheapestMethod =
-    avalanche.months === null || snowball.months === null ? "n/d" :
+    avalanche.months === null || snowball.months === null ? pendingLabel(locale) :
     Math.abs(costDifference) < 0.01 ? (locale === "es" ? "Empate" : "Tie") :
     costDifference > 0 ? methodName("avalanche", locale) :
     methodName("snowball", locale);
   const fastestMethod =
-    avalanche.months === null || snowball.months === null ? "n/d" :
+    avalanche.months === null || snowball.months === null ? pendingLabel(locale) :
     snowball.months === avalanche.months ? (locale === "es" ? "Empate" : "Tie") :
     snowball.months > avalanche.months ? methodName("avalanche", locale) :
     methodName("snowball", locale);
@@ -721,8 +725,8 @@ function PlanDifference({ locale, result }: { locale: Locale; result: DebtPlanRe
       ) : (
         <>
           <div className="mt-3 grid gap-2 text-sm leading-6 text-muted md:grid-cols-2">
-            <p>{labels.months}: <span className="font-semibold text-ink">{monthDifference === null ? "n/d" : `${Math.abs(monthDifference)} ${locale === "es" ? "meses" : "months"}`}</span></p>
-            <p>{labels.costAndFeesDifference}: <span className="font-semibold text-ink">{avalanche.months === null || snowball.months === null ? "n/d" : formatMoney(Math.abs(costDifference), locale)}</span></p>
+            <p>{labels.months}: <span className="font-semibold text-ink">{monthDifference === null ? pendingLabel(locale) : `${Math.abs(monthDifference)} ${locale === "es" ? "meses" : "months"}`}</span></p>
+            <p>{labels.costAndFeesDifference}: <span className="font-semibold text-ink">{avalanche.months === null || snowball.months === null ? pendingLabel(locale) : formatMoney(Math.abs(costDifference), locale)}</span></p>
             <p>{labels.cheapestMethod}: <span className="font-semibold text-ink">{cheapestMethod}</span></p>
             <p>{labels.fastestMethod}: <span className="font-semibold text-ink">{fastestMethod}</span></p>
           </div>
@@ -905,7 +909,7 @@ export function DebtPlanner({ locale }: { locale: Locale }) {
           <Metric label={labels.plannedDebtToIncome} tone={debtLoadTone(result.summary.debtLoadStatus)} value={formatPercent(result.summary.plannedDebtToIncomeRatio, locale)} />
           <Metric info={labels.metricInfo.fixedAndDebt} label={labels.fixedAndDebt} value={formatPercent(result.summary.fixedAndMinimumsToIncome, locale)} />
           <Metric info={labels.metricInfo.estimatedMargin} label={labels.estimatedMargin} value={formatMoney(result.summary.estimatedMonthlyMargin, locale)} />
-          <Metric info={labels.metricInfo.emergencyMonths} label={labels.emergencyMonths} value={result.summary.emergencyFundMonths === null ? "n/d" : result.summary.emergencyFundMonths.toFixed(1)} />
+          <Metric info={labels.metricInfo.emergencyMonths} label={labels.emergencyMonths} value={result.summary.emergencyFundMonths === null ? pendingLabel(locale) : result.summary.emergencyFundMonths.toFixed(1)} />
           <Metric label={labels.monthlyCashAfterExpenses} value={formatMoney(result.summary.monthlyCashAfterExpenses, locale)} />
           <Metric label={labels.minimumPaymentGap} value={formatMoney(result.summary.minimumPaymentGap, locale)} />
           <Metric label={labels.extraPayment} value={formatMoney(Math.max(0, result.summary.minimumPaymentGap), locale)} />
@@ -1024,9 +1028,9 @@ export function DebtPlanner({ locale }: { locale: Locale }) {
         </div>
         <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
           <Metric label={labels.selectedMethod} value={methodName(selectedMethod, locale)} />
-          <Metric label={labels.scenarioPayment} value={simulationIsViable ? formatMoney(targetDebtPayment, locale) : "n/d"} />
-          <Metric label={labels.estimatedSavings} value={!simulationIsViable || paymentSavings === null ? "n/d" : formatMoney(paymentSavings, locale)} />
-          <Metric label={labels.monthsAhead} value={simulationIsViable ? formatMonthDifference(paymentMonthsAhead, locale) : "n/d"} />
+          <Metric label={labels.scenarioPayment} value={simulationIsViable ? formatMoney(targetDebtPayment, locale) : pendingLabel(locale)} />
+          <Metric label={labels.estimatedSavings} value={!simulationIsViable || paymentSavings === null ? pendingLabel(locale) : formatMoney(paymentSavings, locale)} />
+          <Metric label={labels.monthsAhead} value={simulationIsViable ? formatMonthDifference(paymentMonthsAhead, locale) : pendingLabel(locale)} />
         </div>
       </section>
 
@@ -1080,9 +1084,9 @@ export function DebtPlanner({ locale }: { locale: Locale }) {
         </div>
         <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
           <Metric label={labels.selectedMethod} value={methodName(selectedMethod, locale)} />
-          <Metric label={labels.extraContributionSavings} value={!simulationIsViable || contributionSavings === null ? "n/d" : formatMoney(contributionSavings, locale)} />
-          <Metric label={labels.monthsAhead} value={simulationIsViable ? formatMonthDifference(contributionMonthsAhead, locale) : "n/d"} />
-          <Metric label={labels.extraContributionImpact} value={simulationIsViable ? formatMoney(selectedCurrentPlan.extraContributionsApplied, locale) : "n/d"} />
+          <Metric label={labels.extraContributionSavings} value={!simulationIsViable || contributionSavings === null ? pendingLabel(locale) : formatMoney(contributionSavings, locale)} />
+          <Metric label={labels.monthsAhead} value={simulationIsViable ? formatMonthDifference(contributionMonthsAhead, locale) : pendingLabel(locale)} />
+          <Metric label={labels.extraContributionImpact} value={simulationIsViable ? formatMoney(selectedCurrentPlan.extraContributionsApplied, locale) : pendingLabel(locale)} />
         </div>
       </section>
 

@@ -151,6 +151,9 @@ export function BtcEtfFlowsModule({ assetLabel = "BTC", data }: BtcEtfFlowsModul
   const t = (value: string | null | undefined) => locale === "en" ? translateDashboardText(value) : value ?? "";
   const flows = data.flows;
   const isPendingAutomation = assetLabel === "ETH" && flows.rowsParsed === 0 && flows.latestTotalNetFlow === null;
+  const statusLabel = assetLabel === "BTC" && flows.rowsParsed > 0
+    ? "Datos disponibles · actualización según fuente"
+    : dataStatusLabels[flows.dataStatus];
   const metrics = [
     ["Rolling 5D", formatUsdMillions(flows.rolling5dNetFlow, locale)],
     ["Rolling 20D", formatRollingFlow(flows.rolling20dNetFlow, locale)],
@@ -209,7 +212,7 @@ export function BtcEtfFlowsModule({ assetLabel = "BTC", data }: BtcEtfFlowsModul
       eyebrow={`${assetLabel} ETF flows`}
       title={locale === "en" ? "ETF flow pressure" : "Presión de flujos vía ETFs"}
       reading={t(flows.readingSubtext)}
-      status={t(dataStatusLabels[flows.dataStatus])}
+      status={t(statusLabel)}
       metrics={[
         { label: locale === "en" ? "Latest net flow" : "Último flujo neto", value: formatUsdMillions(flows.latestTotalNetFlow, locale), tone: flows.readingSeverity === "positive" ? "sage" : flows.readingSeverity === "negative" ? "danger" : "brass" },
         { label: locale === "en" ? "Read" : "Lectura", value: t(flows.readingLabel) },

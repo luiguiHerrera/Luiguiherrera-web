@@ -1,11 +1,12 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { AutomaticMarketReadings } from "@/components/reports/AutomaticMarketReadings";
+import { buildIcsDataUri } from "@/lib/calendar/ics";
 import { buildWeeklyReportData } from "@/lib/reports/build-weekly-report-data";
 import { jpmSpxLevelsContext } from "@/lib/market/jpm-spx-levels";
 import { activeMarketReport, getReportsByMonth } from "@/lib/reports/market-reports";
 import type { WeeklyReportData } from "@/lib/reports/build-weekly-report-data";
-import type { MarketReport, MarketReportWatchItem } from "@/lib/reports/market-reports";
+import type { MarketReport, MarketReportCalendarItem, MarketReportWatchItem } from "@/lib/reports/market-reports";
 
 export const metadata: Metadata = {
   title: "Informes de mercado | Luigui Herrera",
@@ -163,6 +164,18 @@ export default async function InformesPage() {
         <div>
           <p className="text-xs font-semibold uppercase text-petrol">Calendario y escenarios</p>
           <h2 className="mt-2 text-2xl font-semibold leading-tight text-ink md:text-3xl">Eventos y rutas probables</h2>
+          <p className="mt-3 text-sm leading-6 text-muted">
+            Puedes descargar estas fechas en formato iCalendar para revisarlas en tu calendario personal.
+          </p>
+          {report.calendarHref ? (
+            <a
+              className="mt-4 inline-flex items-center justify-center rounded-[4px] border border-petrol bg-petrol px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-panel hover:text-petrol"
+              download
+              href={report.calendarHref}
+            >
+              Descargar calendario (.ics)
+            </a>
+          ) : null}
         </div>
         <div className="grid gap-5">
           <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
@@ -171,6 +184,15 @@ export default async function InformesPage() {
                 <p className="text-xs font-semibold uppercase text-brass">{item.dateLabel}</p>
                 <h3 className="mt-2 text-sm font-semibold leading-6 text-ink">{item.event}</h3>
                 <p className="mt-2 text-sm leading-6 text-muted">{item.whyItMatters}</p>
+                {item.dateStart ? (
+                  <a
+                    className="mt-3 inline-flex w-fit border-b border-petrol/30 text-xs font-semibold text-petrol transition hover:border-petrol"
+                    download={`${report.id}-${calendarSlug(item.event)}.ics`}
+                    href={calendarItemDataUri(report, item)}
+                  >
+                    Agregar al calendario
+                  </a>
+                ) : null}
               </article>
             ))}
           </div>
@@ -209,6 +231,32 @@ export default async function InformesPage() {
       </section>
     </main>
   );
+}
+
+function calendarSlug(value: string) {
+  return value
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-|-$/g, "");
+}
+
+function calendarEvent(report: MarketReport, item: MarketReportCalendarItem) {
+  return {
+    uid: `${report.id}-${calendarSlug(item.event)}@luigui-herrera`,
+    summary: `${report.title}: ${item.event}`,
+    description: `${item.dateLabel}. ${item.whyItMatters}`,
+    startDate: item.dateStart ?? "",
+    endDate: item.dateEnd,
+  };
+}
+
+function calendarItemDataUri(report: MarketReport, item: MarketReportCalendarItem) {
+  return buildIcsDataUri({
+    name: `${report.title} · ${item.event}`,
+    events: [calendarEvent(report, item)],
+  });
 }
 
 function ReportMonthCard({

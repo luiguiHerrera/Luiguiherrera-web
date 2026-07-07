@@ -15,7 +15,7 @@ const copy = {
     percentile: "Percentil de extensión",
     subtitle: "Lectura rápida de ubicación: precio actual, rango estadístico y distancia frente a su propio historial.",
     title: "S&P 500 frente a sus niveles estadísticos",
-    weeklyRange: "Rango por semana",
+    weeklyRange: "Rango semanal",
     zScore: "Z-score",
   },
   en: {
