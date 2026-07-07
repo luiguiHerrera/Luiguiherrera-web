@@ -27,6 +27,11 @@ function formatNumber(value: number | null | undefined, digits = 1) {
   return value.toFixed(digits);
 }
 
+function formatSignedNumber(value: number | null | undefined, digits = 1) {
+  if (value === null || value === undefined) return "Pendiente";
+  return `${value > 0 ? "+" : ""}${value.toFixed(digits)}`;
+}
+
 function formatUsdMillions(value: number | null | undefined) {
   if (value === null || value === undefined) return "Pendiente";
   return `${value > 0 ? "+" : ""}${value.toFixed(0)} M USD`;
@@ -47,8 +52,54 @@ function structureLabel(distanceToMa200: number | null | undefined) {
   return "Debilidad frente a media larga";
 }
 
-function limitItems(items: string[]) {
+function limitItems<T>(items: T[]) {
   return items.slice(0, 3);
+}
+
+function vixStateLabel(value: string | undefined) {
+  if (value === "low") return "Bajo";
+  if (value === "normal") return "Normal";
+  if (value === "watch") return "Atención";
+  if (value === "elevated") return "Elevado";
+  if (value === "stress" || value === "extreme") return "Estrés";
+  return "Dato pendiente";
+}
+
+function vixScaleFilled(value: number | null | undefined) {
+  if (value === null || value === undefined) return 0;
+  if (value >= 40) return 10;
+  if (value >= 30) return 8;
+  if (value >= 25) return 7;
+  if (value >= 20) return 5;
+  if (value >= 16) return 4;
+  if (value >= 12) return 3;
+  return 2;
+}
+
+function compactSectorName(value: string) {
+  return value
+    .replace("Consumer Discretionary", "Consumo discrecional")
+    .replace("Consumer Staples", "Consumo básico")
+    .replace("Communication Services", "Comunicación")
+    .replace("Health Care", "Salud")
+    .replace("Financials", "Financieras")
+    .replace("Industrials", "Industriales")
+    .replace("Technology", "Tecnología")
+    .replace("Utilities", "Utilities")
+    .replace("Energy", "Energía")
+    .replace("Materials", "Materiales")
+    .replace("Real Estate", "Inmobiliario");
+}
+
+function dashboardButton() {
+  return (
+    <a
+      className="inline-flex w-fit items-center justify-center rounded-[4px] border border-petrol/40 bg-white/70 px-3 py-2 text-xs font-semibold text-petrol transition hover:border-petrol hover:bg-panel"
+      href="/dashboard"
+    >
+      Ver detalle en Dashboard
+    </a>
+  );
 }
 
 const reportStatAssets = [
@@ -98,17 +149,25 @@ export function AutomaticMarketReadings({ data }: AutomaticMarketReadingsProps) 
     ...item,
     data: item.aliases.map((ticker) => statisticalLevelsByTicker.get(ticker)).find(Boolean),
   }));
+  const sectorList = data.sectors.data?.sectors ?? [];
+  const sectorsPositive = sectorList.filter((sector) => sector.return1w > 0).length;
+  const sectorsNegative = sectorList.filter((sector) => sector.return1w < 0).length;
+  const sectorTotal = sectorList.length;
+  const sectorBars = Array.from({ length: Math.max(sectorTotal, 1) }, (_, index) => index < sectorsPositive);
+  const vixSpot = data.volatility.vix?.spot;
+  const vixFilled = vixScaleFilled(vixSpot?.latestVix);
+  const vixBars = Array.from({ length: 10 }, (_, index) => index < vixFilled);
 
   return (
     <section className="border-y border-line py-8 md:py-10">
       <div className="grid gap-5 lg:grid-cols-[0.34fr_1fr]">
         <div>
-          <p className="text-xs font-semibold uppercase text-petrol">Lecturas automáticas</p>
+          <p className="text-xs font-semibold uppercase text-petrol">Lecturas del informe</p>
           <h2 className="mt-2 text-2xl font-semibold leading-tight text-ink md:text-3xl">
             Régimen, sectores, volatilidad y flujos
           </h2>
           <p className="mt-4 text-sm leading-6 text-muted">
-            Módulos calculados con la misma lógica de dashboard, integrados como soporte del informe activo.
+            Resumen compacto de las señales que ayudan a leer el contexto antes de profundizar en Dashboard.
           </p>
         </div>
         <div className="grid gap-5">
@@ -132,7 +191,7 @@ export function AutomaticMarketReadings({ data }: AutomaticMarketReadingsProps) 
             </div>
           </section>
 
-          <ReportSection eyebrow="Auto 01" title="Resumen de señales">
+          <ReportSection eyebrow="Régimen" title="Resumen de señales">
             <div className="grid gap-3 lg:grid-cols-3">
               <SignalList
                 title="Qué impulsó"
@@ -146,7 +205,7 @@ export function AutomaticMarketReadings({ data }: AutomaticMarketReadingsProps) 
             </div>
           </ReportSection>
 
-          <ReportSection eyebrow="Auto 02" title="Índices principales vía ETF">
+          <ReportSection eyebrow="Índices" title="Índices principales vía ETF">
             <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-4">
               {data.coreEtfs.map((asset) => (
                 <article key={asset.ticker} className="border border-line bg-panelSoft p-4">
@@ -169,43 +228,100 @@ export function AutomaticMarketReadings({ data }: AutomaticMarketReadingsProps) 
             </div>
           </ReportSection>
 
-          <ReportSection eyebrow="Auto 03" title="Sectores">
-            <div className="grid gap-3 lg:grid-cols-[0.75fr_0.75fr_1fr]">
-              <SignalList
-                title="Líderes"
-                items={limitItems(data.sectors.leaders.map((sector) => `${sector.etfTicker} · ${sector.sectorName}: ${formatSectorPercent(sector.return1w)}`))}
-              />
-              <SignalList
-                title="Rezagados"
-                items={limitItems(data.sectors.laggards.map((sector) => `${sector.etfTicker} · ${sector.sectorName}: ${formatSectorPercent(sector.return1w)}`))}
-              />
-              <EditorialNote
-                title="Lectura de rotación"
-                body={t(data.sectors.data?.metrics.interpretation) || "Rotación sectorial pendiente."}
-                footer={`Dispersión 1W: ${formatSectorPercent(data.sectors.data?.metrics.sectorDispersion1w)}`}
-              />
+          <ReportSection eyebrow="Sectores" title="Rotación sectorial">
+            <div className="grid gap-4 lg:grid-cols-[0.9fr_1.1fr]">
+              <div className="border border-line bg-panelSoft p-4">
+                <div className="flex items-start justify-between gap-3">
+                  <div>
+                    <p className="text-sm font-semibold text-ink">Sectores positivos</p>
+                    <p className="mt-1 text-xs leading-5 text-muted">Participación semanal por ETF sectorial.</p>
+                  </div>
+                  <p className="text-lg font-semibold text-ink">
+                    {sectorTotal ? `${sectorsPositive} / ${sectorTotal}` : "Pendiente"}
+                  </p>
+                </div>
+                <div className="mt-4 grid grid-cols-11 gap-1" aria-hidden="true">
+                  {sectorBars.map((isPositive, index) => (
+                    <span
+                      key={`sector-bar-${index}`}
+                      className={isPositive ? "h-2.5 bg-petrol" : "h-2.5 bg-line"}
+                    />
+                  ))}
+                </div>
+                <p className="mt-3 text-xs leading-5 text-muted">
+                  {sectorTotal ? `${sectorsNegative} sectores negativos o rezagados en la ventana semanal.` : "Dato sectorial pendiente."}
+                </p>
+              </div>
+              <div className="grid gap-3 sm:grid-cols-2">
+                <CompactSectorList
+                  title="Líderes"
+                  items={limitItems(data.sectors.leaders.map((sector) => ({
+                    label: `${sector.etfTicker} · ${compactSectorName(sector.sectorName)}`,
+                    value: formatSectorPercent(sector.return1w),
+                  })))}
+                />
+                <CompactSectorList
+                  title="Rezagados"
+                  items={limitItems(data.sectors.laggards.map((sector) => ({
+                    label: `${sector.etfTicker} · ${compactSectorName(sector.sectorName)}`,
+                    value: formatSectorPercent(sector.return1w),
+                  })))}
+                />
+              </div>
+              <div className="lg:col-span-2">
+                <div className="flex flex-col gap-3 border border-line bg-panelSoft p-4 md:flex-row md:items-start md:justify-between">
+                  <EditorialNote
+                    title="Lectura"
+                    body={t(data.sectors.data?.metrics.interpretation) || "Rotación sectorial pendiente."}
+                    footer={`Dispersión 1W: ${formatSectorPercent(data.sectors.data?.metrics.sectorDispersion1w)}`}
+                  />
+                  {dashboardButton()}
+                </div>
+              </div>
             </div>
           </ReportSection>
 
           <div className="grid gap-5 lg:grid-cols-2">
-            <ReportSection eyebrow="Auto 04" title="Volatilidad">
-              <div className="grid gap-2 sm:grid-cols-2">
-                <Metric label="VIX spot" value={formatNumber(data.volatility.vix?.spot.latestVix)} emphasis />
-                <Metric label="Momentum VIX" value={vixTrendLabel(data.volatility.vix?.spot.vixTrend)} />
+            <ReportSection eyebrow="VIX" title="Volatilidad">
+              <div className="grid gap-4">
+                <div className="border border-line bg-panelSoft p-4">
+                  <div className="flex items-start justify-between gap-3">
+                    <div>
+                      <p className="text-sm font-semibold text-ink">Nivel actual</p>
+                      <p className="mt-1 text-xs leading-5 text-muted">Estado: {vixStateLabel(vixSpot?.vixSeverity)}</p>
+                    </div>
+                    <p className="text-2xl font-semibold leading-none text-ink">{formatNumber(vixSpot?.latestVix)}</p>
+                  </div>
+                  <div className="mt-4 flex items-center justify-between text-[10px] font-semibold uppercase text-muted">
+                    <span>Calma</span>
+                    <span>Atención</span>
+                    <span>Estrés</span>
+                  </div>
+                  <div className="mt-2 grid grid-cols-10 gap-1" aria-hidden="true">
+                    {vixBars.map((isFilled, index) => (
+                      <span
+                        key={`vix-bar-${index}`}
+                        className={isFilled ? "h-2.5 bg-brass" : "h-2.5 bg-line"}
+                      />
+                    ))}
+                  </div>
+                </div>
+                <div className="grid gap-2 sm:grid-cols-3">
+                  <Metric label="Cambio 1D" value={formatSignedNumber(vixSpot?.change1d)} />
+                  <Metric label="Momentum" value={vixTrendLabel(vixSpot?.vixTrend)} />
+                  <Metric label="Estado" value={vixSpot?.vixCompositeLabel ?? "Dato pendiente"} />
+                </div>
                 <Metric label="Curva VIX" value={data.volatility.termStructure?.classification ?? "Pendiente"} />
-                <Metric
-                  label="M1/M2"
-                  value={data.volatility.termStructure?.m1m2SlopePct === null || data.volatility.termStructure?.m1m2SlopePct === undefined
-                    ? "Pendiente"
-                    : `${data.volatility.termStructure.m1m2SlopePct.toFixed(1)}%`}
-                />
               </div>
-              <p className="mt-4 text-sm leading-6 text-muted">
-                {data.volatility.termStructure?.interpretation || data.volatility.vix?.spot.vixCompositeSubtext || "Volatilidad pendiente de actualización."}
-              </p>
+              <div className="mt-4 flex flex-col gap-3 border-t border-line pt-4 md:flex-row md:items-start md:justify-between">
+                <p className="text-sm leading-6 text-muted">
+                  {data.volatility.termStructure?.interpretation || data.volatility.vix?.spot.vixCompositeSubtext || "Dato VIX pendiente."}
+                </p>
+                {dashboardButton()}
+              </div>
             </ReportSection>
 
-            <ReportSection eyebrow="Auto 05" title="BTC ETF flows">
+            <ReportSection eyebrow="Flujos" title="BTC ETF flows">
               <div className="grid gap-2 sm:grid-cols-2">
                 <Metric label="Último día" value={formatUsdMillions(data.flows.btcEtfFlows?.flows.latestTotalNetFlow)} emphasis />
                 <Metric label="BTC ETF 5D" value={formatUsdMillions(data.flows.btcEtfFlows?.flows.rolling5dNetFlow)} />
@@ -217,7 +333,7 @@ export function AutomaticMarketReadings({ data }: AutomaticMarketReadingsProps) 
             </ReportSection>
           </div>
 
-          <ReportSection eyebrow="Auto 06" title="Activos principales del informe">
+          <ReportSection eyebrow="Activos" title="Activos principales del informe">
             <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-4">
               {selectedStatAssets.map((item) => (
                 <article key={item.label} className="border border-line bg-panelSoft p-4">
@@ -273,6 +389,26 @@ function SignalList({ items, title }: { title: string; items: string[] }) {
       <p className="text-sm font-semibold text-ink">{title}</p>
       <div className="mt-3 grid gap-2 text-sm leading-6 text-muted">
         {items.length ? items.map((item, index) => <p key={`${title}-${index}`} className="border-l border-brass/70 pl-3">{item}</p>) : <p>Sin lecturas destacadas en este bloque.</p>}
+      </div>
+    </div>
+  );
+}
+
+function CompactSectorList({ items, title }: { title: string; items: Array<{ label: string; value: string }> }) {
+  return (
+    <div className="border border-line bg-panelSoft p-4">
+      <p className="text-sm font-semibold text-ink">{title}</p>
+      <div className="mt-3 grid gap-2">
+        {items.length ? (
+          items.map((item) => (
+            <div key={`${title}-${item.label}`} className="flex items-start justify-between gap-3 text-sm leading-6">
+              <span className="text-muted">{item.label}</span>
+              <span className="shrink-0 font-semibold text-ink">{item.value}</span>
+            </div>
+          ))
+        ) : (
+          <p className="text-sm leading-6 text-muted">Dato pendiente.</p>
+        )}
       </div>
     </div>
   );
