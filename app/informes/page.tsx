@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { AutomaticMarketReadings } from "@/components/reports/AutomaticMarketReadings";
 import { buildWeeklyReportData } from "@/lib/reports/build-weekly-report-data";
-import { breadthProxyPlanText } from "@/lib/market/breadth-proxies";
 import { jpmSpxLevelsContext } from "@/lib/market/jpm-spx-levels";
 import { activeMarketReport, getReportsByMonth } from "@/lib/reports/market-reports";
 import type { WeeklyReportData } from "@/lib/reports/build-weekly-report-data";
@@ -362,22 +361,30 @@ function getWatchStatuses(data: WeeklyReportData): Record<string, { text: string
   const iwmLevel = statsByTicker.get("IWM");
   const sectorStats = data.statisticalLevels.filter((asset) => asset.ticker.startsWith("XL"));
   const sectorsPositive = data.sectors.data?.sectors.filter((sector) => (sector.return1w ?? 0) > 0).length ?? null;
-  const sectorsNegative = data.sectors.data?.sectors.filter((sector) => (sector.return1w ?? 0) < 0).length ?? null;
   const sectorsOverLongAverage = sectorStats.filter((asset) => (asset.distanceToLongAverage ?? -Infinity) > 0).length;
-  const relativeRspText = rspLevel && spyLevel
-    ? `RSP vs SPY 1W: ${formatPercentagePoints(rspLevel.returns["1W"], spyLevel.returns["1W"])} pp.`
-    : "RSP/SPY pendiente o no disponible en snapshot.";
-  const relativeIwmText = iwmLevel && spyLevel
-    ? `IWM vs SPY 1W: ${formatPercentagePoints(iwmLevel.returns["1W"], spyLevel.returns["1W"])} pp.`
-    : "IWM/SPY pendiente o no disponible en snapshot.";
+  const sectorTotal = data.sectors.data?.sectors.length ?? sectorStats.length;
+  const equalWeightLabel = rspLevel && spyLevel
+    ? relativeParticipationLabel(rspLevel.returns["1W"], spyLevel.returns["1W"])
+    : "pendiente";
+  const smallCapsLabel = iwmLevel && spyLevel
+    ? smallCapsParticipationLabel(iwmLevel.returns["1W"], spyLevel.returns["1W"])
+    : "pendiente";
+  const sectorTone = sectorsPositive !== null && sectorTotal && sectorsPositive / sectorTotal >= 0.6
+    ? "la lectura sectorial sigue amplia"
+    : sectorsPositive !== null && sectorTotal
+      ? "la lectura sectorial luce selectiva"
+      : "la lectura sectorial queda pendiente";
+  const leadershipTone = equalWeightLabel === "mejor" || smallCapsLabel === "liderando"
+    ? "y la participación fuera de los líderes grandes mejora."
+    : equalWeightLabel === "plano" || smallCapsLabel === "acompañando"
+      ? "con participación fuera de los líderes grandes estable."
+      : "aunque equal weight y small caps no lideran.";
   const breadthText = [
-    `Lectura proxy de amplitud con ETFs líquidos; no sustituye advance/decline oficial por componente. ${breadthProxyPlanText()}.`,
-    relativeRspText,
-    relativeIwmText,
-    rspLevel ? `RSP: percentil ${formatStat(rspLevel.percentile, 1)}, distancia a media larga ${formatDashboardPercent(rspLevel.distanceToLongAverage)}.` : "RSP pendiente o no disponible en snapshot.",
-    iwmLevel ? `IWM: percentil ${formatStat(iwmLevel.percentile, 1)}, distancia a media larga ${formatDashboardPercent(iwmLevel.distanceToLongAverage)}.` : "IWM pendiente o no disponible en snapshot.",
-    sectorsPositive !== null && sectorsNegative !== null ? `Sectores 5D positivos/negativos: ${sectorsPositive}/${sectorsNegative}.` : "Sectores positivos/negativos pendientes.",
-    sectorStats.length ? `Sectores sobre media larga: ${sectorsOverLongAverage}/${sectorStats.length}.` : "Sectores sobre media larga pendientes.",
+    `Hoy ${sectorTone}, ${leadershipTone}`,
+    sectorsPositive !== null && sectorTotal ? `Sectores positivos: ${sectorsPositive} de ${sectorTotal}.` : "Sectores positivos: pendiente.",
+    sectorStats.length ? `Sectores sobre media larga: ${sectorsOverLongAverage} de ${sectorStats.length}.` : "Sectores sobre media larga: pendiente.",
+    `Equal weight vs S&P 500: ${equalWeightLabel}.`,
+    `Small caps vs S&P 500: ${smallCapsLabel}.`,
   ].join(" ");
   const jpmSpxText = `${jpmSpxLevelsContext.statusText} ${jpmSpxLevelsContext.clarification}`;
   const optionsText = `${data.optionsProxy.statusText} ${data.optionsProxy.proxyClarification}`;
@@ -398,7 +405,7 @@ function getWatchStatuses(data: WeeklyReportData): Record<string, { text: string
     "btc-etf-flows": { text: cryptoFlowsText },
     ...(financialText ? { "bank-earnings": { text: financialText, href: "/dashboard", referenceLabel: "Dashboard" } } : {}),
     ...(semisText ? { "semis-earnings": { text: semisText, href: "/dashboard", referenceLabel: "Dashboard" } } : {}),
-    breadth: { text: breadthText, href: "/niveles-estadisticos?asset=RSP", referenceLabel: "Niveles estadísticos" },
+    breadth: { text: breadthText, href: "/dashboard", referenceLabel: "Ver detalle de amplitud en Dashboard" },
     levels: { text: levelsText ? `${levelsText} ${jpmSpxText}` : jpmSpxText, href: jpmSpxLevelsContext.sourceUrl, referenceLabel: jpmSpxLevelsContext.sourceLabel },
     options: { text: optionsText, href: data.optionsProxy.sourceUrl, referenceLabel: data.optionsProxy.sourceName },
     ...(seasonalityText
@@ -422,10 +429,18 @@ function formatDashboardPercent(value: number | null | undefined) {
   return `${value > 0 ? "+" : ""}${(value * 100).toFixed(1)}%`;
 }
 
-function formatPercentagePoints(value: number | null | undefined, benchmark: number | null | undefined) {
+function relativeParticipationLabel(value: number | null | undefined, benchmark: number | null | undefined) {
   if (value === null || value === undefined || benchmark === null || benchmark === undefined) return "pendiente";
   const spread = (value - benchmark) * 100;
-  return `${spread > 0 ? "+" : ""}${spread.toFixed(1)}`;
+  if (Math.abs(spread) < 0.1) return "plano";
+  return spread > 0 ? "mejor" : "peor";
+}
+
+function smallCapsParticipationLabel(value: number | null | undefined, benchmark: number | null | undefined) {
+  if (value === null || value === undefined || benchmark === null || benchmark === undefined) return "pendiente";
+  const spread = (value - benchmark) * 100;
+  if (Math.abs(spread) < 0.1) return "acompañando";
+  return spread > 0 ? "liderando" : "rezagadas";
 }
 
 function formatSectorPercent(value: number | null | undefined) {

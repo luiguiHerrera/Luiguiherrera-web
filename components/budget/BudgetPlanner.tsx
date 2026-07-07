@@ -232,7 +232,7 @@ const copy = {
 };
 
 const initialInput: BudgetInput = {
-  currency: "COP",
+  currency: "€",
   debtPayments: 0,
   education: 0,
   emergencyFund: 0,
@@ -252,7 +252,23 @@ const initialAntExpenses: AntExpense[] = [
   { amount: 0, frequency: "daily", id: "ant-1", name: "", pressureKey: "enjoyment", timesPerMonth: 1 },
 ];
 
-const currencyOptions = ["COP", "USD", "EUR", "MXN", "$", "€"];
+const currencyOptions: Array<{ label: Record<Locale, string>; value: string }> = [
+  { value: "AUD", label: { es: "AUD — Dólar australiano", en: "AUD — Australian dollar" } },
+  { value: "CAD", label: { es: "CAD — Dólar canadiense", en: "CAD — Canadian dollar" } },
+  { value: "CHF", label: { es: "CHF — Franco suizo", en: "CHF — Swiss franc" } },
+  { value: "CNY", label: { es: "CNY — Yuan chino", en: "CNY — Chinese yuan" } },
+  { value: "COP", label: { es: "COP — Peso colombiano", en: "COP — Colombian peso" } },
+  { value: "EUR", label: { es: "EUR — Euro", en: "EUR — Euro" } },
+  { value: "GBP", label: { es: "GBP — Libra esterlina", en: "GBP — Pound sterling" } },
+  { value: "HKD", label: { es: "HKD — Dólar de Hong Kong", en: "HKD — Hong Kong dollar" } },
+  { value: "JPY", label: { es: "JPY — Yen japonés", en: "JPY — Japanese yen" } },
+  { value: "MXN", label: { es: "MXN — Peso mexicano", en: "MXN — Mexican peso" } },
+  { value: "SGD", label: { es: "SGD — Dólar de Singapur", en: "SGD — Singapore dollar" } },
+  { value: "USD", label: { es: "USD — Dólar estadounidense", en: "USD — US dollar" } },
+  { value: "$", label: { es: "$ — Símbolo genérico", en: "$ — Generic symbol" } },
+  { value: "€", label: { es: "€ — Símbolo euro", en: "€ — Euro symbol" } },
+  { value: "Otro", label: { es: "Otro", en: "Other" } },
+];
 
 const frequencyOptions: Array<{ label: Record<Locale, string>; months: number; value: Frequency }> = [
   { value: "monthly", months: 1, label: { es: "Mensual", en: "Monthly" } },
@@ -271,7 +287,7 @@ const antFrequencyOptions: Array<{ label: Record<Locale, string>; value: AntFreq
 
 const priorityOptions: Array<{ label: Record<Locale, string>; value: BudgetPriority }> = [
   { value: "peace", label: { es: "Tranquilidad", en: "Peace of mind" } },
-  { value: "family", label: { es: "Familia", en: "Family" } },
+  { value: "family", label: { es: "Hogar", en: "Household" } },
   { value: "debt", label: { es: "Salir de deudas", en: "Getting out of debt" } },
   { value: "emergency", label: { es: "Fondo de emergencia", en: "Emergency fund" } },
   { value: "investing", label: { es: "Invertir con más orden", en: "Investing with more order" } },
@@ -303,6 +319,7 @@ function formatMoney(value: number, currency: string, locale: Locale) {
   const formatted = new Intl.NumberFormat(locale === "es" ? "es-ES" : "en-US", {
     maximumFractionDigits: 0,
   }).format(Math.round(safe));
+  if (cleanCurrency === "Otro" || cleanCurrency === "Other") return `${locale === "es" ? "Moneda" : "Currency"} ${formatted}`;
   return cleanCurrency === "$" || cleanCurrency === "€" ? `${cleanCurrency}${formatted}` : `${cleanCurrency} ${formatted}`;
 }
 
@@ -399,8 +416,8 @@ function priorityReading(priority: BudgetPriority, locale: Locale) {
       en: "If your priority is peace of mind, the initial focus is margin: less improvisation, more protection, and fewer decisions made under urgency.",
     },
     family: {
-      es: "Si tu prioridad es familia, el presupuesto necesita menos azar y más preparación. No se trata solo de gastar menos, sino de reducir fragilidad.",
-      en: "If your priority is family, the budget needs less chance and more preparation. It is not only about spending less, but reducing fragility.",
+      es: "Si tu prioridad es el hogar, el presupuesto necesita menos azar y más preparación para reducir fragilidad.",
+      en: "If your priority is the household, the budget needs less chance and more preparation to reduce fragility.",
     },
     debt: {
       es: "Si tu prioridad es salir de deudas, el presupuesto debe liberar flujo para atacar capital sin romper lo básico.",
@@ -606,20 +623,15 @@ export function BudgetPlanner({ locale }: { locale: Locale }) {
         <div className="mt-5 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
           <label className="grid gap-2">
             <span className="text-xs font-semibold uppercase tracking-[0.14em] text-muted">{labels.currency}</span>
-            <input
+            <select
               className="max-w-[12rem] rounded-[4px] border border-line bg-white/80 px-3 py-2.5 text-sm font-semibold text-ink outline-none transition focus:border-petrol focus:bg-white"
-              list={`currency-options-${locale}`}
-              maxLength={8}
               onChange={(event) => updateInput("currency", event.target.value)}
-              placeholder={locale === "es" ? "COP, USD, EUR..." : "USD, COP, EUR..."}
-              type="text"
               value={input.currency}
-            />
-            <datalist id={`currency-options-${locale}`}>
-              {[...currencyOptions, locale === "es" ? "Otro" : "Other"].map((currency) => (
-                <option key={currency} value={currency} />
+            >
+              {currencyOptions.map((currency) => (
+                <option key={currency.value} value={currency.value}>{currency.label[locale]}</option>
               ))}
-            </datalist>
+            </select>
           </label>
           <label className="grid gap-2">
             <span className="text-xs font-semibold uppercase tracking-[0.14em] text-muted">{labels.focusQuestion}</span>
@@ -729,22 +741,24 @@ export function BudgetPlanner({ locale }: { locale: Locale }) {
             const annual = monthly * 12;
             const pressureLabel = data.categories.find((category) => category.key === expense.pressureKey)?.label ?? labels.enjoyment;
             return (
-              <div key={expense.id} className="grid gap-4 rounded-[6px] border border-line bg-white/75 p-4 xl:grid-cols-[1fr_0.9fr_1fr_0.8fr_1fr_auto] xl:items-end">
-                <label className="grid gap-2">
+              <div key={expense.id} className="grid min-w-0 gap-4 rounded-[6px] border border-line bg-white/75 p-4 lg:grid-cols-2 xl:grid-cols-[minmax(0,1fr)_minmax(0,0.8fr)_minmax(0,0.9fr)_minmax(0,0.7fr)_minmax(0,1fr)_auto] xl:items-end">
+                <label className="grid min-w-0 gap-2">
                   <span className="text-xs font-semibold uppercase tracking-[0.14em] text-muted">{labels.antName}</span>
                   <input
-                    className="rounded-[4px] border border-line bg-white/80 px-3 py-2.5 text-sm font-semibold text-ink outline-none transition focus:border-petrol focus:bg-white"
+                    className="min-w-0 rounded-[4px] border border-line bg-white/80 px-3 py-2.5 text-sm font-semibold text-ink outline-none transition focus:border-petrol focus:bg-white"
                     onChange={(event) => updateAntExpense(expense.id, { name: event.target.value })}
                     placeholder={locale === "es" ? "Café, domicilios..." : "Coffee, delivery..."}
                     type="text"
                     value={expense.name}
                   />
                 </label>
-                <MoneyField label={locale === "es" ? "Monto" : "Amount"} locale={locale} onChange={(value) => updateAntExpense(expense.id, { amount: value })} value={expense.amount} />
-                <label className="grid gap-2">
+                <div className="min-w-0">
+                  <MoneyField label={locale === "es" ? "Monto" : "Amount"} locale={locale} onChange={(value) => updateAntExpense(expense.id, { amount: value })} value={expense.amount} />
+                </div>
+                <label className="grid min-w-0 gap-2">
                   <span className="text-xs font-semibold uppercase tracking-[0.14em] text-muted">{labels.frequency}</span>
                   <select
-                    className="rounded-[4px] border border-line bg-white/80 px-3 py-2.5 text-sm font-semibold text-ink outline-none transition focus:border-petrol focus:bg-white"
+                    className="min-w-0 rounded-[4px] border border-line bg-white/80 px-3 py-2.5 text-sm font-semibold text-ink outline-none transition focus:border-petrol focus:bg-white"
                     onChange={(event) => updateAntExpense(expense.id, { frequency: event.target.value as AntFrequency })}
                     value={expense.frequency}
                   >
@@ -753,10 +767,10 @@ export function BudgetPlanner({ locale }: { locale: Locale }) {
                     ))}
                   </select>
                 </label>
-                <label className="grid gap-2">
+                <label className="grid min-w-0 gap-2">
                   <span className="text-xs font-semibold uppercase tracking-[0.14em] text-muted">{labels.monthlyTimes}</span>
                   <input
-                    className="rounded-[4px] border border-line bg-white/80 px-3 py-2.5 text-sm font-semibold text-ink outline-none transition focus:border-petrol focus:bg-white disabled:bg-panelSoft"
+                    className="min-w-0 rounded-[4px] border border-line bg-white/80 px-3 py-2.5 text-sm font-semibold text-ink outline-none transition focus:border-petrol focus:bg-white disabled:bg-panelSoft"
                     disabled={expense.frequency !== "occasional"}
                     inputMode="numeric"
                     onChange={(event) => updateAntExpense(expense.id, { timesPerMonth: Math.max(0, parseMoneyInput(event.target.value)) })}
@@ -764,10 +778,10 @@ export function BudgetPlanner({ locale }: { locale: Locale }) {
                     value={formatMoneyInput(expense.frequency === "occasional" ? expense.timesPerMonth : 0, locale)}
                   />
                 </label>
-                <label className="grid gap-2">
+                <label className="grid min-w-0 gap-2">
                   <span className="text-xs font-semibold uppercase tracking-[0.14em] text-muted">{labels.antPressure}</span>
                   <select
-                    className="rounded-[4px] border border-line bg-white/80 px-3 py-2.5 text-sm font-semibold text-ink outline-none transition focus:border-petrol focus:bg-white"
+                    className="min-w-0 rounded-[4px] border border-line bg-white/80 px-3 py-2.5 text-sm font-semibold text-ink outline-none transition focus:border-petrol focus:bg-white"
                     onChange={(event) => updateAntExpense(expense.id, { pressureKey: event.target.value as BudgetBlock })}
                     value={expense.pressureKey}
                   >
@@ -776,10 +790,10 @@ export function BudgetPlanner({ locale }: { locale: Locale }) {
                     ))}
                   </select>
                 </label>
-                <button type="button" onClick={() => removeAntExpense(expense.id)} className="rounded-[4px] border border-line bg-panel px-3 py-2.5 text-xs font-semibold text-muted transition hover:border-petrol hover:text-petrol">
+                <button type="button" onClick={() => removeAntExpense(expense.id)} className="w-fit rounded-[4px] border border-line bg-panel px-3 py-2.5 text-xs font-semibold text-muted transition hover:border-petrol hover:text-petrol xl:justify-self-end">
                   {labels.remove}
                 </button>
-                <p className="xl:col-span-6 text-sm leading-6 text-muted">
+                <p className="min-w-0 text-sm leading-6 text-muted lg:col-span-2 xl:col-span-6">
                   {labels.monthlyEquivalent}: <span className="font-semibold text-ink">{formatMoney(monthly, input.currency, locale)}</span>
                   {" · "}
                   {labels.antAnnualEquivalent}: <span className="font-semibold text-ink">{formatMoney(annual, input.currency, locale)}</span>

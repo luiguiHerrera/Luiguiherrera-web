@@ -13,7 +13,9 @@ import { SectionHeader } from "@/components/ui/SectionHeader";
 import { getDashboardData } from "@/lib/dashboard/get-dashboard-data";
 import { dataStatusLabels } from "@/lib/dashboard/status";
 import { translateDashboardText, translateRegimeLabel } from "@/lib/dashboard/translate-dashboard-copy";
+import { buildWeeklyReportData } from "@/lib/reports/build-weekly-report-data";
 import type { RegimeBias } from "@/lib/dashboard/types";
+import type { WeeklyReportData } from "@/lib/reports/build-weekly-report-data";
 
 export const revalidate = 86400;
 
@@ -30,12 +32,152 @@ const englishRiskBiasLabels: Record<RegimeBias, string> = {
   stress: "Stress",
 };
 
+function MarketBreadthPanel({ data, locale }: { data: WeeklyReportData; locale: "es" | "en" }) {
+  const statsByTicker = new Map(data.statisticalLevels.map((asset) => [asset.ticker, asset]));
+  const spyLevel = statsByTicker.get("SPY");
+  const rspLevel = statsByTicker.get("RSP");
+  const iwmLevel = statsByTicker.get("IWM");
+  const qqqLevel = statsByTicker.get("QQQ");
+  const sectorStats = data.statisticalLevels.filter((asset) => asset.ticker.startsWith("XL"));
+  const sectorsPositive = data.sectors.data?.sectors.filter((sector) => (sector.return1w ?? 0) > 0).length ?? null;
+  const sectorsNegative = data.sectors.data?.sectors.filter((sector) => (sector.return1w ?? 0) < 0).length ?? null;
+  const sectorTotal = data.sectors.data?.sectors.length ?? sectorStats.length;
+  const sectorsOverLongAverage = sectorStats.filter((asset) => (asset.distanceToLongAverage ?? -Infinity) > 0).length;
+  const copy = locale === "en"
+    ? {
+        eyebrow: "Market breadth",
+        title: "Market breadth",
+        subtitle: "It looks for whether the index is rising with broad participation or being held up by a few leaders.",
+        rsp: "RSP/SPY",
+        rspHelp: "Equal weight versus the S&P 500. It checks whether the average stock is keeping up with the capitalization-weighted index.",
+        iwm: "IWM/SPY",
+        iwmHelp: "Small caps versus the S&P 500. It checks whether risk appetite is broadening.",
+        qqq: "QQQ/SPY",
+        qqqHelp: "Technology/growth versus the S&P 500. It checks concentration in growth and technology.",
+        sectorParticipation: "Positive sectors",
+        sectorParticipationHelp: "How many sectors are participating.",
+        sectorTrend: "Sectors above long average",
+        sectorTrendHelp: "Trend health by sector.",
+        classicTitle: "Classic breadth",
+        classicSubtitle: "Requires real advance/decline and new-high/new-low data. Prepared without live values until an automated source is available.",
+        pendingSource: "Pending automated source",
+        adLine: "Advance-decline line",
+        adLineHelp: "Would accumulate advances minus declines to see whether participation improves or deteriorates over time.",
+        mcclellan: "McClellan oscillator",
+        mcclellanHelp: "Would compare short and medium advance/decline momentum, commonly with 19- and 39-period EMAs.",
+        netHighs: "Net 52-week highs",
+        netHighsHelp: "Would compare new 52-week highs with new 52-week lows.",
+        pending: "pending",
+        flat: "flat",
+      }
+    : {
+        eyebrow: "Amplitud de mercado",
+        title: "Amplitud de mercado",
+        subtitle: "Busca responder si el índice sube acompañado o sostenido por pocos líderes.",
+        rsp: "RSP/SPY",
+        rspHelp: "Equal weight contra S&P 500. Mide si la acción promedio acompaña al índice ponderado por capitalización.",
+        iwm: "IWM/SPY",
+        iwmHelp: "Small caps contra S&P 500. Mide si el apetito por riesgo se ensancha.",
+        qqq: "QQQ/SPY",
+        qqqHelp: "Tecnología/growth contra S&P 500. Mide concentración en crecimiento y tecnología.",
+        sectorParticipation: "Sectores positivos",
+        sectorParticipationHelp: "Cuántos sectores acompañan.",
+        sectorTrend: "Sectores sobre media larga",
+        sectorTrendHelp: "Salud de tendencia por sector.",
+        classicTitle: "Amplitud clásica",
+        classicSubtitle: "Requiere datos reales de avances/descensos y nuevos máximos/mínimos. Queda preparado sin valores en vivo hasta tener fuente automatizada.",
+        pendingSource: "Pendiente de fuente automatizada",
+        adLine: "Línea de avance-declive",
+        adLineHelp: "Acumularía avances menos descensos para ver si la participación mejora o se deteriora con el tiempo.",
+        mcclellan: "Oscilador McClellan",
+        mcclellanHelp: "Compararía momentum corto y medio de avances/descensos, normalmente con EMAs de 19 y 39 periodos.",
+        netHighs: "Nuevos máximos netos de 52 semanas",
+        netHighsHelp: "Compararía nuevos máximos de 52 semanas contra nuevos mínimos de 52 semanas.",
+        pending: "pendiente",
+        flat: "plano",
+      };
+  const metrics = [
+    {
+      label: copy.rsp,
+      value: spyLevel && rspLevel ? formatDashboardPpSpread(rspLevel.returns["1W"], spyLevel.returns["1W"], copy.pending, copy.flat) : copy.pending,
+      helper: copy.rspHelp,
+    },
+    {
+      label: copy.iwm,
+      value: spyLevel && iwmLevel ? formatDashboardPpSpread(iwmLevel.returns["1W"], spyLevel.returns["1W"], copy.pending, copy.flat) : copy.pending,
+      helper: copy.iwmHelp,
+    },
+    {
+      label: copy.qqq,
+      value: spyLevel && qqqLevel ? formatDashboardPpSpread(qqqLevel.returns["1W"], spyLevel.returns["1W"], copy.pending, copy.flat) : copy.pending,
+      helper: copy.qqqHelp,
+    },
+    {
+      label: copy.sectorParticipation,
+      value: sectorsPositive !== null && sectorsNegative !== null && sectorTotal ? `${sectorsPositive}/${sectorTotal}` : copy.pending,
+      helper: copy.sectorParticipationHelp,
+    },
+    {
+      label: copy.sectorTrend,
+      value: sectorStats.length ? `${sectorsOverLongAverage}/${sectorStats.length}` : copy.pending,
+      helper: copy.sectorTrendHelp,
+    },
+  ];
+  const classicMetrics = [
+    { helper: copy.adLineHelp, label: copy.adLine },
+    { helper: copy.mcclellanHelp, label: copy.mcclellan },
+    { helper: copy.netHighsHelp, label: copy.netHighs },
+  ];
+
+  return (
+    <section className="border border-line bg-panel p-4 md:p-5">
+      <div>
+        <p className="text-xs font-semibold uppercase tracking-[0.16em] text-petrol">{copy.eyebrow}</p>
+        <h2 className="mt-2 text-xl font-semibold text-ink">{copy.title}</h2>
+        <p className="mt-2 max-w-3xl text-sm leading-6 text-muted">{copy.subtitle}</p>
+      </div>
+      <div className="mt-5 grid gap-3 sm:grid-cols-2 xl:grid-cols-5">
+        {metrics.map((metric) => (
+          <div key={metric.label} className="border border-line bg-panelSoft p-4">
+            <p className="text-xs uppercase tracking-[0.14em] text-muted">{metric.label}</p>
+            <p className="mt-2 font-semibold text-ink">{metric.value}</p>
+            <p className="mt-2 text-xs leading-5 text-muted">{metric.helper}</p>
+          </div>
+        ))}
+      </div>
+      <div className="mt-5 border-t border-line pt-5">
+        <p className="text-sm font-semibold text-ink">{copy.classicTitle}</p>
+        <p className="mt-2 max-w-3xl text-sm leading-6 text-muted">{copy.classicSubtitle}</p>
+        <div className="mt-4 grid gap-3 md:grid-cols-3">
+          {classicMetrics.map((metric) => (
+            <div key={metric.label} className="border border-line bg-white/70 p-4">
+              <p className="text-xs uppercase tracking-[0.14em] text-muted">{metric.label}</p>
+              <p className="mt-2 text-sm font-semibold text-brass">{copy.pendingSource}</p>
+              <p className="mt-2 text-xs leading-5 text-muted">{metric.helper}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function formatDashboardPpSpread(value: number | null | undefined, benchmark: number | null | undefined, pending: string, flat: string) {
+  if (value === null || value === undefined || benchmark === null || benchmark === undefined) return pending;
+  const spread = (value - benchmark) * 100;
+  if (Math.abs(spread) < 0.05) return flat;
+  return `${spread > 0 ? "+" : ""}${spread.toFixed(1)} pp`;
+}
+
 export default async function DashboardPage() {
   return <DashboardContent locale="es" />;
 }
 
 export async function DashboardContent({ locale = "es" }: { locale?: "es" | "en" }) {
-  const { btcEtfFlows, crossSignalRadar, dashboardModules, fedWatch, quantRisk, regimeSummary, sectorRotation, vix, vixTermStructure } = await getDashboardData();
+  const [{ btcEtfFlows, crossSignalRadar, dashboardModules, fedWatch, quantRisk, regimeSummary, sectorRotation, vix, vixTermStructure }, weeklyReportData] = await Promise.all([
+    getDashboardData(),
+    buildWeeklyReportData(),
+  ]);
   const remainingModules = dashboardModules.filter((module) => module.id !== "rates" && module.id !== "sectors" && module.id !== "vix" && module.id !== "btc-flows");
   const biasLabels = locale === "en" ? englishRiskBiasLabels : riskBiasLabels;
   const t = (value: string | null | undefined) => locale === "en" ? translateDashboardText(value) : value ?? "";
@@ -210,6 +352,7 @@ export async function DashboardContent({ locale = "es" }: { locale?: "es" | "en"
       <div className="mt-6 space-y-4 md:mt-8 md:space-y-6">
         {fedWatch ? <FedWatchModule data={fedWatch} locale={locale} /> : null}
         {sectorRotation ? <SectorRotationChart data={sectorRotation} /> : null}
+        <MarketBreadthPanel data={weeklyReportData} locale={locale} />
         {quantRisk ? <QuantRiskPanel data={quantRisk} locale={locale} /> : null}
         {vix ? <VixModule data={vix} /> : null}
         {vixTermStructure ? <VixTermStructureModule data={vixTermStructure} /> : null}

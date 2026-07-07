@@ -316,8 +316,8 @@ export const marketReports: MarketReport[] = [
       {
         key: "breadth",
         name: "Amplitud",
-        whatLooksAt: "RSP/SPY, IWM/SPY, sectores positivos/negativos y sectores sobre media larga.",
-        whyItMatters: "Un índice puede subir con pocos líderes. La amplitud ayuda a distinguir fortaleza amplia de concentración sin depender de feed externo pago.",
+        whatLooksAt: "Si la subida está acompañada por muchas acciones, sectores y tamaños de empresa, o si depende de pocos líderes.",
+        whyItMatters: "Un índice puede subir y aun así estar frágil si pocos activos hacen el trabajo.",
       },
       {
         key: "levels",
