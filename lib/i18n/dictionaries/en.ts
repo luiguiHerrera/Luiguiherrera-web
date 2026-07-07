@@ -22,10 +22,10 @@ export const en = {
       { href: "/en/start", label: "Start simple", shortLabel: "Simple", description: "Guided path for organizing the essentials." },
       { href: "/en/diagnostic?mode=quick", label: "Quick diagnostic", shortLabel: "Quick", description: "Compact read on horizon, liquidity, tolerance and biases." },
       { href: "/en/diagnostic?mode=complete", label: "Full diagnostic", shortLabel: "Full", description: "Deeper assessment across capacity, goals, behavior and consistency." },
-      { href: "/en/budget", label: "Personal budget", shortLabel: "Budget", description: "Educational map for comparing your current budget with an ideal reference." },
-      { href: "/en/debt", label: "Debt management", shortLabel: "Debt", description: "Defensive next block for reviewing debt before investing." },
+      { href: "/en/budget", label: "Personal budget", shortLabel: "Budget", description: "Organize income, expenses, protection, enjoyment, investing, and growth." },
+      { href: "/en/debt", label: "Debt management", shortLabel: "Debt", description: "Check whether your debt is competing with cash flow and your ability to invest." },
       { href: "/en/protect-your-money", label: "Protect your money", shortLabel: "Protect", description: "Red flags before committing capital." },
-      { href: "/en/protection", label: "Investment practice", shortLabel: "Practice", description: "Realistic cases to practice decisions without putting money at risk." },
+      { href: "/en/protection", label: "Investment practice", shortLabel: "Practice", description: "Short cases to train better questions before putting money at risk." },
       { href: "/en/trends", label: "Trends without hype", shortLabel: "Trends", description: "Global changes as hypotheses, not recommendations." },
     ],
     investorItems: [

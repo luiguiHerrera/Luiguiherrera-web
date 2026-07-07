@@ -3,24 +3,24 @@ import { EditorialPathPage } from "@/components/pathways/EditorialPathPage";
 const cards = [
   {
     label: "01",
-    meta: "Base",
-    title: "Diagnóstico rápido",
-    href: "/diagnostico",
-    description: "Evalúa tu punto de partida sin guardar respuestas.",
-  },
-  {
-    label: "02",
     meta: "Flujo",
     title: "Presupuesto personal",
     href: "/presupuesto",
-    description: "Compara tu distribución actual con un modelo ideal y aterrízalo a una versión realista.",
+    description: "Ordena ingresos, gastos, protección, disfrute, inversión y crecimiento.",
+  },
+  {
+    label: "02",
+    meta: "Deuda",
+    title: "Gestión de deudas",
+    href: "/deudas",
+    description: "Revisa si tus deudas están compitiendo contra tu flujo y tu capacidad de invertir.",
   },
   {
     label: "03",
-    meta: "Próximo bloque",
-    title: "Gestión de deudas",
-    href: "/deudas",
-    description: "Una deuda cara puede competir contra cualquier inversión incierta. Ordena el costo, el flujo y el margen de seguridad.",
+    meta: "Para invertir",
+    title: "Diagnóstico de inversión",
+    href: "/diagnostico",
+    description: "Úsalo cuando ya tengas más claro tu flujo, tus deudas y tu margen para asumir riesgo.",
   },
   {
     label: "04",
@@ -34,7 +34,7 @@ const cards = [
     meta: "Práctica",
     title: "Prácticas de inversión",
     href: "/proteccion",
-    description: "Casos realistas para practicar decisiones sin poner dinero en riesgo.",
+    description: "Casos cortos para entrenar preguntas antes de poner dinero en riesgo.",
   },
   {
     label: "06",
@@ -52,8 +52,8 @@ export default function EmpezarPage() {
       cards={cards}
       closingNote="Este camino no busca simplificar en exceso. Busca ordenar el proceso: primero margen de error, luego protección, después contexto."
       eyebrow="Camino guiado"
-      intro="No necesitas empezar por z-scores, FedWatch o modelos cuantitativos. Puedes comenzar por lo esencial: entender tu margen de error, detectar riesgos evidentes y construir un proceso más limpio."
-      primaryCta={{ href: "/diagnostico", label: "Hacer diagnóstico rápido" }}
+      intro="No necesitas empezar por z-scores, FedWatch o modelos cuantitativos. Puedes comenzar por lo esencial: entender tu flujo, tus deudas, tu margen de error y después pensar en inversión."
+      primaryCta={{ href: "/presupuesto", label: "Ordenar presupuesto" }}
       secondaryCta={{ href: "/inversionista", label: "Ver modo inversionista" }}
       subtitle="Un camino para ordenar decisiones antes de entrar en métricas, modelos o reportes avanzados."
       title="Empezar simple"
