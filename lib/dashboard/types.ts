@@ -230,6 +230,40 @@ export type BtcEtfFlowsDashboardData = {
   module: DashboardModuleData;
 };
 
+export type GldPressureState = "inflow" | "outflow" | "neutral" | "pending";
+
+export type GldFlowPressurePoint = {
+  date: string;
+  nav: number;
+  sharesOutstanding: number;
+  totalNetAssets: number;
+};
+
+export type GldFlowPressure = {
+  asOf: string | null;
+  source: "State Street / SPDR Gold Shares";
+  sourceUrl: string;
+  dataStatus: "available" | "delayed" | "pending";
+  nav: number | null;
+  sharesOutstanding: number | null;
+  totalNetAssets: number | null;
+  oneDayShareChange: number | null;
+  fiveDayShareChange: number | null;
+  twentyDayShareChange: number | null;
+  oneDayShareChangePct: number | null;
+  fiveDayShareChangePct: number | null;
+  twentyDayShareChangePct: number | null;
+  oneDayImpliedPressureUsd: number | null;
+  fiveDayImpliedPressureUsd: number | null;
+  twentyDayImpliedPressureUsd: number | null;
+  pressureState: GldPressureState;
+  pressureLabel: string;
+  summary: string;
+  sourceNote: string;
+  reliabilityNote: string;
+  history: GldFlowPressurePoint[];
+};
+
 export type FedWatchConviction = "Alta" | "Media" | "Baja / dispersa";
 
 export type FedWatchRateRange = {
@@ -304,4 +338,5 @@ export type DashboardData = {
   vixTermStructure: VixTermStructureData | null;
   btcEtfFlows: BtcEtfFlowsDashboardData | null;
   ethEtfFlows: BtcEtfFlowsDashboardData | null;
+  gldFlowPressure: GldFlowPressure;
 };

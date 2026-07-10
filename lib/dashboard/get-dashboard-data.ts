@@ -1,5 +1,6 @@
 import { getBtcEtfFlowsData } from "@/lib/dashboard/adapters/btc-etf-flows";
 import { getFedWatchData } from "@/lib/dashboard/adapters/fedwatch";
+import { getGldFlowPressure } from "@/lib/dashboard/adapters/gld-flow-pressure";
 import { getRadarRows } from "@/lib/dashboard/adapters/radar";
 import { getSectorEtfsData } from "@/lib/dashboard/adapters/sector-etfs";
 import { getVixData } from "@/lib/dashboard/adapters/vix";
@@ -8,12 +9,13 @@ import { buildRegimeSummary } from "@/lib/dashboard/regime-scoring";
 import type { DashboardData } from "@/lib/dashboard/types";
 
 export async function getDashboardData(): Promise<DashboardData> {
-  const [sectorEtfs, btcEtfFlows, fedWatchData, vixData, vixTermStructure] = await Promise.all([
+  const [sectorEtfs, btcEtfFlows, fedWatchData, vixData, vixTermStructure, gldFlowPressure] = await Promise.all([
     getSectorEtfsData(),
     getBtcEtfFlowsData(),
     getFedWatchData(),
     getVixData(),
     getVixTermStructureData(),
+    getGldFlowPressure(),
   ]);
   const regimeSummary = buildRegimeSummary({
     btcEtfFlows,
@@ -38,5 +40,6 @@ export async function getDashboardData(): Promise<DashboardData> {
     vixTermStructure,
     btcEtfFlows,
     ethEtfFlows: null,
+    gldFlowPressure,
   };
 }

@@ -170,6 +170,7 @@ export async function buildWeeklyReportData() {
     flows: {
       btcEtfFlows: dashboard.btcEtfFlows,
       ethEtfFlows: null,
+      gldFlowPressure: dashboard.gldFlowPressure,
       generalEtfFlowsStatus: "Pendiente de fuente automatizada clara.",
     },
     optionsProxy,

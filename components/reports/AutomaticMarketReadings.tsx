@@ -331,6 +331,16 @@ export function AutomaticMarketReadings({ data }: AutomaticMarketReadingsProps) 
                 {data.flows.btcEtfFlows?.flows.readingSubtext || "Flujos BTC ETF pendientes de actualización."}
               </p>
             </ReportSection>
+
+            <ReportSection eyebrow="Oro" title="Presión de flujos en GLD">
+              <div className="grid gap-2 sm:grid-cols-2">
+                <Metric label="Proxy de presión de flujos" value={data.flows.gldFlowPressure.pressureLabel} emphasis />
+                <Metric label="Cambio 5D en participaciones" value={formatPercent(data.flows.gldFlowPressure.fiveDayShareChangePct, 2)} />
+                <Metric label="Fecha" value={data.flows.gldFlowPressure.asOf ?? "Dato pendiente"} />
+              </div>
+              <p className="mt-4 text-sm leading-6 text-muted">{data.flows.gldFlowPressure.summary}</p>
+              <p className="mt-3 border-t border-line pt-3 text-xs leading-5 text-muted">{data.flows.gldFlowPressure.sourceNote}</p>
+            </ReportSection>
           </div>
 
           <ReportSection eyebrow="Activos" title="Activos principales del informe">

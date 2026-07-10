@@ -1,6 +1,7 @@
 import { BtcEtfFlowsModule } from "@/components/dashboard/BtcEtfFlowsModule";
 import { DashboardModule } from "@/components/dashboard/DashboardModule";
 import { FedWatchModule } from "@/components/dashboard/FedWatchModule";
+import { GldFlowPressureModule } from "@/components/dashboard/GldFlowPressureModule";
 import { QuantRiskPanel } from "@/components/dashboard/QuantRiskPanel";
 import { RegimeBadge } from "@/components/dashboard/RegimeBadge";
 import { SectorRotationChart } from "@/components/dashboard/SectorRotationChart";
@@ -151,7 +152,7 @@ export default async function DashboardPage() {
 }
 
 export async function DashboardContent({ locale = "es" }: { locale?: "es" | "en" }) {
-  const [{ btcEtfFlows, crossSignalRadar, dashboardModules, fedWatch, quantRisk, regimeSummary, sectorRotation, vix, vixTermStructure }, weeklyReportData] = await Promise.all([
+  const [{ btcEtfFlows, crossSignalRadar, dashboardModules, fedWatch, gldFlowPressure, quantRisk, regimeSummary, sectorRotation, vix, vixTermStructure }, weeklyReportData] = await Promise.all([
     getDashboardData(),
     buildWeeklyReportData(),
   ]);
@@ -194,7 +195,7 @@ export async function DashboardContent({ locale = "es" }: { locale?: "es" | "en"
         finalDisclaimer: "This panel organizes public market readings. It does not forecast prices, recommend trades or replace personalized analysis.",
         capitalFlows: "Capital flows",
         capitalFlowsTitle: "BTC ETF flows",
-        capitalFlowsSubtitle: "Organizes BTC ETF flows and future capital-flow blocks without mixing them with spot statistical levels.",
+        capitalFlowsSubtitle: "Organizes BTC ETF flows and the GLD flow-pressure proxy without mixing them with spot statistical levels.",
       }
     : {
         eyebrow: "Lectura de régimen",
@@ -231,7 +232,7 @@ export async function DashboardContent({ locale = "es" }: { locale?: "es" | "en"
         finalDisclaimer: "Este panel organiza lecturas públicas de mercado. No anticipa precios, no recomienda operaciones con activos y no sustituye un análisis personalizado.",
         capitalFlows: "Flujos de capital",
         capitalFlowsTitle: "BTC ETF flows",
-        capitalFlowsSubtitle: "Ordena flujos de ETFs BTC y futuros bloques de capital sin mezclarlos con niveles estadísticos spot.",
+        capitalFlowsSubtitle: "Ordena flujos de ETFs BTC y el proxy de presión de flujos en GLD sin mezclarlos con niveles estadísticos spot.",
       };
 
   return (
@@ -333,14 +334,15 @@ export async function DashboardContent({ locale = "es" }: { locale?: "es" | "en"
         {quantRisk ? <QuantRiskPanel data={quantRisk} locale={locale} /> : null}
         {vix ? <VixModule data={vix} /> : null}
         {vixTermStructure ? <VixTermStructureModule data={vixTermStructure} /> : null}
-        {btcEtfFlows ? (
+        {btcEtfFlows || gldFlowPressure ? (
           <section className="grid gap-4">
             <div>
               <p className="text-xs font-semibold uppercase tracking-[0.16em] text-petrol">{copy.capitalFlows}</p>
               <h2 className="mt-2 text-2xl font-semibold leading-tight text-ink">{copy.capitalFlowsTitle}</h2>
               <p className="mt-2 max-w-3xl text-sm leading-6 text-muted">{copy.capitalFlowsSubtitle}</p>
             </div>
-            <BtcEtfFlowsModule data={btcEtfFlows} />
+            {gldFlowPressure ? <GldFlowPressureModule data={gldFlowPressure} locale={locale} /> : null}
+            {btcEtfFlows ? <BtcEtfFlowsModule data={btcEtfFlows} /> : null}
           </section>
         ) : null}
         {remainingModules.map((module) => <DashboardModule key={module.id} {...module} locale={locale} />)}
