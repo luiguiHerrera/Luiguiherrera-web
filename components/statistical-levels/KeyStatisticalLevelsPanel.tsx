@@ -63,7 +63,7 @@ function translateLevelText(value: string, locale: "es" | "en") {
 }
 
 function translateLocation(value: string, kind: "weekly" | "monthly", locale: "es" | "en") {
-  if (locale === "es") return value;
+  if (locale === "es") return kind === "weekly" ? value.replaceAll("por semana", "semanal") : value;
   const spanishPeriod = kind === "weekly" ? "por semana" : "mensual";
   const englishPeriod = kind === "weekly" ? "weekly" : "monthly";
   return value

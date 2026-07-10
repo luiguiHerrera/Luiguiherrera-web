@@ -141,7 +141,7 @@ const copy = {
     totalCost: "Intereses y costos estimados",
     weightedCost: "Costo anual ponderado",
     debtToLiquidity: "Deuda / patrimonio líquido",
-    fragileCopy: "Una deuda puede parecer buena por tasa o propósito, pero volverse mala si consume demasiado flujo mensual, reduce liquidez o impide construir margen de seguridad.",
+    fragileCopy: "Una deuda puede parecer razonable por tasa o propósito, pero volverse frágil si consume demasiado flujo mensual.",
     fixedAndMinimumsNote: "Este ratio asume que los gastos fijos no incluyen pagos mínimos de deuda. Si ya los incluiste, lee este dato con cautela.",
     metricInfo: {
       debtToLiquidity: "Compara lo que debes con tu base líquida disponible. Ayuda a ver si la deuda pesa mucho frente a tu colchón.",
@@ -153,7 +153,7 @@ const copy = {
       totalDebt: "Todo lo que todavía está pendiente según las deudas escritas.",
       weightedCost: "Una referencia del costo promedio de tus deudas. Si es alto, invertir tiene que competir contra una deuda cara.",
     },
-    namingCopy: "El punto no es etiquetar la deuda como buena o mala por nombre. El punto es mirar tasa, flujo, liquidez y fragilidad.",
+    namingCopy: "El punto no es etiquetar la deuda por su nombre, sino valorar si es manejable o frágil según su tasa, flujo, liquidez y margen de seguridad.",
     sameMethodsCopy: "Con los datos actuales, ambos métodos producen el mismo resultado porque no hay excedente sobre pagos mínimos o porque el orden práctico de liquidación no cambia.",
     sustainability: "Sostenibilidad del flujo",
     sustainableCopy: "El ingreso cubre gastos y el pago de deuda, y el pago mensual alcanza los mínimos.",

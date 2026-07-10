@@ -810,7 +810,7 @@ export const trendsContent: Record<Locale, TrendsContent> = {
         "Define rol: núcleo, satélite, apuesta u observación.",
         "Escribe qué tendría que pasar para que estés equivocado.",
       ],
-      closing: "Una tendencia puede ser real y aun así ser mala inversión.",
+      closing: "La hipótesis debe incluir precio, vehículo, horizonte y condiciones que podrían invalidarla.",
     },
     sources: {
       eyebrow: "Fuentes posibles",
