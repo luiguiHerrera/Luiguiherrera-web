@@ -27,7 +27,7 @@ const tools = [
     name: "Dashboard de régimen",
     does: "Ordena volatilidad, rotación sectorial, BTC ETF flows y el proxy de presión de flujos en GLD.",
     doesNot: "No da instrucciones operativas.",
-    source: "ETFs sectoriales como proxies, VIX de cierre, BTC ETF flows, proxy GLD con State Street y datos históricos precalculados.",
+    source: "Alpha Vantage para ETFs sectoriales como proxies, FRED/VIX para volatilidad, Bitbo para BTC ETF flows, State Street / GLD para el proxy de presión de flujos y datos pendientes donde aplica.",
     limit: "Fuentes externas pueden retrasarse, fallar o cambiar formato.",
   },
   {
@@ -68,7 +68,7 @@ const tools = [
 ];
 
 const sourceNotes = [
-  ["Mercado", "ETFs sectoriales como proxies, VIX de cierre, flujos publicados y datos históricos precalculados."],
+  ["Mercado", "Alpha Vantage para ETFs sectoriales, FRED/VIX, Bitbo, State Street / GLD y datos pendientes donde aplica."],
   ["Niveles estadísticos", "El dataset actual es un snapshot estático generado por script y commiteado; no hay evidencia en el repo de un cron de deploy que lo regenere automáticamente."],
   ["Actualización", "Algunos módulos se actualizan server-side con caché; otros requieren regeneración explícita mediante scripts estáticos."],
   ["Fallbacks", "Si una fuente falla, el módulo debe mostrar estado prudente sin presentar datos demo como reales."],
