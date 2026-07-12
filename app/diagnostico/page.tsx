@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { DisclaimerBox } from "@/components/ui/DisclaimerBox";
 import { SectionHeader } from "@/components/ui/SectionHeader";
 import type { DiagnosticMode } from "@/lib/diagnostic/types";
+import { ReadingCard } from "@/components/seo/ReadingCard";
 
 function modeFromSearchParam(mode: string | string[] | undefined): DiagnosticMode | undefined {
   if (mode === "quick" || mode === "complete") return mode;
@@ -25,6 +26,12 @@ export default async function DiagnosticoPage({ searchParams }: { searchParams?:
           No guardamos respuestas, portafolios ni resultados individuales. Si recargas la página, la sesión se pierde. Este diagnóstico es una lectura educativa de preparación actual y no constituye asesoramiento financiero o recomendación personalizada.
         </DisclaimerBox>
       </div>
+      <ReadingCard title="Ficha de lectura" items={[
+        { label: "Qué es", value: "Un diagnóstico educativo del inversionista que ordena horizonte, liquidez, experiencia, tolerancia psicológica, comportamiento y capacidad real para asumir riesgo." },
+        { label: "Para qué sirve", value: "Sirve para diferenciar deseo de invertir, tolerancia emocional y capacidad financiera antes de tomar decisiones." },
+        { label: "Límites", value: "No es una evaluación regulatoria de idoneidad o conveniencia y no guarda respuestas personales." },
+        { label: "Siguiente paso", value: "Usar el resultado como punto de conversación y revisar protección, deudas o mercado según el caso." },
+      ]} />
       <DiagnosticFlow initialMode={initialMode} />
     </div>
   );

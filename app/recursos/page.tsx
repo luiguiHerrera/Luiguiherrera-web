@@ -1,5 +1,6 @@
 import { tradingViewScripts } from "@/lib/resources/tradingview-scripts";
 import type { Metadata } from "next";
+import { ReadingCard } from "@/components/seo/ReadingCard";
 
 export const metadata: Metadata = {
   title: "Recursos para inversionistas | Scripts TradingView y herramientas",
@@ -45,6 +46,13 @@ export default function RecursosPage() {
           Herramientas públicas para complementar tu proceso.
         </p>
       </section>
+
+      <ReadingCard title="Ficha de lectura" items={[
+        { label: "Qué es", value: "Un catálogo de recursos públicos para inversionistas, incluyendo scripts open-source de TradingView y futuras herramientas educativas." },
+        { label: "Para qué sirve", value: "Sirve para encontrar herramientas reales publicadas sin enlaces falsos ni categorías infladas." },
+        { label: "Límites", value: "Los recursos son educativos y su disponibilidad depende de cada plataforma externa." },
+        { label: "Siguiente paso", value: "Explorar los scripts publicados o volver a mercado, niveles estadísticos y metodología." },
+      ]} />
 
       <section id="herramientas" className="mt-8 scroll-mt-28">
         <div className="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">

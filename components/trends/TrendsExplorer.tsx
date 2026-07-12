@@ -236,7 +236,7 @@ function TrendDetailPanel({ content, trend }: { content: TrendsContent; trend: T
   );
 }
 
-export function TrendsExplorer({ content }: { content: TrendsContent }) {
+export function TrendsExplorer({ content, readingCard }: { content: TrendsContent; readingCard?: React.ReactNode }) {
   const firstTrend = content.trends[0];
   const [selectedId, setSelectedId] = useState(firstTrend?.id ?? "");
 
@@ -274,6 +274,8 @@ export function TrendsExplorer({ content }: { content: TrendsContent }) {
           </div>
         </div>
       </section>
+
+      <div className="mx-auto max-w-7xl px-4 md:px-5">{readingCard}</div>
 
       <section className="border-b border-line bg-white/55">
         <div className="mx-auto max-w-7xl px-4 py-9 md:px-5 md:py-12">

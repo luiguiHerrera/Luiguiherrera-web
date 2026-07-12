@@ -1,4 +1,5 @@
 import { DebtPlanner } from "@/components/debt/DebtPlanner";
+import { ReadingCard } from "@/components/seo/ReadingCard";
 
 export default function EnglishDebtPage() {
   return (
@@ -15,6 +16,13 @@ export default function EnglishDebtPage() {
           It does not save your data. The calculations are approximate and are meant to organize questions, not make automatic decisions.
         </div>
       </section>
+
+      <ReadingCard title="Reading card" items={[
+        { label: "What it is", value: "An educational tool to compare debt, minimum payments, monthly cash flow, avalanche, snowball and extra payments." },
+        { label: "What it is for", value: "It helps see whether debt is manageable or fragile and whether investing competes against the certain return of paying expensive debt." },
+        { label: "Limits", value: "It does not replace financial, legal, tax or insolvency advice. Results depend on the data entered." },
+        { label: "Next step", value: "After reviewing debt, move to the investor diagnostic or investor protection." },
+      ]} />
 
       <DebtPlanner locale="en" />
     </div>

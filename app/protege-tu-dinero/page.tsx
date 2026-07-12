@@ -3,6 +3,8 @@ import type { Metadata } from "next";
 import { RedFlagsChecklist } from "@/components/red-flags/RedFlagsChecklist";
 import { DisclaimerBox } from "@/components/ui/DisclaimerBox";
 import { RiskPill } from "@/components/ui/RiskPill";
+import { ReadingCard } from "@/components/seo/ReadingCard";
+import type { ReactNode } from "react";
 
 const protectionFilters = [
   {
@@ -68,6 +70,15 @@ function SourceLink({ href, children }: { href: string; children: React.ReactNod
 }
 
 export default function ProtegeTuDineroPage() {
+  return <ProtectYourMoneyContent readingCard={<ReadingCard title="Ficha de lectura" items={[
+    { label: "Qué es", value: "Un checklist educativo de señales de alerta antes de confiar dinero a una entidad, producto o propuesta de inversión." },
+    { label: "Para qué sirve", value: "Sirve para revisar documentación, regulación, custodia, promesas, presión comercial, liquidez y derecho de salida." },
+    { label: "Límites", value: "No verifica oficialmente entidades, no declara fraude y debe complementarse con fuentes regulatorias oficiales." },
+    { label: "Siguiente paso", value: "Verificar la entidad en fuentes oficiales y usar el simulador de protección para practicar decisiones." },
+  ]} />} />;
+}
+
+export function ProtectYourMoneyContent({ readingCard }: { readingCard: ReactNode }) {
   return (
     <div className="mx-auto max-w-7xl px-5 py-10 md:py-14">
       <section className="grid gap-8 border-b border-line pb-9 lg:grid-cols-[1fr_0.72fr] lg:items-end">
@@ -88,6 +99,8 @@ export default function ProtegeTuDineroPage() {
           Herramienta educativa. No sustituye la verificación oficial en CNMV ni constituye asesoría legal o financiera.
         </DisclaimerBox>
       </section>
+
+      {readingCard}
 
       <section className="mt-8">
         <div className="max-w-3xl">

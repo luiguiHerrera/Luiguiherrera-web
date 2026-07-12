@@ -1,4 +1,5 @@
 import { EditorialPathPage } from "@/components/pathways/EditorialPathPage";
+import { ReadingCard } from "@/components/seo/ReadingCard";
 
 const cards = [
   {
@@ -57,6 +58,12 @@ export default function EnglishStartPage() {
       secondaryCta={{ href: "/en/investor", label: "View investor mode" }}
       subtitle="A guided path for organizing decisions before jumping into metrics, models, or advanced reports."
       title="Start simple"
+      readingCard={<ReadingCard title="Reading card" items={[
+        { label: "What it is", value: "A guided path to organize the main tools before investing: budget, debt, diagnostic, protection, practice and market context." },
+        { label: "What it is for", value: "It helps start with cash flow, debt, margin of safety and judgment before moving into advanced market readings." },
+        { label: "Limits", value: "It does not evaluate a full personal situation or replace financial, tax or legal advice." },
+        { label: "Next step", value: "Start with budget, then move to debt, diagnostic and protection." },
+      ]} />}
     />
   );
 }

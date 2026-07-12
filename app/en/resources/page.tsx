@@ -1,4 +1,5 @@
 import { tradingViewScripts } from "@/lib/resources/tradingview-scripts";
+import { ReadingCard } from "@/components/seo/ReadingCard";
 
 const toolCategories = [
   {
@@ -49,6 +50,12 @@ export default function EnglishResourcesPage() {
           Public tools to support your investment process.
         </p>
       </section>
+      <ReadingCard title="Reading card" items={[
+        { label: "What it is", value: "A catalog of public resources for investors, including open-source TradingView scripts and future educational tools." },
+        { label: "What it is for", value: "It helps find real published tools without fake links or inflated categories." },
+        { label: "Limits", value: "The resources are educational and availability depends on each external platform." },
+        { label: "Next step", value: "Explore the published scripts or return to market, statistical levels and methodology." },
+      ]} />
       <section id="tools" className="mt-8 scroll-mt-28">
         <div className="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
           <div>

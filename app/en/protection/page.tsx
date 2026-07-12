@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { InvestmentPractice } from "@/components/protection/InvestmentPractice";
+import { ReadingCard } from "@/components/seo/ReadingCard";
 
 const protectionItems = [
   { title: "Protect your money", href: "/en/protect-your-money", description: "Checklist, warning signs and filters before committing capital." },
@@ -16,6 +17,12 @@ export default function EnglishProtectionPage() {
           Checklists and filters to protect the margin of error before committing capital.
         </p>
       </section>
+      <ReadingCard title="Reading card" items={[
+        { label: "What it is", value: "An educational financial-decision simulator with cases about debt, referral-based products, real estate, ETFs and a family portfolio." },
+        { label: "What it is for", value: "It helps practice decisions before putting money at risk and recognize liquidity, incentives, concentration, time frame and commercial pressure." },
+        { label: "Limits", value: "The cases are illustrative. They do not recommend products, rate entities or replace personalized analysis." },
+        { label: "Next step", value: "Use the Protect your money checklist before reviewing a real proposal." },
+      ]} />
       <InvestmentPractice locale="en" />
       <section className="mt-8 grid gap-5 md:grid-cols-2">
         {protectionItems.map((item) => (

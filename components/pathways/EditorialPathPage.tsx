@@ -1,4 +1,5 @@
 import Link from "next/link";
+import type { ReactNode } from "react";
 
 type PathCard = {
   description: string;
@@ -24,6 +25,7 @@ type EditorialPathPageProps = {
   };
   subtitle: string;
   title: string;
+  readingCard?: ReactNode;
 };
 
 export function EditorialPathPage({
@@ -36,6 +38,7 @@ export function EditorialPathPage({
   secondaryCta,
   subtitle,
   title,
+  readingCard,
 }: EditorialPathPageProps) {
   return (
     <div className="mx-auto max-w-7xl px-4 py-10 md:px-5 md:py-14">
@@ -49,6 +52,8 @@ export function EditorialPathPage({
           {intro}
         </div>
       </section>
+
+      {readingCard}
 
       <section className="mt-8 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
         {cards.map((card) => (

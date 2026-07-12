@@ -1,6 +1,7 @@
 import Link from "next/link";
 import type { Metadata } from "next";
 import { InvestmentPractice } from "@/components/protection/InvestmentPractice";
+import { ReadingCard } from "@/components/seo/ReadingCard";
 
 const protectionItems = [
   {
@@ -25,6 +26,13 @@ export default function ProteccionPage() {
           Checklist y simulador de decisiones financieras para reconocer alertas y cuidar el margen de error antes de entregar capital.
         </p>
       </section>
+
+      <ReadingCard title="Ficha de lectura" items={[
+        { label: "Qué es", value: "Un simulador educativo de decisiones financieras con casos sobre deuda, productos con referidos, finca raíz, ETF y portafolio familiar." },
+        { label: "Para qué sirve", value: "Sirve para practicar decisiones antes de poner dinero en riesgo y reconocer liquidez, incentivos, concentración, plazo y presión comercial." },
+        { label: "Límites", value: "Los casos son ilustrativos. No recomiendan productos, no califican entidades y no sustituyen análisis personalizado." },
+        { label: "Siguiente paso", value: "Usar el checklist de Protege tu dinero antes de evaluar una propuesta real." },
+      ]} />
 
       <InvestmentPractice locale="es" />
 

@@ -1,5 +1,6 @@
 import { DebtPlanner } from "@/components/debt/DebtPlanner";
 import type { Metadata } from "next";
+import { ReadingCard } from "@/components/seo/ReadingCard";
 
 export const metadata: Metadata = {
   title: "Gestión de deudas | Avalancha, bola de nieve y flujo mensual",
@@ -24,6 +25,13 @@ export default function DeudasPage() {
           No guarda tus datos. Los cálculos son aproximados y sirven para ordenar preguntas, no para tomar decisiones automáticas.
         </div>
       </section>
+
+      <ReadingCard title="Ficha de lectura" items={[
+        { label: "Qué es", value: "Una herramienta educativa para comparar deuda, pagos mínimos, flujo mensual, avalancha, bola de nieve y abonos extraordinarios." },
+        { label: "Para qué sirve", value: "Sirve para ver si una deuda es manejable o frágil y si invertir compite contra una rentabilidad segura al pagar deuda cara." },
+        { label: "Límites", value: "No sustituye asesoría financiera, legal, fiscal ni de insolvencia. Los resultados dependen de los datos ingresados." },
+        { label: "Siguiente paso", value: "Después de revisar deuda, pasar al diagnóstico del inversionista o a protección del inversor." },
+      ]} />
 
       <DebtPlanner locale="es" />
     </div>

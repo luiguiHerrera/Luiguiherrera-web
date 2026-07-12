@@ -1,5 +1,6 @@
 import { EditorialPathPage } from "@/components/pathways/EditorialPathPage";
 import type { Metadata } from "next";
+import { ReadingCard } from "@/components/seo/ReadingCard";
 
 export const metadata: Metadata = {
   title: "Empezar a invertir | Ruta guiada de preparación financiera",
@@ -63,6 +64,12 @@ export default function EmpezarPage() {
       secondaryCta={{ href: "/inversionista", label: "Ver modo inversionista" }}
       subtitle="Ruta guiada para ordenar presupuesto, deudas, diagnóstico, protección y prácticas antes de invertir."
       title="Empezar simple"
+      readingCard={<ReadingCard title="Ficha de lectura" items={[
+        { label: "Qué es", value: "Una ruta guiada para ordenar las herramientas principales antes de invertir: presupuesto, deudas, diagnóstico, protección, práctica y mercado." },
+        { label: "Para qué sirve", value: "Sirve para empezar por flujo, deuda, margen de seguridad y criterio antes de pasar a lecturas de mercado más avanzadas." },
+        { label: "Límites", value: "No evalúa una situación personal completa ni reemplaza asesoría financiera, fiscal o legal." },
+        { label: "Siguiente paso", value: "Empezar por presupuesto personal y avanzar hacia deudas, diagnóstico y protección." },
+      ]} />}
     />
   );
 }

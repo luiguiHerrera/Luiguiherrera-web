@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useMemo, useState } from "react";
+import { ReadingCard } from "@/components/seo/ReadingCard";
 
 type Locale = "es" | "en";
 
@@ -595,6 +596,18 @@ export function BudgetPlanner({ locale }: { locale: Locale }) {
           {labels.heroBody}
         </div>
       </section>
+
+      <ReadingCard title={locale === "en" ? "Reading card" : "Ficha de lectura"} items={locale === "en" ? [
+        { label: "What it is", value: "An educational budget simulator to organize income, spending, saving, investing, financial protection and non-monthly expenses." },
+        { label: "What it is for", value: "It helps check whether money has a clear structure before taking debt, investing or adding risk." },
+        { label: "Limits", value: "It does not store personal data, know your full life context or define a universal budget rule." },
+        { label: "Next step", value: "Review debt and margin of safety before moving to the investor diagnostic." },
+      ] : [
+        { label: "Qué es", value: "Un simulador educativo para ordenar ingresos, gastos, ahorro, inversión, protección financiera y gastos no mensuales." },
+        { label: "Para qué sirve", value: "Sirve para ver si el dinero tiene una estructura clara antes de asumir deuda, invertir o tomar más riesgo." },
+        { label: "Límites", value: "No guarda datos personales, no conoce tu vida completa y no define una regla universal de presupuesto." },
+        { label: "Siguiente paso", value: "Revisar deudas y margen de seguridad antes de pasar al diagnóstico del inversionista." },
+      ]} />
 
       <section className="mt-8 rounded-[6px] border border-petrol/20 bg-[#f3efe6] p-5 shadow-[0_12px_32px_rgba(11,52,54,0.035)] md:p-6">
         <p className="text-xs font-semibold uppercase tracking-[0.18em] text-petrol">{locale === "es" ? "Foco" : "Focus"}</p>
