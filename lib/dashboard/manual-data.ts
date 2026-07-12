@@ -136,7 +136,7 @@ export const crossSignalRadar: CrossSignalRadarRow[] = [
   {
     ticker: "IBIT",
     shortInterest: "No disponible",
-    institutionalPresence: "Datos parciales vía reportes institucionales con retraso",
+    institutionalPresence: "Datos parciales vía informes institucionales con retraso",
     shortInterestDate: "No disponible",
     form13FDate: "Última revisión manual",
     sourceName: "Short interest reportado + 13F agregados",
@@ -156,7 +156,7 @@ export const crossSignalRadar: CrossSignalRadarRow[] = [
     lastUpdated: "Última revisión manual",
     updateFrequency: "Manual/curada hasta activar fuentes automatizadas estables",
     dataStatus: "manual",
-    reliabilityNote: "Los reportes institucionales llegan con retraso y no cubren todos los participantes del mercado.",
+    reliabilityNote: "Los informes institucionales llegan con retraso y no cubren todos los participantes del mercado.",
     note: "Cruce contextual para observar demanda defensiva reportada con retraso.",
   },
 ];

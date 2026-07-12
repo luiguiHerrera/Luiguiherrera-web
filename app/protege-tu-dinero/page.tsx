@@ -1,4 +1,5 @@
 import Link from "next/link";
+import type { Metadata } from "next";
 import { RedFlagsChecklist } from "@/components/red-flags/RedFlagsChecklist";
 import { DisclaimerBox } from "@/components/ui/DisclaimerBox";
 import { RiskPill } from "@/components/ui/RiskPill";
@@ -195,3 +196,7 @@ export default function ProtegeTuDineroPage() {
     </div>
   );
 }
+export const metadata: Metadata = {
+  title: "Protege tu dinero | Checklist de señales de alerta antes de invertir",
+  description: "Checklist educativo basado en criterios públicos de protección al inversor para revisar entidad, producto, documentación, presión comercial, promesas y señales de alerta.",
+};

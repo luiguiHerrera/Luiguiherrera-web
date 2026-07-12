@@ -1,4 +1,5 @@
 import { DiagnosticFlow } from "@/components/diagnostic/DiagnosticFlow";
+import type { Metadata } from "next";
 import { DisclaimerBox } from "@/components/ui/DisclaimerBox";
 import { SectionHeader } from "@/components/ui/SectionHeader";
 import type { DiagnosticMode } from "@/lib/diagnostic/types";
@@ -28,3 +29,7 @@ export default async function DiagnosticoPage({ searchParams }: { searchParams?:
     </div>
   );
 }
+export const metadata: Metadata = {
+  title: "Diagnóstico del inversionista | Riesgo, horizonte y capacidad",
+  description: "Diagnóstico educativo para ordenar horizonte, liquidez, experiencia, tolerancia psicológica, sesgos y capacidad real antes de invertir.",
+};

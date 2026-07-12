@@ -18,7 +18,7 @@ const copy = {
     back: "Atrás",
     chooseDepth: "Elige profundidad",
     continue: "Continuar",
-    depthTitle: "Diagnóstico premium retail abierto",
+    depthTitle: "Diagnóstico del inversionista",
     fullDescription: "Lectura más profunda de experiencia, conducta, liquidez, concentración y comprensión de productos.",
     fullDuration: "15-20 minutos",
     fullQuestions: "45-55 base + adaptativas",

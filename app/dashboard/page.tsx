@@ -1,4 +1,5 @@
 import { BtcEtfFlowsModule } from "@/components/dashboard/BtcEtfFlowsModule";
+import type { Metadata } from "next";
 import { DashboardModule } from "@/components/dashboard/DashboardModule";
 import { FedWatchModule } from "@/components/dashboard/FedWatchModule";
 import { GldFlowPressureModule } from "@/components/dashboard/GldFlowPressureModule";
@@ -19,6 +20,11 @@ import type { RegimeBias } from "@/lib/dashboard/types";
 import type { WeeklyReportData } from "@/lib/reports/build-weekly-report-data";
 
 export const revalidate = 86400;
+
+export const metadata: Metadata = {
+  title: "Dashboard de régimen de mercado | VIX, rotación, flujos y GLD",
+  description: "Dashboard educativo de régimen de mercado con rotación sectorial, amplitud, VIX, estructura de volatilidad, BTC ETF flows y proxy de presión de flujos en GLD.",
+};
 
 const riskBiasLabels: Record<RegimeBias, string> = {
   favorable: "Favorable",
@@ -199,8 +205,8 @@ export async function DashboardContent({ locale = "es" }: { locale?: "es" | "en"
       }
     : {
         eyebrow: "Lectura de régimen",
-        title: "Market Regime Dashboard",
-        subtitle: "No elegimos activos ni momentos de ejecución. Te ayudamos a ordenar volatilidad, rotación y flujos.",
+        title: "Dashboard de régimen de mercado",
+        subtitle: "Ordena volatilidad, rotación sectorial, amplitud, VIX, BTC ETF flows y presión de flujos en GLD en una lectura común.",
         disclaimer: "Esta lectura no anticipa el mercado. Resume datos de fuentes abiertas para entender el contexto.",
         integrated: "Régimen integrado",
         composite: "Lectura compuesta del mercado",
@@ -228,7 +234,7 @@ export async function DashboardContent({ locale = "es" }: { locale?: "es" | "en"
         shortDate: "Fecha short interest",
         reviewDate: "Fecha 13F o última revisión",
         note: "Nota prudente",
-        radarFooter: "Fuentes conceptuales: short interest reportado, formularios 13F y reportes institucionales con retraso. La cobertura puede ser incompleta y las fechas pueden diferir entre proveedores.",
+        radarFooter: "Fuentes conceptuales: short interest reportado, formularios 13F e informes institucionales con retraso. La cobertura puede ser incompleta y las fechas pueden diferir entre proveedores.",
         finalDisclaimer: "Este panel organiza lecturas públicas de mercado. No anticipa precios, no recomienda operaciones con activos y no sustituye un análisis personalizado.",
         capitalFlows: "Flujos de capital",
         capitalFlowsTitle: "BTC ETF flows",

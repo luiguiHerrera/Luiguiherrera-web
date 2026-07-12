@@ -764,7 +764,7 @@ export const trendsContent: Record<Locale, TrendsContent> = {
       eyebrow: "Nuevas economías",
       title: "Tendencias: del mundo al portafolio",
       subtitle: "Una tendencia no es una inversión. Es apenas el inicio de una hipótesis.",
-      text: "Esta sección ayuda a observar cambios tecnológicos, económicos y sociales sin convertirlos automáticamente en recomendaciones. La pregunta no es solo qué está creciendo, sino quién captura valor, con qué vehículo, a qué precio, con qué riesgo y dentro de qué portafolio.",
+      text: "Esta sección ayuda a observar cambios tecnológicos, económicos y sociales sin convertirlos automáticamente en recomendaciones. La utilidad está en identificar quién captura valor, con qué vehículo, a qué precio, con qué riesgo y dentro de qué portafolio.",
       badges: ["Nuevas economías", "Hipótesis", "Riesgos", "Vehículos posibles", "Portafolio", "No recomendación"],
       note: "Contenido educativo. No es asesoría financiera, instrucción operativa ni evaluación personalizada.",
     },

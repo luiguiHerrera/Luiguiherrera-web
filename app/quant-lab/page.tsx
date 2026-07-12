@@ -1,4 +1,5 @@
 import Link from "next/link";
+import type { Metadata } from "next";
 import { Td3PerformanceTable } from "@/components/quant-lab/Td3PerformanceTable";
 import { DisclaimerBox } from "@/components/ui/DisclaimerBox";
 import {
@@ -238,6 +239,7 @@ export default async function QuantLabPage({ searchParams }: QuantLabPageProps) 
           <h1 className="mt-4 max-w-4xl text-4xl font-semibold leading-[1.02] text-ink md:text-6xl">
             TD3 Portfolio Research Lab
           </h1>
+          <p className="mt-3 text-sm font-semibold uppercase tracking-[0.14em] text-brass">Laboratorio TD3 de asignación de portafolios</p>
           <p className="mt-6 max-w-3xl text-lg leading-8 text-muted">
             Evaluación experimental de políticas de asignación de portafolios bajo restricciones, costes y validación fuera de muestra.
           </p>
@@ -558,3 +560,7 @@ export default async function QuantLabPage({ searchParams }: QuantLabPageProps) 
     </div>
   );
 }
+export const metadata: Metadata = {
+  title: "TD3 Portfolio Research Lab | Evaluación realista de portafolios",
+  description: "Laboratorio educativo sobre TD3, aprendizaje por refuerzo, asignación de portafolios, costes, cash, límites de concentración, benchmarks y validación fuera de muestra.",
+};

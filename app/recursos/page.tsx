@@ -1,4 +1,10 @@
 import { tradingViewScripts } from "@/lib/resources/tradingview-scripts";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Recursos para inversionistas | Scripts TradingView y herramientas",
+  description: "Catálogo de recursos gratuitos para inversionistas, incluyendo scripts open-source de TradingView para niveles estadísticos y contexto de mercado.",
+};
 
 const toolCategories = [
   {

@@ -1,4 +1,5 @@
 import Link from "next/link";
+import type { Metadata } from "next";
 import { td3Project } from "@/lib/quant-lab/td3-results";
 
 type ResearchItem = {
@@ -77,3 +78,7 @@ export default function InvestigacionPage() {
     </div>
   );
 }
+export const metadata: Metadata = {
+  title: "Investigación cuantitativa | DRL, backtesting y validación",
+  description: "Investigación cuantitativa sobre asignación de portafolios, aprendizaje por refuerzo, backtesting realista, costes, cash, benchmarks y validación estadística.",
+};

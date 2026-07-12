@@ -62,7 +62,7 @@ export default function InversionistaPage() {
       intro="Este camino reúne herramientas más avanzadas. Sirven para observar contexto, contrastar hipótesis y documentar proceso. No reemplazan criterio, gestión de riesgo ni validación propia."
       primaryCta={{ href: "/informes", label: "Abrir informes de mercado" }}
       secondaryCta={{ href: "/empezar", label: "Volver al camino simple" }}
-      subtitle="Para explorar reportes, métricas, niveles estadísticos, tendencias e investigación cuantitativa sin convertirlos en señales automáticas."
+      subtitle="Para explorar informes, métricas, niveles estadísticos, tendencias e investigación cuantitativa sin convertirlos en señales automáticas."
       title="Modo inversionista"
     />
   );

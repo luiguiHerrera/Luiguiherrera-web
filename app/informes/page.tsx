@@ -9,8 +9,8 @@ import type { WeeklyReportData } from "@/lib/reports/build-weekly-report-data";
 import type { MarketReport, MarketReportCalendarItem, MarketReportWatchItem } from "@/lib/reports/market-reports";
 
 export const metadata: Metadata = {
-  title: "Informes de mercado | Luigui Herrera",
-  description: "Archivo de informes para lectura de mercado, flujos, riesgo y activos multi-mercado.",
+  title: "Informes de mercado | Flujos, VIX, sectores y activos",
+  description: "Informes de mercado multi-activo con lectura editorial de VOO, GLD, EWJ, FXI, BTC/ETH, flujos, VIX, sectores, calendario económico y escenarios.",
 };
 
 export const revalidate = 86400;

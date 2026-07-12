@@ -3,8 +3,8 @@ import { TrendsExplorer } from "@/components/trends/TrendsExplorer";
 import { trendsContent } from "@/lib/trends/trends-content";
 
 export const metadata: Metadata = {
-  title: "Tendencias: del mundo al portafolio | Market Lab",
-  description: "Explora cambios del mundo y conviértelos en hipótesis educativas de inversión sin confundir narrativa con recomendación.",
+  title: "Tendencias sin hype | Hipótesis de inversión prudentes",
+  description: "Marco educativo para convertir tendencias como inteligencia artificial, robótica, energía, ciberseguridad, cripto e infraestructura en hipótesis de inversión prudentes.",
 };
 
 export default function TendenciasPage() {

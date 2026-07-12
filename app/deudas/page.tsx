@@ -1,4 +1,10 @@
 import { DebtPlanner } from "@/components/debt/DebtPlanner";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Gestión de deudas | Avalancha, bola de nieve y flujo mensual",
+  description: "Herramienta educativa para evaluar deudas, pagos mínimos, flujo mensual, avalancha, bola de nieve, abonos extraordinarios y rentabilidad mínima comparable.",
+};
 
 export default function DeudasPage() {
   return (
@@ -9,6 +15,9 @@ export default function DeudasPage() {
           <h1 className="mt-4 text-4xl font-semibold leading-[1.02] text-ink md:text-6xl">Gestión de deudas</h1>
           <p className="mt-5 max-w-3xl text-lg leading-8 text-muted">
             Una inversión incierta no siempre compite bien contra una deuda cara y segura. Esta herramienta estima el costo real de tus deudas, compara métodos de pago y revisa si tu flujo mensual tiene margen suficiente.
+          </p>
+          <p className="mt-3 max-w-3xl text-sm leading-6 text-muted">
+            Compara avalancha, bola de nieve, pagos mínimos, abonos extraordinarios y rentabilidad mínima comparable antes de invertir.
           </p>
         </div>
         <div className="rounded-[6px] border border-petrol/20 bg-white/70 p-5 text-sm leading-7 text-muted shadow-[0_12px_32px_rgba(11,52,54,0.045)]">

@@ -1,3 +1,10 @@
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Metodología | Fuentes, límites y trazabilidad",
+  description: "Cómo se construyen las lecturas de mercado, qué datos usan, qué límites tienen y qué no promete la plataforma.",
+};
+
 const principles = [
   ["Prudencia", "Preferimos lecturas sobrias antes que conclusiones llamativas."],
   ["Trazabilidad", "Cada módulo declara fuente, estado, frecuencia y límite principal."],
@@ -18,9 +25,9 @@ const systemMap = [
 const tools = [
   {
     name: "Dashboard de régimen",
-    does: "Ordena volatilidad, rotación sectorial, flujos de ETFs BTC y el proxy de presión de flujos en GLD.",
+    does: "Ordena volatilidad, rotación sectorial, BTC ETF flows y el proxy de presión de flujos en GLD.",
     doesNot: "No da instrucciones operativas.",
-    source: "Alpha Vantage, FRED/VIX, Bitbo y estados pendientes donde aplica.",
+    source: "ETFs sectoriales como proxies, VIX de cierre, BTC ETF flows, proxy GLD con State Street y datos históricos precalculados.",
     limit: "Fuentes externas pueden retrasarse, fallar o cambiar formato.",
   },
   {
@@ -48,7 +55,7 @@ const tools = [
     name: "Tendencias",
     does: "Convierte cambios tecnológicos, económicos y sociales en hipótesis educativas de observación.",
     doesNot: "No recomienda activos, no valida que una tendencia sea buena inversión y no sustituye el análisis de precio, vehículo, horizonte y riesgo.",
-    source: "Marco editorial con fuentes sectoriales, datos macro, reportes institucionales, Google Trends como señal de atención, holdings/13F como observación con retraso y limitaciones.",
+    source: "Marco editorial con fuentes sectoriales, datos macro, informes institucionales, Google Trends como señal de atención, holdings/13F como observación con retraso y limitaciones.",
     limit: "Una tendencia real puede seguir siendo una mala inversión si está cara, no tiene vehículo claro, ya está descontada o no encaja en el portafolio.",
   },
   {

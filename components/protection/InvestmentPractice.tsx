@@ -14,7 +14,7 @@ const ui = {
 
 function formatCurrency(copAmount: number, currency: Currency, locale: PracticeLocale) {
   return new Intl.NumberFormat(locale === "es" ? "es-CO" : "en-US", {
-    style: "currency", currency, currencyDisplay: "code", maximumFractionDigits: currency === "COP" ? 0 : 2,
+    style: "currency", currency, currencyDisplay: "code", maximumFractionDigits: 0,
   }).format(copAmount / copPerCurrency[currency]).replace(/\s+/g, " ");
 }
 
@@ -30,8 +30,9 @@ function parseLocalizedNumber(value: string, decimalComma: boolean) {
 
 function convertText(text: string, currency: Currency, locale: PracticeLocale) {
   let converted = text.replace(/\{money:(\d+)\}/g, (_, raw: string) => formatSelectedAmount(Number(raw), currency, locale));
+  converted = converted.replace(/\{cop:(\d+)\}/g, (_, raw: string) => formatCurrency(Number(raw), currency, locale));
   converted = converted.replace(/COP\s([\d.,]+)\s*(millones?|M)?/gi, (_, raw: string, scale?: string) => {
-    const amount = parseLocalizedNumber(raw, true) * (scale ? 1_000_000 : 1);
+    const amount = parseLocalizedNumber(raw, locale === "es") * (scale ? 1_000_000 : 1);
     return formatCurrency(amount, currency, locale);
   });
   converted = converted.replace(/USD\s([\d,]+(?:\.\d+)?)/gi, (_, raw: string) => formatCurrency(parseLocalizedNumber(raw, false) * 4000, currency, locale));

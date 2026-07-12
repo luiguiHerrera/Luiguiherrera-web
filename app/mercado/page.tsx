@@ -1,10 +1,11 @@
 import Link from "next/link";
+import type { Metadata } from "next";
 import { Sp500StatLevelsPreview } from "@/components/market/Sp500StatLevelsPreview";
 import { getSp500StatLevelsPreviewData } from "@/lib/market/sp500-stat-levels-preview";
 
 const marketTools = [
   {
-    title: "Market Regime Dashboard",
+    title: "Dashboard de régimen de mercado",
     href: "/dashboard",
     description: "Volatilidad, rotación, flujos y curva VIX en una lectura común.",
     meta: "Régimen",
@@ -32,7 +33,7 @@ export default async function MercadoPage() {
         <p className="text-xs font-semibold uppercase tracking-[0.18em] text-petrol">Contexto de mercado</p>
         <h1 className="mt-4 text-4xl font-semibold leading-[1.02] text-ink md:text-6xl">Mercado</h1>
         <p className="mt-5 max-w-3xl text-lg leading-8 text-muted">
-          Régimen, niveles, estacionalidad y reportes para entender el terreno antes de actuar.
+          Régimen, niveles, estacionalidad e informes para entender el terreno antes de actuar.
         </p>
       </section>
 
@@ -54,3 +55,7 @@ export default async function MercadoPage() {
     </div>
   );
 }
+export const metadata: Metadata = {
+  title: "Mercado | Régimen, niveles estadísticos e informes",
+  description: "Página de contexto de mercado con régimen, niveles estadísticos, rangos semanales y mensuales, dashboard e informes educativos para inversionistas.",
+};

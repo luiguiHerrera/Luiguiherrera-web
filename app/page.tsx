@@ -1,4 +1,5 @@
 import Image from "next/image";
+import type { Metadata } from "next";
 import Link from "next/link";
 import { ToolCard } from "@/components/ui/ToolCard";
 import { TypewriterPrinciples } from "@/components/home/TypewriterPrinciples";
@@ -57,7 +58,7 @@ const homePathways = [
     title: "Empezar simple",
     href: "/empezar",
     label: "Camino 01",
-    description: "Ordena lo esencial antes de métricas, modelos o reportes avanzados.",
+    description: "Ordena lo esencial antes de métricas, modelos o informes avanzados.",
     cta: "Entrar al camino simple",
   },
   {
@@ -375,6 +376,9 @@ export default async function Home() {
               Antes de invertir, entiende cómo respira el mercado
             </h1>
             <TypewriterPrinciples />
+            <p className="mt-5 max-w-xl text-sm leading-6 text-muted">
+              Herramientas educativas para inversionistas: presupuesto, deudas, diagnóstico, protección, mercado e investigación cuantitativa.
+            </p>
             <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:flex-wrap md:mt-8 md:gap-4">
               <Link href="/mercado" className="inline-flex w-full items-center justify-center rounded-[4px] border border-petrol bg-petrol px-4 py-2.5 text-sm font-semibold text-white shadow-[0_12px_26px_rgba(11,52,54,0.14)] transition hover:bg-panel hover:text-petrol sm:w-auto md:px-5">
                 Leer el mercado
@@ -509,3 +513,7 @@ export default async function Home() {
     </div>
   );
 }
+export const metadata: Metadata = {
+  title: "Herramientas para inversionistas | Riesgo, mercado y finanzas personales",
+  description: "Herramientas educativas para ordenar presupuesto, deudas, perfil de riesgo, protección del capital, informes de mercado, dashboard, niveles estadísticos e investigación cuantitativa.",
+};

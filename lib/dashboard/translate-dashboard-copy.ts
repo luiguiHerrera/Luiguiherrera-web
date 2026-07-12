@@ -53,7 +53,7 @@ const phraseMap: Array<[RegExp, string]> = [
   [/según disponibilidad de la fuente/gi, "depending on source availability"],
   [/ETF amplio con tenencia institucional reportada vía 13F/g, "Broad ETF with institutional holdings reported through 13F filings"],
   [/ETF amplio con exposición growth\/tecnología reportada con retraso/g, "Broad ETF with growth/technology exposure reported with a delay"],
-  [/Datos parciales vía reportes institucionales con retraso/g, "Partial data through delayed institutional reports"],
+  [/Datos parciales vía informes institucionales con retraso/g, "Partial data through delayed institutional reports"],
   [/ETF de oro con presencia reportada en formularios 13F/g, "Gold ETF with reported presence in 13F filings"],
   [/Defensivos lideran mientras growth\/cíclicos quedan débiles\./g, "Defensives lead while growth/cyclical sectors remain weak."],
   [/Defensivos lideran mientras growth\/cíclicos quedan débiles/g, "Defensives lead while growth/cyclical sectors remain weak"],

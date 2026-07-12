@@ -1,4 +1,10 @@
 import { EditorialPathPage } from "@/components/pathways/EditorialPathPage";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Empezar a invertir | Ruta guiada de preparación financiera",
+  description: "Ruta guiada para ordenar presupuesto, deudas, diagnóstico, protección y prácticas antes de invertir.",
+};
 
 const cards = [
   {
@@ -55,7 +61,7 @@ export default function EmpezarPage() {
       intro="No necesitas empezar por z-scores, FedWatch o modelos cuantitativos. Puedes comenzar por lo esencial: entender tu flujo, tus deudas, tu margen de error y después pensar en inversión."
       primaryCta={{ href: "/presupuesto", label: "Ordenar presupuesto" }}
       secondaryCta={{ href: "/inversionista", label: "Ver modo inversionista" }}
-      subtitle="Un camino para ordenar decisiones antes de entrar en métricas, modelos o reportes avanzados."
+      subtitle="Ruta guiada para ordenar presupuesto, deudas, diagnóstico, protección y prácticas antes de invertir."
       title="Empezar simple"
     />
   );

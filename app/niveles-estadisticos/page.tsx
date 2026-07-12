@@ -1,4 +1,5 @@
 import { StatLevelsLab } from "@/components/statistical-levels/StatLevelsLab";
+import type { Metadata } from "next";
 import { DisclaimerBox } from "@/components/ui/DisclaimerBox";
 import { SectionHeader } from "@/components/ui/SectionHeader";
 import { getStatisticalLevelsPageData } from "@/lib/statistical-levels/get-statistical-levels-data";
@@ -28,7 +29,7 @@ export default async function NivelesEstadisticosPage({ searchParams }: NivelesE
         <SectionHeader
           eyebrow="Laboratorio"
           title="Laboratorio de niveles estadísticos"
-          subtitle="Selecciona un activo y compara su posición actual frente a distintas ventanas de su propio historial."
+          subtitle="Compara percentiles, z-scores, extensiones, rangos, drawdowns y estacionalidad de ETFs, oro, cripto, sectores y mercados internacionales."
         />
         <DisclaimerBox>
           Lectura educativa. No constituye asesoría financiera ni instrucción operativa.
@@ -67,3 +68,7 @@ export default async function NivelesEstadisticosPage({ searchParams }: NivelesE
     </div>
   );
 }
+export const metadata: Metadata = {
+  title: "Niveles estadísticos | Percentiles, z-scores y estacionalidad",
+  description: "Laboratorio de niveles estadísticos para comparar activos por percentil, z-score, extensión, rango histórico, drawdown y estacionalidad.",
+};

@@ -29,7 +29,7 @@ export const es = {
       { href: "/tendencias", label: "Tendencias sin hype", shortLabel: "Tendencias", description: "Cambios del mundo como hipótesis, no como recomendación." },
     ],
     investorItems: [
-      { href: "/inversionista", label: "Modo inversionista", shortLabel: "Modo", description: "Camino avanzado para reportes, métricas e investigación." },
+      { href: "/inversionista", label: "Modo inversionista", shortLabel: "Modo", description: "Camino avanzado para informes, métricas e investigación." },
       { href: "/informes", label: "Informes de mercado", shortLabel: "Informes", description: "Lecturas de mercado, flujos, riesgo y activos multi-mercado." },
       { href: "/dashboard", label: "Dashboard", shortLabel: "Dashboard", description: "Volatilidad, rotación sectorial, flujos y lecturas cruzadas." },
       { href: "/mercado", label: "Mercado", shortLabel: "Mercado", description: "Contexto de mercado y lecturas públicas." },
