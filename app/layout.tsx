@@ -5,6 +5,7 @@ import { Footer } from "@/components/layout/Footer";
 import { Header } from "@/components/layout/Header";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { SITE_URL } from "@/lib/seo/site";
+import { RouteStructuredData } from "@/components/seo/RouteStructuredData";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
@@ -17,9 +18,10 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
     <html lang="es">
       <body>
         <JsonLd data={[
-          { "@context": "https://schema.org", "@type": "WebSite", name: "Luigui Herrera", url: SITE_URL, inLanguage: ["es", "en"] },
-          { "@context": "https://schema.org", "@type": "Person", name: "Luigui Herrera", url: SITE_URL, sameAs: ["https://github.com/luiguiHerrera"] },
+          { "@context": "https://schema.org", "@type": "WebSite", "@id": `${SITE_URL}/#website`, name: "Luigui Herrera", url: SITE_URL, inLanguage: ["es", "en"] },
+          { "@context": "https://schema.org", "@type": "Person", "@id": `${SITE_URL}/#person`, name: "Luigui Herrera", url: SITE_URL, sameAs: ["https://github.com/luiguiHerrera"] },
         ]} />
+        <RouteStructuredData />
         <Suspense fallback={null}>
           <Header />
         </Suspense>
