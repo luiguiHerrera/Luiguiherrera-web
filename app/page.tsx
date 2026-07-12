@@ -516,4 +516,5 @@ export default async function Home() {
 export const metadata: Metadata = {
   title: "Herramientas para inversionistas | Riesgo, mercado y finanzas personales",
   description: "Herramientas educativas para ordenar presupuesto, deudas, perfil de riesgo, protección del capital, informes de mercado, dashboard, niveles estadísticos e investigación cuantitativa.",
+  alternates: { canonical: "/", languages: { es: "/", en: "/en", "x-default": "/" } },
 };

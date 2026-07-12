@@ -1,4 +1,5 @@
 import Image from "next/image";
+import type { Metadata } from "next";
 import Link from "next/link";
 import { ToolCard } from "@/components/ui/ToolCard";
 import { TypewriterPrinciples } from "@/components/home/TypewriterPrinciples";
@@ -7,6 +8,10 @@ import { displayStatTicker } from "@/lib/statistical-levels/display";
 import { getStatisticalLevelsManifest } from "@/lib/statistical-levels/get-statistical-levels-data";
 import { translateBiasLabel, translateDashboardText, translateRegimeLabel } from "@/lib/dashboard/translate-dashboard-copy";
 import type { BtcEtfFlowsDashboardData, RegimeSignal, RegimeSummary, SectorRotationData, VixDashboardData } from "@/lib/dashboard/types";
+
+export const metadata: Metadata = {
+  alternates: { canonical: "/en", languages: { es: "/", en: "/en", "x-default": "/" } },
+};
 
 const principles = [
   ["Understand the context", "Read the board before moving the piece."],

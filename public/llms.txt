@@ -1,0 +1,52 @@
+# Luigui Herrera
+
+Educational tools for investors, personal finance, investor protection, market context and quantitative research.
+
+## What this site is
+Luigui Herrera provides educational tools to organize personal finance, debt, investor diagnostics, market regime context, statistical levels, investment-protection checklists, market reports and quantitative research.
+
+## Important limits
+This site is educational and informational. It does not provide personalized investment, legal, tax or financial advice. It does not promise returns and does not issue buy/sell signals.
+
+## Main Spanish pages
+- Presupuesto personal: https://www.luiguiherrera.com/presupuesto
+- Gestión de deudas: https://www.luiguiherrera.com/deudas
+- Diagnóstico del inversionista: https://www.luiguiherrera.com/diagnostico
+- Protección del inversor: https://www.luiguiherrera.com/proteccion
+- Protege tu dinero: https://www.luiguiherrera.com/protege-tu-dinero
+- Mercado: https://www.luiguiherrera.com/mercado
+- Dashboard de régimen de mercado: https://www.luiguiherrera.com/dashboard
+- Informes de mercado: https://www.luiguiherrera.com/informes
+- Niveles estadísticos: https://www.luiguiherrera.com/niveles-estadisticos
+- Tendencias sin hype: https://www.luiguiherrera.com/tendencias
+- Recursos: https://www.luiguiherrera.com/recursos
+- Metodología: https://www.luiguiherrera.com/metodologia
+- Investigación cuantitativa: https://www.luiguiherrera.com/investigacion
+- Quant Lab: https://www.luiguiherrera.com/quant-lab
+
+## Main English pages
+- Start: https://www.luiguiherrera.com/en/start
+- Budget: https://www.luiguiherrera.com/en/budget
+- Debt: https://www.luiguiherrera.com/en/debt
+- Investor diagnostic: https://www.luiguiherrera.com/en/diagnostic
+- Protection: https://www.luiguiherrera.com/en/protection
+- Protect your money: https://www.luiguiherrera.com/en/protect-your-money
+- Market: https://www.luiguiherrera.com/en/market
+- Market Regime Dashboard: https://www.luiguiherrera.com/en/dashboard
+- Weekly report: https://www.luiguiherrera.com/en/weekly-report
+- Statistical levels: https://www.luiguiherrera.com/en/statistical-levels
+- Trends: https://www.luiguiherrera.com/en/trends
+- Resources: https://www.luiguiherrera.com/en/resources
+- Methodology: https://www.luiguiherrera.com/en/methodology
+- Research: https://www.luiguiherrera.com/en/research
+- Quant Lab: https://www.luiguiherrera.com/en/quant-lab
+
+## Reports and machine-readable files
+- Market reports: https://www.luiguiherrera.com/informes
+- July 2026 report PDF: https://www.luiguiherrera.com/reports/primer-informe-julio-2026.pdf
+- July 2026 report Markdown: https://www.luiguiherrera.com/reports/primer-informe-julio-2026.md
+
+## Source and method notes
+- Dashboard methodology: https://www.luiguiherrera.com/metodologia
+- Research: https://www.luiguiherrera.com/investigacion
+- TD3 research: https://www.luiguiherrera.com/investigacion/td3
