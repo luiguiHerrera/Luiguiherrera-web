@@ -18,23 +18,23 @@ function formatCurrency(copAmount: number, currency: Currency, locale: PracticeL
   }).format(copAmount / copPerCurrency[currency]).replace(/\s+/g, " ");
 }
 
+function formatSelectedAmount(amount: number, currency: Currency, locale: PracticeLocale) {
+  return new Intl.NumberFormat(locale === "es" ? "es-CO" : "en-US", {
+    style: "currency", currency, currencyDisplay: "code", maximumFractionDigits: 0,
+  }).format(amount).replace(/\s+/g, " ");
+}
+
 function parseLocalizedNumber(value: string, decimalComma: boolean) {
   return decimalComma ? Number(value.replace(/\./g, "").replace(",", ".")) : Number(value.replace(/,/g, ""));
 }
 
-function convertText(text: string, currency: Currency, locale: PracticeLocale, showUnitEquivalent = false) {
-  let converted = text.replace(/COP\s([\d.,]+)\s*(millones?|M)?/gi, (_, raw: string, scale?: string) => {
+function convertText(text: string, currency: Currency, locale: PracticeLocale) {
+  let converted = text.replace(/\{money:(\d+)\}/g, (_, raw: string) => formatSelectedAmount(Number(raw), currency, locale));
+  converted = converted.replace(/COP\s([\d.,]+)\s*(millones?|M)?/gi, (_, raw: string, scale?: string) => {
     const amount = parseLocalizedNumber(raw, true) * (scale ? 1_000_000 : 1);
     return formatCurrency(amount, currency, locale);
   });
   converted = converted.replace(/USD\s([\d,]+(?:\.\d+)?)/gi, (_, raw: string) => formatCurrency(parseLocalizedNumber(raw, false) * 4000, currency, locale));
-  if (showUnitEquivalent) {
-    const unitPattern = locale === "es" ? /([\d.]+)\s(unidades?)/gi : /([\d,]+)\s(units?)/gi;
-    converted = converted.replace(unitPattern, (match, raw: string) => {
-      const units = parseLocalizedNumber(raw, locale === "es");
-      return `${match} (${formatCurrency(units * 100_000, currency, locale)})`;
-    });
-  }
   return converted;
 }
 
@@ -46,7 +46,7 @@ export function InvestmentPractice({ locale }: { locale: PracticeLocale }) {
   const [caseIndex,setCaseIndex]=useState(0); const [decisionIndex,setDecisionIndex]=useState<number|null>(null); const [expanded,setExpanded]=useState(false);
   const [currency,setCurrency]=useState<Currency>(locale === "es" ? "COP" : "USD");
   const simulator=useRef<HTMLDivElement>(null); const labels=ui[locale]; const cases=investmentPracticeCases[locale]; const active=cases[caseIndex]; const decision=decisionIndex===null?null:active.decisions[decisionIndex];
-  const display=(text:string,showUnitEquivalent=false)=>convertText(text,currency,locale,showUnitEquivalent);
+  const display=(text:string)=>convertText(text,currency,locale);
   const chooseCase=(index:number)=>{setCaseIndex(index);setDecisionIndex(null);setExpanded(false);};
   const pick=(index:number)=>{setDecisionIndex(index);setExpanded(false);};
   const scroll=(target:React.RefObject<HTMLDivElement|null>)=>target.current?.scrollIntoView({behavior:"smooth",block:"start"});
@@ -63,8 +63,8 @@ export function InvestmentPractice({ locale }: { locale: PracticeLocale }) {
         <p className="text-xs font-semibold uppercase tracking-[0.18em] text-petrol">{labels.case} {caseIndex+1} {labels.of}</p><h3 className="mt-2 text-2xl font-semibold leading-tight text-ink md:text-3xl">{active.title}</h3>
         <div className="mt-6 grid gap-6 lg:grid-cols-[0.95fr_1.05fr]">
           <div className="min-w-0"><h4 className="text-xs font-semibold uppercase tracking-[0.18em] text-petrol">{labels.situation}</h4><p className="mt-3 text-base leading-7 text-ink">{display(active.situation)}</p>
-            <h4 className="mt-6 text-xs font-semibold uppercase tracking-[0.18em] text-petrol">{labels.data}</h4><dl className="mt-3 divide-y divide-line rounded-[4px] border border-line bg-paper">{active.facts.map(f=><div key={f.label} className="grid min-w-0 gap-1 px-3 py-2.5 sm:grid-cols-[1fr_auto]"><dt className="min-w-0 break-words text-sm text-muted [overflow-wrap:anywhere]">{f.label}</dt><dd className="min-w-0 max-w-full break-words text-sm font-semibold text-ink [overflow-wrap:anywhere] sm:text-right">{display(f.value,true)}</dd></div>)}</dl>
-            <div className="mt-4 min-w-0 rounded-[4px] border border-petrol/20 bg-[#eef3f1] p-4"><h4 className="break-words font-semibold text-ink [overflow-wrap:anywhere]">{active.metric.title}</h4><div className="mt-3 grid min-w-0 gap-2">{active.metric.rows.map(row=><div key={row.label} className="flex min-w-0 flex-wrap items-start justify-between gap-2 border-t border-petrol/10 pt-2 text-sm"><span className="min-w-0 break-words text-muted [overflow-wrap:anywhere]">{row.label}</span><span className="min-w-0 max-w-full break-words font-semibold text-ink [overflow-wrap:anywhere] sm:text-right">{display(row.value,true)}{row.status&&<small className="ml-2 rounded-full border border-current/20 px-2 py-0.5 font-semibold text-muted">{labels.status[row.status]}</small>}</span></div>)}</div></div>
+            <h4 className="mt-6 text-xs font-semibold uppercase tracking-[0.18em] text-petrol">{labels.data}</h4><dl className="mt-3 divide-y divide-line rounded-[4px] border border-line bg-paper">{active.facts.map(f=><div key={f.label} className="grid min-w-0 gap-1 px-3 py-2.5 sm:grid-cols-[1fr_auto]"><dt className="min-w-0 break-words text-sm text-muted [overflow-wrap:anywhere]">{f.label}</dt><dd className="min-w-0 max-w-full break-words text-sm font-semibold text-ink [overflow-wrap:anywhere] sm:text-right">{display(f.value)}</dd></div>)}</dl>
+            <div className="mt-4 min-w-0 rounded-[4px] border border-petrol/20 bg-[#eef3f1] p-4"><h4 className="break-words font-semibold text-ink [overflow-wrap:anywhere]">{active.metric.title}</h4><div className="mt-3 grid min-w-0 gap-2">{active.metric.rows.map(row=><div key={row.label} className="flex min-w-0 flex-wrap items-start justify-between gap-2 border-t border-petrol/10 pt-2 text-sm"><span className="min-w-0 break-words text-muted [overflow-wrap:anywhere]">{row.label}</span><span className="min-w-0 max-w-full break-words font-semibold text-ink [overflow-wrap:anywhere] sm:text-right">{display(row.value)}{row.status&&<small className="ml-2 rounded-full border border-current/20 px-2 py-0.5 font-semibold text-muted">{labels.status[row.status]}</small>}</span></div>)}</div></div>
           </div>
           <div className="min-w-0"><h4 className="text-xs font-semibold uppercase tracking-[0.18em] text-petrol">{labels.decisions}</h4><p className="mt-2 text-sm leading-6 text-muted">{labels.choose}</p><div className="mt-3 grid gap-3">{active.decisions.map((option,index)=><button key={option.title} onClick={()=>pick(index)} aria-pressed={decisionIndex===index} className={`rounded-[4px] border p-4 text-left transition ${decisionIndex===index?"border-petrol bg-[#eef3f1] shadow-sm":"border-line bg-paper hover:border-petrol"}`}><span className="text-xs font-semibold text-muted">0{index+1}</span><span className="mt-1 block font-semibold text-ink">{option.title}</span>{option.description&&<span className="mt-2 block text-sm leading-6 text-muted">{display(option.description)}</span>}</button>)}</div>
             {decision&&<div aria-live="polite" className="mt-5 border-t border-line pt-5"><div className={`inline-flex rounded-full border px-3 py-1 text-xs font-semibold ${levelClasses(decision.level)}`}>{labels.levels[decision.level]}</div><h4 className="mt-4 text-xs font-semibold uppercase tracking-[0.18em] text-petrol">{labels.immediate}</h4><p className="mt-2 text-sm leading-7 text-ink">{display(decision.immediate)}</p>{!expanded?<button onClick={()=>setExpanded(true)} className="mt-5 w-full rounded-[4px] bg-petrol px-4 py-3 text-sm font-semibold text-white">{labels.next}</button>:<ResultDetails locale={locale} decision={decision} display={display}/>}</div>}
