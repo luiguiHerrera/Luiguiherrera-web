@@ -1,6 +1,7 @@
 import { WeeklyReport } from "@/components/reports/WeeklyReport";
 import { DisclaimerBox } from "@/components/ui/DisclaimerBox";
 import { SectionHeader } from "@/components/ui/SectionHeader";
+import { ReadingCard } from "@/components/seo/ReadingCard";
 import { buildWeeklyReportData } from "@/lib/reports/build-weekly-report-data";
 
 export const revalidate = 86400;
@@ -20,6 +21,13 @@ export default async function WeeklyReportPage() {
           Educational market-context report. This is not investment advice or a personalized recommendation.
         </DisclaimerBox>
       </div>
+
+      <ReadingCard title="Reading card" items={[
+        { label: "What it is", value: "A multi-asset market-report archive with editorial readings of indices, gold, Japan, China, crypto, volatility, sectors, flows and economic calendar events." },
+        { label: "What it is for", value: "It turns scattered data into context, scenarios and watchpoints for investors." },
+        { label: "Main sources", value: "Public market data, the internal dashboard, BTC ETF flows, VIX, sectors, economic calendar data and methodology notes." },
+        { label: "Limits", value: "The reports are educational, not personalized, and do not replace financial, tax or legal analysis." },
+      ]} />
 
       <div className="mt-6 md:mt-8">
         <WeeklyReport data={reportData} locale="en" />

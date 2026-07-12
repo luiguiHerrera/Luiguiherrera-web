@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { ReadingCard } from "@/components/seo/ReadingCard";
 
 export const metadata: Metadata = {
   title: "Metodología | Fuentes, límites y trazabilidad",
@@ -103,6 +104,13 @@ export default function MetodologiaPage() {
           Cómo se construyen las lecturas, qué datos usan y qué límites tienen.
         </p>
       </section>
+
+      <ReadingCard title="Ficha de lectura" items={[
+        { label: "Qué es", value: "Una página de trazabilidad que explica cómo se construyen las lecturas, qué fuentes usan y qué límites tienen." },
+        { label: "Para qué sirve", value: "Sirve para auditar el método antes de confiar en una herramienta, informe o lectura de mercado." },
+        { label: "Fuentes principales", value: "Fuentes públicas y documentadas: Alpha Vantage, FRED/VIX, Bitbo, State Street / GLD, datos históricos precalculados y fuentes específicas por herramienta." },
+        { label: "Límites", value: "La metodología reduce ambigüedad, pero no elimina errores de fuente, retrasos, cambios de API ni limitaciones de proxies." },
+      ]} />
 
       <section className="mt-8 border border-line bg-panel p-5 md:p-6">
         <Eyebrow>Investigación DRL</Eyebrow>

@@ -12,6 +12,7 @@ import { DisclaimerBox } from "@/components/ui/DisclaimerBox";
 import { ExpandableInsightCard } from "@/components/ui/ExpandableInsightCard";
 import { MetricCard } from "@/components/ui/MetricCard";
 import { SectionHeader } from "@/components/ui/SectionHeader";
+import { ReadingCard } from "@/components/seo/ReadingCard";
 import { getDashboardData } from "@/lib/dashboard/get-dashboard-data";
 import { dataStatusLabels } from "@/lib/dashboard/status";
 import { translateDashboardText, translateRegimeLabel } from "@/lib/dashboard/translate-dashboard-copy";
@@ -253,6 +254,18 @@ export async function DashboardContent({ locale = "es" }: { locale?: "es" | "en"
           {copy.disclaimer}
         </DisclaimerBox>
       </div>
+
+      <ReadingCard title={locale === "en" ? "Reading card" : "Ficha de lectura"} items={locale === "en" ? [
+        { label: "What it is", value: "An educational dashboard that organizes market-regime signals: volatility, sector rotation, breadth, VIX, BTC ETF flows and a GLD flow-pressure proxy." },
+        { label: "What it is for", value: "It helps read whether the market looks more offensive, defensive, concentrated or mixed before reviewing specific assets." },
+        { label: "Main sources", value: "Alpha Vantage for sector ETFs, FRED/VIX for volatility, Bitbo for BTC ETF flows and State Street / GLD for the GLD flow-pressure proxy." },
+        { label: "Limits", value: "It does not predict markets, issue buy or sell signals, and some readings depend on external source availability." },
+      ] : [
+        { label: "Qué es", value: "Un dashboard educativo que ordena señales de régimen de mercado: volatilidad, rotación sectorial, amplitud, VIX, BTC ETF flows y proxy de presión de flujos en GLD." },
+        { label: "Para qué sirve", value: "Sirve para leer si el mercado parece más ofensivo, defensivo, concentrado o mixto antes de revisar activos específicos." },
+        { label: "Fuentes principales", value: "Alpha Vantage para ETFs sectoriales, FRED/VIX para volatilidad, Bitbo para BTC ETF flows y State Street / GLD para el proxy de presión de flujos." },
+        { label: "Límites", value: "No predice el mercado, no emite señales de compra o venta y algunas lecturas dependen de disponibilidad de fuentes externas." },
+      ]} />
 
       <div className="mt-6 md:mt-8">
         <ExpandableInsightCard

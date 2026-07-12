@@ -1,5 +1,6 @@
 import Link from "next/link";
 import type { Metadata } from "next";
+import { ReadingCard } from "@/components/seo/ReadingCard";
 import { Td3PerformanceTable } from "@/components/quant-lab/Td3PerformanceTable";
 import { DisclaimerBox } from "@/components/ui/DisclaimerBox";
 import {
@@ -229,6 +230,10 @@ type QuantLabPageProps = {
 };
 
 export default async function QuantLabPage({ searchParams }: QuantLabPageProps) {
+  return <QuantLabContent searchParams={searchParams} locale="es" />;
+}
+
+export async function QuantLabContent({ searchParams, locale }: QuantLabPageProps & { locale: "es" | "en" }) {
   const params = await searchParams;
 
   return (
@@ -259,6 +264,18 @@ export default async function QuantLabPage({ searchParams }: QuantLabPageProps) 
           Este laboratorio es educativo y metodológico. No genera recomendaciones de inversión, no optimiza portafolios personales y no constituye asesoría financiera.
         </DisclaimerBox>
       </section>
+
+      <ReadingCard title={locale === "en" ? "Reading card" : "Ficha de lectura"} items={locale === "en" ? [
+        { label: "What it is", value: "A technical lab about TD3 applied to portfolio allocation under costs, cash, concentration limits, turnover and benchmarks." },
+        { label: "What it is for", value: "It shows how a reinforcement-learning agent is evaluated when it must compete against realistic rules and constraints." },
+        { label: "Main sources", value: "Internal PyTorch implementation, backtests, walk-forward folds, benchmarks and project result tables." },
+        { label: "Limits", value: "It does not present an AI that predicts the market; it presents an experimental evaluation under a defined protocol." },
+      ] : [
+        { label: "Qué es", value: "Un laboratorio técnico sobre TD3 aplicado a asignación de portafolios bajo costes, cash, límites de concentración, turnover y benchmarks." },
+        { label: "Para qué sirve", value: "Sirve para mostrar cómo se evalúa un agente de aprendizaje por refuerzo cuando se le exige competir contra reglas y restricciones realistas." },
+        { label: "Fuentes principales", value: "Implementación propia en PyTorch, backtests, folds walk-forward, benchmarks y tablas de resultados del proyecto." },
+        { label: "Límites", value: "No presenta una IA que adivina el mercado; presenta una evaluación experimental bajo protocolo definido." },
+      ]} />
 
       <section className="mt-8 grid gap-6 lg:grid-cols-[1fr_0.82fr]">
         <Panel>

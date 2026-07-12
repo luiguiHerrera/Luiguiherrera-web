@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { ReadingCard } from "@/components/seo/ReadingCard";
 import { td3Project } from "@/lib/quant-lab/td3-results";
 
 const researchItems = [
@@ -26,6 +27,13 @@ export default function EnglishResearchPage() {
           Ideas earn their place only after passing through a disciplined process.
         </p>
       </section>
+
+      <ReadingCard title="Reading card" items={[
+        { label: "What it is", value: "A quantitative-research section about portfolio allocation, reinforcement learning, realistic backtesting and statistical validation." },
+        { label: "What it is for", value: "It documents experiments, limits, benchmarks and methodology before treating results as evidence." },
+        { label: "Main sources", value: "Internal code, historical financial data, benchmarks, costs, constraints, out-of-sample validation and project documentation." },
+        { label: "Limits", value: "The research does not promise future superiority; it evaluates robustness under defined assumptions, data and constraints." },
+      ]} />
 
       <section className="mt-8 grid gap-5 md:grid-cols-2">
         {researchItems.map((item) => item.external ? (

@@ -1,3 +1,5 @@
+import { ReadingCard } from "@/components/seo/ReadingCard";
+
 const principles = [
   ["Prudence", "We prefer sober readings over attention-grabbing conclusions."],
   ["Traceability", "Each module declares source, state, frequency and main limit."],
@@ -96,6 +98,13 @@ export default function EnglishMethodologyPage() {
           How the readings are built, what data they use and where their limits are.
         </p>
       </section>
+
+      <ReadingCard title="Reading card" items={[
+        { label: "What it is", value: "A traceability page explaining how readings are built, which sources they use and what their limits are." },
+        { label: "What it is for", value: "It helps audit the method before relying on a tool, report or market reading." },
+        { label: "Main sources", value: "Documented public sources: Alpha Vantage, FRED/VIX, Bitbo, State Street / GLD, precomputed historical data and tool-specific sources." },
+        { label: "Limits", value: "The methodology reduces ambiguity but does not remove source errors, delays, API changes or proxy limitations." },
+      ]} />
 
       <section className="mt-8 border border-line bg-panel p-5 md:p-6">
         <Eyebrow>DRL research</Eyebrow>

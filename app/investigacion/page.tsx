@@ -1,5 +1,6 @@
 import Link from "next/link";
 import type { Metadata } from "next";
+import { ReadingCard } from "@/components/seo/ReadingCard";
 import { td3Project } from "@/lib/quant-lab/td3-results";
 
 type ResearchItem = {
@@ -45,6 +46,13 @@ export default function InvestigacionPage() {
           Aquí las ideas pasan por pruebas antes de ganarse un lugar en el proceso.
         </p>
       </section>
+
+      <ReadingCard title="Ficha de lectura" items={[
+        { label: "Qué es", value: "Una sección de investigación cuantitativa sobre asignación de portafolios, aprendizaje por refuerzo, backtesting realista y validación estadística." },
+        { label: "Para qué sirve", value: "Sirve para documentar experimentos, límites, benchmarks y metodología antes de presentar resultados como evidencia." },
+        { label: "Fuentes principales", value: "Código propio, datos financieros históricos, benchmarks, costes, restricciones, validaciones fuera de muestra y documentación del proyecto." },
+        { label: "Límites", value: "La investigación no promete superioridad futura; evalúa robustez bajo supuestos, datos y restricciones definidos." },
+      ]} />
 
       <section className="mt-8 grid gap-5 md:grid-cols-2">
         {researchItems.map((item) => (

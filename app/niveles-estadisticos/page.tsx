@@ -2,6 +2,7 @@ import { StatLevelsLab } from "@/components/statistical-levels/StatLevelsLab";
 import type { Metadata } from "next";
 import { DisclaimerBox } from "@/components/ui/DisclaimerBox";
 import { SectionHeader } from "@/components/ui/SectionHeader";
+import { ReadingCard } from "@/components/seo/ReadingCard";
 import { getStatisticalLevelsPageData } from "@/lib/statistical-levels/get-statistical-levels-data";
 
 type NivelesEstadisticosPageProps = {
@@ -35,6 +36,13 @@ export default async function NivelesEstadisticosPage({ searchParams }: NivelesE
           Lectura educativa. No constituye asesoría financiera ni instrucción operativa.
         </DisclaimerBox>
       </div>
+
+      <ReadingCard title="Ficha de lectura" items={[
+        { label: "Qué es", value: "Un laboratorio de niveles estadísticos que compara activos contra su propio historial mediante percentiles, z-scores, extensiones, rangos, drawdowns y estacionalidad." },
+        { label: "Para qué sirve", value: "Sirve para ubicar si un activo está cerca de zonas históricamente altas, bajas o normales sin convertirlo en señal automática." },
+        { label: "Fuentes principales", value: "Series históricas precalculadas por activo y metodología interna de ventanas estadísticas." },
+        { label: "Límites", value: "Los niveles son descriptivos, dependen del historial disponible y no indican por sí solos cuándo comprar o vender." },
+      ]} />
 
       <div className="mt-6 grid gap-4 border-y border-line py-4 text-sm leading-6 text-muted md:mt-8 md:grid-cols-4 md:py-5">
         <div>

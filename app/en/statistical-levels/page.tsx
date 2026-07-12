@@ -1,6 +1,7 @@
 import { StatLevelsLab } from "@/components/statistical-levels/StatLevelsLab";
 import { DisclaimerBox } from "@/components/ui/DisclaimerBox";
 import { SectionHeader } from "@/components/ui/SectionHeader";
+import { ReadingCard } from "@/components/seo/ReadingCard";
 import { getStatisticalLevelsPageData } from "@/lib/statistical-levels/get-statistical-levels-data";
 
 type StatisticalLevelsPageProps = {
@@ -34,6 +35,13 @@ export default async function StatisticalLevelsPage({ searchParams }: Statistica
           Educational reading. This is not financial advice or an execution instruction.
         </DisclaimerBox>
       </div>
+
+      <ReadingCard title="Reading card" items={[
+        { label: "What it is", value: "A statistical-levels lab that compares assets against their own history using percentiles, z-scores, extensions, ranges, drawdowns and seasonality." },
+        { label: "What it is for", value: "It helps locate whether an asset is near historically high, low or normal zones without turning that into an automatic signal." },
+        { label: "Main sources", value: "Precomputed historical series by asset and internal statistical-window methodology." },
+        { label: "Limits", value: "The levels are descriptive, depend on available history and do not by themselves indicate when to buy or sell." },
+      ]} />
 
       <div className="mt-6 grid gap-4 border-y border-line py-4 text-sm leading-6 text-muted md:mt-8 md:grid-cols-4 md:py-5">
         <div>

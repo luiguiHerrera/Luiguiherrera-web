@@ -6,6 +6,7 @@ import { buildWeeklyReportData } from "@/lib/reports/build-weekly-report-data";
 import { jpmSpxLevelsContext } from "@/lib/market/jpm-spx-levels";
 import { activeMarketReport, getReportsByMonth } from "@/lib/reports/market-reports";
 import type { WeeklyReportData } from "@/lib/reports/build-weekly-report-data";
+import { ReadingCard } from "@/components/seo/ReadingCard";
 import type { MarketReport, MarketReportCalendarItem, MarketReportWatchItem } from "@/lib/reports/market-reports";
 
 export const metadata: Metadata = {
@@ -58,6 +59,13 @@ export default async function InformesPage() {
           </a>
         </div>
       </section>
+
+      <ReadingCard title="Ficha de lectura" items={[
+        { label: "Qué es", value: "Un archivo de informes de mercado multi-activo con lectura editorial de índices, oro, Japón, China, cripto, volatilidad, sectores, flujos y calendario económico." },
+        { label: "Para qué sirve", value: "Sirve para convertir datos dispersos en una tesis de contexto, escenarios y puntos de vigilancia para inversionistas." },
+        { label: "Fuentes principales", value: "Datos públicos de mercado, dashboard interno, BTC ETF flows, VIX, sectores, calendario económico y fuentes metodológicas descritas en la página de metodología." },
+        { label: "Límites", value: "Los informes son educativos, no personalizados y no sustituyen análisis financiero, fiscal o legal." },
+      ]} />
 
       <section className="grid gap-6 py-8 md:py-10 lg:grid-cols-[0.34fr_1fr]">
         <div>
