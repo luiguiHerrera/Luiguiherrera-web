@@ -18,7 +18,7 @@ const systemMap = [
 const tools = [
   {
     name: "Dashboard de régimen",
-    does: "Ordena volatilidad, rotación sectorial y flujos de ETFs BTC.",
+    does: "Ordena volatilidad, rotación sectorial, flujos de ETFs BTC y el proxy de presión de flujos en GLD.",
     doesNot: "No da instrucciones operativas.",
     source: "Alpha Vantage, FRED/VIX, Bitbo y estados pendientes donde aplica.",
     limit: "Fuentes externas pueden retrasarse, fallar o cambiar formato.",

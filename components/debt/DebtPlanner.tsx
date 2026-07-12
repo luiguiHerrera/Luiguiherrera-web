@@ -141,7 +141,7 @@ const copy = {
     totalCost: "Intereses y costos estimados",
     weightedCost: "Costo anual ponderado",
     debtToLiquidity: "Deuda / patrimonio líquido",
-    fragileCopy: "Una deuda puede parecer razonable por tasa o propósito, pero volverse frágil si consume demasiado flujo mensual.",
+    fragileCopy: "Una deuda puede parecer razonable por tasa o propósito, pero volverse frágil si consume demasiado flujo mensual, reduce liquidez o impide construir margen de seguridad.",
     fixedAndMinimumsNote: "Este ratio asume que los gastos fijos no incluyen pagos mínimos de deuda. Si ya los incluiste, lee este dato con cautela.",
     metricInfo: {
       debtToLiquidity: "Compara lo que debes con tu base líquida disponible. Ayuda a ver si la deuda pesa mucho frente a tu colchón.",
