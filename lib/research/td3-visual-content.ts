@@ -118,7 +118,11 @@ export type Td3VisualContent = {
     intro: string;
     open: string;
     close: string;
-    items: Array<{ title: string; text: string }>;
+    items: Array<{
+      title: string;
+      text: string;
+      link?: { href: string; label: string; description?: string };
+    }>;
   };
 };
 
@@ -372,7 +376,15 @@ export const td3VisualContent: Record<Td3PaperLocale, Td3VisualContent> = {
         { title: "Convergencia del presupuesto", text: "La comprobación compara 30, 60, 100 y 150 episodios. No detecta subentrenamiento obvio a 60 episodios, pero tampoco demuestra optimalidad global del presupuesto." },
         { title: "Límites de alcance", text: "El universo es compacto y centrado en Estados Unidos. No incluye crédito, inmobiliario, commodities amplias, renta variable internacional, impuestos, impacto de mercado, liabilities ni necesidades de retirada." },
         { title: "Límites de ejecución", text: "La ejecución es aproximada: no modela profundidad de libro, impacto de mercado, liquidez intradía, routing de broker, custodia ni fiscalidad." },
-        { title: "Reproducibilidad", text: "El paper documenta scripts de datos, entorno, entrenamiento, benchmarks, validación estadística y robustez. La trazabilidad respalda inspección y réplica, no sustituye evidencia live-forward." },
+        {
+          title: "Reproducibilidad",
+          text: "El paper documenta scripts de datos, entorno, entrenamiento, benchmarks, validación estadística y robustez. La trazabilidad respalda inspección y réplica, no sustituye evidencia live-forward.",
+          link: {
+            href: "https://github.com/luiguiHerrera/portfolio_drl_td3",
+            label: "Repositorio del proyecto",
+            description: "Código, scripts y evidencia reproducible del protocolo TD3.",
+          },
+        },
       ],
     },
   },
@@ -579,7 +591,15 @@ export const td3VisualContent: Record<Td3PaperLocale, Td3VisualContent> = {
         { title: "Training-budget convergence", text: "The check compares 30, 60, 100 and 150 episodes. It finds no obvious undertraining at 60 episodes but does not prove global budget optimality." },
         { title: "Scope limits", text: "The universe is compact and US-centric. It excludes credit, real estate, broad commodities, international equities, taxes, market impact, liabilities and withdrawal needs." },
         { title: "Execution limits", text: "Execution modeling is approximate: it does not model order-book depth, market impact, intraday liquidity, broker routing, custody or taxes." },
-        { title: "Reproducibility", text: "The paper documents data, environment, training, benchmark, statistical-validation and robustness scripts. Traceability supports inspection and replication; it does not replace live-forward evidence." },
+        {
+          title: "Reproducibility",
+          text: "The paper documents data, environment, training, benchmark, statistical-validation and robustness scripts. Traceability supports inspection and replication; it does not replace live-forward evidence.",
+          link: {
+            href: "https://github.com/luiguiHerrera/portfolio_drl_td3",
+            label: "Project repository",
+            description: "Code, scripts and reproducible evidence for the TD3 protocol.",
+          },
+        },
       ],
     },
   },

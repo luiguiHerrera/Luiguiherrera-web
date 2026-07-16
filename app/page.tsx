@@ -30,7 +30,7 @@ const entryways = [
   {
     label: "03",
     title: "Investigar estrategias",
-    href: "/investigacion",
+    href: "/investigacion/td3",
     description: "Modelos y backtests puestos a prueba con método.",
   },
   {

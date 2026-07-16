@@ -22,7 +22,6 @@ const routes: Record<string, RouteSchema> = {
   "/tendencias": { name: "Tendencias sin hype", description: "Herramienta educativa para convertir tendencias de mercado en hipótesis prudentes de observación.", kind: "application", category: "EducationalApplication" },
   "/recursos": { name: "Recursos", description: "Catálogo de recursos públicos y scripts open-source para inversionistas.", kind: "collection" },
   "/metodologia": { name: "Metodología", description: "Trazabilidad de fuentes, límites y métodos de las herramientas educativas.", kind: "page" },
-  "/investigacion": { name: "Investigación cuantitativa", description: "Colección de investigación cuantitativa sobre portafolios, DRL y validación.", kind: "collection" },
   "/investigacion/td3": { name: "Evaluación realista de claims DRL", description: "Nota técnica de investigación sobre TD3, costes, cash, benchmarks y validación estadística.", kind: "tech" },
   "/quant-lab": { name: "TD3 Portfolio Research Lab", description: "Laboratorio técnico de evaluación de TD3 aplicado a asignación de portafolios.", kind: "tech" },
   "/legal": { name: "Legal", description: "Información legal y límites de uso de la plataforma.", kind: "page" },
@@ -44,7 +43,6 @@ Object.assign(enRoutes, {
   "/en/trends": { name: "Trends without hype", description: "Educational tool for turning market trends into prudent observation hypotheses.", kind: "application", category: "EducationalApplication" },
   "/en/resources": { name: "Resources", description: "Catalog of public resources and open-source scripts for investors.", kind: "collection" },
   "/en/methodology": { name: "Methodology", description: "Traceability for sources, limits and methods used by the educational tools.", kind: "page" },
-  "/en/research": { name: "Quantitative research", description: "Collection of quantitative research on portfolios, DRL and validation.", kind: "collection" },
   "/en/research/td3": { name: "Realistic evaluation of DRL claims", description: "Technical research note on TD3, costs, cash, benchmarks and statistical validation.", kind: "tech" },
   "/en/quant-lab": { name: "TD3 Portfolio Research Lab", description: "Technical lab evaluating TD3 for portfolio allocation.", kind: "tech" },
   "/en/legal": { name: "Legal", description: "Legal information and platform usage limits.", kind: "page" },
@@ -59,10 +57,8 @@ export function RouteStructuredData() {
   const config = language === "en" ? enRoutes[pathname] : routes[pathname];
   if (!config) return null;
   const input = { pathname, name: config.name, description: config.description, language };
-  const parentResearch = pathname.endsWith("/research/td3") ? "/en/research" : pathname.endsWith("/investigacion/td3") ? "/investigacion" : null;
   const breadcrumbs = buildBreadcrumbJsonLd(language, [
     { name: language === "en" ? "Home" : "Inicio", pathname: language === "en" ? "/en" : "/" },
-    ...(parentResearch ? [{ name: language === "en" ? "Research" : "Investigación", pathname: parentResearch }] : []),
     { name: config.name, pathname },
   ]);
   const schemas: object[] = [buildWebPageJsonLd(input, config.kind === "collection" ? "CollectionPage" : "WebPage"), breadcrumbs];

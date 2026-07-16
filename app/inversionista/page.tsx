@@ -40,7 +40,7 @@ const cards = [
     label: "06",
     meta: "DRL",
     title: "Investigación DRL",
-    href: "/investigacion",
+    href: "/investigacion/td3",
     description: "Investigación sobre aprendizaje profundo por refuerzo con costes, cash y validación estadística.",
   },
   {

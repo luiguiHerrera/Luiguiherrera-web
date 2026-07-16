@@ -274,6 +274,15 @@ function protocolDisplayRows(protocol: CashProtocol) {
   ];
 }
 
+function protocolMetricSummary(protocol: CashProtocol) {
+  const [drawdownLabel, drawdownValue] = protocol.td3Metrics[3];
+  const [bootstrapLabel, bootstrapValue] = protocol.validation[1];
+  const [probabilityLabel, probabilityValue] = protocol.validation[2];
+  const [wrcLabel, wrcValue] = protocol.validation[3];
+
+  return `${protocol.label}. ${drawdownLabel}: ${drawdownValue}; ${bootstrapLabel}: ${bootstrapValue}; ${probabilityLabel}: ${probabilityValue}; ${wrcLabel}: ${wrcValue}.`;
+}
+
 export function RankingEvidenceTables({
   content,
   protocols,
@@ -293,6 +302,7 @@ export function RankingEvidenceTables({
               </div>
               <div className="overflow-x-auto px-4 py-3 md:px-5">
                 <table className="w-full min-w-[28rem] border-collapse text-left text-sm">
+                  <caption className="sr-only">{protocolMetricSummary(protocol)}</caption>
                   <thead>
                     <tr className="border-b border-line text-[10px] uppercase tracking-[0.14em] text-muted">
                       <th className="py-3 pr-4 font-semibold">{content.metric}</th>
@@ -303,7 +313,7 @@ export function RankingEvidenceTables({
                   <tbody>
                     {content.rows.map((label, index) => (
                       <tr key={label} className="border-b border-line/80 last:border-b-0">
-                        <th className="py-3 pr-4 font-medium text-muted">{label}</th>
+                        <th className="py-3 pr-4 font-medium text-muted">{label}:</th>
                         <td className="px-3 py-3 text-right font-mono font-semibold text-petrol">{rows[index][0]}</td>
                         <td className="pl-3 py-3 text-right font-mono text-ink">{rows[index][1]}</td>
                       </tr>
@@ -387,7 +397,7 @@ export function BootstrapValidationFigure({
               <div key={protocol.id} className="border-b border-line pb-4 last:border-b-0 last:pb-0">
                 <dt className="text-sm font-semibold text-ink">{protocol.label}</dt>
                 <dd className="mt-2 flex items-baseline justify-between gap-4 text-sm text-muted">
-                  {content.wrc}
+                  {content.wrc}:
                   <span className="font-mono text-base font-semibold text-[#8b1e3f]">{ciData(protocol).wrc.toFixed(4)}</span>
                 </dd>
               </div>
@@ -553,7 +563,18 @@ export function AppendixSection({ content, id }: { content: Td3VisualContent["ap
                 <span className="details-close-label">{content.close}</span>
               </span>
             </summary>
-            <p className="border-t border-line px-5 py-4 text-sm leading-6 text-muted">{item.text}</p>
+            <div className="border-t border-line px-5 py-4">
+              <p className="text-sm leading-6 text-muted">{item.text}</p>
+              {item.link ? (
+                <div className="mt-4 border-l-2 border-petrol/35 pl-4">
+                  <a href={item.link.href} className="inline-flex items-center gap-2 text-sm font-semibold text-petrol underline decoration-petrol/25 underline-offset-4 transition hover:decoration-petrol">
+                    {item.link.label}
+                    <span aria-hidden="true">&rarr;</span>
+                  </a>
+                  {item.link.description ? <p className="mt-1 text-xs leading-5 text-muted">{item.link.description}</p> : null}
+                </div>
+              ) : null}
+            </div>
           </details>
         ))}
       </div>

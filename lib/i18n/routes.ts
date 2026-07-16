@@ -4,7 +4,6 @@ export const routePairs = [
   { es: "/", en: "/en" },
   { es: "/mercado", en: "/en/market" },
   { es: "/diagnostico", en: "/en/diagnostic" },
-  { es: "/investigacion", en: "/en/research" },
   { es: "/investigacion/td3", en: "/en/research/td3" },
   { es: "/proteccion", en: "/en/protection" },
   { es: "/tendencias", en: "/en/trends" },

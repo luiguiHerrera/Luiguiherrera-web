@@ -37,7 +37,7 @@ const entryways = [
   {
     label: "03",
     title: "Research strategies",
-    href: "/en/research",
+    href: "/en/research/td3",
     description: "Models and backtests tested with method.",
     actionLabel: "Open tool",
   },

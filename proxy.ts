@@ -4,8 +4,13 @@ import { absoluteUrl, languageAlternates } from "@/lib/seo/site";
 export function proxy(request: NextRequest) {
   const response = NextResponse.next();
   const pathname = request.nextUrl.pathname.replace(/\/$/, "") || "/";
-  const alternates = languageAlternates(pathname);
-  const links = [`<${absoluteUrl(pathname)}>; rel="canonical"`];
+  const canonicalPathname = pathname === "/investigacion"
+    ? "/investigacion/td3"
+    : pathname === "/en/research"
+      ? "/en/research/td3"
+      : pathname;
+  const alternates = languageAlternates(canonicalPathname);
+  const links = [`<${absoluteUrl(canonicalPathname)}>; rel="canonical"`];
   if (alternates) {
     for (const [language, url] of Object.entries(alternates)) links.push(`<${url}>; rel="alternate"; hreflang="${language}"`);
   }

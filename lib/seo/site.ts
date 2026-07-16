@@ -16,7 +16,6 @@ export const languagePairs = [
   ["/tendencias", "/en/trends"],
   ["/recursos", "/en/resources"],
   ["/metodologia", "/en/methodology"],
-  ["/investigacion", "/en/research"],
   ["/investigacion/td3", "/en/research/td3"],
   ["/quant-lab", "/en/quant-lab"],
   ["/legal", "/en/legal"],

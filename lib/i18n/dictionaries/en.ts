@@ -36,7 +36,7 @@ export const en = {
       { href: "/en/statistical-levels", label: "Statistical levels", shortLabel: "Levels", description: "Percentiles, z-scores, extensions, drawdowns and seasonality." },
       { href: "/en/trends", label: "Trends", shortLabel: "Trends", description: "Editorial maps and observable vehicles." },
       { href: "/en/quant-lab", label: "Quant Lab", shortLabel: "Quant", description: "TD3 performance context and quantitative process." },
-      { href: "/en/research", label: "DRL research", shortLabel: "DRL", description: "Research with costs, cash and statistical validation." },
+      { href: "/en/research/td3", label: "DRL research", shortLabel: "DRL", description: "Research with costs, cash and statistical validation." },
       { href: "/en/resources", label: "Resources", shortLabel: "Resources", description: "Public tools and scripts." },
     ],
     diagnosticItems: [

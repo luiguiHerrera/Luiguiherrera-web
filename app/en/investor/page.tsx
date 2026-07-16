@@ -40,7 +40,7 @@ const cards = [
     label: "06",
     meta: "DRL",
     title: "DRL research",
-    href: "/en/research",
+    href: "/en/research/td3",
     description: "Research on deep reinforcement learning under costs, cash, and statistical validation.",
   },
   {

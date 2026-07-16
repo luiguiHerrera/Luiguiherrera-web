@@ -6,6 +6,10 @@ export const metadata: Metadata = {
   title: "Realistic evaluation of DRL portfolio claims | Market Lab",
   description:
     "Interactive paper on TD3 evaluation with costs, explicit cash, matched benchmarks and statistical validation.",
+  alternates: {
+    canonical: "/en/research/td3",
+    languages: { es: "/investigacion/td3", en: "/en/research/td3", "x-default": "/investigacion/td3" },
+  },
 };
 
 export default function EnglishTd3ResearchPage() {

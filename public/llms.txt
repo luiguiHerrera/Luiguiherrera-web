@@ -21,7 +21,7 @@ This site is educational and informational. It does not provide personalized inv
 - Tendencias sin hype: https://www.luiguiherrera.com/tendencias
 - Recursos: https://www.luiguiherrera.com/recursos
 - Metodología: https://www.luiguiherrera.com/metodologia
-- Investigación cuantitativa: https://www.luiguiherrera.com/investigacion
+- Investigación TD3: https://www.luiguiherrera.com/investigacion/td3
 - Quant Lab: https://www.luiguiherrera.com/quant-lab
 
 ## Main English pages
@@ -38,7 +38,7 @@ This site is educational and informational. It does not provide personalized inv
 - Trends: https://www.luiguiherrera.com/en/trends
 - Resources: https://www.luiguiherrera.com/en/resources
 - Methodology: https://www.luiguiherrera.com/en/methodology
-- Research: https://www.luiguiherrera.com/en/research
+- TD3 research: https://www.luiguiherrera.com/en/research/td3
 - Quant Lab: https://www.luiguiherrera.com/en/quant-lab
 
 ## Reports and machine-readable files
@@ -48,5 +48,5 @@ This site is educational and informational. It does not provide personalized inv
 
 ## Source and method notes
 - Dashboard methodology: https://www.luiguiherrera.com/metodologia
-- Research: https://www.luiguiherrera.com/investigacion
 - TD3 research: https://www.luiguiherrera.com/investigacion/td3
+- TD3 project repository: https://github.com/luiguiHerrera/portfolio_drl_td3
