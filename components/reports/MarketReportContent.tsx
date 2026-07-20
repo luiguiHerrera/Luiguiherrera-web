@@ -107,10 +107,7 @@ export function MarketReportContent({
         </div>
         <div className="grid gap-3 md:grid-cols-2">
           {report.whatHappened.map((block) => (
-            <article key={block.title} className="border border-line bg-panel p-5">
-              <h3 className="text-lg font-semibold text-ink">{block.title}</h3>
-              <p className="mt-3 text-sm leading-7 text-muted">{block.body}</p>
-            </article>
+            <ContextByAssetCard key={block.title} block={block} />
           ))}
         </div>
       </section>
@@ -294,6 +291,26 @@ function TimelineStep({ body, number, title }: { body: string; number: string; t
         <p className="mt-1 text-sm leading-6 text-muted">{body}</p>
       </div>
     </div>
+  );
+}
+
+function ContextByAssetCard({ block }: { block: MarketReport["whatHappened"][number] }) {
+  return (
+    <details className="group border border-line bg-panel open:border-petrol/45 open:shadow-[0_16px_36px_rgba(31,35,40,0.06)]">
+      <summary className="grid min-h-24 cursor-pointer list-none gap-3 px-5 py-4 marker:hidden focus-visible:ring-2 focus-visible:ring-petrol/25 focus-visible:ring-offset-2 focus-visible:ring-offset-paper md:grid-cols-[1fr_auto] md:items-start">
+        <div>
+          <h3 className="text-lg font-semibold text-ink">{block.title}</h3>
+          <p className="mt-2 text-sm leading-6 text-muted">{block.summary}</p>
+        </div>
+        <span className="w-fit text-xs font-semibold uppercase text-brass">
+          <span className="details-open-label">ABRIR</span>
+          <span className="details-close-label">CERRAR</span>
+        </span>
+      </summary>
+      <div className="border-t border-line px-5 pb-5 pt-4">
+        <p className="text-sm leading-7 text-muted">{block.body}</p>
+      </div>
+    </details>
   );
 }
 

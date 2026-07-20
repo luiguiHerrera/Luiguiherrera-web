@@ -106,7 +106,6 @@ const reportStatAssets = [
   {
     label: "S&P 500",
     aliases: ["SPY"],
-    note: "Datos técnicos medidos con SPY; VOO es la exposición utilizada en el portafolio.",
   },
   { label: "GLD", aliases: ["GLD"] },
   { label: "EWJ", aliases: ["EWJ"] },
@@ -349,7 +348,7 @@ export function AutomaticMarketReadings({ data }: AutomaticMarketReadingsProps) 
 
           <ReportSection eyebrow="Activos" title="Lecturas automáticas disponibles">
             <p className="mb-4 text-sm leading-6 text-muted">
-              Datos técnicos para los activos con cobertura automática. La lectura completa incluye también stockpicking y la exposición al dólar.
+              Datos técnicos para los activos con cobertura automática. La lectura completa incluye también stockpicking y el factor dólar.
             </p>
             <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-4">
               {selectedStatAssets.map((item) => (
@@ -362,7 +361,6 @@ export function AutomaticMarketReadings({ data }: AutomaticMarketReadingsProps) 
                           ? `${displayStatTicker(item.data.ticker)} · ${displayStatName(item.data.ticker, item.data.name)}`
                           : `${displayStatTicker(item.fallbackTicker ?? item.label)} · ${item.fallbackName ?? "Sin dato vigente"}`}
                       </p>
-                      {item.note ? <p className="mt-2 text-xs leading-5 text-muted">{item.note}</p> : null}
                     </div>
                     {item.data ? (
                       <span className="shrink-0 border border-brass/35 bg-white px-2 py-1 text-[11px] font-semibold uppercase text-brass">

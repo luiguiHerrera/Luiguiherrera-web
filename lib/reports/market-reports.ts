@@ -1,5 +1,6 @@
 export type MarketReportSectionBlock = {
   title: string;
+  summary: string;
   body: string;
 };
 
@@ -122,21 +123,25 @@ export const marketReports: MarketReport[] = [
     whatHappened: [
       {
         title: "Mercado general",
+        summary: "El apetito por riesgo sigue, pero la fortaleza está concentrada.",
         body:
           "El mercado mantiene apetito por riesgo, pero de forma desigual. Tecnología, IA, momentum y flujos sostienen el índice, mientras la concentración elevada obliga a mirar debajo de la superficie.",
       },
       {
         title: "Flujos y estructura",
+        summary: "Los flujos siguen sosteniendo el precio antes que la narrativa.",
         body:
           "Los flujos hacia tecnología siguen siendo fuertes. La inversión pasiva y los ETF actúan como compradores estructurales, la participación retail continúa activa y las opciones de muy corto plazo aumentan la mecánica del mercado. En ese entorno, el precio puede moverse por flujos antes que por narrativa fundamental.",
       },
       {
         title: "IA e infraestructura",
+        summary: "La IA pasa de narrativa a infraestructura medible.",
         body:
           "La inversión en IA pasa de narrativa a infraestructura. Centros de datos, chips, memoria, energía, software, ciberseguridad e industriales forman parte de una misma cadena. No basta con comprar cualquier empresa que mencione IA: importan beneficios, márgenes, valoración y ejecución.",
       },
       {
         title: "Riesgo",
+        summary: "La concentración y las opciones elevan la fragilidad de reversión.",
         body:
           "La concentración, el momentum extendido, la sensibilidad a resultados, la actividad en 0DTE y una volatilidad contenida pero frágil elevan el riesgo de reversión. La principal señal de alerta sería un cambio brusco de flujos.",
       },
@@ -407,7 +412,7 @@ export const marketReports: MarketReport[] = [
     subtitle: "Resultados, rotación, dólar y la prueba real de la inteligencia artificial.",
     dateLabel: "Corte: 17 de julio de 2026 · Publicado: 20 de julio de 2026",
     publishedLabel: "20 de julio de 2026",
-    summary: "Momentum, resultados, dólar y dispersión interna en una cartera multi-activo.",
+    summary: "Momentum, resultados, dólar y dispersión interna para seguimiento de activos, factores de mercado y riesgo.",
     htmlHref: "/reports/segundo-informe-julio-2026.html",
     markdownHref: "/reports/segundo-informe-julio-2026.md",
     pdfHref: "/reports/segundo-informe-julio-2026.pdf",
@@ -431,36 +436,43 @@ export const marketReports: MarketReport[] = [
     whatHappened: [
       {
         title: "VOO / S&P 500",
+        summary: "El índice resistió, pero la volatilidad interna aumentó.",
         body:
           "El índice resistió mejor que sus antiguos líderes. La corrección se concentró en momentum, acciones que venían subiendo por inercia y liderazgo reciente, semiconductores e infraestructura de IA, sin una venta indiscriminada. Cerca del 68 % de los componentes sigue sobre su media de 200 días, una señal de amplitud estructural todavía razonable, aunque la amplitud de corto plazo se deterioró especialmente en tecnología. La volatilidad de acciones individuales está cerca de niveles extremos y la correlación del índice se acerca a mínimos históricos: unas acciones suben mientras otras caen. La temporada de resultados será el siguiente catalizador.",
       },
       {
         title: "GLD",
+        summary: "El oro mantiene una debilidad técnica real.",
         body:
           "El oro acumula más de 30 sesiones por debajo de su media de 200 días, la racha más prolongada desde 2022. No funcionó como refugio durante la corrección del momentum porque dólar firme, rendimientos elevados y posicionamiento sistemático débil presionaron el precio. La debilidad es técnica y real, no una fluctuación aislada. Aun así, su función estructural de diversificación no depende de liderar cada semana. SLV sirve solo como comparación: la plata mezcla sensibilidad monetaria con ciclo industrial. JNUG debe leerse aparte: es un instrumento táctico y apalancado, no una posición estructural en oro.",
       },
       {
         title: "EWJ",
+        summary: "Japón conserva fortaleza relativa con liderazgo más concentrado.",
         body:
           "Japón mantiene fortaleza relativa entre mercados desarrollados, con liderazgo más concentrado en tecnología, inversión y activos ligados a IA. SoftBank superó a Toyota por capitalización por segunda vez en la serie mostrada; la primera coincidió con la burbuja tecnológica de 2000. La comparación sirve como advertencia de concentración narrativa, no como predicción automática de colapso. A la vez, los rendimientos japoneses se acercan a los de Alemania y Estados Unidos, por lo que normalización monetaria y yen vuelven a importar. EWJ mantiene exposición al yen; HEWJ sirve como referencia para entender cuánto puede cambiar la lectura al cubrir ese riesgo cambiario.",
       },
       {
         title: "FXI",
+        summary: "China sigue táctica y todavía carece de liderazgo propio.",
         body:
           "Los gestores institucionales redujeron exposición a mercados emergentes y China todavía no recupera liderazgo sostenido. Las valoraciones bajas no han sido suficientes para atraer un flujo consistente. FXI conserva carácter táctico y contrarian: puede diversificar la concentración estadounidense, pero necesita catalizadores propios para dejar de ser solo una historia barata.",
       },
       {
         title: "BTC / ETH",
+        summary: "Cripto volvió a comportarse como beta alta.",
         body:
           "BTC y ETH se comportaron como activos de beta alta: activos que suelen amplificar el apetito por riesgo, tanto al alza como a la baja. No funcionaron como liquidez ni como cobertura defensiva durante la corrección de tecnología y momentum. La fortaleza del dólar redujo apetito por riesgo y recordó que cripto sigue dependiendo de liquidez, flujos, tasas y DXY. BTC suele conservar mayor fortaleza relativa; ETH puede mostrar más sensibilidad a desapalancamiento y cambios de narrativa.",
       },
       {
         title: "Stockpicking",
+        summary: "La dispersión aumenta oportunidades y también errores de concentración.",
         body:
           "La dispersión elevada, diferencias grandes entre ganadores y perdedores, favorece selección activa, pero también aumenta la posibilidad de pérdidas grandes por acción. La baja correlación permite que compañías distintas tengan resultados muy diferentes. La corrección del momentum mostró que varias posiciones aparentemente distintas podían depender del mismo factor: semiconductores estadounidenses, Taiwán, Corea, IA y high beta pueden ser una sola apuesta disfrazada de diversificación. La temporada de resultados mueve el foco desde expectativas hacia ventas, márgenes, guidance, la guía que entrega la empresa, retorno del CapEx, inversión de capital, financiación y capacidad de convertir IA en beneficios.",
       },
       {
         title: "DXY y USD/COP",
+        summary: "El dólar conserva apoyo, pero su posicionamiento está congestionado.",
         body:
           "CTAs, estrategias sistemáticas que suelen seguir tendencias, y operadores no reportables mantienen posiciones largas elevadas en dólares. El posicionamiento largo en USD está congestionado, aunque el DXY, índice que resume el dólar frente a una cesta de divisas desarrolladas, conserva apoyo por rendimientos, tasas y demanda defensiva. Después de CPI y PPI aumentó el peso de escenarios de tasas algo más bajas, y la convergencia entre rendimientos de Estados Unidos, Alemania y Japón puede reducir parte de la ventaja relativa del dólar. USD/COP no se mueve uno a uno con DXY: también pesan petróleo, riesgo global, flujos a emergentes, tasas en Colombia, situación fiscal y riesgo político local.",
       },
