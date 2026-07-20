@@ -103,7 +103,11 @@ function dashboardButton() {
 }
 
 const reportStatAssets = [
-  { label: "VOO / S&P 500", aliases: ["VOO", "SPY"], proxy: "SPY" },
+  {
+    label: "S&P 500",
+    aliases: ["SPY"],
+    note: "Datos técnicos medidos con SPY; VOO es la exposición utilizada en el portafolio.",
+  },
   { label: "GLD", aliases: ["GLD"] },
   { label: "EWJ", aliases: ["EWJ"] },
   { label: "FXI", aliases: ["FXI"] },
@@ -343,7 +347,10 @@ export function AutomaticMarketReadings({ data }: AutomaticMarketReadingsProps) 
             </ReportSection>
           </div>
 
-          <ReportSection eyebrow="Activos" title="Activos principales del informe">
+          <ReportSection eyebrow="Activos" title="Lecturas automáticas disponibles">
+            <p className="mb-4 text-sm leading-6 text-muted">
+              Datos técnicos para los activos con cobertura automática. La lectura completa incluye también stockpicking y la exposición al dólar.
+            </p>
             <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-4">
               {selectedStatAssets.map((item) => (
                 <article key={item.label} className="border border-line bg-panelSoft p-4">
@@ -355,6 +362,7 @@ export function AutomaticMarketReadings({ data }: AutomaticMarketReadingsProps) 
                           ? `${displayStatTicker(item.data.ticker)} · ${displayStatName(item.data.ticker, item.data.name)}`
                           : `${displayStatTicker(item.fallbackTicker ?? item.label)} · ${item.fallbackName ?? "Sin dato vigente"}`}
                       </p>
+                      {item.note ? <p className="mt-2 text-xs leading-5 text-muted">{item.note}</p> : null}
                     </div>
                     {item.data ? (
                       <span className="shrink-0 border border-brass/35 bg-white px-2 py-1 text-[11px] font-semibold uppercase text-brass">

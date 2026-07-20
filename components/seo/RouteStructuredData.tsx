@@ -64,6 +64,5 @@ export function RouteStructuredData() {
   const schemas: object[] = [buildWebPageJsonLd(input, config.kind === "collection" ? "CollectionPage" : "WebPage"), breadcrumbs];
   if (config.kind === "application") schemas.push(buildWebApplicationJsonLd(input, config.category!));
   if (config.kind === "tech") schemas.push(buildArticleJsonLd(input, "TechArticle", { about: researchAbout }));
-  if (pathname === "/informes" || pathname === "/en/weekly-report") schemas.push(buildArticleJsonLd(input, "Article", { headline: language === "en" ? "First July market report" : "Primer informe de julio", datePublished: "2026-07-01", about: ["market regime", "volatility", "ETF flows", "gold", "Bitcoin", "sectors", "economic calendar"] }));
   return <JsonLd data={schemas} />;
 }

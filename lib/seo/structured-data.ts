@@ -22,7 +22,8 @@ export function buildWebApplicationJsonLd(input: PageInput, applicationCategory:
   return { "@context": "https://schema.org", "@type": "WebApplication", "@id": `${url}#application`, url, name: input.name, description: input.description, inLanguage: input.language, applicationCategory, operatingSystem: "Web", isAccessibleForFree: true, isPartOf: website, author: person };
 }
 
-export function buildArticleJsonLd(input: PageInput, type: "Article" | "TechArticle", options?: { headline?: string; datePublished?: string; about?: string[] }) {
-  const url = absoluteUrl(input.pathname);
-  return { "@context": "https://schema.org", "@type": type, "@id": `${url}#${type === "TechArticle" ? "technical-article" : "article"}`, url, headline: options?.headline ?? input.name, description: input.description, inLanguage: input.language, author: person, publisher: person, isPartOf: website, ...(options?.datePublished ? { datePublished: options.datePublished, dateModified: options.datePublished } : {}), ...(options?.about ? { about: options.about } : {}) };
+export function buildArticleJsonLd(input: PageInput, type: "Article" | "TechArticle", options?: { headline?: string; description?: string; datePublished?: string; about?: string[]; url?: string }) {
+  const url = options?.url ?? absoluteUrl(input.pathname);
+  const id = url.includes("#") ? url : `${url}#${type === "TechArticle" ? "technical-article" : "article"}`;
+  return { "@context": "https://schema.org", "@type": type, "@id": id, url, headline: options?.headline ?? input.name, description: options?.description ?? input.description, inLanguage: input.language, author: person, publisher: person, isPartOf: website, ...(options?.datePublished ? { datePublished: options.datePublished, dateModified: options.datePublished } : {}), ...(options?.about ? { about: options.about } : {}) };
 }
