@@ -9,30 +9,39 @@ export const metadata: Metadata = {
 
 const toolCategories = [
   {
+    id: "tradingview",
     name: "TradingView",
     status: "Disponible",
     description: "Scripts públicos para niveles, contexto de mercado y seguimiento visual.",
     href: "#tradingview",
   },
   {
+    id: "python",
     name: "Python",
     status: "Próximamente",
     description: "Research notebooks, simuladores y utilidades de análisis.",
+    href: "#python",
   },
   {
+    id: "r",
     name: "R",
     status: "Próximamente",
     description: "Estadística, visualización y análisis reproducible.",
+    href: "#r",
   },
   {
+    id: "stata",
     name: "Stata",
     status: "Próximamente",
     description: "Econometría aplicada y plantillas académicas.",
+    href: "#stata",
   },
   {
+    id: "cpp",
     name: "C++",
     status: "Próximamente",
     description: "Herramientas futuras para cálculo eficiente y experimentos de bajo nivel.",
+    href: "#cpp",
   },
 ];
 
@@ -79,18 +88,15 @@ export default function RecursosPage() {
               </>
             );
 
-            return category.href ? (
+            return (
               <a
+                id={category.id === "tradingview" ? undefined : category.id}
                 key={category.name}
                 href={category.href}
-                className="block min-h-[11rem] rounded-[6px] border border-petrol/30 bg-white/75 p-5 shadow-[0_12px_32px_rgba(11,52,54,0.045)] transition hover:border-petrol hover:bg-panel"
+                className="block min-h-[11rem] scroll-mt-28 rounded-[6px] border border-petrol/30 bg-white/75 p-5 shadow-[0_12px_32px_rgba(11,52,54,0.045)] transition hover:border-petrol hover:bg-panel"
               >
                 {content}
               </a>
-            ) : (
-              <article key={category.name} className="min-h-[11rem] rounded-[6px] border border-line bg-white/60 p-5">
-                {content}
-              </article>
             );
           })}
         </div>

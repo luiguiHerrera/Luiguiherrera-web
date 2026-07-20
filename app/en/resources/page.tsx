@@ -3,30 +3,39 @@ import { ReadingCard } from "@/components/seo/ReadingCard";
 
 const toolCategories = [
   {
+    id: "tradingview",
     name: "TradingView",
     status: "Available",
     description: "Public scripts for levels, market context and visual tracking.",
     href: "#tradingview",
   },
   {
+    id: "python",
     name: "Python",
     status: "Coming soon",
     description: "Research notebooks, simulators and analysis utilities.",
+    href: "#python",
   },
   {
+    id: "r",
     name: "R",
     status: "Coming soon",
     description: "Statistics, visualization and reproducible analysis.",
+    href: "#r",
   },
   {
+    id: "stata",
     name: "Stata",
     status: "Coming soon",
     description: "Applied econometrics and academic templates.",
+    href: "#stata",
   },
   {
+    id: "cpp",
     name: "C++",
     status: "Coming soon",
     description: "Future tools for efficient computation and lower-level experiments.",
+    href: "#cpp",
   },
 ];
 
@@ -81,18 +90,15 @@ export default function EnglishResourcesPage() {
               </>
             );
 
-            return category.href ? (
+            return (
               <a
+                id={category.id === "tradingview" ? undefined : category.id}
                 key={category.name}
                 href={category.href}
-                className="block min-h-[11rem] rounded-[6px] border border-petrol/30 bg-white/75 p-5 shadow-[0_12px_32px_rgba(11,52,54,0.045)] transition hover:border-petrol hover:bg-panel"
+                className="block min-h-[11rem] scroll-mt-28 rounded-[6px] border border-petrol/30 bg-white/75 p-5 shadow-[0_12px_32px_rgba(11,52,54,0.045)] transition hover:border-petrol hover:bg-panel"
               >
                 {content}
               </a>
-            ) : (
-              <article key={category.name} className="min-h-[11rem] rounded-[6px] border border-line bg-white/60 p-5">
-                {content}
-              </article>
             );
           })}
         </div>

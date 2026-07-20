@@ -43,20 +43,16 @@ export const es = {
       { href: "/diagnostico?mode=quick", label: "Diagnóstico rápido", shortLabel: "Rápido", description: "Lectura compacta de horizonte, liquidez, tolerancia y sesgos principales." },
       { href: "/diagnostico?mode=complete", label: "Diagnóstico completo", shortLabel: "Completo", description: "Evaluación más profunda por capacidad, objetivos, conducta y consistencia." },
     ],
-    researchItems: [
-      { href: "/investigacion/td3", label: "Protocolo DRL", shortLabel: "DRL", description: "Evaluación realista de aprendizaje profundo por refuerzo bajo costes, cash y validación estadística." },
-      { href: "/quant-lab", label: "Quant / TD3 Lab", shortLabel: "Quant Lab", description: "Contexto de rendimiento TD3 y notas del proceso cuantitativo." },
-    ],
     protectionItems: [
-      { href: "/protege-tu-dinero", label: "Protege tu dinero", shortLabel: "Protege", description: "Alertas prácticas y defensas para decisiones cotidianas." },
-      { href: "/dashboard#radar", label: "Radar de lecturas cruzadas", shortLabel: "Radar", description: "Tensiones curadas entre short interest, instituciones y notas." },
-    ],
-    trendsItems: [
-      { href: "/tendencias", label: "Tendencias: del mundo al portafolio", shortLabel: "Tendencias", description: "Marco educativo para convertir cambios globales en hipótesis con prudencia." },
+      { href: "/proteccion", label: "Simulador de decisiones financieras", shortLabel: "Simulador", description: "Casos cortos para entrenar preguntas antes de poner dinero en riesgo." },
+      { href: "/protege-tu-dinero", label: "Alertas para tu dinero", shortLabel: "Alertas", description: "Señales prácticas antes de evaluar una entidad, producto o propuesta." },
     ],
     resourcesItems: [
-      { href: "/recursos#herramientas", label: "Herramientas por lenguaje", shortLabel: "Lenguajes", description: "TradingView disponible; Python, R, Stata y C++ preparados como próximos recursos." },
-      { href: "/recursos#tradingview", label: "Scripts TradingView", shortLabel: "Scripts", description: "Catálogo compacto de utilidades públicas de TradingView." },
+      { href: "/recursos#tradingview", label: "TradingView", shortLabel: "TradingView", description: "Scripts públicos para niveles, contexto de mercado y seguimiento visual." },
+      { href: "/recursos#python", label: "Python", shortLabel: "Python", description: "Notebooks, simuladores y utilidades de análisis." },
+      { href: "/recursos#r", label: "R", shortLabel: "R", description: "Estadística, visualización y análisis reproducible." },
+      { href: "/recursos#stata", label: "Stata", shortLabel: "Stata", description: "Econometría aplicada y plantillas académicas." },
+      { href: "/recursos#cpp", label: "C++", shortLabel: "C++", description: "Cálculo eficiente y experimentos de bajo nivel." },
     ],
     footerText: "Herramientas educativas para ordenar contexto, riesgo y proceso. El control final siempre queda en manos del inversionista.",
     methodology: "Metodología",

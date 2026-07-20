@@ -98,6 +98,17 @@ function DesktopDropdown({ href, items, label }: { href: string; items: NavDropd
   );
 }
 
+function DesktopNavLink({ href, label }: { href: string; label: string }) {
+  return (
+    <HeaderLink
+      href={href}
+      className="block shrink-0 border-b border-transparent px-2 py-1.5 font-medium transition hover:border-petrol hover:text-petrol focus-visible:border-petrol focus-visible:text-petrol focus-visible:outline-none"
+    >
+      {label}
+    </HeaderLink>
+  );
+}
+
 export function Header() {
   const pathname = usePathname();
   const locale = localeFromPathname(pathname);
@@ -106,9 +117,9 @@ export function Header() {
   const navGroups = [
     { href: hrefs.start, label: dictionary.layout.nav.start, items: dictionary.layout.startItems },
     { href: hrefs.investor, label: dictionary.layout.nav.investor, items: dictionary.layout.investorItems },
-    { href: hrefs.research, label: dictionary.layout.nav.research, items: dictionary.layout.researchItems },
+    { href: hrefs.research, label: dictionary.layout.nav.research },
     { href: hrefs.protection, label: dictionary.layout.nav.protection, items: dictionary.layout.protectionItems },
-    { href: hrefs.trends, label: dictionary.layout.nav.trends, items: dictionary.layout.trendsItems },
+    { href: hrefs.trends, label: dictionary.layout.nav.trends },
     { href: hrefs.resources, label: dictionary.layout.nav.resources, items: dictionary.layout.resourcesItems },
   ];
   return (
@@ -129,7 +140,11 @@ export function Header() {
         <div className="hidden w-full min-w-0 items-center gap-3 md:flex lg:w-auto">
           <nav className="-mx-1 flex max-w-full min-w-0 gap-1 overflow-x-auto text-[12px] text-muted [scrollbar-width:none] lg:mx-0 lg:flex-wrap lg:items-center lg:overflow-visible">
             {navGroups.map((group) => (
-              <DesktopDropdown key={group.href} href={group.href} label={group.label} items={group.items} />
+              group.items?.length ? (
+                <DesktopDropdown key={group.href} href={group.href} label={group.label} items={group.items} />
+              ) : (
+                <DesktopNavLink key={group.href} href={group.href} label={group.label} />
+              )
             ))}
           </nav>
           <div className="hidden md:block lg:ml-1">
