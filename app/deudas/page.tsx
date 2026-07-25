@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 export default function DeudasPage() {
   return (
     <div className="mx-auto max-w-7xl px-4 py-10 md:px-5 md:py-14">
-      <section className="grid gap-8 border-b border-line pb-10 lg:grid-cols-[0.58fr_0.42fr] lg:items-end">
+      <section className="estate-hero grid gap-8 rounded-[6px] border border-line px-5 py-7 shadow-[0_16px_42px_rgba(11,52,54,0.045)] md:px-7 md:py-9 lg:grid-cols-[0.58fr_0.42fr] lg:items-end">
         <div>
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-petrol">Herramienta educativa</p>
           <h1 className="mt-4 text-4xl font-semibold leading-[1.02] text-ink md:text-6xl">Gestión de deudas</h1>

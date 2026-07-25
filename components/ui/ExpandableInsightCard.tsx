@@ -40,7 +40,7 @@ export function ExpandableInsightCard({
   const buttonLabel = locale === "en" ? (open ? "Collapse context" : "Expand context") : (open ? "Contraer contexto" : "Ampliar contexto");
 
   return (
-    <section className={`rounded-[6px] border border-line/90 bg-panel shadow-[0_12px_32px_rgba(11,52,54,0.04)] transition duration-200 hover:border-petrol/35 ${className}`}>
+    <section className={`estate-card min-w-0 rounded-[6px] border border-line/90 transition duration-200 hover:border-petrol/35 ${className}`}>
       <div className="p-3.5 md:p-5">
         <div className="flex flex-col gap-3.5 lg:flex-row lg:items-start lg:justify-between">
           <div className="max-w-3xl">

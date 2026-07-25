@@ -9,9 +9,9 @@ type ToolCardProps = {
   meta?: string;
 };
 
-export function ToolCard({ title, description, href, label, actionLabel = "Abrir herramienta", meta }: ToolCardProps) {
+export function ToolCard({ title, description, href, label, actionLabel = "Explorar", meta }: ToolCardProps) {
   return (
-    <Link href={href} className="group flex min-h-[8.5rem] flex-col rounded-[6px] border border-line bg-white/70 p-4 shadow-[0_10px_28px_rgba(11,52,54,0.035)] transition duration-200 hover:border-petrol hover:bg-white">
+    <Link href={href} className="estate-card group flex min-h-[8.5rem] flex-col rounded-[6px] border border-line p-4 transition duration-200 hover:border-petrol">
       <div className="flex items-center justify-between gap-4">
         <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-petrol">{label}</p>
         {meta ? <span className="rounded-[4px] border border-line bg-panel px-2.5 py-1 text-xs text-muted">{meta}</span> : null}

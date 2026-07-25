@@ -92,7 +92,7 @@ function Eyebrow({ children }: { children: React.ReactNode }) {
 }
 
 function Panel({ children, className = "" }: { children: React.ReactNode; className?: string }) {
-  return <section className={`min-w-0 border border-line bg-panel p-5 md:p-6 ${className}`}>{children}</section>;
+  return <section className={`estate-card min-w-0 border border-line p-5 md:p-6 ${className}`}>{children}</section>;
 }
 
 function SectionTitle({ eyebrow, title, text }: { eyebrow?: string; title: string; text?: string }) {
@@ -203,7 +203,7 @@ function ValidationChart() {
 
 function EvaluationStackChart() {
   return (
-    <Panel className="relative overflow-hidden">
+    <Panel className="technical-surface relative overflow-hidden border-petrol/25">
       <QuantAnnotation variant="bracket" className="absolute right-3 top-4 hidden h-16 w-5 text-brass/35 sm:block" />
       <SectionTitle
         eyebrow="Marco de evaluación"
@@ -240,7 +240,7 @@ export async function QuantLabContent({ searchParams, locale }: QuantLabPageProp
 
   return (
     <div className="mx-auto max-w-7xl px-5 py-10 md:py-14">
-      <section className="grid gap-8 border-b border-line pb-9 lg:grid-cols-[1fr_0.72fr] lg:items-end">
+      <section className="estate-hero grid gap-8 rounded-[6px] border border-line px-5 py-7 shadow-[0_16px_42px_rgba(11,52,54,0.045)] md:px-7 md:py-9 lg:grid-cols-[1fr_0.72fr] lg:items-end">
         <div>
           <Eyebrow>Investigación cuantitativa</Eyebrow>
           <h1 className="mt-4 max-w-4xl text-4xl font-semibold leading-[1.02] text-ink md:text-6xl">
@@ -342,7 +342,7 @@ export async function QuantLabContent({ searchParams, locale }: QuantLabPageProp
         </Panel>
       </div>
 
-      <Panel className="mt-6">
+      <Panel className="technical-surface mt-6 border-petrol/25">
         <SectionTitle
           eyebrow="Arquitectura TD3"
           title="Arquitectura del experimento"
@@ -363,7 +363,7 @@ export async function QuantLabContent({ searchParams, locale }: QuantLabPageProp
       </Panel>
 
       <div className="mt-6 grid gap-6 lg:grid-cols-[1fr_0.9fr]">
-        <Panel>
+        <Panel className="warm-section">
           <SectionTitle
             eyebrow="Protocolo"
             title="Protocolo experimental"

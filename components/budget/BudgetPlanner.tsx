@@ -586,7 +586,7 @@ export function BudgetPlanner({ locale }: { locale: Locale }) {
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-10 md:px-5 md:py-14">
-      <section className="grid gap-8 border-b border-line pb-10 lg:grid-cols-[0.58fr_0.42fr] lg:items-end">
+      <section className="estate-hero grid gap-8 rounded-[6px] border border-line px-5 py-7 shadow-[0_16px_42px_rgba(11,52,54,0.045)] md:px-7 md:py-9 lg:grid-cols-[0.58fr_0.42fr] lg:items-end">
         <div>
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-petrol">{locale === "es" ? "Herramienta educativa" : "Educational tool"}</p>
           <h1 className="mt-4 text-4xl font-semibold leading-[1.02] text-ink md:text-6xl">{labels.heroTitle}</h1>
@@ -615,7 +615,7 @@ export function BudgetPlanner({ locale }: { locale: Locale }) {
         <p className="mt-3 max-w-4xl text-sm leading-6 text-muted">{labels.moneyOrderBody}</p>
       </section>
 
-      <section className="mt-8 rounded-[6px] border border-line bg-panel p-5 shadow-[0_12px_32px_rgba(11,52,54,0.035)] md:p-6">
+      <section className="technical-surface mt-8 rounded-[6px] border border-petrol/20 p-5 shadow-[0_12px_32px_rgba(11,52,54,0.035)] md:p-6">
         <p className="text-xs font-semibold uppercase tracking-[0.18em] text-petrol">01</p>
         <h2 className="mt-2 text-2xl font-semibold leading-tight text-ink">{labels.idealModel}</h2>
         <p className="mt-3 max-w-4xl text-sm leading-6 text-muted">{labels.intro}</p>

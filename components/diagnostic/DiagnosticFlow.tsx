@@ -62,7 +62,7 @@ const copy = {
     back: "Back",
     chooseDepth: "Choose depth",
     continue: "Continue",
-    depthTitle: "Open premium retail diagnostic",
+    depthTitle: "Investor diagnostic",
     fullDescription: "Deeper read across experience, behavior, liquidity, concentration and product understanding.",
     fullDuration: "15-20 minutes",
     fullQuestions: "45-55 base + adaptive",
@@ -391,7 +391,7 @@ function routeHref(locale: DiagnosticLocale, href: string) {
 
 function ModeCard({ active, description, duration, onClick, questions, title }: { active: boolean; description: string; duration: string; onClick: () => void; questions: string; title: string }) {
   return (
-    <button type="button" onClick={onClick} className={`border p-5 text-left transition md:p-6 ${active ? "border-petrol bg-[#eef3f2]" : "border-line bg-panel hover:border-ink"}`}>
+    <button type="button" onClick={onClick} className={`estate-card border p-5 text-left transition md:p-6 ${active ? "border-petrol bg-[#eef3f2]" : "border-line hover:border-ink"}`}>
       <span className="text-xs font-semibold uppercase tracking-[0.16em] text-brass">{duration}</span>
       <h3 className="mt-4 text-xl font-semibold text-ink">{title}</h3>
       <p className="mt-3 text-sm leading-6 text-muted">{description}</p>
@@ -404,7 +404,7 @@ function StartScreen({ locale, mode, setMode, start }: { locale: DiagnosticLocal
   const text = copy[locale];
   const canStart = Boolean(mode);
   return (
-    <section className="border border-line bg-panel p-5 md:p-7">
+    <section className="warm-section border border-line p-5 md:p-7">
       <div className="grid gap-8 lg:grid-cols-[0.74fr_1.26fr] lg:items-start">
         <div>
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-brass">{text.chooseDepth}</p>
@@ -446,7 +446,7 @@ function QuestionScreen({ answer, answers, currentIndex, locale, mode, onAnswer,
   const selectedIds = Array.isArray(answer) ? answer : answer ? [answer] : [];
 
   return (
-    <section className="border border-line bg-panel p-5 md:p-8">
+    <section className="technical-surface border border-petrol/20 p-5 md:p-8">
       <div className="grid gap-6 lg:grid-cols-[0.72fr_0.28fr] lg:items-start">
         <div>
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-brass">{mode === "quick" ? text.quickTitle : text.fullTitle}</p>

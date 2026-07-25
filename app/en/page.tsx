@@ -26,42 +26,42 @@ const entryways = [
     label: "01",
     href: "/en/market",
     description: "Context, regime and levels to understand the terrain.",
-    actionLabel: "Open tool",
+    actionLabel: "Explore",
   },
   {
     title: "Know my profile",
     label: "02",
     href: "/en/diagnostic",
     description: "Risk, horizon, biases and capacity before moving capital.",
-    actionLabel: "Open tool",
+    actionLabel: "Explore",
   },
   {
     label: "03",
     title: "Research strategies",
     href: "/en/research/td3",
     description: "Models and backtests tested with method.",
-    actionLabel: "Open tool",
+    actionLabel: "Explore",
   },
   {
     label: "04",
     title: "Protect capital",
     href: "/en/protection",
     description: "Filters and checklists to protect the margin of error.",
-    actionLabel: "Open tool",
+    actionLabel: "Explore",
   },
   {
     label: "05",
     title: "Explore trends",
     href: "/en/trends",
     description: "World changes translated into educational hypotheses.",
-    actionLabel: "Open tool",
+    actionLabel: "Explore",
   },
   {
-    title: "Use free resources",
+    title: "Explore public resources",
     label: "06",
     href: "/en/resources",
     description: "Public tools and scripts for your process.",
-    actionLabel: "Open tool",
+    actionLabel: "Explore",
   },
 ];
 
@@ -126,7 +126,7 @@ function RegimePreviewPanel({ regimeSummary }: { regimeSummary: RegimeSummary })
   const scoreWidth = `${Math.max(0, Math.min(regimeSummary.regimeScore, 100))}%`;
 
   return (
-    <div className="relative overflow-hidden rounded-[6px] border border-petrol/25 bg-white/80 p-5 shadow-[0_18px_48px_rgba(11,52,54,0.07)] md:p-6">
+    <div className="technical-surface relative overflow-hidden rounded-[6px] border border-petrol/25 p-5 shadow-[0_18px_48px_rgba(11,52,54,0.07)] md:p-6">
       <QuantAnnotation variant="underline" className="absolute right-4 top-11 hidden h-3 w-20 text-brass/35 md:block" />
       <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
         <div>
@@ -365,13 +365,13 @@ export default async function EnglishHomePage() {
 
   return (
     <div>
-      <section className="relative overflow-hidden border-b border-line bg-paper">
+      <section className="estate-hero relative overflow-hidden border-b border-line">
         <div className="mx-auto grid min-h-[470px] max-w-7xl grid-cols-1 px-4 py-10 md:min-h-[650px] md:px-5 md:py-20 lg:grid-cols-[0.7fr_1fr] lg:items-center">
           <div className="relative z-20 max-w-2xl">
             <p className="mb-4 w-fit rounded-full border border-petrol/20 bg-white/65 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-petrol">
               Quant discipline for investors
             </p>
-            <h1 className="text-3xl font-semibold leading-[1.04] text-ink sm:text-4xl md:text-6xl">
+            <h1 className="text-3xl font-semibold leading-[1.04] tracking-[-0.025em] text-ink sm:text-4xl md:text-6xl">
               Before investing, understand how the market breathes.
             </h1>
             <TypewriterPrinciples
@@ -402,7 +402,7 @@ export default async function EnglishHomePage() {
         </div>
       </section>
 
-      <section className="border-b border-line bg-white/70">
+      <section className="border-b border-line bg-paper">
         <div className="mx-auto grid max-w-7xl gap-6 px-4 py-8 md:px-5 md:py-10 lg:grid-cols-[0.34fr_1fr] lg:items-start">
           <div>
             <p className="text-xs font-semibold uppercase tracking-[0.2em] text-petrol">Two paths</p>
@@ -413,7 +413,7 @@ export default async function EnglishHomePage() {
           </div>
           <div className="grid gap-4 md:grid-cols-2">
             {homePathways.map((pathway) => (
-              <Link key={pathway.href} href={pathway.href} className="group flex min-h-[13rem] flex-col rounded-[6px] border border-line bg-white/75 p-5 shadow-[0_12px_32px_rgba(11,52,54,0.045)] transition hover:border-petrol hover:bg-white">
+              <Link key={pathway.href} href={pathway.href} className="estate-card group flex min-h-[13rem] flex-col rounded-[6px] border border-line p-5 transition hover:border-petrol">
                 <p className="text-xs font-semibold uppercase tracking-[0.18em] text-petrol">{pathway.label}</p>
                 <h3 className="mt-4 text-2xl font-semibold leading-tight text-ink">{pathway.title}</h3>
                 <p className="mt-3 text-sm leading-6 text-muted">{pathway.description}</p>
@@ -424,10 +424,10 @@ export default async function EnglishHomePage() {
         </div>
       </section>
 
-      <section className="border-b border-line bg-white/55">
+      <section className="warm-section border-b border-line">
         <div className="mx-auto grid max-w-7xl gap-5 px-4 py-7 md:grid-cols-[0.35fr_1fr_0.95fr] md:items-start md:px-5 md:py-8">
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-petrol">Our philosophy</p>
-          <p className="text-lg leading-7 text-ink md:text-2xl md:leading-8">
+          <p className="border-l-2 border-brass/55 pl-5 text-lg font-medium leading-7 text-ink md:text-2xl md:leading-8">
             Markets change quickly. Risk does too. The edge is organizing information before deciding.
           </p>
           <div className="grid gap-4 md:grid-cols-3">

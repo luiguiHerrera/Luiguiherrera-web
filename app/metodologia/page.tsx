@@ -98,7 +98,7 @@ function Eyebrow({ children }: { children: React.ReactNode }) {
 export default function MetodologiaPage() {
   return (
     <div className="mx-auto max-w-7xl px-5 py-10 md:py-14">
-      <section className="border-b border-line pb-9">
+      <section className="estate-hero rounded-[6px] border border-line px-5 py-7 shadow-[0_16px_42px_rgba(11,52,54,0.045)] md:px-7 md:py-9">
         <Eyebrow>Cómo funciona el sistema</Eyebrow>
         <h1 className="mt-4 max-w-4xl text-4xl font-semibold leading-[1.02] text-ink md:text-6xl">Metodología</h1>
         <p className="mt-5 max-w-3xl text-lg leading-8 text-muted">
@@ -113,7 +113,7 @@ export default function MetodologiaPage() {
         { label: "Límites", value: "La metodología reduce ambigüedad, pero no elimina errores de fuente, retrasos, cambios de API ni limitaciones de proxies." },
       ]} />
 
-      <section className="mt-8 border border-line bg-panel p-5 md:p-6">
+      <section className="editorial-surface mt-8 border border-line p-5 md:p-6">
         <Eyebrow>Investigación DRL</Eyebrow>
         <h2 className="mt-2 text-2xl font-semibold text-ink md:text-3xl">Protocolo de evaluación DRL</h2>
         <p className="mt-4 max-w-4xl text-base leading-7 text-muted">{researchQuestion}</p>
@@ -126,7 +126,7 @@ export default function MetodologiaPage() {
         <Eyebrow>Principios</Eyebrow>
         <div className="mt-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
           {principles.map(([title, text]) => (
-            <article key={title} className="border border-line bg-panel p-4">
+            <article key={title} className="estate-card border border-line p-4 transition">
               <h2 className="font-semibold text-ink">{title}</h2>
               <p className="mt-2 text-sm leading-6 text-muted">{text}</p>
             </article>
@@ -134,14 +134,14 @@ export default function MetodologiaPage() {
         </div>
       </section>
 
-      <section className="mt-8 border border-line bg-panel p-5 md:p-6">
+      <section className="technical-surface mt-8 border border-petrol/25 p-5 md:p-6">
         <div className="max-w-3xl">
           <Eyebrow>Mapa del sistema</Eyebrow>
           <h2 className="mt-2 text-2xl font-semibold text-ink md:text-3xl">Del dato público a la decisión humana</h2>
         </div>
         <div className="mt-6 grid gap-3 lg:grid-cols-5">
           {systemMap.map(([title, text], index) => (
-            <article key={title} className="relative border border-line bg-panelSoft p-4">
+            <article key={title} className={`relative border p-4 ${index === systemMap.length - 1 ? "human-decision-panel" : "border-line bg-white/75"}`}>
               <span className="text-xs font-semibold text-brass">{String(index + 1).padStart(2, "0")}</span>
               <h3 className="mt-3 font-semibold text-ink">{title}</h3>
               <p className="mt-2 text-sm leading-6 text-muted">{text}</p>

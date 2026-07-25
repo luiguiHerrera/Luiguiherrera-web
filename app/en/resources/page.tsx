@@ -4,7 +4,7 @@ import { ReadingCard } from "@/components/seo/ReadingCard";
 
 export const metadata: Metadata = {
   title: "Investor resources | TradingView scripts and tools",
-  description: "A catalog of free investor resources, including open-source TradingView scripts for statistical levels and market context.",
+  description: "A catalog of public investor resources, including open-source TradingView scripts for statistical levels and market context.",
 };
 
 const toolCategories = [
@@ -58,7 +58,7 @@ function englishUseCase(scriptId: string, fallback: string) {
 export default function EnglishResourcesPage() {
   return (
     <div className="mx-auto max-w-7xl px-5 py-10 md:py-14">
-      <section className="border-b border-line pb-10">
+      <section className="estate-hero rounded-[6px] border border-line px-5 py-7 shadow-[0_16px_42px_rgba(11,52,54,0.045)] md:px-7 md:py-9">
         <p className="text-xs font-semibold uppercase tracking-[0.18em] text-petrol">Public tools</p>
         <h1 className="mt-4 text-4xl font-semibold leading-[1.02] text-ink md:text-6xl">Resources</h1>
         <p className="mt-5 max-w-3xl text-lg leading-8 text-muted">
@@ -71,7 +71,7 @@ export default function EnglishResourcesPage() {
         { label: "Limits", value: "The resources are educational and availability depends on each external platform." },
         { label: "Next step", value: "Explore the published scripts or return to market, statistical levels and methodology." },
       ]} />
-      <section id="tools" className="mt-8 scroll-mt-28">
+      <section id="tools" className="technical-surface mt-8 scroll-mt-28 rounded-[6px] border border-petrol/20 p-5 md:p-6">
         <div className="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
           <div>
             <p className="text-xs font-semibold uppercase tracking-[0.18em] text-petrol">Tool types</p>
@@ -101,7 +101,7 @@ export default function EnglishResourcesPage() {
                 id={category.id === "tradingview" ? undefined : category.id}
                 key={category.name}
                 href={category.href}
-                className="block min-h-[11rem] scroll-mt-28 rounded-[6px] border border-petrol/30 bg-white/75 p-5 shadow-[0_12px_32px_rgba(11,52,54,0.045)] transition hover:border-petrol hover:bg-panel"
+                className="estate-card block min-h-[11rem] scroll-mt-28 rounded-[6px] border border-petrol/30 p-5 transition hover:border-petrol"
               >
                 {content}
               </a>
@@ -122,7 +122,7 @@ export default function EnglishResourcesPage() {
         </div>
         <div className="mt-6 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
           {tradingViewScripts.map((script) => (
-            <article key={script.id} className="flex min-h-[15rem] flex-col rounded-[6px] border border-line bg-white/75 p-5 shadow-[0_12px_32px_rgba(11,52,54,0.045)]">
+            <article key={script.id} className="editorial-surface flex min-h-[15rem] flex-col rounded-[6px] border border-line p-5">
               <div className="flex items-start justify-between gap-4">
                 <div>
                   <p className="text-xs font-semibold uppercase tracking-[0.14em] text-petrol">{script.category}</p>

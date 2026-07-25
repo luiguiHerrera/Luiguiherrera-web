@@ -122,7 +122,7 @@ function MarketBreadthPanel({ data, locale }: { data: WeeklyReportData; locale: 
   ];
 
   return (
-    <section className="border border-line bg-panel p-4 md:p-5">
+    <section className="estate-card border border-line p-4 md:p-5">
       <div>
         <p className="text-xs font-semibold uppercase tracking-[0.16em] text-petrol">{copy.eyebrow}</p>
         <h2 className="mt-2 text-xl font-semibold text-ink">{copy.title}</h2>
@@ -245,7 +245,7 @@ export async function DashboardContent({ locale = "es" }: { locale?: "es" | "en"
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-8 md:px-5 md:py-14">
-      <div className="grid gap-5 md:gap-8 lg:grid-cols-[1fr_0.8fr] lg:items-end">
+      <div className="estate-hero grid gap-5 rounded-[6px] border border-line px-5 py-6 shadow-[0_16px_42px_rgba(11,52,54,0.045)] md:gap-8 md:px-7 md:py-8 lg:grid-cols-[1fr_0.8fr] lg:items-end">
         <SectionHeader
           eyebrow={copy.eyebrow}
           title={copy.title}
@@ -271,6 +271,7 @@ export async function DashboardContent({ locale = "es" }: { locale?: "es" | "en"
       <div className="relative mt-6 md:mt-8">
         <QuantAnnotation variant="underline" className="absolute left-4 top-8 z-10 h-2.5 w-24 text-brass/35 md:left-5 md:top-9" />
         <ExpandableInsightCard
+          className="technical-surface border-petrol/30 shadow-[0_20px_50px_rgba(11,52,54,0.08)]"
           eyebrow={copy.integrated}
           title={copy.composite}
           reading={t(regimeSummary.interpretation)}
@@ -283,7 +284,7 @@ export async function DashboardContent({ locale = "es" }: { locale?: "es" | "en"
           ]}
         >
         <div className="grid gap-3 md:grid-cols-4">
-          <div className="border border-line bg-panelSoft p-4">
+          <div className="border border-sage/30 bg-[#eef5f1] p-4">
             <p className="text-xs font-semibold uppercase tracking-[0.16em] text-brass">{copy.currentRegime}</p>
             <div className="mt-3"><RegimeBadge label={locale === "en" ? translateRegimeLabel(regimeSummary.current) : regimeSummary.current} /></div>
           </div>
@@ -313,7 +314,7 @@ export async function DashboardContent({ locale = "es" }: { locale?: "es" | "en"
         </p>
 
         <div className="mt-3 grid gap-3 lg:grid-cols-2">
-          <div className="border border-line bg-panelSoft p-4">
+          <div className="border border-brass/30 bg-[#f8f2e7] p-4">
             <h3 className="text-sm font-semibold text-ink">{copy.supports}</h3>
             <ul className="mt-3 grid gap-2 text-sm leading-6 text-muted">
               {regimeSummary.riskSupportSignals.length > 0 ? (
@@ -356,7 +357,7 @@ export async function DashboardContent({ locale = "es" }: { locale?: "es" | "en"
         {vix ? <VixModule data={vix} /> : null}
         {vixTermStructure ? <VixTermStructureModule data={vixTermStructure} /> : null}
         {btcEtfFlows || gldFlowPressure ? (
-          <section className="grid gap-4">
+          <section className="warm-section grid min-w-0 gap-4 rounded-[6px] border border-line p-4 md:p-5">
             <div>
               <p className="text-xs font-semibold uppercase tracking-[0.16em] text-petrol">{copy.capitalFlows}</p>
               <h2 className="mt-2 text-2xl font-semibold leading-tight text-ink">{copy.capitalFlowsTitle}</h2>

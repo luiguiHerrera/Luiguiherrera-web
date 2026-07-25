@@ -81,7 +81,7 @@ export default function ProtegeTuDineroPage() {
 export function ProtectYourMoneyContent({ readingCard }: { readingCard: ReactNode }) {
   return (
     <div className="mx-auto max-w-7xl px-5 py-10 md:py-14">
-      <section className="grid gap-8 border-b border-line pb-9 lg:grid-cols-[1fr_0.72fr] lg:items-end">
+      <section className="estate-hero grid gap-8 rounded-[6px] border border-line px-5 py-7 shadow-[0_16px_42px_rgba(11,52,54,0.045)] md:px-7 md:py-9 lg:grid-cols-[1fr_0.72fr] lg:items-end">
         <div>
           <p className="text-xs font-semibold uppercase tracking-[0.18em] text-brass">Protección patrimonial</p>
           <h1 className="mt-4 max-w-4xl text-4xl font-semibold leading-[1.02] text-ink md:text-6xl">Protege tu dinero</h1>
@@ -109,7 +109,7 @@ export function ProtectYourMoneyContent({ readingCard }: { readingCard: ReactNod
         </div>
         <div className="mt-6 grid gap-4 lg:grid-cols-3">
           {protectionFilters.map((filter) => (
-            <article key={filter.title} className="border border-line bg-panel p-5">
+            <article key={filter.title} className="estate-card border border-line p-5">
               <div className="flex items-start justify-between gap-4">
                 <h3 className="text-xl font-semibold text-ink">{filter.title}</h3>
                 <RiskPill label={filter.level} tone={filter.tone} />

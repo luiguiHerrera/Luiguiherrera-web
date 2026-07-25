@@ -806,7 +806,7 @@ export function DebtPlanner({ locale }: { locale: Locale }) {
 
   return (
     <div className="mt-8 grid gap-6">
-      <section className="rounded-[6px] border border-line bg-panel p-4 shadow-[0_12px_32px_rgba(11,52,54,0.035)] md:p-5">
+      <section className="technical-surface rounded-[6px] border border-petrol/20 p-4 shadow-[0_12px_32px_rgba(11,52,54,0.035)] md:p-5">
         <p className="text-xs font-semibold uppercase tracking-[0.18em] text-petrol">01</p>
         <h2 className="mt-2 text-xl font-semibold leading-tight text-ink">{labels.baseline}</h2>
         <div className="mt-4 grid gap-3 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
