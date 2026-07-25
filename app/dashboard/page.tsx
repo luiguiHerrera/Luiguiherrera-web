@@ -12,6 +12,7 @@ import { DisclaimerBox } from "@/components/ui/DisclaimerBox";
 import { ExpandableInsightCard } from "@/components/ui/ExpandableInsightCard";
 import { MetricCard } from "@/components/ui/MetricCard";
 import { SectionHeader } from "@/components/ui/SectionHeader";
+import { QuantAnnotation } from "@/components/ui/QuantAnnotation";
 import { ReadingCard } from "@/components/seo/ReadingCard";
 import { getDashboardData } from "@/lib/dashboard/get-dashboard-data";
 import { dataStatusLabels } from "@/lib/dashboard/status";
@@ -267,7 +268,8 @@ export async function DashboardContent({ locale = "es" }: { locale?: "es" | "en"
         { label: "Límites", value: "No predice el mercado, no emite señales de compra o venta y algunas lecturas dependen de disponibilidad de fuentes externas." },
       ]} />
 
-      <div className="mt-6 md:mt-8">
+      <div className="relative mt-6 md:mt-8">
+        <QuantAnnotation variant="underline" className="absolute left-4 top-8 z-10 h-2.5 w-24 text-brass/35 md:left-5 md:top-9" />
         <ExpandableInsightCard
           eyebrow={copy.integrated}
           title={copy.composite}

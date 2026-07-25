@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { ReadingCard } from "@/components/seo/ReadingCard";
+import { QuantAnnotation } from "@/components/ui/QuantAnnotation";
 
 export const metadata: Metadata = {
   title: "Metodología | Fuentes, límites y trazabilidad",
@@ -145,6 +146,7 @@ export default function MetodologiaPage() {
               <h3 className="mt-3 font-semibold text-ink">{title}</h3>
               <p className="mt-2 text-sm leading-6 text-muted">{text}</p>
               {index < systemMap.length - 1 ? <span className="absolute right-3 top-3 hidden text-muted lg:block">→</span> : null}
+              {index === systemMap.length - 1 ? <QuantAnnotation variant="underline" className="absolute bottom-1 left-3 h-3 w-[72%] text-brass/45" /> : null}
             </article>
           ))}
         </div>

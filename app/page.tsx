@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { ToolCard } from "@/components/ui/ToolCard";
 import { TypewriterPrinciples } from "@/components/home/TypewriterPrinciples";
+import { QuantAnnotation } from "@/components/ui/QuantAnnotation";
 import { getHomeDashboardPreviewData } from "@/lib/dashboard/get-home-dashboard-preview-data";
 import { displayStatTicker } from "@/lib/statistical-levels/display";
 import { getStatisticalLevelsManifest } from "@/lib/statistical-levels/get-statistical-levels-data";
@@ -121,7 +122,8 @@ function RegimePreviewPanel({ regimeSummary }: { regimeSummary: RegimeSummary })
   const scoreWidth = `${Math.max(0, Math.min(regimeSummary.regimeScore, 100))}%`;
 
   return (
-    <div className="rounded-[6px] border border-petrol/25 bg-white/80 p-5 shadow-[0_18px_48px_rgba(11,52,54,0.07)] md:p-6">
+    <div className="relative overflow-hidden rounded-[6px] border border-petrol/25 bg-white/80 p-5 shadow-[0_18px_48px_rgba(11,52,54,0.07)] md:p-6">
+      <QuantAnnotation variant="underline" className="absolute right-4 top-11 hidden h-3 w-20 text-brass/35 md:block" />
       <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
         <div>
           <p className="text-xs font-semibold uppercase tracking-[0.18em] text-petrol">Régimen integrado</p>

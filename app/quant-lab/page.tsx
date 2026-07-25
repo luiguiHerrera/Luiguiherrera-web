@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { ReadingCard } from "@/components/seo/ReadingCard";
 import { Td3PerformanceTable } from "@/components/quant-lab/Td3PerformanceTable";
 import { DisclaimerBox } from "@/components/ui/DisclaimerBox";
+import { QuantAnnotation } from "@/components/ui/QuantAnnotation";
 import {
   benchmarkRankingResults,
   capSensitivityResults,
@@ -202,7 +203,8 @@ function ValidationChart() {
 
 function EvaluationStackChart() {
   return (
-    <Panel>
+    <Panel className="relative overflow-hidden">
+      <QuantAnnotation variant="bracket" className="absolute right-3 top-4 hidden h-16 w-5 text-brass/35 sm:block" />
       <SectionTitle
         eyebrow="Marco de evaluación"
         title="Capas de evaluación"

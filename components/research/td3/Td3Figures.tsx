@@ -1,5 +1,6 @@
 import type { CashProtocol, Td3PaperContent } from "@/lib/research/td3-paper";
 import type { ClaimVerdict, Td3VisualContent } from "@/lib/research/td3-visual-content";
+import { QuantAnnotation } from "@/components/ui/QuantAnnotation";
 
 type Locale = Td3PaperContent["locale"];
 
@@ -97,9 +98,10 @@ export function ClaimLadder({ content }: { content: Td3VisualContent["ladder"] }
   const names = ["Ranking", "Statistics", "Feasibility"];
   return (
     <FigureShell eyebrow={content.eyebrow} title={content.title}>
-      <div className="border border-petrol/25 bg-petrol px-5 py-5 text-white md:px-7">
+      <div className="relative overflow-hidden border border-petrol/25 bg-petrol px-5 py-5 text-white md:px-7">
         <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-white/65">{content.researchQuestionLabel}</p>
         <p className="mt-2 max-w-5xl text-base font-semibold leading-7 md:text-lg">{content.researchQuestion}</p>
+        <QuantAnnotation variant="underline" className="absolute bottom-2 left-1/2 hidden h-4 w-28 text-brass/65 md:block" />
       </div>
 
       <div className="mt-5 grid gap-3 md:grid-cols-3">
@@ -498,7 +500,10 @@ export function ContributionFlow({ content }: { content: Td3VisualContent["contr
         <div className="flex flex-col items-stretch gap-2 lg:flex-row lg:items-center">
           {content.flow.map((step, index) => (
             <div key={step} className="contents">
-              <div className={`flex min-h-20 flex-1 items-center justify-center border px-4 py-4 text-center text-sm font-semibold leading-5 ${index === 0 ? "border-[#8b1e3f]/30 bg-[#f8f1f3] text-[#8b1e3f]" : index === content.flow.length - 1 ? "border-sage/45 bg-[#eef5f2] text-[#3f604f]" : "border-line bg-[#f7f8fa] text-ink"}`}>{step}</div>
+              <div className={`relative flex min-h-20 flex-1 items-center justify-center overflow-hidden border px-4 py-4 text-center text-sm font-semibold leading-5 ${index === 0 ? "border-[#8b1e3f]/30 bg-[#f8f1f3] text-[#8b1e3f]" : index === content.flow.length - 1 ? "border-sage/45 bg-[#eef5f2] text-[#3f604f]" : "border-line bg-[#f7f8fa] text-ink"}`}>
+                {step}
+                {index === content.flow.length - 1 ? <QuantAnnotation variant="underline" className="absolute bottom-1 h-2.5 w-3/5 text-brass/45" /> : null}
+              </div>
               {index < content.flow.length - 1 ? <Connector responsiveAt="lg" /> : null}
             </div>
           ))}
@@ -538,7 +543,8 @@ export function FinalAnswerCards({ content }: { content: Td3VisualContent["final
           </div>
         ))}
       </div>
-      <div className="mt-5 border border-petrol bg-petrol p-6 text-white shadow-[0_20px_55px_rgba(11,52,54,0.11)] md:p-8">
+      <div className="relative mt-5 overflow-hidden border border-petrol bg-petrol p-6 text-white shadow-[0_20px_55px_rgba(11,52,54,0.11)] md:p-8">
+        <QuantAnnotation variant="bracket" className="absolute right-4 top-4 hidden h-20 w-6 text-brass/55 md:block" />
         <p className="max-w-5xl text-xl font-semibold leading-8 md:text-3xl md:leading-tight">{content.mainAnswer}</p>
         <p className="mt-6 border-t border-white/20 pt-5 text-sm leading-7 text-white/75">
           <span className="font-semibold text-white">{content.mainResultLabel}:</span> {content.mainResult}
