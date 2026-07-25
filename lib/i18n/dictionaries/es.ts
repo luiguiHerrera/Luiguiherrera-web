@@ -12,14 +12,12 @@ export const es = {
       resources: "Recursos",
     },
     startItems: [
-      { href: "/empezar", label: "Empezar simple", shortLabel: "Simple", description: "Camino guiado para ordenar lo esencial." },
       { href: "/diagnostico?mode=quick", label: "Diagnóstico rápido", shortLabel: "Rápido", description: "Lectura compacta de horizonte, liquidez, tolerancia y sesgos." },
       { href: "/diagnostico?mode=complete", label: "Diagnóstico completo", shortLabel: "Completo", description: "Evaluación más profunda por capacidad, objetivos, conducta y consistencia." },
       { href: "/presupuesto", label: "Presupuesto personal", shortLabel: "Presupuesto", description: "Ordena ingresos, gastos, protección, disfrute, inversión y crecimiento." },
       { href: "/deudas", label: "Gestión de deudas", shortLabel: "Deudas", description: "Revisa si tus deudas están compitiendo contra tu flujo y tu capacidad de invertir." },
-      { href: "/protege-tu-dinero", label: "Protege tu dinero", shortLabel: "Protege", description: "Señales de alerta antes de entregar capital." },
-      { href: "/proteccion", label: "Prácticas de inversión", shortLabel: "Prácticas", description: "Casos cortos para entrenar preguntas antes de poner dinero en riesgo." },
-      { href: "/tendencias", label: "Tendencias sin hype", shortLabel: "Tendencias", description: "Cambios del mundo como hipótesis, no como recomendación." },
+      { href: "/proteccion", label: "Simulador de decisiones financieras", shortLabel: "Simulador", description: "Casos cortos para entrenar preguntas antes de poner dinero en riesgo." },
+      { href: "/protege-tu-dinero", label: "Alertas para tu dinero", shortLabel: "Alertas", description: "Señales de alerta antes de entregar capital." },
     ],
     investorItems: [
       { href: "/dashboard", label: "Dashboard de mercado", shortLabel: "Dashboard", description: "Volatilidad, rotación sectorial, flujos y lecturas cruzadas." },

@@ -1,9 +1,8 @@
 import { DiagnosticFlow } from "@/components/diagnostic/DiagnosticFlow";
 import type { Metadata } from "next";
-import { DisclaimerBox } from "@/components/ui/DisclaimerBox";
-import { SectionHeader } from "@/components/ui/SectionHeader";
 import type { DiagnosticMode } from "@/lib/diagnostic/types";
 import { ReadingCard } from "@/components/seo/ReadingCard";
+import { InstitutionalHero } from "@/components/ui/InstitutionalHero";
 
 function modeFromSearchParam(mode: string | string[] | undefined): DiagnosticMode | undefined {
   if (mode === "quick" || mode === "complete") return mode;
@@ -16,16 +15,15 @@ export default async function DiagnosticoPage({ searchParams }: { searchParams?:
 
   return (
     <div className="mx-auto max-w-7xl px-5 py-10 md:py-14">
-      <div className="institutional-hero institutional-hero--educational mb-10 grid gap-6 px-5 py-7 md:px-7 md:py-9 lg:grid-cols-[1fr_0.72fr] lg:items-end">
-        <SectionHeader
-          eyebrow="Diagnóstico del inversionista"
-          title="Antes de mirar el mercado, conviene mirar al inversionista."
-          subtitle="Elige una ruta rápida o completa para cruzar conocimientos, experiencia, tolerancia psicológica y capacidad real de asumir riesgo. Todo se calcula en tu navegador durante esta sesión."
-        />
-        <DisclaimerBox>
-          No guardamos respuestas, portafolios ni resultados individuales. Si recargas la página, la sesión se pierde. Este diagnóstico es una lectura educativa de preparación actual y no constituye asesoramiento financiero o recomendación personalizada.
-        </DisclaimerBox>
-      </div>
+      <InstitutionalHero
+        chips={["Horizonte", "Liquidez", "Tolerancia", "Capacidad"]}
+        className="mb-10"
+        description="Elige una ruta rápida o completa para cruzar conocimientos, experiencia, tolerancia psicológica y capacidad real de asumir riesgo. Todo se calcula en tu navegador durante esta sesión."
+        eyebrow="Diagnóstico del inversionista"
+        note="No guardamos respuestas, portafolios ni resultados individuales. Si recargas la página, la sesión se pierde. Esta es una lectura educativa, no asesoramiento financiero."
+        title="Antes de mirar el mercado, conviene mirar al inversionista."
+        variant="educational"
+      />
       <ReadingCard title="Ficha de lectura" items={[
         { label: "Qué es", value: "Un diagnóstico educativo del inversionista que ordena horizonte, liquidez, experiencia, tolerancia psicológica, comportamiento y capacidad real para asumir riesgo." },
         { label: "Para qué sirve", value: "Sirve para diferenciar deseo de invertir, tolerancia emocional y capacidad financiera antes de tomar decisiones." },

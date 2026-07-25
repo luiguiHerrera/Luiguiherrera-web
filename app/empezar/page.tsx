@@ -10,45 +10,45 @@ export const metadata: Metadata = {
 const cards = [
   {
     label: "01",
+    meta: "Rápido",
+    title: "Diagnóstico rápido",
+    href: "/diagnostico?mode=quick",
+    description: "Lectura compacta de horizonte, liquidez, tolerancia y sesgos principales.",
+  },
+  {
+    label: "02",
+    meta: "Completo",
+    title: "Diagnóstico completo",
+    href: "/diagnostico?mode=complete",
+    description: "Evaluación más profunda por capacidad, objetivos, conducta y consistencia.",
+  },
+  {
+    label: "03",
     meta: "Flujo",
     title: "Presupuesto personal",
     href: "/presupuesto",
     description: "Ordena ingresos, gastos, protección, disfrute, inversión y crecimiento.",
   },
   {
-    label: "02",
+    label: "04",
     meta: "Deuda",
     title: "Gestión de deudas",
     href: "/deudas",
     description: "Revisa si tus deudas están compitiendo contra tu flujo y tu capacidad de invertir.",
   },
   {
-    label: "03",
-    meta: "Para invertir",
-    title: "Diagnóstico de inversión",
-    href: "/diagnostico",
-    description: "Úsalo cuando ya tengas más claro tu flujo, tus deudas y tu margen para asumir riesgo.",
-  },
-  {
-    label: "04",
-    meta: "Riesgo",
-    title: "Protege tu dinero",
-    href: "/protege-tu-dinero",
-    description: "Señales de alerta antes de entregar capital.",
-  },
-  {
     label: "05",
     meta: "Práctica",
-    title: "Prácticas de inversión",
+    title: "Simulador de decisiones financieras",
     href: "/proteccion",
     description: "Casos cortos para entrenar preguntas antes de poner dinero en riesgo.",
   },
   {
     label: "06",
-    meta: "Contexto",
-    title: "Tendencias sin hype",
-    href: "/tendencias",
-    description: "Usa los cambios del mundo como hipótesis, no como recomendación.",
+    meta: "Alertas",
+    title: "Alertas para tu dinero",
+    href: "/protege-tu-dinero",
+    description: "Señales de alerta antes de entregar capital.",
   },
 ];
 
@@ -59,16 +59,17 @@ export default function EmpezarPage() {
       cards={cards}
       closingNote="Este camino no busca simplificar en exceso. Busca ordenar el proceso: primero margen de error, luego protección, después contexto."
       eyebrow="Camino guiado"
+      heroChips={["Diagnóstico", "Flujo", "Deuda", "Protección"]}
       intro="No necesitas empezar por z-scores, FedWatch o modelos cuantitativos. Puedes comenzar por lo esencial: entender tu flujo, tus deudas, tu margen de error y después pensar en inversión."
-      primaryCta={{ href: "/presupuesto", label: "Ordenar presupuesto" }}
+      primaryCta={{ href: "/diagnostico?mode=quick", label: "Empezar diagnóstico" }}
       secondaryCta={{ href: "/inversionista", label: "Ver modo inversionista" }}
-      subtitle="Ruta guiada para ordenar presupuesto, deudas, diagnóstico, protección y prácticas antes de invertir."
-      title="Empezar simple"
+      subtitle="Ruta guiada para ordenar diagnóstico, presupuesto, deudas y protección antes de invertir."
+      title="Ordena lo esencial"
       readingCard={<ReadingCard title="Ficha de lectura" items={[
-        { label: "Qué es", value: "Una ruta guiada para ordenar las herramientas principales antes de invertir: presupuesto, deudas, diagnóstico, protección, práctica y mercado." },
-        { label: "Para qué sirve", value: "Sirve para empezar por flujo, deuda, margen de seguridad y criterio antes de pasar a lecturas de mercado más avanzadas." },
+        { label: "Qué es", value: "Una ruta guiada para ordenar diagnóstico, presupuesto, deudas, decisiones financieras y alertas antes de invertir." },
+        { label: "Para qué sirve", value: "Sirve para empezar por situación personal, flujo, deuda, margen de seguridad y criterio." },
         { label: "Límites", value: "No evalúa una situación personal completa ni reemplaza asesoría financiera, fiscal o legal." },
-        { label: "Siguiente paso", value: "Empezar por presupuesto personal y avanzar hacia deudas, diagnóstico y protección." },
+        { label: "Siguiente paso", value: "Empezar por el diagnóstico rápido y avanzar hacia diagnóstico completo, presupuesto, deudas y protección." },
       ]} />}
     />
   );

@@ -3,6 +3,7 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
 import { useState } from "react";
+import { InstitutionalHero } from "@/components/ui/InstitutionalHero";
 import type { TrendItem, TrendObservableVehicleKind, TrendRisk, TrendRole, TrendVehicle, TrendsContent } from "@/lib/trends/trends-content";
 
 const vehicleLabels: Record<TrendsContent["locale"], Record<TrendVehicle, string>> = {
@@ -247,35 +248,26 @@ export function TrendsExplorer({ content, readingCard }: { content: TrendsConten
   return (
     <div className="min-w-0 max-w-full [overflow-wrap:anywhere]">
       <section className="border-b border-line bg-paper">
-        <div className="mx-auto grid min-w-0 max-w-7xl gap-8 px-4 py-10 md:px-5 md:py-16 lg:grid-cols-[0.66fr_0.34fr] lg:items-end">
-          <div className="min-w-0">
-            <p className="w-fit rounded-full border border-petrol/20 bg-white/65 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-petrol">
-              {content.hero.eyebrow}
-            </p>
-            <h1 className="mt-5 max-w-full break-words text-4xl font-semibold leading-[1.02] text-ink md:max-w-4xl md:text-6xl">
-              {content.hero.title}
-            </h1>
-            <p className="mt-5 max-w-full text-xl leading-8 text-petrol md:max-w-3xl md:text-2xl md:leading-9">
-              {content.hero.subtitle}
-            </p>
-            <p className="mt-5 max-w-full text-base leading-7 text-muted md:max-w-3xl md:text-lg md:leading-8">
-              {content.hero.text}
-            </p>
-          </div>
-          <div className="min-w-0 rounded-[6px] border border-line bg-white/75 p-4 shadow-[0_12px_32px_rgba(11,52,54,0.045)] md:p-5">
-            <div className="flex flex-wrap gap-2">
-              {content.hero.badges.map((badge) => (
-                <Pill key={badge} tone={badge === "No recomendación" || badge === "No recommendation" ? "strong" : "neutral"}>
-                  {badge}
-                </Pill>
-              ))}
-            </div>
-            <p className="mt-5 border-t border-line pt-4 text-sm leading-6 text-muted">{content.hero.note}</p>
-          </div>
+        <div className="mx-auto max-w-7xl px-4 py-10 md:px-5 md:py-14">
+          <InstitutionalHero
+            chips={content.hero.badges.filter((badge) => badge !== "No recomendación" && badge !== "No recommendation")}
+            description={content.hero.text}
+            eyebrow={content.hero.eyebrow}
+            note={(
+              <>
+                <p className="font-semibold text-petrol">
+                  {content.locale === "en" ? "No recommendation" : "No recomendación"}
+                </p>
+                <p className="mt-2">{content.hero.note}</p>
+              </>
+            )}
+            subtitle={content.hero.subtitle}
+            title={content.hero.title}
+            variant="thesis"
+          />
+          {readingCard}
         </div>
       </section>
-
-      <div className="mx-auto max-w-7xl px-4 md:px-5">{readingCard}</div>
 
       <section className="border-b border-line bg-white/55">
         <div className="mx-auto max-w-7xl px-4 py-9 md:px-5 md:py-12">

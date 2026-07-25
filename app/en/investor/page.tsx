@@ -3,17 +3,17 @@ import { EditorialPathPage } from "@/components/pathways/EditorialPathPage";
 const cards = [
   {
     label: "01",
-    meta: "Report",
-    title: "Weekly report",
-    href: "/en/weekly-report",
-    description: "Editorial read across regime, ETFs, sectors, volatility, flows, levels, and seasonality.",
-  },
-  {
-    label: "02",
     meta: "Regime",
     title: "Dashboard",
     href: "/en/dashboard",
     description: "Volatility, sector rotation, flows, and cross-readings in one structured view.",
+  },
+  {
+    label: "02",
+    meta: "Reports",
+    title: "Reports",
+    href: "/en/weekly-report",
+    description: "Editorial read across regime, ETFs, sectors, volatility, flows, levels, and seasonality.",
   },
   {
     label: "03",
@@ -36,13 +36,6 @@ const cards = [
     href: "/en/research/td3",
     description: "Research on deep reinforcement learning under costs, cash, and statistical validation.",
   },
-  {
-    label: "06",
-    meta: "Support",
-    title: "Resources",
-    href: "/en/resources",
-    description: "Public tools and scripts to support the process.",
-  },
 ];
 
 export default function EnglishInvestorPage() {
@@ -52,11 +45,13 @@ export default function EnglishInvestorPage() {
       cards={cards}
       closingNote="Advanced tools help observe context and document process. Final judgment still depends on risk, criteria, and independent validation."
       eyebrow="Advanced path"
+      heroChips={["Regime", "Reports", "Levels", "Hypotheses"]}
+      heroVariant="executive"
       intro="This path gathers more advanced tools. They help observe context, compare hypotheses, and document process. They do not replace judgment, risk management, or independent validation."
-      primaryCta={{ href: "/en/weekly-report", label: "Read weekly report" }}
-      secondaryCta={{ href: "/en/start", label: "Return to simple path" }}
+      primaryCta={{ href: "/en/dashboard", label: "Open dashboard" }}
+      secondaryCta={{ href: "/en/start", label: "Return to Start" }}
       subtitle="For exploring reports, metrics, statistical levels, trends, and quantitative research without turning them into automatic signals."
-      title="Investor mode"
+      title="Investor area"
     />
   );
 }

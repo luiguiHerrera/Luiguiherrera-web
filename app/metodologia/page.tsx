@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { ReadingCard } from "@/components/seo/ReadingCard";
+import { InstitutionalHero } from "@/components/ui/InstitutionalHero";
 import { QuantAnnotation } from "@/components/ui/QuantAnnotation";
 
 export const metadata: Metadata = {
@@ -61,7 +62,7 @@ const tools = [
     limit: "Una tendencia real puede seguir siendo una mala inversión si está cara, no tiene vehículo claro, ya está descontada o no encaja en el portafolio.",
   },
   {
-    name: "Protege tu dinero",
+    name: "Alertas para tu dinero",
     does: "Organiza señales educativas de alerta antes de confiar en una propuesta.",
     doesNot: "No verifica oficialmente entidades ni declara fraude.",
     source: "Criterios públicos CNMV / MiFID II.",
@@ -98,23 +99,14 @@ function Eyebrow({ children }: { children: React.ReactNode }) {
 export default function MetodologiaPage() {
   return (
     <div className="mx-auto max-w-7xl px-5 py-10 md:py-14">
-      <section className="institutional-hero institutional-hero--executive grid gap-8 px-5 py-7 md:px-7 md:py-10 lg:grid-cols-[1fr_0.52fr] lg:items-end">
-        <div>
-          <Eyebrow>Cómo funciona el sistema</Eyebrow>
-          <h1 className="mt-4 max-w-4xl text-4xl font-semibold leading-[1.02] text-ink md:text-6xl">Metodología</h1>
-          <p className="mt-5 max-w-3xl text-lg leading-8 text-muted">
-            Cómo se construyen las lecturas, qué datos usan y qué límites tienen.
-          </p>
-          <div className="mt-6 flex flex-wrap gap-2">
-            {["Fuentes públicas", "Trazabilidad", "Límites visibles"].map((item) => (
-              <span key={item} className="institutional-hero-chip px-3 py-2 text-[10px] font-semibold uppercase tracking-[0.12em]">{item}</span>
-            ))}
-          </div>
-        </div>
-        <aside className="institutional-hero-note p-5 text-sm leading-7 text-muted">
-          La metodología reduce ambigüedad, pero no elimina errores de fuente, retrasos, cambios de API ni limitaciones de proxies.
-        </aside>
-      </section>
+      <InstitutionalHero
+        chips={["Fuentes públicas", "Trazabilidad", "Límites visibles"]}
+        description="Cómo se construyen las lecturas, qué datos usan y qué límites tienen."
+        eyebrow="Cómo funciona el sistema"
+        note="La metodología reduce ambigüedad, pero no elimina errores de fuente, retrasos, cambios de API ni limitaciones de proxies."
+        title="Metodología"
+        variant="executive"
+      />
 
       <section className="warm-section institutional-panel mt-8 border border-line p-5 md:p-6">
         <Eyebrow>Investigación DRL</Eyebrow>

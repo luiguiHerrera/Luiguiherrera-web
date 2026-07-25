@@ -192,12 +192,27 @@ details:not([open]) .details-close-label {
   position: relative;
 }
 
+.institutional-hero-title {
+  font-size: clamp(2.35rem, 5.5vw, 4.9rem);
+  letter-spacing: -0.045em;
+  overflow-wrap: anywhere;
+  text-wrap: balance;
+}
+
 .institutional-hero::before {
   background: var(--color-institutional);
   content: "";
   height: 4px;
   inset: 0 0 auto;
   position: absolute;
+}
+
+.institutional-hero--archive {
+  background:
+    linear-gradient(90deg, rgba(11, 52, 54, 0.035) 1px, transparent 1px),
+    radial-gradient(circle at 91% 5%, rgba(154, 122, 68, 0.18), transparent 31%),
+    linear-gradient(138deg, #fbfaf6, #eee8dc);
+  background-size: 42px 100%, 100% 100%, 100% 100%;
 }
 
 .institutional-hero--research {
@@ -207,6 +222,17 @@ details:not([open]) .details-close-label {
     linear-gradient(138deg, #fbfaf6, #eae3d6);
   background-size: 100% 34px, 100% 100%, 100% 100%;
   box-shadow: 0 24px 60px rgba(11, 52, 54, 0.095);
+}
+
+.institutional-hero--thesis {
+  background:
+    radial-gradient(ellipse at 86% 12%, rgba(111, 143, 130, 0.18), transparent 34%),
+    radial-gradient(circle at 8% 100%, rgba(154, 122, 68, 0.11), transparent 31%),
+    linear-gradient(136deg, #faf8f2, #ebe6dc);
+}
+
+.institutional-hero--thesis::before {
+  background: linear-gradient(90deg, var(--color-institutional) 0 78%, var(--color-brass) 78% 100%);
 }
 
 .institutional-hero--executive {
@@ -253,6 +279,13 @@ details:not([open]) .details-close-label {
   background: rgba(255, 255, 255, 0.72);
   border: 1px solid rgba(11, 52, 54, 0.18);
   color: var(--color-institutional);
+}
+
+@media (max-width: 767px) {
+  .institutional-hero-title {
+    font-size: clamp(2.1rem, 11vw, 3.15rem);
+    line-height: 1;
+  }
 }
 
 .executive-panel {

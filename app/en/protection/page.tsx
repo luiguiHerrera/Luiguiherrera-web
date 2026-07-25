@@ -1,27 +1,29 @@
 import Link from "next/link";
 import { InvestmentPractice } from "@/components/protection/InvestmentPractice";
 import { ReadingCard } from "@/components/seo/ReadingCard";
+import { InstitutionalHero } from "@/components/ui/InstitutionalHero";
 
 const protectionItems = [
-  { title: "Protect your money", href: "/en/protect-your-money", description: "Checklist, warning signs and filters before committing capital." },
+  { title: "Money warning signs", href: "/en/protect-your-money", description: "Checklist, warning signs and filters before committing capital." },
   { title: "Cross-signal radar", href: "/en/dashboard", description: "The dashboard integrates regime signals to contrast context, stress and risk support." },
 ];
 
 export default function EnglishProtectionPage() {
   return (
     <div className="mx-auto min-w-0 max-w-7xl overflow-hidden px-4 py-10 md:px-5 md:py-14">
-      <section className="institutional-hero institutional-hero--educational px-5 py-7 md:px-7 md:py-9">
-        <p className="text-xs font-semibold uppercase tracking-[0.18em] text-petrol">Risk control</p>
-        <h1 className="mt-4 text-4xl font-semibold leading-[1.02] text-ink md:text-6xl">Protection</h1>
-        <p className="mt-5 max-w-[calc(100vw-2rem)] break-words text-lg leading-8 text-muted [overflow-wrap:anywhere] md:max-w-3xl">
-          Checklists and filters to protect the margin of error before committing capital.
-        </p>
-      </section>
+      <InstitutionalHero
+        chips={["Decisions", "Liquidity", "Incentives", "Concentration"]}
+        description="Educational cases for protecting the margin of error before committing capital."
+        eyebrow="Risk control"
+        note="The cases are illustrative and do not replace personalized financial, legal or regulatory analysis."
+        title="Financial decision simulator"
+        variant="educational"
+      />
       <ReadingCard title="Reading card" items={[
         { label: "What it is", value: "An educational financial-decision simulator with cases about debt, referral-based products, real estate, ETFs and a family portfolio." },
         { label: "What it is for", value: "It helps practice decisions before putting money at risk and recognize liquidity, incentives, concentration, time frame and commercial pressure." },
         { label: "Limits", value: "The cases are illustrative. They do not recommend products, rate entities or replace personalized analysis." },
-        { label: "Next step", value: "Use the Protect your money checklist before reviewing a real proposal." },
+        { label: "Next step", value: "Use Money warning signs before reviewing a real proposal." },
       ]} />
       <InvestmentPractice locale="en" />
       <section className="mt-8 grid gap-5 md:grid-cols-2">

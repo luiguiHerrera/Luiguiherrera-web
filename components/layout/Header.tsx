@@ -2,7 +2,8 @@
 
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import type { MouseEvent, ReactNode } from "react";
+import { useEffect, useState } from "react";
+import type { FocusEvent, KeyboardEvent, MouseEvent, ReactNode } from "react";
 import { LanguageSwitcher } from "@/components/layout/LanguageSwitcher";
 import { getDictionary } from "@/lib/i18n/get-dictionary";
 import { localeFromPathname } from "@/lib/i18n/locales";
@@ -65,17 +66,63 @@ function HeaderLink({ children, className, href }: { children: ReactNode; classN
   );
 }
 
-function DesktopDropdown({ href, items, label }: { href: string; items: NavDropdownItem[]; label: string }) {
+function DesktopDropdown({
+  href,
+  isHome,
+  items,
+  label,
+}: {
+  href: string;
+  isHome: boolean;
+  items: NavDropdownItem[];
+  label: string;
+}) {
+  const [open, setOpen] = useState(false);
+
+  function handleBlur(event: FocusEvent<HTMLDivElement>) {
+    if (!event.currentTarget.contains(event.relatedTarget)) setOpen(false);
+  }
+
+  function handleKeyDown(event: KeyboardEvent<HTMLDivElement>) {
+    if (event.key !== "Escape") return;
+    setOpen(false);
+    event.currentTarget.querySelector<HTMLButtonElement>("button")?.focus();
+  }
+
   return (
-    <div className="group relative shrink-0">
-      <HeaderLink
-        href={href}
-        className="block border-b border-transparent px-2 py-1.5 font-medium transition hover:border-petrol hover:text-petrol focus-visible:border-petrol focus-visible:text-petrol focus-visible:outline-none"
+    <div
+      className="relative shrink-0"
+      onBlur={handleBlur}
+      onFocus={() => setOpen(true)}
+      onKeyDown={handleKeyDown}
+      onMouseEnter={() => setOpen(true)}
+      onMouseLeave={() => setOpen(false)}
+    >
+      <div className="flex items-center">
+        <HeaderLink
+          href={href}
+          className="block border-b border-transparent py-1.5 pl-2 pr-1 font-medium transition hover:border-petrol hover:text-petrol focus-visible:border-petrol focus-visible:text-petrol focus-visible:outline-none"
+        >
+          {label}
+        </HeaderLink>
+        <button
+          type="button"
+          aria-expanded={open}
+          aria-label={`${label}: menú`}
+          className="inline-flex h-7 w-6 items-center justify-center rounded-[3px] text-muted transition hover:bg-paper hover:text-petrol focus-visible:text-petrol"
+          onClick={() => setOpen(true)}
+        >
+          <span aria-hidden="true" className={`text-[9px] transition-transform duration-150 ${open ? "rotate-180" : ""}`}>▾</span>
+        </button>
+      </div>
+      <div
+        className={`absolute right-0 top-full z-[70] w-[min(21rem,calc(100vw-2rem))] pt-3 transition duration-150 ${
+          open ? "visible opacity-100" : "invisible pointer-events-none opacity-0"
+        }`}
       >
-        {label}
-      </HeaderLink>
-      <div className="invisible absolute left-1/2 top-full z-50 hidden w-[21rem] -translate-x-1/2 pt-3 opacity-0 transition duration-150 group-hover:visible group-hover:opacity-100 group-focus-within:visible group-focus-within:opacity-100 lg:block">
-        <div className="grid gap-1 rounded-[6px] border border-line/90 border-t-petrol/45 bg-[#fffdf8]/98 p-2 shadow-[0_16px_38px_rgba(11,52,54,0.075)] backdrop-blur-xl">
+        <div className={`grid gap-1 rounded-[6px] border border-line border-t-petrol/55 p-2 shadow-[0_18px_42px_rgba(11,52,54,0.12)] ${
+          isHome ? "bg-[#fffdf8]/90 backdrop-blur-xl" : "bg-[#fffdf8]"
+        }`}>
           {items.map((item) => (
             <HeaderLink
               key={`${item.href}-${item.label}`}
@@ -105,6 +152,7 @@ function DesktopNavLink({ href, label }: { href: string; label: string }) {
 
 export function Header() {
   const pathname = usePathname();
+  const [mobileOpen, setMobileOpen] = useState(false);
   const locale = localeFromPathname(pathname);
   const dictionary = getDictionary(locale);
   const hrefs = navHrefs[locale];
@@ -115,39 +163,82 @@ export function Header() {
     { href: hrefs.protection, label: dictionary.layout.nav.protection, items: dictionary.layout.protectionItems },
     { href: hrefs.resources, label: dictionary.layout.nav.resources, items: dictionary.layout.resourcesItems },
   ];
+  const isHome = pathname === "/" || pathname === "/en";
+
+  useEffect(() => {
+    setMobileOpen(false);
+  }, [pathname]);
+
+  function handleHeaderKeyDown(event: KeyboardEvent<HTMLElement>) {
+    if (event.key === "Escape") setMobileOpen(false);
+  }
+
   return (
-    <header className="sticky top-0 z-50 border-b border-line/80 bg-[#fffdf8]/92 shadow-[0_1px_18px_rgba(11,52,54,0.045)] backdrop-blur-xl">
-      <div className="mx-auto flex max-w-7xl flex-col gap-2.5 px-3 py-2.5 sm:px-4 lg:flex-row lg:items-center lg:justify-between lg:px-5 lg:py-2.5">
+    <header onKeyDown={handleHeaderKeyDown} className="sticky top-0 z-50 border-b border-line/80 bg-[#fffdf8]/96 shadow-[0_1px_18px_rgba(11,52,54,0.045)] backdrop-blur-xl">
+      <div className="mx-auto flex max-w-7xl items-center justify-between gap-3 px-3 py-2.5 sm:px-4 lg:px-5">
         <div className="flex min-w-0 items-center justify-between gap-3">
           <Link href={hrefs.home} className="flex min-w-0 flex-1 items-center gap-1.5 text-[11px] font-semibold uppercase tracking-[0.14em] text-ink transition hover:text-petrol sm:gap-2 sm:text-xs sm:tracking-[0.18em]">
             <span className="h-2 w-2 shrink-0 rounded-full bg-petrol sm:h-2.5 sm:w-2.5" aria-hidden="true" />
             <span className="truncate">{dictionary.layout.brand}</span>
           </Link>
         </div>
-        <div className="grid grid-cols-[auto_minmax(0,1fr)] items-center gap-2 md:hidden">
+        <div className="flex items-center gap-2 lg:hidden">
           <LanguageSwitcher />
-          <HeaderLink href={hrefs.start} className="inline-flex min-h-8 w-full items-center justify-center rounded-[4px] border border-petrol bg-petrol px-3 py-1.5 text-[11px] font-semibold text-white shadow-[0_8px_18px_rgba(11,52,54,0.10)] transition hover:bg-panel hover:text-petrol">
-            {dictionary.layout.cta}
-          </HeaderLink>
+          <button
+            type="button"
+            aria-expanded={mobileOpen}
+            aria-label={locale === "en" ? "Open navigation" : "Abrir navegación"}
+            className="inline-flex min-h-8 items-center justify-center rounded-[4px] border border-petrol bg-petrol px-3 py-1.5 text-[11px] font-semibold text-white shadow-[0_8px_18px_rgba(11,52,54,0.10)] transition hover:bg-panel hover:text-petrol"
+            onClick={() => setMobileOpen((current) => !current)}
+          >
+            {mobileOpen ? (locale === "en" ? "Close" : "Cerrar") : (locale === "en" ? "Menu" : "Menú")}
+          </button>
         </div>
-        <div className="hidden w-full min-w-0 items-center gap-3 md:flex lg:w-auto">
-          <nav className="-mx-1 flex max-w-full min-w-0 gap-1 overflow-x-auto text-[12px] text-muted [scrollbar-width:none] lg:mx-0 lg:flex-wrap lg:items-center lg:overflow-visible">
+        <div className="hidden min-w-0 items-center gap-3 lg:flex">
+          <nav className="flex min-w-0 items-center gap-1 text-[12px] text-muted">
             {navGroups.map((group) => (
               group.items?.length ? (
-                <DesktopDropdown key={group.href} href={group.href} label={group.label} items={group.items} />
+                <DesktopDropdown key={group.href} href={group.href} isHome={isHome} label={group.label} items={group.items} />
               ) : (
                 <DesktopNavLink key={group.href} href={group.href} label={group.label} />
               )
             ))}
           </nav>
-          <div className="hidden md:block lg:ml-1">
+          <div className="ml-1">
             <LanguageSwitcher />
           </div>
-          <HeaderLink href={hrefs.start} className="hidden shrink-0 rounded-[4px] border border-petrol bg-petrol px-3.5 py-1.5 text-xs font-semibold text-white shadow-[0_8px_18px_rgba(11,52,54,0.12)] transition hover:bg-panel hover:text-petrol md:inline-flex">
+          <HeaderLink href={hrefs.start} className="inline-flex shrink-0 rounded-[4px] border border-petrol bg-petrol px-3.5 py-1.5 text-xs font-semibold text-white shadow-[0_8px_18px_rgba(11,52,54,0.12)] transition hover:bg-panel hover:text-petrol">
             {dictionary.layout.cta}
           </HeaderLink>
         </div>
       </div>
+      {mobileOpen ? (
+        <nav className="max-h-[calc(100vh-3.5rem)] overflow-y-auto border-t border-line bg-[#fffdf8] px-4 py-4 lg:hidden">
+          <div className="mx-auto grid max-w-7xl gap-2">
+            {navGroups.map((group) => (
+              <div key={group.href} className="border-b border-line/75 pb-2">
+                <HeaderLink href={group.href} className="flex min-h-10 items-center font-semibold text-ink transition hover:text-petrol">
+                  {group.label}
+                </HeaderLink>
+                {group.items?.length ? (
+                  <div className="grid gap-1 pb-2 sm:grid-cols-2">
+                    {group.items.map((item) => (
+                      <HeaderLink
+                        key={`${item.href}-${item.label}`}
+                        href={item.href}
+                        className="rounded-[4px] border border-line/80 bg-paper/70 px-3 py-2 text-sm text-muted transition hover:border-petrol/35 hover:bg-white hover:text-petrol"
+                      >
+                        <span className="block font-semibold text-ink">{item.label}</span>
+                        <span className="mt-1 block text-xs leading-5">{item.description}</span>
+                      </HeaderLink>
+                    ))}
+                  </div>
+                ) : null}
+              </div>
+            ))}
+          </div>
+        </nav>
+      ) : null}
     </header>
   );
 }

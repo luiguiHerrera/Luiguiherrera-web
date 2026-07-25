@@ -225,7 +225,7 @@ export function WeeklyReport({ data, locale = "es" }: WeeklyReportProps) {
         <p className="text-xs font-semibold uppercase tracking-[0.2em] text-brass">{copy.report}</p>
         <div className="mt-4 grid gap-6 lg:grid-cols-[1fr_0.62fr] lg:items-end">
           <div>
-            <h1 className="text-3xl font-semibold leading-tight text-ink md:text-5xl">{copy.closeRead}</h1>
+            <h2 className="text-3xl font-semibold leading-tight text-ink md:text-5xl">{copy.closeRead}</h2>
             <p className="mt-4 max-w-3xl text-base leading-7 text-ink md:text-lg">
               {t(data.regimeSummary.interpretation)}
             </p>

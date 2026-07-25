@@ -1,8 +1,7 @@
 import { StatLevelsLab } from "@/components/statistical-levels/StatLevelsLab";
 import type { Metadata } from "next";
-import { DisclaimerBox } from "@/components/ui/DisclaimerBox";
-import { SectionHeader } from "@/components/ui/SectionHeader";
 import { ReadingCard } from "@/components/seo/ReadingCard";
+import { InstitutionalHero } from "@/components/ui/InstitutionalHero";
 import { getStatisticalLevelsPageData } from "@/lib/statistical-levels/get-statistical-levels-data";
 
 type NivelesEstadisticosPageProps = {
@@ -26,18 +25,16 @@ export default async function NivelesEstadisticosPage({ searchParams }: NivelesE
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-8 md:px-5 md:py-14">
-      <div className="grid gap-5 md:gap-8 lg:grid-cols-[1fr_0.76fr] lg:items-end">
-        <SectionHeader
-          eyebrow="Laboratorio"
-          title="Laboratorio de niveles estadísticos"
-          subtitle="Compara percentiles, z-scores, extensiones, rangos, drawdowns y estacionalidad de ETFs, oro, cripto, sectores y mercados internacionales."
-        />
-        <DisclaimerBox>
-          Lectura educativa. No constituye asesoría financiera ni instrucción operativa.
-        </DisclaimerBox>
-      </div>
+      <InstitutionalHero
+        chips={["Percentiles", "Z-scores", "Extensiones", "Drawdowns", "Estacionalidad"]}
+        description="Compara percentiles, z-scores, extensiones, rangos, drawdowns y estacionalidad de ETFs, oro, cripto, sectores y mercados internacionales."
+        eyebrow="Laboratorio cuantitativo"
+        note="Lectura educativa. No constituye asesoría financiera ni instrucción operativa."
+        title="Laboratorio de niveles estadísticos"
+        variant="research"
+      />
 
-      <ReadingCard title="Ficha de lectura" items={[
+      <ReadingCard attached title="Ficha de lectura" items={[
         { label: "Qué es", value: "Un laboratorio de niveles estadísticos que compara activos contra su propio historial mediante percentiles, z-scores, extensiones, rangos, drawdowns y estacionalidad." },
         { label: "Para qué sirve", value: "Sirve para ubicar si un activo está cerca de zonas históricamente altas, bajas o normales sin convertirlo en señal automática." },
         { label: "Fuentes principales", value: "Series históricas precalculadas por activo y metodología interna de ventanas estadísticas." },
@@ -70,7 +67,7 @@ export default async function NivelesEstadisticosPage({ searchParams }: NivelesE
         ) : null}
       </div>
 
-      <div className="mt-6 md:mt-8">
+      <div className="mt-6 min-w-0 max-w-full overflow-x-hidden md:mt-8">
         <StatLevelsLab asset={asset} manifest={manifest} seasonality={seasonality} selection={selection} />
       </div>
     </div>

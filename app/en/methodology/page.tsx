@@ -1,5 +1,6 @@
 import { ReadingCard } from "@/components/seo/ReadingCard";
 import { QuantAnnotation } from "@/components/ui/QuantAnnotation";
+import { InstitutionalHero } from "@/components/ui/InstitutionalHero";
 
 const principles = [
   ["Prudence", "We prefer sober readings over attention-grabbing conclusions."],
@@ -92,23 +93,14 @@ function Eyebrow({ children }: { children: React.ReactNode }) {
 export default function EnglishMethodologyPage() {
   return (
     <div className="mx-auto max-w-7xl px-5 py-10 md:py-14">
-      <section className="institutional-hero institutional-hero--executive grid gap-8 px-5 py-7 md:px-7 md:py-10 lg:grid-cols-[1fr_0.52fr] lg:items-end">
-        <div>
-          <Eyebrow>How the system works</Eyebrow>
-          <h1 className="mt-4 max-w-4xl text-4xl font-semibold leading-[1.02] text-ink md:text-6xl">Methodology</h1>
-          <p className="mt-5 max-w-3xl text-lg leading-8 text-muted">
-            How the readings are built, what data they use and where their limits are.
-          </p>
-          <div className="mt-6 flex flex-wrap gap-2">
-            {["Public sources", "Traceability", "Visible limits"].map((item) => (
-              <span key={item} className="institutional-hero-chip px-3 py-2 text-[10px] font-semibold uppercase tracking-[0.12em]">{item}</span>
-            ))}
-          </div>
-        </div>
-        <aside className="institutional-hero-note p-5 text-sm leading-7 text-muted">
-          The methodology reduces ambiguity but does not remove source errors, delays, API changes or proxy limitations.
-        </aside>
-      </section>
+      <InstitutionalHero
+        chips={["Public sources", "Traceability", "Visible limits"]}
+        description="How the readings are built, what data they use and where their limits are."
+        eyebrow="How the system works"
+        note="The methodology reduces ambiguity but does not remove source errors, delays, API changes or proxy limitations."
+        title="Methodology"
+        variant="executive"
+      />
 
       <section className="warm-section institutional-panel mt-8 border border-line p-5 md:p-6">
         <Eyebrow>DRL research</Eyebrow>

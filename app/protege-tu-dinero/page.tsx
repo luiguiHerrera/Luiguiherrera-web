@@ -1,9 +1,9 @@
 import Link from "next/link";
 import type { Metadata } from "next";
 import { RedFlagsChecklist } from "@/components/red-flags/RedFlagsChecklist";
-import { DisclaimerBox } from "@/components/ui/DisclaimerBox";
 import { RiskPill } from "@/components/ui/RiskPill";
 import { ReadingCard } from "@/components/seo/ReadingCard";
+import { InstitutionalHero } from "@/components/ui/InstitutionalHero";
 import type { ReactNode } from "react";
 
 const protectionFilters = [
@@ -70,7 +70,7 @@ function SourceLink({ href, children }: { href: string; children: React.ReactNod
 }
 
 export default function ProtegeTuDineroPage() {
-  return <ProtectYourMoneyContent readingCard={<ReadingCard title="Ficha de lectura" items={[
+  return <ProtectYourMoneyContent locale="es" readingCard={<ReadingCard title="Ficha de lectura" items={[
     { label: "Qué es", value: "Un checklist educativo de señales de alerta antes de confiar dinero a una entidad, producto o propuesta de inversión." },
     { label: "Para qué sirve", value: "Sirve para revisar documentación, regulación, custodia, promesas, presión comercial, liquidez y derecho de salida." },
     { label: "Límites", value: "No verifica oficialmente entidades, no declara fraude y debe complementarse con fuentes regulatorias oficiales." },
@@ -78,27 +78,32 @@ export default function ProtegeTuDineroPage() {
   ]} />} />;
 }
 
-export function ProtectYourMoneyContent({ readingCard }: { readingCard: ReactNode }) {
+export function ProtectYourMoneyContent({ locale, readingCard }: { locale: "en" | "es"; readingCard: ReactNode }) {
+  const isEnglish = locale === "en";
+
   return (
     <div className="mx-auto max-w-7xl px-5 py-10 md:py-14">
-      <section className="institutional-hero institutional-hero--educational grid gap-8 px-5 py-7 md:px-7 md:py-9 lg:grid-cols-[1fr_0.72fr] lg:items-end">
-        <div>
-          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-brass">Protección patrimonial</p>
-          <h1 className="mt-4 max-w-4xl text-4xl font-semibold leading-[1.02] text-ink md:text-6xl">Protege tu dinero</h1>
-          <p className="mt-5 max-w-2xl text-lg leading-8 text-muted">
-            Evalúa señales de alerta antes de confiar en una propuesta de inversión.
-          </p>
-          <div className="mt-6 flex flex-wrap gap-3">
-            <a href="#revision" className="border border-ink bg-ink px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-panel hover:text-ink">
-              Empezar revisión
-            </a>
-            <SourceLink href="https://www.cnmv.es/portal/Advertencias.aspx">Ver advertencias CNMV</SourceLink>
-          </div>
+      <InstitutionalHero
+        chips={isEnglish ? ["Entity", "Product", "Commercial conduct"] : ["Entidad", "Producto", "Conducta comercial"]}
+        description={isEnglish
+          ? "Review warning signs before trusting an investment proposal."
+          : "Evalúa señales de alerta antes de confiar en una propuesta de inversión."}
+        eyebrow={isEnglish ? "Wealth protection" : "Protección patrimonial"}
+        note={isEnglish
+          ? "Educational tool. It does not replace official verification or constitute legal or financial advice."
+          : "Herramienta educativa. No sustituye la verificación oficial en CNMV ni constituye asesoría legal o financiera."}
+        title={isEnglish ? "Money warning signs" : "Alertas para tu dinero"}
+        variant="educational"
+      >
+        <div className="mt-4 flex flex-wrap items-center gap-3">
+          <a href="#revision" className="border border-ink bg-ink px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-panel hover:text-ink">
+            {isEnglish ? "Start review" : "Empezar revisión"}
+          </a>
+          <SourceLink href="https://www.cnmv.es/portal/Advertencias.aspx">
+            {isEnglish ? "View CNMV warnings" : "Ver advertencias CNMV"}
+          </SourceLink>
         </div>
-        <DisclaimerBox>
-          Herramienta educativa. No sustituye la verificación oficial en CNMV ni constituye asesoría legal o financiera.
-        </DisclaimerBox>
-      </section>
+      </InstitutionalHero>
 
       {readingCard}
 
@@ -210,6 +215,6 @@ export function ProtectYourMoneyContent({ readingCard }: { readingCard: ReactNod
   );
 }
 export const metadata: Metadata = {
-  title: "Protege tu dinero | Checklist de señales de alerta antes de invertir",
+  title: "Alertas para tu dinero | Checklist antes de invertir",
   description: "Checklist educativo basado en criterios públicos de protección al inversor para revisar entidad, producto, documentación, presión comercial, promesas y señales de alerta.",
 };

@@ -426,7 +426,7 @@ function routeFor(scores: DiagnosticScores, flags: DiagnosticFlag[], locale: Dia
   if (flags.includes("knowledge_gap_basic") || flags.includes("product_mismatch")) {
     return {
       href: "/protege-tu-dinero",
-      label: locale === "es" ? "Protege tu dinero" : "Protect your money",
+      label: locale === "es" ? "Alertas para tu dinero" : "Money warning signs",
       note: locale === "es"
         ? "Refuerza alertas, complejidad y riesgos antes de aumentar productos."
         : "Reinforce alerts, complexity and risks before adding products.",

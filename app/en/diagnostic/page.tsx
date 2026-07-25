@@ -1,8 +1,7 @@
 import { DiagnosticFlow } from "@/components/diagnostic/DiagnosticFlow";
-import { DisclaimerBox } from "@/components/ui/DisclaimerBox";
-import { SectionHeader } from "@/components/ui/SectionHeader";
 import type { DiagnosticMode } from "@/lib/diagnostic/types";
 import { ReadingCard } from "@/components/seo/ReadingCard";
+import { InstitutionalHero } from "@/components/ui/InstitutionalHero";
 
 function modeFromSearchParam(mode: string | string[] | undefined): DiagnosticMode | undefined {
   if (mode === "quick" || mode === "complete") return mode;
@@ -15,16 +14,15 @@ export default async function EnglishDiagnosticPage({ searchParams }: { searchPa
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-10 md:px-5 md:py-14">
-      <div className="institutional-hero institutional-hero--educational mb-10 grid gap-6 px-5 py-7 md:px-7 md:py-9 lg:grid-cols-[1fr_0.72fr] lg:items-end">
-        <SectionHeader
-          eyebrow="Investor diagnostic"
-          title="Before reading the market, read the investor."
-          subtitle="Choose a quick or complete path to organize knowledge, experience, psychological tolerance and real risk capacity. The calculation runs in your browser during this session."
-        />
-        <DisclaimerBox>
-          We do not store answers, portfolios or individual results. Reloading the page resets the session. This diagnostic is an educational read of current preparation and is not financial advice or a personalized recommendation.
-        </DisclaimerBox>
-      </div>
+      <InstitutionalHero
+        chips={["Horizon", "Liquidity", "Tolerance", "Capacity"]}
+        className="mb-10"
+        description="Choose a quick or complete path to organize knowledge, experience, psychological tolerance and real risk capacity. The calculation runs in your browser during this session."
+        eyebrow="Investor diagnostic"
+        note="We do not store answers, portfolios or individual results. Reloading the page resets the session. This is an educational read, not financial advice."
+        title="Before reading the market, read the investor."
+        variant="educational"
+      />
       <ReadingCard title="Reading card" items={[
         { label: "What it is", value: "An educational investor diagnostic that organizes horizon, liquidity, experience, psychological tolerance, behavior and real capacity to take risk." },
         { label: "What it is for", value: "It helps separate the desire to invest, emotional tolerance and financial capacity before making decisions." },

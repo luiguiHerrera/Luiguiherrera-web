@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useMemo, useState } from "react";
 import { ReadingCard } from "@/components/seo/ReadingCard";
+import { InstitutionalHero } from "@/components/ui/InstitutionalHero";
 
 type Locale = "es" | "en";
 
@@ -586,16 +587,14 @@ export function BudgetPlanner({ locale }: { locale: Locale }) {
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-10 md:px-5 md:py-14">
-      <section className="institutional-hero institutional-hero--educational grid gap-8 px-5 py-7 md:px-7 md:py-9 lg:grid-cols-[0.58fr_0.42fr] lg:items-end">
-        <div>
-          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-petrol">{locale === "es" ? "Herramienta educativa" : "Educational tool"}</p>
-          <h1 className="mt-4 text-4xl font-semibold leading-[1.02] text-ink md:text-6xl">{labels.heroTitle}</h1>
-          <p className="mt-5 max-w-3xl text-lg leading-8 text-muted">{labels.heroSubtitle}</p>
-        </div>
-        <div className="institutional-hero-note p-5 text-sm leading-7 text-muted">
-          {labels.heroBody}
-        </div>
-      </section>
+      <InstitutionalHero
+        chips={locale === "en" ? ["Income", "Spending", "Protection", "Saving"] : ["Ingresos", "Gastos", "Protección", "Ahorro"]}
+        description={labels.heroSubtitle}
+        eyebrow={locale === "es" ? "Herramienta educativa" : "Educational tool"}
+        note={labels.heroBody}
+        title={labels.heroTitle}
+        variant="educational"
+      />
 
       <ReadingCard title={locale === "en" ? "Reading card" : "Ficha de lectura"} items={locale === "en" ? [
         { label: "What it is", value: "An educational budget simulator to organize income, spending, saving, investing, financial protection and non-monthly expenses." },

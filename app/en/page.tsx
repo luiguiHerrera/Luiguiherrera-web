@@ -44,7 +44,7 @@ const entryways = [
   },
   {
     label: "04",
-    title: "Protect capital",
+    title: "Financial decision simulator",
     href: "/en/protection",
     description: "Filters and checklists to protect the margin of error.",
     actionLabel: "Explore",
@@ -67,18 +67,18 @@ const entryways = [
 
 const homePathways = [
   {
-    title: "Start simple",
+    title: "Start",
     href: "/en/start",
     label: "Path 01",
     description: "Organize the essentials before metrics, models, or advanced reports.",
-    cta: "Enter the simple path",
+    cta: "Enter Start",
   },
   {
-    title: "Investor mode",
+    title: "Investor",
     href: "/en/investor",
     label: "Path 02",
     description: "Explore the dashboard, weekly report, levels, trends, and quant research.",
-    cta: "Enter investor mode",
+    cta: "Enter Investor",
   },
 ];
 

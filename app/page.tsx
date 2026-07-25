@@ -36,7 +36,7 @@ const entryways = [
   },
   {
     label: "04",
-    title: "Proteger capital",
+    title: "Simulador de decisiones financieras",
     href: "/proteccion",
     description: "Filtros y checklist para cuidar el margen de error.",
   },
@@ -56,18 +56,18 @@ const entryways = [
 
 const homePathways = [
   {
-    title: "Empezar simple",
+    title: "Empezar",
     href: "/empezar",
     label: "Camino 01",
     description: "Ordena lo esencial antes de métricas, modelos o informes avanzados.",
-    cta: "Entrar al camino simple",
+    cta: "Entrar a Empezar",
   },
   {
-    title: "Modo inversionista",
+    title: "Inversionista",
     href: "/inversionista",
     label: "Camino 02",
     description: "Explora dashboard, informes de mercado, niveles, tendencias e investigación quant.",
-    cta: "Entrar al modo inversionista",
+    cta: "Entrar a Inversionista",
   },
 ];
 

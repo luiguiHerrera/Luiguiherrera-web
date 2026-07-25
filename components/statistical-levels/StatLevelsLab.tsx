@@ -175,7 +175,7 @@ export function StatLevelsLab({ asset, locale: localeProp, manifest, seasonality
   }
 
   return (
-    <div className="min-w-0 space-y-4 md:space-y-5">
+    <div className="w-full min-w-0 max-w-full space-y-4 overflow-x-hidden md:space-y-5">
       <section className="grid gap-3 md:grid-cols-3 md:gap-4">
         {Object.entries(statusCounts).map(([status, count]) => (
           <div key={status} className="border border-line bg-panel p-3.5 md:p-4">

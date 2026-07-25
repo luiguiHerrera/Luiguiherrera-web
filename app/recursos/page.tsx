@@ -1,6 +1,7 @@
 import { tradingViewScripts } from "@/lib/resources/tradingview-scripts";
 import type { Metadata } from "next";
 import { ReadingCard } from "@/components/seo/ReadingCard";
+import { InstitutionalHero } from "@/components/ui/InstitutionalHero";
 
 export const metadata: Metadata = {
   title: "Recursos para inversionistas | Scripts TradingView y herramientas",
@@ -48,23 +49,14 @@ const toolCategories = [
 export default function RecursosPage() {
   return (
     <div className="mx-auto max-w-7xl px-5 py-10 md:py-14">
-      <section className="institutional-hero institutional-hero--library grid gap-8 px-5 py-7 md:px-7 md:py-10 lg:grid-cols-[1fr_0.52fr] lg:items-end">
-        <div>
-          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-petrol">Recursos públicos</p>
-          <h1 className="mt-4 text-4xl font-semibold leading-[1.02] text-ink md:text-6xl">Recursos</h1>
-          <p className="mt-5 max-w-3xl text-lg leading-8 text-muted">
-            Herramientas públicas para complementar tu proceso.
-          </p>
-          <div className="mt-6 flex flex-wrap gap-2">
-            {toolCategories.map((category) => (
-              <span key={category.id} className="institutional-hero-chip px-3 py-2 text-[10px] font-semibold uppercase tracking-[0.12em]">{category.name}</span>
-            ))}
-          </div>
-        </div>
-        <aside className="institutional-hero-note p-5 text-sm leading-7 text-muted">
-          Solo se publican recursos con enlace funcional o estado explícito.
-        </aside>
-      </section>
+      <InstitutionalHero
+        chips={toolCategories.map((category) => category.name)}
+        description="Herramientas públicas para complementar tu proceso."
+        eyebrow="Recursos públicos"
+        note="Solo se publican recursos con enlace funcional o estado explícito."
+        title="Recursos"
+        variant="library"
+      />
 
       <section id="herramientas" className="research-surface institutional-panel mt-8 scroll-mt-28 rounded-[6px] border border-petrol/25 p-5 md:p-6">
         <div className="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">

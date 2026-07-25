@@ -11,7 +11,7 @@ import { VixTermStructureModule } from "@/components/dashboard/VixTermStructureM
 import { DisclaimerBox } from "@/components/ui/DisclaimerBox";
 import { ExpandableInsightCard } from "@/components/ui/ExpandableInsightCard";
 import { MetricCard } from "@/components/ui/MetricCard";
-import { SectionHeader } from "@/components/ui/SectionHeader";
+import { InstitutionalHero } from "@/components/ui/InstitutionalHero";
 import { QuantAnnotation } from "@/components/ui/QuantAnnotation";
 import { ReadingCard } from "@/components/seo/ReadingCard";
 import { getDashboardData } from "@/lib/dashboard/get-dashboard-data";
@@ -245,16 +245,14 @@ export async function DashboardContent({ locale = "es" }: { locale?: "es" | "en"
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-8 md:px-5 md:py-14">
-      <div className="institutional-hero institutional-hero--executive grid gap-5 px-5 py-6 md:gap-8 md:px-7 md:py-9 lg:grid-cols-[1fr_0.8fr] lg:items-end">
-        <SectionHeader
-          eyebrow={copy.eyebrow}
-          title={copy.title}
-          subtitle={copy.subtitle}
-        />
-        <DisclaimerBox>
-          {copy.disclaimer}
-        </DisclaimerBox>
-      </div>
+      <InstitutionalHero
+        chips={locale === "en" ? ["Regime", "Score", "Confidence", "Drivers"] : ["Régimen", "Score", "Confianza", "Drivers"]}
+        description={copy.subtitle}
+        eyebrow={copy.eyebrow}
+        note={copy.disclaimer}
+        title={copy.title}
+        variant="executive"
+      />
 
       <div className="relative mt-6 md:mt-8">
         <QuantAnnotation variant="underline" className="absolute left-4 top-8 z-10 h-2.5 w-24 text-brass/35 md:left-5 md:top-9" />

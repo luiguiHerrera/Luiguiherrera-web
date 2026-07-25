@@ -12,12 +12,12 @@ This site is educational and informational. It does not provide personalized inv
 - Presupuesto personal: https://www.luiguiherrera.com/presupuesto
 - Gestión de deudas: https://www.luiguiherrera.com/deudas
 - Diagnóstico del inversionista: https://www.luiguiherrera.com/diagnostico
-- Protección del inversor: https://www.luiguiherrera.com/proteccion
-- Protege tu dinero: https://www.luiguiherrera.com/protege-tu-dinero
+- Simulador de decisiones financieras: https://www.luiguiherrera.com/proteccion
+- Alertas para tu dinero: https://www.luiguiherrera.com/protege-tu-dinero
 - Dashboard de régimen de mercado: https://www.luiguiherrera.com/dashboard
 - Informes de mercado: https://www.luiguiherrera.com/informes
 - Niveles estadísticos: https://www.luiguiherrera.com/niveles-estadisticos
-- Tendencias sin hype: https://www.luiguiherrera.com/tendencias
+- Tendencias: https://www.luiguiherrera.com/tendencias
 - Recursos: https://www.luiguiherrera.com/recursos
 - Metodología: https://www.luiguiherrera.com/metodologia
 - Investigación TD3: https://www.luiguiherrera.com/investigacion/td3
@@ -27,8 +27,8 @@ This site is educational and informational. It does not provide personalized inv
 - Budget: https://www.luiguiherrera.com/en/budget
 - Debt: https://www.luiguiherrera.com/en/debt
 - Investor diagnostic: https://www.luiguiherrera.com/en/diagnostic
-- Protection: https://www.luiguiherrera.com/en/protection
-- Protect your money: https://www.luiguiherrera.com/en/protect-your-money
+- Financial decision simulator: https://www.luiguiherrera.com/en/protection
+- Money warning signs: https://www.luiguiherrera.com/en/protect-your-money
 - Market Regime Dashboard: https://www.luiguiherrera.com/en/dashboard
 - Weekly report: https://www.luiguiherrera.com/en/weekly-report
 - Statistical levels: https://www.luiguiherrera.com/en/statistical-levels

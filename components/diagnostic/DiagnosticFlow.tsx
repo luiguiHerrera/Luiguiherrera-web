@@ -187,7 +187,7 @@ const translateResult: Record<string, string> = {
   "Intermedia": "Intermediate",
   "Alta": "High",
   "Compleja": "Complex",
-  "Protege tu dinero": "Protect your money",
+  "Alertas para tu dinero": "Money warning signs",
   "Repetir con calma": "Repeat calmly",
   "Explorar niveles estadísticos": "Explore statistical levels",
   "Revisar recursos": "Review resources",

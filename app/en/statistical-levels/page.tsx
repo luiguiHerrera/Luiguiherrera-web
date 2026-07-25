@@ -1,7 +1,6 @@
 import { StatLevelsLab } from "@/components/statistical-levels/StatLevelsLab";
-import { DisclaimerBox } from "@/components/ui/DisclaimerBox";
-import { SectionHeader } from "@/components/ui/SectionHeader";
 import { ReadingCard } from "@/components/seo/ReadingCard";
+import { InstitutionalHero } from "@/components/ui/InstitutionalHero";
 import { getStatisticalLevelsPageData } from "@/lib/statistical-levels/get-statistical-levels-data";
 
 type StatisticalLevelsPageProps = {
@@ -25,18 +24,16 @@ export default async function StatisticalLevelsPage({ searchParams }: Statistica
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-8 md:px-5 md:py-14">
-      <div className="grid gap-5 md:gap-8 lg:grid-cols-[1fr_0.76fr] lg:items-end">
-        <SectionHeader
-          eyebrow="Lab"
-          title="Statistical Levels Lab"
-          subtitle="Select an asset and compare its current position across different windows of its own history."
-        />
-        <DisclaimerBox>
-          Educational reading. This is not financial advice or an execution instruction.
-        </DisclaimerBox>
-      </div>
+      <InstitutionalHero
+        chips={["Percentiles", "Z-scores", "Extensions", "Drawdowns", "Seasonality"]}
+        description="Select an asset and compare its current position across different windows of its own history."
+        eyebrow="Quantitative laboratory"
+        note="Educational reading. This is not financial advice or an execution instruction."
+        title="Statistical Levels Lab"
+        variant="research"
+      />
 
-      <ReadingCard title="Reading card" items={[
+      <ReadingCard attached title="Reading card" items={[
         { label: "What it is", value: "A statistical-levels lab that compares assets against their own history using percentiles, z-scores, extensions, ranges, drawdowns and seasonality." },
         { label: "What it is for", value: "It helps locate whether an asset is near historically high, low or normal zones without turning that into an automatic signal." },
         { label: "Main sources", value: "Precomputed historical series by asset and internal statistical-window methodology." },
@@ -69,7 +66,7 @@ export default async function StatisticalLevelsPage({ searchParams }: Statistica
         ) : null}
       </div>
 
-      <div className="mt-6 md:mt-8">
+      <div className="mt-6 min-w-0 max-w-full overflow-x-hidden md:mt-8">
         <StatLevelsLab asset={asset} manifest={manifest} seasonality={seasonality} selection={selection} locale="en" />
       </div>
     </div>
