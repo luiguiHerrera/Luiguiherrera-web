@@ -98,22 +98,25 @@ function Eyebrow({ children }: { children: React.ReactNode }) {
 export default function MetodologiaPage() {
   return (
     <div className="mx-auto max-w-7xl px-5 py-10 md:py-14">
-      <section className="estate-hero rounded-[6px] border border-line px-5 py-7 shadow-[0_16px_42px_rgba(11,52,54,0.045)] md:px-7 md:py-9">
-        <Eyebrow>Cómo funciona el sistema</Eyebrow>
-        <h1 className="mt-4 max-w-4xl text-4xl font-semibold leading-[1.02] text-ink md:text-6xl">Metodología</h1>
-        <p className="mt-5 max-w-3xl text-lg leading-8 text-muted">
-          Cómo se construyen las lecturas, qué datos usan y qué límites tienen.
-        </p>
+      <section className="institutional-hero institutional-hero--executive grid gap-8 px-5 py-7 md:px-7 md:py-10 lg:grid-cols-[1fr_0.52fr] lg:items-end">
+        <div>
+          <Eyebrow>Cómo funciona el sistema</Eyebrow>
+          <h1 className="mt-4 max-w-4xl text-4xl font-semibold leading-[1.02] text-ink md:text-6xl">Metodología</h1>
+          <p className="mt-5 max-w-3xl text-lg leading-8 text-muted">
+            Cómo se construyen las lecturas, qué datos usan y qué límites tienen.
+          </p>
+          <div className="mt-6 flex flex-wrap gap-2">
+            {["Fuentes públicas", "Trazabilidad", "Límites visibles"].map((item) => (
+              <span key={item} className="institutional-hero-chip px-3 py-2 text-[10px] font-semibold uppercase tracking-[0.12em]">{item}</span>
+            ))}
+          </div>
+        </div>
+        <aside className="institutional-hero-note p-5 text-sm leading-7 text-muted">
+          La metodología reduce ambigüedad, pero no elimina errores de fuente, retrasos, cambios de API ni limitaciones de proxies.
+        </aside>
       </section>
 
-      <ReadingCard title="Ficha de lectura" items={[
-        { label: "Qué es", value: "Una página de trazabilidad que explica cómo se construyen las lecturas, qué fuentes usan y qué límites tienen." },
-        { label: "Para qué sirve", value: "Sirve para auditar el método antes de confiar en una herramienta, informe o lectura de mercado." },
-        { label: "Fuentes principales", value: "Fuentes públicas y documentadas: Alpha Vantage, FRED/VIX, Bitbo, State Street / GLD, datos históricos precalculados y fuentes específicas por herramienta." },
-        { label: "Límites", value: "La metodología reduce ambigüedad, pero no elimina errores de fuente, retrasos, cambios de API ni limitaciones de proxies." },
-      ]} />
-
-      <section className="editorial-surface mt-8 border border-line p-5 md:p-6">
+      <section className="warm-section institutional-panel mt-8 border border-line p-5 md:p-6">
         <Eyebrow>Investigación DRL</Eyebrow>
         <h2 className="mt-2 text-2xl font-semibold text-ink md:text-3xl">Protocolo de evaluación DRL</h2>
         <p className="mt-4 max-w-4xl text-base leading-7 text-muted">{researchQuestion}</p>
@@ -134,7 +137,7 @@ export default function MetodologiaPage() {
         </div>
       </section>
 
-      <section className="technical-surface mt-8 border border-petrol/25 p-5 md:p-6">
+      <section className="research-surface institutional-panel mt-8 border border-petrol/30 p-5 md:p-6">
         <div className="max-w-3xl">
           <Eyebrow>Mapa del sistema</Eyebrow>
           <h2 className="mt-2 text-2xl font-semibold text-ink md:text-3xl">Del dato público a la decisión humana</h2>
@@ -151,6 +154,13 @@ export default function MetodologiaPage() {
           ))}
         </div>
       </section>
+
+      <ReadingCard className="reading-card-discreet" title="Ficha de lectura" items={[
+        { label: "Qué es", value: "Una página de trazabilidad que explica cómo se construyen las lecturas, qué fuentes usan y qué límites tienen." },
+        { label: "Para qué sirve", value: "Sirve para auditar el método antes de confiar en una herramienta, informe o lectura de mercado." },
+        { label: "Fuentes principales", value: "Fuentes públicas y documentadas: Alpha Vantage, FRED/VIX, Bitbo, State Street / GLD, datos históricos precalculados y fuentes específicas por herramienta." },
+        { label: "Límites", value: "La metodología reduce ambigüedad, pero no elimina errores de fuente, retrasos, cambios de API ni limitaciones de proxies." },
+      ]} />
 
       <section className="mt-8">
         <div className="max-w-3xl">

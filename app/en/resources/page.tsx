@@ -58,20 +58,24 @@ function englishUseCase(scriptId: string, fallback: string) {
 export default function EnglishResourcesPage() {
   return (
     <div className="mx-auto max-w-7xl px-5 py-10 md:py-14">
-      <section className="estate-hero rounded-[6px] border border-line px-5 py-7 shadow-[0_16px_42px_rgba(11,52,54,0.045)] md:px-7 md:py-9">
-        <p className="text-xs font-semibold uppercase tracking-[0.18em] text-petrol">Public tools</p>
-        <h1 className="mt-4 text-4xl font-semibold leading-[1.02] text-ink md:text-6xl">Resources</h1>
-        <p className="mt-5 max-w-3xl text-lg leading-8 text-muted">
-          Public tools to support your investment process.
-        </p>
+      <section className="institutional-hero institutional-hero--library grid gap-8 px-5 py-7 md:px-7 md:py-10 lg:grid-cols-[1fr_0.52fr] lg:items-end">
+        <div>
+          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-petrol">Public resources</p>
+          <h1 className="mt-4 text-4xl font-semibold leading-[1.02] text-ink md:text-6xl">Resources</h1>
+          <p className="mt-5 max-w-3xl text-lg leading-8 text-muted">
+            Public tools to support your investment process.
+          </p>
+          <div className="mt-6 flex flex-wrap gap-2">
+            {toolCategories.map((category) => (
+              <span key={category.id} className="institutional-hero-chip px-3 py-2 text-[10px] font-semibold uppercase tracking-[0.12em]">{category.name}</span>
+            ))}
+          </div>
+        </div>
+        <aside className="institutional-hero-note p-5 text-sm leading-7 text-muted">
+          Only resources with a working public link or an explicit status are published.
+        </aside>
       </section>
-      <ReadingCard title="Reading card" items={[
-        { label: "What it is", value: "A catalog of public resources for investors, including open-source TradingView scripts and future educational tools." },
-        { label: "What it is for", value: "It helps find real published tools without fake links or inflated categories." },
-        { label: "Limits", value: "The resources are educational and availability depends on each external platform." },
-        { label: "Next step", value: "Explore the published scripts or return to market, statistical levels and methodology." },
-      ]} />
-      <section id="tools" className="technical-surface mt-8 scroll-mt-28 rounded-[6px] border border-petrol/20 p-5 md:p-6">
+      <section id="tools" className="research-surface institutional-panel mt-8 scroll-mt-28 rounded-[6px] border border-petrol/25 p-5 md:p-6">
         <div className="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
           <div>
             <p className="text-xs font-semibold uppercase tracking-[0.18em] text-petrol">Tool types</p>
@@ -88,7 +92,7 @@ export default function EnglishResourcesPage() {
               <>
                 <div className="flex items-start justify-between gap-3">
                   <h3 className="text-lg font-semibold text-ink">{category.name}</h3>
-                  <span className="shrink-0 rounded-[4px] border border-line bg-paper px-2.5 py-1 text-xs font-semibold text-muted">
+                  <span className={`shrink-0 rounded-[4px] border px-2.5 py-1 text-xs font-semibold ${category.id === "tradingview" ? "border-brass/50 bg-white/10 text-white" : "border-line bg-paper text-muted"}`}>
                     {category.status}
                   </span>
                 </div>
@@ -101,7 +105,7 @@ export default function EnglishResourcesPage() {
                 id={category.id === "tradingview" ? undefined : category.id}
                 key={category.name}
                 href={category.href}
-                className="estate-card block min-h-[11rem] scroll-mt-28 rounded-[6px] border border-petrol/30 p-5 transition hover:border-petrol"
+                className={`${category.id === "tradingview" ? "resource-active-card" : "resource-coming-card"} block min-h-[11rem] scroll-mt-28 rounded-[6px] border p-5 transition hover:border-petrol`}
               >
                 {content}
               </a>
@@ -109,6 +113,13 @@ export default function EnglishResourcesPage() {
           })}
         </div>
       </section>
+
+      <ReadingCard className="reading-card-discreet" title="Reading card" items={[
+        { label: "What it is", value: "A catalog of public resources for investors, including open-source TradingView scripts and future educational tools." },
+        { label: "What it is for", value: "It helps find real published tools without fake links or inflated categories." },
+        { label: "Limits", value: "The resources are educational and availability depends on each external platform." },
+        { label: "Next step", value: "Explore the published scripts or return to market, statistical levels and methodology." },
+      ]} />
 
       <section id="tradingview" className="mt-10 scroll-mt-28">
         <div className="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">

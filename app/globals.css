@@ -85,14 +85,14 @@ details:not([open]) .details-close-label {
 
 .estate-hero {
   background:
-    radial-gradient(circle at 82% 12%, rgba(154, 122, 68, 0.12), transparent 31%),
-    linear-gradient(135deg, rgba(255, 255, 255, 0.94), rgba(239, 234, 225, 0.78));
+    radial-gradient(circle at 84% 10%, rgba(154, 122, 68, 0.18), transparent 32%),
+    linear-gradient(135deg, rgba(255, 255, 255, 0.97), rgba(232, 226, 214, 0.86));
 }
 
 .warm-section {
   background:
-    radial-gradient(circle at 12% 10%, rgba(154, 122, 68, 0.07), transparent 28%),
-    linear-gradient(125deg, rgba(239, 234, 225, 0.9), rgba(247, 244, 237, 0.72));
+    radial-gradient(circle at 12% 10%, rgba(154, 122, 68, 0.11), transparent 29%),
+    linear-gradient(125deg, rgba(235, 229, 218, 0.96), rgba(247, 244, 237, 0.78));
 }
 
 .editorial-surface {
@@ -104,16 +104,227 @@ details:not([open]) .details-close-label {
 .technical-surface {
   background-color: rgba(250, 249, 245, 0.96);
   background-image:
-    linear-gradient(rgba(11, 52, 54, 0.035) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(11, 52, 54, 0.035) 1px, transparent 1px),
-    radial-gradient(circle at 88% 8%, rgba(154, 122, 68, 0.09), transparent 26%);
-  background-size: 28px 28px, 28px 28px, 100% 100%;
+    linear-gradient(rgba(11, 52, 54, 0.055) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(11, 52, 54, 0.055) 1px, transparent 1px),
+    radial-gradient(circle at 88% 8%, rgba(154, 122, 68, 0.14), transparent 28%);
+  background-size: 30px 30px, 30px 30px, 100% 100%;
 }
 
 .estate-card {
   background:
     linear-gradient(145deg, rgba(255, 255, 255, 0.92), rgba(247, 244, 237, 0.78));
-  box-shadow: 0 14px 36px rgba(11, 52, 54, 0.045);
+  box-shadow: 0 14px 36px rgba(11, 52, 54, 0.06);
+}
+
+.home-estate-hero {
+  isolation: isolate;
+  background:
+    linear-gradient(90deg, rgba(11, 52, 54, 0.035) 1px, transparent 1px),
+    radial-gradient(circle at 88% 8%, rgba(154, 122, 68, 0.2), transparent 28%),
+    linear-gradient(132deg, #fbfaf7 0%, #f4f0e7 56%, #e4ddcf 100%);
+  background-size: 72px 100%, 100% 100%, 100% 100%;
+  box-shadow: inset 0 -5px 0 rgba(11, 52, 54, 0.07);
+}
+
+.home-estate-hero::before {
+  background: var(--color-brass);
+  content: "";
+  height: 1px;
+  left: max(1rem, calc((100% - 80rem) / 2));
+  opacity: 0.72;
+  position: absolute;
+  top: 0;
+  width: min(8rem, 26vw);
+  z-index: 30;
+}
+
+.home-estate-heading {
+  letter-spacing: -0.045em;
+  text-wrap: balance;
+}
+
+.patrimonial-band {
+  background:
+    linear-gradient(rgba(255, 255, 255, 0.028) 1px, transparent 1px),
+    radial-gradient(circle at 12% 0, rgba(154, 122, 68, 0.3), transparent 33%),
+    var(--color-institutional);
+  background-size: 100% 34px, 100% 100%, 100% 100%;
+  border-color: rgba(154, 122, 68, 0.42);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08), 0 22px 50px rgba(11, 52, 54, 0.12);
+}
+
+.patrimonial-band .text-ink,
+.patrimonial-band .text-petrol {
+  color: #ffffff;
+}
+
+.patrimonial-band .text-muted {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.patrimonial-band .border-petrol\/25,
+.patrimonial-band .border-brass\/55 {
+  border-color: rgba(212, 184, 132, 0.62);
+}
+
+.research-surface {
+  background:
+    linear-gradient(rgba(11, 52, 54, 0.045) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(11, 52, 54, 0.045) 1px, transparent 1px),
+    radial-gradient(circle at 92% 6%, rgba(154, 122, 68, 0.17), transparent 29%),
+    linear-gradient(140deg, #f8f5ee, #ece6da);
+  background-size: 34px 34px, 34px 34px, 100% 100%, 100% 100%;
+}
+
+.institutional-panel {
+  border-top: 4px solid var(--color-institutional);
+  box-shadow: 0 22px 58px rgba(11, 52, 54, 0.1);
+}
+
+.institutional-hero {
+  background:
+    radial-gradient(circle at 88% 8%, rgba(154, 122, 68, 0.16), transparent 30%),
+    linear-gradient(138deg, rgba(255, 255, 255, 0.96), rgba(236, 230, 218, 0.9));
+  border: 1px solid var(--color-line);
+  border-radius: 6px;
+  box-shadow: 0 20px 52px rgba(11, 52, 54, 0.075);
+  overflow: hidden;
+  position: relative;
+}
+
+.institutional-hero::before {
+  background: var(--color-institutional);
+  content: "";
+  height: 4px;
+  inset: 0 0 auto;
+  position: absolute;
+}
+
+.institutional-hero--research {
+  background:
+    linear-gradient(rgba(11, 52, 54, 0.038) 1px, transparent 1px),
+    radial-gradient(circle at 90% 4%, rgba(154, 122, 68, 0.2), transparent 31%),
+    linear-gradient(138deg, #fbfaf6, #eae3d6);
+  background-size: 100% 34px, 100% 100%, 100% 100%;
+  box-shadow: 0 24px 60px rgba(11, 52, 54, 0.095);
+}
+
+.institutional-hero--executive {
+  background:
+    radial-gradient(circle at 88% 12%, rgba(154, 122, 68, 0.15), transparent 29%),
+    linear-gradient(135deg, rgba(255, 255, 255, 0.98), rgba(233, 227, 216, 0.88));
+}
+
+.institutional-hero--educational {
+  background:
+    radial-gradient(circle at 10% 0, rgba(154, 122, 68, 0.11), transparent 29%),
+    linear-gradient(138deg, #fbfaf7, #f0eadf);
+  box-shadow: 0 16px 44px rgba(11, 52, 54, 0.065);
+}
+
+.institutional-hero--educational::before {
+  background: linear-gradient(90deg, var(--color-institutional), rgba(111, 143, 130, 0.68));
+  height: 3px;
+}
+
+.institutional-hero--library {
+  background:
+    linear-gradient(rgba(11, 52, 54, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(11, 52, 54, 0.04) 1px, transparent 1px),
+    radial-gradient(circle at 88% 10%, rgba(154, 122, 68, 0.18), transparent 30%),
+    linear-gradient(138deg, #fbfaf7, #ece6da);
+  background-size: 36px 36px, 36px 36px, 100% 100%, 100% 100%;
+}
+
+.institutional-hero-note {
+  background: rgba(255, 255, 255, 0.68);
+  border: 1px solid rgba(154, 122, 68, 0.28);
+  border-left: 3px solid var(--color-institutional);
+  border-radius: 4px;
+  box-shadow: 0 12px 30px rgba(11, 52, 54, 0.045);
+}
+
+.institutional-hero > .editorial-surface {
+  border-left: 3px solid var(--color-institutional);
+  box-shadow: 0 12px 30px rgba(11, 52, 54, 0.045);
+}
+
+.institutional-hero-chip {
+  background: rgba(255, 255, 255, 0.72);
+  border: 1px solid rgba(11, 52, 54, 0.18);
+  color: var(--color-institutional);
+}
+
+.executive-panel {
+  overflow: hidden;
+  position: relative;
+}
+
+.executive-panel::before {
+  background: linear-gradient(90deg, var(--color-institutional) 0 72%, var(--color-brass) 72% 100%);
+  content: "";
+  height: 5px;
+  inset: 0 0 auto;
+  position: absolute;
+  z-index: 2;
+}
+
+.executive-panel [data-insight-metrics] {
+  border-top: 1px solid rgba(11, 52, 54, 0.16);
+  padding-top: 1rem;
+}
+
+.executive-panel [data-insight-metric-value] {
+  font-size: 1rem;
+  line-height: 1.35;
+}
+
+.reading-card-discreet {
+  box-shadow: none;
+  opacity: 0.86;
+}
+
+.resource-active-card {
+  background:
+    radial-gradient(circle at 100% 0, rgba(154, 122, 68, 0.24), transparent 45%),
+    var(--color-institutional);
+  border-color: rgba(154, 122, 68, 0.52);
+  box-shadow: 0 18px 42px rgba(11, 52, 54, 0.14);
+}
+
+.resource-active-card .text-ink,
+.resource-active-card .text-muted {
+  color: #ffffff;
+}
+
+.resource-active-card .text-muted {
+  opacity: 0.72;
+}
+
+.resource-coming-card {
+  background: rgba(255, 255, 255, 0.54);
+  border-color: rgba(216, 210, 200, 0.9);
+  box-shadow: none;
+}
+
+.research-hero {
+  border-top: 5px solid var(--color-institutional);
+  box-shadow: inset 0 -1px 0 rgba(11, 52, 54, 0.14);
+}
+
+.research-band {
+  background:
+    radial-gradient(circle at 88% 12%, rgba(154, 122, 68, 0.16), transparent 30%),
+    linear-gradient(135deg, #eee8dc, #f8f5ef);
+  border-bottom: 1px solid rgba(11, 52, 54, 0.14);
+}
+
+.research-conclusion {
+  background:
+    linear-gradient(90deg, rgba(11, 52, 54, 0.045) 1px, transparent 1px),
+    linear-gradient(#efe9dd, #f7f4ed);
+  background-size: 36px 100%, 100% 100%;
+  border-top: 1px solid rgba(11, 52, 54, 0.16);
 }
 
 .human-decision-panel {
@@ -137,6 +348,17 @@ details:not([open]) .details-close-label {
   .estate-card:hover {
     box-shadow: 0 18px 44px rgba(11, 52, 54, 0.075);
     transform: translateY(-2px);
+  }
+}
+
+@media (min-width: 768px) {
+  .home-estate-heading {
+    font-size: 4.25rem;
+    line-height: 0.98;
+  }
+
+  .executive-panel [data-insight-metric-value] {
+    font-size: 1.15rem;
   }
 }
 

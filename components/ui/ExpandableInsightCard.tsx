@@ -66,11 +66,11 @@ export function ExpandableInsightCard({
         </div>
 
         {metrics.length ? (
-          <div className="mt-4 grid grid-cols-2 gap-2 md:mt-5 md:gap-3 xl:grid-cols-4">
+          <div data-insight-metrics className="mt-4 grid grid-cols-2 gap-2 md:mt-5 md:gap-3 xl:grid-cols-4">
             {metrics.map((metric) => (
               <div key={metric.label} className={`min-w-0 border p-2.5 md:p-3 ${toneClass[metric.tone ?? "neutral"]}`}>
                 <p className="truncate text-[10px] font-semibold uppercase tracking-[0.1em] opacity-75 md:text-[11px] md:tracking-[0.12em]">{metric.label}</p>
-                <p className="mt-1 break-words text-[13px] font-semibold leading-5 md:text-sm">{metric.value}</p>
+                <p data-insight-metric-value className="mt-1 break-words text-[13px] font-semibold leading-5 md:text-sm">{metric.value}</p>
               </div>
             ))}
           </div>

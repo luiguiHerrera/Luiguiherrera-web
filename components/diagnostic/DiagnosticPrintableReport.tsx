@@ -216,7 +216,6 @@ function routeHref(locale: DiagnosticLocale, href: string) {
   if (href === "/protege-tu-dinero") return "/en/protect-your-money";
   if (href === "/dashboard") return "/en/dashboard";
   if (href === "/niveles-estadisticos") return "/en/statistical-levels";
-  if (href === "/mercado") return "/en/market";
   if (href === "/recursos") return "/en/resources";
   if (href.startsWith("/diagnostico")) return href.replace("/diagnostico", "/en/diagnostic");
   return href;

@@ -2,7 +2,6 @@ import type { Locale } from "@/lib/i18n/locales";
 
 export const routePairs = [
   { es: "/", en: "/en" },
-  { es: "/mercado", en: "/en/market" },
   { es: "/diagnostico", en: "/en/diagnostic" },
   { es: "/investigacion/td3", en: "/en/research/td3" },
   { es: "/proteccion", en: "/en/protection" },
@@ -12,7 +11,6 @@ export const routePairs = [
   { es: "/niveles-estadisticos", en: "/en/statistical-levels" },
   { es: "/informes", en: "/en/weekly-report" },
   { es: "/informe-semanal", en: "/en/weekly-report" },
-  { es: "/quant-lab", en: "/en/quant-lab" },
   { es: "/protege-tu-dinero", en: "/en/protect-your-money" },
   { es: "/metodologia", en: "/en/methodology" },
   { es: "/legal", en: "/en/legal" },

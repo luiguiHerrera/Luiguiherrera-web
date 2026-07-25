@@ -52,7 +52,9 @@ function getSelectedCash(cashParam?: string) {
 }
 
 function performanceHref(profile: string, cash: CashAssumption) {
-  return `/quant-lab?profile=${encodeURIComponent(profile)}&cash=${encodeURIComponent(cash)}#td3-performance`;
+  void profile;
+  void cash;
+  return "/investigacion/td3#evidencia";
 }
 
 function getOrderedProfiles() {

@@ -14,7 +14,6 @@ This site is educational and informational. It does not provide personalized inv
 - Diagnóstico del inversionista: https://www.luiguiherrera.com/diagnostico
 - Protección del inversor: https://www.luiguiherrera.com/proteccion
 - Protege tu dinero: https://www.luiguiherrera.com/protege-tu-dinero
-- Mercado: https://www.luiguiherrera.com/mercado
 - Dashboard de régimen de mercado: https://www.luiguiherrera.com/dashboard
 - Informes de mercado: https://www.luiguiherrera.com/informes
 - Niveles estadísticos: https://www.luiguiherrera.com/niveles-estadisticos
@@ -22,7 +21,6 @@ This site is educational and informational. It does not provide personalized inv
 - Recursos: https://www.luiguiherrera.com/recursos
 - Metodología: https://www.luiguiherrera.com/metodologia
 - Investigación TD3: https://www.luiguiherrera.com/investigacion/td3
-- Quant Lab: https://www.luiguiherrera.com/quant-lab
 
 ## Main English pages
 - Start: https://www.luiguiherrera.com/en/start
@@ -31,7 +29,6 @@ This site is educational and informational. It does not provide personalized inv
 - Investor diagnostic: https://www.luiguiherrera.com/en/diagnostic
 - Protection: https://www.luiguiherrera.com/en/protection
 - Protect your money: https://www.luiguiherrera.com/en/protect-your-money
-- Market: https://www.luiguiherrera.com/en/market
 - Market Regime Dashboard: https://www.luiguiherrera.com/en/dashboard
 - Weekly report: https://www.luiguiherrera.com/en/weekly-report
 - Statistical levels: https://www.luiguiherrera.com/en/statistical-levels
@@ -39,7 +36,6 @@ This site is educational and informational. It does not provide personalized inv
 - Resources: https://www.luiguiherrera.com/en/resources
 - Methodology: https://www.luiguiherrera.com/en/methodology
 - TD3 research: https://www.luiguiherrera.com/en/research/td3
-- Quant Lab: https://www.luiguiherrera.com/en/quant-lab
 
 ## Reports and machine-readable files
 - Market reports: https://www.luiguiherrera.com/informes

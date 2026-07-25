@@ -31,20 +31,13 @@ const cards = [
   },
   {
     label: "05",
-    meta: "Quant",
-    title: "Quant Lab",
-    href: "/en/quant-lab",
-    description: "TD3 performance context and quantitative process notes.",
-  },
-  {
-    label: "06",
     meta: "DRL",
-    title: "DRL research",
+    title: "TD3 research",
     href: "/en/research/td3",
     description: "Research on deep reinforcement learning under costs, cash, and statistical validation.",
   },
   {
-    label: "07",
+    label: "06",
     meta: "Support",
     title: "Resources",
     href: "/en/resources",

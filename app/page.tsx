@@ -19,7 +19,7 @@ const entryways = [
   {
     title: "Leer el mercado",
     label: "01",
-    href: "/mercado",
+    href: "/dashboard",
     description: "Contexto, régimen y niveles para entender el terreno.",
   },
   {
@@ -361,13 +361,13 @@ export default async function Home() {
 
   return (
     <div>
-      <section className="estate-hero relative overflow-hidden border-b border-line">
+      <section className="estate-hero home-estate-hero relative overflow-hidden border-b border-line">
         <div className="mx-auto grid min-h-[470px] max-w-7xl grid-cols-1 px-4 py-10 md:min-h-[650px] md:px-5 md:py-20 lg:grid-cols-[0.7fr_1fr] lg:items-center">
           <div className="relative z-20 max-w-2xl">
             <p className="mb-4 w-fit rounded-full border border-petrol/20 bg-white/65 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-petrol">
               Criterio quant para inversores
             </p>
-            <h1 className="text-3xl font-semibold leading-[1.04] tracking-[-0.025em] text-ink sm:text-4xl md:text-6xl">
+            <h1 className="home-estate-heading text-3xl font-semibold leading-[1.04] text-ink sm:text-4xl">
               Antes de invertir, entiende cómo respira el mercado
             </h1>
             <TypewriterPrinciples />
@@ -375,7 +375,7 @@ export default async function Home() {
               Herramientas educativas para inversionistas: presupuesto, deudas, diagnóstico, protección, mercado e investigación cuantitativa.
             </p>
             <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:flex-wrap md:mt-8 md:gap-4">
-              <Link href="/mercado" className="inline-flex w-full items-center justify-center rounded-[4px] border border-petrol bg-petrol px-4 py-2.5 text-sm font-semibold text-white shadow-[0_12px_26px_rgba(11,52,54,0.14)] transition hover:bg-panel hover:text-petrol sm:w-auto md:px-5">
+              <Link href="/dashboard" className="inline-flex w-full items-center justify-center rounded-[4px] border border-petrol bg-petrol px-4 py-2.5 text-sm font-semibold text-white shadow-[0_12px_26px_rgba(11,52,54,0.14)] transition hover:bg-panel hover:text-petrol sm:w-auto md:px-5">
                 Leer el mercado
               </Link>
               <Link href="/diagnostico" className="inline-flex w-full items-center justify-center rounded-[4px] border border-petrol/25 bg-white/70 px-4 py-2.5 text-sm font-semibold text-petrol transition hover:border-petrol hover:bg-white sm:w-auto md:px-5">
@@ -420,7 +420,7 @@ export default async function Home() {
         </div>
       </section>
 
-      <section className="warm-section border-b border-line">
+      <section className="patrimonial-band border-b border-line">
         <div className="mx-auto grid max-w-7xl gap-5 px-4 py-7 md:grid-cols-[0.35fr_1fr_0.95fr] md:items-start md:px-5 md:py-8">
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-petrol">Nuestra filosofía</p>
           <p className="border-l-2 border-brass/55 pl-5 text-lg font-medium leading-7 text-ink md:text-2xl md:leading-8">
@@ -437,7 +437,7 @@ export default async function Home() {
         </div>
       </section>
 
-      <section className="border-b border-line bg-paper">
+      <section className="warm-section border-b border-line">
         <div className="mx-auto max-w-7xl px-4 py-8 md:px-5 md:py-12">
           <div className="grid gap-6 lg:grid-cols-[0.28fr_1fr] lg:items-start">
             <div>
@@ -451,7 +451,7 @@ export default async function Home() {
         </div>
       </section>
 
-      <section className="border-b border-line bg-[#f3efe6]">
+      <section className="research-surface border-b border-line">
         <div className="mx-auto max-w-7xl px-4 py-9 md:px-5 md:py-12">
           <div className="grid gap-4 lg:grid-cols-[0.56fr_0.44fr] lg:items-end">
             <div>
@@ -480,7 +480,7 @@ export default async function Home() {
 
       <section className="bg-paper">
         <div className="mx-auto grid max-w-7xl gap-3 px-4 py-9 md:grid-cols-4 md:gap-5 md:px-5 md:py-12">
-          <Link href="/mercado" className="rounded-[6px] border border-line bg-white/75 p-4 shadow-[0_10px_28px_rgba(11,52,54,0.035)] transition hover:border-petrol md:p-5">
+          <Link href="/dashboard" className="rounded-[6px] border border-line bg-white/75 p-4 shadow-[0_10px_28px_rgba(11,52,54,0.035)] transition hover:border-petrol md:p-5">
             <p className="text-xs font-semibold uppercase tracking-[0.18em] text-petrol">Mercado</p>
             <h2 className="mt-3 text-xl font-semibold text-ink">Régimen, niveles e informes de mercado</h2>
           </Link>

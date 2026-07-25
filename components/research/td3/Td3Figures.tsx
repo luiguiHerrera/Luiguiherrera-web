@@ -97,7 +97,7 @@ export function FalseConfidenceFigure({ content }: { content: Td3VisualContent["
 export function ClaimLadder({ content }: { content: Td3VisualContent["ladder"] }) {
   const names = ["Ranking", "Statistics", "Feasibility"];
   return (
-    <FigureShell eyebrow={content.eyebrow} title={content.title} className="warm-section -mx-4 px-4 md:-mx-5 md:px-5">
+    <FigureShell eyebrow={content.eyebrow} title={content.title} className="research-band -mx-4 px-4 md:-mx-5 md:px-5">
       <div className="relative overflow-hidden border border-petrol/25 bg-petrol px-5 py-5 text-white md:px-7">
         <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-white/65">{content.researchQuestionLabel}</p>
         <p className="mt-2 max-w-5xl text-base font-semibold leading-7 md:text-lg">{content.researchQuestion}</p>
@@ -108,7 +108,7 @@ export function ClaimLadder({ content }: { content: Td3VisualContent["ladder"] }
         {content.questions.map((question, index) => (
           <div key={question} className="relative min-h-44 border border-line bg-white/80 p-5 shadow-[0_12px_28px_rgba(11,52,54,0.035)]">
             <div className="flex items-baseline justify-between gap-4">
-              <span className="font-mono text-3xl font-semibold text-petrol/25">0{index + 1}</span>
+              <span aria-hidden="true" className="font-mono text-3xl font-semibold text-petrol/25">0{index + 1}</span>
               <span className="text-xs font-semibold uppercase tracking-[0.16em] text-brass">{names[index]}</span>
             </div>
             <p className="mt-8 text-sm font-semibold leading-6 text-ink">{question}</p>
@@ -496,7 +496,7 @@ export function ClaimsSurvivalTable({ content }: { content: Td3VisualContent["cl
 export function ContributionFlow({ content }: { content: Td3VisualContent["contribution"] }) {
   return (
     <FigureShell eyebrow={content.eyebrow} title={content.title} intro={content.intro}>
-      <div className="technical-surface border border-petrol/20 p-5 shadow-[0_16px_38px_rgba(11,52,54,0.045)] md:p-7">
+      <div className="research-surface institutional-panel border border-petrol/25 p-5 md:p-7">
         <div className="flex flex-col items-stretch gap-2 lg:flex-row lg:items-center">
           {content.flow.map((step, index) => (
             <div key={step} className="contents">
@@ -517,7 +517,7 @@ export function ContributionFlow({ content }: { content: Td3VisualContent["contr
       <ul className="mt-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
         {content.ingredients.map((ingredient, index) => (
           <li key={ingredient} className="estate-card flex gap-3 border border-line px-4 py-3 text-sm leading-6 text-muted">
-            <span className="font-mono text-xs font-semibold text-brass">0{index + 1}</span>
+            <span aria-hidden="true" className="font-mono text-xs font-semibold text-brass">0{index + 1}</span>
             {ingredient}
           </li>
         ))}
@@ -529,7 +529,7 @@ export function ContributionFlow({ content }: { content: Td3VisualContent["contr
 
 export function FinalAnswerCards({ content }: { content: Td3VisualContent["final"] }) {
   return (
-    <section className="py-12 md:py-16">
+    <section className="research-conclusion -mx-4 px-4 py-12 md:-mx-5 md:px-5 md:py-16">
       <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-brass">{content.eyebrow}</p>
       <div className="mt-5 grid gap-4 md:grid-cols-3">
         {content.cards.map((card) => (
@@ -543,7 +543,7 @@ export function FinalAnswerCards({ content }: { content: Td3VisualContent["final
           </div>
         ))}
       </div>
-      <div className="relative mt-5 overflow-hidden border border-petrol bg-petrol p-6 text-white shadow-[0_20px_55px_rgba(11,52,54,0.11)] md:p-8">
+      <div className="institutional-panel relative mt-5 overflow-hidden border border-petrol bg-petrol p-6 text-white shadow-[0_22px_60px_rgba(11,52,54,0.16)] md:p-8">
         <QuantAnnotation variant="bracket" className="absolute right-4 top-4 hidden h-20 w-6 text-brass/55 md:block" />
         <p className="max-w-5xl text-xl font-semibold leading-8 md:text-3xl md:leading-tight">{content.mainAnswer}</p>
         <p className="mt-6 border-t border-white/20 pt-5 text-sm leading-7 text-white/75">
@@ -607,7 +607,7 @@ export function PaperNavigation({ items, label }: { items: Td3VisualContent["nav
 export function PaperHero({ content, locale }: { content: Td3PaperContent["hero"]; locale: Locale }) {
   const labels = locale === "en" ? { framework: "Falsification-oriented evaluation framework", paper: "Interactive research paper" } : { framework: "Marco de evaluación orientado a falsación", paper: "Paper interactivo de investigación" };
   return (
-    <header className="estate-hero -mx-4 grid gap-8 border-b border-line px-4 py-10 md:-mx-5 md:px-5 md:py-16 lg:grid-cols-[1fr_0.38fr] lg:items-end">
+    <header className="estate-hero research-hero -mx-4 grid gap-8 border-b border-line px-4 py-10 md:-mx-5 md:px-5 md:py-16 lg:grid-cols-[1fr_0.38fr] lg:items-end">
       <div>
         <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-brass">{labels.paper}</p>
         <h1 className="mt-4 max-w-5xl text-3xl font-semibold leading-[1.08] text-ink sm:text-4xl md:text-6xl">{content.title}</h1>

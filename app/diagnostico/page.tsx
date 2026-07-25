@@ -16,7 +16,7 @@ export default async function DiagnosticoPage({ searchParams }: { searchParams?:
 
   return (
     <div className="mx-auto max-w-7xl px-5 py-10 md:py-14">
-      <div className="estate-hero mb-10 grid gap-6 rounded-[6px] border border-line px-5 py-7 shadow-[0_16px_42px_rgba(11,52,54,0.045)] md:px-7 md:py-9 lg:grid-cols-[1fr_0.72fr] lg:items-end">
+      <div className="institutional-hero institutional-hero--educational mb-10 grid gap-6 px-5 py-7 md:px-7 md:py-9 lg:grid-cols-[1fr_0.72fr] lg:items-end">
         <SectionHeader
           eyebrow="Diagnóstico del inversionista"
           title="Antes de mirar el mercado, conviene mirar al inversionista."

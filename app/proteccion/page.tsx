@@ -19,7 +19,7 @@ const protectionItems = [
 export default function ProteccionPage() {
   return (
     <div className="mx-auto min-w-0 max-w-7xl overflow-hidden px-4 py-10 md:px-5 md:py-14">
-      <section className="estate-hero rounded-[6px] border border-line px-5 py-7 shadow-[0_16px_42px_rgba(11,52,54,0.045)] md:px-7 md:py-9">
+      <section className="institutional-hero institutional-hero--educational px-5 py-7 md:px-7 md:py-9">
         <p className="text-xs font-semibold uppercase tracking-[0.18em] text-petrol">Control de riesgo</p>
         <h1 className="mt-4 text-4xl font-semibold leading-[1.02] text-ink md:text-6xl">Protección del inversor</h1>
         <p className="mt-5 max-w-[calc(100vw-2rem)] break-words text-lg leading-8 text-muted [overflow-wrap:anywhere] md:max-w-3xl">

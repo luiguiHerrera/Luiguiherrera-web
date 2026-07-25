@@ -92,22 +92,25 @@ function Eyebrow({ children }: { children: React.ReactNode }) {
 export default function EnglishMethodologyPage() {
   return (
     <div className="mx-auto max-w-7xl px-5 py-10 md:py-14">
-      <section className="estate-hero rounded-[6px] border border-line px-5 py-7 shadow-[0_16px_42px_rgba(11,52,54,0.045)] md:px-7 md:py-9">
-        <Eyebrow>How the system works</Eyebrow>
-        <h1 className="mt-4 max-w-4xl text-4xl font-semibold leading-[1.02] text-ink md:text-6xl">Methodology</h1>
-        <p className="mt-5 max-w-3xl text-lg leading-8 text-muted">
-          How the readings are built, what data they use and where their limits are.
-        </p>
+      <section className="institutional-hero institutional-hero--executive grid gap-8 px-5 py-7 md:px-7 md:py-10 lg:grid-cols-[1fr_0.52fr] lg:items-end">
+        <div>
+          <Eyebrow>How the system works</Eyebrow>
+          <h1 className="mt-4 max-w-4xl text-4xl font-semibold leading-[1.02] text-ink md:text-6xl">Methodology</h1>
+          <p className="mt-5 max-w-3xl text-lg leading-8 text-muted">
+            How the readings are built, what data they use and where their limits are.
+          </p>
+          <div className="mt-6 flex flex-wrap gap-2">
+            {["Public sources", "Traceability", "Visible limits"].map((item) => (
+              <span key={item} className="institutional-hero-chip px-3 py-2 text-[10px] font-semibold uppercase tracking-[0.12em]">{item}</span>
+            ))}
+          </div>
+        </div>
+        <aside className="institutional-hero-note p-5 text-sm leading-7 text-muted">
+          The methodology reduces ambiguity but does not remove source errors, delays, API changes or proxy limitations.
+        </aside>
       </section>
 
-      <ReadingCard title="Reading card" items={[
-        { label: "What it is", value: "A traceability page explaining how readings are built, which sources they use and what their limits are." },
-        { label: "What it is for", value: "It helps audit the method before relying on a tool, report or market reading." },
-        { label: "Main sources", value: "Documented public sources: Alpha Vantage, FRED/VIX, Bitbo, State Street / GLD, precomputed historical data and tool-specific sources." },
-        { label: "Limits", value: "The methodology reduces ambiguity but does not remove source errors, delays, API changes or proxy limitations." },
-      ]} />
-
-      <section className="editorial-surface mt-8 border border-line p-5 md:p-6">
+      <section className="warm-section institutional-panel mt-8 border border-line p-5 md:p-6">
         <Eyebrow>DRL research</Eyebrow>
         <h2 className="mt-2 text-2xl font-semibold text-ink md:text-3xl">DRL Evaluation Protocol</h2>
         <p className="mt-4 max-w-4xl text-base leading-7 text-muted">{researchQuestion}</p>
@@ -128,7 +131,7 @@ export default function EnglishMethodologyPage() {
         </div>
       </section>
 
-      <section className="technical-surface mt-8 border border-petrol/25 p-5 md:p-6">
+      <section className="research-surface institutional-panel mt-8 border border-petrol/30 p-5 md:p-6">
         <div className="max-w-3xl">
           <Eyebrow>System map</Eyebrow>
           <h2 className="mt-2 text-2xl font-semibold text-ink md:text-3xl">From public data to human decision</h2>
@@ -145,6 +148,13 @@ export default function EnglishMethodologyPage() {
           ))}
         </div>
       </section>
+
+      <ReadingCard className="reading-card-discreet" title="Reading card" items={[
+        { label: "What it is", value: "A traceability page explaining how readings are built, which sources they use and what their limits are." },
+        { label: "What it is for", value: "It helps audit the method before relying on a tool, report or market reading." },
+        { label: "Main sources", value: "Documented public sources: Alpha Vantage, FRED/VIX, Bitbo, State Street / GLD, precomputed historical data and tool-specific sources." },
+        { label: "Limits", value: "The methodology reduces ambiguity but does not remove source errors, delays, API changes or proxy limitations." },
+      ]} />
 
       <section className="mt-8">
         <div className="max-w-3xl">

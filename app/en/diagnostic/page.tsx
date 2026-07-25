@@ -15,7 +15,7 @@ export default async function EnglishDiagnosticPage({ searchParams }: { searchPa
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-10 md:px-5 md:py-14">
-      <div className="mb-10 grid gap-6 lg:grid-cols-[1fr_0.72fr] lg:items-end">
+      <div className="institutional-hero institutional-hero--educational mb-10 grid gap-6 px-5 py-7 md:px-7 md:py-9 lg:grid-cols-[1fr_0.72fr] lg:items-end">
         <SectionHeader
           eyebrow="Investor diagnostic"
           title="Before reading the market, read the investor."

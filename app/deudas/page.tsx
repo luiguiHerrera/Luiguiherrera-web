@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 export default function DeudasPage() {
   return (
     <div className="mx-auto max-w-7xl px-4 py-10 md:px-5 md:py-14">
-      <section className="estate-hero grid gap-8 rounded-[6px] border border-line px-5 py-7 shadow-[0_16px_42px_rgba(11,52,54,0.045)] md:px-7 md:py-9 lg:grid-cols-[0.58fr_0.42fr] lg:items-end">
+      <section className="institutional-hero institutional-hero--educational grid gap-8 px-5 py-7 md:px-7 md:py-9 lg:grid-cols-[0.58fr_0.42fr] lg:items-end">
         <div>
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-petrol">Herramienta educativa</p>
           <h1 className="mt-4 text-4xl font-semibold leading-[1.02] text-ink md:text-6xl">Gestión de deudas</h1>
@@ -21,7 +21,7 @@ export default function DeudasPage() {
             Compara avalancha, bola de nieve, pagos mínimos, abonos extraordinarios y rentabilidad mínima comparable antes de invertir.
           </p>
         </div>
-        <div className="rounded-[6px] border border-petrol/20 bg-white/70 p-5 text-sm leading-7 text-muted shadow-[0_12px_32px_rgba(11,52,54,0.045)]">
+        <div className="institutional-hero-note p-5 text-sm leading-7 text-muted">
           No guarda tus datos. Los cálculos son aproximados y sirven para ordenar preguntas, no para tomar decisiones automáticas.
         </div>
       </section>

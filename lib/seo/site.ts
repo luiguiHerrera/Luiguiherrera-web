@@ -9,7 +9,6 @@ export const languagePairs = [
   ["/inversionista", "/en/investor"],
   ["/proteccion", "/en/protection"],
   ["/protege-tu-dinero", "/en/protect-your-money"],
-  ["/mercado", "/en/market"],
   ["/dashboard", "/en/dashboard"],
   ["/informes", "/en/weekly-report"],
   ["/niveles-estadisticos", "/en/statistical-levels"],
@@ -17,7 +16,6 @@ export const languagePairs = [
   ["/recursos", "/en/resources"],
   ["/metodologia", "/en/methodology"],
   ["/investigacion/td3", "/en/research/td3"],
-  ["/quant-lab", "/en/quant-lab"],
   ["/legal", "/en/legal"],
 ] as const;
 

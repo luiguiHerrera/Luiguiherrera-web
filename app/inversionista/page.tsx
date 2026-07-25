@@ -31,20 +31,13 @@ const cards = [
   },
   {
     label: "05",
-    meta: "Quant",
-    title: "Quant Lab",
-    href: "/quant-lab",
-    description: "Contexto de rendimiento TD3 y notas del proceso cuantitativo.",
-  },
-  {
-    label: "06",
     meta: "DRL",
-    title: "Investigación DRL",
+    title: "Investigación TD3",
     href: "/investigacion/td3",
     description: "Investigación sobre aprendizaje profundo por refuerzo con costes, cash y validación estadística.",
   },
   {
-    label: "07",
+    label: "06",
     meta: "Soporte",
     title: "Recursos",
     href: "/recursos",

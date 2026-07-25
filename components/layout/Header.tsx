@@ -12,22 +12,16 @@ const navHrefs = {
     home: "/",
     start: "/empezar",
     investor: "/inversionista",
-    market: "/mercado",
-    diagnostic: "/diagnostico",
     research: "/investigacion/td3",
     protection: "/proteccion",
-    trends: "/tendencias",
     resources: "/recursos",
   },
   en: {
     home: "/en",
     start: "/en/start",
     investor: "/en/investor",
-    market: "/en/market",
-    diagnostic: "/en/diagnostic",
     research: "/en/research/td3",
     protection: "/en/protection",
-    trends: "/en/trends",
     resources: "/en/resources",
   },
 };
@@ -80,13 +74,13 @@ function DesktopDropdown({ href, items, label }: { href: string; items: NavDropd
       >
         {label}
       </HeaderLink>
-      <div className="invisible absolute left-0 top-full z-50 hidden w-[21rem] pt-3 opacity-0 transition duration-150 group-hover:visible group-hover:opacity-100 group-focus-within:visible group-focus-within:opacity-100 lg:block">
-        <div className="grid gap-1 rounded-[6px] border border-line/90 bg-white/95 p-2 shadow-[0_18px_45px_rgba(11,52,54,0.10)] backdrop-blur-xl">
+      <div className="invisible absolute left-1/2 top-full z-50 hidden w-[21rem] -translate-x-1/2 pt-3 opacity-0 transition duration-150 group-hover:visible group-hover:opacity-100 group-focus-within:visible group-focus-within:opacity-100 lg:block">
+        <div className="grid gap-1 rounded-[6px] border border-line/90 border-t-petrol/45 bg-[#fffdf8]/98 p-2 shadow-[0_16px_38px_rgba(11,52,54,0.075)] backdrop-blur-xl">
           {items.map((item) => (
             <HeaderLink
               key={`${item.href}-${item.label}`}
               href={item.href}
-              className="block rounded-[4px] px-3 py-2.5 text-[11px] text-muted transition hover:bg-paper hover:text-petrol focus-visible:bg-paper focus-visible:text-petrol focus-visible:outline-none"
+              className="block rounded-[4px] border-l-2 border-transparent px-3 py-2.5 text-[11px] text-muted transition hover:border-brass/55 hover:bg-paper hover:text-petrol focus-visible:border-brass/55 focus-visible:bg-paper focus-visible:text-petrol focus-visible:outline-none"
             >
               <span className="block font-semibold text-ink">{item.label}</span>
               <span className="block pt-1 leading-5">{item.description}</span>
@@ -119,7 +113,6 @@ export function Header() {
     { href: hrefs.investor, label: dictionary.layout.nav.investor, items: dictionary.layout.investorItems },
     { href: hrefs.research, label: dictionary.layout.nav.research },
     { href: hrefs.protection, label: dictionary.layout.nav.protection, items: dictionary.layout.protectionItems },
-    { href: hrefs.trends, label: dictionary.layout.nav.trends },
     { href: hrefs.resources, label: dictionary.layout.nav.resources, items: dictionary.layout.resourcesItems },
   ];
   return (

@@ -4,11 +4,18 @@ import { absoluteUrl, languageAlternates } from "@/lib/seo/site";
 export function proxy(request: NextRequest) {
   const response = NextResponse.next();
   const pathname = request.nextUrl.pathname.replace(/\/$/, "") || "/";
-  const canonicalPathname = pathname === "/investigacion"
-    ? "/investigacion/td3"
-    : pathname === "/en/research"
-      ? "/en/research/td3"
-      : pathname;
+  const canonicalRedirects: Record<string, string> = {
+    "/en/market": "/en/dashboard",
+    "/en/quant-lab": "/en/research/td3",
+    "/mercado": "/dashboard",
+    "/quant-lab": "/investigacion/td3",
+  };
+  const canonicalPathname = canonicalRedirects[pathname]
+    ?? (pathname === "/investigacion"
+      ? "/investigacion/td3"
+      : pathname === "/en/research"
+        ? "/en/research/td3"
+        : pathname);
   const alternates = languageAlternates(canonicalPathname);
   const links = [`<${absoluteUrl(canonicalPathname)}>; rel="canonical"`];
   if (alternates) {

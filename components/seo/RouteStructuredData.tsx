@@ -15,7 +15,6 @@ const routes: Record<string, RouteSchema> = {
   "/inversionista": { name: "Modo inversionista", description: "Ruta educativa hacia herramientas de mercado e investigación.", kind: "page" },
   "/proteccion": { name: "Protección del inversor", description: "Simulador educativo de decisiones financieras con casos sobre liquidez, deuda, productos, finca raíz, ETF y portafolio.", kind: "application", category: "FinanceApplication" },
   "/protege-tu-dinero": { name: "Protege tu dinero", description: "Checklist educativo de señales de alerta antes de evaluar una entidad, producto o propuesta de inversión.", kind: "application", category: "FinanceApplication" },
-  "/mercado": { name: "Mercado", description: "Página educativa de contexto de mercado, régimen y niveles estadísticos.", kind: "page" },
   "/dashboard": { name: "Dashboard de régimen de mercado", description: "Dashboard educativo para ordenar señales de régimen de mercado, volatilidad, rotación, amplitud, flujos BTC ETF y proxy GLD.", kind: "application", category: "EducationalApplication" },
   "/informes": { name: "Informes de mercado", description: "Archivo de informes de mercado multi-activo.", kind: "collection" },
   "/niveles-estadisticos": { name: "Niveles estadísticos", description: "Laboratorio educativo de niveles estadísticos por activo usando percentiles, z-scores, extensiones, rangos y drawdowns.", kind: "application", category: "EducationalApplication" },
@@ -23,7 +22,6 @@ const routes: Record<string, RouteSchema> = {
   "/recursos": { name: "Recursos", description: "Catálogo de recursos públicos y scripts open-source para inversionistas.", kind: "collection" },
   "/metodologia": { name: "Metodología", description: "Trazabilidad de fuentes, límites y métodos de las herramientas educativas.", kind: "page" },
   "/investigacion/td3": { name: "Evaluación realista de claims DRL", description: "Nota técnica de investigación sobre TD3, costes, cash, benchmarks y validación estadística.", kind: "tech" },
-  "/quant-lab": { name: "TD3 Portfolio Research Lab", description: "Laboratorio técnico de evaluación de TD3 aplicado a asignación de portafolios.", kind: "tech" },
   "/legal": { name: "Legal", description: "Información legal y límites de uso de la plataforma.", kind: "page" },
 };
 
@@ -36,7 +34,6 @@ Object.assign(enRoutes, {
   "/en/investor": { name: "Investor mode", description: "Educational path to market and research tools.", kind: "page" },
   "/en/protection": { name: "Investor protection", description: "Educational financial-decision simulator covering liquidity, debt, products, real estate, ETFs and portfolios.", kind: "application", category: "FinanceApplication" },
   "/en/protect-your-money": { name: "Protect your money", description: "Educational red-flag checklist for reviewing an entity, product or investment proposal.", kind: "application", category: "FinanceApplication" },
-  "/en/market": { name: "Market", description: "Educational page for market context, regime and statistical levels.", kind: "page" },
   "/en/dashboard": { name: "Market Regime Dashboard", description: "Educational dashboard organizing market regime, volatility, rotation, breadth, BTC ETF flows and a GLD proxy.", kind: "application", category: "EducationalApplication" },
   "/en/weekly-report": { name: "Weekly market report", description: "Multi-asset market-report archive.", kind: "collection" },
   "/en/statistical-levels": { name: "Statistical levels", description: "Educational lab using percentiles, z-scores, extensions, ranges and drawdowns by asset.", kind: "application", category: "EducationalApplication" },
@@ -44,7 +41,6 @@ Object.assign(enRoutes, {
   "/en/resources": { name: "Resources", description: "Catalog of public resources and open-source scripts for investors.", kind: "collection" },
   "/en/methodology": { name: "Methodology", description: "Traceability for sources, limits and methods used by the educational tools.", kind: "page" },
   "/en/research/td3": { name: "Realistic evaluation of DRL claims", description: "Technical research note on TD3, costs, cash, benchmarks and statistical validation.", kind: "tech" },
-  "/en/quant-lab": { name: "TD3 Portfolio Research Lab", description: "Technical lab evaluating TD3 for portfolio allocation.", kind: "tech" },
   "/en/legal": { name: "Legal", description: "Legal information and platform usage limits.", kind: "page" },
 });
 
