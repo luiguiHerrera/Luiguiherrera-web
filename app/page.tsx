@@ -113,7 +113,7 @@ function sparklinePath(values: number[], width = 100, height = 40) {
 
 function getPreviewSignals(regimeSummary: RegimeSummary) {
   const primarySignals = regimeSummary.cautionSignals.length > 0 ? regimeSummary.cautionSignals : regimeSummary.riskSupportSignals;
-  return primarySignals.slice(0, 3);
+  return primarySignals.slice(0, 2);
 }
 
 function RegimePreviewPanel({ regimeSummary }: { regimeSummary: RegimeSummary }) {
@@ -121,7 +121,7 @@ function RegimePreviewPanel({ regimeSummary }: { regimeSummary: RegimeSummary })
   const scoreWidth = `${Math.max(0, Math.min(regimeSummary.regimeScore, 100))}%`;
 
   return (
-    <div className="rounded-[6px] border border-petrol/25 bg-white/80 p-4 shadow-[0_18px_48px_rgba(11,52,54,0.07)] md:p-7">
+    <div className="rounded-[6px] border border-petrol/25 bg-white/80 p-5 shadow-[0_18px_48px_rgba(11,52,54,0.07)] md:p-6">
       <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
         <div>
           <p className="text-xs font-semibold uppercase tracking-[0.18em] text-petrol">Régimen integrado</p>
@@ -138,11 +138,11 @@ function RegimePreviewPanel({ regimeSummary }: { regimeSummary: RegimeSummary })
         </div>
       </div>
 
-      <div className="mt-6 md:mt-8">
+      <div className="mt-5">
         <div className="flex items-end justify-between gap-4">
           <div>
             <p className="text-xs font-semibold uppercase tracking-[0.14em] text-muted">Score compuesto</p>
-            <p className="mt-2 text-4xl font-semibold leading-none text-ink md:text-6xl">{regimeSummary.regimeScore}</p>
+            <p className="mt-2 text-4xl font-semibold leading-none text-ink md:text-5xl">{regimeSummary.regimeScore}</p>
           </div>
           <p className="max-w-[11rem] text-right text-xs leading-5 text-muted md:text-sm md:leading-6">
             Resumen del régimen actual con las mismas lecturas del dashboard.
@@ -158,20 +158,13 @@ function RegimePreviewPanel({ regimeSummary }: { regimeSummary: RegimeSummary })
         </div>
       </div>
 
-      <div className="mt-5 grid gap-2 md:mt-7 md:grid-cols-3 md:gap-3">
+      <div className="mt-5 grid gap-2 md:grid-cols-2 md:gap-3">
         {signals.map((signal: RegimeSignal, index) => (
           <div key={`${signal.label}-${index}`} className="rounded-[4px] border-l border-petrol/55 bg-paper px-3 py-2.5 md:px-4 md:py-3">
             <p className="text-sm font-semibold leading-5 text-ink">{signal.label}</p>
             <p className="mt-1 text-xs leading-5 text-muted">{signal.detail}</p>
           </div>
         ))}
-      </div>
-      <p className="mt-5 text-sm leading-6 text-muted">{regimeSummary.interpretation}</p>
-      <p className="mt-6 border-t border-line pt-4 text-xs leading-5 text-muted">
-        {regimeSummary.dataQualityNote}
-      </p>
-      <div className="mt-6">
-        <StatisticalLevelsMiniPanel />
       </div>
     </div>
   );
@@ -362,7 +355,7 @@ async function StatisticalLevelsMiniPanel() {
 }
 
 export default async function Home() {
-  const { btcEtfFlows, regimeSummary, sectorRotation, vix } = await getHomeDashboardPreviewData();
+  const { regimeSummary } = await getHomeDashboardPreviewData();
 
   return (
     <div>
@@ -457,8 +450,8 @@ export default async function Home() {
       </section>
 
       <section className="border-b border-line bg-[#f3efe6]">
-        <div className="mx-auto max-w-7xl px-4 py-10 md:px-5 md:py-16">
-          <div className="grid gap-6 lg:grid-cols-[0.56fr_0.44fr] lg:items-end">
+        <div className="mx-auto max-w-7xl px-4 py-9 md:px-5 md:py-12">
+          <div className="grid gap-4 lg:grid-cols-[0.56fr_0.44fr] lg:items-end">
             <div>
               <p className="text-xs font-semibold uppercase tracking-[0.2em] text-petrol">Market Regime Dashboard</p>
               <h2 className="mt-4 max-w-2xl text-2xl font-semibold leading-tight text-ink md:text-3xl">Lectura diaria del régimen de mercado</h2>
@@ -468,18 +461,11 @@ export default async function Home() {
             </p>
           </div>
 
-          <div className="mt-6 grid gap-4 md:mt-9 md:gap-5 lg:grid-cols-[1.05fr_0.95fr]">
+          <div className="mt-6 max-w-4xl">
             <RegimePreviewPanel regimeSummary={regimeSummary} />
-            <div className="grid gap-4 md:gap-5">
-              <SectorMiniChart data={sectorRotation} />
-              <div className="grid gap-4 md:grid-cols-2 md:gap-5 lg:grid-cols-1 xl:grid-cols-2">
-                <VixMiniPanel data={vix} />
-                <BtcFlowsMiniPanel data={btcEtfFlows} />
-              </div>
-            </div>
           </div>
 
-          <div className="mt-8 flex flex-col gap-4 border-t border-line pt-6 md:flex-row md:items-center md:justify-between">
+          <div className="mt-6 flex flex-col gap-4 border-t border-line pt-5 md:flex-row md:items-center md:justify-between">
             <p className="max-w-2xl text-sm leading-6 text-muted">
               Lectura educativa de contexto. No es recomendación de inversión, no elige activos y no anticipa retornos futuros.
             </p>

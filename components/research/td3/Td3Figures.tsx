@@ -305,17 +305,17 @@ export function RankingEvidenceTables({
                   <caption className="sr-only">{protocolMetricSummary(protocol)}</caption>
                   <thead>
                     <tr className="border-b border-line text-[10px] uppercase tracking-[0.14em] text-muted">
-                      <th className="py-3 pr-4 font-semibold">{content.metric}</th>
-                      <th className="px-3 py-3 text-right font-semibold">{content.td3}</th>
-                      <th className="pl-3 py-3 text-right font-semibold">{content.comparator}</th>
+                      <th scope="col" className="py-3 pr-4 font-semibold">{content.metric}</th>
+                      <th scope="col" className="px-3 py-3 text-right font-semibold">{content.td3}</th>
+                      <th scope="col" className="pl-3 py-3 text-right font-semibold">{content.comparator}</th>
                     </tr>
                   </thead>
                   <tbody>
                     {content.rows.map((label, index) => (
                       <tr key={label} className="border-b border-line/80 last:border-b-0">
-                        <th className="py-3 pr-4 font-medium text-muted">{label}:</th>
-                        <td className="px-3 py-3 text-right font-mono font-semibold text-petrol">{rows[index][0]}</td>
-                        <td className="pl-3 py-3 text-right font-mono text-ink">{rows[index][1]}</td>
+                        <th scope="row" className="py-3 pr-4 font-medium text-muted">{label}:{" "}</th>
+                        <td className="px-3 py-3 text-right font-mono font-semibold text-petrol">{rows[index][0]}{" "}</td>
+                        <td className="pl-3 py-3 text-right font-mono text-ink">{rows[index][1]}{" "}</td>
                       </tr>
                     ))}
                   </tbody>
@@ -468,15 +468,16 @@ export function ClaimsSurvivalTable({ content }: { content: Td3VisualContent["cl
     <FigureShell eyebrow={content.eyebrow} title={content.title} intro={content.intro}>
       <div className="overflow-x-auto border border-line bg-white/80">
         <table className="w-full min-w-[48rem] border-collapse text-left text-sm">
+          <caption className="sr-only">{content.title}</caption>
           <thead className="bg-[#f7f8fa] text-[10px] uppercase tracking-[0.14em] text-muted">
             <tr>
-              {content.headers.map((header) => <th key={header} className="border-b border-line px-5 py-4 font-semibold">{header}</th>)}
+              {content.headers.map((header) => <th key={header} scope="col" className="border-b border-line px-5 py-4 font-semibold">{header}</th>)}
             </tr>
           </thead>
           <tbody>
             {content.rows.map((row) => (
               <tr key={row.claim} className="border-b border-line/80 align-top last:border-b-0">
-                <th className="w-[27%] px-5 py-4 font-semibold leading-6 text-ink">{row.claim}</th>
+                <th scope="row" className="w-[27%] px-5 py-4 font-semibold leading-6 text-ink">{row.claim}{" "}</th>
                 <td className="w-[20%] px-5 py-4">
                   <span className={`inline-flex rounded-[3px] border px-2.5 py-1.5 text-xs font-semibold ${verdictClass(row.verdict)}`}>{content.verdicts[row.verdict]}</span>
                 </td>
@@ -588,7 +589,8 @@ export function PaperNavigation({ items, label }: { items: Td3VisualContent["nav
       <div className="mx-auto flex max-w-7xl gap-5 overflow-x-auto py-3">
         {items.map((item, index) => (
           <a key={item.href} href={item.href} className="flex shrink-0 items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.12em] text-muted transition hover:text-petrol">
-            <span className="font-mono text-[10px] text-brass">0{index + 1}</span>{item.label}
+            <span aria-hidden="true" className="font-mono text-[10px] text-brass">0{index + 1}</span>{" "}
+            <span>{item.label}</span>
           </a>
         ))}
       </div>

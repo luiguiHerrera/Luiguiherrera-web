@@ -74,6 +74,8 @@ const phraseMap: Array<[RegExp, string]> = [
   [/Flujos BTC ETF: Flujos mixtos/g, "BTC ETF flows: mixed flows"],
   [/BTC ETF flows: Flujos mixtos aportan lectura neutral\./g, "BTC ETF flows: mixed flows add a neutral read."],
   [/Rotación: Rotación mixta; no domina una lectura defensiva extrema\./g, "Rotation: mixed rotation; no extreme defensive reading dominates."],
+  [/Dispersión 1W de ([\d.,]+)%; reduce la confianza del régimen\./g, "1W dispersion of $1%; lowers confidence in the regime."],
+  [/Dispersión sectorial/g, "Sector dispersion"],
   [/Cautela/g, "Caution"],
   [/Neutral \/ mixto/g, "Neutral / mixed"],
   [/Estrés/g, "Stress"],

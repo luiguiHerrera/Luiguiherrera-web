@@ -1,5 +1,11 @@
 import { tradingViewScripts } from "@/lib/resources/tradingview-scripts";
+import type { Metadata } from "next";
 import { ReadingCard } from "@/components/seo/ReadingCard";
+
+export const metadata: Metadata = {
+  title: "Investor resources | TradingView scripts and tools",
+  description: "A catalog of free investor resources, including open-source TradingView scripts for statistical levels and market context.",
+};
 
 const toolCategories = [
   {
@@ -51,7 +57,7 @@ function englishUseCase(scriptId: string, fallback: string) {
 
 export default function EnglishResourcesPage() {
   return (
-    <div className="mx-auto max-w-7xl px-4 py-10 md:px-5 md:py-14">
+    <div className="mx-auto max-w-7xl px-5 py-10 md:py-14">
       <section className="border-b border-line pb-10">
         <p className="text-xs font-semibold uppercase tracking-[0.18em] text-petrol">Public tools</p>
         <h1 className="mt-4 text-4xl font-semibold leading-[1.02] text-ink md:text-6xl">Resources</h1>

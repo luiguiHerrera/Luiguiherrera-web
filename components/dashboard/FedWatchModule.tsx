@@ -49,6 +49,8 @@ export function FedWatchModule({ data, locale = "es" }: FedWatchModuleProps) {
         frequency: "Frequency",
         interpretation: "Prudent interpretation",
         limit: "Reading limit",
+        pendingNote: "FedWatch is pending and is not included in the market regime score.",
+        pendingDetail: "Methodology and source detail",
       }
     : {
         title: "Expectativas de política monetaria",
@@ -75,6 +77,8 @@ export function FedWatchModule({ data, locale = "es" }: FedWatchModuleProps) {
         frequency: "Frecuencia",
         interpretation: "Interpretación prudente",
         limit: "Qué NO significa",
+        pendingNote: "FedWatch está pendiente y no está incluido en el score de régimen de mercado.",
+        pendingDetail: "Metodología y detalle de fuente",
       };
   const metrics = [
     [copy.nextMeeting, next?.date ?? copy.pending],
@@ -84,6 +88,47 @@ export function FedWatchModule({ data, locale = "es" }: FedWatchModuleProps) {
     [copy.firstCut, t(fedWatch.firstRelevantCutMeeting) || copy.unidentified],
     [copy.currentRange, t(fedWatch.currentTargetRange) || copy.unidentified],
   ];
+
+  if (fedWatch.dataStatus === "live_pending") {
+    return (
+      <section className="border border-line bg-panelSoft px-5 py-4 md:px-6 md:py-5">
+        <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+          <div className="max-w-3xl">
+            <div className="flex flex-wrap items-center gap-3">
+              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-brass">
+                {locale === "en" ? "FedWatch / rates" : "FedWatch / tasas"}
+              </p>
+              <span className="border border-line bg-panel px-2.5 py-1 text-xs font-semibold text-muted">
+                {t(dataStatusLabels[fedWatch.dataStatus])}
+              </span>
+            </div>
+            <h2 className="mt-2 text-lg font-semibold text-ink">{copy.title}</h2>
+            <p className="mt-2 text-sm font-semibold leading-6 text-ink">{copy.pendingNote}</p>
+            <p className="mt-1 text-sm leading-6 text-muted">{t(fedWatch.readingSubtext)}</p>
+          </div>
+          <div className="shrink-0 text-sm leading-6 text-muted md:text-right">
+            <span className="block text-xs font-semibold uppercase tracking-[0.14em] text-brass">{copy.source}</span>
+            {fedWatch.sourceUrl ? (
+              <a href={fedWatch.sourceUrl} className="mt-1 inline-block text-ink underline-offset-4 hover:underline" target="_blank" rel="noreferrer">
+                {t(fedWatch.sourceName)}
+              </a>
+            ) : (
+              <span className="mt-1 block text-ink">{t(fedWatch.sourceName)}</span>
+            )}
+          </div>
+        </div>
+        <details className="group mt-4 border-t border-line pt-3">
+          <summary className="cursor-pointer list-none text-xs font-semibold text-petrol marker:content-none">
+            {copy.pendingDetail}
+          </summary>
+          <div className="mt-3 grid gap-3 text-sm leading-6 text-muted md:grid-cols-2">
+            <p>{copy.body}</p>
+            <p>{t(fedWatch.reliabilityNote)}</p>
+          </div>
+        </details>
+      </section>
+    );
+  }
 
   return (
     <section className="border border-line bg-panel p-5 md:p-6">
