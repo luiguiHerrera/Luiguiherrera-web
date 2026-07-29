@@ -333,7 +333,6 @@ export type DashboardData = {
   regimeSummary: RegimeSummary;
   sectorRotation: SectorRotationData | null;
   quantRisk: QuantRiskData | null;
-  fedWatch: FedWatchDashboardData | null;
   vix: VixDashboardData | null;
   vixTermStructure: VixTermStructureData | null;
   btcEtfFlows: BtcEtfFlowsDashboardData | null;

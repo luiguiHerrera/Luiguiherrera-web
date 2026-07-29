@@ -1,4 +1,4 @@
-import type { BtcEtfFlowsDashboardData, FedWatchDashboardData, RegimeBias, RegimeSignal, RegimeSummary, SectorRotationData, VixDashboardData } from "@/lib/dashboard/types";
+import type { BtcEtfFlowsDashboardData, RegimeBias, RegimeSignal, RegimeSummary, SectorRotationData, VixDashboardData } from "@/lib/dashboard/types";
 
 type PillarScore = {
   score: number;
@@ -11,11 +11,7 @@ const CURRENT_WEIGHTS = {
   sectorRotation: 0.45,
   vix: 0.4,
   btcEtfFlows: 0.15,
-  fedWatch: 0,
 };
-
-// Future weights after FedWatch licensing/usage confirmation:
-// sectorRotation 35%, VIX 30%, FedWatch 20%, BTC ETF flows 15%.
 
 function clamp(value: number, min: number, max: number) {
   return Math.min(Math.max(value, min), max);
@@ -208,7 +204,7 @@ function biasFromLabel(label: RegimeSummary["current"]): RegimeBias {
 }
 
 function interpretationForLabel(label: RegimeSummary["current"]) {
-  const weighting = "Ponderación actual: rotación sectorial 45%, VIX 40%, BTC ETF flows 15% y FedWatch 0% mientras esté pendiente.";
+  const weighting = "Ponderación actual: rotación sectorial 45%, VIX 40% y BTC ETF flows 15%.";
 
   if (label === "Cautela") {
     return `El mercado muestra deterioro en varias lecturas, pero aún no hay confirmación suficiente para clasificarlo como estrés. ${weighting}`;
@@ -222,12 +218,10 @@ function interpretationForLabel(label: RegimeSummary["current"]) {
 
 export function buildRegimeSummary({
   btcEtfFlows,
-  fedWatch,
   sectorRotation,
   vix,
 }: {
   btcEtfFlows: BtcEtfFlowsDashboardData | null;
-  fedWatch: FedWatchDashboardData | null;
   sectorRotation: SectorRotationData | null;
   vix: VixDashboardData | null;
 }): RegimeSummary {
@@ -247,14 +241,9 @@ export function buildRegimeSummary({
     cautionSignals.push({ label: "Cruce de riesgo", detail: "Volatilidad/rotación o flujos coinciden en lectura de cautela." });
   }
 
-  const fedWatchPending = fedWatch?.fedWatch.dataStatus !== "automated";
-  if (fedWatchPending) {
-    cautionSignals.push({ label: "FedWatch", detail: "FedWatch pendiente de fuente automatizada; no incluido aún en el score." });
-  }
-
   const regimeScore = Math.round(clamp(score, 0, 100));
   const label = labelFromScore(regimeScore, vix, sectorRotation, btcEtfFlows);
-  const confidence = Math.round(clamp(88 - sector.confidencePenalty - volatility.confidencePenalty - btc.confidencePenalty - (fedWatchPending ? 4 : 0), 35, 95));
+  const confidence = Math.round(clamp(88 - sector.confidencePenalty - volatility.confidencePenalty - btc.confidencePenalty, 35, 95));
 
   return {
     current: label,
@@ -265,8 +254,8 @@ export function buildRegimeSummary({
     lastUpdated: "Última actualización disponible por módulo",
     updateFrequency: "Diaria / según disponibilidad de cada fuente",
     dataStatus: sectorRotation && vix && btcEtfFlows ? "automated" : "fallback",
-    reliabilityNote: "Este régimen no anticipa el mercado. Organiza lecturas de volatilidad, rotación y flujos para leer el contexto. FedWatch queda pendiente hasta confirmar acceso automatizado.",
-    dataQualityNote: fedWatchPending ? "FedWatch pendiente de fuente automatizada; no incluido aún en el score." : "FedWatch automatizado disponible, pero aún no se usa como input fuerte hasta confirmar licencia.",
+    reliabilityNote: "Este régimen no anticipa el mercado. Organiza lecturas de volatilidad, rotación y flujos para leer el contexto.",
+    dataQualityNote: "La confianza se ajusta según la disponibilidad y calidad de rotación sectorial, VIX y BTC ETF flows.",
     interpretation: interpretationForLabel(label),
     whatItDoesNotMean: "No es una recomendación de inversión, no elige activos y no anticipa retornos futuros.",
     riskSupportSignals: supportSignals.slice(0, 5),

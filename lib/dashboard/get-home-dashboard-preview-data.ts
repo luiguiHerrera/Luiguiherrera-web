@@ -1,5 +1,4 @@
 import { getBtcEtfFlowsData } from "@/lib/dashboard/adapters/btc-etf-flows";
-import { getFedWatchData } from "@/lib/dashboard/adapters/fedwatch";
 import { getSectorEtfsData } from "@/lib/dashboard/adapters/sector-etfs";
 import { getVixData } from "@/lib/dashboard/adapters/vix";
 import { buildRegimeSummary } from "@/lib/dashboard/regime-scoring";
@@ -13,16 +12,14 @@ export type HomeDashboardPreviewData = {
 };
 
 export async function getHomeDashboardPreviewData(): Promise<HomeDashboardPreviewData> {
-  const [sectorEtfs, btcEtfFlows, fedWatch, vix] = await Promise.all([
+  const [sectorEtfs, btcEtfFlows, vix] = await Promise.all([
     getSectorEtfsData(),
     getBtcEtfFlowsData(),
-    getFedWatchData(),
     getVixData(),
   ]);
 
   const regimeSummary = buildRegimeSummary({
     btcEtfFlows,
-    fedWatch,
     sectorRotation: sectorEtfs.rotation,
     vix,
   });

@@ -72,7 +72,6 @@ const sourceNotes = [
   ["Niveles estadísticos", "El dataset actual es un snapshot estático generado por script y commiteado; no hay evidencia en el repo de un cron de deploy que lo regenere automáticamente."],
   ["Actualización", "Algunos módulos se actualizan server-side con caché; otros requieren regeneración explícita mediante scripts estáticos."],
   ["Fallbacks", "Si una fuente falla, el módulo debe mostrar estado prudente sin presentar datos demo como reales."],
-  ["FedWatch", "Permanece pendiente o con peso cero hasta que la fuente automatizada esté correctamente habilitada."],
 ];
 
 const researchQuestion =

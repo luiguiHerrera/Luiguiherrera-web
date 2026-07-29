@@ -1,4 +1,4 @@
-import { dashboardModules } from "@/lib/dashboard/manual-data";
+import { fedWatchFallbackModule } from "@/lib/dashboard/fedwatch-fallback";
 import type { DashboardModuleData, FedWatchDashboardData, FedWatchData, FedWatchMeeting, FedWatchRateRange } from "@/lib/dashboard/types";
 
 const CME_FEDWATCH_PUBLIC_URL = "https://www.cmegroup.com/markets/interest-rates/cme-fedwatch-tool.html";
@@ -8,11 +8,7 @@ const FALLBACK_MESSAGE = "Datos automáticos de FedWatch no disponibles temporal
 type UnknownRecord = Record<string, unknown>;
 
 function getFallbackModule() {
-  const fallback = dashboardModules.find((module) => module.id === "rates");
-  if (!fallback) {
-    throw new Error("Missing FedWatch fallback module");
-  }
-  return fallback;
+  return fedWatchFallbackModule;
 }
 
 function logFedWatch(message: string, details: Record<string, unknown> = {}) {

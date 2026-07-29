@@ -57,7 +57,7 @@ export default function EnglishStartPage() {
       closingNote="This path does not oversimplify the work. It orders the process: margin of error first, then protection, then context."
       eyebrow="Guided path"
       heroChips={["Diagnostic", "Cash flow", "Debt", "Protection"]}
-      intro="You do not need to start with z-scores, FedWatch, or quantitative models. You can begin with the essentials: understand cash flow, debt, margin of error, and then think about investing."
+      intro="You do not need to start with z-scores or quantitative models. You can begin with the essentials: understand cash flow, debt, margin of error, and then think about investing."
       primaryCta={{ href: "/en/diagnostic?mode=quick", label: "Start diagnostic" }}
       secondaryCta={{ href: "/en/investor", label: "View investor mode" }}
       subtitle="A guided path for organizing diagnostics, budget, debt and protection before investing."

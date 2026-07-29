@@ -57,7 +57,7 @@ export default function EmpezarPage() {
       closingNote="Este camino no busca simplificar en exceso. Busca ordenar el proceso: primero margen de error, luego protección, después contexto."
       eyebrow="Camino guiado"
       heroChips={["Diagnóstico", "Flujo", "Deuda", "Protección"]}
-      intro="No necesitas empezar por z-scores, FedWatch o modelos cuantitativos. Puedes comenzar por lo esencial: entender tu flujo, tus deudas, tu margen de error y después pensar en inversión."
+      intro="No necesitas empezar por z-scores o modelos cuantitativos. Puedes comenzar por lo esencial: entender tu flujo, tus deudas, tu margen de error y después pensar en inversión."
       primaryCta={{ href: "/diagnostico?mode=quick", label: "Empezar diagnóstico" }}
       secondaryCta={{ href: "/inversionista", label: "Ver modo inversionista" }}
       subtitle="Ruta guiada para ordenar diagnóstico, presupuesto, deudas y protección antes de invertir."

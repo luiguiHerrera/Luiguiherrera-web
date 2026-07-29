@@ -335,10 +335,6 @@ export const marketReports: MarketReport[] = [
         name: "Tasas",
         whatLooksAt: "Expectativas de Fed, tasas reales y reacción de duración.",
         whyItMatters: "Afecta múltiplos, tecnología, oro, crédito y apetito por riesgo.",
-        reference: {
-          label: "CME FedWatch",
-          href: "https://www.cmegroup.com/markets/interest-rates/cme-fedwatch-tool.html",
-        },
       },
       {
         key: "tech-flows",

@@ -1,6 +1,5 @@
 import { BtcEtfFlowsModule } from "@/components/dashboard/BtcEtfFlowsModule";
 import { DashboardModule } from "@/components/dashboard/DashboardModule";
-import { FedWatchModule } from "@/components/dashboard/FedWatchModule";
 import { GldFlowPressureModule } from "@/components/dashboard/GldFlowPressureModule";
 import { QuantRiskPanel } from "@/components/dashboard/QuantRiskPanel";
 import { RegimeBadge } from "@/components/dashboard/RegimeBadge";
@@ -157,7 +156,7 @@ export default async function DashboardPage() {
 }
 
 export async function DashboardContent({ locale = "es" }: { locale?: "es" | "en" }) {
-  const [{ btcEtfFlows, crossSignalRadar, dashboardModules, fedWatch, gldFlowPressure, quantRisk, regimeSummary, sectorRotation, vix, vixTermStructure }, weeklyReportData] = await Promise.all([
+  const [{ btcEtfFlows, crossSignalRadar, dashboardModules, gldFlowPressure, quantRisk, regimeSummary, sectorRotation, vix, vixTermStructure }, weeklyReportData] = await Promise.all([
     getDashboardData(),
     buildWeeklyReportData(),
   ]);
@@ -178,7 +177,6 @@ export async function DashboardContent({ locale = "es" }: { locale?: "es" | "en"
         status: "Status",
         updated: "Updated",
         activeSources: "Active sources",
-        fedwatchNote: "FedWatch remains pending and carries no weight in the score while its status is live_pending.",
         supports: "Risk supports",
         cautions: "Caution readings",
         noSupports: "No dominant risk-support readings at this moment.",
@@ -215,7 +213,6 @@ export async function DashboardContent({ locale = "es" }: { locale?: "es" | "en"
         status: "Estado",
         updated: "Actualización",
         activeSources: "Fuentes activas",
-        fedwatchNote: "FedWatch permanece pendiente y no aporta peso al score mientras su estado sea live_pending.",
         supports: "Soportes de riesgo",
         cautions: "Lecturas de cautela",
         noSupports: "Sin lecturas dominantes a favor del riesgo en este momento.",
@@ -292,10 +289,6 @@ export async function DashboardContent({ locale = "es" }: { locale?: "es" | "en"
           </p>
         </div>
 
-        <p className="mt-3 border border-line bg-panelSoft px-3 py-2 text-xs leading-5 text-muted">
-          {copy.fedwatchNote}
-        </p>
-
         <div className="mt-3 grid gap-3 lg:grid-cols-2">
           <div className="border border-brass/30 bg-[#f8f2e7] p-4">
             <h3 className="text-sm font-semibold text-ink">{copy.supports}</h3>
@@ -345,7 +338,6 @@ export async function DashboardContent({ locale = "es" }: { locale?: "es" | "en"
       ]} />
 
       <div className="mt-6 space-y-4 md:mt-8 md:space-y-6">
-        {fedWatch ? <FedWatchModule data={fedWatch} locale={locale} /> : null}
         {sectorRotation ? <SectorRotationChart data={sectorRotation} /> : null}
         <MarketBreadthPanel data={weeklyReportData} locale={locale} />
         {quantRisk ? <QuantRiskPanel data={quantRisk} locale={locale} /> : null}
