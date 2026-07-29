@@ -1,3 +1,4 @@
+import { readFileSync } from "node:fs";
 import {
   absoluteUrl,
   buildSeoMetadata,
@@ -13,6 +14,7 @@ import {
 } from "../lib/reports/market-reports.ts";
 import { bilingualRoutePairs } from "../lib/i18n/language-pairs.ts";
 import { translatePathname } from "../lib/i18n/routes.ts";
+import nextConfig from "../next.config.ts";
 
 const expectedStaticRoutes = [
   "/",
@@ -166,6 +168,113 @@ for (const report of marketReports) {
   }
   if (metadata.alternates?.languages) {
     errors.push(`Spanish-only report received language alternates: ${pathname}`);
+  }
+}
+
+type ExpectedReportHeaders = {
+  canonical?: string;
+  robots?: string;
+};
+
+const expectedReportHeaders = new Map<string, ExpectedReportHeaders>();
+for (const report of marketReports) {
+  const canonicalUrl = absoluteUrl(reportHref(report));
+  const canonicalHeader = `<${canonicalUrl}>; rel="canonical"`;
+
+  if (report.htmlHref) {
+    expectedReportHeaders.set(report.htmlHref, { canonical: canonicalHeader });
+    const downloadableHtml = readFileSync(
+      new URL(`../public${report.htmlHref}`, import.meta.url),
+      "utf8",
+    );
+    if (!downloadableHtml.includes(`<link rel="canonical" href="${canonicalUrl}">`)) {
+      errors.push(`HTML canonical mismatch for ${report.htmlHref}`);
+    }
+  }
+  if (report.pdfHref) {
+    expectedReportHeaders.set(report.pdfHref, { canonical: canonicalHeader });
+  }
+  if (report.markdownHref) {
+    expectedReportHeaders.set(report.markdownHref, { robots: "noindex, follow" });
+  }
+  if (report.calendarHref) {
+    expectedReportHeaders.set(report.calendarHref, { robots: "noindex, follow" });
+  }
+}
+
+const headerRules = nextConfig.headers ? await nextConfig.headers() : [];
+const reportHeaderRules = headerRules.filter(({ source }) => source.startsWith("/reports/"));
+const expectedReportSources = new Set(expectedReportHeaders.keys());
+
+for (const rule of headerRules) {
+  const hasCanonical = rule.headers.some(
+    ({ key, value }) =>
+      key.toLocaleLowerCase() === "link"
+      && value.toLocaleLowerCase().includes('rel="canonical"'),
+  );
+  const hasNoindex = rule.headers.some(
+    ({ key, value }) =>
+      key.toLocaleLowerCase() === "x-robots-tag"
+      && value.toLocaleLowerCase().includes("noindex"),
+  );
+  if (hasCanonical && hasNoindex) {
+    errors.push(`Header rule combines canonical and noindex: ${rule.source}`);
+  }
+}
+
+for (const rule of reportHeaderRules) {
+  if (!expectedReportSources.has(rule.source)) {
+    errors.push(`Unexpected or overly broad report header rule: ${rule.source}`);
+  }
+}
+
+for (const [source, expected] of expectedReportHeaders) {
+  const matchingRules = reportHeaderRules.filter((rule) => rule.source === source);
+  if (matchingRules.length !== 1) {
+    errors.push(`Expected one exact header rule for ${source}, found ${matchingRules.length}`);
+    continue;
+  }
+
+  const configuredHeaders = matchingRules[0].headers;
+  const duplicateKeys = configuredHeaders
+    .map(({ key }) => key.toLocaleLowerCase())
+    .filter((key, index, keys) => keys.indexOf(key) !== index);
+  if (duplicateKeys.length) {
+    errors.push(`Duplicate headers for ${source}: ${[...new Set(duplicateKeys)].join(", ")}`);
+  }
+
+  const link = configuredHeaders.find(({ key }) => key.toLocaleLowerCase() === "link")?.value;
+  const robots = configuredHeaders.find(
+    ({ key }) => key.toLocaleLowerCase() === "x-robots-tag",
+  )?.value;
+
+  if (link !== expected.canonical) {
+    errors.push(
+      `Canonical HTTP header mismatch for ${source}: ${link ?? "missing"} `
+        + `(expected ${expected.canonical ?? "none"})`,
+    );
+  }
+  if (robots !== expected.robots) {
+    errors.push(
+      `X-Robots-Tag mismatch for ${source}: ${robots ?? "missing"} `
+        + `(expected ${expected.robots ?? "none"})`,
+    );
+  }
+  if (link && robots?.toLocaleLowerCase().includes("noindex")) {
+    errors.push(`Resource combines canonical and noindex: ${source}`);
+  }
+  if (pathnames.includes(source)) {
+    errors.push(`Downloadable resource must remain outside indexable sitemap paths: ${source}`);
+  }
+}
+
+for (const source of ["/reports/manifest.json", "/llms.txt"]) {
+  const indexingHeaders = headerRules
+    .filter((rule) => rule.source === source || rule.source === "/:path*")
+    .flatMap((rule) => rule.headers)
+    .filter(({ key }) => ["link", "x-robots-tag"].includes(key.toLocaleLowerCase()));
+  if (indexingHeaders.length) {
+    errors.push(`${source} received report indexing headers`);
   }
 }
 
