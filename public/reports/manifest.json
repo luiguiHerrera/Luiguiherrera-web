@@ -1,0 +1,73 @@
+{
+  "reports": [
+    {
+      "canonicalUrl": "https://www.luiguiherrera.com/informes/primer-informe-julio-2026",
+      "cutoffs": {
+        "automaticData": null,
+        "editorial": null
+      },
+      "formats": {
+        "html": {
+          "mimeType": "text/html; charset=utf-8",
+          "path": "/reports/primer-informe-julio-2026.html",
+          "sha256": "751932790e2408ad5974ed817868bd23619ae41c6e1373dd7a23cd9ca379195e",
+          "size": 29363
+        },
+        "ics": {
+          "mimeType": "text/calendar; charset=utf-8",
+          "path": "/reports/primer-informe-julio-2026-calendar.ics",
+          "sha256": "9058f4f61f339423bd077458bb18d8334ee384dd162d148abae448ec048dd798",
+          "size": 2645
+        },
+        "markdown": {
+          "mimeType": "text/markdown; charset=utf-8",
+          "path": "/reports/primer-informe-julio-2026.md",
+          "sha256": "c9fa1cd7379123b3cf8f79614e3dea5fa56840532d1d0c30007f62cb9a0c5bb1",
+          "size": 18037
+        },
+        "pdf": {
+          "mimeType": "application/pdf",
+          "path": "/reports/primer-informe-julio-2026.pdf",
+          "sha256": "de6c10ce5f4f924a63fdd18cc1617b8ae2b5e319098ceca88311a87af16dddc2",
+          "size": 22798
+        }
+      },
+      "id": "primer-informe-julio-2026",
+      "modifiedAt": "2026-07-06",
+      "publishedAt": "2026-07-06",
+      "sourceHash": "945de465ab011c073f0c2bac31899b49c2d69ed06f4a3991b8e62fe9b35fa3d0"
+    },
+    {
+      "canonicalUrl": "https://www.luiguiherrera.com/informes/segundo-informe-julio-2026",
+      "cutoffs": {
+        "automaticData": "2026-07-18",
+        "editorial": "2026-07-17"
+      },
+      "formats": {
+        "html": {
+          "mimeType": "text/html; charset=utf-8",
+          "path": "/reports/segundo-informe-julio-2026.html",
+          "sha256": "4335b6a4c338be7fa00b13ebb279ae27c5e4139aba5ba13ac816a12cb1c81140",
+          "size": 51135
+        },
+        "markdown": {
+          "mimeType": "text/markdown; charset=utf-8",
+          "path": "/reports/segundo-informe-julio-2026.md",
+          "sha256": "2a756eef362b74d1a78749ef318206f9794580a71e51d13e303c40f3f0be1403",
+          "size": 35553
+        },
+        "pdf": {
+          "mimeType": "application/pdf",
+          "path": "/reports/segundo-informe-julio-2026.pdf",
+          "sha256": "ca106189e0684ec8a355fcf61e5f6502b83215d3422354e084baa3d359cc6ec2",
+          "size": 1442969
+        }
+      },
+      "id": "segundo-informe-julio-2026",
+      "modifiedAt": "2026-07-20",
+      "publishedAt": "2026-07-20",
+      "sourceHash": "6e247dbb18ac996821c1fc83fee0f37960565766f75955bc7cc3bd8330f98880"
+    }
+  ],
+  "schemaVersion": "1.0.0"
+}

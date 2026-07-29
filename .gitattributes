@@ -1,0 +1,2 @@
+public/reports/*.ics -diff
+public/reports/*.pdf -diff

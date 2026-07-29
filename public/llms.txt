@@ -38,11 +38,25 @@ This site is educational and informational. It does not provide personalized inv
 - TD3 research: https://www.luiguiherrera.com/en/research/td3
 
 ## Reports and machine-readable files
-- Market reports: https://www.luiguiherrera.com/informes
-- Second July 2026 report: https://www.luiguiherrera.com/informes/segundo-informe-julio-2026
-- First July 2026 report: https://www.luiguiherrera.com/informes/primer-informe-julio-2026
-- July 2026 report PDF: https://www.luiguiherrera.com/reports/primer-informe-julio-2026.pdf
-- July 2026 report Markdown: https://www.luiguiherrera.com/reports/primer-informe-julio-2026.md
+
+This section is a complementary discovery aid, not an official indexing protocol. The editorial page is the primary representation of each report.
+
+### Primer informe de julio
+- Primary canonical editorial URL: https://www.luiguiherrera.com/informes/primer-informe-julio-2026
+- Description: IA, flujos, concentración y señales de amplitud en la primera lectura mensual.
+- Published: 2026-07-06
+- Markdown auxiliary machine-readable representation: https://www.luiguiherrera.com/reports/primer-informe-julio-2026.md
+- PDF human-readable download: https://www.luiguiherrera.com/reports/primer-informe-julio-2026.pdf
+- Secondary downloadable HTML representation: https://www.luiguiherrera.com/reports/primer-informe-julio-2026.html
+- Structured calendar events: https://www.luiguiherrera.com/reports/primer-informe-julio-2026-calendar.ics
+
+### Segundo informe de julio
+- Primary canonical editorial URL: https://www.luiguiherrera.com/informes/segundo-informe-julio-2026
+- Description: Momentum, resultados, dólar y dispersión interna para seguimiento de activos, factores de mercado y riesgo.
+- Published: 2026-07-20
+- Markdown auxiliary machine-readable representation: https://www.luiguiherrera.com/reports/segundo-informe-julio-2026.md
+- PDF human-readable download: https://www.luiguiherrera.com/reports/segundo-informe-julio-2026.pdf
+- Secondary downloadable HTML representation: https://www.luiguiherrera.com/reports/segundo-informe-julio-2026.html
 
 ## Source and method notes
 - Dashboard methodology: https://www.luiguiherrera.com/metodologia

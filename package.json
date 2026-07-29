@@ -4,7 +4,9 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "reports:generate": "node scripts/generate-market-report.mjs",
+    "reports:generate": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --experimental-strip-types scripts/reports.mts generate",
+    "reports:validate": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --experimental-strip-types scripts/reports.mts validate",
+    "reports:check": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --experimental-strip-types scripts/reports.mts check",
     "build:stat-levels": "node scripts/build-statistical-levels.mjs",
     "build:td3-performance": "node scripts/build-td3-performance.mjs",
     "build": "next build",

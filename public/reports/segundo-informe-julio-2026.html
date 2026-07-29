@@ -3,415 +3,209 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Segundo informe de julio - Luigui Herrera</title>
-  <meta name="description" content="Resultados, rotación, dólar y la prueba real de la inteligencia artificial.">
+  <title>Segundo informe de julio · El índice aguanta, pero por dentro el mercado ya cambió | Luigui Herrera</title>
+  <meta name="description" content="Momentum, resultados, dólar y dispersión interna para seguimiento de activos, factores de mercado y riesgo.">
   <meta name="author" content="Luigui Herrera">
-  <meta name="date" content="20 de julio de 2026">
+  <meta name="date" content="2026-07-20">
   <link rel="canonical" href="https://www.luiguiherrera.com/informes/segundo-informe-julio-2026">
-  <!-- Contenido generado desde market-reports.ts. Versión editorial: 20 de julio de 2026. Slug: segundo-informe-julio-2026. -->
   <style>
-    @page { size: A4; margin: 15mm 14mm 17mm; }
+    @page { size: A4; margin: 16mm; }
     * { box-sizing: border-box; }
-    html { background: #f7f4ec; color: #1f2328; font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif; }
-    body { margin: 0; font-size: 10.2pt; line-height: 1.55; }
-    a { color: #0b3436; text-decoration: none; border-bottom: 1px solid rgba(11, 52, 54, 0.35); }
-    h1, h2, h3, p { margin: 0; }
-    h1 { max-width: 165mm; font-size: clamp(38px, 7vw, 72px); line-height: 0.98; letter-spacing: 0; color: #111817; }
-    h2 { font-size: 25px; line-height: 1.1; letter-spacing: 0; color: #111817; }
-    h3 { font-size: 15px; line-height: 1.25; color: #153638; }
-    .page { position: relative; max-width: 980px; margin: 0 auto; padding: 46px 42px 54px; break-after: page; }
-    .page:last-child { break-after: auto; }
-    .closing-section { margin-top: 36px; border-top: 1px solid #d8d2c6; padding-top: 26px; }
-    .cover { min-height: 100vh; display: grid; grid-template-rows: auto 1fr auto; }
-    .topline { display: flex; justify-content: space-between; gap: 18px; border-bottom: 1px solid #d8d2c6; padding-bottom: 18px; color: #6e7471; font-size: 12px; font-weight: 650; text-transform: uppercase; letter-spacing: 0.08em; }
-    .cover-body { align-self: center; padding: 76px 0; }
-    .kicker, .section-head p, .asset-label, .status { color: #9a7a45; font-size: 11px; font-weight: 750; letter-spacing: 0.11em; text-transform: uppercase; }
-    .subtitle { max-width: 720px; margin-top: 22px; color: #0b3436; font-size: 24px; line-height: 1.25; }
-    .cover-meta, .trace { display: grid; gap: 10px; margin-top: 34px; max-width: 720px; }
-    .cover-meta div, .trace div { display: grid; grid-template-columns: 150px 1fr; gap: 16px; border-top: 1px solid #d8d2c6; padding-top: 9px; }
-    dt { color: #6e7471; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; }
-    dd { margin: 0; color: #1f2328; }
-    .legal, .disclaimer { border-left: 2px solid #9a7a45; padding-left: 16px; color: #555d58; font-size: 12px; line-height: 1.55; }
-    .section-head { margin: 0 0 22px; padding-top: 6px; }
-    .section-head h2 { margin-top: 8px; }
-    .lead { max-width: 830px; color: #414844; font-size: 16px; line-height: 1.72; }
-    .summary-grid, .compact-grid, .scenario-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin: 24px 0 34px; }
-    .transverse { margin: -16px 0 34px; border: 1px solid rgba(154, 122, 69, 0.45); background: rgba(239, 234, 224, 0.46); padding: 18px; break-inside: avoid; }
-    .transverse p { color: #9a7a45; font-size: 11px; font-weight: 750; letter-spacing: 0.11em; text-transform: uppercase; }
-    .transverse h3 { margin-top: 8px; }
-    .transverse span { display: block; margin-top: 8px; color: #555d58; }
-    .small-card, .narrative, .asset-reading, .watch-item { border: 1px solid #d8d2c6; background: rgba(239, 234, 224, 0.68); padding: 18px; break-inside: avoid; }
-    .small-card p, .narrative p, .micro span { display: block; margin-top: 9px; color: #555d58; }
-    .asset-order { display: grid; gap: 13px; }
-    .asset-reading { margin-bottom: 14px; }
-    .asset-columns { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; margin-top: 16px; }
-    .micro { border-left: 1px solid rgba(154, 122, 69, 0.55); padding-left: 11px; }
-    .micro p { color: #9a7a45; font-size: 10px; font-weight: 750; letter-spacing: 0.08em; text-transform: uppercase; }
-    .figures { display: grid; gap: 20px; }
-    figure { margin: 0; padding: 16px; border: 1px solid #d8d2c6; background: #fffdf8; break-inside: avoid; page-break-inside: avoid; }
-    figure img { display: block; width: auto; max-width: 100%; max-height: 560px; margin: 0 auto; object-fit: contain; }
-    figcaption { margin-top: 12px; color: #414844; font-size: 12px; line-height: 1.5; }
-    figcaption span { display: block; margin-top: 5px; color: #6e7471; }
-    .figure-source, .source { margin-top: 7px; color: #6e7471; font-size: 11px; line-height: 1.45; }
-    .scenario-grid { margin-top: 4px; }
-    .watchlist { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
-    .signals-section { break-inside: auto; }
-    .signals-section .section-head { break-after: avoid; page-break-after: avoid; }
-    .watchlist { break-before: avoid; page-break-before: avoid; }
-    .watch-item { padding: 14px; }
-    .watch-item-wide { grid-column: 1 / -1; }
-    .watch-item .micro { margin-top: 10px; }
-    .final { min-height: 0; }
-    .trace { margin-top: 28px; font-size: 12px; }
+    html { background: #f7f4ec; color: #1f2328; font-family: Inter, Arial, sans-serif; }
+    body { margin: 0; font-size: 16px; line-height: 1.65; }
+    main { max-width: 1060px; margin: 0 auto; padding: 42px 28px 64px; }
+    a { color: #0b3436; }
+    h1, h2, h3, h4, p { margin-top: 0; }
+    h1 { max-width: 850px; font-size: clamp(42px, 7vw, 76px); line-height: 1; }
+    h2 { font-size: 30px; border-bottom: 1px solid #d8d2c6; padding-bottom: 12px; }
+    h3 { color: #153638; }
+    section { padding: 40px 0; border-bottom: 1px solid #d8d2c6; }
+    .cover { min-height: 80vh; display: flex; flex-direction: column; justify-content: center; }
+    .eyebrow { color: #9a7a45; font-size: 12px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; }
+    .subtitle, .lead { color: #153638; font-size: 22px; }
+    .metadata { max-width: 820px; margin: 24px 0; }
+    .metadata div { display: grid; grid-template-columns: 210px 1fr; border-top: 1px solid #d8d2c6; padding: 8px 0; }
+    dt { color: #6e7471; font-size: 12px; font-weight: 700; text-transform: uppercase; }
+    dd { margin: 0; }
+    .grid, .columns { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
+    .card, .asset, .watch, .callout { margin: 14px 0; padding: 18px; border: 1px solid #d8d2c6; background: rgba(255,255,255,.62); break-inside: avoid; }
+    .summary, .source { color: #6e7471; font-size: 14px; }
+    .historical-note, .disclaimer { border-left: 3px solid #9a7a45; padding: 12px 16px; background: rgba(239,234,224,.7); }
+    .table-wrap { overflow-x: auto; margin: 14px 0 22px; }
+    table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    th, td { border: 1px solid #d8d2c6; padding: 8px; text-align: left; vertical-align: top; }
+    th { background: #153638; color: white; }
+    figure { margin: 24px 0; padding: 16px; border: 1px solid #d8d2c6; background: white; break-inside: avoid; }
+    figure img { display: block; max-width: 100%; height: auto; margin: auto; }
+    figcaption { margin-top: 10px; }
     @media print {
-      body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-      .page { max-width: none; min-height: auto; padding: 0; }
-      .closing-section { margin-top: 8mm; padding-top: 6mm; }
-      .cover { min-height: 247mm; }
-      h1 { font-size: 46pt; }
-      .subtitle { font-size: 18pt; }
-      .lead { font-size: 11pt; }
-      .small-card, .narrative, .asset-reading, .watch-item { padding: 5mm; }
-      .asset-columns { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 3mm; }
-      .summary-grid, .compact-grid, .scenario-grid { gap: 4mm; margin: 7mm 0 10mm; }
-      .transverse { margin: -5mm 0 9mm; padding: 4mm; }
-      .signals-section { break-before: page; page-break-before: always; }
-      .signals-section .section-head { margin-bottom: 4mm; }
-      .asset-reading { margin-bottom: 4mm; }
-      .figures { gap: 6mm; }
-      figure { padding: 4mm; }
-      figure img { max-height: 128mm; }
-      .watchlist { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 3mm; }
-      .watch-item { font-size: 7.7pt; line-height: 1.38; padding: 3.5mm; }
-      .watch-item h3 { font-size: 10.5pt; }
-      .watch-item .micro { margin-top: 2.5mm; }
-      .watch-item .micro p { font-size: 6.8pt; }
-      .trace { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 2mm 5mm; margin-top: 5mm; font-size: 7.6pt; }
-      .trace div { display: block; border-top: 0; padding-top: 0; }
-      .trace dt { margin-bottom: 1mm; font-size: 6.8pt; }
+      body { font-size: 10pt; print-color-adjust: exact; }
+      main { max-width: none; padding: 0; }
+      .cover { min-height: 248mm; break-after: page; }
+      section { break-before: page; border-bottom: 0; padding: 0; }
+      h1 { font-size: 42pt; }
+      h2 { font-size: 20pt; }
+      .subtitle, .lead { font-size: 13pt; }
+      .card, .asset, .watch, .callout { padding: 4mm; }
     }
-    @media (max-width: 760px) {
-      .page { padding: 32px 18px 42px; }
-      .topline, .cover-meta div, .trace div { grid-template-columns: 1fr; }
-      .summary-grid, .compact-grid, .scenario-grid, .asset-columns, .watchlist { grid-template-columns: 1fr; }
+    @media (max-width: 720px) {
+      main { padding: 28px 16px 48px; }
+      .grid, .columns { grid-template-columns: 1fr; }
+      .metadata div { grid-template-columns: 1fr; gap: 3px; }
     }
   </style>
 </head>
 <body>
   <main>
-    <section class="page cover">
-      <div class="topline">
-        <span>Informes de mercado - Julio 2026</span>
-        <span>Luigui Herrera</span>
-      </div>
-      <div class="cover-body">
-        <p class="kicker">Segundo informe de julio</p>
-        <h1>El índice aguanta, pero por dentro el mercado ya cambió</h1>
-        <p class="subtitle">Resultados, rotación, dólar y la prueba real de la inteligencia artificial.</p>
-        <dl class="cover-meta">
-          <div><dt>Fecha</dt><dd>20 de julio de 2026</dd></div>
-          <div><dt>Autor</dt><dd>Luigui Herrera</dd></div>
-          <div><dt>URL</dt><dd><a href="https://www.luiguiherrera.com/informes/segundo-informe-julio-2026">luiguiherrera.com/informes/segundo-informe-julio-2026</a></dd></div>
-        </dl>
-      </div>
-      <p class="legal">Este documento tiene fines educativos e informativos. No constituye asesoría financiera, recomendación personalizada ni solicitud de compra o venta de activos. Las decisiones de inversión deben considerar objetivos, horizonte, liquidez, tolerancia al riesgo y situación financiera individual. Rentabilidades pasadas no garantizan resultados futuros.</p>
-    </section>
-
-    <section class="page">
-      <header class="section-head"><p>Tesis principal</p><h2>La lectura de fondo</h2></header>
-      <p class="lead">El S&amp;P 500 conserva su estructura de medio y largo plazo, pero debajo del índice ocurrió una rotación violenta. Las acciones individuales se están moviendo mucho más que el mercado agregado: unas suben mientras otras caen, y el índice oculta parte de ese cambio interno.</p>
-      <div class="summary-grid">
-        <article class="small-card"><h3>VOO</h3><p>El índice aguanta, pero ya no explica bien la dispersión interna.</p></article><article class="small-card"><h3>GLD</h3><p>El oro sigue débil en precio y conserva su función estructural.</p></article><article class="small-card"><h3>EWJ</h3><p>Japón mantiene fortaleza relativa, con más peso de tecnología, yen y tasas.</p></article><article class="small-card"><h3>FXI</h3><p>China sigue táctica: valoraciones bajas no bastan sin catalizador.</p></article><article class="small-card"><h3>BTC / ETH</h3><p>Cripto volvió a comportarse como beta alta, no como cobertura defensiva.</p></article><article class="small-card"><h3>Stockpicking</h3><p>La dispersión abre oportunidades, pero también castiga duplicar factores.</p></article>
-      </div>
-      <article class="transverse">
-    <p>Factor transversal</p>
-    <h3>DXY / USD/COP</h3>
-    <span>El dólar conserva apoyo, aunque el posicionamiento largo luce congestionado y USD/COP mantiene factores locales propios.</span>
-  </article>
-      <header class="section-head"><p>Qué pasó</p><h2>Contexto por activo</h2></header>
-      <div class="asset-order">
-        <article class="narrative"><h3>VOO / S&amp;P 500</h3><p>El índice resistió mejor que sus antiguos líderes. La corrección se concentró en momentum, acciones que venían subiendo por inercia y liderazgo reciente, semiconductores e infraestructura de IA, sin una venta indiscriminada. Cerca del 68 % de los componentes sigue sobre su media de 200 días, una señal de amplitud estructural todavía razonable, aunque la amplitud de corto plazo se deterioró especialmente en tecnología. La volatilidad de acciones individuales está cerca de niveles extremos y la correlación del índice se acerca a mínimos históricos: unas acciones suben mientras otras caen. La temporada de resultados será el siguiente catalizador.</p></article><article class="narrative"><h3>GLD</h3><p>El oro acumula más de 30 sesiones por debajo de su media de 200 días, la racha más prolongada desde 2022. No funcionó como refugio durante la corrección del momentum porque dólar firme, rendimientos elevados y posicionamiento sistemático débil presionaron el precio. La debilidad es técnica y real, no una fluctuación aislada. Aun así, su función estructural de diversificación no depende de liderar cada semana. SLV sirve solo como comparación: la plata mezcla sensibilidad monetaria con ciclo industrial. JNUG debe leerse aparte: es un instrumento táctico y apalancado, no una posición estructural en oro.</p></article><article class="narrative"><h3>EWJ</h3><p>Japón mantiene fortaleza relativa entre mercados desarrollados, con liderazgo más concentrado en tecnología, inversión y activos ligados a IA. SoftBank superó a Toyota por capitalización por segunda vez en la serie mostrada; la primera coincidió con la burbuja tecnológica de 2000. La comparación sirve como advertencia de concentración narrativa, no como predicción automática de colapso. A la vez, los rendimientos japoneses se acercan a los de Alemania y Estados Unidos, por lo que normalización monetaria y yen vuelven a importar. EWJ mantiene exposición al yen; HEWJ sirve como referencia para entender cuánto puede cambiar la lectura al cubrir ese riesgo cambiario.</p></article><article class="narrative"><h3>FXI</h3><p>Los gestores institucionales redujeron exposición a mercados emergentes y China todavía no recupera liderazgo sostenido. Las valoraciones bajas no han sido suficientes para atraer un flujo consistente. FXI conserva carácter táctico y contrarian: puede diversificar la concentración estadounidense, pero necesita catalizadores propios para dejar de ser solo una historia barata.</p></article><article class="narrative"><h3>BTC / ETH</h3><p>BTC y ETH se comportaron como activos de beta alta: activos que suelen amplificar el apetito por riesgo, tanto al alza como a la baja. No funcionaron como liquidez ni como cobertura defensiva durante la corrección de tecnología y momentum. La fortaleza del dólar redujo apetito por riesgo y recordó que cripto sigue dependiendo de liquidez, flujos, tasas y DXY. BTC suele conservar mayor fortaleza relativa; ETH puede mostrar más sensibilidad a desapalancamiento y cambios de narrativa.</p></article><article class="narrative"><h3>Stockpicking</h3><p>La dispersión elevada, diferencias grandes entre ganadores y perdedores, favorece selección activa, pero también aumenta la posibilidad de pérdidas grandes por acción. La baja correlación permite que compañías distintas tengan resultados muy diferentes. La corrección del momentum mostró que varias posiciones aparentemente distintas podían depender del mismo factor: semiconductores estadounidenses, Taiwán, Corea, IA y high beta pueden ser una sola apuesta disfrazada de diversificación. La temporada de resultados mueve el foco desde expectativas hacia ventas, márgenes, guidance, la guía que entrega la empresa, retorno del CapEx, inversión de capital, financiación y capacidad de convertir IA en beneficios.</p></article><article class="narrative"><h3>DXY y USD/COP</h3><p>CTAs, estrategias sistemáticas que suelen seguir tendencias, y operadores no reportables mantienen posiciones largas elevadas en dólares. El posicionamiento largo en USD está congestionado, aunque el DXY, índice que resume el dólar frente a una cesta de divisas desarrolladas, conserva apoyo por rendimientos, tasas y demanda defensiva. Después de CPI y PPI aumentó el peso de escenarios de tasas algo más bajas, y la convergencia entre rendimientos de Estados Unidos, Alemania y Japón puede reducir parte de la ventaja relativa del dólar. USD/COP no se mueve uno a uno con DXY: también pesan petróleo, riesgo global, flujos a emergentes, tasas en Colombia, situación fiscal y riesgo político local.</p></article>
-      </div>
-    </section>
-
-    <section class="page">
-      <header class="section-head"><p>Qué esperamos</p><h2>Lectura de seguimiento por activo</h2></header>
-      <article class="asset-reading">
-    <div>
-      <p class="asset-label">VOO / S&amp;P 500 · núcleo</p>
-      <h3>El índice no está roto, pero su calma no refleja bien lo que ocurre debajo.</h3>
+    <header class="cover">
+      <p class="eyebrow">Segundo informe de julio</p>
+      <h1>El índice aguanta, pero por dentro el mercado ya cambió</h1>
+      <p class="subtitle">Resultados, rotación, dólar y la prueba real de la inteligencia artificial.</p>
+      <dl class="metadata"><div><dt>Autor</dt><dd>Luigui Herrera</dd></div><div><dt>Publicación</dt><dd>2026-07-20</dd></div><div><dt>Actualización</dt><dd>2026-07-20</dd></div><div><dt>Corte editorial</dt><dd>2026-07-17</dd></div><div><dt>Corte de datos automáticos</dt><dd>2026-07-18</dd></div><div><dt>URL editorial primaria</dt><dd><a href="https://www.luiguiherrera.com/informes/segundo-informe-julio-2026">https://www.luiguiherrera.com/informes/segundo-informe-julio-2026</a></dd></div></dl>
+      <p class="primary-url">Página editorial primaria: <a href="https://www.luiguiherrera.com/informes/segundo-informe-julio-2026">https://www.luiguiherrera.com/informes/segundo-informe-julio-2026</a></p>
+    </header>
+    <section id="thesis" data-section="thesis"><h2>Tesis principal</h2><p class="lead">El S&amp;P 500 conserva su estructura de medio y largo plazo, pero debajo del índice ocurrió una rotación violenta. Las acciones individuales se están moviendo mucho más que el mercado agregado: unas suben mientras otras caen, y el índice oculta parte de ese cambio interno.</p></section>
+<section id="executive-summary" data-section="executive-summary"><h2>Resumen ejecutivo</h2><div class="grid"><article class="card"><h3>VOO</h3><p>El índice aguanta, pero ya no explica bien la dispersión interna.</p></article><article class="card"><h3>GLD</h3><p>El oro sigue débil en precio y conserva su función estructural.</p></article><article class="card"><h3>EWJ</h3><p>Japón mantiene fortaleza relativa, con más peso de tecnología, yen y tasas.</p></article><article class="card"><h3>FXI</h3><p>China sigue táctica: valoraciones bajas no bastan sin catalizador.</p></article><article class="card"><h3>BTC / ETH</h3><p>Cripto volvió a comportarse como beta alta, no como cobertura defensiva.</p></article><article class="card"><h3>Stockpicking</h3><p>La dispersión abre oportunidades, pero también castiga duplicar factores.</p></article></div><article class="callout"><p class="eyebrow">Factor transversal</p><h3>DXY / USD/COP</h3><p>El dólar conserva apoyo, aunque el posicionamiento largo luce congestionado y USD/COP mantiene factores locales propios.</p></article></section>
+<section id="context-by-asset" data-section="context-by-asset"><h2>Contexto por activo</h2><article class="card"><h3>VOO / S&amp;P 500</h3><p class="summary">El índice resistió, pero la volatilidad interna aumentó.</p><p>El índice resistió mejor que sus antiguos líderes. La corrección se concentró en momentum, acciones que venían subiendo por inercia y liderazgo reciente, semiconductores e infraestructura de IA, sin una venta indiscriminada. Cerca del 68 % de los componentes sigue sobre su media de 200 días, una señal de amplitud estructural todavía razonable, aunque la amplitud de corto plazo se deterioró especialmente en tecnología. La volatilidad de acciones individuales está cerca de niveles extremos y la correlación del índice se acerca a mínimos históricos: unas acciones suben mientras otras caen. La temporada de resultados será el siguiente catalizador.</p></article><article class="card"><h3>GLD</h3><p class="summary">El oro mantiene una debilidad técnica real.</p><p>El oro acumula más de 30 sesiones por debajo de su media de 200 días, la racha más prolongada desde 2022. No funcionó como refugio durante la corrección del momentum porque dólar firme, rendimientos elevados y posicionamiento sistemático débil presionaron el precio. La debilidad es técnica y real, no una fluctuación aislada. Aun así, su función estructural de diversificación no depende de liderar cada semana. SLV sirve solo como comparación: la plata mezcla sensibilidad monetaria con ciclo industrial. JNUG debe leerse aparte: es un instrumento táctico y apalancado, no una posición estructural en oro.</p></article><article class="card"><h3>EWJ</h3><p class="summary">Japón conserva fortaleza relativa con liderazgo más concentrado.</p><p>Japón mantiene fortaleza relativa entre mercados desarrollados, con liderazgo más concentrado en tecnología, inversión y activos ligados a IA. SoftBank superó a Toyota por capitalización por segunda vez en la serie mostrada; la primera coincidió con la burbuja tecnológica de 2000. La comparación sirve como advertencia de concentración narrativa, no como predicción automática de colapso. A la vez, los rendimientos japoneses se acercan a los de Alemania y Estados Unidos, por lo que normalización monetaria y yen vuelven a importar. EWJ mantiene exposición al yen; HEWJ sirve como referencia para entender cuánto puede cambiar la lectura al cubrir ese riesgo cambiario.</p></article><article class="card"><h3>FXI</h3><p class="summary">China sigue táctica y todavía carece de liderazgo propio.</p><p>Los gestores institucionales redujeron exposición a mercados emergentes y China todavía no recupera liderazgo sostenido. Las valoraciones bajas no han sido suficientes para atraer un flujo consistente. FXI conserva carácter táctico y contrarian: puede diversificar la concentración estadounidense, pero necesita catalizadores propios para dejar de ser solo una historia barata.</p></article><article class="card"><h3>BTC / ETH</h3><p class="summary">Cripto volvió a comportarse como beta alta.</p><p>BTC y ETH se comportaron como activos de beta alta: activos que suelen amplificar el apetito por riesgo, tanto al alza como a la baja. No funcionaron como liquidez ni como cobertura defensiva durante la corrección de tecnología y momentum. La fortaleza del dólar redujo apetito por riesgo y recordó que cripto sigue dependiendo de liquidez, flujos, tasas y DXY. BTC suele conservar mayor fortaleza relativa; ETH puede mostrar más sensibilidad a desapalancamiento y cambios de narrativa.</p></article><article class="card"><h3>Stockpicking</h3><p class="summary">La dispersión aumenta oportunidades y también errores de concentración.</p><p>La dispersión elevada, diferencias grandes entre ganadores y perdedores, favorece selección activa, pero también aumenta la posibilidad de pérdidas grandes por acción. La baja correlación permite que compañías distintas tengan resultados muy diferentes. La corrección del momentum mostró que varias posiciones aparentemente distintas podían depender del mismo factor: semiconductores estadounidenses, Taiwán, Corea, IA y high beta pueden ser una sola apuesta disfrazada de diversificación. La temporada de resultados mueve el foco desde expectativas hacia ventas, márgenes, guidance, la guía que entrega la empresa, retorno del CapEx, inversión de capital, financiación y capacidad de convertir IA en beneficios.</p></article><article class="card"><h3>DXY y USD/COP</h3><p class="summary">El dólar conserva apoyo, pero su posicionamiento está congestionado.</p><p>CTAs, estrategias sistemáticas que suelen seguir tendencias, y operadores no reportables mantienen posiciones largas elevadas en dólares. El posicionamiento largo en USD está congestionado, aunque el DXY, índice que resume el dólar frente a una cesta de divisas desarrolladas, conserva apoyo por rendimientos, tasas y demanda defensiva. Después de CPI y PPI aumentó el peso de escenarios de tasas algo más bajas, y la convergencia entre rendimientos de Estados Unidos, Alemania y Japón puede reducir parte de la ventaja relativa del dólar. USD/COP no se mueve uno a uno con DXY: también pesan petróleo, riesgo global, flujos a emergentes, tasas en Colombia, situación fiscal y riesgo político local.</p></article></section>
+<section id="asset-follow-up" data-section="asset-follow-up"><h2>Lectura de seguimiento por activo</h2><article class="asset">
+            <p class="eyebrow">VOO / S&amp;P 500 · núcleo</p>
+            <h3>El índice no está roto, pero su calma no refleja bien lo que ocurre debajo.</h3>
+            <div class="table-wrap"><table><thead><tr><th>Lectura</th><th>Contenido</th></tr></thead><tbody><tr><td>Qué pasó</td><td>El S&amp;P 500 resistió mejor que momentum, semiconductores e infraestructura de IA. La venta no fue indiscriminada: la amplitud estructural sigue razonable, mientras la amplitud corta se deterioró en tecnología.</td></tr><tr><td>Qué cambió</td><td>La correlación baja significa que el índice agrega movimientos opuestos. Puede verse tranquilo aunque haya rotación violenta debajo.</td></tr><tr><td>Qué esperamos</td><td>Escenario base: mercado constructivo, pero más volátil y selectivo. El índice puede continuar firme si los resultados sostienen expectativas y la correlación permanece baja.</td></tr><tr><td>Qué vigilar</td><td>Riesgo principal: decepción en IA, inflación o tasas que eleve correlación y lleve al índice la volatilidad hoy concentrada en acciones. Vigilar amplitud de 20, 50 y 200 días, VIX, correlación implícita, grandes tecnológicas, reacción T+3 a T+5 y ventas sistemáticas.</td></tr><tr><td>Lectura del informe</td><td>VOO conserva función de núcleo. La estabilidad del índice no debe confundirse con ausencia de riesgo interno.</td></tr><tr><td>Antes / contexto</td><td>El liderazgo descansaba en tecnología, IA, momentum y flujos.</td></tr><tr><td>Ahora / cambio</td><td>El índice aguanta, pero los antiguos líderes corrigen y la dispersión sube.</td></tr><tr><td>Próximas señales</td><td>Resultados y amplitud dirán si la rotación es sana o empieza a contaminar al índice.</td></tr></tbody></table></div>
+          </article><article class="asset">
+            <p class="eyebrow">GLD · diversificador</p>
+            <h3>El oro atraviesa una debilidad técnica real.</h3>
+            <div class="table-wrap"><table><thead><tr><th>Lectura</th><th>Contenido</th></tr></thead><tbody><tr><td>Qué pasó</td><td>GLD acumula una racha prolongada bajo la media de 200 días. Dólar firme, rendimientos elevados y posicionamiento sistemático débil explican la presión.</td></tr><tr><td>Qué cambió</td><td>El oro no actuó como refugio durante la corrección del momentum, lo que obliga a separar su lectura estructural de su comportamiento semanal.</td></tr><tr><td>Qué esperamos</td><td>Escenario base: GLD puede seguir débil mientras DXY y rendimientos reales, tasas ajustadas por inflación, permanezcan elevados. Señal positiva: recuperación de la media de 200 días, caída del dólar o moderación de esos rendimientos.</td></tr><tr><td>Qué vigilar</td><td>Riesgo principal: mayor deterioro técnico y continuación de salidas sistemáticas. Vigilar media de 200 días, tasas reales, dólar y flujos de presión en GLD.</td></tr><tr><td>Lectura del informe</td><td>La diversificación de GLD y la operación táctica en JNUG son lecturas distintas. JNUG no debe equipararse con una posición estructural en oro.</td></tr><tr><td>Antes / contexto</td><td>GLD funcionaba como diversificador de régimen.</td></tr><tr><td>Ahora / cambio</td><td>La presión técnica domina y los productos apalancados amplifican movimientos de corto plazo.</td></tr><tr><td>Próximas señales</td><td>La recuperación de la media larga sería la primera mejora seria.</td></tr></tbody></table></div>
+          </article><article class="asset">
+            <p class="eyebrow">EWJ · internacional</p>
+            <h3>Japón sigue fuerte, pero el liderazgo también se está concentrando.</h3>
+            <div class="table-wrap"><table><thead><tr><th>Lectura</th><th>Contenido</th></tr></thead><tbody><tr><td>Qué pasó</td><td>Japón conserva fortaleza relativa entre desarrollados. El liderazgo se inclinó hacia tecnología, inversión y activos ligados a IA, con la comparación SoftBank/Toyota como advertencia de concentración narrativa.</td></tr><tr><td>Qué cambió</td><td>La normalización monetaria y el yen vuelven al centro porque los rendimientos japoneses se acercan a los de Alemania y Estados Unidos.</td></tr><tr><td>Qué esperamos</td><td>Escenario base: sesgo favorable mientras Japón conserve fortaleza relativa. Señal positiva: liderazgo más amplio y yen ordenado.</td></tr><tr><td>Qué vigilar</td><td>Riesgo principal: concentración tecnológica, normalización monetaria, movimientos bruscos del yen y toma de beneficios. EWJ mantiene riesgo yen; la cobertura cambiaria reduce gran parte de esa exposición.</td></tr><tr><td>Lectura del informe</td><td>Distinguir retorno del mercado japonés de retorno cambiario. La exposición sin cobertura y la exposición cubierta no ofrecen el mismo resultado.</td></tr><tr><td>Antes / contexto</td><td>Japón venía liderando dentro de Asia desarrollada.</td></tr><tr><td>Ahora / cambio</td><td>El liderazgo se concentra y el yen vuelve a pesar.</td></tr><tr><td>Próximas señales</td><td>Fortaleza relativa y política monetaria definirán la lectura.</td></tr></tbody></table></div>
+          </article><article class="asset">
+            <p class="eyebrow">FXI · contrarian</p>
+            <h3>China sigue táctica: valoraciones bajas no bastan sin catalizador.</h3>
+            <div class="table-wrap"><table><thead><tr><th>Lectura</th><th>Contenido</th></tr></thead><tbody><tr><td>Qué pasó</td><td>La reducción de exposición a emergentes y la falta de liderazgo sostenido mantienen a FXI en una lectura de rezago.</td></tr><tr><td>Qué cambió</td><td>El mercado sigue exigiendo algo más que múltiplos bajos: necesita flujo, confianza y mejora de beneficios.</td></tr><tr><td>Qué esperamos</td><td>Escenario base: comportamiento táctico y dependiente de catalizadores. Señal positiva: estímulo creíble, recuperación de confianza, mejora de flujos y fortaleza relativa.</td></tr><tr><td>Qué vigilar</td><td>Riesgo principal: permanecer barata sin compradores ni crecimiento de beneficios. Vigilar datos chinos, dólar, flujos a emergentes y respuesta política.</td></tr><tr><td>Lectura del informe</td><td>FXI puede diversificar concentración estadounidense, pero todavía no confirma liderazgo propio.</td></tr><tr><td>Antes / contexto</td><td>El rezago ofrecía una hipótesis contrarian.</td></tr><tr><td>Ahora / cambio</td><td>La falta de flujo consistente mantiene la cautela.</td></tr><tr><td>Próximas señales</td><td>Solo catalizadores claros cambiarían la lectura.</td></tr></tbody></table></div>
+          </article><article class="asset">
+            <p class="eyebrow">BTC / ETH · alta beta</p>
+            <h3>Cripto sigue siendo beta alta, sensible a liquidez, dólar y tecnología.</h3>
+            <div class="table-wrap"><table><thead><tr><th>Lectura</th><th>Contenido</th></tr></thead><tbody><tr><td>Qué pasó</td><td>BTC y ETH no actuaron como liquidez ni como cobertura defensiva. La corrección de tecnología, momentum y la fortaleza del dólar redujeron apetito por riesgo.</td></tr><tr><td>Qué cambió</td><td>La lectura vuelve a separar precio spot de flujos y narrativa. BTC suele conservar mejor fortaleza relativa; ETH puede ser más sensible a desapalancamiento.</td></tr><tr><td>Qué esperamos</td><td>Escenario base: alta sensibilidad a liquidez, dólar y apetito por riesgo. Señal positiva: DXY más débil, tasas más bajas, estabilización de momentum y regreso de flujos.</td></tr><tr><td>Qué vigilar</td><td>Riesgo principal: desapalancamiento, dólar fuerte y ampliación de la corrección tecnológica. Vigilar BTC spot, ETH spot, VIX, DXY y condiciones financieras.</td></tr><tr><td>Lectura del informe</td><td>No tratarlos como activos defensivos. Funcionan mejor como lectura de beta y liquidez.</td></tr><tr><td>Antes / contexto</td><td>La liquidez sostenía el apetito por cripto.</td></tr><tr><td>Ahora / cambio</td><td>La beta frente a tecnología vuelve a quedar visible.</td></tr><tr><td>Próximas señales</td><td>Dólar, tasas y momentum marcarán la estabilidad del rebote.</td></tr></tbody></table></div>
+          </article><article class="asset">
+            <p class="eyebrow">Stockpicking · clave</p>
+            <h3>La selección gana importancia, pero el tamaño de posición gana todavía más.</h3>
+            <div class="table-wrap"><table><thead><tr><th>Lectura</th><th>Contenido</th></tr></thead><tbody><tr><td>Qué pasó</td><td>La dispersión elevada favorece selección activa: compañías diferentes pueden tener resultados muy distintos. También aumenta el riesgo de pérdidas grandes por acción. Tener cinco acciones distintas no sirve de mucho si las cinco dependen de la misma historia.</td></tr><tr><td>Qué cambió</td><td>La corrección del momentum mostró que semiconductores estadounidenses, Taiwán, Corea, IA y high beta pueden representar una sola apuesta. Resultados cambiarán el foco hacia ventas, márgenes, guidance, retorno del CapEx, financiación y capacidad de convertir IA en beneficios.</td></tr><tr><td>Qué esperamos</td><td>Escenario base: más oportunidades individuales y menos utilidad en comprar sectores completos sin filtro. Prioridades: beneficios reales, márgenes defendibles, catalizadores propios, balance, financiación, guidance y tamaño de posición.</td></tr><tr><td>Qué vigilar</td><td>Riesgos: duplicar factores, comprar antes de resultados sin margen, interpretar toda caída como oportunidad, depender de una sola narrativa y perseguir rebotes de momentum antes de confirmación. En IA y semiconductores, mirar capex y márgenes; en financieras, crédito y provisiones; en salud, guidance y regulación; en industriales e infraestructura, backlog y costes; en consumo, demanda y poder de precio.</td></tr><tr><td>Lectura del informe</td><td>El crecimiento agregado esperado de EPS ronda 22 %, pero la acción mediana estaría cerca de 9 %. Infraestructura de IA explicaría cerca del 60 % del crecimiento; MU y NVDA más del 40 %, y los diez mayores contribuyentes cerca del 75 %. La reacción útil suele verse entre T+3 y T+5, no necesariamente el primer día.</td></tr><tr><td>Antes / contexto</td><td>El índice permitía ignorar parte de la dispersión.</td></tr><tr><td>Ahora / cambio</td><td>La dispersión expone dependencias comunes y errores de diversificación.</td></tr><tr><td>Próximas señales</td><td>Resultados separarán narrativas sólidas de momentum vulnerable.</td></tr></tbody></table></div>
+          </article><article class="asset">
+            <p class="eyebrow">DXY y USD/COP · divisa</p>
+            <h3>El dólar sigue diversificando frente al peso, pero el posicionamiento está cargado.</h3>
+            <div class="table-wrap"><table><thead><tr><th>Lectura</th><th>Contenido</th></tr></thead><tbody><tr><td>Qué pasó</td><td>El DXY conserva apoyo por rendimientos, tasas y demanda defensiva. Al mismo tiempo, CTAs y operadores no reportables mantienen largos elevados en dólares, una señal de posicionamiento congestionado.</td></tr><tr><td>Qué cambió</td><td>Tras CPI y PPI aumentó el peso de escenarios de tasas algo más bajas. La convergencia de rendimientos entre Estados Unidos, Alemania y Japón puede reducir parte de la ventaja relativa del dólar.</td></tr><tr><td>Qué esperamos</td><td>Escenario base: dólar todavía firme, aunque con riesgo creciente de reversión por posicionamiento. Puede fortalecerse si la Fed sigue restrictiva, suben rendimientos o cae apetito por riesgo; puede debilitarse si modera inflación, la Fed resulta menos dura, caen rendimientos o se cierran largos.</td></tr><tr><td>Qué vigilar</td><td>Para USD/COP mirar además petróleo, riesgo colombiano, flujos hacia emergentes, política fiscal y monetaria local. DXY y USD/COP no se mueven siempre uno a uno.</td></tr><tr><td>Lectura del informe</td><td>La exposición en dólares sigue diversificando frente al peso colombiano, pero un posicionamiento tan cargado aumenta el riesgo de una corrección rápida del dólar.</td></tr><tr><td>Antes / contexto</td><td>El dólar ofrecía defensa y rendimiento relativo.</td></tr><tr><td>Ahora / cambio</td><td>El apoyo sigue, pero el consenso largo luce más lleno.</td></tr><tr><td>Próximas señales</td><td>Inflación, Fed, petróleo y riesgo local marcarán USD/COP.</td></tr></tbody></table></div>
+          </article></section>
+<section id="historical-snapshot" data-section="historical-snapshot"><h2>Lecturas automáticas al cierre del informe</h2>
+    <p class="historical-note">Snapshot histórico congelado. Datos con corte a <strong>2026-07-18</strong>. Las cifras reproducen el estado publicado y no representan datos vigentes.</p>
+    <h3>Régimen al corte</h3>
+    <div class="table-wrap"><table><thead><tr><th>Campo</th><th>Valor</th></tr></thead><tbody><tr><td>Régimen</td><td>Cautela</td></tr><tr><td>Score</td><td>36/100</td></tr><tr><td>Confianza</td><td>58%</td></tr><tr><td>Sesgo</td><td>cautious</td></tr><tr><td>Interpretación histórica</td><td>El mercado muestra deterioro en varias lecturas, pero aún no hay confirmación suficiente para clasificarlo como estrés. Ponderación actual: rotación sectorial 45%, VIX 40%, BTC ETF flows 15% y FedWatch 0% mientras esté pendiente.</td></tr></tbody></table></div>
+    <div class="columns">
+      <article class="card"><h3>Qué impulsó</h3><ul><li>Rotación: Rotación mixta; no domina una lectura defensiva extrema.</li><li>BTC ETF flows: Flujos mixtos aportan lectura neutral.</li></ul></article>
+      <article class="card"><h3>Qué frenó</h3><ul><li>Rotación: Defensivos lideran mientras growth/cíclicos quedan débiles.</li><li>Volatilidad: Vigilancia: zona de vigilancia.</li><li>Momentum VIX: VIX subiendo rápido; aumenta la cautela.</li></ul></article>
+      <article class="card"><h3>Qué vigilar</h3><ul><li>Curva VIX: Contango moderado.</li><li>Flujos BTC ETF: Flujos mixtos.</li><li>La lectura sugiere una rotación mixta. No implica dirección futura del mercado.</li></ul></article>
     </div>
-    <div class="asset-columns">
-      <div class="micro"><p>Qué pasó</p><span>El S&amp;P 500 resistió mejor que momentum, semiconductores e infraestructura de IA. La venta no fue indiscriminada: la amplitud estructural sigue razonable, mientras la amplitud corta se deterioró en tecnología.</span></div>
-      <div class="micro"><p>Qué cambió</p><span>La correlación baja significa que el índice agrega movimientos opuestos. Puede verse tranquilo aunque haya rotación violenta debajo.</span></div>
-      <div class="micro"><p>Qué esperamos</p><span>Escenario base: mercado constructivo, pero más volátil y selectivo. El índice puede continuar firme si los resultados sostienen expectativas y la correlación permanece baja.</span></div>
-      <div class="micro"><p>Qué vigilar</p><span>Riesgo principal: decepción en IA, inflación o tasas que eleve correlación y lleve al índice la volatilidad hoy concentrada en acciones. Vigilar amplitud de 20, 50 y 200 días, VIX, correlación implícita, grandes tecnológicas, reacción T+3 a T+5 y ventas sistemáticas.</span></div>
-      <div class="micro"><p>Lectura del informe</p><span>VOO conserva función de núcleo. La estabilidad del índice no debe confundirse con ausencia de riesgo interno.</span></div>
-      <div class="micro"><p>Secuencia</p><span>El liderazgo descansaba en tecnología, IA, momentum y flujos. El índice aguanta, pero los antiguos líderes corrigen y la dispersión sube. Resultados y amplitud dirán si la rotación es sana o empieza a contaminar al índice.</span></div>
-    </div>
-  </article><article class="asset-reading">
-    <div>
-      <p class="asset-label">GLD · diversificador</p>
-      <h3>El oro atraviesa una debilidad técnica real.</h3>
-    </div>
-    <div class="asset-columns">
-      <div class="micro"><p>Qué pasó</p><span>GLD acumula una racha prolongada bajo la media de 200 días. Dólar firme, rendimientos elevados y posicionamiento sistemático débil explican la presión.</span></div>
-      <div class="micro"><p>Qué cambió</p><span>El oro no actuó como refugio durante la corrección del momentum, lo que obliga a separar su lectura estructural de su comportamiento semanal.</span></div>
-      <div class="micro"><p>Qué esperamos</p><span>Escenario base: GLD puede seguir débil mientras DXY y rendimientos reales, tasas ajustadas por inflación, permanezcan elevados. Señal positiva: recuperación de la media de 200 días, caída del dólar o moderación de esos rendimientos.</span></div>
-      <div class="micro"><p>Qué vigilar</p><span>Riesgo principal: mayor deterioro técnico y continuación de salidas sistemáticas. Vigilar media de 200 días, tasas reales, dólar y flujos de presión en GLD.</span></div>
-      <div class="micro"><p>Lectura del informe</p><span>La diversificación de GLD y la operación táctica en JNUG son lecturas distintas. JNUG no debe equipararse con una posición estructural en oro.</span></div>
-      <div class="micro"><p>Secuencia</p><span>GLD funcionaba como diversificador de régimen. La presión técnica domina y los productos apalancados amplifican movimientos de corto plazo. La recuperación de la media larga sería la primera mejora seria.</span></div>
-    </div>
-  </article><article class="asset-reading">
-    <div>
-      <p class="asset-label">EWJ · internacional</p>
-      <h3>Japón sigue fuerte, pero el liderazgo también se está concentrando.</h3>
-    </div>
-    <div class="asset-columns">
-      <div class="micro"><p>Qué pasó</p><span>Japón conserva fortaleza relativa entre desarrollados. El liderazgo se inclinó hacia tecnología, inversión y activos ligados a IA, con la comparación SoftBank/Toyota como advertencia de concentración narrativa.</span></div>
-      <div class="micro"><p>Qué cambió</p><span>La normalización monetaria y el yen vuelven al centro porque los rendimientos japoneses se acercan a los de Alemania y Estados Unidos.</span></div>
-      <div class="micro"><p>Qué esperamos</p><span>Escenario base: sesgo favorable mientras Japón conserve fortaleza relativa. Señal positiva: liderazgo más amplio y yen ordenado.</span></div>
-      <div class="micro"><p>Qué vigilar</p><span>Riesgo principal: concentración tecnológica, normalización monetaria, movimientos bruscos del yen y toma de beneficios. EWJ mantiene riesgo yen; la cobertura cambiaria reduce gran parte de esa exposición.</span></div>
-      <div class="micro"><p>Lectura del informe</p><span>Distinguir retorno del mercado japonés de retorno cambiario. La exposición sin cobertura y la exposición cubierta no ofrecen el mismo resultado.</span></div>
-      <div class="micro"><p>Secuencia</p><span>Japón venía liderando dentro de Asia desarrollada. El liderazgo se concentra y el yen vuelve a pesar. Fortaleza relativa y política monetaria definirán la lectura.</span></div>
-    </div>
-  </article><article class="asset-reading">
-    <div>
-      <p class="asset-label">FXI · contrarian</p>
-      <h3>China sigue táctica: valoraciones bajas no bastan sin catalizador.</h3>
-    </div>
-    <div class="asset-columns">
-      <div class="micro"><p>Qué pasó</p><span>La reducción de exposición a emergentes y la falta de liderazgo sostenido mantienen a FXI en una lectura de rezago.</span></div>
-      <div class="micro"><p>Qué cambió</p><span>El mercado sigue exigiendo algo más que múltiplos bajos: necesita flujo, confianza y mejora de beneficios.</span></div>
-      <div class="micro"><p>Qué esperamos</p><span>Escenario base: comportamiento táctico y dependiente de catalizadores. Señal positiva: estímulo creíble, recuperación de confianza, mejora de flujos y fortaleza relativa.</span></div>
-      <div class="micro"><p>Qué vigilar</p><span>Riesgo principal: permanecer barata sin compradores ni crecimiento de beneficios. Vigilar datos chinos, dólar, flujos a emergentes y respuesta política.</span></div>
-      <div class="micro"><p>Lectura del informe</p><span>FXI puede diversificar concentración estadounidense, pero todavía no confirma liderazgo propio.</span></div>
-      <div class="micro"><p>Secuencia</p><span>El rezago ofrecía una hipótesis contrarian. La falta de flujo consistente mantiene la cautela. Solo catalizadores claros cambiarían la lectura.</span></div>
-    </div>
-  </article><article class="asset-reading">
-    <div>
-      <p class="asset-label">BTC / ETH · alta beta</p>
-      <h3>Cripto sigue siendo beta alta, sensible a liquidez, dólar y tecnología.</h3>
-    </div>
-    <div class="asset-columns">
-      <div class="micro"><p>Qué pasó</p><span>BTC y ETH no actuaron como liquidez ni como cobertura defensiva. La corrección de tecnología, momentum y la fortaleza del dólar redujeron apetito por riesgo.</span></div>
-      <div class="micro"><p>Qué cambió</p><span>La lectura vuelve a separar precio spot de flujos y narrativa. BTC suele conservar mejor fortaleza relativa; ETH puede ser más sensible a desapalancamiento.</span></div>
-      <div class="micro"><p>Qué esperamos</p><span>Escenario base: alta sensibilidad a liquidez, dólar y apetito por riesgo. Señal positiva: DXY más débil, tasas más bajas, estabilización de momentum y regreso de flujos.</span></div>
-      <div class="micro"><p>Qué vigilar</p><span>Riesgo principal: desapalancamiento, dólar fuerte y ampliación de la corrección tecnológica. Vigilar BTC spot, ETH spot, VIX, DXY y condiciones financieras.</span></div>
-      <div class="micro"><p>Lectura del informe</p><span>No tratarlos como activos defensivos. Funcionan mejor como lectura de beta y liquidez.</span></div>
-      <div class="micro"><p>Secuencia</p><span>La liquidez sostenía el apetito por cripto. La beta frente a tecnología vuelve a quedar visible. Dólar, tasas y momentum marcarán la estabilidad del rebote.</span></div>
-    </div>
-  </article><article class="asset-reading">
-    <div>
-      <p class="asset-label">Stockpicking · clave</p>
-      <h3>La selección gana importancia, pero el tamaño de posición gana todavía más.</h3>
-    </div>
-    <div class="asset-columns">
-      <div class="micro"><p>Qué pasó</p><span>La dispersión elevada favorece selección activa: compañías diferentes pueden tener resultados muy distintos. También aumenta el riesgo de pérdidas grandes por acción. Tener cinco acciones distintas no sirve de mucho si las cinco dependen de la misma historia.</span></div>
-      <div class="micro"><p>Qué cambió</p><span>La corrección del momentum mostró que semiconductores estadounidenses, Taiwán, Corea, IA y high beta pueden representar una sola apuesta. Resultados cambiarán el foco hacia ventas, márgenes, guidance, retorno del CapEx, financiación y capacidad de convertir IA en beneficios.</span></div>
-      <div class="micro"><p>Qué esperamos</p><span>Escenario base: más oportunidades individuales y menos utilidad en comprar sectores completos sin filtro. Prioridades: beneficios reales, márgenes defendibles, catalizadores propios, balance, financiación, guidance y tamaño de posición.</span></div>
-      <div class="micro"><p>Qué vigilar</p><span>Riesgos: duplicar factores, comprar antes de resultados sin margen, interpretar toda caída como oportunidad, depender de una sola narrativa y perseguir rebotes de momentum antes de confirmación. En IA y semiconductores, mirar capex y márgenes; en financieras, crédito y provisiones; en salud, guidance y regulación; en industriales e infraestructura, backlog y costes; en consumo, demanda y poder de precio.</span></div>
-      <div class="micro"><p>Lectura del informe</p><span>El crecimiento agregado esperado de EPS ronda 22 %, pero la acción mediana estaría cerca de 9 %. Infraestructura de IA explicaría cerca del 60 % del crecimiento; MU y NVDA más del 40 %, y los diez mayores contribuyentes cerca del 75 %. La reacción útil suele verse entre T+3 y T+5, no necesariamente el primer día.</span></div>
-      <div class="micro"><p>Secuencia</p><span>El índice permitía ignorar parte de la dispersión. La dispersión expone dependencias comunes y errores de diversificación. Resultados separarán narrativas sólidas de momentum vulnerable.</span></div>
-    </div>
-  </article><article class="asset-reading">
-    <div>
-      <p class="asset-label">DXY y USD/COP · divisa</p>
-      <h3>El dólar sigue diversificando frente al peso, pero el posicionamiento está cargado.</h3>
-    </div>
-    <div class="asset-columns">
-      <div class="micro"><p>Qué pasó</p><span>El DXY conserva apoyo por rendimientos, tasas y demanda defensiva. Al mismo tiempo, CTAs y operadores no reportables mantienen largos elevados en dólares, una señal de posicionamiento congestionado.</span></div>
-      <div class="micro"><p>Qué cambió</p><span>Tras CPI y PPI aumentó el peso de escenarios de tasas algo más bajas. La convergencia de rendimientos entre Estados Unidos, Alemania y Japón puede reducir parte de la ventaja relativa del dólar.</span></div>
-      <div class="micro"><p>Qué esperamos</p><span>Escenario base: dólar todavía firme, aunque con riesgo creciente de reversión por posicionamiento. Puede fortalecerse si la Fed sigue restrictiva, suben rendimientos o cae apetito por riesgo; puede debilitarse si modera inflación, la Fed resulta menos dura, caen rendimientos o se cierran largos.</span></div>
-      <div class="micro"><p>Qué vigilar</p><span>Para USD/COP mirar además petróleo, riesgo colombiano, flujos hacia emergentes, política fiscal y monetaria local. DXY y USD/COP no se mueven siempre uno a uno.</span></div>
-      <div class="micro"><p>Lectura del informe</p><span>La exposición en dólares sigue diversificando frente al peso colombiano, pero un posicionamiento tan cargado aumenta el riesgo de una corrección rápida del dólar.</span></div>
-      <div class="micro"><p>Secuencia</p><span>El dólar ofrecía defensa y rendimiento relativo. El apoyo sigue, pero el consenso largo luce más lleno. Inflación, Fed, petróleo y riesgo local marcarán USD/COP.</span></div>
-    </div>
-  </article>
-    </section>
+    <h3>Índices principales vía ETF</h3>
+    <div class="table-wrap"><table><thead><tr><th>Ticker</th><th>Retorno 1W</th><th>Media larga</th><th>Distancia a máximos</th></tr></thead><tbody><tr><td>SPY</td><td>-0.8%</td><td>+7.2%</td><td>-1.9%</td></tr><tr><td>QQQ</td><td>-2.3%</td><td>+8.7%</td><td>-6.7%</td></tr><tr><td>DIA</td><td>-0.7%</td><td>+7.4%</td><td>-1.7%</td></tr><tr><td>IWM</td><td>+0.2%</td><td>+12.0%</td><td>-2.1%</td></tr></tbody></table></div>
+    <h3>Rotación sectorial</h3>
+    <div class="table-wrap"><table><thead><tr><th>Campo</th><th>Valor</th></tr></thead><tbody><tr><td>Sectores positivos</td><td>5 / 11</td></tr><tr><td>Sectores negativos</td><td>6</td></tr><tr><td>Dispersión 1W</td><td>+2.6%</td></tr><tr><td>Lectura al publicar</td><td>La lectura sugiere una rotación mixta. No implica dirección futura del mercado.</td></tr></tbody></table></div>
+    <div class="table-wrap"><table><thead><tr><th>Grupo</th><th>Ticker</th><th>Nombre</th><th>Retorno 1W</th></tr></thead><tbody><tr><td>Líder</td><td>XLU</td><td>Utilities</td><td>+1.2%</td></tr><tr><td>Líder</td><td>XLP</td><td>Consumo básico/defensivo</td><td>+0.9%</td></tr><tr><td>Líder</td><td>XLV</td><td>Salud</td><td>+0.7%</td></tr><tr><td>Rezagado</td><td>XLK</td><td>Tecnología</td><td>-1.4%</td></tr><tr><td>Rezagado</td><td>XLY</td><td>Consumo discrecional</td><td>-0.8%</td></tr><tr><td>Rezagado</td><td>XLE</td><td>Energía</td><td>-0.5%</td></tr></tbody></table></div>
+    <h3>VIX - Volatilidad al corte</h3>
+    <div class="table-wrap"><table><thead><tr><th>Campo</th><th>Valor</th></tr></thead><tbody><tr><td>Nivel al corte</td><td>18.8</td></tr><tr><td>Cambio 1D</td><td>+2.0</td></tr><tr><td>Estado</td><td>Atención / Vigilancia</td></tr><tr><td>Momentum</td><td>Subiendo rápido</td></tr><tr><td>Curva</td><td>Contango moderado</td></tr><tr><td>Lectura histórica</td><td>Los contratos más largos cotizan por encima del vencimiento cercano. Es una estructura habitual en entornos de volatilidad más ordenada.</td></tr></tbody></table></div>
+    <h3>Flujos netos de ETFs de BTC al corte</h3>
+    <div class="table-wrap"><table><thead><tr><th>Campo</th><th>Valor</th></tr></thead><tbody><tr><td>Último día</td><td>+124 M USD</td></tr><tr><td>Rolling 5D</td><td>-228 M USD</td></tr><tr><td>Racha</td><td>Racha de entradas</td></tr><tr><td>Lectura al publicar</td><td>No hay una dirección dominante clara en los flujos recientes.</td></tr></tbody></table></div>
+    <h3>Proxy histórico de presión de flujos en GLD</h3>
+    <div class="table-wrap"><table><thead><tr><th>Campo</th><th>Valor</th></tr></thead><tbody><tr><td>Fecha del dato</td><td>2026-07-17</td></tr><tr><td>Proxy al corte</td><td>Salida neta probable</td></tr><tr><td>Cambio 5D en participaciones</td><td>-0.34%</td></tr><tr><td>Resumen</td><td>GLD muestra salida neta probable a 5 sesiones, usando cambios en participaciones como proxy de presión de flujos.</td></tr><tr><td>Limitación de fuente</td><td>Cálculo propio con datos diarios de NAV, participaciones y activos netos publicados por State Street. No representa flujos oficiales reportados por el fondo.</td></tr></tbody></table></div>
+    <h3>Lecturas automáticas de activos al corte</h3>
+    <div class="table-wrap"><table><thead><tr><th>Activo</th><th>Percentil</th><th>Z-score</th><th>Media larga</th><th>Último cierre</th></tr></thead><tbody><tr><td>SPY (SPY)</td><td>48.9</td><td>0.31</td><td>+7.2%</td><td>743.29</td></tr><tr><td>GLD (GLD)</td><td>0.7</td><td>-1.99</td><td>-10.4%</td><td>368.41</td></tr><tr><td>EWJ (EWJ)</td><td>48.9</td><td>0.19</td><td>+5.7%</td><td>90.49</td></tr><tr><td>FXI (FXI)</td><td>22.1</td><td>-0.80</td><td>-8.2%</td><td>34.13</td></tr><tr><td>BTC (BTC/USDT)</td><td>18.4</td><td>-0.97</td><td>-12.6%</td><td>63941</td></tr><tr><td>ETH (ETH/USDT)</td><td>31.1</td><td>-0.63</td><td>-15.8%</td><td>1844.21</td></tr></tbody></table></div></section>
+<section id="figures" data-section="figures"><h2>Figuras</h2><figure>
+            <img src="../images/reports/segundo-informe-julio-2026/02-volatilidad-gs.png" alt="Comparación histórica de la caída y volatilidad del factor High Beta Momentum frente al S&amp;P 500." width="662" height="570">
+            <figcaption><strong>VOO / S&amp;P 500.</strong> El daño dentro de momentum ha sido mucho mayor que el movimiento observado en el índice.</figcaption>
+            <p class="source">Fuente: Goldman Sachs FICC &amp; Equities y Bloomberg, julio de 2026.</p>
+          </figure><figure>
+            <img src="../images/reports/segundo-informe-julio-2026/04-amplitud-sp500-medias-20-50-200.png" alt="Porcentaje de componentes del S&amp;P 500 por encima de sus medias móviles de 20, 50 y 200 días." width="900" height="811">
+            <figcaption><strong>VOO / S&amp;P 500.</strong> La amplitud de corto plazo se debilitó, pero la estructura de medio y largo plazo todavía no muestra una ruptura general.</figcaption>
+            <p class="source">Fuente: StockCharts, datos al 17 de julio de 2026.</p>
+          </figure><figure>
+            <img src="../images/reports/segundo-informe-julio-2026/06-oro-bajo-media-200-dias.png" alt="Precio del oro por debajo de su media móvil de 200 días durante julio de 2026." width="1254" height="828">
+            <figcaption><strong>GLD.</strong> El oro atraviesa su periodo más prolongado bajo la media de 200 días desde 2022.</figcaption>
+            <p class="source">Fuente: Barchart, julio de 2026.</p>
+          </figure><figure>
+            <img src="../images/reports/segundo-informe-julio-2026/08-softbank-vs-toyota-japon.png" alt="Comparación histórica entre la capitalización de SoftBank y Toyota junto con el Nasdaq." width="564" height="297">
+            <figcaption><strong>EWJ.</strong> SoftBank vuelve a superar a Toyota, una señal de cuánto peso ha ganado la narrativa tecnológica dentro de Japón.</figcaption>
+            <p class="source">Fuente: BCA Research, julio de 2026. Esta comparación no implica que el desenlace deba repetir el episodio del año 2000.</p>
+          </figure><figure>
+            <img src="../images/reports/segundo-informe-julio-2026/01-momentum-caida.png" alt="Retroceso histórico del factor High Beta Momentum durante julio de 2026." width="656" height="548">
+            <figcaption><strong>Stockpicking.</strong> La corrección fue extrema, pero los episodios históricos no garantizan que el suelo ya esté formado.</figcaption>
+            <p class="source">Fuente: Goldman Sachs FICC &amp; Equities y Bloomberg, julio de 2026.</p>
+          </figure><figure>
+            <img src="../images/reports/segundo-informe-julio-2026/03-concentracion-crecimiento-eps-sp500.png" alt="Crecimiento esperado del EPS del S&amp;P 500 agregado, excluyendo grandes contribuyentes y para la acción mediana." width="691" height="546">
+            <figcaption><strong>Stockpicking.</strong> El crecimiento del índice está mucho más concentrado de lo que sugiere el titular agregado.</figcaption>
+            <p class="source">Fuente: Goldman Sachs Global Investment Research y FactSet, julio de 2026.</p>
+          </figure><figure>
+            <img src="../images/reports/segundo-informe-julio-2026/07-posicionamiento-especulativo-dolar.png" alt="Posición neta de operadores no reportables en futuros del dólar frente al Dollar Index." width="777" height="447">
+            <figcaption><strong>DXY y USD/COP.</strong> El dólar conserva apoyo, pero la posición larga ya está congestionada.</figcaption>
+            <p class="source">Fuente: CFTC y McClellan Financial Publications, julio de 2026.</p>
+          </figure><figure>
+            <img src="../images/reports/segundo-informe-julio-2026/09-convergencia-rendimientos-10-anos.png" alt="Rendimientos de bonos gubernamentales a diez años de Estados Unidos, Alemania y Japón entre 1990 y 2026." width="459" height="286">
+            <figcaption><strong>DXY y USD/COP.</strong> La diferencia entre los principales rendimientos globales se está reduciendo.</figcaption>
+            <p class="source">Fuente: BlackRock Investment Institute y LSEG Datastream, julio de 2026.</p>
+          </figure></section>
+<section id="calendar-and-scenarios" data-section="calendar-and-scenarios"><h2>Calendario y escenarios</h2><h3>Eventos y ventanas editoriales</h3><article class="card"><p class="eyebrow">Temporada de resultados</p><h4>Guía de empresas, márgenes y retorno del CapEx</h4><p>El mercado pasa de premiar expectativas a exigir evidencia de ventas, márgenes y beneficios.</p></article><article class="card"><p class="eyebrow">Ventana posterior a resultados</p><h4>Reacción T+3 a T+5</h4><p>El primer día puede reflejar posicionamiento; la lectura más útil suele aparecer cuando el mercado digiere la guía de la empresa y las revisiones.</p></article><article class="card"><p class="eyebrow">Durante julio</p><h4>DXY, tasas y USD/COP</h4><p>Dólar, rendimientos y riesgo local pueden cambiar la lectura de activos internacionales y liquidez en USD.</p></article><h3>Escenarios</h3><div class="grid"><article class="card"><h4>Base</h4><p>Rotación y volatilidad interna, pero sin ruptura general del índice. El mercado sigue constructivo si resultados y amplitud estructural sostienen la lectura.</p></article><article class="card"><h4>Positivo</h4><p>Resultados validan el CapEx de IA, momentum se estabiliza, DXY y rendimientos se moderan, y la subida se ensancha más allá de pocos líderes.</p></article><article class="card"><h4>Adverso</h4><p>Resultados decepcionan, sube la correlación, venden los sistemáticos y el dólar se fortalece frente a monedas emergentes.</p></article></div></section>
+<section id="watchlist" data-section="watchlist"><h2>Señales a vigilar</h2><article class="watch">
+            <h3>VIX</h3>
+            <div class="table-wrap"><table><thead><tr><th>Campo</th><th>Contenido</th></tr></thead><tbody><tr><td>Estado</td><td>Contenido</td></tr><tr><td>Qué mira</td><td>Nivel spot, cambio reciente y estructura de futuros.</td></tr><tr><td>Por qué importa</td><td>Un VIX tranquilo puede convivir con mucha volatilidad individual; una subida rápida cambia la lectura de riesgo agregado.</td></tr><tr><td>Lectura al publicar</td><td>La volatilidad agregada sigue contenida frente al daño observado dentro de momentum y high beta. Esa divergencia mantiene al índice estable, pero deja menos margen si la presión se extiende.</td></tr><tr><td>Qué cambiaría</td><td>Una subida rápida del VIX junto con deterioro de amplitud y aumento de correlación indicaría que la volatilidad interna empieza a trasladarse al índice.</td></tr><tr><td>Fecha</td><td>20 de julio de 2026</td></tr><tr><td>Fuente</td><td>Dashboard interno, FRED VIXCLS y estructura VIX.</td></tr></tbody></table></div>
+            <p><a href="https://www.luiguiherrera.com/dashboard">Ver Dashboard</a></p>
+          </article><article class="watch">
+            <h3>Correlación implícita</h3>
+            <div class="table-wrap"><table><thead><tr><th>Campo</th><th>Contenido</th></tr></thead><tbody><tr><td>Estado</td><td>Baja</td></tr><tr><td>Qué mira</td><td>Si las acciones empiezan a moverse juntas o siguen compensándose entre sí dentro del índice.</td></tr><tr><td>Por qué importa</td><td>Cuando sube la correlación, la volatilidad que estaba en acciones individuales puede trasladarse al índice.</td></tr><tr><td>Lectura al publicar</td><td>La correlación implícita continúa baja: la volatilidad está concentrada en acciones y factores, mientras el índice permanece relativamente estable. Esa dispersión favorece el stockpicking, pero también deja al índice expuesto si las acciones comienzan a caer juntas.</td></tr><tr><td>Qué cambiaría</td><td>Un aumento sostenido de la correlación acompañado por deterioro de la amplitud indicaría que la volatilidad está dejando de ser un problema interno y empieza a trasladarse al índice.</td></tr><tr><td>Fecha</td><td>20 de julio de 2026</td></tr><tr><td>Fuente</td><td>Goldman Sachs FICC &amp; Equities y Bloomberg.</td></tr></tbody></table></div>
 
-    <section class="page">
-      <header class="section-head"><p>Figuras</p><h2>Evidencia visual seleccionada</h2></header>
-      <div class="figures">
-        <figure>
-    <img src="../images/reports/segundo-informe-julio-2026/02-volatilidad-gs.png" alt="Comparación histórica de la caída y volatilidad del factor High Beta Momentum frente al S&amp;P 500." width="662" height="570">
-    <figcaption><strong>VOO / S&amp;P 500.</strong> El daño dentro de momentum ha sido mucho mayor que el movimiento observado en el índice. </figcaption>
-    <p class="figure-source">Fuente: Goldman Sachs FICC &amp; Equities y Bloomberg, julio de 2026.</p>
-  </figure><figure>
-    <img src="../images/reports/segundo-informe-julio-2026/04-amplitud-sp500-medias-20-50-200.png" alt="Porcentaje de componentes del S&amp;P 500 por encima de sus medias móviles de 20, 50 y 200 días." width="900" height="811">
-    <figcaption><strong>VOO / S&amp;P 500.</strong> La amplitud de corto plazo se debilitó, pero la estructura de medio y largo plazo todavía no muestra una ruptura general. </figcaption>
-    <p class="figure-source">Fuente: StockCharts, datos al 17 de julio de 2026.</p>
-  </figure><figure>
-    <img src="../images/reports/segundo-informe-julio-2026/06-oro-bajo-media-200-dias.png" alt="Precio del oro por debajo de su media móvil de 200 días durante julio de 2026." width="1254" height="828">
-    <figcaption><strong>GLD.</strong> El oro atraviesa su periodo más prolongado bajo la media de 200 días desde 2022. </figcaption>
-    <p class="figure-source">Fuente: Barchart, julio de 2026.</p>
-  </figure><figure>
-    <img src="../images/reports/segundo-informe-julio-2026/08-softbank-vs-toyota-japon.png" alt="Comparación histórica entre la capitalización de SoftBank y Toyota junto con el Nasdaq." width="564" height="297">
-    <figcaption><strong>EWJ.</strong> SoftBank vuelve a superar a Toyota, una señal de cuánto peso ha ganado la narrativa tecnológica dentro de Japón. <span>Esta comparación no implica que el desenlace deba repetir el episodio del año 2000.</span></figcaption>
-    <p class="figure-source">Fuente: BCA Research, julio de 2026.</p>
-  </figure><figure>
-    <img src="../images/reports/segundo-informe-julio-2026/01-momentum-caida.png" alt="Retroceso histórico del factor High Beta Momentum durante julio de 2026." width="656" height="548">
-    <figcaption><strong>Stockpicking.</strong> La corrección fue extrema, pero los episodios históricos no garantizan que el suelo ya esté formado. </figcaption>
-    <p class="figure-source">Fuente: Goldman Sachs FICC &amp; Equities y Bloomberg, julio de 2026.</p>
-  </figure><figure>
-    <img src="../images/reports/segundo-informe-julio-2026/03-concentracion-crecimiento-eps-sp500.png" alt="Crecimiento esperado del EPS del S&amp;P 500 agregado, excluyendo grandes contribuyentes y para la acción mediana." width="691" height="546">
-    <figcaption><strong>Stockpicking.</strong> El crecimiento del índice está mucho más concentrado de lo que sugiere el titular agregado. </figcaption>
-    <p class="figure-source">Fuente: Goldman Sachs Global Investment Research y FactSet, julio de 2026.</p>
-  </figure><figure>
-    <img src="../images/reports/segundo-informe-julio-2026/07-posicionamiento-especulativo-dolar.png" alt="Posición neta de operadores no reportables en futuros del dólar frente al Dollar Index." width="777" height="447">
-    <figcaption><strong>DXY y USD/COP.</strong> El dólar conserva apoyo, pero la posición larga ya está congestionada. </figcaption>
-    <p class="figure-source">Fuente: CFTC y McClellan Financial Publications, julio de 2026.</p>
-  </figure><figure>
-    <img src="../images/reports/segundo-informe-julio-2026/09-convergencia-rendimientos-10-anos.png" alt="Rendimientos de bonos gubernamentales a diez años de Estados Unidos, Alemania y Japón entre 1990 y 2026." width="459" height="286">
-    <figcaption><strong>DXY y USD/COP.</strong> La diferencia entre los principales rendimientos globales se está reduciendo. </figcaption>
-    <p class="figure-source">Fuente: BlackRock Investment Institute y LSEG Datastream, julio de 2026.</p>
-  </figure>
-      </div>
-    </section>
+          </article><article class="watch">
+            <h3>Amplitud 20/50/200 días</h3>
+            <div class="table-wrap"><table><thead><tr><th>Campo</th><th>Contenido</th></tr></thead><tbody><tr><td>Estado</td><td>Mixta</td></tr><tr><td>Qué mira</td><td>Participación de corto, medio y largo plazo dentro del mercado.</td></tr><tr><td>Por qué importa</td><td>La amplitud ayuda a distinguir rotación sana de deterioro estructural.</td></tr><tr><td>Lectura al publicar</td><td>La amplitud de corto plazo se debilitó, especialmente en tecnología, pero cerca de dos tercios del S&amp;P 500 siguen sobre su media de 200 días. La lectura todavía parece más rotación interna que ruptura general.</td></tr><tr><td>Qué cambiaría</td><td>Un deterioro simultáneo en medias de 20, 50 y 200 días, junto con sectores defensivos liderando por varias semanas, convertiría la señal en una alerta más amplia.</td></tr><tr><td>Fecha</td><td>20 de julio de 2026</td></tr><tr><td>Fuente</td><td>StockCharts y dashboard interno de amplitud.</td></tr></tbody></table></div>
+            <p><a href="https://www.luiguiherrera.com/dashboard">Ver detalle de amplitud</a></p>
+          </article><article class="watch">
+            <h3>Growth frente a Value</h3>
+            <div class="table-wrap"><table><thead><tr><th>Campo</th><th>Contenido</th></tr></thead><tbody><tr><td>Estado</td><td>Rotación parcial</td></tr><tr><td>Qué mira</td><td>Rotación entre crecimiento, valor y defensivos.</td></tr><tr><td>Por qué importa</td><td>Muestra si la corrección es específica de momentum o un cambio más amplio de apetito por riesgo.</td></tr><tr><td>Lectura al publicar</td><td>La corrección ha castigado especialmente a momentum y high beta, pero todavía no existe una rotación limpia y persistente hacia Value. La amplitud de medio plazo continúa razonable, por lo que el movimiento se parece más a una limpieza de factores que a un cambio completo de régimen.</td></tr><tr><td>Qué cambiaría</td><td>Varias semanas de fortaleza relativa de Value y defensivos, junto con revisiones negativas de beneficios en Growth y un deterioro más amplio de la participación del mercado.</td></tr><tr><td>Fecha</td><td>20 de julio de 2026</td></tr><tr><td>Fuente</td><td>Goldman Sachs, BofA y datos de amplitud del S&amp;P 500.</td></tr></tbody></table></div>
 
-    <section class="page">
-      <header class="section-head"><p>Calendario y escenarios</p><h2>Fechas y rutas probables</h2></header>
-      <div class="compact-grid">
-        <article class="small-card"><h3>Temporada de resultados</h3><p>Guía de empresas, márgenes y retorno del CapEx. El mercado pasa de premiar expectativas a exigir evidencia de ventas, márgenes y beneficios.</p></article><article class="small-card"><h3>Ventana posterior a resultados</h3><p>Reacción T+3 a T+5. El primer día puede reflejar posicionamiento; la lectura más útil suele aparecer cuando el mercado digiere la guía de la empresa y las revisiones.</p></article><article class="small-card"><h3>Durante julio</h3><p>DXY, tasas y USD/COP. Dólar, rendimientos y riesgo local pueden cambiar la lectura de activos internacionales y liquidez en USD.</p></article>
-      </div>
-      <div class="scenario-grid">
-        <article class="small-card"><h3>Base</h3><p>Rotación y volatilidad interna, pero sin ruptura general del índice. El mercado sigue constructivo si resultados y amplitud estructural sostienen la lectura.</p></article><article class="small-card"><h3>Positivo</h3><p>Resultados validan el CapEx de IA, momentum se estabiliza, DXY y rendimientos se moderan, y la subida se ensancha más allá de pocos líderes.</p></article><article class="small-card"><h3>Adverso</h3><p>Resultados decepcionan, sube la correlación, venden los sistemáticos y el dólar se fortalece frente a monedas emergentes.</p></article>
-      </div>
-      <div class="signals-section">
-      <header class="section-head"><p>Señales a vigilar</p><h2>Lista de control</h2></header>
-      <div class="watchlist">
-        <article class="watch-item">
-    <h3>VIX</h3>
-    <p class="status">Contenido</p>
-    <div class="micro"><p>Qué mira</p><span>Nivel spot, cambio reciente y estructura de futuros.</span></div>
-    <div class="micro"><p>Por qué importa</p><span>Un VIX tranquilo puede convivir con mucha volatilidad individual; una subida rápida cambia la lectura de riesgo agregado.</span></div>
-    <div class="micro"><p>Lectura actual</p><span>La volatilidad agregada sigue contenida frente al daño observado dentro de momentum y high beta. Esa divergencia mantiene al índice estable, pero deja menos margen si la presión se extiende.</span></div>
-    <div class="micro"><p>Qué cambiaría</p><span>Una subida rápida del VIX junto con deterioro de amplitud y aumento de correlación indicaría que la volatilidad interna empieza a trasladarse al índice.</span></div>
-    <p class="source"><strong>Fecha:</strong> 20 de julio de 2026 · <strong>Fuente:</strong> Dashboard interno, FRED VIXCLS y estructura VIX.</p>
-    <p class="source"><a href="https://www.luiguiherrera.com/dashboard">Ver Dashboard</a></p>
-  </article><article class="watch-item">
-    <h3>Correlación implícita</h3>
-    <p class="status">Baja</p>
-    <div class="micro"><p>Qué mira</p><span>Si las acciones empiezan a moverse juntas o siguen compensándose entre sí dentro del índice.</span></div>
-    <div class="micro"><p>Por qué importa</p><span>Cuando sube la correlación, la volatilidad que estaba en acciones individuales puede trasladarse al índice.</span></div>
-    <div class="micro"><p>Lectura actual</p><span>La correlación implícita continúa baja: la volatilidad está concentrada en acciones y factores, mientras el índice permanece relativamente estable. Esa dispersión favorece el stockpicking, pero también deja al índice expuesto si las acciones comienzan a caer juntas.</span></div>
-    <div class="micro"><p>Qué cambiaría</p><span>Un aumento sostenido de la correlación acompañado por deterioro de la amplitud indicaría que la volatilidad está dejando de ser un problema interno y empieza a trasladarse al índice.</span></div>
-    <p class="source"><strong>Fecha:</strong> 20 de julio de 2026 · <strong>Fuente:</strong> Goldman Sachs FICC &amp; Equities y Bloomberg.</p>
+          </article><article class="watch">
+            <h3>Guidance de hyperscalers</h3>
+            <div class="table-wrap"><table><thead><tr><th>Campo</th><th>Contenido</th></tr></thead><tbody><tr><td>Estado</td><td>Prueba abierta</td></tr><tr><td>Qué mira</td><td>CapEx, es decir inversión de capital, demanda de nube, inversión en IA y señales de monetización.</td></tr><tr><td>Por qué importa</td><td>La narrativa de IA necesita pasar de expectativa a beneficios y retorno sobre inversión.</td></tr><tr><td>Lectura al publicar</td><td>La temporada de resultados pasa la discusión desde narrativa hacia ventas, márgenes, guidance y retorno del CapEx. La infraestructura de IA explica una parte grande del crecimiento esperado, así que la guía de hyperscalers pesa más que el titular del índice.</td></tr><tr><td>Qué cambiaría</td><td>Guidance débil, menor visibilidad de monetización o presión persistente en márgenes harían más frágil la lectura de IA. Validación de demanda y retorno sostendría el escenario constructivo.</td></tr><tr><td>Fecha</td><td>20 de julio de 2026</td></tr><tr><td>Fuente</td><td>Goldman Sachs Global Investment Research, FactSet y lectura editorial del informe.</td></tr></tbody></table></div>
 
-  </article><article class="watch-item">
-    <h3>Amplitud 20/50/200 días</h3>
-    <p class="status">Mixta</p>
-    <div class="micro"><p>Qué mira</p><span>Participación de corto, medio y largo plazo dentro del mercado.</span></div>
-    <div class="micro"><p>Por qué importa</p><span>La amplitud ayuda a distinguir rotación sana de deterioro estructural.</span></div>
-    <div class="micro"><p>Lectura actual</p><span>La amplitud de corto plazo se debilitó, especialmente en tecnología, pero cerca de dos tercios del S&amp;P 500 siguen sobre su media de 200 días. La lectura todavía parece más rotación interna que ruptura general.</span></div>
-    <div class="micro"><p>Qué cambiaría</p><span>Un deterioro simultáneo en medias de 20, 50 y 200 días, junto con sectores defensivos liderando por varias semanas, convertiría la señal en una alerta más amplia.</span></div>
-    <p class="source"><strong>Fecha:</strong> 20 de julio de 2026 · <strong>Fuente:</strong> StockCharts y dashboard interno de amplitud.</p>
-    <p class="source"><a href="https://www.luiguiherrera.com/dashboard">Ver detalle de amplitud</a></p>
-  </article><article class="watch-item">
-    <h3>Growth frente a Value</h3>
-    <p class="status">Rotación parcial</p>
-    <div class="micro"><p>Qué mira</p><span>Rotación entre crecimiento, valor y defensivos.</span></div>
-    <div class="micro"><p>Por qué importa</p><span>Muestra si la corrección es específica de momentum o un cambio más amplio de apetito por riesgo.</span></div>
-    <div class="micro"><p>Lectura actual</p><span>La corrección ha castigado especialmente a momentum y high beta, pero todavía no existe una rotación limpia y persistente hacia Value. La amplitud de medio plazo continúa razonable, por lo que el movimiento se parece más a una limpieza de factores que a un cambio completo de régimen.</span></div>
-    <div class="micro"><p>Qué cambiaría</p><span>Varias semanas de fortaleza relativa de Value y defensivos, junto con revisiones negativas de beneficios en Growth y un deterioro más amplio de la participación del mercado.</span></div>
-    <p class="source"><strong>Fecha:</strong> 20 de julio de 2026 · <strong>Fuente:</strong> Goldman Sachs, BofA y datos de amplitud del S&amp;P 500.</p>
+          </article><article class="watch">
+            <h3>Márgenes y retorno del CapEx</h3>
+            <div class="table-wrap"><table><thead><tr><th>Campo</th><th>Contenido</th></tr></thead><tbody><tr><td>Estado</td><td>Clave en resultados</td></tr><tr><td>Qué mira</td><td>Si la inversión en infraestructura mejora ingresos y márgenes o solo eleva costes.</td></tr><tr><td>Por qué importa</td><td>El mercado puede tolerar CapEx alto si ve retorno claro; sin retorno, los múltiplos quedan más frágiles.</td></tr><tr><td>Lectura al publicar</td><td>El crecimiento agregado de beneficios luce concentrado. La pregunta operativa es si el CapEx de IA empieza a traducirse en ingresos, márgenes y flujo de caja, o si solo aumenta la base de costes.</td></tr><tr><td>Qué cambiaría</td><td>Revisiones positivas de beneficios, márgenes defendibles y mejor conversión de inversión en ingresos mejorarían la lectura. Más costes sin retorno visible la deteriorarían.</td></tr><tr><td>Fecha</td><td>20 de julio de 2026</td></tr><tr><td>Fuente</td><td>Goldman Sachs Global Investment Research, FactSet y comentarios de temporada de resultados.</td></tr></tbody></table></div>
 
-  </article><article class="watch-item">
-    <h3>Guidance de hyperscalers</h3>
-    <p class="status">Prueba abierta</p>
-    <div class="micro"><p>Qué mira</p><span>CapEx, es decir inversión de capital, demanda de nube, inversión en IA y señales de monetización.</span></div>
-    <div class="micro"><p>Por qué importa</p><span>La narrativa de IA necesita pasar de expectativa a beneficios y retorno sobre inversión.</span></div>
-    <div class="micro"><p>Lectura actual</p><span>La temporada de resultados pasa la discusión desde narrativa hacia ventas, márgenes, guidance y retorno del CapEx. La infraestructura de IA explica una parte grande del crecimiento esperado, así que la guía de hyperscalers pesa más que el titular del índice.</span></div>
-    <div class="micro"><p>Qué cambiaría</p><span>Guidance débil, menor visibilidad de monetización o presión persistente en márgenes harían más frágil la lectura de IA. Validación de demanda y retorno sostendría el escenario constructivo.</span></div>
-    <p class="source"><strong>Fecha:</strong> 20 de julio de 2026 · <strong>Fuente:</strong> Goldman Sachs Global Investment Research, FactSet y lectura editorial del informe.</p>
+          </article><article class="watch">
+            <h3>DXY</h3>
+            <div class="table-wrap"><table><thead><tr><th>Campo</th><th>Contenido</th></tr></thead><tbody><tr><td>Estado</td><td>Largo congestionado</td></tr><tr><td>Qué mira</td><td>Dirección del dólar, rendimientos relativos y cierre de posiciones largas.</td></tr><tr><td>Por qué importa</td><td>DXY afecta oro, cripto, emergentes, activos internacionales y condiciones financieras.</td></tr><tr><td>Lectura al publicar</td><td>El DXY conserva apoyo por rendimientos, tasas y demanda defensiva, pero el posicionamiento largo en dólares luce congestionado. Eso deja al dólar útil como referencia de riesgo, aunque con más vulnerabilidad a una reversión rápida.</td></tr><tr><td>Qué cambiaría</td><td>Inflación más moderada, Fed menos restrictiva, caída de rendimientos o cierre de largos reducirían apoyo. Estrés de riesgo, petróleo o mayores rendimientos podrían fortalecerlo de nuevo.</td></tr><tr><td>Fecha</td><td>20 de julio de 2026</td></tr><tr><td>Fuente</td><td>CFTC, McClellan Financial Publications, BlackRock Investment Institute y LSEG Datastream.</td></tr></tbody></table></div>
 
-  </article><article class="watch-item">
-    <h3>Márgenes y retorno del CapEx</h3>
-    <p class="status">Clave en resultados</p>
-    <div class="micro"><p>Qué mira</p><span>Si la inversión en infraestructura mejora ingresos y márgenes o solo eleva costes.</span></div>
-    <div class="micro"><p>Por qué importa</p><span>El mercado puede tolerar CapEx alto si ve retorno claro; sin retorno, los múltiplos quedan más frágiles.</span></div>
-    <div class="micro"><p>Lectura actual</p><span>El crecimiento agregado de beneficios luce concentrado. La pregunta operativa es si el CapEx de IA empieza a traducirse en ingresos, márgenes y flujo de caja, o si solo aumenta la base de costes.</span></div>
-    <div class="micro"><p>Qué cambiaría</p><span>Revisiones positivas de beneficios, márgenes defendibles y mejor conversión de inversión en ingresos mejorarían la lectura. Más costes sin retorno visible la deteriorarían.</span></div>
-    <p class="source"><strong>Fecha:</strong> 20 de julio de 2026 · <strong>Fuente:</strong> Goldman Sachs Global Investment Research, FactSet y comentarios de temporada de resultados.</p>
+          </article><article class="watch">
+            <h3>Treasury a diez años</h3>
+            <div class="table-wrap"><table><thead><tr><th>Campo</th><th>Contenido</th></tr></thead><tbody><tr><td>Estado</td><td>Convergencia global</td></tr><tr><td>Qué mira</td><td>Rendimiento nominal, tasas reales, inflación esperada y presión de emisión.</td></tr><tr><td>Por qué importa</td><td>El diez años marca el coste de capital que atraviesa tecnología, oro, bonos y dólar.</td></tr><tr><td>Lectura al publicar</td><td>Los rendimientos de Estados Unidos, Alemania y Japón se están acercando. Esa convergencia puede reducir parte de la ventaja relativa del dólar y cambia la lectura de oro, cripto y activos internacionales.</td></tr><tr><td>Qué cambiaría</td><td>Una caída sostenida de rendimientos reales aliviaría presión sobre oro y growth. Un repunte por inflación, emisión o prima por plazo endurecería condiciones financieras.</td></tr><tr><td>Fecha</td><td>20 de julio de 2026</td></tr><tr><td>Fuente</td><td>BlackRock Investment Institute, LSEG Datastream y lectura del informe.</td></tr></tbody></table></div>
 
-  </article><article class="watch-item">
-    <h3>DXY</h3>
-    <p class="status">Largo congestionado</p>
-    <div class="micro"><p>Qué mira</p><span>Dirección del dólar, rendimientos relativos y cierre de posiciones largas.</span></div>
-    <div class="micro"><p>Por qué importa</p><span>DXY afecta oro, cripto, emergentes, activos internacionales y condiciones financieras.</span></div>
-    <div class="micro"><p>Lectura actual</p><span>El DXY conserva apoyo por rendimientos, tasas y demanda defensiva, pero el posicionamiento largo en dólares luce congestionado. Eso deja al dólar útil como referencia de riesgo, aunque con más vulnerabilidad a una reversión rápida.</span></div>
-    <div class="micro"><p>Qué cambiaría</p><span>Inflación más moderada, Fed menos restrictiva, caída de rendimientos o cierre de largos reducirían apoyo. Estrés de riesgo, petróleo o mayores rendimientos podrían fortalecerlo de nuevo.</span></div>
-    <p class="source"><strong>Fecha:</strong> 20 de julio de 2026 · <strong>Fuente:</strong> CFTC, McClellan Financial Publications, BlackRock Investment Institute y LSEG Datastream.</p>
+          </article><article class="watch">
+            <h3>USD/COP</h3>
+            <div class="table-wrap"><table><thead><tr><th>Campo</th><th>Contenido</th></tr></thead><tbody><tr><td>Estado</td><td>Riesgo local importa</td></tr><tr><td>Qué mira</td><td>Dólar global, petróleo, flujos a emergentes, tasas locales, fiscalidad y riesgo político.</td></tr><tr><td>Por qué importa</td><td>USD/COP es una lectura propia: no replica mecánicamente al DXY.</td></tr><tr><td>Lectura al publicar</td><td>USD/COP debe leerse con DXY, petróleo, flujos hacia emergentes y riesgo fiscal/político colombiano. La exposición en dólares sigue diversificando frente al peso, pero no conviene asumir que DXY y USD/COP se mueven uno a uno.</td></tr><tr><td>Qué cambiaría</td><td>Mejora de flujos a emergentes, petróleo estable y menor ruido fiscal reducirían presión sobre USD/COP. Dólar global fuerte, petróleo débil o tensión local la elevarían.</td></tr><tr><td>Fecha</td><td>20 de julio de 2026</td></tr><tr><td>Fuente</td><td>Lectura macro del informe, DXY, petróleo y riesgo local colombiano.</td></tr></tbody></table></div>
 
-  </article><article class="watch-item">
-    <h3>Treasury a diez años</h3>
-    <p class="status">Convergencia global</p>
-    <div class="micro"><p>Qué mira</p><span>Rendimiento nominal, tasas reales, inflación esperada y presión de emisión.</span></div>
-    <div class="micro"><p>Por qué importa</p><span>El diez años marca el coste de capital que atraviesa tecnología, oro, bonos y dólar.</span></div>
-    <div class="micro"><p>Lectura actual</p><span>Los rendimientos de Estados Unidos, Alemania y Japón se están acercando. Esa convergencia puede reducir parte de la ventaja relativa del dólar y cambia la lectura de oro, cripto y activos internacionales.</span></div>
-    <div class="micro"><p>Qué cambiaría</p><span>Una caída sostenida de rendimientos reales aliviaría presión sobre oro y growth. Un repunte por inflación, emisión o prima por plazo endurecería condiciones financieras.</span></div>
-    <p class="source"><strong>Fecha:</strong> 20 de julio de 2026 · <strong>Fuente:</strong> BlackRock Investment Institute, LSEG Datastream y lectura del informe.</p>
+          </article><article class="watch">
+            <h3>Petróleo</h3>
+            <div class="table-wrap"><table><thead><tr><th>Campo</th><th>Contenido</th></tr></thead><tbody><tr><td>Estado</td><td>Factor externo</td></tr><tr><td>Qué mira</td><td>Presión de energía sobre inflación, Colombia y apetito por emergentes.</td></tr><tr><td>Por qué importa</td><td>El petróleo puede cambiar inflación, tasas esperadas y lectura de USD/COP.</td></tr><tr><td>Lectura al publicar</td><td>El petróleo funciona como factor de contexto para inflación, emergentes y USD/COP. En este informe no es un activo central, pero puede alterar rápidamente la lectura del dólar frente al peso.</td></tr><tr><td>Qué cambiaría</td><td>Un repunte sostenido aumentaría presión inflacionaria y apoyo a Colombia por términos de intercambio. Una caída fuerte pesaría sobre emergentes ligados a commodities.</td></tr><tr><td>Fecha</td><td>20 de julio de 2026</td></tr><tr><td>Fuente</td><td>Lectura editorial del informe y señales macro de energía.</td></tr></tbody></table></div>
 
-  </article><article class="watch-item">
-    <h3>USD/COP</h3>
-    <p class="status">Riesgo local importa</p>
-    <div class="micro"><p>Qué mira</p><span>Dólar global, petróleo, flujos a emergentes, tasas locales, fiscalidad y riesgo político.</span></div>
-    <div class="micro"><p>Por qué importa</p><span>USD/COP es una lectura propia: no replica mecánicamente al DXY.</span></div>
-    <div class="micro"><p>Lectura actual</p><span>USD/COP debe leerse con DXY, petróleo, flujos hacia emergentes y riesgo fiscal/político colombiano. La exposición en dólares sigue diversificando frente al peso, pero no conviene asumir que DXY y USD/COP se mueven uno a uno.</span></div>
-    <div class="micro"><p>Qué cambiaría</p><span>Mejora de flujos a emergentes, petróleo estable y menor ruido fiscal reducirían presión sobre USD/COP. Dólar global fuerte, petróleo débil o tensión local la elevarían.</span></div>
-    <p class="source"><strong>Fecha:</strong> 20 de julio de 2026 · <strong>Fuente:</strong> Lectura macro del informe, DXY, petróleo y riesgo local colombiano.</p>
+          </article><article class="watch">
+            <h3>Oro frente a DMA200</h3>
+            <div class="table-wrap"><table><thead><tr><th>Campo</th><th>Contenido</th></tr></thead><tbody><tr><td>Estado</td><td>Debilidad técnica</td></tr><tr><td>Qué mira</td><td>Si GLD recupera o sigue perdiendo su media de 200 días.</td></tr><tr><td>Por qué importa</td><td>La media larga ayuda a separar pausa táctica de deterioro técnico más persistente.</td></tr><tr><td>Lectura al publicar</td><td>GLD atraviesa una racha prolongada bajo la media de 200 días. La señal habla de debilidad técnica real, aunque su función estructural de diversificación no depende de liderar cada semana.</td></tr><tr><td>Qué cambiaría</td><td>Recuperar la media de 200 días, junto con dólar o rendimientos reales más bajos, mejoraría la lectura. Más sesiones bajo la media prolongarían la presión técnica.</td></tr><tr><td>Fecha</td><td>20 de julio de 2026</td></tr><tr><td>Fuente</td><td>Barchart y lectura del bloque GLD.</td></tr></tbody></table></div>
 
-  </article><article class="watch-item">
-    <h3>Petróleo</h3>
-    <p class="status">Factor externo</p>
-    <div class="micro"><p>Qué mira</p><span>Presión de energía sobre inflación, Colombia y apetito por emergentes.</span></div>
-    <div class="micro"><p>Por qué importa</p><span>El petróleo puede cambiar inflación, tasas esperadas y lectura de USD/COP.</span></div>
-    <div class="micro"><p>Lectura actual</p><span>El petróleo funciona como factor de contexto para inflación, emergentes y USD/COP. En este informe no es un activo central, pero puede alterar rápidamente la lectura del dólar frente al peso.</span></div>
-    <div class="micro"><p>Qué cambiaría</p><span>Un repunte sostenido aumentaría presión inflacionaria y apoyo a Colombia por términos de intercambio. Una caída fuerte pesaría sobre emergentes ligados a commodities.</span></div>
-    <p class="source"><strong>Fecha:</strong> 20 de julio de 2026 · <strong>Fuente:</strong> Lectura editorial del informe y señales macro de energía.</p>
+          </article><article class="watch">
+            <h3>Flujos sistemáticos</h3>
+            <div class="table-wrap"><table><thead><tr><th>Campo</th><th>Contenido</th></tr></thead><tbody><tr><td>Estado</td><td>Riesgo de aceleración</td></tr><tr><td>Qué mira</td><td>Exposición de estrategias de control de volatilidad, que reducen riesgo cuando sube la volatilidad, CTAs y ventas forzadas potenciales.</td></tr><tr><td>Por qué importa</td><td>Cuando el posicionamiento es elevado, un cambio de volatilidad puede acelerar ventas.</td></tr><tr><td>Lectura al publicar</td><td>La presión en momentum y high beta es consistente con una limpieza de factores. Si la volatilidad del índice sube, estrategias sistemáticas pueden acelerar ventas y transformar una rotación interna en un movimiento de mercado más amplio.</td></tr><tr><td>Qué cambiaría</td><td>VIX al alza, correlación subiendo y amplitud cayendo al mismo tiempo aumentarían el riesgo de ventas sistemáticas más agresivas.</td></tr><tr><td>Fecha</td><td>20 de julio de 2026</td></tr><tr><td>Fuente</td><td>Goldman Sachs FICC &amp; Equities, Bloomberg y lectura del informe.</td></tr></tbody></table></div>
 
-  </article><article class="watch-item">
-    <h3>Oro frente a DMA200</h3>
-    <p class="status">Debilidad técnica</p>
-    <div class="micro"><p>Qué mira</p><span>Si GLD recupera o sigue perdiendo su media de 200 días.</span></div>
-    <div class="micro"><p>Por qué importa</p><span>La media larga ayuda a separar pausa táctica de deterioro técnico más persistente.</span></div>
-    <div class="micro"><p>Lectura actual</p><span>GLD atraviesa una racha prolongada bajo la media de 200 días. La señal habla de debilidad técnica real, aunque su función estructural de diversificación no depende de liderar cada semana.</span></div>
-    <div class="micro"><p>Qué cambiaría</p><span>Recuperar la media de 200 días, junto con dólar o rendimientos reales más bajos, mejoraría la lectura. Más sesiones bajo la media prolongarían la presión técnica.</span></div>
-    <p class="source"><strong>Fecha:</strong> 20 de julio de 2026 · <strong>Fuente:</strong> Barchart y lectura del bloque GLD.</p>
+          </article><article class="watch">
+            <h3>Reacción T+3 a T+5</h3>
+            <div class="table-wrap"><table><thead><tr><th>Campo</th><th>Contenido</th></tr></thead><tbody><tr><td>Estado</td><td>Ventana clave</td></tr><tr><td>Qué mira</td><td>Comportamiento de las acciones después de que el mercado digiere resultados y guía de la empresa.</td></tr><tr><td>Por qué importa</td><td>El primer movimiento puede ser ruido de posicionamiento; la digestión posterior suele dar mejor señal.</td></tr><tr><td>Lectura al publicar</td><td>La temporada de resultados será la prueba principal. El foco está en la reacción posterior a los resultados, cuando el mercado asimila ventas, márgenes, guidance, financiación y retorno del CapEx.</td></tr><tr><td>Qué cambiaría</td><td>Reacciones T+3 a T+5 positivas y con ampliación de liderazgo sostendrían el escenario constructivo. Rebotes iniciales que se revierten dejarían una señal más frágil.</td></tr><tr><td>Fecha</td><td>20 de julio de 2026</td></tr><tr><td>Fuente</td><td>Lectura editorial del informe y calendario de resultados.</td></tr></tbody></table></div>
 
-  </article><article class="watch-item">
-    <h3>Flujos sistemáticos</h3>
-    <p class="status">Riesgo de aceleración</p>
-    <div class="micro"><p>Qué mira</p><span>Exposición de estrategias de control de volatilidad, que reducen riesgo cuando sube la volatilidad, CTAs y ventas forzadas potenciales.</span></div>
-    <div class="micro"><p>Por qué importa</p><span>Cuando el posicionamiento es elevado, un cambio de volatilidad puede acelerar ventas.</span></div>
-    <div class="micro"><p>Lectura actual</p><span>La presión en momentum y high beta es consistente con una limpieza de factores. Si la volatilidad del índice sube, estrategias sistemáticas pueden acelerar ventas y transformar una rotación interna en un movimiento de mercado más amplio.</span></div>
-    <div class="micro"><p>Qué cambiaría</p><span>VIX al alza, correlación subiendo y amplitud cayendo al mismo tiempo aumentarían el riesgo de ventas sistemáticas más agresivas.</span></div>
-    <p class="source"><strong>Fecha:</strong> 20 de julio de 2026 · <strong>Fuente:</strong> Goldman Sachs FICC &amp; Equities, Bloomberg y lectura del informe.</p>
-
-  </article><article class="watch-item watch-item-wide">
-    <h3>Reacción T+3 a T+5</h3>
-    <p class="status">Ventana clave</p>
-    <div class="micro"><p>Qué mira</p><span>Comportamiento de las acciones después de que el mercado digiere resultados y guía de la empresa.</span></div>
-    <div class="micro"><p>Por qué importa</p><span>El primer movimiento puede ser ruido de posicionamiento; la digestión posterior suele dar mejor señal.</span></div>
-    <div class="micro"><p>Lectura actual</p><span>La temporada de resultados será la prueba principal. El foco está en la reacción posterior a los resultados, cuando el mercado asimila ventas, márgenes, guidance, financiación y retorno del CapEx.</span></div>
-    <div class="micro"><p>Qué cambiaría</p><span>Reacciones T+3 a T+5 positivas y con ampliación de liderazgo sostendrían el escenario constructivo. Rebotes iniciales que se revierten dejarían una señal más frágil.</span></div>
-    <p class="source"><strong>Fecha:</strong> 20 de julio de 2026 · <strong>Fuente:</strong> Lectura editorial del informe y calendario de resultados.</p>
-
-  </article>
-      </div>
-      </div>
-      <div class="final closing-section">
-      <header class="section-head"><p>Fuentes y aviso educativo</p><h2>Marco de lectura</h2></header>
-      <p class="lead">Las lecturas combinan datos de mercado, cálculos propios, dashboard interno, niveles estadísticos y referencias públicas e institucionales, incluyendo Goldman Sachs, BofA, Deutsche Bank, Bloomberg y BCA Research cuando aportan contexto. Las fuentes informan el análisis; no organizan la estructura del informe.</p>
-      <p class="disclaimer">Este documento tiene fines educativos e informativos. No constituye asesoría financiera, recomendación personalizada ni solicitud de compra o venta de activos. Las decisiones de inversión deben considerar objetivos, horizonte, liquidez, tolerancia al riesgo y situación financiera individual. Rentabilidades pasadas no garantizan resultados futuros.</p>
-      <dl class="trace">
-        <div><dt>Slug</dt><dd>segundo-informe-julio-2026</dd></div>
-        <div><dt>Fecha de generación</dt><dd>20 de julio de 2026</dd></div>
-        <div><dt>Versión editorial</dt><dd>20 de julio de 2026</dd></div>
-        <div><dt>URL canónica</dt><dd><a href="https://www.luiguiherrera.com/informes/segundo-informe-julio-2026">https://www.luiguiherrera.com/informes/segundo-informe-julio-2026</a></dd></div>
-      </dl>
-      </div>
-    </section>
+          </article></section>
+<section id="sources-and-limitations" data-section="sources-and-limitations"><h2>Fuentes, limitaciones y aviso educativo</h2><h3>Fuentes y método</h3><p>Las lecturas combinan datos de mercado, cálculos propios, dashboard interno, niveles estadísticos y referencias públicas e institucionales, incluyendo Goldman Sachs, BofA, Deutsche Bank, Bloomberg y BCA Research cuando aportan contexto. Las fuentes informan el análisis; no organizan la estructura del informe.</p><h3>Limitaciones y aviso educativo</h3><p class="disclaimer">Este documento tiene fines educativos e informativos. No constituye asesoría financiera, recomendación personalizada ni solicitud de compra o venta de activos. Las decisiones de inversión deben considerar objetivos, horizonte, liquidez, tolerancia al riesgo y situación financiera individual. Rentabilidades pasadas no garantizan resultados futuros.</p></section>
   </main>
 </body>
 </html>
