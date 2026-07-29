@@ -364,7 +364,7 @@ export default async function EnglishHomePage() {
   return (
     <div>
       <section className="estate-hero home-estate-hero relative overflow-hidden border-b border-line">
-        <div className="mx-auto grid min-h-[470px] max-w-7xl grid-cols-1 px-4 py-10 md:min-h-[650px] md:px-5 md:py-20 lg:grid-cols-[0.7fr_1fr] lg:items-center">
+        <div className="mx-auto grid min-h-[470px] max-w-7xl grid-cols-1 px-4 pb-48 pt-10 md:min-h-[650px] md:px-5 md:py-20 lg:grid-cols-[0.7fr_1fr] lg:items-center">
           <div className="relative z-20 max-w-2xl">
             <p className="mb-4 w-fit rounded-full border border-petrol/20 bg-white/65 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-petrol">
               Quant discipline for investors
@@ -385,14 +385,14 @@ export default async function EnglishHomePage() {
               </Link>
             </div>
           </div>
-          <div className="absolute bottom-0 right-0 block h-[30%] w-full md:inset-y-0 md:h-auto md:w-[72%]">
+          <div className="absolute bottom-0 right-0 block h-48 w-full md:inset-y-0 md:h-auto md:w-full">
             <Image
-              src="/images/hero-family-ascent.png"
-              alt=""
+              src="/images/hero-family-sculptural-ascent.png"
+              alt="Family ascending together on a sculptural staircase in a luminous space."
               fill
               priority
-              sizes="(min-width: 1024px) 72vw, 100vw"
-              className="object-contain object-[100%_100%] opacity-30 sm:opacity-45 md:object-cover md:object-[60%_50%] md:opacity-90 lg:object-[58%_50%]"
+              sizes="100vw"
+              className="object-cover object-[68%_50%] opacity-45 sm:opacity-55 md:object-[50%_50%] md:opacity-90"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-paper/10 via-paper/45 to-paper md:bg-gradient-to-r md:from-paper md:via-paper/82 md:via-45% md:to-paper/10" />
             <div className="absolute inset-y-0 left-0 w-1/3 bg-paper/55 md:w-1/2 md:bg-paper/35" />
