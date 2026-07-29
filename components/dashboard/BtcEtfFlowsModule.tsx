@@ -209,8 +209,8 @@ export function BtcEtfFlowsModule({ assetLabel = "BTC", data }: BtcEtfFlowsModul
 
   return (
     <ExpandableInsightCard
-      eyebrow={`${assetLabel} ETF flows`}
-      title={locale === "en" ? "ETF flow pressure" : "Presión de flujos vía ETFs"}
+      eyebrow={assetLabel === "BTC" ? (locale === "en" ? "Bitcoin · Spot ETFs" : "Bitcoin · ETFs spot") : `${assetLabel} ETF flows`}
+      title={assetLabel === "BTC" ? (locale === "en" ? "Net flows for spot Bitcoin ETFs" : "Flujos netos de ETFs de BTC") : (locale === "en" ? "ETF flow pressure" : "Presión de flujos vía ETFs")}
       reading={t(flows.readingSubtext)}
       status={t(statusLabel)}
       metrics={[

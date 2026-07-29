@@ -31,8 +31,8 @@ export function GldFlowPressureModule({ data, locale = "es" }: { data: GldFlowPr
 
   return (
     <ExpandableInsightCard
-      eyebrow={isEnglish ? "Flow-pressure proxy" : "Proxy de presión de flujos"}
-      title={isEnglish ? "GLD flow pressure" : "Presión de flujos en GLD"}
+      eyebrow={isEnglish ? "Gold · GLD" : "Oro · GLD"}
+      title={isEnglish ? "Flow-pressure proxy" : "Proxy de presión de flujos"}
       reading={label}
       status={status}
       metrics={[
