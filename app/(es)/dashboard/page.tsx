@@ -156,7 +156,7 @@ export default async function DashboardPage() {
 }
 
 export async function DashboardContent({ locale = "es" }: { locale?: "es" | "en" }) {
-  const [{ btcEtfFlows, crossSignalRadar, dashboardModules, gldFlowPressure, quantRisk, regimeSummary, sectorRotation, vix, vixTermStructure }, weeklyReportData] = await Promise.all([
+  const [{ btcEtfFlows, dashboardModules, gldFlowPressure, quantRisk, regimeSummary, sectorRotation, vix, vixTermStructure }, weeklyReportData] = await Promise.all([
     getDashboardData(),
     buildWeeklyReportData(),
   ]);
@@ -180,21 +180,6 @@ export async function DashboardContent({ locale = "es" }: { locale?: "es" | "en"
         supports: "Risk supports",
         cautions: "Caution readings",
         noSupports: "No dominant risk-support readings at this moment.",
-        radar: "Radar",
-        crossReadings: "Cross-readings",
-        radarReading: "Combines short interest, institutional presence and prudent notes to organize follow-up tensions.",
-        manualUpdate: "Manual update",
-        reviewedTickers: "Reviewed tickers",
-        mode: "Mode",
-        curated: "Curated",
-        use: "Use",
-        research: "Research",
-        shortInterest: "Reported short interest",
-        institutional: "Institutional presence / 13F",
-        shortDate: "Short interest date",
-        reviewDate: "13F date or latest review",
-        note: "Prudent note",
-        radarFooter: "Conceptual sources: reported short interest, 13F filings and institutional reports with lag. Coverage can be incomplete and dates can differ by provider.",
         finalDisclaimer: "This panel organizes public market readings. It does not forecast prices, recommend trades or replace personalized analysis.",
         capitalFlows: "Capital flows",
         capitalFlowsTitle: "Flow map",
@@ -216,21 +201,6 @@ export async function DashboardContent({ locale = "es" }: { locale?: "es" | "en"
         supports: "Soportes de riesgo",
         cautions: "Lecturas de cautela",
         noSupports: "Sin lecturas dominantes a favor del riesgo en este momento.",
-        radar: "Radar",
-        crossReadings: "Lecturas cruzadas",
-        radarReading: "Cruza short interest, presencia institucional y notas prudentes para ordenar posibles tensiones de seguimiento.",
-        manualUpdate: "Actualización manual",
-        reviewedTickers: "Tickers revisados",
-        mode: "Modo",
-        curated: "Curado",
-        use: "Uso",
-        research: "Investigación",
-        shortInterest: "Short interest reportado",
-        institutional: "Presencia institucional / 13F",
-        shortDate: "Fecha short interest",
-        reviewDate: "Fecha 13F o última revisión",
-        note: "Nota prudente",
-        radarFooter: "Fuentes conceptuales: short interest reportado, formularios 13F e informes institucionales con retraso. La cobertura puede ser incompleta y las fechas pueden diferir entre proveedores.",
         finalDisclaimer: "Este panel organiza lecturas públicas de mercado. No anticipa precios, no recomienda operaciones con activos y no sustituye un análisis personalizado.",
         capitalFlows: "Flujos de capital",
         capitalFlowsTitle: "Mapa de flujos",
@@ -355,61 +325,6 @@ export async function DashboardContent({ locale = "es" }: { locale?: "es" | "en"
           </section>
         ) : null}
         {remainingModules.map((module) => <DashboardModule key={module.id} {...module} locale={locale} />)}
-      </div>
-
-      <div id="radar" className="mt-6 scroll-mt-28">
-        <ExpandableInsightCard
-          eyebrow={copy.radar}
-          title={copy.crossReadings}
-          reading={copy.radarReading}
-          status={copy.manualUpdate}
-          metrics={[
-            { label: copy.reviewedTickers, value: String(crossSignalRadar.length) },
-            { label: copy.mode, value: copy.curated },
-            { label: copy.use, value: copy.research },
-          ]}
-        >
-        <p className="mt-4 border border-line bg-panelSoft px-3 py-2 text-xs leading-5 text-muted">
-          {locale === "en" ? "Update mode: manual/curated until stable automated sources are active." : "Modo de actualización: manual/curado hasta activar fuentes automatizadas estables."}
-        </p>
-
-        <div className="mt-5 overflow-x-auto">
-          <table className="w-full min-w-[980px] border-collapse text-left text-[13px]">
-            <thead className="text-muted">
-              <tr className="border-b border-line">
-                <th className="py-2.5 pr-4 font-medium">Ticker</th>
-                <th className="py-2.5 pr-4 font-medium">{copy.shortInterest}</th>
-                <th className="py-2.5 pr-4 font-medium">{copy.institutional}</th>
-                <th className="py-2.5 pr-4 font-medium">{copy.shortDate}</th>
-                <th className="py-2.5 pr-4 font-medium">{copy.reviewDate}</th>
-                <th className="py-2.5 pr-4 font-medium">{copy.status}</th>
-                <th className="py-2.5 pr-4 font-medium">{copy.note}</th>
-              </tr>
-            </thead>
-            <tbody>
-              {crossSignalRadar.map((row) => (
-                <tr key={row.ticker} className="border-b border-line/70">
-                  <td className="py-3 pr-4 font-semibold text-ink">{row.ticker}</td>
-                  <td className="py-3 pr-4 text-muted">{t(row.shortInterest)}</td>
-                  <td className="py-3 pr-4 text-muted">{t(row.institutionalPresence)}</td>
-                  <td className="py-3 pr-4 text-muted">{row.shortInterestDate}</td>
-                  <td className="py-3 pr-4 text-muted">{row.form13FDate}</td>
-                  <td className="py-3 pr-4">
-                    <span className="border border-line bg-panelSoft px-2 py-1 text-xs font-semibold text-muted">
-                      {copy.manualUpdate}
-                    </span>
-                  </td>
-                  <td className="py-3 pr-4 text-muted">{t(row.note)}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-
-        <p className="mt-5 border-t border-line pt-4 text-sm leading-6 text-muted">
-          {copy.radarFooter}
-        </p>
-        </ExpandableInsightCard>
       </div>
 
       <div className="mt-6">
