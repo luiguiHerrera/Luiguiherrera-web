@@ -87,8 +87,10 @@ export function WeeklyReport({ data, locale = "es" }: WeeklyReportProps) {
   const copy = locale === "en"
     ? {
         report: "Weekly Report",
+        liveData: "Live content",
         closeRead: "Closing read",
-        date: "Date",
+        generationDate: "Generated",
+        dataDate: "Data through",
         week: "Week",
         regime: "Regime",
         confidence: "Confidence",
@@ -149,8 +151,10 @@ export function WeeklyReport({ data, locale = "es" }: WeeklyReportProps) {
       }
     : {
         report: "Lectura automática",
+        liveData: "Contenido vivo",
         closeRead: "Lectura de cierre",
-        date: "Fecha",
+        generationDate: "Generado",
+        dataDate: "Datos con corte a",
         week: "Semana",
         regime: "Régimen",
         confidence: "Confianza",
@@ -222,7 +226,12 @@ export function WeeklyReport({ data, locale = "es" }: WeeklyReportProps) {
   return (
     <div className="space-y-5 md:space-y-7">
       <section className="border border-petrol/35 bg-panel p-4 shadow-[0_10px_30px_rgba(31,35,40,0.035)] md:p-8">
-        <p className="text-xs font-semibold uppercase tracking-[0.2em] text-brass">{copy.report}</p>
+        <div className="flex flex-wrap items-center gap-2">
+          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-brass">{copy.report}</p>
+          <span className="border border-petrol/30 bg-white/70 px-2 py-1 text-[10px] font-semibold uppercase text-petrol">
+            {copy.liveData}
+          </span>
+        </div>
         <div className="mt-4 grid gap-6 lg:grid-cols-[1fr_0.62fr] lg:items-end">
           <div>
             <h2 className="text-3xl font-semibold leading-tight text-ink md:text-5xl">{copy.closeRead}</h2>
@@ -231,7 +240,8 @@ export function WeeklyReport({ data, locale = "es" }: WeeklyReportProps) {
             </p>
           </div>
           <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-1">
-            <Metric label={copy.date} value={data.generatedAt} />
+            <Metric label={copy.generationDate} value={data.generatedAt} />
+            <Metric label={copy.dataDate} value={data.dataThrough} />
             <Metric label={copy.week} value={formatWeekLabel(data.weekLabel, locale)} />
             <Metric label={copy.regime} value={locale === "en" ? translateRegimeLabel(data.regimeSummary.current) : data.regimeSummary.current} />
             <div className="grid grid-cols-2 gap-2">

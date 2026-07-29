@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { InstitutionalHero } from "@/components/ui/InstitutionalHero";
+import { formatEditorialDate } from "@/lib/editorial/dates";
 import { getReportsByMonth, reportDisplayName, reportHref } from "@/lib/reports/market-reports";
 import type { MarketReport } from "@/lib/reports/market-reports";
 import { getRouteMetadata } from "@/lib/seo/site";
@@ -89,7 +90,7 @@ function ReportGrid({
           </div>
           <h3 className="mt-3 text-xl font-semibold leading-tight text-ink">{report.title}</h3>
           <p className="mt-2 text-xs font-semibold uppercase text-muted">
-            {report.publishedLabel ?? report.dateLabel}
+            <time dateTime={report.publishedAt}>{formatEditorialDate(report.publishedAt, "es")}</time>
           </p>
           <p className="mt-4 text-sm leading-6 text-muted">{report.summary}</p>
           {report.pdfHref && report.htmlHref && report.markdownHref ? (

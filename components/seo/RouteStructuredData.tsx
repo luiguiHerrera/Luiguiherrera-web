@@ -2,6 +2,7 @@
 
 import { usePathname } from "next/navigation";
 import { JsonLd } from "@/components/seo/JsonLd";
+import { td3Editorial } from "@/lib/research/td3-editorial";
 import { buildArticleJsonLd, buildBreadcrumbJsonLd, buildWebApplicationJsonLd, buildWebPageJsonLd, type SchemaLanguage } from "@/lib/seo/structured-data";
 
 type RouteKind = "application" | "collection" | "page" | "tech";
@@ -21,7 +22,7 @@ const routes: Record<string, RouteSchema> = {
   "/tendencias": { name: "Tendencias", description: "Herramienta educativa para convertir tendencias de mercado en hipótesis prudentes de observación.", kind: "application", category: "EducationalApplication" },
   "/recursos": { name: "Recursos", description: "Catálogo de recursos públicos y scripts open-source para inversionistas.", kind: "collection" },
   "/metodologia": { name: "Metodología", description: "Trazabilidad de fuentes, límites y métodos de las herramientas educativas.", kind: "page" },
-  "/investigacion/td3": { name: "Evaluación realista de claims DRL", description: "Nota técnica de investigación sobre TD3, costes, cash, benchmarks y validación estadística.", kind: "tech" },
+  "/investigacion/td3": { name: td3Editorial.es.headline, description: "Nota técnica de investigación sobre TD3, costes, cash, benchmarks y validación estadística.", kind: "tech" },
   "/legal": { name: "Legal", description: "Información legal y límites de uso de la plataforma.", kind: "page" },
 };
 
@@ -40,7 +41,7 @@ Object.assign(enRoutes, {
   "/en/trends": { name: "Trends", description: "Educational tool for turning market trends into prudent observation hypotheses.", kind: "application", category: "EducationalApplication" },
   "/en/resources": { name: "Resources", description: "Catalog of public resources and open-source scripts for investors.", kind: "collection" },
   "/en/methodology": { name: "Methodology", description: "Traceability for sources, limits and methods used by the educational tools.", kind: "page" },
-  "/en/research/td3": { name: "Realistic evaluation of DRL claims", description: "Technical research note on TD3, costs, cash, benchmarks and statistical validation.", kind: "tech" },
+  "/en/research/td3": { name: td3Editorial.en.headline, description: "Technical research note on TD3, costs, cash, benchmarks and statistical validation.", kind: "tech" },
   "/en/legal": { name: "Legal", description: "Legal information and platform usage limits.", kind: "page" },
 });
 
@@ -59,6 +60,14 @@ export function RouteStructuredData() {
   ]);
   const schemas: object[] = [buildWebPageJsonLd(input, config.kind === "collection" ? "CollectionPage" : "WebPage"), breadcrumbs];
   if (config.kind === "application") schemas.push(buildWebApplicationJsonLd(input, config.category!));
-  if (config.kind === "tech") schemas.push(buildArticleJsonLd(input, "TechArticle", { about: researchAbout }));
+  if (config.kind === "tech") {
+    const editorial = language === "en" ? td3Editorial.en : td3Editorial.es;
+    schemas.push(buildArticleJsonLd(input, "TechArticle", {
+      about: researchAbout,
+      datePublished: editorial.publishedAt,
+      dateModified: editorial.modifiedAt,
+      headline: editorial.headline,
+    }));
+  }
   return <JsonLd data={schemas} />;
 }

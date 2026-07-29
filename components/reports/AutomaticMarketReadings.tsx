@@ -1,11 +1,13 @@
 import Link from "next/link";
+import { HistoricalAutomaticMarketReadings } from "@/components/reports/HistoricalAutomaticMarketReadings";
 import { ReportSection } from "@/components/reports/ReportSection";
 import { displayStatName, displayStatTicker } from "@/lib/statistical-levels/display";
 import type { WeeklyReportData } from "@/lib/reports/build-weekly-report-data";
+import type { HistoricalAutomaticReadingsSnapshot } from "@/lib/reports/historical-automatic-readings";
 
-type AutomaticMarketReadingsProps = {
-  data: WeeklyReportData;
-};
+type AutomaticMarketReadingsProps =
+  | { mode: "live"; data: WeeklyReportData }
+  | { mode: "historical"; snapshot: HistoricalAutomaticReadingsSnapshot };
 
 type StatisticalLevelAsset = WeeklyReportData["statisticalLevels"][number];
 
@@ -142,7 +144,15 @@ function formatStatMetric(value: number | null | undefined, digits: number) {
   return hasMetric(value) ? value.toFixed(digits) : "n/d";
 }
 
-export function AutomaticMarketReadings({ data }: AutomaticMarketReadingsProps) {
+export function AutomaticMarketReadings(props: AutomaticMarketReadingsProps) {
+  if (props.mode === "historical") {
+    return <HistoricalAutomaticMarketReadings snapshot={props.snapshot} />;
+  }
+
+  return <LiveAutomaticMarketReadings data={props.data} />;
+}
+
+function LiveAutomaticMarketReadings({ data }: { data: WeeklyReportData }) {
   const watchItems = limitItems([
     data.volatility.termStructure?.classification ? `Curva VIX: ${data.volatility.termStructure.classification}` : "",
     data.flows.btcEtfFlows?.flows.readingLabel ? `Flujos BTC ETF: ${data.flows.btcEtfFlows.flows.readingLabel}` : "",

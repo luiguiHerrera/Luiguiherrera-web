@@ -2,9 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { MarketReportContent } from "@/components/reports/MarketReportContent";
-import { buildWeeklyReportData } from "@/lib/reports/build-weekly-report-data";
 import {
-  activeMarketReport,
   getAdjacentReports,
   getMarketReportBySlug,
   marketReports,
@@ -12,6 +10,7 @@ import {
   reportHref,
   reportMetadataTitle,
 } from "@/lib/reports/market-reports";
+import { getHistoricalAutomaticReadings } from "@/lib/reports/historical-automatic-readings";
 import { buildArticleJsonLd, buildBreadcrumbJsonLd, buildWebPageJsonLd } from "@/lib/seo/structured-data";
 import { absoluteUrl, buildSeoMetadata } from "@/lib/seo/site";
 
@@ -45,8 +44,9 @@ export default async function MarketReportPage({ params }: ReportPageProps) {
   if (!report) notFound();
 
   const { nextReport, previousReport } = getAdjacentReports(report.id);
-  const automaticData = report.id === activeMarketReport.id ? await buildWeeklyReportData() : null;
+  const automaticReadings = getHistoricalAutomaticReadings(report.id);
   const pathname = reportHref(report);
+  const canonical = absoluteUrl(pathname);
 
   return (
     <main className="mx-auto w-full max-w-7xl overflow-x-hidden px-4 py-8 md:px-5 md:py-14">
@@ -71,13 +71,16 @@ export default async function MarketReportPage({ params }: ReportPageProps) {
           }, "Article", {
             headline: report.title,
             description: report.summary,
-            url: absoluteUrl(pathname),
+            url: canonical,
+            datePublished: report.publishedAt,
+            dateModified: report.modifiedAt,
+            mainEntityOfPage: canonical,
             about: report.executiveSummary.map((item) => item.title),
           }),
         ]}
       />
       <MarketReportContent
-        automaticData={automaticData}
+        automaticReadings={automaticReadings}
         nextReport={nextReport}
         previousReport={previousReport}
         report={report}

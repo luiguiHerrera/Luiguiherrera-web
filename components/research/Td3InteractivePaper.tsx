@@ -1,5 +1,7 @@
 import type { Td3PaperContent } from "@/lib/research/td3-paper";
+import { td3Editorial } from "@/lib/research/td3-editorial";
 import { td3VisualContent } from "@/lib/research/td3-visual-content";
+import { EditorialByline } from "@/components/editorial/EditorialByline";
 import {
   AppendixSection,
   BootstrapValidationFigure,
@@ -28,10 +30,18 @@ export function Td3InteractivePaper({ content }: Td3InteractivePaperProps) {
       ? { claims: "claims", method: "method", evidence: "evidence", conclusion: "conclusion", appendix: "appendix" }
       : { claims: "claims", method: "metodo", evidence: "evidencia", conclusion: "conclusion", appendix: "apendice" };
   const navigationLabel = content.locale === "en" ? "Interactive paper sections" : "Secciones del paper interactivo";
+  const editorial = td3Editorial[content.locale];
 
   return (
     <article className="mx-auto max-w-7xl overflow-x-clip px-4 pb-8 md:px-5 md:pb-12">
       <PaperHero content={content.hero} locale={content.locale} />
+      <div className="mx-auto max-w-4xl">
+        <EditorialByline
+          locale={content.locale}
+          modifiedAt={editorial.modifiedAt}
+          publishedAt={editorial.publishedAt}
+        />
+      </div>
       <PaperNavigation items={visual.navigation} label={navigationLabel} />
 
       <FalseConfidenceFigure content={visual.backtest} />

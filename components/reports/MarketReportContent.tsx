@@ -1,13 +1,14 @@
 import Link from "next/link";
+import { EditorialByline } from "@/components/editorial/EditorialByline";
 import { AutomaticMarketReadings } from "@/components/reports/AutomaticMarketReadings";
 import { ReportFigure } from "@/components/reports/ReportFigure";
 import { buildIcsDataUri } from "@/lib/calendar/ics";
 import { reportDisplayName, reportHref } from "@/lib/reports/market-reports";
-import type { WeeklyReportData } from "@/lib/reports/build-weekly-report-data";
+import type { HistoricalAutomaticReadingsSnapshot } from "@/lib/reports/historical-automatic-readings";
 import type { MarketReport, MarketReportCalendarItem, MarketReportWatchItem } from "@/lib/reports/market-reports";
 
 type MarketReportContentProps = {
-  automaticData: WeeklyReportData | null;
+  automaticReadings: HistoricalAutomaticReadingsSnapshot | null;
   nextReport?: MarketReport | null;
   previousReport?: MarketReport | null;
   report: MarketReport;
@@ -40,7 +41,7 @@ function calendarItemDataUri(report: MarketReport, item: MarketReportCalendarIte
 }
 
 export function MarketReportContent({
-  automaticData,
+  automaticReadings,
   nextReport,
   previousReport,
   report,
@@ -66,8 +67,14 @@ export function MarketReportContent({
               {report.status === "actual" ? "Informe actual" : "Archivado"}
             </span>
           </div>
-          <p className="mt-2 text-xs font-semibold uppercase text-muted">{report.dateLabel}</p>
           <h1 className="mt-2 text-3xl font-semibold leading-tight text-ink md:text-5xl">{report.title}</h1>
+          <EditorialByline
+            automaticDataCutoffAt={report.automaticDataCutoffAt}
+            editorialCutoffAt={report.editorialCutoffAt}
+            locale="es"
+            modifiedAt={report.modifiedAt}
+            publishedAt={report.publishedAt}
+          />
           <p className="mt-4 text-base leading-7 text-muted">{report.subtitle}</p>
           <ReportExportLinks report={report} />
         </div>
@@ -164,7 +171,9 @@ export function MarketReportContent({
         </div>
       </section>
 
-      {automaticData ? <AutomaticMarketReadings data={automaticData} /> : null}
+      {automaticReadings ? (
+        <AutomaticMarketReadings mode="historical" snapshot={automaticReadings} />
+      ) : null}
 
       <section className="grid gap-6 py-8 md:py-10 lg:grid-cols-[0.34fr_1fr]">
         <div>
@@ -324,7 +333,7 @@ function WatchControlItem({ item, report }: { item: MarketReportWatchItem; repor
   const whatWouldChange =
     item.whatWouldChange ??
     "La lectura cambiaría si el comportamiento observado se sostiene varias semanas o contradice la tesis principal del informe.";
-  const asOf = item.asOf ?? report.publishedLabel ?? report.dateLabel;
+  const asOf = item.asOf ?? report.publishedAt;
   const source = item.source ?? report.sourcesNote;
 
   return (
@@ -343,7 +352,7 @@ function WatchControlItem({ item, report }: { item: MarketReportWatchItem; repor
         <div className="grid gap-4 text-sm leading-6 text-muted md:grid-cols-2">
           <ReadingColumn title="Qué mira" body={item.whatLooksAt} />
           <ReadingColumn title="Por qué importa" body={item.whyItMatters} />
-          <ReadingColumn title="Lectura actual" body={currentReading} />
+          <ReadingColumn title="Lectura al publicar" body={currentReading} />
           <ReadingColumn title="Qué cambiaría" body={whatWouldChange} />
         </div>
         <div className="mt-4 border-t border-line pt-3 text-xs leading-5 text-muted">

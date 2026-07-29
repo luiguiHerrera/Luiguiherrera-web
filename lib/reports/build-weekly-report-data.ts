@@ -114,8 +114,9 @@ export async function buildWeeklyReportData() {
   ]);
   const manifest = await getStatisticalLevelsManifest();
   const assets = await Promise.all(coreEtfs.map((ticker) => getStatisticalLevelsAsset(ticker)));
-  const generatedAt = manifest.generatedAt;
-  const { day, month, year } = dateParts(generatedAt);
+  const dataThrough = manifest.generatedAt;
+  const generatedAt = manifest.snapshotGeneratedAt ?? dataThrough;
+  const { day, month, year } = dateParts(dataThrough);
   const cyclePhase = presidentialCyclePhase(year);
   const spySeasonality = await getStatisticalLevelsAssetSeasonality("SPY");
   const seasonalityWindow = spySeasonality?.windows["10Y"] ?? spySeasonality?.windows.Full ?? null;
@@ -139,7 +140,8 @@ export async function buildWeeklyReportData() {
 
   return {
     generatedAt,
-    weekLabel: weekLabel(generatedAt),
+    dataThrough,
+    weekLabel: weekLabel(dataThrough),
     regimeSummary: dashboard.regimeSummary,
     executiveSummary: {
       helped: dashboard.regimeSummary.riskSupportSignals.slice(0, 3),

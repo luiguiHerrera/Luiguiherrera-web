@@ -73,6 +73,10 @@ export type MarketReport = {
   subtitle: string;
   dateLabel: string;
   publishedLabel?: string;
+  publishedAt: string;
+  modifiedAt: string;
+  editorialCutoffAt?: string;
+  automaticDataCutoffAt?: string;
   summary: string;
   calendarHref?: string;
   htmlHref?: string;
@@ -104,6 +108,8 @@ export const marketReports: MarketReport[] = [
     subtitle: "IA, flujos y concentración: un mercado fuerte, pero más mecánico",
     dateLabel: "Primera lectura de julio de 2026",
     publishedLabel: "Julio de 2026",
+    publishedAt: "2026-07-06",
+    modifiedAt: "2026-07-06",
     summary: "IA, flujos, concentración y señales de amplitud en la primera lectura mensual.",
     calendarHref: "/reports/primer-informe-julio-2026-calendar.ics",
     htmlHref: "/reports/primer-informe-julio-2026.html",
@@ -408,6 +414,10 @@ export const marketReports: MarketReport[] = [
     subtitle: "Resultados, rotación, dólar y la prueba real de la inteligencia artificial.",
     dateLabel: "Corte: 17 de julio de 2026 · Publicado: 20 de julio de 2026",
     publishedLabel: "20 de julio de 2026",
+    publishedAt: "2026-07-20",
+    modifiedAt: "2026-07-20",
+    editorialCutoffAt: "2026-07-17",
+    automaticDataCutoffAt: "2026-07-18",
     summary: "Momentum, resultados, dólar y dispersión interna para seguimiento de activos, factores de mercado y riesgo.",
     htmlHref: "/reports/segundo-informe-julio-2026.html",
     markdownHref: "/reports/segundo-informe-julio-2026.md",
