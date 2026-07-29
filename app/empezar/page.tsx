@@ -1,11 +1,8 @@
 import { EditorialPathPage } from "@/components/pathways/EditorialPathPage";
-import type { Metadata } from "next";
 import { ReadingCard } from "@/components/seo/ReadingCard";
+import { getRouteMetadata } from "@/lib/seo/site";
 
-export const metadata: Metadata = {
-  title: "Empezar a invertir | Ruta guiada de preparación financiera",
-  description: "Ruta guiada para ordenar presupuesto, deudas, diagnóstico, protección y prácticas antes de invertir.",
-};
+export const metadata = getRouteMetadata("/empezar");
 
 const cards = [
   {

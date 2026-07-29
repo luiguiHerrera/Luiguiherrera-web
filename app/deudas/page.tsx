@@ -1,12 +1,9 @@
 import { DebtPlanner } from "@/components/debt/DebtPlanner";
-import type { Metadata } from "next";
 import { ReadingCard } from "@/components/seo/ReadingCard";
 import { InstitutionalHero } from "@/components/ui/InstitutionalHero";
+import { getRouteMetadata } from "@/lib/seo/site";
 
-export const metadata: Metadata = {
-  title: "Gestión de deudas | Avalancha, bola de nieve y flujo mensual",
-  description: "Herramienta educativa para evaluar deudas, pagos mínimos, flujo mensual, avalancha, bola de nieve, abonos extraordinarios y rentabilidad mínima comparable.",
-};
+export const metadata = getRouteMetadata("/deudas");
 
 export default function DeudasPage() {
   return (

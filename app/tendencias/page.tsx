@@ -1,12 +1,9 @@
-import type { Metadata } from "next";
 import { TrendsExplorer } from "@/components/trends/TrendsExplorer";
 import { trendsContent } from "@/lib/trends/trends-content";
 import { ReadingCard } from "@/components/seo/ReadingCard";
+import { getRouteMetadata } from "@/lib/seo/site";
 
-export const metadata: Metadata = {
-  title: "Tendencias | Hipótesis de inversión prudentes",
-  description: "Marco educativo para convertir tendencias como inteligencia artificial, robótica, energía, ciberseguridad, cripto e infraestructura en hipótesis de inversión prudentes.",
-};
+export const metadata = getRouteMetadata("/tendencias");
 
 export default function TendenciasPage() {
   return <TrendsExplorer content={trendsContent.es} readingCard={<ReadingCard attached title="Ficha de lectura" items={[

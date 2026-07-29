@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import type { FocusEvent, KeyboardEvent, MouseEvent, ReactNode } from "react";
 import { LanguageSwitcher } from "@/components/layout/LanguageSwitcher";
 import { getDictionary } from "@/lib/i18n/get-dictionary";
@@ -150,8 +150,7 @@ function DesktopNavLink({ href, label }: { href: string; label: string }) {
   );
 }
 
-export function Header() {
-  const pathname = usePathname();
+function HeaderForPathname({ pathname }: { pathname: string }) {
   const [mobileOpen, setMobileOpen] = useState(false);
   const locale = localeFromPathname(pathname);
   const dictionary = getDictionary(locale);
@@ -164,10 +163,6 @@ export function Header() {
     { href: hrefs.resources, label: dictionary.layout.nav.resources, items: dictionary.layout.resourcesItems },
   ];
   const isHome = pathname === "/" || pathname === "/en";
-
-  useEffect(() => {
-    setMobileOpen(false);
-  }, [pathname]);
 
   function handleHeaderKeyDown(event: KeyboardEvent<HTMLElement>) {
     if (event.key === "Escape") setMobileOpen(false);
@@ -241,4 +236,9 @@ export function Header() {
       ) : null}
     </header>
   );
+}
+
+export function Header() {
+  const pathname = usePathname();
+  return <HeaderForPathname key={pathname} pathname={pathname} />;
 }

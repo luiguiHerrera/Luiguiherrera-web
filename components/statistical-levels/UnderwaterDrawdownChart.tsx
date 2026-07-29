@@ -24,6 +24,14 @@ function buildPath(values: number[]) {
     .join(" ");
 }
 
+function calculateDrawdowns(series: Array<{ close: number }>) {
+  let peak = -Infinity;
+  return series.map((point) => {
+    peak = Math.max(peak, point.close);
+    return peak > 0 ? point.close / peak - 1 : 0;
+  });
+}
+
 function periodLabel(frequency: StatisticalFrequency, locale: "es" | "en") {
   if (locale === "en") {
     if (frequency === "daily") return "daily periods";
@@ -39,11 +47,7 @@ export function UnderwaterDrawdownChart({ asset, frequency, locale = "es", windo
   const data = asset?.frequencies[frequency];
   const metric = data?.windows[window];
   const series = data?.compactSeries ?? [];
-  let peak = -Infinity;
-  const drawdowns = series.map((point) => {
-    peak = Math.max(peak, point.close);
-    return peak > 0 ? point.close / peak - 1 : 0;
-  });
+  const drawdowns = calculateDrawdowns(series);
   const path = buildPath(drawdowns);
   const area = path ? `${path} L 100 8 L 0 8 Z` : "";
   const minDrawdown = Math.min(-0.01, ...drawdowns);

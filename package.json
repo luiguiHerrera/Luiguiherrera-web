@@ -9,7 +9,9 @@
     "build:td3-performance": "node scripts/build-td3-performance.mjs",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "eslint .",
+    "validate:seo": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --experimental-strip-types scripts/validate-seo.mts",
+    "seo:validate": "npm run validate:seo"
   },
   "dependencies": {
     "exceljs": "^4.4.0",
@@ -22,6 +24,8 @@
     "@types/react": "19.0.8",
     "@types/react-dom": "19.0.3",
     "autoprefixer": "10.4.20",
+    "eslint": "^9.39.5",
+    "eslint-config-next": "^16.2.7",
     "postcss": "8.4.49",
     "tailwindcss": "3.4.17",
     "typescript": "5.6.3"

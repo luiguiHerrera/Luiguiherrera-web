@@ -1,5 +1,8 @@
 import { EditorialPathPage } from "@/components/pathways/EditorialPathPage";
 import { ReadingCard } from "@/components/seo/ReadingCard";
+import { getRouteMetadata } from "@/lib/seo/site";
+
+export const metadata = getRouteMetadata("/en/start");
 
 const cards = [
   {

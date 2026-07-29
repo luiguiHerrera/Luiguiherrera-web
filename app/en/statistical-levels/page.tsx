@@ -2,6 +2,9 @@ import { StatLevelsLab } from "@/components/statistical-levels/StatLevelsLab";
 import { ReadingCard } from "@/components/seo/ReadingCard";
 import { InstitutionalHero } from "@/components/ui/InstitutionalHero";
 import { getStatisticalLevelsPageData } from "@/lib/statistical-levels/get-statistical-levels-data";
+import { getRouteMetadata } from "@/lib/seo/site";
+
+export const metadata = getRouteMetadata("/en/statistical-levels");
 
 type StatisticalLevelsPageProps = {
   searchParams?: Promise<Record<string, string | string[] | undefined>>;

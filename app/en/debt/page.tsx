@@ -1,6 +1,9 @@
 import { DebtPlanner } from "@/components/debt/DebtPlanner";
 import { ReadingCard } from "@/components/seo/ReadingCard";
 import { InstitutionalHero } from "@/components/ui/InstitutionalHero";
+import { getRouteMetadata } from "@/lib/seo/site";
+
+export const metadata = getRouteMetadata("/en/debt");
 
 export default function EnglishDebtPage() {
   return (

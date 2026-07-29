@@ -1,8 +1,8 @@
 import { StatLevelsLab } from "@/components/statistical-levels/StatLevelsLab";
-import type { Metadata } from "next";
 import { ReadingCard } from "@/components/seo/ReadingCard";
 import { InstitutionalHero } from "@/components/ui/InstitutionalHero";
 import { getStatisticalLevelsPageData } from "@/lib/statistical-levels/get-statistical-levels-data";
+import { getRouteMetadata } from "@/lib/seo/site";
 
 type NivelesEstadisticosPageProps = {
   searchParams?: Promise<Record<string, string | string[] | undefined>>;
@@ -73,7 +73,4 @@ export default async function NivelesEstadisticosPage({ searchParams }: NivelesE
     </div>
   );
 }
-export const metadata: Metadata = {
-  title: "Niveles estadísticos | Percentiles, z-scores y estacionalidad",
-  description: "Laboratorio de niveles estadísticos para comparar activos por percentil, z-score, extensión, rango histórico, drawdown y estacionalidad.",
-};
+export const metadata = getRouteMetadata("/niveles-estadisticos");

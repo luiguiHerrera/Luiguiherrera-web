@@ -1,22 +1,10 @@
-import type { Metadata } from "next";
 import Link from "next/link";
 import { InstitutionalHero } from "@/components/ui/InstitutionalHero";
 import { getReportsByMonth, reportDisplayName, reportHref } from "@/lib/reports/market-reports";
 import type { MarketReport } from "@/lib/reports/market-reports";
+import { getRouteMetadata } from "@/lib/seo/site";
 
-export const metadata: Metadata = {
-  title: "Archivo de informes | Luigui Herrera",
-  description: "Archivo de informes de mercado multi-activo con lecturas editoriales por mes.",
-  alternates: {
-    canonical: "/informes",
-  },
-  openGraph: {
-    title: "Archivo de informes | Luigui Herrera",
-    description: "Lecturas de mercado cargadas por mes, con informes actuales y archivados.",
-    url: "/informes",
-    type: "website",
-  },
-};
+export const metadata = getRouteMetadata("/informes");
 
 const currentMonthKey = "2026-07";
 const previousMonthKey = "2026-06";

@@ -1,12 +1,9 @@
-import type { Metadata } from "next";
 import { ReadingCard } from "@/components/seo/ReadingCard";
 import { InstitutionalHero } from "@/components/ui/InstitutionalHero";
 import { QuantAnnotation } from "@/components/ui/QuantAnnotation";
+import { getRouteMetadata } from "@/lib/seo/site";
 
-export const metadata: Metadata = {
-  title: "Metodología | Fuentes, límites y trazabilidad",
-  description: "Cómo se construyen las lecturas de mercado, qué datos usan, qué límites tienen y qué no promete la plataforma.",
-};
+export const metadata = getRouteMetadata("/metodologia");
 
 const principles = [
   ["Prudencia", "Preferimos lecturas sobrias antes que conclusiones llamativas."],

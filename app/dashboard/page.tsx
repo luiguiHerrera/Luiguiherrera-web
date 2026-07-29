@@ -1,5 +1,4 @@
 import { BtcEtfFlowsModule } from "@/components/dashboard/BtcEtfFlowsModule";
-import type { Metadata } from "next";
 import { DashboardModule } from "@/components/dashboard/DashboardModule";
 import { FedWatchModule } from "@/components/dashboard/FedWatchModule";
 import { GldFlowPressureModule } from "@/components/dashboard/GldFlowPressureModule";
@@ -16,6 +15,7 @@ import { QuantAnnotation } from "@/components/ui/QuantAnnotation";
 import { ReadingCard } from "@/components/seo/ReadingCard";
 import { getDashboardData } from "@/lib/dashboard/get-dashboard-data";
 import { dataStatusLabels } from "@/lib/dashboard/status";
+import { getRouteMetadata } from "@/lib/seo/site";
 import { translateDashboardText, translateRegimeLabel } from "@/lib/dashboard/translate-dashboard-copy";
 import { buildWeeklyReportData } from "@/lib/reports/build-weekly-report-data";
 import type { RegimeBias } from "@/lib/dashboard/types";
@@ -23,10 +23,7 @@ import type { WeeklyReportData } from "@/lib/reports/build-weekly-report-data";
 
 export const revalidate = 86400;
 
-export const metadata: Metadata = {
-  title: "Dashboard de régimen de mercado | VIX, rotación, flujos y GLD",
-  description: "Dashboard educativo de régimen de mercado con rotación sectorial, amplitud, VIX, estructura de volatilidad, BTC ETF flows y proxy de presión de flujos en GLD.",
-};
+export const metadata = getRouteMetadata("/dashboard");
 
 const riskBiasLabels: Record<RegimeBias, string> = {
   favorable: "Favorable",

@@ -1,8 +1,7 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import Link from "next/link";
-import { useSearchParams } from "next/navigation";
 import { DisclaimerBox } from "@/components/ui/DisclaimerBox";
 import { DiagnosticPrintableReport } from "@/components/diagnostic/DiagnosticPrintableReport";
 import { DiagnosticReportActions } from "@/components/diagnostic/DiagnosticReportActions";
@@ -639,27 +638,14 @@ function ResultScreen({ answers, locale, mode, restart }: { answers: DiagnosticA
 }
 
 export function DiagnosticFlow({ initialMode, locale = "es" }: { initialMode?: DiagnosticMode; locale?: DiagnosticLocale }) {
-  const searchParams = useSearchParams();
-  const restartToken = searchParams.get("restart");
   const [mode, setMode] = useState<DiagnosticMode | undefined>(initialMode);
   const [started, setStarted] = useState(Boolean(initialMode));
   const [index, setIndex] = useState(0);
   const [answers, setAnswers] = useState<DiagnosticAnswers>({});
   const [completed, setCompleted] = useState(false);
   const questions = useMemo(() => mode ? getQuestionsForMode(mode, answers) : [], [answers, mode]);
-  const question = questions[Math.min(index, questions.length - 1)];
-
-  useEffect(() => {
-    setMode(initialMode);
-    setStarted(Boolean(initialMode));
-    setCompleted(false);
-    setIndex(0);
-    setAnswers({});
-  }, [initialMode, restartToken]);
-
-  useEffect(() => {
-    if (index >= questions.length) setIndex(Math.max(0, questions.length - 1));
-  }, [index, questions.length]);
+  const safeIndex = Math.min(index, Math.max(0, questions.length - 1));
+  const question = questions[safeIndex];
 
   function start() {
     if (!mode) return;
@@ -686,7 +672,7 @@ export function DiagnosticFlow({ initialMode, locale = "es" }: { initialMode?: D
   }
 
   function goBack() {
-    if (index === 0) {
+    if (safeIndex === 0) {
       setStarted(false);
       return;
     }
@@ -695,7 +681,7 @@ export function DiagnosticFlow({ initialMode, locale = "es" }: { initialMode?: D
 
   function goNext() {
     if (!question || !isAnswered(answers[question.id])) return;
-    if (index >= questions.length - 1) {
+    if (safeIndex >= questions.length - 1) {
       setCompleted(true);
       return;
     }
@@ -711,7 +697,7 @@ export function DiagnosticFlow({ initialMode, locale = "es" }: { initialMode?: D
     <QuestionScreen
       answer={answers[question.id]}
       answers={answers}
-      currentIndex={index}
+      currentIndex={safeIndex}
       locale={locale}
       mode={mode}
       onAnswer={updateAnswer}

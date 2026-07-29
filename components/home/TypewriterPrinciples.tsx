@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 
 const defaultPhrases = [
   "Entiende el contexto.",
@@ -19,14 +19,14 @@ export function TypewriterPrinciples({
   const [visibleChars, setVisibleChars] = useState(0);
   const [deleting, setDeleting] = useState(false);
 
-  const currentPhrase = useMemo(() => phrases[phraseIndex], [phraseIndex]);
+  const currentPhrase = phrases[phraseIndex] ?? "";
 
   useEffect(() => {
     const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
     if (prefersReducedMotion) {
-      setVisibleChars(currentPhrase.length);
-      return;
+      const timeout = window.setTimeout(() => setVisibleChars(currentPhrase.length), 0);
+      return () => window.clearTimeout(timeout);
     }
 
     const typingSpeed = deleting ? 32 : 54;
@@ -52,7 +52,7 @@ export function TypewriterPrinciples({
 
         if (deleting && visibleChars === 0) {
           setDeleting(false);
-        setPhraseIndex((value) => (value + 1) % phrases.length);
+          setPhraseIndex((value) => (value + 1) % phrases.length);
         }
       },
       !deleting && visibleChars === currentPhrase.length

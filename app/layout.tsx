@@ -9,8 +9,6 @@ import { RouteStructuredData } from "@/components/seo/RouteStructuredData";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
-  title: "Herramientas para inversionistas",
-  description: "Diagnósticos, simulaciones y lecturas educativas de mercado.",
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {

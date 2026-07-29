@@ -899,6 +899,18 @@ export function reportDisplayName(report: MarketReport) {
   return report.label ?? report.title;
 }
 
+function normalizedTitlePart(value: string) {
+  return value.trim().replace(/\s+/g, " ").toLocaleLowerCase("es");
+}
+
+export function reportMetadataTitle(report: MarketReport) {
+  const parts = [reportDisplayName(report), report.title].filter(
+    (part, index, values) =>
+      values.findIndex((candidate) => normalizedTitlePart(candidate) === normalizedTitlePart(part)) === index,
+  );
+  return parts.join(" | ");
+}
+
 export function reportHref(report: MarketReport) {
   return `/informes/${report.id}`;
 }

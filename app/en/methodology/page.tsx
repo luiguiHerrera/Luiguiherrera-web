@@ -1,6 +1,9 @@
 import { ReadingCard } from "@/components/seo/ReadingCard";
 import { QuantAnnotation } from "@/components/ui/QuantAnnotation";
 import { InstitutionalHero } from "@/components/ui/InstitutionalHero";
+import { getRouteMetadata } from "@/lib/seo/site";
+
+export const metadata = getRouteMetadata("/en/methodology");
 
 const principles = [
   ["Prudence", "We prefer sober readings over attention-grabbing conclusions."],

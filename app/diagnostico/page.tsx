@@ -1,17 +1,18 @@
 import { DiagnosticFlow } from "@/components/diagnostic/DiagnosticFlow";
-import type { Metadata } from "next";
 import type { DiagnosticMode } from "@/lib/diagnostic/types";
 import { ReadingCard } from "@/components/seo/ReadingCard";
 import { InstitutionalHero } from "@/components/ui/InstitutionalHero";
+import { getRouteMetadata } from "@/lib/seo/site";
 
 function modeFromSearchParam(mode: string | string[] | undefined): DiagnosticMode | undefined {
   if (mode === "quick" || mode === "complete") return mode;
   return undefined;
 }
 
-export default async function DiagnosticoPage({ searchParams }: { searchParams?: Promise<{ mode?: string | string[] }> }) {
+export default async function DiagnosticoPage({ searchParams }: { searchParams?: Promise<{ mode?: string | string[]; restart?: string | string[] }> }) {
   const params = await searchParams;
   const initialMode = modeFromSearchParam(params?.mode);
+  const restartToken = Array.isArray(params?.restart) ? params.restart[0] : params?.restart;
 
   return (
     <div className="mx-auto max-w-7xl px-5 py-10 md:py-14">
@@ -30,11 +31,8 @@ export default async function DiagnosticoPage({ searchParams }: { searchParams?:
         { label: "Límites", value: "No es una evaluación regulatoria de idoneidad o conveniencia y no guarda respuestas personales." },
         { label: "Siguiente paso", value: "Usar el resultado como punto de conversación y revisar protección, deudas o mercado según el caso." },
       ]} />
-      <DiagnosticFlow initialMode={initialMode} />
+      <DiagnosticFlow key={`${initialMode ?? "none"}:${restartToken ?? ""}`} initialMode={initialMode} />
     </div>
   );
 }
-export const metadata: Metadata = {
-  title: "Diagnóstico del inversionista | Riesgo, horizonte y capacidad",
-  description: "Diagnóstico educativo para ordenar horizonte, liquidez, experiencia, tolerancia psicológica, sesgos y capacidad real antes de invertir.",
-};
+export const metadata = getRouteMetadata("/diagnostico");

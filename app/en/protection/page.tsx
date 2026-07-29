@@ -2,6 +2,9 @@ import Link from "next/link";
 import { InvestmentPractice } from "@/components/protection/InvestmentPractice";
 import { ReadingCard } from "@/components/seo/ReadingCard";
 import { InstitutionalHero } from "@/components/ui/InstitutionalHero";
+import { getRouteMetadata } from "@/lib/seo/site";
+
+export const metadata = getRouteMetadata("/en/protection");
 
 const protectionItems = [
   { title: "Money warning signs", href: "/en/protect-your-money", description: "Checklist, warning signs and filters before committing capital." },

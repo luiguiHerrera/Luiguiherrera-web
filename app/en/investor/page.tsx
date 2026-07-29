@@ -1,4 +1,7 @@
 import { EditorialPathPage } from "@/components/pathways/EditorialPathPage";
+import { getRouteMetadata } from "@/lib/seo/site";
+
+export const metadata = getRouteMetadata("/en/investor");
 
 const cards = [
   {

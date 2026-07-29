@@ -10,9 +10,10 @@ import {
   marketReports,
   reportDisplayName,
   reportHref,
+  reportMetadataTitle,
 } from "@/lib/reports/market-reports";
 import { buildArticleJsonLd, buildBreadcrumbJsonLd, buildWebPageJsonLd } from "@/lib/seo/structured-data";
-import { absoluteUrl } from "@/lib/seo/site";
+import { absoluteUrl, buildSeoMetadata } from "@/lib/seo/site";
 
 type ReportPageProps = {
   params: Promise<{ slug: string }>;
@@ -28,19 +29,14 @@ export async function generateMetadata({ params }: ReportPageProps): Promise<Met
   if (!report) return {};
   const canonical = reportHref(report);
 
-  return {
-    title: `${reportDisplayName(report)} | ${report.title}`,
+  return buildSeoMetadata({
+    pathname: canonical,
+    language: "es",
+    title: reportMetadataTitle(report),
     description: report.summary,
-    alternates: {
-      canonical,
-    },
-    openGraph: {
-      title: report.title,
-      description: report.summary,
-      url: canonical,
-      type: "article",
-    },
-  };
+    socialTitle: report.title,
+    type: "article",
+  });
 }
 
 export default async function MarketReportPage({ params }: ReportPageProps) {

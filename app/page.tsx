@@ -1,5 +1,4 @@
 import Image from "next/image";
-import type { Metadata } from "next";
 import Link from "next/link";
 import { ToolCard } from "@/components/ui/ToolCard";
 import { TypewriterPrinciples } from "@/components/home/TypewriterPrinciples";
@@ -8,6 +7,7 @@ import { getHomeDashboardPreviewData } from "@/lib/dashboard/get-home-dashboard-
 import { displayStatTicker } from "@/lib/statistical-levels/display";
 import { getStatisticalLevelsManifest } from "@/lib/statistical-levels/get-statistical-levels-data";
 import type { BtcEtfFlowsDashboardData, RegimeBias, RegimeSignal, RegimeSummary, SectorRotationData, VixDashboardData } from "@/lib/dashboard/types";
+import { getRouteMetadata } from "@/lib/seo/site";
 
 const principles = [
   ["Entender el contexto", "Leer el tablero antes de mover la ficha."],
@@ -501,8 +501,4 @@ export default async function Home() {
     </div>
   );
 }
-export const metadata: Metadata = {
-  title: "Herramientas para inversionistas | Riesgo, mercado y finanzas personales",
-  description: "Herramientas educativas para ordenar presupuesto, deudas, perfil de riesgo, protección del capital, informes de mercado, dashboard, niveles estadísticos e investigación cuantitativa.",
-  alternates: { canonical: "/", languages: { es: "/", en: "/en", "x-default": "/" } },
-};
+export const metadata = getRouteMetadata("/");

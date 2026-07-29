@@ -1,5 +1,8 @@
 import { MethodologyNote } from "@/components/ui/MethodologyNote";
 import { SectionHeader } from "@/components/ui/SectionHeader";
+import { getRouteMetadata } from "@/lib/seo/site";
+
+export const metadata = getRouteMetadata("/en/legal");
 
 const legalSections = [
   ["No personalized advice", "The content is educational and informational. It does not constitute financial, legal, tax, wealth or personalized advice."],

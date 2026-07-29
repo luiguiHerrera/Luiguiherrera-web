@@ -1,12 +1,9 @@
 import { tradingViewScripts } from "@/lib/resources/tradingview-scripts";
-import type { Metadata } from "next";
 import { ReadingCard } from "@/components/seo/ReadingCard";
 import { InstitutionalHero } from "@/components/ui/InstitutionalHero";
+import { getRouteMetadata } from "@/lib/seo/site";
 
-export const metadata: Metadata = {
-  title: "Recursos para inversionistas | Scripts TradingView y herramientas",
-  description: "Catálogo de recursos públicos para inversionistas, incluyendo scripts open-source de TradingView para niveles estadísticos y contexto de mercado.",
-};
+export const metadata = getRouteMetadata("/recursos");
 
 const toolCategories = [
   {

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { calculateDebtPlan } from "@/lib/debt/calculate-debt-plan";
 import type { DebtInput, DebtKind, DebtPlanResult, DebtProfileInput, ExtraContributionInput, PayoffMethod, PayoffPlan } from "@/lib/debt/types";
 
@@ -568,13 +568,11 @@ function RateField({
   onChange: (value: number) => void;
   value: number;
 }) {
-  const [draftValue, setDraftValue] = useState(String(value));
-
-  useEffect(() => {
-    if (percentInputToNumber(draftValue) !== value) {
-      setDraftValue(String(value));
-    }
-  }, [draftValue, value]);
+  const [draft, setDraft] = useState({
+    sourceValue: value,
+    text: String(value),
+  });
+  const draftValue = draft.sourceValue === value ? draft.text : String(value);
 
   return (
     <label className="grid gap-2">
@@ -583,8 +581,9 @@ function RateField({
         className="rounded-[4px] border border-line bg-white/80 px-3 py-2.5 text-sm font-semibold text-ink outline-none transition focus:border-petrol focus:bg-white"
         inputMode="decimal"
         onChange={(event) => {
-          setDraftValue(event.target.value);
-          onChange(percentInputToNumber(event.target.value));
+          const nextValue = percentInputToNumber(event.target.value);
+          setDraft({ sourceValue: nextValue, text: event.target.value });
+          onChange(nextValue);
         }}
         type="text"
         value={draftValue}

@@ -2,15 +2,19 @@ import { DiagnosticFlow } from "@/components/diagnostic/DiagnosticFlow";
 import type { DiagnosticMode } from "@/lib/diagnostic/types";
 import { ReadingCard } from "@/components/seo/ReadingCard";
 import { InstitutionalHero } from "@/components/ui/InstitutionalHero";
+import { getRouteMetadata } from "@/lib/seo/site";
+
+export const metadata = getRouteMetadata("/en/diagnostic");
 
 function modeFromSearchParam(mode: string | string[] | undefined): DiagnosticMode | undefined {
   if (mode === "quick" || mode === "complete") return mode;
   return undefined;
 }
 
-export default async function EnglishDiagnosticPage({ searchParams }: { searchParams?: Promise<{ mode?: string | string[] }> }) {
+export default async function EnglishDiagnosticPage({ searchParams }: { searchParams?: Promise<{ mode?: string | string[]; restart?: string | string[] }> }) {
   const params = await searchParams;
   const initialMode = modeFromSearchParam(params?.mode);
+  const restartToken = Array.isArray(params?.restart) ? params.restart[0] : params?.restart;
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-10 md:px-5 md:py-14">
@@ -29,7 +33,7 @@ export default async function EnglishDiagnosticPage({ searchParams }: { searchPa
         { label: "Limits", value: "It is not a regulatory suitability or appropriateness assessment and does not store personal answers." },
         { label: "Next step", value: "Use the result as a conversation starting point and review protection, debt or market context as needed." },
       ]} />
-      <DiagnosticFlow initialMode={initialMode} locale="en" />
+      <DiagnosticFlow key={`${initialMode ?? "none"}:${restartToken ?? ""}`} initialMode={initialMode} locale="en" />
     </div>
   );
 }

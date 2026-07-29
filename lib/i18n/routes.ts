@@ -1,29 +1,14 @@
 import type { Locale } from "@/lib/i18n/locales";
-
-export const routePairs = [
-  { es: "/", en: "/en" },
-  { es: "/diagnostico", en: "/en/diagnostic" },
-  { es: "/investigacion/td3", en: "/en/research/td3" },
-  { es: "/proteccion", en: "/en/protection" },
-  { es: "/tendencias", en: "/en/trends" },
-  { es: "/recursos", en: "/en/resources" },
-  { es: "/dashboard", en: "/en/dashboard" },
-  { es: "/niveles-estadisticos", en: "/en/statistical-levels" },
-  { es: "/informes", en: "/en/weekly-report" },
-  { es: "/informe-semanal", en: "/en/weekly-report" },
-  { es: "/protege-tu-dinero", en: "/en/protect-your-money" },
-  { es: "/metodologia", en: "/en/methodology" },
-  { es: "/legal", en: "/en/legal" },
-] as const;
+import { getTranslatedPathname } from "./language-pairs.ts";
 
 export function translatePathname(pathname: string, targetLocale: Locale) {
   const normalized = pathname !== "/" && pathname.endsWith("/") ? pathname.slice(0, -1) : pathname;
-  const match = routePairs.find((pair) => pair.es === normalized || pair.en === normalized);
-  if (match) return match[targetLocale];
+  const translatedPathname = getTranslatedPathname(normalized, targetLocale);
+  if (translatedPathname) return translatedPathname;
 
-  if (targetLocale === "es" && normalized.startsWith("/en/")) return normalized.replace(/^\/en/, "") || "/";
-  if (targetLocale === "en" && !normalized.startsWith("/en")) return `/en${normalized === "/" ? "" : normalized}`;
-  return normalized;
+  const isEnglishPath = normalized === "/en" || normalized.startsWith("/en/");
+  if (targetLocale === "en") return isEnglishPath ? normalized : "/en";
+  return isEnglishPath ? "/" : normalized;
 }
 
 export function withSearch(pathname: string, search: string) {

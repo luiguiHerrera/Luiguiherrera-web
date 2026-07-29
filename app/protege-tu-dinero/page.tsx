@@ -1,10 +1,10 @@
 import Link from "next/link";
-import type { Metadata } from "next";
 import { RedFlagsChecklist } from "@/components/red-flags/RedFlagsChecklist";
 import { RiskPill } from "@/components/ui/RiskPill";
 import { ReadingCard } from "@/components/seo/ReadingCard";
 import { InstitutionalHero } from "@/components/ui/InstitutionalHero";
 import type { ReactNode } from "react";
+import { getRouteMetadata } from "@/lib/seo/site";
 
 const protectionFilters = [
   {
@@ -214,7 +214,4 @@ export function ProtectYourMoneyContent({ locale, readingCard }: { locale: "en" 
     </div>
   );
 }
-export const metadata: Metadata = {
-  title: "Alertas para tu dinero | Checklist antes de invertir",
-  description: "Checklist educativo basado en criterios públicos de protección al inversor para revisar entidad, producto, documentación, presión comercial, promesas y señales de alerta.",
-};
+export const metadata = getRouteMetadata("/protege-tu-dinero");

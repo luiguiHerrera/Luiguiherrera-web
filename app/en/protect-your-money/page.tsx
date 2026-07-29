@@ -1,5 +1,8 @@
 import { ProtectYourMoneyContent } from "@/app/protege-tu-dinero/page";
 import { ReadingCard } from "@/components/seo/ReadingCard";
+import { getRouteMetadata } from "@/lib/seo/site";
+
+export const metadata = getRouteMetadata("/en/protect-your-money");
 
 export default function EnglishProtectYourMoneyPage() {
   return <ProtectYourMoneyContent locale="en" readingCard={<ReadingCard title="Reading card" items={[

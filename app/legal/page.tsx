@@ -1,5 +1,8 @@
 import { MethodologyNote } from "@/components/ui/MethodologyNote";
 import { SectionHeader } from "@/components/ui/SectionHeader";
+import { getRouteMetadata } from "@/lib/seo/site";
+
+export const metadata = getRouteMetadata("/legal");
 
 const legalSections = [
   [

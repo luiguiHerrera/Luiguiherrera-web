@@ -1,8 +1,8 @@
 import Link from "next/link";
-import type { Metadata } from "next";
 import { InvestmentPractice } from "@/components/protection/InvestmentPractice";
 import { ReadingCard } from "@/components/seo/ReadingCard";
 import { InstitutionalHero } from "@/components/ui/InstitutionalHero";
+import { getRouteMetadata } from "@/lib/seo/site";
 
 const protectionItems = [
   {
@@ -50,7 +50,4 @@ export default function ProteccionPage() {
     </div>
   );
 }
-export const metadata: Metadata = {
-  title: "Simulador de decisiones financieras | Protección",
-  description: "Simulador educativo de decisiones financieras para revisar deuda, productos con referidos, finca raíz, ETF, portafolio familiar y señales de alerta antes de invertir.",
-};
+export const metadata = getRouteMetadata("/proteccion");
