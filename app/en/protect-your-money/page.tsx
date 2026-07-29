@@ -1,4 +1,4 @@
-import { ProtectYourMoneyContent } from "@/app/protege-tu-dinero/page";
+import { ProtectYourMoneyContent } from "@/app/(es)/protege-tu-dinero/page";
 import { ReadingCard } from "@/components/seo/ReadingCard";
 import { getRouteMetadata } from "@/lib/seo/site";
 

@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { ReportSection } from "@/components/reports/ReportSection";
 import { displayStatName, displayStatTicker } from "@/lib/statistical-levels/display";
 import type { WeeklyReportData } from "@/lib/reports/build-weekly-report-data";
@@ -93,12 +94,12 @@ function compactSectorName(value: string) {
 
 function dashboardButton() {
   return (
-    <a
+    <Link
       className="inline-flex w-fit items-center justify-center rounded-[4px] border border-petrol/40 bg-white/70 px-3 py-2 text-xs font-semibold text-petrol transition hover:border-petrol hover:bg-panel"
       href="/dashboard"
     >
       Ver detalle en Dashboard
-    </a>
+    </Link>
   );
 }
 
