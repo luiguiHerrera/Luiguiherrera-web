@@ -7,6 +7,33 @@ import {
 export const SITE_URL = "https://www.luiguiherrera.com";
 export const SITE_NAME = "Luigui Herrera";
 
+const siteIcons: Metadata["icons"] = {
+  icon: [
+    {
+      url: "/brand/luigui-herrera/v1/luigui-herrera-favicon.ico",
+      type: "image/x-icon",
+      sizes: "any",
+    },
+    {
+      url: "/brand/luigui-herrera/v1/luigui-herrera-android-icon-192.png",
+      type: "image/png",
+      sizes: "192x192",
+    },
+    {
+      url: "/brand/luigui-herrera/v1/luigui-herrera-android-icon-512.png",
+      type: "image/png",
+      sizes: "512x512",
+    },
+  ],
+  apple: [
+    {
+      url: "/brand/luigui-herrera/v1/luigui-herrera-apple-touch-icon-180.png",
+      type: "image/png",
+      sizes: "180x180",
+    },
+  ],
+};
+
 export type SeoLanguage = "es" | "en";
 export type SeoPageType = "website" | "article";
 
@@ -305,6 +332,7 @@ export function buildSeoMetadata(definition: SeoRouteDefinition): Metadata {
   return {
     title: definition.title,
     description: definition.description,
+    icons: siteIcons,
     alternates: {
       canonical,
       ...(languages ? { languages } : {}),

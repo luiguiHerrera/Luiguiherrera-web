@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
 import type { FocusEvent, KeyboardEvent, MouseEvent, ReactNode } from "react";
+import { MarketLabMark } from "@/components/brand/MarketLabMark";
 import { LanguageSwitcher } from "@/components/layout/LanguageSwitcher";
 import { getDictionary } from "@/lib/i18n/get-dictionary";
 import { localeFromPathname } from "@/lib/i18n/locales";
@@ -172,9 +173,9 @@ function HeaderForPathname({ pathname }: { pathname: string }) {
     <header onKeyDown={handleHeaderKeyDown} className="sticky top-0 z-50 border-b border-line/80 bg-[#fffdf8]/96 shadow-[0_1px_18px_rgba(11,52,54,0.045)] backdrop-blur-xl">
       <div className="mx-auto flex max-w-7xl items-center justify-between gap-3 px-3 py-2.5 sm:px-4 lg:px-5">
         <div className="flex min-w-0 items-center justify-between gap-3">
-          <Link href={hrefs.home} className="flex min-w-0 flex-1 items-center gap-1.5 text-[11px] font-semibold uppercase tracking-[0.14em] text-ink transition hover:text-petrol sm:gap-2 sm:text-xs sm:tracking-[0.18em]">
-            <span className="h-2 w-2 shrink-0 rounded-full bg-petrol sm:h-2.5 sm:w-2.5" aria-hidden="true" />
-            <span className="truncate">{dictionary.layout.brand}</span>
+          <Link href={hrefs.home} className="flex min-w-0 flex-1 items-center transition hover:opacity-75">
+            <span className="sr-only">{dictionary.layout.brand}</span>
+            <MarketLabMark />
           </Link>
         </div>
         <div className="flex items-center gap-2 lg:hidden">

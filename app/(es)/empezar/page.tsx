@@ -9,8 +9,8 @@ const content: StartPathContent = {
     eyebrow: "Camino guiado",
     title: "Pon orden a tu dinero antes de invertir",
     subtitle:
-      "Crea tu presupuesto, organiza tus deudas o revisa si estás preparado para invertir. Sin registro y sin que tus datos salgan del navegador.",
-    guarantee: "Sin registro · Tus datos no salen del navegador",
+      "Crea tu presupuesto, organiza tus deudas o revisa si estás preparado para invertir. Sin registro: no guardamos los datos financieros que introduces.",
+    guarantee: "Sin registro · No guardamos los datos financieros que introduces",
   },
   primaryActions: [
     {
@@ -38,10 +38,10 @@ const content: StartPathContent = {
         destinationLabel: "Revisar mis deudas",
       },
       {
-        situation: "Quiero crear un colchón de seguridad.",
+        situation: "Quiero crear un fondo de emergencia.",
         href: "/presupuesto",
         destinationLabel: "Ir al presupuesto",
-        support: "Calcula primero tu margen mensual y la cobertura de tu ahorro disponible.",
+        support: "Empieza calculando cuánto te queda cada mes y cuánto ahorro tienes disponible.",
       },
       {
         situation: "Quiero saber si estoy preparado para invertir.",
@@ -60,9 +60,10 @@ const content: StartPathContent = {
     links: [
       {
         meta: "Diagnóstico",
-        label: "Diagnóstico completo",
+        label: "Conoce tu perfil como inversionista",
         href: "/diagnostico?mode=complete",
-        description: "Evaluación más profunda por capacidad, objetivos, conducta y consistencia.",
+        description:
+          "Un cuestionario educativo para entender tu capacidad financiera, tus objetivos y cómo tomas decisiones al invertir.",
       },
       {
         meta: "Práctica",
@@ -83,8 +84,6 @@ const content: StartPathContent = {
         description: "Accede a herramientas educativas de mercado e investigación.",
       },
     ],
-    closingNote:
-      "Este camino no busca simplificar en exceso. Busca ordenar el proceso: primero margen de error, luego protección, después contexto.",
   },
   faq: {
     title: "Preguntas frecuentes",
@@ -99,9 +98,9 @@ const content: StartPathContent = {
         answer: "No. Puedes utilizar esta ruta y sus herramientas sin crear una cuenta.",
       },
       {
-        question: "¿Mis datos financieros salen del navegador?",
+        question: "¿Guardamos tus datos financieros?",
         answer:
-          "No. Los datos financieros que introduces en las herramientas se procesan en tu navegador y no se envían a un servidor.",
+          "No. Tus ingresos, gastos y deudas se calculan directamente en tu navegador. No guardamos los datos financieros que introduces ni los enviamos a nuestros servidores.",
       },
       {
         question: "¿Debo pagar mis deudas antes de invertir?",

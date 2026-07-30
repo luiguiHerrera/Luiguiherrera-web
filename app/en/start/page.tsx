@@ -9,8 +9,8 @@ const content: StartPathContent = {
     eyebrow: "Guided path",
     title: "Get your finances in order before you invest",
     subtitle:
-      "Create a budget, organize your debts, or check whether you are ready to invest. No account required, and your data stays in your browser.",
-    guarantee: "No account required · Your data stays in your browser",
+      "Create a budget, organize your debts, or check whether you are ready to invest. No account required: we do not store the financial data you enter.",
+    guarantee: "No account required · We do not store the financial data you enter",
   },
   primaryActions: [
     {
@@ -42,7 +42,7 @@ const content: StartPathContent = {
         href: "/en/budget",
         destinationLabel: "Go to budget",
         support:
-          "Start by calculating your monthly margin and the estimated coverage of your available savings.",
+          "Start by calculating how much you have left each month and how much savings you have available.",
       },
       {
         situation: "I want to know whether I am ready to invest.",
@@ -61,9 +61,10 @@ const content: StartPathContent = {
     links: [
       {
         meta: "Diagnostic",
-        label: "Full diagnostic",
+        label: "Understand your investor profile",
         href: "/en/diagnostic?mode=complete",
-        description: "A deeper assessment across capacity, goals, behavior and consistency.",
+        description:
+          "An educational questionnaire to understand your financial capacity, goals, and how you make investment decisions.",
       },
       {
         meta: "Practice",
@@ -84,8 +85,6 @@ const content: StartPathContent = {
         description: "Access educational market and research tools.",
       },
     ],
-    closingNote:
-      "This path does not oversimplify the work. It orders the process: margin of error first, then protection, then context.",
   },
   faq: {
     title: "Frequently asked questions",
@@ -100,9 +99,9 @@ const content: StartPathContent = {
         answer: "No. You can use this path and its tools without creating an account.",
       },
       {
-        question: "Does my financial data leave my browser?",
+        question: "Do we store your financial data?",
         answer:
-          "No. The financial data you enter into the tools is processed in your browser and is not sent to a server.",
+          "No. Your income, expenses, and debts are calculated directly in your browser. We do not store the financial data you enter or send it to our servers.",
       },
       {
         question: "Should I pay off debt before investing?",

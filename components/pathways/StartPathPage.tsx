@@ -37,7 +37,7 @@ export type StartPathContent = {
   };
   learning: {
     actionLabel: string;
-    closingNote: string;
+    closingNote?: string;
     introduction: string;
     links: LearningLink[];
     purpose: string;
@@ -155,9 +155,11 @@ export function StartPathPage({ content }: StartPathPageProps) {
             ))}
           </div>
 
-          <aside className="mt-6 border-l-2 border-petrol pl-4 text-sm leading-6 text-muted">
-            {content.learning.closingNote}
-          </aside>
+          {content.learning.closingNote ? (
+            <aside className="mt-6 border-l-2 border-petrol pl-4 text-sm leading-6 text-muted">
+              {content.learning.closingNote}
+            </aside>
+          ) : null}
         </div>
       </section>
 
