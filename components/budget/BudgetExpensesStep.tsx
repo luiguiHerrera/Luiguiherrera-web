@@ -10,7 +10,10 @@ import {
   nonMonthlyFrequencyOptions,
   smallExpenseFrequencyOptions,
 } from "@/components/budget/budget-copy";
-import { monthlySmallExpenseAmount } from "@/lib/personal-finance/budget/calculations";
+import {
+  monthlyNonMonthlyAmount,
+  monthlySmallExpenseAmount,
+} from "@/lib/personal-finance/budget/calculations";
 import {
   MAX_DYNAMIC_EXPENSE_ROWS,
   type BudgetCurrency,
@@ -61,6 +64,21 @@ function displayedMonthlyEquivalent(expense: SmallExpenseDraft) {
       id: expense.id,
       name: expense.name,
       timesPerMonth: expense.timesPerMonth,
+    });
+  } catch {
+    return null;
+  }
+}
+
+function displayedNonMonthlyEquivalent(expense: NonMonthlyDraft) {
+  if (expense.amount.minorUnits === null || expense.amount.error) return null;
+  try {
+    return monthlyNonMonthlyAmount({
+      amountMinor: expense.amount.minorUnits,
+      frequency: expense.frequency,
+      id: expense.id,
+      monthsFrequency: expense.monthsFrequency,
+      name: expense.name,
     });
   } catch {
     return null;
@@ -193,6 +211,7 @@ export function BudgetExpensesStep({
             const monthsId = `budget-non-monthly-${expense.id}-months`;
             const amountHandlers = onNonMonthlyAmount(expense.id);
             const monthsError = errors[monthsId];
+            const monthlyEquivalent = displayedNonMonthlyEquivalent(expense);
             return (
             <fieldset className="grid min-w-0 gap-4 rounded-[6px] border border-line bg-white/80 p-4 lg:grid-cols-[1.2fr_1fr_1fr_0.8fr_auto] lg:items-end" key={expense.id}>
                 <legend className="sr-only">{locale === "es" ? `Gasto no mensual ${row}` : `Non-monthly expense ${row}`}</legend>
@@ -230,25 +249,34 @@ export function BudgetExpensesStep({
                     ))}
                   </select>
                 </label>
-                <label className="grid min-w-0 gap-2" htmlFor={monthsId}>
-                  <span className="text-xs font-semibold uppercase tracking-[0.14em] text-muted">
-                    {labels.months} · {locale === "es" ? `gasto ${row}` : `expense ${row}`}
-                  </span>
-                  <input
-                    aria-describedby={monthsError ? `${monthsId}-error` : undefined}
-                    aria-invalid={Boolean(monthsError)}
-                    className="min-w-0 rounded-[4px] border border-line bg-white px-3 py-2.5 text-sm font-semibold text-ink outline-none transition focus:border-petrol disabled:bg-panelSoft aria-[invalid=true]:border-red-700"
-                    disabled={expense.frequency !== "custom"}
-                    id={monthsId}
-                    inputMode="numeric"
-                    min={1}
-                    onChange={(event) => onNonMonthlyChange(expense.id, { monthsFrequency: Number(event.target.value) })}
-                    step={1}
-                    type="number"
-                    value={expense.monthsFrequency}
-                  />
-                  {monthsError ? <span className="text-sm leading-5 text-red-800" id={`${monthsId}-error`}>{monthsError}</span> : null}
-                </label>
+                <div className="grid min-w-0 gap-3">
+                  {expense.frequency === "custom" ? (
+                    <label className="grid min-w-0 gap-2" htmlFor={monthsId}>
+                      <span className="text-xs font-semibold uppercase tracking-[0.14em] text-muted">
+                        {labels.repeatsEveryMonths}
+                      </span>
+                      <input
+                        aria-describedby={`${monthsId}-equivalent${monthsError ? ` ${monthsId}-error` : ""}`}
+                        aria-invalid={Boolean(monthsError)}
+                        className="min-w-0 rounded-[4px] border border-line bg-white px-3 py-2.5 text-sm font-semibold text-ink outline-none transition focus:border-petrol aria-[invalid=true]:border-red-700"
+                        id={monthsId}
+                        inputMode="numeric"
+                        min={1}
+                        onChange={(event) => onNonMonthlyChange(expense.id, { monthsFrequency: Number(event.target.value) })}
+                        step={1}
+                        type="number"
+                        value={expense.monthsFrequency}
+                      />
+                      {monthsError ? <span className="text-sm leading-5 text-red-800" id={`${monthsId}-error`}>{monthsError}</span> : null}
+                    </label>
+                  ) : null}
+                  <p className="grid min-w-0 gap-2" id={`${monthsId}-equivalent`}>
+                    <span className="text-xs font-semibold uppercase tracking-[0.14em] text-muted">{labels.monthlyEquivalent}:</span>
+                    <span className="min-w-0 rounded-[4px] border border-line bg-panelSoft px-3 py-2.5 text-sm font-semibold text-ink">
+                      {monthlyEquivalent === null ? "—" : formatMoney(monthlyEquivalent, locale, currency)}
+                    </span>
+                  </p>
+                </div>
                 <button
                   aria-label={locale === "es" ? `Eliminar gasto no mensual ${row}` : `Remove non-monthly expense ${row}`}
                   className="rounded-[4px] border border-line bg-panel px-3 py-2.5 text-xs font-semibold text-muted transition hover:border-petrol hover:text-petrol"

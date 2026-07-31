@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { budgetTargetCopy } from "@/components/budget/budget-target-copy";
 import {
+  basisPointsFromAmount,
   calculateEmergencyFundProjection,
   contingencyReserveAmount,
 } from "@/lib/personal-finance/budget/target-calculations";
@@ -16,7 +17,6 @@ import type {
 } from "@/lib/personal-finance/budget/types";
 import {
   formatMoney,
-  formatMoneyInput,
   parseLocalizedMoney,
 } from "@/lib/personal-finance/budget/validation";
 import {
@@ -31,10 +31,6 @@ function initialTargetChoice(plan: EmergencyFundPlan) {
   return String(plan.target.months);
 }
 
-function initialReserveChoice(reserve: ContingencyReserve) {
-  return reserve.kind;
-}
-
 export function BudgetEmergencyFundTarget({
   coverageBaseMinor,
   currency,
@@ -43,9 +39,13 @@ export function BudgetEmergencyFundTarget({
   locale,
   onPlanChange,
   onReserveChange,
+  onReserveChoiceChange,
+  onReserveDraftChange,
   onValidationChange,
   plan,
   reserve,
+  reserveChoice,
+  reserveDraft,
 }: {
   coverageBaseMinor: number;
   currency: BudgetCurrency;
@@ -54,9 +54,13 @@ export function BudgetEmergencyFundTarget({
   locale: BudgetLocale;
   onPlanChange: (plan: EmergencyFundPlan) => void;
   onReserveChange: (reserve: ContingencyReserve) => void;
+  onReserveChoiceChange: (choice: ContingencyReserve["kind"]) => void;
+  onReserveDraftChange: (draft: string) => void;
   onValidationChange: (key: "emergency" | "reserve", invalid: boolean) => void;
   plan: EmergencyFundPlan;
   reserve: ContingencyReserve;
+  reserveChoice: ContingencyReserve["kind"];
+  reserveDraft: string;
 }) {
   const labels = budgetTargetCopy[locale];
   const [targetChoice, setTargetChoice] = useState(initialTargetChoice(plan));
@@ -68,21 +72,40 @@ export function BudgetEmergencyFundTarget({
   );
   const [targetError, setTargetError] = useState<string | null>(null);
   const [deadlineError, setDeadlineError] = useState<string | null>(null);
-  const [reserveChoice, setReserveChoice] = useState(initialReserveChoice(reserve));
-  const [reserveDraft, setReserveDraft] = useState(
-    reserve.kind === "amount"
-      ? formatMoneyInput(reserve.amountMinor, locale, currency)
-      : reserve.kind === "percentage"
-        ? formatBasisPoints(reserve.basisPoints, locale)
-        : "",
-  );
-  const [reserveError, setReserveError] = useState<string | null>(null);
+  const [reserveError, setReserveError] = useState<string | null>(() => {
+    if (reserveDraft.trim() === "") return null;
+    if (reserveChoice === "percentage") {
+      const parsed = parseLocalizedPercentage(reserveDraft, locale);
+      return parsed.error || parsed.basisPoints === null
+        ? labels.percentageError
+        : null;
+    }
+    if (reserveChoice === "amount") {
+      const parsed = parseLocalizedMoney(reserveDraft, locale, currency);
+      if (parsed.error || parsed.minorUnits === null) {
+        return locale === "es"
+          ? "Introduce un importe válido."
+          : "Enter a valid amount.";
+      }
+      return parsed.minorUnits > incomeMinor ? labels.amountAboveIncome : null;
+    }
+    return null;
+  });
   const projection = calculateEmergencyFundProjection(
     plan,
     coverageBaseMinor,
     emergencyFundMinor,
   );
   const reserveAmount = contingencyReserveAmount(reserve, incomeMinor);
+  const reservePercentage = reserve.kind === "percentage"
+    ? { status: "ok" as const, value: reserve.basisPoints }
+    : reserve.kind === "amount"
+      ? basisPointsFromAmount(reserve.amountMinor, incomeMinor)
+      : null;
+  const reserveEquivalentVisible = (
+    reserve.kind === reserveChoice
+    && (reserve.kind === "amount" || reserve.kind === "percentage")
+  );
 
   function setPreset(value: string) {
     setTargetChoice(value);
@@ -155,8 +178,8 @@ export function BudgetEmergencyFundTarget({
   }
 
   function changeReserveChoice(value: string) {
-    setReserveChoice(value as "unset" | "none" | "amount" | "percentage");
-    setReserveDraft("");
+    onReserveChoiceChange(value as ContingencyReserve["kind"]);
+    onReserveDraftChange("");
     setReserveError(null);
     onValidationChange("reserve", false);
     if (value === "unset") onReserveChange({ kind: "unset" });
@@ -167,7 +190,7 @@ export function BudgetEmergencyFundTarget({
   }
 
   function changeReserveDraft(raw: string) {
-    setReserveDraft(raw);
+    onReserveDraftChange(raw);
     if (reserveChoice === "percentage") {
       const parsed = parseLocalizedPercentage(raw, locale);
       if (parsed.error || parsed.basisPoints === null) {
@@ -293,8 +316,8 @@ export function BudgetEmergencyFundTarget({
           >
             <option value="unset">{labels.contingencyUnset}</option>
             <option value="none">{labels.contingencyNone}</option>
-            <option value="amount">{labels.contingencyAmount}</option>
             <option value="percentage">{labels.contingencyPercentage}</option>
+            <option value="amount">{labels.contingencyAmount}</option>
           </select>
         </label>
         {reserveChoice === "amount" || reserveChoice === "percentage" ? (
@@ -302,22 +325,34 @@ export function BudgetEmergencyFundTarget({
             <span className="text-xs font-semibold uppercase tracking-[0.14em] text-muted">
               {reserveChoice === "amount" ? labels.amount : labels.percentage}
             </span>
-            <input
-              aria-describedby={reserveError ? "budget-contingency-error" : undefined}
-              aria-invalid={Boolean(reserveError)}
-              className="rounded-[4px] border border-line bg-white px-3 py-2.5 text-sm font-semibold text-ink outline-none focus:border-petrol aria-[invalid=true]:border-red-700"
-              id="budget-contingency-value"
-              inputMode="decimal"
-              onChange={(event) => changeReserveDraft(event.target.value)}
-              type="text"
-              value={reserveDraft}
-            />
+            <span className="relative">
+              <input
+                aria-describedby={`budget-contingency-help${reserveEquivalentVisible ? " budget-contingency-equivalent" : ""}${reserveError ? " budget-contingency-error" : ""}`}
+                aria-invalid={Boolean(reserveError)}
+                aria-label={reserveChoice === "amount"
+                  ? labels.contingencyAmount
+                  : `${labels.contingencyPercentage} (${labels.percentage})`}
+                className={`w-full rounded-[4px] border border-line bg-white px-3 py-2.5 text-sm font-semibold text-ink outline-none focus:border-petrol aria-[invalid=true]:border-red-700 ${reserveChoice === "percentage" ? "pr-9" : ""}`}
+                id="budget-contingency-value"
+                inputMode="decimal"
+                onChange={(event) => changeReserveDraft(event.target.value)}
+                type="text"
+                value={reserveDraft}
+              />
+              {reserveChoice === "percentage" ? (
+                <span aria-hidden="true" className="pointer-events-none absolute right-3 top-2.5 text-sm text-muted">%</span>
+              ) : null}
+            </span>
             {reserveError ? <span className="text-sm text-red-800" id="budget-contingency-error">{reserveError}</span> : null}
           </label>
         ) : null}
-        {reserveAmount.status === "ok" && reserve.kind !== "unset" ? (
-          <p className="mt-4 text-sm font-semibold text-ink">
-            {labels.amount}: {formatMoney(reserveAmount.value, locale, currency)}
+        {reserveEquivalentVisible ? (
+          <p className="mt-4 text-sm font-semibold text-ink" id="budget-contingency-equivalent">
+            {reserve.kind === "percentage" && reserveAmount.status === "ok"
+              ? `${labels.equivalentAmount}: ${formatMoney(reserveAmount.value, locale, currency)}`
+              : reservePercentage?.status === "ok"
+                ? `${labels.equivalentPercentage}: ${formatBasisPoints(reservePercentage.value, locale)} %`
+                : null}
           </p>
         ) : null}
       </fieldset>

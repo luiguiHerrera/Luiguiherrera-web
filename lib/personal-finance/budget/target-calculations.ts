@@ -1,5 +1,6 @@
 import {
   allocationCategories,
+  MAX_CATEGORY_ALLOCATION_BASIS_POINTS,
   type AllocationBasisPoints,
   type AllocationComparisonRow,
   type AllocationSumState,
@@ -13,10 +14,16 @@ import {
   type ReconciledAllocationAmounts,
   type SavingsCurrentClassification,
   type TargetAllocation,
+  type TargetAllocationLifecycle,
 } from "./target-types.ts";
 
 const BASIS_POINTS_TOTAL = BigInt(10_000);
 const MAX_SAFE = BigInt(Number.MAX_SAFE_INTEGER);
+
+export type MinorUnitRescaleResult =
+  | { status: "exact"; value: number }
+  | { status: "notRepresentable" }
+  | { status: "rangeError" };
 
 function isSafeNonNegativeInteger(value: number) {
   return Number.isSafeInteger(value) && value >= 0;
@@ -44,6 +51,43 @@ function safeSum(values: number[]): ExactCalculation<number> {
     (total, value) => total + BigInt(value),
     BigInt(0),
   ));
+}
+
+export function rescaleMinorUnitsExact(
+  oldMinorUnits: number,
+  oldFractionDigits: number,
+  newFractionDigits: number,
+): MinorUnitRescaleResult {
+  if (
+    !isSafeNonNegativeInteger(oldMinorUnits)
+    || !Number.isSafeInteger(oldFractionDigits)
+    || oldFractionDigits < 0
+    || !Number.isSafeInteger(newFractionDigits)
+    || newFractionDigits < 0
+  ) {
+    return { status: "rangeError" };
+  }
+  const oldFactor = BigInt(10) ** BigInt(oldFractionDigits);
+  const newFactor = BigInt(10) ** BigInt(newFractionDigits);
+  const scaledNumerator = BigInt(oldMinorUnits) * newFactor;
+  if (scaledNumerator % oldFactor !== BigInt(0)) {
+    return { status: "notRepresentable" };
+  }
+  const scaled = scaledNumerator / oldFactor;
+  return scaled > MAX_SAFE
+    ? { status: "rangeError" }
+    : { status: "exact", value: Number(scaled) };
+}
+
+export function transitionTargetAllocationLifecycle(
+  lifecycle: TargetAllocationLifecycle,
+  event: "initialize-success" | "initialize-error" | "edit",
+): TargetAllocationLifecycle {
+  if (event === "edit") return "edited";
+  if (event === "initialize-success" && lifecycle === "uninitialized") {
+    return "initialized";
+  }
+  return lifecycle;
 }
 
 export function amountFromBasisPoints(
@@ -80,7 +124,9 @@ export function reconcileAllocationAmounts(
 ): ExactCalculation<ReconciledAllocationAmounts> {
   if (!isSafeNonNegativeInteger(incomeMinor)
     || !allocationCategories.every((category) => (
-      Number.isSafeInteger(allocation[category]) && allocation[category] >= 0
+      Number.isSafeInteger(allocation[category])
+      && allocation[category] >= 0
+      && allocation[category] <= MAX_CATEGORY_ALLOCATION_BASIS_POINTS
     ))) {
     return { reason: "unsafe-integer", status: "rangeError" };
   }
@@ -142,6 +188,13 @@ export function allocationSumState(
     hasValidationErrors: boolean;
   },
 ): AllocationSumState {
+  if (!allocationCategories.every((category) => (
+    Number.isSafeInteger(allocation[category])
+    && allocation[category] >= 0
+    && allocation[category] <= MAX_CATEGORY_ALLOCATION_BASIS_POINTS
+  ))) {
+    throw new RangeError("allocation category is outside the supported range");
+  }
   const allocatedBasisPoints = allocationCategories.reduce(
     (total, category) => total + allocation[category],
     0,
@@ -253,6 +306,73 @@ export function calculateAlpBase(
     ? projection.monthlyContributionMinor ?? 0
     : 0;
   return safeSum([monthlyNonMonthlyMinor, reserveMinor, contribution]);
+}
+
+export function deriveStartingTargetAllocation(
+  input: CurrentAllocationInput,
+  classification: SavingsCurrentClassification,
+  reserve: ContingencyReserve,
+  projection: EmergencyFundProjection,
+): ExactCalculation<TargetAllocation> {
+  const reserveResult = contingencyReserveAmount(reserve, input.incomeMinor);
+  if (reserveResult.status !== "ok") return reserveResult;
+
+  let classifiedAlpMinor = 0;
+  let classifiedClfMinor = 0;
+  if (
+    classification.kind === "split"
+    && input.savingInvestmentMinor !== null
+  ) {
+    const split = splitCurrentSaving(
+      input.savingInvestmentMinor,
+      classification.alpShareBasisPoints,
+    );
+    if (split.status !== "ok") return split;
+    classifiedAlpMinor = split.value.alpMinor;
+    classifiedClfMinor = split.value.clfMinor;
+  }
+
+  const alpBase = calculateAlpBase(
+    input.monthlyNonMonthlyMinor,
+    reserveResult.value,
+    projection,
+  );
+  if (alpBase.status !== "ok") return alpBase;
+
+  const amounts = {
+    alp: safeSum([alpBase.value, classifiedAlpMinor]),
+    clf: safeSum([classifiedClfMinor]),
+    education: safeSum([input.educationMinor ?? 0]),
+    enjoyment: safeSum([input.enjoymentMinor ?? 0]),
+    essentials: safeSum([
+      input.essentialsMinor ?? 0,
+      input.debtPaymentsMinor ?? 0,
+    ]),
+    serAndGiving: safeSum([input.personalDevelopmentMinor ?? 0]),
+  };
+  if (Object.values(amounts).some((amount) => amount.status !== "ok")) {
+    return { reason: "unsafe-integer", status: "rangeError" };
+  }
+
+  const allocation = {} as TargetAllocation;
+  for (const category of allocationCategories) {
+    const amount = amounts[category];
+    if (amount.status !== "ok") {
+      return { reason: "unsafe-integer", status: "rangeError" };
+    }
+    const converted = basisPointsFromAmount(amount.value, input.incomeMinor);
+    if (
+      converted.status !== "ok"
+      || converted.value > MAX_CATEGORY_ALLOCATION_BASIS_POINTS
+    ) {
+      return converted.status === "rangeError"
+        ? converted
+        : { reason: "unsafe-integer", status: "rangeError" };
+    }
+    allocation[category] = converted.value;
+  }
+
+  return { status: "ok", value: allocation };
 }
 
 export function splitCurrentSaving(

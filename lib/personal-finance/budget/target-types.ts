@@ -1,5 +1,7 @@
 export type AllocationBasisPoints = number;
 
+export const MAX_CATEGORY_ALLOCATION_BASIS_POINTS = 60_000;
+
 export const allocationCategories = [
   "essentials",
   "alp",
@@ -12,6 +14,11 @@ export const allocationCategories = [
 export type AllocationCategory = (typeof allocationCategories)[number];
 
 export type TargetAllocation = Record<AllocationCategory, AllocationBasisPoints>;
+
+export type TargetAllocationLifecycle =
+  | "uninitialized"
+  | "initialized"
+  | "edited";
 
 export const emptyTargetAllocation: TargetAllocation = {
   alp: 0,

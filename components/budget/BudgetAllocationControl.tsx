@@ -3,27 +3,33 @@
 import { useEffect, useRef, useState } from "react";
 import { moneyErrorText } from "@/components/budget/BudgetIncomeStep";
 import { budgetTargetCopy } from "@/components/budget/budget-target-copy";
-import { basisPointsFromAmount } from "@/lib/personal-finance/budget/target-calculations";
-import type {
-  AllocationBasisPoints,
-  AllocationCategory,
+import {
+  basisPointsFromAmount,
+  rescaleMinorUnitsExact,
+} from "@/lib/personal-finance/budget/target-calculations";
+import {
+  MAX_CATEGORY_ALLOCATION_BASIS_POINTS,
+  type AllocationBasisPoints,
+  type AllocationCategory,
 } from "@/lib/personal-finance/budget/target-types";
 import type {
   BudgetCurrency,
   BudgetLocale,
 } from "@/lib/personal-finance/budget/types";
 import {
+  currencyFractionDigits,
   formatMoney,
   formatMoneyInput,
   parseLocalizedMoney,
   type MoneyParseError,
 } from "@/lib/personal-finance/budget/validation";
 import {
+  categorySliderMaxPercent,
   formatBasisPoints,
   parseLocalizedPercentage,
 } from "@/lib/personal-finance/budget/target-validation";
 
-type AmountValidationError = MoneyParseError | "above-income" | "empty";
+type AmountValidationError = MoneyParseError | "category-range" | "empty";
 
 function validateAmountDraft(
   raw: string,
@@ -37,12 +43,12 @@ function validateAmountDraft(
   const parsed = parseLocalizedMoney(raw, locale, currency);
   if (parsed.error) return { basisPoints: null, error: parsed.error };
   if (parsed.minorUnits === null) return { basisPoints: null, error: "empty" };
-  if (parsed.minorUnits > incomeMinor) {
-    return { basisPoints: null, error: "above-income" };
-  }
   const converted = basisPointsFromAmount(parsed.minorUnits, incomeMinor);
-  if (converted.status !== "ok" || converted.value > 10_000) {
-    return { basisPoints: null, error: "above-income" };
+  if (
+    converted.status !== "ok"
+    || converted.value > MAX_CATEGORY_ALLOCATION_BASIS_POINTS
+  ) {
+    return { basisPoints: null, error: "category-range" };
   }
   return { basisPoints: converted.value, error: null };
 }
@@ -50,9 +56,12 @@ function validateAmountDraft(
 function amountValidationErrorText(
   error: AmountValidationError,
   locale: BudgetLocale,
-  amountAboveIncome: string,
 ) {
-  if (error === "above-income") return amountAboveIncome;
+  if (error === "category-range") {
+    return locale === "es"
+      ? "El importe de una categoría no puede superar el 600 % del ingreso."
+      : "A category amount cannot exceed 600% of your income.";
+  }
   return moneyErrorText(error === "empty" ? "invalid" : error, locale)
     ?? (locale === "es" ? "Introduce un importe válido." : "Enter a valid amount.");
 }
@@ -91,6 +100,8 @@ export function BudgetAllocationControl({
   const percentageId = `budget-target-${category}-percentage`;
   const amountId = `budget-target-${category}-amount`;
   const helpId = `budget-target-${category}-help`;
+  const sliderScaleHelpId = `budget-target-${category}-slider-scale`;
+  const sliderMaxPercent = categorySliderMaxPercent(basisPoints);
 
   function updateBasisPoints(next: number) {
     onBasisPointsChange(next);
@@ -104,9 +115,17 @@ export function BudgetAllocationControl({
 
   function handlePercentage(raw: string) {
     setPercentageDraft(raw);
-    const parsed = parseLocalizedPercentage(raw, locale);
+    const parsed = parseLocalizedPercentage(
+      raw,
+      locale,
+      MAX_CATEGORY_ALLOCATION_BASIS_POINTS,
+    );
     if (parsed.error || parsed.basisPoints === null) {
-      setPercentageError(labels.percentageError);
+      setPercentageError(
+        locale === "es"
+          ? "Introduce un porcentaje entre 0 y 600 con un máximo de dos decimales."
+          : "Enter a percentage from 0 to 600 with no more than two decimal places.",
+      );
       onValidationChange(true);
       return;
     }
@@ -128,7 +147,6 @@ export function BudgetAllocationControl({
       setAmountError(amountValidationErrorText(
         validation.error ?? "empty",
         locale,
-        labels.amountAboveIncome,
       ));
       onValidationChange(true);
       return;
@@ -138,14 +156,47 @@ export function BudgetAllocationControl({
   }
 
   useEffect(() => {
-    const contextChanged = amountContext.current.currency !== currency
-      || amountContext.current.incomeMinor !== incomeMinor
-      || amountContext.current.locale !== locale;
+    const previousContext = amountContext.current;
+    const contextChanged = previousContext.currency !== currency
+      || previousContext.incomeMinor !== incomeMinor
+      || previousContext.locale !== locale;
     amountContext.current = { currency, incomeMinor, locale };
     if (!amountEditing || !contextChanged) return;
 
+    let nextAmountDraft = amountDraft;
+    if (
+      previousContext.currency !== currency
+      || previousContext.locale !== locale
+    ) {
+      const previousParsed = parseLocalizedMoney(
+        amountDraft,
+        previousContext.locale,
+        previousContext.currency,
+      );
+      if (
+        previousParsed.error === null
+        && previousParsed.minorUnits !== null
+      ) {
+        const rebased = rescaleMinorUnitsExact(
+          previousParsed.minorUnits,
+          currencyFractionDigits(
+            previousContext.locale,
+            previousContext.currency,
+          ),
+          currencyFractionDigits(locale, currency),
+        );
+        nextAmountDraft = rebased.status === "exact"
+          ? formatMoneyInput(rebased.value, locale, currency)
+          : formatMoneyInput(
+              previousParsed.minorUnits,
+              previousContext.locale,
+              previousContext.currency,
+            );
+        setAmountDraft(nextAmountDraft);
+      }
+    }
     const validation = validateAmountDraft(
-      amountDraft,
+      nextAmountDraft,
       locale,
       currency,
       incomeMinor,
@@ -154,7 +205,6 @@ export function BudgetAllocationControl({
       ? amountValidationErrorText(
           validation.error,
           locale,
-          labels.amountAboveIncome,
         )
       : null;
     setAmountError(nextError);
@@ -164,7 +214,6 @@ export function BudgetAllocationControl({
     amountEditing,
     currency,
     incomeMinor,
-    labels.amountAboveIncome,
     locale,
     onValidationChange,
   ]);
@@ -183,6 +232,7 @@ export function BudgetAllocationControl({
             <input
               aria-describedby={`${helpId}${percentageError ? ` ${percentageId}-error` : ""}`}
               aria-invalid={Boolean(percentageError)}
+              aria-label={`${categoryCopy.name}: ${labels.percentage}`}
               className="w-full rounded-[4px] border border-line bg-white px-3 py-2.5 pr-9 text-sm font-semibold text-ink outline-none transition focus:border-petrol aria-[invalid=true]:border-red-700"
               id={percentageId}
               inputMode="decimal"
@@ -233,15 +283,22 @@ export function BudgetAllocationControl({
       <label className="mt-5 grid gap-2" htmlFor={`budget-target-${category}-slider`}>
         <span className="sr-only">{categoryCopy.name}: {labels.percentage}</span>
         <input
-          aria-describedby={helpId}
+          aria-describedby={`${helpId}${sliderMaxPercent > 100 ? ` ${sliderScaleHelpId}` : ""}`}
+          aria-valuemax={sliderMaxPercent}
+          aria-valuemin={0}
+          aria-valuenow={basisPoints / 100}
           aria-valuetext={`${formatBasisPoints(basisPoints, locale)} % — ${formatMoney(amountMinor, locale, currency)}`}
           className="w-full accent-petrol"
           id={`budget-target-${category}-slider`}
-          max="100"
+          max={sliderMaxPercent}
           min="0"
           onBlur={onCommit}
           onChange={(event) => {
-            const parsed = parseLocalizedPercentage(event.target.value, "en");
+            const parsed = parseLocalizedPercentage(
+              event.target.value,
+              "en",
+              MAX_CATEGORY_ALLOCATION_BASIS_POINTS,
+            );
             if (parsed.error === null && parsed.basisPoints !== null) {
               updateBasisPoints(parsed.basisPoints);
             }
@@ -251,6 +308,13 @@ export function BudgetAllocationControl({
           type="range"
           value={formatBasisPoints(basisPoints, "en")}
         />
+        {sliderMaxPercent > 100 ? (
+          <span className="text-xs leading-5 text-muted" id={sliderScaleHelpId}>
+            {locale === "es"
+              ? "La escala de esta barra se amplió porque la categoría supera el 100 % del ingreso."
+              : "This slider scale was expanded because the category exceeds 100% of your income."}
+          </span>
+        ) : null}
       </label>
     </fieldset>
   );

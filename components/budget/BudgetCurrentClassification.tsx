@@ -97,6 +97,7 @@ export function BudgetCurrentClassification({
               <input
                 aria-describedby={`budget-current-alp-help${error ? " budget-current-alp-error" : ""}`}
                 aria-invalid={Boolean(error)}
+                aria-label={`${labels.classificationQuestion} (${labels.percentage})`}
                 className="w-full rounded-[4px] border border-line bg-white px-3 py-2.5 pr-9 text-sm font-semibold text-ink outline-none transition focus:border-petrol aria-[invalid=true]:border-red-700"
                 id="budget-current-alp-share"
                 inputMode="decimal"

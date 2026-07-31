@@ -27,6 +27,12 @@ import { budgetCopy } from "@/components/budget/budget-copy";
 import { calculateBudget } from "@/lib/personal-finance/budget/calculations";
 import type { BudgetResult } from "@/lib/personal-finance/budget/result-model";
 import {
+  calculateEmergencyFundProjection,
+  deriveStartingTargetAllocation,
+  rescaleMinorUnitsExact,
+  transitionTargetAllocationLifecycle,
+} from "@/lib/personal-finance/budget/target-calculations";
+import {
   emptyTargetAllocation,
   type ContingencyReserve,
   type CurrentAllocationInput,
@@ -34,6 +40,7 @@ import {
   type SavingsCurrentClassification,
   type SerGivingBreakdown,
   type TargetAllocation,
+  type TargetAllocationLifecycle,
 } from "@/lib/personal-finance/budget/target-types";
 import {
   appendBudgetExpenseRow,
@@ -43,6 +50,7 @@ import {
   type BudgetPriority,
 } from "@/lib/personal-finance/budget/types";
 import {
+  currencyFractionDigits,
   formatMoneyInput,
   parseLocalizedMoney,
 } from "@/lib/personal-finance/budget/validation";
@@ -93,9 +101,29 @@ function formatDraft(
 function rebaseDraft(
   draft: MoneyDraft,
   locale: BudgetLocale,
+  currentCurrency: BudgetCurrency,
   nextCurrency: BudgetCurrency,
 ) {
-  return parseDraft(draft.text, locale, nextCurrency);
+  if (draft.error || draft.minorUnits === null) {
+    return parseDraft(draft.text, locale, nextCurrency);
+  }
+  const rebased = rescaleMinorUnitsExact(
+    draft.minorUnits,
+    currencyFractionDigits(locale, currentCurrency),
+    currencyFractionDigits(locale, nextCurrency),
+  );
+  if (rebased.status === "exact") {
+    return {
+      error: null,
+      minorUnits: rebased.value,
+      text: formatMoneyInput(rebased.value, locale, nextCurrency),
+    };
+  }
+  return {
+    error: rebased.status === "notRepresentable" ? "precision" as const : "range" as const,
+    minorUnits: null,
+    text: formatMoneyInput(draft.minorUnits, locale, currentCurrency),
+  };
 }
 
 function focusElement(id: string) {
@@ -121,12 +149,18 @@ export function BudgetWizard({ locale }: { locale: BudgetLocale }) {
   const [targetAllocation, setTargetAllocation] = useState<TargetAllocation>({
     ...emptyTargetAllocation,
   });
+  const [targetAllocationLifecycle, setTargetAllocationLifecycle] =
+    useState<TargetAllocationLifecycle>("uninitialized");
+  const [targetInitializationError, setTargetInitializationError] =
+    useState<string | null>(null);
   const [currentClassification, setCurrentClassification] = useState<SavingsCurrentClassification>({ kind: "unclassified" });
   const [emergencyPlan, setEmergencyPlan] = useState<EmergencyFundPlan>({
     completionMonths: null,
     target: { kind: "unset" },
   });
   const [contingencyReserve, setContingencyReserve] = useState<ContingencyReserve>({ kind: "unset" });
+  const [contingencyReserveChoice, setContingencyReserveChoice] = useState<ContingencyReserve["kind"]>("unset");
+  const [contingencyReserveDraft, setContingencyReserveDraft] = useState("");
   const [serGiving, setSerGiving] = useState<SerGivingBreakdown>({ kind: "closed" });
   const rowCounter = useRef(0);
   const hasMounted = useRef(false);
@@ -162,6 +196,21 @@ export function BudgetWizard({ locale }: { locale: BudgetLocale }) {
   function handleIncomeChange(event: ChangeEvent<HTMLInputElement>) {
     const next = parseDraft(event.target.value, locale, currency);
     setIncome(next);
+    if (contingencyReserveChoice === "amount") {
+      const parsedReserve = parseLocalizedMoney(
+        contingencyReserveDraft,
+        locale,
+        currency,
+      );
+      setContingencyReserve(
+        parsedReserve.error === null
+        && parsedReserve.minorUnits !== null
+        && next.minorUnits !== null
+        && parsedReserve.minorUnits <= next.minorUnits
+          ? { amountMinor: parsedReserve.minorUnits, kind: "amount" }
+          : { kind: "unset" },
+      );
+    }
     setFieldError("budget-income", next);
   }
 
@@ -170,21 +219,29 @@ export function BudgetWizard({ locale }: { locale: BudgetLocale }) {
   }
 
   function handleCurrencyChange(nextCurrency: BudgetCurrency) {
-    const nextIncome = rebaseDraft(income, locale, nextCurrency);
+    const nextIncome = rebaseDraft(income, locale, currency, nextCurrency);
     const nextMainDrafts = Object.fromEntries(
       Object.entries(mainDrafts).map(([key, draft]) => [
         key,
-        rebaseDraft(draft, locale, nextCurrency),
+        rebaseDraft(draft, locale, currency, nextCurrency),
       ]),
     ) as MainExpenseDrafts;
     const nextNonMonthlyDrafts = nonMonthlyDrafts.map((expense) => ({
       ...expense,
-      amount: rebaseDraft(expense.amount, locale, nextCurrency),
+      amount: rebaseDraft(expense.amount, locale, currency, nextCurrency),
     }));
     const nextSmallDrafts = smallDrafts.map((expense) => ({
       ...expense,
-      amount: rebaseDraft(expense.amount, locale, nextCurrency),
+      amount: rebaseDraft(expense.amount, locale, currency, nextCurrency),
     }));
+    const nextReserveDraft = contingencyReserveChoice === "amount"
+      ? rebaseDraft(
+          parseDraft(contingencyReserveDraft, locale, currency),
+          locale,
+          currency,
+          nextCurrency,
+        )
+      : null;
     const nextErrors: Record<string, string> = {};
     const addMoneyError = (id: string, draft: MoneyDraft) => {
       if (draft.error) {
@@ -207,6 +264,17 @@ export function BudgetWizard({ locale }: { locale: BudgetLocale }) {
     setMainDrafts(nextMainDrafts);
     setNonMonthlyDrafts(nextNonMonthlyDrafts);
     setSmallDrafts(nextSmallDrafts);
+    if (nextReserveDraft) {
+      setContingencyReserveDraft(nextReserveDraft.text);
+      setContingencyReserve(
+        nextReserveDraft.error === null
+        && nextReserveDraft.minorUnits !== null
+        && nextIncome.minorUnits !== null
+        && nextReserveDraft.minorUnits <= nextIncome.minorUnits
+          ? { amountMinor: nextReserveDraft.minorUnits, kind: "amount" }
+          : { kind: "unset" },
+      );
+    }
     setCurrency(nextCurrency);
     setErrors(nextErrors);
     setResult(null);
@@ -440,6 +508,43 @@ export function BudgetWizard({ locale }: { locale: BudgetLocale }) {
     smallExpensesMinor: result.monthlySmallExpensesMinor,
   } : null;
 
+  function openTargetAllocation() {
+    if (
+      targetAllocationLifecycle === "uninitialized"
+      && result
+      && currentInput
+    ) {
+      const projection = calculateEmergencyFundProjection(
+        emergencyPlan,
+        result.essentialsAndDebtMinor,
+        result.emergencyFundMinor,
+      );
+      const startingAllocation = deriveStartingTargetAllocation(
+        currentInput,
+        currentClassification,
+        contingencyReserve,
+        projection,
+      );
+      if (startingAllocation.status === "ok") {
+        setTargetAllocation(startingAllocation.value);
+        setTargetAllocationLifecycle((current) => (
+          transitionTargetAllocationLifecycle(current, "initialize-success")
+        ));
+        setTargetInitializationError(null);
+      } else {
+        setTargetAllocationLifecycle((current) => (
+          transitionTargetAllocationLifecycle(current, "initialize-error")
+        ));
+        setTargetInitializationError(
+          locale === "es"
+            ? "No se pudo aplicar el punto de partida dentro del rango técnico permitido. Revisa los importes e inténtalo de nuevo."
+            : "The starting point could not be applied within the supported technical range. Review the amounts and try again.",
+        );
+      }
+    }
+    setStep(4);
+  }
+
   return (
     <section className="mt-8 rounded-[6px] border border-line bg-panel p-5 shadow-[0_12px_32px_rgba(11,52,54,0.035)] md:p-6" aria-labelledby={`budget-step-${step}-heading`}>
       <p className="text-sm font-semibold text-petrol">{labels.noDataSaved}</p>
@@ -550,7 +655,7 @@ export function BudgetWizard({ locale }: { locale: BudgetLocale }) {
             <button className="rounded-[4px] border border-line bg-white px-5 py-2.5 text-sm font-semibold text-petrol transition hover:border-petrol" onClick={() => { setErrors({}); setStep(2); }} type="button">
               {labels.back}
             </button>
-            <button className="rounded-[4px] border border-petrol bg-petrol px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-panel hover:text-petrol" onClick={() => setStep(4)} type="button">
+            <button className="rounded-[4px] border border-petrol bg-petrol px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-panel hover:text-petrol" onClick={openTargetAllocation} type="button">
               {locale === "es" ? "Construir distribución objetivo" : "Build target allocation"}
             </button>
           </div>
@@ -561,22 +666,37 @@ export function BudgetWizard({ locale }: { locale: BudgetLocale }) {
         <div className="mt-6">
           <p className="text-xs font-semibold uppercase tracking-[0.18em] text-petrol">04</p>
           <h2 className="mt-2 text-2xl font-semibold leading-tight text-ink" id="budget-step-4-heading" tabIndex={-1}>{targetLabels.allocationTitle}</h2>
-          <BudgetTargetStep
-            allocation={targetAllocation}
-            classification={currentClassification}
-            coverageBaseMinor={result.essentialsAndDebtMinor}
-            currency={currency}
-            currentInput={currentInput}
-            emergencyFundMinor={result.emergencyFundMinor}
-            emergencyPlan={emergencyPlan}
-            locale={locale}
-            onAllocationChange={setTargetAllocation}
-            onEmergencyPlanChange={setEmergencyPlan}
-            onReserveChange={setContingencyReserve}
-            onSerGivingChange={setSerGiving}
-            reserve={contingencyReserve}
-            serGiving={serGiving}
-          />
+          {targetInitializationError ? (
+            <p className="mt-6 border border-red-700/40 bg-red-50 p-4 text-sm leading-6 text-red-900" role="alert">
+              {targetInitializationError}
+            </p>
+          ) : (
+            <BudgetTargetStep
+              allocation={targetAllocation}
+              classification={currentClassification}
+              coverageBaseMinor={result.essentialsAndDebtMinor}
+              currency={currency}
+              currentInput={currentInput}
+              emergencyFundMinor={result.emergencyFundMinor}
+              emergencyPlan={emergencyPlan}
+              locale={locale}
+              onAllocationChange={(allocation) => {
+                setTargetAllocation(allocation);
+                setTargetAllocationLifecycle((current) => (
+                  transitionTargetAllocationLifecycle(current, "edit")
+                ));
+              }}
+              onEmergencyPlanChange={setEmergencyPlan}
+              onReserveChange={setContingencyReserve}
+              onReserveChoiceChange={setContingencyReserveChoice}
+              onReserveDraftChange={setContingencyReserveDraft}
+              onSerGivingChange={setSerGiving}
+              reserve={contingencyReserve}
+              reserveChoice={contingencyReserveChoice}
+              reserveDraft={contingencyReserveDraft}
+              serGiving={serGiving}
+            />
+          )}
           <div className="mt-6">
             <button className="rounded-[4px] border border-line bg-white px-5 py-2.5 text-sm font-semibold text-petrol transition hover:border-petrol" onClick={() => setStep(3)} type="button">
               {targetLabels.backToStartingPoint}

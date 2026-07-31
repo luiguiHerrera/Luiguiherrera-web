@@ -2,7 +2,10 @@ import type {
   AllocationBasisPoints,
   TargetAllocation,
 } from "./target-types.ts";
-import { allocationCategories } from "./target-types.ts";
+import {
+  allocationCategories,
+  MAX_CATEGORY_ALLOCATION_BASIS_POINTS,
+} from "./target-types.ts";
 import type { BudgetLocale } from "./types.ts";
 
 export type PercentageParseError = "invalid" | "negative" | "precision" | "range";
@@ -14,6 +17,7 @@ export type PercentageParseResult =
 export function parseLocalizedPercentage(
   raw: string,
   locale: BudgetLocale,
+  maximumBasisPoints = 10_000,
 ): PercentageParseResult {
   const value = raw.trim();
   if (value === "") return { basisPoints: null, error: null };
@@ -36,10 +40,22 @@ export function parseLocalizedPercentage(
   const whole = Number(match[1]);
   const fraction = (match[2] ?? "").padEnd(2, "0");
   const basisPoints = whole * 100 + Number(fraction || "0");
-  if (basisPoints > 10_000) {
+  if (basisPoints > maximumBasisPoints) {
     return { basisPoints: null, error: "range" };
   }
   return { basisPoints, error: null };
+}
+
+export function categorySliderMaxPercent(basisPoints: AllocationBasisPoints) {
+  if (
+    !Number.isSafeInteger(basisPoints)
+    || basisPoints < 0
+    || basisPoints > MAX_CATEGORY_ALLOCATION_BASIS_POINTS
+  ) {
+    throw new RangeError("basisPoints must be within the category allocation range");
+  }
+  if (basisPoints <= 10_000) return 100;
+  return Math.min(600, Math.ceil(basisPoints / 2_500) * 25);
 }
 
 export function formatBasisPoints(
@@ -60,7 +76,7 @@ export function validateAllocation(allocation: TargetAllocation) {
   return allocationCategories.every((category) => (
     Number.isSafeInteger(allocation[category])
     && allocation[category] >= 0
-    && allocation[category] <= 10_000
+    && allocation[category] <= MAX_CATEGORY_ALLOCATION_BASIS_POINTS
   ));
 }
 

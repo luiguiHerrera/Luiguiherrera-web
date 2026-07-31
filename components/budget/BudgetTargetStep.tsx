@@ -48,8 +48,12 @@ export function BudgetTargetStep({
   onAllocationChange,
   onEmergencyPlanChange,
   onReserveChange,
+  onReserveChoiceChange,
+  onReserveDraftChange,
   onSerGivingChange,
   reserve,
+  reserveChoice,
+  reserveDraft,
   serGiving,
 }: {
   allocation: TargetAllocation;
@@ -63,8 +67,12 @@ export function BudgetTargetStep({
   onAllocationChange: (allocation: TargetAllocation) => void;
   onEmergencyPlanChange: (plan: EmergencyFundPlan) => void;
   onReserveChange: (reserve: ContingencyReserve) => void;
+  onReserveChoiceChange: (choice: ContingencyReserve["kind"]) => void;
+  onReserveDraftChange: (draft: string) => void;
   onSerGivingChange: (breakdown: SerGivingBreakdown) => void;
   reserve: ContingencyReserve;
+  reserveChoice: ContingencyReserve["kind"];
+  reserveDraft: string;
   serGiving: SerGivingBreakdown;
 }) {
   const labels = budgetTargetCopy[locale];
@@ -129,9 +137,12 @@ export function BudgetTargetStep({
   const appliedSer = serGiving.kind === "split" && amounts
     ? splitCurrentSaving(amounts.serAndGiving, serGiving.serShareBasisPoints)
     : null;
-  const visibleSer = provisionalSer?.status === "ok"
-    ? provisionalSer.value
-    : appliedSer?.status === "ok" ? appliedSer.value : null;
+  const serGivingHasTotal = Boolean(amounts && amounts.serAndGiving > 0);
+  const visibleSer = serGivingHasTotal
+    ? provisionalSer?.status === "ok"
+      ? provisionalSer.value
+      : appliedSer?.status === "ok" ? appliedSer.value : null
+    : null;
 
   function setValidation(key: string, invalid: boolean) {
     setInvalidControls((currentErrors) => ({
@@ -150,6 +161,7 @@ export function BudgetTargetStep({
       setValidation("serBreakdown", true);
       return;
     }
+    if (!serGivingHasTotal) return;
     setSerError(null);
     setValidation("serBreakdown", false);
     onSerGivingChange({
@@ -171,6 +183,7 @@ export function BudgetTargetStep({
   return (
     <div className="mt-6 min-w-0">
       <p className="max-w-4xl text-sm leading-6 text-muted">{labels.allocationIntro}</p>
+      <p className="mt-3 max-w-4xl border-l-2 border-brass bg-white/75 px-4 py-3 text-sm leading-6 text-ink">{labels.allocationStartingPoint}</p>
       <p className="mt-3 max-w-4xl border-l border-petrol/30 pl-3 text-sm leading-6 text-muted">{labels.allocationHelp}</p>
 
       <div className="mt-6">
@@ -182,9 +195,13 @@ export function BudgetTargetStep({
           locale={locale}
           onPlanChange={onEmergencyPlanChange}
           onReserveChange={onReserveChange}
+          onReserveChoiceChange={onReserveChoiceChange}
+          onReserveDraftChange={onReserveDraftChange}
           onValidationChange={setValidation}
           plan={emergencyPlan}
           reserve={reserve}
+          reserveChoice={reserveChoice}
+          reserveDraft={reserveDraft}
         />
       </div>
 
@@ -210,13 +227,17 @@ export function BudgetTargetStep({
 
       <details className="mt-5 rounded-[6px] border border-line bg-white/70 p-4">
         <summary className="cursor-pointer text-sm font-semibold text-petrol">{labels.serGivingSummary}</summary>
-        <p className="mt-3 text-sm leading-6 text-muted">{labels.serGivingHelp}</p>
+        <p className="mt-3 text-sm leading-6 text-muted" id="budget-target-ser-help">{labels.serGivingHelp}</p>
+        {!serGivingHasTotal ? (
+          <p className="mt-3 text-sm font-semibold leading-6 text-muted" id="budget-target-ser-zero">{labels.serGivingZero}</p>
+        ) : null}
         <label className="mt-4 grid max-w-md gap-2" htmlFor="budget-target-ser-share">
           <span className="text-xs font-semibold uppercase tracking-[0.14em] text-muted">SER</span>
           <span className="relative">
             <input
-              aria-describedby={serError ? "budget-target-ser-error" : undefined}
+              aria-describedby={`budget-target-ser-help${!serGivingHasTotal ? " budget-target-ser-zero" : ""}${serError ? " budget-target-ser-error" : ""}`}
               aria-invalid={Boolean(serError)}
+              aria-label={locale === "es" ? "Porcentaje de SER" : "SER percentage"}
               className="w-full rounded-[4px] border border-line bg-white px-3 py-2.5 pr-9 text-sm font-semibold text-ink outline-none focus:border-petrol aria-[invalid=true]:border-red-700"
               id="budget-target-ser-share"
               inputMode="decimal"
@@ -239,7 +260,14 @@ export function BudgetTargetStep({
           </div>
         ) : null}
         <div className="mt-4 flex flex-col gap-3 sm:flex-row">
-          <button className="rounded-[4px] border border-petrol bg-petrol px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-panel hover:text-petrol" onClick={applySerBreakdown} type="button">{labels.applySerGiving}</button>
+          <button
+            className="rounded-[4px] border border-petrol bg-petrol px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-panel hover:text-petrol disabled:cursor-not-allowed disabled:border-line disabled:bg-panelSoft disabled:text-muted"
+            disabled={!serGivingHasTotal}
+            onClick={applySerBreakdown}
+            type="button"
+          >
+            {labels.applySerGiving}
+          </button>
           <button
             className="rounded-[4px] border border-line bg-white px-4 py-2.5 text-sm font-semibold text-petrol transition hover:border-petrol"
             onClick={() => {
