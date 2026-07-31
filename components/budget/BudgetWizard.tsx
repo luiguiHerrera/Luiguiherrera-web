@@ -19,10 +19,22 @@ import {
   moneyErrorText,
   type MoneyDraft,
 } from "@/components/budget/BudgetIncomeStep";
+import { BudgetCurrentClassification } from "@/components/budget/BudgetCurrentClassification";
 import { BudgetResults, budgetHighlight } from "@/components/budget/BudgetResults";
+import { BudgetTargetStep } from "@/components/budget/BudgetTargetStep";
+import { budgetTargetCopy } from "@/components/budget/budget-target-copy";
 import { budgetCopy } from "@/components/budget/budget-copy";
 import { calculateBudget } from "@/lib/personal-finance/budget/calculations";
 import type { BudgetResult } from "@/lib/personal-finance/budget/result-model";
+import {
+  emptyTargetAllocation,
+  type ContingencyReserve,
+  type CurrentAllocationInput,
+  type EmergencyFundPlan,
+  type SavingsCurrentClassification,
+  type SerGivingBreakdown,
+  type TargetAllocation,
+} from "@/lib/personal-finance/budget/target-types";
 import {
   appendBudgetExpenseRow,
   type BudgetCurrency,
@@ -35,7 +47,7 @@ import {
   parseLocalizedMoney,
 } from "@/lib/personal-finance/budget/validation";
 
-type Step = 1 | 2 | 3;
+type Step = 1 | 2 | 3 | 4;
 
 const emptyMoneyDraft = (): MoneyDraft => ({
   error: null,
@@ -94,6 +106,7 @@ function focusElement(id: string) {
 
 export function BudgetWizard({ locale }: { locale: BudgetLocale }) {
   const labels = budgetCopy[locale];
+  const targetLabels = budgetTargetCopy[locale];
   const initialCurrency: BudgetCurrency = locale === "es" ? "EUR" : "USD";
   const [currency, setCurrency] = useState<BudgetCurrency>(initialCurrency);
   const [priority, setPriority] = useState<BudgetPriority>("understand");
@@ -105,6 +118,16 @@ export function BudgetWizard({ locale }: { locale: BudgetLocale }) {
   const [result, setResult] = useState<BudgetResult | null>(null);
   const [step, setStep] = useState<Step>(1);
   const [liveMessage, setLiveMessage] = useState("");
+  const [targetAllocation, setTargetAllocation] = useState<TargetAllocation>({
+    ...emptyTargetAllocation,
+  });
+  const [currentClassification, setCurrentClassification] = useState<SavingsCurrentClassification>({ kind: "unclassified" });
+  const [emergencyPlan, setEmergencyPlan] = useState<EmergencyFundPlan>({
+    completionMonths: null,
+    target: { kind: "unset" },
+  });
+  const [contingencyReserve, setContingencyReserve] = useState<ContingencyReserve>({ kind: "unset" });
+  const [serGiving, setSerGiving] = useState<SerGivingBreakdown>({ kind: "closed" });
   const rowCounter = useRef(0);
   const hasMounted = useRef(false);
 
@@ -114,7 +137,11 @@ export function BudgetWizard({ locale }: { locale: BudgetLocale }) {
       return;
     }
     focusElement(`budget-step-${step}-heading`);
-    const stepLabel = step === 1 ? labels.step1Label : step === 2 ? labels.step2Label : labels.step3Label;
+    const stepLabel = step === 1
+      ? labels.step1Label
+      : step === 2
+        ? labels.step2Label
+        : step === 3 ? labels.step3Label : labels.step4Label;
     setLiveMessage(`${labels.step} ${step}: ${stepLabel}`);
   }, [labels, step]);
 
@@ -197,6 +224,9 @@ export function BudgetWizard({ locale }: { locale: BudgetLocale }) {
       onChange: (event: ChangeEvent<HTMLInputElement>) => {
         const next = parseDraft(event.target.value, locale, currency);
         setMainDrafts((current) => ({ ...current, [key]: next }));
+        if (key === "savingInvestment" && (next.minorUnits === null || next.minorUnits <= 0)) {
+          setCurrentClassification({ kind: "unclassified" });
+        }
         setFieldError(id, next);
       },
     };
@@ -392,14 +422,30 @@ export function BudgetWizard({ locale }: { locale: BudgetLocale }) {
     focusElement(nextFocus ? `budget-small-${nextFocus.id}-name` : "budget-add-small");
   }
 
-  const stepLabels = [labels.step1Label, labels.step2Label, labels.step3Label];
+  const stepLabels = [
+    labels.step1Label,
+    labels.step2Label,
+    labels.step3Label,
+    labels.step4Label,
+  ];
+  const currentInput: CurrentAllocationInput | null = result ? {
+    debtPaymentsMinor: mainDrafts.debtPayments.minorUnits,
+    educationMinor: mainDrafts.education.minorUnits,
+    enjoymentMinor: mainDrafts.enjoyment.minorUnits,
+    essentialsMinor: mainDrafts.essentials.minorUnits,
+    incomeMinor: result.monthlyIncomeMinor,
+    monthlyNonMonthlyMinor: result.monthlyNonMonthlyMinor,
+    personalDevelopmentMinor: mainDrafts.personalDevelopment.minorUnits,
+    savingInvestmentMinor: mainDrafts.savingInvestment.minorUnits,
+    smallExpensesMinor: result.monthlySmallExpensesMinor,
+  } : null;
 
   return (
     <section className="mt-8 rounded-[6px] border border-line bg-panel p-5 shadow-[0_12px_32px_rgba(11,52,54,0.035)] md:p-6" aria-labelledby={`budget-step-${step}-heading`}>
       <p className="text-sm font-semibold text-petrol">{labels.noDataSaved}</p>
       <p className="mt-2 max-w-4xl text-sm leading-6 text-muted">{labels.privacyLong}</p>
 
-      <ol aria-label={locale === "es" ? "Progreso del presupuesto" : "Budget progress"} className="mt-6 grid gap-2 sm:grid-cols-3">
+      <ol aria-label={locale === "es" ? "Progreso del presupuesto" : "Budget progress"} className="mt-6 grid gap-2 sm:grid-cols-2 lg:grid-cols-4">
         {stepLabels.map((label, index) => {
           const number = (index + 1) as Step;
           return (
@@ -459,6 +505,7 @@ export function BudgetWizard({ locale }: { locale: BudgetLocale }) {
           <p className="text-xs font-semibold uppercase tracking-[0.18em] text-petrol">02</p>
           <h2 className="mt-2 text-2xl font-semibold leading-tight text-ink" id="budget-step-2-heading" tabIndex={-1}>{labels.step2Title}</h2>
           <BudgetExpensesStep
+            currency={currency}
             errors={errors}
             locale={locale}
             mainDrafts={mainDrafts}
@@ -490,9 +537,49 @@ export function BudgetWizard({ locale }: { locale: BudgetLocale }) {
           <p className="text-xs font-semibold uppercase tracking-[0.18em] text-petrol">03</p>
           <h2 className="mt-2 text-2xl font-semibold leading-tight text-ink" id="budget-step-3-heading" tabIndex={-1}>{labels.step3Title}</h2>
           <BudgetResults currency={currency} locale={locale} result={result} />
-          <div className="mt-6">
+          {mainDrafts.savingInvestment.minorUnits !== null && mainDrafts.savingInvestment.minorUnits > 0 ? (
+            <BudgetCurrentClassification
+              classification={currentClassification}
+              currency={currency}
+              locale={locale}
+              onChange={setCurrentClassification}
+              savingInvestmentMinor={mainDrafts.savingInvestment.minorUnits}
+            />
+          ) : null}
+          <div className="mt-6 flex flex-col-reverse gap-3 sm:flex-row sm:justify-between">
             <button className="rounded-[4px] border border-line bg-white px-5 py-2.5 text-sm font-semibold text-petrol transition hover:border-petrol" onClick={() => { setErrors({}); setStep(2); }} type="button">
               {labels.back}
+            </button>
+            <button className="rounded-[4px] border border-petrol bg-petrol px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-panel hover:text-petrol" onClick={() => setStep(4)} type="button">
+              {locale === "es" ? "Construir distribución objetivo" : "Build target allocation"}
+            </button>
+          </div>
+        </div>
+      ) : null}
+
+      {step === 4 && result && currentInput ? (
+        <div className="mt-6">
+          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-petrol">04</p>
+          <h2 className="mt-2 text-2xl font-semibold leading-tight text-ink" id="budget-step-4-heading" tabIndex={-1}>{targetLabels.allocationTitle}</h2>
+          <BudgetTargetStep
+            allocation={targetAllocation}
+            classification={currentClassification}
+            coverageBaseMinor={result.essentialsAndDebtMinor}
+            currency={currency}
+            currentInput={currentInput}
+            emergencyFundMinor={result.emergencyFundMinor}
+            emergencyPlan={emergencyPlan}
+            locale={locale}
+            onAllocationChange={setTargetAllocation}
+            onEmergencyPlanChange={setEmergencyPlan}
+            onReserveChange={setContingencyReserve}
+            onSerGivingChange={setSerGiving}
+            reserve={contingencyReserve}
+            serGiving={serGiving}
+          />
+          <div className="mt-6">
+            <button className="rounded-[4px] border border-line bg-white px-5 py-2.5 text-sm font-semibold text-petrol transition hover:border-petrol" onClick={() => setStep(3)} type="button">
+              {targetLabels.backToStartingPoint}
             </button>
           </div>
         </div>

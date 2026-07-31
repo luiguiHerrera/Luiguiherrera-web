@@ -10,12 +10,15 @@ import {
   nonMonthlyFrequencyOptions,
   smallExpenseFrequencyOptions,
 } from "@/components/budget/budget-copy";
+import { monthlySmallExpenseAmount } from "@/lib/personal-finance/budget/calculations";
 import {
   MAX_DYNAMIC_EXPENSE_ROWS,
+  type BudgetCurrency,
   type BudgetLocale,
   type NonMonthlyFrequency,
   type SmallExpenseFrequency,
 } from "@/lib/personal-finance/budget/types";
+import { formatMoney } from "@/lib/personal-finance/budget/validation";
 
 export type MainExpenseKey =
   | "debtPayments"
@@ -49,7 +52,23 @@ type FieldHandlers = {
   onChange: (event: ChangeEvent<HTMLInputElement>) => void;
 };
 
+function displayedMonthlyEquivalent(expense: SmallExpenseDraft) {
+  if (expense.amount.minorUnits === null || expense.amount.error) return null;
+  try {
+    return monthlySmallExpenseAmount({
+      amountMinor: expense.amount.minorUnits,
+      frequency: expense.frequency,
+      id: expense.id,
+      name: expense.name,
+      timesPerMonth: expense.timesPerMonth,
+    });
+  } catch {
+    return null;
+  }
+}
+
 export function BudgetExpensesStep({
+  currency,
   errors,
   locale,
   mainDrafts,
@@ -65,6 +84,7 @@ export function BudgetExpensesStep({
   onSmallChange,
   smallDrafts,
 }: {
+  currency: BudgetCurrency;
   errors: Record<string, string>;
   locale: BudgetLocale;
   mainDrafts: MainExpenseDrafts;
@@ -269,6 +289,7 @@ export function BudgetExpensesStep({
             const timesId = `budget-small-${expense.id}-times`;
             const amountHandlers = onSmallAmount(expense.id);
             const timesError = errors[timesId];
+            const monthlyEquivalent = displayedMonthlyEquivalent(expense);
             return (
             <fieldset className="grid min-w-0 gap-4 rounded-[6px] border border-line bg-white/80 p-4 lg:grid-cols-[1.2fr_1fr_1fr_0.8fr_auto] lg:items-end" key={expense.id}>
                 <legend className="sr-only">{locale === "es" ? `Gasto pequeño ${row}` : `Small expense ${row}`}</legend>
@@ -306,25 +327,33 @@ export function BudgetExpensesStep({
                     ))}
                   </select>
                 </label>
-                <label className="grid min-w-0 gap-2" htmlFor={timesId}>
-                  <span className="text-xs font-semibold uppercase tracking-[0.14em] text-muted">
-                    {labels.timesPerMonth} · {locale === "es" ? `gasto ${row}` : `expense ${row}`}
-                  </span>
-                  <input
-                    aria-describedby={timesError ? `${timesId}-error` : undefined}
-                    aria-invalid={Boolean(timesError)}
-                    className="min-w-0 rounded-[4px] border border-line bg-white px-3 py-2.5 text-sm font-semibold text-ink outline-none transition focus:border-petrol disabled:bg-panelSoft aria-[invalid=true]:border-red-700"
-                    disabled={expense.frequency !== "occasional"}
-                    id={timesId}
-                    inputMode="numeric"
-                    min={0}
-                    onChange={(event) => onSmallChange(expense.id, { timesPerMonth: Number(event.target.value) })}
-                    step={1}
-                    type="number"
-                    value={expense.timesPerMonth}
-                  />
-                  {timesError ? <span className="text-sm leading-5 text-red-800" id={`${timesId}-error`}>{timesError}</span> : null}
-                </label>
+                {expense.frequency === "occasional" ? (
+                  <label className="grid min-w-0 gap-2" htmlFor={timesId}>
+                    <span className="text-xs font-semibold uppercase tracking-[0.14em] text-muted">
+                      {labels.timesPerMonth} · {locale === "es" ? `gasto ${row}` : `expense ${row}`}
+                    </span>
+                    <input
+                      aria-describedby={timesError ? `${timesId}-error` : undefined}
+                      aria-invalid={Boolean(timesError)}
+                      className="min-w-0 rounded-[4px] border border-line bg-white px-3 py-2.5 text-sm font-semibold text-ink outline-none transition focus:border-petrol aria-[invalid=true]:border-red-700"
+                      id={timesId}
+                      inputMode="numeric"
+                      min={0}
+                      onChange={(event) => onSmallChange(expense.id, { timesPerMonth: Number(event.target.value) })}
+                      step={1}
+                      type="number"
+                      value={expense.timesPerMonth}
+                    />
+                    {timesError ? <span className="text-sm leading-5 text-red-800" id={`${timesId}-error`}>{timesError}</span> : null}
+                  </label>
+                ) : (
+                  <p className="grid min-w-0 gap-2 self-end">
+                    <span className="text-xs font-semibold uppercase tracking-[0.14em] text-muted">{labels.monthlyEquivalent}:</span>
+                    <span className="min-w-0 rounded-[4px] border border-line bg-panelSoft px-3 py-2.5 text-sm font-semibold text-ink">
+                      {monthlyEquivalent === null ? "—" : formatMoney(monthlyEquivalent, locale, currency)}
+                    </span>
+                  </p>
+                )}
                 <button
                   aria-label={locale === "es" ? `Eliminar gasto pequeño ${row}` : `Remove small expense ${row}`}
                   className="rounded-[4px] border border-line bg-panel px-3 py-2.5 text-xs font-semibold text-muted transition hover:border-petrol hover:text-petrol"

@@ -65,6 +65,7 @@ export function BudgetResults({
   return (
     <div className="mt-6">
       <h3 className="text-xl font-semibold text-ink">{labels.resultTitle}</h3>
+      <p className="mt-2 max-w-3xl text-sm leading-6 text-muted">{labels.resultExplanation}</p>
       <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
         <Metric label={labels.resultIncome} value={formatMoney(result.monthlyIncomeMinor, locale, currency)} />
         <Metric label={labels.totalAssigned} value={formatMoney(result.totalAssignedMinor, locale, currency)} />
