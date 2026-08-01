@@ -2,21 +2,17 @@
 
 import { useState } from "react";
 import { budgetTargetCopy } from "@/components/budget/budget-target-copy";
-import {
-  basisPointsFromAmount,
-  calculateEmergencyFundProjection,
-  contingencyReserveAmount,
-} from "@/lib/personal-finance/budget/target-calculations";
 import type {
+  BudgetTargetSnapshot,
   ContingencyReserve,
   EmergencyFundPlan,
 } from "@/lib/personal-finance/budget/target-types";
+import { formatTargetMoney } from "@/lib/personal-finance/budget/target-formatting";
 import type {
   BudgetCurrency,
   BudgetLocale,
 } from "@/lib/personal-finance/budget/types";
 import {
-  formatMoney,
   parseLocalizedMoney,
 } from "@/lib/personal-finance/budget/validation";
 import {
@@ -32,9 +28,7 @@ function initialTargetChoice(plan: EmergencyFundPlan) {
 }
 
 export function BudgetEmergencyFundTarget({
-  coverageBaseMinor,
   currency,
-  emergencyFundMinor,
   incomeMinor,
   locale,
   onPlanChange,
@@ -43,13 +37,11 @@ export function BudgetEmergencyFundTarget({
   onReserveDraftChange,
   onValidationChange,
   plan,
-  reserve,
   reserveChoice,
   reserveDraft,
+  snapshot,
 }: {
-  coverageBaseMinor: number;
   currency: BudgetCurrency;
-  emergencyFundMinor: number;
   incomeMinor: number;
   locale: BudgetLocale;
   onPlanChange: (plan: EmergencyFundPlan) => void;
@@ -58,9 +50,9 @@ export function BudgetEmergencyFundTarget({
   onReserveDraftChange: (draft: string) => void;
   onValidationChange: (key: "emergency" | "reserve", invalid: boolean) => void;
   plan: EmergencyFundPlan;
-  reserve: ContingencyReserve;
   reserveChoice: ContingencyReserve["kind"];
   reserveDraft: string;
+  snapshot: BudgetTargetSnapshot;
 }) {
   const labels = budgetTargetCopy[locale];
   const [targetChoice, setTargetChoice] = useState(initialTargetChoice(plan));
@@ -91,20 +83,12 @@ export function BudgetEmergencyFundTarget({
     }
     return null;
   });
-  const projection = calculateEmergencyFundProjection(
-    plan,
-    coverageBaseMinor,
-    emergencyFundMinor,
-  );
-  const reserveAmount = contingencyReserveAmount(reserve, incomeMinor);
-  const reservePercentage = reserve.kind === "percentage"
-    ? { status: "ok" as const, value: reserve.basisPoints }
-    : reserve.kind === "amount"
-      ? basisPointsFromAmount(reserve.amountMinor, incomeMinor)
-      : null;
+  const projection = snapshot.coverage;
+  const reserveSnapshot = snapshot.reserve;
   const reserveEquivalentVisible = (
-    reserve.kind === reserveChoice
-    && (reserve.kind === "amount" || reserve.kind === "percentage")
+    reserveSnapshot.status === "defined"
+    && reserveSnapshot.source === reserveChoice
+    && (reserveSnapshot.source === "amount" || reserveSnapshot.source === "percentage")
   );
 
   function setPreset(value: string) {
@@ -218,7 +202,7 @@ export function BudgetEmergencyFundTarget({
     onReserveChange({ amountMinor: parsed.minorUnits, kind: "amount" });
   }
 
-  const coverageNumber = projection.status === "calculated"
+  const coverageNumber = projection.currentCoverageBasisPoints !== null
     ? new Intl.NumberFormat(locale === "es" ? "es-ES" : "en-US", {
         maximumFractionDigits: 2,
       }).format(projection.currentCoverageBasisPoints / 10_000)
@@ -283,19 +267,19 @@ export function BudgetEmergencyFundTarget({
         {projection.status === "rangeError" ? <p className="mt-4 text-sm text-red-800">{locale === "es" ? "El objetivo supera el rango calculable." : "The target exceeds the calculable range."}</p> : null}
         {projection.status === "calculated" ? (
           <p className="mt-4 border-l border-petrol/30 pl-3 text-sm leading-6 text-muted">
-            {projection.shortfallMinor === 0
+            {projection.shortfallMinor === BigInt(0)
               ? labels.coverageCovered
               : projection.monthlyContributionMinor === null
                 ? labels.coverageMessage(
                     coverageNumber,
-                    projection.targetMonths,
-                    formatMoney(projection.shortfallMinor, locale, currency),
+                    projection.targetMonths!,
+                    formatTargetMoney(projection.shortfallMinor!, locale, currency),
                   )
                 : labels.coverageMessageWithDeadline(
                     coverageNumber,
-                    projection.targetMonths,
+                    projection.targetMonths!,
                     plan.completionMonths!,
-                    formatMoney(projection.monthlyContributionMinor, locale, currency),
+                    formatTargetMoney(projection.monthlyContributionMinor, locale, currency),
                   )}
           </p>
         ) : null}
@@ -348,10 +332,10 @@ export function BudgetEmergencyFundTarget({
         ) : null}
         {reserveEquivalentVisible ? (
           <p className="mt-4 text-sm font-semibold text-ink" id="budget-contingency-equivalent">
-            {reserve.kind === "percentage" && reserveAmount.status === "ok"
-              ? `${labels.equivalentAmount}: ${formatMoney(reserveAmount.value, locale, currency)}`
-              : reservePercentage?.status === "ok"
-                ? `${labels.equivalentPercentage}: ${formatBasisPoints(reservePercentage.value, locale)} %`
+            {reserveSnapshot.status === "defined" && reserveSnapshot.source === "percentage"
+              ? `${labels.equivalentAmount}: ${formatTargetMoney(reserveSnapshot.amountMinor, locale, currency)}`
+              : reserveSnapshot.status === "defined" && reserveSnapshot.source === "amount"
+                ? `${labels.equivalentPercentage}: ${formatBasisPoints(reserveSnapshot.basisPoints, locale)} %`
                 : null}
           </p>
         ) : null}

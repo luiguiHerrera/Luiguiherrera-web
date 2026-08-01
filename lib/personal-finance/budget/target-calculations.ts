@@ -4,6 +4,12 @@ import {
   type AllocationBasisPoints,
   type AllocationComparisonRow,
   type AllocationSumState,
+  type BudgetTargetAmounts,
+  type BudgetTargetBaseline,
+  type BudgetTargetComparisonRow,
+  type BudgetTargetCoverageSnapshot,
+  type BudgetTargetSnapshot,
+  type ContingencyReserveSnapshot,
   type ContingencyReserve,
   type CurrentAllocationInput,
   type CurrentAllocationMap,
@@ -13,6 +19,7 @@ import {
   type ExactCalculation,
   type ReconciledAllocationAmounts,
   type SavingsCurrentClassification,
+  type SerGivingBreakdown,
   type TargetAllocation,
   type TargetAllocationLifecycle,
 } from "./target-types.ts";
@@ -88,6 +95,22 @@ export function transitionTargetAllocationLifecycle(
     return "initialized";
   }
   return lifecycle;
+}
+
+export function cloneBudgetTargetBaseline(
+  baseline: BudgetTargetBaseline,
+): BudgetTargetBaseline {
+  return {
+    allocation: { ...baseline.allocation },
+    emergencyPlan: {
+      ...baseline.emergencyPlan,
+      target: { ...baseline.emergencyPlan.target },
+    },
+    reserve: { ...baseline.reserve },
+    reserveChoice: baseline.reserveChoice,
+    reserveDraft: baseline.reserveDraft,
+    serGiving: { ...baseline.serGiving },
+  };
 }
 
 export function amountFromBasisPoints(
@@ -506,4 +529,391 @@ export function buildAllocationComparison(
       targetBasisPoints: target[category],
     };
   });
+}
+
+function buildBudgetTargetComparison(
+  current: CurrentAllocationMap,
+  target: TargetAllocation,
+  targetAmounts: BudgetTargetAmounts,
+): BudgetTargetComparisonRow[] {
+  return allocationCategories.map((category) => {
+    const currentValue = current[category];
+    const canCompare = currentValue.status === "known"
+      && currentValue.amountMinor !== null
+      && currentValue.basisPoints !== null;
+    const currentAmountMinor = currentValue.amountMinor === null
+      ? null
+      : BigInt(currentValue.amountMinor);
+    return {
+      category,
+      currentAmountMinor,
+      currentBasisPoints: currentValue.basisPoints,
+      currentStatus: currentValue.status,
+      deltaAmountMinor: canCompare
+        ? targetAmounts[category] - currentAmountMinor!
+        : null,
+      deltaBasisPoints: canCompare
+        ? target[category] - currentValue.basisPoints!
+        : null,
+      targetAmountMinor: targetAmounts[category],
+      targetBasisPoints: target[category],
+    };
+  });
+}
+
+function basisPointsFromBigIntAmount(
+  amountMinor: bigint,
+  incomeMinor: bigint,
+): ExactCalculation<number> {
+  if (amountMinor < BigInt(0) || incomeMinor < BigInt(0)) {
+    return { reason: "unsafe-integer", status: "rangeError" };
+  }
+  if (incomeMinor === BigInt(0)) {
+    return { reason: "zero-income", status: "notCalculable" };
+  }
+  return safeNumber(roundHalfUp(
+    amountMinor * BASIS_POINTS_TOTAL,
+    incomeMinor,
+  ));
+}
+
+function reconcileAllocationAmountsBigInt(
+  incomeMinor: bigint,
+  allocation: TargetAllocation,
+): ExactCalculation<BudgetTargetAmounts> {
+  if (incomeMinor < BigInt(0)
+    || !allocationCategories.every((category) => (
+      Number.isSafeInteger(allocation[category])
+      && allocation[category] >= 0
+      && allocation[category] <= MAX_CATEGORY_ALLOCATION_BASIS_POINTS
+    ))) {
+    return { reason: "unsafe-integer", status: "rangeError" };
+  }
+  if (incomeMinor === BigInt(0)) {
+    return { reason: "zero-income", status: "notCalculable" };
+  }
+
+  const entries = allocationCategories.map((category, order) => {
+    const product = incomeMinor * BigInt(allocation[category]);
+    return {
+      category,
+      order,
+      quotient: product / BASIS_POINTS_TOTAL,
+      remainder: product % BASIS_POINTS_TOTAL,
+    };
+  });
+  const totalBasisPoints = allocationCategories.reduce(
+    (total, category) => total + BigInt(allocation[category]),
+    BigInt(0),
+  );
+  const targetTotal = roundHalfUp(
+    incomeMinor * totalBasisPoints,
+    BASIS_POINTS_TOTAL,
+  );
+  const floorTotal = entries.reduce(
+    (total, entry) => total + entry.quotient,
+    BigInt(0),
+  );
+  const correctionResult = safeNumber(targetTotal - floorTotal);
+  if (correctionResult.status !== "ok"
+    || correctionResult.value > allocationCategories.length) {
+    return { reason: "unsafe-integer", status: "rangeError" };
+  }
+  const corrected = new Set(
+    [...entries]
+      .sort((left, right) => (
+        left.remainder === right.remainder
+          ? left.order - right.order
+          : left.remainder > right.remainder ? -1 : 1
+      ))
+      .slice(0, correctionResult.value)
+      .map((entry) => entry.category),
+  );
+  const amounts = {} as BudgetTargetAmounts;
+  for (const entry of entries) {
+    amounts[entry.category] = entry.quotient
+      + (corrected.has(entry.category) ? BigInt(1) : BigInt(0));
+  }
+  return { status: "ok", value: amounts };
+}
+
+function buildCoverageSnapshot(
+  emergencyPlan: EmergencyFundPlan,
+  coverageBaseMinor: bigint,
+  emergencyFundMinor: bigint,
+): ExactCalculation<BudgetTargetCoverageSnapshot> {
+  const base = {
+    completionMonths: emergencyPlan.completionMonths,
+    coverageBaseMinor,
+    currentCoverageBasisPoints: null,
+    monthlyContributionMinor: null,
+    shortfallMinor: null,
+    target: { ...emergencyPlan.target },
+    targetAmountMinor: null,
+    targetMonths: null,
+  };
+  if (emergencyPlan.target.kind === "unset") {
+    const currentCoverage = coverageBaseMinor === BigInt(0)
+      ? null
+      : basisPointsFromBigIntAmount(emergencyFundMinor, coverageBaseMinor);
+    if (currentCoverage?.status === "rangeError") return currentCoverage;
+    return {
+      status: "ok",
+      value: {
+        ...base,
+        currentCoverageBasisPoints: currentCoverage?.status === "ok"
+          ? currentCoverage.value
+          : null,
+        status: "unset",
+      },
+    };
+  }
+  if (coverageBaseMinor === BigInt(0)) {
+    return { status: "ok", value: { ...base, status: "zero-base" } };
+  }
+  const targetMonths = emergencyPlan.target.months;
+  if (!Number.isSafeInteger(targetMonths) || targetMonths < 1 || targetMonths > 120
+    || (emergencyPlan.completionMonths !== null
+      && (!Number.isSafeInteger(emergencyPlan.completionMonths)
+        || emergencyPlan.completionMonths < 1
+        || emergencyPlan.completionMonths > 600))) {
+    return { reason: "unsafe-integer", status: "rangeError" };
+  }
+  const targetAmountMinor = coverageBaseMinor * BigInt(targetMonths);
+  const shortfallMinor = targetAmountMinor > emergencyFundMinor
+    ? targetAmountMinor - emergencyFundMinor
+    : BigInt(0);
+  const monthlyContributionMinor = emergencyPlan.completionMonths === null
+    || shortfallMinor === BigInt(0)
+    ? null
+    : (shortfallMinor + BigInt(emergencyPlan.completionMonths) - BigInt(1))
+      / BigInt(emergencyPlan.completionMonths);
+  const currentCoverage = basisPointsFromBigIntAmount(
+    emergencyFundMinor,
+    coverageBaseMinor,
+  );
+  if (currentCoverage.status !== "ok") {
+    return { reason: "unsafe-integer", status: "rangeError" };
+  }
+  return {
+    status: "ok",
+    value: {
+      ...base,
+      currentCoverageBasisPoints: currentCoverage.value,
+      monthlyContributionMinor,
+      shortfallMinor,
+      status: "calculated",
+      targetAmountMinor,
+      targetMonths,
+    },
+  };
+}
+
+function buildReserveSnapshot(
+  reserve: ContingencyReserve,
+  incomeMinor: bigint,
+): ExactCalculation<ContingencyReserveSnapshot> {
+  if (reserve.kind === "unset") {
+    return { status: "ok", value: { status: "unset" } };
+  }
+  if (reserve.kind === "none") {
+    return {
+      status: "ok",
+      value: {
+        amountMinor: BigInt(0),
+        basisPoints: 0,
+        source: "none",
+        status: "defined",
+      },
+    };
+  }
+  if (reserve.kind === "amount") {
+    if (!isSafeNonNegativeInteger(reserve.amountMinor)) {
+      return { reason: "unsafe-integer", status: "rangeError" };
+    }
+    const amountMinor = BigInt(reserve.amountMinor);
+    const basisPoints = basisPointsFromBigIntAmount(amountMinor, incomeMinor);
+    if (basisPoints.status !== "ok") return basisPoints;
+    return {
+      status: "ok",
+      value: {
+        amountMinor,
+        basisPoints: basisPoints.value,
+        source: "amount",
+        status: "defined",
+      },
+    };
+  }
+  if (!Number.isSafeInteger(reserve.basisPoints) || reserve.basisPoints < 0) {
+    return { reason: "unsafe-integer", status: "rangeError" };
+  }
+  return {
+    status: "ok",
+    value: {
+      amountMinor: roundHalfUp(
+        incomeMinor * BigInt(reserve.basisPoints),
+        BASIS_POINTS_TOTAL,
+      ),
+      basisPoints: reserve.basisPoints,
+      source: "percentage",
+      status: "defined",
+    },
+  };
+}
+
+function calculateBigIntShortfall(
+  requiredMinor: bigint,
+  allocatedMinor: bigint,
+  incomeMinor: bigint,
+) {
+  const amountMinor = requiredMinor > allocatedMinor
+    ? requiredMinor - allocatedMinor
+    : BigInt(0);
+  if (amountMinor === BigInt(0)) {
+    return { amountMinor, basisPoints: 0, status: "ok" as const };
+  }
+  const basisPoints = basisPointsFromBigIntAmount(amountMinor, incomeMinor);
+  return basisPoints.status === "ok"
+    ? { amountMinor, basisPoints: basisPoints.value, status: "ok" as const }
+    : {
+        amountMinor,
+        basisPoints: null,
+        status: basisPoints.status === "rangeError"
+          ? "rangeError" as const
+          : "notCalculable" as const,
+      };
+}
+
+export function buildBudgetTargetSnapshot({
+  allocation,
+  classification,
+  coverageBaseMinor,
+  currentInput,
+  emergencyFundMinor,
+  emergencyPlan,
+  hasValidationErrors,
+  reserve,
+  serGiving,
+}: {
+  allocation: TargetAllocation;
+  classification: SavingsCurrentClassification;
+  coverageBaseMinor: number;
+  currentInput: CurrentAllocationInput;
+  emergencyFundMinor: number;
+  emergencyPlan: EmergencyFundPlan;
+  hasValidationErrors: boolean;
+  reserve: ContingencyReserve;
+  serGiving: SerGivingBreakdown;
+}): ExactCalculation<BudgetTargetSnapshot> {
+  if (!isSafeNonNegativeInteger(currentInput.incomeMinor)
+    || !isSafeNonNegativeInteger(coverageBaseMinor)
+    || !isSafeNonNegativeInteger(emergencyFundMinor)
+    || !isSafeNonNegativeInteger(currentInput.monthlyNonMonthlyMinor)
+    || !isSafeNonNegativeInteger(currentInput.smallExpensesMinor)) {
+    return { reason: "unsafe-integer", status: "rangeError" };
+  }
+  const incomeMinor = BigInt(currentInput.incomeMinor);
+  const coverageBase = BigInt(coverageBaseMinor);
+  const emergencyFund = BigInt(emergencyFundMinor);
+  const amountsResult = reconcileAllocationAmountsBigInt(
+    incomeMinor,
+    allocation,
+  );
+  if (amountsResult.status !== "ok") return amountsResult;
+
+  const coverageResult = buildCoverageSnapshot(
+    emergencyPlan,
+    coverageBase,
+    emergencyFund,
+  );
+  if (coverageResult.status !== "ok") return coverageResult;
+
+  const reserveResult = buildReserveSnapshot(
+    reserve,
+    incomeMinor,
+  );
+  if (reserveResult.status !== "ok") return reserveResult;
+
+  const reserveAmountMinor = reserveResult.value.status === "defined"
+    ? reserveResult.value.amountMinor
+    : BigInt(0);
+  const alpBaseMinor = BigInt(currentInput.monthlyNonMonthlyMinor)
+    + reserveAmountMinor
+    + (coverageResult.value.monthlyContributionMinor ?? BigInt(0));
+
+  const essentialsShortfall = calculateBigIntShortfall(
+    coverageBase,
+    amountsResult.value.essentials,
+    incomeMinor,
+  );
+  const alpShortfall = calculateBigIntShortfall(
+    alpBaseMinor,
+    amountsResult.value.alp,
+    incomeMinor,
+  );
+  const sumState = allocationSumState(allocation, {
+    hasAlpShortfall: Boolean(alpShortfall.status === "ok"
+      ? alpShortfall.amountMinor
+      : false),
+    hasEssentialsShortfall: Boolean(essentialsShortfall.status === "ok"
+      ? essentialsShortfall.amountMinor
+      : false),
+    hasValidationErrors,
+  });
+  const totalAllocatedMinor = allocationCategories.reduce(
+    (total, category) => total + amountsResult.value[category],
+    BigInt(0),
+  );
+
+  const current = classifyCurrentAllocation(currentInput, classification);
+
+  let serGivingAmounts = null;
+  if (serGiving.kind === "split") {
+    const serMinor = roundHalfUp(
+      amountsResult.value.serAndGiving * BigInt(serGiving.serShareBasisPoints),
+      BASIS_POINTS_TOTAL,
+    );
+    serGivingAmounts = {
+      givingMinor: amountsResult.value.serAndGiving - serMinor,
+      serMinor,
+    };
+  }
+
+  return {
+    status: "ok",
+    value: {
+      allocatedBasisPoints: sumState.allocatedBasisPoints,
+      allocation: { ...allocation },
+      alpBaseMinor,
+      alpShortfall,
+      amounts: amountsResult.value,
+      comparison: buildBudgetTargetComparison(
+        current,
+        allocation,
+        amountsResult.value,
+      ),
+      coverage: coverageResult.value,
+      essentialsShortfall,
+      excessBasisPoints: sumState.excessBasisPoints,
+      excessMinor: totalAllocatedMinor > incomeMinor
+        ? totalAllocatedMinor - incomeMinor
+        : BigInt(0),
+      incomeMinor,
+      isFinalViable: sumState.isFinalViable,
+      partialStatuses: {
+        alp: current.alp.status,
+        clf: current.clf.status,
+        serAndGiving: current.serAndGiving.status,
+      },
+      remainingBasisPoints: sumState.remainingBasisPoints,
+      remainingMinor: incomeMinor > totalAllocatedMinor
+        ? incomeMinor - totalAllocatedMinor
+        : BigInt(0),
+      reserve: reserveResult.value,
+      serGivingAmounts,
+      status: sumState.status,
+      totalAllocatedMinor,
+      unclassifiedSmallMinor: BigInt(currentInput.smallExpensesMinor),
+    },
+  };
 }

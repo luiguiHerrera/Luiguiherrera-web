@@ -20,6 +20,8 @@ export type TargetAllocationLifecycle =
   | "initialized"
   | "edited";
 
+export type BudgetTargetMode = "edit" | "review";
+
 export const emptyTargetAllocation: TargetAllocation = {
   alp: 0,
   clf: 0,
@@ -84,6 +86,15 @@ export type AllocationComparisonRow = {
   deltaBasisPoints: number | null;
 };
 
+export type BudgetTargetComparisonRow = Omit<
+  AllocationComparisonRow,
+  "currentAmountMinor" | "deltaAmountMinor" | "targetAmountMinor"
+> & {
+  currentAmountMinor: bigint | null;
+  deltaAmountMinor: bigint | null;
+  targetAmountMinor: bigint;
+};
+
 export type ExactCalculation<T> =
   | { status: "ok"; value: T }
   | { status: "notCalculable"; reason: "zero-income" | "zero-base" }
@@ -123,3 +134,72 @@ export type CurrentAllocationValue = {
 };
 
 export type CurrentAllocationMap = Record<AllocationCategory, CurrentAllocationValue>;
+
+export type TargetShortfall = {
+  amountMinor: bigint | null;
+  basisPoints: number | null;
+  status: "ok" | "notCalculable" | "rangeError";
+};
+
+export type SerGivingAmounts = {
+  givingMinor: bigint;
+  serMinor: bigint;
+};
+
+export type BudgetTargetAmounts = Record<AllocationCategory, bigint>;
+
+export type BudgetTargetCoverageSnapshot = {
+  completionMonths: number | null;
+  coverageBaseMinor: bigint;
+  currentCoverageBasisPoints: number | null;
+  monthlyContributionMinor: bigint | null;
+  shortfallMinor: bigint | null;
+  status: EmergencyFundProjection["status"];
+  target: EmergencyFundTarget;
+  targetAmountMinor: bigint | null;
+  targetMonths: number | null;
+};
+
+export type ContingencyReserveSnapshot =
+  | { status: "unset" }
+  | {
+      amountMinor: bigint;
+      basisPoints: number;
+      source: Exclude<ContingencyReserve["kind"], "unset">;
+      status: "defined";
+    };
+
+export type BudgetTargetSnapshot = {
+  allocatedBasisPoints: number;
+  allocation: TargetAllocation;
+  alpBaseMinor: bigint | null;
+  alpShortfall: TargetShortfall | null;
+  amounts: BudgetTargetAmounts;
+  comparison: BudgetTargetComparisonRow[];
+  coverage: BudgetTargetCoverageSnapshot;
+  excessBasisPoints: number;
+  excessMinor: bigint;
+  incomeMinor: bigint;
+  isFinalViable: boolean;
+  partialStatuses: Pick<
+    Record<AllocationCategory, CurrentAllocationStatus>,
+    "alp" | "clf" | "serAndGiving"
+  >;
+  remainingBasisPoints: number;
+  remainingMinor: bigint;
+  reserve: ContingencyReserveSnapshot;
+  serGivingAmounts: SerGivingAmounts | null;
+  status: "under" | "exact" | "over";
+  totalAllocatedMinor: bigint;
+  essentialsShortfall: TargetShortfall | null;
+  unclassifiedSmallMinor: bigint;
+};
+
+export type BudgetTargetBaseline = {
+  allocation: TargetAllocation;
+  emergencyPlan: EmergencyFundPlan;
+  reserve: ContingencyReserve;
+  reserveChoice: ContingencyReserve["kind"];
+  reserveDraft: string;
+  serGiving: SerGivingBreakdown;
+};

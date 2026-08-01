@@ -6,6 +6,7 @@ import {
   useState,
   type ChangeEvent,
   type FormEvent,
+  type MouseEvent as ReactMouseEvent,
 } from "react";
 import {
   BudgetExpensesStep,
@@ -21,19 +22,25 @@ import {
 } from "@/components/budget/BudgetIncomeStep";
 import { BudgetCurrentClassification } from "@/components/budget/BudgetCurrentClassification";
 import { BudgetResults, budgetHighlight } from "@/components/budget/BudgetResults";
+import { BudgetTargetReview } from "@/components/budget/BudgetTargetReview";
+import { BudgetTargetSummary } from "@/components/budget/BudgetTargetSummary";
 import { BudgetTargetStep } from "@/components/budget/BudgetTargetStep";
 import { budgetTargetCopy } from "@/components/budget/budget-target-copy";
 import { budgetCopy } from "@/components/budget/budget-copy";
 import { calculateBudget } from "@/lib/personal-finance/budget/calculations";
 import type { BudgetResult } from "@/lib/personal-finance/budget/result-model";
 import {
+  buildBudgetTargetSnapshot,
   calculateEmergencyFundProjection,
+  cloneBudgetTargetBaseline,
   deriveStartingTargetAllocation,
   rescaleMinorUnitsExact,
   transitionTargetAllocationLifecycle,
 } from "@/lib/personal-finance/budget/target-calculations";
 import {
   emptyTargetAllocation,
+  type BudgetTargetBaseline,
+  type BudgetTargetMode,
   type ContingencyReserve,
   type CurrentAllocationInput,
   type EmergencyFundPlan,
@@ -162,8 +169,17 @@ export function BudgetWizard({ locale }: { locale: BudgetLocale }) {
   const [contingencyReserveChoice, setContingencyReserveChoice] = useState<ContingencyReserve["kind"]>("unset");
   const [contingencyReserveDraft, setContingencyReserveDraft] = useState("");
   const [serGiving, setSerGiving] = useState<SerGivingBreakdown>({ kind: "closed" });
+  const [targetMode, setTargetMode] = useState<BudgetTargetMode>("edit");
+  const [targetBaseline, setTargetBaseline] = useState<BudgetTargetBaseline | null>(null);
+  const [targetInvalidControls, setTargetInvalidControls] = useState<Record<string, boolean>>({});
+  const [targetEditorVersion, setTargetEditorVersion] = useState(0);
+  const [resetConfirmationOpen, setResetConfirmationOpen] = useState(false);
   const rowCounter = useRef(0);
   const hasMounted = useRef(false);
+  const resetDialogRef = useRef<HTMLDialogElement>(null);
+  const resetCancelRef = useRef<HTMLButtonElement>(null);
+  const resetTriggerRef = useRef<HTMLButtonElement | null>(null);
+  const resetInProgressRef = useRef(false);
 
   useEffect(() => {
     if (!hasMounted.current) {
@@ -178,6 +194,22 @@ export function BudgetWizard({ locale }: { locale: BudgetLocale }) {
         : step === 3 ? labels.step3Label : labels.step4Label;
     setLiveMessage(`${labels.step} ${step}: ${stepLabel}`);
   }, [labels, step]);
+
+  useEffect(() => {
+    const dialog = resetDialogRef.current;
+    if (!dialog) return;
+    if (resetConfirmationOpen) {
+      if (!dialog.open) dialog.showModal();
+      requestAnimationFrame(() => resetCancelRef.current?.focus());
+      return;
+    }
+    if (dialog.open) dialog.close();
+  }, [resetConfirmationOpen]);
+
+  useEffect(() => () => {
+    const dialog = resetDialogRef.current;
+    if (dialog?.open) dialog.close();
+  }, []);
 
   function setFieldError(id: string, draft: MoneyDraft) {
     setErrors((current) => {
@@ -507,6 +539,22 @@ export function BudgetWizard({ locale }: { locale: BudgetLocale }) {
     savingInvestmentMinor: mainDrafts.savingInvestment.minorUnits,
     smallExpensesMinor: result.monthlySmallExpensesMinor,
   } : null;
+  const targetSnapshotResult = result && currentInput
+    ? buildBudgetTargetSnapshot({
+        allocation: targetAllocation,
+        classification: currentClassification,
+        coverageBaseMinor: result.essentialsAndDebtMinor,
+        currentInput,
+        emergencyFundMinor: result.emergencyFundMinor,
+        emergencyPlan,
+        hasValidationErrors: Object.values(targetInvalidControls).some(Boolean),
+        reserve: contingencyReserve,
+        serGiving,
+      })
+    : null;
+  const targetSnapshot = targetSnapshotResult?.status === "ok"
+    ? targetSnapshotResult.value
+    : null;
 
   function openTargetAllocation() {
     if (
@@ -527,6 +575,17 @@ export function BudgetWizard({ locale }: { locale: BudgetLocale }) {
       );
       if (startingAllocation.status === "ok") {
         setTargetAllocation(startingAllocation.value);
+        setTargetBaseline(cloneBudgetTargetBaseline({
+          allocation: { ...startingAllocation.value },
+          emergencyPlan: {
+            ...emergencyPlan,
+            target: { ...emergencyPlan.target },
+          },
+          reserve: { ...contingencyReserve },
+          reserveChoice: contingencyReserveChoice,
+          reserveDraft: contingencyReserveDraft,
+          serGiving: { ...serGiving },
+        }));
         setTargetAllocationLifecycle((current) => (
           transitionTargetAllocationLifecycle(current, "initialize-success")
         ));
@@ -542,7 +601,61 @@ export function BudgetWizard({ locale }: { locale: BudgetLocale }) {
         );
       }
     }
+    setTargetMode("edit");
     setStep(4);
+  }
+
+  function showTargetMode(mode: BudgetTargetMode) {
+    setResetConfirmationOpen(false);
+    setTargetMode(mode);
+    focusElement("budget-step-4-heading");
+  }
+
+  function requestTargetReset(event?: ReactMouseEvent<HTMLButtonElement>) {
+    if (!targetBaseline) return;
+    resetTriggerRef.current = event?.currentTarget
+      ?? (document.activeElement instanceof HTMLButtonElement
+        ? document.activeElement
+        : null);
+    setResetConfirmationOpen(true);
+  }
+
+  function restoreResetTriggerFocus() {
+    const trigger = resetTriggerRef.current;
+    requestAnimationFrame(() => {
+      trigger?.focus();
+      resetTriggerRef.current = null;
+    });
+  }
+
+  function closeResetDialog() {
+    setResetConfirmationOpen(false);
+    const dialog = resetDialogRef.current;
+    if (dialog?.open) {
+      dialog.close();
+    } else {
+      restoreResetTriggerFocus();
+    }
+  }
+
+  function resetTargetToBaseline() {
+    if (!targetBaseline || resetInProgressRef.current) return;
+    resetInProgressRef.current = true;
+    const restored = cloneBudgetTargetBaseline(targetBaseline);
+    setTargetAllocation(restored.allocation);
+    setEmergencyPlan(restored.emergencyPlan);
+    setContingencyReserve(restored.reserve);
+    setContingencyReserveChoice(restored.reserveChoice);
+    setContingencyReserveDraft(restored.reserveDraft);
+    setSerGiving(restored.serGiving);
+    setTargetAllocationLifecycle("initialized");
+    setTargetInvalidControls({});
+    setTargetEditorVersion((current) => current + 1);
+    setLiveMessage(targetLabels.resetToStartingPoint);
+    closeResetDialog();
+    requestAnimationFrame(() => {
+      resetInProgressRef.current = false;
+    });
   }
 
   return (
@@ -665,43 +778,125 @@ export function BudgetWizard({ locale }: { locale: BudgetLocale }) {
       {step === 4 && result && currentInput ? (
         <div className="mt-6">
           <p className="text-xs font-semibold uppercase tracking-[0.18em] text-petrol">04</p>
-          <h2 className="mt-2 text-2xl font-semibold leading-tight text-ink" id="budget-step-4-heading" tabIndex={-1}>{targetLabels.allocationTitle}</h2>
-          {targetInitializationError ? (
+          <h2 className="mt-2 text-2xl font-semibold leading-tight text-ink" id="budget-step-4-heading" tabIndex={-1}>{targetLabels.reviewTitle}</h2>
+          {targetInitializationError || !targetSnapshot ? (
             <p className="mt-6 border border-red-700/40 bg-red-50 p-4 text-sm leading-6 text-red-900" role="alert">
-              {targetInitializationError}
+              {targetInitializationError ?? (locale === "es"
+                ? "No se puede calcular la distribución dentro del rango seguro."
+                : "The allocation cannot be calculated within the safe range.")}
             </p>
           ) : (
-            <BudgetTargetStep
-              allocation={targetAllocation}
-              classification={currentClassification}
-              coverageBaseMinor={result.essentialsAndDebtMinor}
-              currency={currency}
-              currentInput={currentInput}
-              emergencyFundMinor={result.emergencyFundMinor}
-              emergencyPlan={emergencyPlan}
-              locale={locale}
-              onAllocationChange={(allocation) => {
-                setTargetAllocation(allocation);
-                setTargetAllocationLifecycle((current) => (
-                  transitionTargetAllocationLifecycle(current, "edit")
-                ));
-              }}
-              onEmergencyPlanChange={setEmergencyPlan}
-              onReserveChange={setContingencyReserve}
-              onReserveChoiceChange={setContingencyReserveChoice}
-              onReserveDraftChange={setContingencyReserveDraft}
-              onSerGivingChange={setSerGiving}
-              reserve={contingencyReserve}
-              reserveChoice={contingencyReserveChoice}
-              reserveDraft={contingencyReserveDraft}
-              serGiving={serGiving}
-            />
+            <div className="mt-6 grid min-w-0 gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(15rem,19rem)]">
+              <BudgetTargetSummary
+                currency={currency}
+                locale={locale}
+                mode={targetMode}
+                onReview={() => showTargetMode("review")}
+                reviewDisabled={Object.values(targetInvalidControls).some(Boolean)}
+                showReviewAction={targetMode === "edit"}
+                snapshot={targetSnapshot}
+              />
+              <div className="min-w-0 lg:col-start-1 lg:row-start-1">
+                {targetMode === "edit" ? (
+                  <>
+                    <BudgetTargetStep
+                      allocation={targetAllocation}
+                      currency={currency}
+                      currentInput={currentInput}
+                      emergencyPlan={emergencyPlan}
+                      key={`budget-target-editor-${targetEditorVersion}`}
+                      locale={locale}
+                      onAllocationChange={(allocation) => {
+                        setTargetAllocation(allocation);
+                        setTargetAllocationLifecycle((current) => (
+                          transitionTargetAllocationLifecycle(current, "edit")
+                        ));
+                      }}
+                      onEmergencyPlanChange={setEmergencyPlan}
+                      onReserveChange={setContingencyReserve}
+                      onReserveChoiceChange={setContingencyReserveChoice}
+                      onReserveDraftChange={setContingencyReserveDraft}
+                      onSerGivingChange={setSerGiving}
+                      onValidationChange={(key, invalid) => {
+                        setTargetInvalidControls((current) => ({
+                          ...current,
+                          [key]: invalid,
+                        }));
+                      }}
+                      reserveChoice={contingencyReserveChoice}
+                      reserveDraft={contingencyReserveDraft}
+                      serGiving={serGiving}
+                      snapshot={targetSnapshot}
+                    />
+                    <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+                      <button
+                        className="rounded-[4px] border border-petrol bg-petrol px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-panel hover:text-petrol disabled:cursor-not-allowed disabled:border-line disabled:bg-panelSoft disabled:text-muted"
+                        disabled={Object.values(targetInvalidControls).some(Boolean)}
+                        onClick={() => showTargetMode("review")}
+                        type="button"
+                      >
+                        {targetLabels.reviewAllocation}
+                      </button>
+                      <button className="rounded-[4px] border border-line bg-white px-5 py-2.5 text-sm font-semibold text-petrol transition hover:border-petrol" onClick={requestTargetReset} type="button">
+                        {targetLabels.resetToStartingPoint}
+                      </button>
+                      <button className="rounded-[4px] border border-line bg-white px-5 py-2.5 text-sm font-semibold text-petrol transition hover:border-petrol" onClick={() => setStep(3)} type="button">
+                        {targetLabels.backToStep3}
+                      </button>
+                    </div>
+                  </>
+                ) : (
+                  <BudgetTargetReview
+                    currency={currency}
+                    locale={locale}
+                    onAdjust={() => showTargetMode("edit")}
+                    onReset={requestTargetReset}
+                    snapshot={targetSnapshot}
+                  />
+                )}
+                <dialog
+                  aria-describedby="budget-target-reset-confirmation-description"
+                  aria-labelledby="budget-target-reset-confirmation-title"
+                  className="m-auto w-[calc(100%-2rem)] max-w-lg rounded-[6px] border border-brass bg-white p-5 text-ink shadow-[0_18px_60px_rgba(11,52,54,0.28)] backdrop:bg-ink/55 md:p-6"
+                  id="budget-target-reset-confirmation"
+                  onCancel={(event) => {
+                    event.preventDefault();
+                    closeResetDialog();
+                  }}
+                  onClose={() => {
+                    setResetConfirmationOpen(false);
+                    restoreResetTriggerFocus();
+                  }}
+                  onKeyDown={(event) => {
+                    if (event.key !== "Escape") return;
+                    event.preventDefault();
+                    closeResetDialog();
+                  }}
+                  ref={resetDialogRef}
+                >
+                  <h3 className="text-xl font-semibold leading-tight" id="budget-target-reset-confirmation-title">
+                    {targetLabels.resetDialogTitle}
+                  </h3>
+                  <p className="mt-3 text-sm leading-6 text-muted" id="budget-target-reset-confirmation-description">
+                    {targetLabels.resetDialogDescription}
+                  </p>
+                  <div className="mt-5 flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
+                    <button
+                      className="rounded-[4px] border border-line bg-white px-4 py-2.5 text-sm font-semibold text-petrol transition hover:border-petrol"
+                      onClick={closeResetDialog}
+                      ref={resetCancelRef}
+                      type="button"
+                    >
+                      {targetLabels.cancel}
+                    </button>
+                    <button className="rounded-[4px] border border-petrol bg-petrol px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-panel hover:text-petrol" onClick={resetTargetToBaseline} type="button">
+                      {targetLabels.confirmReset}
+                    </button>
+                  </div>
+                </dialog>
+              </div>
+            </div>
           )}
-          <div className="mt-6">
-            <button className="rounded-[4px] border border-line bg-white px-5 py-2.5 text-sm font-semibold text-petrol transition hover:border-petrol" onClick={() => setStep(3)} type="button">
-              {targetLabels.backToStartingPoint}
-            </button>
-          </div>
         </div>
       ) : null}
     </section>

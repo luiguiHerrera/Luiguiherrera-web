@@ -222,7 +222,10 @@ export function BudgetAllocationControl({
     <fieldset className="min-w-0 rounded-[6px] border border-line bg-white/70 p-4 md:p-5">
       <legend className="px-1 text-lg font-semibold text-ink">{categoryCopy.name}</legend>
       <p className="mt-1 text-xs font-semibold uppercase tracking-[0.12em] text-petrol">{categoryCopy.subtitle}</p>
-      <p className="mt-3 text-sm leading-6 text-muted" id={helpId}>{categoryCopy.description}</p>
+      <details className="mt-3" id={helpId}>
+        <summary className="cursor-pointer text-sm font-semibold text-petrol">{labels.categoryDetails}</summary>
+        <p className="mt-2 text-sm leading-6 text-muted">{categoryCopy.description}</p>
+      </details>
       {categoryCopy.limit ? <p className="mt-3 border-l border-petrol/30 pl-3 text-xs leading-5 text-muted">{categoryCopy.limit}</p> : null}
 
       <div className="mt-5 grid min-w-0 gap-4 sm:grid-cols-2">

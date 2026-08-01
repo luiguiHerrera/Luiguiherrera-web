@@ -1,28 +1,19 @@
 "use client";
 
 import { useState } from "react";
-import { BudgetAllocationComparison } from "@/components/budget/BudgetAllocationComparison";
 import { BudgetAllocationControl } from "@/components/budget/BudgetAllocationControl";
 import { BudgetEmergencyFundTarget } from "@/components/budget/BudgetEmergencyFundTarget";
 import { budgetTargetCopy } from "@/components/budget/budget-target-copy";
 import {
-  allocationSumState,
-  buildAllocationComparison,
-  calculateAlpBase,
-  calculateEmergencyFundProjection,
-  calculateShortfall,
-  classifyCurrentAllocation,
-  contingencyReserveAmount,
-  reconcileAllocationAmounts,
   splitCurrentSaving,
 } from "@/lib/personal-finance/budget/target-calculations";
 import {
   allocationCategories,
   type AllocationCategory,
+  type BudgetTargetSnapshot,
   type ContingencyReserve,
   type CurrentAllocationInput,
   type EmergencyFundPlan,
-  type SavingsCurrentClassification,
   type SerGivingBreakdown,
   type TargetAllocation,
 } from "@/lib/personal-finance/budget/target-types";
@@ -30,19 +21,23 @@ import type {
   BudgetCurrency,
   BudgetLocale,
 } from "@/lib/personal-finance/budget/types";
-import { formatMoney } from "@/lib/personal-finance/budget/validation";
+import { formatTargetMoney } from "@/lib/personal-finance/budget/target-formatting";
 import {
   formatBasisPoints,
   parseLocalizedPercentage,
 } from "@/lib/personal-finance/budget/target-validation";
 
+function controlNumber(value: bigint) {
+  if (value < BigInt(0) || value > BigInt(Number.MAX_SAFE_INTEGER)) {
+    throw new RangeError("Minor-unit value is outside the control range");
+  }
+  return Number(value);
+}
+
 export function BudgetTargetStep({
   allocation,
-  classification,
-  coverageBaseMinor,
   currency,
   currentInput,
-  emergencyFundMinor,
   emergencyPlan,
   locale,
   onAllocationChange,
@@ -51,17 +46,15 @@ export function BudgetTargetStep({
   onReserveChoiceChange,
   onReserveDraftChange,
   onSerGivingChange,
-  reserve,
+  onValidationChange,
   reserveChoice,
   reserveDraft,
   serGiving,
+  snapshot,
 }: {
   allocation: TargetAllocation;
-  classification: SavingsCurrentClassification;
-  coverageBaseMinor: number;
   currency: BudgetCurrency;
   currentInput: CurrentAllocationInput;
-  emergencyFundMinor: number;
   emergencyPlan: EmergencyFundPlan;
   locale: BudgetLocale;
   onAllocationChange: (allocation: TargetAllocation) => void;
@@ -70,89 +63,53 @@ export function BudgetTargetStep({
   onReserveChoiceChange: (choice: ContingencyReserve["kind"]) => void;
   onReserveDraftChange: (draft: string) => void;
   onSerGivingChange: (breakdown: SerGivingBreakdown) => void;
-  reserve: ContingencyReserve;
+  onValidationChange: (key: string, invalid: boolean) => void;
   reserveChoice: ContingencyReserve["kind"];
   reserveDraft: string;
   serGiving: SerGivingBreakdown;
+  snapshot: BudgetTargetSnapshot;
 }) {
   const labels = budgetTargetCopy[locale];
-  const [invalidControls, setInvalidControls] = useState<Record<string, boolean>>({});
-  const [liveMessage, setLiveMessage] = useState("");
   const [serDraft, setSerDraft] = useState(() => (
     serGiving.kind === "split"
       ? formatBasisPoints(serGiving.serShareBasisPoints, locale)
       : ""
   ));
   const [serError, setSerError] = useState<string | null>(null);
-  const amountsResult = reconcileAllocationAmounts(currentInput.incomeMinor, allocation);
-  const amounts = amountsResult.status === "ok" ? amountsResult.value : null;
-  const projection = calculateEmergencyFundProjection(
-    emergencyPlan,
-    coverageBaseMinor,
-    emergencyFundMinor,
-  );
-  const reserveResult = contingencyReserveAmount(reserve, currentInput.incomeMinor);
-  const alpBaseResult = reserveResult.status === "ok"
-    ? calculateAlpBase(currentInput.monthlyNonMonthlyMinor, reserveResult.value, projection)
-    : reserveResult;
-  const essentialsShortfall = amounts
-    ? calculateShortfall(
-        coverageBaseMinor,
-        amounts.essentials,
-        currentInput.incomeMinor,
-      )
-    : null;
-  const alpShortfall = amounts && alpBaseResult.status === "ok"
-    ? calculateShortfall(
-        alpBaseResult.value,
-        amounts.alp,
-        currentInput.incomeMinor,
-      )
-    : null;
-  const sumState = allocationSumState(allocation, {
-    hasAlpShortfall: Boolean(alpShortfall?.amountMinor),
-    hasEssentialsShortfall: Boolean(essentialsShortfall?.amountMinor),
-    hasValidationErrors: Object.values(invalidControls).some(Boolean),
-  });
-  const current = classifyCurrentAllocation(currentInput, classification);
-  const comparison = amounts
-    ? buildAllocationComparison(current, allocation, amounts)
-    : [];
-  const sumCopy = sumState.status === "exact"
+  const amounts = snapshot.amounts;
+  const sumCopy = snapshot.status === "exact"
     ? labels.sumExact
-    : sumState.status === "under"
+    : snapshot.status === "under"
       ? labels.sumUnder(
-          formatBasisPoints(sumState.allocatedBasisPoints, locale),
-          formatBasisPoints(sumState.remainingBasisPoints, locale),
+          formatBasisPoints(snapshot.allocatedBasisPoints, locale),
+          formatBasisPoints(snapshot.remainingBasisPoints, locale),
         )
       : labels.sumOver(
-          formatBasisPoints(sumState.allocatedBasisPoints, locale),
-          formatBasisPoints(sumState.excessBasisPoints, locale),
+          formatBasisPoints(snapshot.allocatedBasisPoints, locale),
+          formatBasisPoints(snapshot.excessBasisPoints, locale),
         );
   const parsedSer = parseLocalizedPercentage(serDraft, locale);
   const provisionalSer = parsedSer.error === null && parsedSer.basisPoints !== null
-    && amounts
-    ? splitCurrentSaving(amounts.serAndGiving, parsedSer.basisPoints)
+    ? splitCurrentSaving(controlNumber(amounts.serAndGiving), parsedSer.basisPoints)
     : null;
-  const appliedSer = serGiving.kind === "split" && amounts
-    ? splitCurrentSaving(amounts.serAndGiving, serGiving.serShareBasisPoints)
+  const appliedSer = snapshot.serGivingAmounts
+    ? {
+        givingMinor: snapshot.serGivingAmounts.givingMinor,
+        serMinor: snapshot.serGivingAmounts.serMinor,
+      }
     : null;
-  const serGivingHasTotal = Boolean(amounts && amounts.serAndGiving > 0);
+  const serGivingHasTotal = amounts.serAndGiving > BigInt(0);
   const visibleSer = serGivingHasTotal
     ? provisionalSer?.status === "ok"
-      ? provisionalSer.value
-      : appliedSer?.status === "ok" ? appliedSer.value : null
+      ? {
+          givingMinor: BigInt(provisionalSer.value.clfMinor),
+          serMinor: BigInt(provisionalSer.value.alpMinor),
+        }
+      : appliedSer
     : null;
 
   function setValidation(key: string, invalid: boolean) {
-    setInvalidControls((currentErrors) => ({
-      ...currentErrors,
-      [key]: invalid,
-    }));
-  }
-
-  function announceTotal() {
-    setLiveMessage(`${sumCopy[0]} ${sumCopy[1]}`);
+    onValidationChange(key, invalid);
   }
 
   function applySerBreakdown() {
@@ -170,27 +127,18 @@ export function BudgetTargetStep({
     });
   }
 
-  if (!amounts) {
-    return (
-      <p className="mt-6 text-sm text-red-800">
-        {locale === "es"
-          ? "No se puede calcular la distribución dentro del rango seguro."
-          : "The allocation cannot be calculated within the safe range."}
-      </p>
-    );
-  }
-
   return (
     <div className="mt-6 min-w-0">
       <p className="max-w-4xl text-sm leading-6 text-muted">{labels.allocationIntro}</p>
       <p className="mt-3 max-w-4xl border-l-2 border-brass bg-white/75 px-4 py-3 text-sm leading-6 text-ink">{labels.allocationStartingPoint}</p>
-      <p className="mt-3 max-w-4xl border-l border-petrol/30 pl-3 text-sm leading-6 text-muted">{labels.allocationHelp}</p>
+      <details className="mt-3 max-w-4xl border-l border-petrol/30 pl-3">
+        <summary className="cursor-pointer text-sm font-semibold text-petrol">{labels.categoryDetails}</summary>
+        <p className="mt-2 text-sm leading-6 text-muted">{labels.allocationHelp}</p>
+      </details>
 
       <div className="mt-6">
         <BudgetEmergencyFundTarget
-          coverageBaseMinor={coverageBaseMinor}
           currency={currency}
-          emergencyFundMinor={emergencyFundMinor}
           incomeMinor={currentInput.incomeMinor}
           locale={locale}
           onPlanChange={onEmergencyPlanChange}
@@ -199,16 +147,16 @@ export function BudgetTargetStep({
           onReserveDraftChange={onReserveDraftChange}
           onValidationChange={setValidation}
           plan={emergencyPlan}
-          reserve={reserve}
           reserveChoice={reserveChoice}
           reserveDraft={reserveDraft}
+          snapshot={snapshot}
         />
       </div>
 
       <div className="mt-6 grid min-w-0 gap-5 lg:grid-cols-2">
         {allocationCategories.map((category: AllocationCategory) => (
           <BudgetAllocationControl
-            amountMinor={amounts[category]}
+            amountMinor={controlNumber(amounts[category])}
             basisPoints={allocation[category]}
             category={category}
             currency={currency}
@@ -219,7 +167,7 @@ export function BudgetTargetStep({
               ...allocation,
               [category]: basisPoints,
             })}
-            onCommit={announceTotal}
+            onCommit={() => undefined}
             onValidationChange={(invalid) => setValidation(category, invalid)}
           />
         ))}
@@ -255,8 +203,8 @@ export function BudgetTargetStep({
         </label>
         {visibleSer ? (
           <div className="mt-4 grid gap-3 sm:grid-cols-2">
-            <p className="border border-line bg-panelSoft p-3 text-sm"><span className="font-semibold text-ink">SER: </span>{formatMoney(visibleSer.alpMinor, locale, currency)}</p>
-            <p className="border border-line bg-panelSoft p-3 text-sm"><span className="font-semibold text-ink">{locale === "es" ? "Donación" : "Giving"}: </span>{formatMoney(visibleSer.clfMinor, locale, currency)}</p>
+            <p className="border border-line bg-panelSoft p-3 text-sm"><span className="font-semibold text-ink">SER: </span>{formatTargetMoney(visibleSer.serMinor, locale, currency)}</p>
+            <p className="border border-line bg-panelSoft p-3 text-sm"><span className="font-semibold text-ink">{locale === "es" ? "Donación" : "Giving"}: </span>{formatTargetMoney(visibleSer.givingMinor, locale, currency)}</p>
           </div>
         ) : null}
         <div className="mt-4 flex flex-col gap-3 sm:flex-row">
@@ -283,39 +231,35 @@ export function BudgetTargetStep({
         </div>
       </details>
 
-      <section aria-live="polite" className="mt-6 border-l-2 border-brass bg-white/75 px-4 py-4">
+      <section className="mt-6 border-l-2 border-brass bg-white/75 px-4 py-4">
         <p className="text-sm font-semibold leading-6 text-ink">{sumCopy[0]}</p>
         <p className="mt-1 text-sm leading-6 text-muted">{sumCopy[1]}</p>
       </section>
-      <div aria-atomic="true" aria-live="polite" className="sr-only" role="status">{liveMessage}</div>
 
-      {essentialsShortfall?.status === "ok" && essentialsShortfall.amountMinor > 0 ? (
+      {snapshot.essentialsShortfall?.status === "ok" && snapshot.essentialsShortfall.amountMinor! > BigInt(0) ? (
         <p className="mt-4 border-l-2 border-red-700 bg-red-50 px-4 py-3 text-sm leading-6 text-red-900">
           {labels.essentialsShortfall(
-            formatMoney(essentialsShortfall.amountMinor, locale, currency),
-            essentialsShortfall.basisPoints === null
+            formatTargetMoney(snapshot.essentialsShortfall.amountMinor!, locale, currency),
+            snapshot.essentialsShortfall.basisPoints === null
               ? "—"
-              : `${formatBasisPoints(essentialsShortfall.basisPoints, locale)} %`,
+              : `${formatBasisPoints(snapshot.essentialsShortfall.basisPoints, locale)} %`,
           )}
         </p>
       ) : null}
 
-      {alpBaseResult.status === "ok" ? (
+      {snapshot.alpBaseMinor !== null ? (
         <div className="mt-4 border border-line bg-panelSoft p-4">
-          <p className="text-sm font-semibold text-ink">{labels.alpBaseLabel}: {formatMoney(alpBaseResult.value, locale, currency)}</p>
-          <p className="mt-2 text-xs leading-5 text-muted">{labels.alpBaseHelp}</p>
-          {alpShortfall?.status === "ok" && alpShortfall.amountMinor > 0 ? (
-            <p className="mt-3 text-sm leading-6 text-red-900">{labels.alpShortfall(formatMoney(alpShortfall.amountMinor, locale, currency))}</p>
+          <p className="text-sm font-semibold text-ink">{labels.alpBaseLabel}: {formatTargetMoney(snapshot.alpBaseMinor, locale, currency)}</p>
+          <details className="mt-2">
+            <summary className="cursor-pointer text-xs font-semibold text-petrol">{labels.categoryDetails}</summary>
+            <p className="mt-2 text-xs leading-5 text-muted">{labels.alpBaseHelp}</p>
+          </details>
+          {snapshot.alpShortfall?.status === "ok" && snapshot.alpShortfall.amountMinor! > BigInt(0) ? (
+            <p className="mt-3 text-sm leading-6 text-red-900">{labels.alpShortfall(formatTargetMoney(snapshot.alpShortfall.amountMinor!, locale, currency))}</p>
           ) : null}
         </div>
       ) : null}
 
-      <BudgetAllocationComparison
-        currency={currency}
-        locale={locale}
-        rows={comparison}
-        smallExpensesMinor={currentInput.smallExpensesMinor}
-      />
       <p className="mt-6 max-w-4xl text-xs leading-5 text-muted">{labels.privacy}</p>
     </div>
   );
