@@ -13,9 +13,11 @@ const root = process.cwd();
 const read = (relativePath: string) => fs.readFileSync(path.join(root, relativePath), "utf8");
 const first = marketReports.find((report) => report.id === "primer-informe-julio-2026");
 const second = marketReports.find((report) => report.id === "segundo-informe-julio-2026");
+const august = marketReports.find((report) => report.id === "primer-informe-agosto-2026");
 
 assert(first, "Falta el primer informe.");
 assert(second, "Falta el segundo informe.");
+assert(august, "Falta el primer informe de agosto.");
 
 function assertIsoDate(value: string, label: string) {
   assert.match(value, /^\d{4}-\d{2}-\d{2}$/, `${label} no usa YYYY-MM-DD.`);
@@ -47,6 +49,47 @@ assert.deepEqual(
     automaticDataCutoffAt: "2026-07-18",
   },
 );
+assert.deepEqual(
+  {
+    publishedAt: august.publishedAt,
+    modifiedAt: august.modifiedAt,
+    editorialCutoffAt: august.editorialCutoffAt,
+    automaticDataCutoffAt: august.automaticDataCutoffAt,
+    status: august.status,
+  },
+  {
+    publishedAt: "2026-08-01",
+    modifiedAt: "2026-08-01",
+    editorialCutoffAt: "2026-07-31",
+    automaticDataCutoffAt: undefined,
+    status: "actual",
+  },
+);
+assert.equal(second.status, "archivado");
+assert.deepEqual(
+  august.executiveSummary.map((item) => item.title),
+  ["VOO", "GLD", "EWJ", "FXI", "BTC / ETH", "Stockpicking"],
+);
+assert.deepEqual(
+  august.assetReadings.map((item) => item.asset),
+  [
+    "VOO / S&P 500",
+    "GLD / Oro",
+    "EWJ / Japón",
+    "FXI / China",
+    "BTC / ETH",
+    "Stockpicking",
+    "DXY / USD/COP",
+  ],
+);
+assert.equal(august.transversalFactor?.title, "DXY / USD/COP");
+assert.equal(getHistoricalAutomaticReadings(august.id), null, "Agosto no debe inventar un snapshot automático.");
+for (const forbidden of ["familia", "portafolio", "portfolio", "destinatario privado"]) {
+  assert(
+    !JSON.stringify(august).toLocaleLowerCase("es").includes(forbidden),
+    `El informe de agosto expone contexto privado: ${forbidden}.`,
+  );
+}
 
 assert.deepEqual(Object.keys(snapshot), [
   "dataDate",
@@ -253,4 +296,4 @@ for (const locale of ["es", "en"] as const) {
   assert.equal(editorial.headline, td3PaperContent[locale].hero.title);
 }
 
-console.log("Editorial validation passed: 2 reports, 1 historical snapshot and 2 TD3 locales.");
+console.log("Editorial validation passed: 3 reports, 1 historical snapshot and 2 TD3 locales.");

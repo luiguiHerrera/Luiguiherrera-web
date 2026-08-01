@@ -66,7 +66,44 @@
       "id": "segundo-informe-julio-2026",
       "modifiedAt": "2026-07-20",
       "publishedAt": "2026-07-20",
-      "sourceHash": "6e247dbb18ac996821c1fc83fee0f37960565766f75955bc7cc3bd8330f98880"
+      "sourceHash": "f7eaa3d996375684105ba901f1bc393f0d92ac4d12c8023970eb7165257acdf1"
+    },
+    {
+      "canonicalUrl": "https://www.luiguiherrera.com/informes/primer-informe-agosto-2026",
+      "cutoffs": {
+        "automaticData": null,
+        "editorial": "2026-07-31"
+      },
+      "formats": {
+        "html": {
+          "mimeType": "text/html; charset=utf-8",
+          "path": "/reports/primer-informe-agosto-2026.html",
+          "sha256": "78d315307d3ee8b284ce57edc59a84d4b1461cfabff7cce82974cfbb2e315328",
+          "size": 37641
+        },
+        "ics": {
+          "mimeType": "text/calendar; charset=utf-8",
+          "path": "/reports/primer-informe-agosto-2026-calendar.ics",
+          "sha256": "3e39148272bd4a3e581227c14ef1e8530acb3eb38cac0a6efc95a33c69754a06",
+          "size": 4759
+        },
+        "markdown": {
+          "mimeType": "text/markdown; charset=utf-8",
+          "path": "/reports/primer-informe-agosto-2026.md",
+          "sha256": "5335a14b64355386b83cab7419a73a6d736f4762fcca4dc4ff6ffa39e87ffd87",
+          "size": 26097
+        },
+        "pdf": {
+          "mimeType": "application/pdf",
+          "path": "/reports/primer-informe-agosto-2026.pdf",
+          "sha256": "3a8d8ee3bac3f6b0210e84da8047e88dc652427c22adef8f369dd7bb6a24256b",
+          "size": 32882
+        }
+      },
+      "id": "primer-informe-agosto-2026",
+      "modifiedAt": "2026-08-01",
+      "publishedAt": "2026-08-01",
+      "sourceHash": "a6d47a4bcd6fe17d738a967c29591cc6fdca1b644cc4999a3e966bf3efecfbe1"
     }
   ],
   "schemaVersion": "1.0.0"

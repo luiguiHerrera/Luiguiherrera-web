@@ -422,7 +422,7 @@ export const marketReports: MarketReport[] = [
     htmlHref: "/reports/segundo-informe-julio-2026.html",
     markdownHref: "/reports/segundo-informe-julio-2026.md",
     pdfHref: "/reports/segundo-informe-julio-2026.pdf",
-    status: "actual",
+    status: "archivado",
     thesis:
       "El S&P 500 conserva su estructura de medio y largo plazo, pero debajo del índice ocurrió una rotación violenta. Las acciones individuales se están moviendo mucho más que el mercado agregado: unas suben mientras otras caen, y el índice oculta parte de ese cambio interno.",
     executiveSummary: [
@@ -888,6 +888,447 @@ export const marketReports: MarketReport[] = [
       "Las lecturas combinan datos de mercado, cálculos propios, dashboard interno, niveles estadísticos y referencias públicas e institucionales, incluyendo Goldman Sachs, BofA, Deutsche Bank, Bloomberg y BCA Research cuando aportan contexto. Las fuentes informan el análisis; no organizan la estructura del informe.",
     disclaimer:
       "Este documento tiene fines educativos e informativos. No constituye asesoría financiera, recomendación personalizada ni solicitud de compra o venta de activos. Las decisiones de inversión deben considerar objetivos, horizonte, liquidez, tolerancia al riesgo y situación financiera individual. Rentabilidades pasadas no garantizan resultados futuros.",
+  },
+  {
+    id: "primer-informe-agosto-2026",
+    monthKey: "2026-08",
+    monthLabel: "Agosto 2026",
+    label: "Primer informe de agosto",
+    title: "Agosto empieza con dispersión: la IA pasa del gasto al retorno",
+    subtitle:
+      "Semiconductores, crédito, tasas y USD/COP: el índice aún resiste, pero el coste de capital gana peso.",
+    dateLabel: "Corte: 31 de julio de 2026 · Publicado: 1 de agosto de 2026",
+    publishedLabel: "1 de agosto de 2026",
+    publishedAt: "2026-08-01",
+    modifiedAt: "2026-08-01",
+    editorialCutoffAt: "2026-07-31",
+    summary:
+      "Dispersión, semiconductores, retorno de la inversión en IA, crédito, tasas y USD/COP para la primera lectura de agosto.",
+    calendarHref: "/reports/primer-informe-agosto-2026-calendar.ics",
+    htmlHref: "/reports/primer-informe-agosto-2026.html",
+    markdownHref: "/reports/primer-informe-agosto-2026.md",
+    pdfHref: "/reports/primer-informe-agosto-2026.pdf",
+    status: "actual",
+    thesis:
+      "La corrección de semiconductores y momentum fue extraordinaria, pero no equivale todavía a una ruptura general del mercado. El ajuste combinó una noticia sectorial, posiciones congestionadas y vehículos apalancados; al mismo tiempo, los rendimientos largos y el crédito de las grandes tecnológicas elevaron el coste de financiar la expansión de inteligencia artificial. Agosto puede amplificar movimientos en ambos sentidos: el escenario base sigue siendo un índice funcional con alta dispersión, condicionado a que resultados, márgenes y flujo de caja empiecen a justificar el gasto.",
+    executiveSummary: [
+      {
+        title: "VOO",
+        text: "El índice sigue funcional, pero su estabilidad depende de que la correlación permanezca contenida.",
+      },
+      {
+        title: "GLD",
+        text: "La tesis estructural mejora antes que la técnica: el precio todavía debe confirmar una recuperación.",
+      },
+      {
+        title: "EWJ",
+        text: "Japón conserva fortaleza relativa, pero tecnología, momentum, yen y tasas elevan la selectividad.",
+      },
+      {
+        title: "FXI",
+        text: "China resistió mejor que sus semiconductores; sigue siendo una lectura táctica que necesita catalizadores amplios.",
+      },
+      {
+        title: "BTC / ETH",
+        text: "Cripto conserva comportamiento de beta alta y sensibilidad a liquidez, dólar y volatilidad tecnológica.",
+      },
+      {
+        title: "Stockpicking",
+        text: "Resultados, márgenes, financiación y reacción T+3 a T+5 importan más que el primer movimiento.",
+      },
+    ],
+    transversalFactor: {
+      label: "Factor transversal",
+      title: "DXY / USD/COP",
+      text:
+        "La TRM certificada para el 1 al 3 de agosto fue 3.144,14 COP por dólar. La fortaleza del peso se desacopló del dólar global, pero petróleo, diferencial de tasas, flujos y riesgo local impiden atribuir el movimiento a una sola causa.",
+    },
+    whatHappened: [
+      {
+        title: "Índice y estructura",
+        summary: "El índice ocultó una rotación mucho más violenta debajo de la superficie.",
+        body:
+          "La volatilidad se concentró primero en momentum, semiconductores e infraestructura de IA. La correlación entre acciones permaneció cerca de mínimos de varias décadas, de modo que ganadores y perdedores pudieron compensarse dentro del índice. Esa baja correlación no es bajista por sí misma: el riesgo aparece si sube al mismo tiempo que VIX y se deteriora la amplitud.",
+      },
+      {
+        title: "Semiconductores y China",
+        summary: "La noticia cambió la percepción de riesgo antes que la capacidad industrial.",
+        body:
+          "Distintas series institucionales sitúan la caída de cinco sesiones de semiconductores asiáticos en un rango aproximado de 9 % a 12 %, según el universo utilizado. El detonante fue el avance anunciado de China en litografía DUV, pero las fuentes todavía no demuestran producción comercial a escala, rendimiento industrial sostenido ni capacidad EUV. El shock fue sectorial: el índice amplio chino no acompañó la caída con la misma intensidad.",
+      },
+      {
+        title: "IA, crédito y flujo de caja",
+        summary: "El mercado dejó de premiar el gasto por sí solo y empezó a exigir retorno.",
+        body:
+          "La prueba de la IA pasó de cuánto invierten las grandes tecnológicas a cuánto ingreso, margen y flujo de caja produce esa inversión. Los diferenciales de crédito de varios grandes financiadores de IA se ampliaron frente a comparables, una señal de que el mercado de bonos empieza a cobrar más por sostener el CapEx. No confirma una crisis, pero reduce el margen para resultados o guías decepcionantes.",
+      },
+      {
+        title: "Fed, petróleo y tasas",
+        summary: "La Fed mantuvo tasas, pero la disidencia confirmó que el riesgo inflacionario sigue abierto.",
+        body:
+          "El 29 de julio la Fed mantuvo el rango objetivo en 3,50 %–3,75 %. Tres miembros prefirieron subir 25 puntos básicos y el comunicado volvió a destacar inflación elevada y choques de oferta ligados a energía. La cadena de riesgo para agosto es condicional: petróleo más alto puede elevar inflación esperada, volatilidad de tasas y coste de capital; una moderación del crudo rompería esa secuencia.",
+      },
+      {
+        title: "Corea y Asia tecnológica",
+        summary: "Beneficios fuertes y estructura frágil pueden coexistir.",
+        body:
+          "El material institucional muestra revisiones de beneficios muy fuertes en Corea, pero también una concentración excepcional en Samsung Electronics y SK Hynix. Los productos apalancados y sus rebalanceos amplificaron el movimiento. El mercado puede parecer barato sobre beneficios próximos y caro sobre beneficios normalizados: la diferencia depende de cuánto duren los márgenes extraordinarios de memoria y semiconductores.",
+      },
+      {
+        title: "USD/COP",
+        summary: "El peso se fortaleció más de lo que explica el dólar global por sí solo.",
+        body:
+          "La TRM fue 3.144,14 COP por dólar para la vigencia del 1 al 3 de agosto, mientras la tasa de política del Banco de la República se mantenía en 12 %. Petróleo y diferencial de tasas pueden apoyar al peso, pero no identifican por sí solos la contribución de política, fiscalidad, flujos de capital o cobertura empresarial. Después de un movimiento rápido, el escenario más prudente es un rango amplio, no una extrapolación lineal.",
+      },
+      {
+        title: "Selección de compañías",
+        summary: "La dispersión convirtió cada resultado en una prueba de valoración y financiación.",
+        body:
+          "Las reacciones empresariales recientes mostraron que un buen titular no basta cuando el posicionamiento está congestionado. Para la primera semana de agosto están confirmados resultados de Arista Networks el día 4, Duolingo el 5 y Cloudflare el 6, todos después del cierre estadounidense. El foco debe estar en ventas, márgenes, guía, retorno del CapEx, balance y persistencia de la reacción entre tres y cinco sesiones.",
+      },
+    ],
+    assetReadings: [
+      {
+        asset: "VOO / S&P 500",
+        headline: "El índice sigue en pie, pero la baja correlación está haciendo parte del trabajo.",
+        badge: "funcional",
+        story:
+          "El S&P 500 absorbió una rotación violenta porque el daño se concentró en factores y compañías, no en todo el mercado al mismo tiempo. La calma del índice subestima la dificultad de operar debajo de la superficie.",
+        changed:
+          "La volatilidad empezó a pasar de acciones individuales hacia índices y aumentó la demanda de coberturas. Varias estrategias sistemáticas quedaron más cerca de niveles que podrían obligarlas a reducir exposición.",
+        expected:
+          "Escenario base: alta dispersión, rebotes y correcciones selectivas, con un índice todavía funcional si resultados y amplitud estructural resisten.",
+        watch:
+          "Correlación, VIX, amplitud a 20, 50 y 200 días, diferenciales de crédito, reacción de bancos a tasas largas y niveles de venta de estrategias sistemáticas.",
+        reading:
+          "VOO conserva función de núcleo, pero un índice estable no elimina el riesgo de concentración ni de transición hacia una venta más correlacionada.",
+        timeline: {
+          before: "El liderazgo de IA y momentum sostenía el índice con concentración elevada.",
+          now: "La rotación interna es extrema y la correlación baja todavía amortigua el agregado.",
+          next: "Resultados, amplitud y crédito dirán si el ajuste limpia excesos o alcanza al índice.",
+        },
+      },
+      {
+        asset: "GLD / Oro",
+        headline: "La tesis estructural mejora antes que la señal técnica.",
+        badge: "diversificador",
+        story:
+          "La debilidad técnica descrita en julio no desapareció por el aumento de incertidumbre. Dólar, tasas reales y posicionamiento siguen siendo los primeros filtros para la lectura táctica del oro.",
+        changed:
+          "El debate de largo plazo ganó apoyo por deuda pública, compras de bancos centrales y riesgo de oferta, pero esa tesis no sustituye la confirmación del precio.",
+        expected:
+          "Puede recuperar protagonismo si caen tasas reales o dólar y mejora su estructura técnica. Si los rendimientos largos siguen altos, la presión puede continuar.",
+        watch:
+          "Media de 200 días, tasas reales, DXY, compras de bancos centrales y presión de flujos en GLD.",
+        reading:
+          "Distinguir diversificación estructural de una entrada táctica: responden a horizontes y señales diferentes.",
+        timeline: {
+          before: "GLD acumuló una debilidad técnica prolongada durante julio.",
+          now: "La narrativa estructural mejora, pero el precio todavía no la confirma.",
+          next: "Tasas reales y recuperación de la media larga serán las señales principales.",
+        },
+      },
+      {
+        asset: "EWJ / Japón",
+        headline: "Japón conserva fortaleza relativa, pero su liderazgo es más sensible a tecnología, yen y tasas.",
+        badge: "selectivo",
+        story:
+          "Japón sigue ofreciendo una lectura distinta dentro de Asia desarrollada. La corrección global de momentum también alcanzó al mercado japonés y reveló una mayor dependencia de tecnología, inversión e inteligencia artificial.",
+        changed:
+          "La volatilidad de factores dejó de ser exclusivamente estadounidense. Al mismo tiempo, la normalización de rendimientos japoneses devuelve al yen y a la política monetaria un papel más importante en el retorno.",
+        expected:
+          "Escenario base: fortaleza relativa con más dispersión. La continuidad necesita beneficios defendibles, liderazgo más amplio y una divisa ordenada.",
+        watch:
+          "Yen, rendimientos japoneses, amplitud, concentración tecnológica, revisiones de beneficios y persistencia del momentum regional.",
+        reading:
+          "Separar retorno de las acciones y efecto cambiario. EWJ incorpora exposición al yen y no equivale a una versión cubierta de Japón.",
+        timeline: {
+          before: "Japón venía mostrando mejor tono relativo dentro de Asia desarrollada.",
+          now: "La corrección de momentum expone concentración y devuelve peso al yen y a las tasas.",
+          next: "Amplitud de beneficios y estabilidad cambiaria decidirán si conserva el liderazgo.",
+        },
+      },
+      {
+        asset: "FXI / China",
+        headline: "China resistió mejor que sus semiconductores, pero todavía necesita un catalizador de mercado amplio.",
+        badge: "táctico",
+        story:
+          "El día de la mayor presión en semiconductores asiáticos, el índice amplio chino mostró un comportamiento mucho más resistente. La divergencia indica que el anuncio sobre litografía fue un shock de cadena tecnológica, no una liquidación uniforme de China.",
+        changed:
+          "El avance anunciado en DUV introdujo una hipótesis de sustitución industrial de largo plazo, pero producción a escala, rendimiento comercial y capacidad EUV siguen sin demostrarse.",
+        expected:
+          "Escenario base: lectura táctica y dependiente de política, confianza, beneficios y flujos. El riesgo tecnológico no basta por sí solo para convertir a FXI en liderazgo sostenido.",
+        watch:
+          "Estímulo, crecimiento, confianza interna, flujos extranjeros, DXY, amplitud del mercado chino y evidencia industrial verificable en semiconductores.",
+        reading:
+          "No confundir la resistencia del índice amplio con una validación de toda la cadena tecnológica, ni valoraciones bajas con una tendencia confirmada.",
+        timeline: {
+          before: "FXI mantenía una lectura contrarian por rezago y valoración.",
+          now: "El mercado amplio resiste mejor que los semiconductores, pero aún carece de liderazgo consistente.",
+          next: "Política, beneficios y flujos deberán confirmar cualquier mejora más duradera.",
+        },
+      },
+      {
+        asset: "BTC / ETH",
+        headline: "Cripto conserva su papel de beta alta, no de cobertura defensiva.",
+        badge: "alta beta",
+        story:
+          "BTC y ETH siguen sensibles a liquidez, dólar y apetito por riesgo. La dispersión de tecnología y el endurecimiento del coste de capital reducen la utilidad de leer cripto como una narrativa aislada.",
+        changed:
+          "La atención pasa de precio spot a la combinación de flujos, apalancamiento y correlación con activos tecnológicos.",
+        expected:
+          "Mejor tono si se estabilizan momentum y VIX, cae DXY y regresan flujos. Mayor vulnerabilidad si crédito, tasas y ventas sistemáticas se conectan.",
+        watch:
+          "BTC y ETH spot, flujos de ETF de BTC, DXY, VIX, tecnología y condiciones de financiación.",
+        reading:
+          "No sustituir liquidez ni defensa por exposición cripto; su función en este mapa es medir beta y liquidez.",
+        timeline: {
+          before: "La liquidez explicaba buena parte del apetito por cripto.",
+          now: "El mercado vuelve a exigir disciplina frente a dólar y volatilidad tecnológica.",
+          next: "Flujos y estabilidad de riesgo marcarán la calidad de cualquier rebote.",
+        },
+      },
+      {
+        asset: "Stockpicking",
+        headline: "La reacción posterior importa más que acertar el primer movimiento.",
+        badge: "selectivo",
+        story:
+          "La temporada reciente castigó varias compañías más de lo que sugería el movimiento implícito previo. Sin una marca temporal reproducible de opciones, esas comparaciones sirven como observación y no como estadística definitiva.",
+        changed:
+          "La pregunta ya no es solo quién crece, sino quién financia ese crecimiento, conserva márgenes y convierte el CapEx en flujo de caja. Semiconductores, Corea, infraestructura de IA y high beta pueden representar una misma exposición aunque aparezcan como compañías distintas.",
+        expected:
+          "Arista Networks, Duolingo y Cloudflare abren ventanas confirmadas entre el 4 y el 6 de agosto. La lectura útil combinará sorpresa, guía y reacción acumulada T+3 a T+5.",
+        watch:
+          "Ventas, márgenes, guía, retorno del CapEx, balance, financiación, movimiento implícito inmediatamente anterior y reacción a tres y cinco sesiones.",
+        reading:
+          "No confundir compañías distintas con factores distintos: semiconductores, IA, high beta y Asia tecnológica pueden duplicar la misma exposición.",
+        timeline: {
+          before: "El momentum permitía que varias compañías compartieran una misma narrativa.",
+          now: "Resultados y coste de capital separan historias con caja de historias dependientes de valoración.",
+          next: "La persistencia posterior a resultados distinguirá señal fundamental de ajuste inicial.",
+        },
+      },
+      {
+        asset: "DXY / USD/COP",
+        headline: "La fortaleza del peso está confirmada; su descomposición causal no.",
+        badge: "rango amplio",
+        story:
+          "La TRM certificada para el 1 al 3 de agosto fue 3.144,14 COP por dólar y la tasa de política colombiana se mantenía en 12 %. El peso mostró un desempeño que no se explica únicamente por DXY.",
+        changed:
+          "El diferencial de tasas, petróleo y factores políticos locales ganaron peso relativo. Atribuir el movimiento completo a elecciones, fiscalidad o energía excedería la evidencia disponible.",
+        expected:
+          "Escenario base: consolidación con movimientos amplios en ambos sentidos después de una apreciación rápida. La continuación exige petróleo firme, entradas de capital y menor prima local; la reversión puede acelerarse con DXY al alza, petróleo débil o tensión soberana.",
+        watch:
+          "DXY, Brent, tasa del Banco de la República, TES, prima soberana, flujos hacia Colombia y comparación con otras monedas exportadoras.",
+        reading:
+          "USD/COP requiere una tesis propia. La correlación con petróleo o monedas comparables no elimina los factores locales.",
+        timeline: {
+          before: "DXY servía como explicación dominante para buena parte de la variación cambiaria.",
+          now: "El peso se fortaleció más que varios referentes globales y elevó el peso de factores locales.",
+          next: "Flujos, petróleo y prima soberana dirán si la divergencia persiste o revierte.",
+        },
+      },
+    ],
+    calendar: [
+      {
+        dateLabel: "Lun. 3 agosto",
+        dateStart: "2026-08-03",
+        event: "ISM manufacturero de Estados Unidos",
+        whyItMatters: "Abre la lectura de actividad, pedidos, empleo y presiones de precios de agosto.",
+      },
+      {
+        dateLabel: "Mar. 4 agosto",
+        dateStart: "2026-08-04",
+        event: "JOLTS y resultados de Arista Networks",
+        whyItMatters: "Combina una señal del mercado laboral con una prueba de demanda en redes para centros de datos e IA.",
+      },
+      {
+        dateLabel: "Mié. 5 agosto",
+        dateStart: "2026-08-05",
+        event: "ISM servicios y resultados de Duolingo",
+        whyItMatters: "Servicios ayuda a medir actividad e inflación; Duolingo prueba crecimiento, monetización y valoración.",
+      },
+      {
+        dateLabel: "Jue. 6 agosto",
+        dateStart: "2026-08-06",
+        event: "Resultados de Cloudflare",
+        whyItMatters: "La guía permite evaluar demanda de nube, seguridad, márgenes e inversión en infraestructura.",
+      },
+      {
+        dateLabel: "Vie. 7 agosto",
+        dateStart: "2026-08-07",
+        event: "Empleo de Estados Unidos de julio",
+        whyItMatters: "Puede reajustar expectativas de crecimiento, inflación salarial y política monetaria.",
+      },
+      {
+        dateLabel: "Mié. 12 agosto",
+        dateStart: "2026-08-12",
+        event: "IPC de Estados Unidos de julio",
+        whyItMatters: "Es la prueba principal para tasas reales, dólar, duración y valoración de crecimiento.",
+      },
+      {
+        dateLabel: "Vie. 14 agosto",
+        dateStart: "2026-08-14",
+        event: "Ventas minoristas de Estados Unidos de julio",
+        whyItMatters: "Mide la resistencia del consumo después de señales mixtas de actividad e inflación.",
+      },
+      {
+        dateLabel: "Mié. 19 agosto",
+        dateStart: "2026-08-19",
+        event: "Minutas de la Fed del 28 y 29 de julio",
+        whyItMatters: "Aclararán el balance entre la mayoría que mantuvo tasas y los tres votos favorables a subirlas.",
+      },
+      {
+        dateLabel: "Vie. 21 agosto",
+        dateStart: "2026-08-21",
+        event: "Vencimiento mensual de opciones",
+        whyItMatters: "Puede modificar coberturas, volumen y sensibilidad del índice alrededor de niveles relevantes.",
+      },
+      {
+        dateLabel: "27-29 agosto",
+        dateStart: "2026-08-27",
+        dateEnd: "2026-08-30",
+        event: "Simposio de Jackson Hole",
+        whyItMatters: "La comunicación de bancos centrales puede cambiar la lectura de tasas, dólar y liquidez global.",
+      },
+    ],
+    scenarios: [
+      {
+        title: "Base",
+        body:
+          "Alta dispersión, rebotes violentos y correcciones selectivas, con un índice todavía funcional. El shock de semiconductores parece adelantado frente a la evidencia industrial, pero crédito y tasas impiden tratar toda caída como oportunidad automática.",
+      },
+      {
+        title: "Positivo",
+        body:
+          "Resultados validan monetización de IA, márgenes y flujo de caja; el crédito se estabiliza, cae la demanda de coberturas y el liderazgo se amplía más allá de unas pocas compañías.",
+      },
+      {
+        title: "Adverso",
+        body:
+          "Gasto creciente sin retorno visible, petróleo y tasas al alza, crédito más caro y correlación creciente activan ventas sistemáticas. La volatilidad deja de ser interna y alcanza al índice.",
+      },
+    ],
+    watchlist: [
+      {
+        key: "mega-cap-credit",
+        name: "Crédito de grandes tecnológicas",
+        statusLabel: "Prima en aumento",
+        whatLooksAt: "Diferenciales de crédito de los principales financiadores de infraestructura de IA frente al mercado general.",
+        whyItMatters: "El mercado de bonos puede endurecer la financiación antes de que la renta variable reconozca el coste.",
+        currentReading: "Las referencias institucionales muestran ampliación relativa durante la última parte de julio.",
+        whatWouldChange: "Estabilización después de resultados apoyaría el escenario base; una nueva ampliación elevaría la alerta.",
+        asOf: "31 de julio de 2026",
+        source: "J.P. Morgan, Goldman Sachs y lectura editorial del informe.",
+      },
+      {
+        key: "long-rates",
+        name: "Tasas largas y bancos",
+        statusLabel: "Coste de capital elevado",
+        whatLooksAt: "Treasury a treinta años, tasas reales y reacción de bancos a mayores rendimientos.",
+        whyItMatters: "Si tasas altas dejan de favorecer a bancos y empiezan a debilitarlos, aumenta el riesgo de desapalancamiento.",
+        currentReading: "Los rendimientos largos siguen siendo una restricción más importante para valoraciones y financiación.",
+        whatWouldChange: "Una caída sostenida aliviaría presión; nuevos máximos con bancos débiles deteriorarían la tesis.",
+        asOf: "31 de julio de 2026",
+        source: "BofA, datos de mercado y lectura editorial del informe.",
+      },
+      {
+        key: "correlation-breadth",
+        name: "Correlación y amplitud",
+        statusLabel: "Amortiguador frágil",
+        whatLooksAt: "Correlación realizada e implícita y porcentaje de acciones sobre medias de 20, 50 y 200 días.",
+        whyItMatters: "La baja correlación permite que el índice absorba movimientos opuestos entre compañías.",
+        currentReading: "La correlación permanece excepcionalmente baja mientras la amplitud corta se deteriora.",
+        whatWouldChange: "Correlación, VIX y deterioro de amplitud subiendo juntos trasladarían el daño al índice.",
+        asOf: "31 de julio de 2026",
+        source: "Goldman Sachs, datos de amplitud y lectura editorial del informe.",
+      },
+      {
+        key: "systematic-volatility",
+        name: "VIX y flujos sistemáticos",
+        statusLabel: "Riesgo de aceleración",
+        whatLooksAt: "VIX, convexidad de opciones, niveles CTA y estrategias de control de volatilidad.",
+        whyItMatters: "Una ruptura puede transformar una rotación de factores en oferta mecánica de índices.",
+        currentReading: "La demanda de protección aumentó y varios niveles de corto plazo ya fueron probados.",
+        whatWouldChange: "Normalización de coberturas y estabilización alejarían el riesgo; nuevas rupturas lo aumentarían.",
+        asOf: "31 de julio de 2026",
+        source: "Goldman Sachs, Nomura y lectura editorial del informe.",
+      },
+      {
+        key: "ai-return",
+        name: "Retorno del gasto en IA",
+        statusLabel: "Prueba abierta",
+        whatLooksAt: "Ingresos, márgenes, flujo de caja, CapEx y guía de grandes tecnológicas y proveedores.",
+        whyItMatters: "La productividad operativa solo crea valor financiero si se convierte en crecimiento o caja defendible.",
+        currentReading: "La demanda existe, pero el retorno agregado todavía no está demostrado.",
+        whatWouldChange: "Mejor conversión de inversión en ingresos y caja apoyaría la tesis; costes crecientes sin retorno la deteriorarían.",
+        asOf: "31 de julio de 2026",
+        source: "Resultados empresariales, Goldman Sachs y J.P. Morgan.",
+      },
+      {
+        key: "china-lithography",
+        name: "Litografía china",
+        statusLabel: "Riesgo no probado a escala",
+        whatLooksAt: "Producción verificable, rendimiento industrial, comercialización y capacidad EUV.",
+        whyItMatters: "La evidencia industrial decide si el shock fue de percepción o un cambio estructural más rápido.",
+        currentReading: "La escala descrita sigue siendo pequeña y la sustitución comercial de ASML no está demostrada.",
+        whatWouldChange: "Envíos verificables, rendimiento sostenido o progreso EUV elevarían el riesgo estructural.",
+        asOf: "31 de julio de 2026",
+        source: "Goldman Sachs Asia Equity Strategy y J.P. Morgan Market Intelligence.",
+      },
+      {
+        key: "fed-oil",
+        name: "Fed, petróleo e inflación",
+        statusLabel: "Cadena condicional",
+        whatLooksAt: "Petróleo, inflación esperada, volatilidad de tasas y comunicación de la Fed.",
+        whyItMatters: "Energía puede endurecer tasas y coste de capital incluso sin una subida inmediata de la Fed.",
+        currentReading: "La Fed mantuvo 3,50 %–3,75 % el 29 de julio; tres miembros prefirieron subir 25 puntos básicos.",
+        whatWouldChange: "Moderación de energía rompería la cadena; una nueva aceleración reforzaría la presión.",
+        asOf: "29 de julio de 2026",
+        source: "Federal Reserve Board.",
+        href: "https://www.federalreserve.gov/newsevents/pressreleases/monetary20260729a.htm",
+        linkLabel: "Comunicado oficial de la Fed",
+      },
+      {
+        key: "usd-cop",
+        name: "USD/COP",
+        statusLabel: "Fortaleza local, causalidad abierta",
+        whatLooksAt: "TRM, DXY, Brent, tasa local, TES, prima soberana y flujos de capital.",
+        whyItMatters: "El peso puede separarse del dólar global durante ventanas en las que dominan factores colombianos.",
+        currentReading: "La TRM certificada fue 3.144,14 COP para la vigencia del 1 al 3 de agosto.",
+        whatWouldChange: "Convergencia hacia monedas comparables reduciría el componente local; nueva divergencia exigiría una descomposición propia.",
+        asOf: "1 de agosto de 2026",
+        source: "Superintendencia Financiera de Colombia y Banco de la República.",
+        href: "https://www.superfinanciera.gov.co/CargaDriver/index.jsp",
+        linkLabel: "TRM certificada por la SFC",
+      },
+      {
+        key: "korea-leverage",
+        name: "Concentración y apalancamiento en Corea",
+        statusLabel: "Desapalancamiento iniciado",
+        whatLooksAt: "Peso de grandes fabricantes, vehículos apalancados, rebalanceos y flujos extranjeros y locales.",
+        whyItMatters: "Una buena tesis de beneficios puede sufrir movimientos extremos si la estructura de posiciones es frágil.",
+        currentReading: "Los beneficios se concentran mientras los vehículos apalancados amplificaron el ajuste.",
+        whatWouldChange: "Menor peso de rebalanceos y liderazgo más amplio estabilizarían; nuevas ventas forzadas prolongarían la corrección.",
+        asOf: "31 de julio de 2026",
+        source: "Goldman Sachs Asia Equity Strategy.",
+      },
+      {
+        key: "earnings-persistence",
+        name: "Reacción T+3 a T+5",
+        statusLabel: "Ventana de confirmación",
+        whatLooksAt: "Persistencia de la reacción después de resultados y diferencia frente al movimiento implícito previo.",
+        whyItMatters: "El primer día puede reflejar coberturas y posicionamiento; la digestión posterior aporta una señal más limpia.",
+        currentReading: "La primera semana de agosto concentra pruebas confirmadas en ANET, DUOL y NET.",
+        whatWouldChange: "Reacciones persistentes y mejores guías ampliarían liderazgo; rebotes que se reviertan señalarían fragilidad.",
+        asOf: "1 de agosto de 2026",
+        source: "Relaciones con inversionistas de Arista Networks, Duolingo y Cloudflare.",
+      },
+    ],
+    sourcesNote:
+      "Las lecturas combinan datos de mercado, cálculos propios y material institucional con cortes entre el 21 y el 31 de julio de 2026, incluyendo J.P. Morgan, Goldman Sachs, BofA y Nomura. Los hechos sensibles de calendario y política se contrastaron con la Federal Reserve Board, Bureau of Labor Statistics, U.S. Census Bureau, Institute for Supply Management, Federal Reserve Bank of Kansas City, Banco de la República, Superintendencia Financiera de Colombia y relaciones con inversionistas de Arista Networks, Duolingo y Cloudflare. Las fuentes informan el análisis; no organizan la estructura. Se excluyeron cifras, gráficos y atribuciones que el borrador marcaba como pendientes de verificación.",
+    disclaimer:
+      "Este documento tiene fines educativos e informativos. No constituye asesoría financiera, recomendación personalizada ni solicitud de compra o venta de activos. Los escenarios son condicionales, no predicciones. Las decisiones de inversión deben considerar objetivos, horizonte, liquidez, tolerancia al riesgo y situación financiera individual. Rentabilidades pasadas no garantizan resultados futuros.",
   },
 ];
 

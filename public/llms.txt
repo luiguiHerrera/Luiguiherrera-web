@@ -58,6 +58,15 @@ This section is a complementary discovery aid, not an official indexing protocol
 - PDF human-readable download: https://www.luiguiherrera.com/reports/segundo-informe-julio-2026.pdf
 - Secondary downloadable HTML representation: https://www.luiguiherrera.com/reports/segundo-informe-julio-2026.html
 
+### Primer informe de agosto
+- Primary canonical editorial URL: https://www.luiguiherrera.com/informes/primer-informe-agosto-2026
+- Description: Dispersión, semiconductores, retorno de la inversión en IA, crédito, tasas y USD/COP para la primera lectura de agosto.
+- Published: 2026-08-01
+- Markdown auxiliary machine-readable representation: https://www.luiguiherrera.com/reports/primer-informe-agosto-2026.md
+- PDF human-readable download: https://www.luiguiherrera.com/reports/primer-informe-agosto-2026.pdf
+- Secondary downloadable HTML representation: https://www.luiguiherrera.com/reports/primer-informe-agosto-2026.html
+- Structured calendar events: https://www.luiguiherrera.com/reports/primer-informe-agosto-2026-calendar.ics
+
 ## Source and method notes
 - Dashboard methodology: https://www.luiguiherrera.com/metodologia
 - TD3 research: https://www.luiguiherrera.com/investigacion/td3

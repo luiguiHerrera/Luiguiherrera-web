@@ -1,0 +1,116 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Luigui Herrera//Market Reports//ES
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+X-WR-CALNAME:Primer informe de agosto
+BEGIN:VEVENT
+UID:primer-informe-agosto-2026-ism-manufacturero-de-estados-unidos@luigui-h
+ errera
+DTSTAMP:20260801T000000Z
+DTSTART;VALUE=DATE:20260803
+DTEND;VALUE=DATE:20260804
+SUMMARY:Primer informe de agosto: ISM manufacturero de Estados Unidos
+DESCRIPTION:Lun. 3 agosto. Abre la lectura de actividad\, pedidos\, empleo 
+ y presiones de precios de agosto.
+URL:https://www.luiguiherrera.com/informes/primer-informe-agosto-2026
+END:VEVENT
+BEGIN:VEVENT
+UID:primer-informe-agosto-2026-jolts-y-resultados-de-arista-networks@luigui
+ -herrera
+DTSTAMP:20260801T000000Z
+DTSTART;VALUE=DATE:20260804
+DTEND;VALUE=DATE:20260805
+SUMMARY:Primer informe de agosto: JOLTS y resultados de Arista Networks
+DESCRIPTION:Mar. 4 agosto. Combina una señal del mercado laboral con una p
+ rueba de demanda en redes para centros de datos e IA.
+URL:https://www.luiguiherrera.com/informes/primer-informe-agosto-2026
+END:VEVENT
+BEGIN:VEVENT
+UID:primer-informe-agosto-2026-ism-servicios-y-resultados-de-duolingo@luigu
+ i-herrera
+DTSTAMP:20260801T000000Z
+DTSTART;VALUE=DATE:20260805
+DTEND;VALUE=DATE:20260806
+SUMMARY:Primer informe de agosto: ISM servicios y resultados de Duolingo
+DESCRIPTION:Mié. 5 agosto. Servicios ayuda a medir actividad e inflación\
+ ; Duolingo prueba crecimiento\, monetización y valoración.
+URL:https://www.luiguiherrera.com/informes/primer-informe-agosto-2026
+END:VEVENT
+BEGIN:VEVENT
+UID:primer-informe-agosto-2026-resultados-de-cloudflare@luigui-herrera
+DTSTAMP:20260801T000000Z
+DTSTART;VALUE=DATE:20260806
+DTEND;VALUE=DATE:20260807
+SUMMARY:Primer informe de agosto: Resultados de Cloudflare
+DESCRIPTION:Jue. 6 agosto. La guía permite evaluar demanda de nube\, segur
+ idad\, márgenes e inversión en infraestructura.
+URL:https://www.luiguiherrera.com/informes/primer-informe-agosto-2026
+END:VEVENT
+BEGIN:VEVENT
+UID:primer-informe-agosto-2026-empleo-de-estados-unidos-de-julio@luigui-her
+ rera
+DTSTAMP:20260801T000000Z
+DTSTART;VALUE=DATE:20260807
+DTEND;VALUE=DATE:20260808
+SUMMARY:Primer informe de agosto: Empleo de Estados Unidos de julio
+DESCRIPTION:Vie. 7 agosto. Puede reajustar expectativas de crecimiento\, in
+ flación salarial y política monetaria.
+URL:https://www.luiguiherrera.com/informes/primer-informe-agosto-2026
+END:VEVENT
+BEGIN:VEVENT
+UID:primer-informe-agosto-2026-ipc-de-estados-unidos-de-julio@luigui-herrer
+ a
+DTSTAMP:20260801T000000Z
+DTSTART;VALUE=DATE:20260812
+DTEND;VALUE=DATE:20260813
+SUMMARY:Primer informe de agosto: IPC de Estados Unidos de julio
+DESCRIPTION:Mié. 12 agosto. Es la prueba principal para tasas reales\, dó
+ lar\, duración y valoración de crecimiento.
+URL:https://www.luiguiherrera.com/informes/primer-informe-agosto-2026
+END:VEVENT
+BEGIN:VEVENT
+UID:primer-informe-agosto-2026-ventas-minoristas-de-estados-unidos-de-julio
+ @luigui-herrera
+DTSTAMP:20260801T000000Z
+DTSTART;VALUE=DATE:20260814
+DTEND;VALUE=DATE:20260815
+SUMMARY:Primer informe de agosto: Ventas minoristas de Estados Unidos de ju
+ lio
+DESCRIPTION:Vie. 14 agosto. Mide la resistencia del consumo después de se
+ ñales mixtas de actividad e inflación.
+URL:https://www.luiguiherrera.com/informes/primer-informe-agosto-2026
+END:VEVENT
+BEGIN:VEVENT
+UID:primer-informe-agosto-2026-minutas-de-la-fed-del-28-y-29-de-julio@luigu
+ i-herrera
+DTSTAMP:20260801T000000Z
+DTSTART;VALUE=DATE:20260819
+DTEND;VALUE=DATE:20260820
+SUMMARY:Primer informe de agosto: Minutas de la Fed del 28 y 29 de julio
+DESCRIPTION:Mié. 19 agosto. Aclararán el balance entre la mayoría que ma
+ ntuvo tasas y los tres votos favorables a subirlas.
+URL:https://www.luiguiherrera.com/informes/primer-informe-agosto-2026
+END:VEVENT
+BEGIN:VEVENT
+UID:primer-informe-agosto-2026-vencimiento-mensual-de-opciones@luigui-herre
+ ra
+DTSTAMP:20260801T000000Z
+DTSTART;VALUE=DATE:20260821
+DTEND;VALUE=DATE:20260822
+SUMMARY:Primer informe de agosto: Vencimiento mensual de opciones
+DESCRIPTION:Vie. 21 agosto. Puede modificar coberturas\, volumen y sensibil
+ idad del índice alrededor de niveles relevantes.
+URL:https://www.luiguiherrera.com/informes/primer-informe-agosto-2026
+END:VEVENT
+BEGIN:VEVENT
+UID:primer-informe-agosto-2026-simposio-de-jackson-hole@luigui-herrera
+DTSTAMP:20260801T000000Z
+DTSTART;VALUE=DATE:20260827
+DTEND;VALUE=DATE:20260831
+SUMMARY:Primer informe de agosto: Simposio de Jackson Hole
+DESCRIPTION:27-29 agosto. La comunicación de bancos centrales puede cambia
+ r la lectura de tasas\, dólar y liquidez global.
+URL:https://www.luiguiherrera.com/informes/primer-informe-agosto-2026
+END:VEVENT
+END:VCALENDAR

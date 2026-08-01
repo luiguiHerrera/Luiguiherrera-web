@@ -251,33 +251,45 @@ def data_table(headers, rows, styles, widths=None):
     return table
 
 
-def add_asset_reading(story, item, styles):
+def add_asset_reading(story, item, styles, allow_table_split=False):
+    rows = [
+        ("Clasificación", item["badge"]),
+        ("Qué pasó", item["story"]),
+        ("Qué cambió", item["changed"]),
+        ("Qué esperamos", item["expected"]),
+        ("Qué vigilar", item["watch"]),
+        ("Lectura del informe", item["reading"]),
+        (
+            "Secuencia",
+            " ".join(
+                [
+                    item["timeline"]["before"],
+                    item["timeline"]["now"],
+                    item["timeline"]["next"],
+                ]
+            ),
+        ),
+    ]
+    if allow_table_split:
+        story.append(PDF["CondPageBreak"](65 * PDF["mm"]))
+        story.append(
+            PDF["KeepTogether"](
+                [
+                    p(item["asset"], styles["h2"]),
+                    p(item["headline"], styles["body"]),
+                ]
+            )
+        )
+        story.append(info_table(rows, styles))
+        story.append(PDF["Spacer"](1, 7))
+        return
+
     story.append(
         PDF["KeepTogether"](
             [
                 p(item["asset"], styles["h2"]),
                 p(item["headline"], styles["body"]),
-                info_table(
-                    [
-                        ("Clasificación", item["badge"]),
-                        ("Qué pasó", item["story"]),
-                        ("Qué cambió", item["changed"]),
-                        ("Qué esperamos", item["expected"]),
-                        ("Qué vigilar", item["watch"]),
-                        ("Lectura del informe", item["reading"]),
-                        (
-                            "Secuencia",
-                            " ".join(
-                                [
-                                    item["timeline"]["before"],
-                                    item["timeline"]["now"],
-                                    item["timeline"]["next"],
-                                ]
-                            ),
-                        ),
-                    ],
-                    styles,
-                ),
+                info_table(rows, styles),
                 PDF["Spacer"](1, 7),
             ]
         )
@@ -484,11 +496,13 @@ def add_figure(story, item, styles, root):
     story.append(PDF["Spacer"](1, 8))
 
 
-def add_section(story, section, styles, root, published_at, description, force_break):
+def add_section(story, section, styles, root, published_at, description, force_break, report_id):
     kind = section["kind"]
     story.append(
         PDF["PageBreak"]()
-        if force_break or kind == "figures"
+        if force_break
+        or kind == "figures"
+        or (report_id == "primer-informe-agosto-2026" and kind == "sources")
         else PDF["CondPageBreak"](55 * PDF["mm"])
     )
     story.append(p(section["title"], styles["h1"]))
@@ -517,7 +531,12 @@ def add_section(story, section, styles, root, published_at, description, force_b
             story.append(p(item["body"], styles["body"]))
     elif kind == "asset-readings":
         for item in section["items"]:
-            add_asset_reading(story, item, styles)
+            add_asset_reading(
+                story,
+                item,
+                styles,
+                allow_table_split=report_id == "primer-informe-agosto-2026",
+            )
     elif kind == "historical-snapshot":
         add_historical_snapshot(story, section["snapshot"], styles)
     elif kind == "figures":
@@ -536,15 +555,32 @@ def add_section(story, section, styles, root, published_at, description, force_b
             )
         story.append(p("Escenarios", styles["h2"]))
         for item in section["scenarios"]:
-            story.append(p(item["title"], styles["h3"]))
-            story.append(p(item["body"], styles["body"]))
+            if report_id == "primer-informe-agosto-2026":
+                story.append(
+                    PDF["KeepTogether"](
+                        [
+                            p(item["title"], styles["h3"]),
+                            p(item["body"], styles["body"]),
+                        ]
+                    )
+                )
+            else:
+                story.append(p(item["title"], styles["h3"]))
+                story.append(p(item["body"], styles["body"]))
     elif kind == "watchlist":
-        for item in section["items"]:
+        for item_index, item in enumerate(section["items"]):
             reading_label = "Lectura al publicar" if item.get("currentReading") else "Lectura de seguimiento"
+            if report_id == "primer-informe-agosto-2026" and item_index and item_index % 2 == 0:
+                story.append(PDF["PageBreak"]())
             story.append(
                 PDF["KeepTogether"](
                     [
                         p(item["name"], styles["h2"]),
+                        *(
+                            [PDF["Spacer"](1, 3 * PDF["mm"])]
+                            if report_id == "primer-informe-agosto-2026"
+                            else []
+                        ),
                         info_table(
                             [
                                 ("Estado", item.get("statusLabel", "Seguimiento")),
@@ -634,6 +670,7 @@ def generate_pdf(model_path, output_path, root):
             model["publishedAt"],
             model["description"],
             index == 0,
+            model["id"],
         )
 
     def page_decor(canvas_obj, doc_obj):
