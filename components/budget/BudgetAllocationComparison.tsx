@@ -1,10 +1,10 @@
 import { budgetTargetCopy } from "@/components/budget/budget-target-copy";
-import type { AllocationComparisonRow } from "@/lib/personal-finance/budget/target-types";
+import type { BudgetTargetComparisonRow } from "@/lib/personal-finance/budget/target-types";
 import type {
   BudgetCurrency,
   BudgetLocale,
 } from "@/lib/personal-finance/budget/types";
-import { formatMoney } from "@/lib/personal-finance/budget/validation";
+import { formatTargetMoney } from "@/lib/personal-finance/budget/target-formatting";
 import { formatBasisPoints } from "@/lib/personal-finance/budget/target-validation";
 
 function SignedValue({
@@ -16,10 +16,10 @@ function SignedValue({
   basisPoints: number;
   currency: BudgetCurrency;
   locale: BudgetLocale;
-  minorUnits: number;
+  minorUnits: bigint;
 }) {
   const percentageSign = basisPoints > 0 ? "+" : basisPoints < 0 ? "−" : "";
-  const amountSign = minorUnits > 0 ? "+" : "";
+  const amountSign = minorUnits > BigInt(0) ? "+" : "";
   return (
     <>
       <span className="block text-base font-semibold text-ink">
@@ -27,7 +27,7 @@ function SignedValue({
         {locale === "es" ? " puntos porcentuales" : " percentage points"}
       </span>
       <span className="mt-1 block text-xs text-muted">
-        {amountSign}{formatMoney(minorUnits, locale, currency)}
+        {amountSign}{formatTargetMoney(minorUnits, locale, currency)}
       </span>
     </>
   );
@@ -41,8 +41,8 @@ export function BudgetAllocationComparison({
 }: {
   currency: BudgetCurrency;
   locale: BudgetLocale;
-  rows: AllocationComparisonRow[];
-  smallExpensesMinor: number;
+  rows: BudgetTargetComparisonRow[];
+  smallExpensesMinor: bigint;
 }) {
   const labels = budgetTargetCopy[locale];
 
@@ -72,19 +72,19 @@ export function BudgetAllocationComparison({
                 {row.currentStatus === "known" && row.currentBasisPoints !== null && row.currentAmountMinor !== null ? (
                   <>
                     <span className="mt-1 block text-base font-semibold text-ink md:mt-0">{formatBasisPoints(row.currentBasisPoints, locale)} %</span>
-                    <span className="mt-1 block text-xs text-muted">{formatMoney(row.currentAmountMinor, locale, currency)}</span>
+                    <span className="mt-1 block text-xs text-muted">{formatTargetMoney(row.currentAmountMinor, locale, currency)}</span>
                   </>
                 ) : (
                   <>
                     <span className="mt-1 block text-sm font-semibold leading-5 text-muted md:mt-0">{labels.statusLabels[row.currentStatus]}</span>
-                    {row.currentAmountMinor !== null ? <span className="mt-1 block text-xs text-muted">{formatMoney(row.currentAmountMinor, locale, currency)}</span> : null}
+                    {row.currentAmountMinor !== null ? <span className="mt-1 block text-xs text-muted">{formatTargetMoney(row.currentAmountMinor, locale, currency)}</span> : null}
                   </>
                 )}
               </div>
               <div className="min-w-0" role="cell">
                 <span className="block text-xs font-semibold uppercase tracking-[0.12em] text-muted md:hidden">{labels.comparisonTarget}</span>
                 <span className="mt-1 block text-base font-semibold text-ink md:mt-0">{formatBasisPoints(row.targetBasisPoints, locale)} %</span>
-                <span className="mt-1 block text-xs text-muted">{formatMoney(row.targetAmountMinor, locale, currency)}</span>
+                <span className="mt-1 block text-xs text-muted">{formatTargetMoney(row.targetAmountMinor, locale, currency)}</span>
               </div>
               <div className="min-w-0" role="cell">
                 <span className="block text-xs font-semibold uppercase tracking-[0.12em] text-muted md:hidden">{labels.comparisonChange}</span>
@@ -105,7 +105,7 @@ export function BudgetAllocationComparison({
       </div>
       <p className="mt-4 border-l border-petrol/30 pl-3 text-sm leading-6 text-muted">
         <span className="font-semibold text-ink">{labels.unclassifiedSmall}: </span>
-        {formatMoney(smallExpensesMinor, locale, currency)}
+        {formatTargetMoney(smallExpensesMinor, locale, currency)}
       </p>
     </section>
   );

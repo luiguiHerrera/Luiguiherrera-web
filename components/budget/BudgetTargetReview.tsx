@@ -1,4 +1,5 @@
 import { BudgetAllocationComparison } from "@/components/budget/BudgetAllocationComparison";
+import { budgetProjectionCopy } from "@/components/budget/budget-projection-copy";
 import { budgetTargetCopy } from "@/components/budget/budget-target-copy";
 import {
   allocationCategories,
@@ -17,28 +18,23 @@ function formatCoverage(value: number, locale: BudgetLocale) {
   }).format(value / 10_000);
 }
 
-function presentationNumber(value: bigint) {
-  if (value < BigInt(Number.MIN_SAFE_INTEGER)
-    || value > BigInt(Number.MAX_SAFE_INTEGER)) {
-    throw new RangeError("Minor-unit value is outside the presentation range");
-  }
-  return Number(value);
-}
-
 export function BudgetTargetReview({
   currency,
   locale,
   onAdjust,
+  onExplore,
   onReset,
   snapshot,
 }: {
   currency: BudgetCurrency;
   locale: BudgetLocale;
   onAdjust: () => void;
+  onExplore: () => void;
   onReset: () => void;
   snapshot: BudgetTargetSnapshot;
 }) {
   const labels = budgetTargetCopy[locale];
+  const projectionLabels = budgetProjectionCopy[locale];
   const statusLabel = snapshot.status === "exact"
     ? labels.statusExact
     : snapshot.status === "under" ? labels.statusUnder : labels.statusOver;
@@ -60,17 +56,6 @@ export function BudgetTargetReview({
   const reserve = snapshot.reserve.status === "unset"
     ? labels.summaryNotDefined
     : formatTargetMoney(snapshot.reserve.amountMinor, locale, currency);
-  const comparisonRows = snapshot.comparison.map((row) => ({
-    ...row,
-    currentAmountMinor: row.currentAmountMinor === null
-      ? null
-      : presentationNumber(row.currentAmountMinor),
-    deltaAmountMinor: row.deltaAmountMinor === null
-      ? null
-      : presentationNumber(row.deltaAmountMinor),
-    targetAmountMinor: presentationNumber(row.targetAmountMinor),
-  }));
-
   return (
     <div className="min-w-0" aria-labelledby="budget-step-4-heading">
       <div className="border-l-2 border-brass bg-white/75 px-4 py-4">
@@ -149,8 +134,8 @@ export function BudgetTargetReview({
       <BudgetAllocationComparison
         currency={currency}
         locale={locale}
-        rows={comparisonRows}
-        smallExpensesMinor={presentationNumber(snapshot.unclassifiedSmallMinor)}
+        rows={snapshot.comparison}
+        smallExpensesMinor={snapshot.unclassifiedSmallMinor}
       />
 
       <section className="mt-6 border-l-2 border-brass bg-white/75 px-4 py-4" aria-labelledby="budget-review-conclusion-title">
@@ -160,7 +145,15 @@ export function BudgetTargetReview({
       </section>
 
       <div className="mt-6 flex flex-col gap-3 sm:flex-row">
-        <button className="rounded-[4px] border border-petrol bg-petrol px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-panel hover:text-petrol" onClick={onAdjust} type="button">
+        <button
+          className="rounded-[4px] border border-petrol bg-petrol px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-panel hover:text-petrol"
+          id="budget-review-projection-trigger"
+          onClick={onExplore}
+          type="button"
+        >
+          {projectionLabels.exploreProjection}
+        </button>
+        <button className="rounded-[4px] border border-line bg-white px-5 py-2.5 text-sm font-semibold text-petrol transition hover:border-petrol" onClick={onAdjust} type="button">
           {labels.keepAdjusting}
         </button>
         <button className="rounded-[4px] border border-line bg-white px-5 py-2.5 text-sm font-semibold text-petrol transition hover:border-petrol" onClick={onReset} type="button">
