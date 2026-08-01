@@ -49,16 +49,8 @@ const frameworkCopy = {
     privacy: "Tus datos se procesan en este dispositivo. No se guardan ni se envían.",
     resources: "Recursos relacionados con el presupuesto",
     rule: {
-      above: "Por encima de 100 %",
-      action: "Ver cómo funciona el 100 %",
-      allocated: "Distribuido",
-      below: "Por debajo de 100 %",
-      close: "Ocultar explicación",
       detail: "Las seis categorías utilizan el mismo ingreso. Puedes explorar por debajo o por encima del 100 %, y la herramienta mostrará lo pendiente o el exceso sin redistribuir nada automáticamente. El 100 % describe un estado de distribución, no una respuesta universalmente correcta.",
-      exact: "100 %",
-      excess: "Exceso",
       title: "La regla del 100 %",
-      unallocated: "Sin asignar",
     },
     title: "Del punto de partida a una distribución propia",
   },
@@ -104,16 +96,8 @@ const frameworkCopy = {
     privacy: "Your data is processed on this device. It is not stored or sent anywhere.",
     resources: "Budget-related resources",
     rule: {
-      above: "Above 100%",
-      action: "See how 100% works",
-      allocated: "Allocated",
-      below: "Below 100%",
-      close: "Hide explanation",
       detail: "The six categories use the same income. You can explore below or above 100%, and the tool will show the unallocated share or excess without redistributing anything automatically. A 100% allocation describes a distribution state, not a universally correct answer.",
-      exact: "100%",
-      excess: "Excess",
       title: "The 100% rule",
-      unallocated: "Unallocated",
     },
     title: "From your starting point to your own allocation",
   },
@@ -127,7 +111,7 @@ const frameworkCopy = {
   neutral: string;
   privacy: string;
   resources: string;
-  rule: Record<"above" | "action" | "allocated" | "below" | "close" | "detail" | "exact" | "excess" | "title" | "unallocated", string>;
+  rule: Record<"detail" | "title", string>;
   title: string;
 }>;
 
@@ -228,25 +212,7 @@ export function BudgetEducationalFramework({ locale }: { locale: BudgetLocale })
 
       <article className="mt-5 border border-line bg-white/55 p-4 md:p-5">
         <h3 className="text-base font-semibold text-ink">{labels.rule.title}</h3>
-        <div className="mt-4 grid grid-cols-3 overflow-hidden border border-line text-center">
-          {[
-            [labels.rule.below, labels.rule.unallocated],
-            [labels.rule.exact, labels.rule.allocated],
-            [labels.rule.above, labels.rule.excess],
-          ].map(([heading, status], index) => (
-            <div className={`min-w-0 px-2 py-3 ${index === 1 ? "border-x border-line bg-panelSoft" : "bg-white"}`} key={heading}>
-              <p className="text-xs font-semibold leading-4 text-ink sm:text-sm">{heading}</p>
-              <p className="mt-1 break-words text-[11px] leading-4 text-muted sm:text-xs">{status}</p>
-            </div>
-          ))}
-        </div>
-        <details className="group mt-3">
-          <summary className={`${summaryClassName} inline-flex min-h-11 items-center text-sm font-semibold text-petrol`}>
-            <span className="group-open:hidden">{labels.rule.action}</span>
-            <span className="hidden group-open:inline">{labels.rule.close}</span>
-          </summary>
-          <p className="border-t border-line pt-3 text-sm leading-6 text-muted">{labels.rule.detail}</p>
-        </details>
+        <p className="mt-3 text-sm leading-6 text-muted">{labels.rule.detail}</p>
       </article>
 
       <div className="mt-5 border-l-2 border-petrol bg-panelSoft px-4 py-3 text-sm leading-6 text-muted">

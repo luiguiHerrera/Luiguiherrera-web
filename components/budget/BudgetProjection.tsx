@@ -510,7 +510,7 @@ export function BudgetProjection({
               return (
                 <button
                   aria-pressed={visible[scenarioId]}
-                  className={`rounded-[4px] border px-3 py-2.5 text-sm font-semibold transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-petrol disabled:cursor-not-allowed ${visible[scenarioId] ? scenarioId === "target" ? "border-brass bg-white text-ink" : "border-petrol bg-panelSoft text-petrol" : "border-line bg-white text-muted"}`}
+                  className={`rounded-[4px] border px-3 py-2.5 text-sm font-semibold transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-petrol disabled:cursor-not-allowed ${visible[scenarioId] ? "border-petrol bg-panelSoft text-petrol" : "border-line bg-white text-muted"}`}
                   disabled={onlyVisible}
                   key={scenarioId}
                   onClick={() => toggleScenario(scenarioId)}
