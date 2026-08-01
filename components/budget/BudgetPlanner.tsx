@@ -1,16 +1,14 @@
 import Link from "next/link";
+import { BudgetEducationalFramework } from "@/components/budget/BudgetEducationalFramework";
 import { BudgetFaq } from "@/components/budget/BudgetFaq";
 import { BudgetWizard } from "@/components/budget/BudgetWizard";
 import { budgetCopy } from "@/components/budget/budget-copy";
-import { budgetTargetCopy } from "@/components/budget/budget-target-copy";
 import { ReadingCard } from "@/components/seo/ReadingCard";
 import { InstitutionalHero } from "@/components/ui/InstitutionalHero";
-import { allocationCategories } from "@/lib/personal-finance/budget/target-types";
 import type { BudgetLocale } from "@/lib/personal-finance/budget/types";
 
 export function BudgetPlanner({ locale }: { locale: BudgetLocale }) {
   const labels = budgetCopy[locale];
-  const targetLabels = budgetTargetCopy[locale];
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-10 md:px-5 md:py-14">
@@ -52,73 +50,7 @@ export function BudgetPlanner({ locale }: { locale: BudgetLocale }) {
 
       <BudgetWizard locale={locale} />
 
-      <section
-        aria-labelledby="budget-target-context-title"
-        className="mt-8 rounded-[6px] border border-line bg-panel p-5 shadow-[0_12px_32px_rgba(11,52,54,0.035)] md:p-6"
-      >
-        <p className="text-xs font-semibold uppercase tracking-[0.18em] text-petrol">
-          {locale === "es" ? "Marco educativo" : "Educational framework"}
-        </p>
-        <h2 className="mt-2 text-2xl font-semibold leading-tight text-ink" id="budget-target-context-title">
-          {locale === "es" ? "Del punto de partida a una distribución propia" : "From your starting point to your own allocation"}
-        </h2>
-        <p className="mt-3 max-w-4xl text-sm leading-6 text-muted">
-          {locale === "es"
-            ? "Este simulador separa el diagnóstico de los importes introducidos de la distribución objetivo que tú construyes. Su propósito es hacer visibles equivalencias, límites y decisiones, no imponer una regla universal."
-            : "This simulator separates the diagnosis of the amounts you entered from the target allocation you build. Its purpose is to make equivalents, constraints, and decisions visible, not to impose a universal rule."}
-        </p>
-
-        <div className="mt-6 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-          {allocationCategories.map((category) => (
-            <article className="min-w-0 border border-line bg-white/60 p-4" key={category}>
-              <h3 className="font-semibold leading-6 text-ink">{targetLabels.categories[category].name}</h3>
-              <p className="mt-1 text-xs font-semibold uppercase tracking-[0.1em] text-petrol">{targetLabels.categories[category].subtitle}</p>
-              <p className="mt-3 text-sm leading-6 text-muted">{targetLabels.categories[category].description}</p>
-            </article>
-          ))}
-        </div>
-
-        <div className="mt-6 grid gap-5 md:grid-cols-2">
-          <article>
-            <h3 className="text-base font-semibold text-ink">{locale === "es" ? "ALP y CLF cumplen funciones distintas" : "ALP and CLF serve different purposes"}</h3>
-            <p className="mt-2 text-sm leading-6 text-muted">
-              {locale === "es"
-                ? "ALP organiza previsión y estabilidad: gastos no mensuales, imprevistos y fondo de emergencia. CLF organiza patrimonio y libertad futura: inversión, vivienda, negocio y otros activos. Clasificar el importe actual es opcional."
-                : "ALP organizes planning and stability: non-monthly expenses, contingencies, and an emergency fund. CLF organizes wealth and future freedom: investing, housing, a business, and other assets. Classifying the current amount is optional."}
-            </p>
-          </article>
-          <article>
-            <h3 className="text-base font-semibold text-ink">{locale === "es" ? "Fondo de emergencia y reserva" : "Emergency fund and reserve"}</h3>
-            <p className="mt-2 text-sm leading-6 text-muted">
-              {locale === "es"
-                ? "El fondo de emergencia es un saldo de protección. La reserva para imprevistos es una cantidad mensual adicional para gastos pequeños inesperados que no estén incluidos en otros bloques."
-                : "An emergency fund is a protective balance. A contingency reserve is an additional monthly amount for small unexpected expenses that are not included elsewhere."}
-            </p>
-          </article>
-          <article>
-            <h3 className="text-base font-semibold text-ink">{locale === "es" ? "La regla del 100 %" : "The 100% rule"}</h3>
-            <p className="mt-2 text-sm leading-6 text-muted">
-              {locale === "es"
-                ? "Las seis categorías utilizan el mismo ingreso. Puedes explorar por debajo o por encima del 100 %, y la herramienta mostrará lo pendiente o el exceso sin redistribuir nada automáticamente."
-                : "The six categories use the same income. You can explore below or above 100%, and the tool will show the unallocated share or excess without redistributing anything automatically."}
-            </p>
-          </article>
-          <article>
-            <h3 className="text-base font-semibold text-ink">{locale === "es" ? "Lectura neutral y límites" : "Neutral reading and limits"}</h3>
-            <p className="mt-2 text-sm leading-6 text-muted">
-              {locale === "es"
-                ? "El punto de partida describe tus datos; el objetivo expresa tus decisiones. La herramienta no califica una categoría como buena o mala, no recomienda inversiones, no promete rentabilidad y no garantiza mayores ingresos."
-                : "The starting point describes your inputs; the target reflects your decisions. The tool does not label a category as good or bad, recommend investments, promise returns, or guarantee higher income."}
-            </p>
-          </article>
-        </div>
-        <p className="mt-6 max-w-4xl border-l border-petrol/40 pl-3 text-sm leading-6 text-muted">{targetLabels.privacy}</p>
-        <nav aria-label={locale === "es" ? "Recursos relacionados con el presupuesto" : "Budget-related resources"} className="mt-5 flex flex-wrap gap-x-5 gap-y-3 text-sm font-semibold">
-          <Link className="text-petrol underline-offset-4 hover:underline" href={locale === "es" ? "/empezar" : "/en/start"}>{locale === "es" ? "Empezar" : "Start here"}</Link>
-          <Link className="text-petrol underline-offset-4 hover:underline" href={locale === "es" ? "/deudas" : "/en/debt"}>{locale === "es" ? "Revisar deudas" : "Review debt"}</Link>
-          <Link className="text-petrol underline-offset-4 hover:underline" href={locale === "es" ? "/metodologia" : "/en/methodology"}>{locale === "es" ? "Consultar metodología" : "Read the methodology"}</Link>
-        </nav>
-      </section>
+      <BudgetEducationalFramework locale={locale} />
 
       <BudgetFaq locale={locale} />
 

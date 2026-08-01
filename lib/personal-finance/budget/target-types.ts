@@ -20,7 +20,7 @@ export type TargetAllocationLifecycle =
   | "initialized"
   | "edited";
 
-export type BudgetTargetMode = "edit" | "review" | "projection";
+export type BudgetTargetMode = "edit" | "review";
 
 export const emptyTargetAllocation: TargetAllocation = {
   alp: 0,

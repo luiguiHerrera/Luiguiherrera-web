@@ -470,7 +470,7 @@ export function BudgetProjection({
   }
 
   return (
-    <div className="min-w-0" aria-labelledby="budget-step-4-heading">
+    <div className="min-w-0" aria-labelledby="budget-step-5-heading">
       <p className="max-w-4xl text-base leading-7 text-muted">{labels.introduction}</p>
       <p className="mt-4 max-w-5xl border-l-2 border-brass bg-white/75 px-4 py-4 text-sm leading-6 text-ink">
         {labels.disclaimer}

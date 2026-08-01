@@ -8,7 +8,7 @@ export function BudgetFaq({ locale }: { locale: BudgetLocale }) {
   return (
     <section
       aria-labelledby="budget-faq-title"
-      className="mx-auto mt-8 max-w-4xl"
+      className="mt-8 rounded-[6px] border border-line bg-panel p-5 shadow-[0_12px_32px_rgba(11,52,54,0.035)] md:p-6"
     >
       <h2 className="text-2xl font-semibold leading-tight text-ink" id="budget-faq-title">
         {labels.faqTitle}
