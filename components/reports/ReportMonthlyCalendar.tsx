@@ -137,6 +137,12 @@ export function ReportMonthlyCalendar({ events }: ReportMonthlyCalendarProps) {
                         aria-expanded={active}
                         aria-label={`${event.event}. ${event.displayTimeCest ?? "Hora por confirmar"}`}
                         onClick={() => selectEvent(eventId(event))}
+                        onKeyDown={(keyboardEvent) => {
+                          if (keyboardEvent.key === "Enter" || keyboardEvent.key === " ") {
+                            keyboardEvent.preventDefault();
+                            selectEvent(eventId(event));
+                          }
+                        }}
                         onPointerEnter={() => selectEvent(eventId(event))}
                         data-calendar-event={eventId(event)}
                       >

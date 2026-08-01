@@ -186,6 +186,7 @@ for (const requirement of [
   'rel="noopener noreferrer"',
   'event.key === "Escape"',
   "onClick={() => selectEvent(eventId(event))}",
+  'keyboardEvent.key === "Enter" || keyboardEvent.key === " "',
 ]) {
   assert(monthlyCalendarComponent.includes(requirement), `Calendario mensual: falta ${requirement}.`);
 }
