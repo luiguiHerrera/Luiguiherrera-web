@@ -185,7 +185,7 @@ for (const requirement of [
   'aria-label="Cerrar detalle del evento"',
   'rel="noopener noreferrer"',
   'event.key === "Escape"',
-  "onFocus={() => selectEvent(eventId(event))}",
+  "onClick={() => selectEvent(eventId(event))}",
 ]) {
   assert(monthlyCalendarComponent.includes(requirement), `Calendario mensual: falta ${requirement}.`);
 }
