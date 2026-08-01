@@ -2,8 +2,8 @@ export type HistoricalAutomaticReadingsSnapshot = {
   dataDate: string;
   regime: {
     label: string;
-    score: number;
-    confidence: number;
+    score: number | null;
+    confidence: number | null;
     bias: string;
     interpretation: string;
     support: string[];
@@ -33,20 +33,20 @@ export type HistoricalAutomaticReadingsSnapshot = {
     momentum: string;
     curve: string;
     curveText: string;
-  };
+  } | null;
   btcEtfFlows: {
     lastDayUsdMillions: number;
     rolling5dUsdMillions: number;
     streakLabel: string;
     reading: string;
-  };
+  } | null;
   gldFlowPressure: {
     asOf: string;
     sharesChange5dPct: number;
     label: string;
     summary: string;
     sourceNote: string;
-  };
+  } | null;
   statisticalAssets: Array<{
     label: "SPY" | "GLD" | "EWJ" | "FXI" | "BTC" | "ETH";
     symbol?: string;
@@ -141,8 +141,46 @@ export const secondJuly2026AutomaticReadings = {
   ],
 } satisfies HistoricalAutomaticReadingsSnapshot;
 
+export const firstAugust2026AutomaticReadings = {
+  dataDate: "2026-07-31",
+  regime: {
+    label: "Lectura parcial al cierre",
+    score: null,
+    confidence: null,
+    bias: "selectivo",
+    interpretation: "El snapshot congelado confirma dispersión elevada y fortaleza desigual. No se publica un score ni una confianza agregada porque al corte faltaban flujos archivados de BTC y GLD; las métricas disponibles no se completan con datos posteriores.",
+    support: ["Cinco de once sectores cerraron con retorno semanal positivo.", "SPY, QQQ y DIA conservaron retorno semanal positivo."],
+    caution: ["La dispersión sectorial semanal alcanzó 7,65 puntos porcentuales.", "IWM quedó rezagado y seis sectores cerraron en negativo."],
+    watch: ["VIX spot disponible con último cierre oficial del 30 de julio; curva no disponible al cierre.", "Flujos de BTC y presión de flujos en GLD: No disponible al cierre."],
+  },
+  indices: [
+    { ticker: "SPY", return1w: 1.07, distanceLongAverage: 7.12, distanceFromHigh: -1.40 },
+    { ticker: "QQQ", return1w: 0.86, distanceLongAverage: 6.86, distanceFromHigh: -7.69 },
+    { ticker: "DIA", return1w: 0.59, distanceLongAverage: 7.48, distanceFromHigh: -1.06 },
+    { ticker: "IWM", return1w: -0.58, distanceLongAverage: 9.92, distanceFromHigh: -3.08 },
+  ],
+  sectors: {
+    positiveCount: 5, totalCount: 11, negativeCount: 6, dispersion1w: 7.65,
+    leaders: [{ ticker: "XLY", name: "Consumo discrecional", return1w: 4.74 }, { ticker: "XLE", name: "Energía", return1w: 2.04 }, { ticker: "XLK", name: "Tecnología", return1w: 0.60 }],
+    laggards: [{ ticker: "XLU", name: "Utilities", return1w: -2.91 }, { ticker: "XLB", name: "Materiales", return1w: -1.87 }, { ticker: "XLI", name: "Industriales", return1w: -1.83 }],
+    reading: "La amplitud sectorial fue negativa y la dispersión alta: el índice no describió por sí solo la experiencia interna del mercado.",
+  },
+  vix: { level: 17.09, change1d: -3.57, stateLabel: "Normal", status: "Ordenado", momentum: "Bajando rápido", curve: "No disponible al cierre", curveText: "El spot procede del último cierre disponible en FRED al 30 de julio. La curva no se completa con observaciones posteriores." },
+  btcEtfFlows: null,
+  gldFlowPressure: null,
+  statisticalAssets: [
+    { label: "SPY", percentile: 48.3, zScore: 0.28, distanceLongAverage: 7.12, lastClose: 747.03 },
+    { label: "GLD", percentile: 1.6, zScore: -1.88, distanceLongAverage: -9.79, lastClose: 371.54 },
+    { label: "EWJ", percentile: 58.8, zScore: 0.35, distanceLongAverage: 7.05, lastClose: 92.39 },
+    { label: "FXI", percentile: 44.6, zScore: -0.23, distanceLongAverage: -1.22, lastClose: 36.50 },
+    { label: "BTC", symbol: "BTC/USDT", percentile: 19.3, zScore: -0.92, distanceLongAverage: -11.73, lastClose: 62932.64 },
+    { label: "ETH", symbol: "ETH/USDT", percentile: 40.2, zScore: -0.48, distanceLongAverage: -11.42, lastClose: 1862.55 },
+  ],
+} satisfies HistoricalAutomaticReadingsSnapshot;
+
 const historicalSnapshots = new Map<string, HistoricalAutomaticReadingsSnapshot>([
   ["segundo-informe-julio-2026", secondJuly2026AutomaticReadings],
+  ["primer-informe-agosto-2026", firstAugust2026AutomaticReadings],
 ]);
 
 export function getHistoricalAutomaticReadings(reportId: string) {

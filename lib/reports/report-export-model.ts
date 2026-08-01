@@ -13,6 +13,7 @@ import {
   type MarketReportSectionBlock,
   type MarketReportWatchItem,
 } from "./market-reports.ts";
+import { exclusiveAllDayEnd, getReportCalendar } from "./report-presentation.ts";
 
 export const REPORT_EXPORT_SCHEMA_VERSION = "1.0.0";
 export const REPORT_EXPORT_AUTHOR = "Luigui Herrera";
@@ -55,6 +56,7 @@ export type ReportExportSection =
       title: "Lectura de seguimiento por activo";
       kind: "asset-readings";
       items: MarketReportAssetReading[];
+      stockpicking?: NonNullable<MarketReport["stockpicking"]>;
     }
   | {
       id: "historical-snapshot";
@@ -74,6 +76,12 @@ export type ReportExportSection =
       kind: "calendar-scenarios";
       calendar: MarketReportCalendarItem[];
       scenarios: MarketReportScenario[];
+    }
+  | {
+      id: "probable-routes";
+      title: "Rutas probables";
+      kind: "probable-routes";
+      routes: NonNullable<MarketReport["probableRoutes"]>;
     }
   | {
       id: "watchlist";
@@ -107,6 +115,7 @@ export type ReportExportModel = {
   formats: Record<ReportExportFormat, string | null>;
   events: ReportExportEvent[];
   sections: ReportExportSection[];
+  presentation?: MarketReport["presentation"];
 };
 
 function eventSlug(value: string) {
@@ -125,7 +134,7 @@ function figuresFor(report: MarketReport) {
 }
 
 function structuredEvents(report: MarketReport, canonicalUrl: string): ReportExportEvent[] {
-  return report.calendar
+  return getReportCalendar(report)
     .filter((item): item is MarketReportCalendarItem & { dateStart: string } => Boolean(item.dateStart))
     .map((item) => {
       if (report.presentation?.calendarStyle !== "monthly") {
@@ -149,14 +158,15 @@ function structuredEvents(report: MarketReport, canonicalUrl: string): ReportExp
       const assets = item.affectedAssets?.length
         ? ` Activos o factores: ${item.affectedAssets.join(", ")}.`
         : "";
-      const source = item.sourceLabel ? ` Fuente: ${item.sourceLabel}.` : "";
+      const source = item.sourceLabel ? ` Fuente de fecha/hora: ${item.sourceLabel}.` : "";
+      const impliedMove = item.impliedMovePct !== undefined ? ` Movimiento implícito esperado: ${item.impliedMoveApproximate ? "aproximadamente " : ""}±${item.impliedMovePct.toFixed(2)} %, proveedor: ${item.impliedMoveProvider}.` : "";
       return {
         uid: `${report.id}-${eventSlug(item.event)}@luigui-herrera`,
         startDate: item.dateStart,
-        endDate: item.dateEnd,
+        endDate: item.startDateTimeUtc ? item.dateEnd : exclusiveAllDayEnd(item.dateStart, item.dateEnd),
         ...(item.startDateTimeUtc ? { startDateTimeUtc: item.startDateTimeUtc } : {}),
         summary: `${reportDisplayName(report)}: ${item.event}`,
-        description: `${item.dateLabel}. ${time}. ${item.whyItMatters}${assets}${source}`,
+        description: `${item.dateLabel}. ${time}. ${item.whyItMatters}${impliedMove}${assets}${source}`,
         url: item.trackingHref?.startsWith("http") ? item.trackingHref : canonicalUrl,
       };
     });
@@ -187,12 +197,6 @@ function reportSections(
       kind: "context",
       items: report.whatHappened,
     },
-    {
-      id: "asset-follow-up",
-      title: "Lectura de seguimiento por activo",
-      kind: "asset-readings",
-      items: report.assetReadings,
-    },
   ];
 
   if (snapshot) {
@@ -203,6 +207,14 @@ function reportSections(
       snapshot,
     });
   }
+
+  sections.push({
+    id: "asset-follow-up",
+    title: "Lectura de seguimiento por activo",
+    kind: "asset-readings",
+    items: report.assetReadings,
+    ...(report.stockpicking ? { stockpicking: report.stockpicking } : {}),
+  });
 
   if (figures.length) {
     sections.push({
@@ -218,9 +230,10 @@ function reportSections(
       id: "calendar-and-scenarios",
       title: "Calendario y escenarios",
       kind: "calendar-scenarios",
-      calendar: report.calendar,
-      scenarios: report.scenarios,
+      calendar: getReportCalendar(report),
+      scenarios: report.probableRoutes ? [] : report.scenarios,
     },
+    ...(report.probableRoutes ? [{ id: "probable-routes" as const, title: "Rutas probables" as const, kind: "probable-routes" as const, routes: report.probableRoutes }] : []),
     {
       id: "watchlist",
       title: "Señales a vigilar",
@@ -267,6 +280,7 @@ export function buildReportExportModel(report: MarketReport): ReportExportModel 
     },
     events,
     sections: reportSections(report, snapshot),
+    ...(report.presentation ? { presentation: report.presentation } : {}),
   };
 }
 

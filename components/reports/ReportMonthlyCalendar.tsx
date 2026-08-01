@@ -1,10 +1,12 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
-import type { MarketReportCalendarItem } from "@/lib/reports/market-reports";
+import type { MarketReport, MarketReportCalendarItem } from "@/lib/reports/market-reports";
+import { getCalendarConfig, getMonthGrid, isEventInMonth } from "@/lib/reports/report-presentation";
 
 type ReportMonthlyCalendarProps = {
   events: MarketReportCalendarItem[];
+  report: MarketReport;
 };
 
 const weekdays = ["Lun", "Mar", "Mié", "Jue", "Vie", "Sáb", "Dom"];
@@ -38,19 +40,20 @@ function ExternalMark() {
   return <span aria-hidden="true">↗</span>;
 }
 
-export function ReportMonthlyCalendar({ events }: ReportMonthlyCalendarProps) {
+export function ReportMonthlyCalendar({ events, report }: ReportMonthlyCalendarProps) {
+  const calendarConfig = getCalendarConfig(report);
   const [selectedId, setSelectedId] = useState<string | null>(events[0] ? eventId(events[0]) : null);
   const rootRef = useRef<HTMLDivElement>(null);
   const eventButtonRefs = useRef(new Map<string, HTMLButtonElement>());
   const eventsByDay = useMemo(() => {
     const grouped = new Map<number, MarketReportCalendarItem[]>();
     for (const event of events) {
-      if (!event.dateStart?.startsWith("2026-08-")) continue;
-      const day = Number(event.dateStart.slice(-2));
+      if (!isEventInMonth(event, calendarConfig.year, calendarConfig.month)) continue;
+      const day = Number(event.dateStart?.slice(-2));
       grouped.set(day, [...(grouped.get(day) ?? []), event]);
     }
     return grouped;
-  }, [events]);
+  }, [calendarConfig.month, calendarConfig.year, events]);
   const selected = events.find((event) => eventId(event) === selectedId) ?? null;
   const selectEvent = (id: string) => setSelectedId(id);
   const closeDetail = (restoreFocus: boolean) => {
@@ -60,10 +63,7 @@ export function ReportMonthlyCalendar({ events }: ReportMonthlyCalendarProps) {
       requestAnimationFrame(() => eventButtonRefs.current.get(triggerId)?.focus());
     }
   };
-  const days = Array.from({ length: 42 }, (_, index) => {
-    const day = index - 4;
-    return day >= 1 && day <= 31 ? day : null;
-  });
+  const days = getMonthGrid(calendarConfig.year, calendarConfig.month);
 
   useEffect(() => {
     const onKeyDown = (event: KeyboardEvent) => {
@@ -87,11 +87,11 @@ export function ReportMonthlyCalendar({ events }: ReportMonthlyCalendarProps) {
 
   return (
     <div ref={rootRef} className="grid gap-4 xl:grid-cols-[minmax(0,1fr)_19rem]">
-      <div className="min-w-0 border border-line bg-panel" aria-label="Calendario de agosto de 2026">
+      <div className="min-w-0 border border-line bg-panel" aria-label={`Calendario de ${calendarConfig.title}`}>
         <div className="flex flex-wrap items-center justify-between gap-3 border-b border-line px-4 py-3">
           <div>
             <p className="text-xs font-semibold uppercase tracking-[0.14em] text-brass">Calendario mensual</p>
-            <h3 className="mt-1 text-lg font-semibold text-ink">Agosto de 2026</h3>
+            <h3 className="mt-1 text-lg font-semibold text-ink">{calendarConfig.title}</h3>
           </div>
           <ul className="flex flex-wrap gap-2" aria-label="Leyenda del calendario">
             {Object.entries(categoryLabels).map(([category, label]) => (
@@ -108,16 +108,16 @@ export function ReportMonthlyCalendar({ events }: ReportMonthlyCalendarProps) {
             </div>
           ))}
         </div>
-        <div className="grid grid-cols-7" role="grid" aria-label="Días de agosto de 2026">
+        <div className="grid grid-cols-7" role="grid" aria-label={`Días de ${calendarConfig.title}`}>
           {days.map((day, index) => {
             const dayEvents = day ? eventsByDay.get(day) ?? [] : [];
             const weekend = index % 7 > 4;
             return (
               <div
                 key={`${index}-${day ?? "empty"}`}
-                className={`min-h-16 border-b border-r border-line p-1 last:border-r-0 sm:min-h-28 sm:p-2 ${day ? (weekend ? "bg-panelSoft/70" : "bg-white") : "bg-paper/45"}`}
+                className={`min-h-16 min-w-0 border-b border-r border-line p-1 last:border-r-0 sm:min-h-28 sm:p-2 ${day ? (weekend ? "bg-panelSoft/70" : "bg-white") : "bg-paper/45"}`}
                 role="gridcell"
-                aria-label={day ? `${day} de agosto${dayEvents.length ? `, ${dayEvents.length} eventos` : ""}` : undefined}
+                aria-label={day ? `${day} de ${calendarConfig.title}${dayEvents.length ? `, ${dayEvents.length} eventos` : ""}` : undefined}
               >
                 {day ? <span className={`text-xs font-semibold ${weekend ? "text-brass" : "text-ink"}`}>{day}</span> : null}
                 <div className="mt-1 grid gap-1">
@@ -132,7 +132,7 @@ export function ReportMonthlyCalendar({ events }: ReportMonthlyCalendarProps) {
                           else eventButtonRefs.current.delete(eventId(event));
                         }}
                         type="button"
-                        className={`min-h-8 w-full border px-1.5 py-1 text-left text-[10px] font-semibold leading-tight transition focus-visible:ring-2 focus-visible:ring-petrol/30 sm:min-h-0 ${categoryClasses[category]} ${active ? "ring-2 ring-petrol/25" : ""}`}
+                        className={`min-h-8 min-w-0 w-full max-w-full overflow-hidden border px-1.5 py-1 text-left text-[10px] font-semibold leading-tight transition focus-visible:ring-2 focus-visible:ring-petrol/30 sm:min-h-0 ${categoryClasses[category]} ${active ? "ring-2 ring-petrol/25" : ""}`}
                         aria-controls="report-calendar-detail"
                         aria-expanded={active}
                         aria-label={`${event.event}. ${event.displayTimeCest ?? "Hora por confirmar"}`}
@@ -147,11 +147,11 @@ export function ReportMonthlyCalendar({ events }: ReportMonthlyCalendarProps) {
                         data-calendar-event={eventId(event)}
                       >
                         <span className="mx-auto block h-2 w-2 rounded-full bg-current sm:hidden" aria-hidden="true" />
-                        <span className="hidden sm:block">{event.event}</span>
+                        <span className="hidden truncate sm:block">{event.ticker ?? event.event}</span>
                       </button>
                     );
                   })}
-                  {dayEvents.length > 2 ? <span className="text-[10px] font-semibold text-muted">+{dayEvents.length - 2} más</span> : null}
+                  {dayEvents.length > 2 ? <details className="relative"><summary className="cursor-pointer text-[10px] font-semibold text-petrol">+{dayEvents.length - 2} más</summary><div className="absolute z-20 mt-1 grid min-w-32 gap-1 border border-line bg-panel p-1 shadow-lg">{dayEvents.slice(2).map((event) => <button key={eventId(event)} ref={(node) => { if (node) eventButtonRefs.current.set(eventId(event), node); else eventButtonRefs.current.delete(eventId(event)); }} type="button" className={`min-h-8 min-w-0 max-w-full overflow-hidden border px-1.5 py-1 text-left text-[10px] font-semibold ${categoryClasses[categoryFor(event)]}`} aria-controls="report-calendar-detail" aria-label={`${event.event}. ${event.displayTimeCest ?? "Hora por confirmar"}`} onClick={() => selectEvent(eventId(event))} onKeyDown={(keyboardEvent) => { if (keyboardEvent.key === "Enter" || keyboardEvent.key === " ") { keyboardEvent.preventDefault(); selectEvent(eventId(event)); } }} data-calendar-event={eventId(event)}><span className="block truncate">{event.ticker ?? event.event}</span></button>)}</div></details> : null}
                 </div>
               </div>
             );
@@ -198,6 +198,7 @@ export function ReportMonthlyCalendar({ events }: ReportMonthlyCalendarProps) {
                 <dt className="text-[10px] font-semibold uppercase text-brass">Confirmación</dt>
                 <dd className="mt-1 text-ink">{selected.timeStatus === "confirmed" ? "Hora confirmada por fuente primaria" : selected.timeStatus === "approximate" ? "Hora aproximada" : "Hora por confirmar"}</dd>
               </div>
+              {selected.impliedMovePct !== undefined ? <div><dt className="text-[10px] font-semibold uppercase text-brass">Movimiento implícito esperado</dt><dd className="mt-1 text-ink">{selected.impliedMoveApproximate ? "≈" : ""}±{selected.impliedMovePct.toFixed(2).replace(".", ",")} % · {selected.impliedMoveProvider}</dd></div> : null}
             </dl>
             <div className="mt-4 grid gap-2 border-t border-line pt-3">
               {selected.trackingHref && selected.trackingLabel ? (

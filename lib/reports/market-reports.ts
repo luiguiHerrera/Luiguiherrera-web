@@ -31,6 +31,7 @@ export type MarketReportAssetReading = {
     next: string;
   };
   figures?: MarketReportFigure[];
+  detailsModule?: "earnings";
 };
 
 export type MarketReportCalendarItem = {
@@ -51,6 +52,56 @@ export type MarketReportCalendarItem = {
   sourceHref?: string;
   trackingHref?: string;
   trackingLabel?: string;
+  ticker?: string;
+  company?: string;
+  impliedMovePct?: number;
+  impliedMoveApproximate?: boolean;
+  impliedMoveProvider?: string;
+  impliedMoveProviderHref?: string;
+};
+
+export type MarketReportEarningsItem = {
+  company: string;
+  ticker: string;
+  reportDate: string;
+  reactionDate?: string;
+  session?: "before-open" | "after-close" | "time-tba";
+  startDateTimeUtc?: string;
+  originalTime?: string;
+  originalTimeZone?: string;
+  displayTime?: string;
+  impliedMovePct: number;
+  impliedMoveApproximate?: boolean;
+  actualMovePct?: number;
+  impliedMoveProvider: string;
+  impliedMoveProviderHref: string;
+  dateTimeSourceLabel: string;
+  dateTimeSourceHref: string;
+  actualMoveSourceLabel?: string;
+  actualMoveSourceHref?: string;
+  consultedAt: string;
+  confirmationStatus: "confirmed" | "date-confirmed" | "unconfirmed";
+};
+
+export type MarketReportProbableRoutes = {
+  title: "Rutas probables";
+  note: string;
+  engines: Array<{ title: string; body: string }>;
+  scenarios: MarketReportScenario[];
+};
+
+export type MarketReportPresentation = {
+  contextTitle?: string;
+  timelineStyle?: "progression";
+  calendarStyle?: "monthly";
+  watchlistStyle?: "dashboard";
+  year?: number;
+  month?: number;
+  localizedTitle?: string;
+  locale?: string;
+  primaryTimeZone?: string;
+  displayTimeZones?: string[];
+  enabledModules?: Array<"automatic-readings" | "probable-routes" | "stockpicking-earnings">;
 };
 
 export type MarketReportScenario = {
@@ -111,11 +162,14 @@ export type MarketReport = {
   watchlist: MarketReportWatchItem[];
   sourcesNote: string;
   disclaimer: string;
-  presentation?: {
-    contextTitle?: string;
-    timelineStyle?: "progression";
-    calendarStyle?: "monthly";
-    watchlistStyle?: "dashboard";
+  presentation?: MarketReportPresentation;
+  probableRoutes?: MarketReportProbableRoutes;
+  stockpicking?: {
+    earnings: {
+      methodology: string;
+      published: MarketReportEarningsItem[];
+      upcoming: MarketReportEarningsItem[];
+    };
   };
 };
 
@@ -922,6 +976,7 @@ export const marketReports: MarketReport[] = [
     publishedAt: "2026-08-01",
     modifiedAt: "2026-08-01",
     editorialCutoffAt: "2026-07-31",
+    automaticDataCutoffAt: "2026-07-31",
     summary:
       "Dispersión, semiconductores, retorno de la inversión en IA, crédito, tasas y USD/COP para la primera lectura de agosto.",
     calendarHref: "/reports/primer-informe-agosto-2026-calendar.ics",
@@ -934,6 +989,51 @@ export const marketReports: MarketReport[] = [
       timelineStyle: "progression",
       calendarStyle: "monthly",
       watchlistStyle: "dashboard",
+      year: 2026,
+      month: 8,
+      localizedTitle: "Agosto de 2026",
+      locale: "es-ES",
+      primaryTimeZone: "America/New_York",
+      displayTimeZones: ["America/New_York", "Europe/Madrid"],
+      enabledModules: ["automatic-readings", "probable-routes", "stockpicking-earnings"],
+    },
+    probableRoutes: {
+      title: "Rutas probables",
+      note: "Escenarios condicionales para organizar la vigilancia; no son predicciones ni recomendaciones.",
+      engines: [
+        { title: "Resultados y monetización de IA", body: "Ventas, márgenes y retorno del CapEx decidirán qué compañías mantienen liderazgo." },
+        { title: "Fed, petróleo y tasas largas", body: "Determinarán si las condiciones financieras se estabilizan o vuelven a endurecerse." },
+        { title: "Correlación, sistemáticos y USD/COP", body: "La amplitud, el posicionamiento y el dólar mostrarán si la volatilidad interna alcanza al índice y a las monedas emergentes." },
+      ],
+      scenarios: [
+        { title: "Base", body: "Continúa la dispersión y la rotación, pero sin ruptura general del índice. Los resultados separan ganadores y perdedores." },
+        { title: "Positivo", body: "Los resultados justifican parte del gasto en IA, se estabiliza el crédito, se moderan los rendimientos y mejora la amplitud." },
+        { title: "Adverso", body: "Decepcionan los resultados, se amplían los diferenciales de crédito, suben petróleo o tasas y la recuperación de la correlación activa ventas sistemáticas." },
+      ],
+    },
+    stockpicking: {
+      earnings: {
+        methodology: "Los movimientos implícitos esperados proceden de lecturas externas del mercado de opciones —principalmente Unusual Whales— y pueden cambiar hasta la publicación. Representan la magnitud aproximada descontada, no una previsión propia ni una estimación de dirección.",
+        published: [
+          { company: "Hycroft Mining", ticker: "HYMC", reportDate: "2026-07-28", reactionDate: "2026-07-28", session: "before-open", impliedMovePct: 21.20, actualMovePct: -1.5, impliedMoveProvider: "Unusual Whales", impliedMoveProviderHref: "https://unusualwhales.com/earnings", dateTimeSourceLabel: "SEC EDGAR", dateTimeSourceHref: "https://www.sec.gov/edgar/browse/?CIK=1718405&owner=exclude", actualMoveSourceLabel: "Yahoo Finance", actualMoveSourceHref: "https://finance.yahoo.com/quote/HYMC/history/", consultedAt: "2026-08-01T12:00:00Z", confirmationStatus: "date-confirmed" },
+          { company: "Vertiv", ticker: "VRT", reportDate: "2026-07-29", reactionDate: "2026-07-29", session: "before-open", impliedMovePct: 8.38, actualMovePct: -17.2, impliedMoveProvider: "Unusual Whales", impliedMoveProviderHref: "https://unusualwhales.com/earnings", dateTimeSourceLabel: "Relaciones con inversionistas de Vertiv", dateTimeSourceHref: "https://investors.vertiv.com/news/news-details/2026/Vertiv-Announces-Date-of-Second-Quarter-2026-Earnings-Release-and-Conference-Call/default.aspx", actualMoveSourceLabel: "Yahoo Finance", actualMoveSourceHref: "https://finance.yahoo.com/quote/VRT/history/", consultedAt: "2026-08-01T12:00:00Z", confirmationStatus: "confirmed" },
+          { company: "Coinbase", ticker: "COIN", reportDate: "2026-07-30", reactionDate: "2026-07-31", session: "after-close", impliedMovePct: 8.72, actualMovePct: -10.6, impliedMoveProvider: "Unusual Whales", impliedMoveProviderHref: "https://unusualwhales.com/earnings", dateTimeSourceLabel: "Relaciones con inversionistas de Coinbase", dateTimeSourceHref: "https://investor.coinbase.com/news/news-details/2026/Coinbase-Announces-Date-of-Second-Quarter-2026-Financial-Results/default.aspx", actualMoveSourceLabel: "Yahoo Finance", actualMoveSourceHref: "https://finance.yahoo.com/quote/COIN/history/", consultedAt: "2026-08-01T12:00:00Z", confirmationStatus: "confirmed" },
+          { company: "Reddit", ticker: "RDDT", reportDate: "2026-07-30", reactionDate: "2026-07-31", session: "after-close", impliedMovePct: 14.32, actualMovePct: -21.0, impliedMoveProvider: "Unusual Whales", impliedMoveProviderHref: "https://unusualwhales.com/earnings", dateTimeSourceLabel: "Relaciones con inversionistas de Reddit", dateTimeSourceHref: "https://investor.redditinc.com/news-events/news-releases/news-details/2026/Reddit-to-Announce-Second-Quarter-Results-on-Thursday-July-30-2026/default.aspx", actualMoveSourceLabel: "Yahoo Finance", actualMoveSourceHref: "https://finance.yahoo.com/quote/RDDT/history/", consultedAt: "2026-08-01T12:00:00Z", confirmationStatus: "confirmed" },
+          { company: "AngloGold Ashanti", ticker: "AU", reportDate: "2026-07-31", reactionDate: "2026-07-31", impliedMovePct: 9.53, actualMovePct: -3.7, impliedMoveProvider: "Unusual Whales", impliedMoveProviderHref: "https://unusualwhales.com/earnings", dateTimeSourceLabel: "Relaciones con inversionistas de AngloGold Ashanti", dateTimeSourceHref: "https://www.anglogoldashanti.com/investors/", actualMoveSourceLabel: "Yahoo Finance", actualMoveSourceHref: "https://finance.yahoo.com/quote/AU/history/", consultedAt: "2026-08-01T12:00:00Z", confirmationStatus: "date-confirmed" },
+          { company: "Cameco", ticker: "CCJ", reportDate: "2026-07-31", reactionDate: "2026-07-31", impliedMovePct: 10.44, actualMovePct: -2.4, impliedMoveProvider: "Unusual Whales", impliedMoveProviderHref: "https://unusualwhales.com/earnings", dateTimeSourceLabel: "Relaciones con inversionistas de Cameco", dateTimeSourceHref: "https://www.cameco.com/invest/events-presentations", actualMoveSourceLabel: "Yahoo Finance", actualMoveSourceHref: "https://finance.yahoo.com/quote/CCJ/history/", consultedAt: "2026-08-01T12:00:00Z", confirmationStatus: "date-confirmed" },
+        ],
+        upcoming: [
+          { company: "Palantir", ticker: "PLTR", reportDate: "2026-08-03", session: "after-close", startDateTimeUtc: "2026-08-03T21:00:00Z", originalTime: "17:00", originalTimeZone: "ET", displayTime: "23:00 CEST", impliedMovePct: 10.32, impliedMoveProvider: "Unusual Whales", impliedMoveProviderHref: "https://unusualwhales.com/earnings", dateTimeSourceLabel: "Relaciones con inversionistas de Palantir", dateTimeSourceHref: "https://investors.palantir.com/", consultedAt: "2026-08-01T12:00:00Z", confirmationStatus: "confirmed" },
+          { company: "Arista Networks", ticker: "ANET", reportDate: "2026-08-04", session: "after-close", startDateTimeUtc: "2026-08-04T20:30:00Z", originalTime: "16:30", originalTimeZone: "ET", displayTime: "22:30 CEST", impliedMovePct: 10.40, impliedMoveApproximate: true, impliedMoveProvider: "Unusual Whales", impliedMoveProviderHref: "https://unusualwhales.com/earnings", dateTimeSourceLabel: "Relaciones con inversionistas de Arista", dateTimeSourceHref: "https://investors.arista.com/Communications/Press-Releases-and-Events/Press-Release-Detail/2026/Arista-Networks-to-Announce-Q2-2026-Financial-Results-on-Tuesday-August-4-2026/default.aspx", consultedAt: "2026-08-01T12:00:00Z", confirmationStatus: "confirmed" },
+          { company: "Coupang", ticker: "CPNG", reportDate: "2026-08-04", session: "after-close", startDateTimeUtc: "2026-08-04T21:30:00Z", originalTime: "17:30", originalTimeZone: "ET", displayTime: "23:30 CEST", impliedMovePct: 10.23, impliedMoveProvider: "Unusual Whales", impliedMoveProviderHref: "https://unusualwhales.com/earnings", dateTimeSourceLabel: "Relaciones con inversionistas de Coupang", dateTimeSourceHref: "https://ir.aboutcoupang.com/news-events/news/news-details/2026/Coupang-to-Announce-Second-Quarter-2026-Results-on-August-4-2026/default.aspx", consultedAt: "2026-08-01T12:00:00Z", confirmationStatus: "confirmed" },
+          { company: "Uber", ticker: "UBER", reportDate: "2026-08-05", session: "before-open", startDateTimeUtc: "2026-08-05T12:00:00Z", originalTime: "08:00", originalTimeZone: "ET", displayTime: "14:00 CEST", impliedMovePct: 7.36, impliedMoveProvider: "Unusual Whales", impliedMoveProviderHref: "https://unusualwhales.com/earnings", dateTimeSourceLabel: "Relaciones con inversionistas de Uber", dateTimeSourceHref: "https://investor.uber.com/news-events/news/press-release-details/2026/Uber-Announces-Date-of-Second-Quarter-2026-Results-Conference-Call/default.aspx", consultedAt: "2026-08-01T12:00:00Z", confirmationStatus: "confirmed" },
+          { company: "Duolingo", ticker: "DUOL", reportDate: "2026-08-05", session: "after-close", startDateTimeUtc: "2026-08-05T21:00:00Z", originalTime: "17:00", originalTimeZone: "ET", displayTime: "23:00 CEST", impliedMovePct: 16.45, impliedMoveApproximate: true, impliedMoveProvider: "Unusual Whales", impliedMoveProviderHref: "https://unusualwhales.com/earnings", dateTimeSourceLabel: "Relaciones con inversionistas de Duolingo", dateTimeSourceHref: "https://investors.duolingo.com/news-releases/news-release-details/duolingo-announce-second-quarter-2026-results-wednesday-august-5", consultedAt: "2026-08-01T12:00:00Z", confirmationStatus: "confirmed" },
+          { company: "LifeMD", ticker: "LFMD", reportDate: "2026-08-05", session: "time-tba", impliedMovePct: 23.44, impliedMoveApproximate: true, impliedMoveProvider: "Unusual Whales", impliedMoveProviderHref: "https://unusualwhales.com/earnings", dateTimeSourceLabel: "Relaciones con inversionistas de LifeMD", dateTimeSourceHref: "https://ir.lifemd.com/", consultedAt: "2026-08-01T12:00:00Z", confirmationStatus: "unconfirmed" },
+          { company: "Cloudflare", ticker: "NET", reportDate: "2026-08-06", session: "after-close", startDateTimeUtc: "2026-08-06T21:00:00Z", originalTime: "17:00", originalTimeZone: "ET", displayTime: "23:00 CEST", impliedMovePct: 11.60, impliedMoveApproximate: true, impliedMoveProvider: "Unusual Whales", impliedMoveProviderHref: "https://unusualwhales.com/earnings", dateTimeSourceLabel: "Relaciones con inversionistas de Cloudflare", dateTimeSourceHref: "https://www.cloudflare.net/news/news-details/2026/Cloudflare-Announces-Date-of-Second-Quarter-2026-Financial-Results/default.aspx", consultedAt: "2026-08-01T12:00:00Z", confirmationStatus: "confirmed" },
+          { company: "Hims & Hers", ticker: "HIMS", reportDate: "2026-08-10", session: "after-close", startDateTimeUtc: "2026-08-10T21:00:00Z", originalTime: "17:00", originalTimeZone: "ET", displayTime: "23:00 CEST", impliedMovePct: 20.53, impliedMoveProvider: "Unusual Whales", impliedMoveProviderHref: "https://unusualwhales.com/earnings", dateTimeSourceLabel: "Relaciones con inversionistas de Hims & Hers", dateTimeSourceHref: "https://investors.hims.com/news/news-details/2026/Hims--Hers-to-Announce-Second-Quarter-2026-Financial-Results-on-August-10-2026/default.aspx", consultedAt: "2026-08-01T12:00:00Z", confirmationStatus: "confirmed" },
+          { company: "Celsius Holdings", ticker: "CELH", reportDate: "2026-08-11", session: "time-tba", impliedMovePct: 11.55, impliedMoveProvider: "Unusual Whales", impliedMoveProviderHref: "https://unusualwhales.com/earnings", dateTimeSourceLabel: "Relaciones con inversionistas de Celsius Holdings", dateTimeSourceHref: "https://ir.celsiusholdingsinc.com/", consultedAt: "2026-08-01T12:00:00Z", confirmationStatus: "unconfirmed" },
+        ],
+      },
     },
     thesis:
       "La corrección de semiconductores y momentum fue extraordinaria, pero no equivale todavía a una ruptura general del mercado. El ajuste combinó una noticia sectorial, posiciones congestionadas y vehículos apalancados; al mismo tiempo, los rendimientos largos y el crédito de las grandes tecnológicas elevaron el coste de financiar la expansión de inteligencia artificial. Agosto puede amplificar movimientos en ambos sentidos: el escenario base sigue siendo un índice funcional con alta dispersión, condicionado a que resultados, márgenes y flujo de caja empiecen a justificar el gasto.",
@@ -1116,6 +1216,7 @@ export const marketReports: MarketReport[] = [
       },
       {
         asset: "Stockpicking",
+        detailsModule: "earnings",
         headline: "La reacción posterior importa más que acertar el primer movimiento.",
         badge: "selectivo",
         story:
@@ -1123,7 +1224,7 @@ export const marketReports: MarketReport[] = [
         changed:
           "La pregunta ya no es solo quién crece, sino quién financia ese crecimiento, conserva márgenes y convierte el CapEx en flujo de caja. Semiconductores, Corea, infraestructura de IA y high beta pueden representar una misma exposición aunque aparezcan como compañías distintas.",
         expected:
-          "Arista Networks, Duolingo y Cloudflare abren ventanas confirmadas entre el 4 y el 6 de agosto. La lectura útil combinará sorpresa, guía y reacción acumulada T+3 a T+5.",
+          "Nueve compañías abren ventanas previstas entre el 3 y el 11 de agosto. La lectura útil combinará sorpresa, guía y reacción acumulada T+3 a T+5.",
         watch:
           "Ventas, márgenes, guía, retorno del CapEx, balance, financiación, movimiento implícito inmediatamente anterior y reacción a tres y cinco sesiones.",
         reading:
@@ -1193,24 +1294,6 @@ export const marketReports: MarketReport[] = [
         trackingLabel: "Seguir JOLTS en BLS",
       },
       {
-        id: "arista-q2",
-        dateLabel: "Mar. 4 agosto",
-        dateStart: "2026-08-04",
-        startDateTimeUtc: "2026-08-04T20:30:00Z",
-        event: "Resultados de Arista Networks",
-        whyItMatters: "Prueba la demanda de redes para centros de datos, la guía y el retorno del gasto en infraestructura de IA.",
-        category: "earnings",
-        originalTime: "16:30",
-        originalTimeZone: "ET",
-        displayTimeCest: "22:30 CEST",
-        timeStatus: "confirmed",
-        affectedAssets: ["ANET", "VOO", "Semiconductores", "Infraestructura de IA"],
-        sourceLabel: "Relaciones con inversionistas de Arista",
-        sourceHref: "https://investors.arista.com/Communications/Press-Releases-and-Events/Press-Release-Detail/2026/Arista-Networks-to-Announce-Q2-2026-Financial-Results-on-Tuesday-August-4-2026/default.aspx",
-        trackingHref: "https://investors.arista.com/",
-        trackingLabel: "Seguir resultados de Arista",
-      },
-      {
         id: "ism-services",
         dateLabel: "Mié. 5 agosto",
         dateStart: "2026-08-05",
@@ -1227,42 +1310,6 @@ export const marketReports: MarketReport[] = [
         sourceHref: "https://www.ismworld.org/supply-management-news-and-reports/reports/rob-report-calendar/",
         trackingHref: "/dashboard",
         trackingLabel: "Seguir reacción del mercado",
-      },
-      {
-        id: "duolingo-q2",
-        dateLabel: "Mié. 5 agosto",
-        dateStart: "2026-08-05",
-        startDateTimeUtc: "2026-08-05T21:00:00Z",
-        event: "Resultados de Duolingo",
-        whyItMatters: "Prueba crecimiento, monetización, márgenes y valoración después del cierre estadounidense.",
-        category: "earnings",
-        originalTime: "17:00",
-        originalTimeZone: "ET",
-        displayTimeCest: "23:00 CEST",
-        timeStatus: "confirmed",
-        affectedAssets: ["DUOL", "Stockpicking", "Software", "Crecimiento"],
-        sourceLabel: "Relaciones con inversionistas de Duolingo",
-        sourceHref: "https://investors.duolingo.com/events/event-details/duolingo-second-quarter-2026-earnings-call",
-        trackingHref: "https://investors.duolingo.com/",
-        trackingLabel: "Seguir resultados de Duolingo",
-      },
-      {
-        id: "cloudflare-q2",
-        dateLabel: "Jue. 6 agosto",
-        dateStart: "2026-08-06",
-        startDateTimeUtc: "2026-08-06T21:00:00Z",
-        event: "Resultados de Cloudflare",
-        whyItMatters: "La guía permite evaluar demanda de nube, seguridad, márgenes e inversión en infraestructura.",
-        category: "earnings",
-        originalTime: "17:00",
-        originalTimeZone: "ET",
-        displayTimeCest: "23:00 CEST",
-        timeStatus: "confirmed",
-        affectedAssets: ["NET", "Stockpicking", "Nube", "Infraestructura de IA"],
-        sourceLabel: "Relaciones con inversionistas de Cloudflare",
-        sourceHref: "https://www.cloudflare.net/news/news-details/2026/Cloudflare-Announces-Date-of-Second-Quarter-2026-Financial-Results/default.aspx",
-        trackingHref: "https://www.cloudflare.net/financials/quarterly-results/default.aspx",
-        trackingLabel: "Seguir resultados de Cloudflare",
       },
       {
         id: "employment-july",

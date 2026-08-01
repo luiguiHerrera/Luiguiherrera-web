@@ -3,10 +3,12 @@ import { EditorialByline } from "@/components/editorial/EditorialByline";
 import { AutomaticMarketReadings } from "@/components/reports/AutomaticMarketReadings";
 import { ReportFigure } from "@/components/reports/ReportFigure";
 import { ReportMonthlyCalendar } from "@/components/reports/ReportMonthlyCalendar";
+import { StockpickingEarnings, StockpickingSummary } from "@/components/reports/StockpickingEarnings";
 import { buildIcsDataUri } from "@/lib/calendar/ics";
 import { reportDisplayName, reportHref } from "@/lib/reports/market-reports";
 import type { HistoricalAutomaticReadingsSnapshot } from "@/lib/reports/historical-automatic-readings";
 import type { MarketReport, MarketReportCalendarItem, MarketReportWatchItem } from "@/lib/reports/market-reports";
+import { getReportCalendar } from "@/lib/reports/report-presentation";
 
 type MarketReportContentProps = {
   automaticReadings: HistoricalAutomaticReadingsSnapshot | null;
@@ -56,7 +58,8 @@ export function MarketReportContent({
   previousReport,
   report,
 }: MarketReportContentProps) {
-  const hasCalendarDates = report.calendar.some((item) => item.dateStart);
+  const calendar = getReportCalendar(report);
+  const hasCalendarDates = calendar.some((item) => item.dateStart);
   const calendarSectionLabel = hasCalendarDates ? "Calendario y escenarios" : "Escenarios";
   const calendarSectionTitle = hasCalendarDates ? "Eventos y rutas probables" : "Rutas probables";
   const contextTitle = report.presentation?.contextTitle ?? "Contexto por activo";
@@ -139,6 +142,10 @@ export function MarketReportContent({
         </div>
       </section>
 
+      {automaticReadings ? (
+        <AutomaticMarketReadings mode="historical" snapshot={automaticReadings} />
+      ) : null}
+
       <section id="lectura-seguimiento" className="grid scroll-mt-24 gap-6 border-y border-line py-8 md:py-10 lg:grid-cols-[0.34fr_1fr]">
         <div>
           <p className="text-xs font-semibold uppercase text-petrol">Qué esperamos</p>
@@ -157,6 +164,7 @@ export function MarketReportContent({
                   <span className="details-open-label">ABRIR</span>
                   <span className="details-close-label">CERRAR</span>
                 </span>
+                {asset.detailsModule === "earnings" && report.stockpicking ? <div className="md:col-span-4"><StockpickingSummary published={report.stockpicking.earnings.published} upcoming={report.stockpicking.earnings.upcoming} /></div> : null}
               </summary>
               <div className="border-t border-line px-5 pb-5 pt-4">
                 <div className="grid gap-5 lg:grid-cols-[0.62fr_0.38fr]">
@@ -175,6 +183,7 @@ export function MarketReportContent({
                         ))}
                       </div>
                     ) : null}
+                    {asset.detailsModule === "earnings" && report.stockpicking ? <StockpickingEarnings {...report.stockpicking.earnings} /> : null}
                   </div>
                   <div className={`border border-line bg-paper p-4 ${enhancedTimeline ? "lg:col-span-2" : ""}`}>
                     <p className="text-xs font-semibold uppercase text-petrol">Secuencia de lectura</p>
@@ -199,10 +208,6 @@ export function MarketReportContent({
         </div>
       </section>
 
-      {automaticReadings ? (
-        <AutomaticMarketReadings mode="historical" snapshot={automaticReadings} />
-      ) : null}
-
       <section id="calendario-y-escenarios" className="grid scroll-mt-24 gap-6 py-8 md:py-10 lg:grid-cols-[0.34fr_1fr]">
         <div>
           <p className="text-xs font-semibold uppercase text-petrol">{calendarSectionLabel}</p>
@@ -223,11 +228,11 @@ export function MarketReportContent({
           ) : null}
         </div>
         <div className="grid gap-5">
-          {report.calendar.length && enhancedCalendar ? (
-            <ReportMonthlyCalendar events={report.calendar} />
-          ) : report.calendar.length ? (
+          {calendar.length && enhancedCalendar ? (
+            <ReportMonthlyCalendar events={calendar} report={report} />
+          ) : calendar.length ? (
             <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-              {report.calendar.map((item) => (
+              {calendar.map((item) => (
                 <article key={`${item.dateLabel}-${item.event}`} className="border border-line bg-white/70 p-4">
                   <p className="text-xs font-semibold uppercase text-brass">{item.dateLabel}</p>
                   <h3 className="mt-2 text-sm font-semibold leading-6 text-ink">{item.event}</h3>
@@ -245,16 +250,26 @@ export function MarketReportContent({
               ))}
             </div>
           ) : null}
-          <div className="grid gap-3 md:grid-cols-3">
+          {!report.probableRoutes ? <div className="grid gap-3 md:grid-cols-3">
             {report.scenarios.map((scenario) => (
               <article key={scenario.title} className="border border-line bg-panel p-5">
                 <h3 className="text-lg font-semibold text-ink">{scenario.title}</h3>
                 <p className="mt-3 text-sm leading-7 text-muted">{scenario.body}</p>
               </article>
             ))}
-          </div>
+          </div> : null}
         </div>
       </section>
+
+      {report.probableRoutes ? (
+        <section id="rutas-probables" className="grid scroll-mt-24 gap-6 border-t border-line py-8 md:py-10 lg:grid-cols-[0.34fr_1fr]">
+          <div><p className="text-xs font-semibold uppercase text-petrol">Escenarios condicionales</p><h2 className="mt-2 text-2xl font-semibold text-ink md:text-3xl">{report.probableRoutes.title}</h2><p className="mt-3 text-sm leading-6 text-muted">{report.probableRoutes.note}</p></div>
+          <div className="grid gap-5">
+            <div className="grid gap-3 md:grid-cols-3">{report.probableRoutes.engines.map((item) => <article key={item.title} className="border-l-2 border-petrol bg-panel p-4"><p className="text-xs font-semibold uppercase text-petrol">Motor</p><h3 className="mt-2 font-semibold text-ink">{item.title}</h3><p className="mt-2 text-sm leading-6 text-muted">{item.body}</p></article>)}</div>
+            <div className="grid gap-3 md:grid-cols-3">{report.probableRoutes.scenarios.map((item) => <article key={item.title} className="border border-line bg-panelSoft p-4"><h3 className="font-semibold text-ink">{item.title}</h3><p className="mt-2 text-sm leading-6 text-muted">{item.body}</p></article>)}</div>
+          </div>
+        </section>
+      ) : null}
 
       <section id="senales-a-vigilar" className="grid scroll-mt-24 gap-6 border-y border-line py-8 md:py-10 lg:grid-cols-[0.34fr_1fr]">
         <div>

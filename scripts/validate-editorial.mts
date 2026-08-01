@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import fs from "node:fs";
 import path from "node:path";
 import { marketReports } from "../lib/reports/market-reports.ts";
+import { exclusiveAllDayEnd, getMonthGrid, getReportCalendar } from "../lib/reports/report-presentation.ts";
 import {
   getHistoricalAutomaticReadings,
   secondJuly2026AutomaticReadings as snapshot,
@@ -82,7 +83,7 @@ assert.deepEqual(
     publishedAt: "2026-08-01",
     modifiedAt: "2026-08-01",
     editorialCutoffAt: "2026-07-31",
-    automaticDataCutoffAt: undefined,
+    automaticDataCutoffAt: "2026-07-31",
     status: "actual",
   },
 );
@@ -104,7 +105,7 @@ assert.deepEqual(
   ],
 );
 assert.equal(august.transversalFactor?.title, "DXY / USD/COP");
-assert.equal(getHistoricalAutomaticReadings(august.id), null, "Agosto no debe inventar un snapshot automático.");
+assert.equal(getHistoricalAutomaticReadings(august.id)?.dataDate, "2026-07-31", "Agosto debe usar el snapshot congelado al cierre.");
 for (const forbidden of ["familia", "portafolio", "portfolio", "destinatario privado"]) {
   assert(
     !JSON.stringify(august).toLocaleLowerCase("es").includes(forbidden),
@@ -112,15 +113,14 @@ for (const forbidden of ["familia", "portafolio", "portfolio", "destinatario pri
   );
 }
 
-assert.deepEqual(august.presentation, {
-  contextTitle: "Contexto general",
-  timelineStyle: "progression",
-  calendarStyle: "monthly",
-  watchlistStyle: "dashboard",
-});
-assert.equal(august.calendar.length, 12, "Agosto debe conservar los 12 eventos editoriales verificados.");
-assert.equal(new Set(august.calendar.map((event) => event.id)).size, august.calendar.length, "Los eventos de agosto requieren identificadores únicos.");
-for (const event of august.calendar) {
+assert.equal(august.presentation?.year, 2026);
+assert.equal(august.presentation?.month, 8);
+assert.deepEqual(august.presentation?.enabledModules, ["automatic-readings", "probable-routes", "stockpicking-earnings"]);
+const augustCalendar = getReportCalendar(august);
+assert.equal(august.calendar.length, 9, "La base editorial conserva nueve eventos no derivados.");
+assert.equal(augustCalendar.length, 18, "El calendario combinado debe contener 18 eventos.");
+assert.equal(new Set(augustCalendar.map((event) => event.id)).size, augustCalendar.length, "Los eventos de agosto requieren identificadores únicos.");
+for (const event of augustCalendar) {
   assert(event.id, `Evento sin id: ${event.event}`);
   assert(event.dateStart, `${event.id}: falta fecha inicial.`);
   assertIsoDate(event.dateStart, `${event.id}.dateStart`);
@@ -157,11 +157,20 @@ for (const event of august.calendar) {
     assert.equal(event.displayTimeCest, "Hora por confirmar", `${event.id}: no se debe inferir CEST.`);
   }
 }
-assert.equal(august.calendar.filter((event) => event.timeStatus === "confirmed").length, 10);
+assert.equal(augustCalendar.filter((event) => event.timeStatus === "confirmed").length, 14);
 assert.deepEqual(
-  august.calendar.filter((event) => event.timeStatus === "tba").map((event) => event.id),
-  ["monthly-options-expiry", "jackson-hole-2026"],
+  augustCalendar.filter((event) => event.timeStatus === "tba").map((event) => event.id),
+  ["earnings-lfmd", "earnings-celh", "monthly-options-expiry", "jackson-hole-2026"],
 );
+assert.deepEqual(august.stockpicking?.earnings.published.filter((item) => Math.abs(item.actualMovePct ?? 0) > item.impliedMovePct).map((item) => item.ticker), ["VRT", "COIN", "RDDT"]);
+assert.deepEqual(august.stockpicking?.earnings.upcoming.filter((item) => item.impliedMoveApproximate).map((item) => item.ticker), ["ANET", "DUOL", "LFMD", "NET"]);
+assert.equal(august.probableRoutes?.title, "Rutas probables");
+
+assert.equal(getMonthGrid(2023, 1)[6], 1, "Un mes que empieza en domingo debe usar desplazamiento lunes-domingo.");
+assert.equal(getMonthGrid(2026, 4).filter(Boolean).length, 30, "Abril debe tener 30 días.");
+assert.equal(getMonthGrid(2024, 2).filter(Boolean).length, 29, "Febrero bisiesto debe tener 29 días.");
+assert.equal(dateTimeParts(new Date("2026-08-03T21:00:00Z"), "America/New_York").date, "2026-08-03", "UTC no debe desplazar la fecha editorial.");
+assert.equal(exclusiveAllDayEnd("2026-08-11"), "2026-08-12", "DTEND de día completo debe ser exclusivo.");
 assert.deepEqual(
   new Set(august.watchlist.map((item) => item.category)),
   new Set(["market-structure", "rates-credit", "technology-ai", "fx-commodities"]),

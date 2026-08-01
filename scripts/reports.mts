@@ -12,6 +12,7 @@ import {
   type ReportExportModel,
   type ReportExportSection,
 } from "../lib/reports/report-export-model.ts";
+import { getMonthGrid } from "../lib/reports/report-presentation.ts";
 
 type ArtifactManifestEntry = {
   path: string;
@@ -116,8 +117,8 @@ function renderHistoricalHtml(section: Extract<ReportExportSection, { kind: "his
       ["Campo", "Valor"],
       [
         ["Régimen", regime.label],
-        ["Score", `${regime.score}/100`],
-        ["Confianza", `${regime.confidence}%`],
+        ["Score", regime.score === null ? "No disponible al cierre" : `${regime.score}/100`],
+        ["Confianza", regime.confidence === null ? "No disponible al cierre" : `${regime.confidence}%`],
         ["Sesgo", regime.bias],
         ["Interpretación histórica", regime.interpretation],
       ],
@@ -165,7 +166,7 @@ function renderHistoricalHtml(section: Extract<ReportExportSection, { kind: "his
       ],
     )}
     <h3>VIX - Volatilidad al corte</h3>
-    ${htmlTable(
+    ${snapshot.vix ? htmlTable(
       ["Campo", "Valor"],
       [
         ["Nivel al corte", snapshot.vix.level.toFixed(1)],
@@ -175,9 +176,9 @@ function renderHistoricalHtml(section: Extract<ReportExportSection, { kind: "his
         ["Curva", snapshot.vix.curve],
         ["Lectura histórica", snapshot.vix.curveText],
       ],
-    )}
+    ) : "<p>No disponible al cierre.</p>"}
     <h3>Flujos netos de ETFs de BTC al corte</h3>
-    ${htmlTable(
+    ${snapshot.btcEtfFlows ? htmlTable(
       ["Campo", "Valor"],
       [
         ["Último día", formatUsdMillions(snapshot.btcEtfFlows.lastDayUsdMillions)],
@@ -185,9 +186,9 @@ function renderHistoricalHtml(section: Extract<ReportExportSection, { kind: "his
         ["Racha", snapshot.btcEtfFlows.streakLabel],
         ["Lectura al publicar", snapshot.btcEtfFlows.reading],
       ],
-    )}
+    ) : "<p>No disponible al cierre.</p>"}
     <h3>Proxy histórico de presión de flujos en GLD</h3>
-    ${htmlTable(
+    ${snapshot.gldFlowPressure ? htmlTable(
       ["Campo", "Valor"],
       [
         ["Fecha del dato", snapshot.gldFlowPressure.asOf],
@@ -196,7 +197,7 @@ function renderHistoricalHtml(section: Extract<ReportExportSection, { kind: "his
         ["Resumen", snapshot.gldFlowPressure.summary],
         ["Limitación de fuente", snapshot.gldFlowPressure.sourceNote],
       ],
-    )}
+    ) : "<p>No disponible al cierre.</p>"}
     <h3>Lecturas automáticas de activos al corte</h3>
     ${htmlTable(
       ["Activo", "Percentil", "Z-score", "Media larga", "Último cierre"],
@@ -224,6 +225,35 @@ function htmlTable(headers: string[], rows: Array<Array<string>>) {
     .join("")}</tbody></table></div>`;
 }
 
+function impliedMove(item: { impliedMovePct: number; impliedMoveApproximate?: boolean }) {
+  return `${item.impliedMoveApproximate ? "≈" : ""}±${item.impliedMovePct.toFixed(2).replace(".", ",")} %`;
+}
+
+function renderStockpickingHtml(stockpicking: NonNullable<Extract<ReportExportSection, { kind: "asset-readings" }>["stockpicking"]>) {
+  const { published, upcoming, methodology } = stockpicking.earnings;
+  const exceeded = published.filter((item) => Math.abs(item.actualMovePct ?? 0) > item.impliedMovePct);
+  return `<div class="stockpicking-earnings"><h4>Qué pasó — resultados publicados</h4><p><strong>${published.length} resultados publicados; ${exceeded.length} excedieron el rango.</strong> VRT, COIN y RDDT fueron las reacciones negativas más fuertes.</p>${htmlTable(["Fecha", "Empresa", "Movimiento implícito esperado", "Movimiento ocurrido", "Lectura"], published.map((item) => [item.reportDate, `${item.company} (${item.ticker})`, impliedMove(item), `${item.actualMovePct?.toFixed(1).replace(".", ",")} %`, Math.abs(item.actualMovePct ?? 0) > item.impliedMovePct ? "Excedió el rango" : "Dentro del rango"]))}<h4>Qué esperamos — próximos resultados</h4>${htmlTable(["Fecha", "Empresa", "Movimiento implícito esperado", "Hora o sesión", "Fuente"], upcoming.map((item) => [item.reportDate, `${item.company} (${item.ticker})`, impliedMove(item), item.confirmationStatus === "confirmed" ? [item.originalTime, item.originalTimeZone, item.displayTime].filter(Boolean).join(" · ") : "Hora por confirmar", item.dateTimeSourceLabel]))}<p class="historical-note">${esc(methodology)} Proveedor por fila: <a href="https://unusualwhales.com/earnings" target="_blank" rel="noopener noreferrer">Unusual Whales</a>.</p></div>`;
+}
+
+function renderStockpickingMarkdown(stockpicking: NonNullable<Extract<ReportExportSection, { kind: "asset-readings" }>["stockpicking"]>) {
+  const { published, upcoming, methodology } = stockpicking.earnings;
+  return `#### Qué pasó — resultados publicados
+
+**${published.length} resultados publicados; ${published.filter((item) => Math.abs(item.actualMovePct ?? 0) > item.impliedMovePct).length} excedieron el rango.** VRT, COIN y RDDT fueron las reacciones negativas más fuertes.
+
+| Fecha | Empresa | Movimiento implícito esperado | Movimiento ocurrido | Lectura |
+|---|---|---:|---:|---|
+${published.map((item) => `| ${item.reportDate} | ${item.company} (${item.ticker}) | ${impliedMove(item)} | ${item.actualMovePct?.toFixed(1).replace(".", ",")} % | ${Math.abs(item.actualMovePct ?? 0) > item.impliedMovePct ? "Excedió el rango" : "Dentro del rango"} |`).join("\n")}
+
+#### Qué esperamos — próximos resultados
+
+| Fecha | Empresa | Movimiento implícito esperado | Hora o sesión | Fuente oficial |
+|---|---|---:|---|---|
+${upcoming.map((item) => `| ${item.reportDate} | ${item.company} (${item.ticker}) | ${impliedMove(item)} | ${item.confirmationStatus === "confirmed" ? [item.originalTime, item.originalTimeZone, item.displayTime].filter(Boolean).join(" · ") : "Hora por confirmar"} | [${item.dateTimeSourceLabel}](${item.dateTimeSourceHref}) |`).join("\n")}
+
+${methodology} Proveedor por fila: [Unusual Whales](https://unusualwhales.com/earnings).`;
+}
+
 function calendarTimeLabel(item: Extract<ReportExportSection, { kind: "calendar-scenarios" }>["calendar"][number]) {
   if (item.timeStatus === "tba") return `Hora por confirmar · ${item.originalTimeZone ?? "Zona por confirmar"}`;
   return [
@@ -232,18 +262,18 @@ function calendarTimeLabel(item: Extract<ReportExportSection, { kind: "calendar-
   ].filter(Boolean).join(" · ") || "Hora por confirmar";
 }
 
-function renderMonthlyCalendarHtml(items: Extract<ReportExportSection, { kind: "calendar-scenarios" }>["calendar"]) {
-  const days = Array.from({ length: 42 }, (_, index) => {
-    const day = index - 4;
-    return day >= 1 && day <= 31 ? day : null;
-  });
-  return `<div class="month-calendar" aria-label="Calendario de agosto de 2026">
+function renderMonthlyCalendarHtml(items: Extract<ReportExportSection, { kind: "calendar-scenarios" }>["calendar"], model: ReportExportModel) {
+  const year = model.presentation?.year ?? Number(model.publishedAt.slice(0, 4));
+  const month = model.presentation?.month ?? Number(model.publishedAt.slice(5, 7));
+  const title = model.presentation?.localizedTitle ?? new Intl.DateTimeFormat(model.presentation?.locale ?? "es-ES", { month: "long", year: "numeric", timeZone: "UTC" }).format(new Date(Date.UTC(year, month - 1, 1)));
+  const days = getMonthGrid(year, month);
+  return `<div class="month-calendar" aria-label="Calendario de ${esc(title)}">
     ${["Lun", "Mar", "Mié", "Jue", "Vie", "Sáb", "Dom"].map((day) => `<div class="month-calendar__weekday">${day}</div>`).join("")}
     ${days.map((day) => {
       if (!day) return `<div class="month-calendar__day month-calendar__day--empty"></div>`;
-      const dayItems = items.filter((item) => item.dateStart === `2026-08-${String(day).padStart(2, "0")}`);
-      const weekend = (day + 4) % 7 > 4;
-      return `<div class="month-calendar__day${weekend ? " month-calendar__day--weekend" : ""}"><strong>${day}</strong>${dayItems.map((item) => `<span class="event-chip event-chip--${esc(item.category ?? "other")}">${esc(item.event)}</span>`).join("")}</div>`;
+      const dayItems = items.filter((item) => item.dateStart === `${year}-${String(month).padStart(2, "0")}-${String(day).padStart(2, "0")}`);
+      const weekend = (new Date(Date.UTC(year, month - 1, day)).getUTCDay() % 6) === 0;
+      return `<div class="month-calendar__day${weekend ? " month-calendar__day--weekend" : ""}"><strong>${day}</strong>${dayItems.map((item) => `<span class="event-chip event-chip--${esc(item.category ?? "other")}">${esc(item.ticker ?? item.event)}</span>`).join("")}</div>`;
     }).join("")}
   </div>
   <h3>Detalle de eventos</h3>
@@ -326,14 +356,15 @@ function renderSectionHtml(section: ReportExportSection, model: ReportExportMode
                 ["Qué esperamos", item.expected],
                 ["Qué vigilar", item.watch],
                 ["Lectura del informe", item.reading],
-                ...(model.id === "primer-informe-agosto-2026" ? [] : [
+                ...(model.presentation?.timelineStyle === "progression" ? [] : [
                   ["Antes / contexto", item.timeline.before],
                   ["Ahora / cambio", item.timeline.now],
                   ["Próximas señales", item.timeline.next],
                 ]),
               ],
-            )}${model.id === "primer-informe-agosto-2026" ? `
+            )}${model.presentation?.timelineStyle === "progression" ? `
             <p class="eyebrow">Secuencia de lectura</p><ol class="reading-flow"><li><strong>Antes — Contexto</strong><span>${esc(item.timeline.before)}</span></li><li><strong>Ahora — Qué cambió</strong><span>${esc(item.timeline.now)}</span></li><li><strong>Después — Qué vigilamos</strong><span>${esc(item.timeline.next)}</span></li></ol>` : ""}
+            ${item.detailsModule === "earnings" && section.stockpicking ? renderStockpickingHtml(section.stockpicking) : ""}
           </article>`,
         )
         .join("");
@@ -356,7 +387,7 @@ function renderSectionHtml(section: ReportExportSection, model: ReportExportMode
         .join("");
       break;
     case "calendar-scenarios":
-      body = `<h3>Eventos y ventanas editoriales</h3>${model.id === "primer-informe-agosto-2026" ? renderMonthlyCalendarHtml(section.calendar) : section.calendar
+      body = `<h3>Eventos y ventanas editoriales</h3>${model.presentation?.calendarStyle === "monthly" ? renderMonthlyCalendarHtml(section.calendar, model) : section.calendar
         .map(
           (item) =>
             `<article class="card"><p class="eyebrow">${esc(item.dateLabel)}</p><h4>${esc(item.event)}</h4><p>${esc(item.whyItMatters)}</p></article>`,
@@ -365,8 +396,11 @@ function renderSectionHtml(section: ReportExportSection, model: ReportExportMode
         .map((item) => `<article class="card"><h4>${esc(item.title)}</h4><p>${esc(item.body)}</p></article>`)
         .join("")}</div>`;
       break;
+    case "probable-routes":
+      body = `<p class="historical-note">${esc(section.routes.note)}</p><h3>Motores</h3><div class="grid">${section.routes.engines.map((item) => `<article class="card"><h4>${esc(item.title)}</h4><p>${esc(item.body)}</p></article>`).join("")}</div><h3>Escenarios</h3><div class="grid">${section.routes.scenarios.map((item) => `<article class="card"><h4>${esc(item.title)}</h4><p>${esc(item.body)}</p></article>`).join("")}</div>`;
+      break;
     case "watchlist":
-      body = model.id === "primer-informe-agosto-2026" ? renderWatchlistDashboardHtml(section.items, model) : section.items
+      body = model.presentation?.watchlistStyle === "dashboard" ? renderWatchlistDashboardHtml(section.items, model) : section.items
         .map((item) => {
           const readingLabel = item.currentReading ? "Lectura al publicar" : "Lectura de seguimiento";
           const href = item.href ?? item.reference?.href;
@@ -417,7 +451,7 @@ function renderHtml(model: ReportExportModel) {
   <meta name="author" content="${model.author}">
   <meta name="date" content="${model.publishedAt}">
   <link rel="canonical" href="${model.canonicalUrl}">
-  <style>${reportCss(model.id === "primer-informe-agosto-2026")}</style>
+  <style>${reportCss(Boolean(model.presentation?.timelineStyle || model.presentation?.calendarStyle || model.presentation?.watchlistStyle))}</style>
 </head>
 <body>
   <main>
@@ -446,8 +480,8 @@ function renderHistoricalMarkdown(
 | Campo | Valor |
 |---|---|
 | Régimen | ${snapshot.regime.label} |
-| Score | ${snapshot.regime.score}/100 |
-| Confianza | ${snapshot.regime.confidence}% |
+| Score | ${snapshot.regime.score === null ? "No disponible al cierre" : `${snapshot.regime.score}/100`} |
+| Confianza | ${snapshot.regime.confidence === null ? "No disponible al cierre" : `${snapshot.regime.confidence}%`} |
 | Sesgo | ${snapshot.regime.bias} |
 | Interpretación histórica | ${snapshot.regime.interpretation} |
 
@@ -494,27 +528,27 @@ ${[
 
 | Campo | Valor |
 |---|---|
-| Nivel al corte | ${snapshot.vix.level.toFixed(1)} |
+${snapshot.vix ? `| Nivel al corte | ${snapshot.vix.level.toFixed(1)} |
 | Cambio 1D | ${formatSigned(snapshot.vix.change1d)} |
 | Estado | ${snapshot.vix.stateLabel} / ${snapshot.vix.status} |
 | Momentum | ${snapshot.vix.momentum} |
 | Curva | ${snapshot.vix.curve} |
-| Lectura histórica | ${snapshot.vix.curveText} |
+| Lectura histórica | ${snapshot.vix.curveText} |` : "No disponible al cierre."}
 
 ### Flujos netos de ETFs de BTC al corte
 
-- Último día: **${formatUsdMillions(snapshot.btcEtfFlows.lastDayUsdMillions)}**
+${snapshot.btcEtfFlows ? `- Último día: **${formatUsdMillions(snapshot.btcEtfFlows.lastDayUsdMillions)}**
 - Rolling 5D: **${formatUsdMillions(snapshot.btcEtfFlows.rolling5dUsdMillions)}**
 - Racha: **${snapshot.btcEtfFlows.streakLabel}**
-- Lectura al publicar: ${snapshot.btcEtfFlows.reading}
+- Lectura al publicar: ${snapshot.btcEtfFlows.reading}` : "No disponible al cierre."}
 
 ### Proxy histórico de presión de flujos en GLD
 
-- Fecha del dato: **${snapshot.gldFlowPressure.asOf}**
+${snapshot.gldFlowPressure ? `- Fecha del dato: **${snapshot.gldFlowPressure.asOf}**
 - Proxy al corte: **${snapshot.gldFlowPressure.label}**
 - Cambio 5D en participaciones: **${formatSigned(snapshot.gldFlowPressure.sharesChange5dPct, 2)}%**
 - Resumen: ${snapshot.gldFlowPressure.summary}
-- Limitación de fuente: ${snapshot.gldFlowPressure.sourceNote}
+- Limitación de fuente: ${snapshot.gldFlowPressure.sourceNote}` : "No disponible al cierre."}
 
 ### Lecturas automáticas de activos al corte
 
@@ -561,7 +595,7 @@ Clasificación: **${item.badge}**
 - **Lectura del informe:** ${item.reading}
 - **Antes / contexto:** ${item.timeline.before}
 - **Ahora / cambio:** ${item.timeline.now}
-- **Próximas señales:** ${item.timeline.next}`,
+- **Próximas señales:** ${item.timeline.next}${item.detailsModule === "earnings" && section.stockpicking ? `\n\n${renderStockpickingMarkdown(section.stockpicking)}` : ""}`,
         )
         .join("\n\n")}`;
     case "historical-snapshot":
@@ -585,13 +619,15 @@ Fuente: ${figure.sourceHref ? `[${figure.source}](${figure.sourceHref})` : figur
 
 ### Eventos y ventanas editoriales
 
-${model.id === "primer-informe-agosto-2026" ? `| Fecha | Hora y zona | Evento | Por qué importa | Activos o factores | Fuente | Seguimiento |
+${model.presentation?.calendarStyle === "monthly" ? `| Fecha | Hora y zona | Evento | Por qué importa | Activos o factores | Fuente | Seguimiento |
 |---|---|---|---|---|---|---|
 ${section.calendar.map((item) => `| ${item.dateLabel} | ${calendarTimeLabel(item)} | ${item.event} | ${item.whyItMatters} | ${item.affectedAssets?.join(", ") ?? "No especificados"} | ${item.sourceHref && item.sourceLabel ? `[${item.sourceLabel}](${item.sourceHref})` : item.sourceLabel ?? "No indicada"} | ${item.trackingHref && item.trackingLabel ? `[${item.trackingLabel}](${absoluteUrl(item.trackingHref)})` : "No disponible"} |`).join("\n")}` : section.calendar.map((item) => `- **${item.dateLabel}:** ${item.event}. ${item.whyItMatters}`).join("\n")}
 
 ### Escenarios
 
 ${section.scenarios.map((item) => `#### ${item.title}\n\n${item.body}`).join("\n\n")}`;
+    case "probable-routes":
+      return `${heading}\n\n${section.routes.note}\n\n### Motores\n\n${section.routes.engines.map((item) => `#### ${item.title}\n\n${item.body}`).join("\n\n")}\n\n### Escenarios\n\n${section.routes.scenarios.map((item) => `#### ${item.title}\n\n${item.body}`).join("\n\n")}`;
     case "watchlist":
       return `${heading}\n\n${section.items
         .map((item) => {
@@ -608,7 +644,7 @@ ${section.scenarios.map((item) => `#### ${item.title}\n\n${item.body}`).join("\n
 - **Qué cambiaría:** ${item.whatWouldChange ?? "La lectura cambiaría si el comportamiento observado contradice la tesis principal."}
 - **Fecha:** ${item.asOf ?? model.publishedAt}
 - **Fuente:** ${item.source ?? model.description}${
-            href && linkLabel ? `\n- **Enlace:** [${linkLabel}](${absoluteUrl(href)})` : model.id === "primer-informe-agosto-2026" ? `\n- **Enlace:** Seguimiento institucional no disponible públicamente.` : ""
+            href && linkLabel ? `\n- **Enlace:** [${linkLabel}](${absoluteUrl(href)})` : model.presentation?.watchlistStyle === "dashboard" ? `\n- **Enlace:** Seguimiento institucional no disponible públicamente.` : ""
           }`;
         })
         .join("\n\n")}`;
@@ -794,7 +830,7 @@ function renderIcs(model: ReportExportModel) {
       ? [`DTSTART:${icsDateTime(event.startDateTimeUtc)}`]
       : [
           `DTSTART;VALUE=DATE:${icsDate(event.startDate)}`,
-          `DTEND;VALUE=DATE:${icsDate(addOneDay(event.endDate ?? event.startDate))}`,
+          `DTEND;VALUE=DATE:${icsDate(event.endDate ?? addOneDay(event.startDate))}`,
         ];
     lines.push(
       "BEGIN:VEVENT",
@@ -904,6 +940,19 @@ function generateInto(outputDir: string, inputLlms: string) {
   const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), "geo01b-models-"));
   try {
     for (const model of models) {
+      if (model.status === "archivado") {
+        for (const relativeName of [
+          `${model.id}.html`,
+          `${model.id}.md`,
+          `${model.id}.pdf`,
+          ...(model.formats.ics ? [path.basename(model.formats.ics)] : []),
+        ]) {
+          const source = path.join(reportsDir, relativeName);
+          const destination = path.join(outputDir, relativeName);
+          if (source !== destination) fs.copyFileSync(source, destination);
+        }
+        continue;
+      }
       fs.writeFileSync(path.join(outputDir, `${model.id}.html`), renderHtml(model), "utf8");
       fs.writeFileSync(path.join(outputDir, `${model.id}.md`), renderMarkdown(model), "utf8");
       if (model.formats.ics) {
@@ -958,6 +1007,7 @@ function normalizedText(value: string) {
     .replace(/<[^>]+>/g, " ")
     .replace(/[\u2011\u2012\u2013\u2014]/g, "-")
     .replace(/\u2192/g, "->")
+    .replace(/»/g, "≈")
     .replace(/luigui herrera\s+\d+/gi, " ")
     .replace(/\s+/g, " ")
     .trim()
@@ -1009,18 +1059,18 @@ function substantiveNeedles(section: ReportExportSection, model: ReportExportMod
       values.push(
         snapshot.dataDate,
         snapshot.regime.label,
-        `${snapshot.regime.score}/100`,
-        `${snapshot.regime.confidence}%`,
+        snapshot.regime.score === null ? "No disponible al cierre" : `${snapshot.regime.score}/100`,
+        snapshot.regime.confidence === null ? "No disponible al cierre" : `${snapshot.regime.confidence}%`,
         snapshot.regime.interpretation,
         ...snapshot.regime.support,
         ...snapshot.regime.caution,
         ...snapshot.regime.watch,
         snapshot.sectors.reading,
-        snapshot.vix.level.toFixed(1),
-        snapshot.vix.curveText,
-        formatUsdMillions(snapshot.btcEtfFlows.lastDayUsdMillions),
-        formatUsdMillions(snapshot.btcEtfFlows.rolling5dUsdMillions),
-        snapshot.gldFlowPressure.summary,
+        snapshot.vix?.level.toFixed(1) ?? "No disponible al cierre",
+        snapshot.vix?.curveText ?? "No disponible al cierre",
+        snapshot.btcEtfFlows ? formatUsdMillions(snapshot.btcEtfFlows.lastDayUsdMillions) : "No disponible al cierre",
+        snapshot.btcEtfFlows ? formatUsdMillions(snapshot.btcEtfFlows.rolling5dUsdMillions) : "No disponible al cierre",
+        snapshot.gldFlowPressure?.summary ?? "No disponible al cierre",
       );
       for (const item of snapshot.indices) {
         values.push(item.ticker, `${formatSigned(item.return1w)}%`);
@@ -1045,7 +1095,7 @@ function substantiveNeedles(section: ReportExportSection, model: ReportExportMod
     case "calendar-scenarios":
       for (const item of section.calendar) {
         values.push(item.dateLabel, item.event, item.whyItMatters);
-        if (model.id === "primer-informe-agosto-2026") {
+        if (model.presentation?.calendarStyle === "monthly") {
           values.push(
             calendarTimeLabel(item),
             ...(item.affectedAssets ?? []),
@@ -1055,6 +1105,10 @@ function substantiveNeedles(section: ReportExportSection, model: ReportExportMod
         }
       }
       for (const item of section.scenarios) values.push(item.title, item.body);
+      break;
+    case "probable-routes":
+      values.push(section.routes.note);
+      for (const item of [...section.routes.engines, ...section.routes.scenarios]) values.push(item.title, item.body);
       break;
     case "watchlist":
       for (const item of section.items) {
@@ -1110,7 +1164,10 @@ function validateIcs(model: ReportExportModel, value: string) {
       assert(!event.includes("DTEND;VALUE=DATE:"));
     } else {
       assert(event.includes(`DTSTART;VALUE=DATE:${icsDate(expected.startDate)}`));
-      assert(event.includes(`DTEND;VALUE=DATE:${icsDate(addOneDay(expected.endDate ?? expected.startDate))}`));
+      const expectedEnd = model.status === "archivado"
+        ? addOneDay(expected.endDate ?? expected.startDate)
+        : expected.endDate ?? addOneDay(expected.startDate);
+      assert(event.includes(`DTEND;VALUE=DATE:${icsDate(expectedEnd)}`));
     }
     assert(event.includes(`SUMMARY:${escapeIcs(expected.summary)}`));
     assert(event.includes(`DESCRIPTION:${escapeIcs(expected.description)}`));

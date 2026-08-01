@@ -45,7 +45,7 @@ export function HistoricalAutomaticMarketReadings({ snapshot }: { snapshot: Hist
     { length: snapshot.sectors.totalCount },
     (_, index) => index < snapshot.sectors.positiveCount,
   );
-  const vixFilled = snapshot.vix.level >= 20 ? 5 : snapshot.vix.level >= 16 ? 4 : 3;
+  const vixFilled = snapshot.vix ? (snapshot.vix.level >= 20 ? 5 : snapshot.vix.level >= 16 ? 4 : 3) : 0;
   const vixBars = Array.from({ length: 10 }, (_, index) => index < vixFilled);
 
   return (
@@ -76,8 +76,8 @@ export function HistoricalAutomaticMarketReadings({ snapshot }: { snapshot: Hist
                   label="Datos con corte a"
                   value={<time dateTime={snapshot.dataDate}>{formatEditorialDate(snapshot.dataDate, "es")}</time>}
                 />
-                <Metric label="Score" value={`${snapshot.regime.score}/100`} emphasis />
-                <Metric label="Confianza" value={`${snapshot.regime.confidence}%`} emphasis />
+                <Metric label="Score" value={snapshot.regime.score === null ? "No disponible al cierre" : `${snapshot.regime.score}/100`} emphasis />
+                <Metric label="Confianza" value={snapshot.regime.confidence === null ? "No disponible al cierre" : `${snapshot.regime.confidence}%`} emphasis />
                 <Metric label="Sesgo" value={snapshot.regime.bias} />
               </div>
             </div>
@@ -163,6 +163,7 @@ export function HistoricalAutomaticMarketReadings({ snapshot }: { snapshot: Hist
 
           <div className="grid gap-5 lg:grid-cols-2">
             <ReportSection eyebrow="VIX" title="Volatilidad">
+              {snapshot.vix ? <>
               <div className="grid gap-4">
                 <div className="border border-line bg-panelSoft p-4">
                   <div className="flex items-start justify-between gap-3">
@@ -196,19 +197,21 @@ export function HistoricalAutomaticMarketReadings({ snapshot }: { snapshot: Hist
               <div className="mt-4 flex flex-col gap-3 border-t border-line pt-4 md:flex-row md:items-start md:justify-between">
                 <p className="text-sm leading-6 text-muted">{snapshot.vix.curveText}</p>
                 {dashboardButton()}
-              </div>
+              </div></> : <p className="text-sm leading-6 text-muted">No disponible al cierre. El snapshot no se completa con datos vivos posteriores.</p>}
             </ReportSection>
 
             <ReportSection eyebrow="Flujos" title="BTC ETF flows">
+              {snapshot.btcEtfFlows ? <>
               <div className="grid gap-2 sm:grid-cols-2">
                 <Metric label="Último día al corte" value={formatUsdMillions(snapshot.btcEtfFlows.lastDayUsdMillions)} emphasis />
                 <Metric label="BTC ETF 5D al corte" value={formatUsdMillions(snapshot.btcEtfFlows.rolling5dUsdMillions)} />
                 <Metric label="Racha al corte" value={snapshot.btcEtfFlows.streakLabel} />
               </div>
-              <p className="mt-4 text-sm leading-6 text-muted">{snapshot.btcEtfFlows.reading}</p>
+              <p className="mt-4 text-sm leading-6 text-muted">{snapshot.btcEtfFlows.reading}</p></> : <p className="text-sm leading-6 text-muted">No disponible al cierre.</p>}
             </ReportSection>
 
             <ReportSection eyebrow="Oro" title="Presión de flujos en GLD">
+              {snapshot.gldFlowPressure ? <>
               <div className="grid gap-2 sm:grid-cols-2">
                 <Metric label="Proxy al corte" value={snapshot.gldFlowPressure.label} emphasis />
                 <Metric
@@ -223,7 +226,7 @@ export function HistoricalAutomaticMarketReadings({ snapshot }: { snapshot: Hist
               <p className="mt-4 text-sm leading-6 text-muted">{snapshot.gldFlowPressure.summary}</p>
               <p className="mt-3 border-t border-line pt-3 text-xs leading-5 text-muted">
                 {snapshot.gldFlowPressure.sourceNote}
-              </p>
+              </p></> : <p className="text-sm leading-6 text-muted">No disponible al cierre.</p>}
             </ReportSection>
           </div>
 

@@ -35,7 +35,7 @@
       "id": "primer-informe-julio-2026",
       "modifiedAt": "2026-07-06",
       "publishedAt": "2026-07-06",
-      "sourceHash": "945de465ab011c073f0c2bac31899b49c2d69ed06f4a3991b8e62fe9b35fa3d0"
+      "sourceHash": "d876962a52bb1dd5fec22d3e04432e7b3b4fad5ff37495aea1dd9c630f36c864"
     },
     {
       "canonicalUrl": "https://www.luiguiherrera.com/informes/segundo-informe-julio-2026",
@@ -66,44 +66,44 @@
       "id": "segundo-informe-julio-2026",
       "modifiedAt": "2026-07-20",
       "publishedAt": "2026-07-20",
-      "sourceHash": "f7eaa3d996375684105ba901f1bc393f0d92ac4d12c8023970eb7165257acdf1"
+      "sourceHash": "e955503baa714d6406336d0cad98bee285a86ca6af694ff5a48d90e7e5b0171d"
     },
     {
       "canonicalUrl": "https://www.luiguiherrera.com/informes/primer-informe-agosto-2026",
       "cutoffs": {
-        "automaticData": null,
+        "automaticData": "2026-07-31",
         "editorial": "2026-07-31"
       },
       "formats": {
         "html": {
           "mimeType": "text/html; charset=utf-8",
           "path": "/reports/primer-informe-agosto-2026.html",
-          "sha256": "e36cd210d30e02fd2a30484663309ab2d85f6dd86bc7fd60df26e5a0a075030b",
-          "size": 53007
+          "sha256": "e99eaa0b66d35cac59f6314fc2aaecf4c6507f556f1bc45335683e6637a6527c",
+          "size": 66474
         },
         "ics": {
           "mimeType": "text/calendar; charset=utf-8",
           "path": "/reports/primer-informe-agosto-2026-calendar.ics",
-          "sha256": "93822022b79e879160d306eadeadb2e72e388a4cb876bb85e66e426c7d37ec3e",
-          "size": 6676
+          "sha256": "fb4581d9833c49d11ecc0674126ba3536aff6eab7e6f95a5c66e11f2fb5b1e14",
+          "size": 11510
         },
         "markdown": {
           "mimeType": "text/markdown; charset=utf-8",
           "path": "/reports/primer-informe-agosto-2026.md",
-          "sha256": "b4f894baeeafd80c9b79d86b8ac520c2823ae8c4459b1bb100df288ecc6d0540",
-          "size": 30600
+          "sha256": "f300bbada7bafecfb1f0a6330693228f04cd592951187b8480c7c3a4315721f6",
+          "size": 40156
         },
         "pdf": {
           "mimeType": "application/pdf",
           "path": "/reports/primer-informe-agosto-2026.pdf",
-          "sha256": "9d8f2b5e1b1297a7fe82373e8b9744468c894437bd1b4ae74a6dfdd3bd8a92b7",
-          "size": 38931
+          "sha256": "5661d707a17b46793e3fdd58a2279c3fa93ed32856645fb3eeb54fc8d1893d8c",
+          "size": 50298
         }
       },
       "id": "primer-informe-agosto-2026",
       "modifiedAt": "2026-08-01",
       "publishedAt": "2026-08-01",
-      "sourceHash": "618ccfad04a100bc0c4c0fcea8b83007c93c7f73ed464f544b25f529243e6fce"
+      "sourceHash": "6710690d90c21ac637cbd0dc72955d3ad52d69c4bd38975809d5f78921618d7f"
     }
   ],
   "schemaVersion": "1.0.0"

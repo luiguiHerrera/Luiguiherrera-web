@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 import argparse
+import calendar
 import html
 import json
 import os
@@ -262,28 +263,34 @@ def calendar_time_label(item):
     return " · ".join(parts) or "Hora por confirmar"
 
 
-def add_monthly_calendar(story, items, styles):
+def add_monthly_calendar(story, items, styles, presentation):
     Table = PDF["Table"]
     TableStyle = PDF["TableStyle"]
     colors = PDF["colors"]
     mm = PDF["mm"]
+    year = int(presentation["year"])
+    month = int(presentation["month"])
+    title = presentation.get("localizedTitle") or f"{year}-{month:02d}"
+    prefix = f"{year}-{month:02d}-"
+    first_weekday, day_count = calendar.monthrange(year, month)
     by_day = {}
     for item in items:
-        if item.get("dateStart", "").startswith("2026-08-"):
+        if item.get("dateStart", "").startswith(prefix):
             day = int(item["dateStart"][-2:])
             by_day.setdefault(day, []).append(item)
+    cell_count = ((first_weekday + day_count + 6) // 7) * 7
     cells = []
-    for index in range(42):
-        day = index - 4
-        if day < 1 or day > 31:
+    for index in range(cell_count):
+        day = index - first_weekday + 1
+        if day < 1 or day > day_count:
             cells.append(p(" ", styles["small"]))
             continue
         lines = [str(day)]
         for item in by_day.get(day, []):
-            lines.append(item["event"])
+            lines.append(item.get("ticker", item["event"]))
         cells.append(p("\n".join(lines), styles["small"]))
     data = [[p(day, styles["small"]) for day in ["Lun", "Mar", "Mié", "Jue", "Vie", "Sáb", "Dom"]]]
-    data.extend([cells[row : row + 7] for row in range(0, 42, 7)])
+    data.extend([cells[row : row + 7] for row in range(0, cell_count, 7)])
     table = Table(data, colWidths=[24 * mm] * 7, repeatRows=1, hAlign="LEFT")
     commands = [
         ("VALIGN", (0, 0), (-1, -1), "TOP"),
@@ -299,7 +306,7 @@ def add_monthly_calendar(story, items, styles):
     for column in (5, 6):
         commands.append(("BACKGROUND", (column, 1), (column, -1), colors.HexColor("#F2EDE4")))
     table.setStyle(TableStyle(commands))
-    story.append(p("Agosto de 2026", styles["h2"]))
+    story.append(p(title, styles["h2"]))
     story.append(table)
     story.append(PDF["Spacer"](1, 7))
     story.append(p("Detalle y leyenda", styles["h2"]))
@@ -317,6 +324,7 @@ def add_monthly_calendar(story, items, styles):
                 p(f"{item['event']}. {item['whyItMatters']}", styles["body"]),
                 p(f"Activos o factores: {', '.join(item.get('affectedAssets', [])) or 'No especificados'}", styles["small"]),
                 p(f"Fuente: {source}{f' · {source_href}' if source_href else ''}", styles["small"]),
+                *([p(f"Movimiento implícito esperado: {'aproximadamente ' if item.get('impliedMoveApproximate') else ''}±{item['impliedMovePct']:.2f}% · Proveedor: {item.get('impliedMoveProvider', 'No indicado')}", styles["small"])] if item.get("impliedMovePct") is not None else []),
                 *(
                     [p(f"Seguimiento: {tracking_label} · {tracking_href}", styles["small"])]
                     if tracking_label and tracking_href
@@ -398,8 +406,8 @@ def add_historical_snapshot(story, snapshot, styles):
         info_table(
             [
                 ("Régimen al corte", regime["label"]),
-                ("Score", f"{regime['score']}/100"),
-                ("Confianza", f"{regime['confidence']}%"),
+                ("Score", "No disponible al cierre" if regime["score"] is None else f"{regime['score']}/100"),
+                ("Confianza", "No disponible al cierre" if regime["confidence"] is None else f"{regime['confidence']}%"),
                 ("Sesgo", regime["bias"]),
                 ("Interpretación histórica", regime["interpretation"]),
             ],
@@ -467,9 +475,10 @@ def add_historical_snapshot(story, snapshot, styles):
     )
 
     vix = snapshot["vix"]
-    add_snapshot_group(
-        story,
-        "VIX - Volatilidad al corte",
+    if vix:
+        add_snapshot_group(
+            story,
+            "VIX - Volatilidad al corte",
         info_table(
             [
                 ("Nivel al corte", f"{vix['level']:.1f}"),
@@ -481,11 +490,15 @@ def add_historical_snapshot(story, snapshot, styles):
             ],
             styles,
         ),
-        styles,
-    )
+            styles,
+        )
+    else:
+        story.append(p("VIX - Volatilidad al corte", styles["h2"]))
+        story.append(p("No disponible al cierre.", styles["body"]))
 
     btc = snapshot["btcEtfFlows"]
-    add_snapshot_group(
+    if btc:
+        add_snapshot_group(
         story,
         "Flujos netos de ETFs de BTC al corte",
         info_table(
@@ -497,11 +510,15 @@ def add_historical_snapshot(story, snapshot, styles):
             ],
             styles,
         ),
-        styles,
-    )
+            styles,
+        )
+    else:
+        story.append(p("Flujos netos de ETFs de BTC al corte", styles["h2"]))
+        story.append(p("No disponible al cierre.", styles["body"]))
 
     gld = snapshot["gldFlowPressure"]
-    add_snapshot_group(
+    if gld:
+        add_snapshot_group(
         story,
         "Proxy histórico de presión de flujos en GLD",
         info_table(
@@ -514,8 +531,11 @@ def add_historical_snapshot(story, snapshot, styles):
             ],
             styles,
         ),
-        styles,
-    )
+            styles,
+        )
+    else:
+        story.append(p("Proxy histórico de presión de flujos en GLD", styles["h2"]))
+        story.append(p("No disponible al cierre.", styles["body"]))
 
     add_snapshot_group(
         story,
@@ -573,13 +593,17 @@ def add_figure(story, item, styles, root):
     story.append(PDF["Spacer"](1, 8))
 
 
-def add_section(story, section, styles, root, published_at, description, force_break, report_id):
+def add_section(story, section, styles, root, published_at, description, force_break, model):
     kind = section["kind"]
+    presentation = model.get("presentation", {})
+    enhanced_timeline = presentation.get("timelineStyle") == "progression"
+    enhanced_calendar = presentation.get("calendarStyle") == "monthly"
+    enhanced_watchlist = presentation.get("watchlistStyle") == "dashboard"
     story.append(
         PDF["PageBreak"]()
         if force_break
         or kind == "figures"
-        or (report_id == "primer-informe-agosto-2026" and kind == "sources")
+        or (enhanced_watchlist and kind == "sources")
         else PDF["CondPageBreak"](55 * PDF["mm"])
     )
     story.append(p(section["title"], styles["h1"]))
@@ -612,9 +636,16 @@ def add_section(story, section, styles, root, published_at, description, force_b
                 story,
                 item,
                 styles,
-                allow_table_split=report_id == "primer-informe-agosto-2026",
-                enhanced_timeline=report_id == "primer-informe-agosto-2026",
+                allow_table_split=enhanced_timeline,
+                enhanced_timeline=enhanced_timeline,
             )
+            if item.get("detailsModule") == "earnings" and section.get("stockpicking"):
+                earnings = section["stockpicking"]["earnings"]
+                story.append(p("Qué pasó — resultados publicados", styles["h2"]))
+                story.append(data_table(["Fecha", "Empresa", "Implícito", "Ocurrido", "Lectura"], [[row["reportDate"], f"{row['company']} ({row['ticker']})", f"{'≈' if row.get('impliedMoveApproximate') else ''}±{row['impliedMovePct']:.2f}%", f"{row['actualMovePct']:.1f}%", "Excedió el rango" if abs(row["actualMovePct"]) > row["impliedMovePct"] else "Dentro del rango"] for row in earnings["published"]], styles, [26*PDF["mm"], 55*PDF["mm"], 28*PDF["mm"], 27*PDF["mm"], 39*PDF["mm"]]))
+                story.append(p("Qué esperamos — próximos resultados", styles["h2"]))
+                story.append(data_table(["Fecha", "Empresa", "Implícito", "Hora / estado"], [[row["reportDate"], f"{row['company']} ({row['ticker']})", f"{'≈' if row.get('impliedMoveApproximate') else ''}±{row['impliedMovePct']:.2f}%", " · ".join(filter(None, [row.get("originalTime"), row.get("originalTimeZone"), row.get("displayTime")])) if row["confirmationStatus"] == "confirmed" else "Hora por confirmar"] for row in earnings["upcoming"]], styles, [27*PDF["mm"], 62*PDF["mm"], 31*PDF["mm"], 55*PDF["mm"]]))
+                story.append(p(earnings["methodology"] + " Proveedor por fila: Unusual Whales · https://unusualwhales.com/earnings", styles["small"]))
     elif kind == "historical-snapshot":
         add_historical_snapshot(story, section["snapshot"], styles)
     elif kind == "figures":
@@ -622,8 +653,8 @@ def add_section(story, section, styles, root, published_at, description, force_b
             add_figure(story, item, styles, root)
     elif kind == "calendar-scenarios":
         story.append(p("Eventos y ventanas editoriales", styles["h2"]))
-        if report_id == "primer-informe-agosto-2026":
-            add_monthly_calendar(story, section["calendar"], styles)
+        if enhanced_calendar:
+            add_monthly_calendar(story, section["calendar"], styles, presentation)
         else:
             for item in section["calendar"]:
                 story.append(
@@ -636,7 +667,7 @@ def add_section(story, section, styles, root, published_at, description, force_b
                 )
         story.append(p("Escenarios", styles["h2"]))
         for item in section["scenarios"]:
-            if report_id == "primer-informe-agosto-2026":
+            if enhanced_calendar:
                 story.append(
                     PDF["KeepTogether"](
                         [
@@ -648,10 +679,18 @@ def add_section(story, section, styles, root, published_at, description, force_b
             else:
                 story.append(p(item["title"], styles["h3"]))
                 story.append(p(item["body"], styles["body"]))
+    elif kind == "probable-routes":
+        story.append(p(section["routes"]["note"], styles["body"]))
+        story.append(p("Motores", styles["h2"]))
+        for item in section["routes"]["engines"]:
+            story.append(PDF["KeepTogether"]([p(item["title"], styles["h3"]), p(item["body"], styles["body"])]))
+        story.append(p("Escenarios", styles["h2"]))
+        for item in section["routes"]["scenarios"]:
+            story.append(PDF["KeepTogether"]([p(item["title"], styles["h3"]), p(item["body"], styles["body"])]))
     elif kind == "watchlist":
         for item_index, item in enumerate(section["items"]):
             reading_label = "Lectura al publicar" if item.get("currentReading") else "Lectura de seguimiento"
-            if report_id == "primer-informe-agosto-2026" and item_index and item_index % 2 == 0:
+            if enhanced_watchlist and item_index and item_index % 2 == 0:
                 story.append(PDF["PageBreak"]())
             story.append(
                 PDF["KeepTogether"](
@@ -659,7 +698,7 @@ def add_section(story, section, styles, root, published_at, description, force_b
                         p(item["name"], styles["h2"]),
                         *(
                             [PDF["Spacer"](1, 3 * PDF["mm"])]
-                            if report_id == "primer-informe-agosto-2026"
+                            if enhanced_watchlist
                             else []
                         ),
                         info_table(
@@ -676,7 +715,7 @@ def add_section(story, section, styles, root, published_at, description, force_b
                                             }.get(item.get("category"), "Seguimiento"),
                                         )
                                     ]
-                                    if report_id == "primer-informe-agosto-2026"
+                                    if enhanced_watchlist
                                     else []
                                 ),
                                 ("Estado", item.get("statusLabel", "Seguimiento")),
@@ -707,7 +746,7 @@ def add_section(story, section, styles, root, published_at, description, force_b
                                             else "Seguimiento institucional no disponible públicamente.",
                                         )
                                     ]
-                                    if report_id == "primer-informe-agosto-2026"
+                                    if enhanced_watchlist
                                     else []
                                 ),
                             ],
@@ -778,7 +817,7 @@ def generate_pdf(model_path, output_path, root):
             model["publishedAt"],
             model["description"],
             index == 0,
-            model["id"],
+            model,
         )
 
     def page_decor(canvas_obj, doc_obj):
