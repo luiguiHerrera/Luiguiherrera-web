@@ -253,6 +253,8 @@ def data_table(headers, rows, styles, widths=None):
 
 
 def calendar_time_label(item):
+    if item.get("dateConfirmationStatus") == "editorial-unconfirmed":
+        return "Fecha prevista editorial no confirmada · hora por confirmar"
     if item.get("timeStatus") == "tba":
         return f"Hora por confirmar · {item.get('originalTimeZone', 'Zona por confirmar')}"
     parts = []
@@ -261,6 +263,34 @@ def calendar_time_label(item):
     if item.get("displayTimeCest"):
         parts.append(item["displayTimeCest"])
     return " · ".join(parts) or "Hora por confirmar"
+
+
+def earnings_schedule_label(item):
+    if item.get("dateConfirmationStatus") == "editorial-unconfirmed":
+        return "Fecha prevista editorial no confirmada · hora por confirmar"
+    if item.get("timeConfirmationStatus") != "confirmed":
+        return "Fecha confirmada · hora por confirmar" if item.get("timeConfirmationStatus") == "unconfirmed" else "Fecha confirmada · hora no registrada"
+    time_label = " · ".join(filter(None, [item.get("originalTime"), item.get("originalTimeZone"), item.get("displayTime")]))
+    if time_label:
+        return time_label
+    if item.get("session") == "before-open":
+        return "Fecha y sesión confirmadas · antes de apertura"
+    if item.get("session") == "after-close":
+        return "Fecha y sesión confirmadas · después del cierre"
+    return "Fecha confirmada · hora no registrada"
+
+
+def add_earnings_trace(story, items, styles):
+    for item in items:
+        lines = [
+            f"Movimiento implícito: {item['impliedMoveProvider']} — {item['ticker']} · {item['impliedMoveProviderHref']} · consulta {item['consultedAt']}",
+            f"Fecha y hora: {item['dateTimeSourceLabel']} · {item['dateTimeSourceHref']} · {earnings_schedule_label(item)}",
+        ]
+        if item.get("actualMoveSourceHref") and item.get("actualMoveSourceLabel"):
+            lines.append(f"Movimiento ocurrido: {item['actualMoveSourceLabel']} · {item['actualMoveSourceHref']}" + (f" · {item['actualMoveMethodology']}" if item.get("actualMoveMethodology") else ""))
+        else:
+            lines.append("Movimiento ocurrido: pendiente de publicación.")
+        story.append(PDF["KeepTogether"]([p(f"{item['company']} ({item['ticker']})", styles["h3"]), *[p(line, styles["small"]) for line in lines]]))
 
 
 def add_monthly_calendar(story, items, styles, presentation):
@@ -643,9 +673,13 @@ def add_section(story, section, styles, root, published_at, description, force_b
                 earnings = section["stockpicking"]["earnings"]
                 story.append(p("Qué pasó — resultados publicados", styles["h2"]))
                 story.append(data_table(["Fecha", "Empresa", "Implícito", "Ocurrido", "Lectura"], [[row["reportDate"], f"{row['company']} ({row['ticker']})", f"{'≈' if row.get('impliedMoveApproximate') else ''}±{row['impliedMovePct']:.2f}%", f"{row['actualMovePct']:.1f}%", "Excedió el rango" if abs(row["actualMovePct"]) > row["impliedMovePct"] else "Dentro del rango"] for row in earnings["published"]], styles, [26*PDF["mm"], 55*PDF["mm"], 28*PDF["mm"], 27*PDF["mm"], 39*PDF["mm"]]))
+                story.append(p("Trazabilidad — resultados publicados", styles["h2"]))
+                add_earnings_trace(story, earnings["published"], styles)
                 story.append(p("Qué esperamos — próximos resultados", styles["h2"]))
-                story.append(data_table(["Fecha", "Empresa", "Implícito", "Hora / estado"], [[row["reportDate"], f"{row['company']} ({row['ticker']})", f"{'≈' if row.get('impliedMoveApproximate') else ''}±{row['impliedMovePct']:.2f}%", " · ".join(filter(None, [row.get("originalTime"), row.get("originalTimeZone"), row.get("displayTime")])) if row["confirmationStatus"] == "confirmed" else "Hora por confirmar"] for row in earnings["upcoming"]], styles, [27*PDF["mm"], 62*PDF["mm"], 31*PDF["mm"], 55*PDF["mm"]]))
-                story.append(p(earnings["methodology"] + " Proveedor por fila: Unusual Whales · https://unusualwhales.com/earnings", styles["small"]))
+                story.append(data_table(["Fecha", "Empresa", "Implícito", "Hora / estado"], [[row["reportDate"], f"{row['company']} ({row['ticker']})", f"{'≈' if row.get('impliedMoveApproximate') else ''}±{row['impliedMovePct']:.2f}%", earnings_schedule_label(row)] for row in earnings["upcoming"]], styles, [27*PDF["mm"], 62*PDF["mm"], 31*PDF["mm"], 55*PDF["mm"]]))
+                story.append(p("Trazabilidad — próximos resultados", styles["h2"]))
+                add_earnings_trace(story, earnings["upcoming"], styles)
+                story.append(p(earnings["methodology"] + " Cada fila identifica la página por ticker, la fecha de consulta y las fuentes utilizadas para fecha, hora y reacción.", styles["small"]))
     elif kind == "historical-snapshot":
         add_historical_snapshot(story, section["snapshot"], styles)
     elif kind == "figures":

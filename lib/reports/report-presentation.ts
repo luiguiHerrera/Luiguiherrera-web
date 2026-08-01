@@ -34,10 +34,41 @@ export function formatImpliedMove(item: Pick<MarketReportEarningsItem, "impliedM
   return `${item.impliedMoveApproximate ? "≈" : ""}±${item.impliedMovePct.toFixed(2).replace(".", ",")} %`;
 }
 
+export function formatEvidenceConsultedAt(value: string) {
+  return new Intl.DateTimeFormat("es-ES", {
+    day: "numeric",
+    month: "short",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+    timeZone: "UTC",
+    timeZoneName: "short",
+  }).format(new Date(value));
+}
+
+export function earningsScheduleLabel(item: MarketReportEarningsItem) {
+  if (item.dateConfirmationStatus === "editorial-unconfirmed") {
+    return "Fecha prevista editorial no confirmada · hora por confirmar";
+  }
+  if (item.timeConfirmationStatus !== "confirmed") {
+    return item.timeConfirmationStatus === "unconfirmed"
+      ? "Fecha confirmada · hora por confirmar"
+      : "Fecha confirmada · hora no registrada";
+  }
+  const timeLabel = [
+    item.originalTime && item.originalTimeZone ? `${item.originalTime} ${item.originalTimeZone}` : null,
+    item.displayTime,
+  ].filter(Boolean).join(" · ");
+  if (timeLabel) return timeLabel;
+  if (item.session === "before-open") return "Fecha y sesión confirmadas · antes de apertura";
+  if (item.session === "after-close") return "Fecha y sesión confirmadas · después del cierre";
+  return "Fecha confirmada · hora no registrada";
+}
+
 function earningsCalendarItem(item: MarketReportEarningsItem): MarketReportCalendarItem {
   const date = new Date(`${item.reportDate}T12:00:00Z`);
   const dateLabel = new Intl.DateTimeFormat("es-ES", { weekday: "short", day: "numeric", month: "long", timeZone: "UTC" }).format(date);
-  const timeConfirmed = item.confirmationStatus === "confirmed" && Boolean(item.startDateTimeUtc);
+  const timeConfirmed = item.timeConfirmationStatus === "confirmed" && Boolean(item.startDateTimeUtc);
   return {
     id: `earnings-${item.ticker.toLowerCase()}`,
     dateLabel,
@@ -52,15 +83,19 @@ function earningsCalendarItem(item: MarketReportEarningsItem): MarketReportCalen
     originalTimeZone: timeConfirmed ? item.originalTimeZone : "ET",
     displayTimeCest: timeConfirmed ? item.displayTime : "Hora por confirmar",
     timeStatus: timeConfirmed ? "confirmed" : "tba",
+    dateConfirmationStatus: item.dateConfirmationStatus,
     affectedAssets: [item.ticker, "Stockpicking"],
     sourceLabel: item.dateTimeSourceLabel,
     sourceHref: item.dateTimeSourceHref,
     trackingHref: item.dateTimeSourceHref,
-    trackingLabel: `Seguir resultados de ${item.ticker}`,
+    trackingLabel: item.dateConfirmationStatus === "editorial-unconfirmed"
+      ? `Consultar página de IR de ${item.ticker}`
+      : `Seguir resultados de ${item.ticker}`,
     impliedMovePct: item.impliedMovePct,
     impliedMoveApproximate: item.impliedMoveApproximate,
     impliedMoveProvider: item.impliedMoveProvider,
     impliedMoveProviderHref: item.impliedMoveProviderHref,
+    impliedMoveConsultedAt: item.consultedAt,
   };
 }
 

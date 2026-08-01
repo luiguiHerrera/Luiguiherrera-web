@@ -115,7 +115,7 @@ for (const forbidden of ["familia", "portafolio", "portfolio", "destinatario pri
 
 assert.equal(august.presentation?.year, 2026);
 assert.equal(august.presentation?.month, 8);
-assert.deepEqual(august.presentation?.enabledModules, ["automatic-readings", "probable-routes", "stockpicking-earnings"]);
+assert(!Object.hasOwn(august.presentation ?? {}, "enabledModules"), "enabledModules no debe duplicar módulos ya derivados por presencia de datos.");
 const augustCalendar = getReportCalendar(august);
 assert.equal(august.calendar.length, 9, "La base editorial conserva nueve eventos no derivados.");
 assert.equal(augustCalendar.length, 18, "El calendario combinado debe contener 18 eventos.");
@@ -134,7 +134,7 @@ for (const event of augustCalendar) {
   assert(event.timeStatus, `${event.id}: falta estado de hora.`);
   assert(event.originalTimeZone, `${event.id}: falta zona horaria original.`);
   assert(event.affectedAssets?.length, `${event.id}: faltan activos o factores afectados.`);
-  assert(event.sourceLabel && event.sourceHref, `${event.id}: falta fuente primaria.`);
+  assert(event.sourceLabel && event.sourceHref, `${event.id}: falta fuente o página de seguimiento.`);
   assert.match(event.sourceHref, /^https:\/\//, `${event.id}: la fuente debe usar HTTPS.`);
   assert(!event.sourceHref.includes("utm_source=chatgpt.com"), `${event.id}: la fuente contiene UTM de ChatGPT.`);
   if (event.timeStatus === "confirmed") {
@@ -164,7 +164,42 @@ assert.deepEqual(
 );
 assert.deepEqual(august.stockpicking?.earnings.published.filter((item) => Math.abs(item.actualMovePct ?? 0) > item.impliedMovePct).map((item) => item.ticker), ["VRT", "COIN", "RDDT"]);
 assert.deepEqual(august.stockpicking?.earnings.upcoming.filter((item) => item.impliedMoveApproximate).map((item) => item.ticker), ["ANET", "DUOL", "LFMD", "NET"]);
+for (const item of [...(august.stockpicking?.earnings.published ?? []), ...(august.stockpicking?.earnings.upcoming ?? [])]) {
+  assert.equal(item.impliedMoveProviderHref, `https://unusualwhales.com/stock/${item.ticker}/earnings`, `${item.ticker}: falta página específica del movimiento implícito.`);
+  assert(item.consultedAt, `${item.ticker}: falta fecha de consulta.`);
+  assert(item.dateTimeSourceLabel && item.dateTimeSourceHref, `${item.ticker}: falta fuente de fecha/hora.`);
+}
+for (const item of august.stockpicking?.earnings.published ?? []) {
+  assert(item.actualMoveSourceLabel && item.actualMoveSourceHref && item.actualMoveMethodology, `${item.ticker}: falta trazabilidad del movimiento ocurrido.`);
+}
+const ccj = august.stockpicking?.earnings.published.find((item) => item.ticker === "CCJ");
+assert.equal(ccj?.actualMovePct, -2.1);
+assert.equal(ccj?.actualMoveSourceLabel, "Nasdaq Historical — CCJ");
+assert(ccj?.actualMoveMethodology?.includes("86,38 / 88,23"), "CCJ debe explicar el cálculo cierre a cierre.");
+const pltr = august.stockpicking?.earnings.upcoming.find((item) => item.ticker === "PLTR");
+assert.equal(pltr?.dateTimeSourceHref, "https://www.nasdaq.com/press-release/palantir-announces-date-second-quarter-2026-earnings-release-and-webcast-2026-07-13");
+for (const ticker of ["LFMD", "CELH"]) {
+  const item = august.stockpicking?.earnings.upcoming.find((candidate) => candidate.ticker === ticker);
+  assert.equal(item?.dateConfirmationStatus, "editorial-unconfirmed");
+  assert.equal(item?.timeConfirmationStatus, "unconfirmed");
+  assert(item?.dateTimeSourceLabel.includes("sin anuncio que confirme el evento"), `${ticker}: la portada de IR no debe presentarse como confirmación.`);
+}
+assert(august.sourcesNote.includes("Unusual Whales") && august.sourcesNote.includes("Nasdaq Historical") && august.sourcesNote.includes("Yahoo Finance"), "Fuentes y método debe enumerar proveedores de resultados.");
 assert.equal(august.probableRoutes?.title, "Rutas probables");
+
+const explicitUnconfirmed = "Fecha prevista editorial no confirmada · hora por confirmar";
+for (const artifact of [
+  "public/reports/primer-informe-agosto-2026.md",
+  "public/reports/primer-informe-agosto-2026.html",
+  "public/reports/primer-informe-agosto-2026-calendar.ics",
+]) {
+  const content = read(artifact).replace(/\r?\n[ \t]/g, "");
+  assert(content.includes(explicitUnconfirmed), `${artifact}: falta estado editorial no confirmado.`);
+}
+for (const artifact of ["public/reports/primer-informe-agosto-2026.md", "public/reports/primer-informe-agosto-2026.html"]) {
+  const content = read(artifact);
+  assert(content.includes("-2,1 %") || content.includes("-2.1 %"), `${artifact}: falta cifra reproducible de CCJ.`);
+}
 
 assert.equal(getMonthGrid(2023, 1)[6], 1, "Un mes que empieza en domingo debe usar desplazamiento lunes-domingo.");
 assert.equal(getMonthGrid(2026, 4).filter(Boolean).length, 30, "Abril debe tener 30 días.");

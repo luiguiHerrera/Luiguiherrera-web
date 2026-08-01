@@ -260,23 +260,89 @@ Clasificación: **selectivo**
 | 2026-07-30 | Coinbase (COIN) | ±8,72 % | -10,6 % | Excedió el rango |
 | 2026-07-30 | Reddit (RDDT) | ±14,32 % | -21,0 % | Excedió el rango |
 | 2026-07-31 | AngloGold Ashanti (AU) | ±9,53 % | -3,7 % | Dentro del rango |
-| 2026-07-31 | Cameco (CCJ) | ±10,44 % | -2,4 % | Dentro del rango |
+| 2026-07-31 | Cameco (CCJ) | ±10,44 % | -2,1 % | Dentro del rango |
 
 #### Qué esperamos — próximos resultados
 
-| Fecha | Empresa | Movimiento implícito esperado | Hora o sesión | Fuente oficial |
+| Fecha | Empresa | Movimiento implícito esperado | Hora o estado | Fuente de fecha y hora |
 |---|---|---:|---|---|
-| 2026-08-03 | Palantir (PLTR) | ±10,32 % | 17:00 · ET · 23:00 CEST | [Relaciones con inversionistas de Palantir](https://investors.palantir.com/) |
-| 2026-08-04 | Arista Networks (ANET) | ≈±10,40 % | 16:30 · ET · 22:30 CEST | [Relaciones con inversionistas de Arista](https://investors.arista.com/Communications/Press-Releases-and-Events/Press-Release-Detail/2026/Arista-Networks-to-Announce-Q2-2026-Financial-Results-on-Tuesday-August-4-2026/default.aspx) |
-| 2026-08-04 | Coupang (CPNG) | ±10,23 % | 17:30 · ET · 23:30 CEST | [Relaciones con inversionistas de Coupang](https://ir.aboutcoupang.com/news-events/news/news-details/2026/Coupang-to-Announce-Second-Quarter-2026-Results-on-August-4-2026/default.aspx) |
-| 2026-08-05 | Uber (UBER) | ±7,36 % | 08:00 · ET · 14:00 CEST | [Relaciones con inversionistas de Uber](https://investor.uber.com/news-events/news/press-release-details/2026/Uber-Announces-Date-of-Second-Quarter-2026-Results-Conference-Call/default.aspx) |
-| 2026-08-05 | Duolingo (DUOL) | ≈±16,45 % | 17:00 · ET · 23:00 CEST | [Relaciones con inversionistas de Duolingo](https://investors.duolingo.com/news-releases/news-release-details/duolingo-announce-second-quarter-2026-results-wednesday-august-5) |
-| 2026-08-05 | LifeMD (LFMD) | ≈±23,44 % | Hora por confirmar | [Relaciones con inversionistas de LifeMD](https://ir.lifemd.com/) |
-| 2026-08-06 | Cloudflare (NET) | ≈±11,60 % | 17:00 · ET · 23:00 CEST | [Relaciones con inversionistas de Cloudflare](https://www.cloudflare.net/news/news-details/2026/Cloudflare-Announces-Date-of-Second-Quarter-2026-Financial-Results/default.aspx) |
-| 2026-08-10 | Hims & Hers (HIMS) | ±20,53 % | 17:00 · ET · 23:00 CEST | [Relaciones con inversionistas de Hims & Hers](https://investors.hims.com/news/news-details/2026/Hims--Hers-to-Announce-Second-Quarter-2026-Financial-Results-on-August-10-2026/default.aspx) |
-| 2026-08-11 | Celsius Holdings (CELH) | ±11,55 % | Hora por confirmar | [Relaciones con inversionistas de Celsius Holdings](https://ir.celsiusholdingsinc.com/) |
+| 2026-08-03 | Palantir (PLTR) | ±10,32 % | 17:00 ET · 23:00 CEST | [Anuncio de Palantir: resultados Q2 2026 y webcast](https://www.nasdaq.com/press-release/palantir-announces-date-second-quarter-2026-earnings-release-and-webcast-2026-07-13) |
+| 2026-08-04 | Arista Networks (ANET) | ≈±10,40 % | 16:30 ET · 22:30 CEST | [Anuncio de resultados de Arista](https://investors.arista.com/Communications/Press-Releases-and-Events/Press-Release-Detail/2026/Arista-Networks-to-Announce-Q2-2026-Financial-Results-on-Tuesday-August-4-2026/default.aspx) |
+| 2026-08-04 | Coupang (CPNG) | ±10,23 % | 17:30 ET · 23:30 CEST | [Anuncio de resultados de Coupang](https://ir.aboutcoupang.com/news-events/news/news-details/2026/Coupang-to-Announce-Second-Quarter-2026-Results-on-August-4-2026/default.aspx) |
+| 2026-08-05 | Uber (UBER) | ±7,36 % | 08:00 ET · 14:00 CEST | [Anuncio de resultados de Uber](https://investor.uber.com/news-events/news/press-release-details/2026/Uber-Announces-Date-of-Second-Quarter-2026-Results-Conference-Call/default.aspx) |
+| 2026-08-05 | Duolingo (DUOL) | ≈±16,45 % | 17:00 ET · 23:00 CEST | [Anuncio de resultados de Duolingo](https://investors.duolingo.com/news-releases/news-release-details/duolingo-announce-second-quarter-2026-results-wednesday-august-5) |
+| 2026-08-05 | LifeMD (LFMD) | ≈±23,44 % | Fecha prevista editorial no confirmada · hora por confirmar | [Página de IR de LifeMD (sin anuncio que confirme el evento)](https://ir.lifemd.com/) |
+| 2026-08-06 | Cloudflare (NET) | ≈±11,60 % | 17:00 ET · 23:00 CEST | [Anuncio de resultados de Cloudflare](https://www.cloudflare.net/news/news-details/2026/Cloudflare-Announces-Date-of-Second-Quarter-2026-Financial-Results/default.aspx) |
+| 2026-08-10 | Hims & Hers (HIMS) | ±20,53 % | 17:00 ET · 23:00 CEST | [Anuncio de resultados de Hims & Hers](https://investors.hims.com/news/news-details/2026/Hims--Hers-to-Announce-Second-Quarter-2026-Financial-Results-on-August-10-2026/default.aspx) |
+| 2026-08-11 | Celsius Holdings (CELH) | ±11,55 % | Fecha prevista editorial no confirmada · hora por confirmar | [Página de IR de Celsius Holdings (sin anuncio que confirme el evento)](https://ir.celsiusholdingsinc.com/) |
 
-Los movimientos implícitos esperados proceden de lecturas externas del mercado de opciones —principalmente Unusual Whales— y pueden cambiar hasta la publicación. Representan la magnitud aproximada descontada, no una previsión propia ni una estimación de dirección. Proveedor por fila: [Unusual Whales](https://unusualwhales.com/earnings).
+##### Trazabilidad — resultados publicados
+
+- **Hycroft Mining (HYMC)**
+  - Movimiento implícito: [Unusual Whales — HYMC](https://unusualwhales.com/stock/HYMC/earnings); consulta 1 ago 2026, 12:00 UTC.
+  - Fecha y hora: [SEC EDGAR](https://www.sec.gov/edgar/browse/?CIK=1718405&owner=exclude); Fecha confirmada · hora no registrada.
+  - Movimiento ocurrido: [Yahoo Finance — históricos de HYMC](https://finance.yahoo.com/quote/HYMC/history/); Variación del cierre regular de la sesión de reacción frente al cierre regular previo, redondeada a una decimal.
+- **Vertiv (VRT)**
+  - Movimiento implícito: [Unusual Whales — VRT](https://unusualwhales.com/stock/VRT/earnings); consulta 1 ago 2026, 12:00 UTC.
+  - Fecha y hora: [Anuncio de resultados de Vertiv](https://investors.vertiv.com/news/news-details/2026/Vertiv-Announces-Date-of-Second-Quarter-2026-Earnings-Release-and-Conference-Call/default.aspx); Fecha y sesión confirmadas · antes de apertura.
+  - Movimiento ocurrido: [Yahoo Finance — históricos de VRT](https://finance.yahoo.com/quote/VRT/history/); Variación del cierre regular de la sesión de reacción frente al cierre regular previo, redondeada a una decimal.
+- **Coinbase (COIN)**
+  - Movimiento implícito: [Unusual Whales — COIN](https://unusualwhales.com/stock/COIN/earnings); consulta 1 ago 2026, 12:00 UTC.
+  - Fecha y hora: [Anuncio de resultados de Coinbase](https://investor.coinbase.com/news/news-details/2026/Coinbase-Announces-Date-of-Second-Quarter-2026-Financial-Results/default.aspx); Fecha y sesión confirmadas · después del cierre.
+  - Movimiento ocurrido: [Yahoo Finance — históricos de COIN](https://finance.yahoo.com/quote/COIN/history/); Variación del cierre regular del 31 de julio frente al cierre regular previo, redondeada a una decimal.
+- **Reddit (RDDT)**
+  - Movimiento implícito: [Unusual Whales — RDDT](https://unusualwhales.com/stock/RDDT/earnings); consulta 1 ago 2026, 12:00 UTC.
+  - Fecha y hora: [Anuncio de resultados de Reddit](https://investor.redditinc.com/news-events/news-releases/news-details/2026/Reddit-to-Announce-Second-Quarter-Results-on-Thursday-July-30-2026/default.aspx); Fecha y sesión confirmadas · después del cierre.
+  - Movimiento ocurrido: [Yahoo Finance — históricos de RDDT](https://finance.yahoo.com/quote/RDDT/history/); Variación del cierre regular del 31 de julio frente al cierre regular previo, redondeada a una decimal.
+- **AngloGold Ashanti (AU)**
+  - Movimiento implícito: [Unusual Whales — AU](https://unusualwhales.com/stock/AU/earnings); consulta 1 ago 2026, 12:00 UTC.
+  - Fecha y hora: [Relaciones con inversionistas de AngloGold Ashanti](https://www.anglogoldashanti.com/investors/); Fecha confirmada · hora no registrada.
+  - Movimiento ocurrido: [Yahoo Finance — históricos de AU](https://finance.yahoo.com/quote/AU/history/); Variación del cierre regular del 31 de julio frente al cierre regular previo, redondeada a una decimal.
+- **Cameco (CCJ)**
+  - Movimiento implícito: [Unusual Whales — CCJ](https://unusualwhales.com/stock/CCJ/earnings); consulta 1 ago 2026, 12:00 UTC.
+  - Fecha y hora: [Relaciones con inversionistas de Cameco](https://www.cameco.com/invest/events-presentations); Fecha confirmada · hora no registrada.
+  - Movimiento ocurrido: [Nasdaq Historical — CCJ](https://api.nasdaq.com/api/quote/CCJ/historical?assetclass=stocks&fromdate=2026-07-29&todate=2026-08-01&limit=10); Variación cierre a cierre de la sesión regular: 86,38 USD el 31 de julio frente a 88,23 USD el 30 de julio; (86,38 / 88,23 - 1) × 100 = -2,10 %, redondeada a una decimal.
+
+##### Trazabilidad — próximos resultados
+
+- **Palantir (PLTR)**
+  - Movimiento implícito: [Unusual Whales — PLTR](https://unusualwhales.com/stock/PLTR/earnings); consulta 1 ago 2026, 12:00 UTC.
+  - Fecha y hora: [Anuncio de Palantir: resultados Q2 2026 y webcast](https://www.nasdaq.com/press-release/palantir-announces-date-second-quarter-2026-earnings-release-and-webcast-2026-07-13); 17:00 ET · 23:00 CEST.
+  - Movimiento ocurrido: pendiente de publicación.
+- **Arista Networks (ANET)**
+  - Movimiento implícito: [Unusual Whales — ANET](https://unusualwhales.com/stock/ANET/earnings); consulta 1 ago 2026, 12:00 UTC.
+  - Fecha y hora: [Anuncio de resultados de Arista](https://investors.arista.com/Communications/Press-Releases-and-Events/Press-Release-Detail/2026/Arista-Networks-to-Announce-Q2-2026-Financial-Results-on-Tuesday-August-4-2026/default.aspx); 16:30 ET · 22:30 CEST.
+  - Movimiento ocurrido: pendiente de publicación.
+- **Coupang (CPNG)**
+  - Movimiento implícito: [Unusual Whales — CPNG](https://unusualwhales.com/stock/CPNG/earnings); consulta 1 ago 2026, 12:00 UTC.
+  - Fecha y hora: [Anuncio de resultados de Coupang](https://ir.aboutcoupang.com/news-events/news/news-details/2026/Coupang-to-Announce-Second-Quarter-2026-Results-on-August-4-2026/default.aspx); 17:30 ET · 23:30 CEST.
+  - Movimiento ocurrido: pendiente de publicación.
+- **Uber (UBER)**
+  - Movimiento implícito: [Unusual Whales — UBER](https://unusualwhales.com/stock/UBER/earnings); consulta 1 ago 2026, 12:00 UTC.
+  - Fecha y hora: [Anuncio de resultados de Uber](https://investor.uber.com/news-events/news/press-release-details/2026/Uber-Announces-Date-of-Second-Quarter-2026-Results-Conference-Call/default.aspx); 08:00 ET · 14:00 CEST.
+  - Movimiento ocurrido: pendiente de publicación.
+- **Duolingo (DUOL)**
+  - Movimiento implícito: [Unusual Whales — DUOL](https://unusualwhales.com/stock/DUOL/earnings); consulta 1 ago 2026, 12:00 UTC.
+  - Fecha y hora: [Anuncio de resultados de Duolingo](https://investors.duolingo.com/news-releases/news-release-details/duolingo-announce-second-quarter-2026-results-wednesday-august-5); 17:00 ET · 23:00 CEST.
+  - Movimiento ocurrido: pendiente de publicación.
+- **LifeMD (LFMD)**
+  - Movimiento implícito: [Unusual Whales — LFMD](https://unusualwhales.com/stock/LFMD/earnings); consulta 1 ago 2026, 12:00 UTC.
+  - Fecha y hora: [Página de IR de LifeMD (sin anuncio que confirme el evento)](https://ir.lifemd.com/); Fecha prevista editorial no confirmada · hora por confirmar.
+  - Movimiento ocurrido: pendiente de publicación.
+- **Cloudflare (NET)**
+  - Movimiento implícito: [Unusual Whales — NET](https://unusualwhales.com/stock/NET/earnings); consulta 1 ago 2026, 12:00 UTC.
+  - Fecha y hora: [Anuncio de resultados de Cloudflare](https://www.cloudflare.net/news/news-details/2026/Cloudflare-Announces-Date-of-Second-Quarter-2026-Financial-Results/default.aspx); 17:00 ET · 23:00 CEST.
+  - Movimiento ocurrido: pendiente de publicación.
+- **Hims & Hers (HIMS)**
+  - Movimiento implícito: [Unusual Whales — HIMS](https://unusualwhales.com/stock/HIMS/earnings); consulta 1 ago 2026, 12:00 UTC.
+  - Fecha y hora: [Anuncio de resultados de Hims & Hers](https://investors.hims.com/news/news-details/2026/Hims--Hers-to-Announce-Second-Quarter-2026-Financial-Results-on-August-10-2026/default.aspx); 17:00 ET · 23:00 CEST.
+  - Movimiento ocurrido: pendiente de publicación.
+- **Celsius Holdings (CELH)**
+  - Movimiento implícito: [Unusual Whales — CELH](https://unusualwhales.com/stock/CELH/earnings); consulta 1 ago 2026, 12:00 UTC.
+  - Fecha y hora: [Página de IR de Celsius Holdings (sin anuncio que confirme el evento)](https://ir.celsiusholdingsinc.com/); Fecha prevista editorial no confirmada · hora por confirmar.
+  - Movimiento ocurrido: pendiente de publicación.
+
+Los movimientos implícitos esperados proceden de lecturas externas del mercado de opciones —principalmente Unusual Whales— y pueden cambiar hasta la publicación. Representan la magnitud aproximada descontada, no una previsión propia ni una estimación de dirección. Cada fila enlaza su página por ticker, la fecha de consulta y las fuentes utilizadas para fecha, hora y reacción.
 
 ### DXY / USD/COP
 
@@ -300,18 +366,18 @@ Clasificación: **rango amplio**
 | Fecha | Hora y zona | Evento | Por qué importa | Activos o factores | Fuente | Seguimiento |
 |---|---|---|---|---|---|---|
 | Lun. 3 agosto | 10:00 ET · 16:00 CEST | ISM manufacturero de Estados Unidos | Abre la lectura de actividad, pedidos, empleo y presiones de precios de agosto. | VOO, DXY, Treasury, Bancos | [Calendario oficial de ISM](https://www.ismworld.org/supply-management-news-and-reports/reports/rob-report-calendar/) | [Seguir reacción del mercado](https://www.luiguiherrera.com/dashboard) |
-| lun, 3 de agosto | 17:00 ET · 23:00 CEST | Resultados de Palantir (PLTR) | Movimiento implícito esperado ±10,32 %; ventana para evaluar resultados, guía y reacción posterior. | PLTR, Stockpicking | [Relaciones con inversionistas de Palantir](https://investors.palantir.com/) | [Seguir resultados de PLTR](https://investors.palantir.com/) |
+| lun, 3 de agosto | 17:00 ET · 23:00 CEST | Resultados de Palantir (PLTR) | Movimiento implícito esperado ±10,32 %; ventana para evaluar resultados, guía y reacción posterior. | PLTR, Stockpicking | [Anuncio de Palantir: resultados Q2 2026 y webcast](https://www.nasdaq.com/press-release/palantir-announces-date-second-quarter-2026-earnings-release-and-webcast-2026-07-13) | [Seguir resultados de PLTR](https://www.nasdaq.com/press-release/palantir-announces-date-second-quarter-2026-earnings-release-and-webcast-2026-07-13) |
 | Mar. 4 agosto | 10:00 ET · 16:00 CEST | JOLTS de junio | Mide vacantes, contrataciones y renuncias para precisar el equilibrio del mercado laboral estadounidense. | VOO, DXY, Treasury, Fed | [Calendario oficial del BLS](https://www.bls.gov/schedule/2026/08_sched.htm) | [Seguir JOLTS en BLS](https://www.bls.gov/jlt/) |
-| mar, 4 de agosto | 16:30 ET · 22:30 CEST | Resultados de Arista Networks (ANET) | Movimiento implícito esperado ≈±10,40 %; ventana para evaluar resultados, guía y reacción posterior. | ANET, Stockpicking | [Relaciones con inversionistas de Arista](https://investors.arista.com/Communications/Press-Releases-and-Events/Press-Release-Detail/2026/Arista-Networks-to-Announce-Q2-2026-Financial-Results-on-Tuesday-August-4-2026/default.aspx) | [Seguir resultados de ANET](https://investors.arista.com/Communications/Press-Releases-and-Events/Press-Release-Detail/2026/Arista-Networks-to-Announce-Q2-2026-Financial-Results-on-Tuesday-August-4-2026/default.aspx) |
-| mar, 4 de agosto | 17:30 ET · 23:30 CEST | Resultados de Coupang (CPNG) | Movimiento implícito esperado ±10,23 %; ventana para evaluar resultados, guía y reacción posterior. | CPNG, Stockpicking | [Relaciones con inversionistas de Coupang](https://ir.aboutcoupang.com/news-events/news/news-details/2026/Coupang-to-Announce-Second-Quarter-2026-Results-on-August-4-2026/default.aspx) | [Seguir resultados de CPNG](https://ir.aboutcoupang.com/news-events/news/news-details/2026/Coupang-to-Announce-Second-Quarter-2026-Results-on-August-4-2026/default.aspx) |
-| mié, 5 de agosto | 08:00 ET · 14:00 CEST | Resultados de Uber (UBER) | Movimiento implícito esperado ±7,36 %; ventana para evaluar resultados, guía y reacción posterior. | UBER, Stockpicking | [Relaciones con inversionistas de Uber](https://investor.uber.com/news-events/news/press-release-details/2026/Uber-Announces-Date-of-Second-Quarter-2026-Results-Conference-Call/default.aspx) | [Seguir resultados de UBER](https://investor.uber.com/news-events/news/press-release-details/2026/Uber-Announces-Date-of-Second-Quarter-2026-Results-Conference-Call/default.aspx) |
+| mar, 4 de agosto | 16:30 ET · 22:30 CEST | Resultados de Arista Networks (ANET) | Movimiento implícito esperado ≈±10,40 %; ventana para evaluar resultados, guía y reacción posterior. | ANET, Stockpicking | [Anuncio de resultados de Arista](https://investors.arista.com/Communications/Press-Releases-and-Events/Press-Release-Detail/2026/Arista-Networks-to-Announce-Q2-2026-Financial-Results-on-Tuesday-August-4-2026/default.aspx) | [Seguir resultados de ANET](https://investors.arista.com/Communications/Press-Releases-and-Events/Press-Release-Detail/2026/Arista-Networks-to-Announce-Q2-2026-Financial-Results-on-Tuesday-August-4-2026/default.aspx) |
+| mar, 4 de agosto | 17:30 ET · 23:30 CEST | Resultados de Coupang (CPNG) | Movimiento implícito esperado ±10,23 %; ventana para evaluar resultados, guía y reacción posterior. | CPNG, Stockpicking | [Anuncio de resultados de Coupang](https://ir.aboutcoupang.com/news-events/news/news-details/2026/Coupang-to-Announce-Second-Quarter-2026-Results-on-August-4-2026/default.aspx) | [Seguir resultados de CPNG](https://ir.aboutcoupang.com/news-events/news/news-details/2026/Coupang-to-Announce-Second-Quarter-2026-Results-on-August-4-2026/default.aspx) |
+| mié, 5 de agosto | 08:00 ET · 14:00 CEST | Resultados de Uber (UBER) | Movimiento implícito esperado ±7,36 %; ventana para evaluar resultados, guía y reacción posterior. | UBER, Stockpicking | [Anuncio de resultados de Uber](https://investor.uber.com/news-events/news/press-release-details/2026/Uber-Announces-Date-of-Second-Quarter-2026-Results-Conference-Call/default.aspx) | [Seguir resultados de UBER](https://investor.uber.com/news-events/news/press-release-details/2026/Uber-Announces-Date-of-Second-Quarter-2026-Results-Conference-Call/default.aspx) |
 | Mié. 5 agosto | 10:00 ET · 16:00 CEST | ISM servicios de Estados Unidos | Ayuda a medir actividad, empleo y presiones de precios en la parte dominante de la economía. | VOO, DXY, Treasury, Fed | [Calendario oficial de ISM](https://www.ismworld.org/supply-management-news-and-reports/reports/rob-report-calendar/) | [Seguir reacción del mercado](https://www.luiguiherrera.com/dashboard) |
-| mié, 5 de agosto | 17:00 ET · 23:00 CEST | Resultados de Duolingo (DUOL) | Movimiento implícito esperado ≈±16,45 %; ventana para evaluar resultados, guía y reacción posterior. | DUOL, Stockpicking | [Relaciones con inversionistas de Duolingo](https://investors.duolingo.com/news-releases/news-release-details/duolingo-announce-second-quarter-2026-results-wednesday-august-5) | [Seguir resultados de DUOL](https://investors.duolingo.com/news-releases/news-release-details/duolingo-announce-second-quarter-2026-results-wednesday-august-5) |
-| mié, 5 de agosto | Hora por confirmar · ET | Resultados de LifeMD (LFMD) | Movimiento implícito esperado ≈±23,44 %; ventana para evaluar resultados, guía y reacción posterior. | LFMD, Stockpicking | [Relaciones con inversionistas de LifeMD](https://ir.lifemd.com/) | [Seguir resultados de LFMD](https://ir.lifemd.com/) |
-| jue, 6 de agosto | 17:00 ET · 23:00 CEST | Resultados de Cloudflare (NET) | Movimiento implícito esperado ≈±11,60 %; ventana para evaluar resultados, guía y reacción posterior. | NET, Stockpicking | [Relaciones con inversionistas de Cloudflare](https://www.cloudflare.net/news/news-details/2026/Cloudflare-Announces-Date-of-Second-Quarter-2026-Financial-Results/default.aspx) | [Seguir resultados de NET](https://www.cloudflare.net/news/news-details/2026/Cloudflare-Announces-Date-of-Second-Quarter-2026-Financial-Results/default.aspx) |
+| mié, 5 de agosto | 17:00 ET · 23:00 CEST | Resultados de Duolingo (DUOL) | Movimiento implícito esperado ≈±16,45 %; ventana para evaluar resultados, guía y reacción posterior. | DUOL, Stockpicking | [Anuncio de resultados de Duolingo](https://investors.duolingo.com/news-releases/news-release-details/duolingo-announce-second-quarter-2026-results-wednesday-august-5) | [Seguir resultados de DUOL](https://investors.duolingo.com/news-releases/news-release-details/duolingo-announce-second-quarter-2026-results-wednesday-august-5) |
+| mié, 5 de agosto | Fecha prevista editorial no confirmada · hora por confirmar | Resultados de LifeMD (LFMD) | Movimiento implícito esperado ≈±23,44 %; ventana para evaluar resultados, guía y reacción posterior. | LFMD, Stockpicking | [Página de IR de LifeMD (sin anuncio que confirme el evento)](https://ir.lifemd.com/) | [Consultar página de IR de LFMD](https://ir.lifemd.com/) |
+| jue, 6 de agosto | 17:00 ET · 23:00 CEST | Resultados de Cloudflare (NET) | Movimiento implícito esperado ≈±11,60 %; ventana para evaluar resultados, guía y reacción posterior. | NET, Stockpicking | [Anuncio de resultados de Cloudflare](https://www.cloudflare.net/news/news-details/2026/Cloudflare-Announces-Date-of-Second-Quarter-2026-Financial-Results/default.aspx) | [Seguir resultados de NET](https://www.cloudflare.net/news/news-details/2026/Cloudflare-Announces-Date-of-Second-Quarter-2026-Financial-Results/default.aspx) |
 | Vie. 7 agosto | 08:30 ET · 14:30 CEST | Empleo de Estados Unidos de julio | Puede reajustar expectativas de crecimiento, inflación salarial y política monetaria. | VOO, DXY, Treasury, Fed, Oro | [Calendario oficial del BLS](https://www.bls.gov/schedule/2026/08_sched.htm) | [Seguir empleo en BLS](https://www.bls.gov/news.release/empsit.htm) |
-| lun, 10 de agosto | 17:00 ET · 23:00 CEST | Resultados de Hims & Hers (HIMS) | Movimiento implícito esperado ±20,53 %; ventana para evaluar resultados, guía y reacción posterior. | HIMS, Stockpicking | [Relaciones con inversionistas de Hims & Hers](https://investors.hims.com/news/news-details/2026/Hims--Hers-to-Announce-Second-Quarter-2026-Financial-Results-on-August-10-2026/default.aspx) | [Seguir resultados de HIMS](https://investors.hims.com/news/news-details/2026/Hims--Hers-to-Announce-Second-Quarter-2026-Financial-Results-on-August-10-2026/default.aspx) |
-| mar, 11 de agosto | Hora por confirmar · ET | Resultados de Celsius Holdings (CELH) | Movimiento implícito esperado ±11,55 %; ventana para evaluar resultados, guía y reacción posterior. | CELH, Stockpicking | [Relaciones con inversionistas de Celsius Holdings](https://ir.celsiusholdingsinc.com/) | [Seguir resultados de CELH](https://ir.celsiusholdingsinc.com/) |
+| lun, 10 de agosto | 17:00 ET · 23:00 CEST | Resultados de Hims & Hers (HIMS) | Movimiento implícito esperado ±20,53 %; ventana para evaluar resultados, guía y reacción posterior. | HIMS, Stockpicking | [Anuncio de resultados de Hims & Hers](https://investors.hims.com/news/news-details/2026/Hims--Hers-to-Announce-Second-Quarter-2026-Financial-Results-on-August-10-2026/default.aspx) | [Seguir resultados de HIMS](https://investors.hims.com/news/news-details/2026/Hims--Hers-to-Announce-Second-Quarter-2026-Financial-Results-on-August-10-2026/default.aspx) |
+| mar, 11 de agosto | Fecha prevista editorial no confirmada · hora por confirmar | Resultados de Celsius Holdings (CELH) | Movimiento implícito esperado ±11,55 %; ventana para evaluar resultados, guía y reacción posterior. | CELH, Stockpicking | [Página de IR de Celsius Holdings (sin anuncio que confirme el evento)](https://ir.celsiusholdingsinc.com/) | [Consultar página de IR de CELH](https://ir.celsiusholdingsinc.com/) |
 | Mié. 12 agosto | 08:30 ET · 14:30 CEST | IPC de Estados Unidos de julio | Es la prueba principal para tasas reales, dólar, duración y valoración de crecimiento. | VOO, GLD, DXY, Treasury, BTC / ETH | [Calendario oficial del BLS](https://www.bls.gov/schedule/2026/08_sched.htm) | [Seguir IPC en BLS](https://www.bls.gov/cpi/) |
 | Vie. 14 agosto | 08:30 ET · 14:30 CEST | Ventas minoristas de Estados Unidos de julio | Mide la resistencia del consumo después de señales mixtas de actividad e inflación. | VOO, DXY, Treasury, Consumo | [Calendario oficial del U.S. Census Bureau](https://www.census.gov/retail/release_schedule.html) | [Seguir ventas minoristas](https://www.census.gov/retail/index.html) |
 | Mié. 19 agosto | 14:00 ET · 20:00 CEST | Minutas de la Fed del 28 y 29 de julio | Aclararán el balance entre la mayoría que mantuvo tasas y los tres votos favorables a subirlas. | VOO, GLD, DXY, Treasury, BTC / ETH | [Calendario oficial de la Federal Reserve Board](https://www.federalreserve.gov/newsevents/2026-august.htm) | [Seguir minutas de la Fed](https://www.federalreserve.gov/monetarypolicy/fomccalendars.htm) |
@@ -490,7 +556,7 @@ Decepcionan los resultados, se amplían los diferenciales de crédito, suben pet
 
 ### Fuentes y método
 
-Las lecturas combinan datos de mercado, cálculos propios y material institucional con cortes entre el 21 y el 31 de julio de 2026, incluyendo J.P. Morgan, Goldman Sachs, BofA y Nomura. Los hechos sensibles de calendario y política se contrastaron con la Federal Reserve Board, Bureau of Labor Statistics, U.S. Census Bureau, Institute for Supply Management, Federal Reserve Bank of Kansas City, Banco de la República, Superintendencia Financiera de Colombia y relaciones con inversionistas de Arista Networks, Duolingo y Cloudflare. Las fuentes informan el análisis; no organizan la estructura. Se excluyeron cifras, gráficos y atribuciones que el borrador marcaba como pendientes de verificación.
+Las lecturas combinan datos de mercado, cálculos propios y material institucional con cortes entre el 21 y el 31 de julio de 2026, incluyendo J.P. Morgan, Goldman Sachs, BofA y Nomura. El calendario macro usa Federal Reserve Board, Bureau of Labor Statistics, U.S. Census Bureau, Institute for Supply Management, Federal Reserve Bank of Kansas City y Cboe; USD/COP usa Banco de la República y Superintendencia Financiera de Colombia. Las fechas corporativas confirmadas proceden de SEC EDGAR, anuncios específicos de Vertiv, Coinbase, Reddit, Palantir, Arista Networks, Coupang, Uber, Duolingo, Cloudflare y Hims & Hers, además de páginas de relaciones con inversionistas de AngloGold Ashanti y Cameco. Las portadas de IR de LifeMD y Celsius Holdings se incluyen solo como páginas de seguimiento: no confirman sus fechas editoriales ni sus horas. Los movimientos implícitos proceden de páginas por ticker de Unusual Whales consultadas el 1 de agosto de 2026 a las 12:00 UTC. Las reacciones realizadas usan históricos por ticker de Yahoo Finance, salvo CCJ, calculada con Nasdaq Historical como variación entre cierres regulares del 30 y 31 de julio, redondeada a una decimal. Las fuentes informan el análisis; no organizan la estructura. Se excluyeron cifras, gráficos y atribuciones que el borrador marcaba como pendientes de verificación.
 
 ### Limitaciones y aviso educativo
 

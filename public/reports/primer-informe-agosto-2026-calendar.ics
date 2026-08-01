@@ -10,10 +10,11 @@ UID:primer-informe-agosto-2026-ism-manufacturero-de-estados-unidos@luigui-h
 DTSTAMP:20260801T000000Z
 DTSTART:20260803T140000Z
 SUMMARY:Primer informe de agosto: ISM manufacturero de Estados Unidos
-DESCRIPTION:Lun. 3 agosto. 10:00 ET / 16:00 CEST. Abre la lectura de activi
- dad\, pedidos\, empleo y presiones de precios de agosto. Activos o factore
- s: VOO\, DXY\, Treasury\, Bancos. Fuente de fecha/hora: Calendario oficial
-  de ISM.
+DESCRIPTION:Lun. 3 agosto. Fecha y hora confirmadas por fuente primaria. 10
+ :00 ET / 16:00 CEST. Abre la lectura de actividad\, pedidos\, empleo y pre
+ siones de precios de agosto. Activos o factores: VOO\, DXY\, Treasury\, Ba
+ ncos. Fuente de fecha/hora: Calendario oficial de ISM (https://www.ismworl
+ d.org/supply-management-news-and-reports/reports/rob-report-calendar/).
 URL:https://www.luiguiherrera.com/informes/primer-informe-agosto-2026
 END:VEVENT
 BEGIN:VEVENT
@@ -21,22 +22,27 @@ UID:primer-informe-agosto-2026-resultados-de-palantir-pltr@luigui-herrera
 DTSTAMP:20260801T000000Z
 DTSTART:20260803T210000Z
 SUMMARY:Primer informe de agosto: Resultados de Palantir (PLTR)
-DESCRIPTION:lun\, 3 de agosto. 17:00 ET / 23:00 CEST. Movimiento implícito
-  esperado ±10\,32 %\; ventana para evaluar resultados\, guía y reacción
-  posterior. Movimiento implícito esperado: ±10.32 %\, proveedor: Unusual
-  Whales. Activos o factores: PLTR\, Stockpicking. Fuente de fecha/hora: Re
- laciones con inversionistas de Palantir.
-URL:https://investors.palantir.com/
+DESCRIPTION:lun\, 3 de agosto. Fecha y hora confirmadas por fuente primaria
+ . 17:00 ET / 23:00 CEST. Movimiento implícito esperado ±10\,32 %\; venta
+ na para evaluar resultados\, guía y reacción posterior. Movimiento impl
+ ícito esperado: ±10.32 %. Fuente: Unusual Whales (https://unusualwhales.
+ com/stock/PLTR/earnings)\; consulta: 2026-08-01T12:00:00Z. Activos o facto
+ res: PLTR\, Stockpicking. Fuente de fecha/hora: Anuncio de Palantir: resul
+ tados Q2 2026 y webcast (https://www.nasdaq.com/press-release/palantir-ann
+ ounces-date-second-quarter-2026-earnings-release-and-webcast-2026-07-13).
+URL:https://www.nasdaq.com/press-release/palantir-announces-date-second-qua
+ rter-2026-earnings-release-and-webcast-2026-07-13
 END:VEVENT
 BEGIN:VEVENT
 UID:primer-informe-agosto-2026-jolts-de-junio@luigui-herrera
 DTSTAMP:20260801T000000Z
 DTSTART:20260804T140000Z
 SUMMARY:Primer informe de agosto: JOLTS de junio
-DESCRIPTION:Mar. 4 agosto. 10:00 ET / 16:00 CEST. Mide vacantes\, contratac
- iones y renuncias para precisar el equilibrio del mercado laboral estadoun
- idense. Activos o factores: VOO\, DXY\, Treasury\, Fed. Fuente de fecha/ho
- ra: Calendario oficial del BLS.
+DESCRIPTION:Mar. 4 agosto. Fecha y hora confirmadas por fuente primaria. 10
+ :00 ET / 16:00 CEST. Mide vacantes\, contrataciones y renuncias para preci
+ sar el equilibrio del mercado laboral estadounidense. Activos o factores: 
+ VOO\, DXY\, Treasury\, Fed. Fuente de fecha/hora: Calendario oficial del B
+ LS (https://www.bls.gov/schedule/2026/08_sched.htm).
 URL:https://www.bls.gov/jlt/
 END:VEVENT
 BEGIN:VEVENT
@@ -45,11 +51,15 @@ UID:primer-informe-agosto-2026-resultados-de-arista-networks-anet@luigui-he
 DTSTAMP:20260801T000000Z
 DTSTART:20260804T203000Z
 SUMMARY:Primer informe de agosto: Resultados de Arista Networks (ANET)
-DESCRIPTION:mar\, 4 de agosto. 16:30 ET / 22:30 CEST. Movimiento implícito
-  esperado ≈±10\,40 %\; ventana para evaluar resultados\, guía y reacci
- ón posterior. Movimiento implícito esperado: aproximadamente ±10.40 %\,
-  proveedor: Unusual Whales. Activos o factores: ANET\, Stockpicking. Fuent
- e de fecha/hora: Relaciones con inversionistas de Arista.
+DESCRIPTION:mar\, 4 de agosto. Fecha y hora confirmadas por fuente primaria
+ . 16:30 ET / 22:30 CEST. Movimiento implícito esperado ≈±10\,40 %\; ve
+ ntana para evaluar resultados\, guía y reacción posterior. Movimiento im
+ plícito esperado: aproximadamente ±10.40 %. Fuente: Unusual Whales (http
+ s://unusualwhales.com/stock/ANET/earnings)\; consulta: 2026-08-01T12:00:00
+ Z. Activos o factores: ANET\, Stockpicking. Fuente de fecha/hora: Anuncio 
+ de resultados de Arista (https://investors.arista.com/Communications/Press
+ -Releases-and-Events/Press-Release-Detail/2026/Arista-Networks-to-Announce
+ -Q2-2026-Financial-Results-on-Tuesday-August-4-2026/default.aspx).
 URL:https://investors.arista.com/Communications/Press-Releases-and-Events/P
  ress-Release-Detail/2026/Arista-Networks-to-Announce-Q2-2026-Financial-Res
  ults-on-Tuesday-August-4-2026/default.aspx
@@ -59,11 +69,15 @@ UID:primer-informe-agosto-2026-resultados-de-coupang-cpng@luigui-herrera
 DTSTAMP:20260801T000000Z
 DTSTART:20260804T213000Z
 SUMMARY:Primer informe de agosto: Resultados de Coupang (CPNG)
-DESCRIPTION:mar\, 4 de agosto. 17:30 ET / 23:30 CEST. Movimiento implícito
-  esperado ±10\,23 %\; ventana para evaluar resultados\, guía y reacción
-  posterior. Movimiento implícito esperado: ±10.23 %\, proveedor: Unusual
-  Whales. Activos o factores: CPNG\, Stockpicking. Fuente de fecha/hora: Re
- laciones con inversionistas de Coupang.
+DESCRIPTION:mar\, 4 de agosto. Fecha y hora confirmadas por fuente primaria
+ . 17:30 ET / 23:30 CEST. Movimiento implícito esperado ±10\,23 %\; venta
+ na para evaluar resultados\, guía y reacción posterior. Movimiento impl
+ ícito esperado: ±10.23 %. Fuente: Unusual Whales (https://unusualwhales.
+ com/stock/CPNG/earnings)\; consulta: 2026-08-01T12:00:00Z. Activos o facto
+ res: CPNG\, Stockpicking. Fuente de fecha/hora: Anuncio de resultados de C
+ oupang (https://ir.aboutcoupang.com/news-events/news/news-details/2026/Cou
+ pang-to-Announce-Second-Quarter-2026-Results-on-August-4-2026/default.aspx
+ ).
 URL:https://ir.aboutcoupang.com/news-events/news/news-details/2026/Coupang-
  to-Announce-Second-Quarter-2026-Results-on-August-4-2026/default.aspx
 END:VEVENT
@@ -72,11 +86,15 @@ UID:primer-informe-agosto-2026-resultados-de-uber-uber@luigui-herrera
 DTSTAMP:20260801T000000Z
 DTSTART:20260805T120000Z
 SUMMARY:Primer informe de agosto: Resultados de Uber (UBER)
-DESCRIPTION:mié\, 5 de agosto. 08:00 ET / 14:00 CEST. Movimiento implícit
- o esperado ±7\,36 %\; ventana para evaluar resultados\, guía y reacción
-  posterior. Movimiento implícito esperado: ±7.36 %\, proveedor: Unusual 
- Whales. Activos o factores: UBER\, Stockpicking. Fuente de fecha/hora: Rel
- aciones con inversionistas de Uber.
+DESCRIPTION:mié\, 5 de agosto. Fecha y hora confirmadas por fuente primari
+ a. 08:00 ET / 14:00 CEST. Movimiento implícito esperado ±7\,36 %\; venta
+ na para evaluar resultados\, guía y reacción posterior. Movimiento impl
+ ícito esperado: ±7.36 %. Fuente: Unusual Whales (https://unusualwhales.c
+ om/stock/UBER/earnings)\; consulta: 2026-08-01T12:00:00Z. Activos o factor
+ es: UBER\, Stockpicking. Fuente de fecha/hora: Anuncio de resultados de Ub
+ er (https://investor.uber.com/news-events/news/press-release-details/2026/
+ Uber-Announces-Date-of-Second-Quarter-2026-Results-Conference-Call/default
+ .aspx).
 URL:https://investor.uber.com/news-events/news/press-release-details/2026/U
  ber-Announces-Date-of-Second-Quarter-2026-Results-Conference-Call/default.
  aspx
@@ -87,10 +105,12 @@ UID:primer-informe-agosto-2026-ism-servicios-de-estados-unidos@luigui-herre
 DTSTAMP:20260801T000000Z
 DTSTART:20260805T140000Z
 SUMMARY:Primer informe de agosto: ISM servicios de Estados Unidos
-DESCRIPTION:Mié. 5 agosto. 10:00 ET / 16:00 CEST. Ayuda a medir actividad\
- , empleo y presiones de precios en la parte dominante de la economía. Act
- ivos o factores: VOO\, DXY\, Treasury\, Fed. Fuente de fecha/hora: Calenda
- rio oficial de ISM.
+DESCRIPTION:Mié. 5 agosto. Fecha y hora confirmadas por fuente primaria. 1
+ 0:00 ET / 16:00 CEST. Ayuda a medir actividad\, empleo y presiones de prec
+ ios en la parte dominante de la economía. Activos o factores: VOO\, DXY\,
+  Treasury\, Fed. Fuente de fecha/hora: Calendario oficial de ISM (https://
+ www.ismworld.org/supply-management-news-and-reports/reports/rob-report-cal
+ endar/).
 URL:https://www.luiguiherrera.com/informes/primer-informe-agosto-2026
 END:VEVENT
 BEGIN:VEVENT
@@ -98,11 +118,15 @@ UID:primer-informe-agosto-2026-resultados-de-duolingo-duol@luigui-herrera
 DTSTAMP:20260801T000000Z
 DTSTART:20260805T210000Z
 SUMMARY:Primer informe de agosto: Resultados de Duolingo (DUOL)
-DESCRIPTION:mié\, 5 de agosto. 17:00 ET / 23:00 CEST. Movimiento implícit
- o esperado ≈±16\,45 %\; ventana para evaluar resultados\, guía y reacc
- ión posterior. Movimiento implícito esperado: aproximadamente ±16.45 %\
- , proveedor: Unusual Whales. Activos o factores: DUOL\, Stockpicking. Fuen
- te de fecha/hora: Relaciones con inversionistas de Duolingo.
+DESCRIPTION:mié\, 5 de agosto. Fecha y hora confirmadas por fuente primari
+ a. 17:00 ET / 23:00 CEST. Movimiento implícito esperado ≈±16\,45 %\; v
+ entana para evaluar resultados\, guía y reacción posterior. Movimiento i
+ mplícito esperado: aproximadamente ±16.45 %. Fuente: Unusual Whales (htt
+ ps://unusualwhales.com/stock/DUOL/earnings)\; consulta: 2026-08-01T12:00:0
+ 0Z. Activos o factores: DUOL\, Stockpicking. Fuente de fecha/hora: Anuncio
+  de resultados de Duolingo (https://investors.duolingo.com/news-releases/n
+ ews-release-details/duolingo-announce-second-quarter-2026-results-wednesda
+ y-august-5).
 URL:https://investors.duolingo.com/news-releases/news-release-details/duoli
  ngo-announce-second-quarter-2026-results-wednesday-august-5
 END:VEVENT
@@ -112,11 +136,14 @@ DTSTAMP:20260801T000000Z
 DTSTART;VALUE=DATE:20260805
 DTEND;VALUE=DATE:20260806
 SUMMARY:Primer informe de agosto: Resultados de LifeMD (LFMD)
-DESCRIPTION:mié\, 5 de agosto. Hora por confirmar (ET). Movimiento implíc
- ito esperado ≈±23\,44 %\; ventana para evaluar resultados\, guía y rea
- cción posterior. Movimiento implícito esperado: aproximadamente ±23.44 
- %\, proveedor: Unusual Whales. Activos o factores: LFMD\, Stockpicking. Fu
- ente de fecha/hora: Relaciones con inversionistas de LifeMD.
+DESCRIPTION:mié\, 5 de agosto. Fecha prevista editorial no confirmada · h
+ ora por confirmar. Hora por confirmar (ET). Movimiento implícito esperado
+  ≈±23\,44 %\; ventana para evaluar resultados\, guía y reacción poste
+ rior. Movimiento implícito esperado: aproximadamente ±23.44 %. Fuente: U
+ nusual Whales (https://unusualwhales.com/stock/LFMD/earnings)\; consulta: 
+ 2026-08-01T12:00:00Z. Activos o factores: LFMD\, Stockpicking. Página con
+ sultada para seguimiento (no confirma el evento): Página de IR de LifeMD 
+ (sin anuncio que confirme el evento) (https://ir.lifemd.com/).
 URL:https://ir.lifemd.com/
 END:VEVENT
 BEGIN:VEVENT
@@ -124,11 +151,15 @@ UID:primer-informe-agosto-2026-resultados-de-cloudflare-net@luigui-herrera
 DTSTAMP:20260801T000000Z
 DTSTART:20260806T210000Z
 SUMMARY:Primer informe de agosto: Resultados de Cloudflare (NET)
-DESCRIPTION:jue\, 6 de agosto. 17:00 ET / 23:00 CEST. Movimiento implícito
-  esperado ≈±11\,60 %\; ventana para evaluar resultados\, guía y reacci
- ón posterior. Movimiento implícito esperado: aproximadamente ±11.60 %\,
-  proveedor: Unusual Whales. Activos o factores: NET\, Stockpicking. Fuente
-  de fecha/hora: Relaciones con inversionistas de Cloudflare.
+DESCRIPTION:jue\, 6 de agosto. Fecha y hora confirmadas por fuente primaria
+ . 17:00 ET / 23:00 CEST. Movimiento implícito esperado ≈±11\,60 %\; ve
+ ntana para evaluar resultados\, guía y reacción posterior. Movimiento im
+ plícito esperado: aproximadamente ±11.60 %. Fuente: Unusual Whales (http
+ s://unusualwhales.com/stock/NET/earnings)\; consulta: 2026-08-01T12:00:00Z
+ . Activos o factores: NET\, Stockpicking. Fuente de fecha/hora: Anuncio de
+  resultados de Cloudflare (https://www.cloudflare.net/news/news-details/20
+ 26/Cloudflare-Announces-Date-of-Second-Quarter-2026-Financial-Results/defa
+ ult.aspx).
 URL:https://www.cloudflare.net/news/news-details/2026/Cloudflare-Announces-
  Date-of-Second-Quarter-2026-Financial-Results/default.aspx
 END:VEVENT
@@ -138,10 +169,11 @@ UID:primer-informe-agosto-2026-empleo-de-estados-unidos-de-julio@luigui-her
 DTSTAMP:20260801T000000Z
 DTSTART:20260807T123000Z
 SUMMARY:Primer informe de agosto: Empleo de Estados Unidos de julio
-DESCRIPTION:Vie. 7 agosto. 08:30 ET / 14:30 CEST. Puede reajustar expectati
- vas de crecimiento\, inflación salarial y política monetaria. Activos o 
- factores: VOO\, DXY\, Treasury\, Fed\, Oro. Fuente de fecha/hora: Calendar
- io oficial del BLS.
+DESCRIPTION:Vie. 7 agosto. Fecha y hora confirmadas por fuente primaria. 08
+ :30 ET / 14:30 CEST. Puede reajustar expectativas de crecimiento\, inflaci
+ ón salarial y política monetaria. Activos o factores: VOO\, DXY\, Treasu
+ ry\, Fed\, Oro. Fuente de fecha/hora: Calendario oficial del BLS (https://
+ www.bls.gov/schedule/2026/08_sched.htm).
 URL:https://www.bls.gov/news.release/empsit.htm
 END:VEVENT
 BEGIN:VEVENT
@@ -149,11 +181,15 @@ UID:primer-informe-agosto-2026-resultados-de-hims-hers-hims@luigui-herrera
 DTSTAMP:20260801T000000Z
 DTSTART:20260810T210000Z
 SUMMARY:Primer informe de agosto: Resultados de Hims & Hers (HIMS)
-DESCRIPTION:lun\, 10 de agosto. 17:00 ET / 23:00 CEST. Movimiento implícit
- o esperado ±20\,53 %\; ventana para evaluar resultados\, guía y reacció
- n posterior. Movimiento implícito esperado: ±20.53 %\, proveedor: Unusua
- l Whales. Activos o factores: HIMS\, Stockpicking. Fuente de fecha/hora: R
- elaciones con inversionistas de Hims & Hers.
+DESCRIPTION:lun\, 10 de agosto. Fecha y hora confirmadas por fuente primari
+ a. 17:00 ET / 23:00 CEST. Movimiento implícito esperado ±20\,53 %\; vent
+ ana para evaluar resultados\, guía y reacción posterior. Movimiento impl
+ ícito esperado: ±20.53 %. Fuente: Unusual Whales (https://unusualwhales.
+ com/stock/HIMS/earnings)\; consulta: 2026-08-01T12:00:00Z. Activos o facto
+ res: HIMS\, Stockpicking. Fuente de fecha/hora: Anuncio de resultados de H
+ ims & Hers (https://investors.hims.com/news/news-details/2026/Hims--Hers-t
+ o-Announce-Second-Quarter-2026-Financial-Results-on-August-10-2026/default
+ .aspx).
 URL:https://investors.hims.com/news/news-details/2026/Hims--Hers-to-Announc
  e-Second-Quarter-2026-Financial-Results-on-August-10-2026/default.aspx
 END:VEVENT
@@ -164,11 +200,14 @@ DTSTAMP:20260801T000000Z
 DTSTART;VALUE=DATE:20260811
 DTEND;VALUE=DATE:20260812
 SUMMARY:Primer informe de agosto: Resultados de Celsius Holdings (CELH)
-DESCRIPTION:mar\, 11 de agosto. Hora por confirmar (ET). Movimiento implíc
- ito esperado ±11\,55 %\; ventana para evaluar resultados\, guía y reacci
- ón posterior. Movimiento implícito esperado: ±11.55 %\, proveedor: Unus
- ual Whales. Activos o factores: CELH\, Stockpicking. Fuente de fecha/hora:
-  Relaciones con inversionistas de Celsius Holdings.
+DESCRIPTION:mar\, 11 de agosto. Fecha prevista editorial no confirmada · h
+ ora por confirmar. Hora por confirmar (ET). Movimiento implícito esperado
+  ±11\,55 %\; ventana para evaluar resultados\, guía y reacción posterio
+ r. Movimiento implícito esperado: ±11.55 %. Fuente: Unusual Whales (http
+ s://unusualwhales.com/stock/CELH/earnings)\; consulta: 2026-08-01T12:00:00
+ Z. Activos o factores: CELH\, Stockpicking. Página consultada para seguim
+ iento (no confirma el evento): Página de IR de Celsius Holdings (sin anun
+ cio que confirme el evento) (https://ir.celsiusholdingsinc.com/).
 URL:https://ir.celsiusholdingsinc.com/
 END:VEVENT
 BEGIN:VEVENT
@@ -177,10 +216,11 @@ UID:primer-informe-agosto-2026-ipc-de-estados-unidos-de-julio@luigui-herrer
 DTSTAMP:20260801T000000Z
 DTSTART:20260812T123000Z
 SUMMARY:Primer informe de agosto: IPC de Estados Unidos de julio
-DESCRIPTION:Mié. 12 agosto. 08:30 ET / 14:30 CEST. Es la prueba principal 
- para tasas reales\, dólar\, duración y valoración de crecimiento. Activ
- os o factores: VOO\, GLD\, DXY\, Treasury\, BTC / ETH. Fuente de fecha/hor
- a: Calendario oficial del BLS.
+DESCRIPTION:Mié. 12 agosto. Fecha y hora confirmadas por fuente primaria. 
+ 08:30 ET / 14:30 CEST. Es la prueba principal para tasas reales\, dólar\,
+  duración y valoración de crecimiento. Activos o factores: VOO\, GLD\, D
+ XY\, Treasury\, BTC / ETH. Fuente de fecha/hora: Calendario oficial del BL
+ S (https://www.bls.gov/schedule/2026/08_sched.htm).
 URL:https://www.bls.gov/cpi/
 END:VEVENT
 BEGIN:VEVENT
@@ -190,10 +230,11 @@ DTSTAMP:20260801T000000Z
 DTSTART:20260814T123000Z
 SUMMARY:Primer informe de agosto: Ventas minoristas de Estados Unidos de ju
  lio
-DESCRIPTION:Vie. 14 agosto. 08:30 ET / 14:30 CEST. Mide la resistencia del 
- consumo después de señales mixtas de actividad e inflación. Activos o f
- actores: VOO\, DXY\, Treasury\, Consumo. Fuente de fecha/hora: Calendario 
- oficial del U.S. Census Bureau.
+DESCRIPTION:Vie. 14 agosto. Fecha y hora confirmadas por fuente primaria. 0
+ 8:30 ET / 14:30 CEST. Mide la resistencia del consumo después de señales
+  mixtas de actividad e inflación. Activos o factores: VOO\, DXY\, Treasur
+ y\, Consumo. Fuente de fecha/hora: Calendario oficial del U.S. Census Bure
+ au (https://www.census.gov/retail/release_schedule.html).
 URL:https://www.census.gov/retail/index.html
 END:VEVENT
 BEGIN:VEVENT
@@ -202,10 +243,12 @@ UID:primer-informe-agosto-2026-minutas-de-la-fed-del-28-y-29-de-julio@luigu
 DTSTAMP:20260801T000000Z
 DTSTART:20260819T180000Z
 SUMMARY:Primer informe de agosto: Minutas de la Fed del 28 y 29 de julio
-DESCRIPTION:Mié. 19 agosto. 14:00 ET / 20:00 CEST. Aclararán el balance e
- ntre la mayoría que mantuvo tasas y los tres votos favorables a subirlas.
-  Activos o factores: VOO\, GLD\, DXY\, Treasury\, BTC / ETH. Fuente de fec
- ha/hora: Calendario oficial de la Federal Reserve Board.
+DESCRIPTION:Mié. 19 agosto. Fecha y hora confirmadas por fuente primaria. 
+ 14:00 ET / 20:00 CEST. Aclararán el balance entre la mayoría que mantuvo
+  tasas y los tres votos favorables a subirlas. Activos o factores: VOO\, G
+ LD\, DXY\, Treasury\, BTC / ETH. Fuente de fecha/hora: Calendario oficial 
+ de la Federal Reserve Board (https://www.federalreserve.gov/newsevents/202
+ 6-august.htm).
 URL:https://www.federalreserve.gov/monetarypolicy/fomccalendars.htm
 END:VEVENT
 BEGIN:VEVENT
@@ -215,10 +258,12 @@ DTSTAMP:20260801T000000Z
 DTSTART;VALUE=DATE:20260821
 DTEND;VALUE=DATE:20260822
 SUMMARY:Primer informe de agosto: Vencimiento mensual de opciones
-DESCRIPTION:Vie. 21 agosto. Hora por confirmar (ET). Puede modificar cobert
- uras\, volumen y sensibilidad del índice alrededor de niveles relevantes.
-  Activos o factores: VOO\, VIX\, Opciones sobre índices. Fuente de fecha/
- hora: Calendario de vencimientos 2026 de Cboe.
+DESCRIPTION:Vie. 21 agosto. Fecha confirmada · hora por confirmar. Hora po
+ r confirmar (ET). Puede modificar coberturas\, volumen y sensibilidad del 
+ índice alrededor de niveles relevantes. Activos o factores: VOO\, VIX\, O
+ pciones sobre índices. Fuente de fecha/hora: Calendario de vencimientos 2
+ 026 de Cboe (https://cdn.cboe.com/resources/options/Cboe2026OPTIONSCalenda
+ r.pdf).
 URL:https://www.luiguiherrera.com/informes/primer-informe-agosto-2026
 END:VEVENT
 BEGIN:VEVENT
@@ -227,10 +272,12 @@ DTSTAMP:20260801T000000Z
 DTSTART;VALUE=DATE:20260827
 DTEND;VALUE=DATE:20260830
 SUMMARY:Primer informe de agosto: Simposio de Jackson Hole
-DESCRIPTION:27-29 agosto. Hora por confirmar (MDT). La comunicación de ban
- cos centrales puede cambiar la lectura de tasas\, dólar y liquidez global
- . Activos o factores: VOO\, GLD\, DXY\, Treasury\, BTC / ETH. Fuente de fe
- cha/hora: Federal Reserve Bank of Kansas City.
+DESCRIPTION:27-29 agosto. Fecha confirmada · hora por confirmar. Hora por 
+ confirmar (MDT). La comunicación de bancos centrales puede cambiar la lec
+ tura de tasas\, dólar y liquidez global. Activos o factores: VOO\, GLD\, 
+ DXY\, Treasury\, BTC / ETH. Fuente de fecha/hora: Federal Reserve Bank of 
+ Kansas City (https://www.kansascityfed.org/research/jackson-hole-economic-
+ symposium/).
 URL:https://www.kansascityfed.org/research/jackson-hole-economic-symposium/
 END:VEVENT
 END:VCALENDAR

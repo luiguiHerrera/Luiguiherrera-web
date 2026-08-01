@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import type { MarketReport, MarketReportCalendarItem } from "@/lib/reports/market-reports";
-import { getCalendarConfig, getMonthGrid, isEventInMonth } from "@/lib/reports/report-presentation";
+import { formatEvidenceConsultedAt, getCalendarConfig, getMonthGrid, isEventInMonth } from "@/lib/reports/report-presentation";
 
 type ReportMonthlyCalendarProps = {
   events: MarketReportCalendarItem[];
@@ -34,6 +34,15 @@ function categoryFor(event: MarketReportCalendarItem) {
 
 function eventId(event: MarketReportCalendarItem) {
   return event.id ?? `${event.dateStart}-${event.event}`;
+}
+
+function confirmationLabel(event: MarketReportCalendarItem) {
+  if (event.dateConfirmationStatus === "editorial-unconfirmed") {
+    return "Fecha prevista editorial no confirmada · hora por confirmar";
+  }
+  if (event.timeStatus === "confirmed") return "Fecha y hora confirmadas por fuente primaria";
+  if (event.timeStatus === "approximate") return "Fecha confirmada · hora aproximada";
+  return "Fecha confirmada · hora por confirmar";
 }
 
 function ExternalMark() {
@@ -196,9 +205,9 @@ export function ReportMonthlyCalendar({ events, report }: ReportMonthlyCalendarP
               </div>
               <div>
                 <dt className="text-[10px] font-semibold uppercase text-brass">Confirmación</dt>
-                <dd className="mt-1 text-ink">{selected.timeStatus === "confirmed" ? "Hora confirmada por fuente primaria" : selected.timeStatus === "approximate" ? "Hora aproximada" : "Hora por confirmar"}</dd>
+                <dd className="mt-1 text-ink">{confirmationLabel(selected)}</dd>
               </div>
-              {selected.impliedMovePct !== undefined ? <div><dt className="text-[10px] font-semibold uppercase text-brass">Movimiento implícito esperado</dt><dd className="mt-1 text-ink">{selected.impliedMoveApproximate ? "≈" : ""}±{selected.impliedMovePct.toFixed(2).replace(".", ",")} % · {selected.impliedMoveProvider}</dd></div> : null}
+              {selected.impliedMovePct !== undefined ? <div><dt className="text-[10px] font-semibold uppercase text-brass">Movimiento implícito esperado</dt><dd className="mt-1 text-ink">{selected.impliedMoveApproximate ? "≈" : ""}±{selected.impliedMovePct.toFixed(2).replace(".", ",")} % · {selected.impliedMoveProviderHref ? <a className="font-semibold text-petrol" href={selected.impliedMoveProviderHref} target="_blank" rel="noopener noreferrer">{selected.impliedMoveProvider} ↗</a> : selected.impliedMoveProvider}{selected.impliedMoveConsultedAt ? ` · consulta ${formatEvidenceConsultedAt(selected.impliedMoveConsultedAt)}` : ""}</dd></div> : null}
             </dl>
             <div className="mt-4 grid gap-2 border-t border-line pt-3">
               {selected.trackingHref && selected.trackingLabel ? (

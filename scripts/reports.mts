@@ -12,7 +12,7 @@ import {
   type ReportExportModel,
   type ReportExportSection,
 } from "../lib/reports/report-export-model.ts";
-import { getMonthGrid } from "../lib/reports/report-presentation.ts";
+import { earningsScheduleLabel, formatEvidenceConsultedAt, getMonthGrid } from "../lib/reports/report-presentation.ts";
 
 type ArtifactManifestEntry = {
   path: string;
@@ -229,10 +229,21 @@ function impliedMove(item: { impliedMovePct: number; impliedMoveApproximate?: bo
   return `${item.impliedMoveApproximate ? "≈" : ""}±${item.impliedMovePct.toFixed(2).replace(".", ",")} %`;
 }
 
+function earningsTraceHtml(items: NonNullable<Extract<ReportExportSection, { kind: "asset-readings" }>["stockpicking"]>["earnings"]["published"]) {
+  return `<div class="earnings-trace">${items.map((item) => `<article class="card"><h5>${esc(item.company)} (${esc(item.ticker)})</h5><p><strong>Movimiento implícito:</strong> <a href="${esc(item.impliedMoveProviderHref)}" target="_blank" rel="noopener noreferrer">${esc(item.impliedMoveProvider)} — ${esc(item.ticker)} ↗</a> · consulta ${esc(formatEvidenceConsultedAt(item.consultedAt))}</p><p><strong>Fecha y hora:</strong> <a href="${esc(item.dateTimeSourceHref)}" target="_blank" rel="noopener noreferrer">${esc(item.dateTimeSourceLabel)} ↗</a> · ${esc(earningsScheduleLabel(item))}</p>${item.actualMoveSourceHref && item.actualMoveSourceLabel ? `<p><strong>Movimiento ocurrido:</strong> <a href="${esc(item.actualMoveSourceHref)}" target="_blank" rel="noopener noreferrer">${esc(item.actualMoveSourceLabel)} ↗</a>${item.actualMoveMethodology ? ` · ${esc(item.actualMoveMethodology)}` : ""}</p>` : "<p><strong>Movimiento ocurrido:</strong> pendiente de publicación.</p>"}</article>`).join("")}</div>`;
+}
+
+function earningsTraceMarkdown(items: NonNullable<Extract<ReportExportSection, { kind: "asset-readings" }>["stockpicking"]>["earnings"]["published"]) {
+  return items.map((item) => `- **${item.company} (${item.ticker})**
+  - Movimiento implícito: [${item.impliedMoveProvider} — ${item.ticker}](${item.impliedMoveProviderHref}); consulta ${formatEvidenceConsultedAt(item.consultedAt)}.
+  - Fecha y hora: [${item.dateTimeSourceLabel}](${item.dateTimeSourceHref}); ${earningsScheduleLabel(item)}.
+  - Movimiento ocurrido: ${item.actualMoveSourceHref && item.actualMoveSourceLabel ? `[${item.actualMoveSourceLabel}](${item.actualMoveSourceHref})${item.actualMoveMethodology ? `; ${item.actualMoveMethodology}` : "."}` : "pendiente de publicación."}`).join("\n");
+}
+
 function renderStockpickingHtml(stockpicking: NonNullable<Extract<ReportExportSection, { kind: "asset-readings" }>["stockpicking"]>) {
   const { published, upcoming, methodology } = stockpicking.earnings;
   const exceeded = published.filter((item) => Math.abs(item.actualMovePct ?? 0) > item.impliedMovePct);
-  return `<div class="stockpicking-earnings"><h4>Qué pasó — resultados publicados</h4><p><strong>${published.length} resultados publicados; ${exceeded.length} excedieron el rango.</strong> VRT, COIN y RDDT fueron las reacciones negativas más fuertes.</p>${htmlTable(["Fecha", "Empresa", "Movimiento implícito esperado", "Movimiento ocurrido", "Lectura"], published.map((item) => [item.reportDate, `${item.company} (${item.ticker})`, impliedMove(item), `${item.actualMovePct?.toFixed(1).replace(".", ",")} %`, Math.abs(item.actualMovePct ?? 0) > item.impliedMovePct ? "Excedió el rango" : "Dentro del rango"]))}<h4>Qué esperamos — próximos resultados</h4>${htmlTable(["Fecha", "Empresa", "Movimiento implícito esperado", "Hora o sesión", "Fuente"], upcoming.map((item) => [item.reportDate, `${item.company} (${item.ticker})`, impliedMove(item), item.confirmationStatus === "confirmed" ? [item.originalTime, item.originalTimeZone, item.displayTime].filter(Boolean).join(" · ") : "Hora por confirmar", item.dateTimeSourceLabel]))}<p class="historical-note">${esc(methodology)} Proveedor por fila: <a href="https://unusualwhales.com/earnings" target="_blank" rel="noopener noreferrer">Unusual Whales</a>.</p></div>`;
+  return `<div class="stockpicking-earnings"><h4>Qué pasó — resultados publicados</h4><p><strong>${published.length} resultados publicados; ${exceeded.length} excedieron el rango.</strong> VRT, COIN y RDDT fueron las reacciones negativas más fuertes.</p>${htmlTable(["Fecha", "Empresa", "Movimiento implícito esperado", "Movimiento ocurrido", "Lectura"], published.map((item) => [item.reportDate, `${item.company} (${item.ticker})`, impliedMove(item), `${item.actualMovePct?.toFixed(1).replace(".", ",")} %`, Math.abs(item.actualMovePct ?? 0) > item.impliedMovePct ? "Excedió el rango" : "Dentro del rango"]))}<h5>Trazabilidad — resultados publicados</h5>${earningsTraceHtml(published)}<h4>Qué esperamos — próximos resultados</h4>${htmlTable(["Fecha", "Empresa", "Movimiento implícito esperado", "Hora o estado", "Fuente de fecha y hora"], upcoming.map((item) => [item.reportDate, `${item.company} (${item.ticker})`, impliedMove(item), earningsScheduleLabel(item), item.dateTimeSourceLabel]))}<h5>Trazabilidad — próximos resultados</h5>${earningsTraceHtml(upcoming)}<p class="historical-note">${esc(methodology)} Cada fila enlaza su página por ticker, la fecha de consulta y las fuentes utilizadas para fecha, hora y reacción.</p></div>`;
 }
 
 function renderStockpickingMarkdown(stockpicking: NonNullable<Extract<ReportExportSection, { kind: "asset-readings" }>["stockpicking"]>) {
@@ -247,14 +258,23 @@ ${published.map((item) => `| ${item.reportDate} | ${item.company} (${item.ticker
 
 #### Qué esperamos — próximos resultados
 
-| Fecha | Empresa | Movimiento implícito esperado | Hora o sesión | Fuente oficial |
+| Fecha | Empresa | Movimiento implícito esperado | Hora o estado | Fuente de fecha y hora |
 |---|---|---:|---|---|
-${upcoming.map((item) => `| ${item.reportDate} | ${item.company} (${item.ticker}) | ${impliedMove(item)} | ${item.confirmationStatus === "confirmed" ? [item.originalTime, item.originalTimeZone, item.displayTime].filter(Boolean).join(" · ") : "Hora por confirmar"} | [${item.dateTimeSourceLabel}](${item.dateTimeSourceHref}) |`).join("\n")}
+${upcoming.map((item) => `| ${item.reportDate} | ${item.company} (${item.ticker}) | ${impliedMove(item)} | ${earningsScheduleLabel(item)} | [${item.dateTimeSourceLabel}](${item.dateTimeSourceHref}) |`).join("\n")}
 
-${methodology} Proveedor por fila: [Unusual Whales](https://unusualwhales.com/earnings).`;
+##### Trazabilidad — resultados publicados
+
+${earningsTraceMarkdown(published)}
+
+##### Trazabilidad — próximos resultados
+
+${earningsTraceMarkdown(upcoming)}
+
+${methodology} Cada fila enlaza su página por ticker, la fecha de consulta y las fuentes utilizadas para fecha, hora y reacción.`;
 }
 
 function calendarTimeLabel(item: Extract<ReportExportSection, { kind: "calendar-scenarios" }>["calendar"][number]) {
+  if (item.dateConfirmationStatus === "editorial-unconfirmed") return "Fecha prevista editorial no confirmada · hora por confirmar";
   if (item.timeStatus === "tba") return `Hora por confirmar · ${item.originalTimeZone ?? "Zona por confirmar"}`;
   return [
     item.originalTime && item.originalTimeZone ? `${item.originalTime} ${item.originalTimeZone}` : null,

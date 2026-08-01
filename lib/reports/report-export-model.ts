@@ -158,15 +158,26 @@ function structuredEvents(report: MarketReport, canonicalUrl: string): ReportExp
       const assets = item.affectedAssets?.length
         ? ` Activos o factores: ${item.affectedAssets.join(", ")}.`
         : "";
-      const source = item.sourceLabel ? ` Fuente de fecha/hora: ${item.sourceLabel}.` : "";
-      const impliedMove = item.impliedMovePct !== undefined ? ` Movimiento implícito esperado: ${item.impliedMoveApproximate ? "aproximadamente " : ""}±${item.impliedMovePct.toFixed(2)} %, proveedor: ${item.impliedMoveProvider}.` : "";
+      const confirmation = item.dateConfirmationStatus === "editorial-unconfirmed"
+        ? "Fecha prevista editorial no confirmada · hora por confirmar."
+        : item.timeStatus === "confirmed"
+          ? "Fecha y hora confirmadas por fuente primaria."
+          : "Fecha confirmada · hora por confirmar.";
+      const source = item.sourceLabel
+        ? item.dateConfirmationStatus === "editorial-unconfirmed"
+          ? ` Página consultada para seguimiento (no confirma el evento): ${item.sourceLabel}${item.sourceHref ? ` (${item.sourceHref})` : ""}.`
+          : ` Fuente de fecha/hora: ${item.sourceLabel}${item.sourceHref ? ` (${item.sourceHref})` : ""}.`
+        : "";
+      const impliedMove = item.impliedMovePct !== undefined
+        ? ` Movimiento implícito esperado: ${item.impliedMoveApproximate ? "aproximadamente " : ""}±${item.impliedMovePct.toFixed(2)} %. Fuente: ${item.impliedMoveProvider}${item.impliedMoveProviderHref ? ` (${item.impliedMoveProviderHref})` : ""}${item.impliedMoveConsultedAt ? `; consulta: ${item.impliedMoveConsultedAt}` : ""}.`
+        : "";
       return {
         uid: `${report.id}-${eventSlug(item.event)}@luigui-herrera`,
         startDate: item.dateStart,
         endDate: item.startDateTimeUtc ? item.dateEnd : exclusiveAllDayEnd(item.dateStart, item.dateEnd),
         ...(item.startDateTimeUtc ? { startDateTimeUtc: item.startDateTimeUtc } : {}),
         summary: `${reportDisplayName(report)}: ${item.event}`,
-        description: `${item.dateLabel}. ${time}. ${item.whyItMatters}${impliedMove}${assets}${source}`,
+        description: `${item.dateLabel}. ${confirmation} ${time}. ${item.whyItMatters}${impliedMove}${assets}${source}`,
         url: item.trackingHref?.startsWith("http") ? item.trackingHref : canonicalUrl,
       };
     });
