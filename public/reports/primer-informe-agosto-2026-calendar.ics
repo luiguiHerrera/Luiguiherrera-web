@@ -8,89 +8,117 @@ BEGIN:VEVENT
 UID:primer-informe-agosto-2026-ism-manufacturero-de-estados-unidos@luigui-h
  errera
 DTSTAMP:20260801T000000Z
-DTSTART;VALUE=DATE:20260803
-DTEND;VALUE=DATE:20260804
+DTSTART:20260803T140000Z
 SUMMARY:Primer informe de agosto: ISM manufacturero de Estados Unidos
-DESCRIPTION:Lun. 3 agosto. Abre la lectura de actividad\, pedidos\, empleo 
- y presiones de precios de agosto.
+DESCRIPTION:Lun. 3 agosto. 10:00 ET / 16:00 CEST. Abre la lectura de activi
+ dad\, pedidos\, empleo y presiones de precios de agosto. Activos o factore
+ s: VOO\, DXY\, Treasury\, Bancos. Fuente: Calendario oficial de ISM.
 URL:https://www.luiguiherrera.com/informes/primer-informe-agosto-2026
 END:VEVENT
 BEGIN:VEVENT
-UID:primer-informe-agosto-2026-jolts-y-resultados-de-arista-networks@luigui
- -herrera
+UID:primer-informe-agosto-2026-jolts-de-junio@luigui-herrera
 DTSTAMP:20260801T000000Z
-DTSTART;VALUE=DATE:20260804
-DTEND;VALUE=DATE:20260805
-SUMMARY:Primer informe de agosto: JOLTS y resultados de Arista Networks
-DESCRIPTION:Mar. 4 agosto. Combina una señal del mercado laboral con una p
- rueba de demanda en redes para centros de datos e IA.
+DTSTART:20260804T140000Z
+SUMMARY:Primer informe de agosto: JOLTS de junio
+DESCRIPTION:Mar. 4 agosto. 10:00 ET / 16:00 CEST. Mide vacantes\, contratac
+ iones y renuncias para precisar el equilibrio del mercado laboral estadoun
+ idense. Activos o factores: VOO\, DXY\, Treasury\, Fed. Fuente: Calendario
+  oficial del BLS.
+URL:https://www.bls.gov/jlt/
+END:VEVENT
+BEGIN:VEVENT
+UID:primer-informe-agosto-2026-resultados-de-arista-networks@luigui-herrera
+DTSTAMP:20260801T000000Z
+DTSTART:20260804T203000Z
+SUMMARY:Primer informe de agosto: Resultados de Arista Networks
+DESCRIPTION:Mar. 4 agosto. 16:30 ET / 22:30 CEST. Prueba la demanda de rede
+ s para centros de datos\, la guía y el retorno del gasto en infraestructu
+ ra de IA. Activos o factores: ANET\, VOO\, Semiconductores\, Infraestructu
+ ra de IA. Fuente: Relaciones con inversionistas de Arista.
+URL:https://investors.arista.com/
+END:VEVENT
+BEGIN:VEVENT
+UID:primer-informe-agosto-2026-ism-servicios-de-estados-unidos@luigui-herre
+ ra
+DTSTAMP:20260801T000000Z
+DTSTART:20260805T140000Z
+SUMMARY:Primer informe de agosto: ISM servicios de Estados Unidos
+DESCRIPTION:Mié. 5 agosto. 10:00 ET / 16:00 CEST. Ayuda a medir actividad\
+ , empleo y presiones de precios en la parte dominante de la economía. Act
+ ivos o factores: VOO\, DXY\, Treasury\, Fed. Fuente: Calendario oficial de
+  ISM.
 URL:https://www.luiguiherrera.com/informes/primer-informe-agosto-2026
 END:VEVENT
 BEGIN:VEVENT
-UID:primer-informe-agosto-2026-ism-servicios-y-resultados-de-duolingo@luigu
- i-herrera
+UID:primer-informe-agosto-2026-resultados-de-duolingo@luigui-herrera
 DTSTAMP:20260801T000000Z
-DTSTART;VALUE=DATE:20260805
-DTEND;VALUE=DATE:20260806
-SUMMARY:Primer informe de agosto: ISM servicios y resultados de Duolingo
-DESCRIPTION:Mié. 5 agosto. Servicios ayuda a medir actividad e inflación\
- ; Duolingo prueba crecimiento\, monetización y valoración.
-URL:https://www.luiguiherrera.com/informes/primer-informe-agosto-2026
+DTSTART:20260805T210000Z
+SUMMARY:Primer informe de agosto: Resultados de Duolingo
+DESCRIPTION:Mié. 5 agosto. 17:00 ET / 23:00 CEST. Prueba crecimiento\, mon
+ etización\, márgenes y valoración después del cierre estadounidense. A
+ ctivos o factores: DUOL\, Stockpicking\, Software\, Crecimiento. Fuente: R
+ elaciones con inversionistas de Duolingo.
+URL:https://investors.duolingo.com/
 END:VEVENT
 BEGIN:VEVENT
 UID:primer-informe-agosto-2026-resultados-de-cloudflare@luigui-herrera
 DTSTAMP:20260801T000000Z
-DTSTART;VALUE=DATE:20260806
-DTEND;VALUE=DATE:20260807
+DTSTART:20260806T210000Z
 SUMMARY:Primer informe de agosto: Resultados de Cloudflare
-DESCRIPTION:Jue. 6 agosto. La guía permite evaluar demanda de nube\, segur
- idad\, márgenes e inversión en infraestructura.
-URL:https://www.luiguiherrera.com/informes/primer-informe-agosto-2026
+DESCRIPTION:Jue. 6 agosto. 17:00 ET / 23:00 CEST. La guía permite evaluar 
+ demanda de nube\, seguridad\, márgenes e inversión en infraestructura. A
+ ctivos o factores: NET\, Stockpicking\, Nube\, Infraestructura de IA. Fuen
+ te: Relaciones con inversionistas de Cloudflare.
+URL:https://www.cloudflare.net/financials/quarterly-results/default.aspx
 END:VEVENT
 BEGIN:VEVENT
 UID:primer-informe-agosto-2026-empleo-de-estados-unidos-de-julio@luigui-her
  rera
 DTSTAMP:20260801T000000Z
-DTSTART;VALUE=DATE:20260807
-DTEND;VALUE=DATE:20260808
+DTSTART:20260807T123000Z
 SUMMARY:Primer informe de agosto: Empleo de Estados Unidos de julio
-DESCRIPTION:Vie. 7 agosto. Puede reajustar expectativas de crecimiento\, in
- flación salarial y política monetaria.
-URL:https://www.luiguiherrera.com/informes/primer-informe-agosto-2026
+DESCRIPTION:Vie. 7 agosto. 08:30 ET / 14:30 CEST. Puede reajustar expectati
+ vas de crecimiento\, inflación salarial y política monetaria. Activos o 
+ factores: VOO\, DXY\, Treasury\, Fed\, Oro. Fuente: Calendario oficial del
+  BLS.
+URL:https://www.bls.gov/news.release/empsit.htm
 END:VEVENT
 BEGIN:VEVENT
 UID:primer-informe-agosto-2026-ipc-de-estados-unidos-de-julio@luigui-herrer
  a
 DTSTAMP:20260801T000000Z
-DTSTART;VALUE=DATE:20260812
-DTEND;VALUE=DATE:20260813
+DTSTART:20260812T123000Z
 SUMMARY:Primer informe de agosto: IPC de Estados Unidos de julio
-DESCRIPTION:Mié. 12 agosto. Es la prueba principal para tasas reales\, dó
- lar\, duración y valoración de crecimiento.
-URL:https://www.luiguiherrera.com/informes/primer-informe-agosto-2026
+DESCRIPTION:Mié. 12 agosto. 08:30 ET / 14:30 CEST. Es la prueba principal 
+ para tasas reales\, dólar\, duración y valoración de crecimiento. Activ
+ os o factores: VOO\, GLD\, DXY\, Treasury\, BTC / ETH. Fuente: Calendario 
+ oficial del BLS.
+URL:https://www.bls.gov/cpi/
 END:VEVENT
 BEGIN:VEVENT
 UID:primer-informe-agosto-2026-ventas-minoristas-de-estados-unidos-de-julio
  @luigui-herrera
 DTSTAMP:20260801T000000Z
-DTSTART;VALUE=DATE:20260814
-DTEND;VALUE=DATE:20260815
+DTSTART:20260814T123000Z
 SUMMARY:Primer informe de agosto: Ventas minoristas de Estados Unidos de ju
  lio
-DESCRIPTION:Vie. 14 agosto. Mide la resistencia del consumo después de se
- ñales mixtas de actividad e inflación.
-URL:https://www.luiguiherrera.com/informes/primer-informe-agosto-2026
+DESCRIPTION:Vie. 14 agosto. 08:30 ET / 14:30 CEST. Mide la resistencia del 
+ consumo después de señales mixtas de actividad e inflación. Activos o f
+ actores: VOO\, DXY\, Treasury\, Consumo. Fuente: Calendario oficial del U.
+ S. Census Bureau.
+URL:https://www.census.gov/retail/index.html
 END:VEVENT
 BEGIN:VEVENT
 UID:primer-informe-agosto-2026-minutas-de-la-fed-del-28-y-29-de-julio@luigu
  i-herrera
 DTSTAMP:20260801T000000Z
-DTSTART;VALUE=DATE:20260819
-DTEND;VALUE=DATE:20260820
+DTSTART:20260819T180000Z
 SUMMARY:Primer informe de agosto: Minutas de la Fed del 28 y 29 de julio
-DESCRIPTION:Mié. 19 agosto. Aclararán el balance entre la mayoría que ma
- ntuvo tasas y los tres votos favorables a subirlas.
-URL:https://www.luiguiherrera.com/informes/primer-informe-agosto-2026
+DESCRIPTION:Mié. 19 agosto. 14:00 ET / 20:00 CEST. Aclararán el balance e
+ ntre la mayoría que mantuvo tasas y los tres votos favorables a subirlas.
+  Activos o factores: VOO\, GLD\, DXY\, Treasury\, BTC / ETH. Fuente: Calen
+ dario oficial de la Federal Reserve Board.
+URL:https://www.federalreserve.gov/monetarypolicy/fomccalendars.htm
 END:VEVENT
 BEGIN:VEVENT
 UID:primer-informe-agosto-2026-vencimiento-mensual-de-opciones@luigui-herre
@@ -99,18 +127,22 @@ DTSTAMP:20260801T000000Z
 DTSTART;VALUE=DATE:20260821
 DTEND;VALUE=DATE:20260822
 SUMMARY:Primer informe de agosto: Vencimiento mensual de opciones
-DESCRIPTION:Vie. 21 agosto. Puede modificar coberturas\, volumen y sensibil
- idad del índice alrededor de niveles relevantes.
+DESCRIPTION:Vie. 21 agosto. Hora por confirmar (ET). Puede modificar cobert
+ uras\, volumen y sensibilidad del índice alrededor de niveles relevantes.
+  Activos o factores: VOO\, VIX\, Opciones sobre índices. Fuente: Calendar
+ io de vencimientos 2026 de Cboe.
 URL:https://www.luiguiherrera.com/informes/primer-informe-agosto-2026
 END:VEVENT
 BEGIN:VEVENT
 UID:primer-informe-agosto-2026-simposio-de-jackson-hole@luigui-herrera
 DTSTAMP:20260801T000000Z
 DTSTART;VALUE=DATE:20260827
-DTEND;VALUE=DATE:20260831
+DTEND;VALUE=DATE:20260830
 SUMMARY:Primer informe de agosto: Simposio de Jackson Hole
-DESCRIPTION:27-29 agosto. La comunicación de bancos centrales puede cambia
- r la lectura de tasas\, dólar y liquidez global.
-URL:https://www.luiguiherrera.com/informes/primer-informe-agosto-2026
+DESCRIPTION:27-29 agosto. Hora por confirmar (MDT). La comunicación de ban
+ cos centrales puede cambiar la lectura de tasas\, dólar y liquidez global
+ . Activos o factores: VOO\, GLD\, DXY\, Treasury\, BTC / ETH. Fuente: Fede
+ ral Reserve Bank of Kansas City.
+URL:https://www.kansascityfed.org/research/jackson-hole-economic-symposium/
 END:VEVENT
 END:VCALENDAR

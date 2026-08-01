@@ -224,6 +224,72 @@ function htmlTable(headers: string[], rows: Array<Array<string>>) {
     .join("")}</tbody></table></div>`;
 }
 
+function calendarTimeLabel(item: Extract<ReportExportSection, { kind: "calendar-scenarios" }>["calendar"][number]) {
+  if (item.timeStatus === "tba") return `Hora por confirmar · ${item.originalTimeZone ?? "Zona por confirmar"}`;
+  return [
+    item.originalTime && item.originalTimeZone ? `${item.originalTime} ${item.originalTimeZone}` : null,
+    item.displayTimeCest,
+  ].filter(Boolean).join(" · ") || "Hora por confirmar";
+}
+
+function renderMonthlyCalendarHtml(items: Extract<ReportExportSection, { kind: "calendar-scenarios" }>["calendar"]) {
+  const days = Array.from({ length: 42 }, (_, index) => {
+    const day = index - 4;
+    return day >= 1 && day <= 31 ? day : null;
+  });
+  return `<div class="month-calendar" aria-label="Calendario de agosto de 2026">
+    ${["Lun", "Mar", "Mié", "Jue", "Vie", "Sáb", "Dom"].map((day) => `<div class="month-calendar__weekday">${day}</div>`).join("")}
+    ${days.map((day) => {
+      if (!day) return `<div class="month-calendar__day month-calendar__day--empty"></div>`;
+      const dayItems = items.filter((item) => item.dateStart === `2026-08-${String(day).padStart(2, "0")}`);
+      const weekend = (day + 4) % 7 > 4;
+      return `<div class="month-calendar__day${weekend ? " month-calendar__day--weekend" : ""}"><strong>${day}</strong>${dayItems.map((item) => `<span class="event-chip event-chip--${esc(item.category ?? "other")}">${esc(item.event)}</span>`).join("")}</div>`;
+    }).join("")}
+  </div>
+  <h3>Detalle de eventos</h3>
+  ${htmlTable(
+    ["Fecha", "Hora y zona", "Evento", "Por qué importa", "Activos", "Fuente"],
+    items.map((item) => [
+      item.dateLabel,
+      calendarTimeLabel(item),
+      item.event,
+      item.whyItMatters,
+      item.affectedAssets?.join(", ") ?? "No especificados",
+      item.sourceLabel ?? "Fuente institucional no indicada",
+    ]),
+  )}
+  <div class="event-links">${items.map((item) => `<article class="card"><h4>${esc(item.event)}</h4>${item.trackingHref && item.trackingLabel ? `<a href="${esc(absoluteUrl(item.trackingHref))}"${item.trackingHref.startsWith("http") ? ` target="_blank" rel="noopener noreferrer"` : ""}>${esc(item.trackingLabel)}${item.trackingHref.startsWith("http") ? " ↗" : ""}</a>` : ""}${item.sourceHref && item.sourceLabel ? `<br><a href="${esc(item.sourceHref)}" target="_blank" rel="noopener noreferrer">${esc(item.sourceLabel)} ↗</a>` : ""}</article>`).join("")}</div>`;
+}
+
+const watchCategoryLabels = {
+  "market-structure": "Estructura de mercado",
+  "rates-credit": "Tasas y crédito",
+  "technology-ai": "Tecnología e IA",
+  "fx-commodities": "Divisas y materias primas",
+} as const;
+
+function renderWatchlistDashboardHtml(
+  items: Extract<ReportExportSection, { kind: "watchlist" }>["items"],
+  model: ReportExportModel,
+) {
+  return Object.entries(watchCategoryLabels).map(([category, label]) => {
+    const categoryItems = items.filter((item) => item.category === category);
+    if (!categoryItems.length) return "";
+    return `<section class="watch-group"><h3>${esc(label)}</h3><div class="watch-grid">${categoryItems.map((item) => {
+      const href = item.href ?? item.reference?.href;
+      const linkLabel = item.linkLabel ?? item.reference?.label;
+      const external = Boolean(href?.startsWith("http"));
+      return `<article class="watch watch--compact">
+        <div class="watch-heading"><h4>${esc(item.name)}</h4><span class="status status--${esc(item.status ?? "watch")}">${esc(item.statusLabel ?? "Seguimiento")}</span></div>
+        <p>${esc(item.currentReading ?? "Lectura editorial de seguimiento basada en el contexto del informe.")}</p>
+        <p class="watch-change"><strong>Qué cambiaría la lectura</strong><br>${esc(item.whatWouldChange ?? "La lectura cambiaría si el comportamiento observado contradice la tesis principal.")}</p>
+        ${href && linkLabel ? `<a class="follow-link" href="${esc(absoluteUrl(href))}"${external ? ` target="_blank" rel="noopener noreferrer"` : ""}>${esc(linkLabel)} ${external ? "↗" : "→"}</a>` : `<p class="unavailable">Seguimiento institucional no disponible públicamente.</p>`}
+        <details><summary>Ver contexto completo</summary><p><strong>Qué mira:</strong> ${esc(item.whatLooksAt)}</p><p><strong>Por qué importa:</strong> ${esc(item.whyItMatters)}</p><p><strong>Corte:</strong> ${esc(item.asOf ?? model.publishedAt)}</p><p><strong>Fuente:</strong> ${esc(item.source ?? model.description)}</p></details>
+      </article>`;
+    }).join("")}</div></section>`;
+  }).join("");
+}
+
 function renderSectionHtml(section: ReportExportSection, model: ReportExportModel) {
   let body = "";
   switch (section.kind) {
@@ -260,11 +326,14 @@ function renderSectionHtml(section: ReportExportSection, model: ReportExportMode
                 ["Qué esperamos", item.expected],
                 ["Qué vigilar", item.watch],
                 ["Lectura del informe", item.reading],
-                ["Antes / contexto", item.timeline.before],
-                ["Ahora / cambio", item.timeline.now],
-                ["Próximas señales", item.timeline.next],
+                ...(model.id === "primer-informe-agosto-2026" ? [] : [
+                  ["Antes / contexto", item.timeline.before],
+                  ["Ahora / cambio", item.timeline.now],
+                  ["Próximas señales", item.timeline.next],
+                ]),
               ],
-            )}
+            )}${model.id === "primer-informe-agosto-2026" ? `
+            <p class="eyebrow">Secuencia de lectura</p><ol class="reading-flow"><li><strong>Antes — Contexto</strong><span>${esc(item.timeline.before)}</span></li><li><strong>Ahora — Qué cambió</strong><span>${esc(item.timeline.now)}</span></li><li><strong>Después — Qué vigilamos</strong><span>${esc(item.timeline.next)}</span></li></ol>` : ""}
           </article>`,
         )
         .join("");
@@ -287,7 +356,7 @@ function renderSectionHtml(section: ReportExportSection, model: ReportExportMode
         .join("");
       break;
     case "calendar-scenarios":
-      body = `<h3>Eventos y ventanas editoriales</h3>${section.calendar
+      body = `<h3>Eventos y ventanas editoriales</h3>${model.id === "primer-informe-agosto-2026" ? renderMonthlyCalendarHtml(section.calendar) : section.calendar
         .map(
           (item) =>
             `<article class="card"><p class="eyebrow">${esc(item.dateLabel)}</p><h4>${esc(item.event)}</h4><p>${esc(item.whyItMatters)}</p></article>`,
@@ -297,7 +366,7 @@ function renderSectionHtml(section: ReportExportSection, model: ReportExportMode
         .join("")}</div>`;
       break;
     case "watchlist":
-      body = section.items
+      body = model.id === "primer-informe-agosto-2026" ? renderWatchlistDashboardHtml(section.items, model) : section.items
         .map((item) => {
           const readingLabel = item.currentReading ? "Lectura al publicar" : "Lectura de seguimiento";
           const href = item.href ?? item.reference?.href;
@@ -348,7 +417,7 @@ function renderHtml(model: ReportExportModel) {
   <meta name="author" content="${model.author}">
   <meta name="date" content="${model.publishedAt}">
   <link rel="canonical" href="${model.canonicalUrl}">
-  <style>${reportCss()}</style>
+  <style>${reportCss(model.id === "primer-informe-agosto-2026")}</style>
 </head>
 <body>
   <main>
@@ -516,7 +585,9 @@ Fuente: ${figure.sourceHref ? `[${figure.source}](${figure.sourceHref})` : figur
 
 ### Eventos y ventanas editoriales
 
-${section.calendar.map((item) => `- **${item.dateLabel}:** ${item.event}. ${item.whyItMatters}`).join("\n")}
+${model.id === "primer-informe-agosto-2026" ? `| Fecha | Hora y zona | Evento | Por qué importa | Activos o factores | Fuente | Seguimiento |
+|---|---|---|---|---|---|---|
+${section.calendar.map((item) => `| ${item.dateLabel} | ${calendarTimeLabel(item)} | ${item.event} | ${item.whyItMatters} | ${item.affectedAssets?.join(", ") ?? "No especificados"} | ${item.sourceHref && item.sourceLabel ? `[${item.sourceLabel}](${item.sourceHref})` : item.sourceLabel ?? "No indicada"} | ${item.trackingHref && item.trackingLabel ? `[${item.trackingLabel}](${absoluteUrl(item.trackingHref)})` : "No disponible"} |`).join("\n")}` : section.calendar.map((item) => `- **${item.dateLabel}:** ${item.event}. ${item.whyItMatters}`).join("\n")}
 
 ### Escenarios
 
@@ -527,7 +598,8 @@ ${section.scenarios.map((item) => `#### ${item.title}\n\n${item.body}`).join("\n
           const readingLabel = item.currentReading ? "Lectura al publicar" : "Lectura de seguimiento";
           const href = item.href ?? item.reference?.href;
           const linkLabel = item.linkLabel ?? item.reference?.label;
-          return `### ${item.name}
+          const category = item.category ? watchCategoryLabels[item.category] : null;
+          return `### ${item.name}${category ? `\n\n- **Categoría:** ${category}` : ""}
 
 - **Estado:** ${item.statusLabel ?? "Seguimiento"}
 - **Qué mira:** ${item.whatLooksAt}
@@ -536,7 +608,7 @@ ${section.scenarios.map((item) => `#### ${item.title}\n\n${item.body}`).join("\n
 - **Qué cambiaría:** ${item.whatWouldChange ?? "La lectura cambiaría si el comportamiento observado contradice la tesis principal."}
 - **Fecha:** ${item.asOf ?? model.publishedAt}
 - **Fuente:** ${item.source ?? model.description}${
-            href && linkLabel ? `\n- **Enlace:** [${linkLabel}](${absoluteUrl(href)})` : ""
+            href && linkLabel ? `\n- **Enlace:** [${linkLabel}](${absoluteUrl(href)})` : model.id === "primer-informe-agosto-2026" ? `\n- **Enlace:** Seguimiento institucional no disponible públicamente.` : ""
           }`;
         })
         .join("\n\n")}`;
@@ -575,7 +647,7 @@ ${model.sections.map((section) => renderSectionMarkdown(section, model)).join("\
 `.replace(/[ \t]+$/gm, "");
 }
 
-function reportCss() {
+function reportCss(enhanced = false) {
   return `
     @page { size: A4; margin: 16mm; }
     * { box-sizing: border-box; }
@@ -595,7 +667,34 @@ function reportCss() {
     .metadata div { display: grid; grid-template-columns: 210px 1fr; border-top: 1px solid #d8d2c6; padding: 8px 0; }
     dt { color: #6e7471; font-size: 12px; font-weight: 700; text-transform: uppercase; }
     dd { margin: 0; }
-    .grid, .columns { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
+    .grid, .columns { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }${enhanced ? `
+    .reading-flow { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; list-style: none; margin: 18px 0 0; padding: 0; }
+    .reading-flow li { border-top: 3px solid #9a7a45; padding: 12px 0; }
+    .reading-flow span { color: #6e7471; display: block; font-size: 14px; margin-top: 6px; }
+    .month-calendar { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); border-left: 1px solid #d8d2c6; border-top: 1px solid #d8d2c6; }
+    .month-calendar__weekday, .month-calendar__day { border-bottom: 1px solid #d8d2c6; border-right: 1px solid #d8d2c6; min-height: 105px; padding: 8px; }
+    .month-calendar__weekday { background: #153638; color: white; min-height: 0; text-align: center; }
+    .month-calendar__day--weekend { background: #efeae1; }
+    .month-calendar__day--empty { background: rgba(239,234,225,.45); }
+    .event-chip { border: 1px solid #d8d2c6; display: block; font-size: 11px; line-height: 1.3; margin-top: 6px; padding: 4px; }
+    .event-chip--macro { background: rgba(11,52,54,.08); color: #0b3436; }
+    .event-chip--central-bank, .event-chip--earnings { background: rgba(154,122,68,.1); color: #6f542d; }
+    .event-chip--options { background: rgba(138,78,69,.1); color: #8a4e45; }
+    .event-links { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+    .watch-group { border: 0; padding: 12px 0; }
+    .watch-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+    .watch--compact { display: flex; flex-direction: column; }
+    .watch-heading { align-items: start; display: flex; gap: 12px; justify-content: space-between; }
+    .status { border: 1px solid #d8d2c6; font-size: 10px; font-weight: 700; padding: 3px 7px; text-transform: uppercase; }
+    .status--stressed { background: rgba(138,78,69,.1); color: #8a4e45; }
+    .status--tba { background: rgba(154,122,68,.1); color: #6f542d; }
+    .status--watch, .status--stable, .status--improving { background: rgba(11,52,54,.08); color: #0b3436; }
+    .watch-change { border-left: 3px solid #9a7a45; padding-left: 12px; }
+    .follow-link, .unavailable { display: block; margin-top: auto; padding: 9px 11px; }
+    .follow-link { background: #153638; color: white; text-decoration: none; }
+    .unavailable { background: #efeae1; color: #6e7471; font-size: 13px; }
+    details { border-top: 1px solid #d8d2c6; margin-top: 12px; padding-top: 9px; }
+    summary { color: #0b3436; cursor: pointer; font-weight: 700; }` : ""}
     .card, .asset, .watch, .callout { margin: 14px 0; padding: 18px; border: 1px solid #d8d2c6; background: rgba(255,255,255,.62); break-inside: avoid; }
     .summary, .source { color: #6e7471; font-size: 14px; }
     .historical-note, .disclaimer { border-left: 3px solid #9a7a45; padding: 12px 16px; background: rgba(239,234,224,.7); }
@@ -618,7 +717,11 @@ function reportCss() {
     }
     @media (max-width: 720px) {
       main { padding: 28px 16px 48px; }
-      .grid, .columns { grid-template-columns: 1fr; }
+      .grid, .columns { grid-template-columns: 1fr; }${enhanced ? `
+      .reading-flow { grid-template-columns: 1fr; }
+      .month-calendar__weekday, .month-calendar__day { min-height: 54px; padding: 4px; }
+      .event-chip { font-size: 0; min-height: 10px; padding: 0; }
+      .event-links, .watch-grid { grid-template-columns: 1fr; }` : ""}
       .metadata div { grid-template-columns: 1fr; gap: 3px; }
     }
   `;
@@ -634,6 +737,10 @@ function escapeIcs(value: string) {
 
 function icsDate(value: string) {
   return value.replaceAll("-", "");
+}
+
+function icsDateTime(value: string) {
+  return value.replace(/[-:]/g, "").replace(".000", "");
 }
 
 function addOneDay(value: string) {
@@ -683,12 +790,17 @@ function renderIcs(model: ReportExportModel) {
     `X-WR-CALNAME:${escapeIcs(model.editionName)}`,
   ];
   for (const event of model.events) {
+    const timingLines = event.startDateTimeUtc
+      ? [`DTSTART:${icsDateTime(event.startDateTimeUtc)}`]
+      : [
+          `DTSTART;VALUE=DATE:${icsDate(event.startDate)}`,
+          `DTEND;VALUE=DATE:${icsDate(addOneDay(event.endDate ?? event.startDate))}`,
+        ];
     lines.push(
       "BEGIN:VEVENT",
       `UID:${escapeIcs(event.uid)}`,
       `DTSTAMP:${stamp}`,
-      `DTSTART;VALUE=DATE:${icsDate(event.startDate)}`,
-      `DTEND;VALUE=DATE:${icsDate(addOneDay(event.endDate ?? event.startDate))}`,
+      ...timingLines,
       `SUMMARY:${escapeIcs(event.summary)}`,
       `DESCRIPTION:${escapeIcs(event.description)}`,
       `URL:${event.url}`,
@@ -931,7 +1043,17 @@ function substantiveNeedles(section: ReportExportSection, model: ReportExportMod
       for (const item of section.items) values.push(item.asset, item.caption, item.source, item.note ?? "");
       break;
     case "calendar-scenarios":
-      for (const item of section.calendar) values.push(item.dateLabel, item.event, item.whyItMatters);
+      for (const item of section.calendar) {
+        values.push(item.dateLabel, item.event, item.whyItMatters);
+        if (model.id === "primer-informe-agosto-2026") {
+          values.push(
+            calendarTimeLabel(item),
+            ...(item.affectedAssets ?? []),
+            item.sourceLabel ?? "",
+            item.trackingLabel ?? "",
+          );
+        }
+      }
       for (const item of section.scenarios) values.push(item.title, item.body);
       break;
     case "watchlist":
@@ -974,10 +1096,22 @@ function validateIcs(model: ReportExportModel, value: string) {
   const unfolded = value.replace(/\r\n[ \t]/g, "");
   const events = [...unfolded.matchAll(/BEGIN:VEVENT\r\n([\s\S]*?)END:VEVENT/g)].map((match) => match[1]);
   assert.equal(events.length, model.events.length, `${model.id}: cantidad de eventos ICS incorrecta.`);
+  const uids = events.map((event) => event.match(/^UID:(.+)$/m)?.[1]);
+  assert(uids.every(Boolean), `${model.id}: evento ICS sin UID.`);
+  assert.equal(new Set(uids).size, events.length, `${model.id}: UIDs duplicados en ICS.`);
   for (const expected of model.events) {
-    const event = events.find((item) => item.includes(`UID:${escapeIcs(expected.uid)}`));
+    const matchingEvents = events.filter((item) => item.includes(`UID:${escapeIcs(expected.uid)}`));
+    assert.equal(matchingEvents.length, 1, `${model.id}: UID ausente o duplicado ${expected.uid}.`);
+    const event = matchingEvents[0];
     assert(event, `${model.id}: falta UID ${expected.uid}.`);
-    assert(event.includes(`DTSTART;VALUE=DATE:${icsDate(expected.startDate)}`));
+    if (expected.startDateTimeUtc) {
+      assert(event.includes(`DTSTART:${icsDateTime(expected.startDateTimeUtc)}`));
+      assert(!event.includes("DTSTART;VALUE=DATE:"));
+      assert(!event.includes("DTEND;VALUE=DATE:"));
+    } else {
+      assert(event.includes(`DTSTART;VALUE=DATE:${icsDate(expected.startDate)}`));
+      assert(event.includes(`DTEND;VALUE=DATE:${icsDate(addOneDay(expected.endDate ?? expected.startDate))}`));
+    }
     assert(event.includes(`SUMMARY:${escapeIcs(expected.summary)}`));
     assert(event.includes(`DESCRIPTION:${escapeIcs(expected.description)}`));
     assert(event.includes(`URL:${expected.url}`));

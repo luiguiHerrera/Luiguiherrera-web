@@ -25,6 +25,27 @@ function assertIsoDate(value: string, label: string) {
   assert.equal(parsed.toISOString().slice(0, 10), value, `${label} no es una fecha ISO válida.`);
 }
 
+function dateTimeParts(value: Date, timeZone: string) {
+  const parts = Object.fromEntries(
+    new Intl.DateTimeFormat("en-CA", {
+      timeZone,
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+      hour: "2-digit",
+      minute: "2-digit",
+      hourCycle: "h23",
+    })
+      .formatToParts(value)
+      .filter((part) => part.type !== "literal")
+      .map((part) => [part.type, part.value]),
+  );
+  return {
+    date: `${parts.year}-${parts.month}-${parts.day}`,
+    time: `${parts.hour}:${parts.minute}`,
+  };
+}
+
 for (const report of marketReports) {
   assertIsoDate(report.publishedAt, `${report.id}.publishedAt`);
   assertIsoDate(report.modifiedAt, `${report.id}.modifiedAt`);
@@ -89,6 +110,84 @@ for (const forbidden of ["familia", "portafolio", "portfolio", "destinatario pri
     !JSON.stringify(august).toLocaleLowerCase("es").includes(forbidden),
     `El informe de agosto expone contexto privado: ${forbidden}.`,
   );
+}
+
+assert.deepEqual(august.presentation, {
+  contextTitle: "Contexto general",
+  timelineStyle: "progression",
+  calendarStyle: "monthly",
+  watchlistStyle: "dashboard",
+});
+assert.equal(august.calendar.length, 12, "Agosto debe conservar los 12 eventos editoriales verificados.");
+assert.equal(new Set(august.calendar.map((event) => event.id)).size, august.calendar.length, "Los eventos de agosto requieren identificadores únicos.");
+for (const event of august.calendar) {
+  assert(event.id, `Evento sin id: ${event.event}`);
+  assert(event.dateStart, `${event.id}: falta fecha inicial.`);
+  assertIsoDate(event.dateStart, `${event.id}.dateStart`);
+  assert(event.dateStart.startsWith("2026-08-"), `${event.id}: fecha fuera de agosto de 2026.`);
+  if (event.dateEnd) {
+    assertIsoDate(event.dateEnd, `${event.id}.dateEnd`);
+    assert(event.dateEnd.startsWith("2026-08-"), `${event.id}: fecha final fuera de agosto de 2026.`);
+    assert(event.dateEnd >= event.dateStart, `${event.id}: fecha final anterior a la inicial.`);
+  }
+  assert(event.category, `${event.id}: falta categoría.`);
+  assert(event.timeStatus, `${event.id}: falta estado de hora.`);
+  assert(event.originalTimeZone, `${event.id}: falta zona horaria original.`);
+  assert(event.affectedAssets?.length, `${event.id}: faltan activos o factores afectados.`);
+  assert(event.sourceLabel && event.sourceHref, `${event.id}: falta fuente primaria.`);
+  assert.match(event.sourceHref, /^https:\/\//, `${event.id}: la fuente debe usar HTTPS.`);
+  assert(!event.sourceHref.includes("utm_source=chatgpt.com"), `${event.id}: la fuente contiene UTM de ChatGPT.`);
+  if (event.timeStatus === "confirmed") {
+    assert.match(event.startDateTimeUtc ?? "", /^2026-08-\d{2}T\d{2}:\d{2}:00Z$/, `${event.id}: hora UTC confirmada inválida.`);
+    assert.match(event.originalTime ?? "", /^\d{2}:\d{2}$/, `${event.id}: hora original confirmada inválida.`);
+    assert.match(event.displayTimeCest ?? "", /^\d{2}:\d{2} CEST$/, `${event.id}: conversión CEST inválida.`);
+    const instant = new Date(event.startDateTimeUtc ?? "");
+    assert(!Number.isNaN(instant.getTime()), `${event.id}: instante UTC no válido.`);
+    const originalZone = event.originalTimeZone === "ET" ? "America/New_York" : null;
+    assert(originalZone, `${event.id}: zona original sin conversión reproducible.`);
+    const original = dateTimeParts(instant, originalZone);
+    const cest = dateTimeParts(instant, "Europe/Madrid");
+    assert.equal(original.date, event.dateStart, `${event.id}: UTC cambia el día en la zona original.`);
+    assert.equal(original.time, event.originalTime, `${event.id}: UTC no coincide con la hora original.`);
+    assert.equal(cest.date, event.dateStart, `${event.id}: la conversión a CEST cambia de día y requiere fecha visible propia.`);
+    assert.equal(`${cest.time} CEST`, event.displayTimeCest, `${event.id}: conversión UTC/CEST incorrecta.`);
+  } else if (event.timeStatus === "tba") {
+    assert(!event.startDateTimeUtc, `${event.id}: una hora por confirmar no debe tener DTSTART horario.`);
+    assert.equal(event.originalTime, "Hora por confirmar", `${event.id}: el estado pendiente debe ser explícito.`);
+    assert.equal(event.displayTimeCest, "Hora por confirmar", `${event.id}: no se debe inferir CEST.`);
+  }
+}
+assert.equal(august.calendar.filter((event) => event.timeStatus === "confirmed").length, 10);
+assert.deepEqual(
+  august.calendar.filter((event) => event.timeStatus === "tba").map((event) => event.id),
+  ["monthly-options-expiry", "jackson-hole-2026"],
+);
+assert.deepEqual(
+  new Set(august.watchlist.map((item) => item.category)),
+  new Set(["market-structure", "rates-credit", "technology-ai", "fx-commodities"]),
+);
+for (const item of august.watchlist) {
+  assert(item.name.trim(), `${item.key}: falta nombre accesible.`);
+  assert(item.category, `${item.key}: falta categoría de seguimiento.`);
+  assert(item.status && item.statusLabel, `${item.key}: falta estado visual.`);
+  assert(item.whatLooksAt && item.whyItMatters && item.currentReading && item.whatWouldChange, `${item.key}: la divulgación progresiva pierde condiciones de lectura.`);
+  assert(item.asOf && item.source, `${item.key}: falta trazabilidad editorial.`);
+  if (item.href) assert(item.linkLabel, `${item.key}: el enlace de seguimiento no tiene etiqueta accesible.`);
+  if (item.href?.startsWith("http")) {
+    assert.match(item.href, /^https:\/\//, `${item.key}: el seguimiento externo debe usar HTTPS.`);
+    assert(!item.href.includes("utm_source=chatgpt.com"), `${item.key}: el seguimiento contiene UTM de ChatGPT.`);
+  }
+}
+
+const monthlyCalendarComponent = read("components/reports/ReportMonthlyCalendar.tsx");
+for (const requirement of [
+  'aria-controls="report-calendar-detail"',
+  'aria-label="Cerrar detalle del evento"',
+  'rel="noopener noreferrer"',
+  'event.key === "Escape"',
+  "onFocus={() => selectEvent(eventId(event))}",
+]) {
+  assert(monthlyCalendarComponent.includes(requirement), `Calendario mensual: falta ${requirement}.`);
 }
 
 assert.deepEqual(Object.keys(snapshot), [

@@ -83,6 +83,27 @@ details:not([open]) .details-close-label {
   display: none;
 }
 
+.report-reading-flow__step:not(:last-child)::after {
+  background: var(--color-line);
+  bottom: -1rem;
+  content: "";
+  left: 1.22rem;
+  position: absolute;
+  top: 2.5rem;
+  width: 1px;
+}
+
+@media (min-width: 768px) {
+  .report-reading-flow__step:not(:last-child)::after {
+    bottom: auto;
+    height: 1px;
+    left: 2.5rem;
+    right: -1rem;
+    top: 1.22rem;
+    width: auto;
+  }
+}
+
 .estate-hero {
   background:
     radial-gradient(circle at 84% 10%, rgba(154, 122, 68, 0.18), transparent 32%),

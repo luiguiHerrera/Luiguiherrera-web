@@ -251,7 +251,84 @@ def data_table(headers, rows, styles, widths=None):
     return table
 
 
-def add_asset_reading(story, item, styles, allow_table_split=False):
+def calendar_time_label(item):
+    if item.get("timeStatus") == "tba":
+        return f"Hora por confirmar · {item.get('originalTimeZone', 'Zona por confirmar')}"
+    parts = []
+    if item.get("originalTime") and item.get("originalTimeZone"):
+        parts.append(f"{item['originalTime']} {item['originalTimeZone']}")
+    if item.get("displayTimeCest"):
+        parts.append(item["displayTimeCest"])
+    return " · ".join(parts) or "Hora por confirmar"
+
+
+def add_monthly_calendar(story, items, styles):
+    Table = PDF["Table"]
+    TableStyle = PDF["TableStyle"]
+    colors = PDF["colors"]
+    mm = PDF["mm"]
+    by_day = {}
+    for item in items:
+        if item.get("dateStart", "").startswith("2026-08-"):
+            day = int(item["dateStart"][-2:])
+            by_day.setdefault(day, []).append(item)
+    cells = []
+    for index in range(42):
+        day = index - 4
+        if day < 1 or day > 31:
+            cells.append(p(" ", styles["small"]))
+            continue
+        lines = [str(day)]
+        for item in by_day.get(day, []):
+            lines.append(item["event"])
+        cells.append(p("\n".join(lines), styles["small"]))
+    data = [[p(day, styles["small"]) for day in ["Lun", "Mar", "Mié", "Jue", "Vie", "Sáb", "Dom"]]]
+    data.extend([cells[row : row + 7] for row in range(0, 42, 7)])
+    table = Table(data, colWidths=[24 * mm] * 7, repeatRows=1, hAlign="LEFT")
+    commands = [
+        ("VALIGN", (0, 0), (-1, -1), "TOP"),
+        ("BACKGROUND", (0, 0), (-1, 0), colors.HexColor("#153638")),
+        ("TEXTCOLOR", (0, 0), (-1, 0), colors.white),
+        ("BOX", (0, 0), (-1, -1), 0.35, colors.HexColor("#D8D2C6")),
+        ("INNERGRID", (0, 0), (-1, -1), 0.25, colors.HexColor("#D8D2C6")),
+        ("LEFTPADDING", (0, 0), (-1, -1), 3),
+        ("RIGHTPADDING", (0, 0), (-1, -1), 3),
+        ("TOPPADDING", (0, 0), (-1, -1), 3),
+        ("BOTTOMPADDING", (0, 0), (-1, -1), 5),
+    ]
+    for column in (5, 6):
+        commands.append(("BACKGROUND", (column, 1), (column, -1), colors.HexColor("#F2EDE4")))
+    table.setStyle(TableStyle(commands))
+    story.append(p("Agosto de 2026", styles["h2"]))
+    story.append(table)
+    story.append(PDF["Spacer"](1, 7))
+    story.append(p("Detalle y leyenda", styles["h2"]))
+    for item in items:
+        source = item.get("sourceLabel", "Fuente institucional no indicada")
+        source_href = item.get("sourceHref")
+        tracking_label = item.get("trackingLabel")
+        tracking_href = item.get("trackingHref")
+        if tracking_href and tracking_href.startswith("/"):
+            tracking_href = f"https://www.luiguiherrera.com{tracking_href}"
+        story.append(
+            PDF["KeepTogether"](
+            [
+                p(f"{item['dateLabel']} · {calendar_time_label(item)}", styles["h3"]),
+                p(f"{item['event']}. {item['whyItMatters']}", styles["body"]),
+                p(f"Activos o factores: {', '.join(item.get('affectedAssets', [])) or 'No especificados'}", styles["small"]),
+                p(f"Fuente: {source}{f' · {source_href}' if source_href else ''}", styles["small"]),
+                *(
+                    [p(f"Seguimiento: {tracking_label} · {tracking_href}", styles["small"])]
+                    if tracking_label and tracking_href
+                    else []
+                ),
+                PDF["Spacer"](1, 5),
+            ]
+            )
+        )
+
+
+def add_asset_reading(story, item, styles, allow_table_split=False, enhanced_timeline=False):
     rows = [
         ("Clasificación", item["badge"]),
         ("Qué pasó", item["story"]),
@@ -263,9 +340,9 @@ def add_asset_reading(story, item, styles, allow_table_split=False):
             "Secuencia",
             " ".join(
                 [
-                    item["timeline"]["before"],
-                    item["timeline"]["now"],
-                    item["timeline"]["next"],
+                    f"Antes - Contexto: {item['timeline']['before']}" if enhanced_timeline else item["timeline"]["before"],
+                    f"Ahora - Qué cambió: {item['timeline']['now']}" if enhanced_timeline else item["timeline"]["now"],
+                    f"Después - Qué vigilamos: {item['timeline']['next']}" if enhanced_timeline else item["timeline"]["next"],
                 ]
             ),
         ),
@@ -536,6 +613,7 @@ def add_section(story, section, styles, root, published_at, description, force_b
                 item,
                 styles,
                 allow_table_split=report_id == "primer-informe-agosto-2026",
+                enhanced_timeline=report_id == "primer-informe-agosto-2026",
             )
     elif kind == "historical-snapshot":
         add_historical_snapshot(story, section["snapshot"], styles)
@@ -544,15 +622,18 @@ def add_section(story, section, styles, root, published_at, description, force_b
             add_figure(story, item, styles, root)
     elif kind == "calendar-scenarios":
         story.append(p("Eventos y ventanas editoriales", styles["h2"]))
-        for item in section["calendar"]:
-            story.append(
-                PDF["KeepTogether"](
-                    [
-                        p(item["dateLabel"], styles["h3"]),
-                        p(f"{item['event']}. {item['whyItMatters']}", styles["body"]),
-                    ]
+        if report_id == "primer-informe-agosto-2026":
+            add_monthly_calendar(story, section["calendar"], styles)
+        else:
+            for item in section["calendar"]:
+                story.append(
+                    PDF["KeepTogether"](
+                        [
+                            p(item["dateLabel"], styles["h3"]),
+                            p(f"{item['event']}. {item['whyItMatters']}", styles["body"]),
+                        ]
+                    )
                 )
-            )
         story.append(p("Escenarios", styles["h2"]))
         for item in section["scenarios"]:
             if report_id == "primer-informe-agosto-2026":
@@ -583,6 +664,21 @@ def add_section(story, section, styles, root, published_at, description, force_b
                         ),
                         info_table(
                             [
+                                *(
+                                    [
+                                        (
+                                            "Categoría",
+                                            {
+                                                "market-structure": "Estructura de mercado",
+                                                "rates-credit": "Tasas y crédito",
+                                                "technology-ai": "Tecnología e IA",
+                                                "fx-commodities": "Divisas y materias primas",
+                                            }.get(item.get("category"), "Seguimiento"),
+                                        )
+                                    ]
+                                    if report_id == "primer-informe-agosto-2026"
+                                    else []
+                                ),
                                 ("Estado", item.get("statusLabel", "Seguimiento")),
                                 ("Qué mira", item["whatLooksAt"]),
                                 ("Por qué importa", item["whyItMatters"]),
@@ -602,6 +698,18 @@ def add_section(story, section, styles, root, published_at, description, force_b
                                 ),
                                 ("Fecha", item.get("asOf", published_at)),
                                 ("Fuente", item.get("source", description)),
+                                *(
+                                    [
+                                        (
+                                            "Seguimiento",
+                                            f"{item.get('linkLabel', 'Seguimiento institucional')}: {item['href']}"
+                                            if item.get("href")
+                                            else "Seguimiento institucional no disponible públicamente.",
+                                        )
+                                    ]
+                                    if report_id == "primer-informe-agosto-2026"
+                                    else []
+                                ),
                             ],
                             styles,
                         ),

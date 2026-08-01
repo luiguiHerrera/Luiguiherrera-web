@@ -24,6 +24,7 @@ export type ReportExportEvent = {
   uid: string;
   startDate: string;
   endDate?: string;
+  startDateTimeUtc?: string;
   summary: string;
   description: string;
   url: string;
@@ -44,8 +45,8 @@ export type ReportExportSection =
       transversalFactor?: NonNullable<MarketReport["transversalFactor"]>;
     }
   | {
-      id: "context-by-asset";
-      title: "Contexto por activo";
+      id: "context-by-asset" | "context-general";
+      title: string;
       kind: "context";
       items: MarketReportSectionBlock[];
     }
@@ -126,14 +127,39 @@ function figuresFor(report: MarketReport) {
 function structuredEvents(report: MarketReport, canonicalUrl: string): ReportExportEvent[] {
   return report.calendar
     .filter((item): item is MarketReportCalendarItem & { dateStart: string } => Boolean(item.dateStart))
-    .map((item) => ({
-      uid: `${report.id}-${eventSlug(item.event)}@luigui-herrera`,
-      startDate: item.dateStart,
-      endDate: item.dateEnd,
-      summary: `${reportDisplayName(report)}: ${item.event}`,
-      description: `${item.dateLabel}. ${item.whyItMatters}`,
-      url: canonicalUrl,
-    }));
+    .map((item) => {
+      if (report.presentation?.calendarStyle !== "monthly") {
+        return {
+          uid: `${report.id}-${eventSlug(item.event)}@luigui-herrera`,
+          startDate: item.dateStart,
+          endDate: item.dateEnd,
+          summary: `${reportDisplayName(report)}: ${item.event}`,
+          description: `${item.dateLabel}. ${item.whyItMatters}`,
+          url: canonicalUrl,
+        };
+      }
+      const time = item.timeStatus === "tba"
+        ? `Hora por confirmar (${item.originalTimeZone ?? "zona horaria por confirmar"})`
+        : [
+            item.originalTime && item.originalTimeZone
+              ? `${item.originalTime} ${item.originalTimeZone}`
+              : null,
+            item.displayTimeCest,
+          ].filter(Boolean).join(" / ");
+      const assets = item.affectedAssets?.length
+        ? ` Activos o factores: ${item.affectedAssets.join(", ")}.`
+        : "";
+      const source = item.sourceLabel ? ` Fuente: ${item.sourceLabel}.` : "";
+      return {
+        uid: `${report.id}-${eventSlug(item.event)}@luigui-herrera`,
+        startDate: item.dateStart,
+        endDate: item.dateEnd,
+        ...(item.startDateTimeUtc ? { startDateTimeUtc: item.startDateTimeUtc } : {}),
+        summary: `${reportDisplayName(report)}: ${item.event}`,
+        description: `${item.dateLabel}. ${time}. ${item.whyItMatters}${assets}${source}`,
+        url: item.trackingHref?.startsWith("http") ? item.trackingHref : canonicalUrl,
+      };
+    });
 }
 
 function reportSections(
@@ -156,8 +182,8 @@ function reportSections(
       ...(report.transversalFactor ? { transversalFactor: report.transversalFactor } : {}),
     },
     {
-      id: "context-by-asset",
-      title: "Contexto por activo",
+      id: report.presentation?.contextTitle ? "context-general" : "context-by-asset",
+      title: report.presentation?.contextTitle ?? "Contexto por activo",
       kind: "context",
       items: report.whatHappened,
     },

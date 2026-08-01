@@ -29,7 +29,7 @@ La corrección de semiconductores y momentum fue extraordinaria, pero no equival
 
 La TRM certificada para el 1 al 3 de agosto fue 3.144,14 COP por dólar. La fortaleza del peso se desacopló del dólar global, pero petróleo, diferencial de tasas, flujos y riesgo local impiden atribuir el movimiento a una sola causa.
 
-## Contexto por activo
+## Contexto general
 
 ### Índice y estructura
 
@@ -184,16 +184,20 @@ Clasificación: **rango amplio**
 
 ### Eventos y ventanas editoriales
 
-- **Lun. 3 agosto:** ISM manufacturero de Estados Unidos. Abre la lectura de actividad, pedidos, empleo y presiones de precios de agosto.
-- **Mar. 4 agosto:** JOLTS y resultados de Arista Networks. Combina una señal del mercado laboral con una prueba de demanda en redes para centros de datos e IA.
-- **Mié. 5 agosto:** ISM servicios y resultados de Duolingo. Servicios ayuda a medir actividad e inflación; Duolingo prueba crecimiento, monetización y valoración.
-- **Jue. 6 agosto:** Resultados de Cloudflare. La guía permite evaluar demanda de nube, seguridad, márgenes e inversión en infraestructura.
-- **Vie. 7 agosto:** Empleo de Estados Unidos de julio. Puede reajustar expectativas de crecimiento, inflación salarial y política monetaria.
-- **Mié. 12 agosto:** IPC de Estados Unidos de julio. Es la prueba principal para tasas reales, dólar, duración y valoración de crecimiento.
-- **Vie. 14 agosto:** Ventas minoristas de Estados Unidos de julio. Mide la resistencia del consumo después de señales mixtas de actividad e inflación.
-- **Mié. 19 agosto:** Minutas de la Fed del 28 y 29 de julio. Aclararán el balance entre la mayoría que mantuvo tasas y los tres votos favorables a subirlas.
-- **Vie. 21 agosto:** Vencimiento mensual de opciones. Puede modificar coberturas, volumen y sensibilidad del índice alrededor de niveles relevantes.
-- **27-29 agosto:** Simposio de Jackson Hole. La comunicación de bancos centrales puede cambiar la lectura de tasas, dólar y liquidez global.
+| Fecha | Hora y zona | Evento | Por qué importa | Activos o factores | Fuente | Seguimiento |
+|---|---|---|---|---|---|---|
+| Lun. 3 agosto | 10:00 ET · 16:00 CEST | ISM manufacturero de Estados Unidos | Abre la lectura de actividad, pedidos, empleo y presiones de precios de agosto. | VOO, DXY, Treasury, Bancos | [Calendario oficial de ISM](https://www.ismworld.org/supply-management-news-and-reports/reports/rob-report-calendar/) | [Seguir reacción del mercado](https://www.luiguiherrera.com/dashboard) |
+| Mar. 4 agosto | 10:00 ET · 16:00 CEST | JOLTS de junio | Mide vacantes, contrataciones y renuncias para precisar el equilibrio del mercado laboral estadounidense. | VOO, DXY, Treasury, Fed | [Calendario oficial del BLS](https://www.bls.gov/schedule/2026/08_sched.htm) | [Seguir JOLTS en BLS](https://www.bls.gov/jlt/) |
+| Mar. 4 agosto | 16:30 ET · 22:30 CEST | Resultados de Arista Networks | Prueba la demanda de redes para centros de datos, la guía y el retorno del gasto en infraestructura de IA. | ANET, VOO, Semiconductores, Infraestructura de IA | [Relaciones con inversionistas de Arista](https://investors.arista.com/Communications/Press-Releases-and-Events/Press-Release-Detail/2026/Arista-Networks-to-Announce-Q2-2026-Financial-Results-on-Tuesday-August-4-2026/default.aspx) | [Seguir resultados de Arista](https://investors.arista.com/) |
+| Mié. 5 agosto | 10:00 ET · 16:00 CEST | ISM servicios de Estados Unidos | Ayuda a medir actividad, empleo y presiones de precios en la parte dominante de la economía. | VOO, DXY, Treasury, Fed | [Calendario oficial de ISM](https://www.ismworld.org/supply-management-news-and-reports/reports/rob-report-calendar/) | [Seguir reacción del mercado](https://www.luiguiherrera.com/dashboard) |
+| Mié. 5 agosto | 17:00 ET · 23:00 CEST | Resultados de Duolingo | Prueba crecimiento, monetización, márgenes y valoración después del cierre estadounidense. | DUOL, Stockpicking, Software, Crecimiento | [Relaciones con inversionistas de Duolingo](https://investors.duolingo.com/events/event-details/duolingo-second-quarter-2026-earnings-call) | [Seguir resultados de Duolingo](https://investors.duolingo.com/) |
+| Jue. 6 agosto | 17:00 ET · 23:00 CEST | Resultados de Cloudflare | La guía permite evaluar demanda de nube, seguridad, márgenes e inversión en infraestructura. | NET, Stockpicking, Nube, Infraestructura de IA | [Relaciones con inversionistas de Cloudflare](https://www.cloudflare.net/news/news-details/2026/Cloudflare-Announces-Date-of-Second-Quarter-2026-Financial-Results/default.aspx) | [Seguir resultados de Cloudflare](https://www.cloudflare.net/financials/quarterly-results/default.aspx) |
+| Vie. 7 agosto | 08:30 ET · 14:30 CEST | Empleo de Estados Unidos de julio | Puede reajustar expectativas de crecimiento, inflación salarial y política monetaria. | VOO, DXY, Treasury, Fed, Oro | [Calendario oficial del BLS](https://www.bls.gov/schedule/2026/08_sched.htm) | [Seguir empleo en BLS](https://www.bls.gov/news.release/empsit.htm) |
+| Mié. 12 agosto | 08:30 ET · 14:30 CEST | IPC de Estados Unidos de julio | Es la prueba principal para tasas reales, dólar, duración y valoración de crecimiento. | VOO, GLD, DXY, Treasury, BTC / ETH | [Calendario oficial del BLS](https://www.bls.gov/schedule/2026/08_sched.htm) | [Seguir IPC en BLS](https://www.bls.gov/cpi/) |
+| Vie. 14 agosto | 08:30 ET · 14:30 CEST | Ventas minoristas de Estados Unidos de julio | Mide la resistencia del consumo después de señales mixtas de actividad e inflación. | VOO, DXY, Treasury, Consumo | [Calendario oficial del U.S. Census Bureau](https://www.census.gov/retail/release_schedule.html) | [Seguir ventas minoristas](https://www.census.gov/retail/index.html) |
+| Mié. 19 agosto | 14:00 ET · 20:00 CEST | Minutas de la Fed del 28 y 29 de julio | Aclararán el balance entre la mayoría que mantuvo tasas y los tres votos favorables a subirlas. | VOO, GLD, DXY, Treasury, BTC / ETH | [Calendario oficial de la Federal Reserve Board](https://www.federalreserve.gov/newsevents/2026-august.htm) | [Seguir minutas de la Fed](https://www.federalreserve.gov/monetarypolicy/fomccalendars.htm) |
+| Vie. 21 agosto | Hora por confirmar · ET | Vencimiento mensual de opciones | Puede modificar coberturas, volumen y sensibilidad del índice alrededor de niveles relevantes. | VOO, VIX, Opciones sobre índices | [Calendario de vencimientos 2026 de Cboe](https://cdn.cboe.com/resources/options/Cboe2026OPTIONSCalendar.pdf) | [Seguir VIX y régimen](https://www.luiguiherrera.com/dashboard) |
+| 27-29 agosto | Hora por confirmar · MDT | Simposio de Jackson Hole | La comunicación de bancos centrales puede cambiar la lectura de tasas, dólar y liquidez global. | VOO, GLD, DXY, Treasury, BTC / ETH | [Federal Reserve Bank of Kansas City](https://www.kansascityfed.org/research/jackson-hole-economic-symposium/) | [Seguir programa oficial](https://www.kansascityfed.org/research/jackson-hole-economic-symposium/) |
 
 ### Escenarios
 
@@ -213,67 +217,87 @@ Gasto creciente sin retorno visible, petróleo y tasas al alza, crédito más ca
 
 ### Crédito de grandes tecnológicas
 
-- **Estado:** Prima en aumento
+- **Categoría:** Tasas y crédito
+
+- **Estado:** En tensión
 - **Qué mira:** Diferenciales de crédito de los principales financiadores de infraestructura de IA frente al mercado general.
 - **Por qué importa:** El mercado de bonos puede endurecer la financiación antes de que la renta variable reconozca el coste.
 - **Lectura al publicar:** Las referencias institucionales muestran ampliación relativa durante la última parte de julio.
 - **Qué cambiaría:** Estabilización después de resultados apoyaría el escenario base; una nueva ampliación elevaría la alerta.
 - **Fecha:** 31 de julio de 2026
 - **Fuente:** J.P. Morgan, Goldman Sachs y lectura editorial del informe.
+- **Enlace:** [Seguir riesgo agregado](https://www.luiguiherrera.com/dashboard)
 
 ### Tasas largas y bancos
 
-- **Estado:** Coste de capital elevado
+- **Categoría:** Tasas y crédito
+
+- **Estado:** En tensión
 - **Qué mira:** Treasury a treinta años, tasas reales y reacción de bancos a mayores rendimientos.
 - **Por qué importa:** Si tasas altas dejan de favorecer a bancos y empiezan a debilitarlos, aumenta el riesgo de desapalancamiento.
 - **Lectura al publicar:** Los rendimientos largos siguen siendo una restricción más importante para valoraciones y financiación.
 - **Qué cambiaría:** Una caída sostenida aliviaría presión; nuevos máximos con bancos débiles deteriorarían la tesis.
 - **Fecha:** 31 de julio de 2026
 - **Fuente:** BofA, datos de mercado y lectura editorial del informe.
+- **Enlace:** [Seguir tasas reales del Treasury](https://home.treasury.gov/resource-center/data-chart-center/interest-rates/TextView?type=daily_treasury_real_yield_curve&field_tdr_date_value=2026)
 
 ### Correlación y amplitud
 
-- **Estado:** Amortiguador frágil
+- **Categoría:** Estructura de mercado
+
+- **Estado:** En observación
 - **Qué mira:** Correlación realizada e implícita y porcentaje de acciones sobre medias de 20, 50 y 200 días.
 - **Por qué importa:** La baja correlación permite que el índice absorba movimientos opuestos entre compañías.
 - **Lectura al publicar:** La correlación permanece excepcionalmente baja mientras la amplitud corta se deteriora.
 - **Qué cambiaría:** Correlación, VIX y deterioro de amplitud subiendo juntos trasladarían el daño al índice.
 - **Fecha:** 31 de julio de 2026
 - **Fuente:** Goldman Sachs, datos de amplitud y lectura editorial del informe.
+- **Enlace:** [Seguir niveles del S&P 500](https://www.luiguiherrera.com/niveles-estadisticos?asset=SPY)
 
 ### VIX y flujos sistemáticos
 
-- **Estado:** Riesgo de aceleración
+- **Categoría:** Estructura de mercado
+
+- **Estado:** En tensión
 - **Qué mira:** VIX, convexidad de opciones, niveles CTA y estrategias de control de volatilidad.
 - **Por qué importa:** Una ruptura puede transformar una rotación de factores en oferta mecánica de índices.
 - **Lectura al publicar:** La demanda de protección aumentó y varios niveles de corto plazo ya fueron probados.
 - **Qué cambiaría:** Normalización de coberturas y estabilización alejarían el riesgo; nuevas rupturas lo aumentarían.
 - **Fecha:** 31 de julio de 2026
 - **Fuente:** Goldman Sachs, Nomura y lectura editorial del informe.
+- **Enlace:** [Seguir VIX y régimen](https://www.luiguiherrera.com/dashboard)
 
 ### Retorno del gasto en IA
 
-- **Estado:** Prueba abierta
+- **Categoría:** Tecnología e IA
+
+- **Estado:** Por confirmar
 - **Qué mira:** Ingresos, márgenes, flujo de caja, CapEx y guía de grandes tecnológicas y proveedores.
 - **Por qué importa:** La productividad operativa solo crea valor financiero si se convierte en crecimiento o caja defendible.
 - **Lectura al publicar:** La demanda existe, pero el retorno agregado todavía no está demostrado.
 - **Qué cambiaría:** Mejor conversión de inversión en ingresos y caja apoyaría la tesis; costes crecientes sin retorno la deteriorarían.
 - **Fecha:** 31 de julio de 2026
 - **Fuente:** Resultados empresariales, Goldman Sachs y J.P. Morgan.
+- **Enlace:** Seguimiento institucional no disponible públicamente.
 
 ### Litografía china
 
-- **Estado:** Riesgo no probado a escala
+- **Categoría:** Tecnología e IA
+
+- **Estado:** Por confirmar
 - **Qué mira:** Producción verificable, rendimiento industrial, comercialización y capacidad EUV.
 - **Por qué importa:** La evidencia industrial decide si el shock fue de percepción o un cambio estructural más rápido.
 - **Lectura al publicar:** La escala descrita sigue siendo pequeña y la sustitución comercial de ASML no está demostrada.
 - **Qué cambiaría:** Envíos verificables, rendimiento sostenido o progreso EUV elevarían el riesgo estructural.
 - **Fecha:** 31 de julio de 2026
 - **Fuente:** Goldman Sachs Asia Equity Strategy y J.P. Morgan Market Intelligence.
+- **Enlace:** Seguimiento institucional no disponible públicamente.
 
 ### Fed, petróleo e inflación
 
-- **Estado:** Cadena condicional
+- **Categoría:** Tasas y crédito
+
+- **Estado:** En observación
 - **Qué mira:** Petróleo, inflación esperada, volatilidad de tasas y comunicación de la Fed.
 - **Por qué importa:** Energía puede endurecer tasas y coste de capital incluso sin una subida inmediata de la Fed.
 - **Lectura al publicar:** La Fed mantuvo 3,50 %–3,75 % el 29 de julio; tres miembros prefirieron subir 25 puntos básicos.
@@ -284,7 +308,9 @@ Gasto creciente sin retorno visible, petróleo y tasas al alza, crédito más ca
 
 ### USD/COP
 
-- **Estado:** Fortaleza local, causalidad abierta
+- **Categoría:** Divisas y materias primas
+
+- **Estado:** En observación
 - **Qué mira:** TRM, DXY, Brent, tasa local, TES, prima soberana y flujos de capital.
 - **Por qué importa:** El peso puede separarse del dólar global durante ventanas en las que dominan factores colombianos.
 - **Lectura al publicar:** La TRM certificada fue 3.144,14 COP para la vigencia del 1 al 3 de agosto.
@@ -295,23 +321,29 @@ Gasto creciente sin retorno visible, petróleo y tasas al alza, crédito más ca
 
 ### Concentración y apalancamiento en Corea
 
-- **Estado:** Desapalancamiento iniciado
+- **Categoría:** Tecnología e IA
+
+- **Estado:** En tensión
 - **Qué mira:** Peso de grandes fabricantes, vehículos apalancados, rebalanceos y flujos extranjeros y locales.
 - **Por qué importa:** Una buena tesis de beneficios puede sufrir movimientos extremos si la estructura de posiciones es frágil.
 - **Lectura al publicar:** Los beneficios se concentran mientras los vehículos apalancados amplificaron el ajuste.
 - **Qué cambiaría:** Menor peso de rebalanceos y liderazgo más amplio estabilizarían; nuevas ventas forzadas prolongarían la corrección.
 - **Fecha:** 31 de julio de 2026
 - **Fuente:** Goldman Sachs Asia Equity Strategy.
+- **Enlace:** Seguimiento institucional no disponible públicamente.
 
 ### Reacción T+3 a T+5
 
-- **Estado:** Ventana de confirmación
+- **Categoría:** Tecnología e IA
+
+- **Estado:** Por confirmar
 - **Qué mira:** Persistencia de la reacción después de resultados y diferencia frente al movimiento implícito previo.
 - **Por qué importa:** El primer día puede reflejar coberturas y posicionamiento; la digestión posterior aporta una señal más limpia.
 - **Lectura al publicar:** La primera semana de agosto concentra pruebas confirmadas en ANET, DUOL y NET.
 - **Qué cambiaría:** Reacciones persistentes y mejores guías ampliarían liderazgo; rebotes que se reviertan señalarían fragilidad.
 - **Fecha:** 1 de agosto de 2026
 - **Fuente:** Relaciones con inversionistas de Arista Networks, Duolingo y Cloudflare.
+- **Enlace:** [Seguir resultados corporativos](https://investors.arista.com/)
 
 ## Fuentes, limitaciones y aviso educativo
 

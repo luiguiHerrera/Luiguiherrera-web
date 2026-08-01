@@ -4,6 +4,7 @@ export type IcsEvent = {
   description: string;
   startDate: string;
   endDate?: string;
+  startDateTimeUtc?: string;
 };
 
 export type IcsCalendar = {
@@ -23,6 +24,10 @@ function formatDate(value: string) {
   return value.replaceAll("-", "");
 }
 
+function formatUtcDateTime(value: string) {
+  return value.replace(/[-:]/g, "").replace(".000", "");
+}
+
 function addOneDay(value: string) {
   const [year, month, day] = value.split("-").map(Number);
   const date = new Date(Date.UTC(year, month - 1, day + 1));
@@ -31,12 +36,20 @@ function addOneDay(value: string) {
 
 function foldLine(line: string) {
   const chunks: string[] = [];
-  let remaining = line;
-  while (remaining.length > 75) {
-    chunks.push(remaining.slice(0, 75));
-    remaining = ` ${remaining.slice(75)}`;
+  let current = "";
+  let currentBytes = 0;
+  for (const character of line) {
+    const bytes = new TextEncoder().encode(character).length;
+    if (currentBytes + bytes > 75) {
+      chunks.push(current);
+      current = ` ${character}`;
+      currentBytes = 1 + bytes;
+    } else {
+      current += character;
+      currentBytes += bytes;
+    }
   }
-  chunks.push(remaining);
+  chunks.push(current);
   return chunks.join("\r\n");
 }
 
@@ -51,13 +64,17 @@ export function buildIcsCalendar(calendar: IcsCalendar) {
   ];
 
   calendar.events.forEach((event) => {
-    const endDate = addOneDay(event.endDate ?? event.startDate);
+    const timingLines = event.startDateTimeUtc
+      ? [`DTSTART:${formatUtcDateTime(event.startDateTimeUtc)}`]
+      : [
+          `DTSTART;VALUE=DATE:${formatDate(event.startDate)}`,
+          `DTEND;VALUE=DATE:${formatDate(addOneDay(event.endDate ?? event.startDate))}`,
+        ];
     lines.push(
       "BEGIN:VEVENT",
       `UID:${escapeIcsText(event.uid)}`,
       `DTSTAMP:${formatDate(new Date().toISOString().slice(0, 10))}T000000Z`,
-      `DTSTART;VALUE=DATE:${formatDate(event.startDate)}`,
-      `DTEND;VALUE=DATE:${formatDate(endDate)}`,
+      ...timingLines,
       `SUMMARY:${escapeIcsText(event.summary)}`,
       `DESCRIPTION:${escapeIcsText(event.description)}`,
       "END:VEVENT",
