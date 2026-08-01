@@ -73,7 +73,7 @@ import {
   parseLocalizedMoney,
 } from "@/lib/personal-finance/budget/validation";
 
-type Step = 1 | 2 | 3 | 4;
+type BudgetWizardStep = 1 | 2 | 3 | 4 | 5;
 
 const emptyMoneyDraft = (): MoneyDraft => ({
   error: null,
@@ -163,7 +163,7 @@ export function BudgetWizard({ locale }: { locale: BudgetLocale }) {
   const [smallDrafts, setSmallDrafts] = useState<SmallExpenseDraft[]>([]);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [result, setResult] = useState<BudgetResult | null>(null);
-  const [step, setStep] = useState<Step>(1);
+  const [step, setStep] = useState<BudgetWizardStep>(1);
   const [liveMessage, setLiveMessage] = useState("");
   const [targetAllocation, setTargetAllocation] = useState<TargetAllocation>({
     ...emptyTargetAllocation,
@@ -203,7 +203,11 @@ export function BudgetWizard({ locale }: { locale: BudgetLocale }) {
       ? labels.step1Label
       : step === 2
         ? labels.step2Label
-        : step === 3 ? labels.step3Label : labels.step4Label;
+        : step === 3
+          ? labels.step3Label
+          : step === 4
+            ? labels.step4Label
+            : labels.step5Label;
     setLiveMessage(`${labels.step} ${step}: ${stepLabel}`);
   }, [labels, step]);
 
@@ -539,6 +543,7 @@ export function BudgetWizard({ locale }: { locale: BudgetLocale }) {
     labels.step2Label,
     labels.step3Label,
     labels.step4Label,
+    labels.step5Label,
   ];
   const currentInput: CurrentAllocationInput | null = result ? {
     debtPaymentsMinor: mainDrafts.debtPayments.minorUnits,
@@ -636,19 +641,22 @@ export function BudgetWizard({ locale }: { locale: BudgetLocale }) {
   function showTargetMode(mode: BudgetTargetMode) {
     setResetConfirmationOpen(false);
     setTargetMode(mode);
-    focusElement("budget-step-4-heading");
+    if (step === 4) {
+      focusElement("budget-step-4-heading");
+    } else {
+      setStep(4);
+    }
   }
 
   function showProjection() {
     setResetConfirmationOpen(false);
-    setTargetMode("projection");
-    focusElement("budget-step-4-heading");
+    setStep(5);
   }
 
   function returnToReview() {
     setResetConfirmationOpen(false);
     setTargetMode("review");
-    focusElement("budget-review-projection-trigger");
+    setStep(4);
   }
 
   function requestTargetReset(event?: ReactMouseEvent<HTMLButtonElement>) {
@@ -703,9 +711,32 @@ export function BudgetWizard({ locale }: { locale: BudgetLocale }) {
       <p className="text-sm font-semibold text-petrol">{labels.noDataSaved}</p>
       <p className="mt-2 max-w-4xl text-sm leading-6 text-muted">{labels.privacyLong}</p>
 
-      <ol aria-label={locale === "es" ? "Progreso del presupuesto" : "Budget progress"} className="mt-6 grid gap-2 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="mt-6 sm:hidden">
+        <ol aria-label={locale === "es" ? "Progreso del presupuesto" : "Budget progress"} className="grid grid-cols-5 gap-1.5">
+          {stepLabels.map((label, index) => {
+            const number = (index + 1) as BudgetWizardStep;
+            return (
+              <li
+                aria-current={step === number ? "step" : undefined}
+                className={`min-w-0 border-t-4 px-1 pt-2 text-center text-xs font-semibold ${step === number ? "border-petrol text-petrol" : "border-line text-muted"}`}
+                key={label}
+              >
+                <span aria-hidden="true">{number}</span>
+                <span className="sr-only">{labels.step} {number}: {label}</span>
+              </li>
+            );
+          })}
+        </ol>
+        <p className="mt-3 text-sm font-semibold text-ink">
+          <span className="text-petrol">{labels.step} {step}</span>
+          <span aria-hidden="true"> · </span>
+          {stepLabels[step - 1]}
+        </p>
+      </div>
+
+      <ol aria-label={locale === "es" ? "Progreso del presupuesto" : "Budget progress"} className="mt-6 hidden gap-2 sm:grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5">
         {stepLabels.map((label, index) => {
-          const number = (index + 1) as Step;
+          const number = (index + 1) as BudgetWizardStep;
           return (
             <li
               aria-current={step === number ? "step" : undefined}
@@ -819,7 +850,7 @@ export function BudgetWizard({ locale }: { locale: BudgetLocale }) {
         <div className="mt-6">
           <p className="text-xs font-semibold uppercase tracking-[0.18em] text-petrol">04</p>
           <h2 className="mt-2 text-2xl font-semibold leading-tight text-ink" id="budget-step-4-heading" tabIndex={-1}>
-            {targetMode === "projection" ? projectionLabels.title : targetLabels.reviewTitle}
+            {targetLabels.reviewTitle}
           </h2>
           {targetInitializationError || !targetSnapshot ? (
             <p className="mt-6 border border-red-700/40 bg-red-50 p-4 text-sm leading-6 text-red-900" role="alert">
@@ -828,19 +859,7 @@ export function BudgetWizard({ locale }: { locale: BudgetLocale }) {
                 : "The allocation cannot be calculated within the safe range.")}
             </p>
           ) : (
-            targetMode === "projection" && projectionScenarios ? (
-              <div className="mt-6 min-w-0">
-                <BudgetProjection
-                  currency={currency}
-                  locale={locale}
-                  onAdjust={() => showTargetMode("edit")}
-                  onBackToReview={returnToReview}
-                  scenarios={projectionScenarios}
-                  serGivingAmounts={targetSnapshot.serGivingAmounts}
-                />
-              </div>
-            ) : (
-              <div className="mt-6 grid min-w-0 gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(15rem,19rem)]">
+            <div className="mt-6 grid min-w-0 gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(15rem,19rem)]">
                 <BudgetTargetSummary
                   currency={currency}
                   locale={locale}
@@ -951,8 +970,26 @@ export function BudgetWizard({ locale }: { locale: BudgetLocale }) {
                   </dialog>
                 </div>
               </div>
-            )
           )}
+        </div>
+      ) : null}
+
+      {step === 5 && result && projectionScenarios && targetSnapshot ? (
+        <div className="mt-6 min-w-0">
+          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-petrol">05</p>
+          <h2 className="mt-2 text-2xl font-semibold leading-tight text-ink" id="budget-step-5-heading" tabIndex={-1}>
+            {projectionLabels.title}
+          </h2>
+          <div className="mt-6 min-w-0">
+            <BudgetProjection
+              currency={currency}
+              locale={locale}
+              onAdjust={() => showTargetMode("edit")}
+              onBackToReview={returnToReview}
+              scenarios={projectionScenarios}
+              serGivingAmounts={targetSnapshot.serGivingAmounts}
+            />
+          </div>
         </div>
       ) : null}
     </section>
