@@ -577,7 +577,7 @@ function basisPointsFromBigIntAmount(
   ));
 }
 
-function reconcileAllocationAmountsBigInt(
+export function reconcileAllocationAmountsBigInt(
   incomeMinor: bigint,
   allocation: TargetAllocation,
 ): ExactCalculation<BudgetTargetAmounts> {
