@@ -21,17 +21,28 @@ import {
   type MoneyDraft,
 } from "@/components/budget/BudgetIncomeStep";
 import { BudgetCurrentClassification } from "@/components/budget/BudgetCurrentClassification";
+import {
+  BudgetProjection,
+  type BudgetProjectionScenarios,
+} from "@/components/budget/BudgetProjection";
 import { BudgetResults, budgetHighlight } from "@/components/budget/BudgetResults";
 import { BudgetTargetReview } from "@/components/budget/BudgetTargetReview";
 import { BudgetTargetSummary } from "@/components/budget/BudgetTargetSummary";
 import { BudgetTargetStep } from "@/components/budget/BudgetTargetStep";
 import { budgetTargetCopy } from "@/components/budget/budget-target-copy";
+import { budgetProjectionCopy } from "@/components/budget/budget-projection-copy";
 import { budgetCopy } from "@/components/budget/budget-copy";
 import { calculateBudget } from "@/lib/personal-finance/budget/calculations";
 import type { BudgetResult } from "@/lib/personal-finance/budget/result-model";
 import {
+  buildCurrentBudgetProjectionScenario,
+  buildEducational5010BudgetProjectionScenario,
+  buildTargetBudgetProjectionScenario,
+} from "@/lib/personal-finance/budget/projection-calculations";
+import {
   buildBudgetTargetSnapshot,
   calculateEmergencyFundProjection,
+  classifyCurrentAllocation,
   cloneBudgetTargetBaseline,
   deriveStartingTargetAllocation,
   rescaleMinorUnitsExact,
@@ -142,6 +153,7 @@ function focusElement(id: string) {
 export function BudgetWizard({ locale }: { locale: BudgetLocale }) {
   const labels = budgetCopy[locale];
   const targetLabels = budgetTargetCopy[locale];
+  const projectionLabels = budgetProjectionCopy[locale];
   const initialCurrency: BudgetCurrency = locale === "es" ? "EUR" : "USD";
   const [currency, setCurrency] = useState<BudgetCurrency>(initialCurrency);
   const [priority, setPriority] = useState<BudgetPriority>("understand");
@@ -555,6 +567,22 @@ export function BudgetWizard({ locale }: { locale: BudgetLocale }) {
   const targetSnapshot = targetSnapshotResult?.status === "ok"
     ? targetSnapshotResult.value
     : null;
+  const projectionScenarios: BudgetProjectionScenarios | null = result
+    && currentInput
+    && targetSnapshot
+    ? {
+        current: buildCurrentBudgetProjectionScenario({
+          allocation: classifyCurrentAllocation(currentInput, currentClassification),
+          currency,
+          result,
+        }),
+        educational5010: buildEducational5010BudgetProjectionScenario(
+          targetSnapshot.incomeMinor,
+          currency,
+        ),
+        target: buildTargetBudgetProjectionScenario(targetSnapshot, currency),
+      }
+    : null;
 
   function openTargetAllocation() {
     if (
@@ -609,6 +637,18 @@ export function BudgetWizard({ locale }: { locale: BudgetLocale }) {
     setResetConfirmationOpen(false);
     setTargetMode(mode);
     focusElement("budget-step-4-heading");
+  }
+
+  function showProjection() {
+    setResetConfirmationOpen(false);
+    setTargetMode("projection");
+    focusElement("budget-step-4-heading");
+  }
+
+  function returnToReview() {
+    setResetConfirmationOpen(false);
+    setTargetMode("review");
+    focusElement("budget-review-projection-trigger");
   }
 
   function requestTargetReset(event?: ReactMouseEvent<HTMLButtonElement>) {
@@ -778,7 +818,9 @@ export function BudgetWizard({ locale }: { locale: BudgetLocale }) {
       {step === 4 && result && currentInput ? (
         <div className="mt-6">
           <p className="text-xs font-semibold uppercase tracking-[0.18em] text-petrol">04</p>
-          <h2 className="mt-2 text-2xl font-semibold leading-tight text-ink" id="budget-step-4-heading" tabIndex={-1}>{targetLabels.reviewTitle}</h2>
+          <h2 className="mt-2 text-2xl font-semibold leading-tight text-ink" id="budget-step-4-heading" tabIndex={-1}>
+            {targetMode === "projection" ? projectionLabels.title : targetLabels.reviewTitle}
+          </h2>
           {targetInitializationError || !targetSnapshot ? (
             <p className="mt-6 border border-red-700/40 bg-red-50 p-4 text-sm leading-6 text-red-900" role="alert">
               {targetInitializationError ?? (locale === "es"
@@ -786,17 +828,29 @@ export function BudgetWizard({ locale }: { locale: BudgetLocale }) {
                 : "The allocation cannot be calculated within the safe range.")}
             </p>
           ) : (
-            <div className="mt-6 grid min-w-0 gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(15rem,19rem)]">
-              <BudgetTargetSummary
-                currency={currency}
-                locale={locale}
-                mode={targetMode}
-                onReview={() => showTargetMode("review")}
-                reviewDisabled={Object.values(targetInvalidControls).some(Boolean)}
-                showReviewAction={targetMode === "edit"}
-                snapshot={targetSnapshot}
-              />
-              <div className="min-w-0 lg:col-start-1 lg:row-start-1">
+            targetMode === "projection" && projectionScenarios ? (
+              <div className="mt-6 min-w-0">
+                <BudgetProjection
+                  currency={currency}
+                  locale={locale}
+                  onAdjust={() => showTargetMode("edit")}
+                  onBackToReview={returnToReview}
+                  scenarios={projectionScenarios}
+                  serGivingAmounts={targetSnapshot.serGivingAmounts}
+                />
+              </div>
+            ) : (
+              <div className="mt-6 grid min-w-0 gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(15rem,19rem)]">
+                <BudgetTargetSummary
+                  currency={currency}
+                  locale={locale}
+                  mode={targetMode}
+                  onReview={() => showTargetMode("review")}
+                  reviewDisabled={Object.values(targetInvalidControls).some(Boolean)}
+                  showReviewAction={targetMode === "edit"}
+                  snapshot={targetSnapshot}
+                />
+                <div className="min-w-0 lg:col-start-1 lg:row-start-1">
                 {targetMode === "edit" ? (
                   <>
                     <BudgetTargetStep
@@ -850,11 +904,12 @@ export function BudgetWizard({ locale }: { locale: BudgetLocale }) {
                     currency={currency}
                     locale={locale}
                     onAdjust={() => showTargetMode("edit")}
+                    onExplore={showProjection}
                     onReset={requestTargetReset}
                     snapshot={targetSnapshot}
                   />
                 )}
-                <dialog
+                  <dialog
                   aria-describedby="budget-target-reset-confirmation-description"
                   aria-labelledby="budget-target-reset-confirmation-title"
                   className="m-auto w-[calc(100%-2rem)] max-w-lg rounded-[6px] border border-brass bg-white p-5 text-ink shadow-[0_18px_60px_rgba(11,52,54,0.28)] backdrop:bg-ink/55 md:p-6"
@@ -893,9 +948,10 @@ export function BudgetWizard({ locale }: { locale: BudgetLocale }) {
                       {targetLabels.confirmReset}
                     </button>
                   </div>
-                </dialog>
+                  </dialog>
+                </div>
               </div>
-            </div>
+            )
           )}
         </div>
       ) : null}

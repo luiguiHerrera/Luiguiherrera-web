@@ -308,3 +308,10 @@ test("EUR, USD, and JPY format exact bigint minor units", () => {
   assert.match(formatTargetMoney(BigInt(123_456), "en", "USD"), /1,234\.56|1234\.56/);
   assert.doesNotMatch(formatTargetMoney(BigInt(123_456), "en", "JPY"), /\.\d{2}/);
 });
+
+test("money formatting preserves signed bigint values beyond the safe integer range", () => {
+  const amountMinor = BigInt(Number.MAX_SAFE_INTEGER) + BigInt(123);
+  const formatted = formatTargetMoney(-amountMinor, "en", "USD");
+  assert.match(formatted, /^-/);
+  assert.match(formatted, /90,071,992,547,411\.14/);
+});
