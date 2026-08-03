@@ -53,13 +53,13 @@ export function HistoricalAutomaticMarketReadings({ snapshot }: { snapshot: Hist
       <div className="grid gap-5 lg:grid-cols-[0.34fr_1fr]">
         <div>
           <p className="text-xs font-semibold uppercase text-petrol">
-            Lecturas automáticas al cierre del informe
+            Lecturas de mercado al cierre
           </p>
           <h2 className="mt-2 text-2xl font-semibold leading-tight text-ink md:text-3xl">
             Régimen, sectores, volatilidad y flujos
           </h2>
           <p className="mt-4 text-sm leading-6 text-muted">
-            Datos con corte a{" "}
+            Datos disponibles hasta{" "}
             <time dateTime={snapshot.dataDate}>{formatEditorialDate(snapshot.dataDate, "es")}</time>.
           </p>
         </div>
@@ -73,11 +73,11 @@ export function HistoricalAutomaticMarketReadings({ snapshot }: { snapshot: Hist
               </div>
               <div className="grid gap-2 sm:grid-cols-2">
                 <Metric
-                  label="Datos con corte a"
+                  label="Datos disponibles hasta"
                   value={<time dateTime={snapshot.dataDate}>{formatEditorialDate(snapshot.dataDate, "es")}</time>}
                 />
-                <Metric label="Score" value={snapshot.regime.score === null ? "No disponible al cierre" : `${snapshot.regime.score}/100`} emphasis />
-                <Metric label="Confianza" value={snapshot.regime.confidence === null ? "No disponible al cierre" : `${snapshot.regime.confidence}%`} emphasis />
+                <Metric label="Puntuación" value={snapshot.regime.score === null ? "No publicada" : `${snapshot.regime.score}/100`} emphasis />
+                <Metric label="Confianza" value={snapshot.regime.confidence === null ? "No publicada" : `${snapshot.regime.confidence}%`} emphasis />
                 <Metric label="Sesgo" value={snapshot.regime.bias} />
               </div>
             </div>
@@ -230,9 +230,9 @@ export function HistoricalAutomaticMarketReadings({ snapshot }: { snapshot: Hist
             </ReportSection>
           </div>
 
-          <ReportSection eyebrow="Activos" title="Lecturas automáticas al corte">
+          <ReportSection eyebrow="Activos" title="Posición técnica por activo">
             <p className="mb-4 text-sm leading-6 text-muted">
-              Datos técnicos conservados tal como se mostraron al cierre del informe.
+              Percentil, z-score, distancia frente a la media de largo plazo y último cierre disponible.
             </p>
             <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-3">
               {snapshot.statisticalAssets.map((asset) => (

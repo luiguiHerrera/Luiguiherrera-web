@@ -60,7 +60,9 @@ export type ReportExportSection =
     }
   | {
       id: "historical-snapshot";
-      title: "Lecturas automáticas al cierre del informe";
+      title:
+        | "Lecturas automáticas al cierre del informe"
+        | "Lecturas de mercado al cierre";
       kind: "historical-snapshot";
       snapshot: HistoricalAutomaticReadingsSnapshot;
     }
@@ -183,6 +185,20 @@ function structuredEvents(report: MarketReport, canonicalUrl: string): ReportExp
     });
 }
 
+function historicalSnapshotTitle(
+  report: MarketReport,
+): Extract<
+  ReportExportSection,
+  { kind: "historical-snapshot" }
+>["title"] {
+  // Compatibilidad con el artefacto archivado publicado en julio.
+  if (report.id === "segundo-informe-julio-2026") {
+    return "Lecturas automáticas al cierre del informe";
+  }
+
+  return "Lecturas de mercado al cierre";
+}
+
 function reportSections(
   report: MarketReport,
   snapshot: HistoricalAutomaticReadingsSnapshot | null,
@@ -213,7 +229,7 @@ function reportSections(
   if (snapshot) {
     sections.push({
       id: "historical-snapshot",
-      title: "Lecturas automáticas al cierre del informe",
+      title: historicalSnapshotTitle(report),
       kind: "historical-snapshot",
       snapshot,
     });

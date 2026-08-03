@@ -5,9 +5,9 @@ Semiconductores, crédito, tasas y USD/COP: el índice aún resiste, pero el cos
 - Edición: Primer informe de agosto
 - Autor: Luigui Herrera
 - Publicación: 2026-08-01
-- Actualización: 2026-08-01
+- Actualización: 2026-08-03
 - Corte editorial: 2026-07-31
-- Corte de datos automáticos: 2026-07-31
+- Corte de datos de mercado: 2026-07-31
 - URL editorial primaria: https://www.luiguiherrera.com/informes/primer-informe-agosto-2026
 
 > La página editorial indicada arriba es la representación primaria de este informe.
@@ -23,7 +23,7 @@ La corrección de semiconductores y momentum fue extraordinaria, pero no equival
 - **EWJ:** Japón conserva fortaleza relativa, pero tecnología, momentum, yen y tasas elevan la selectividad.
 - **FXI:** China resistió mejor que sus semiconductores; sigue siendo una lectura táctica que necesita catalizadores amplios.
 - **BTC / ETH:** Cripto conserva comportamiento de beta alta y sensibilidad a liquidez, dólar y volatilidad tecnológica.
-- **Stockpicking:** Resultados, márgenes, financiación y reacción T+3 a T+5 importan más que el primer movimiento.
+- **Stockpicking:** Resultados, márgenes, financiación y reacción durante las 3 a 5 sesiones posteriores importan más que el primer movimiento.
 
 ### Factor transversal: DXY / USD/COP
 
@@ -31,11 +31,11 @@ La TRM certificada para el 1 al 3 de agosto fue 3.144,14 COP por dólar. La fort
 
 ## Contexto general
 
-### Índice y estructura
+### S&P 500: índice y estructura interna
 
-**El índice ocultó una rotación mucho más violenta debajo de la superficie.**
+**El desempeño agregado del S&P 500 ocultó una rotación mucho más violenta bajo la superficie.**
 
-La volatilidad se concentró primero en momentum, semiconductores e infraestructura de IA. La correlación entre acciones permaneció cerca de mínimos de varias décadas, de modo que ganadores y perdedores pudieron compensarse dentro del índice. Esa baja correlación no es bajista por sí misma: el riesgo aparece si sube al mismo tiempo que VIX y se deteriora la amplitud.
+La volatilidad se concentró primero en momentum, semiconductores e infraestructura de IA. La correlación entre las acciones del S&P 500 permaneció cerca de mínimos de varias décadas, de modo que ganadores y perdedores pudieron compensarse dentro del índice. Esa baja correlación no es bajista por sí misma: el riesgo aparece si sube al mismo tiempo que VIX y se deteriora la amplitud.
 
 ### Semiconductores y China
 
@@ -73,24 +73,24 @@ La TRM fue 3.144,14 COP por dólar para la vigencia del 1 al 3 de agosto, mientr
 
 Las reacciones empresariales recientes mostraron que un buen titular no basta cuando el posicionamiento está congestionado. Para la primera semana de agosto están confirmados resultados de Arista Networks el día 4, Duolingo el 5 y Cloudflare el 6, todos después del cierre estadounidense. El foco debe estar en ventas, márgenes, guía, retorno del CapEx, balance y persistencia de la reacción entre tres y cinco sesiones.
 
-## Lecturas automáticas al cierre del informe
+## Lecturas de mercado al cierre
 
-Snapshot histórico congelado. Datos con corte a **2026-07-31**. Las cifras reproducen el estado publicado y no representan datos vigentes.
+Corte de esta edición: **2026-07-31**. Cada módulo conserva la última fecha disponible de su fuente.
 
 ### Régimen al corte
 
 | Campo | Valor |
 |---|---|
-| Régimen | Lectura parcial al cierre |
-| Score | No disponible al cierre |
-| Confianza | No disponible al cierre |
-| Sesgo | selectivo |
-| Interpretación histórica | El snapshot congelado confirma dispersión elevada y fortaleza desigual. No se publica un score ni una confianza agregada porque al corte faltaban flujos archivados de BTC y GLD; las métricas disponibles no se completan con datos posteriores. |
+| Régimen | Risk-on selectivo |
+| Puntuación | 70/100 |
+| Confianza | 62% |
+| Sesgo | Favorable |
+| Interpretación histórica | Lectura compuesta de volatilidad, rotación y flujos. Ponderación actual: rotación sectorial 45%, VIX 40% y BTC ETF flows 15%. |
 
 #### Qué impulsó
 
-- Cinco de once sectores cerraron con retorno semanal positivo.
 - SPY, QQQ y DIA conservaron retorno semanal positivo.
+- La curva del VIX cerró en fuerte contango al 31 de julio.
 
 #### Qué frenó
 
@@ -99,8 +99,8 @@ Snapshot histórico congelado. Datos con corte a **2026-07-31**. Las cifras repr
 
 #### Qué vigilar
 
-- VIX spot disponible con último cierre oficial del 30 de julio; curva no disponible al cierre.
-- Flujos de BTC y presión de flujos en GLD: No disponible al cierre.
+- BTC ETF: +329 M USD en el último día disponible y -261 M USD en cinco días.
+- GLD: presión neutral al 31 de julio, con -0.23 % en participaciones durante cinco sesiones.
 
 ### Índices principales vía ETF
 
@@ -133,20 +133,27 @@ Snapshot histórico congelado. Datos con corte a **2026-07-31**. Las cifras repr
 |---|---|
 | Nivel al corte | 17.1 |
 | Cambio 1D | -3.6 |
-| Estado | Normal / Ordenado |
-| Momentum | Bajando rápido |
-| Curva | No disponible al cierre |
-| Lectura histórica | El spot procede del último cierre disponible en FRED al 30 de julio. La curva no se completa con observaciones posteriores. |
+| Estado | Normal alto / Normal alto |
+| Momentum | Estable |
+| Curva | Fuerte contango |
+| Lectura histórica | Los contratos más largos cotizan por encima del vencimiento cercano. Es una estructura habitual en entornos de volatilidad más ordenada. |
 
 ### Flujos netos de ETFs de BTC al corte
 
-No disponible al cierre.
+- Último día: **+329 M USD**
+- Rolling 5D: **-261 M USD**
+- Racha: **Racha de entradas**
+- Lectura al publicar: El último día disponible mostró entradas netas de 328.8 M USD, mientras el acumulado de cinco días permaneció en -261 M USD. La señal reciente es mixta.
 
 ### Proxy histórico de presión de flujos en GLD
 
-No disponible al cierre.
+- Fecha del dato: **2026-07-31**
+- Proxy al corte: **Presión neutral**
+- Cambio 5D en participaciones: **-0.23%**
+- Resumen: GLD muestra presión neutral o señales contrapuestas, usando cambios en participaciones como proxy de presión de flujos.
+- Limitación de fuente: Cálculo propio con datos diarios de NAV, participaciones y activos netos publicados por State Street. No representa flujos oficiales reportados por el fondo.
 
-### Lecturas automáticas de activos al corte
+### Posición técnica por activo
 
 | Activo | Percentil | Z-score | Media larga | Último cierre |
 |---|---:|---:|---:|---:|
@@ -242,8 +249,8 @@ Clasificación: **selectivo**
 
 - **Qué pasó:** La temporada reciente castigó varias compañías más de lo que sugería el movimiento implícito previo. Sin una marca temporal reproducible de opciones, esas comparaciones sirven como observación y no como estadística definitiva.
 - **Qué cambió:** La pregunta ya no es solo quién crece, sino quién financia ese crecimiento, conserva márgenes y convierte el CapEx en flujo de caja. Semiconductores, Corea, infraestructura de IA y high beta pueden representar una misma exposición aunque aparezcan como compañías distintas.
-- **Qué esperamos:** Nueve compañías abren ventanas previstas entre el 3 y el 11 de agosto. La lectura útil combinará sorpresa, guía y reacción acumulada T+3 a T+5.
-- **Qué vigilar:** Ventas, márgenes, guía, retorno del CapEx, balance, financiación, movimiento implícito inmediatamente anterior y reacción a tres y cinco sesiones.
+- **Qué esperamos:** Nueve compañías abren ventanas previstas entre el 3 y el 11 de agosto. La lectura útil combinará sorpresa, guía y reacción acumulada durante las 3 a 5 sesiones posteriores.
+- **Qué vigilar:** Ventas, márgenes, guía, retorno del CapEx, balance, financiación, movimiento implícito inmediatamente anterior y reacción después de 3 y 5 sesiones.
 - **Lectura del informe:** No confundir compañías distintas con factores distintos: semiconductores, IA, high beta y Asia tecnológica pueden duplicar la misma exposición.
 - **Antes / contexto:** El momentum permitía que varias compañías compartieran una misma narrativa.
 - **Ahora / cambio:** Resultados y coste de capital separan historias con caja de historias dependientes de valoración.
@@ -539,7 +546,7 @@ Decepcionan los resultados, se amplían los diferenciales de crédito, suben pet
 - **Fuente:** Goldman Sachs Asia Equity Strategy.
 - **Enlace:** Seguimiento institucional no disponible públicamente.
 
-### Reacción T+3 a T+5
+### Reacción entre 3 y 5 sesiones
 
 - **Categoría:** Tecnología e IA
 

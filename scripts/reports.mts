@@ -99,7 +99,7 @@ function renderMetadataHtml(model: ReportExportModel) {
     ["Publicación", model.publishedAt],
     ["Actualización", model.modifiedAt],
     ["Corte editorial", model.editorialCutoffAt ?? "No aplica"],
-    ["Corte de datos automáticos", model.automaticDataCutoffAt ?? "No aplica"],
+    ["Corte de datos de mercado", model.automaticDataCutoffAt ?? "No aplica"],
     ["URL editorial primaria", `<a href="${model.canonicalUrl}">${model.canonicalUrl}</a>`],
   ];
   return `<dl class="metadata">${rows
@@ -111,14 +111,14 @@ function renderHistoricalHtml(section: Extract<ReportExportSection, { kind: "his
   const snapshot = section.snapshot;
   const regime = snapshot.regime;
   return `
-    <p class="historical-note">Snapshot histórico congelado. Datos con corte a <strong>${snapshot.dataDate}</strong>. Las cifras reproducen el estado publicado y no representan datos vigentes.</p>
+    <p class="historical-note">Corte de esta edición: <strong>${snapshot.dataDate}</strong>. Cada módulo conserva la última fecha disponible de su fuente.</p>
     <h3>Régimen al corte</h3>
     ${htmlTable(
       ["Campo", "Valor"],
       [
         ["Régimen", regime.label],
-        ["Score", regime.score === null ? "No disponible al cierre" : `${regime.score}/100`],
-        ["Confianza", regime.confidence === null ? "No disponible al cierre" : `${regime.confidence}%`],
+        ["Puntuación", regime.score === null ? "No publicada" : `${regime.score}/100`],
+        ["Confianza", regime.confidence === null ? "No publicada" : `${regime.confidence}%`],
         ["Sesgo", regime.bias],
         ["Interpretación histórica", regime.interpretation],
       ],
@@ -198,7 +198,7 @@ function renderHistoricalHtml(section: Extract<ReportExportSection, { kind: "his
         ["Limitación de fuente", snapshot.gldFlowPressure.sourceNote],
       ],
     ) : "<p>No disponible al cierre.</p>"}
-    <h3>Lecturas automáticas de activos al corte</h3>
+    <h3>Posición técnica por activo</h3>
     ${htmlTable(
       ["Activo", "Percentil", "Z-score", "Media larga", "Último cierre"],
       snapshot.statisticalAssets.map((asset) => [
@@ -493,15 +493,15 @@ function renderHistoricalMarkdown(
   section: Extract<ReportExportSection, { kind: "historical-snapshot" }>,
 ) {
   const snapshot = section.snapshot;
-  return `Snapshot histórico congelado. Datos con corte a **${snapshot.dataDate}**. Las cifras reproducen el estado publicado y no representan datos vigentes.
+  return `Corte de esta edición: **${snapshot.dataDate}**. Cada módulo conserva la última fecha disponible de su fuente.
 
 ### Régimen al corte
 
 | Campo | Valor |
 |---|---|
 | Régimen | ${snapshot.regime.label} |
-| Score | ${snapshot.regime.score === null ? "No disponible al cierre" : `${snapshot.regime.score}/100`} |
-| Confianza | ${snapshot.regime.confidence === null ? "No disponible al cierre" : `${snapshot.regime.confidence}%`} |
+| Puntuación | ${snapshot.regime.score === null ? "No publicada" : `${snapshot.regime.score}/100`} |
+| Confianza | ${snapshot.regime.confidence === null ? "No publicada" : `${snapshot.regime.confidence}%`} |
 | Sesgo | ${snapshot.regime.bias} |
 | Interpretación histórica | ${snapshot.regime.interpretation} |
 
@@ -570,7 +570,7 @@ ${snapshot.gldFlowPressure ? `- Fecha del dato: **${snapshot.gldFlowPressure.asO
 - Resumen: ${snapshot.gldFlowPressure.summary}
 - Limitación de fuente: ${snapshot.gldFlowPressure.sourceNote}` : "No disponible al cierre."}
 
-### Lecturas automáticas de activos al corte
+### Posición técnica por activo
 
 | Activo | Percentil | Z-score | Media larga | Último cierre |
 |---|---:|---:|---:|---:|
@@ -688,7 +688,7 @@ function renderMarkdown(model: ReportExportModel) {
     `- Publicación: ${model.publishedAt}`,
     `- Actualización: ${model.modifiedAt}`,
     `- Corte editorial: ${model.editorialCutoffAt ?? "No aplica"}`,
-    `- Corte de datos automáticos: ${model.automaticDataCutoffAt ?? "No aplica"}`,
+    `- Corte de datos de mercado: ${model.automaticDataCutoffAt ?? "No aplica"}`,
     `- URL editorial primaria: ${model.canonicalUrl}`,
   ];
   return `# ${model.title}
@@ -1079,8 +1079,8 @@ function substantiveNeedles(section: ReportExportSection, model: ReportExportMod
       values.push(
         snapshot.dataDate,
         snapshot.regime.label,
-        snapshot.regime.score === null ? "No disponible al cierre" : `${snapshot.regime.score}/100`,
-        snapshot.regime.confidence === null ? "No disponible al cierre" : `${snapshot.regime.confidence}%`,
+        snapshot.regime.score === null ? "No publicada" : `${snapshot.regime.score}/100`,
+        snapshot.regime.confidence === null ? "No publicada" : `${snapshot.regime.confidence}%`,
         snapshot.regime.interpretation,
         ...snapshot.regime.support,
         ...snapshot.regime.caution,

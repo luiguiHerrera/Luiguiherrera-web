@@ -977,7 +977,7 @@ export const marketReports: MarketReport[] = [
     dateLabel: "Corte: 31 de julio de 2026 · Publicado: 1 de agosto de 2026",
     publishedLabel: "1 de agosto de 2026",
     publishedAt: "2026-08-01",
-    modifiedAt: "2026-08-01",
+    modifiedAt: "2026-08-03",
     editorialCutoffAt: "2026-07-31",
     automaticDataCutoffAt: "2026-07-31",
     summary:
@@ -1062,7 +1062,7 @@ export const marketReports: MarketReport[] = [
       },
       {
         title: "Stockpicking",
-        text: "Resultados, márgenes, financiación y reacción T+3 a T+5 importan más que el primer movimiento.",
+        text: "Resultados, márgenes, financiación y reacción durante las 3 a 5 sesiones posteriores importan más que el primer movimiento.",
       },
     ],
     transversalFactor: {
@@ -1073,10 +1073,10 @@ export const marketReports: MarketReport[] = [
     },
     whatHappened: [
       {
-        title: "Índice y estructura",
-        summary: "El índice ocultó una rotación mucho más violenta debajo de la superficie.",
+        title: "S&P 500: índice y estructura interna",
+        summary: "El desempeño agregado del S&P 500 ocultó una rotación mucho más violenta bajo la superficie.",
         body:
-          "La volatilidad se concentró primero en momentum, semiconductores e infraestructura de IA. La correlación entre acciones permaneció cerca de mínimos de varias décadas, de modo que ganadores y perdedores pudieron compensarse dentro del índice. Esa baja correlación no es bajista por sí misma: el riesgo aparece si sube al mismo tiempo que VIX y se deteriora la amplitud.",
+          "La volatilidad se concentró primero en momentum, semiconductores e infraestructura de IA. La correlación entre las acciones del S&P 500 permaneció cerca de mínimos de varias décadas, de modo que ganadores y perdedores pudieron compensarse dentro del índice. Esa baja correlación no es bajista por sí misma: el riesgo aparece si sube al mismo tiempo que VIX y se deteriora la amplitud.",
       },
       {
         title: "Semiconductores y China",
@@ -1226,9 +1226,9 @@ export const marketReports: MarketReport[] = [
         changed:
           "La pregunta ya no es solo quién crece, sino quién financia ese crecimiento, conserva márgenes y convierte el CapEx en flujo de caja. Semiconductores, Corea, infraestructura de IA y high beta pueden representar una misma exposición aunque aparezcan como compañías distintas.",
         expected:
-          "Nueve compañías abren ventanas previstas entre el 3 y el 11 de agosto. La lectura útil combinará sorpresa, guía y reacción acumulada T+3 a T+5.",
+          "Nueve compañías abren ventanas previstas entre el 3 y el 11 de agosto. La lectura útil combinará sorpresa, guía y reacción acumulada durante las 3 a 5 sesiones posteriores.",
         watch:
-          "Ventas, márgenes, guía, retorno del CapEx, balance, financiación, movimiento implícito inmediatamente anterior y reacción a tres y cinco sesiones.",
+          "Ventas, márgenes, guía, retorno del CapEx, balance, financiación, movimiento implícito inmediatamente anterior y reacción después de 3 y 5 sesiones.",
         reading:
           "No confundir compañías distintas con factores distintos: semiconductores, IA, high beta y Asia tecnológica pueden duplicar la misma exposición.",
         timeline: {
@@ -1570,7 +1570,7 @@ export const marketReports: MarketReport[] = [
       },
       {
         key: "earnings-persistence",
-        name: "Reacción T+3 a T+5",
+        name: "Reacción entre 3 y 5 sesiones",
         category: "technology-ai",
         status: "tba",
         statusLabel: "Por confirmar",

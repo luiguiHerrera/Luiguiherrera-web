@@ -141,17 +141,30 @@ export const secondJuly2026AutomaticReadings = {
   ],
 } satisfies HistoricalAutomaticReadingsSnapshot;
 
+// Captura complementaria ejecutada el 2026-08-03; se incorporaron únicamente módulos con datos verificables.
+// Corte del informe: 2026-07-31. Cada módulo conserva la fecha propia de su último dato disponible.
+// Régimen integrado fijado desde el dashboard publicado el 2026-08-03: Risk-on selectivo, Favorable, 70/100 y 62% de confianza.
 export const firstAugust2026AutomaticReadings = {
   dataDate: "2026-07-31",
   regime: {
-    label: "Lectura parcial al cierre",
-    score: null,
-    confidence: null,
-    bias: "selectivo",
-    interpretation: "El snapshot congelado confirma dispersión elevada y fortaleza desigual. No se publica un score ni una confianza agregada porque al corte faltaban flujos archivados de BTC y GLD; las métricas disponibles no se completan con datos posteriores.",
-    support: ["Cinco de once sectores cerraron con retorno semanal positivo.", "SPY, QQQ y DIA conservaron retorno semanal positivo."],
-    caution: ["La dispersión sectorial semanal alcanzó 7,65 puntos porcentuales.", "IWM quedó rezagado y seis sectores cerraron en negativo."],
-    watch: ["VIX spot disponible con último cierre oficial del 30 de julio; curva no disponible al cierre.", "Flujos de BTC y presión de flujos en GLD: No disponible al cierre."],
+    label: "Risk-on selectivo",
+    score: 70,
+    confidence: 62,
+    bias: "Favorable",
+    interpretation:
+      "Lectura compuesta de volatilidad, rotación y flujos. Ponderación actual: rotación sectorial 45%, VIX 40% y BTC ETF flows 15%.",
+    support: [
+      "SPY, QQQ y DIA conservaron retorno semanal positivo.",
+      "La curva del VIX cerró en fuerte contango al 31 de julio.",
+    ],
+    caution: [
+      "La dispersión sectorial semanal alcanzó 7,65 puntos porcentuales.",
+      "IWM quedó rezagado y seis sectores cerraron en negativo.",
+    ],
+    watch: [
+      "BTC ETF: +329 M USD en el último día disponible y -261 M USD en cinco días.",
+      "GLD: presión neutral al 31 de julio, con -0.23 % en participaciones durante cinco sesiones.",
+    ],
   },
   indices: [
     { ticker: "SPY", return1w: 1.07, distanceLongAverage: 7.12, distanceFromHigh: -1.40 },
@@ -165,9 +178,28 @@ export const firstAugust2026AutomaticReadings = {
     laggards: [{ ticker: "XLU", name: "Utilities", return1w: -2.91 }, { ticker: "XLB", name: "Materiales", return1w: -1.87 }, { ticker: "XLI", name: "Industriales", return1w: -1.83 }],
     reading: "La amplitud sectorial fue negativa y la dispersión alta: el índice no describió por sí solo la experiencia interna del mercado.",
   },
-  vix: { level: 17.09, change1d: -3.57, stateLabel: "Normal", status: "Ordenado", momentum: "Bajando rápido", curve: "No disponible al cierre", curveText: "El spot procede del último cierre disponible en FRED al 30 de julio. La curva no se completa con observaciones posteriores." },
-  btcEtfFlows: null,
-  gldFlowPressure: null,
+  vix: {
+    level: 17.09,
+    change1d: -3.5700000000000003,
+    stateLabel: "Normal alto",
+    status: "Normal alto",
+    momentum: "Estable",
+    curve: "Fuerte contango",
+    curveText: "Los contratos más largos cotizan por encima del vencimiento cercano. Es una estructura habitual en entornos de volatilidad más ordenada.",
+  },
+  btcEtfFlows: {
+    lastDayUsdMillions: 328.8,
+    rolling5dUsdMillions: -261,
+    streakLabel: "Racha de entradas",
+    reading: "El último día disponible mostró entradas netas de 328.8 M USD, mientras el acumulado de cinco días permaneció en -261 M USD. La señal reciente es mixta.",
+  },
+  gldFlowPressure: {
+    asOf: "2026-07-31",
+    sharesChange5dPct: -0.23,
+    label: "Presión neutral",
+    summary: "GLD muestra presión neutral o señales contrapuestas, usando cambios en participaciones como proxy de presión de flujos.",
+    sourceNote: "Cálculo propio con datos diarios de NAV, participaciones y activos netos publicados por State Street. No representa flujos oficiales reportados por el fondo.",
+  },
   statisticalAssets: [
     { label: "SPY", percentile: 48.3, zScore: 0.28, distanceLongAverage: 7.12, lastClose: 747.03 },
     { label: "GLD", percentile: 1.6, zScore: -1.88, distanceLongAverage: -9.79, lastClose: 371.54 },

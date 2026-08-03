@@ -7,7 +7,7 @@ X-WR-CALNAME:Primer informe de agosto
 BEGIN:VEVENT
 UID:primer-informe-agosto-2026-ism-manufacturero-de-estados-unidos@luigui-h
  errera
-DTSTAMP:20260801T000000Z
+DTSTAMP:20260803T000000Z
 DTSTART:20260803T140000Z
 SUMMARY:Primer informe de agosto: ISM manufacturero de Estados Unidos
 DESCRIPTION:Lun. 3 agosto. Fecha y hora confirmadas por fuente primaria. 10
@@ -19,7 +19,7 @@ URL:https://www.luiguiherrera.com/informes/primer-informe-agosto-2026
 END:VEVENT
 BEGIN:VEVENT
 UID:primer-informe-agosto-2026-resultados-de-palantir-pltr@luigui-herrera
-DTSTAMP:20260801T000000Z
+DTSTAMP:20260803T000000Z
 DTSTART:20260803T210000Z
 SUMMARY:Primer informe de agosto: Resultados de Palantir (PLTR)
 DESCRIPTION:lun\, 3 de agosto. Fecha y hora confirmadas por fuente primaria
@@ -35,7 +35,7 @@ URL:https://www.nasdaq.com/press-release/palantir-announces-date-second-qua
 END:VEVENT
 BEGIN:VEVENT
 UID:primer-informe-agosto-2026-jolts-de-junio@luigui-herrera
-DTSTAMP:20260801T000000Z
+DTSTAMP:20260803T000000Z
 DTSTART:20260804T140000Z
 SUMMARY:Primer informe de agosto: JOLTS de junio
 DESCRIPTION:Mar. 4 agosto. Fecha y hora confirmadas por fuente primaria. 10
@@ -48,7 +48,7 @@ END:VEVENT
 BEGIN:VEVENT
 UID:primer-informe-agosto-2026-resultados-de-arista-networks-anet@luigui-he
  rrera
-DTSTAMP:20260801T000000Z
+DTSTAMP:20260803T000000Z
 DTSTART:20260804T203000Z
 SUMMARY:Primer informe de agosto: Resultados de Arista Networks (ANET)
 DESCRIPTION:mar\, 4 de agosto. Fecha y hora confirmadas por fuente primaria
@@ -66,7 +66,7 @@ URL:https://investors.arista.com/Communications/Press-Releases-and-Events/P
 END:VEVENT
 BEGIN:VEVENT
 UID:primer-informe-agosto-2026-resultados-de-coupang-cpng@luigui-herrera
-DTSTAMP:20260801T000000Z
+DTSTAMP:20260803T000000Z
 DTSTART:20260804T213000Z
 SUMMARY:Primer informe de agosto: Resultados de Coupang (CPNG)
 DESCRIPTION:mar\, 4 de agosto. Fecha y hora confirmadas por fuente primaria
@@ -83,7 +83,7 @@ URL:https://ir.aboutcoupang.com/news-events/news/news-details/2026/Coupang-
 END:VEVENT
 BEGIN:VEVENT
 UID:primer-informe-agosto-2026-resultados-de-uber-uber@luigui-herrera
-DTSTAMP:20260801T000000Z
+DTSTAMP:20260803T000000Z
 DTSTART:20260805T120000Z
 SUMMARY:Primer informe de agosto: Resultados de Uber (UBER)
 DESCRIPTION:mié\, 5 de agosto. Fecha y hora confirmadas por fuente primari
@@ -102,7 +102,7 @@ END:VEVENT
 BEGIN:VEVENT
 UID:primer-informe-agosto-2026-ism-servicios-de-estados-unidos@luigui-herre
  ra
-DTSTAMP:20260801T000000Z
+DTSTAMP:20260803T000000Z
 DTSTART:20260805T140000Z
 SUMMARY:Primer informe de agosto: ISM servicios de Estados Unidos
 DESCRIPTION:Mié. 5 agosto. Fecha y hora confirmadas por fuente primaria. 1
@@ -115,7 +115,7 @@ URL:https://www.luiguiherrera.com/informes/primer-informe-agosto-2026
 END:VEVENT
 BEGIN:VEVENT
 UID:primer-informe-agosto-2026-resultados-de-duolingo-duol@luigui-herrera
-DTSTAMP:20260801T000000Z
+DTSTAMP:20260803T000000Z
 DTSTART:20260805T210000Z
 SUMMARY:Primer informe de agosto: Resultados de Duolingo (DUOL)
 DESCRIPTION:mié\, 5 de agosto. Fecha y hora confirmadas por fuente primari
@@ -132,7 +132,7 @@ URL:https://investors.duolingo.com/news-releases/news-release-details/duoli
 END:VEVENT
 BEGIN:VEVENT
 UID:primer-informe-agosto-2026-resultados-de-lifemd-lfmd@luigui-herrera
-DTSTAMP:20260801T000000Z
+DTSTAMP:20260803T000000Z
 DTSTART;VALUE=DATE:20260805
 DTEND;VALUE=DATE:20260806
 SUMMARY:Primer informe de agosto: Resultados de LifeMD (LFMD)
@@ -148,7 +148,7 @@ URL:https://ir.lifemd.com/
 END:VEVENT
 BEGIN:VEVENT
 UID:primer-informe-agosto-2026-resultados-de-cloudflare-net@luigui-herrera
-DTSTAMP:20260801T000000Z
+DTSTAMP:20260803T000000Z
 DTSTART:20260806T210000Z
 SUMMARY:Primer informe de agosto: Resultados de Cloudflare (NET)
 DESCRIPTION:jue\, 6 de agosto. Fecha y hora confirmadas por fuente primaria
@@ -166,7 +166,7 @@ END:VEVENT
 BEGIN:VEVENT
 UID:primer-informe-agosto-2026-empleo-de-estados-unidos-de-julio@luigui-her
  rera
-DTSTAMP:20260801T000000Z
+DTSTAMP:20260803T000000Z
 DTSTART:20260807T123000Z
 SUMMARY:Primer informe de agosto: Empleo de Estados Unidos de julio
 DESCRIPTION:Vie. 7 agosto. Fecha y hora confirmadas por fuente primaria. 08
@@ -178,7 +178,7 @@ URL:https://www.bls.gov/news.release/empsit.htm
 END:VEVENT
 BEGIN:VEVENT
 UID:primer-informe-agosto-2026-resultados-de-hims-hers-hims@luigui-herrera
-DTSTAMP:20260801T000000Z
+DTSTAMP:20260803T000000Z
 DTSTART:20260810T210000Z
 SUMMARY:Primer informe de agosto: Resultados de Hims & Hers (HIMS)
 DESCRIPTION:lun\, 10 de agosto. Fecha y hora confirmadas por fuente primari
@@ -196,7 +196,7 @@ END:VEVENT
 BEGIN:VEVENT
 UID:primer-informe-agosto-2026-resultados-de-celsius-holdings-celh@luigui-h
  errera
-DTSTAMP:20260801T000000Z
+DTSTAMP:20260803T000000Z
 DTSTART;VALUE=DATE:20260811
 DTEND;VALUE=DATE:20260812
 SUMMARY:Primer informe de agosto: Resultados de Celsius Holdings (CELH)
@@ -213,7 +213,7 @@ END:VEVENT
 BEGIN:VEVENT
 UID:primer-informe-agosto-2026-ipc-de-estados-unidos-de-julio@luigui-herrer
  a
-DTSTAMP:20260801T000000Z
+DTSTAMP:20260803T000000Z
 DTSTART:20260812T123000Z
 SUMMARY:Primer informe de agosto: IPC de Estados Unidos de julio
 DESCRIPTION:Mié. 12 agosto. Fecha y hora confirmadas por fuente primaria. 
@@ -226,7 +226,7 @@ END:VEVENT
 BEGIN:VEVENT
 UID:primer-informe-agosto-2026-ventas-minoristas-de-estados-unidos-de-julio
  @luigui-herrera
-DTSTAMP:20260801T000000Z
+DTSTAMP:20260803T000000Z
 DTSTART:20260814T123000Z
 SUMMARY:Primer informe de agosto: Ventas minoristas de Estados Unidos de ju
  lio
@@ -240,7 +240,7 @@ END:VEVENT
 BEGIN:VEVENT
 UID:primer-informe-agosto-2026-minutas-de-la-fed-del-28-y-29-de-julio@luigu
  i-herrera
-DTSTAMP:20260801T000000Z
+DTSTAMP:20260803T000000Z
 DTSTART:20260819T180000Z
 SUMMARY:Primer informe de agosto: Minutas de la Fed del 28 y 29 de julio
 DESCRIPTION:Mié. 19 agosto. Fecha y hora confirmadas por fuente primaria. 
@@ -254,7 +254,7 @@ END:VEVENT
 BEGIN:VEVENT
 UID:primer-informe-agosto-2026-vencimiento-mensual-de-opciones@luigui-herre
  ra
-DTSTAMP:20260801T000000Z
+DTSTAMP:20260803T000000Z
 DTSTART;VALUE=DATE:20260821
 DTEND;VALUE=DATE:20260822
 SUMMARY:Primer informe de agosto: Vencimiento mensual de opciones
@@ -268,7 +268,7 @@ URL:https://www.luiguiherrera.com/informes/primer-informe-agosto-2026
 END:VEVENT
 BEGIN:VEVENT
 UID:primer-informe-agosto-2026-simposio-de-jackson-hole@luigui-herrera
-DTSTAMP:20260801T000000Z
+DTSTAMP:20260803T000000Z
 DTSTART;VALUE=DATE:20260827
 DTEND;VALUE=DATE:20260830
 SUMMARY:Primer informe de agosto: Simposio de Jackson Hole

@@ -81,7 +81,7 @@ assert.deepEqual(
   },
   {
     publishedAt: "2026-08-01",
-    modifiedAt: "2026-08-01",
+    modifiedAt: "2026-08-03",
     editorialCutoffAt: "2026-07-31",
     automaticDataCutoffAt: "2026-07-31",
     status: "actual",
@@ -405,8 +405,8 @@ for (const label of ["Dato vigente", "Nivel actual", "Lectura actual"]) {
   assert(!historicalComponent.includes(label), `El snapshot histórico contiene la etiqueta actual: ${label}.`);
 }
 for (const label of [
-  "Lecturas automáticas al cierre del informe",
-  "Datos con corte a",
+  "Lecturas de mercado al cierre",
+  "Datos disponibles hasta",
   "Dato al corte",
   "Nivel al corte",
   "Lectura al publicar",

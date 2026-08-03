@@ -423,11 +423,11 @@ def add_snapshot_group(story, title, content, styles):
 
 
 def add_historical_snapshot(story, snapshot, styles):
-    story.append(p("Snapshot histórico congelado", styles["h2"]))
+    story.append(p("Corte de esta edición", styles["h2"]))
     story.append(
         p(
-            f"Datos conservados con corte a {snapshot['dataDate']}. "
-            "Las cifras reproducen el estado publicado y no representan datos vigentes.",
+            f"Datos disponibles hasta {snapshot['dataDate']}. "
+            "Cada módulo conserva la última fecha disponible de su fuente.",
             styles["body"],
         )
     )
@@ -436,8 +436,8 @@ def add_historical_snapshot(story, snapshot, styles):
         info_table(
             [
                 ("Régimen al corte", regime["label"]),
-                ("Score", "No disponible al cierre" if regime["score"] is None else f"{regime['score']}/100"),
-                ("Confianza", "No disponible al cierre" if regime["confidence"] is None else f"{regime['confidence']}%"),
+                ("Puntuación", "No publicada" if regime["score"] is None else f"{regime['score']}/100"),
+                ("Confianza", "No publicada" if regime["confidence"] is None else f"{regime['confidence']}%"),
                 ("Sesgo", regime["bias"]),
                 ("Interpretación histórica", regime["interpretation"]),
             ],
@@ -569,7 +569,7 @@ def add_historical_snapshot(story, snapshot, styles):
 
     add_snapshot_group(
         story,
-        "Lecturas automáticas de activos al corte",
+        "Posición técnica por activo",
         data_table(
             ["Activo", "Percentil", "Z-score", "Media larga", "Último cierre"],
             [
@@ -833,7 +833,7 @@ def generate_pdf(model_path, output_path, root):
                 ("Publicación", model["publishedAt"]),
                 ("Actualización", model["modifiedAt"]),
                 ("Corte editorial", model.get("editorialCutoffAt", "No aplica")),
-                ("Corte de datos automáticos", model.get("automaticDataCutoffAt", "No aplica")),
+                ("Corte de datos de mercado", model.get("automaticDataCutoffAt", "No aplica")),
                 ("URL editorial primaria", model["canonicalUrl"]),
             ],
             styles,
