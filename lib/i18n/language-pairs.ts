@@ -5,6 +5,7 @@ export const bilingualRoutePairs = [
   { es: "/deudas", en: "/en/debt" },
   { es: "/diagnostico", en: "/en/diagnostic" },
   { es: "/inversionista", en: "/en/investor" },
+  { es: "/fragilidad-de-portafolio", en: "/en/portfolio-fragility" },
   { es: "/proteccion", en: "/en/protection" },
   { es: "/protege-tu-dinero", en: "/en/protect-your-money" },
   { es: "/dashboard", en: "/en/dashboard" },

@@ -39,6 +39,13 @@ const cards = [
     href: "/en/research/td3",
     description: "Research on deep reinforcement learning under costs, cash, and statistical validation.",
   },
+  {
+    label: "06",
+    meta: "Portfolio",
+    title: "Portfolio fragility",
+    href: "/en/portfolio-fragility",
+    description: "Find capital and behavior concentration, run stress, and compare changes without uploading your portfolio.",
+  },
 ];
 
 export default function EnglishInvestorPage() {

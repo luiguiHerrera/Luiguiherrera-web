@@ -2,7 +2,7 @@ import type { MetadataRoute } from "next";
 import { absoluteUrl, indexableRoutePaths, languageAlternates } from "@/lib/seo/site";
 import { marketReports, reportHref } from "@/lib/reports/market-reports";
 
-const highPriority = new Set(["/dashboard", "/informes", "/en/weekly-report", "/proteccion", "/metodologia", "/niveles-estadisticos"]);
+const highPriority = new Set(["/dashboard", "/informes", "/en/weekly-report", "/proteccion", "/metodologia", "/niveles-estadisticos", "/fragilidad-de-portafolio"]);
 const educationalTools = new Set(["/presupuesto", "/deudas", "/diagnostico", "/protege-tu-dinero"]);
 
 export default function sitemap(): MetadataRoute.Sitemap {

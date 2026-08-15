@@ -24,6 +24,7 @@ export const en = {
       { href: "/en/weekly-report", label: "Market reports", shortLabel: "Reports", description: "Editorial read on regime, ETFs, sectors, levels and seasonality." },
       { href: "/en/statistical-levels", label: "Statistical levels", shortLabel: "Levels", description: "Percentiles, z-scores, extensions, drawdowns and seasonality." },
       { href: "/en/trends", label: "Trends", shortLabel: "Trends", description: "Editorial maps and observable vehicles." },
+      { href: "/en/portfolio-fragility", label: "Portfolio fragility", shortLabel: "Fragility", description: "Concentration, historical behavior, stress, and counterfactuals without uploading the portfolio." },
     ],
     diagnosticItems: [
       { href: "/en/diagnostic?mode=quick", label: "Quick diagnostic", shortLabel: "Quick", description: "A concise investor read for horizon, liquidity, tolerance and key biases." },

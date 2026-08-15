@@ -134,6 +134,20 @@ const seoRouteContent: readonly Omit<SeoRouteDefinition, "alternatePathname">[] 
       "Explore the market dashboard, reports, statistical levels, trends and quantitative research without treating them as automatic signals.",
   },
   {
+    pathname: "/fragilidad-de-portafolio",
+    language: "es",
+    title: "Fragilidad de portafolio | Diversificación, correlación y stress",
+    description:
+      "Analiza concentración, diversificación, correlación, contribución al riesgo, drawdown y stress de cartera con datos incluidos o históricos locales.",
+  },
+  {
+    pathname: "/en/portfolio-fragility",
+    language: "en",
+    title: "Portfolio fragility | Diversification, correlation and stress",
+    description:
+      "Analyze portfolio concentration, diversification, correlation, risk contribution, drawdown, and stress with bundled or local historical data.",
+  },
+  {
     pathname: "/proteccion",
     language: "es",
     title: "Simulador de decisiones financieras | Protección",

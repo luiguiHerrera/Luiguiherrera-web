@@ -39,6 +39,13 @@ const cards = [
     href: "/investigacion/td3",
     description: "Investigación sobre aprendizaje profundo por refuerzo con costes, cash y validación estadística.",
   },
+  {
+    label: "06",
+    meta: "Portafolio",
+    title: "Fragilidad de portafolio",
+    href: "/fragilidad-de-portafolio",
+    description: "Detecta concentración de capital y comportamiento, prueba stress y compara cambios sin subir tu portafolio.",
+  },
 ];
 
 export default function InversionistaPage() {

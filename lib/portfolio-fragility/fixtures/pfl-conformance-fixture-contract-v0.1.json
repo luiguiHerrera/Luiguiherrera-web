@@ -1,0 +1,1453 @@
+{
+  "contract_id": "pfl-conformance-fixture-contract",
+  "schema_id": "pfl-conformance-fixture-schema",
+  "schema_version": "0.1.0",
+  "methodology_version": "pfl-methodology/0.1.0",
+  "scenario_registry_version": "pfl-scenario-registry/0.1.0",
+  "status": "FROZEN",
+  "encoding": "UTF-8",
+  "contract_format": "LANGUAGE_NEUTRAL_CONTRACT_DSL_NOT_EXECUTABLE_JSON_SCHEMA",
+  "purpose": "Language-neutral deterministic contract for Python-reference and cross-language conformance fixtures.",
+  "normative_rules": {
+    "number_model": "IEEE-754 binary64",
+    "intermediate_rounding": "FORBIDDEN",
+    "non_finite_numbers": "FORBIDDEN",
+    "signed_zero_serialization": 0,
+    "date_format": "YYYY-MM-DD",
+    "date_semantics": "calendar_date_without_timezone",
+    "asset_order": "ascending Unicode code-point order by asset_id",
+    "date_order": "ascending ISO-8601 calendar date",
+    "summation": "Neumaier compensated summation or an implementation proven equivalent within the frozen tolerance",
+    "covariance_algorithm": "deterministic two-pass sample covariance with compensated means and centered cross-products",
+    "missing_data": "complete-case valuation dates; no forward fill; no pairwise deletion",
+    "reporting_currency": "required explicit engine input; no implicit default or hidden FX assumption",
+    "historical_return_basis": "consistent documented adjusted total-return basis by default; price-only approximation requires explicit opt-in",
+    "annualization_factor": 252,
+    "comparison_formula": "abs(actual - expected) <= absolute + relative * abs(expected)",
+    "json_object_member_order": "not_significant",
+    "json_array_order": "significant unless a field explicitly declares set semantics"
+  },
+  "default_tolerances": {
+    "weights_and_concentration": {
+      "absolute": 1e-12,
+      "relative": 1e-12
+    },
+    "market_data_calculations": {
+      "absolute": 1e-10,
+      "relative": 1e-9
+    },
+    "identities": {
+      "absolute": 1e-10,
+      "relative": 0
+    },
+    "dates_statuses_ids_booleans_nulls_cluster_membership": "EXACT"
+  },
+  "fixture_document_schema": {
+    "required": [
+      "fixture_id",
+      "schema_version",
+      "methodology_version",
+      "scenario_registry_version",
+      "calculation",
+      "inputs",
+      "expected",
+      "comparison"
+    ],
+    "properties": {
+      "fixture_id": {
+        "type": "string",
+        "pattern": "^[A-Z0-9_]+$"
+      },
+      "schema_version": {
+        "const": "0.1.0"
+      },
+      "methodology_version": {
+        "const": "pfl-methodology/0.1.0"
+      },
+      "scenario_registry_version": {
+        "const": "pfl-scenario-registry/0.1.0"
+      },
+      "calculation": {
+        "enum": [
+          "WEIGHT_NORMALIZATION",
+          "CONCENTRATION",
+          "RETURN_ALIGNMENT",
+          "STATIC_SHARE_PATH",
+          "SAMPLE_RISK",
+          "RISK_CONTRIBUTION",
+          "DIVERSIFICATION_RATIO",
+          "BEHAVIOUR_CLUSTERING",
+          "DRAWDOWN",
+          "HISTORICAL_REPLAY",
+          "HYPOTHETICAL_STRESS",
+          "REMOVE_HOLDING",
+          "CHANGE_HOLDING",
+          "UNAVAILABLE_PROPAGATION",
+          "END_TO_END"
+        ]
+      },
+      "description": {
+        "type": "string"
+      },
+      "inputs": {
+        "$ref": "#input_contract"
+      },
+      "expected": {
+        "$ref": "#output_contract"
+      },
+      "comparison": {
+        "type": "object",
+        "required": [
+          "default_tolerance_class"
+        ],
+        "properties": {
+          "default_tolerance_class": {
+            "enum": [
+              "weights_and_concentration",
+              "market_data_calculations",
+              "EXACT"
+            ]
+          },
+          "field_overrides": {
+            "type": "object",
+            "additionalProperties": {
+              "oneOf": [
+                {
+                  "const": "EXACT"
+                },
+                {
+                  "type": "object",
+                  "required": [
+                    "absolute",
+                    "relative"
+                  ],
+                  "properties": {
+                    "absolute": {
+                      "type": "number",
+                      "minimum": 0
+                    },
+                    "relative": {
+                      "type": "number",
+                      "minimum": 0
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        }
+      },
+      "invariants": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "provenance": {
+        "type": "object"
+      }
+    },
+    "additionalProperties": false
+  },
+  "input_contract": {
+    "portfolio": {
+      "required": [
+        "reporting_currency",
+        "holdings"
+      ],
+      "fields": {
+        "reporting_currency": "ISO-4217 string",
+        "holdings": [
+          {
+            "asset_id": "stable string; unique",
+            "raw_weight": "finite number >= 0",
+            "native_currency": "ISO-4217 string",
+            "return_basis": "TOTAL_RETURN or PRICE_RETURN_SPLIT_ADJUSTED",
+            "primary_scenario_bucket": "explicit enum value or OTHER"
+          }
+        ]
+      },
+      "constraints": [
+        "at least one raw_weight > 0",
+        "shorts, leverage, derivatives, and liabilities unsupported in v0.1",
+        "zero-weight assets excluded from calculations"
+      ]
+    },
+    "series": {
+      "price_or_total_return_values": [
+        {
+          "asset_id": "string",
+          "date": "YYYY-MM-DD",
+          "value": "finite number > 0"
+        }
+      ],
+      "fx_values_when_required": [
+        {
+          "currency_pair": "BASE_PER_LOCAL",
+          "date": "YYYY-MM-DD",
+          "value": "finite number > 0"
+        }
+      ],
+      "duplicate_rule": "reject duplicate asset/date unless values and metadata are identical",
+      "forward_fill": false,
+      "maximum_return_endpoint_gap_calendar_days": 7
+    },
+    "analysis": {
+      "as_of": "YYYY-MM-DD",
+      "risk_window_max_aligned_returns": 252,
+      "risk_window_min_aligned_returns": 60,
+      "low_sample_range_inclusive": [
+        60,
+        251
+      ],
+      "path_mode": "STATIC_SHARES_NO_REBALANCING",
+      "annualization_factor": 252
+    },
+    "historical_replay": {
+      "episode_id": "versioned registry ID",
+      "requested_start": "YYYY-MM-DD",
+      "requested_end": "YYYY-MM-DD",
+      "start_alignment": "first complete-case date on/after requested_start and within 5 calendar days",
+      "end_alignment": "last complete-case date on/before requested_end and within 5 calendar days",
+      "return_basis_policy": "consistent documented adjusted total return by default",
+      "price_only_approximation": {
+        "default": false,
+        "when_false_and_only_price_data_exists": "UNAVAILABLE_PRICE_ONLY",
+        "when_true_requires": [
+          "explicit_user_opt_in",
+          "affected_asset_ids",
+          "PRICE_RETURN_ONLY quality flag",
+          "visible distributions-omitted limitation"
+        ],
+        "mixed_basis_requires": "MIXED_RETURN_BASIS quality flag and visible limitation"
+      },
+      "proxy_opt_in": {
+        "default": false,
+        "consent_scope": "SESSION_ONLY_PER_ASSET_EPISODE_MAPPING",
+        "reuse_for_other_episode_or_session": "FORBIDDEN",
+        "when_true_requires": [
+          "proxy_asset_id",
+          "proxy_name",
+          "source",
+          "mapping_rationale",
+          "affected_dates",
+          "visible_limitation"
+        ]
+      }
+    },
+    "hypothetical_stress": {
+      "direct_shocks": "map asset_id or resolved primary bucket to arithmetic shock >= -1",
+      "asset_override_precedence": "asset override replaces bucket shock; shocks never stack",
+      "volatility_multipliers": "map asset_id or resolved bucket to finite number >= 0",
+      "correlation_convergence_lambda": "finite number in [0,1]",
+      "probability": "FORBIDDEN"
+    },
+    "counterfactual": {
+      "remove_asset_id": "optional stable asset ID",
+      "change": {
+        "asset_id": "stable asset ID",
+        "target_normalized_weight": "number in [0,1]",
+        "funding_rule": "PROPORTIONAL_OTHER_HOLDINGS"
+      }
+    }
+  },
+  "output_contract": {
+    "available_result": {
+      "required": [
+        "status",
+        "quality_flags"
+      ],
+      "shape": {
+        "status": "OK",
+        "calculation_specific_fields": "finite JSON numbers, structured objects, or ordered arrays as direct members beside status and quality_flags",
+        "quality_flags": "ordered unique array from the quality flag registry",
+        "units": "required in end-to-end and data-derived fixtures for numeric fields whose units are not fixed by the calculation contract",
+        "observation_count": "required in end-to-end and data-derived sample/path fixtures",
+        "date_range": "required in end-to-end and data-derived sample/path fixtures",
+        "return_basis": "required in end-to-end and data-derived return fixtures",
+        "reporting_currency": "required in end-to-end and data-derived value/return fixtures"
+      },
+      "metadata_scope": {
+        "canonical_primitive_examples": "may omit echoed metadata even when isolated calculation inputs imply it",
+        "end_to_end_and_data_derived_fixtures": "must declare applicable units, observation count, date range, return basis, reporting currency, and provenance"
+      }
+    },
+    "unavailable_result": {
+      "required": [
+        "status",
+        "reason_code",
+        "message",
+        "affected_asset_ids",
+        "required",
+        "observed"
+      ],
+      "shape": {
+        "status": "UNAVAILABLE",
+        "reason_code": "stable reason registry value",
+        "message": "non-empty visible explanation",
+        "affected_asset_ids": "ordered unique asset IDs",
+        "required": "structured requirement",
+        "observed": "structured observed state"
+      },
+      "forbidden_encodings": [
+        "numeric zero",
+        "bare null",
+        "NaN",
+        "empty string",
+        "omitted requested field"
+      ]
+    },
+    "recovery": {
+      "recovered": {
+        "recovery_status": "RECOVERED",
+        "recovery_date": "YYYY-MM-DD"
+      },
+      "not_recovered": {
+        "recovery_status": "NOT_RECOVERED_BY_AS_OF",
+        "recovery_date": null,
+        "duration_so_far_required": true
+      }
+    },
+    "matrix_shape": {
+      "asset_ids": "canonical ordered array",
+      "values": "square row-major nested array matching asset_ids",
+      "symmetry_required": true
+    }
+  },
+  "reason_code_registry": [
+    "ASSET_NOT_EXIST",
+    "INSUFFICIENT_OBSERVATIONS",
+    "MISSING_EPISODE_COVERAGE",
+    "FX_UNAVAILABLE",
+    "UNADJUSTED_PRICE",
+    "UNAVAILABLE_PRICE_ONLY",
+    "GAPPED_SERIES",
+    "ZERO_PORTFOLIO_VOLATILITY",
+    "INSUFFICIENT_HOLDINGS",
+    "DEGENERATE_CORRELATION",
+    "UNSUPPORTED_PORTFOLIO",
+    "INVALID_COUNTERFACTUAL",
+    "INVALID_INPUT"
+  ],
+  "quality_flag_registry_in_canonical_order": [
+    "LOW_SAMPLE",
+    "PRICE_RETURN_ONLY",
+    "MIXED_RETURN_BASIS",
+    "USES_PROXY",
+    "BOUNDARY_ALIGNED",
+    "GAPPED_SERIES"
+  ],
+  "historical_window_policy": {
+    "registry_version": "pfl-scenario-registry/0.1.0",
+    "semantics": "VERSIONED_ANALYTICAL_WINDOWS",
+    "universal_crisis_start_or_end_definitions": false,
+    "date_change_requires_version_review": true
+  },
+  "historical_episode_registry": [
+    {
+      "episode_id": "DOTCOM_TECH_UNWIND",
+      "start": "2000-03-10",
+      "end": "2002-10-09",
+      "date_basis": "NASDAQ Composite closing peak to closing trough",
+      "window_type": "BENCHMARK_PEAK_TO_TROUGH"
+    },
+    {
+      "episode_id": "GFC_HOUSING_CREDIT",
+      "start": "2007-10-09",
+      "end": "2009-03-09",
+      "date_basis": "S&P 500 closing peak to closing trough",
+      "window_type": "BENCHMARK_PEAK_TO_TROUGH"
+    },
+    {
+      "episode_id": "COVID_CRASH",
+      "start": "2020-02-19",
+      "end": "2020-03-23",
+      "date_basis": "S&P 500 pre-crash closing peak to crash closing trough",
+      "window_type": "BENCHMARK_PEAK_TO_TROUGH"
+    },
+    {
+      "episode_id": "INFLATION_RATES_2022",
+      "start": "2022-01-03",
+      "end": "2022-12-30",
+      "date_basis": "first and last S&P 500 trading sessions of calendar 2022",
+      "window_type": "FIXED_CALENDAR_REGIME",
+      "diagnostic_subwindow": {
+        "start": "2022-01-03",
+        "end": "2022-10-12",
+        "basis": "S&P 500 price peak to trough"
+      }
+    }
+  ],
+  "scenario_bucket_order": [
+    "AI_CORE",
+    "MEGA_GROWTH",
+    "BROAD_EQ",
+    "CYCLICAL_EQ",
+    "DEFENSIVE_EQ",
+    "GOV_SHORT",
+    "GOV_LONG",
+    "IG_CREDIT",
+    "HY_CREDIT",
+    "ENERGY",
+    "GOLD",
+    "CRYPTO",
+    "CASH",
+    "OTHER"
+  ],
+  "hypothetical_scenario_taxonomy": [
+    "AI_GROWTH_BUBBLE_DEFLATION",
+    "SEVERE_RECESSION",
+    "CREDIT_LIQUIDITY_CRISIS",
+    "GEOPOLITICAL_ENERGY_SHOCK",
+    "RENEWED_INFLATION_RATES",
+    "BROAD_EQUITY_CRASH_CORRELATION_CONVERGENCE",
+    "CRYPTO_CRASH"
+  ],
+  "scenario_vector_policy": {
+    "registry_version": "pfl-scenario-registry/0.1.0",
+    "machinery_and_taxonomy": "FROZEN",
+    "production_default_magnitudes": "NOT_FROZEN",
+    "vector_role": "CONFORMANCE_TEST_VECTOR_ONLY",
+    "forecast": false,
+    "recommendation": false,
+    "production_default": false
+  },
+  "conformance_scenario_vectors": [
+    {
+      "scenario_id": "AI_GROWTH_BUBBLE_DEFLATION",
+      "vector_version": "0.1.0",
+      "vector_role": "CONFORMANCE_TEST_VECTOR_ONLY",
+      "production_default": false,
+      "forecast": false,
+      "recommendation": false,
+      "semantics": "HYPOTHETICAL_STRESS",
+      "direct_shocks_in_bucket_order": [
+        -0.5,
+        -0.3,
+        -0.12,
+        -0.15,
+        -0.07,
+        0,
+        0,
+        0,
+        -0.1,
+        0,
+        0,
+        -0.35,
+        0,
+        0
+      ],
+      "volatility_multipliers_in_bucket_order": [
+        2,
+        1.7,
+        1.4,
+        1.4,
+        1.4,
+        1,
+        1,
+        1,
+        1.4,
+        1,
+        1,
+        1.4,
+        1,
+        1
+      ],
+      "correlation_convergence_lambda": 0.5,
+      "probability_assigned": false,
+      "required_disclosure": "Illustrative configurable assumptions, not historical ground truth or a forecast."
+    },
+    {
+      "scenario_id": "SEVERE_RECESSION",
+      "vector_version": "0.1.0",
+      "vector_role": "CONFORMANCE_TEST_VECTOR_ONLY",
+      "production_default": false,
+      "forecast": false,
+      "recommendation": false,
+      "semantics": "HYPOTHETICAL_STRESS",
+      "direct_shocks_in_bucket_order": [
+        -0.4,
+        -0.35,
+        -0.35,
+        -0.45,
+        -0.2,
+        0.03,
+        0.1,
+        -0.08,
+        -0.25,
+        -0.3,
+        0.05,
+        -0.5,
+        0,
+        0
+      ],
+      "volatility_multipliers_in_bucket_order": [
+        1.6,
+        1.6,
+        1.6,
+        1.6,
+        1.6,
+        1.2,
+        1.2,
+        1.6,
+        1.6,
+        1.6,
+        1,
+        1.6,
+        1,
+        1
+      ],
+      "correlation_convergence_lambda": 0.6,
+      "probability_assigned": false
+    },
+    {
+      "scenario_id": "CREDIT_LIQUIDITY_CRISIS",
+      "vector_version": "0.1.0",
+      "vector_role": "CONFORMANCE_TEST_VECTOR_ONLY",
+      "production_default": false,
+      "forecast": false,
+      "recommendation": false,
+      "semantics": "HYPOTHETICAL_STRESS",
+      "direct_shocks_in_bucket_order": [
+        -0.25,
+        -0.25,
+        -0.25,
+        -0.35,
+        -0.25,
+        0,
+        0.05,
+        -0.12,
+        -0.3,
+        -0.25,
+        0,
+        -0.45,
+        0,
+        0
+      ],
+      "volatility_multipliers_in_bucket_order": [
+        1.6,
+        1.6,
+        1.6,
+        1.6,
+        1.6,
+        1.3,
+        1.3,
+        2,
+        2,
+        1.6,
+        1,
+        2,
+        1,
+        1
+      ],
+      "correlation_convergence_lambda": 0.7,
+      "probability_assigned": false
+    },
+    {
+      "scenario_id": "GEOPOLITICAL_ENERGY_SHOCK",
+      "vector_version": "0.1.0",
+      "vector_role": "CONFORMANCE_TEST_VECTOR_ONLY",
+      "production_default": false,
+      "forecast": false,
+      "recommendation": false,
+      "semantics": "HYPOTHETICAL_STRESS",
+      "direct_shocks_in_bucket_order": [
+        -0.15,
+        -0.15,
+        -0.15,
+        -0.15,
+        -0.08,
+        -0.03,
+        -0.08,
+        -0.05,
+        -0.12,
+        0.35,
+        0.12,
+        -0.2,
+        0,
+        0
+      ],
+      "volatility_multipliers_in_bucket_order": [
+        1.5,
+        1.5,
+        1.5,
+        1.5,
+        1.5,
+        1.3,
+        1.3,
+        1.5,
+        1.5,
+        2,
+        1.3,
+        1.5,
+        1,
+        1
+      ],
+      "correlation_convergence_lambda": 0.35,
+      "probability_assigned": false
+    },
+    {
+      "scenario_id": "RENEWED_INFLATION_RATES",
+      "vector_version": "0.1.0",
+      "vector_role": "CONFORMANCE_TEST_VECTOR_ONLY",
+      "production_default": false,
+      "forecast": false,
+      "recommendation": false,
+      "semantics": "HYPOTHETICAL_STRESS",
+      "direct_shocks_in_bucket_order": [
+        -0.35,
+        -0.3,
+        -0.2,
+        -0.15,
+        -0.12,
+        -0.05,
+        -0.2,
+        -0.15,
+        -0.18,
+        0.15,
+        0,
+        -0.35,
+        0,
+        0
+      ],
+      "volatility_multipliers_in_bucket_order": [
+        1.7,
+        1.7,
+        1.4,
+        1.4,
+        1.4,
+        1.4,
+        1.7,
+        1.4,
+        1.4,
+        1.4,
+        1.4,
+        1.7,
+        1,
+        1
+      ],
+      "correlation_convergence_lambda": 0.45,
+      "probability_assigned": false
+    },
+    {
+      "scenario_id": "BROAD_EQUITY_CRASH_CORRELATION_CONVERGENCE",
+      "vector_version": "0.1.0",
+      "vector_role": "CONFORMANCE_TEST_VECTOR_ONLY",
+      "production_default": false,
+      "forecast": false,
+      "recommendation": false,
+      "semantics": "HYPOTHETICAL_STRESS",
+      "direct_shocks_in_bucket_order": [
+        -0.35,
+        -0.35,
+        -0.35,
+        -0.35,
+        -0.35,
+        -0.02,
+        -0.08,
+        -0.08,
+        -0.2,
+        -0.25,
+        0,
+        -0.5,
+        0,
+        0
+      ],
+      "volatility_multipliers_in_bucket_order": [
+        1.75,
+        1.75,
+        1.75,
+        1.75,
+        1.75,
+        1.4,
+        1.4,
+        1.4,
+        1.75,
+        1.4,
+        1.4,
+        1.75,
+        1,
+        1
+      ],
+      "correlation_convergence_lambda": 0.75,
+      "probability_assigned": false
+    },
+    {
+      "scenario_id": "CRYPTO_CRASH",
+      "vector_version": "0.1.0",
+      "vector_role": "CONFORMANCE_TEST_VECTOR_ONLY",
+      "production_default": false,
+      "forecast": false,
+      "recommendation": false,
+      "semantics": "HYPOTHETICAL_STRESS",
+      "direct_shocks_in_bucket_order": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        -0.7,
+        0,
+        0
+      ],
+      "volatility_multipliers_in_bucket_order": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        2.5,
+        1,
+        1
+      ],
+      "correlation_convergence_lambda": 0.1,
+      "probability_assigned": false
+    }
+  ],
+  "formula_registry": {
+    "normalized_weight": "raw_weight_i / compensated_sum(raw_weights)",
+    "simple_return": "value_t / value_t_minus_1 - 1",
+    "static_share_quantity": "normalized_weight_i / value_i_start",
+    "static_share_wealth": "compensated_sum(quantity_i * value_i_t)",
+    "hhi": "sum(normalized_weight_i^2)",
+    "effective_holdings": "1 / hhi",
+    "sample_covariance_daily": "sum((x-mean_x)*(y-mean_y))/(T-1)",
+    "covariance_annual": "252 * covariance_daily",
+    "volatility_annual": "sqrt(252 * sample_variance_daily)",
+    "correlation": "covariance_daily/(daily_vol_i*daily_vol_j)",
+    "portfolio_variance": "w_transpose * covariance_annual * w",
+    "portfolio_volatility": "sqrt(portfolio_variance)",
+    "marginal_contribution_to_volatility": "(covariance_annual*w)_i/portfolio_volatility",
+    "component_contribution_to_volatility": "w_i*marginal_contribution_i",
+    "percentage_contribution_to_volatility": "component_contribution_i/portfolio_volatility",
+    "diversification_ratio": "sum(w_i*asset_volatility_i)/portfolio_volatility",
+    "cluster_distance": "sqrt(0.5*(1-correlation))",
+    "cluster_linkage": "complete linkage; merge threshold sqrt(0.15); lexicographic tie break",
+    "drawdown": "wealth_t/running_peak_t-1",
+    "direct_stress_return": "sum(w_i*resolved_arithmetic_shock_i)",
+    "volatility_stress_covariance": "diag(k*sigma)*R*diag(k*sigma)",
+    "correlation_convergence": "(1-lambda)*R+lambda*ones_matrix",
+    "remove_holding": "set selected weight to 0 and divide every other weight by 1-selected_weight",
+    "change_holding": "set selected weight to x and multiply every other weight by (1-x)/(1-old_selected_weight)"
+  },
+  "canonical_examples": [
+    {
+      "fixture_id": "WEIGHTS_CONCENTRATION_001",
+      "schema_version": "0.1.0",
+      "methodology_version": "pfl-methodology/0.1.0",
+      "scenario_registry_version": "pfl-scenario-registry/0.1.0",
+      "calculation": "CONCENTRATION",
+      "inputs": {
+        "holdings": [
+          {
+            "asset_id": "A",
+            "raw_weight": 2
+          },
+          {
+            "asset_id": "B",
+            "raw_weight": 1
+          },
+          {
+            "asset_id": "C",
+            "raw_weight": 1
+          },
+          {
+            "asset_id": "ZERO",
+            "raw_weight": 0
+          }
+        ]
+      },
+      "expected": {
+        "status": "OK",
+        "asset_ids": [
+          "A",
+          "B",
+          "C"
+        ],
+        "normalized_weights": [
+          0.5,
+          0.25,
+          0.25
+        ],
+        "hhi": 0.375,
+        "effective_holdings": 2.6666666666666665,
+        "quality_flags": []
+      },
+      "comparison": {
+        "default_tolerance_class": "weights_and_concentration",
+        "field_overrides": {
+          "$.expected.asset_ids": "EXACT",
+          "$.expected.status": "EXACT"
+        }
+      },
+      "invariants": [
+        "sum(normalized_weights)=1 within 1e-12",
+        "effective_holdings=1/hhi"
+      ]
+    },
+    {
+      "fixture_id": "RISK_KERNEL_001",
+      "schema_version": "0.1.0",
+      "methodology_version": "pfl-methodology/0.1.0",
+      "scenario_registry_version": "pfl-scenario-registry/0.1.0",
+      "calculation": "RISK_CONTRIBUTION",
+      "inputs": {
+        "asset_ids": [
+          "A",
+          "B",
+          "C"
+        ],
+        "normalized_weights": [
+          0.5,
+          0.25,
+          0.25
+        ],
+        "annual_covariance": [
+          [
+            0.04,
+            0.006,
+            0
+          ],
+          [
+            0.006,
+            0.01,
+            0.002
+          ],
+          [
+            0,
+            0.002,
+            0.0225
+          ]
+        ]
+      },
+      "expected": {
+        "status": "OK",
+        "covariance_times_weights": [
+          0.021500000000000002,
+          0.006,
+          0.006125
+        ],
+        "portfolio_variance": 0.01378125,
+        "portfolio_volatility": 0.11739356881873896,
+        "marginal_contribution": [
+          0.1831446152999828,
+          0.05111012519999519,
+          0.0521749194749951
+        ],
+        "component_contribution": [
+          0.0915723076499914,
+          0.012777531299998798,
+          0.013043729868748775
+        ],
+        "percentage_contribution": [
+          0.7800453514739231,
+          0.108843537414966,
+          0.11111111111111113
+        ],
+        "diversification_ratio": 1.38423255749987,
+        "quality_flags": []
+      },
+      "comparison": {
+        "default_tolerance_class": "market_data_calculations",
+        "field_overrides": {
+          "$.expected.status": "EXACT"
+        }
+      },
+      "invariants": [
+        "sum(component_contribution)=portfolio_volatility within 1e-10",
+        "sum(percentage_contribution)=1 within 1e-10"
+      ]
+    },
+    {
+      "fixture_id": "STATIC_SHARE_DRAWDOWN_001",
+      "schema_version": "0.1.0",
+      "methodology_version": "pfl-methodology/0.1.0",
+      "scenario_registry_version": "pfl-scenario-registry/0.1.0",
+      "calculation": "STATIC_SHARE_PATH",
+      "inputs": {
+        "asset_ids": [
+          "A",
+          "B"
+        ],
+        "normalized_weights": [
+          0.6,
+          0.4
+        ],
+        "dates": [
+          "2024-01-01",
+          "2024-01-02",
+          "2024-01-03"
+        ],
+        "values": [
+          [
+            100,
+            100
+          ],
+          [
+            90,
+            100
+          ],
+          [
+            99,
+            105
+          ]
+        ]
+      },
+      "expected": {
+        "status": "OK",
+        "quantities": [
+          0.006,
+          0.004
+        ],
+        "wealth": [
+          1,
+          0.94,
+          1.014
+        ],
+        "period_returns": [
+          -0.06000000000000005,
+          0.07872340425531932
+        ],
+        "total_return": 0.014000000000000012,
+        "maximum_drawdown": -0.06000000000000005,
+        "peak_date": "2024-01-01",
+        "trough_date": "2024-01-02",
+        "recovery_date": "2024-01-03",
+        "quality_flags": []
+      },
+      "comparison": {
+        "default_tolerance_class": "market_data_calculations",
+        "field_overrides": {
+          "$.expected.peak_date": "EXACT",
+          "$.expected.trough_date": "EXACT",
+          "$.expected.recovery_date": "EXACT",
+          "$.expected.status": "EXACT"
+        }
+      },
+      "invariants": [
+        "wealth[0]=1",
+        "total_return=wealth[last]-1"
+      ]
+    },
+    {
+      "fixture_id": "DRAWDOWN_TIMING_001",
+      "schema_version": "0.1.0",
+      "methodology_version": "pfl-methodology/0.1.0",
+      "scenario_registry_version": "pfl-scenario-registry/0.1.0",
+      "calculation": "DRAWDOWN",
+      "inputs": {
+        "dates": [
+          "2024-01-01",
+          "2024-01-02",
+          "2024-01-03",
+          "2024-01-04",
+          "2024-01-05",
+          "2024-01-06",
+          "2024-01-07"
+        ],
+        "wealth": [
+          1,
+          1.1,
+          1.05,
+          0.88,
+          0.99,
+          1.1,
+          1.12
+        ]
+      },
+      "expected": {
+        "status": "OK",
+        "drawdown": [
+          0,
+          0,
+          -0.045454545454545525,
+          -0.19999999999999996,
+          -0.10000000000000009,
+          0,
+          0
+        ],
+        "maximum_drawdown": -0.19999999999999996,
+        "peak_date": "2024-01-02",
+        "trough_date": "2024-01-04",
+        "time_to_trough_calendar_days": 2,
+        "time_to_trough_observations": 2,
+        "recovery_status": "RECOVERED",
+        "recovery_date": "2024-01-06",
+        "recovery_time_calendar_days": 2,
+        "recovery_time_observations": 2,
+        "underwater_periods": [
+          {
+            "originating_peak_date": "2024-01-02",
+            "start_date": "2024-01-03",
+            "trough_date": "2024-01-04",
+            "end_date": "2024-01-06",
+            "depth": -0.19999999999999996,
+            "underwater_calendar_days_from_start": 3,
+            "underwater_observations_from_start": 3
+          }
+        ],
+        "quality_flags": []
+      },
+      "comparison": {
+        "default_tolerance_class": "market_data_calculations",
+        "field_overrides": {
+          "$.expected.peak_date": "EXACT",
+          "$.expected.trough_date": "EXACT",
+          "$.expected.recovery_status": "EXACT",
+          "$.expected.recovery_date": "EXACT",
+          "$.expected.underwater_periods[*].start_date": "EXACT",
+          "$.expected.underwater_periods[*].end_date": "EXACT"
+        }
+      }
+    },
+    {
+      "fixture_id": "DIRECT_STRESS_001",
+      "schema_version": "0.1.0",
+      "methodology_version": "pfl-methodology/0.1.0",
+      "scenario_registry_version": "pfl-scenario-registry/0.1.0",
+      "calculation": "HYPOTHETICAL_STRESS",
+      "inputs": {
+        "asset_ids": [
+          "A",
+          "B",
+          "C"
+        ],
+        "normalized_weights": [
+          0.5,
+          0.3,
+          0.2
+        ],
+        "resolved_direct_shocks": [
+          -0.4,
+          -0.2,
+          0
+        ]
+      },
+      "expected": {
+        "status": "OK",
+        "asset_contributions": [
+          -0.2,
+          -0.06,
+          0
+        ],
+        "portfolio_stress_return": -0.26,
+        "stressed_portfolio_value_per_unit": 0.74,
+        "quality_flags": []
+      },
+      "comparison": {
+        "default_tolerance_class": "market_data_calculations",
+        "field_overrides": {
+          "$.expected.status": "EXACT"
+        }
+      },
+      "invariants": [
+        "sum(asset_contributions)=portfolio_stress_return",
+        "stressed_portfolio_value_per_unit=1+portfolio_stress_return"
+      ]
+    },
+    {
+      "fixture_id": "REMOVE_CHANGE_001",
+      "schema_version": "0.1.0",
+      "methodology_version": "pfl-methodology/0.1.0",
+      "scenario_registry_version": "pfl-scenario-registry/0.1.0",
+      "calculation": "CHANGE_HOLDING",
+      "inputs": {
+        "asset_ids": [
+          "A",
+          "B",
+          "C"
+        ],
+        "normalized_weights": [
+          0.5,
+          0.3,
+          0.2
+        ],
+        "remove_asset_id": "B",
+        "change": {
+          "asset_id": "A",
+          "target_normalized_weight": 0.2,
+          "funding_rule": "PROPORTIONAL_OTHER_HOLDINGS"
+        }
+      },
+      "expected": {
+        "status": "OK",
+        "remove_B_weights": [
+          0.7142857142857143,
+          0,
+          0.28571428571428575
+        ],
+        "change_A_to_0_2_weights": [
+          0.2,
+          0.48,
+          0.32000000000000006
+        ],
+        "quality_flags": []
+      },
+      "comparison": {
+        "default_tolerance_class": "weights_and_concentration",
+        "field_overrides": {
+          "$.expected.status": "EXACT"
+        }
+      },
+      "invariants": [
+        "sum(remove_B_weights)=1",
+        "sum(change_A_to_0_2_weights)=1"
+      ]
+    },
+    {
+      "fixture_id": "CLUSTER_COMPLETE_LINKAGE_001",
+      "schema_version": "0.1.0",
+      "methodology_version": "pfl-methodology/0.1.0",
+      "scenario_registry_version": "pfl-scenario-registry/0.1.0",
+      "calculation": "BEHAVIOUR_CLUSTERING",
+      "inputs": {
+        "asset_ids": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ],
+        "normalized_weights": [
+          0.4,
+          0.3,
+          0.2,
+          0.1
+        ],
+        "correlation": [
+          [
+            1,
+            0.8,
+            0.75,
+            0.1
+          ],
+          [
+            0.8,
+            1,
+            0.72,
+            0.05
+          ],
+          [
+            0.75,
+            0.72,
+            1,
+            0.2
+          ],
+          [
+            0.1,
+            0.05,
+            0.2,
+            1
+          ]
+        ],
+        "linkage": "COMPLETE",
+        "merge_threshold": 0.3872983346207417,
+        "observation_count": 252
+      },
+      "expected": {
+        "status": "OK",
+        "holding_count": 4,
+        "cluster_count": 2,
+        "largest_cluster_capital_share": 0.9,
+        "clusters": [
+          {
+            "cluster_id": "BEHAVIOUR_GROUP_1",
+            "asset_ids": [
+              "A",
+              "B",
+              "C"
+            ],
+            "capital_weight": 0.9
+          },
+          {
+            "cluster_id": "BEHAVIOUR_GROUP_2",
+            "asset_ids": [
+              "D"
+            ],
+            "capital_weight": 0.1
+          }
+        ],
+        "quality_flags": []
+      },
+      "comparison": {
+        "default_tolerance_class": "market_data_calculations",
+        "field_overrides": {
+          "$.expected.clusters[*].cluster_id": "EXACT",
+          "$.expected.clusters[*].asset_ids": "EXACT",
+          "$.expected.holding_count": "EXACT",
+          "$.expected.cluster_count": "EXACT",
+          "$.expected.status": "EXACT"
+        }
+      }
+    },
+    {
+      "fixture_id": "UNAVAILABLE_ASSET_NOT_EXIST_001",
+      "schema_version": "0.1.0",
+      "methodology_version": "pfl-methodology/0.1.0",
+      "scenario_registry_version": "pfl-scenario-registry/0.1.0",
+      "calculation": "UNAVAILABLE_PROPAGATION",
+      "inputs": {
+        "episode_id": "DOTCOM_TECH_UNWIND",
+        "positive_weight_asset_ids": [
+          "EXISTING",
+          "LATER_LISTED"
+        ],
+        "asset_inception_dates": {
+          "EXISTING": "1990-01-01",
+          "LATER_LISTED": "2015-01-01"
+        },
+        "proxy_opt_in": false
+      },
+      "expected": {
+        "status": "UNAVAILABLE",
+        "reason_code": "ASSET_NOT_EXIST",
+        "message": "LATER_LISTED did not exist during DOTCOM_TECH_UNWIND; no proxy was authorized.",
+        "affected_asset_ids": [
+          "LATER_LISTED"
+        ],
+        "required": {
+          "coverage_start": "2000-03-10",
+          "coverage_end": "2002-10-09",
+          "proxy_rule": "EXPLICIT_USER_OPT_IN"
+        },
+        "observed": {
+          "inception_date": "2015-01-01",
+          "proxy_opt_in": false
+        }
+      },
+      "comparison": {
+        "default_tolerance_class": "EXACT"
+      }
+    }
+  ],
+  "required_fixture_cases": [
+    {
+      "case_id": "WEIGHTS_RAW_SUM_NOT_ONE",
+      "must_expose": [
+        "normalization",
+        "HHI",
+        "effective holdings"
+      ]
+    },
+    {
+      "case_id": "ZERO_WEIGHT_EXCLUDED",
+      "must_expose": [
+        "canonical asset order",
+        "zero-weight exclusion"
+      ]
+    },
+    {
+      "case_id": "MISSING_DATE_COMPLETE_CASE",
+      "must_expose": [
+        "no forward fill",
+        "no pairwise deletion",
+        "aligned dates"
+      ]
+    },
+    {
+      "case_id": "GAP_OVER_SEVEN_DAYS",
+      "must_expose": [
+        "risk-return exclusion",
+        "replay unavailable"
+      ]
+    },
+    {
+      "case_id": "PRICE_ONLY_AND_MIXED_BASIS",
+      "must_expose": [
+        "UNAVAILABLE_PRICE_ONLY when explicit opt-in is absent",
+        "PRICE_RETURN_ONLY after explicit opt-in",
+        "MIXED_RETURN_BASIS after explicit opt-in when applicable",
+        "visible distributions-omitted limitation"
+      ]
+    },
+    {
+      "case_id": "FX_MISSING",
+      "must_expose": [
+        "FX_UNAVAILABLE",
+        "aggregate status propagation"
+      ]
+    },
+    {
+      "case_id": "SAMPLE_59_60_251_252",
+      "must_expose": [
+        "minimum boundary",
+        "LOW_SAMPLE boundary",
+        "default-window boundary"
+      ]
+    },
+    {
+      "case_id": "ZERO_VOLATILITY_ASSET_AND_PORTFOLIO",
+      "must_expose": [
+        "DEGENERATE_CORRELATION",
+        "ZERO_PORTFOLIO_VOLATILITY"
+      ]
+    },
+    {
+      "case_id": "NEGATIVE_RISK_CONTRIBUTION",
+      "must_expose": [
+        "negative MCR",
+        "negative CCR",
+        "Euler identity without clamping"
+      ]
+    },
+    {
+      "case_id": "COVARIANCE_PIPELINE_FROM_RETURNS",
+      "must_expose": [
+        "sample denominator T-1",
+        "annualization by 252",
+        "matrix symmetry",
+        "portfolio variance"
+      ]
+    },
+    {
+      "case_id": "CLUSTER_THRESHOLD_BELOW_AT_ABOVE",
+      "must_expose": [
+        "complete linkage",
+        "0.70 correlation threshold",
+        "lexicographic tie break",
+        "holding count N",
+        "observable cluster count K",
+        "largest-cluster capital share"
+      ]
+    },
+    {
+      "case_id": "DRAWDOWN_TIED_TROUGH_AND_PEAK_PLATEAU",
+      "must_expose": [
+        "earliest minimum trough",
+        "latest associated peak"
+      ]
+    },
+    {
+      "case_id": "UNRECOVERED_DRAWDOWN",
+      "must_expose": [
+        "NOT_RECOVERED_BY_AS_OF",
+        "null recovery date",
+        "duration so far"
+      ]
+    },
+    {
+      "case_id": "ALL_FOUR_HISTORICAL_EPISODES",
+      "must_expose": [
+        "exact registry dates",
+        "boundary alignment",
+        "static shares",
+        "unavailable propagation"
+      ]
+    },
+    {
+      "case_id": "PROXY_DENIED_AND_EXPLICITLY_ALLOWED",
+      "must_expose": [
+        "default unavailable",
+        "USES_PROXY",
+        "proxy identity and limitation"
+      ]
+    },
+    {
+      "case_id": "DIRECT_STRESS_BUCKET_AND_ASSET_OVERRIDE",
+      "must_expose": [
+        "override replaces bucket",
+        "no shock stacking",
+        "contribution sum"
+      ]
+    },
+    {
+      "case_id": "VOLATILITY_AND_CORRELATION_STRESS",
+      "must_expose": [
+        "volatility scaling",
+        "correlation convex combination",
+        "stressed portfolio volatility separated from direct P&L"
+      ]
+    },
+    {
+      "case_id": "REMOVE_SOLE_HOLDING",
+      "must_expose": [
+        "INVALID_COUNTERFACTUAL"
+      ]
+    },
+    {
+      "case_id": "REMOVE_AND_CHANGE_PROPORTIONAL_FUNDING",
+      "must_expose": [
+        "new weights",
+        "metric deltas",
+        "unchanged asset covariance and cluster membership"
+      ]
+    },
+    {
+      "case_id": "NUMERICAL_DRIFT_ADVERSARIAL",
+      "must_expose": [
+        "compensated summation",
+        "two-pass covariance",
+        "near-zero variance clamp boundary",
+        "round-trip JSON numbers"
+      ]
+    }
+  ],
+  "versioning_policy": {
+    "schema_version": "semantic version for fixture document shape",
+    "methodology_version": "semantic version for formulas, constants, status propagation, and numerical semantics",
+    "scenario_registry_version": "semantic version for historical windows, hypothetical IDs, bucket taxonomy, and scenario machinery",
+    "patch": "clarification or added fixture that does not change existing valid expected behavior",
+    "minor": "backward-compatible new optional calculation/output",
+    "major": "breaking schema or changed existing quantitative semantics",
+    "expected_value_change": "requires explicit fixture review and methodology-version assessment; never treated as formatting",
+    "frozen_fixture_immutability": "published fixture IDs and expected values are immutable; corrections create a new methodology version and new fixture IDs or revisions"
+  },
+  "conformance_run": {
+    "required_report_fields": [
+      "implementation_name",
+      "implementation_version",
+      "schema_version",
+      "methodology_version",
+      "scenario_registry_version",
+      "fixture_set_digest_sha256",
+      "total",
+      "passed",
+      "failed",
+      "failures"
+    ],
+    "failure_shape": {
+      "fixture_id": "string",
+      "json_path": "string",
+      "expected": "JSON value",
+      "actual": "JSON value",
+      "absolute_error": "number or null",
+      "relative_error": "number or null",
+      "tolerance": "object or EXACT"
+    },
+    "pass_condition": "zero failures; invariant checks pass; no unrequested fields are silently discarded",
+    "reference_flow": [
+      "Python computes candidate expected outputs",
+      "independent formula review validates candidate values",
+      "approved JSON is frozen and hashed",
+      "Python and TypeScript both consume the same frozen JSON",
+      "TypeScript never regenerates expected outputs"
+    ]
+  },
+  "prohibited_fixture_practices": [
+    "NaN or Infinity",
+    "locale-dependent dates or numbers",
+    "random inputs without a frozen seed and frozen generated values",
+    "tolerances wide enough to hide formula differences",
+    "expected values generated independently in each language",
+    "implicit reporting currency or hidden FX assumption",
+    "silent proxy substitution",
+    "proxy consent persisted or reused beyond its asset, episode, mapping, or session",
+    "price-only approximation without explicit opt-in and visible limitation",
+    "silent asset exclusion or weight renormalization after missing data",
+    "mixing historical replay and hypothetical stress in one result type",
+    "probabilities on hypothetical scenarios",
+    "conformance scenario vectors used as forecasts, recommendations, calibrated estimates, or production defaults",
+    "opaque composite portfolio scores"
+  ]
+}

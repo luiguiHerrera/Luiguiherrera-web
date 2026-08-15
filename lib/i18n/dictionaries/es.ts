@@ -24,6 +24,7 @@ export const es = {
       { href: "/informes", label: "Informes de mercado", shortLabel: "Informes", description: "Lecturas de mercado, flujos, riesgo y activos multi-mercado." },
       { href: "/niveles-estadisticos", label: "Niveles estadísticos", shortLabel: "Niveles", description: "Percentiles, z-scores, extensiones, drawdowns y estacionalidad." },
       { href: "/tendencias", label: "Tendencias", shortLabel: "Tendencias", description: "Mapas editoriales y vehículos observables." },
+      { href: "/fragilidad-de-portafolio", label: "Fragilidad de portafolio", shortLabel: "Fragilidad", description: "Concentración, comportamiento histórico, stress y contrafactuales sin subir el portafolio." },
     ],
     diagnosticItems: [
       { href: "/diagnostico?mode=quick", label: "Diagnóstico rápido", shortLabel: "Rápido", description: "Lectura compacta de horizonte, liquidez, tolerancia y sesgos principales." },

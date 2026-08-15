@@ -184,7 +184,7 @@ function HeaderForPathname({ pathname }: { pathname: string }) {
             type="button"
             aria-expanded={mobileOpen}
             aria-label={locale === "en" ? "Open navigation" : "Abrir navegación"}
-            className="inline-flex min-h-8 items-center justify-center rounded-[4px] border border-petrol bg-petrol px-3 py-1.5 text-[11px] font-semibold text-white shadow-[0_8px_18px_rgba(11,52,54,0.10)] transition hover:bg-panel hover:text-petrol"
+            className="inline-flex min-h-11 min-w-11 items-center justify-center rounded-[4px] border border-petrol bg-petrol px-3 py-1.5 text-[11px] font-semibold text-white shadow-[0_8px_18px_rgba(11,52,54,0.10)] transition hover:bg-panel hover:text-petrol"
             onClick={() => setMobileOpen((current) => !current)}
           >
             {mobileOpen ? (locale === "en" ? "Close" : "Cerrar") : (locale === "en" ? "Menu" : "Menú")}
