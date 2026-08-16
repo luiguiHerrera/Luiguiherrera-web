@@ -15,7 +15,7 @@ export type HistoricalAutomaticReadingsSnapshot = {
     return1w: number;
     distanceLongAverage: number;
     distanceFromHigh: number;
-  }>;
+  }> | null;
   sectors: {
     positiveCount: number;
     totalCount: number;
@@ -25,14 +25,40 @@ export type HistoricalAutomaticReadingsSnapshot = {
     laggards: Array<{ ticker: string; name: string; return1w: number }>;
     reading: string;
   };
+  /** Amplitud relativa publicada por el dashboard al corte. Solo se incluye cuando quedó capturada. */
+  breadth?: {
+    rspVsSpy1wPp: number | null;
+    iwmVsSpy1wPp: number | null;
+    qqqVsSpy1wPp: number | null;
+    sectorsOverLongAverage: number | null;
+    sectorsOverLongAverageTotal: number | null;
+    reading: string;
+  } | null;
+  /** Radar cuantitativo del dashboard al corte. Solo se incluye cuando quedó capturado. */
+  quantRadar?: {
+    fragilityScore: number;
+    fragilityLabel: string;
+    ewmaVolAnnualized: number;
+    garchVolForecast: number;
+    averageCorrelation21d: number;
+    sectorDispersion1w: number;
+  } | null;
   vix: {
     level: number;
-    change1d: number;
     stateLabel: string;
     status: string;
     momentum: string;
     curve: string;
     curveText: string;
+    change1d?: number;
+    percentileLabel?: string;
+  } | null;
+  /** Estructura temporal de futuros del VIX al corte. */
+  vixTermStructure?: {
+    classification: string;
+    vx2MinusVx1: number;
+    slopeVx1Vx2Pct: number;
+    vx3MinusVx1: number;
   } | null;
   btcEtfFlows: {
     lastDayUsdMillions: number;
@@ -42,7 +68,9 @@ export type HistoricalAutomaticReadingsSnapshot = {
   } | null;
   gldFlowPressure: {
     asOf: string;
+    sharesChange1dPct?: number;
     sharesChange5dPct: number;
+    sharesChange20dPct?: number;
     label: string;
     summary: string;
     sourceNote: string;
@@ -54,7 +82,7 @@ export type HistoricalAutomaticReadingsSnapshot = {
     zScore: number;
     distanceLongAverage: number;
     lastClose: number;
-  }>;
+  }> | null;
 };
 
 // Source: immutable Vercel deployment for commit ce32ff886f04d0a1fd36f9f73a0492a5718d2d23.
@@ -210,9 +238,105 @@ export const firstAugust2026AutomaticReadings = {
   ],
 } satisfies HistoricalAutomaticReadingsSnapshot;
 
+// Captura del dashboard público ejecutada el 2026-08-16 sobre el corte de datos del 2026-08-14.
+// Solo se registraron los módulos visibles en esa captura: régimen, rotación y amplitud, radar
+// cuantitativo, VIX con su estructura temporal, presión de flujos en GLD y flujos de ETFs de BTC.
+// Los bloques de índices vía ETF y posición técnica por activo no quedaron capturados a esa fecha y
+// permanecen en null: el snapshot histórico no se completa con datos vivos posteriores.
+export const secondAugust2026AutomaticReadings = {
+  dataDate: "2026-08-14",
+  regime: {
+    label: "Risk-on selectivo",
+    score: 61,
+    confidence: 66,
+    bias: "Favorable",
+    interpretation:
+      "Lectura compuesta de volatilidad, rotación y flujos. Ponderación actual: rotación sectorial 45%, VIX 40% y BTC ETF flows 15%.",
+    support: [
+      "Sectores: 9 de 11 cerraron la semana en positivo y 8 de 11 quedaron sobre su media larga.",
+      "Curva del VIX: fuerte contango, con VX2 - VX1 en +2,36 puntos al corte.",
+      "Radar cuantitativo: fragilidad 20/100 y correlación promedio de 0,11.",
+    ],
+    caution: [
+      "La dispersión sectorial semanal alcanzó 9,1 puntos porcentuales.",
+      "La amplitud relativa siguió negativa: RSP/SPY -1,1 pp e IWM/SPY -1,7 pp.",
+      "BTC ETF: -123 M USD en el último día disponible y -229 M USD en cinco sesiones.",
+    ],
+    watch: [
+      "VIX en 17,8, clasificado como normal alto y con momentum estable (percentil 42).",
+      "GLD: entrada neta probable, con +0,59 % en participaciones durante cinco sesiones.",
+      "QQQ/SPY aparecía como pendiente en el dashboard al corte.",
+    ],
+  },
+  indices: null,
+  sectors: {
+    positiveCount: 9,
+    totalCount: 11,
+    negativeCount: 2,
+    dispersion1w: 9.1,
+    leaders: [{ ticker: "XLE", name: "Energía", return1w: 7.7 }],
+    laggards: [{ ticker: "XLY", name: "Consumo discrecional", return1w: -1.4 }],
+    reading:
+      "Nueve de once sectores cerraron la semana en positivo, pero la dispersión de 9,1 puntos porcentuales entre líder y rezagado indica que el índice no describe por sí solo la experiencia interna del mercado.",
+  },
+  breadth: {
+    rspVsSpy1wPp: -1.1,
+    iwmVsSpy1wPp: -1.7,
+    qqqVsSpy1wPp: null,
+    sectorsOverLongAverage: 8,
+    sectorsOverLongAverageTotal: 11,
+    reading:
+      "El equal weight y las small caps quedaron por detrás del índice ponderado por capitalización durante la semana. QQQ/SPY aparecía como pendiente en el dashboard al corte y no se completa con datos posteriores.",
+  },
+  quantRadar: {
+    fragilityScore: 20,
+    fragilityLabel: "Baja",
+    ewmaVolAnnualized: 7.7,
+    garchVolForecast: 8.0,
+    averageCorrelation21d: 0.11,
+    sectorDispersion1w: 9.1,
+  },
+  vix: {
+    level: 17.8,
+    stateLabel: "Normal alto",
+    status: "Normal alto",
+    momentum: "Estable",
+    curve: "Fuerte contango",
+    curveText:
+      "Los contratos más largos cotizan por encima del vencimiento cercano. Es una estructura habitual en entornos de volatilidad más ordenada.",
+    percentileLabel: "p42 · rango habitual",
+  },
+  vixTermStructure: {
+    classification: "Fuerte contango",
+    vx2MinusVx1: 2.36,
+    slopeVx1Vx2Pct: 15.2,
+    vx3MinusVx1: 4.02,
+  },
+  btcEtfFlows: {
+    lastDayUsdMillions: -123,
+    rolling5dUsdMillions: -229,
+    streakLabel: "Racha de salidas · 2 días",
+    reading:
+      "El último día disponible registró salidas netas de 123 M USD y el acumulado de cinco sesiones quedó en -229 M USD. La señal permanece mixta.",
+  },
+  gldFlowPressure: {
+    asOf: "2026-08-14",
+    sharesChange1dPct: 0.03,
+    sharesChange5dPct: 0.59,
+    sharesChange20dPct: 2.49,
+    label: "Entrada neta probable",
+    summary:
+      "GLD muestra entrada neta probable, usando cambios en participaciones como proxy de presión de flujos: +0,03 % en una sesión, +0,59 % en cinco y +2,49 % en veinte.",
+    sourceNote:
+      "Cálculo propio con datos diarios de NAV, participaciones y activos netos publicados por State Street. No representa flujos oficiales reportados por el fondo.",
+  },
+  statisticalAssets: null,
+} satisfies HistoricalAutomaticReadingsSnapshot;
+
 const historicalSnapshots = new Map<string, HistoricalAutomaticReadingsSnapshot>([
   ["segundo-informe-julio-2026", secondJuly2026AutomaticReadings],
   ["primer-informe-agosto-2026", firstAugust2026AutomaticReadings],
+  ["segundo-informe-agosto-2026", secondAugust2026AutomaticReadings],
 ]);
 
 export function getHistoricalAutomaticReadings(reportId: string) {

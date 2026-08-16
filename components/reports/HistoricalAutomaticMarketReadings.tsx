@@ -22,6 +22,11 @@ function formatUsdMillions(value: number) {
   return `${value > 0 ? "+" : ""}${value.toFixed(0)} M USD`;
 }
 
+function formatPointSpread(value: number | null, digits = 1) {
+  if (value === null) return "Pendiente al corte";
+  return `${value > 0 ? "+" : ""}${value.toFixed(digits)} pp`;
+}
+
 function structureLabel(distanceLongAverage: number) {
   if (distanceLongAverage > 5) return "Sobre media larga";
   if (distanceLongAverage > 0) return "Apoyo cercano";
@@ -91,6 +96,7 @@ export function HistoricalAutomaticMarketReadings({ snapshot }: { snapshot: Hist
             </div>
           </ReportSection>
 
+          {snapshot.indices?.length ? (
           <ReportSection eyebrow="Índices" title="Índices principales vía ETF">
             <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-4">
               {snapshot.indices.map((asset) => (
@@ -119,6 +125,7 @@ export function HistoricalAutomaticMarketReadings({ snapshot }: { snapshot: Hist
               ))}
             </div>
           </ReportSection>
+          ) : null}
 
           <ReportSection eyebrow="Sectores" title="Rotación sectorial">
             <div className="grid gap-4 lg:grid-cols-[0.9fr_1.1fr]">
@@ -161,6 +168,48 @@ export function HistoricalAutomaticMarketReadings({ snapshot }: { snapshot: Hist
             </div>
           </ReportSection>
 
+          {snapshot.breadth ? (
+            <ReportSection eyebrow="Amplitud" title="Amplitud relativa al corte">
+              <div className="grid gap-2 sm:grid-cols-2 xl:grid-cols-4">
+                <Metric label="RSP/SPY 1W" value={formatPointSpread(snapshot.breadth.rspVsSpy1wPp)} emphasis />
+                <Metric label="IWM/SPY 1W" value={formatPointSpread(snapshot.breadth.iwmVsSpy1wPp)} emphasis />
+                <Metric label="QQQ/SPY 1W" value={formatPointSpread(snapshot.breadth.qqqVsSpy1wPp)} />
+                <Metric
+                  label="Sectores sobre media larga"
+                  value={
+                    snapshot.breadth.sectorsOverLongAverage === null || snapshot.breadth.sectorsOverLongAverageTotal === null
+                      ? "Pendiente al corte"
+                      : `${snapshot.breadth.sectorsOverLongAverage} / ${snapshot.breadth.sectorsOverLongAverageTotal}`
+                  }
+                />
+              </div>
+              <div className="mt-4 flex flex-col gap-3 border-t border-line pt-4 md:flex-row md:items-start md:justify-between">
+                <p className="text-sm leading-6 text-muted">{snapshot.breadth.reading}</p>
+                {dashboardButton()}
+              </div>
+            </ReportSection>
+          ) : null}
+
+          {snapshot.quantRadar ? (
+            <ReportSection eyebrow="Radar cuantitativo" title="Condiciones estadísticas al corte">
+              <div className="grid gap-2 sm:grid-cols-2 xl:grid-cols-3">
+                <Metric
+                  label="Fragilidad"
+                  value={`${snapshot.quantRadar.fragilityScore}/100 · ${snapshot.quantRadar.fragilityLabel}`}
+                  emphasis
+                />
+                <Metric label="Volatilidad EWMA" value={formatPercent(snapshot.quantRadar.ewmaVolAnnualized)} />
+                <Metric label="Volatilidad GARCH" value={formatPercent(snapshot.quantRadar.garchVolForecast)} />
+                <Metric label="Correlación promedio" value={snapshot.quantRadar.averageCorrelation21d.toFixed(2)} />
+                <Metric label="Dispersión sectorial" value={formatPercent(snapshot.quantRadar.sectorDispersion1w)} />
+              </div>
+              <p className="mt-4 border-t border-line pt-4 text-xs leading-5 text-muted">
+                Estos modelos estiman condiciones estadísticas de riesgo bajo supuestos históricos; no anticipan por sí
+                solos el comportamiento del mercado.
+              </p>
+            </ReportSection>
+          ) : null}
+
           <div className="grid gap-5 lg:grid-cols-2">
             <ReportSection eyebrow="VIX" title="Volatilidad">
               {snapshot.vix ? <>
@@ -188,11 +237,20 @@ export function HistoricalAutomaticMarketReadings({ snapshot }: { snapshot: Hist
                   </div>
                 </div>
                 <div className="grid gap-2 sm:grid-cols-3">
-                  <Metric label="Cambio 1D" value={formatSignedNumber(snapshot.vix.change1d)} />
+                  {snapshot.vix.change1d === undefined
+                    ? <Metric label="Percentil" value={snapshot.vix.percentileLabel ?? "No registrado al corte"} />
+                    : <Metric label="Cambio 1D" value={formatSignedNumber(snapshot.vix.change1d)} />}
                   <Metric label="Momentum" value={snapshot.vix.momentum} />
                   <Metric label="Estado" value={snapshot.vix.status} />
                 </div>
                 <Metric label="Curva VIX" value={snapshot.vix.curve} />
+                {snapshot.vixTermStructure ? (
+                  <div className="grid gap-2 sm:grid-cols-3">
+                    <Metric label="VX2 − VX1" value={formatSignedNumber(snapshot.vixTermStructure.vx2MinusVx1, 2)} />
+                    <Metric label="Pendiente VX1–VX2" value={formatPercent(snapshot.vixTermStructure.slopeVx1Vx2Pct)} />
+                    <Metric label="VX3 − VX1" value={formatSignedNumber(snapshot.vixTermStructure.vx3MinusVx1, 2)} />
+                  </div>
+                ) : null}
               </div>
               <div className="mt-4 flex flex-col gap-3 border-t border-line pt-4 md:flex-row md:items-start md:justify-between">
                 <p className="text-sm leading-6 text-muted">{snapshot.vix.curveText}</p>
@@ -214,10 +272,22 @@ export function HistoricalAutomaticMarketReadings({ snapshot }: { snapshot: Hist
               {snapshot.gldFlowPressure ? <>
               <div className="grid gap-2 sm:grid-cols-2">
                 <Metric label="Proxy al corte" value={snapshot.gldFlowPressure.label} emphasis />
+                {snapshot.gldFlowPressure.sharesChange1dPct === undefined ? null : (
+                  <Metric
+                    label="Cambio 1D en participaciones"
+                    value={formatPercent(snapshot.gldFlowPressure.sharesChange1dPct, 2)}
+                  />
+                )}
                 <Metric
                   label="Cambio 5D en participaciones"
                   value={formatPercent(snapshot.gldFlowPressure.sharesChange5dPct, 2)}
                 />
+                {snapshot.gldFlowPressure.sharesChange20dPct === undefined ? null : (
+                  <Metric
+                    label="Cambio 20D en participaciones"
+                    value={formatPercent(snapshot.gldFlowPressure.sharesChange20dPct, 2)}
+                  />
+                )}
                 <Metric
                   label="Fecha del dato"
                   value={<time dateTime={snapshot.gldFlowPressure.asOf}>{snapshot.gldFlowPressure.asOf}</time>}
@@ -230,6 +300,7 @@ export function HistoricalAutomaticMarketReadings({ snapshot }: { snapshot: Hist
             </ReportSection>
           </div>
 
+          {snapshot.statisticalAssets?.length ? (
           <ReportSection eyebrow="Activos" title="Posición técnica por activo">
             <p className="mb-4 text-sm leading-6 text-muted">
               Percentil, z-score, distancia frente a la media de largo plazo y último cierre disponible.
@@ -265,6 +336,7 @@ export function HistoricalAutomaticMarketReadings({ snapshot }: { snapshot: Hist
               ))}
             </div>
           </ReportSection>
+          ) : null}
         </div>
       </div>
     </section>

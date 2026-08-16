@@ -128,7 +128,7 @@ function renderHistoricalHtml(section: Extract<ReportExportSection, { kind: "his
       ${htmlList("Qué frenó", regime.caution)}
       ${htmlList("Qué vigilar", regime.watch)}
     </div>
-    <h3>Índices principales vía ETF</h3>
+    ${snapshot.indices?.length ? `<h3>Índices principales vía ETF</h3>
     ${htmlTable(
       ["Ticker", "Retorno 1W", "Media larga", "Distancia a máximos"],
       snapshot.indices.map((item) => [
@@ -137,7 +137,7 @@ function renderHistoricalHtml(section: Extract<ReportExportSection, { kind: "his
         `${formatSigned(item.distanceLongAverage)}%`,
         `${formatSigned(item.distanceFromHigh)}%`,
       ]),
-    )}
+    )}` : ""}
     <h3>Rotación sectorial</h3>
     ${htmlTable(
       ["Campo", "Valor"],
@@ -165,18 +165,56 @@ function renderHistoricalHtml(section: Extract<ReportExportSection, { kind: "his
         ]),
       ],
     )}
+    ${snapshot.breadth ? `<h3>Amplitud relativa al corte</h3>
+    ${htmlTable(
+      ["Campo", "Valor"],
+      [
+        ["RSP/SPY 1W", snapshot.breadth.rspVsSpy1wPp === null ? "Pendiente al corte" : `${formatSigned(snapshot.breadth.rspVsSpy1wPp)} pp`],
+        ["IWM/SPY 1W", snapshot.breadth.iwmVsSpy1wPp === null ? "Pendiente al corte" : `${formatSigned(snapshot.breadth.iwmVsSpy1wPp)} pp`],
+        ["QQQ/SPY 1W", snapshot.breadth.qqqVsSpy1wPp === null ? "Pendiente al corte" : `${formatSigned(snapshot.breadth.qqqVsSpy1wPp)} pp`],
+        [
+          "Sectores sobre media larga",
+          snapshot.breadth.sectorsOverLongAverage === null || snapshot.breadth.sectorsOverLongAverageTotal === null
+            ? "Pendiente al corte"
+            : `${snapshot.breadth.sectorsOverLongAverage} / ${snapshot.breadth.sectorsOverLongAverageTotal}`,
+        ],
+        ["Lectura al publicar", snapshot.breadth.reading],
+      ],
+    )}` : ""}
+    ${snapshot.quantRadar ? `<h3>Radar cuantitativo al corte</h3>
+    ${htmlTable(
+      ["Campo", "Valor"],
+      [
+        ["Fragilidad", `${snapshot.quantRadar.fragilityScore}/100 · ${snapshot.quantRadar.fragilityLabel}`],
+        ["Volatilidad EWMA", `${formatSigned(snapshot.quantRadar.ewmaVolAnnualized)}%`],
+        ["Volatilidad GARCH", `${formatSigned(snapshot.quantRadar.garchVolForecast)}%`],
+        ["Correlación promedio", snapshot.quantRadar.averageCorrelation21d.toFixed(2)],
+        ["Dispersión sectorial", `${formatSigned(snapshot.quantRadar.sectorDispersion1w)}%`],
+      ],
+    )}` : ""}
     <h3>VIX - Volatilidad al corte</h3>
     ${snapshot.vix ? htmlTable(
       ["Campo", "Valor"],
       [
         ["Nivel al corte", snapshot.vix.level.toFixed(1)],
-        ["Cambio 1D", formatSigned(snapshot.vix.change1d)],
+        ...(snapshot.vix.change1d === undefined ? [] : [["Cambio 1D", formatSigned(snapshot.vix.change1d)]]),
+        ...(snapshot.vix.percentileLabel ? [["Percentil", snapshot.vix.percentileLabel]] : []),
         ["Estado", `${snapshot.vix.stateLabel} / ${snapshot.vix.status}`],
         ["Momentum", snapshot.vix.momentum],
         ["Curva", snapshot.vix.curve],
         ["Lectura histórica", snapshot.vix.curveText],
       ],
     ) : "<p>No disponible al cierre.</p>"}
+    ${snapshot.vixTermStructure ? `<h3>Estructura temporal del VIX al corte</h3>
+    ${htmlTable(
+      ["Campo", "Valor"],
+      [
+        ["Clasificación", snapshot.vixTermStructure.classification],
+        ["VX2 - VX1", `${formatSigned(snapshot.vixTermStructure.vx2MinusVx1, 2)} puntos`],
+        ["Pendiente VX1-VX2", `${formatSigned(snapshot.vixTermStructure.slopeVx1Vx2Pct)}%`],
+        ["VX3 - VX1", `${formatSigned(snapshot.vixTermStructure.vx3MinusVx1, 2)} puntos`],
+      ],
+    )}` : ""}
     <h3>Flujos netos de ETFs de BTC al corte</h3>
     ${snapshot.btcEtfFlows ? htmlTable(
       ["Campo", "Valor"],
@@ -193,12 +231,14 @@ function renderHistoricalHtml(section: Extract<ReportExportSection, { kind: "his
       [
         ["Fecha del dato", snapshot.gldFlowPressure.asOf],
         ["Proxy al corte", snapshot.gldFlowPressure.label],
+        ...(snapshot.gldFlowPressure.sharesChange1dPct === undefined ? [] : [["Cambio 1D en participaciones", `${formatSigned(snapshot.gldFlowPressure.sharesChange1dPct, 2)}%`]]),
         ["Cambio 5D en participaciones", `${formatSigned(snapshot.gldFlowPressure.sharesChange5dPct, 2)}%`],
+        ...(snapshot.gldFlowPressure.sharesChange20dPct === undefined ? [] : [["Cambio 20D en participaciones", `${formatSigned(snapshot.gldFlowPressure.sharesChange20dPct, 2)}%`]]),
         ["Resumen", snapshot.gldFlowPressure.summary],
         ["Limitación de fuente", snapshot.gldFlowPressure.sourceNote],
       ],
     ) : "<p>No disponible al cierre.</p>"}
-    <h3>Posición técnica por activo</h3>
+    ${snapshot.statisticalAssets?.length ? `<h3>Posición técnica por activo</h3>
     ${htmlTable(
       ["Activo", "Percentil", "Z-score", "Media larga", "Último cierre"],
       snapshot.statisticalAssets.map((asset) => [
@@ -208,7 +248,7 @@ function renderHistoricalHtml(section: Extract<ReportExportSection, { kind: "his
         `${formatSigned(asset.distanceLongAverage)}%`,
         asset.label === "BTC" ? asset.lastClose.toFixed(0) : asset.lastClose.toFixed(2),
       ]),
-    )}`;
+    )}` : ""}`;
 }
 
 function htmlList(title: string, items: string[]) {
@@ -240,24 +280,42 @@ function earningsTraceMarkdown(items: NonNullable<Extract<ReportExportSection, {
   - Movimiento ocurrido: ${item.actualMoveSourceHref && item.actualMoveSourceLabel ? `[${item.actualMoveSourceLabel}](${item.actualMoveSourceHref})${item.actualMoveMethodology ? `; ${item.actualMoveMethodology}` : "."}` : "pendiente de publicación."}`).join("\n");
 }
 
+function renderStockpickingThemesHtml(themes: NonNullable<Extract<ReportExportSection, { kind: "asset-readings" }>["stockpicking"]>["themes"]) {
+  if (!themes?.length) return "";
+  return themes.map((theme) => `<article class="callout"><p class="eyebrow">${esc(theme.label)}</p><h4>${esc(theme.title)}</h4><p>${esc(theme.body)}</p>${theme.examples?.length ? `<p><strong>Compañías citadas:</strong> ${theme.examples.map((example) => `${esc(example.company)} (${esc(example.ticker)})`).join(", ")}.</p>` : ""}${theme.note ? `<p class="historical-note">${esc(theme.note)}</p>` : ""}</article>`).join("");
+}
+
 function renderStockpickingHtml(stockpicking: NonNullable<Extract<ReportExportSection, { kind: "asset-readings" }>["stockpicking"]>) {
-  const { published, upcoming, methodology } = stockpicking.earnings;
+  const { published, upcoming, methodology, publishedNote, upcomingNote } = stockpicking.earnings;
   const exceeded = published.filter((item) => Math.abs(item.actualMovePct ?? 0) > item.impliedMovePct);
-  return `<div class="stockpicking-earnings"><h4>Qué pasó — resultados publicados</h4><p><strong>${published.length} resultados publicados; ${exceeded.length} excedieron el rango.</strong> VRT, COIN y RDDT fueron las reacciones negativas más fuertes.</p>${htmlTable(["Fecha", "Empresa", "Movimiento implícito esperado", "Movimiento ocurrido", "Lectura"], published.map((item) => [item.reportDate, `${item.company} (${item.ticker})`, impliedMove(item), `${item.actualMovePct?.toFixed(1).replace(".", ",")} %`, Math.abs(item.actualMovePct ?? 0) > item.impliedMovePct ? "Excedió el rango" : "Dentro del rango"]))}<h5>Trazabilidad — resultados publicados</h5>${earningsTraceHtml(published)}<h4>Qué esperamos — próximos resultados</h4>${htmlTable(["Fecha", "Empresa", "Movimiento implícito esperado", "Hora o estado", "Fuente de fecha y hora"], upcoming.map((item) => [item.reportDate, `${item.company} (${item.ticker})`, impliedMove(item), earningsScheduleLabel(item), item.dateTimeSourceLabel]))}<h5>Trazabilidad — próximos resultados</h5>${earningsTraceHtml(upcoming)}<p class="historical-note">${esc(methodology)} Cada fila enlaza su página por ticker, la fecha de consulta y las fuentes utilizadas para fecha, hora y reacción.</p></div>`;
+  const publishedIntro = publishedNote
+    ? `<p>${esc(publishedNote)}</p>`
+    : `<p><strong>${published.length} resultados publicados; ${exceeded.length} excedieron el rango.</strong> VRT, COIN y RDDT fueron las reacciones negativas más fuertes.</p>`;
+  const upcomingIntro = upcomingNote ? `<p>${esc(upcomingNote)}</p>` : "";
+  return `<div class="stockpicking-earnings"><h4>Qué pasó — resultados publicados</h4>${publishedIntro}${htmlTable(["Fecha", "Empresa", "Movimiento implícito esperado", "Movimiento ocurrido", "Lectura"], published.map((item) => [item.reportDate, `${item.company} (${item.ticker})`, impliedMove(item), `${item.actualMovePct?.toFixed(1).replace(".", ",")} %`, Math.abs(item.actualMovePct ?? 0) > item.impliedMovePct ? "Excedió el rango" : "Dentro del rango"]))}<h5>Trazabilidad — resultados publicados</h5>${earningsTraceHtml(published)}<h4>Qué esperamos — próximos resultados</h4>${upcomingIntro}${htmlTable(["Fecha", "Empresa", "Movimiento implícito esperado", "Hora o estado", "Fuente de fecha y hora"], upcoming.map((item) => [item.reportDate, `${item.company} (${item.ticker})`, impliedMove(item), earningsScheduleLabel(item), item.dateTimeSourceLabel]))}<h5>Trazabilidad — próximos resultados</h5>${earningsTraceHtml(upcoming)}${renderStockpickingThemesHtml(stockpicking.themes)}<p class="historical-note">${esc(methodology)} Cada fila enlaza su página por ticker, la fecha de consulta y las fuentes utilizadas para fecha, hora y reacción.</p></div>`;
+}
+
+function renderStockpickingThemesMarkdown(themes: NonNullable<Extract<ReportExportSection, { kind: "asset-readings" }>["stockpicking"]>["themes"]) {
+  if (!themes?.length) return "";
+  return `\n${themes.map((theme) => `#### ${theme.label}: ${theme.title}
+
+${theme.body}${theme.examples?.length ? `\n\nCompañías citadas: ${theme.examples.map((example) => `${example.company} (${example.ticker})`).join(", ")}.` : ""}${theme.note ? `\n\n${theme.note}` : ""}`).join("\n\n")}\n`;
 }
 
 function renderStockpickingMarkdown(stockpicking: NonNullable<Extract<ReportExportSection, { kind: "asset-readings" }>["stockpicking"]>) {
-  const { published, upcoming, methodology } = stockpicking.earnings;
+  const { published, upcoming, methodology, publishedNote, upcomingNote } = stockpicking.earnings;
+  const publishedIntro = publishedNote
+    ?? `**${published.length} resultados publicados; ${published.filter((item) => Math.abs(item.actualMovePct ?? 0) > item.impliedMovePct).length} excedieron el rango.** VRT, COIN y RDDT fueron las reacciones negativas más fuertes.`;
   return `#### Qué pasó — resultados publicados
 
-**${published.length} resultados publicados; ${published.filter((item) => Math.abs(item.actualMovePct ?? 0) > item.impliedMovePct).length} excedieron el rango.** VRT, COIN y RDDT fueron las reacciones negativas más fuertes.
+${publishedIntro}
 
 | Fecha | Empresa | Movimiento implícito esperado | Movimiento ocurrido | Lectura |
 |---|---|---:|---:|---|
 ${published.map((item) => `| ${item.reportDate} | ${item.company} (${item.ticker}) | ${impliedMove(item)} | ${item.actualMovePct?.toFixed(1).replace(".", ",")} % | ${Math.abs(item.actualMovePct ?? 0) > item.impliedMovePct ? "Excedió el rango" : "Dentro del rango"} |`).join("\n")}
 
 #### Qué esperamos — próximos resultados
-
+${upcomingNote ? `\n${upcomingNote}\n` : ""}
 | Fecha | Empresa | Movimiento implícito esperado | Hora o estado | Fuente de fecha y hora |
 |---|---|---:|---|---|
 ${upcoming.map((item) => `| ${item.reportDate} | ${item.company} (${item.ticker}) | ${impliedMove(item)} | ${earningsScheduleLabel(item)} | [${item.dateTimeSourceLabel}](${item.dateTimeSourceHref}) |`).join("\n")}
@@ -269,7 +327,7 @@ ${earningsTraceMarkdown(published)}
 ##### Trazabilidad — próximos resultados
 
 ${earningsTraceMarkdown(upcoming)}
-
+${renderStockpickingThemesMarkdown(stockpicking.themes)}
 ${methodology} Cada fila enlaza su página por ticker, la fecha de consulta y las fuentes utilizadas para fecha, hora y reacción.`;
 }
 
@@ -316,6 +374,9 @@ const watchCategoryLabels = {
   "rates-credit": "Tasas y crédito",
   "technology-ai": "Tecnología e IA",
   "fx-commodities": "Divisas y materias primas",
+  stockpicking: "Stockpicking y resultados",
+  "macro-global": "Macro global",
+  crypto: "Cripto",
 } as const;
 
 function renderWatchlistDashboardHtml(
@@ -374,15 +435,15 @@ function renderSectionHtml(section: ReportExportSection, model: ReportExportMode
                 ["Qué pasó", item.story],
                 ["Qué cambió", item.changed],
                 ["Qué esperamos", item.expected],
-                ["Qué vigilar", item.watch],
-                ["Lectura del informe", item.reading],
-                ...(model.presentation?.timelineStyle === "progression" ? [] : [
+                ...(item.watch ? [["Qué vigilar", item.watch]] : []),
+                ...(item.reading ? [["Lectura del informe", item.reading]] : []),
+                ...(item.timeline && model.presentation?.timelineStyle !== "progression" ? [
                   ["Antes / contexto", item.timeline.before],
                   ["Ahora / cambio", item.timeline.now],
                   ["Próximas señales", item.timeline.next],
-                ]),
+                ] : []),
               ],
-            )}${model.presentation?.timelineStyle === "progression" ? `
+            )}${item.timeline && model.presentation?.timelineStyle === "progression" ? `
             <p class="eyebrow">Secuencia de lectura</p><ol class="reading-flow"><li><strong>Antes — Contexto</strong><span>${esc(item.timeline.before)}</span></li><li><strong>Ahora — Qué cambió</strong><span>${esc(item.timeline.now)}</span></li><li><strong>Después — Qué vigilamos</strong><span>${esc(item.timeline.next)}</span></li></ol>` : ""}
             ${item.detailsModule === "earnings" && section.stockpicking ? renderStockpickingHtml(section.stockpicking) : ""}
           </article>`,
@@ -417,7 +478,7 @@ function renderSectionHtml(section: ReportExportSection, model: ReportExportMode
         .join("")}</div>`;
       break;
     case "probable-routes":
-      body = `<p class="historical-note">${esc(section.routes.note)}</p><h3>Motores</h3><div class="grid">${section.routes.engines.map((item) => `<article class="card"><h4>${esc(item.title)}</h4><p>${esc(item.body)}</p></article>`).join("")}</div><h3>Escenarios</h3><div class="grid">${section.routes.scenarios.map((item) => `<article class="card"><h4>${esc(item.title)}</h4><p>${esc(item.body)}</p></article>`).join("")}</div>`;
+      body = `<p class="historical-note">${esc(section.routes.note)}</p>${section.routes.engines?.length ? `<h3>Motores</h3><div class="grid">${section.routes.engines.map((item) => `<article class="card"><h4>${esc(item.title)}</h4><p>${esc(item.body)}</p></article>`).join("")}</div>` : ""}<h3>Escenarios</h3><div class="grid">${section.routes.scenarios.map((item) => `<article class="card"><h4>${esc(item.title)}</h4><p>${esc(item.body)}</p></article>`).join("")}</div>`;
       break;
     case "watchlist":
       body = model.presentation?.watchlistStyle === "dashboard" ? renderWatchlistDashboardHtml(section.items, model) : section.items
@@ -517,7 +578,7 @@ ${snapshot.regime.caution.map((item) => `- ${item}`).join("\n")}
 
 ${snapshot.regime.watch.map((item) => `- ${item}`).join("\n")}
 
-### Índices principales vía ETF
+${snapshot.indices?.length ? `### Índices principales vía ETF
 
 | Ticker | Retorno 1W | Media larga | Distancia a máximos |
 |---|---:|---:|---:|
@@ -528,7 +589,7 @@ ${snapshot.indices
   )
   .join("\n")}
 
-### Rotación sectorial
+` : ""}### Rotación sectorial
 
 - Sectores positivos: **${snapshot.sectors.positiveCount} / ${snapshot.sectors.totalCount}**
 - Sectores negativos: **${snapshot.sectors.negativeCount}**
@@ -544,18 +605,44 @@ ${[
   .map(([group, item]) => `| ${group} | ${item.ticker} | ${item.name} | ${formatSigned(item.return1w)}% |`)
   .join("\n")}
 
-### VIX - Volatilidad al corte
+${snapshot.breadth ? `### Amplitud relativa al corte
+
+- RSP/SPY 1W: **${snapshot.breadth.rspVsSpy1wPp === null ? "Pendiente al corte" : `${formatSigned(snapshot.breadth.rspVsSpy1wPp)} pp`}**
+- IWM/SPY 1W: **${snapshot.breadth.iwmVsSpy1wPp === null ? "Pendiente al corte" : `${formatSigned(snapshot.breadth.iwmVsSpy1wPp)} pp`}**
+- QQQ/SPY 1W: **${snapshot.breadth.qqqVsSpy1wPp === null ? "Pendiente al corte" : `${formatSigned(snapshot.breadth.qqqVsSpy1wPp)} pp`}**
+- Sectores sobre media larga: **${snapshot.breadth.sectorsOverLongAverage === null || snapshot.breadth.sectorsOverLongAverageTotal === null ? "Pendiente al corte" : `${snapshot.breadth.sectorsOverLongAverage} / ${snapshot.breadth.sectorsOverLongAverageTotal}`}**
+- Lectura al publicar: ${snapshot.breadth.reading}
+
+` : ""}${snapshot.quantRadar ? `### Radar cuantitativo al corte
+
+- Fragilidad: **${snapshot.quantRadar.fragilityScore}/100 · ${snapshot.quantRadar.fragilityLabel}**
+- Volatilidad EWMA: **${formatSigned(snapshot.quantRadar.ewmaVolAnnualized)}%**
+- Volatilidad GARCH: **${formatSigned(snapshot.quantRadar.garchVolForecast)}%**
+- Correlación promedio: **${snapshot.quantRadar.averageCorrelation21d.toFixed(2)}**
+- Dispersión sectorial: **${formatSigned(snapshot.quantRadar.sectorDispersion1w)}%**
+
+` : ""}### VIX - Volatilidad al corte
 
 | Campo | Valor |
 |---|---|
-${snapshot.vix ? `| Nivel al corte | ${snapshot.vix.level.toFixed(1)} |
-| Cambio 1D | ${formatSigned(snapshot.vix.change1d)} |
-| Estado | ${snapshot.vix.stateLabel} / ${snapshot.vix.status} |
-| Momentum | ${snapshot.vix.momentum} |
-| Curva | ${snapshot.vix.curve} |
-| Lectura histórica | ${snapshot.vix.curveText} |` : "No disponible al cierre."}
+${snapshot.vix ? [
+  `| Nivel al corte | ${snapshot.vix.level.toFixed(1)} |`,
+  ...(snapshot.vix.change1d === undefined ? [] : [`| Cambio 1D | ${formatSigned(snapshot.vix.change1d)} |`]),
+  ...(snapshot.vix.percentileLabel ? [`| Percentil | ${snapshot.vix.percentileLabel} |`] : []),
+  `| Estado | ${snapshot.vix.stateLabel} / ${snapshot.vix.status} |`,
+  `| Momentum | ${snapshot.vix.momentum} |`,
+  `| Curva | ${snapshot.vix.curve} |`,
+  `| Lectura histórica | ${snapshot.vix.curveText} |`,
+].join("\n") : "No disponible al cierre."}
 
-### Flujos netos de ETFs de BTC al corte
+${snapshot.vixTermStructure ? `### Estructura temporal del VIX al corte
+
+- Clasificación: **${snapshot.vixTermStructure.classification}**
+- VX2 - VX1: **${formatSigned(snapshot.vixTermStructure.vx2MinusVx1, 2)} puntos**
+- Pendiente VX1-VX2: **${formatSigned(snapshot.vixTermStructure.slopeVx1Vx2Pct)}%**
+- VX3 - VX1: **${formatSigned(snapshot.vixTermStructure.vx3MinusVx1, 2)} puntos**
+
+` : ""}### Flujos netos de ETFs de BTC al corte
 
 ${snapshot.btcEtfFlows ? `- Último día: **${formatUsdMillions(snapshot.btcEtfFlows.lastDayUsdMillions)}**
 - Rolling 5D: **${formatUsdMillions(snapshot.btcEtfFlows.rolling5dUsdMillions)}**
@@ -564,12 +651,16 @@ ${snapshot.btcEtfFlows ? `- Último día: **${formatUsdMillions(snapshot.btcEtfF
 
 ### Proxy histórico de presión de flujos en GLD
 
-${snapshot.gldFlowPressure ? `- Fecha del dato: **${snapshot.gldFlowPressure.asOf}**
-- Proxy al corte: **${snapshot.gldFlowPressure.label}**
-- Cambio 5D en participaciones: **${formatSigned(snapshot.gldFlowPressure.sharesChange5dPct, 2)}%**
-- Resumen: ${snapshot.gldFlowPressure.summary}
-- Limitación de fuente: ${snapshot.gldFlowPressure.sourceNote}` : "No disponible al cierre."}
-
+${snapshot.gldFlowPressure ? [
+  `- Fecha del dato: **${snapshot.gldFlowPressure.asOf}**`,
+  `- Proxy al corte: **${snapshot.gldFlowPressure.label}**`,
+  ...(snapshot.gldFlowPressure.sharesChange1dPct === undefined ? [] : [`- Cambio 1D en participaciones: **${formatSigned(snapshot.gldFlowPressure.sharesChange1dPct, 2)}%**`]),
+  `- Cambio 5D en participaciones: **${formatSigned(snapshot.gldFlowPressure.sharesChange5dPct, 2)}%**`,
+  ...(snapshot.gldFlowPressure.sharesChange20dPct === undefined ? [] : [`- Cambio 20D en participaciones: **${formatSigned(snapshot.gldFlowPressure.sharesChange20dPct, 2)}%**`]),
+  `- Resumen: ${snapshot.gldFlowPressure.summary}`,
+  `- Limitación de fuente: ${snapshot.gldFlowPressure.sourceNote}`,
+].join("\n") : "No disponible al cierre."}
+${snapshot.statisticalAssets?.length ? `
 ### Posición técnica por activo
 
 | Activo | Percentil | Z-score | Media larga | Último cierre |
@@ -579,7 +670,7 @@ ${snapshot.statisticalAssets
     (asset) =>
       `| ${asset.label} (${asset.symbol ?? asset.label}) | ${asset.percentile.toFixed(1)} | ${asset.zScore.toFixed(2)} | ${formatSigned(asset.distanceLongAverage)}% | ${asset.label === "BTC" ? asset.lastClose.toFixed(0) : asset.lastClose.toFixed(2)} |`,
   )
-  .join("\n")}`;
+  .join("\n")}` : ""}`;
 }
 
 function renderSectionMarkdown(section: ReportExportSection, model: ReportExportModel) {
@@ -608,14 +699,18 @@ function renderSectionMarkdown(section: ReportExportSection, model: ReportExport
 
 Clasificación: **${item.badge}**
 
-- **Qué pasó:** ${item.story}
-- **Qué cambió:** ${item.changed}
-- **Qué esperamos:** ${item.expected}
-- **Qué vigilar:** ${item.watch}
-- **Lectura del informe:** ${item.reading}
-- **Antes / contexto:** ${item.timeline.before}
-- **Ahora / cambio:** ${item.timeline.now}
-- **Próximas señales:** ${item.timeline.next}${item.detailsModule === "earnings" && section.stockpicking ? `\n\n${renderStockpickingMarkdown(section.stockpicking)}` : ""}`,
+${[
+  `- **Qué pasó:** ${item.story}`,
+  `- **Qué cambió:** ${item.changed}`,
+  `- **Qué esperamos:** ${item.expected}`,
+  ...(item.watch ? [`- **Qué vigilar:** ${item.watch}`] : []),
+  ...(item.reading ? [`- **Lectura del informe:** ${item.reading}`] : []),
+  ...(item.timeline ? [
+    `- **Antes / contexto:** ${item.timeline.before}`,
+    `- **Ahora / cambio:** ${item.timeline.now}`,
+    `- **Próximas señales:** ${item.timeline.next}`,
+  ] : []),
+].join("\n")}${item.detailsModule === "earnings" && section.stockpicking ? `\n\n${renderStockpickingMarkdown(section.stockpicking)}` : ""}`,
         )
         .join("\n\n")}`;
     case "historical-snapshot":
@@ -647,7 +742,7 @@ ${section.calendar.map((item) => `| ${item.dateLabel} | ${calendarTimeLabel(item
 
 ${section.scenarios.map((item) => `#### ${item.title}\n\n${item.body}`).join("\n\n")}`;
     case "probable-routes":
-      return `${heading}\n\n${section.routes.note}\n\n### Motores\n\n${section.routes.engines.map((item) => `#### ${item.title}\n\n${item.body}`).join("\n\n")}\n\n### Escenarios\n\n${section.routes.scenarios.map((item) => `#### ${item.title}\n\n${item.body}`).join("\n\n")}`;
+      return `${heading}\n\n${section.routes.note}\n\n${section.routes.engines?.length ? `### Motores\n\n${section.routes.engines.map((item) => `#### ${item.title}\n\n${item.body}`).join("\n\n")}\n\n` : ""}### Escenarios\n\n${section.routes.scenarios.map((item) => `#### ${item.title}\n\n${item.body}`).join("\n\n")}`;
     case "watchlist":
       return `${heading}\n\n${section.items
         .map((item) => {
@@ -1066,12 +1161,21 @@ function substantiveNeedles(section: ReportExportSection, model: ReportExportMod
           item.story,
           item.changed,
           item.expected,
-          item.watch,
-          item.reading,
-          item.timeline.before,
-          item.timeline.now,
-          item.timeline.next,
+          item.watch ?? "",
+          item.reading ?? "",
+          item.timeline?.before ?? "",
+          item.timeline?.now ?? "",
+          item.timeline?.next ?? "",
         );
+      }
+      if (section.stockpicking) {
+        values.push(
+          section.stockpicking.earnings.publishedNote ?? "",
+          section.stockpicking.earnings.upcomingNote ?? "",
+        );
+        for (const theme of section.stockpicking.themes ?? []) {
+          values.push(theme.label, theme.title, theme.body, theme.note ?? "");
+        }
       }
       break;
     case "historical-snapshot": {
@@ -1092,13 +1196,29 @@ function substantiveNeedles(section: ReportExportSection, model: ReportExportMod
         snapshot.btcEtfFlows ? formatUsdMillions(snapshot.btcEtfFlows.rolling5dUsdMillions) : "No disponible al cierre",
         snapshot.gldFlowPressure?.summary ?? "No disponible al cierre",
       );
-      for (const item of snapshot.indices) {
+      if (snapshot.breadth) values.push(snapshot.breadth.reading);
+      if (snapshot.quantRadar) {
+        values.push(
+          `${snapshot.quantRadar.fragilityScore}/100 · ${snapshot.quantRadar.fragilityLabel}`,
+          `${formatSigned(snapshot.quantRadar.ewmaVolAnnualized)}%`,
+          `${formatSigned(snapshot.quantRadar.garchVolForecast)}%`,
+          snapshot.quantRadar.averageCorrelation21d.toFixed(2),
+        );
+      }
+      if (snapshot.vixTermStructure) {
+        values.push(
+          snapshot.vixTermStructure.classification,
+          `${formatSigned(snapshot.vixTermStructure.vx2MinusVx1, 2)} puntos`,
+          `${formatSigned(snapshot.vixTermStructure.vx3MinusVx1, 2)} puntos`,
+        );
+      }
+      for (const item of snapshot.indices ?? []) {
         values.push(item.ticker, `${formatSigned(item.return1w)}%`);
       }
       for (const item of [...snapshot.sectors.leaders, ...snapshot.sectors.laggards]) {
         values.push(item.ticker, item.name, `${formatSigned(item.return1w)}%`);
       }
-      for (const asset of snapshot.statisticalAssets) {
+      for (const asset of snapshot.statisticalAssets ?? []) {
         values.push(
           asset.label,
           asset.percentile.toFixed(1),
@@ -1128,7 +1248,7 @@ function substantiveNeedles(section: ReportExportSection, model: ReportExportMod
       break;
     case "probable-routes":
       values.push(section.routes.note);
-      for (const item of [...section.routes.engines, ...section.routes.scenarios]) values.push(item.title, item.body);
+      for (const item of [...(section.routes.engines ?? []), ...section.routes.scenarios]) values.push(item.title, item.body);
       break;
     case "watchlist":
       for (const item of section.items) {
@@ -1184,7 +1304,10 @@ function validateIcs(model: ReportExportModel, value: string) {
       assert(!event.includes("DTEND;VALUE=DATE:"));
     } else {
       assert(event.includes(`DTSTART;VALUE=DATE:${icsDate(expected.startDate)}`));
-      const expectedEnd = model.status === "archivado"
+      // Los artefactos archivados anteriores al calendario mensual guardan DTEND inclusivo y se
+      // toleran tal cual; los modelos con calendario mensual ya resuelven el DTEND exclusivo.
+      const legacyInclusiveEnd = model.status === "archivado" && model.presentation?.calendarStyle !== "monthly";
+      const expectedEnd = legacyInclusiveEnd
         ? addOneDay(expected.endDate ?? expected.startDate)
         : expected.endDate ?? addOneDay(expected.startDate);
       assert(event.includes(`DTEND;VALUE=DATE:${icsDate(expectedEnd)}`));

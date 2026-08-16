@@ -53,7 +53,7 @@ export type ReportExportSection =
     }
   | {
       id: "asset-follow-up";
-      title: "Lectura de seguimiento por activo";
+      title: string;
       kind: "asset-readings";
       items: MarketReportAssetReading[];
       stockpicking?: NonNullable<MarketReport["stockpicking"]>;
@@ -74,7 +74,7 @@ export type ReportExportSection =
     }
   | {
       id: "calendar-and-scenarios";
-      title: "Calendario y escenarios";
+      title: string;
       kind: "calendar-scenarios";
       calendar: MarketReportCalendarItem[];
       scenarios: MarketReportScenario[];
@@ -87,13 +87,13 @@ export type ReportExportSection =
     }
   | {
       id: "watchlist";
-      title: "Señales a vigilar";
+      title: string;
       kind: "watchlist";
       items: MarketReportWatchItem[];
     }
   | {
       id: "sources-and-limitations";
-      title: "Fuentes, limitaciones y aviso educativo";
+      title: string;
       kind: "sources";
       sourcesNote: string;
       disclaimer: string;
@@ -204,20 +204,22 @@ function reportSections(
   snapshot: HistoricalAutomaticReadingsSnapshot | null,
 ): ReportExportSection[] {
   const figures = figuresFor(report);
+  const sectionTitles = report.presentation?.sectionTitles;
   const sections: ReportExportSection[] = [
-    {
-      id: "thesis",
-      title: "Tesis principal",
-      kind: "narrative",
-      body: report.thesis,
-    },
-    {
-      id: "executive-summary",
-      title: "Resumen ejecutivo",
-      kind: "summary",
-      items: report.executiveSummary,
-      ...(report.transversalFactor ? { transversalFactor: report.transversalFactor } : {}),
-    },
+    ...(report.thesis
+      ? [{ id: "thesis" as const, title: "Tesis principal" as const, kind: "narrative" as const, body: report.thesis }]
+      : []),
+    ...(report.executiveSummary?.length || report.transversalFactor
+      ? [
+          {
+            id: "executive-summary" as const,
+            title: "Resumen ejecutivo" as const,
+            kind: "summary" as const,
+            items: report.executiveSummary ?? [],
+            ...(report.transversalFactor ? { transversalFactor: report.transversalFactor } : {}),
+          },
+        ]
+      : []),
     {
       id: report.presentation?.contextTitle ? "context-general" : "context-by-asset",
       title: report.presentation?.contextTitle ?? "Contexto por activo",
@@ -237,7 +239,7 @@ function reportSections(
 
   sections.push({
     id: "asset-follow-up",
-    title: "Lectura de seguimiento por activo",
+    title: sectionTitles?.assetReadings ?? "Lectura de seguimiento por activo",
     kind: "asset-readings",
     items: report.assetReadings,
     ...(report.stockpicking ? { stockpicking: report.stockpicking } : {}),
@@ -255,21 +257,21 @@ function reportSections(
   sections.push(
     {
       id: "calendar-and-scenarios",
-      title: "Calendario y escenarios",
+      title: sectionTitles?.calendar ?? "Calendario y escenarios",
       kind: "calendar-scenarios",
       calendar: getReportCalendar(report),
-      scenarios: report.probableRoutes ? [] : report.scenarios,
+      scenarios: report.probableRoutes ? [] : report.scenarios ?? [],
     },
     ...(report.probableRoutes ? [{ id: "probable-routes" as const, title: "Rutas probables" as const, kind: "probable-routes" as const, routes: report.probableRoutes }] : []),
     {
       id: "watchlist",
-      title: "Señales a vigilar",
+      title: sectionTitles?.watchlist ?? "Señales a vigilar",
       kind: "watchlist",
       items: report.watchlist,
     },
     {
       id: "sources-and-limitations",
-      title: "Fuentes, limitaciones y aviso educativo",
+      title: sectionTitles?.sources ?? "Fuentes, limitaciones y aviso educativo",
       kind: "sources",
       sourcesNote: report.sourcesNote,
       disclaimer: report.disclaimer,

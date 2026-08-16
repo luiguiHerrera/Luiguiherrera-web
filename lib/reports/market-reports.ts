@@ -23,9 +23,12 @@ export type MarketReportAssetReading = {
   story: string;
   changed: string;
   expected: string;
-  watch: string;
-  reading: string;
-  timeline: {
+  /** Optional: el formato condensado concentra la vigilancia en la lista de control. */
+  watch?: string;
+  /** Optional: el formato condensado no repite una lectura editorial por activo. */
+  reading?: string;
+  /** Optional: el formato condensado no expone la secuencia de lectura. */
+  timeline?: {
     before: string;
     now: string;
     next: string;
@@ -90,8 +93,17 @@ export type MarketReportEarningsItem = {
 export type MarketReportProbableRoutes = {
   title: "Rutas probables";
   note: string;
-  engines: Array<{ title: string; body: string }>;
+  /** Optional: solo se publica cuando el informe identifica motores explícitos. */
+  engines?: Array<{ title: string; body: string }>;
   scenarios: MarketReportScenario[];
+};
+
+export type MarketReportStockpickingTheme = {
+  label: string;
+  title: string;
+  body: string;
+  examples?: Array<{ ticker: string; company: string }>;
+  note?: string;
 };
 
 export type MarketReportPresentation = {
@@ -99,6 +111,13 @@ export type MarketReportPresentation = {
   timelineStyle?: "progression";
   calendarStyle?: "monthly";
   watchlistStyle?: "dashboard";
+  /** Títulos canónicos por sección cuando la edición usa un orden editorial propio. */
+  sectionTitles?: {
+    assetReadings?: string;
+    calendar?: string;
+    watchlist?: string;
+    sources?: string;
+  };
   year?: number;
   month?: number;
   localizedTitle?: string;
@@ -115,7 +134,14 @@ export type MarketReportScenario = {
 export type MarketReportWatchItem = {
   key: string;
   name: string;
-  category?: "market-structure" | "rates-credit" | "technology-ai" | "fx-commodities";
+  category?:
+    | "market-structure"
+    | "rates-credit"
+    | "technology-ai"
+    | "fx-commodities"
+    | "stockpicking"
+    | "macro-global"
+    | "crypto";
   status?: "stable" | "watch" | "stressed" | "improving" | "tba";
   statusLabel?: string;
   whatLooksAt: string;
@@ -151,8 +177,10 @@ export type MarketReport = {
   markdownHref?: string;
   pdfHref?: string;
   status: "actual" | "archivado";
-  thesis: string;
-  executiveSummary: Array<{ title: string; text: string }>;
+  /** Optional: en el formato condensado el contexto general cumple esta función. */
+  thesis?: string;
+  /** Optional: en el formato condensado el contexto general cumple esta función. */
+  executiveSummary?: Array<{ title: string; text: string }>;
   transversalFactor?: {
     label?: string;
     title: string;
@@ -161,7 +189,8 @@ export type MarketReport = {
   whatHappened: MarketReportSectionBlock[];
   assetReadings: MarketReportAssetReading[];
   calendar: MarketReportCalendarItem[];
-  scenarios: MarketReportScenario[];
+  /** Optional: las ediciones con rutas probables no duplican los escenarios. */
+  scenarios?: MarketReportScenario[];
   watchlist: MarketReportWatchItem[];
   sourcesNote: string;
   disclaimer: string;
@@ -170,9 +199,12 @@ export type MarketReport = {
   stockpicking?: {
     earnings: {
       methodology: string;
+      publishedNote?: string;
+      upcomingNote?: string;
       published: MarketReportEarningsItem[];
       upcoming: MarketReportEarningsItem[];
     };
+    themes?: MarketReportStockpickingTheme[];
   };
 };
 
@@ -986,7 +1018,7 @@ export const marketReports: MarketReport[] = [
     htmlHref: "/reports/primer-informe-agosto-2026.html",
     markdownHref: "/reports/primer-informe-agosto-2026.md",
     pdfHref: "/reports/primer-informe-agosto-2026.pdf",
-    status: "actual",
+    status: "archivado",
     presentation: {
       contextTitle: "Contexto general",
       timelineStyle: "progression",
@@ -1588,6 +1620,453 @@ export const marketReports: MarketReport[] = [
       "Las lecturas combinan datos de mercado, cálculos propios y material institucional con cortes entre el 21 y el 31 de julio de 2026, incluyendo J.P. Morgan, Goldman Sachs, BofA y Nomura. El calendario macro usa Federal Reserve Board, Bureau of Labor Statistics, U.S. Census Bureau, Institute for Supply Management, Federal Reserve Bank of Kansas City y Cboe; USD/COP usa Banco de la República y Superintendencia Financiera de Colombia. Las fechas corporativas confirmadas proceden de SEC EDGAR, anuncios específicos de Vertiv, Coinbase, Reddit, Palantir, Arista Networks, Coupang, Uber, Duolingo, Cloudflare y Hims & Hers, además de páginas de relaciones con inversionistas de AngloGold Ashanti y Cameco. Las portadas de IR de LifeMD y Celsius Holdings se incluyen solo como páginas de seguimiento: no confirman sus fechas editoriales ni sus horas. Los movimientos implícitos proceden de páginas por ticker de Unusual Whales consultadas el 1 de agosto de 2026 a las 12:00 UTC. Las reacciones realizadas usan históricos por ticker de Yahoo Finance, salvo CCJ, calculada con Nasdaq Historical como variación entre cierres regulares del 30 y 31 de julio, redondeada a una decimal. Las fuentes informan el análisis; no organizan la estructura. Se excluyeron cifras, gráficos y atribuciones que el borrador marcaba como pendientes de verificación.",
     disclaimer:
       "Este documento tiene fines educativos e informativos. No constituye asesoría financiera, recomendación personalizada ni solicitud de compra o venta de activos. Los escenarios son condicionales, no predicciones. Las decisiones de inversión deben considerar objetivos, horizonte, liquidez, tolerancia al riesgo y situación financiera individual. Rentabilidades pasadas no garantizan resultados futuros.",
+  },
+  {
+    id: "segundo-informe-agosto-2026",
+    monthKey: "2026-08",
+    monthLabel: "Agosto 2026",
+    label: "Segundo informe de agosto",
+    title: "El mercado vuelve al riesgo mientras la factura de la IA gana peso",
+    subtitle:
+      "Rotación interna, financiación de la IA, oro y política monetaria marcan una segunda mitad de agosto con menos margen para decepciones.",
+    dateLabel: "Corte editorial: 16 de agosto de 2026 · Datos automáticos: 14 de agosto de 2026",
+    publishedLabel: "16 de agosto de 2026",
+    publishedAt: "2026-08-16",
+    modifiedAt: "2026-08-16",
+    editorialCutoffAt: "2026-08-16",
+    automaticDataCutoffAt: "2026-08-14",
+    summary:
+      "Rotación interna, coste de financiar la IA, oro, política monetaria y stockpicking para la segunda mitad de agosto, con lecturas de mercado congeladas al 14 de agosto de 2026.",
+    calendarHref: "/reports/segundo-informe-agosto-2026-calendar.ics",
+    htmlHref: "/reports/segundo-informe-agosto-2026.html",
+    markdownHref: "/reports/segundo-informe-agosto-2026.md",
+    pdfHref: "/reports/segundo-informe-agosto-2026.pdf",
+    status: "actual",
+    presentation: {
+      contextTitle: "Contexto general",
+      calendarStyle: "monthly",
+      watchlistStyle: "dashboard",
+      sectionTitles: {
+        assetReadings: "Lectura por activo",
+        calendar: "Calendario de eventos",
+        watchlist: "Lista de control",
+        sources: "Fuentes y aviso educativo",
+      },
+      year: 2026,
+      month: 8,
+      localizedTitle: "Agosto de 2026",
+      locale: "es-ES",
+      primaryTimeZone: "America/New_York",
+      displayTimeZones: ["America/New_York", "Europe/Madrid"],
+    },
+    whatHappened: [
+      {
+        title: "Un mercado más fuerte de lo que sugería julio",
+        summary: "Los hedge funds reconstruyeron exposición en Norteamérica y las compras se ampliaron más allá de las grandes tecnológicas.",
+        body:
+          "La primera mitad de agosto dejó un mercado estadounidense más fuerte de lo que sugería la sacudida de finales de julio. Los hedge funds reconstruyeron exposición en Norteamérica y las compras se extendieron más allá de las grandes tecnológicas, una señal favorable para la amplitud del mercado.",
+      },
+      {
+        title: "Rotación dentro del mercado, no retirada de capital",
+        summary: "Varios líderes de momentum perdieron fuerza mientras compañías rezagadas recuperaron terreno.",
+        body:
+          "La mejora, sin embargo, llega con una composición distinta. Varias acciones que habían liderado por momentum perdieron fuerza mientras sectores y compañías rezagadas recuperaron terreno. Hasta el corte, el comportamiento encaja mejor con una rotación dentro del mercado que con una retirada general de capital.",
+      },
+      {
+        title: "El posicionamiento es más exigente",
+        summary: "El indicador Bull & Bear de Bank of America alcanzó 9,7 sobre 10, una zona de optimismo extremo.",
+        body:
+          "El posicionamiento también es más exigente. El indicador Bull & Bear de Bank of America alcanzó 9,7 sobre 10, una zona que la entidad considera de optimismo extremo. No anticipa por sí sola una caída, pero sí implica que hay menos margen para que una decepción pase desapercibida.",
+      },
+      {
+        title: "La factura de la inteligencia artificial",
+        summary: "El mercado empieza a mirar cómo se financia la expansión, no solo cuánto se invierte.",
+        body:
+          "La inteligencia artificial continúa concentrando inversión, aunque el mercado empieza a mirar una segunda variable: cómo se financia esa expansión. El aumento de emisiones de deuda asociadas a centros de datos e infraestructura, junto con mayores primas de crédito en varias grandes tecnológicas, sugiere que el coste financiero del ciclo de IA empieza a importar tanto como el crecimiento esperado. Si una parte mayor del flujo de caja se dirige a inversión y financiación, las recompras también podrían aportar menos apoyo marginal que en años anteriores.",
+      },
+      {
+        title: "El oro recupera demanda y se acerca a resistencia",
+        summary: "Vuelve a existir demanda sistemática, pero todavía debe atravesar una zona técnica relevante.",
+        body:
+          "El oro recuperó compradores sistemáticos después de su corrección, pero se aproxima a una zona técnica relevante. Esto deja una configuración menos simple que “alcista” o “bajista”: vuelve a existir demanda, pero todavía debe demostrarse que el precio puede atravesar una resistencia importante.",
+      },
+      {
+        title: "Lo que decide la segunda mitad de agosto",
+        summary: "Rendimientos largos y DXY vuelven a ser variables transversales frente a PCE, Jackson Hole, OPEX y resultados.",
+        body:
+          "Para la segunda mitad del mes, los rendimientos largos y el DXY vuelven a ser variables transversales. PCE, Jackson Hole, la expiración mensual de opciones y los resultados de FUTU y NVIDIA pueden modificar las expectativas sobre tipos, crecimiento y gasto en IA. La lectura de arranque es, por tanto, la de un mercado que todavía tiene argumentos para mantenerse funcional, pero menos espacio para equivocarse.",
+      },
+    ],
+    assetReadings: [
+      {
+        asset: "S&P 500",
+        headline: "La corrección no evolucionó hacia una liquidación general: el mercado encontró nuevos compradores.",
+        badge: "funcional",
+        story:
+          "Después de la reducción de riesgo de finales de julio, los hedge funds volvieron a aumentar exposición en Estados Unidos. Morgan Stanley mostró compras en Norteamérica que se extendieron más allá de tecnología hacia materiales, salud, inmobiliario y otras áreas de la economía. El índice recuperó fortaleza mientras bajo la superficie se produjo una rotación intensa: varios antiguos líderes de momentum cedieron y compañías previamente castigadas rebotaron. Al cierre del 14 de agosto, la participación sectorial era amplia —9 de 11 sectores positivos y 8 de 11 sobre su media larga en el dashboard— aunque el equal weight todavía no superaba al índice ponderado por capitalización.",
+        changed:
+          "La principal diferencia frente al primer informe es que la corrección no evolucionó hacia una liquidación general. Al mismo tiempo, el riesgo cambió de forma. El Bull & Bear de BofA en 9,7/10, la rotación violenta de momentum y el aumento del coste de financiar infraestructura de IA reducen el margen para decepciones. La discusión ya no es solo crecimiento tecnológico: deuda, crédito, tipos largos y uso del flujo de caja empiezan a importar más.",
+        expected:
+          "El escenario base sigue siendo compatible con un S&P 500 funcional, pero con mayor dispersión entre sectores y compañías. La continuidad sería más saludable si la amplitud se mantiene y el liderazgo sigue ampliándose. Un repunte fuerte de rendimientos y DXY, un deterioro simultáneo de amplitud y crédito o una decepción importante en las grandes tecnológicas elevarían el riesgo de que la rotación se convierta en reducción general de exposición.",
+      },
+      {
+        asset: "Oro",
+        headline: "Reaparecieron compradores sistemáticos, pero la confirmación técnica todavía importa.",
+        badge: "en confirmación",
+        story:
+          "Después de una corrección cercana al 27 % desde máximos, el oro rebotó y volvió a atraer demanda sistemática. Según el análisis de Charlie McElligott, la señal CTA pasó aproximadamente de -18 % corto a +15 % largo, con alrededor de 1.500 millones de dólares de compras estimadas en el giro. BTIG situó una zona de resistencia importante alrededor de 4.400–4.500 dólares, mientras el dashboard mostraba al 14 de agosto una presión de flujos en GLD compatible con entrada neta probable: +0,03 % en 1D, +0,59 % en 5D y +2,49 % en 20D.",
+        changed:
+          "La tesis táctica mejoró: ya no se trata solo de una narrativa estructural sobre deuda o diversificación; han reaparecido compradores sistemáticos y los flujos de GLD mejoraron. Pero la confirmación técnica todavía importa. McElligott identifica además un nivel condicional cercano a 5.056 dólares que, bajo su modelo, podría llevar a una exposición CTA mucho más larga. No es un objetivo de precio.",
+        expected:
+          "El escenario mejora si el oro consigue absorber la zona de 4.400–4.500 sin un fortalecimiento simultáneo del DXY o de las tasas reales. Un rechazo en resistencia acompañado por dólar y rendimientos más altos favorecería consolidación o retroceso. Una ruptura sostenida, especialmente con DXY y rendimientos contenidos, podría atraer demanda sistemática adicional.",
+      },
+      {
+        asset: "China",
+        headline: "Exportaciones fuertes y demanda interna débil: el contraste se volvió más explícito.",
+        badge: "táctico",
+        story:
+          "La economía china siguió mostrando una brecha clara entre fortaleza externa y debilidad doméstica. En julio, las exportaciones crecieron aproximadamente 24 % interanual y el superávit comercial alcanzó unos 113.000 millones de dólares, mientras el crecimiento del PIB del segundo trimestre fue de 4,3 % y las ventas minoristas habían mostrado un tono mucho más débil. Beijing mantuvo una estrategia de apoyo selectivo y aceleración del gasto ya presupuestado, sin anunciar un gran programa nuevo de estímulo al consumo. La estacionalidad de agosto no aporta una señal direccional útil por sí sola: FXI terminó agosto en positivo en 5 de los últimos 10 años.",
+        changed:
+          "La resistencia del mercado amplio chino frente a episodios de presión tecnológica sigue siendo relevante, pero el contraste entre exportaciones fuertes y demanda interna débil se volvió más explícito. Eso limita una lectura demasiado optimista basada únicamente en valoraciones o política. El motor exportador es fuerte; el consumidor doméstico todavía no ofrece una confirmación equivalente.",
+        expected:
+          "La lectura sigue siendo táctica y mixta. Mejoras claras en confianza, consumo o estímulos dirigidos a demanda doméstica aumentarían la calidad de una recuperación. Por el contrario, un DXY más fuerte, mayores tensiones comerciales o persistencia de la debilidad interna mantendrían la dispersión y limitarían una tesis direccional más fuerte.",
+      },
+      {
+        asset: "Japón",
+        headline: "El yen volvió a ser la variable central de la lectura japonesa.",
+        badge: "selectivo",
+        story:
+          "Japón siguió atrayendo interés institucional dentro de la rotación global, pero el yen volvió a convertirse en una variable central. Después de una intervención coordinada que llevó al yen desde un mínimo cercano a 163,99 por dólar hasta alrededor de 155,20, la divisa volvió a debilitarse hacia 159,5 al 14 de agosto. El diferencial de rendimientos entre Estados Unidos y Japón seguía siendo amplio y el mercado aumentó sus apuestas por una nueva subida del Banco de Japón en septiembre.",
+        changed:
+          "La debilidad del yen ya no funciona únicamente como apoyo para exportadores. Al acercarse de nuevo a 160, aumenta también el riesgo de intervención, inflación importada y una respuesta monetaria más rápida. Por eso, la lectura de Japón depende más que al inicio del mes de la interacción entre beneficios, divisa y política monetaria.",
+        expected:
+          "La fortaleza relativa puede continuar si la debilidad del yen se mantiene ordenada y el Banco de Japón normaliza tipos de forma gradual. Una nueva intervención cambiaria o un endurecimiento monetario más rápido podría fortalecer el yen y aumentar la dispersión entre sectores, especialmente en compañías con elevada sensibilidad exportadora.",
+      },
+      {
+        asset: "Bitcoin",
+        headline: "Sin ruptura clara al alza y con flujos de ETFs todavía mixtos.",
+        badge: "alta beta",
+        story:
+          "Bitcoin llegó al corte alrededor de la zona de 63.000 dólares y no consiguió convertir unos datos macro algo más suaves en una ruptura clara al alza. El dashboard mostraba al 14 de agosto una señal de flujos de ETFs spot todavía mixta: último flujo de -123 M USD, -229 M USD en cinco días y una racha de dos días de salidas.",
+        changed:
+          "La lectura se apoya menos en una narrativa direccional y más en la combinación de liquidez, DXY, rendimientos y flujos de ETFs. La información fiable hasta el corte no justifica una tesis independiente más fuerte.",
+        expected:
+          "Un dólar y rendimientos más contenidos, acompañados por una mejora persistente de los flujos de ETFs, favorecerían un entorno más constructivo. Un endurecimiento de las condiciones financieras o nuevas salidas sostenidas mantendrían a Bitcoin como un activo de beta alta y sensible al apetito global por riesgo.",
+      },
+      {
+        asset: "Ethereum",
+        headline: "Sin señal institucional propia suficiente para separarlo del régimen general de cripto.",
+        badge: "alta beta",
+        story:
+          "Ethereum compartió el entorno de volatilidad y sensibilidad a liquidez del mercado cripto. La información institucional específica disponible hasta el corte es menor que para Bitcoin y no aporta una señal independiente suficientemente fuerte para separar con confianza su dirección del régimen general de cripto.",
+        changed:
+          "No aparece una nueva tesis propia que invalide la lectura anterior: DXY, tipos, liquidez y apetito por riesgo siguen siendo los principales filtros macro.",
+        expected:
+          "El escenario mejora si se relajan las condiciones financieras y el mercado cripto recupera flujos y participación. Si dólar y rendimientos suben o se debilita el apetito por riesgo, ETH seguiría siendo vulnerable. No corresponde inferir fortaleza relativa frente a BTC sin una fuente específica.",
+      },
+      {
+        asset: "DXY",
+        headline: "Factor transversal: puede amplificar o aliviar a la vez la presión sobre oro, China y cripto.",
+        badge: "factor transversal",
+        story:
+          "El dólar siguió actuando como transmisor entre las diferencias de tipos, la política monetaria y el comportamiento de otros activos. La tensión alrededor del yen mostró que los diferenciales de rendimientos siguen teniendo capacidad para mover divisas incluso después de intervención oficial.",
+        changed:
+          "Para la segunda mitad de agosto, PCE y Jackson Hole aumentan la sensibilidad del DXY a cualquier cambio en expectativas sobre la Fed. Su papel es más importante porque puede amplificar o aliviar simultáneamente presión sobre oro, China y cripto.",
+        expected:
+          "Una lectura de inflación más persistente o una Fed más restrictiva tendería a apoyar dólar y rendimientos. Una combinación de inflación más contenida y mayor confianza en desinflación podría producir el movimiento contrario. El DXY se usa aquí como factor transversal, no como activo recomendado.",
+      },
+      {
+        asset: "Stockpicking",
+        detailsModule: "earnings",
+        headline: "Siete de nueve reacciones quedaron dentro del rango implícito; PLTR y CELH lo excedieron.",
+        badge: "selectivo",
+        story:
+          "Las nueve publicaciones que el primer informe dejó bajo seguimiento ya reaccionaron. Siete se movieron dentro del rango que las opciones descontaban antes del evento y dos lo excedieron: PLTR al alza y CELH a la baja. En CELH, además, la fecha finalmente confirmada fue el 6 de agosto y no la fecha editorial sin confirmar que figuraba en el informe anterior.",
+        changed:
+          "La ventana de seguimiento se reduce a dos publicaciones con fecha oficial confirmada: FUTU el 20 de agosto y NVIDIA el 26. Además, la cadena de infraestructura óptica para centros de datos aparece como tema en observación dentro del análisis de compañías, sin que el mapa industrial permita por sí solo clasificar ninguna como selección.",
+        expected:
+          "En ambos casos la referencia será comprobar si la reacción del cierre regular permanece dentro del movimiento implícito registrado antes del evento o introduce una sorpresa de precio material. En NVIDIA, márgenes, guía y comentarios sobre demanda de centros de datos importan más allá de una sola acción como prueba del ciclo de inversión en IA.",
+      },
+    ],
+    stockpicking: {
+      earnings: {
+        methodology:
+          "Los movimientos implícitos esperados de la tabla retrospectiva son los congelados en el primer informe de agosto, procedentes de páginas por ticker de Unusual Whales consultadas el 1 de agosto de 2026 a las 12:00 UTC; no se actualizan con el valor posterior de las opciones. El movimiento ocurrido usa una única metodología: variación entre el cierre regular de la sesión de reacción y el cierre regular inmediatamente anterior, redondeada a una decimal. No se usan datos after-hours ni máximos o mínimos intradía.",
+        publishedNote:
+          "El primer informe dejó nueve publicaciones de resultados bajo seguimiento. Al comparar el movimiento que las opciones descontaban antes del evento con el cierre regular de la sesión de reacción, siete de las nueve compañías permanecieron dentro del rango esperado. PLTR y CELH lo excedieron. La comparación mide sorpresa de precio, no calidad empresarial: una acción puede presentar buenos resultados y aun así moverse menos de lo que el mercado ya había descontado.",
+        upcomingNote:
+          "Solo dos compañías del seguimiento publican resultados entre el 17 y el 31 de agosto, ambas con fecha oficial confirmada por sus páginas de relaciones con inversionistas. Los movimientos implícitos quedaron registrados en la consulta del 16 de agosto de 2026 y no se actualizan después de publicar.",
+        published: [
+          { company: "Palantir", ticker: "PLTR", reportDate: "2026-08-03", reactionDate: "2026-08-04", session: "after-close", impliedMovePct: 10.32, actualMovePct: 29.5, impliedMoveProvider: "Unusual Whales", impliedMoveProviderHref: "https://unusualwhales.com/stock/PLTR/earnings", dateTimeSourceLabel: "Anuncio de Palantir: resultados Q2 2026 y webcast", dateTimeSourceHref: "https://www.nasdaq.com/press-release/palantir-announces-date-second-quarter-2026-earnings-release-and-webcast-2026-07-13", actualMoveSourceLabel: "Stock Analysis — históricos de PLTR", actualMoveSourceHref: "https://stockanalysis.com/stocks/pltr/history/", actualMoveMethodology: "Cierre regular del 4 de agosto (162,66 USD) frente al cierre regular previo (125,65 USD): (162,66 / 125,65 - 1) × 100 = +29,5 %.", consultedAt: "2026-08-01T12:00:00Z", dateConfirmationStatus: "confirmed", timeConfirmationStatus: "confirmed" },
+          { company: "Arista Networks", ticker: "ANET", reportDate: "2026-08-04", reactionDate: "2026-08-05", session: "after-close", impliedMovePct: 10.40, impliedMoveApproximate: true, actualMovePct: 3.6, impliedMoveProvider: "Unusual Whales", impliedMoveProviderHref: "https://unusualwhales.com/stock/ANET/earnings", dateTimeSourceLabel: "Anuncio de resultados de Arista", dateTimeSourceHref: "https://investors.arista.com/Communications/Press-Releases-and-Events/Press-Release-Detail/2026/Arista-Networks-to-Announce-Q2-2026-Financial-Results-on-Tuesday-August-4-2026/default.aspx", actualMoveSourceLabel: "Stock Analysis — históricos de ANET", actualMoveSourceHref: "https://stockanalysis.com/stocks/anet/history/", actualMoveMethodology: "Cierre regular del 5 de agosto (197,31 USD) frente al cierre regular previo (190,51 USD): (197,31 / 190,51 - 1) × 100 = +3,6 %.", consultedAt: "2026-08-01T12:00:00Z", dateConfirmationStatus: "confirmed", timeConfirmationStatus: "confirmed" },
+          { company: "Coupang", ticker: "CPNG", reportDate: "2026-08-04", reactionDate: "2026-08-05", session: "after-close", impliedMovePct: 10.23, actualMovePct: -4.6, impliedMoveProvider: "Unusual Whales", impliedMoveProviderHref: "https://unusualwhales.com/stock/CPNG/earnings", dateTimeSourceLabel: "Anuncio de resultados de Coupang", dateTimeSourceHref: "https://ir.aboutcoupang.com/news-events/news/news-details/2026/Coupang-to-Announce-Second-Quarter-2026-Results-on-August-4-2026/default.aspx", actualMoveSourceLabel: "Stock Analysis — históricos de CPNG", actualMoveSourceHref: "https://stockanalysis.com/stocks/cpng/history/", actualMoveMethodology: "Cierre regular del 5 de agosto (16,00 USD) frente al cierre regular previo (16,78 USD): (16,00 / 16,78 - 1) × 100 = -4,6 %.", consultedAt: "2026-08-01T12:00:00Z", dateConfirmationStatus: "confirmed", timeConfirmationStatus: "confirmed" },
+          { company: "Uber", ticker: "UBER", reportDate: "2026-08-05", reactionDate: "2026-08-05", session: "before-open", impliedMovePct: 7.36, actualMovePct: -5.3, impliedMoveProvider: "Unusual Whales", impliedMoveProviderHref: "https://unusualwhales.com/stock/UBER/earnings", dateTimeSourceLabel: "Anuncio de resultados de Uber", dateTimeSourceHref: "https://investor.uber.com/news-events/news/press-release-details/2026/Uber-Announces-Date-of-Second-Quarter-2026-Results-Conference-Call/default.aspx", actualMoveSourceLabel: "Stock Analysis — históricos de UBER", actualMoveSourceHref: "https://stockanalysis.com/stocks/uber/history/", actualMoveMethodology: "Cierre regular del 5 de agosto (68,18 USD) frente al cierre regular previo (71,99 USD): (68,18 / 71,99 - 1) × 100 = -5,3 %.", consultedAt: "2026-08-01T12:00:00Z", dateConfirmationStatus: "confirmed", timeConfirmationStatus: "confirmed" },
+          { company: "Duolingo", ticker: "DUOL", reportDate: "2026-08-05", reactionDate: "2026-08-06", session: "after-close", impliedMovePct: 16.45, impliedMoveApproximate: true, actualMovePct: -9.4, impliedMoveProvider: "Unusual Whales", impliedMoveProviderHref: "https://unusualwhales.com/stock/DUOL/earnings", dateTimeSourceLabel: "Resultados Q2 2026 de Duolingo", dateTimeSourceHref: "https://investors.duolingo.com/news-releases/news-release-details/duolingo-reports-second-quarter-2026-results", actualMoveSourceLabel: "Stock Analysis — históricos de DUOL", actualMoveSourceHref: "https://stockanalysis.com/stocks/duol/history/", actualMoveMethodology: "Cierre regular del 6 de agosto (122,58 USD) frente al cierre regular previo (135,32 USD): (122,58 / 135,32 - 1) × 100 = -9,4 %. Algunos titulares describieron caídas mayores en after-hours o intradía; el informe no las utiliza.", consultedAt: "2026-08-01T12:00:00Z", dateConfirmationStatus: "confirmed", timeConfirmationStatus: "confirmed" },
+          { company: "LifeMD", ticker: "LFMD", reportDate: "2026-08-05", reactionDate: "2026-08-06", impliedMovePct: 23.44, impliedMoveApproximate: true, actualMovePct: -7.6, impliedMoveProvider: "Unusual Whales", impliedMoveProviderHref: "https://unusualwhales.com/stock/LFMD/earnings", dateTimeSourceLabel: "Página de IR de LifeMD (sin anuncio que confirme el evento)", dateTimeSourceHref: "https://ir.lifemd.com/", actualMoveSourceLabel: "Stock Analysis — históricos de LFMD", actualMoveSourceHref: "https://stockanalysis.com/stocks/lfmd/history/", actualMoveMethodology: "Cierre regular del 6 de agosto (3,40 USD) frente al cierre regular previo (3,68 USD): (3,40 / 3,68 - 1) × 100 = -7,6 %.", consultedAt: "2026-08-01T12:00:00Z", dateConfirmationStatus: "editorial-unconfirmed", timeConfirmationStatus: "not-recorded" },
+          { company: "Cloudflare", ticker: "NET", reportDate: "2026-08-06", reactionDate: "2026-08-07", session: "after-close", impliedMovePct: 11.60, impliedMoveApproximate: true, actualMovePct: 5.6, impliedMoveProvider: "Unusual Whales", impliedMoveProviderHref: "https://unusualwhales.com/stock/NET/earnings", dateTimeSourceLabel: "Anuncio de resultados de Cloudflare", dateTimeSourceHref: "https://www.cloudflare.net/news/news-details/2026/Cloudflare-Announces-Date-of-Second-Quarter-2026-Financial-Results/default.aspx", actualMoveSourceLabel: "Stock Analysis — históricos de NET", actualMoveSourceHref: "https://stockanalysis.com/stocks/net/history/", actualMoveMethodology: "Cierre regular del 7 de agosto (300,27 USD) frente al cierre regular previo (284,43 USD): (300,27 / 284,43 - 1) × 100 = +5,6 %. El +16 % citado en algunos titulares corresponde a after-hours y no a esta metodología.", consultedAt: "2026-08-01T12:00:00Z", dateConfirmationStatus: "confirmed", timeConfirmationStatus: "confirmed" },
+          { company: "Hims & Hers", ticker: "HIMS", reportDate: "2026-08-10", reactionDate: "2026-08-11", session: "after-close", impliedMovePct: 20.53, actualMovePct: -4.0, impliedMoveProvider: "Unusual Whales", impliedMoveProviderHref: "https://unusualwhales.com/stock/HIMS/earnings", dateTimeSourceLabel: "Anuncio de resultados de Hims & Hers", dateTimeSourceHref: "https://investors.hims.com/news/news-details/2026/Hims--Hers-to-Announce-Second-Quarter-2026-Financial-Results-on-August-10-2026/default.aspx", actualMoveSourceLabel: "Stock Analysis — históricos de HIMS", actualMoveSourceHref: "https://stockanalysis.com/stocks/hims/history/", actualMoveMethodology: "Cierre regular del 11 de agosto (30,51 USD) frente al cierre regular previo (31,77 USD): (30,51 / 31,77 - 1) × 100 = -4,0 %.", consultedAt: "2026-08-01T12:00:00Z", dateConfirmationStatus: "confirmed", timeConfirmationStatus: "confirmed" },
+          { company: "Celsius Holdings", ticker: "CELH", reportDate: "2026-08-06", reactionDate: "2026-08-06", impliedMovePct: 11.55, actualMovePct: -18.5, impliedMoveProvider: "Unusual Whales", impliedMoveProviderHref: "https://unusualwhales.com/stock/CELH/earnings", dateTimeSourceLabel: "Resultados Q2 2026 de Celsius Holdings", dateTimeSourceHref: "https://ir.celsiusholdingsinc.com/news/news-details/2026/Celsius-Holdings-Reports-Second-Quarter-2026-Financial-Results/default.aspx", actualMoveSourceLabel: "Stock Analysis — históricos de CELH", actualMoveSourceHref: "https://stockanalysis.com/stocks/celh/history/", actualMoveMethodology: "La fecha finalmente confirmada fue el 6 de agosto; el primer informe había dejado el 11 de agosto como fecha editorial no confirmada. Cierre regular del 6 de agosto (23,77 USD) frente al cierre regular previo (29,15 USD): (23,77 / 29,15 - 1) × 100 = -18,5 %.", consultedAt: "2026-08-01T12:00:00Z", dateConfirmationStatus: "confirmed", timeConfirmationStatus: "not-recorded" },
+        ],
+        upcoming: [
+          { company: "Futu Holdings", ticker: "FUTU", reportDate: "2026-08-20", session: "before-open", startDateTimeUtc: "2026-08-20T11:30:00Z", originalTime: "07:30", originalTimeZone: "ET", displayTime: "13:30 CEST", impliedMovePct: 7.04, impliedMoveProvider: "Unusual Whales", impliedMoveProviderHref: "https://unusualwhales.com/stock/FUTU/options-flow-history", dateTimeSourceLabel: "Futu Investor Relations — conferencia de resultados Q2 2026", dateTimeSourceHref: "https://ir.futuholdings.com/events/event-details/futu-holdings-ltd-second-quarter-2026-earnings-conference-call/", consultedAt: "2026-08-16", dateConfirmationStatus: "confirmed", timeConfirmationStatus: "confirmed" },
+          { company: "NVIDIA", ticker: "NVDA", reportDate: "2026-08-26", session: "after-close", startDateTimeUtc: "2026-08-26T21:00:00Z", originalTime: "17:00", originalTimeZone: "ET", displayTime: "23:00 CEST", impliedMovePct: 6.18, impliedMoveProvider: "Unusual Whales", impliedMoveProviderHref: "https://unusualwhales.com/stock/NVDA/earnings", dateTimeSourceLabel: "NVIDIA Investor Relations — resultados Q2 FY27", dateTimeSourceHref: "https://investor.nvidia.com/events-and-presentations/events-and-presentations/event-details/2026/NVIDIA-2nd-Quarter-FY27-Financial-Results/default.aspx", consultedAt: "2026-08-16", dateConfirmationStatus: "confirmed", timeConfirmationStatus: "confirmed" },
+        ],
+      },
+      themes: [
+        {
+          label: "Oportunidad en consideración",
+          title: "Infraestructura óptica para IA",
+          body:
+            "El crecimiento de la IA no termina en los chips. Cada nueva generación de centros de datos necesita mover más información entre procesadores, servidores y centros de procesamiento, lo que eleva la importancia de la infraestructura óptica: transceptores, láseres, módulos ópticos, fibra, packaging y testing. Lumentum, Coherent, Broadcom y Marvell aparecen en distintos puntos de esa cadena, junto con varios proveedores asiáticos. El mapa industrial justifica mantener el tema bajo observación, pero por sí solo no permite clasificar ninguna compañía como selección: valoración, márgenes, concentración de clientes y expectativas ya descontadas siguen siendo determinantes.",
+          examples: [
+            { ticker: "LITE", company: "Lumentum" },
+            { ticker: "COHR", company: "Coherent" },
+            { ticker: "AVGO", company: "Broadcom" },
+            { ticker: "MRVL", company: "Marvell" },
+          ],
+          note:
+            "Las compañías se citan como ejemplos de la cadena industrial descrita en la infografía aportada, no como selección aprobada ni recomendación de compra.",
+        },
+      ],
+    },
+    calendar: [
+      {
+        id: "monthly-options-expiry-august",
+        dateLabel: "Vie. 21 agosto",
+        dateStart: "2026-08-21",
+        event: "Expiración mensual de opciones (OPEX)",
+        whyItMatters: "Puede alterar coberturas, flujos y volatilidad de corto plazo; no implica una dirección determinada.",
+        category: "options",
+        originalTime: "Hora por confirmar",
+        originalTimeZone: "ET",
+        displayTimeCest: "Hora por confirmar",
+        timeStatus: "tba",
+        affectedAssets: ["S&P 500", "VIX", "Opciones sobre índices"],
+        sourceLabel: "Calendario de expiraciones de la OCC",
+        sourceHref: "https://www.theocc.com/clearance-and-settlement/expiration-calendars",
+        trackingHref: "/dashboard",
+        trackingLabel: "Seguir VIX y régimen",
+      },
+      {
+        id: "pce-july",
+        dateLabel: "Mié. 26 agosto",
+        dateStart: "2026-08-26",
+        startDateTimeUtc: "2026-08-26T12:30:00Z",
+        event: "Personal Income & Outlays / PCE de julio",
+        whyItMatters: "Puede modificar expectativas sobre la Fed, los rendimientos y el DXY para el resto del mes.",
+        category: "macro",
+        originalTime: "08:30",
+        originalTimeZone: "ET",
+        displayTimeCest: "14:30 CEST",
+        timeStatus: "confirmed",
+        affectedAssets: ["S&P 500", "Oro", "DXY", "Treasury", "BTC / ETH"],
+        sourceLabel: "Calendario oficial de publicaciones del BEA",
+        sourceHref: "https://www.bea.gov/news/schedule",
+        trackingHref: "https://www.bea.gov/data/personal-consumption-expenditures-price-index",
+        trackingLabel: "Seguir el índice PCE en el BEA",
+      },
+      {
+        id: "jackson-hole-2026",
+        dateLabel: "27-29 agosto",
+        dateStart: "2026-08-27",
+        dateEnd: "2026-08-29",
+        event: "Simposio de Jackson Hole",
+        whyItMatters:
+          "Comunicación de bancos centrales; el tema oficial de 2026 es “Financial Innovation: Implications for Payments and Policy”. La agenda con la hora del discurso del presidente de la Fed no está publicada al corte.",
+        category: "central-bank",
+        originalTime: "Hora por confirmar",
+        originalTimeZone: "MDT",
+        displayTimeCest: "Hora por confirmar",
+        timeStatus: "tba",
+        affectedAssets: ["S&P 500", "Oro", "DXY", "Treasury", "BTC / ETH"],
+        sourceLabel: "Federal Reserve Bank of Kansas City",
+        sourceHref: "https://www.kansascityfed.org/research/jackson-hole-economic-symposium/",
+        trackingHref: "https://www.kansascityfed.org/research/jackson-hole-economic-symposium/jackson-hole-faqs/",
+        trackingLabel: "Seguir programa oficial",
+      },
+    ],
+    probableRoutes: {
+      title: "Rutas probables",
+      note: "Estas rutas no son predicciones. Sirven para reconocer qué combinación de señales está ganando peso a medida que avanza la segunda mitad del mes.",
+      scenarios: [
+        {
+          title: "Ruta base — mercado funcional con rotación",
+          body:
+            "El S&P 500 mantiene una estructura razonablemente firme, pero el liderazgo continúa rotando. La amplitud evita una venta generalizada, rendimientos y DXY no se desordenan y el oro prueba resistencia sin una ruptura inmediata del régimen. PCE y Jackson Hole generan volatilidad, pero no cambian de forma abrupta las expectativas monetarias. NVIDIA confirma demanda elevada por infraestructura de IA, aunque el mercado sigue prestando más atención al coste de financiarla.",
+        },
+        {
+          title: "Ruta favorable — amplitud, desinflación y menor presión de tasas",
+          body:
+            "Una lectura de inflación más contenida y una comunicación menos restrictiva reducen presión sobre rendimientos y DXY. La participación del S&P 500 continúa ampliándose y la rotación deja de depender de unos pocos líderes. NVIDIA valida crecimiento y márgenes suficientes para sostener el gasto en IA sin empeorar la preocupación por financiación. El oro supera su resistencia con apoyo de compradores sistemáticos y las condiciones de liquidez favorecen una mejora de los flujos cripto.",
+        },
+        {
+          title: "Ruta adversa — tasas y dólar convierten la rotación en reducción de riesgo",
+          body:
+            "Inflación o comunicación de la Fed obligan al mercado a descontar tipos altos durante más tiempo. Suben rendimientos y DXY, se amplían los diferenciales de crédito y la debilidad deja de concentrarse en antiguos líderes. El S&P 500 pierde amplitud, el oro no logra sostenerse sobre resistencia ante un dólar más fuerte y BTC/ETH sufren nuevas salidas o menor apetito de riesgo. Una decepción de NVIDIA podría amplificar la revisión de expectativas sobre IA.",
+        },
+      ],
+    },
+    watchlist: [
+      {
+        key: "spx-breadth",
+        name: "Amplitud del S&P 500",
+        category: "market-structure",
+        status: "watch",
+        statusLabel: "En observación",
+        whatLooksAt: "Número de sectores que acompañan al índice y comportamiento relativo de RSP/SPY e IWM/SPY.",
+        whyItMatters: "Un índice firme con amplitud deteriorada suele describir una subida sostenida por pocos líderes.",
+        currentReading: "Al 14 de agosto, 9 de 11 sectores cerraron la semana en positivo y 8 de 11 quedaron sobre su media larga, pero RSP/SPY (-1,1 pp) e IWM/SPY (-1,7 pp) siguieron por detrás del índice.",
+        whatWouldChange: "Señal de alerta: índice firme con amplitud, crédito y antiguos líderes deteriorándose al mismo tiempo. La lectura mejoraría si RSP/SPY e IWM/SPY dejan de deteriorarse.",
+        asOf: "14 de agosto de 2026",
+        source: "Dashboard propio, snapshot del 14 de agosto de 2026.",
+        href: "/dashboard",
+        linkLabel: "Ver amplitud en el Dashboard",
+      },
+      {
+        key: "us-yields",
+        name: "Rendimientos estadounidenses",
+        category: "rates-credit",
+        status: "watch",
+        statusLabel: "En observación",
+        whatLooksAt: "Treasury a 10 años y, cuando el componente exista, tasas reales.",
+        whyItMatters: "Los rendimientos largos condicionan valoración, coste de capital y el atractivo relativo de otros activos.",
+        currentReading: "Los rendimientos largos vuelven a ser una variable transversal para la segunda mitad del mes, con PCE y Jackson Hole como referencias principales.",
+        whatWouldChange: "Señal de alerta: una subida rápida que coincida con ampliación de los diferenciales de crédito.",
+        asOf: "16 de agosto de 2026",
+        source: "Lectura editorial del informe y datos públicos del Treasury.",
+        href: "https://home.treasury.gov/resource-center/data-chart-center/interest-rates/TextView?type=daily_treasury_real_yield_curve&field_tdr_date_value=2026",
+        linkLabel: "Seguir tasas reales del Treasury",
+      },
+      {
+        key: "ai-credit",
+        name: "Crédito y financiación de la IA",
+        category: "rates-credit",
+        status: "stressed",
+        statusLabel: "En tensión",
+        whatLooksAt: "Diferenciales de las grandes tecnológicas, nueva emisión de deuda y comentarios de CapEx.",
+        whyItMatters: "Si una parte mayor del flujo de caja se dirige a inversión y financiación, las recompras aportan menos apoyo marginal.",
+        currentReading: "El aumento de emisiones ligadas a centros de datos y las mayores primas de crédito sugieren que el coste financiero del ciclo empieza a pesar tanto como el crecimiento esperado.",
+        whatWouldChange: "Una estabilización de diferenciales apoyaría el escenario base; una nueva ampliación junto con más emisión elevaría la alerta.",
+        asOf: "16 de agosto de 2026",
+        source: "Bank of America, Morgan Stanley y lectura editorial del informe.",
+      },
+      {
+        key: "dxy",
+        name: "DXY",
+        category: "fx-commodities",
+        status: "watch",
+        statusLabel: "En observación",
+        whatLooksAt: "Reacción del dólar a PCE y a la comunicación de Jackson Hole.",
+        whyItMatters: "Un dólar más fuerte endurece simultáneamente la lectura de oro, China y cripto; uno más débil puede aliviarla.",
+        currentReading: "El dólar sigue actuando como transmisor entre diferenciales de tipos, política monetaria y el resto de activos del universo.",
+        whatWouldChange: "Una inflación más persistente o una Fed más restrictiva apoyarían dólar y rendimientos; mayor confianza en desinflación produciría el movimiento contrario.",
+        asOf: "16 de agosto de 2026",
+        source: "Lectura editorial del informe.",
+      },
+      {
+        key: "gold-levels",
+        name: "Oro: resistencia y demanda sistemática",
+        category: "fx-commodities",
+        status: "watch",
+        statusLabel: "En observación",
+        whatLooksAt: "Zona técnica de 4.400–4.500 dólares y el nivel condicional cercano a 5.056 del material de McElligott.",
+        whyItMatters: "La demanda sistemática ya regresó, pero la confirmación del precio sigue pendiente.",
+        currentReading: "Al 14 de agosto el proxy de presión de flujos en GLD era compatible con entrada neta probable: +0,03 % en 1D, +0,59 % en 5D y +2,49 % en 20D.",
+        whatWouldChange: "El nivel de 5.056 no debe tratarse como objetivo de precio: es un umbral condicional del modelo citado. Un rechazo en 4.400–4.500 con dólar y tasas al alza favorecería consolidación.",
+        asOf: "14 de agosto de 2026",
+        source: "BTIG, Charlie McElligott y dashboard propio, snapshot del 14 de agosto de 2026.",
+        href: "/dashboard",
+        linkLabel: "Ver presión de flujos en el Dashboard",
+      },
+      {
+        key: "nvda-earnings",
+        name: "NVIDIA",
+        category: "stockpicking",
+        status: "tba",
+        statusLabel: "Por confirmar",
+        whatLooksAt: "Movimiento implícito previo, reacción del cierre regular posterior, márgenes, guía y comentarios de demanda de centros de datos.",
+        whyItMatters: "El evento funciona como prueba transversal del ciclo de inversión en IA, más allá de una sola acción.",
+        currentReading: "Resultados el 26 de agosto con conferencia a las 17:00 ET. El movimiento implícito rondaba 6,18 % (aproximadamente ±13,94 dólares) en la consulta del 16 de agosto.",
+        whatWouldChange: "Una reacción dentro del rango implícito mantendría la lectura; una sorpresa material de precio o una guía débil obligarían a revisar expectativas sobre gasto en IA.",
+        asOf: "16 de agosto de 2026",
+        source: "NVIDIA Investor Relations y Unusual Whales.",
+        href: "https://investor.nvidia.com/events-and-presentations/events-and-presentations/event-details/2026/NVIDIA-2nd-Quarter-FY27-Financial-Results/default.aspx",
+        linkLabel: "Seguir resultados de NVIDIA",
+      },
+      {
+        key: "futu-earnings",
+        name: "FUTU",
+        category: "stockpicking",
+        status: "tba",
+        statusLabel: "Por confirmar",
+        whatLooksAt: "Movimiento implícito previo y reacción del cierre regular posterior.",
+        whyItMatters: "Permite comparar de nuevo lo descontado por las opciones con la reacción efectiva del mercado.",
+        currentReading: "Resultados el 20 de agosto antes de la apertura estadounidense, con conferencia a las 07:30 ET. El movimiento implícito era 7,04 % (aproximadamente ±7,42 dólares) en la consulta del 16 de agosto.",
+        whatWouldChange: "No conviene extrapolar una sola sesión como tesis de largo plazo, dentro o fuera del rango.",
+        asOf: "16 de agosto de 2026",
+        source: "Futu Investor Relations y Unusual Whales.",
+        href: "https://ir.futuholdings.com/",
+        linkLabel: "Seguir resultados de FUTU",
+      },
+      {
+        key: "japan-yen-boj",
+        name: "Japón, yen y Banco de Japón",
+        category: "macro-global",
+        status: "watch",
+        statusLabel: "En observación",
+        whatLooksAt: "Yen alrededor de 160, riesgo de intervención y expectativas de subida del BOJ.",
+        whyItMatters: "Conviene diferenciar la mejora bursátil del efecto divisa antes de leer la fortaleza relativa japonesa.",
+        currentReading: "Tras la intervención que llevó al yen desde ~163,99 hasta ~155,20, la divisa volvió a debilitarse hacia 159,5 al 14 de agosto.",
+        whatWouldChange: "Una nueva intervención o un endurecimiento monetario más rápido fortalecerían el yen y aumentarían la dispersión entre sectores exportadores.",
+        asOf: "14 de agosto de 2026",
+        source: "Reuters, 13 y 14 de agosto de 2026.",
+      },
+      {
+        key: "china-domestic",
+        name: "China y demanda doméstica",
+        category: "macro-global",
+        status: "watch",
+        statusLabel: "En observación",
+        whatLooksAt: "Consumo y confianza interna, estímulos dirigidos a demanda, exportaciones, tensiones comerciales, DXY y flujos extranjeros.",
+        whyItMatters: "El motor exportador es fuerte, pero el consumidor doméstico todavía no ofrece una confirmación equivalente.",
+        currentReading: "Exportaciones de julio en torno a +24 % interanual y superávit cercano a 113.000 millones de dólares, con PIB del segundo trimestre en 4,3 % y ventas minoristas más débiles.",
+        whatWouldChange: "Estímulos dirigidos al consumo mejorarían la calidad de una recuperación; un DXY más fuerte o mayores tensiones comerciales la limitarían.",
+        asOf: "14 de agosto de 2026",
+        source: "Reuters, entre el 30 de julio y el 12 de agosto de 2026.",
+      },
+      {
+        key: "btc-etf-flows",
+        name: "Bitcoin: flujos de ETFs spot",
+        category: "crypto",
+        status: "watch",
+        statusLabel: "En observación",
+        whatLooksAt: "Flujos de ETFs spot, DXY y rendimientos, además de la confirmación de cualquier ruptura.",
+        whyItMatters: "La lectura depende menos de una narrativa direccional y más de liquidez, dólar, tasas y flujos.",
+        currentReading: "Al 14 de agosto: -123 M USD en el último día disponible, -229 M USD en cinco sesiones y una racha de dos días de salidas.",
+        whatWouldChange: "Una mejora persistente de los flujos con dólar y rendimientos contenidos favorecería un entorno más constructivo; conviene confirmar rupturas, no solo reacciones intradía.",
+        asOf: "14 de agosto de 2026",
+        source: "Dashboard propio, snapshot del 14 de agosto de 2026.",
+        href: "/dashboard",
+        linkLabel: "Ver flujos de ETFs en el Dashboard",
+      },
+      {
+        key: "eth-liquidity",
+        name: "Ethereum y liquidez cripto",
+        category: "crypto",
+        status: "tba",
+        statusLabel: "Por confirmar",
+        whatLooksAt: "Liquidez general del mercado cripto, relación con BTC y apetito por riesgo.",
+        whyItMatters: "La información fiable disponible hasta el corte no sostiene una lectura direccional propia separada del régimen general de cripto.",
+        currentReading: "No hay una señal institucional específica suficiente para separar con confianza la dirección de ETH del conjunto del mercado cripto.",
+        whatWouldChange: "No conviene atribuir catalizadores específicos sin una fuente que los sostenga.",
+        asOf: "16 de agosto de 2026",
+        source: "Lectura editorial del informe.",
+      },
+    ],
+    sourcesNote:
+      "Las lecturas combinan datos de mercado, cálculos propios y material institucional parafraseado: Morgan Stanley, HF Highlights, 12 de agosto de 2026; Charlie McElligott, Cross-Asset Strategy, 12 de agosto de 2026; BTIG, A Divergent Breakout, 11 de agosto de 2026; Goldman Sachs, US TMT, 11 de agosto de 2026; Bank of America, The Flow Show, 10 de agosto de 2026; infografía de cadena óptica global, 11 de agosto de 2026, y tabla de estacionalidad de Carson aportada por el editor. El calendario usa fuentes oficiales: BEA para el PCE del 26 de agosto, OCC para la expiración mensual del 21 de agosto y Federal Reserve Bank of Kansas City para Jackson Hole del 27 al 29 de agosto, cuyo tema de 2026 es “Financial Innovation: Implications for Payments and Policy”. Las fechas corporativas proceden de Futu Investor Relations y NVIDIA Investor Relations; la corrección de la fecha de Celsius Holdings al 6 de agosto procede de su comunicado de resultados. Los movimientos implícitos de la tabla retrospectiva son los congelados en el primer informe de agosto, consultados en Unusual Whales el 1 de agosto de 2026 a las 12:00 UTC; los de FUTU y NVIDIA se consultaron en Unusual Whales el 16 de agosto de 2026 y quedan congelados en esta publicación. Las reacciones realizadas usan históricos por ticker de Stock Analysis con la misma metodología de cierre regular contra cierre regular. El contexto de Japón y China procede de Reuters entre el 30 de julio y el 14 de agosto de 2026, y los flujos de BTC y la presión de flujos en GLD proceden del dashboard propio con corte al 14 de agosto de 2026. La estacionalidad aporta contexto, no una señal: el tramo agosto-septiembre ha sido históricamente menos favorable en series largas, pero durante la última década el S&P 500 terminó agosto en positivo siete veces.",
+    disclaimer:
+      "Este informe organiza información pública, datos de mercado y análisis de terceros con fines exclusivamente educativos e informativos. No constituye asesoría financiera personalizada, recomendación de inversión ni instrucción para comprar, vender o mantener activos. Las rutas descritas son escenarios condicionales, no predicciones. Posicionamiento, estacionalidad, análisis técnico, flujos y movimientos implícitos de opciones pueden ayudar a interpretar el contexto, pero no garantizan resultados futuros. Las lecturas automáticas de este informe están congeladas al cierre del 14 de agosto de 2026 para preservar la fotografía histórica con la que fue publicado. El Dashboard continúa actualizándose con los datos más recientes disponibles y puede mostrar valores distintos.",
   },
 ];
 

@@ -67,6 +67,15 @@ This section is a complementary discovery aid, not an official indexing protocol
 - Secondary downloadable HTML representation: https://www.luiguiherrera.com/reports/primer-informe-agosto-2026.html
 - Structured calendar events: https://www.luiguiherrera.com/reports/primer-informe-agosto-2026-calendar.ics
 
+### Segundo informe de agosto
+- Primary canonical editorial URL: https://www.luiguiherrera.com/informes/segundo-informe-agosto-2026
+- Description: Rotación interna, coste de financiar la IA, oro, política monetaria y stockpicking para la segunda mitad de agosto, con lecturas de mercado congeladas al 14 de agosto de 2026.
+- Published: 2026-08-16
+- Markdown auxiliary machine-readable representation: https://www.luiguiherrera.com/reports/segundo-informe-agosto-2026.md
+- PDF human-readable download: https://www.luiguiherrera.com/reports/segundo-informe-agosto-2026.pdf
+- Secondary downloadable HTML representation: https://www.luiguiherrera.com/reports/segundo-informe-agosto-2026.html
+- Structured calendar events: https://www.luiguiherrera.com/reports/segundo-informe-agosto-2026-calendar.ics
+
 ## Source and method notes
 - Dashboard methodology: https://www.luiguiherrera.com/metodologia
 - TD3 research: https://www.luiguiherrera.com/investigacion/td3

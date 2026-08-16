@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import fs from "node:fs";
 import path from "node:path";
 import { marketReports } from "../lib/reports/market-reports.ts";
+import { buildReportExportModel } from "../lib/reports/report-export-model.ts";
 import { exclusiveAllDayEnd, getMonthGrid, getReportCalendar } from "../lib/reports/report-presentation.ts";
 import {
   getHistoricalAutomaticReadings,
@@ -15,10 +16,12 @@ const read = (relativePath: string) => fs.readFileSync(path.join(root, relativeP
 const first = marketReports.find((report) => report.id === "primer-informe-julio-2026");
 const second = marketReports.find((report) => report.id === "segundo-informe-julio-2026");
 const august = marketReports.find((report) => report.id === "primer-informe-agosto-2026");
+const secondAugust = marketReports.find((report) => report.id === "segundo-informe-agosto-2026");
 
 assert(first, "Falta el primer informe.");
 assert(second, "Falta el segundo informe.");
 assert(august, "Falta el primer informe de agosto.");
+assert(secondAugust, "Falta el segundo informe de agosto.");
 
 function assertIsoDate(value: string, label: string) {
   assert.match(value, /^\d{4}-\d{2}-\d{2}$/, `${label} no usa YYYY-MM-DD.`);
@@ -84,10 +87,16 @@ assert.deepEqual(
     modifiedAt: "2026-08-03",
     editorialCutoffAt: "2026-07-31",
     automaticDataCutoffAt: "2026-07-31",
-    status: "actual",
+    status: "archivado",
   },
 );
 assert.equal(second.status, "archivado");
+assert.equal(
+  marketReports.filter((report) => report.status === "actual").length,
+  1,
+  "El archivo debe exponer un único informe marcado como Actual.",
+);
+assert.equal(marketReports.find((report) => report.status === "actual")?.id, "segundo-informe-agosto-2026");
 assert.deepEqual(
   august.executiveSummary.map((item) => item.title),
   ["VOO", "GLD", "EWJ", "FXI", "BTC / ETH", "Stockpicking"],
@@ -186,6 +195,289 @@ for (const ticker of ["LFMD", "CELH"]) {
 }
 assert(august.sourcesNote.includes("Unusual Whales") && august.sourcesNote.includes("Nasdaq Historical") && august.sourcesNote.includes("Yahoo Finance"), "Fuentes y método debe enumerar proveedores de resultados.");
 assert.equal(august.probableRoutes?.title, "Rutas probables");
+
+// --- Segundo informe de agosto de 2026 -------------------------------------------------------
+
+assert.deepEqual(
+  {
+    label: secondAugust.label,
+    title: secondAugust.title,
+    publishedAt: secondAugust.publishedAt,
+    modifiedAt: secondAugust.modifiedAt,
+    editorialCutoffAt: secondAugust.editorialCutoffAt,
+    automaticDataCutoffAt: secondAugust.automaticDataCutoffAt,
+    status: secondAugust.status,
+  },
+  {
+    label: "Segundo informe de agosto",
+    title: "El mercado vuelve al riesgo mientras la factura de la IA gana peso",
+    publishedAt: "2026-08-16",
+    modifiedAt: "2026-08-16",
+    editorialCutoffAt: "2026-08-16",
+    automaticDataCutoffAt: "2026-08-14",
+    status: "actual",
+  },
+);
+
+// El contexto general cumple la función de resumen ejecutivo: no hay tesis ni resumen separados.
+assert.equal(secondAugust.presentation?.contextTitle, "Contexto general");
+assert.equal(secondAugust.thesis, undefined, "El formato nuevo no publica una Tesis principal separada.");
+assert.equal(secondAugust.executiveSummary, undefined, "El formato nuevo no publica un Resumen ejecutivo separado.");
+assert.equal(secondAugust.transversalFactor, undefined, "DXY se publica como activo, no como bloque transversal duplicado.");
+
+assert.deepEqual(
+  buildReportExportModel(secondAugust).sections.map((section) => [section.id, section.title]),
+  [
+    ["context-general", "Contexto general"],
+    ["historical-snapshot", "Lecturas de mercado al cierre"],
+    ["asset-follow-up", "Lectura por activo"],
+    ["calendar-and-scenarios", "Calendario de eventos"],
+    ["probable-routes", "Rutas probables"],
+    ["watchlist", "Lista de control"],
+    ["sources-and-limitations", "Fuentes y aviso educativo"],
+  ],
+  "El orden canónico de secciones del segundo informe de agosto cambió.",
+);
+
+assert.deepEqual(
+  secondAugust.assetReadings.map((item) => item.asset),
+  ["S&P 500", "Oro", "China", "Japón", "Bitcoin", "Ethereum", "DXY", "Stockpicking"],
+);
+for (const asset of secondAugust.assetReadings) {
+  assert(asset.story && asset.changed && asset.expected, `${asset.asset}: faltan Qué pasó / Qué cambió / Qué esperamos.`);
+  assert.equal(asset.watch, undefined, `${asset.asset}: la vigilancia se concentra en la lista de control.`);
+  assert.equal(asset.reading, undefined, `${asset.asset}: el formato nuevo no repite "Lectura del informe".`);
+  assert.equal(asset.timeline, undefined, `${asset.asset}: el formato nuevo no publica "Secuencia de lectura".`);
+}
+
+// Movimiento ocurrido: cierre regular de la sesión de reacción contra el cierre regular previo.
+assert.deepEqual(
+  secondAugust.stockpicking?.earnings.published.map((item) => [item.ticker, item.actualMovePct]),
+  [
+    ["PLTR", 29.5],
+    ["ANET", 3.6],
+    ["CPNG", -4.6],
+    ["UBER", -5.3],
+    ["DUOL", -9.4],
+    ["LFMD", -7.6],
+    ["NET", 5.6],
+    ["HIMS", -4.0],
+    ["CELH", -18.5],
+  ],
+);
+assert.deepEqual(
+  secondAugust.stockpicking?.earnings.published
+    .filter((item) => Math.abs(item.actualMovePct ?? 0) > item.impliedMovePct)
+    .map((item) => item.ticker),
+  ["PLTR", "CELH"],
+  "Solo PLTR y CELH excedieron el rango implícito.",
+);
+assert.deepEqual(
+  secondAugust.stockpicking?.earnings.published.map((item) => [item.ticker, item.impliedMovePct]),
+  [
+    ["PLTR", 10.32],
+    ["ANET", 10.4],
+    ["CPNG", 10.23],
+    ["UBER", 7.36],
+    ["DUOL", 16.45],
+    ["LFMD", 23.44],
+    ["NET", 11.6],
+    ["HIMS", 20.53],
+    ["CELH", 11.55],
+  ],
+  "Los movimientos implícitos retrospectivos deben conservar los valores congelados del primer informe.",
+);
+const celh = secondAugust.stockpicking?.earnings.published.find((item) => item.ticker === "CELH");
+assert.equal(celh?.reportDate, "2026-08-06", "La fecha confirmada de CELH es el 6 de agosto de 2026.");
+assert.equal(celh?.reactionDate, "2026-08-06");
+assert.equal(celh?.dateConfirmationStatus, "confirmed");
+assert(
+  celh?.actualMoveMethodology?.includes("La fecha finalmente confirmada fue el 6 de agosto"),
+  "El segundo informe debe corregir explícitamente la fecha editorial de CELH.",
+);
+const cloudflare = secondAugust.stockpicking?.earnings.published.find((item) => item.ticker === "NET");
+assert(cloudflare?.actualMoveMethodology?.includes("after-hours"), "NET debe aclarar que el +16 % es after-hours.");
+const duolingo = secondAugust.stockpicking?.earnings.published.find((item) => item.ticker === "DUOL");
+assert(duolingo?.actualMoveMethodology?.includes("after-hours"), "DUOL debe aclarar que los titulares mayores no usan esta metodología.");
+for (const item of secondAugust.stockpicking?.earnings.published ?? []) {
+  assert(item.reactionDate, `${item.ticker}: falta la sesión de reacción.`);
+  assert(item.actualMoveSourceLabel && item.actualMoveSourceHref && item.actualMoveMethodology, `${item.ticker}: falta trazabilidad del movimiento ocurrido.`);
+  assert.match(item.actualMoveSourceHref, /^https:\/\//, `${item.ticker}: la fuente de reacción debe usar HTTPS.`);
+}
+for (const item of [...(secondAugust.stockpicking?.earnings.published ?? []), ...(secondAugust.stockpicking?.earnings.upcoming ?? [])]) {
+  assert.match(
+    item.impliedMoveProviderHref,
+    new RegExp(`^https://unusualwhales\\.com/stock/${item.ticker}/`),
+    `${item.ticker}: falta la página por ticker del movimiento implícito.`,
+  );
+  assert(item.consultedAt, `${item.ticker}: falta la fecha de consulta congelada.`);
+}
+
+assert.deepEqual(
+  secondAugust.stockpicking?.earnings.upcoming.map((item) => [item.ticker, item.reportDate, item.impliedMovePct, item.consultedAt]),
+  [
+    ["FUTU", "2026-08-20", 7.04, "2026-08-16"],
+    ["NVDA", "2026-08-26", 6.18, "2026-08-16"],
+  ],
+  "Los próximos resultados son únicamente FUTU y NVDA, con el implícito congelado en la consulta del 16 de agosto.",
+);
+
+const opticalTheme = secondAugust.stockpicking?.themes?.[0];
+assert.equal(opticalTheme?.label, "Oportunidad en consideración");
+assert.deepEqual(opticalTheme?.examples?.map((item) => item.ticker), ["LITE", "COHR", "AVGO", "MRVL"]);
+for (const forbidden of ["comprar", "selección recomendada", "próximo ganador", "la siguiente nvidia"]) {
+  assert(
+    !`${opticalTheme?.body} ${opticalTheme?.note}`.toLocaleLowerCase("es").includes(forbidden),
+    `El tema óptico no puede formularse como recomendación: ${forbidden}.`,
+  );
+}
+
+const secondAugustCalendar = getReportCalendar(secondAugust);
+assert.deepEqual(
+  secondAugustCalendar.map((event) => [event.id, event.dateStart]),
+  [
+    ["earnings-futu", "2026-08-20"],
+    ["monthly-options-expiry-august", "2026-08-21"],
+    ["pce-july", "2026-08-26"],
+    ["earnings-nvda", "2026-08-26"],
+    ["jackson-hole-2026", "2026-08-27"],
+  ],
+  "El calendario prospectivo cubre FUTU 20, OPEX 21, PCE y NVDA 26 y Jackson Hole 27-29.",
+);
+for (const event of secondAugustCalendar) {
+  assert(event.dateStart, `${event.id}: falta fecha inicial.`);
+  assertIsoDate(event.dateStart, `${event.id}.dateStart`);
+  assert(event.dateStart >= "2026-08-17" && event.dateStart <= "2026-08-31", `${event.id}: fecha fuera del periodo prospectivo.`);
+  assert(event.category && event.timeStatus && event.originalTimeZone, `${event.id}: falta categoría, estado de hora o zona.`);
+  assert(event.affectedAssets?.length, `${event.id}: faltan activos o factores afectados.`);
+  assert(event.sourceLabel && event.sourceHref, `${event.id}: falta fuente institucional.`);
+  assert.match(event.sourceHref, /^https:\/\//, `${event.id}: la fuente debe usar HTTPS.`);
+  if (event.timeStatus === "confirmed") {
+    assert.match(event.startDateTimeUtc ?? "", /^2026-08-\d{2}T\d{2}:\d{2}:00Z$/, `${event.id}: hora UTC confirmada inválida.`);
+    const instant = new Date(event.startDateTimeUtc ?? "");
+    const original = dateTimeParts(instant, "America/New_York");
+    const cest = dateTimeParts(instant, "Europe/Madrid");
+    assert.equal(original.time, event.originalTime, `${event.id}: UTC no coincide con la hora original.`);
+    assert.equal(`${cest.time} CEST`, event.displayTimeCest, `${event.id}: conversión UTC/CEST incorrecta.`);
+  }
+}
+const jacksonHole = secondAugust.calendar.find((event) => event.id === "jackson-hole-2026");
+assert.equal(jacksonHole?.dateEnd, "2026-08-29");
+assert.equal(jacksonHole?.timeStatus, "tba", "No se inventa la hora del discurso del presidente de la Fed.");
+assert(
+  jacksonHole?.whyItMatters.includes("Financial Innovation: Implications for Payments and Policy"),
+  "Falta el tema oficial de Jackson Hole 2026.",
+);
+
+assert.deepEqual(
+  secondAugust.probableRoutes?.scenarios.map((route) => route.title),
+  [
+    "Ruta base — mercado funcional con rotación",
+    "Ruta favorable — amplitud, desinflación y menor presión de tasas",
+    "Ruta adversa — tasas y dólar convierten la rotación en reducción de riesgo",
+  ],
+);
+assert.equal(secondAugust.probableRoutes?.engines, undefined, "El informe no inventa motores no sostenidos por el material.");
+assert(
+  secondAugust.probableRoutes?.note.includes("no son predicciones"),
+  "Las rutas deben cerrar recordando que son escenarios condicionales.",
+);
+for (const route of secondAugust.probableRoutes?.scenarios ?? []) {
+  assert(!/\b\d{1,3}\s?%\s+de probabilidad/i.test(route.body), `${route.title}: no se asignan probabilidades arbitrarias.`);
+}
+
+assert.deepEqual(
+  secondAugust.watchlist.map((item) => item.key),
+  [
+    "spx-breadth",
+    "us-yields",
+    "ai-credit",
+    "dxy",
+    "gold-levels",
+    "nvda-earnings",
+    "futu-earnings",
+    "japan-yen-boj",
+    "china-domestic",
+    "btc-etf-flows",
+    "eth-liquidity",
+  ],
+  "La lista de control debe concentrar la vigilancia de los once frentes del informe.",
+);
+for (const item of secondAugust.watchlist) {
+  assert(item.category && item.status && item.statusLabel, `${item.key}: falta clasificación visual.`);
+  assert(item.whatLooksAt && item.whyItMatters && item.currentReading && item.whatWouldChange, `${item.key}: la divulgación progresiva pierde condiciones de lectura.`);
+  assert(item.asOf && item.source, `${item.key}: falta trazabilidad editorial.`);
+  if (item.href) assert(item.linkLabel, `${item.key}: el enlace de seguimiento no tiene etiqueta accesible.`);
+}
+const goldWatch = secondAugust.watchlist.find((item) => item.key === "gold-levels");
+assert(goldWatch?.whatLooksAt.includes("4.400–4.500") && goldWatch.whatLooksAt.includes("5.056"));
+assert(goldWatch?.whatWouldChange.includes("no debe tratarse como objetivo de precio"), "El nivel de 5.056 no puede presentarse como objetivo.");
+
+for (const forbidden of ["gp", "familia", "portafolio", "portfolio", "cartera familiar", "destinatario privado", "asesoría personalizada de compra"]) {
+  const haystack = JSON.stringify(secondAugust).toLocaleLowerCase("es");
+  const pattern = forbidden === "gp" ? /\bgp\b/ : new RegExp(forbidden.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"));
+  assert(!pattern.test(haystack), `El segundo informe de agosto expone contexto privado: ${forbidden}.`);
+}
+assert(!JSON.stringify(secondAugust).includes("USD/COP"), "USD/COP queda fuera de esta edición.");
+
+// El informe queda congelado al 14/08 mientras el dashboard sigue resolviendo el último dato.
+const secondAugustSnapshot = getHistoricalAutomaticReadings(secondAugust.id);
+assert.equal(secondAugustSnapshot?.dataDate, "2026-08-14", "El informe debe usar el snapshot congelado al 14 de agosto.");
+assert.equal(secondAugustSnapshot?.gldFlowPressure?.asOf, "2026-08-14");
+assert.equal(secondAugustSnapshot?.regime.label, "Risk-on selectivo");
+assert.equal(secondAugustSnapshot?.regime.score, 61);
+assert.equal(secondAugustSnapshot?.regime.confidence, 66);
+assert.equal(secondAugustSnapshot?.quantRadar?.fragilityScore, 20);
+assert.equal(secondAugustSnapshot?.vixTermStructure?.classification, "Fuerte contango");
+assert.equal(
+  secondAugustSnapshot?.indices,
+  null,
+  "Los módulos no capturados al corte permanecen en null; el snapshot no se completa con datos posteriores.",
+);
+assert.equal(secondAugustSnapshot?.statisticalAssets, null);
+
+// Canary: el registro histórico es estático y no depende de ningún loader vivo ni de la fecha de render.
+const historicalModule = read("lib/reports/historical-automatic-readings.ts");
+for (const liveSource of ["buildWeeklyReportData", "getDashboardData", "fetch(", "new Date()", "Date.now("]) {
+  assert(
+    !historicalModule.includes(liveSource),
+    `El snapshot histórico no puede depender de una fuente viva: ${liveSource}.`,
+  );
+}
+const dashboardRoute = read("app/(es)/dashboard/page.tsx");
+assert(dashboardRoute.includes("getDashboardData"), "El dashboard debe seguir resolviendo datos vivos.");
+assert(dashboardRoute.includes("buildWeeklyReportData"), "El dashboard debe seguir resolviendo datos vivos.");
+assert(
+  !dashboardRoute.includes("historical-automatic-readings") && !dashboardRoute.includes("2026-08-14"),
+  "El dashboard no puede consumir el snapshot del informe ni quedar fijado al 14 de agosto.",
+);
+for (const sharedModule of [
+  "lib/dashboard/get-dashboard-data.ts",
+  "lib/reports/build-weekly-report-data.ts",
+  "lib/statistical-levels/get-statistical-levels-data.ts",
+]) {
+  assert(
+    !read(sharedModule).includes("2026-08-14"),
+    `${sharedModule}: un loader compartido no puede quedar fijado al corte del informe.`,
+  );
+}
+for (const artifact of [
+  "public/reports/segundo-informe-agosto-2026.md",
+  "public/reports/segundo-informe-agosto-2026.html",
+]) {
+  const content = read(artifact);
+  assert(content.includes("2026-08-14"), `${artifact}: la exportación debe reflejar el snapshot del 14 de agosto.`);
+  for (const forbiddenHeading of ["Tesis principal", "Resumen ejecutivo", "Lectura del informe", "Secuencia de lectura"]) {
+    assert(!content.includes(forbiddenHeading), `${artifact}: el formato anterior sobrevive en la exportación (${forbiddenHeading}).`);
+  }
+  assert(content.includes("-18,5 %") || content.includes("-18.5 %"), `${artifact}: falta la reacción verificada de CELH.`);
+  assert(content.includes("+29,5") || content.includes("29,5 %"), `${artifact}: falta la reacción verificada de PLTR.`);
+}
+const secondAugustIcs = read("public/reports/segundo-informe-agosto-2026-calendar.ics").replace(/\r?\n[ \t]/g, "");
+assert.equal((secondAugustIcs.match(/BEGIN:VEVENT/g) ?? []).length, 5, "El ICS solo incluye los cinco eventos confirmados del 17 al 31 de agosto.");
+for (const stamp of ["20260820", "20260821", "20260826", "20260827"]) {
+  assert(secondAugustIcs.includes(stamp), `El ICS debe incluir el evento del ${stamp}.`);
+}
 
 const explicitUnconfirmed = "Fecha prevista editorial no confirmada · hora por confirmar";
 for (const artifact of [
@@ -440,4 +732,6 @@ for (const locale of ["es", "en"] as const) {
   assert.equal(editorial.headline, td3PaperContent[locale].hero.title);
 }
 
-console.log("Editorial validation passed: 3 reports, 1 historical snapshot and 2 TD3 locales.");
+console.log(
+  `Editorial validation passed: ${marketReports.length} reports, 2 historical snapshots audited and 2 TD3 locales.`,
+);

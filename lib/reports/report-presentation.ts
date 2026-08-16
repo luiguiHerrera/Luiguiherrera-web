@@ -35,15 +35,15 @@ export function formatImpliedMove(item: Pick<MarketReportEarningsItem, "impliedM
 }
 
 export function formatEvidenceConsultedAt(value: string) {
+  // Una consulta registrada solo por fecha no debe mostrar una hora que la fuente no aportó.
+  const dateOnly = /^\d{4}-\d{2}-\d{2}$/.test(value);
   return new Intl.DateTimeFormat("es-ES", {
     day: "numeric",
     month: "short",
     year: "numeric",
-    hour: "2-digit",
-    minute: "2-digit",
+    ...(dateOnly ? {} : { hour: "2-digit", minute: "2-digit", timeZoneName: "short" }),
     timeZone: "UTC",
-    timeZoneName: "short",
-  }).format(new Date(value));
+  }).format(new Date(dateOnly ? `${value}T00:00:00Z` : value));
 }
 
 export function earningsScheduleLabel(item: MarketReportEarningsItem) {

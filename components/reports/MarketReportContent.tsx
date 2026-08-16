@@ -60,17 +60,28 @@ export function MarketReportContent({
 }: MarketReportContentProps) {
   const calendar = getReportCalendar(report);
   const hasCalendarDates = calendar.some((item) => item.dateStart);
-  const calendarSectionLabel = hasCalendarDates ? "Calendario y escenarios" : "Escenarios";
-  const calendarSectionTitle = hasCalendarDates ? "Eventos y rutas probables" : "Rutas probables";
+  const sectionTitles = report.presentation?.sectionTitles;
+  const calendarSectionLabel = sectionTitles?.calendar
+    ? "Calendario"
+    : hasCalendarDates ? "Calendario y escenarios" : "Escenarios";
+  const calendarSectionTitle = sectionTitles?.calendar
+    ?? (hasCalendarDates ? "Eventos y rutas probables" : "Rutas probables");
+  const assetSectionTitle = sectionTitles?.assetReadings ?? "Lectura de seguimiento por activo";
+  const watchlistSectionTitle = sectionTitles?.watchlist ?? "Lista de control";
+  const sourcesSectionTitle = sectionTitles?.sources ?? "Fuentes y aviso educativo";
   const contextTitle = report.presentation?.contextTitle ?? "Contexto por activo";
   const enhancedTimeline = report.presentation?.timelineStyle === "progression";
   const enhancedCalendar = report.presentation?.calendarStyle === "monthly";
   const enhancedWatchlist = report.presentation?.watchlistStyle === "dashboard";
+  const hasHeadlineSummary = Boolean(report.thesis || report.executiveSummary?.length || report.transversalFactor);
   const watchlistGroups = [
     ["market-structure", "Estructura de mercado"],
     ["rates-credit", "Tasas y crédito"],
     ["technology-ai", "Tecnología e IA"],
     ["fx-commodities", "Divisas y materias primas"],
+    ["stockpicking", "Stockpicking y resultados"],
+    ["macro-global", "Macro global"],
+    ["crypto", "Cripto"],
   ] as const;
 
   return (
@@ -82,7 +93,7 @@ export function MarketReportContent({
         ← Volver al archivo de informes
       </Link>
 
-      <section className="mt-6 grid gap-6 border-y border-line py-8 md:py-10 lg:grid-cols-[0.34fr_1fr]">
+      <section className={`mt-6 grid gap-6 border-y border-line py-8 md:py-10 ${hasHeadlineSummary ? "lg:grid-cols-[0.34fr_1fr]" : ""}`}>
         <div>
           <div className="flex flex-wrap items-center gap-2">
             <p className="text-xs font-semibold uppercase text-petrol">{reportDisplayName(report)}</p>
@@ -101,33 +112,43 @@ export function MarketReportContent({
           <p className="mt-4 text-base leading-7 text-muted">{report.subtitle}</p>
           <ReportExportLinks report={report} />
         </div>
-        <div className="grid gap-6">
-          <section>
-            <p className="text-xs font-semibold uppercase text-brass">Tesis principal</p>
-            <p className="mt-3 text-base leading-8 text-muted">{report.thesis}</p>
-          </section>
-
-          <section>
-            <p className="text-xs font-semibold uppercase text-petrol">Resumen ejecutivo</p>
-            <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-              {report.executiveSummary.map((item) => (
-                <article key={item.title} className="border border-line bg-panel p-4">
-                  <p className="text-sm font-semibold uppercase text-petrol">{item.title}</p>
-                  <p className="mt-3 text-sm leading-6 text-muted">{item.text}</p>
-                </article>
-              ))}
-            </div>
-            {report.transversalFactor ? (
-              <article className="mt-3 border border-brass/35 bg-panelSoft p-4">
-                {report.transversalFactor.label ? (
-                  <p className="text-xs font-semibold uppercase text-brass">{report.transversalFactor.label}</p>
-                ) : null}
-                <h3 className="mt-2 text-sm font-semibold uppercase text-petrol">{report.transversalFactor.title}</h3>
-                <p className="mt-2 text-sm leading-6 text-muted">{report.transversalFactor.text}</p>
-              </article>
+        {hasHeadlineSummary ? (
+          <div className="grid gap-6">
+            {report.thesis ? (
+              <section>
+                <p className="text-xs font-semibold uppercase text-brass">Tesis principal</p>
+                <p className="mt-3 text-base leading-8 text-muted">{report.thesis}</p>
+              </section>
             ) : null}
-          </section>
-        </div>
+
+            {report.executiveSummary?.length || report.transversalFactor ? (
+              <section>
+                {report.executiveSummary?.length ? (
+                  <>
+                    <p className="text-xs font-semibold uppercase text-petrol">Resumen ejecutivo</p>
+                    <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+                      {report.executiveSummary.map((item) => (
+                        <article key={item.title} className="border border-line bg-panel p-4">
+                          <p className="text-sm font-semibold uppercase text-petrol">{item.title}</p>
+                          <p className="mt-3 text-sm leading-6 text-muted">{item.text}</p>
+                        </article>
+                      ))}
+                    </div>
+                  </>
+                ) : null}
+                {report.transversalFactor ? (
+                  <article className="mt-3 border border-brass/35 bg-panelSoft p-4">
+                    {report.transversalFactor.label ? (
+                      <p className="text-xs font-semibold uppercase text-brass">{report.transversalFactor.label}</p>
+                    ) : null}
+                    <h3 className="mt-2 text-sm font-semibold uppercase text-petrol">{report.transversalFactor.title}</h3>
+                    <p className="mt-2 text-sm leading-6 text-muted">{report.transversalFactor.text}</p>
+                  </article>
+                ) : null}
+              </section>
+            ) : null}
+          </div>
+        ) : null}
       </section>
 
       <section id={report.presentation?.contextTitle ? "contexto-general" : "contexto-por-activo"} className="grid scroll-mt-24 gap-6 py-8 md:py-10 lg:grid-cols-[0.34fr_1fr]">
@@ -149,7 +170,7 @@ export function MarketReportContent({
       <section id="lectura-seguimiento" className="grid scroll-mt-24 gap-6 border-y border-line py-8 md:py-10 lg:grid-cols-[0.34fr_1fr]">
         <div>
           <p className="text-xs font-semibold uppercase text-petrol">Qué esperamos</p>
-          <h2 className="mt-2 text-2xl font-semibold leading-tight text-ink md:text-3xl">Lectura de seguimiento por activo</h2>
+          <h2 className="mt-2 text-2xl font-semibold leading-tight text-ink md:text-3xl">{assetSectionTitle}</h2>
         </div>
         <div className="grid gap-4">
           {report.assetReadings.map((asset) => (
@@ -167,14 +188,14 @@ export function MarketReportContent({
                 {asset.detailsModule === "earnings" && report.stockpicking ? <div className="md:col-span-4"><StockpickingSummary published={report.stockpicking.earnings.published} upcoming={report.stockpicking.earnings.upcoming} /></div> : null}
               </summary>
               <div className="border-t border-line px-5 pb-5 pt-4">
-                <div className="grid gap-5 lg:grid-cols-[0.62fr_0.38fr]">
+                <div className={`grid gap-5 ${asset.timeline && !enhancedTimeline ? "lg:grid-cols-[0.62fr_0.38fr]" : ""}`}>
                   <div className="grid gap-4">
                     <ReadingColumn title="Qué pasó" body={asset.story} />
                     <ReadingColumn title="Qué cambió" body={asset.changed} />
-                    <div className="grid gap-3 md:grid-cols-3">
+                    <div className={`grid gap-3 ${asset.watch || asset.reading ? "md:grid-cols-3" : ""}`}>
                       <ReadingColumn title="Qué esperamos" body={asset.expected} />
-                      <ReadingColumn title="Qué vigilar" body={asset.watch} />
-                      <ReadingColumn title="Lectura del informe" body={asset.reading} />
+                      {asset.watch ? <ReadingColumn title="Qué vigilar" body={asset.watch} /> : null}
+                      {asset.reading ? <ReadingColumn title="Lectura del informe" body={asset.reading} /> : null}
                     </div>
                     {asset.figures?.length ? (
                       <div className="grid gap-4 pt-1">
@@ -183,24 +204,28 @@ export function MarketReportContent({
                         ))}
                       </div>
                     ) : null}
-                    {asset.detailsModule === "earnings" && report.stockpicking ? <StockpickingEarnings {...report.stockpicking.earnings} /> : null}
+                    {asset.detailsModule === "earnings" && report.stockpicking ? (
+                      <StockpickingEarnings {...report.stockpicking.earnings} themes={report.stockpicking.themes} />
+                    ) : null}
                   </div>
-                  <div className={`border border-line bg-paper p-4 ${enhancedTimeline ? "lg:col-span-2" : ""}`}>
-                    <p className="text-xs font-semibold uppercase text-petrol">Secuencia de lectura</p>
-                    {enhancedTimeline ? (
-                      <ol className="report-reading-flow mt-4 grid gap-4 md:grid-cols-3" aria-label={`Secuencia de lectura para ${asset.asset}`}>
-                        <TimelineStep enhanced number="1" title="Antes — Contexto" body={asset.timeline.before} />
-                        <TimelineStep enhanced number="2" title="Ahora — Qué cambió" body={asset.timeline.now} />
-                        <TimelineStep enhanced number="3" title="Después — Qué vigilamos" body={asset.timeline.next} />
-                      </ol>
-                    ) : (
-                      <div className="mt-4 grid gap-3">
-                        <TimelineStep number="1" title="Antes / contexto" body={asset.timeline.before} />
-                        <TimelineStep number="2" title="Ahora / cambio" body={asset.timeline.now} />
-                        <TimelineStep number="3" title="Próximas señales" body={asset.timeline.next} />
-                      </div>
-                    )}
-                  </div>
+                  {asset.timeline ? (
+                    <div className={`border border-line bg-paper p-4 ${enhancedTimeline ? "lg:col-span-2" : ""}`}>
+                      <p className="text-xs font-semibold uppercase text-petrol">Secuencia de lectura</p>
+                      {enhancedTimeline ? (
+                        <ol className="report-reading-flow mt-4 grid gap-4 md:grid-cols-3" aria-label={`Secuencia de lectura para ${asset.asset}`}>
+                          <TimelineStep enhanced number="1" title="Antes — Contexto" body={asset.timeline.before} />
+                          <TimelineStep enhanced number="2" title="Ahora — Qué cambió" body={asset.timeline.now} />
+                          <TimelineStep enhanced number="3" title="Después — Qué vigilamos" body={asset.timeline.next} />
+                        </ol>
+                      ) : (
+                        <div className="mt-4 grid gap-3">
+                          <TimelineStep number="1" title="Antes / contexto" body={asset.timeline.before} />
+                          <TimelineStep number="2" title="Ahora / cambio" body={asset.timeline.now} />
+                          <TimelineStep number="3" title="Próximas señales" body={asset.timeline.next} />
+                        </div>
+                      )}
+                    </div>
+                  ) : null}
                 </div>
               </div>
             </details>
@@ -250,7 +275,7 @@ export function MarketReportContent({
               ))}
             </div>
           ) : null}
-          {!report.probableRoutes ? <div className="grid gap-3 md:grid-cols-3">
+          {!report.probableRoutes && report.scenarios?.length ? <div className="grid gap-3 md:grid-cols-3">
             {report.scenarios.map((scenario) => (
               <article key={scenario.title} className="border border-line bg-panel p-5">
                 <h3 className="text-lg font-semibold text-ink">{scenario.title}</h3>
@@ -265,7 +290,7 @@ export function MarketReportContent({
         <section id="rutas-probables" className="grid scroll-mt-24 gap-6 border-t border-line py-8 md:py-10 lg:grid-cols-[0.34fr_1fr]">
           <div><p className="text-xs font-semibold uppercase text-petrol">Escenarios condicionales</p><h2 className="mt-2 text-2xl font-semibold text-ink md:text-3xl">{report.probableRoutes.title}</h2><p className="mt-3 text-sm leading-6 text-muted">{report.probableRoutes.note}</p></div>
           <div className="grid gap-5">
-            <div className="grid gap-3 md:grid-cols-3">{report.probableRoutes.engines.map((item) => <article key={item.title} className="border-l-2 border-petrol bg-panel p-4"><p className="text-xs font-semibold uppercase text-petrol">Motor</p><h3 className="mt-2 font-semibold text-ink">{item.title}</h3><p className="mt-2 text-sm leading-6 text-muted">{item.body}</p></article>)}</div>
+            {report.probableRoutes.engines?.length ? <div className="grid gap-3 md:grid-cols-3">{report.probableRoutes.engines.map((item) => <article key={item.title} className="border-l-2 border-petrol bg-panel p-4"><p className="text-xs font-semibold uppercase text-petrol">Motor</p><h3 className="mt-2 font-semibold text-ink">{item.title}</h3><p className="mt-2 text-sm leading-6 text-muted">{item.body}</p></article>)}</div> : null}
             <div className="grid gap-3 md:grid-cols-3">{report.probableRoutes.scenarios.map((item) => <article key={item.title} className="border border-line bg-panelSoft p-4"><h3 className="font-semibold text-ink">{item.title}</h3><p className="mt-2 text-sm leading-6 text-muted">{item.body}</p></article>)}</div>
           </div>
         </section>
@@ -274,7 +299,7 @@ export function MarketReportContent({
       <section id="senales-a-vigilar" className="grid scroll-mt-24 gap-6 border-y border-line py-8 md:py-10 lg:grid-cols-[0.34fr_1fr]">
         <div>
           <p className="text-xs font-semibold uppercase text-petrol">Señales a vigilar</p>
-          <h2 className="mt-2 text-2xl font-semibold leading-tight text-ink md:text-3xl">Lista de control</h2>
+          <h2 className="mt-2 text-2xl font-semibold leading-tight text-ink md:text-3xl">{watchlistSectionTitle}</h2>
         </div>
         {enhancedWatchlist ? (
           <div className="grid gap-6">
@@ -305,7 +330,7 @@ export function MarketReportContent({
 
       <section id="fuentes-y-aviso" className="grid scroll-mt-24 gap-6 py-8 md:py-10 lg:grid-cols-[0.34fr_1fr]">
         <div>
-          <p className="text-xs font-semibold uppercase text-petrol">Fuentes y aviso educativo</p>
+          <p className="text-xs font-semibold uppercase text-petrol">{sourcesSectionTitle}</p>
           <h2 className="mt-2 text-2xl font-semibold leading-tight text-ink md:text-3xl">Marco de lectura</h2>
         </div>
         <div className="border border-line bg-panelSoft p-5">

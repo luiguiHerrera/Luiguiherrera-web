@@ -372,19 +372,25 @@ def add_asset_reading(story, item, styles, allow_table_split=False, enhanced_tim
         ("Qué pasó", item["story"]),
         ("Qué cambió", item["changed"]),
         ("Qué esperamos", item["expected"]),
-        ("Qué vigilar", item["watch"]),
-        ("Lectura del informe", item["reading"]),
-        (
-            "Secuencia",
-            " ".join(
-                [
-                    f"Antes - Contexto: {item['timeline']['before']}" if enhanced_timeline else item["timeline"]["before"],
-                    f"Ahora - Qué cambió: {item['timeline']['now']}" if enhanced_timeline else item["timeline"]["now"],
-                    f"Después - Qué vigilamos: {item['timeline']['next']}" if enhanced_timeline else item["timeline"]["next"],
-                ]
-            ),
-        ),
     ]
+    if item.get("watch"):
+        rows.append(("Qué vigilar", item["watch"]))
+    if item.get("reading"):
+        rows.append(("Lectura del informe", item["reading"]))
+    timeline = item.get("timeline")
+    if timeline:
+        rows.append(
+            (
+                "Secuencia",
+                " ".join(
+                    [
+                        f"Antes - Contexto: {timeline['before']}" if enhanced_timeline else timeline["before"],
+                        f"Ahora - Qué cambió: {timeline['now']}" if enhanced_timeline else timeline["now"],
+                        f"Después - Qué vigilamos: {timeline['next']}" if enhanced_timeline else timeline["next"],
+                    ]
+                ),
+            )
+        )
     if allow_table_split:
         story.append(PDF["CondPageBreak"](65 * PDF["mm"]))
         story.append(
@@ -453,25 +459,26 @@ def add_historical_snapshot(story, snapshot, styles):
         for value in regime[key]:
             story.append(bullet(value, styles))
 
-    add_snapshot_group(
-        story,
-        "Índices principales vía ETF",
-        data_table(
-            ["Ticker", "Retorno 1W", "Media larga", "Distancia a máximos"],
-            [
+    if snapshot.get("indices"):
+        add_snapshot_group(
+            story,
+            "Índices principales vía ETF",
+            data_table(
+                ["Ticker", "Retorno 1W", "Media larga", "Distancia a máximos"],
                 [
-                    item["ticker"],
-                    f"{item['return1w']:+.1f}%",
-                    f"{item['distanceLongAverage']:+.1f}%",
-                    f"{item['distanceFromHigh']:+.1f}%",
-                ]
-                for item in snapshot["indices"]
-            ],
+                    [
+                        item["ticker"],
+                        f"{item['return1w']:+.1f}%",
+                        f"{item['distanceLongAverage']:+.1f}%",
+                        f"{item['distanceFromHigh']:+.1f}%",
+                    ]
+                    for item in snapshot["indices"]
+                ],
+                styles,
+                [28 * PDF["mm"], 40 * PDF["mm"], 46 * PDF["mm"], 52 * PDF["mm"]],
+            ),
             styles,
-            [28 * PDF["mm"], 40 * PDF["mm"], 46 * PDF["mm"], 52 * PDF["mm"]],
-        ),
-        styles,
-    )
+        )
 
     sectors = snapshot["sectors"]
     add_snapshot_group(
@@ -504,27 +511,86 @@ def add_historical_snapshot(story, snapshot, styles):
         )
     )
 
-    vix = snapshot["vix"]
-    if vix:
+    breadth = snapshot.get("breadth")
+    if breadth:
+        def spread(value):
+            return "Pendiente al corte" if value is None else f"{value:+.1f} pp"
+
+        over_long = (
+            "Pendiente al corte"
+            if breadth["sectorsOverLongAverage"] is None or breadth["sectorsOverLongAverageTotal"] is None
+            else f"{breadth['sectorsOverLongAverage']} / {breadth['sectorsOverLongAverageTotal']}"
+        )
         add_snapshot_group(
             story,
-            "VIX - Volatilidad al corte",
-        info_table(
+            "Amplitud relativa al corte",
+            info_table(
+                [
+                    ("RSP/SPY 1W", spread(breadth["rspVsSpy1wPp"])),
+                    ("IWM/SPY 1W", spread(breadth["iwmVsSpy1wPp"])),
+                    ("QQQ/SPY 1W", spread(breadth["qqqVsSpy1wPp"])),
+                    ("Sectores sobre media larga", over_long),
+                    ("Lectura al publicar", breadth["reading"]),
+                ],
+                styles,
+            ),
+            styles,
+        )
+
+    radar = snapshot.get("quantRadar")
+    if radar:
+        add_snapshot_group(
+            story,
+            "Radar cuantitativo al corte",
+            info_table(
+                [
+                    ("Fragilidad", f"{radar['fragilityScore']}/100 · {radar['fragilityLabel']}"),
+                    ("Volatilidad EWMA", f"{radar['ewmaVolAnnualized']:+.1f}%"),
+                    ("Volatilidad GARCH", f"{radar['garchVolForecast']:+.1f}%"),
+                    ("Correlación promedio", f"{radar['averageCorrelation21d']:.2f}"),
+                    ("Dispersión sectorial", f"{radar['sectorDispersion1w']:+.1f}%"),
+                ],
+                styles,
+            ),
+            styles,
+        )
+
+    vix = snapshot["vix"]
+    if vix:
+        vix_rows = [("Nivel al corte", f"{vix['level']:.1f}")]
+        if vix.get("change1d") is not None:
+            vix_rows.append(("Cambio 1D", f"{vix['change1d']:+.1f}"))
+        if vix.get("percentileLabel"):
+            vix_rows.append(("Percentil", vix["percentileLabel"]))
+        vix_rows.extend(
             [
-                ("Nivel al corte", f"{vix['level']:.1f}"),
-                ("Cambio 1D", f"{vix['change1d']:+.1f}"),
                 ("Estado", f"{vix['stateLabel']} / {vix['status']}"),
                 ("Momentum", vix["momentum"]),
                 ("Curva", vix["curve"]),
                 ("Lectura histórica", vix["curveText"]),
-            ],
-            styles,
-        ),
-            styles,
+            ]
         )
+        add_snapshot_group(story, "VIX - Volatilidad al corte", info_table(vix_rows, styles), styles)
     else:
         story.append(p("VIX - Volatilidad al corte", styles["h2"]))
         story.append(p("No disponible al cierre.", styles["body"]))
+
+    term_structure = snapshot.get("vixTermStructure")
+    if term_structure:
+        add_snapshot_group(
+            story,
+            "Estructura temporal del VIX al corte",
+            info_table(
+                [
+                    ("Clasificación", term_structure["classification"]),
+                    ("VX2 - VX1", f"{term_structure['vx2MinusVx1']:+.2f} puntos"),
+                    ("Pendiente VX1-VX2", f"{term_structure['slopeVx1Vx2Pct']:+.1f}%"),
+                    ("VX3 - VX1", f"{term_structure['vx3MinusVx1']:+.2f} puntos"),
+                ],
+                styles,
+            ),
+            styles,
+        )
 
     btc = snapshot["btcEtfFlows"]
     if btc:
@@ -548,45 +614,39 @@ def add_historical_snapshot(story, snapshot, styles):
 
     gld = snapshot["gldFlowPressure"]
     if gld:
-        add_snapshot_group(
-        story,
-        "Proxy histórico de presión de flujos en GLD",
-        info_table(
-            [
-                ("Fecha del dato", gld["asOf"]),
-                ("Proxy al corte", gld["label"]),
-                ("Cambio 5D en participaciones", f"{gld['sharesChange5dPct']:+.2f}%"),
-                ("Resumen", gld["summary"]),
-                ("Limitación de fuente", gld["sourceNote"]),
-            ],
-            styles,
-        ),
-            styles,
-        )
+        gld_rows = [("Fecha del dato", gld["asOf"]), ("Proxy al corte", gld["label"])]
+        if gld.get("sharesChange1dPct") is not None:
+            gld_rows.append(("Cambio 1D en participaciones", f"{gld['sharesChange1dPct']:+.2f}%"))
+        gld_rows.append(("Cambio 5D en participaciones", f"{gld['sharesChange5dPct']:+.2f}%"))
+        if gld.get("sharesChange20dPct") is not None:
+            gld_rows.append(("Cambio 20D en participaciones", f"{gld['sharesChange20dPct']:+.2f}%"))
+        gld_rows.extend([("Resumen", gld["summary"]), ("Limitación de fuente", gld["sourceNote"])])
+        add_snapshot_group(story, "Proxy histórico de presión de flujos en GLD", info_table(gld_rows, styles), styles)
     else:
         story.append(p("Proxy histórico de presión de flujos en GLD", styles["h2"]))
         story.append(p("No disponible al cierre.", styles["body"]))
 
-    add_snapshot_group(
-        story,
-        "Posición técnica por activo",
-        data_table(
-            ["Activo", "Percentil", "Z-score", "Media larga", "Último cierre"],
-            [
+    if snapshot.get("statisticalAssets"):
+        add_snapshot_group(
+            story,
+            "Posición técnica por activo",
+            data_table(
+                ["Activo", "Percentil", "Z-score", "Media larga", "Último cierre"],
                 [
-                    f"{asset['label']} ({asset.get('symbol', asset['label'])})",
-                    f"{asset['percentile']:.1f}",
-                    f"{asset['zScore']:.2f}",
-                    f"{asset['distanceLongAverage']:+.1f}%",
-                    f"{asset['lastClose']:.0f}" if asset["label"] == "BTC" else f"{asset['lastClose']:.2f}",
-                ]
-                for asset in snapshot["statisticalAssets"]
-            ],
+                    [
+                        f"{asset['label']} ({asset.get('symbol', asset['label'])})",
+                        f"{asset['percentile']:.1f}",
+                        f"{asset['zScore']:.2f}",
+                        f"{asset['distanceLongAverage']:+.1f}%",
+                        f"{asset['lastClose']:.0f}" if asset["label"] == "BTC" else f"{asset['lastClose']:.2f}",
+                    ]
+                    for asset in snapshot["statisticalAssets"]
+                ],
+                styles,
+                [48 * PDF["mm"], 30 * PDF["mm"], 30 * PDF["mm"], 35 * PDF["mm"], 34 * PDF["mm"]],
+            ),
             styles,
-            [48 * PDF["mm"], 30 * PDF["mm"], 30 * PDF["mm"], 35 * PDF["mm"], 34 * PDF["mm"]],
-        ),
-        styles,
-    )
+        )
 
 
 def add_figure(story, item, styles, root):
@@ -672,13 +732,25 @@ def add_section(story, section, styles, root, published_at, description, force_b
             if item.get("detailsModule") == "earnings" and section.get("stockpicking"):
                 earnings = section["stockpicking"]["earnings"]
                 story.append(p("Qué pasó — resultados publicados", styles["h2"]))
+                if earnings.get("publishedNote"):
+                    story.append(p(earnings["publishedNote"], styles["body"]))
                 story.append(data_table(["Fecha", "Empresa", "Implícito", "Ocurrido", "Lectura"], [[row["reportDate"], f"{row['company']} ({row['ticker']})", f"{'≈' if row.get('impliedMoveApproximate') else ''}±{row['impliedMovePct']:.2f}%", f"{row['actualMovePct']:.1f}%", "Excedió el rango" if abs(row["actualMovePct"]) > row["impliedMovePct"] else "Dentro del rango"] for row in earnings["published"]], styles, [26*PDF["mm"], 55*PDF["mm"], 28*PDF["mm"], 27*PDF["mm"], 39*PDF["mm"]]))
                 story.append(p("Trazabilidad — resultados publicados", styles["h2"]))
                 add_earnings_trace(story, earnings["published"], styles)
                 story.append(p("Qué esperamos — próximos resultados", styles["h2"]))
+                if earnings.get("upcomingNote"):
+                    story.append(p(earnings["upcomingNote"], styles["body"]))
                 story.append(data_table(["Fecha", "Empresa", "Implícito", "Hora / estado"], [[row["reportDate"], f"{row['company']} ({row['ticker']})", f"{'≈' if row.get('impliedMoveApproximate') else ''}±{row['impliedMovePct']:.2f}%", earnings_schedule_label(row)] for row in earnings["upcoming"]], styles, [27*PDF["mm"], 62*PDF["mm"], 31*PDF["mm"], 55*PDF["mm"]]))
                 story.append(p("Trazabilidad — próximos resultados", styles["h2"]))
                 add_earnings_trace(story, earnings["upcoming"], styles)
+                for theme in section["stockpicking"].get("themes", []):
+                    story.append(p(f"{theme['label']}: {theme['title']}", styles["h2"]))
+                    story.append(p(theme["body"], styles["body"]))
+                    if theme.get("examples"):
+                        cited = ", ".join(f"{example['company']} ({example['ticker']})" for example in theme["examples"])
+                        story.append(p(f"Compañías citadas: {cited}.", styles["small"]))
+                    if theme.get("note"):
+                        story.append(p(theme["note"], styles["small"]))
                 story.append(p(earnings["methodology"] + " Cada fila identifica la página por ticker, la fecha de consulta y las fuentes utilizadas para fecha, hora y reacción.", styles["small"]))
     elif kind == "historical-snapshot":
         add_historical_snapshot(story, section["snapshot"], styles)
@@ -715,9 +787,10 @@ def add_section(story, section, styles, root, published_at, description, force_b
                 story.append(p(item["body"], styles["body"]))
     elif kind == "probable-routes":
         story.append(p(section["routes"]["note"], styles["body"]))
-        story.append(p("Motores", styles["h2"]))
-        for item in section["routes"]["engines"]:
-            story.append(PDF["KeepTogether"]([p(item["title"], styles["h3"]), p(item["body"], styles["body"])]))
+        if section["routes"].get("engines"):
+            story.append(p("Motores", styles["h2"]))
+            for item in section["routes"]["engines"]:
+                story.append(PDF["KeepTogether"]([p(item["title"], styles["h3"]), p(item["body"], styles["body"])]))
         story.append(p("Escenarios", styles["h2"]))
         for item in section["routes"]["scenarios"]:
             story.append(PDF["KeepTogether"]([p(item["title"], styles["h3"]), p(item["body"], styles["body"])]))

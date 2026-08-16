@@ -1,0 +1,87 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Luigui Herrera//Market Reports//ES
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+X-WR-CALNAME:Segundo informe de agosto
+BEGIN:VEVENT
+UID:segundo-informe-agosto-2026-resultados-de-futu-holdings-futu@luigui-her
+ rera
+DTSTAMP:20260816T000000Z
+DTSTART:20260820T113000Z
+SUMMARY:Segundo informe de agosto: Resultados de Futu Holdings (FUTU)
+DESCRIPTION:jue\, 20 de agosto. Fecha y hora confirmadas por fuente primari
+ a. 07:30 ET / 13:30 CEST. Movimiento implícito esperado ±7\,04 %\; venta
+ na para evaluar resultados\, guía y reacción posterior. Movimiento impl
+ ícito esperado: ±7.04 %. Fuente: Unusual Whales (https://unusualwhales.c
+ om/stock/FUTU/options-flow-history)\; consulta: 2026-08-16. Activos o fact
+ ores: FUTU\, Stockpicking. Fuente de fecha/hora: Futu Investor Relations 
+ — conferencia de resultados Q2 2026 (https://ir.futuholdings.com/events/
+ event-details/futu-holdings-ltd-second-quarter-2026-earnings-conference-ca
+ ll/).
+URL:https://ir.futuholdings.com/events/event-details/futu-holdings-ltd-seco
+ nd-quarter-2026-earnings-conference-call/
+END:VEVENT
+BEGIN:VEVENT
+UID:segundo-informe-agosto-2026-expiracion-mensual-de-opciones-opex@luigui-
+ herrera
+DTSTAMP:20260816T000000Z
+DTSTART;VALUE=DATE:20260821
+DTEND;VALUE=DATE:20260822
+SUMMARY:Segundo informe de agosto: Expiración mensual de opciones (OPEX)
+DESCRIPTION:Vie. 21 agosto. Fecha confirmada · hora por confirmar. Hora po
+ r confirmar (ET). Puede alterar coberturas\, flujos y volatilidad de corto
+  plazo\; no implica una dirección determinada. Activos o factores: S&P 50
+ 0\, VIX\, Opciones sobre índices. Fuente de fecha/hora: Calendario de exp
+ iraciones de la OCC (https://www.theocc.com/clearance-and-settlement/expir
+ ation-calendars).
+URL:https://www.luiguiherrera.com/informes/segundo-informe-agosto-2026
+END:VEVENT
+BEGIN:VEVENT
+UID:segundo-informe-agosto-2026-personal-income-outlays-pce-de-julio@luigui
+ -herrera
+DTSTAMP:20260816T000000Z
+DTSTART:20260826T123000Z
+SUMMARY:Segundo informe de agosto: Personal Income & Outlays / PCE de julio
+DESCRIPTION:Mié. 26 agosto. Fecha y hora confirmadas por fuente primaria. 
+ 08:30 ET / 14:30 CEST. Puede modificar expectativas sobre la Fed\, los ren
+ dimientos y el DXY para el resto del mes. Activos o factores: S&P 500\, Or
+ o\, DXY\, Treasury\, BTC / ETH. Fuente de fecha/hora: Calendario oficial d
+ e publicaciones del BEA (https://www.bea.gov/news/schedule).
+URL:https://www.bea.gov/data/personal-consumption-expenditures-price-index
+END:VEVENT
+BEGIN:VEVENT
+UID:segundo-informe-agosto-2026-resultados-de-nvidia-nvda@luigui-herrera
+DTSTAMP:20260816T000000Z
+DTSTART:20260826T210000Z
+SUMMARY:Segundo informe de agosto: Resultados de NVIDIA (NVDA)
+DESCRIPTION:mié\, 26 de agosto. Fecha y hora confirmadas por fuente primar
+ ia. 17:00 ET / 23:00 CEST. Movimiento implícito esperado ±6\,18 %\; vent
+ ana para evaluar resultados\, guía y reacción posterior. Movimiento impl
+ ícito esperado: ±6.18 %. Fuente: Unusual Whales (https://unusualwhales.c
+ om/stock/NVDA/earnings)\; consulta: 2026-08-16. Activos o factores: NVDA\,
+  Stockpicking. Fuente de fecha/hora: NVIDIA Investor Relations — resulta
+ dos Q2 FY27 (https://investor.nvidia.com/events-and-presentations/events-a
+ nd-presentations/event-details/2026/NVIDIA-2nd-Quarter-FY27-Financial-Resu
+ lts/default.aspx).
+URL:https://investor.nvidia.com/events-and-presentations/events-and-present
+ ations/event-details/2026/NVIDIA-2nd-Quarter-FY27-Financial-Results/defaul
+ t.aspx
+END:VEVENT
+BEGIN:VEVENT
+UID:segundo-informe-agosto-2026-simposio-de-jackson-hole@luigui-herrera
+DTSTAMP:20260816T000000Z
+DTSTART;VALUE=DATE:20260827
+DTEND;VALUE=DATE:20260830
+SUMMARY:Segundo informe de agosto: Simposio de Jackson Hole
+DESCRIPTION:27-29 agosto. Fecha confirmada · hora por confirmar. Hora por 
+ confirmar (MDT). Comunicación de bancos centrales\; el tema oficial de 20
+ 26 es “Financial Innovation: Implications for Payments and Policy”. La
+  agenda con la hora del discurso del presidente de la Fed no está publica
+ da al corte. Activos o factores: S&P 500\, Oro\, DXY\, Treasury\, BTC / ET
+ H. Fuente de fecha/hora: Federal Reserve Bank of Kansas City (https://www.
+ kansascityfed.org/research/jackson-hole-economic-symposium/).
+URL:https://www.kansascityfed.org/research/jackson-hole-economic-symposium/
+ jackson-hole-faqs/
+END:VEVENT
+END:VCALENDAR

@@ -75,7 +75,9 @@ export default async function MarketReportPage({ params }: ReportPageProps) {
             datePublished: report.publishedAt,
             dateModified: report.modifiedAt,
             mainEntityOfPage: canonical,
-            about: report.executiveSummary.map((item) => item.title),
+            about: (report.executiveSummary ?? report.assetReadings).map((item) =>
+              "title" in item ? item.title : item.asset,
+            ),
           }),
         ]}
       />
