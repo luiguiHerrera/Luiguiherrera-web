@@ -27,3 +27,6 @@ qa-diagnostic-flow.mjs
 Herramientas para inversionistas*.pdf
 playwright-report/
 test-results/
+
+# TypeScript incremental build artifacts
+*.tsbuildinfo
