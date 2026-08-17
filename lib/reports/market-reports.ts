@@ -1662,9 +1662,9 @@ export const marketReports: MarketReport[] = [
     whatHappened: [
       {
         title: "Un mercado más fuerte de lo que sugería julio",
-        summary: "Los hedge funds reconstruyeron exposición en Norteamérica y las compras se ampliaron más allá de las grandes tecnológicas.",
+        summary: "Los hedge funds reconstruyeron exposición en EE. UU. y las compras se ampliaron más allá de las grandes tecnológicas.",
         body:
-          "La primera mitad de agosto dejó un mercado estadounidense más fuerte de lo que sugería la sacudida de finales de julio. Los hedge funds reconstruyeron exposición en Norteamérica y las compras se extendieron más allá de las grandes tecnológicas, una señal favorable para la amplitud del mercado.",
+          "La primera mitad de agosto dejó un mercado estadounidense más fuerte de lo que sugería la sacudida de finales de julio. Los hedge funds reconstruyeron exposición en EE. UU. y las compras se extendieron más allá de las grandes tecnológicas, una señal favorable para la amplitud del mercado.",
       },
       {
         title: "Rotación dentro del mercado, no retirada de capital",
@@ -1703,7 +1703,7 @@ export const marketReports: MarketReport[] = [
         headline: "La corrección no evolucionó hacia una liquidación general: el mercado encontró nuevos compradores.",
         badge: "funcional",
         story:
-          "Después de la reducción de riesgo de finales de julio, los hedge funds volvieron a aumentar exposición en Estados Unidos. Morgan Stanley mostró compras en Norteamérica que se extendieron más allá de tecnología hacia materiales, salud, inmobiliario y otras áreas de la economía. El índice recuperó fortaleza mientras bajo la superficie se produjo una rotación intensa: varios antiguos líderes de momentum cedieron y compañías previamente castigadas rebotaron. Al cierre del 14 de agosto, la participación sectorial era amplia —9 de 11 sectores positivos y 8 de 11 sobre su media larga en el dashboard— aunque el equal weight todavía no superaba al índice ponderado por capitalización.",
+          "Después de la reducción de riesgo de finales de julio, los hedge funds volvieron a aumentar exposición en Estados Unidos. Morgan Stanley mostró compras en EE. UU. que se extendieron más allá de tecnología hacia materiales, salud, inmobiliario y otras áreas de la economía. El índice recuperó fortaleza mientras bajo la superficie se produjo una rotación intensa: varios antiguos líderes de momentum cedieron y compañías previamente castigadas rebotaron. Al cierre del 14 de agosto, la participación sectorial era amplia —9 de 11 sectores positivos y 8 de 11 sobre su media larga en el dashboard— aunque el equal weight todavía no superaba al índice ponderado por capitalización.",
         changed:
           "La principal diferencia frente al primer informe es que la corrección no evolucionó hacia una liquidación general. Al mismo tiempo, el riesgo cambió de forma. El Bull & Bear de BofA en 9,7/10, la rotación violenta de momentum y el aumento del coste de financiar infraestructura de IA reducen el margen para decepciones. La discusión ya no es solo crecimiento tecnológico: deuda, crédito, tipos largos y uso del flujo de caja empiezan a importar más.",
         expected:
@@ -1825,7 +1825,7 @@ export const marketReports: MarketReport[] = [
             { ticker: "MRVL", company: "Marvell" },
           ],
           note:
-            "Las compañías se citan como ejemplos de la cadena industrial descrita en la infografía aportada, no como selección aprobada ni recomendación de compra.",
+            "Estas compañías se mencionan como ejemplos dentro de la cadena de infraestructura óptica para IA, no como una selección aprobada ni como una recomendación de compra.",
         },
       ],
     },

@@ -16,9 +16,9 @@ Rotación interna, financiación de la IA, oro y política monetaria marcan una 
 
 ### Un mercado más fuerte de lo que sugería julio
 
-**Los hedge funds reconstruyeron exposición en Norteamérica y las compras se ampliaron más allá de las grandes tecnológicas.**
+**Los hedge funds reconstruyeron exposición en EE. UU. y las compras se ampliaron más allá de las grandes tecnológicas.**
 
-La primera mitad de agosto dejó un mercado estadounidense más fuerte de lo que sugería la sacudida de finales de julio. Los hedge funds reconstruyeron exposición en Norteamérica y las compras se extendieron más allá de las grandes tecnológicas, una señal favorable para la amplitud del mercado.
+La primera mitad de agosto dejó un mercado estadounidense más fuerte de lo que sugería la sacudida de finales de julio. Los hedge funds reconstruyeron exposición en EE. UU. y las compras se extendieron más allá de las grandes tecnológicas, una señal favorable para la amplitud del mercado.
 
 ### Rotación dentro del mercado, no retirada de capital
 
@@ -154,7 +154,7 @@ Corte de esta edición: **2026-08-14**. Cada módulo conserva la última fecha d
 
 Clasificación: **funcional**
 
-- **Qué pasó:** Después de la reducción de riesgo de finales de julio, los hedge funds volvieron a aumentar exposición en Estados Unidos. Morgan Stanley mostró compras en Norteamérica que se extendieron más allá de tecnología hacia materiales, salud, inmobiliario y otras áreas de la economía. El índice recuperó fortaleza mientras bajo la superficie se produjo una rotación intensa: varios antiguos líderes de momentum cedieron y compañías previamente castigadas rebotaron. Al cierre del 14 de agosto, la participación sectorial era amplia —9 de 11 sectores positivos y 8 de 11 sobre su media larga en el dashboard— aunque el equal weight todavía no superaba al índice ponderado por capitalización.
+- **Qué pasó:** Después de la reducción de riesgo de finales de julio, los hedge funds volvieron a aumentar exposición en Estados Unidos. Morgan Stanley mostró compras en EE. UU. que se extendieron más allá de tecnología hacia materiales, salud, inmobiliario y otras áreas de la economía. El índice recuperó fortaleza mientras bajo la superficie se produjo una rotación intensa: varios antiguos líderes de momentum cedieron y compañías previamente castigadas rebotaron. Al cierre del 14 de agosto, la participación sectorial era amplia —9 de 11 sectores positivos y 8 de 11 sobre su media larga en el dashboard— aunque el equal weight todavía no superaba al índice ponderado por capitalización.
 - **Qué cambió:** La principal diferencia frente al primer informe es que la corrección no evolucionó hacia una liquidación general. Al mismo tiempo, el riesgo cambió de forma. El Bull & Bear de BofA en 9,7/10, la rotación violenta de momentum y el aumento del coste de financiar infraestructura de IA reducen el margen para decepciones. La discusión ya no es solo crecimiento tecnológico: deuda, crédito, tipos largos y uso del flujo de caja empiezan a importar más.
 - **Qué esperamos:** El escenario base sigue siendo compatible con un S&P 500 funcional, pero con mayor dispersión entre sectores y compañías. La continuidad sería más saludable si la amplitud se mantiene y el liderazgo sigue ampliándose. Un repunte fuerte de rendimientos y DXY, un deterioro simultáneo de amplitud y crédito o una decepción importante en las grandes tecnológicas elevarían el riesgo de que la rotación se convierta en reducción general de exposición.
 
@@ -309,7 +309,7 @@ El crecimiento de la IA no termina en los chips. Cada nueva generación de centr
 
 Compañías citadas: Lumentum (LITE), Coherent (COHR), Broadcom (AVGO), Marvell (MRVL).
 
-Las compañías se citan como ejemplos de la cadena industrial descrita en la infografía aportada, no como selección aprobada ni recomendación de compra.
+Estas compañías se mencionan como ejemplos dentro de la cadena de infraestructura óptica para IA, no como una selección aprobada ni como una recomendación de compra.
 
 Los movimientos implícitos esperados de la tabla retrospectiva son los congelados en el primer informe de agosto, procedentes de páginas por ticker de Unusual Whales consultadas el 1 de agosto de 2026 a las 12:00 UTC; no se actualizan con el valor posterior de las opciones. El movimiento ocurrido usa una única metodología: variación entre el cierre regular de la sesión de reacción y el cierre regular inmediatamente anterior, redondeada a una decimal. No se usan datos after-hours ni máximos o mínimos intradía. Cada fila enlaza su página por ticker, la fecha de consulta y las fuentes utilizadas para fecha, hora y reacción.
 
