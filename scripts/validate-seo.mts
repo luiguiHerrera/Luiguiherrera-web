@@ -27,6 +27,8 @@ const expectedStaticRoutes = [
   "/en/debt",
   "/diagnostico",
   "/en/diagnostic",
+  "/fragilidad-de-portafolio",
+  "/en/portfolio-fragility",
   "/inversionista",
   "/en/investor",
   "/proteccion",
@@ -112,8 +114,8 @@ for (const pathname of ["/informes", "/en/weekly-report"]) {
   }
 }
 
-if (bilingualRoutePairs.length !== 15) {
-  errors.push(`Expected 15 bilingual route pairs, found ${bilingualRoutePairs.length}`);
+if (bilingualRoutePairs.length !== 16) {
+  errors.push(`Expected 16 bilingual route pairs, found ${bilingualRoutePairs.length}`);
 }
 
 for (const { es, en } of bilingualRoutePairs) {
