@@ -3,6 +3,7 @@ import test from "node:test";
 import { adjacentTest, breakTest, regime, rollingAt, tomDecayData, tomToolVersion } from "./dataset.ts";
 import { buildTomDecayView } from "./presentation.ts";
 import { tomDecayContent } from "./content.ts";
+import { tomDecayReferences } from "./references.ts";
 import type { TomDecayDataset } from "./types.ts";
 
 const { yahoo, french } = tomDecayData;
@@ -183,6 +184,46 @@ test("both locales publish the same frozen numbers in their own number format", 
     assert.ok(!unresolved.test(JSON.stringify(view.publicationBody)), "every publication placeholder must be resolved");
     assert.ok(!unresolved.test(JSON.stringify(view.rollingBody)), "every decay placeholder must be resolved");
     assert.ok(!unresolved.test(JSON.stringify(view.secondaryCards)), "every mechanism placeholder must be resolved");
+  }
+});
+
+test("both locales publish exactly the four verified scientific references", () => {
+  const expected = [
+    ["reference-ariel-1987", "10.1016/0304-405X(87)90066-3"],
+    ["reference-lakonishok-smidt-1988", "10.1093/rfs/1.4.403"],
+    ["reference-mcconnell-xu-2008", "10.2469/faj.v64.n2.11"],
+    ["reference-newey-west-1987", "10.2307/1913610"],
+  ];
+
+  assert.deepEqual(
+    tomDecayReferences.map((reference) => [reference.id, reference.doi]),
+    expected,
+  );
+  assert.equal(tomDecayContent.es.references.entries, tomDecayReferences);
+  assert.equal(tomDecayContent.en.references.entries, tomDecayReferences);
+});
+
+test("inline scientific citations are limited to the reviewed semantic placements", () => {
+  const citationPattern = /\[\[(reference-[a-z0-9-]+)\|[^\]]+\]\]/g;
+  const expectedCounts = new Map([
+    ["reference-ariel-1987", 1],
+    ["reference-lakonishok-smidt-1988", 1],
+    ["reference-mcconnell-xu-2008", 1],
+    ["reference-newey-west-1987", 1],
+  ]);
+
+  for (const locale of ["es", "en"] as const) {
+    const serialized = JSON.stringify(tomDecayContent[locale]);
+    const counts = new Map<string, number>();
+    for (const match of serialized.matchAll(citationPattern)) {
+      counts.set(match[1], (counts.get(match[1]) ?? 0) + 1);
+    }
+    assert.deepEqual(counts, expectedCounts, `${locale} inline citations`);
+    assert.equal(
+      tomDecayContent[locale].glossary.entries.filter((entry) => entry.source).length,
+      1,
+      `${locale} HAC glossary source`,
+    );
   }
 });
 

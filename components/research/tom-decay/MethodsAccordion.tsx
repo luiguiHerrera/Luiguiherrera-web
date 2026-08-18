@@ -1,5 +1,6 @@
 import type { TomDecayContent } from "@/lib/research/tom-decay/content";
 import { GlossaryText } from "@/components/research/tom-decay/GlossaryLink";
+import { ResearchText } from "@/components/research/tom-decay/ResearchText";
 
 export function MethodsAccordion({ content }: { content: TomDecayContent }) {
   const copy = content.methods;
@@ -21,7 +22,7 @@ export function MethodsAccordion({ content }: { content: TomDecayContent }) {
             </summary>
             <div className="grid gap-3 pb-5 text-sm leading-7 text-muted">
               {section.body.map((paragraph) => (
-                <p key={paragraph}><GlossaryText text={paragraph} /></p>
+                <p key={paragraph}><ResearchText text={paragraph} /></p>
               ))}
             </div>
           </details>

@@ -1,4 +1,5 @@
 import type { TomDecayContent } from "./content-types.ts";
+import { tomDecayReferences } from "./references.ts";
 
 export const tomDecayContentEs: TomDecayContent = {
   locale: "es",
@@ -52,7 +53,7 @@ export const tomDecayContentEs: TomDecayContent = {
     eyebrow: "La pregunta",
     title: "¿Cuánto de este resultado sigue siendo del mercado de hoy?",
     body: [
-      "El turn-of-the-month es una de las anomalías de calendario más documentadas del mercado estadounidense.",
+      "El turn-of-the-month es una de las anomalías de calendario más documentadas del mercado estadounidense ([[reference-lakonishok-smidt-1988|Lakonishok y Smidt, 1988]]; [[reference-mcconnell-xu-2008|McConnell y Xu, 2008]]).",
       "No quería volver a demostrar que funcionó históricamente. Quería saber algo más útil: cuánto de ese resultado sigue perteneciendo al mercado que existe hoy.",
       "Para responderlo separé la muestra por tiempo, comparé los días TOM contra todos los demás días de trading y repetí el análisis con una segunda fuente y un universo de mercado distinto.",
     ],
@@ -76,7 +77,7 @@ export const tomDecayContentEs: TomDecayContent = {
     eyebrow: "Primer giro",
     title: "Hacerse pública no parece haberla matado",
     body: [
-      "Si la historia fuera simplemente “la anomalía se publicó y los arbitradores la eliminaron”, debería aparecer una ruptura clara alrededor de 1987.",
+      "Si la historia fuera simplemente “la anomalía se publicó y los arbitradores la eliminaron”, debería aparecer una ruptura clara alrededor de 1987 ([[reference-ariel-1987|Ariel, 1987]]).",
       "No aparece.",
       "En Yahoo/S&P 500, el premium pasa de {yahooFrom} a {yahooTo} bps diarios. En la réplica French de 1950+, pasa de {frenchFrom} a {frenchTo} bps.",
       "Los tests directos entre ambos regímenes no detectan una diferencia significativa.",
@@ -370,7 +371,7 @@ export const tomDecayContentEs: TomDecayContent = {
         id: "inference",
         title: "Inferencia estadística",
         body: [
-          "Todas las pruebas usan errores estándar HAC/Newey-West con rezagos seleccionados por longitud de muestra.",
+          "Todas las pruebas usan errores estándar HAC/Newey-West con rezagos seleccionados por longitud de muestra ([[reference-newey-west-1987|Newey y West, 1987]]).",
           "Los p-valores publicados corresponden a los outputs congelados del paquete y no se recalculan en el navegador.",
         ],
       },
@@ -438,6 +439,7 @@ export const tomDecayContentEs: TomDecayContent = {
         shortLabel: "Errores estándar robustos",
         definition: "HAC significa Heteroskedasticity and Autocorrelation Consistent. Es un ajuste de errores estándar robusto a heterocedasticidad y autocorrelación serial.",
         explanation: "Ayuda a que la incertidumbre estadística no parezca artificialmente pequeña cuando la variabilidad cambia o las observaciones cercanas están relacionadas.",
+        source: { href: "#reference-newey-west-1987", label: "Newey y West (1987)" },
       },
       {
         id: "glossary-p",
@@ -447,6 +449,15 @@ export const tomDecayContentEs: TomDecayContent = {
         explanation: "Un valor menor indica mayor incompatibilidad con la hipótesis nula; no mide la probabilidad de que esa hipótesis sea verdadera ni la importancia económica del resultado.",
       },
     ],
+  },
+
+  references: {
+    eyebrow: "Literatura científica",
+    title: "Referencias",
+    intro: "Publicaciones citadas para el contexto histórico y metodológico del estudio.",
+    externalLabel: "Abrir publicación en una pestaña nueva",
+    doiLabel: "DOI",
+    entries: tomDecayReferences,
   },
 
   footer: {

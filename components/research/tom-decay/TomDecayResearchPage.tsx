@@ -10,6 +10,7 @@ import { TomDecayFooter } from "@/components/research/tom-decay/TomDecayFooter";
 import { TomDecayHero } from "@/components/research/tom-decay/TomDecayHero";
 import { GlossaryText } from "@/components/research/tom-decay/GlossaryLink";
 import { TomGlossary } from "@/components/research/tom-decay/TomGlossary";
+import { TomReferences } from "@/components/research/tom-decay/TomReferences";
 import { TomDecayNav } from "@/components/research/tom-decay/TomDecayNav";
 import {
   narrativeMeasure,
@@ -223,6 +224,8 @@ export function TomDecayResearchPage({ content }: { content: TomDecayContent }) 
       </TomDecaySection>
 
       <TomGlossary content={content} />
+
+      <TomReferences content={content} />
 
       <TomDecayFooter content={content} />
     </article>

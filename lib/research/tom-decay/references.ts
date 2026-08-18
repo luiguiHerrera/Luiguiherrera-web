@@ -1,0 +1,53 @@
+import type { TomReference } from "./content-types.ts";
+
+export const tomDecayReferences = [
+  {
+    id: "reference-ariel-1987",
+    authors: "Robert A. Ariel",
+    year: 1987,
+    title: "A Monthly Effect in Stock Returns",
+    journal: "Journal of Financial Economics",
+    volume: "18",
+    issue: "1",
+    pages: "161–174",
+    doi: "10.1016/0304-405X(87)90066-3",
+    href: "https://doi.org/10.1016/0304-405X(87)90066-3",
+  },
+  {
+    id: "reference-lakonishok-smidt-1988",
+    authors: "Josef Lakonishok and Seymour Smidt",
+    year: 1988,
+    title: "Are Seasonal Anomalies Real? A Ninety-Year Perspective",
+    journal: "The Review of Financial Studies",
+    volume: "1",
+    issue: "4",
+    pages: "403–425",
+    doi: "10.1093/rfs/1.4.403",
+    href: "https://doi.org/10.1093/rfs/1.4.403",
+  },
+  {
+    id: "reference-mcconnell-xu-2008",
+    authors: "John J. McConnell and Wei Xu",
+    year: 2008,
+    title: "Equity Returns at the Turn of the Month",
+    journal: "Financial Analysts Journal",
+    volume: "64",
+    issue: "2",
+    pages: "49–64",
+    doi: "10.2469/faj.v64.n2.11",
+    href: "https://doi.org/10.2469/faj.v64.n2.11",
+  },
+  {
+    id: "reference-newey-west-1987",
+    authors: "Whitney K. Newey and Kenneth D. West",
+    year: 1987,
+    title:
+      "A Simple, Positive Semi-Definite, Heteroskedasticity and Autocorrelation Consistent Covariance Matrix",
+    journal: "Econometrica",
+    volume: "55",
+    issue: "3",
+    pages: "703–708",
+    doi: "10.2307/1913610",
+    href: "https://doi.org/10.2307/1913610",
+  },
+] as const satisfies readonly TomReference[];

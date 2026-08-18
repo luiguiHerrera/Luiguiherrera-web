@@ -18,6 +18,16 @@ export function TomGlossary({ content }: { content: TomDecayContent }) {
             <dd className="mt-4 grid gap-3 text-sm leading-7">
               <p className="text-ink">{entry.definition}</p>
               <p className="text-muted">{entry.explanation}</p>
+              {entry.source ? (
+                <p className="text-xs text-muted">
+                  <a
+                    className="rounded-[2px] font-medium text-petrol underline decoration-petrol/45 underline-offset-[3px] transition hover:decoration-2 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-petrol"
+                    href={entry.source.href}
+                  >
+                    {entry.source.label}
+                  </a>
+                </p>
+              ) : null}
             </dd>
           </div>
         ))}

@@ -2,6 +2,25 @@ import type { TomBreakId, TomDatasetId, TomRegimeId } from "./types.ts";
 
 export type TomDecayLocale = "es" | "en";
 
+export type TomReferenceId =
+  | "reference-ariel-1987"
+  | "reference-lakonishok-smidt-1988"
+  | "reference-mcconnell-xu-2008"
+  | "reference-newey-west-1987";
+
+export type TomReference = {
+  id: TomReferenceId;
+  authors: string;
+  year: number;
+  title: string;
+  journal: string;
+  volume: string;
+  issue: string;
+  pages: string;
+  doi: string;
+  href: string;
+};
+
 export type LabelledLink = {
   href: string;
   label: string;
@@ -205,7 +224,17 @@ export type TomDecayContent = {
       shortLabel: string;
       definition: string;
       explanation: string;
+      source?: { href: `#${TomReferenceId}`; label: string };
     }[];
+  };
+
+  references: {
+    eyebrow: string;
+    title: string;
+    intro: string;
+    externalLabel: string;
+    doiLabel: string;
+    entries: readonly TomReference[];
   };
 
   footer: {

@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 import { GlossaryText } from "@/components/research/tom-decay/GlossaryLink";
+import { ResearchText } from "@/components/research/tom-decay/ResearchText";
 
 type TomDecaySectionProps = {
   children?: ReactNode;
@@ -39,7 +40,7 @@ export function TomDecaySection({
             }`}
           >
             {intro.map((paragraph) => (
-              <p key={paragraph}><GlossaryText text={paragraph} /></p>
+              <p key={paragraph}><ResearchText text={paragraph} /></p>
             ))}
           </div>
         ) : null}

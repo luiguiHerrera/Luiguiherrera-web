@@ -1,4 +1,5 @@
 import type { TomDecayContent } from "./content-types.ts";
+import { tomDecayReferences } from "./references.ts";
 
 export const tomDecayContentEn: TomDecayContent = {
   locale: "en",
@@ -52,7 +53,7 @@ export const tomDecayContentEn: TomDecayContent = {
     eyebrow: "The question",
     title: "How much of this result still belongs to today's market?",
     body: [
-      "The turn-of-the-month effect is one of the most documented calendar anomalies in U.S. equities.",
+      "The turn-of-the-month effect is one of the most documented calendar anomalies in U.S. equities ([[reference-lakonishok-smidt-1988|Lakonishok and Smidt, 1988]]; [[reference-mcconnell-xu-2008|McConnell and Xu, 2008]]).",
       "I was not interested in proving again that it worked historically. I wanted to know something more useful: how much of that historical result still belongs to the market that exists today.",
       "I split the sample through time, compared canonical TOM days with every other trading day, and repeated the analysis using a second data source and a different market universe.",
     ],
@@ -76,7 +77,7 @@ export const tomDecayContentEn: TomDecayContent = {
     eyebrow: "First twist",
     title: "Becoming public did not appear to kill it",
     body: [
-      "If the story were simply “the anomaly was published and arbitrage removed it,” I should see a clear break around 1987.",
+      "If the story were simply “the anomaly was published and arbitrage removed it,” I should see a clear break around 1987 ([[reference-ariel-1987|Ariel, 1987]]).",
       "I do not.",
       "In Yahoo/S&P 500 data, the premium moves from {yahooFrom} to {yahooTo} bps per day. In the matched 1950+ French replication, it moves from {frenchFrom} to {frenchTo} bps.",
       "Direct tests between those regimes do not detect a significant difference.",
@@ -368,7 +369,7 @@ export const tomDecayContentEn: TomDecayContent = {
         id: "inference",
         title: "Statistical inference",
         body: [
-          "All tests use HAC/Newey-West standard errors with lags selected by sample length.",
+          "All tests use HAC/Newey-West standard errors with lags selected by sample length ([[reference-newey-west-1987|Newey and West, 1987]]).",
           "Published p-values come from the frozen bundle outputs and are not recomputed in the browser.",
         ],
       },
@@ -436,6 +437,7 @@ export const tomDecayContentEn: TomDecayContent = {
         shortLabel: "Robust standard errors",
         definition: "HAC means Heteroskedasticity and Autocorrelation Consistent. It is a standard-error adjustment robust to heteroskedasticity and serial correlation.",
         explanation: "It helps prevent statistical uncertainty from looking artificially small when variability changes or nearby observations are related.",
+        source: { href: "#reference-newey-west-1987", label: "Newey and West (1987)" },
       },
       {
         id: "glossary-p",
@@ -445,6 +447,15 @@ export const tomDecayContentEn: TomDecayContent = {
         explanation: "A smaller value indicates greater incompatibility with the null; it does not measure the probability that the null is true or the result's economic importance.",
       },
     ],
+  },
+
+  references: {
+    eyebrow: "Scientific literature",
+    title: "References",
+    intro: "Publications cited for the study's historical and methodological context.",
+    externalLabel: "Open publication in a new tab",
+    doiLabel: "DOI",
+    entries: tomDecayReferences,
   },
 
   footer: {
