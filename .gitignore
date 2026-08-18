@@ -16,6 +16,7 @@ pnpm-debug.log*
 out/
 .vercel/
 *.zip
+!public/research/**/*.zip
 .env.local
 
 # Local QA artifacts
