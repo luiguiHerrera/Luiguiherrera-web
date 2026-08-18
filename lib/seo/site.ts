@@ -46,6 +46,7 @@ export type SeoRouteDefinition = {
   type?: SeoPageType;
   socialTitle?: string;
   socialDescription?: string;
+  socialCard?: "summary" | "summary_large_image";
 };
 
 const seoRouteContent: readonly Omit<SeoRouteDefinition, "alternatePathname">[] = [
@@ -260,6 +261,44 @@ const seoRouteContent: readonly Omit<SeoRouteDefinition, "alternatePathname">[] 
       "How the market readings and tools are built, which data sources they use, what their limits are and what the platform does not promise.",
   },
   {
+    pathname: "/investigacion",
+    language: "es",
+    title: "Investigación cuantitativa | Estudios reproducibles",
+    description:
+      "Investigaciones cuantitativas reproducibles sobre evaluación de estrategias, estabilidad temporal de anomalías, replicación independiente y límites de lo que la evidencia permite afirmar.",
+  },
+  {
+    pathname: "/en/research",
+    language: "en",
+    title: "Quantitative research | Reproducible studies",
+    description:
+      "Reproducible quantitative research on strategy evaluation, the temporal stability of anomalies, independent replication and the limits of what the evidence supports.",
+  },
+  {
+    pathname: "/investigacion/el-fantasma-de-una-anomalia",
+    language: "es",
+    title: "El fantasma de una anomalía | Turn-of-the-Month y decay del alpha",
+    description:
+      "Investigo cómo el efecto turn-of-the-month pasó de una prima fuerte durante décadas a ser indistinguible de cero en ventanas recientes, con replicación independiente y código reproducible en Stata.",
+    type: "article",
+    socialTitle: "El fantasma de una anomalía",
+    socialDescription:
+      "Un backtest largo puede conservar la memoria estadística de un mercado que ya no existe. Una investigación reproducible sobre el decay del turn-of-the-month.",
+    socialCard: "summary_large_image",
+  },
+  {
+    pathname: "/en/research/the-ghost-of-an-anomaly",
+    language: "en",
+    title: "The Ghost of an Anomaly | Turn-of-the-Month Alpha Decay",
+    description:
+      "A reproducible investigation of how the turn-of-the-month premium went from strong for decades to statistically indistinguishable from zero in recent windows, with independent replication and Stata verification.",
+    type: "article",
+    socialTitle: "The Ghost of an Anomaly",
+    socialDescription:
+      "A long backtest can preserve the statistical memory of a market that no longer exists. A reproducible study of turn-of-the-month decay.",
+    socialCard: "summary_large_image",
+  },
+  {
     pathname: "/investigacion/td3",
     language: "es",
     title: "Evaluación realista de claims DRL | Market Lab",
@@ -363,7 +402,7 @@ export function buildSeoMetadata(definition: SeoRouteDefinition): Metadata {
       type: definition.type ?? "website",
     },
     twitter: {
-      card: "summary",
+      card: definition.socialCard ?? "summary",
       title: definition.socialTitle ?? definition.title,
       description: definition.socialDescription ?? definition.description,
     },

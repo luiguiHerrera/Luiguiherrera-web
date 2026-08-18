@@ -14,7 +14,7 @@ const navHrefs = {
     home: "/",
     start: "/empezar",
     investor: "/inversionista",
-    research: "/investigacion/td3",
+    research: "/investigacion",
     protection: "/proteccion",
     resources: "/recursos",
   },
@@ -22,7 +22,7 @@ const navHrefs = {
     home: "/en",
     start: "/en/start",
     investor: "/en/investor",
-    research: "/en/research/td3",
+    research: "/en/research",
     protection: "/en/protection",
     resources: "/en/resources",
   },
@@ -159,7 +159,7 @@ function HeaderForPathname({ pathname }: { pathname: string }) {
   const navGroups = [
     { href: hrefs.start, label: dictionary.layout.nav.start, items: dictionary.layout.startItems },
     { href: hrefs.investor, label: dictionary.layout.nav.investor, items: dictionary.layout.investorItems },
-    { href: hrefs.research, label: dictionary.layout.nav.research },
+    { href: hrefs.research, label: dictionary.layout.nav.research, items: dictionary.layout.researchItems },
     { href: hrefs.protection, label: dictionary.layout.nav.protection, items: dictionary.layout.protectionItems },
     { href: hrefs.resources, label: dictionary.layout.nav.resources, items: dictionary.layout.resourcesItems },
   ];

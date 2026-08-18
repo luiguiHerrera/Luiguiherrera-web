@@ -1014,3 +1014,73 @@ details:not([open]) .details-close-label {
     padding-top: 3mm;
   }
 }
+
+.tom-decay-surface {
+  background:
+    linear-gradient(rgba(11, 52, 54, 0.035) 1px, transparent 1px),
+    radial-gradient(circle at 92% 4%, rgba(154, 122, 68, 0.16), transparent 30%),
+    linear-gradient(146deg, #fbfaf6, #ece6da);
+  background-size: 100% 30px, 100% 100%, 100% 100%;
+}
+
+.tom-decay-ribbon-line {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  animation: tom-decay-draw 2.4s cubic-bezier(0.22, 0.61, 0.36, 1) forwards;
+}
+
+.tom-decay-ribbon-fill,
+.tom-decay-ribbon-ghost,
+.tom-decay-ribbon-tick {
+  animation: tom-decay-fade 1.5s ease-out 0.5s both;
+}
+
+@keyframes tom-decay-draw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes tom-decay-fade {
+  from {
+    opacity: 0;
+  }
+}
+
+.tom-decay-chart-focus:focus-visible {
+  box-shadow: none;
+  outline: 2px solid var(--color-institutional);
+  outline-offset: 3px;
+}
+
+.tom-decay-scroll {
+  scrollbar-width: thin;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tom-decay-ribbon-line,
+  .tom-decay-ribbon-fill,
+  .tom-decay-ribbon-ghost,
+  .tom-decay-ribbon-tick {
+    animation: none;
+    stroke-dashoffset: 0;
+  }
+}
+
+[data-entered="true"] .tom-decay-step {
+  animation: tom-decay-step-in 0.62s ease-out backwards;
+  animation-delay: calc(var(--tom-step-index) * 0.16s);
+}
+
+@keyframes tom-decay-step-in {
+  from {
+    opacity: 0.16;
+    transform: translateY(10px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-entered="true"] .tom-decay-step {
+    animation: none;
+  }
+}

@@ -1,0 +1,75 @@
+{
+  "schema": "qtomdecay-v0.3",
+  "version": "0.3.1",
+  "symbol": "USMKT",
+  "source": "french",
+  "source_provenance": {
+    "provider": "Kenneth French Data Library",
+    "dataset": "Fama/French 3 Factors [Daily]",
+    "market_return_definition": "(Mkt-RF + RF) / 100",
+    "download_url": "https://mba.tuck.dartmouth.edu/pages/faculty/ken.french/ftp/F-F_Research_Data_Factors_daily_CSV.zip",
+    "download_sha256": "39f9ae1d0e9f575024bc23145980ac270cea508fb67e592578b3f4d65f36d006"
+  },
+  "start": "1950-01-03",
+  "end": "2026-06-30",
+  "canonical_tom_days": [
+    0,
+    1,
+    2,
+    3
+  ],
+  "event_time_definition": "T=0 is the last trading day of each month",
+  "rolling_years": 10,
+  "pressure_windows": {
+    "selling_pressure": "T-8..T-4",
+    "positive_reversal": "T-3..T-1",
+    "buying_pressure": "T..T+3"
+  },
+  "cutoffs": {
+    "publication_era": "1987-01-01",
+    "T5_to_T3": "1995-06-07",
+    "decimalization_complete": "2001-04-09",
+    "T3_to_T2": "2017-09-05",
+    "T2_to_T1": "2024-05-28"
+  },
+  "pressure_reversal": {
+    "months": 917,
+    "pressure_reversal_corr": -0.19656994191315302,
+    "reversal_after_negative_pressure_mean": 0.003865891729389269,
+    "reversal_after_nonnegative_pressure_mean": 0.001521533863354509,
+    "difference_negative_minus_nonnegative": 0.0023443578660347626,
+    "difference_hac_se": 0.0012392198099386088,
+    "difference_hac_z": 1.8918014764070812,
+    "difference_hac_p": 0.058517436525325595,
+    "hac_lags": 6,
+    "negative_pressure_months": 429,
+    "nonnegative_pressure_months": 488
+  },
+  "exploratory_breakpoint": {
+    "status": "EXPLORATORY_NOT_CONFIRMATORY",
+    "criterion": "maximum absolute HAC z for TOM interaction change",
+    "minimum_years_each_side": 10,
+    "selected_year": 1991,
+    "selected_cutoff": "1991-01-01 00:00:00",
+    "tom_premium_pre": 0.0014614684671875216,
+    "tom_premium_post": 0.00035187091978230783,
+    "change_post_minus_pre": -0.0011095975474052137,
+    "change_hac_z": -2.997186008995914,
+    "naive_hac_p_unadjusted": 0.002724843971523949,
+    "warning": "p-value is not multiplicity-adjusted and must not be read as a confirmatory test"
+  },
+  "methodology_notes": [
+    "TOM premium is measured against all other trading days.",
+    "Externally fixed cutoff tests are confirmatory/descriptive relative to the research plan.",
+    "The automatic breakpoint search is explicitly exploratory and its naive p-value is not multiplicity-adjusted.",
+    "Rolling windows are descriptive and use a fixed trailing calendar length.",
+    "No TOM window optimization is performed."
+  ],
+  "warnings": [
+    "1987 is a publication-era boundary, not an exact market-awareness date.",
+    "Structural cutoffs correlate with broader market evolution; they are not standalone causal identification.",
+    "T+1 history is short and exploratory.",
+    "Yahoo and Kenneth French/CRSP-market-proxy differ in both provider and market-universe definition.",
+    "For ^GSPC, Yahoo represents the provider's index series; for French, market return is Mkt-RF + RF."
+  ]
+}

@@ -1,0 +1,120 @@
+{
+  "schema": "qtomdecay-manifest-v0.3",
+  "version": "0.3.1",
+  "created_at_utc": "2026-08-17T23:11:41.614843+00:00",
+  "source_provenance": {
+    "provider": "Yahoo Finance via yfinance",
+    "symbol": "^GSPC",
+    "return_definition": "provider adjusted-close percentage change"
+  },
+  "files": {
+    "break_tests.csv": {
+      "bytes": 994,
+      "sha256": "1c6bddc54107c0bccf62ee47f736ce7dd5c63bc72f093444cfa6fee050214f95"
+    },
+    "break_tests.dta": {
+      "bytes": 7395,
+      "sha256": "1bd93f30b93089a26dc1536c165a53689ee999da7ab2351c2a34939bd53e4959"
+    },
+    "calendar_concentration.csv": {
+      "bytes": 553,
+      "sha256": "3d3cc213a799e958638a82ca15a25aba9db1fe94739645b09ccca1eb23bb9afb"
+    },
+    "calendar_concentration.dta": {
+      "bytes": 6522,
+      "sha256": "9c42bef7c481024444fcddef0ed3d2342eea117b53dfd33389c42754fd77c64c"
+    },
+    "calendar_pairwise_tests.csv": {
+      "bytes": 571,
+      "sha256": "349748075b44613714be9e9f310059719bb289498949c5b20fe5b41c7f4f8c07"
+    },
+    "calendar_pairwise_tests.dta": {
+      "bytes": 7195,
+      "sha256": "5fdf5e7886bfb75f4773aade11cefd24384f7093165687745d1502286315fdb1"
+    },
+    "event_months.csv": {
+      "bytes": 136989,
+      "sha256": "0ab5c667a06c101322c8d5f098f461049e716e616ac0fcee265acb3b2932029e"
+    },
+    "event_months.dta": {
+      "bytes": 86629,
+      "sha256": "9fddfa57e5441b876282b91634751037f7e2d4120a2baac702c69c3db2bc7430"
+    },
+    "exploratory_breakpoint_grid.csv": {
+      "bytes": 8607,
+      "sha256": "a7ce66f298167c89b2f26c9bcc5734e24283bfe877a7ad9926d4db153acbb5eb"
+    },
+    "exploratory_breakpoint_grid.dta": {
+      "bytes": 9963,
+      "sha256": "ee4280079e49d17ea3774f6680d1462e4eac94eae19d0e8efe95a532adac7dea"
+    },
+    "pressure_reversal_by_settlement.csv": {
+      "bytes": 486,
+      "sha256": "3460e0b874e25e0aad70b54185ba2cda9303510f36263c461c60f06878d4b022"
+    },
+    "pressure_reversal_by_settlement.dta": {
+      "bytes": 4547,
+      "sha256": "d23a128643d17925077997229955703fb7841170ab0497b4195ad30f75a55abb"
+    },
+    "publication_adjacent_tests.csv": {
+      "bytes": 872,
+      "sha256": "5e0917ef46b56865e543df9f12e563de59a8eb7852e0b812fdc4b0ed67eeb58c"
+    },
+    "publication_adjacent_tests.dta": {
+      "bytes": 8059,
+      "sha256": "ef3ffac5f933dc095c3995787bedfaf4923fdd761c832735194735eabff3a451"
+    },
+    "publication_regime_summary.csv": {
+      "bytes": 1197,
+      "sha256": "443d967696d0f2cb34b49efca4711430aa6eee692bba6da637f7c30f70b5083a"
+    },
+    "publication_regime_summary.dta": {
+      "bytes": 9450,
+      "sha256": "c43d53c9eff4235f1fca7e1c51470c260f57d43c826c73fa6d7ad10cb315ac96"
+    },
+    "relative_day_map.csv": {
+      "bytes": 21766,
+      "sha256": "63d18e5b88131be35bb6f93c22e808cf682f26f40b7b03741c97ab7aa5dff337"
+    },
+    "relative_day_map.dta": {
+      "bytes": 20606,
+      "sha256": "cc548a595ea849e31e4694681372902ddd86bb4dd04ead82c62125f94cc1dfbf"
+    },
+    "research_report.json": {
+      "bytes": 2833,
+      "sha256": "c7ed6a902c46939c6053637fb365e594964f270a67bcebda5557fd362c0acdff"
+    },
+    "rolling_premium.csv": {
+      "bytes": 11062,
+      "sha256": "3ab6b8a2f206edbedc6d6065eeb7e0da2af91ef22cfaafac364e1776a2b054bd"
+    },
+    "rolling_premium.dta": {
+      "bytes": 13595,
+      "sha256": "1c9287845377d037ae1a79770d7fc5399883c2f42271b959c4705c587ae04f6c"
+    },
+    "settlement_adjacent_tests.csv": {
+      "bytes": 624,
+      "sha256": "bcaf9d77d7ffa7eb4bb8ccb0c31021bac4084338dc7ce93acf815cd43804e676"
+    },
+    "settlement_adjacent_tests.dta": {
+      "bytes": 7826,
+      "sha256": "48becdf30d44716ad5c7648d47a985e76ab3136ac768b9e0867352468253e345"
+    },
+    "settlement_regime_summary.csv": {
+      "bytes": 945,
+      "sha256": "03d094aecc33696b3dc73b9660a93a87cecb7d55c10b987572f95e05178eb37e"
+    },
+    "settlement_regime_summary.dta": {
+      "bytes": 9255,
+      "sha256": "7e2b087d6c7bab85c7d8f8ce2c9a7dbe61f93410250d35de8fc8fede3b786bde"
+    },
+    "settlement_timing_summary.csv": {
+      "bytes": 347,
+      "sha256": "a123f2eca5c774a733cb7b48bb0cbc88b07ee582fc2271184da56a3576c5902d"
+    },
+    "settlement_timing_summary.dta": {
+      "bytes": 4515,
+      "sha256": "003f8e60d07a32231a6a0ea1a220d19dff5f5944ba14c4b78664aa8db703d4e3"
+    }
+  }
+}

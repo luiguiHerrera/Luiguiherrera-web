@@ -3,10 +3,22 @@
 import { usePathname } from "next/navigation";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { td3Editorial } from "@/lib/research/td3-editorial";
+import { tomDecayEditorial } from "@/lib/research/tom-decay/editorial";
 import { buildArticleJsonLd, buildBreadcrumbJsonLd, buildWebApplicationJsonLd, buildWebPageJsonLd, type SchemaLanguage } from "@/lib/seo/structured-data";
 
 type RouteKind = "application" | "collection" | "page" | "tech";
-type RouteSchema = { name: string; description: string; kind: RouteKind; category?: "FinanceApplication" | "EducationalApplication" };
+type EditorialRecord = { headline: string; publishedAt: string; modifiedAt: string };
+type RouteSchema = {
+  name: string;
+  description: string;
+  kind: RouteKind;
+  category?: "FinanceApplication" | "EducationalApplication";
+  editorial?: EditorialRecord;
+  about?: string[];
+};
+
+const td3About = ["reinforcement learning", "TD3", "portfolio allocation", "transaction costs", "walk-forward validation", "backtesting", "risk constraints"];
+const tomDecayAbout = ["turn-of-the-month effect", "calendar anomalies", "alpha decay", "market microstructure", "HAC inference", "independent replication", "reproducible research"];
 
 const routes: Record<string, RouteSchema> = {
   "/empezar": { name: "Empezar", description: "Ruta guiada para ordenar las herramientas principales antes de invertir.", kind: "page" },
@@ -22,7 +34,9 @@ const routes: Record<string, RouteSchema> = {
   "/tendencias": { name: "Tendencias", description: "Herramienta educativa para convertir tendencias de mercado en hipótesis prudentes de observación.", kind: "application", category: "EducationalApplication" },
   "/recursos": { name: "Recursos", description: "Catálogo de recursos públicos y scripts open-source para inversionistas.", kind: "collection" },
   "/metodologia": { name: "Metodología", description: "Trazabilidad de fuentes, límites y métodos de las herramientas educativas.", kind: "page" },
-  "/investigacion/td3": { name: td3Editorial.es.headline, description: "Nota técnica de investigación sobre TD3, costes, cash, benchmarks y validación estadística.", kind: "tech" },
+  "/investigacion": { name: "Investigación cuantitativa", description: "Índice de estudios cuantitativos reproducibles con método, datos derivados y límites publicados.", kind: "collection" },
+  "/investigacion/td3": { name: td3Editorial.es.headline, description: "Nota técnica de investigación sobre TD3, costes, cash, benchmarks y validación estadística.", kind: "tech", editorial: td3Editorial.es, about: td3About },
+  "/investigacion/el-fantasma-de-una-anomalia": { name: tomDecayEditorial.es.headline, description: "Nota técnica de investigación sobre el decay del efecto turn-of-the-month, replicación independiente y estabilidad temporal.", kind: "tech", editorial: tomDecayEditorial.es, about: tomDecayAbout },
   "/legal": { name: "Legal", description: "Información legal y límites de uso de la plataforma.", kind: "page" },
 };
 
@@ -41,11 +55,13 @@ Object.assign(enRoutes, {
   "/en/trends": { name: "Trends", description: "Educational tool for turning market trends into prudent observation hypotheses.", kind: "application", category: "EducationalApplication" },
   "/en/resources": { name: "Resources", description: "Catalog of public resources and open-source scripts for investors.", kind: "collection" },
   "/en/methodology": { name: "Methodology", description: "Traceability for sources, limits and methods used by the educational tools.", kind: "page" },
-  "/en/research/td3": { name: td3Editorial.en.headline, description: "Technical research note on TD3, costs, cash, benchmarks and statistical validation.", kind: "tech" },
+  "/en/research": { name: "Quantitative research", description: "Index of reproducible quantitative studies with published methods, derived data and limits.", kind: "collection" },
+  "/en/research/td3": { name: td3Editorial.en.headline, description: "Technical research note on TD3, costs, cash, benchmarks and statistical validation.", kind: "tech", editorial: td3Editorial.en, about: td3About },
+  "/en/research/the-ghost-of-an-anomaly": { name: tomDecayEditorial.en.headline, description: "Technical research note on turn-of-the-month decay, independent replication and temporal stability.", kind: "tech", editorial: tomDecayEditorial.en, about: tomDecayAbout },
   "/en/legal": { name: "Legal", description: "Legal information and platform usage limits.", kind: "page" },
 });
 
-const researchAbout = ["reinforcement learning", "TD3", "portfolio allocation", "transaction costs", "walk-forward validation", "backtesting", "risk constraints"];
+
 
 export function RouteStructuredData() {
   const pathname = usePathname().replace(/\/$/, "") || "/";
@@ -60,13 +76,12 @@ export function RouteStructuredData() {
   ]);
   const schemas: object[] = [buildWebPageJsonLd(input, config.kind === "collection" ? "CollectionPage" : "WebPage"), breadcrumbs];
   if (config.kind === "application") schemas.push(buildWebApplicationJsonLd(input, config.category!));
-  if (config.kind === "tech") {
-    const editorial = language === "en" ? td3Editorial.en : td3Editorial.es;
+  if (config.kind === "tech" && config.editorial) {
     schemas.push(buildArticleJsonLd(input, "TechArticle", {
-      about: researchAbout,
-      datePublished: editorial.publishedAt,
-      dateModified: editorial.modifiedAt,
-      headline: editorial.headline,
+      about: config.about,
+      datePublished: config.editorial.publishedAt,
+      dateModified: config.editorial.modifiedAt,
+      headline: config.editorial.headline,
     }));
   }
   return <JsonLd data={schemas} />;

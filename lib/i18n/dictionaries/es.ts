@@ -26,6 +26,10 @@ export const es = {
       { href: "/tendencias", label: "Tendencias", shortLabel: "Tendencias", description: "Mapas editoriales y vehículos observables." },
       { href: "/fragilidad-de-portafolio", label: "Fragilidad de portafolio", shortLabel: "Fragilidad", description: "Concentración, comportamiento histórico, stress y contrafactuales sin subir el portafolio." },
     ],
+    researchItems: [
+      { href: "/investigacion/el-fantasma-de-una-anomalia", label: "El fantasma de una anomalía", shortLabel: "TOM decay", description: "Cuánto de la prima turn-of-the-month sigue perteneciendo al mercado actual." },
+      { href: "/investigacion/td3", label: "Evaluación realista de claims DRL", shortLabel: "TD3", description: "Costes, cash explícito, benchmarks comparables y validación estadística." },
+    ],
     diagnosticItems: [
       { href: "/diagnostico?mode=quick", label: "Diagnóstico rápido", shortLabel: "Rápido", description: "Lectura compacta de horizonte, liquidez, tolerancia y sesgos principales." },
       { href: "/diagnostico?mode=complete", label: "Diagnóstico completo", shortLabel: "Completo", description: "Evaluación más profunda por capacidad, objetivos, conducta y consistencia." },

@@ -26,6 +26,10 @@ export const en = {
       { href: "/en/trends", label: "Trends", shortLabel: "Trends", description: "Editorial maps and observable vehicles." },
       { href: "/en/portfolio-fragility", label: "Portfolio fragility", shortLabel: "Fragility", description: "Concentration, historical behavior, stress, and counterfactuals without uploading the portfolio." },
     ],
+    researchItems: [
+      { href: "/en/research/the-ghost-of-an-anomaly", label: "The Ghost of an Anomaly", shortLabel: "TOM decay", description: "How much of the turn-of-the-month premium still belongs to today's market." },
+      { href: "/en/research/td3", label: "Realistic evaluation of DRL portfolio claims", shortLabel: "TD3", description: "Costs, explicit cash, matched benchmarks and statistical validation." },
+    ],
     diagnosticItems: [
       { href: "/en/diagnostic?mode=quick", label: "Quick diagnostic", shortLabel: "Quick", description: "A concise investor read for horizon, liquidity, tolerance and key biases." },
       { href: "/en/diagnostic?mode=complete", label: "Full diagnostic", shortLabel: "Full", description: "A deeper block-by-block assessment across capacity, goals and behavior." },

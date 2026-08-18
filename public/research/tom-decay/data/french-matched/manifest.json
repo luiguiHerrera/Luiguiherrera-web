@@ -1,0 +1,122 @@
+{
+  "schema": "qtomdecay-manifest-v0.3",
+  "version": "0.3.1",
+  "created_at_utc": "2026-08-17T23:16:17.937308+00:00",
+  "source_provenance": {
+    "provider": "Kenneth French Data Library",
+    "dataset": "Fama/French 3 Factors [Daily]",
+    "market_return_definition": "(Mkt-RF + RF) / 100",
+    "download_url": "https://mba.tuck.dartmouth.edu/pages/faculty/ken.french/ftp/F-F_Research_Data_Factors_daily_CSV.zip",
+    "download_sha256": "39f9ae1d0e9f575024bc23145980ac270cea508fb67e592578b3f4d65f36d006"
+  },
+  "files": {
+    "break_tests.csv": {
+      "bytes": 994,
+      "sha256": "ffc03e41864e2ab8d9825f12c25ae74cfede056a86fb17855d32f8632fe34e71"
+    },
+    "break_tests.dta": {
+      "bytes": 7395,
+      "sha256": "e8318b218263bc338c9e5de3be5bd1db0804b9a206f3d4f85ec1777a71ef83c0"
+    },
+    "calendar_concentration.csv": {
+      "bytes": 554,
+      "sha256": "818829c8b8503d17908233200b4dd1279421b3d1e78bcf769cd296bf906cd034"
+    },
+    "calendar_concentration.dta": {
+      "bytes": 6522,
+      "sha256": "a7c74bdd513071c3d134766f51c8256970f10d668d4d1ad599c060c6c9f4879a"
+    },
+    "calendar_pairwise_tests.csv": {
+      "bytes": 572,
+      "sha256": "59ed20895e1ee64bf2196aa5244a7854b10f214bec627145759c9382be29462b"
+    },
+    "calendar_pairwise_tests.dta": {
+      "bytes": 7195,
+      "sha256": "ee8e6701fc7a4f54a81503b9bd17cf4dde0b66879a697c7e0c15d5d6c4253cc5"
+    },
+    "event_months.csv": {
+      "bytes": 136642,
+      "sha256": "c83792ef4bea5ff2eaa0c4510fcba1932decbff4ba64eeade786c6005e929093"
+    },
+    "event_months.dta": {
+      "bytes": 86457,
+      "sha256": "5106606ac2ced98497be13bc814be56f076d139605185919bd7726b53904d2b0"
+    },
+    "exploratory_breakpoint_grid.csv": {
+      "bytes": 8596,
+      "sha256": "ea493be50e7ccea224f69ff7e050c130e0835ab47c77abbb62fea3fdfbaddbdd"
+    },
+    "exploratory_breakpoint_grid.dta": {
+      "bytes": 9963,
+      "sha256": "383fc7a676e2d0cb2af722f334f9a825ed9f198ea64f48131ace245669dc59bf"
+    },
+    "pressure_reversal_by_settlement.csv": {
+      "bytes": 490,
+      "sha256": "2ce88a2fa8b130994d73155097378063f5bc29e21bb741715296989fb96cce52"
+    },
+    "pressure_reversal_by_settlement.dta": {
+      "bytes": 4547,
+      "sha256": "aeba43fca9529568d2e53c5bf665f2de5a9a809e98b8463c7033069ccc890b3a"
+    },
+    "publication_adjacent_tests.csv": {
+      "bytes": 867,
+      "sha256": "667d8d46fcd69377d3ac7f921bd166391242a1b5404d71d047232c5e40a1e0b7"
+    },
+    "publication_adjacent_tests.dta": {
+      "bytes": 8059,
+      "sha256": "3f1a23a4db7942d19e45b9a2f4e0dcec747944f4fbc074d71da6eb9732a77e23"
+    },
+    "publication_regime_summary.csv": {
+      "bytes": 1187,
+      "sha256": "ee2ce0b4f5b08f2f583c19dd75346807125cf77958bde34e566ba89cf0fadf01"
+    },
+    "publication_regime_summary.dta": {
+      "bytes": 9450,
+      "sha256": "acc89ea1fe73399f371029315cef27f57228c2efcf2615e942c8966c9476c8f3"
+    },
+    "relative_day_map.csv": {
+      "bytes": 18751,
+      "sha256": "5d27ad4bbcd0a7298703dcc3b7e103076567353847c68c42607d8eccba04f898"
+    },
+    "relative_day_map.dta": {
+      "bytes": 20606,
+      "sha256": "d1aeaf1d8e672c2ffe50388e2a2c42a9d1c7697d9781948ae241aa86785eda6c"
+    },
+    "research_report.json": {
+      "bytes": 3056,
+      "sha256": "16ca1e0db85c927499e90e2ddd8ed14d3efdf8486ac6161f0f5db1539ab21d50"
+    },
+    "rolling_premium.csv": {
+      "bytes": 11074,
+      "sha256": "43ed1384ba7a9277b88c437a10ea240b6a036b2a1df4e5aa1613f21974b4d331"
+    },
+    "rolling_premium.dta": {
+      "bytes": 13595,
+      "sha256": "18a45fe504ee0090db48d9a08f1fada1bfa68af94b397663399ee9829dc4d1ad"
+    },
+    "settlement_adjacent_tests.csv": {
+      "bytes": 623,
+      "sha256": "899c081561a6034bf6d42c15ad93ca5e4ba32300c16d5a49bcc113eb1944df31"
+    },
+    "settlement_adjacent_tests.dta": {
+      "bytes": 7826,
+      "sha256": "240a982c1817b27ba06d5c99c50d0af47f6424dfeee857b3db78aad8f3b08f6d"
+    },
+    "settlement_regime_summary.csv": {
+      "bytes": 940,
+      "sha256": "09f76ec5da8c1bfbd9fc5e85aae9ca37d40b1ec8863c5fa477288d7b26fbdc4e"
+    },
+    "settlement_regime_summary.dta": {
+      "bytes": 9255,
+      "sha256": "2c6df264f6c3aa9ab26262720e3a12cc112da1dc6db588c4deb81f9606c26950"
+    },
+    "settlement_timing_summary.csv": {
+      "bytes": 336,
+      "sha256": "b4f57c686e97b431033d5fe8293c6f0ea4c0bc952ce85a8960a3a40714512e80"
+    },
+    "settlement_timing_summary.dta": {
+      "bytes": 4515,
+      "sha256": "d2b49d07b1916f9115534a4bd89ecac698fe04562e6644776541bcfe984d7373"
+    }
+  }
+}

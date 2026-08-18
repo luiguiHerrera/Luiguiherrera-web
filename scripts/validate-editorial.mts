@@ -10,6 +10,9 @@ import {
 } from "../lib/reports/historical-automatic-readings.ts";
 import { td3Editorial } from "../lib/research/td3-editorial.ts";
 import { td3PaperContent } from "../lib/research/td3-paper.ts";
+import { tomDecayEditorial } from "../lib/research/tom-decay/editorial.ts";
+import { tomDecayContent } from "../lib/research/tom-decay/content.ts";
+import { tomDecayData, adjacentTest, regime } from "../lib/research/tom-decay/dataset.ts";
 
 const root = process.cwd();
 const read = (relativePath: string) => fs.readFileSync(path.join(root, relativePath), "utf8");
@@ -732,6 +735,71 @@ for (const locale of ["es", "en"] as const) {
   assert.equal(editorial.headline, td3PaperContent[locale].hero.title);
 }
 
+const tomProhibited = [
+  /\bI proved\b/i,
+  /\bwe prove\b/i,
+  /decimalization (caused|killed)/i,
+  /\bdeath date\b/i,
+  /la decimalizaci[oó]n (caus|mat)/i,
+  /fecha de muerte/i,
+  /(TOM|turn-of-the-month) (no longer exists|ya no existe)/i,
+];
+
+for (const locale of ["es", "en"] as const) {
+  const editorial = tomDecayEditorial[locale];
+  const content = tomDecayContent[locale];
+  assertIsoDate(editorial.publishedAt, `tomDecay.${locale}.publishedAt`);
+  assertIsoDate(editorial.modifiedAt, `tomDecay.${locale}.modifiedAt`);
+  assert(editorial.modifiedAt >= editorial.publishedAt);
+  assert.equal(editorial.headline, content.documentTitle);
+  assert.equal(editorial.pathname, content.pathname);
+
+  const copy = JSON.stringify(content);
+  for (const pattern of tomProhibited) {
+    assert(!pattern.test(copy), `TOM decay ${locale} copy matches prohibited claim ${pattern}`);
+  }
+  assert(!copy.includes("/Users/"), `TOM decay ${locale} copy exposes a local filesystem path`);
+
+  assert.equal(content.nav.items.length, 7, `TOM decay ${locale} needs 7 progress sections`);
+  assert.equal(content.methods.sections.length, 8, `TOM decay ${locale} needs 8 methods sections`);
+  assert.equal(content.boundary.supports.length, 5);
+  assert.equal(content.boundary.limits.length, 5);
+  assert.equal(content.secondary.cards.length, 3);
+  assert.deepEqual(
+    content.secondary.cards.map((card) => card.status),
+    ["suggestive", "not-robust", "exploratory"],
+    `TOM decay ${locale} must keep the secondary verdicts unchanged`,
+  );
+}
+
+for (const id of ["yahoo", "french"] as const) {
+  const dataset = tomDecayData[id];
+  assert.equal(dataset.toolVersion, "0.3.1", `${id} must use the frozen qtomdecay version`);
+  assert.equal(dataset.rollingYears, 10);
+  assert.deepEqual([...dataset.canonicalTomDays], [0, 1, 2, 3]);
+  assert.equal(dataset.start, "1950-01-03", `${id} must use the matched 1950+ horizon`);
+  assert(
+    adjacentTest(dataset, "PRE_PUBLICATION", "PUBLISHED_PRE_DECIMAL").changeHacP > 0.05,
+    `${id} publication-era change must stay statistically undetected`,
+  );
+  assert(
+    regime(dataset, "PRE_PUBLICATION").premiumBps > regime(dataset, "POST_DECIMAL_PRE_T2").premiumBps,
+    `${id} must keep the historical premium above the post-2001 premium`,
+  );
+  assert(
+    dataset.calendarPairwise.every((test) => test.differenceHacP > 0.2),
+    `${id} calendar concentration must remain not robust`,
+  );
+  assert.equal(dataset.exploratoryBreakpoint.status, "EXPLORATORY_NOT_CONFIRMATORY");
+}
+
+assert.notEqual(
+  tomDecayData.yahoo.exploratoryBreakpoint.selectedYear,
+  tomDecayData.french.exploratoryBreakpoint.selectedYear,
+  "the exploratory breakpoint must keep disagreeing across universes",
+);
+
 console.log(
-  `Editorial validation passed: ${marketReports.length} reports, 2 historical snapshots audited and 2 TD3 locales.`,
+  `Editorial validation passed: ${marketReports.length} reports, 2 historical snapshots audited, `
+    + `2 TD3 locales and 2 TOM decay locales.`,
 );

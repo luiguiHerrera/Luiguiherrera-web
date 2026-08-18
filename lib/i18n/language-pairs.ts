@@ -13,7 +13,9 @@ export const bilingualRoutePairs = [
   { es: "/tendencias", en: "/en/trends" },
   { es: "/recursos", en: "/en/resources" },
   { es: "/metodologia", en: "/en/methodology" },
+  { es: "/investigacion", en: "/en/research" },
   { es: "/investigacion/td3", en: "/en/research/td3" },
+  { es: "/investigacion/el-fantasma-de-una-anomalia", en: "/en/research/the-ghost-of-an-anomaly" },
   { es: "/legal", en: "/en/legal" },
 ] as const;
 

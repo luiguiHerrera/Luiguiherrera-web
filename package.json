@@ -9,6 +9,8 @@
     "reports:check": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --experimental-strip-types scripts/reports.mts check",
     "build:stat-levels": "node scripts/build-statistical-levels.mjs",
     "build:td3-performance": "node scripts/build-td3-performance.mjs",
+    "build:tom-decay": "node scripts/build-tom-decay-data.mjs",
+    "check:tom-decay": "node scripts/build-tom-decay-data.mjs --check",
     "build": "next build",
     "start": "next start",
     "lint": "eslint .",

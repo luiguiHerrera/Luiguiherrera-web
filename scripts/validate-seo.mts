@@ -47,8 +47,12 @@ const expectedStaticRoutes = [
   "/en/resources",
   "/metodologia",
   "/en/methodology",
+  "/investigacion",
+  "/en/research",
   "/investigacion/td3",
   "/en/research/td3",
+  "/investigacion/el-fantasma-de-una-anomalia",
+  "/en/research/the-ghost-of-an-anomaly",
   "/legal",
   "/en/legal",
 ] as const;
@@ -114,8 +118,8 @@ for (const pathname of ["/informes", "/en/weekly-report"]) {
   }
 }
 
-if (bilingualRoutePairs.length !== 16) {
-  errors.push(`Expected 16 bilingual route pairs, found ${bilingualRoutePairs.length}`);
+if (bilingualRoutePairs.length !== 18) {
+  errors.push(`Expected 18 bilingual route pairs, found ${bilingualRoutePairs.length}`);
 }
 
 for (const { es, en } of bilingualRoutePairs) {
