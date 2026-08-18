@@ -418,6 +418,35 @@ export const tomDecayContentEn: TomDecayContent = {
     ],
   },
 
+  glossary: {
+    eyebrow: "Reference",
+    title: "Glossary",
+    intro: "Concise definitions of the statistical terms used throughout the study.",
+    entries: [
+      {
+        id: "glossary-bps",
+        term: "BPS",
+        shortLabel: "Basis points",
+        definition: "BPS means basis points. 1 bp equals 0.01%, and 100 bps equal 1%.",
+        explanation: "They express small return differences clearly without confusing percentages with percentage points.",
+      },
+      {
+        id: "glossary-hac",
+        term: "HAC",
+        shortLabel: "Robust standard errors",
+        definition: "HAC means Heteroskedasticity and Autocorrelation Consistent. It is a standard-error adjustment robust to heteroskedasticity and serial correlation.",
+        explanation: "It helps prevent statistical uncertainty from looking artificially small when variability changes or nearby observations are related.",
+      },
+      {
+        id: "glossary-p",
+        term: "p / p-value",
+        shortLabel: "Evidence under the null",
+        definition: "A p-value is the probability, under the null hypothesis and the test model, of observing a result at least as extreme as the one obtained.",
+        explanation: "A smaller value indicates greater incompatibility with the null; it does not measure the probability that the null is true or the result's economic importance.",
+      },
+    ],
+  },
+
   footer: {
     author: "Luigui Herrera",
     role: "Applied quantitative research and reproducible tooling.",
@@ -462,21 +491,5 @@ export const tomDecayContentEn: TomDecayContent = {
     premium: "Premium",
     shortSample: "Short sample",
     change: "Change",
-    helpLabel: "Help",
-    termsLabel: "Terms",
-    terms: [
-      {
-        term: "BPS",
-        text: "BPS = basis points. 1 bp = 0.01%. 100 bps = 1%.",
-      },
-      {
-        term: "HAC",
-        text: "HAC = Heteroskedasticity and Autocorrelation Consistent. A robust standard-error adjustment used here to make inference less sensitive to heteroskedasticity and serial correlation.",
-      },
-      {
-        term: "p",
-        text: "p = p-value. As a common reference, p < 0.05 is considered statistically significant and p < 0.01 represents stronger evidence.",
-      },
-    ],
   },
 };

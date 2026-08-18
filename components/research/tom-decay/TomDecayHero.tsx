@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { DecayRibbon } from "@/components/research/tom-decay/DecayRibbon";
 import { EditorialByline } from "@/components/editorial/EditorialByline";
+import { GlossaryText } from "@/components/research/tom-decay/GlossaryLink";
 import type { TomDecayContent } from "@/lib/research/tom-decay/content";
 
 type TomDecayHeroProps = {
@@ -67,7 +68,7 @@ export function TomDecayHero({ content, modifiedAt, publishedAt }: TomDecayHeroP
           <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-muted">
             {content.labels.source}
           </p>
-          <p className="mt-3 text-sm leading-7 text-ink [overflow-wrap:anywhere]">{hero.metadata}</p>
+          <p className="mt-3 text-sm leading-7 text-ink [overflow-wrap:anywhere]"><GlossaryText text={hero.metadata} /></p>
           <EditorialByline locale={content.locale} modifiedAt={modifiedAt} publishedAt={publishedAt} />
         </aside>
       </div>

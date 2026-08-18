@@ -1,6 +1,7 @@
 import type { TomDecayContent } from "@/lib/research/tom-decay/content";
 import type { TomFormatters } from "@/lib/research/tom-decay/format";
 import type { TomDecayView } from "@/lib/research/tom-decay/presentation";
+import { GlossaryText } from "@/components/research/tom-decay/GlossaryLink";
 
 type PublicationComparisonProps = {
   content: TomDecayContent;
@@ -27,7 +28,7 @@ export function PublicationComparison({ content, format, pairs }: PublicationCom
             <figcaption className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
               <span className="text-sm font-semibold text-ink">{pair.name}</span>
               <span className="font-mono text-[11px] uppercase tracking-[0.12em] text-muted">
-                {labels.bpsPerDay}
+                <GlossaryText text={labels.bpsPerDay} />
               </span>
             </figcaption>
 
@@ -77,11 +78,11 @@ export function PublicationComparison({ content, format, pairs }: PublicationCom
               <div className="flex items-baseline justify-between gap-4">
                 <dt className="text-muted">{copy.changeLabel}</dt>
                 <dd className="font-mono tabular-nums text-ink">
-                  {format.signedBps(pair.changeBps)} {labels.bpsPerDay}
+                  {format.signedBps(pair.changeBps)} <GlossaryText text={labels.bpsPerDay} />
                 </dd>
               </div>
               <div className="flex items-baseline justify-between gap-4">
-                <dt className="text-muted">{copy.pLabel}</dt>
+                <dt className="text-muted"><GlossaryText text={copy.pLabel} /></dt>
                 <dd className="font-mono tabular-nums text-ink">{format.pValue(pair.changeHacP)}</dd>
               </div>
             </dl>
@@ -99,7 +100,7 @@ export function PublicationComparison({ content, format, pairs }: PublicationCom
         <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-[#7d6132]">
           {copy.note.title}
         </p>
-        <p className="mt-2 text-sm leading-7 text-ink">{copy.note.body}</p>
+        <p className="mt-2 text-sm leading-7 text-ink"><GlossaryText text={copy.note.body} /></p>
       </div>
     </div>
   );

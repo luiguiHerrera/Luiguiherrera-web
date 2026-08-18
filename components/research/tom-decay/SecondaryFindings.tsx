@@ -1,5 +1,6 @@
 import type { TomDecayContent } from "@/lib/research/tom-decay/content";
 import type { TomDecayView } from "@/lib/research/tom-decay/presentation";
+import { GlossaryText } from "@/components/research/tom-decay/GlossaryLink";
 
 type SecondaryFindingsProps = {
   cards: TomDecayView["secondaryCards"];
@@ -24,13 +25,13 @@ export function SecondaryFindings({ cards, content }: SecondaryFindingsProps) {
               {copy.resultLabel}
             </p>
             <h3 className="mt-2 text-base font-semibold leading-6 text-ink">{card.finding}</h3>
-            <p className="mt-3 text-sm leading-7 text-muted">{card.body}</p>
+            <p className="mt-3 text-sm leading-7 text-muted"><GlossaryText text={card.body} /></p>
 
             <dl className="mt-5 grid gap-2 border-t border-line pt-4 text-xs">
               {card.evidence.map((item) => (
                 <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1" key={item.sourceName}>
                   <dt className="text-muted">{item.sourceName}</dt>
-                  <dd className="font-mono tabular-nums text-ink">{item.detail}</dd>
+                  <dd className="font-mono tabular-nums text-ink"><GlossaryText text={item.detail} /></dd>
                 </div>
               ))}
             </dl>
@@ -49,7 +50,7 @@ export function SecondaryFindings({ cards, content }: SecondaryFindingsProps) {
         ))}
       </div>
 
-      <p className="mt-6 max-w-3xl text-sm leading-7 text-muted">{copy.closing}</p>
+      <p className="mt-6 max-w-3xl text-sm leading-7 text-muted"><GlossaryText text={copy.closing} /></p>
     </div>
   );
 }

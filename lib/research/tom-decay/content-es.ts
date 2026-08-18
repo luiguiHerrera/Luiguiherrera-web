@@ -420,6 +420,35 @@ export const tomDecayContentEs: TomDecayContent = {
     ],
   },
 
+  glossary: {
+    eyebrow: "Referencia",
+    title: "Glosario",
+    intro: "Definiciones breves de los términos estadísticos utilizados a lo largo del estudio.",
+    entries: [
+      {
+        id: "glossary-bps",
+        term: "BPS",
+        shortLabel: "Puntos básicos",
+        definition: "BPS significa basis points o puntos básicos. 1 bp equivale a 0,01 % y 100 bps equivalen a 1 %.",
+        explanation: "Permite expresar diferencias pequeñas de rentabilidad sin confundir porcentajes con puntos porcentuales.",
+      },
+      {
+        id: "glossary-hac",
+        term: "HAC",
+        shortLabel: "Errores estándar robustos",
+        definition: "HAC significa Heteroskedasticity and Autocorrelation Consistent. Es un ajuste de errores estándar robusto a heterocedasticidad y autocorrelación serial.",
+        explanation: "Ayuda a que la incertidumbre estadística no parezca artificialmente pequeña cuando la variabilidad cambia o las observaciones cercanas están relacionadas.",
+      },
+      {
+        id: "glossary-p",
+        term: "p / p-valor",
+        shortLabel: "Evidencia bajo la hipótesis nula",
+        definition: "El p-valor es la probabilidad, bajo la hipótesis nula y el modelo del test, de observar un resultado al menos tan extremo como el obtenido.",
+        explanation: "Un valor menor indica mayor incompatibilidad con la hipótesis nula; no mide la probabilidad de que esa hipótesis sea verdadera ni la importancia económica del resultado.",
+      },
+    ],
+  },
+
   footer: {
     author: "Luigui Herrera",
     role: "Investigación cuantitativa aplicada y herramientas reproducibles.",
@@ -464,21 +493,5 @@ export const tomDecayContentEs: TomDecayContent = {
     premium: "Prima",
     shortSample: "Muestra corta",
     change: "Cambio",
-    helpLabel: "Ayuda",
-    termsLabel: "Términos",
-    terms: [
-      {
-        term: "BPS",
-        text: "BPS = basis points / puntos básicos. 1 bp = 0,01 %. 100 bps = 1 %.",
-      },
-      {
-        term: "HAC",
-        text: "HAC = Heteroskedasticity and Autocorrelation Consistent. Es un ajuste robusto de errores estándar usado aquí para reducir la sensibilidad de la inferencia a heterocedasticidad y autocorrelación serial.",
-      },
-      {
-        term: "p",
-        text: "p = p-value. Como referencia habitual, p < 0,05 se considera estadísticamente significativo y p < 0,01 representa evidencia más fuerte.",
-      },
-    ],
   },
 };

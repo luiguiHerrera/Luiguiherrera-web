@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import { GlossaryText } from "@/components/research/tom-decay/GlossaryLink";
 
 type TomDecaySectionProps = {
   children?: ReactNode;
@@ -12,7 +13,7 @@ type TomDecaySectionProps = {
   wide?: boolean;
 };
 
-export const narrativeMeasure = "max-w-[58rem]";
+export const narrativeMeasure = "mx-auto max-w-[68rem]";
 
 export function TomDecaySection({
   children,
@@ -38,7 +39,7 @@ export function TomDecaySection({
             }`}
           >
             {intro.map((paragraph) => (
-              <p key={paragraph}>{paragraph}</p>
+              <p key={paragraph}><GlossaryText text={paragraph} /></p>
             ))}
           </div>
         ) : null}
@@ -50,8 +51,8 @@ export function TomDecaySection({
 
 export function TomDecayTakeaway({ children }: { children: ReactNode }) {
   return (
-    <p className="mt-6 border-l-2 border-brass/60 bg-white/60 px-5 py-4 text-sm font-medium leading-7 text-ink">
-      {children}
+    <p className="mx-auto mt-6 max-w-[68rem] border-l-2 border-brass/60 bg-white/60 px-5 py-4 text-sm font-medium leading-7 text-ink">
+      {typeof children === "string" ? <GlossaryText text={children} /> : children}
     </p>
   );
 }

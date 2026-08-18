@@ -2,7 +2,7 @@
 
 import { useId, useMemo, useState } from "react";
 import type { TomDecayContent } from "@/lib/research/tom-decay/content";
-import { TermKey } from "@/components/research/tom-decay/TermTooltip";
+import { GlossaryText } from "@/components/research/tom-decay/GlossaryLink";
 import { createTomFormatters } from "@/lib/research/tom-decay/format";
 import type { RegimeEstimate, TomDatasetId, TomRegimeId } from "@/lib/research/tom-decay/types";
 
@@ -175,9 +175,11 @@ export function RegimeComparisonChart({ content, series }: RegimeComparisonChart
             })}
 
             <line stroke="#C9C2B6" strokeWidth="1" x1={LEFT} x2={WIDTH - RIGHT} y1={plotBottom} y2={plotBottom} />
-            <text fill="#69706D" fontSize="11" x={LEFT} y={HEIGHT - 8}>
-              {copy.axisY}
-            </text>
+            <a className="tom-decay-chart-focus" href="#glossary-bps">
+              <text fill="#69706D" fontSize="11" x={LEFT} y={HEIGHT - 8}>
+                {copy.axisY}
+              </text>
+            </a>
           </svg>
         </div>
 
@@ -192,10 +194,10 @@ export function RegimeComparisonChart({ content, series }: RegimeComparisonChart
                 {activeSeries.name} · {labels.regimes[activeEstimate.regime].name}
               </span>
               <span className="font-mono tabular-nums">
-                {labels.premium} {format.bps(activeEstimate.premiumBps)} {labels.bpsPerDay}
+                {labels.premium} {format.bps(activeEstimate.premiumBps)} <GlossaryText text={labels.bpsPerDay} />
               </span>
               <span className="font-mono tabular-nums">
-                {labels.hacP} {format.pValue(activeEstimate.hacP)}
+                <GlossaryText text={labels.hacP} /> {format.pValue(activeEstimate.hacP)}
               </span>
               <span className="font-mono tabular-nums">
                 {labels.tomDays} {format.integer(activeEstimate.tomDays)}
@@ -228,13 +230,9 @@ export function RegimeComparisonChart({ content, series }: RegimeComparisonChart
         ))}
       </div>
 
-      <div className="flex flex-wrap items-center gap-x-4 gap-y-2 border border-t-0 border-line bg-white/50 px-4 py-3 md:px-5">
-        <TermKey helpLabel={labels.helpLabel} label={labels.termsLabel} terms={labels.terms} />
-      </div>
-
       <div className="tom-decay-scroll overflow-x-auto border border-t-0 border-line bg-white/50">
         <table className="w-full min-w-[30rem] border-collapse text-left text-xs">
-          <caption className="px-4 py-3 text-left text-[11px] leading-5 text-muted">{copy.tableCaption}</caption>
+          <caption className="px-4 py-3 text-left text-[11px] leading-5 text-muted"><GlossaryText text={copy.tableCaption} /></caption>
           <thead>
             <tr className="bg-panelSoft">
               <th className="border-y border-line px-4 py-2 font-semibold text-ink" scope="col">
@@ -268,7 +266,7 @@ export function RegimeComparisonChart({ content, series }: RegimeComparisonChart
                         |
                       </span>
                       <span className="whitespace-nowrap text-[11px] text-muted">
-                        {labels.hacP} {format.pValue(entry.estimates[index].hacP)}
+                        <GlossaryText text={labels.hacP} /> {format.pValue(entry.estimates[index].hacP)}
                       </span>
                     </span>
                   </td>

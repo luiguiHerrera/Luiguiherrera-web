@@ -195,6 +195,19 @@ export type TomDecayContent = {
     sections: { id: string; title: string; body: string[] }[];
   };
 
+  glossary: {
+    eyebrow: string;
+    title: string;
+    intro: string;
+    entries: {
+      id: "glossary-bps" | "glossary-hac" | "glossary-p";
+      term: string;
+      shortLabel: string;
+      definition: string;
+      explanation: string;
+    }[];
+  };
+
   footer: {
     author: string;
     role: string;
@@ -214,8 +227,5 @@ export type TomDecayContent = {
     premium: string;
     shortSample: string;
     change: string;
-    helpLabel: string;
-    termsLabel: string;
-    terms: { term: string; text: string }[];
   };
 };

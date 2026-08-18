@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { GlossaryText } from "@/components/research/tom-decay/GlossaryLink";
 import type { TomDecayContent } from "@/lib/research/tom-decay/content";
 
 type HashEntry = {
@@ -56,7 +57,7 @@ export function VerificationKit({ content, hashGroups, sourceHash, toolVersion }
 
   return (
     <div className="min-w-0">
-      <p className="max-w-3xl text-sm leading-7 text-muted">{copy.body}</p>
+      <p className="max-w-3xl text-sm leading-7 text-muted"><GlossaryText text={copy.body} /></p>
 
       <div className="mt-5 max-w-3xl border-l-2 border-petrol/40 bg-white/60 px-5 py-4">
         <div className="grid gap-2 text-sm leading-7 text-ink">
@@ -85,7 +86,7 @@ export function VerificationKit({ content, hashGroups, sourceHash, toolVersion }
                 </span>
               ) : null}
             </div>
-            <p className="mt-3 text-sm leading-6 text-muted">{item.purpose}</p>
+            <p className="mt-3 text-sm leading-6 text-muted"><GlossaryText text={item.purpose} /></p>
             <div className="mt-auto flex flex-wrap items-center justify-between gap-3 pt-5">
               <span className="text-[10px] font-semibold uppercase tracking-[0.14em] text-muted">
                 {copy.typeLabel}: {item.fileType}
@@ -103,7 +104,7 @@ export function VerificationKit({ content, hashGroups, sourceHash, toolVersion }
       </ul>
 
       <p className="mt-6 border-l-2 border-brass/60 bg-white/60 px-5 py-4 text-sm font-medium leading-7 text-ink">
-        {copy.traceability}
+        <GlossaryText text={copy.traceability} />
       </p>
 
       <div className="mt-7 grid gap-4 lg:grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)]">
@@ -113,7 +114,7 @@ export function VerificationKit({ content, hashGroups, sourceHash, toolVersion }
             {copy.environment.map((item) => (
               <li className="flex gap-3" key={item}>
                 <span aria-hidden="true" className="mt-2.5 h-px w-3 shrink-0 bg-line" />
-                <span className="font-mono [overflow-wrap:anywhere]">{item}</span>
+                <span className="font-mono [overflow-wrap:anywhere]"><GlossaryText text={item} /></span>
               </li>
             ))}
             <li className="flex gap-3">

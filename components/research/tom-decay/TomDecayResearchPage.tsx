@@ -8,6 +8,8 @@ import { RollingPremiumChart } from "@/components/research/tom-decay/RollingPrem
 import { SecondaryFindings } from "@/components/research/tom-decay/SecondaryFindings";
 import { TomDecayFooter } from "@/components/research/tom-decay/TomDecayFooter";
 import { TomDecayHero } from "@/components/research/tom-decay/TomDecayHero";
+import { GlossaryText } from "@/components/research/tom-decay/GlossaryLink";
+import { TomGlossary } from "@/components/research/tom-decay/TomGlossary";
 import { TomDecayNav } from "@/components/research/tom-decay/TomDecayNav";
 import {
   narrativeMeasure,
@@ -137,7 +139,7 @@ export function TomDecayResearchPage({ content }: { content: TomDecayContent }) 
                     <dt className="text-[10px] font-semibold uppercase tracking-[0.14em] text-muted">
                       {field.term}
                     </dt>
-                    <dd className="text-ink [overflow-wrap:anywhere]">{field.description}</dd>
+                    <dd className="text-ink [overflow-wrap:anywhere]"><GlossaryText text={field.description} /></dd>
                   </div>
                 ))}
               </dl>
@@ -188,11 +190,11 @@ export function TomDecayResearchPage({ content }: { content: TomDecayContent }) 
       >
         <div className={narrativeMeasure}>
           <p className="border-l-2 border-petrol/50 pl-5 text-base font-semibold leading-8 text-ink md:text-lg">
-            {content.lesson.question}
+            <GlossaryText text={content.lesson.question} />
           </p>
           <div className="mt-6 grid gap-4 text-sm leading-7 text-muted md:text-base md:leading-8">
             {content.lesson.closing.map((paragraph) => (
-              <p key={paragraph}>{paragraph}</p>
+              <p key={paragraph}><GlossaryText text={paragraph} /></p>
             ))}
           </div>
         </div>
@@ -219,6 +221,8 @@ export function TomDecayResearchPage({ content }: { content: TomDecayContent }) 
       <TomDecaySection eyebrow={content.methods.eyebrow} title={content.methods.title} wide>
         <MethodsAccordion content={content} />
       </TomDecaySection>
+
+      <TomGlossary content={content} />
 
       <TomDecayFooter content={content} />
     </article>

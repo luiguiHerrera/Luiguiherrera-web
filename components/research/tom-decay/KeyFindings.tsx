@@ -1,5 +1,6 @@
 import type { TomDecayContent } from "@/lib/research/tom-decay/content";
 import type { TomDecayView } from "@/lib/research/tom-decay/presentation";
+import { GlossaryText } from "@/components/research/tom-decay/GlossaryLink";
 
 type KeyFindingsProps = {
   content: TomDecayContent;
@@ -20,11 +21,11 @@ export function KeyFindings({ content, findings }: KeyFindingsProps) {
                 <span className="text-3xl leading-none md:text-4xl">{finding.value}</span>
                 {finding.unit ? (
                   <span className="text-xs font-medium uppercase tracking-[0.08em] text-muted">
-                    {finding.unit}
+                    <GlossaryText text={finding.unit} />
                   </span>
                 ) : null}
               </p>
-              <p className="mt-4 text-sm leading-6 text-muted">{finding.label}</p>
+              <p className="mt-4 text-sm leading-6 text-muted"><GlossaryText text={finding.label} /></p>
             </dd>
           </div>
         ))}

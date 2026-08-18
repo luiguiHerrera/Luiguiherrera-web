@@ -11,7 +11,7 @@ import {
   paddedDomain,
 } from "@/lib/research/tom-decay/chart-geometry";
 import type { TomDecayContent } from "@/lib/research/tom-decay/content";
-import { TermKey } from "@/components/research/tom-decay/TermTooltip";
+import { GlossaryText } from "@/components/research/tom-decay/GlossaryLink";
 import { createTomFormatters } from "@/lib/research/tom-decay/format";
 import type { RollingPoint, TomDatasetId } from "@/lib/research/tom-decay/types";
 
@@ -138,7 +138,7 @@ export function RollingPremiumChart({ content, events, series }: RollingPremiumC
       <div className="flex flex-col gap-4 border border-line bg-white/70 p-4 md:flex-row md:items-end md:justify-between md:p-5">
         <div className="min-w-0">
           <h3 className="text-base font-semibold text-ink md:text-lg">{copy.chartTitle}</h3>
-          <p className="mt-1 text-xs leading-6 text-muted">{copy.chartSubtitle}</p>
+          <p className="mt-1 text-xs leading-6 text-muted"><GlossaryText text={copy.chartSubtitle} /></p>
         </div>
         <fieldset className="min-w-0">
           <legend className="mb-2 text-[10px] font-semibold uppercase tracking-[0.16em] text-muted">
@@ -306,9 +306,11 @@ export function RollingPremiumChart({ content, events, series }: RollingPremiumC
           <text fill="#69706D" fontSize={compact ? 10 : 11} x={plotLeft} y={box.height - 8}>
             {copy.axisX}
           </text>
-          <text fill="#69706D" fontSize={compact ? 10 : 11} textAnchor="end" x={plotRight} y={box.height - 8}>
-            {copy.axisY}
-          </text>
+          <a className="tom-decay-chart-focus" href="#glossary-bps">
+            <text fill="#69706D" fontSize={compact ? 10 : 11} textAnchor="end" x={plotRight} y={box.height - 8}>
+              {copy.axisY}
+            </text>
+          </a>
         </svg>
 
         <p className="sr-only" id={`${tableId}-summary`}>
@@ -333,13 +335,13 @@ export function RollingPremiumChart({ content, events, series }: RollingPremiumC
                       />
                       <span className="font-semibold text-ink">{entry.short}</span>
                       <span className="font-mono tabular-nums">
-                        {format.bps(point.premiumBps)} {content.labels.bpsPerDay}
+                        {format.bps(point.premiumBps)} <GlossaryText text={content.labels.bpsPerDay} />
                       </span>
                       <span className="font-mono tabular-nums">
                         {copy.tooltip.interval} {format.interval(point.ci95LoBps, point.ci95HiBps)}
                       </span>
                       <span className="font-mono tabular-nums">
-                        {copy.tooltip.pValue} {format.pValue(point.hacP)}
+                        <GlossaryText text={copy.tooltip.pValue} /> {format.pValue(point.hacP)}
                       </span>
                       <span className="font-mono tabular-nums">
                         {copy.tooltip.observations} {format.integer(point.observations)}
@@ -353,7 +355,7 @@ export function RollingPremiumChart({ content, events, series }: RollingPremiumC
               ) : null}
             </div>
           ) : (
-            <p className="text-xs leading-5 text-muted">{copy.chartSummary}</p>
+            <p className="text-xs leading-5 text-muted"><GlossaryText text={copy.chartSummary} /></p>
           )}
         </div>
       </div>
@@ -377,7 +379,7 @@ export function RollingPremiumChart({ content, events, series }: RollingPremiumC
         ))}
         <span className="inline-flex items-center gap-2">
           <span aria-hidden="true" className="inline-block h-3 w-7 rounded-[2px] bg-petrol/15" />
-          {copy.bandLabel}
+          <GlossaryText text={copy.bandLabel} />
         </span>
         <span className="inline-flex items-center gap-2">
           <svg aria-hidden="true" className="h-2.5 w-7" viewBox="0 0 28 10">
@@ -385,11 +387,6 @@ export function RollingPremiumChart({ content, events, series }: RollingPremiumC
           </svg>
           {copy.eventsLabel}
         </span>
-        <TermKey
-          helpLabel={content.labels.helpLabel}
-          label={content.labels.termsLabel}
-          terms={content.labels.terms}
-        />
       </div>
 
       <div className="border border-t-0 border-line bg-white/50 px-4 py-3 md:px-5">
@@ -410,7 +407,7 @@ export function RollingPremiumChart({ content, events, series }: RollingPremiumC
                 <tr>
                   {copy.tableHeaders.map((header) => (
                     <th className="border-b border-line px-3 py-2 font-semibold text-ink" key={header} scope="col">
-                      {header}
+                      <GlossaryText text={header} />
                     </th>
                   ))}
                 </tr>

@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { narrativeMeasure } from "@/components/research/tom-decay/TomDecaySection";
+import { GlossaryText } from "@/components/research/tom-decay/GlossaryLink";
 import type { TomDecayContent } from "@/lib/research/tom-decay/content";
 
 export function GhostAlphaNarrative({ content }: { content: TomDecayContent }) {
@@ -29,8 +30,8 @@ export function GhostAlphaNarrative({ content }: { content: TomDecayContent }) {
   return (
     <div className="min-w-0">
       <div className={`${narrativeMeasure} border-l-2 border-petrol/50 pl-5`}>
-        <p className="text-sm leading-7 text-muted md:text-base">{copy.bridge}</p>
-        <p className="mt-2 text-base font-semibold leading-8 text-ink md:text-lg">{copy.question}</p>
+        <p className="text-sm leading-7 text-muted md:text-base"><GlossaryText text={copy.bridge} /></p>
+        <p className="mt-2 text-base font-semibold leading-8 text-ink md:text-lg"><GlossaryText text={copy.question} /></p>
       </div>
 
       <p className="mt-7 text-[10px] font-semibold uppercase tracking-[0.16em] text-muted">
@@ -52,13 +53,13 @@ export function GhostAlphaNarrative({ content }: { content: TomDecayContent }) {
             <p className="mt-4 font-mono text-xs font-semibold uppercase tracking-[0.1em] text-petrol">
               {step.label}
             </p>
-            <p className="mt-2 text-sm leading-6 text-muted">{step.caption}</p>
+            <p className="mt-2 text-sm leading-6 text-muted"><GlossaryText text={step.caption} /></p>
           </li>
         ))}
       </ol>
 
       <p className={`${narrativeMeasure} mt-7 border-t border-line pt-5 text-lg font-semibold leading-8 text-ink md:text-2xl md:leading-10`}>
-        {copy.closing}
+        <GlossaryText text={copy.closing} />
       </p>
     </div>
   );
