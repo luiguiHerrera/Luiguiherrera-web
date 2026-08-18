@@ -120,6 +120,7 @@ export type TomDecayContent = {
     eyebrow: string;
     title: string;
     body: string[];
+    bridge: string;
     question: string;
     stepsLabel: string;
     steps: { label: string; caption: string }[];
@@ -164,12 +165,15 @@ export type TomDecayContent = {
     eyebrow: string;
     title: string;
     body: string;
+    dependencyNote: string[];
+    dependencySummary: string;
     traceability: string;
     downloadLabel: string;
     typeLabel: string;
     items: {
       id: string;
       name: string;
+      role: string;
       purpose: string;
       fileType: string;
       href: string;
@@ -210,5 +214,8 @@ export type TomDecayContent = {
     premium: string;
     shortSample: string;
     change: string;
+    helpLabel: string;
+    termsLabel: string;
+    terms: { term: string; text: string }[];
   };
 };

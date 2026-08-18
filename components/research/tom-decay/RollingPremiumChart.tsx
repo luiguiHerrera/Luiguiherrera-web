@@ -11,6 +11,7 @@ import {
   paddedDomain,
 } from "@/lib/research/tom-decay/chart-geometry";
 import type { TomDecayContent } from "@/lib/research/tom-decay/content";
+import { TermKey } from "@/components/research/tom-decay/TermTooltip";
 import { createTomFormatters } from "@/lib/research/tom-decay/format";
 import type { RollingPoint, TomDatasetId } from "@/lib/research/tom-decay/types";
 
@@ -384,6 +385,11 @@ export function RollingPremiumChart({ content, events, series }: RollingPremiumC
           </svg>
           {copy.eventsLabel}
         </span>
+        <TermKey
+          helpLabel={content.labels.helpLabel}
+          label={content.labels.termsLabel}
+          terms={content.labels.terms}
+        />
       </div>
 
       <div className="border border-t-0 border-line bg-white/50 px-4 py-3 md:px-5">

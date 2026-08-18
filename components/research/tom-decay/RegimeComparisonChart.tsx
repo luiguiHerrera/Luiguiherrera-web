@@ -2,6 +2,7 @@
 
 import { useId, useMemo, useState } from "react";
 import type { TomDecayContent } from "@/lib/research/tom-decay/content";
+import { TermKey } from "@/components/research/tom-decay/TermTooltip";
 import { createTomFormatters } from "@/lib/research/tom-decay/format";
 import type { RegimeEstimate, TomDatasetId, TomRegimeId } from "@/lib/research/tom-decay/types";
 
@@ -110,7 +111,14 @@ export function RegimeComparisonChart({ content, series }: RegimeComparisonChart
                   ) : null}
                   {series.map((entry, entryIndex) => {
                     const estimate = entry.estimates[index];
+                    const pairedEstimate = series[entryIndex === 0 ? 1 : 0]?.estimates[index];
                     const dotX = x + (entryIndex === 0 ? -13 : 13);
+                    const labelsAreClose = pairedEstimate
+                      ? Math.abs(scaleY(estimate.premiumBps) - scaleY(pairedEstimate.premiumBps)) < 18
+                      : false;
+                    const labelOffsetY = labelsAreClose && entryIndex === 1
+                      ? 22
+                      : estimate.premiumBps >= 0 ? -15 : 22;
                     const selected = active?.regime === regimeId && active?.dataset === entry.id;
                     return (
                       <g
@@ -147,7 +155,7 @@ export function RegimeComparisonChart({ content, series }: RegimeComparisonChart
                           fontWeight="600"
                           textAnchor="middle"
                           x={dotX}
-                          y={scaleY(estimate.premiumBps) + (estimate.premiumBps >= 0 ? -15 : 22)}
+                          y={scaleY(estimate.premiumBps) + labelOffsetY}
                         >
                           {format.bps(estimate.premiumBps)}
                         </text>
@@ -220,6 +228,10 @@ export function RegimeComparisonChart({ content, series }: RegimeComparisonChart
         ))}
       </div>
 
+      <div className="flex flex-wrap items-center gap-x-4 gap-y-2 border border-t-0 border-line bg-white/50 px-4 py-3 md:px-5">
+        <TermKey helpLabel={labels.helpLabel} label={labels.termsLabel} terms={labels.terms} />
+      </div>
+
       <div className="tom-decay-scroll overflow-x-auto border border-t-0 border-line bg-white/50">
         <table className="w-full min-w-[30rem] border-collapse text-left text-xs">
           <caption className="px-4 py-3 text-left text-[11px] leading-5 text-muted">{copy.tableCaption}</caption>
@@ -248,9 +260,16 @@ export function RegimeComparisonChart({ content, series }: RegimeComparisonChart
                 </th>
                 {series.map((entry) => (
                   <td className="px-4 py-2 text-right font-mono tabular-nums text-ink" key={entry.id}>
-                    {format.bps(entry.estimates[index].premiumBps)}
-                    <span className="ml-2 text-[11px] text-muted">
-                      {labels.hacP} {format.pValue(entry.estimates[index].hacP)}
+                    <span className="inline-flex flex-wrap items-baseline justify-end gap-x-2 gap-y-0.5">
+                      <span className="whitespace-nowrap font-semibold">
+                        {format.bps(entry.estimates[index].premiumBps)}
+                      </span>
+                      <span aria-hidden="true" className="hidden text-line sm:inline">
+                        |
+                      </span>
+                      <span className="whitespace-nowrap text-[11px] text-muted">
+                        {labels.hacP} {format.pValue(entry.estimates[index].hacP)}
+                      </span>
                     </span>
                   </td>
                 ))}

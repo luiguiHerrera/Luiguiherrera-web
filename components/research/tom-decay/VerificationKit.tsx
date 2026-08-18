@@ -15,6 +15,18 @@ type VerificationKitProps = {
   toolVersion: string;
 };
 
+function renderInlineCode(text: string) {
+  return text.split(/`([^`]+)`/g).map((part, index) =>
+    index % 2 === 1 ? (
+      <code className="rounded-[3px] bg-panelSoft px-1.5 py-0.5 font-mono text-[0.85em] text-petrol" key={index}>
+        {part}
+      </code>
+    ) : (
+      part
+    ),
+  );
+}
+
 function CopyButton({ copiedLabel, label, value }: { copiedLabel: string; label: string; value: string }) {
   const [copied, setCopied] = useState(false);
 
@@ -46,10 +58,24 @@ export function VerificationKit({ content, hashGroups, sourceHash, toolVersion }
     <div className="min-w-0">
       <p className="max-w-3xl text-sm leading-7 text-muted">{copy.body}</p>
 
-      <ul className="mt-7 grid gap-3 md:grid-cols-2">
+      <div className="mt-5 max-w-3xl border-l-2 border-petrol/40 bg-white/60 px-5 py-4">
+        <div className="grid gap-2 text-sm leading-7 text-ink">
+          {copy.dependencyNote.map((line) => (
+            <p key={line}>{renderInlineCode(line)}</p>
+          ))}
+        </div>
+        <p className="mt-3 border-t border-line pt-2.5 font-mono text-[11px] leading-5 text-muted">
+          {copy.dependencySummary}
+        </p>
+      </div>
+
+      <ul className="mt-6 grid gap-3 md:grid-cols-2">
         {copy.items.map((item) => (
           <li className="flex min-w-0 flex-col border border-line bg-white/80 p-5" key={item.id}>
-            <div className="flex items-start justify-between gap-4">
+            <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-brass">
+              {item.role}
+            </p>
+            <div className="mt-2.5 flex items-start justify-between gap-4">
               <p className="min-w-0 font-mono text-sm font-semibold text-petrol [overflow-wrap:anywhere]">
                 {item.name}
               </p>

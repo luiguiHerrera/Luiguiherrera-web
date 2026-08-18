@@ -183,8 +183,9 @@ export const tomDecayContentEn: TomDecayContent = {
       "A longer sample often feels safer.",
       "But length and stability are not the same thing.",
       "If I combine decades in which the premium was large with decades in which the estimate fluctuates around zero, the historical average still carries part of the old signal.",
-      "The backtest is not necessarily wrong. It may simply be answering a question I no longer care about.",
+      "The backtest is not necessarily wrong. It may simply be answering a question that is no longer the one I care about.",
     ],
+    bridge: "The question I do care about is:",
     question: "How much of the historical result still exists inside the regime I would actually trade?",
     stepsLabel: "Layers of evidence",
     steps: [
@@ -280,6 +281,11 @@ export const tomDecayContentEn: TomDecayContent = {
     eyebrow: "Verification",
     title: "Reproduce the research",
     body: "The page publishes the same verification package used for the final validation.",
+    dependencyNote: [
+      "To run the reproduction you need the `.do` script and `qtomdecay v0.3.1`.",
+      "The two output bundles contain the frozen results used on this page and let you verify that your reproduction matches the published analysis.",
+    ],
+    dependencySummary: "Reproduction: 1 + 2 · Full verification: 1 + 2 + 3 + 4",
     traceability:
       "Every number published on this page can be traced back to an output from the research bundle.",
     downloadLabel: "Download",
@@ -288,6 +294,7 @@ export const tomDecayContentEn: TomDecayContent = {
       {
         id: "do",
         name: "reproduce_tom_decay.do",
+        role: "Reproduction · Step 1",
         purpose: "Public script that reproduces both samples using relative output paths.",
         fileType: "Stata .do",
         href: "/research/tom-decay/downloads/reproduce_tom_decay.do",
@@ -295,6 +302,7 @@ export const tomDecayContentEn: TomDecayContent = {
       {
         id: "tool",
         name: "qtomdecay",
+        role: "Reproduction · Step 2",
         purpose: "The frozen research tool used in the final validation.",
         fileType: "ZIP",
         version: "0.3.1",
@@ -303,6 +311,7 @@ export const tomDecayContentEn: TomDecayContent = {
       {
         id: "yahoo-data",
         name: "Yahoo S&P 500 1950+ outputs",
+        role: "Verification · Yahoo",
         purpose: "Regimes, adjacent tests, breaks, rolling windows and report for the Yahoo sample.",
         fileType: "CSV · JSON",
         href: "/research/tom-decay/data/yahoo/manifest.json",
@@ -310,6 +319,7 @@ export const tomDecayContentEn: TomDecayContent = {
       {
         id: "french-data",
         name: "French US Market 1950+ matched outputs",
+        role: "Verification · French",
         purpose: "The same outputs for the independent, horizon-matched replication.",
         fileType: "CSV · JSON",
         href: "/research/tom-decay/data/french-matched/manifest.json",
@@ -452,5 +462,21 @@ export const tomDecayContentEn: TomDecayContent = {
     premium: "Premium",
     shortSample: "Short sample",
     change: "Change",
+    helpLabel: "Help",
+    termsLabel: "Terms",
+    terms: [
+      {
+        term: "BPS",
+        text: "BPS = basis points. 1 bp = 0.01%. 100 bps = 1%.",
+      },
+      {
+        term: "HAC",
+        text: "HAC = Heteroskedasticity and Autocorrelation Consistent. A robust standard-error adjustment used here to make inference less sensitive to heteroskedasticity and serial correlation.",
+      },
+      {
+        term: "p",
+        text: "p = p-value. As a common reference, p < 0.05 is considered statistically significant and p < 0.01 represents stronger evidence.",
+      },
+    ],
   },
 };

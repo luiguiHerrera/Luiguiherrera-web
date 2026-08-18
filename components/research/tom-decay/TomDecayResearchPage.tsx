@@ -9,7 +9,11 @@ import { SecondaryFindings } from "@/components/research/tom-decay/SecondaryFind
 import { TomDecayFooter } from "@/components/research/tom-decay/TomDecayFooter";
 import { TomDecayHero } from "@/components/research/tom-decay/TomDecayHero";
 import { TomDecayNav } from "@/components/research/tom-decay/TomDecayNav";
-import { TomDecaySection, TomDecayTakeaway } from "@/components/research/tom-decay/TomDecaySection";
+import {
+  narrativeMeasure,
+  TomDecaySection,
+  TomDecayTakeaway,
+} from "@/components/research/tom-decay/TomDecaySection";
 import { VerificationKit } from "@/components/research/tom-decay/VerificationKit";
 import type { TomDecayContent } from "@/lib/research/tom-decay/content";
 import {
@@ -74,6 +78,7 @@ export function TomDecayResearchPage({ content }: { content: TomDecayContent }) 
         eyebrow={content.question.eyebrow}
         id={questionId}
         intro={content.question.body}
+        narrative
         title={content.question.title}
       />
 
@@ -90,6 +95,7 @@ export function TomDecayResearchPage({ content }: { content: TomDecayContent }) 
         eyebrow={content.publication.eyebrow}
         id={publicationId}
         intro={view.publicationBody}
+        narrative
         title={content.publication.title}
       >
         <PublicationComparison content={content} format={view.format} pairs={view.publicationPairs} />
@@ -100,8 +106,8 @@ export function TomDecayResearchPage({ content }: { content: TomDecayContent }) 
         eyebrow={content.rolling.eyebrow}
         id={evidenceId}
         intro={view.rollingBody}
+        narrative
         title={content.rolling.title}
-        wide
       >
         <RollingPremiumChart content={content} events={events} series={rollingSeries} />
         <TomDecayTakeaway>{content.rolling.takeaway}</TomDecayTakeaway>
@@ -111,8 +117,8 @@ export function TomDecayResearchPage({ content }: { content: TomDecayContent }) 
         eyebrow={content.replication.eyebrow}
         id={replicationId}
         intro={content.replication.body}
+        narrative
         title={content.replication.title}
-        wide
       >
         <div className="grid gap-3 md:grid-cols-2">
           {content.replication.sources.map((source) => (
@@ -147,10 +153,11 @@ export function TomDecayResearchPage({ content }: { content: TomDecayContent }) 
       </TomDecaySection>
 
       <TomDecaySection
+        compact
         eyebrow={content.ghost.eyebrow}
         intro={content.ghost.body}
+        narrative
         title={content.ghost.title}
-        wide
       >
         <GhostAlphaNarrative content={content} />
       </TomDecaySection>
@@ -176,9 +183,10 @@ export function TomDecayResearchPage({ content }: { content: TomDecayContent }) 
       <TomDecaySection
         eyebrow={content.lesson.eyebrow}
         intro={content.lesson.body}
+        narrative
         title={content.lesson.title}
       >
-        <div className="max-w-3xl">
+        <div className={narrativeMeasure}>
           <p className="border-l-2 border-petrol/50 pl-5 text-base font-semibold leading-8 text-ink md:text-lg">
             {content.lesson.question}
           </p>

@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { narrativeMeasure } from "@/components/research/tom-decay/TomDecaySection";
 import type { TomDecayContent } from "@/lib/research/tom-decay/content";
 
 export function GhostAlphaNarrative({ content }: { content: TomDecayContent }) {
@@ -27,11 +28,12 @@ export function GhostAlphaNarrative({ content }: { content: TomDecayContent }) {
 
   return (
     <div className="min-w-0">
-      <p className="max-w-3xl border-l-2 border-petrol/50 pl-5 text-base font-semibold leading-8 text-ink md:text-lg">
-        {copy.question}
-      </p>
+      <div className={`${narrativeMeasure} border-l-2 border-petrol/50 pl-5`}>
+        <p className="text-sm leading-7 text-muted md:text-base">{copy.bridge}</p>
+        <p className="mt-2 text-base font-semibold leading-8 text-ink md:text-lg">{copy.question}</p>
+      </div>
 
-      <p className="mt-8 text-[10px] font-semibold uppercase tracking-[0.16em] text-muted">
+      <p className="mt-7 text-[10px] font-semibold uppercase tracking-[0.16em] text-muted">
         {copy.stepsLabel}
       </p>
 
@@ -55,7 +57,7 @@ export function GhostAlphaNarrative({ content }: { content: TomDecayContent }) {
         ))}
       </ol>
 
-      <p className="mt-8 border-t border-line pt-6 text-lg font-semibold leading-8 text-ink md:text-2xl md:leading-10">
+      <p className={`${narrativeMeasure} mt-7 border-t border-line pt-5 text-lg font-semibold leading-8 text-ink md:text-2xl md:leading-10`}>
         {copy.closing}
       </p>
     </div>
