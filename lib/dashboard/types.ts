@@ -107,7 +107,7 @@ export type VixHistoryPoint = {
 };
 
 export type VixTermStructurePoint = {
-  label: "VX1" | "VX2" | "VX3";
+  label: `VX${1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9}`;
   symbol: string | null;
   contract: string | null;
   expirationDate: string | null;

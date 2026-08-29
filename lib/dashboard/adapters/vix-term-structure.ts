@@ -1,15 +1,16 @@
 import type { VixTermStructureClassification, VixTermStructureData, VixTermStructurePoint } from "@/lib/dashboard/types";
 
-type CboeSettlementRow = {
+export type CboeSettlementRow = {
   product: string;
   symbol: string;
   expirationDate: string;
-  price: number;
+  price: number | null;
 };
 
-const CBOE_SETTLEMENT_SOURCE_URL = "https://www.cboe.com/us/futures/market_statistics/settlement/futures/daily/";
+const CBOE_SETTLEMENT_SOURCE_URL = "https://www.cboe.com/markets/us/futures/market-statistics/settlement/futures/daily/";
 const CBOE_SETTLEMENT_CSV_URL = "https://www-api.cboe.com/us/futures/market_statistics/settlement/csv/";
 const MONTHLY_VX_SYMBOL_PATTERN = /^VX\/[FGHJKMNQUVXZ][0-9]$/;
+const MAX_MONTHLY_CONTRACTS = 9;
 const REQUEST_TIMEOUT_MS = 8000;
 const LOOKBACK_DAYS = 12;
 
@@ -18,11 +19,7 @@ function logVixTermStructure(details: Record<string, unknown>) {
 }
 
 function emptyPoints(): VixTermStructurePoint[] {
-  return [
-    { label: "VX1", symbol: null, contract: null, expirationDate: null, value: null },
-    { label: "VX2", symbol: null, contract: null, expirationDate: null, value: null },
-    { label: "VX3", symbol: null, contract: null, expirationDate: null, value: null },
-  ];
+  return [];
 }
 
 function buildFallbackData(sourceStatus: VixTermStructureData["sourceStatus"], reason: string): VixTermStructureData {
@@ -127,7 +124,7 @@ function normalizeHeader(value: string) {
   return value.toLowerCase().replace(/\s+/g, "");
 }
 
-function parseCboeSettlements(csv: string): CboeSettlementRow[] {
+export function parseCboeSettlements(csv: string): CboeSettlementRow[] {
   const rows = parseCsvRows(csv.replace(/^\uFEFF/, ""));
   const header = rows[0] ?? [];
   const indexes = new Map(header.map((value, index) => [normalizeHeader(value), index]));
@@ -149,7 +146,6 @@ function parseCboeSettlements(csv: string): CboeSettlementRow[] {
     .slice(1)
     .map((row) => {
       const price = parseSettlementPrice(row[priceIndex] ?? "");
-      if (price === null) return null;
 
       return {
         product: row[productIndex] ?? "",
@@ -157,8 +153,51 @@ function parseCboeSettlements(csv: string): CboeSettlementRow[] {
         expirationDate: row[expirationIndex] ?? "",
         price,
       };
+    });
+}
+
+function isIsoDate(value: string) {
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(value)) return false;
+  const parsed = new Date(`${value}T00:00:00Z`);
+  return !Number.isNaN(parsed.getTime()) && parsed.toISOString().slice(0, 10) === value;
+}
+
+export function selectMonthlyVixContracts(
+  rows: CboeSettlementRow[],
+  settlementDate: string,
+  limit = MAX_MONTHLY_CONTRACTS,
+) {
+  if (!isIsoDate(settlementDate) || limit <= 0) return [];
+
+  const normalized = rows
+    .map((row) => ({
+      product: row.product.trim().toUpperCase(),
+      symbol: row.symbol.trim().toUpperCase(),
+      expirationDate: row.expirationDate.trim(),
+      price: row.price !== null && Number.isFinite(row.price) ? row.price : null,
+    }))
+    .filter((row) => (
+      row.product === "VX" &&
+      MONTHLY_VX_SYMBOL_PATTERN.test(row.symbol) &&
+      isIsoDate(row.expirationDate) &&
+      row.expirationDate > settlementDate
+    ))
+    .sort((a, b) => (
+      a.expirationDate.localeCompare(b.expirationDate) ||
+      Number(b.price !== null) - Number(a.price !== null) ||
+      a.symbol.localeCompare(b.symbol)
+    ));
+  const seenSymbols = new Set<string>();
+  const seenExpirations = new Set<string>();
+
+  return normalized
+    .filter((row) => {
+      if (seenSymbols.has(row.symbol) || seenExpirations.has(row.expirationDate)) return false;
+      seenSymbols.add(row.symbol);
+      seenExpirations.add(row.expirationDate);
+      return true;
     })
-    .filter((row): row is CboeSettlementRow => row !== null);
+    .slice(0, limit);
 }
 
 async function fetchSettlementCsv(date: string) {
@@ -216,21 +255,17 @@ function interpretationFor(classification: VixTermStructureClassification) {
   return "Estructura VIX pendiente de fuente automatizada estable.";
 }
 
-function buildDataFromContracts(contracts: CboeSettlementRow[], settlementDate: string): VixTermStructureData {
-  const selected = contracts.slice(0, 3);
-  const points: VixTermStructurePoint[] = emptyPoints().map((point, index) => {
-    const contract = selected[index];
-    if (!contract) return point;
-
-    return {
-      label: point.label,
-      symbol: contract.symbol,
-      contract: contractLabel(contract.expirationDate),
-      expirationDate: contract.expirationDate,
-      value: contract.price,
-    };
-  });
-  const [vx1, vx2, vx3] = points.map((point) => point.value);
+export function buildDataFromContracts(contracts: CboeSettlementRow[], settlementDate: string): VixTermStructureData {
+  const points: VixTermStructurePoint[] = contracts.slice(0, MAX_MONTHLY_CONTRACTS).map((contract, index) => ({
+    label: `VX${index + 1}` as VixTermStructurePoint["label"],
+    symbol: contract.symbol,
+    contract: contractLabel(contract.expirationDate),
+    expirationDate: contract.expirationDate,
+    value: contract.price,
+  }));
+  const vx1 = points[0]?.value ?? null;
+  const vx2 = points[1]?.value ?? null;
+  const vx3 = points[2]?.value ?? null;
   const m1m2Spread = vx1 !== null && vx2 !== null ? vx2 - vx1 : null;
   const m1m2SlopePct = vx1 !== null && vx2 !== null && vx1 > 0 ? (vx2 / vx1 - 1) * 100 : null;
   const m1m3Spread = vx1 !== null && vx3 !== null ? vx3 - vx1 : null;
@@ -252,7 +287,7 @@ function buildDataFromContracts(contracts: CboeSettlementRow[], settlementDate: 
     whatItDoesNotMean:
       "La estructura temporal del VIX no predice por sí sola la dirección del mercado y no representa una señal de compra o venta.",
     reliabilityNote:
-      "Settlements diarios oficiales de Cboe CFE. La lectura usa los tres primeros contratos mensuales VX disponibles y excluye contratos de vencimiento corto.",
+      "Settlements diarios oficiales de Cboe CFE. La curva muestra hasta los nueve primeros contratos mensuales VX no vencidos y excluye contratos semanales.",
   };
 }
 
@@ -261,10 +296,9 @@ export async function getVixTermStructureData(): Promise<VixTermStructureData> {
     for (const date of recentSettlementDates()) {
       const response = await fetchSettlementCsv(date);
       const rows = response.ok ? parseCboeSettlements(response.text) : [];
-      const monthlyContracts = rows
-        .filter((row) => row.product === "VX" && MONTHLY_VX_SYMBOL_PATTERN.test(row.symbol))
-        .sort((a, b) => a.expirationDate.localeCompare(b.expirationDate));
-      const selectedSymbols = monthlyContracts.slice(0, 3).map((row) => row.symbol);
+      const monthlyContracts = selectMonthlyVixContracts(rows, date, rows.length);
+      const selectedContracts = monthlyContracts.slice(0, MAX_MONTHLY_CONTRACTS);
+      const selectedSymbols = selectedContracts.map((row) => row.symbol);
 
       logVixTermStructure({
         source: "cboe_settlement",
@@ -272,11 +306,11 @@ export async function getVixTermStructureData(): Promise<VixTermStructureData> {
         settlementDate: date,
         monthlyContractsFound: monthlyContracts.length,
         selectedSymbols,
-        sourceStatus: monthlyContracts.length >= 3 ? "automated" : "pending",
+        sourceStatus: selectedContracts.length > 0 ? "automated" : "pending",
       });
 
-      if (monthlyContracts.length >= 3) {
-        return buildDataFromContracts(monthlyContracts, date);
+      if (selectedContracts.length > 0) {
+        return buildDataFromContracts(selectedContracts, date);
       }
     }
 

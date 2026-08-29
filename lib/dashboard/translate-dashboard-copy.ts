@@ -64,6 +64,7 @@ const phraseMap: Array<[RegExp, string]> = [
   [/Punto de partida para observar concentración temática y exposición institucional diferida\./g, "Starting point to observe thematic concentration and delayed institutional exposure."],
   [/Lectura parcial de exposición vía ETF spot de Bitcoin; no implica dirección de precio\./g, "Partial exposure read through a spot Bitcoin ETF; it does not imply price direction."],
   [/Los contratos más largos cotizan por encima[^.]*\./g, "Longer contracts trade above the near-term contract. This is a common structure in calmer volatility regimes."],
+  [/Settlements diarios oficiales de Cboe CFE\. La curva muestra hasta los nueve primeros contratos mensuales VX no vencidos y excluye contratos semanales\./g, "Official daily Cboe CFE settlements. The curve shows up to the first nine unexpired monthly VX contracts and excludes weekly contracts."],
   [/La lectura sugiere una rotación mixta\.?/g, "The reading suggests mixed rotation."],
   [/Volatilidad: vigilancia: zona de vigilancia\.?/gi, "Volatility: watch zone."],
   [/Momentum VIX: VIX subiendo rápido; aumenta la cautela\.?/gi, "VIX momentum: VIX rising fast; caution increases."],

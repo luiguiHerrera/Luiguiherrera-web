@@ -48,19 +48,21 @@ function classificationClass(classification: VixTermStructureData["classificatio
 }
 
 function curvePoints(points: VixTermStructurePoint[]) {
-  const validPoints = points.filter((point): point is VixTermStructurePoint & { value: number } => point.value !== null);
+  const validPoints = points
+    .map((point, index) => ({ point, index }))
+    .filter((entry): entry is { point: VixTermStructurePoint & { value: number }; index: number } => entry.point.value !== null);
   if (!validPoints.length) return [];
 
-  const values = validPoints.map((point) => point.value);
+  const values = validPoints.map(({ point }) => point.value);
   const min = Math.min(...values);
   const max = Math.max(...values);
   const padding = Math.max((max - min) * 0.18, 0.25);
   const domainMin = min - padding;
   const domainMax = max + padding;
   const range = Math.max(domainMax - domainMin, 0.01);
-  const step = 76 / Math.max(validPoints.length - 1, 1);
+  const step = 76 / Math.max(points.length - 1, 1);
 
-  return validPoints.map((point, index) => ({
+  return validPoints.map(({ point, index }) => ({
     point,
     x: 12 + index * step,
     y: 42 - ((point.value - domainMin) / range) * 28,
@@ -74,13 +76,15 @@ function TermStructureChart({ data, locale = "es" }: { data: VixTermStructureDat
     .map(({ x, y }, index) => `${index === 0 ? "M" : "L"} ${x.toFixed(2)} ${y.toFixed(2)}`)
     .join(" ");
   const hasCurve = plottedPoints.length >= 2;
+  const lastPointLabel = data.points.at(-1)?.label;
+  const curveRange = lastPointLabel === "VX1" ? "VX1" : `VX1–${lastPointLabel ?? "VX9"}`;
 
   return (
     <div className="border border-line bg-panelSoft p-4">
       <div className="flex items-start justify-between gap-4">
         <div>
           <p className="text-xs font-semibold uppercase tracking-[0.14em] text-brass">{locale === "en" ? "Near curve" : "Curva cercana"}</p>
-          <h3 className="mt-1 text-sm font-semibold text-ink">VX1 / VX2 / VX3</h3>
+          <h3 className="mt-1 text-sm font-semibold text-ink">{curveRange}</h3>
         </div>
         <span className={`border px-3 py-1 text-xs font-semibold ${classificationClass(data.classification)}`}>
           {t(data.classification)}
@@ -90,13 +94,15 @@ function TermStructureChart({ data, locale = "es" }: { data: VixTermStructureDat
       <svg viewBox="0 0 100 58" className="mt-4 h-36 w-full" aria-hidden="true">
         <line x1="7" x2="95" y1="42" y2="42" stroke="#d8d1c8" strokeWidth="0.7" vectorEffect="non-scaling-stroke" />
         <line x1="7" x2="95" y1="28" y2="28" stroke="#eee9e3" strokeWidth="0.6" vectorEffect="non-scaling-stroke" />
-        {hasCurve ? (
+        {plottedPoints.length ? (
           <>
-            <path d={curvePath} fill="none" stroke="#6f8f7b" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" vectorEffect="non-scaling-stroke" />
-            {plottedPoints.map(({ point, x, y }) => (
+            {hasCurve ? (
+              <path d={curvePath} fill="none" stroke="#6f8f7b" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" vectorEffect="non-scaling-stroke" />
+            ) : null}
+            {plottedPoints.map(({ point, x, y }, index) => (
               <g key={point.label}>
                 <circle cx={x} cy={y} r="2.4" fill="#fbfaf8" stroke="#47604f" strokeWidth="1.3" vectorEffect="non-scaling-stroke" />
-                <text x={x} y={Math.max(8, y - 5)} textAnchor="middle" className="fill-ink text-[4.2px] font-semibold">
+                <text x={x} y={index % 2 === 0 ? Math.max(8, y - 5) : Math.min(48, y + 8)} textAnchor="middle" className="fill-ink text-[4.2px] font-semibold">
                   {formatPointValue(point.value, locale)}
                 </text>
                 <text x={x} y="53" textAnchor="middle" className="fill-muted text-[3.6px] font-semibold">
