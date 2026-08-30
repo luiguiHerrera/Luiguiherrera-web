@@ -7,4 +7,5 @@ export const dataStatusLabels: Record<DataStatus, string> = {
   automated: "Datos automatizados",
   fallback: "Fallback demo",
   delayed: "Actualización pendiente",
+  unavailable: "Datos temporalmente no disponibles",
 };

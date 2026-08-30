@@ -296,7 +296,7 @@ export function WeeklyReport({ data, locale = "es" }: WeeklyReportProps) {
       <div className="grid gap-5 lg:grid-cols-2">
         <ReportSection eyebrow="04" title={copy.volatility}>
           <div className="grid gap-2 sm:grid-cols-2">
-            <Metric label="VIX spot" value={formatNumber(data.volatility.vix?.spot.latestVix, 1, locale)} emphasis />
+            <Metric label={locale === "en" ? "VIX · last close" : "VIX · último cierre"} value={formatNumber(data.volatility.vix?.spot.latestVix, 1, locale)} emphasis />
             <Metric label={copy.vixMomentum} value={vixTrendLabel(data.volatility.vix?.spot.vixTrend, locale)} />
             <Metric label={copy.vixCurve} value={t(data.volatility.termStructure?.classification) || copy.pending} />
             <Metric label="M1/M2" value={data.volatility.termStructure?.m1m2SlopePct === null || data.volatility.termStructure?.m1m2SlopePct === undefined ? copy.pending : `${data.volatility.termStructure.m1m2SlopePct.toFixed(1)}%`} />

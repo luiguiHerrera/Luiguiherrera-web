@@ -2,8 +2,7 @@ import type { CrossSignalRadarRow, DashboardModuleData } from "@/lib/dashboard/t
 
 // Adapters map live, public or vendor data into these same shapes.
 // Sprint 1 automates Sector ETFs and BTC ETF flows server-side with fallbacks.
-// VIX and Short interest / 13F remain pending until source permissions and
-// reliable provider contracts are reviewed.
+// Short interest / 13F remain pending until reliable provider contracts are reviewed.
 
 export const dashboardModules: DashboardModuleData[] = [
   {
@@ -28,31 +27,6 @@ export const dashboardModules: DashboardModuleData[] = [
       why: "Ayuda a ver si el liderazgo se concentra en sectores growth, value, cíclicos o defensivos.",
       how: "Liderazgo defensivo puede sugerir cautela; liderazgo cíclico/growth puede sugerir mayor apetito por riesgo o crecimiento.",
       whatItDoesNotMean: "No convierte a un sector líder en una instrucción operativa ni a un sector rezagado en descarte automático.",
-    },
-  },
-  {
-    id: "vix",
-    title: "VIX Term Structure",
-    status: "Datos demo",
-    sourceName: "CBOE / VIX futures term structure",
-    sourceUrl: "https://www.cboe.com/tradable_products/vix/",
-    lastUpdated: "Demo manual: 2026-06-07",
-    updateFrequency: "Cuando se automatice: intradía o cierre diario",
-    dataStatus: "demo",
-    reliabilityNote: "Valores de ejemplo para explicar lectura de estructura. No son cotizaciones actuales.",
-    observedData: [
-      ["VIX spot", "17.8"],
-      ["Futuro 1", "18.6"],
-      ["Futuro 2", "19.1"],
-      ["Estructura", "Contango"],
-      ["Diferencial M2-M1", "+0.5 pts"],
-      ["Estado de volatilidad", "Normal"],
-    ],
-    interpretation: {
-      lookingAt: "Relación entre VIX spot y futuros cercanos para observar si el mercado paga más por protección inmediata o futura.",
-      why: "La estructura temporal puede señalar estrés inmediato, normalización o demanda de cobertura.",
-      how: "Contango suele indicar menor estrés inmediato; backwardation suele indicar tensión.",
-      whatItDoesNotMean: "No predice automáticamente la dirección del mercado ni marca puntos de entrada o salida.",
     },
   },
   {

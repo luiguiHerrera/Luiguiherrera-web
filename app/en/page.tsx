@@ -241,7 +241,7 @@ function VixMiniPanel({ data }: { data: VixDashboardData | null }) {
   const latestVix = spot?.latestVix;
   const history = spot?.history.map((point) => point.value).slice(-24) ?? [];
   const path = sparklinePath(history, 100, 46);
-  const trendLabel = spot?.vixTrend === "rising_fast" ? "Rising fast" : spot?.vixTrend === "rising" ? "Rising" : spot?.vixTrend === "falling" ? "Falling" : "Stable";
+  const trendLabel = latestVix === null || latestVix === undefined ? "Unavailable" : spot?.vixTrend === "rising_fast" ? "Rising fast" : spot?.vixTrend === "rising" ? "Rising" : spot?.vixTrend === "falling" ? "Falling" : "Stable";
 
   return (
     <div className="rounded-[6px] border border-line bg-white/80 p-4 shadow-[0_12px_32px_rgba(11,52,54,0.045)] md:p-6">
@@ -265,7 +265,7 @@ function VixMiniPanel({ data }: { data: VixDashboardData | null }) {
       </svg>
       <div className="mt-3 flex justify-between border-t border-line pt-3 text-xs leading-5 text-muted">
         <span>FRED VIXCLS</span>
-        <span>{spot?.dataStatus === "automated" ? "Latest close" : "Fallback"}</span>
+        <span>{latestVix === null || latestVix === undefined ? "Unavailable" : spot?.dataStatus === "automated" ? "Latest close" : "Delayed latest close"}</span>
       </div>
     </div>
   );

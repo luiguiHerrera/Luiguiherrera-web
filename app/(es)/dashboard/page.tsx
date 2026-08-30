@@ -184,6 +184,8 @@ export async function DashboardContent({ locale = "es" }: { locale?: "es" | "en"
         capitalFlows: "Capital flows",
         capitalFlowsTitle: "Flow map",
         capitalFlowsSubtitle: "A comparative view of inflows, outflows, and flow pressure across different assets.",
+        vixSection: "VIX / Volatility",
+        vixSectionSubtitle: "Current level and term structure of implied volatility.",
       }
     : {
         eyebrow: "Lectura de régimen",
@@ -205,6 +207,8 @@ export async function DashboardContent({ locale = "es" }: { locale?: "es" | "en"
         capitalFlows: "Flujos de capital",
         capitalFlowsTitle: "Mapa de flujos",
         capitalFlowsSubtitle: "Lectura comparada de entradas, salidas y presión de flujos en distintos activos.",
+        vixSection: "VIX / Volatilidad",
+        vixSectionSubtitle: "Nivel actual y estructura temporal de la volatilidad implícita.",
       };
 
   return (
@@ -311,8 +315,18 @@ export async function DashboardContent({ locale = "es" }: { locale?: "es" | "en"
         {sectorRotation ? <SectorRotationChart data={sectorRotation} /> : null}
         <MarketBreadthPanel data={weeklyReportData} locale={locale} />
         {quantRisk ? <QuantRiskPanel data={quantRisk} locale={locale} /> : null}
-        {vix ? <VixModule data={vix} /> : null}
-        {vixTermStructure ? <VixTermStructureModule data={vixTermStructure} /> : null}
+        {vix || vixTermStructure ? (
+          <section className="grid min-w-0 gap-3 [&>*]:min-w-0" aria-labelledby="vix-volatility-section">
+            <div className="border-l-2 border-brass/50 pl-4">
+              <h2 id="vix-volatility-section" className="text-xs font-semibold uppercase tracking-[0.2em] text-petrol">{copy.vixSection}</h2>
+              <p className="mt-2 max-w-3xl text-sm leading-6 text-muted">{copy.vixSectionSubtitle}</p>
+            </div>
+            <div className="grid min-w-0 gap-4 md:gap-5 [&>*]:min-w-0">
+              {vix ? <VixModule data={vix} /> : null}
+              {vixTermStructure ? <VixTermStructureModule data={vixTermStructure} /> : null}
+            </div>
+          </section>
+        ) : null}
         {btcEtfFlows || gldFlowPressure ? (
           <section className="warm-section grid min-w-0 gap-4 rounded-[6px] border border-line p-4 md:p-5">
             <div>

@@ -1,6 +1,6 @@
 import type { DashboardModuleId } from "@/lib/analytics/trackEvent";
 
-export type DataStatus = "demo" | "manual" | "live_pending" | "automated" | "fallback" | "delayed";
+export type DataStatus = "demo" | "manual" | "live_pending" | "automated" | "fallback" | "delayed" | "unavailable";
 
 export type RegimeLabel = "Risk-on constructivo" | "Risk-on selectivo" | "Neutral / mixto" | "Cautela" | "Estrés";
 export type RegimeBias = "favorable" | "neutral" | "cautious" | "stress";
@@ -125,6 +125,7 @@ export type VixTermStructureClassification =
   | "Pendiente";
 
 export type VixSpotData = DashboardDataSource & {
+  lastObservationDate: string | null;
   latestVix: number | null;
   previousVix: number | null;
   change1d: number | null;

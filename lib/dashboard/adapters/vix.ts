@@ -1,134 +1,71 @@
-import { dashboardModules } from "@/lib/dashboard/manual-data";
 import type { DashboardModuleData, LegacyVixTermStructureData, VixDashboardData, VixHistoryPoint, VixSpotData } from "@/lib/dashboard/types";
 
-type FredObservation = {
-  date: string;
-  value: string;
-};
+type VixFetch = (input: string | URL | Request, init?: RequestInit) => Promise<Response>;
+type GetVixDataOptions = { fetcher?: VixFetch };
 
 const FRED_VIX_SOURCE_URL = "https://fred.stlouisfed.org/series/VIXCLS";
-const FRED_VIX_API_URL = "https://api.stlouisfed.org/fred/series/observations";
 const FRED_VIX_CSV_URL = "https://fred.stlouisfed.org/graph/fredgraph.csv?id=VIXCLS";
-const FALLBACK_MESSAGE = "Datos automáticos no disponibles temporalmente. Mostrando lectura demo para mantener la estructura visual.";
 const FRED_TIMEOUT_MS = 8000;
+const MIN_ANALYTICAL_HISTORY = 6;
+const RECENT_SESSION_COUNT = 24;
 
-function getFallbackModule() {
-  const fallback = dashboardModules.find((module) => module.id === "vix");
-  if (!fallback) {
-    throw new Error("Missing VIX fallback module");
-  }
-  return fallback;
-}
-
-function logVixFallback(reason: string, details: Record<string, unknown> = {}) {
-  console.warn("[dashboard:vix]", {
-    reason,
-    ...details,
-  });
+function logVixSourceIssue(reason: string, details: Record<string, unknown> = {}) {
+  console.warn("[dashboard:vix]", { reason, ...details });
 }
 
 function parseVixValue(value: string) {
   if (!value || value === ".") return null;
   const parsed = Number(value);
-  return Number.isFinite(parsed) ? parsed : null;
+  return Number.isFinite(parsed) && parsed >= 0 ? parsed : null;
 }
 
-function parseFredCsv(csv: string): VixHistoryPoint[] {
-  return csv
-    .trim()
-    .split(/\r?\n/)
-    .slice(1)
-    .map((line) => {
-      const [date, rawValue] = line.split(",");
-      const value = parseVixValue(rawValue);
-      return date && value !== null ? { date, value } : null;
-    })
-    .filter((point): point is VixHistoryPoint => point !== null);
+function isValidObservationDate(value: string) {
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(value)) return false;
+  const date = new Date(`${value}T00:00:00Z`);
+  return !Number.isNaN(date.getTime()) && date.toISOString().slice(0, 10) === value;
 }
 
-async function fetchFredWithApiKey(apiKey: string): Promise<VixHistoryPoint[]> {
-  const params = new URLSearchParams({
-    series_id: "VIXCLS",
-    api_key: apiKey,
-    file_type: "json",
-    observation_start: "1990-01-01",
-    sort_order: "asc",
-  });
-  const response = await fetch(`${FRED_VIX_API_URL}?${params.toString()}`, {
-    next: { revalidate: 86400 },
-    signal: AbortSignal.timeout(FRED_TIMEOUT_MS),
-  });
-  const json = await response.json();
-  const topLevelKeys = json && typeof json === "object" ? Object.keys(json) : [];
-
-  if (!response.ok || json.error_code || json.error_message) {
-    logVixFallback("fred_api_error", {
-      source: "FRED API VIXCLS",
-      status: response.status,
-      topLevelKeys,
-      errorCode: json.error_code,
-      errorMessage: json.error_message,
-    });
-    return [];
+export function normalizeVixHistory(points: VixHistoryPoint[]) {
+  const byDate = new Map<string, VixHistoryPoint>();
+  for (const point of points) {
+    if (!isValidObservationDate(point.date) || !Number.isFinite(point.value) || point.value < 0) continue;
+    byDate.set(point.date, { date: point.date, value: point.value });
   }
-
-  const observations = Array.isArray(json.observations) ? (json.observations as FredObservation[]) : [];
-  console.info("[dashboard:vix]", {
-    source: "FRED API VIXCLS",
-    status: response.status,
-    topLevelKeys,
-    observationsCount: observations.length,
-  });
-
-  return observations
-    .map((observation) => {
-      const value = parseVixValue(observation.value);
-      return observation.date && value !== null ? { date: observation.date, value } : null;
-    })
-    .filter((point): point is VixHistoryPoint => point !== null);
+  return [...byDate.values()].sort((a, b) => a.date.localeCompare(b.date));
 }
 
-async function fetchFredPublicCsv(): Promise<VixHistoryPoint[]> {
-  const response = await fetch(FRED_VIX_CSV_URL, {
-    next: { revalidate: 86400 },
-    signal: AbortSignal.timeout(FRED_TIMEOUT_MS),
-  });
+export function parseFredCsv(csv: string): VixHistoryPoint[] {
+  const rows = csv.replace(/^\uFEFF/, "").trim().split(/\r?\n/);
+  if (rows.length < 2) return [];
+  return normalizeVixHistory(rows.slice(1).flatMap((line) => {
+    const separator = line.indexOf(",");
+    if (separator < 0) return [];
+    const date = line.slice(0, separator).trim();
+    const value = parseVixValue(line.slice(separator + 1).trim());
+    return value === null ? [] : [{ date, value }];
+  }));
+}
+
+async function fetchFredPublicCsv(fetcher: VixFetch): Promise<VixHistoryPoint[]> {
+  const response = await fetcher(FRED_VIX_CSV_URL, { next: { revalidate: 86400 }, signal: AbortSignal.timeout(FRED_TIMEOUT_MS) });
   const text = await response.text();
-  const header = text.split(/\r?\n/)[0] ?? "";
-
   if (!response.ok) {
-    logVixFallback("fred_csv_error", {
-      source: "FRED public CSV VIXCLS",
-      status: response.status,
-      header,
-    });
+    logVixSourceIssue("fred_csv_error", { source: "FRED public CSV VIXCLS", status: response.status });
     return [];
   }
-
-  const points = parseFredCsv(text);
-  console.info("[dashboard:vix]", {
-    source: "FRED public CSV VIXCLS",
-    status: response.status,
-    header,
-    observationsCount: points.length,
-  });
-  return points;
+  return parseFredCsv(text);
 }
 
-async function fetchVixHistory(): Promise<VixHistoryPoint[]> {
+export async function fetchVixHistory({ fetcher = fetch }: GetVixDataOptions = {}) {
   try {
-    const apiKey = process.env.FRED_API_KEY;
-    const history = apiKey ? await fetchFredWithApiKey(apiKey) : await fetchFredPublicCsv();
-    return history.sort((a, b) => a.date.localeCompare(b.date));
+    return await fetchFredPublicCsv(fetcher);
   } catch (error) {
-    logVixFallback("fred_request_failed", {
-      message: error instanceof Error ? error.message : "Unknown error",
-    });
+    logVixSourceIssue("fred_csv_request_failed", { message: error instanceof Error ? error.message : "Unknown error" });
     return [];
   }
 }
 
-function formatDate(date: string) {
+export function formatVixObservationDate(date: string) {
   return new Intl.DateTimeFormat("es-CO", { day: "2-digit", month: "short", year: "numeric", timeZone: "UTC" }).format(new Date(`${date}T00:00:00Z`));
 }
 
@@ -138,77 +75,33 @@ function formatVix(value: number | null) {
 
 function formatChange(value: number | null) {
   if (value === null) return "Historial insuficiente";
-  const sign = value > 0 ? "+" : "";
-  return `${sign}${value.toFixed(1)} pts`;
+  return `${value > 0 ? "+" : ""}${value.toFixed(1)} pts`;
 }
 
 function vixLevelFor(latestVix: number): Pick<VixSpotData, "vixLevelLabel" | "vixSeverity" | "vixDescription"> {
-  if (latestVix >= 40) {
-    return {
-      vixLevelLabel: "Estrés extremo",
-      vixSeverity: "extreme",
-      vixDescription: "Lectura excepcionalmente elevada de volatilidad implícita.",
-    };
-  }
-  if (latestVix >= 30) {
-    return {
-      vixLevelLabel: "Estrés",
-      vixSeverity: "stress",
-      vixDescription: "Volatilidad implícita alta, normalmente asociada a mayor demanda de protección.",
-    };
-  }
-  if (latestVix >= 25) {
-    return {
-      vixLevelLabel: "Tensión",
-      vixSeverity: "elevated",
-      vixDescription: "Presión de volatilidad elevada frente a condiciones normales.",
-    };
-  }
-  if (latestVix >= 20) {
-    return {
-      vixLevelLabel: "Vigilancia",
-      vixSeverity: "watch",
-      vixDescription: "La volatilidad entra en una zona donde suele aumentar la sensibilidad del mercado.",
-    };
-  }
-  if (latestVix >= 16) {
-    return {
-      vixLevelLabel: "Normal alto",
-      vixSeverity: "watch",
-      vixDescription: "Volatilidad todavía moderada, pero acercándose a zona de vigilancia.",
-    };
-  }
-  if (latestVix >= 12) {
-    return {
-      vixLevelLabel: "Normal bajo",
-      vixSeverity: "normal",
-      vixDescription: "Entorno de volatilidad contenido.",
-    };
-  }
-  return {
-    vixLevelLabel: "Complacencia",
-    vixSeverity: "low",
-    vixDescription: "Volatilidad implícita muy baja frente a rangos habituales.",
-  };
+  if (latestVix >= 40) return { vixLevelLabel: "Estrés extremo", vixSeverity: "extreme", vixDescription: "Lectura excepcionalmente elevada de volatilidad implícita." };
+  if (latestVix >= 30) return { vixLevelLabel: "Estrés", vixSeverity: "stress", vixDescription: "Volatilidad implícita alta, normalmente asociada a mayor demanda de protección." };
+  if (latestVix >= 25) return { vixLevelLabel: "Tensión", vixSeverity: "elevated", vixDescription: "Presión de volatilidad elevada frente a condiciones normales." };
+  if (latestVix >= 20) return { vixLevelLabel: "Vigilancia", vixSeverity: "watch", vixDescription: "La volatilidad entra en una zona donde suele aumentar la sensibilidad del mercado." };
+  if (latestVix >= 16) return { vixLevelLabel: "Normal alto", vixSeverity: "watch", vixDescription: "Volatilidad todavía moderada, pero acercándose a zona de vigilancia." };
+  if (latestVix >= 12) return { vixLevelLabel: "Normal bajo", vixSeverity: "normal", vixDescription: "Entorno de volatilidad contenido." };
+  return { vixLevelLabel: "Complacencia", vixSeverity: "low", vixDescription: "Volatilidad implícita muy baja frente a rangos habituales." };
 }
 
 function relativeChange(current: number, previous: number | null | undefined) {
-  if (!previous || previous <= 0) return null;
-  return ((current - previous) / previous) * 100;
+  return !previous || previous <= 0 ? null : ((current - previous) / previous) * 100;
 }
 
 function vixTrendFor(change1dPct: number | null, change5dPct: number | null): VixSpotData["vixTrend"] {
   if (change5dPct === null && change1dPct === null) return "stable";
-  if ((change5dPct ?? Number.NEGATIVE_INFINITY) >= 15 || (change1dPct ?? Number.NEGATIVE_INFINITY) >= 8) return "rising_fast";
-  if ((change5dPct ?? Number.NEGATIVE_INFINITY) >= 5) return "rising";
-  if ((change5dPct ?? Number.POSITIVE_INFINITY) <= -10) return "falling";
+  if ((change5dPct ?? -Infinity) >= 15 || (change1dPct ?? -Infinity) >= 8) return "rising_fast";
+  if ((change5dPct ?? -Infinity) >= 5) return "rising";
+  if ((change5dPct ?? Infinity) <= -10) return "falling";
   return "stable";
 }
 
 function percentileFor(history: VixHistoryPoint[], latestVix: number) {
-  if (history.length < 252) return null;
-  const belowOrEqual = history.filter((point) => point.value <= latestVix).length;
-  return (belowOrEqual / history.length) * 100;
+  return history.length < 252 ? null : (history.filter((point) => point.value <= latestVix).length / history.length) * 100;
 }
 
 function percentileLabelFor(percentile: number | null) {
@@ -220,191 +113,77 @@ function percentileLabelFor(percentile: number | null) {
   return "Bajo frente a su historia reciente";
 }
 
-function compositeReadingFor(
-  latestVix: number,
-  level: Pick<VixSpotData, "vixLevelLabel" | "vixSeverity">,
-  percentile: number | null,
-  trend: VixSpotData["vixTrend"],
-): Pick<VixSpotData, "vixCompositeLabel" | "vixCompositeSubtext" | "vixSeverity"> {
-  if (latestVix >= 40) {
-    return {
-      vixCompositeLabel: "Estrés extremo",
-      vixCompositeSubtext: "Lectura excepcional de presión de volatilidad.",
-      vixSeverity: "extreme",
-    };
-  }
-  if (latestVix >= 30) {
-    return {
-      vixCompositeLabel: "Estrés",
-      vixCompositeSubtext: "Mayor demanda implícita de protección.",
-      vixSeverity: "stress",
-    };
-  }
-  if (latestVix >= 25) {
-    return {
-      vixCompositeLabel: "Tensión",
-      vixCompositeSubtext: "Estrés de mercado por encima de rangos normales.",
-      vixSeverity: "elevated",
-    };
-  }
-  if (latestVix >= 20) {
-    return {
-      vixCompositeLabel: "Vigilancia",
-      vixCompositeSubtext: trend === "rising" || trend === "rising_fast" ? "Presión de volatilidad en aumento." : "Volatilidad en zona de mayor sensibilidad.",
-      vixSeverity: "watch",
-    };
-  }
-  if (latestVix >= 18 && (trend === "rising" || trend === "rising_fast" || (percentile ?? 0) > 60)) {
-    return {
-      vixCompositeLabel: "Vigilancia",
-      vixCompositeSubtext: "Volatilidad acercándose a zona de tensión.",
-      vixSeverity: "watch",
-    };
-  }
-  if (latestVix >= 18) {
-    return {
-      vixCompositeLabel: "Normal alto",
-      vixCompositeSubtext: "Cerca de zona de vigilancia.",
-      vixSeverity: "watch",
-    };
-  }
-  return {
-    vixCompositeLabel: level.vixLevelLabel,
-    vixCompositeSubtext: level.vixSeverity === "low" ? "Volatilidad implícita muy contenida." : "Presión de volatilidad contenida.",
-    vixSeverity: level.vixSeverity,
-  };
+function compositeReadingFor(latestVix: number, level: Pick<VixSpotData, "vixLevelLabel" | "vixSeverity">, percentile: number | null, trend: VixSpotData["vixTrend"]): Pick<VixSpotData, "vixCompositeLabel" | "vixCompositeSubtext" | "vixSeverity"> {
+  if (latestVix >= 40) return { vixCompositeLabel: "Estrés extremo", vixCompositeSubtext: "Lectura excepcional de presión de volatilidad.", vixSeverity: "extreme" };
+  if (latestVix >= 30) return { vixCompositeLabel: "Estrés", vixCompositeSubtext: "Mayor demanda implícita de protección.", vixSeverity: "stress" };
+  if (latestVix >= 25) return { vixCompositeLabel: "Tensión", vixCompositeSubtext: "Estrés de mercado por encima de rangos normales.", vixSeverity: "elevated" };
+  if (latestVix >= 20) return { vixCompositeLabel: "Vigilancia", vixCompositeSubtext: trend === "rising" || trend === "rising_fast" ? "Presión de volatilidad en aumento." : "Volatilidad en zona de mayor sensibilidad.", vixSeverity: "watch" };
+  if (latestVix >= 18 && (trend === "rising" || trend === "rising_fast" || (percentile ?? 0) > 60)) return { vixCompositeLabel: "Vigilancia", vixCompositeSubtext: "Volatilidad acercándose a zona de tensión.", vixSeverity: "watch" };
+  if (latestVix >= 18) return { vixCompositeLabel: "Normal alto", vixCompositeSubtext: "Cerca de zona de vigilancia.", vixSeverity: "watch" };
+  return { vixCompositeLabel: level.vixLevelLabel, vixCompositeSubtext: level.vixSeverity === "low" ? "Volatilidad implícita muy contenida." : "Presión de volatilidad contenida.", vixSeverity: level.vixSeverity };
 }
 
 function buildTermStructureFallback(latestVix: number | null, lastUpdated: string): LegacyVixTermStructureData {
   return {
-    sourceName: "CBOE / VIX futures term structure",
-    sourceUrl: "https://www.cboe.com/tradable_products/vix/",
-    lastUpdated,
-    updateFrequency: "Pendiente de proveedor estable",
-    dataStatus: "live_pending",
+    sourceName: "CBOE / VIX futures term structure", sourceUrl: "https://www.cboe.com/tradable_products/vix/", lastUpdated,
+    updateFrequency: "Pendiente de proveedor estable", dataStatus: "live_pending",
     reliabilityNote: "Estructura preparada para VIX futures cercanos. No se automatiza hasta validar permisos, proveedor y timestamp sin scraping frágil.",
-    spot: latestVix,
-    futureMonth1: null,
-    futureMonth2: null,
-    spreadM2M1: null,
-    curveState: "live_pending",
+    spot: latestVix, futureMonth1: null, futureMonth2: null, spreadM2M1: null, curveState: "live_pending",
     interpretation: {
       lookingAt: "Relación entre VIX spot y futuros cercanos para observar si se paga más por protección cercana o futura.",
-      why: "Ayuda a diferenciar tensión inmediata de una curva más normalizada.",
-      how: "Contango suele asociarse con menor tensión inmediata; backwardation suele indicar más estrés cercano.",
+      why: "Ayuda a diferenciar tensión inmediata de una curva más normalizada.", how: "Contango suele asociarse con menor tensión inmediata; backwardation suele indicar más estrés cercano.",
       whatItDoesNotMean: "No anticipa por sí sola la dirección del mercado ni marca puntos de entrada o salida.",
     },
   };
 }
 
-function buildFallbackVixData(fallback: DashboardModuleData): VixDashboardData {
-  const latestVix = 17.8;
-  const lastUpdated = fallback.lastUpdated;
-  const spot: VixSpotData = {
-    sourceName: "FRED VIXCLS",
-    sourceUrl: FRED_VIX_SOURCE_URL,
-    lastUpdated,
-    updateFrequency: "Actualización diaria con último cierre disponible",
-    dataStatus: "demo",
-    reliabilityNote: FALLBACK_MESSAGE,
-    latestVix,
-    previousVix: 18.1,
-    change1d: -0.3,
-    change5d: -0.8,
-    change21d: 1.2,
-    vixPercentile: 42,
-    vixLevelLabel: "Normal alto",
-    vixSeverity: "watch",
-    vixDescription: "Volatilidad todavía moderada, pero acercándose a zona de vigilancia.",
-    vixCompositeLabel: "Normal alto",
-    vixCompositeSubtext: "Cerca de zona de vigilancia.",
-    vixPercentileLabel: "En rango habitual",
-    vixTrend: "stable",
-    history: [
-      18.4, 18.2, 18.9, 19.6, 18.8, 18.1, 17.6, 17.9, 18.5, 18.0, 17.4, 17.8,
-      18.3, 19.1, 18.7, 18.0, 17.7, 17.2, 17.5, 18.1, 18.6, 18.2, 17.9, 17.8,
-    ].map((value, index) => ({ date: `demo-${index + 1}`, value })),
-    interpretation: {
-      lookingAt: "Último cierre disponible del VIX y cambios recientes de volatilidad implícita del S&P 500.",
-      why: "El VIX resume expectativas de volatilidad implícita y ayuda a leer presión de riesgo.",
-      how: "Lectura aproximada basada en umbrales habituales y datos históricos; niveles más altos sugieren mayor tensión de volatilidad.",
-      whatItDoesNotMean: "Un VIX alto no significa automáticamente caída futura del mercado. Un VIX bajo tampoco elimina el riesgo. Mide expectativas implícitas de volatilidad, no dirección ni retorno esperado.",
-    },
-  };
-
+function buildModule(spot: VixSpotData): DashboardModuleData {
   return {
-    spot,
-    termStructure: buildTermStructureFallback(latestVix, lastUpdated),
-    module: {
-      ...fallback,
-      title: "VIX / volatilidad",
-      status: "Datos demo",
-      sourceName: spot.sourceName,
-      sourceUrl: spot.sourceUrl,
-      lastUpdated: spot.lastUpdated,
-      updateFrequency: spot.updateFrequency,
-      dataStatus: spot.dataStatus,
-      reliabilityNote: spot.reliabilityNote,
-      observedData: [
-        ["VIX último cierre", formatVix(spot.latestVix)],
-        ["Cambio 1D", formatChange(spot.change1d)],
-        ["Cambio 5D", formatChange(spot.change5d)],
-        ["Lectura", spot.vixCompositeLabel],
-      ],
-      interpretation: spot.interpretation,
-    },
+    id: "vix", title: "VIX / volatilidad",
+    status: spot.dataStatus === "automated" ? "Datos automatizados" : spot.latestVix === null ? "Datos temporalmente no disponibles" : "Datos con retraso",
+    sourceName: spot.sourceName, sourceUrl: spot.sourceUrl, lastUpdated: spot.lastUpdated, updateFrequency: spot.updateFrequency,
+    dataStatus: spot.dataStatus, reliabilityNote: spot.reliabilityNote,
+    observedData: [["VIX último cierre", formatVix(spot.latestVix)], ["Cambio 1D", formatChange(spot.change1d)], ["Cambio 5D", formatChange(spot.change5d)], ["Cambio 21D", formatChange(spot.change21d)], ["Lectura", spot.vixCompositeLabel]],
+    interpretation: spot.interpretation,
   };
 }
 
-export async function getVixData(): Promise<VixDashboardData> {
-  const fallback = getFallbackModule();
-  const history = await fetchVixHistory();
+function unavailableVixData(): VixDashboardData {
+  const lastUpdated = "Sin observación válida disponible";
+  const spot: VixSpotData = {
+    sourceName: "FRED VIXCLS", sourceUrl: FRED_VIX_SOURCE_URL, lastUpdated, updateFrequency: "Diaria · último cierre disponible", dataStatus: "unavailable",
+    reliabilityNote: "La fuente oficial no devolvió un historial válido. No se sustituyen valores, métricas ni gráficos con datos fabricados.",
+    lastObservationDate: null, latestVix: null, previousVix: null, change1d: null, change5d: null, change21d: null, vixPercentile: null,
+    vixLevelLabel: "No disponible", vixSeverity: "normal", vixDescription: "Datos temporalmente no disponibles.",
+    vixCompositeLabel: "No disponible", vixCompositeSubtext: "Datos temporalmente no disponibles. La lectura se reanudará cuando FRED publique un historial válido.",
+    vixPercentileLabel: "No disponible", vixTrend: "stable", history: [],
+    interpretation: {
+      lookingAt: "Último cierre disponible del VIX y cambios recientes de volatilidad implícita del S&P 500.", why: "El VIX resume expectativas de volatilidad implícita y ayuda a leer presión de riesgo.",
+      how: "La lectura permanece no disponible mientras no exista un historial oficial válido.", whatItDoesNotMean: "La ausencia temporal del dato no permite inferir un nivel, tendencia o dirección de mercado.",
+    },
+  };
+  return { spot, termStructure: buildTermStructureFallback(null, lastUpdated), module: buildModule(spot) };
+}
 
-  if (history.length < 6) {
-    logVixFallback("insufficient_valid_vix_history", {
-      source: process.env.FRED_API_KEY ? "FRED API VIXCLS" : "FRED public CSV VIXCLS",
-      validObservations: history.length,
-    });
-    return buildFallbackVixData(fallback);
-  }
-
+export function buildVixDashboardData(rawHistory: VixHistoryPoint[]): VixDashboardData {
+  const history = normalizeVixHistory(rawHistory);
+  if (history.length < MIN_ANALYTICAL_HISTORY) return unavailableVixData();
   const latest = history.at(-1);
   const previous = history.at(-2);
-  if (!latest || !previous) {
-    return buildFallbackVixData(fallback);
-  }
-
-  const change5d = history.length >= 6 ? latest.value - history[history.length - 6].value : null;
-  const change21d = history.length >= 22 ? latest.value - history[history.length - 22].value : null;
+  if (!latest || !previous) return unavailableVixData();
   const percentile = percentileFor(history, latest.value);
   const level = vixLevelFor(latest.value);
-  const change1dPct = relativeChange(latest.value, previous.value);
-  const change5dPct = relativeChange(latest.value, history.at(-6)?.value);
-  const trend = vixTrendFor(change1dPct, change5dPct);
+  const trend = vixTrendFor(relativeChange(latest.value, previous.value), relativeChange(latest.value, history.at(-6)?.value));
   const composite = compositeReadingFor(latest.value, level, percentile, trend);
-  const lastUpdated = `Último cierre disponible: ${formatDate(latest.date)}`;
-
+  const lastUpdated = `Último cierre disponible: ${formatVixObservationDate(latest.date)}`;
   const spot: VixSpotData = {
-    sourceName: "FRED VIXCLS",
-    sourceUrl: FRED_VIX_SOURCE_URL,
-    lastUpdated,
-    updateFrequency: "Actualización diaria con último cierre disponible",
-    dataStatus: "automated",
+    sourceName: "FRED VIXCLS", sourceUrl: FRED_VIX_SOURCE_URL, lastUpdated, updateFrequency: "Diaria · último cierre disponible", dataStatus: "automated",
     reliabilityNote: "Dato diario de cierre publicado por FRED. Puede tener retraso, revisiones o días sin observación; no representa cotización intradía.",
-    latestVix: latest.value,
-    previousVix: previous.value,
-    change1d: latest.value - previous.value,
-    change5d,
-    change21d,
-    vixPercentile: percentile,
-    vixLevelLabel: level.vixLevelLabel,
-    vixSeverity: composite.vixSeverity,
-    vixDescription: level.vixDescription,
-    vixCompositeLabel: composite.vixCompositeLabel,
-    vixCompositeSubtext: composite.vixCompositeSubtext,
-    vixPercentileLabel: percentileLabelFor(percentile),
-    vixTrend: trend,
-    history: history.slice(-60),
+    lastObservationDate: latest.date, latestVix: latest.value, previousVix: previous.value, change1d: latest.value - previous.value,
+    change5d: latest.value - history[history.length - 6].value, change21d: history.length >= 22 ? latest.value - history[history.length - 22].value : null,
+    vixPercentile: percentile, vixLevelLabel: level.vixLevelLabel, vixSeverity: composite.vixSeverity, vixDescription: level.vixDescription,
+    vixCompositeLabel: composite.vixCompositeLabel, vixCompositeSubtext: composite.vixCompositeSubtext, vixPercentileLabel: percentileLabelFor(percentile), vixTrend: trend,
+    history: history.slice(-RECENT_SESSION_COUNT),
     interpretation: {
       lookingAt: "Último cierre disponible del VIX y cambios recientes de volatilidad implícita del S&P 500.",
       why: "El VIX resume expectativas de volatilidad implícita del S&P 500 a partir de opciones. Es una lectura de presión de riesgo, no una lectura de dirección del mercado.",
@@ -412,28 +191,11 @@ export async function getVixData(): Promise<VixDashboardData> {
       whatItDoesNotMean: "Un VIX alto no significa automáticamente caída futura del mercado. Un VIX bajo tampoco elimina el riesgo. Mide expectativas implícitas de volatilidad, no dirección ni retorno esperado.",
     },
   };
+  return { spot, termStructure: buildTermStructureFallback(latest.value, lastUpdated), module: buildModule(spot) };
+}
 
-  return {
-    spot,
-    termStructure: buildTermStructureFallback(latest.value, lastUpdated),
-    module: {
-      ...fallback,
-      title: "VIX / volatilidad",
-      status: spot.vixCompositeLabel,
-      sourceName: spot.sourceName,
-      sourceUrl: spot.sourceUrl,
-      lastUpdated,
-      updateFrequency: spot.updateFrequency,
-      dataStatus: spot.dataStatus,
-      reliabilityNote: spot.reliabilityNote,
-      observedData: [
-        ["VIX último cierre", formatVix(spot.latestVix)],
-        ["Cambio 1D", formatChange(spot.change1d)],
-        ["Cambio 5D", formatChange(spot.change5d)],
-        ["Cambio 21D", formatChange(spot.change21d)],
-        ["Lectura", spot.vixCompositeLabel],
-      ],
-      interpretation: spot.interpretation,
-    },
-  };
+export async function getVixData(options: GetVixDataOptions = {}): Promise<VixDashboardData> {
+  const history = await fetchVixHistory(options);
+  if (history.length < MIN_ANALYTICAL_HISTORY) logVixSourceIssue("insufficient_valid_vix_history", { source: "FRED VIXCLS", validObservations: history.length });
+  return buildVixDashboardData(history);
 }

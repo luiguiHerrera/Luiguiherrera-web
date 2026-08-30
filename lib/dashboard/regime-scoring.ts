@@ -78,12 +78,12 @@ function sectorScore(data: SectorRotationData | null): PillarScore {
 }
 
 function vixScore(data: VixDashboardData | null): PillarScore {
-  if (!data) {
+  if (!data || data.spot.latestVix === null || data.spot.dataStatus !== "automated") {
     return {
       score: 50,
       confidencePenalty: 18,
       support: [],
-      caution: [{ label: "VIX", detail: "VIX no disponible; se reduce la confianza de la lectura compuesta." }],
+      caution: [{ label: "VIX", detail: "VIX no disponible o retrasado; se reduce la confianza de la lectura compuesta." }],
     };
   }
 
@@ -253,7 +253,7 @@ export function buildRegimeSummary({
     sourceName: "Rotación sectorial, VIX y BTC ETF flows",
     lastUpdated: "Última actualización disponible por módulo",
     updateFrequency: "Diaria / según disponibilidad de cada fuente",
-    dataStatus: sectorRotation && vix && btcEtfFlows ? "automated" : "fallback",
+    dataStatus: sectorRotation?.dataStatus === "automated" && vix?.spot.dataStatus === "automated" && btcEtfFlows?.flows.dataStatus === "automated" ? "automated" : "fallback",
     reliabilityNote: "Este régimen no anticipa el mercado. Organiza lecturas de volatilidad, rotación y flujos para leer el contexto.",
     dataQualityNote: "La confianza se ajusta según la disponibilidad y calidad de rotación sectorial, VIX y BTC ETF flows.",
     interpretation: interpretationForLabel(label),

@@ -295,7 +295,7 @@ export function VixTermStructureModule({ data }: VixTermStructureModuleProps) {
   return (
     <section className="border border-line bg-panel px-4 py-5 shadow-[0_14px_32px_rgba(51,45,39,0.05)] sm:px-5 md:px-7 md:py-6" data-vix-module>
       <div className="flex flex-wrap items-center justify-between gap-3">
-        <p className="text-xs font-semibold uppercase tracking-[0.2em] text-brass">VIX term structure</p>
+        <p className="text-xs font-semibold uppercase tracking-[0.2em] text-brass">{locale === "en" ? "Term structure" : "Estructura temporal"}</p>
         <span className="inline-flex items-center gap-2 text-[11px] font-normal text-muted/80" data-vix-status>
           <span className="h-1 w-1 rounded-full bg-[#6f8f7b]/70" aria-hidden="true" />
           {statusLabel}
