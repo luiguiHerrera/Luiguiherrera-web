@@ -84,7 +84,7 @@ test("D: sorts mixed input and removes duplicate symbols and expirations", () =>
   assert.equal(selected[1]?.price, monthlyRows[1].price);
 });
 
-test("E: the UI consumes every selected point for both chart marks and cards", () => {
+test("E: the UI consumes every selected point for both chart marks and table rows", () => {
   const data = buildDataFromContracts(
     selectMonthlyVixContracts(monthlyRows, "2026-08-28"),
     "2026-08-28",
@@ -97,7 +97,7 @@ test("E: the UI consumes every selected point for both chart marks and cards", (
   assert.equal(data.points.length, 9);
   assert.match(componentSource, /plottedPoints\.map/);
   assert.match(componentSource, /data\.points\.map/);
-  assert.match(componentSource, /VX1–\$\{lastPointLabel/);
+  assert.match(componentSource, /formatAxisExpiration\(point/);
   assert.doesNotMatch(componentSource, /VX1 \/ VX2 \/ VX3/);
   assert.doesNotMatch(componentSource, /slice\(0,\s*3\)/);
 });
