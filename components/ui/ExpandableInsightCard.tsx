@@ -14,6 +14,8 @@ type ExpandableInsightCardProps = {
   summaryExtra?: React.ReactNode;
   children: React.ReactNode;
   className?: string;
+  eyebrowClassName?: string;
+  titleClassName?: string;
 };
 
 const toneClass = {
@@ -33,6 +35,8 @@ export function ExpandableInsightCard({
   summaryExtra,
   children,
   className = "",
+  eyebrowClassName,
+  titleClassName,
 }: ExpandableInsightCardProps) {
   const [open, setOpen] = useState(defaultOpen);
   const pathname = usePathname();
@@ -44,8 +48,8 @@ export function ExpandableInsightCard({
       <div className="p-3.5 md:p-5">
         <div className="flex flex-col gap-3.5 lg:flex-row lg:items-start lg:justify-between">
           <div className="max-w-3xl">
-            {eyebrow ? <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-petrol md:text-xs md:tracking-[0.18em]">{eyebrow}</p> : null}
-            <h2 className="mt-1.5 text-lg font-semibold leading-snug text-ink md:mt-2 md:text-2xl">{title}</h2>
+            {eyebrow ? <p className={eyebrowClassName ?? "text-[11px] font-semibold uppercase tracking-[0.16em] text-petrol md:text-xs md:tracking-[0.18em]"}>{eyebrow}</p> : null}
+            <h2 className={titleClassName ?? "mt-1.5 text-lg font-semibold leading-snug text-ink md:mt-2 md:text-2xl"}>{title}</h2>
             <p className="mt-2 text-sm leading-6 text-muted md:mt-3 md:text-base md:leading-7">{reading}</p>
           </div>
           <div className="flex items-center justify-between gap-2 sm:justify-start lg:flex-col lg:items-end">

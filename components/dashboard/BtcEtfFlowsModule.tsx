@@ -1,6 +1,7 @@
 "use client";
 
 import { usePathname } from "next/navigation";
+import { dashboardModuleEyebrowClassName, dashboardModuleTitleClassName } from "@/components/dashboard/DashboardPrimitives";
 import { dataStatusLabels } from "@/lib/dashboard/status";
 import { ExpandableInsightCard } from "@/components/ui/ExpandableInsightCard";
 import { translateDashboardText } from "@/lib/dashboard/translate-dashboard-copy";
@@ -167,7 +168,9 @@ export function BtcEtfFlowsModule({ assetLabel = "BTC", data }: BtcEtfFlowsModul
     return (
       <ExpandableInsightCard
         eyebrow={`${assetLabel} ETF flows`}
+        eyebrowClassName={dashboardModuleEyebrowClassName}
         title={locale === "en" ? "Pending ETF flow automation" : "Flujos ETF pendientes de automatización"}
+        titleClassName={`mt-3 ${dashboardModuleTitleClassName}`}
         reading={t(flows.readingSubtext)}
         status={t(dataStatusLabels[flows.dataStatus])}
         metrics={[
@@ -210,7 +213,9 @@ export function BtcEtfFlowsModule({ assetLabel = "BTC", data }: BtcEtfFlowsModul
   return (
     <ExpandableInsightCard
       eyebrow={assetLabel === "BTC" ? (locale === "en" ? "Bitcoin · Spot ETFs" : "Bitcoin · ETFs spot") : `${assetLabel} ETF flows`}
+      eyebrowClassName={dashboardModuleEyebrowClassName}
       title={assetLabel === "BTC" ? (locale === "en" ? "Net flows for spot Bitcoin ETFs" : "Flujos netos de ETFs de BTC") : (locale === "en" ? "ETF flow pressure" : "Presión de flujos vía ETFs")}
+      titleClassName={`mt-3 ${dashboardModuleTitleClassName}`}
       reading={t(flows.readingSubtext)}
       status={t(statusLabel)}
       metrics={[

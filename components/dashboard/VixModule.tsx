@@ -3,6 +3,7 @@
 import { useId, useState } from "react";
 import type { CSSProperties } from "react";
 import { usePathname } from "next/navigation";
+import { dashboardModuleEyebrowClassName, dashboardModuleTitleClassName } from "@/components/dashboard/DashboardPrimitives";
 import { translateDashboardText } from "@/lib/dashboard/translate-dashboard-copy";
 import type { VixDashboardData, VixHistoryPoint, VixSpotData } from "@/lib/dashboard/types";
 
@@ -158,7 +159,7 @@ export function VixModule({ data }: VixModuleProps) {
   return (
     <section className="border border-line bg-panel px-4 py-5 shadow-[0_14px_32px_rgba(51,45,39,0.05)] sm:px-5 md:px-7 md:py-6" data-vix-spot-module>
       <div className="flex flex-wrap items-center justify-between gap-3">
-        <p className="text-xs font-semibold uppercase tracking-[0.2em] text-brass">{locale === "en" ? "Current level" : "Nivel actual"}</p>
+        <p className={dashboardModuleEyebrowClassName}>{locale === "en" ? "Current level" : "Nivel actual"}</p>
         <span className="inline-flex items-center gap-2 text-[11px] font-normal text-muted/80" data-vix-spot-status>
           <span className={`h-1 w-1 rounded-full ${spot.dataStatus === "automated" ? "bg-[#6f8f7b]/70" : "bg-brass/70"}`} aria-hidden="true" />
           {status}
@@ -167,7 +168,7 @@ export function VixModule({ data }: VixModuleProps) {
 
       <div className="mt-3 flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
         <div className="max-w-3xl">
-          <h2 className="font-serif text-2xl font-semibold tracking-[-0.02em] text-ink md:text-3xl">{locale === "en" ? "Volatility pressure" : "Presión de volatilidad"}</h2>
+          <h2 className={dashboardModuleTitleClassName}>{locale === "en" ? "Volatility pressure" : "Presión de volatilidad"}</h2>
           <p className="mt-3 text-sm leading-6 text-muted md:text-base">{t(spot.vixCompositeSubtext)}</p>
         </div>
         <button

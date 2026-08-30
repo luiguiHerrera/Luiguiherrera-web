@@ -3,6 +3,7 @@
 import { useId, useState } from "react";
 import type { CSSProperties } from "react";
 import { usePathname } from "next/navigation";
+import { dashboardModuleEyebrowClassName, dashboardModuleTitleClassName } from "@/components/dashboard/DashboardPrimitives";
 import { translateDashboardText } from "@/lib/dashboard/translate-dashboard-copy";
 import type { VixTermStructureData, VixTermStructurePoint, VixTermStructureSourceStatus } from "@/lib/dashboard/types";
 
@@ -59,6 +60,17 @@ function formatFullExpiration(value: string | null, locale: Locale) {
   if (!date) return value ?? (locale === "en" ? "Pending" : "Pendiente");
   return new Intl.DateTimeFormat(locale === "en" ? "en-US" : "es-ES", {
     day: "numeric",
+    month: "short",
+    year: "numeric",
+    timeZone: "UTC",
+  }).format(date);
+}
+
+function formatContractMonth(value: string | null, expirationDate: string | null, locale: Locale) {
+  if (locale === "es") return value ?? "Pendiente";
+  const date = parseExpirationDate(expirationDate);
+  if (!date) return value ? translateDashboardText(value) : "Pending";
+  return new Intl.DateTimeFormat("en-US", {
     month: "short",
     year: "numeric",
     timeZone: "UTC",
@@ -265,7 +277,7 @@ function TermStructureTable({
                 <th scope="row" className="px-3 py-3 font-semibold text-ink md:px-4">{point.label}</th>
                 <td className="px-3 py-3 font-medium text-muted md:px-4">{point.symbol ?? pending}</td>
                 <td className="px-3 py-3 text-right font-semibold tabular-nums text-ink md:px-4">{formatPointValue(point.value, locale)}</td>
-                <td className="px-3 py-3 text-muted md:px-4">{point.contract ?? pending}</td>
+                <td className="px-3 py-3 text-muted md:px-4">{formatContractMonth(point.contract, point.expirationDate, locale)}</td>
                 <td className="px-3 py-3 font-medium tabular-nums text-muted md:px-4">{formatFullExpiration(point.expirationDate, locale)}</td>
               </tr>
             );
@@ -295,7 +307,7 @@ export function VixTermStructureModule({ data }: VixTermStructureModuleProps) {
   return (
     <section className="border border-line bg-panel px-4 py-5 shadow-[0_14px_32px_rgba(51,45,39,0.05)] sm:px-5 md:px-7 md:py-6" data-vix-module>
       <div className="flex flex-wrap items-center justify-between gap-3">
-        <p className="text-xs font-semibold uppercase tracking-[0.2em] text-brass">{locale === "en" ? "Term structure" : "Estructura temporal"}</p>
+        <p className={dashboardModuleEyebrowClassName}>{locale === "en" ? "Term structure" : "Estructura temporal"}</p>
         <span className="inline-flex items-center gap-2 text-[11px] font-normal text-muted/80" data-vix-status>
           <span className="h-1 w-1 rounded-full bg-[#6f8f7b]/70" aria-hidden="true" />
           {statusLabel}
@@ -305,7 +317,7 @@ export function VixTermStructureModule({ data }: VixTermStructureModuleProps) {
       <div className="mt-3 flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
         <div className="max-w-3xl">
           <div className="flex flex-wrap items-center gap-3">
-            <h2 className="font-serif text-2xl font-semibold tracking-[-0.02em] text-ink md:text-3xl">Contango / Backwardation</h2>
+            <h2 className={dashboardModuleTitleClassName}>Contango / Backwardation</h2>
             <span className={`border px-2.5 py-1 text-xs font-semibold ${classificationClass(data.classification)}`} data-vix-regime>
               {t(data.classification)}
             </span>

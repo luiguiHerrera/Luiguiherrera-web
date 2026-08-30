@@ -1,4 +1,6 @@
+import { dashboardModuleEyebrowClassName, dashboardModuleTitleClassName } from "@/components/dashboard/DashboardPrimitives";
 import { ExpandableInsightCard } from "@/components/ui/ExpandableInsightCard";
+import { translateDashboardText } from "@/lib/dashboard/translate-dashboard-copy";
 import type { GldFlowPressure } from "@/lib/dashboard/types";
 
 function formatPercent(value: number | null, locale: "es" | "en") {
@@ -24,6 +26,7 @@ function formatUsd(value: number | null, locale: "es" | "en") {
 
 export function GldFlowPressureModule({ data, locale = "es" }: { data: GldFlowPressure; locale?: "es" | "en" }) {
   const isEnglish = locale === "en";
+  const t = (value: string) => isEnglish ? translateDashboardText(value) : value;
   const status = data.dataStatus === "delayed" ? (isEnglish ? "Delayed data" : "Dato retrasado") : data.dataStatus === "available" ? (isEnglish ? "Data available" : "Datos disponibles") : (isEnglish ? "Pending data" : "Dato pendiente");
   const label = isEnglish
     ? data.pressureState === "inflow" ? "Probable net creation" : data.pressureState === "outflow" ? "Probable net redemption" : data.pressureState === "neutral" ? "Neutral pressure" : "Pending data"
@@ -32,7 +35,9 @@ export function GldFlowPressureModule({ data, locale = "es" }: { data: GldFlowPr
   return (
     <ExpandableInsightCard
       eyebrow={isEnglish ? "Gold · GLD" : "Oro · GLD"}
+      eyebrowClassName={dashboardModuleEyebrowClassName}
       title={isEnglish ? "Flow-pressure proxy" : "Proxy de presión de flujos"}
+      titleClassName={`mt-3 ${dashboardModuleTitleClassName}`}
       reading={label}
       status={status}
       metrics={[
@@ -61,8 +66,8 @@ export function GldFlowPressureModule({ data, locale = "es" }: { data: GldFlowPr
         ))}
       </div>
       <div className="mt-4 border-t border-line pt-4 text-xs leading-5 text-muted">
-        <p>{data.sourceNote}</p>
-        <p className="mt-2">{data.reliabilityNote}</p>
+        <p>{t(data.sourceNote)}</p>
+        <p className="mt-2">{t(data.reliabilityNote)}</p>
         <a className="mt-2 inline-block font-semibold text-petrol underline-offset-4 hover:underline" href={data.sourceUrl} target="_blank" rel="noreferrer">
           {data.source}
         </a>

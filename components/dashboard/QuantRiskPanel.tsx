@@ -1,3 +1,4 @@
+import { dashboardModuleEyebrowClassName, dashboardModuleTitleClassName } from "@/components/dashboard/DashboardPrimitives";
 import { dataStatusLabels } from "@/lib/dashboard/status";
 import { translateDashboardText } from "@/lib/dashboard/translate-dashboard-copy";
 import type { QuantRiskData } from "@/lib/dashboard/types";
@@ -26,6 +27,9 @@ function modelStatusLabel(status: QuantRiskData["modelStatus"], locale: "es" | "
 
 export function QuantRiskPanel({ data, locale = "es" }: QuantRiskPanelProps) {
   const t = (value: string | null | undefined) => locale === "en" ? translateDashboardText(value) : value ?? "";
+  const reliabilityNote = locale === "en" && data.dataStatus === "demo"
+    ? "Quantitative models require sufficient history. Demo data is visible while the automated source is unavailable. It does not predict market direction."
+    : t(data.reliabilityNote);
   const metrics = [
     [locale === "en" ? "Fragility" : "Fragilidad", `${data.fragilityScore}/100 · ${t(data.fragilityLabel)}`],
     [locale === "en" ? "EWMA volatility" : "Volatilidad EWMA", formatPercent(data.ewmaVolAnnualized, locale)],
@@ -39,8 +43,8 @@ export function QuantRiskPanel({ data, locale = "es" }: QuantRiskPanelProps) {
     <section className="border border-line bg-panel p-4 md:p-5">
       <div className="grid gap-5 lg:grid-cols-[0.78fr_1.22fr] lg:items-start">
         <div>
-          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-brass">{locale === "en" ? "Quantitative risk radar" : "Radar cuantitativo de riesgo"}</p>
-          <h2 className="mt-2 text-xl font-semibold text-ink">{locale === "en" ? "Statistical conditions" : "Condiciones estadísticas"}</h2>
+          <p className={dashboardModuleEyebrowClassName}>{locale === "en" ? "Quantitative risk radar" : "Radar cuantitativo de riesgo"}</p>
+          <h2 className={`mt-3 ${dashboardModuleTitleClassName}`}>{locale === "en" ? "Statistical conditions" : "Condiciones estadísticas"}</h2>
           <p className="mt-3 text-sm leading-6 text-muted">
             {locale === "en"
               ? "These models estimate statistical risk conditions under historical assumptions; they help locate context."
@@ -74,7 +78,7 @@ export function QuantRiskPanel({ data, locale = "es" }: QuantRiskPanelProps) {
         </div>
       </div>
 
-      <p className="mt-4 text-sm leading-6 text-muted">{t(data.reliabilityNote)}</p>
+      <p className="mt-4 text-sm leading-6 text-muted">{reliabilityNote}</p>
     </section>
   );
 }

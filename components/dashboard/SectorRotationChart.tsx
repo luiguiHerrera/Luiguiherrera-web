@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from "react";
 import { usePathname } from "next/navigation";
+import { dashboardModuleEyebrowClassName, dashboardModuleTitleClassName } from "@/components/dashboard/DashboardPrimitives";
 import { SectorDetailPanel } from "@/components/dashboard/SectorDetailPanel";
 import { ExpandableInsightCard } from "@/components/ui/ExpandableInsightCard";
 import { dataStatusLabels } from "@/lib/dashboard/status";
@@ -135,7 +136,9 @@ export function SectorRotationChart({ data }: SectorRotationChartProps) {
   return (
     <ExpandableInsightCard
       eyebrow={copy.eyebrow}
+      eyebrowClassName={dashboardModuleEyebrowClassName}
       title={copy.title}
+      titleClassName={`mt-3 ${dashboardModuleTitleClassName}`}
       reading={t(data.metrics.interpretation)}
       status={t(dataStatusLabels[data.dataStatus])}
       metrics={[
