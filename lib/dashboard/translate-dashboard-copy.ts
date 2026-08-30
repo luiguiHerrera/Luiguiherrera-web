@@ -20,6 +20,7 @@ const phraseMap: Array<[RegExp, string]> = [
   [/(\d{1,2}) de nov de (\d{4})/gi, "Nov $1, $2"],
   [/(\d{1,2}) de dic de (\d{4})/gi, "Dec $1, $2"],
   [/Automática server-side con caché diaria; revisión periódica sugerida/g, "Automated server-side with a daily cache; periodic review recommended"],
+  [/Automática server-side con caché diaria cuando exista fuente disponible/g, "Automated server-side with a daily cache when a source is available"],
   [/La rotación se estima mediante ETFs sectoriales líquidos como proxies\. Puede diferir de índices o grupos sectoriales de otros proveedores\./g, "Rotation is estimated through liquid sector ETFs used as proxies. It may differ from sector indexes or groups from other providers."],
   [/La lectura cuantitativa muestra fragilidad baja\. Estos modelos estiman condiciones estadísticas de riesgo bajo supuestos históricos; no implican dirección futura del mercado\./g, "The quantitative reading shows low fragility. These models estimate statistical risk conditions under historical assumptions; they do not imply future market direction."],
   [/La lectura cuantitativa muestra fragilidad media\. Estos modelos estiman condiciones estadísticas de riesgo bajo supuestos históricos; no implican dirección futura del mercado\./g, "The quantitative reading shows medium fragility. These models estimate statistical risk conditions under historical assumptions; they do not imply future market direction."],

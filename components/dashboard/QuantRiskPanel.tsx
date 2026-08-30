@@ -1,6 +1,13 @@
-import { dashboardModuleEyebrowClassName, dashboardModuleTitleClassName } from "@/components/dashboard/DashboardPrimitives";
-import { dataStatusLabels } from "@/lib/dashboard/status";
-import { translateDashboardText } from "@/lib/dashboard/translate-dashboard-copy";
+"use client";
+
+import { useId, useState } from "react";
+import {
+  DashboardDisclosureButton,
+  DashboardStatus,
+  dashboardModuleEyebrowClassName,
+  dashboardModuleTitleClassName,
+} from "@/components/dashboard/DashboardPrimitives";
+import { buildQuantRiskPresentation, type QuantRiskReadinessState } from "@/lib/dashboard/quant-risk-presentation";
 import type { QuantRiskData } from "@/lib/dashboard/types";
 
 type QuantRiskPanelProps = {
@@ -8,77 +15,128 @@ type QuantRiskPanelProps = {
   locale?: "es" | "en";
 };
 
-function formatPercent(value: number | null, locale: "es" | "en" = "es") {
-  if (value === null) return locale === "en" ? "Not enough data" : "Pendiente de datos suficientes";
-  const sign = value > 0 ? "+" : "";
-  return `${sign}${value.toFixed(1)}%`;
+function primaryMetricCellClass(index: number) {
+  return [
+    "min-w-0 px-3 py-3 sm:px-4",
+    index === 0 ? "pl-0 sm:pl-0" : "",
+    index === 1 || index === 3 ? "border-l border-line" : "",
+    index >= 2 ? "border-t border-line sm:border-t-0" : "",
+    index === 2 ? "sm:border-l sm:border-line" : "",
+  ].join(" ");
 }
 
-function formatCorrelation(value: number | null, locale: "es" | "en" = "es") {
-  if (value === null) return locale === "en" ? "Not enough data" : "Pendiente de datos suficientes";
-  return value.toFixed(2);
-}
-
-function modelStatusLabel(status: QuantRiskData["modelStatus"], locale: "es" | "en" = "es") {
-  if (status === "estimated") return locale === "en" ? "Estimated" : "Estimado";
-  if (status === "fallback_ewma") return "Fallback EWMA";
-  return locale === "en" ? "Waiting for enough history" : "En espera de historial suficiente";
+function readinessDotClass(state: QuantRiskReadinessState) {
+  if (state === "available") return "bg-sage/80";
+  if (state === "fallback") return "bg-brass/80";
+  return "bg-muted/45";
 }
 
 export function QuantRiskPanel({ data, locale = "es" }: QuantRiskPanelProps) {
-  const t = (value: string | null | undefined) => locale === "en" ? translateDashboardText(value) : value ?? "";
-  const reliabilityNote = locale === "en" && data.dataStatus === "demo"
-    ? "Quantitative models require sufficient history. Demo data is visible while the automated source is unavailable. It does not predict market direction."
-    : t(data.reliabilityNote);
-  const metrics = [
-    [locale === "en" ? "Fragility" : "Fragilidad", `${data.fragilityScore}/100 · ${t(data.fragilityLabel)}`],
-    [locale === "en" ? "EWMA volatility" : "Volatilidad EWMA", formatPercent(data.ewmaVolAnnualized, locale)],
-    [locale === "en" ? "GARCH volatility" : "Volatilidad GARCH", formatPercent(data.garchVolForecast, locale)],
-    [locale === "en" ? "Average correlation" : "Correlación promedio", formatCorrelation(data.averageCorrelation21d, locale)],
-    [locale === "en" ? "Sector dispersion" : "Dispersión sectorial", formatPercent(data.sectorDispersion1w, locale)],
-    [locale === "en" ? "Model" : "Modelo", modelStatusLabel(data.modelStatus, locale)],
-  ];
+  const [contextOpen, setContextOpen] = useState(false);
+  const contextId = useId();
+  const presentation = buildQuantRiskPresentation(data, locale);
+  const { copy } = presentation;
 
   return (
-    <section className="border border-line bg-panel p-4 md:p-5">
-      <div className="grid gap-5 lg:grid-cols-[0.78fr_1.22fr] lg:items-start">
-        <div>
-          <p className={dashboardModuleEyebrowClassName}>{locale === "en" ? "Quantitative risk radar" : "Radar cuantitativo de riesgo"}</p>
-          <h2 className={`mt-3 ${dashboardModuleTitleClassName}`}>{locale === "en" ? "Statistical conditions" : "Condiciones estadísticas"}</h2>
-          <p className="mt-3 text-sm leading-6 text-muted">
-            {locale === "en"
-              ? "These models estimate statistical risk conditions under historical assumptions; they help locate context."
-              : "Estos modelos estiman condiciones estadísticas de riesgo bajo supuestos históricos; no anticipan por sí solos el comportamiento del mercado."}
-          </p>
-          <p className="mt-4 text-sm leading-6 text-muted">{t(data.fragilityInterpretation)}</p>
-        </div>
-
-        <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
-          {metrics.map(([label, value]) => (
-            <div key={label} className="border border-line bg-panelSoft p-4">
-              <p className="text-xs uppercase tracking-[0.14em] text-muted">{label}</p>
-              <p className="mt-2 font-semibold text-ink">{value}</p>
-            </div>
-          ))}
-        </div>
+    <section
+      className="min-w-0 border border-line bg-panel px-4 py-5 shadow-[0_14px_32px_rgba(51,45,39,0.05)] sm:px-5 md:px-7 md:py-6"
+      data-quant-risk-module
+      data-quant-data-status={data.dataStatus}
+    >
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <p className={dashboardModuleEyebrowClassName}>{copy.eyebrow}</p>
+        <span data-quant-status><DashboardStatus label={presentation.status} tone={presentation.statusTone} /></span>
       </div>
 
-      <div className="mt-5 grid gap-3 border-t border-line pt-4 text-sm leading-6 text-muted md:grid-cols-3">
-        <div>
-          <span className="block text-xs font-semibold uppercase tracking-[0.14em] text-brass">{locale === "en" ? "Source" : "Fuente"}</span>
-          <span className="mt-1 block text-ink">{t(data.sourceName)}</span>
+      <div className="mt-3 flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
+        <div className="max-w-3xl">
+          <h2 className={dashboardModuleTitleClassName}>{copy.title}</h2>
+          <p className="mt-3 text-sm leading-6 text-muted md:text-base">{copy.description}</p>
         </div>
-        <div>
-          <span className="block text-xs font-semibold uppercase tracking-[0.14em] text-brass">{locale === "en" ? "Status" : "Estado"}</span>
-          <span className="mt-1 block text-ink">{t(dataStatusLabels[data.dataStatus])}</span>
-        </div>
-        <div>
-          <span className="block text-xs font-semibold uppercase tracking-[0.14em] text-brass">{locale === "en" ? "Updated" : "Actualización"}</span>
-          <span className="mt-1 block text-ink">{t(data.lastUpdated)}</span>
-        </div>
+        <DashboardDisclosureButton
+          controls={contextId}
+          expanded={contextOpen}
+          expandedLabel={copy.hideContext}
+          collapsedLabel={copy.showContext}
+          onClick={() => setContextOpen((open) => !open)}
+        />
       </div>
 
-      <p className="mt-4 text-sm leading-6 text-muted">{reliabilityNote}</p>
+      <div className="mt-5 grid grid-cols-2 border-y border-line sm:grid-cols-4" data-quant-primary-metrics>
+        {presentation.primaryMetrics.map((metric, index) => (
+          <div
+            key={metric.id}
+            className={primaryMetricCellClass(index)}
+            data-quant-primary-metric={metric.id}
+            data-available={metric.available ? "true" : "false"}
+          >
+            <p className="text-[10px] font-semibold uppercase tracking-[0.1em] text-muted sm:text-[11px]">{metric.label}</p>
+            <p className={`mt-1.5 break-words text-sm font-semibold tabular-nums sm:text-base ${metric.available ? "text-ink" : "text-muted"}`}>{metric.value}</p>
+            {metric.note ? <p className="mt-1 text-[11px] font-medium text-brass">{metric.note}</p> : null}
+          </div>
+        ))}
+      </div>
+
+      {contextOpen ? (
+        <div id={contextId} className="mt-5 border-t border-line pt-5" data-quant-context>
+          <div className="grid gap-6 lg:grid-cols-2">
+            <section>
+              <h3 className="text-xs font-semibold uppercase tracking-[0.14em] text-brass">{copy.dispersion}</h3>
+              <div className="mt-3 grid grid-cols-2 border-y border-line" data-quant-dispersion>
+                {presentation.dispersion.map((metric, index) => (
+                  <div key={metric.label} className={`min-w-0 px-3 py-3 ${index === 0 ? "pl-0" : "border-l border-line"}`}>
+                    <p className="text-[10px] font-semibold uppercase tracking-[0.1em] text-muted">{metric.label}</p>
+                    <p className="mt-1.5 text-sm font-semibold tabular-nums text-ink sm:text-base">{metric.value}</p>
+                  </div>
+                ))}
+              </div>
+              <div className="mt-4 border-l border-line pl-3 text-sm leading-6">
+                <p className="font-semibold text-ink">{copy.modelState}</p>
+                <p className="mt-1 text-muted" data-quant-model-state>{presentation.modelState}</p>
+              </div>
+            </section>
+
+            <section>
+              <h3 className="text-xs font-semibold uppercase tracking-[0.14em] text-brass">{copy.modelReliability}</h3>
+              <div className="mt-2 divide-y divide-line/70" data-quant-readiness>
+                {presentation.readiness.map((item) => (
+                  <div key={item.id} className="flex min-w-0 items-center justify-between gap-4 py-3 text-sm">
+                    <span className="font-semibold text-ink">{item.label}</span>
+                    <span className="inline-flex min-w-0 items-center gap-2 text-right text-muted">
+                      <span className={`h-1.5 w-1.5 shrink-0 rounded-full ${readinessDotClass(item.state)}`} aria-hidden="true" />
+                      <span className="break-words">{item.value}</span>
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </section>
+          </div>
+
+          <div className="mt-5 grid gap-5 border-t border-line pt-5 lg:grid-cols-2">
+            <section className="border-l border-brass/50 pl-3">
+              <h3 className="text-sm font-semibold text-ink">{copy.interpretation}</h3>
+              <p className="mt-1.5 text-sm leading-6 text-muted">{presentation.interpretation}</p>
+            </section>
+
+            <section className="border-l border-petrol/20 pl-3">
+              <h3 className="text-sm font-semibold text-ink">{copy.sourceMethodology}</h3>
+              <dl className="mt-2 grid gap-2 text-xs leading-5 text-muted">
+                <div>
+                  <dt className="inline font-semibold text-ink">{copy.source}: </dt>
+                  <dd className="inline">
+                    {data.sourceUrl ? (
+                      <a href={data.sourceUrl} target="_blank" rel="noreferrer" className="underline-offset-4 hover:text-ink hover:underline">{presentation.sourceName}</a>
+                    ) : presentation.sourceName}
+                  </dd>
+                </div>
+                <div><dt className="inline font-semibold text-ink">{copy.updated}: </dt><dd className="inline">{presentation.lastUpdated}</dd></div>
+                <div><dt className="inline font-semibold text-ink">{copy.frequency}: </dt><dd className="inline">{presentation.updateFrequency}</dd></div>
+                <div><dt className="inline font-semibold text-ink">{copy.model}: </dt><dd className="inline">{copy.modelScope}</dd></div>
+              </dl>
+            </section>
+          </div>
+        </div>
+      ) : null}
     </section>
   );
 }
