@@ -60,12 +60,12 @@ function curvePoints(points: VixTermStructurePoint[]) {
   const domainMin = min - padding;
   const domainMax = max + padding;
   const range = Math.max(domainMax - domainMin, 0.01);
-  const step = 76 / Math.max(points.length - 1, 1);
+  const step = 92 / Math.max(points.length - 1, 1);
 
   return validPoints.map(({ point, index }) => ({
     point,
-    x: 12 + index * step,
-    y: 42 - ((point.value - domainMin) / range) * 28,
+    x: 4 + index * step,
+    y: 78 - ((point.value - domainMin) / range) * 58,
   }));
 }
 
@@ -80,58 +80,91 @@ function TermStructureChart({ data, locale = "es" }: { data: VixTermStructureDat
   const curveRange = lastPointLabel === "VX1" ? "VX1" : `VX1–${lastPointLabel ?? "VX9"}`;
 
   return (
-    <div className="border border-line bg-panelSoft p-4">
-      <div className="flex items-start justify-between gap-4">
+    <div className="min-w-0 border border-line bg-panelSoft p-4 md:p-5">
+      <div className="flex flex-wrap items-start justify-between gap-4">
         <div>
           <p className="text-xs font-semibold uppercase tracking-[0.14em] text-brass">{locale === "en" ? "Near curve" : "Curva cercana"}</p>
-          <h3 className="mt-1 text-sm font-semibold text-ink">{curveRange}</h3>
+          <h3 className="mt-1 text-lg font-semibold text-ink">{curveRange}</h3>
         </div>
-        <span className={`border px-3 py-1 text-xs font-semibold ${classificationClass(data.classification)}`}>
+        <span className={`border px-3 py-1.5 text-xs font-semibold ${classificationClass(data.classification)}`}>
           {t(data.classification)}
         </span>
       </div>
 
-      <svg viewBox="0 0 100 58" className="mt-4 h-36 w-full" aria-hidden="true">
-        <line x1="7" x2="95" y1="42" y2="42" stroke="#d8d1c8" strokeWidth="0.7" vectorEffect="non-scaling-stroke" />
-        <line x1="7" x2="95" y1="28" y2="28" stroke="#eee9e3" strokeWidth="0.6" vectorEffect="non-scaling-stroke" />
-        {plottedPoints.length ? (
-          <>
-            {hasCurve ? (
-              <path d={curvePath} fill="none" stroke="#6f8f7b" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" vectorEffect="non-scaling-stroke" />
-            ) : null}
-            {plottedPoints.map(({ point, x, y }, index) => (
-              <g key={point.label}>
-                <circle cx={x} cy={y} r="2.4" fill="#fbfaf8" stroke="#47604f" strokeWidth="1.3" vectorEffect="non-scaling-stroke" />
-                <text x={x} y={index % 2 === 0 ? Math.max(8, y - 5) : Math.min(48, y + 8)} textAnchor="middle" className="fill-ink text-[4.2px] font-semibold">
-                  {formatPointValue(point.value, locale)}
-                </text>
-                <text x={x} y="53" textAnchor="middle" className="fill-muted text-[3.6px] font-semibold">
-                  {point.label}
-                </text>
-              </g>
-            ))}
-          </>
-        ) : (
-          <text x="50" y="31" textAnchor="middle" className="fill-muted text-[4px]">
-            {locale === "en" ? "VIX structure pending a stable automated source." : "Estructura VIX pendiente de fuente automatizada estable."}
-          </text>
-        )}
-      </svg>
+      <div className="relative mt-5 h-32 md:h-44">
+        <svg viewBox="0 0 100 100" preserveAspectRatio="none" className="absolute inset-0 h-full w-full" aria-hidden="true">
+          <line x1="4" x2="96" y1="78" y2="78" stroke="#d8d1c8" strokeWidth="0.7" vectorEffect="non-scaling-stroke" />
+          <line x1="4" x2="96" y1="49" y2="49" stroke="#eee9e3" strokeWidth="0.6" vectorEffect="non-scaling-stroke" />
+          <line x1="4" x2="96" y1="20" y2="20" stroke="#eee9e3" strokeWidth="0.6" vectorEffect="non-scaling-stroke" />
+          {hasCurve ? (
+            <path d={curvePath} fill="none" stroke="#6f8f7b" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" vectorEffect="non-scaling-stroke" />
+          ) : null}
+        </svg>
 
-      <div className="mt-3 grid gap-2 sm:grid-cols-3">
-        {data.points.map((point) => (
-          <div key={point.label} className="border border-line bg-panel px-3 py-2">
-            <div className="flex items-center justify-between gap-3">
-              <p className="text-xs uppercase tracking-[0.12em] text-muted">{point.label}</p>
-              <p className="text-[10px] font-semibold uppercase tracking-[0.12em] text-muted">{point.symbol ?? (locale === "en" ? "Pending" : "Pendiente")}</p>
-            </div>
-            <p className="mt-1 font-semibold text-ink">{formatPointValue(point.value, locale)}</p>
-            <p className="mt-1 text-xs text-muted">
-              {point.contract ?? (locale === "en" ? "Contract pending" : "Contrato pendiente")}
-              {point.expirationDate ? ` · ${point.expirationDate}` : ""}
-            </p>
-          </div>
+        {plottedPoints.map(({ point, x, y }) => (
+          <span
+            key={point.label}
+            title={`${point.label}: ${formatPointValue(point.value, locale)}`}
+            className="absolute h-3 w-3 -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-[#47604f] bg-panel shadow-[0_0_0_3px_rgba(251,250,248,0.75)]"
+            style={{ left: `${x}%`, top: `${y}%` }}
+            aria-hidden="true"
+          />
         ))}
+
+        {!plottedPoints.length ? (
+          <p className="absolute inset-0 flex items-center justify-center text-center text-sm text-muted">
+            {locale === "en" ? "VIX structure pending a stable automated source." : "Estructura VIX pendiente de fuente automatizada estable."}
+          </p>
+        ) : null}
+      </div>
+
+      <div
+        className="mt-1 grid text-center"
+        style={{ gridTemplateColumns: `repeat(${Math.max(data.points.length, 1)}, minmax(0, 1fr))`, paddingInline: "4%" }}
+      >
+        {data.points.map((point) => (
+          <span key={point.label} className="text-[10px] font-semibold tracking-[0.04em] text-muted md:text-xs">
+            {point.label}
+          </span>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function TermStructureTable({ data, locale = "es" }: { data: VixTermStructureData; locale?: "es" | "en" }) {
+  const pending = locale === "en" ? "Pending" : "Pendiente";
+
+  return (
+    <div className="min-w-0 border border-line bg-panel">
+      <div className="border-b border-line bg-panelSoft px-4 py-3 md:px-5">
+        <p className="text-xs font-semibold uppercase tracking-[0.14em] text-brass">
+          {locale === "en" ? "Contract detail" : "Detalle por vencimiento"}
+        </p>
+      </div>
+      <div className="w-full max-w-full overflow-x-auto">
+        <table className="w-full min-w-[680px] border-collapse text-left text-sm">
+          <thead className="border-b border-line bg-paper/55 text-[11px] uppercase tracking-[0.12em] text-muted">
+            <tr>
+              <th scope="col" className="px-4 py-3 font-semibold md:px-5">VX</th>
+              <th scope="col" className="px-4 py-3 font-semibold">{locale === "en" ? "Contract" : "Contrato"}</th>
+              <th scope="col" className="px-4 py-3 text-right font-semibold">Settlement</th>
+              <th scope="col" className="px-4 py-3 font-semibold">{locale === "en" ? "Month" : "Mes"}</th>
+              <th scope="col" className="px-4 py-3 font-semibold md:pr-5">{locale === "en" ? "Expiration" : "Vencimiento"}</th>
+            </tr>
+          </thead>
+          <tbody className="divide-y divide-line/80">
+            {data.points.map((point) => (
+              <tr key={point.label} className="transition-colors hover:bg-panelSoft/70">
+                <th scope="row" className="px-4 py-3 font-semibold text-ink md:px-5">{point.label}</th>
+                <td className="px-4 py-3 font-medium text-muted">{point.symbol ?? pending}</td>
+                <td className="px-4 py-3 text-right font-semibold tabular-nums text-ink">{formatPointValue(point.value, locale)}</td>
+                <td className="px-4 py-3 text-muted">{point.contract ?? pending}</td>
+                <td className="px-4 py-3 font-medium tabular-nums text-muted md:pr-5">{point.expirationDate ?? pending}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </div>
     </div>
   );
@@ -161,10 +194,14 @@ export function VixTermStructureModule({ data }: VixTermStructureModuleProps) {
         { label: "Spread VX3-VX1", value: formatSpread(data.m1m3Spread, locale) },
       ]}
     >
-      <div className="grid gap-5 xl:grid-cols-[0.88fr_1.12fr] xl:items-start">
+      <div className="grid min-w-0 gap-5">
+        <TermStructureChart data={data} locale={locale} />
+
+        <TermStructureTable data={data} locale={locale} />
+
         <div className="border border-line bg-panelSoft p-4">
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-brass">VIX term structure</p>
-          <h2 className="mt-2 text-xl font-semibold text-ink">Contango / Backwardation</h2>
+          <h3 className="mt-2 text-lg font-semibold text-ink">{locale === "en" ? "Curve reading" : "Lectura de la curva"}</h3>
           <p className="mt-3 text-sm leading-6 text-muted">
             {locale === "en"
               ? "The VIX term structure compares near futures to observe whether immediate protection is priced above or below later expirations."
@@ -187,8 +224,6 @@ export function VixTermStructureModule({ data }: VixTermStructureModuleProps) {
               : "Lectura contextual para ubicar la demanda relativa de protección entre vencimientos cercanos."}
           </p>
         </div>
-
-        <TermStructureChart data={data} locale={locale} />
       </div>
 
       <div className="mt-4 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
