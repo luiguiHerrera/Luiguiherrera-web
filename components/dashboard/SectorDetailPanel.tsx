@@ -47,7 +47,7 @@ function trendFromValues(values: number[]): SectorEtfSnapshot["trend"] {
 function MiniReturnChart({ label, values, locale = "es" }: { label: string; values: number[]; locale?: "es" | "en" }) {
   if (values.length < 2) {
     return (
-      <div className="border border-line bg-panel p-4 text-sm text-muted">
+      <div className="bg-panel px-4 py-4 text-sm text-muted">
         {locale === "en" ? "Not enough history for this view" : "Historial insuficiente para esta vista"}
       </div>
     );
@@ -78,7 +78,7 @@ function MiniReturnChart({ label, values, locale = "es" }: { label: string; valu
   const yFor = (value: number) => chartBottom - ((value - min) / range) * chartHeight;
 
   return (
-    <div className="border border-line bg-panel p-3">
+    <div className="bg-panel px-3 py-3">
       <div className="mb-2 flex items-center justify-between text-xs uppercase tracking-[0.12em] text-muted">
         <span>{label}</span>
         <span className="font-semibold text-ink">{formatPercent(finalValue, locale)}</span>
@@ -109,7 +109,13 @@ function MiniReturnChart({ label, values, locale = "es" }: { label: string; valu
 }
 
 export function SectorDetailPanel({ sector, selectedPeriod, selectedRank, locale = "es" }: SectorDetailPanelProps) {
-  const t = (value: string | null | undefined) => locale === "en" ? translateDashboardText(value) : value ?? "";
+  const t = (value: string | null | undefined) => locale === "en"
+    ? translateDashboardText(value)
+    : value === "Utilities"
+      ? "Servicios públicos"
+      : value === "Real Estate"
+        ? "Inmobiliario"
+        : value ?? "";
   const selectedSeries = sector.detailSeries.find((series) => series.period === detailPeriodMap[selectedPeriod]);
   const detailPoints = selectedSeries?.points ?? sector.sparkline30d;
   const trend = trendFromValues(detailPoints);
@@ -123,11 +129,11 @@ export function SectorDetailPanel({ sector, selectedPeriod, selectedRank, locale
           : locale === "en" ? "Available-history trend" : "Tendencia historial disponible";
 
   return (
-    <div className="border border-line bg-panelSoft p-4">
+    <section className="bg-panelSoft/35 px-4 py-4" data-selected-sector-detail>
       <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
         <div>
-          <p className="text-xs font-semibold uppercase tracking-[0.16em] text-brass">{locale === "en" ? "Sector detail" : "Detalle sectorial"}</p>
-          <h3 className="mt-1 text-xl font-semibold text-ink">{t(sector.sectorName)}</h3>
+          <p className="text-xs font-semibold uppercase tracking-[0.16em] text-brass">{locale === "en" ? "Selected sector detail" : "Detalle del sector seleccionado"}</p>
+          <h3 className="mt-1 font-serif text-lg font-semibold text-ink">{t(sector.sectorName)}</h3>
           <p className="mt-1 text-sm text-muted">{sector.etfTicker} {locale === "en" ? "as sector proxy" : "como proxy sectorial"}</p>
         </div>
         <p className="text-sm font-semibold text-ink">
@@ -135,7 +141,7 @@ export function SectorDetailPanel({ sector, selectedPeriod, selectedRank, locale
         </p>
       </div>
 
-      <div className="mt-4 grid gap-3 text-sm sm:grid-cols-2 lg:grid-cols-5">
+      <div className="mt-4 grid grid-cols-2 border-y border-line text-sm lg:grid-cols-5">
         <div>
           <span className="block text-xs uppercase tracking-[0.14em] text-muted">{locale === "en" ? "Latest close" : "Último cierre"}</span>
           <span className="mt-1 block font-semibold text-ink">{formatCurrency(sector.latestClose)}</span>
@@ -167,6 +173,6 @@ export function SectorDetailPanel({ sector, selectedPeriod, selectedRank, locale
           ? "Trend is calculated on daily closes, comparing the first segment with the final segment of the displayed period. Sector proxy for context."
           : "Tendencia calculada sobre cierres diarios, comparando el tramo inicial con el tramo final del periodo mostrado. Proxy sectorial para contexto, no personalizado."}
       </p>
-    </div>
+    </section>
   );
 }

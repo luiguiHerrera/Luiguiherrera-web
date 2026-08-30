@@ -1,9 +1,9 @@
 import { BtcEtfFlowsModule } from "@/components/dashboard/BtcEtfFlowsModule";
-import { dashboardModuleEyebrowClassName, dashboardModuleTitleClassName } from "@/components/dashboard/DashboardPrimitives";
 import { DashboardReadingGuide } from "@/components/dashboard/DashboardReadingGuide";
 import { DashboardModule } from "@/components/dashboard/DashboardModule";
 import { GldFlowPressureModule } from "@/components/dashboard/GldFlowPressureModule";
 import { IntegratedRegimeModule } from "@/components/dashboard/IntegratedRegimeModule";
+import { MarketBreadthPanel, type MarketBreadthValues } from "@/components/dashboard/MarketBreadthPanel";
 import { QuantRiskPanel } from "@/components/dashboard/QuantRiskPanel";
 import { SectorRotationChart } from "@/components/dashboard/SectorRotationChart";
 import { VixModule } from "@/components/dashboard/VixModule";
@@ -19,7 +19,7 @@ export const revalidate = 86400;
 
 export const metadata = getRouteMetadata("/dashboard");
 
-function MarketBreadthPanel({ data, locale }: { data: WeeklyReportData; locale: "es" | "en" }) {
+function buildMarketBreadthValues(data: WeeklyReportData, locale: "es" | "en"): MarketBreadthValues {
   const statsByTicker = new Map(data.statisticalLevels.map((asset) => [asset.ticker, asset]));
   const spyLevel = statsByTicker.get("SPY");
   const rspLevel = statsByTicker.get("RSP");
@@ -30,100 +30,16 @@ function MarketBreadthPanel({ data, locale }: { data: WeeklyReportData; locale: 
   const sectorsNegative = data.sectors.data?.sectors.filter((sector) => (sector.return1w ?? 0) < 0).length ?? null;
   const sectorTotal = data.sectors.data?.sectors.length ?? sectorStats.length;
   const sectorsOverLongAverage = sectorStats.filter((asset) => (asset.distanceToLongAverage ?? -Infinity) > 0).length;
-  const copy = locale === "en"
-    ? {
-        eyebrow: "Market breadth",
-        title: "Market breadth",
-        subtitle: "It looks for whether the index is rising with broad participation or being held up by a few leaders.",
-        rsp: "RSP/SPY",
-        rspHelp: "Equal weight versus the S&P 500. It checks whether the average stock is keeping up with the capitalization-weighted index.",
-        iwm: "IWM/SPY",
-        iwmHelp: "Small caps versus the S&P 500. It checks whether risk appetite is broadening.",
-        qqq: "QQQ/SPY",
-        qqqHelp: "Technology/growth versus the S&P 500. It checks concentration in growth and technology.",
-        sectorParticipation: "Positive sectors",
-        sectorParticipationHelp: "How many sectors are participating.",
-        sectorTrend: "Sectors above long average",
-        sectorTrendHelp: "Trend health by sector.",
-        classicTitle: "Next classic breadth block",
-        classicSubtitle: "Pending automated source for advances/declines and 52-week highs/lows.",
-        classicDetail: "Prepared for the advance-decline line, McClellan oscillator and net 52-week highs once reliable data is available.",
-        pending: "pending",
-        flat: "flat",
-      }
-    : {
-        eyebrow: "Amplitud de mercado",
-        title: "Amplitud de mercado",
-        subtitle: "Busca responder si el índice sube acompañado o sostenido por pocos líderes.",
-        rsp: "RSP/SPY",
-        rspHelp: "Equal weight contra S&P 500. Mide si la acción promedio acompaña al índice ponderado por capitalización.",
-        iwm: "IWM/SPY",
-        iwmHelp: "Small caps contra S&P 500. Mide si el apetito por riesgo se ensancha.",
-        qqq: "QQQ/SPY",
-        qqqHelp: "Tecnología/growth contra S&P 500. Mide concentración en crecimiento y tecnología.",
-        sectorParticipation: "Sectores positivos",
-        sectorParticipationHelp: "Cuántos sectores acompañan.",
-        sectorTrend: "Sectores sobre media larga",
-        sectorTrendHelp: "Salud de tendencia por sector.",
-        classicTitle: "Próximo bloque de amplitud clásica",
-        classicSubtitle: "Pendiente de fuente automatizada para avances/descensos y máximos/mínimos de 52 semanas.",
-        classicDetail: "Queda preparado para línea de avance-declive, oscilador McClellan y nuevos máximos netos cuando haya datos confiables.",
-        pending: "pendiente",
-        flat: "plano",
-      };
-  const metrics = [
-    {
-      label: copy.rsp,
-      value: spyLevel && rspLevel ? formatDashboardPpSpread(rspLevel.returns["1W"], spyLevel.returns["1W"], copy.pending, copy.flat) : copy.pending,
-      helper: copy.rspHelp,
-    },
-    {
-      label: copy.iwm,
-      value: spyLevel && iwmLevel ? formatDashboardPpSpread(iwmLevel.returns["1W"], spyLevel.returns["1W"], copy.pending, copy.flat) : copy.pending,
-      helper: copy.iwmHelp,
-    },
-    {
-      label: copy.qqq,
-      value: spyLevel && qqqLevel ? formatDashboardPpSpread(qqqLevel.returns["1W"], spyLevel.returns["1W"], copy.pending, copy.flat) : copy.pending,
-      helper: copy.qqqHelp,
-    },
-    {
-      label: copy.sectorParticipation,
-      value: sectorsPositive !== null && sectorsNegative !== null && sectorTotal ? `${sectorsPositive}/${sectorTotal}` : copy.pending,
-      helper: copy.sectorParticipationHelp,
-    },
-    {
-      label: copy.sectorTrend,
-      value: sectorStats.length ? `${sectorsOverLongAverage}/${sectorStats.length}` : copy.pending,
-      helper: copy.sectorTrendHelp,
-    },
-  ];
+  const pending = locale === "en" ? "Pending" : "Pendiente";
+  const flat = locale === "en" ? "Flat" : "Plano";
 
-  return (
-    <section className="estate-card border border-line p-4 md:p-5">
-      <div>
-        <p className={dashboardModuleEyebrowClassName}>{copy.eyebrow}</p>
-        <h2 className={`mt-3 ${dashboardModuleTitleClassName}`}>{copy.title}</h2>
-        <p className="mt-2 max-w-3xl text-sm leading-6 text-muted">{copy.subtitle}</p>
-      </div>
-      <div className="mt-5 grid gap-3 sm:grid-cols-2 xl:grid-cols-5">
-        {metrics.map((metric) => (
-          <div key={metric.label} className="border border-line bg-panelSoft p-4">
-            <p className="text-xs uppercase tracking-[0.14em] text-muted">{metric.label}</p>
-            <p className="mt-2 font-semibold text-ink">{metric.value}</p>
-            <p className="mt-2 text-xs leading-5 text-muted">{metric.helper}</p>
-          </div>
-        ))}
-      </div>
-      <div className="mt-5 border-t border-line pt-5">
-        <div className="border border-line bg-white/70 p-4">
-          <p className="text-sm font-semibold text-ink">{copy.classicTitle}</p>
-          <p className="mt-2 max-w-3xl text-sm leading-6 text-muted">{copy.classicSubtitle}</p>
-          <p className="mt-2 max-w-3xl text-xs leading-5 text-muted">{copy.classicDetail}</p>
-        </div>
-      </div>
-    </section>
-  );
+  return {
+    rspVsSpy: spyLevel && rspLevel ? formatDashboardPpSpread(rspLevel.returns["1W"], spyLevel.returns["1W"], pending, flat) : pending,
+    iwmVsSpy: spyLevel && iwmLevel ? formatDashboardPpSpread(iwmLevel.returns["1W"], spyLevel.returns["1W"], pending, flat) : pending,
+    qqqVsSpy: spyLevel && qqqLevel ? formatDashboardPpSpread(qqqLevel.returns["1W"], spyLevel.returns["1W"], pending, flat) : pending,
+    positiveSectors: sectorsPositive !== null && sectorsNegative !== null && sectorTotal ? sectorsPositive + "/" + sectorTotal : pending,
+    sectorsOverLongAverage: sectorStats.length ? sectorsOverLongAverage + "/" + sectorStats.length : pending,
+  };
 }
 
 function formatDashboardPpSpread(value: number | null | undefined, benchmark: number | null | undefined, pending: string, flat: string) {
@@ -143,6 +59,7 @@ export async function DashboardContent({ locale = "es" }: { locale?: "es" | "en"
     buildWeeklyReportData(),
   ]);
   const remainingModules = dashboardModules.filter((module) => module.id !== "rates" && module.id !== "sectors" && module.id !== "vix" && module.id !== "btc-flows");
+  const breadthValues = buildMarketBreadthValues(weeklyReportData, locale);
   const copy = locale === "en"
     ? {
         eyebrow: "Regime read",
@@ -155,6 +72,8 @@ export async function DashboardContent({ locale = "es" }: { locale?: "es" | "en"
         capitalFlowsSubtitle: "A comparative view of inflows, outflows, and flow pressure across different assets.",
         vixSection: "VIX / Volatility",
         vixSectionSubtitle: "Current level and term structure of implied volatility.",
+        participationSection: "MARKET PARTICIPATION",
+        participationSectionSubtitle: "Sector leadership shows where relative strength is concentrated; breadth helps assess how many areas of the market are participating.",
       }
     : {
         eyebrow: "Lectura de régimen",
@@ -167,6 +86,8 @@ export async function DashboardContent({ locale = "es" }: { locale?: "es" | "en"
         capitalFlowsSubtitle: "Lectura comparada de entradas, salidas y presión de flujos en distintos activos.",
         vixSection: "VIX / Volatilidad",
         vixSectionSubtitle: "Nivel actual y estructura temporal de la volatilidad implícita.",
+        participationSection: "PARTICIPACIÓN DE MERCADO",
+        participationSectionSubtitle: "El liderazgo sectorial muestra dónde se concentra la fortaleza relativa; la amplitud ayuda a evaluar cuántas áreas del mercado acompañan el movimiento.",
       };
 
   return (
@@ -212,8 +133,30 @@ export async function DashboardContent({ locale = "es" }: { locale?: "es" | "en"
       <DashboardReadingGuide locale={locale} />
 
       <div className="mt-6 space-y-4 md:mt-8 md:space-y-6">
-        {sectorRotation ? <SectorRotationChart data={sectorRotation} /> : null}
-        <MarketBreadthPanel data={weeklyReportData} locale={locale} />
+        <section className="grid min-w-0 gap-3 [&>*]:min-w-0" aria-labelledby="market-participation-section" data-market-participation-section>
+          <div className="border-l-2 border-brass/50 pl-4">
+            <h2 id="market-participation-section" className="text-xs font-semibold uppercase tracking-[0.2em] text-petrol">{copy.participationSection}</h2>
+            <p className="mt-2 max-w-3xl text-sm leading-6 text-muted">{copy.participationSectionSubtitle}</p>
+          </div>
+          <div className="grid min-w-0 gap-4 md:gap-5 [&>*]:min-w-0">
+            {sectorRotation ? <SectorRotationChart data={sectorRotation} /> : null}
+            <MarketBreadthPanel
+              locale={locale}
+              values={breadthValues}
+              statisticalSource={{
+                name: weeklyReportData.statisticalSource.name,
+                url: weeklyReportData.statisticalSource.url,
+                updated: weeklyReportData.statisticalSource.updated,
+              }}
+              sectorSource={sectorRotation ? {
+                name: sectorRotation.sourceName,
+                url: sectorRotation.sourceUrl,
+                updated: sectorRotation.lastUpdated,
+                status: sectorRotation.dataStatus,
+              } : null}
+            />
+          </div>
+        </section>
         {quantRisk ? <QuantRiskPanel data={quantRisk} locale={locale} /> : null}
         {vix || vixTermStructure ? (
           <section className="grid min-w-0 gap-3 [&>*]:min-w-0" aria-labelledby="vix-volatility-section">

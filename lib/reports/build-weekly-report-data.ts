@@ -141,6 +141,11 @@ export async function buildWeeklyReportData() {
   return {
     generatedAt,
     dataThrough,
+    statisticalSource: {
+      name: manifest.source,
+      url: manifest.sourceUrl,
+      updated: dataThrough,
+    },
     weekLabel: weekLabel(dataThrough),
     regimeSummary: dashboard.regimeSummary,
     executiveSummary: {
