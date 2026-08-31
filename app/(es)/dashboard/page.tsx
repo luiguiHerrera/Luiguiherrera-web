@@ -67,9 +67,8 @@ export async function DashboardContent({ locale = "es" }: { locale?: "es" | "en"
         subtitle: "This dashboard organizes volatility, sector rotation and flows into a compact market context view.",
         disclaimer: "Educational market-context reading. It summarizes public data and does not provide execution instructions.",
         finalDisclaimer: "This panel organizes public market readings. It does not forecast prices, recommend trades or replace personalized analysis.",
-        capitalFlows: "Capital flows",
-        capitalFlowsTitle: "Flow map",
-        capitalFlowsSubtitle: "A comparative view of inflows, outflows, and flow pressure across different assets.",
+        capitalFlows: "CAPITAL FLOWS",
+        capitalFlowsSubtitle: "A comparative view of inflows, outflows, and flow pressure across selected assets and vehicles.",
         vixSection: "VIX / Volatility",
         vixSectionSubtitle: "Current level and term structure of implied volatility.",
         participationSection: "MARKET PARTICIPATION",
@@ -81,9 +80,8 @@ export async function DashboardContent({ locale = "es" }: { locale?: "es" | "en"
         subtitle: "Ordena volatilidad, rotación sectorial, amplitud, VIX, BTC ETF flows y presión de flujos en GLD en una lectura común.",
         disclaimer: "Esta lectura no anticipa el mercado. Resume datos de fuentes abiertas para entender el contexto.",
         finalDisclaimer: "Este panel organiza lecturas públicas de mercado. No anticipa precios, no recomienda operaciones con activos y no sustituye un análisis personalizado.",
-        capitalFlows: "Flujos de capital",
-        capitalFlowsTitle: "Mapa de flujos",
-        capitalFlowsSubtitle: "Lectura comparada de entradas, salidas y presión de flujos en distintos activos.",
+        capitalFlows: "FLUJOS DE CAPITAL",
+        capitalFlowsSubtitle: "Lectura comparada de entradas, salidas y presión de flujos en activos y vehículos seleccionados.",
         vixSection: "VIX / Volatilidad",
         vixSectionSubtitle: "Nivel actual y estructura temporal de la volatilidad implícita.",
         participationSection: "PARTICIPACIÓN DE MERCADO",
@@ -171,14 +169,15 @@ export async function DashboardContent({ locale = "es" }: { locale?: "es" | "en"
           </section>
         ) : null}
         {btcEtfFlows || gldFlowPressure ? (
-          <section className="warm-section grid min-w-0 gap-4 rounded-[6px] border border-line p-4 md:p-5">
-            <div>
-              <p className="text-xs font-semibold uppercase tracking-[0.16em] text-petrol">{copy.capitalFlows}</p>
-              <h2 className="mt-2 text-2xl font-semibold leading-tight text-ink">{copy.capitalFlowsTitle}</h2>
+          <section className="grid min-w-0 gap-3 [&>*]:min-w-0" aria-labelledby="capital-flows-section" data-capital-flows-section>
+            <div className="border-l-2 border-brass/50 pl-4">
+              <h2 id="capital-flows-section" className="text-xs font-semibold uppercase tracking-[0.2em] text-petrol">{copy.capitalFlows}</h2>
               <p className="mt-2 max-w-3xl text-sm leading-6 text-muted">{copy.capitalFlowsSubtitle}</p>
             </div>
-            {gldFlowPressure ? <GldFlowPressureModule data={gldFlowPressure} locale={locale} /> : null}
-            {btcEtfFlows ? <BtcEtfFlowsModule data={btcEtfFlows} /> : null}
+            <div className="grid min-w-0 gap-4 md:gap-5 [&>*]:min-w-0">
+              {gldFlowPressure ? <GldFlowPressureModule data={gldFlowPressure} locale={locale} /> : null}
+              {btcEtfFlows ? <BtcEtfFlowsModule data={btcEtfFlows} /> : null}
+            </div>
           </section>
         ) : null}
         {remainingModules.map((module) => <DashboardModule key={module.id} {...module} locale={locale} />)}
