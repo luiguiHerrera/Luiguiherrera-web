@@ -62,3 +62,13 @@ test("localizes sector-source provenance without changing the Spanish source lab
   assert.equal(englishSource, "Alpha Vantage: daily sector ETF prices");
   assert.doesNotMatch(englishSource, /precios diarios de ETFs sectoriales/);
 });
+
+test("translates the three verified dynamic English defects and preserves Favorable", () => {
+  assert.equal(translateDashboardText("Risk-on selectivo"), "Selective risk-on");
+  assert.equal(translateDashboardText("RETORNO ACUMULADO · 30 SESIONES"), "Cumulative return · 30 sessions");
+  assert.equal(
+    translateDashboardText("La lectura sugiere una rotación growth."),
+    "The reading suggests growth rotation.",
+  );
+  assert.equal(translateDashboardText("Favorable"), "Favorable");
+});

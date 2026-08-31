@@ -83,7 +83,7 @@ function MiniReturnChart({ label, values, locale = "es" }: { label: string; valu
         <span>{label}</span>
         <span className="font-semibold text-ink">{formatPercent(finalValue, locale)}</span>
       </div>
-      <svg viewBox="0 0 190 92" className="h-32 w-full text-petrol" role="img" aria-label="Retorno acumulado de los cierres diarios mostrados">
+      <svg viewBox="0 0 190 92" className="h-32 w-full text-petrol" role="img" aria-label={locale === "en" ? "Cumulative return for the displayed daily closes" : "Retorno acumulado de los cierres diarios mostrados"}>
         {[max, middle, min].map((tick) => (
           <g key={tick}>
             <line x1={chartLeft} x2={chartRight} y1={yFor(tick)} y2={yFor(tick)} stroke="currentColor" strokeOpacity="0.12" vectorEffect="non-scaling-stroke" />
@@ -165,7 +165,7 @@ export function SectorDetailPanel({ sector, selectedPeriod, selectedRank, locale
       </div>
 
       <div className="mt-4">
-        <MiniReturnChart label={selectedSeries?.label ?? (locale === "en" ? "Available history" : "Historial disponible")} values={detailPoints} locale={locale} />
+        <MiniReturnChart label={t(selectedSeries?.label) || (locale === "en" ? "Available history" : "Historial disponible")} values={detailPoints} locale={locale} />
       </div>
 
       <p className="mt-4 text-sm leading-6 text-muted">

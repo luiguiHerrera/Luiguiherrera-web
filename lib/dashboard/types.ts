@@ -200,7 +200,7 @@ export type BtcEtfFlowPoint = {
   totalNetFlow: number;
 };
 
-export type BtcEtfFlowsData = DashboardDataSource & {
+export type EtfFlowsData = DashboardDataSource & {
   latestDate: string;
   latestTotalNetFlow: number | null;
   latestFundFlows: BtcEtfFundFlow[];
@@ -226,8 +226,30 @@ export type BtcEtfFlowsData = DashboardDataSource & {
   interpretation: DashboardModuleData["interpretation"];
 };
 
+export type BtcEtfFlowSourceRole = "primary" | "fallback" | "unavailable";
+export type BtcEtfFlowCoverage = "complete" | "partial" | "unavailable";
+export type BtcEtfFlowDataStatus = "automated" | "delayed" | "unavailable";
+
+export type BtcEtfFlowSource = {
+  name: string;
+  url: string;
+};
+
+export type BtcEtfFlowsData = Omit<EtfFlowsData, "dataStatus"> & {
+  dataStatus: BtcEtfFlowDataStatus;
+  sourceRole: BtcEtfFlowSourceRole;
+  coverage: BtcEtfFlowCoverage;
+  primarySource: BtcEtfFlowSource;
+  fallbackSource: BtcEtfFlowSource;
+};
+
 export type BtcEtfFlowsDashboardData = {
   flows: BtcEtfFlowsData;
+  module: DashboardModuleData;
+};
+
+export type EtfFlowsDashboardData = {
+  flows: EtfFlowsData;
   module: DashboardModuleData;
 };
 
@@ -338,6 +360,6 @@ export type DashboardData = {
   vix: VixDashboardData | null;
   vixTermStructure: VixTermStructureData | null;
   btcEtfFlows: BtcEtfFlowsDashboardData | null;
-  ethEtfFlows: BtcEtfFlowsDashboardData | null;
+  ethEtfFlows: EtfFlowsDashboardData | null;
   gldFlowPressure: GldFlowPressure;
 };

@@ -11,6 +11,7 @@ import { VixTermStructureModule } from "@/components/dashboard/VixTermStructureM
 import { DisclaimerBox } from "@/components/ui/DisclaimerBox";
 import { InstitutionalHero } from "@/components/ui/InstitutionalHero";
 import { getDashboardData } from "@/lib/dashboard/get-dashboard-data";
+import { formatCapitalFlowDate } from "@/lib/dashboard/capital-flows-presentation";
 import { buildMarketBreadthValues } from "@/lib/dashboard/market-breadth";
 import { getRouteMetadata } from "@/lib/seo/site";
 import { buildWeeklyReportData } from "@/lib/reports/build-weekly-report-data";
@@ -90,7 +91,9 @@ export async function DashboardContent({ locale = "es" }: { locale?: "es" | "en"
               pillar: "btcFlows" as const,
               sourceName: btcEtfFlows.flows.sourceName,
               sourceUrl: btcEtfFlows.flows.sourceUrl,
-              lastUpdated: btcEtfFlows.flows.lastUpdated,
+              lastUpdated: btcEtfFlows.flows.latestDate
+                ? formatCapitalFlowDate(btcEtfFlows.flows.latestDate, locale)
+                : locale === "en" ? "No valid observation" : "Sin observación válida",
               dataStatus: btcEtfFlows.flows.dataStatus,
             }] : []),
           ]}

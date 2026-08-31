@@ -2,7 +2,7 @@ import type { CrossSignalRadarRow, DashboardModuleData } from "@/lib/dashboard/t
 
 // Adapters map live, public or vendor data into these same shapes.
 // Sector analytics fail closed in their adapter and have no manual/demo entry here.
-// BTC ETF flows retain their explicitly labelled presentation fallback.
+// The BTC entry is a mock-data fixture only. Production BTC retrieval does not import this module.
 // Short interest / 13F remain pending until reliable provider contracts are reviewed.
 
 export const dashboardModules: DashboardModuleData[] = [

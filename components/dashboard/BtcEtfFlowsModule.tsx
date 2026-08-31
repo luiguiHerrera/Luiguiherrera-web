@@ -11,11 +11,12 @@ import {
 } from "@/components/dashboard/DashboardPrimitives";
 import {
   buildBtcRecentSessionRows,
+  btcFlowCoverageCopy,
+  btcFlowStatusLabel,
   capitalFlowTone,
   flowDirectionLabel,
   formatCapitalFlowDate,
 } from "@/lib/dashboard/capital-flows-presentation";
-import { dataStatusLabels } from "@/lib/dashboard/status";
 import { translateDashboardText } from "@/lib/dashboard/translate-dashboard-copy";
 import type {
   BtcEtfFlowPoint,
@@ -270,14 +271,19 @@ export function BtcEtfFlowsModule({ assetLabel = "BTC", data }: BtcEtfFlowsModul
   const contextId = useId();
   const t = (value: string | null | undefined) => locale === "en" ? translateDashboardText(value) : value ?? "";
   const flows = data.flows;
-  const statusLabel = assetLabel === "BTC" && flows.rowsParsed > 0
-    ? locale === "en" ? "Data available · source-based update" : "Datos disponibles · actualización según fuente"
-    : t(dataStatusLabels[flows.dataStatus]);
-  const statusTone = flows.rowsParsed > 0 && flows.dataStatus === "automated"
+  const statusLabel = btcFlowStatusLabel(flows.dataStatus, flows.sourceRole, locale);
+  const statusTone = flows.dataStatus === "automated"
     ? "positive"
-    : flows.dataStatus === "fallback" || flows.dataStatus === "delayed" || flows.dataStatus === "manual"
+    : flows.dataStatus === "delayed"
       ? "warning"
       : "neutral";
+  const coverageCopy = btcFlowCoverageCopy(flows.coverage, flows.rowsParsed, locale);
+  const updatedLabel = flows.latestDate
+    ? formatCapitalFlowDate(flows.latestDate, locale)
+    : locale === "en" ? "No valid observation" : "Sin observación válida";
+  const activeSourceLabel = flows.sourceRole === "unavailable"
+    ? locale === "en" ? "No active source" : "Sin fuente activa"
+    : flows.sourceName;
   const primaryMetrics = [
     {
       id: "latest",
@@ -318,6 +324,8 @@ export function BtcEtfFlowsModule({ assetLabel = "BTC", data }: BtcEtfFlowsModul
       className="min-w-0 border border-line bg-panel px-4 py-5 shadow-[0_14px_32px_rgba(51,45,39,0.05)] sm:px-5 md:px-7 md:py-6"
       data-btc-flow-module
       data-btc-data-status={flows.dataStatus}
+      data-btc-source-role={flows.sourceRole}
+      data-btc-coverage={flows.coverage}
     >
       <div className="flex flex-wrap items-center justify-between gap-3">
         <p className={dashboardModuleEyebrowClassName}>{assetLabel === "BTC" ? locale === "en" ? "Bitcoin · Spot ETFs" : "Bitcoin · ETFs spot" : `${assetLabel} ETF flows`}</p>
@@ -332,6 +340,10 @@ export function BtcEtfFlowsModule({ assetLabel = "BTC", data }: BtcEtfFlowsModul
               : locale === "en" ? "ETF flow pressure" : "Presión de flujos vía ETFs"}
           </h2>
           <p className="mt-3 text-sm leading-6 text-muted md:text-base">{t(flows.readingSubtext)}</p>
+          <div className="mt-3 flex flex-wrap items-baseline gap-x-3 gap-y-1 text-xs leading-5" data-btc-coverage-summary>
+            <span className="font-semibold text-ink">{coverageCopy.label}</span>
+            <span className="text-muted">{coverageCopy.detail}</span>
+          </div>
         </div>
         <DashboardDisclosureButton
           controls={contextId}
@@ -385,12 +397,20 @@ export function BtcEtfFlowsModule({ assetLabel = "BTC", data }: BtcEtfFlowsModul
 
           <div className="mt-5 flex flex-wrap gap-x-8 gap-y-3 border-t border-line pt-4 text-xs leading-5 text-muted" data-btc-source-metadata>
             <div>
-              <span className="font-semibold uppercase tracking-[0.12em] text-brass">{locale === "en" ? "Source" : "Fuente"}</span>
-              {flows.sourceUrl ? (
-                <a href={flows.sourceUrl} className="ml-2 font-medium text-ink underline-offset-4 hover:underline" target="_blank" rel="noreferrer">{t(flows.sourceName)}</a>
-              ) : <span className="ml-2 font-medium text-ink">{t(flows.sourceName)}</span>}
+              <span className="font-semibold uppercase tracking-[0.12em] text-brass">{locale === "en" ? "Primary source" : "Fuente principal"}</span>
+              <a href={flows.primarySource.url} className="ml-2 font-medium text-ink underline-offset-4 hover:underline" target="_blank" rel="noreferrer">{flows.primarySource.name}</a>
             </div>
-            <div><span className="font-semibold uppercase tracking-[0.12em] text-brass">{locale === "en" ? "Updated" : "Actualización"}</span><span className="ml-2 font-medium text-ink">{t(flows.lastUpdated)}</span></div>
+            <div>
+              <span className="font-semibold uppercase tracking-[0.12em] text-brass">Fallback</span>
+              <a href={flows.fallbackSource.url} className="ml-2 font-medium text-ink underline-offset-4 hover:underline" target="_blank" rel="noreferrer">{flows.fallbackSource.name}</a>
+            </div>
+            <div>
+              <span className="font-semibold uppercase tracking-[0.12em] text-brass">{locale === "en" ? "Active source" : "Fuente activa"}</span>
+              {flows.sourceUrl ? (
+                <a href={flows.sourceUrl} className="ml-2 font-medium text-ink underline-offset-4 hover:underline" target="_blank" rel="noreferrer">{activeSourceLabel}</a>
+              ) : <span className="ml-2 font-medium text-ink">{activeSourceLabel}</span>}
+            </div>
+            <div><span className="font-semibold uppercase tracking-[0.12em] text-brass">{locale === "en" ? "Updated" : "Actualización"}</span><span className="ml-2 font-medium text-ink">{updatedLabel}</span></div>
             <div><span className="font-semibold uppercase tracking-[0.12em] text-brass">{locale === "en" ? "Frequency" : "Frecuencia"}</span><span className="ml-2 font-medium text-ink">{t(flows.updateFrequency)}</span></div>
           </div>
           <p className="mt-3 text-xs leading-5 text-muted">{t(flows.reliabilityNote)}</p>

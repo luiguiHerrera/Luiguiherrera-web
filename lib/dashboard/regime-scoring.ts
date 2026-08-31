@@ -126,7 +126,7 @@ function vixScore(data: VixDashboardData | null): PillarScore {
 }
 
 function btcScore(data: BtcEtfFlowsDashboardData | null): PillarScore {
-  if (!data) {
+  if (!data || data.flows.dataStatus === "unavailable" || data.flows.sourceRole === "unavailable") {
     return {
       score: 50,
       confidencePenalty: 15,

@@ -1,13 +1,13 @@
 import type {
   BtcEtfFlowPoint,
-  BtcEtfFlowsDashboardData,
-  BtcEtfFlowsData,
   BtcEtfFundFlow,
   BtcFlowBreadth,
   BtcFlowLevel,
   BtcFlowStreak,
   BtcFlowTrend,
   DashboardModuleData,
+  EtfFlowsDashboardData,
+  EtfFlowsData,
 } from "@/lib/dashboard/types";
 
 const FARSIDE_ETH_URL = "https://farside.co.uk/eth/";
@@ -287,7 +287,7 @@ async function getParsedEthFlowTable() {
   throw new Error(errors.join(" | "));
 }
 
-function buildEthFlowsFromRows(parsed: ParsedEthFlowTable): BtcEtfFlowsData {
+function buildEthFlowsFromRows(parsed: ParsedEthFlowTable): EtfFlowsData {
   const latest = parsed.rows[0];
   const rolling5dNetFlow = sumRows(parsed.rows, 5);
   const rolling10dNetFlow = sumRows(parsed.rows, 10);
@@ -333,7 +333,7 @@ function buildEthFlowsFromRows(parsed: ParsedEthFlowTable): BtcEtfFlowsData {
   };
 }
 
-function buildPendingEthFlows(_reason?: string): BtcEtfFlowsData {
+function buildPendingEthFlows(_reason?: string): EtfFlowsData {
   return {
     sourceName: "Farside Ethereum fund-flow source",
     sourceUrl: FARSIDE_ETH_URL,
@@ -380,7 +380,7 @@ function buildPendingEthFlows(_reason?: string): BtcEtfFlowsData {
   };
 }
 
-function buildModuleFromFlows(flows: BtcEtfFlowsData): DashboardModuleData {
+function buildModuleFromFlows(flows: EtfFlowsData): DashboardModuleData {
   return {
     id: "btc-flows",
     title: "Ethereum fund flows",
@@ -401,7 +401,7 @@ function buildModuleFromFlows(flows: BtcEtfFlowsData): DashboardModuleData {
   };
 }
 
-export async function getEthEtfFlowsData(): Promise<BtcEtfFlowsDashboardData> {
+export async function getEthEtfFlowsData(): Promise<EtfFlowsDashboardData> {
   try {
     const parsed = await getParsedEthFlowTable();
     const flows = buildEthFlowsFromRows(parsed);

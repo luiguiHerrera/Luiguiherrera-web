@@ -1,4 +1,3 @@
-import { dashboardModules } from "@/lib/dashboard/manual-data";
 import type {
   BtcEtfFlowPoint,
   BtcEtfFlowsDashboardData,
@@ -9,7 +8,7 @@ import type {
   BtcFlowStreak,
   BtcFlowTrend,
   DashboardModuleData,
-} from "@/lib/dashboard/types";
+} from "../types.ts";
 
 const REVALIDATE_SECONDS = 60 * 60 * 24;
 const BITBO_URL = "https://bitbo.io/treasuries/etf-flows/";
@@ -17,10 +16,24 @@ const FARSIDE_URL = "https://farside.co.uk/btc/";
 const FARSIDE_ALL_DATA_URL = "https://farside.co.uk/bitcoin-etf-flow-all-data/";
 const FARSIDE_URLS = [FARSIDE_ALL_DATA_URL, FARSIDE_URL];
 const REQUEST_TIMEOUT_MS = 8000;
-const FALLBACK_MESSAGE = "Datos automáticos no disponibles temporalmente. Mostrando lectura demo para mantener la estructura visual.";
 const BITBO_EXPECTED_COLUMNS = ["Date", "IBIT", "FBTC", "GBTC", "BTC", "BITB", "ARKB", "HODL", "BTCO", "BRRR", "EZBC", "MSBT", "BTCW", "DEFI", "Totals"];
 const FARSIDE_EXPECTED_COLUMNS = ["Date", "IBIT", "FBTC", "BITB", "ARKB", "BTCO", "EZBC", "BRRR", "HODL", "BTCW", "MSBT", "GBTC", "BTC", "Total"];
 const AGGREGATE_ROWS = new Set(["total", "totals", "average", "maximum", "minimum"]);
+
+const PRIMARY_SOURCE = {
+  name: "Bitbo / BitcoinTreasuries",
+  url: BITBO_URL,
+};
+
+const FALLBACK_SOURCE = {
+  name: "Farside Investors",
+  url: FARSIDE_ALL_DATA_URL,
+};
+
+type BtcEtfFlowsOptions = {
+  fetchImpl?: typeof fetch;
+  now?: number;
+};
 
 type SourceConfig = {
   id: "bitbo" | "farside";
@@ -62,14 +75,6 @@ type ParsedFarsideTable = {
   source: SourceConfig;
   sourceUrl: string;
 };
-
-function getFallbackModule() {
-  const fallback = dashboardModules.find((module) => module.id === "btc-flows");
-  if (!fallback) {
-    throw new Error("Missing BTC ETF flows fallback module");
-  }
-  return fallback;
-}
 
 function logBtcFlows(message: string, details: Record<string, unknown> = {}) {
   console.info("[dashboard:btc-etf-flows]", { message, ...details });
@@ -147,9 +152,9 @@ function formatNegativeFundFlow(flow: BtcEtfFundFlow | null) {
   return flow ? `${flow.ticker} ${formatUsdMillions(flow.flow)}` : "Sin salidas negativas";
 }
 
-function dataStatusForTimestamp(timestamp: number): BtcEtfFlowsData["dataStatus"] {
+function dataStatusForTimestamp(timestamp: number, now = Date.now()): BtcEtfFlowsData["dataStatus"] {
   const staleAfterMs = 4 * 24 * 60 * 60 * 1000;
-  return Date.now() - timestamp > staleAfterMs ? "delayed" : "automated";
+  return now - timestamp > staleAfterMs ? "delayed" : "automated";
 }
 
 function sumRows(rows: ParsedFlowRow[], count: number) {
@@ -323,12 +328,12 @@ function parsePublicFlowRows(html: string, source: SourceConfig, sourceUrl: stri
   return { rows: [], columns: [], calculatedTotal: false, source, sourceUrl };
 }
 
-async function fetchSourceHtml(url: string, source: SourceConfig) {
+async function fetchSourceHtml(url: string, source: SourceConfig, fetchImpl: typeof fetch) {
   let lastError: Error | null = null;
 
   for (let attempt = 1; attempt <= 2; attempt += 1) {
     try {
-      const response = await fetch(url, {
+      const response = await fetchImpl(url, {
         headers: {
           "User-Agent": "MarketRegimeDashboard/1.0 (+https://market-lab.local)",
           Accept: "text/html",
@@ -367,12 +372,12 @@ async function fetchSourceHtml(url: string, source: SourceConfig) {
   throw lastError ?? new Error(`${source.label} request failed`);
 }
 
-async function getParsedSourceTable(source: SourceConfig) {
+async function getParsedSourceTable(source: SourceConfig, fetchImpl: typeof fetch) {
   const errors: string[] = [];
 
   for (const url of source.urls) {
     try {
-      const html = await fetchSourceHtml(url, source);
+      const html = await fetchSourceHtml(url, source, fetchImpl);
       const parsed = parsePublicFlowRows(html, source, url);
       logBtcFlows("source_parse", {
         source: source.id,
@@ -400,12 +405,12 @@ async function getParsedSourceTable(source: SourceConfig) {
   throw new Error(errors.join(" | "));
 }
 
-async function getParsedBtcFlowTable() {
+async function getParsedBtcFlowTable(fetchImpl: typeof fetch) {
   const errors: string[] = [];
 
   for (const source of SOURCE_CONFIGS) {
     try {
-      return await getParsedSourceTable(source);
+      return await getParsedSourceTable(source, fetchImpl);
     } catch (error) {
       const message = error instanceof Error ? error.message : "unknown source error";
       errors.push(`${source.label}: ${message}`);
@@ -416,7 +421,7 @@ async function getParsedBtcFlowTable() {
   throw new Error(errors.join(" | "));
 }
 
-function buildBtcDataFromRows(parsed: ParsedFarsideTable): BtcEtfFlowsData {
+function buildBtcDataFromRows(parsed: ParsedFarsideTable, now: number): BtcEtfFlowsData {
   const { calculatedTotal, rows, source, sourceUrl } = parsed;
   const latest = rows[0];
   const rolling5dNetFlow = sumRows(rows, 5);
@@ -430,11 +435,15 @@ function buildBtcDataFromRows(parsed: ParsedFarsideTable): BtcEtfFlowsData {
   const reading = classifyFlowReading(latest.totalNetFlow, rolling5dNetFlow, rolling20dNetFlow, breadth, streak);
 
   return {
+    sourceRole: source.id === "bitbo" ? "primary" : "fallback",
+    coverage: rows.length >= 20 ? "complete" : "partial",
+    primarySource: PRIMARY_SOURCE,
+    fallbackSource: FALLBACK_SOURCE,
     sourceName: source.label,
     sourceUrl,
-    lastUpdated: `Última actualización disponible: ${latest.date}`,
+    lastUpdated: latest.date,
     updateFrequency: "Diaria / según disponibilidad de la fuente",
-    dataStatus: dataStatusForTimestamp(latest.timestamp),
+    dataStatus: dataStatusForTimestamp(latest.timestamp, now),
     reliabilityNote: source.reliabilityNote,
     latestDate: latest.date,
     latestTotalNetFlow: latest.totalNetFlow,
@@ -465,14 +474,15 @@ function buildBtcDataFromRows(parsed: ParsedFarsideTable): BtcEtfFlowsData {
   };
 }
 
-function buildModuleFromData(data: BtcEtfFlowsData, fallback: DashboardModuleData): DashboardModuleData {
+function buildModuleFromData(data: BtcEtfFlowsData): DashboardModuleData {
   const driverSummary = [
     `Mayor aporte positivo: ${formatPositiveFundFlow(data.largestInflowFundLatestDay)}`,
     `Mayor aporte negativo: ${formatNegativeFundFlow(data.largestOutflowFundLatestDay)}`,
   ].join(" · ");
 
   return {
-    ...fallback,
+    id: "btc-flows",
+    title: "BTC ETF Flows",
     status: data.readingLabel,
     sourceName: data.sourceName,
     sourceUrl: data.sourceUrl,
@@ -491,80 +501,67 @@ function buildModuleFromData(data: BtcEtfFlowsData, fallback: DashboardModuleDat
   };
 }
 
-function fallbackBtcFlowsData(fallback: DashboardModuleData, reason: string): BtcEtfFlowsDashboardData {
-  logBtcFlowsFallback("using_btc_flows_fallback", { reason });
-  const demoFlows: BtcEtfFundFlow[] = [
-    { ticker: "IBIT", flow: 95 },
-    { ticker: "FBTC", flow: 40 },
-    { ticker: "ARKB", flow: 8 },
-    { ticker: "GBTC", flow: -23 },
-    { ticker: "BITB", flow: 0 },
-  ];
-  const history = [
-    -80, 45, 130, 220, -35, 90, 160, 120, 40, -70, 180, 240, 80, -25, 60, 110, 140, 75, -55, 120,
-  ].map((totalNetFlow, index) => ({ date: `demo-${index + 1}`, totalNetFlow }));
-  const rows = history.slice().reverse().map<ParsedFlowRow>((point, index) => ({
-    date: point.date,
-    timestamp: index,
-    totalNetFlow: point.totalNetFlow,
-    latestFundFlows: demoFlows,
-    calculatedTotal: false,
-  }));
+function unavailableBtcFlowsData(reason: string): BtcEtfFlowsDashboardData {
+  logBtcFlowsFallback("btc_flows_unavailable", { reason });
   const data: BtcEtfFlowsData = {
-    sourceName: "Bitbo / BitcoinTreasuries",
-    sourceUrl: BITBO_URL,
-    lastUpdated: FALLBACK_MESSAGE,
+    sourceRole: "unavailable",
+    coverage: "unavailable",
+    primarySource: PRIMARY_SOURCE,
+    fallbackSource: FALLBACK_SOURCE,
+    sourceName: "Sin fuente activa",
+    lastUpdated: "",
     updateFrequency: "Diaria / según disponibilidad de la fuente",
-    dataStatus: "fallback",
-    reliabilityNote: `${FALLBACK_MESSAGE} Detalle técnico disponible solo en logs server-side.`,
-    latestDate: "Demo",
-    latestTotalNetFlow: 120,
-    latestFundFlows: demoFlows,
-    rolling5dNetFlow: sumRows(rows, 5),
-    rolling10dNetFlow: sumRows(rows, 10),
-    rolling20dNetFlow: sumRows(rows, 20),
-    positiveDaysLast10: positiveNegativeDays(rows).positive,
-    negativeDaysLast10: positiveNegativeDays(rows).negative,
-    flowStreak: { direction: "inflow", count: 3, label: "Racha de 3 días de entradas" },
-    cumulativeNetFlow: rows.reduce((sum, row) => sum + row.totalNetFlow, 0),
-    largestInflowFundLatestDay: strongestPositive(demoFlows),
-    largestOutflowFundLatestDay: strongestNegative(demoFlows),
-    dominantFlowDriver: "IBIT",
-    breadth: latestFundBreadth(demoFlows),
-    dailyLevel: "moderate_inflow",
-    recentTrend: "moderate_inflows",
-    readingLabel: "Datos pendientes",
-    readingSubtext: "La fuente aún no ha publicado o completado la actualización diaria.",
+    dataStatus: "unavailable",
+    reliabilityNote: "Bitbo y Farside no devolvieron una tabla válida. No se sustituyen observaciones ni métricas con datos fabricados. El detalle técnico permanece en logs server-side.",
+    latestDate: "",
+    latestTotalNetFlow: null,
+    latestFundFlows: [],
+    rolling5dNetFlow: null,
+    rolling10dNetFlow: null,
+    rolling20dNetFlow: null,
+    positiveDaysLast10: 0,
+    negativeDaysLast10: 0,
+    flowStreak: { direction: "none", count: 0, label: "Sin observaciones disponibles" },
+    cumulativeNetFlow: null,
+    largestInflowFundLatestDay: null,
+    largestOutflowFundLatestDay: null,
+    dominantFlowDriver: "Sin observaciones disponibles",
+    breadth: { positive: 0, negative: 0, flatOrMissing: 0 },
+    dailyLevel: "pending",
+    recentTrend: "pending",
+    readingLabel: "Datos no disponibles",
+    readingSubtext: "Las fuentes reales configuradas no están disponibles temporalmente.",
     readingSeverity: "pending",
     calculatedTotal: false,
     rowsParsed: 0,
-    history,
+    history: [],
     interpretation: {
       lookingAt: "Flujos netos hacia o desde ETFs spot de Bitcoin de EE. UU. como proxy de demanda vía vehículos regulados.",
       why: "Ayuda a observar presión de flujos y absorción institucional separada del movimiento diario del precio spot.",
-      how: "Lectura aproximada basada en flujos netos diarios y acumulados recientes.",
-      whatItDoesNotMean: "Entradas netas no garantizan subidas del precio de Bitcoin. Salidas netas tampoco implican caídas futuras. Los flujos son una pieza de contexto junto con precio, liquidez, volatilidad y régimen macro.",
+      how: "La lectura se reanudará cuando Bitbo o Farside vuelvan a publicar una tabla válida.",
+      whatItDoesNotMean: "La ausencia temporal de observaciones no permite inferir entradas, salidas, tendencia ni dirección del precio de Bitcoin.",
     },
   };
 
   return {
     flows: data,
-    module: buildModuleFromData(data, fallback),
+    module: buildModuleFromData(data),
   };
 }
 
-export async function getBtcEtfFlowsData(): Promise<BtcEtfFlowsDashboardData> {
-  const fallback = getFallbackModule();
+export async function getBtcEtfFlowsData(options: BtcEtfFlowsOptions = {}): Promise<BtcEtfFlowsDashboardData> {
+  const fetchImpl = options.fetchImpl ?? fetch;
+  const now = options.now ?? Date.now();
 
   try {
-    const parsed = await getParsedBtcFlowTable();
-    const data = buildBtcDataFromRows(parsed);
+    const parsed = await getParsedBtcFlowTable(fetchImpl);
+    const data = buildBtcDataFromRows(parsed, now);
     return {
       flows: data,
-      module: buildModuleFromData(data, fallback),
+      module: buildModuleFromData(data),
     };
   } catch (error) {
     const reason = error instanceof Error ? error.message : "error desconocido de fuente";
-    return fallbackBtcFlowsData(fallback, reason);
+    return unavailableBtcFlowsData(reason);
   }
 }
