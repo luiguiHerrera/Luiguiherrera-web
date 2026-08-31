@@ -8,6 +8,7 @@ const phraseMap: Array<[RegExp, string]> = [
   [/Fuente sectorial temporalmente no disponible/g, "Sector source temporarily unavailable"],
   [/Los modelos no se calculan sin historiales sectoriales reales y completos\./g, "Models are not calculated without complete real sector histories."],
   [/Automático con fuente pública: ([\d-]+)/g, "Automated from public source: $1"],
+  [/Alpha Vantage: precios diarios de ETFs sectoriales/g, "Alpha Vantage: daily sector ETF prices"],
   [/ETFs sectoriales como proxies/g, "Sector ETFs used as proxies"],
   [/No es una recomendación de inversión, no elige activos y no anticipa retornos futuros\./g, "It is not investment advice, does not select assets, and does not forecast future returns."],
   [/Lectura compuesta de volatilidad, rotación y flujos\./g, "Composite read of volatility, rotation, and flows."],

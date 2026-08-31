@@ -53,3 +53,12 @@ test("translates the real-sector regime support signal", () => {
     "Growth/cyclical sectors lead while defensives lag.",
   );
 });
+
+test("localizes sector-source provenance without changing the Spanish source label", () => {
+  const spanishSource = "Alpha Vantage: precios diarios de ETFs sectoriales";
+  const englishSource = translateDashboardText(spanishSource);
+
+  assert.equal(spanishSource, "Alpha Vantage: precios diarios de ETFs sectoriales");
+  assert.equal(englishSource, "Alpha Vantage: daily sector ETF prices");
+  assert.doesNotMatch(englishSource, /precios diarios de ETFs sectoriales/);
+});
