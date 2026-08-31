@@ -1,6 +1,17 @@
+import type { ReactNode } from "react";
+
 export const dashboardModuleEyebrowClassName = "text-xs font-semibold uppercase tracking-[0.2em] text-brass";
 
 export const dashboardModuleTitleClassName = "font-serif text-2xl font-semibold tracking-[-0.02em] text-ink md:text-3xl";
+
+type DashboardModuleHeadingProps = {
+  children: ReactNode;
+  headingLevel: "h2" | "h3";
+};
+
+export function DashboardModuleHeading({ children, headingLevel: Heading }: DashboardModuleHeadingProps) {
+  return <Heading className={dashboardModuleTitleClassName}>{children}</Heading>;
+}
 
 type DashboardStatusProps = {
   label: string;

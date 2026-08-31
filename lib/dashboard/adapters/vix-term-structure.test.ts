@@ -102,6 +102,18 @@ test("E: the UI consumes every selected point for both chart marks and table row
   assert.doesNotMatch(componentSource, /slice\(0,\s*3\)/);
 });
 
+test("E2: VIX chart points expose a 24px target around the unchanged 16px marker", () => {
+  const componentSource = readFileSync(new URL(
+    "../../../components/dashboard/VixTermStructureModule.tsx",
+    import.meta.url,
+  ), "utf8");
+
+  assert.match(componentSource, /data-vix-point=\{point\.label\}/);
+  assert.match(componentSource, /inline-flex h-6 w-6/);
+  assert.match(componentSource, /block h-4 w-4 rounded-full/);
+  assert.match(componentSource, /data-vix-point-marker/);
+});
+
 test("F: exposes the corrected public Cboe settlement link", () => {
   const data = buildDataFromContracts(monthlyRows.slice(0, 3), "2026-08-28");
   assert.equal(

@@ -4,10 +4,10 @@ import { useId, useState } from "react";
 import type { CSSProperties } from "react";
 import { usePathname } from "next/navigation";
 import {
+  DashboardModuleHeading,
   DashboardDisclosureButton,
   DashboardStatus,
   dashboardModuleEyebrowClassName,
-  dashboardModuleTitleClassName,
 } from "@/components/dashboard/DashboardPrimitives";
 import {
   buildBtcRecentSessionRows,
@@ -227,7 +227,7 @@ function RecentSessionsTable({ history, locale }: { history: BtcEtfFlowPoint[]; 
     <section className="border-t border-line pt-4" data-btc-detail>
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
-          <h3 className="text-sm font-semibold text-ink">{locale === "en" ? "Recent-session detail" : "Detalle de sesiones recientes"}</h3>
+          <h4 className="text-sm font-semibold text-ink">{locale === "en" ? "Recent-session detail" : "Detalle de sesiones recientes"}</h4>
           <p className="mt-1 text-xs text-muted">{rows.length} {locale === "en" ? "available sessions" : "sesiones disponibles"}</p>
         </div>
         <DashboardDisclosureButton
@@ -334,11 +334,11 @@ export function BtcEtfFlowsModule({ assetLabel = "BTC", data }: BtcEtfFlowsModul
 
       <div className="mt-3 flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
         <div className="max-w-3xl">
-          <h2 className={dashboardModuleTitleClassName}>
+          <DashboardModuleHeading headingLevel="h3">
             {assetLabel === "BTC"
               ? locale === "en" ? "Net flows for spot Bitcoin ETFs" : "Flujos netos de ETFs de BTC"
               : locale === "en" ? "ETF flow pressure" : "Presión de flujos vía ETFs"}
-          </h2>
+          </DashboardModuleHeading>
           <p className="mt-3 text-sm leading-6 text-muted md:text-base">{t(flows.readingSubtext)}</p>
           <div className="mt-3 flex flex-wrap items-baseline gap-x-3 gap-y-1 text-xs leading-5" data-btc-coverage-summary>
             <span className="font-semibold text-ink">{coverageCopy.label}</span>
@@ -368,7 +368,7 @@ export function BtcEtfFlowsModule({ assetLabel = "BTC", data }: BtcEtfFlowsModul
           <FlowBarChart history={flows.history} locale={locale} />
 
           <section className="mt-5">
-            <h3 className="text-xs font-semibold uppercase tracking-[0.14em] text-brass">{locale === "en" ? "Supporting detail" : "Detalle complementario"}</h3>
+            <h4 className="text-xs font-semibold uppercase tracking-[0.14em] text-brass">{locale === "en" ? "Supporting detail" : "Detalle complementario"}</h4>
             <div className="mt-3 grid border-y border-line sm:grid-cols-2 lg:grid-cols-3" data-btc-secondary-metrics>
               {secondaryMetrics.map(([id, label, value], index) => (
                 <div
@@ -384,11 +384,11 @@ export function BtcEtfFlowsModule({ assetLabel = "BTC", data }: BtcEtfFlowsModul
 
           <div className="mt-5 grid gap-4 border-t border-line pt-5 text-sm leading-6 text-muted lg:grid-cols-2">
             <section className="border-l border-brass/50 pl-3">
-              <h3 className="font-semibold text-ink">{locale === "en" ? "Prudent interpretation" : "Interpretación prudente"}</h3>
+              <h4 className="font-semibold text-ink">{locale === "en" ? "Prudent interpretation" : "Interpretación prudente"}</h4>
               <p className="mt-1.5">{t(flows.interpretation.how)}</p>
             </section>
             <section className="border-l border-petrol/20 pl-3">
-              <h3 className="font-semibold text-ink">{locale === "en" ? "What it does not mean" : "Qué NO significa"}</h3>
+              <h4 className="font-semibold text-ink">{locale === "en" ? "What it does not mean" : "Qué NO significa"}</h4>
               <p className="mt-1.5">{t(flows.interpretation.whatItDoesNotMean)}</p>
             </section>
           </div>

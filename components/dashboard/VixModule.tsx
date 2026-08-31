@@ -3,7 +3,7 @@
 import { useId, useState } from "react";
 import type { CSSProperties } from "react";
 import { usePathname } from "next/navigation";
-import { dashboardModuleEyebrowClassName, dashboardModuleTitleClassName } from "@/components/dashboard/DashboardPrimitives";
+import { DashboardModuleHeading, dashboardModuleEyebrowClassName } from "@/components/dashboard/DashboardPrimitives";
 import { translateDashboardText } from "@/lib/dashboard/translate-dashboard-copy";
 import type { VixDashboardData, VixHistoryPoint, VixSpotData } from "@/lib/dashboard/types";
 
@@ -168,7 +168,7 @@ export function VixModule({ data }: VixModuleProps) {
 
       <div className="mt-3 flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
         <div className="max-w-3xl">
-          <h2 className={dashboardModuleTitleClassName}>{locale === "en" ? "Volatility pressure" : "Presión de volatilidad"}</h2>
+          <DashboardModuleHeading headingLevel="h3">{locale === "en" ? "Volatility pressure" : "Presión de volatilidad"}</DashboardModuleHeading>
           <p className="mt-3 text-sm leading-6 text-muted md:text-base">{t(spot.vixCompositeSubtext)}</p>
         </div>
         <button
@@ -212,8 +212,8 @@ export function VixModule({ data }: VixModuleProps) {
           </div>
 
           <div className="mt-4 grid gap-3 border-t border-line pt-4 text-sm leading-6 text-muted lg:grid-cols-2">
-            <div className="bg-panelSoft/35 px-4 py-3"><h3 className="text-sm font-semibold text-ink">{locale === "en" ? "Prudent interpretation" : "Interpretación prudente"}</h3><p className="mt-1.5">{t(spot.interpretation.how)}</p></div>
-            <div className="bg-panelSoft/35 px-4 py-3"><h3 className="text-sm font-semibold text-ink">{locale === "en" ? "What it does not mean" : "Qué NO significa"}</h3><p className="mt-1.5">{t(spot.interpretation.whatItDoesNotMean)}</p></div>
+            <div className="bg-panelSoft/35 px-4 py-3"><h4 className="text-sm font-semibold text-ink">{locale === "en" ? "Prudent interpretation" : "Interpretación prudente"}</h4><p className="mt-1.5">{t(spot.interpretation.how)}</p></div>
+            <div className="bg-panelSoft/35 px-4 py-3"><h4 className="text-sm font-semibold text-ink">{locale === "en" ? "What it does not mean" : "Qué NO significa"}</h4><p className="mt-1.5">{t(spot.interpretation.whatItDoesNotMean)}</p></div>
           </div>
 
           <div className="mt-3 flex flex-wrap gap-x-8 gap-y-3 border-t border-line pt-3 text-xs text-muted">

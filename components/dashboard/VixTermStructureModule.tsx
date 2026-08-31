@@ -3,7 +3,7 @@
 import { useId, useState } from "react";
 import type { CSSProperties } from "react";
 import { usePathname } from "next/navigation";
-import { dashboardModuleEyebrowClassName, dashboardModuleTitleClassName } from "@/components/dashboard/DashboardPrimitives";
+import { DashboardModuleHeading, dashboardModuleEyebrowClassName } from "@/components/dashboard/DashboardPrimitives";
 import { translateDashboardText } from "@/lib/dashboard/translate-dashboard-copy";
 import type { VixTermStructureData, VixTermStructurePoint, VixTermStructureSourceStatus } from "@/lib/dashboard/types";
 
@@ -176,7 +176,7 @@ function TermStructureChart({
               key={point.label}
               type="button"
               aria-label={`${point.label}, ${point.symbol ?? (locale === "en" ? "contract pending" : "contrato pendiente")}, ${formatFullExpiration(point.expirationDate, locale)}, settlement ${formatPointValue(point.value, locale)}`}
-              className={`absolute h-4 w-4 -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-[#47604f] outline-none transition-[transform,background-color,box-shadow] focus-visible:ring-2 focus-visible:ring-brass focus-visible:ring-offset-2 ${isActive ? "scale-125 bg-[#47604f] shadow-[0_0_0_4px_rgba(111,143,123,0.18)]" : "bg-panel shadow-[0_0_0_3px_rgba(251,250,248,0.78)] hover:scale-110"}`}
+              className="group absolute inline-flex h-6 w-6 -translate-x-1/2 -translate-y-1/2 items-center justify-center bg-transparent outline-none focus-visible:ring-2 focus-visible:ring-brass focus-visible:ring-offset-2"
               style={{ left: `${x}%`, top: `${y}%` }}
               onMouseEnter={() => onActivePointChange(point.label)}
               onMouseLeave={() => onActivePointChange(null)}
@@ -184,7 +184,13 @@ function TermStructureChart({
               onBlur={() => onActivePointChange(null)}
               onClick={() => onActivePointChange(point.label)}
               data-vix-point={point.label}
-            />
+            >
+              <span
+                aria-hidden="true"
+                className={`pointer-events-none block h-4 w-4 rounded-full border-2 border-[#47604f] transition-[transform,background-color,box-shadow] ${isActive ? "scale-125 bg-[#47604f] shadow-[0_0_0_4px_rgba(111,143,123,0.18)]" : "bg-panel shadow-[0_0_0_3px_rgba(251,250,248,0.78)] group-hover:scale-110"}`}
+                data-vix-point-marker
+              />
+            </button>
           );
         })}
 
@@ -317,7 +323,7 @@ export function VixTermStructureModule({ data }: VixTermStructureModuleProps) {
       <div className="mt-3 flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
         <div className="max-w-3xl">
           <div className="flex flex-wrap items-center gap-3">
-            <h2 className={dashboardModuleTitleClassName}>Contango / Backwardation</h2>
+            <DashboardModuleHeading headingLevel="h3">Contango / Backwardation</DashboardModuleHeading>
             <span className={`border px-2.5 py-1 text-xs font-semibold ${classificationClass(data.classification)}`} data-vix-regime>
               {t(data.classification)}
             </span>
@@ -382,11 +388,11 @@ export function VixTermStructureModule({ data }: VixTermStructureModuleProps) {
       {contextOpen ? (
         <div id={contextId} className="mt-3 grid gap-3 border-t border-line pt-4 text-sm leading-6 text-muted lg:grid-cols-2" data-vix-context>
           <div className="bg-panelSoft/35 px-4 py-3">
-            <h3 className="text-sm font-semibold text-ink">{locale === "en" ? "What it does not mean" : "Qué NO significa"}</h3>
+            <h4 className="text-sm font-semibold text-ink">{locale === "en" ? "What it does not mean" : "Qué NO significa"}</h4>
             <p className="mt-1.5">{t(data.whatItDoesNotMean)}</p>
           </div>
           <div className="bg-panelSoft/35 px-4 py-3">
-            <h3 className="text-sm font-semibold text-ink">{locale === "en" ? "Source and methodology" : "Fuente y metodología"}</h3>
+            <h4 className="text-sm font-semibold text-ink">{locale === "en" ? "Source and methodology" : "Fuente y metodología"}</h4>
             <p className="mt-1.5">{t(data.reliabilityNote)}</p>
           </div>
           <div className="flex flex-wrap gap-x-8 gap-y-3 border-t border-line pt-3 text-xs lg:col-span-2">

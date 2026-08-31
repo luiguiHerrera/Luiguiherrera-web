@@ -2,10 +2,10 @@
 
 import { useId, useState } from "react";
 import {
+  DashboardModuleHeading,
   DashboardDisclosureButton,
   DashboardStatus,
   dashboardModuleEyebrowClassName,
-  dashboardModuleTitleClassName,
 } from "@/components/dashboard/DashboardPrimitives";
 import { capitalFlowTone, formatCapitalFlowDate } from "@/lib/dashboard/capital-flows-presentation";
 import { translateDashboardText } from "@/lib/dashboard/translate-dashboard-copy";
@@ -113,7 +113,7 @@ export function GldFlowPressureModule({ data, locale = "es" }: { data: GldFlowPr
 
       <div className="mt-3 flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
         <div className="max-w-3xl">
-          <h2 className={dashboardModuleTitleClassName}>{isEnglish ? "Flow-pressure proxy" : "Proxy de presión de flujos"}</h2>
+          <DashboardModuleHeading headingLevel="h3">{isEnglish ? "Flow-pressure proxy" : "Proxy de presión de flujos"}</DashboardModuleHeading>
           <p className="mt-3 text-sm leading-6 text-muted md:text-base">
             {isEnglish
               ? "Estimates creation or redemption pressure from changes in GLD shares outstanding."
@@ -143,7 +143,7 @@ export function GldFlowPressureModule({ data, locale = "es" }: { data: GldFlowPr
         <div id={contextId} className="mt-5 border-t border-line pt-5" data-gld-context>
           <div className="grid gap-6 lg:grid-cols-2">
             <section>
-              <h3 className="text-xs font-semibold uppercase tracking-[0.14em] text-brass">{isEnglish ? "Proxy detail" : "Detalle del proxy"}</h3>
+              <h4 className="text-xs font-semibold uppercase tracking-[0.14em] text-brass">{isEnglish ? "Proxy detail" : "Detalle del proxy"}</h4>
               <div className="mt-3 grid grid-cols-2 border-y border-line" data-gld-secondary-metrics>
                 {secondaryMetrics.map(([label, value], index) => (
                   <div key={label} className={`min-w-0 px-3 py-3 ${index % 2 === 0 ? "pl-0" : "border-l border-line"} ${index >= 2 ? "border-t border-line" : ""}`}>
@@ -156,11 +156,11 @@ export function GldFlowPressureModule({ data, locale = "es" }: { data: GldFlowPr
 
             <section className="grid content-start gap-4 text-sm leading-6 text-muted">
               <div className="border-l border-brass/50 pl-3">
-                <h3 className="font-semibold text-ink">{isEnglish ? "Prudent interpretation" : "Interpretación prudente"}</h3>
+                <h4 className="font-semibold text-ink">{isEnglish ? "Prudent interpretation" : "Interpretación prudente"}</h4>
                 <p className="mt-1.5">{pressureInterpretation(data, locale)}</p>
               </div>
               <div className="border-l border-petrol/20 pl-3">
-                <h3 className="font-semibold text-ink">{isEnglish ? "Proxy limitation" : "Limitación del proxy"}</h3>
+                <h4 className="font-semibold text-ink">{isEnglish ? "Proxy limitation" : "Limitación del proxy"}</h4>
                 <p className="mt-1.5">{t(data.reliabilityNote)}</p>
                 <p className="mt-2">
                   {isEnglish
