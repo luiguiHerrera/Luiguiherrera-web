@@ -1,12 +1,12 @@
-import { averageCorrelation, correlation, ewmaAnnualizedVolatility, garchOneOneForecast, mean } from "@/lib/dashboard/math";
-import type { QuantRiskData, SectorEtfSnapshot, SectorRotationMetrics, VolatilityStatus } from "@/lib/dashboard/types";
+import { averageCorrelation, correlation, ewmaAnnualizedVolatility, garchOneOneForecast, mean } from "./math.ts";
+import type { QuantRiskData, SectorEtfSnapshot, SectorRotationMetrics, VolatilityStatus } from "./types.ts";
 
 function toPercent(value: number | null) {
   return value === null ? null : value * 100;
 }
 
-function classifyVolatility(volatility: number | null): VolatilityStatus {
-  if (volatility === null) return "stress";
+function classifyVolatility(volatility: number | null): VolatilityStatus | null {
+  if (volatility === null) return null;
   if (volatility >= 0.28) return "stress";
   if (volatility >= 0.18) return "elevated";
   return "normal";
@@ -89,5 +89,30 @@ export function buildQuantRiskData(sectors: SectorEtfSnapshot[], metrics: Sector
     fragilityScore: Math.min(score, 100),
     fragilityLabel: fragilityLabel(score),
     fragilityInterpretation: `La lectura cuantitativa muestra fragilidad ${fragilityLabel(score).toLowerCase()}. Estos modelos estiman condiciones estadísticas de riesgo bajo supuestos históricos; no implican dirección futura del mercado.`,
+  };
+}
+
+export function buildUnavailableQuantRiskData(reason: string): QuantRiskData {
+  return {
+    sourceName: "Cálculos propios sobre ETFs sectoriales vía Alpha Vantage",
+    sourceUrl: "https://www.alphavantage.co/documentation/",
+    lastUpdated: "Fuente sectorial temporalmente no disponible",
+    updateFrequency: "Automática server-side con caché diaria; revisión periódica sugerida",
+    dataStatus: "unavailable",
+    reliabilityNote: `Los modelos no se calculan sin historiales sectoriales reales y completos. Detalle técnico: ${reason}.`,
+    ewmaVolAnnualized: null,
+    ewmaVolChange: null,
+    ewmaStatus: null,
+    garchVolForecast: null,
+    garchStatus: null,
+    modelStatus: "insufficient_data",
+    averageCorrelation21d: null,
+    averageCorrelation63d: null,
+    defensiveGrowthCorrelation21d: null,
+    sectorDispersion1w: null,
+    sectorDispersion1m: null,
+    fragilityScore: null,
+    fragilityLabel: null,
+    fragilityInterpretation: "Datos insuficientes: no existe un historial sectorial real y completo para estimar el modelo.",
   };
 }

@@ -198,8 +198,8 @@ function LiveAutomaticMarketReadings({ data }: { data: WeeklyReportData }) {
               </div>
               <div className="grid gap-2 sm:grid-cols-2">
                 <Metric label="Fecha de datos" value={data.generatedAt} />
-                <Metric label="Score" value={`${data.regimeSummary.regimeScore}/100`} emphasis />
-                <Metric label="Confianza" value={`${data.regimeSummary.confidence}%`} emphasis />
+                <Metric label="Score" value={data.regimeSummary.regimeScore === null ? "No disponible" : `${data.regimeSummary.regimeScore}/100`} emphasis />
+                <Metric label="Confianza" value={data.regimeSummary.confidence === null ? "No disponible" : `${data.regimeSummary.confidence}%`} emphasis />
                 <Metric label="Sesgo" value={data.regimeSummary.bias} />
               </div>
             </div>

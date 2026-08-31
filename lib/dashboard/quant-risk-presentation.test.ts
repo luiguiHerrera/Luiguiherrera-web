@@ -77,6 +77,28 @@ test("labels an existing EWMA fallback without presenting it as a native GARCH e
   assert.equal(fallback.readiness.find((item) => item.id === "garch")?.value, "EWMA fallback");
 });
 
+test("presents unavailable real-sector history as insufficient rather than low risk", () => {
+  const unavailable = buildQuantRiskPresentation({
+    ...automatedData,
+    dataStatus: "unavailable",
+    modelStatus: "insufficient_data",
+    ewmaVolAnnualized: null,
+    ewmaStatus: null,
+    garchVolForecast: null,
+    garchStatus: null,
+    averageCorrelation21d: null,
+    sectorDispersion1w: null,
+    sectorDispersion1m: null,
+    fragilityScore: null,
+    fragilityLabel: null,
+    reliabilityNote: "Los modelos no se calculan sin historiales sectoriales reales y completos.",
+  }, "en");
+  assert.equal(unavailable.status, "Data temporarily unavailable");
+  assert.ok(unavailable.primaryMetrics.every((metric) => metric.available === false));
+  assert.equal(unavailable.dispersion[0].value, "Not enough data");
+  assert.match(unavailable.interpretation, /not calculated without complete real sector histories/i);
+});
+
 test("localizes the presentation and keeps the disclosure collapsed by default", () => {
   const english = buildQuantRiskPresentation(automatedData, "en");
   assert.equal(english.copy.eyebrow, "Quantitative risk");

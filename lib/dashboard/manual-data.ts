@@ -1,34 +1,11 @@
 import type { CrossSignalRadarRow, DashboardModuleData } from "@/lib/dashboard/types";
 
 // Adapters map live, public or vendor data into these same shapes.
-// Sprint 1 automates Sector ETFs and BTC ETF flows server-side with fallbacks.
+// Sector analytics fail closed in their adapter and have no manual/demo entry here.
+// BTC ETF flows retain their explicitly labelled presentation fallback.
 // Short interest / 13F remain pending until reliable provider contracts are reviewed.
 
 export const dashboardModules: DashboardModuleData[] = [
-  {
-    id: "sectors",
-    title: "Rotación sectorial por ETFs",
-    status: "Datos manuales",
-    sourceName: "ETFs sectoriales SPDR como proxies conceptuales",
-    lastUpdated: "Manual: 2026-06-07",
-    updateFrequency: "Cuando se automatice: cierre diario o periódico",
-    dataStatus: "manual",
-    reliabilityNote: "Aproximación por proxies sectoriales; no sustituye un análisis completo de composición, factores o liquidez.",
-    observedData: [
-      ["Universo proxy", "XLK, XLF, XLV, XLE, XLY, XLP, XLI, XLB, XLU, XLRE, XLC"],
-      ["Top 1 semana", "XLU +1.2%, XLP +0.9%, XLV +0.7%"],
-      ["Bottom 1 semana", "XLK -1.4%, XLY -0.8%, XLE -0.5%"],
-      ["Top 1 mes", "XLF +3.0%, XLI +2.4%, XLV +2.1%"],
-      ["Bottom 1 mes", "XLRE -1.2%, XLE -0.9%, XLC -0.4%"],
-      ["Lectura", "Mixta con sesgo defensivo moderado"],
-    ],
-    interpretation: {
-      lookingAt: "Performance de ETFs sectoriales como aproximación de liderazgo y rezago por sectores.",
-      why: "Ayuda a ver si el liderazgo se concentra en sectores growth, value, cíclicos o defensivos.",
-      how: "Liderazgo defensivo puede sugerir cautela; liderazgo cíclico/growth puede sugerir mayor apetito por riesgo o crecimiento.",
-      whatItDoesNotMean: "No convierte a un sector líder en una instrucción operativa ni a un sector rezagado en descarte automático.",
-    },
-  },
   {
     id: "btc-flows",
     title: "BTC ETF Flows",

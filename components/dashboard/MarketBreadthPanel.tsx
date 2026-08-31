@@ -8,14 +8,7 @@ import {
   dashboardModuleTitleClassName,
 } from "@/components/dashboard/DashboardPrimitives";
 import { translateDashboardText } from "@/lib/dashboard/translate-dashboard-copy";
-
-export type MarketBreadthValues = {
-  rspVsSpy: string;
-  iwmVsSpy: string;
-  qqqVsSpy: string;
-  positiveSectors: string;
-  sectorsOverLongAverage: string;
-};
+import type { MarketBreadthValues } from "@/lib/dashboard/market-breadth";
 
 type SourceMetadata = {
   name: string;
@@ -45,13 +38,13 @@ function metricCellClass(index: number) {
 export function MarketBreadthPanel({ locale, values, statisticalSource, sectorSource }: MarketBreadthPanelProps) {
   const [contextOpen, setContextOpen] = useState(false);
   const contextId = useId();
-  const sectorDataIsDemo = sectorSource?.status === "demo" || sectorSource?.status === "fallback";
+  const sectorDataAvailable = sectorSource?.status === "automated";
   const copy = locale === "en"
     ? {
         eyebrow: "Market breadth",
         title: "Market breadth",
         description: "Evaluates whether market movement is supported by broad participation or concentrated in a few segments.",
-        status: sectorDataIsDemo ? "Partial demo data" : "Processed public data",
+        status: sectorDataAvailable ? "Processed public data" : "Processed public data · partial",
         showContext: "Show context",
         hideContext: "Hide context",
         positiveSectors: "Positive sectors",
@@ -68,7 +61,7 @@ export function MarketBreadthPanel({ locale, values, statisticalSource, sectorSo
         eyebrow: "Amplitud de mercado",
         title: "Amplitud de mercado",
         description: "Evalúa si el movimiento del mercado está acompañado por una participación amplia o concentrado en pocos segmentos.",
-        status: sectorDataIsDemo ? "Datos demo parciales" : "Datos públicos procesados",
+        status: sectorDataAvailable ? "Datos públicos procesados" : "Datos públicos procesados · parcial",
         showContext: "Mostrar contexto",
         hideContext: "Ocultar contexto",
         positiveSectors: "Sectores positivos",
@@ -111,7 +104,7 @@ export function MarketBreadthPanel({ locale, values, statisticalSource, sectorSo
     <article className="min-w-0 border border-line bg-panel px-4 py-5 shadow-[0_14px_32px_rgba(51,45,39,0.05)] sm:px-5 md:px-7 md:py-6" data-market-breadth-module>
       <div className="flex flex-wrap items-center justify-between gap-3">
         <p className={dashboardModuleEyebrowClassName}>{copy.eyebrow}</p>
-        <DashboardStatus label={copy.status} tone={sectorDataIsDemo ? "warning" : "positive"} />
+        <DashboardStatus label={copy.status} tone={sectorDataAvailable ? "positive" : "warning"} />
       </div>
       <div className="mt-3 flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
         <div className="max-w-3xl">

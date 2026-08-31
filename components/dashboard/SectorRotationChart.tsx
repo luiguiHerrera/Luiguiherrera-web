@@ -11,10 +11,36 @@ import {
 import { SectorDetailPanel } from "@/components/dashboard/SectorDetailPanel";
 import { dataStatusLabels } from "@/lib/dashboard/status";
 import { translateDashboardText } from "@/lib/dashboard/translate-dashboard-copy";
-import type { SectorEtfSnapshot, SectorRotationData } from "@/lib/dashboard/types";
+import type { DashboardModuleData, SectorEtfSnapshot, SectorRotationData } from "@/lib/dashboard/types";
 
 type Period = "1W" | "1M" | "3M";
 type SectorRotationChartProps = { data: SectorRotationData };
+
+export function SectorRotationUnavailable({ locale, module }: { locale: "es" | "en"; module: DashboardModuleData }) {
+  const isEnglish = locale === "en";
+  return (
+    <article className="min-w-0 border border-line bg-panel px-4 py-5 shadow-[0_14px_32px_rgba(51,45,39,0.05)] sm:px-5 md:px-7 md:py-6" data-sector-rotation-module data-sector-data-status="unavailable">
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <p className={dashboardModuleEyebrowClassName}>{isEnglish ? "Sector rotation" : "Rotación sectorial"}</p>
+        <DashboardStatus label={isEnglish ? "Data temporarily unavailable" : "Datos temporalmente no disponibles"} tone="neutral" />
+      </div>
+      <div className="mt-3 max-w-3xl">
+        <h3 className={dashboardModuleTitleClassName}>{isEnglish ? "Relative sector map" : "Mapa relativo sectorial"}</h3>
+        <p className="mt-3 text-sm leading-6 text-muted md:text-base">
+          {isEnglish
+            ? "A complete, valid snapshot for all 11 sector ETF proxies is not available. Rankings, returns, dispersion, and bars remain unavailable rather than using synthetic histories."
+            : "No existe un snapshot completo y válido para los 11 proxies de ETFs sectoriales. Rankings, retornos, dispersión y barras permanecen no disponibles en lugar de usar historiales sintéticos."}
+        </p>
+      </div>
+      <div className="mt-5 grid gap-3 border-y border-line py-4 text-sm leading-6 text-muted md:grid-cols-3">
+        <div><p className="text-[11px] font-semibold uppercase tracking-[0.12em] text-brass">{isEnglish ? "Source" : "Fuente"}</p><a href={module.sourceUrl} target="_blank" rel="noreferrer" className="mt-1 block font-semibold text-ink underline-offset-4 hover:underline">Alpha Vantage</a></div>
+        <div><p className="text-[11px] font-semibold uppercase tracking-[0.12em] text-brass">{isEnglish ? "Updated" : "Actualización"}</p><p className="mt-1 font-semibold text-ink">{isEnglish ? "Source temporarily unavailable" : module.lastUpdated}</p></div>
+        <div><p className="text-[11px] font-semibold uppercase tracking-[0.12em] text-brass">{isEnglish ? "Frequency" : "Frecuencia"}</p><p className="mt-1 font-semibold text-ink">{isEnglish ? "Daily server-side snapshot" : module.updateFrequency}</p></div>
+      </div>
+      <p className="mt-4 text-xs leading-5 text-muted">{isEnglish ? "The module resumes only after all governed series pass date, close, freshness, and history validation." : module.reliabilityNote}</p>
+    </article>
+  );
+}
 
 const periodConfig: Record<Period, {
   label: string;

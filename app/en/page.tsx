@@ -121,7 +121,7 @@ function getPreviewSignals(regimeSummary: RegimeSummary) {
 
 function RegimePreviewPanel({ regimeSummary }: { regimeSummary: RegimeSummary }) {
   const signals = getPreviewSignals(regimeSummary);
-  const scoreWidth = `${Math.max(0, Math.min(regimeSummary.regimeScore, 100))}%`;
+  const scoreWidth = regimeSummary.regimeScore === null ? "0%" : `${Math.max(0, Math.min(regimeSummary.regimeScore, 100))}%`;
 
   return (
     <div className="technical-surface relative overflow-hidden rounded-[6px] border border-petrol/25 p-5 shadow-[0_18px_48px_rgba(11,52,54,0.07)] md:p-6">
@@ -138,7 +138,7 @@ function RegimePreviewPanel({ regimeSummary }: { regimeSummary: RegimeSummary })
         </div>
         <div className="text-left md:text-right">
           <p className="text-xs font-semibold uppercase tracking-[0.14em] text-muted">Confidence</p>
-          <p className="mt-1 text-xl font-semibold text-ink">{regimeSummary.confidence}%</p>
+          <p className="mt-1 text-xl font-semibold text-ink">{regimeSummary.confidence === null ? "n/a" : `${regimeSummary.confidence}%`}</p>
         </div>
       </div>
 
@@ -146,7 +146,7 @@ function RegimePreviewPanel({ regimeSummary }: { regimeSummary: RegimeSummary })
         <div className="flex items-end justify-between gap-4">
           <div>
             <p className="text-xs font-semibold uppercase tracking-[0.14em] text-muted">Composite score</p>
-            <p className="mt-2 text-4xl font-semibold leading-none text-ink md:text-5xl">{regimeSummary.regimeScore}</p>
+            <p className="mt-2 text-4xl font-semibold leading-none text-ink md:text-5xl">{regimeSummary.regimeScore ?? "n/a"}</p>
           </div>
           <p className="max-w-[11rem] text-right text-xs leading-5 text-muted md:text-sm md:leading-6">
             Current regime summary using the same dashboard readings.

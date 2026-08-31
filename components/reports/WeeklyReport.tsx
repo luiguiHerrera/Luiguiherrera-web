@@ -245,8 +245,8 @@ export function WeeklyReport({ data, locale = "es" }: WeeklyReportProps) {
             <Metric label={copy.week} value={formatWeekLabel(data.weekLabel, locale)} />
             <Metric label={copy.regime} value={locale === "en" ? translateRegimeLabel(data.regimeSummary.current) : data.regimeSummary.current} />
             <div className="grid grid-cols-2 gap-2">
-              <Metric label="Score" value={`${data.regimeSummary.regimeScore}/100`} emphasis />
-              <Metric label={copy.confidence} value={`${data.regimeSummary.confidence}%`} emphasis />
+              <Metric label="Score" value={data.regimeSummary.regimeScore === null ? (locale === "en" ? "Unavailable" : "No disponible") : `${data.regimeSummary.regimeScore}/100`} emphasis />
+              <Metric label={copy.confidence} value={data.regimeSummary.confidence === null ? (locale === "en" ? "Unavailable" : "No disponible") : `${data.regimeSummary.confidence}%`} emphasis />
             </div>
           </div>
         </div>

@@ -197,6 +197,7 @@ function labelFromScore(
 }
 
 function biasFromLabel(label: RegimeSummary["current"]): RegimeBias {
+  if (label === "Incompleto") return "unavailable";
   if (label === "Risk-on constructivo" || label === "Risk-on selectivo") return "favorable";
   if (label === "Neutral / mixto") return "neutral";
   if (label === "Cautela") return "cautious";
@@ -205,6 +206,10 @@ function biasFromLabel(label: RegimeSummary["current"]): RegimeBias {
 
 function interpretationForLabel(label: RegimeSummary["current"]) {
   const weighting = "Ponderación actual: rotación sectorial 45%, VIX 40% y BTC ETF flows 15%.";
+
+  if (label === "Incompleto") {
+    return `Lectura compuesta no disponible: falta el pilar gobernado de rotación sectorial. No se renormalizan los pesos restantes. ${weighting}`;
+  }
 
   if (label === "Cautela") {
     return `El mercado muestra deterioro en varias lecturas, pero aún no hay confirmación suficiente para clasificarlo como estrés. ${weighting}`;
@@ -225,6 +230,25 @@ export function buildRegimeSummary({
   sectorRotation: SectorRotationData | null;
   vix: VixDashboardData | null;
 }): RegimeSummary {
+  if (!sectorRotation || sectorRotation.dataStatus !== "automated") {
+    return {
+      current: "Incompleto",
+      bias: "unavailable",
+      confidence: null,
+      regimeScore: null,
+      sourceName: "Rotación sectorial, VIX y BTC ETF flows",
+      lastUpdated: "Pendiente de un snapshot sectorial real y completo",
+      updateFrequency: "Diaria / según disponibilidad de cada fuente",
+      dataStatus: "unavailable",
+      reliabilityNote: "El score integrado requiere los tres pilares gobernados. Sin rotación sectorial real no se calcula un score parcial.",
+      dataQualityNote: "Pesos preservados: rotación sectorial 45%, VIX 40% y BTC ETF flows 15%. Los pesos no se redistribuyen ni se renormalizan.",
+      interpretation: interpretationForLabel("Incompleto"),
+      whatItDoesNotMean: "La ausencia del score no implica un régimen neutral, favorable o adverso.",
+      riskSupportSignals: [],
+      cautionSignals: [{ label: "Rotación", detail: "Pilar sectorial temporalmente no disponible; score y confianza quedan sin calcular." }],
+    };
+  }
+
   const sector = sectorScore(sectorRotation);
   const volatility = vixScore(vix);
   const btc = btcScore(btcEtfFlows);
@@ -244,6 +268,12 @@ export function buildRegimeSummary({
   const regimeScore = Math.round(clamp(score, 0, 100));
   const label = labelFromScore(regimeScore, vix, sectorRotation, btcEtfFlows);
   const confidence = Math.round(clamp(88 - sector.confidencePenalty - volatility.confidencePenalty - btc.confidencePenalty, 35, 95));
+  const sourceStatuses = [vix?.spot.dataStatus, btcEtfFlows?.flows.dataStatus];
+  const dataStatus = sourceStatuses.every((status) => status === "automated")
+    ? "automated"
+    : sourceStatuses.some((status) => status === "delayed" || status === "live_pending")
+      ? "delayed"
+      : "fallback";
 
   return {
     current: label,
@@ -253,7 +283,7 @@ export function buildRegimeSummary({
     sourceName: "Rotación sectorial, VIX y BTC ETF flows",
     lastUpdated: "Última actualización disponible por módulo",
     updateFrequency: "Diaria / según disponibilidad de cada fuente",
-    dataStatus: sectorRotation?.dataStatus === "automated" && vix?.spot.dataStatus === "automated" && btcEtfFlows?.flows.dataStatus === "automated" ? "automated" : "fallback",
+    dataStatus,
     reliabilityNote: "Este régimen no anticipa el mercado. Organiza lecturas de volatilidad, rotación y flujos para leer el contexto.",
     dataQualityNote: "La confianza se ajusta según la disponibilidad y calidad de rotación sectorial, VIX y BTC ETF flows.",
     interpretation: interpretationForLabel(label),

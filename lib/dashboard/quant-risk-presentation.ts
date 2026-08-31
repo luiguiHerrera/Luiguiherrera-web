@@ -97,9 +97,11 @@ function translateDynamic(value: string, locale: QuantRiskLocale) {
 export function buildQuantRiskPresentation(data: QuantRiskData, locale: QuantRiskLocale) {
   const labels = copy[locale];
   const fragilityAvailable = data.modelStatus !== "insufficient_data";
-  const fragilityLabel = locale === "en"
-    ? ({ Baja: "Low", Media: "Medium", Alta: "High" } as const)[data.fragilityLabel]
-    : data.fragilityLabel;
+  const fragilityLabel = data.fragilityLabel === null
+    ? labels.insufficient
+    : locale === "en"
+      ? ({ Baja: "Low", Media: "Medium", Alta: "High" } as const)[data.fragilityLabel]
+      : data.fragilityLabel;
   const garchState: QuantRiskReadinessState = data.garchVolForecast === null || data.modelStatus === "insufficient_data"
     ? "insufficient"
     : data.modelStatus === "fallback_ewma" ? "fallback" : "available";

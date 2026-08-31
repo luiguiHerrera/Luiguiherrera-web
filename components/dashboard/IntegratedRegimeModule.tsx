@@ -29,12 +29,14 @@ const biasLabels: Record<"es" | "en", Record<RegimeBias, string>> = {
     neutral: "Neutral",
     cautious: "Cauteloso",
     stress: "Estrés",
+    unavailable: "No disponible",
   },
   en: {
     favorable: "Favorable",
     neutral: "Neutral",
     cautious: "Cautious",
     stress: "Stress",
+    unavailable: "Unavailable",
   },
 };
 
@@ -96,8 +98,8 @@ export function IntegratedRegimeModule({ data, locale, provenance }: IntegratedR
   const metrics = [
     { label: copy.regime, value: regimeLabel, badge: true },
     { label: copy.bias, value: biasLabels[locale][data.bias] },
-    { label: "Score", value: `${data.regimeScore}/100` },
-    { label: copy.confidence, value: `${data.confidence}%` },
+    { label: "Score", value: data.regimeScore === null ? (isEnglish ? "Unavailable" : "No disponible") : `${data.regimeScore}/100` },
+    { label: copy.confidence, value: data.confidence === null ? (isEnglish ? "Unavailable" : "No disponible") : `${data.confidence}%` },
   ];
 
   return (

@@ -1,3 +1,5 @@
+import { cache } from "react";
+
 import { getBtcEtfFlowsData } from "@/lib/dashboard/adapters/btc-etf-flows";
 import { getGldFlowPressure } from "@/lib/dashboard/adapters/gld-flow-pressure";
 import { getRadarRows } from "@/lib/dashboard/adapters/radar";
@@ -7,7 +9,7 @@ import { getVixTermStructureData } from "@/lib/dashboard/adapters/vix-term-struc
 import { buildRegimeSummary } from "@/lib/dashboard/regime-scoring";
 import type { DashboardData } from "@/lib/dashboard/types";
 
-export async function getDashboardData(): Promise<DashboardData> {
+export const getDashboardData = cache(async (): Promise<DashboardData> => {
   const [sectorEtfs, btcEtfFlows, vixData, vixTermStructure, gldFlowPressure] = await Promise.all([
     getSectorEtfsData(),
     getBtcEtfFlowsData(),
@@ -29,6 +31,7 @@ export async function getDashboardData(): Promise<DashboardData> {
     ],
     crossSignalRadar: getRadarRows(),
     regimeSummary,
+    sectorModule: sectorEtfs.module,
     sectorRotation: sectorEtfs.rotation,
     quantRisk: sectorEtfs.quantRisk,
     vix: vixData,
@@ -37,4 +40,4 @@ export async function getDashboardData(): Promise<DashboardData> {
     ethEtfFlows: null,
     gldFlowPressure,
   };
-}
+});

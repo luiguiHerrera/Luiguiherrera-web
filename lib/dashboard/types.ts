@@ -2,8 +2,8 @@ import type { DashboardModuleId } from "@/lib/analytics/trackEvent";
 
 export type DataStatus = "demo" | "manual" | "live_pending" | "automated" | "fallback" | "delayed" | "unavailable";
 
-export type RegimeLabel = "Risk-on constructivo" | "Risk-on selectivo" | "Neutral / mixto" | "Cautela" | "Estrés";
-export type RegimeBias = "favorable" | "neutral" | "cautious" | "stress";
+export type RegimeLabel = "Risk-on constructivo" | "Risk-on selectivo" | "Neutral / mixto" | "Cautela" | "Estrés" | "Incompleto";
+export type RegimeBias = "favorable" | "neutral" | "cautious" | "stress" | "unavailable";
 
 export type DashboardDataSource = {
   sourceName: string;
@@ -87,17 +87,17 @@ export type SectorRotationData = DashboardDataSource & {
 export type QuantRiskData = DashboardDataSource & {
   ewmaVolAnnualized: number | null;
   ewmaVolChange: number | null;
-  ewmaStatus: VolatilityStatus;
+  ewmaStatus: VolatilityStatus | null;
   garchVolForecast: number | null;
-  garchStatus: VolatilityStatus;
+  garchStatus: VolatilityStatus | null;
   modelStatus: GarchModelStatus;
   averageCorrelation21d: number | null;
   averageCorrelation63d: number | null;
   defensiveGrowthCorrelation21d: number | null;
-  sectorDispersion1w: number;
-  sectorDispersion1m: number;
-  fragilityScore: number;
-  fragilityLabel: FragilityLabel;
+  sectorDispersion1w: number | null;
+  sectorDispersion1m: number | null;
+  fragilityScore: number | null;
+  fragilityLabel: FragilityLabel | null;
   fragilityInterpretation: string;
 };
 
@@ -310,8 +310,8 @@ export type RegimeSignal = {
 export type RegimeSummary = DashboardDataSource & {
   current: RegimeLabel;
   bias: RegimeBias;
-  confidence: number;
-  regimeScore: number;
+  confidence: number | null;
+  regimeScore: number | null;
   interpretation: string;
   whatItDoesNotMean: string;
   dataQualityNote: string;
@@ -332,6 +332,7 @@ export type DashboardData = {
   dashboardModules: DashboardModuleData[];
   crossSignalRadar: CrossSignalRadarRow[];
   regimeSummary: RegimeSummary;
+  sectorModule: DashboardModuleData;
   sectorRotation: SectorRotationData | null;
   quantRisk: QuantRiskData | null;
   vix: VixDashboardData | null;

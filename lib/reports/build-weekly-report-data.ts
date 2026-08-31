@@ -1,4 +1,5 @@
 import { getDashboardData } from "@/lib/dashboard/get-dashboard-data";
+import type { DashboardData } from "@/lib/dashboard/types";
 import { getOptionsProxyData } from "@/lib/market/options-proxies";
 import {
   getStatisticalLevelsAsset,
@@ -107,9 +108,9 @@ function extensionHighlights(assets: AssetStatSummary[], preferredTickers: strin
     }));
 }
 
-export async function buildWeeklyReportData() {
+export async function buildWeeklyReportData(dashboardInput?: DashboardData) {
   const [dashboard, optionsProxy] = await Promise.all([
-    getDashboardData(),
+    dashboardInput ?? getDashboardData(),
     getOptionsProxyData(),
   ]);
   const manifest = await getStatisticalLevelsManifest();

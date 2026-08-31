@@ -17,6 +17,11 @@ test("translates dynamic dashboard copy without leaving mixed-language fragments
     ["Racha de 3 días de entradas", "3-day inflow streak"],
     ["Entorno de volatilidad contenido.", "Contained volatility environment."],
     ["ETFs sectoriales como proxies", "Sector ETFs used as proxies"],
+    ["Incompleto", "Incomplete"],
+    [
+      "Lectura compuesta no disponible: falta el pilar gobernado de rotación sectorial. No se renormalizan los pesos restantes.",
+      "Composite read unavailable: the governed sector-rotation pillar is missing. Remaining weights are not renormalized.",
+    ],
     [
       "Lectura compuesta de volatilidad, rotación y flujos. Ponderación actual: rotación sectorial 45%, VIX 40% y BTC ETF flows 15%.",
       "Composite read of volatility, rotation, and flows. Current weighting: sector rotation 45%, VIX 40%, and BTC ETF flows 15%.",
@@ -40,4 +45,11 @@ test("translates dynamic dashboard copy without leaving mixed-language fragments
   for (const [source, expected] of cases) {
     assert.equal(translateDashboardText(source), expected);
   }
+});
+
+test("translates the real-sector regime support signal", () => {
+  assert.equal(
+    translateDashboardText("Sectores growth/cíclicos lideran y defensivos quedan rezagados."),
+    "Growth/cyclical sectors lead while defensives lag.",
+  );
 });

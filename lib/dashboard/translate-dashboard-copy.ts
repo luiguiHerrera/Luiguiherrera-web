@@ -1,12 +1,19 @@
 import type { DataStatus, RegimeBias } from "@/lib/dashboard/types";
 
 const phraseMap: Array<[RegExp, string]> = [
+  [/Lectura compuesta no disponible: falta el pilar gobernado de rotación sectorial\. No se renormalizan los pesos restantes\./g, "Composite read unavailable: the governed sector-rotation pillar is missing. Remaining weights are not renormalized."],
+  [/Pilar sectorial temporalmente no disponible; score y confianza quedan sin calcular\./g, "The sector pillar is temporarily unavailable; score and confidence remain uncalculated."],
+  [/Incompleto/g, "Incomplete"],
+  [/Pendiente de un snapshot sectorial real y completo/g, "Waiting for a complete real sector snapshot"],
+  [/Fuente sectorial temporalmente no disponible/g, "Sector source temporarily unavailable"],
+  [/Los modelos no se calculan sin historiales sectoriales reales y completos\./g, "Models are not calculated without complete real sector histories."],
   [/Automático con fuente pública: ([\d-]+)/g, "Automated from public source: $1"],
   [/ETFs sectoriales como proxies/g, "Sector ETFs used as proxies"],
   [/No es una recomendación de inversión, no elige activos y no anticipa retornos futuros\./g, "It is not investment advice, does not select assets, and does not forecast future returns."],
   [/Lectura compuesta de volatilidad, rotación y flujos\./g, "Composite read of volatility, rotation, and flows."],
   [/presión de volatilidad contenida\./g, "contained volatility pressure."],
   [/Entradas sostenidas favorecen apetito por riesgo cripto\/institucional\./g, "Sustained inflows support crypto and institutional risk appetite."],
+  [/Sectores growth\/cíclicos lideran y defensivos quedan rezagados\./g, "Growth/cyclical sectors lead while defensives lag."],
   [/(\d{1,2}) de ene de (\d{4})/gi, "Jan $1, $2"],
   [/(\d{1,2}) de feb de (\d{4})/gi, "Feb $1, $2"],
   [/(\d{1,2}) de mar de (\d{4})/gi, "Mar $1, $2"],
@@ -245,6 +252,7 @@ export function translateBiasLabel(value: RegimeBias) {
     neutral: "Neutral",
     cautious: "Cautious",
     stress: "Stress",
+    unavailable: "Unavailable",
   };
   return labels[value];
 }

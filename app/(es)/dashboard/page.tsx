@@ -3,61 +3,30 @@ import { DashboardReadingGuide } from "@/components/dashboard/DashboardReadingGu
 import { DashboardModule } from "@/components/dashboard/DashboardModule";
 import { GldFlowPressureModule } from "@/components/dashboard/GldFlowPressureModule";
 import { IntegratedRegimeModule } from "@/components/dashboard/IntegratedRegimeModule";
-import { MarketBreadthPanel, type MarketBreadthValues } from "@/components/dashboard/MarketBreadthPanel";
+import { MarketBreadthPanel } from "@/components/dashboard/MarketBreadthPanel";
 import { QuantRiskPanel } from "@/components/dashboard/QuantRiskPanel";
-import { SectorRotationChart } from "@/components/dashboard/SectorRotationChart";
+import { SectorRotationChart, SectorRotationUnavailable } from "@/components/dashboard/SectorRotationChart";
 import { VixModule } from "@/components/dashboard/VixModule";
 import { VixTermStructureModule } from "@/components/dashboard/VixTermStructureModule";
 import { DisclaimerBox } from "@/components/ui/DisclaimerBox";
 import { InstitutionalHero } from "@/components/ui/InstitutionalHero";
 import { getDashboardData } from "@/lib/dashboard/get-dashboard-data";
+import { buildMarketBreadthValues } from "@/lib/dashboard/market-breadth";
 import { getRouteMetadata } from "@/lib/seo/site";
 import { buildWeeklyReportData } from "@/lib/reports/build-weekly-report-data";
-import type { WeeklyReportData } from "@/lib/reports/build-weekly-report-data";
 
 export const revalidate = 86400;
 
 export const metadata = getRouteMetadata("/dashboard");
-
-function buildMarketBreadthValues(data: WeeklyReportData, locale: "es" | "en"): MarketBreadthValues {
-  const statsByTicker = new Map(data.statisticalLevels.map((asset) => [asset.ticker, asset]));
-  const spyLevel = statsByTicker.get("SPY");
-  const rspLevel = statsByTicker.get("RSP");
-  const iwmLevel = statsByTicker.get("IWM");
-  const qqqLevel = statsByTicker.get("QQQ");
-  const sectorStats = data.statisticalLevels.filter((asset) => asset.ticker.startsWith("XL"));
-  const sectorsPositive = data.sectors.data?.sectors.filter((sector) => (sector.return1w ?? 0) > 0).length ?? null;
-  const sectorsNegative = data.sectors.data?.sectors.filter((sector) => (sector.return1w ?? 0) < 0).length ?? null;
-  const sectorTotal = data.sectors.data?.sectors.length ?? sectorStats.length;
-  const sectorsOverLongAverage = sectorStats.filter((asset) => (asset.distanceToLongAverage ?? -Infinity) > 0).length;
-  const pending = locale === "en" ? "Pending" : "Pendiente";
-  const flat = locale === "en" ? "Flat" : "Plano";
-
-  return {
-    rspVsSpy: spyLevel && rspLevel ? formatDashboardPpSpread(rspLevel.returns["1W"], spyLevel.returns["1W"], pending, flat) : pending,
-    iwmVsSpy: spyLevel && iwmLevel ? formatDashboardPpSpread(iwmLevel.returns["1W"], spyLevel.returns["1W"], pending, flat) : pending,
-    qqqVsSpy: spyLevel && qqqLevel ? formatDashboardPpSpread(qqqLevel.returns["1W"], spyLevel.returns["1W"], pending, flat) : pending,
-    positiveSectors: sectorsPositive !== null && sectorsNegative !== null && sectorTotal ? sectorsPositive + "/" + sectorTotal : pending,
-    sectorsOverLongAverage: sectorStats.length ? sectorsOverLongAverage + "/" + sectorStats.length : pending,
-  };
-}
-
-function formatDashboardPpSpread(value: number | null | undefined, benchmark: number | null | undefined, pending: string, flat: string) {
-  if (value === null || value === undefined || benchmark === null || benchmark === undefined) return pending;
-  const spread = (value - benchmark) * 100;
-  if (Math.abs(spread) < 0.05) return flat;
-  return `${spread > 0 ? "+" : ""}${spread.toFixed(1)} pp`;
-}
 
 export default async function DashboardPage() {
   return <DashboardContent locale="es" />;
 }
 
 export async function DashboardContent({ locale = "es" }: { locale?: "es" | "en" }) {
-  const [{ btcEtfFlows, dashboardModules, gldFlowPressure, quantRisk, regimeSummary, sectorRotation, vix, vixTermStructure }, weeklyReportData] = await Promise.all([
-    getDashboardData(),
-    buildWeeklyReportData(),
-  ]);
+  const dashboardData = await getDashboardData();
+  const { btcEtfFlows, dashboardModules, gldFlowPressure, quantRisk, regimeSummary, sectorModule, sectorRotation, vix, vixTermStructure } = dashboardData;
+  const weeklyReportData = await buildWeeklyReportData(dashboardData);
   const remainingModules = dashboardModules.filter((module) => module.id !== "rates" && module.id !== "sectors" && module.id !== "vix" && module.id !== "btc-flows");
   const breadthValues = buildMarketBreadthValues(weeklyReportData, locale);
   const copy = locale === "en"
@@ -103,13 +72,13 @@ export async function DashboardContent({ locale = "es" }: { locale?: "es" | "en"
           data={regimeSummary}
           locale={locale}
           provenance={[
-            ...(sectorRotation ? [{
+            ...[{
               pillar: "sectorRotation" as const,
-              sourceName: sectorRotation.sourceName,
-              sourceUrl: sectorRotation.sourceUrl,
-              lastUpdated: sectorRotation.lastUpdated,
-              dataStatus: sectorRotation.dataStatus,
-            }] : []),
+              sourceName: sectorRotation?.sourceName ?? sectorModule.sourceName,
+              sourceUrl: sectorRotation?.sourceUrl ?? sectorModule.sourceUrl,
+              lastUpdated: sectorRotation?.lastUpdated ?? sectorModule.lastUpdated,
+              dataStatus: sectorRotation?.dataStatus ?? sectorModule.dataStatus,
+            }],
             ...(vix ? [{
               pillar: "vix" as const,
               sourceName: vix.spot.sourceName,
@@ -137,7 +106,7 @@ export async function DashboardContent({ locale = "es" }: { locale?: "es" | "en"
             <p className="mt-2 max-w-3xl text-sm leading-6 text-muted">{copy.participationSectionSubtitle}</p>
           </div>
           <div className="grid min-w-0 gap-4 md:gap-5 [&>*]:min-w-0">
-            {sectorRotation ? <SectorRotationChart data={sectorRotation} /> : null}
+            {sectorRotation ? <SectorRotationChart data={sectorRotation} /> : <SectorRotationUnavailable locale={locale} module={sectorModule} />}
             <MarketBreadthPanel
               locale={locale}
               values={breadthValues}
@@ -146,12 +115,12 @@ export async function DashboardContent({ locale = "es" }: { locale?: "es" | "en"
                 url: weeklyReportData.statisticalSource.url,
                 updated: weeklyReportData.statisticalSource.updated,
               }}
-              sectorSource={sectorRotation ? {
-                name: sectorRotation.sourceName,
-                url: sectorRotation.sourceUrl,
-                updated: sectorRotation.lastUpdated,
-                status: sectorRotation.dataStatus,
-              } : null}
+              sectorSource={{
+                name: sectorRotation?.sourceName ?? sectorModule.sourceName,
+                url: sectorRotation?.sourceUrl ?? sectorModule.sourceUrl,
+                updated: sectorRotation?.lastUpdated ?? sectorModule.lastUpdated,
+                status: sectorRotation?.dataStatus ?? sectorModule.dataStatus,
+              }}
             />
           </div>
         </section>
