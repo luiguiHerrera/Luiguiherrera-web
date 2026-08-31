@@ -1,4 +1,5 @@
 import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
 import test from "node:test";
 import {
   buildBtcRecentSessionRows,
@@ -7,6 +8,7 @@ import {
   capitalFlowTone,
   flowDirectionLabel,
   formatCapitalFlowDate,
+  formatCapitalFlowUsdMillions,
 } from "./capital-flows-presentation.ts";
 
 test("recent BTC sessions keep source values and show newest rows first", () => {
@@ -28,6 +30,42 @@ test("capital-flow tones distinguish inflow, outflow, flat and unavailable value
   assert.equal(capitalFlowTone(-1), "negative");
   assert.equal(capitalFlowTone(0), "neutral");
   assert.equal(capitalFlowTone(null), "unavailable");
+});
+
+test("BTC flow display precision scales consistently without changing units", () => {
+  assert.equal(formatCapitalFlowUsdMillions(944.2, "en"), "+944 M USD");
+  assert.equal(formatCapitalFlowUsdMillions(142.8, "en"), "+143 M USD");
+  assert.equal(formatCapitalFlowUsdMillions(-944.8, "en"), "-945 M USD");
+  assert.equal(formatCapitalFlowUsdMillions(42.67, "en"), "+42.7 M USD");
+  assert.equal(formatCapitalFlowUsdMillions(10, "en"), "+10 M USD");
+  assert.equal(formatCapitalFlowUsdMillions(-1.14, "en"), "-1.1 M USD");
+  assert.equal(formatCapitalFlowUsdMillions(0, "en"), "0 M USD");
+  assert.equal(formatCapitalFlowUsdMillions(-0.04, "en"), "0 M USD");
+});
+
+test("BTC primary metric, chart tooltip and recent-session table share the canonical formatter", () => {
+  const moduleSource = readFileSync(
+    new URL("../../components/dashboard/BtcEtfFlowsModule.tsx", import.meta.url),
+    "utf8",
+  );
+
+  assert.match(moduleSource, /value: formatCapitalFlowUsdMillions\(flows\.latestTotalNetFlow, locale\)/);
+  assert.match(moduleSource, /formatCapitalFlowUsdMillions\(active\.point\.totalNetFlow, locale\)/);
+  assert.match(moduleSource, /formatCapitalFlowUsdMillions\(row\.totalNetFlow, locale\)/);
+});
+
+test("BTC flow precision is identical across ES and EN while separators stay localized", () => {
+  assert.equal(formatCapitalFlowUsdMillions(42.67, "es"), "+42,7 M USD");
+  assert.equal(formatCapitalFlowUsdMillions(42.67, "en"), "+42.7 M USD");
+  assert.equal(formatCapitalFlowUsdMillions(944.2, "es"), "+944 M USD");
+  assert.equal(formatCapitalFlowUsdMillions(944.2, "en"), "+944 M USD");
+});
+
+test("BTC flow unavailable copy remains contextual", () => {
+  assert.equal(formatCapitalFlowUsdMillions(null, "es"), "Dato pendiente");
+  assert.equal(formatCapitalFlowUsdMillions(null, "en"), "Pending data");
+  assert.equal(formatCapitalFlowUsdMillions(null, "es", "insufficient"), "Historial insuficiente");
+  assert.equal(formatCapitalFlowUsdMillions(null, "en", "insufficient"), "Not enough history");
 });
 
 test("direction and date labels are localized without changing underlying values", () => {

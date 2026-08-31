@@ -9,6 +9,7 @@ import type {
   BtcFlowTrend,
   DashboardModuleData,
 } from "../types.ts";
+import { formatCapitalFlowUsdMillions } from "../capital-flows-presentation.ts";
 
 const REVALIDATE_SECONDS = 60 * 60 * 24;
 const BITBO_URL = "https://bitbo.io/treasuries/etf-flows/";
@@ -134,22 +135,16 @@ function parseFarsideDate(value: string) {
   return Number.isFinite(timestamp) ? timestamp : null;
 }
 
-function formatUsdMillions(value: number | null) {
-  if (value === null) return "Dato pendiente";
-  const sign = value > 0 ? "+" : "";
-  return `${sign}${value.toFixed(0)} M USD`;
-}
-
 function formatRollingFlow(value: number | null) {
-  return value === null ? "Historial insuficiente" : formatUsdMillions(value);
+  return formatCapitalFlowUsdMillions(value, "es", "insufficient");
 }
 
 function formatPositiveFundFlow(flow: BtcEtfFundFlow | null) {
-  return flow ? `${flow.ticker} ${formatUsdMillions(flow.flow)}` : "Sin entradas positivas";
+  return flow ? `${flow.ticker} ${formatCapitalFlowUsdMillions(flow.flow, "es")}` : "Sin entradas positivas";
 }
 
 function formatNegativeFundFlow(flow: BtcEtfFundFlow | null) {
-  return flow ? `${flow.ticker} ${formatUsdMillions(flow.flow)}` : "Sin salidas negativas";
+  return flow ? `${flow.ticker} ${formatCapitalFlowUsdMillions(flow.flow, "es")}` : "Sin salidas negativas";
 }
 
 function dataStatusForTimestamp(timestamp: number, now = Date.now()): BtcEtfFlowsData["dataStatus"] {
@@ -491,8 +486,8 @@ function buildModuleFromData(data: BtcEtfFlowsData): DashboardModuleData {
     dataStatus: data.dataStatus,
     reliabilityNote: data.reliabilityNote,
     observedData: [
-      ["Flujo neto último día", formatUsdMillions(data.latestTotalNetFlow)],
-      ["Rolling 5D", formatUsdMillions(data.rolling5dNetFlow)],
+      ["Flujo neto último día", formatCapitalFlowUsdMillions(data.latestTotalNetFlow, "es")],
+      ["Rolling 5D", formatCapitalFlowUsdMillions(data.rolling5dNetFlow, "es")],
       ["Rolling 20D", formatRollingFlow(data.rolling20dNetFlow)],
       ["Racha", data.flowStreak.label],
       ["Aportantes", driverSummary],

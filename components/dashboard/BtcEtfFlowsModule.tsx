@@ -16,6 +16,7 @@ import {
   capitalFlowTone,
   flowDirectionLabel,
   formatCapitalFlowDate,
+  formatCapitalFlowUsdMillions,
 } from "@/lib/dashboard/capital-flows-presentation";
 import { translateDashboardText } from "@/lib/dashboard/translate-dashboard-copy";
 import type {
@@ -32,27 +33,19 @@ type BtcEtfFlowsModuleProps = {
   data: BtcEtfFlowsDashboardData;
 };
 
-function formatUsdMillions(value: number | null, locale: Locale = "es") {
-  if (value === null) return locale === "en" ? "Pending data" : "Dato pendiente";
-  const sign = value > 0 ? "+" : "";
-  return `${sign}${value.toFixed(0)} M USD`;
-}
-
 function formatRollingFlow(value: number | null, locale: Locale = "es") {
-  return value === null
-    ? locale === "en" ? "Not enough history" : "Historial insuficiente"
-    : formatUsdMillions(value, locale);
+  return formatCapitalFlowUsdMillions(value, locale, "insufficient");
 }
 
 function formatPositiveFundFlow(flow: BtcEtfFundFlow | null, locale: Locale = "es") {
   return flow
-    ? `${flow.ticker} ${formatUsdMillions(flow.flow, locale)}`
+    ? `${flow.ticker} ${formatCapitalFlowUsdMillions(flow.flow, locale)}`
     : locale === "en" ? "No positive inflows" : "Sin entradas positivas";
 }
 
 function formatNegativeFundFlow(flow: BtcEtfFundFlow | null, locale: Locale = "es") {
   return flow
-    ? `${flow.ticker} ${formatUsdMillions(flow.flow, locale)}`
+    ? `${flow.ticker} ${formatCapitalFlowUsdMillions(flow.flow, locale)}`
     : locale === "en" ? "No negative outflows" : "Sin salidas negativas";
 }
 
@@ -176,7 +169,7 @@ function FlowBarChart({ history, locale }: { history: BtcEtfFlowPoint[]; locale:
               <button
                 key={`${point.date}-${index}`}
                 type="button"
-                aria-label={`${formatCapitalFlowDate(point.date, locale)} · ${locale === "en" ? "daily net flow" : "flujo neto diario"} ${formatUsdMillions(point.totalNetFlow, locale)} · ${locale === "en" ? "available cumulative" : "acumulado disponible"} ${formatUsdMillions(cumulative, locale)}`}
+                aria-label={`${formatCapitalFlowDate(point.date, locale)} · ${locale === "en" ? "daily net flow" : "flujo neto diario"} ${formatCapitalFlowUsdMillions(point.totalNetFlow, locale)} · ${locale === "en" ? "available cumulative" : "acumulado disponible"} ${formatCapitalFlowUsdMillions(cumulative, locale)}`}
                 className="absolute top-[8%] h-[84%] min-w-2 -translate-x-1/2 bg-transparent outline-none focus-visible:ring-2 focus-visible:ring-brass focus-visible:ring-offset-1"
                 style={{ left: `${centerX}%`, width: `${Math.max(84 / points.length, 2)}%` }}
                 onMouseEnter={() => setHoveredIndex(index)}
@@ -193,8 +186,8 @@ function FlowBarChart({ history, locale }: { history: BtcEtfFlowPoint[]; locale:
                 style={{ ...(active.centerX >= 18 && active.centerX <= 82 ? { left: `${active.centerX}%` } : {}) } as CSSProperties}
               >
                 <p className="font-semibold text-ink">{formatCapitalFlowDate(active.point.date, locale)}</p>
-                <p className="mt-1 text-muted">{locale === "en" ? "Daily" : "Diario"} <strong className={`ml-1 tabular-nums ${valueClass(active.point.totalNetFlow)}`}>{formatUsdMillions(active.point.totalNetFlow, locale)}</strong></p>
-                <p className="mt-0.5 text-muted">{locale === "en" ? "Available cumulative" : "Acumulado disponible"} <strong className={`ml-1 tabular-nums ${valueClass(active.cumulative)}`}>{formatUsdMillions(active.cumulative, locale)}</strong></p>
+                <p className="mt-1 text-muted">{locale === "en" ? "Daily" : "Diario"} <strong className={`ml-1 tabular-nums ${valueClass(active.point.totalNetFlow)}`}>{formatCapitalFlowUsdMillions(active.point.totalNetFlow, locale)}</strong></p>
+                <p className="mt-0.5 text-muted">{locale === "en" ? "Available cumulative" : "Acumulado disponible"} <strong className={`ml-1 tabular-nums ${valueClass(active.cumulative)}`}>{formatCapitalFlowUsdMillions(active.cumulative, locale)}</strong></p>
               </div>
             ) : null}
           </div>
@@ -253,7 +246,7 @@ function RecentSessionsTable({ history, locale }: { history: BtcEtfFlowPoint[]; 
               {rows.map((row) => (
                 <tr key={row.date}>
                   <td className="py-2.5 pr-4 font-medium text-ink">{formatCapitalFlowDate(row.date, locale)}</td>
-                  <td className={`px-4 py-2.5 text-right font-semibold tabular-nums ${valueClass(row.totalNetFlow)}`}>{formatUsdMillions(row.totalNetFlow, locale)}</td>
+                  <td className={`px-4 py-2.5 text-right font-semibold tabular-nums ${valueClass(row.totalNetFlow)}`}>{formatCapitalFlowUsdMillions(row.totalNetFlow, locale)}</td>
                   <td className="py-2.5 pl-4 text-right">{flowDirectionLabel(row.totalNetFlow, locale)}</td>
                 </tr>
               ))}
@@ -288,7 +281,7 @@ export function BtcEtfFlowsModule({ assetLabel = "BTC", data }: BtcEtfFlowsModul
     {
       id: "latest",
       label: locale === "en" ? "Latest net flow" : "Último flujo neto",
-      value: formatUsdMillions(flows.latestTotalNetFlow, locale),
+      value: formatCapitalFlowUsdMillions(flows.latestTotalNetFlow, locale),
       valueClassName: valueClass(flows.latestTotalNetFlow),
     },
     {
@@ -300,7 +293,7 @@ export function BtcEtfFlowsModule({ assetLabel = "BTC", data }: BtcEtfFlowsModul
     {
       id: "rolling5d",
       label: "Rolling 5D",
-      value: formatUsdMillions(flows.rolling5dNetFlow, locale),
+      value: formatCapitalFlowUsdMillions(flows.rolling5dNetFlow, locale),
       valueClassName: valueClass(flows.rolling5dNetFlow),
     },
     {

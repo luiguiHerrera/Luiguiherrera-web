@@ -7,6 +7,7 @@ import type {
 
 export type CapitalFlowsLocale = "es" | "en";
 export type CapitalFlowTone = "positive" | "negative" | "neutral" | "unavailable";
+export type CapitalFlowUnavailableCopy = "pending" | "insufficient";
 
 export type BtcRecentSessionRow = BtcEtfFlowPoint & {
   direction: "inflow" | "outflow" | "flat";
@@ -77,6 +78,29 @@ export function flowDirectionLabel(value: number, locale: CapitalFlowsLocale) {
   if (direction === "inflow") return locale === "en" ? "Inflow" : "Entrada";
   if (direction === "outflow") return locale === "en" ? "Outflow" : "Salida";
   return locale === "en" ? "Flat" : "Sin cambio";
+}
+
+export function formatCapitalFlowUsdMillions(
+  value: number | null,
+  locale: CapitalFlowsLocale,
+  unavailableCopy: CapitalFlowUnavailableCopy = "pending",
+) {
+  if (value === null) {
+    if (unavailableCopy === "insufficient") {
+      return locale === "en" ? "Not enough history" : "Historial insuficiente";
+    }
+    return locale === "en" ? "Pending data" : "Dato pendiente";
+  }
+
+  const maximumFractionDigits = value === 0 || Math.abs(value) >= 100 ? 0 : 1;
+  const roundedValue = Number(value.toFixed(maximumFractionDigits));
+  if (roundedValue === 0) return "0 M USD";
+
+  const sign = roundedValue > 0 ? "+" : "-";
+  const formatted = new Intl.NumberFormat(locale === "en" ? "en-US" : "es-ES", {
+    maximumFractionDigits,
+  }).format(Math.abs(roundedValue));
+  return `${sign}${formatted} M USD`;
 }
 
 export function formatCapitalFlowDate(value: string | null, locale: CapitalFlowsLocale) {
