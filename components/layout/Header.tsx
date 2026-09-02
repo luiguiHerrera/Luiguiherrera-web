@@ -191,7 +191,7 @@ function HeaderForPathname({ pathname }: { pathname: string }) {
           </button>
         </div>
         <div className="hidden min-w-0 items-center gap-3 lg:flex">
-          <nav className="flex min-w-0 items-center gap-1 text-[12px] text-muted">
+          <nav className="flex min-w-0 items-center gap-1.5 text-[13px] text-muted">
             {navGroups.map((group) => (
               group.items?.length ? (
                 <DesktopDropdown key={group.href} href={group.href} isHome={isHome} label={group.label} items={group.items} />

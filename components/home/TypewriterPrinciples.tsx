@@ -3,9 +3,9 @@
 import { useEffect, useState } from "react";
 
 const defaultPhrases = [
+  "Decide con datos y menos ruido.",
   "Entiende el contexto.",
   "Gestiona el riesgo.",
-  "Decide con datos y menos ruido.",
 ];
 
 export function TypewriterPrinciples({
@@ -16,7 +16,7 @@ export function TypewriterPrinciples({
   phrases?: string[];
 }) {
   const [phraseIndex, setPhraseIndex] = useState(0);
-  const [visibleChars, setVisibleChars] = useState(0);
+  const [visibleChars, setVisibleChars] = useState(() => phrases[0]?.length ?? 0);
   const [deleting, setDeleting] = useState(false);
 
   const currentPhrase = phrases[phraseIndex] ?? "";
@@ -24,10 +24,7 @@ export function TypewriterPrinciples({
   useEffect(() => {
     const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-    if (prefersReducedMotion) {
-      const timeout = window.setTimeout(() => setVisibleChars(currentPhrase.length), 0);
-      return () => window.clearTimeout(timeout);
-    }
+    if (prefersReducedMotion) return;
 
     const typingSpeed = deleting ? 32 : 54;
     const pauseAtEnd = 1200;
@@ -66,13 +63,13 @@ export function TypewriterPrinciples({
   }, [currentPhrase, deleting, phrases.length, visibleChars]);
 
   return (
-    <div className="mt-7 max-w-xl border-l border-petrol/55 pl-4">
+    <div className="mt-7 max-w-xl border-l border-petrol/55 pl-4" data-home-typewriter>
       <p className="text-xs font-semibold uppercase tracking-[0.18em] text-petrol">
         {eyebrow}
       </p>
-      <p className="mt-3 min-h-[2rem] text-base leading-7 text-muted md:text-lg">
+      <p className="mt-3 min-h-[3.5rem] text-base leading-7 text-muted sm:min-h-[2rem] md:text-lg" data-home-typewriter-text>
         <span>{currentPhrase.slice(0, visibleChars)}</span>
-        <span className="ml-1 inline-block h-5 w-px translate-y-1 animate-pulse bg-petrol" />
+        <span aria-hidden="true" className="ml-1 inline-block h-5 w-px translate-y-1 animate-pulse bg-petrol motion-reduce:animate-none" />
       </p>
     </div>
   );
