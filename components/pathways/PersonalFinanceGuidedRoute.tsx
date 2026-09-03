@@ -61,13 +61,55 @@ function Recommendation({ option }: { option: PersonalFinanceRouteOption }) {
         </ul>
       </div>
 
-      <p className="mt-6 text-sm leading-6 text-muted">{option.recommendation.metadata}</p>
-      <Link
-        href={option.recommendation.href}
-        className="mt-5 inline-flex min-h-12 items-center justify-center rounded-[4px] border border-petrol bg-petrol px-5 py-3 text-sm font-semibold text-white shadow-[0_10px_22px_rgba(11,52,54,0.12)] transition hover:bg-white hover:text-petrol focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-petrol"
-      >
-        {option.recommendation.cta}
-      </Link>
+      <div className="mt-6">
+        {option.recommendation.actionLabel ? (
+          <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-brass">
+            {option.recommendation.actionLabel}
+          </p>
+        ) : null}
+        <div
+          className={[
+            option.recommendation.actionLabel ? "mt-3" : "",
+            option.recommendation.actions.length === 2
+              ? "grid gap-4 lg:grid-cols-2"
+              : "",
+          ].join(" ")}
+        >
+          {option.recommendation.actions.map((action) => (
+            <div
+              key={action.href}
+              className={option.recommendation.actions.length === 2
+                ? "flex min-w-0 flex-col border-t border-line pt-4"
+                : ""}
+            >
+              {action.label ? (
+                <h4 className="text-xs font-semibold uppercase tracking-[0.16em] text-petrol">
+                  {action.label}
+                </h4>
+              ) : null}
+              <p className={[
+                "text-sm leading-6 text-muted",
+                action.label ? "mt-2" : "",
+              ].join(" ")}>{action.time}</p>
+              {action.description ? (
+                <p className="mt-2 text-sm leading-6 text-muted">{action.description}</p>
+              ) : null}
+              <Link
+                href={action.href}
+                className={[
+                  "inline-flex min-h-12 items-center justify-center rounded-[4px] border border-petrol px-5 py-3 text-center text-sm font-semibold transition",
+                  "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-petrol",
+                  option.recommendation.actions.length === 2
+                    ? "mt-4 bg-white/70 text-petrol hover:bg-petrol hover:text-white lg:mt-auto"
+                    : "mt-5 bg-petrol text-white shadow-[0_10px_22px_rgba(11,52,54,0.12)] hover:bg-white hover:text-petrol",
+                ].join(" ")}
+              >
+                {action.cta}
+              </Link>
+            </div>
+          ))}
+        </div>
+      </div>
     </div>
   );
 }
