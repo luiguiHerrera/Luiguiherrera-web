@@ -4,7 +4,7 @@ export const en = {
     cta: "Start",
     nav: {
       home: "Home",
-      start: "Start",
+      start: "Personal finance",
       investor: "Investor",
       diagnostic: "Diagnostic",
       research: "Research",

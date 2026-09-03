@@ -1,0 +1,21 @@
+@keyframes recommendation-enter {
+  from {
+    opacity: 0.35;
+    transform: translateY(4px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.recommendation {
+  animation: recommendation-enter 180ms ease-out;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .recommendation {
+    animation: none;
+  }
+}

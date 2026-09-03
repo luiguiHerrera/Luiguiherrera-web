@@ -1,0 +1,11 @@
+.imageField {
+  -webkit-mask-image: none;
+  mask-image: none;
+}
+
+@media (min-width: 48rem) {
+  .imageField {
+    -webkit-mask-image: linear-gradient(to right, transparent 0%, black 28%, black 100%);
+    mask-image: linear-gradient(to right, transparent 0%, black 28%, black 100%);
+  }
+}

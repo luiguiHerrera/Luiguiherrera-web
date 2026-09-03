@@ -21,7 +21,7 @@ const td3About = ["reinforcement learning", "TD3", "portfolio allocation", "tran
 const tomDecayAbout = ["turn-of-the-month effect", "calendar anomalies", "alpha decay", "market microstructure", "HAC inference", "independent replication", "reproducible research"];
 
 const routes: Record<string, RouteSchema> = {
-  "/empezar": { name: "Empezar", description: "Ruta guiada para ordenar las herramientas principales antes de invertir.", kind: "page" },
+  "/empezar": { name: "Finanzas personales", description: "Ruta guiada para elegir un primer paso entre presupuesto, deudas, fondo de emergencia y preparación para invertir.", kind: "page" },
   "/presupuesto": { name: "Presupuesto personal", description: "Simulador educativo para ordenar ingresos, gastos, ahorro, inversión, protección financiera y gastos no mensuales.", kind: "application", category: "FinanceApplication" },
   "/deudas": { name: "Gestión de deudas", description: "Herramienta educativa para comparar pagos de deuda, avalancha, bola de nieve, flujo mensual y abonos extraordinarios.", kind: "application", category: "FinanceApplication" },
   "/diagnostico": { name: "Diagnóstico del inversionista", description: "Diagnóstico educativo para ordenar horizonte, liquidez, experiencia, comportamiento y capacidad para asumir riesgo.", kind: "application", category: "FinanceApplication" },
@@ -42,7 +42,7 @@ const routes: Record<string, RouteSchema> = {
 
 const enRoutes: Record<string, RouteSchema> = Object.fromEntries(Object.entries(routes).map(([path, value]) => [path, value]));
 Object.assign(enRoutes, {
-  "/en/start": { name: "Start", description: "A guided path through the main educational tools before investing.", kind: "page" },
+  "/en/start": { name: "Personal finance", description: "A guided path for choosing a first step across budgeting, debt, an emergency fund and investment readiness.", kind: "page" },
   "/en/budget": { name: "Personal budget", description: "Educational simulator for organizing income, spending, saving, investing, financial protection and non-monthly expenses.", kind: "application", category: "FinanceApplication" },
   "/en/debt": { name: "Debt management", description: "Educational tool for comparing debt payments, avalanche, snowball, monthly cash flow and extra payments.", kind: "application", category: "FinanceApplication" },
   "/en/diagnostic": { name: "Investor diagnostic", description: "Educational diagnostic for organizing horizon, liquidity, experience, behavior and capacity to take risk.", kind: "application", category: "FinanceApplication" },

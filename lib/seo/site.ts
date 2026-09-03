@@ -67,16 +67,16 @@ const seoRouteContent: readonly Omit<SeoRouteDefinition, "alternatePathname">[] 
   {
     pathname: "/empezar",
     language: "es",
-    title: "Empezar a invertir | Ruta guiada de preparación financiera",
+    title: "Finanzas personales | Encuentra tu primer paso",
     description:
-      "Ruta guiada para ordenar presupuesto, deudas, diagnóstico, protección y prácticas antes de invertir.",
+      "Ruta guiada para elegir entre presupuesto, deudas, fondo de emergencia y preparación para invertir según tu situación financiera.",
   },
   {
     pathname: "/en/start",
     language: "en",
-    title: "Start investing | A guided financial foundation",
+    title: "Personal finance | Find your first step",
     description:
-      "A guided path to organize your investor diagnostic, budget, debt and financial protection before investing.",
+      "A guided path to choose between budgeting, debt, an emergency fund and investment readiness based on your financial situation.",
   },
   {
     pathname: "/presupuesto",

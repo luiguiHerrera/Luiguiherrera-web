@@ -51,7 +51,17 @@ function isDiagnosticHref(href: string) {
     href.startsWith("/en/diagnostic?");
 }
 
-function HeaderLink({ children, className, href }: { children: ReactNode; className: string; href: string }) {
+function HeaderLink({
+  ariaCurrent,
+  children,
+  className,
+  href,
+}: {
+  ariaCurrent?: "page";
+  children: ReactNode;
+  className: string;
+  href: string;
+}) {
   const router = useRouter();
 
   function handleClick(event: MouseEvent<HTMLAnchorElement>) {
@@ -61,7 +71,7 @@ function HeaderLink({ children, className, href }: { children: ReactNode; classN
   }
 
   return (
-    <Link href={href} onClick={handleClick} className={className}>
+    <Link aria-current={ariaCurrent} href={href} onClick={handleClick} className={className}>
       {children}
     </Link>
   );
@@ -69,14 +79,18 @@ function HeaderLink({ children, className, href }: { children: ReactNode; classN
 
 function DesktopDropdown({
   href,
+  isActive,
   isHome,
   items,
   label,
+  pathname,
 }: {
   href: string;
+  isActive: boolean;
   isHome: boolean;
   items: NavDropdownItem[];
   label: string;
+  pathname: string;
 }) {
   const [open, setOpen] = useState(false);
 
@@ -102,7 +116,11 @@ function DesktopDropdown({
       <div className="flex items-center">
         <HeaderLink
           href={href}
-          className="block border-b border-transparent py-1.5 pl-2 pr-1 font-medium transition hover:border-petrol hover:text-petrol focus-visible:border-petrol focus-visible:text-petrol focus-visible:outline-none"
+          ariaCurrent={isActive ? "page" : undefined}
+          className={[
+            "block border-b py-1.5 pl-2 pr-1 font-medium transition hover:border-petrol hover:text-petrol focus-visible:border-petrol focus-visible:text-petrol focus-visible:outline-none",
+            isActive ? "border-brass text-petrol" : "border-transparent",
+          ].join(" ")}
         >
           {label}
         </HeaderLink>
@@ -128,7 +146,11 @@ function DesktopDropdown({
             <HeaderLink
               key={`${item.href}-${item.label}`}
               href={item.href}
-              className="block rounded-[4px] border-l-2 border-transparent px-3 py-2.5 text-[11px] text-muted transition hover:border-brass/55 hover:bg-paper hover:text-petrol focus-visible:border-brass/55 focus-visible:bg-paper focus-visible:text-petrol focus-visible:outline-none"
+              ariaCurrent={pathMatches(pathname, item.href) ? "page" : undefined}
+              className={[
+                "block rounded-[4px] border-l-2 px-3 py-2.5 text-[11px] text-muted transition hover:border-brass/55 hover:bg-paper hover:text-petrol focus-visible:border-brass/55 focus-visible:bg-paper focus-visible:text-petrol focus-visible:outline-none",
+                pathMatches(pathname, item.href) ? "border-brass bg-paper text-petrol" : "border-transparent",
+              ].join(" ")}
             >
               <span className="block font-semibold text-ink">{item.label}</span>
               <span className="block pt-1 leading-5">{item.description}</span>
@@ -140,16 +162,30 @@ function DesktopDropdown({
   );
 }
 
-function DesktopNavLink({ href, label }: { href: string; label: string }) {
+function DesktopNavLink({ href, isActive, label }: { href: string; isActive: boolean; label: string }) {
   return (
     <HeaderLink
       href={href}
-      className="block shrink-0 border-b border-transparent px-2 py-1.5 font-medium transition hover:border-petrol hover:text-petrol focus-visible:border-petrol focus-visible:text-petrol focus-visible:outline-none"
+      ariaCurrent={isActive ? "page" : undefined}
+      className={[
+        "block shrink-0 border-b px-2 py-1.5 font-medium transition hover:border-petrol hover:text-petrol focus-visible:border-petrol focus-visible:text-petrol focus-visible:outline-none",
+        isActive ? "border-brass text-petrol" : "border-transparent",
+      ].join(" ")}
     >
       {label}
     </HeaderLink>
   );
 }
+
+function pathMatches(pathname: string, href: string) {
+  const route = href.split(/[?#]/)[0];
+  return pathname === route || pathname.startsWith(route + "/");
+}
+
+const personalFinancePaths = {
+  es: ["/empezar", "/presupuesto", "/deudas", "/diagnostico"],
+  en: ["/en/start", "/en/budget", "/en/debt", "/en/diagnostic"],
+} as const;
 
 function HeaderForPathname({ pathname }: { pathname: string }) {
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -157,12 +193,23 @@ function HeaderForPathname({ pathname }: { pathname: string }) {
   const dictionary = getDictionary(locale);
   const hrefs = navHrefs[locale];
   const navGroups = [
-    { href: hrefs.start, label: dictionary.layout.nav.start, items: dictionary.layout.startItems },
+    {
+      href: hrefs.start,
+      isActive: personalFinancePaths[locale].some((path) => pathMatches(pathname, path)),
+      label: dictionary.layout.nav.start,
+      items: dictionary.layout.startItems,
+    },
     { href: hrefs.investor, label: dictionary.layout.nav.investor, items: dictionary.layout.investorItems },
     { href: hrefs.research, label: dictionary.layout.nav.research, items: dictionary.layout.researchItems },
     { href: hrefs.protection, label: dictionary.layout.nav.protection, items: dictionary.layout.protectionItems },
     { href: hrefs.resources, label: dictionary.layout.nav.resources, items: dictionary.layout.resourcesItems },
-  ];
+  ].map((group) => ({
+    ...group,
+    isActive: group.isActive ?? (
+      pathMatches(pathname, group.href) ||
+      group.items.some((item) => pathMatches(pathname, item.href))
+    ),
+  }));
   const isHome = pathname === "/" || pathname === "/en";
 
   function handleHeaderKeyDown(event: KeyboardEvent<HTMLElement>) {
@@ -194,9 +241,9 @@ function HeaderForPathname({ pathname }: { pathname: string }) {
           <nav className="flex min-w-0 items-center gap-1.5 text-[13px] text-muted">
             {navGroups.map((group) => (
               group.items?.length ? (
-                <DesktopDropdown key={group.href} href={group.href} isHome={isHome} label={group.label} items={group.items} />
+                <DesktopDropdown key={group.href} href={group.href} isActive={group.isActive} isHome={isHome} label={group.label} items={group.items} pathname={pathname} />
               ) : (
-                <DesktopNavLink key={group.href} href={group.href} label={group.label} />
+                <DesktopNavLink key={group.href} href={group.href} isActive={group.isActive} label={group.label} />
               )
             ))}
           </nav>
@@ -213,7 +260,14 @@ function HeaderForPathname({ pathname }: { pathname: string }) {
           <div className="mx-auto grid max-w-7xl gap-2">
             {navGroups.map((group) => (
               <div key={group.href} className="border-b border-line/75 pb-2">
-                <HeaderLink href={group.href} className="flex min-h-10 items-center font-semibold text-ink transition hover:text-petrol">
+                <HeaderLink
+                  href={group.href}
+                  ariaCurrent={group.isActive ? "page" : undefined}
+                  className={[
+                    "flex min-h-10 items-center border-l-2 pl-2 font-semibold transition hover:text-petrol",
+                    group.isActive ? "border-brass text-petrol" : "border-transparent text-ink",
+                  ].join(" ")}
+                >
                   {group.label}
                 </HeaderLink>
                 {group.items?.length ? (
@@ -222,7 +276,11 @@ function HeaderForPathname({ pathname }: { pathname: string }) {
                       <HeaderLink
                         key={`${item.href}-${item.label}`}
                         href={item.href}
-                        className="rounded-[4px] border border-line/80 bg-paper/70 px-3 py-2 text-sm text-muted transition hover:border-petrol/35 hover:bg-white hover:text-petrol"
+                        ariaCurrent={pathMatches(pathname, item.href) ? "page" : undefined}
+                        className={[
+                          "rounded-[4px] border bg-paper/70 px-3 py-2 text-sm text-muted transition hover:border-petrol/35 hover:bg-white hover:text-petrol",
+                          pathMatches(pathname, item.href) ? "border-brass/55 bg-white text-petrol" : "border-line/80",
+                        ].join(" ")}
                       >
                         <span className="block font-semibold text-ink">{item.label}</span>
                         <span className="mt-1 block text-xs leading-5">{item.description}</span>
