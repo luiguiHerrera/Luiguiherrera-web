@@ -40,7 +40,7 @@ function Recommendation({ option }: { option: PersonalFinanceRouteOption }) {
       <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-brass">
         {option.recommendation.eyebrow}
       </p>
-      <h3 className="mt-3 max-w-[24ch] font-serif text-[clamp(1.75rem,3vw,2.15rem)] font-semibold leading-[1.08] tracking-[-0.025em] text-ink">
+      <h3 className="mt-3 max-w-[24ch] [font-family:var(--font-personal-finance-display)] text-[clamp(1.75rem,3vw,2.15rem)] font-medium leading-[1.03] tracking-[-0.025em] text-ink">
         {option.recommendation.title}
       </h3>
       <p className="mt-4 max-w-[44rem] text-base leading-7 text-muted">

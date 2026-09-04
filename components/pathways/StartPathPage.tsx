@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import { Playfair_Display } from "next/font/google";
 import { PersonalFinanceGuidedRoute } from "@/components/pathways/PersonalFinanceGuidedRoute";
 import { PersonalFinanceHeroCta } from "@/components/pathways/PersonalFinanceHeroCta";
 import heroStyles from "@/components/pathways/PersonalFinanceHero.module.css";
@@ -14,6 +15,14 @@ type StartPathPageProps = {
 
 const focusClasses =
   "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-petrol focus-visible:ring-offset-2 focus-visible:ring-offset-paper";
+
+const playfairDisplay = Playfair_Display({
+  subsets: ["latin"],
+  weight: "500",
+  style: "normal",
+  display: "swap",
+  variable: "--font-personal-finance-display",
+});
 
 export function StartPathPage({ content }: StartPathPageProps) {
   const faqStructuredData = {
@@ -30,7 +39,7 @@ export function StartPathPage({ content }: StartPathPageProps) {
   };
 
   return (
-    <div lang={content.locale} className="overflow-x-clip bg-paper">
+    <div lang={content.locale} className={`${playfairDisplay.variable} overflow-x-clip bg-paper`}>
       <JsonLd data={faqStructuredData} />
 
       <div className="mx-auto max-w-[1420px] px-4 sm:px-7 lg:px-9">
@@ -54,7 +63,7 @@ export function StartPathPage({ content }: StartPathPageProps) {
               <p className="mb-4 text-[11px] font-semibold uppercase tracking-[0.22em] text-brass">
                 {content.hero.eyebrow}
               </p>
-              <h1 className="font-serif text-[clamp(2.55rem,4.7vw,4.65rem)] font-medium leading-[0.99] tracking-[-0.035em] text-ink">
+              <h1 className="[font-family:var(--font-personal-finance-display)] text-[clamp(2.55rem,4.7vw,4.65rem)] font-medium leading-[0.99] tracking-[-0.035em] text-ink">
                 {content.hero.title.split("\n").map((line, index) => (
                   <span key={line} className="block lg:whitespace-nowrap">{index > 0 ? " " : null}{line}</span>
                 ))}
@@ -85,7 +94,7 @@ export function StartPathPage({ content }: StartPathPageProps) {
           </p>
           <h2
             id="personal-finance-guided-route-title"
-            className="mt-3 max-w-[24ch] text-balance font-serif text-[clamp(2rem,4vw,2.65rem)] font-semibold leading-[1.08] tracking-[-0.03em] text-ink"
+            className="mt-3 max-w-[24ch] text-balance [font-family:var(--font-personal-finance-display)] text-[clamp(2rem,4vw,2.65rem)] font-medium leading-[1.03] tracking-[-0.03em] text-ink"
           >
             {content.guidedRoute.title}
           </h2>
@@ -96,7 +105,7 @@ export function StartPathPage({ content }: StartPathPageProps) {
         <section aria-labelledby="personal-finance-faq-title" className="px-1 py-11 sm:px-7 md:py-14 lg:px-8">
           <h2
             id="personal-finance-faq-title"
-            className="font-serif text-[clamp(1.85rem,3vw,2.25rem)] font-semibold tracking-[-0.025em] text-ink"
+            className="[font-family:var(--font-personal-finance-display)] text-[clamp(1.85rem,3vw,2.25rem)] font-medium leading-[1.05] tracking-[-0.025em] text-ink"
           >
             {content.faq.title}
           </h2>
@@ -127,7 +136,7 @@ export function StartPathPage({ content }: StartPathPageProps) {
               </p>
               <h2
                 id="personal-finance-bridge-title"
-                className="mt-3 max-w-[18ch] font-serif text-[clamp(1.9rem,3vw,2.35rem)] font-semibold leading-[1.08] tracking-[-0.025em] text-ink"
+                className="mt-3 max-w-[18ch] [font-family:var(--font-personal-finance-display)] text-[clamp(1.9rem,3vw,2.35rem)] font-medium leading-[1.03] tracking-[-0.025em] text-ink"
               >
                 {content.bridge.title}
               </h2>
