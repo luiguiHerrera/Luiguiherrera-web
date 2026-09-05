@@ -192,6 +192,9 @@ function HeaderForPathname({ pathname }: { pathname: string }) {
   const locale = localeFromPathname(pathname);
   const dictionary = getDictionary(locale);
   const hrefs = navHrefs[locale];
+  const isInvestorEntry = pathname === "/inversionista" || pathname === "/en/investor";
+  const entryCtaHref = isInvestorEntry ? (locale === "en" ? "/en/dashboard" : "/dashboard") : hrefs.start;
+  const entryCtaLabel = isInvestorEntry ? (locale === "en" ? "Open dashboard" : "Ver dashboard") : dictionary.layout.cta;
   const navGroups = [
     {
       href: hrefs.start,
@@ -250,8 +253,8 @@ function HeaderForPathname({ pathname }: { pathname: string }) {
           <div className="ml-1">
             <LanguageSwitcher />
           </div>
-          <HeaderLink href={hrefs.start} className="inline-flex shrink-0 rounded-[4px] border border-petrol bg-petrol px-3.5 py-1.5 text-xs font-semibold text-white shadow-[0_8px_18px_rgba(11,52,54,0.12)] transition hover:bg-panel hover:text-petrol">
-            {dictionary.layout.cta}
+          <HeaderLink href={entryCtaHref} className="inline-flex shrink-0 rounded-[4px] border border-petrol bg-petrol px-3.5 py-1.5 text-xs font-semibold text-white shadow-[0_8px_18px_rgba(11,52,54,0.12)] transition hover:bg-panel hover:text-petrol">
+            {entryCtaLabel}
           </HeaderLink>
         </div>
       </div>

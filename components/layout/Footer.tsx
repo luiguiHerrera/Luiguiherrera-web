@@ -13,6 +13,7 @@ export function Footer() {
   const methodologyHref = locale === "en" ? "/en/methodology" : "/metodologia";
   const legalHref = locale === "en" ? "/en/legal" : "/legal";
   const isPersonalFinanceEntry = pathname === "/empezar" || pathname === "/en/start";
+  const isInvestorEntry = pathname === "/inversionista" || pathname === "/en/investor";
 
   if (isPersonalFinanceEntry) {
     const year = new Date().getUTCFullYear();
@@ -47,7 +48,9 @@ export function Footer() {
   return (
     <footer className="border-t border-[#19484a] bg-petrol">
       <div className="mx-auto flex max-w-7xl flex-col gap-5 px-5 py-9 text-sm leading-6 text-white/85 md:flex-row md:items-center md:justify-between md:py-8">
-        <p className="max-w-3xl">{dictionary.layout.footerText}</p>
+        <p className="max-w-3xl">{isInvestorEntry
+          ? (locale === "en" ? "© Luigui Herrera. All rights reserved." : "© Luigui Herrera. Todos los derechos reservados.")
+          : dictionary.layout.footerText}</p>
         <div className="flex flex-wrap gap-x-5 gap-y-2 border-t border-white/15 pt-4 md:border-t-0 md:pt-0">
           <Link className="font-semibold text-white transition hover:text-white/80" href={methodologyHref}>
             {dictionary.layout.methodology}
