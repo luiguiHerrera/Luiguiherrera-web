@@ -94,8 +94,8 @@ function colorFor(value: number | null, metric: SeasonalityMetric, scale: number
   const centered = metric === "winRate" ? value - 0.5 : value;
   const intensity = Math.min(Math.abs(centered) / Math.max(metric === "winRate" ? 0.35 : scale, 0.001), 1);
   if (Math.abs(centered) < (metric === "winRate" ? 0.03 : scale * 0.08)) return "#e8e3dc";
-  if (centered > 0) return `rgba(111, 143, 123, ${0.2 + intensity * 0.6})`;
-  return `rgba(168, 100, 100, ${0.2 + intensity * 0.6})`;
+  if (centered > 0) return `rgba(18, 59, 61, ${0.2 + intensity * 0.6})`;
+  return `rgba(154, 122, 68, ${0.2 + intensity * 0.6})`;
 }
 
 function cellTitle(label: string, cell: SeasonalityCell | undefined, locale: "es" | "en") {
@@ -212,7 +212,7 @@ export function AdvancedSeasonalityPanel({ data, frequency, generatedAt, locale 
     <ExpandableInsightCard
       eyebrow={copy.eyebrow}
       title={copy.title}
-      reading={copy.reading}
+      reading={copy.reading + (locale === "en" ? " Only completed UTC calendar periods enter the sample; the current day, ISO week or month is excluded." : " La muestra incluye solo periodos de calendario UTC completos; se excluye el día, la semana ISO o el mes en curso.")}
       status={ticker}
       defaultOpen={frequency === "daily"}
       metrics={[
@@ -244,6 +244,8 @@ export function AdvancedSeasonalityPanel({ data, frequency, generatedAt, locale 
           {frequency === "monthly" ? <MonthlyView cells={cells as CalendarMonthSeasonalityCell[]} locale={locale} metric={metric} /> : null}
           {frequency === "weekly" ? <WeeklyView cells={monthCells as CalendarWeekSeasonalityCell[]} copy={copy} locale={locale} metric={metric} month={month} monthNames={months} /> : null}
           {frequency === "daily" ? <DailyView cells={cells as CalendarDaySeasonalityCell[]} copy={copy} currentDay={currentDay} currentMonth={currentMonth} locale={locale} metric={metric} month={month} monthNames={months} /> : null}
+
+          <details className="sl-seasonality-values"><summary>{locale === "en" ? "Sample values · all metrics" : "Valores de la muestra · todas las métricas"}</summary><div className="sl-table-scroll" tabIndex={0} role="region" aria-label={locale === "en" ? "Seasonality values" : "Valores de estacionalidad"}><table className="sl-table"><thead><tr><th>{copy.month}</th><th>{copy.averageReturn}</th><th>{locale === "en" ? "Median" : "Mediana"}</th><th>Win rate</th><th>N</th></tr></thead><tbody>{(frequency === "monthly" ? cells : monthCells).map(cell => <tr key={cellKey(cell)}><th>{labelForCell(cell, locale)}</th><td>{formatPercent(cell.averageReturn)}</td><td>{formatPercent(cell.medianReturn)}</td><td>{formatMetric(cell.winRate, "winRate")}</td><td>{cell.sampleSize}{cell.sampleSize < 5 ? ` · ${copy.lowSample}` : ""}</td></tr>)}</tbody></table></div></details>
 
           <p className="border-t border-line pt-4 text-xs leading-5 text-muted">
             {copy.footer}
@@ -414,7 +416,7 @@ function DailyView({
           </div>
           {currentDay && currentMonth === month ? (
             <span className="w-fit border border-petrol bg-[#eef3f2] px-3 py-1 text-xs font-semibold uppercase text-petrol">
-              {locale === "en" ? `Today marker: day ${currentDay}` : `Marcador hoy: día ${currentDay}`}
+              {locale === "en" ? `Snapshot marker: day ${currentDay}` : `Marcador del dato: día ${currentDay}`}
             </span>
           ) : null}
         </div>
@@ -433,7 +435,7 @@ function DailyView({
               >
                 <span className="block text-xs">{day}</span>
                 <span className="mt-2 block text-[10px] text-ink">{metric === "sampleSize" ? cell?.sampleSize ?? "n/d" : formatMetric(value, metric)}</span>
-                {isToday ? <span className="absolute right-1 top-1 border border-petrol bg-white px-1 text-[9px] uppercase text-petrol">{locale === "en" ? "Today" : "Hoy"}</span> : null}
+                {isToday ? <span className="absolute right-1 top-1 border border-petrol bg-white px-1 text-[9px] uppercase text-petrol">{locale === "en" ? "As of" : "Dato"}</span> : null}
               </div>
             );
           })}

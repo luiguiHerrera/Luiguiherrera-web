@@ -1,0 +1,2861 @@
+{
+  "SCHEMA_VERSION": "statistical-levels.provenance.v1",
+  "BASELINE_ID": "STATISTICAL_LEVELS_RAW_AUTHORITY_20260906T163225Z",
+  "RAW_ARCHIVE_ACCESS_CLASS": "PRIVATE_LOCAL_DURABLE",
+  "RAW_ARCHIVE_RELATIVE_PATH": "Library/Application Support/LuiguiHerrera/statistical-levels/raw-authority/2026-09-06T163225Z",
+  "RAW_ARCHIVE_MANIFEST_SHA256": "f8d7448e27e818dab35073fb7457b267a530ad9a191220380ba2699ff6c62d4f",
+  "RAW_MANIFEST_SHA256": "0464f4ceda2005fae95b385875018e49e0aaed94f1e759f456e7f5f741ddcb44",
+  "GENERATOR_COMMIT": "5859071ac43180decec28570bc3859dd905734f7",
+  "SOURCE_STATE": "UNCOMMITTED_CANDIDATE_CONTENT_ADDRESSED",
+  "GENERATOR_SHA256": "7beebd2acf006cd38809539155a5460c612885831df3381d47236c4d71092226",
+  "SOURCE_BUNDLE": [
+    {
+      "file": "scripts/build-statistical-levels.mjs",
+      "SHA256": "e298c952e02112757d09ccf089383dd4653e044b305cd4d45e5f624857b04f6c"
+    },
+    {
+      "file": "scripts/statistical-levels-offline.mjs",
+      "SHA256": "5a4193bc3937b36ff71f48a8277be9b7aa277091bff058545cd01034f5b335f1"
+    },
+    {
+      "file": "lib/statistical-levels/baseline-policy.mjs",
+      "SHA256": "cf6f2aa44d9711d37cccd02c28f396497d2c1620dfae72c5edec1d829d423523"
+    },
+    {
+      "file": "lib/statistical-levels/defect-repairs.mjs",
+      "SHA256": "5fee525b1a7e453dc149b91a92b5eb427f55c7231b031aae9f04cbde932925d1"
+    }
+  ],
+  "CONFIG_SHA256": "2f47dea33e1a06c1de4c4d06b8a4c2c9d3db5616a6f87be8b85c128dc960af06",
+  "CONFIG": {
+    "BASELINE_ID": "STATISTICAL_LEVELS_RAW_AUTHORITY_20260906T163225Z",
+    "SNAPSHOT_CUTOFF": "2026-09-06T16:32:25Z",
+    "RAW_MANIFEST_SHA256": "0464f4ceda2005fae95b385875018e49e0aaed94f1e759f456e7f5f741ddcb44",
+    "RAW_ARCHIVE_MANIFEST_SHA256": "f8d7448e27e818dab35073fb7457b267a530ad9a191220380ba2699ff6c62d4f",
+    "RAW_ARCHIVE_RELATIVE_PATH": "Library/Application Support/LuiguiHerrera/statistical-levels/raw-authority/2026-09-06T163225Z",
+    "RAW_ARCHIVE_ACCESS_CLASS": "PRIVATE_LOCAL_DURABLE",
+    "SCHEMA_VERSION": "statistical-levels.snapshot.v3",
+    "POLICY_VERSION": "completed-history-current-mark.v1",
+    "GENERATOR_COMMIT": "5859071ac43180decec28570bc3859dd905734f7",
+    "SOURCE_STATE": "UNCOMMITTED_CANDIDATE_CONTENT_ADDRESSED",
+    "GENERATED_AT": "2026-09-06T18:56:58Z",
+    "HISTORICAL_DRIFT_CAUSE": "UNEXPLAINED",
+    "FOUNDER_DECISION": "ADOPT_REPAIRED_REBASELINE: explicit baseline authority migration"
+  },
+  "GENERATED_AT": "2026-09-06T18:56:58Z",
+  "GENERATION_TIMESTAMP_SEMANTICS": "Assigned reproducible candidate build timestamp; actual execution times are retained separately in qualification evidence.",
+  "NODE_VERSION": "v26.5.0",
+  "snapshots": [
+    {
+      "FILE": "assets/AIQ.json",
+      "SNAPSHOT_SHA256": "710d2b02a431f77f196e3b70061e5b581f96d1c3065d25fd28ada746360f7eea",
+      "SCHEMA_VERSION": "statistical-levels.snapshot.v3",
+      "GENERATOR_COMMIT": "5859071ac43180decec28570bc3859dd905734f7",
+      "GENERATOR_SHA256": "7beebd2acf006cd38809539155a5460c612885831df3381d47236c4d71092226",
+      "CONFIG_SHA256": "2f47dea33e1a06c1de4c4d06b8a4c2c9d3db5616a6f87be8b85c128dc960af06",
+      "GENERATED_AT": "2026-09-06T18:56:58Z",
+      "INPUTS": [
+        {
+          "ASSET": "AIQ",
+          "RAW_SOURCE_ID": "STATISTICAL_LEVELS_RAW_AUTHORITY_20260906T163225Z/raw/AIQ.json",
+          "RAW_SHA256": "6d69def46c59f6bf9b6daf28f9cb9d071b0d290fa382cb8acde394f60a1f5045",
+          "RAW_ROW_COUNT": 2088,
+          "RAW_FIRST_DATE": "2018-05-16",
+          "RAW_LAST_DATE": "2026-09-04",
+          "SNAPSHOT_CUTOFF": "2026-09-06T16:32:25Z",
+          "CURRENT_MARK_TIMESTAMP": "2026-09-04T20:00:01.000Z",
+          "LAST_COMPLETED_OBSERVATION": {
+            "daily": "2026-09-04",
+            "weekly": "2026-08-28",
+            "monthly": "2026-08-31"
+          },
+          "COMPLETED_DAILY_ROW_COUNT": 2088
+        }
+      ]
+    },
+    {
+      "FILE": "assets/BOTZ.json",
+      "SNAPSHOT_SHA256": "abc7e1cd5a2306881cf5882499ab3a1213e3dca7a881f5a4f966c8352c67e721",
+      "SCHEMA_VERSION": "statistical-levels.snapshot.v3",
+      "GENERATOR_COMMIT": "5859071ac43180decec28570bc3859dd905734f7",
+      "GENERATOR_SHA256": "7beebd2acf006cd38809539155a5460c612885831df3381d47236c4d71092226",
+      "CONFIG_SHA256": "2f47dea33e1a06c1de4c4d06b8a4c2c9d3db5616a6f87be8b85c128dc960af06",
+      "GENERATED_AT": "2026-09-06T18:56:58Z",
+      "INPUTS": [
+        {
+          "ASSET": "BOTZ",
+          "RAW_SOURCE_ID": "STATISTICAL_LEVELS_RAW_AUTHORITY_20260906T163225Z/raw/BOTZ.json",
+          "RAW_SHA256": "4733150d3a9fc341b90556ceba26d33c1902a50c2c4587b07bf95f72c9c04953",
+          "RAW_ROW_COUNT": 2509,
+          "RAW_FIRST_DATE": "2016-09-13",
+          "RAW_LAST_DATE": "2026-09-04",
+          "SNAPSHOT_CUTOFF": "2026-09-06T16:32:25Z",
+          "CURRENT_MARK_TIMESTAMP": "2026-09-04T20:00:01.000Z",
+          "LAST_COMPLETED_OBSERVATION": {
+            "daily": "2026-09-04",
+            "weekly": "2026-08-28",
+            "monthly": "2026-08-31"
+          },
+          "COMPLETED_DAILY_ROW_COUNT": 2509
+        }
+      ]
+    },
+    {
+      "FILE": "assets/BTCUSD.json",
+      "SNAPSHOT_SHA256": "65183b997cc0a726214c2e79a4f52c2f35b9371ea0da316e625f7a81335d91a9",
+      "SCHEMA_VERSION": "statistical-levels.snapshot.v3",
+      "GENERATOR_COMMIT": "5859071ac43180decec28570bc3859dd905734f7",
+      "GENERATOR_SHA256": "7beebd2acf006cd38809539155a5460c612885831df3381d47236c4d71092226",
+      "CONFIG_SHA256": "2f47dea33e1a06c1de4c4d06b8a4c2c9d3db5616a6f87be8b85c128dc960af06",
+      "GENERATED_AT": "2026-09-06T18:56:58Z",
+      "INPUTS": [
+        {
+          "ASSET": "BTCUSD",
+          "RAW_SOURCE_ID": "STATISTICAL_LEVELS_RAW_AUTHORITY_20260906T163225Z/raw/BTCUSD.json",
+          "RAW_SHA256": "0c2711b962ae007aa2b9566c09b636a443d445d854716fcb1d2ad78c41ffa9bd",
+          "RAW_ROW_COUNT": 4373,
+          "RAW_FIRST_DATE": "2014-09-17",
+          "RAW_LAST_DATE": "2026-09-06",
+          "SNAPSHOT_CUTOFF": "2026-09-06T16:32:25Z",
+          "CURRENT_MARK_TIMESTAMP": "2026-09-06T16:32:25.000Z",
+          "LAST_COMPLETED_OBSERVATION": {
+            "daily": "2026-09-05",
+            "weekly": "2026-08-30",
+            "monthly": "2026-08-31"
+          },
+          "COMPLETED_DAILY_ROW_COUNT": 4372
+        }
+      ]
+    },
+    {
+      "FILE": "assets/CIBR.json",
+      "SNAPSHOT_SHA256": "9db36f7e0e89c39c20ec15dc2a951b57244c37462b8eea8ce8dc2af1de0c02e3",
+      "SCHEMA_VERSION": "statistical-levels.snapshot.v3",
+      "GENERATOR_COMMIT": "5859071ac43180decec28570bc3859dd905734f7",
+      "GENERATOR_SHA256": "7beebd2acf006cd38809539155a5460c612885831df3381d47236c4d71092226",
+      "CONFIG_SHA256": "2f47dea33e1a06c1de4c4d06b8a4c2c9d3db5616a6f87be8b85c128dc960af06",
+      "GENERATED_AT": "2026-09-06T18:56:58Z",
+      "INPUTS": [
+        {
+          "ASSET": "CIBR",
+          "RAW_SOURCE_ID": "STATISTICAL_LEVELS_RAW_AUTHORITY_20260906T163225Z/raw/CIBR.json",
+          "RAW_SHA256": "253554558afb2d2df8297612f1aa3b7d47f5938b2d894270cfb5e266de329200",
+          "RAW_ROW_COUNT": 2809,
+          "RAW_FIRST_DATE": "2015-07-07",
+          "RAW_LAST_DATE": "2026-09-04",
+          "SNAPSHOT_CUTOFF": "2026-09-06T16:32:25Z",
+          "CURRENT_MARK_TIMESTAMP": "2026-09-04T20:00:01.000Z",
+          "LAST_COMPLETED_OBSERVATION": {
+            "daily": "2026-09-04",
+            "weekly": "2026-08-28",
+            "monthly": "2026-08-31"
+          },
+          "COMPLETED_DAILY_ROW_COUNT": 2809
+        }
+      ]
+    },
+    {
+      "FILE": "assets/DIA.json",
+      "SNAPSHOT_SHA256": "4a2f80cb2708b42f482d3434dc662c715bdc062d69188423f5d57f98d335cef6",
+      "SCHEMA_VERSION": "statistical-levels.snapshot.v3",
+      "GENERATOR_COMMIT": "5859071ac43180decec28570bc3859dd905734f7",
+      "GENERATOR_SHA256": "7beebd2acf006cd38809539155a5460c612885831df3381d47236c4d71092226",
+      "CONFIG_SHA256": "2f47dea33e1a06c1de4c4d06b8a4c2c9d3db5616a6f87be8b85c128dc960af06",
+      "GENERATED_AT": "2026-09-06T18:56:58Z",
+      "INPUTS": [
+        {
+          "ASSET": "DIA",
+          "RAW_SOURCE_ID": "STATISTICAL_LEVELS_RAW_AUTHORITY_20260906T163225Z/raw/DIA.json",
+          "RAW_SHA256": "6a502437400a852dbf95c1daffcd755e995aec72ca2f1051cc31e4b63f649c99",
+          "RAW_ROW_COUNT": 7202,
+          "RAW_FIRST_DATE": "1998-01-20",
+          "RAW_LAST_DATE": "2026-09-04",
+          "SNAPSHOT_CUTOFF": "2026-09-06T16:32:25Z",
+          "CURRENT_MARK_TIMESTAMP": "2026-09-04T20:00:00.000Z",
+          "LAST_COMPLETED_OBSERVATION": {
+            "daily": "2026-09-04",
+            "weekly": "2026-08-28",
+            "monthly": "2026-08-31"
+          },
+          "COMPLETED_DAILY_ROW_COUNT": 7202
+        }
+      ]
+    },
+    {
+      "FILE": "assets/EEM.json",
+      "SNAPSHOT_SHA256": "37026857f0126010ac57059915812c6e8bc7f0ce076c1f7c503ce9fb78d89126",
+      "SCHEMA_VERSION": "statistical-levels.snapshot.v3",
+      "GENERATOR_COMMIT": "5859071ac43180decec28570bc3859dd905734f7",
+      "GENERATOR_SHA256": "7beebd2acf006cd38809539155a5460c612885831df3381d47236c4d71092226",
+      "CONFIG_SHA256": "2f47dea33e1a06c1de4c4d06b8a4c2c9d3db5616a6f87be8b85c128dc960af06",
+      "GENERATED_AT": "2026-09-06T18:56:58Z",
+      "INPUTS": [
+        {
+          "ASSET": "EEM",
+          "RAW_SOURCE_ID": "STATISTICAL_LEVELS_RAW_AUTHORITY_20260906T163225Z/raw/EEM.json",
+          "RAW_SHA256": "c71b0213fc315f959dff022e7b125336733c2c00a18121c9375b80e24f7e3a0c",
+          "RAW_ROW_COUNT": 5887,
+          "RAW_FIRST_DATE": "2003-04-14",
+          "RAW_LAST_DATE": "2026-09-04",
+          "SNAPSHOT_CUTOFF": "2026-09-06T16:32:25Z",
+          "CURRENT_MARK_TIMESTAMP": "2026-09-04T20:00:00.000Z",
+          "LAST_COMPLETED_OBSERVATION": {
+            "daily": "2026-09-04",
+            "weekly": "2026-08-28",
+            "monthly": "2026-08-31"
+          },
+          "COMPLETED_DAILY_ROW_COUNT": 5887
+        }
+      ]
+    },
+    {
+      "FILE": "assets/EFA.json",
+      "SNAPSHOT_SHA256": "a2d7a2305d2d2be107db9c0fa331376a8a26c540be13bcfba62792332aab24af",
+      "SCHEMA_VERSION": "statistical-levels.snapshot.v3",
+      "GENERATOR_COMMIT": "5859071ac43180decec28570bc3859dd905734f7",
+      "GENERATOR_SHA256": "7beebd2acf006cd38809539155a5460c612885831df3381d47236c4d71092226",
+      "CONFIG_SHA256": "2f47dea33e1a06c1de4c4d06b8a4c2c9d3db5616a6f87be8b85c128dc960af06",
+      "GENERATED_AT": "2026-09-06T18:56:58Z",
+      "INPUTS": [
+        {
+          "ASSET": "EFA",
+          "RAW_SOURCE_ID": "STATISTICAL_LEVELS_RAW_AUTHORITY_20260906T163225Z/raw/EFA.json",
+          "RAW_SHA256": "ecf0887d88b08ee4586844b7219390da24807e6e8b9d8c0582f85556974ef168",
+          "RAW_ROW_COUNT": 6293,
+          "RAW_FIRST_DATE": "2001-08-27",
+          "RAW_LAST_DATE": "2026-09-04",
+          "SNAPSHOT_CUTOFF": "2026-09-06T16:32:25Z",
+          "CURRENT_MARK_TIMESTAMP": "2026-09-04T20:00:00.000Z",
+          "LAST_COMPLETED_OBSERVATION": {
+            "daily": "2026-09-04",
+            "weekly": "2026-08-28",
+            "monthly": "2026-08-31"
+          },
+          "COMPLETED_DAILY_ROW_COUNT": 6293
+        }
+      ]
+    },
+    {
+      "FILE": "assets/ETHUSD.json",
+      "SNAPSHOT_SHA256": "f1767c388fa0277b7b442396827663a88c7bb30b9bc8df8fa20d49942de5d610",
+      "SCHEMA_VERSION": "statistical-levels.snapshot.v3",
+      "GENERATOR_COMMIT": "5859071ac43180decec28570bc3859dd905734f7",
+      "GENERATOR_SHA256": "7beebd2acf006cd38809539155a5460c612885831df3381d47236c4d71092226",
+      "CONFIG_SHA256": "2f47dea33e1a06c1de4c4d06b8a4c2c9d3db5616a6f87be8b85c128dc960af06",
+      "GENERATED_AT": "2026-09-06T18:56:58Z",
+      "INPUTS": [
+        {
+          "ASSET": "ETHUSD",
+          "RAW_SOURCE_ID": "STATISTICAL_LEVELS_RAW_AUTHORITY_20260906T163225Z/raw/ETHUSD.json",
+          "RAW_SHA256": "0ad50a9ebf01e07e37113cb0fc32489eddb2ce404de7c44ec70f7826b489ce93",
+          "RAW_ROW_COUNT": 3224,
+          "RAW_FIRST_DATE": "2017-11-09",
+          "RAW_LAST_DATE": "2026-09-06",
+          "SNAPSHOT_CUTOFF": "2026-09-06T16:32:25Z",
+          "CURRENT_MARK_TIMESTAMP": "2026-09-06T16:32:24.000Z",
+          "LAST_COMPLETED_OBSERVATION": {
+            "daily": "2026-09-05",
+            "weekly": "2026-08-30",
+            "monthly": "2026-08-31"
+          },
+          "COMPLETED_DAILY_ROW_COUNT": 3223
+        }
+      ]
+    },
+    {
+      "FILE": "assets/EWJ.json",
+      "SNAPSHOT_SHA256": "b49f80308671636a36b75fc46287478652c8f0281342a73e586b83adc13b3259",
+      "SCHEMA_VERSION": "statistical-levels.snapshot.v3",
+      "GENERATOR_COMMIT": "5859071ac43180decec28570bc3859dd905734f7",
+      "GENERATOR_SHA256": "7beebd2acf006cd38809539155a5460c612885831df3381d47236c4d71092226",
+      "CONFIG_SHA256": "2f47dea33e1a06c1de4c4d06b8a4c2c9d3db5616a6f87be8b85c128dc960af06",
+      "GENERATED_AT": "2026-09-06T18:56:58Z",
+      "INPUTS": [
+        {
+          "ASSET": "EWJ",
+          "RAW_SOURCE_ID": "STATISTICAL_LEVELS_RAW_AUTHORITY_20260906T163225Z/raw/EWJ.json",
+          "RAW_SHA256": "ccfde0b936b47f45c011d09822dcf6a61455bfe145aa2c0aa15942ad08aa2765",
+          "RAW_ROW_COUNT": 7667,
+          "RAW_FIRST_DATE": "1996-03-18",
+          "RAW_LAST_DATE": "2026-09-04",
+          "SNAPSHOT_CUTOFF": "2026-09-06T16:32:25Z",
+          "CURRENT_MARK_TIMESTAMP": "2026-09-04T20:00:00.000Z",
+          "LAST_COMPLETED_OBSERVATION": {
+            "daily": "2026-09-04",
+            "weekly": "2026-08-28",
+            "monthly": "2026-08-31"
+          },
+          "COMPLETED_DAILY_ROW_COUNT": 7667
+        }
+      ]
+    },
+    {
+      "FILE": "assets/FINX.json",
+      "SNAPSHOT_SHA256": "26bc5d65c892a6ca1ea8eac0b87db8977a682d1145fe5fe84df815fc1263c681",
+      "SCHEMA_VERSION": "statistical-levels.snapshot.v3",
+      "GENERATOR_COMMIT": "5859071ac43180decec28570bc3859dd905734f7",
+      "GENERATOR_SHA256": "7beebd2acf006cd38809539155a5460c612885831df3381d47236c4d71092226",
+      "CONFIG_SHA256": "2f47dea33e1a06c1de4c4d06b8a4c2c9d3db5616a6f87be8b85c128dc960af06",
+      "GENERATED_AT": "2026-09-06T18:56:58Z",
+      "INPUTS": [
+        {
+          "ASSET": "FINX",
+          "RAW_SOURCE_ID": "STATISTICAL_LEVELS_RAW_AUTHORITY_20260906T163225Z/raw/FINX.json",
+          "RAW_SHA256": "aee5a2ea4ecf87c03ae8ce28a891b89a4f54d1840421bb5aafacfc0fa7da7e30",
+          "RAW_ROW_COUNT": 2509,
+          "RAW_FIRST_DATE": "2016-09-13",
+          "RAW_LAST_DATE": "2026-09-04",
+          "SNAPSHOT_CUTOFF": "2026-09-06T16:32:25Z",
+          "CURRENT_MARK_TIMESTAMP": "2026-09-04T20:00:01.000Z",
+          "LAST_COMPLETED_OBSERVATION": {
+            "daily": "2026-09-04",
+            "weekly": "2026-08-28",
+            "monthly": "2026-08-31"
+          },
+          "COMPLETED_DAILY_ROW_COUNT": 2509
+        }
+      ]
+    },
+    {
+      "FILE": "assets/FXI.json",
+      "SNAPSHOT_SHA256": "1672a9eaaa015fcf1f75ef660477b14be412c63d8942c2b438bce271dbd8a3db",
+      "SCHEMA_VERSION": "statistical-levels.snapshot.v3",
+      "GENERATOR_COMMIT": "5859071ac43180decec28570bc3859dd905734f7",
+      "GENERATOR_SHA256": "7beebd2acf006cd38809539155a5460c612885831df3381d47236c4d71092226",
+      "CONFIG_SHA256": "2f47dea33e1a06c1de4c4d06b8a4c2c9d3db5616a6f87be8b85c128dc960af06",
+      "GENERATED_AT": "2026-09-06T18:56:58Z",
+      "INPUTS": [
+        {
+          "ASSET": "FXI",
+          "RAW_SOURCE_ID": "STATISTICAL_LEVELS_RAW_AUTHORITY_20260906T163225Z/raw/FXI.json",
+          "RAW_SHA256": "d69c24dd4dd75b14664cfd52af538081ee024b6dc6f28463dd53cd08102994e1",
+          "RAW_ROW_COUNT": 5512,
+          "RAW_FIRST_DATE": "2004-10-08",
+          "RAW_LAST_DATE": "2026-09-04",
+          "SNAPSHOT_CUTOFF": "2026-09-06T16:32:25Z",
+          "CURRENT_MARK_TIMESTAMP": "2026-09-04T20:00:00.000Z",
+          "LAST_COMPLETED_OBSERVATION": {
+            "daily": "2026-09-04",
+            "weekly": "2026-08-28",
+            "monthly": "2026-08-31"
+          },
+          "COMPLETED_DAILY_ROW_COUNT": 5512
+        }
+      ]
+    },
+    {
+      "FILE": "assets/GLD.json",
+      "SNAPSHOT_SHA256": "002424f1f249e205dd77e9f940b0bbe960dd1e122469a15e1eada8f7c865e4ab",
+      "SCHEMA_VERSION": "statistical-levels.snapshot.v3",
+      "GENERATOR_COMMIT": "5859071ac43180decec28570bc3859dd905734f7",
+      "GENERATOR_SHA256": "7beebd2acf006cd38809539155a5460c612885831df3381d47236c4d71092226",
+      "CONFIG_SHA256": "2f47dea33e1a06c1de4c4d06b8a4c2c9d3db5616a6f87be8b85c128dc960af06",
+      "GENERATED_AT": "2026-09-06T18:56:58Z",
+      "INPUTS": [
+        {
+          "ASSET": "GLD",
+          "RAW_SOURCE_ID": "STATISTICAL_LEVELS_RAW_AUTHORITY_20260906T163225Z/raw/GLD.json",
+          "RAW_SHA256": "9b5928a9849318a38a2af78efc080977b9dc1a2e4ee5c3932bca747480343aea",
+          "RAW_ROW_COUNT": 5483,
+          "RAW_FIRST_DATE": "2004-11-18",
+          "RAW_LAST_DATE": "2026-09-04",
+          "SNAPSHOT_CUTOFF": "2026-09-06T16:32:25Z",
+          "CURRENT_MARK_TIMESTAMP": "2026-09-04T20:00:00.000Z",
+          "LAST_COMPLETED_OBSERVATION": {
+            "daily": "2026-09-04",
+            "weekly": "2026-08-28",
+            "monthly": "2026-08-31"
+          },
+          "COMPLETED_DAILY_ROW_COUNT": 5483
+        }
+      ]
+    },
+    {
+      "FILE": "assets/HYG.json",
+      "SNAPSHOT_SHA256": "fbfc877af949dfc8a68603654721124e215870cb15bd3a8ba9492ad021b9fecf",
+      "SCHEMA_VERSION": "statistical-levels.snapshot.v3",
+      "GENERATOR_COMMIT": "5859071ac43180decec28570bc3859dd905734f7",
+      "GENERATOR_SHA256": "7beebd2acf006cd38809539155a5460c612885831df3381d47236c4d71092226",
+      "CONFIG_SHA256": "2f47dea33e1a06c1de4c4d06b8a4c2c9d3db5616a6f87be8b85c128dc960af06",
+      "GENERATED_AT": "2026-09-06T18:56:58Z",
+      "INPUTS": [
+        {
+          "ASSET": "HYG",
+          "RAW_SOURCE_ID": "STATISTICAL_LEVELS_RAW_AUTHORITY_20260906T163225Z/raw/HYG.json",
+          "RAW_SHA256": "df23be966f75418f3a35f955633e7face2a7133844ab5316d5c6000370013318",
+          "RAW_ROW_COUNT": 4883,
+          "RAW_FIRST_DATE": "2007-04-11",
+          "RAW_LAST_DATE": "2026-09-04",
+          "SNAPSHOT_CUTOFF": "2026-09-06T16:32:25Z",
+          "CURRENT_MARK_TIMESTAMP": "2026-09-04T20:00:00.000Z",
+          "LAST_COMPLETED_OBSERVATION": {
+            "daily": "2026-09-04",
+            "weekly": "2026-08-28",
+            "monthly": "2026-08-31"
+          },
+          "COMPLETED_DAILY_ROW_COUNT": 4883
+        }
+      ]
+    },
+    {
+      "FILE": "assets/IEF.json",
+      "SNAPSHOT_SHA256": "89356caf70d11a491f12e81ee36fc8fb701dbfd08057a8f6153516ab37ee858a",
+      "SCHEMA_VERSION": "statistical-levels.snapshot.v3",
+      "GENERATOR_COMMIT": "5859071ac43180decec28570bc3859dd905734f7",
+      "GENERATOR_SHA256": "7beebd2acf006cd38809539155a5460c612885831df3381d47236c4d71092226",
+      "CONFIG_SHA256": "2f47dea33e1a06c1de4c4d06b8a4c2c9d3db5616a6f87be8b85c128dc960af06",
+      "GENERATED_AT": "2026-09-06T18:56:58Z",
+      "INPUTS": [
+        {
+          "ASSET": "IEF",
+          "RAW_SOURCE_ID": "STATISTICAL_LEVELS_RAW_AUTHORITY_20260906T163225Z/raw/IEF.json",
+          "RAW_SHA256": "aaf4d585d4c4d5a4e86c81f66303f36e9ad7c72d08b940aa99dce8d3fa14a358",
+          "RAW_ROW_COUNT": 6065,
+          "RAW_FIRST_DATE": "2002-07-30",
+          "RAW_LAST_DATE": "2026-09-04",
+          "SNAPSHOT_CUTOFF": "2026-09-06T16:32:25Z",
+          "CURRENT_MARK_TIMESTAMP": "2026-09-04T20:00:01.000Z",
+          "LAST_COMPLETED_OBSERVATION": {
+            "daily": "2026-09-04",
+            "weekly": "2026-08-28",
+            "monthly": "2026-08-31"
+          },
+          "COMPLETED_DAILY_ROW_COUNT": 6065
+        }
+      ]
+    },
+    {
+      "FILE": "assets/ITA.json",
+      "SNAPSHOT_SHA256": "6d1ba902ac1530f3efd3518bc4753a248b28669f8d39d3fd400e85841f5e9afe",
+      "SCHEMA_VERSION": "statistical-levels.snapshot.v3",
+      "GENERATOR_COMMIT": "5859071ac43180decec28570bc3859dd905734f7",
+      "GENERATOR_SHA256": "7beebd2acf006cd38809539155a5460c612885831df3381d47236c4d71092226",
+      "CONFIG_SHA256": "2f47dea33e1a06c1de4c4d06b8a4c2c9d3db5616a6f87be8b85c128dc960af06",
+      "GENERATED_AT": "2026-09-06T18:56:58Z",
+      "INPUTS": [
+        {
+          "ASSET": "ITA",
+          "RAW_SOURCE_ID": "STATISTICAL_LEVELS_RAW_AUTHORITY_20260906T163225Z/raw/ITA.json",
+          "RAW_SHA256": "3f5af589385c705289bca9a432ac36d2d4447b2fea05236a60d287e8de44292f",
+          "RAW_ROW_COUNT": 5116,
+          "RAW_FIRST_DATE": "2006-05-05",
+          "RAW_LAST_DATE": "2026-09-04",
+          "SNAPSHOT_CUTOFF": "2026-09-06T16:32:25Z",
+          "CURRENT_MARK_TIMESTAMP": "2026-09-04T20:00:00.000Z",
+          "LAST_COMPLETED_OBSERVATION": {
+            "daily": "2026-09-04",
+            "weekly": "2026-08-28",
+            "monthly": "2026-08-31"
+          },
+          "COMPLETED_DAILY_ROW_COUNT": 5116
+        }
+      ]
+    },
+    {
+      "FILE": "assets/IWM.json",
+      "SNAPSHOT_SHA256": "4b7c6a77ad45ed39c7968f3cc05e7c97e8c7a6d38ee32dda3b2aea3165bc5982",
+      "SCHEMA_VERSION": "statistical-levels.snapshot.v3",
+      "GENERATOR_COMMIT": "5859071ac43180decec28570bc3859dd905734f7",
+      "GENERATOR_SHA256": "7beebd2acf006cd38809539155a5460c612885831df3381d47236c4d71092226",
+      "CONFIG_SHA256": "2f47dea33e1a06c1de4c4d06b8a4c2c9d3db5616a6f87be8b85c128dc960af06",
+      "GENERATED_AT": "2026-09-06T18:56:58Z",
+      "INPUTS": [
+        {
+          "ASSET": "IWM",
+          "RAW_SOURCE_ID": "STATISTICAL_LEVELS_RAW_AUTHORITY_20260906T163225Z/raw/IWM.json",
+          "RAW_SHA256": "6cfc0d614fa08265a61d78d28bf476763bf57cfc7b4717ac388024d62725671a",
+          "RAW_ROW_COUNT": 6608,
+          "RAW_FIRST_DATE": "2000-05-26",
+          "RAW_LAST_DATE": "2026-09-04",
+          "SNAPSHOT_CUTOFF": "2026-09-06T16:32:25Z",
+          "CURRENT_MARK_TIMESTAMP": "2026-09-04T20:00:00.000Z",
+          "LAST_COMPLETED_OBSERVATION": {
+            "daily": "2026-09-04",
+            "weekly": "2026-08-28",
+            "monthly": "2026-08-31"
+          },
+          "COMPLETED_DAILY_ROW_COUNT": 6608
+        }
+      ]
+    },
+    {
+      "FILE": "assets/LQD.json",
+      "SNAPSHOT_SHA256": "1a9bbdbca4b31b71a6e0754a89f8cd0cf583dbe432620e6b4cec172a47e529d4",
+      "SCHEMA_VERSION": "statistical-levels.snapshot.v3",
+      "GENERATOR_COMMIT": "5859071ac43180decec28570bc3859dd905734f7",
+      "GENERATOR_SHA256": "7beebd2acf006cd38809539155a5460c612885831df3381d47236c4d71092226",
+      "CONFIG_SHA256": "2f47dea33e1a06c1de4c4d06b8a4c2c9d3db5616a6f87be8b85c128dc960af06",
+      "GENERATED_AT": "2026-09-06T18:56:58Z",
+      "INPUTS": [
+        {
+          "ASSET": "LQD",
+          "RAW_SOURCE_ID": "STATISTICAL_LEVELS_RAW_AUTHORITY_20260906T163225Z/raw/LQD.json",
+          "RAW_SHA256": "f428905964ff6f721bbe7ce127077a93ec2b312fbcc4c93c0081f0dfb998131c",
+          "RAW_ROW_COUNT": 6065,
+          "RAW_FIRST_DATE": "2002-07-30",
+          "RAW_LAST_DATE": "2026-09-04",
+          "SNAPSHOT_CUTOFF": "2026-09-06T16:32:25Z",
+          "CURRENT_MARK_TIMESTAMP": "2026-09-04T20:00:00.000Z",
+          "LAST_COMPLETED_OBSERVATION": {
+            "daily": "2026-09-04",
+            "weekly": "2026-08-28",
+            "monthly": "2026-08-31"
+          },
+          "COMPLETED_DAILY_ROW_COUNT": 6065
+        }
+      ]
+    },
+    {
+      "FILE": "assets/PAVE.json",
+      "SNAPSHOT_SHA256": "0925c7b7f936253d5781ef430217e76dad11fcb2ca703818e7ba939bdaef3aa0",
+      "SCHEMA_VERSION": "statistical-levels.snapshot.v3",
+      "GENERATOR_COMMIT": "5859071ac43180decec28570bc3859dd905734f7",
+      "GENERATOR_SHA256": "7beebd2acf006cd38809539155a5460c612885831df3381d47236c4d71092226",
+      "CONFIG_SHA256": "2f47dea33e1a06c1de4c4d06b8a4c2c9d3db5616a6f87be8b85c128dc960af06",
+      "GENERATED_AT": "2026-09-06T18:56:58Z",
+      "INPUTS": [
+        {
+          "ASSET": "PAVE",
+          "RAW_SOURCE_ID": "STATISTICAL_LEVELS_RAW_AUTHORITY_20260906T163225Z/raw/PAVE.json",
+          "RAW_SHA256": "2488fbae2d3d72386b428acfe668d2b6357594e21cab10bade14c9e71108d77f",
+          "RAW_ROW_COUNT": 2388,
+          "RAW_FIRST_DATE": "2017-03-08",
+          "RAW_LAST_DATE": "2026-09-04",
+          "SNAPSHOT_CUTOFF": "2026-09-06T16:32:25Z",
+          "CURRENT_MARK_TIMESTAMP": "2026-09-04T20:00:00.000Z",
+          "LAST_COMPLETED_OBSERVATION": {
+            "daily": "2026-09-04",
+            "weekly": "2026-08-28",
+            "monthly": "2026-08-31"
+          },
+          "COMPLETED_DAILY_ROW_COUNT": 2388
+        }
+      ]
+    },
+    {
+      "FILE": "assets/PHO.json",
+      "SNAPSHOT_SHA256": "3ba57e587c984abc71a1c560090d7a82697730a6635c170bb03b57e7fa106fd5",
+      "SCHEMA_VERSION": "statistical-levels.snapshot.v3",
+      "GENERATOR_COMMIT": "5859071ac43180decec28570bc3859dd905734f7",
+      "GENERATOR_SHA256": "7beebd2acf006cd38809539155a5460c612885831df3381d47236c4d71092226",
+      "CONFIG_SHA256": "2f47dea33e1a06c1de4c4d06b8a4c2c9d3db5616a6f87be8b85c128dc960af06",
+      "GENERATED_AT": "2026-09-06T18:56:58Z",
+      "INPUTS": [
+        {
+          "ASSET": "PHO",
+          "RAW_SOURCE_ID": "STATISTICAL_LEVELS_RAW_AUTHORITY_20260906T163225Z/raw/PHO.json",
+          "RAW_SHA256": "8c9e1400b761759531a0e5569edd1afa252f5b292c8df7b6042f46948bd9980d",
+          "RAW_ROW_COUNT": 5219,
+          "RAW_FIRST_DATE": "2005-12-06",
+          "RAW_LAST_DATE": "2026-09-04",
+          "SNAPSHOT_CUTOFF": "2026-09-06T16:32:25Z",
+          "CURRENT_MARK_TIMESTAMP": "2026-09-04T20:00:00.000Z",
+          "LAST_COMPLETED_OBSERVATION": {
+            "daily": "2026-09-04",
+            "weekly": "2026-08-28",
+            "monthly": "2026-08-31"
+          },
+          "COMPLETED_DAILY_ROW_COUNT": 5219
+        }
+      ]
+    },
+    {
+      "FILE": "assets/QQQ.json",
+      "SNAPSHOT_SHA256": "de40e40c909266999aca1ffaf72689a23d6f334896ee76f68faa302294e4d29e",
+      "SCHEMA_VERSION": "statistical-levels.snapshot.v3",
+      "GENERATOR_COMMIT": "5859071ac43180decec28570bc3859dd905734f7",
+      "GENERATOR_SHA256": "7beebd2acf006cd38809539155a5460c612885831df3381d47236c4d71092226",
+      "CONFIG_SHA256": "2f47dea33e1a06c1de4c4d06b8a4c2c9d3db5616a6f87be8b85c128dc960af06",
+      "GENERATED_AT": "2026-09-06T18:56:58Z",
+      "INPUTS": [
+        {
+          "ASSET": "QQQ",
+          "RAW_SOURCE_ID": "STATISTICAL_LEVELS_RAW_AUTHORITY_20260906T163225Z/raw/QQQ.json",
+          "RAW_SHA256": "4fcfe7ac3b738716b6f40862a9ead9ea9496afc74ce3e7e89636c343b873f56a",
+          "RAW_ROW_COUNT": 6916,
+          "RAW_FIRST_DATE": "1999-03-10",
+          "RAW_LAST_DATE": "2026-09-04",
+          "SNAPSHOT_CUTOFF": "2026-09-06T16:32:25Z",
+          "CURRENT_MARK_TIMESTAMP": "2026-09-04T20:00:00.000Z",
+          "LAST_COMPLETED_OBSERVATION": {
+            "daily": "2026-09-04",
+            "weekly": "2026-08-28",
+            "monthly": "2026-08-31"
+          },
+          "COMPLETED_DAILY_ROW_COUNT": 6916
+        }
+      ]
+    },
+    {
+      "FILE": "assets/RSP.json",
+      "SNAPSHOT_SHA256": "76ee3023ac2c91ef6f6a650114f2d138f9fa66f20beb2d7e2f5325dfdac53ea5",
+      "SCHEMA_VERSION": "statistical-levels.snapshot.v3",
+      "GENERATOR_COMMIT": "5859071ac43180decec28570bc3859dd905734f7",
+      "GENERATOR_SHA256": "7beebd2acf006cd38809539155a5460c612885831df3381d47236c4d71092226",
+      "CONFIG_SHA256": "2f47dea33e1a06c1de4c4d06b8a4c2c9d3db5616a6f87be8b85c128dc960af06",
+      "GENERATED_AT": "2026-09-06T18:56:58Z",
+      "INPUTS": [
+        {
+          "ASSET": "RSP",
+          "RAW_SOURCE_ID": "STATISTICAL_LEVELS_RAW_AUTHORITY_20260906T163225Z/raw/RSP.json",
+          "RAW_SHA256": "a3ac26d2ab86b3e7d934b65ad9e28c70b7b66e2f0b5848e0482f08e3db71d603",
+          "RAW_ROW_COUNT": 5875,
+          "RAW_FIRST_DATE": "2003-05-01",
+          "RAW_LAST_DATE": "2026-09-04",
+          "SNAPSHOT_CUTOFF": "2026-09-06T16:32:25Z",
+          "CURRENT_MARK_TIMESTAMP": "2026-09-04T20:00:00.000Z",
+          "LAST_COMPLETED_OBSERVATION": {
+            "daily": "2026-09-04",
+            "weekly": "2026-08-28",
+            "monthly": "2026-08-31"
+          },
+          "COMPLETED_DAILY_ROW_COUNT": 5875
+        }
+      ]
+    },
+    {
+      "FILE": "assets/SHY.json",
+      "SNAPSHOT_SHA256": "5de68079ddec233e85a70b5268e3d52928f3c2f0bf2e9ebe3c7e496d44ba1ea8",
+      "SCHEMA_VERSION": "statistical-levels.snapshot.v3",
+      "GENERATOR_COMMIT": "5859071ac43180decec28570bc3859dd905734f7",
+      "GENERATOR_SHA256": "7beebd2acf006cd38809539155a5460c612885831df3381d47236c4d71092226",
+      "CONFIG_SHA256": "2f47dea33e1a06c1de4c4d06b8a4c2c9d3db5616a6f87be8b85c128dc960af06",
+      "GENERATED_AT": "2026-09-06T18:56:58Z",
+      "INPUTS": [
+        {
+          "ASSET": "SHY",
+          "RAW_SOURCE_ID": "STATISTICAL_LEVELS_RAW_AUTHORITY_20260906T163225Z/raw/SHY.json",
+          "RAW_SHA256": "4e9f69bfd47f949007d5902895f69390b0e508dfb8c4e999201a0572ac12196d",
+          "RAW_ROW_COUNT": 6065,
+          "RAW_FIRST_DATE": "2002-07-30",
+          "RAW_LAST_DATE": "2026-09-04",
+          "SNAPSHOT_CUTOFF": "2026-09-06T16:32:25Z",
+          "CURRENT_MARK_TIMESTAMP": "2026-09-04T20:00:00.000Z",
+          "LAST_COMPLETED_OBSERVATION": {
+            "daily": "2026-09-04",
+            "weekly": "2026-08-28",
+            "monthly": "2026-08-31"
+          },
+          "COMPLETED_DAILY_ROW_COUNT": 6065
+        }
+      ]
+    },
+    {
+      "FILE": "assets/SLV.json",
+      "SNAPSHOT_SHA256": "f3452a7ea1c20ec465d840291845edf503472b143ebf5f60f51ffe09c24f92dd",
+      "SCHEMA_VERSION": "statistical-levels.snapshot.v3",
+      "GENERATOR_COMMIT": "5859071ac43180decec28570bc3859dd905734f7",
+      "GENERATOR_SHA256": "7beebd2acf006cd38809539155a5460c612885831df3381d47236c4d71092226",
+      "CONFIG_SHA256": "2f47dea33e1a06c1de4c4d06b8a4c2c9d3db5616a6f87be8b85c128dc960af06",
+      "GENERATED_AT": "2026-09-06T18:56:58Z",
+      "INPUTS": [
+        {
+          "ASSET": "SLV",
+          "RAW_SOURCE_ID": "STATISTICAL_LEVELS_RAW_AUTHORITY_20260906T163225Z/raw/SLV.json",
+          "RAW_SHA256": "58b55ba7ac4419ebd2c7f83e114c45525be8a9905c61ad447fb19ad512a26d71",
+          "RAW_ROW_COUNT": 5121,
+          "RAW_FIRST_DATE": "2006-04-28",
+          "RAW_LAST_DATE": "2026-09-04",
+          "SNAPSHOT_CUTOFF": "2026-09-06T16:32:25Z",
+          "CURRENT_MARK_TIMESTAMP": "2026-09-04T20:00:00.000Z",
+          "LAST_COMPLETED_OBSERVATION": {
+            "daily": "2026-09-04",
+            "weekly": "2026-08-28",
+            "monthly": "2026-08-31"
+          },
+          "COMPLETED_DAILY_ROW_COUNT": 5121
+        }
+      ]
+    },
+    {
+      "FILE": "assets/SMH.json",
+      "SNAPSHOT_SHA256": "e87a339166fec62eb94e88ac2e070ecaab08af7ab319903f79f3f85cddc2be84",
+      "SCHEMA_VERSION": "statistical-levels.snapshot.v3",
+      "GENERATOR_COMMIT": "5859071ac43180decec28570bc3859dd905734f7",
+      "GENERATOR_SHA256": "7beebd2acf006cd38809539155a5460c612885831df3381d47236c4d71092226",
+      "CONFIG_SHA256": "2f47dea33e1a06c1de4c4d06b8a4c2c9d3db5616a6f87be8b85c128dc960af06",
+      "GENERATED_AT": "2026-09-06T18:56:58Z",
+      "INPUTS": [
+        {
+          "ASSET": "SMH",
+          "RAW_SOURCE_ID": "STATISTICAL_LEVELS_RAW_AUTHORITY_20260906T163225Z/raw/SMH.json",
+          "RAW_SHA256": "2bc7b62708bf5fa9e4440b842965014e01c97964019472e38100597a33c33108",
+          "RAW_ROW_COUNT": 6603,
+          "RAW_FIRST_DATE": "2000-06-05",
+          "RAW_LAST_DATE": "2026-09-04",
+          "SNAPSHOT_CUTOFF": "2026-09-06T16:32:25Z",
+          "CURRENT_MARK_TIMESTAMP": "2026-09-04T20:00:00.000Z",
+          "LAST_COMPLETED_OBSERVATION": {
+            "daily": "2026-09-04",
+            "weekly": "2026-08-28",
+            "monthly": "2026-08-31"
+          },
+          "COMPLETED_DAILY_ROW_COUNT": 6603
+        }
+      ]
+    },
+    {
+      "FILE": "assets/SPY.json",
+      "SNAPSHOT_SHA256": "d46f90baa2dbef3a98a429010576fc4973dbce337d67f91618b1fa0d308a03d7",
+      "SCHEMA_VERSION": "statistical-levels.snapshot.v3",
+      "GENERATOR_COMMIT": "5859071ac43180decec28570bc3859dd905734f7",
+      "GENERATOR_SHA256": "7beebd2acf006cd38809539155a5460c612885831df3381d47236c4d71092226",
+      "CONFIG_SHA256": "2f47dea33e1a06c1de4c4d06b8a4c2c9d3db5616a6f87be8b85c128dc960af06",
+      "GENERATED_AT": "2026-09-06T18:56:58Z",
+      "INPUTS": [
+        {
+          "ASSET": "SPY",
+          "RAW_SOURCE_ID": "STATISTICAL_LEVELS_RAW_AUTHORITY_20260906T163225Z/raw/SPY.json",
+          "RAW_SHA256": "6ba1f0e3a459ee61f13fd2c8f4ee56b2094c39d8230f43dd32ef51aad41ac016",
+          "RAW_ROW_COUNT": 8458,
+          "RAW_FIRST_DATE": "1993-01-29",
+          "RAW_LAST_DATE": "2026-09-04",
+          "SNAPSHOT_CUTOFF": "2026-09-06T16:32:25Z",
+          "CURRENT_MARK_TIMESTAMP": "2026-09-04T20:00:00.000Z",
+          "LAST_COMPLETED_OBSERVATION": {
+            "daily": "2026-09-04",
+            "weekly": "2026-08-28",
+            "monthly": "2026-08-31"
+          },
+          "COMPLETED_DAILY_ROW_COUNT": 8458
+        }
+      ]
+    },
+    {
+      "FILE": "assets/TLT.json",
+      "SNAPSHOT_SHA256": "5bb9e83239fc18119c0cd1c8159de11dbda474e5d3b3f728bea7560089d59e26",
+      "SCHEMA_VERSION": "statistical-levels.snapshot.v3",
+      "GENERATOR_COMMIT": "5859071ac43180decec28570bc3859dd905734f7",
+      "GENERATOR_SHA256": "7beebd2acf006cd38809539155a5460c612885831df3381d47236c4d71092226",
+      "CONFIG_SHA256": "2f47dea33e1a06c1de4c4d06b8a4c2c9d3db5616a6f87be8b85c128dc960af06",
+      "GENERATED_AT": "2026-09-06T18:56:58Z",
+      "INPUTS": [
+        {
+          "ASSET": "TLT",
+          "RAW_SOURCE_ID": "STATISTICAL_LEVELS_RAW_AUTHORITY_20260906T163225Z/raw/TLT.json",
+          "RAW_SHA256": "1a65c08c4f5bbb78419d07637d54fff46d76c2530fd2e104a06203619d84b511",
+          "RAW_ROW_COUNT": 6065,
+          "RAW_FIRST_DATE": "2002-07-30",
+          "RAW_LAST_DATE": "2026-09-04",
+          "SNAPSHOT_CUTOFF": "2026-09-06T16:32:25Z",
+          "CURRENT_MARK_TIMESTAMP": "2026-09-04T20:00:00.000Z",
+          "LAST_COMPLETED_OBSERVATION": {
+            "daily": "2026-09-04",
+            "weekly": "2026-08-28",
+            "monthly": "2026-08-31"
+          },
+          "COMPLETED_DAILY_ROW_COUNT": 6065
+        }
+      ]
+    },
+    {
+      "FILE": "assets/USO.json",
+      "SNAPSHOT_SHA256": "991e738b77b9657f94a818192f63d91d8316bc59f181e37938813b16b195932e",
+      "SCHEMA_VERSION": "statistical-levels.snapshot.v3",
+      "GENERATOR_COMMIT": "5859071ac43180decec28570bc3859dd905734f7",
+      "GENERATOR_SHA256": "7beebd2acf006cd38809539155a5460c612885831df3381d47236c4d71092226",
+      "CONFIG_SHA256": "2f47dea33e1a06c1de4c4d06b8a4c2c9d3db5616a6f87be8b85c128dc960af06",
+      "GENERATED_AT": "2026-09-06T18:56:58Z",
+      "INPUTS": [
+        {
+          "ASSET": "USO",
+          "RAW_SOURCE_ID": "STATISTICAL_LEVELS_RAW_AUTHORITY_20260906T163225Z/raw/USO.json",
+          "RAW_SHA256": "2610de9869e6ba5771621d9dda9bc701f898a4d559dcd6af462c0c9016875a9b",
+          "RAW_ROW_COUNT": 5134,
+          "RAW_FIRST_DATE": "2006-04-10",
+          "RAW_LAST_DATE": "2026-09-04",
+          "SNAPSHOT_CUTOFF": "2026-09-06T16:32:25Z",
+          "CURRENT_MARK_TIMESTAMP": "2026-09-04T20:00:00.000Z",
+          "LAST_COMPLETED_OBSERVATION": {
+            "daily": "2026-09-04",
+            "weekly": "2026-08-28",
+            "monthly": "2026-08-31"
+          },
+          "COMPLETED_DAILY_ROW_COUNT": 5134
+        }
+      ]
+    },
+    {
+      "FILE": "assets/UUP.json",
+      "SNAPSHOT_SHA256": "f70e23f6050f8f631c80555f3d84b4b655c6f09dc3f10031a3c54d9d5bc16416",
+      "SCHEMA_VERSION": "statistical-levels.snapshot.v3",
+      "GENERATOR_COMMIT": "5859071ac43180decec28570bc3859dd905734f7",
+      "GENERATOR_SHA256": "7beebd2acf006cd38809539155a5460c612885831df3381d47236c4d71092226",
+      "CONFIG_SHA256": "2f47dea33e1a06c1de4c4d06b8a4c2c9d3db5616a6f87be8b85c128dc960af06",
+      "GENERATED_AT": "2026-09-06T18:56:58Z",
+      "INPUTS": [
+        {
+          "ASSET": "UUP",
+          "RAW_SOURCE_ID": "STATISTICAL_LEVELS_RAW_AUTHORITY_20260906T163225Z/raw/UUP.json",
+          "RAW_SHA256": "5ead84653405ff22095fbac21e63ef6d9a73bd8176be790a782b1f0aaea5848c",
+          "RAW_ROW_COUNT": 4911,
+          "RAW_FIRST_DATE": "2007-03-01",
+          "RAW_LAST_DATE": "2026-09-04",
+          "SNAPSHOT_CUTOFF": "2026-09-06T16:32:25Z",
+          "CURRENT_MARK_TIMESTAMP": "2026-09-04T20:00:00.000Z",
+          "LAST_COMPLETED_OBSERVATION": {
+            "daily": "2026-09-04",
+            "weekly": "2026-08-28",
+            "monthly": "2026-08-31"
+          },
+          "COMPLETED_DAILY_ROW_COUNT": 4911
+        }
+      ]
+    },
+    {
+      "FILE": "assets/VOO.json",
+      "SNAPSHOT_SHA256": "5c943d56651826e412122a632272370dbefca61778f02897166a3861843d824c",
+      "SCHEMA_VERSION": "statistical-levels.snapshot.v3",
+      "GENERATOR_COMMIT": "5859071ac43180decec28570bc3859dd905734f7",
+      "GENERATOR_SHA256": "7beebd2acf006cd38809539155a5460c612885831df3381d47236c4d71092226",
+      "CONFIG_SHA256": "2f47dea33e1a06c1de4c4d06b8a4c2c9d3db5616a6f87be8b85c128dc960af06",
+      "GENERATED_AT": "2026-09-06T18:56:58Z",
+      "INPUTS": [
+        {
+          "ASSET": "VOO",
+          "RAW_SOURCE_ID": "STATISTICAL_LEVELS_RAW_AUTHORITY_20260906T163225Z/raw/VOO.json",
+          "RAW_SHA256": "af77732acbd2916970f25eb605519de7f324aa82db00e67aca71449c96e44c09",
+          "RAW_ROW_COUNT": 4022,
+          "RAW_FIRST_DATE": "2010-09-09",
+          "RAW_LAST_DATE": "2026-09-04",
+          "SNAPSHOT_CUTOFF": "2026-09-06T16:32:25Z",
+          "CURRENT_MARK_TIMESTAMP": "2026-09-04T20:00:00.000Z",
+          "LAST_COMPLETED_OBSERVATION": {
+            "daily": "2026-09-04",
+            "weekly": "2026-08-28",
+            "monthly": "2026-08-31"
+          },
+          "COMPLETED_DAILY_ROW_COUNT": 4022
+        }
+      ]
+    },
+    {
+      "FILE": "assets/XLB.json",
+      "SNAPSHOT_SHA256": "5c6e59bb1c1c509d373aa25264f587c0419997865d27725cb0cca5aefe9fd30f",
+      "SCHEMA_VERSION": "statistical-levels.snapshot.v3",
+      "GENERATOR_COMMIT": "5859071ac43180decec28570bc3859dd905734f7",
+      "GENERATOR_SHA256": "7beebd2acf006cd38809539155a5460c612885831df3381d47236c4d71092226",
+      "CONFIG_SHA256": "2f47dea33e1a06c1de4c4d06b8a4c2c9d3db5616a6f87be8b85c128dc960af06",
+      "GENERATED_AT": "2026-09-06T18:56:58Z",
+      "INPUTS": [
+        {
+          "ASSET": "XLB",
+          "RAW_SOURCE_ID": "STATISTICAL_LEVELS_RAW_AUTHORITY_20260906T163225Z/raw/XLB.json",
+          "RAW_SHA256": "fa945f6b9fdeb19385d390cfa4f714e13e9deb16658c55ef9388bc022d83798a",
+          "RAW_ROW_COUNT": 6968,
+          "RAW_FIRST_DATE": "1998-12-22",
+          "RAW_LAST_DATE": "2026-09-04",
+          "SNAPSHOT_CUTOFF": "2026-09-06T16:32:25Z",
+          "CURRENT_MARK_TIMESTAMP": "2026-09-04T20:00:00.000Z",
+          "LAST_COMPLETED_OBSERVATION": {
+            "daily": "2026-09-04",
+            "weekly": "2026-08-28",
+            "monthly": "2026-08-31"
+          },
+          "COMPLETED_DAILY_ROW_COUNT": 6968
+        }
+      ]
+    },
+    {
+      "FILE": "assets/XLC.json",
+      "SNAPSHOT_SHA256": "2b6ff378bf8ec58abd295a7745b28256397322d76ea05ef8f1ca7688f159cd70",
+      "SCHEMA_VERSION": "statistical-levels.snapshot.v3",
+      "GENERATOR_COMMIT": "5859071ac43180decec28570bc3859dd905734f7",
+      "GENERATOR_SHA256": "7beebd2acf006cd38809539155a5460c612885831df3381d47236c4d71092226",
+      "CONFIG_SHA256": "2f47dea33e1a06c1de4c4d06b8a4c2c9d3db5616a6f87be8b85c128dc960af06",
+      "GENERATED_AT": "2026-09-06T18:56:58Z",
+      "INPUTS": [
+        {
+          "ASSET": "XLC",
+          "RAW_SOURCE_ID": "STATISTICAL_LEVELS_RAW_AUTHORITY_20260906T163225Z/raw/XLC.json",
+          "RAW_SHA256": "d338eea25205ddf1aeaaef280c8eb9aa797a8c6c4194d0f001e09c25932b98cc",
+          "RAW_ROW_COUNT": 2065,
+          "RAW_FIRST_DATE": "2018-06-19",
+          "RAW_LAST_DATE": "2026-09-04",
+          "SNAPSHOT_CUTOFF": "2026-09-06T16:32:25Z",
+          "CURRENT_MARK_TIMESTAMP": "2026-09-04T20:00:00.000Z",
+          "LAST_COMPLETED_OBSERVATION": {
+            "daily": "2026-09-04",
+            "weekly": "2026-08-28",
+            "monthly": "2026-08-31"
+          },
+          "COMPLETED_DAILY_ROW_COUNT": 2065
+        }
+      ]
+    },
+    {
+      "FILE": "assets/XLE.json",
+      "SNAPSHOT_SHA256": "39437934b5d3b5f3b5284f9d9762edff44ba2ea02e080d7407431a43bb7e17fd",
+      "SCHEMA_VERSION": "statistical-levels.snapshot.v3",
+      "GENERATOR_COMMIT": "5859071ac43180decec28570bc3859dd905734f7",
+      "GENERATOR_SHA256": "7beebd2acf006cd38809539155a5460c612885831df3381d47236c4d71092226",
+      "CONFIG_SHA256": "2f47dea33e1a06c1de4c4d06b8a4c2c9d3db5616a6f87be8b85c128dc960af06",
+      "GENERATED_AT": "2026-09-06T18:56:58Z",
+      "INPUTS": [
+        {
+          "ASSET": "XLE",
+          "RAW_SOURCE_ID": "STATISTICAL_LEVELS_RAW_AUTHORITY_20260906T163225Z/raw/XLE.json",
+          "RAW_SHA256": "3a9ae9ed8d0fc4fa27a94b6bcb3e4216264d3cbec15531e2e821e5c16aa1b6ee",
+          "RAW_ROW_COUNT": 6968,
+          "RAW_FIRST_DATE": "1998-12-22",
+          "RAW_LAST_DATE": "2026-09-04",
+          "SNAPSHOT_CUTOFF": "2026-09-06T16:32:25Z",
+          "CURRENT_MARK_TIMESTAMP": "2026-09-04T20:00:00.000Z",
+          "LAST_COMPLETED_OBSERVATION": {
+            "daily": "2026-09-04",
+            "weekly": "2026-08-28",
+            "monthly": "2026-08-31"
+          },
+          "COMPLETED_DAILY_ROW_COUNT": 6968
+        }
+      ]
+    },
+    {
+      "FILE": "assets/XLF.json",
+      "SNAPSHOT_SHA256": "b2446ab391ce287dc8c9a1cd87b36bdd18ced2e4a888ac0a736a7bdd76c0cdcd",
+      "SCHEMA_VERSION": "statistical-levels.snapshot.v3",
+      "GENERATOR_COMMIT": "5859071ac43180decec28570bc3859dd905734f7",
+      "GENERATOR_SHA256": "7beebd2acf006cd38809539155a5460c612885831df3381d47236c4d71092226",
+      "CONFIG_SHA256": "2f47dea33e1a06c1de4c4d06b8a4c2c9d3db5616a6f87be8b85c128dc960af06",
+      "GENERATED_AT": "2026-09-06T18:56:58Z",
+      "INPUTS": [
+        {
+          "ASSET": "XLF",
+          "RAW_SOURCE_ID": "STATISTICAL_LEVELS_RAW_AUTHORITY_20260906T163225Z/raw/XLF.json",
+          "RAW_SHA256": "d431249dd4b382242616824a39a9f83601f143c93f5dad93a54aaed77952d5de",
+          "RAW_ROW_COUNT": 6968,
+          "RAW_FIRST_DATE": "1998-12-22",
+          "RAW_LAST_DATE": "2026-09-04",
+          "SNAPSHOT_CUTOFF": "2026-09-06T16:32:25Z",
+          "CURRENT_MARK_TIMESTAMP": "2026-09-04T20:00:00.000Z",
+          "LAST_COMPLETED_OBSERVATION": {
+            "daily": "2026-09-04",
+            "weekly": "2026-08-28",
+            "monthly": "2026-08-31"
+          },
+          "COMPLETED_DAILY_ROW_COUNT": 6968
+        }
+      ]
+    },
+    {
+      "FILE": "assets/XLI.json",
+      "SNAPSHOT_SHA256": "6954b1e98bbe47e8f00223303e0e39ce11fe93aa6238b5aeb7af8bf36fb8e884",
+      "SCHEMA_VERSION": "statistical-levels.snapshot.v3",
+      "GENERATOR_COMMIT": "5859071ac43180decec28570bc3859dd905734f7",
+      "GENERATOR_SHA256": "7beebd2acf006cd38809539155a5460c612885831df3381d47236c4d71092226",
+      "CONFIG_SHA256": "2f47dea33e1a06c1de4c4d06b8a4c2c9d3db5616a6f87be8b85c128dc960af06",
+      "GENERATED_AT": "2026-09-06T18:56:58Z",
+      "INPUTS": [
+        {
+          "ASSET": "XLI",
+          "RAW_SOURCE_ID": "STATISTICAL_LEVELS_RAW_AUTHORITY_20260906T163225Z/raw/XLI.json",
+          "RAW_SHA256": "2976b43a6ad8abd1e4fb866de6af337e18f05f093c17a80eb09933fbc4ea54ae",
+          "RAW_ROW_COUNT": 6968,
+          "RAW_FIRST_DATE": "1998-12-22",
+          "RAW_LAST_DATE": "2026-09-04",
+          "SNAPSHOT_CUTOFF": "2026-09-06T16:32:25Z",
+          "CURRENT_MARK_TIMESTAMP": "2026-09-04T20:00:00.000Z",
+          "LAST_COMPLETED_OBSERVATION": {
+            "daily": "2026-09-04",
+            "weekly": "2026-08-28",
+            "monthly": "2026-08-31"
+          },
+          "COMPLETED_DAILY_ROW_COUNT": 6968
+        }
+      ]
+    },
+    {
+      "FILE": "assets/XLK.json",
+      "SNAPSHOT_SHA256": "e94e53eaae05422a1769ed3f729390bae4d8a084055b7bd047bc2b0ae4465be7",
+      "SCHEMA_VERSION": "statistical-levels.snapshot.v3",
+      "GENERATOR_COMMIT": "5859071ac43180decec28570bc3859dd905734f7",
+      "GENERATOR_SHA256": "7beebd2acf006cd38809539155a5460c612885831df3381d47236c4d71092226",
+      "CONFIG_SHA256": "2f47dea33e1a06c1de4c4d06b8a4c2c9d3db5616a6f87be8b85c128dc960af06",
+      "GENERATED_AT": "2026-09-06T18:56:58Z",
+      "INPUTS": [
+        {
+          "ASSET": "XLK",
+          "RAW_SOURCE_ID": "STATISTICAL_LEVELS_RAW_AUTHORITY_20260906T163225Z/raw/XLK.json",
+          "RAW_SHA256": "3043ae7d83b09fb5805a2d664b9da1aeddf16b0dcf62cceb3db415c83c22d641",
+          "RAW_ROW_COUNT": 6968,
+          "RAW_FIRST_DATE": "1998-12-22",
+          "RAW_LAST_DATE": "2026-09-04",
+          "SNAPSHOT_CUTOFF": "2026-09-06T16:32:25Z",
+          "CURRENT_MARK_TIMESTAMP": "2026-09-04T20:00:00.000Z",
+          "LAST_COMPLETED_OBSERVATION": {
+            "daily": "2026-09-04",
+            "weekly": "2026-08-28",
+            "monthly": "2026-08-31"
+          },
+          "COMPLETED_DAILY_ROW_COUNT": 6968
+        }
+      ]
+    },
+    {
+      "FILE": "assets/XLP.json",
+      "SNAPSHOT_SHA256": "d0480fcd2103b700b3cdec5edafd49a6bf1df8c77d328d063c4f8cce83e303b8",
+      "SCHEMA_VERSION": "statistical-levels.snapshot.v3",
+      "GENERATOR_COMMIT": "5859071ac43180decec28570bc3859dd905734f7",
+      "GENERATOR_SHA256": "7beebd2acf006cd38809539155a5460c612885831df3381d47236c4d71092226",
+      "CONFIG_SHA256": "2f47dea33e1a06c1de4c4d06b8a4c2c9d3db5616a6f87be8b85c128dc960af06",
+      "GENERATED_AT": "2026-09-06T18:56:58Z",
+      "INPUTS": [
+        {
+          "ASSET": "XLP",
+          "RAW_SOURCE_ID": "STATISTICAL_LEVELS_RAW_AUTHORITY_20260906T163225Z/raw/XLP.json",
+          "RAW_SHA256": "cfd58f5a83331349141272c92fbcbc74c5f68ed695b031aa2e384996e7d6c048",
+          "RAW_ROW_COUNT": 6968,
+          "RAW_FIRST_DATE": "1998-12-22",
+          "RAW_LAST_DATE": "2026-09-04",
+          "SNAPSHOT_CUTOFF": "2026-09-06T16:32:25Z",
+          "CURRENT_MARK_TIMESTAMP": "2026-09-04T20:00:00.000Z",
+          "LAST_COMPLETED_OBSERVATION": {
+            "daily": "2026-09-04",
+            "weekly": "2026-08-28",
+            "monthly": "2026-08-31"
+          },
+          "COMPLETED_DAILY_ROW_COUNT": 6968
+        }
+      ]
+    },
+    {
+      "FILE": "assets/XLRE.json",
+      "SNAPSHOT_SHA256": "fb8c85bdaab371fc06595a838045b6d2cf10ed1a55a94c3adf471df93358f9f1",
+      "SCHEMA_VERSION": "statistical-levels.snapshot.v3",
+      "GENERATOR_COMMIT": "5859071ac43180decec28570bc3859dd905734f7",
+      "GENERATOR_SHA256": "7beebd2acf006cd38809539155a5460c612885831df3381d47236c4d71092226",
+      "CONFIG_SHA256": "2f47dea33e1a06c1de4c4d06b8a4c2c9d3db5616a6f87be8b85c128dc960af06",
+      "GENERATED_AT": "2026-09-06T18:56:58Z",
+      "INPUTS": [
+        {
+          "ASSET": "XLRE",
+          "RAW_SOURCE_ID": "STATISTICAL_LEVELS_RAW_AUTHORITY_20260906T163225Z/raw/XLRE.json",
+          "RAW_SHA256": "bf2e9826c054ab861b6c3eaf05f85247f66a647df855a828f02a656de09861f4",
+          "RAW_ROW_COUNT": 2743,
+          "RAW_FIRST_DATE": "2015-10-08",
+          "RAW_LAST_DATE": "2026-09-04",
+          "SNAPSHOT_CUTOFF": "2026-09-06T16:32:25Z",
+          "CURRENT_MARK_TIMESTAMP": "2026-09-04T20:00:00.000Z",
+          "LAST_COMPLETED_OBSERVATION": {
+            "daily": "2026-09-04",
+            "weekly": "2026-08-28",
+            "monthly": "2026-08-31"
+          },
+          "COMPLETED_DAILY_ROW_COUNT": 2743
+        }
+      ]
+    },
+    {
+      "FILE": "assets/XLU.json",
+      "SNAPSHOT_SHA256": "e17cae65bc63eedd4bdf54a2ff2a03d5714f313d180bc700e1d0308147947ce8",
+      "SCHEMA_VERSION": "statistical-levels.snapshot.v3",
+      "GENERATOR_COMMIT": "5859071ac43180decec28570bc3859dd905734f7",
+      "GENERATOR_SHA256": "7beebd2acf006cd38809539155a5460c612885831df3381d47236c4d71092226",
+      "CONFIG_SHA256": "2f47dea33e1a06c1de4c4d06b8a4c2c9d3db5616a6f87be8b85c128dc960af06",
+      "GENERATED_AT": "2026-09-06T18:56:58Z",
+      "INPUTS": [
+        {
+          "ASSET": "XLU",
+          "RAW_SOURCE_ID": "STATISTICAL_LEVELS_RAW_AUTHORITY_20260906T163225Z/raw/XLU.json",
+          "RAW_SHA256": "5492b4c6f01153e12750ec2142f438266dcba982e5713d79b3d24e37a3f4eba4",
+          "RAW_ROW_COUNT": 6968,
+          "RAW_FIRST_DATE": "1998-12-22",
+          "RAW_LAST_DATE": "2026-09-04",
+          "SNAPSHOT_CUTOFF": "2026-09-06T16:32:25Z",
+          "CURRENT_MARK_TIMESTAMP": "2026-09-04T20:00:00.000Z",
+          "LAST_COMPLETED_OBSERVATION": {
+            "daily": "2026-09-04",
+            "weekly": "2026-08-28",
+            "monthly": "2026-08-31"
+          },
+          "COMPLETED_DAILY_ROW_COUNT": 6968
+        }
+      ]
+    },
+    {
+      "FILE": "assets/XLV.json",
+      "SNAPSHOT_SHA256": "31dcdc164d79957eb978c1ed7566fcd3c62a47970a3e7c87ed65ed2572659c3a",
+      "SCHEMA_VERSION": "statistical-levels.snapshot.v3",
+      "GENERATOR_COMMIT": "5859071ac43180decec28570bc3859dd905734f7",
+      "GENERATOR_SHA256": "7beebd2acf006cd38809539155a5460c612885831df3381d47236c4d71092226",
+      "CONFIG_SHA256": "2f47dea33e1a06c1de4c4d06b8a4c2c9d3db5616a6f87be8b85c128dc960af06",
+      "GENERATED_AT": "2026-09-06T18:56:58Z",
+      "INPUTS": [
+        {
+          "ASSET": "XLV",
+          "RAW_SOURCE_ID": "STATISTICAL_LEVELS_RAW_AUTHORITY_20260906T163225Z/raw/XLV.json",
+          "RAW_SHA256": "749e53b2d29013076b2c37ca0cebd668b3ca5d5a6e3aafa16d93fe54ad38bc8f",
+          "RAW_ROW_COUNT": 6968,
+          "RAW_FIRST_DATE": "1998-12-22",
+          "RAW_LAST_DATE": "2026-09-04",
+          "SNAPSHOT_CUTOFF": "2026-09-06T16:32:25Z",
+          "CURRENT_MARK_TIMESTAMP": "2026-09-04T20:00:00.000Z",
+          "LAST_COMPLETED_OBSERVATION": {
+            "daily": "2026-09-04",
+            "weekly": "2026-08-28",
+            "monthly": "2026-08-31"
+          },
+          "COMPLETED_DAILY_ROW_COUNT": 6968
+        }
+      ]
+    },
+    {
+      "FILE": "assets/XLY.json",
+      "SNAPSHOT_SHA256": "b0579557d6d2ac06db8b985175a5a189b341cb8bb8841dd5f15ac66084178de0",
+      "SCHEMA_VERSION": "statistical-levels.snapshot.v3",
+      "GENERATOR_COMMIT": "5859071ac43180decec28570bc3859dd905734f7",
+      "GENERATOR_SHA256": "7beebd2acf006cd38809539155a5460c612885831df3381d47236c4d71092226",
+      "CONFIG_SHA256": "2f47dea33e1a06c1de4c4d06b8a4c2c9d3db5616a6f87be8b85c128dc960af06",
+      "GENERATED_AT": "2026-09-06T18:56:58Z",
+      "INPUTS": [
+        {
+          "ASSET": "XLY",
+          "RAW_SOURCE_ID": "STATISTICAL_LEVELS_RAW_AUTHORITY_20260906T163225Z/raw/XLY.json",
+          "RAW_SHA256": "59d59491b45e6fe9833d10cfef93eb119f2a8ef5dab40b3cad154913ce368e31",
+          "RAW_ROW_COUNT": 6968,
+          "RAW_FIRST_DATE": "1998-12-22",
+          "RAW_LAST_DATE": "2026-09-04",
+          "SNAPSHOT_CUTOFF": "2026-09-06T16:32:25Z",
+          "CURRENT_MARK_TIMESTAMP": "2026-09-04T20:00:00.000Z",
+          "LAST_COMPLETED_OBSERVATION": {
+            "daily": "2026-09-04",
+            "weekly": "2026-08-28",
+            "monthly": "2026-08-31"
+          },
+          "COMPLETED_DAILY_ROW_COUNT": 6968
+        }
+      ]
+    },
+    {
+      "FILE": "manifest.json",
+      "SNAPSHOT_SHA256": "206563329a2ca344a253efaf40108da1aa5fca9bade0360483a41080e066847e",
+      "SCHEMA_VERSION": "statistical-levels.snapshot.v3",
+      "GENERATOR_COMMIT": "5859071ac43180decec28570bc3859dd905734f7",
+      "GENERATOR_SHA256": "7beebd2acf006cd38809539155a5460c612885831df3381d47236c4d71092226",
+      "CONFIG_SHA256": "2f47dea33e1a06c1de4c4d06b8a4c2c9d3db5616a6f87be8b85c128dc960af06",
+      "GENERATED_AT": "2026-09-06T18:56:58Z",
+      "INPUTS": [
+        {
+          "ASSET": "SPY",
+          "RAW_SOURCE_ID": "STATISTICAL_LEVELS_RAW_AUTHORITY_20260906T163225Z/raw/SPY.json",
+          "RAW_SHA256": "6ba1f0e3a459ee61f13fd2c8f4ee56b2094c39d8230f43dd32ef51aad41ac016",
+          "RAW_ROW_COUNT": 8458,
+          "RAW_FIRST_DATE": "1993-01-29",
+          "RAW_LAST_DATE": "2026-09-04",
+          "SNAPSHOT_CUTOFF": "2026-09-06T16:32:25Z",
+          "CURRENT_MARK_TIMESTAMP": "2026-09-04T20:00:00.000Z",
+          "LAST_COMPLETED_OBSERVATION": {
+            "daily": "2026-09-04",
+            "weekly": "2026-08-28",
+            "monthly": "2026-08-31"
+          },
+          "COMPLETED_DAILY_ROW_COUNT": 8458
+        },
+        {
+          "ASSET": "QQQ",
+          "RAW_SOURCE_ID": "STATISTICAL_LEVELS_RAW_AUTHORITY_20260906T163225Z/raw/QQQ.json",
+          "RAW_SHA256": "4fcfe7ac3b738716b6f40862a9ead9ea9496afc74ce3e7e89636c343b873f56a",
+          "RAW_ROW_COUNT": 6916,
+          "RAW_FIRST_DATE": "1999-03-10",
+          "RAW_LAST_DATE": "2026-09-04",
+          "SNAPSHOT_CUTOFF": "2026-09-06T16:32:25Z",
+          "CURRENT_MARK_TIMESTAMP": "2026-09-04T20:00:00.000Z",
+          "LAST_COMPLETED_OBSERVATION": {
+            "daily": "2026-09-04",
+            "weekly": "2026-08-28",
+            "monthly": "2026-08-31"
+          },
+          "COMPLETED_DAILY_ROW_COUNT": 6916
+        },
+        {
+          "ASSET": "IWM",
+          "RAW_SOURCE_ID": "STATISTICAL_LEVELS_RAW_AUTHORITY_20260906T163225Z/raw/IWM.json",
+          "RAW_SHA256": "6cfc0d614fa08265a61d78d28bf476763bf57cfc7b4717ac388024d62725671a",
+          "RAW_ROW_COUNT": 6608,
+          "RAW_FIRST_DATE": "2000-05-26",
+          "RAW_LAST_DATE": "2026-09-04",
+          "SNAPSHOT_CUTOFF": "2026-09-06T16:32:25Z",
+          "CURRENT_MARK_TIMESTAMP": "2026-09-04T20:00:00.000Z",
+          "LAST_COMPLETED_OBSERVATION": {
+            "daily": "2026-09-04",
+            "weekly": "2026-08-28",
+            "monthly": "2026-08-31"
+          },
+          "COMPLETED_DAILY_ROW_COUNT": 6608
+        },
+        {
+          "ASSET": "DIA",
+          "RAW_SOURCE_ID": "STATISTICAL_LEVELS_RAW_AUTHORITY_20260906T163225Z/raw/DIA.json",
+          "RAW_SHA256": "6a502437400a852dbf95c1daffcd755e995aec72ca2f1051cc31e4b63f649c99",
+          "RAW_ROW_COUNT": 7202,
+          "RAW_FIRST_DATE": "1998-01-20",
+          "RAW_LAST_DATE": "2026-09-04",
+          "SNAPSHOT_CUTOFF": "2026-09-06T16:32:25Z",
+          "CURRENT_MARK_TIMESTAMP": "2026-09-04T20:00:00.000Z",
+          "LAST_COMPLETED_OBSERVATION": {
+            "daily": "2026-09-04",
+            "weekly": "2026-08-28",
+            "monthly": "2026-08-31"
+          },
+          "COMPLETED_DAILY_ROW_COUNT": 7202
+        },
+        {
+          "ASSET": "VOO",
+          "RAW_SOURCE_ID": "STATISTICAL_LEVELS_RAW_AUTHORITY_20260906T163225Z/raw/VOO.json",
+          "RAW_SHA256": "af77732acbd2916970f25eb605519de7f324aa82db00e67aca71449c96e44c09",
+          "RAW_ROW_COUNT": 4022,
+          "RAW_FIRST_DATE": "2010-09-09",
+          "RAW_LAST_DATE": "2026-09-04",
+          "SNAPSHOT_CUTOFF": "2026-09-06T16:32:25Z",
+          "CURRENT_MARK_TIMESTAMP": "2026-09-04T20:00:00.000Z",
+          "LAST_COMPLETED_OBSERVATION": {
+            "daily": "2026-09-04",
+            "weekly": "2026-08-28",
+            "monthly": "2026-08-31"
+          },
+          "COMPLETED_DAILY_ROW_COUNT": 4022
+        },
+        {
+          "ASSET": "RSP",
+          "RAW_SOURCE_ID": "STATISTICAL_LEVELS_RAW_AUTHORITY_20260906T163225Z/raw/RSP.json",
+          "RAW_SHA256": "a3ac26d2ab86b3e7d934b65ad9e28c70b7b66e2f0b5848e0482f08e3db71d603",
+          "RAW_ROW_COUNT": 5875,
+          "RAW_FIRST_DATE": "2003-05-01",
+          "RAW_LAST_DATE": "2026-09-04",
+          "SNAPSHOT_CUTOFF": "2026-09-06T16:32:25Z",
+          "CURRENT_MARK_TIMESTAMP": "2026-09-04T20:00:00.000Z",
+          "LAST_COMPLETED_OBSERVATION": {
+            "daily": "2026-09-04",
+            "weekly": "2026-08-28",
+            "monthly": "2026-08-31"
+          },
+          "COMPLETED_DAILY_ROW_COUNT": 5875
+        },
+        {
+          "ASSET": "UUP",
+          "RAW_SOURCE_ID": "STATISTICAL_LEVELS_RAW_AUTHORITY_20260906T163225Z/raw/UUP.json",
+          "RAW_SHA256": "5ead84653405ff22095fbac21e63ef6d9a73bd8176be790a782b1f0aaea5848c",
+          "RAW_ROW_COUNT": 4911,
+          "RAW_FIRST_DATE": "2007-03-01",
+          "RAW_LAST_DATE": "2026-09-04",
+          "SNAPSHOT_CUTOFF": "2026-09-06T16:32:25Z",
+          "CURRENT_MARK_TIMESTAMP": "2026-09-04T20:00:00.000Z",
+          "LAST_COMPLETED_OBSERVATION": {
+            "daily": "2026-09-04",
+            "weekly": "2026-08-28",
+            "monthly": "2026-08-31"
+          },
+          "COMPLETED_DAILY_ROW_COUNT": 4911
+        },
+        {
+          "ASSET": "TLT",
+          "RAW_SOURCE_ID": "STATISTICAL_LEVELS_RAW_AUTHORITY_20260906T163225Z/raw/TLT.json",
+          "RAW_SHA256": "1a65c08c4f5bbb78419d07637d54fff46d76c2530fd2e104a06203619d84b511",
+          "RAW_ROW_COUNT": 6065,
+          "RAW_FIRST_DATE": "2002-07-30",
+          "RAW_LAST_DATE": "2026-09-04",
+          "SNAPSHOT_CUTOFF": "2026-09-06T16:32:25Z",
+          "CURRENT_MARK_TIMESTAMP": "2026-09-04T20:00:00.000Z",
+          "LAST_COMPLETED_OBSERVATION": {
+            "daily": "2026-09-04",
+            "weekly": "2026-08-28",
+            "monthly": "2026-08-31"
+          },
+          "COMPLETED_DAILY_ROW_COUNT": 6065
+        },
+        {
+          "ASSET": "IEF",
+          "RAW_SOURCE_ID": "STATISTICAL_LEVELS_RAW_AUTHORITY_20260906T163225Z/raw/IEF.json",
+          "RAW_SHA256": "aaf4d585d4c4d5a4e86c81f66303f36e9ad7c72d08b940aa99dce8d3fa14a358",
+          "RAW_ROW_COUNT": 6065,
+          "RAW_FIRST_DATE": "2002-07-30",
+          "RAW_LAST_DATE": "2026-09-04",
+          "SNAPSHOT_CUTOFF": "2026-09-06T16:32:25Z",
+          "CURRENT_MARK_TIMESTAMP": "2026-09-04T20:00:01.000Z",
+          "LAST_COMPLETED_OBSERVATION": {
+            "daily": "2026-09-04",
+            "weekly": "2026-08-28",
+            "monthly": "2026-08-31"
+          },
+          "COMPLETED_DAILY_ROW_COUNT": 6065
+        },
+        {
+          "ASSET": "SHY",
+          "RAW_SOURCE_ID": "STATISTICAL_LEVELS_RAW_AUTHORITY_20260906T163225Z/raw/SHY.json",
+          "RAW_SHA256": "4e9f69bfd47f949007d5902895f69390b0e508dfb8c4e999201a0572ac12196d",
+          "RAW_ROW_COUNT": 6065,
+          "RAW_FIRST_DATE": "2002-07-30",
+          "RAW_LAST_DATE": "2026-09-04",
+          "SNAPSHOT_CUTOFF": "2026-09-06T16:32:25Z",
+          "CURRENT_MARK_TIMESTAMP": "2026-09-04T20:00:00.000Z",
+          "LAST_COMPLETED_OBSERVATION": {
+            "daily": "2026-09-04",
+            "weekly": "2026-08-28",
+            "monthly": "2026-08-31"
+          },
+          "COMPLETED_DAILY_ROW_COUNT": 6065
+        },
+        {
+          "ASSET": "HYG",
+          "RAW_SOURCE_ID": "STATISTICAL_LEVELS_RAW_AUTHORITY_20260906T163225Z/raw/HYG.json",
+          "RAW_SHA256": "df23be966f75418f3a35f955633e7face2a7133844ab5316d5c6000370013318",
+          "RAW_ROW_COUNT": 4883,
+          "RAW_FIRST_DATE": "2007-04-11",
+          "RAW_LAST_DATE": "2026-09-04",
+          "SNAPSHOT_CUTOFF": "2026-09-06T16:32:25Z",
+          "CURRENT_MARK_TIMESTAMP": "2026-09-04T20:00:00.000Z",
+          "LAST_COMPLETED_OBSERVATION": {
+            "daily": "2026-09-04",
+            "weekly": "2026-08-28",
+            "monthly": "2026-08-31"
+          },
+          "COMPLETED_DAILY_ROW_COUNT": 4883
+        },
+        {
+          "ASSET": "LQD",
+          "RAW_SOURCE_ID": "STATISTICAL_LEVELS_RAW_AUTHORITY_20260906T163225Z/raw/LQD.json",
+          "RAW_SHA256": "f428905964ff6f721bbe7ce127077a93ec2b312fbcc4c93c0081f0dfb998131c",
+          "RAW_ROW_COUNT": 6065,
+          "RAW_FIRST_DATE": "2002-07-30",
+          "RAW_LAST_DATE": "2026-09-04",
+          "SNAPSHOT_CUTOFF": "2026-09-06T16:32:25Z",
+          "CURRENT_MARK_TIMESTAMP": "2026-09-04T20:00:00.000Z",
+          "LAST_COMPLETED_OBSERVATION": {
+            "daily": "2026-09-04",
+            "weekly": "2026-08-28",
+            "monthly": "2026-08-31"
+          },
+          "COMPLETED_DAILY_ROW_COUNT": 6065
+        },
+        {
+          "ASSET": "GLD",
+          "RAW_SOURCE_ID": "STATISTICAL_LEVELS_RAW_AUTHORITY_20260906T163225Z/raw/GLD.json",
+          "RAW_SHA256": "9b5928a9849318a38a2af78efc080977b9dc1a2e4ee5c3932bca747480343aea",
+          "RAW_ROW_COUNT": 5483,
+          "RAW_FIRST_DATE": "2004-11-18",
+          "RAW_LAST_DATE": "2026-09-04",
+          "SNAPSHOT_CUTOFF": "2026-09-06T16:32:25Z",
+          "CURRENT_MARK_TIMESTAMP": "2026-09-04T20:00:00.000Z",
+          "LAST_COMPLETED_OBSERVATION": {
+            "daily": "2026-09-04",
+            "weekly": "2026-08-28",
+            "monthly": "2026-08-31"
+          },
+          "COMPLETED_DAILY_ROW_COUNT": 5483
+        },
+        {
+          "ASSET": "SLV",
+          "RAW_SOURCE_ID": "STATISTICAL_LEVELS_RAW_AUTHORITY_20260906T163225Z/raw/SLV.json",
+          "RAW_SHA256": "58b55ba7ac4419ebd2c7f83e114c45525be8a9905c61ad447fb19ad512a26d71",
+          "RAW_ROW_COUNT": 5121,
+          "RAW_FIRST_DATE": "2006-04-28",
+          "RAW_LAST_DATE": "2026-09-04",
+          "SNAPSHOT_CUTOFF": "2026-09-06T16:32:25Z",
+          "CURRENT_MARK_TIMESTAMP": "2026-09-04T20:00:00.000Z",
+          "LAST_COMPLETED_OBSERVATION": {
+            "daily": "2026-09-04",
+            "weekly": "2026-08-28",
+            "monthly": "2026-08-31"
+          },
+          "COMPLETED_DAILY_ROW_COUNT": 5121
+        },
+        {
+          "ASSET": "USO",
+          "RAW_SOURCE_ID": "STATISTICAL_LEVELS_RAW_AUTHORITY_20260906T163225Z/raw/USO.json",
+          "RAW_SHA256": "2610de9869e6ba5771621d9dda9bc701f898a4d559dcd6af462c0c9016875a9b",
+          "RAW_ROW_COUNT": 5134,
+          "RAW_FIRST_DATE": "2006-04-10",
+          "RAW_LAST_DATE": "2026-09-04",
+          "SNAPSHOT_CUTOFF": "2026-09-06T16:32:25Z",
+          "CURRENT_MARK_TIMESTAMP": "2026-09-04T20:00:00.000Z",
+          "LAST_COMPLETED_OBSERVATION": {
+            "daily": "2026-09-04",
+            "weekly": "2026-08-28",
+            "monthly": "2026-08-31"
+          },
+          "COMPLETED_DAILY_ROW_COUNT": 5134
+        },
+        {
+          "ASSET": "XLK",
+          "RAW_SOURCE_ID": "STATISTICAL_LEVELS_RAW_AUTHORITY_20260906T163225Z/raw/XLK.json",
+          "RAW_SHA256": "3043ae7d83b09fb5805a2d664b9da1aeddf16b0dcf62cceb3db415c83c22d641",
+          "RAW_ROW_COUNT": 6968,
+          "RAW_FIRST_DATE": "1998-12-22",
+          "RAW_LAST_DATE": "2026-09-04",
+          "SNAPSHOT_CUTOFF": "2026-09-06T16:32:25Z",
+          "CURRENT_MARK_TIMESTAMP": "2026-09-04T20:00:00.000Z",
+          "LAST_COMPLETED_OBSERVATION": {
+            "daily": "2026-09-04",
+            "weekly": "2026-08-28",
+            "monthly": "2026-08-31"
+          },
+          "COMPLETED_DAILY_ROW_COUNT": 6968
+        },
+        {
+          "ASSET": "XLF",
+          "RAW_SOURCE_ID": "STATISTICAL_LEVELS_RAW_AUTHORITY_20260906T163225Z/raw/XLF.json",
+          "RAW_SHA256": "d431249dd4b382242616824a39a9f83601f143c93f5dad93a54aaed77952d5de",
+          "RAW_ROW_COUNT": 6968,
+          "RAW_FIRST_DATE": "1998-12-22",
+          "RAW_LAST_DATE": "2026-09-04",
+          "SNAPSHOT_CUTOFF": "2026-09-06T16:32:25Z",
+          "CURRENT_MARK_TIMESTAMP": "2026-09-04T20:00:00.000Z",
+          "LAST_COMPLETED_OBSERVATION": {
+            "daily": "2026-09-04",
+            "weekly": "2026-08-28",
+            "monthly": "2026-08-31"
+          },
+          "COMPLETED_DAILY_ROW_COUNT": 6968
+        },
+        {
+          "ASSET": "XLV",
+          "RAW_SOURCE_ID": "STATISTICAL_LEVELS_RAW_AUTHORITY_20260906T163225Z/raw/XLV.json",
+          "RAW_SHA256": "749e53b2d29013076b2c37ca0cebd668b3ca5d5a6e3aafa16d93fe54ad38bc8f",
+          "RAW_ROW_COUNT": 6968,
+          "RAW_FIRST_DATE": "1998-12-22",
+          "RAW_LAST_DATE": "2026-09-04",
+          "SNAPSHOT_CUTOFF": "2026-09-06T16:32:25Z",
+          "CURRENT_MARK_TIMESTAMP": "2026-09-04T20:00:00.000Z",
+          "LAST_COMPLETED_OBSERVATION": {
+            "daily": "2026-09-04",
+            "weekly": "2026-08-28",
+            "monthly": "2026-08-31"
+          },
+          "COMPLETED_DAILY_ROW_COUNT": 6968
+        },
+        {
+          "ASSET": "XLE",
+          "RAW_SOURCE_ID": "STATISTICAL_LEVELS_RAW_AUTHORITY_20260906T163225Z/raw/XLE.json",
+          "RAW_SHA256": "3a9ae9ed8d0fc4fa27a94b6bcb3e4216264d3cbec15531e2e821e5c16aa1b6ee",
+          "RAW_ROW_COUNT": 6968,
+          "RAW_FIRST_DATE": "1998-12-22",
+          "RAW_LAST_DATE": "2026-09-04",
+          "SNAPSHOT_CUTOFF": "2026-09-06T16:32:25Z",
+          "CURRENT_MARK_TIMESTAMP": "2026-09-04T20:00:00.000Z",
+          "LAST_COMPLETED_OBSERVATION": {
+            "daily": "2026-09-04",
+            "weekly": "2026-08-28",
+            "monthly": "2026-08-31"
+          },
+          "COMPLETED_DAILY_ROW_COUNT": 6968
+        },
+        {
+          "ASSET": "XLY",
+          "RAW_SOURCE_ID": "STATISTICAL_LEVELS_RAW_AUTHORITY_20260906T163225Z/raw/XLY.json",
+          "RAW_SHA256": "59d59491b45e6fe9833d10cfef93eb119f2a8ef5dab40b3cad154913ce368e31",
+          "RAW_ROW_COUNT": 6968,
+          "RAW_FIRST_DATE": "1998-12-22",
+          "RAW_LAST_DATE": "2026-09-04",
+          "SNAPSHOT_CUTOFF": "2026-09-06T16:32:25Z",
+          "CURRENT_MARK_TIMESTAMP": "2026-09-04T20:00:00.000Z",
+          "LAST_COMPLETED_OBSERVATION": {
+            "daily": "2026-09-04",
+            "weekly": "2026-08-28",
+            "monthly": "2026-08-31"
+          },
+          "COMPLETED_DAILY_ROW_COUNT": 6968
+        },
+        {
+          "ASSET": "XLP",
+          "RAW_SOURCE_ID": "STATISTICAL_LEVELS_RAW_AUTHORITY_20260906T163225Z/raw/XLP.json",
+          "RAW_SHA256": "cfd58f5a83331349141272c92fbcbc74c5f68ed695b031aa2e384996e7d6c048",
+          "RAW_ROW_COUNT": 6968,
+          "RAW_FIRST_DATE": "1998-12-22",
+          "RAW_LAST_DATE": "2026-09-04",
+          "SNAPSHOT_CUTOFF": "2026-09-06T16:32:25Z",
+          "CURRENT_MARK_TIMESTAMP": "2026-09-04T20:00:00.000Z",
+          "LAST_COMPLETED_OBSERVATION": {
+            "daily": "2026-09-04",
+            "weekly": "2026-08-28",
+            "monthly": "2026-08-31"
+          },
+          "COMPLETED_DAILY_ROW_COUNT": 6968
+        },
+        {
+          "ASSET": "XLI",
+          "RAW_SOURCE_ID": "STATISTICAL_LEVELS_RAW_AUTHORITY_20260906T163225Z/raw/XLI.json",
+          "RAW_SHA256": "2976b43a6ad8abd1e4fb866de6af337e18f05f093c17a80eb09933fbc4ea54ae",
+          "RAW_ROW_COUNT": 6968,
+          "RAW_FIRST_DATE": "1998-12-22",
+          "RAW_LAST_DATE": "2026-09-04",
+          "SNAPSHOT_CUTOFF": "2026-09-06T16:32:25Z",
+          "CURRENT_MARK_TIMESTAMP": "2026-09-04T20:00:00.000Z",
+          "LAST_COMPLETED_OBSERVATION": {
+            "daily": "2026-09-04",
+            "weekly": "2026-08-28",
+            "monthly": "2026-08-31"
+          },
+          "COMPLETED_DAILY_ROW_COUNT": 6968
+        },
+        {
+          "ASSET": "XLB",
+          "RAW_SOURCE_ID": "STATISTICAL_LEVELS_RAW_AUTHORITY_20260906T163225Z/raw/XLB.json",
+          "RAW_SHA256": "fa945f6b9fdeb19385d390cfa4f714e13e9deb16658c55ef9388bc022d83798a",
+          "RAW_ROW_COUNT": 6968,
+          "RAW_FIRST_DATE": "1998-12-22",
+          "RAW_LAST_DATE": "2026-09-04",
+          "SNAPSHOT_CUTOFF": "2026-09-06T16:32:25Z",
+          "CURRENT_MARK_TIMESTAMP": "2026-09-04T20:00:00.000Z",
+          "LAST_COMPLETED_OBSERVATION": {
+            "daily": "2026-09-04",
+            "weekly": "2026-08-28",
+            "monthly": "2026-08-31"
+          },
+          "COMPLETED_DAILY_ROW_COUNT": 6968
+        },
+        {
+          "ASSET": "XLU",
+          "RAW_SOURCE_ID": "STATISTICAL_LEVELS_RAW_AUTHORITY_20260906T163225Z/raw/XLU.json",
+          "RAW_SHA256": "5492b4c6f01153e12750ec2142f438266dcba982e5713d79b3d24e37a3f4eba4",
+          "RAW_ROW_COUNT": 6968,
+          "RAW_FIRST_DATE": "1998-12-22",
+          "RAW_LAST_DATE": "2026-09-04",
+          "SNAPSHOT_CUTOFF": "2026-09-06T16:32:25Z",
+          "CURRENT_MARK_TIMESTAMP": "2026-09-04T20:00:00.000Z",
+          "LAST_COMPLETED_OBSERVATION": {
+            "daily": "2026-09-04",
+            "weekly": "2026-08-28",
+            "monthly": "2026-08-31"
+          },
+          "COMPLETED_DAILY_ROW_COUNT": 6968
+        },
+        {
+          "ASSET": "XLRE",
+          "RAW_SOURCE_ID": "STATISTICAL_LEVELS_RAW_AUTHORITY_20260906T163225Z/raw/XLRE.json",
+          "RAW_SHA256": "bf2e9826c054ab861b6c3eaf05f85247f66a647df855a828f02a656de09861f4",
+          "RAW_ROW_COUNT": 2743,
+          "RAW_FIRST_DATE": "2015-10-08",
+          "RAW_LAST_DATE": "2026-09-04",
+          "SNAPSHOT_CUTOFF": "2026-09-06T16:32:25Z",
+          "CURRENT_MARK_TIMESTAMP": "2026-09-04T20:00:00.000Z",
+          "LAST_COMPLETED_OBSERVATION": {
+            "daily": "2026-09-04",
+            "weekly": "2026-08-28",
+            "monthly": "2026-08-31"
+          },
+          "COMPLETED_DAILY_ROW_COUNT": 2743
+        },
+        {
+          "ASSET": "XLC",
+          "RAW_SOURCE_ID": "STATISTICAL_LEVELS_RAW_AUTHORITY_20260906T163225Z/raw/XLC.json",
+          "RAW_SHA256": "d338eea25205ddf1aeaaef280c8eb9aa797a8c6c4194d0f001e09c25932b98cc",
+          "RAW_ROW_COUNT": 2065,
+          "RAW_FIRST_DATE": "2018-06-19",
+          "RAW_LAST_DATE": "2026-09-04",
+          "SNAPSHOT_CUTOFF": "2026-09-06T16:32:25Z",
+          "CURRENT_MARK_TIMESTAMP": "2026-09-04T20:00:00.000Z",
+          "LAST_COMPLETED_OBSERVATION": {
+            "daily": "2026-09-04",
+            "weekly": "2026-08-28",
+            "monthly": "2026-08-31"
+          },
+          "COMPLETED_DAILY_ROW_COUNT": 2065
+        },
+        {
+          "ASSET": "AIQ",
+          "RAW_SOURCE_ID": "STATISTICAL_LEVELS_RAW_AUTHORITY_20260906T163225Z/raw/AIQ.json",
+          "RAW_SHA256": "6d69def46c59f6bf9b6daf28f9cb9d071b0d290fa382cb8acde394f60a1f5045",
+          "RAW_ROW_COUNT": 2088,
+          "RAW_FIRST_DATE": "2018-05-16",
+          "RAW_LAST_DATE": "2026-09-04",
+          "SNAPSHOT_CUTOFF": "2026-09-06T16:32:25Z",
+          "CURRENT_MARK_TIMESTAMP": "2026-09-04T20:00:01.000Z",
+          "LAST_COMPLETED_OBSERVATION": {
+            "daily": "2026-09-04",
+            "weekly": "2026-08-28",
+            "monthly": "2026-08-31"
+          },
+          "COMPLETED_DAILY_ROW_COUNT": 2088
+        },
+        {
+          "ASSET": "BOTZ",
+          "RAW_SOURCE_ID": "STATISTICAL_LEVELS_RAW_AUTHORITY_20260906T163225Z/raw/BOTZ.json",
+          "RAW_SHA256": "4733150d3a9fc341b90556ceba26d33c1902a50c2c4587b07bf95f72c9c04953",
+          "RAW_ROW_COUNT": 2509,
+          "RAW_FIRST_DATE": "2016-09-13",
+          "RAW_LAST_DATE": "2026-09-04",
+          "SNAPSHOT_CUTOFF": "2026-09-06T16:32:25Z",
+          "CURRENT_MARK_TIMESTAMP": "2026-09-04T20:00:01.000Z",
+          "LAST_COMPLETED_OBSERVATION": {
+            "daily": "2026-09-04",
+            "weekly": "2026-08-28",
+            "monthly": "2026-08-31"
+          },
+          "COMPLETED_DAILY_ROW_COUNT": 2509
+        },
+        {
+          "ASSET": "CIBR",
+          "RAW_SOURCE_ID": "STATISTICAL_LEVELS_RAW_AUTHORITY_20260906T163225Z/raw/CIBR.json",
+          "RAW_SHA256": "253554558afb2d2df8297612f1aa3b7d47f5938b2d894270cfb5e266de329200",
+          "RAW_ROW_COUNT": 2809,
+          "RAW_FIRST_DATE": "2015-07-07",
+          "RAW_LAST_DATE": "2026-09-04",
+          "SNAPSHOT_CUTOFF": "2026-09-06T16:32:25Z",
+          "CURRENT_MARK_TIMESTAMP": "2026-09-04T20:00:01.000Z",
+          "LAST_COMPLETED_OBSERVATION": {
+            "daily": "2026-09-04",
+            "weekly": "2026-08-28",
+            "monthly": "2026-08-31"
+          },
+          "COMPLETED_DAILY_ROW_COUNT": 2809
+        },
+        {
+          "ASSET": "FINX",
+          "RAW_SOURCE_ID": "STATISTICAL_LEVELS_RAW_AUTHORITY_20260906T163225Z/raw/FINX.json",
+          "RAW_SHA256": "aee5a2ea4ecf87c03ae8ce28a891b89a4f54d1840421bb5aafacfc0fa7da7e30",
+          "RAW_ROW_COUNT": 2509,
+          "RAW_FIRST_DATE": "2016-09-13",
+          "RAW_LAST_DATE": "2026-09-04",
+          "SNAPSHOT_CUTOFF": "2026-09-06T16:32:25Z",
+          "CURRENT_MARK_TIMESTAMP": "2026-09-04T20:00:01.000Z",
+          "LAST_COMPLETED_OBSERVATION": {
+            "daily": "2026-09-04",
+            "weekly": "2026-08-28",
+            "monthly": "2026-08-31"
+          },
+          "COMPLETED_DAILY_ROW_COUNT": 2509
+        },
+        {
+          "ASSET": "ITA",
+          "RAW_SOURCE_ID": "STATISTICAL_LEVELS_RAW_AUTHORITY_20260906T163225Z/raw/ITA.json",
+          "RAW_SHA256": "3f5af589385c705289bca9a432ac36d2d4447b2fea05236a60d287e8de44292f",
+          "RAW_ROW_COUNT": 5116,
+          "RAW_FIRST_DATE": "2006-05-05",
+          "RAW_LAST_DATE": "2026-09-04",
+          "SNAPSHOT_CUTOFF": "2026-09-06T16:32:25Z",
+          "CURRENT_MARK_TIMESTAMP": "2026-09-04T20:00:00.000Z",
+          "LAST_COMPLETED_OBSERVATION": {
+            "daily": "2026-09-04",
+            "weekly": "2026-08-28",
+            "monthly": "2026-08-31"
+          },
+          "COMPLETED_DAILY_ROW_COUNT": 5116
+        },
+        {
+          "ASSET": "PAVE",
+          "RAW_SOURCE_ID": "STATISTICAL_LEVELS_RAW_AUTHORITY_20260906T163225Z/raw/PAVE.json",
+          "RAW_SHA256": "2488fbae2d3d72386b428acfe668d2b6357594e21cab10bade14c9e71108d77f",
+          "RAW_ROW_COUNT": 2388,
+          "RAW_FIRST_DATE": "2017-03-08",
+          "RAW_LAST_DATE": "2026-09-04",
+          "SNAPSHOT_CUTOFF": "2026-09-06T16:32:25Z",
+          "CURRENT_MARK_TIMESTAMP": "2026-09-04T20:00:00.000Z",
+          "LAST_COMPLETED_OBSERVATION": {
+            "daily": "2026-09-04",
+            "weekly": "2026-08-28",
+            "monthly": "2026-08-31"
+          },
+          "COMPLETED_DAILY_ROW_COUNT": 2388
+        },
+        {
+          "ASSET": "PHO",
+          "RAW_SOURCE_ID": "STATISTICAL_LEVELS_RAW_AUTHORITY_20260906T163225Z/raw/PHO.json",
+          "RAW_SHA256": "8c9e1400b761759531a0e5569edd1afa252f5b292c8df7b6042f46948bd9980d",
+          "RAW_ROW_COUNT": 5219,
+          "RAW_FIRST_DATE": "2005-12-06",
+          "RAW_LAST_DATE": "2026-09-04",
+          "SNAPSHOT_CUTOFF": "2026-09-06T16:32:25Z",
+          "CURRENT_MARK_TIMESTAMP": "2026-09-04T20:00:00.000Z",
+          "LAST_COMPLETED_OBSERVATION": {
+            "daily": "2026-09-04",
+            "weekly": "2026-08-28",
+            "monthly": "2026-08-31"
+          },
+          "COMPLETED_DAILY_ROW_COUNT": 5219
+        },
+        {
+          "ASSET": "SMH",
+          "RAW_SOURCE_ID": "STATISTICAL_LEVELS_RAW_AUTHORITY_20260906T163225Z/raw/SMH.json",
+          "RAW_SHA256": "2bc7b62708bf5fa9e4440b842965014e01c97964019472e38100597a33c33108",
+          "RAW_ROW_COUNT": 6603,
+          "RAW_FIRST_DATE": "2000-06-05",
+          "RAW_LAST_DATE": "2026-09-04",
+          "SNAPSHOT_CUTOFF": "2026-09-06T16:32:25Z",
+          "CURRENT_MARK_TIMESTAMP": "2026-09-04T20:00:00.000Z",
+          "LAST_COMPLETED_OBSERVATION": {
+            "daily": "2026-09-04",
+            "weekly": "2026-08-28",
+            "monthly": "2026-08-31"
+          },
+          "COMPLETED_DAILY_ROW_COUNT": 6603
+        },
+        {
+          "ASSET": "BTCUSD",
+          "RAW_SOURCE_ID": "STATISTICAL_LEVELS_RAW_AUTHORITY_20260906T163225Z/raw/BTCUSD.json",
+          "RAW_SHA256": "0c2711b962ae007aa2b9566c09b636a443d445d854716fcb1d2ad78c41ffa9bd",
+          "RAW_ROW_COUNT": 4373,
+          "RAW_FIRST_DATE": "2014-09-17",
+          "RAW_LAST_DATE": "2026-09-06",
+          "SNAPSHOT_CUTOFF": "2026-09-06T16:32:25Z",
+          "CURRENT_MARK_TIMESTAMP": "2026-09-06T16:32:25.000Z",
+          "LAST_COMPLETED_OBSERVATION": {
+            "daily": "2026-09-05",
+            "weekly": "2026-08-30",
+            "monthly": "2026-08-31"
+          },
+          "COMPLETED_DAILY_ROW_COUNT": 4372
+        },
+        {
+          "ASSET": "ETHUSD",
+          "RAW_SOURCE_ID": "STATISTICAL_LEVELS_RAW_AUTHORITY_20260906T163225Z/raw/ETHUSD.json",
+          "RAW_SHA256": "0ad50a9ebf01e07e37113cb0fc32489eddb2ce404de7c44ec70f7826b489ce93",
+          "RAW_ROW_COUNT": 3224,
+          "RAW_FIRST_DATE": "2017-11-09",
+          "RAW_LAST_DATE": "2026-09-06",
+          "SNAPSHOT_CUTOFF": "2026-09-06T16:32:25Z",
+          "CURRENT_MARK_TIMESTAMP": "2026-09-06T16:32:24.000Z",
+          "LAST_COMPLETED_OBSERVATION": {
+            "daily": "2026-09-05",
+            "weekly": "2026-08-30",
+            "monthly": "2026-08-31"
+          },
+          "COMPLETED_DAILY_ROW_COUNT": 3223
+        },
+        {
+          "ASSET": "EWJ",
+          "RAW_SOURCE_ID": "STATISTICAL_LEVELS_RAW_AUTHORITY_20260906T163225Z/raw/EWJ.json",
+          "RAW_SHA256": "ccfde0b936b47f45c011d09822dcf6a61455bfe145aa2c0aa15942ad08aa2765",
+          "RAW_ROW_COUNT": 7667,
+          "RAW_FIRST_DATE": "1996-03-18",
+          "RAW_LAST_DATE": "2026-09-04",
+          "SNAPSHOT_CUTOFF": "2026-09-06T16:32:25Z",
+          "CURRENT_MARK_TIMESTAMP": "2026-09-04T20:00:00.000Z",
+          "LAST_COMPLETED_OBSERVATION": {
+            "daily": "2026-09-04",
+            "weekly": "2026-08-28",
+            "monthly": "2026-08-31"
+          },
+          "COMPLETED_DAILY_ROW_COUNT": 7667
+        },
+        {
+          "ASSET": "FXI",
+          "RAW_SOURCE_ID": "STATISTICAL_LEVELS_RAW_AUTHORITY_20260906T163225Z/raw/FXI.json",
+          "RAW_SHA256": "d69c24dd4dd75b14664cfd52af538081ee024b6dc6f28463dd53cd08102994e1",
+          "RAW_ROW_COUNT": 5512,
+          "RAW_FIRST_DATE": "2004-10-08",
+          "RAW_LAST_DATE": "2026-09-04",
+          "SNAPSHOT_CUTOFF": "2026-09-06T16:32:25Z",
+          "CURRENT_MARK_TIMESTAMP": "2026-09-04T20:00:00.000Z",
+          "LAST_COMPLETED_OBSERVATION": {
+            "daily": "2026-09-04",
+            "weekly": "2026-08-28",
+            "monthly": "2026-08-31"
+          },
+          "COMPLETED_DAILY_ROW_COUNT": 5512
+        },
+        {
+          "ASSET": "EFA",
+          "RAW_SOURCE_ID": "STATISTICAL_LEVELS_RAW_AUTHORITY_20260906T163225Z/raw/EFA.json",
+          "RAW_SHA256": "ecf0887d88b08ee4586844b7219390da24807e6e8b9d8c0582f85556974ef168",
+          "RAW_ROW_COUNT": 6293,
+          "RAW_FIRST_DATE": "2001-08-27",
+          "RAW_LAST_DATE": "2026-09-04",
+          "SNAPSHOT_CUTOFF": "2026-09-06T16:32:25Z",
+          "CURRENT_MARK_TIMESTAMP": "2026-09-04T20:00:00.000Z",
+          "LAST_COMPLETED_OBSERVATION": {
+            "daily": "2026-09-04",
+            "weekly": "2026-08-28",
+            "monthly": "2026-08-31"
+          },
+          "COMPLETED_DAILY_ROW_COUNT": 6293
+        },
+        {
+          "ASSET": "EEM",
+          "RAW_SOURCE_ID": "STATISTICAL_LEVELS_RAW_AUTHORITY_20260906T163225Z/raw/EEM.json",
+          "RAW_SHA256": "c71b0213fc315f959dff022e7b125336733c2c00a18121c9375b80e24f7e3a0c",
+          "RAW_ROW_COUNT": 5887,
+          "RAW_FIRST_DATE": "2003-04-14",
+          "RAW_LAST_DATE": "2026-09-04",
+          "SNAPSHOT_CUTOFF": "2026-09-06T16:32:25Z",
+          "CURRENT_MARK_TIMESTAMP": "2026-09-04T20:00:00.000Z",
+          "LAST_COMPLETED_OBSERVATION": {
+            "daily": "2026-09-04",
+            "weekly": "2026-08-28",
+            "monthly": "2026-08-31"
+          },
+          "COMPLETED_DAILY_ROW_COUNT": 5887
+        }
+      ]
+    },
+    {
+      "FILE": "seasonality/AIQ.json",
+      "SNAPSHOT_SHA256": "50799fa5bf1720872f3d87c80ba5693ca237bebe0e8ce17e7d491d4de27b28e1",
+      "SCHEMA_VERSION": "statistical-levels.snapshot.v3",
+      "GENERATOR_COMMIT": "5859071ac43180decec28570bc3859dd905734f7",
+      "GENERATOR_SHA256": "7beebd2acf006cd38809539155a5460c612885831df3381d47236c4d71092226",
+      "CONFIG_SHA256": "2f47dea33e1a06c1de4c4d06b8a4c2c9d3db5616a6f87be8b85c128dc960af06",
+      "GENERATED_AT": "2026-09-06T18:56:58Z",
+      "INPUTS": [
+        {
+          "ASSET": "AIQ",
+          "RAW_SOURCE_ID": "STATISTICAL_LEVELS_RAW_AUTHORITY_20260906T163225Z/raw/AIQ.json",
+          "RAW_SHA256": "6d69def46c59f6bf9b6daf28f9cb9d071b0d290fa382cb8acde394f60a1f5045",
+          "RAW_ROW_COUNT": 2088,
+          "RAW_FIRST_DATE": "2018-05-16",
+          "RAW_LAST_DATE": "2026-09-04",
+          "SNAPSHOT_CUTOFF": "2026-09-06T16:32:25Z",
+          "CURRENT_MARK_TIMESTAMP": "2026-09-04T20:00:01.000Z",
+          "LAST_COMPLETED_OBSERVATION": {
+            "daily": "2026-09-04",
+            "weekly": "2026-08-28",
+            "monthly": "2026-08-31"
+          },
+          "COMPLETED_DAILY_ROW_COUNT": 2088
+        }
+      ]
+    },
+    {
+      "FILE": "seasonality/BOTZ.json",
+      "SNAPSHOT_SHA256": "2fa6bd3f70b5d20f7a50dccbd705e98a980e31f7093001b30089a2eb7233a974",
+      "SCHEMA_VERSION": "statistical-levels.snapshot.v3",
+      "GENERATOR_COMMIT": "5859071ac43180decec28570bc3859dd905734f7",
+      "GENERATOR_SHA256": "7beebd2acf006cd38809539155a5460c612885831df3381d47236c4d71092226",
+      "CONFIG_SHA256": "2f47dea33e1a06c1de4c4d06b8a4c2c9d3db5616a6f87be8b85c128dc960af06",
+      "GENERATED_AT": "2026-09-06T18:56:58Z",
+      "INPUTS": [
+        {
+          "ASSET": "BOTZ",
+          "RAW_SOURCE_ID": "STATISTICAL_LEVELS_RAW_AUTHORITY_20260906T163225Z/raw/BOTZ.json",
+          "RAW_SHA256": "4733150d3a9fc341b90556ceba26d33c1902a50c2c4587b07bf95f72c9c04953",
+          "RAW_ROW_COUNT": 2509,
+          "RAW_FIRST_DATE": "2016-09-13",
+          "RAW_LAST_DATE": "2026-09-04",
+          "SNAPSHOT_CUTOFF": "2026-09-06T16:32:25Z",
+          "CURRENT_MARK_TIMESTAMP": "2026-09-04T20:00:01.000Z",
+          "LAST_COMPLETED_OBSERVATION": {
+            "daily": "2026-09-04",
+            "weekly": "2026-08-28",
+            "monthly": "2026-08-31"
+          },
+          "COMPLETED_DAILY_ROW_COUNT": 2509
+        }
+      ]
+    },
+    {
+      "FILE": "seasonality/BTCUSD.json",
+      "SNAPSHOT_SHA256": "a57a2d4e0e2272af479fa1c35c0564925b3d68027ac04280f864c8948b0b0981",
+      "SCHEMA_VERSION": "statistical-levels.snapshot.v3",
+      "GENERATOR_COMMIT": "5859071ac43180decec28570bc3859dd905734f7",
+      "GENERATOR_SHA256": "7beebd2acf006cd38809539155a5460c612885831df3381d47236c4d71092226",
+      "CONFIG_SHA256": "2f47dea33e1a06c1de4c4d06b8a4c2c9d3db5616a6f87be8b85c128dc960af06",
+      "GENERATED_AT": "2026-09-06T18:56:58Z",
+      "INPUTS": [
+        {
+          "ASSET": "BTCUSD",
+          "RAW_SOURCE_ID": "STATISTICAL_LEVELS_RAW_AUTHORITY_20260906T163225Z/raw/BTCUSD.json",
+          "RAW_SHA256": "0c2711b962ae007aa2b9566c09b636a443d445d854716fcb1d2ad78c41ffa9bd",
+          "RAW_ROW_COUNT": 4373,
+          "RAW_FIRST_DATE": "2014-09-17",
+          "RAW_LAST_DATE": "2026-09-06",
+          "SNAPSHOT_CUTOFF": "2026-09-06T16:32:25Z",
+          "CURRENT_MARK_TIMESTAMP": "2026-09-06T16:32:25.000Z",
+          "LAST_COMPLETED_OBSERVATION": {
+            "daily": "2026-09-05",
+            "weekly": "2026-08-30",
+            "monthly": "2026-08-31"
+          },
+          "COMPLETED_DAILY_ROW_COUNT": 4372
+        }
+      ]
+    },
+    {
+      "FILE": "seasonality/CIBR.json",
+      "SNAPSHOT_SHA256": "e80481fa864d12f9cc5f6ab81b554bbad562b3cbdddf2a2070eaf6f92cd2730c",
+      "SCHEMA_VERSION": "statistical-levels.snapshot.v3",
+      "GENERATOR_COMMIT": "5859071ac43180decec28570bc3859dd905734f7",
+      "GENERATOR_SHA256": "7beebd2acf006cd38809539155a5460c612885831df3381d47236c4d71092226",
+      "CONFIG_SHA256": "2f47dea33e1a06c1de4c4d06b8a4c2c9d3db5616a6f87be8b85c128dc960af06",
+      "GENERATED_AT": "2026-09-06T18:56:58Z",
+      "INPUTS": [
+        {
+          "ASSET": "CIBR",
+          "RAW_SOURCE_ID": "STATISTICAL_LEVELS_RAW_AUTHORITY_20260906T163225Z/raw/CIBR.json",
+          "RAW_SHA256": "253554558afb2d2df8297612f1aa3b7d47f5938b2d894270cfb5e266de329200",
+          "RAW_ROW_COUNT": 2809,
+          "RAW_FIRST_DATE": "2015-07-07",
+          "RAW_LAST_DATE": "2026-09-04",
+          "SNAPSHOT_CUTOFF": "2026-09-06T16:32:25Z",
+          "CURRENT_MARK_TIMESTAMP": "2026-09-04T20:00:01.000Z",
+          "LAST_COMPLETED_OBSERVATION": {
+            "daily": "2026-09-04",
+            "weekly": "2026-08-28",
+            "monthly": "2026-08-31"
+          },
+          "COMPLETED_DAILY_ROW_COUNT": 2809
+        }
+      ]
+    },
+    {
+      "FILE": "seasonality/DIA.json",
+      "SNAPSHOT_SHA256": "e433aa5da2b886e3999918852abd19d1334d5f6586f20684e39fa4ccc2f02c52",
+      "SCHEMA_VERSION": "statistical-levels.snapshot.v3",
+      "GENERATOR_COMMIT": "5859071ac43180decec28570bc3859dd905734f7",
+      "GENERATOR_SHA256": "7beebd2acf006cd38809539155a5460c612885831df3381d47236c4d71092226",
+      "CONFIG_SHA256": "2f47dea33e1a06c1de4c4d06b8a4c2c9d3db5616a6f87be8b85c128dc960af06",
+      "GENERATED_AT": "2026-09-06T18:56:58Z",
+      "INPUTS": [
+        {
+          "ASSET": "DIA",
+          "RAW_SOURCE_ID": "STATISTICAL_LEVELS_RAW_AUTHORITY_20260906T163225Z/raw/DIA.json",
+          "RAW_SHA256": "6a502437400a852dbf95c1daffcd755e995aec72ca2f1051cc31e4b63f649c99",
+          "RAW_ROW_COUNT": 7202,
+          "RAW_FIRST_DATE": "1998-01-20",
+          "RAW_LAST_DATE": "2026-09-04",
+          "SNAPSHOT_CUTOFF": "2026-09-06T16:32:25Z",
+          "CURRENT_MARK_TIMESTAMP": "2026-09-04T20:00:00.000Z",
+          "LAST_COMPLETED_OBSERVATION": {
+            "daily": "2026-09-04",
+            "weekly": "2026-08-28",
+            "monthly": "2026-08-31"
+          },
+          "COMPLETED_DAILY_ROW_COUNT": 7202
+        }
+      ]
+    },
+    {
+      "FILE": "seasonality/EEM.json",
+      "SNAPSHOT_SHA256": "36df84ef3822e9b9f620c70d4d2e38061a9fc23ce87fc6903cd3f41eae9e2548",
+      "SCHEMA_VERSION": "statistical-levels.snapshot.v3",
+      "GENERATOR_COMMIT": "5859071ac43180decec28570bc3859dd905734f7",
+      "GENERATOR_SHA256": "7beebd2acf006cd38809539155a5460c612885831df3381d47236c4d71092226",
+      "CONFIG_SHA256": "2f47dea33e1a06c1de4c4d06b8a4c2c9d3db5616a6f87be8b85c128dc960af06",
+      "GENERATED_AT": "2026-09-06T18:56:58Z",
+      "INPUTS": [
+        {
+          "ASSET": "EEM",
+          "RAW_SOURCE_ID": "STATISTICAL_LEVELS_RAW_AUTHORITY_20260906T163225Z/raw/EEM.json",
+          "RAW_SHA256": "c71b0213fc315f959dff022e7b125336733c2c00a18121c9375b80e24f7e3a0c",
+          "RAW_ROW_COUNT": 5887,
+          "RAW_FIRST_DATE": "2003-04-14",
+          "RAW_LAST_DATE": "2026-09-04",
+          "SNAPSHOT_CUTOFF": "2026-09-06T16:32:25Z",
+          "CURRENT_MARK_TIMESTAMP": "2026-09-04T20:00:00.000Z",
+          "LAST_COMPLETED_OBSERVATION": {
+            "daily": "2026-09-04",
+            "weekly": "2026-08-28",
+            "monthly": "2026-08-31"
+          },
+          "COMPLETED_DAILY_ROW_COUNT": 5887
+        }
+      ]
+    },
+    {
+      "FILE": "seasonality/EFA.json",
+      "SNAPSHOT_SHA256": "6130b9f6188b26c8e8e2bf62f9f11a17be28679a1ce135869141aa6581ead8a5",
+      "SCHEMA_VERSION": "statistical-levels.snapshot.v3",
+      "GENERATOR_COMMIT": "5859071ac43180decec28570bc3859dd905734f7",
+      "GENERATOR_SHA256": "7beebd2acf006cd38809539155a5460c612885831df3381d47236c4d71092226",
+      "CONFIG_SHA256": "2f47dea33e1a06c1de4c4d06b8a4c2c9d3db5616a6f87be8b85c128dc960af06",
+      "GENERATED_AT": "2026-09-06T18:56:58Z",
+      "INPUTS": [
+        {
+          "ASSET": "EFA",
+          "RAW_SOURCE_ID": "STATISTICAL_LEVELS_RAW_AUTHORITY_20260906T163225Z/raw/EFA.json",
+          "RAW_SHA256": "ecf0887d88b08ee4586844b7219390da24807e6e8b9d8c0582f85556974ef168",
+          "RAW_ROW_COUNT": 6293,
+          "RAW_FIRST_DATE": "2001-08-27",
+          "RAW_LAST_DATE": "2026-09-04",
+          "SNAPSHOT_CUTOFF": "2026-09-06T16:32:25Z",
+          "CURRENT_MARK_TIMESTAMP": "2026-09-04T20:00:00.000Z",
+          "LAST_COMPLETED_OBSERVATION": {
+            "daily": "2026-09-04",
+            "weekly": "2026-08-28",
+            "monthly": "2026-08-31"
+          },
+          "COMPLETED_DAILY_ROW_COUNT": 6293
+        }
+      ]
+    },
+    {
+      "FILE": "seasonality/ETHUSD.json",
+      "SNAPSHOT_SHA256": "ba1fb0dc95c31da543996286580e0c805613c554bd0e1656a382dfa2982d2bc2",
+      "SCHEMA_VERSION": "statistical-levels.snapshot.v3",
+      "GENERATOR_COMMIT": "5859071ac43180decec28570bc3859dd905734f7",
+      "GENERATOR_SHA256": "7beebd2acf006cd38809539155a5460c612885831df3381d47236c4d71092226",
+      "CONFIG_SHA256": "2f47dea33e1a06c1de4c4d06b8a4c2c9d3db5616a6f87be8b85c128dc960af06",
+      "GENERATED_AT": "2026-09-06T18:56:58Z",
+      "INPUTS": [
+        {
+          "ASSET": "ETHUSD",
+          "RAW_SOURCE_ID": "STATISTICAL_LEVELS_RAW_AUTHORITY_20260906T163225Z/raw/ETHUSD.json",
+          "RAW_SHA256": "0ad50a9ebf01e07e37113cb0fc32489eddb2ce404de7c44ec70f7826b489ce93",
+          "RAW_ROW_COUNT": 3224,
+          "RAW_FIRST_DATE": "2017-11-09",
+          "RAW_LAST_DATE": "2026-09-06",
+          "SNAPSHOT_CUTOFF": "2026-09-06T16:32:25Z",
+          "CURRENT_MARK_TIMESTAMP": "2026-09-06T16:32:24.000Z",
+          "LAST_COMPLETED_OBSERVATION": {
+            "daily": "2026-09-05",
+            "weekly": "2026-08-30",
+            "monthly": "2026-08-31"
+          },
+          "COMPLETED_DAILY_ROW_COUNT": 3223
+        }
+      ]
+    },
+    {
+      "FILE": "seasonality/EWJ.json",
+      "SNAPSHOT_SHA256": "608f0f5fbc6abc886e49f2e15e5f984ce9f20b8730a9d122ef94b4b8eb69782e",
+      "SCHEMA_VERSION": "statistical-levels.snapshot.v3",
+      "GENERATOR_COMMIT": "5859071ac43180decec28570bc3859dd905734f7",
+      "GENERATOR_SHA256": "7beebd2acf006cd38809539155a5460c612885831df3381d47236c4d71092226",
+      "CONFIG_SHA256": "2f47dea33e1a06c1de4c4d06b8a4c2c9d3db5616a6f87be8b85c128dc960af06",
+      "GENERATED_AT": "2026-09-06T18:56:58Z",
+      "INPUTS": [
+        {
+          "ASSET": "EWJ",
+          "RAW_SOURCE_ID": "STATISTICAL_LEVELS_RAW_AUTHORITY_20260906T163225Z/raw/EWJ.json",
+          "RAW_SHA256": "ccfde0b936b47f45c011d09822dcf6a61455bfe145aa2c0aa15942ad08aa2765",
+          "RAW_ROW_COUNT": 7667,
+          "RAW_FIRST_DATE": "1996-03-18",
+          "RAW_LAST_DATE": "2026-09-04",
+          "SNAPSHOT_CUTOFF": "2026-09-06T16:32:25Z",
+          "CURRENT_MARK_TIMESTAMP": "2026-09-04T20:00:00.000Z",
+          "LAST_COMPLETED_OBSERVATION": {
+            "daily": "2026-09-04",
+            "weekly": "2026-08-28",
+            "monthly": "2026-08-31"
+          },
+          "COMPLETED_DAILY_ROW_COUNT": 7667
+        }
+      ]
+    },
+    {
+      "FILE": "seasonality/FINX.json",
+      "SNAPSHOT_SHA256": "6bc83b729cbbb4e434bab5f429ab9b39e607e8438ed5d413c8b6eb0674d5d03b",
+      "SCHEMA_VERSION": "statistical-levels.snapshot.v3",
+      "GENERATOR_COMMIT": "5859071ac43180decec28570bc3859dd905734f7",
+      "GENERATOR_SHA256": "7beebd2acf006cd38809539155a5460c612885831df3381d47236c4d71092226",
+      "CONFIG_SHA256": "2f47dea33e1a06c1de4c4d06b8a4c2c9d3db5616a6f87be8b85c128dc960af06",
+      "GENERATED_AT": "2026-09-06T18:56:58Z",
+      "INPUTS": [
+        {
+          "ASSET": "FINX",
+          "RAW_SOURCE_ID": "STATISTICAL_LEVELS_RAW_AUTHORITY_20260906T163225Z/raw/FINX.json",
+          "RAW_SHA256": "aee5a2ea4ecf87c03ae8ce28a891b89a4f54d1840421bb5aafacfc0fa7da7e30",
+          "RAW_ROW_COUNT": 2509,
+          "RAW_FIRST_DATE": "2016-09-13",
+          "RAW_LAST_DATE": "2026-09-04",
+          "SNAPSHOT_CUTOFF": "2026-09-06T16:32:25Z",
+          "CURRENT_MARK_TIMESTAMP": "2026-09-04T20:00:01.000Z",
+          "LAST_COMPLETED_OBSERVATION": {
+            "daily": "2026-09-04",
+            "weekly": "2026-08-28",
+            "monthly": "2026-08-31"
+          },
+          "COMPLETED_DAILY_ROW_COUNT": 2509
+        }
+      ]
+    },
+    {
+      "FILE": "seasonality/FXI.json",
+      "SNAPSHOT_SHA256": "000a8844e7471d09fe2d8c7664d14ea2eeeaac50fd4cd723cdc6d948b1c0feaf",
+      "SCHEMA_VERSION": "statistical-levels.snapshot.v3",
+      "GENERATOR_COMMIT": "5859071ac43180decec28570bc3859dd905734f7",
+      "GENERATOR_SHA256": "7beebd2acf006cd38809539155a5460c612885831df3381d47236c4d71092226",
+      "CONFIG_SHA256": "2f47dea33e1a06c1de4c4d06b8a4c2c9d3db5616a6f87be8b85c128dc960af06",
+      "GENERATED_AT": "2026-09-06T18:56:58Z",
+      "INPUTS": [
+        {
+          "ASSET": "FXI",
+          "RAW_SOURCE_ID": "STATISTICAL_LEVELS_RAW_AUTHORITY_20260906T163225Z/raw/FXI.json",
+          "RAW_SHA256": "d69c24dd4dd75b14664cfd52af538081ee024b6dc6f28463dd53cd08102994e1",
+          "RAW_ROW_COUNT": 5512,
+          "RAW_FIRST_DATE": "2004-10-08",
+          "RAW_LAST_DATE": "2026-09-04",
+          "SNAPSHOT_CUTOFF": "2026-09-06T16:32:25Z",
+          "CURRENT_MARK_TIMESTAMP": "2026-09-04T20:00:00.000Z",
+          "LAST_COMPLETED_OBSERVATION": {
+            "daily": "2026-09-04",
+            "weekly": "2026-08-28",
+            "monthly": "2026-08-31"
+          },
+          "COMPLETED_DAILY_ROW_COUNT": 5512
+        }
+      ]
+    },
+    {
+      "FILE": "seasonality/GLD.json",
+      "SNAPSHOT_SHA256": "c6c1b94cfe1442b1ffc8c2d5f32ac754546da598c71f8fb8b95859f7492a0103",
+      "SCHEMA_VERSION": "statistical-levels.snapshot.v3",
+      "GENERATOR_COMMIT": "5859071ac43180decec28570bc3859dd905734f7",
+      "GENERATOR_SHA256": "7beebd2acf006cd38809539155a5460c612885831df3381d47236c4d71092226",
+      "CONFIG_SHA256": "2f47dea33e1a06c1de4c4d06b8a4c2c9d3db5616a6f87be8b85c128dc960af06",
+      "GENERATED_AT": "2026-09-06T18:56:58Z",
+      "INPUTS": [
+        {
+          "ASSET": "GLD",
+          "RAW_SOURCE_ID": "STATISTICAL_LEVELS_RAW_AUTHORITY_20260906T163225Z/raw/GLD.json",
+          "RAW_SHA256": "9b5928a9849318a38a2af78efc080977b9dc1a2e4ee5c3932bca747480343aea",
+          "RAW_ROW_COUNT": 5483,
+          "RAW_FIRST_DATE": "2004-11-18",
+          "RAW_LAST_DATE": "2026-09-04",
+          "SNAPSHOT_CUTOFF": "2026-09-06T16:32:25Z",
+          "CURRENT_MARK_TIMESTAMP": "2026-09-04T20:00:00.000Z",
+          "LAST_COMPLETED_OBSERVATION": {
+            "daily": "2026-09-04",
+            "weekly": "2026-08-28",
+            "monthly": "2026-08-31"
+          },
+          "COMPLETED_DAILY_ROW_COUNT": 5483
+        }
+      ]
+    },
+    {
+      "FILE": "seasonality/HYG.json",
+      "SNAPSHOT_SHA256": "d07d9fa60ac7bedb924db2dfe6d80b8ca5289267f5d0a33f0d5c4d200f36804b",
+      "SCHEMA_VERSION": "statistical-levels.snapshot.v3",
+      "GENERATOR_COMMIT": "5859071ac43180decec28570bc3859dd905734f7",
+      "GENERATOR_SHA256": "7beebd2acf006cd38809539155a5460c612885831df3381d47236c4d71092226",
+      "CONFIG_SHA256": "2f47dea33e1a06c1de4c4d06b8a4c2c9d3db5616a6f87be8b85c128dc960af06",
+      "GENERATED_AT": "2026-09-06T18:56:58Z",
+      "INPUTS": [
+        {
+          "ASSET": "HYG",
+          "RAW_SOURCE_ID": "STATISTICAL_LEVELS_RAW_AUTHORITY_20260906T163225Z/raw/HYG.json",
+          "RAW_SHA256": "df23be966f75418f3a35f955633e7face2a7133844ab5316d5c6000370013318",
+          "RAW_ROW_COUNT": 4883,
+          "RAW_FIRST_DATE": "2007-04-11",
+          "RAW_LAST_DATE": "2026-09-04",
+          "SNAPSHOT_CUTOFF": "2026-09-06T16:32:25Z",
+          "CURRENT_MARK_TIMESTAMP": "2026-09-04T20:00:00.000Z",
+          "LAST_COMPLETED_OBSERVATION": {
+            "daily": "2026-09-04",
+            "weekly": "2026-08-28",
+            "monthly": "2026-08-31"
+          },
+          "COMPLETED_DAILY_ROW_COUNT": 4883
+        }
+      ]
+    },
+    {
+      "FILE": "seasonality/IEF.json",
+      "SNAPSHOT_SHA256": "aca382d488426a97ddc558b52a1b6726160a2fd38ae8bd0626c3e2806b4891d0",
+      "SCHEMA_VERSION": "statistical-levels.snapshot.v3",
+      "GENERATOR_COMMIT": "5859071ac43180decec28570bc3859dd905734f7",
+      "GENERATOR_SHA256": "7beebd2acf006cd38809539155a5460c612885831df3381d47236c4d71092226",
+      "CONFIG_SHA256": "2f47dea33e1a06c1de4c4d06b8a4c2c9d3db5616a6f87be8b85c128dc960af06",
+      "GENERATED_AT": "2026-09-06T18:56:58Z",
+      "INPUTS": [
+        {
+          "ASSET": "IEF",
+          "RAW_SOURCE_ID": "STATISTICAL_LEVELS_RAW_AUTHORITY_20260906T163225Z/raw/IEF.json",
+          "RAW_SHA256": "aaf4d585d4c4d5a4e86c81f66303f36e9ad7c72d08b940aa99dce8d3fa14a358",
+          "RAW_ROW_COUNT": 6065,
+          "RAW_FIRST_DATE": "2002-07-30",
+          "RAW_LAST_DATE": "2026-09-04",
+          "SNAPSHOT_CUTOFF": "2026-09-06T16:32:25Z",
+          "CURRENT_MARK_TIMESTAMP": "2026-09-04T20:00:01.000Z",
+          "LAST_COMPLETED_OBSERVATION": {
+            "daily": "2026-09-04",
+            "weekly": "2026-08-28",
+            "monthly": "2026-08-31"
+          },
+          "COMPLETED_DAILY_ROW_COUNT": 6065
+        }
+      ]
+    },
+    {
+      "FILE": "seasonality/ITA.json",
+      "SNAPSHOT_SHA256": "e954959f4c64587e402aa132d9c214584ad3680a251aabcb11c53935f0b1f539",
+      "SCHEMA_VERSION": "statistical-levels.snapshot.v3",
+      "GENERATOR_COMMIT": "5859071ac43180decec28570bc3859dd905734f7",
+      "GENERATOR_SHA256": "7beebd2acf006cd38809539155a5460c612885831df3381d47236c4d71092226",
+      "CONFIG_SHA256": "2f47dea33e1a06c1de4c4d06b8a4c2c9d3db5616a6f87be8b85c128dc960af06",
+      "GENERATED_AT": "2026-09-06T18:56:58Z",
+      "INPUTS": [
+        {
+          "ASSET": "ITA",
+          "RAW_SOURCE_ID": "STATISTICAL_LEVELS_RAW_AUTHORITY_20260906T163225Z/raw/ITA.json",
+          "RAW_SHA256": "3f5af589385c705289bca9a432ac36d2d4447b2fea05236a60d287e8de44292f",
+          "RAW_ROW_COUNT": 5116,
+          "RAW_FIRST_DATE": "2006-05-05",
+          "RAW_LAST_DATE": "2026-09-04",
+          "SNAPSHOT_CUTOFF": "2026-09-06T16:32:25Z",
+          "CURRENT_MARK_TIMESTAMP": "2026-09-04T20:00:00.000Z",
+          "LAST_COMPLETED_OBSERVATION": {
+            "daily": "2026-09-04",
+            "weekly": "2026-08-28",
+            "monthly": "2026-08-31"
+          },
+          "COMPLETED_DAILY_ROW_COUNT": 5116
+        }
+      ]
+    },
+    {
+      "FILE": "seasonality/IWM.json",
+      "SNAPSHOT_SHA256": "03e63a117e791a631b87c6be977cb12866c2218b63494d2fa920f4d36fea076c",
+      "SCHEMA_VERSION": "statistical-levels.snapshot.v3",
+      "GENERATOR_COMMIT": "5859071ac43180decec28570bc3859dd905734f7",
+      "GENERATOR_SHA256": "7beebd2acf006cd38809539155a5460c612885831df3381d47236c4d71092226",
+      "CONFIG_SHA256": "2f47dea33e1a06c1de4c4d06b8a4c2c9d3db5616a6f87be8b85c128dc960af06",
+      "GENERATED_AT": "2026-09-06T18:56:58Z",
+      "INPUTS": [
+        {
+          "ASSET": "IWM",
+          "RAW_SOURCE_ID": "STATISTICAL_LEVELS_RAW_AUTHORITY_20260906T163225Z/raw/IWM.json",
+          "RAW_SHA256": "6cfc0d614fa08265a61d78d28bf476763bf57cfc7b4717ac388024d62725671a",
+          "RAW_ROW_COUNT": 6608,
+          "RAW_FIRST_DATE": "2000-05-26",
+          "RAW_LAST_DATE": "2026-09-04",
+          "SNAPSHOT_CUTOFF": "2026-09-06T16:32:25Z",
+          "CURRENT_MARK_TIMESTAMP": "2026-09-04T20:00:00.000Z",
+          "LAST_COMPLETED_OBSERVATION": {
+            "daily": "2026-09-04",
+            "weekly": "2026-08-28",
+            "monthly": "2026-08-31"
+          },
+          "COMPLETED_DAILY_ROW_COUNT": 6608
+        }
+      ]
+    },
+    {
+      "FILE": "seasonality/LQD.json",
+      "SNAPSHOT_SHA256": "6bdf0ad8122d5a87feb5696df74460e09cfcba6ec7d3acbb26ac8241ca1fdbc7",
+      "SCHEMA_VERSION": "statistical-levels.snapshot.v3",
+      "GENERATOR_COMMIT": "5859071ac43180decec28570bc3859dd905734f7",
+      "GENERATOR_SHA256": "7beebd2acf006cd38809539155a5460c612885831df3381d47236c4d71092226",
+      "CONFIG_SHA256": "2f47dea33e1a06c1de4c4d06b8a4c2c9d3db5616a6f87be8b85c128dc960af06",
+      "GENERATED_AT": "2026-09-06T18:56:58Z",
+      "INPUTS": [
+        {
+          "ASSET": "LQD",
+          "RAW_SOURCE_ID": "STATISTICAL_LEVELS_RAW_AUTHORITY_20260906T163225Z/raw/LQD.json",
+          "RAW_SHA256": "f428905964ff6f721bbe7ce127077a93ec2b312fbcc4c93c0081f0dfb998131c",
+          "RAW_ROW_COUNT": 6065,
+          "RAW_FIRST_DATE": "2002-07-30",
+          "RAW_LAST_DATE": "2026-09-04",
+          "SNAPSHOT_CUTOFF": "2026-09-06T16:32:25Z",
+          "CURRENT_MARK_TIMESTAMP": "2026-09-04T20:00:00.000Z",
+          "LAST_COMPLETED_OBSERVATION": {
+            "daily": "2026-09-04",
+            "weekly": "2026-08-28",
+            "monthly": "2026-08-31"
+          },
+          "COMPLETED_DAILY_ROW_COUNT": 6065
+        }
+      ]
+    },
+    {
+      "FILE": "seasonality/PAVE.json",
+      "SNAPSHOT_SHA256": "318aae6e1c64f28a21b598edbebf2fca5bf4864c0c72f84573d972aa3a281b39",
+      "SCHEMA_VERSION": "statistical-levels.snapshot.v3",
+      "GENERATOR_COMMIT": "5859071ac43180decec28570bc3859dd905734f7",
+      "GENERATOR_SHA256": "7beebd2acf006cd38809539155a5460c612885831df3381d47236c4d71092226",
+      "CONFIG_SHA256": "2f47dea33e1a06c1de4c4d06b8a4c2c9d3db5616a6f87be8b85c128dc960af06",
+      "GENERATED_AT": "2026-09-06T18:56:58Z",
+      "INPUTS": [
+        {
+          "ASSET": "PAVE",
+          "RAW_SOURCE_ID": "STATISTICAL_LEVELS_RAW_AUTHORITY_20260906T163225Z/raw/PAVE.json",
+          "RAW_SHA256": "2488fbae2d3d72386b428acfe668d2b6357594e21cab10bade14c9e71108d77f",
+          "RAW_ROW_COUNT": 2388,
+          "RAW_FIRST_DATE": "2017-03-08",
+          "RAW_LAST_DATE": "2026-09-04",
+          "SNAPSHOT_CUTOFF": "2026-09-06T16:32:25Z",
+          "CURRENT_MARK_TIMESTAMP": "2026-09-04T20:00:00.000Z",
+          "LAST_COMPLETED_OBSERVATION": {
+            "daily": "2026-09-04",
+            "weekly": "2026-08-28",
+            "monthly": "2026-08-31"
+          },
+          "COMPLETED_DAILY_ROW_COUNT": 2388
+        }
+      ]
+    },
+    {
+      "FILE": "seasonality/PHO.json",
+      "SNAPSHOT_SHA256": "ce76887fa79729e0eae899387238e361e79e10e28f31d49ea71735402fbe7362",
+      "SCHEMA_VERSION": "statistical-levels.snapshot.v3",
+      "GENERATOR_COMMIT": "5859071ac43180decec28570bc3859dd905734f7",
+      "GENERATOR_SHA256": "7beebd2acf006cd38809539155a5460c612885831df3381d47236c4d71092226",
+      "CONFIG_SHA256": "2f47dea33e1a06c1de4c4d06b8a4c2c9d3db5616a6f87be8b85c128dc960af06",
+      "GENERATED_AT": "2026-09-06T18:56:58Z",
+      "INPUTS": [
+        {
+          "ASSET": "PHO",
+          "RAW_SOURCE_ID": "STATISTICAL_LEVELS_RAW_AUTHORITY_20260906T163225Z/raw/PHO.json",
+          "RAW_SHA256": "8c9e1400b761759531a0e5569edd1afa252f5b292c8df7b6042f46948bd9980d",
+          "RAW_ROW_COUNT": 5219,
+          "RAW_FIRST_DATE": "2005-12-06",
+          "RAW_LAST_DATE": "2026-09-04",
+          "SNAPSHOT_CUTOFF": "2026-09-06T16:32:25Z",
+          "CURRENT_MARK_TIMESTAMP": "2026-09-04T20:00:00.000Z",
+          "LAST_COMPLETED_OBSERVATION": {
+            "daily": "2026-09-04",
+            "weekly": "2026-08-28",
+            "monthly": "2026-08-31"
+          },
+          "COMPLETED_DAILY_ROW_COUNT": 5219
+        }
+      ]
+    },
+    {
+      "FILE": "seasonality/QQQ.json",
+      "SNAPSHOT_SHA256": "fdd286c71224b19768244fe263eae4da2936420cd3aa1202c738671c26a3c1b7",
+      "SCHEMA_VERSION": "statistical-levels.snapshot.v3",
+      "GENERATOR_COMMIT": "5859071ac43180decec28570bc3859dd905734f7",
+      "GENERATOR_SHA256": "7beebd2acf006cd38809539155a5460c612885831df3381d47236c4d71092226",
+      "CONFIG_SHA256": "2f47dea33e1a06c1de4c4d06b8a4c2c9d3db5616a6f87be8b85c128dc960af06",
+      "GENERATED_AT": "2026-09-06T18:56:58Z",
+      "INPUTS": [
+        {
+          "ASSET": "QQQ",
+          "RAW_SOURCE_ID": "STATISTICAL_LEVELS_RAW_AUTHORITY_20260906T163225Z/raw/QQQ.json",
+          "RAW_SHA256": "4fcfe7ac3b738716b6f40862a9ead9ea9496afc74ce3e7e89636c343b873f56a",
+          "RAW_ROW_COUNT": 6916,
+          "RAW_FIRST_DATE": "1999-03-10",
+          "RAW_LAST_DATE": "2026-09-04",
+          "SNAPSHOT_CUTOFF": "2026-09-06T16:32:25Z",
+          "CURRENT_MARK_TIMESTAMP": "2026-09-04T20:00:00.000Z",
+          "LAST_COMPLETED_OBSERVATION": {
+            "daily": "2026-09-04",
+            "weekly": "2026-08-28",
+            "monthly": "2026-08-31"
+          },
+          "COMPLETED_DAILY_ROW_COUNT": 6916
+        }
+      ]
+    },
+    {
+      "FILE": "seasonality/RSP.json",
+      "SNAPSHOT_SHA256": "9da2ca3ff68b7c7553013850df358f39ea03500d4a1b6001be79b5c7c8acd9a6",
+      "SCHEMA_VERSION": "statistical-levels.snapshot.v3",
+      "GENERATOR_COMMIT": "5859071ac43180decec28570bc3859dd905734f7",
+      "GENERATOR_SHA256": "7beebd2acf006cd38809539155a5460c612885831df3381d47236c4d71092226",
+      "CONFIG_SHA256": "2f47dea33e1a06c1de4c4d06b8a4c2c9d3db5616a6f87be8b85c128dc960af06",
+      "GENERATED_AT": "2026-09-06T18:56:58Z",
+      "INPUTS": [
+        {
+          "ASSET": "RSP",
+          "RAW_SOURCE_ID": "STATISTICAL_LEVELS_RAW_AUTHORITY_20260906T163225Z/raw/RSP.json",
+          "RAW_SHA256": "a3ac26d2ab86b3e7d934b65ad9e28c70b7b66e2f0b5848e0482f08e3db71d603",
+          "RAW_ROW_COUNT": 5875,
+          "RAW_FIRST_DATE": "2003-05-01",
+          "RAW_LAST_DATE": "2026-09-04",
+          "SNAPSHOT_CUTOFF": "2026-09-06T16:32:25Z",
+          "CURRENT_MARK_TIMESTAMP": "2026-09-04T20:00:00.000Z",
+          "LAST_COMPLETED_OBSERVATION": {
+            "daily": "2026-09-04",
+            "weekly": "2026-08-28",
+            "monthly": "2026-08-31"
+          },
+          "COMPLETED_DAILY_ROW_COUNT": 5875
+        }
+      ]
+    },
+    {
+      "FILE": "seasonality/SHY.json",
+      "SNAPSHOT_SHA256": "1db180061d40438a5c48ee3e5a7f788ca64fc9c6e3633d50e6fcf53af95aba7c",
+      "SCHEMA_VERSION": "statistical-levels.snapshot.v3",
+      "GENERATOR_COMMIT": "5859071ac43180decec28570bc3859dd905734f7",
+      "GENERATOR_SHA256": "7beebd2acf006cd38809539155a5460c612885831df3381d47236c4d71092226",
+      "CONFIG_SHA256": "2f47dea33e1a06c1de4c4d06b8a4c2c9d3db5616a6f87be8b85c128dc960af06",
+      "GENERATED_AT": "2026-09-06T18:56:58Z",
+      "INPUTS": [
+        {
+          "ASSET": "SHY",
+          "RAW_SOURCE_ID": "STATISTICAL_LEVELS_RAW_AUTHORITY_20260906T163225Z/raw/SHY.json",
+          "RAW_SHA256": "4e9f69bfd47f949007d5902895f69390b0e508dfb8c4e999201a0572ac12196d",
+          "RAW_ROW_COUNT": 6065,
+          "RAW_FIRST_DATE": "2002-07-30",
+          "RAW_LAST_DATE": "2026-09-04",
+          "SNAPSHOT_CUTOFF": "2026-09-06T16:32:25Z",
+          "CURRENT_MARK_TIMESTAMP": "2026-09-04T20:00:00.000Z",
+          "LAST_COMPLETED_OBSERVATION": {
+            "daily": "2026-09-04",
+            "weekly": "2026-08-28",
+            "monthly": "2026-08-31"
+          },
+          "COMPLETED_DAILY_ROW_COUNT": 6065
+        }
+      ]
+    },
+    {
+      "FILE": "seasonality/SLV.json",
+      "SNAPSHOT_SHA256": "3ec8b213411867a70f5d4f003293f94a4368a38bda87fef94b3a1bf7514d17ab",
+      "SCHEMA_VERSION": "statistical-levels.snapshot.v3",
+      "GENERATOR_COMMIT": "5859071ac43180decec28570bc3859dd905734f7",
+      "GENERATOR_SHA256": "7beebd2acf006cd38809539155a5460c612885831df3381d47236c4d71092226",
+      "CONFIG_SHA256": "2f47dea33e1a06c1de4c4d06b8a4c2c9d3db5616a6f87be8b85c128dc960af06",
+      "GENERATED_AT": "2026-09-06T18:56:58Z",
+      "INPUTS": [
+        {
+          "ASSET": "SLV",
+          "RAW_SOURCE_ID": "STATISTICAL_LEVELS_RAW_AUTHORITY_20260906T163225Z/raw/SLV.json",
+          "RAW_SHA256": "58b55ba7ac4419ebd2c7f83e114c45525be8a9905c61ad447fb19ad512a26d71",
+          "RAW_ROW_COUNT": 5121,
+          "RAW_FIRST_DATE": "2006-04-28",
+          "RAW_LAST_DATE": "2026-09-04",
+          "SNAPSHOT_CUTOFF": "2026-09-06T16:32:25Z",
+          "CURRENT_MARK_TIMESTAMP": "2026-09-04T20:00:00.000Z",
+          "LAST_COMPLETED_OBSERVATION": {
+            "daily": "2026-09-04",
+            "weekly": "2026-08-28",
+            "monthly": "2026-08-31"
+          },
+          "COMPLETED_DAILY_ROW_COUNT": 5121
+        }
+      ]
+    },
+    {
+      "FILE": "seasonality/SMH.json",
+      "SNAPSHOT_SHA256": "42c5819e6619b1d8bd3fef284a58bb51d3dae8fde0da474d13b817ef692cb56e",
+      "SCHEMA_VERSION": "statistical-levels.snapshot.v3",
+      "GENERATOR_COMMIT": "5859071ac43180decec28570bc3859dd905734f7",
+      "GENERATOR_SHA256": "7beebd2acf006cd38809539155a5460c612885831df3381d47236c4d71092226",
+      "CONFIG_SHA256": "2f47dea33e1a06c1de4c4d06b8a4c2c9d3db5616a6f87be8b85c128dc960af06",
+      "GENERATED_AT": "2026-09-06T18:56:58Z",
+      "INPUTS": [
+        {
+          "ASSET": "SMH",
+          "RAW_SOURCE_ID": "STATISTICAL_LEVELS_RAW_AUTHORITY_20260906T163225Z/raw/SMH.json",
+          "RAW_SHA256": "2bc7b62708bf5fa9e4440b842965014e01c97964019472e38100597a33c33108",
+          "RAW_ROW_COUNT": 6603,
+          "RAW_FIRST_DATE": "2000-06-05",
+          "RAW_LAST_DATE": "2026-09-04",
+          "SNAPSHOT_CUTOFF": "2026-09-06T16:32:25Z",
+          "CURRENT_MARK_TIMESTAMP": "2026-09-04T20:00:00.000Z",
+          "LAST_COMPLETED_OBSERVATION": {
+            "daily": "2026-09-04",
+            "weekly": "2026-08-28",
+            "monthly": "2026-08-31"
+          },
+          "COMPLETED_DAILY_ROW_COUNT": 6603
+        }
+      ]
+    },
+    {
+      "FILE": "seasonality/SPY.json",
+      "SNAPSHOT_SHA256": "bc33ee962982f620f556722490106f9f9af423eed0c6b8b08995bae1b5e9cc26",
+      "SCHEMA_VERSION": "statistical-levels.snapshot.v3",
+      "GENERATOR_COMMIT": "5859071ac43180decec28570bc3859dd905734f7",
+      "GENERATOR_SHA256": "7beebd2acf006cd38809539155a5460c612885831df3381d47236c4d71092226",
+      "CONFIG_SHA256": "2f47dea33e1a06c1de4c4d06b8a4c2c9d3db5616a6f87be8b85c128dc960af06",
+      "GENERATED_AT": "2026-09-06T18:56:58Z",
+      "INPUTS": [
+        {
+          "ASSET": "SPY",
+          "RAW_SOURCE_ID": "STATISTICAL_LEVELS_RAW_AUTHORITY_20260906T163225Z/raw/SPY.json",
+          "RAW_SHA256": "6ba1f0e3a459ee61f13fd2c8f4ee56b2094c39d8230f43dd32ef51aad41ac016",
+          "RAW_ROW_COUNT": 8458,
+          "RAW_FIRST_DATE": "1993-01-29",
+          "RAW_LAST_DATE": "2026-09-04",
+          "SNAPSHOT_CUTOFF": "2026-09-06T16:32:25Z",
+          "CURRENT_MARK_TIMESTAMP": "2026-09-04T20:00:00.000Z",
+          "LAST_COMPLETED_OBSERVATION": {
+            "daily": "2026-09-04",
+            "weekly": "2026-08-28",
+            "monthly": "2026-08-31"
+          },
+          "COMPLETED_DAILY_ROW_COUNT": 8458
+        }
+      ]
+    },
+    {
+      "FILE": "seasonality/TLT.json",
+      "SNAPSHOT_SHA256": "5c832cf5e62e74930d9b329c3a4f438779a33da973db0e47f9cdff123588a0db",
+      "SCHEMA_VERSION": "statistical-levels.snapshot.v3",
+      "GENERATOR_COMMIT": "5859071ac43180decec28570bc3859dd905734f7",
+      "GENERATOR_SHA256": "7beebd2acf006cd38809539155a5460c612885831df3381d47236c4d71092226",
+      "CONFIG_SHA256": "2f47dea33e1a06c1de4c4d06b8a4c2c9d3db5616a6f87be8b85c128dc960af06",
+      "GENERATED_AT": "2026-09-06T18:56:58Z",
+      "INPUTS": [
+        {
+          "ASSET": "TLT",
+          "RAW_SOURCE_ID": "STATISTICAL_LEVELS_RAW_AUTHORITY_20260906T163225Z/raw/TLT.json",
+          "RAW_SHA256": "1a65c08c4f5bbb78419d07637d54fff46d76c2530fd2e104a06203619d84b511",
+          "RAW_ROW_COUNT": 6065,
+          "RAW_FIRST_DATE": "2002-07-30",
+          "RAW_LAST_DATE": "2026-09-04",
+          "SNAPSHOT_CUTOFF": "2026-09-06T16:32:25Z",
+          "CURRENT_MARK_TIMESTAMP": "2026-09-04T20:00:00.000Z",
+          "LAST_COMPLETED_OBSERVATION": {
+            "daily": "2026-09-04",
+            "weekly": "2026-08-28",
+            "monthly": "2026-08-31"
+          },
+          "COMPLETED_DAILY_ROW_COUNT": 6065
+        }
+      ]
+    },
+    {
+      "FILE": "seasonality/USO.json",
+      "SNAPSHOT_SHA256": "46d735829adfb005fcadca8309cd89a80bc112c137eeadc699e3a95235eca18f",
+      "SCHEMA_VERSION": "statistical-levels.snapshot.v3",
+      "GENERATOR_COMMIT": "5859071ac43180decec28570bc3859dd905734f7",
+      "GENERATOR_SHA256": "7beebd2acf006cd38809539155a5460c612885831df3381d47236c4d71092226",
+      "CONFIG_SHA256": "2f47dea33e1a06c1de4c4d06b8a4c2c9d3db5616a6f87be8b85c128dc960af06",
+      "GENERATED_AT": "2026-09-06T18:56:58Z",
+      "INPUTS": [
+        {
+          "ASSET": "USO",
+          "RAW_SOURCE_ID": "STATISTICAL_LEVELS_RAW_AUTHORITY_20260906T163225Z/raw/USO.json",
+          "RAW_SHA256": "2610de9869e6ba5771621d9dda9bc701f898a4d559dcd6af462c0c9016875a9b",
+          "RAW_ROW_COUNT": 5134,
+          "RAW_FIRST_DATE": "2006-04-10",
+          "RAW_LAST_DATE": "2026-09-04",
+          "SNAPSHOT_CUTOFF": "2026-09-06T16:32:25Z",
+          "CURRENT_MARK_TIMESTAMP": "2026-09-04T20:00:00.000Z",
+          "LAST_COMPLETED_OBSERVATION": {
+            "daily": "2026-09-04",
+            "weekly": "2026-08-28",
+            "monthly": "2026-08-31"
+          },
+          "COMPLETED_DAILY_ROW_COUNT": 5134
+        }
+      ]
+    },
+    {
+      "FILE": "seasonality/UUP.json",
+      "SNAPSHOT_SHA256": "2aacb8cf3b754b7b3aaf3b956adc767b4b11afc3af8fecb74d2c6bc157d13520",
+      "SCHEMA_VERSION": "statistical-levels.snapshot.v3",
+      "GENERATOR_COMMIT": "5859071ac43180decec28570bc3859dd905734f7",
+      "GENERATOR_SHA256": "7beebd2acf006cd38809539155a5460c612885831df3381d47236c4d71092226",
+      "CONFIG_SHA256": "2f47dea33e1a06c1de4c4d06b8a4c2c9d3db5616a6f87be8b85c128dc960af06",
+      "GENERATED_AT": "2026-09-06T18:56:58Z",
+      "INPUTS": [
+        {
+          "ASSET": "UUP",
+          "RAW_SOURCE_ID": "STATISTICAL_LEVELS_RAW_AUTHORITY_20260906T163225Z/raw/UUP.json",
+          "RAW_SHA256": "5ead84653405ff22095fbac21e63ef6d9a73bd8176be790a782b1f0aaea5848c",
+          "RAW_ROW_COUNT": 4911,
+          "RAW_FIRST_DATE": "2007-03-01",
+          "RAW_LAST_DATE": "2026-09-04",
+          "SNAPSHOT_CUTOFF": "2026-09-06T16:32:25Z",
+          "CURRENT_MARK_TIMESTAMP": "2026-09-04T20:00:00.000Z",
+          "LAST_COMPLETED_OBSERVATION": {
+            "daily": "2026-09-04",
+            "weekly": "2026-08-28",
+            "monthly": "2026-08-31"
+          },
+          "COMPLETED_DAILY_ROW_COUNT": 4911
+        }
+      ]
+    },
+    {
+      "FILE": "seasonality/VOO.json",
+      "SNAPSHOT_SHA256": "ac00f4a0c565334b7575b38adde6cfd0c880550fd974945ca07ddde879a8cd09",
+      "SCHEMA_VERSION": "statistical-levels.snapshot.v3",
+      "GENERATOR_COMMIT": "5859071ac43180decec28570bc3859dd905734f7",
+      "GENERATOR_SHA256": "7beebd2acf006cd38809539155a5460c612885831df3381d47236c4d71092226",
+      "CONFIG_SHA256": "2f47dea33e1a06c1de4c4d06b8a4c2c9d3db5616a6f87be8b85c128dc960af06",
+      "GENERATED_AT": "2026-09-06T18:56:58Z",
+      "INPUTS": [
+        {
+          "ASSET": "VOO",
+          "RAW_SOURCE_ID": "STATISTICAL_LEVELS_RAW_AUTHORITY_20260906T163225Z/raw/VOO.json",
+          "RAW_SHA256": "af77732acbd2916970f25eb605519de7f324aa82db00e67aca71449c96e44c09",
+          "RAW_ROW_COUNT": 4022,
+          "RAW_FIRST_DATE": "2010-09-09",
+          "RAW_LAST_DATE": "2026-09-04",
+          "SNAPSHOT_CUTOFF": "2026-09-06T16:32:25Z",
+          "CURRENT_MARK_TIMESTAMP": "2026-09-04T20:00:00.000Z",
+          "LAST_COMPLETED_OBSERVATION": {
+            "daily": "2026-09-04",
+            "weekly": "2026-08-28",
+            "monthly": "2026-08-31"
+          },
+          "COMPLETED_DAILY_ROW_COUNT": 4022
+        }
+      ]
+    },
+    {
+      "FILE": "seasonality/XLB.json",
+      "SNAPSHOT_SHA256": "37d02263bd76f2231de7eaa121c6b409331774200311129ba4faaee84943fff5",
+      "SCHEMA_VERSION": "statistical-levels.snapshot.v3",
+      "GENERATOR_COMMIT": "5859071ac43180decec28570bc3859dd905734f7",
+      "GENERATOR_SHA256": "7beebd2acf006cd38809539155a5460c612885831df3381d47236c4d71092226",
+      "CONFIG_SHA256": "2f47dea33e1a06c1de4c4d06b8a4c2c9d3db5616a6f87be8b85c128dc960af06",
+      "GENERATED_AT": "2026-09-06T18:56:58Z",
+      "INPUTS": [
+        {
+          "ASSET": "XLB",
+          "RAW_SOURCE_ID": "STATISTICAL_LEVELS_RAW_AUTHORITY_20260906T163225Z/raw/XLB.json",
+          "RAW_SHA256": "fa945f6b9fdeb19385d390cfa4f714e13e9deb16658c55ef9388bc022d83798a",
+          "RAW_ROW_COUNT": 6968,
+          "RAW_FIRST_DATE": "1998-12-22",
+          "RAW_LAST_DATE": "2026-09-04",
+          "SNAPSHOT_CUTOFF": "2026-09-06T16:32:25Z",
+          "CURRENT_MARK_TIMESTAMP": "2026-09-04T20:00:00.000Z",
+          "LAST_COMPLETED_OBSERVATION": {
+            "daily": "2026-09-04",
+            "weekly": "2026-08-28",
+            "monthly": "2026-08-31"
+          },
+          "COMPLETED_DAILY_ROW_COUNT": 6968
+        }
+      ]
+    },
+    {
+      "FILE": "seasonality/XLC.json",
+      "SNAPSHOT_SHA256": "e4a6f672247e4ae7d10ca9411b7061fe241d62e8ed01307732f67c33a81630b7",
+      "SCHEMA_VERSION": "statistical-levels.snapshot.v3",
+      "GENERATOR_COMMIT": "5859071ac43180decec28570bc3859dd905734f7",
+      "GENERATOR_SHA256": "7beebd2acf006cd38809539155a5460c612885831df3381d47236c4d71092226",
+      "CONFIG_SHA256": "2f47dea33e1a06c1de4c4d06b8a4c2c9d3db5616a6f87be8b85c128dc960af06",
+      "GENERATED_AT": "2026-09-06T18:56:58Z",
+      "INPUTS": [
+        {
+          "ASSET": "XLC",
+          "RAW_SOURCE_ID": "STATISTICAL_LEVELS_RAW_AUTHORITY_20260906T163225Z/raw/XLC.json",
+          "RAW_SHA256": "d338eea25205ddf1aeaaef280c8eb9aa797a8c6c4194d0f001e09c25932b98cc",
+          "RAW_ROW_COUNT": 2065,
+          "RAW_FIRST_DATE": "2018-06-19",
+          "RAW_LAST_DATE": "2026-09-04",
+          "SNAPSHOT_CUTOFF": "2026-09-06T16:32:25Z",
+          "CURRENT_MARK_TIMESTAMP": "2026-09-04T20:00:00.000Z",
+          "LAST_COMPLETED_OBSERVATION": {
+            "daily": "2026-09-04",
+            "weekly": "2026-08-28",
+            "monthly": "2026-08-31"
+          },
+          "COMPLETED_DAILY_ROW_COUNT": 2065
+        }
+      ]
+    },
+    {
+      "FILE": "seasonality/XLE.json",
+      "SNAPSHOT_SHA256": "a0c7338ed0667b842f322f59e07e69673aa13d3493e5eacb998b6d5a77dcbc76",
+      "SCHEMA_VERSION": "statistical-levels.snapshot.v3",
+      "GENERATOR_COMMIT": "5859071ac43180decec28570bc3859dd905734f7",
+      "GENERATOR_SHA256": "7beebd2acf006cd38809539155a5460c612885831df3381d47236c4d71092226",
+      "CONFIG_SHA256": "2f47dea33e1a06c1de4c4d06b8a4c2c9d3db5616a6f87be8b85c128dc960af06",
+      "GENERATED_AT": "2026-09-06T18:56:58Z",
+      "INPUTS": [
+        {
+          "ASSET": "XLE",
+          "RAW_SOURCE_ID": "STATISTICAL_LEVELS_RAW_AUTHORITY_20260906T163225Z/raw/XLE.json",
+          "RAW_SHA256": "3a9ae9ed8d0fc4fa27a94b6bcb3e4216264d3cbec15531e2e821e5c16aa1b6ee",
+          "RAW_ROW_COUNT": 6968,
+          "RAW_FIRST_DATE": "1998-12-22",
+          "RAW_LAST_DATE": "2026-09-04",
+          "SNAPSHOT_CUTOFF": "2026-09-06T16:32:25Z",
+          "CURRENT_MARK_TIMESTAMP": "2026-09-04T20:00:00.000Z",
+          "LAST_COMPLETED_OBSERVATION": {
+            "daily": "2026-09-04",
+            "weekly": "2026-08-28",
+            "monthly": "2026-08-31"
+          },
+          "COMPLETED_DAILY_ROW_COUNT": 6968
+        }
+      ]
+    },
+    {
+      "FILE": "seasonality/XLF.json",
+      "SNAPSHOT_SHA256": "5108fc9033efddab00da0ab465f21d9e02047260e181799829d04e1a04c9d985",
+      "SCHEMA_VERSION": "statistical-levels.snapshot.v3",
+      "GENERATOR_COMMIT": "5859071ac43180decec28570bc3859dd905734f7",
+      "GENERATOR_SHA256": "7beebd2acf006cd38809539155a5460c612885831df3381d47236c4d71092226",
+      "CONFIG_SHA256": "2f47dea33e1a06c1de4c4d06b8a4c2c9d3db5616a6f87be8b85c128dc960af06",
+      "GENERATED_AT": "2026-09-06T18:56:58Z",
+      "INPUTS": [
+        {
+          "ASSET": "XLF",
+          "RAW_SOURCE_ID": "STATISTICAL_LEVELS_RAW_AUTHORITY_20260906T163225Z/raw/XLF.json",
+          "RAW_SHA256": "d431249dd4b382242616824a39a9f83601f143c93f5dad93a54aaed77952d5de",
+          "RAW_ROW_COUNT": 6968,
+          "RAW_FIRST_DATE": "1998-12-22",
+          "RAW_LAST_DATE": "2026-09-04",
+          "SNAPSHOT_CUTOFF": "2026-09-06T16:32:25Z",
+          "CURRENT_MARK_TIMESTAMP": "2026-09-04T20:00:00.000Z",
+          "LAST_COMPLETED_OBSERVATION": {
+            "daily": "2026-09-04",
+            "weekly": "2026-08-28",
+            "monthly": "2026-08-31"
+          },
+          "COMPLETED_DAILY_ROW_COUNT": 6968
+        }
+      ]
+    },
+    {
+      "FILE": "seasonality/XLI.json",
+      "SNAPSHOT_SHA256": "ada0394f3d7c86ea3155ac363a4f15a208beb2a28307e72fad90876af12b05f1",
+      "SCHEMA_VERSION": "statistical-levels.snapshot.v3",
+      "GENERATOR_COMMIT": "5859071ac43180decec28570bc3859dd905734f7",
+      "GENERATOR_SHA256": "7beebd2acf006cd38809539155a5460c612885831df3381d47236c4d71092226",
+      "CONFIG_SHA256": "2f47dea33e1a06c1de4c4d06b8a4c2c9d3db5616a6f87be8b85c128dc960af06",
+      "GENERATED_AT": "2026-09-06T18:56:58Z",
+      "INPUTS": [
+        {
+          "ASSET": "XLI",
+          "RAW_SOURCE_ID": "STATISTICAL_LEVELS_RAW_AUTHORITY_20260906T163225Z/raw/XLI.json",
+          "RAW_SHA256": "2976b43a6ad8abd1e4fb866de6af337e18f05f093c17a80eb09933fbc4ea54ae",
+          "RAW_ROW_COUNT": 6968,
+          "RAW_FIRST_DATE": "1998-12-22",
+          "RAW_LAST_DATE": "2026-09-04",
+          "SNAPSHOT_CUTOFF": "2026-09-06T16:32:25Z",
+          "CURRENT_MARK_TIMESTAMP": "2026-09-04T20:00:00.000Z",
+          "LAST_COMPLETED_OBSERVATION": {
+            "daily": "2026-09-04",
+            "weekly": "2026-08-28",
+            "monthly": "2026-08-31"
+          },
+          "COMPLETED_DAILY_ROW_COUNT": 6968
+        }
+      ]
+    },
+    {
+      "FILE": "seasonality/XLK.json",
+      "SNAPSHOT_SHA256": "de194033502f3b9bafd1fc637d8ed3560cd857633237bf9a86eb90709573f179",
+      "SCHEMA_VERSION": "statistical-levels.snapshot.v3",
+      "GENERATOR_COMMIT": "5859071ac43180decec28570bc3859dd905734f7",
+      "GENERATOR_SHA256": "7beebd2acf006cd38809539155a5460c612885831df3381d47236c4d71092226",
+      "CONFIG_SHA256": "2f47dea33e1a06c1de4c4d06b8a4c2c9d3db5616a6f87be8b85c128dc960af06",
+      "GENERATED_AT": "2026-09-06T18:56:58Z",
+      "INPUTS": [
+        {
+          "ASSET": "XLK",
+          "RAW_SOURCE_ID": "STATISTICAL_LEVELS_RAW_AUTHORITY_20260906T163225Z/raw/XLK.json",
+          "RAW_SHA256": "3043ae7d83b09fb5805a2d664b9da1aeddf16b0dcf62cceb3db415c83c22d641",
+          "RAW_ROW_COUNT": 6968,
+          "RAW_FIRST_DATE": "1998-12-22",
+          "RAW_LAST_DATE": "2026-09-04",
+          "SNAPSHOT_CUTOFF": "2026-09-06T16:32:25Z",
+          "CURRENT_MARK_TIMESTAMP": "2026-09-04T20:00:00.000Z",
+          "LAST_COMPLETED_OBSERVATION": {
+            "daily": "2026-09-04",
+            "weekly": "2026-08-28",
+            "monthly": "2026-08-31"
+          },
+          "COMPLETED_DAILY_ROW_COUNT": 6968
+        }
+      ]
+    },
+    {
+      "FILE": "seasonality/XLP.json",
+      "SNAPSHOT_SHA256": "de3c58f952573d0a9beb7bd9e89d21244f0c455332f4faed14de1a07da64e90d",
+      "SCHEMA_VERSION": "statistical-levels.snapshot.v3",
+      "GENERATOR_COMMIT": "5859071ac43180decec28570bc3859dd905734f7",
+      "GENERATOR_SHA256": "7beebd2acf006cd38809539155a5460c612885831df3381d47236c4d71092226",
+      "CONFIG_SHA256": "2f47dea33e1a06c1de4c4d06b8a4c2c9d3db5616a6f87be8b85c128dc960af06",
+      "GENERATED_AT": "2026-09-06T18:56:58Z",
+      "INPUTS": [
+        {
+          "ASSET": "XLP",
+          "RAW_SOURCE_ID": "STATISTICAL_LEVELS_RAW_AUTHORITY_20260906T163225Z/raw/XLP.json",
+          "RAW_SHA256": "cfd58f5a83331349141272c92fbcbc74c5f68ed695b031aa2e384996e7d6c048",
+          "RAW_ROW_COUNT": 6968,
+          "RAW_FIRST_DATE": "1998-12-22",
+          "RAW_LAST_DATE": "2026-09-04",
+          "SNAPSHOT_CUTOFF": "2026-09-06T16:32:25Z",
+          "CURRENT_MARK_TIMESTAMP": "2026-09-04T20:00:00.000Z",
+          "LAST_COMPLETED_OBSERVATION": {
+            "daily": "2026-09-04",
+            "weekly": "2026-08-28",
+            "monthly": "2026-08-31"
+          },
+          "COMPLETED_DAILY_ROW_COUNT": 6968
+        }
+      ]
+    },
+    {
+      "FILE": "seasonality/XLRE.json",
+      "SNAPSHOT_SHA256": "70835995077ad17a737597a22190b59ea16503c686273137ebd311557106931c",
+      "SCHEMA_VERSION": "statistical-levels.snapshot.v3",
+      "GENERATOR_COMMIT": "5859071ac43180decec28570bc3859dd905734f7",
+      "GENERATOR_SHA256": "7beebd2acf006cd38809539155a5460c612885831df3381d47236c4d71092226",
+      "CONFIG_SHA256": "2f47dea33e1a06c1de4c4d06b8a4c2c9d3db5616a6f87be8b85c128dc960af06",
+      "GENERATED_AT": "2026-09-06T18:56:58Z",
+      "INPUTS": [
+        {
+          "ASSET": "XLRE",
+          "RAW_SOURCE_ID": "STATISTICAL_LEVELS_RAW_AUTHORITY_20260906T163225Z/raw/XLRE.json",
+          "RAW_SHA256": "bf2e9826c054ab861b6c3eaf05f85247f66a647df855a828f02a656de09861f4",
+          "RAW_ROW_COUNT": 2743,
+          "RAW_FIRST_DATE": "2015-10-08",
+          "RAW_LAST_DATE": "2026-09-04",
+          "SNAPSHOT_CUTOFF": "2026-09-06T16:32:25Z",
+          "CURRENT_MARK_TIMESTAMP": "2026-09-04T20:00:00.000Z",
+          "LAST_COMPLETED_OBSERVATION": {
+            "daily": "2026-09-04",
+            "weekly": "2026-08-28",
+            "monthly": "2026-08-31"
+          },
+          "COMPLETED_DAILY_ROW_COUNT": 2743
+        }
+      ]
+    },
+    {
+      "FILE": "seasonality/XLU.json",
+      "SNAPSHOT_SHA256": "9695131841ef9d4a669d12a6c05b661934d14b5074ea2fe7357626e0669bd2d9",
+      "SCHEMA_VERSION": "statistical-levels.snapshot.v3",
+      "GENERATOR_COMMIT": "5859071ac43180decec28570bc3859dd905734f7",
+      "GENERATOR_SHA256": "7beebd2acf006cd38809539155a5460c612885831df3381d47236c4d71092226",
+      "CONFIG_SHA256": "2f47dea33e1a06c1de4c4d06b8a4c2c9d3db5616a6f87be8b85c128dc960af06",
+      "GENERATED_AT": "2026-09-06T18:56:58Z",
+      "INPUTS": [
+        {
+          "ASSET": "XLU",
+          "RAW_SOURCE_ID": "STATISTICAL_LEVELS_RAW_AUTHORITY_20260906T163225Z/raw/XLU.json",
+          "RAW_SHA256": "5492b4c6f01153e12750ec2142f438266dcba982e5713d79b3d24e37a3f4eba4",
+          "RAW_ROW_COUNT": 6968,
+          "RAW_FIRST_DATE": "1998-12-22",
+          "RAW_LAST_DATE": "2026-09-04",
+          "SNAPSHOT_CUTOFF": "2026-09-06T16:32:25Z",
+          "CURRENT_MARK_TIMESTAMP": "2026-09-04T20:00:00.000Z",
+          "LAST_COMPLETED_OBSERVATION": {
+            "daily": "2026-09-04",
+            "weekly": "2026-08-28",
+            "monthly": "2026-08-31"
+          },
+          "COMPLETED_DAILY_ROW_COUNT": 6968
+        }
+      ]
+    },
+    {
+      "FILE": "seasonality/XLV.json",
+      "SNAPSHOT_SHA256": "4373fff29d5849e3268258d7d3ac06b2249b406f1e1370e173576fa93a0f35a8",
+      "SCHEMA_VERSION": "statistical-levels.snapshot.v3",
+      "GENERATOR_COMMIT": "5859071ac43180decec28570bc3859dd905734f7",
+      "GENERATOR_SHA256": "7beebd2acf006cd38809539155a5460c612885831df3381d47236c4d71092226",
+      "CONFIG_SHA256": "2f47dea33e1a06c1de4c4d06b8a4c2c9d3db5616a6f87be8b85c128dc960af06",
+      "GENERATED_AT": "2026-09-06T18:56:58Z",
+      "INPUTS": [
+        {
+          "ASSET": "XLV",
+          "RAW_SOURCE_ID": "STATISTICAL_LEVELS_RAW_AUTHORITY_20260906T163225Z/raw/XLV.json",
+          "RAW_SHA256": "749e53b2d29013076b2c37ca0cebd668b3ca5d5a6e3aafa16d93fe54ad38bc8f",
+          "RAW_ROW_COUNT": 6968,
+          "RAW_FIRST_DATE": "1998-12-22",
+          "RAW_LAST_DATE": "2026-09-04",
+          "SNAPSHOT_CUTOFF": "2026-09-06T16:32:25Z",
+          "CURRENT_MARK_TIMESTAMP": "2026-09-04T20:00:00.000Z",
+          "LAST_COMPLETED_OBSERVATION": {
+            "daily": "2026-09-04",
+            "weekly": "2026-08-28",
+            "monthly": "2026-08-31"
+          },
+          "COMPLETED_DAILY_ROW_COUNT": 6968
+        }
+      ]
+    },
+    {
+      "FILE": "seasonality/XLY.json",
+      "SNAPSHOT_SHA256": "0448c902724047911d667ca5520058d5d8d0a2b002f97be7f86a4a4342c16e4a",
+      "SCHEMA_VERSION": "statistical-levels.snapshot.v3",
+      "GENERATOR_COMMIT": "5859071ac43180decec28570bc3859dd905734f7",
+      "GENERATOR_SHA256": "7beebd2acf006cd38809539155a5460c612885831df3381d47236c4d71092226",
+      "CONFIG_SHA256": "2f47dea33e1a06c1de4c4d06b8a4c2c9d3db5616a6f87be8b85c128dc960af06",
+      "GENERATED_AT": "2026-09-06T18:56:58Z",
+      "INPUTS": [
+        {
+          "ASSET": "XLY",
+          "RAW_SOURCE_ID": "STATISTICAL_LEVELS_RAW_AUTHORITY_20260906T163225Z/raw/XLY.json",
+          "RAW_SHA256": "59d59491b45e6fe9833d10cfef93eb119f2a8ef5dab40b3cad154913ce368e31",
+          "RAW_ROW_COUNT": 6968,
+          "RAW_FIRST_DATE": "1998-12-22",
+          "RAW_LAST_DATE": "2026-09-04",
+          "SNAPSHOT_CUTOFF": "2026-09-06T16:32:25Z",
+          "CURRENT_MARK_TIMESTAMP": "2026-09-04T20:00:00.000Z",
+          "LAST_COMPLETED_OBSERVATION": {
+            "daily": "2026-09-04",
+            "weekly": "2026-08-28",
+            "monthly": "2026-08-31"
+          },
+          "COMPLETED_DAILY_ROW_COUNT": 6968
+        }
+      ]
+    }
+  ]
+}

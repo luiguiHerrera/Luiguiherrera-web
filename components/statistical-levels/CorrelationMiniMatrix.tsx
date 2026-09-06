@@ -1,5 +1,5 @@
 import { Fragment } from "react";
-import { correlation } from "@/lib/statistical-levels/calculations";
+import { datedCorrelation, canonicalPeriodDate } from "@/lib/statistical-levels/defect-repairs.mjs";
 import type { AssetStatRecord, StatisticalFrequency, StatisticalWindow } from "@/lib/statistical-levels/types";
 
 type CorrelationMiniMatrixProps = {
@@ -46,13 +46,16 @@ export function CorrelationMiniMatrix({ assets, frequency, window }: Correlation
             <Fragment key={row.ticker}>
               <div className="border-b border-line p-2 text-sm font-semibold text-ink">{row.ticker}</div>
               {available.map((column) => {
-                const value =
-                  row.ticker === column.ticker
-                    ? 1
-                    : correlation(row.frequencies[frequency].windows[window].windowReturns, column.frequencies[frequency].windows[window].windowReturns);
+                const dated = (asset: AssetStatRecord) => {
+                  const data = asset.frequencies[frequency];
+                  const history = data.drawdownHistory ?? [];
+                  const observations = history.slice(1).map((p, i) => ({date: canonicalPeriodDate(p.date, frequency)!, value: p.close / history[i].close - 1}));
+                  return window === "Full" ? observations : observations.slice(-Math.max(0, data.windows[window].sessions - 1));
+                };
+                const { value, n } = datedCorrelation(dated(row), dated(column));
                 return (
                   <div key={`${row.ticker}-${column.ticker}`} className={`border-b border-line p-2 text-center text-sm font-semibold ${tone(value)}`}>
-                    {value === null ? "n/d" : value.toFixed(2)}
+                    {value === null ? "n/d" : value.toFixed(2)} · N {n}
                   </div>
                 );
               })}

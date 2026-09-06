@@ -90,17 +90,5 @@ export function maxDrawdown(closes: number[]) {
   return drawdowns.length ? Math.min(...drawdowns) : null;
 }
 
-export function correlation(first: number[], second: number[]) {
-  const length = Math.min(first.length, second.length);
-  if (length < 20) return null;
-  const x = first.slice(first.length - length);
-  const y = second.slice(second.length - length);
-  const xMean = mean(x);
-  const yMean = mean(y);
-  if (xMean === null || yMean === null) return null;
-  const numerator = x.reduce((sum, value, index) => sum + (value - xMean) * (y[index] - yMean), 0);
-  const xDenominator = Math.sqrt(x.reduce((sum, value) => sum + (value - xMean) ** 2, 0));
-  const yDenominator = Math.sqrt(y.reduce((sum, value) => sum + (value - yMean) ** 2, 0));
-  if (!xDenominator || !yDenominator) return null;
-  return numerator / (xDenominator * yDenominator);
-}
+// SL-DEF-006: undated arrays are not a valid correlation input.
+export { datedCorrelation as correlation } from "./defect-repairs.mjs";

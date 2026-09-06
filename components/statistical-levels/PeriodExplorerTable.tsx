@@ -121,6 +121,7 @@ export function PeriodExplorerTable({ asset, frequency, locale = "es" }: PeriodE
         <button
           type="button"
           onClick={() => setOpen((value) => !value)}
+          aria-expanded={open}
           className="min-h-9 w-fit border border-line px-4 text-sm font-semibold text-ink transition hover:border-ink focus:outline-none focus:ring-2 focus:ring-ink/20"
         >
           {open ? (locale === "en" ? "Hide explorer" : "Ocultar explorador") : (locale === "en" ? "Show period explorer" : "Ver explorador de periodos")}
@@ -143,13 +144,14 @@ export function PeriodExplorerTable({ asset, frequency, locale = "es" }: PeriodE
                 key={key}
                 type="button"
                 onClick={() => setFilter(key)}
+                aria-pressed={filter === key}
                 className={`min-h-9 px-3 text-xs font-semibold transition ${filter === key ? "bg-ink text-white" : "text-muted hover:text-ink"}`}
               >
                 {label}
               </button>
             ))}
           </div>
-          <div className="mt-4 overflow-x-auto">
+          <div className="mt-4 overflow-x-auto" tabIndex={0} role="region" aria-label={locale === "en" ? "Period table" : "Tabla de periodos"}>
             <table className="w-full min-w-[980px] border-collapse text-left text-[13px]">
               <thead className="text-muted">
                 <tr className="border-b border-line">

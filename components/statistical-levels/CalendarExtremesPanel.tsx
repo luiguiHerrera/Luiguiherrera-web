@@ -24,7 +24,7 @@ function reading(balance: number | null, locale: "es" | "en") {
 }
 
 function formatCalendarLabel(label: string, frequency: StatisticalFrequency, locale: "es" | "en") {
-  if (frequency !== "weekly") return label;
+  if (frequency !== "weekly") return locale === "en" ? ({ Lunes: "Monday", Martes: "Tuesday", Miércoles: "Wednesday", Jueves: "Thursday", Viernes: "Friday", Sábado: "Saturday", Domingo: "Sunday" } as Record<string, string>)[label] ?? label : label;
 
   const weekRanges: Record<string, string> = {
     "Semana 1": "01-07",
@@ -57,7 +57,7 @@ export function CalendarExtremesPanel({ asset, frequency, locale = "es" }: Calen
     <section className="border border-line bg-panel p-4 md:p-5">
       <div className="flex flex-col gap-2 lg:flex-row lg:items-end lg:justify-between">
         <div>
-          <p className="text-xs font-semibold uppercase tracking-[0.16em] text-brass">Calendario</p>
+          <p className="text-xs font-semibold uppercase tracking-[0.16em] text-brass">{locale === "en" ? "Calendar" : "Calendario"}</p>
           <h2 className="mt-1 text-xl font-semibold text-ink">{locale === "en" ? "Calendar extremes" : "Extremos por calendario"}</h2>
         </div>
         <p className="max-w-xl text-sm leading-6 text-muted">
@@ -67,7 +67,7 @@ export function CalendarExtremesPanel({ asset, frequency, locale = "es" }: Calen
         </p>
       </div>
       <div className="mt-5 grid gap-5 lg:grid-cols-[1fr_17rem]">
-        <div className="overflow-x-auto">
+        <div className="overflow-x-auto" tabIndex={0} role="region" aria-label={locale === "en" ? "Calendar extremes" : "Extremos por calendario"}>
           <table className="w-full min-w-[780px] border-collapse text-left text-[13px]">
             <thead className="text-muted">
               <tr className="border-b border-line">
@@ -83,10 +83,10 @@ export function CalendarExtremesPanel({ asset, frequency, locale = "es" }: Calen
                 <tr key={item.label} className="border-b border-line/70">
                   <td className="py-3 pr-4 font-semibold text-ink">{formatCalendarLabel(item.label, frequency, locale)}</td>
                   <td className="py-3 pr-4">
-                    <CompactBar value={item.highRate} color="#6f8f7b" />
+                    <CompactBar value={item.highRate} color="#123b3d" />
                   </td>
                   <td className="py-3 pr-4">
-                    <CompactBar value={item.lowRate} color="#a86464" />
+                    <CompactBar value={item.lowRate} color="#9a7a44" />
                   </td>
                   <td className="py-3 pr-4 font-semibold text-ink">{formatPp(item.balance)}</td>
                   <td className="py-3 pr-4 text-muted">{reading(item.balance, locale)}</td>

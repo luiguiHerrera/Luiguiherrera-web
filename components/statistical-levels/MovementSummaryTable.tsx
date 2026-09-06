@@ -48,7 +48,7 @@ const englishHelp: Partial<Record<ChangeMoveMetric, string>> = {
   closeLocation: "Close position within the period range. 0 is near the low and 1 is near the high.",
 };
 
-const visibleMetrics: ChangeMoveMetric[] = ["change", "openGap", "highExtensionFromOpen", "lowExtensionFromOpen", "range", "closeLocation"];
+const visibleMetrics: ChangeMoveMetric[] = ["change", "openGap", "highExtensionFromOpen", "lowExtensionFromOpen", "highExtensionFromPrevClose", "lowExtensionFromPrevClose", "closeLocation", "upperFade", "lowerRecovery", "range"];
 const miniMetrics: ChangeMoveMetric[] = ["change", "openGap", "range", "closeLocation"];
 
 function formatStat(value: number | null, isRatio = true) {
@@ -87,7 +87,7 @@ export function MovementSummaryTable({ asset, frequency, locale = "es" }: Moveme
               </p>
               <div className="relative mt-4 h-2 bg-white">
                 <div className="absolute top-1/2 h-px w-full -translate-y-1/2 bg-[#d8d2ca]" />
-                <div className="absolute top-0 h-2 bg-[#cfdcd3]" style={{ left: `${left}%`, width: `${width}%` }} />
+                <div className="absolute top-0 h-2 bg-[#ccd7d2]" style={{ left: `${left}%`, width: `${width}%` }} />
                 {median !== null ? <div className="absolute top-1/2 h-4 w-px -translate-y-1/2 bg-ink" style={{ left: `${median}%` }} /> : null}
               </div>
               <div className="mt-2 flex justify-between text-xs text-muted">
@@ -98,16 +98,18 @@ export function MovementSummaryTable({ asset, frequency, locale = "es" }: Moveme
           );
         })}
       </div>
-      <div className="mt-5 overflow-x-auto">
+      <div className="mt-5 overflow-x-auto" tabIndex={0} role="region" aria-label={locale === "en" ? "Statistical table" : "Tabla estadística"}>
         <table className="w-full min-w-[780px] border-collapse text-left text-[13px]">
           <thead className="text-muted">
             <tr className="border-b border-line">
               <th className="py-2.5 pr-4 font-medium">{locale === "en" ? "Metric" : "Métrica"}</th>
               <th className="py-2.5 pr-4 font-medium">mean</th>
               <th className="py-2.5 pr-4 font-medium">std</th>
+              <th className="py-2.5 pr-4 font-medium">p10</th>
               <th className="py-2.5 pr-4 font-medium">p25</th>
               <th className="py-2.5 pr-4 font-medium">p50</th>
               <th className="py-2.5 pr-4 font-medium">p75</th>
+              <th className="py-2.5 pr-4 font-medium">p90</th>
               <th className="py-2.5 pr-4 font-medium">max</th>
               <th className="py-2.5 pr-4 font-medium">min</th>
             </tr>
@@ -124,9 +126,11 @@ export function MovementSummaryTable({ asset, frequency, locale = "es" }: Moveme
                   </td>
                   <td className="py-3 pr-4 text-muted">{formatStat(row?.mean ?? null, isRatio)}</td>
                   <td className="py-3 pr-4 text-muted">{formatStat(row?.std ?? null, isRatio)}</td>
+                  <td className="py-3 pr-4 text-muted">{formatStat(row?.p10 ?? null, isRatio)}</td>
                   <td className="py-3 pr-4 text-muted">{formatStat(row?.p25 ?? null, isRatio)}</td>
                   <td className="py-3 pr-4 text-muted">{formatStat(row?.p50 ?? null, isRatio)}</td>
                   <td className="py-3 pr-4 text-muted">{formatStat(row?.p75 ?? null, isRatio)}</td>
+                  <td className="py-3 pr-4 text-muted">{formatStat(row?.p90 ?? null, isRatio)}</td>
                   <td className="py-3 pr-4 text-muted">{formatStat(row?.max ?? null, isRatio)}</td>
                   <td className="py-3 pr-4 text-muted">{formatStat(row?.min ?? null, isRatio)}</td>
                 </tr>

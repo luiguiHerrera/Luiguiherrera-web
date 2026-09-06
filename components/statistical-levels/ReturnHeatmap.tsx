@@ -53,8 +53,8 @@ function color(value: number | null, maxAbs: number) {
   if (value === null) return "#f3f0eb";
   const intensity = Math.min(Math.abs(value) / maxAbs, 1);
   if (Math.abs(value) < maxAbs * 0.08) return "#e8e3dc";
-  if (value > 0) return `rgba(111, 143, 123, ${0.22 + intensity * 0.58})`;
-  return `rgba(168, 100, 100, ${0.22 + intensity * 0.58})`;
+  if (value > 0) return `rgba(18, 59, 61, ${0.22 + intensity * 0.58})`;
+  return `rgba(154, 122, 68, ${0.22 + intensity * 0.58})`;
 }
 
 function textTone(value: number | null, maxAbs: number) {

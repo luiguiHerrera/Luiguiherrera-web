@@ -1,5 +1,6 @@
-import { mkdir, writeFile } from "node:fs/promises";
+import { runOfflineCli } from "./statistical-levels-offline.mjs";
 import path from "node:path";
+import { canonicalPeriodDate, isCompletedPeriod, datedCorrelationEvidence } from "../lib/statistical-levels/defect-repairs.mjs";
 
 const outputPath = path.join(process.cwd(), "lib/statistical-levels/generated-data.ts");
 const generatedDir = path.join(process.cwd(), "lib/statistical-levels/generated");
@@ -136,28 +137,6 @@ function clampPrecision(value, digits = 4) {
   return value === null || value === undefined || !Number.isFinite(value) ? null : Number(value.toFixed(digits));
 }
 
-function correlation(first, second) {
-  const length = Math.min(first.length, second.length);
-  if (length < 20) return null;
-  const x = first.slice(-length).filter(Number.isFinite);
-  const y = second.slice(-length).filter(Number.isFinite);
-  if (x.length !== y.length || x.length < 20) return null;
-  const xMean = mean(x);
-  const yMean = mean(y);
-  if (xMean === null || yMean === null) return null;
-  let numerator = 0;
-  let xDenominator = 0;
-  let yDenominator = 0;
-  for (let index = 0; index < x.length; index += 1) {
-    const xDelta = x[index] - xMean;
-    const yDelta = y[index] - yMean;
-    numerator += xDelta * yDelta;
-    xDenominator += xDelta ** 2;
-    yDenominator += yDelta ** 2;
-  }
-  const denominator = Math.sqrt(xDenominator * yDenominator);
-  return denominator === 0 ? null : clampPrecision(numerator / denominator, 3);
-}
 
 function dateParts(dateString) {
   const date = new Date(`${dateString}T00:00:00Z`);
@@ -795,12 +774,13 @@ function buildWeeklySeasonalityCells(observations) {
   );
 }
 
-function seasonalityObservations(rows, frequency) {
+function seasonalityObservations(rows, frequency, asOf = new Date().toISOString()) {
   const periodRows = frequency === "daily" ? rows : aggregateRows(rows, frequency);
   const observations = [];
   for (let index = 1; index < periodRows.length; index += 1) {
     const previous = periodRows[index - 1];
     const current = periodRows[index];
+    if (!isCompletedPeriod(current.periodEnd, frequency, asOf)) continue;
     if (!previous?.adjustedClose || !current?.adjustedClose) continue;
     const returnValue = current.adjustedClose / previous.adjustedClose - 1;
     if (!Number.isFinite(returnValue)) continue;
@@ -830,11 +810,11 @@ function buildSeasonalityDimension(observations, cellBuilder) {
   };
 }
 
-function buildDailySeasonalityData(ticker, rows) {
+function buildDailySeasonalityData(ticker, rows, asOf = new Date().toISOString()) {
   const observationsByFrequency = {
-    daily: seasonalityObservations(rows, "daily"),
-    weekly: seasonalityObservations(rows, "weekly"),
-    monthly: seasonalityObservations(rows, "monthly"),
+    daily: seasonalityObservations(rows, "daily", asOf),
+    weekly: seasonalityObservations(rows, "weekly", asOf),
+    monthly: seasonalityObservations(rows, "monthly", asOf),
   };
   const windowEntries = seasonalityWindows.map((windowKey) => {
     const dailySessions = seasonalitySessions(windowKey, "daily");
@@ -864,6 +844,7 @@ function buildDailySeasonalityData(ticker, rows) {
 
   return {
     asset: ticker,
+    historicalSample: { asOf: asOf.slice(0, 10), policy: "completed_utc_calendar_periods", completedThrough: Object.fromEntries(Object.entries(observationsByFrequency).map(([frequency, observations]) => [frequency, observations.at(-1)?.date ?? null])) },
     windows: Object.fromEntries(windowEntries),
   };
 }
@@ -986,6 +967,7 @@ function buildFrequencyMetrics(rows, frequency) {
     distanceToMovingAverages,
     longMovingAverageKey: config.longKey,
     compactSeries: compactSeries(periodRows, config.chartLimit, config.movingAverages.long),
+    drawdownHistory: periodRows.map(row => ({ date: row.periodEnd, close: row.adjustedClose })),
     windows: Object.fromEntries(Object.entries(windows).map(([key, sizes]) => [key, buildWindowMetric(closes, sizes[frequency], config)])),
     changeMoves: buildChangeMoves(moves),
     openingLocation: buildOpeningLocation(moves),
@@ -1035,6 +1017,7 @@ function buildUnavailableFrequency(periods = 0) {
     distanceToMovingAverages: {},
     longMovingAverageKey: "MA200",
     compactSeries: [],
+    drawdownHistory: [],
     windows: Object.fromEntries(Object.keys(windows).map((key) => [key, unavailableWindow(periods)])),
     changeMoves,
     openingLocation: { range: [], close: [] },
@@ -1144,7 +1127,11 @@ function buildCorrelationSource(rows) {
   return Object.fromEntries(
     ["daily", "weekly", "monthly"].map((frequency) => {
       const periodRows = aggregateRows(rows, frequency);
-      return [frequency, periodReturns(periodRows.map((row) => row.adjustedClose))];
+      return [frequency, periodRows.slice(1).map((row, index) => ({
+        date: canonicalPeriodDate(row.periodEnd, frequency),
+        observedThrough: row.periodEnd,
+        value: periodRows[index].adjustedClose > 0 && row.adjustedClose > 0 ? row.adjustedClose / periodRows[index].adjustedClose - 1 : null,
+      }))];
     }),
   );
 }
@@ -1158,22 +1145,14 @@ function buildCorrelationMatrix(assets, sources, frequency, windowKey) {
       return [ticker, sessionLimit ? source.slice(-sessionLimit) : source];
     }),
   );
-  const values = Object.fromEntries(
-    tickers.map((rowTicker) => [
-      rowTicker,
-      Object.fromEntries(
-        tickers.map((columnTicker) => [
-          columnTicker,
-          rowTicker === columnTicker ? 1 : correlation(seriesByTicker[rowTicker] ?? [], seriesByTicker[columnTicker] ?? []),
-        ]),
-      ),
-    ]),
-  );
-
+  const pairs = Object.fromEntries(tickers.map(a => [a, Object.fromEntries(tickers.map(b => [b, datedCorrelationEvidence(seriesByTicker[a], seriesByTicker[b])]))]));
   return {
     tickers,
     minObservations: 20,
-    values,
+    alignment: "canonical_calendar_date",
+    values: Object.fromEntries(tickers.map(a => [a, Object.fromEntries(tickers.map(b => [b, pairs[a][b].value]))])),
+    effectiveThroughDate: Object.fromEntries(tickers.map(a => [a, Object.fromEntries(tickers.map(b => [b, pairs[a][b].effectiveThroughDate]))])),
+    matchedObservations: Object.fromEntries(tickers.map(a => [a, Object.fromEntries(tickers.map(b => [b, pairs[a][b].n]))])),
   };
 }
 
@@ -1186,28 +1165,7 @@ function buildCorrelationData(assets, sources) {
   );
 }
 
-const assets = [];
-const dailySeasonality = [];
-const correlationSources = new Map();
-for (const asset of universe) {
-  try {
-    const { rows, provider } = await fetchMarketData(asset);
-    const record = buildAssetRecord(asset, rows, provider);
-    assets.push(record);
-    dailySeasonality.push(buildDailySeasonalityData(asset.ticker, rows));
-    correlationSources.set(asset.ticker, buildCorrelationSource(rows));
-    console.log(
-      `[stat-levels] ${asset.ticker}: ${record.status} (${rows.length} daily rows, weekly ${record.frequencies.weekly.periods}, monthly ${record.frequencies.monthly.periods}, provider ${provider})`,
-    );
-  } catch (error) {
-    const message = error instanceof Error ? error.message : "unknown error";
-    console.warn(`[stat-levels] ${asset.ticker}: unavailable (${message})`);
-    assets.push(buildAssetRecord(asset, [], "unavailable"));
-    dailySeasonality.push(buildDailySeasonalityData(asset.ticker, []));
-    correlationSources.set(asset.ticker, buildCorrelationSource([]));
-  }
-}
-
+function createSnapshotManifest(assets, dailySeasonality, correlationSources) {
 const latestDates = assets.map((asset) => asset.lastDate).filter(Boolean).sort();
 const generatedAt = latestDates.at(-1) ?? new Date().toISOString().slice(0, 10);
 const snapshotGeneratedAt = new Date().toISOString().slice(0, 10);
@@ -1275,24 +1233,9 @@ const manifest = {
   },
 };
 
-await mkdir(path.dirname(outputPath), { recursive: true });
-await mkdir(assetOutputDir, { recursive: true });
-await mkdir(seasonalityOutputDir, { recursive: true });
-await writeFile(manifestOutputPath, JSON.stringify(manifest));
-await Promise.all(
-  assets.map((asset) => writeFile(path.join(assetOutputDir, `${asset.ticker}.json`), JSON.stringify(asset))),
-);
-await Promise.all(
-  dailySeasonality.map((assetSeasonality) => writeFile(path.join(seasonalityOutputDir, `${assetSeasonality.asset}.json`), JSON.stringify(assetSeasonality))),
-);
-await writeFile(
-  outputPath,
-  `import type { StatisticalLevelsGeneratedData } from "@/lib/statistical-levels/types";\n\nexport const statisticalLevelsData = ${JSON.stringify({ ...data, assets: [] })} as StatisticalLevelsGeneratedData;\n`,
-);
+return manifest;
+}
 
-console.log("[stat-levels] summary", summary);
-console.log("[stat-levels] unavailable reasons", unavailableReasons);
-console.log(`[stat-levels] wrote ${manifestOutputPath}`);
-console.log(`[stat-levels] wrote ${assetOutputDir}/{ticker}.json`);
-console.log(`[stat-levels] wrote ${seasonalityOutputDir}/{ticker}.json`);
-console.log(`[stat-levels] wrote ${outputPath}`);
+// Boundary retained for isolated formula tests. The executable entry point is offline-only.
+const assets = [];
+await runOfflineCli(import.meta.url, assets);

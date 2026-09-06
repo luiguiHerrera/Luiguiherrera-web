@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { closeLocationBucket } from "@/lib/statistical-levels/defect-repairs.mjs";
 import type { AssetStatRecord, OpeningCategoryStats, StatisticalFrequency } from "@/lib/statistical-levels/types";
 
 type OpeningLocationPanelProps = {
@@ -15,7 +16,10 @@ function formatPercent(value: number | null) {
 }
 
 function categoryLabel(value: string, locale: "es" | "en") {
-  if (locale === "es") return value;
+  if (locale === "es") return ({
+    "Above previous range": "Por encima del rango previo", "Inside previous range": "Dentro del rango previo", "Below previous range": "Por debajo del rango previo",
+    "Above previous close": "Por encima del cierre previo", "Near previous close": "Cerca del cierre previo", "Below previous close": "Por debajo del cierre previo",
+  } as Record<string, string>)[value] ?? value;
   const labels: Record<string, string> = {
     "Cierre cerca del mínimo": "Close near the low",
     "Cierre en zona media": "Close in the middle zone",
@@ -43,10 +47,10 @@ function CategoryBars({ locale, rows }: { locale: "es" | "en"; rows: OpeningCate
             <span className="text-muted">{formatPercent(row.proportion)}</span>
           </div>
           <div className="mt-2 h-2 bg-panelSoft">
-            <div className="h-2 bg-[#7f9386]" style={{ width: `${Math.max((row.proportion ?? 0) * 100, row.count ? 2 : 0)}%` }} />
+            <div className="h-2 bg-[#536e6b]" style={{ width: `${Math.max((row.proportion ?? 0) * 100, row.count ? 2 : 0)}%` }} />
           </div>
           <p className="mt-1 text-xs leading-5 text-muted">
-            {copy.behavior}: {formatPercent(row.averageForwardReturn)} · {copy.vol} {formatPercent(row.averageVolatility)} · {copy.positive} {formatPercent(row.positiveRate)}
+            N {row.count} · {copy.behavior}: {formatPercent(row.averageForwardReturn)} · {copy.vol} {formatPercent(row.averageVolatility)} · {copy.positive} {formatPercent(row.positiveRate)}
           </p>
         </div>
       ))}
@@ -78,22 +82,19 @@ export function OpeningLocationPanel({ asset, frequency, locale = "es" }: Openin
       : openToCloseAverage >= 0
         ? locale === "en" ? "In the recent sample, closes tend to finish above the open." : "En la muestra reciente, el cierre tiende a quedar por encima de la apertura."
         : locale === "en" ? "In the recent sample, closes tend to finish below the open." : "En la muestra reciente, el cierre tiende a quedar por debajo de la apertura.";
+  const validClosePeriods = periods.filter(row => closeLocationBucket(row.closeLocation) !== null);
+  const unavailableCloseCount = periods.length - validClosePeriods.length;
   const closeRows: OpeningCategoryStats[] = [
     { category: "Cierre cerca del mínimo", count: 0, proportion: 0, averageForwardReturn: null, averageVolatility: null, positiveRate: null },
     { category: "Cierre en zona media", count: 0, proportion: 0, averageForwardReturn: null, averageVolatility: null, positiveRate: null },
     { category: "Cierre cerca del máximo", count: 0, proportion: 0, averageForwardReturn: null, averageVolatility: null, positiveRate: null },
-  ].map((bucket) => {
-    const rows = periods.filter((row) => {
-      const closeLocation = row.closeLocation ?? 0.5;
-      if (bucket.category.includes("mínimo")) return closeLocation <= 0.33;
-      if (bucket.category.includes("máximo")) return closeLocation >= 0.67;
-      return closeLocation > 0.33 && closeLocation < 0.67;
-    });
+  ].map((bucket, bucketIndex) => {
+    const rows = validClosePeriods.filter(row => closeLocationBucket(row.closeLocation) === bucketIndex);
     const changes = rows.map((row) => row.change).filter((value): value is number => value !== null && Number.isFinite(value));
     return {
       category: bucket.category,
       count: rows.length,
-      proportion: periods.length ? rows.length / periods.length : 0,
+      proportion: validClosePeriods.length ? rows.length / validClosePeriods.length : null,
       averageForwardReturn: average(changes),
       averageVolatility: cleanAverage(rows.map((row) => row.range)),
       positiveRate: changes.length ? changes.filter((value) => value > 0).length / changes.length : null,
@@ -102,32 +103,33 @@ export function OpeningLocationPanel({ asset, frequency, locale = "es" }: Openin
   const allRows = [...(location?.range ?? []), ...(location?.close ?? [])];
   const mostFrequentRange = [...(location?.range ?? [])].sort((a, b) => b.count - a.count)[0];
   const mostFrequentClose = [...(location?.close ?? [])].sort((a, b) => b.count - a.count)[0];
-  const mostFrequentCloseLocation = [...closeRows].sort((a, b) => b.count - a.count)[0];
-  const strongestCloseLocation = [...closeRows].sort((a, b) => (b.averageForwardReturn ?? -Infinity) - (a.averageForwardReturn ?? -Infinity))[0];
-  const weakestCloseLocation = [...closeRows].sort((a, b) => (a.averageForwardReturn ?? Infinity) - (b.averageForwardReturn ?? Infinity))[0];
+  const mostFrequentCloseLocation = closeRows.filter(row => row.count > 0).sort((a, b) => b.count - a.count)[0];
+  const strongestCloseLocation = closeRows.filter(row => row.averageForwardReturn !== null).sort((a, b) => (b.averageForwardReturn ?? -Infinity) - (a.averageForwardReturn ?? -Infinity))[0];
+  const weakestCloseLocation = closeRows.filter(row => row.averageForwardReturn !== null).sort((a, b) => (a.averageForwardReturn ?? Infinity) - (b.averageForwardReturn ?? Infinity))[0];
   const highestReturn = [...allRows].sort((a, b) => (b.averageForwardReturn ?? -Infinity) - (a.averageForwardReturn ?? -Infinity))[0];
   const lowestReturn = [...allRows].sort((a, b) => (a.averageForwardReturn ?? Infinity) - (b.averageForwardReturn ?? Infinity))[0];
   return (
     <section className="border border-line bg-panel p-4 md:p-5">
-      <div className="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
+      <div className="flex flex-col gap-3 xl:flex-row xl:items-end xl:justify-between">
         <div>
-          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-brass">Opening / Close location</p>
+          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-brass">{locale === "en" ? "Opening / Close location" : "Ubicación de apertura y cierre"}</p>
           <h2 className="mt-2 text-xl font-semibold text-ink">{mode === "opening" ? (locale === "en" ? "Opening location" : "Ubicación de apertura") : (locale === "en" ? "Close location" : "Ubicación de cierre")}</h2>
           <p className="mt-2 max-w-3xl text-sm leading-6 text-muted">
             {mode === "opening"
-              ? locale === "en" ? "Opening location places the current open against the prior range and prior close." : "Opening location ubica la apertura actual frente al rango y al cierre previos."
-              : locale === "en" ? "Close location places each close inside its own period high-low range. Use the session summary for close versus open." : "Close location ubica cada cierre dentro del máximo-mínimo de su propio periodo. Para comparar cierre contra apertura, revisa el resumen de sesión."}
+              ? locale === "en" ? "Opening location places the current open against the prior range and prior close." : "La ubicación de apertura sitúa la apertura actual frente al rango y al cierre previos."
+              : locale === "en" ? "Close location places each close inside its own period high-low range. Use the session summary for close versus open." : "La ubicación de cierre sitúa cada cierre dentro del máximo-mínimo de su propio periodo. Para comparar cierre contra apertura, revisa el resumen de sesión."}
           </p>
         </div>
         <div className="flex w-full border border-line bg-panelSoft p-1 sm:w-fit">
           {[
-            ["opening", "Opening location"],
-            ["close", "Close location"],
+            ["opening", locale === "en" ? "Opening location" : "Ubicación de apertura"],
+            ["close", locale === "en" ? "Close location" : "Ubicación de cierre"],
           ].map(([key, label]) => (
             <button
               key={key}
               type="button"
               onClick={() => setMode(key as "opening" | "close")}
+              aria-pressed={mode === key}
               className={`min-h-9 flex-1 px-3 text-xs font-semibold transition sm:flex-none ${mode === key ? "bg-ink text-white" : "text-muted hover:text-ink"}`}
             >
               {label}
@@ -139,7 +141,7 @@ export function OpeningLocationPanel({ asset, frequency, locale = "es" }: Openin
         {[
           [locale === "en" ? "Session vs open" : "Sesión vs apertura", locale === "en" ? "Average close/open return" : "Retorno medio cierre/apertura", formatPercent(openToCloseAverage)],
           [locale === "en" ? "Closes above open" : "Cierres sobre apertura", locale === "en" ? "Share of periods" : "Proporción de periodos", formatPercent(closeAboveOpenRate)],
-          [locale === "en" ? "Brief reading" : "Lectura breve", "Open to Close", openToCloseReading],
+          [locale === "en" ? "Brief reading" : "Lectura breve", `${locale === "en" ? "Open to close" : "Cierre frente a apertura"} · N ${openToCloseReturns.length}`, openToCloseReading],
         ].map(([label, detail, value]) => (
           <div key={label} className="border border-line bg-panelSoft p-3">
             <p className="text-[11px] uppercase tracking-[0.11em] text-muted">{label}</p>
@@ -150,6 +152,7 @@ export function OpeningLocationPanel({ asset, frequency, locale = "es" }: Openin
       </div>
       {mode === "close" ? (
         <>
+          <p className="mt-4 text-xs text-muted" data-close-sample>{locale === "en" ? "Valid close locations" : "Ubicaciones de cierre válidas"}: N {validClosePeriods.length} · {locale === "en" ? "Unavailable (excluded)" : "No disponibles (excluidas)"}: {unavailableCloseCount}. {locale === "en" ? "Distribution uses only valid locations; each bucket reports its own N." : "La distribución usa solo ubicaciones válidas; cada grupo muestra su propio N."}</p>
           <div className="mt-5 grid gap-3 md:grid-cols-3">
             {[
               [locale === "en" ? "Highest frequency" : "Mayor frecuencia", categoryLabel(mostFrequentCloseLocation?.category ?? "n/d", locale), formatPercent(mostFrequentCloseLocation?.proportion ?? null)],
@@ -164,7 +167,7 @@ export function OpeningLocationPanel({ asset, frequency, locale = "es" }: Openin
             ))}
           </div>
           <div className="mt-5 border border-line bg-panelSoft p-4">
-            {periods.length ? (
+            {validClosePeriods.length ? (
               <>
                 <h3 className="text-sm font-semibold text-ink">{locale === "en" ? "Close distribution inside the range" : "Distribución del cierre dentro del rango"}</h3>
                 <div className="mt-4">
@@ -172,7 +175,7 @@ export function OpeningLocationPanel({ asset, frequency, locale = "es" }: Openin
                 </div>
               </>
             ) : (
-              <p className="text-sm leading-6 text-muted">{locale === "en" ? "Close location is pending enough data." : "Close location pendiente de datos suficientes."}</p>
+              <p className="text-sm leading-6 text-muted">{locale === "en" ? "Close location unavailable. No valid observations; no category or historical ranking can be inferred." : "Ubicación de cierre no disponible. Sin observaciones válidas; no se puede inferir una categoría ni una clasificación histórica."}</p>
             )}
           </div>
         </>

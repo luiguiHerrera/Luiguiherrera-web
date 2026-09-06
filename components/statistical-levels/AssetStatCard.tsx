@@ -1,3 +1,4 @@
+import { dailyReturnAliases } from "@/lib/statistical-levels/defect-repairs.mjs";
 import { RiskPill } from "@/components/ui/RiskPill";
 import { MetricHelpTooltip } from "@/components/ui/MetricHelpTooltip";
 import { PercentileRangeBar } from "@/components/statistical-levels/PercentileRangeBar";
@@ -117,7 +118,7 @@ export function AssetStatCard({ asset, frequency, locale = "es", window }: Asset
             <RiskPill label={statusLabel(asset.status, locale)} tone={statusTone(asset.status)} />
           </div>
           <p className="mt-1 text-sm leading-6 text-muted">{displayStatName(asset.ticker, asset.name)}</p>
-          <p className="mt-1 text-xs uppercase tracking-[0.14em] text-brass">{asset.category} · {(locale === "en" ? englishFrequencyLabels : frequencyLabels)[frequency]}</p>
+          <p className="mt-1 text-xs uppercase tracking-[0.14em] text-brass">{locale === "en" ? ({ "Índices / ETFs": "Indices / ETFs", "Bonos": "Bonds", "Oro y materias primas": "Gold & commodities", "Sectores": "Sectors", "Temáticos": "Thematic", "Cripto": "Crypto", "Internacional": "International" })[asset.category] : asset.category} · {(locale === "en" ? englishFrequencyLabels : frequencyLabels)[frequency]}</p>
         </div>
         <div className="text-left sm:text-right">
           <p className="text-xs uppercase tracking-[0.14em] text-muted">{copy.latestClose}</p>
@@ -128,6 +129,7 @@ export function AssetStatCard({ asset, frequency, locale = "es", window }: Asset
 
       <div className="mt-5">
         <StatBandsChart series={frequencyData.compactSeries} locale={locale} />
+        <p className="mt-1 text-xs text-muted">{frequencyData.longMovingAverageKey} · {frequencyData.compactSeries[0]?.date ?? "n/d"} – {frequencyData.compactSeries.at(-1)?.date ?? "n/d"}</p>
       </div>
 
       <div className="mt-5 grid gap-4 lg:grid-cols-[1fr_1fr]">
@@ -152,7 +154,7 @@ export function AssetStatCard({ asset, frequency, locale = "es", window }: Asset
             <span className="font-semibold text-ink">{formatPercent(metric.currentDrawdown)}</span>
           </div>
           <div className="mt-3 h-2 bg-white">
-            <div className="h-2 bg-[#a86464]" style={{ width: `${drawdownWidth(metric.currentDrawdown)}%` }} />
+            <div className="h-2 bg-[#9a7a44]" style={{ width: `${drawdownWidth(metric.currentDrawdown)}%` }} />
           </div>
           <p className="mt-3 text-xs text-muted">{copy.annualizedVol} {formatPercent(metric.annualizedVolatilityWindow)}</p>
         </div>
@@ -182,11 +184,16 @@ export function AssetStatCard({ asset, frequency, locale = "es", window }: Asset
               .replace("Historial suficiente para frecuencia", "Sufficient history for")
               .replace("Datos limitados para frecuencia", "Limited data for")
               .replace("Sin datos suficientes para frecuencia", "Not enough data for")
-              .replace("diaria", "daily frequency")
+              .replace("diaria", "daily frequency").replace("diario", "daily frequency").replace("semanal", "weekly frequency").replace("mensual", "monthly frequency").replace("Historial limitado para esta frecuencia:", "Limited history for this frequency:").replace("periodos.", "periods.")
               .replace("por semana", "weekly frequency")
               .replace("mensual", "monthly frequency")
           : frequencyData.statusNote}
       </p>
+      <details id="sl-return-aliases" className="mt-4 border-t border-line pt-3">
+        <summary className="cursor-pointer text-sm font-semibold">{locale === "en" ? "Daily returns: exact session counts" : "Retornos diarios: número exacto de sesiones"}</summary>
+        <p className="mt-2 text-xs text-muted">{locale === "en" ? "Adjusted-close returns over observed daily sessions. These are session counts, including weekends for crypto, rather than calendar durations." : "Retornos de cierre ajustado sobre sesiones diarias observadas. Son cantidades de sesiones, incluidos fines de semana en cripto, y no duraciones de calendario."}</p>
+        <dl className="mt-3 grid gap-2 text-sm">{dailyReturnAliases.map(alias => <div key={alias.alias} className="flex justify-between gap-3"><dt>{alias[locale]}</dt><dd>{formatPercent(asset.returns[alias.oldAlias])}</dd></div>)}</dl>
+      </details>
     </article>
   );
 }

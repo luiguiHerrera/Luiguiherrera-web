@@ -36,10 +36,10 @@ function formatPercent(value: number | null) {
 const monthlyScriptUrl = "https://www.tradingview.com/script/89W4VF7T/";
 
 function levelTone(key: string) {
-  if (key.includes("SHE")) return "border-[#6f8f7b]/40 bg-[#6f8f7b]/10 text-[#47604f]";
+  if (key.includes("SHE")) return "border-[#123b3d]/40 bg-[#123b3d]/10 text-[#123b3d]";
   if (key.includes("AHE")) return "border-[#b6905b]/40 bg-[#b6905b]/10 text-[#76562d]";
   if (key.includes("ALE")) return "border-[#b6905b]/40 bg-[#b6905b]/10 text-[#76562d]";
-  return "border-[#a86464]/40 bg-[#a86464]/10 text-[#7b3f3f]";
+  return "border-[#9a7a44]/40 bg-[#9a7a44]/10 text-[#76562d]";
 }
 
 function translateLevelText(value: string, locale: "es" | "en") {
@@ -169,8 +169,8 @@ function LevelLadder({ data, kind, locale, ticker }: { data: KeyStatisticalLevel
         </div>
       </div>
 
-      <div className="mt-5 max-w-full overflow-x-auto lg:overflow-visible">
-        <div className="w-full min-w-[760px] border border-line bg-panel p-4 lg:min-w-0">
+      <div className="mt-5 max-w-full overflow-x-auto">
+        <div className="w-full min-w-[760px] border border-line bg-panel p-4">
           <div className="flex items-center justify-between gap-4 text-[11px] font-semibold uppercase tracking-[0.12em] text-muted">
             <span>{formatPrice(min, ticker)}</span>
             <span>{copy.priceScale}</span>
@@ -227,7 +227,7 @@ function LevelLadder({ data, kind, locale, ticker }: { data: KeyStatisticalLevel
           rel="noopener noreferrer"
           className="mt-4 inline-flex border border-ink bg-ink px-3 py-2 text-xs font-semibold text-white transition hover:bg-panel hover:text-ink"
         >
-          Ver script Monthly Statistical Levels
+          {locale === "en" ? "View Monthly Statistical Levels script" : "Ver script Monthly Statistical Levels"}
         </a>
       ) : null}
     </div>

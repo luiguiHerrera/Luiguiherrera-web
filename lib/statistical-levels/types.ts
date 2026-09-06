@@ -118,7 +118,7 @@ export type OpeningCloseCategory = "Above previous close" | "Near previous close
 export type OpeningCategoryStats = {
   category: string;
   count: number;
-  proportion: number;
+  proportion: number | null;
   averageForwardReturn: number | null;
   averageVolatility: number | null;
   positiveRate: number | null;
@@ -243,6 +243,7 @@ export type DailySeasonalityWindowData = {
 };
 
 export type DailySeasonalityData = {
+  historicalSample?: { asOf: string; policy: "completed_utc_calendar_periods"; completedThrough: Record<StatisticalFrequency, string | null> };
   asset: string;
   windows: Record<SeasonalityWindow, DailySeasonalityWindowData>;
 };
@@ -274,6 +275,7 @@ export type FrequencyMetricSet = {
   distanceToMovingAverages: Record<string, number | null>;
   longMovingAverageKey: string;
   compactSeries: CompactPricePoint[];
+  drawdownHistory: Array<{ date: string; close: number }>;
   windows: Record<StatisticalWindow, WindowMetric>;
   changeMoves: Record<ChangeMoveMetric, MovementSummary>;
   openingLocation: {
@@ -287,6 +289,8 @@ export type FrequencyMetricSet = {
 };
 
 export type AssetStatRecord = {
+  currentMark?: { value: number; date: string; timestamp: string };
+  dataAuthority?: { baselineId: string; rawSha256: string; snapshotCutoff: string; historicalDriftCause: "UNEXPLAINED"; lastCompletedObservation: Record<StatisticalFrequency, string | null> };
   ticker: string;
   name: string;
   category: AssetCategory;
@@ -319,6 +323,7 @@ export type AssetStatRecord = {
 };
 
 export type AssetStatSummary = {
+  historicalThroughDate?: string;
   ticker: string;
   name: string;
   category: AssetCategory;
@@ -335,6 +340,9 @@ export type AssetStatSummary = {
 };
 
 export type CorrelationMatrix = {
+  effectiveThroughDate?: Record<string, Record<string, string | null>>;
+  alignment: "canonical_calendar_date";
+  matchedObservations: Record<string, Record<string, number>>;
   tickers: string[];
   minObservations: number;
   values: Record<string, Record<string, number | null>>;
@@ -343,6 +351,7 @@ export type CorrelationMatrix = {
 export type StatisticalLevelsCorrelation = Record<StatisticalFrequency, Record<CorrelationWindowKey, CorrelationMatrix>>;
 
 export type StatisticalLevelsManifest = {
+  baseline?: { id: string; cutoff: string; rawManifestSha256: string; schemaVersion: string; historicalDriftCause: "UNEXPLAINED" };
   generatedAt: string;
   snapshotGeneratedAt?: string;
   source: string;

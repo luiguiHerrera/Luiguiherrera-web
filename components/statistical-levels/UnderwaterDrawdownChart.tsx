@@ -1,3 +1,5 @@
+import { windowName } from "@/lib/statistical-levels/interpretation";
+import { StatisticalDisclosure } from "./StatisticalDisclosure";
 import type { AssetStatRecord, StatisticalFrequency, StatisticalWindow } from "@/lib/statistical-levels/types";
 
 type UnderwaterDrawdownChartProps = {
@@ -46,12 +48,13 @@ function periodLabel(frequency: StatisticalFrequency, locale: "es" | "en") {
 export function UnderwaterDrawdownChart({ asset, frequency, locale = "es", window }: UnderwaterDrawdownChartProps) {
   const data = asset?.frequencies[frequency];
   const metric = data?.windows[window];
-  const series = data?.compactSeries ?? [];
+  const history = data?.drawdownHistory ?? [];
+  const series = metric?.available ? history.slice(-metric.sessions) : [];
   const drawdowns = calculateDrawdowns(series);
   const path = buildPath(drawdowns);
   const area = path ? `${path} L 100 8 L 0 8 Z` : "";
   const minDrawdown = Math.min(-0.01, ...drawdowns);
-  const periodCount = metric?.sessions ?? series.length;
+  const periodCount = series.length;
 
   const copy = locale === "en"
     ? {
@@ -89,7 +92,7 @@ export function UnderwaterDrawdownChart({ asset, frequency, locale = "es", windo
             {copy.body}
           </p>
           <p className="mt-1 text-xs leading-5 text-muted">
-            {copy.analyzedWindow}: {window}. {copy.calculatedOver} {periodCount} {periodLabel(frequency, locale)}.
+            {copy.analyzedWindow}: {windowName(window, locale)}. {copy.calculatedOver} {periodCount} {periodLabel(frequency, locale)}. {series[0]?.date ?? "n/d"} – {series.at(-1)?.date ?? "n/d"}.
           </p>
         </div>
         <div className="text-sm text-muted md:text-right">
@@ -97,12 +100,12 @@ export function UnderwaterDrawdownChart({ asset, frequency, locale = "es", windo
           <p>{copy.windowMaximum}: <span className="font-semibold text-ink">{formatPercent(metric?.maxDrawdown ?? null)}</span></p>
         </div>
       </div>
-      <div className="mt-5">
+      {series.length === 0 ? <p className="mt-5 text-sm text-muted">{locale === "en" ? "Unavailable: insufficient history for the selected window. N 0." : "No disponible: historial insuficiente para la ventana seleccionada. N 0."}</p> : <div className="mt-5">
         <svg viewBox="0 0 100 100" className="h-56 w-full" preserveAspectRatio="none" role="img" aria-label={copy.aria}>
           <rect x="0" y="0" width="100" height="100" fill="#fbfaf8" />
           <line x1="0" x2="100" y1="8" y2="8" stroke="#b8b2aa" strokeWidth="0.45" vectorEffect="non-scaling-stroke" />
-          {area ? <path d={area} fill="#eadfdd" /> : null}
-          {path ? <path d={path} fill="none" stroke="#a86464" strokeWidth="1.4" vectorEffect="non-scaling-stroke" /> : null}
+          {area ? <path d={area} fill="#e6dece" /> : null}
+          {path ? <path d={path} fill="none" stroke="#9a7a44" strokeWidth="1.4" vectorEffect="non-scaling-stroke" /> : null}
           {drawdowns.map((value, index) => {
             const x = drawdowns.length === 1 ? 0 : (index / (drawdowns.length - 1)) * 100;
             const y = 8 + (Math.abs(value) / Math.abs(minDrawdown)) * 82;
@@ -113,7 +116,12 @@ export function UnderwaterDrawdownChart({ asset, frequency, locale = "es", windo
             );
           })}
         </svg>
-      </div>
+      </div>}
+      <StatisticalDisclosure id="sl-drawdown-data" title={locale === "en" ? "Drawdown values by date" : "Valores de drawdown por fecha"}>
+        <div className="sl-table-scroll" tabIndex={0} role="region" aria-label={locale === "en" ? "Dated drawdown values" : "Valores de drawdown con fechas"}>
+          <table className="sl-table"><thead><tr><th>{locale === "en" ? "Date" : "Fecha"}</th><th>Drawdown</th></tr></thead><tbody>{drawdowns.map((value, index) => <tr key={series[index].date}><th>{series[index].date}</th><td>{formatPercent(value)}</td></tr>)}</tbody></table>
+        </div>
+      </StatisticalDisclosure>
       <p className="mt-3 text-xs leading-5 text-muted">
         {copy.footer}
       </p>

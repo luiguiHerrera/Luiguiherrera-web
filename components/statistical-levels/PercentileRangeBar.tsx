@@ -16,11 +16,11 @@ export function PercentileRangeBar({ label, value }: PercentileRangeBarProps) {
         <span className="font-semibold text-ink">{position === null ? "n/d" : `${position.toFixed(1)}%`}</span>
       </div>
       <div className="relative mt-2 h-2 overflow-hidden bg-panelSoft">
-        <div className="absolute inset-y-0 left-0 bg-[#d9cfca]" style={{ width: "10%" }} />
-        <div className="absolute inset-y-0 left-[10%] bg-[#e8e1dc]" style={{ width: "20%" }} />
-        <div className="absolute inset-y-0 left-[30%] bg-[#eef0ec]" style={{ width: "40%" }} />
-        <div className="absolute inset-y-0 left-[70%] bg-[#dfe8e2]" style={{ width: "20%" }} />
-        <div className="absolute inset-y-0 left-[90%] bg-[#c9d8cf]" style={{ width: "10%" }} />
+        <div className="absolute inset-y-0 left-0 bg-[#e4dece]" style={{ width: "10%" }} />
+        <div className="absolute inset-y-0 left-[10%] bg-[#e9e4d9]" style={{ width: "20%" }} />
+        <div className="absolute inset-y-0 left-[30%] bg-[#f0eee7]" style={{ width: "40%" }} />
+        <div className="absolute inset-y-0 left-[70%] bg-[#d7dfd9]" style={{ width: "20%" }} />
+        <div className="absolute inset-y-0 left-[90%] bg-[#c5d2cd]" style={{ width: "10%" }} />
         {position !== null ? (
           <div className="absolute top-1/2 h-4 w-px -translate-y-1/2 bg-ink" style={{ left: `${position}%` }} />
         ) : null}
