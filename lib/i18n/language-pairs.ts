@@ -9,6 +9,7 @@ export const bilingualRoutePairs = [
   { es: "/proteccion", en: "/en/protection" },
   { es: "/protege-tu-dinero", en: "/en/protect-your-money" },
   { es: "/dashboard", en: "/en/dashboard" },
+  { es: "/informes", en: "/en/reports" },
   { es: "/niveles-estadisticos", en: "/en/statistical-levels" },
   { es: "/tendencias", en: "/en/trends" },
   { es: "/recursos", en: "/en/resources" },

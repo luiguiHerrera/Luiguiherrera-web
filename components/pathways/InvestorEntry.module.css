@@ -30,6 +30,19 @@
 .recommendation li { display: flex; gap: 12px; color: var(--color-muted); font-size: 14px; line-height: 1.65; }
 .recommendation li > span { color: var(--color-brass); }
 .time { margin: 24px 0 16px; font-size: 13px; line-height: 1.65; color: var(--color-muted); }
+.actions { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 24px; margin-top: 23px; padding-top: 21px; border-top: 1px solid var(--color-line); }
+.action { display: flex; flex-direction: column; align-items: flex-start; min-width: 0; }
+.actionTitle { font-size: 14px; line-height: 1.6; color: var(--color-ink); }
+.actionTitle strong { font-weight: 600; }
+.actionDescription { margin: 9px 0 0; font-size: 14px; line-height: 1.65; color: var(--color-muted); }
+.actionTime { margin: auto 0 10px; padding-top: 10px; font-size: 13px; line-height: 1.65; color: var(--color-muted); }
+.action .primaryCta { max-width: 100%; }
+.secondaryCta { background: transparent; color: var(--color-institutional); }
+.secondaryCta:hover { background: var(--color-paper); color: var(--color-institutional); }
+@media (max-width: 1100px) {
+  .actions { grid-template-columns: 1fr; gap: 19px; }
+  .action + .action { border-top: 1px solid var(--color-line); padding-top: 19px; }
+}
 .bridges, .faq { max-width: 1244px; margin: 0 auto; padding: 48px 0; }
 .bridges h2, .faq h2 { font-size: clamp(29px,2.7vw,36px); }
 .bridgeList { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); margin-top: 27px; border-top: 1px solid var(--color-line); border-bottom: 1px solid var(--color-line); }

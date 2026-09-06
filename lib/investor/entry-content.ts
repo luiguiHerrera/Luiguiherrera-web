@@ -1,13 +1,22 @@
+export type InvestorRecommendationAction = {
+  label: string;
+  product: string;
+  description: string;
+  time: string;
+  cta: string;
+  href: string;
+};
+
 export type InvestorRouteOption = {
   id: "dashboard" | "levels" | "trends" | "research";
   label: string;
   title: string;
   description: string;
   outcomes: [string, string, string];
-  time: string;
-  cta: string;
-  href: string;
-};
+} & (
+  | { actions: InvestorRecommendationAction[]; time?: never; cta?: never; href?: never }
+  | { actions?: never; time: string; cta: string; href: string }
+);
 
 export type InvestorEntryContent = {
   locale: "es" | "en";
@@ -41,10 +50,13 @@ export const investorEntryContent: Record<"es" | "en", InvestorEntryContent> = {
       options: [
         {
           id: "dashboard", label: "Quiero una lectura rápida del mercado.",
-          title: "Lee el pulso del mercado",
-          description: "Obtén una lectura diaria del régimen, la amplitud, la volatilidad y los flujos.",
-          outcomes: ["Qué está favoreciendo o frenando el entorno.", "Cómo está el régimen actual.", "Qué mirar primero hoy."],
-          time: "≈5–10 min", cta: "Ver dashboard", href: "/dashboard",
+          title: "Lee el mercado desde dos ángulos",
+          description: "Mira qué está pasando ahora y, si necesitas contexto, qué cambió y por qué importa.",
+          outcomes: ["Qué está favoreciendo o frenando el entorno.", "Qué cambió y merece atención.", "Qué mirar después."],
+          actions: [
+            { label: "AHORA", product: "Dashboard", description: "Régimen, amplitud, volatilidad y flujos en una lectura rápida.", time: "≈5–10 min", cta: "Ver dashboard", href: "/dashboard" },
+            { label: "CONTEXTO", product: "Informes", description: "Qué cambió, qué merece atención y cómo interpretar el entorno.", time: "≈10–20 min", cta: "Leer informes", href: "/informes" },
+          ],
         },
         {
           id: "levels", label: "Quiero conocer las estadísticas de mis activos.",
@@ -104,10 +116,13 @@ export const investorEntryContent: Record<"es" | "en", InvestorEntryContent> = {
       options: [
         {
           id: "dashboard", label: "I want a quick market read.",
-          title: "Read the pulse of the market",
-          description: "Get a daily read on regime, breadth, volatility and flows.",
-          outcomes: ["What is supporting or pressuring the environment.", "How the current regime looks.", "What to look at first today."],
-          time: "≈5–10 min", cta: "Open dashboard", href: "/en/dashboard",
+          title: "Read the market from two angles",
+          description: "See what is happening now and, when you need context, what changed and why it matters.",
+          outcomes: ["What is supporting or pressuring the environment.", "What changed and deserves attention.", "What to look at next."],
+          actions: [
+            { label: "NOW", product: "Dashboard", description: "Regime, breadth, volatility and flows in one quick read.", time: "≈5–10 min", cta: "Open dashboard", href: "/en/dashboard" },
+            { label: "CONTEXT", product: "Reports", description: "What changed, what deserves attention and how to interpret the environment.", time: "≈10–20 min", cta: "Read reports", href: "/en/reports" },
+          ],
         },
         {
           id: "levels", label: "I want to understand my assets’ statistics.",

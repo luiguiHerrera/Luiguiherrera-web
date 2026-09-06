@@ -77,6 +77,12 @@ const auditExpression = `(() => {
     selectedBottom: active[0]?.getBoundingClientRect().bottom,
     visiblePanels: visible.map(el=>el.id),
     destination: visible[0]?.querySelector('a')?.getAttribute('href'),
+    actions: [...(visible[0]?.querySelectorAll('a') ?? [])].map(el => ({
+      href: el.getAttribute('href'), height: el.getBoundingClientRect().height,
+      description: el.getAttribute('aria-describedby')?.split(' ').map(id => document.getElementById(id)?.textContent).join(' '),
+    })),
+    actionTimes: [...(visible[0]?.querySelectorAll('section p[id$="-time"]') ?? [])].map(el => el.textContent),
+    nestedInteractive: document.querySelectorAll('a a,a button,button a,button button').length,
     recommendationHeading: visible[0]?.querySelector('h3')?.textContent,
     focus: document.activeElement?.id,
     footer: document.querySelector('footer')?.innerText,
@@ -128,6 +134,7 @@ try {
       await c.click('main header a');
       assert.equal(await c.evaluate('document.activeElement.id'),'investor-option-dashboard');
       item.heroFocus = true;
+      await sleep(800); // Let the hero's smooth scroll settle before pointer interactions.
       for (const [index,id] of ids.entries()) {
         await c.click(`#investor-option-${id}`);
         const audit = await c.evaluate(auditExpression);
@@ -138,6 +145,15 @@ try {
         assert.deepEqual(audit.selected,[`investor-option-${id}`]);
         assert.deepEqual(audit.visiblePanels,[`investor-panel-${id}`]);
         assert.equal(audit.destination,destinations[locale][index]);
+        assert.equal(audit.nestedInteractive,0);
+        assert.equal(audit.actions.length,index===0 ? 2 : 1);
+        for(const action of audit.actions) assert.ok(action.height>=44);
+        if(index===0){
+          assert.equal(audit.recommendationHeading,locale==='es'?'Lee el mercado desde dos ángulos':'Read the market from two angles');
+          assert.equal(audit.actions[1].href,locale==='es'?'/informes':'/en/reports');
+          assert.deepEqual(audit.actionTimes,['≈5–10 min','≈10–20 min']);
+          assert.ok(audit.actions.every(action=>action.description));
+        }
         if (width < 768) {
           assert.ok(audit.selectedTop >= 65, `${name}/${id}: chosen option above sticky header`);
           assert.ok(audit.selectedBottom <= height, `${name}/${id}: chosen option below viewport`);
@@ -157,6 +173,9 @@ try {
       assert.equal(await c.evaluate('document.activeElement.id'),'investor-option-dashboard');
       await c.key('Tab','Tab',9);
       assert.equal(await c.evaluate('document.activeElement.getAttribute("href")'),destinations[locale][0]);
+      assert.equal(await c.evaluate('document.activeElement.matches(":focus-visible")'),true);
+      await c.key('Tab','Tab',9);
+      assert.equal(await c.evaluate('document.activeElement.getAttribute("href")'),locale==='es'?'/informes':'/en/reports');
       await c.key('Tab','Tab',9);
       assert.equal(await c.evaluate('document.activeElement.id'),'investor-option-levels');
       await c.key('Enter','Enter',13);
@@ -193,7 +212,7 @@ try {
     }
   }
   // All page destinations and the unchanged core routes must render successfully.
-  for (const route of [...new Set([...Object.values(destinations).flat(), '/recursos', '/en/resources', '/fragilidad-de-portafolio', '/en/portfolio-fragility', '/', '/en', '/empezar', '/en/start', '/presupuesto', '/en/budget', '/deudas', '/en/debt'])]) {
+  for (const route of [...new Set([...Object.values(destinations).flat(), '/informes', '/en/reports', '/recursos', '/en/resources', '/fragilidad-de-portafolio', '/en/portfolio-fragility', '/', '/en', '/empezar', '/en/start', '/presupuesto', '/en/budget', '/deudas', '/en/debt'])]) {
     const response=await fetch(base+route);
     const html=await response.text();
     const result={ route,status:response.status,h1:html.includes('<h1'),redirected:response.redirected };

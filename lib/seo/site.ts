@@ -198,6 +198,12 @@ const seoRouteContent: readonly Omit<SeoRouteDefinition, "alternatePathname">[] 
     socialDescription: "Lecturas de mercado cargadas por mes, con informes actuales y archivados.",
   },
   {
+    pathname: "/en/reports",
+    language: "en",
+    title: "Market reports | Current report and archive",
+    description: "A clear view of what changed, what matters, and the context behind the market. Read the current English market report and browse available previous editions.",
+  },
+  {
     pathname: "/en/weekly-report",
     language: "en",
     title: "Weekly market report | Multi-asset context and scenarios",

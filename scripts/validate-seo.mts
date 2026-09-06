@@ -38,6 +38,7 @@ const expectedStaticRoutes = [
   "/dashboard",
   "/en/dashboard",
   "/informes",
+  "/en/reports",
   "/en/weekly-report",
   "/niveles-estadisticos",
   "/en/statistical-levels",
@@ -112,14 +113,14 @@ if (unexpectedRoutes.length) {
   errors.push(`Unexpected indexable route definitions: ${unexpectedRoutes.join(", ")}`);
 }
 
-for (const pathname of ["/informes", "/en/weekly-report"]) {
+for (const pathname of ["/en/weekly-report"]) {
   if (getSeoRoute(pathname)?.alternatePathname || languageAlternates(pathname)) {
     errors.push(`${pathname} must not have a language alternate`);
   }
 }
 
-if (bilingualRoutePairs.length !== 18) {
-  errors.push(`Expected 18 bilingual route pairs, found ${bilingualRoutePairs.length}`);
+if (bilingualRoutePairs.length !== 19) {
+  errors.push(`Expected 19 bilingual route pairs, found ${bilingualRoutePairs.length}`);
 }
 
 for (const { es, en } of bilingualRoutePairs) {

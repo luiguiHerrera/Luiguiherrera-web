@@ -88,8 +88,36 @@ export function InvestorGuidedRoute({ content }: { content: InvestorEntryContent
                 <li key={outcome}><span aria-hidden="true">✓</span>{outcome}</li>
               ))}
             </ul>
-            <p className={styles.time}>{option.time} <span>· {content.timeLabel}</span></p>
-            <Link className={styles.primaryCta} href={option.href}>{option.cta} <span aria-hidden="true">→</span></Link>
+            {option.actions ? (
+              <div className={styles.actions}>
+                {option.actions.map((action, actionIndex) => {
+                  const actionId = `investor-action-${option.id}-${actionIndex}`;
+                  return (
+                    <section key={action.href} className={styles.action} aria-labelledby={`${actionId}-title`}>
+                      <p id={`${actionId}-title`} className={styles.actionTitle}>
+                        <span className={styles.eyebrow}>{action.label}</span>
+                        <span aria-hidden="true"> · </span>
+                        <strong>{action.product}</strong>
+                      </p>
+                      <p id={`${actionId}-description`} className={styles.actionDescription}>{action.description}</p>
+                      <p id={`${actionId}-time`} className={styles.actionTime}>{action.time}</p>
+                      <Link
+                        className={`${styles.primaryCta}${actionIndex > 0 ? ` ${styles.secondaryCta}` : ""}`}
+                        href={action.href}
+                        aria-describedby={`${actionId}-description ${actionId}-time`}
+                      >
+                        {action.cta} <span aria-hidden="true">→</span>
+                      </Link>
+                    </section>
+                  );
+                })}
+              </div>
+            ) : (
+              <>
+                <p className={styles.time}>{option.time} <span>· {content.timeLabel}</span></p>
+                <Link className={styles.primaryCta} href={option.href}>{option.cta} <span aria-hidden="true">→</span></Link>
+              </>
+            )}
           </div>
         </Fragment>
       ))}
