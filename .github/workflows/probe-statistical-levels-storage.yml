@@ -1,60 +1,53 @@
-name: Update statistical levels
+name: Probe Statistical Levels private storage
 
 on:
   workflow_dispatch:
-  schedule:
-    # Tue-Sat at 08:30 UTC. GitHub schedules run on the default branch.
-    - cron: "30 8 * * 2-6"
 
 permissions:
-  contents: write
+  contents: read
   id-token: write
 
 concurrency:
-  group: statistical-levels-raw-authority-publication
+  group: statistical-levels-synthetic-storage-probe
   cancel-in-progress: false
 
 env:
   STAT_LEVELS_AWS_REGION: ${{ vars.STAT_LEVELS_AWS_REGION }}
   STAT_LEVELS_RAW_BUCKET: ${{ vars.STAT_LEVELS_RAW_BUCKET }}
   STAT_LEVELS_RAW_ROLE_ARN: ${{ vars.STAT_LEVELS_RAW_ROLE_ARN }}
-  STAT_LEVELS_RAW_AUTHORITY_READY: ${{ vars.STAT_LEVELS_RAW_AUTHORITY_READY }}
 
 jobs:
-  update-statistical-levels:
+  synthetic-probe:
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 10
     steps:
-      - name: Fail closed before all provider and publication operations
+      - name: Require the exact trusted branch and manual event
         shell: bash
         run: |
           test "$GITHUB_REPOSITORY" = "luiguiHerrera/Luiguiherrera-web"
           test "$GITHUB_REF" = "refs/heads/vercel-deployment"
-          test "$STAT_LEVELS_RAW_AUTHORITY_READY" = "true"
+          test "$GITHUB_EVENT_NAME" = "workflow_dispatch"
 
-      - name: Checkout the triggering deployment commit
+      - name: Checkout the triggering deployment commit without repository write credentials
         uses: actions/checkout@v5
         with:
           ref: ${{ github.sha }}
+          persist-credentials: false
 
       - name: Setup Node
         uses: actions/setup-node@v6
         with:
           node-version: "22"
-          cache: npm
-
-      - name: Install locked dependencies before credentials exist
-        run: npm ci
 
       - name: Assume dedicated storage role through GitHub OIDC
-        # Official release v6.2.4; provenance in docs/statistical-levels-hosted-authority.md.
+        # Official release v6.2.4; no stored AWS credential or profile inputs.
         uses: aws-actions/configure-aws-credentials@cbe3b392738ccf3f987d68400dafcf4b0624a56c
         with:
           aws-region: ${{ vars.STAT_LEVELS_AWS_REGION }}
           role-to-assume: ${{ vars.STAT_LEVELS_RAW_ROLE_ARN }}
           audience: sts.amazonaws.com
-          role-session-name: sl-raw-${{ github.run_id }}-${{ github.run_attempt }}
-          role-duration-seconds: 1800
+          role-session-name: sl-probe-${{ github.run_id }}-${{ github.run_attempt }}
+          role-duration-seconds: 900
           unset-current-credentials: true
           use-existing-credentials: false
           output-credentials: false
@@ -62,8 +55,5 @@ jobs:
           retry-max-attempts: 2
           action-timeout-s: 120
 
-      - name: Archive, verify, seal, reread and generate a validated candidate
-        run: node scripts/statistical-levels-hosted.mjs prepare
-
-      - name: Atomically commit validated snapshots and provenance, then push
-        run: node scripts/statistical-levels-hosted.mjs publish
+      - name: Synthetic create, readback, seal and denial checks
+        run: node scripts/statistical-levels-storage-probe.mjs
