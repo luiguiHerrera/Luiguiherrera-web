@@ -28,7 +28,7 @@ const entryways = [
   {
     title: "¿Tiene sentido esta estrategia?",
     label: "03",
-    href: "/investigacion/td3",
+    href: "/investigacion",
     description: "Modelos y backtests reproducibles.",
   },
   {
