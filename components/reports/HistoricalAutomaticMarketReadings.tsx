@@ -61,14 +61,16 @@ export function HistoricalAutomaticMarketReadings({ snapshot }: { snapshot: Hist
             Lecturas de mercado al cierre
           </p>
           <h2 className="mt-2 text-2xl font-semibold leading-tight text-ink md:text-3xl">
-            Régimen, sectores, volatilidad y flujos
+            {snapshot.displayTitle ?? "Régimen, sectores, volatilidad y flujos"}
           </h2>
           <p className="mt-4 text-sm leading-6 text-muted">
             Datos disponibles hasta{" "}
             <time dateTime={snapshot.dataDate}>{formatEditorialDate(snapshot.dataDate, "es")}</time>.
           </p>
         </div>
-        <div className="grid gap-5">
+        <div className="grid min-w-0 gap-5">
+          {snapshot.closingLabel ? <p className="text-base font-medium text-ink">{snapshot.closingLabel}</p> : null}
+          {snapshot.sourceNote ? <p className="border-l-2 border-brass pl-3 text-xs leading-6 text-muted">{snapshot.sourceNote}</p> : null}
           <section className="border border-petrol/35 bg-panel p-4 shadow-[0_10px_30px_rgba(31,35,40,0.035)] md:p-6">
             <div className="grid gap-5 lg:grid-cols-[1fr_0.54fr] lg:items-end">
               <div>
@@ -88,7 +90,7 @@ export function HistoricalAutomaticMarketReadings({ snapshot }: { snapshot: Hist
             </div>
           </section>
 
-          <ReportSection eyebrow="Régimen" title="Resumen de señales">
+          <ReportSection headingLevel={snapshot.displayTitle ? 3 : 2} eyebrow="Régimen" title="Resumen de señales">
             <div className="grid gap-3 lg:grid-cols-3">
               <SignalList title="Qué impulsó" items={snapshot.regime.support} />
               <SignalList title="Qué frenó" items={snapshot.regime.caution} />
@@ -96,8 +98,32 @@ export function HistoricalAutomaticMarketReadings({ snapshot }: { snapshot: Hist
             </div>
           </ReportSection>
 
+          {snapshot.weeklyReview ? (
+            <ReportSection headingLevel={3} eyebrow={snapshot.weeklyReview.periodLabel} title={snapshot.weeklyReview.title}>
+              <div className="grid gap-5">
+                {([['A. Lo que impulsó', snapshot.weeklyReview.support], ['B. Lo que frenó', snapshot.weeklyReview.caution]] as const).map(([title, items]) => (
+                  <div key={title}>
+                    <h4 className="text-base font-semibold text-ink">{title}</h4>
+                    <ul className="mt-3 grid list-disc gap-3 pl-5 text-sm leading-6 text-muted">
+                      {items.map(item => <li key={item}>{item}</li>)}
+                    </ul>
+                  </div>
+                ))}
+                <p className="border-l-2 border-brass pl-4 text-sm leading-6 text-ink">{snapshot.weeklyReview.closing}</p>
+                <details className="border-t border-line pt-3 text-xs leading-6 text-muted">
+                  <summary className="cursor-pointer font-semibold text-petrol">Método y fuentes · cierre congelado al {formatEditorialDate(snapshot.weeklyReview.asOf, "es")}</summary>
+                  <p className="mt-3">{snapshot.weeklyReview.methodology}</p>
+                  {snapshot.weeklyReview.notes.map(note => <p className="mt-2" key={note}>{note}</p>)}
+                  <ul className="mt-2">
+                    {snapshot.weeklyReview.sources.map(source => <li key={source.href}><a className="underline underline-offset-4" href={source.href} target="_blank" rel="noreferrer">{source.label}</a></li>)}
+                  </ul>
+                </details>
+              </div>
+            </ReportSection>
+          ) : null}
+
           {snapshot.indices?.length ? (
-          <ReportSection eyebrow="Índices" title="Índices principales vía ETF">
+          <ReportSection headingLevel={snapshot.displayTitle ? 3 : 2} eyebrow="Índices" title="Índices principales vía ETF">
             <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-4">
               {snapshot.indices.map((asset) => (
                 <article key={asset.ticker} className="border border-line bg-panelSoft p-4">
@@ -127,7 +153,7 @@ export function HistoricalAutomaticMarketReadings({ snapshot }: { snapshot: Hist
           </ReportSection>
           ) : null}
 
-          <ReportSection eyebrow="Sectores" title="Rotación sectorial">
+          <ReportSection headingLevel={snapshot.displayTitle ? 3 : 2} eyebrow="Sectores" title="Rotación sectorial">
             <div className="grid gap-4 lg:grid-cols-[0.9fr_1.1fr]">
               <div className="border border-line bg-panelSoft p-4">
                 <div className="flex items-start justify-between gap-3">
@@ -169,11 +195,11 @@ export function HistoricalAutomaticMarketReadings({ snapshot }: { snapshot: Hist
           </ReportSection>
 
           {snapshot.breadth ? (
-            <ReportSection eyebrow="Amplitud" title="Amplitud relativa al corte">
+            <ReportSection headingLevel={snapshot.displayTitle ? 3 : 2} eyebrow="Amplitud" title="Amplitud relativa al corte">
               <div className="grid gap-2 sm:grid-cols-2 xl:grid-cols-4">
-                <Metric label="RSP/SPY 1W" value={formatPointSpread(snapshot.breadth.rspVsSpy1wPp)} emphasis />
-                <Metric label="IWM/SPY 1W" value={formatPointSpread(snapshot.breadth.iwmVsSpy1wPp)} emphasis />
-                <Metric label="QQQ/SPY 1W" value={formatPointSpread(snapshot.breadth.qqqVsSpy1wPp)} />
+                <Metric label={`RSP/SPY ${snapshot.breadth.windowLabel ?? '1W'}`} value={formatPointSpread(snapshot.breadth.rspVsSpy1wPp)} emphasis />
+                <Metric label={`IWM/SPY ${snapshot.breadth.windowLabel ?? '1W'}`} value={formatPointSpread(snapshot.breadth.iwmVsSpy1wPp)} emphasis />
+                <Metric label={`QQQ/SPY ${snapshot.breadth.windowLabel ?? '1W'}`} value={formatPointSpread(snapshot.breadth.qqqVsSpy1wPp)} />
                 <Metric
                   label="Sectores sobre media larga"
                   value={
@@ -191,7 +217,7 @@ export function HistoricalAutomaticMarketReadings({ snapshot }: { snapshot: Hist
           ) : null}
 
           {snapshot.quantRadar ? (
-            <ReportSection eyebrow="Radar cuantitativo" title="Condiciones estadísticas al corte">
+            <ReportSection headingLevel={snapshot.displayTitle ? 3 : 2} eyebrow="Radar cuantitativo" title="Condiciones estadísticas al corte">
               <div className="grid gap-2 sm:grid-cols-2 xl:grid-cols-3">
                 <Metric
                   label="Fragilidad"
@@ -211,7 +237,7 @@ export function HistoricalAutomaticMarketReadings({ snapshot }: { snapshot: Hist
           ) : null}
 
           <div className="grid gap-5 lg:grid-cols-2">
-            <ReportSection eyebrow="VIX" title="Volatilidad">
+            <ReportSection headingLevel={snapshot.displayTitle ? 3 : 2} eyebrow="VIX" title="Volatilidad">
               {snapshot.vix ? <>
               <div className="grid gap-4">
                 <div className="border border-line bg-panelSoft p-4">
@@ -243,7 +269,10 @@ export function HistoricalAutomaticMarketReadings({ snapshot }: { snapshot: Hist
                   <Metric label="Momentum" value={snapshot.vix.momentum} />
                   <Metric label="Estado" value={snapshot.vix.status} />
                 </div>
+                {snapshot.vix.asOf ? <Metric label="Fecha de VIX spot" value={snapshot.vix.asOf} /> : null}
+                {snapshot.vix.asOf && snapshot.vix.percentileLabel ? <Metric label="Percentil" value={snapshot.vix.percentileLabel} /> : null}
                 <Metric label="Curva VIX" value={snapshot.vix.curve} />
+                {snapshot.vixTermStructure?.points ? <div className="grid grid-cols-3 gap-2">{snapshot.vixTermStructure.points.map(point=><Metric key={point.label} label={`${point.label} · ${point.expirationDate}`} value={point.value?.toFixed(2) ?? "No disponible"} />)}</div> : null}
                 {snapshot.vixTermStructure ? (
                   <div className="grid gap-2 sm:grid-cols-3">
                     <Metric label="VX2 − VX1" value={formatSignedNumber(snapshot.vixTermStructure.vx2MinusVx1, 2)} />
@@ -258,17 +287,18 @@ export function HistoricalAutomaticMarketReadings({ snapshot }: { snapshot: Hist
               </div></> : <p className="text-sm leading-6 text-muted">No disponible al cierre. El snapshot no se completa con datos vivos posteriores.</p>}
             </ReportSection>
 
-            <ReportSection eyebrow="Flujos" title="BTC ETF flows">
+            <ReportSection headingLevel={snapshot.displayTitle ? 3 : 2} eyebrow="Flujos" title="BTC ETF flows">
               {snapshot.btcEtfFlows ? <>
               <div className="grid gap-2 sm:grid-cols-2">
+                {snapshot.btcEtfFlows.asOf ? <Metric label="Fecha del último flujo" value={snapshot.btcEtfFlows.asOf} /> : null}
                 <Metric label="Último día al corte" value={formatUsdMillions(snapshot.btcEtfFlows.lastDayUsdMillions)} emphasis />
-                <Metric label="BTC ETF 5D al corte" value={formatUsdMillions(snapshot.btcEtfFlows.rolling5dUsdMillions)} />
+                <Metric label={"BTC ETF 5D al corte"} value={formatUsdMillions(snapshot.btcEtfFlows.rolling5dUsdMillions)} />
                 <Metric label="Racha al corte" value={snapshot.btcEtfFlows.streakLabel} />
               </div>
               <p className="mt-4 text-sm leading-6 text-muted">{snapshot.btcEtfFlows.reading}</p></> : <p className="text-sm leading-6 text-muted">No disponible al cierre.</p>}
             </ReportSection>
 
-            <ReportSection eyebrow="Oro" title="Presión de flujos en GLD">
+            <ReportSection headingLevel={snapshot.displayTitle ? 3 : 2} eyebrow="Oro" title="Presión de flujos en GLD">
               {snapshot.gldFlowPressure ? <>
               <div className="grid gap-2 sm:grid-cols-2">
                 <Metric label="Proxy al corte" value={snapshot.gldFlowPressure.label} emphasis />
@@ -301,7 +331,7 @@ export function HistoricalAutomaticMarketReadings({ snapshot }: { snapshot: Hist
           </div>
 
           {snapshot.statisticalAssets?.length ? (
-          <ReportSection eyebrow="Activos" title="Posición técnica por activo">
+          <ReportSection headingLevel={snapshot.displayTitle ? 3 : 2} eyebrow="Activos" title="Posición técnica por activo">
             <p className="mb-4 text-sm leading-6 text-muted">
               Percentil, z-score, distancia frente a la media de largo plazo y último cierre disponible.
             </p>

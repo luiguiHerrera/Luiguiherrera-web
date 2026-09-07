@@ -1,0 +1,1895 @@
+{
+  "state": "VALIDATED_INTEGRATION_CONTENT",
+  "production_base": "80e5cc26d29d68d71ff55022f6897bd3e08640bf",
+  "reviewed_semantic_source": "a0a109fac223784a1df1ce4822938d821e18ff97",
+  "merge_base": "49d9f10c08b9a4b86f63a5673075ae041a96fc45",
+  "production_only_commits": [
+    "80e5cc26d29d68d71ff55022f6897bd3e08640bf refactor(statistical-levels): simplify experience and repair historical analytics",
+    "5859071ac43180decec28570bc3859dd905734f7 refactor(investor): add dashboard and reports market paths",
+    "70b31d0d669d4d90dc1bade7af5710da9d62c87b refactor(investor): create guided market entry experience",
+    "2184b5b58ee2bd507bf535331b6a141e695b8465 Update statistical levels snapshot",
+    "33e3218e72f9ac581a2c59e7e966837e20f14cc3 style(personal-finance): refine editorial display typography",
+    "a3544cfa3754b63209344c3d38e151d7ff93e96a Update statistical levels snapshot",
+    "33acbbc403069830f33a2bb7e9285030b169d5d7 refactor(personal-finance): refine guided paths and investor bridge",
+    "bada9c31afa18d7573d35a158badcaf6c8c29972 refactor(personal-finance): create guided financial entry experience",
+    "551c794780fd4e9f1494d06204d85fb3816f6e23 Update statistical levels snapshot",
+    "93bafdfc2aa3778c423940a7b0207daf98a4738e Update statistical levels snapshot",
+    "70c7e83ebb2cef8714ddabf3408053968bc5a2e3 refactor(home): simplify navigation and showcase market dashboard",
+    "4782d79f6840afb5541a543d5b2ea4b955610dc3 Update statistical levels snapshot",
+    "0adad1da7b533f94357d4e0b99634bd7a5291f62 refactor(dashboard): preserve BTC flow display precision",
+    "2c0fd2ec34465d748d08fa7bf489a98b77611e8d fix(dashboard): improve semantic hierarchy and touch targets",
+    "25830b562a80743a09de82e6e64e50d11d00f922 fix(dashboard): clarify BTC data freshness and provenance",
+    "637216e01b9eb4f7a7931ca37d3422c783655296 fix(dashboard): localize sector provenance in English",
+    "a30fc0137b890557d35c22c5f8957623fe4f0a85 fix(dashboard): use real sector data in production",
+    "843616e9596c8be648118b5beba39e06353fb437 refactor(dashboard): redesign capital flows",
+    "be42c12befc4a3d54d91801fc5ce4052ab451a9c refactor(dashboard): redesign quantitative risk",
+    "f1060b59911745b2d15ebbb93c92a1a1ebe96f08 refactor(dashboard): redesign market participation",
+    "18e78927efa2997d74d2db2a2e0ebc07c37809a3 refactor(dashboard): establish unified visual hierarchy",
+    "e0cedcdfbedb68f6fd55b4b5b3e55f1c3fc8d0ce feat(dashboard): unify VIX volatility analysis",
+    "9678c8ba2c6a7ff3c1af3f63b7744eff0fdd300c refactor(dashboard): finalize VIX term structure presentation",
+    "22c3ec8dfb0a76700618f118a69b8f196b7bf0d7 refactor(dashboard): simplify VIX term structure presentation",
+    "0eac70f5426021d68c867769376abab32f94bafb Update statistical levels snapshot",
+    "745d9d906cad882d6ee3060bd2292d67a2fdc0e4 feat(dashboard): extend VIX term structure to nine contracts",
+    "6bf0699c6bc1918a52c9585ce60f7bb4159293fa Update statistical levels snapshot",
+    "16828fea41a24442c7901449f9b9bc67c7f97405 Update statistical levels snapshot",
+    "d5db8079052b04f05f823db604f90e409bce1b46 Update statistical levels snapshot",
+    "3863b56bde064f60fa8768aecb1e007fb7f9c345 Update statistical levels snapshot",
+    "91eeb393b93182bdf876ab48803c6473b002fdbb Update statistical levels snapshot",
+    "8746a2ae4eb7a351fb9b5d4356a3633769761af2 Update statistical levels snapshot",
+    "c4e8fc3a5d27347678cb02cd4c988b84e10ca040 Update statistical levels snapshot",
+    "c26a4dc541b0cefeccec5cbd67f76b4e7a7994d3 Update statistical levels snapshot",
+    "337b57ce1481b1e8ab0377ca59ad5b9ccebb0c30 fix(research): add scientific references to TOM study",
+    "b1eee481f22cb5dfe20252d69ecdc3cd2ffea005 fix(research): add TOM glossary and widen narrative",
+    "9a8eb5d9fe7c3c1b7d875d52661b11e58807aca0 fix(research): refine TOM study readability and verification UX",
+    "15fad5e3506b736c880e5f34607547746dd2ecb7 chore(gitignore): allow published research zip artifacts",
+    "03bac27785be0d09cc5976f63cb58cb1d6bd5071 feat(research): publish turn-of-the-month anomaly decay study",
+    "1389a672f1e24a3f7f20f2437401eaba893bb027 Update statistical levels snapshot"
+  ],
+  "candidate_only_commits": [
+    "a0a109fac223784a1df1ce4822938d821e18ff97 fix(reports): clarify selective September sector rotation",
+    "47db50bd238489a5fb7a2874fa0de70dc6791586 fix(reports): close September provenance and exact-build findings",
+    "636cb73fb0fe4d2b28ad96cb7185f8c07d8f895b feat(reports): freeze verified September 4 weekly market review",
+    "84e8b3ee92dff4c41b4342ae5d1759603ed85c6b feat(reports): add frozen first September 2026 market report",
+    "c6854e988ea33356320d364e7b306f348cb8980e feat(dashboard): extend VIX term structure to nine contracts",
+    "cbaa6c847eb234ac717160db2b0bb29e39754599 chore(gitignore): allow published research zip artifacts",
+    "37273537b88b162539eabf3a8c254e74522ca9de feat(research): publish turn-of-the-month anomaly decay study"
+  ],
+  "campaign_base": "c6854e988ea33356320d364e7b306f348cb8980e",
+  "campaign_commits": [
+    "84e8b3ee92dff4c41b4342ae5d1759603ed85c6b feat(reports): add frozen first September 2026 market report",
+    "636cb73fb0fe4d2b28ad96cb7185f8c07d8f895b feat(reports): freeze verified September 4 weekly market review",
+    "47db50bd238489a5fb7a2874fa0de70dc6791586 fix(reports): close September provenance and exact-build findings",
+    "a0a109fac223784a1df1ce4822938d821e18ff97 fix(reports): clarify selective September sector rotation"
+  ],
+  "overlapping_files": [
+    ".gitignore",
+    "app/(es)/investigacion/el-fantasma-de-una-anomalia/opengraph-image.tsx",
+    "app/(es)/investigacion/el-fantasma-de-una-anomalia/page.tsx",
+    "app/(es)/investigacion/page.tsx",
+    "app/en/research/page.tsx",
+    "app/en/research/the-ghost-of-an-anomaly/opengraph-image.tsx",
+    "app/en/research/the-ghost-of-an-anomaly/page.tsx",
+    "app/globals.css",
+    "components/dashboard/VixTermStructureModule.tsx",
+    "components/layout/Header.tsx",
+    "components/research/ResearchIndex.tsx",
+    "components/research/tom-decay/ClaimBoundary.tsx",
+    "components/research/tom-decay/DecayRibbon.tsx",
+    "components/research/tom-decay/GhostAlphaNarrative.tsx",
+    "components/research/tom-decay/KeyFindings.tsx",
+    "components/research/tom-decay/MethodsAccordion.tsx",
+    "components/research/tom-decay/PublicationComparison.tsx",
+    "components/research/tom-decay/RegimeComparisonChart.tsx",
+    "components/research/tom-decay/RollingPremiumChart.tsx",
+    "components/research/tom-decay/SecondaryFindings.tsx",
+    "components/research/tom-decay/ShareImage.tsx",
+    "components/research/tom-decay/TomDecayFooter.tsx",
+    "components/research/tom-decay/TomDecayHero.tsx",
+    "components/research/tom-decay/TomDecayNav.tsx",
+    "components/research/tom-decay/TomDecayResearchPage.tsx",
+    "components/research/tom-decay/TomDecaySection.tsx",
+    "components/research/tom-decay/VerificationKit.tsx",
+    "components/seo/RouteStructuredData.tsx",
+    "lib/dashboard/adapters/vix-term-structure.test.ts",
+    "lib/dashboard/adapters/vix-term-structure.ts",
+    "lib/dashboard/translate-dashboard-copy.ts",
+    "lib/dashboard/types.ts",
+    "lib/i18n/dictionaries/en.ts",
+    "lib/i18n/dictionaries/es.ts",
+    "lib/i18n/language-pairs.ts",
+    "lib/research/research-index.ts",
+    "lib/research/tom-decay/chart-geometry.test.ts",
+    "lib/research/tom-decay/chart-geometry.ts",
+    "lib/research/tom-decay/content-en.ts",
+    "lib/research/tom-decay/content-es.ts",
+    "lib/research/tom-decay/content-types.ts",
+    "lib/research/tom-decay/content.ts",
+    "lib/research/tom-decay/dataset.ts",
+    "lib/research/tom-decay/editorial.ts",
+    "lib/research/tom-decay/format.ts",
+    "lib/research/tom-decay/freeze.test.ts",
+    "lib/research/tom-decay/generated/frozen-sources.ts",
+    "lib/research/tom-decay/og.ts",
+    "lib/research/tom-decay/parse.test.ts",
+    "lib/research/tom-decay/parse.ts",
+    "lib/research/tom-decay/presentation.ts",
+    "lib/research/tom-decay/types.ts",
+    "lib/seo/site.ts",
+    "package.json",
+    "public/research/tom-decay/data/french-matched/break_tests.csv",
+    "public/research/tom-decay/data/french-matched/calendar_pairwise_tests.csv",
+    "public/research/tom-decay/data/french-matched/manifest.json",
+    "public/research/tom-decay/data/french-matched/publication_adjacent_tests.csv",
+    "public/research/tom-decay/data/french-matched/publication_regime_summary.csv",
+    "public/research/tom-decay/data/french-matched/research_report.json",
+    "public/research/tom-decay/data/french-matched/rolling_premium.csv",
+    "public/research/tom-decay/data/yahoo/break_tests.csv",
+    "public/research/tom-decay/data/yahoo/calendar_pairwise_tests.csv",
+    "public/research/tom-decay/data/yahoo/manifest.json",
+    "public/research/tom-decay/data/yahoo/publication_adjacent_tests.csv",
+    "public/research/tom-decay/data/yahoo/publication_regime_summary.csv",
+    "public/research/tom-decay/data/yahoo/research_report.json",
+    "public/research/tom-decay/data/yahoo/rolling_premium.csv",
+    "public/research/tom-decay/downloads/qtomdecay_v0_3_1_statanow185.zip",
+    "public/research/tom-decay/downloads/reproduce_tom_decay.do",
+    "scripts/build-statistical-levels.mjs",
+    "scripts/build-tom-decay-data.mjs",
+    "scripts/validate-editorial.mts",
+    "scripts/validate-seo.mts"
+  ],
+  "overlap_classification": {
+    ".gitignore": "PRODUCTION_ONLY_BEHAVIOR",
+    "app/(es)/investigacion/el-fantasma-de-una-anomalia/opengraph-image.tsx": "PRODUCTION_ONLY_BEHAVIOR",
+    "app/(es)/investigacion/el-fantasma-de-una-anomalia/page.tsx": "PRODUCTION_ONLY_BEHAVIOR",
+    "app/(es)/investigacion/page.tsx": "PRODUCTION_ONLY_BEHAVIOR",
+    "app/en/research/page.tsx": "PRODUCTION_ONLY_BEHAVIOR",
+    "app/en/research/the-ghost-of-an-anomaly/opengraph-image.tsx": "PRODUCTION_ONLY_BEHAVIOR",
+    "app/en/research/the-ghost-of-an-anomaly/page.tsx": "PRODUCTION_ONLY_BEHAVIOR",
+    "app/globals.css": "PRODUCTION_ONLY_BEHAVIOR",
+    "components/dashboard/VixTermStructureModule.tsx": "PRODUCTION_ONLY_BEHAVIOR",
+    "components/layout/Header.tsx": "PRODUCTION_ONLY_BEHAVIOR",
+    "components/research/ResearchIndex.tsx": "PRODUCTION_ONLY_BEHAVIOR",
+    "components/research/tom-decay/ClaimBoundary.tsx": "PRODUCTION_ONLY_BEHAVIOR",
+    "components/research/tom-decay/DecayRibbon.tsx": "PRODUCTION_ONLY_BEHAVIOR",
+    "components/research/tom-decay/GhostAlphaNarrative.tsx": "PRODUCTION_ONLY_BEHAVIOR",
+    "components/research/tom-decay/KeyFindings.tsx": "PRODUCTION_ONLY_BEHAVIOR",
+    "components/research/tom-decay/MethodsAccordion.tsx": "PRODUCTION_ONLY_BEHAVIOR",
+    "components/research/tom-decay/PublicationComparison.tsx": "PRODUCTION_ONLY_BEHAVIOR",
+    "components/research/tom-decay/RegimeComparisonChart.tsx": "PRODUCTION_ONLY_BEHAVIOR",
+    "components/research/tom-decay/RollingPremiumChart.tsx": "PRODUCTION_ONLY_BEHAVIOR",
+    "components/research/tom-decay/SecondaryFindings.tsx": "PRODUCTION_ONLY_BEHAVIOR",
+    "components/research/tom-decay/ShareImage.tsx": "PRODUCTION_ONLY_BEHAVIOR",
+    "components/research/tom-decay/TomDecayFooter.tsx": "PRODUCTION_ONLY_BEHAVIOR",
+    "components/research/tom-decay/TomDecayHero.tsx": "PRODUCTION_ONLY_BEHAVIOR",
+    "components/research/tom-decay/TomDecayNav.tsx": "PRODUCTION_ONLY_BEHAVIOR",
+    "components/research/tom-decay/TomDecayResearchPage.tsx": "PRODUCTION_ONLY_BEHAVIOR",
+    "components/research/tom-decay/TomDecaySection.tsx": "PRODUCTION_ONLY_BEHAVIOR",
+    "components/research/tom-decay/VerificationKit.tsx": "PRODUCTION_ONLY_BEHAVIOR",
+    "components/seo/RouteStructuredData.tsx": "PRODUCTION_ONLY_BEHAVIOR",
+    "lib/dashboard/adapters/vix-term-structure.test.ts": "PRODUCTION_ONLY_BEHAVIOR",
+    "lib/dashboard/adapters/vix-term-structure.ts": "PRODUCTION_ONLY_BEHAVIOR",
+    "lib/dashboard/translate-dashboard-copy.ts": "PRODUCTION_ONLY_BEHAVIOR",
+    "lib/dashboard/types.ts": "PRODUCTION_ONLY_BEHAVIOR",
+    "lib/i18n/dictionaries/en.ts": "PRODUCTION_ONLY_BEHAVIOR",
+    "lib/i18n/dictionaries/es.ts": "PRODUCTION_ONLY_BEHAVIOR",
+    "lib/i18n/language-pairs.ts": "PRODUCTION_ONLY_BEHAVIOR",
+    "lib/research/research-index.ts": "PRODUCTION_ONLY_BEHAVIOR",
+    "lib/research/tom-decay/chart-geometry.test.ts": "PRODUCTION_ONLY_BEHAVIOR",
+    "lib/research/tom-decay/chart-geometry.ts": "PRODUCTION_ONLY_BEHAVIOR",
+    "lib/research/tom-decay/content-en.ts": "PRODUCTION_ONLY_BEHAVIOR",
+    "lib/research/tom-decay/content-es.ts": "PRODUCTION_ONLY_BEHAVIOR",
+    "lib/research/tom-decay/content-types.ts": "PRODUCTION_ONLY_BEHAVIOR",
+    "lib/research/tom-decay/content.ts": "PRODUCTION_ONLY_BEHAVIOR",
+    "lib/research/tom-decay/dataset.ts": "PRODUCTION_ONLY_BEHAVIOR",
+    "lib/research/tom-decay/editorial.ts": "PRODUCTION_ONLY_BEHAVIOR",
+    "lib/research/tom-decay/format.ts": "PRODUCTION_ONLY_BEHAVIOR",
+    "lib/research/tom-decay/freeze.test.ts": "PRODUCTION_ONLY_BEHAVIOR",
+    "lib/research/tom-decay/generated/frozen-sources.ts": "PRODUCTION_ONLY_BEHAVIOR",
+    "lib/research/tom-decay/og.ts": "PRODUCTION_ONLY_BEHAVIOR",
+    "lib/research/tom-decay/parse.test.ts": "PRODUCTION_ONLY_BEHAVIOR",
+    "lib/research/tom-decay/parse.ts": "PRODUCTION_ONLY_BEHAVIOR",
+    "lib/research/tom-decay/presentation.ts": "PRODUCTION_ONLY_BEHAVIOR",
+    "lib/research/tom-decay/types.ts": "PRODUCTION_ONLY_BEHAVIOR",
+    "lib/seo/site.ts": "PRODUCTION_ONLY_BEHAVIOR",
+    "package.json": "PRODUCTION_ONLY_BEHAVIOR",
+    "public/research/tom-decay/data/french-matched/break_tests.csv": "PRODUCTION_ONLY_BEHAVIOR",
+    "public/research/tom-decay/data/french-matched/calendar_pairwise_tests.csv": "PRODUCTION_ONLY_BEHAVIOR",
+    "public/research/tom-decay/data/french-matched/manifest.json": "PRODUCTION_ONLY_BEHAVIOR",
+    "public/research/tom-decay/data/french-matched/publication_adjacent_tests.csv": "PRODUCTION_ONLY_BEHAVIOR",
+    "public/research/tom-decay/data/french-matched/publication_regime_summary.csv": "PRODUCTION_ONLY_BEHAVIOR",
+    "public/research/tom-decay/data/french-matched/research_report.json": "PRODUCTION_ONLY_BEHAVIOR",
+    "public/research/tom-decay/data/french-matched/rolling_premium.csv": "PRODUCTION_ONLY_BEHAVIOR",
+    "public/research/tom-decay/data/yahoo/break_tests.csv": "PRODUCTION_ONLY_BEHAVIOR",
+    "public/research/tom-decay/data/yahoo/calendar_pairwise_tests.csv": "PRODUCTION_ONLY_BEHAVIOR",
+    "public/research/tom-decay/data/yahoo/manifest.json": "PRODUCTION_ONLY_BEHAVIOR",
+    "public/research/tom-decay/data/yahoo/publication_adjacent_tests.csv": "PRODUCTION_ONLY_BEHAVIOR",
+    "public/research/tom-decay/data/yahoo/publication_regime_summary.csv": "PRODUCTION_ONLY_BEHAVIOR",
+    "public/research/tom-decay/data/yahoo/research_report.json": "PRODUCTION_ONLY_BEHAVIOR",
+    "public/research/tom-decay/data/yahoo/rolling_premium.csv": "PRODUCTION_ONLY_BEHAVIOR",
+    "public/research/tom-decay/downloads/qtomdecay_v0_3_1_statanow185.zip": "PRODUCTION_ONLY_BEHAVIOR",
+    "public/research/tom-decay/downloads/reproduce_tom_decay.do": "PRODUCTION_ONLY_BEHAVIOR",
+    "scripts/build-statistical-levels.mjs": "SHARED_BEHAVIOR",
+    "scripts/build-tom-decay-data.mjs": "PRODUCTION_ONLY_BEHAVIOR",
+    "scripts/validate-editorial.mts": "SHARED_BEHAVIOR",
+    "scripts/validate-seo.mts": "PRODUCTION_ONLY_BEHAVIOR"
+  },
+  "report_campaign_overlaps": [
+    "scripts/build-statistical-levels.mjs",
+    "scripts/validate-editorial.mts"
+  ],
+  "files_changed_vs_production": [
+    "app/(es)/informes/page.tsx",
+    "components/reports/HistoricalAutomaticMarketReadings.tsx",
+    "components/reports/MarketReportContent.tsx",
+    "components/reports/ReportQuantitativePanels.tsx",
+    "components/reports/ReportSection.tsx",
+    "components/reports/StockpickingEarnings.tsx",
+    "docs/reports/primer-informe-septiembre-2026-addendum-qa.json",
+    "docs/reports/primer-informe-septiembre-2026-addendum.md",
+    "docs/reports/primer-informe-septiembre-2026-architecture.md",
+    "docs/reports/primer-informe-septiembre-2026-production-integration.json",
+    "docs/reports/primer-informe-septiembre-2026-production-integration.md",
+    "docs/reports/primer-informe-septiembre-2026-qa.json",
+    "docs/reports/primer-informe-septiembre-2026-review-repair-validation.md",
+    "docs/reports/primer-informe-septiembre-2026-source-ledger.md",
+    "docs/reports/primer-informe-septiembre-2026-validation.md",
+    "lib/investor/entry-content.test.ts",
+    "lib/reports/first-september-2026.test.mts",
+    "lib/reports/first-september-2026.ts",
+    "lib/reports/historical-automatic-readings.ts",
+    "lib/reports/market-reports.ts",
+    "lib/reports/report-export-model.ts",
+    "lib/reports/report-statistical-panels.ts",
+    "lib/reports/september-production-integration.test.mts",
+    "lib/reports/snapshots/primer-informe-septiembre-2026/automatic.json",
+    "lib/reports/snapshots/primer-informe-septiembre-2026/btc-source.json",
+    "lib/reports/snapshots/primer-informe-septiembre-2026/dashboard-evidence.json",
+    "lib/reports/snapshots/primer-informe-septiembre-2026/integrity.json",
+    "lib/reports/snapshots/primer-informe-septiembre-2026/prices-evidence.json.gz",
+    "lib/reports/snapshots/primer-informe-septiembre-2026/statistical.json",
+    "lib/reports/snapshots/primer-informe-septiembre-2026/weekly-review-evidence.json.gz",
+    "lib/reports/snapshots/primer-informe-septiembre-2026/weekly-review.json",
+    "lib/reports/weekly-review.test.mts",
+    "next.config.ts",
+    "public/llms.txt",
+    "public/reports/manifest.json",
+    "public/reports/primer-informe-septiembre-2026-calendar.ics",
+    "public/reports/primer-informe-septiembre-2026.html",
+    "public/reports/primer-informe-septiembre-2026.md",
+    "public/reports/primer-informe-septiembre-2026.pdf",
+    "scripts/capture-september-prices.mjs",
+    "scripts/render-report-pdf.py",
+    "scripts/report-node-register.mjs",
+    "scripts/report-statistical-snapshot.mjs",
+    "scripts/report-weekly-review.mjs",
+    "scripts/reports.mts",
+    "scripts/validate-editorial.mts"
+  ],
+  "statistical_conflict_resolution": "Production builder, offline CLI, formulas, baseline policy/config/provenance and generated data are byte-identical to production. Report verification uses the existing isolated createEngine boundary with its own as-of clock and current-mark aggregation. buildKeyLevels excludes the current week; only historical pre-2026 Midterm observations enter report seasonality. No imports execute the CLI and no live aggregation context is changed.",
+  "additional_test_adaptation": "Investor Reports route test validates visible archive labels (Mes anterior and Archivo histórico), replacing the obsolete previousMonthReports variable-name assertion.",
+  "report_semantic_equivalence": {
+    "all_5_report_models_equal": true,
+    "all_exports_and_manifest_byte_equal": true,
+    "exports": {
+      "public/reports/segundo-informe-julio-2026.pdf": {
+        "sha256": "ca106189e0684ec8a355fcf61e5f6502b83215d3422354e084baa3d359cc6ec2",
+        "size": 1442969
+      },
+      "public/reports/segundo-informe-agosto-2026-calendar.ics": {
+        "sha256": "eb5ead8cac703763d8c0461172cbfded7518691ccc77f9fe0b3f72e980dc77b3",
+        "size": 4462
+      },
+      "public/reports/segundo-informe-agosto-2026.pdf": {
+        "sha256": "1f8a40e7f3aff392575ac09c7087642d22d3e4b2082581d031a7a7a90ec043ae",
+        "size": 54097
+      },
+      "public/reports/segundo-informe-julio-2026.html": {
+        "sha256": "4335b6a4c338be7fa00b13ebb279ae27c5e4139aba5ba13ac816a12cb1c81140",
+        "size": 51135
+      },
+      "public/reports/segundo-informe-agosto-2026.md": {
+        "sha256": "5a267530dcb66c963c6a383a50d3635a1e94ce6037853cd2dde608c05feb56a6",
+        "size": 46261
+      },
+      "public/reports/segundo-informe-julio-2026.md": {
+        "sha256": "2a756eef362b74d1a78749ef318206f9794580a71e51d13e303c40f3f0be1403",
+        "size": 35553
+      },
+      "public/reports/primer-informe-agosto-2026-calendar.ics": {
+        "sha256": "ed1baaf8b53afadff4fafb66a7bd25be2ece90e79abfbdf883ed338bdcc88638",
+        "size": 15025
+      },
+      "public/reports/primer-informe-julio-2026.html": {
+        "sha256": "751932790e2408ad5974ed817868bd23619ae41c6e1373dd7a23cd9ca379195e",
+        "size": 29363
+      },
+      "public/reports/primer-informe-agosto-2026.md": {
+        "sha256": "0c466c8f068b368d44ccd9f8cccf64a1bf9bf2be1f882e81cec59f2a1e370e29",
+        "size": 49316
+      },
+      "public/reports/primer-informe-septiembre-2026.html": {
+        "sha256": "24bd3477e47bbeb97a2d6f500371edb38b50e42dda7e8f3880531e0b00dbf663",
+        "size": 77199
+      },
+      "public/reports/manifest.json": {
+        "sha256": "40ca769e592e9148518a9fcdc42f5b231218c54828306e7d66cf9b6d2fce1623",
+        "size": 7033
+      },
+      "public/reports/primer-informe-julio-2026-calendar.ics": {
+        "sha256": "9058f4f61f339423bd077458bb18d8334ee384dd162d148abae448ec048dd798",
+        "size": 2645
+      },
+      "public/reports/primer-informe-septiembre-2026-calendar.ics": {
+        "sha256": "113a55e1ca0572508ce6febab5a1b51c423713eee095ab1dc0a8efdd3464d299",
+        "size": 8240
+      },
+      "public/reports/primer-informe-julio-2026.md": {
+        "sha256": "c9fa1cd7379123b3cf8f79614e3dea5fa56840532d1d0c30007f62cb9a0c5bb1",
+        "size": 18037
+      },
+      "public/reports/primer-informe-septiembre-2026.md": {
+        "sha256": "0d78362c9dcd1ac0a3cc26e0b9415c07dc787b26ae9bde11dff5fb4a9f787194",
+        "size": 46003
+      },
+      "public/reports/segundo-informe-agosto-2026.html": {
+        "sha256": "383edb037d4e697e7083754ad5f01f3275cdd896ea105a0de578d567ccd23886",
+        "size": 70790
+      },
+      "public/reports/primer-informe-julio-2026.pdf": {
+        "sha256": "de6c10ce5f4f924a63fdd18cc1617b8ae2b5e319098ceca88311a87af16dddc2",
+        "size": 22798
+      },
+      "public/reports/primer-informe-agosto-2026.pdf": {
+        "sha256": "d95e214bc8f4942697f313c0c86594809fff73d29e748fae6253bedaf22b61ac",
+        "size": 56119
+      },
+      "public/reports/primer-informe-septiembre-2026.pdf": {
+        "sha256": "09afc96789aa93b6010150e594b00df516d591d8e5256be533cf0532e57fa2aa",
+        "size": 62538
+      },
+      "public/reports/primer-informe-agosto-2026.html": {
+        "sha256": "620198a7530bd8c2a5984d313819fe43202c75ae7ac2dd4648a79edfe807d575",
+        "size": 79455
+      }
+    }
+  },
+  "snapshot_cut": "2026-09-04",
+  "statistical_report_matrix": {
+    "SPY": {
+      "asOf": "2026-09-04",
+      "closeConvention": "Cierre regular; serie ajustada del proveedor congelada en la captura.",
+      "levels": {
+        "available": true,
+        "statusNote": "Calculado con 1753 periodos completados.",
+        "periods": 1753,
+        "currentOpen": 767.33,
+        "lastClose": 770.19,
+        "avgHigherExtension": 0.0157,
+        "stdHigherExtension": 0.0152,
+        "avgLowerExtension": 0.0168,
+        "stdLowerExtension": 0.0193,
+        "levels": {
+          "WSHE": 791.07,
+          "WAHE": 779.39,
+          "WALE": 754.47,
+          "WSLE": 739.65
+        },
+        "distances": {
+          "WSHE": -0.0264,
+          "WAHE": -0.0118,
+          "WALE": 0.0208,
+          "WSLE": 0.0413
+        },
+        "location": "Dentro del rango por semana medio"
+      },
+      "seasonality": {
+        "month": 9,
+        "cycle": "midterm",
+        "window": "All",
+        "years": [
+          2022,
+          2018,
+          2014,
+          2010,
+          2006,
+          2002,
+          1998,
+          1994
+        ],
+        "sampleSize": 8,
+        "weeks": [
+          {
+            "month": 9,
+            "weekOfMonth": 1,
+            "averageReturn": -0.008934,
+            "medianReturn": -0.008763,
+            "winRate": 0.375,
+            "sampleSize": 8
+          },
+          {
+            "month": 9,
+            "weekOfMonth": 2,
+            "averageReturn": 0.008144,
+            "medianReturn": 0.000827,
+            "winRate": 0.5,
+            "sampleSize": 8
+          },
+          {
+            "month": 9,
+            "weekOfMonth": 3,
+            "averageReturn": -0.00453,
+            "medianReturn": 0.00795,
+            "winRate": 0.75,
+            "sampleSize": 8
+          },
+          {
+            "month": 9,
+            "weekOfMonth": 4,
+            "averageReturn": -0.008552,
+            "medianReturn": -0.00915,
+            "winRate": 0.25,
+            "sampleSize": 8
+          },
+          {
+            "month": 9,
+            "weekOfMonth": 5,
+            "averageReturn": -0.002478,
+            "medianReturn": 0.005786,
+            "winRate": 0.6667,
+            "sampleSize": 3
+          }
+        ],
+        "averageReturn": -0.006276,
+        "winRate": 0.5,
+        "averageWeeklyWinRate": 0.50834,
+        "averageWeeklySampleSize": 7,
+        "strongestWeek": 2,
+        "weakestWeek": 1,
+        "methodology": "Retorno entre cierres semanales ajustados. La semana se asigna por su fecha de cierre: Semana 1 = días 1–7; Semana 5 = días 29–31. Solo septiembres de años Midterm completos anteriores a 2026; hasta 10 ciclos. N puede variar por semana. La primera semana puede incluir días de agosto.",
+        "observations": [
+          {
+            "date": "1994-09-02",
+            "year": 1994,
+            "weekOfMonth": 1,
+            "returnValue": -0.008191976524696165
+          },
+          {
+            "date": "1994-09-09",
+            "year": 1994,
+            "weekOfMonth": 2,
+            "returnValue": -0.006276143949036195
+          },
+          {
+            "date": "1994-09-16",
+            "year": 1994,
+            "weekOfMonth": 3,
+            "returnValue": 0.006416118019425765
+          },
+          {
+            "date": "1994-09-23",
+            "year": 1994,
+            "weekOfMonth": 4,
+            "returnValue": -0.02359565166622013
+          },
+          {
+            "date": "1994-09-30",
+            "year": 1994,
+            "weekOfMonth": 5,
+            "returnValue": 0.005786069974763386
+          },
+          {
+            "date": "1998-09-04",
+            "year": 1998,
+            "weekOfMonth": 1,
+            "returnValue": -0.05441358078855718
+          },
+          {
+            "date": "1998-09-11",
+            "year": 1998,
+            "weekOfMonth": 2,
+            "returnValue": 0.040281761651500325
+          },
+          {
+            "date": "1998-09-18",
+            "year": 1998,
+            "weekOfMonth": 3,
+            "returnValue": 0.007540562679579699
+          },
+          {
+            "date": "1998-09-25",
+            "year": 1998,
+            "weekOfMonth": 4,
+            "returnValue": 0.021120526725569855
+          },
+          {
+            "date": "2002-09-06",
+            "year": 2002,
+            "weekOfMonth": 1,
+            "returnValue": -0.019394079302263445
+          },
+          {
+            "date": "2002-09-13",
+            "year": 2002,
+            "weekOfMonth": 2,
+            "returnValue": -0.003666414552568442
+          },
+          {
+            "date": "2002-09-20",
+            "year": 2002,
+            "weekOfMonth": 3,
+            "returnValue": -0.05511135474520601
+          },
+          {
+            "date": "2002-09-27",
+            "year": 2002,
+            "weekOfMonth": 4,
+            "returnValue": -0.018968955178364055
+          },
+          {
+            "date": "2006-09-01",
+            "year": 2006,
+            "weekOfMonth": 1,
+            "returnValue": 0.012403237364402742
+          },
+          {
+            "date": "2006-09-08",
+            "year": 2006,
+            "weekOfMonth": 2,
+            "returnValue": -0.008674663948611272
+          },
+          {
+            "date": "2006-09-15",
+            "year": 2006,
+            "weekOfMonth": 3,
+            "returnValue": 0.017349501527675004
+          },
+          {
+            "date": "2006-09-22",
+            "year": 2006,
+            "weekOfMonth": 4,
+            "returnValue": -0.0037127360179903812
+          },
+          {
+            "date": "2006-09-29",
+            "year": 2006,
+            "weekOfMonth": 5,
+            "returnValue": 0.01604924660296625
+          },
+          {
+            "date": "2010-09-03",
+            "year": 2010,
+            "weekOfMonth": 1,
+            "returnValue": 0.037712250115959245
+          },
+          {
+            "date": "2010-09-10",
+            "year": 2010,
+            "weekOfMonth": 2,
+            "returnValue": 0.005320873491390765
+          },
+          {
+            "date": "2010-09-17",
+            "year": 2010,
+            "weekOfMonth": 3,
+            "returnValue": 0.014461956693903044
+          },
+          {
+            "date": "2010-09-24",
+            "year": 2010,
+            "weekOfMonth": 4,
+            "returnValue": 0.020713340989543694
+          },
+          {
+            "date": "2014-09-05",
+            "year": 2014,
+            "weekOfMonth": 1,
+            "returnValue": 0.0019927063949209955
+          },
+          {
+            "date": "2014-09-12",
+            "year": 2014,
+            "weekOfMonth": 2,
+            "returnValue": -0.009845619905850644
+          },
+          {
+            "date": "2014-09-19",
+            "year": 2014,
+            "weekOfMonth": 3,
+            "returnValue": 0.012595577397315871
+          },
+          {
+            "date": "2014-09-26",
+            "year": 2014,
+            "weekOfMonth": 4,
+            "returnValue": -0.013951165002704324
+          },
+          {
+            "date": "2018-09-07",
+            "year": 2018,
+            "weekOfMonth": 1,
+            "returnValue": -0.009334887441258988
+          },
+          {
+            "date": "2018-09-14",
+            "year": 2018,
+            "weekOfMonth": 2,
+            "returnValue": 0.011404900025516529
+          },
+          {
+            "date": "2018-09-21",
+            "year": 2018,
+            "weekOfMonth": 3,
+            "returnValue": 0.00835984853339955
+          },
+          {
+            "date": "2018-09-28",
+            "year": 2018,
+            "weekOfMonth": 4,
+            "returnValue": -0.004349333526362131
+          },
+          {
+            "date": "2022-09-02",
+            "year": 2022,
+            "weekOfMonth": 1,
+            "returnValue": -0.03224686414973443
+          },
+          {
+            "date": "2022-09-09",
+            "year": 2022,
+            "weekOfMonth": 2,
+            "returnValue": 0.03661024163298676
+          },
+          {
+            "date": "2022-09-16",
+            "year": 2022,
+            "weekOfMonth": 3,
+            "returnValue": -0.0478509457355224
+          },
+          {
+            "date": "2022-09-23",
+            "year": 2022,
+            "weekOfMonth": 4,
+            "returnValue": -0.04567386429206077
+          },
+          {
+            "date": "2022-09-30",
+            "year": 2022,
+            "weekOfMonth": 5,
+            "returnValue": -0.029270312042898428
+          }
+        ]
+      }
+    },
+    "GLD": {
+      "asOf": "2026-09-04",
+      "closeConvention": "Cierre regular; serie ajustada del proveedor congelada en la captura.",
+      "levels": {
+        "available": true,
+        "statusNote": "Calculado con 1137 periodos completados.",
+        "periods": 1137,
+        "currentOpen": 407.76,
+        "lastClose": 406.77,
+        "avgHigherExtension": 0.0162,
+        "stdHigherExtension": 0.0152,
+        "avgLowerExtension": 0.016,
+        "stdLowerExtension": 0.0178,
+        "levels": {
+          "WSHE": 420.57,
+          "WAHE": 414.36,
+          "WALE": 401.23,
+          "WSLE": 393.99
+        },
+        "distances": {
+          "WSHE": -0.0328,
+          "WAHE": -0.0183,
+          "WALE": 0.0138,
+          "WSLE": 0.0324
+        },
+        "location": "Dentro del rango por semana medio"
+      },
+      "seasonality": {
+        "month": 9,
+        "cycle": "midterm",
+        "window": "All",
+        "years": [
+          2022,
+          2018,
+          2014,
+          2010,
+          2006
+        ],
+        "sampleSize": 5,
+        "weeks": [
+          {
+            "month": 9,
+            "weekOfMonth": 1,
+            "averageReturn": -0.003888,
+            "medianReturn": -0.002467,
+            "winRate": 0.4,
+            "sampleSize": 5
+          },
+          {
+            "month": 9,
+            "weekOfMonth": 2,
+            "averageReturn": -0.010739,
+            "medianReturn": -0.001855,
+            "winRate": 0.2,
+            "sampleSize": 5
+          },
+          {
+            "month": 9,
+            "weekOfMonth": 3,
+            "averageReturn": -0.012398,
+            "medianReturn": -0.010897,
+            "winRate": 0.4,
+            "sampleSize": 5
+          },
+          {
+            "month": 9,
+            "weekOfMonth": 4,
+            "averageReturn": 0.002316,
+            "medianReturn": -0.000256,
+            "winRate": 0.4,
+            "sampleSize": 5
+          },
+          {
+            "month": 9,
+            "weekOfMonth": 5,
+            "averageReturn": 0.013715,
+            "medianReturn": 0.013715,
+            "winRate": 1,
+            "sampleSize": 2
+          }
+        ],
+        "averageReturn": -0.018954,
+        "winRate": 0.2,
+        "averageWeeklyWinRate": 0.48,
+        "averageWeeklySampleSize": 4.4,
+        "strongestWeek": 5,
+        "weakestWeek": 3,
+        "methodology": "Retorno entre cierres semanales ajustados. La semana se asigna por su fecha de cierre: Semana 1 = días 1–7; Semana 5 = días 29–31. Solo septiembres de años Midterm completos anteriores a 2026; hasta 10 ciclos. N puede variar por semana. La primera semana puede incluir días de agosto.",
+        "observations": [
+          {
+            "date": "2006-09-01",
+            "year": 2006,
+            "weekOfMonth": 1,
+            "returnValue": 0.005989946576007821
+          },
+          {
+            "date": "2006-09-08",
+            "year": 2006,
+            "weekOfMonth": 2,
+            "returnValue": -0.02413904126390476
+          },
+          {
+            "date": "2006-09-15",
+            "year": 2006,
+            "weekOfMonth": 3,
+            "returnValue": -0.05343003056447948
+          },
+          {
+            "date": "2006-09-22",
+            "year": 2006,
+            "weekOfMonth": 4,
+            "returnValue": 0.019163727555270738
+          },
+          {
+            "date": "2006-09-29",
+            "year": 2006,
+            "weekOfMonth": 5,
+            "returnValue": 0.016581213675213702
+          },
+          {
+            "date": "2010-09-03",
+            "year": 2010,
+            "weekOfMonth": 1,
+            "returnValue": 0.007024204495096109
+          },
+          {
+            "date": "2010-09-10",
+            "year": 2010,
+            "weekOfMonth": 2,
+            "returnValue": -0.0010667815438472061
+          },
+          {
+            "date": "2010-09-17",
+            "year": 2010,
+            "weekOfMonth": 3,
+            "returnValue": 0.023083857149005516
+          },
+          {
+            "date": "2010-09-24",
+            "year": 2010,
+            "weekOfMonth": 4,
+            "returnValue": 0.017263537680556107
+          },
+          {
+            "date": "2014-09-05",
+            "year": 2014,
+            "weekOfMonth": 1,
+            "returnValue": -0.01453256083858745
+          },
+          {
+            "date": "2014-09-12",
+            "year": 2014,
+            "weekOfMonth": 2,
+            "returnValue": -0.030149115683255956
+          },
+          {
+            "date": "2014-09-19",
+            "year": 2014,
+            "weekOfMonth": 3,
+            "returnValue": -0.010897119722008464
+          },
+          {
+            "date": "2014-09-26",
+            "year": 2014,
+            "weekOfMonth": 4,
+            "returnValue": -0.0002561960972311539
+          },
+          {
+            "date": "2018-09-07",
+            "year": 2018,
+            "weekOfMonth": 1,
+            "returnValue": -0.0024667341649770025
+          },
+          {
+            "date": "2018-09-14",
+            "year": 2018,
+            "weekOfMonth": 2,
+            "returnValue": -0.001854685104971665
+          },
+          {
+            "date": "2018-09-21",
+            "year": 2018,
+            "weekOfMonth": 3,
+            "returnValue": 0.004158564966162626
+          },
+          {
+            "date": "2018-09-28",
+            "year": 2018,
+            "weekOfMonth": 4,
+            "returnValue": -0.0064322496507577265
+          },
+          {
+            "date": "2022-09-02",
+            "year": 2022,
+            "weekOfMonth": 1,
+            "returnValue": -0.015454995532115379
+          },
+          {
+            "date": "2022-09-09",
+            "year": 2022,
+            "weekOfMonth": 2,
+            "returnValue": 0.0035163381739400368
+          },
+          {
+            "date": "2022-09-16",
+            "year": 2022,
+            "weekOfMonth": 3,
+            "returnValue": -0.024903083629573275
+          },
+          {
+            "date": "2022-09-23",
+            "year": 2022,
+            "weekOfMonth": 4,
+            "returnValue": -0.018159657806972818
+          },
+          {
+            "date": "2022-09-30",
+            "year": 2022,
+            "weekOfMonth": 5,
+            "returnValue": 0.010848984081072599
+          }
+        ]
+      }
+    },
+    "FXI": {
+      "asOf": "2026-09-04",
+      "closeConvention": "Cierre regular; serie ajustada del proveedor congelada en la captura.",
+      "levels": {
+        "available": true,
+        "statusNote": "Calculado con 1143 periodos completados.",
+        "periods": 1143,
+        "currentOpen": 35.66,
+        "lastClose": 35.88,
+        "avgHigherExtension": 0.0243,
+        "stdHigherExtension": 0.0257,
+        "avgLowerExtension": 0.0261,
+        "stdLowerExtension": 0.029,
+        "levels": {
+          "WSHE": 37.44,
+          "WAHE": 36.53,
+          "WALE": 34.73,
+          "WSLE": 33.7
+        },
+        "distances": {
+          "WSHE": -0.0417,
+          "WAHE": -0.0177,
+          "WALE": 0.0331,
+          "WSLE": 0.0648
+        },
+        "location": "Dentro del rango por semana medio"
+      },
+      "seasonality": {
+        "month": 9,
+        "cycle": "midterm",
+        "window": "All",
+        "years": [
+          2022,
+          2018,
+          2014,
+          2010,
+          2006
+        ],
+        "sampleSize": 5,
+        "weeks": [
+          {
+            "month": 9,
+            "weekOfMonth": 1,
+            "averageReturn": 0.00283,
+            "medianReturn": 0.020796,
+            "winRate": 0.6,
+            "sampleSize": 5
+          },
+          {
+            "month": 9,
+            "weekOfMonth": 2,
+            "averageReturn": -0.007875,
+            "medianReturn": -0.003907,
+            "winRate": 0.4,
+            "sampleSize": 5
+          },
+          {
+            "month": 9,
+            "weekOfMonth": 3,
+            "averageReturn": 0.001066,
+            "medianReturn": 0.004167,
+            "winRate": 0.6,
+            "sampleSize": 5
+          },
+          {
+            "month": 9,
+            "weekOfMonth": 4,
+            "averageReturn": -0.007479,
+            "medianReturn": -0.006957,
+            "winRate": 0.4,
+            "sampleSize": 5
+          },
+          {
+            "month": 9,
+            "weekOfMonth": 5,
+            "averageReturn": -0.010065,
+            "medianReturn": -0.010065,
+            "winRate": 0.5,
+            "sampleSize": 2
+          }
+        ],
+        "averageReturn": -0.014272,
+        "winRate": 0.6,
+        "averageWeeklyWinRate": 0.5,
+        "averageWeeklySampleSize": 4.4,
+        "strongestWeek": 1,
+        "weakestWeek": 5,
+        "methodology": "Retorno entre cierres semanales ajustados. La semana se asigna por su fecha de cierre: Semana 1 = días 1–7; Semana 5 = días 29–31. Solo septiembres de años Midterm completos anteriores a 2026; hasta 10 ciclos. N puede variar por semana. La primera semana puede incluir días de agosto.",
+        "observations": [
+          {
+            "date": "2006-09-01",
+            "year": 2006,
+            "weekOfMonth": 1,
+            "returnValue": 0.02079579902205242
+          },
+          {
+            "date": "2006-09-08",
+            "year": 2006,
+            "weekOfMonth": 2,
+            "returnValue": -0.010123632130438986
+          },
+          {
+            "date": "2006-09-15",
+            "year": 2006,
+            "weekOfMonth": 3,
+            "returnValue": 0.004166990298664297
+          },
+          {
+            "date": "2006-09-22",
+            "year": 2006,
+            "weekOfMonth": 4,
+            "returnValue": 0.014710912085446726
+          },
+          {
+            "date": "2006-09-29",
+            "year": 2006,
+            "weekOfMonth": 5,
+            "returnValue": 0.008055029588323936
+          },
+          {
+            "date": "2010-09-03",
+            "year": 2010,
+            "weekOfMonth": 1,
+            "returnValue": 0.024518721602760696
+          },
+          {
+            "date": "2010-09-10",
+            "year": 2010,
+            "weekOfMonth": 2,
+            "returnValue": -0.003907483766371511
+          },
+          {
+            "date": "2010-09-17",
+            "year": 2010,
+            "weekOfMonth": 3,
+            "returnValue": 0.02868345959659968
+          },
+          {
+            "date": "2010-09-24",
+            "year": 2010,
+            "weekOfMonth": 4,
+            "returnValue": 0.021210472374449507
+          },
+          {
+            "date": "2014-09-05",
+            "year": 2014,
+            "weekOfMonth": 1,
+            "returnValue": 0.05065503576247332
+          },
+          {
+            "date": "2014-09-12",
+            "year": 2014,
+            "weekOfMonth": 2,
+            "returnValue": -0.03692374179417346
+          },
+          {
+            "date": "2014-09-19",
+            "year": 2014,
+            "weekOfMonth": 3,
+            "returnValue": -0.026373580712123812
+          },
+          {
+            "date": "2014-09-26",
+            "year": 2014,
+            "weekOfMonth": 4,
+            "returnValue": -0.017055658718925004
+          },
+          {
+            "date": "2018-09-07",
+            "year": 2018,
+            "weekOfMonth": 1,
+            "returnValue": -0.03491381657153747
+          },
+          {
+            "date": "2018-09-14",
+            "year": 2018,
+            "weekOfMonth": 2,
+            "returnValue": 0.00782203024184569
+          },
+          {
+            "date": "2018-09-21",
+            "year": 2018,
+            "weekOfMonth": 3,
+            "returnValue": 0.045840360198436736
+          },
+          {
+            "date": "2018-09-28",
+            "year": 2018,
+            "weekOfMonth": 4,
+            "returnValue": -0.006957173289884988
+          },
+          {
+            "date": "2022-09-02",
+            "year": 2022,
+            "weekOfMonth": 1,
+            "returnValue": -0.046905537177240664
+          },
+          {
+            "date": "2022-09-09",
+            "year": 2022,
+            "weekOfMonth": 2,
+            "returnValue": 0.0037594584072342396
+          },
+          {
+            "date": "2022-09-16",
+            "year": 2022,
+            "weekOfMonth": 3,
+            "returnValue": -0.04698673689897448
+          },
+          {
+            "date": "2022-09-23",
+            "year": 2022,
+            "weekOfMonth": 4,
+            "returnValue": -0.04930326081992942
+          },
+          {
+            "date": "2022-09-30",
+            "year": 2022,
+            "weekOfMonth": 5,
+            "returnValue": -0.02818494170025687
+          }
+        ]
+      }
+    },
+    "EWJ": {
+      "asOf": "2026-09-04",
+      "closeConvention": "Cierre regular; serie ajustada del proveedor congelada en la captura.",
+      "levels": {
+        "available": true,
+        "statusNote": "Calculado con 1589 periodos completados.",
+        "periods": 1589,
+        "currentOpen": 96.45,
+        "lastClose": 98.28,
+        "avgHigherExtension": 0.0181,
+        "stdHigherExtension": 0.0186,
+        "avgLowerExtension": 0.0188,
+        "stdLowerExtension": 0.0199,
+        "levels": {
+          "WSHE": 99.99,
+          "WAHE": 98.19,
+          "WALE": 94.63,
+          "WSLE": 92.71
+        },
+        "distances": {
+          "WSHE": -0.0171,
+          "WAHE": 0.0009,
+          "WALE": 0.0385,
+          "WSLE": 0.06
+        },
+        "location": "Cerca de extensión por semana alta"
+      },
+      "seasonality": {
+        "month": 9,
+        "cycle": "midterm",
+        "window": "All",
+        "years": [
+          2022,
+          2018,
+          2014,
+          2010,
+          2006,
+          2002,
+          1998
+        ],
+        "sampleSize": 7,
+        "weeks": [
+          {
+            "month": 9,
+            "weekOfMonth": 1,
+            "averageReturn": 0.002025,
+            "medianReturn": 0.00339,
+            "winRate": 0.5714,
+            "sampleSize": 7
+          },
+          {
+            "month": 9,
+            "weekOfMonth": 2,
+            "averageReturn": 0.004114,
+            "medianReturn": 0.012397,
+            "winRate": 0.5714,
+            "sampleSize": 7
+          },
+          {
+            "month": 9,
+            "weekOfMonth": 3,
+            "averageReturn": -0.002563,
+            "medianReturn": -0.005102,
+            "winRate": 0.4286,
+            "sampleSize": 7
+          },
+          {
+            "month": 9,
+            "weekOfMonth": 4,
+            "averageReturn": -0.008126,
+            "medianReturn": -0.005384,
+            "winRate": 0.4286,
+            "sampleSize": 7
+          },
+          {
+            "month": 9,
+            "weekOfMonth": 5,
+            "averageReturn": 0.000988,
+            "medianReturn": 0.000988,
+            "winRate": 0.5,
+            "sampleSize": 2
+          }
+        ],
+        "averageReturn": -0.008583,
+        "winRate": 0.4286,
+        "averageWeeklyWinRate": 0.5,
+        "averageWeeklySampleSize": 6,
+        "strongestWeek": 2,
+        "weakestWeek": 4,
+        "methodology": "Retorno entre cierres semanales ajustados. La semana se asigna por su fecha de cierre: Semana 1 = días 1–7; Semana 5 = días 29–31. Solo septiembres de años Midterm completos anteriores a 2026; hasta 10 ciclos. N puede variar por semana. La primera semana puede incluir días de agosto.",
+        "observations": [
+          {
+            "date": "1998-09-04",
+            "year": 1998,
+            "weekOfMonth": 1,
+            "returnValue": 0.0866145331843804
+          },
+          {
+            "date": "1998-09-11",
+            "year": 1998,
+            "weekOfMonth": 2,
+            "returnValue": 0.021738706654918172
+          },
+          {
+            "date": "1998-09-18",
+            "year": 1998,
+            "weekOfMonth": 3,
+            "returnValue": -0.02127618980599144
+          },
+          {
+            "date": "1998-09-25",
+            "year": 1998,
+            "weekOfMonth": 4,
+            "returnValue": -0.028985667559999984
+          },
+          {
+            "date": "2002-09-06",
+            "year": 2002,
+            "weekOfMonth": 1,
+            "returnValue": -0.03969276881363082
+          },
+          {
+            "date": "2002-09-13",
+            "year": 2002,
+            "weekOfMonth": 2,
+            "returnValue": -0.03066660447067815
+          },
+          {
+            "date": "2002-09-20",
+            "year": 2002,
+            "weekOfMonth": 3,
+            "returnValue": 0.022008432436535275
+          },
+          {
+            "date": "2002-09-27",
+            "year": 2002,
+            "weekOfMonth": 4,
+            "returnValue": -0.005383599079900048
+          },
+          {
+            "date": "2006-09-01",
+            "year": 2006,
+            "weekOfMonth": 1,
+            "returnValue": 0.011704786128279077
+          },
+          {
+            "date": "2006-09-08",
+            "year": 2006,
+            "weekOfMonth": 2,
+            "returnValue": -0.00939991010588015
+          },
+          {
+            "date": "2006-09-15",
+            "year": 2006,
+            "weekOfMonth": 3,
+            "returnValue": -0.021168104589855186
+          },
+          {
+            "date": "2006-09-22",
+            "year": 2006,
+            "weekOfMonth": 4,
+            "returnValue": -0.01565974548911353
+          },
+          {
+            "date": "2006-09-29",
+            "year": 2006,
+            "weekOfMonth": 5,
+            "returnValue": 0.025757737729739993
+          },
+          {
+            "date": "2010-09-03",
+            "year": 2010,
+            "weekOfMonth": 1,
+            "returnValue": 0.0168068570877411
+          },
+          {
+            "date": "2010-09-10",
+            "year": 2010,
+            "weekOfMonth": 2,
+            "returnValue": 0.012396938629225307
+          },
+          {
+            "date": "2010-09-17",
+            "year": 2010,
+            "weekOfMonth": 3,
+            "returnValue": -0.005102350744537132
+          },
+          {
+            "date": "2010-09-24",
+            "year": 2010,
+            "weekOfMonth": 4,
+            "returnValue": 0.012307867187553168
+          },
+          {
+            "date": "2014-09-05",
+            "year": 2014,
+            "weekOfMonth": 1,
+            "returnValue": 0.003390145885735274
+          },
+          {
+            "date": "2014-09-12",
+            "year": 2014,
+            "weekOfMonth": 2,
+            "returnValue": -0.004223186020385961
+          },
+          {
+            "date": "2014-09-19",
+            "year": 2014,
+            "weekOfMonth": 3,
+            "returnValue": 0.0016961785083600134
+          },
+          {
+            "date": "2014-09-26",
+            "year": 2014,
+            "weekOfMonth": 4,
+            "returnValue": 0.008467539318433026
+          },
+          {
+            "date": "2018-09-07",
+            "year": 2018,
+            "weekOfMonth": 1,
+            "returnValue": -0.0266230259610738
+          },
+          {
+            "date": "2018-09-14",
+            "year": 2018,
+            "weekOfMonth": 2,
+            "returnValue": 0.025586742740020707
+          },
+          {
+            "date": "2018-09-21",
+            "year": 2018,
+            "weekOfMonth": 3,
+            "returnValue": 0.03303512806596465
+          },
+          {
+            "date": "2018-09-28",
+            "year": 2018,
+            "weekOfMonth": 4,
+            "returnValue": 0.003164371529880583
+          },
+          {
+            "date": "2022-09-02",
+            "year": 2022,
+            "weekOfMonth": 1,
+            "returnValue": -0.03802358451304555
+          },
+          {
+            "date": "2022-09-09",
+            "year": 2022,
+            "weekOfMonth": 2,
+            "returnValue": 0.013366551146098749
+          },
+          {
+            "date": "2022-09-16",
+            "year": 2022,
+            "weekOfMonth": 3,
+            "returnValue": -0.027133976681975702
+          },
+          {
+            "date": "2022-09-23",
+            "year": 2022,
+            "weekOfMonth": 4,
+            "returnValue": -0.030796072820146847
+          },
+          {
+            "date": "2022-09-30",
+            "year": 2022,
+            "weekOfMonth": 5,
+            "returnValue": -0.02378105232626171
+          }
+        ]
+      }
+    },
+    "BTCUSD": {
+      "asOf": "2026-09-04",
+      "closeConvention": "Cierre diario UTC del 4 de septiembre; semana de lunes a domingo, aún incompleta al corte.",
+      "levels": {
+        "available": true,
+        "statusNote": "Calculado con 624 periodos completados.",
+        "periods": 624,
+        "currentOpen": 77673.7,
+        "lastClose": 79671.97,
+        "avgHigherExtension": 0.0708,
+        "stdHigherExtension": 0.0773,
+        "avgLowerExtension": 0.0684,
+        "stdLowerExtension": 0.0947,
+        "levels": {
+          "WSHE": 89180.8,
+          "WAHE": 83173.75,
+          "WALE": 72360.62,
+          "WSLE": 65002.71
+        },
+        "distances": {
+          "WSHE": -0.1066,
+          "WAHE": -0.0421,
+          "WALE": 0.101,
+          "WSLE": 0.2257
+        },
+        "location": "Dentro del rango por semana medio"
+      },
+      "seasonality": {
+        "month": 9,
+        "cycle": "midterm",
+        "window": "All",
+        "years": [
+          2022,
+          2018
+        ],
+        "sampleSize": 2,
+        "weeks": [
+          {
+            "month": 9,
+            "weekOfMonth": 1,
+            "averageReturn": 0.051581,
+            "medianReturn": 0.051581,
+            "winRate": 1,
+            "sampleSize": 2
+          },
+          {
+            "month": 9,
+            "weekOfMonth": 2,
+            "averageReturn": -0.022222,
+            "medianReturn": -0.022222,
+            "winRate": 0.5,
+            "sampleSize": 2
+          },
+          {
+            "month": 9,
+            "weekOfMonth": 3,
+            "averageReturn": -0.036804,
+            "medianReturn": -0.036804,
+            "winRate": 0.5,
+            "sampleSize": 2
+          },
+          {
+            "month": 9,
+            "weekOfMonth": 4,
+            "averageReturn": -0.001055,
+            "medianReturn": -0.001055,
+            "winRate": 0.5,
+            "sampleSize": 2
+          },
+          {
+            "month": 9,
+            "weekOfMonth": 5,
+            "averageReturn": -0.012677,
+            "medianReturn": -0.012677,
+            "winRate": 0,
+            "sampleSize": 1
+          }
+        ],
+        "averageReturn": -0.044684,
+        "winRate": 0,
+        "averageWeeklyWinRate": 0.5,
+        "averageWeeklySampleSize": 1.8,
+        "strongestWeek": 1,
+        "weakestWeek": 3,
+        "methodology": "Retorno entre cierres semanales ajustados. La semana se asigna por su fecha de cierre: Semana 1 = días 1–7; Semana 5 = días 29–31. Solo septiembres de años Midterm completos anteriores a 2026; hasta 10 ciclos. N puede variar por semana. La primera semana puede incluir días de agosto.",
+        "observations": [
+          {
+            "date": "2018-09-02",
+            "year": 2018,
+            "weekOfMonth": 1,
+            "returnValue": 0.08430573270270436
+          },
+          {
+            "date": "2018-09-09",
+            "year": 2018,
+            "weekOfMonth": 2,
+            "returnValue": -0.13363092808046384
+          },
+          {
+            "date": "2018-09-16",
+            "year": 2018,
+            "weekOfMonth": 3,
+            "returnValue": 0.034331871792654844
+          },
+          {
+            "date": "2018-09-23",
+            "year": 2018,
+            "weekOfMonth": 4,
+            "returnValue": 0.029683038028071262
+          },
+          {
+            "date": "2018-09-30",
+            "year": 2018,
+            "weekOfMonth": 5,
+            "returnValue": -0.012676876162624584
+          },
+          {
+            "date": "2022-09-04",
+            "year": 2022,
+            "weekOfMonth": 1,
+            "returnValue": 0.018856192930113203
+          },
+          {
+            "date": "2022-09-11",
+            "year": 2022,
+            "weekOfMonth": 2,
+            "returnValue": 0.08918639987082022
+          },
+          {
+            "date": "2022-09-18",
+            "year": 2022,
+            "weekOfMonth": 3,
+            "returnValue": -0.10793892153316531
+          },
+          {
+            "date": "2022-09-25",
+            "year": 2022,
+            "weekOfMonth": 4,
+            "returnValue": -0.03179319842033268
+          }
+        ]
+      }
+    },
+    "ETHUSD": {
+      "asOf": "2026-09-04",
+      "closeConvention": "Cierre diario UTC del 4 de septiembre; semana de lunes a domingo, aún incompleta al corte.",
+      "levels": {
+        "available": true,
+        "statusNote": "Calculado con 460 periodos completados.",
+        "periods": 460,
+        "currentOpen": 2417.9,
+        "lastClose": 2456.08,
+        "avgHigherExtension": 0.0869,
+        "stdHigherExtension": 0.0923,
+        "avgLowerExtension": 0.0989,
+        "stdLowerExtension": 0.1298,
+        "levels": {
+          "WSHE": 2851.25,
+          "WAHE": 2628.01,
+          "WALE": 2178.87,
+          "WSLE": 1865.12
+        },
+        "distances": {
+          "WSHE": -0.1386,
+          "WAHE": -0.0654,
+          "WALE": 0.1272,
+          "WSLE": 0.3168
+        },
+        "location": "Dentro del rango por semana medio"
+      },
+      "seasonality": {
+        "month": 9,
+        "cycle": "midterm",
+        "window": "All",
+        "years": [
+          2022,
+          2018
+        ],
+        "sampleSize": 2,
+        "weeks": [
+          {
+            "month": 9,
+            "weekOfMonth": 1,
+            "averageReturn": 0.086249,
+            "medianReturn": 0.086249,
+            "winRate": 1,
+            "sampleSize": 2
+          },
+          {
+            "month": 9,
+            "weekOfMonth": 2,
+            "averageReturn": -0.107152,
+            "medianReturn": -0.107152,
+            "winRate": 0.5,
+            "sampleSize": 2
+          },
+          {
+            "month": 9,
+            "weekOfMonth": 3,
+            "averageReturn": -0.060946,
+            "medianReturn": -0.060946,
+            "winRate": 0.5,
+            "sampleSize": 2
+          },
+          {
+            "month": 9,
+            "weekOfMonth": 4,
+            "averageReturn": 0.038419,
+            "medianReturn": 0.038419,
+            "winRate": 0.5,
+            "sampleSize": 2
+          },
+          {
+            "month": 9,
+            "weekOfMonth": 5,
+            "averageReturn": -0.046994,
+            "medianReturn": -0.046994,
+            "winRate": 0,
+            "sampleSize": 1
+          }
+        ],
+        "averageReturn": -0.161249,
+        "winRate": 0,
+        "averageWeeklyWinRate": 0.5,
+        "averageWeeklySampleSize": 1.8,
+        "strongestWeek": 1,
+        "weakestWeek": 2,
+        "methodology": "Retorno entre cierres semanales ajustados. La semana se asigna por su fecha de cierre: Semana 1 = días 1–7; Semana 5 = días 29–31. Solo septiembres de años Midterm completos anteriores a 2026; hasta 10 ciclos. N puede variar por semana. La primera semana puede incluir días de agosto.",
+        "observations": [
+          {
+            "date": "2018-09-02",
+            "year": 2018,
+            "weekOfMonth": 1,
+            "returnValue": 0.06967376689085936
+          },
+          {
+            "date": "2018-09-09",
+            "year": 2018,
+            "weekOfMonth": 2,
+            "returnValue": -0.3310346648886292
+          },
+          {
+            "date": "2018-09-16",
+            "year": 2018,
+            "weekOfMonth": 3,
+            "returnValue": 0.12017331295674083
+          },
+          {
+            "date": "2018-09-23",
+            "year": 2018,
+            "weekOfMonth": 4,
+            "returnValue": 0.10762547752550056
+          },
+          {
+            "date": "2018-09-30",
+            "year": 2018,
+            "weekOfMonth": 5,
+            "returnValue": -0.04699379898503009
+          },
+          {
+            "date": "2022-09-04",
+            "year": 2022,
+            "weekOfMonth": 1,
+            "returnValue": 0.10282374621384704
+          },
+          {
+            "date": "2022-09-11",
+            "year": 2022,
+            "weekOfMonth": 2,
+            "returnValue": 0.11673021728543387
+          },
+          {
+            "date": "2022-09-18",
+            "year": 2022,
+            "weekOfMonth": 3,
+            "returnValue": -0.24206546437665588
+          },
+          {
+            "date": "2022-09-25",
+            "year": 2022,
+            "weekOfMonth": 4,
+            "returnValue": -0.030788144239815907
+          }
+        ]
+      }
+    }
+  },
+  "statistical_live_equivalence": {
+    "files": 81,
+    "both_generations_equal": true,
+    "production_bytes_equal": true,
+    "provenance_bytes_equal": true,
+    "network_attempts": 0,
+    "output_set_sha256": "a31384364ab836a978634d6a1ce56bbaa63bcfafed505b0afa329a33b3c60ea8",
+    "production_current_marks": {
+      "SPY": {
+        "value": 770.19,
+        "date": "2026-09-04",
+        "timestamp": "2026-09-04T20:00:00.000Z"
+      },
+      "GLD": {
+        "value": 406.77,
+        "date": "2026-09-04",
+        "timestamp": "2026-09-04T20:00:00.000Z"
+      },
+      "FXI": {
+        "value": 35.88,
+        "date": "2026-09-04",
+        "timestamp": "2026-09-04T20:00:00.000Z"
+      },
+      "EWJ": {
+        "value": 98.28,
+        "date": "2026-09-04",
+        "timestamp": "2026-09-04T20:00:00.000Z"
+      },
+      "BTCUSD": {
+        "value": 79744.99,
+        "date": "2026-09-06",
+        "timestamp": "2026-09-06T16:32:25.000Z"
+      },
+      "ETHUSD": {
+        "value": 2483.47,
+        "date": "2026-09-06",
+        "timestamp": "2026-09-06T16:32:24.000Z"
+      }
+    }
+  },
+  "tests": {
+    "command": [
+      "node",
+      "--disable-warning=MODULE_TYPELESS_PACKAGE_JSON",
+      "--import",
+      "./scripts/report-node-register.mjs",
+      "--experimental-test-module-mocks",
+      "--test",
+      "lib/dashboard/accessibility-semantics.test.ts",
+      "lib/dashboard/adapters/btc-etf-flows.test.ts",
+      "lib/dashboard/adapters/sector-data-core.test.ts",
+      "lib/dashboard/adapters/sector-etfs.test.ts",
+      "lib/dashboard/adapters/vix-term-structure.test.ts",
+      "lib/dashboard/adapters/vix.test.ts",
+      "lib/dashboard/capital-flows-presentation.test.ts",
+      "lib/dashboard/home-preview-format.test.ts",
+      "lib/dashboard/market-breadth.test.ts",
+      "lib/dashboard/quant-risk-presentation.test.ts",
+      "lib/dashboard/regime-scoring.test.ts",
+      "lib/dashboard/risk-models.test.ts",
+      "lib/dashboard/translate-dashboard-copy.test.ts",
+      "lib/investor/entry-content.test.ts",
+      "lib/personal-finance/budget/projection-calculations.test.ts",
+      "lib/personal-finance/budget/projection-presentation.test.ts",
+      "lib/personal-finance/budget/target-calculations.test.ts",
+      "lib/personal-finance/entry-content.test.ts",
+      "lib/portfolio-fragility/analysis-view.test.ts",
+      "lib/portfolio-fragility/conformance.test.ts",
+      "lib/portfolio-fragility/engine.test.ts",
+      "lib/portfolio-fragility/format.test.ts",
+      "lib/reports/english-reports.test.ts",
+      "lib/reports/first-september-2026.test.mts",
+      "lib/reports/september-production-integration.test.mts",
+      "lib/reports/weekly-review.test.mts",
+      "lib/research/tom-decay/chart-geometry.test.ts",
+      "lib/research/tom-decay/freeze.test.ts",
+      "lib/research/tom-decay/parse.test.ts",
+      "lib/statistical-levels/baseline.test.mjs",
+      "lib/statistical-levels/contracts.test.ts",
+      "lib/statistical-levels/defect-repairs.test.ts"
+    ],
+    "qualification_dir": "/private/tmp/september-2026-integration-validation/statistical-qualification",
+    "files": 32,
+    "exit": 0,
+    "totals": {
+      "tests": 277,
+      "pass": 277,
+      "fail": 0,
+      "skipped": 0,
+      "cancelled": 0
+    }
+  },
+  "build": {
+    "command": "NEXT_TELEMETRY_DISABLED=1 npm run build",
+    "exit": 0,
+    "next": "16.3.1"
+  },
+  "reports_pipeline": [
+    {
+      "command": [
+        "npm",
+        "run",
+        "reports:generate"
+      ],
+      "exit": 0
+    },
+    {
+      "command": [
+        "npm",
+        "run",
+        "reports:validate"
+      ],
+      "exit": 0
+    },
+    {
+      "command": [
+        "npm",
+        "run",
+        "reports:check"
+      ],
+      "exit": 0
+    }
+  ],
+  "ci_validation": [
+    {
+      "script": "lint",
+      "exit": 0
+    },
+    {
+      "script": "validate:editorial",
+      "exit": 0
+    },
+    {
+      "script": "validate:seo",
+      "exit": 0
+    }
+  ],
+  "visual": {
+    "surface": "CUA in-app browser, local production build on 127.0.0.1:3032",
+    "report": {
+      "desktop": [
+        1440,
+        1000
+      ],
+      "mobile": [
+        390,
+        844
+      ],
+      "document_overflow_px": 0,
+      "main_sections": 7,
+      "SPY_accordion": "opened",
+      "levels_mobile_table_width": 290,
+      "levels_mobile_container_width": 290,
+      "table_overflow_policy": "auto",
+      "fonts": "loaded",
+      "broken_images": [],
+      "console_errors": []
+    },
+    "dashboard": {
+      "desktop": [
+        1440,
+        1000
+      ],
+      "mobile": [
+        390,
+        844
+      ],
+      "document_overflow_px": 0,
+      "report_link_destination": "/dashboard",
+      "opens": true
+    },
+    "statistical_levels": {
+      "desktop": [
+        1440,
+        1000
+      ],
+      "mobile": [
+        390,
+        844
+      ],
+      "document_overflow_px": 0,
+      "production_design_preserved": true,
+      "navigation_from_dashboard": "Inversionista menu → Niveles estadísticos",
+      "fonts": "loaded",
+      "broken_images": [],
+      "console_errors": []
+    },
+    "archive": {
+      "desktop": [
+        1440,
+        1000
+      ],
+      "mobile": [
+        390,
+        844
+      ],
+      "document_overflow_px": 0,
+      "actual_count": 1,
+      "actual": "primer-informe-septiembre-2026",
+      "archived_count": 4
+    }
+  },
+  "http": {
+    "origin": "http://127.0.0.1:3032",
+    "report_wording": true,
+    "historical_routes": 5,
+    "exports_byte_equal": true,
+    "assets_without_404": 25,
+    "dashboard_text_excerpt": "Dashboard de régimen de mercado | VIX, rotación, flujos y GLD Lectura de régimen Dashboard de régimen de mercado Ordena volatilidad, rotación sectorial, amplitud, VIX, BTC ETF flows y presión de flujos en GLD en una lectura común. Esta lectura no anticipa el mercado. Resume datos de fuentes abiertas para entender el contexto. Régimen integrado Datos temporalmente no disponibles Lectura compuesta del mercado Lectura compuesta no disponible: falta el pilar gobernado de rotación sectorial. No se renormalizan los pesos restantes. Ponderación actual: rotación sectorial 45%, VIX 40% y BTC ETF flows ",
+    "dashboard_latest_settlement": "2026-09-07",
+    "no_local_paths": true,
+    "dashboard_latest_evidence": "Cboe provider build log and serialized Dashboard component data: Último settlement disponible: 07 de sept de 2026",
+    "dashboard_local_sector_state": "Unavailable under current production quality gate; no composite score fabricated. Adapters and orchestration unchanged."
+  },
+  "limitations": {
+    "dependency_audit": "Pre-existing production lockfile: npm audit --audit-level=high exits 1; browserslist has two high advisories (GHSA-c83g-rgw3-j3cx, GHSA-73wf-gq98-2v4g). Totals: 1 high, 2 moderate, 1 low, 0 critical. package.json and package-lock.json are unchanged. No dependency repair in this report-only integration. This is not a clean CI-security or production-promotion approval.",
+    "dashboard_local_provider_state": "No sector provider credential in the isolated local build: production quality gate returns Incompleto/null score, not fabricated data. Cboe VX obtains 2026-09-07 in the build/serialized Dashboard data. Deterministic canary advances VIX/VX, sectors, BTC flows and GLD to 2026-09-08 while the entire report model stays identical."
+  },
+  "unexpected_drift": "NONE",
+  "push": false,
+  "deploy": false,
+  "next_required_step": "Independent integration review; no production promotion authorized in this task.",
+  "portable_test_authority": "Historical export assertions use the production ancestor 80e5cc2. Original snapshot assertions pin the five hashes from the reviewed original integrity manifest instead of git show against the non-ancestor 84e8b3e. No semantic-source branch objects are needed to run the suite."
+}

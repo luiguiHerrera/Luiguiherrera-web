@@ -1,3 +1,4 @@
+import type { ReportQuantitativePanel } from "../lib/reports/report-statistical-panels";
 import assert from "node:assert/strict";
 import { spawnSync } from "node:child_process";
 import { createHash } from "node:crypto";
@@ -110,7 +111,9 @@ function renderMetadataHtml(model: ReportExportModel) {
 function renderHistoricalHtml(section: Extract<ReportExportSection, { kind: "historical-snapshot" }>) {
   const snapshot = section.snapshot;
   const regime = snapshot.regime;
+  const review = snapshot.weeklyReview;
   return `
+    ${snapshot.closingLabel ? `<p>${esc(snapshot.closingLabel)}</p><p class="historical-note">${esc(snapshot.sourceNote ?? '')}</p>` : ''}
     <p class="historical-note">Corte de esta edición: <strong>${snapshot.dataDate}</strong>. Cada módulo conserva la última fecha disponible de su fuente.</p>
     <h3>Régimen al corte</h3>
     ${htmlTable(
@@ -128,7 +131,12 @@ function renderHistoricalHtml(section: Extract<ReportExportSection, { kind: "his
       ${htmlList("Qué frenó", regime.caution)}
       ${htmlList("Qué vigilar", regime.watch)}
     </div>
-    ${snapshot.indices?.length ? `<h3>Índices principales vía ETF</h3>
+    ${review ? `<h3>${esc(review.title)}</h3><p>${esc(review.periodLabel)}</p>
+      <h4>A. Lo que impulsó</h4><ul>${review.support.map(item => `<li>${esc(item)}</li>`).join('')}</ul>
+      <h4>B. Lo que frenó</h4><ul>${review.caution.map(item => `<li>${esc(item)}</li>`).join('')}</ul>
+      <p>${esc(review.closing)}</p><p class="historical-note">${esc(review.methodology)}</p>
+      ${review.notes.map(note => `<p>${esc(note)}</p>`).join('')}
+      <ul>${review.sources.map(source => `<li><a href="${esc(source.href)}">${esc(source.label)}</a></li>`).join('')}</ul>` : ''}${snapshot.indices?.length ? `<h3>Índices principales vía ETF</h3>
     ${htmlTable(
       ["Ticker", "Retorno 1W", "Media larga", "Distancia a máximos"],
       snapshot.indices.map((item) => [
@@ -169,9 +177,9 @@ function renderHistoricalHtml(section: Extract<ReportExportSection, { kind: "his
     ${htmlTable(
       ["Campo", "Valor"],
       [
-        ["RSP/SPY 1W", snapshot.breadth.rspVsSpy1wPp === null ? "Pendiente al corte" : `${formatSigned(snapshot.breadth.rspVsSpy1wPp)} pp`],
-        ["IWM/SPY 1W", snapshot.breadth.iwmVsSpy1wPp === null ? "Pendiente al corte" : `${formatSigned(snapshot.breadth.iwmVsSpy1wPp)} pp`],
-        ["QQQ/SPY 1W", snapshot.breadth.qqqVsSpy1wPp === null ? "Pendiente al corte" : `${formatSigned(snapshot.breadth.qqqVsSpy1wPp)} pp`],
+        [`RSP/SPY ${snapshot.breadth.windowLabel ?? "1W"}`, snapshot.breadth.rspVsSpy1wPp === null ? "Pendiente al corte" : `${formatSigned(snapshot.breadth.rspVsSpy1wPp)} pp`],
+        [`IWM/SPY ${snapshot.breadth.windowLabel ?? "1W"}`, snapshot.breadth.iwmVsSpy1wPp === null ? "Pendiente al corte" : `${formatSigned(snapshot.breadth.iwmVsSpy1wPp)} pp`],
+        [`QQQ/SPY ${snapshot.breadth.windowLabel ?? "1W"}`, snapshot.breadth.qqqVsSpy1wPp === null ? "Pendiente al corte" : `${formatSigned(snapshot.breadth.qqqVsSpy1wPp)} pp`],
         [
           "Sectores sobre media larga",
           snapshot.breadth.sectorsOverLongAverage === null || snapshot.breadth.sectorsOverLongAverageTotal === null
@@ -196,6 +204,7 @@ function renderHistoricalHtml(section: Extract<ReportExportSection, { kind: "his
     ${snapshot.vix ? htmlTable(
       ["Campo", "Valor"],
       [
+        ...(snapshot.vix.asOf ? [["Fecha de VIX spot", snapshot.vix.asOf]] : []),
         ["Nivel al corte", snapshot.vix.level.toFixed(1)],
         ...(snapshot.vix.change1d === undefined ? [] : [["Cambio 1D", formatSigned(snapshot.vix.change1d)]]),
         ...(snapshot.vix.percentileLabel ? [["Percentil", snapshot.vix.percentileLabel]] : []),
@@ -210,6 +219,7 @@ function renderHistoricalHtml(section: Extract<ReportExportSection, { kind: "his
       ["Campo", "Valor"],
       [
         ["Clasificación", snapshot.vixTermStructure.classification],
+        ...(snapshot.vixTermStructure.points ?? []).map(point=>[`${point.label} · ${point.expirationDate}`, String(point.value)]),
         ["VX2 - VX1", `${formatSigned(snapshot.vixTermStructure.vx2MinusVx1, 2)} puntos`],
         ["Pendiente VX1-VX2", `${formatSigned(snapshot.vixTermStructure.slopeVx1Vx2Pct)}%`],
         ["VX3 - VX1", `${formatSigned(snapshot.vixTermStructure.vx3MinusVx1, 2)} puntos`],
@@ -292,7 +302,7 @@ function renderStockpickingHtml(stockpicking: NonNullable<Extract<ReportExportSe
     ? `<p>${esc(publishedNote)}</p>`
     : `<p><strong>${published.length} resultados publicados; ${exceeded.length} excedieron el rango.</strong> VRT, COIN y RDDT fueron las reacciones negativas más fuertes.</p>`;
   const upcomingIntro = upcomingNote ? `<p>${esc(upcomingNote)}</p>` : "";
-  return `<div class="stockpicking-earnings"><h4>Qué pasó — resultados publicados</h4>${publishedIntro}${htmlTable(["Fecha", "Empresa", "Movimiento implícito esperado", "Movimiento ocurrido", "Lectura"], published.map((item) => [item.reportDate, `${item.company} (${item.ticker})`, impliedMove(item), `${item.actualMovePct?.toFixed(1).replace(".", ",")} %`, Math.abs(item.actualMovePct ?? 0) > item.impliedMovePct ? "Excedió el rango" : "Dentro del rango"]))}<h5>Trazabilidad — resultados publicados</h5>${earningsTraceHtml(published)}<h4>Qué esperamos — próximos resultados</h4>${upcomingIntro}${htmlTable(["Fecha", "Empresa", "Movimiento implícito esperado", "Hora o estado", "Fuente de fecha y hora"], upcoming.map((item) => [item.reportDate, `${item.company} (${item.ticker})`, impliedMove(item), earningsScheduleLabel(item), item.dateTimeSourceLabel]))}<h5>Trazabilidad — próximos resultados</h5>${earningsTraceHtml(upcoming)}${renderStockpickingThemesHtml(stockpicking.themes)}<p class="historical-note">${esc(methodology)} Cada fila enlaza su página por ticker, la fecha de consulta y las fuentes utilizadas para fecha, hora y reacción.</p></div>`;
+  return `<div class="stockpicking-earnings"><h4>Qué pasó — resultados publicados</h4>${publishedIntro}${htmlTable(["Fecha", "Empresa", "Movimiento implícito esperado", "Movimiento ocurrido", "Lectura"], published.map((item) => [item.reportDate, `${item.company} (${item.ticker})`, impliedMove(item), `${item.actualMovePct?.toFixed(1).replace(".", ",")} %`, Math.abs(item.actualMovePct ?? 0) > item.impliedMovePct ? "Excedió el rango" : "Dentro del rango"]))}<h5>Trazabilidad — resultados publicados</h5>${earningsTraceHtml(published)}${upcoming.length ? `<h4>Qué esperamos — próximos resultados</h4>${upcomingIntro}${htmlTable(["Fecha", "Empresa", "Movimiento implícito esperado", "Hora o estado", "Fuente de fecha y hora"], upcoming.map((item) => [item.reportDate, `${item.company} (${item.ticker})`, impliedMove(item), earningsScheduleLabel(item), item.dateTimeSourceLabel]))}<h5>Trazabilidad — próximos resultados</h5>${earningsTraceHtml(upcoming)}` : upcomingIntro}${renderStockpickingThemesHtml(stockpicking.themes)}<p class="historical-note">${esc(methodology)} Cada fila enlaza su página por ticker, la fecha de consulta y las fuentes utilizadas para fecha, hora y reacción.</p></div>`;
 }
 
 function renderStockpickingThemesMarkdown(themes: NonNullable<Extract<ReportExportSection, { kind: "asset-readings" }>["stockpicking"]>["themes"]) {
@@ -314,19 +324,17 @@ ${publishedIntro}
 |---|---|---:|---:|---|
 ${published.map((item) => `| ${item.reportDate} | ${item.company} (${item.ticker}) | ${impliedMove(item)} | ${item.actualMovePct?.toFixed(1).replace(".", ",")} % | ${Math.abs(item.actualMovePct ?? 0) > item.impliedMovePct ? "Excedió el rango" : "Dentro del rango"} |`).join("\n")}
 
-#### Qué esperamos — próximos resultados
+${upcoming.length ? `#### Qué esperamos — próximos resultados
 ${upcomingNote ? `\n${upcomingNote}\n` : ""}
 | Fecha | Empresa | Movimiento implícito esperado | Hora o estado | Fuente de fecha y hora |
 |---|---|---:|---|---|
-${upcoming.map((item) => `| ${item.reportDate} | ${item.company} (${item.ticker}) | ${impliedMove(item)} | ${earningsScheduleLabel(item)} | [${item.dateTimeSourceLabel}](${item.dateTimeSourceHref}) |`).join("\n")}
+${upcoming.map((item) => `| ${item.reportDate} | ${item.company} (${item.ticker}) | ${impliedMove(item)} | ${earningsScheduleLabel(item)} | [${item.dateTimeSourceLabel}](${item.dateTimeSourceHref}) |`).join("\n")}` : upcomingNote ?? ""}
 
 ##### Trazabilidad — resultados publicados
 
 ${earningsTraceMarkdown(published)}
 
-##### Trazabilidad — próximos resultados
-
-${earningsTraceMarkdown(upcoming)}
+${upcoming.length ? `##### Trazabilidad — próximos resultados\n\n${earningsTraceMarkdown(upcoming)}` : ""}
 ${renderStockpickingThemesMarkdown(stockpicking.themes)}
 ${methodology} Cada fila enlaza su página por ticker, la fecha de consulta y las fuentes utilizadas para fecha, hora y reacción.`;
 }
@@ -401,6 +409,18 @@ function renderWatchlistDashboardHtml(
   }).join("");
 }
 
+function quantitativeHtml(panels: ReportQuantitativePanel[] = []) {
+  return panels.map(panel => {
+    const range = panel.range;
+    const x = (value: number) => range ? 28 + (value - range.low) / (range.high - range.low || 1) * 444 : 0;
+    const chart = range ? `<svg viewBox="0 0 500 82" role="img" aria-label="Rango estadístico semanal; valores exactos en la tabla" style="width:100%;max-width:660px"><line x1="28" y1="44" x2="472" y2="44" stroke="#d8d2c6" stroke-width="8"/>${range.marks.map(mark=>`<line x1="${x(mark.value)}" x2="${x(mark.value)}" y1="34" y2="53" stroke="#153638"/><text x="${x(mark.value)}" y="72" text-anchor="middle" font-size="12">${mark.label}</text>`).join('')}<circle cx="${x(range.current)}" cy="44" r="6" fill="#9a7a45"/><text x="250" y="19" text-anchor="middle" font-size="12">Precio al corte: ${range.current}</text></svg>` : '';
+    return `<div class="quantitative"><h4>${esc(panel.title)}</h4><p>${esc(panel.intro)}</p>${chart}${panel.rows.length ? htmlTable(panel.headers,panel.rows) : ''}${panel.notes.map(note=>`<p class="historical-note">${esc(note)}</p>`).join('')}</div>`;
+  }).join('');
+}
+function quantitativeMarkdown(panels: ReportQuantitativePanel[] = []) {
+  return panels.map(panel=>`\n\n#### ${panel.title}\n\n${panel.intro}\n\n${panel.rows.length ? [panel.headers, panel.headers.map(()=> '---'), ...panel.rows].map(row=>'| '+row.map(cell=>cell.replace(/\|/g,'\\|')).join(' | ')+' |').join('\n') : ''}\n\n${panel.notes.join('\n\n')}`).join('');
+}
+
 function renderSectionHtml(section: ReportExportSection, model: ReportExportModel) {
   let body = "";
   switch (section.kind) {
@@ -416,6 +436,10 @@ function renderSectionHtml(section: ReportExportSection, model: ReportExportMode
       }
       break;
     case "context":
+      if (model.presentation?.contextStyle === "prose") {
+        body = section.items.map(item=>`<p>${esc(item.body)}</p>`).join('') + `<p class="historical-note">${esc(model.presentation.openingLine ?? '')}</p>`;
+        break;
+      }
       body = section.items
         .map(
           (item) =>
@@ -445,6 +469,7 @@ function renderSectionHtml(section: ReportExportSection, model: ReportExportMode
               ],
             )}${item.timeline && model.presentation?.timelineStyle === "progression" ? `
             <p class="eyebrow">Secuencia de lectura</p><ol class="reading-flow"><li><strong>Antes — Contexto</strong><span>${esc(item.timeline.before)}</span></li><li><strong>Ahora — Qué cambió</strong><span>${esc(item.timeline.now)}</span></li><li><strong>Después — Qué vigilamos</strong><span>${esc(item.timeline.next)}</span></li></ol>` : ""}
+            ${quantitativeHtml(item.quantitativePanels)}
             ${item.detailsModule === "earnings" && section.stockpicking ? renderStockpickingHtml(section.stockpicking) : ""}
           </article>`,
         )
@@ -473,14 +498,19 @@ function renderSectionHtml(section: ReportExportSection, model: ReportExportMode
           (item) =>
             `<article class="card"><p class="eyebrow">${esc(item.dateLabel)}</p><h4>${esc(item.event)}</h4><p>${esc(item.whyItMatters)}</p></article>`,
         )
-        .join("")}<h3>Escenarios</h3><div class="grid">${section.scenarios
+        .join("")}${section.scenarios.length ? `<h3>Escenarios</h3><div class="grid">${section.scenarios
         .map((item) => `<article class="card"><h4>${esc(item.title)}</h4><p>${esc(item.body)}</p></article>`)
-        .join("")}</div>`;
+        .join("")}</div>` : ""}`;
       break;
     case "probable-routes":
-      body = `<p class="historical-note">${esc(section.routes.note)}</p>${section.routes.engines?.length ? `<h3>Motores</h3><div class="grid">${section.routes.engines.map((item) => `<article class="card"><h4>${esc(item.title)}</h4><p>${esc(item.body)}</p></article>`).join("")}</div>` : ""}<h3>Escenarios</h3><div class="grid">${section.routes.scenarios.map((item) => `<article class="card"><h4>${esc(item.title)}</h4><p>${esc(item.body)}</p></article>`).join("")}</div>`;
+      body = `${model.presentation?.contextStyle === "prose" ? "" : `<p class="historical-note">${esc(section.routes.note)}</p>`}${section.routes.engines?.length ? `<h3>Motores</h3><div class="grid">${section.routes.engines.map((item) => `<article class="card"><h4>${esc(item.title)}</h4><p>${esc(item.body)}</p></article>`).join("")}</div>` : ""}<h3>Escenarios</h3><div class="grid">${section.routes.scenarios.map((item) => `<article class="card"><h4>${esc(item.title)}</h4><p>${esc(item.body)}</p></article>`).join("")}</div>${model.presentation?.contextStyle === "prose" ? `<p class="historical-note">${esc(section.routes.note)}</p>` : ""}`;
       break;
     case "watchlist":
+      if (model.presentation?.contextStyle === "prose") {
+        const first = section.items[0];
+        body = `<p>${esc(first.statusLabel)} · ${esc(first.asOf)}. ${esc(first.source)}</p>${htmlTable(["Factor", "Qué mira", "Qué cambiaría la lectura"], section.items.map(item=>[item.name, item.whatLooksAt, item.whatWouldChange ?? item.whyItMatters]))}`;
+        break;
+      }
       body = model.presentation?.watchlistStyle === "dashboard" ? renderWatchlistDashboardHtml(section.items, model) : section.items
         .map((item) => {
           const readingLabel = item.currentReading ? "Lectura al publicar" : "Lectura de seguimiento";
@@ -514,7 +544,7 @@ function renderSectionHtml(section: ReportExportSection, model: ReportExportMode
         .join("");
       break;
     case "sources":
-      body = `<h3>Fuentes y método</h3><p>${esc(section.sourcesNote)}</p><h3>Limitaciones y aviso educativo</h3><p class="disclaimer">${esc(section.disclaimer)}</p>`;
+      body = `${section.sourceGroups?.map(group=>`<h3>${esc(group.title)}</h3><ul>${group.entries.map(entry=>`<li>${entry.href ? `<a href="${esc(absoluteUrl(entry.href))}">${esc(entry.label)}</a>` : esc(entry.label)}${entry.note ? ` · ${esc(entry.note)}` : ''}</li>`).join('')}</ul>`).join('') ?? ''}<h3>Fuentes y método</h3><p>${esc(section.sourcesNote)}</p><h3>Limitaciones y aviso educativo</h3><p class="disclaimer">${esc(section.disclaimer)}</p>`;
       break;
   }
 
@@ -541,6 +571,7 @@ function renderHtml(model: ReportExportModel) {
       <h1>${esc(model.title)}</h1>
       <p class="subtitle">${esc(model.subtitle)}</p>
       ${renderMetadataHtml(model)}
+      ${model.presentation?.prospectivePeriod ? `<p>Periodo prospectivo: ${esc(model.presentation.prospectivePeriod)}</p>` : ""}
       <p class="primary-url">Página editorial primaria: <a href="${model.canonicalUrl}">${model.canonicalUrl}</a></p>
     </header>
     ${model.sections.map((section) => renderSectionHtml(section, model)).join("\n")}
@@ -554,7 +585,8 @@ function renderHistoricalMarkdown(
   section: Extract<ReportExportSection, { kind: "historical-snapshot" }>,
 ) {
   const snapshot = section.snapshot;
-  return `Corte de esta edición: **${snapshot.dataDate}**. Cada módulo conserva la última fecha disponible de su fuente.
+  const review = snapshot.weeklyReview;
+  return `${snapshot.closingLabel ? `${snapshot.closingLabel}\n\n${snapshot.sourceNote}\n\n` : ''}Corte de esta edición: **${snapshot.dataDate}**. Cada módulo conserva la última fecha disponible de su fuente.
 
 ### Régimen al corte
 
@@ -578,7 +610,27 @@ ${snapshot.regime.caution.map((item) => `- ${item}`).join("\n")}
 
 ${snapshot.regime.watch.map((item) => `- ${item}`).join("\n")}
 
-${snapshot.indices?.length ? `### Índices principales vía ETF
+${review ? `### ${review.title}
+
+${review.periodLabel}
+
+#### A. Lo que impulsó
+
+${review.support.map(item => `- ${item}`).join('\n')}
+
+#### B. Lo que frenó
+
+${review.caution.map(item => `- ${item}`).join('\n')}
+
+${review.closing}
+
+${review.methodology}
+
+${review.notes.join('\n\n')}
+
+${review.sources.map(source => `- [${source.label}](${source.href})`).join('\n')}
+
+` : ''}${snapshot.indices?.length ? `### Índices principales vía ETF
 
 | Ticker | Retorno 1W | Media larga | Distancia a máximos |
 |---|---:|---:|---:|
@@ -607,9 +659,9 @@ ${[
 
 ${snapshot.breadth ? `### Amplitud relativa al corte
 
-- RSP/SPY 1W: **${snapshot.breadth.rspVsSpy1wPp === null ? "Pendiente al corte" : `${formatSigned(snapshot.breadth.rspVsSpy1wPp)} pp`}**
-- IWM/SPY 1W: **${snapshot.breadth.iwmVsSpy1wPp === null ? "Pendiente al corte" : `${formatSigned(snapshot.breadth.iwmVsSpy1wPp)} pp`}**
-- QQQ/SPY 1W: **${snapshot.breadth.qqqVsSpy1wPp === null ? "Pendiente al corte" : `${formatSigned(snapshot.breadth.qqqVsSpy1wPp)} pp`}**
+- RSP/SPY ${snapshot.breadth.windowLabel ?? "1W"}: **${snapshot.breadth.rspVsSpy1wPp === null ? "Pendiente al corte" : `${formatSigned(snapshot.breadth.rspVsSpy1wPp)} pp`}**
+- IWM/SPY ${snapshot.breadth.windowLabel ?? "1W"}: **${snapshot.breadth.iwmVsSpy1wPp === null ? "Pendiente al corte" : `${formatSigned(snapshot.breadth.iwmVsSpy1wPp)} pp`}**
+- QQQ/SPY ${snapshot.breadth.windowLabel ?? "1W"}: **${snapshot.breadth.qqqVsSpy1wPp === null ? "Pendiente al corte" : `${formatSigned(snapshot.breadth.qqqVsSpy1wPp)} pp`}**
 - Sectores sobre media larga: **${snapshot.breadth.sectorsOverLongAverage === null || snapshot.breadth.sectorsOverLongAverageTotal === null ? "Pendiente al corte" : `${snapshot.breadth.sectorsOverLongAverage} / ${snapshot.breadth.sectorsOverLongAverageTotal}`}**
 - Lectura al publicar: ${snapshot.breadth.reading}
 
@@ -626,6 +678,7 @@ ${snapshot.breadth ? `### Amplitud relativa al corte
 | Campo | Valor |
 |---|---|
 ${snapshot.vix ? [
+  ...(snapshot.vix.asOf ? [`| Fecha VIX spot | ${snapshot.vix.asOf} |`] : []),
   `| Nivel al corte | ${snapshot.vix.level.toFixed(1)} |`,
   ...(snapshot.vix.change1d === undefined ? [] : [`| Cambio 1D | ${formatSigned(snapshot.vix.change1d)} |`]),
   ...(snapshot.vix.percentileLabel ? [`| Percentil | ${snapshot.vix.percentileLabel} |`] : []),
@@ -641,11 +694,12 @@ ${snapshot.vixTermStructure ? `### Estructura temporal del VIX al corte
 - VX2 - VX1: **${formatSigned(snapshot.vixTermStructure.vx2MinusVx1, 2)} puntos**
 - Pendiente VX1-VX2: **${formatSigned(snapshot.vixTermStructure.slopeVx1Vx2Pct)}%**
 - VX3 - VX1: **${formatSigned(snapshot.vixTermStructure.vx3MinusVx1, 2)} puntos**
+${snapshot.vixTermStructure.points?.map(point=>`- ${point.label} · ${point.expirationDate}: ${point.value}`).join("\n") ?? ""}
 
 ` : ""}### Flujos netos de ETFs de BTC al corte
 
 ${snapshot.btcEtfFlows ? `- Último día: **${formatUsdMillions(snapshot.btcEtfFlows.lastDayUsdMillions)}**
-- Rolling 5D: **${formatUsdMillions(snapshot.btcEtfFlows.rolling5dUsdMillions)}**
+- ${"Rolling 5D"}: **${formatUsdMillions(snapshot.btcEtfFlows.rolling5dUsdMillions)}**
 - Racha: **${snapshot.btcEtfFlows.streakLabel}**
 - Lectura al publicar: ${snapshot.btcEtfFlows.reading}` : "No disponible al cierre."}
 
@@ -687,6 +741,7 @@ function renderSectionMarkdown(section: ReportExportSection, model: ReportExport
           : ""
       }`;
     case "context":
+      if (model.presentation?.contextStyle === "prose") return `${heading}\n\n${section.items.map(item=>item.body).join('\n\n')}\n\n${model.presentation.openingLine}`;
       return `${heading}\n\n${section.items
         .map((item) => `### ${item.title}\n\n**${item.summary}**\n\n${item.body}`)
         .join("\n\n")}`;
@@ -710,7 +765,7 @@ ${[
     `- **Ahora / cambio:** ${item.timeline.now}`,
     `- **Próximas señales:** ${item.timeline.next}`,
   ] : []),
-].join("\n")}${item.detailsModule === "earnings" && section.stockpicking ? `\n\n${renderStockpickingMarkdown(section.stockpicking)}` : ""}`,
+].join("\n")}${quantitativeMarkdown(item.quantitativePanels)}${item.detailsModule === "earnings" && section.stockpicking ? `\n\n${renderStockpickingMarkdown(section.stockpicking)}` : ""}`,
         )
         .join("\n\n")}`;
     case "historical-snapshot":
@@ -738,12 +793,14 @@ ${model.presentation?.calendarStyle === "monthly" ? `| Fecha | Hora y zona | Eve
 |---|---|---|---|---|---|---|
 ${section.calendar.map((item) => `| ${item.dateLabel} | ${calendarTimeLabel(item)} | ${item.event} | ${item.whyItMatters} | ${item.affectedAssets?.join(", ") ?? "No especificados"} | ${item.sourceHref && item.sourceLabel ? `[${item.sourceLabel}](${item.sourceHref})` : item.sourceLabel ?? "No indicada"} | ${item.trackingHref && item.trackingLabel ? `[${item.trackingLabel}](${absoluteUrl(item.trackingHref)})` : "No disponible"} |`).join("\n")}` : section.calendar.map((item) => `- **${item.dateLabel}:** ${item.event}. ${item.whyItMatters}`).join("\n")}
 
-### Escenarios
-
-${section.scenarios.map((item) => `#### ${item.title}\n\n${item.body}`).join("\n\n")}`;
+${section.scenarios.length ? `### Escenarios\n\n${section.scenarios.map((item) => `#### ${item.title}\n\n${item.body}`).join("\n\n")}` : ""}`;
     case "probable-routes":
-      return `${heading}\n\n${section.routes.note}\n\n${section.routes.engines?.length ? `### Motores\n\n${section.routes.engines.map((item) => `#### ${item.title}\n\n${item.body}`).join("\n\n")}\n\n` : ""}### Escenarios\n\n${section.routes.scenarios.map((item) => `#### ${item.title}\n\n${item.body}`).join("\n\n")}`;
+      return `${heading}\n\n${model.presentation?.contextStyle === "prose" ? "" : `${section.routes.note}\n\n`}${section.routes.engines?.length ? `### Motores\n\n${section.routes.engines.map((item) => `#### ${item.title}\n\n${item.body}`).join("\n\n")}\n\n` : ""}### Escenarios\n\n${section.routes.scenarios.map((item) => `#### ${item.title}\n\n${item.body}`).join("\n\n")}${model.presentation?.contextStyle === "prose" ? `\n\n${section.routes.note}` : ""}`;
     case "watchlist":
+      if (model.presentation?.contextStyle === "prose") {
+        const first = section.items[0];
+        return `${heading}\n\n${first.statusLabel} · ${first.asOf}. ${first.source}\n\n| Factor | Qué mira | Qué cambiaría la lectura |\n|---|---|---|\n${section.items.map(item=>`| ${item.name} | ${item.whatLooksAt} | ${item.whatWouldChange} |`).join("\n")}`;
+      }
       return `${heading}\n\n${section.items
         .map((item) => {
           const readingLabel = item.currentReading ? "Lectura al publicar" : "Lectura de seguimiento";
@@ -765,6 +822,8 @@ ${section.scenarios.map((item) => `#### ${item.title}\n\n${item.body}`).join("\n
         .join("\n\n")}`;
     case "sources":
       return `${heading}
+
+${section.sourceGroups?.map(group=>`### ${group.title}\n\n${group.entries.map(entry=>`- ${entry.href ? `[${entry.label}](${absoluteUrl(entry.href)})` : entry.label}${entry.note ? ` · ${entry.note}` : ''}`).join('\n')}`).join('\n\n') ?? ''}
 
 ### Fuentes y método
 
@@ -794,7 +853,7 @@ ${metadata.join("\n")}
 
 > La página editorial indicada arriba es la representación primaria de este informe.
 
-${model.sections.map((section) => renderSectionMarkdown(section, model)).join("\n\n")}
+${model.presentation?.prospectivePeriod ? `Periodo prospectivo: ${model.presentation.prospectivePeriod}\n\n` : ""}${model.sections.map((section) => renderSectionMarkdown(section, model)).join("\n\n")}
 `.replace(/[ \t]+$/gm, "");
 }
 
@@ -1120,7 +1179,7 @@ function normalizedText(value: string) {
     .replace(/&quot;/g, '"')
     .replace(/&#39;|&apos;/g, "'")
     .replace(/<[^>]+>/g, " ")
-    .replace(/[\u2011\u2012\u2013\u2014]/g, "-")
+    .replace(/[\u2011\u2012\u2013\u2014\u2212]/g, "-")
     .replace(/\u2192/g, "->")
     .replace(/»/g, "≈")
     .replace(/luigui herrera\s+\d+/gi, " ")
@@ -1151,10 +1210,12 @@ function substantiveNeedles(section: ReportExportSection, model: ReportExportMod
       }
       break;
     case "context":
-      for (const item of section.items) values.push(item.title, item.summary, item.body);
+      for (const item of section.items) values.push(...(model.presentation?.contextStyle === "prose" ? [item.body] : [item.title, item.summary, item.body]));
+      if (model.presentation?.openingLine) values.push(model.presentation.openingLine);
       break;
     case "asset-readings":
       for (const item of section.items) {
+        for (const panel of item.quantitativePanels ?? []) values.push(panel.title,panel.intro,...panel.headers,...panel.rows.flat(),...panel.notes);
         values.push(
           item.asset,
           item.headline,
@@ -1180,6 +1241,7 @@ function substantiveNeedles(section: ReportExportSection, model: ReportExportMod
       break;
     case "historical-snapshot": {
       const snapshot = section.snapshot;
+      if (snapshot.closingLabel) values.push(snapshot.closingLabel, snapshot.sourceNote ?? "");
       values.push(
         snapshot.dataDate,
         snapshot.regime.label,
@@ -1196,6 +1258,12 @@ function substantiveNeedles(section: ReportExportSection, model: ReportExportMod
         snapshot.btcEtfFlows ? formatUsdMillions(snapshot.btcEtfFlows.rolling5dUsdMillions) : "No disponible al cierre",
         snapshot.gldFlowPressure?.summary ?? "No disponible al cierre",
       );
+      if (snapshot.weeklyReview) {
+        const review = snapshot.weeklyReview;
+        values.push(review.title, review.periodLabel, 'A. Lo que impulsó', 'B. Lo que frenó',
+          ...review.support, ...review.caution, review.closing, review.methodology, ...review.notes,
+          ...review.sources.map(source => source.label));
+      }
       if (snapshot.breadth) values.push(snapshot.breadth.reading);
       if (snapshot.quantRadar) {
         values.push(
@@ -1266,6 +1334,7 @@ function substantiveNeedles(section: ReportExportSection, model: ReportExportMod
       }
       break;
     case "sources":
+      for (const group of section.sourceGroups ?? []) values.push(group.title,...group.entries.flatMap(entry=>[entry.label,entry.note ?? ""]));
       values.push(section.sourcesNote, section.disclaimer);
       break;
   }

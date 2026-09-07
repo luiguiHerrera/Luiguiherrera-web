@@ -1,3 +1,6 @@
+import { firstSeptember2026Report } from "./first-september-2026.ts";
+import type { ReportQuantitativePanel } from "./report-statistical-panels";
+
 export type MarketReportSectionBlock = {
   title: string;
   summary: string;
@@ -35,6 +38,7 @@ export type MarketReportAssetReading = {
   };
   figures?: MarketReportFigure[];
   detailsModule?: "earnings";
+  quantitativePanels?: ReportQuantitativePanel[];
 };
 
 export type MarketReportCalendarItem = {
@@ -108,6 +112,9 @@ export type MarketReportStockpickingTheme = {
 
 export type MarketReportPresentation = {
   contextTitle?: string;
+  contextStyle?: "prose";
+  openingLine?: string;
+  prospectivePeriod?: string;
   timelineStyle?: "progression";
   calendarStyle?: "monthly";
   watchlistStyle?: "dashboard";
@@ -192,6 +199,7 @@ export type MarketReport = {
   /** Optional: las ediciones con rutas probables no duplican los escenarios. */
   scenarios?: MarketReportScenario[];
   watchlist: MarketReportWatchItem[];
+  sourceGroups?: Array<{ title: string; entries: Array<{ label: string; href?: string; note?: string }> }>;
   sourcesNote: string;
   disclaimer: string;
   presentation?: MarketReportPresentation;
@@ -1641,7 +1649,7 @@ export const marketReports: MarketReport[] = [
     htmlHref: "/reports/segundo-informe-agosto-2026.html",
     markdownHref: "/reports/segundo-informe-agosto-2026.md",
     pdfHref: "/reports/segundo-informe-agosto-2026.pdf",
-    status: "actual",
+    status: "archivado",
     presentation: {
       contextTitle: "Contexto general",
       calendarStyle: "monthly",
@@ -2068,6 +2076,7 @@ export const marketReports: MarketReport[] = [
     disclaimer:
       "Este informe organiza información pública, datos de mercado y análisis de terceros con fines exclusivamente educativos e informativos. No constituye asesoría financiera personalizada, recomendación de inversión ni instrucción para comprar, vender o mantener activos. Las rutas descritas son escenarios condicionales, no predicciones. Posicionamiento, estacionalidad, análisis técnico, flujos y movimientos implícitos de opciones pueden ayudar a interpretar el contexto, pero no garantizan resultados futuros. Las lecturas automáticas de este informe están congeladas al cierre del 14 de agosto de 2026 para preservar la fotografía histórica con la que fue publicado. El Dashboard continúa actualizándose con los datos más recientes disponibles y puede mostrar valores distintos.",
   },
+  firstSeptember2026Report,
 ];
 
 export const activeMarketReport = marketReports.find((report) => report.status === "actual") ?? marketReports[0];

@@ -1,0 +1,183 @@
+{
+  "dataDate": "2026-09-04",
+  "displayTitle": "Lecturas de mercado al cierre",
+  "closingLabel": "Estado del mercado al cierre del 4 de septiembre de 2026",
+  "sourceNote": "Captura inmutable al 04/09/2026. Rotación, radar, futuros VX, GLD y BTC ETF flows corresponden al 4 de septiembre. VIX spot conserva la última observación disponible de FRED: 3 de septiembre. Cada fuente mantiene su propia fecha; no se incorporan datos posteriores al corte.",
+  "regime": {
+    "label": "Risk-on selectivo",
+    "score": 74,
+    "confidence": 88,
+    "bias": "Favorable",
+    "interpretation": "Lectura compuesta de volatilidad, rotación y flujos. Ponderación actual: rotación sectorial 45%, VIX 40% y BTC ETF flows 15%.",
+    "support": [
+      "Rotación: Sectores growth/cíclicos lideran y defensivos quedan rezagados.",
+      "Volatilidad: Normal bajo: presión de volatilidad contenida.",
+      "BTC ETF flows: Entradas sostenidas favorecen apetito por riesgo cripto/institucional.",
+      "Racha BTC ETF: Racha de 3 días de entradas"
+    ],
+    "caution": [
+      "Dispersión sectorial: Dispersión 1W de 4.2%; reduce la confianza del régimen."
+    ],
+    "watch": [
+      "La confianza corresponde al modelo compuesto; no mide probabilidad de subida.",
+      "BTC: acumulado de cinco sesiones completas del 31 de agosto al 4 de septiembre, según Farside."
+    ]
+  },
+  "indices": null,
+  "sectors": {
+    "positiveCount": 4,
+    "totalCount": 11,
+    "negativeCount": 6,
+    "dispersion1w": 4.163949128446765,
+    "leaders": [
+      {
+        "ticker": "XLE",
+        "name": "Energía",
+        "return1w": 2.2016592214422426
+      },
+      {
+        "ticker": "XLK",
+        "name": "Tecnología",
+        "return1w": 0.8562658193763895
+      },
+      {
+        "ticker": "XLU",
+        "name": "Utilities",
+        "return1w": 0.8190966534051158
+      }
+    ],
+    "laggards": [
+      {
+        "ticker": "XLY",
+        "name": "Consumo discrecional",
+        "return1w": -1.9622899070045219
+      },
+      {
+        "ticker": "XLB",
+        "name": "Materiales",
+        "return1w": -1.3915005641218503
+      },
+      {
+        "ticker": "XLRE",
+        "name": "Real Estate",
+        "return1w": -1.236510791366896
+      }
+    ],
+    "reading": "La lectura sugiere una rotación cíclica. No implica dirección futura del mercado."
+  },
+  "breadth": {
+    "rspVsSpy1wPp": -0.5900000000000001,
+    "iwmVsSpy1wPp": 0.3,
+    "qqqVsSpy1wPp": -0.10000000000000005,
+    "sectorsOverLongAverage": 8,
+    "sectorsOverLongAverageTotal": 11,
+    "reading": "Diferencias de retorno de cinco sesiones en puntos porcentuales; precios ajustados. La media larga es la media diaria de 200 sesiones."
+  },
+  "quantRadar": {
+    "fragilityScore": 20,
+    "fragilityLabel": "Baja",
+    "ewmaVolAnnualized": 7.3880977901044265,
+    "garchVolForecast": 7.666790501902986,
+    "averageCorrelation21d": 0.1453745726616991,
+    "sectorDispersion1w": 4.163949128446765
+  },
+  "vix": {
+    "asOf": "2026-09-03",
+    "level": 14.32,
+    "stateLabel": "Normal bajo",
+    "status": "Normal bajo",
+    "momentum": "Estable",
+    "curve": "Fuerte contango",
+    "curveText": "Los contratos más largos cotizan por encima del vencimiento cercano. Es una estructura habitual en entornos de volatilidad más ordenada.",
+    "change1d": -0.879999999999999,
+    "percentileLabel": "27.2"
+  },
+  "vixTermStructure": {
+    "classification": "Fuerte contango",
+    "vx2MinusVx1": 1.871500000000001,
+    "slopeVx1Vx2Pct": 11.504957920685577,
+    "vx3MinusVx1": 2.501899999999999,
+    "points": [
+      {
+        "label": "VX1",
+        "symbol": "VX/U6",
+        "contract": "sept de 2026",
+        "expirationDate": "2026-09-16",
+        "value": 16.2669
+      },
+      {
+        "label": "VX2",
+        "symbol": "VX/V6",
+        "contract": "oct de 2026",
+        "expirationDate": "2026-10-21",
+        "value": 18.1384
+      },
+      {
+        "label": "VX3",
+        "symbol": "VX/X6",
+        "contract": "nov de 2026",
+        "expirationDate": "2026-11-18",
+        "value": 18.7688
+      },
+      {
+        "label": "VX4",
+        "symbol": "VX/Z6",
+        "contract": "dic de 2026",
+        "expirationDate": "2026-12-16",
+        "value": 18.975
+      },
+      {
+        "label": "VX5",
+        "symbol": "VX/F7",
+        "contract": "ene de 2027",
+        "expirationDate": "2027-01-20",
+        "value": 19.9997
+      },
+      {
+        "label": "VX6",
+        "symbol": "VX/G7",
+        "contract": "feb de 2027",
+        "expirationDate": "2027-02-17",
+        "value": 20.4603
+      },
+      {
+        "label": "VX7",
+        "symbol": "VX/H7",
+        "contract": "mar de 2027",
+        "expirationDate": "2027-03-17",
+        "value": 20.7295
+      },
+      {
+        "label": "VX8",
+        "symbol": "VX/J7",
+        "contract": "abr de 2027",
+        "expirationDate": "2027-04-21",
+        "value": 21.0267
+      },
+      {
+        "label": "VX9",
+        "symbol": "VX/K7",
+        "contract": "may de 2027",
+        "expirationDate": "2027-05-18",
+        "value": 21.15
+      }
+    ]
+  },
+  "btcEtfFlows": {
+    "asOf": "2026-09-04",
+    "lastDayUsdMillions": 174.6,
+    "rolling5dUsdMillions": 986.7,
+    "streakLabel": "Racha de 3 días de entradas",
+    "reading": "Entradas sostenidas. Los ETFs spot de Bitcoin muestran demanda neta positiva en la ventana reciente. Último dato: 04/09/2026. Rolling 5D: sesiones completas del 31/08 al 04/09. Fuente: Farside Investors."
+  },
+  "gldFlowPressure": {
+    "asOf": "2026-09-04",
+    "sharesChange1dPct": -0.13542795232936078,
+    "sharesChange5dPct": 0.9307418560087599,
+    "sharesChange20dPct": 3.393157599551318,
+    "label": "Entrada neta probable",
+    "summary": "GLD muestra entrada neta probable a 5 sesiones, usando cambios en participaciones como proxy de presión de flujos.",
+    "sourceNote": "Cálculo propio con datos diarios de NAV, participaciones y activos netos publicados por State Street. No representa flujos oficiales reportados por el fondo."
+  },
+  "statisticalAssets": null
+}

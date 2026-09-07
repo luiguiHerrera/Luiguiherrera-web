@@ -230,7 +230,8 @@ def data_table(headers, rows, styles, widths=None):
     Table = PDF["Table"]
     TableStyle = PDF["TableStyle"]
     colors = PDF["colors"]
-    data = [[p(value, styles["small"]) for value in headers]]
+    header_style = PDF["ParagraphStyle"]("table_header", parent=styles["small"], textColor=colors.white)
+    data = [[p(value, header_style) for value in headers]]
     data.extend([[p(value, styles["small"]) for value in row] for row in rows])
     table = Table(data, colWidths=widths, repeatRows=1, hAlign="LEFT")
     table.setStyle(
@@ -319,7 +320,8 @@ def add_monthly_calendar(story, items, styles, presentation):
         for item in by_day.get(day, []):
             lines.append(item.get("ticker", item["event"]))
         cells.append(p("\n".join(lines), styles["small"]))
-    data = [[p(day, styles["small"]) for day in ["Lun", "Mar", "Mié", "Jue", "Vie", "Sáb", "Dom"]]]
+    header_style = PDF["ParagraphStyle"]("calendar_header", parent=styles["small"], textColor=colors.white)
+    data = [[p(day, header_style) for day in ["Lun", "Mar", "Mié", "Jue", "Vie", "Sáb", "Dom"]]]
     data.extend([cells[row : row + 7] for row in range(0, cell_count, 7)])
     table = Table(data, colWidths=[24 * mm] * 7, repeatRows=1, hAlign="LEFT")
     commands = [
@@ -336,8 +338,11 @@ def add_monthly_calendar(story, items, styles, presentation):
     for column in (5, 6):
         commands.append(("BACKGROUND", (column, 1), (column, -1), colors.HexColor("#F2EDE4")))
     table.setStyle(TableStyle(commands))
-    story.append(p(title, styles["h2"]))
-    story.append(table)
+    if presentation.get("contextStyle") == "prose":
+        story.append(PDF["KeepTogether"]([p(title, styles["h2"]), table]))
+    else:
+        story.append(p(title, styles["h2"]))
+        story.append(table)
     story.append(PDF["Spacer"](1, 7))
     story.append(p("Detalle y leyenda", styles["h2"]))
     for item in items:
@@ -428,7 +433,36 @@ def add_snapshot_group(story, title, content, styles):
     )
 
 
+def add_quantitative_panels(story, panels, styles):
+    from reportlab.graphics.shapes import Drawing, Line, Circle, String
+    for panel in panels:
+        panel_story = []
+        panel_story.append(p(panel["title"], styles["h3"]))
+        panel_story.append(p(panel["intro"], styles["body"]))
+        limits = panel.get("range")
+        if limits:
+            drawing = Drawing(470, 70)
+            def x(value):
+                return 25 + (value - limits["low"]) / (limits["high"] - limits["low"] or 1) * 420
+            drawing.add(Line(25, 32, 445, 32, strokeColor=PDF["colors"].HexColor("#D8D2C6"), strokeWidth=7))
+            for mark in limits["marks"]:
+                drawing.add(Line(x(mark["value"]), 24, x(mark["value"]), 40, strokeColor=PDF["colors"].HexColor("#153638")))
+                drawing.add(String(x(mark["value"]), 8, mark["label"], textAnchor="middle", fontName="Helvetica", fontSize=9))
+            drawing.add(Circle(x(limits["current"]), 32, 4, fillColor=PDF["colors"].HexColor("#9A7A45"), strokeColor=None))
+            price_label = f"{limits['current']:,.2f}".replace(",", "_").replace(".", ",").replace("_", ".")
+            drawing.add(String(235, 56, f"Precio al corte: {price_label}", textAnchor="middle", fontName="Helvetica", fontSize=9))
+            panel_story.append(drawing)
+        if panel["rows"]:
+            panel_story.append(data_table(panel["headers"], panel["rows"], styles))
+        for note in panel["notes"]:
+            panel_story.append(p(note, styles["small"]))
+
+        story.append(PDF["KeepTogether"](panel_story))
+
 def add_historical_snapshot(story, snapshot, styles):
+    if snapshot.get("closingLabel"):
+        story.append(p(snapshot["closingLabel"], styles["body"]))
+        story.append(p(snapshot.get("sourceNote", ""), styles["small"]))
     story.append(p("Corte de esta edición", styles["h2"]))
     story.append(
         p(
@@ -455,9 +489,22 @@ def add_historical_snapshot(story, snapshot, styles):
         ("Qué frenó", "caution"),
         ("Qué vigilar", "watch"),
     ]:
-        story.append(p(title, styles["h3"]))
-        for value in regime[key]:
-            story.append(bullet(value, styles))
+        story.append(PDF["KeepTogether"]([p(title, styles["h3"]), *[bullet(value, styles) for value in regime[key]]]))
+
+    review = snapshot.get("weeklyReview")
+    if review:
+        story.append(p(review["title"], styles["h2"]))
+        story.append(p(review["periodLabel"], styles["small"]))
+        for title, key in [("A. Lo que impulsó", "support"), ("B. Lo que frenó", "caution")]:
+            story.append(p(title, styles["h3"]))
+            for value in review[key]:
+                story.append(bullet(value, styles))
+        story.append(p(review["closing"], styles["body"]))
+        story.append(p(review["methodology"], styles["small"]))
+        for note in review["notes"]:
+            story.append(p(note, styles["small"]))
+        for source in review["sources"]:
+            story.append(PDF["Paragraph"](f'<link href="{html.escape(source["href"], quote=True)}">{paragraph_text(source["label"])}</link>', styles["small"]))
 
     if snapshot.get("indices"):
         add_snapshot_group(
@@ -526,9 +573,9 @@ def add_historical_snapshot(story, snapshot, styles):
             "Amplitud relativa al corte",
             info_table(
                 [
-                    ("RSP/SPY 1W", spread(breadth["rspVsSpy1wPp"])),
-                    ("IWM/SPY 1W", spread(breadth["iwmVsSpy1wPp"])),
-                    ("QQQ/SPY 1W", spread(breadth["qqqVsSpy1wPp"])),
+                    (f"RSP/SPY {breadth.get('windowLabel', '1W')}", spread(breadth["rspVsSpy1wPp"])),
+                    (f"IWM/SPY {breadth.get('windowLabel', '1W')}", spread(breadth["iwmVsSpy1wPp"])),
+                    (f"QQQ/SPY {breadth.get('windowLabel', '1W')}", spread(breadth["qqqVsSpy1wPp"])),
                     ("Sectores sobre media larga", over_long),
                     ("Lectura al publicar", breadth["reading"]),
                 ],
@@ -558,6 +605,8 @@ def add_historical_snapshot(story, snapshot, styles):
     vix = snapshot["vix"]
     if vix:
         vix_rows = [("Nivel al corte", f"{vix['level']:.1f}")]
+        if vix.get("asOf"):
+            vix_rows.append(("Fecha VIX spot", vix["asOf"]))
         if vix.get("change1d") is not None:
             vix_rows.append(("Cambio 1D", f"{vix['change1d']:+.1f}"))
         if vix.get("percentileLabel"):
@@ -591,6 +640,9 @@ def add_historical_snapshot(story, snapshot, styles):
             ),
             styles,
         )
+
+    if term_structure and term_structure.get("points"):
+        story.append(data_table(["Contrato", "Vencimiento", "Settlement"], [[point["label"], point["expirationDate"], str(point["value"])] for point in term_structure["points"]], styles))
 
     btc = snapshot["btcEtfFlows"]
     if btc:
@@ -694,6 +746,7 @@ def add_section(story, section, styles, root, published_at, description, force_b
         if force_break
         or kind == "figures"
         or (enhanced_watchlist and kind == "sources")
+        or (presentation.get("contextStyle") == "prose" and kind == "calendar-scenarios")
         else PDF["CondPageBreak"](55 * PDF["mm"])
     )
     story.append(p(section["title"], styles["h1"]))
@@ -717,9 +770,12 @@ def add_section(story, section, styles, root, published_at, description, force_b
             story.append(p(factor["text"], styles["body"]))
     elif kind == "context":
         for item in section["items"]:
-            story.append(p(item["title"], styles["h2"]))
-            story.append(p(item["summary"], styles["small"]))
+            if presentation.get("contextStyle") != "prose":
+                story.append(p(item["title"], styles["h2"]))
+                story.append(p(item["summary"], styles["small"]))
             story.append(p(item["body"], styles["body"]))
+        if presentation.get("openingLine"):
+            story.append(p(presentation["openingLine"], styles["body"]))
     elif kind == "asset-readings":
         for item in section["items"]:
             add_asset_reading(
@@ -729,6 +785,7 @@ def add_section(story, section, styles, root, published_at, description, force_b
                 allow_table_split=enhanced_timeline,
                 enhanced_timeline=enhanced_timeline,
             )
+            add_quantitative_panels(story, item.get("quantitativePanels", []), styles)
             if item.get("detailsModule") == "earnings" and section.get("stockpicking"):
                 earnings = section["stockpicking"]["earnings"]
                 story.append(p("Qué pasó — resultados publicados", styles["h2"]))
@@ -737,20 +794,24 @@ def add_section(story, section, styles, root, published_at, description, force_b
                 story.append(data_table(["Fecha", "Empresa", "Implícito", "Ocurrido", "Lectura"], [[row["reportDate"], f"{row['company']} ({row['ticker']})", f"{'≈' if row.get('impliedMoveApproximate') else ''}±{row['impliedMovePct']:.2f}%", f"{row['actualMovePct']:.1f}%", "Excedió el rango" if abs(row["actualMovePct"]) > row["impliedMovePct"] else "Dentro del rango"] for row in earnings["published"]], styles, [26*PDF["mm"], 55*PDF["mm"], 28*PDF["mm"], 27*PDF["mm"], 39*PDF["mm"]]))
                 story.append(p("Trazabilidad — resultados publicados", styles["h2"]))
                 add_earnings_trace(story, earnings["published"], styles)
-                story.append(p("Qué esperamos — próximos resultados", styles["h2"]))
+                if earnings["upcoming"]:
+                    story.append(p("Qué esperamos — próximos resultados", styles["h2"]))
                 if earnings.get("upcomingNote"):
                     story.append(p(earnings["upcomingNote"], styles["body"]))
-                story.append(data_table(["Fecha", "Empresa", "Implícito", "Hora / estado"], [[row["reportDate"], f"{row['company']} ({row['ticker']})", f"{'≈' if row.get('impliedMoveApproximate') else ''}±{row['impliedMovePct']:.2f}%", earnings_schedule_label(row)] for row in earnings["upcoming"]], styles, [27*PDF["mm"], 62*PDF["mm"], 31*PDF["mm"], 55*PDF["mm"]]))
-                story.append(p("Trazabilidad — próximos resultados", styles["h2"]))
-                add_earnings_trace(story, earnings["upcoming"], styles)
+                if earnings["upcoming"]:
+                    story.append(data_table(["Fecha", "Empresa", "Implícito", "Hora / estado"], [[row["reportDate"], f"{row['company']} ({row['ticker']})", f"{'≈' if row.get('impliedMoveApproximate') else ''}±{row['impliedMovePct']:.2f}%", earnings_schedule_label(row)] for row in earnings["upcoming"]], styles, [27*PDF["mm"], 62*PDF["mm"], 31*PDF["mm"], 55*PDF["mm"]]))
+                    story.append(p("Trazabilidad — próximos resultados", styles["h2"]))
+                    add_earnings_trace(story, earnings["upcoming"], styles)
                 for theme in section["stockpicking"].get("themes", []):
-                    story.append(p(f"{theme['label']}: {theme['title']}", styles["h2"]))
-                    story.append(p(theme["body"], styles["body"]))
+                    theme_story = []
+                    theme_story.append(p(f"{theme['label']}: {theme['title']}", styles["h2"]))
+                    theme_story.append(p(theme["body"], styles["body"]))
                     if theme.get("examples"):
                         cited = ", ".join(f"{example['company']} ({example['ticker']})" for example in theme["examples"])
-                        story.append(p(f"Compañías citadas: {cited}.", styles["small"]))
+                        theme_story.append(p(f"Compañías citadas: {cited}.", styles["small"]))
                     if theme.get("note"):
-                        story.append(p(theme["note"], styles["small"]))
+                        theme_story.append(p(theme["note"], styles["small"]))
+                    story.append(PDF["KeepTogether"](theme_story))
                 story.append(p(earnings["methodology"] + " Cada fila identifica la página por ticker, la fecha de consulta y las fuentes utilizadas para fecha, hora y reacción.", styles["small"]))
     elif kind == "historical-snapshot":
         add_historical_snapshot(story, section["snapshot"], styles)
@@ -771,7 +832,8 @@ def add_section(story, section, styles, root, published_at, description, force_b
                         ]
                     )
                 )
-        story.append(p("Escenarios", styles["h2"]))
+        if section["scenarios"]:
+            story.append(p("Escenarios", styles["h2"]))
         for item in section["scenarios"]:
             if enhanced_calendar:
                 story.append(
@@ -786,7 +848,9 @@ def add_section(story, section, styles, root, published_at, description, force_b
                 story.append(p(item["title"], styles["h3"]))
                 story.append(p(item["body"], styles["body"]))
     elif kind == "probable-routes":
-        story.append(p(section["routes"]["note"], styles["body"]))
+        closing_note = presentation.get("contextStyle") == "prose"
+        if not closing_note:
+            story.append(p(section["routes"]["note"], styles["body"]))
         if section["routes"].get("engines"):
             story.append(p("Motores", styles["h2"]))
             for item in section["routes"]["engines"]:
@@ -794,7 +858,18 @@ def add_section(story, section, styles, root, published_at, description, force_b
         story.append(p("Escenarios", styles["h2"]))
         for item in section["routes"]["scenarios"]:
             story.append(PDF["KeepTogether"]([p(item["title"], styles["h3"]), p(item["body"], styles["body"])]))
+        if closing_note:
+            story.append(p(section["routes"]["note"], styles["body"]))
     elif kind == "watchlist":
+        if presentation.get("contextStyle") == "prose":
+            first = section["items"][0]
+            story.append(p(f"{first['statusLabel']} · {first['asOf']}. {first['source']}", styles["small"]))
+            for item in section["items"]:
+                story.append(PDF["KeepTogether"]([
+                    p(item["name"], styles["h3"]),
+                    p(f"Qué mira: {item['whatLooksAt']} Qué cambiaría la lectura: {item['whatWouldChange']}", styles["body"]),
+                ]))
+            return
         for item_index, item in enumerate(section["items"]):
             reading_label = "Lectura al publicar" if item.get("currentReading") else "Lectura de seguimiento"
             if enhanced_watchlist and item_index and item_index % 2 == 0:
@@ -864,6 +939,14 @@ def add_section(story, section, styles, root, published_at, description, force_b
                 )
             )
     elif kind == "sources":
+        for group in section.get("sourceGroups", []):
+            group_story = [p(group["title"], styles["h2"])]
+            for entry in group["entries"]:
+                entry_story = [p(entry["label"] + (" · " + entry["note"] if entry.get("note") else ""), styles["body"])]
+                if entry.get("href"):
+                    entry_story.append(p(entry["href"], styles["small"]))
+                group_story.extend(entry_story)
+            story.append(PDF["KeepTogether"](group_story))
         story.append(p("Fuentes y método", styles["h2"]))
         story.append(p(section["sourcesNote"], styles["body"]))
         story.append(p("Limitaciones y aviso educativo", styles["h2"]))
@@ -907,6 +990,7 @@ def generate_pdf(model_path, output_path, root):
                 ("Actualización", model["modifiedAt"]),
                 ("Corte editorial", model.get("editorialCutoffAt", "No aplica")),
                 ("Corte de datos de mercado", model.get("automaticDataCutoffAt", "No aplica")),
+                *([("Periodo prospectivo", model["presentation"]["prospectivePeriod"])] if model.get("presentation", {}).get("prospectivePeriod") else []),
                 ("URL editorial primaria", model["canonicalUrl"]),
             ],
             styles,

@@ -1,0 +1,171 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Luigui Herrera//Market Reports//ES
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+X-WR-CALNAME:Primer informe de septiembre
+BEGIN:VEVENT
+UID:primer-informe-septiembre-2026-labor-day-sin-sesion-regular-de-opciones
+ -en-ee-uu@luigui-herrera
+DTSTAMP:20260906T000000Z
+DTSTART;VALUE=DATE:20260907
+DTEND;VALUE=DATE:20260908
+SUMMARY:Primer informe de septiembre: Labor Day · sin sesión regular de o
+ pciones en EE. UU.
+DESCRIPTION:7 de septiembre. Fecha confirmada · hora por confirmar. Hora p
+ or confirmar (ET). El festivo cambia la liquidez y el calendario de public
+ aciones. Cripto continúa operando. Activos o factores: S&P 500\, Oro\, DX
+ Y\, BTC / ETH. Fuente de fecha/hora: Cboe · Hours & Holidays (https://www
+ .cboe.com/about/hours/us-options).
+URL:https://www.cboe.com/about/hours/us-options
+END:VEVENT
+BEGIN:VEVENT
+UID:primer-informe-septiembre-2026-china-cpi-y-ppi-de-agosto@luigui-herrera
+DTSTAMP:20260906T000000Z
+DTSTART:20260909T013000Z
+SUMMARY:Primer informe de septiembre: China · CPI y PPI de agosto
+DESCRIPTION:9 de septiembre. Fecha y hora confirmadas por fuente primaria. 
+ 09:30 China (UTC+8) / 03:30 CEST. Permiten contrastar precios de consumo y
+  de producción con la debilidad de demanda descrita en agosto. Activos o 
+ factores: China\, FXI\, Consumo\, DXY. Fuente de fecha/hora: National Bure
+ au of Statistics of China · calendario vigente (https://www.stats.gov.cn/
+ szst/).
+URL:https://www.stats.gov.cn/szst/
+END:VEVENT
+BEGIN:VEVENT
+UID:primer-informe-septiembre-2026-ppi-de-agosto@luigui-herrera
+DTSTAMP:20260906T000000Z
+DTSTART:20260910T123000Z
+SUMMARY:Primer informe de septiembre: PPI de agosto
+DESCRIPTION:10 de septiembre. Fecha y hora confirmadas por fuente primaria.
+  08:30 ET / 14:30 CEST. Primera referencia de precios antes del CPI\; pued
+ e mover rendimientos y dólar. Activos o factores: S&P 500\, Oro\, DXY\, B
+ TC / ETH. Fuente de fecha/hora: Bureau of Labor Statistics (https://www.bl
+ s.gov/schedule/2026/09_sched.htm).
+URL:https://www.bls.gov/schedule/2026/09_sched.htm
+END:VEVENT
+BEGIN:VEVENT
+UID:primer-informe-septiembre-2026-cpi-de-agosto@luigui-herrera
+DTSTAMP:20260906T000000Z
+DTSTART:20260911T123000Z
+SUMMARY:Primer informe de septiembre: CPI de agosto
+DESCRIPTION:11 de septiembre. Fecha y hora confirmadas por fuente primaria.
+  08:30 ET / 14:30 CEST. Inflación general y subyacente frente a la capaci
+ dad de los bonos para absorber una sorpresa. Activos o factores: S&P 500\,
+  Oro\, DXY\, BTC / ETH. Fuente de fecha/hora: Bureau of Labor Statistics (
+ https://www.bls.gov/schedule/2026/09_sched.htm).
+URL:https://www.bls.gov/schedule/2026/09_sched.htm
+END:VEVENT
+BEGIN:VEVENT
+UID:primer-informe-septiembre-2026-china-actividad-y-ventas-minoristas-de-a
+ gosto@luigui-herrera
+DTSTAMP:20260906T000000Z
+DTSTART:20260915T020000Z
+SUMMARY:Primer informe de septiembre: China · actividad y ventas minorista
+ s de agosto
+DESCRIPTION:15 de septiembre. Fecha y hora confirmadas por fuente primaria.
+  10:00 China (UTC+8) / 04:00 CEST. La producción industrial\, la inversi
+ ón y las ventas minoristas permiten comprobar si el consumidor empieza a 
+ confirmar la tesis. Activos o factores: China\, FXI\, Consumo\, DXY. Fuent
+ e de fecha/hora: National Bureau of Statistics of China · calendario vige
+ nte (https://www.stats.gov.cn/szst/).
+URL:https://www.stats.gov.cn/szst/
+END:VEVENT
+BEGIN:VEVENT
+UID:primer-informe-septiembre-2026-ventas-minoristas-de-agosto@luigui-herre
+ ra
+DTSTAMP:20260906T000000Z
+DTSTART:20260916T123000Z
+SUMMARY:Primer informe de septiembre: Ventas minoristas de agosto
+DESCRIPTION:16 de septiembre. Fecha y hora confirmadas por fuente primaria.
+  08:30 ET / 14:30 CEST. Permiten contrastar el estado del consumo con las 
+ expectativas de crecimiento. Activos o factores: S&P 500\, Oro\, DXY\, BTC
+  / ETH. Fuente de fecha/hora: U.S. Census Bureau (https://www.census.gov/r
+ etail/release_schedule.html).
+URL:https://www.census.gov/retail/release_schedule.html
+END:VEVENT
+BEGIN:VEVENT
+UID:primer-informe-septiembre-2026-fomc-decision-y-proyecciones@luigui-herr
+ era
+DTSTAMP:20260906T000000Z
+DTSTART:20260916T180000Z
+SUMMARY:Primer informe de septiembre: FOMC · decisión y proyecciones
+DESCRIPTION:16 de septiembre. Fecha y hora confirmadas por fuente primaria.
+  14:00 ET / 20:00 CEST. Cierre de la reunión del 15–16. Importan el men
+ saje\, las proyecciones y la reacción de los rendimientos largos. Activos
+  o factores: S&P 500\, Oro\, DXY\, BTC / ETH. Fuente de fecha/hora: Federa
+ l Reserve Board (https://www.federalreserve.gov/newsevents/2026-september.
+ htm).
+URL:https://www.federalreserve.gov/newsevents/2026-september.htm
+END:VEVENT
+BEGIN:VEVENT
+UID:primer-informe-septiembre-2026-fomc-conferencia-de-prensa@luigui-herrer
+ a
+DTSTAMP:20260906T000000Z
+DTSTART:20260916T183000Z
+SUMMARY:Primer informe de septiembre: FOMC · conferencia de prensa
+DESCRIPTION:16 de septiembre. Fecha y hora confirmadas por fuente primaria.
+  14:30 ET / 20:30 CEST. Permite distinguir el anuncio de tipos de la inter
+ pretación que ofrece la Fed. Activos o factores: S&P 500\, Oro\, DXY\, BT
+ C / ETH. Fuente de fecha/hora: Federal Reserve Board (https://www.federalr
+ eserve.gov/newsevents/2026-september.htm).
+URL:https://www.federalreserve.gov/newsevents/2026-september.htm
+END:VEVENT
+BEGIN:VEVENT
+UID:primer-informe-septiembre-2026-boj-reunion-de-politica-monetaria@luigui
+ -herrera
+DTSTAMP:20260906T000000Z
+DTSTART;VALUE=DATE:20260917
+DTEND;VALUE=DATE:20260919
+SUMMARY:Primer informe de septiembre: BOJ · reunión de política monetari
+ a
+DESCRIPTION:17–18 de septiembre. Fecha confirmada · hora por confirmar. 
+ Hora por confirmar (JST). Reunión del 17–18. La decisión se publica al
+  terminar\; la fuente no fija una hora de anuncio. Puede mover yen\, JGB y
+  bolsa. Activos o factores: Japón\, Yen\, JGB\, DXY. Fuente de fecha/hora
+ : Bank of Japan (https://www.boj.or.jp/en/mopo/mpmsche_minu/index.htm).
+URL:https://www.boj.or.jp/en/mopo/mpmsche_minu/index.htm
+END:VEVENT
+BEGIN:VEVENT
+UID:primer-informe-septiembre-2026-produccion-industrial-de-agosto@luigui-h
+ errera
+DTSTAMP:20260906T000000Z
+DTSTART:20260918T131500Z
+SUMMARY:Primer informe de septiembre: Producción industrial de agosto
+DESCRIPTION:18 de septiembre. Fecha y hora confirmadas por fuente primaria.
+  09:15 ET / 15:15 CEST. Actividad industrial y utilización de capacidad f
+ rente al coste de financiación. Activos o factores: S&P 500\, Oro\, DXY\,
+  BTC / ETH. Fuente de fecha/hora: Federal Reserve Board (https://www.feder
+ alreserve.gov/newsevents/2026-september.htm).
+URL:https://www.federalreserve.gov/newsevents/2026-september.htm
+END:VEVENT
+BEGIN:VEVENT
+UID:primer-informe-septiembre-2026-expiracion-mensual-de-opciones@luigui-he
+ rrera
+DTSTAMP:20260906T000000Z
+DTSTART;VALUE=DATE:20260918
+DTEND;VALUE=DATE:20260919
+SUMMARY:Primer informe de septiembre: Expiración mensual de opciones
+DESCRIPTION:18 de septiembre. Fecha confirmada · hora por confirmar. Hora 
+ por confirmar (ET). Los ajustes de cobertura pueden alterar la negociació
+ n. Horarios de liquidación y última negociación dependen del contrato\;
+  no se asigna una hora única. Activos o factores: S&P 500\, Oro\, DXY\, B
+ TC / ETH. Fuente de fecha/hora: Cboe · 2026 Options Expiration Calendar (
+ https://cdn.cboe.com/resources/options/Cboe2026OPTIONSCalendar.pdf).
+URL:https://cdn.cboe.com/resources/options/Cboe2026OPTIONSCalendar.pdf
+END:VEVENT
+BEGIN:VEVENT
+UID:primer-informe-septiembre-2026-pce-ingresos-y-gasto-personal-de-agosto@
+ luigui-herrera
+DTSTAMP:20260906T000000Z
+DTSTART:20260930T123000Z
+SUMMARY:Primer informe de septiembre: PCE\, ingresos y gasto personal de ag
+ osto
+DESCRIPTION:30 de septiembre. Fecha y hora confirmadas por fuente primaria.
+  08:30 ET / 14:30 CEST. Referencia de inflación y consumo para el cierre 
+ del mes\, si no hay una nueva edición antes. Activos o factores: S&P 500\
+ , Oro\, DXY\, BTC / ETH. Fuente de fecha/hora: Bureau of Economic Analysis
+  (https://www.bea.gov/news/schedule/full).
+URL:https://www.bea.gov/news/schedule/full
+END:VEVENT
+END:VCALENDAR

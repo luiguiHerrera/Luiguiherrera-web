@@ -95,6 +95,7 @@ export type ReportExportSection =
       id: "sources-and-limitations";
       title: string;
       kind: "sources";
+      sourceGroups?: MarketReport["sourceGroups"];
       sourcesNote: string;
       disclaimer: string;
     };
@@ -273,6 +274,7 @@ function reportSections(
       id: "sources-and-limitations",
       title: sectionTitles?.sources ?? "Fuentes, limitaciones y aviso educativo",
       kind: "sources",
+      ...(report.sourceGroups ? { sourceGroups: report.sourceGroups } : {}),
       sourcesNote: report.sourcesNote,
       disclaimer: report.disclaimer,
     },

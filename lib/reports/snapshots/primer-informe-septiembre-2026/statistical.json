@@ -1,0 +1,1708 @@
+{
+  "asOf": "2026-09-04",
+  "assets": {
+    "SPY": {
+      "ticker": "SPY",
+      "symbol": "SPY",
+      "asOf": "2026-09-04",
+      "provider": "Yahoo Finance historical chart",
+      "periodStart": "2026-08-31",
+      "closeConvention": "Cierre regular; serie ajustada del proveedor congelada en la captura.",
+      "levels": {
+        "available": true,
+        "statusNote": "Calculado con 1753 periodos completados.",
+        "periods": 1753,
+        "currentOpen": 767.33,
+        "lastClose": 770.19,
+        "avgHigherExtension": 0.0157,
+        "stdHigherExtension": 0.0152,
+        "avgLowerExtension": 0.0168,
+        "stdLowerExtension": 0.0193,
+        "levels": {
+          "WSHE": 791.07,
+          "WAHE": 779.39,
+          "WALE": 754.47,
+          "WSLE": 739.65
+        },
+        "distances": {
+          "WSHE": -0.0264,
+          "WAHE": -0.0118,
+          "WALE": 0.0208,
+          "WSLE": 0.0413
+        },
+        "location": "Dentro del rango por semana medio"
+      },
+      "seasonality": {
+        "month": 9,
+        "cycle": "midterm",
+        "window": "All",
+        "years": [
+          2022,
+          2018,
+          2014,
+          2010,
+          2006,
+          2002,
+          1998,
+          1994
+        ],
+        "sampleSize": 8,
+        "weeks": [
+          {
+            "month": 9,
+            "weekOfMonth": 1,
+            "averageReturn": -0.008934,
+            "medianReturn": -0.008763,
+            "winRate": 0.375,
+            "sampleSize": 8
+          },
+          {
+            "month": 9,
+            "weekOfMonth": 2,
+            "averageReturn": 0.008144,
+            "medianReturn": 0.000827,
+            "winRate": 0.5,
+            "sampleSize": 8
+          },
+          {
+            "month": 9,
+            "weekOfMonth": 3,
+            "averageReturn": -0.00453,
+            "medianReturn": 0.00795,
+            "winRate": 0.75,
+            "sampleSize": 8
+          },
+          {
+            "month": 9,
+            "weekOfMonth": 4,
+            "averageReturn": -0.008552,
+            "medianReturn": -0.00915,
+            "winRate": 0.25,
+            "sampleSize": 8
+          },
+          {
+            "month": 9,
+            "weekOfMonth": 5,
+            "averageReturn": -0.002478,
+            "medianReturn": 0.005786,
+            "winRate": 0.6667,
+            "sampleSize": 3
+          }
+        ],
+        "averageReturn": -0.006276,
+        "winRate": 0.5,
+        "averageWeeklyWinRate": 0.50834,
+        "averageWeeklySampleSize": 7,
+        "strongestWeek": 2,
+        "weakestWeek": 1,
+        "methodology": "Retorno entre cierres semanales ajustados. La semana se asigna por su fecha de cierre: Semana 1 = días 1–7; Semana 5 = días 29–31. Solo septiembres de años Midterm completos anteriores a 2026; hasta 10 ciclos. N puede variar por semana. La primera semana puede incluir días de agosto.",
+        "observations": [
+          {
+            "date": "1994-09-02",
+            "year": 1994,
+            "weekOfMonth": 1,
+            "returnValue": -0.008191976524696165
+          },
+          {
+            "date": "1994-09-09",
+            "year": 1994,
+            "weekOfMonth": 2,
+            "returnValue": -0.006276143949036195
+          },
+          {
+            "date": "1994-09-16",
+            "year": 1994,
+            "weekOfMonth": 3,
+            "returnValue": 0.006416118019425765
+          },
+          {
+            "date": "1994-09-23",
+            "year": 1994,
+            "weekOfMonth": 4,
+            "returnValue": -0.02359565166622013
+          },
+          {
+            "date": "1994-09-30",
+            "year": 1994,
+            "weekOfMonth": 5,
+            "returnValue": 0.005786069974763386
+          },
+          {
+            "date": "1998-09-04",
+            "year": 1998,
+            "weekOfMonth": 1,
+            "returnValue": -0.05441358078855718
+          },
+          {
+            "date": "1998-09-11",
+            "year": 1998,
+            "weekOfMonth": 2,
+            "returnValue": 0.040281761651500325
+          },
+          {
+            "date": "1998-09-18",
+            "year": 1998,
+            "weekOfMonth": 3,
+            "returnValue": 0.007540562679579699
+          },
+          {
+            "date": "1998-09-25",
+            "year": 1998,
+            "weekOfMonth": 4,
+            "returnValue": 0.021120526725569855
+          },
+          {
+            "date": "2002-09-06",
+            "year": 2002,
+            "weekOfMonth": 1,
+            "returnValue": -0.019394079302263445
+          },
+          {
+            "date": "2002-09-13",
+            "year": 2002,
+            "weekOfMonth": 2,
+            "returnValue": -0.003666414552568442
+          },
+          {
+            "date": "2002-09-20",
+            "year": 2002,
+            "weekOfMonth": 3,
+            "returnValue": -0.05511135474520601
+          },
+          {
+            "date": "2002-09-27",
+            "year": 2002,
+            "weekOfMonth": 4,
+            "returnValue": -0.018968955178364055
+          },
+          {
+            "date": "2006-09-01",
+            "year": 2006,
+            "weekOfMonth": 1,
+            "returnValue": 0.012403237364402742
+          },
+          {
+            "date": "2006-09-08",
+            "year": 2006,
+            "weekOfMonth": 2,
+            "returnValue": -0.008674663948611272
+          },
+          {
+            "date": "2006-09-15",
+            "year": 2006,
+            "weekOfMonth": 3,
+            "returnValue": 0.017349501527675004
+          },
+          {
+            "date": "2006-09-22",
+            "year": 2006,
+            "weekOfMonth": 4,
+            "returnValue": -0.0037127360179903812
+          },
+          {
+            "date": "2006-09-29",
+            "year": 2006,
+            "weekOfMonth": 5,
+            "returnValue": 0.01604924660296625
+          },
+          {
+            "date": "2010-09-03",
+            "year": 2010,
+            "weekOfMonth": 1,
+            "returnValue": 0.037712250115959245
+          },
+          {
+            "date": "2010-09-10",
+            "year": 2010,
+            "weekOfMonth": 2,
+            "returnValue": 0.005320873491390765
+          },
+          {
+            "date": "2010-09-17",
+            "year": 2010,
+            "weekOfMonth": 3,
+            "returnValue": 0.014461956693903044
+          },
+          {
+            "date": "2010-09-24",
+            "year": 2010,
+            "weekOfMonth": 4,
+            "returnValue": 0.020713340989543694
+          },
+          {
+            "date": "2014-09-05",
+            "year": 2014,
+            "weekOfMonth": 1,
+            "returnValue": 0.0019927063949209955
+          },
+          {
+            "date": "2014-09-12",
+            "year": 2014,
+            "weekOfMonth": 2,
+            "returnValue": -0.009845619905850644
+          },
+          {
+            "date": "2014-09-19",
+            "year": 2014,
+            "weekOfMonth": 3,
+            "returnValue": 0.012595577397315871
+          },
+          {
+            "date": "2014-09-26",
+            "year": 2014,
+            "weekOfMonth": 4,
+            "returnValue": -0.013951165002704324
+          },
+          {
+            "date": "2018-09-07",
+            "year": 2018,
+            "weekOfMonth": 1,
+            "returnValue": -0.009334887441258988
+          },
+          {
+            "date": "2018-09-14",
+            "year": 2018,
+            "weekOfMonth": 2,
+            "returnValue": 0.011404900025516529
+          },
+          {
+            "date": "2018-09-21",
+            "year": 2018,
+            "weekOfMonth": 3,
+            "returnValue": 0.00835984853339955
+          },
+          {
+            "date": "2018-09-28",
+            "year": 2018,
+            "weekOfMonth": 4,
+            "returnValue": -0.004349333526362131
+          },
+          {
+            "date": "2022-09-02",
+            "year": 2022,
+            "weekOfMonth": 1,
+            "returnValue": -0.03224686414973443
+          },
+          {
+            "date": "2022-09-09",
+            "year": 2022,
+            "weekOfMonth": 2,
+            "returnValue": 0.03661024163298676
+          },
+          {
+            "date": "2022-09-16",
+            "year": 2022,
+            "weekOfMonth": 3,
+            "returnValue": -0.0478509457355224
+          },
+          {
+            "date": "2022-09-23",
+            "year": 2022,
+            "weekOfMonth": 4,
+            "returnValue": -0.04567386429206077
+          },
+          {
+            "date": "2022-09-30",
+            "year": 2022,
+            "weekOfMonth": 5,
+            "returnValue": -0.029270312042898428
+          }
+        ]
+      },
+      "reading": {
+        "lastClose": 770.19,
+        "lastDate": "2026-09-04",
+        "returns": {
+          "1W": 0.0041,
+          "1M": 0.0015,
+          "3M": 0.0499,
+          "6M": 0.1516,
+          "1Y": 0.1997
+        },
+        "distanceLongAverage": 0.085,
+        "percentile": 58.2,
+        "zScore": 0.44,
+        "currentDrawdown": -0.0099
+      }
+    },
+    "GLD": {
+      "ticker": "GLD",
+      "symbol": "GLD",
+      "asOf": "2026-09-04",
+      "provider": "Yahoo Finance historical chart",
+      "periodStart": "2026-08-31",
+      "closeConvention": "Cierre regular; serie ajustada del proveedor congelada en la captura.",
+      "levels": {
+        "available": true,
+        "statusNote": "Calculado con 1137 periodos completados.",
+        "periods": 1137,
+        "currentOpen": 407.76,
+        "lastClose": 406.77,
+        "avgHigherExtension": 0.0162,
+        "stdHigherExtension": 0.0152,
+        "avgLowerExtension": 0.016,
+        "stdLowerExtension": 0.0178,
+        "levels": {
+          "WSHE": 420.57,
+          "WAHE": 414.36,
+          "WALE": 401.23,
+          "WSLE": 393.99
+        },
+        "distances": {
+          "WSHE": -0.0328,
+          "WAHE": -0.0183,
+          "WALE": 0.0138,
+          "WSLE": 0.0324
+        },
+        "location": "Dentro del rango por semana medio"
+      },
+      "seasonality": {
+        "month": 9,
+        "cycle": "midterm",
+        "window": "All",
+        "years": [
+          2022,
+          2018,
+          2014,
+          2010,
+          2006
+        ],
+        "sampleSize": 5,
+        "weeks": [
+          {
+            "month": 9,
+            "weekOfMonth": 1,
+            "averageReturn": -0.003888,
+            "medianReturn": -0.002467,
+            "winRate": 0.4,
+            "sampleSize": 5
+          },
+          {
+            "month": 9,
+            "weekOfMonth": 2,
+            "averageReturn": -0.010739,
+            "medianReturn": -0.001855,
+            "winRate": 0.2,
+            "sampleSize": 5
+          },
+          {
+            "month": 9,
+            "weekOfMonth": 3,
+            "averageReturn": -0.012398,
+            "medianReturn": -0.010897,
+            "winRate": 0.4,
+            "sampleSize": 5
+          },
+          {
+            "month": 9,
+            "weekOfMonth": 4,
+            "averageReturn": 0.002316,
+            "medianReturn": -0.000256,
+            "winRate": 0.4,
+            "sampleSize": 5
+          },
+          {
+            "month": 9,
+            "weekOfMonth": 5,
+            "averageReturn": 0.013715,
+            "medianReturn": 0.013715,
+            "winRate": 1,
+            "sampleSize": 2
+          }
+        ],
+        "averageReturn": -0.018954,
+        "winRate": 0.2,
+        "averageWeeklyWinRate": 0.48,
+        "averageWeeklySampleSize": 4.4,
+        "strongestWeek": 5,
+        "weakestWeek": 3,
+        "methodology": "Retorno entre cierres semanales ajustados. La semana se asigna por su fecha de cierre: Semana 1 = días 1–7; Semana 5 = días 29–31. Solo septiembres de años Midterm completos anteriores a 2026; hasta 10 ciclos. N puede variar por semana. La primera semana puede incluir días de agosto.",
+        "observations": [
+          {
+            "date": "2006-09-01",
+            "year": 2006,
+            "weekOfMonth": 1,
+            "returnValue": 0.005989946576007821
+          },
+          {
+            "date": "2006-09-08",
+            "year": 2006,
+            "weekOfMonth": 2,
+            "returnValue": -0.02413904126390476
+          },
+          {
+            "date": "2006-09-15",
+            "year": 2006,
+            "weekOfMonth": 3,
+            "returnValue": -0.05343003056447948
+          },
+          {
+            "date": "2006-09-22",
+            "year": 2006,
+            "weekOfMonth": 4,
+            "returnValue": 0.019163727555270738
+          },
+          {
+            "date": "2006-09-29",
+            "year": 2006,
+            "weekOfMonth": 5,
+            "returnValue": 0.016581213675213702
+          },
+          {
+            "date": "2010-09-03",
+            "year": 2010,
+            "weekOfMonth": 1,
+            "returnValue": 0.007024204495096109
+          },
+          {
+            "date": "2010-09-10",
+            "year": 2010,
+            "weekOfMonth": 2,
+            "returnValue": -0.0010667815438472061
+          },
+          {
+            "date": "2010-09-17",
+            "year": 2010,
+            "weekOfMonth": 3,
+            "returnValue": 0.023083857149005516
+          },
+          {
+            "date": "2010-09-24",
+            "year": 2010,
+            "weekOfMonth": 4,
+            "returnValue": 0.017263537680556107
+          },
+          {
+            "date": "2014-09-05",
+            "year": 2014,
+            "weekOfMonth": 1,
+            "returnValue": -0.01453256083858745
+          },
+          {
+            "date": "2014-09-12",
+            "year": 2014,
+            "weekOfMonth": 2,
+            "returnValue": -0.030149115683255956
+          },
+          {
+            "date": "2014-09-19",
+            "year": 2014,
+            "weekOfMonth": 3,
+            "returnValue": -0.010897119722008464
+          },
+          {
+            "date": "2014-09-26",
+            "year": 2014,
+            "weekOfMonth": 4,
+            "returnValue": -0.0002561960972311539
+          },
+          {
+            "date": "2018-09-07",
+            "year": 2018,
+            "weekOfMonth": 1,
+            "returnValue": -0.0024667341649770025
+          },
+          {
+            "date": "2018-09-14",
+            "year": 2018,
+            "weekOfMonth": 2,
+            "returnValue": -0.001854685104971665
+          },
+          {
+            "date": "2018-09-21",
+            "year": 2018,
+            "weekOfMonth": 3,
+            "returnValue": 0.004158564966162626
+          },
+          {
+            "date": "2018-09-28",
+            "year": 2018,
+            "weekOfMonth": 4,
+            "returnValue": -0.0064322496507577265
+          },
+          {
+            "date": "2022-09-02",
+            "year": 2022,
+            "weekOfMonth": 1,
+            "returnValue": -0.015454995532115379
+          },
+          {
+            "date": "2022-09-09",
+            "year": 2022,
+            "weekOfMonth": 2,
+            "returnValue": 0.0035163381739400368
+          },
+          {
+            "date": "2022-09-16",
+            "year": 2022,
+            "weekOfMonth": 3,
+            "returnValue": -0.024903083629573275
+          },
+          {
+            "date": "2022-09-23",
+            "year": 2022,
+            "weekOfMonth": 4,
+            "returnValue": -0.018159657806972818
+          },
+          {
+            "date": "2022-09-30",
+            "year": 2022,
+            "weekOfMonth": 5,
+            "returnValue": 0.010848984081072599
+          }
+        ]
+      },
+      "reading": {
+        "lastClose": 406.77,
+        "lastDate": "2026-09-04",
+        "returns": {
+          "1W": -0.004,
+          "1M": -0.0171,
+          "3M": 0.0781,
+          "6M": -0.1409,
+          "1Y": 0.2451
+        },
+        "distanceLongAverage": -0.0209,
+        "percentile": 15.6,
+        "zScore": -1.08,
+        "currentDrawdown": -0.1797
+      }
+    },
+    "FXI": {
+      "ticker": "FXI",
+      "symbol": "FXI",
+      "asOf": "2026-09-04",
+      "provider": "Yahoo Finance historical chart",
+      "periodStart": "2026-08-31",
+      "closeConvention": "Cierre regular; serie ajustada del proveedor congelada en la captura.",
+      "levels": {
+        "available": true,
+        "statusNote": "Calculado con 1143 periodos completados.",
+        "periods": 1143,
+        "currentOpen": 35.66,
+        "lastClose": 35.88,
+        "avgHigherExtension": 0.0243,
+        "stdHigherExtension": 0.0257,
+        "avgLowerExtension": 0.0261,
+        "stdLowerExtension": 0.029,
+        "levels": {
+          "WSHE": 37.44,
+          "WAHE": 36.53,
+          "WALE": 34.73,
+          "WSLE": 33.7
+        },
+        "distances": {
+          "WSHE": -0.0417,
+          "WAHE": -0.0177,
+          "WALE": 0.0331,
+          "WSLE": 0.0648
+        },
+        "location": "Dentro del rango por semana medio"
+      },
+      "seasonality": {
+        "month": 9,
+        "cycle": "midterm",
+        "window": "All",
+        "years": [
+          2022,
+          2018,
+          2014,
+          2010,
+          2006
+        ],
+        "sampleSize": 5,
+        "weeks": [
+          {
+            "month": 9,
+            "weekOfMonth": 1,
+            "averageReturn": 0.00283,
+            "medianReturn": 0.020796,
+            "winRate": 0.6,
+            "sampleSize": 5
+          },
+          {
+            "month": 9,
+            "weekOfMonth": 2,
+            "averageReturn": -0.007875,
+            "medianReturn": -0.003907,
+            "winRate": 0.4,
+            "sampleSize": 5
+          },
+          {
+            "month": 9,
+            "weekOfMonth": 3,
+            "averageReturn": 0.001066,
+            "medianReturn": 0.004167,
+            "winRate": 0.6,
+            "sampleSize": 5
+          },
+          {
+            "month": 9,
+            "weekOfMonth": 4,
+            "averageReturn": -0.007479,
+            "medianReturn": -0.006957,
+            "winRate": 0.4,
+            "sampleSize": 5
+          },
+          {
+            "month": 9,
+            "weekOfMonth": 5,
+            "averageReturn": -0.010065,
+            "medianReturn": -0.010065,
+            "winRate": 0.5,
+            "sampleSize": 2
+          }
+        ],
+        "averageReturn": -0.014272,
+        "winRate": 0.6,
+        "averageWeeklyWinRate": 0.5,
+        "averageWeeklySampleSize": 4.4,
+        "strongestWeek": 1,
+        "weakestWeek": 5,
+        "methodology": "Retorno entre cierres semanales ajustados. La semana se asigna por su fecha de cierre: Semana 1 = días 1–7; Semana 5 = días 29–31. Solo septiembres de años Midterm completos anteriores a 2026; hasta 10 ciclos. N puede variar por semana. La primera semana puede incluir días de agosto.",
+        "observations": [
+          {
+            "date": "2006-09-01",
+            "year": 2006,
+            "weekOfMonth": 1,
+            "returnValue": 0.02079579902205242
+          },
+          {
+            "date": "2006-09-08",
+            "year": 2006,
+            "weekOfMonth": 2,
+            "returnValue": -0.010123632130438986
+          },
+          {
+            "date": "2006-09-15",
+            "year": 2006,
+            "weekOfMonth": 3,
+            "returnValue": 0.004166990298664297
+          },
+          {
+            "date": "2006-09-22",
+            "year": 2006,
+            "weekOfMonth": 4,
+            "returnValue": 0.014710912085446726
+          },
+          {
+            "date": "2006-09-29",
+            "year": 2006,
+            "weekOfMonth": 5,
+            "returnValue": 0.008055029588323936
+          },
+          {
+            "date": "2010-09-03",
+            "year": 2010,
+            "weekOfMonth": 1,
+            "returnValue": 0.024518721602760696
+          },
+          {
+            "date": "2010-09-10",
+            "year": 2010,
+            "weekOfMonth": 2,
+            "returnValue": -0.003907483766371511
+          },
+          {
+            "date": "2010-09-17",
+            "year": 2010,
+            "weekOfMonth": 3,
+            "returnValue": 0.02868345959659968
+          },
+          {
+            "date": "2010-09-24",
+            "year": 2010,
+            "weekOfMonth": 4,
+            "returnValue": 0.021210472374449507
+          },
+          {
+            "date": "2014-09-05",
+            "year": 2014,
+            "weekOfMonth": 1,
+            "returnValue": 0.05065503576247332
+          },
+          {
+            "date": "2014-09-12",
+            "year": 2014,
+            "weekOfMonth": 2,
+            "returnValue": -0.03692374179417346
+          },
+          {
+            "date": "2014-09-19",
+            "year": 2014,
+            "weekOfMonth": 3,
+            "returnValue": -0.026373580712123812
+          },
+          {
+            "date": "2014-09-26",
+            "year": 2014,
+            "weekOfMonth": 4,
+            "returnValue": -0.017055658718925004
+          },
+          {
+            "date": "2018-09-07",
+            "year": 2018,
+            "weekOfMonth": 1,
+            "returnValue": -0.03491381657153747
+          },
+          {
+            "date": "2018-09-14",
+            "year": 2018,
+            "weekOfMonth": 2,
+            "returnValue": 0.00782203024184569
+          },
+          {
+            "date": "2018-09-21",
+            "year": 2018,
+            "weekOfMonth": 3,
+            "returnValue": 0.045840360198436736
+          },
+          {
+            "date": "2018-09-28",
+            "year": 2018,
+            "weekOfMonth": 4,
+            "returnValue": -0.006957173289884988
+          },
+          {
+            "date": "2022-09-02",
+            "year": 2022,
+            "weekOfMonth": 1,
+            "returnValue": -0.046905537177240664
+          },
+          {
+            "date": "2022-09-09",
+            "year": 2022,
+            "weekOfMonth": 2,
+            "returnValue": 0.0037594584072342396
+          },
+          {
+            "date": "2022-09-16",
+            "year": 2022,
+            "weekOfMonth": 3,
+            "returnValue": -0.04698673689897448
+          },
+          {
+            "date": "2022-09-23",
+            "year": 2022,
+            "weekOfMonth": 4,
+            "returnValue": -0.04930326081992942
+          },
+          {
+            "date": "2022-09-30",
+            "year": 2022,
+            "weekOfMonth": 5,
+            "returnValue": -0.02818494170025687
+          }
+        ]
+      },
+      "reading": {
+        "lastClose": 35.88,
+        "lastDate": "2026-09-04",
+        "returns": {
+          "1W": 0.0144,
+          "1M": 0.0056,
+          "3M": 0.0929,
+          "6M": 0.0092,
+          "1Y": -0.0467
+        },
+        "distanceLongAverage": -0.0162,
+        "percentile": 43.2,
+        "zScore": -0.3,
+        "currentDrawdown": -0.2566
+      }
+    },
+    "EWJ": {
+      "ticker": "EWJ",
+      "symbol": "EWJ",
+      "asOf": "2026-09-04",
+      "provider": "Yahoo Finance historical chart",
+      "periodStart": "2026-08-31",
+      "closeConvention": "Cierre regular; serie ajustada del proveedor congelada en la captura.",
+      "levels": {
+        "available": true,
+        "statusNote": "Calculado con 1589 periodos completados.",
+        "periods": 1589,
+        "currentOpen": 96.45,
+        "lastClose": 98.28,
+        "avgHigherExtension": 0.0181,
+        "stdHigherExtension": 0.0186,
+        "avgLowerExtension": 0.0188,
+        "stdLowerExtension": 0.0199,
+        "levels": {
+          "WSHE": 99.99,
+          "WAHE": 98.19,
+          "WALE": 94.63,
+          "WSLE": 92.71
+        },
+        "distances": {
+          "WSHE": -0.0171,
+          "WAHE": 0.0009,
+          "WALE": 0.0385,
+          "WSLE": 0.06
+        },
+        "location": "Cerca de extensión por semana alta"
+      },
+      "seasonality": {
+        "month": 9,
+        "cycle": "midterm",
+        "window": "All",
+        "years": [
+          2022,
+          2018,
+          2014,
+          2010,
+          2006,
+          2002,
+          1998
+        ],
+        "sampleSize": 7,
+        "weeks": [
+          {
+            "month": 9,
+            "weekOfMonth": 1,
+            "averageReturn": 0.002025,
+            "medianReturn": 0.00339,
+            "winRate": 0.5714,
+            "sampleSize": 7
+          },
+          {
+            "month": 9,
+            "weekOfMonth": 2,
+            "averageReturn": 0.004114,
+            "medianReturn": 0.012397,
+            "winRate": 0.5714,
+            "sampleSize": 7
+          },
+          {
+            "month": 9,
+            "weekOfMonth": 3,
+            "averageReturn": -0.002563,
+            "medianReturn": -0.005102,
+            "winRate": 0.4286,
+            "sampleSize": 7
+          },
+          {
+            "month": 9,
+            "weekOfMonth": 4,
+            "averageReturn": -0.008126,
+            "medianReturn": -0.005384,
+            "winRate": 0.4286,
+            "sampleSize": 7
+          },
+          {
+            "month": 9,
+            "weekOfMonth": 5,
+            "averageReturn": 0.000988,
+            "medianReturn": 0.000988,
+            "winRate": 0.5,
+            "sampleSize": 2
+          }
+        ],
+        "averageReturn": -0.008583,
+        "winRate": 0.4286,
+        "averageWeeklyWinRate": 0.5,
+        "averageWeeklySampleSize": 6,
+        "strongestWeek": 2,
+        "weakestWeek": 4,
+        "methodology": "Retorno entre cierres semanales ajustados. La semana se asigna por su fecha de cierre: Semana 1 = días 1–7; Semana 5 = días 29–31. Solo septiembres de años Midterm completos anteriores a 2026; hasta 10 ciclos. N puede variar por semana. La primera semana puede incluir días de agosto.",
+        "observations": [
+          {
+            "date": "1998-09-04",
+            "year": 1998,
+            "weekOfMonth": 1,
+            "returnValue": 0.0866145331843804
+          },
+          {
+            "date": "1998-09-11",
+            "year": 1998,
+            "weekOfMonth": 2,
+            "returnValue": 0.021738706654918172
+          },
+          {
+            "date": "1998-09-18",
+            "year": 1998,
+            "weekOfMonth": 3,
+            "returnValue": -0.02127618980599144
+          },
+          {
+            "date": "1998-09-25",
+            "year": 1998,
+            "weekOfMonth": 4,
+            "returnValue": -0.028985667559999984
+          },
+          {
+            "date": "2002-09-06",
+            "year": 2002,
+            "weekOfMonth": 1,
+            "returnValue": -0.03969276881363082
+          },
+          {
+            "date": "2002-09-13",
+            "year": 2002,
+            "weekOfMonth": 2,
+            "returnValue": -0.03066660447067815
+          },
+          {
+            "date": "2002-09-20",
+            "year": 2002,
+            "weekOfMonth": 3,
+            "returnValue": 0.022008432436535275
+          },
+          {
+            "date": "2002-09-27",
+            "year": 2002,
+            "weekOfMonth": 4,
+            "returnValue": -0.005383599079900048
+          },
+          {
+            "date": "2006-09-01",
+            "year": 2006,
+            "weekOfMonth": 1,
+            "returnValue": 0.011704786128279077
+          },
+          {
+            "date": "2006-09-08",
+            "year": 2006,
+            "weekOfMonth": 2,
+            "returnValue": -0.00939991010588015
+          },
+          {
+            "date": "2006-09-15",
+            "year": 2006,
+            "weekOfMonth": 3,
+            "returnValue": -0.021168104589855186
+          },
+          {
+            "date": "2006-09-22",
+            "year": 2006,
+            "weekOfMonth": 4,
+            "returnValue": -0.01565974548911353
+          },
+          {
+            "date": "2006-09-29",
+            "year": 2006,
+            "weekOfMonth": 5,
+            "returnValue": 0.025757737729739993
+          },
+          {
+            "date": "2010-09-03",
+            "year": 2010,
+            "weekOfMonth": 1,
+            "returnValue": 0.0168068570877411
+          },
+          {
+            "date": "2010-09-10",
+            "year": 2010,
+            "weekOfMonth": 2,
+            "returnValue": 0.012396938629225307
+          },
+          {
+            "date": "2010-09-17",
+            "year": 2010,
+            "weekOfMonth": 3,
+            "returnValue": -0.005102350744537132
+          },
+          {
+            "date": "2010-09-24",
+            "year": 2010,
+            "weekOfMonth": 4,
+            "returnValue": 0.012307867187553168
+          },
+          {
+            "date": "2014-09-05",
+            "year": 2014,
+            "weekOfMonth": 1,
+            "returnValue": 0.003390145885735274
+          },
+          {
+            "date": "2014-09-12",
+            "year": 2014,
+            "weekOfMonth": 2,
+            "returnValue": -0.004223186020385961
+          },
+          {
+            "date": "2014-09-19",
+            "year": 2014,
+            "weekOfMonth": 3,
+            "returnValue": 0.0016961785083600134
+          },
+          {
+            "date": "2014-09-26",
+            "year": 2014,
+            "weekOfMonth": 4,
+            "returnValue": 0.008467539318433026
+          },
+          {
+            "date": "2018-09-07",
+            "year": 2018,
+            "weekOfMonth": 1,
+            "returnValue": -0.0266230259610738
+          },
+          {
+            "date": "2018-09-14",
+            "year": 2018,
+            "weekOfMonth": 2,
+            "returnValue": 0.025586742740020707
+          },
+          {
+            "date": "2018-09-21",
+            "year": 2018,
+            "weekOfMonth": 3,
+            "returnValue": 0.03303512806596465
+          },
+          {
+            "date": "2018-09-28",
+            "year": 2018,
+            "weekOfMonth": 4,
+            "returnValue": 0.003164371529880583
+          },
+          {
+            "date": "2022-09-02",
+            "year": 2022,
+            "weekOfMonth": 1,
+            "returnValue": -0.03802358451304555
+          },
+          {
+            "date": "2022-09-09",
+            "year": 2022,
+            "weekOfMonth": 2,
+            "returnValue": 0.013366551146098749
+          },
+          {
+            "date": "2022-09-16",
+            "year": 2022,
+            "weekOfMonth": 3,
+            "returnValue": -0.027133976681975702
+          },
+          {
+            "date": "2022-09-23",
+            "year": 2022,
+            "weekOfMonth": 4,
+            "returnValue": -0.030796072820146847
+          },
+          {
+            "date": "2022-09-30",
+            "year": 2022,
+            "weekOfMonth": 5,
+            "returnValue": -0.02378105232626171
+          }
+        ]
+      },
+      "reading": {
+        "lastClose": 98.28,
+        "lastDate": "2026-09-04",
+        "returns": {
+          "1W": 0.025,
+          "1M": 0.0369,
+          "3M": 0.0596,
+          "6M": 0.1657,
+          "1Y": 0.3021
+        },
+        "distanceLongAverage": 0.1121,
+        "percentile": 83.1,
+        "zScore": 0.86,
+        "currentDrawdown": -0.0019
+      }
+    },
+    "BTCUSD": {
+      "ticker": "BTCUSD",
+      "symbol": "BTC-USD",
+      "asOf": "2026-09-04",
+      "provider": "Yahoo Finance historical chart",
+      "periodStart": "2026-08-31",
+      "closeConvention": "Cierre diario UTC del 4 de septiembre; semana de lunes a domingo, aún incompleta al corte.",
+      "levels": {
+        "available": true,
+        "statusNote": "Calculado con 624 periodos completados.",
+        "periods": 624,
+        "currentOpen": 77673.7,
+        "lastClose": 79671.97,
+        "avgHigherExtension": 0.0708,
+        "stdHigherExtension": 0.0773,
+        "avgLowerExtension": 0.0684,
+        "stdLowerExtension": 0.0947,
+        "levels": {
+          "WSHE": 89180.8,
+          "WAHE": 83173.75,
+          "WALE": 72360.62,
+          "WSLE": 65002.71
+        },
+        "distances": {
+          "WSHE": -0.1066,
+          "WAHE": -0.0421,
+          "WALE": 0.101,
+          "WSLE": 0.2257
+        },
+        "location": "Dentro del rango por semana medio"
+      },
+      "seasonality": {
+        "month": 9,
+        "cycle": "midterm",
+        "window": "All",
+        "years": [
+          2022,
+          2018
+        ],
+        "sampleSize": 2,
+        "weeks": [
+          {
+            "month": 9,
+            "weekOfMonth": 1,
+            "averageReturn": 0.051581,
+            "medianReturn": 0.051581,
+            "winRate": 1,
+            "sampleSize": 2
+          },
+          {
+            "month": 9,
+            "weekOfMonth": 2,
+            "averageReturn": -0.022222,
+            "medianReturn": -0.022222,
+            "winRate": 0.5,
+            "sampleSize": 2
+          },
+          {
+            "month": 9,
+            "weekOfMonth": 3,
+            "averageReturn": -0.036804,
+            "medianReturn": -0.036804,
+            "winRate": 0.5,
+            "sampleSize": 2
+          },
+          {
+            "month": 9,
+            "weekOfMonth": 4,
+            "averageReturn": -0.001055,
+            "medianReturn": -0.001055,
+            "winRate": 0.5,
+            "sampleSize": 2
+          },
+          {
+            "month": 9,
+            "weekOfMonth": 5,
+            "averageReturn": -0.012677,
+            "medianReturn": -0.012677,
+            "winRate": 0,
+            "sampleSize": 1
+          }
+        ],
+        "averageReturn": -0.044684,
+        "winRate": 0,
+        "averageWeeklyWinRate": 0.5,
+        "averageWeeklySampleSize": 1.8,
+        "strongestWeek": 1,
+        "weakestWeek": 3,
+        "methodology": "Retorno entre cierres semanales ajustados. La semana se asigna por su fecha de cierre: Semana 1 = días 1–7; Semana 5 = días 29–31. Solo septiembres de años Midterm completos anteriores a 2026; hasta 10 ciclos. N puede variar por semana. La primera semana puede incluir días de agosto.",
+        "observations": [
+          {
+            "date": "2018-09-02",
+            "year": 2018,
+            "weekOfMonth": 1,
+            "returnValue": 0.08430573270270436
+          },
+          {
+            "date": "2018-09-09",
+            "year": 2018,
+            "weekOfMonth": 2,
+            "returnValue": -0.13363092808046384
+          },
+          {
+            "date": "2018-09-16",
+            "year": 2018,
+            "weekOfMonth": 3,
+            "returnValue": 0.034331871792654844
+          },
+          {
+            "date": "2018-09-23",
+            "year": 2018,
+            "weekOfMonth": 4,
+            "returnValue": 0.029683038028071262
+          },
+          {
+            "date": "2018-09-30",
+            "year": 2018,
+            "weekOfMonth": 5,
+            "returnValue": -0.012676876162624584
+          },
+          {
+            "date": "2022-09-04",
+            "year": 2022,
+            "weekOfMonth": 1,
+            "returnValue": 0.018856192930113203
+          },
+          {
+            "date": "2022-09-11",
+            "year": 2022,
+            "weekOfMonth": 2,
+            "returnValue": 0.08918639987082022
+          },
+          {
+            "date": "2022-09-18",
+            "year": 2022,
+            "weekOfMonth": 3,
+            "returnValue": -0.10793892153316531
+          },
+          {
+            "date": "2022-09-25",
+            "year": 2022,
+            "weekOfMonth": 4,
+            "returnValue": -0.03179319842033268
+          }
+        ]
+      },
+      "reading": {
+        "lastClose": 79671.97,
+        "lastDate": "2026-09-04",
+        "returns": {
+          "1W": 0.0143,
+          "1M": 0.0247,
+          "3M": 0.2266,
+          "6M": 0.0191,
+          "1Y": -0.0874
+        },
+        "distanceLongAverage": 0.1443,
+        "percentile": 61,
+        "zScore": 0.19,
+        "currentDrawdown": -0.3614
+      }
+    },
+    "ETHUSD": {
+      "ticker": "ETHUSD",
+      "symbol": "ETH-USD",
+      "asOf": "2026-09-04",
+      "provider": "Yahoo Finance historical chart",
+      "periodStart": "2026-08-31",
+      "closeConvention": "Cierre diario UTC del 4 de septiembre; semana de lunes a domingo, aún incompleta al corte.",
+      "levels": {
+        "available": true,
+        "statusNote": "Calculado con 460 periodos completados.",
+        "periods": 460,
+        "currentOpen": 2417.9,
+        "lastClose": 2456.08,
+        "avgHigherExtension": 0.0869,
+        "stdHigherExtension": 0.0923,
+        "avgLowerExtension": 0.0989,
+        "stdLowerExtension": 0.1298,
+        "levels": {
+          "WSHE": 2851.25,
+          "WAHE": 2628.01,
+          "WALE": 2178.87,
+          "WSLE": 1865.12
+        },
+        "distances": {
+          "WSHE": -0.1386,
+          "WAHE": -0.0654,
+          "WALE": 0.1272,
+          "WSLE": 0.3168
+        },
+        "location": "Dentro del rango por semana medio"
+      },
+      "seasonality": {
+        "month": 9,
+        "cycle": "midterm",
+        "window": "All",
+        "years": [
+          2022,
+          2018
+        ],
+        "sampleSize": 2,
+        "weeks": [
+          {
+            "month": 9,
+            "weekOfMonth": 1,
+            "averageReturn": 0.086249,
+            "medianReturn": 0.086249,
+            "winRate": 1,
+            "sampleSize": 2
+          },
+          {
+            "month": 9,
+            "weekOfMonth": 2,
+            "averageReturn": -0.107152,
+            "medianReturn": -0.107152,
+            "winRate": 0.5,
+            "sampleSize": 2
+          },
+          {
+            "month": 9,
+            "weekOfMonth": 3,
+            "averageReturn": -0.060946,
+            "medianReturn": -0.060946,
+            "winRate": 0.5,
+            "sampleSize": 2
+          },
+          {
+            "month": 9,
+            "weekOfMonth": 4,
+            "averageReturn": 0.038419,
+            "medianReturn": 0.038419,
+            "winRate": 0.5,
+            "sampleSize": 2
+          },
+          {
+            "month": 9,
+            "weekOfMonth": 5,
+            "averageReturn": -0.046994,
+            "medianReturn": -0.046994,
+            "winRate": 0,
+            "sampleSize": 1
+          }
+        ],
+        "averageReturn": -0.161249,
+        "winRate": 0,
+        "averageWeeklyWinRate": 0.5,
+        "averageWeeklySampleSize": 1.8,
+        "strongestWeek": 1,
+        "weakestWeek": 2,
+        "methodology": "Retorno entre cierres semanales ajustados. La semana se asigna por su fecha de cierre: Semana 1 = días 1–7; Semana 5 = días 29–31. Solo septiembres de años Midterm completos anteriores a 2026; hasta 10 ciclos. N puede variar por semana. La primera semana puede incluir días de agosto.",
+        "observations": [
+          {
+            "date": "2018-09-02",
+            "year": 2018,
+            "weekOfMonth": 1,
+            "returnValue": 0.06967376689085936
+          },
+          {
+            "date": "2018-09-09",
+            "year": 2018,
+            "weekOfMonth": 2,
+            "returnValue": -0.3310346648886292
+          },
+          {
+            "date": "2018-09-16",
+            "year": 2018,
+            "weekOfMonth": 3,
+            "returnValue": 0.12017331295674083
+          },
+          {
+            "date": "2018-09-23",
+            "year": 2018,
+            "weekOfMonth": 4,
+            "returnValue": 0.10762547752550056
+          },
+          {
+            "date": "2018-09-30",
+            "year": 2018,
+            "weekOfMonth": 5,
+            "returnValue": -0.04699379898503009
+          },
+          {
+            "date": "2022-09-04",
+            "year": 2022,
+            "weekOfMonth": 1,
+            "returnValue": 0.10282374621384704
+          },
+          {
+            "date": "2022-09-11",
+            "year": 2022,
+            "weekOfMonth": 2,
+            "returnValue": 0.11673021728543387
+          },
+          {
+            "date": "2022-09-18",
+            "year": 2022,
+            "weekOfMonth": 3,
+            "returnValue": -0.24206546437665588
+          },
+          {
+            "date": "2022-09-25",
+            "year": 2022,
+            "weekOfMonth": 4,
+            "returnValue": -0.030788144239815907
+          }
+        ]
+      },
+      "reading": {
+        "lastClose": 2456.08,
+        "lastDate": "2026-09-04",
+        "returns": {
+          "1W": -0.0044,
+          "1M": -0.0031,
+          "3M": 0.2999,
+          "6M": 0.0701,
+          "1Y": -0.1605
+        },
+        "distanceLongAverage": 0.2077,
+        "percentile": 73,
+        "zScore": 0.6,
+        "currentDrawdown": -0.4916
+      }
+    }
+  },
+  "readings": {
+    "SPY": {
+      "lastClose": 770.19,
+      "lastDate": "2026-09-04",
+      "returns": {
+        "1W": 0.0041,
+        "1M": 0.0015,
+        "3M": 0.0499,
+        "6M": 0.1516,
+        "1Y": 0.1997
+      },
+      "distanceLongAverage": 0.085,
+      "percentile": 58.2,
+      "zScore": 0.44,
+      "currentDrawdown": -0.0099
+    },
+    "GLD": {
+      "lastClose": 406.77,
+      "lastDate": "2026-09-04",
+      "returns": {
+        "1W": -0.004,
+        "1M": -0.0171,
+        "3M": 0.0781,
+        "6M": -0.1409,
+        "1Y": 0.2451
+      },
+      "distanceLongAverage": -0.0209,
+      "percentile": 15.6,
+      "zScore": -1.08,
+      "currentDrawdown": -0.1797
+    },
+    "FXI": {
+      "lastClose": 35.88,
+      "lastDate": "2026-09-04",
+      "returns": {
+        "1W": 0.0144,
+        "1M": 0.0056,
+        "3M": 0.0929,
+        "6M": 0.0092,
+        "1Y": -0.0467
+      },
+      "distanceLongAverage": -0.0162,
+      "percentile": 43.2,
+      "zScore": -0.3,
+      "currentDrawdown": -0.2566
+    },
+    "EWJ": {
+      "lastClose": 98.28,
+      "lastDate": "2026-09-04",
+      "returns": {
+        "1W": 0.025,
+        "1M": 0.0369,
+        "3M": 0.0596,
+        "6M": 0.1657,
+        "1Y": 0.3021
+      },
+      "distanceLongAverage": 0.1121,
+      "percentile": 83.1,
+      "zScore": 0.86,
+      "currentDrawdown": -0.0019
+    },
+    "BTCUSD": {
+      "lastClose": 79671.97,
+      "lastDate": "2026-09-04",
+      "returns": {
+        "1W": 0.0143,
+        "1M": 0.0247,
+        "3M": 0.2266,
+        "6M": 0.0191,
+        "1Y": -0.0874
+      },
+      "distanceLongAverage": 0.1443,
+      "percentile": 61,
+      "zScore": 0.19,
+      "currentDrawdown": -0.3614
+    },
+    "ETHUSD": {
+      "lastClose": 2456.08,
+      "lastDate": "2026-09-04",
+      "returns": {
+        "1W": -0.0044,
+        "1M": -0.0031,
+        "3M": 0.2999,
+        "6M": 0.0701,
+        "1Y": -0.1605
+      },
+      "distanceLongAverage": 0.2077,
+      "percentile": 73,
+      "zScore": 0.6,
+      "currentDrawdown": -0.4916
+    },
+    "RSP": {
+      "lastDate": "2026-09-04",
+      "lastClose": 219,
+      "returns": {
+        "1W": -0.0018,
+        "1M": -0.0138,
+        "3M": 0.0484,
+        "6M": 0.1143,
+        "1Y": 0.1828
+      },
+      "distanceLongAverage": 0.0808
+    },
+    "IWM": {
+      "lastDate": "2026-09-04",
+      "lastClose": 296.01,
+      "returns": {
+        "1W": 0.0071,
+        "1M": -0.0189,
+        "3M": 0.0023,
+        "6M": 0.1847,
+        "1Y": 0.2641
+      },
+      "distanceLongAverage": 0.0884
+    },
+    "QQQ": {
+      "lastDate": "2026-09-04",
+      "lastClose": 718.96,
+      "returns": {
+        "1W": 0.0031,
+        "1M": 0.004,
+        "3M": 0.0074,
+        "6M": 0.2016,
+        "1Y": 0.2559
+      },
+      "distanceLongAverage": 0.0947
+    },
+    "XLK": {
+      "lastDate": "2026-09-04",
+      "lastClose": 187.28,
+      "returns": {
+        "1W": 0.0042,
+        "1M": 0.0198,
+        "3M": 0.0168,
+        "6M": 0.3674,
+        "1Y": 0.4336
+      },
+      "distanceLongAverage": 0.1696
+    },
+    "XLF": {
+      "lastDate": "2026-09-04",
+      "lastClose": 58.1,
+      "returns": {
+        "1W": 0.0068,
+        "1M": 0.0108,
+        "3M": 0.0783,
+        "6M": 0.1589,
+        "1Y": 0.0914
+      },
+      "distanceLongAverage": 0.0917
+    },
+    "XLV": {
+      "lastDate": "2026-09-04",
+      "lastClose": 171.45,
+      "returns": {
+        "1W": 0.0053,
+        "1M": -0.0241,
+        "3M": 0.1266,
+        "6M": 0.1324,
+        "1Y": 0.2693
+      },
+      "distanceLongAverage": 0.1094
+    },
+    "XLE": {
+      "lastDate": "2026-09-04",
+      "lastClose": 64.06,
+      "returns": {
+        "1W": 0.0016,
+        "1M": 0.0075,
+        "3M": 0.1763,
+        "6M": 0.148,
+        "1Y": 0.4831
+      },
+      "distanceLongAverage": 0.1781
+    },
+    "XLY": {
+      "lastDate": "2026-09-04",
+      "lastClose": 114.91,
+      "returns": {
+        "1W": -0.0144,
+        "1M": -0.031,
+        "3M": 0.0101,
+        "6M": 0.0081,
+        "1Y": -0.0151
+      },
+      "distanceLongAverage": -0.0151
+    },
+    "XLP": {
+      "lastDate": "2026-09-04",
+      "lastClose": 84.58,
+      "returns": {
+        "1W": -0.0047,
+        "1M": -0.0226,
+        "3M": 0.0103,
+        "6M": -0.0016,
+        "1Y": 0.0779
+      },
+      "distanceLongAverage": 0.0234
+    },
+    "XLI": {
+      "lastDate": "2026-09-04",
+      "lastClose": 175.27,
+      "returns": {
+        "1W": 0.0008,
+        "1M": -0.0367,
+        "3M": -0.0162,
+        "6M": 0.0368,
+        "1Y": 0.1719
+      },
+      "distanceLongAverage": 0.0298
+    },
+    "XLB": {
+      "lastDate": "2026-09-04",
+      "lastClose": 52.44,
+      "returns": {
+        "1W": -0.0047,
+        "1M": -0.0015,
+        "3M": 0.0309,
+        "6M": 0.0604,
+        "1Y": 0.1694
+      },
+      "distanceLongAverage": 0.0526
+    },
+    "XLU": {
+      "lastDate": "2026-09-04",
+      "lastClose": 43.08,
+      "returns": {
+        "1W": 0.0201,
+        "1M": -0.0214,
+        "3M": -0.0442,
+        "6M": -0.0659,
+        "1Y": 0.0577
+      },
+      "distanceLongAverage": -0.0273
+    },
+    "XLRE": {
+      "lastDate": "2026-09-04",
+      "lastClose": 43.93,
+      "returns": {
+        "1W": -0.0041,
+        "1M": -0.0236,
+        "3M": -0.0159,
+        "6M": 0.0402,
+        "1Y": 0.0882
+      },
+      "distanceLongAverage": 0.0304
+    },
+    "XLC": {
+      "lastDate": "2026-09-04",
+      "lastClose": 112.03,
+      "returns": {
+        "1W": 0.0051,
+        "1M": 0.0064,
+        "3M": 0.0444,
+        "6M": -0.0407,
+        "1Y": -0.0056
+      },
+      "distanceLongAverage": -0.0139
+    }
+  },
+  "earnings": {
+    "NVDA": {
+      "beforeDate": "2026-08-26",
+      "afterDate": "2026-08-27",
+      "before": 209.66000366210938,
+      "after": 227.97999572753906,
+      "actualMovePct": 8.73795275466771
+    },
+    "FUTU": {
+      "beforeDate": "2026-08-19",
+      "afterDate": "2026-08-20",
+      "before": 109.41999816894531,
+      "after": 112.7300033569336,
+      "actualMovePct": 3.0250459179112843
+    }
+  }
+}

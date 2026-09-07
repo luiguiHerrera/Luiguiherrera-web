@@ -1,0 +1,92 @@
+{
+  "viewports": [
+    {
+      "name": "desktop",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "size": {
+        "viewport": 1440,
+        "document": 1440
+      },
+      "headings": [
+        "Contexto general",
+        "Lecturas de mercado al cierre",
+        "Lectura por activo",
+        "Calendario de eventos",
+        "Rutas probables",
+        "Lista de control",
+        "Fuentes y aviso educativo"
+      ],
+      "errors": [],
+      "subblockHeading": "H3",
+      "groups": [
+        "A. Lo que impulsó",
+        "B. Lo que frenó"
+      ],
+      "keyboardMethodDisclosure": "PASS",
+      "withinClosingSection": true
+    },
+    {
+      "name": "mobile",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "size": {
+        "viewport": 390,
+        "document": 390
+      },
+      "headings": [
+        "Contexto general",
+        "Lecturas de mercado al cierre",
+        "Lectura por activo",
+        "Calendario de eventos",
+        "Rutas probables",
+        "Lista de control",
+        "Fuentes y aviso educativo"
+      ],
+      "errors": [],
+      "subblockHeading": "H3",
+      "groups": [
+        "A. Lo que impulsó",
+        "B. Lo que frenó"
+      ],
+      "keyboardMethodDisclosure": "PASS",
+      "withinClosingSection": true
+    }
+  ],
+  "downloads": [
+    {
+      "ext": "html",
+      "status": 200,
+      "contentType": "text/html; charset=UTF-8"
+    },
+    {
+      "ext": "md",
+      "status": 200,
+      "contentType": "text/markdown; charset=UTF-8"
+    },
+    {
+      "ext": "pdf",
+      "status": 200,
+      "contentType": "application/pdf"
+    }
+  ],
+  "pdf": {
+    "pages": 22,
+    "bytes": 62165,
+    "outOfBoundsCharacters": [],
+    "addendumPages": [
+      3
+    ],
+    "calendarTitlePage": [
+      17
+    ]
+  },
+  "snapshotDate": "2026-09-04",
+  "testCount": 25,
+  "build": "PASS — isolated 84e8b3e plus addendum",
+  "exportValidation": "PASS"
+}

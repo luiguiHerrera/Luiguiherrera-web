@@ -1,5 +1,22 @@
+import septemberSnapshot from "./snapshots/primer-informe-septiembre-2026/automatic.json" with { type: "json" };
+import septemberWeeklyReview from "./snapshots/primer-informe-septiembre-2026/weekly-review.json" with { type: "json" };
+
 export type HistoricalAutomaticReadingsSnapshot = {
   dataDate: string;
+  displayTitle?: string;
+  closingLabel?: string;
+  sourceNote?: string;
+  weeklyReview?: {
+    title: string;
+    asOf: string;
+    periodLabel: string;
+    support: string[];
+    caution: string[];
+    closing: string;
+    methodology: string;
+    notes: string[];
+    sources: Array<{ label: string; href: string }>;
+  };
   regime: {
     label: string;
     score: number | null;
@@ -27,6 +44,7 @@ export type HistoricalAutomaticReadingsSnapshot = {
   };
   /** Amplitud relativa publicada por el dashboard al corte. Solo se incluye cuando quedó capturada. */
   breadth?: {
+    windowLabel?: string;
     rspVsSpy1wPp: number | null;
     iwmVsSpy1wPp: number | null;
     qqqVsSpy1wPp: number | null;
@@ -44,6 +62,7 @@ export type HistoricalAutomaticReadingsSnapshot = {
     sectorDispersion1w: number;
   } | null;
   vix: {
+    asOf?: string;
     level: number;
     stateLabel: string;
     status: string;
@@ -59,8 +78,10 @@ export type HistoricalAutomaticReadingsSnapshot = {
     vx2MinusVx1: number;
     slopeVx1Vx2Pct: number;
     vx3MinusVx1: number;
+    points?: Array<{ label: string; symbol: string | null; expirationDate: string | null; value: number | null }>;
   } | null;
   btcEtfFlows: {
+    asOf?: string;
     lastDayUsdMillions: number;
     rolling5dUsdMillions: number;
     streakLabel: string;
@@ -333,10 +354,33 @@ export const secondAugust2026AutomaticReadings = {
   statisticalAssets: null,
 } satisfies HistoricalAutomaticReadingsSnapshot;
 
+// Freeze recursively so accidental in-process mutation cannot change later renders.
+function freezeSnapshot<T extends object>(value: T): T {
+  for (const child of Object.values(value)) if (child && typeof child === "object") freezeSnapshot(child);
+  return Object.freeze(value);
+}
+export const firstSeptember2026AutomaticReadings: HistoricalAutomaticReadingsSnapshot = freezeSnapshot({
+  ...septemberSnapshot,
+  // September presentation only: preserve the captured model and its quantitative state.
+  regime: {
+    ...septemberSnapshot.regime,
+    support: septemberSnapshot.regime.support.map((signal) => signal.startsWith("Rotación:")
+      ? "Rotación: El liderazgo fue selectivo. Energía y Tecnología encabezaron la semana, pero Utilities también estuvo entre los líderes. No hubo una rotación uniforme hacia growth/cíclicos ni un rezago general de los defensivos."
+      : signal),
+  },
+  weeklyReview: septemberWeeklyReview,
+  breadth: {
+    ...septemberSnapshot.breadth,
+    windowLabel: "31/08–04/09",
+    reading: "Diferencias entre los cierres del 31/08 y el 04/09 (cuatro intervalos diarios), conservadas de la captura original del Dashboard. Esta ventana no equivale a la semana completa del subbloque editorial, calculada desde el cierre del viernes 28/08.",
+  },
+});
+
 const historicalSnapshots = new Map<string, HistoricalAutomaticReadingsSnapshot>([
   ["segundo-informe-julio-2026", secondJuly2026AutomaticReadings],
   ["primer-informe-agosto-2026", firstAugust2026AutomaticReadings],
   ["segundo-informe-agosto-2026", secondAugust2026AutomaticReadings],
+  ["primer-informe-septiembre-2026", firstSeptember2026AutomaticReadings],
 ]);
 
 export function getHistoricalAutomaticReadings(reportId: string) {

@@ -1,24 +1,22 @@
 import Link from "next/link";
 import { InstitutionalHero } from "@/components/ui/InstitutionalHero";
 import { formatEditorialDate } from "@/lib/editorial/dates";
-import { getReportsByMonth, reportDisplayName, reportHref } from "@/lib/reports/market-reports";
+import { activeMarketReport, marketReports, getReportsByMonth, reportDisplayName, reportHref } from "@/lib/reports/market-reports";
 import type { MarketReport } from "@/lib/reports/market-reports";
 import { getRouteMetadata } from "@/lib/seo/site";
 
 export const metadata = getRouteMetadata("/informes");
 
-const currentMonthKey = "2026-08";
-const previousMonthKey = "2026-07";
-const previousMonthLabel = "Julio 2026";
+const currentMonthKey = activeMarketReport.monthKey;
 
 export default function InformesPage() {
   const currentMonthReports = prioritizeReports(getReportsByMonth(currentMonthKey));
-  const previousMonthReports = prioritizeReports(getReportsByMonth(previousMonthKey));
+  const archiveMonths = [...new Set(marketReports.map(report => report.monthKey))].filter(month => month !== currentMonthKey).sort().reverse();
 
   return (
     <main className="mx-auto w-full max-w-7xl overflow-x-hidden px-4 py-8 md:px-5 md:py-14">
       <InstitutionalHero
-        chips={["Archivo público", "Agosto 2026"]}
+        chips={["Archivo público", activeMarketReport.monthLabel]}
         description="Informes públicos de mercado para revisar contexto, escenarios y señales de seguimiento por activo."
         eyebrow="Archivo de informes"
         note="Documento educativo e informativo. No constituye asesoría financiera personalizada."
@@ -29,18 +27,18 @@ export default function InformesPage() {
       <section className="mt-8 grid gap-6 border-t border-petrol/20 pt-8 md:pt-10 lg:grid-cols-[0.34fr_1fr]">
         <div>
           <p className="text-xs font-semibold uppercase text-petrol">Mes vigente</p>
-          <h2 className="mt-2 text-2xl font-semibold leading-tight text-ink md:text-3xl">Agosto 2026</h2>
+          <h2 className="mt-2 text-2xl font-semibold leading-tight text-ink md:text-3xl">{activeMarketReport.monthLabel}</h2>
         </div>
         <ReportGrid reports={currentMonthReports} />
       </section>
 
-      <section className="grid gap-6 border-t border-line py-8 md:py-10 lg:grid-cols-[0.34fr_1fr]">
+      {archiveMonths.map((month, index) => <section key={month} className="grid gap-6 border-t border-line py-8 md:py-10 lg:grid-cols-[0.34fr_1fr]">
         <div>
-          <p className="text-xs font-semibold uppercase text-petrol">Mes anterior</p>
-          <h2 className="mt-2 text-2xl font-semibold leading-tight text-ink md:text-3xl">{previousMonthLabel}</h2>
+          <p className="text-xs font-semibold uppercase text-petrol">{index === 0 ? "Mes anterior" : "Archivo histórico"}</p>
+          <h2 className="mt-2 text-2xl font-semibold leading-tight text-ink md:text-3xl">{getReportsByMonth(month)[0].monthLabel}</h2>
         </div>
-        <ReportGrid reports={previousMonthReports} emptyLabel="No hay informes cargados del mes anterior." />
-      </section>
+        <ReportGrid reports={prioritizeReports(getReportsByMonth(month))} emptyLabel="No hay informes cargados del mes anterior." />
+      </section>)}
     </main>
   );
 }

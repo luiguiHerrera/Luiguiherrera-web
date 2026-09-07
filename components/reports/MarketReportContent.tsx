@@ -1,3 +1,4 @@
+import { ReportQuantitativePanels } from "@/components/reports/ReportQuantitativePanels";
 import Link from "next/link";
 import { EditorialByline } from "@/components/editorial/EditorialByline";
 import { AutomaticMarketReadings } from "@/components/reports/AutomaticMarketReadings";
@@ -110,6 +111,7 @@ export function MarketReportContent({
             publishedAt={report.publishedAt}
           />
           <p className="mt-4 text-base leading-7 text-muted">{report.subtitle}</p>
+          {report.presentation?.prospectivePeriod ? <p className="mt-3 text-sm text-muted">Periodo prospectivo: {report.presentation.prospectivePeriod}</p> : null}
           <ReportExportLinks report={report} />
         </div>
         {hasHeadlineSummary ? (
@@ -156,11 +158,14 @@ export function MarketReportContent({
           <p className="text-xs font-semibold uppercase text-petrol">Qué pasó</p>
           <h2 className="mt-2 text-2xl font-semibold leading-tight text-ink md:text-3xl">{contextTitle}</h2>
         </div>
-        <div className="grid gap-3 md:grid-cols-2">
+        {report.presentation?.contextStyle === "prose" ? <div className="grid gap-4">
+          {report.whatHappened.map(block => <p key={block.title} className="text-sm leading-7 text-muted md:text-base">{block.body}</p>)}
+          <p className="border-l-2 border-brass pl-4 text-base font-medium leading-7 text-ink">{report.presentation.openingLine}</p>
+        </div> : <div className="grid gap-3 md:grid-cols-2">
           {report.whatHappened.map((block) => (
             <ContextByAssetCard key={block.title} block={block} />
           ))}
-        </div>
+        </div>}
       </section>
 
       {automaticReadings ? (
@@ -197,6 +202,7 @@ export function MarketReportContent({
                       {asset.watch ? <ReadingColumn title="Qué vigilar" body={asset.watch} /> : null}
                       {asset.reading ? <ReadingColumn title="Lectura del informe" body={asset.reading} /> : null}
                     </div>
+                    {asset.quantitativePanels ? <ReportQuantitativePanels panels={asset.quantitativePanels} asset={asset.asset} /> : null}
                     {asset.figures?.length ? (
                       <div className="grid gap-4 pt-1">
                         {asset.figures.map((figure) => (
@@ -288,10 +294,11 @@ export function MarketReportContent({
 
       {report.probableRoutes ? (
         <section id="rutas-probables" className="grid scroll-mt-24 gap-6 border-t border-line py-8 md:py-10 lg:grid-cols-[0.34fr_1fr]">
-          <div><p className="text-xs font-semibold uppercase text-petrol">Escenarios condicionales</p><h2 className="mt-2 text-2xl font-semibold text-ink md:text-3xl">{report.probableRoutes.title}</h2><p className="mt-3 text-sm leading-6 text-muted">{report.probableRoutes.note}</p></div>
+          <div><p className="text-xs font-semibold uppercase text-petrol">Escenarios condicionales</p><h2 className="mt-2 text-2xl font-semibold text-ink md:text-3xl">{report.probableRoutes.title}</h2><p className="mt-3 text-sm leading-6 text-muted">{report.presentation?.contextStyle === "prose" ? "Tres rutas condicionales, sin probabilidades asignadas." : report.probableRoutes.note}</p></div>
           <div className="grid gap-5">
             {report.probableRoutes.engines?.length ? <div className="grid gap-3 md:grid-cols-3">{report.probableRoutes.engines.map((item) => <article key={item.title} className="border-l-2 border-petrol bg-panel p-4"><p className="text-xs font-semibold uppercase text-petrol">Motor</p><h3 className="mt-2 font-semibold text-ink">{item.title}</h3><p className="mt-2 text-sm leading-6 text-muted">{item.body}</p></article>)}</div> : null}
             <div className="grid gap-3 md:grid-cols-3">{report.probableRoutes.scenarios.map((item) => <article key={item.title} className="border border-line bg-panelSoft p-4"><h3 className="font-semibold text-ink">{item.title}</h3><p className="mt-2 text-sm leading-6 text-muted">{item.body}</p></article>)}</div>
+            {report.presentation?.contextStyle === "prose" ? <p className="text-sm leading-6 text-muted">{report.probableRoutes.note}</p> : null}
           </div>
         </section>
       ) : null}
@@ -331,11 +338,15 @@ export function MarketReportContent({
       <section id="fuentes-y-aviso" className="grid scroll-mt-24 gap-6 py-8 md:py-10 lg:grid-cols-[0.34fr_1fr]">
         <div>
           <p className="text-xs font-semibold uppercase text-petrol">{sourcesSectionTitle}</p>
-          <h2 className="mt-2 text-2xl font-semibold leading-tight text-ink md:text-3xl">Marco de lectura</h2>
+          <h2 className="mt-2 text-2xl font-semibold leading-tight text-ink md:text-3xl">{report.sourceGroups ? sourcesSectionTitle : "Marco de lectura"}</h2>
         </div>
         <div className="border border-line bg-panelSoft p-5">
+          {report.sourceGroups?.map(group => <section key={group.title} className="mb-5">
+            <h3 className="font-semibold text-ink">{group.title}</h3>
+            <ul className="mt-2 grid gap-2 text-sm leading-6 text-muted">{group.entries.map(entry=><li key={entry.label}>{entry.href ? <a className="underline decoration-petrol/30 underline-offset-4 hover:text-petrol" href={entry.href}>{entry.label}</a> : entry.label}{entry.note ? <span className="block text-xs">{entry.note}</span> : null}</li>)}</ul>
+          </section>)}
           <p className="text-sm leading-7 text-muted">{report.sourcesNote}</p>
-          <p className="mt-3 border-t border-line pt-3 text-sm leading-7 text-muted">{report.disclaimer}</p>
+          <p className="mt-3 whitespace-pre-line border-t border-line pt-3 text-sm leading-7 text-muted">{report.disclaimer}</p>
         </div>
       </section>
 

@@ -74,7 +74,8 @@ test("Reports destinations are actual report entries, not resource redirects", (
   const es = readFileSync("app/(es)/informes/page.tsx", "utf8");
   const en = readFileSync("app/en/reports/page.tsx", "utf8");
   assert.match(es, /getReportsByMonth/);
-  assert.match(es, /previousMonthReports/);
+  assert.match(es, /Mes anterior/);
+  assert.match(es, /Archivo histórico/);
   assert.match(es, /Abrir informe/);
   assert.match(en, /previousEnglishReports/);
   assert.match(en, /currentEnglishReport/);

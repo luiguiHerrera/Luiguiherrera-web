@@ -1,0 +1,15 @@
+{
+  "reportId": "primer-informe-septiembre-2026",
+  "asOf": "2026-09-04",
+  "capturedAt": "2026-09-06",
+  "policy": "Published report inputs are immutable. Export regeneration reads these files only; never recapture or replace them with latest provider data.",
+  "files": {
+    "automatic.json": "945692213bc501f8ade3a2ea2da008d7f279b32376099d38baf4a36d8082f879",
+    "statistical.json": "a93c1e9c97b5925a5ce6b9aa795a340795a26967ef2544e7da7953dab60d6e6b",
+    "dashboard-evidence.json": "e86698edf44aaa0aa67e1d7124b10c89ab128b1787585c08fa6e1df5ebfee524",
+    "prices-evidence.json.gz": "faef2218ab59a796786e90696a93ddf0005de681bf1cf29a33feb57d67e18387",
+    "btc-source.json": "228a63f829b28af82d891ac7d5d046799eba358910e5b528470e50c85575ef23",
+    "weekly-review.json": "7d3e923ed05cdabb99393860167a37e47337c4fc81963ee1e20cea6bf18e9a12",
+    "weekly-review-evidence.json.gz": "bfed97e77290056ae439148ad44d52a6f240f65055e2003b085caea314a0fc66"
+  }
+}

@@ -1,0 +1,146 @@
+{
+  "reviewedAt": "2026-09-06",
+  "browser": "Chromium / Playwright",
+  "build": "PASS: Next production build; 55 static pages",
+  "productionBrowser": [
+    {
+      "name": "desktop",
+      "errors": [],
+      "overflows": {
+        "document": 1440,
+        "viewport": 1440,
+        "elements": []
+      },
+      "headings": [
+        "Contexto general",
+        "Lecturas de mercado al cierre",
+        "Lectura por activo",
+        "Calendario de eventos",
+        "Rutas probables",
+        "Lista de control",
+        "Fuentes y aviso educativo"
+      ],
+      "panelCount": 7,
+      "sourceDate": 1
+    },
+    {
+      "name": "desktop",
+      "archiveLinks": [
+        "/informes/primer-informe-septiembre-2026",
+        "/informes/primer-informe-agosto-2026",
+        "/informes/segundo-informe-agosto-2026",
+        "/informes/primer-informe-julio-2026",
+        "/informes/segundo-informe-julio-2026"
+      ]
+    },
+    {
+      "name": "mobile",
+      "errors": [],
+      "overflows": {
+        "document": 390,
+        "viewport": 390,
+        "elements": []
+      },
+      "headings": [
+        "Contexto general",
+        "Lecturas de mercado al cierre",
+        "Lectura por activo",
+        "Calendario de eventos",
+        "Rutas probables",
+        "Lista de control",
+        "Fuentes y aviso educativo"
+      ],
+      "panelCount": 7,
+      "sourceDate": 1
+    },
+    {
+      "name": "mobile",
+      "archiveLinks": [
+        "/informes/primer-informe-septiembre-2026",
+        "/informes/primer-informe-agosto-2026",
+        "/informes/segundo-informe-agosto-2026",
+        "/informes/primer-informe-julio-2026",
+        "/informes/segundo-informe-julio-2026"
+      ]
+    }
+  ],
+  "keyboardAndDownloads": [
+    {
+      "width": 1440,
+      "keyboard": "PASS",
+      "exports": [
+        {
+          "url": "/reports/primer-informe-septiembre-2026.pdf",
+          "status": 200,
+          "type": "application/pdf"
+        },
+        {
+          "url": "/reports/primer-informe-septiembre-2026.html",
+          "status": 200,
+          "type": "text/html; charset=UTF-8"
+        },
+        {
+          "url": "/reports/primer-informe-septiembre-2026.md",
+          "status": 200,
+          "type": "text/markdown; charset=UTF-8"
+        },
+        {
+          "url": "/reports/primer-informe-septiembre-2026-calendar.ics",
+          "status": 200,
+          "type": "text/calendar; charset=UTF-8"
+        }
+      ]
+    },
+    {
+      "width": 390,
+      "keyboard": "PASS",
+      "exports": [
+        {
+          "url": "/reports/primer-informe-septiembre-2026.pdf",
+          "status": 200,
+          "type": "application/pdf"
+        },
+        {
+          "url": "/reports/primer-informe-septiembre-2026.html",
+          "status": 200,
+          "type": "text/html; charset=UTF-8"
+        },
+        {
+          "url": "/reports/primer-informe-septiembre-2026.md",
+          "status": 200,
+          "type": "text/markdown; charset=UTF-8"
+        },
+        {
+          "url": "/reports/primer-informe-septiembre-2026-calendar.ics",
+          "status": 200,
+          "type": "text/calendar; charset=UTF-8"
+        }
+      ]
+    }
+  ],
+  "pdf": {
+    "pages": 21,
+    "renderedPages": 21,
+    "charactersOutsidePage": 0,
+    "bytes": 58827,
+    "visualReview": "PASS: all 21 pages; tables, range charts, calendar, references and footer inspected. White headers on dark tables; no clipped rows.",
+    "renderers": [
+      "Poppler",
+      "PDFium"
+    ]
+  },
+  "canary": "PASS: actual Dashboard orchestrator advances from 04/09 to 08/09 via provider fixtures; report and export model remain frozen",
+  "tests": {
+    "reportAndVx": {
+      "passed": 20,
+      "failed": 0
+    },
+    "reportsValidate": "PASS: 5 reports / 19 artifacts",
+    "reportsCheck": "PASS: 20 deterministic files",
+    "editorial": "PASS",
+    "seo": "PASS: 43 indexable routes / 18 language pairs",
+    "typescript": "PASS",
+    "lint": "PASS: 0 errors; 18 pre-existing warnings; focused lint 0 warnings"
+  },
+  "deployment": "Not deployed"
+}

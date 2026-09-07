@@ -1,0 +1,31 @@
+{
+  "title": "Lo que impulsó y lo que frenó al mercado",
+  "asOf": "2026-09-04",
+  "periodLabel": "Semana del 31 de agosto al 4 de septiembre de 2026",
+  "support": [
+    "Energía lideró: XLE +2,20 %. Tecnología avanzó +0,86 %, con mucha selección. Salud sumó +0,17 % y acumula +11,70 % YTD; fue cuarta entre los once sectores, no uno de los tres líderes semanales.",
+    "Entre las megacaps destacaron META +6,70 % y NVDA +5,89 %. META pertenece a Comunicación. Hay fortaleza en líderes vinculados a IA; estos retornos no permiten atribuirle todo el movimiento de tecnología.",
+    "USO ganó +9,45 %, frente al +2,20 % de XLE. El vehículo ligado a futuros de petróleo y las acciones energéticas tuvieron intensidades distintas; USO no es el precio spot del crudo.",
+    "Las pequeñas compañías conservan ventaja en el acumulado: IWM +20,75 % YTD, frente a SPY +13,54 % y QQQ +17,31 %. Esa ventaja anual no equivale a liderar cada semana."
+  ],
+  "caution": [
+    "Consumo Discrecional fue el mayor rezago: XLY -1,96 %. Materiales (XLB) cayó un 1,39 % y Real Estate (XLRE) un 1,24 %. Financieros quedó plano (0,00 %): la sensibilidad a tipos merece atención, pero no hubo una caída semanal de XLF que atribuirles.",
+    "La divergencia entre megacaps fue amplia: AMZN -2,97 %, MSFT -2,69 % y GOOGL -2,28 % contrastaron con META y NVDA. La diferencia entre el mejor y el peor de los siete fue de 9,68 puntos porcentuales. No describe una tecnología uniformemente fuerte.",
+    "El VIX de Cboe cerró el viernes en 14,53, 0,10 puntos por encima del viernes anterior. El S&P 500 encadenó 27 sesiones sin una caída diaria de al menos el 1 %, del 30/07 al 04/09. Es evidencia de calma, no un pronóstico de corrección."
+  ],
+  "closing": "El mercado sigue funcionando, pero no de forma uniforme. Hay dispersión entre sectores, dentro de las megacaps, entre petróleo y acciones energéticas y entre grandes y pequeñas compañías. La baja volatilidad describe calma, no seguridad. Un rango más comprimido podría ampliarse con rapidez cuando aparezca un catalizador; esa posibilidad no fija ni dirección ni fecha.",
+  "methodology": "Semana: cierre regular del 28/08 al 04/09. YTD: cierre del 31/12/2025 al 04/09/2026. ETFs y acciones usan precios ajustados; no se confunden con índices de precio. La racha usa el índice S&P 500 (^GSPC), cierres regulares y caídas diarias de al menos un 1 %, sin datos intradía.",
+  "notes": [
+    "El cierre VIX del 04/09 se incorpora desde Cboe a este addendum. La captura automática original conserva FRED 14,32 del 03/09 y su régimen calculado; ambas observaciones mantienen fecha y fuente."
+  ],
+  "sources": [
+    {
+      "label": "Yahoo Finance · series históricas congeladas al 04/09",
+      "href": "https://finance.yahoo.com/"
+    },
+    {
+      "label": "Cboe · cierres históricos del VIX",
+      "href": "https://cdn.cboe.com/api/global/us_indices/daily_prices/VIX_History.csv"
+    }
+  ]
+}
