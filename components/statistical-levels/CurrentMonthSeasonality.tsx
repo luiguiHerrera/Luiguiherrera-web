@@ -1,6 +1,7 @@
 'use client';
 import { useState } from 'react';
 import type { DailySeasonalityData, SeasonalityWindow } from '@/lib/statistical-levels/types';
+import { returnBarGeometry, winRateWidth } from './interaction-presentation';
 import { percent } from '@/lib/statistical-levels/interpretation';
 
 export function CurrentMonthSeasonality({ data, asOf, locale }: { data: DailySeasonalityData; asOf: string; locale: 'es' | 'en' }) {
@@ -11,6 +12,7 @@ export function CurrentMonthSeasonality({ data, asOf, locale }: { data: DailySea
   const monthName = Number.isFinite(month) ? date.toLocaleDateString(en ? 'en-US' : 'es-ES', { month: 'long', timeZone: 'UTC' }) : 'n/d';
   const windowData = data.windows[window] ?? (window === 'All' ? data.windows.Full : undefined);
   const cells = windowData?.weekly?.general.filter(cell => cell.month === month) ?? [];
+  const returnScale = Math.max(0, ...cells.filter(cell => cell.sampleSize > 0).map(cell => Math.abs(cell.averageReturn ?? 0)));
   const monthly = windowData?.monthly?.general.find(cell => cell.month === month);
   return <section id="sl-seasonality" className="sl-section">
     <div className="sl-section-heading"><div><p className="sl-eyebrow">{monthName} · {en ? 'Snapshot month' : 'Mes del último dato'}</p><h2>{en ? 'How has this month behaved?' : '¿Cómo suele comportarse este mes?'}</h2></div>
@@ -20,7 +22,22 @@ export function CurrentMonthSeasonality({ data, asOf, locale }: { data: DailySea
     <div className="sl-weeks">{[1,2,3,4,5].map(week => {
       const cell = cells.find(item => item.weekOfMonth === week);
       const n = cell?.sampleSize ?? 0;
-      return <article key={week} data-week={week}><h3>{en ? 'Week' : 'Semana'} {week}</h3><p className="sl-week-value">{n ? percent(cell?.averageReturn ?? null, 2) : 'n/d'}</p><p>{en ? 'Average return' : 'Retorno promedio'}</p><p className="sl-week-rate">{en ? 'Positive weeks' : 'Semanas positivas'} <strong>{n && cell?.winRate != null ? `${(cell.winRate * 100).toFixed(0)}%` : 'n/d'}</strong></p><small>N {n}{n < 5 ? en ? ' · Limited sample' : ' · Muestra limitada' : ''}</small></article>;
+      const bar = returnBarGeometry(n ? cell?.averageReturn ?? null : null, returnScale);
+      const rateWidth = winRateWidth(n ? cell?.winRate ?? null : null);
+      return <article key={week} data-week={week} data-limited={n < 5}>
+        <h3>{en ? 'Week' : 'Semana'} {week}</h3>
+        <p className="sl-week-value">{n ? percent(cell?.averageReturn ?? null, 2) : 'n/d'}</p>
+        <p className="sl-week-return-label">{en ? 'Average return' : 'Retorno promedio'}</p>
+        <div className="sl-return-micro" aria-hidden="true" data-direction={bar.direction}>
+          <span className="sl-return-zero" />
+          <span className="sl-return-fill" style={{ left: `${bar.left}%`, width: `${bar.width}%` }} />
+        </div>
+        <p className="sl-week-rate">{en ? 'Positive weeks' : 'Semanas positivas'} <strong>{n && cell?.winRate != null ? `${(cell.winRate * 100).toFixed(0)}%` : 'n/d'}</strong></p>
+        <div className="sl-win-micro" aria-hidden="true" data-available={rateWidth !== null}>
+          <span style={{ width: `${rateWidth ?? 0}%` }} />
+        </div>
+        <small>N {n}{n < 5 ? en ? ' · Limited sample' : ' · Muestra limitada' : ''}</small>
+      </article>;
     })}</div>
     <p className="sl-caption">{en ? 'Weeks are grouped by their closing date: days 1–7, 8–14, 15–21, 22–28 and 29–31. Historical samples contain only completed UTC calendar periods; the current week and month are excluded. Median, cycles and calendar detail are available below.' : 'Las semanas se agrupan por fecha de cierre: días 1–7, 8–14, 15–21, 22–28 y 29–31. Las muestras históricas contienen solo periodos de calendario UTC completos; se excluyen la semana y el mes en curso. Mediana, ciclos y detalle por calendario están disponibles más abajo.'}</p>
     <p className="sl-caption">{en ? "Completed observations through" : "Observaciones completas hasta"}: {en ? "monthly" : "mensual"} {data.historicalSample?.completedThrough.monthly ?? "n/d"} · {en ? "weekly" : "semanal"} {data.historicalSample?.completedThrough.weekly ?? "n/d"}.</p>

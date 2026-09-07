@@ -1,3 +1,4 @@
+import { DrawdownInspection } from "./DrawdownInspection";
 import { windowName } from "@/lib/statistical-levels/interpretation";
 import { StatisticalDisclosure } from "./StatisticalDisclosure";
 import type { AssetStatRecord, StatisticalFrequency, StatisticalWindow } from "@/lib/statistical-levels/types";
@@ -101,21 +102,7 @@ export function UnderwaterDrawdownChart({ asset, frequency, locale = "es", windo
         </div>
       </div>
       {series.length === 0 ? <p className="mt-5 text-sm text-muted">{locale === "en" ? "Unavailable: insufficient history for the selected window. N 0." : "No disponible: historial insuficiente para la ventana seleccionada. N 0."}</p> : <div className="mt-5">
-        <svg viewBox="0 0 100 100" className="h-56 w-full" preserveAspectRatio="none" role="img" aria-label={copy.aria}>
-          <rect x="0" y="0" width="100" height="100" fill="#fbfaf8" />
-          <line x1="0" x2="100" y1="8" y2="8" stroke="#b8b2aa" strokeWidth="0.45" vectorEffect="non-scaling-stroke" />
-          {area ? <path d={area} fill="#e6dece" /> : null}
-          {path ? <path d={path} fill="none" stroke="#9a7a44" strokeWidth="1.4" vectorEffect="non-scaling-stroke" /> : null}
-          {drawdowns.map((value, index) => {
-            const x = drawdowns.length === 1 ? 0 : (index / (drawdowns.length - 1)) * 100;
-            const y = 8 + (Math.abs(value) / Math.abs(minDrawdown)) * 82;
-            return (
-              <circle key={`${series[index]?.date ?? index}-${index}`} cx={x} cy={y} r="2.6" fill="transparent" stroke="transparent" vectorEffect="non-scaling-stroke">
-                <title>{`${series[index]?.date ?? copy.pendingDate} · DD ${formatPercent(value)}`}</title>
-              </circle>
-            );
-          })}
-        </svg>
+        <DrawdownInspection key={`${asset?.ticker}-${frequency}-${window}`} series={series} drawdowns={drawdowns} path={path} area={area} minDrawdown={minDrawdown} locale={locale} />
       </div>}
       <StatisticalDisclosure id="sl-drawdown-data" title={locale === "en" ? "Drawdown values by date" : "Valores de drawdown por fecha"}>
         <div className="sl-table-scroll" tabIndex={0} role="region" aria-label={locale === "en" ? "Dated drawdown values" : "Valores de drawdown con fechas"}>

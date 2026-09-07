@@ -1,7 +1,7 @@
 "use client";
 
-import { useMemo, useState } from "react";
-import { ExpandableInsightCard } from "@/components/ui/ExpandableInsightCard";
+import { useId, useMemo, useState } from "react";
+import { windowName } from "@/lib/statistical-levels/interpretation";
 import type {
   CalendarDaySeasonalityCell,
   CalendarMonthSeasonalityCell,
@@ -127,6 +127,8 @@ function labelForCell(cell: SeasonalityCell | undefined, locale: "es" | "en") {
 }
 
 export function AdvancedSeasonalityPanel({ data, frequency, generatedAt, locale = "es", ticker }: AdvancedSeasonalityPanelProps) {
+  const [contextOpen, setContextOpen] = useState(true);
+  const contextId = useId();
   const [window, setWindow] = useState<SeasonalityWindow>("5Y");
   const [phase, setPhase] = useState<PresidentialCyclePhase>("all");
   const [metric, setMetric] = useState<SeasonalityMetric>("averageReturn");
@@ -209,29 +211,36 @@ export function AdvancedSeasonalityPanel({ data, frequency, generatedAt, locale 
       };
 
   return (
-    <ExpandableInsightCard
-      eyebrow={copy.eyebrow}
-      title={copy.title}
-      reading={copy.reading + (locale === "en" ? " Only completed UTC calendar periods enter the sample; the current day, ISO week or month is excluded." : " La muestra incluye solo periodos de calendario UTC completos; se excluye el día, la semana ISO o el mes en curso.")}
-      status={ticker}
-      defaultOpen={frequency === "daily"}
-      metrics={[
-        { label: copy.window, value: window },
-        { label: copy.presidentialCycle, value: phaseOptions.find((item) => item.key === phase)?.label ?? "Off" },
-        { label: copy.metric, value: metricOptions.find((item) => item.key === metric)?.label ?? "Promedio" },
-        { label: copy.averageN, value: sampleAverage === null ? "n/d" : sampleAverage.toFixed(0) },
-      ]}
-      summaryExtra={
-        <div className="grid gap-2.5 sm:grid-cols-2 xl:grid-cols-4">
-          <Control label={copy.window} value={window} setValue={(value) => setWindow(value as SeasonalityWindow)} options={windowOptions.map((item) => [item, item])} />
-          <Control label={copy.presidentialCycle} value={phase} setValue={(value) => setPhase(value as PresidentialCyclePhase)} options={phaseOptions.map((item) => [item.key, item.label])} />
-          <Control label={copy.metric} value={metric} setValue={(value) => setMetric(value as SeasonalityMetric)} options={metricOptions.map((item) => [item.key, item.label])} />
-          {frequency !== "monthly" ? (
-            <Control label={copy.month} value={String(month)} setValue={(value) => setMonth(Number(value))} options={months.map((name, index) => [String(index + 1), name])} />
-          ) : null}
+    <section className="sl-patterns-context min-w-0" data-context-expanded={contextOpen}>
+      <div className="p-3.5 md:p-5">
+        <div className="flex flex-col gap-3.5 lg:flex-row lg:items-start lg:justify-between">
+          <div className="max-w-3xl">
+            <p className="text-xs font-semibold uppercase tracking-[0.16em] text-petrol">{copy.eyebrow} · {ticker}</p>
+            <h2 className="mt-2 text-lg font-semibold leading-snug text-ink md:text-2xl">{copy.title}</h2>
+            {contextOpen ? <p className="mt-3 text-sm leading-6 text-muted md:text-base md:leading-7">{copy.reading}{locale === "en" ? " Only completed UTC calendar periods enter the sample; the current day, ISO week or month is excluded." : " La muestra incluye solo periodos de calendario UTC completos; se excluye el día, la semana ISO o el mes en curso."}</p> : null}
+          </div>
+          <button type="button" className="sl-context-toggle" aria-expanded={contextOpen} aria-controls={contextId} onClick={() => setContextOpen(open => !open)}>
+            {locale === "en" ? contextOpen ? "Hide context" : "View full context" : contextOpen ? "Ocultar contexto" : "Ver contexto completo"}
+            <span aria-hidden="true">{contextOpen ? '↑' : '↓'}</span>
+          </button>
         </div>
-      }
-    >
+        {!contextOpen ? <div className="sl-patterns-summary">
+          <p className="sl-eyebrow">{frequency === "monthly" ? locale === "en" ? "All calendar months" : "Todos los meses del calendario" : months[month - 1]} · {windowName(window === "All" ? "Full" : window, locale)} · {phase === "all" ? locale === "en" ? "All cycles" : "Todos los ciclos" : phaseOptions.find(item => item.key === phase)?.label} · {metricOptions.find(item => item.key === metric)?.label}</p>
+          <p>{locale === "en" ? `Calendar-${frequency === "monthly" ? "month" : frequency === "weekly" ? "week" : "day"} patterns using completed UTC periods only.` : `Patrones por ${frequency === "monthly" ? "mes" : frequency === "weekly" ? "semana" : "día"} de calendario usando solo periodos UTC completos.`}</p>
+          <p>{copy.averageN}: {sampleAverage === null ? "n/d" : sampleAverage.toFixed(0)} · {locale === "en" ? "across all calendar groups" : "entre todos los grupos del calendario"}{sampleAverage !== null && sampleAverage < 5 ? ` · ${copy.lowSample}` : ""}</p>
+        </div> : null}
+      </div>
+      <div id={contextId} hidden={!contextOpen}>
+        <div className="px-3.5 pb-5 md:px-5">
+          <div className="sl-pattern-controls grid gap-2.5 sm:grid-cols-2 xl:grid-cols-4">
+            <Control label={copy.window} value={window} setValue={(value) => setWindow(value as SeasonalityWindow)} options={windowOptions.map((item) => [item, windowName(item === "All" ? "Full" : item, locale)])} />
+            <Control label={copy.presidentialCycle} value={phase} setValue={(value) => setPhase(value as PresidentialCyclePhase)} options={phaseOptions.map((item) => [item.key, item.label])} />
+            <Control label={copy.metric} value={metric} setValue={(value) => setMetric(value as SeasonalityMetric)} options={metricOptions.map((item) => [item.key, item.label])} />
+            {frequency !== "monthly" ? <Control label={copy.month} value={String(month)} setValue={(value) => setMonth(Number(value))} options={months.map((name, index) => [String(index + 1), name])} /> : null}
+          </div>
+          <p className="sl-caption sl-patterns-sample">{copy.averageN}: {sampleAverage === null ? "n/d" : sampleAverage.toFixed(0)} · {locale === "en" ? "Completed periods only" : "Solo periodos completos"}{sampleAverage !== null && sampleAverage < 5 ? ` · ${copy.lowSample}` : ""}</p>
+        </div>
+        <div className="border-t border-line/80 p-3.5 md:p-5">
       {dimension ? (
         <div className="grid gap-5">
           <div className="grid gap-3 md:grid-cols-4">
@@ -256,7 +265,9 @@ export function AdvancedSeasonalityPanel({ data, frequency, generatedAt, locale 
           {copy.emptyGeneral}
         </div>
       )}
-    </ExpandableInsightCard>
+        </div>
+      </div>
+    </section>
   );
 }
 

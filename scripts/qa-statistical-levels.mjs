@@ -134,7 +134,7 @@ try{
     const explorer=await c.evaluate('[...document.querySelectorAll("#sl-periods button")].map(e=>e.textContent)');assert.equal(explorer.length,1);
     await c.click('#sl-periods button');assert.equal(await c.evaluate('document.querySelectorAll("#sl-periods button[aria-pressed]").length'),7);
     for(let i=1;i<=7;i++){await c.click(`#sl-periods .flex.flex-wrap button:nth-child(${i})`);await audit(c,`${name}/filter${i}`);}
-    await c.click('#sl-calendar button[aria-expanded]');
+    if (!await c.evaluate('document.querySelector("#sl-calendar button[aria-expanded]").getAttribute("aria-expanded") === "true"')) await c.click('#sl-calendar button[aria-expanded]');
     await select(c,'#sl-calendar select:nth-of-type(1)','3Y');
     await c.click('#sl-calendar .sl-seasonality-values summary');
     assert.ok(await c.evaluate('document.querySelectorAll("#sl-calendar .sl-seasonality-values td").length>0'));

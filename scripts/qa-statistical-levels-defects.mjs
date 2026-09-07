@@ -148,7 +148,7 @@ try {
   for(const width of [1440,390]) {
     await load(c,routes.en+'?frequency=daily&window=Full',width,900);
     const start=Date.now();await open(c,'sl-drawdown-history');
-    const n=await c.evaluate('document.querySelectorAll("#sl-drawdown-history circle").length');
+    const n=await c.evaluate('Number(document.querySelector("#sl-drawdown-history [role=slider]").getAttribute("aria-valuemax")) + 1');
     assert.equal(n,spy.frequencies.daily.periods);await audit(c,`full-history-${width}`);
     report.defects.push({name:`full-history-${width}`,points:n,openMs:Date.now()-start,overflow:0});
   }
