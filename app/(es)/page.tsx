@@ -14,37 +14,37 @@ const principles = [
 
 const entryways = [
   {
-    title: "Leer el mercado",
+    title: "¿Cómo está el mercado?",
     label: "01",
     href: "/dashboard",
     description: "Régimen, niveles y contexto.",
   },
   {
-    title: "Mi perfil",
+    title: "¿Qué riesgo puedo asumir?",
     label: "02",
     href: "/diagnostico",
     description: "Riesgo, horizonte y capacidad.",
   },
   {
-    title: "Estrategias",
+    title: "¿Tiene sentido esta estrategia?",
     label: "03",
     href: "/investigacion/td3",
     description: "Modelos y backtests reproducibles.",
   },
   {
-    title: "Simulador financiero",
+    title: "¿Qué decisión financiera estoy evaluando?",
     label: "04",
     href: "/proteccion",
     description: "Decisiones y margen de error.",
   },
   {
-    title: "Tendencias",
+    title: "¿Qué está cambiando?",
     label: "05",
     href: "/tendencias",
     description: "Cambios globales como hipótesis.",
   },
   {
-    title: "Recursos",
+    title: "¿Quiero comprobarlo por mi cuenta?",
     label: "06",
     href: "/recursos",
     description: "Scripts y herramientas públicas.",
@@ -154,10 +154,11 @@ export default async function Home() {
         vixTermStructure={vixTermStructure}
       />
 
-      <section className="warm-section" aria-labelledby="home-goals-es" data-home-goals>
-        <div className="mx-auto max-w-7xl px-4 py-11 md:px-5 md:py-14">
-          <h2 id="home-goals-es" className="text-xs font-semibold uppercase tracking-[0.2em] text-petrol">Explora por objetivo</h2>
-          <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      <section className="mx-4 mb-4 rounded-xl border border-line bg-gradient-to-br from-paper via-panelSoft/25 to-paper sm:mx-6" aria-labelledby="home-goals-es" data-home-goals>
+        <div className="mx-auto max-w-7xl px-4 py-10 md:px-5 md:py-14">
+          <h2 id="home-goals-es" className="text-3xl font-semibold leading-tight tracking-tight text-ink md:text-4xl">¿Qué merece tu atención hoy?</h2>
+          <p className="mt-2 text-base leading-7 text-muted md:text-lg">Explora el sitio desde la pregunta que realmente tienes.</p>
+          <div className="mt-7 grid gap-4 sm:grid-cols-2 lg:grid-cols-3 [&>a]:px-6 [&>a]:py-4 sm:[&>a]:p-6">
             {entryways.map((tool) => <ToolCard key={tool.href} {...tool} actionLabel="Explorar" headingLevel="h3" />)}
           </div>
         </div>
