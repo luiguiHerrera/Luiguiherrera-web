@@ -7,6 +7,8 @@
     "reports:generate": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --experimental-strip-types scripts/reports.mts generate",
     "reports:validate": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --experimental-strip-types scripts/reports.mts validate",
     "reports:check": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --experimental-strip-types scripts/reports.mts check",
+    "build:trends-13f": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --experimental-strip-types scripts/build-capital-disclosures.mts --fetch",
+    "check:trends-13f": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --experimental-strip-types scripts/build-capital-disclosures.mts --check",
     "build:stat-levels": "node scripts/build-statistical-levels.mjs",
     "build:td3-performance": "node scripts/build-td3-performance.mjs",
     "build:tom-decay": "node scripts/build-tom-decay-data.mjs",

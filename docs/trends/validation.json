@@ -1,0 +1,185 @@
+{
+  "state": "IMPLEMENTED_LOCAL_WITH_PARTIAL_13F_COVERAGE",
+  "base_commit": "84e8b3ee92dff4c41b4342ae5d1759603ed85c6b",
+  "review_date": "2026-09-06",
+  "files_changed": [
+    "app/(es)/tendencias/page.tsx",
+    "app/en/trends/page.tsx",
+    "components/seo/RouteStructuredData.tsx",
+    "components/trends/TrendsExplorer.tsx",
+    "lib/analytics/trackEvent.ts",
+    "lib/i18n/language-pairs.ts",
+    "lib/seo/site.ts",
+    "lib/trends/trends-content.ts",
+    "scripts/validate-seo.mts"
+  ],
+  "files_created": [
+    "app/(es)/tendencias/[slug]/page.tsx",
+    "app/(es)/tendencias/metodologia/page.tsx",
+    "app/en/trends/[slug]/page.tsx",
+    "app/en/trends/methodology/page.tsx",
+    "components/trends/CapitalDisclosureSection.tsx",
+    "components/trends/CapitalDisclosureTable.tsx",
+    "components/trends/TrendDetailPage.tsx",
+    "components/trends/TrendRadar.tsx",
+    "components/trends/TrendsAnalytics.tsx",
+    "components/trends/TrendsMethodologyPage.tsx",
+    "components/trends/trends.module.css",
+    "docs/trends/implementation.md",
+    "docs/trends/validation.json",
+    "lib/trends/capital/config.json",
+    "lib/trends/capital/copy.ts",
+    "lib/trends/capital/generated/issuer-evidence.json",
+    "lib/trends/capital/generated/manifest.json",
+    "lib/trends/capital/generated/sec-evidence.json.gz",
+    "lib/trends/capital/generated/snapshot.json.gz",
+    "lib/trends/capital/get-capital-data.ts",
+    "lib/trends/capital/normalize.test.ts",
+    "lib/trends/capital/normalize.ts",
+    "lib/trends/capital/types.ts",
+    "lib/trends/capital/universe.json",
+    "lib/trends/catalog.ts",
+    "lib/trends/copy.ts",
+    "lib/trends/detail-copy.ts",
+    "lib/trends/details.ts",
+    "lib/trends/evidence.ts",
+    "lib/trends/methodology-copy.ts",
+    "lib/trends/trends.test.tsx",
+    "scripts/build-capital-disclosures.mts",
+    "scripts/fetch-capital-disclosures.py",
+    "scripts/test-capital-xml.py",
+    "scripts/trends-test-register.mjs",
+    "scripts/validate-trends-http.mts"
+  ],
+  "counts": {
+    "changed": 9,
+    "created": 36
+  },
+  "validation": {
+    "tests": {
+      "status": "PASS",
+      "node": 197,
+      "xml": 5,
+      "new_node_tests": 26,
+      "failures": 0,
+      "snapshot_reproducible": true
+    },
+    "typecheck": "PASS",
+    "lint": {
+      "status": "PASS",
+      "errors": 0,
+      "warnings": 18,
+      "new_warnings": 0,
+      "note": "Warnings are in untouched files."
+    },
+    "build": {
+      "status": "PASS",
+      "note": "Production build completed; 34 trends routes use daily revalidation."
+    },
+    "git_diff_check": "PASS",
+    "seo": {
+      "status": "PASS",
+      "indexable_routes": 75,
+      "reciprocal_language_pairs": 34
+    },
+    "editorial": "PASS",
+    "http": {
+      "status": "PASS",
+      "routes": 34,
+      "es_routes": 17,
+      "en_routes": 17,
+      "unknown_routes_return_404": 2,
+      "checks": [
+        "200 status",
+        "locale",
+        "single H1",
+        "canonical",
+        "hreflang",
+        "server JSON-LD",
+        "breadcrumbs",
+        "fragment targets"
+      ]
+    },
+    "browser": {
+      "status": "PASS",
+      "index_locales": [
+        "es",
+        "en"
+      ],
+      "index_widths_px": [
+        320,
+        375,
+        390,
+        768,
+        1280,
+        1920
+      ],
+      "index_cases": 12,
+      "global_horizontal_overflow": false,
+      "radar_columns": {
+        "320": 1,
+        "375": 1,
+        "390": 1,
+        "768": 2,
+        "1280": 3,
+        "1920": 3
+      },
+      "capital_mobile_list_below_px": 1024,
+      "detail_and_methodology_cases": 18,
+      "detail_and_methodology_widths_px": [
+        320,
+        768,
+        1280
+      ],
+      "detail_and_methodology_routes": [
+        "/tendencias/inteligencia-artificial",
+        "/en/trends/artificial-intelligence",
+        "/tendencias/educacion-y-trabajo",
+        "/en/trends/critical-materials",
+        "/tendencias/metodologia",
+        "/en/trends/methodology"
+      ],
+      "filters": {
+        "Technology": 4,
+        "Resources": 4,
+        "Health": 1,
+        "Security": 2,
+        "Finance": 2,
+        "Consumption": 2,
+        "All": 15
+      },
+      "tabs": "PASS: selected state, pending state, End and ArrowRight wrap with matching focus",
+      "language_switcher": "PASS: ES AI detail to corresponding EN detail and canonical",
+      "hydration_or_console_errors_observed": false,
+      "visual_comparison": "Consistent inherited fonts, heading weight, colors, spacing and borders; compared directly with Inversionista."
+    }
+  },
+  "data_source": {
+    "name": "SEC EDGAR",
+    "url": "https://www.sec.gov/edgar/search/"
+  },
+  "dataset_as_of": "2026-09-06T18:49:00.130105+00:00",
+  "quarter_end": "2026-06-30",
+  "13f_coverage": {
+    "universe": 3,
+    "filings_located": 2,
+    "validated": 2,
+    "percent": 66.66666666666666,
+    "comparable": 0
+  },
+  "known_limitations": [
+    "Initial versioned universe contains three managers; current holdings validated for two (67% rounded).",
+    "Pershing current filing is a 13F-NT notice; reporting entity requires review.",
+    "All quarterly movements remain INDETERMINATE until documented corporate-action comparisons are reviewed.",
+    "Eight issuer/class/ticker mappings are verified; unresolved securities retain unknown tickers and unverified thematic links.",
+    "Up to eight securities are displayed per view; this is not an exhaustive screener.",
+    "SEC updates are explicit script runs; no scheduled automation was created.",
+    "18 pre-existing lint warnings remain in unrelated files.",
+    "Installed Next version is 16.2.7 while the pre-existing package manifest specifies 16.3.1; dependencies were not changed by this work."
+  ],
+  "next_recommended_step": "Verify the reporting entity behind the Pershing 13F-NT and document corporate-action comparisons before enabling determined movements.",
+  "commit_created": false,
+  "pushed": false,
+  "deployed": false,
+  "unrelated_worktree_changes": "Preserved; excluded from these file lists."
+}

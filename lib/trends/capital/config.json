@@ -1,0 +1,277 @@
+{
+  "quarter_end": "2026-06-30",
+  "previous_quarter_end": "2026-03-31",
+  "comparisons": [
+    {
+      "manager_id": "berkshire-hathaway",
+      "quarter_end": "2026-06-30",
+      "previous_key": "02079K107|LONG|SH",
+      "current_key": "02079K107|LONG|SH",
+      "share_factor": 1,
+      "source_url": "https://www.sec.gov/Archives/edgar/data/1652044/000165204426000071/goog-20260630.htm",
+      "checked_at": "2026-09-06",
+      "previous_accessions": [
+        "0001193125-26-226661"
+      ],
+      "current_accessions": [
+        "0001193125-26-352200"
+      ],
+      "previous_shares": 3585215,
+      "current_shares": 27188433,
+      "checks": {
+        "split": "CLEAR",
+        "reverse_split": "CLEAR",
+        "merger": "CLEAR",
+        "spin_off": "CLEAR",
+        "ticker_change": "CLEAR",
+        "CUSIP_change": "CLEAR",
+        "share_class_change": "CLEAR",
+        "amendment": "CLEAR",
+        "confidentiality": "CLEAR",
+        "missing_filing": "CLEAR",
+        "manager_relationship": "CLEAR",
+        "put_call": "CLEAR",
+        "permitted_omission": "CLEAR"
+      },
+      "action": "NONE",
+      "evidence_urls": [
+        "https://www.sec.gov/Archives/edgar/data/1067983/000119312526226661/0001193125-26-226661.txt",
+        "https://www.sec.gov/Archives/edgar/data/1067983/000119312526352200/0001193125-26-352200.txt",
+        "https://www.sec.gov/Archives/edgar/data/1652044/000119312526216986/d109021d8k.htm",
+        "https://www.sec.gov/Archives/edgar/data/1652044/000119312526234488/d144566d8k.htm",
+        "https://www.sec.gov/Archives/edgar/data/1652044/000119312526257724/d83560d8k.htm",
+        "https://www.sec.gov/Archives/edgar/data/1652044/000119312526259830/d36818d8k.htm",
+        "https://www.sec.gov/Archives/edgar/data/1652044/000119312526267578/d57679d8k.htm",
+        "https://www.sec.gov/Archives/edgar/data/1652044/000119312526342390/d171253d8k.htm",
+        "https://www.sec.gov/Archives/edgar/data/1652044/000165204426000031/goog-20260330.htm",
+        "https://www.sec.gov/Archives/edgar/data/1652044/000165204426000034/goog-20260407.htm",
+        "https://www.sec.gov/Archives/edgar/data/1652044/000165204426000043/goog-20260429.htm",
+        "https://www.sec.gov/Archives/edgar/data/1652044/000165204426000048/goog-20260331.htm",
+        "https://www.sec.gov/Archives/edgar/data/1652044/000165204426000059/goog-20260602.htm",
+        "https://www.sec.gov/Archives/edgar/data/1652044/000165204426000066/goog-20260722.htm",
+        "https://www.sec.gov/Archives/edgar/data/1652044/000165204426000071/goog-20260630.htm"
+      ],
+      "rationale": "Q1/Q2 covers and Class C rows reconciled; CUSIP 02079K107 is present in both periods, no options or permitted-omission inference. Reporting perimeter and non-confidential flags unchanged. Alphabet Q1/Q2 10-Q covers and Note 11, plus intervening 8-Ks, reviewed: June issuance/private placement and new preferred securities do not multiply existing Class C shares; no Class C split, reverse split, conversion or spin-off adjustment identified. Factor 1; quantity change only, not attribution of a trading date, price or investment thesis. June 4 issuer 8-K explicitly reports 14,359,656 Class C shares privately placed with a Berkshire affiliate; that is only part of the 23,603,218-share net change.",
+      "absence_verified": false
+    },
+    {
+      "manager_id": "bridgewater-associates",
+      "quarter_end": "2026-06-30",
+      "previous_key": "02079K107|LONG|SH",
+      "current_key": "02079K107|LONG|SH",
+      "share_factor": 1,
+      "source_url": "https://www.sec.gov/Archives/edgar/data/1652044/000165204426000071/goog-20260630.htm",
+      "checked_at": "2026-09-06",
+      "previous_accessions": [
+        "0001350694-26-000002"
+      ],
+      "current_accessions": [
+        "0001350694-26-000003"
+      ],
+      "previous_shares": 387002,
+      "current_shares": 74207,
+      "checks": {
+        "split": "CLEAR",
+        "reverse_split": "CLEAR",
+        "merger": "CLEAR",
+        "spin_off": "CLEAR",
+        "ticker_change": "CLEAR",
+        "CUSIP_change": "CLEAR",
+        "share_class_change": "CLEAR",
+        "amendment": "CLEAR",
+        "confidentiality": "CLEAR",
+        "missing_filing": "CLEAR",
+        "manager_relationship": "CLEAR",
+        "put_call": "CLEAR",
+        "permitted_omission": "CLEAR"
+      },
+      "action": "NONE",
+      "evidence_urls": [
+        "https://www.sec.gov/Archives/edgar/data/1350694/000135069426000002/0001350694-26-000002.txt",
+        "https://www.sec.gov/Archives/edgar/data/1350694/000135069426000003/0001350694-26-000003.txt",
+        "https://www.sec.gov/Archives/edgar/data/1652044/000119312526216986/d109021d8k.htm",
+        "https://www.sec.gov/Archives/edgar/data/1652044/000119312526234488/d144566d8k.htm",
+        "https://www.sec.gov/Archives/edgar/data/1652044/000119312526257724/d83560d8k.htm",
+        "https://www.sec.gov/Archives/edgar/data/1652044/000119312526259830/d36818d8k.htm",
+        "https://www.sec.gov/Archives/edgar/data/1652044/000119312526267578/d57679d8k.htm",
+        "https://www.sec.gov/Archives/edgar/data/1652044/000119312526342390/d171253d8k.htm",
+        "https://www.sec.gov/Archives/edgar/data/1652044/000165204426000031/goog-20260330.htm",
+        "https://www.sec.gov/Archives/edgar/data/1652044/000165204426000034/goog-20260407.htm",
+        "https://www.sec.gov/Archives/edgar/data/1652044/000165204426000043/goog-20260429.htm",
+        "https://www.sec.gov/Archives/edgar/data/1652044/000165204426000048/goog-20260331.htm",
+        "https://www.sec.gov/Archives/edgar/data/1652044/000165204426000059/goog-20260602.htm",
+        "https://www.sec.gov/Archives/edgar/data/1652044/000165204426000066/goog-20260722.htm",
+        "https://www.sec.gov/Archives/edgar/data/1652044/000165204426000071/goog-20260630.htm"
+      ],
+      "rationale": "Q1/Q2 covers and Class C rows reconciled; CUSIP 02079K107 is present in both periods, no options or permitted-omission inference. Reporting perimeter and non-confidential flags unchanged. Alphabet Q1/Q2 10-Q covers and Note 11, plus intervening 8-Ks, reviewed: June issuance/private placement and new preferred securities do not multiply existing Class C shares; no Class C split, reverse split, conversion or spin-off adjustment identified. Factor 1; quantity change only, not attribution of a trading date, price or investment thesis.",
+      "absence_verified": false
+    }
+  ],
+  "security_mappings": [
+    {
+      "CUSIP": "02079K107",
+      "security_class": "CAP STK CL C",
+      "ticker": "GOOG",
+      "issuer": "Alphabet",
+      "trend_ids": [
+        "ai"
+      ],
+      "source_url": "https://www.sec.gov/Archives/edgar/data/0001652044/000165204426000071/goog-20260630.htm",
+      "reviewed_at": "2026-09-06",
+      "issuer_id": "sec-issuer-1652044"
+    },
+    {
+      "CUSIP": "02079K305",
+      "security_class": "CAP STK CL A",
+      "ticker": "GOOGL",
+      "issuer": "Alphabet",
+      "trend_ids": [
+        "ai"
+      ],
+      "source_url": "https://www.sec.gov/Archives/edgar/data/0001652044/000165204426000071/goog-20260630.htm",
+      "reviewed_at": "2026-09-06",
+      "issuer_id": "sec-issuer-1652044"
+    },
+    {
+      "CUSIP": "025816109",
+      "security_class": "COM",
+      "ticker": "AXP",
+      "issuer": "American Express",
+      "trend_ids": [
+        "fintech"
+      ],
+      "source_url": "https://www.sec.gov/Archives/edgar/data/0000004962/000000496226000322/axp-20260630.htm",
+      "reviewed_at": "2026-09-06",
+      "issuer_id": "sec-issuer-4962"
+    },
+    {
+      "CUSIP": "037833100",
+      "security_class": "COM",
+      "ticker": "AAPL",
+      "issuer": "Apple",
+      "trend_ids": [
+        "premium-consumption"
+      ],
+      "source_url": "https://www.sec.gov/Archives/edgar/data/0000320193/000032019326000020/aapl-20260627.htm",
+      "reviewed_at": "2026-09-06",
+      "issuer_id": "sec-issuer-320193"
+    },
+    {
+      "CUSIP": "060505104",
+      "security_class": "COM",
+      "ticker": "BAC",
+      "issuer": "Bank of America",
+      "trend_ids": [
+        "fintech"
+      ],
+      "source_url": "https://www.sec.gov/Archives/edgar/data/0000070858/000007085826000394/bac-20260630.htm",
+      "reviewed_at": "2026-09-06",
+      "issuer_id": "sec-issuer-70858"
+    },
+    {
+      "CUSIP": "14040H105",
+      "security_class": "COM",
+      "ticker": "COF",
+      "issuer": "Capital One",
+      "trend_ids": [
+        "fintech"
+      ],
+      "source_url": "https://www.sec.gov/Archives/edgar/data/0000927628/000092762826000089/cof-20260630.htm",
+      "reviewed_at": "2026-09-06",
+      "issuer_id": "sec-issuer-927628"
+    },
+    {
+      "CUSIP": "166764100",
+      "security_class": "COM",
+      "ticker": "CVX",
+      "issuer": "Chevron",
+      "trend_ids": [
+        "energy"
+      ],
+      "source_url": "https://www.sec.gov/Archives/edgar/data/0000093410/000009341026000167/cvx-20260630.htm",
+      "reviewed_at": "2026-09-06",
+      "issuer_id": "sec-issuer-93410"
+    },
+    {
+      "CUSIP": "H1467J104",
+      "security_class": "COM",
+      "ticker": "CB",
+      "issuer": "Chubb",
+      "trend_ids": [],
+      "source_url": "https://www.sec.gov/Archives/edgar/data/0000896159/000089615926000017/cb-20260630.htm",
+      "reviewed_at": "2026-09-06",
+      "issuer_id": "sec-issuer-896159"
+    },
+    {
+      "CUSIP": "874039100",
+      "security_class": "SPONSORED ADS",
+      "ticker": "TSM",
+      "issuer": "TSMC",
+      "issuer_id": "sec-issuer-1046179",
+      "trend_ids": [
+        "ai"
+      ],
+      "source_url": "https://www.sec.gov/Archives/edgar/data/1046179/000162828026025362/tsm-20251231.htm",
+      "reviewed_at": "2026-09-06"
+    },
+    {
+      "CUSIP": "92826C839",
+      "security_class": "COM CL A",
+      "ticker": "V",
+      "issuer": "Visa",
+      "issuer_id": "sec-issuer-1403161",
+      "trend_ids": [
+        "fintech"
+      ],
+      "source_url": "https://www.sec.gov/Archives/edgar/data/1403161/000140316126000104/v-20260630.htm",
+      "reviewed_at": "2026-09-06"
+    },
+    {
+      "CUSIP": "023135106",
+      "security_class": "COM",
+      "ticker": "AMZN",
+      "issuer": "Amazon",
+      "issuer_id": "sec-issuer-1018724",
+      "trend_ids": [
+        "ai",
+        "automation"
+      ],
+      "source_url": "https://www.sec.gov/Archives/edgar/data/1018724/000101872426000026/amzn-20260630.htm",
+      "reviewed_at": "2026-09-06"
+    },
+    {
+      "CUSIP": "30303M102",
+      "security_class": "CL A",
+      "ticker": "META",
+      "issuer": "Meta Platforms",
+      "issuer_id": "sec-issuer-1326801",
+      "trend_ids": [
+        "ai"
+      ],
+      "source_url": "https://www.sec.gov/Archives/edgar/data/1326801/000162828026050705/meta-20260630.htm",
+      "reviewed_at": "2026-09-06"
+    },
+    {
+      "CUSIP": "594918104",
+      "security_class": "COM",
+      "ticker": "MSFT",
+      "issuer": "Microsoft",
+      "issuer_id": "sec-issuer-789019",
+      "trend_ids": [
+        "ai"
+      ],
+      "source_url": "https://www.sec.gov/Archives/edgar/data/789019/000119312526323660/msft-20260630.htm",
+      "reviewed_at": "2026-09-06"
+    }
+  ],
+  "accepted_issues": [
+    {
+      "manager_id": "first-eagle",
+      "quarter_end": "2026-06-30",
+      "issue": "ambiguous_additive_amendment",
+      "disposition": "WITHHOLD_HOLDINGS",
+      "source_url": "https://www.sec.gov/Archives/edgar/data/1325447/000132544726000033/0001325447-26-000033.txt",
+      "reviewed_at": "2026-09-06"
+    }
+  ]
+}

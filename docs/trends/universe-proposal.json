@@ -1,0 +1,1035 @@
+{
+  "id": "lhi-superinvestor-universe-v1",
+  "name": "LHI Superinvestor Universe v1",
+  "version": 1,
+  "selection_as_of": "2026-09-06",
+  "selection_policy": "Purposive analytical sample, not representative of all managers or a performance ranking. Verifiable legal identity; >=8 distinct 13F quarters, or documented reporting-parent continuity; one independent reporting group; two requested quarters must be traceable. Notice entities retained outside the denominator. Mixed equity styles and structures; exclude trading/market-making books and unresolved related reporting groups. Membership fixed before comparing movements.",
+  "managers": [
+    {
+      "manager_id": "berkshire-hathaway",
+      "display_name": "Berkshire Hathaway",
+      "legal_name": "Berkshire Hathaway Inc.",
+      "CIK": "0001067983",
+      "manager_type": "conglomerate",
+      "inclusion_reason": {
+        "es": "Identidad SEC e historial continuo sujetos a validación; ámbito: value; consolidated institutional structure.",
+        "en": "SEC identity and continuous filing history subject to validation; scope: value; consolidated institutional structure."
+      },
+      "inclusion_date": "2026-09-06",
+      "status": "ACTIVE",
+      "filing_expected": true,
+      "notes": {
+        "es": "Solo valores 13F; no representa la cartera completa ni acredita habilidad.",
+        "en": "13F securities only; not the full portfolio or evidence of skill."
+      },
+      "economic_group_id": "berkshire-hathaway",
+      "source_url": "https://data.sec.gov/submissions/CIK0001067983.json",
+      "pilot": true
+    },
+    {
+      "manager_id": "bridgewater-associates",
+      "display_name": "Bridgewater Associates",
+      "legal_name": "Bridgewater Associates, LP",
+      "CIK": "0001350694",
+      "manager_type": "hedge_fund",
+      "inclusion_reason": {
+        "es": "Identidad SEC e historial continuo sujetos a validación; ámbito: diversified; only disclosed US long exposure.",
+        "en": "SEC identity and continuous filing history subject to validation; scope: diversified; only disclosed US long exposure."
+      },
+      "inclusion_date": "2026-09-06",
+      "status": "ACTIVE",
+      "filing_expected": true,
+      "notes": {
+        "es": "Solo valores 13F; no representa la cartera completa ni acredita habilidad.",
+        "en": "13F securities only; not the full portfolio or evidence of skill."
+      },
+      "economic_group_id": "bridgewater-associates",
+      "source_url": "https://data.sec.gov/submissions/CIK0001350694.json",
+      "pilot": true
+    },
+    {
+      "manager_id": "pershing-square-inc",
+      "display_name": "Pershing Square",
+      "legal_name": "PERSHING SQUARE INC.",
+      "CIK": "0002026053",
+      "manager_type": "public_parent",
+      "inclusion_reason": {
+        "es": "Identidad SEC e historial continuo sujetos a validación; ámbito: concentrated; reporting-parent transition.",
+        "en": "SEC identity and continuous filing history subject to validation; scope: concentrated; reporting-parent transition."
+      },
+      "inclusion_date": "2026-09-06",
+      "status": "ACTIVE",
+      "filing_expected": true,
+      "notes": {
+        "es": "Solo valores 13F; no representa la cartera completa ni acredita habilidad.",
+        "en": "13F securities only; not the full portfolio or evidence of skill."
+      },
+      "economic_group_id": "pershing-square",
+      "source_url": "https://data.sec.gov/submissions/CIK0002026053.json",
+      "pilot": true
+    },
+    {
+      "manager_id": "baupost",
+      "display_name": "Baupost",
+      "legal_name": "BAUPOST GROUP LLC/MA",
+      "CIK": "0001061768",
+      "manager_type": "hedge_fund",
+      "inclusion_reason": {
+        "es": "Identidad SEC e historial continuo sujetos a validación; ámbito: value; special situations.",
+        "en": "SEC identity and continuous filing history subject to validation; scope: value; special situations."
+      },
+      "inclusion_date": "2026-09-06",
+      "status": "ACTIVE",
+      "filing_expected": true,
+      "notes": {
+        "es": "Solo valores 13F; no representa la cartera completa ni acredita habilidad.",
+        "en": "13F securities only; not the full portfolio or evidence of skill."
+      },
+      "economic_group_id": "baupost",
+      "source_url": "https://data.sec.gov/submissions/CIK0001061768.json",
+      "pilot": true
+    },
+    {
+      "manager_id": "greenlight",
+      "display_name": "Greenlight Capital",
+      "legal_name": "GREENLIGHT CAPITAL INC",
+      "CIK": "0001079114",
+      "manager_type": "hedge_fund",
+      "inclusion_reason": {
+        "es": "Identidad SEC e historial continuo sujetos a validación; ámbito: value; long/short strategy, long disclosure only.",
+        "en": "SEC identity and continuous filing history subject to validation; scope: value; long/short strategy, long disclosure only."
+      },
+      "inclusion_date": "2026-09-06",
+      "status": "EXCLUDED",
+      "filing_expected": false,
+      "notes": {
+        "es": "CIK histórico sin reportes Q1/Q2 2026; último 13F localizado Q4 2023. No se presume sucesión por parecido de nombre.",
+        "en": "Historical CIK has no Q1/Q2 2026 reports; latest located 13F is Q4 2023. No successor is inferred from similar names."
+      },
+      "economic_group_id": "greenlight",
+      "source_url": "https://data.sec.gov/submissions/CIK0001079114.json",
+      "pilot": false
+    },
+    {
+      "manager_id": "third-point",
+      "display_name": "Third Point",
+      "legal_name": "THIRD POINT MANAGEMENT CO LLC",
+      "CIK": "0001040273",
+      "manager_type": "hedge_fund",
+      "inclusion_reason": {
+        "es": "Identidad SEC e historial continuo sujetos a validación; ámbito: event-driven; diversified public equity sleeve.",
+        "en": "SEC identity and continuous filing history subject to validation; scope: event-driven; diversified public equity sleeve."
+      },
+      "inclusion_date": "2026-09-06",
+      "status": "ACTIVE",
+      "filing_expected": true,
+      "notes": {
+        "es": "Solo valores 13F; no representa la cartera completa ni acredita habilidad.",
+        "en": "13F securities only; not the full portfolio or evidence of skill."
+      },
+      "economic_group_id": "third-point",
+      "source_url": "https://data.sec.gov/submissions/CIK0001040273.json",
+      "pilot": true
+    },
+    {
+      "manager_id": "duquesne",
+      "display_name": "Duquesne Family Office",
+      "legal_name": "DUQUESNE FAMILY OFFICE LLC",
+      "CIK": "0001536411",
+      "manager_type": "family_office",
+      "inclusion_reason": {
+        "es": "Identidad SEC e historial continuo sujetos a validación; ámbito: flexible allocation; public equity sleeve.",
+        "en": "SEC identity and continuous filing history subject to validation; scope: flexible allocation; public equity sleeve."
+      },
+      "inclusion_date": "2026-09-06",
+      "status": "ACTIVE",
+      "filing_expected": true,
+      "notes": {
+        "es": "Solo valores 13F; no representa la cartera completa ni acredita habilidad.",
+        "en": "13F securities only; not the full portfolio or evidence of skill."
+      },
+      "economic_group_id": "duquesne",
+      "source_url": "https://data.sec.gov/submissions/CIK0001536411.json",
+      "pilot": true
+    },
+    {
+      "manager_id": "lone-pine",
+      "display_name": "Lone Pine Capital",
+      "legal_name": "LONE PINE CAPITAL LLC",
+      "CIK": "0001061165",
+      "manager_type": "hedge_fund",
+      "inclusion_reason": {
+        "es": "Identidad SEC e historial continuo sujetos a validación; ámbito: growth; concentrated public equities.",
+        "en": "SEC identity and continuous filing history subject to validation; scope: growth; concentrated public equities."
+      },
+      "inclusion_date": "2026-09-06",
+      "status": "ACTIVE",
+      "filing_expected": true,
+      "notes": {
+        "es": "Solo valores 13F; no representa la cartera completa ni acredita habilidad.",
+        "en": "13F securities only; not the full portfolio or evidence of skill."
+      },
+      "economic_group_id": "lone-pine",
+      "source_url": "https://data.sec.gov/submissions/CIK0001061165.json",
+      "pilot": true
+    },
+    {
+      "manager_id": "fundsmith",
+      "display_name": "Fundsmith",
+      "legal_name": "FUNDSMITH LLP",
+      "CIK": "0001569205",
+      "manager_type": "asset_manager",
+      "inclusion_reason": {
+        "es": "Identidad SEC e historial continuo sujetos a validación; ámbito: quality growth; concentrated US-listed sleeve.",
+        "en": "SEC identity and continuous filing history subject to validation; scope: quality growth; concentrated US-listed sleeve."
+      },
+      "inclusion_date": "2026-09-06",
+      "status": "ACTIVE",
+      "filing_expected": true,
+      "notes": {
+        "es": "Solo valores 13F; no representa la cartera completa ni acredita habilidad.",
+        "en": "13F securities only; not the full portfolio or evidence of skill."
+      },
+      "economic_group_id": "fundsmith",
+      "source_url": "https://data.sec.gov/submissions/CIK0001569205.json",
+      "pilot": true
+    },
+    {
+      "manager_id": "dodge-cox",
+      "display_name": "Dodge & Cox",
+      "legal_name": "DODGE & COX",
+      "CIK": "0000200217",
+      "manager_type": "asset_manager",
+      "inclusion_reason": {
+        "es": "Identidad SEC e historial continuo sujetos a validación; ámbito: value; diversified institutional portfolios.",
+        "en": "SEC identity and continuous filing history subject to validation; scope: value; diversified institutional portfolios."
+      },
+      "inclusion_date": "2026-09-06",
+      "status": "ACTIVE",
+      "filing_expected": true,
+      "notes": {
+        "es": "Solo valores 13F; no representa la cartera completa ni acredita habilidad.",
+        "en": "13F securities only; not the full portfolio or evidence of skill."
+      },
+      "economic_group_id": "dodge-cox",
+      "source_url": "https://data.sec.gov/submissions/CIK0000200217.json",
+      "pilot": true
+    },
+    {
+      "manager_id": "appaloosa",
+      "display_name": "Appaloosa",
+      "legal_name": "APPALOOSA LP",
+      "CIK": "0001656456",
+      "manager_type": "family_office",
+      "inclusion_reason": {
+        "es": "Identidad SEC e historial continuo sujetos a validación; ámbito: opportunistic public equity sleeve.",
+        "en": "SEC identity and continuous filing history subject to validation; scope: opportunistic public equity sleeve."
+      },
+      "inclusion_date": "2026-09-06",
+      "status": "ACTIVE",
+      "filing_expected": true,
+      "notes": {
+        "es": "Solo valores 13F; no representa la cartera completa ni acredita habilidad.",
+        "en": "13F securities only; not the full portfolio or evidence of skill."
+      },
+      "economic_group_id": "appaloosa",
+      "source_url": "https://data.sec.gov/submissions/CIK0001656456.json",
+      "pilot": false
+    },
+    {
+      "manager_id": "tiger-global",
+      "display_name": "Tiger Global",
+      "legal_name": "TIGER TECHNOLOGY MANAGEMENT LLC",
+      "CIK": "0001167483",
+      "manager_type": "hedge_fund",
+      "inclusion_reason": {
+        "es": "Identidad SEC e historial continuo sujetos a validación; ámbito: growth; public sleeve excludes private investments.",
+        "en": "SEC identity and continuous filing history subject to validation; scope: growth; public sleeve excludes private investments."
+      },
+      "inclusion_date": "2026-09-06",
+      "status": "ACTIVE",
+      "filing_expected": true,
+      "notes": {
+        "es": "Solo valores 13F; no representa la cartera completa ni acredita habilidad.",
+        "en": "13F securities only; not the full portfolio or evidence of skill."
+      },
+      "economic_group_id": "tiger-global",
+      "source_url": "https://data.sec.gov/submissions/CIK0001167483.json",
+      "pilot": false
+    },
+    {
+      "manager_id": "coatue",
+      "display_name": "Coatue",
+      "legal_name": "COATUE MANAGEMENT LLC",
+      "CIK": "0001135730",
+      "manager_type": "hedge_fund",
+      "inclusion_reason": {
+        "es": "Identidad SEC e historial continuo sujetos a validación; ámbito: technology/growth; public sleeve only.",
+        "en": "SEC identity and continuous filing history subject to validation; scope: technology/growth; public sleeve only."
+      },
+      "inclusion_date": "2026-09-06",
+      "status": "ACTIVE",
+      "filing_expected": true,
+      "notes": {
+        "es": "Solo valores 13F; no representa la cartera completa ni acredita habilidad.",
+        "en": "13F securities only; not the full portfolio or evidence of skill."
+      },
+      "economic_group_id": "coatue",
+      "source_url": "https://data.sec.gov/submissions/CIK0001135730.json",
+      "pilot": false
+    },
+    {
+      "manager_id": "viking",
+      "display_name": "Viking Global",
+      "legal_name": "VIKING GLOBAL INVESTORS LP",
+      "CIK": "0001103804",
+      "manager_type": "hedge_fund",
+      "inclusion_reason": {
+        "es": "Identidad SEC e historial continuo sujetos a validación; ámbito: fundamental; diversified long disclosure.",
+        "en": "SEC identity and continuous filing history subject to validation; scope: fundamental; diversified long disclosure."
+      },
+      "inclusion_date": "2026-09-06",
+      "status": "ACTIVE",
+      "filing_expected": true,
+      "notes": {
+        "es": "Solo valores 13F; no representa la cartera completa ni acredita habilidad.",
+        "en": "13F securities only; not the full portfolio or evidence of skill."
+      },
+      "economic_group_id": "viking",
+      "source_url": "https://data.sec.gov/submissions/CIK0001103804.json",
+      "pilot": false
+    },
+    {
+      "manager_id": "maverick",
+      "display_name": "Maverick Capital",
+      "legal_name": "MAVERICK CAPITAL LTD",
+      "CIK": "0000934639",
+      "manager_type": "hedge_fund",
+      "inclusion_reason": {
+        "es": "Identidad SEC e historial continuo sujetos a validación; ámbito: fundamental long/short; long disclosure only.",
+        "en": "SEC identity and continuous filing history subject to validation; scope: fundamental long/short; long disclosure only."
+      },
+      "inclusion_date": "2026-09-06",
+      "status": "ACTIVE",
+      "filing_expected": true,
+      "notes": {
+        "es": "Solo valores 13F; no representa la cartera completa ni acredita habilidad.",
+        "en": "13F securities only; not the full portfolio or evidence of skill."
+      },
+      "economic_group_id": "maverick",
+      "source_url": "https://data.sec.gov/submissions/CIK0000934639.json",
+      "pilot": false
+    },
+    {
+      "manager_id": "akre",
+      "display_name": "Akre Capital",
+      "legal_name": "AKRE CAPITAL MANAGEMENT LLC",
+      "CIK": "0001112520",
+      "manager_type": "asset_manager",
+      "inclusion_reason": {
+        "es": "Identidad SEC e historial continuo sujetos a validación; ámbito: concentrated quality businesses.",
+        "en": "SEC identity and continuous filing history subject to validation; scope: concentrated quality businesses."
+      },
+      "inclusion_date": "2026-09-06",
+      "status": "ACTIVE",
+      "filing_expected": true,
+      "notes": {
+        "es": "Solo valores 13F; no representa la cartera completa ni acredita habilidad.",
+        "en": "13F securities only; not the full portfolio or evidence of skill."
+      },
+      "economic_group_id": "akre",
+      "source_url": "https://data.sec.gov/submissions/CIK0001112520.json",
+      "pilot": false
+    },
+    {
+      "manager_id": "lindsell-train",
+      "display_name": "Lindsell Train",
+      "legal_name": "LINDSELL TRAIN LTD",
+      "CIK": "0001484150",
+      "manager_type": "asset_manager",
+      "inclusion_reason": {
+        "es": "Identidad SEC e historial continuo sujetos a validación; ámbito: concentrated global quality; US-listed sleeve.",
+        "en": "SEC identity and continuous filing history subject to validation; scope: concentrated global quality; US-listed sleeve."
+      },
+      "inclusion_date": "2026-09-06",
+      "status": "ACTIVE",
+      "filing_expected": true,
+      "notes": {
+        "es": "Solo valores 13F; no representa la cartera completa ni acredita habilidad.",
+        "en": "13F securities only; not the full portfolio or evidence of skill."
+      },
+      "economic_group_id": "lindsell-train",
+      "source_url": "https://data.sec.gov/submissions/CIK0001484150.json",
+      "pilot": false
+    },
+    {
+      "manager_id": "ruane-cunniff",
+      "display_name": "Ruane Cunniff",
+      "legal_name": "RUANE, CUNNIFF & GOLDFARB INC",
+      "CIK": "0000728014",
+      "manager_type": "asset_manager",
+      "inclusion_reason": {
+        "es": "Identidad SEC e historial continuo sujetos a validación; ámbito: concentrated fundamental equity.",
+        "en": "SEC identity and continuous filing history subject to validation; scope: concentrated fundamental equity."
+      },
+      "inclusion_date": "2026-09-06",
+      "status": "EXCLUDED",
+      "filing_expected": false,
+      "notes": {
+        "es": "CIK histórico: último 13F Q1 2018. Se selecciona separadamente la entidad legal L.P. con filings actuales; no se enlaza la serie histórica.",
+        "en": "Historical CIK: latest 13F Q1 2018. The L.P. legal entity with current filings is selected separately; historical series are not joined."
+      },
+      "economic_group_id": "ruane-cunniff",
+      "source_url": "https://data.sec.gov/submissions/CIK0000728014.json",
+      "pilot": false
+    },
+    {
+      "manager_id": "fairfax",
+      "display_name": "Fairfax Financial",
+      "legal_name": "FAIRFAX FINANCIAL HOLDINGS LTD/ CAN",
+      "CIK": "0000915191",
+      "manager_type": "insurance_group",
+      "inclusion_reason": {
+        "es": "Identidad SEC e historial continuo sujetos a validación; ámbito: value; consolidated insurance investment structure.",
+        "en": "SEC identity and continuous filing history subject to validation; scope: value; consolidated insurance investment structure."
+      },
+      "inclusion_date": "2026-09-06",
+      "status": "ACTIVE",
+      "filing_expected": true,
+      "notes": {
+        "es": "Solo valores 13F; no representa la cartera completa ni acredita habilidad.",
+        "en": "13F securities only; not the full portfolio or evidence of skill."
+      },
+      "economic_group_id": "fairfax",
+      "source_url": "https://data.sec.gov/submissions/CIK0000915191.json",
+      "pilot": false
+    },
+    {
+      "manager_id": "markel",
+      "display_name": "Markel Group",
+      "legal_name": "MARKEL HOLDINGS INC",
+      "CIK": "0001096343",
+      "manager_type": "insurance_group",
+      "inclusion_reason": {
+        "es": "Identidad SEC e historial continuo sujetos a validación; ámbito: insurance public equity portfolio.",
+        "en": "SEC identity and continuous filing history subject to validation; scope: insurance public equity portfolio."
+      },
+      "inclusion_date": "2026-09-06",
+      "status": "ACTIVE",
+      "filing_expected": true,
+      "notes": {
+        "es": "Solo valores 13F; no representa la cartera completa ni acredita habilidad.",
+        "en": "13F securities only; not the full portfolio or evidence of skill."
+      },
+      "economic_group_id": "markel",
+      "source_url": "https://data.sec.gov/submissions/CIK0001096343.json",
+      "pilot": false
+    },
+    {
+      "manager_id": "loews",
+      "display_name": "Loews",
+      "legal_name": "LOEWS CORP",
+      "CIK": "0000060086",
+      "manager_type": "conglomerate",
+      "inclusion_reason": {
+        "es": "Identidad SEC e historial continuo sujetos a validación; ámbito: consolidated public equity sleeve.",
+        "en": "SEC identity and continuous filing history subject to validation; scope: consolidated public equity sleeve."
+      },
+      "inclusion_date": "2026-09-06",
+      "status": "ACTIVE",
+      "filing_expected": true,
+      "notes": {
+        "es": "Solo valores 13F; no representa la cartera completa ni acredita habilidad.",
+        "en": "13F securities only; not the full portfolio or evidence of skill."
+      },
+      "economic_group_id": "loews",
+      "source_url": "https://data.sec.gov/submissions/CIK0000060086.json",
+      "pilot": false
+    },
+    {
+      "manager_id": "pzena",
+      "display_name": "Pzena Investment Management",
+      "legal_name": "PZENA INVESTMENT MANAGEMENT LLC",
+      "CIK": "0001027796",
+      "manager_type": "asset_manager",
+      "inclusion_reason": {
+        "es": "Identidad SEC e historial continuo sujetos a validación; ámbito: value; institutional mandates.",
+        "en": "SEC identity and continuous filing history subject to validation; scope: value; institutional mandates."
+      },
+      "inclusion_date": "2026-09-06",
+      "status": "ACTIVE",
+      "filing_expected": true,
+      "notes": {
+        "es": "Solo valores 13F; no representa la cartera completa ni acredita habilidad.",
+        "en": "13F securities only; not the full portfolio or evidence of skill."
+      },
+      "economic_group_id": "pzena",
+      "source_url": "https://data.sec.gov/submissions/CIK0001027796.json",
+      "pilot": false
+    },
+    {
+      "manager_id": "southeastern",
+      "display_name": "Southeastern Asset Management",
+      "legal_name": "SOUTHEASTERN ASSET MANAGEMENT INC/TN/",
+      "CIK": "0000807985",
+      "manager_type": "asset_manager",
+      "inclusion_reason": {
+        "es": "Identidad SEC e historial continuo sujetos a validación; ámbito: concentrated value.",
+        "en": "SEC identity and continuous filing history subject to validation; scope: concentrated value."
+      },
+      "inclusion_date": "2026-09-06",
+      "status": "ACTIVE",
+      "filing_expected": true,
+      "notes": {
+        "es": "Solo valores 13F; no representa la cartera completa ni acredita habilidad.",
+        "en": "13F securities only; not the full portfolio or evidence of skill."
+      },
+      "economic_group_id": "southeastern",
+      "source_url": "https://data.sec.gov/submissions/CIK0000807985.json",
+      "pilot": false
+    },
+    {
+      "manager_id": "tweedy-browne",
+      "display_name": "Tweedy Browne",
+      "legal_name": "TWEEDY, BROWNE CO LLC",
+      "CIK": "0000732905",
+      "manager_type": "asset_manager",
+      "inclusion_reason": {
+        "es": "Identidad SEC e historial continuo sujetos a validación; ámbito: global value; US-listed sleeve.",
+        "en": "SEC identity and continuous filing history subject to validation; scope: global value; US-listed sleeve."
+      },
+      "inclusion_date": "2026-09-06",
+      "status": "ACTIVE",
+      "filing_expected": true,
+      "notes": {
+        "es": "Solo valores 13F; no representa la cartera completa ni acredita habilidad.",
+        "en": "13F securities only; not the full portfolio or evidence of skill."
+      },
+      "economic_group_id": "tweedy-browne",
+      "source_url": "https://data.sec.gov/submissions/CIK0000732905.json",
+      "pilot": false
+    },
+    {
+      "manager_id": "diamond-hill",
+      "display_name": "Diamond Hill",
+      "legal_name": "DIAMOND HILL CAPITAL MANAGEMENT, LLC (INVESTMENT ADVISOR)",
+      "CIK": "0001217541",
+      "manager_type": "asset_manager",
+      "inclusion_reason": {
+        "es": "Identidad SEC e historial continuo sujetos a validación; ámbito: fundamental value; diversified mandates.",
+        "en": "SEC identity and continuous filing history subject to validation; scope: fundamental value; diversified mandates."
+      },
+      "inclusion_date": "2026-09-06",
+      "status": "ACTIVE",
+      "filing_expected": true,
+      "notes": {
+        "es": "Solo valores 13F; no representa la cartera completa ni acredita habilidad.",
+        "en": "13F securities only; not the full portfolio or evidence of skill."
+      },
+      "economic_group_id": "diamond-hill",
+      "source_url": "https://data.sec.gov/submissions/CIK0001217541.json",
+      "pilot": false
+    },
+    {
+      "manager_id": "yacktman",
+      "display_name": "Yacktman",
+      "legal_name": "YACKTMAN ASSET MANAGEMENT LP",
+      "CIK": "0000905567",
+      "manager_type": "asset_manager",
+      "inclusion_reason": {
+        "es": "Identidad SEC e historial continuo sujetos a validación; ámbito: quality/value; patient public equity.",
+        "en": "SEC identity and continuous filing history subject to validation; scope: quality/value; patient public equity."
+      },
+      "inclusion_date": "2026-09-06",
+      "status": "ACTIVE",
+      "filing_expected": true,
+      "notes": {
+        "es": "Solo valores 13F; no representa la cartera completa ni acredita habilidad.",
+        "en": "13F securities only; not the full portfolio or evidence of skill."
+      },
+      "economic_group_id": "yacktman",
+      "source_url": "https://data.sec.gov/submissions/CIK0000905567.json",
+      "pilot": false
+    },
+    {
+      "manager_id": "ariel",
+      "display_name": "Ariel Investments",
+      "legal_name": "ARIEL INVESTMENTS, LLC",
+      "CIK": "0000936753",
+      "manager_type": "asset_manager",
+      "inclusion_reason": {
+        "es": "Identidad SEC e historial continuo sujetos a validación; ámbito: value; multi-cap public equities.",
+        "en": "SEC identity and continuous filing history subject to validation; scope: value; multi-cap public equities."
+      },
+      "inclusion_date": "2026-09-06",
+      "status": "ACTIVE",
+      "filing_expected": true,
+      "notes": {
+        "es": "Solo valores 13F; no representa la cartera completa ni acredita habilidad.",
+        "en": "13F securities only; not the full portfolio or evidence of skill."
+      },
+      "economic_group_id": "ariel",
+      "source_url": "https://data.sec.gov/submissions/CIK0000936753.json",
+      "pilot": false
+    },
+    {
+      "manager_id": "harris",
+      "display_name": "Harris Associates",
+      "legal_name": "HARRIS ASSOCIATES L P",
+      "CIK": "0000813917",
+      "manager_type": "asset_manager",
+      "inclusion_reason": {
+        "es": "Identidad SEC e historial continuo sujetos a validación; ámbito: value; diversified institutional mandates.",
+        "en": "SEC identity and continuous filing history subject to validation; scope: value; diversified institutional mandates."
+      },
+      "inclusion_date": "2026-09-06",
+      "status": "ACTIVE",
+      "filing_expected": true,
+      "notes": {
+        "es": "Solo valores 13F; no representa la cartera completa ni acredita habilidad.",
+        "en": "13F securities only; not the full portfolio or evidence of skill."
+      },
+      "economic_group_id": "harris",
+      "source_url": "https://data.sec.gov/submissions/CIK0000813917.json",
+      "pilot": false
+    },
+    {
+      "manager_id": "davis",
+      "display_name": "Davis Selected Advisers",
+      "legal_name": "DAVIS SELECTED ADVISERS",
+      "CIK": "0001036325",
+      "manager_type": "asset_manager",
+      "inclusion_reason": {
+        "es": "Identidad SEC e historial continuo sujetos a validación; ámbito: fundamental; concentrated equity mandates.",
+        "en": "SEC identity and continuous filing history subject to validation; scope: fundamental; concentrated equity mandates."
+      },
+      "inclusion_date": "2026-09-06",
+      "status": "ACTIVE",
+      "filing_expected": true,
+      "notes": {
+        "es": "Solo valores 13F; no representa la cartera completa ni acredita habilidad.",
+        "en": "13F securities only; not the full portfolio or evidence of skill."
+      },
+      "economic_group_id": "davis",
+      "source_url": "https://data.sec.gov/submissions/CIK0001036325.json",
+      "pilot": false
+    },
+    {
+      "manager_id": "first-eagle",
+      "display_name": "First Eagle",
+      "legal_name": "FIRST EAGLE INVESTMENT MANAGEMENT, LLC",
+      "CIK": "0001325447",
+      "manager_type": "asset_manager",
+      "inclusion_reason": {
+        "es": "Identidad SEC e historial continuo sujetos a validación; ámbito: value; US equity sleeve excludes credit and other assets.",
+        "en": "SEC identity and continuous filing history subject to validation; scope: value; US equity sleeve excludes credit and other assets."
+      },
+      "inclusion_date": "2026-09-06",
+      "status": "ACTIVE",
+      "filing_expected": true,
+      "notes": {
+        "es": "Solo valores 13F; no representa la cartera completa ni acredita habilidad.",
+        "en": "13F securities only; not the full portfolio or evidence of skill."
+      },
+      "economic_group_id": "first-eagle",
+      "source_url": "https://data.sec.gov/submissions/CIK0001325447.json",
+      "pilot": false
+    },
+    {
+      "manager_id": "gardner-russo-quinn",
+      "display_name": "Gardner Russo & Quinn",
+      "legal_name": "GARDNER RUSSO & QUINN LLC",
+      "CIK": "0000860643",
+      "manager_type": "asset_manager",
+      "inclusion_reason": {
+        "es": "Identidad SEC e historial continuo sujetos a validación; ámbito: global quality; concentrated US-listed sleeve.",
+        "en": "SEC identity and continuous filing history subject to validation; scope: global quality; concentrated US-listed sleeve."
+      },
+      "inclusion_date": "2026-09-06",
+      "status": "ACTIVE",
+      "filing_expected": true,
+      "notes": {
+        "es": "Solo valores 13F; no representa la cartera completa ni acredita habilidad.",
+        "en": "13F securities only; not the full portfolio or evidence of skill."
+      },
+      "economic_group_id": "gardner-russo-quinn",
+      "source_url": "https://data.sec.gov/submissions/CIK0000860643.json",
+      "pilot": false
+    },
+    {
+      "manager_id": "polen",
+      "display_name": "Polen Capital",
+      "legal_name": "POLEN CAPITAL MANAGEMENT LLC",
+      "CIK": "0001034524",
+      "manager_type": "asset_manager",
+      "inclusion_reason": {
+        "es": "Identidad SEC e historial continuo sujetos a validación; ámbito: growth; institutional public equity mandates.",
+        "en": "SEC identity and continuous filing history subject to validation; scope: growth; institutional public equity mandates."
+      },
+      "inclusion_date": "2026-09-06",
+      "status": "ACTIVE",
+      "filing_expected": true,
+      "notes": {
+        "es": "Solo valores 13F; no representa la cartera completa ni acredita habilidad.",
+        "en": "13F securities only; not the full portfolio or evidence of skill."
+      },
+      "economic_group_id": "polen",
+      "source_url": "https://data.sec.gov/submissions/CIK0001034524.json",
+      "pilot": false
+    },
+    {
+      "manager_id": "bamco",
+      "display_name": "BAMCO",
+      "legal_name": "BANCO INC",
+      "CIK": "0001017918",
+      "manager_type": "asset_manager",
+      "inclusion_reason": {
+        "es": "Identidad SEC e historial continuo sujetos a validación; ámbito: growth; Baron reporting entity, no separate Baron duplication.",
+        "en": "SEC identity and continuous filing history subject to validation; scope: growth; Baron reporting entity, no separate Baron duplication."
+      },
+      "inclusion_date": "2026-09-06",
+      "status": "ACTIVE",
+      "filing_expected": true,
+      "notes": {
+        "es": "Solo valores 13F; no representa la cartera completa ni acredita habilidad.",
+        "en": "13F securities only; not the full portfolio or evidence of skill."
+      },
+      "economic_group_id": "bamco",
+      "source_url": "https://data.sec.gov/submissions/CIK0001017918.json",
+      "pilot": false
+    },
+    {
+      "manager_id": "brown-advisory",
+      "display_name": "Brown Advisory",
+      "legal_name": "BROWN ADVISORY INC",
+      "CIK": "0001345929",
+      "manager_type": "asset_manager",
+      "inclusion_reason": {
+        "es": "Identidad SEC e historial continuo sujetos a validación; ámbito: diversified institutional and advisory mandates.",
+        "en": "SEC identity and continuous filing history subject to validation; scope: diversified institutional and advisory mandates."
+      },
+      "inclusion_date": "2026-09-06",
+      "status": "ACTIVE",
+      "filing_expected": true,
+      "notes": {
+        "es": "Solo valores 13F; no representa la cartera completa ni acredita habilidad.",
+        "en": "13F securities only; not the full portfolio or evidence of skill."
+      },
+      "economic_group_id": "brown-advisory",
+      "source_url": "https://data.sec.gov/submissions/CIK0001345929.json",
+      "pilot": false
+    },
+    {
+      "manager_id": "wcm",
+      "display_name": "WCM Investment Management",
+      "legal_name": "WCM INVESTMENT MANAGEMENT/CA",
+      "CIK": "0001061186",
+      "manager_type": "asset_manager",
+      "inclusion_reason": {
+        "es": "Identidad SEC e historial continuo sujetos a validación; ámbito: quality/growth; global US-listed sleeve.",
+        "en": "SEC identity and continuous filing history subject to validation; scope: quality/growth; global US-listed sleeve."
+      },
+      "inclusion_date": "2026-09-06",
+      "status": "ACTIVE",
+      "filing_expected": true,
+      "notes": {
+        "es": "Solo valores 13F; no representa la cartera completa ni acredita habilidad.",
+        "en": "13F securities only; not the full portfolio or evidence of skill."
+      },
+      "economic_group_id": "wcm",
+      "source_url": "https://data.sec.gov/submissions/CIK0001061186.json",
+      "pilot": false
+    },
+    {
+      "manager_id": "cantillon",
+      "display_name": "Cantillon Capital",
+      "legal_name": "CANTILLON CAPITAL MANAGEMENT LLC",
+      "CIK": "0001279936",
+      "manager_type": "asset_manager",
+      "inclusion_reason": {
+        "es": "Identidad SEC e historial continuo sujetos a validación; ámbito: concentrated global quality.",
+        "en": "SEC identity and continuous filing history subject to validation; scope: concentrated global quality."
+      },
+      "inclusion_date": "2026-09-06",
+      "status": "ACTIVE",
+      "filing_expected": true,
+      "notes": {
+        "es": "Solo valores 13F; no representa la cartera completa ni acredita habilidad.",
+        "en": "13F securities only; not the full portfolio or evidence of skill."
+      },
+      "economic_group_id": "cantillon",
+      "source_url": "https://data.sec.gov/submissions/CIK0001279936.json",
+      "pilot": false
+    },
+    {
+      "manager_id": "sands",
+      "display_name": "Sands Capital",
+      "legal_name": "SANDS CAPITAL MANAGEMENT, LP",
+      "CIK": "0001020066",
+      "manager_type": "asset_manager",
+      "inclusion_reason": {
+        "es": "Identidad SEC e historial continuo sujetos a validación; ámbito: growth; concentrated mandates.",
+        "en": "SEC identity and continuous filing history subject to validation; scope: growth; concentrated mandates."
+      },
+      "inclusion_date": "2026-09-06",
+      "status": "ACTIVE",
+      "filing_expected": true,
+      "notes": {
+        "es": "Solo valores 13F; no representa la cartera completa ni acredita habilidad.",
+        "en": "13F securities only; not the full portfolio or evidence of skill."
+      },
+      "economic_group_id": "sands",
+      "source_url": "https://data.sec.gov/submissions/CIK0001020066.json",
+      "pilot": false
+    },
+    {
+      "manager_id": "fisher",
+      "display_name": "Fisher Asset Management",
+      "legal_name": "FISHER INVESTMENTS INC",
+      "CIK": "0000850529",
+      "manager_type": "asset_manager",
+      "inclusion_reason": {
+        "es": "Identidad SEC e historial continuo sujetos a validación; ámbito: large diversified advisory structure; one reporting unit.",
+        "en": "SEC identity and continuous filing history subject to validation; scope: large diversified advisory structure; one reporting unit."
+      },
+      "inclusion_date": "2026-09-06",
+      "status": "ACTIVE",
+      "filing_expected": true,
+      "notes": {
+        "es": "Solo valores 13F; no representa la cartera completa ni acredita habilidad.",
+        "en": "13F securities only; not the full portfolio or evidence of skill."
+      },
+      "economic_group_id": "fisher",
+      "source_url": "https://data.sec.gov/submissions/CIK0000850529.json",
+      "pilot": false
+    },
+    {
+      "manager_id": "eagle-capital",
+      "display_name": "Eagle Capital",
+      "legal_name": "EAGLE CAPITAL MANAGEMENT LLC",
+      "CIK": "0000945631",
+      "manager_type": "asset_manager",
+      "inclusion_reason": {
+        "es": "Identidad SEC e historial continuo sujetos a validación; ámbito: fundamental; concentrated institutional equity.",
+        "en": "SEC identity and continuous filing history subject to validation; scope: fundamental; concentrated institutional equity."
+      },
+      "inclusion_date": "2026-09-06",
+      "status": "ACTIVE",
+      "filing_expected": true,
+      "notes": {
+        "es": "Solo valores 13F; no representa la cartera completa ni acredita habilidad.",
+        "en": "13F securities only; not the full portfolio or evidence of skill."
+      },
+      "economic_group_id": "eagle-capital",
+      "source_url": "https://data.sec.gov/submissions/CIK0000945631.json",
+      "pilot": false
+    },
+    {
+      "manager_id": "greenhaven",
+      "display_name": "Greenhaven Associates",
+      "legal_name": "GREENHAVEN ASSOCIATES INC",
+      "CIK": "0000846222",
+      "manager_type": "asset_manager",
+      "inclusion_reason": {
+        "es": "Identidad SEC e historial continuo sujetos a validación; ámbito: value; concentrated public equity.",
+        "en": "SEC identity and continuous filing history subject to validation; scope: value; concentrated public equity."
+      },
+      "inclusion_date": "2026-09-06",
+      "status": "ACTIVE",
+      "filing_expected": true,
+      "notes": {
+        "es": "Solo valores 13F; no representa la cartera completa ni acredita habilidad.",
+        "en": "13F securities only; not the full portfolio or evidence of skill."
+      },
+      "economic_group_id": "greenhaven",
+      "source_url": "https://data.sec.gov/submissions/CIK0000846222.json",
+      "pilot": true
+    },
+    {
+      "manager_id": "abrams",
+      "display_name": "Abrams Capital",
+      "legal_name": "PAMET CAPITAL MANAGEMENT, LP",
+      "CIK": "0001358706",
+      "manager_type": "hedge_fund",
+      "inclusion_reason": {
+        "es": "Identidad SEC e historial continuo sujetos a validación; ámbito: value; concentrated opportunistic sleeve.",
+        "en": "SEC identity and continuous filing history subject to validation; scope: value; concentrated opportunistic sleeve."
+      },
+      "inclusion_date": "2026-09-06",
+      "status": "ACTIVE",
+      "filing_expected": true,
+      "notes": {
+        "es": "Solo valores 13F; no representa la cartera completa ni acredita habilidad.",
+        "en": "13F securities only; not the full portfolio or evidence of skill."
+      },
+      "economic_group_id": "abrams",
+      "source_url": "https://data.sec.gov/submissions/CIK0001358706.json",
+      "pilot": false
+    },
+    {
+      "manager_id": "himalaya",
+      "display_name": "Himalaya Capital",
+      "legal_name": "HIMALAYA CAPITAL MANAGEMENT LLC",
+      "CIK": "0001709323",
+      "manager_type": "asset_manager",
+      "inclusion_reason": {
+        "es": "Identidad SEC e historial continuo sujetos a validación; ámbito: concentrated long-term equity.",
+        "en": "SEC identity and continuous filing history subject to validation; scope: concentrated long-term equity."
+      },
+      "inclusion_date": "2026-09-06",
+      "status": "ACTIVE",
+      "filing_expected": true,
+      "notes": {
+        "es": "Solo valores 13F; no representa la cartera completa ni acredita habilidad.",
+        "en": "13F securities only; not the full portfolio or evidence of skill."
+      },
+      "economic_group_id": "himalaya",
+      "source_url": "https://data.sec.gov/submissions/CIK0001709323.json",
+      "pilot": false
+    },
+    {
+      "manager_id": "valueact",
+      "display_name": "ValueAct Capital",
+      "legal_name": "VALUEACT CAPITAL MANAGEMENT, L.P.",
+      "CIK": "0001351069",
+      "manager_type": "hedge_fund",
+      "inclusion_reason": {
+        "es": "Identidad SEC e historial continuo sujetos a validación; ámbito: activist; concentrated public equity.",
+        "en": "SEC identity and continuous filing history subject to validation; scope: activist; concentrated public equity."
+      },
+      "inclusion_date": "2026-09-06",
+      "status": "NOTICE_ONLY",
+      "filing_expected": false,
+      "notes": {
+        "es": "Avisos Q1/Q2 remiten a ValueAct Holdings, L.P.; no se cuenta por separado.",
+        "en": "Q1/Q2 notices refer to ValueAct Holdings, L.P.; not counted separately."
+      },
+      "economic_group_id": "valueact",
+      "source_url": "https://data.sec.gov/submissions/CIK0001351069.json",
+      "pilot": false
+    },
+    {
+      "manager_id": "starboard",
+      "display_name": "Starboard Value",
+      "legal_name": "STARBOARD VALUE LP",
+      "CIK": "0001517137",
+      "manager_type": "hedge_fund",
+      "inclusion_reason": {
+        "es": "Identidad SEC e historial continuo sujetos a validación; ámbito: activist; event-driven public equity.",
+        "en": "SEC identity and continuous filing history subject to validation; scope: activist; event-driven public equity."
+      },
+      "inclusion_date": "2026-09-06",
+      "status": "ACTIVE",
+      "filing_expected": true,
+      "notes": {
+        "es": "Solo valores 13F; no representa la cartera completa ni acredita habilidad.",
+        "en": "13F securities only; not the full portfolio or evidence of skill."
+      },
+      "economic_group_id": "starboard",
+      "source_url": "https://data.sec.gov/submissions/CIK0001517137.json",
+      "pilot": false
+    },
+    {
+      "manager_id": "engaged",
+      "display_name": "Engaged Capital",
+      "legal_name": "ENGAGED CAPITAL LLC",
+      "CIK": "0001559771",
+      "manager_type": "hedge_fund",
+      "inclusion_reason": {
+        "es": "Identidad SEC e historial continuo sujetos a validación; ámbito: activist; concentrated public equity.",
+        "en": "SEC identity and continuous filing history subject to validation; scope: activist; concentrated public equity."
+      },
+      "inclusion_date": "2026-09-06",
+      "status": "ACTIVE",
+      "filing_expected": true,
+      "notes": {
+        "es": "Solo valores 13F; no representa la cartera completa ni acredita habilidad.",
+        "en": "13F securities only; not the full portfolio or evidence of skill."
+      },
+      "economic_group_id": "engaged",
+      "source_url": "https://data.sec.gov/submissions/CIK0001559771.json",
+      "pilot": false
+    },
+    {
+      "manager_id": "pershing-square-capital-management",
+      "display_name": "Pershing Square Capital Management (notice)",
+      "legal_name": "Pershing Square Capital Management, L.P.",
+      "CIK": "0001336528",
+      "manager_type": "notice_entity",
+      "inclusion_reason": {
+        "es": "Entidad histórica retenida para trazabilidad de su aviso 13F-NT; no es una unidad adicional de recuento.",
+        "en": "Historical entity retained to trace its 13F-NT notice; not an additional counting unit."
+      },
+      "inclusion_date": "2026-09-06",
+      "status": "NOTICE_ONLY",
+      "filing_expected": false,
+      "notes": {
+        "es": "Q2 remite a Pershing Square Inc.; exposición no divulgada por separado.",
+        "en": "Q2 refers to Pershing Square Inc.; exposure not separately disclosed."
+      },
+      "economic_group_id": "pershing-square",
+      "source_url": "https://data.sec.gov/submissions/CIK0001336528.json",
+      "pilot": true
+    },
+    {
+      "manager_id": "ruane-cunniff-lp",
+      "display_name": "Ruane Cunniff",
+      "legal_name": "Ruane, Cunniff & Goldfarb L.P.",
+      "CIK": "0001720792",
+      "manager_type": "asset_manager",
+      "inclusion_reason": {
+        "es": "Identidad SEC e historial continuo sujetos a validación; ámbito: concentrated fundamental equity.",
+        "en": "SEC identity and continuous filing history subject to validation; scope: concentrated fundamental equity."
+      },
+      "inclusion_date": "2026-09-06",
+      "status": "ACTIVE",
+      "filing_expected": true,
+      "notes": {
+        "es": "Entidad L.P. identificada en portada SEC Q2 2026; no se incorpora la antigua entidad Inc. al recuento.",
+        "en": "L.P. entity identified on its SEC Q2 2026 cover; the former Inc. entity is not counted."
+      },
+      "economic_group_id": "ruane-cunniff",
+      "source_url": "https://data.sec.gov/submissions/CIK0001720792.json",
+      "pilot": false
+    },
+    {
+      "manager_id": "valueact-holdings",
+      "display_name": "ValueAct Holdings",
+      "legal_name": "ValueAct Holdings, L.P.",
+      "CIK": "0001418814",
+      "manager_type": "hedge_fund",
+      "inclusion_reason": {
+        "es": "Identidad SEC e historial continuo sujetos a validación; ámbito: activist; concentrated public equity.",
+        "en": "SEC identity and continuous filing history subject to validation; scope: activist; concentrated public equity."
+      },
+      "inclusion_date": "2026-09-06",
+      "status": "ACTIVE",
+      "filing_expected": true,
+      "notes": {
+        "es": "Reporte receptor del aviso ValueAct Capital Management; una unidad de recuento.",
+        "en": "Receiving report for the ValueAct Capital Management notice; one counting unit."
+      },
+      "economic_group_id": "valueact",
+      "source_url": "https://data.sec.gov/submissions/CIK0001418814.json",
+      "pilot": false
+    }
+  ],
+  "relationships": [
+    {
+      "type": "INCLUDED_REPORT",
+      "notice_manager_id": "pershing-square-capital-management",
+      "reporting_manager_id": "pershing-square-inc",
+      "quarter_end": "2026-06-30",
+      "source_url": "https://www.sec.gov/Archives/edgar/data/1336528/000117266126003777/0001172661-26-003777.txt",
+      "status": "VERIFIED"
+    },
+    {
+      "type": "INCLUDED_REPORT",
+      "notice_manager_id": "valueact",
+      "reporting_manager_id": "valueact-holdings",
+      "quarter_end": "2026-06-30",
+      "source_url": "https://www.sec.gov/Archives/edgar/data/1351069/000135106926000006/0001351069-26-000006.txt",
+      "status": "VERIFIED"
+    }
+  ]
+}

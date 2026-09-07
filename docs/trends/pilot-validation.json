@@ -1,0 +1,214 @@
+{
+  "PILOT_10": "PASS",
+  "as_of": "2026-09-06T19:45:13.395799+00:00",
+  "universe_size": 10,
+  "expected_filers": 10,
+  "disclosed_filers": 10,
+  "notice_entities": 1,
+  "parser_errors": 0,
+  "quarter_pair": [
+    "2026-03-31",
+    "2026-06-30"
+  ],
+  "tests": "17 Node + 5 XML PASS",
+  "snapshot_reproducible": true,
+  "raw_cover_and_table_review": "Berkshire, Bridgewater and Fundsmith: cover entries/value totals and selected raw XML rows independently inspected before expansion.",
+  "manual_checks": [
+    {
+      "manager_id": "berkshire-hathaway",
+      "CUSIP": "037833100",
+      "values": [
+        {
+          "quarter_end": "2026-03-31",
+          "shares": 227917808,
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1067983/000119312526226661/53405.xml",
+          "filing_url": "https://www.sec.gov/Archives/edgar/data/1067983/000119312526226661/0001193125-26-226661.txt",
+          "raw_rows": [
+            692000,
+            3840000,
+            34000,
+            34724000,
+            2724000,
+            15532000,
+            61542988,
+            7204000,
+            14472000,
+            80664820,
+            2712000,
+            3776000
+          ]
+        },
+        {
+          "quarter_end": "2026-06-30",
+          "shares": 227917808,
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1067983/000119312526352200/56757.xml",
+          "filing_url": "https://www.sec.gov/Archives/edgar/data/1067983/000119312526352200/0001193125-26-352200.txt",
+          "raw_rows": [
+            692000,
+            3840000,
+            34000,
+            34724000,
+            2724000,
+            15532000,
+            61542988,
+            7204000,
+            14472000,
+            80664820,
+            2712000,
+            3776000
+          ]
+        }
+      ]
+    },
+    {
+      "manager_id": "berkshire-hathaway",
+      "CUSIP": "025816109",
+      "values": [
+        {
+          "quarter_end": "2026-03-31",
+          "shares": 151610700,
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1067983/000119312526226661/53405.xml",
+          "filing_url": "https://www.sec.gov/Archives/edgar/data/1067983/000119312526226661/0001193125-26-226661.txt",
+          "raw_rows": [
+            1149942,
+            149061045,
+            1399713
+          ]
+        },
+        {
+          "quarter_end": "2026-06-30",
+          "shares": 151610700,
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1067983/000119312526352200/56757.xml",
+          "filing_url": "https://www.sec.gov/Archives/edgar/data/1067983/000119312526352200/0001193125-26-352200.txt",
+          "raw_rows": [
+            1149942,
+            149061045,
+            1399713
+          ]
+        }
+      ]
+    },
+    {
+      "manager_id": "bridgewater-associates",
+      "CUSIP": "02079K107",
+      "values": [
+        {
+          "quarter_end": "2026-03-31",
+          "shares": 387002,
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1350694/000135069426000002/infotable.xml",
+          "filing_url": "https://www.sec.gov/Archives/edgar/data/1350694/000135069426000002/0001350694-26-000002.txt",
+          "raw_rows": [
+            387002
+          ]
+        },
+        {
+          "quarter_end": "2026-06-30",
+          "shares": 74207,
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1350694/000135069426000003/infotable.xml",
+          "filing_url": "https://www.sec.gov/Archives/edgar/data/1350694/000135069426000003/0001350694-26-000003.txt",
+          "raw_rows": [
+            74207
+          ]
+        }
+      ]
+    },
+    {
+      "manager_id": "bridgewater-associates",
+      "CUSIP": "02079K305",
+      "values": [
+        {
+          "quarter_end": "2026-03-31",
+          "shares": 1997674,
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1350694/000135069426000002/infotable.xml",
+          "filing_url": "https://www.sec.gov/Archives/edgar/data/1350694/000135069426000002/0001350694-26-000002.txt",
+          "raw_rows": [
+            1997674
+          ]
+        },
+        {
+          "quarter_end": "2026-06-30",
+          "shares": 1322176,
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1350694/000135069426000003/infotable.xml",
+          "filing_url": "https://www.sec.gov/Archives/edgar/data/1350694/000135069426000003/0001350694-26-000003.txt",
+          "raw_rows": [
+            1322176
+          ]
+        }
+      ]
+    },
+    {
+      "manager_id": "fundsmith",
+      "CUSIP": "594918104",
+      "values": [
+        {
+          "quarter_end": "2026-03-31",
+          "shares": 2079737,
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1569205/000156920526000005/FLLPq12026.xml",
+          "filing_url": "https://www.sec.gov/Archives/edgar/data/1569205/000156920526000005/0001569205-26-000005.txt",
+          "raw_rows": [
+            2079737
+          ]
+        },
+        {
+          "quarter_end": "2026-06-30",
+          "shares": 1596737,
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1569205/000156920526000012/FLLPq22026.xml",
+          "filing_url": "https://www.sec.gov/Archives/edgar/data/1569205/000156920526000012/0001569205-26-000012.txt",
+          "raw_rows": [
+            1596737
+          ]
+        }
+      ]
+    }
+  ],
+  "pershing": "NT references 2026053; receiving HR lists 1336528. One counting group. Q1 combination perimeter blocks movements.",
+  "excluded_candidate": "Greenlight 1079114: no Q1/Q2 2026 reports; last 13F Q4 2023. No successor guessed. Replaced by Greenhaven in pilot.",
+  "managers": [
+    "berkshire-hathaway",
+    "bridgewater-associates",
+    "pershing-square-inc",
+    "baupost",
+    "third-point",
+    "duquesne",
+    "lone-pine",
+    "fundsmith",
+    "dodge-cox",
+    "greenhaven"
+  ],
+  "evidence_hashes": {
+    "https://data.sec.gov/submissions/CIK0000200217.json": "c38997532ee42000f6265f885b0c3feef3f98b58cb774d766af9f759ef4b5cc4",
+    "https://data.sec.gov/submissions/CIK0000846222.json": "5a71ac0795c4eb26bcba8d9fd4d6319ce5f1836f05e5cda2042308b4cee29037",
+    "https://data.sec.gov/submissions/CIK0001040273.json": "26fc6e296c54b2685d487a764b1b95448e7257f2bf548036a71fa1e9bb0df9e8",
+    "https://data.sec.gov/submissions/CIK0001061165.json": "d11fcdd2dbb5850fc3496f3009ea223a36bb9c0a509476b5c7437d23844184c4",
+    "https://data.sec.gov/submissions/CIK0001061768.json": "0e75a4ca4deddb76d6d5324add5cb65f67a33683f4646b0525edf99bb6f85ed5",
+    "https://data.sec.gov/submissions/CIK0001067983.json": "f5efd38abf95a1b7cc1286557b6263cf9f6e673cfc8c870b7c2b9304682e4a4b",
+    "https://data.sec.gov/submissions/CIK0001336528.json": "3b70ab3566e461dcdba8fee9f9a1dd54f7074346c85331e3ca7951bc6e3b58ae",
+    "https://data.sec.gov/submissions/CIK0001350694.json": "5a6ac012cf825477e73db7393939e53dbd7c333f1755487c109320e543410b5a",
+    "https://data.sec.gov/submissions/CIK0001536411.json": "446e28e02f4ed08c0f1877dfc0302b4b0356c3a4af9b4cb97db4c5ec790ba66b",
+    "https://data.sec.gov/submissions/CIK0001569205.json": "32bcefdf8106ddf80785adf64c1b7b1e0e6d53a1a33ba09fbc2c9b247887de22",
+    "https://data.sec.gov/submissions/CIK0002026053.json": "c03e4063d6274d87c04dc2976da0ad4f64e6d24adb5c9c6a7ac84912e18b76eb",
+    "https://www.sec.gov/Archives/edgar/data/1040273/000104027326000002/0001040273-26-000002.txt": "0210b005832edc815ff8b49da2678462fdde4ed92cdcf2ea69a0682163c512ec",
+    "https://www.sec.gov/Archives/edgar/data/1040273/000104027326000003/0001040273-26-000003.txt": "426ac9f0e22f5d84c1b0e92958fe3970bc27f1441534fb7451c1fc72c72f7e34",
+    "https://www.sec.gov/Archives/edgar/data/1061165/000091957426003439/0000919574-26-003439.txt": "afaea02245fdd833f253e4991368fe71cd6623809051fcba98e0c30d7ad735af",
+    "https://www.sec.gov/Archives/edgar/data/1061165/000091957426005485/0000919574-26-005485.txt": "600389f06b8a429770ed7466bd7617b41b83e5c95b96d82a9698fec85dc2cbf1",
+    "https://www.sec.gov/Archives/edgar/data/1061768/000106176826000007/0001061768-26-000007.txt": "3bb4ed97784e5ba7e1cba2b27a4421b03c4fe02429dce0a5968eb52fcd684eb4",
+    "https://www.sec.gov/Archives/edgar/data/1061768/000106176826000010/0001061768-26-000010.txt": "d8b98be51befdf7a58f833f61b2bf13bc0e06f9609501b2299acc038154eea2a",
+    "https://www.sec.gov/Archives/edgar/data/1067983/000119312526226661/0001193125-26-226661.txt": "989d1c033140cef4b1aa6da937c0024f77a8fe37a99ac917df0af6aecbcee3cb",
+    "https://www.sec.gov/Archives/edgar/data/1067983/000119312526352200/0001193125-26-352200.txt": "19fc411d481abb83dc262b3ddeacaa3b6d8ae30c0d7ba76566595e2c60e62a0e",
+    "https://www.sec.gov/Archives/edgar/data/1336528/000117266126002336/0001172661-26-002336.txt": "90763a9f577675268e9b5e719983d0843925f6b09f3fc209ee6a7688ff7582c7",
+    "https://www.sec.gov/Archives/edgar/data/1336528/000117266126003777/0001172661-26-003777.txt": "a6fb71ea338b4676a5648c611dd86df841428ea0f470f4e71973db0c94f652cc",
+    "https://www.sec.gov/Archives/edgar/data/1350694/000135069426000002/0001350694-26-000002.txt": "fb6dde8409663edbfe9e76e1d9284eee48fae46459588c058d666d100cb221ef",
+    "https://www.sec.gov/Archives/edgar/data/1350694/000135069426000003/0001350694-26-000003.txt": "10db3b5be5784fc280833ce0c20f050fea88e30f3c98828a0c561b9b265776f6",
+    "https://www.sec.gov/Archives/edgar/data/1536411/000153641126000004/0001536411-26-000004.txt": "ffb98ae96f74b4866e555a7f298029ce7225a9f8c54d24aa921d783b5c4b12ab",
+    "https://www.sec.gov/Archives/edgar/data/1536411/000153641126000006/0001536411-26-000006.txt": "0ddb8791e4b7a2bc5001069c2b726d734944c691713c6a34fc3c7273cea0ae7b",
+    "https://www.sec.gov/Archives/edgar/data/1569205/000156920526000005/0001569205-26-000005.txt": "5ba25a67fd187af55fb5a486af16b38d1f9298315b5ff6d0c70852a4c3a22842",
+    "https://www.sec.gov/Archives/edgar/data/1569205/000156920526000012/0001569205-26-000012.txt": "8eb923ed004c452ea2720b7b4f1251a17a47790d6ed1024b157606f1402023c4",
+    "https://www.sec.gov/Archives/edgar/data/200217/000119312526223352/0001193125-26-223352.txt": "d56023a4f0169c4996de639c325b35dd95f55a76a5f23af0af59d0db1865a8fc",
+    "https://www.sec.gov/Archives/edgar/data/200217/000119312526349535/0001193125-26-349535.txt": "227b91bdcca5dd37ecce8c141d0f494d97da30ab3b5ed2abdcb197a480aa6f5c",
+    "https://www.sec.gov/Archives/edgar/data/2026053/000117266126002339/0001172661-26-002339.txt": "e522f29dda22f8b85e6e96fa62e869856a776773a24129a90ce74abafdfb5d6c",
+    "https://www.sec.gov/Archives/edgar/data/2026053/000117266126003790/0001172661-26-003790.txt": "ce5e27e43bc76d8fea60fc5e2b146c017172653649e8433f0b3191dabfa5b310",
+    "https://www.sec.gov/Archives/edgar/data/846222/000121390026040342/0001213900-26-040342.txt": "17fdde2cb86d7f0c74d2f8fcc6161273c5eb9f13fddc0c7beeefd95ad35984df",
+    "https://www.sec.gov/Archives/edgar/data/846222/000121390026082192/0001213900-26-082192.txt": "eab37d923f4dcf77b9336fc4bc9891689e7d9d697c3e1a317f855854b99a8f14"
+  },
+  "expansion_authorized": true
+}

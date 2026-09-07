@@ -1,0 +1,1082 @@
+{
+  "id": "lhi-superinvestor-universe-v1",
+  "name": "LHI Superinvestor Universe v1",
+  "version": 1,
+  "selection_as_of": "2026-09-06",
+  "selection_policy": "Muestra analítica intencional, no representativa ni ranking de rentabilidad. Identidad legal SEC; >=8 trimestres 13F o continuidad documentada hacia una matriz; un grupo declarante independiente. Variedad de concentración y de estructuras. Membresía fijada antes de comparar movimientos. Entidades históricas sin filings actuales excluidas explícitamente; anomalías trimestrales de miembros activos permanecen en cobertura como no disponibles.",
+  "managers": [
+    {
+      "manager_id": "berkshire-hathaway",
+      "display_name": "Berkshire Hathaway",
+      "legal_name": "BERKSHIRE HATHAWAY INC",
+      "CIK": "0001067983",
+      "manager_type": "conglomerate",
+      "inclusion_reason": {
+        "es": "Identidad legal verificada en SEC y 39 trimestres de historial localizado. La tabla Q2 original contiene 29 valores normalizados. Se selecciona una sola unidad declarante del grupo; el alcance es únicamente su exposición 13F.",
+        "en": "SEC legal identity verified and 39 quarters of located filing history. The original Q2 table contains 29 normalized securities. One reporting unit is selected per group; scope is limited to its 13F exposure."
+      },
+      "inclusion_date": "2026-09-06",
+      "status": "ACTIVE",
+      "filing_expected": true,
+      "notes": {
+        "es": "Solo valores 13F; no representa la cartera completa ni acredita habilidad.",
+        "en": "13F securities only; not the full portfolio or evidence of skill."
+      },
+      "economic_group_id": "berkshire-hathaway",
+      "source_url": "https://data.sec.gov/submissions/CIK0001067983.json",
+      "pilot": true,
+      "history_quarters": 39
+    },
+    {
+      "manager_id": "bridgewater-associates",
+      "display_name": "Bridgewater Associates",
+      "legal_name": "Bridgewater Associates, LP",
+      "CIK": "0001350694",
+      "manager_type": "hedge_fund",
+      "inclusion_reason": {
+        "es": "Identidad legal verificada en SEC y 83 trimestres de historial localizado. La tabla Q2 original contiene 997 valores normalizados. Se selecciona una sola unidad declarante del grupo; el alcance es únicamente su exposición 13F.",
+        "en": "SEC legal identity verified and 83 quarters of located filing history. The original Q2 table contains 997 normalized securities. One reporting unit is selected per group; scope is limited to its 13F exposure."
+      },
+      "inclusion_date": "2026-09-06",
+      "status": "ACTIVE",
+      "filing_expected": true,
+      "notes": {
+        "es": "Solo valores 13F; no representa la cartera completa ni acredita habilidad.",
+        "en": "13F securities only; not the full portfolio or evidence of skill."
+      },
+      "economic_group_id": "bridgewater-associates",
+      "source_url": "https://data.sec.gov/submissions/CIK0001350694.json",
+      "pilot": true,
+      "history_quarters": 83
+    },
+    {
+      "manager_id": "pershing-square-inc",
+      "display_name": "Pershing Square",
+      "legal_name": "PERSHING SQUARE INC.",
+      "CIK": "0002026053",
+      "manager_type": "public_parent",
+      "inclusion_reason": {
+        "es": "Matriz declarante con cinco trimestres propios y continuidad explícita hacia la entidad histórica PSCM (83 trimestres). Ambas portadas acreditan la inclusión Q2; se cuenta solo la matriz. El cambio de perímetro impide comparar Q1/Q2 como una misma cartera.",
+        "en": "Reporting parent with five own quarters and explicit continuity with historical PSCM (83 quarters). Both covers establish Q2 inclusion; only the parent is counted. The perimeter change prevents treating Q1/Q2 as the same portfolio."
+      },
+      "inclusion_date": "2026-09-06",
+      "status": "ACTIVE",
+      "filing_expected": true,
+      "notes": {
+        "es": "Solo valores 13F; no representa la cartera completa ni acredita habilidad.",
+        "en": "13F securities only; not the full portfolio or evidence of skill."
+      },
+      "economic_group_id": "pershing-square",
+      "source_url": "https://data.sec.gov/submissions/CIK0002026053.json",
+      "pilot": true,
+      "history_quarters": 5
+    },
+    {
+      "manager_id": "baupost",
+      "display_name": "Baupost",
+      "legal_name": "BAUPOST GROUP LLC/MA",
+      "CIK": "0001061768",
+      "manager_type": "hedge_fund",
+      "inclusion_reason": {
+        "es": "Identidad legal verificada en SEC y 105 trimestres de historial localizado. La tabla Q2 original contiene 23 valores normalizados. Se selecciona una sola unidad declarante del grupo; el alcance es únicamente su exposición 13F.",
+        "en": "SEC legal identity verified and 105 quarters of located filing history. The original Q2 table contains 23 normalized securities. One reporting unit is selected per group; scope is limited to its 13F exposure."
+      },
+      "inclusion_date": "2026-09-06",
+      "status": "ACTIVE",
+      "filing_expected": true,
+      "notes": {
+        "es": "Solo valores 13F; no representa la cartera completa ni acredita habilidad.",
+        "en": "13F securities only; not the full portfolio or evidence of skill."
+      },
+      "economic_group_id": "baupost",
+      "source_url": "https://data.sec.gov/submissions/CIK0001061768.json",
+      "pilot": true,
+      "history_quarters": 105
+    },
+    {
+      "manager_id": "greenlight",
+      "display_name": "Greenlight Capital",
+      "legal_name": "GREENLIGHT CAPITAL INC",
+      "CIK": "0001079114",
+      "manager_type": "hedge_fund",
+      "inclusion_reason": {
+        "es": "Identidad SEC e historial continuo sujetos a validación; ámbito: value; long/short strategy, long disclosure only.",
+        "en": "SEC identity and continuous filing history subject to validation; scope: value; long/short strategy, long disclosure only."
+      },
+      "inclusion_date": "2026-09-06",
+      "status": "EXCLUDED",
+      "filing_expected": false,
+      "notes": {
+        "es": "CIK histórico sin reportes Q1/Q2 2026; último 13F localizado Q4 2023. No se presume sucesión por parecido de nombre.",
+        "en": "Historical CIK has no Q1/Q2 2026 reports; latest located 13F is Q4 2023. No successor is inferred from similar names."
+      },
+      "economic_group_id": "greenlight",
+      "source_url": "https://data.sec.gov/submissions/CIK0001079114.json",
+      "pilot": false
+    },
+    {
+      "manager_id": "third-point",
+      "display_name": "Third Point",
+      "legal_name": "Third Point LLC",
+      "CIK": "0001040273",
+      "manager_type": "hedge_fund",
+      "inclusion_reason": {
+        "es": "Identidad legal verificada en SEC y 109 trimestres de historial localizado. La tabla Q2 original contiene 43 valores normalizados. Se selecciona una sola unidad declarante del grupo; el alcance es únicamente su exposición 13F.",
+        "en": "SEC legal identity verified and 109 quarters of located filing history. The original Q2 table contains 43 normalized securities. One reporting unit is selected per group; scope is limited to its 13F exposure."
+      },
+      "inclusion_date": "2026-09-06",
+      "status": "ACTIVE",
+      "filing_expected": true,
+      "notes": {
+        "es": "Solo valores 13F; no representa la cartera completa ni acredita habilidad.",
+        "en": "13F securities only; not the full portfolio or evidence of skill."
+      },
+      "economic_group_id": "third-point",
+      "source_url": "https://data.sec.gov/submissions/CIK0001040273.json",
+      "pilot": true,
+      "history_quarters": 109
+    },
+    {
+      "manager_id": "duquesne",
+      "display_name": "Duquesne Family Office",
+      "legal_name": "Duquesne Family Office LLC",
+      "CIK": "0001536411",
+      "manager_type": "family_office",
+      "inclusion_reason": {
+        "es": "Identidad legal verificada en SEC y 59 trimestres de historial localizado. La tabla Q2 original contiene 95 valores normalizados. Se selecciona una sola unidad declarante del grupo; el alcance es únicamente su exposición 13F.",
+        "en": "SEC legal identity verified and 59 quarters of located filing history. The original Q2 table contains 95 normalized securities. One reporting unit is selected per group; scope is limited to its 13F exposure."
+      },
+      "inclusion_date": "2026-09-06",
+      "status": "ACTIVE",
+      "filing_expected": true,
+      "notes": {
+        "es": "Solo valores 13F; no representa la cartera completa ni acredita habilidad.",
+        "en": "13F securities only; not the full portfolio or evidence of skill."
+      },
+      "economic_group_id": "duquesne",
+      "source_url": "https://data.sec.gov/submissions/CIK0001536411.json",
+      "pilot": true,
+      "history_quarters": 59
+    },
+    {
+      "manager_id": "lone-pine",
+      "display_name": "Lone Pine Capital",
+      "legal_name": "LONE PINE CAPITAL LLC",
+      "CIK": "0001061165",
+      "manager_type": "hedge_fund",
+      "inclusion_reason": {
+        "es": "Identidad legal verificada en SEC y 87 trimestres de historial localizado. La tabla Q2 original contiene 34 valores normalizados. Se selecciona una sola unidad declarante del grupo; el alcance es únicamente su exposición 13F.",
+        "en": "SEC legal identity verified and 87 quarters of located filing history. The original Q2 table contains 34 normalized securities. One reporting unit is selected per group; scope is limited to its 13F exposure."
+      },
+      "inclusion_date": "2026-09-06",
+      "status": "ACTIVE",
+      "filing_expected": true,
+      "notes": {
+        "es": "Solo valores 13F; no representa la cartera completa ni acredita habilidad.",
+        "en": "13F securities only; not the full portfolio or evidence of skill."
+      },
+      "economic_group_id": "lone-pine",
+      "source_url": "https://data.sec.gov/submissions/CIK0001061165.json",
+      "pilot": true,
+      "history_quarters": 87
+    },
+    {
+      "manager_id": "fundsmith",
+      "display_name": "Fundsmith",
+      "legal_name": "Fundsmith LLP",
+      "CIK": "0001569205",
+      "manager_type": "asset_manager",
+      "inclusion_reason": {
+        "es": "Identidad legal verificada en SEC y 55 trimestres de historial localizado. La tabla Q2 original contiene 41 valores normalizados. Se selecciona una sola unidad declarante del grupo; el alcance es únicamente su exposición 13F.",
+        "en": "SEC legal identity verified and 55 quarters of located filing history. The original Q2 table contains 41 normalized securities. One reporting unit is selected per group; scope is limited to its 13F exposure."
+      },
+      "inclusion_date": "2026-09-06",
+      "status": "ACTIVE",
+      "filing_expected": true,
+      "notes": {
+        "es": "Solo valores 13F; no representa la cartera completa ni acredita habilidad.",
+        "en": "13F securities only; not the full portfolio or evidence of skill."
+      },
+      "economic_group_id": "fundsmith",
+      "source_url": "https://data.sec.gov/submissions/CIK0001569205.json",
+      "pilot": true,
+      "history_quarters": 55
+    },
+    {
+      "manager_id": "dodge-cox",
+      "display_name": "Dodge & Cox",
+      "legal_name": "DODGE & COX",
+      "CIK": "0000200217",
+      "manager_type": "asset_manager",
+      "inclusion_reason": {
+        "es": "Identidad legal verificada en SEC y 79 trimestres de historial localizado. La tabla Q2 original contiene 222 valores normalizados. Se selecciona una sola unidad declarante del grupo; el alcance es únicamente su exposición 13F.",
+        "en": "SEC legal identity verified and 79 quarters of located filing history. The original Q2 table contains 222 normalized securities. One reporting unit is selected per group; scope is limited to its 13F exposure."
+      },
+      "inclusion_date": "2026-09-06",
+      "status": "ACTIVE",
+      "filing_expected": true,
+      "notes": {
+        "es": "Solo valores 13F; no representa la cartera completa ni acredita habilidad.",
+        "en": "13F securities only; not the full portfolio or evidence of skill."
+      },
+      "economic_group_id": "dodge-cox",
+      "source_url": "https://data.sec.gov/submissions/CIK0000200217.json",
+      "pilot": true,
+      "history_quarters": 79
+    },
+    {
+      "manager_id": "appaloosa",
+      "display_name": "Appaloosa",
+      "legal_name": "Appaloosa LP",
+      "CIK": "0001656456",
+      "manager_type": "family_office",
+      "inclusion_reason": {
+        "es": "Identidad legal verificada en SEC y 42 trimestres de historial localizado. La tabla Q2 original contiene 27 valores normalizados. Se selecciona una sola unidad declarante del grupo; el alcance es únicamente su exposición 13F.",
+        "en": "SEC legal identity verified and 42 quarters of located filing history. The original Q2 table contains 27 normalized securities. One reporting unit is selected per group; scope is limited to its 13F exposure."
+      },
+      "inclusion_date": "2026-09-06",
+      "status": "ACTIVE",
+      "filing_expected": true,
+      "notes": {
+        "es": "Solo valores 13F; no representa la cartera completa ni acredita habilidad.",
+        "en": "13F securities only; not the full portfolio or evidence of skill."
+      },
+      "economic_group_id": "appaloosa",
+      "source_url": "https://data.sec.gov/submissions/CIK0001656456.json",
+      "pilot": false,
+      "history_quarters": 42
+    },
+    {
+      "manager_id": "tiger-global",
+      "display_name": "Tiger Global",
+      "legal_name": "TIGER GLOBAL MANAGEMENT LLC",
+      "CIK": "0001167483",
+      "manager_type": "hedge_fund",
+      "inclusion_reason": {
+        "es": "Identidad legal verificada en SEC y 99 trimestres de historial localizado. La tabla Q2 original contiene 46 valores normalizados. Se selecciona una sola unidad declarante del grupo; el alcance es únicamente su exposición 13F.",
+        "en": "SEC legal identity verified and 99 quarters of located filing history. The original Q2 table contains 46 normalized securities. One reporting unit is selected per group; scope is limited to its 13F exposure."
+      },
+      "inclusion_date": "2026-09-06",
+      "status": "ACTIVE",
+      "filing_expected": true,
+      "notes": {
+        "es": "Solo valores 13F; no representa la cartera completa ni acredita habilidad.",
+        "en": "13F securities only; not the full portfolio or evidence of skill."
+      },
+      "economic_group_id": "tiger-global",
+      "source_url": "https://data.sec.gov/submissions/CIK0001167483.json",
+      "pilot": false,
+      "history_quarters": 99
+    },
+    {
+      "manager_id": "coatue",
+      "display_name": "Coatue",
+      "legal_name": "COATUE MANAGEMENT LLC",
+      "CIK": "0001135730",
+      "manager_type": "hedge_fund",
+      "inclusion_reason": {
+        "es": "Identidad legal verificada en SEC y 94 trimestres de historial localizado. La tabla Q2 original contiene 66 valores normalizados. Se selecciona una sola unidad declarante del grupo; el alcance es únicamente su exposición 13F.",
+        "en": "SEC legal identity verified and 94 quarters of located filing history. The original Q2 table contains 66 normalized securities. One reporting unit is selected per group; scope is limited to its 13F exposure."
+      },
+      "inclusion_date": "2026-09-06",
+      "status": "ACTIVE",
+      "filing_expected": true,
+      "notes": {
+        "es": "Solo valores 13F; no representa la cartera completa ni acredita habilidad.",
+        "en": "13F securities only; not the full portfolio or evidence of skill."
+      },
+      "economic_group_id": "coatue",
+      "source_url": "https://data.sec.gov/submissions/CIK0001135730.json",
+      "pilot": false,
+      "history_quarters": 94
+    },
+    {
+      "manager_id": "viking",
+      "display_name": "Viking Global",
+      "legal_name": "VIKING GLOBAL INVESTORS LP",
+      "CIK": "0001103804",
+      "manager_type": "hedge_fund",
+      "inclusion_reason": {
+        "es": "Identidad legal verificada en SEC y 101 trimestres de historial localizado. La tabla Q2 original contiene 90 valores normalizados. Se selecciona una sola unidad declarante del grupo; el alcance es únicamente su exposición 13F.",
+        "en": "SEC legal identity verified and 101 quarters of located filing history. The original Q2 table contains 90 normalized securities. One reporting unit is selected per group; scope is limited to its 13F exposure."
+      },
+      "inclusion_date": "2026-09-06",
+      "status": "ACTIVE",
+      "filing_expected": true,
+      "notes": {
+        "es": "Solo valores 13F; no representa la cartera completa ni acredita habilidad.",
+        "en": "13F securities only; not the full portfolio or evidence of skill."
+      },
+      "economic_group_id": "viking",
+      "source_url": "https://data.sec.gov/submissions/CIK0001103804.json",
+      "pilot": false,
+      "history_quarters": 101
+    },
+    {
+      "manager_id": "maverick",
+      "display_name": "Maverick Capital",
+      "legal_name": "MAVERICK CAPITAL LTD",
+      "CIK": "0000934639",
+      "manager_type": "hedge_fund",
+      "inclusion_reason": {
+        "es": "Identidad legal verificada en SEC y 104 trimestres de historial localizado. La tabla Q2 original contiene 179 valores normalizados. Se selecciona una sola unidad declarante del grupo; el alcance es únicamente su exposición 13F.",
+        "en": "SEC legal identity verified and 104 quarters of located filing history. The original Q2 table contains 179 normalized securities. One reporting unit is selected per group; scope is limited to its 13F exposure."
+      },
+      "inclusion_date": "2026-09-06",
+      "status": "ACTIVE",
+      "filing_expected": true,
+      "notes": {
+        "es": "Solo valores 13F; no representa la cartera completa ni acredita habilidad.",
+        "en": "13F securities only; not the full portfolio or evidence of skill."
+      },
+      "economic_group_id": "maverick",
+      "source_url": "https://data.sec.gov/submissions/CIK0000934639.json",
+      "pilot": false,
+      "history_quarters": 104
+    },
+    {
+      "manager_id": "akre",
+      "display_name": "Akre Capital",
+      "legal_name": "AKRE CAPITAL MANAGEMENT LLC",
+      "CIK": "0001112520",
+      "manager_type": "asset_manager",
+      "inclusion_reason": {
+        "es": "Identidad legal verificada en SEC y 103 trimestres de historial localizado. La tabla Q2 original contiene 20 valores normalizados. Se selecciona una sola unidad declarante del grupo; el alcance es únicamente su exposición 13F.",
+        "en": "SEC legal identity verified and 103 quarters of located filing history. The original Q2 table contains 20 normalized securities. One reporting unit is selected per group; scope is limited to its 13F exposure."
+      },
+      "inclusion_date": "2026-09-06",
+      "status": "ACTIVE",
+      "filing_expected": true,
+      "notes": {
+        "es": "Solo valores 13F; no representa la cartera completa ni acredita habilidad.",
+        "en": "13F securities only; not the full portfolio or evidence of skill."
+      },
+      "economic_group_id": "akre",
+      "source_url": "https://data.sec.gov/submissions/CIK0001112520.json",
+      "pilot": false,
+      "history_quarters": 103
+    },
+    {
+      "manager_id": "lindsell-train",
+      "display_name": "Lindsell Train",
+      "legal_name": "Lindsell Train Ltd",
+      "CIK": "0001484150",
+      "manager_type": "asset_manager",
+      "inclusion_reason": {
+        "es": "Identidad legal verificada en SEC y 67 trimestres de historial localizado. La tabla Q2 original contiene 28 valores normalizados. Se selecciona una sola unidad declarante del grupo; el alcance es únicamente su exposición 13F.",
+        "en": "SEC legal identity verified and 67 quarters of located filing history. The original Q2 table contains 28 normalized securities. One reporting unit is selected per group; scope is limited to its 13F exposure."
+      },
+      "inclusion_date": "2026-09-06",
+      "status": "ACTIVE",
+      "filing_expected": true,
+      "notes": {
+        "es": "Solo valores 13F; no representa la cartera completa ni acredita habilidad.",
+        "en": "13F securities only; not the full portfolio or evidence of skill."
+      },
+      "economic_group_id": "lindsell-train",
+      "source_url": "https://data.sec.gov/submissions/CIK0001484150.json",
+      "pilot": false,
+      "history_quarters": 67
+    },
+    {
+      "manager_id": "ruane-cunniff",
+      "display_name": "Ruane Cunniff",
+      "legal_name": "RUANE, CUNNIFF & GOLDFARB INC",
+      "CIK": "0000728014",
+      "manager_type": "asset_manager",
+      "inclusion_reason": {
+        "es": "Identidad SEC e historial continuo sujetos a validación; ámbito: concentrated fundamental equity.",
+        "en": "SEC identity and continuous filing history subject to validation; scope: concentrated fundamental equity."
+      },
+      "inclusion_date": "2026-09-06",
+      "status": "EXCLUDED",
+      "filing_expected": false,
+      "notes": {
+        "es": "CIK histórico: último 13F Q1 2018. Se selecciona separadamente la entidad legal L.P. con filings actuales; no se enlaza la serie histórica.",
+        "en": "Historical CIK: latest 13F Q1 2018. The L.P. legal entity with current filings is selected separately; historical series are not joined."
+      },
+      "economic_group_id": "ruane-cunniff",
+      "source_url": "https://data.sec.gov/submissions/CIK0000728014.json",
+      "pilot": false,
+      "history_quarters": 77
+    },
+    {
+      "manager_id": "fairfax",
+      "display_name": "Fairfax Financial",
+      "legal_name": "FAIRFAX FINANCIAL HOLDINGS LTD/ CAN",
+      "CIK": "0000915191",
+      "manager_type": "insurance_group",
+      "inclusion_reason": {
+        "es": "Identidad legal verificada en SEC y 67 trimestres de historial localizado. La tabla Q2 original contiene 32 valores normalizados. Se selecciona una sola unidad declarante del grupo; el alcance es únicamente su exposición 13F.",
+        "en": "SEC legal identity verified and 67 quarters of located filing history. The original Q2 table contains 32 normalized securities. One reporting unit is selected per group; scope is limited to its 13F exposure."
+      },
+      "inclusion_date": "2026-09-06",
+      "status": "ACTIVE",
+      "filing_expected": true,
+      "notes": {
+        "es": "Solo valores 13F; no representa la cartera completa ni acredita habilidad.",
+        "en": "13F securities only; not the full portfolio or evidence of skill."
+      },
+      "economic_group_id": "fairfax",
+      "source_url": "https://data.sec.gov/submissions/CIK0000915191.json",
+      "pilot": false,
+      "history_quarters": 67
+    },
+    {
+      "manager_id": "markel",
+      "display_name": "Markel Group",
+      "legal_name": "MARKEL GROUP INC.",
+      "CIK": "0001096343",
+      "manager_type": "insurance_group",
+      "inclusion_reason": {
+        "es": "Identidad legal verificada en SEC y 41 trimestres de historial localizado. La tabla Q2 original contiene 130 valores normalizados. Se selecciona una sola unidad declarante del grupo; el alcance es únicamente su exposición 13F.",
+        "en": "SEC legal identity verified and 41 quarters of located filing history. The original Q2 table contains 130 normalized securities. One reporting unit is selected per group; scope is limited to its 13F exposure."
+      },
+      "inclusion_date": "2026-09-06",
+      "status": "ACTIVE",
+      "filing_expected": true,
+      "notes": {
+        "es": "Solo valores 13F; no representa la cartera completa ni acredita habilidad.",
+        "en": "13F securities only; not the full portfolio or evidence of skill."
+      },
+      "economic_group_id": "markel",
+      "source_url": "https://data.sec.gov/submissions/CIK0001096343.json",
+      "pilot": false,
+      "history_quarters": 41
+    },
+    {
+      "manager_id": "loews",
+      "display_name": "Loews",
+      "legal_name": "LOEWS CORP",
+      "CIK": "0000060086",
+      "manager_type": "conglomerate",
+      "inclusion_reason": {
+        "es": "Identidad legal verificada en SEC y 35 trimestres de historial localizado. La tabla Q2 original contiene 29 valores normalizados. Se selecciona una sola unidad declarante del grupo; el alcance es únicamente su exposición 13F.",
+        "en": "SEC legal identity verified and 35 quarters of located filing history. The original Q2 table contains 29 normalized securities. One reporting unit is selected per group; scope is limited to its 13F exposure."
+      },
+      "inclusion_date": "2026-09-06",
+      "status": "ACTIVE",
+      "filing_expected": true,
+      "notes": {
+        "es": "Solo valores 13F; no representa la cartera completa ni acredita habilidad.",
+        "en": "13F securities only; not the full portfolio or evidence of skill."
+      },
+      "economic_group_id": "loews",
+      "source_url": "https://data.sec.gov/submissions/CIK0000060086.json",
+      "pilot": false,
+      "history_quarters": 35
+    },
+    {
+      "manager_id": "pzena",
+      "display_name": "Pzena Investment Management",
+      "legal_name": "PZENA INVESTMENT MANAGEMENT LLC",
+      "CIK": "0001027796",
+      "manager_type": "asset_manager",
+      "inclusion_reason": {
+        "es": "Identidad legal verificada en SEC y 109 trimestres de historial localizado. La tabla Q2 original contiene 161 valores normalizados. Se selecciona una sola unidad declarante del grupo; el alcance es únicamente su exposición 13F.",
+        "en": "SEC legal identity verified and 109 quarters of located filing history. The original Q2 table contains 161 normalized securities. One reporting unit is selected per group; scope is limited to its 13F exposure."
+      },
+      "inclusion_date": "2026-09-06",
+      "status": "ACTIVE",
+      "filing_expected": true,
+      "notes": {
+        "es": "Solo valores 13F; no representa la cartera completa ni acredita habilidad.",
+        "en": "13F securities only; not the full portfolio or evidence of skill."
+      },
+      "economic_group_id": "pzena",
+      "source_url": "https://data.sec.gov/submissions/CIK0001027796.json",
+      "pilot": false,
+      "history_quarters": 109
+    },
+    {
+      "manager_id": "southeastern",
+      "display_name": "Southeastern Asset Management",
+      "legal_name": "SOUTHEASTERN ASSET MANAGEMENT INC/TN/",
+      "CIK": "0000807985",
+      "manager_type": "asset_manager",
+      "inclusion_reason": {
+        "es": "Identidad legal verificada en SEC y 100 trimestres de historial localizado. La tabla Q2 original contiene 47 valores normalizados. Se selecciona una sola unidad declarante del grupo; el alcance es únicamente su exposición 13F.",
+        "en": "SEC legal identity verified and 100 quarters of located filing history. The original Q2 table contains 47 normalized securities. One reporting unit is selected per group; scope is limited to its 13F exposure."
+      },
+      "inclusion_date": "2026-09-06",
+      "status": "ACTIVE",
+      "filing_expected": true,
+      "notes": {
+        "es": "Solo valores 13F; no representa la cartera completa ni acredita habilidad.",
+        "en": "13F securities only; not the full portfolio or evidence of skill."
+      },
+      "economic_group_id": "southeastern",
+      "source_url": "https://data.sec.gov/submissions/CIK0000807985.json",
+      "pilot": false,
+      "history_quarters": 100
+    },
+    {
+      "manager_id": "tweedy-browne",
+      "display_name": "Tweedy Browne",
+      "legal_name": "Tweedy, Browne Co LLC",
+      "CIK": "0000732905",
+      "manager_type": "asset_manager",
+      "inclusion_reason": {
+        "es": "Identidad legal verificada en SEC y 110 trimestres de historial localizado. La tabla Q2 original contiene 91 valores normalizados. Se selecciona una sola unidad declarante del grupo; el alcance es únicamente su exposición 13F.",
+        "en": "SEC legal identity verified and 110 quarters of located filing history. The original Q2 table contains 91 normalized securities. One reporting unit is selected per group; scope is limited to its 13F exposure."
+      },
+      "inclusion_date": "2026-09-06",
+      "status": "ACTIVE",
+      "filing_expected": true,
+      "notes": {
+        "es": "Solo valores 13F; no representa la cartera completa ni acredita habilidad.",
+        "en": "13F securities only; not the full portfolio or evidence of skill."
+      },
+      "economic_group_id": "tweedy-browne",
+      "source_url": "https://data.sec.gov/submissions/CIK0000732905.json",
+      "pilot": false,
+      "history_quarters": 110
+    },
+    {
+      "manager_id": "diamond-hill",
+      "display_name": "Diamond Hill",
+      "legal_name": "Diamond Hill Capital Management, LLC (Investment Advisor)",
+      "CIK": "0001217541",
+      "manager_type": "asset_manager",
+      "inclusion_reason": {
+        "es": "Identidad legal verificada en SEC y 91 trimestres de historial localizado. La tabla Q2 original contiene 186 valores normalizados. Se selecciona una sola unidad declarante del grupo; el alcance es únicamente su exposición 13F.",
+        "en": "SEC legal identity verified and 91 quarters of located filing history. The original Q2 table contains 186 normalized securities. One reporting unit is selected per group; scope is limited to its 13F exposure."
+      },
+      "inclusion_date": "2026-09-06",
+      "status": "ACTIVE",
+      "filing_expected": true,
+      "notes": {
+        "es": "Solo valores 13F; no representa la cartera completa ni acredita habilidad.",
+        "en": "13F securities only; not the full portfolio or evidence of skill."
+      },
+      "economic_group_id": "diamond-hill",
+      "source_url": "https://data.sec.gov/submissions/CIK0001217541.json",
+      "pilot": false,
+      "history_quarters": 91
+    },
+    {
+      "manager_id": "yacktman",
+      "display_name": "Yacktman",
+      "legal_name": "YACKTMAN ASSET MANAGEMENT LP",
+      "CIK": "0000905567",
+      "manager_type": "asset_manager",
+      "inclusion_reason": {
+        "es": "Identidad legal verificada en SEC y 110 trimestres de historial localizado. La tabla Q2 original contiene 74 valores normalizados. Se selecciona una sola unidad declarante del grupo; el alcance es únicamente su exposición 13F.",
+        "en": "SEC legal identity verified and 110 quarters of located filing history. The original Q2 table contains 74 normalized securities. One reporting unit is selected per group; scope is limited to its 13F exposure."
+      },
+      "inclusion_date": "2026-09-06",
+      "status": "ACTIVE",
+      "filing_expected": true,
+      "notes": {
+        "es": "Solo valores 13F; no representa la cartera completa ni acredita habilidad.",
+        "en": "13F securities only; not the full portfolio or evidence of skill."
+      },
+      "economic_group_id": "yacktman",
+      "source_url": "https://data.sec.gov/submissions/CIK0000905567.json",
+      "pilot": false,
+      "history_quarters": 110
+    },
+    {
+      "manager_id": "ariel",
+      "display_name": "Ariel Investments",
+      "legal_name": "ARIEL INVESTMENTS, LLC",
+      "CIK": "0000936753",
+      "manager_type": "asset_manager",
+      "inclusion_reason": {
+        "es": "Identidad legal verificada en SEC y 79 trimestres de historial localizado. La tabla Q2 original contiene 106 valores normalizados. Se selecciona una sola unidad declarante del grupo; el alcance es únicamente su exposición 13F.",
+        "en": "SEC legal identity verified and 79 quarters of located filing history. The original Q2 table contains 106 normalized securities. One reporting unit is selected per group; scope is limited to its 13F exposure."
+      },
+      "inclusion_date": "2026-09-06",
+      "status": "ACTIVE",
+      "filing_expected": true,
+      "notes": {
+        "es": "Solo valores 13F; no representa la cartera completa ni acredita habilidad.",
+        "en": "13F securities only; not the full portfolio or evidence of skill."
+      },
+      "economic_group_id": "ariel",
+      "source_url": "https://data.sec.gov/submissions/CIK0000936753.json",
+      "pilot": false,
+      "history_quarters": 79
+    },
+    {
+      "manager_id": "harris",
+      "display_name": "Harris Associates",
+      "legal_name": "HARRIS ASSOCIATES L P",
+      "CIK": "0000813917",
+      "manager_type": "asset_manager",
+      "inclusion_reason": {
+        "es": "Identidad legal verificada en SEC y 110 trimestres de historial localizado. La tabla Q2 original contiene 162 valores normalizados. Se selecciona una sola unidad declarante del grupo; el alcance es únicamente su exposición 13F.",
+        "en": "SEC legal identity verified and 110 quarters of located filing history. The original Q2 table contains 162 normalized securities. One reporting unit is selected per group; scope is limited to its 13F exposure."
+      },
+      "inclusion_date": "2026-09-06",
+      "status": "ACTIVE",
+      "filing_expected": true,
+      "notes": {
+        "es": "Solo valores 13F; no representa la cartera completa ni acredita habilidad.",
+        "en": "13F securities only; not the full portfolio or evidence of skill."
+      },
+      "economic_group_id": "harris",
+      "source_url": "https://data.sec.gov/submissions/CIK0000813917.json",
+      "pilot": false,
+      "history_quarters": 110
+    },
+    {
+      "manager_id": "davis",
+      "display_name": "Davis Selected Advisers",
+      "legal_name": "DAVIS SELECTED ADVISERS",
+      "CIK": "0001036325",
+      "manager_type": "asset_manager",
+      "inclusion_reason": {
+        "es": "Identidad legal verificada en SEC y 109 trimestres de historial localizado. La tabla Q2 original contiene 112 valores normalizados. Se selecciona una sola unidad declarante del grupo; el alcance es únicamente su exposición 13F.",
+        "en": "SEC legal identity verified and 109 quarters of located filing history. The original Q2 table contains 112 normalized securities. One reporting unit is selected per group; scope is limited to its 13F exposure."
+      },
+      "inclusion_date": "2026-09-06",
+      "status": "ACTIVE",
+      "filing_expected": true,
+      "notes": {
+        "es": "Solo valores 13F; no representa la cartera completa ni acredita habilidad.",
+        "en": "13F securities only; not the full portfolio or evidence of skill."
+      },
+      "economic_group_id": "davis",
+      "source_url": "https://data.sec.gov/submissions/CIK0001036325.json",
+      "pilot": false,
+      "history_quarters": 109
+    },
+    {
+      "manager_id": "first-eagle",
+      "display_name": "First Eagle",
+      "legal_name": "First Eagle Investment Management, LLC",
+      "CIK": "0001325447",
+      "manager_type": "asset_manager",
+      "inclusion_reason": {
+        "es": "Identidad legal verificada en SEC y 81 trimestres de historial localizado. La tabla Q2 original contiene 424 valores normalizados. Se selecciona una sola unidad declarante del grupo; el alcance es únicamente su exposición 13F.",
+        "en": "SEC legal identity verified and 81 quarters of located filing history. The original Q2 table contains 424 normalized securities. One reporting unit is selected per group; scope is limited to its 13F exposure."
+      },
+      "inclusion_date": "2026-09-06",
+      "status": "TEMPORARILY_UNAVAILABLE",
+      "filing_expected": true,
+      "notes": {
+        "es": "Q2: enmienda 0001325447-26-000033 marcada NEW HOLDINGS solapa el original; no se publican posiciones hasta resolverla. Q1: restatement válido, sin duplicación. No se importa la cartera completa del declarante externo Exchange Traded Concepts.",
+        "en": "Q2: amendment 0001325447-26-000033 marked NEW HOLDINGS overlaps the original; holdings are withheld until resolved. Q1: valid restatement without duplication. The full portfolio of external reporter Exchange Traded Concepts is not imported."
+      },
+      "economic_group_id": "first-eagle",
+      "source_url": "https://data.sec.gov/submissions/CIK0001325447.json",
+      "pilot": false,
+      "history_quarters": 81
+    },
+    {
+      "manager_id": "gardner-russo-quinn",
+      "display_name": "Gardner Russo & Quinn",
+      "legal_name": "GARDNER RUSSO & QUINN LLC",
+      "CIK": "0000860643",
+      "manager_type": "asset_manager",
+      "inclusion_reason": {
+        "es": "Identidad legal verificada en SEC y 110 trimestres de historial localizado. La tabla Q2 original contiene 85 valores normalizados. Se selecciona una sola unidad declarante del grupo; el alcance es únicamente su exposición 13F.",
+        "en": "SEC legal identity verified and 110 quarters of located filing history. The original Q2 table contains 85 normalized securities. One reporting unit is selected per group; scope is limited to its 13F exposure."
+      },
+      "inclusion_date": "2026-09-06",
+      "status": "ACTIVE",
+      "filing_expected": true,
+      "notes": {
+        "es": "Solo valores 13F; no representa la cartera completa ni acredita habilidad.",
+        "en": "13F securities only; not the full portfolio or evidence of skill."
+      },
+      "economic_group_id": "gardner-russo-quinn",
+      "source_url": "https://data.sec.gov/submissions/CIK0000860643.json",
+      "pilot": false,
+      "history_quarters": 110
+    },
+    {
+      "manager_id": "polen",
+      "display_name": "Polen Capital",
+      "legal_name": "POLEN CAPITAL MANAGEMENT LLC",
+      "CIK": "0001034524",
+      "manager_type": "asset_manager",
+      "inclusion_reason": {
+        "es": "Identidad legal verificada en SEC y 110 trimestres de historial localizado. La tabla Q2 original contiene 219 valores normalizados. Se selecciona una sola unidad declarante del grupo; el alcance es únicamente su exposición 13F.",
+        "en": "SEC legal identity verified and 110 quarters of located filing history. The original Q2 table contains 219 normalized securities. One reporting unit is selected per group; scope is limited to its 13F exposure."
+      },
+      "inclusion_date": "2026-09-06",
+      "status": "ACTIVE",
+      "filing_expected": true,
+      "notes": {
+        "es": "Solo valores 13F; no representa la cartera completa ni acredita habilidad.",
+        "en": "13F securities only; not the full portfolio or evidence of skill."
+      },
+      "economic_group_id": "polen",
+      "source_url": "https://data.sec.gov/submissions/CIK0001034524.json",
+      "pilot": false,
+      "history_quarters": 110
+    },
+    {
+      "manager_id": "bamco",
+      "display_name": "BAMCO",
+      "legal_name": "BAMCO INC /NY/",
+      "CIK": "0001017918",
+      "manager_type": "asset_manager",
+      "inclusion_reason": {
+        "es": "Identidad legal verificada en SEC y 73 trimestres de historial localizado. La tabla Q2 original contiene 345 valores normalizados. Se selecciona una sola unidad declarante del grupo; el alcance es únicamente su exposición 13F.",
+        "en": "SEC legal identity verified and 73 quarters of located filing history. The original Q2 table contains 345 normalized securities. One reporting unit is selected per group; scope is limited to its 13F exposure."
+      },
+      "inclusion_date": "2026-09-06",
+      "status": "ACTIVE",
+      "filing_expected": true,
+      "notes": {
+        "es": "Solo valores 13F; no representa la cartera completa ni acredita habilidad.",
+        "en": "13F securities only; not the full portfolio or evidence of skill."
+      },
+      "economic_group_id": "bamco",
+      "source_url": "https://data.sec.gov/submissions/CIK0001017918.json",
+      "pilot": false,
+      "history_quarters": 73
+    },
+    {
+      "manager_id": "brown-advisory",
+      "display_name": "Brown Advisory",
+      "legal_name": "BROWN ADVISORY INC",
+      "CIK": "0001345929",
+      "manager_type": "asset_manager",
+      "inclusion_reason": {
+        "es": "Identidad legal verificada en SEC y 65 trimestres de historial localizado. La tabla Q2 original contiene 1447 valores normalizados. Se selecciona una sola unidad declarante del grupo; el alcance es únicamente su exposición 13F.",
+        "en": "SEC legal identity verified and 65 quarters of located filing history. The original Q2 table contains 1447 normalized securities. One reporting unit is selected per group; scope is limited to its 13F exposure."
+      },
+      "inclusion_date": "2026-09-06",
+      "status": "ACTIVE",
+      "filing_expected": true,
+      "notes": {
+        "es": "Solo valores 13F; no representa la cartera completa ni acredita habilidad.",
+        "en": "13F securities only; not the full portfolio or evidence of skill."
+      },
+      "economic_group_id": "brown-advisory",
+      "source_url": "https://data.sec.gov/submissions/CIK0001345929.json",
+      "pilot": false,
+      "history_quarters": 65
+    },
+    {
+      "manager_id": "wcm",
+      "display_name": "WCM Investment Management",
+      "legal_name": "WCM INVESTMENT MANAGEMENT, LLC",
+      "CIK": "0001061186",
+      "manager_type": "asset_manager",
+      "inclusion_reason": {
+        "es": "Identidad legal verificada en SEC y 114 trimestres de historial localizado. La tabla Q2 original contiene 266 valores normalizados. Se selecciona una sola unidad declarante del grupo; el alcance es únicamente su exposición 13F.",
+        "en": "SEC legal identity verified and 114 quarters of located filing history. The original Q2 table contains 266 normalized securities. One reporting unit is selected per group; scope is limited to its 13F exposure."
+      },
+      "inclusion_date": "2026-09-06",
+      "status": "ACTIVE",
+      "filing_expected": true,
+      "notes": {
+        "es": "Solo valores 13F; no representa la cartera completa ni acredita habilidad.",
+        "en": "13F securities only; not the full portfolio or evidence of skill."
+      },
+      "economic_group_id": "wcm",
+      "source_url": "https://data.sec.gov/submissions/CIK0001061186.json",
+      "pilot": false,
+      "history_quarters": 114
+    },
+    {
+      "manager_id": "cantillon",
+      "display_name": "Cantillon Capital",
+      "legal_name": "CANTILLON CAPITAL MANAGEMENT LLC",
+      "CIK": "0001279936",
+      "manager_type": "asset_manager",
+      "inclusion_reason": {
+        "es": "Identidad legal verificada en SEC y 91 trimestres de historial localizado. La tabla Q2 original contiene 27 valores normalizados. Se selecciona una sola unidad declarante del grupo; el alcance es únicamente su exposición 13F.",
+        "en": "SEC legal identity verified and 91 quarters of located filing history. The original Q2 table contains 27 normalized securities. One reporting unit is selected per group; scope is limited to its 13F exposure."
+      },
+      "inclusion_date": "2026-09-06",
+      "status": "ACTIVE",
+      "filing_expected": true,
+      "notes": {
+        "es": "Solo valores 13F; no representa la cartera completa ni acredita habilidad.",
+        "en": "13F securities only; not the full portfolio or evidence of skill."
+      },
+      "economic_group_id": "cantillon",
+      "source_url": "https://data.sec.gov/submissions/CIK0001279936.json",
+      "pilot": false,
+      "history_quarters": 91
+    },
+    {
+      "manager_id": "sands",
+      "display_name": "Sands Capital",
+      "legal_name": "SANDS CAPITAL MANAGEMENT, LLC",
+      "CIK": "0001020066",
+      "manager_type": "asset_manager",
+      "inclusion_reason": {
+        "es": "Identidad legal verificada en SEC y 110 trimestres de historial localizado. La tabla Q2 original contiene 71 valores normalizados. Se selecciona una sola unidad declarante del grupo; el alcance es únicamente su exposición 13F.",
+        "en": "SEC legal identity verified and 110 quarters of located filing history. The original Q2 table contains 71 normalized securities. One reporting unit is selected per group; scope is limited to its 13F exposure."
+      },
+      "inclusion_date": "2026-09-06",
+      "status": "ACTIVE",
+      "filing_expected": true,
+      "notes": {
+        "es": "Solo valores 13F; no representa la cartera completa ni acredita habilidad.",
+        "en": "13F securities only; not the full portfolio or evidence of skill."
+      },
+      "economic_group_id": "sands",
+      "source_url": "https://data.sec.gov/submissions/CIK0001020066.json",
+      "pilot": false,
+      "history_quarters": 110
+    },
+    {
+      "manager_id": "fisher",
+      "display_name": "Fisher Asset Management",
+      "legal_name": "Fisher Asset Management, LLC",
+      "CIK": "0000850529",
+      "manager_type": "asset_manager",
+      "inclusion_reason": {
+        "es": "Identidad legal verificada en SEC y 110 trimestres de historial localizado. La tabla Q2 original contiene 1037 valores normalizados. Se selecciona una sola unidad declarante del grupo; el alcance es únicamente su exposición 13F.",
+        "en": "SEC legal identity verified and 110 quarters of located filing history. The original Q2 table contains 1037 normalized securities. One reporting unit is selected per group; scope is limited to its 13F exposure."
+      },
+      "inclusion_date": "2026-09-06",
+      "status": "ACTIVE",
+      "filing_expected": true,
+      "notes": {
+        "es": "Solo valores 13F; no representa la cartera completa ni acredita habilidad.",
+        "en": "13F securities only; not the full portfolio or evidence of skill."
+      },
+      "economic_group_id": "fisher",
+      "source_url": "https://data.sec.gov/submissions/CIK0000850529.json",
+      "pilot": false,
+      "history_quarters": 110
+    },
+    {
+      "manager_id": "eagle-capital",
+      "display_name": "Eagle Capital",
+      "legal_name": "EAGLE CAPITAL MANAGEMENT LLC",
+      "CIK": "0000945631",
+      "manager_type": "asset_manager",
+      "inclusion_reason": {
+        "es": "Identidad legal verificada en SEC y 110 trimestres de historial localizado. La tabla Q2 original contiene 56 valores normalizados. Se selecciona una sola unidad declarante del grupo; el alcance es únicamente su exposición 13F.",
+        "en": "SEC legal identity verified and 110 quarters of located filing history. The original Q2 table contains 56 normalized securities. One reporting unit is selected per group; scope is limited to its 13F exposure."
+      },
+      "inclusion_date": "2026-09-06",
+      "status": "ACTIVE",
+      "filing_expected": true,
+      "notes": {
+        "es": "Solo valores 13F; no representa la cartera completa ni acredita habilidad.",
+        "en": "13F securities only; not the full portfolio or evidence of skill."
+      },
+      "economic_group_id": "eagle-capital",
+      "source_url": "https://data.sec.gov/submissions/CIK0000945631.json",
+      "pilot": false,
+      "history_quarters": 110
+    },
+    {
+      "manager_id": "greenhaven",
+      "display_name": "Greenhaven Associates",
+      "legal_name": "GREENHAVEN ASSOCIATES INC",
+      "CIK": "0000846222",
+      "manager_type": "asset_manager",
+      "inclusion_reason": {
+        "es": "Identidad legal verificada en SEC y 110 trimestres de historial localizado. La tabla Q2 original contiene 28 valores normalizados. Se selecciona una sola unidad declarante del grupo; el alcance es únicamente su exposición 13F.",
+        "en": "SEC legal identity verified and 110 quarters of located filing history. The original Q2 table contains 28 normalized securities. One reporting unit is selected per group; scope is limited to its 13F exposure."
+      },
+      "inclusion_date": "2026-09-06",
+      "status": "ACTIVE",
+      "filing_expected": true,
+      "notes": {
+        "es": "Solo valores 13F; no representa la cartera completa ni acredita habilidad.",
+        "en": "13F securities only; not the full portfolio or evidence of skill."
+      },
+      "economic_group_id": "greenhaven",
+      "source_url": "https://data.sec.gov/submissions/CIK0000846222.json",
+      "pilot": true,
+      "history_quarters": 110
+    },
+    {
+      "manager_id": "abrams",
+      "display_name": "Abrams Capital",
+      "legal_name": "ABRAMS CAPITAL MANAGEMENT, L.P.",
+      "CIK": "0001358706",
+      "manager_type": "hedge_fund",
+      "inclusion_reason": {
+        "es": "Identidad legal verificada en SEC y 82 trimestres de historial localizado. La tabla Q2 original contiene 11 valores normalizados. Se selecciona una sola unidad declarante del grupo; el alcance es únicamente su exposición 13F.",
+        "en": "SEC legal identity verified and 82 quarters of located filing history. The original Q2 table contains 11 normalized securities. One reporting unit is selected per group; scope is limited to its 13F exposure."
+      },
+      "inclusion_date": "2026-09-06",
+      "status": "ACTIVE",
+      "filing_expected": true,
+      "notes": {
+        "es": "Solo valores 13F; no representa la cartera completa ni acredita habilidad.",
+        "en": "13F securities only; not the full portfolio or evidence of skill."
+      },
+      "economic_group_id": "abrams",
+      "source_url": "https://data.sec.gov/submissions/CIK0001358706.json",
+      "pilot": false,
+      "history_quarters": 82
+    },
+    {
+      "manager_id": "himalaya",
+      "display_name": "Himalaya Capital",
+      "legal_name": "Himalaya Capital Management LLC",
+      "CIK": "0001709323",
+      "manager_type": "asset_manager",
+      "inclusion_reason": {
+        "es": "Identidad legal verificada en SEC y 35 trimestres de historial localizado. La tabla Q2 original contiene 8 valores normalizados. Se selecciona una sola unidad declarante del grupo; el alcance es únicamente su exposición 13F.",
+        "en": "SEC legal identity verified and 35 quarters of located filing history. The original Q2 table contains 8 normalized securities. One reporting unit is selected per group; scope is limited to its 13F exposure."
+      },
+      "inclusion_date": "2026-09-06",
+      "status": "ACTIVE",
+      "filing_expected": true,
+      "notes": {
+        "es": "Solo valores 13F; no representa la cartera completa ni acredita habilidad.",
+        "en": "13F securities only; not the full portfolio or evidence of skill."
+      },
+      "economic_group_id": "himalaya",
+      "source_url": "https://data.sec.gov/submissions/CIK0001709323.json",
+      "pilot": false,
+      "history_quarters": 35
+    },
+    {
+      "manager_id": "valueact",
+      "display_name": "ValueAct Capital",
+      "legal_name": "ValueAct Capital Management, L.P.",
+      "CIK": "0001351069",
+      "manager_type": "hedge_fund",
+      "inclusion_reason": {
+        "es": "Entidad de aviso conservada para trazabilidad. Su portada identifica al declarante receptor; no añade un gestor al denominador.",
+        "en": "Notice entity retained for traceability. Its cover identifies the receiving reporter; it does not add a manager to the denominator."
+      },
+      "inclusion_date": "2026-09-06",
+      "status": "NOTICE_ONLY",
+      "filing_expected": false,
+      "notes": {
+        "es": "Avisos Q1/Q2 remiten a ValueAct Holdings, L.P.; no se cuenta por separado.",
+        "en": "Q1/Q2 notices refer to ValueAct Holdings, L.P.; not counted separately."
+      },
+      "economic_group_id": "valueact",
+      "source_url": "https://data.sec.gov/submissions/CIK0001351069.json",
+      "pilot": false,
+      "history_quarters": 80
+    },
+    {
+      "manager_id": "starboard",
+      "display_name": "Starboard Value",
+      "legal_name": "Starboard Value LP",
+      "CIK": "0001517137",
+      "manager_type": "hedge_fund",
+      "inclusion_reason": {
+        "es": "Identidad legal verificada en SEC y 61 trimestres de historial localizado. La tabla Q2 original contiene 22 valores normalizados. Se selecciona una sola unidad declarante del grupo; el alcance es únicamente su exposición 13F.",
+        "en": "SEC legal identity verified and 61 quarters of located filing history. The original Q2 table contains 22 normalized securities. One reporting unit is selected per group; scope is limited to its 13F exposure."
+      },
+      "inclusion_date": "2026-09-06",
+      "status": "ACTIVE",
+      "filing_expected": true,
+      "notes": {
+        "es": "Solo valores 13F; no representa la cartera completa ni acredita habilidad.",
+        "en": "13F securities only; not the full portfolio or evidence of skill."
+      },
+      "economic_group_id": "starboard",
+      "source_url": "https://data.sec.gov/submissions/CIK0001517137.json",
+      "pilot": false,
+      "history_quarters": 61
+    },
+    {
+      "manager_id": "engaged",
+      "display_name": "Engaged Capital",
+      "legal_name": "Engaged Capital LLC",
+      "CIK": "0001559771",
+      "manager_type": "hedge_fund",
+      "inclusion_reason": {
+        "es": "Identidad legal verificada en SEC y 51 trimestres de historial localizado. La tabla Q2 original contiene 10 valores normalizados. Se selecciona una sola unidad declarante del grupo; el alcance es únicamente su exposición 13F.",
+        "en": "SEC legal identity verified and 51 quarters of located filing history. The original Q2 table contains 10 normalized securities. One reporting unit is selected per group; scope is limited to its 13F exposure."
+      },
+      "inclusion_date": "2026-09-06",
+      "status": "ACTIVE",
+      "filing_expected": true,
+      "notes": {
+        "es": "Solo valores 13F; no representa la cartera completa ni acredita habilidad.",
+        "en": "13F securities only; not the full portfolio or evidence of skill."
+      },
+      "economic_group_id": "engaged",
+      "source_url": "https://data.sec.gov/submissions/CIK0001559771.json",
+      "pilot": false,
+      "history_quarters": 51
+    },
+    {
+      "manager_id": "pershing-square-capital-management",
+      "display_name": "Pershing Square Capital Management (notice)",
+      "legal_name": "Pershing Square Capital Management, L.P.",
+      "CIK": "0001336528",
+      "manager_type": "notice_entity",
+      "inclusion_reason": {
+        "es": "Entidad de aviso conservada para trazabilidad. Su portada identifica al declarante receptor; no añade un gestor al denominador.",
+        "en": "Notice entity retained for traceability. Its cover identifies the receiving reporter; it does not add a manager to the denominator."
+      },
+      "inclusion_date": "2026-09-06",
+      "status": "NOTICE_ONLY",
+      "filing_expected": false,
+      "notes": {
+        "es": "Q2 remite a Pershing Square Inc.; exposición no divulgada por separado.",
+        "en": "Q2 refers to Pershing Square Inc.; exposure not separately disclosed."
+      },
+      "economic_group_id": "pershing-square",
+      "source_url": "https://data.sec.gov/submissions/CIK0001336528.json",
+      "pilot": true,
+      "history_quarters": 83
+    },
+    {
+      "manager_id": "ruane-cunniff-lp",
+      "display_name": "Ruane Cunniff",
+      "legal_name": "Ruane, Cunniff & Goldfarb L.P.",
+      "CIK": "0001720792",
+      "manager_type": "asset_manager",
+      "inclusion_reason": {
+        "es": "Identidad legal verificada en SEC y 34 trimestres de historial localizado. La tabla Q2 original contiene 54 valores normalizados. Se selecciona una sola unidad declarante del grupo; el alcance es únicamente su exposición 13F.",
+        "en": "SEC legal identity verified and 34 quarters of located filing history. The original Q2 table contains 54 normalized securities. One reporting unit is selected per group; scope is limited to its 13F exposure."
+      },
+      "inclusion_date": "2026-09-06",
+      "status": "ACTIVE",
+      "filing_expected": true,
+      "notes": {
+        "es": "Entidad L.P. identificada en portada SEC Q2 2026; no se incorpora la antigua entidad Inc. al recuento.",
+        "en": "L.P. entity identified on its SEC Q2 2026 cover; the former Inc. entity is not counted."
+      },
+      "economic_group_id": "ruane-cunniff",
+      "source_url": "https://data.sec.gov/submissions/CIK0001720792.json",
+      "pilot": false,
+      "history_quarters": 34
+    },
+    {
+      "manager_id": "valueact-holdings",
+      "display_name": "ValueAct Holdings",
+      "legal_name": "ValueAct Holdings, L.P.",
+      "CIK": "0001418814",
+      "manager_type": "hedge_fund",
+      "inclusion_reason": {
+        "es": "Identidad legal verificada en SEC y 73 trimestres de historial localizado. La tabla Q2 original contiene 18 valores normalizados. Se selecciona una sola unidad declarante del grupo; el alcance es únicamente su exposición 13F.",
+        "en": "SEC legal identity verified and 73 quarters of located filing history. The original Q2 table contains 18 normalized securities. One reporting unit is selected per group; scope is limited to its 13F exposure."
+      },
+      "inclusion_date": "2026-09-06",
+      "status": "ACTIVE",
+      "filing_expected": true,
+      "notes": {
+        "es": "Reporte receptor del aviso ValueAct Capital Management; una unidad de recuento.",
+        "en": "Receiving report for the ValueAct Capital Management notice; one counting unit."
+      },
+      "economic_group_id": "valueact",
+      "source_url": "https://data.sec.gov/submissions/CIK0001418814.json",
+      "pilot": false,
+      "history_quarters": 73
+    }
+  ],
+  "relationships": [
+    {
+      "type": "INCLUDED_REPORT",
+      "notice_manager_id": "pershing-square-capital-management",
+      "reporting_manager_id": "pershing-square-inc",
+      "quarter_end": "2026-06-30",
+      "source_url": "https://www.sec.gov/Archives/edgar/data/1336528/000117266126003777/0001172661-26-003777.txt",
+      "status": "VERIFIED"
+    },
+    {
+      "type": "INCLUDED_REPORT",
+      "notice_manager_id": "valueact",
+      "reporting_manager_id": "valueact-holdings",
+      "quarter_end": "2026-06-30",
+      "source_url": "https://www.sec.gov/Archives/edgar/data/1351069/000135106926000006/0001351069-26-000006.txt",
+      "status": "VERIFIED"
+    }
+  ]
+}

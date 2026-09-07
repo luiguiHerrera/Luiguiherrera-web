@@ -1,0 +1,312 @@
+{
+  "STATE": "PRODUCTION_CANDIDATE_V2_LOCAL",
+  "BASE_COMMIT": "636cb73fb0fe4d2b28ad96cb7185f8c07d8f895b",
+  "TREND_COUNT": 15,
+  "TREND_SCOPE": "15 KEEP; 0 MERGE; 0 REMOVE. Scope clarification for urban infrastructure in ES/EN; phases and evidence unchanged.",
+  "UNIVERSE_VERSION": "v1",
+  "UNIVERSE_SIZE": 44,
+  "DISCLOSED_FILERS": 43,
+  "POSITION_DENOMINATOR": 43,
+  "COVERAGE": {
+    "numerator": 43,
+    "denominator": 44,
+    "percent": 97.72727272727273,
+    "display_es": "97,7%",
+    "display_en": "97.7%"
+  },
+  "POSITION_AGGREGATION": "TRACEABLE; current usable long SH positions; issuer manager union; share classes kept separate",
+  "FIRST_EAGLE_PUBLIC_HANDLING": {
+    "expected_member": true,
+    "current_q2_usable": false,
+    "reason": "AMBIGUOUS_ADDITIVE_AMENDMENT",
+    "included_in_disclosed_denominator": false,
+    "contributes_positions": false,
+    "interpreted_as_zero_holdings": false,
+    "published_movements": false
+  },
+  "MOVEMENT_PUBLICATION": "REVIEW_PENDING",
+  "MOVEMENT_UI_PRESENT": false,
+  "MOVEMENT_FIELDS_PUBLIC": [],
+  "TRENDS_V2_1_STATUS": "BLOCKED; internal engine and evidence retained, separate from v2 readiness",
+  "PUBLIC_DATA_TRACEABILITY": "PASS; current positions independent of previous quarter and comparison outputs; public allowlist enforced on server; source belongs to an eligible Q2 holding",
+  "FAIL_CLOSED": "PASS; any non-READY gate hides every movement view; unknown or blocked fields including nested payloads rejected; inconsistent or unavailable coverage withholds rows",
+  "TESTS": {
+    "status": "PASS",
+    "node": 221,
+    "xml": 7,
+    "new_release_scope_tests": 10,
+    "failures": 0
+  },
+  "TYPECHECK": "PASS",
+  "LINT": {
+    "status": "PASS",
+    "errors": 0,
+    "preexisting_warnings": 18,
+    "scope_warnings": 0
+  },
+  "BUILD": "PASS",
+  "GIT_DIFF_CHECK": "PASS",
+  "ES_VALIDATION": "PASS; 17 routes",
+  "EN_VALIDATION": "PASS; 17 routes",
+  "MOBILE_VALIDATION": {
+    "status": "PASS",
+    "widths": [
+      320,
+      375,
+      390,
+      768
+    ],
+    "locales": [
+      "es",
+      "en"
+    ],
+    "horizontal_overflow": false,
+    "dedicated_positions_list": true
+  },
+  "DESKTOP_VALIDATION": {
+    "status": "PASS",
+    "widths": [
+      1280,
+      1920
+    ],
+    "locales": [
+      "es",
+      "en"
+    ],
+    "horizontal_overflow": false,
+    "columns": 5
+  },
+  "SNAPSHOT_REPRODUCIBLE": "PASS; snapshot and manifest reproduced offline; SEC source hashes retained; independent XML verification passed",
+  "FILES_CHANGED": [
+    "components/trends/CapitalDisclosureSection.tsx",
+    "components/trends/CapitalDisclosureTable.tsx",
+    "components/trends/TrendDetailPage.tsx",
+    "components/trends/TrendsExplorer.tsx",
+    "components/trends/TrendsMethodologyPage.tsx",
+    "docs/trends/implementation.md",
+    "lib/trends/capital/copy.ts",
+    "lib/trends/copy.ts",
+    "lib/trends/methodology-copy.ts",
+    "lib/trends/trends-content.ts",
+    "lib/trends/trends.test.tsx",
+    "scripts/validate-trends-http.mts"
+  ],
+  "FILES_CREATED": [
+    "docs/trends/production-candidate-v2-validation.json",
+    "docs/trends/production-candidate-v2.md",
+    "lib/trends/capital/positions.ts",
+    "lib/trends/capital/public-capital.test.tsx",
+    "lib/trends/capital/public-capital.ts",
+    "lib/trends/capital/public-contract.ts"
+  ],
+  "KNOWN_LIMITATIONS": [
+    "13F is delayed and incomplete; the universe is an explicit analytical selection, not representative of all managers.",
+    "First Eagle remains expected but Q2 unavailable; published holdings coverage is 43/44.",
+    "13 verified ticker mappings; unresolved mappings are not invented.",
+    "Only positions and overlap are public. 8137 indeterminate comparisons and two reviewed cases remain internal.",
+    "SEC retrieval remains manual and keeps its actual retrieval time."
+  ],
+  "PRODUCTION_READINESS": "PASS",
+  "NEXT_RECOMMENDED_STEP": "Review and approve the local positions-only v2 candidate for eventual publication; keep TRENDS_V2_1_MOVEMENTS separate.",
+  "HTTP_VALIDATION": {
+    "state": "PASS",
+    "routes": 34,
+    "missing_routes": "404",
+    "locales": [
+      "es",
+      "en"
+    ],
+    "canonical": "PASS",
+    "hreflang": "PASS",
+    "structured_data": "PASS",
+    "headings": "PASS",
+    "anchors": "PASS",
+    "positions_only_html_and_rsc": "PASS"
+  },
+  "PUBLIC_PAYLOAD": {
+    "as_of": "2026-09-06T20:11:49.338122+00:00",
+    "quarter_end": "2026-06-30",
+    "position_rows": 2716,
+    "alphabet_issuer_count": 32,
+    "public_table_payload_bytes": 2911,
+    "public_metadata_and_views_bytes": 3207,
+    "uncompressed_internal_snapshot_bytes": 41813431,
+    "rows": [
+      {
+        "ticker_verified": "GOOGL",
+        "manager_count": 28,
+        "eligible_disclosed_managers": 43,
+        "percent_disclosed": 65.11627906976744
+      },
+      {
+        "ticker_verified": "TSM",
+        "manager_count": 25,
+        "eligible_disclosed_managers": 43,
+        "percent_disclosed": 58.139534883720934
+      },
+      {
+        "ticker_verified": "V",
+        "manager_count": 25,
+        "eligible_disclosed_managers": 43,
+        "percent_disclosed": 58.139534883720934
+      },
+      {
+        "ticker_verified": "AMZN",
+        "manager_count": 24,
+        "eligible_disclosed_managers": 43,
+        "percent_disclosed": 55.81395348837209
+      },
+      {
+        "ticker_verified": "META",
+        "manager_count": 24,
+        "eligible_disclosed_managers": 43,
+        "percent_disclosed": 55.81395348837209
+      },
+      {
+        "ticker_verified": "MSFT",
+        "manager_count": 24,
+        "eligible_disclosed_managers": 43,
+        "percent_disclosed": 55.81395348837209
+      },
+      {
+        "ticker_verified": "GOOG",
+        "manager_count": 20,
+        "eligible_disclosed_managers": 43,
+        "percent_disclosed": 46.51162790697674
+      },
+      {
+        "ticker_verified": "COF",
+        "manager_count": 18,
+        "eligible_disclosed_managers": 43,
+        "percent_disclosed": 41.86046511627907
+      }
+    ],
+    "allowed": {
+      "root": [
+        "quarter_end",
+        "as_of",
+        "quality",
+        "freshness",
+        "refresh_failed",
+        "universe_name",
+        "universe_version",
+        "universe_size",
+        "coverage",
+        "views"
+      ],
+      "coverage": [
+        "disclosed_filers",
+        "percent"
+      ],
+      "view": [
+        "id",
+        "rows"
+      ],
+      "position": [
+        "security_id",
+        "issuer",
+        "issuer_id",
+        "ticker_verified",
+        "security_class",
+        "manager_count",
+        "eligible_disclosed_managers",
+        "percent_disclosed",
+        "theme_links",
+        "filing_source"
+      ]
+    },
+    "blocked": [
+      "movement",
+      "movement_count",
+      "increase_count",
+      "decrease_count",
+      "new_count",
+      "exit_count",
+      "disagreement_count",
+      "movement_rank",
+      "movements",
+      "increased",
+      "reduced",
+      "new",
+      "exited",
+      "indeterminate",
+      "compared",
+      "comparable",
+      "manager_ids",
+      "previous_shares",
+      "current_shares",
+      "raw_delta",
+      "corporate_action_adjustment",
+      "normalized_previous_shares",
+      "review_source",
+      "confidence",
+      "previous_sources",
+      "current_sources",
+      "reported_value",
+      "accession_number"
+    ]
+  },
+  "BROWSER_VALIDATION": {
+    "environment": "Local production build on 127.0.0.1:3010",
+    "index_cases": 12,
+    "detail_methodology_cases": 24,
+    "widths": [
+      320,
+      375,
+      390,
+      768,
+      1280,
+      1920
+    ],
+    "global_or_capital_text_overflow": false,
+    "h1_per_route": 1,
+    "capital_rows": 8,
+    "movement_tabs": 0,
+    "coverage_count_per_index": 1,
+    "filters": [
+      4,
+      4,
+      1,
+      2,
+      2,
+      2,
+      15
+    ],
+    "language_switcher": "PASS; EN AI to matching ES AI detail",
+    "console_errors_or_warnings_observed": [],
+    "visual_checks": [
+      "ES capital 1280",
+      "EN capital 320",
+      "EN radar 768",
+      "ES hero and capital 1920"
+    ]
+  },
+  "CAPITAL_EVIDENCE_VERIFICATION": {
+    "status": "PASS",
+    "independent_managers": 43,
+    "security_rows": 3055,
+    "current_long_share_rows": 2716,
+    "manual_sample_securities": 5,
+    "reviewed_movements_retained": 2
+  },
+  "PRESERVED_SHA256": {
+    "lib/trends/capital/config.json": "9e0d133f00f83f82c286ef610a10a0b38bf85a918ad3cd149831d46ceb0fa089",
+    "lib/trends/capital/generated/corporate-actions-evidence.json.gz": "f6912e5446ec14afb0f002567447618535d106a4da97d0d62fba9de5be39862d",
+    "lib/trends/capital/generated/issuer-evidence.json": "c316cf6943ebcdb0dcf2a68683d49ad5f1ab79ec8f929e966669bbb3dedefa25",
+    "lib/trends/capital/generated/issuer-reports-evidence.json.gz": "b7da14bbda5d9c829c3be059b1b3b51bba7f307378a600748ae51ceef460d348",
+    "lib/trends/capital/generated/manifest.json": "d833af9c74667844508a504e2b60a5b1f4edc13fca4a8dfe81f9ddc9b2f293be",
+    "lib/trends/capital/generated/refresh-status.json": "476920767387e31c8255b8442b30dee82b1a87204c99f22f936c0db506a77d14",
+    "lib/trends/capital/generated/sec-evidence.json.gz": "91c738283edfb0f84ad2dcc032b26ed960aef03d42716c9859fb8f13c8b86ecb",
+    "lib/trends/capital/generated/snapshot.json.gz": "42d0ac9e2168dec775d589d255c13052fcf757f83e89c688ebbd117b3490274a",
+    "lib/trends/capital/normalize.ts": "ed09bcebd97df5f64424054fb341e85587aede50f8a4abacc3fc1e8a6b3311dc",
+    "lib/trends/capital/types.ts": "552268edd6bf12aa3d694d617e56c6337acacbc92e6741a3e3a9e33fb538a13e",
+    "lib/trends/capital/universe.json": "cd5cfb1ef808cb023f340e82f77b41e7799a86822eaad7aa98a9313f62d971fa",
+    "lib/trends/catalog.ts": "6bad52c9d8059675ce5bc840d5ee55142e58d652a6b621a5b6ea6acf7ed5c1cc",
+    "lib/trends/evidence.ts": "a0faa3b112f348f593e740aa0b6cbfbeb4aeac11def0a1b829dbeceee38d5594"
+  },
+  "UNRELATED_FILES_PRESERVED": true,
+  "COMMIT_CREATED": false,
+  "PUSHED": false,
+  "DEPLOYED": false,
+  "VALIDATED_AT_UTC": "2026-09-07T00:50:23Z"
+}

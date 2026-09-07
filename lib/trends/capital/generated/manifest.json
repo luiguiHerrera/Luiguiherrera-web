@@ -1,0 +1,321 @@
+{
+  "schema_version": 2,
+  "universe_id": "lhi-superinvestor-universe-v1",
+  "registry_sha256": "81710fc720073aa49f6257a8a5bdacab6fecac4c2f6bd36737db0dbbe7cbf899",
+  "snapshot_sha256": "42d0ac9e2168dec775d589d255c13052fcf757f83e89c688ebbd117b3490274a",
+  "quarter_end": "2026-06-30",
+  "previous_quarter_end": "2026-03-31",
+  "as_of": "2026-09-06T20:11:49.338122+00:00",
+  "source": {
+    "name": "SEC EDGAR",
+    "url": "https://www.sec.gov/edgar/search/"
+  },
+  "freshness": "current",
+  "quality": "partial",
+  "coverage": {
+    "universe_size": 44,
+    "expected_filers": 44,
+    "disclosed_filers": 43,
+    "notice_only": 2,
+    "pending": 0,
+    "failed": 1,
+    "eligible_disclosed_managers": 43,
+    "percent": 97.72727272727273,
+    "comparable": 2
+  },
+  "movement_publication": "REVIEW_PENDING",
+  "movement_counts": {
+    "NEW": 0,
+    "INCREASED": 1,
+    "UNCHANGED": 0,
+    "REDUCED": 1,
+    "EXITED": 0,
+    "INDETERMINATE": 8137
+  },
+  "managers": [
+    {
+      "manager_id": "berkshire-hathaway",
+      "status": "available",
+      "confidential": false,
+      "issues": []
+    },
+    {
+      "manager_id": "bridgewater-associates",
+      "status": "available",
+      "confidential": false,
+      "issues": []
+    },
+    {
+      "manager_id": "pershing-square-inc",
+      "status": "available",
+      "confidential": true,
+      "issues": []
+    },
+    {
+      "manager_id": "baupost",
+      "status": "available",
+      "confidential": false,
+      "issues": []
+    },
+    {
+      "manager_id": "third-point",
+      "status": "available",
+      "confidential": false,
+      "issues": []
+    },
+    {
+      "manager_id": "duquesne",
+      "status": "available",
+      "confidential": true,
+      "issues": []
+    },
+    {
+      "manager_id": "lone-pine",
+      "status": "available",
+      "confidential": true,
+      "issues": []
+    },
+    {
+      "manager_id": "fundsmith",
+      "status": "available",
+      "confidential": false,
+      "issues": []
+    },
+    {
+      "manager_id": "dodge-cox",
+      "status": "available",
+      "confidential": false,
+      "issues": []
+    },
+    {
+      "manager_id": "appaloosa",
+      "status": "available",
+      "confidential": true,
+      "issues": []
+    },
+    {
+      "manager_id": "tiger-global",
+      "status": "available",
+      "confidential": true,
+      "issues": []
+    },
+    {
+      "manager_id": "coatue",
+      "status": "available",
+      "confidential": true,
+      "issues": []
+    },
+    {
+      "manager_id": "viking",
+      "status": "available",
+      "confidential": false,
+      "issues": []
+    },
+    {
+      "manager_id": "maverick",
+      "status": "available",
+      "confidential": true,
+      "issues": []
+    },
+    {
+      "manager_id": "akre",
+      "status": "available",
+      "confidential": true,
+      "issues": []
+    },
+    {
+      "manager_id": "lindsell-train",
+      "status": "available",
+      "confidential": true,
+      "issues": []
+    },
+    {
+      "manager_id": "fairfax",
+      "status": "available",
+      "confidential": true,
+      "issues": []
+    },
+    {
+      "manager_id": "markel",
+      "status": "available",
+      "confidential": false,
+      "issues": []
+    },
+    {
+      "manager_id": "loews",
+      "status": "available",
+      "confidential": false,
+      "issues": []
+    },
+    {
+      "manager_id": "pzena",
+      "status": "available",
+      "confidential": false,
+      "issues": []
+    },
+    {
+      "manager_id": "southeastern",
+      "status": "available",
+      "confidential": true,
+      "issues": []
+    },
+    {
+      "manager_id": "tweedy-browne",
+      "status": "available",
+      "confidential": false,
+      "issues": []
+    },
+    {
+      "manager_id": "diamond-hill",
+      "status": "available",
+      "confidential": false,
+      "issues": []
+    },
+    {
+      "manager_id": "yacktman",
+      "status": "available",
+      "confidential": false,
+      "issues": []
+    },
+    {
+      "manager_id": "ariel",
+      "status": "available",
+      "confidential": false,
+      "issues": []
+    },
+    {
+      "manager_id": "harris",
+      "status": "available",
+      "confidential": false,
+      "issues": []
+    },
+    {
+      "manager_id": "davis",
+      "status": "available",
+      "confidential": true,
+      "issues": []
+    },
+    {
+      "manager_id": "first-eagle",
+      "status": "unavailable",
+      "confidential": true,
+      "issues": [
+        "ambiguous_additive_amendment"
+      ]
+    },
+    {
+      "manager_id": "gardner-russo-quinn",
+      "status": "available",
+      "confidential": false,
+      "issues": []
+    },
+    {
+      "manager_id": "polen",
+      "status": "available",
+      "confidential": true,
+      "issues": []
+    },
+    {
+      "manager_id": "bamco",
+      "status": "available",
+      "confidential": true,
+      "issues": []
+    },
+    {
+      "manager_id": "brown-advisory",
+      "status": "available",
+      "confidential": false,
+      "issues": []
+    },
+    {
+      "manager_id": "wcm",
+      "status": "available",
+      "confidential": false,
+      "issues": []
+    },
+    {
+      "manager_id": "cantillon",
+      "status": "available",
+      "confidential": false,
+      "issues": []
+    },
+    {
+      "manager_id": "sands",
+      "status": "available",
+      "confidential": false,
+      "issues": []
+    },
+    {
+      "manager_id": "fisher",
+      "status": "available",
+      "confidential": false,
+      "issues": []
+    },
+    {
+      "manager_id": "eagle-capital",
+      "status": "available",
+      "confidential": true,
+      "issues": []
+    },
+    {
+      "manager_id": "greenhaven",
+      "status": "available",
+      "confidential": true,
+      "issues": []
+    },
+    {
+      "manager_id": "abrams",
+      "status": "available",
+      "confidential": true,
+      "issues": []
+    },
+    {
+      "manager_id": "himalaya",
+      "status": "available",
+      "confidential": false,
+      "issues": []
+    },
+    {
+      "manager_id": "valueact",
+      "status": "not_separately_disclosed",
+      "confidential": true,
+      "issues": [
+        "reporting_manager_notice"
+      ],
+      "included_report_source": "https://www.sec.gov/Archives/edgar/data/1418814/000141881426000003/0001418814-26-000003.txt"
+    },
+    {
+      "manager_id": "starboard",
+      "status": "available",
+      "confidential": true,
+      "issues": []
+    },
+    {
+      "manager_id": "engaged",
+      "status": "available",
+      "confidential": true,
+      "issues": []
+    },
+    {
+      "manager_id": "pershing-square-capital-management",
+      "status": "not_separately_disclosed",
+      "confidential": true,
+      "issues": [
+        "reporting_manager_notice"
+      ],
+      "included_report_source": "https://www.sec.gov/Archives/edgar/data/2026053/000117266126003790/0001172661-26-003790.txt"
+    },
+    {
+      "manager_id": "ruane-cunniff-lp",
+      "status": "available",
+      "confidential": true,
+      "issues": []
+    },
+    {
+      "manager_id": "valueact-holdings",
+      "status": "available",
+      "confidential": false,
+      "issues": []
+    }
+  ]
+}

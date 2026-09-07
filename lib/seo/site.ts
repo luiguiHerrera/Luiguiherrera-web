@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { trendCatalog, trendPath, trendsMethodologyPath } from "../trends/catalog.ts";
 import {
   bilingualRoutePairs,
   getTranslatedPathname,
@@ -50,6 +51,10 @@ export type SeoRouteDefinition = {
 };
 
 const seoRouteContent: readonly Omit<SeoRouteDefinition, "alternatePathname">[] = [
+  ...(["es", "en"] as const).flatMap((language) => [
+    { pathname: trendsMethodologyPath(language), language, title: language === "es" ? "Metodología de Tendencias | Evidencia y datos 13F" : "Trends methodology | Evidence and 13F data", description: language === "es" ? "Criterios editoriales, universo de gestores, tratamiento de enmiendas y límites de los datos SEC EDGAR." : "Editorial criteria, manager universe, amendment handling and the limits of SEC EDGAR data." },
+    ...trendCatalog.map((trend) => ({ pathname: trendPath(trend, language), language, title: `${trend.name[language]} | ${language === "es" ? "Tendencias" : "Trends"}`, description: language === "es" ? `Analiza ${trend.name.es.toLowerCase()}: cambio, evidencia, cadena de valor, capital divulgado, vehículos y riesgos que podrían invalidar la hipótesis.` : `Explore ${trend.name.en.toLowerCase()}: change, evidence, the value chain, disclosed capital, vehicles and risks that could invalidate the hypothesis.` })),
+  ]),
   {
     pathname: "/",
     language: "es",
@@ -227,16 +232,16 @@ const seoRouteContent: readonly Omit<SeoRouteDefinition, "alternatePathname">[] 
   {
     pathname: "/tendencias",
     language: "es",
-    title: "Tendencias | Hipótesis de inversión prudentes",
+    title: "Tendencias | Cambios estructurales, evidencia y capital divulgado",
     description:
-      "Marco educativo para convertir tendencias como inteligencia artificial, robótica, energía, ciberseguridad, cripto e infraestructura en hipótesis de inversión prudentes.",
+      "Explora cambios estructurales, evidencia, captura de valor, posiciones 13F divulgadas y riesgos para construir hipótesis de inversión prudentes.",
   },
   {
     pathname: "/en/trends",
     language: "en",
-    title: "Trends: from the world to the portfolio | Market Lab",
+    title: "Trends | Structural change, evidence and disclosed capital",
     description:
-      "Explore what is changing in the world and turn trends into educational hypotheses without confusing narrative with investment.",
+      "Explore structural change, evidence, value capture, disclosed 13F holdings and risks to build prudent investment hypotheses.",
   },
   {
     pathname: "/recursos",

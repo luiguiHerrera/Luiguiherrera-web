@@ -1,3 +1,5 @@
+import { trendCatalog, trendPath, trendsMethodologyPath } from "../trends/catalog.ts";
+
 export const bilingualRoutePairs = [
   { es: "/", en: "/en" },
   { es: "/empezar", en: "/en/start" },
@@ -12,6 +14,8 @@ export const bilingualRoutePairs = [
   { es: "/informes", en: "/en/reports" },
   { es: "/niveles-estadisticos", en: "/en/statistical-levels" },
   { es: "/tendencias", en: "/en/trends" },
+  { es: trendsMethodologyPath("es"), en: trendsMethodologyPath("en") },
+  ...trendCatalog.map((trend) => ({ es: trendPath(trend, "es"), en: trendPath(trend, "en") })),
   { es: "/recursos", en: "/en/resources" },
   { es: "/metodologia", en: "/en/methodology" },
   { es: "/investigacion", en: "/en/research" },

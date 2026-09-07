@@ -1,0 +1,198 @@
+{
+  "STATE": "LOCAL_REVIEW_COMPLETE_WITH_DATA_BLOCKERS",
+  "BASE_COMMIT": "636cb73fb0fe4d2b28ad96cb7185f8c07d8f895b",
+  "TREND_COUNT": 15,
+  "TREND_COUNT_REVIEW": "15 KEEP; 0 MERGE; 0 REMOVE",
+  "TREND_CHANGES": "None in this phase. Space and critical materials were the two additions in the preceding phase.",
+  "UNIVERSE_VERSION": "v1",
+  "UNIVERSE_SIZE": 44,
+  "REGISTRY_ENTITIES": 48,
+  "EXPECTED_FILERS": 44,
+  "DISCLOSED_FILERS": 43,
+  "NOTICE_ONLY": 2,
+  "EXCLUDED_ENTITIES": 2,
+  "PENDING_FILERS": 0,
+  "FAILED_FILERS": 1,
+  "COVERAGE": {
+    "numerator": 43,
+    "denominator": 44,
+    "percent": 97.72727272727273,
+    "holdings_metric_denominator": 43
+  },
+  "PERSHING_CIK": {
+    "notice": "0001336528",
+    "reporting_parent": "0002026053"
+  },
+  "PERSHING_FILING_TYPE": {
+    "notice": "13F-NT",
+    "reporting_parent": "13F-HR"
+  },
+  "PERSHING_RESOLUTION": "VERIFIED INCLUDED_REPORT. Count parent once; PSCM is NOT_SEPARATELY_DISCLOSED. Q1/Q2 perimeter change remains indeterminate.",
+  "PILOT_10": "PASS before expansion; see pilot-validation.json",
+  "Q1_Q2_COMPARISON": {
+    "previous": "2026-03-31",
+    "current": "2026-06-30",
+    "reproducible": true,
+    "pairs": 8139,
+    "reviewed": 2,
+    "movement_counts": {
+      "NEW": 0,
+      "INCREASED": 1,
+      "UNCHANGED": 0,
+      "REDUCED": 1,
+      "EXITED": 0,
+      "INDETERMINATE": 8137
+    }
+  },
+  "CORPORATE_ACTION_HANDLING": "Explicit checks and source-backed reviews pinned to accessions and quantities; unresolved cases remain INDETERMINATE.",
+  "INDETERMINATE_COUNT": 8137,
+  "DOUBLE_COUNT_CHECK": "PASS: one reporting group, current holder IDs, issuer set union, no dollar weighting",
+  "AMENDMENT_CHECK": "PASS: Q1 First Eagle restatement replaces original; ambiguous Q2 amendment withheld",
+  "PUT_CALL_CHECK": "PASS",
+  "SHARE_CLASS_CHECK": "PASS: issue identity from CUSIP; GOOG/GOOGL separate",
+  "MISSING_FILING_CHECK": "PASS: no inferred exits",
+  "SEC_MANUAL_VERIFICATION": {
+    "status": "PASS",
+    "managers": [
+      "Berkshire Hathaway",
+      "Bridgewater Associates",
+      "Fundsmith"
+    ],
+    "securities": [
+      "AAPL",
+      "AXP",
+      "GOOG",
+      "GOOGL",
+      "MSFT"
+    ],
+    "movements": [
+      "Berkshire GOOG INCREASED",
+      "Bridgewater GOOG REDUCED"
+    ],
+    "edge_case": "First Eagle Q1 restatement and ambiguous Q2 additive amendment",
+    "independent_reconstruction": {
+      "managers": 43,
+      "security_rows": 3055,
+      "script": "scripts/verify-capital-evidence.py"
+    }
+  },
+  "SNAPSHOT_REPRODUCIBLE": "PASS: snapshot and manifest, retained SEC hashes, independent XML reconstruction",
+  "TESTS": {
+    "status": "PASS",
+    "node": 211,
+    "xml": 7,
+    "failures": 0
+  },
+  "TYPECHECK": "PASS",
+  "LINT": {
+    "status": "PASS",
+    "errors": 0,
+    "preexisting_warnings": 18,
+    "new_warnings": 0
+  },
+  "BUILD": "PASS",
+  "GIT_DIFF_CHECK": "PASS",
+  "ES_VALIDATION": "PASS: 17 routes",
+  "EN_VALIDATION": "PASS: 17 routes",
+  "HTTP_VALIDATION": {
+    "routes": 34,
+    "unknown_routes": "404",
+    "canonical": "PASS",
+    "hreflang": "PASS",
+    "structured_data": "PASS",
+    "headings": "PASS",
+    "anchors": "PASS"
+  },
+  "MOBILE_VALIDATION": {
+    "status": "PASS",
+    "widths": [
+      320,
+      375,
+      390,
+      768
+    ],
+    "global_horizontal_overflow": false,
+    "dedicated_capital_list": true
+  },
+  "DESKTOP_VALIDATION": {
+    "status": "PASS",
+    "widths": [
+      1280,
+      1920
+    ],
+    "global_horizontal_overflow": false
+  },
+  "BROWSER_INTERACTIONS": {
+    "filters": "PASS: 4/4/1/2/2/2; all 15",
+    "tabs": "PASS: pending state, End and ArrowRight wrap with matching focus",
+    "language_switcher": "PASS: EN AI detail to corresponding ES detail",
+    "methodology_and_detail_responsive_cases": 16,
+    "index_responsive_cases": 12,
+    "hydration": "No problems observed during navigation and interactions"
+  },
+  "FILES_CHANGED": [
+    "components/trends/CapitalDisclosureSection.tsx",
+    "components/trends/CapitalDisclosureTable.tsx",
+    "components/trends/TrendDetailPage.tsx",
+    "components/trends/TrendsMethodologyPage.tsx",
+    "docs/trends/implementation.md",
+    "lib/trends/capital/config.json",
+    "lib/trends/capital/copy.ts",
+    "lib/trends/capital/generated/manifest.json",
+    "lib/trends/capital/generated/sec-evidence.json.gz",
+    "lib/trends/capital/generated/snapshot.json.gz",
+    "lib/trends/capital/get-capital-data.ts",
+    "lib/trends/capital/normalize.test.ts",
+    "lib/trends/capital/normalize.ts",
+    "lib/trends/capital/types.ts",
+    "lib/trends/capital/universe.json",
+    "lib/trends/methodology-copy.ts",
+    "lib/trends/trends.test.tsx",
+    "package.json",
+    "scripts/build-capital-disclosures.mts",
+    "scripts/fetch-capital-disclosures.py",
+    "scripts/test-capital-xml.py"
+  ],
+  "FILES_CREATED": [
+    "docs/trends/pilot-validation.json",
+    "docs/trends/preproduction-review.md",
+    "docs/trends/preproduction-validation.json",
+    "docs/trends/universe-proposal.json",
+    "lib/trends/capital/audit.ts",
+    "lib/trends/capital/generated/corporate-actions-evidence.json.gz",
+    "lib/trends/capital/generated/issuer-reports-evidence.json.gz",
+    "lib/trends/capital/generated/refresh-status.json",
+    "lib/trends/capital/pipeline.test.ts",
+    "scripts/verify-capital-evidence.py"
+  ],
+  "FILE_COUNTS": {
+    "changed": 21,
+    "created": 10
+  },
+  "KNOWN_LIMITATIONS": [
+    "8137 quarterly comparisons lack sufficient review; all movement aggregates stay unpublished.",
+    "First Eagle Q2 additive amendment overlaps the original; current holdings withheld, expected denominator retained.",
+    "13 verified ticker mappings; other tickers remain unresolved.",
+    "Purposive analytical sample, not representative of all managers. Broader portfolios have more opportunities to overlap.",
+    "13F is delayed and incomplete; unknown confidentiality flags block movements.",
+    "Manual refresh only; no automation."
+  ],
+  "PRODUCTION_READINESS": "BLOCKED",
+  "PRODUCTION_BLOCKERS": [
+    "Complete source-backed review for the remaining movement comparisons before enabling aggregate movement views.",
+    "Resolve First Eagle Q2 amendment 0001325447-26-000033 without reinterpreting its declared amendment type."
+  ],
+  "NEXT_RECOMMENDED_STEP": "Resolve First Eagle from SEC evidence and extend the documented corporate-action review; keep movement aggregates closed until complete.",
+  "AS_OF": "2026-09-06T20:11:49.338122+00:00",
+  "SOURCE": {
+    "name": "SEC EDGAR",
+    "url": "https://www.sec.gov/edgar/search/"
+  },
+  "SEC_REFRESH_COMMAND": "npm run build:trends-13f",
+  "SEC_REFRESH_RESULT": "PASS; snapshot remains honestly partial",
+  "PUBLICATION_SCOPE": "Current-quarter disclosed long-security overlap only; no movement rankings or recommendations.",
+  "unrelated_files_preserved": true,
+  "commit_created": false,
+  "pushed": false,
+  "deployed": false
+}

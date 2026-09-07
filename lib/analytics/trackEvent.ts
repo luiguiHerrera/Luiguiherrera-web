@@ -1,4 +1,10 @@
 export type AnalyticsEvent =
+  | "trend_opened"
+  | "trend_filter_changed"
+  | "capital_tab_changed"
+  | "capital_company_opened"
+  | "trend_deep_dive_opened"
+  | "trends_methodology_opened"
   | "page_view"
   | "diagnostic_started"
   | "diagnostic_step_completed"
@@ -10,6 +16,12 @@ export type AnalyticsEvent =
 export type DashboardModuleId = "rates" | "sectors" | "vix" | "btc-flows" | "cross-signal-radar";
 
 type AnalyticsMetadata = {
+  trend_opened: { trend_id: string };
+  trend_filter_changed: { category: string };
+  capital_tab_changed: { tab: string };
+  capital_company_opened: { security_id: string };
+  trend_deep_dive_opened: { trend_id: string };
+  trends_methodology_opened: undefined;
   page_view: { path: string };
   diagnostic_started: undefined;
   diagnostic_step_completed: { step_index: number };
@@ -20,6 +32,12 @@ type AnalyticsMetadata = {
 };
 
 const allowedMetadataKeys: Record<AnalyticsEvent, readonly string[]> = {
+  trend_opened: ["trend_id"],
+  trend_filter_changed: ["category"],
+  capital_tab_changed: ["tab"],
+  capital_company_opened: ["security_id"],
+  trend_deep_dive_opened: ["trend_id"],
+  trends_methodology_opened: [],
   page_view: ["path"],
   diagnostic_started: [],
   diagnostic_step_completed: ["step_index"],

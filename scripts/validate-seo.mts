@@ -14,9 +14,11 @@ import {
 } from "../lib/reports/market-reports.ts";
 import { bilingualRoutePairs } from "../lib/i18n/language-pairs.ts";
 import { translatePathname } from "../lib/i18n/routes.ts";
+import { trendCatalog, trendPath, trendsMethodologyPath } from "../lib/trends/catalog.ts";
 import nextConfig from "../next.config.ts";
 
 const expectedStaticRoutes = [
+  ...(["es", "en"] as const).flatMap((locale) => [trendsMethodologyPath(locale), ...trendCatalog.map((trend) => trendPath(trend, locale))]),
   "/",
   "/en",
   "/empezar",
@@ -119,8 +121,9 @@ for (const pathname of ["/en/weekly-report"]) {
   }
 }
 
-if (bilingualRoutePairs.length !== 19) {
-  errors.push(`Expected 19 bilingual route pairs, found ${bilingualRoutePairs.length}`);
+const expectedPairCount = 19 + trendCatalog.length + 1;
+if (bilingualRoutePairs.length !== expectedPairCount) {
+  errors.push(`Expected ${expectedPairCount} bilingual route pairs, found ${bilingualRoutePairs.length}`);
 }
 
 for (const { es, en } of bilingualRoutePairs) {

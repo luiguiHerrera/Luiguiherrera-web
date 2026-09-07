@@ -1,0 +1,23 @@
+import { trendCatalog, type TrendDefinition } from "./catalog.ts";
+import { trendDetails, type TrendItem } from "./trends-content.ts";
+import { trendEvidence } from "./evidence.ts";
+
+const additions: Record<"es" | "en", Record<string, Pick<TrendItem, "short" | "changing" | "valueChain" | "capture" | "bullCase" | "bearCase" | "failure" | "nextStep">>> = {
+  es: {
+    space: { short: "Lanzamiento, conectividad y observación terrestre amplían las aplicaciones comerciales del espacio.", changing: "La actividad espacial conecta infraestructura orbital con servicios utilizados en tierra: comunicaciones, navegación y datos.", valueChain: "Lanzamiento, componentes, satélites, estaciones terrestres, procesamiento de datos y aplicaciones.", capture: "Podrían capturar valor operadores con demanda recurrente, fabricantes fiables y servicios con un uso medible en tierra.", bullCase: "Más capacidad y servicios útiles pueden ampliar el mercado accesible.", bearCase: "La intensidad de capital, los fallos técnicos y la competencia pueden diluir los retornos.", failure: "La hipótesis se debilita si no aparecen clientes recurrentes, si la capacidad supera la demanda o si operar deja de ser viable.", nextStep: "Distinguir contratos, capacidad operativa y proyectos todavía experimentales." },
+    "critical-materials": { short: "La electrificación y la tecnología dependen de cadenas de extracción, refino y reciclaje concentradas.", changing: "La seguridad de suministro importa junto con el volumen de demanda de minerales.", valueChain: "Exploración, extracción, refino, procesamiento, fabricación, recuperación y reciclaje.", capture: "La captura depende del coste de producción, la calidad del recurso, los permisos y la posición dentro del refino.", bullCase: "Diversificar suministros puede sostener inversión en capacidad y reciclaje.", bearCase: "Nuevos proyectos, sustitución tecnológica o menor demanda pueden presionar precios y márgenes.", failure: "La hipótesis falla si la oferta crece más deprisa, si aparece un sustituto o si los costes impiden producir con rentabilidad.", nextStep: "Separar el mineral, la jurisdicción y el eslabón de la cadena antes de estudiar una empresa." },
+  },
+  en: {
+    space: { short: "Launch, connectivity and Earth observation expand the commercial uses of space.", changing: "Space activity connects orbital infrastructure with services used on Earth: communications, navigation and data.", valueChain: "Launch, components, satellites, ground stations, data processing and applications.", capture: "Operators with recurring demand, reliable manufacturers and services with measurable use on Earth could capture value.", bullCase: "More capacity and useful services could expand the addressable market.", bearCase: "Capital intensity, technical failures and competition can dilute returns.", failure: "The hypothesis weakens if recurring customers fail to materialize, capacity exceeds demand or operations become unviable.", nextStep: "Distinguish contracts, operating capacity and projects that remain experimental." },
+    "critical-materials": { short: "Electrification and technology depend on concentrated mining, refining and recycling supply chains.", changing: "Supply security matters alongside the volume of mineral demand.", valueChain: "Exploration, mining, refining, processing, manufacturing, recovery and recycling.", capture: "Value capture depends on production costs, resource quality, permits and the position within refining.", bullCase: "Diversifying supply could sustain investment in capacity and recycling.", bearCase: "New projects, technological substitution or weaker demand can pressure prices and margins.", failure: "The hypothesis fails if supply grows faster, a substitute emerges or costs prevent profitable production.", nextStep: "Separate the mineral, jurisdiction and link in the chain before studying a company." },
+  },
+};
+export function getTrendDetail(definition: TrendDefinition, locale: "es" | "en") {
+  const existing = trendDetails[locale].find((trend) => trend.id === definition.id);
+  const added = additions[locale][definition.id];
+  if (!existing && !added) throw new Error(`Missing trend detail: ${definition.id}/${locale}`);
+  return { ...definition, ...(existing ?? added), name: definition.name[locale], observableVehicles: existing?.observableVehicles ?? [], risks: existing?.risks ?? ["regulacion", "competencia", "timing", "liquidez"] as TrendItem["risks"], evidenceNote: trendEvidence[definition.id] };
+}
+export function getRadarTrends(locale: "es" | "en") {
+  return trendCatalog.map((definition) => ({ ...definition, short: getTrendDetail(definition, locale).short }));
+}
