@@ -272,6 +272,9 @@ def earnings_schedule_label(item):
     if item.get("timeConfirmationStatus") != "confirmed":
         return "Fecha confirmada · hora por confirmar" if item.get("timeConfirmationStatus") == "unconfirmed" else "Fecha confirmada · hora no registrada"
     time_label = " · ".join(filter(None, [item.get("originalTime"), item.get("originalTimeZone"), item.get("displayTime")]))
+    if item.get("timeKind") == "earnings-call" and time_label:
+        release = "Resultados antes de la apertura de EE. UU." if item.get("session") == "before-open" else "Resultados después del cierre de EE. UU."
+        return f"{release} · Call {item['originalTime']} {item['originalTimeZone']} · {item['displayTime']}"
     if time_label:
         return time_label
     if item.get("session") == "before-open":
@@ -283,6 +286,12 @@ def earnings_schedule_label(item):
 
 def add_earnings_trace(story, items, styles):
     for item in items:
+        if item.get("impliedMovePct") is None:
+            story.append(PDF["KeepTogether"]([
+                p(f"{item['company']} ({item['ticker']})", styles["h3"]),
+                PDF["Paragraph"](f'<link href="{html.escape(item["dateTimeSourceHref"], quote=True)}">{paragraph_text(item["dateTimeSourceLabel"])} · {paragraph_text(item["dateTimeSourceHref"])}</link> · {paragraph_text(earnings_schedule_label(item))}', styles["small"]),
+            ]))
+            continue
         lines = [
             f"Movimiento implícito: {item['impliedMoveProvider']} — {item['ticker']} · {item['impliedMoveProviderHref']} · consulta {item['consultedAt']}",
             f"Fecha y hora: {item['dateTimeSourceLabel']} · {item['dateTimeSourceHref']} · {earnings_schedule_label(item)}",
@@ -795,11 +804,17 @@ def add_section(story, section, styles, root, published_at, description, force_b
                 story.append(p("Trazabilidad — resultados publicados", styles["h2"]))
                 add_earnings_trace(story, earnings["published"], styles)
                 if earnings["upcoming"]:
-                    story.append(p("Qué esperamos — próximos resultados", styles["h2"]))
+                    story.append(p(earnings.get("upcomingTitle") or "Qué esperamos — próximos resultados", styles["h2"]))
                 if earnings.get("upcomingNote"):
                     story.append(p(earnings["upcomingNote"], styles["body"]))
                 if earnings["upcoming"]:
-                    story.append(data_table(["Fecha", "Empresa", "Implícito", "Hora / estado"], [[row["reportDate"], f"{row['company']} ({row['ticker']})", f"{'≈' if row.get('impliedMoveApproximate') else ''}±{row['impliedMovePct']:.2f}%", earnings_schedule_label(row)] for row in earnings["upcoming"]], styles, [27*PDF["mm"], 62*PDF["mm"], 31*PDF["mm"], 55*PDF["mm"]]))
+                    show_implied = any(row.get("impliedMovePct") is not None for row in earnings["upcoming"])
+                    headers = ["Fecha", "Empresa"] + (["Implícito"] if show_implied else []) + ["Hora / estado"]
+                    rows = [[row["reportDate"], f"{row['company']} ({row['ticker']})"] +
+                            ([f"{'≈' if row.get('impliedMoveApproximate') else ''}±{row['impliedMovePct']:.2f}%" if row.get("impliedMovePct") is not None else ""] if show_implied else []) +
+                            [earnings_schedule_label(row)] for row in earnings["upcoming"]]
+                    widths = [27, 62, 31, 55] if show_implied else [27, 62, 86]
+                    story.append(data_table(headers, rows, styles, [width*PDF["mm"] for width in widths]))
                     story.append(p("Trazabilidad — próximos resultados", styles["h2"]))
                     add_earnings_trace(story, earnings["upcoming"], styles)
                 for theme in section["stockpicking"].get("themes", []):
@@ -868,6 +883,9 @@ def add_section(story, section, styles, root, published_at, description, force_b
                 story.append(PDF["KeepTogether"]([
                     p(item["name"], styles["h3"]),
                     p(f"Qué mira: {item['whatLooksAt']} Qué cambiaría la lectura: {item['whatWouldChange']}", styles["body"]),
+                    *([PDF["Paragraph"](f'<link href="{html.escape(item["href"], quote=True)}">{paragraph_text(item["linkLabel"])}: {paragraph_text(item["href"])}</link>', styles["small"]),
+                       p(f"{item['source']} · Actualización editorial: {item['asOf']}.", styles["small"])]
+                      if item.get("asOf", "") > (model.get("editorialCutoffAt") or model["publishedAt"]) and item.get("href") and item.get("linkLabel") else []),
                 ]))
             return
         for item_index, item in enumerate(section["items"]):

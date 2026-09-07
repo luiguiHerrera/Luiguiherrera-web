@@ -275,16 +275,18 @@ function htmlTable(headers: string[], rows: Array<Array<string>>) {
     .join("")}</tbody></table></div>`;
 }
 
-function impliedMove(item: { impliedMovePct: number; impliedMoveApproximate?: boolean }) {
+function impliedMove(item: { impliedMovePct?: number; impliedMoveApproximate?: boolean }) {
+  if (item.impliedMovePct === undefined) return "";
   return `${item.impliedMoveApproximate ? "≈" : ""}±${item.impliedMovePct.toFixed(2).replace(".", ",")} %`;
 }
 
-function earningsTraceHtml(items: NonNullable<Extract<ReportExportSection, { kind: "asset-readings" }>["stockpicking"]>["earnings"]["published"]) {
-  return `<div class="earnings-trace">${items.map((item) => `<article class="card"><h5>${esc(item.company)} (${esc(item.ticker)})</h5><p><strong>Movimiento implícito:</strong> <a href="${esc(item.impliedMoveProviderHref)}" target="_blank" rel="noopener noreferrer">${esc(item.impliedMoveProvider)} — ${esc(item.ticker)} ↗</a> · consulta ${esc(formatEvidenceConsultedAt(item.consultedAt))}</p><p><strong>Fecha y hora:</strong> <a href="${esc(item.dateTimeSourceHref)}" target="_blank" rel="noopener noreferrer">${esc(item.dateTimeSourceLabel)} ↗</a> · ${esc(earningsScheduleLabel(item))}</p>${item.actualMoveSourceHref && item.actualMoveSourceLabel ? `<p><strong>Movimiento ocurrido:</strong> <a href="${esc(item.actualMoveSourceHref)}" target="_blank" rel="noopener noreferrer">${esc(item.actualMoveSourceLabel)} ↗</a>${item.actualMoveMethodology ? ` · ${esc(item.actualMoveMethodology)}` : ""}</p>` : "<p><strong>Movimiento ocurrido:</strong> pendiente de publicación.</p>"}</article>`).join("")}</div>`;
+function earningsTraceHtml(items: NonNullable<Extract<ReportExportSection, { kind: "asset-readings" }>["stockpicking"]>["earnings"]["upcoming"]) {
+  return `<div class="earnings-trace">${items.map((item) => item.impliedMovePct === undefined ? `<article class="card"><h5>${esc(item.company)} (${esc(item.ticker)})</h5><p><a href="${esc(item.dateTimeSourceHref)}" target="_blank" rel="noopener noreferrer">${esc(item.dateTimeSourceLabel)} ↗</a> · ${esc(earningsScheduleLabel(item))}</p></article>` : `<article class="card"><h5>${esc(item.company)} (${esc(item.ticker)})</h5><p><strong>Movimiento implícito:</strong> <a href="${esc(item.impliedMoveProviderHref)}" target="_blank" rel="noopener noreferrer">${esc(item.impliedMoveProvider)} — ${esc(item.ticker)} ↗</a> · consulta ${esc(formatEvidenceConsultedAt(item.consultedAt))}</p><p><strong>Fecha y hora:</strong> <a href="${esc(item.dateTimeSourceHref)}" target="_blank" rel="noopener noreferrer">${esc(item.dateTimeSourceLabel)} ↗</a> · ${esc(earningsScheduleLabel(item))}</p>${item.actualMoveSourceHref && item.actualMoveSourceLabel ? `<p><strong>Movimiento ocurrido:</strong> <a href="${esc(item.actualMoveSourceHref)}" target="_blank" rel="noopener noreferrer">${esc(item.actualMoveSourceLabel)} ↗</a>${item.actualMoveMethodology ? ` · ${esc(item.actualMoveMethodology)}` : ""}</p>` : "<p><strong>Movimiento ocurrido:</strong> pendiente de publicación.</p>"}</article>`).join("")}</div>`;
 }
 
-function earningsTraceMarkdown(items: NonNullable<Extract<ReportExportSection, { kind: "asset-readings" }>["stockpicking"]>["earnings"]["published"]) {
-  return items.map((item) => `- **${item.company} (${item.ticker})**
+function earningsTraceMarkdown(items: NonNullable<Extract<ReportExportSection, { kind: "asset-readings" }>["stockpicking"]>["earnings"]["upcoming"]) {
+  return items.map((item) => item.impliedMovePct === undefined ? `- **${item.company} (${item.ticker})**
+  - Fecha y hora: [${item.dateTimeSourceLabel}](${item.dateTimeSourceHref}); ${earningsScheduleLabel(item)}.` : `- **${item.company} (${item.ticker})**
   - Movimiento implícito: [${item.impliedMoveProvider} — ${item.ticker}](${item.impliedMoveProviderHref}); consulta ${formatEvidenceConsultedAt(item.consultedAt)}.
   - Fecha y hora: [${item.dateTimeSourceLabel}](${item.dateTimeSourceHref}); ${earningsScheduleLabel(item)}.
   - Movimiento ocurrido: ${item.actualMoveSourceHref && item.actualMoveSourceLabel ? `[${item.actualMoveSourceLabel}](${item.actualMoveSourceHref})${item.actualMoveMethodology ? `; ${item.actualMoveMethodology}` : "."}` : "pendiente de publicación."}`).join("\n");
@@ -296,13 +298,14 @@ function renderStockpickingThemesHtml(themes: NonNullable<Extract<ReportExportSe
 }
 
 function renderStockpickingHtml(stockpicking: NonNullable<Extract<ReportExportSection, { kind: "asset-readings" }>["stockpicking"]>) {
-  const { published, upcoming, methodology, publishedNote, upcomingNote } = stockpicking.earnings;
+  const { published, upcoming, methodology, publishedNote, upcomingNote, upcomingTitle } = stockpicking.earnings;
+  const showUpcomingImplied = upcoming.some((item) => item.impliedMovePct !== undefined);
   const exceeded = published.filter((item) => Math.abs(item.actualMovePct ?? 0) > item.impliedMovePct);
   const publishedIntro = publishedNote
     ? `<p>${esc(publishedNote)}</p>`
     : `<p><strong>${published.length} resultados publicados; ${exceeded.length} excedieron el rango.</strong> VRT, COIN y RDDT fueron las reacciones negativas más fuertes.</p>`;
   const upcomingIntro = upcomingNote ? `<p>${esc(upcomingNote)}</p>` : "";
-  return `<div class="stockpicking-earnings"><h4>Qué pasó — resultados publicados</h4>${publishedIntro}${htmlTable(["Fecha", "Empresa", "Movimiento implícito esperado", "Movimiento ocurrido", "Lectura"], published.map((item) => [item.reportDate, `${item.company} (${item.ticker})`, impliedMove(item), `${item.actualMovePct?.toFixed(1).replace(".", ",")} %`, Math.abs(item.actualMovePct ?? 0) > item.impliedMovePct ? "Excedió el rango" : "Dentro del rango"]))}<h5>Trazabilidad — resultados publicados</h5>${earningsTraceHtml(published)}${upcoming.length ? `<h4>Qué esperamos — próximos resultados</h4>${upcomingIntro}${htmlTable(["Fecha", "Empresa", "Movimiento implícito esperado", "Hora o estado", "Fuente de fecha y hora"], upcoming.map((item) => [item.reportDate, `${item.company} (${item.ticker})`, impliedMove(item), earningsScheduleLabel(item), item.dateTimeSourceLabel]))}<h5>Trazabilidad — próximos resultados</h5>${earningsTraceHtml(upcoming)}` : upcomingIntro}${renderStockpickingThemesHtml(stockpicking.themes)}<p class="historical-note">${esc(methodology)} Cada fila enlaza su página por ticker, la fecha de consulta y las fuentes utilizadas para fecha, hora y reacción.</p></div>`;
+  return `<div class="stockpicking-earnings"><h4>Qué pasó — resultados publicados</h4>${publishedIntro}${htmlTable(["Fecha", "Empresa", "Movimiento implícito esperado", "Movimiento ocurrido", "Lectura"], published.map((item) => [item.reportDate, `${item.company} (${item.ticker})`, impliedMove(item), `${item.actualMovePct?.toFixed(1).replace(".", ",")} %`, Math.abs(item.actualMovePct ?? 0) > item.impliedMovePct ? "Excedió el rango" : "Dentro del rango"]))}<h5>Trazabilidad — resultados publicados</h5>${earningsTraceHtml(published)}${upcoming.length ? `<h4>${esc(upcomingTitle ?? "Qué esperamos — próximos resultados")}</h4>${upcomingIntro}${htmlTable(["Fecha", "Empresa", ...(showUpcomingImplied ? ["Movimiento implícito esperado"] : []), "Hora o estado", "Fuente de fecha y hora"], upcoming.map((item) => [item.reportDate, `${item.company} (${item.ticker})`, ...(showUpcomingImplied ? [impliedMove(item)] : []), earningsScheduleLabel(item), item.dateTimeSourceLabel]))}<h5>Trazabilidad — próximos resultados</h5>${earningsTraceHtml(upcoming)}` : upcomingIntro}${renderStockpickingThemesHtml(stockpicking.themes)}<p class="historical-note">${esc(methodology)} Cada fila enlaza su página por ticker, la fecha de consulta y las fuentes utilizadas para fecha, hora y reacción.</p></div>`;
 }
 
 function renderStockpickingThemesMarkdown(themes: NonNullable<Extract<ReportExportSection, { kind: "asset-readings" }>["stockpicking"]>["themes"]) {
@@ -313,7 +316,8 @@ ${theme.body}${theme.examples?.length ? `\n\nCompañías citadas: ${theme.exampl
 }
 
 function renderStockpickingMarkdown(stockpicking: NonNullable<Extract<ReportExportSection, { kind: "asset-readings" }>["stockpicking"]>) {
-  const { published, upcoming, methodology, publishedNote, upcomingNote } = stockpicking.earnings;
+  const { published, upcoming, methodology, publishedNote, upcomingNote, upcomingTitle } = stockpicking.earnings;
+  const showUpcomingImplied = upcoming.some((item) => item.impliedMovePct !== undefined);
   const publishedIntro = publishedNote
     ?? `**${published.length} resultados publicados; ${published.filter((item) => Math.abs(item.actualMovePct ?? 0) > item.impliedMovePct).length} excedieron el rango.** VRT, COIN y RDDT fueron las reacciones negativas más fuertes.`;
   return `#### Qué pasó — resultados publicados
@@ -324,11 +328,11 @@ ${publishedIntro}
 |---|---|---:|---:|---|
 ${published.map((item) => `| ${item.reportDate} | ${item.company} (${item.ticker}) | ${impliedMove(item)} | ${item.actualMovePct?.toFixed(1).replace(".", ",")} % | ${Math.abs(item.actualMovePct ?? 0) > item.impliedMovePct ? "Excedió el rango" : "Dentro del rango"} |`).join("\n")}
 
-${upcoming.length ? `#### Qué esperamos — próximos resultados
+${upcoming.length ? `#### ${upcomingTitle ?? "Qué esperamos — próximos resultados"}
 ${upcomingNote ? `\n${upcomingNote}\n` : ""}
-| Fecha | Empresa | Movimiento implícito esperado | Hora o estado | Fuente de fecha y hora |
-|---|---|---:|---|---|
-${upcoming.map((item) => `| ${item.reportDate} | ${item.company} (${item.ticker}) | ${impliedMove(item)} | ${earningsScheduleLabel(item)} | [${item.dateTimeSourceLabel}](${item.dateTimeSourceHref}) |`).join("\n")}` : upcomingNote ?? ""}
+| Fecha | Empresa | ${showUpcomingImplied ? "Movimiento implícito esperado | " : ""}Hora o estado | Fuente de fecha y hora |
+|---|---|${showUpcomingImplied ? "---:|" : ""}---|---|
+${upcoming.map((item) => `| ${item.reportDate} | ${item.company} (${item.ticker}) | ${showUpcomingImplied ? `${impliedMove(item)} | ` : ""}${earningsScheduleLabel(item)} | [${item.dateTimeSourceLabel}](${item.dateTimeSourceHref}) |`).join("\n")}` : upcomingNote ?? ""}
 
 ##### Trazabilidad — resultados publicados
 
@@ -508,7 +512,9 @@ function renderSectionHtml(section: ReportExportSection, model: ReportExportMode
     case "watchlist":
       if (model.presentation?.contextStyle === "prose") {
         const first = section.items[0];
-        body = `<p>${esc(first.statusLabel)} · ${esc(first.asOf)}. ${esc(first.source)}</p>${htmlTable(["Factor", "Qué mira", "Qué cambiaría la lectura"], section.items.map(item=>[item.name, item.whatLooksAt, item.whatWouldChange ?? item.whyItMatters]))}`;
+        // Later editorial references remain visible beside the frozen compact checklist.
+        const revisedReferences = section.items.filter(item => item.asOf && item.asOf > (model.editorialCutoffAt ?? model.publishedAt) && item.href && item.linkLabel);
+        body = `<p>${esc(first.statusLabel)} · ${esc(first.asOf)}. ${esc(first.source)}</p>${htmlTable(["Factor", "Qué mira", "Qué cambiaría la lectura"], section.items.map(item=>[item.name, item.whatLooksAt, item.whatWouldChange ?? item.whyItMatters]))}${revisedReferences.map(item => `<p><strong>${esc(item.name)}:</strong> <a href="${esc(item.href)}" target="_blank" rel="noopener noreferrer">${esc(item.linkLabel)} ↗</a><br>${esc(item.source)} · Actualización editorial: ${esc(item.asOf)}.</p>`).join("")}`;
         break;
       }
       body = model.presentation?.watchlistStyle === "dashboard" ? renderWatchlistDashboardHtml(section.items, model) : section.items
@@ -799,7 +805,8 @@ ${section.scenarios.length ? `### Escenarios\n\n${section.scenarios.map((item) =
     case "watchlist":
       if (model.presentation?.contextStyle === "prose") {
         const first = section.items[0];
-        return `${heading}\n\n${first.statusLabel} · ${first.asOf}. ${first.source}\n\n| Factor | Qué mira | Qué cambiaría la lectura |\n|---|---|---|\n${section.items.map(item=>`| ${item.name} | ${item.whatLooksAt} | ${item.whatWouldChange} |`).join("\n")}`;
+        const revisedReferences = section.items.filter(item => item.asOf && item.asOf > (model.editorialCutoffAt ?? model.publishedAt) && item.href && item.linkLabel);
+        return `${heading}\n\n${first.statusLabel} · ${first.asOf}. ${first.source}\n\n| Factor | Qué mira | Qué cambiaría la lectura |\n|---|---|---|\n${section.items.map(item=>`| ${item.name} | ${item.whatLooksAt} | ${item.whatWouldChange} |`).join("\n")}${revisedReferences.map(item => `\n\n- **${item.name}:** [${item.linkLabel}](${item.href}). ${item.source} Actualización editorial: ${item.asOf}.`).join("")}`;
       }
       return `${heading}\n\n${section.items
         .map((item) => {

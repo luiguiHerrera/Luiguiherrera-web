@@ -7,7 +7,7 @@ X-WR-CALNAME:Primer informe de septiembre
 BEGIN:VEVENT
 UID:primer-informe-septiembre-2026-labor-day-sin-sesion-regular-de-opciones
  -en-ee-uu@luigui-herrera
-DTSTAMP:20260906T000000Z
+DTSTAMP:20260907T000000Z
 DTSTART;VALUE=DATE:20260907
 DTEND;VALUE=DATE:20260908
 SUMMARY:Primer informe de septiembre: Labor Day · sin sesión regular de o
@@ -21,7 +21,7 @@ URL:https://www.cboe.com/about/hours/us-options
 END:VEVENT
 BEGIN:VEVENT
 UID:primer-informe-septiembre-2026-china-cpi-y-ppi-de-agosto@luigui-herrera
-DTSTAMP:20260906T000000Z
+DTSTAMP:20260907T000000Z
 DTSTART:20260909T013000Z
 SUMMARY:Primer informe de septiembre: China · CPI y PPI de agosto
 DESCRIPTION:9 de septiembre. Fecha y hora confirmadas por fuente primaria. 
@@ -33,8 +33,24 @@ DESCRIPTION:9 de septiembre. Fecha y hora confirmadas por fuente primaria.
 URL:https://www.stats.gov.cn/szst/
 END:VEVENT
 BEGIN:VEVENT
+UID:primer-informe-septiembre-2026-oddity-tech-q2-2026-call@luigui-herrera
+DTSTAMP:20260907T000000Z
+DTSTART:20260909T123000Z
+SUMMARY:Primer informe de septiembre: ODDITY Tech Q2 2026 · call
+DESCRIPTION:mié\, 9 de septiembre. Fecha y hora confirmadas por fuente pri
+ maria. 08:30 ET / Call 14:30 CEST. Resultados antes de la apertura de EE. 
+ UU. · Call 08:30 ET · 14:30 CEST. Referencia para comprobar crecimiento\
+ , márgenes y guía\; separar la reacción de una sesión de los cambios e
+ n la tesis. Activos o factores: ODD\, Stockpicking. Fuente de fecha/hora: 
+ ODDITY Investor Relations (https://investors.oddity.com/news-releases/news
+ -release-details/oddity-announce-second-quarter-2026-financial-results-sep
+ tember).
+URL:https://investors.oddity.com/news-releases/news-release-details/oddity-
+ announce-second-quarter-2026-financial-results-september
+END:VEVENT
+BEGIN:VEVENT
 UID:primer-informe-septiembre-2026-ppi-de-agosto@luigui-herrera
-DTSTAMP:20260906T000000Z
+DTSTAMP:20260907T000000Z
 DTSTART:20260910T123000Z
 SUMMARY:Primer informe de septiembre: PPI de agosto
 DESCRIPTION:10 de septiembre. Fecha y hora confirmadas por fuente primaria.
@@ -46,7 +62,7 @@ URL:https://www.bls.gov/schedule/2026/09_sched.htm
 END:VEVENT
 BEGIN:VEVENT
 UID:primer-informe-septiembre-2026-cpi-de-agosto@luigui-herrera
-DTSTAMP:20260906T000000Z
+DTSTAMP:20260907T000000Z
 DTSTART:20260911T123000Z
 SUMMARY:Primer informe de septiembre: CPI de agosto
 DESCRIPTION:11 de septiembre. Fecha y hora confirmadas por fuente primaria.
@@ -59,7 +75,7 @@ END:VEVENT
 BEGIN:VEVENT
 UID:primer-informe-septiembre-2026-china-actividad-y-ventas-minoristas-de-a
  gosto@luigui-herrera
-DTSTAMP:20260906T000000Z
+DTSTAMP:20260907T000000Z
 DTSTART:20260915T020000Z
 SUMMARY:Primer informe de septiembre: China · actividad y ventas minorista
  s de agosto
@@ -74,7 +90,7 @@ END:VEVENT
 BEGIN:VEVENT
 UID:primer-informe-septiembre-2026-ventas-minoristas-de-agosto@luigui-herre
  ra
-DTSTAMP:20260906T000000Z
+DTSTAMP:20260907T000000Z
 DTSTART:20260916T123000Z
 SUMMARY:Primer informe de septiembre: Ventas minoristas de agosto
 DESCRIPTION:16 de septiembre. Fecha y hora confirmadas por fuente primaria.
@@ -87,7 +103,7 @@ END:VEVENT
 BEGIN:VEVENT
 UID:primer-informe-septiembre-2026-fomc-decision-y-proyecciones@luigui-herr
  era
-DTSTAMP:20260906T000000Z
+DTSTAMP:20260907T000000Z
 DTSTART:20260916T180000Z
 SUMMARY:Primer informe de septiembre: FOMC · decisión y proyecciones
 DESCRIPTION:16 de septiembre. Fecha y hora confirmadas por fuente primaria.
@@ -101,7 +117,7 @@ END:VEVENT
 BEGIN:VEVENT
 UID:primer-informe-septiembre-2026-fomc-conferencia-de-prensa@luigui-herrer
  a
-DTSTAMP:20260906T000000Z
+DTSTAMP:20260907T000000Z
 DTSTART:20260916T183000Z
 SUMMARY:Primer informe de septiembre: FOMC · conferencia de prensa
 DESCRIPTION:16 de septiembre. Fecha y hora confirmadas por fuente primaria.
@@ -114,7 +130,7 @@ END:VEVENT
 BEGIN:VEVENT
 UID:primer-informe-septiembre-2026-boj-reunion-de-politica-monetaria@luigui
  -herrera
-DTSTAMP:20260906T000000Z
+DTSTAMP:20260907T000000Z
 DTSTART;VALUE=DATE:20260917
 DTEND;VALUE=DATE:20260919
 SUMMARY:Primer informe de septiembre: BOJ · reunión de política monetari
@@ -129,7 +145,7 @@ END:VEVENT
 BEGIN:VEVENT
 UID:primer-informe-septiembre-2026-produccion-industrial-de-agosto@luigui-h
  errera
-DTSTAMP:20260906T000000Z
+DTSTAMP:20260907T000000Z
 DTSTART:20260918T131500Z
 SUMMARY:Primer informe de septiembre: Producción industrial de agosto
 DESCRIPTION:18 de septiembre. Fecha y hora confirmadas por fuente primaria.
@@ -142,7 +158,7 @@ END:VEVENT
 BEGIN:VEVENT
 UID:primer-informe-septiembre-2026-expiracion-mensual-de-opciones@luigui-he
  rrera
-DTSTAMP:20260906T000000Z
+DTSTAMP:20260907T000000Z
 DTSTART;VALUE=DATE:20260918
 DTEND;VALUE=DATE:20260919
 SUMMARY:Primer informe de septiembre: Expiración mensual de opciones
@@ -157,7 +173,7 @@ END:VEVENT
 BEGIN:VEVENT
 UID:primer-informe-septiembre-2026-pce-ingresos-y-gasto-personal-de-agosto@
  luigui-herrera
-DTSTAMP:20260906T000000Z
+DTSTAMP:20260907T000000Z
 DTSTART:20260930T123000Z
 SUMMARY:Primer informe de septiembre: PCE\, ingresos y gasto personal de ag
  osto

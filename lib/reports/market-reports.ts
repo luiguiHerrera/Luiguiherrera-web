@@ -94,6 +94,21 @@ export type MarketReportEarningsItem = {
   timeConfirmationStatus: "confirmed" | "unconfirmed" | "not-recorded";
 };
 
+// An IR-confirmed upcoming event can be published without an options observation.
+// Published comparisons retain the complete, required options evidence above.
+export type MarketReportUpcomingEarningsItem = (MarketReportEarningsItem | (
+  Omit<MarketReportEarningsItem, "impliedMovePct" | "impliedMoveProvider" | "impliedMoveProviderHref" | "consultedAt"> & {
+    impliedMovePct?: never;
+    impliedMoveProvider?: never;
+    impliedMoveProviderHref?: never;
+    consultedAt?: never;
+  }
+)) & {
+  eventTitle?: string;
+  /** The confirmed clock time belongs to the call, not the results release. */
+  timeKind?: "earnings-call";
+};
+
 export type MarketReportProbableRoutes = {
   title: "Rutas probables";
   note: string;
@@ -209,8 +224,9 @@ export type MarketReport = {
       methodology: string;
       publishedNote?: string;
       upcomingNote?: string;
+      upcomingTitle?: string;
       published: MarketReportEarningsItem[];
-      upcoming: MarketReportEarningsItem[];
+      upcoming: MarketReportUpcomingEarningsItem[];
     };
     themes?: MarketReportStockpickingTheme[];
   };

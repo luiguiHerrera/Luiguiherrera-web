@@ -5,7 +5,7 @@ La IA sigue creciendo, pero el mercado ya no mira solamente cuánto se invierte.
 - Edición: Primer informe de septiembre
 - Autor: Luigui Herrera
 - Publicación: 2026-09-06
-- Actualización: 2026-09-06
+- Actualización: 2026-09-07
 - Corte editorial: 2026-09-06
 - Corte de datos de mercado: 2026-09-04
 - URL editorial primaria: https://www.luiguiherrera.com/informes/primer-informe-septiembre-2026
@@ -486,7 +486,13 @@ Reacciones realizadas: NVDA +8,74 % y FUTU +3,03 %. Movimiento implícito regist
 | 2026-08-26 | NVIDIA (NVDA) | ≈±6,18 % | 8,7 % | Excedió el rango |
 | 2026-08-20 | Futu Holdings (FUTU) | ≈±7,04 % | 3,0 % | Dentro del rango |
 
-El estudio de software queda abierto. No se publica una lista de próximos resultados sin fechas verificadas.
+#### Próximo resultado
+
+ODDITY presenta resultados el 9 de septiembre antes de la apertura. La referencia será comprobar crecimiento, márgenes y guía, y separar la reacción de una sola sesión de cualquier cambio real en la tesis.
+
+| Fecha | Empresa | Hora o estado | Fuente de fecha y hora |
+|---|---|---|---|
+| 2026-09-09 | ODDITY Tech Ltd. (ODD) | Resultados antes de la apertura de EE. UU. · Call 08:30 ET · 14:30 CEST | [ODDITY Investor Relations](https://investors.oddity.com/news-releases/news-release-details/oddity-announce-second-quarter-2026-financial-results-september) |
 
 ##### Trazabilidad — resultados publicados
 
@@ -499,7 +505,10 @@ El estudio de software queda abierto. No se publica una lista de próximos resul
   - Fecha y hora: [Futu Investor Relations · 20/08/2026](https://futuholdings.gcs-web.com/news-releases/news-release-details/futu-announces-second-quarter-2026-unaudited-financial-results/); 07:30 ET · 13:30 CEST.
   - Movimiento ocurrido: [Yahoo Finance · cierres históricos capturados el 06/09/2026](https://finance.yahoo.com/quote/FUTU/history/); Cierre regular 2026-08-19: 109.42 USD; cierre regular 2026-08-20: 112.73 USD. (Cierre posterior / cierre previo − 1) × 100. Sin after-hours.
 
+##### Trazabilidad — próximos resultados
 
+- **ODDITY Tech Ltd. (ODD)**
+  - Fecha y hora: [ODDITY Investor Relations](https://investors.oddity.com/news-releases/news-release-details/oddity-announce-second-quarter-2026-financial-results-september); Resultados antes de la apertura de EE. UU. · Call 08:30 ET · 14:30 CEST.
 
 #### Tema en consideración: Software empresarial — ¿Castigo excesivo por miedo a la disrupción de IA?
 
@@ -519,6 +528,7 @@ Movimiento regular contra regular: para resultados después del cierre, cierre d
 |---|---|---|---|---|---|---|
 | 7 de septiembre | Hora por confirmar · ET | Labor Day · sin sesión regular de opciones en EE. UU. | El festivo cambia la liquidez y el calendario de publicaciones. Cripto continúa operando. | S&P 500, Oro, DXY, BTC / ETH | [Cboe · Hours & Holidays](https://www.cboe.com/about/hours/us-options) | [Consultar fuente oficial](https://www.cboe.com/about/hours/us-options) |
 | 9 de septiembre | 09:30 China (UTC+8) · 03:30 CEST | China · CPI y PPI de agosto | Permiten contrastar precios de consumo y de producción con la debilidad de demanda descrita en agosto. | China, FXI, Consumo, DXY | [National Bureau of Statistics of China · calendario vigente](https://www.stats.gov.cn/szst/) | [Consultar fuente oficial](https://www.stats.gov.cn/szst/) |
+| mié, 9 de septiembre | 08:30 ET · Call 14:30 CEST | ODDITY Tech Q2 2026 · call | Resultados antes de la apertura de EE. UU. · Call 08:30 ET · 14:30 CEST. Referencia para comprobar crecimiento, márgenes y guía; separar la reacción de una sesión de los cambios en la tesis. | ODD, Stockpicking | [ODDITY Investor Relations](https://investors.oddity.com/news-releases/news-release-details/oddity-announce-second-quarter-2026-financial-results-september) | [Seguir resultados de ODD](https://investors.oddity.com/news-releases/news-release-details/oddity-announce-second-quarter-2026-financial-results-september) |
 | 10 de septiembre | 08:30 ET · 14:30 CEST | PPI de agosto | Primera referencia de precios antes del CPI; puede mover rendimientos y dólar. | S&P 500, Oro, DXY, BTC / ETH | [Bureau of Labor Statistics](https://www.bls.gov/schedule/2026/09_sched.htm) | [Consultar fuente oficial](https://www.bls.gov/schedule/2026/09_sched.htm) |
 | 11 de septiembre | 08:30 ET · 14:30 CEST | CPI de agosto | Inflación general y subyacente frente a la capacidad de los bonos para absorber una sorpresa. | S&P 500, Oro, DXY, BTC / ETH | [Bureau of Labor Statistics](https://www.bls.gov/schedule/2026/09_sched.htm) | [Consultar fuente oficial](https://www.bls.gov/schedule/2026/09_sched.htm) |
 | 15 de septiembre | 10:00 China (UTC+8) · 04:00 CEST | China · actividad y ventas minoristas de agosto | La producción industrial, la inversión y las ventas minoristas permiten comprobar si el consumidor empieza a confirmar la tesis. | China, FXI, Consumo, DXY | [National Bureau of Statistics of China · calendario vigente](https://www.stats.gov.cn/szst/) | [Consultar fuente oficial](https://www.stats.gov.cn/szst/) |
@@ -567,9 +577,17 @@ Seguimiento condicional · 2026-09-06. Lectura editorial; métricas automáticas
 | Bitcoin ETF flows | Último flujo, cobertura de la fuente y acumulado reciente. | Entradas o salidas persistentes, confirmadas con sesiones completas, pesarían más que un día aislado. |
 | Ethereum / liquidez | ETH/BTC y condiciones de liquidez. | Debilidad relativa mientras mejora el riesgo general pediría más cautela con su beta. |
 | CAPEX de IA | Inversión comprometida frente a flujo de caja operativo. | Un crecimiento del gasto muy superior al de caja exigiría revisar la calidad del crecimiento. |
-| Financiación de IA | Nueva deuda, coste financiero y compromisos de centros de datos. | Financiar más capacidad a costes crecientes reduciría el margen para fallar. |
-| Software / monetización | Consumo, retención, márgenes y FCF por acción. | Mejor adopción sin mejora de caja sería una confirmación incompleta. |
+| Financiación de IA | CAPEX frente a flujo de caja, nueva emisión de deuda, spreads y demanda por bonos de hyperscalers. | Más deuda a spreads crecientes o menor capacidad del mercado para absorber nuevas emisiones indicaría que financiar la expansión empieza a encarecerse. |
+| Software / monetización | Crecimiento de ingresos ligados a IA, ACV/RPO, retención, márgenes y flujo de caja libre. | Adopción de IA que aumenta uso e ingresos sin deteriorar márgenes ni flujo de caja reforzaría la tesis de monetización. Mucho uso sin mejora de caja sería una confirmación incompleta. |
 | Posicionamiento / concentración | Liquidez de gestores y exposición a semiconductores. | Deshacer posiciones concurridas con crédito débil elevaría el riesgo de liquidación. |
+
+- **Treasury 10Y:** [Ver curva 10Y / 30Y](https://home.treasury.gov/resource-center/data-chart-center/interest-rates/TextView?type=daily_treasury_yield_curve&field_tdr_date_value=2026). U.S. Treasury · Daily Treasury Par Yield Curve Rates · 2026. Referencia de seguimiento; no actualiza el snapshot. Actualización editorial: 2026-09-07.
+
+- **Treasury 30Y:** [Ver curva 10Y / 30Y](https://home.treasury.gov/resource-center/data-chart-center/interest-rates/TextView?type=daily_treasury_yield_curve&field_tdr_date_value=2026). U.S. Treasury · Daily Treasury Par Yield Curve Rates · 2026. Referencia de seguimiento; no actualiza el snapshot. Actualización editorial: 2026-09-07.
+
+- **Financiación de IA:** [Ver financiación de Big Tech](https://www.ecb.europa.eu/press/blog/date/2026/html/ecb.blog20260831~dac6a37e73.en.html). European Central Bank · Big tech, big debt: when US tech giants tap the euro area bond market · 31/08/2026. Marco de seguimiento editorial. Actualización editorial: 2026-09-07.
+
+- **Software / monetización:** [Ver ejemplo de monetización](https://investor.servicenow.com/news/news-details/2026/ServiceNow-Reports-Second-Quarter-2026-Financial-Results/default.aspx). ServiceNow Investor Relations · Q2 2026 Financial Results · 22/07/2026. Ejemplo público, no recomendación. Actualización editorial: 2026-09-07.
 
 ## Fuentes y aviso educativo
 

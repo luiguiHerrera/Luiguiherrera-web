@@ -1,4 +1,4 @@
-import type { MarketReport, MarketReportCalendarItem, MarketReportEarningsItem } from "./market-reports";
+import type { MarketReport, MarketReportCalendarItem, MarketReportEarningsItem, MarketReportUpcomingEarningsItem } from "./market-reports";
 
 export function getCalendarConfig(report: MarketReport) {
   const [fallbackYear, fallbackMonth] = report.monthKey.split("-").map(Number);
@@ -30,7 +30,8 @@ export function isEventInMonth(event: MarketReportCalendarItem, year: number, mo
   return event.dateStart?.startsWith(`${year}-${String(month).padStart(2, "0")}-`) ?? false;
 }
 
-export function formatImpliedMove(item: Pick<MarketReportEarningsItem, "impliedMovePct" | "impliedMoveApproximate">) {
+export function formatImpliedMove(item: Partial<Pick<MarketReportEarningsItem, "impliedMovePct" | "impliedMoveApproximate">>) {
+  if (item.impliedMovePct === undefined) return "";
   return `${item.impliedMoveApproximate ? "≈" : ""}±${item.impliedMovePct.toFixed(2).replace(".", ",")} %`;
 }
 
@@ -46,7 +47,7 @@ export function formatEvidenceConsultedAt(value: string) {
   }).format(new Date(dateOnly ? `${value}T00:00:00Z` : value));
 }
 
-export function earningsScheduleLabel(item: MarketReportEarningsItem) {
+export function earningsScheduleLabel(item: MarketReportUpcomingEarningsItem) {
   if (item.dateConfirmationStatus === "editorial-unconfirmed") {
     return "Fecha prevista editorial no confirmada · hora por confirmar";
   }
@@ -59,13 +60,17 @@ export function earningsScheduleLabel(item: MarketReportEarningsItem) {
     item.originalTime && item.originalTimeZone ? `${item.originalTime} ${item.originalTimeZone}` : null,
     item.displayTime,
   ].filter(Boolean).join(" · ");
+  if (item.timeKind === "earnings-call" && timeLabel) {
+    const release = item.session === "before-open" ? "Resultados antes de la apertura de EE. UU." : "Resultados después del cierre de EE. UU.";
+    return `${release} · Call ${timeLabel}`;
+  }
   if (timeLabel) return timeLabel;
   if (item.session === "before-open") return "Fecha y sesión confirmadas · antes de apertura";
   if (item.session === "after-close") return "Fecha y sesión confirmadas · después del cierre";
   return "Fecha confirmada · hora no registrada";
 }
 
-function earningsCalendarItem(item: MarketReportEarningsItem): MarketReportCalendarItem {
+function earningsCalendarItem(item: MarketReportUpcomingEarningsItem): MarketReportCalendarItem {
   const date = new Date(`${item.reportDate}T12:00:00Z`);
   const dateLabel = new Intl.DateTimeFormat("es-ES", { weekday: "short", day: "numeric", month: "long", timeZone: "UTC" }).format(date);
   const timeConfirmed = item.timeConfirmationStatus === "confirmed" && Boolean(item.startDateTimeUtc);
@@ -74,14 +79,16 @@ function earningsCalendarItem(item: MarketReportEarningsItem): MarketReportCalen
     dateLabel,
     dateStart: item.reportDate,
     ...(timeConfirmed ? { startDateTimeUtc: item.startDateTimeUtc } : {}),
-    event: `Resultados de ${item.company} (${item.ticker})`,
+    event: item.eventTitle ? `${item.eventTitle}${item.timeKind === "earnings-call" ? " · call" : ""}` : `Resultados de ${item.company} (${item.ticker})`,
     company: item.company,
     ticker: item.ticker,
-    whyItMatters: `Movimiento implícito esperado ${formatImpliedMove(item)}; ventana para evaluar resultados, guía y reacción posterior.`,
+    whyItMatters: item.impliedMovePct === undefined
+      ? `${earningsScheduleLabel(item)}. Referencia para comprobar crecimiento, márgenes y guía; separar la reacción de una sesión de los cambios en la tesis.`
+      : `Movimiento implícito esperado ${formatImpliedMove(item)}; ventana para evaluar resultados, guía y reacción posterior.`,
     category: "earnings",
     originalTime: timeConfirmed ? item.originalTime : "Hora por confirmar",
     originalTimeZone: timeConfirmed ? item.originalTimeZone : "ET",
-    displayTimeCest: timeConfirmed ? item.displayTime : "Hora por confirmar",
+    displayTimeCest: timeConfirmed ? (item.timeKind === "earnings-call" ? `Call ${item.displayTime}` : item.displayTime) : "Hora por confirmar",
     timeStatus: timeConfirmed ? "confirmed" : "tba",
     dateConfirmationStatus: item.dateConfirmationStatus,
     affectedAssets: [item.ticker, "Stockpicking"],
