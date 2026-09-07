@@ -4,3 +4,203 @@
   :global(html):has(.page) { scroll-behavior: auto; }
   .page * { transition: none; }
 }
+
+@font-face {
+  font-family: "LHI Trends Display";
+  src: url("/fonts/playfair-display-500.ttf") format("truetype");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+.visualPage { max-width: 1340px; margin: 0 auto; padding: 0 32px 64px; min-width: 0; }
+.visualPage h1, .visualPage h2 { font-family: "LHI Trends Display", Georgia, serif; font-weight: 500; text-wrap: balance; }
+.visualPage a { color: var(--color-institutional); }
+.eyebrow { color: var(--color-brass); font-size: .75rem; font-weight: 600; letter-spacing: .2em; text-transform: uppercase; }
+.hero { border-bottom: 1px solid var(--color-line); }
+.heroTop { position: relative; isolation: isolate; background: var(--color-paper); }
+.heroCopy { position: relative; z-index: 1; width: 59%; padding: 52px 20px 44px 0; }
+.hero h1 { max-width: 22ch; margin-top: 20px; font-size: clamp(2.5rem,4.1vw,3.6rem); letter-spacing: -.035em; line-height: 1.08; }
+.heroSubtitle { margin-top: 24px; max-width: 47ch; color: var(--color-institutional); font-size: 1.05rem; line-height: 1.7; }
+.heroText { max-width: 54ch; margin-top: 13px; color: var(--color-muted); font-size: .9375rem; line-height: 1.8; }
+.heroActions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 25px; }
+.primaryCta, .secondaryCta { min-height: 46px; display: inline-flex; align-items: center; justify-content: center; gap: 14px; border: 1px solid var(--color-institutional); border-radius: 4px; padding: 12px 18px; font-size: .875rem; font-weight: 600; line-height: 1.5; transition: background .18s, color .18s; }
+.visualPage .primaryCta { color: var(--color-paper); background: var(--color-institutional); }
+.visualPage .primaryCta:hover { background: var(--color-paper); color: var(--color-institutional); }
+.secondaryCta { background: var(--color-paper); border-color: var(--color-line); }
+.secondaryCta:hover { border-color: var(--color-institutional); background: var(--color-soft); }
+.heroVisual { position: absolute; inset: 0 0 0 53%; z-index: 0; background: var(--color-paper); }
+.heroVisual::before { content: ""; position: absolute; inset: 0; background: url("/images/trends/hero.jpg") center / cover; filter: saturate(.8) contrast(.92); }
+.heroVisual::after { content: ""; position: absolute; inset: 0; background: linear-gradient(to right,var(--color-paper) 0%,color-mix(in srgb,var(--color-paper) 96%,transparent) 8%,color-mix(in srgb,var(--color-paper) 78%,transparent) 16%,color-mix(in srgb,var(--color-paper) 42%,transparent) 25%,color-mix(in srgb,var(--color-paper) 12%,transparent) 34%,transparent 42%); }
+.heroPrinciples { display: grid; grid-template-columns: repeat(4,minmax(0,1fr)); border-top: 1px solid var(--color-line); padding: 22px 0; }
+.heroPrinciples > div { display: flex; align-items: center; justify-content: center; gap: 13px; color: var(--color-institutional); font-size: .875rem; }
+.heroPrinciples > div + div { border-left: 1px solid var(--color-line); }
+.heroPrinciples svg { width: 24px; height: 24px; flex-shrink: 0; }
+@media (max-width: 767px) {
+  .visualPage { padding: 0 20px 40px; }
+  .heroCopy { width: 100%; padding: 34px 0 28px; }
+  .hero h1 { font-size: clamp(2rem,8.9vw,3rem); max-width: 22ch; }
+  .heroSubtitle { margin-top: 19px; font-size: 1rem; line-height: 1.65; }
+  .heroText { font-size: .9375rem; line-height: 1.7; }
+  .heroActions { gap: 10px; margin-top: 22px; }
+  .heroActions a { width: 100%; }
+  .heroVisual { position: relative; inset: auto; height: 160px; }
+  .heroVisual::before { background-position: 50% 51%; }
+  .heroVisual::after { background: linear-gradient(to bottom,var(--color-paper),transparent 12%); }
+  .heroPrinciples { grid-template-columns: repeat(2,minmax(0,1fr)); padding: 9px 0; }
+  .heroPrinciples > div { min-height: 54px; justify-content: flex-start; gap: 10px; font-size: .8125rem; }
+  .heroPrinciples > div + div { border-left: 0; }
+  .heroPrinciples > div:nth-child(even) { padding-left: 12px; }
+  .heroPrinciples > div:nth-child(n+3) { border-top: 1px solid var(--color-line); }
+  .heroPrinciples svg { width: 21px; height: 21px; }
+}
+.visualPage { background: var(--color-paper); }
+.visualPage h2 { font-size: clamp(1.9rem,3vw,2.65rem); line-height: 1.18; letter-spacing: -.025em; }
+.current, .radarSection, .capitalSection { padding: 46px 0; }
+.radarSection, .capitalSection { border-top: 1px solid var(--color-line); scroll-margin-top: 88px; }
+.sectionHeading { display: flex; align-items: flex-end; justify-content: space-between; flex-wrap: wrap; gap: 14px 28px; }
+.sectionHeading p, .sectionText { margin-top: 10px; color: var(--color-muted); font-size: .9375rem; line-height: 1.7; }
+.sectionHeading .updated { margin: 0 0 3px; font-size: .75rem; }
+.currentGrid { display: grid; grid-template-columns: 1.18fr 1fr 1fr 1fr; gap: 20px; margin-top: 27px; }
+.currentStory { display: flex; flex-direction: column; min-width: 0; border-top: 1px solid var(--color-line); padding-top: 12px; }
+.trendImage { display: block; background-size: cover; background-position: center; filter: saturate(.82) contrast(.96); background-color: var(--color-soft); }
+.currentImage { width: 100%; height: 136px; border-radius: 3px; }
+.currentStory:first-child { padding-top: 0; border-top: 0; }
+.leadStory .currentImage { height: 170px; }
+.currentStory:nth-child(3) .currentImage { order: 2; height: 116px; margin-top: 16px; }
+.storyCopy { display: flex; flex: 1; flex-direction: column; align-items: flex-start; padding-top: 17px; }
+.currentStory:nth-child(3) .storyCopy { padding-top: 6px; }
+.storyCopy h3, .capitalStory h3 { font-family: "LHI Trends Display", Georgia, serif; font-size: 1.35rem; font-weight: 500; line-height: 1.2; letter-spacing: -.02em; }
+.storyCopy p, .capitalStory > p:not(.eyebrow) { margin-top: 11px; color: var(--color-muted); font-size: .875rem; line-height: 1.75; }
+.textLink { display: inline-flex; align-items: center; gap: 12px; min-height: 44px; font-size: .8125rem; font-weight: 600; line-height: 1.6; }
+.storyCopy .textLink { margin-top: auto; padding-top: 13px; }
+.textLink:hover, .radarLink:hover { text-decoration: underline; text-underline-offset: 4px; }
+.capitalStory { background: var(--color-soft); border-top: 2px solid var(--color-brass); padding: 22px 20px 12px; display: flex; flex-direction: column; align-items: flex-start; }
+.capitalStory .eyebrow { font-size: .75rem; }
+.capitalStory h3 { margin-top: 19px; font-size: 1.6rem; }
+.capitalStory .textLink { margin-top: auto; padding-top: 16px; }
+.miniBars { width: 100%; display: grid; gap: 7px; padding: 21px 0 7px; }
+.miniBars span { display: block; height: 7px; background: var(--color-institutional); opacity: .78; }
+.miniBars span:first-child { background: var(--color-brass); opacity: 1; }
+.filters { display: flex; gap: 8px; overflow-x: auto; max-width: 100%; padding: 4px 3px 11px; margin: 22px -3px 0; scrollbar-width: thin; scrollbar-color: var(--color-line) transparent; }
+.filter { flex-shrink: 0; min-height: 44px; padding: 9px 18px; border: 1px solid var(--color-line); border-radius: 999px; background: var(--color-soft); color: var(--color-institutional); font-size: .8125rem; transition: background .15s,border-color .15s; }
+.filter:hover { background: var(--color-paper); border-color: var(--color-brass); }
+.filter[aria-pressed="true"] { color: var(--color-paper); background: var(--color-institutional); border-color: var(--color-institutional); }
+.filterCount { color: var(--color-muted); font-size: .75rem; margin-top: 4px; }
+.radarGrid { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 14px; margin-top: 18px; }
+.radarCard { position: relative; min-width: 0; display: grid; grid-template-columns: 76px minmax(0,1fr); grid-template-rows: auto auto 1fr auto; column-gap: 16px; padding: 18px; border: 1px solid var(--color-line); border-radius: 4px; background: color-mix(in srgb,var(--color-paper) 55%,white); transition: border-color .18s,background .18s; }
+.radarCard:hover { border-color: var(--color-brass); background: var(--color-paper); }
+.radarImage { grid-column: 1; grid-row: 1 / span 2; width: 76px; height: 82px; border-radius: 3px; }
+.radarName { grid-column: 2; color: var(--color-ink); font-size: 1rem; font-weight: 600; line-height: 1.3; letter-spacing: -.015em; align-self: start; }
+.radarDescription { grid-column: 2; margin-top: 7px; color: var(--color-muted); font-size: .8125rem; line-height: 1.6; }
+.radarMeta { grid-column: 1 / -1; display: flex; flex-wrap: wrap; gap: 9px 19px; margin-top: 15px; align-items: flex-end; }
+.radarMeta > div { display: flex; gap: 6px; align-items: center; font-size: .75rem; line-height: 1.6; }
+.radarMeta dt { color: var(--color-muted); }
+.phaseBadge, .evidenceBadge { border-radius: 3px; padding: 3px 6px; font-weight: 500; color: var(--color-institutional); background: color-mix(in srgb,var(--color-signal) 16%,var(--color-paper)); }
+.phaseBadge[data-phase="adoption"], .evidenceBadge[data-evidence="growing"] { background: color-mix(in srgb,var(--color-brass) 12%,var(--color-paper)); color: var(--color-ink); }
+.phaseBadge[data-phase="mature"], .evidenceBadge[data-evidence="limited"] { background: var(--color-soft); color: var(--color-muted); }
+.radarLink { grid-column: 1 / -1; display: flex; align-items: center; justify-content: space-between; min-height: 40px; padding-top: 8px; margin-top: 5px; border-top: 1px solid color-mix(in srgb,var(--color-line) 65%,transparent); font-size: .8125rem; font-weight: 600; }
+.radarLink span { font-size: 1rem; }
+.radarNote { margin-top: 20px; color: var(--color-muted); font-size: .75rem; line-height: 1.8; }
+.capitalPeriod { color: var(--color-muted); font-size: .875rem; line-height: 1.8; }
+.capitalStatus { display: flex; flex-wrap: wrap; gap: 5px 24px; color: var(--color-muted); margin-top: 12px; font-size: .75rem; line-height: 1.8; }
+.capitalStatus > p:first-child { color: var(--color-institutional); }
+.capitalOverview { display: grid; grid-template-columns: minmax(0,1.45fr) minmax(0,1fr); gap: 54px; margin-top: 30px; }
+.overlapChart figcaption { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 5px 15px; padding-bottom: 15px; border-bottom: 1px solid var(--color-line); }
+.overlapChart figcaption span:first-child { color: var(--color-institutional); font-size: 1rem; font-weight: 600; }
+.overlapChart figcaption span:last-child { color: var(--color-muted); font-size: .75rem; }
+.overlapChart ol { display: grid; gap: 14px; padding-top: 20px; }
+.overlapChart li { display: grid; align-items: center; grid-template-columns: 58px minmax(0,1fr) 66px; gap: 15px; }
+.barTicker { color: var(--color-institutional); font-size: .8125rem; font-weight: 600; }
+.barTrack { height: 10px; display: block; background: var(--color-soft); overflow: hidden; border-radius: 1px; }
+.barTrack > span { display: block; height: 100%; background: var(--color-institutional); border-radius: inherit; }
+.barCount { color: var(--color-institutional); font-size: .9375rem; font-variant-numeric: tabular-nums; text-align: right; }
+.barCount > span { font-size: .75rem; color: var(--color-muted); }
+.universe { padding: 24px 28px; background: var(--color-soft); border-top: 2px solid var(--color-brass); min-width: 0; }
+.universe h3 { font-family: "LHI Trends Display",Georgia,serif; font-weight: 500; font-size: 1.7rem; line-height: 1.2; letter-spacing: -.025em; max-width: 19ch; }
+.universeNumbers { display: grid; grid-template-columns: 1fr 1fr 1.3fr; gap: 16px; padding: 24px 0 23px; margin-top: 17px; border-top: 1px solid var(--color-line); border-bottom: 1px solid var(--color-line); }
+.universeNumbers dd { font-family: "LHI Trends Display",Georgia,serif; font-size: clamp(2rem,3vw,2.8rem); letter-spacing: -.05em; font-weight: 500; line-height: 1.1; color: var(--color-institutional); }
+.universeNumbers small { font-family: inherit; font-size: .57em; margin-left: 2px; }
+.universeNumbers dt { margin-top: 9px; color: var(--color-muted); font-size: .75rem; line-height: 1.5; }
+.universeText { margin-top: 20px; color: var(--color-muted); font-size: .8125rem; line-height: 1.8; }
+.universe .textLink { margin-top: 12px; font-size: .75rem; }
+.alphabetNote { border-top: 1px solid var(--color-line); padding-top: 20px; margin-top: 25px; }
+.alphabetTitle { font-size: .875rem; font-weight: 600; color: var(--color-institutional); }
+.alphabetTitle > span { font-size: .75rem; color: var(--color-muted); font-weight: 400; margin-left: 12px; }
+.alphabetUnion { display: flex; gap: 18px; align-items: center; margin-top: 12px; }
+.alphabetUnion > div { display: grid; gap: 7px; min-width: 95px; }
+.alphabetUnion > div > span { display: flex; justify-content: space-between; gap: 15px; font-size: .8125rem; color: var(--color-muted); }
+.alphabetUnion strong { color: var(--color-institutional); font-weight: 500; }
+.unionConnector { display: block; height: 36px; width: 42px; border: 1px solid var(--color-brass); border-left: 0; position: relative; }
+.unionConnector::after { content: ""; position: absolute; top: 50%; left: 100%; width: 16px; border-top: 1px solid var(--color-brass); }
+.alphabetUnion > p { display: flex; align-items: center; gap: 12px; margin-left: 9px; }
+.alphabetUnion > p > strong { font-family: "LHI Trends Display",Georgia,serif; font-size: 2rem; }
+.alphabetUnion > p > span { color: var(--color-muted); font-size: .75rem; line-height: 1.5; }
+.positionsNote { margin-top: 28px; padding-top: 22px; border-top: 1px solid var(--color-line); max-width: 100%; font-size: .8125rem; line-height: 1.8; color: var(--color-muted); }
+.capitalDetails { margin-top: 16px; }
+.capitalDetails summary { display: inline-flex; align-items: center; gap: 14px; min-height: 44px; list-style: none; cursor: pointer; color: var(--color-institutional); font-size: .875rem; font-weight: 600; }
+.capitalDetails summary::-webkit-details-marker { display: none; }
+.capitalDetails summary:hover { text-decoration: underline; text-underline-offset: 4px; }
+.capitalDetails summary:focus-visible { outline: 2px solid var(--color-institutional); outline-offset: 3px; }
+.capitalDetails[open] summary span { transform: rotate(180deg); }
+.capitalTable { margin-top: 24px; padding: 22px 25px 15px; border: 1px solid var(--color-line); border-radius: 4px; background: color-mix(in srgb,var(--color-paper) 60%,white); }
+.capitalTable table th[scope="row"] { padding-top: 14px; padding-bottom: 11px; }
+.capitalTable table a { min-height: 32px; }
+.deepDive { position: relative; isolation: isolate; overflow: hidden; margin-top: 8px; padding: 44px 46px 42px; background: var(--color-institutional); border-top: 2px solid var(--color-brass); border-radius: 4px; }
+.deepDive::before { content: ""; position: absolute; inset: 0 0 0 54%; z-index: -1; background: url("/images/trends/hero.jpg") center 58% / cover; filter: saturate(.82) contrast(.96); opacity: .1; }
+.deepDive .eyebrow { color: color-mix(in srgb,var(--color-brass) 55%,var(--color-paper)); }
+.deepDive h2 { color: var(--color-paper); margin-top: 16px; max-width: 22ch; font-size: clamp(2rem,3.4vw,2.9rem); }
+.deepText { margin-top: 15px; color: var(--color-paper); opacity: .8; font-size: .9375rem; line-height: 1.8; max-width: 60ch; }
+.visualPage .deepCta { display: inline-flex; align-items: center; justify-content: center; gap: 16px; min-height: 46px; margin-top: 24px; border-radius: 4px; padding: 12px 18px; background: var(--color-paper); color: var(--color-institutional); font-size: .875rem; font-weight: 600; border: 1px solid var(--color-paper); }
+.visualPage .deepCta:hover { background: var(--color-institutional); color: var(--color-paper); }
+@media (min-width: 1440px) { .heroCopy { padding-top: 58px; padding-bottom: 48px; } }
+@media (max-width: 1100px) {
+  .currentGrid { grid-template-columns: repeat(2,minmax(0,1fr)); gap: 24px; }
+  .currentImage, .leadStory .currentImage { height: 160px; }
+  .currentStory:nth-child(3) .currentImage { order: 0; height: 160px; margin: 0; }
+  .currentStory:nth-child(3) .storyCopy { padding-top: 17px; }
+  .currentStory { padding-top: 0; border-top: 0; }
+  .radarGrid { grid-template-columns: repeat(2,minmax(0,1fr)); }
+  .capitalOverview { gap: 28px; grid-template-columns: minmax(0,1.2fr) minmax(0,1fr); }
+  .universe { padding: 22px; }
+  .universeNumbers { gap: 10px; }
+  .universeNumbers dd { font-size: 2rem; }
+}
+@media (max-width: 767px) {
+  .current, .radarSection, .capitalSection { padding: 33px 0; }
+  .visualPage h2 { font-size: 1.9rem; }
+  .currentGrid { grid-template-columns: 1fr; gap: 23px; margin-top: 23px; }
+  .currentStory, .currentStory:first-child { display: grid; grid-template-columns: 96px minmax(0,1fr); column-gap: 17px; border-bottom: 1px solid var(--color-line); padding-bottom: 21px; }
+  .currentImage, .leadStory .currentImage, .currentStory:nth-child(3) .currentImage { height: 120px; width: 96px; margin-top: 0; border-radius: 3px; }
+  .storyCopy, .currentStory:nth-child(3) .storyCopy { padding-top: 0; }
+  .storyCopy h3 { font-size: 1.28rem; }
+  .storyCopy p { font-size: .8125rem; line-height: 1.7; }
+  .capitalStory { padding: 22px 24px 16px; }
+  .capitalStory h3 { font-size: 1.6rem; margin-top: 12px; }
+  .miniBars { max-width: 260px; padding-top: 17px; }
+  .capitalStory > p:not(.eyebrow) { font-size: .875rem; }
+  .radarGrid { grid-template-columns: 1fr; gap: 12px; }
+  .radarCard { padding: 16px; grid-template-columns: 70px minmax(0,1fr); column-gap: 14px; }
+  .radarImage { width: 70px; height: 78px; }
+  .radarName { font-size: 1rem; }
+  .radarDescription { font-size: .8125rem; }
+  .radarMeta { gap: 7px 16px; margin-top: 13px; }
+  .radarMeta > div { font-size: .75rem; }
+  .radarLink { min-height: 40px; }
+  .capitalOverview { grid-template-columns: 1fr; gap: 26px; margin-top: 24px; }
+  .overlapChart li { grid-template-columns: 53px minmax(0,1fr) 60px; gap: 10px; }
+  .overlapChart ol { gap: 17px; }
+  .barTrack { height: 10px; }
+  .universe { padding: 24px; }
+  .universeNumbers dd { font-size: 2.3rem; }
+  .alphabetTitle > span { display: block; margin: 7px 0 0; }
+  .alphabetUnion { gap: 13px; }
+  .unionConnector { width: 25px; }
+  .alphabetUnion > p { gap: 9px; }
+  .capitalTable { padding: 18px 17px 12px; margin-top: 20px; }
+  .capitalTable li { padding-top: 18px; padding-bottom: 16px; }
+  .deepDive { margin-top: 0; padding: 30px 24px 32px; }
+  .deepDive h2 { font-size: 2rem; }
+  .deepDive::before { inset: 0; opacity: .065; }
+  .deepText { font-size: .875rem; }
+  .visualPage .deepCta { width: 100%; text-align: center; font-size: .8125rem; padding: 12px; gap: 6px; }
+}

@@ -6,65 +6,84 @@ import { CapitalDisclosureSection, capitalQuarterLabel } from "./CapitalDisclosu
 import { getCapitalData } from "@/lib/trends/capital/get-capital-data";
 import { getPublicCapital } from "@/lib/trends/capital/public-capital";
 import { TrendRadar } from "./TrendRadar";
+import { TrendImage } from "./TrendImage";
 import { trendCatalog, trendPath, trendsMethodologyPath, trendsReviewedAt, trendsPath } from "@/lib/trends/catalog";
 import { trendsCopy } from "@/lib/trends/copy";
 import { getRadarTrends } from "@/lib/trends/details";
 import styles from "./trends.module.css";
 
-const heading = "text-2xl font-semibold leading-tight tracking-[-0.025em] text-ink md:text-3xl";
 export async function TrendsExplorer({ locale }: { locale: "es" | "en" }) {
   const copy = trendsCopy[locale];
-  const capital = getPublicCapital(await getCapitalData());
+  const dataset = await getCapitalData();
+  const capital = getPublicCapital(dataset);
+  const sharedRows = capital.views.find(view => view.id === "shared")?.rows ?? [];
+  const alphabetId = sharedRows.find(row => row.ticker_verified === "GOOGL")?.issuer_id;
+  const alphabetUnion = capital.quality !== "unavailable" && alphabetId ? dataset.issuers.find(issuer => issuer.issuer_id === alphabetId)?.managers : undefined;
   const trends = getRadarTrends(locale);
   const date = new Intl.DateTimeFormat(locale === "es" ? "es-ES" : "en-GB", { day: "2-digit", month: "short", year: "numeric", timeZone: "UTC" }).format(new Date(`${trendsReviewedAt}T00:00:00Z`));
-  return <div data-trends-page className={`${styles.page} mx-auto min-w-0 max-w-7xl px-4 pb-12 pt-8 md:px-5 md:pb-16 md:pt-10`}>
+  return <div data-trends-page className={`${styles.page} ${styles.visualPage}`}>
     <TrendsAnalytics />
     <JsonLd data={[buildWebPageJsonLd({ pathname: trendsPath(locale), name: copy.hero.eyebrow, description: copy.hero.text, language: locale }, "CollectionPage"), buildBreadcrumbJsonLd(locale, [{ name: locale === "es" ? "Inicio" : "Home", pathname: locale === "es" ? "/" : "/en" }, { name: copy.hero.eyebrow, pathname: trendsPath(locale) }])]} />
-    <header className="border-b border-line pb-9 md:pb-11">
-      <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-brass">{copy.hero.eyebrow}</p>
-      <h1 className="mt-4 max-w-[25ch] text-balance text-[clamp(2rem,5vw,4.25rem)] font-semibold leading-[1.02] tracking-[-0.045em] text-ink">{copy.hero.title}</h1>
-      <p className="mt-5 max-w-4xl text-lg font-medium leading-8 text-petrol">{copy.hero.subtitle}</p>
-      <p className="mt-3 max-w-3xl text-base leading-7 text-muted">{copy.hero.text}</p>
-      <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
-        <a href="#radar" className="inline-flex min-h-11 items-center justify-center rounded-[4px] border border-petrol bg-petrol px-5 py-2.5 text-sm font-semibold text-white hover:bg-panel hover:text-petrol">{copy.hero.primary}</a>
-        <a href="#capital" className="inline-flex min-h-11 items-center justify-center rounded-[4px] border border-petrol/25 bg-white/70 px-5 py-2.5 text-sm font-semibold text-petrol hover:border-petrol">{copy.hero.secondary}</a>
+    <header className={styles.hero}>
+      <div className={styles.heroTop}>
+        <div className={styles.heroCopy}>
+          <p className={styles.eyebrow}>{copy.hero.eyebrow}</p>
+          <h1>{copy.hero.title}</h1>
+          <p className={styles.heroSubtitle}>{copy.hero.subtitle}</p>
+          <p className={styles.heroText}>{copy.hero.text}</p>
+          <div className={styles.heroActions}>
+            <a href="#radar" className={styles.primaryCta}>{copy.hero.primary} <span aria-hidden="true">→</span></a>
+            <a href="#capital" className={styles.secondaryCta}>{copy.hero.secondary}</a>
+          </div>
+        </div>
+        <div className={styles.heroVisual} aria-hidden="true" />
       </div>
-      <p className="mt-5 text-xs leading-6 text-muted">{copy.hero.sequence}</p>
+      <div className={styles.heroPrinciples}>
+        {copy.hero.sequence.split(" · ").slice(0, 4).map((label, index) => <div key={label}>
+          <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round">
+            {index === 0 ? <><path d="M5 3h11l3 3v15H5zM15 3v4h4M8 11h8M8 15h5" /></> : index === 1 ? <><path d="M4 20V10h4v10M10 20V4h4v16M16 20v-7h4v7M3 20h18" /></> : index === 2 ? <><path d="m12 3 9 5-9 5-9-5zM3 12l9 5 9-5M3 16l9 5 9-5" /></> : <><path d="m12 3 8 3v6c0 5-8 9-8 9s-8-4-8-9V6zM12 8v5M12 16h.01" /></>}
+          </svg><span>{label}</span>
+        </div>)}
+      </div>
     </header>
-    <section aria-labelledby="current-title" className="py-9 md:py-12">
-      <div className="flex flex-wrap items-end justify-between gap-3">
-        <div><h2 id="current-title" className={heading}>{copy.current.title}</h2><p className="mt-2 text-sm text-muted">{copy.current.subtitle}</p></div>
-        <p className="text-xs text-muted">{copy.current.updated}: <time dateTime={trendsReviewedAt}>{date}</time></p>
+    <section aria-labelledby="current-title" className={styles.current}>
+      <div className={styles.sectionHeading}>
+        <div><h2 id="current-title">{copy.current.title}</h2><p>{copy.current.subtitle}</p></div>
+        <p className={styles.updated}>{copy.current.updated}: <time dateTime={trendsReviewedAt}>{date}</time></p>
       </div>
-      <div className="mt-6 grid gap-x-6 gap-y-5 md:grid-cols-2 xl:grid-cols-4">
-        {copy.current.readings.map((reading) => {
+      <div className={styles.currentGrid}>
+        {copy.current.readings.map((reading, index) => {
           const trend = trendCatalog.find((item) => item.id === reading.id)!;
-          return <article key={reading.id} className="flex flex-col border-t border-line pt-4">
-            <h3 className="text-base font-semibold text-ink">{trend.name[locale]}</h3>
-            <p className="mt-3 text-sm leading-6 text-muted">{reading.text}</p>
-            <Link href={trendPath(trend, locale)} aria-label={`${copy.current.analyze}: ${trend.name[locale]}`} className="mt-auto inline-flex min-h-11 w-fit items-center pt-3 text-sm font-semibold text-petrol hover:underline">{copy.current.analyze} <span aria-hidden="true" className="ml-2">→</span></Link>
+          return <article key={reading.id} className={`${styles.currentStory} ${index === 0 ? styles.leadStory : ""}`}>
+            <TrendImage id={reading.id} className={styles.currentImage} />
+            <div className={styles.storyCopy}>
+              <h3>{trend.name[locale]}</h3>
+              <p>{reading.text}</p>
+              <Link href={trendPath(trend, locale)} aria-label={`${copy.current.analyze}: ${trend.name[locale]}`} className={styles.textLink}>{copy.current.analyze} <span aria-hidden="true">→</span></Link>
+            </div>
           </article>;
         })}
-        <article className="flex flex-col border-t border-petrol pt-4">
-          <h3 className="text-base font-semibold text-ink">{copy.current.capital}</h3>
-          <p className="mt-2 text-xs text-muted">{capitalQuarterLabel(capital.quarter_end)}</p>
-          <p className="mt-3 text-sm leading-6 text-muted">{copy.current.capitalText}</p>
-          <a href="#capital" className="mt-auto inline-flex min-h-11 w-fit items-center pt-3 text-sm font-semibold text-petrol hover:underline">{copy.current.data} <span aria-hidden="true" className="ml-2">→</span></a>
+        <article className={styles.capitalStory}>
+          <p className={styles.eyebrow}>{capitalQuarterLabel(capital.quarter_end)}</p>
+          <h3>{copy.current.capital}</h3>
+          <div aria-hidden="true" className={styles.miniBars}>{sharedRows.slice(0, 5).map(row => <span key={row.security_id} style={{ width: `${row.percent_disclosed}%` }} />)}</div>
+          <p>{copy.current.capitalText}</p>
+          <a href="#capital" className={styles.textLink}>{copy.current.data} <span aria-hidden="true">→</span></a>
         </article>
       </div>
     </section>
-    <section id="radar" aria-labelledby="radar-title" className="scroll-mt-24 border-t border-line py-9 md:py-12">
-      <h2 id="radar-title" className={heading}>{copy.radar.title}</h2>
-      <p className="mt-3 text-base leading-7 text-muted">{copy.radar.text}</p>
+    <section id="radar" aria-labelledby="radar-title" className={styles.radarSection}>
+      <h2 id="radar-title">{copy.radar.title}</h2>
+      <p className={styles.sectionText}>{copy.radar.text}</p>
       <TrendRadar trends={trends} locale={locale} />
-      <p className="mt-5 text-xs leading-6 text-muted">{copy.radar.note} <Link href={`${trendsMethodologyPath(locale)}#editorial`} className="font-semibold text-petrol underline underline-offset-4">{copy.capital.methodology} →</Link></p>
+      <p className={styles.radarNote}>{copy.radar.note} <Link href={`${trendsMethodologyPath(locale)}#editorial`} className="font-semibold text-petrol underline underline-offset-4">{copy.capital.methodology} →</Link></p>
     </section>
-    <CapitalDisclosureSection capital={capital} locale={locale} />
-    <section aria-labelledby="deep-title" className="rounded-[6px] border border-line bg-panelSoft p-6 md:p-9">
-      <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-petrol">{copy.deep.eyebrow}</p>
-      <h2 id="deep-title" className={`mt-3 ${heading}`}>{copy.deep.title}</h2>
-      <p className="mt-4 max-w-2xl text-base leading-7 text-muted">{copy.deep.text}</p>
-      <Link data-deep-dive href={trendPath(trendCatalog[0], locale)} className="mt-5 inline-flex min-h-11 items-center text-sm font-semibold text-petrol underline decoration-petrol/30 underline-offset-4 hover:decoration-petrol">{copy.deep.cta} <span aria-hidden="true" className="ml-2">→</span></Link>
+    <CapitalDisclosureSection capital={capital} locale={locale} alphabetUnion={alphabetUnion} />
+    <section aria-labelledby="deep-title" className={styles.deepDive}>
+      <p className={styles.eyebrow}>{copy.deep.eyebrow}</p>
+      <h2 id="deep-title">{copy.deep.title}</h2>
+      <p className={styles.deepText}>{copy.deep.text}</p>
+      <Link data-deep-dive href={trendPath(trendCatalog[0], locale)} className={styles.deepCta}>{copy.deep.cta} <span aria-hidden="true" className="ml-2">→</span></Link>
     </section>
   </div>;
 }
