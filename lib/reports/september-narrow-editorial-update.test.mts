@@ -17,9 +17,10 @@ const odd = earnings.upcoming.find(item => item.ticker === 'ODD')!;
 const hash = (value: unknown) => createHash('sha256').update(JSON.stringify(value)).digest('hex');
 const treasury = 'https://home.treasury.gov/resource-center/data-chart-center/interest-rates/TextView?type=daily_treasury_yield_curve&field_tdr_date_value=2026';
 
-// These hashes were captured from the complete models at production eb1c4b,
-// before editing. Exclude only the explicitly authorized fields, not whole sections.
+// Preserve the original narrow-update invariant with only the approved Ethereum
+// sentence reapplied to production 43f5b5f. Do not exclude entire sections.
 test('narrow update preserves all unrelated report content from production eb1c4b', () => {
+  assert.equal(report.assetReadings.find(item => item.asset === 'Ethereum')!.expected, "ETH podría responder con mayor intensidad si mejora la liquidez y se amplía el interés por cripto. Si Bitcoin concentra las entradas o el dólar se fortalece, la recuperación relativa podría quedar limitada. Por ahora, Ethereum no muestra una tesis propia tan clara; su comportamiento depende principalmente de la liquidez y de si el interés por cripto se amplía más allá de Bitcoin.");
   const unchanged = structuredClone(report);
   Reflect.deleteProperty(unchanged, "modifiedAt");
   const upcoming = unchanged.stockpicking!.earnings;
@@ -30,7 +31,7 @@ test('narrow update preserves all unrelated report content from production eb1c4
       for (const key of ['whatLooksAt', 'whatWouldChange', 'currentReading', 'whyItMatters']) Reflect.deleteProperty(item, key);
     }
   }
-  assert.equal(hash(unchanged), '7628a54d73e81c6ca179c923761224877d5cbc42d4d3821d62f28aa345565351');
+  assert.equal(hash(unchanged), '15e42dcd75e48a65a165b33fc59ef69f12338a72e91d8c09c462efb5830adcd4');
   assert.equal(hash(getHistoricalAutomaticReadings(id)), '8c56f21abbc5063821b243686f43a99091f2a1337d2cbef0ab87f58cf3639243');
   const prior = marketReports.filter(item => item.id !== id).map(definition => ({ definition, resolved: buildReportExportModel(definition), automatic: getHistoricalAutomaticReadings(definition.id) }));
   assert.equal(hash(prior), '8943fbfcc2909f544cd2f6d13ec053936fdaeb5d9549656372c5494a9d4361fb');

@@ -404,7 +404,7 @@ Clasificación: **beta de liquidez**
 
 - **Qué pasó:** Ethereum cerró el día UTC del 4 de septiembre en 2.456,08 USD. Su lectura en este informe parte del precio, de la relación con Bitcoin y de las condiciones de liquidez. No se atribuye el movimiento a un catalizador de actividad de la red que no haya sido verificado.
 - **Qué cambió:** Una mejora del apetito por riesgo puede amplificar la respuesta de ETH, pero una beta mayor también aumenta la sensibilidad a un endurecimiento financiero. El comportamiento relativo frente a BTC ayuda a distinguir una recuperación amplia de una demanda concentrada en Bitcoin.
-- **Qué esperamos:** ETH podría responder con mayor intensidad si mejora la liquidez y se amplía el interés por cripto. Si Bitcoin concentra las entradas o el dólar se fortalece, la recuperación relativa podría quedar limitada. No hay evidencia suficiente aquí para construir una tesis específica de IA para Ethereum.
+- **Qué esperamos:** ETH podría responder con mayor intensidad si mejora la liquidez y se amplía el interés por cripto. Si Bitcoin concentra las entradas o el dólar se fortalece, la recuperación relativa podría quedar limitada. Por ahora, Ethereum no muestra una tesis propia tan clara; su comportamiento depende principalmente de la liquidez y de si el interés por cripto se amplía más allá de Bitcoin.
 
 #### Niveles estadísticos
 
