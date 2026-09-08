@@ -53,23 +53,23 @@ test("missing history keeps the capital-only path and its own reason code", () =
 });
 
 test("an unnormalizable portfolio still fails at the top level so downstream gating holds", () => {
-  const result = analyzePortfolioForDisplay(parsePortfolioText("SPY nope"), []);
+  const result = analyzePortfolioForDisplay([{ assetId: "SPY", rawWeight: NaN }], []);
   assert.equal(result.status, "UNAVAILABLE");
   if (result.status !== "UNAVAILABLE") return;
   assert.equal(result.reason_code, "INVALID_INPUT");
 });
 
 test("a short or leveraged portfolio keeps its own reason code", () => {
-  const result = analyzePortfolioForDisplay(parsePortfolioText("SPY -10\nTLT 60"), []);
+  const result = analyzePortfolioForDisplay([{ assetId: "SPY", rawWeight: -10 }, { assetId: "TLT", rawWeight: 60 }], []);
   assert.equal(result.status, "UNAVAILABLE");
   if (result.status !== "UNAVAILABLE") return;
   assert.equal(result.reason_code, "UNSUPPORTED_PORTFOLIO");
 });
 
 test("a broken portfolio is not masked as a history failure when history is also present", () => {
-  for (const text of ["SPY nope", "SPY -10\nTLT 60", "SPY 60\nSPY 40"]) {
-    const result = analyzePortfolioForDisplay(parsePortfolioText(text), NON_ISO_DATE_HISTORY);
-    assert.equal(result.status, "UNAVAILABLE", text + " must remain a portfolio failure");
+  for (const holdings of [[{ assetId: "SPY", rawWeight: NaN }], [{ assetId: "SPY", rawWeight: -10 }, { assetId: "TLT", rawWeight: 60 }], [{ assetId: "SPY", rawWeight: 60 }, { assetId: "SPY", rawWeight: 40 }]]) {
+    const result = analyzePortfolioForDisplay(holdings, NON_ISO_DATE_HISTORY);
+    assert.equal(result.status, "UNAVAILABLE", "Malformed portfolio must remain a portfolio failure");
   }
 });
 

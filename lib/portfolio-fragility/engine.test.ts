@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import test from "node:test";
 import { analyzePortfolio, covarianceStress, directStress, historicalReplay, normalizeWeights, removeHolding } from "./engine.ts";
-import { buildDemoHistory, DEMO_HOLDINGS, parseHistoryCsv, parsePortfolioText } from "./demo-data.ts";
+import { buildDemoHistory, DEMO_HOLDINGS, parseHistoryCsv } from "./demo-data.ts";
 
 function analysisHistoryStatus(rows: ReturnType<typeof buildDemoHistory>) {
   const result = analyzePortfolio(DEMO_HOLDINGS, rows);
@@ -11,9 +11,9 @@ function analysisHistoryStatus(rows: ReturnType<typeof buildDemoHistory>) {
 
 test("normalization rejects duplicates, negative and non-finite inputs", () => {
   const reason = (value: ReturnType<typeof normalizeWeights>) => value.status === "UNAVAILABLE" ? value.reason_code : "OK";
-  assert.equal(reason(normalizeWeights(parsePortfolioText("SPY 60\nSPY 40"))), "INVALID_INPUT");
-  assert.equal(reason(normalizeWeights(parsePortfolioText("SPY -1\nTLT 2"))), "UNSUPPORTED_PORTFOLIO");
-  assert.equal(reason(normalizeWeights(parsePortfolioText("SPY nope"))), "INVALID_INPUT");
+  assert.equal(reason(normalizeWeights([{ assetId: "SPY", rawWeight: 60 }, { assetId: "SPY", rawWeight: 40 }])), "INVALID_INPUT");
+  assert.equal(reason(normalizeWeights([{ assetId: "SPY", rawWeight: -1 }, { assetId: "TLT", rawWeight: 2 }])), "UNSUPPORTED_PORTFOLIO");
+  assert.equal(reason(normalizeWeights([{ assetId: "SPY", rawWeight: NaN }])), "INVALID_INPUT");
 });
 
 test("missing history preserves capital metrics and returns typed unavailable", () => {

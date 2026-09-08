@@ -21,3 +21,15 @@ test("percentages and decimals stay locale-consistent with the multiplier", () =
   assert.equal(es.pct(0.351), "35,1 %");
   assert.equal(en.pct(0.351), "35.1%");
 });
+
+
+test("first insight and signed contributions retain required precision and units in both languages", () => {
+  for (const locale of ["en", "es"] as const) {
+    const f = createFormatters(locale);
+    assert.ok(f.hhi(.445).includes(locale === "en" ? "0.445" : "0,445"));
+    assert.ok(f.signedPct(-.05).includes("-5"));
+    assert.ok(f.signedPct(1.2).includes("+120"));
+    assert.ok(f.points(-.005).includes(locale === "en" ? "-0.5" : "-0,5"));
+    assert.notEqual(f.precisePct(1e-15), f.precisePct(0));
+  }
+});

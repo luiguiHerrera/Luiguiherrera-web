@@ -53,12 +53,7 @@ export function buildDemoHistory(): HistoryObservation[] {
   });
 }
 
-export function parsePortfolioText(value: string): Holding[] {
-  return value.split(/\r?\n/).map((line) => line.trim()).filter(Boolean).map((line) => {
-    const [assetId, raw] = line.split(/[\s,;]+/);
-    return { assetId: assetId?.toUpperCase() ?? "", rawWeight: Number(raw) };
-  });
-}
+export { parsePortfolioText } from "./holdings-input.ts";
 
 export function parseHistoryCsv(value: string): HistoryObservation[] {
   const rows = value.trim().split(/\r?\n/).filter(Boolean);
