@@ -1,0 +1,122 @@
+{
+  "custody_archive_outside_git": "/Users/quantlab/Developer/web/Luiguiherrera-evidence/trends-movements-v2.1-20260908",
+  "existing_files_modified": [],
+  "files": [
+    {
+      "absolute_path": "/Users/quantlab/.codex/worktrees/2885/Luiguiherrera-web/docs/trends/movements-research-status.md",
+      "bytes": 947,
+      "checkpoint_relative_path": "../../../docs/trends/movements-research-status.md",
+      "path": "docs/trends/movements-research-status.md",
+      "role": "discovery note",
+      "sha256": "c1de0a4c05be736815cae46214a5e6698024723f8199c55ad20bf8434b2b252f"
+    },
+    {
+      "absolute_path": "/Users/quantlab/.codex/worktrees/2885/Luiguiherrera-web/internal/checkpoints/trends-movements-v2.1-20260908/CANDIDATES.json",
+      "bytes": 99475,
+      "checkpoint_relative_path": "CANDIDATES.json",
+      "path": "internal/checkpoints/trends-movements-v2.1-20260908/CANDIDATES.json",
+      "role": "internal checkpoint",
+      "sha256": "50e10fece123bca5fd66ce9215caa6d9773934c7a6fcb6169e650e7093dd7e29"
+    },
+    {
+      "absolute_path": "/Users/quantlab/.codex/worktrees/2885/Luiguiherrera-web/internal/checkpoints/trends-movements-v2.1-20260908/CODE_RETENTION.json",
+      "bytes": 41776,
+      "checkpoint_relative_path": "CODE_RETENTION.json",
+      "path": "internal/checkpoints/trends-movements-v2.1-20260908/CODE_RETENTION.json",
+      "role": "internal checkpoint",
+      "sha256": "84ba3253c34b1335b2f0d7b2f36c303421e6582bac2bf44d25f5e282f2c16182"
+    },
+    {
+      "absolute_path": "/Users/quantlab/.codex/worktrees/2885/Luiguiherrera-web/internal/checkpoints/trends-movements-v2.1-20260908/FILES.json",
+      "bytes": null,
+      "checkpoint_relative_path": "FILES.json",
+      "path": "internal/checkpoints/trends-movements-v2.1-20260908/FILES.json",
+      "role": "internal checkpoint",
+      "sha256": null
+    },
+    {
+      "absolute_path": "/Users/quantlab/.codex/worktrees/2885/Luiguiherrera-web/internal/checkpoints/trends-movements-v2.1-20260908/MODELS.md",
+      "bytes": 8105,
+      "checkpoint_relative_path": "MODELS.md",
+      "path": "internal/checkpoints/trends-movements-v2.1-20260908/MODELS.md",
+      "role": "internal checkpoint",
+      "sha256": "9da132197987f5ada44d01ca7c5118a48be4854e07c77cdb52de26720b945925"
+    },
+    {
+      "absolute_path": "/Users/quantlab/.codex/worktrees/2885/Luiguiherrera-web/internal/checkpoints/trends-movements-v2.1-20260908/README.md",
+      "bytes": 7049,
+      "checkpoint_relative_path": "README.md",
+      "path": "internal/checkpoints/trends-movements-v2.1-20260908/README.md",
+      "role": "internal checkpoint",
+      "sha256": "a069656baa19378d4748c8a1f9284cbb9c25209d0b03c756d2a2a3f5f1c4e24d"
+    },
+    {
+      "absolute_path": "/Users/quantlab/.codex/worktrees/2885/Luiguiherrera-web/internal/checkpoints/trends-movements-v2.1-20260908/REPRODUCE.md",
+      "bytes": 6054,
+      "checkpoint_relative_path": "REPRODUCE.md",
+      "path": "internal/checkpoints/trends-movements-v2.1-20260908/REPRODUCE.md",
+      "role": "internal checkpoint",
+      "sha256": "009429b49b3d8275db9a27c03decb37197bfaff2f71407ae6bcb6dcafd67ef14"
+    },
+    {
+      "absolute_path": "/Users/quantlab/.codex/worktrees/2885/Luiguiherrera-web/internal/checkpoints/trends-movements-v2.1-20260908/STATE.json",
+      "bytes": 14717,
+      "checkpoint_relative_path": "STATE.json",
+      "path": "internal/checkpoints/trends-movements-v2.1-20260908/STATE.json",
+      "role": "internal checkpoint",
+      "sha256": "1e528b40143259327a884dab4d1a5a07fdc8661f82c2248cf18d79df84dcac65"
+    },
+    {
+      "absolute_path": "/Users/quantlab/.codex/worktrees/2885/Luiguiherrera-web/internal/checkpoints/trends-movements-v2.1-20260908/STORAGE_AUDIT.json",
+      "bytes": 7060,
+      "checkpoint_relative_path": "STORAGE_AUDIT.json",
+      "path": "internal/checkpoints/trends-movements-v2.1-20260908/STORAGE_AUDIT.json",
+      "role": "internal checkpoint",
+      "sha256": "4b48d35af4b437be975b7ab486644c2f2da61d5b8fd72de12a7dbec72e37d09e"
+    },
+    {
+      "absolute_path": "/Users/quantlab/.codex/worktrees/2885/Luiguiherrera-web/internal/checkpoints/trends-movements-v2.1-20260908/VALIDATION.json",
+      "bytes": 30643,
+      "checkpoint_relative_path": "VALIDATION.json",
+      "path": "internal/checkpoints/trends-movements-v2.1-20260908/VALIDATION.json",
+      "role": "internal checkpoint",
+      "sha256": "4b6b4bdcf3610ddbd15ef00a4c149f47ec2e98ce0ca909d1074aa8d76bdd1642"
+    },
+    {
+      "absolute_path": "/Users/quantlab/.codex/worktrees/2885/Luiguiherrera-web/internal/checkpoints/trends-movements-v2.1-20260908/WORKSPACE_BASELINE.json",
+      "bytes": 64747,
+      "checkpoint_relative_path": "WORKSPACE_BASELINE.json",
+      "path": "internal/checkpoints/trends-movements-v2.1-20260908/WORKSPACE_BASELINE.json",
+      "role": "internal checkpoint",
+      "sha256": "766185724e2810ed37477496d474a7b0a72b57f389912a269190a287a0a59e4f"
+    },
+    {
+      "absolute_path": "/Users/quantlab/.codex/worktrees/2885/Luiguiherrera-web/internal/checkpoints/trends-movements-v2.1-20260908/reconstruction-core.tar.gz",
+      "bytes": 10514957,
+      "checkpoint_relative_path": "reconstruction-core.tar.gz",
+      "path": "internal/checkpoints/trends-movements-v2.1-20260908/reconstruction-core.tar.gz",
+      "role": "internal checkpoint",
+      "sha256": "c11bc2b56a526c58e31ce2aa726be3ed0aa135dd9ed386e8e5ec50f92b87d369"
+    },
+    {
+      "absolute_path": "/Users/quantlab/.codex/worktrees/2885/Luiguiherrera-web/internal/checkpoints/trends-movements-v2.1-20260908/retained-manifest.jsonl.gz",
+      "bytes": 2524468,
+      "checkpoint_relative_path": "retained-manifest.jsonl.gz",
+      "path": "internal/checkpoints/trends-movements-v2.1-20260908/retained-manifest.jsonl.gz",
+      "role": "internal checkpoint",
+      "sha256": "95e875e0195660c1c44fafb88e3e64bfe44bd3cf6550d9ab2d9a34b0e325eed2"
+    },
+    {
+      "absolute_path": "/Users/quantlab/.codex/worktrees/2885/Luiguiherrera-web/internal/checkpoints/trends-movements-v2.1-20260908/verify_checkpoint.py",
+      "bytes": 9973,
+      "checkpoint_relative_path": "verify_checkpoint.py",
+      "path": "internal/checkpoints/trends-movements-v2.1-20260908/verify_checkpoint.py",
+      "role": "internal checkpoint",
+      "sha256": "3a8807dfd5d6cb82b1e39d182bc1398cca68e37dd4d9e5cd0f0f4d9587cf3fd8"
+    }
+  ],
+  "files_created": 14,
+  "self_hash_policy": "FILES.json sha256/bytes are null to avoid self-reference; all other artifacts bound.",
+  "status": "PROPOSED_NOT_COMMITTED",
+  "total_known_bytes_excluding_self": 13329971
+}

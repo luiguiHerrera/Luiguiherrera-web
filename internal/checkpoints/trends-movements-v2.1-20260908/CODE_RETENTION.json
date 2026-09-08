@@ -1,0 +1,611 @@
+{
+  "DEFER_CODE": [
+    {
+      "copied_as_inert_history": true,
+      "path": "scripts/movement_evidence_wave1/attestations.py",
+      "reason": "Acquisition, scope-specific review authoring or expansion entry point. Requires new access assessment and explicit authorization before execution.",
+      "sha256": "a3dbf22bb2380790b06a298bd844055da1facc8307edf309435e7838cea6fb09"
+    },
+    {
+      "copied_as_inert_history": true,
+      "path": "scripts/movement_evidence_wave1/research.py",
+      "reason": "Acquisition, scope-specific review authoring or expansion entry point. Requires new access assessment and explicit authorization before execution.",
+      "sha256": "24f3f15a6160f0adb731e90588ba39e64a88de1c7dc3819e16c8731cacc8d84f"
+    },
+    {
+      "copied_as_inert_history": true,
+      "path": "scripts/movement_evidence_wave1/run.py",
+      "reason": "Acquisition, scope-specific review authoring or expansion entry point. Requires new access assessment and explicit authorization before execution.",
+      "sha256": "7ec3a73f4499663baad860184762e3d6a83789e33a2beb0f5e35f6db7457f96d"
+    },
+    {
+      "copied_as_inert_history": true,
+      "path": "scripts/movement_global_wave2a/coverage_findings.py",
+      "reason": "Acquisition, scope-specific review authoring or expansion entry point. Requires new access assessment and explicit authorization before execution.",
+      "sha256": "54e7966bf76dde080c04cedb7da3f4f2a2afbf3d753e1701bad320edfa9d15a1"
+    },
+    {
+      "copied_as_inert_history": true,
+      "path": "scripts/movement_global_wave2a/discover.py",
+      "reason": "Acquisition, scope-specific review authoring or expansion entry point. Requires new access assessment and explicit authorization before execution.",
+      "sha256": "f4aa67a603f5c6c4913bc741f3eeb2359a2b94401c607c7e7ef7ee1b0723cd88"
+    },
+    {
+      "copied_as_inert_history": true,
+      "path": "scripts/movement_global_wave2a/events2a.py",
+      "reason": "Acquisition, scope-specific review authoring or expansion entry point. Requires new access assessment and explicit authorization before execution.",
+      "sha256": "0ab02fbae68e7911eac70b56339410a4af15ea3d7875c886a4516eb6bc202995"
+    },
+    {
+      "copied_as_inert_history": true,
+      "path": "scripts/movement_global_wave2a/identity_findings.py",
+      "reason": "Acquisition, scope-specific review authoring or expansion entry point. Requires new access assessment and explicit authorization before execution.",
+      "sha256": "695292d820f1de68c1864b6ecac0ed224da972e1a9e5a8c1af7717b62b29c715"
+    },
+    {
+      "copied_as_inert_history": true,
+      "path": "scripts/movement_global_wave2a/manual2a.py",
+      "reason": "Acquisition, scope-specific review authoring or expansion entry point. Requires new access assessment and explicit authorization before execution.",
+      "sha256": "689b65bed331db1773ff7e9d9ce65bac6350dac749aa5adba0c96cf8c2c3229a"
+    },
+    {
+      "copied_as_inert_history": true,
+      "path": "scripts/movement_global_wave2a/primary2a.py",
+      "reason": "Acquisition, scope-specific review authoring or expansion entry point. Requires new access assessment and explicit authorization before execution.",
+      "sha256": "acbb857922958ead45b221ac71c71413b68d5600eff7c67ad805f5caecc4a3d5"
+    },
+    {
+      "copied_as_inert_history": true,
+      "path": "scripts/movement_pilot_wave1c/discovery.py",
+      "reason": "Acquisition, scope-specific review authoring or expansion entry point. Requires new access assessment and explicit authorization before execution.",
+      "sha256": "7c4a113ae6241ee48e8125cd8744a755b964d3dc1021ee7246ee63f2942bbbe7"
+    },
+    {
+      "copied_as_inert_history": true,
+      "path": "scripts/movement_pilot_wave1c/retrieve_events.py",
+      "reason": "Acquisition, scope-specific review authoring or expansion entry point. Requires new access assessment and explicit authorization before execution.",
+      "sha256": "509cba096865df4642a79e6307e4d5b611780b494d4e0b571a88bc3b4f3a1c25"
+    },
+    {
+      "copied_as_inert_history": true,
+      "path": "scripts/movement_pilot_wave1c/review_records.py",
+      "reason": "Acquisition, scope-specific review authoring or expansion entry point. Requires new access assessment and explicit authorization before execution.",
+      "sha256": "97e59bdfd384856890b67177078ac3d401bde5febe20387bfc31b891e0b02c9e"
+    },
+    {
+      "copied_as_inert_history": true,
+      "path": "scripts/movement_pilot_wave1d/attest_review.py",
+      "reason": "Acquisition, scope-specific review authoring or expansion entry point. Requires new access assessment and explicit authorization before execution.",
+      "sha256": "54cff54cd2223adea3d43666f85d86a44b775aa9ba8fc507e9d4a48f11b1bc14"
+    },
+    {
+      "copied_as_inert_history": true,
+      "path": "scripts/movement_qualification/run.py",
+      "reason": "Acquisition, scope-specific review authoring or expansion entry point. Requires new access assessment and explicit authorization before execution.",
+      "sha256": "924def8cc660f9e331e1b5f2abd5858d8ca3779fd858713e9fba38d470e32f3f"
+    },
+    {
+      "copied_as_inert_history": true,
+      "path": "scripts/movement_security_wave1b/fetch_sources.py",
+      "reason": "Acquisition, scope-specific review authoring or expansion entry point. Requires new access assessment and explicit authorization before execution.",
+      "sha256": "2b3c67f3871579a8fc3b06085a47502e63077029f65dd6b68d0f4db0465dd8c3"
+    },
+    {
+      "copied_as_inert_history": true,
+      "path": "scripts/movement_security_wave1b/retrieve_events.py",
+      "reason": "Acquisition, scope-specific review authoring or expansion entry point. Requires new access assessment and explicit authorization before execution.",
+      "sha256": "6c24dcbe775409cbd3d835855352cc0462ab8738bf97486dc9557ae432b73304"
+    }
+  ],
+  "DISCARDABLE_EXPERIMENT_CODE": [
+    {
+      "copied_as_inert_history": true,
+      "path": "scripts/movement_evidence_wave1/report.py",
+      "reason": "Superseded phase-specific report formatting; historical source retained in bundle, no deletion proposed before archive verification.",
+      "sha256": "fcf0a386537c0d85b6bd6c267a1cb93ac2e12aa6c3d9069ea2c9423f719474fb"
+    },
+    {
+      "copied_as_inert_history": true,
+      "path": "scripts/movement_global_wave2a/report2a.py",
+      "reason": "Superseded phase-specific report formatting; historical source retained in bundle, no deletion proposed before archive verification.",
+      "sha256": "1edca01c3ffd79100d4f549b2103abf85e76d911fb44f536284c3668d1262f6a"
+    },
+    {
+      "copied_as_inert_history": true,
+      "path": "scripts/movement_pilot_wave1c/generate_report.py",
+      "reason": "Superseded phase-specific report formatting; historical source retained in bundle, no deletion proposed before archive verification.",
+      "sha256": "684fb120543f51765bc0714ffe81d33cf19b90768236fd5d6ed84482c2df6801"
+    },
+    {
+      "copied_as_inert_history": true,
+      "path": "scripts/movement_pilot_wave1d/report.py",
+      "reason": "Superseded phase-specific report formatting; historical source retained in bundle, no deletion proposed before archive verification.",
+      "sha256": "cec7998252bf2b8d9dc5b1586c91262dd5340e87557e913037b671ed15553d28"
+    },
+    {
+      "copied_as_inert_history": true,
+      "path": "scripts/movement_security_wave1b/report.py",
+      "reason": "Superseded phase-specific report formatting; historical source retained in bundle, no deletion proposed before archive verification.",
+      "sha256": "3d7eb62162fd9fd0456ffa200babf49db3657f1f167075a5cccd5d9b69284ead"
+    },
+    {
+      "copied_as_inert_history": true,
+      "path": "scripts/report-movement-qualification.py",
+      "reason": "Superseded phase-specific report formatting; historical source retained in bundle, no deletion proposed before archive verification.",
+      "sha256": "e72f6a0bd229c20c94f79259ea26b822bfed110f72fd85cc169d3a2c1d2bc208"
+    }
+  ],
+  "KEEP_CODE": [
+    {
+      "copied_as_inert_history": true,
+      "path": "scripts/movement_evidence_wave1/.gitignore",
+      "reason": "Offline model/parser/evidence dependency, identity or event grouping logic, deterministic census, validation, or audit tests. Reusable components need isolation from mixed acquisition adapters before integration.",
+      "sha256": "32dae3052f331ee34d628ef535709b301259a45df7c7522c4d35dcf49873f00b"
+    },
+    {
+      "copied_as_inert_history": true,
+      "path": "scripts/movement_evidence_wave1/README.md",
+      "reason": "Offline model/parser/evidence dependency, identity or event grouping logic, deterministic census, validation, or audit tests. Reusable components need isolation from mixed acquisition adapters before integration.",
+      "sha256": "01e4c68a7dd686b0420ec50d884432842ae6601bea0de19b576e4b65117f68d4"
+    },
+    {
+      "copied_as_inert_history": true,
+      "path": "scripts/movement_evidence_wave1/build.py",
+      "reason": "Offline model/parser/evidence dependency, identity or event grouping logic, deterministic census, validation, or audit tests. Reusable components need isolation from mixed acquisition adapters before integration.",
+      "sha256": "c03a7688333680968741f4819c91b04af184a899fb77ebfb88a9027025efc360"
+    },
+    {
+      "copied_as_inert_history": true,
+      "path": "scripts/movement_evidence_wave1/engine.py",
+      "reason": "Offline model/parser/evidence dependency, identity or event grouping logic, deterministic census, validation, or audit tests. Reusable components need isolation from mixed acquisition adapters before integration.",
+      "sha256": "0febef0e2ad5bb0b334abefd6305d29b5282b5e116a48639fa6ed1dbbe7aac56"
+    },
+    {
+      "copied_as_inert_history": true,
+      "path": "scripts/movement_evidence_wave1/model.py",
+      "reason": "Offline model/parser/evidence dependency, identity or event grouping logic, deterministic census, validation, or audit tests. Reusable components need isolation from mixed acquisition adapters before integration.",
+      "sha256": "f41e7ba3cfa10d6e2598a022cf13e2f1d85c1d0e8381b222fb2012e97c188ce3"
+    },
+    {
+      "copied_as_inert_history": true,
+      "path": "scripts/movement_evidence_wave1/test_expansion_gate.py",
+      "reason": "Offline model/parser/evidence dependency, identity or event grouping logic, deterministic census, validation, or audit tests. Reusable components need isolation from mixed acquisition adapters before integration.",
+      "sha256": "1181abfa2b419df1a9a2f02dd86a01e88c49bca25e1ac9ec9e2ece125ed6a27a"
+    },
+    {
+      "copied_as_inert_history": true,
+      "path": "scripts/movement_evidence_wave1/test_shared_evidence.py",
+      "reason": "Offline model/parser/evidence dependency, identity or event grouping logic, deterministic census, validation, or audit tests. Reusable components need isolation from mixed acquisition adapters before integration.",
+      "sha256": "0dd30800964cc8ade26ad2edc04dda5d0500b3d6e8efe494b1d393f6b54caffa"
+    },
+    {
+      "copied_as_inert_history": true,
+      "path": "scripts/movement_global_wave2a/audit2a.py",
+      "reason": "Offline model/parser/evidence dependency, identity or event grouping logic, deterministic census, validation, or audit tests. Reusable components need isolation from mixed acquisition adapters before integration.",
+      "sha256": "bf2d9b4e3cf1ebf155fc37b14d02e8dbba43c636620cf1208f1105a909d08417"
+    },
+    {
+      "copied_as_inert_history": true,
+      "path": "scripts/movement_global_wave2a/bias2a.py",
+      "reason": "Offline model/parser/evidence dependency, identity or event grouping logic, deterministic census, validation, or audit tests. Reusable components need isolation from mixed acquisition adapters before integration.",
+      "sha256": "db87f2d4c0bd9dfb9af392576a6cde11f00d39b6ca2c9234236b06c3b6610fc8"
+    },
+    {
+      "copied_as_inert_history": true,
+      "path": "scripts/movement_global_wave2a/context2a.py",
+      "reason": "Offline model/parser/evidence dependency, identity or event grouping logic, deterministic census, validation, or audit tests. Reusable components need isolation from mixed acquisition adapters before integration.",
+      "sha256": "5c14a1096e117cb8d999f1461425c565b375a7499c4481bbea5915b099f71b50"
+    },
+    {
+      "copied_as_inert_history": true,
+      "path": "scripts/movement_global_wave2a/freeze_target.py",
+      "reason": "Offline model/parser/evidence dependency, identity or event grouping logic, deterministic census, validation, or audit tests. Reusable components need isolation from mixed acquisition adapters before integration.",
+      "sha256": "cf1ea15af69b0ec1defd672729e415f23274d8e47423efdbd028f51b6c2b9753"
+    },
+    {
+      "copied_as_inert_history": true,
+      "path": "scripts/movement_global_wave2a/global_engine.py",
+      "reason": "Offline model/parser/evidence dependency, identity or event grouping logic, deterministic census, validation, or audit tests. Reusable components need isolation from mixed acquisition adapters before integration.",
+      "sha256": "72c7dababbb7b41ecd8956f5922e26f85fcd19ed92ab80f7186fef4a4f1673e2"
+    },
+    {
+      "copied_as_inert_history": true,
+      "path": "scripts/movement_global_wave2a/inspect2a.py",
+      "reason": "Offline model/parser/evidence dependency, identity or event grouping logic, deterministic census, validation, or audit tests. Reusable components need isolation from mixed acquisition adapters before integration.",
+      "sha256": "57230eb2d87365b7f60a806faf9047fe00d65203d1cc357516c13b8e9f417c17"
+    },
+    {
+      "copied_as_inert_history": true,
+      "path": "scripts/movement_global_wave2a/test_global.py",
+      "reason": "Offline model/parser/evidence dependency, identity or event grouping logic, deterministic census, validation, or audit tests. Reusable components need isolation from mixed acquisition adapters before integration.",
+      "sha256": "300c2fff4260694e702bc170068784d071a6e8591fc53cb34631bf10b4361d30"
+    },
+    {
+      "copied_as_inert_history": true,
+      "path": "scripts/movement_global_wave2a/validate2a.py",
+      "reason": "Offline model/parser/evidence dependency, identity or event grouping logic, deterministic census, validation, or audit tests. Reusable components need isolation from mixed acquisition adapters before integration.",
+      "sha256": "badb1fb751ef3ce01bac5085fc9c60f872794cb63d0d23c22e45dab380676141"
+    },
+    {
+      "copied_as_inert_history": true,
+      "path": "scripts/movement_pilot_wave1c/candidates.py",
+      "reason": "Offline model/parser/evidence dependency, identity or event grouping logic, deterministic census, validation, or audit tests. Reusable components need isolation from mixed acquisition adapters before integration.",
+      "sha256": "841132a2cae76a9e35609c433943658c31b35c2a4a239f2feefb656d016ec4a3"
+    },
+    {
+      "copied_as_inert_history": true,
+      "path": "scripts/movement_pilot_wave1c/context.py",
+      "reason": "Offline model/parser/evidence dependency, identity or event grouping logic, deterministic census, validation, or audit tests. Reusable components need isolation from mixed acquisition adapters before integration.",
+      "sha256": "979c3d0b7c7ea59eeb1be22752a25c41f372c973a0a6538ce9fd28826fd04510"
+    },
+    {
+      "copied_as_inert_history": true,
+      "path": "scripts/movement_pilot_wave1c/coverage.py",
+      "reason": "Offline model/parser/evidence dependency, identity or event grouping logic, deterministic census, validation, or audit tests. Reusable components need isolation from mixed acquisition adapters before integration.",
+      "sha256": "d3d7235957114552fd4a888977daf68cb12865b953bd4df18147d790e9ac7d6b"
+    },
+    {
+      "copied_as_inert_history": true,
+      "path": "scripts/movement_pilot_wave1c/documents.py",
+      "reason": "Offline model/parser/evidence dependency, identity or event grouping logic, deterministic census, validation, or audit tests. Reusable components need isolation from mixed acquisition adapters before integration.",
+      "sha256": "9ddc04b7e99730f0821f5dc3d69aa36b4c5a959388d011153e093e356d58cb03"
+    },
+    {
+      "copied_as_inert_history": true,
+      "path": "scripts/movement_pilot_wave1c/extract-issuer-pdf.swift",
+      "reason": "Offline model/parser/evidence dependency, identity or event grouping logic, deterministic census, validation, or audit tests. Reusable components need isolation from mixed acquisition adapters before integration.",
+      "sha256": "0b89655bae0e1ecebf3d33241fb5bc69a21e781c5c9fb1a8ef915d5e3933ce9a"
+    },
+    {
+      "copied_as_inert_history": true,
+      "path": "scripts/movement_pilot_wave1c/final_audit.py",
+      "reason": "Offline model/parser/evidence dependency, identity or event grouping logic, deterministic census, validation, or audit tests. Reusable components need isolation from mixed acquisition adapters before integration.",
+      "sha256": "d0598865bd430c9e8926c3e624b2821ddb47100d24c75c4852869ee20703f4ff"
+    },
+    {
+      "copied_as_inert_history": true,
+      "path": "scripts/movement_pilot_wave1c/issuer_identity.py",
+      "reason": "Offline model/parser/evidence dependency, identity or event grouping logic, deterministic census, validation, or audit tests. Reusable components need isolation from mixed acquisition adapters before integration.",
+      "sha256": "b5471074e62cf0722fefdb5650bf9eac0fe7c2db03ebdeccf1edccfb1baf7a1c"
+    },
+    {
+      "copied_as_inert_history": true,
+      "path": "scripts/movement_pilot_wave1c/links.py",
+      "reason": "Offline model/parser/evidence dependency, identity or event grouping logic, deterministic census, validation, or audit tests. Reusable components need isolation from mixed acquisition adapters before integration.",
+      "sha256": "60bc707d7c858db0436895a443d5a4e9c7965c0201f160beba571baf88ee3810"
+    },
+    {
+      "copied_as_inert_history": true,
+      "path": "scripts/movement_pilot_wave1c/owned_inventory.py",
+      "reason": "Offline model/parser/evidence dependency, identity or event grouping logic, deterministic census, validation, or audit tests. Reusable components need isolation from mixed acquisition adapters before integration.",
+      "sha256": "69fc8adc1079d82df51647317d5c98b5ed41a700f340f94692d193b21ab5abe8"
+    },
+    {
+      "copied_as_inert_history": true,
+      "path": "scripts/movement_pilot_wave1c/pilot_engine.py",
+      "reason": "Offline model/parser/evidence dependency, identity or event grouping logic, deterministic census, validation, or audit tests. Reusable components need isolation from mixed acquisition adapters before integration.",
+      "sha256": "9d446229e53f3161aa8e773453aaf4817b5beeab99eed3c1c2388d8776e57c2c"
+    },
+    {
+      "copied_as_inert_history": true,
+      "path": "scripts/movement_pilot_wave1c/pricing_covers.py",
+      "reason": "Offline model/parser/evidence dependency, identity or event grouping logic, deterministic census, validation, or audit tests. Reusable components need isolation from mixed acquisition adapters before integration.",
+      "sha256": "711280df4c81b4f562e72fc5d530f23f5d7245cdea661904b77a11c57603ec28"
+    },
+    {
+      "copied_as_inert_history": true,
+      "path": "scripts/movement_pilot_wave1c/pricing_review.py",
+      "reason": "Offline model/parser/evidence dependency, identity or event grouping logic, deterministic census, validation, or audit tests. Reusable components need isolation from mixed acquisition adapters before integration.",
+      "sha256": "81f3ed100222c79e6aead3259f40a4d26e500f7d7a5e90432ca77f5fde6a9e0c"
+    },
+    {
+      "copied_as_inert_history": true,
+      "path": "scripts/movement_pilot_wave1c/quantities.py",
+      "reason": "Offline model/parser/evidence dependency, identity or event grouping logic, deterministic census, validation, or audit tests. Reusable components need isolation from mixed acquisition adapters before integration.",
+      "sha256": "9b7905bb2319e617cdd170bc8539196b064bd1e8440e79d2ab5d52c6384236b1"
+    },
+    {
+      "copied_as_inert_history": true,
+      "path": "scripts/movement_pilot_wave1c/replay_check.py",
+      "reason": "Offline model/parser/evidence dependency, identity or event grouping logic, deterministic census, validation, or audit tests. Reusable components need isolation from mixed acquisition adapters before integration.",
+      "sha256": "4e96907bdae352c84d5715121aec49beb5bbc22359905b7d8e24d4de354fc064"
+    },
+    {
+      "copied_as_inert_history": true,
+      "path": "scripts/movement_pilot_wave1c/review_dossier.py",
+      "reason": "Offline model/parser/evidence dependency, identity or event grouping logic, deterministic census, validation, or audit tests. Reusable components need isolation from mixed acquisition adapters before integration.",
+      "sha256": "78c1f887b08c467ad8db44299c20b0a3bccb3e56c7401c8750c59de007b53425"
+    },
+    {
+      "copied_as_inert_history": true,
+      "path": "scripts/movement_pilot_wave1c/supplements.py",
+      "reason": "Offline model/parser/evidence dependency, identity or event grouping logic, deterministic census, validation, or audit tests. Reusable components need isolation from mixed acquisition adapters before integration.",
+      "sha256": "33ebd34b8ef86ae0753051b74b1290f422e5b5dc14d3198b39bf382d64c5c928"
+    },
+    {
+      "copied_as_inert_history": true,
+      "path": "scripts/movement_pilot_wave1c/test_candidates.py",
+      "reason": "Offline model/parser/evidence dependency, identity or event grouping logic, deterministic census, validation, or audit tests. Reusable components need isolation from mixed acquisition adapters before integration.",
+      "sha256": "c0dbc4ba9c2b82242c93906fb5c9b6710e126bb6a8cc0755b569aa6151ed3081"
+    },
+    {
+      "copied_as_inert_history": true,
+      "path": "scripts/movement_pilot_wave1c/test_coverage.py",
+      "reason": "Offline model/parser/evidence dependency, identity or event grouping logic, deterministic census, validation, or audit tests. Reusable components need isolation from mixed acquisition adapters before integration.",
+      "sha256": "394665587dafd70cec6b449ece1e6261823eec7be6a9c6713bb9a96cd6371669"
+    },
+    {
+      "copied_as_inert_history": true,
+      "path": "scripts/movement_pilot_wave1c/test_filing_person.py",
+      "reason": "Offline model/parser/evidence dependency, identity or event grouping logic, deterministic census, validation, or audit tests. Reusable components need isolation from mixed acquisition adapters before integration.",
+      "sha256": "d4174d3ae6254eee3d763f755614c2bfffcc413d991a4b4a231e34a3f1f32057"
+    },
+    {
+      "copied_as_inert_history": true,
+      "path": "scripts/movement_pilot_wave1c/test_identity.py",
+      "reason": "Offline model/parser/evidence dependency, identity or event grouping logic, deterministic census, validation, or audit tests. Reusable components need isolation from mixed acquisition adapters before integration.",
+      "sha256": "3294805dfb4f3cc48edb1eade00299a5aa14168ff9de79030e26e0973ab1a52b"
+    },
+    {
+      "copied_as_inert_history": true,
+      "path": "scripts/movement_pilot_wave1c/test_owned_inventory.py",
+      "reason": "Offline model/parser/evidence dependency, identity or event grouping logic, deterministic census, validation, or audit tests. Reusable components need isolation from mixed acquisition adapters before integration.",
+      "sha256": "d03c4cb769ac6a431ddbc3b342a77881e6a6e833baee97295a6e42c280128983"
+    },
+    {
+      "copied_as_inert_history": true,
+      "path": "scripts/movement_pilot_wave1c/test_supplements.py",
+      "reason": "Offline model/parser/evidence dependency, identity or event grouping logic, deterministic census, validation, or audit tests. Reusable components need isolation from mixed acquisition adapters before integration.",
+      "sha256": "92abe6e3b9b893c20c1a42d9325edb3983b9f2ca01af3f188dac1adb5d95e841"
+    },
+    {
+      "copied_as_inert_history": true,
+      "path": "scripts/movement_pilot_wave1d/audit.py",
+      "reason": "Offline model/parser/evidence dependency, identity or event grouping logic, deterministic census, validation, or audit tests. Reusable components need isolation from mixed acquisition adapters before integration.",
+      "sha256": "78b677d95f58ca50a0860e247915a4b13a014dc71aef894cd2c633cba31d45b9"
+    },
+    {
+      "copied_as_inert_history": true,
+      "path": "scripts/movement_pilot_wave1d/closure.py",
+      "reason": "Offline model/parser/evidence dependency, identity or event grouping logic, deterministic census, validation, or audit tests. Reusable components need isolation from mixed acquisition adapters before integration.",
+      "sha256": "a7f4ca3c0c16c50471faf645d7c1a165f7c8777251d3d8165f026224231a552a"
+    },
+    {
+      "copied_as_inert_history": true,
+      "path": "scripts/movement_pilot_wave1d/test_closure.py",
+      "reason": "Offline model/parser/evidence dependency, identity or event grouping logic, deterministic census, validation, or audit tests. Reusable components need isolation from mixed acquisition adapters before integration.",
+      "sha256": "c2b7edf90f005aa35a0e0239a6fcd2ff96946ef27e300af31e896b3cfa2fe91e"
+    },
+    {
+      "copied_as_inert_history": true,
+      "path": "scripts/movement_pilot_wave1d/validate.py",
+      "reason": "Offline model/parser/evidence dependency, identity or event grouping logic, deterministic census, validation, or audit tests. Reusable components need isolation from mixed acquisition adapters before integration.",
+      "sha256": "4404016e07033ae07a74fc9af42dd6aa79f7cf0ad982d01c9a192512db406c05"
+    },
+    {
+      "copied_as_inert_history": true,
+      "path": "scripts/movement_product_wave2c/build2c.py",
+      "reason": "Offline model/parser/evidence dependency, identity or event grouping logic, deterministic census, validation, or audit tests. Reusable components need isolation from mixed acquisition adapters before integration.",
+      "sha256": "25dccd9fce34097d3eb8f79ad3e933910c29ec3f72d9f56e74202da6246275cb"
+    },
+    {
+      "copied_as_inert_history": true,
+      "path": "scripts/movement_product_wave2c/context2c.py",
+      "reason": "Offline model/parser/evidence dependency, identity or event grouping logic, deterministic census, validation, or audit tests. Reusable components need isolation from mixed acquisition adapters before integration.",
+      "sha256": "97d4eadf9b209b5357ace2d2fa2bda8a16309352e10c426471ae7fd725866710"
+    },
+    {
+      "copied_as_inert_history": true,
+      "path": "scripts/movement_product_wave2c/export_editorial.mts",
+      "reason": "Offline model/parser/evidence dependency, identity or event grouping logic, deterministic census, validation, or audit tests. Reusable components need isolation from mixed acquisition adapters before integration.",
+      "sha256": "fbe857c46fc64d9fc437513ef4329e64cf7ebf33c8ee57d7406c7e6f18ef7d77"
+    },
+    {
+      "copied_as_inert_history": true,
+      "path": "scripts/movement_product_wave2c/model2c.py",
+      "reason": "Offline model/parser/evidence dependency, identity or event grouping logic, deterministic census, validation, or audit tests. Reusable components need isolation from mixed acquisition adapters before integration.",
+      "sha256": "69a73254cca35d6d0cbfd374758d8244e8de1ba6bd242556b8483afe34197360"
+    },
+    {
+      "copied_as_inert_history": true,
+      "path": "scripts/movement_product_wave2c/report2c.py",
+      "reason": "Offline model/parser/evidence dependency, identity or event grouping logic, deterministic census, validation, or audit tests. Reusable components need isolation from mixed acquisition adapters before integration.",
+      "sha256": "6beddbe11bfe40902b595c8bfb72f31b9e7ad0952b27c3df101d818004bf3719"
+    },
+    {
+      "copied_as_inert_history": true,
+      "path": "scripts/movement_product_wave2c/test_product2c.py",
+      "reason": "Offline model/parser/evidence dependency, identity or event grouping logic, deterministic census, validation, or audit tests. Reusable components need isolation from mixed acquisition adapters before integration.",
+      "sha256": "4ac70f5d7a572acc95984f6c60ca7c71ca9c42d6f2647038657f73a724af261f"
+    },
+    {
+      "copied_as_inert_history": true,
+      "path": "scripts/movement_product_wave2c/validate2c.py",
+      "reason": "Offline model/parser/evidence dependency, identity or event grouping logic, deterministic census, validation, or audit tests. Reusable components need isolation from mixed acquisition adapters before integration.",
+      "sha256": "6dd83889ee5f68f3486dd86ea7f5d573168ae3e8c8c0b59169aafc9fa282487d"
+    },
+    {
+      "copied_as_inert_history": true,
+      "path": "scripts/movement_qualification/.gitignore",
+      "reason": "Offline model/parser/evidence dependency, identity or event grouping logic, deterministic census, validation, or audit tests. Reusable components need isolation from mixed acquisition adapters before integration.",
+      "sha256": "32dae3052f331ee34d628ef535709b301259a45df7c7522c4d35dcf49873f00b"
+    },
+    {
+      "copied_as_inert_history": true,
+      "path": "scripts/movement_qualification/README.md",
+      "reason": "Offline model/parser/evidence dependency, identity or event grouping logic, deterministic census, validation, or audit tests. Reusable components need isolation from mixed acquisition adapters before integration.",
+      "sha256": "744339959d5bb6f8beda2215deb8fb0b9e8da7e8ae3e5ec8c66fca8b47643d97"
+    },
+    {
+      "copied_as_inert_history": true,
+      "path": "scripts/movement_qualification/adapter.py",
+      "reason": "Offline model/parser/evidence dependency, identity or event grouping logic, deterministic census, validation, or audit tests. Reusable components need isolation from mixed acquisition adapters before integration.",
+      "sha256": "f0f77be2593841f359a07c76e6d7ea008aae636d98550beefd5a9028b1693fed"
+    },
+    {
+      "copied_as_inert_history": true,
+      "path": "scripts/movement_qualification/build_registries.py",
+      "reason": "Offline model/parser/evidence dependency, identity or event grouping logic, deterministic census, validation, or audit tests. Reusable components need isolation from mixed acquisition adapters before integration.",
+      "sha256": "8edf17fa2f13edaa56554f1c970c447404f0e866d2e0a9139bd2d8343304dc4b"
+    },
+    {
+      "copied_as_inert_history": true,
+      "path": "scripts/movement_qualification/census.py",
+      "reason": "Offline model/parser/evidence dependency, identity or event grouping logic, deterministic census, validation, or audit tests. Reusable components need isolation from mixed acquisition adapters before integration.",
+      "sha256": "96dc8b3906309ea7185572d6b69bc9be9bf27354845cdb9affef33f8d7ce6123"
+    },
+    {
+      "copied_as_inert_history": true,
+      "path": "scripts/movement_qualification/evidence.py",
+      "reason": "Offline model/parser/evidence dependency, identity or event grouping logic, deterministic census, validation, or audit tests. Reusable components need isolation from mixed acquisition adapters before integration.",
+      "sha256": "047419fabef636d6b50aa198922caf8f366b49b9a5a93f678cb46ff3950f9831"
+    },
+    {
+      "copied_as_inert_history": true,
+      "path": "scripts/movement_qualification/freeze.py",
+      "reason": "Offline model/parser/evidence dependency, identity or event grouping logic, deterministic census, validation, or audit tests. Reusable components need isolation from mixed acquisition adapters before integration.",
+      "sha256": "41e67cae2a48caf79d45ad80b06c00ca23aa1503dce613c690f42a57b93051bd"
+    },
+    {
+      "copied_as_inert_history": true,
+      "path": "scripts/movement_qualification/resolver.py",
+      "reason": "Offline model/parser/evidence dependency, identity or event grouping logic, deterministic census, validation, or audit tests. Reusable components need isolation from mixed acquisition adapters before integration.",
+      "sha256": "cf3ffda2adcfd6c1a5ab8a9ca76812d3407de4eb960c39700a1b2c294913b8a0"
+    },
+    {
+      "copied_as_inert_history": true,
+      "path": "scripts/movement_qualification/select_pilot.py",
+      "reason": "Offline model/parser/evidence dependency, identity or event grouping logic, deterministic census, validation, or audit tests. Reusable components need isolation from mixed acquisition adapters before integration.",
+      "sha256": "e2606a49a86d89889696d0718c15fd1c45d2fffc121757fb1efdf04ef65f3a7f"
+    },
+    {
+      "copied_as_inert_history": true,
+      "path": "scripts/movement_qualification/test_census.py",
+      "reason": "Offline model/parser/evidence dependency, identity or event grouping logic, deterministic census, validation, or audit tests. Reusable components need isolation from mixed acquisition adapters before integration.",
+      "sha256": "45dc1f3e2003fa3b65535efe324ef7dc39ef1953c3e12aed00bc33b0142868e1"
+    },
+    {
+      "copied_as_inert_history": true,
+      "path": "scripts/movement_qualification/test_gate.py",
+      "reason": "Offline model/parser/evidence dependency, identity or event grouping logic, deterministic census, validation, or audit tests. Reusable components need isolation from mixed acquisition adapters before integration.",
+      "sha256": "3786a9de7ee4296fd79af01a54f566a7e9a935dd8052ad842a956ab0d45ac90a"
+    },
+    {
+      "copied_as_inert_history": true,
+      "path": "scripts/movement_qualification/test_resolver.py",
+      "reason": "Offline model/parser/evidence dependency, identity or event grouping logic, deterministic census, validation, or audit tests. Reusable components need isolation from mixed acquisition adapters before integration.",
+      "sha256": "a9b469513ffdc692653bae9026b15eeeb9f9101cda0939f465e4238406cad8aa"
+    },
+    {
+      "copied_as_inert_history": true,
+      "path": "scripts/movement_security_wave1b/common.py",
+      "reason": "Offline model/parser/evidence dependency, identity or event grouping logic, deterministic census, validation, or audit tests. Reusable components need isolation from mixed acquisition adapters before integration.",
+      "sha256": "b2a9ccc1ed76dec5c1731fc451a3cf3da911d3b796177d9fb071294440598408"
+    },
+    {
+      "copied_as_inert_history": true,
+      "path": "scripts/movement_security_wave1b/detection.py",
+      "reason": "Offline model/parser/evidence dependency, identity or event grouping logic, deterministic census, validation, or audit tests. Reusable components need isolation from mixed acquisition adapters before integration.",
+      "sha256": "497e4ffc1ae5ff9c7eae64a171c415bf321cbd50cdfc1cb662cbc8a560ebe9c2"
+    },
+    {
+      "copied_as_inert_history": true,
+      "path": "scripts/movement_security_wave1b/events.py",
+      "reason": "Offline model/parser/evidence dependency, identity or event grouping logic, deterministic census, validation, or audit tests. Reusable components need isolation from mixed acquisition adapters before integration.",
+      "sha256": "eef7b99f753c2d0bb1ec51e2879b05ead77c0900bd009d5015151f776c8979f9"
+    },
+    {
+      "copied_as_inert_history": true,
+      "path": "scripts/movement_security_wave1b/identity.py",
+      "reason": "Offline model/parser/evidence dependency, identity or event grouping logic, deterministic census, validation, or audit tests. Reusable components need isolation from mixed acquisition adapters before integration.",
+      "sha256": "b965efc18f6f35a43ff46ca45324759c2a6d7097f4234ff2531752b2c546c591"
+    },
+    {
+      "copied_as_inert_history": true,
+      "path": "scripts/movement_security_wave1b/inventory.py",
+      "reason": "Offline model/parser/evidence dependency, identity or event grouping logic, deterministic census, validation, or audit tests. Reusable components need isolation from mixed acquisition adapters before integration.",
+      "sha256": "bc6d34b9a5c4596d55c1b4dcc0f871fe51ad1a8af2f1bdf2bed83c3def7bc54d"
+    },
+    {
+      "copied_as_inert_history": true,
+      "path": "scripts/movement_security_wave1b/issuers.py",
+      "reason": "Offline model/parser/evidence dependency, identity or event grouping logic, deterministic census, validation, or audit tests. Reusable components need isolation from mixed acquisition adapters before integration.",
+      "sha256": "3f2aaab1986c2928d6712f279ea3d1b4eb5c17774e6497e9cc5f49bec651f192"
+    },
+    {
+      "copied_as_inert_history": true,
+      "path": "scripts/movement_security_wave1b/pilot.py",
+      "reason": "Offline model/parser/evidence dependency, identity or event grouping logic, deterministic census, validation, or audit tests. Reusable components need isolation from mixed acquisition adapters before integration.",
+      "sha256": "a7c8c672437ecda71f46999de0beedafc3391d5c8b8e56a21fcfbd9b6d4f9def"
+    },
+    {
+      "copied_as_inert_history": true,
+      "path": "scripts/movement_security_wave1b/security_master.py",
+      "reason": "Offline model/parser/evidence dependency, identity or event grouping logic, deterministic census, validation, or audit tests. Reusable components need isolation from mixed acquisition adapters before integration.",
+      "sha256": "681b6514b94af6db2e7d067465d682665fea8dd66db1cb6e7dc30499c96fe60c"
+    },
+    {
+      "copied_as_inert_history": true,
+      "path": "scripts/movement_security_wave1b/test_events.py",
+      "reason": "Offline model/parser/evidence dependency, identity or event grouping logic, deterministic census, validation, or audit tests. Reusable components need isolation from mixed acquisition adapters before integration.",
+      "sha256": "178a0a06cd05ade74273d2c340d224bfff8f438c8713d6122273ddb4ba6b89f6"
+    },
+    {
+      "copied_as_inert_history": true,
+      "path": "scripts/movement_security_wave1b/test_pilot_gate.py",
+      "reason": "Offline model/parser/evidence dependency, identity or event grouping logic, deterministic census, validation, or audit tests. Reusable components need isolation from mixed acquisition adapters before integration.",
+      "sha256": "7fe8b7147c085faaa799e400d900f15ba50c588bed9df00f514c67814550715d"
+    },
+    {
+      "copied_as_inert_history": true,
+      "path": "scripts/movement_security_wave1b/test_security_master.py",
+      "reason": "Offline model/parser/evidence dependency, identity or event grouping logic, deterministic census, validation, or audit tests. Reusable components need isolation from mixed acquisition adapters before integration.",
+      "sha256": "e4d037c0e0de157adb1129b09bd05380a31193bb4791b879a3242a9a9a4a804e"
+    },
+    {
+      "copied_as_inert_history": true,
+      "path": "scripts/movement_source_wave2b/benchmark2b.py",
+      "reason": "Offline model/parser/evidence dependency, identity or event grouping logic, deterministic census, validation, or audit tests. Reusable components need isolation from mixed acquisition adapters before integration.",
+      "sha256": "50d917b77a2cdeeeb1a014ca44b6ea40cb632b8b83635cd6021b8dab90f5c9ef"
+    },
+    {
+      "copied_as_inert_history": true,
+      "path": "scripts/movement_source_wave2b/context2b.py",
+      "reason": "Offline model/parser/evidence dependency, identity or event grouping logic, deterministic census, validation, or audit tests. Reusable components need isolation from mixed acquisition adapters before integration.",
+      "sha256": "03ed36abc5ac914c461a53d4c691802d1c2f21b8189f95019f168c8cbdc2a471"
+    },
+    {
+      "copied_as_inert_history": true,
+      "path": "scripts/movement_source_wave2b/coverage2b.py",
+      "reason": "Offline model/parser/evidence dependency, identity or event grouping logic, deterministic census, validation, or audit tests. Reusable components need isolation from mixed acquisition adapters before integration.",
+      "sha256": "9e74efebc9a8a90e2223b8dc816c894d750896b4b3712f184e29bc9f56f902e5"
+    },
+    {
+      "copied_as_inert_history": true,
+      "path": "scripts/movement_source_wave2b/finalize2b.py",
+      "reason": "Offline model/parser/evidence dependency, identity or event grouping logic, deterministic census, validation, or audit tests. Reusable components need isolation from mixed acquisition adapters before integration.",
+      "sha256": "91b6aecc166ea0c6f383e91eaec1edf17da64f0c313b6c4798747c4416bce33a"
+    },
+    {
+      "copied_as_inert_history": true,
+      "path": "scripts/movement_source_wave2b/test_benchmark2b.py",
+      "reason": "Offline model/parser/evidence dependency, identity or event grouping logic, deterministic census, validation, or audit tests. Reusable components need isolation from mixed acquisition adapters before integration.",
+      "sha256": "fc067a4f7429b6ebb3d2af610d1f73c929034753fc0dd7959eab9312f7ce520a"
+    },
+    {
+      "copied_as_inert_history": true,
+      "path": "scripts/movement_source_wave2b/test_coverage2b.py",
+      "reason": "Offline model/parser/evidence dependency, identity or event grouping logic, deterministic census, validation, or audit tests. Reusable components need isolation from mixed acquisition adapters before integration.",
+      "sha256": "18d698658414f580bde66cc2b58fab8162a8949dc26e4c45f213db0843ad9549"
+    },
+    {
+      "copied_as_inert_history": true,
+      "path": "scripts/movement_source_wave2b/validate2b.py",
+      "reason": "Offline model/parser/evidence dependency, identity or event grouping logic, deterministic census, validation, or audit tests. Reusable components need isolation from mixed acquisition adapters before integration.",
+      "sha256": "e546e59d4715c62866f6164c339231ec3e756c64ef2c5a5c8a7d32606525f750"
+    }
+  ],
+  "mixed_modules": "context.py/context2a.py/common.py include network-capable methods; retention does not authorize calling get/fetch methods. No network entry points are in the replay allowlist.",
+  "production_integration": false,
+  "source_deleted": false
+}

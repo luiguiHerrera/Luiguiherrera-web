@@ -1,0 +1,164 @@
+{
+  "archive_created_here": "Historical research-closure audit created only the compact core. Subsequent custody close is recorded in custody_archive below; historical file classifications/counts are unchanged.",
+  "audited_at": "2026-09-08T07:36:58.770555+00:00",
+  "class_file_counts": {
+    "A_RECONSTRUCTION_CRITICAL": 248,
+    "B_USEFUL_PRIMARY_EVIDENCE": 5162,
+    "C_REPRODUCIBLE_GENERATED": 171,
+    "D_REDUNDANT_OR_NOISE": 14316
+  },
+  "class_logical_bytes": {
+    "A_RECONSTRUCTION_CRITICAL": 81526631,
+    "B_USEFUL_PRIMARY_EVIDENCE": 1213387943,
+    "C_REPRODUCIBLE_GENERATED": 456687488,
+    "D_REDUNDANT_OR_NOISE": 5681785074
+  },
+  "core_members": 248,
+  "core_stored_bytes": 10514957,
+  "custody_archive": {
+    "DELETE_TEMP_EVIDENCE": "NO",
+    "EVIDENCE_ARCHIVE_ID": "trends-movements-v2.1-20260908-custody-1",
+    "EVIDENCE_ARCHIVE_MANIFEST_SHA256": "576d25b51f9784d7225ce2d5694a3bd3a06039272c1a70df775abfad03b7f94e",
+    "EVIDENCE_ARCHIVE_ROOT": "/Users/quantlab/Developer/web/Luiguiherrera-evidence/trends-movements-v2.1-20260908",
+    "EVIDENCE_ARCHIVE_STATE": "DURABLE_LOCAL_VERIFIED",
+    "PRIMARY_REVALIDATION_CAPABLE": "YES",
+    "category_c_dependency_exceptions": {
+      "internal/trends-movements/wave1/issuer-index-supplement.json": [
+        "PRIMARY_RESPONSE_CONTAINER",
+        "Contains original URL-keyed SEC response bodies and body hashes; misclassified as generated in coarse storage census. New downloads cannot reproduce its historical bytes."
+      ],
+      "internal/trends-movements/wave1/issuer-primary-supplement.json": [
+        "PRIMARY_RESPONSE_CONTAINER",
+        "Contains original issuer/SEC response bodies and hashes used by legacy_sources and the evidence DAG; not a regenerable result."
+      ],
+      "internal/trends-movements/wave1c/berkshire-class-a-positive-block.json": [
+        "REVIEWED_PRIMARY_FINDING",
+        "Class A elected-conversion arithmetic and primary locators preserve the nonuniform transformation finding."
+      ],
+      "internal/trends-movements/wave1c/diageo-fy26-results-ocr.json": [
+        "HASH_BOUND_REVIEW_AID",
+        "OCR bytes bound to the prior manual review. Re-rendering is not guaranteed byte-identical; original PDF remains authority."
+      ],
+      "internal/trends-movements/wave1c/pricing-product-scope-review.json": [
+        "REVIEWED_SCOPE_INPUT",
+        "Explicit positive class/product review outcomes consumed by checked_product_scopes; original review decisions must not be regenerated or replaced."
+      ],
+      "internal/trends-movements/wave1d/tsmc-agm-ocr.json": [
+        "HASH_BOUND_REVIEW_AID",
+        "closure.validate_proof explicitly checks this original extraction hash; a new OCR run cannot replace it."
+      ],
+      "internal/trends-movements/wave1d/tsmc-agm-text.json": [
+        "HASH_BOUND_REVIEW_AID",
+        "closure.validate_proof explicitly checks this original extraction hash; original PDF remains authority."
+      ],
+      "internal/trends-movements/wave2a/document-type-corrections.json": [
+        "REVIEWED_METADATA_CORRECTION",
+        "Explicit primary document-type corrections are retained decisions, not an automatic certificate upgrade."
+      ]
+    }
+  },
+  "files_deleted": 0,
+  "files_moved": 0,
+  "manifest_sha256": "95e875e0195660c1c44fafb88e3e64bfe44bd3cf6550d9ab2d9a34b0e325eed2",
+  "physical_disk_space_reclaimable": "NOT_MEASURED; APFS clones, compression and hardlinks can share blocks. Logical duplicate bytes are not reclaimable-space estimates.",
+  "retention_policy": {
+    "A": "Retain core plus exact reviewed decisions/source ledgers; derived snapshots marked A are reconstruction shortcuts and hash anchors, not independent evidence.",
+    "B": "Retain primary source bytes outside Git in a verified, access-controlled durable archive before authorizing any temporary cleanup.",
+    "C": "Potential future removal only after replay verified from A/B inputs and matching code. No deletion authorized in this task.",
+    "D": "Potential future removal only after duplicate or noise status independently checked against a durable copy; no deletion authorized."
+  },
+  "roots": [
+    {
+      "class_file_counts": {
+        "A_RECONSTRUCTION_CRITICAL": 248,
+        "B_USEFUL_PRIMARY_EVIDENCE": 5162,
+        "C_REPRODUCIBLE_GENERATED": 166,
+        "D_REDUNDANT_OR_NOISE": 55
+      },
+      "class_logical_bytes": {
+        "A_RECONSTRUCTION_CRITICAL": 81526631,
+        "B_USEFUL_PRIMARY_EVIDENCE": 1213387943,
+        "C_REPRODUCIBLE_GENERATED": 456652726,
+        "D_REDUNDANT_OR_NOISE": 407421
+      },
+      "files": 5631,
+      "root": "/private/tmp/trends-wave2c-20260908/worktree",
+      "stored_logical_bytes": 1751974721
+    },
+    {
+      "class_file_counts": {
+        "C_REPRODUCIBLE_GENERATED": 5,
+        "D_REDUNDANT_OR_NOISE": 40
+      },
+      "class_logical_bytes": {
+        "C_REPRODUCIBLE_GENERATED": 34762,
+        "D_REDUNDANT_OR_NOISE": 15410952
+      },
+      "files": 45,
+      "root": "/private/tmp/trends-v2-1-movements-20260907/worktree",
+      "stored_logical_bytes": 15445714
+    },
+    {
+      "class_file_counts": {
+        "D_REDUNDANT_OR_NOISE": 84
+      },
+      "class_logical_bytes": {
+        "D_REDUNDANT_OR_NOISE": 53083512
+      },
+      "files": 84,
+      "root": "/private/tmp/trends-evidence-wave1-20260907/worktree",
+      "stored_logical_bytes": 53083512
+    },
+    {
+      "class_file_counts": {
+        "D_REDUNDANT_OR_NOISE": 702
+      },
+      "class_logical_bytes": {
+        "D_REDUNDANT_OR_NOISE": 950198614
+      },
+      "files": 702,
+      "root": "/private/tmp/trends-wave1b-20260907/worktree",
+      "stored_logical_bytes": 950198614
+    },
+    {
+      "class_file_counts": {
+        "D_REDUNDANT_OR_NOISE": 2327
+      },
+      "class_logical_bytes": {
+        "D_REDUNDANT_OR_NOISE": 1214605424
+      },
+      "files": 2327,
+      "root": "/private/tmp/trends-wave1c-20260907/worktree",
+      "stored_logical_bytes": 1214605424
+    },
+    {
+      "class_file_counts": {
+        "D_REDUNDANT_OR_NOISE": 5516
+      },
+      "class_logical_bytes": {
+        "D_REDUNDANT_OR_NOISE": 1705337020
+      },
+      "files": 5516,
+      "root": "/private/tmp/trends-wave2a-20260907/worktree",
+      "stored_logical_bytes": 1705337020
+    },
+    {
+      "class_file_counts": {
+        "D_REDUNDANT_OR_NOISE": 5592
+      },
+      "class_logical_bytes": {
+        "D_REDUNDANT_OR_NOISE": 1742742131
+      },
+      "files": 5592,
+      "root": "/private/tmp/trends-wave2b-20260908/worktree",
+      "stored_logical_bytes": 1742742131
+    }
+  ],
+  "scope": "Seven preserved movement R&D worktrees: internal/trends-movements, movement scripts, three inherited SEC/issuer source archives, frozen snapshot/config/universe. Excludes node_modules, .next, unrelated projects and external original download folders.",
+  "total_files": 19897,
+  "total_logical_bytes": 7433387136,
+  "unique_stored_content_bytes": 1752003867,
+  "unique_stored_content_count": 5618,
+  "wave2a_downloaded_response_bytes": 5089019968,
+  "wave2a_retained_source_bytes": 321488443
+}
