@@ -1,0 +1,257 @@
+name: Regime V2 isolated S3 OIDC probe
+
+on:
+  workflow_dispatch:
+    inputs:
+      bucket_name:
+        description: Approved private Regime V2 probe bucket (validated exactly)
+        required: true
+        type: string
+        default: lh-regime-v2-shadow-732159826922-us-east-1
+      role_arn:
+        description: Approved probe-only IAM role (validated exactly)
+        required: true
+        type: string
+        default: arn:aws:iam::732159826922:role/RegimeV2S3Probe
+
+permissions:
+  id-token: write
+
+concurrency:
+  group: regime-v2-isolated-s3-probe
+  cancel-in-progress: false
+
+env:
+  AWS_REGION: us-east-1
+  AWS_DEFAULT_REGION: us-east-1
+  AWS_MAX_ATTEMPTS: '1'
+  AWS_RETRY_MODE: standard
+  AWS_EC2_METADATA_DISABLED: 'true'
+  AWS_PAGER: ''
+  PROBE_BUCKET: ${{ inputs.bucket_name }}
+  PROBE_ROLE_ARN: ${{ inputs.role_arn }}
+  PROBE_RESULT_FILE: ${{ runner.temp }}/regime-v2-s3-probe-result.json
+
+jobs:
+  isolated-probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Validate fixed scope and existing AWS CLI before obtaining credentials
+        id: preflight
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          # PROBE_PREFLIGHT_BEGIN
+          import json, os, re, subprocess, sys
+          def require(condition, code):
+              if not condition:
+                  print(json.dumps({'state': 'FAIL', 'stage': 'PREFLIGHT', 'code': code}))
+                  sys.exit(1)
+          require(os.environ.get('GITHUB_REPOSITORY') == 'luiguiHerrera/Luiguiherrera-web', 'WRONG_REPOSITORY')
+          require(os.environ.get('GITHUB_REF') == 'refs/heads/vercel-deployment', 'WRONG_BRANCH')
+          require(os.environ.get('GITHUB_EVENT_NAME') == 'workflow_dispatch', 'MANUAL_EVENT_REQUIRED')
+          require(os.environ.get('PROBE_BUCKET') == 'lh-regime-v2-shadow-732159826922-us-east-1', 'UNAPPROVED_BUCKET')
+          require(os.environ.get('PROBE_ROLE_ARN') == 'arn:aws:iam::732159826922:role/RegimeV2S3Probe', 'UNAPPROVED_ROLE')
+          require(os.environ.get('AWS_REGION') == 'us-east-1', 'WRONG_REGION')
+          require(os.environ.get('AWS_MAX_ATTEMPTS') == '1', 'RETRIES_NOT_DISABLED')
+          require(re.fullmatch(r'[1-9][0-9]{0,19}', os.environ.get('GITHUB_RUN_ID', '')) is not None, 'INVALID_RUN_ID')
+          require(re.fullmatch(r'[1-9][0-9]{0,5}', os.environ.get('GITHUB_RUN_ATTEMPT', '')) is not None, 'INVALID_RUN_ATTEMPT')
+          try:
+              version = subprocess.run(['aws', '--version'], capture_output=True, text=True, timeout=15, check=False)
+              require(version.returncode == 0 and re.match(r'^aws-cli/2\.[0-9]+\.[0-9]+(?:\s|$)', version.stdout + version.stderr) is not None, 'AWS_CLI_V2_REQUIRED')
+              skeleton = subprocess.run(['aws', 's3api', 'put-object', '--generate-cli-skeleton', 'input'], capture_output=True, text=True, timeout=15, check=False)
+              require(skeleton.returncode == 0, 'AWS_CLI_CAPABILITY_CHECK_FAILED')
+              fields = json.loads(skeleton.stdout)
+              require(all(key in fields for key in ['IfNoneMatch', 'IfMatch', 'ExpectedBucketOwner']), 'AWS_CLI_CONDITIONAL_WRITES_REQUIRED')
+          except (OSError, subprocess.TimeoutExpired, ValueError):
+              require(False, 'AWS_CLI_UNAVAILABLE_OR_UNSUPPORTED')
+          print(json.dumps({'state': 'PASS', 'stage': 'PREFLIGHT', 'awsCliVersion': re.search(r'aws-cli/2\.[0-9]+\.[0-9]+', version.stdout + version.stderr).group(0), 'scope': 'regime-v2/_probe/', 'checkout': False}))
+          # PROBE_PREFLIGHT_END
+          PY
+
+      - name: Assume only the approved probe role using GitHub OIDC
+        id: oidc
+        # Existing accepted official v6.2.4 pin; no long-lived AWS credential inputs.
+        uses: aws-actions/configure-aws-credentials@cbe3b392738ccf3f987d68400dafcf4b0624a56c
+        with:
+          aws-region: us-east-1
+          role-to-assume: ${{ inputs.role_arn }}
+          allowed-account-ids: '732159826922'
+          audience: sts.amazonaws.com
+          role-session-name: rv2-probe-${{ github.run_id }}-${{ github.run_attempt }}
+          role-duration-seconds: 900
+          unset-current-credentials: true
+          use-existing-credentials: false
+          output-credentials: false
+          mask-aws-account-id: true
+          disable-retry: true
+          action-timeout-s: 90
+
+      - name: Exercise only the isolated synthetic S3 probe prefix
+        id: probe
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          # PROBE_BODY_BEGIN
+          import hashlib, json, os, pathlib, re, subprocess, sys, tempfile, time
+          ACCOUNT = '732159826922'
+          BUCKET = 'lh-regime-v2-shadow-732159826922-us-east-1'
+          ROLE = 'RegimeV2S3Probe'
+          region = 'us-east-1'
+          run_id, attempt = os.environ.get('GITHUB_RUN_ID', ''), os.environ.get('GITHUB_RUN_ATTEMPT', '')
+          prefix = 'regime-v2/_probe/' + run_id + '-' + attempt + '/'
+          deadline = time.monotonic() + 150
+          result = {'schemaVersion': 'regime-v2-s3-bootstrap-probe/1', 'state': 'FAIL', 'probeId': run_id + '-' + attempt,
+                    'prefix': prefix, 'region': region, 'roleName': ROLE, 'bucketLogicalIdentity': 'REGIME_V2_PRIVATE_SHADOW_BUCKET',
+                    'evidenceKind': 'SYNTHETIC_INFRASTRUCTURE_PROBE', 'marketRequests': 0, 'shadowRuns': 0,
+                    'productionObservations': 0, 'longLivedKeysUsed': False, 'checks': {}, 'calls': []}
+          class ProbeFailure(Exception):
+              def __init__(self, stage, code, expected, observed):
+                  self.stage, self.code, self.expected, self.observed = stage, code, expected, observed
+          def require(condition, stage, code, expected, observed):
+              if not condition:
+                  raise ProbeFailure(stage, code, expected, observed)
+          def encoded(value):
+              return (json.dumps(value, sort_keys=True, separators=(',', ':')) + '\n').encode()
+          def digest(value):
+              return hashlib.sha256(value).hexdigest()
+          def command(stage, service, operation, arguments, expected_error=None):
+              remaining = deadline - time.monotonic()
+              require(remaining > 0, stage, 'PROBE_TIMEOUT', 'within probe budget', 'deadline exceeded')
+              argv = ['aws', service, operation, '--region', region, '--output', 'json', '--no-cli-pager', '--cli-connect-timeout', '10', '--cli-read-timeout', '45']
+              if service == 's3api':
+                  argv += ['--bucket', BUCKET, '--expected-bucket-owner', ACCOUNT]
+              argv += arguments
+              context = {'stage': stage, 'service': service, 'operation': operation, 'conditional': '--if-none-match' in arguments or '--if-match' in arguments}
+              if '--key' in arguments:
+                  key = arguments[arguments.index('--key') + 1]
+                  require(key.startswith(prefix) and key.count('/') == prefix.count('/'), stage, 'KEY_OUTSIDE_PROBE', 'exact probe namespace', 'invalid key')
+                  context['key'] = key
+              try:
+                  completed = subprocess.run(argv, capture_output=True, text=True, timeout=min(60, remaining), check=False)
+              except (OSError, subprocess.TimeoutExpired):
+                  context['result'] = 'CLI_UNAVAILABLE_OR_TIMEOUT'; result['calls'].append(context)
+                  raise ProbeFailure(stage, 'CLI_UNAVAILABLE_OR_TIMEOUT', 'bounded AWS CLI completion', context['result'])
+              if completed.returncode:
+                  # Retain the AWS error class only: stderr may contain request details.
+                  match = re.search(r'An error occurred \(([A-Za-z0-9_.-]{1,80})\)', completed.stderr)
+                  aws_code = match.group(1) if match else 'UNCLASSIFIED_AWS_ERROR'
+                  context.update({'result': 'AWS_ERROR', 'awsCode': aws_code}); result['calls'].append(context)
+                  if expected_error and aws_code == expected_error:
+                      return {'expectedAwsError': aws_code}
+                  raise ProbeFailure(stage, aws_code, expected_error or 'SUCCESS', aws_code)
+              context['result'] = 'SUCCESS'; result['calls'].append(context)
+              if expected_error:
+                  raise ProbeFailure(stage, 'EXPECTED_DENIAL_NOT_OBSERVED', expected_error, 'SUCCESS')
+              try:
+                  return json.loads(completed.stdout or '{}')
+              except ValueError:
+                  raise ProbeFailure(stage, 'INVALID_AWS_JSON', 'JSON metadata', 'unparseable metadata')
+          def mark(name):
+              result['checks'][name] = 'PASS'
+          try:
+              require(os.environ.get('PROBE_BUCKET') == BUCKET and os.environ.get('PROBE_ROLE_ARN') == 'arn:aws:iam::' + ACCOUNT + ':role/' + ROLE,
+                      'SCOPE', 'CONFIGURATION_CHANGED', 'approved bucket and role', 'mismatch')
+              require(os.environ.get('GITHUB_REPOSITORY') == 'luiguiHerrera/Luiguiherrera-web' and os.environ.get('GITHUB_REF') == 'refs/heads/vercel-deployment' and os.environ.get('GITHUB_EVENT_NAME') == 'workflow_dispatch',
+                      'SCOPE', 'WRONG_EXECUTION_CONTEXT', 'approved manual branch', 'mismatch')
+              require(re.fullmatch(r'[1-9][0-9]{0,19}', run_id) is not None and re.fullmatch(r'[1-9][0-9]{0,5}', attempt) is not None,
+                      'SCOPE', 'INVALID_PROBE_ID', 'numeric Actions run identity', 'invalid')
+              require(os.environ.get('AWS_MAX_ATTEMPTS') == '1' and os.environ.get('AWS_REGION') == region,
+                      'SCOPE', 'INVALID_AWS_CONFIGURATION', 'one attempt and approved region', 'mismatch')
+              identity = command('OIDC_IDENTITY', 'sts', 'get-caller-identity', [])
+              expected_arn = 'arn:aws:sts::' + ACCOUNT + ':assumed-role/' + ROLE + '/rv2-probe-' + run_id + '-' + attempt
+              require(identity.get('Account') == ACCOUNT and identity.get('Arn') == expected_arn,
+                      'OIDC_IDENTITY', 'UNEXPECTED_IDENTITY', 'exact probe role session', 'unexpected identity')
+              mark('OIDC_ASSUME_ROLE')
+              versioning = command('VERSIONING', 's3api', 'get-bucket-versioning', [])
+              require(versioning.get('Status') == 'Enabled', 'VERSIONING', 'VERSIONING_NOT_ENABLED', 'Enabled', versioning.get('Status', 'missing'))
+              mark('S3_VERSIONING')
+              public = command('PUBLIC_ACCESS', 's3api', 'get-public-access-block', []).get('PublicAccessBlockConfiguration', {})
+              require(all(public.get(key) is True for key in ['BlockPublicAcls', 'IgnorePublicAcls', 'BlockPublicPolicy', 'RestrictPublicBuckets']),
+                      'PUBLIC_ACCESS', 'PUBLIC_ACCESS_NOT_BLOCKED', 'all four controls true', 'one or more controls absent/false')
+              mark('S3_PUBLIC_ACCESS_BLOCK')
+              rules = command('ENCRYPTION', 's3api', 'get-bucket-encryption', []).get('ServerSideEncryptionConfiguration', {}).get('Rules', [])
+              require(len(rules) == 1 and rules[0].get('ApplyServerSideEncryptionByDefault', {}).get('SSEAlgorithm') == 'AES256',
+                      'ENCRYPTION', 'EXPECTED_SSE_S3_ENCRYPTION', 'AES256 default encryption', 'unexpected encryption policy')
+              mark('S3_ENCRYPTION')
+              with tempfile.TemporaryDirectory(prefix='regime-v2-s3-probe-') as temporary:
+                  folder = pathlib.Path(temporary)
+                  immutable_body = encoded({'kind': 'SYNTHETIC_PROBE', 'probeId': result['probeId'], 'value': 1})
+                  first_body, second_body = encoded({'kind': 'SYNTHETIC_PROBE_POINTER', 'value': 1}), encoded({'kind': 'SYNTHETIC_PROBE_POINTER', 'value': 2})
+                  source, initial, updated = folder/'immutable.json', folder/'latest-v1.json', folder/'latest-v2.json'
+                  source.write_bytes(immutable_body); initial.write_bytes(first_body); updated.write_bytes(second_body)
+                  immutable, pointer, sentinel, unconditional = [prefix + name for name in ['immutable.json', 'latest.json', 'delete-sentinel.json', 'unconditional.json']]
+                  def put(stage, key, body, condition, expected_error=None):
+                      response = command(stage, 's3api', 'put-object', ['--key', key, '--body', str(body), '--content-type', 'application/json'] + condition, expected_error)
+                      if not expected_error:
+                          require(isinstance(response.get('VersionId'), str) and response['VersionId'] not in ['', 'null'], stage, 'MISSING_VERSION_ID', 'versioned object', 'missing version')
+                      return response
+                  def get(stage, key, destination):
+                      response = command(stage, 's3api', 'get-object', ['--key', key, str(destination)])
+                      return response, destination.read_bytes()
+                  created = put('IMMUTABLE_CREATE', immutable, source, ['--if-none-match', '*']); mark('FIRST_CONDITIONAL_CREATE')
+                  put('DUPLICATE_CREATE', immutable, source, ['--if-none-match', '*'], 'PreconditionFailed'); mark('DUPLICATE_CREATE_REJECTED')
+                  metadata, actual = get('READ_AFTER_WRITE', immutable, folder/'read-immutable.json')
+                  require(actual == immutable_body and digest(actual) == digest(immutable_body) and metadata.get('VersionId') == created.get('VersionId'),
+                          'READ_AFTER_WRITE', 'IMMUTABLE_READBACK_MISMATCH', 'exact body hash and version', 'mismatch')
+                  result['bodySha256'] = digest(actual); mark('READ_AFTER_WRITE'); mark('BODY_HASH_MATCH')
+                  latest_created = put('LATEST_CREATE', pointer, initial, ['--if-none-match', '*']); mark('LATEST_CREATE')
+                  prior_meta, prior_body = get('LATEST_READ', pointer, folder/'latest-before.json')
+                  old_etag = prior_meta.get('ETag')
+                  require(prior_body == first_body and isinstance(old_etag, str) and bool(old_etag) and prior_meta.get('VersionId') == latest_created.get('VersionId'),
+                          'LATEST_READ', 'LATEST_READBACK_MISMATCH', 'initial body and ETag/version', 'mismatch')
+                  advanced = put('LATEST_CAS', pointer, updated, ['--if-match', old_etag])
+                  require(advanced.get('VersionId') != latest_created.get('VersionId'), 'LATEST_CAS', 'VERSION_DID_NOT_ADVANCE', 'new version', 'same version')
+                  mark('LATEST_CAS')
+                  put('STALE_ETAG', pointer, initial, ['--if-match', old_etag], 'PreconditionFailed'); mark('STALE_ETAG_REJECTED')
+                  after_meta, after_body = get('LATEST_VERIFY', pointer, folder/'latest-after.json')
+                  require(after_body == second_body and after_meta.get('VersionId') == advanced.get('VersionId') and after_meta.get('ETag') != old_etag,
+                          'LATEST_VERIFY', 'STALE_CAS_CHANGED_OBJECT', 'newest body/version preserved', 'mismatch')
+                  put('SENTINEL_CREATE', sentinel, source, ['--if-none-match', '*'])
+                  command('DELETE_DENIAL', 's3api', 'delete-object', ['--key', sentinel], 'AccessDenied'); mark('DELETE_DENIED')
+                  _, sentinel_body = get('SENTINEL_VERIFY', sentinel, folder/'sentinel.json')
+                  require(sentinel_body == immutable_body, 'SENTINEL_VERIFY', 'SENTINEL_CHANGED', 'sentinel remains readable', 'mismatch')
+                  # A new key isolates a broken enforcement policy from valid objects.
+                  put('UNCONDITIONAL_DENIAL', unconditional, source, [], 'AccessDenied'); mark('UNCONDITIONAL_PUT_DENIED')
+              result['state'] = 'PASS'
+          except ProbeFailure as error:
+              result['failure'] = {'stage': error.stage, 'code': error.code, 'expected': error.expected, 'observed': error.observed,
+                                   'policyContext': 'probe-only writer; conditional create for immutable keys; CAS for latest; no DeleteObject'}
+          except Exception:
+              # Never publish raw exception text, credentials, signed requests or response bodies.
+              result['failure'] = {'stage': 'PROBE', 'code': 'UNCLASSIFIED_LOCAL_FAILURE', 'expected': 'bounded probe completion', 'observed': 'local exception'}
+          try:
+              pathlib.Path(os.environ['PROBE_RESULT_FILE']).write_text(json.dumps(result, sort_keys=True) + '\n')
+          except Exception:
+              print(json.dumps({'state': 'FAIL', 'stage': 'DIAGNOSTICS', 'code': 'RESULT_WRITE_FAILED'}))
+              sys.exit(1)
+          sys.exit(0 if result['state'] == 'PASS' else 1)
+          # PROBE_BODY_END
+          PY
+
+      - name: Publish terminal probe evidence without tokens or provider payloads
+        if: ${{ always() }}
+        shell: bash
+        env:
+          PREFLIGHT_OUTCOME: ${{ steps.preflight.outcome }}
+          OIDC_OUTCOME: ${{ steps.oidc.outcome }}
+          PROBE_OUTCOME: ${{ steps.probe.outcome }}
+        run: |
+          python3 - <<'PY'
+          # PROBE_TERMINAL_BEGIN
+          import json, os, pathlib, sys
+          try:
+              result = json.loads(pathlib.Path(os.environ['PROBE_RESULT_FILE']).read_text())
+              assert result.get('schemaVersion') == 'regime-v2-s3-bootstrap-probe/1'
+          except Exception:
+              outcomes = {key: os.environ.get(key) if os.environ.get(key) in ['success', 'failure', 'cancelled', 'skipped'] else 'unknown' for key in ['PREFLIGHT_OUTCOME', 'OIDC_OUTCOME', 'PROBE_OUTCOME']}
+              result = {'schemaVersion': 'regime-v2-s3-bootstrap-probe/1', 'state': 'FAIL', 'evidenceKind': 'ATTEMPT_ONLY', 'failure': {'code': 'PROBE_DID_NOT_COMPLETE', 'outcomes': outcomes}, 'marketRequests': 0, 'shadowRuns': 0, 'productionObservations': 0}
+          text = json.dumps(result, sort_keys=True, indent=2)
+          print(text)
+          if os.environ.get('GITHUB_STEP_SUMMARY'):
+              with open(os.environ['GITHUB_STEP_SUMMARY'], 'a') as summary:
+                  summary.write('```json\n' + text + '\n```\n')
+          sys.exit(0 if result.get('state') == 'PASS' else 1)
+          # PROBE_TERMINAL_END
+          PY
