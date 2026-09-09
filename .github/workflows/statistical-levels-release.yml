@@ -1,0 +1,148 @@
+# Identity-critical bootstrap. No release target is selected until an explicit fixed operation passes all gates.
+name: Statistical Levels controlled release
+on:
+  workflow_dispatch:
+    inputs:
+      operation:
+        description: Adopt the already-published baseline, or qualify an explicitly selected future data candidate
+        required: true
+        type: choice
+        default: ADOPT_EXISTING_PRODUCTION_BASELINE
+        options:
+          - ADOPT_EXISTING_PRODUCTION_BASELINE
+          - PROMOTE_EXACT_STATISTICAL_LEVELS_CANDIDATE
+      candidate_git_sha:
+        description: Future qualified data candidate SHA; leave empty for baseline adoption
+        type: string
+        default: ''
+      candidate_deployment_id:
+        description: Exact future Preview deployment ID; leave empty for baseline adoption
+        type: string
+        default: ''
+      expected_previous_production_sha:
+        description: Expected certified Production SHA; leave empty for baseline adoption
+        type: string
+        default: ''
+      expected_previous_production_deployment:
+        description: Expected certified Production deployment; leave empty for baseline adoption
+        type: string
+        default: ''
+      previous_publication_date:
+        description: Certified previous daily marker date UTC; leave empty for baseline adoption
+        type: string
+        default: ''
+permissions:
+  contents: read
+concurrency:
+  group: statistical-levels-controlled-release
+  cancel-in-progress: false
+jobs:
+  candidate-qa:
+    name: Statistical Levels candidate QA
+    if: github.repository == 'luiguiHerrera/Luiguiherrera-web' && github.ref == 'refs/heads/vercel-deployment'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 40
+    permissions:
+      contents: read
+      id-token: write
+    outputs:
+      qa_envelope: ${{ steps.qa.outputs.qa_envelope }}
+      qa_payload_sha256: ${{ steps.qa.outputs.qa_payload_sha256 }}
+    steps:
+      - name: Check out execution source B
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+          fetch-depth: 1
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38
+        with:
+          node-version: '22.23.2'
+          package-manager-cache: false
+      - name: Verify frozen helper bytes before executing any helper
+        working-directory: scripts/statistical-levels-release
+        env:
+          EXPECTED_SOURCE_SUMS: d06af2d1eaec507666000f307ec7df4e9b55da53f6fdc667191f7adfa50a0167
+        run: |
+          printf '%s  SOURCE_SHA256SUMS\n' "$EXPECTED_SOURCE_SUMS" | sha256sum --check --strict
+          sha256sum --check --strict SOURCE_SHA256SUMS
+      - name: Independently verify execution identity and selected target ancestry
+        id: identity
+        run: node scripts/statistical-levels-release/scripts/cli.mjs preflight
+      - name: Check out verified Production baseline or explicitly selected future candidate
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+        with:
+          ref: ${{ steps.identity.outputs.candidate_sha }}
+          path: .release-candidate
+          persist-credentials: false
+          fetch-depth: 1
+      - name: Install locked QA dependencies without lifecycle scripts
+        run: |
+          npm ci --prefix .release-candidate --ignore-scripts --no-audit --no-fund --userconfig=/dev/null --registry=https://registry.npmjs.org
+          npm ci --prefix scripts/statistical-levels-release/qa-dependencies --ignore-scripts --no-audit --no-fund --userconfig=/dev/null --registry=https://registry.npmjs.org
+          node scripts/statistical-levels-release/qa-dependencies/node_modules/playwright/cli.js install --with-deps chromium
+      - name: Public Production or exact Preview QA with canonical non-secret attestation outputs
+        id: qa
+        run: node scripts/statistical-levels-release/scripts/cli.mjs qa
+  seal-qa:
+    name: statistical-levels-candidate-qa-sha256-${{ needs.candidate-qa.outputs.qa_payload_sha256 }}
+    needs: candidate-qa
+    if: needs.candidate-qa.result == 'success'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 2
+    permissions: {}
+    steps:
+      - name: Complete the public server-owned digest marker
+        env:
+          QA_SHA256: ${{ needs.candidate-qa.outputs.qa_payload_sha256 }}
+        shell: bash
+        run: |
+          [[ "$QA_SHA256" =~ ^[a-f0-9]{64}$ ]]
+  invoke-controller:
+    name: Statistical Levels release controller
+    needs: [candidate-qa, seal-qa]
+    if: needs.candidate-qa.result == 'success' && needs.seal-qa.result == 'success' && github.repository == 'luiguiHerrera/Luiguiherrera-web' && github.ref == 'refs/heads/vercel-deployment'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+          fetch-depth: 1
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38
+        with:
+          node-version: '22.23.2'
+          package-manager-cache: false
+      - name: Verify frozen helper bytes before executing any helper
+        working-directory: scripts/statistical-levels-release
+        env:
+          EXPECTED_SOURCE_SUMS: d06af2d1eaec507666000f307ec7df4e9b55da53f6fdc667191f7adfa50a0167
+        run: |
+          printf '%s  SOURCE_SHA256SUMS\n' "$EXPECTED_SOURCE_SUMS" | sha256sum --check --strict
+          sha256sum --check --strict SOURCE_SHA256SUMS
+      - name: Verify public completed QA jobs, ancestry and default AWS OIDC identity
+        env:
+          SL_QA_ENVELOPE: ${{ needs.candidate-qa.outputs.qa_envelope }}
+          SL_QA_PAYLOAD_SHA256: ${{ needs.candidate-qa.outputs.qa_payload_sha256 }}
+        run: node scripts/statistical-levels-release/scripts/cli.mjs prepare-invocation
+      - name: Assume only dedicated Lambda invoker
+        uses: aws-actions/configure-aws-credentials@cbe3b392738ccf3f987d68400dafcf4b0624a56c
+        with:
+          aws-region: eu-south-2
+          role-to-assume: arn:aws:iam::732159826922:role/LuiguiHerreraStatisticalLevelsReleaseInvoker
+          audience: sts.amazonaws.com
+          allowed-account-ids: '732159826922'
+          role-session-name: sl-release-${{ github.run_id }}
+          role-duration-seconds: 1800
+          unset-current-credentials: true
+          use-existing-credentials: false
+          output-credentials: false
+          disable-retry: true
+          action-timeout-s: 60
+          inline-session-policy: '{"Version":"2012-10-17","Statement":[{"Effect":"Allow","Action":"lambda:InvokeFunction","Resource":"arn:aws:lambda:eu-south-2:732159826922:function:statistical-levels-vercel-release-controller"}]}'
+      - name: Invoke the exact controller once; no direct promotion or automatic retry
+        run: node scripts/statistical-levels-release/scripts/invoke.mjs
