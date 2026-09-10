@@ -4,7 +4,7 @@ import { P, need, canonical } from './release-core.mjs';
 import { attestProbe, validateProbeAttestation } from './probe-core.mjs';
 import { assertProbeWorkflow, resolveProbeDeployment, probeOIDC, readProbeRoleIdentity, readProbeOIDCEvidence, packageRoot, candidateRoot, execution } from './probe-runtime.mjs';
 import { writeProbeEvidence } from './probe-evidence.mjs';
-import { requireProtectedProbeHTTP } from './probe-gate.mjs';
+import { requireProtectedProbeHTTP, requireProbeCertificationHTTP, requireProbeQATokenBudget } from './probe-gate.mjs';
 
 const root = path.join(process.env.RUNNER_TEMP ?? '', 'statistical-levels-identity-probe');
 const qaDirectory = path.join(root, 'qa');
@@ -25,6 +25,8 @@ try {
       productReport: await readOptional(path.join(qaDirectory, 'product-report.json')),
       accounting: await readOptional(path.join(qaDirectory, 'network-accounting.json')),
       httpPreflight: await readOptional(path.join(qaDirectory, 'http-preflight.json')),
+      certificationHttp: await readOptional(path.join(qaDirectory, 'trusted-sources-certification.json')),
+      tokenBudget: await readOptional(path.join(qaDirectory, 'token-budget.json')),
       awsProof: await readOptional(path.join(root, 'aws-proof.json')),
       attestation: await readOptional(path.join(root, 'qa-attestation.json')),
       oidcEvidence: await readProbeOIDCEvidence() });
@@ -52,6 +54,8 @@ try {
       const attestation = JSON.parse(await fs.readFile(path.join(root, 'qa-attestation.json'), 'utf8'));
       validateProbeAttestation(attestation, run, context.target, frozen.workflow_sha256);
       requireProtectedProbeHTTP(await readOptional(path.join(qaDirectory, 'http-preflight.json')), context.target);
+      requireProbeCertificationHTTP(await readOptional(path.join(qaDirectory, 'trusted-sources-certification.json')), context.target);
+      requireProbeQATokenBudget(await readOptional(path.join(qaDirectory, 'token-budget.json')), context.target.origin);
       const age = Date.now() - Date.parse(attestation.timestamp);
       need(age >= 0 && age <= 86400000, 'PROBE_QA_EXPIRED');
       need(context.target.candidate_git_sha === frozen.target.candidate_git_sha && context.target.deployment_id === frozen.target.deployment_id, 'PROBE_FIXTURE_CHANGED');

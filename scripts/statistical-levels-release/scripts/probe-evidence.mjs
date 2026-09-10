@@ -4,6 +4,8 @@ import { canonical, exactKeys, need, P, sha, validateProductReport, verifiedOrig
 import { validateProbeAttestation } from './probe-core.mjs';
 import { validateProbeOIDCEvidence } from './probe-oidc.mjs';
 import { validateProbeHttpEvidence } from './probe-http.mjs';
+import { requireProbeCertificationHTTP, requireProbeQATokenBudget } from './probe-gate.mjs';
+import { validateProbeTokenBudgetEvidence } from './probe-token-budget.mjs';
 
 export const probeEvidenceFiles = Object.freeze([
   'probe-summary.json', 'trusted-sources-qa.json', 'application-network-summary.json',
@@ -120,7 +122,7 @@ export function buildProbeEvidence(input) {
     try { return validator(value); } catch { issues.push(code); return null; }
   }
   need(input && typeof input === 'object' && !Array.isArray(input), 'EVIDENCE_INPUT');
-  const allowed = ['context', 'outcomes', 'productReport', 'accounting', 'awsProof', 'attestation', 'oidcEvidence', 'httpPreflight'];
+  const allowed = ['context', 'outcomes', 'productReport', 'accounting', 'awsProof', 'attestation', 'oidcEvidence', 'httpPreflight', 'certificationHttp', 'tokenBudget'];
   if (Object.keys(input).some(k => !allowed.includes(k))) issues.push('UNEXPECTED_INPUT_FIELD');
   const context = inspect(input.context, validContext, 'INVALID_CONTEXT');
   const oidc = inspect(input.oidcEvidence, value => {
@@ -137,6 +139,32 @@ export function buildProbeEvidence(input) {
     return validateProbeHttpEvidence(value, context.target);
   }, 'INVALID_HTTP_PREFLIGHT');
   const protectedBaseline = httpPreflight?.anonymous_protection_baseline === 'PROTECTED' && httpPreflight.anonymous_baseline_complete === true;
+  const certificationHttp = inspect(input.certificationHttp, value => {
+    need(context?.target, 'CERTIFICATION_HTTP_TARGET');
+    return requireProbeCertificationHTTP(value, context.target);
+  }, 'INVALID_CERTIFICATION_HTTP');
+  const tokenBudget = inspect(input.tokenBudget, value => {
+    const safe = validateProbeTokenBudgetEvidence(value);
+    need(context?.target?.origin === safe.origin, 'TOKEN_BUDGET_ORIGIN');
+    return safe;
+  }, 'INVALID_TOKEN_BUDGET');
+  const totalTokenRequests = tokenBudget?.vercel_total_oidc_token_request_count;
+  if ((httpPreflight || vercelOIDC.length) && !tokenBudget) issues.push('MISSING_TOKEN_BUDGET');
+  if (vercelOIDC.length > 2 || (tokenBudget && vercelOIDC.length > totalTokenRequests)) issues.push('VERCEL_OIDC_COUNT_MISMATCH');
+  if (tokenBudget?.certification_token_accepted && vercelOIDC[0]?.result !== 'PASS') issues.push('CERTIFICATION_TOKEN_WITHOUT_PASSING_OIDC');
+  if (tokenBudget?.qa_refresh_token_accepted && (vercelOIDC.length !== 2 || vercelOIDC[1].result !== 'PASS')) issues.push('QA_REFRESH_WITHOUT_PASSING_OIDC');
+  if (tokenBudget && !protectedBaseline && (totalTokenRequests || tokenBudget.trusted_sources_certified)) issues.push('TOKEN_BUDGET_WITHOUT_PROTECTED_BASELINE');
+  if (tokenBudget?.trusted_sources_certified && !certificationHttp) issues.push('CERTIFICATION_WITHOUT_HTTP_RECEIPT');
+  if (certificationHttp && (!httpPreflight || !equal(certificationHttp.fixture, httpPreflight.fixture) ||
+    !equal(certificationHttp.anonymous, httpPreflight.anonymous) || !equal(certificationHttp.routes[0], httpPreflight.routes[0]))) issues.push('CERTIFICATION_HTTP_MISMATCH');
+  const certifiedBudget = !!(tokenBudget?.trusted_sources_certified && tokenBudget.certification_recorded &&
+    tokenBudget.vercel_certification_oidc_token_request_count === 1 && tokenBudget.certification_token_accepted &&
+    tokenBudget.trusted_sources_certified_before_qa_refresh && certificationHttp && protectedBaseline && vercelOIDC[0]?.result === 'PASS');
+  let usableQABudget = false;
+  if (tokenBudget) { try { requireProbeQATokenBudget(tokenBudget, context.target.origin); usableQABudget = true; } catch { /* Failed/incomplete lifecycle cannot authorize QA or AWS. */ } }
+  const tokenBudgetComplete = certifiedBudget && usableQABudget &&
+    !issues.some(value => /TOKEN_BUDGET|CERTIFICATION_|QA_REFRESH|VERCEL_OIDC_COUNT/.test(value));
+
   if (httpPreflight?.trusted_request_attempted && !vercelOIDC.some(value => value.result === 'PASS')) issues.push('HTTP_WITHOUT_PASSING_OIDC');
   if (httpPreflight && !protectedBaseline && (vercelOIDC.length || awsOIDC.length)) issues.push('OIDC_WITHOUT_PROTECTED_BASELINE');
   if (httpPreflight && !httpPreflight.vercel_oidc_token_requested && vercelOIDC.length) issues.push('UNEXPECTED_VERCEL_TOKEN_REQUEST');
@@ -173,7 +201,7 @@ export function buildProbeEvidence(input) {
   const httpComplete = protectedBaseline && httpPreflight?.result === 'PASS' && httpPreflight.trusted_sources_access === 'PASS' &&
     httpPreflight.trusted_sources_live_certified === true &&
     canonical(httpPreflight.routes.map(route => route.path)).equals(canonical(['/niveles-estadisticos', '/en/statistical-levels']));
-  const qaComplete = !!(report && accounting && attestation && noNetworkFailures && httpComplete && oidcResult(vercelOIDC) === 'PASS' &&
+  const qaComplete = !!(report && accounting && attestation && noNetworkFailures && httpComplete && tokenBudgetComplete && oidcResult(vercelOIDC) === 'PASS' &&
     !issues.includes('OIDC_EXECUTION_CONTEXT_MISMATCH'));
   const complete = { resolve: !!context?.target, qa: qaComplete,
     aws_assume: qaComplete && oidcResult(awsOIDC) === 'PASS', aws_identity: qaComplete && !!aws && oidcResult(awsOIDC) === 'PASS' };
@@ -203,16 +231,19 @@ export function buildProbeEvidence(input) {
   const noTrustedHTTP = httpPreflight && !httpPreflight.trusted_request_attempted;
   const beforeHTTP = vercelOIDC.length > 0 && vercelOIDC[0].result === 'FAIL' &&
     !vercelOIDC.some(value => value.result === 'PASS') && !httpPreflight && !report && !accounting && !attestation;
-  const trustedProof = protectedBaseline && oidcResult(vercelOIDC) === 'PASS' &&
-    !uniqueIssues.some(value => /OIDC_EXECUTION_CONTEXT_MISMATCH|INVALID_HTTP_PREFLIGHT|INVALID_OIDC_EVIDENCE/.test(value));
-  const access = baselineStopped || noTrustedHTTP ? 'NOT_RUN' : trustedProof ? httpPreflight.trusted_sources_access : beforeHTTP ? 'NOT_ATTEMPTED' :
+  const trustedProof = certifiedBudget && !uniqueIssues.some(value =>
+    /OIDC_EXECUTION_CONTEXT_MISMATCH|INVALID_HTTP_PREFLIGHT|INVALID_OIDC_EVIDENCE|TOKEN_BUDGET|CERTIFICATION_|VERCEL_OIDC_COUNT/.test(value));
+  const certificationDenied = protectedBaseline && tokenBudget?.vercel_certification_oidc_token_request_count === 1 &&
+    tokenBudget.vercel_post_certification_qa_refresh_count === 0 && !tokenBudget.trusted_sources_certified &&
+    vercelOIDC[0]?.result === 'PASS' && httpPreflight?.trusted_sources_access === 'FAIL';
+  const access = baselineStopped || noTrustedHTTP ? 'NOT_RUN' : trustedProof ? 'PASS' : certificationDenied ? 'FAIL' : beforeHTTP ? 'NOT_ATTEMPTED' :
     qaState === 'NOT_RUN' ? 'NOT_RUN' : 'NOT_CERTIFIED';
-  const liveCertified = trustedProof && access === 'PASS' && httpPreflight.trusted_sources_live_certified === true;
+  const liveCertified = trustedProof && access === 'PASS';
   const evidence = {
     'probe-summary.json': { schema_version: 'statistical-levels.identity-probe-summary.v3', operation: OPERATION,
       classification: 'PROBE_ONLY', production_release_target: false, result, ...safeContext, steps, evidence_issues: uniqueIssues,
       failed_oidc_gates: oidc.filter(value => value.result === 'FAIL').map(({ audience_kind, error_code }) => ({ audience_kind, error_code })) },
-    'trusted-sources-qa.json': { schema_version: 'statistical-levels.identity-probe-trusted-sources.v5', result: qaState,
+    'trusted-sources-qa.json': { schema_version: 'statistical-levels.identity-probe-trusted-sources.v6', result: qaState,
       preview_origin: context?.target?.origin ?? null, http_access_through_trusted_source: access,
       audience: P.vercel_audience, oidc_validation_result: oidcResult(vercelOIDC), oidc_claim_evidence: vercelOIDC,
       anonymous_http_status: httpPreflight?.anonymous?.http_status_exact ?? null,
@@ -225,6 +256,14 @@ export function buildProbeEvidence(input) {
       trusted_sources_live_certified: liveCertified,
       baseline_stop_reason: baselineStopped ? httpPreflight.error_code : null,
       preview_qa_result: baselineStopped ? 'NOT_RUN' : qaState,
+      vercel_certification_oidc_token_request_count: tokenBudget?.vercel_certification_oidc_token_request_count ?? null,
+      vercel_post_certification_qa_refresh_count: tokenBudget?.vercel_post_certification_qa_refresh_count ?? null,
+      vercel_total_oidc_token_request_count: totalTokenRequests ?? null,
+      trusted_http_request_count: httpPreflight?.trusted_http_request_count ?? null,
+      trusted_redirect_hops: httpPreflight?.routes.map(route => ({ path: route.path, hops: Math.max(0, route.hops.length - 1) })) ?? [],
+      trusted_sources_certified_before_qa_refresh: certifiedBudget,
+      token_budget_stop_reason: tokenBudget?.error_code ?? null,
+      token_budget: tokenBudget, certification_http: certificationHttp,
       http_preflight: httpPreflight, product_report: report },
     'application-network-summary.json': { schema_version: 'statistical-levels.identity-probe-network.v1', result: accounting ?
       (qaState === 'PASS' && noNetworkFailures ? 'PASS' : 'FAIL') : steps.qa.result === 'NOT_RUN' ? 'NOT_RUN' : 'FAIL',

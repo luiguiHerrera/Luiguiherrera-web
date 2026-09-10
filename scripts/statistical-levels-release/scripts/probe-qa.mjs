@@ -5,7 +5,8 @@ import { validateProbeTarget } from './probe-core.mjs';
 import { createReadOnlyHarness } from './browser-harness-base.mjs';
 import { runReadOnlyQA } from './qa-runner.mjs';
 import { validateProbeHttpEvidence } from './probe-http.mjs';
-import { runProtectedProbeQA } from './probe-gate.mjs';
+import { runProtectedProbeQA, requireProbeCertificationHTTP } from './probe-gate.mjs';
+import { validateProbeTokenBudgetEvidence } from './probe-token-budget.mjs';
 
 export async function verifyProbeInputs(codeRoot, inputManifest, target) {
   for (const [file, expected] of Object.entries(inputManifest)) {
@@ -55,6 +56,14 @@ export async function runProbeQA(options) {
   validateProbeTarget(target);
   await fs.mkdir(options.out, { recursive: true, mode: 0o700 });
   const report = await runProtectedProbeQA({ target, requestOIDCToken: options.requestOIDCToken,
+    onTokenEvidence: async value => {
+      const safe = validateProbeTokenBudgetEvidence(value);
+      await fs.writeFile(path.join(options.out, 'token-budget.json'), canonical(safe), { mode: 0o600 });
+    },
+    onCertificationEvidence: async value => {
+      const safe = requireProbeCertificationHTTP(value, target);
+      await fs.writeFile(path.join(options.out, 'trusted-sources-certification.json'), canonical(safe), { mode: 0o600 });
+    },
     onEvidence: async value => {
       const safe = validateProbeHttpEvidence(value, target);
       await fs.writeFile(path.join(options.out, 'http-preflight.json'), canonical(safe), { mode: 0o600 });
