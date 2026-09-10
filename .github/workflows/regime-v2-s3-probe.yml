@@ -30,7 +30,6 @@ env:
   AWS_PAGER: ''
   PROBE_BUCKET: ${{ inputs.bucket_name }}
   PROBE_ROLE_ARN: ${{ inputs.role_arn }}
-  PROBE_RESULT_FILE: ${{ runner.temp }}/regime-v2-s3-probe-result.json
 
 jobs:
   isolated-probe:
@@ -222,7 +221,7 @@ jobs:
               # Never publish raw exception text, credentials, signed requests or response bodies.
               result['failure'] = {'stage': 'PROBE', 'code': 'UNCLASSIFIED_LOCAL_FAILURE', 'expected': 'bounded probe completion', 'observed': 'local exception'}
           try:
-              pathlib.Path(os.environ['PROBE_RESULT_FILE']).write_text(json.dumps(result, sort_keys=True) + '\n')
+              (pathlib.Path(os.environ['RUNNER_TEMP']) / 'regime-v2-s3-probe-result.json').write_text(json.dumps(result, sort_keys=True) + '\n')
           except Exception:
               print(json.dumps({'state': 'FAIL', 'stage': 'DIAGNOSTICS', 'code': 'RESULT_WRITE_FAILED'}))
               sys.exit(1)
@@ -242,7 +241,7 @@ jobs:
           # PROBE_TERMINAL_BEGIN
           import json, os, pathlib, sys
           try:
-              result = json.loads(pathlib.Path(os.environ['PROBE_RESULT_FILE']).read_text())
+              result = json.loads((pathlib.Path(os.environ['RUNNER_TEMP']) / 'regime-v2-s3-probe-result.json').read_text())
               assert result.get('schemaVersion') == 'regime-v2-s3-bootstrap-probe/1'
           except Exception:
               outcomes = {key: os.environ.get(key) if os.environ.get(key) in ['success', 'failure', 'cancelled', 'skipped'] else 'unknown' for key in ['PREFLIGHT_OUTCOME', 'OIDC_OUTCOME', 'PROBE_OUTCOME']}
