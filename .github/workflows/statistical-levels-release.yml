@@ -71,7 +71,7 @@ jobs:
       - name: Verify frozen helper bytes before executing any helper
         working-directory: scripts/statistical-levels-release
         env:
-          EXPECTED_SOURCE_SUMS: 77b6dbd38e50590a54bc03088a22aa221aa7f266abc1644148e66a65b26d9237
+          EXPECTED_SOURCE_SUMS: b1229b97a95bf4f0d736b926019ce58de72f9f89d39abd451e467c0af399d39d
         run: |
           printf '%s  SOURCE_SHA256SUMS\n' "$EXPECTED_SOURCE_SUMS" | sha256sum --check --strict
           sha256sum --check --strict SOURCE_SHA256SUMS
@@ -129,7 +129,7 @@ jobs:
       - name: Verify frozen helper bytes before executing any helper
         working-directory: scripts/statistical-levels-release
         env:
-          EXPECTED_SOURCE_SUMS: 77b6dbd38e50590a54bc03088a22aa221aa7f266abc1644148e66a65b26d9237
+          EXPECTED_SOURCE_SUMS: b1229b97a95bf4f0d736b926019ce58de72f9f89d39abd451e467c0af399d39d
         run: |
           printf '%s  SOURCE_SHA256SUMS\n' "$EXPECTED_SOURCE_SUMS" | sha256sum --check --strict
           sha256sum --check --strict SOURCE_SHA256SUMS
@@ -178,7 +178,7 @@ jobs:
         id: source_integrity
         working-directory: scripts/statistical-levels-release
         env:
-          EXPECTED_SOURCE_SUMS: 77b6dbd38e50590a54bc03088a22aa221aa7f266abc1644148e66a65b26d9237
+          EXPECTED_SOURCE_SUMS: b1229b97a95bf4f0d736b926019ce58de72f9f89d39abd451e467c0af399d39d
         run: |
           printf '%s  SOURCE_SHA256SUMS\n' "$EXPECTED_SOURCE_SUMS" | sha256sum --check --strict
           sha256sum --check --strict SOURCE_SHA256SUMS
@@ -199,8 +199,18 @@ jobs:
           node scripts/statistical-levels-release/qa-dependencies/node_modules/playwright/cli.js install --with-deps chromium
       - name: Protected Preview QA through exact-origin Trusted Sources OIDC
         id: qa
+        env:
+          SL_JOB_WORKFLOW_REF: ${{ job.workflow_ref }}
+          SL_JOB_WORKFLOW_SHA: ${{ job.workflow_sha }}
+          SL_JOB_WORKFLOW_REPOSITORY: ${{ job.workflow_repository }}
+          SL_JOB_WORKFLOW_FILE_PATH: ${{ job.workflow_file_path }}
         run: node scripts/statistical-levels-release/scripts/probe-cli.mjs qa
       - name: Validate QA attestation and audience-specific AWS OIDC claims
+        env:
+          SL_JOB_WORKFLOW_REF: ${{ job.workflow_ref }}
+          SL_JOB_WORKFLOW_SHA: ${{ job.workflow_sha }}
+          SL_JOB_WORKFLOW_REPOSITORY: ${{ job.workflow_repository }}
+          SL_JOB_WORKFLOW_FILE_PATH: ${{ job.workflow_file_path }}
         run: node scripts/statistical-levels-release/scripts/probe-cli.mjs aws-preflight
       - name: Assume only dedicated release invoker with all non-identity actions denied
         id: aws_assume
@@ -227,7 +237,7 @@ jobs:
         if: always() && steps.source_integrity.outcome == 'success'
         working-directory: scripts/statistical-levels-release
         env:
-          EXPECTED_SOURCE_SUMS: 77b6dbd38e50590a54bc03088a22aa221aa7f266abc1644148e66a65b26d9237
+          EXPECTED_SOURCE_SUMS: b1229b97a95bf4f0d736b926019ce58de72f9f89d39abd451e467c0af399d39d
           PROBE_RESOLVE_OUTCOME: ${{ steps.resolve.outcome }}
           PROBE_QA_OUTCOME: ${{ steps.qa.outcome }}
           PROBE_AWS_ASSUME_OUTCOME: ${{ steps.aws_assume.outcome }}

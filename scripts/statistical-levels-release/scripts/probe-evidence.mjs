@@ -126,6 +126,8 @@ export function buildProbeEvidence(input) {
     need(Array.isArray(value) && value.length <= 256, 'EVIDENCE_OIDC_COUNT');
     return value.map(validateProbeOIDCEvidence);
   }, 'INVALID_OIDC_EVIDENCE') ?? [];
+  if (context && oidc.some(value => value.claims !== null &&
+    value.claims.caller_workflow_sha !== context.run.execution_sha)) issues.push('OIDC_EXECUTION_CONTEXT_MISMATCH');
   const vercelOIDC = oidc.filter(value => value.audience_kind === 'VERCEL');
   const awsOIDC = oidc.filter(value => value.audience_kind === 'AWS');
   const oidcResult = records => records.length === 0 ? 'NOT_RUN' : records.every(value => value.result === 'PASS') ? 'PASS' : 'FAIL';
@@ -187,17 +189,17 @@ export function buildProbeEvidence(input) {
   const access = qaState === 'PASS' ? 'PASS' : beforeHTTP ? 'NOT_ATTEMPTED' :
     qaState === 'NOT_RUN' ? 'NOT_RUN' : 'NOT_CERTIFIED';
   const evidence = {
-    'probe-summary.json': { schema_version: 'statistical-levels.identity-probe-summary.v2', operation: OPERATION,
+    'probe-summary.json': { schema_version: 'statistical-levels.identity-probe-summary.v3', operation: OPERATION,
       classification: 'PROBE_ONLY', production_release_target: false, result, ...safeContext, steps, evidence_issues: uniqueIssues,
       failed_oidc_gates: oidc.filter(value => value.result === 'FAIL').map(({ audience_kind, error_code }) => ({ audience_kind, error_code })) },
-    'trusted-sources-qa.json': { schema_version: 'statistical-levels.identity-probe-trusted-sources.v2', result: qaState,
+    'trusted-sources-qa.json': { schema_version: 'statistical-levels.identity-probe-trusted-sources.v3', result: qaState,
       preview_origin: context?.target?.origin ?? null, http_access_through_trusted_source: access,
       audience: P.vercel_audience, oidc_validation_result: oidcResult(vercelOIDC), oidc_claim_evidence: vercelOIDC, product_report: report },
     'application-network-summary.json': { schema_version: 'statistical-levels.identity-probe-network.v1', result: accounting ?
       (qaState === 'PASS' && noNetworkFailures ? 'PASS' : 'FAIL') : steps.qa.result === 'NOT_RUN' ? 'NOT_RUN' : 'FAIL',
       preview_origin: context?.target?.origin ?? null, unrelated_origin_redaction: 'SHA256', accounting,
       rejected_accounting_sha256: input.accounting != null && !accounting ? rejectedDigest(input.accounting) : null },
-    'aws-oidc-summary.json': { schema_version: 'statistical-levels.identity-probe-aws.v2',
+    'aws-oidc-summary.json': { schema_version: 'statistical-levels.identity-probe-aws.v3',
       result: steps.aws_identity.result, assume_role_with_web_identity: steps.aws_assume.result,
       credential_model: 'GITHUB_OIDC', oidc_validation_result: oidcResult(awsOIDC), oidc_claim_evidence: awsOIDC, identity: aws },
     'qa-attestation.json': { schema_version: 'statistical-levels.identity-probe-attestation-evidence.v1', result: qaState, attestation },

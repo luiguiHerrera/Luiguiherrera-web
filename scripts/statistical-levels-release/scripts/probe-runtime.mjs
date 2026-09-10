@@ -67,7 +67,7 @@ function oidcEvidencePath(env) {
   return path.join(env.RUNNER_TEMP, 'statistical-levels-identity-probe', 'oidc-claims.jsonl');
 }
 
-// This journal accepts only fixed booleans/enums from the signed-claim evaluator.
+// This journal accepts only validated booleans/enums and bounded workflow identity metadata.
 // It never accepts a token, signature, header or arbitrary claim value.
 export async function recordProbeOIDCEvidence(evidence, env = process.env) {
   const safe = validateProbeOIDCEvidence(evidence);

@@ -9,7 +9,7 @@ import { signedFixture, jwks, env } from './probe-oidc-fixture.mjs';
 
 for (const [audience, extra, code] of [[P.vercel_audience, {}, null], [P.aws_audience, {}, null],
   [P.vercel_audience, { environment: 'Preview' }, 'UNEXPECTED_GITHUB_ENVIRONMENT_CLAIM'],
-  [P.vercel_audience, { job_workflow_ref: 'unexpected' }, 'UNEXPECTED_JOB_WORKFLOW_REF'],
+  [P.vercel_audience, { job_workflow_ref: 'unexpected' }, 'JOB_WORKFLOW_REF_MISMATCH'],
   [P.aws_audience, { sub: P.aws_subject + '-wrong' }, 'OIDC_SUBJECT_MISMATCH']]) {
   test('runtime persists only safe diagnostics before pass or precise rejection: ' + audience + ':' + code, async t => {
     const root = await fs.mkdtemp(path.join(os.tmpdir(), 'probe-oidc-unit-'));

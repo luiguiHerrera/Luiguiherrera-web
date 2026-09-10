@@ -253,7 +253,7 @@ test('pure evidence module contains no invocation, transport, SDK, or cloud subp
 });
 
 for (const [claim, code] of [['environment', 'UNEXPECTED_GITHUB_ENVIRONMENT_CLAIM'],
-  ['job_workflow_ref', 'UNEXPECTED_JOB_WORKFLOW_REF'], ['job_workflow_sha', 'UNEXPECTED_JOB_WORKFLOW_SHA']]) {
+  ['job_workflow_ref', 'JOB_WORKFLOW_REF_MISMATCH'], ['job_workflow_sha', 'JOB_WORKFLOW_SHA_MISMATCH']]) {
   test('signed ' + claim + ' rejection is precise, safe and certifies no HTTP attempt', () => {
     const marker = 'untrusted-claim-marker';
     const { token, evidence } = signedFixture(P.vercel_audience, { [claim]: marker });
@@ -313,4 +313,30 @@ test('failed AWS preflight remains FAIL when assumption and caller identity are 
   assert.equal(json['aws-oidc-summary.json'].oidc_validation_result, 'FAIL');
   assert.equal(json['aws-oidc-summary.json'].assume_role_with_web_identity, 'NOT_RUN');
   assert.equal(json['probe-summary.json'].result, 'FAIL');
+});
+
+
+test('v3 artifact preserves exact safe direct-job metadata for both token audiences', () => {
+  const input = fixture(), json = decode(buildProbeEvidence(input));
+  assert.equal(json['probe-summary.json'].schema_version, 'statistical-levels.identity-probe-summary.v3');
+  for (const name of ['trusted-sources-qa.json', 'aws-oidc-summary.json']) {
+    assert.ok(json[name].schema_version.endsWith('.v3'));
+    const c = json[name].oidc_claim_evidence[0].claims;
+    assert.equal(c.job_workflow_ref_value, P.workflow_ref);
+    assert.equal(c.runtime_job_workflow_ref, P.workflow_ref);
+    assert.equal(c.job_workflow_ref_match, true);
+    assert.equal(c.job_workflow_sha_value, input.context.run.execution_sha);
+    assert.equal(c.runtime_job_workflow_sha, input.context.run.execution_sha);
+    assert.equal(c.job_workflow_sha_match, true);
+    assert.equal(c.runtime_job_workflow_repository, P.repository);
+    assert.equal(c.runtime_job_workflow_file_path, P.workflow_path);
+    for (const field of ['runtime_job_equals_caller_ref', 'runtime_job_equals_caller_sha', 'runtime_job_equals_caller_repository']) assert.equal(c[field], true);
+  }
+});
+
+test('otherwise valid workflow identity evidence cannot be attached to a different execution SHA', () => {
+  const input = fixture(); input.context.run.execution_sha = '9'.repeat(40);
+  const json = decode(buildProbeEvidence(input));
+  assert.equal(json['probe-summary.json'].result, 'FAIL');
+  assert.ok(json['probe-summary.json'].evidence_issues.includes('OIDC_EXECUTION_CONTEXT_MISMATCH'));
 });
