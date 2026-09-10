@@ -2,7 +2,7 @@ import fs from 'node:fs/promises';
 import path from 'node:path';
 import { P, need, canonical, oidcLease } from './release-core.mjs';
 import { attestProbe, validateProbeAttestation } from './probe-core.mjs';
-import { assertProbeWorkflow, resolveProbeDeployment, probeOIDC, readProbeRoleIdentity, packageRoot, candidateRoot, execution } from './probe-runtime.mjs';
+import { assertProbeWorkflow, resolveProbeDeployment, probeOIDC, readProbeRoleIdentity, readProbeOIDCEvidence, packageRoot, candidateRoot, execution } from './probe-runtime.mjs';
 import { writeProbeEvidence } from './probe-evidence.mjs';
 
 const root = path.join(process.env.RUNNER_TEMP ?? '', 'statistical-levels-identity-probe');
@@ -24,7 +24,8 @@ try {
       productReport: await readOptional(path.join(qaDirectory, 'product-report.json')),
       accounting: await readOptional(path.join(qaDirectory, 'network-accounting.json')),
       awsProof: await readOptional(path.join(root, 'aws-proof.json')),
-      attestation: await readOptional(path.join(root, 'qa-attestation.json')) });
+      attestation: await readOptional(path.join(root, 'qa-attestation.json')),
+      oidcEvidence: await readProbeOIDCEvidence() });
     await fs.appendFile(process.env.GITHUB_OUTPUT, 'ready=true\n');
     if (summary.result !== 'PASS') process.exitCode = 1;
   } else {

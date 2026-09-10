@@ -5,6 +5,7 @@ import os from 'node:os';
 import path from 'node:path';
 import { P, canonical, productGates, sha } from '../scripts/release-core.mjs';
 import { account } from '../scripts/network-accounting.mjs';
+import { signedFixture } from './probe-oidc-fixture.mjs';
 import { attestProbe } from '../scripts/probe-core.mjs';
 import { buildProbeEvidence, probeEvidenceFiles, sanitizeProbeAccounting, writeProbeEvidence } from '../scripts/probe-evidence.mjs';
 
@@ -27,16 +28,17 @@ function fixture(events = []) {
   const awsProof = { result: 'PASS', assumed_role: 'LuiguiHerreraStatisticalLevelsReleaseInvoker', account_match: true,
     session_match: true, workflow_run_id: context.run.id, workflow_run_attempt: context.run.attempt, workflow_execution_sha: context.run.execution_sha };
   return { context, outcomes: { resolve: 'success', qa: 'success', aws_assume: 'success', aws_identity: 'success' },
-    productReport, accounting, awsProof, attestation };
+    productReport, accounting, awsProof, attestation,
+    oidcEvidence: [signedFixture().evidence, signedFixture(P.aws_audience).evidence] };
 }
 function failedQA(events = []) {
   const value = fixture();
   return { ...value, outcomes: { resolve: 'success', qa: 'failure', aws_assume: 'skipped', aws_identity: 'skipped' },
-    accounting: { ...account(events, false, origin), authFailures: [] }, productReport: null, awsProof: null, attestation: null };
+    oidcEvidence: [signedFixture().evidence], accounting: { ...account(events, false, origin), authFailures: [] }, productReport: null, awsProof: null, attestation: null };
 }
 function blank(outcomes) {
   const value = fixture();
-  return { context: { ...value.context, target: null }, outcomes, productReport: null, accounting: null, awsProof: null, attestation: null };
+  return { context: { ...value.context, target: null }, outcomes, oidcEvidence: [], productReport: null, accounting: null, awsProof: null, attestation: null };
 }
 
 test('evidence has exactly six canonical JSON files; manifest covers other five exact bytes', () => {
@@ -248,4 +250,67 @@ test('writer rejects symlink destination without modifying the linked directory'
 test('pure evidence module contains no invocation, transport, SDK, or cloud subprocess import', async () => {
   const source = await fs.readFile(new URL('../scripts/probe-evidence.mjs', import.meta.url), 'utf8');
   assert.doesNotMatch(source, /import[^\n]*(?:invoke|runtime-io|child_process|aws-sdk)|\bfetch\(|InvokeFunction|GetSecretValue|PutObject/);
+});
+
+for (const [claim, code] of [['environment', 'UNEXPECTED_GITHUB_ENVIRONMENT_CLAIM'],
+  ['job_workflow_ref', 'UNEXPECTED_JOB_WORKFLOW_REF'], ['job_workflow_sha', 'UNEXPECTED_JOB_WORKFLOW_SHA']]) {
+  test('signed ' + claim + ' rejection is precise, safe and certifies no HTTP attempt', () => {
+    const marker = 'untrusted-claim-marker';
+    const { token, evidence } = signedFixture(P.vercel_audience, { [claim]: marker });
+    const input = { ...failedQA(), accounting: null, oidcEvidence: [evidence] };
+    const json = decode(buildProbeEvidence(input)), trusted = json['trusted-sources-qa.json'];
+    assert.equal(json['probe-summary.json'].result, 'FAIL');
+    assert.deepEqual(json['probe-summary.json'].evidence_issues, []);
+    assert.deepEqual(json['probe-summary.json'].failed_oidc_gates, [{ audience_kind: 'VERCEL', error_code: code }]);
+    assert.equal(trusted.http_access_through_trusted_source, 'NOT_ATTEMPTED');
+    assert.equal(trusted.oidc_claim_evidence[0].claims[claim + '_present'], true);
+    assert.equal(trusted.oidc_claim_evidence[0].error_code, code);
+    assert.equal(json['aws-oidc-summary.json'].result, 'NOT_RUN');
+    assert.ok(!JSON.stringify(json).includes(token)); assert.ok(!JSON.stringify(json).includes(marker));
+  });
+}
+
+test('token refresh failure after valid initial token never claims HTTP was not attempted', () => {
+  const input = { ...failedQA(), accounting: null,
+    oidcEvidence: [signedFixture().evidence, signedFixture(P.vercel_audience, { environment: 'unexpected' }).evidence] };
+  const json = decode(buildProbeEvidence(input));
+  assert.equal(json['trusted-sources-qa.json'].http_access_through_trusted_source, 'NOT_CERTIFIED');
+  assert.equal(json['trusted-sources-qa.json'].oidc_validation_result, 'FAIL');
+  assert.equal(json['probe-summary.json'].result, 'FAIL');
+});
+
+for (const bad of [undefined, [], [signedFixture().evidence], [signedFixture(P.aws_audience).evidence],
+  [signedFixture().evidence, signedFixture(P.aws_audience, { sub: 'wrong' }).evidence]]) {
+  test('successful steps require complete passing diagnostics for both audiences: ' + String(bad?.length), () => {
+    const input = fixture(); input.oidcEvidence = bad;
+    assert.equal(decode(buildProbeEvidence(input))['probe-summary.json'].result, 'FAIL');
+  });
+}
+
+for (const mutate of [value => { value.token = 'private-token-marker'; },
+  value => { value.claims.environment_value_or_expected_classification = 'private-token-marker'; },
+  value => { value.claims.environment_present = true; }, value => { value.error_code = 'private-token-marker'; }]) {
+  test('OIDC diagnostic schema rejects arbitrary values without reflecting them: ' + mutate.toString(), () => {
+    const input = fixture(); mutate(input.oidcEvidence[0]);
+    const json = decode(buildProbeEvidence(input));
+    assert.equal(json['probe-summary.json'].result, 'FAIL');
+    assert.ok(json['probe-summary.json'].evidence_issues.includes('INVALID_OIDC_EVIDENCE'));
+    assert.ok(!JSON.stringify(json).includes('private-token-marker'));
+  });
+}
+
+test('no diagnostics or HTTP ledger means access not certified, never a Vercel denial', () => {
+  const json = decode(buildProbeEvidence({ ...failedQA(), accounting: null, oidcEvidence: [] }));
+  assert.equal(json['trusted-sources-qa.json'].http_access_through_trusted_source, 'NOT_CERTIFIED');
+  assert.equal(json['trusted-sources-qa.json'].oidc_validation_result, 'NOT_RUN');
+});
+
+test('failed AWS preflight remains FAIL when assumption and caller identity are skipped', () => {
+  const input = fixture(); input.outcomes.aws_assume = input.outcomes.aws_identity = 'skipped'; input.awsProof = null;
+  input.oidcEvidence[1] = signedFixture(P.aws_audience, { environment: 'unexpected' }).evidence;
+  const json = decode(buildProbeEvidence(input));
+  assert.equal(json['trusted-sources-qa.json'].result, 'PASS');
+  assert.equal(json['aws-oidc-summary.json'].oidc_validation_result, 'FAIL');
+  assert.equal(json['aws-oidc-summary.json'].assume_role_with_web_identity, 'NOT_RUN');
+  assert.equal(json['probe-summary.json'].result, 'FAIL');
 });

@@ -2,6 +2,7 @@ import fs from 'node:fs/promises';
 import path from 'node:path';
 import { canonical, exactKeys, need, P, sha, validateProductReport, verifiedOrigin } from './release-core.mjs';
 import { validateProbeAttestation } from './probe-core.mjs';
+import { validateProbeOIDCEvidence } from './probe-oidc.mjs';
 
 export const probeEvidenceFiles = Object.freeze([
   'probe-summary.json', 'trusted-sources-qa.json', 'application-network-summary.json',
@@ -118,9 +119,17 @@ export function buildProbeEvidence(input) {
     try { return validator(value); } catch { issues.push(code); return null; }
   }
   need(input && typeof input === 'object' && !Array.isArray(input), 'EVIDENCE_INPUT');
-  const allowed = ['context', 'outcomes', 'productReport', 'accounting', 'awsProof', 'attestation'];
+  const allowed = ['context', 'outcomes', 'productReport', 'accounting', 'awsProof', 'attestation', 'oidcEvidence'];
   if (Object.keys(input).some(k => !allowed.includes(k))) issues.push('UNEXPECTED_INPUT_FIELD');
   const context = inspect(input.context, validContext, 'INVALID_CONTEXT');
+  const oidc = inspect(input.oidcEvidence, value => {
+    need(Array.isArray(value) && value.length <= 256, 'EVIDENCE_OIDC_COUNT');
+    return value.map(validateProbeOIDCEvidence);
+  }, 'INVALID_OIDC_EVIDENCE') ?? [];
+  const vercelOIDC = oidc.filter(value => value.audience_kind === 'VERCEL');
+  const awsOIDC = oidc.filter(value => value.audience_kind === 'AWS');
+  const oidcResult = records => records.length === 0 ? 'NOT_RUN' : records.every(value => value.result === 'PASS') ? 'PASS' : 'FAIL';
+  if (oidc.some(value => value.audience_kind === 'UNSUPPORTED')) issues.push('UNSUPPORTED_OIDC_AUDIENCE');
   let outcomes;
   try {
     exactKeys(input.outcomes, outcomeNames);
@@ -150,8 +159,8 @@ export function buildProbeEvidence(input) {
   const noNetworkFailures = accounting && accounting.application_console_errors === 0 &&
     accounting.required_application_request_failures === 0 && accounting.hydration_errors === 0 &&
     accounting.unclassified_failures.length === 0 && accounting.authFailures.length === 0;
-  const complete = { resolve: !!context?.target, qa: !!(report && accounting && attestation && noNetworkFailures),
-    aws_assume: true, aws_identity: !!aws };
+  const complete = { resolve: !!context?.target, qa: !!(report && accounting && attestation && noNetworkFailures && oidcResult(vercelOIDC) === 'PASS'),
+    aws_assume: oidcResult(awsOIDC) === 'PASS', aws_identity: !!aws && oidcResult(awsOIDC) === 'PASS' };
   const steps = {};
   for (const name of outcomeNames) {
     const outcome = outcomes[name];
@@ -163,25 +172,34 @@ export function buildProbeEvidence(input) {
   if (outcomes.aws_identity === 'success' && steps.aws_assume.result !== 'PASS') issues.push('IDENTITY_WITHOUT_ASSUME_ROLE');
   if (outcomes.resolve === 'skipped' && context?.target) issues.push('UNEXPECTED_RESOLUTION_EVIDENCE');
   if (outcomes.qa === 'skipped' && (report || accounting || attestation)) issues.push('UNEXPECTED_QA_EVIDENCE');
+  if (outcomes.qa === 'skipped' && vercelOIDC.length) issues.push('UNEXPECTED_VERCEL_OIDC_EVIDENCE');
+  if (awsOIDC.length && steps.qa.result !== 'PASS') issues.push('AWS_OIDC_WITHOUT_PASSING_QA');
   if (outcomes.aws_identity === 'skipped' && aws) issues.push('UNEXPECTED_AWS_EVIDENCE');
   const uniqueIssues = [...new Set(issues)].sort();
-  const result = uniqueIssues.length || Object.values(steps).some(x => x.result === 'FAIL') ? 'FAIL' :
+  const result = uniqueIssues.length || oidc.some(value => value.result === 'FAIL') || Object.values(steps).some(x => x.result === 'FAIL') ? 'FAIL' :
     Object.values(steps).every(x => x.result === 'PASS') ? 'PASS' : 'NOT_RUN';
   const safeContext = context ?? { run: null, target: null, workflow_sha256: null };
   const qaState = steps.qa.result === 'PASS' && uniqueIssues.some(x => /PRODUCT|NETWORK|ATTESTATION|QA_WITHOUT/.test(x)) ? 'FAIL' : steps.qa.result;
+  // The first token must pass validation before any Preview transport is created.
+  // A later refresh rejection cannot certify that HTTP was never attempted.
+  const beforeHTTP = vercelOIDC.length > 0 && vercelOIDC[0].result === 'FAIL' &&
+    !vercelOIDC.some(value => value.result === 'PASS') && !report && !accounting && !attestation;
+  const access = qaState === 'PASS' ? 'PASS' : beforeHTTP ? 'NOT_ATTEMPTED' :
+    qaState === 'NOT_RUN' ? 'NOT_RUN' : 'NOT_CERTIFIED';
   const evidence = {
-    'probe-summary.json': { schema_version: 'statistical-levels.identity-probe-summary.v1', operation: OPERATION,
-      classification: 'PROBE_ONLY', production_release_target: false, result, ...safeContext, steps, evidence_issues: uniqueIssues },
-    'trusted-sources-qa.json': { schema_version: 'statistical-levels.identity-probe-trusted-sources.v1', result: qaState,
-      preview_origin: context?.target?.origin ?? null, http_access_through_trusted_source: qaState,
-      audience: P.vercel_audience, product_report: report },
+    'probe-summary.json': { schema_version: 'statistical-levels.identity-probe-summary.v2', operation: OPERATION,
+      classification: 'PROBE_ONLY', production_release_target: false, result, ...safeContext, steps, evidence_issues: uniqueIssues,
+      failed_oidc_gates: oidc.filter(value => value.result === 'FAIL').map(({ audience_kind, error_code }) => ({ audience_kind, error_code })) },
+    'trusted-sources-qa.json': { schema_version: 'statistical-levels.identity-probe-trusted-sources.v2', result: qaState,
+      preview_origin: context?.target?.origin ?? null, http_access_through_trusted_source: access,
+      audience: P.vercel_audience, oidc_validation_result: oidcResult(vercelOIDC), oidc_claim_evidence: vercelOIDC, product_report: report },
     'application-network-summary.json': { schema_version: 'statistical-levels.identity-probe-network.v1', result: accounting ?
       (qaState === 'PASS' && noNetworkFailures ? 'PASS' : 'FAIL') : steps.qa.result === 'NOT_RUN' ? 'NOT_RUN' : 'FAIL',
       preview_origin: context?.target?.origin ?? null, unrelated_origin_redaction: 'SHA256', accounting,
       rejected_accounting_sha256: input.accounting != null && !accounting ? rejectedDigest(input.accounting) : null },
-    'aws-oidc-summary.json': { schema_version: 'statistical-levels.identity-probe-aws.v1',
+    'aws-oidc-summary.json': { schema_version: 'statistical-levels.identity-probe-aws.v2',
       result: steps.aws_identity.result, assume_role_with_web_identity: steps.aws_assume.result,
-      credential_model: 'GITHUB_OIDC', identity: aws },
+      credential_model: 'GITHUB_OIDC', oidc_validation_result: oidcResult(awsOIDC), oidc_claim_evidence: awsOIDC, identity: aws },
     'qa-attestation.json': { schema_version: 'statistical-levels.identity-probe-attestation-evidence.v1', result: qaState, attestation },
   };
   const files = Object.fromEntries(Object.entries(evidence).map(([name, value]) => [name, canonical(value)]));

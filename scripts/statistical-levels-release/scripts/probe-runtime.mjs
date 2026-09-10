@@ -1,8 +1,9 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import { execFileSync } from 'node:child_process';
-import { P, need, sha, validateRun, validateRunMetadata, validateAncestry, verifyOIDC } from './release-core.mjs';
+import { P, need, sha, canonical, validateRun, validateRunMetadata, validateAncestry } from './release-core.mjs';
 import { selectProbeTarget, resolveProbePreview, validateProbeRoleIdentity } from './probe-core.mjs';
+import { evaluateProbeOIDC, validateProbeOIDCEvidence } from './probe-oidc.mjs';
 
 export const packageRoot = path.resolve(import.meta.dirname, '..');
 export const codeRoot = path.resolve(packageRoot, '../..');
@@ -61,6 +62,37 @@ export async function resolveProbeDeployment(target) {
   return resolveProbePreview(deployments, statuses, commits, target);
 }
 
+function oidcEvidencePath(env) {
+  need(env.RUNNER_TEMP && path.isAbsolute(env.RUNNER_TEMP), 'PROBE_RUNNER_TEMP');
+  return path.join(env.RUNNER_TEMP, 'statistical-levels-identity-probe', 'oidc-claims.jsonl');
+}
+
+// This journal accepts only fixed booleans/enums from the signed-claim evaluator.
+// It never accepts a token, signature, header or arbitrary claim value.
+export async function recordProbeOIDCEvidence(evidence, env = process.env) {
+  const safe = validateProbeOIDCEvidence(evidence);
+  const file = oidcEvidencePath(env);
+  await fs.mkdir(path.dirname(file), { recursive: true, mode: 0o700 });
+  await fs.appendFile(file, Buffer.concat([canonical(safe), Buffer.from('\n')]), { mode: 0o600 });
+}
+
+export async function readProbeOIDCEvidence(env = process.env) {
+  let bytes;
+  try {
+    const file = oidcEvidencePath(env), stat = await fs.lstat(file);
+    need(stat.isFile() && !stat.isSymbolicLink(), 'PROBE_OIDC_EVIDENCE_FILE');
+    need(stat.size <= 1_000_000, 'PROBE_OIDC_EVIDENCE_SIZE');
+    bytes = await fs.readFile(file);
+  }
+  catch (error) { if (error.code === 'ENOENT') return []; throw error; }
+  need(bytes.length <= 1_000_000, 'PROBE_OIDC_EVIDENCE_SIZE');
+  let records;
+  try { records = bytes.toString('utf8').split('\n').filter(Boolean).map(line => JSON.parse(line)); }
+  catch { throw new Error('PROBE_OIDC_EVIDENCE_INVALID'); }
+  need(records.length <= 256, 'PROBE_OIDC_EVIDENCE_COUNT');
+  return records.map(validateProbeOIDCEvidence);
+}
+
 export async function probeOIDC(audience, env = process.env) {
   need([P.vercel_audience, P.aws_audience].includes(audience), 'PROBE_OIDC_AUDIENCE');
   const url = new URL(env.ACTIONS_ID_TOKEN_REQUEST_URL);
@@ -72,7 +104,9 @@ export async function probeOIDC(audience, env = process.env) {
   const token = (await response.json()).value;
   const keys = await fetch(P.issuer + '/.well-known/jwks', { redirect: 'error', signal: AbortSignal.timeout(30000) });
   need(keys.ok, 'OIDC_JWKS_FAILED');
-  verifyOIDC(token, await keys.json(), audience, env, Math.floor(Date.now() / 1000));
+  const evidence = evaluateProbeOIDC(token, await keys.json(), audience, env, Math.floor(Date.now() / 1000));
+  await recordProbeOIDCEvidence(evidence, env);
+  need(evidence.result === 'PASS', evidence.error_code);
   return token;
 }
 
