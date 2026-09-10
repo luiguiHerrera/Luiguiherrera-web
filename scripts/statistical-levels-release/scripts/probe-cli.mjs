@@ -23,6 +23,7 @@ try {
         aws_assume: process.env.PROBE_AWS_ASSUME_OUTCOME, aws_identity: process.env.PROBE_AWS_IDENTITY_OUTCOME },
       productReport: await readOptional(path.join(qaDirectory, 'product-report.json')),
       accounting: await readOptional(path.join(qaDirectory, 'network-accounting.json')),
+      httpPreflight: await readOptional(path.join(qaDirectory, 'http-preflight.json')),
       awsProof: await readOptional(path.join(root, 'aws-proof.json')),
       attestation: await readOptional(path.join(root, 'qa-attestation.json')),
       oidcEvidence: await readProbeOIDCEvidence() });

@@ -7,10 +7,12 @@ import { P, canonical, productGates, sha } from '../scripts/release-core.mjs';
 import { account } from '../scripts/network-accounting.mjs';
 import { signedFixture } from './probe-oidc-fixture.mjs';
 import { attestProbe } from '../scripts/probe-core.mjs';
+import { createProbeHttpSession } from '../scripts/probe-http.mjs';
 import { buildProbeEvidence, probeEvidenceFiles, sanitizeProbeAccounting, writeProbeEvidence } from '../scripts/probe-evidence.mjs';
 
 const origin = 'https://luiguiherrera-fixture-luigui-herrera-s-projects.vercel.app';
 const decode = files => Object.fromEntries(Object.entries(files).map(([name, bytes]) => [name, JSON.parse(bytes)]));
+let httpFixture = null;
 function fixture(events = []) {
   const context = { run: { id: '12345', attempt: '2', execution_sha: 'b'.repeat(40) }, workflow_sha256: 'c'.repeat(64),
     target: { operation: 'PROBE_IDENTITY', phase: 'preview', candidate_git_sha: 'a'.repeat(40),
@@ -28,18 +30,28 @@ function fixture(events = []) {
   const awsProof = { result: 'PASS', assumed_role: 'LuiguiHerreraStatisticalLevelsReleaseInvoker', account_match: true,
     session_match: true, workflow_run_id: context.run.id, workflow_run_attempt: context.run.attempt, workflow_execution_sha: context.run.execution_sha };
   return { context, outcomes: { resolve: 'success', qa: 'success', aws_assume: 'success', aws_identity: 'success' },
-    productReport, accounting, awsProof, attestation,
+    productReport, accounting, awsProof, attestation, httpPreflight: structuredClone(httpFixture),
     oidcEvidence: [signedFixture().evidence, signedFixture(P.aws_audience).evidence] };
 }
 function failedQA(events = []) {
   const value = fixture();
   return { ...value, outcomes: { resolve: 'success', qa: 'failure', aws_assume: 'skipped', aws_identity: 'skipped' },
-    oidcEvidence: [signedFixture().evidence], accounting: { ...account(events, false, origin), authFailures: [] }, productReport: null, awsProof: null, attestation: null };
+    oidcEvidence: [signedFixture().evidence], accounting: { ...account(events, false, origin), authFailures: [] }, httpPreflight: null, productReport: null, awsProof: null, attestation: null };
 }
 function blank(outcomes) {
   const value = fixture();
   return { context: { ...value.context, target: null }, outcomes, oidcEvidence: [], productReport: null, accounting: null, awsProof: null, attestation: null };
 }
+
+// Exercise the real bounded preflight producer with an in-memory transport.
+// These current probe evidence fixtures are unrelated to historical data oracles.
+const seedTarget = fixture().context.target;
+const session = createProbeHttpSession({ target: seedTarget, tokenSource: { get: async () => 'synthetic-unit-credential' },
+  transport: async () => new Response('<html><div id="sl-controls"></div><div id="sl-authority">' +
+    seedTarget.authority_run_id + '</div></html>', { status: 200, headers: { 'content-type': 'text/html' } }),
+  onEvidence: value => { httpFixture = value; } });
+await session.get(origin + '/niveles-estadisticos');
+await session.get(origin + '/en/statistical-levels');
 
 test('evidence has exactly six canonical JSON files; manifest covers other five exact bytes', () => {
   const files = buildProbeEvidence(fixture()), json = decode(files);
@@ -104,7 +116,7 @@ test('partial resolved target retains verified Preview and full failing network 
   assert.equal(json['application-network-summary.json'].accounting.required_application_request_failures, 1);
 });
 
-for (const field of ['productReport', 'accounting', 'attestation', 'awsProof']) {
+for (const field of ['productReport', 'accounting', 'attestation', 'awsProof', 'httpPreflight']) {
   test(`successful step with missing ${field} evidence fails closed`, () => {
     const input = fixture(); input[field] = null;
     assert.equal(decode(buildProbeEvidence(input))['probe-summary.json'].result, 'FAIL');
@@ -316,11 +328,12 @@ test('failed AWS preflight remains FAIL when assumption and caller identity are 
 });
 
 
-test('v3 artifact preserves exact safe direct-job metadata for both token audiences', () => {
+test('redirect diagnostic wrapper preserves exact V3 direct-job metadata for both audiences', () => {
   const input = fixture(), json = decode(buildProbeEvidence(input));
   assert.equal(json['probe-summary.json'].schema_version, 'statistical-levels.identity-probe-summary.v3');
   for (const name of ['trusted-sources-qa.json', 'aws-oidc-summary.json']) {
-    assert.ok(json[name].schema_version.endsWith('.v3'));
+    assert.ok(json[name].schema_version.endsWith(name === 'trusted-sources-qa.json' ? '.v4' : '.v3'));
+    assert.equal(json[name].oidc_claim_evidence[0].schema_version, 'statistical-levels.probe-oidc-evidence.v3');
     const c = json[name].oidc_claim_evidence[0].claims;
     assert.equal(c.job_workflow_ref_value, P.workflow_ref);
     assert.equal(c.runtime_job_workflow_ref, P.workflow_ref);
@@ -339,4 +352,84 @@ test('otherwise valid workflow identity evidence cannot be attached to a differe
   const json = decode(buildProbeEvidence(input));
   assert.equal(json['probe-summary.json'].result, 'FAIL');
   assert.ok(json['probe-summary.json'].evidence_issues.includes('OIDC_EXECUTION_CONTEXT_MISMATCH'));
+});
+
+test('HTTP preflight survives canonical journal serialization and fixture-bound finalization', () => {
+  const input = fixture(); input.httpPreflight = JSON.parse(canonical(input.httpPreflight));
+  const json = decode(buildProbeEvidence(input));
+  assert.equal(json['probe-summary.json'].result, 'PASS');
+  assert.deepEqual(json['trusted-sources-qa.json'].http_preflight, input.httpPreflight);
+});
+
+test('one passing language preflight cannot certify both product routes', () => {
+  const input = fixture(); input.httpPreflight.routes.pop();
+  const json = decode(buildProbeEvidence(input));
+  assert.equal(json['trusted-sources-qa.json'].http_access_through_trusted_source, 'PASS');
+  assert.equal(json['probe-summary.json'].result, 'FAIL');
+  assert.ok(json['probe-summary.json'].evidence_issues.includes('MISSING_QA_EVIDENCE'));
+});
+
+test('HTTP success without passing OIDC diagnostics cannot establish trusted access', () => {
+  const input = fixture(); input.oidcEvidence = [];
+  const json = decode(buildProbeEvidence(input));
+  assert.equal(json['probe-summary.json'].result, 'FAIL');
+  assert.equal(json['trusted-sources-qa.json'].http_access_through_trusted_source, 'NOT_CERTIFIED');
+  assert.ok(json['probe-summary.json'].evidence_issues.includes('HTTP_WITHOUT_PASSING_OIDC'));
+});
+
+for (const mutation of [
+  value => { value.fixture.candidate_git_sha = '9'.repeat(40); },
+  value => { value.fixture.deployment_id = 'dpl_AnotherFixture012345'; },
+  value => { value.fixture.authority_run_id = value.fixture.authority_run_id.replace(/^2026/, '2025'); },
+  value => { value.routes[0].hops[0].http_status_exact = 307; },
+  value => { value.cross_origin_oidc_forward = true; },
+  value => { value.max_redirects = 3; },
+]) {
+  test('altered HTTP identity or redirect decision is rejected by artifact finalization: ' + mutation.toString(), () => {
+    const input = fixture(); mutation(input.httpPreflight);
+    const json = decode(buildProbeEvidence(input));
+    assert.equal(json['probe-summary.json'].result, 'FAIL');
+    assert.equal(json['trusted-sources-qa.json'].http_preflight, null);
+    assert.ok(json['probe-summary.json'].evidence_issues.includes('INVALID_HTTP_PREFLIGHT'));
+  });
+}
+
+test('raw extra HTTP headers and inherited serializers cannot enter the artifact', () => {
+  const input = fixture();
+  Object.defineProperty(input.httpPreflight, 'toJSON', { value: () => ({ stolen: 'private-http-marker' }) });
+  const json = decode(buildProbeEvidence(input));
+  assert.equal(json['probe-summary.json'].result, 'FAIL');
+  assert.equal(json['trusted-sources-qa.json'].http_preflight, null);
+  assert.ok(!JSON.stringify(json).includes('private-http-marker'));
+  const other = fixture(); other.httpPreflight.routes[0].hops[0].headers['set-cookie'] = 'private-cookie-marker';
+  const otherJSON = decode(buildProbeEvidence(other));
+  assert.equal(otherJSON['probe-summary.json'].result, 'FAIL');
+  assert.ok(!JSON.stringify(otherJSON).includes('private-cookie-marker'));
+});
+
+test('matching protection redirects retain exact safe diagnostics in the six-file failure artifact', async () => {
+  const input = failedQA(); let latest, calls = 0;
+  const token = signedFixture().token;
+  const probe = createProbeHttpSession({ target: input.context.target, tokenSource: { get: async () => token },
+    transport: async (_url, options) => {
+      calls++;
+      assert.equal(options.redirect, 'manual');
+      assert.equal(options.headers['x-vercel-trusted-oidc-idp-token'], calls === 1 ? undefined : token);
+      return new Response(null, { status: 302, headers: { location: 'https://vercel.com/login?token=private-query-marker#private-fragment-marker',
+        server: 'Vercel', 'set-cookie': 'private-cookie-marker' } });
+    }, onEvidence: value => { latest = value; } });
+  await assert.rejects(probe.get(origin + '/niveles-estadisticos'), /TRUSTED_SOURCE_NOT_ACCEPTED_BY_PROTECTION_LAYER/);
+  assert.equal(calls, 2);
+  input.httpPreflight = JSON.parse(canonical(latest));
+  const json = decode(buildProbeEvidence(input));
+  const saved = json['trusted-sources-qa.json'];
+  assert.equal(saved.http_access_through_trusted_source, 'FAIL');
+  assert.equal(saved.http_preflight.error_code, 'TRUSTED_SOURCE_NOT_ACCEPTED_BY_PROTECTION_LAYER');
+  assert.equal(saved.http_preflight.anonymous.http_status_exact, 302);
+  assert.equal(saved.http_preflight.routes[0].hops[0].http_status_exact, 302);
+  assert.equal(saved.http_preflight.routes[0].hops[0].location.host, 'vercel.com');
+  assert.equal(saved.http_preflight.routes[0].hops[0].location.path, '/login');
+  assert.equal(saved.http_preflight.routes[0].hops[0].location.query_present, true);
+  for (const marker of [token, 'private-query-marker', 'private-fragment-marker', 'private-cookie-marker']) assert.ok(!JSON.stringify(json).includes(marker));
+  assert.equal(json['aws-oidc-summary.json'].result, 'NOT_RUN');
 });

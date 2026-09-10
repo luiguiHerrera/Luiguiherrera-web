@@ -3,6 +3,7 @@ import path from 'node:path';
 import { canonical, exactKeys, need, P, sha, validateProductReport, verifiedOrigin } from './release-core.mjs';
 import { validateProbeAttestation } from './probe-core.mjs';
 import { validateProbeOIDCEvidence } from './probe-oidc.mjs';
+import { validateProbeHttpEvidence } from './probe-http.mjs';
 
 export const probeEvidenceFiles = Object.freeze([
   'probe-summary.json', 'trusted-sources-qa.json', 'application-network-summary.json',
@@ -119,7 +120,7 @@ export function buildProbeEvidence(input) {
     try { return validator(value); } catch { issues.push(code); return null; }
   }
   need(input && typeof input === 'object' && !Array.isArray(input), 'EVIDENCE_INPUT');
-  const allowed = ['context', 'outcomes', 'productReport', 'accounting', 'awsProof', 'attestation', 'oidcEvidence'];
+  const allowed = ['context', 'outcomes', 'productReport', 'accounting', 'awsProof', 'attestation', 'oidcEvidence', 'httpPreflight'];
   if (Object.keys(input).some(k => !allowed.includes(k))) issues.push('UNEXPECTED_INPUT_FIELD');
   const context = inspect(input.context, validContext, 'INVALID_CONTEXT');
   const oidc = inspect(input.oidcEvidence, value => {
@@ -131,6 +132,11 @@ export function buildProbeEvidence(input) {
   const vercelOIDC = oidc.filter(value => value.audience_kind === 'VERCEL');
   const awsOIDC = oidc.filter(value => value.audience_kind === 'AWS');
   const oidcResult = records => records.length === 0 ? 'NOT_RUN' : records.every(value => value.result === 'PASS') ? 'PASS' : 'FAIL';
+  const httpPreflight = inspect(input.httpPreflight, value => {
+    need(context?.target, 'HTTP_PREFLIGHT_TARGET');
+    return validateProbeHttpEvidence(value, context.target);
+  }, 'INVALID_HTTP_PREFLIGHT');
+  if (httpPreflight && !vercelOIDC.some(value => value.result === 'PASS')) issues.push('HTTP_WITHOUT_PASSING_OIDC');
   if (oidc.some(value => value.audience_kind === 'UNSUPPORTED')) issues.push('UNSUPPORTED_OIDC_AUDIENCE');
   let outcomes;
   try {
@@ -161,7 +167,9 @@ export function buildProbeEvidence(input) {
   const noNetworkFailures = accounting && accounting.application_console_errors === 0 &&
     accounting.required_application_request_failures === 0 && accounting.hydration_errors === 0 &&
     accounting.unclassified_failures.length === 0 && accounting.authFailures.length === 0;
-  const complete = { resolve: !!context?.target, qa: !!(report && accounting && attestation && noNetworkFailures && oidcResult(vercelOIDC) === 'PASS'),
+  const httpComplete = httpPreflight?.result === 'PASS' && httpPreflight.access === 'PASS' &&
+    canonical(httpPreflight.routes.map(route => route.path)).equals(canonical(['/niveles-estadisticos', '/en/statistical-levels']));
+  const complete = { resolve: !!context?.target, qa: !!(report && accounting && attestation && noNetworkFailures && httpComplete && oidcResult(vercelOIDC) === 'PASS'),
     aws_assume: oidcResult(awsOIDC) === 'PASS', aws_identity: !!aws && oidcResult(awsOIDC) === 'PASS' };
   const steps = {};
   for (const name of outcomeNames) {
@@ -173,7 +181,7 @@ export function buildProbeEvidence(input) {
   if (['aws_assume', 'aws_identity'].some(k => outcomes[k] === 'success') && steps.qa.result !== 'PASS') issues.push('AWS_WITHOUT_PASSING_QA');
   if (outcomes.aws_identity === 'success' && steps.aws_assume.result !== 'PASS') issues.push('IDENTITY_WITHOUT_ASSUME_ROLE');
   if (outcomes.resolve === 'skipped' && context?.target) issues.push('UNEXPECTED_RESOLUTION_EVIDENCE');
-  if (outcomes.qa === 'skipped' && (report || accounting || attestation)) issues.push('UNEXPECTED_QA_EVIDENCE');
+  if (outcomes.qa === 'skipped' && (report || accounting || attestation || httpPreflight)) issues.push('UNEXPECTED_QA_EVIDENCE');
   if (outcomes.qa === 'skipped' && vercelOIDC.length) issues.push('UNEXPECTED_VERCEL_OIDC_EVIDENCE');
   if (awsOIDC.length && steps.qa.result !== 'PASS') issues.push('AWS_OIDC_WITHOUT_PASSING_QA');
   if (outcomes.aws_identity === 'skipped' && aws) issues.push('UNEXPECTED_AWS_EVIDENCE');
@@ -185,16 +193,17 @@ export function buildProbeEvidence(input) {
   // The first token must pass validation before any Preview transport is created.
   // A later refresh rejection cannot certify that HTTP was never attempted.
   const beforeHTTP = vercelOIDC.length > 0 && vercelOIDC[0].result === 'FAIL' &&
-    !vercelOIDC.some(value => value.result === 'PASS') && !report && !accounting && !attestation;
-  const access = qaState === 'PASS' ? 'PASS' : beforeHTTP ? 'NOT_ATTEMPTED' :
+    !vercelOIDC.some(value => value.result === 'PASS') && !httpPreflight && !report && !accounting && !attestation;
+  const access = httpPreflight && oidcResult(vercelOIDC) === 'PASS' ? httpPreflight.access : beforeHTTP ? 'NOT_ATTEMPTED' :
     qaState === 'NOT_RUN' ? 'NOT_RUN' : 'NOT_CERTIFIED';
   const evidence = {
     'probe-summary.json': { schema_version: 'statistical-levels.identity-probe-summary.v3', operation: OPERATION,
       classification: 'PROBE_ONLY', production_release_target: false, result, ...safeContext, steps, evidence_issues: uniqueIssues,
       failed_oidc_gates: oidc.filter(value => value.result === 'FAIL').map(({ audience_kind, error_code }) => ({ audience_kind, error_code })) },
-    'trusted-sources-qa.json': { schema_version: 'statistical-levels.identity-probe-trusted-sources.v3', result: qaState,
+    'trusted-sources-qa.json': { schema_version: 'statistical-levels.identity-probe-trusted-sources.v4', result: qaState,
       preview_origin: context?.target?.origin ?? null, http_access_through_trusted_source: access,
-      audience: P.vercel_audience, oidc_validation_result: oidcResult(vercelOIDC), oidc_claim_evidence: vercelOIDC, product_report: report },
+      audience: P.vercel_audience, oidc_validation_result: oidcResult(vercelOIDC), oidc_claim_evidence: vercelOIDC,
+      http_preflight: httpPreflight, product_report: report },
     'application-network-summary.json': { schema_version: 'statistical-levels.identity-probe-network.v1', result: accounting ?
       (qaState === 'PASS' && noNetworkFailures ? 'PASS' : 'FAIL') : steps.qa.result === 'NOT_RUN' ? 'NOT_RUN' : 'FAIL',
       preview_origin: context?.target?.origin ?? null, unrelated_origin_redaction: 'SHA256', accounting,
