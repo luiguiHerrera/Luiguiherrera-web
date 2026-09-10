@@ -1,0 +1,282 @@
+{
+  "feature_cache_exactly_unchanged": true,
+  "decisions_verified": 1930,
+  "complete": 1930,
+  "extractor_corrections": "Strict positive-return count uses >0, not 1e-10; mandatory expected VX monthly catalog; native adjclose accessor. No raw historical feature or classification input changed, so original seals remain intact.",
+  "omission_scope": "Post-selection TRAIN-only feature omission diagnostics. Constants/duplicated horizons are deliberately reduced challengers, not raw market scenarios or alternative production parameters. No reselection.",
+  "omission_interpretation": "A nonzero difference demonstrates rule-path use in this sample, not independent information or predictive value. corr_window_spread omission is the requested level-only versus level-plus-spread comparison.",
+  "omission_diagnostics": [
+    {
+      "feature_id": "eq_positive_5",
+      "observations": 1258,
+      "regime_changed": 154,
+      "pillar_changed": 449
+    },
+    {
+      "feature_id": "eq_positive_21",
+      "observations": 1258,
+      "regime_changed": 107,
+      "pillar_changed": 347
+    },
+    {
+      "feature_id": "eq_leadership_gap",
+      "observations": 1258,
+      "regime_changed": 425,
+      "pillar_changed": 1038
+    },
+    {
+      "feature_id": "vix_level",
+      "observations": 1258,
+      "regime_changed": 394,
+      "pillar_changed": 538
+    },
+    {
+      "feature_id": "vix_momentum_1",
+      "observations": 1258,
+      "regime_changed": 8,
+      "pillar_changed": 18
+    },
+    {
+      "feature_id": "vix_momentum_5",
+      "observations": 1258,
+      "regime_changed": 7,
+      "pillar_changed": 14
+    },
+    {
+      "feature_id": "vx_slope_12",
+      "observations": 1258,
+      "regime_changed": 17,
+      "pillar_changed": 42
+    },
+    {
+      "feature_id": "corr_mean_21",
+      "observations": 1258,
+      "regime_changed": 165,
+      "pillar_changed": 410
+    },
+    {
+      "feature_id": "corr_window_spread",
+      "observations": 1258,
+      "regime_changed": 22,
+      "pillar_changed": 75
+    }
+  ],
+  "train_feature_distributions": {
+    "positive_5": {
+      "min": 0,
+      "p10": 1,
+      "median": 7.0,
+      "p90": 11,
+      "max": 11
+    },
+    "positive_21": {
+      "min": 0,
+      "p10": 1,
+      "median": 8.0,
+      "p90": 11,
+      "max": 11
+    },
+    "leadership_gap": {
+      "min": -8.55141615650152,
+      "p10": -2.507496191105532,
+      "median": 2.411364722598714,
+      "p90": 8.059105570192408,
+      "max": 17.927679894039866
+    },
+    "vix": {
+      "min": 11.54,
+      "p10": 13.54,
+      "median": 19.525,
+      "p90": 30.24,
+      "max": 82.69
+    },
+    "jump_1": {
+      "min": -23.373525904332848,
+      "p10": -7.731582786287383,
+      "median": -0.8766593191908256,
+      "p90": 8.667736757624379,
+      "max": 61.64205039096438
+    },
+    "jump_5": {
+      "min": -39.06097163351809,
+      "p10": -15.595188718374109,
+      "median": -1.5517932157516123,
+      "p90": 19.148104728409532,
+      "max": 151.6709511568123
+    },
+    "slope": {
+      "min": -21.397941680960542,
+      "p10": -0.7347538574577483,
+      "median": 6.6770242526736245,
+      "p90": 13.211009174311927,
+      "max": 23.853211009174302
+    },
+    "rho21": {
+      "min": 0.09106757056854003,
+      "p10": 0.3011661055243559,
+      "median": 0.5237268434880311,
+      "p90": 0.7635880455612115,
+      "max": 0.9428518427627666
+    },
+    "rho63": {
+      "min": 0.24328747023650862,
+      "p10": 0.4151007938169586,
+      "median": 0.5320504331899304,
+      "p90": 0.7359433400417376,
+      "max": 0.9235180423388037
+    },
+    "corr_spread": {
+      "min": -0.4313073989290428,
+      "p10": -0.1826316846104058,
+      "median": -0.010471917071318032,
+      "p90": 0.11250175286215691,
+      "max": 0.23406183537074277
+    }
+  },
+  "price_basis_comparisons": {
+    "XLK": {
+      "compared_windows": 2160,
+      "largest_absolute_difference": {
+        "date": "2020-04-15",
+        "adjusted_return_21": 20.568414429041425,
+        "unadjusted_return_21": 19.94211922212137,
+        "difference_pp": 0.6262952069200551
+      }
+    },
+    "XLY": {
+      "compared_windows": 2160,
+      "largest_absolute_difference": {
+        "date": "2020-04-17",
+        "adjusted_return_21": 29.763240079922014,
+        "unadjusted_return_21": 29.13665436948396,
+        "difference_pp": 0.6265857104380537
+      }
+    },
+    "XLC": {
+      "compared_windows": 2044,
+      "largest_absolute_difference": {
+        "date": "2025-09-22",
+        "adjusted_return_21": 8.442125050162286,
+        "unadjusted_return_21": 8.06524943349678,
+        "difference_pp": 0.3768756166655063
+      }
+    },
+    "XLF": {
+      "compared_windows": 2160,
+      "largest_absolute_difference": {
+        "date": "2020-04-17",
+        "adjusted_return_21": 17.664725219011412,
+        "unadjusted_return_21": 16.67534531805559,
+        "difference_pp": 0.9893799009558215
+      }
+    },
+    "XLE": {
+      "compared_windows": 2160,
+      "largest_absolute_difference": {
+        "date": "2020-01-03",
+        "adjusted_return_21": 8.280027870580465,
+        "unadjusted_return_21": 4.119984956901024,
+        "difference_pp": 4.160042913679441
+      }
+    },
+    "XLI": {
+      "compared_windows": 2160,
+      "largest_absolute_difference": {
+        "date": "2020-04-17",
+        "adjusted_return_21": 17.606639806496773,
+        "unadjusted_return_21": 16.700571167492086,
+        "difference_pp": 0.9060686390046868
+      }
+    },
+    "XLB": {
+      "compared_windows": 2160,
+      "largest_absolute_difference": {
+        "date": "2020-04-17",
+        "adjusted_return_21": 22.984473634052762,
+        "unadjusted_return_21": 22.168203858018344,
+        "difference_pp": 0.8162697760344173
+      }
+    },
+    "XLV": {
+      "compared_windows": 2160,
+      "largest_absolute_difference": {
+        "date": "2020-01-02",
+        "adjusted_return_21": 4.210438345595557,
+        "unadjusted_return_21": 3.1095346862843876,
+        "difference_pp": 1.1009036593111698
+      }
+    },
+    "XLP": {
+      "compared_windows": 2160,
+      "largest_absolute_difference": {
+        "date": "2019-01-23",
+        "adjusted_return_21": 3.7155481776237176,
+        "unadjusted_return_21": 2.7750674896532823,
+        "difference_pp": 0.9404806879704353
+      }
+    },
+    "XLU": {
+      "compared_windows": 2160,
+      "largest_absolute_difference": {
+        "date": "2020-04-21",
+        "adjusted_return_21": 20.981721079407723,
+        "unadjusted_return_21": 19.782515986708702,
+        "difference_pp": 1.199205092699021
+      }
+    },
+    "XLRE": {
+      "compared_windows": 2160,
+      "largest_absolute_difference": {
+        "date": "2021-01-21",
+        "adjusted_return_21": 2.101532011261864,
+        "unadjusted_return_21": 0.7958313020209218,
+        "difference_pp": 1.3057007092409423
+      }
+    },
+    "SPY": {
+      "compared_windows": 2160,
+      "largest_absolute_difference": {
+        "date": "2020-04-17",
+        "adjusted_return_21": 20.135649398477785,
+        "unadjusted_return_21": 19.43333943684895,
+        "difference_pp": 0.7023099616288349
+      }
+    },
+    "RSP": {
+      "compared_windows": 2160,
+      "largest_absolute_difference": {
+        "date": "2020-04-17",
+        "adjusted_return_21": 19.381501433595517,
+        "unadjusted_return_21": 18.21996383094737,
+        "difference_pp": 1.1615376026481457
+      }
+    },
+    "IWM": {
+      "compared_windows": 2160,
+      "largest_absolute_difference": {
+        "date": "2022-10-24",
+        "adjusted_return_21": 4.200089825163578,
+        "unadjusted_return_21": 3.6638604818972187,
+        "difference_pp": 0.536229343266359
+      }
+    }
+  },
+  "historical_witness_states": [
+    "DEFENSIVE",
+    "TRANSITION",
+    "RISK_ON_BROAD",
+    "RISK_ON_SELECTIVE",
+    "STRESS"
+  ],
+  "frozen_result_sha256": {
+    "F1-test.json": "23667dd81976fe0021639b7dc8860bda2b28216609d72da897e03ae672cf189c",
+    "F1-training-selection.json": "8bc9aa082e1040de173dbccce7a9099629f81a6f7a5012864cc09f517b9fcae0",
+    "F1-validation.json": "508abcc4dffc2cf74624cc0a9c3e61953ba31ec2d26fee95f62ff6eb1e59634b",
+    "F2-test.json": "f958ad26f5d39d40d0ed94a23f1482aedd487b82838b72765b56f2f48ed98464",
+    "F2-training-selection.json": "c12afea00da6294867cb1b9b93a17a9d202a0c3fabb0fdd1a65db2025b52ab15",
+    "F2-validation.json": "d6d438a52d563fea1bfe5670ecba315a20814846d8428bff0cb28c02f68026f6",
+    "F3-test.json": "a1d9d2247fc77f44d82aa209b5b14d2138e8b5a0ff920b519af358881621f7ed",
+    "F3-training-selection.json": "5fc60bcab1b8b8110db0472b167a78f8713ad26dbe24a251fa889e26aa1eb4be",
+    "F3-validation.json": "47cf062ace0a1b1c32a641adfceb8038c1ddb7aaf93ad13947847330e7e28132"
+  }
+}

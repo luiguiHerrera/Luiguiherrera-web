@@ -1,0 +1,28 @@
+{
+  "checked_at": "2026-09-08T14:42:58.307617+00:00",
+  "v1_tests": {
+    "command": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --import ./scripts/report-node-register.mjs --experimental-test-module-mocks --test lib/reports/first-september-2026.test.mts lib/reports/weekly-review.test.mts lib/dashboard/adapters/vix-term-structure.test.ts",
+    "exit_code": 0,
+    "total": 25,
+    "passed": 25,
+    "failed": 0,
+    "warnings": [
+      "ExperimentalWarning: module mocking",
+      "DeprecationWarning: mock.module options.namedExports"
+    ]
+  },
+  "conceptual": {
+    "command": "node docs/regime-engine-v2/prototype-check.mjs",
+    "exit_code": 0,
+    "passed": 16,
+    "total": 16,
+    "abstract_configurations": 320,
+    "scope": "Preserved P1-P7 symbolic checker; its previous gate status is not the P8 gate."
+  },
+  "runtime": {
+    "python": "3.9.6 (default, May 22 2026, 11:13:45) \n[Clang 21.0.0 (clang-2100.1.1.101)]",
+    "numpy": "1.26.4",
+    "node": "v26.5.0",
+    "platform": "macOS-26.6.1-arm64-arm-64bit"
+  }
+}

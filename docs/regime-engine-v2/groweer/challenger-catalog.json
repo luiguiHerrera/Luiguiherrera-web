@@ -1,0 +1,183 @@
+{
+  "count": 44,
+  "counting_rule": "4 simple comparators +11 reduced engines +26 single-parameter configurations +H1 +P1 +1 PFL component configuration. Canonical B5, archived B0 and11 mechanical INCOMPLETE checks are excluded. Reapplying the same26 parameter settings to comparator/H1 outputs does not add identities.",
+  "runtime_integrations": 0,
+  "catalog": [
+    {
+      "id": "B1_VIX_ONLY",
+      "type": "benchmark"
+    },
+    {
+      "id": "B2_VIX_BREADTH",
+      "type": "benchmark"
+    },
+    {
+      "id": "B3_FAMILY_VOTE",
+      "type": "benchmark"
+    },
+    {
+      "id": "B4_PREVIOUS",
+      "type": "benchmark"
+    },
+    {
+      "id": "R_MINUS_POSITIVE_5",
+      "type": "reduced_condition_engine"
+    },
+    {
+      "id": "R_MINUS_POSITIVE_21",
+      "type": "reduced_condition_engine"
+    },
+    {
+      "id": "R_MINUS_LEADERSHIP_GAP",
+      "type": "reduced_condition_engine"
+    },
+    {
+      "id": "R_MINUS_VIX_LEVEL",
+      "type": "reduced_condition_engine"
+    },
+    {
+      "id": "R_MINUS_JUMP_1",
+      "type": "reduced_condition_engine"
+    },
+    {
+      "id": "R_MINUS_JUMP_5",
+      "type": "reduced_condition_engine"
+    },
+    {
+      "id": "R_MINUS_VX_SLOPE",
+      "type": "reduced_condition_engine"
+    },
+    {
+      "id": "R_MINUS_CORRELATION_LEVEL",
+      "type": "reduced_condition_engine"
+    },
+    {
+      "id": "R_MINUS_CORRELATION_DETERIORATION",
+      "type": "reduced_condition_engine"
+    },
+    {
+      "id": "R_MINUS_PARTICIPATION",
+      "type": "reduced_condition_engine"
+    },
+    {
+      "id": "R_MINUS_VOLATILITY_MOMENTUM",
+      "type": "reduced_condition_engine"
+    },
+    {
+      "id": "S_k_weak_lower",
+      "type": "single_parameter_sensitivity"
+    },
+    {
+      "id": "S_k_weak_upper",
+      "type": "single_parameter_sensitivity"
+    },
+    {
+      "id": "S_k_broad_lower",
+      "type": "single_parameter_sensitivity"
+    },
+    {
+      "id": "S_k_broad_upper",
+      "type": "single_parameter_sensitivity"
+    },
+    {
+      "id": "S_leadership_gap_lower",
+      "type": "single_parameter_sensitivity"
+    },
+    {
+      "id": "S_leadership_gap_upper",
+      "type": "single_parameter_sensitivity"
+    },
+    {
+      "id": "S_v_watch_lower",
+      "type": "single_parameter_sensitivity"
+    },
+    {
+      "id": "S_v_watch_upper",
+      "type": "single_parameter_sensitivity"
+    },
+    {
+      "id": "S_v_adverse_lower",
+      "type": "single_parameter_sensitivity"
+    },
+    {
+      "id": "S_v_adverse_upper",
+      "type": "single_parameter_sensitivity"
+    },
+    {
+      "id": "S_v_stress_lower",
+      "type": "single_parameter_sensitivity"
+    },
+    {
+      "id": "S_v_stress_upper",
+      "type": "single_parameter_sensitivity"
+    },
+    {
+      "id": "S_jump_1_lower",
+      "type": "single_parameter_sensitivity"
+    },
+    {
+      "id": "S_jump_1_upper",
+      "type": "single_parameter_sensitivity"
+    },
+    {
+      "id": "S_jump_5_lower",
+      "type": "single_parameter_sensitivity"
+    },
+    {
+      "id": "S_jump_5_upper",
+      "type": "single_parameter_sensitivity"
+    },
+    {
+      "id": "S_curve_flat_lower",
+      "type": "single_parameter_sensitivity"
+    },
+    {
+      "id": "S_curve_flat_upper",
+      "type": "single_parameter_sensitivity"
+    },
+    {
+      "id": "S_curve_adverse_lower",
+      "type": "single_parameter_sensitivity"
+    },
+    {
+      "id": "S_curve_adverse_upper",
+      "type": "single_parameter_sensitivity"
+    },
+    {
+      "id": "S_rho_floor_lower",
+      "type": "single_parameter_sensitivity"
+    },
+    {
+      "id": "S_rho_floor_upper",
+      "type": "single_parameter_sensitivity"
+    },
+    {
+      "id": "S_rho_high_lower",
+      "type": "single_parameter_sensitivity"
+    },
+    {
+      "id": "S_rho_high_upper",
+      "type": "single_parameter_sensitivity"
+    },
+    {
+      "id": "S_delta_rising_lower",
+      "type": "single_parameter_sensitivity"
+    },
+    {
+      "id": "S_delta_rising_upper",
+      "type": "single_parameter_sensitivity"
+    },
+    {
+      "id": "H1_CONFIRM_ONE_ADDITIONAL_OBSERVATION",
+      "type": "temporal_challenger"
+    },
+    {
+      "id": "P1_OBSERVED_EVIDENCE_PERSISTENCE",
+      "type": "diagnostic_challenger"
+    },
+    {
+      "id": "PFL_EQUAL_WEIGHT_11_SECTOR_COMPONENTS",
+      "type": "diagnostic_challenger"
+    }
+  ]
+}

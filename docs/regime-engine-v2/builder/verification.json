@@ -1,0 +1,273 @@
+{
+  "checks": [
+    {
+      "check": "tests",
+      "command": [
+        "node",
+        "--disable-warning=MODULE_TYPELESS_PACKAGE_JSON",
+        "--import",
+        "./scripts/trends-test-register.mjs",
+        "--experimental-test-module-mocks",
+        "--test",
+        "lib/dashboard/adapters/vix-term-structure.test.ts",
+        "lib/personal-finance/budget/budget-plan-export.test.ts",
+        "lib/personal-finance/budget/projection-calculations.test.ts",
+        "lib/personal-finance/budget/projection-presentation.test.ts",
+        "lib/personal-finance/budget/target-calculations.test.ts",
+        "lib/portfolio-fragility/analysis-view.test.ts",
+        "lib/portfolio-fragility/conformance.test.ts",
+        "lib/portfolio-fragility/engine.test.ts",
+        "lib/portfolio-fragility/format.test.ts",
+        "lib/portfolio-fragility/input-session.test.ts",
+        "lib/regime-engine-v2/engine.test.ts",
+        "lib/reports/first-september-2026.test.mts",
+        "lib/reports/weekly-review.test.mts",
+        "lib/research/tom-decay/chart-geometry.test.ts",
+        "lib/research/tom-decay/freeze.test.ts",
+        "lib/research/tom-decay/parse.test.ts",
+        "lib/trends/capital/normalize.test.ts",
+        "lib/trends/capital/pipeline.test.ts",
+        "lib/trends/capital/public-capital.test.tsx",
+        "lib/trends/trends.test.tsx"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 2.551129102706909,
+      "tests": 302,
+      "pass": 302,
+      "fail": 0,
+      "skipped": 0
+    },
+    {
+      "check": "typecheck",
+      "command": [
+        "npx",
+        "tsc",
+        "--noEmit",
+        "--incremental",
+        "false"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 2.8467209339141846
+    },
+    {
+      "check": "lint",
+      "command": [
+        "npx",
+        "eslint",
+        ".",
+        "--format",
+        "json"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 5.177018880844116,
+      "errors": 0,
+      "warnings": 18,
+      "new_errors": 0,
+      "new_warnings": 0,
+      "preexisting_messages": [
+        [
+          "/Users/quantlab/Developer/web/Luiguiherrera-web/app/(es)/page.tsx",
+          "@typescript-eslint/no-unused-vars",
+          175,
+          "'SectorMiniChart' is defined but never used.",
+          1
+        ],
+        [
+          "/Users/quantlab/Developer/web/Luiguiherrera-web/app/(es)/page.tsx",
+          "@typescript-eslint/no-unused-vars",
+          237,
+          "'VixMiniPanel' is defined but never used.",
+          1
+        ],
+        [
+          "/Users/quantlab/Developer/web/Luiguiherrera-web/app/(es)/page.tsx",
+          "@typescript-eslint/no-unused-vars",
+          272,
+          "'BtcFlowsMiniPanel' is defined but never used.",
+          1
+        ],
+        [
+          "/Users/quantlab/Developer/web/Luiguiherrera-web/app/(es)/page.tsx",
+          "@typescript-eslint/no-unused-vars",
+          309,
+          "'StatisticalLevelsMiniPanel' is defined but never used.",
+          1
+        ],
+        [
+          "/Users/quantlab/Developer/web/Luiguiherrera-web/app/en/page.tsx",
+          "@typescript-eslint/no-unused-vars",
+          177,
+          "'SectorMiniChart' is defined but never used.",
+          1
+        ],
+        [
+          "/Users/quantlab/Developer/web/Luiguiherrera-web/app/en/page.tsx",
+          "@typescript-eslint/no-unused-vars",
+          239,
+          "'VixMiniPanel' is defined but never used.",
+          1
+        ],
+        [
+          "/Users/quantlab/Developer/web/Luiguiherrera-web/app/en/page.tsx",
+          "@typescript-eslint/no-unused-vars",
+          274,
+          "'BtcFlowsMiniPanel' is defined but never used.",
+          1
+        ],
+        [
+          "/Users/quantlab/Developer/web/Luiguiherrera-web/app/en/page.tsx",
+          "@typescript-eslint/no-unused-vars",
+          311,
+          "'StatisticalLevelsMiniPanel' is defined but never used.",
+          1
+        ],
+        [
+          "/Users/quantlab/Developer/web/Luiguiherrera-web/components/dashboard/BtcEtfFlowsModule.tsx",
+          "@typescript-eslint/no-unused-vars",
+          42,
+          "'severityClass' is defined but never used.",
+          1
+        ],
+        [
+          "/Users/quantlab/Developer/web/Luiguiherrera-web/components/dashboard/VixModule.tsx",
+          "@typescript-eslint/no-unused-vars",
+          30,
+          "'severityClass' is defined but never used.",
+          1
+        ],
+        [
+          "/Users/quantlab/Developer/web/Luiguiherrera-web/components/statistical-levels/PeriodExplorerTable.tsx",
+          "react-hooks/exhaustive-deps",
+          97,
+          "The 'rows' logical expression could make the dependencies of useMemo Hook (at line 112) change on every render. To fix this, wrap the initialization of 'rows' in its own useMemo() Hook.",
+          1
+        ],
+        [
+          "/Users/quantlab/Developer/web/Luiguiherrera-web/components/statistical-levels/PeriodExplorerTable.tsx",
+          "react-hooks/exhaustive-deps",
+          97,
+          "The 'rows' logical expression could make the dependencies of useMemo Hook (at line 98) change on every render. To fix this, wrap the initialization of 'rows' in its own useMemo() Hook.",
+          1
+        ],
+        [
+          "/Users/quantlab/Developer/web/Luiguiherrera-web/lib/dashboard/adapters/eth-etf-flows.ts",
+          "@typescript-eslint/no-unused-vars",
+          336,
+          "'_reason' is defined but never used.",
+          1
+        ],
+        [
+          "/Users/quantlab/Developer/web/Luiguiherrera-web/lib/dashboard/adapters/sector-etfs.ts",
+          "@typescript-eslint/no-unused-vars",
+          87,
+          "'reason' is defined but never used.",
+          1
+        ],
+        [
+          "/Users/quantlab/Developer/web/Luiguiherrera-web/scripts/build-statistical-levels.mjs",
+          "@typescript-eslint/no-unused-vars",
+          98,
+          "'yahooSymbol' is defined but never used.",
+          1
+        ],
+        [
+          "/Users/quantlab/Developer/web/Luiguiherrera-web/scripts/build-statistical-levels.mjs",
+          "@typescript-eslint/no-unused-vars",
+          959,
+          "'key' is assigned a value but never used.",
+          1
+        ],
+        [
+          "/Users/quantlab/Developer/web/Luiguiherrera-web/scripts/build-statistical-levels.mjs",
+          "@typescript-eslint/no-unused-vars",
+          1062,
+          "'yahooSymbol' is assigned a value but never used.",
+          1
+        ],
+        [
+          "/Users/quantlab/Developer/web/Luiguiherrera-web/scripts/build-td3-performance.mjs",
+          "@typescript-eslint/no-unused-vars",
+          173,
+          "'error' is defined but never used.",
+          1
+        ]
+      ]
+    }
+  ],
+  "python_tests": {
+    "command": [
+      "python3",
+      "scripts/test-capital-xml.py"
+    ],
+    "exit_code": 0,
+    "tests": 7,
+    "pass": true
+  },
+  "build": {
+    "command": [
+      "npm",
+      "run",
+      "build"
+    ],
+    "exit_code": 0,
+    "status": "PASS",
+    "log_sha256": "217131d639388b95800a4fcead19d4e049d6bb914626aed8358bc49b3d13bff3",
+    "sandbox_retry": "Initial sandbox attempt failed because Turbopack needs a local port. Approved execution outside sandbox succeeded.",
+    "generated_next_env_change": "Build removed a preexisting generated import. Original bytes restored from a hash-verified pre-build copy; no configuration change retained."
+  },
+  "additional_checks": [
+    {
+      "command": [
+        "npm",
+        "run",
+        "validate:editorial"
+      ],
+      "exit_code": 0,
+      "result": "5 reports; 2 historical snapshots; TD3/TOM locales pass"
+    },
+    {
+      "command": [
+        "npm",
+        "run",
+        "reports:validate"
+      ],
+      "exit_code": 0,
+      "result": "5 reports, 19 artifacts and llms synchronized"
+    },
+    {
+      "command": [
+        "npm",
+        "run",
+        "reports:check"
+      ],
+      "exit_code": 0,
+      "result": "20 deterministic synchronized files"
+    }
+  ],
+  "environment": {
+    "node": "v26.5.0",
+    "python": "3.9.6",
+    "installed": {
+      "next": "16.2.7",
+      "typescript": "5.6.3",
+      "eslint": "9.39.5"
+    },
+    "declared": {
+      "next": "16.3.1",
+      "typescript": "5.6.3",
+      "eslint": "^9.39.5"
+    },
+    "dependency_files_changed": false,
+    "preexisting_note": "Installed Next 16.2.7 differs from package.json 16.3.1. Verification uses the existing installation; dependency/configuration changes were outside Builder and were not made."
+  },
+  "typecheck_after_restoring_generated_file": {
+    "command": [
+      "npx",
+      "tsc",
+      "--noEmit",
+      "--incremental",
+      "false"
+    ],
+    "exit_code": 0
+  }
+}

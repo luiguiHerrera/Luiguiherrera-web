@@ -1,0 +1,16 @@
+{
+  "url": "https://cdn.cboe.com/api/global/us_indices/daily_prices/VIX_History.csv",
+  "status": "CAPTURED",
+  "http_status": 200,
+  "capture_started_at": "2026-09-08T14:09:00.259570+00:00",
+  "captured_at": "2026-09-08T14:09:00.768566+00:00",
+  "available_at": "2026-09-08T14:09:00.768566+00:00",
+  "availability_certainty": "CONSERVATIVE_BOUND",
+  "source_published_at": null,
+  "historical_replay_class": "R2",
+  "raw_sha256": "5f6a4197e929ee7a1eb999db2938c7f6049114c9fd29eb5d80e356dabe43d658",
+  "raw_bytes": 472360,
+  "file": "vix-history.csv.gz",
+  "http_date_not_publication": "Tue, 08 Sep 2026 14:09:00 GMT",
+  "last_modified_not_vintage_guarantee": "Tue, 08 Sep 2026 11:01:50 GMT"
+}

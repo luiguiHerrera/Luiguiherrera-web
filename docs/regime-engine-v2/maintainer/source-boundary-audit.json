@@ -1,0 +1,253 @@
+{
+  "schemaVersion": "regime-v2-maintainer-source-boundary-audit/1.0.0",
+  "disposition": "PASS",
+  "methodologyImpact": "NO",
+  "module": "lib/regime-engine-v2/operations/source-input.ts",
+  "testModule": "lib/regime-engine-v2/operations/source-input.test.ts",
+  "architecture": [
+    "existing source fetch",
+    "exact capture bytes and hash",
+    "bounded plain-data/hash/provenance validation",
+    "existing source normalizers with unchanged contracts; root M-PERF-01 reuses the identical Yahoo date formatter within each normalization call",
+    "normalized JSON-compatible versioned EngineInput",
+    "unchanged evaluateRegime / C03",
+    "internal shadow snapshot"
+  ],
+  "authority": "Frozen P8 source/price/temporal/freshness contracts. New code is an operational boundary only.",
+  "api": {
+    "function": "prepareSourceInput(bundle: unknown, asOf: string)",
+    "returns": [
+      "input: EngineInput",
+      "issues: string[]",
+      "captureMetadata: source/vintage/capture hashes, row replay classes and parse counts",
+      "sourceStatus: normalization and source-calendar resolutions"
+    ],
+    "failure": "SourceBundleError(code=INVALID_SOURCE_BUNDLE) for invalid bundles; valid but missing/stale sources are admitted as unavailable data for the engine to classify INCOMPLETE/PARTIAL.",
+    "vintagePreparation": "prepareSourceVintage(bundle) validates/hashes/normalizes one immutable source vintage; resolveSourceVintage(preparation, asOf) re-resolves calendars and assembles current VX on every changed cutoff.",
+    "convenience": "prepareSourceInput(bundle, asOf) remains the uncached raw-boundary convenience function and returns exactly the same per-cut data."
+  },
+  "schema": {
+    "schemaVersion": "regime-v2-source-bundle/1.0.0",
+    "mode": [
+      "R0",
+      "R1",
+      "R2"
+    ],
+    "captures": {
+      "array": true,
+      "required": [
+        "kind",
+        "capture"
+      ],
+      "kinds": [
+        "YAHOO_ADJCLOSE",
+        "CBOE_VIX_CSV",
+        "CFE_MONTHLY_CATALOG",
+        "CFE_MONTHLY_CSV",
+        "BTC_NATIVE_TABLE_JSON",
+        "GLD_NATIVE_ROWS_JSON"
+      ],
+      "optional": [
+        "ticker (required for YAHOO_ADJCLOSE)",
+        "identity: {symbol, expirationDate} (required for monthly CFE history)",
+        "observationDates: explicit unique dates selected from exact raw bytes",
+        "upstreamCapture and transformVersion (required for parsed native BTC/GLD JSON)",
+        "unitEventDates (GLD native unit events)"
+      ]
+    },
+    "captureRecord": {
+      "reuse": "lib/regime-engine-v2/capture.ts CaptureRecord",
+      "required": [
+        "captureId=hash(canonical body without captureId)",
+        "rawHash=SHA256(exact bytes)",
+        "rawBase64",
+        "sourceId",
+        "sourceVersion",
+        "sourceUrl",
+        "startedAt",
+        "completedAt",
+        "origin: PROSPECTIVE|R2_IMPORT",
+        "metadata.sourceId/sourceVersion/vintageHash/capturedAt/availableAt matching envelope"
+      ]
+    },
+    "calendars": {
+      "keys": [
+        "equity",
+        "vix",
+        "vx",
+        "btc",
+        "gld"
+      ],
+      "packet": [
+        "calendar: existing Calendar type",
+        "capture: exact authoritative source capture",
+        "transformVersion: governed normalization/transcription identity",
+        "calendarHash: hash(calendar)"
+      ],
+      "missing": "Omit unavailable calendar. Never synthesize weekdays or relabel observed SPY dates."
+    }
+  },
+  "examples": {
+    "validEmptyBundle": {
+      "schemaVersion": "regime-v2-source-bundle/1.0.0",
+      "mode": "R0",
+      "captures": [],
+      "calendars": {}
+    },
+    "emptyBundleResult": "prepareSourceInput at an explicit asOf succeeds as an honest empty boundary; unchanged engine reports INCOMPLETE / UNKNOWN_CALENDAR / missing source.",
+    "completeSyntheticExample": "Executable test 'per-session prospective vintages accumulate a complete R0 window and replay through the snapshot schema' builds a fully artificial explicit exchange schedule, 704 independently captured equity rows, six VIX rows, two CFE monthly rows and one catalog. It obtains COMPLETE/R0 and exact snapshot replay. This proves plumbing, not actual prospective market coverage.",
+    "fixtureCaveat": "All test raw bytes, timestamps and OFFICIAL-format packets are synthetic. They are not production calendar versions and must not be installed as real exchange data."
+  },
+  "operatorWorkflow": [
+    "Store exact source captures outside the repository using the governed external runtime store. The capture wrapper must use existing provider fetch bytes; do not add a second network call.",
+    "Assemble a JSON bundle externally with explicit source kinds, source contracts and capture envelopes. Retain every upstream raw capture for transformed BTC/GLD tables.",
+    "Supply separate reviewed versioned calendar packets for equity, VIX, CFE, BTC fund reporting and GLD valuation. Preserve raw schedule capture and normalization hash; coverage must be complete for the declared interval.",
+    "For a prospective window, select each observation from its actual contemporaneous capture via observationDates. A newly fetched full history cannot replace original per-session vintages. Mixed R2 parents remain R2 and are ineligible in R0 mode.",
+    "Use one explicit contemporaneously known CFE monthly catalog and current near-month histories containing Trade Date,Futures,Settle. Missing nearest identity/settlement remains missing; a later contract is not promoted.",
+    "Set V2_SHADOW_INPUT to the external bundle path under the root integration configuration. The integration persists original bundle bytes by hash before normalization. V1 remains public authority.",
+    "Inspect snapshot sourceStatus, issues, raw capture references and calendarStatus. A missing reliable calendar is an operational INCOMPLETE result, not permission to relax freshness.",
+    "Retain the normalized JSON input and engine/snapshot versions with each snapshot; exact replay uses these bytes rather than current provider values."
+  ],
+  "provenance": {
+    "rawBoundary": "SHA256 and envelope hashes detect local corruption and retain identity. They do not authenticate provider origin, certify a manual calendar transcription, or independently prove an operator-supplied historical timestamp.",
+    "nativeExtraction": "BTC/GLD JSON preserves exact extraction bytes plus upstream raw bytes and an explicit transform version. These are declared transformations for audit; provider HTML/PDF table semantic correctness still requires reviewed extraction.",
+    "normalizedIdentity": "JSON representation of bulk normalized source rows and histories is materialized once per vintage, detached and frozen before any evaluation. Each cut creates a fresh asOf-bearing input and JSON-materializes only its newly assembled VX packet. Persisted normalized input replays without representation drift; caller objects remain unchanged.",
+    "providerPublication": "sourcePublishedAt remains null. actual capturedAt/availableAt is the conservative availability bound for those exact bytes, never a provider publication claim.",
+    "sourceSubstitution": "Endpoint/source identity checks plus frozen normalizers reject FRED VIX substitution, Yahoo close for adjclose, or CFE Close for Settle.",
+    "rawHashes": "Native JSON normalized packet vintageHash is explicitly the exact raw byte hash, including original whitespace; sourceCapture and upstreamCapture identities remain in the ledger."
+  },
+  "replay": {
+    "R0Eligibility": "PROSPECTIVE origin, reliable OFFICIAL calendar known at capture completion, and observationDate equals that source calendar's latest closed session at capture completion. Row keeps exact capture availability bound.",
+    "olderRows": "All older rows in the same new payload default to R2. R2_IMPORT is always R2, including when its observation is the current session. R2 upstream native extraction cannot upgrade its derived row.",
+    "packetAggregation": "Mixed parent classes propagate weakest replay class; distinct incompatible source versions/native units are rejected. No filling, interpolation or state smoothing.",
+    "R1": "No unproved R1 reconstruction is invented. Mode R1 can conservatively admit proved R0 parents; historical R2 parents remain ineligible. A genuine R1 reconstruction would require separately governed vintage-integrity proof not supplied by this work.",
+    "historical": "Existing 1930 historical dates remain R2; no archive file is relabeled or rewritten.",
+    "qualification": "Synthetic R0 schema tests are not PIT OOS evidence; live event counts are not automatically increased by fixtures."
+  },
+  "freshness": {
+    "policy": "Frozen ZERO_SESSION_CARRY_WITH_EXPLICIT_CALENDARS",
+    "expectedSession": "Resolved separately from each calendar and caller asOf.",
+    "observedSession": "Original economic observationDate, retained per normalized row.",
+    "status": "Engine sourceStatus reports AVAILABLE, STALE_OR_WRONG_SESSION, UNKNOWN_CALENDAR, TEMPORALLY_INELIGIBLE, missing or normalizer-specific failure; no V1 availability exception.",
+    "vxObservationEnd": "Loader propagates latest evidenced observationEndAt of the two near-contract parents after frozen assembly. Unknown parent ends retain conservative day-end; equity close is never used as CFE settlement clock."
+  },
+  "acquisitionCompatibility": [
+    {
+      "source": "Yahoo adjusted prices",
+      "accepted": "Exact v8 chart bytes with USD native adjusted-close array and ticker identity.",
+      "notAccepted": "Existing V1 close-fallback scalar/array without original adjclose contract."
+    },
+    {
+      "source": "VIX",
+      "accepted": "Cboe VIX_History.csv DATE/CLOSE bytes.",
+      "notAccepted": "FRED VIXCLS or a presentation composite."
+    },
+    {
+      "source": "CFE VX",
+      "accepted": "Official monthly expiry catalog plus monthly CSV Trade Date/Futures/Settle.",
+      "notAccepted": "V1 daily aggregate capture alone; its raw bytes are useful audit evidence but are not this monthly-history input format."
+    },
+    {
+      "source": "BTC",
+      "accepted": "Native dated fund net-flow table in USD millions, raw ancestry preserved.",
+      "notAccepted": "Price/volume proxies or oneDay presentation scalar."
+    },
+    {
+      "source": "GLD",
+      "accepted": "Native dated shares/NAV/AUM rows with raw ancestry preserved.",
+      "notAccepted": "A twenty-day scalar presented as a complete 21-row source window."
+    }
+  ],
+  "boundedCost": {
+    "additionalNetworkFetches": 0,
+    "newDependencies": 0,
+    "maxCaptureEntries": 4096,
+    "maxRawBytesPerCapture": 8388608,
+    "maxTotalRawBytes": 33554432,
+    "maxNormalizedRowsProcessed": 1000000,
+    "maxCalendarSessionsPerPacket": 20000,
+    "algorithm": "Cold vintage: validate hashes/provenance and parse raw sources once; source-family capture-time calendar resolutions use a bounded local memo, session-close lookup uses Maps, row selection uses Sets, and each combined series sorts once. Warm changed cut: resolve all source calendars, select/assemble VX for the new target, construct fresh cutoff metadata and issues, and share immutable normalized rows. No output or freshness TTL; no full-history JSON clone or raw normalization on every new cut.",
+    "historyPolicy": "Over-limit bundles fail explicitly; no truncation to fewer than methodology-required horizons. Explicit observationDates may select original rows while retaining full raw bytes. Optional history coverage and BTC streak censoring remain engine semantics.",
+    "snapshotLimit": "Root snapshot storage additionally bounds serialized snapshots to 16 MiB. An excessively large normalized bundle can therefore produce a recorded shadow failure; V1 isolation remains mandatory.",
+    "sourceModuleGlobalCacheEntries": 0,
+    "dashboardCacheCapacity": {
+      "normalizedVintages": 1,
+      "exactCutResults": 1,
+      "parsedRawBundleCache": 0
+    },
+    "vintageCacheKey": [
+      "exact source bundle byte SHA256",
+      "engine version",
+      "C03 parameter set",
+      "frozen contract hashes",
+      "bundle schema version",
+      "source preparation version",
+      "maintenance normalizer implementation SHA256"
+    ],
+    "cutCacheKey": [
+      "vintage cache identity",
+      "exact asOf"
+    ],
+    "parseCountMeaning": "sourceStatus.parseCount and captureMetadata.parseCount record original vintage normalization workload, not new parsing performed by each subsequent cut. Performance evidence instruments actual calls separately.",
+    "performanceFinding": "M-PERF-01 combines the root Yahoo formatter hoist with bounded immutable-vintage preparation; consolidated finding and before/after performance evidence are maintained by root."
+  },
+  "verification": {
+    "command": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --test lib/regime-engine-v2/operations/source-input.test.ts",
+    "passed": 25,
+    "total": 25,
+    "covers": [
+      "DST",
+      "holiday",
+      "early close",
+      "unknown/future/proxy calendar",
+      "no retroactive history upgrade",
+      "unknown publication bound",
+      "R2 import preservation",
+      "stale VIX",
+      "missing adjusted close",
+      "missing nearest VX",
+      "native zero and shares/NAV units",
+      "capture/calendar tampering",
+      "provider endpoint mismatch",
+      "bounded envelope",
+      "accessor rejection",
+      "deterministic normalization",
+      "full synthetic R0 normalized input \u2192 snapshot \u2192 exact output replay",
+      "same cached vintage across four cutoffs exactly matches fresh uncached preparation",
+      "changed cutoff becomes STALE or UNKNOWN_CALENDAR when required",
+      "VX expiry and observation date reassembled from the same vintage",
+      "same-vintage immutable rows reused; changed source version and raw capture invalidate the cache; old bytes cannot receive a newer cached result"
+    ],
+    "canonicalFilesModifiedBySourceBoundary": 0,
+    "rootNormalizerImplementationRepair": "One canonical normalizer file changed by root for identical formatter reuse, covered by separate 19-case preservation evidence and all conformance checks. Frozen methodology is unchanged."
+  },
+  "limitations": [
+    "No actual official calendar packet has been configured by these synthetic tests.",
+    "No R1 vintage-reconstruction certification is implemented.",
+    "Provider identity and operator transcription remain a declared auditable boundary, not cryptographic provider authentication.",
+    "New full-history captures cannot immediately provide a complete strict R0 window. Warm-up or separately proved eligible source vintages are required.",
+    "No additional provider acquisition, paid data dependency or licensing redistribution has been introduced."
+  ],
+  "findings": [
+    {
+      "finding_id": "M-SOURCE-01",
+      "severity": "MEDIUM",
+      "component": "prospective normalization",
+      "description": "Passing fresh packet-level capture metadata to a whole historical payload would label earlier rows R0.",
+      "evidence": "Regression tests distinguish current selected row R0 and older retained rows R2.",
+      "repair": "Per-row closed-session eligibility, upstream R2 preservation and weakest-parent aggregation in new source boundary.",
+      "methodology_impact": "NO",
+      "status": "CLOSED"
+    },
+    {
+      "finding_id": "M-SOURCE-02",
+      "severity": "LOW",
+      "component": "operational VX normalization",
+      "description": "Frozen assembler's fallback observation end is date-only UTC day-end; a source with evidenced earlier settlement close would remain unavailable before day-end unless parent end is propagated.",
+      "evidence": "Complete synthetic R0 pipeline test initially showed only VX_NEAR_CONTRACTS_UNAVAILABLE, then passed after explicit max-near-parent observation end propagation.",
+      "repair": "New loader propagates the latest near-parent evidenced end using the source-specific calendar. No assembler/core/oracle modification.",
+      "methodology_impact": "NO",
+      "status": "CLOSED"
+    }
+  ]
+}

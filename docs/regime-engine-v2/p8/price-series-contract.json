@@ -1,0 +1,1830 @@
+{
+  "version": "p8-price-series/1.0.0",
+  "status": "PASS",
+  "precedence": "Overrides unbound price/source fields of P1-P7; no architecture/taxonomy change.",
+  "family_contracts": {
+    "EQUITY_ADJUSTED": {
+      "series_type": "ETF_ADJUSTED_PRICE",
+      "price_basis": "SPLIT_DIVIDEND_ADJUSTED_CLOSE",
+      "adjustment_policy": "Use provider adjclose arrays only. No close fallback, mixed bases or manual second adjustment.",
+      "return_definition": "Simple return 100*(P[t]/P[t-n]-1), n=5/21/63 sessions; daily returns for correlation are P[t]/P[t-1]-1.",
+      "corporate_action_policy": "Retain dividends/splits event records and whole-panel vintage hashes. Revisions create a new snapshot. This is a vendor distribution-adjusted return proxy, not an exact investor total-return claim. Unknown adjustment provenance makes the input unavailable.",
+      "source": "Yahoo chart endpoint already used by scripts/build-statistical-levels.mjs and the report evidence capture. P8 selects this verified adjusted panel; Alpha Vantage TIME_SERIES_DAILY remains a V1 precedent only.",
+      "source_field": "chart.result[0].indicators.adjclose[0].adjclose aligned to timestamp; meta.currency; events.dividends/events.splits",
+      "compatibility_constraints": [
+        "USD",
+        "same provider adjustment convention and declared vintage manifest across all 11 ETFs",
+        "ratio numerator/denominator same currency, basis and session",
+        "all required dates and constituents; never fill missing with close or zero"
+      ],
+      "rationale": "The repository has both raw-close and adjustment-preferring paths. Actual P8 provider payloads contain distinct adjclose and close arrays plus corporate-action events; the display alias alone was insufficient.",
+      "evidence": [
+        "source-data-audit.json",
+        "evidence/yahoo-*.json.metadata.json",
+        "../source-ledger.json#S03-S04-S10-S20",
+        "https://help.yahoo.com/kb/SLN28256.html"
+      ]
+    },
+    "VIX_OFFICIAL": {
+      "series_type": "OFFICIAL_VIX_INDEX",
+      "price_basis": "OFFICIAL_DAILY_INDEX_CLOSE",
+      "adjustment_policy": "No equity adjustment. Preserve index points.",
+      "return_definition": "Point change V[t]-V[t-n] and relative momentum 100*(V[t]/V[t-n]-1) are distinct fields.",
+      "corporate_action_policy": "Not an equity. Preserve revisions as separate official-index vintages.",
+      "source": "Cboe official VIX History CSV; official-source history already appears in weekly-review evidence. Existing FRED VIXCLS path is documented but not silently spliced into this panel.",
+      "source_field": "CSV DATE and CLOSE; not HIGH/LOW/OPEN. FRED observations.value only under an explicitly separately versioned source contract.",
+      "compatibility_constraints": [
+        "positive finite official index value",
+        "same economic session as core equities and VX",
+        "complete six closes for core level and 1/5-session momentum",
+        "percentile uses bounded prefix through target, no future rows"
+      ],
+      "rationale": "VIX is an observed index level, not an adjustable equity price.",
+      "evidence": [
+        "evidence/vix-history.csv.metadata.json",
+        "../source-ledger.json#S11-S12",
+        "https://cdn.cboe.com/api/global/us_indices/daily_prices/VIX_History.csv",
+        "https://fred.stlouisfed.org/series/VIXCLS"
+      ]
+    },
+    "VX_OFFICIAL": {
+      "series_type": "OFFICIAL_MONTHLY_VX_SETTLEMENT",
+      "price_basis": "OFFICIAL_DAILY_SETTLE",
+      "adjustment_policy": "No equity adjustment, continuous-contract back-adjustment or substitution of Close/final SOQ.",
+      "return_definition": "Slope 100*(VX2/VX1-1); spread VX2-VX1. Slots are maturity ranks on one date, never an ETF return series.",
+      "corporate_action_policy": "Retain actual contract symbol, expiration and daily settlement. Roll is catalog-based selection of first two monthly expirations strictly after target; weekly, expired and final-expiry settlement are excluded.",
+      "source": "Cboe/CFE official monthly VX historical CSV archive, same official settlement convention as lib/dashboard/adapters/vix-term-structure.ts.",
+      "source_field": "CSV Trade Date, Futures, Settle; catalog duration_type=M, futures_root=VX, expire_date, product_display and path.",
+      "compatibility_constraints": [
+        "same trade/settlement date",
+        "catalog determines expected slots before examining prices",
+        "missing VX1 is retained as missing; never promote VX2",
+        "unique identities and expirations; no weekly or synthetic contracts"
+      ],
+      "rationale": "The actual archive has a separate Settle column and often zero Close. Only official Settle meets the repository curve convention.",
+      "evidence": [
+        "evidence/cfe-contract-index.json.metadata.json",
+        "evidence/selected-contracts.json",
+        "evidence/vx-*.csv.metadata.json",
+        "../source-ledger.json#S13-S14",
+        "https://www.cboe.com/markets/us/futures/market-statistics/historical-data/futures"
+      ]
+    },
+    "BTC_NATIVE": {
+      "series_type": "REPORTED_ETF_NET_FLOW",
+      "price_basis": "NOT_APPLICABLE_NATIVE_USD_MILLIONS",
+      "adjustment_policy": "Do not equity-adjust money flows. Preserve USD millions; USD conversion is explicit multiplication by 1,000,000.",
+      "return_definition": "Not a return: reported daily total and bounded sums in USD millions; positive/negative/zero/missing fund counts separately.",
+      "corporate_action_policy": "Version expected fund columns and constituent changes. Dash/unreported is null. Use reported total with partial-fund coverage flagged; derive total only when all expected fund cells are observed and reconciliation is explicit.",
+      "source": "Existing report Farside parsed public table in btc-source.json. It is a web-reader extraction, not original HTML; provenance limitation retained.",
+      "source_field": "columns Date, twelve named fund columns, Total; rows[][]; source/url/retrievedAt/retrievalMethod.",
+      "compatibility_constraints": [
+        "one fund-universe/version per breadth calculation",
+        "no cross-vendor row splicing",
+        "consecutive expected sessions for sums",
+        "streak zero breaks; missing/start is censored",
+        "cumulative scope names first/last observed table row"
+      ],
+      "rationale": "Flows retain monetary units and raw cell missingness; they are optional satellite evidence with zero core votes.",
+      "evidence": [
+        "../../../../lib/reports/snapshots/primer-informe-septiembre-2026/btc-source.json",
+        "../source-ledger.json#S15-S16",
+        "https://farside.co.uk/bitcoin-etf-flow-all-data/"
+      ]
+    },
+    "GLD_NATIVE": {
+      "series_type": "FUND_SHARES_NAV_AUM",
+      "price_basis": "NATIVE_SHARES_NAV_USD_PER_SHARE_AUM_USD",
+      "adjustment_policy": "No equity-price adjustment of shares/flows. Preserve shares, NAV USD/share and AUM USD separately.",
+      "return_definition": "delta_shares=shares[t]-shares[t-n]; fraction=delta_shares/shares[t-n]; pressure_proxy_usd=delta_shares*NAV[t]. Not reported fund flows and not a sum of daily flows.",
+      "corporate_action_policy": "A share-unit/split event requires explicit dated unit mapping before differences; otherwise window unavailable. Never infer a creation/redemption flow from an unverified share-unit jump.",
+      "source": "State Street fund-data workbook already used by gld-flow-pressure.ts; retained report history is the available parsed evidence layer.",
+      "source_field": "date, nav, shares outstanding, total net assets -> dashboard-evidence.gldFlowPressure.history[].date/nav/sharesOutstanding/totalNetAssets.",
+      "compatibility_constraints": [
+        "n+1 dated rows for n-session difference",
+        "positive finite native NAV/shares/AUM",
+        "preserve abs(NAV*shares-AUM)/AUM and .01 legacy diagnostic bound; incomplete 21-row coherence audit flagged PARTIAL",
+        "20 retained rows do not prove a 20-session difference"
+      ],
+      "rationale": "Shares and price are economically different dimensions. Native share changes give an optional pressure proxy, never a core vote.",
+      "evidence": [
+        "../../../../lib/reports/snapshots/primer-informe-septiembre-2026/dashboard-evidence.json",
+        "../source-ledger.json#S17",
+        "https://www.ssga.com/library-content/products/fund-data/etfs/us/navhist-us-en-gld.xlsx"
+      ]
+    },
+    "UNBOUND_RESEARCH": {
+      "series_type": "PARKED_RESEARCH_INPUT",
+      "price_basis": "NOT_BOUND_FOR_ACTIVE_V2",
+      "adjustment_policy": "No active evaluation. Any underlying equity data retains EQUITY_ADJUSTED lineage; portfolio holdings are not substituted for a market universe.",
+      "return_definition": "Documented research expression only; not an active feature contract.",
+      "corporate_action_policy": "Inherited raw-family policy where defined; otherwise not evaluable.",
+      "source": "P1 registry and repository research/portfolio helpers; no newly approved market input.",
+      "source_field": "See original registry depends_on and source.existing_field_or_symbol; missing market archive/holdings compatibility is explicit.",
+      "compatibility_constraints": [
+        "PARKED",
+        "zero votes",
+        "requires separate evidence/version before activation"
+      ],
+      "rationale": "Builder can faithfully preserve an unavailable parked feature without inventing a market series or making it a blocker for the fixed core.",
+      "evidence": [
+        "../feature-registry.json",
+        "../dependency-map.json"
+      ]
+    },
+    "LEGACY_PRESENTATION": {
+      "series_type": "LEGACY_PRESENTATION_RECORD",
+      "price_basis": "NOT_APPLICABLE_EXCLUDED_VIEW",
+      "adjustment_policy": "Do not recompute V1 presentation as a V2 evidence input.",
+      "return_definition": "No active V2 return/decision contribution.",
+      "corporate_action_policy": "Preserve original V1 snapshots byte-for-byte.",
+      "source": "Original V1 module output and P1 source audit.",
+      "source_field": "Original registry source.existing_field_or_symbol.",
+      "compatibility_constraints": [
+        "EXCLUDED_FROM_V2_REPLAY",
+        "zero votes",
+        "never substitute score/label for raw family evidence"
+      ],
+      "rationale": "An existing composite is a presentation product, not independent evidence.",
+      "evidence": [
+        "../feature-registry.json",
+        "../preservation.json"
+      ]
+    }
+  },
+  "features": [
+    {
+      "feature_id": "eq_returns_5",
+      "family": "participation",
+      "source_contract_id": "EQUITY_ADJUSTED",
+      "series_type": "ETF_ADJUSTED_PRICE",
+      "price_basis": "SPLIT_DIVIDEND_ADJUSTED_CLOSE",
+      "adjustment_policy": "Use provider adjclose arrays only. No close fallback, mixed bases or manual second adjustment.",
+      "return_definition": "Simple return 100*(P[t]/P[t-n]-1), n=5/21/63 sessions; daily returns for correlation are P[t]/P[t-1]-1.",
+      "corporate_action_policy": "Retain dividends/splits event records and whole-panel vintage hashes. Revisions create a new snapshot. This is a vendor distribution-adjusted return proxy, not an exact investor total-return claim. Unknown adjustment provenance makes the input unavailable.",
+      "source": "Yahoo chart endpoint already used by scripts/build-statistical-levels.mjs and the report evidence capture. P8 selects this verified adjusted panel; Alpha Vantage TIME_SERIES_DAILY remains a V1 precedent only.",
+      "source_field": "chart.result[0].indicators.adjclose[0].adjclose aligned to timestamp; meta.currency; events.dividends/events.splits",
+      "compatibility_constraints": [
+        "USD",
+        "same provider adjustment convention and declared vintage manifest across all 11 ETFs",
+        "ratio numerator/denominator same currency, basis and session",
+        "all required dates and constituents; never fill missing with close or zero"
+      ],
+      "rationale": "The repository has both raw-close and adjustment-preferring paths. Actual P8 provider payloads contain distinct adjclose and close arrays plus corporate-action events; the display alias alone was insufficient.",
+      "evidence": [
+        "source-data-audit.json",
+        "evidence/yahoo-*.json.metadata.json",
+        "../source-ledger.json#S03-S04-S10-S20",
+        "https://help.yahoo.com/kb/SLN28256.html"
+      ],
+      "feature_transform": "For each ETF: 100*(P[t]/P[t-5]-1); same date and approved price basis.",
+      "unit": "percent",
+      "minimum_history": "6 dated closes per ETF; all 11 for core",
+      "execution_status": "REQUIRED_CORE"
+    },
+    {
+      "feature_id": "eq_returns_21",
+      "family": "participation",
+      "source_contract_id": "EQUITY_ADJUSTED",
+      "series_type": "ETF_ADJUSTED_PRICE",
+      "price_basis": "SPLIT_DIVIDEND_ADJUSTED_CLOSE",
+      "adjustment_policy": "Use provider adjclose arrays only. No close fallback, mixed bases or manual second adjustment.",
+      "return_definition": "Simple return 100*(P[t]/P[t-n]-1), n=5/21/63 sessions; daily returns for correlation are P[t]/P[t-1]-1.",
+      "corporate_action_policy": "Retain dividends/splits event records and whole-panel vintage hashes. Revisions create a new snapshot. This is a vendor distribution-adjusted return proxy, not an exact investor total-return claim. Unknown adjustment provenance makes the input unavailable.",
+      "source": "Yahoo chart endpoint already used by scripts/build-statistical-levels.mjs and the report evidence capture. P8 selects this verified adjusted panel; Alpha Vantage TIME_SERIES_DAILY remains a V1 precedent only.",
+      "source_field": "chart.result[0].indicators.adjclose[0].adjclose aligned to timestamp; meta.currency; events.dividends/events.splits",
+      "compatibility_constraints": [
+        "USD",
+        "same provider adjustment convention and declared vintage manifest across all 11 ETFs",
+        "ratio numerator/denominator same currency, basis and session",
+        "all required dates and constituents; never fill missing with close or zero"
+      ],
+      "rationale": "The repository has both raw-close and adjustment-preferring paths. Actual P8 provider payloads contain distinct adjclose and close arrays plus corporate-action events; the display alias alone was insufficient.",
+      "evidence": [
+        "source-data-audit.json",
+        "evidence/yahoo-*.json.metadata.json",
+        "../source-ledger.json#S03-S04-S10-S20",
+        "https://help.yahoo.com/kb/SLN28256.html"
+      ],
+      "feature_transform": "For each ETF: 100*(P[t]/P[t-21]-1); same date and approved price basis.",
+      "unit": "percent",
+      "minimum_history": "22 dated closes per ETF; all 11 for core",
+      "execution_status": "REQUIRED_CORE"
+    },
+    {
+      "feature_id": "eq_returns_63",
+      "family": "participation",
+      "source_contract_id": "EQUITY_ADJUSTED",
+      "series_type": "ETF_ADJUSTED_PRICE",
+      "price_basis": "SPLIT_DIVIDEND_ADJUSTED_CLOSE",
+      "adjustment_policy": "Use provider adjclose arrays only. No close fallback, mixed bases or manual second adjustment.",
+      "return_definition": "Simple return 100*(P[t]/P[t-n]-1), n=5/21/63 sessions; daily returns for correlation are P[t]/P[t-1]-1.",
+      "corporate_action_policy": "Retain dividends/splits event records and whole-panel vintage hashes. Revisions create a new snapshot. This is a vendor distribution-adjusted return proxy, not an exact investor total-return claim. Unknown adjustment provenance makes the input unavailable.",
+      "source": "Yahoo chart endpoint already used by scripts/build-statistical-levels.mjs and the report evidence capture. P8 selects this verified adjusted panel; Alpha Vantage TIME_SERIES_DAILY remains a V1 precedent only.",
+      "source_field": "chart.result[0].indicators.adjclose[0].adjclose aligned to timestamp; meta.currency; events.dividends/events.splits",
+      "compatibility_constraints": [
+        "USD",
+        "same provider adjustment convention and declared vintage manifest across all 11 ETFs",
+        "ratio numerator/denominator same currency, basis and session",
+        "all required dates and constituents; never fill missing with close or zero"
+      ],
+      "rationale": "The repository has both raw-close and adjustment-preferring paths. Actual P8 provider payloads contain distinct adjclose and close arrays plus corporate-action events; the display alias alone was insufficient.",
+      "evidence": [
+        "source-data-audit.json",
+        "evidence/yahoo-*.json.metadata.json",
+        "../source-ledger.json#S03-S04-S10-S20",
+        "https://help.yahoo.com/kb/SLN28256.html"
+      ],
+      "feature_transform": "For each ETF: 100*(P[t]/P[t-63]-1); same date and approved price basis.",
+      "unit": "percent",
+      "minimum_history": "64 dated closes per ETF; all 11 for core",
+      "execution_status": "OPTIONAL_EVIDENCE"
+    },
+    {
+      "feature_id": "eq_positive_5",
+      "family": "participation",
+      "source_contract_id": "EQUITY_ADJUSTED",
+      "series_type": "ETF_ADJUSTED_PRICE",
+      "price_basis": "SPLIT_DIVIDEND_ADJUSTED_CLOSE",
+      "adjustment_policy": "Use provider adjclose arrays only. No close fallback, mixed bases or manual second adjustment.",
+      "return_definition": "Simple return 100*(P[t]/P[t-n]-1), n=5/21/63 sessions; daily returns for correlation are P[t]/P[t-1]-1.",
+      "corporate_action_policy": "Retain dividends/splits event records and whole-panel vintage hashes. Revisions create a new snapshot. This is a vendor distribution-adjusted return proxy, not an exact investor total-return claim. Unknown adjustment provenance makes the input unavailable.",
+      "source": "Yahoo chart endpoint already used by scripts/build-statistical-levels.mjs and the report evidence capture. P8 selects this verified adjusted panel; Alpha Vantage TIME_SERIES_DAILY remains a V1 precedent only.",
+      "source_field": "chart.result[0].indicators.adjclose[0].adjclose aligned to timestamp; meta.currency; events.dividends/events.splits",
+      "compatibility_constraints": [
+        "USD",
+        "same provider adjustment convention and declared vintage manifest across all 11 ETFs",
+        "ratio numerator/denominator same currency, basis and session",
+        "all required dates and constituents; never fill missing with close or zero"
+      ],
+      "rationale": "The repository has both raw-close and adjustment-preferring paths. Actual P8 provider payloads contain distinct adjclose and close arrays plus corporate-action events; the display alias alone was insufficient.",
+      "evidence": [
+        "source-data-audit.json",
+        "evidence/yahoo-*.json.metadata.json",
+        "../source-ledger.json#S03-S04-S10-S20",
+        "https://help.yahoo.com/kb/SLN28256.html"
+      ],
+      "feature_transform": "count(eq_returns_5[ticker] > 0); denominator fixed at 11.",
+      "unit": "count of 11",
+      "minimum_history": "6 closes for each of all 11 ETFs",
+      "execution_status": "REQUIRED_CORE"
+    },
+    {
+      "feature_id": "eq_positive_21",
+      "family": "participation",
+      "source_contract_id": "EQUITY_ADJUSTED",
+      "series_type": "ETF_ADJUSTED_PRICE",
+      "price_basis": "SPLIT_DIVIDEND_ADJUSTED_CLOSE",
+      "adjustment_policy": "Use provider adjclose arrays only. No close fallback, mixed bases or manual second adjustment.",
+      "return_definition": "Simple return 100*(P[t]/P[t-n]-1), n=5/21/63 sessions; daily returns for correlation are P[t]/P[t-1]-1.",
+      "corporate_action_policy": "Retain dividends/splits event records and whole-panel vintage hashes. Revisions create a new snapshot. This is a vendor distribution-adjusted return proxy, not an exact investor total-return claim. Unknown adjustment provenance makes the input unavailable.",
+      "source": "Yahoo chart endpoint already used by scripts/build-statistical-levels.mjs and the report evidence capture. P8 selects this verified adjusted panel; Alpha Vantage TIME_SERIES_DAILY remains a V1 precedent only.",
+      "source_field": "chart.result[0].indicators.adjclose[0].adjclose aligned to timestamp; meta.currency; events.dividends/events.splits",
+      "compatibility_constraints": [
+        "USD",
+        "same provider adjustment convention and declared vintage manifest across all 11 ETFs",
+        "ratio numerator/denominator same currency, basis and session",
+        "all required dates and constituents; never fill missing with close or zero"
+      ],
+      "rationale": "The repository has both raw-close and adjustment-preferring paths. Actual P8 provider payloads contain distinct adjclose and close arrays plus corporate-action events; the display alias alone was insufficient.",
+      "evidence": [
+        "source-data-audit.json",
+        "evidence/yahoo-*.json.metadata.json",
+        "../source-ledger.json#S03-S04-S10-S20",
+        "https://help.yahoo.com/kb/SLN28256.html"
+      ],
+      "feature_transform": "count(eq_returns_21[ticker] > 0); denominator fixed at 11.",
+      "unit": "count of 11",
+      "minimum_history": "22 closes for each of all 11 ETFs",
+      "execution_status": "REQUIRED_CORE"
+    },
+    {
+      "feature_id": "eq_above_ma200",
+      "family": "participation",
+      "source_contract_id": "EQUITY_ADJUSTED",
+      "series_type": "ETF_ADJUSTED_PRICE",
+      "price_basis": "SPLIT_DIVIDEND_ADJUSTED_CLOSE",
+      "adjustment_policy": "Use provider adjclose arrays only. No close fallback, mixed bases or manual second adjustment.",
+      "return_definition": "Simple return 100*(P[t]/P[t-n]-1), n=5/21/63 sessions; daily returns for correlation are P[t]/P[t-1]-1.",
+      "corporate_action_policy": "Retain dividends/splits event records and whole-panel vintage hashes. Revisions create a new snapshot. This is a vendor distribution-adjusted return proxy, not an exact investor total-return claim. Unknown adjustment provenance makes the input unavailable.",
+      "source": "Yahoo chart endpoint already used by scripts/build-statistical-levels.mjs and the report evidence capture. P8 selects this verified adjusted panel; Alpha Vantage TIME_SERIES_DAILY remains a V1 precedent only.",
+      "source_field": "chart.result[0].indicators.adjclose[0].adjclose aligned to timestamp; meta.currency; events.dividends/events.splits",
+      "compatibility_constraints": [
+        "USD",
+        "same provider adjustment convention and declared vintage manifest across all 11 ETFs",
+        "ratio numerator/denominator same currency, basis and session",
+        "all required dates and constituents; never fill missing with close or zero"
+      ],
+      "rationale": "The repository has both raw-close and adjustment-preferring paths. Actual P8 provider payloads contain distinct adjclose and close arrays plus corporate-action events; the display alias alone was insufficient.",
+      "evidence": [
+        "source-data-audit.json",
+        "evidence/yahoo-*.json.metadata.json",
+        "../source-ledger.json#S03-S04-S10-S20",
+        "https://help.yahoo.com/kb/SLN28256.html"
+      ],
+      "feature_transform": "For each ETF MA200=mean(last 200 approved closes); count(P[t] > MA200[t]); all 11 or unavailable.",
+      "unit": "count of 11",
+      "minimum_history": "200 aligned dated closes per ETF",
+      "execution_status": "OPTIONAL_EVIDENCE"
+    },
+    {
+      "feature_id": "eq_rsp_spy_21",
+      "family": "participation",
+      "source_contract_id": "EQUITY_ADJUSTED",
+      "series_type": "ETF_ADJUSTED_PRICE",
+      "price_basis": "SPLIT_DIVIDEND_ADJUSTED_CLOSE",
+      "adjustment_policy": "Use provider adjclose arrays only. No close fallback, mixed bases or manual second adjustment.",
+      "return_definition": "Simple return 100*(P[t]/P[t-n]-1), n=5/21/63 sessions; daily returns for correlation are P[t]/P[t-1]-1.",
+      "corporate_action_policy": "Retain dividends/splits event records and whole-panel vintage hashes. Revisions create a new snapshot. This is a vendor distribution-adjusted return proxy, not an exact investor total-return claim. Unknown adjustment provenance makes the input unavailable.",
+      "source": "Yahoo chart endpoint already used by scripts/build-statistical-levels.mjs and the report evidence capture. P8 selects this verified adjusted panel; Alpha Vantage TIME_SERIES_DAILY remains a V1 precedent only.",
+      "source_field": "chart.result[0].indicators.adjclose[0].adjclose aligned to timestamp; meta.currency; events.dividends/events.splits",
+      "compatibility_constraints": [
+        "USD",
+        "same provider adjustment convention and declared vintage manifest across all 11 ETFs",
+        "ratio numerator/denominator same currency, basis and session",
+        "all required dates and constituents; never fill missing with close or zero"
+      ],
+      "rationale": "The repository has both raw-close and adjustment-preferring paths. Actual P8 provider payloads contain distinct adjclose and close arrays plus corporate-action events; the display alias alone was insufficient.",
+      "evidence": [
+        "source-data-audit.json",
+        "evidence/yahoo-*.json.metadata.json",
+        "../source-ledger.json#S03-S04-S10-S20",
+        "https://help.yahoo.com/kb/SLN28256.html"
+      ],
+      "feature_transform": "q[t]=P_RSP[t]/P_SPY[t]; 100*(q[t]/q[t-21]-1), same basis/currency and dates.",
+      "unit": "percent",
+      "minimum_history": "22 aligned dated closes of both ETFs",
+      "execution_status": "OPTIONAL_EVIDENCE"
+    },
+    {
+      "feature_id": "eq_iwm_spy_21",
+      "family": "participation",
+      "source_contract_id": "EQUITY_ADJUSTED",
+      "series_type": "ETF_ADJUSTED_PRICE",
+      "price_basis": "SPLIT_DIVIDEND_ADJUSTED_CLOSE",
+      "adjustment_policy": "Use provider adjclose arrays only. No close fallback, mixed bases or manual second adjustment.",
+      "return_definition": "Simple return 100*(P[t]/P[t-n]-1), n=5/21/63 sessions; daily returns for correlation are P[t]/P[t-1]-1.",
+      "corporate_action_policy": "Retain dividends/splits event records and whole-panel vintage hashes. Revisions create a new snapshot. This is a vendor distribution-adjusted return proxy, not an exact investor total-return claim. Unknown adjustment provenance makes the input unavailable.",
+      "source": "Yahoo chart endpoint already used by scripts/build-statistical-levels.mjs and the report evidence capture. P8 selects this verified adjusted panel; Alpha Vantage TIME_SERIES_DAILY remains a V1 precedent only.",
+      "source_field": "chart.result[0].indicators.adjclose[0].adjclose aligned to timestamp; meta.currency; events.dividends/events.splits",
+      "compatibility_constraints": [
+        "USD",
+        "same provider adjustment convention and declared vintage manifest across all 11 ETFs",
+        "ratio numerator/denominator same currency, basis and session",
+        "all required dates and constituents; never fill missing with close or zero"
+      ],
+      "rationale": "The repository has both raw-close and adjustment-preferring paths. Actual P8 provider payloads contain distinct adjclose and close arrays plus corporate-action events; the display alias alone was insufficient.",
+      "evidence": [
+        "source-data-audit.json",
+        "evidence/yahoo-*.json.metadata.json",
+        "../source-ledger.json#S03-S04-S10-S20",
+        "https://help.yahoo.com/kb/SLN28256.html"
+      ],
+      "feature_transform": "q[t]=P_IWM[t]/P_SPY[t]; 100*(q[t]/q[t-21]-1), same basis/currency and dates.",
+      "unit": "percent",
+      "minimum_history": "22 aligned dated closes of both ETFs",
+      "execution_status": "OPTIONAL_EVIDENCE"
+    },
+    {
+      "feature_id": "eq_growth_21",
+      "family": "leadership",
+      "source_contract_id": "EQUITY_ADJUSTED",
+      "series_type": "ETF_ADJUSTED_PRICE",
+      "price_basis": "SPLIT_DIVIDEND_ADJUSTED_CLOSE",
+      "adjustment_policy": "Use provider adjclose arrays only. No close fallback, mixed bases or manual second adjustment.",
+      "return_definition": "Simple return 100*(P[t]/P[t-n]-1), n=5/21/63 sessions; daily returns for correlation are P[t]/P[t-1]-1.",
+      "corporate_action_policy": "Retain dividends/splits event records and whole-panel vintage hashes. Revisions create a new snapshot. This is a vendor distribution-adjusted return proxy, not an exact investor total-return claim. Unknown adjustment provenance makes the input unavailable.",
+      "source": "Yahoo chart endpoint already used by scripts/build-statistical-levels.mjs and the report evidence capture. P8 selects this verified adjusted panel; Alpha Vantage TIME_SERIES_DAILY remains a V1 precedent only.",
+      "source_field": "chart.result[0].indicators.adjclose[0].adjclose aligned to timestamp; meta.currency; events.dividends/events.splits",
+      "compatibility_constraints": [
+        "USD",
+        "same provider adjustment convention and declared vintage manifest across all 11 ETFs",
+        "ratio numerator/denominator same currency, basis and session",
+        "all required dates and constituents; never fill missing with close or zero"
+      ],
+      "rationale": "The repository has both raw-close and adjustment-preferring paths. Actual P8 provider payloads contain distinct adjclose and close arrays plus corporate-action events; the display alias alone was insufficient.",
+      "evidence": [
+        "source-data-audit.json",
+        "evidence/yahoo-*.json.metadata.json",
+        "../source-ledger.json#S03-S04-S10-S20",
+        "https://help.yahoo.com/kb/SLN28256.html"
+      ],
+      "feature_transform": "arithmetic mean of eq_returns_21 over fixed growth ETF set; no missing constituent.",
+      "unit": "percent",
+      "minimum_history": "22 dated closes per constituent; 11-sector core universe",
+      "execution_status": "REQUIRED_CORE"
+    },
+    {
+      "feature_id": "eq_cyclical_21",
+      "family": "leadership",
+      "source_contract_id": "EQUITY_ADJUSTED",
+      "series_type": "ETF_ADJUSTED_PRICE",
+      "price_basis": "SPLIT_DIVIDEND_ADJUSTED_CLOSE",
+      "adjustment_policy": "Use provider adjclose arrays only. No close fallback, mixed bases or manual second adjustment.",
+      "return_definition": "Simple return 100*(P[t]/P[t-n]-1), n=5/21/63 sessions; daily returns for correlation are P[t]/P[t-1]-1.",
+      "corporate_action_policy": "Retain dividends/splits event records and whole-panel vintage hashes. Revisions create a new snapshot. This is a vendor distribution-adjusted return proxy, not an exact investor total-return claim. Unknown adjustment provenance makes the input unavailable.",
+      "source": "Yahoo chart endpoint already used by scripts/build-statistical-levels.mjs and the report evidence capture. P8 selects this verified adjusted panel; Alpha Vantage TIME_SERIES_DAILY remains a V1 precedent only.",
+      "source_field": "chart.result[0].indicators.adjclose[0].adjclose aligned to timestamp; meta.currency; events.dividends/events.splits",
+      "compatibility_constraints": [
+        "USD",
+        "same provider adjustment convention and declared vintage manifest across all 11 ETFs",
+        "ratio numerator/denominator same currency, basis and session",
+        "all required dates and constituents; never fill missing with close or zero"
+      ],
+      "rationale": "The repository has both raw-close and adjustment-preferring paths. Actual P8 provider payloads contain distinct adjclose and close arrays plus corporate-action events; the display alias alone was insufficient.",
+      "evidence": [
+        "source-data-audit.json",
+        "evidence/yahoo-*.json.metadata.json",
+        "../source-ledger.json#S03-S04-S10-S20",
+        "https://help.yahoo.com/kb/SLN28256.html"
+      ],
+      "feature_transform": "arithmetic mean of eq_returns_21 over fixed cyclical ETF set; no missing constituent.",
+      "unit": "percent",
+      "minimum_history": "22 dated closes per constituent; 11-sector core universe",
+      "execution_status": "REQUIRED_CORE"
+    },
+    {
+      "feature_id": "eq_defensive_21",
+      "family": "leadership",
+      "source_contract_id": "EQUITY_ADJUSTED",
+      "series_type": "ETF_ADJUSTED_PRICE",
+      "price_basis": "SPLIT_DIVIDEND_ADJUSTED_CLOSE",
+      "adjustment_policy": "Use provider adjclose arrays only. No close fallback, mixed bases or manual second adjustment.",
+      "return_definition": "Simple return 100*(P[t]/P[t-n]-1), n=5/21/63 sessions; daily returns for correlation are P[t]/P[t-1]-1.",
+      "corporate_action_policy": "Retain dividends/splits event records and whole-panel vintage hashes. Revisions create a new snapshot. This is a vendor distribution-adjusted return proxy, not an exact investor total-return claim. Unknown adjustment provenance makes the input unavailable.",
+      "source": "Yahoo chart endpoint already used by scripts/build-statistical-levels.mjs and the report evidence capture. P8 selects this verified adjusted panel; Alpha Vantage TIME_SERIES_DAILY remains a V1 precedent only.",
+      "source_field": "chart.result[0].indicators.adjclose[0].adjclose aligned to timestamp; meta.currency; events.dividends/events.splits",
+      "compatibility_constraints": [
+        "USD",
+        "same provider adjustment convention and declared vintage manifest across all 11 ETFs",
+        "ratio numerator/denominator same currency, basis and session",
+        "all required dates and constituents; never fill missing with close or zero"
+      ],
+      "rationale": "The repository has both raw-close and adjustment-preferring paths. Actual P8 provider payloads contain distinct adjclose and close arrays plus corporate-action events; the display alias alone was insufficient.",
+      "evidence": [
+        "source-data-audit.json",
+        "evidence/yahoo-*.json.metadata.json",
+        "../source-ledger.json#S03-S04-S10-S20",
+        "https://help.yahoo.com/kb/SLN28256.html"
+      ],
+      "feature_transform": "arithmetic mean of eq_returns_21 over fixed defensive ETF set; no missing constituent.",
+      "unit": "percent",
+      "minimum_history": "22 dated closes per constituent; 11-sector core universe",
+      "execution_status": "REQUIRED_CORE"
+    },
+    {
+      "feature_id": "eq_leadership_gap",
+      "family": "leadership",
+      "source_contract_id": "EQUITY_ADJUSTED",
+      "series_type": "ETF_ADJUSTED_PRICE",
+      "price_basis": "SPLIT_DIVIDEND_ADJUSTED_CLOSE",
+      "adjustment_policy": "Use provider adjclose arrays only. No close fallback, mixed bases or manual second adjustment.",
+      "return_definition": "Simple return 100*(P[t]/P[t-n]-1), n=5/21/63 sessions; daily returns for correlation are P[t]/P[t-1]-1.",
+      "corporate_action_policy": "Retain dividends/splits event records and whole-panel vintage hashes. Revisions create a new snapshot. This is a vendor distribution-adjusted return proxy, not an exact investor total-return claim. Unknown adjustment provenance makes the input unavailable.",
+      "source": "Yahoo chart endpoint already used by scripts/build-statistical-levels.mjs and the report evidence capture. P8 selects this verified adjusted panel; Alpha Vantage TIME_SERIES_DAILY remains a V1 precedent only.",
+      "source_field": "chart.result[0].indicators.adjclose[0].adjclose aligned to timestamp; meta.currency; events.dividends/events.splits",
+      "compatibility_constraints": [
+        "USD",
+        "same provider adjustment convention and declared vintage manifest across all 11 ETFs",
+        "ratio numerator/denominator same currency, basis and session",
+        "all required dates and constituents; never fill missing with close or zero"
+      ],
+      "rationale": "The repository has both raw-close and adjustment-preferring paths. Actual P8 provider payloads contain distinct adjclose and close arrays plus corporate-action events; the display alias alone was insufficient.",
+      "evidence": [
+        "source-data-audit.json",
+        "evidence/yahoo-*.json.metadata.json",
+        "../source-ledger.json#S03-S04-S10-S20",
+        "https://help.yahoo.com/kb/SLN28256.html"
+      ],
+      "feature_transform": "max(eq_growth_21,eq_cyclical_21)-eq_defensive_21; signed gap; compare to +/-validated gap.",
+      "unit": "percentage points",
+      "minimum_history": "All three complete group means",
+      "execution_status": "REQUIRED_CORE"
+    },
+    {
+      "feature_id": "eq_legacy_leadership",
+      "family": "leadership",
+      "source_contract_id": "LEGACY_PRESENTATION",
+      "series_type": "LEGACY_PRESENTATION_RECORD",
+      "price_basis": "NOT_APPLICABLE_EXCLUDED_VIEW",
+      "adjustment_policy": "Do not recompute V1 presentation as a V2 evidence input.",
+      "return_definition": "No active V2 return/decision contribution.",
+      "corporate_action_policy": "Preserve original V1 snapshots byte-for-byte.",
+      "source": "Original V1 module output and P1 source audit.",
+      "source_field": "Original registry source.existing_field_or_symbol.",
+      "compatibility_constraints": [
+        "EXCLUDED_FROM_V2_REPLAY",
+        "zero votes",
+        "never substitute score/label for raw family evidence"
+      ],
+      "rationale": "An existing composite is a presentation product, not independent evidence.",
+      "evidence": [
+        "../feature-registry.json",
+        "../preservation.json"
+      ],
+      "feature_transform": "Sort growth/cyclical/defensive means descending; label top group if top minus second >=1 percentage point, otherwise mixta. V1 only.",
+      "unit": "categorical",
+      "minimum_history": "Three group means; not a substitute for validated V2 comparator",
+      "execution_status": "EXCLUDED"
+    },
+    {
+      "feature_id": "eq_dispersion_5",
+      "family": "leadership",
+      "source_contract_id": "EQUITY_ADJUSTED",
+      "series_type": "ETF_ADJUSTED_PRICE",
+      "price_basis": "SPLIT_DIVIDEND_ADJUSTED_CLOSE",
+      "adjustment_policy": "Use provider adjclose arrays only. No close fallback, mixed bases or manual second adjustment.",
+      "return_definition": "Simple return 100*(P[t]/P[t-n]-1), n=5/21/63 sessions; daily returns for correlation are P[t]/P[t-1]-1.",
+      "corporate_action_policy": "Retain dividends/splits event records and whole-panel vintage hashes. Revisions create a new snapshot. This is a vendor distribution-adjusted return proxy, not an exact investor total-return claim. Unknown adjustment provenance makes the input unavailable.",
+      "source": "Yahoo chart endpoint already used by scripts/build-statistical-levels.mjs and the report evidence capture. P8 selects this verified adjusted panel; Alpha Vantage TIME_SERIES_DAILY remains a V1 precedent only.",
+      "source_field": "chart.result[0].indicators.adjclose[0].adjclose aligned to timestamp; meta.currency; events.dividends/events.splits",
+      "compatibility_constraints": [
+        "USD",
+        "same provider adjustment convention and declared vintage manifest across all 11 ETFs",
+        "ratio numerator/denominator same currency, basis and session",
+        "all required dates and constituents; never fill missing with close or zero"
+      ],
+      "rationale": "The repository has both raw-close and adjustment-preferring paths. Actual P8 provider payloads contain distinct adjclose and close arrays plus corporate-action events; the display alias alone was insufficient.",
+      "evidence": [
+        "source-data-audit.json",
+        "evidence/yahoo-*.json.metadata.json",
+        "../source-ledger.json#S03-S04-S10-S20",
+        "https://help.yahoo.com/kb/SLN28256.html"
+      ],
+      "feature_transform": "max(eq_returns_5)-min(eq_returns_5); all 11 constituents.",
+      "unit": "percentage points",
+      "minimum_history": "6 closes per ETF",
+      "execution_status": "OPTIONAL_EVIDENCE"
+    },
+    {
+      "feature_id": "eq_dispersion_21",
+      "family": "leadership",
+      "source_contract_id": "EQUITY_ADJUSTED",
+      "series_type": "ETF_ADJUSTED_PRICE",
+      "price_basis": "SPLIT_DIVIDEND_ADJUSTED_CLOSE",
+      "adjustment_policy": "Use provider adjclose arrays only. No close fallback, mixed bases or manual second adjustment.",
+      "return_definition": "Simple return 100*(P[t]/P[t-n]-1), n=5/21/63 sessions; daily returns for correlation are P[t]/P[t-1]-1.",
+      "corporate_action_policy": "Retain dividends/splits event records and whole-panel vintage hashes. Revisions create a new snapshot. This is a vendor distribution-adjusted return proxy, not an exact investor total-return claim. Unknown adjustment provenance makes the input unavailable.",
+      "source": "Yahoo chart endpoint already used by scripts/build-statistical-levels.mjs and the report evidence capture. P8 selects this verified adjusted panel; Alpha Vantage TIME_SERIES_DAILY remains a V1 precedent only.",
+      "source_field": "chart.result[0].indicators.adjclose[0].adjclose aligned to timestamp; meta.currency; events.dividends/events.splits",
+      "compatibility_constraints": [
+        "USD",
+        "same provider adjustment convention and declared vintage manifest across all 11 ETFs",
+        "ratio numerator/denominator same currency, basis and session",
+        "all required dates and constituents; never fill missing with close or zero"
+      ],
+      "rationale": "The repository has both raw-close and adjustment-preferring paths. Actual P8 provider payloads contain distinct adjclose and close arrays plus corporate-action events; the display alias alone was insufficient.",
+      "evidence": [
+        "source-data-audit.json",
+        "evidence/yahoo-*.json.metadata.json",
+        "../source-ledger.json#S03-S04-S10-S20",
+        "https://help.yahoo.com/kb/SLN28256.html"
+      ],
+      "feature_transform": "max(eq_returns_21)-min(eq_returns_21); all 11 constituents.",
+      "unit": "percentage points",
+      "minimum_history": "22 closes per ETF",
+      "execution_status": "OPTIONAL_EVIDENCE"
+    },
+    {
+      "feature_id": "eq_leadership_persistence",
+      "family": "leadership",
+      "source_contract_id": "UNBOUND_RESEARCH",
+      "series_type": "PARKED_RESEARCH_INPUT",
+      "price_basis": "NOT_BOUND_FOR_ACTIVE_V2",
+      "adjustment_policy": "No active evaluation. Any underlying equity data retains EQUITY_ADJUSTED lineage; portfolio holdings are not substituted for a market universe.",
+      "return_definition": "Documented research expression only; not an active feature contract.",
+      "corporate_action_policy": "Inherited raw-family policy where defined; otherwise not evaluable.",
+      "source": "P1 registry and repository research/portfolio helpers; no newly approved market input.",
+      "source_field": "See original registry depends_on and source.existing_field_or_symbol; missing market archive/holdings compatibility is explicit.",
+      "compatibility_constraints": [
+        "PARKED",
+        "zero votes",
+        "requires separate evidence/version before activation"
+      ],
+      "rationale": "Builder can faithfully preserve an unavailable parked feature without inventing a market series or making it a blocker for the fixed core.",
+      "evidence": [
+        "../feature-registry.json",
+        "../dependency-map.json"
+      ],
+      "feature_transform": "Store start/end of consecutive equal leadership states under same rules; break on gaps, version changes or missing.",
+      "unit": "sessions and UTC instants",
+      "minimum_history": "At least two consecutive eligible archived decisions for a change; one gives observed start only",
+      "execution_status": "PARKED"
+    },
+    {
+      "feature_id": "eq_holdings_concentration",
+      "family": "leadership",
+      "source_contract_id": "UNBOUND_RESEARCH",
+      "series_type": "PARKED_RESEARCH_INPUT",
+      "price_basis": "NOT_BOUND_FOR_ACTIVE_V2",
+      "adjustment_policy": "No active evaluation. Any underlying equity data retains EQUITY_ADJUSTED lineage; portfolio holdings are not substituted for a market universe.",
+      "return_definition": "Documented research expression only; not an active feature contract.",
+      "corporate_action_policy": "Inherited raw-family policy where defined; otherwise not evaluable.",
+      "source": "P1 registry and repository research/portfolio helpers; no newly approved market input.",
+      "source_field": "See original registry depends_on and source.existing_field_or_symbol; missing market archive/holdings compatibility is explicit.",
+      "compatibility_constraints": [
+        "PARKED",
+        "zero votes",
+        "requires separate evidence/version before activation"
+      ],
+      "rationale": "Builder can faithfully preserve an unavailable parked feature without inventing a market series or making it a blocker for the fixed core.",
+      "evidence": [
+        "../feature-registry.json",
+        "../dependency-map.json"
+      ],
+      "feature_transform": "PARK: define market universe and dated constituent weights before HHI or top-N concentration.",
+      "unit": "UNBOUND",
+      "minimum_history": "Complete dated market constituent weights and publication provenance",
+      "execution_status": "PARKED"
+    },
+    {
+      "feature_id": "vix_level",
+      "family": "vix_spot",
+      "source_contract_id": "VIX_OFFICIAL",
+      "series_type": "OFFICIAL_VIX_INDEX",
+      "price_basis": "OFFICIAL_DAILY_INDEX_CLOSE",
+      "adjustment_policy": "No equity adjustment. Preserve index points.",
+      "return_definition": "Point change V[t]-V[t-n] and relative momentum 100*(V[t]/V[t-n]-1) are distinct fields.",
+      "corporate_action_policy": "Not an equity. Preserve revisions as separate official-index vintages.",
+      "source": "Cboe official VIX History CSV; official-source history already appears in weekly-review evidence. Existing FRED VIXCLS path is documented but not silently spliced into this panel.",
+      "source_field": "CSV DATE and CLOSE; not HIGH/LOW/OPEN. FRED observations.value only under an explicitly separately versioned source contract.",
+      "compatibility_constraints": [
+        "positive finite official index value",
+        "same economic session as core equities and VX",
+        "complete six closes for core level and 1/5-session momentum",
+        "percentile uses bounded prefix through target, no future rows"
+      ],
+      "rationale": "VIX is an observed index level, not an adjustable equity price.",
+      "evidence": [
+        "evidence/vix-history.csv.metadata.json",
+        "../source-ledger.json#S11-S12",
+        "https://cdn.cboe.com/api/global/us_indices/daily_prices/VIX_History.csv",
+        "https://fred.stlouisfed.org/series/VIXCLS"
+      ],
+      "feature_transform": "Latest eligible positive VIXCLS close.",
+      "unit": "VIX points",
+      "minimum_history": "1 for level/alert; B requires 6 closes for momentum",
+      "execution_status": "REQUIRED_CORE"
+    },
+    {
+      "feature_id": "vix_change_points_1",
+      "family": "vix_spot",
+      "source_contract_id": "VIX_OFFICIAL",
+      "series_type": "OFFICIAL_VIX_INDEX",
+      "price_basis": "OFFICIAL_DAILY_INDEX_CLOSE",
+      "adjustment_policy": "No equity adjustment. Preserve index points.",
+      "return_definition": "Point change V[t]-V[t-n] and relative momentum 100*(V[t]/V[t-n]-1) are distinct fields.",
+      "corporate_action_policy": "Not an equity. Preserve revisions as separate official-index vintages.",
+      "source": "Cboe official VIX History CSV; official-source history already appears in weekly-review evidence. Existing FRED VIXCLS path is documented but not silently spliced into this panel.",
+      "source_field": "CSV DATE and CLOSE; not HIGH/LOW/OPEN. FRED observations.value only under an explicitly separately versioned source contract.",
+      "compatibility_constraints": [
+        "positive finite official index value",
+        "same economic session as core equities and VX",
+        "complete six closes for core level and 1/5-session momentum",
+        "percentile uses bounded prefix through target, no future rows"
+      ],
+      "rationale": "VIX is an observed index level, not an adjustable equity price.",
+      "evidence": [
+        "evidence/vix-history.csv.metadata.json",
+        "../source-ledger.json#S11-S12",
+        "https://cdn.cboe.com/api/global/us_indices/daily_prices/VIX_History.csv",
+        "https://fred.stlouisfed.org/series/VIXCLS"
+      ],
+      "feature_transform": "V[t]-V[t-1]",
+      "unit": "VIX points",
+      "minimum_history": "2 dated closes",
+      "execution_status": "OPTIONAL_EVIDENCE"
+    },
+    {
+      "feature_id": "vix_change_points_5",
+      "family": "vix_spot",
+      "source_contract_id": "VIX_OFFICIAL",
+      "series_type": "OFFICIAL_VIX_INDEX",
+      "price_basis": "OFFICIAL_DAILY_INDEX_CLOSE",
+      "adjustment_policy": "No equity adjustment. Preserve index points.",
+      "return_definition": "Point change V[t]-V[t-n] and relative momentum 100*(V[t]/V[t-n]-1) are distinct fields.",
+      "corporate_action_policy": "Not an equity. Preserve revisions as separate official-index vintages.",
+      "source": "Cboe official VIX History CSV; official-source history already appears in weekly-review evidence. Existing FRED VIXCLS path is documented but not silently spliced into this panel.",
+      "source_field": "CSV DATE and CLOSE; not HIGH/LOW/OPEN. FRED observations.value only under an explicitly separately versioned source contract.",
+      "compatibility_constraints": [
+        "positive finite official index value",
+        "same economic session as core equities and VX",
+        "complete six closes for core level and 1/5-session momentum",
+        "percentile uses bounded prefix through target, no future rows"
+      ],
+      "rationale": "VIX is an observed index level, not an adjustable equity price.",
+      "evidence": [
+        "evidence/vix-history.csv.metadata.json",
+        "../source-ledger.json#S11-S12",
+        "https://cdn.cboe.com/api/global/us_indices/daily_prices/VIX_History.csv",
+        "https://fred.stlouisfed.org/series/VIXCLS"
+      ],
+      "feature_transform": "V[t]-V[t-5]",
+      "unit": "VIX points",
+      "minimum_history": "6 dated closes",
+      "execution_status": "OPTIONAL_EVIDENCE"
+    },
+    {
+      "feature_id": "vix_change_points_21",
+      "family": "vix_spot",
+      "source_contract_id": "VIX_OFFICIAL",
+      "series_type": "OFFICIAL_VIX_INDEX",
+      "price_basis": "OFFICIAL_DAILY_INDEX_CLOSE",
+      "adjustment_policy": "No equity adjustment. Preserve index points.",
+      "return_definition": "Point change V[t]-V[t-n] and relative momentum 100*(V[t]/V[t-n]-1) are distinct fields.",
+      "corporate_action_policy": "Not an equity. Preserve revisions as separate official-index vintages.",
+      "source": "Cboe official VIX History CSV; official-source history already appears in weekly-review evidence. Existing FRED VIXCLS path is documented but not silently spliced into this panel.",
+      "source_field": "CSV DATE and CLOSE; not HIGH/LOW/OPEN. FRED observations.value only under an explicitly separately versioned source contract.",
+      "compatibility_constraints": [
+        "positive finite official index value",
+        "same economic session as core equities and VX",
+        "complete six closes for core level and 1/5-session momentum",
+        "percentile uses bounded prefix through target, no future rows"
+      ],
+      "rationale": "VIX is an observed index level, not an adjustable equity price.",
+      "evidence": [
+        "evidence/vix-history.csv.metadata.json",
+        "../source-ledger.json#S11-S12",
+        "https://cdn.cboe.com/api/global/us_indices/daily_prices/VIX_History.csv",
+        "https://fred.stlouisfed.org/series/VIXCLS"
+      ],
+      "feature_transform": "V[t]-V[t-21]",
+      "unit": "VIX points",
+      "minimum_history": "22 dated closes",
+      "execution_status": "OPTIONAL_EVIDENCE"
+    },
+    {
+      "feature_id": "vix_momentum_1",
+      "family": "vix_spot",
+      "source_contract_id": "VIX_OFFICIAL",
+      "series_type": "OFFICIAL_VIX_INDEX",
+      "price_basis": "OFFICIAL_DAILY_INDEX_CLOSE",
+      "adjustment_policy": "No equity adjustment. Preserve index points.",
+      "return_definition": "Point change V[t]-V[t-n] and relative momentum 100*(V[t]/V[t-n]-1) are distinct fields.",
+      "corporate_action_policy": "Not an equity. Preserve revisions as separate official-index vintages.",
+      "source": "Cboe official VIX History CSV; official-source history already appears in weekly-review evidence. Existing FRED VIXCLS path is documented but not silently spliced into this panel.",
+      "source_field": "CSV DATE and CLOSE; not HIGH/LOW/OPEN. FRED observations.value only under an explicitly separately versioned source contract.",
+      "compatibility_constraints": [
+        "positive finite official index value",
+        "same economic session as core equities and VX",
+        "complete six closes for core level and 1/5-session momentum",
+        "percentile uses bounded prefix through target, no future rows"
+      ],
+      "rationale": "VIX is an observed index level, not an adjustable equity price.",
+      "evidence": [
+        "evidence/vix-history.csv.metadata.json",
+        "../source-ledger.json#S11-S12",
+        "https://cdn.cboe.com/api/global/us_indices/daily_prices/VIX_History.csv",
+        "https://fred.stlouisfed.org/series/VIXCLS"
+      ],
+      "feature_transform": "100*(V[t]/V[t-1]-1); denominator >0.",
+      "unit": "percent",
+      "minimum_history": "2 dated closes",
+      "execution_status": "REQUIRED_CORE"
+    },
+    {
+      "feature_id": "vix_momentum_5",
+      "family": "vix_spot",
+      "source_contract_id": "VIX_OFFICIAL",
+      "series_type": "OFFICIAL_VIX_INDEX",
+      "price_basis": "OFFICIAL_DAILY_INDEX_CLOSE",
+      "adjustment_policy": "No equity adjustment. Preserve index points.",
+      "return_definition": "Point change V[t]-V[t-n] and relative momentum 100*(V[t]/V[t-n]-1) are distinct fields.",
+      "corporate_action_policy": "Not an equity. Preserve revisions as separate official-index vintages.",
+      "source": "Cboe official VIX History CSV; official-source history already appears in weekly-review evidence. Existing FRED VIXCLS path is documented but not silently spliced into this panel.",
+      "source_field": "CSV DATE and CLOSE; not HIGH/LOW/OPEN. FRED observations.value only under an explicitly separately versioned source contract.",
+      "compatibility_constraints": [
+        "positive finite official index value",
+        "same economic session as core equities and VX",
+        "complete six closes for core level and 1/5-session momentum",
+        "percentile uses bounded prefix through target, no future rows"
+      ],
+      "rationale": "VIX is an observed index level, not an adjustable equity price.",
+      "evidence": [
+        "evidence/vix-history.csv.metadata.json",
+        "../source-ledger.json#S11-S12",
+        "https://cdn.cboe.com/api/global/us_indices/daily_prices/VIX_History.csv",
+        "https://fred.stlouisfed.org/series/VIXCLS"
+      ],
+      "feature_transform": "100*(V[t]/V[t-5]-1); denominator >0.",
+      "unit": "percent",
+      "minimum_history": "6 dated closes",
+      "execution_status": "REQUIRED_CORE"
+    },
+    {
+      "feature_id": "vix_percentile",
+      "family": "vix_spot",
+      "source_contract_id": "VIX_OFFICIAL",
+      "series_type": "OFFICIAL_VIX_INDEX",
+      "price_basis": "OFFICIAL_DAILY_INDEX_CLOSE",
+      "adjustment_policy": "No equity adjustment. Preserve index points.",
+      "return_definition": "Point change V[t]-V[t-n] and relative momentum 100*(V[t]/V[t-n]-1) are distinct fields.",
+      "corporate_action_policy": "Not an equity. Preserve revisions as separate official-index vintages.",
+      "source": "Cboe official VIX History CSV; official-source history already appears in weekly-review evidence. Existing FRED VIXCLS path is documented but not silently spliced into this panel.",
+      "source_field": "CSV DATE and CLOSE; not HIGH/LOW/OPEN. FRED observations.value only under an explicitly separately versioned source contract.",
+      "compatibility_constraints": [
+        "positive finite official index value",
+        "same economic session as core equities and VX",
+        "complete six closes for core level and 1/5-session momentum",
+        "percentile uses bounded prefix through target, no future rows"
+      ],
+      "rationale": "VIX is an observed index level, not an adjustable equity price.",
+      "evidence": [
+        "evidence/vix-history.csv.metadata.json",
+        "../source-ledger.json#S11-S12",
+        "https://cdn.cboe.com/api/global/us_indices/daily_prices/VIX_History.csv",
+        "https://fred.stlouisfed.org/series/VIXCLS"
+      ],
+      "feature_transform": "100*count(V[i]<=V[t])/N for all eligible closes from declared series start through t, including t.",
+      "unit": "percentile rank",
+      "minimum_history": "252 eligible dated closes; preserve full reference population",
+      "execution_status": "OPTIONAL_EVIDENCE"
+    },
+    {
+      "feature_id": "vix_legacy_composite",
+      "family": "vix_spot",
+      "source_contract_id": "LEGACY_PRESENTATION",
+      "series_type": "LEGACY_PRESENTATION_RECORD",
+      "price_basis": "NOT_APPLICABLE_EXCLUDED_VIEW",
+      "adjustment_policy": "Do not recompute V1 presentation as a V2 evidence input.",
+      "return_definition": "No active V2 return/decision contribution.",
+      "corporate_action_policy": "Preserve original V1 snapshots byte-for-byte.",
+      "source": "Original V1 module output and P1 source audit.",
+      "source_field": "Original registry source.existing_field_or_symbol.",
+      "compatibility_constraints": [
+        "EXCLUDED_FROM_V2_REPLAY",
+        "zero votes",
+        "never substitute score/label for raw family evidence"
+      ],
+      "rationale": "An existing composite is a presentation product, not independent evidence.",
+      "evidence": [
+        "../feature-registry.json",
+        "../preservation.json"
+      ],
+      "feature_transform": "Legacy level/percentile/momentum classification; not an input to V2 core.",
+      "unit": "categorical",
+      "minimum_history": "Legacy context only; no core eligibility",
+      "execution_status": "EXCLUDED"
+    },
+    {
+      "feature_id": "vx_contracts",
+      "family": "vix_curve",
+      "source_contract_id": "VX_OFFICIAL",
+      "series_type": "OFFICIAL_MONTHLY_VX_SETTLEMENT",
+      "price_basis": "OFFICIAL_DAILY_SETTLE",
+      "adjustment_policy": "No equity adjustment, continuous-contract back-adjustment or substitution of Close/final SOQ.",
+      "return_definition": "Slope 100*(VX2/VX1-1); spread VX2-VX1. Slots are maturity ranks on one date, never an ETF return series.",
+      "corporate_action_policy": "Retain actual contract symbol, expiration and daily settlement. Roll is catalog-based selection of first two monthly expirations strictly after target; weekly, expired and final-expiry settlement are excluded.",
+      "source": "Cboe/CFE official monthly VX historical CSV archive, same official settlement convention as lib/dashboard/adapters/vix-term-structure.ts.",
+      "source_field": "CSV Trade Date, Futures, Settle; catalog duration_type=M, futures_root=VX, expire_date, product_display and path.",
+      "compatibility_constraints": [
+        "same trade/settlement date",
+        "catalog determines expected slots before examining prices",
+        "missing VX1 is retained as missing; never promote VX2",
+        "unique identities and expirations; no weekly or synthetic contracts"
+      ],
+      "rationale": "The actual archive has a separate Settle column and often zero Close. Only official Settle meets the repository curve convention.",
+      "evidence": [
+        "evidence/cfe-contract-index.json.metadata.json",
+        "evidence/selected-contracts.json",
+        "evidence/vx-*.csv.metadata.json",
+        "../source-ledger.json#S13-S14",
+        "https://www.cboe.com/markets/us/futures/market-statistics/historical-data/futures"
+      ],
+      "feature_transform": "Select monthly unexpired VX contracts by actual expiration ascending; retain missing prices in slots, symbols, settlement date; no weekly contracts.",
+      "unit": "VIX futures points",
+      "minimum_history": "VX1 and VX2 eligible for B; VX3…VX9 optional",
+      "execution_status": "REQUIRED_CORE"
+    },
+    {
+      "feature_id": "vx_spread_12",
+      "family": "vix_curve",
+      "source_contract_id": "VX_OFFICIAL",
+      "series_type": "OFFICIAL_MONTHLY_VX_SETTLEMENT",
+      "price_basis": "OFFICIAL_DAILY_SETTLE",
+      "adjustment_policy": "No equity adjustment, continuous-contract back-adjustment or substitution of Close/final SOQ.",
+      "return_definition": "Slope 100*(VX2/VX1-1); spread VX2-VX1. Slots are maturity ranks on one date, never an ETF return series.",
+      "corporate_action_policy": "Retain actual contract symbol, expiration and daily settlement. Roll is catalog-based selection of first two monthly expirations strictly after target; weekly, expired and final-expiry settlement are excluded.",
+      "source": "Cboe/CFE official monthly VX historical CSV archive, same official settlement convention as lib/dashboard/adapters/vix-term-structure.ts.",
+      "source_field": "CSV Trade Date, Futures, Settle; catalog duration_type=M, futures_root=VX, expire_date, product_display and path.",
+      "compatibility_constraints": [
+        "same trade/settlement date",
+        "catalog determines expected slots before examining prices",
+        "missing VX1 is retained as missing; never promote VX2",
+        "unique identities and expirations; no weekly or synthetic contracts"
+      ],
+      "rationale": "The actual archive has a separate Settle column and often zero Close. Only official Settle meets the repository curve convention.",
+      "evidence": [
+        "evidence/cfe-contract-index.json.metadata.json",
+        "evidence/selected-contracts.json",
+        "evidence/vx-*.csv.metadata.json",
+        "../source-ledger.json#S13-S14",
+        "https://www.cboe.com/markets/us/futures/market-statistics/historical-data/futures"
+      ],
+      "feature_transform": "VX2-VX1",
+      "unit": "points",
+      "minimum_history": "Positive VX1 and actual VX2, with identities and expirations",
+      "execution_status": "OPTIONAL_EVIDENCE"
+    },
+    {
+      "feature_id": "vx_slope_12",
+      "family": "vix_curve",
+      "source_contract_id": "VX_OFFICIAL",
+      "series_type": "OFFICIAL_MONTHLY_VX_SETTLEMENT",
+      "price_basis": "OFFICIAL_DAILY_SETTLE",
+      "adjustment_policy": "No equity adjustment, continuous-contract back-adjustment or substitution of Close/final SOQ.",
+      "return_definition": "Slope 100*(VX2/VX1-1); spread VX2-VX1. Slots are maturity ranks on one date, never an ETF return series.",
+      "corporate_action_policy": "Retain actual contract symbol, expiration and daily settlement. Roll is catalog-based selection of first two monthly expirations strictly after target; weekly, expired and final-expiry settlement are excluded.",
+      "source": "Cboe/CFE official monthly VX historical CSV archive, same official settlement convention as lib/dashboard/adapters/vix-term-structure.ts.",
+      "source_field": "CSV Trade Date, Futures, Settle; catalog duration_type=M, futures_root=VX, expire_date, product_display and path.",
+      "compatibility_constraints": [
+        "same trade/settlement date",
+        "catalog determines expected slots before examining prices",
+        "missing VX1 is retained as missing; never promote VX2",
+        "unique identities and expirations; no weekly or synthetic contracts"
+      ],
+      "rationale": "The actual archive has a separate Settle column and often zero Close. Only official Settle meets the repository curve convention.",
+      "evidence": [
+        "evidence/cfe-contract-index.json.metadata.json",
+        "evidence/selected-contracts.json",
+        "evidence/vx-*.csv.metadata.json",
+        "../source-ledger.json#S13-S14",
+        "https://www.cboe.com/markets/us/futures/market-statistics/historical-data/futures"
+      ],
+      "feature_transform": "100*(VX2/VX1-1); VX1>0.",
+      "unit": "percent",
+      "minimum_history": "Positive VX1 and actual VX2, with identities and expirations",
+      "execution_status": "REQUIRED_CORE"
+    },
+    {
+      "feature_id": "vx_spread_13",
+      "family": "vix_curve",
+      "source_contract_id": "VX_OFFICIAL",
+      "series_type": "OFFICIAL_MONTHLY_VX_SETTLEMENT",
+      "price_basis": "OFFICIAL_DAILY_SETTLE",
+      "adjustment_policy": "No equity adjustment, continuous-contract back-adjustment or substitution of Close/final SOQ.",
+      "return_definition": "Slope 100*(VX2/VX1-1); spread VX2-VX1. Slots are maturity ranks on one date, never an ETF return series.",
+      "corporate_action_policy": "Retain actual contract symbol, expiration and daily settlement. Roll is catalog-based selection of first two monthly expirations strictly after target; weekly, expired and final-expiry settlement are excluded.",
+      "source": "Cboe/CFE official monthly VX historical CSV archive, same official settlement convention as lib/dashboard/adapters/vix-term-structure.ts.",
+      "source_field": "CSV Trade Date, Futures, Settle; catalog duration_type=M, futures_root=VX, expire_date, product_display and path.",
+      "compatibility_constraints": [
+        "same trade/settlement date",
+        "catalog determines expected slots before examining prices",
+        "missing VX1 is retained as missing; never promote VX2",
+        "unique identities and expirations; no weekly or synthetic contracts"
+      ],
+      "rationale": "The actual archive has a separate Settle column and often zero Close. Only official Settle meets the repository curve convention.",
+      "evidence": [
+        "evidence/cfe-contract-index.json.metadata.json",
+        "evidence/selected-contracts.json",
+        "evidence/vx-*.csv.metadata.json",
+        "../source-ledger.json#S13-S14",
+        "https://www.cboe.com/markets/us/futures/market-statistics/historical-data/futures"
+      ],
+      "feature_transform": "VX3-VX1",
+      "unit": "points",
+      "minimum_history": "Positive VX1 and actual VX3, with identities and expirations",
+      "execution_status": "OPTIONAL_EVIDENCE"
+    },
+    {
+      "feature_id": "vx_slope_13",
+      "family": "vix_curve",
+      "source_contract_id": "VX_OFFICIAL",
+      "series_type": "OFFICIAL_MONTHLY_VX_SETTLEMENT",
+      "price_basis": "OFFICIAL_DAILY_SETTLE",
+      "adjustment_policy": "No equity adjustment, continuous-contract back-adjustment or substitution of Close/final SOQ.",
+      "return_definition": "Slope 100*(VX2/VX1-1); spread VX2-VX1. Slots are maturity ranks on one date, never an ETF return series.",
+      "corporate_action_policy": "Retain actual contract symbol, expiration and daily settlement. Roll is catalog-based selection of first two monthly expirations strictly after target; weekly, expired and final-expiry settlement are excluded.",
+      "source": "Cboe/CFE official monthly VX historical CSV archive, same official settlement convention as lib/dashboard/adapters/vix-term-structure.ts.",
+      "source_field": "CSV Trade Date, Futures, Settle; catalog duration_type=M, futures_root=VX, expire_date, product_display and path.",
+      "compatibility_constraints": [
+        "same trade/settlement date",
+        "catalog determines expected slots before examining prices",
+        "missing VX1 is retained as missing; never promote VX2",
+        "unique identities and expirations; no weekly or synthetic contracts"
+      ],
+      "rationale": "The actual archive has a separate Settle column and often zero Close. Only official Settle meets the repository curve convention.",
+      "evidence": [
+        "evidence/cfe-contract-index.json.metadata.json",
+        "evidence/selected-contracts.json",
+        "evidence/vx-*.csv.metadata.json",
+        "../source-ledger.json#S13-S14",
+        "https://www.cboe.com/markets/us/futures/market-statistics/historical-data/futures"
+      ],
+      "feature_transform": "100*(VX3/VX1-1); VX1>0.",
+      "unit": "percent",
+      "minimum_history": "Positive VX1 and actual VX3, with identities and expirations",
+      "execution_status": "OPTIONAL_EVIDENCE"
+    },
+    {
+      "feature_id": "vx_curvature",
+      "family": "vix_curve",
+      "source_contract_id": "UNBOUND_RESEARCH",
+      "series_type": "PARKED_RESEARCH_INPUT",
+      "price_basis": "NOT_BOUND_FOR_ACTIVE_V2",
+      "adjustment_policy": "No active evaluation. Any underlying equity data retains EQUITY_ADJUSTED lineage; portfolio holdings are not substituted for a market universe.",
+      "return_definition": "Documented research expression only; not an active feature contract.",
+      "corporate_action_policy": "Inherited raw-family policy where defined; otherwise not evaluable.",
+      "source": "P1 registry and repository research/portfolio helpers; no newly approved market input.",
+      "source_field": "See original registry depends_on and source.existing_field_or_symbol; missing market archive/holdings compatibility is explicit.",
+      "compatibility_constraints": [
+        "PARKED",
+        "zero votes",
+        "requires separate evidence/version before activation"
+      ],
+      "rationale": "Builder can faithfully preserve an unavailable parked feature without inventing a market series or making it a blocker for the fixed core.",
+      "evidence": [
+        "../feature-registry.json",
+        "../dependency-map.json"
+      ],
+      "feature_transform": "PARK candidate: 2*(((VX3-VX2)/(T3-T2))-((VX2-VX1)/(T2-T1)))/(T3-T1), T in days. No state classification before history validation.",
+      "unit": "points per day squared",
+      "minimum_history": "3 valid monthly contracts with distinct ordered expirations; historical minimum UNBOUND",
+      "execution_status": "PARKED"
+    },
+    {
+      "feature_id": "corr_mean_21",
+      "family": "co_movement",
+      "source_contract_id": "EQUITY_ADJUSTED",
+      "series_type": "ETF_ADJUSTED_PRICE",
+      "price_basis": "SPLIT_DIVIDEND_ADJUSTED_CLOSE",
+      "adjustment_policy": "Use provider adjclose arrays only. No close fallback, mixed bases or manual second adjustment.",
+      "return_definition": "Simple return 100*(P[t]/P[t-n]-1), n=5/21/63 sessions; daily returns for correlation are P[t]/P[t-1]-1.",
+      "corporate_action_policy": "Retain dividends/splits event records and whole-panel vintage hashes. Revisions create a new snapshot. This is a vendor distribution-adjusted return proxy, not an exact investor total-return claim. Unknown adjustment provenance makes the input unavailable.",
+      "source": "Yahoo chart endpoint already used by scripts/build-statistical-levels.mjs and the report evidence capture. P8 selects this verified adjusted panel; Alpha Vantage TIME_SERIES_DAILY remains a V1 precedent only.",
+      "source_field": "chart.result[0].indicators.adjclose[0].adjclose aligned to timestamp; meta.currency; events.dividends/events.splits",
+      "compatibility_constraints": [
+        "USD",
+        "same provider adjustment convention and declared vintage manifest across all 11 ETFs",
+        "ratio numerator/denominator same currency, basis and session",
+        "all required dates and constituents; never fill missing with close or zero"
+      ],
+      "rationale": "The repository has both raw-close and adjustment-preferring paths. Actual P8 provider payloads contain distinct adjclose and close arrays plus corporate-action events; the display alias alone was insufficient.",
+      "evidence": [
+        "source-data-audit.json",
+        "evidence/yahoo-*.json.metadata.json",
+        "../source-ledger.json#S03-S04-S10-S20",
+        "https://help.yahoo.com/kb/SLN28256.html"
+      ],
+      "feature_transform": "Mean Pearson correlation over all 55 pairs of 11 daily-return series aligned on exactly 21 common consecutive sessions; any invalid pair => unavailable.",
+      "unit": "correlation [-1,1]",
+      "minimum_history": "22 closes per ETF; 55 valid pairs, no zero-variance series",
+      "execution_status": "REQUIRED_CORE"
+    },
+    {
+      "feature_id": "corr_mean_63",
+      "family": "co_movement",
+      "source_contract_id": "EQUITY_ADJUSTED",
+      "series_type": "ETF_ADJUSTED_PRICE",
+      "price_basis": "SPLIT_DIVIDEND_ADJUSTED_CLOSE",
+      "adjustment_policy": "Use provider adjclose arrays only. No close fallback, mixed bases or manual second adjustment.",
+      "return_definition": "Simple return 100*(P[t]/P[t-n]-1), n=5/21/63 sessions; daily returns for correlation are P[t]/P[t-1]-1.",
+      "corporate_action_policy": "Retain dividends/splits event records and whole-panel vintage hashes. Revisions create a new snapshot. This is a vendor distribution-adjusted return proxy, not an exact investor total-return claim. Unknown adjustment provenance makes the input unavailable.",
+      "source": "Yahoo chart endpoint already used by scripts/build-statistical-levels.mjs and the report evidence capture. P8 selects this verified adjusted panel; Alpha Vantage TIME_SERIES_DAILY remains a V1 precedent only.",
+      "source_field": "chart.result[0].indicators.adjclose[0].adjclose aligned to timestamp; meta.currency; events.dividends/events.splits",
+      "compatibility_constraints": [
+        "USD",
+        "same provider adjustment convention and declared vintage manifest across all 11 ETFs",
+        "ratio numerator/denominator same currency, basis and session",
+        "all required dates and constituents; never fill missing with close or zero"
+      ],
+      "rationale": "The repository has both raw-close and adjustment-preferring paths. Actual P8 provider payloads contain distinct adjclose and close arrays plus corporate-action events; the display alias alone was insufficient.",
+      "evidence": [
+        "source-data-audit.json",
+        "evidence/yahoo-*.json.metadata.json",
+        "../source-ledger.json#S03-S04-S10-S20",
+        "https://help.yahoo.com/kb/SLN28256.html"
+      ],
+      "feature_transform": "Mean Pearson correlation over all 55 pairs of 11 daily-return series aligned on exactly 63 common consecutive sessions; any invalid pair => unavailable.",
+      "unit": "correlation [-1,1]",
+      "minimum_history": "64 closes per ETF; 55 valid pairs, no zero-variance series",
+      "execution_status": "REQUIRED_CORE"
+    },
+    {
+      "feature_id": "corr_window_spread",
+      "family": "co_movement",
+      "source_contract_id": "EQUITY_ADJUSTED",
+      "series_type": "ETF_ADJUSTED_PRICE",
+      "price_basis": "SPLIT_DIVIDEND_ADJUSTED_CLOSE",
+      "adjustment_policy": "Use provider adjclose arrays only. No close fallback, mixed bases or manual second adjustment.",
+      "return_definition": "Simple return 100*(P[t]/P[t-n]-1), n=5/21/63 sessions; daily returns for correlation are P[t]/P[t-1]-1.",
+      "corporate_action_policy": "Retain dividends/splits event records and whole-panel vintage hashes. Revisions create a new snapshot. This is a vendor distribution-adjusted return proxy, not an exact investor total-return claim. Unknown adjustment provenance makes the input unavailable.",
+      "source": "Yahoo chart endpoint already used by scripts/build-statistical-levels.mjs and the report evidence capture. P8 selects this verified adjusted panel; Alpha Vantage TIME_SERIES_DAILY remains a V1 precedent only.",
+      "source_field": "chart.result[0].indicators.adjclose[0].adjclose aligned to timestamp; meta.currency; events.dividends/events.splits",
+      "compatibility_constraints": [
+        "USD",
+        "same provider adjustment convention and declared vintage manifest across all 11 ETFs",
+        "ratio numerator/denominator same currency, basis and session",
+        "all required dates and constituents; never fill missing with close or zero"
+      ],
+      "rationale": "The repository has both raw-close and adjustment-preferring paths. Actual P8 provider payloads contain distinct adjclose and close arrays plus corporate-action events; the display alias alone was insufficient.",
+      "evidence": [
+        "source-data-audit.json",
+        "evidence/yahoo-*.json.metadata.json",
+        "../source-ledger.json#S03-S04-S10-S20",
+        "https://help.yahoo.com/kb/SLN28256.html"
+      ],
+      "feature_transform": "corr_mean_21-corr_mean_63 on same end session and universe.",
+      "unit": "correlation difference",
+      "minimum_history": "64 common dated closes per ETF; both correlations eligible",
+      "execution_status": "REQUIRED_CORE"
+    },
+    {
+      "feature_id": "corr_change_21",
+      "family": "co_movement",
+      "source_contract_id": "EQUITY_ADJUSTED",
+      "series_type": "ETF_ADJUSTED_PRICE",
+      "price_basis": "SPLIT_DIVIDEND_ADJUSTED_CLOSE",
+      "adjustment_policy": "Use provider adjclose arrays only. No close fallback, mixed bases or manual second adjustment.",
+      "return_definition": "Simple return 100*(P[t]/P[t-n]-1), n=5/21/63 sessions; daily returns for correlation are P[t]/P[t-1]-1.",
+      "corporate_action_policy": "Retain dividends/splits event records and whole-panel vintage hashes. Revisions create a new snapshot. This is a vendor distribution-adjusted return proxy, not an exact investor total-return claim. Unknown adjustment provenance makes the input unavailable.",
+      "source": "Yahoo chart endpoint already used by scripts/build-statistical-levels.mjs and the report evidence capture. P8 selects this verified adjusted panel; Alpha Vantage TIME_SERIES_DAILY remains a V1 precedent only.",
+      "source_field": "chart.result[0].indicators.adjclose[0].adjclose aligned to timestamp; meta.currency; events.dividends/events.splits",
+      "compatibility_constraints": [
+        "USD",
+        "same provider adjustment convention and declared vintage manifest across all 11 ETFs",
+        "ratio numerator/denominator same currency, basis and session",
+        "all required dates and constituents; never fill missing with close or zero"
+      ],
+      "rationale": "The repository has both raw-close and adjustment-preferring paths. Actual P8 provider payloads contain distinct adjclose and close arrays plus corporate-action events; the display alias alone was insufficient.",
+      "evidence": [
+        "source-data-audit.json",
+        "evidence/yahoo-*.json.metadata.json",
+        "../source-ledger.json#S03-S04-S10-S20",
+        "https://help.yahoo.com/kb/SLN28256.html"
+      ],
+      "feature_transform": "rho21(t)-rho21(t-21); both correlations recomputed from eligible dated observations.",
+      "unit": "correlation difference",
+      "minimum_history": "43 common dated closes per ETF",
+      "execution_status": "OPTIONAL_EVIDENCE"
+    },
+    {
+      "feature_id": "corr_defensive_growth_21",
+      "family": "co_movement",
+      "source_contract_id": "EQUITY_ADJUSTED",
+      "series_type": "ETF_ADJUSTED_PRICE",
+      "price_basis": "SPLIT_DIVIDEND_ADJUSTED_CLOSE",
+      "adjustment_policy": "Use provider adjclose arrays only. No close fallback, mixed bases or manual second adjustment.",
+      "return_definition": "Simple return 100*(P[t]/P[t-n]-1), n=5/21/63 sessions; daily returns for correlation are P[t]/P[t-1]-1.",
+      "corporate_action_policy": "Retain dividends/splits event records and whole-panel vintage hashes. Revisions create a new snapshot. This is a vendor distribution-adjusted return proxy, not an exact investor total-return claim. Unknown adjustment provenance makes the input unavailable.",
+      "source": "Yahoo chart endpoint already used by scripts/build-statistical-levels.mjs and the report evidence capture. P8 selects this verified adjusted panel; Alpha Vantage TIME_SERIES_DAILY remains a V1 precedent only.",
+      "source_field": "chart.result[0].indicators.adjclose[0].adjclose aligned to timestamp; meta.currency; events.dividends/events.splits",
+      "compatibility_constraints": [
+        "USD",
+        "same provider adjustment convention and declared vintage manifest across all 11 ETFs",
+        "ratio numerator/denominator same currency, basis and session",
+        "all required dates and constituents; never fill missing with close or zero"
+      ],
+      "rationale": "The repository has both raw-close and adjustment-preferring paths. Actual P8 provider payloads contain distinct adjclose and close arrays plus corporate-action events; the display alias alone was insufficient.",
+      "evidence": [
+        "source-data-audit.json",
+        "evidence/yahoo-*.json.metadata.json",
+        "../source-ledger.json#S03-S04-S10-S20",
+        "https://help.yahoo.com/kb/SLN28256.html"
+      ],
+      "feature_transform": "Pearson(mean daily defensive returns, mean daily growth returns) over 21 common returns.",
+      "unit": "correlation [-1,1]",
+      "minimum_history": "22 dated closes for all group members; nondegenerate means",
+      "execution_status": "OPTIONAL_EVIDENCE"
+    },
+    {
+      "feature_id": "realized_ewma",
+      "family": "realized_risk",
+      "source_contract_id": "EQUITY_ADJUSTED",
+      "series_type": "ETF_ADJUSTED_PRICE",
+      "price_basis": "SPLIT_DIVIDEND_ADJUSTED_CLOSE",
+      "adjustment_policy": "Use provider adjclose arrays only. No close fallback, mixed bases or manual second adjustment.",
+      "return_definition": "Simple return 100*(P[t]/P[t-n]-1), n=5/21/63 sessions; daily returns for correlation are P[t]/P[t-1]-1.",
+      "corporate_action_policy": "Retain dividends/splits event records and whole-panel vintage hashes. Revisions create a new snapshot. This is a vendor distribution-adjusted return proxy, not an exact investor total-return claim. Unknown adjustment provenance makes the input unavailable.",
+      "source": "Yahoo chart endpoint already used by scripts/build-statistical-levels.mjs and the report evidence capture. P8 selects this verified adjusted panel; Alpha Vantage TIME_SERIES_DAILY remains a V1 precedent only.",
+      "source_field": "chart.result[0].indicators.adjclose[0].adjclose aligned to timestamp; meta.currency; events.dividends/events.splits",
+      "compatibility_constraints": [
+        "USD",
+        "same provider adjustment convention and declared vintage manifest across all 11 ETFs",
+        "ratio numerator/denominator same currency, basis and session",
+        "all required dates and constituents; never fill missing with close or zero"
+      ],
+      "rationale": "The repository has both raw-close and adjustment-preferring paths. Actual P8 provider payloads contain distinct adjclose and close arrays plus corporate-action events; the display alias alone was insufficient.",
+      "evidence": [
+        "source-data-audit.json",
+        "evidence/yahoo-*.json.metadata.json",
+        "../source-ledger.json#S03-S04-S10-S20",
+        "https://help.yahoo.com/kb/SLN28256.html"
+      ],
+      "feature_transform": "Daily equal-weight mean over 11 aligned ETFs; seed sample variance of first 21 returns; recurse var=.94*prior+.06*r² from return 22; 100*sqrt(var*252).",
+      "unit": "annualized percent",
+      "minimum_history": "21 returns /22 closes for all ETFs",
+      "execution_status": "OPTIONAL_EVIDENCE"
+    },
+    {
+      "feature_id": "realized_ewma_change",
+      "family": "realized_risk",
+      "source_contract_id": "EQUITY_ADJUSTED",
+      "series_type": "ETF_ADJUSTED_PRICE",
+      "price_basis": "SPLIT_DIVIDEND_ADJUSTED_CLOSE",
+      "adjustment_policy": "Use provider adjclose arrays only. No close fallback, mixed bases or manual second adjustment.",
+      "return_definition": "Simple return 100*(P[t]/P[t-n]-1), n=5/21/63 sessions; daily returns for correlation are P[t]/P[t-1]-1.",
+      "corporate_action_policy": "Retain dividends/splits event records and whole-panel vintage hashes. Revisions create a new snapshot. This is a vendor distribution-adjusted return proxy, not an exact investor total-return claim. Unknown adjustment provenance makes the input unavailable.",
+      "source": "Yahoo chart endpoint already used by scripts/build-statistical-levels.mjs and the report evidence capture. P8 selects this verified adjusted panel; Alpha Vantage TIME_SERIES_DAILY remains a V1 precedent only.",
+      "source_field": "chart.result[0].indicators.adjclose[0].adjclose aligned to timestamp; meta.currency; events.dividends/events.splits",
+      "compatibility_constraints": [
+        "USD",
+        "same provider adjustment convention and declared vintage manifest across all 11 ETFs",
+        "ratio numerator/denominator same currency, basis and session",
+        "all required dates and constituents; never fill missing with close or zero"
+      ],
+      "rationale": "The repository has both raw-close and adjustment-preferring paths. Actual P8 provider payloads contain distinct adjclose and close arrays plus corporate-action events; the display alias alone was insufficient.",
+      "evidence": [
+        "source-data-audit.json",
+        "evidence/yahoo-*.json.metadata.json",
+        "../source-ledger.json#S03-S04-S10-S20",
+        "https://help.yahoo.com/kb/SLN28256.html"
+      ],
+      "feature_transform": "EWMA(t)-EWMA(t-21), identical seed/start and eligible prefix; result in percentage points.",
+      "unit": "percentage points",
+      "minimum_history": "43 returns to reproduce current legacy availability condition (>42); mathematical 42-return minimum differs",
+      "execution_status": "OPTIONAL_EVIDENCE"
+    },
+    {
+      "feature_id": "realized_garch",
+      "family": "realized_risk",
+      "source_contract_id": "UNBOUND_RESEARCH",
+      "series_type": "PARKED_RESEARCH_INPUT",
+      "price_basis": "NOT_BOUND_FOR_ACTIVE_V2",
+      "adjustment_policy": "No active evaluation. Any underlying equity data retains EQUITY_ADJUSTED lineage; portfolio holdings are not substituted for a market universe.",
+      "return_definition": "Documented research expression only; not an active feature contract.",
+      "corporate_action_policy": "Inherited raw-family policy where defined; otherwise not evaluable.",
+      "source": "P1 registry and repository research/portfolio helpers; no newly approved market input.",
+      "source_field": "See original registry depends_on and source.existing_field_or_symbol; missing market archive/holdings compatibility is explicit.",
+      "compatibility_constraints": [
+        "PARKED",
+        "zero votes",
+        "requires separate evidence/version before activation"
+      ],
+      "rationale": "Builder can faithfully preserve an unavailable parked feature without inventing a market series or making it a blocker for the fixed core.",
+      "evidence": [
+        "../feature-registry.json",
+        "../dependency-map.json"
+      ],
+      "feature_transform": "Legacy alpha=.06 beta=.9; omega=max(sampleVariance(all returns)*.04,0); recursion over same eligible returns; annualize sqrt(var*252)*100. Record explicit EWMA fallback as same observation lineage.",
+      "unit": "annualized percent",
+      "minimum_history": "63 returns /64 closes per ETF; fallback labeled distinctly",
+      "execution_status": "PARKED"
+    },
+    {
+      "feature_id": "legacy_fragility_score",
+      "family": "co_movement",
+      "source_contract_id": "LEGACY_PRESENTATION",
+      "series_type": "LEGACY_PRESENTATION_RECORD",
+      "price_basis": "NOT_APPLICABLE_EXCLUDED_VIEW",
+      "adjustment_policy": "Do not recompute V1 presentation as a V2 evidence input.",
+      "return_definition": "No active V2 return/decision contribution.",
+      "corporate_action_policy": "Preserve original V1 snapshots byte-for-byte.",
+      "source": "Original V1 module output and P1 source audit.",
+      "source_field": "Original registry source.existing_field_or_symbol.",
+      "compatibility_constraints": [
+        "EXCLUDED_FROM_V2_REPLAY",
+        "zero votes",
+        "never substitute score/label for raw family evidence"
+      ],
+      "rationale": "An existing composite is a presentation product, not independent evidence.",
+      "evidence": [
+        "../feature-registry.json",
+        "../preservation.json"
+      ],
+      "feature_transform": "Existing 20-point terms on volatility/correlation/dispersion/leadership; never evaluate as V2 input.",
+      "unit": "legacy score",
+      "minimum_history": "Not eligible for V2 core",
+      "execution_status": "EXCLUDED"
+    },
+    {
+      "feature_id": "pfl_concentration",
+      "family": "portfolio_specific",
+      "source_contract_id": "UNBOUND_RESEARCH",
+      "series_type": "PARKED_RESEARCH_INPUT",
+      "price_basis": "NOT_BOUND_FOR_ACTIVE_V2",
+      "adjustment_policy": "No active evaluation. Any underlying equity data retains EQUITY_ADJUSTED lineage; portfolio holdings are not substituted for a market universe.",
+      "return_definition": "Documented research expression only; not an active feature contract.",
+      "corporate_action_policy": "Inherited raw-family policy where defined; otherwise not evaluable.",
+      "source": "P1 registry and repository research/portfolio helpers; no newly approved market input.",
+      "source_field": "See original registry depends_on and source.existing_field_or_symbol; missing market archive/holdings compatibility is explicit.",
+      "compatibility_constraints": [
+        "PARKED",
+        "zero votes",
+        "requires separate evidence/version before activation"
+      ],
+      "rationale": "Builder can faithfully preserve an unavailable parked feature without inventing a market series or making it a blocker for the fixed core.",
+      "evidence": [
+        "../feature-registry.json",
+        "../dependency-map.json"
+      ],
+      "feature_transform": "PARK: mathematical helper exists; market-universe compatibility and nonredundancy must be evidenced before proposing any transform.",
+      "unit": "portfolio-specific",
+      "minimum_history": "Compatible market universe, weights, dated history and scenario contract absent",
+      "execution_status": "PARKED"
+    },
+    {
+      "feature_id": "pfl_covariance",
+      "family": "portfolio_specific",
+      "source_contract_id": "UNBOUND_RESEARCH",
+      "series_type": "PARKED_RESEARCH_INPUT",
+      "price_basis": "NOT_BOUND_FOR_ACTIVE_V2",
+      "adjustment_policy": "No active evaluation. Any underlying equity data retains EQUITY_ADJUSTED lineage; portfolio holdings are not substituted for a market universe.",
+      "return_definition": "Documented research expression only; not an active feature contract.",
+      "corporate_action_policy": "Inherited raw-family policy where defined; otherwise not evaluable.",
+      "source": "P1 registry and repository research/portfolio helpers; no newly approved market input.",
+      "source_field": "See original registry depends_on and source.existing_field_or_symbol; missing market archive/holdings compatibility is explicit.",
+      "compatibility_constraints": [
+        "PARKED",
+        "zero votes",
+        "requires separate evidence/version before activation"
+      ],
+      "rationale": "Builder can faithfully preserve an unavailable parked feature without inventing a market series or making it a blocker for the fixed core.",
+      "evidence": [
+        "../feature-registry.json",
+        "../dependency-map.json"
+      ],
+      "feature_transform": "PARK: mathematical helper exists; market-universe compatibility and nonredundancy must be evidenced before proposing any transform.",
+      "unit": "portfolio-specific",
+      "minimum_history": "Compatible market universe, weights, dated history and scenario contract absent",
+      "execution_status": "PARKED"
+    },
+    {
+      "feature_id": "pfl_stress",
+      "family": "portfolio_specific",
+      "source_contract_id": "UNBOUND_RESEARCH",
+      "series_type": "PARKED_RESEARCH_INPUT",
+      "price_basis": "NOT_BOUND_FOR_ACTIVE_V2",
+      "adjustment_policy": "No active evaluation. Any underlying equity data retains EQUITY_ADJUSTED lineage; portfolio holdings are not substituted for a market universe.",
+      "return_definition": "Documented research expression only; not an active feature contract.",
+      "corporate_action_policy": "Inherited raw-family policy where defined; otherwise not evaluable.",
+      "source": "P1 registry and repository research/portfolio helpers; no newly approved market input.",
+      "source_field": "See original registry depends_on and source.existing_field_or_symbol; missing market archive/holdings compatibility is explicit.",
+      "compatibility_constraints": [
+        "PARKED",
+        "zero votes",
+        "requires separate evidence/version before activation"
+      ],
+      "rationale": "Builder can faithfully preserve an unavailable parked feature without inventing a market series or making it a blocker for the fixed core.",
+      "evidence": [
+        "../feature-registry.json",
+        "../dependency-map.json"
+      ],
+      "feature_transform": "PARK: mathematical helper exists; market-universe compatibility and nonredundancy must be evidenced before proposing any transform.",
+      "unit": "portfolio-specific",
+      "minimum_history": "Compatible market universe, weights, dated history and scenario contract absent",
+      "execution_status": "PARKED"
+    },
+    {
+      "feature_id": "btc_daily",
+      "family": "btc_flows",
+      "source_contract_id": "BTC_NATIVE",
+      "series_type": "REPORTED_ETF_NET_FLOW",
+      "price_basis": "NOT_APPLICABLE_NATIVE_USD_MILLIONS",
+      "adjustment_policy": "Do not equity-adjust money flows. Preserve USD millions; USD conversion is explicit multiplication by 1,000,000.",
+      "return_definition": "Not a return: reported daily total and bounded sums in USD millions; positive/negative/zero/missing fund counts separately.",
+      "corporate_action_policy": "Version expected fund columns and constituent changes. Dash/unreported is null. Use reported total with partial-fund coverage flagged; derive total only when all expected fund cells are observed and reconciliation is explicit.",
+      "source": "Existing report Farside parsed public table in btc-source.json. It is a web-reader extraction, not original HTML; provenance limitation retained.",
+      "source_field": "columns Date, twelve named fund columns, Total; rows[][]; source/url/retrievedAt/retrievalMethod.",
+      "compatibility_constraints": [
+        "one fund-universe/version per breadth calculation",
+        "no cross-vendor row splicing",
+        "consecutive expected sessions for sums",
+        "streak zero breaks; missing/start is censored",
+        "cumulative scope names first/last observed table row"
+      ],
+      "rationale": "Flows retain monetary units and raw cell missingness; they are optional satellite evidence with zero core votes.",
+      "evidence": [
+        "../../../../lib/reports/snapshots/primer-informe-septiembre-2026/btc-source.json",
+        "../source-ledger.json#S15-S16",
+        "https://farside.co.uk/bitcoin-etf-flow-all-data/"
+      ],
+      "feature_transform": "Use reported daily total with raw row and coverage. Recompute only if all expected fund values are observed and reconcile explicitly; null never zero.",
+      "unit": "USD millions",
+      "minimum_history": "1 complete eligible row; legacy parser itself requires >=5 rows",
+      "execution_status": "OPTIONAL_EVIDENCE"
+    },
+    {
+      "feature_id": "btc_rolling_5",
+      "family": "btc_flows",
+      "source_contract_id": "BTC_NATIVE",
+      "series_type": "REPORTED_ETF_NET_FLOW",
+      "price_basis": "NOT_APPLICABLE_NATIVE_USD_MILLIONS",
+      "adjustment_policy": "Do not equity-adjust money flows. Preserve USD millions; USD conversion is explicit multiplication by 1,000,000.",
+      "return_definition": "Not a return: reported daily total and bounded sums in USD millions; positive/negative/zero/missing fund counts separately.",
+      "corporate_action_policy": "Version expected fund columns and constituent changes. Dash/unreported is null. Use reported total with partial-fund coverage flagged; derive total only when all expected fund cells are observed and reconciliation is explicit.",
+      "source": "Existing report Farside parsed public table in btc-source.json. It is a web-reader extraction, not original HTML; provenance limitation retained.",
+      "source_field": "columns Date, twelve named fund columns, Total; rows[][]; source/url/retrievedAt/retrievalMethod.",
+      "compatibility_constraints": [
+        "one fund-universe/version per breadth calculation",
+        "no cross-vendor row splicing",
+        "consecutive expected sessions for sums",
+        "streak zero breaks; missing/start is censored",
+        "cumulative scope names first/last observed table row"
+      ],
+      "rationale": "Flows retain monetary units and raw cell missingness; they are optional satellite evidence with zero core votes.",
+      "evidence": [
+        "../../../../lib/reports/snapshots/primer-informe-septiembre-2026/btc-source.json",
+        "../source-ledger.json#S15-S16",
+        "https://farside.co.uk/bitcoin-etf-flow-all-data/"
+      ],
+      "feature_transform": "sum of last 5 eligible daily totals; every expected session observed; reject incomplete window.",
+      "unit": "USD millions",
+      "minimum_history": "5 complete dated eligible total rows",
+      "execution_status": "OPTIONAL_EVIDENCE"
+    },
+    {
+      "feature_id": "btc_rolling_10",
+      "family": "btc_flows",
+      "source_contract_id": "BTC_NATIVE",
+      "series_type": "REPORTED_ETF_NET_FLOW",
+      "price_basis": "NOT_APPLICABLE_NATIVE_USD_MILLIONS",
+      "adjustment_policy": "Do not equity-adjust money flows. Preserve USD millions; USD conversion is explicit multiplication by 1,000,000.",
+      "return_definition": "Not a return: reported daily total and bounded sums in USD millions; positive/negative/zero/missing fund counts separately.",
+      "corporate_action_policy": "Version expected fund columns and constituent changes. Dash/unreported is null. Use reported total with partial-fund coverage flagged; derive total only when all expected fund cells are observed and reconciliation is explicit.",
+      "source": "Existing report Farside parsed public table in btc-source.json. It is a web-reader extraction, not original HTML; provenance limitation retained.",
+      "source_field": "columns Date, twelve named fund columns, Total; rows[][]; source/url/retrievedAt/retrievalMethod.",
+      "compatibility_constraints": [
+        "one fund-universe/version per breadth calculation",
+        "no cross-vendor row splicing",
+        "consecutive expected sessions for sums",
+        "streak zero breaks; missing/start is censored",
+        "cumulative scope names first/last observed table row"
+      ],
+      "rationale": "Flows retain monetary units and raw cell missingness; they are optional satellite evidence with zero core votes.",
+      "evidence": [
+        "../../../../lib/reports/snapshots/primer-informe-septiembre-2026/btc-source.json",
+        "../source-ledger.json#S15-S16",
+        "https://farside.co.uk/bitcoin-etf-flow-all-data/"
+      ],
+      "feature_transform": "sum of last 10 eligible daily totals; every expected session observed; reject incomplete window.",
+      "unit": "USD millions",
+      "minimum_history": "10 complete dated eligible total rows",
+      "execution_status": "OPTIONAL_EVIDENCE"
+    },
+    {
+      "feature_id": "btc_rolling_20",
+      "family": "btc_flows",
+      "source_contract_id": "BTC_NATIVE",
+      "series_type": "REPORTED_ETF_NET_FLOW",
+      "price_basis": "NOT_APPLICABLE_NATIVE_USD_MILLIONS",
+      "adjustment_policy": "Do not equity-adjust money flows. Preserve USD millions; USD conversion is explicit multiplication by 1,000,000.",
+      "return_definition": "Not a return: reported daily total and bounded sums in USD millions; positive/negative/zero/missing fund counts separately.",
+      "corporate_action_policy": "Version expected fund columns and constituent changes. Dash/unreported is null. Use reported total with partial-fund coverage flagged; derive total only when all expected fund cells are observed and reconciliation is explicit.",
+      "source": "Existing report Farside parsed public table in btc-source.json. It is a web-reader extraction, not original HTML; provenance limitation retained.",
+      "source_field": "columns Date, twelve named fund columns, Total; rows[][]; source/url/retrievedAt/retrievalMethod.",
+      "compatibility_constraints": [
+        "one fund-universe/version per breadth calculation",
+        "no cross-vendor row splicing",
+        "consecutive expected sessions for sums",
+        "streak zero breaks; missing/start is censored",
+        "cumulative scope names first/last observed table row"
+      ],
+      "rationale": "Flows retain monetary units and raw cell missingness; they are optional satellite evidence with zero core votes.",
+      "evidence": [
+        "../../../../lib/reports/snapshots/primer-informe-septiembre-2026/btc-source.json",
+        "../source-ledger.json#S15-S16",
+        "https://farside.co.uk/bitcoin-etf-flow-all-data/"
+      ],
+      "feature_transform": "sum of last 20 eligible daily totals; every expected session observed; reject incomplete window.",
+      "unit": "USD millions",
+      "minimum_history": "20 complete dated eligible total rows",
+      "execution_status": "OPTIONAL_EVIDENCE"
+    },
+    {
+      "feature_id": "btc_streak",
+      "family": "btc_flows",
+      "source_contract_id": "BTC_NATIVE",
+      "series_type": "REPORTED_ETF_NET_FLOW",
+      "price_basis": "NOT_APPLICABLE_NATIVE_USD_MILLIONS",
+      "adjustment_policy": "Do not equity-adjust money flows. Preserve USD millions; USD conversion is explicit multiplication by 1,000,000.",
+      "return_definition": "Not a return: reported daily total and bounded sums in USD millions; positive/negative/zero/missing fund counts separately.",
+      "corporate_action_policy": "Version expected fund columns and constituent changes. Dash/unreported is null. Use reported total with partial-fund coverage flagged; derive total only when all expected fund cells are observed and reconciliation is explicit.",
+      "source": "Existing report Farside parsed public table in btc-source.json. It is a web-reader extraction, not original HTML; provenance limitation retained.",
+      "source_field": "columns Date, twelve named fund columns, Total; rows[][]; source/url/retrievedAt/retrievalMethod.",
+      "compatibility_constraints": [
+        "one fund-universe/version per breadth calculation",
+        "no cross-vendor row splicing",
+        "consecutive expected sessions for sums",
+        "streak zero breaks; missing/start is censored",
+        "cumulative scope names first/last observed table row"
+      ],
+      "rationale": "Flows retain monetary units and raw cell missingness; they are optional satellite evidence with zero core votes.",
+      "evidence": [
+        "../../../../lib/reports/snapshots/primer-informe-septiembre-2026/btc-source.json",
+        "../source-ledger.json#S15-S16",
+        "https://farside.co.uk/bitcoin-etf-flow-all-data/"
+      ],
+      "feature_transform": "Count contiguous latest same nonzero signs; zero breaks; missing ends known coverage and emits censored=true; history start also censored.",
+      "unit": "sessions + direction + censored",
+      "minimum_history": "1 eligible row; complete preceding history required to claim uncensored length",
+      "execution_status": "OPTIONAL_EVIDENCE"
+    },
+    {
+      "feature_id": "btc_breadth",
+      "family": "btc_flows",
+      "source_contract_id": "BTC_NATIVE",
+      "series_type": "REPORTED_ETF_NET_FLOW",
+      "price_basis": "NOT_APPLICABLE_NATIVE_USD_MILLIONS",
+      "adjustment_policy": "Do not equity-adjust money flows. Preserve USD millions; USD conversion is explicit multiplication by 1,000,000.",
+      "return_definition": "Not a return: reported daily total and bounded sums in USD millions; positive/negative/zero/missing fund counts separately.",
+      "corporate_action_policy": "Version expected fund columns and constituent changes. Dash/unreported is null. Use reported total with partial-fund coverage flagged; derive total only when all expected fund cells are observed and reconciliation is explicit.",
+      "source": "Existing report Farside parsed public table in btc-source.json. It is a web-reader extraction, not original HTML; provenance limitation retained.",
+      "source_field": "columns Date, twelve named fund columns, Total; rows[][]; source/url/retrievedAt/retrievalMethod.",
+      "compatibility_constraints": [
+        "one fund-universe/version per breadth calculation",
+        "no cross-vendor row splicing",
+        "consecutive expected sessions for sums",
+        "streak zero breaks; missing/start is censored",
+        "cumulative scope names first/last observed table row"
+      ],
+      "rationale": "Flows retain monetary units and raw cell missingness; they are optional satellite evidence with zero core votes.",
+      "evidence": [
+        "../../../../lib/reports/snapshots/primer-informe-septiembre-2026/btc-source.json",
+        "../source-ledger.json#S15-S16",
+        "https://farside.co.uk/bitcoin-etf-flow-all-data/"
+      ],
+      "feature_transform": "Count separately positive, negative, observed zero and missing among explicitly versioned expected funds.",
+      "unit": "counts by status",
+      "minimum_history": "Raw cells for entire expected universe, including nulls; counts carry coverage",
+      "execution_status": "OPTIONAL_EVIDENCE"
+    },
+    {
+      "feature_id": "btc_legacy_severity",
+      "family": "btc_flows",
+      "source_contract_id": "LEGACY_PRESENTATION",
+      "series_type": "LEGACY_PRESENTATION_RECORD",
+      "price_basis": "NOT_APPLICABLE_EXCLUDED_VIEW",
+      "adjustment_policy": "Do not recompute V1 presentation as a V2 evidence input.",
+      "return_definition": "No active V2 return/decision contribution.",
+      "corporate_action_policy": "Preserve original V1 snapshots byte-for-byte.",
+      "source": "Original V1 module output and P1 source audit.",
+      "source_field": "Original registry source.existing_field_or_symbol.",
+      "compatibility_constraints": [
+        "EXCLUDED_FROM_V2_REPLAY",
+        "zero votes",
+        "never substitute score/label for raw family evidence"
+      ],
+      "rationale": "An existing composite is a presentation product, not independent evidence.",
+      "evidence": [
+        "../feature-registry.json",
+        "../preservation.json"
+      ],
+      "feature_transform": "Legacy classification of daily, rolling, breadth and streak; not a vote in V2.",
+      "unit": "categorical",
+      "minimum_history": "Complete underlying windows for interpretation",
+      "execution_status": "EXCLUDED"
+    },
+    {
+      "feature_id": "btc_cumulative",
+      "family": "btc_flows",
+      "source_contract_id": "BTC_NATIVE",
+      "series_type": "REPORTED_ETF_NET_FLOW",
+      "price_basis": "NOT_APPLICABLE_NATIVE_USD_MILLIONS",
+      "adjustment_policy": "Do not equity-adjust money flows. Preserve USD millions; USD conversion is explicit multiplication by 1,000,000.",
+      "return_definition": "Not a return: reported daily total and bounded sums in USD millions; positive/negative/zero/missing fund counts separately.",
+      "corporate_action_policy": "Version expected fund columns and constituent changes. Dash/unreported is null. Use reported total with partial-fund coverage flagged; derive total only when all expected fund cells are observed and reconciliation is explicit.",
+      "source": "Existing report Farside parsed public table in btc-source.json. It is a web-reader extraction, not original HTML; provenance limitation retained.",
+      "source_field": "columns Date, twelve named fund columns, Total; rows[][]; source/url/retrievedAt/retrievalMethod.",
+      "compatibility_constraints": [
+        "one fund-universe/version per breadth calculation",
+        "no cross-vendor row splicing",
+        "consecutive expected sessions for sums",
+        "streak zero breaks; missing/start is censored",
+        "cumulative scope names first/last observed table row"
+      ],
+      "rationale": "Flows retain monetary units and raw cell missingness; they are optional satellite evidence with zero core votes.",
+      "evidence": [
+        "../../../../lib/reports/snapshots/primer-informe-septiembre-2026/btc-source.json",
+        "../source-ledger.json#S15-S16",
+        "https://farside.co.uk/bitcoin-etf-flow-all-data/"
+      ],
+      "feature_transform": "sum(all eligible rows in explicitly bounded retrieved table); label exact first/last session and coverage.",
+      "unit": "USD millions",
+      "minimum_history": "All rows in declared interval; no inception claim without verified inception coverage",
+      "execution_status": "OPTIONAL_EVIDENCE"
+    },
+    {
+      "feature_id": "gld_fund_data",
+      "family": "gld_pressure",
+      "source_contract_id": "GLD_NATIVE",
+      "series_type": "FUND_SHARES_NAV_AUM",
+      "price_basis": "NATIVE_SHARES_NAV_USD_PER_SHARE_AUM_USD",
+      "adjustment_policy": "No equity-price adjustment of shares/flows. Preserve shares, NAV USD/share and AUM USD separately.",
+      "return_definition": "delta_shares=shares[t]-shares[t-n]; fraction=delta_shares/shares[t-n]; pressure_proxy_usd=delta_shares*NAV[t]. Not reported fund flows and not a sum of daily flows.",
+      "corporate_action_policy": "A share-unit/split event requires explicit dated unit mapping before differences; otherwise window unavailable. Never infer a creation/redemption flow from an unverified share-unit jump.",
+      "source": "State Street fund-data workbook already used by gld-flow-pressure.ts; retained report history is the available parsed evidence layer.",
+      "source_field": "date, nav, shares outstanding, total net assets -> dashboard-evidence.gldFlowPressure.history[].date/nav/sharesOutstanding/totalNetAssets.",
+      "compatibility_constraints": [
+        "n+1 dated rows for n-session difference",
+        "positive finite native NAV/shares/AUM",
+        "preserve abs(NAV*shares-AUM)/AUM and .01 legacy diagnostic bound; incomplete 21-row coherence audit flagged PARTIAL",
+        "20 retained rows do not prove a 20-session difference"
+      ],
+      "rationale": "Shares and price are economically different dimensions. Native share changes give an optional pressure proxy, never a core vote.",
+      "evidence": [
+        "../../../../lib/reports/snapshots/primer-informe-septiembre-2026/dashboard-evidence.json",
+        "../source-ledger.json#S17",
+        "https://www.ssga.com/library-content/products/fund-data/etfs/us/navhist-us-en-gld.xlsx"
+      ],
+      "feature_transform": "Retain dated positive shares, NAV, AUM. Legacy coherence check abs(NAV*shares-AUM)/AUM <= .01 over last 21 rows; discrepancies preserved.",
+      "unit": "shares / USD per share / USD",
+      "minimum_history": "21 eligible dated rows for legacy adapter; elementary current values require 1",
+      "execution_status": "OPTIONAL_EVIDENCE"
+    },
+    {
+      "feature_id": "gld_shares_change_1",
+      "family": "gld_pressure",
+      "source_contract_id": "GLD_NATIVE",
+      "series_type": "FUND_SHARES_NAV_AUM",
+      "price_basis": "NATIVE_SHARES_NAV_USD_PER_SHARE_AUM_USD",
+      "adjustment_policy": "No equity-price adjustment of shares/flows. Preserve shares, NAV USD/share and AUM USD separately.",
+      "return_definition": "delta_shares=shares[t]-shares[t-n]; fraction=delta_shares/shares[t-n]; pressure_proxy_usd=delta_shares*NAV[t]. Not reported fund flows and not a sum of daily flows.",
+      "corporate_action_policy": "A share-unit/split event requires explicit dated unit mapping before differences; otherwise window unavailable. Never infer a creation/redemption flow from an unverified share-unit jump.",
+      "source": "State Street fund-data workbook already used by gld-flow-pressure.ts; retained report history is the available parsed evidence layer.",
+      "source_field": "date, nav, shares outstanding, total net assets -> dashboard-evidence.gldFlowPressure.history[].date/nav/sharesOutstanding/totalNetAssets.",
+      "compatibility_constraints": [
+        "n+1 dated rows for n-session difference",
+        "positive finite native NAV/shares/AUM",
+        "preserve abs(NAV*shares-AUM)/AUM and .01 legacy diagnostic bound; incomplete 21-row coherence audit flagged PARTIAL",
+        "20 retained rows do not prove a 20-session difference"
+      ],
+      "rationale": "Shares and price are economically different dimensions. Native share changes give an optional pressure proxy, never a core vote.",
+      "evidence": [
+        "../../../../lib/reports/snapshots/primer-informe-septiembre-2026/dashboard-evidence.json",
+        "../source-ledger.json#S17",
+        "https://www.ssga.com/library-content/products/fund-data/etfs/us/navhist-us-en-gld.xlsx"
+      ],
+      "feature_transform": "delta=shares[t]-shares[t-1]; fraction=delta/shares[t-1]; preserve both units.",
+      "unit": "shares and fraction",
+      "minimum_history": "2 eligible dated rows, all expected sessions",
+      "execution_status": "OPTIONAL_EVIDENCE"
+    },
+    {
+      "feature_id": "gld_pressure_usd_1",
+      "family": "gld_pressure",
+      "source_contract_id": "GLD_NATIVE",
+      "series_type": "FUND_SHARES_NAV_AUM",
+      "price_basis": "NATIVE_SHARES_NAV_USD_PER_SHARE_AUM_USD",
+      "adjustment_policy": "No equity-price adjustment of shares/flows. Preserve shares, NAV USD/share and AUM USD separately.",
+      "return_definition": "delta_shares=shares[t]-shares[t-n]; fraction=delta_shares/shares[t-n]; pressure_proxy_usd=delta_shares*NAV[t]. Not reported fund flows and not a sum of daily flows.",
+      "corporate_action_policy": "A share-unit/split event requires explicit dated unit mapping before differences; otherwise window unavailable. Never infer a creation/redemption flow from an unverified share-unit jump.",
+      "source": "State Street fund-data workbook already used by gld-flow-pressure.ts; retained report history is the available parsed evidence layer.",
+      "source_field": "date, nav, shares outstanding, total net assets -> dashboard-evidence.gldFlowPressure.history[].date/nav/sharesOutstanding/totalNetAssets.",
+      "compatibility_constraints": [
+        "n+1 dated rows for n-session difference",
+        "positive finite native NAV/shares/AUM",
+        "preserve abs(NAV*shares-AUM)/AUM and .01 legacy diagnostic bound; incomplete 21-row coherence audit flagged PARTIAL",
+        "20 retained rows do not prove a 20-session difference"
+      ],
+      "rationale": "Shares and price are economically different dimensions. Native share changes give an optional pressure proxy, never a core vote.",
+      "evidence": [
+        "../../../../lib/reports/snapshots/primer-informe-septiembre-2026/dashboard-evidence.json",
+        "../source-ledger.json#S17",
+        "https://www.ssga.com/library-content/products/fund-data/etfs/us/navhist-us-en-gld.xlsx"
+      ],
+      "feature_transform": "gld_shares_change_1.delta * NAV[t]; not sum of daily monetary flows.",
+      "unit": "USD",
+      "minimum_history": "2 eligible rows and NAV at endpoint",
+      "execution_status": "OPTIONAL_EVIDENCE"
+    },
+    {
+      "feature_id": "gld_shares_change_5",
+      "family": "gld_pressure",
+      "source_contract_id": "GLD_NATIVE",
+      "series_type": "FUND_SHARES_NAV_AUM",
+      "price_basis": "NATIVE_SHARES_NAV_USD_PER_SHARE_AUM_USD",
+      "adjustment_policy": "No equity-price adjustment of shares/flows. Preserve shares, NAV USD/share and AUM USD separately.",
+      "return_definition": "delta_shares=shares[t]-shares[t-n]; fraction=delta_shares/shares[t-n]; pressure_proxy_usd=delta_shares*NAV[t]. Not reported fund flows and not a sum of daily flows.",
+      "corporate_action_policy": "A share-unit/split event requires explicit dated unit mapping before differences; otherwise window unavailable. Never infer a creation/redemption flow from an unverified share-unit jump.",
+      "source": "State Street fund-data workbook already used by gld-flow-pressure.ts; retained report history is the available parsed evidence layer.",
+      "source_field": "date, nav, shares outstanding, total net assets -> dashboard-evidence.gldFlowPressure.history[].date/nav/sharesOutstanding/totalNetAssets.",
+      "compatibility_constraints": [
+        "n+1 dated rows for n-session difference",
+        "positive finite native NAV/shares/AUM",
+        "preserve abs(NAV*shares-AUM)/AUM and .01 legacy diagnostic bound; incomplete 21-row coherence audit flagged PARTIAL",
+        "20 retained rows do not prove a 20-session difference"
+      ],
+      "rationale": "Shares and price are economically different dimensions. Native share changes give an optional pressure proxy, never a core vote.",
+      "evidence": [
+        "../../../../lib/reports/snapshots/primer-informe-septiembre-2026/dashboard-evidence.json",
+        "../source-ledger.json#S17",
+        "https://www.ssga.com/library-content/products/fund-data/etfs/us/navhist-us-en-gld.xlsx"
+      ],
+      "feature_transform": "delta=shares[t]-shares[t-5]; fraction=delta/shares[t-5]; preserve both units.",
+      "unit": "shares and fraction",
+      "minimum_history": "6 eligible dated rows, all expected sessions",
+      "execution_status": "OPTIONAL_EVIDENCE"
+    },
+    {
+      "feature_id": "gld_pressure_usd_5",
+      "family": "gld_pressure",
+      "source_contract_id": "GLD_NATIVE",
+      "series_type": "FUND_SHARES_NAV_AUM",
+      "price_basis": "NATIVE_SHARES_NAV_USD_PER_SHARE_AUM_USD",
+      "adjustment_policy": "No equity-price adjustment of shares/flows. Preserve shares, NAV USD/share and AUM USD separately.",
+      "return_definition": "delta_shares=shares[t]-shares[t-n]; fraction=delta_shares/shares[t-n]; pressure_proxy_usd=delta_shares*NAV[t]. Not reported fund flows and not a sum of daily flows.",
+      "corporate_action_policy": "A share-unit/split event requires explicit dated unit mapping before differences; otherwise window unavailable. Never infer a creation/redemption flow from an unverified share-unit jump.",
+      "source": "State Street fund-data workbook already used by gld-flow-pressure.ts; retained report history is the available parsed evidence layer.",
+      "source_field": "date, nav, shares outstanding, total net assets -> dashboard-evidence.gldFlowPressure.history[].date/nav/sharesOutstanding/totalNetAssets.",
+      "compatibility_constraints": [
+        "n+1 dated rows for n-session difference",
+        "positive finite native NAV/shares/AUM",
+        "preserve abs(NAV*shares-AUM)/AUM and .01 legacy diagnostic bound; incomplete 21-row coherence audit flagged PARTIAL",
+        "20 retained rows do not prove a 20-session difference"
+      ],
+      "rationale": "Shares and price are economically different dimensions. Native share changes give an optional pressure proxy, never a core vote.",
+      "evidence": [
+        "../../../../lib/reports/snapshots/primer-informe-septiembre-2026/dashboard-evidence.json",
+        "../source-ledger.json#S17",
+        "https://www.ssga.com/library-content/products/fund-data/etfs/us/navhist-us-en-gld.xlsx"
+      ],
+      "feature_transform": "gld_shares_change_5.delta * NAV[t]; not sum of daily monetary flows.",
+      "unit": "USD",
+      "minimum_history": "6 eligible rows and NAV at endpoint",
+      "execution_status": "OPTIONAL_EVIDENCE"
+    },
+    {
+      "feature_id": "gld_shares_change_20",
+      "family": "gld_pressure",
+      "source_contract_id": "GLD_NATIVE",
+      "series_type": "FUND_SHARES_NAV_AUM",
+      "price_basis": "NATIVE_SHARES_NAV_USD_PER_SHARE_AUM_USD",
+      "adjustment_policy": "No equity-price adjustment of shares/flows. Preserve shares, NAV USD/share and AUM USD separately.",
+      "return_definition": "delta_shares=shares[t]-shares[t-n]; fraction=delta_shares/shares[t-n]; pressure_proxy_usd=delta_shares*NAV[t]. Not reported fund flows and not a sum of daily flows.",
+      "corporate_action_policy": "A share-unit/split event requires explicit dated unit mapping before differences; otherwise window unavailable. Never infer a creation/redemption flow from an unverified share-unit jump.",
+      "source": "State Street fund-data workbook already used by gld-flow-pressure.ts; retained report history is the available parsed evidence layer.",
+      "source_field": "date, nav, shares outstanding, total net assets -> dashboard-evidence.gldFlowPressure.history[].date/nav/sharesOutstanding/totalNetAssets.",
+      "compatibility_constraints": [
+        "n+1 dated rows for n-session difference",
+        "positive finite native NAV/shares/AUM",
+        "preserve abs(NAV*shares-AUM)/AUM and .01 legacy diagnostic bound; incomplete 21-row coherence audit flagged PARTIAL",
+        "20 retained rows do not prove a 20-session difference"
+      ],
+      "rationale": "Shares and price are economically different dimensions. Native share changes give an optional pressure proxy, never a core vote.",
+      "evidence": [
+        "../../../../lib/reports/snapshots/primer-informe-septiembre-2026/dashboard-evidence.json",
+        "../source-ledger.json#S17",
+        "https://www.ssga.com/library-content/products/fund-data/etfs/us/navhist-us-en-gld.xlsx"
+      ],
+      "feature_transform": "delta=shares[t]-shares[t-20]; fraction=delta/shares[t-20]; preserve both units.",
+      "unit": "shares and fraction",
+      "minimum_history": "21 eligible dated rows, all expected sessions",
+      "execution_status": "OPTIONAL_EVIDENCE"
+    },
+    {
+      "feature_id": "gld_pressure_usd_20",
+      "family": "gld_pressure",
+      "source_contract_id": "GLD_NATIVE",
+      "series_type": "FUND_SHARES_NAV_AUM",
+      "price_basis": "NATIVE_SHARES_NAV_USD_PER_SHARE_AUM_USD",
+      "adjustment_policy": "No equity-price adjustment of shares/flows. Preserve shares, NAV USD/share and AUM USD separately.",
+      "return_definition": "delta_shares=shares[t]-shares[t-n]; fraction=delta_shares/shares[t-n]; pressure_proxy_usd=delta_shares*NAV[t]. Not reported fund flows and not a sum of daily flows.",
+      "corporate_action_policy": "A share-unit/split event requires explicit dated unit mapping before differences; otherwise window unavailable. Never infer a creation/redemption flow from an unverified share-unit jump.",
+      "source": "State Street fund-data workbook already used by gld-flow-pressure.ts; retained report history is the available parsed evidence layer.",
+      "source_field": "date, nav, shares outstanding, total net assets -> dashboard-evidence.gldFlowPressure.history[].date/nav/sharesOutstanding/totalNetAssets.",
+      "compatibility_constraints": [
+        "n+1 dated rows for n-session difference",
+        "positive finite native NAV/shares/AUM",
+        "preserve abs(NAV*shares-AUM)/AUM and .01 legacy diagnostic bound; incomplete 21-row coherence audit flagged PARTIAL",
+        "20 retained rows do not prove a 20-session difference"
+      ],
+      "rationale": "Shares and price are economically different dimensions. Native share changes give an optional pressure proxy, never a core vote.",
+      "evidence": [
+        "../../../../lib/reports/snapshots/primer-informe-septiembre-2026/dashboard-evidence.json",
+        "../source-ledger.json#S17",
+        "https://www.ssga.com/library-content/products/fund-data/etfs/us/navhist-us-en-gld.xlsx"
+      ],
+      "feature_transform": "gld_shares_change_20.delta * NAV[t]; not sum of daily monetary flows.",
+      "unit": "USD",
+      "minimum_history": "21 eligible rows and NAV at endpoint",
+      "execution_status": "OPTIONAL_EVIDENCE"
+    },
+    {
+      "feature_id": "gld_legacy_state",
+      "family": "gld_pressure",
+      "source_contract_id": "LEGACY_PRESENTATION",
+      "series_type": "LEGACY_PRESENTATION_RECORD",
+      "price_basis": "NOT_APPLICABLE_EXCLUDED_VIEW",
+      "adjustment_policy": "Do not recompute V1 presentation as a V2 evidence input.",
+      "return_definition": "No active V2 return/decision contribution.",
+      "corporate_action_policy": "Preserve original V1 snapshots byte-for-byte.",
+      "source": "Original V1 module output and P1 source audit.",
+      "source_field": "Original registry source.existing_field_or_symbol.",
+      "compatibility_constraints": [
+        "EXCLUDED_FROM_V2_REPLAY",
+        "zero votes",
+        "never substitute score/label for raw family evidence"
+      ],
+      "rationale": "An existing composite is a presentation product, not independent evidence.",
+      "evidence": [
+        "../feature-registry.json",
+        "../preservation.json"
+      ],
+      "feature_transform": "Existing five/twenty-day fraction comparisons with neutral band .0005; preserve contradictory windows in V2 evidence rather than copying neutral label.",
+      "unit": "categorical",
+      "minimum_history": "21 eligible rows",
+      "execution_status": "EXCLUDED"
+    }
+  ]
+}

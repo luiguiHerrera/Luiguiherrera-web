@@ -1,0 +1,55 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "ReadThreeBucketSettingsOnly",
+      "Effect": "Allow",
+      "Action": [
+        "s3:GetBucketVersioning",
+        "s3:GetBucketPublicAccessBlock",
+        "s3:GetEncryptionConfiguration"
+      ],
+      "Resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1"
+    },
+    {
+      "Sid": "ShadowProductionObjectsOnly",
+      "Effect": "Allow",
+      "Action": [
+        "s3:GetObject",
+        "s3:PutObject"
+      ],
+      "Resource": [
+        "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/regime-v2/observations/*",
+        "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/regime-v2/runs/*",
+        "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/regime-v2/indexes/latest.json"
+      ]
+    },
+    {
+      "Sid": "ResolveExactShadowJsonKeyAbsence",
+      "Effect": "Allow",
+      "Action": "s3:ListBucket",
+      "Resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1",
+      "Condition": {
+        "StringLike": {
+          "s3:prefix": [
+            "regime-v2/observations/*.json",
+            "regime-v2/runs/*.json",
+            "regime-v2/indexes/latest.json"
+          ]
+        },
+        "NumericLessThanEquals": {
+          "s3:max-keys": "1"
+        }
+      }
+    },
+    {
+      "Sid": "NeverDeleteAnyObjectOrVersion",
+      "Effect": "Deny",
+      "Action": [
+        "s3:DeleteObject",
+        "s3:DeleteObjectVersion"
+      ],
+      "Resource": "*"
+    }
+  ]
+}

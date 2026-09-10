@@ -1,0 +1,555 @@
+{
+  "features_total": 59,
+  "primary_role_counts": {
+    "DIAGNOSTIC": 24,
+    "CORE_DECISION": 9,
+    "PRESENTATION_ONLY": 5,
+    "RESEARCH_ONLY": 7,
+    "SATELLITE": 14
+  },
+  "data_kind_counts": {
+    "DERIVED": 55,
+    "RAW": 4
+  },
+  "counting_rule": "Primary roles are mutually exclusive and sum to 59. RAW/DERIVED are a separate exhaustive axis and must not be added to roles. Required dependency parents are diagnostic role with required_transitive_core_input=true.",
+  "raw_inputs_outside_59_registry": "raw_sector_prices/raw_vix_history/raw_vx_settlements/etc are source nodes, not extra registry features.",
+  "core_concordance_units": [
+    "equity_price_complex",
+    "implied_volatility_complex"
+  ],
+  "core_concordance_units_maximum": 2,
+  "unit_independence_claim": "Economic lineage grouping only; no statistical independence assertion.",
+  "features": [
+    {
+      "feature_id": "eq_returns_5",
+      "primary_role": "DIAGNOSTIC",
+      "data_kind": "DERIVED",
+      "required_transitive_core_input": true,
+      "dependency_group": "equity_price_complex",
+      "concordance_vote_increment": 0,
+      "incremental_information": "Not a direct core decision condition. Transitive parents enable core transforms but add no vote."
+    },
+    {
+      "feature_id": "eq_returns_21",
+      "primary_role": "DIAGNOSTIC",
+      "data_kind": "DERIVED",
+      "required_transitive_core_input": true,
+      "dependency_group": "equity_price_complex",
+      "concordance_vote_increment": 0,
+      "incremental_information": "Not a direct core decision condition. Transitive parents enable core transforms but add no vote."
+    },
+    {
+      "feature_id": "eq_returns_63",
+      "primary_role": "DIAGNOSTIC",
+      "data_kind": "DERIVED",
+      "required_transitive_core_input": false,
+      "dependency_group": "equity_price_complex",
+      "concordance_vote_increment": 0,
+      "incremental_information": "Not a direct core decision condition. Transitive parents enable core transforms but add no vote."
+    },
+    {
+      "feature_id": "eq_positive_5",
+      "primary_role": "CORE_DECISION",
+      "data_kind": "DERIVED",
+      "required_transitive_core_input": true,
+      "dependency_group": "equity_price_complex",
+      "concordance_vote_increment": 0,
+      "incremental_information": "Short participation; can diverge from the 21-session breadth count. Same equity family."
+    },
+    {
+      "feature_id": "eq_positive_21",
+      "primary_role": "CORE_DECISION",
+      "data_kind": "DERIVED",
+      "required_transitive_core_input": true,
+      "dependency_group": "equity_price_complex",
+      "concordance_vote_increment": 0,
+      "incremental_information": "Medium participation; avoids reducing two horizons to a single recent move. Same equity family."
+    },
+    {
+      "feature_id": "eq_above_ma200",
+      "primary_role": "DIAGNOSTIC",
+      "data_kind": "DERIVED",
+      "required_transitive_core_input": false,
+      "dependency_group": "equity_price_complex",
+      "concordance_vote_increment": 0,
+      "incremental_information": "Not a direct core decision condition. Transitive parents enable core transforms but add no vote."
+    },
+    {
+      "feature_id": "eq_rsp_spy_21",
+      "primary_role": "DIAGNOSTIC",
+      "data_kind": "DERIVED",
+      "required_transitive_core_input": false,
+      "dependency_group": "equity_price_complex",
+      "concordance_vote_increment": 0,
+      "incremental_information": "Not a direct core decision condition. Transitive parents enable core transforms but add no vote."
+    },
+    {
+      "feature_id": "eq_iwm_spy_21",
+      "primary_role": "DIAGNOSTIC",
+      "data_kind": "DERIVED",
+      "required_transitive_core_input": false,
+      "dependency_group": "equity_price_complex",
+      "concordance_vote_increment": 0,
+      "incremental_information": "Not a direct core decision condition. Transitive parents enable core transforms but add no vote."
+    },
+    {
+      "feature_id": "eq_growth_21",
+      "primary_role": "DIAGNOSTIC",
+      "data_kind": "DERIVED",
+      "required_transitive_core_input": true,
+      "dependency_group": "equity_price_complex",
+      "concordance_vote_increment": 0,
+      "incremental_information": "Not a direct core decision condition. Transitive parents enable core transforms but add no vote."
+    },
+    {
+      "feature_id": "eq_cyclical_21",
+      "primary_role": "DIAGNOSTIC",
+      "data_kind": "DERIVED",
+      "required_transitive_core_input": true,
+      "dependency_group": "equity_price_complex",
+      "concordance_vote_increment": 0,
+      "incremental_information": "Not a direct core decision condition. Transitive parents enable core transforms but add no vote."
+    },
+    {
+      "feature_id": "eq_defensive_21",
+      "primary_role": "DIAGNOSTIC",
+      "data_kind": "DERIVED",
+      "required_transitive_core_input": true,
+      "dependency_group": "equity_price_complex",
+      "concordance_vote_increment": 0,
+      "incremental_information": "Not a direct core decision condition. Transitive parents enable core transforms but add no vote."
+    },
+    {
+      "feature_id": "eq_leadership_gap",
+      "primary_role": "CORE_DECISION",
+      "data_kind": "DERIVED",
+      "required_transitive_core_input": true,
+      "dependency_group": "equity_price_complex",
+      "concordance_vote_increment": 0,
+      "incremental_information": "Relative non-defensive versus defensive leadership; distinguishes broad/selective participation from who leads."
+    },
+    {
+      "feature_id": "eq_legacy_leadership",
+      "primary_role": "PRESENTATION_ONLY",
+      "data_kind": "DERIVED",
+      "required_transitive_core_input": false,
+      "dependency_group": "equity_price_complex",
+      "concordance_vote_increment": 0,
+      "incremental_information": "Not a direct core decision condition. Transitive parents enable core transforms but add no vote."
+    },
+    {
+      "feature_id": "eq_dispersion_5",
+      "primary_role": "DIAGNOSTIC",
+      "data_kind": "DERIVED",
+      "required_transitive_core_input": false,
+      "dependency_group": "equity_price_complex",
+      "concordance_vote_increment": 0,
+      "incremental_information": "Not a direct core decision condition. Transitive parents enable core transforms but add no vote."
+    },
+    {
+      "feature_id": "eq_dispersion_21",
+      "primary_role": "DIAGNOSTIC",
+      "data_kind": "DERIVED",
+      "required_transitive_core_input": false,
+      "dependency_group": "equity_price_complex",
+      "concordance_vote_increment": 0,
+      "incremental_information": "Not a direct core decision condition. Transitive parents enable core transforms but add no vote."
+    },
+    {
+      "feature_id": "eq_leadership_persistence",
+      "primary_role": "RESEARCH_ONLY",
+      "data_kind": "DERIVED",
+      "required_transitive_core_input": false,
+      "dependency_group": "equity_price_complex",
+      "concordance_vote_increment": 0,
+      "incremental_information": "Not a direct core decision condition. Transitive parents enable core transforms but add no vote."
+    },
+    {
+      "feature_id": "eq_holdings_concentration",
+      "primary_role": "RESEARCH_ONLY",
+      "data_kind": "DERIVED",
+      "required_transitive_core_input": false,
+      "dependency_group": "equity_price_complex",
+      "concordance_vote_increment": 0,
+      "incremental_information": "Not a direct core decision condition. Transitive parents enable core transforms but add no vote."
+    },
+    {
+      "feature_id": "vix_level",
+      "primary_role": "CORE_DECISION",
+      "data_kind": "RAW",
+      "required_transitive_core_input": true,
+      "dependency_group": "implied_volatility_complex",
+      "concordance_vote_increment": 0,
+      "incremental_information": "Absolute implied risk level; momentum and curve can be calm at an elevated level."
+    },
+    {
+      "feature_id": "vix_change_points_1",
+      "primary_role": "DIAGNOSTIC",
+      "data_kind": "DERIVED",
+      "required_transitive_core_input": false,
+      "dependency_group": "implied_volatility_complex",
+      "concordance_vote_increment": 0,
+      "incremental_information": "Not a direct core decision condition. Transitive parents enable core transforms but add no vote."
+    },
+    {
+      "feature_id": "vix_change_points_5",
+      "primary_role": "DIAGNOSTIC",
+      "data_kind": "DERIVED",
+      "required_transitive_core_input": false,
+      "dependency_group": "implied_volatility_complex",
+      "concordance_vote_increment": 0,
+      "incremental_information": "Not a direct core decision condition. Transitive parents enable core transforms but add no vote."
+    },
+    {
+      "feature_id": "vix_change_points_21",
+      "primary_role": "DIAGNOSTIC",
+      "data_kind": "DERIVED",
+      "required_transitive_core_input": false,
+      "dependency_group": "implied_volatility_complex",
+      "concordance_vote_increment": 0,
+      "incremental_information": "Not a direct core decision condition. Transitive parents enable core transforms but add no vote."
+    },
+    {
+      "feature_id": "vix_momentum_1",
+      "primary_role": "CORE_DECISION",
+      "data_kind": "DERIVED",
+      "required_transitive_core_input": true,
+      "dependency_group": "implied_volatility_complex",
+      "concordance_vote_increment": 0,
+      "incremental_information": "Immediate relative acceleration; can cross the fast threshold without a five-session jump."
+    },
+    {
+      "feature_id": "vix_momentum_5",
+      "primary_role": "CORE_DECISION",
+      "data_kind": "DERIVED",
+      "required_transitive_core_input": true,
+      "dependency_group": "implied_volatility_complex",
+      "concordance_vote_increment": 0,
+      "incremental_information": "Multi-session acceleration; detects cumulative change without a large final daily move."
+    },
+    {
+      "feature_id": "vix_percentile",
+      "primary_role": "DIAGNOSTIC",
+      "data_kind": "DERIVED",
+      "required_transitive_core_input": false,
+      "dependency_group": "implied_volatility_complex",
+      "concordance_vote_increment": 0,
+      "incremental_information": "Not a direct core decision condition. Transitive parents enable core transforms but add no vote."
+    },
+    {
+      "feature_id": "vix_legacy_composite",
+      "primary_role": "PRESENTATION_ONLY",
+      "data_kind": "DERIVED",
+      "required_transitive_core_input": false,
+      "dependency_group": "implied_volatility_complex",
+      "concordance_vote_increment": 0,
+      "incremental_information": "Not a direct core decision condition. Transitive parents enable core transforms but add no vote."
+    },
+    {
+      "feature_id": "vx_contracts",
+      "primary_role": "DIAGNOSTIC",
+      "data_kind": "RAW",
+      "required_transitive_core_input": true,
+      "dependency_group": "implied_volatility_complex",
+      "concordance_vote_increment": 0,
+      "incremental_information": "Not a direct core decision condition. Transitive parents enable core transforms but add no vote."
+    },
+    {
+      "feature_id": "vx_spread_12",
+      "primary_role": "DIAGNOSTIC",
+      "data_kind": "DERIVED",
+      "required_transitive_core_input": false,
+      "dependency_group": "implied_volatility_complex",
+      "concordance_vote_increment": 0,
+      "incremental_information": "Not a direct core decision condition. Transitive parents enable core transforms but add no vote."
+    },
+    {
+      "feature_id": "vx_slope_12",
+      "primary_role": "CORE_DECISION",
+      "data_kind": "DERIVED",
+      "required_transitive_core_input": true,
+      "dependency_group": "implied_volatility_complex",
+      "concordance_vote_increment": 0,
+      "incremental_information": "Near monthly settlement geometry; can disagree with spot VIX and signals material inversion."
+    },
+    {
+      "feature_id": "vx_spread_13",
+      "primary_role": "DIAGNOSTIC",
+      "data_kind": "DERIVED",
+      "required_transitive_core_input": false,
+      "dependency_group": "implied_volatility_complex",
+      "concordance_vote_increment": 0,
+      "incremental_information": "Not a direct core decision condition. Transitive parents enable core transforms but add no vote."
+    },
+    {
+      "feature_id": "vx_slope_13",
+      "primary_role": "DIAGNOSTIC",
+      "data_kind": "DERIVED",
+      "required_transitive_core_input": false,
+      "dependency_group": "implied_volatility_complex",
+      "concordance_vote_increment": 0,
+      "incremental_information": "Not a direct core decision condition. Transitive parents enable core transforms but add no vote."
+    },
+    {
+      "feature_id": "vx_curvature",
+      "primary_role": "RESEARCH_ONLY",
+      "data_kind": "DERIVED",
+      "required_transitive_core_input": false,
+      "dependency_group": "implied_volatility_complex",
+      "concordance_vote_increment": 0,
+      "incremental_information": "Not a direct core decision condition. Transitive parents enable core transforms but add no vote."
+    },
+    {
+      "feature_id": "corr_mean_21",
+      "primary_role": "CORE_DECISION",
+      "data_kind": "DERIVED",
+      "required_transitive_core_input": true,
+      "dependency_group": "equity_price_complex",
+      "concordance_vote_increment": 0,
+      "incremental_information": "Current co-movement level across all 55 pairs; separates high concentration of return behavior."
+    },
+    {
+      "feature_id": "corr_mean_63",
+      "primary_role": "DIAGNOSTIC",
+      "data_kind": "DERIVED",
+      "required_transitive_core_input": true,
+      "dependency_group": "equity_price_complex",
+      "concordance_vote_increment": 0,
+      "incremental_information": "Not a direct core decision condition. Transitive parents enable core transforms but add no vote."
+    },
+    {
+      "feature_id": "corr_window_spread",
+      "primary_role": "CORE_DECISION",
+      "data_kind": "DERIVED",
+      "required_transitive_core_input": true,
+      "dependency_group": "equity_price_complex",
+      "concordance_vote_increment": 0,
+      "incremental_information": "Nested 21-minus-63 change; distinguishes rising fragility before the high-level boundary. The 63-session mean is a parent, not a separate vote."
+    },
+    {
+      "feature_id": "corr_change_21",
+      "primary_role": "DIAGNOSTIC",
+      "data_kind": "DERIVED",
+      "required_transitive_core_input": false,
+      "dependency_group": "equity_price_complex",
+      "concordance_vote_increment": 0,
+      "incremental_information": "Not a direct core decision condition. Transitive parents enable core transforms but add no vote."
+    },
+    {
+      "feature_id": "corr_defensive_growth_21",
+      "primary_role": "DIAGNOSTIC",
+      "data_kind": "DERIVED",
+      "required_transitive_core_input": false,
+      "dependency_group": "equity_price_complex",
+      "concordance_vote_increment": 0,
+      "incremental_information": "Not a direct core decision condition. Transitive parents enable core transforms but add no vote."
+    },
+    {
+      "feature_id": "realized_ewma",
+      "primary_role": "DIAGNOSTIC",
+      "data_kind": "DERIVED",
+      "required_transitive_core_input": false,
+      "dependency_group": "equity_price_complex",
+      "concordance_vote_increment": 0,
+      "incremental_information": "Not a direct core decision condition. Transitive parents enable core transforms but add no vote."
+    },
+    {
+      "feature_id": "realized_ewma_change",
+      "primary_role": "DIAGNOSTIC",
+      "data_kind": "DERIVED",
+      "required_transitive_core_input": false,
+      "dependency_group": "equity_price_complex",
+      "concordance_vote_increment": 0,
+      "incremental_information": "Not a direct core decision condition. Transitive parents enable core transforms but add no vote."
+    },
+    {
+      "feature_id": "realized_garch",
+      "primary_role": "RESEARCH_ONLY",
+      "data_kind": "DERIVED",
+      "required_transitive_core_input": false,
+      "dependency_group": "equity_price_complex",
+      "concordance_vote_increment": 0,
+      "incremental_information": "Not a direct core decision condition. Transitive parents enable core transforms but add no vote."
+    },
+    {
+      "feature_id": "legacy_fragility_score",
+      "primary_role": "PRESENTATION_ONLY",
+      "data_kind": "DERIVED",
+      "required_transitive_core_input": false,
+      "dependency_group": "equity_price_complex",
+      "concordance_vote_increment": 0,
+      "incremental_information": "Not a direct core decision condition. Transitive parents enable core transforms but add no vote."
+    },
+    {
+      "feature_id": "pfl_concentration",
+      "primary_role": "RESEARCH_ONLY",
+      "data_kind": "DERIVED",
+      "required_transitive_core_input": false,
+      "dependency_group": "portfolio_specific",
+      "concordance_vote_increment": 0,
+      "incremental_information": "Not a direct core decision condition. Transitive parents enable core transforms but add no vote."
+    },
+    {
+      "feature_id": "pfl_covariance",
+      "primary_role": "RESEARCH_ONLY",
+      "data_kind": "DERIVED",
+      "required_transitive_core_input": false,
+      "dependency_group": "portfolio_specific",
+      "concordance_vote_increment": 0,
+      "incremental_information": "Not a direct core decision condition. Transitive parents enable core transforms but add no vote."
+    },
+    {
+      "feature_id": "pfl_stress",
+      "primary_role": "RESEARCH_ONLY",
+      "data_kind": "DERIVED",
+      "required_transitive_core_input": false,
+      "dependency_group": "portfolio_specific",
+      "concordance_vote_increment": 0,
+      "incremental_information": "Not a direct core decision condition. Transitive parents enable core transforms but add no vote."
+    },
+    {
+      "feature_id": "btc_daily",
+      "primary_role": "SATELLITE",
+      "data_kind": "RAW",
+      "required_transitive_core_input": false,
+      "dependency_group": "btc_etf_flows",
+      "concordance_vote_increment": 0,
+      "incremental_information": "Not a direct core decision condition. Transitive parents enable core transforms but add no vote."
+    },
+    {
+      "feature_id": "btc_rolling_5",
+      "primary_role": "SATELLITE",
+      "data_kind": "DERIVED",
+      "required_transitive_core_input": false,
+      "dependency_group": "btc_etf_flows",
+      "concordance_vote_increment": 0,
+      "incremental_information": "Not a direct core decision condition. Transitive parents enable core transforms but add no vote."
+    },
+    {
+      "feature_id": "btc_rolling_10",
+      "primary_role": "SATELLITE",
+      "data_kind": "DERIVED",
+      "required_transitive_core_input": false,
+      "dependency_group": "btc_etf_flows",
+      "concordance_vote_increment": 0,
+      "incremental_information": "Not a direct core decision condition. Transitive parents enable core transforms but add no vote."
+    },
+    {
+      "feature_id": "btc_rolling_20",
+      "primary_role": "SATELLITE",
+      "data_kind": "DERIVED",
+      "required_transitive_core_input": false,
+      "dependency_group": "btc_etf_flows",
+      "concordance_vote_increment": 0,
+      "incremental_information": "Not a direct core decision condition. Transitive parents enable core transforms but add no vote."
+    },
+    {
+      "feature_id": "btc_streak",
+      "primary_role": "SATELLITE",
+      "data_kind": "DERIVED",
+      "required_transitive_core_input": false,
+      "dependency_group": "btc_etf_flows",
+      "concordance_vote_increment": 0,
+      "incremental_information": "Not a direct core decision condition. Transitive parents enable core transforms but add no vote."
+    },
+    {
+      "feature_id": "btc_breadth",
+      "primary_role": "SATELLITE",
+      "data_kind": "DERIVED",
+      "required_transitive_core_input": false,
+      "dependency_group": "btc_etf_flows",
+      "concordance_vote_increment": 0,
+      "incremental_information": "Not a direct core decision condition. Transitive parents enable core transforms but add no vote."
+    },
+    {
+      "feature_id": "btc_legacy_severity",
+      "primary_role": "PRESENTATION_ONLY",
+      "data_kind": "DERIVED",
+      "required_transitive_core_input": false,
+      "dependency_group": "btc_etf_flows",
+      "concordance_vote_increment": 0,
+      "incremental_information": "Not a direct core decision condition. Transitive parents enable core transforms but add no vote."
+    },
+    {
+      "feature_id": "btc_cumulative",
+      "primary_role": "SATELLITE",
+      "data_kind": "DERIVED",
+      "required_transitive_core_input": false,
+      "dependency_group": "btc_etf_flows",
+      "concordance_vote_increment": 0,
+      "incremental_information": "Not a direct core decision condition. Transitive parents enable core transforms but add no vote."
+    },
+    {
+      "feature_id": "gld_fund_data",
+      "primary_role": "SATELLITE",
+      "data_kind": "RAW",
+      "required_transitive_core_input": false,
+      "dependency_group": "gld_share_pressure",
+      "concordance_vote_increment": 0,
+      "incremental_information": "Not a direct core decision condition. Transitive parents enable core transforms but add no vote."
+    },
+    {
+      "feature_id": "gld_shares_change_1",
+      "primary_role": "SATELLITE",
+      "data_kind": "DERIVED",
+      "required_transitive_core_input": false,
+      "dependency_group": "gld_share_pressure",
+      "concordance_vote_increment": 0,
+      "incremental_information": "Not a direct core decision condition. Transitive parents enable core transforms but add no vote."
+    },
+    {
+      "feature_id": "gld_pressure_usd_1",
+      "primary_role": "SATELLITE",
+      "data_kind": "DERIVED",
+      "required_transitive_core_input": false,
+      "dependency_group": "gld_share_pressure",
+      "concordance_vote_increment": 0,
+      "incremental_information": "Not a direct core decision condition. Transitive parents enable core transforms but add no vote."
+    },
+    {
+      "feature_id": "gld_shares_change_5",
+      "primary_role": "SATELLITE",
+      "data_kind": "DERIVED",
+      "required_transitive_core_input": false,
+      "dependency_group": "gld_share_pressure",
+      "concordance_vote_increment": 0,
+      "incremental_information": "Not a direct core decision condition. Transitive parents enable core transforms but add no vote."
+    },
+    {
+      "feature_id": "gld_pressure_usd_5",
+      "primary_role": "SATELLITE",
+      "data_kind": "DERIVED",
+      "required_transitive_core_input": false,
+      "dependency_group": "gld_share_pressure",
+      "concordance_vote_increment": 0,
+      "incremental_information": "Not a direct core decision condition. Transitive parents enable core transforms but add no vote."
+    },
+    {
+      "feature_id": "gld_shares_change_20",
+      "primary_role": "SATELLITE",
+      "data_kind": "DERIVED",
+      "required_transitive_core_input": false,
+      "dependency_group": "gld_share_pressure",
+      "concordance_vote_increment": 0,
+      "incremental_information": "Not a direct core decision condition. Transitive parents enable core transforms but add no vote."
+    },
+    {
+      "feature_id": "gld_pressure_usd_20",
+      "primary_role": "SATELLITE",
+      "data_kind": "DERIVED",
+      "required_transitive_core_input": false,
+      "dependency_group": "gld_share_pressure",
+      "concordance_vote_increment": 0,
+      "incremental_information": "Not a direct core decision condition. Transitive parents enable core transforms but add no vote."
+    },
+    {
+      "feature_id": "gld_legacy_state",
+      "primary_role": "PRESENTATION_ONLY",
+      "data_kind": "DERIVED",
+      "required_transitive_core_input": false,
+      "dependency_group": "gld_share_pressure",
+      "concordance_vote_increment": 0,
+      "incremental_information": "Not a direct core decision condition. Transitive parents enable core transforms but add no vote."
+    }
+  ]
+}

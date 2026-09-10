@@ -1,0 +1,2168 @@
+{
+  "registry_version": "regime-v2-features/1.0.0-prototype",
+  "runtime_enabled": false,
+  "family_vocabulary": [
+    "participation",
+    "leadership",
+    "realized_risk",
+    "co_movement",
+    "vix_spot",
+    "vix_curve",
+    "btc_flows",
+    "gld_pressure",
+    "portfolio_specific"
+  ],
+  "initial_profile_optional_features": [
+    "vix_percentile",
+    "btc_daily",
+    "btc_rolling_5",
+    "gld_shares_change_5"
+  ],
+  "features": [
+    {
+      "feature_id": "eq_returns_5",
+      "name": "Retornos sectoriales 5 sesiones",
+      "family": "participation",
+      "source": {
+        "audit_ids": [
+          "S03",
+          "S04"
+        ],
+        "existing_field_or_symbol": "sectorRotation.sectors[].return1w",
+        "providers": [
+          {
+            "name": "Alpha Vantage sector daily prices; derived local statistics",
+            "url": "https://www.alphavantage.co/documentation/#daily"
+          }
+        ]
+      },
+      "economic_meaning": "Participación y liderazgo relativo de once proxies sectoriales.",
+      "transform": "For each ETF: 100*(P[t]/P[t-5]-1); same date and approved price basis.",
+      "window": "5 consecutive equity sessions",
+      "freshness": {
+        "policy_ref": "SOURCE_EQUITY_CALENDAR",
+        "validation_parameter": "FRESHNESS_POLICY",
+        "available_at_required": true
+      },
+      "minimum_history": "6 dated closes per ETF; all 11 for core",
+      "dependency_group": "equity_price_complex",
+      "required_or_optional": "REQUIRED_CORE",
+      "missing_behavior": "Preserve null and explicit reason/status. Reject demo, malformed, stale or temporally ineligible input; never impute zero or neutral. Missing REQUIRED_CORE makes its dependent pillar UNAVAILABLE. Optional/parked/excluded features cannot substitute for core.",
+      "existing_or_new": "EXISTING_TRANSFORM_REQUIRES_DATED_INPUTS",
+      "depends_on": [
+        "raw_sector_prices"
+      ],
+      "unit": "percent",
+      "notes": ""
+    },
+    {
+      "feature_id": "eq_returns_21",
+      "name": "Retornos sectoriales 21 sesiones",
+      "family": "participation",
+      "source": {
+        "audit_ids": [
+          "S03",
+          "S04"
+        ],
+        "existing_field_or_symbol": "sectorRotation.sectors[].return1m",
+        "providers": [
+          {
+            "name": "Alpha Vantage sector daily prices; derived local statistics",
+            "url": "https://www.alphavantage.co/documentation/#daily"
+          }
+        ]
+      },
+      "economic_meaning": "Participación y liderazgo relativo de once proxies sectoriales.",
+      "transform": "For each ETF: 100*(P[t]/P[t-21]-1); same date and approved price basis.",
+      "window": "21 consecutive equity sessions",
+      "freshness": {
+        "policy_ref": "SOURCE_EQUITY_CALENDAR",
+        "validation_parameter": "FRESHNESS_POLICY",
+        "available_at_required": true
+      },
+      "minimum_history": "22 dated closes per ETF; all 11 for core",
+      "dependency_group": "equity_price_complex",
+      "required_or_optional": "REQUIRED_CORE",
+      "missing_behavior": "Preserve null and explicit reason/status. Reject demo, malformed, stale or temporally ineligible input; never impute zero or neutral. Missing REQUIRED_CORE makes its dependent pillar UNAVAILABLE. Optional/parked/excluded features cannot substitute for core.",
+      "existing_or_new": "EXISTING_TRANSFORM_REQUIRES_DATED_INPUTS",
+      "depends_on": [
+        "raw_sector_prices"
+      ],
+      "unit": "percent",
+      "notes": ""
+    },
+    {
+      "feature_id": "eq_returns_63",
+      "name": "Retornos sectoriales 63 sesiones",
+      "family": "participation",
+      "source": {
+        "audit_ids": [
+          "S03",
+          "S04"
+        ],
+        "existing_field_or_symbol": "sectorRotation.sectors[].return3m",
+        "providers": [
+          {
+            "name": "Alpha Vantage sector daily prices; derived local statistics",
+            "url": "https://www.alphavantage.co/documentation/#daily"
+          }
+        ]
+      },
+      "economic_meaning": "Participación y liderazgo relativo de once proxies sectoriales.",
+      "transform": "For each ETF: 100*(P[t]/P[t-63]-1); same date and approved price basis.",
+      "window": "63 consecutive equity sessions",
+      "freshness": {
+        "policy_ref": "SOURCE_EQUITY_CALENDAR",
+        "validation_parameter": "FRESHNESS_POLICY",
+        "available_at_required": true
+      },
+      "minimum_history": "64 dated closes per ETF; all 11 for core",
+      "dependency_group": "equity_price_complex",
+      "required_or_optional": "OPTIONAL_EVIDENCE",
+      "missing_behavior": "Preserve null and explicit reason/status. Reject demo, malformed, stale or temporally ineligible input; never impute zero or neutral. Missing REQUIRED_CORE makes its dependent pillar UNAVAILABLE. Optional/parked/excluded features cannot substitute for core.",
+      "existing_or_new": "EXISTING_TRANSFORM_REQUIRES_DATED_INPUTS",
+      "depends_on": [
+        "raw_sector_prices"
+      ],
+      "unit": "percent",
+      "notes": ""
+    },
+    {
+      "feature_id": "eq_positive_5",
+      "name": "Sectores positivos a 5 sesiones",
+      "family": "participation",
+      "source": {
+        "audit_ids": [
+          "S03",
+          "S08"
+        ],
+        "existing_field_or_symbol": "new count from sectors[].return1w",
+        "providers": [
+          {
+            "name": "Alpha Vantage sector daily prices; derived local statistics",
+            "url": "https://www.alphavantage.co/documentation/#daily"
+          }
+        ]
+      },
+      "economic_meaning": "Cuántos sectores proxy acompañan; no amplitud de acciones individuales.",
+      "transform": "count(eq_returns_5[ticker] > 0); denominator fixed at 11.",
+      "window": "5 sessions",
+      "freshness": {
+        "policy_ref": "SOURCE_EQUITY_CALENDAR",
+        "validation_parameter": "FRESHNESS_POLICY",
+        "available_at_required": true
+      },
+      "minimum_history": "6 closes for each of all 11 ETFs",
+      "dependency_group": "equity_price_complex",
+      "required_or_optional": "REQUIRED_CORE",
+      "missing_behavior": "Preserve null and explicit reason/status. Reject demo, malformed, stale or temporally ineligible input; never impute zero or neutral. Missing REQUIRED_CORE makes its dependent pillar UNAVAILABLE. Optional/parked/excluded features cannot substitute for core.",
+      "existing_or_new": "NEW_AGGREGATION_EXISTING_RETURNS",
+      "depends_on": [
+        "eq_returns_5"
+      ],
+      "unit": "count of 11",
+      "notes": ""
+    },
+    {
+      "feature_id": "eq_positive_21",
+      "name": "Sectores positivos a 21 sesiones",
+      "family": "participation",
+      "source": {
+        "audit_ids": [
+          "S03",
+          "S08"
+        ],
+        "existing_field_or_symbol": "new count from sectors[].return1m",
+        "providers": [
+          {
+            "name": "Alpha Vantage sector daily prices; derived local statistics",
+            "url": "https://www.alphavantage.co/documentation/#daily"
+          }
+        ]
+      },
+      "economic_meaning": "Cuántos sectores proxy acompañan; no amplitud de acciones individuales.",
+      "transform": "count(eq_returns_21[ticker] > 0); denominator fixed at 11.",
+      "window": "21 sessions",
+      "freshness": {
+        "policy_ref": "SOURCE_EQUITY_CALENDAR",
+        "validation_parameter": "FRESHNESS_POLICY",
+        "available_at_required": true
+      },
+      "minimum_history": "22 closes for each of all 11 ETFs",
+      "dependency_group": "equity_price_complex",
+      "required_or_optional": "REQUIRED_CORE",
+      "missing_behavior": "Preserve null and explicit reason/status. Reject demo, malformed, stale or temporally ineligible input; never impute zero or neutral. Missing REQUIRED_CORE makes its dependent pillar UNAVAILABLE. Optional/parked/excluded features cannot substitute for core.",
+      "existing_or_new": "NEW_AGGREGATION_EXISTING_RETURNS",
+      "depends_on": [
+        "eq_returns_21"
+      ],
+      "unit": "count of 11",
+      "notes": ""
+    },
+    {
+      "feature_id": "eq_above_ma200",
+      "name": "Sectores sobre MA200",
+      "family": "participation",
+      "source": {
+        "audit_ids": [
+          "S08",
+          "S09",
+          "S10"
+        ],
+        "existing_field_or_symbol": "assets/<ETF>.frequencies.daily.distanceToMovingAverages.MA200",
+        "providers": [
+          {
+            "name": "Static Stooq/Yahoo build; per-capture source lineage required",
+            "url": "https://stooq.com/"
+          }
+        ]
+      },
+      "economic_meaning": "Participación respecto a tendencia larga.",
+      "transform": "For each ETF MA200=mean(last 200 approved closes); count(P[t] > MA200[t]); all 11 or unavailable.",
+      "window": "200 equity sessions",
+      "freshness": {
+        "policy_ref": "SOURCE_EQUITY_CALENDAR",
+        "validation_parameter": "FRESHNESS_POLICY",
+        "available_at_required": true
+      },
+      "minimum_history": "200 aligned dated closes per ETF",
+      "dependency_group": "equity_price_complex",
+      "required_or_optional": "OPTIONAL_EVIDENCE",
+      "missing_behavior": "Preserve null and explicit reason/status. Reject demo, malformed, stale or temporally ineligible input; never impute zero or neutral. Missing REQUIRED_CORE makes its dependent pillar UNAVAILABLE. Optional/parked/excluded features cannot substitute for core.",
+      "existing_or_new": "NEW_AGGREGATION_STATIC_INPUTS_EXIST",
+      "depends_on": [
+        "raw_statistical_prices"
+      ],
+      "unit": "count of 11",
+      "notes": "Static snapshot dated 2026-08-14; not activated in initial profile. Do not treat compact MA200 as raw history."
+    },
+    {
+      "feature_id": "eq_rsp_spy_21",
+      "name": "RSP/SPY: cambio relativo 21 sesiones",
+      "family": "participation",
+      "source": {
+        "audit_ids": [
+          "S08",
+          "S09",
+          "S10",
+          "S20"
+        ],
+        "existing_field_or_symbol": "new paired ratio from RSP and SPY dated prices",
+        "providers": [
+          {
+            "name": "Static Stooq/Yahoo build; per-capture source lineage required",
+            "url": "https://stooq.com/"
+          }
+        ]
+      },
+      "economic_meaning": "RSP: equal-weight participation proxy; IWM: small-cap relative participation. Neither proves holdings concentration.",
+      "transform": "q[t]=P_RSP[t]/P_SPY[t]; 100*(q[t]/q[t-21]-1), same basis/currency and dates.",
+      "window": "21 common equity sessions",
+      "freshness": {
+        "policy_ref": "SOURCE_EQUITY_CALENDAR",
+        "validation_parameter": "FRESHNESS_POLICY",
+        "available_at_required": true
+      },
+      "minimum_history": "22 aligned dated closes of both ETFs",
+      "dependency_group": "equity_price_complex",
+      "required_or_optional": "OPTIONAL_EVIDENCE",
+      "missing_behavior": "Preserve null and explicit reason/status. Reject demo, malformed, stale or temporally ineligible input; never impute zero or neutral. Missing REQUIRED_CORE makes its dependent pillar UNAVAILABLE. Optional/parked/excluded features cannot substitute for core.",
+      "existing_or_new": "NEW_TRANSFORM_STATIC_AND_REPORT_PRICES_EXIST",
+      "depends_on": [
+        "raw_statistical_prices"
+      ],
+      "unit": "percent",
+      "notes": "No live ratio evaluator in HEAD. Not initially activated; no synthetic SPY/RSP replacement."
+    },
+    {
+      "feature_id": "eq_iwm_spy_21",
+      "name": "IWM/SPY: cambio relativo 21 sesiones",
+      "family": "participation",
+      "source": {
+        "audit_ids": [
+          "S08",
+          "S09",
+          "S10",
+          "S20"
+        ],
+        "existing_field_or_symbol": "new paired ratio from IWM and SPY dated prices",
+        "providers": [
+          {
+            "name": "Static Stooq/Yahoo build; per-capture source lineage required",
+            "url": "https://stooq.com/"
+          }
+        ]
+      },
+      "economic_meaning": "RSP: equal-weight participation proxy; IWM: small-cap relative participation. Neither proves holdings concentration.",
+      "transform": "q[t]=P_IWM[t]/P_SPY[t]; 100*(q[t]/q[t-21]-1), same basis/currency and dates.",
+      "window": "21 common equity sessions",
+      "freshness": {
+        "policy_ref": "SOURCE_EQUITY_CALENDAR",
+        "validation_parameter": "FRESHNESS_POLICY",
+        "available_at_required": true
+      },
+      "minimum_history": "22 aligned dated closes of both ETFs",
+      "dependency_group": "equity_price_complex",
+      "required_or_optional": "OPTIONAL_EVIDENCE",
+      "missing_behavior": "Preserve null and explicit reason/status. Reject demo, malformed, stale or temporally ineligible input; never impute zero or neutral. Missing REQUIRED_CORE makes its dependent pillar UNAVAILABLE. Optional/parked/excluded features cannot substitute for core.",
+      "existing_or_new": "NEW_TRANSFORM_STATIC_AND_REPORT_PRICES_EXIST",
+      "depends_on": [
+        "raw_statistical_prices"
+      ],
+      "unit": "percent",
+      "notes": "No live ratio evaluator in HEAD. Not initially activated; no synthetic SPY/RSP replacement."
+    },
+    {
+      "feature_id": "eq_growth_21",
+      "name": "Media de grupo growth",
+      "family": "leadership",
+      "source": {
+        "audit_ids": [
+          "S03"
+        ],
+        "existing_field_or_symbol": "sectorRotation.metrics.growthLeadership",
+        "providers": [
+          {
+            "name": "Alpha Vantage sector daily prices; derived local statistics",
+            "url": "https://www.alphavantage.co/documentation/#daily"
+          }
+        ]
+      },
+      "economic_meaning": "Liderazgo de proxies agrupados por lectura económica.",
+      "transform": "arithmetic mean of eq_returns_21 over fixed growth ETF set; no missing constituent.",
+      "window": "21 sessions",
+      "freshness": {
+        "policy_ref": "SOURCE_EQUITY_CALENDAR",
+        "validation_parameter": "FRESHNESS_POLICY",
+        "available_at_required": true
+      },
+      "minimum_history": "22 dated closes per constituent; 11-sector core universe",
+      "dependency_group": "equity_price_complex",
+      "required_or_optional": "REQUIRED_CORE",
+      "missing_behavior": "Preserve null and explicit reason/status. Reject demo, malformed, stale or temporally ineligible input; never impute zero or neutral. Missing REQUIRED_CORE makes its dependent pillar UNAVAILABLE. Optional/parked/excluded features cannot substitute for core.",
+      "existing_or_new": "EXISTING_TRANSFORM_REQUIRES_DATED_INPUTS",
+      "depends_on": [
+        "eq_returns_21"
+      ],
+      "unit": "percent",
+      "notes": ""
+    },
+    {
+      "feature_id": "eq_cyclical_21",
+      "name": "Media de grupo cyclical",
+      "family": "leadership",
+      "source": {
+        "audit_ids": [
+          "S03"
+        ],
+        "existing_field_or_symbol": "sectorRotation.metrics.cyclicalLeadership",
+        "providers": [
+          {
+            "name": "Alpha Vantage sector daily prices; derived local statistics",
+            "url": "https://www.alphavantage.co/documentation/#daily"
+          }
+        ]
+      },
+      "economic_meaning": "Liderazgo de proxies agrupados por lectura económica.",
+      "transform": "arithmetic mean of eq_returns_21 over fixed cyclical ETF set; no missing constituent.",
+      "window": "21 sessions",
+      "freshness": {
+        "policy_ref": "SOURCE_EQUITY_CALENDAR",
+        "validation_parameter": "FRESHNESS_POLICY",
+        "available_at_required": true
+      },
+      "minimum_history": "22 dated closes per constituent; 11-sector core universe",
+      "dependency_group": "equity_price_complex",
+      "required_or_optional": "REQUIRED_CORE",
+      "missing_behavior": "Preserve null and explicit reason/status. Reject demo, malformed, stale or temporally ineligible input; never impute zero or neutral. Missing REQUIRED_CORE makes its dependent pillar UNAVAILABLE. Optional/parked/excluded features cannot substitute for core.",
+      "existing_or_new": "EXISTING_TRANSFORM_REQUIRES_DATED_INPUTS",
+      "depends_on": [
+        "eq_returns_21"
+      ],
+      "unit": "percent",
+      "notes": ""
+    },
+    {
+      "feature_id": "eq_defensive_21",
+      "name": "Media de grupo defensive",
+      "family": "leadership",
+      "source": {
+        "audit_ids": [
+          "S03"
+        ],
+        "existing_field_or_symbol": "sectorRotation.metrics.defensiveLeadership",
+        "providers": [
+          {
+            "name": "Alpha Vantage sector daily prices; derived local statistics",
+            "url": "https://www.alphavantage.co/documentation/#daily"
+          }
+        ]
+      },
+      "economic_meaning": "Liderazgo de proxies agrupados por lectura económica.",
+      "transform": "arithmetic mean of eq_returns_21 over fixed defensive ETF set; no missing constituent.",
+      "window": "21 sessions",
+      "freshness": {
+        "policy_ref": "SOURCE_EQUITY_CALENDAR",
+        "validation_parameter": "FRESHNESS_POLICY",
+        "available_at_required": true
+      },
+      "minimum_history": "22 dated closes per constituent; 11-sector core universe",
+      "dependency_group": "equity_price_complex",
+      "required_or_optional": "REQUIRED_CORE",
+      "missing_behavior": "Preserve null and explicit reason/status. Reject demo, malformed, stale or temporally ineligible input; never impute zero or neutral. Missing REQUIRED_CORE makes its dependent pillar UNAVAILABLE. Optional/parked/excluded features cannot substitute for core.",
+      "existing_or_new": "EXISTING_TRANSFORM_REQUIRES_DATED_INPUTS",
+      "depends_on": [
+        "eq_returns_21"
+      ],
+      "unit": "percent",
+      "notes": ""
+    },
+    {
+      "feature_id": "eq_leadership_gap",
+      "name": "Brecha no defensivos frente a defensivos",
+      "family": "leadership",
+      "source": {
+        "audit_ids": [
+          "S03"
+        ],
+        "existing_field_or_symbol": "new comparison from the three group means",
+        "providers": [
+          {
+            "name": "Alpha Vantage sector daily prices; derived local statistics",
+            "url": "https://www.alphavantage.co/documentation/#daily"
+          }
+        ]
+      },
+      "economic_meaning": "Separa liderazgo growth/cíclico del defensivo.",
+      "transform": "max(eq_growth_21,eq_cyclical_21)-eq_defensive_21; signed gap; compare to +/-validated gap.",
+      "window": "21 sessions",
+      "freshness": {
+        "policy_ref": "SOURCE_EQUITY_CALENDAR",
+        "validation_parameter": "FRESHNESS_POLICY",
+        "available_at_required": true
+      },
+      "minimum_history": "All three complete group means",
+      "dependency_group": "equity_price_complex",
+      "required_or_optional": "REQUIRED_CORE",
+      "missing_behavior": "Preserve null and explicit reason/status. Reject demo, malformed, stale or temporally ineligible input; never impute zero or neutral. Missing REQUIRED_CORE makes its dependent pillar UNAVAILABLE. Optional/parked/excluded features cannot substitute for core.",
+      "existing_or_new": "NEW_COMPARISON_EXISTING_GROUP_INPUTS",
+      "depends_on": [
+        "eq_growth_21",
+        "eq_cyclical_21",
+        "eq_defensive_21"
+      ],
+      "unit": "percentage points",
+      "notes": "Different from V1 top-two-of-three reading; explicitly versioned."
+    },
+    {
+      "feature_id": "eq_legacy_leadership",
+      "name": "Lectura de liderazgo V1",
+      "family": "leadership",
+      "source": {
+        "audit_ids": [
+          "S03"
+        ],
+        "existing_field_or_symbol": "sectorRotation.metrics.reading; buildMetrics",
+        "providers": [
+          {
+            "name": "Alpha Vantage sector daily prices; derived local statistics",
+            "url": "https://www.alphavantage.co/documentation/#daily"
+          }
+        ]
+      },
+      "economic_meaning": "Etiqueta previa derivada de ranking de las tres medias de grupo.",
+      "transform": "Sort growth/cyclical/defensive means descending; label top group if top minus second >=1 percentage point, otherwise mixta. V1 only.",
+      "window": "21 sessions",
+      "freshness": {
+        "policy_ref": "SOURCE_EQUITY_CALENDAR",
+        "validation_parameter": "FRESHNESS_POLICY",
+        "available_at_required": true
+      },
+      "minimum_history": "Three group means; not a substitute for validated V2 comparator",
+      "dependency_group": "equity_price_complex",
+      "required_or_optional": "EXCLUDED",
+      "missing_behavior": "Preserve null and explicit reason/status. Reject demo, malformed, stale or temporally ineligible input; never impute zero or neutral. Missing REQUIRED_CORE makes its dependent pillar UNAVAILABLE. Optional/parked/excluded features cannot substitute for core.",
+      "existing_or_new": "EXISTING_DERIVED_LABEL",
+      "depends_on": [
+        "eq_growth_21",
+        "eq_cyclical_21",
+        "eq_defensive_21"
+      ],
+      "unit": "categorical",
+      "notes": "Keep exact V1 dependency separate from new V2 non-defensive/defensive gap."
+    },
+    {
+      "feature_id": "eq_dispersion_5",
+      "name": "Dispersión sectorial 5",
+      "family": "leadership",
+      "source": {
+        "audit_ids": [
+          "S03"
+        ],
+        "existing_field_or_symbol": "sectorRotation.metrics.sectorDispersion1w",
+        "providers": [
+          {
+            "name": "Alpha Vantage sector daily prices; derived local statistics",
+            "url": "https://www.alphavantage.co/documentation/#daily"
+          }
+        ]
+      },
+      "economic_meaning": "Distancia entre líder y rezagado; no volatilidad temporal.",
+      "transform": "max(eq_returns_5)-min(eq_returns_5); all 11 constituents.",
+      "window": "Cross-section over 5-session returns",
+      "freshness": {
+        "policy_ref": "SOURCE_EQUITY_CALENDAR",
+        "validation_parameter": "FRESHNESS_POLICY",
+        "available_at_required": true
+      },
+      "minimum_history": "6 closes per ETF",
+      "dependency_group": "equity_price_complex",
+      "required_or_optional": "OPTIONAL_EVIDENCE",
+      "missing_behavior": "Preserve null and explicit reason/status. Reject demo, malformed, stale or temporally ineligible input; never impute zero or neutral. Missing REQUIRED_CORE makes its dependent pillar UNAVAILABLE. Optional/parked/excluded features cannot substitute for core.",
+      "existing_or_new": "EXISTING_TRANSFORM_REQUIRES_DATED_INPUTS",
+      "depends_on": [
+        "eq_returns_5"
+      ],
+      "unit": "percentage points",
+      "notes": ""
+    },
+    {
+      "feature_id": "eq_dispersion_21",
+      "name": "Dispersión sectorial 21",
+      "family": "leadership",
+      "source": {
+        "audit_ids": [
+          "S03"
+        ],
+        "existing_field_or_symbol": "sectorRotation.metrics.sectorDispersion1m",
+        "providers": [
+          {
+            "name": "Alpha Vantage sector daily prices; derived local statistics",
+            "url": "https://www.alphavantage.co/documentation/#daily"
+          }
+        ]
+      },
+      "economic_meaning": "Distancia entre líder y rezagado; no volatilidad temporal.",
+      "transform": "max(eq_returns_21)-min(eq_returns_21); all 11 constituents.",
+      "window": "Cross-section over 21-session returns",
+      "freshness": {
+        "policy_ref": "SOURCE_EQUITY_CALENDAR",
+        "validation_parameter": "FRESHNESS_POLICY",
+        "available_at_required": true
+      },
+      "minimum_history": "22 closes per ETF",
+      "dependency_group": "equity_price_complex",
+      "required_or_optional": "OPTIONAL_EVIDENCE",
+      "missing_behavior": "Preserve null and explicit reason/status. Reject demo, malformed, stale or temporally ineligible input; never impute zero or neutral. Missing REQUIRED_CORE makes its dependent pillar UNAVAILABLE. Optional/parked/excluded features cannot substitute for core.",
+      "existing_or_new": "EXISTING_TRANSFORM_REQUIRES_DATED_INPUTS",
+      "depends_on": [
+        "eq_returns_21"
+      ],
+      "unit": "percentage points",
+      "notes": ""
+    },
+    {
+      "feature_id": "eq_leadership_persistence",
+      "name": "Persistencia de liderazgo",
+      "family": "leadership",
+      "source": {
+        "audit_ids": [
+          "S03"
+        ],
+        "existing_field_or_symbol": "previousReturn1w/1m/3m and previousRank fields exist; no regime persistence archive",
+        "providers": [
+          {
+            "name": "Prospective immutable same-version regime archive; not available as daily archive",
+            "url": null
+          }
+        ]
+      },
+      "economic_meaning": "Continuidad observada del liderazgo, sin puntuación.",
+      "transform": "Store start/end of consecutive equal leadership states under same rules; break on gaps, version changes or missing.",
+      "window": "Consecutive archived decisions; no smoothing window",
+      "freshness": {
+        "policy_ref": "SOURCE_EQUITY_CALENDAR",
+        "validation_parameter": "FRESHNESS_POLICY",
+        "available_at_required": true
+      },
+      "minimum_history": "At least two consecutive eligible archived decisions for a change; one gives observed start only",
+      "dependency_group": "equity_price_complex",
+      "required_or_optional": "PARKED",
+      "missing_behavior": "Preserve null and explicit reason/status. Reject demo, malformed, stale or temporally ineligible input; never impute zero or neutral. Missing REQUIRED_CORE makes its dependent pillar UNAVAILABLE. Optional/parked/excluded features cannot substitute for core.",
+      "existing_or_new": "NEW_HISTORY_LAYER",
+      "depends_on": [
+        "raw_regime_archive"
+      ],
+      "unit": "sessions and UTC instants",
+      "notes": "Previous non-overlapping returns are not an archive of daily regimes. Groweer owns activation."
+    },
+    {
+      "feature_id": "eq_holdings_concentration",
+      "name": "Concentración de mercado por holdings",
+      "family": "leadership",
+      "source": {
+        "audit_ids": [
+          "S08",
+          "S18"
+        ],
+        "existing_field_or_symbol": "no market-weight/constituent snapshot in the regime pipeline",
+        "providers": [
+          {
+            "name": "Not integrated; requires market holdings publication source",
+            "url": null
+          }
+        ]
+      },
+      "economic_meaning": "Concentración real exige pesos del universo de mercado, no pesos de cartera personal.",
+      "transform": "PARK: define market universe and dated constituent weights before HHI or top-N concentration.",
+      "window": "Point-in-time holdings snapshot",
+      "freshness": {
+        "policy_ref": "SOURCE_EQUITY_CALENDAR",
+        "validation_parameter": "FRESHNESS_POLICY",
+        "available_at_required": true
+      },
+      "minimum_history": "Complete dated market constituent weights and publication provenance",
+      "dependency_group": "equity_price_complex",
+      "required_or_optional": "PARKED",
+      "missing_behavior": "Preserve null and explicit reason/status. Reject demo, malformed, stale or temporally ineligible input; never impute zero or neutral. Missing REQUIRED_CORE makes its dependent pillar UNAVAILABLE. Optional/parked/excluded features cannot substitute for core.",
+      "existing_or_new": "NEW_SOURCE_CONTRACT_REQUIRED",
+      "depends_on": [
+        "raw_market_holdings"
+      ],
+      "unit": "UNBOUND",
+      "notes": "RSP/SPY remains a price proxy; PFL HHI is not a substitute."
+    },
+    {
+      "feature_id": "vix_level",
+      "name": "Nivel VIX",
+      "family": "vix_spot",
+      "source": {
+        "audit_ids": [
+          "S11",
+          "S12"
+        ],
+        "existing_field_or_symbol": "vix.spot.latestVix; raw FRED VIXCLS",
+        "providers": [
+          {
+            "name": "FRED / Cboe VIXCLS",
+            "url": "https://fred.stlouisfed.org/series/VIXCLS"
+          }
+        ]
+      },
+      "economic_meaning": "Volatilidad implícita observada.",
+      "transform": "Latest eligible positive VIXCLS close.",
+      "window": "One eligible observation",
+      "freshness": {
+        "policy_ref": "SOURCE_FRED_PUBLICATION",
+        "validation_parameter": "FRESHNESS_POLICY",
+        "available_at_required": true
+      },
+      "minimum_history": "1 for level/alert; B requires 6 closes for momentum",
+      "dependency_group": "implied_volatility_complex",
+      "required_or_optional": "REQUIRED_CORE",
+      "missing_behavior": "Preserve null and explicit reason/status. Reject demo, malformed, stale or temporally ineligible input; never impute zero or neutral. Missing REQUIRED_CORE makes its dependent pillar UNAVAILABLE. Optional/parked/excluded features cannot substitute for core.",
+      "existing_or_new": "EXISTING_TRANSFORM_REQUIRES_VINTAGE",
+      "depends_on": [
+        "raw_vix_history"
+      ],
+      "unit": "VIX points",
+      "notes": ""
+    },
+    {
+      "feature_id": "vix_change_points_1",
+      "name": "Cambio VIX 1 en puntos",
+      "family": "vix_spot",
+      "source": {
+        "audit_ids": [
+          "S11"
+        ],
+        "existing_field_or_symbol": "vix.spot.change1d",
+        "providers": [
+          {
+            "name": "FRED / Cboe VIXCLS",
+            "url": "https://fred.stlouisfed.org/series/VIXCLS"
+          }
+        ]
+      },
+      "economic_meaning": "Variación absoluta del índice; no confundir con porcentaje.",
+      "transform": "V[t]-V[t-1]",
+      "window": "Last 1 eligible VIX sessions",
+      "freshness": {
+        "policy_ref": "SOURCE_FRED_PUBLICATION",
+        "validation_parameter": "FRESHNESS_POLICY",
+        "available_at_required": true
+      },
+      "minimum_history": "2 dated closes",
+      "dependency_group": "implied_volatility_complex",
+      "required_or_optional": "OPTIONAL_EVIDENCE",
+      "missing_behavior": "Preserve null and explicit reason/status. Reject demo, malformed, stale or temporally ineligible input; never impute zero or neutral. Missing REQUIRED_CORE makes its dependent pillar UNAVAILABLE. Optional/parked/excluded features cannot substitute for core.",
+      "existing_or_new": "EXISTING_TRANSFORM_REQUIRES_VINTAGE",
+      "depends_on": [
+        "raw_vix_history"
+      ],
+      "unit": "VIX points",
+      "notes": ""
+    },
+    {
+      "feature_id": "vix_change_points_5",
+      "name": "Cambio VIX 5 en puntos",
+      "family": "vix_spot",
+      "source": {
+        "audit_ids": [
+          "S11"
+        ],
+        "existing_field_or_symbol": "vix.spot.change5d",
+        "providers": [
+          {
+            "name": "FRED / Cboe VIXCLS",
+            "url": "https://fred.stlouisfed.org/series/VIXCLS"
+          }
+        ]
+      },
+      "economic_meaning": "Variación absoluta del índice; no confundir con porcentaje.",
+      "transform": "V[t]-V[t-5]",
+      "window": "Last 5 eligible VIX sessions",
+      "freshness": {
+        "policy_ref": "SOURCE_FRED_PUBLICATION",
+        "validation_parameter": "FRESHNESS_POLICY",
+        "available_at_required": true
+      },
+      "minimum_history": "6 dated closes",
+      "dependency_group": "implied_volatility_complex",
+      "required_or_optional": "OPTIONAL_EVIDENCE",
+      "missing_behavior": "Preserve null and explicit reason/status. Reject demo, malformed, stale or temporally ineligible input; never impute zero or neutral. Missing REQUIRED_CORE makes its dependent pillar UNAVAILABLE. Optional/parked/excluded features cannot substitute for core.",
+      "existing_or_new": "EXISTING_TRANSFORM_REQUIRES_VINTAGE",
+      "depends_on": [
+        "raw_vix_history"
+      ],
+      "unit": "VIX points",
+      "notes": ""
+    },
+    {
+      "feature_id": "vix_change_points_21",
+      "name": "Cambio VIX 21 en puntos",
+      "family": "vix_spot",
+      "source": {
+        "audit_ids": [
+          "S11"
+        ],
+        "existing_field_or_symbol": "vix.spot.change21d",
+        "providers": [
+          {
+            "name": "FRED / Cboe VIXCLS",
+            "url": "https://fred.stlouisfed.org/series/VIXCLS"
+          }
+        ]
+      },
+      "economic_meaning": "Variación absoluta del índice; no confundir con porcentaje.",
+      "transform": "V[t]-V[t-21]",
+      "window": "Last 21 eligible VIX sessions",
+      "freshness": {
+        "policy_ref": "SOURCE_FRED_PUBLICATION",
+        "validation_parameter": "FRESHNESS_POLICY",
+        "available_at_required": true
+      },
+      "minimum_history": "22 dated closes",
+      "dependency_group": "implied_volatility_complex",
+      "required_or_optional": "OPTIONAL_EVIDENCE",
+      "missing_behavior": "Preserve null and explicit reason/status. Reject demo, malformed, stale or temporally ineligible input; never impute zero or neutral. Missing REQUIRED_CORE makes its dependent pillar UNAVAILABLE. Optional/parked/excluded features cannot substitute for core.",
+      "existing_or_new": "EXISTING_TRANSFORM_REQUIRES_VINTAGE",
+      "depends_on": [
+        "raw_vix_history"
+      ],
+      "unit": "VIX points",
+      "notes": ""
+    },
+    {
+      "feature_id": "vix_momentum_1",
+      "name": "Momentum relativo VIX 1",
+      "family": "vix_spot",
+      "source": {
+        "audit_ids": [
+          "S11"
+        ],
+        "existing_field_or_symbol": "relativeChange inputs to vixTrendFor; not returned as numeric percent",
+        "providers": [
+          {
+            "name": "FRED / Cboe VIXCLS",
+            "url": "https://fred.stlouisfed.org/series/VIXCLS"
+          }
+        ]
+      },
+      "economic_meaning": "Velocidad relativa de incremento de demanda implícita de cobertura.",
+      "transform": "100*(V[t]/V[t-1]-1); denominator >0.",
+      "window": "Last 1 eligible VIX sessions",
+      "freshness": {
+        "policy_ref": "SOURCE_FRED_PUBLICATION",
+        "validation_parameter": "FRESHNESS_POLICY",
+        "available_at_required": true
+      },
+      "minimum_history": "2 dated closes",
+      "dependency_group": "implied_volatility_complex",
+      "required_or_optional": "REQUIRED_CORE",
+      "missing_behavior": "Preserve null and explicit reason/status. Reject demo, malformed, stale or temporally ineligible input; never impute zero or neutral. Missing REQUIRED_CORE makes its dependent pillar UNAVAILABLE. Optional/parked/excluded features cannot substitute for core.",
+      "existing_or_new": "EXISTING_INTERNAL_TRANSFORM_NOT_EXPOSED",
+      "depends_on": [
+        "raw_vix_history"
+      ],
+      "unit": "percent",
+      "notes": ""
+    },
+    {
+      "feature_id": "vix_momentum_5",
+      "name": "Momentum relativo VIX 5",
+      "family": "vix_spot",
+      "source": {
+        "audit_ids": [
+          "S11"
+        ],
+        "existing_field_or_symbol": "relativeChange inputs to vixTrendFor; not returned as numeric percent",
+        "providers": [
+          {
+            "name": "FRED / Cboe VIXCLS",
+            "url": "https://fred.stlouisfed.org/series/VIXCLS"
+          }
+        ]
+      },
+      "economic_meaning": "Velocidad relativa de incremento de demanda implícita de cobertura.",
+      "transform": "100*(V[t]/V[t-5]-1); denominator >0.",
+      "window": "Last 5 eligible VIX sessions",
+      "freshness": {
+        "policy_ref": "SOURCE_FRED_PUBLICATION",
+        "validation_parameter": "FRESHNESS_POLICY",
+        "available_at_required": true
+      },
+      "minimum_history": "6 dated closes",
+      "dependency_group": "implied_volatility_complex",
+      "required_or_optional": "REQUIRED_CORE",
+      "missing_behavior": "Preserve null and explicit reason/status. Reject demo, malformed, stale or temporally ineligible input; never impute zero or neutral. Missing REQUIRED_CORE makes its dependent pillar UNAVAILABLE. Optional/parked/excluded features cannot substitute for core.",
+      "existing_or_new": "EXISTING_INTERNAL_TRANSFORM_NOT_EXPOSED",
+      "depends_on": [
+        "raw_vix_history"
+      ],
+      "unit": "percent",
+      "notes": ""
+    },
+    {
+      "feature_id": "vix_percentile",
+      "name": "Percentil VIX histórico expansivo",
+      "family": "vix_spot",
+      "source": {
+        "audit_ids": [
+          "S11"
+        ],
+        "existing_field_or_symbol": "vix.spot.vixPercentile; percentileFor",
+        "providers": [
+          {
+            "name": "FRED / Cboe VIXCLS",
+            "url": "https://fred.stlouisfed.org/series/VIXCLS"
+          }
+        ]
+      },
+      "economic_meaning": "Posición relativa a su historia disponible, no probabilidad de mercado.",
+      "transform": "100*count(V[i]<=V[t])/N for all eligible closes from declared series start through t, including t.",
+      "window": "Expanding from declared available history start; not a 252-session rolling window",
+      "freshness": {
+        "policy_ref": "SOURCE_FRED_PUBLICATION",
+        "validation_parameter": "FRESHNESS_POLICY",
+        "available_at_required": true
+      },
+      "minimum_history": "252 eligible dated closes; preserve full reference population",
+      "dependency_group": "implied_volatility_complex",
+      "required_or_optional": "OPTIONAL_EVIDENCE",
+      "missing_behavior": "Preserve null and explicit reason/status. Reject demo, malformed, stale or temporally ineligible input; never impute zero or neutral. Missing REQUIRED_CORE makes its dependent pillar UNAVAILABLE. Optional/parked/excluded features cannot substitute for core.",
+      "existing_or_new": "EXISTING_TRANSFORM_OUTPUT_HISTORY_TRUNCATED",
+      "depends_on": [
+        "raw_vix_history"
+      ],
+      "unit": "percentile rank",
+      "notes": "Returned history has only 60 points. Raw rank may be evidence; it must never be labeled regime confidence/probability."
+    },
+    {
+      "feature_id": "vix_legacy_composite",
+      "name": "Composite/severity VIX V1",
+      "family": "vix_spot",
+      "source": {
+        "audit_ids": [
+          "S11"
+        ],
+        "existing_field_or_symbol": "vixCompositeLabel; vixSeverity; vixTrend",
+        "providers": [
+          {
+            "name": "FRED / Cboe VIXCLS",
+            "url": "https://fred.stlouisfed.org/series/VIXCLS"
+          }
+        ]
+      },
+      "economic_meaning": "Etiqueta del módulo legado, derivada del mismo VIX.",
+      "transform": "Legacy level/percentile/momentum classification; not an input to V2 core.",
+      "window": "Same history as legacy adapter",
+      "freshness": {
+        "policy_ref": "SOURCE_FRED_PUBLICATION",
+        "validation_parameter": "FRESHNESS_POLICY",
+        "available_at_required": true
+      },
+      "minimum_history": "Legacy context only; no core eligibility",
+      "dependency_group": "implied_volatility_complex",
+      "required_or_optional": "EXCLUDED",
+      "missing_behavior": "Preserve null and explicit reason/status. Reject demo, malformed, stale or temporally ineligible input; never impute zero or neutral. Missing REQUIRED_CORE makes its dependent pillar UNAVAILABLE. Optional/parked/excluded features cannot substitute for core.",
+      "existing_or_new": "EXISTING_DERIVED_LABEL",
+      "depends_on": [
+        "vix_level",
+        "vix_percentile",
+        "vix_momentum_1",
+        "vix_momentum_5"
+      ],
+      "unit": "categorical",
+      "notes": "Do not inherit stable from missing momentum or a demo VIX severity."
+    },
+    {
+      "feature_id": "vx_contracts",
+      "name": "Contratos mensuales VX1…VX9",
+      "family": "vix_curve",
+      "source": {
+        "audit_ids": [
+          "S13"
+        ],
+        "existing_field_or_symbol": "vixTermStructure.points",
+        "providers": [
+          {
+            "name": "Cboe CFE monthly VX settlements",
+            "url": "https://www.cboe.com/markets/us/futures/market-statistics/settlement/futures/daily/"
+          }
+        ]
+      },
+      "economic_meaning": "Estructura por vencimiento de volatilidad implícita.",
+      "transform": "Select monthly unexpired VX contracts by actual expiration ascending; retain missing prices in slots, symbols, settlement date; no weekly contracts.",
+      "window": "Single settlement cross-section",
+      "freshness": {
+        "policy_ref": "SOURCE_CFE_SETTLEMENT",
+        "validation_parameter": "FRESHNESS_POLICY",
+        "available_at_required": true
+      },
+      "minimum_history": "VX1 and VX2 eligible for B; VX3…VX9 optional",
+      "dependency_group": "implied_volatility_complex",
+      "required_or_optional": "REQUIRED_CORE",
+      "missing_behavior": "Preserve null and explicit reason/status. Reject demo, malformed, stale or temporally ineligible input; never impute zero or neutral. Missing REQUIRED_CORE makes its dependent pillar UNAVAILABLE. Optional/parked/excluded features cannot substitute for core.",
+      "existing_or_new": "EXISTING_SELECTION_REQUIRES_DATED_SETTLEMENT",
+      "depends_on": [
+        "raw_vx_settlements"
+      ],
+      "unit": "VIX futures points",
+      "notes": "Provider automated status does not guarantee two positive prices or same usable date as spot."
+    },
+    {
+      "feature_id": "vx_spread_12",
+      "name": "VX1–VX2 spread",
+      "family": "vix_curve",
+      "source": {
+        "audit_ids": [
+          "S14"
+        ],
+        "existing_field_or_symbol": "vixTermStructure.m1m2Spread",
+        "providers": [
+          {
+            "name": "Cboe CFE monthly VX settlements",
+            "url": "https://www.cboe.com/markets/us/futures/market-statistics/settlement/futures/daily/"
+          }
+        ]
+      },
+      "economic_meaning": "Prima de vencimiento posterior frente al cercano; ambos contratos del mismo settlement.",
+      "transform": "VX2-VX1",
+      "window": "Single settlement",
+      "freshness": {
+        "policy_ref": "SOURCE_CFE_SETTLEMENT",
+        "validation_parameter": "FRESHNESS_POLICY",
+        "available_at_required": true
+      },
+      "minimum_history": "Positive VX1 and actual VX2, with identities and expirations",
+      "dependency_group": "implied_volatility_complex",
+      "required_or_optional": "OPTIONAL_EVIDENCE",
+      "missing_behavior": "Preserve null and explicit reason/status. Reject demo, malformed, stale or temporally ineligible input; never impute zero or neutral. Missing REQUIRED_CORE makes its dependent pillar UNAVAILABLE. Optional/parked/excluded features cannot substitute for core.",
+      "existing_or_new": "EXISTING_TRANSFORM_REQUIRES_DATED_SETTLEMENT",
+      "depends_on": [
+        "vx_contracts"
+      ],
+      "unit": "points",
+      "notes": ""
+    },
+    {
+      "feature_id": "vx_slope_12",
+      "name": "VX1–VX2 slope",
+      "family": "vix_curve",
+      "source": {
+        "audit_ids": [
+          "S14"
+        ],
+        "existing_field_or_symbol": "vixTermStructure.m1m2SlopePct",
+        "providers": [
+          {
+            "name": "Cboe CFE monthly VX settlements",
+            "url": "https://www.cboe.com/markets/us/futures/market-statistics/settlement/futures/daily/"
+          }
+        ]
+      },
+      "economic_meaning": "Prima de vencimiento posterior frente al cercano; ambos contratos del mismo settlement.",
+      "transform": "100*(VX2/VX1-1); VX1>0.",
+      "window": "Single settlement",
+      "freshness": {
+        "policy_ref": "SOURCE_CFE_SETTLEMENT",
+        "validation_parameter": "FRESHNESS_POLICY",
+        "available_at_required": true
+      },
+      "minimum_history": "Positive VX1 and actual VX2, with identities and expirations",
+      "dependency_group": "implied_volatility_complex",
+      "required_or_optional": "REQUIRED_CORE",
+      "missing_behavior": "Preserve null and explicit reason/status. Reject demo, malformed, stale or temporally ineligible input; never impute zero or neutral. Missing REQUIRED_CORE makes its dependent pillar UNAVAILABLE. Optional/parked/excluded features cannot substitute for core.",
+      "existing_or_new": "EXISTING_TRANSFORM_REQUIRES_DATED_SETTLEMENT",
+      "depends_on": [
+        "vx_contracts"
+      ],
+      "unit": "percent",
+      "notes": ""
+    },
+    {
+      "feature_id": "vx_spread_13",
+      "name": "VX1–VX3 spread",
+      "family": "vix_curve",
+      "source": {
+        "audit_ids": [
+          "S14"
+        ],
+        "existing_field_or_symbol": "vixTermStructure.m1m3Spread",
+        "providers": [
+          {
+            "name": "Cboe CFE monthly VX settlements",
+            "url": "https://www.cboe.com/markets/us/futures/market-statistics/settlement/futures/daily/"
+          }
+        ]
+      },
+      "economic_meaning": "Prima de vencimiento posterior frente al cercano; ambos contratos del mismo settlement.",
+      "transform": "VX3-VX1",
+      "window": "Single settlement",
+      "freshness": {
+        "policy_ref": "SOURCE_CFE_SETTLEMENT",
+        "validation_parameter": "FRESHNESS_POLICY",
+        "available_at_required": true
+      },
+      "minimum_history": "Positive VX1 and actual VX3, with identities and expirations",
+      "dependency_group": "implied_volatility_complex",
+      "required_or_optional": "OPTIONAL_EVIDENCE",
+      "missing_behavior": "Preserve null and explicit reason/status. Reject demo, malformed, stale or temporally ineligible input; never impute zero or neutral. Missing REQUIRED_CORE makes its dependent pillar UNAVAILABLE. Optional/parked/excluded features cannot substitute for core.",
+      "existing_or_new": "EXISTING_TRANSFORM_REQUIRES_DATED_SETTLEMENT",
+      "depends_on": [
+        "vx_contracts"
+      ],
+      "unit": "points",
+      "notes": ""
+    },
+    {
+      "feature_id": "vx_slope_13",
+      "name": "VX1–VX3 slope",
+      "family": "vix_curve",
+      "source": {
+        "audit_ids": [
+          "S14"
+        ],
+        "existing_field_or_symbol": "vixTermStructure.m1m3SlopePct",
+        "providers": [
+          {
+            "name": "Cboe CFE monthly VX settlements",
+            "url": "https://www.cboe.com/markets/us/futures/market-statistics/settlement/futures/daily/"
+          }
+        ]
+      },
+      "economic_meaning": "Prima de vencimiento posterior frente al cercano; ambos contratos del mismo settlement.",
+      "transform": "100*(VX3/VX1-1); VX1>0.",
+      "window": "Single settlement",
+      "freshness": {
+        "policy_ref": "SOURCE_CFE_SETTLEMENT",
+        "validation_parameter": "FRESHNESS_POLICY",
+        "available_at_required": true
+      },
+      "minimum_history": "Positive VX1 and actual VX3, with identities and expirations",
+      "dependency_group": "implied_volatility_complex",
+      "required_or_optional": "OPTIONAL_EVIDENCE",
+      "missing_behavior": "Preserve null and explicit reason/status. Reject demo, malformed, stale or temporally ineligible input; never impute zero or neutral. Missing REQUIRED_CORE makes its dependent pillar UNAVAILABLE. Optional/parked/excluded features cannot substitute for core.",
+      "existing_or_new": "EXISTING_TRANSFORM_REQUIRES_DATED_SETTLEMENT",
+      "depends_on": [
+        "vx_contracts"
+      ],
+      "unit": "percent",
+      "notes": ""
+    },
+    {
+      "feature_id": "vx_curvature",
+      "name": "Curvatura por vencimiento real",
+      "family": "vix_curve",
+      "source": {
+        "audit_ids": [
+          "S13",
+          "S14"
+        ],
+        "existing_field_or_symbol": "not implemented",
+        "providers": [
+          {
+            "name": "Cboe CFE monthly VX settlements",
+            "url": "https://www.cboe.com/markets/us/futures/market-statistics/settlement/futures/daily/"
+          }
+        ]
+      },
+      "economic_meaning": "Cambio de pendiente a lo largo de plazos, sujeto a roll y distancia de vencimientos.",
+      "transform": "PARK candidate: 2*(((VX3-VX2)/(T3-T2))-((VX2-VX1)/(T2-T1)))/(T3-T1), T in days. No state classification before history validation.",
+      "window": "Single curve geometry plus historical normalization window UNBOUND",
+      "freshness": {
+        "policy_ref": "SOURCE_CFE_SETTLEMENT",
+        "validation_parameter": "FRESHNESS_POLICY",
+        "available_at_required": true
+      },
+      "minimum_history": "3 valid monthly contracts with distinct ordered expirations; historical minimum UNBOUND",
+      "dependency_group": "implied_volatility_complex",
+      "required_or_optional": "PARKED",
+      "missing_behavior": "Preserve null and explicit reason/status. Reject demo, malformed, stale or temporally ineligible input; never impute zero or neutral. Missing REQUIRED_CORE makes its dependent pillar UNAVAILABLE. Optional/parked/excluded features cannot substitute for core.",
+      "existing_or_new": "NEW_TRANSFORM_HISTORY_REQUIRED",
+      "depends_on": [
+        "vx_contracts"
+      ],
+      "unit": "points per day squared",
+      "notes": "No interpolation or curvature score; not in initial profile."
+    },
+    {
+      "feature_id": "corr_mean_21",
+      "name": "Correlación media 21",
+      "family": "co_movement",
+      "source": {
+        "audit_ids": [
+          "S06",
+          "S07"
+        ],
+        "existing_field_or_symbol": "quantRisk.averageCorrelation21d",
+        "providers": [
+          {
+            "name": "Alpha Vantage sector daily prices; derived local statistics",
+            "url": "https://www.alphavantage.co/documentation/#daily"
+          }
+        ]
+      },
+      "economic_meaning": "Co-movement de sectores y reducción potencial de diversificación.",
+      "transform": "Mean Pearson correlation over all 55 pairs of 11 daily-return series aligned on exactly 21 common consecutive sessions; any invalid pair => unavailable.",
+      "window": "Last 21 equity returns",
+      "freshness": {
+        "policy_ref": "SOURCE_EQUITY_CALENDAR",
+        "validation_parameter": "FRESHNESS_POLICY",
+        "available_at_required": true
+      },
+      "minimum_history": "22 closes per ETF; 55 valid pairs, no zero-variance series",
+      "dependency_group": "equity_price_complex",
+      "required_or_optional": "REQUIRED_CORE",
+      "missing_behavior": "Preserve null and explicit reason/status. Reject demo, malformed, stale or temporally ineligible input; never impute zero or neutral. Missing REQUIRED_CORE makes its dependent pillar UNAVAILABLE. Optional/parked/excluded features cannot substitute for core.",
+      "existing_or_new": "EXISTING_AGGREGATE_REQUIRES_ALIGNMENT_AND_COVERAGE_REPAIR",
+      "depends_on": [
+        "raw_sector_prices"
+      ],
+      "unit": "correlation [-1,1]",
+      "notes": "Legacy helper can silently use shorter or position-misaligned arrays; do not trust it as validated V2 input."
+    },
+    {
+      "feature_id": "corr_mean_63",
+      "name": "Correlación media 63",
+      "family": "co_movement",
+      "source": {
+        "audit_ids": [
+          "S06",
+          "S07"
+        ],
+        "existing_field_or_symbol": "quantRisk.averageCorrelation63d",
+        "providers": [
+          {
+            "name": "Alpha Vantage sector daily prices; derived local statistics",
+            "url": "https://www.alphavantage.co/documentation/#daily"
+          }
+        ]
+      },
+      "economic_meaning": "Co-movement de sectores y reducción potencial de diversificación.",
+      "transform": "Mean Pearson correlation over all 55 pairs of 11 daily-return series aligned on exactly 63 common consecutive sessions; any invalid pair => unavailable.",
+      "window": "Last 63 equity returns",
+      "freshness": {
+        "policy_ref": "SOURCE_EQUITY_CALENDAR",
+        "validation_parameter": "FRESHNESS_POLICY",
+        "available_at_required": true
+      },
+      "minimum_history": "64 closes per ETF; 55 valid pairs, no zero-variance series",
+      "dependency_group": "equity_price_complex",
+      "required_or_optional": "REQUIRED_CORE",
+      "missing_behavior": "Preserve null and explicit reason/status. Reject demo, malformed, stale or temporally ineligible input; never impute zero or neutral. Missing REQUIRED_CORE makes its dependent pillar UNAVAILABLE. Optional/parked/excluded features cannot substitute for core.",
+      "existing_or_new": "EXISTING_AGGREGATE_REQUIRES_ALIGNMENT_AND_COVERAGE_REPAIR",
+      "depends_on": [
+        "raw_sector_prices"
+      ],
+      "unit": "correlation [-1,1]",
+      "notes": "Legacy helper can silently use shorter or position-misaligned arrays; do not trust it as validated V2 input."
+    },
+    {
+      "feature_id": "corr_window_spread",
+      "name": "Brecha de correlación corta/larga",
+      "family": "co_movement",
+      "source": {
+        "audit_ids": [
+          "S07"
+        ],
+        "existing_field_or_symbol": "new difference of averageCorrelation21d and averageCorrelation63d",
+        "providers": [
+          {
+            "name": "Alpha Vantage sector daily prices; derived local statistics",
+            "url": "https://www.alphavantage.co/documentation/#daily"
+          }
+        ]
+      },
+      "economic_meaning": "Intensificación relativa entre ventanas anidadas, no cambio temporal.",
+      "transform": "corr_mean_21-corr_mean_63 on same end session and universe.",
+      "window": "Nested 21/63 sessions",
+      "freshness": {
+        "policy_ref": "SOURCE_EQUITY_CALENDAR",
+        "validation_parameter": "FRESHNESS_POLICY",
+        "available_at_required": true
+      },
+      "minimum_history": "64 common dated closes per ETF; both correlations eligible",
+      "dependency_group": "equity_price_complex",
+      "required_or_optional": "REQUIRED_CORE",
+      "missing_behavior": "Preserve null and explicit reason/status. Reject demo, malformed, stale or temporally ineligible input; never impute zero or neutral. Missing REQUIRED_CORE makes its dependent pillar UNAVAILABLE. Optional/parked/excluded features cannot substitute for core.",
+      "existing_or_new": "NEW_TRANSFORM_EXISTING_COMPONENTS",
+      "depends_on": [
+        "corr_mean_21",
+        "corr_mean_63"
+      ],
+      "unit": "correlation difference",
+      "notes": ""
+    },
+    {
+      "feature_id": "corr_change_21",
+      "name": "Cambio temporal de correlación",
+      "family": "co_movement",
+      "source": {
+        "audit_ids": [
+          "S06",
+          "S07"
+        ],
+        "existing_field_or_symbol": "not separately calculated",
+        "providers": [
+          {
+            "name": "Alpha Vantage sector daily prices; derived local statistics",
+            "url": "https://www.alphavantage.co/documentation/#daily"
+          }
+        ]
+      },
+      "economic_meaning": "Cambio de la correlación de 21 sesiones entre dos fechas separadas 21 sesiones.",
+      "transform": "rho21(t)-rho21(t-21); both correlations recomputed from eligible dated observations.",
+      "window": "Two non-overlapping 21-return windows",
+      "freshness": {
+        "policy_ref": "SOURCE_EQUITY_CALENDAR",
+        "validation_parameter": "FRESHNESS_POLICY",
+        "available_at_required": true
+      },
+      "minimum_history": "43 common dated closes per ETF",
+      "dependency_group": "equity_price_complex",
+      "required_or_optional": "OPTIONAL_EVIDENCE",
+      "missing_behavior": "Preserve null and explicit reason/status. Reject demo, malformed, stale or temporally ineligible input; never impute zero or neutral. Missing REQUIRED_CORE makes its dependent pillar UNAVAILABLE. Optional/parked/excluded features cannot substitute for core.",
+      "existing_or_new": "NEW_TRANSFORM_EXISTING_RAW_PRICES",
+      "depends_on": [
+        "raw_sector_prices"
+      ],
+      "unit": "correlation difference",
+      "notes": "Not interchangeable with corr_window_spread."
+    },
+    {
+      "feature_id": "corr_defensive_growth_21",
+      "name": "Correlación defensivos/growth",
+      "family": "co_movement",
+      "source": {
+        "audit_ids": [
+          "S07"
+        ],
+        "existing_field_or_symbol": "quantRisk.defensiveGrowthCorrelation21d",
+        "providers": [
+          {
+            "name": "Alpha Vantage sector daily prices; derived local statistics",
+            "url": "https://www.alphavantage.co/documentation/#daily"
+          }
+        ]
+      },
+      "economic_meaning": "Grado de comportamiento conjunto de dos subgrupos.",
+      "transform": "Pearson(mean daily defensive returns, mean daily growth returns) over 21 common returns.",
+      "window": "21 sessions",
+      "freshness": {
+        "policy_ref": "SOURCE_EQUITY_CALENDAR",
+        "validation_parameter": "FRESHNESS_POLICY",
+        "available_at_required": true
+      },
+      "minimum_history": "22 dated closes for all group members; nondegenerate means",
+      "dependency_group": "equity_price_complex",
+      "required_or_optional": "OPTIONAL_EVIDENCE",
+      "missing_behavior": "Preserve null and explicit reason/status. Reject demo, malformed, stale or temporally ineligible input; never impute zero or neutral. Missing REQUIRED_CORE makes its dependent pillar UNAVAILABLE. Optional/parked/excluded features cannot substitute for core.",
+      "existing_or_new": "EXISTING_AGGREGATE_REQUIRES_DATE_ALIGNMENT",
+      "depends_on": [
+        "raw_sector_prices"
+      ],
+      "unit": "correlation [-1,1]",
+      "notes": ""
+    },
+    {
+      "feature_id": "realized_ewma",
+      "name": "Volatilidad EWMA",
+      "family": "realized_risk",
+      "source": {
+        "audit_ids": [
+          "S06",
+          "S07"
+        ],
+        "existing_field_or_symbol": "quantRisk.ewmaVolAnnualized; math.ewmaAnnualizedVolatility",
+        "providers": [
+          {
+            "name": "Alpha Vantage sector daily prices; derived local statistics",
+            "url": "https://www.alphavantage.co/documentation/#daily"
+          }
+        ]
+      },
+      "economic_meaning": "Variabilidad realizada del retorno equiponderado sectorial.",
+      "transform": "Daily equal-weight mean over 11 aligned ETFs; seed sample variance of first 21 returns; recurse var=.94*prior+.06*r² from return 22; 100*sqrt(var*252).",
+      "window": "All declared eligible prefix, seed and start fixed in feature inputs",
+      "freshness": {
+        "policy_ref": "SOURCE_EQUITY_CALENDAR",
+        "validation_parameter": "FRESHNESS_POLICY",
+        "available_at_required": true
+      },
+      "minimum_history": "21 returns /22 closes for all ETFs",
+      "dependency_group": "equity_price_complex",
+      "required_or_optional": "OPTIONAL_EVIDENCE",
+      "missing_behavior": "Preserve null and explicit reason/status. Reject demo, malformed, stale or temporally ineligible input; never impute zero or neutral. Missing REQUIRED_CORE makes its dependent pillar UNAVAILABLE. Optional/parked/excluded features cannot substitute for core.",
+      "existing_or_new": "EXISTING_TRANSFORM_REQUIRES_DATE_ALIGNMENT",
+      "depends_on": [
+        "raw_sector_prices"
+      ],
+      "unit": "annualized percent",
+      "notes": "Historical slice/start is part of input hash; not independent of correlation/leadership."
+    },
+    {
+      "feature_id": "realized_ewma_change",
+      "name": "Cambio EWMA frente a 21 sesiones",
+      "family": "realized_risk",
+      "source": {
+        "audit_ids": [
+          "S07"
+        ],
+        "existing_field_or_symbol": "quantRisk.ewmaVolChange",
+        "providers": [
+          {
+            "name": "Alpha Vantage sector daily prices; derived local statistics",
+            "url": "https://www.alphavantage.co/documentation/#daily"
+          }
+        ]
+      },
+      "economic_meaning": "Variación de riesgo realizado respecto a una evaluación anterior.",
+      "transform": "EWMA(t)-EWMA(t-21), identical seed/start and eligible prefix; result in percentage points.",
+      "window": "21-session change",
+      "freshness": {
+        "policy_ref": "SOURCE_EQUITY_CALENDAR",
+        "validation_parameter": "FRESHNESS_POLICY",
+        "available_at_required": true
+      },
+      "minimum_history": "43 returns to reproduce current legacy availability condition (>42); mathematical 42-return minimum differs",
+      "dependency_group": "equity_price_complex",
+      "required_or_optional": "OPTIONAL_EVIDENCE",
+      "missing_behavior": "Preserve null and explicit reason/status. Reject demo, malformed, stale or temporally ineligible input; never impute zero or neutral. Missing REQUIRED_CORE makes its dependent pillar UNAVAILABLE. Optional/parked/excluded features cannot substitute for core.",
+      "existing_or_new": "EXISTING_TRANSFORM_REQUIRES_DATE_ALIGNMENT",
+      "depends_on": [
+        "realized_ewma",
+        "raw_sector_prices"
+      ],
+      "unit": "percentage points",
+      "notes": "Legacy minimum is recorded, not silently changed by Builder."
+    },
+    {
+      "feature_id": "realized_garch",
+      "name": "Forecast GARCH con parámetros fijos",
+      "family": "realized_risk",
+      "source": {
+        "audit_ids": [
+          "S06",
+          "S07"
+        ],
+        "existing_field_or_symbol": "quantRisk.garchVolForecast; garchOneOneForecast",
+        "providers": [
+          {
+            "name": "Alpha Vantage sector daily prices; derived local statistics",
+            "url": "https://www.alphavantage.co/documentation/#daily"
+          }
+        ]
+      },
+      "economic_meaning": "Diagnóstico condicional del mismo panel sectorial.",
+      "transform": "Legacy alpha=.06 beta=.9; omega=max(sampleVariance(all returns)*.04,0); recursion over same eligible returns; annualize sqrt(var*252)*100. Record explicit EWMA fallback as same observation lineage.",
+      "window": "Declared eligible prefix",
+      "freshness": {
+        "policy_ref": "SOURCE_EQUITY_CALENDAR",
+        "validation_parameter": "FRESHNESS_POLICY",
+        "available_at_required": true
+      },
+      "minimum_history": "63 returns /64 closes per ETF; fallback labeled distinctly",
+      "dependency_group": "equity_price_complex",
+      "required_or_optional": "PARKED",
+      "missing_behavior": "Preserve null and explicit reason/status. Reject demo, malformed, stale or temporally ineligible input; never impute zero or neutral. Missing REQUIRED_CORE makes its dependent pillar UNAVAILABLE. Optional/parked/excluded features cannot substitute for core.",
+      "existing_or_new": "EXISTING_REDUNDANT_DIAGNOSTIC",
+      "depends_on": [
+        "raw_sector_prices",
+        "realized_ewma"
+      ],
+      "unit": "annualized percent",
+      "notes": "No parameter estimation in function; not an independent confirmation and not initial V2 core."
+    },
+    {
+      "feature_id": "legacy_fragility_score",
+      "name": "Fragility score V1",
+      "family": "co_movement",
+      "source": {
+        "audit_ids": [
+          "S07"
+        ],
+        "existing_field_or_symbol": "quantRisk.fragilityScore; fragilityLabel",
+        "providers": [
+          {
+            "name": "Alpha Vantage sector daily prices; derived local statistics",
+            "url": "https://www.alphavantage.co/documentation/#daily"
+          }
+        ]
+      },
+      "economic_meaning": "Composite legado para preservación, no nueva evidencia.",
+      "transform": "Existing 20-point terms on volatility/correlation/dispersion/leadership; never evaluate as V2 input.",
+      "window": "Legacy only",
+      "freshness": {
+        "policy_ref": "SOURCE_EQUITY_CALENDAR",
+        "validation_parameter": "FRESHNESS_POLICY",
+        "available_at_required": true
+      },
+      "minimum_history": "Not eligible for V2 core",
+      "dependency_group": "equity_price_complex",
+      "required_or_optional": "EXCLUDED",
+      "missing_behavior": "Preserve null and explicit reason/status. Reject demo, malformed, stale or temporally ineligible input; never impute zero or neutral. Missing REQUIRED_CORE makes its dependent pillar UNAVAILABLE. Optional/parked/excluded features cannot substitute for core.",
+      "existing_or_new": "EXISTING_SCORE",
+      "depends_on": [
+        "realized_ewma",
+        "realized_garch",
+        "corr_mean_21",
+        "eq_dispersion_5",
+        "eq_dispersion_21",
+        "eq_legacy_leadership"
+      ],
+      "unit": "legacy score",
+      "notes": "Exact legacy leadership dependency remains distinct; V1 is preserved byte-for-byte."
+    },
+    {
+      "feature_id": "pfl_concentration",
+      "name": "PFL concentration",
+      "family": "portfolio_specific",
+      "source": {
+        "audit_ids": [
+          "S18"
+        ],
+        "existing_field_or_symbol": "concentrationMetrics",
+        "providers": [
+          {
+            "name": "Portfolio-specific inputs and local demonstration data; no market-source contract",
+            "url": null
+          }
+        ]
+      },
+      "economic_meaning": "Propiedad de una cartera/escenario del usuario, no del mercado global.",
+      "transform": "PARK: mathematical helper exists; market-universe compatibility and nonredundancy must be evidenced before proposing any transform.",
+      "window": "Portfolio-specific, not global-market window",
+      "freshness": {
+        "policy_ref": "NO_MARKET_FRESHNESS_CONTRACT",
+        "validation_parameter": "FRESHNESS_POLICY",
+        "available_at_required": true
+      },
+      "minimum_history": "Compatible market universe, weights, dated history and scenario contract absent",
+      "dependency_group": "portfolio_specific",
+      "required_or_optional": "PARKED",
+      "missing_behavior": "Preserve null and explicit reason/status. Reject demo, malformed, stale or temporally ineligible input; never impute zero or neutral. Missing REQUIRED_CORE makes its dependent pillar UNAVAILABLE. Optional/parked/excluded features cannot substitute for core.",
+      "existing_or_new": "EXISTING_PORTFOLIO_ONLY",
+      "depends_on": [
+        "raw_portfolio_holdings"
+      ],
+      "unit": "portfolio-specific",
+      "notes": "Do not ingest personal holdings or synthetic demos into regime engine."
+    },
+    {
+      "feature_id": "pfl_covariance",
+      "name": "PFL covariance",
+      "family": "portfolio_specific",
+      "source": {
+        "audit_ids": [
+          "S18"
+        ],
+        "existing_field_or_symbol": "sampleCovariance; portfolioRisk",
+        "providers": [
+          {
+            "name": "Portfolio-specific inputs and local demonstration data; no market-source contract",
+            "url": null
+          }
+        ]
+      },
+      "economic_meaning": "Propiedad de una cartera/escenario del usuario, no del mercado global.",
+      "transform": "PARK: mathematical helper exists; market-universe compatibility and nonredundancy must be evidenced before proposing any transform.",
+      "window": "Portfolio-specific, not global-market window",
+      "freshness": {
+        "policy_ref": "NO_MARKET_FRESHNESS_CONTRACT",
+        "validation_parameter": "FRESHNESS_POLICY",
+        "available_at_required": true
+      },
+      "minimum_history": "Compatible market universe, weights, dated history and scenario contract absent",
+      "dependency_group": "portfolio_specific",
+      "required_or_optional": "PARKED",
+      "missing_behavior": "Preserve null and explicit reason/status. Reject demo, malformed, stale or temporally ineligible input; never impute zero or neutral. Missing REQUIRED_CORE makes its dependent pillar UNAVAILABLE. Optional/parked/excluded features cannot substitute for core.",
+      "existing_or_new": "EXISTING_PORTFOLIO_ONLY",
+      "depends_on": [
+        "raw_portfolio_history",
+        "raw_portfolio_holdings"
+      ],
+      "unit": "portfolio-specific",
+      "notes": "Do not ingest personal holdings or synthetic demos into regime engine."
+    },
+    {
+      "feature_id": "pfl_stress",
+      "name": "PFL stress",
+      "family": "portfolio_specific",
+      "source": {
+        "audit_ids": [
+          "S18"
+        ],
+        "existing_field_or_symbol": "covarianceStress",
+        "providers": [
+          {
+            "name": "Portfolio-specific inputs and local demonstration data; no market-source contract",
+            "url": null
+          }
+        ]
+      },
+      "economic_meaning": "Propiedad de una cartera/escenario del usuario, no del mercado global.",
+      "transform": "PARK: mathematical helper exists; market-universe compatibility and nonredundancy must be evidenced before proposing any transform.",
+      "window": "Portfolio-specific, not global-market window",
+      "freshness": {
+        "policy_ref": "NO_MARKET_FRESHNESS_CONTRACT",
+        "validation_parameter": "FRESHNESS_POLICY",
+        "available_at_required": true
+      },
+      "minimum_history": "Compatible market universe, weights, dated history and scenario contract absent",
+      "dependency_group": "portfolio_specific",
+      "required_or_optional": "PARKED",
+      "missing_behavior": "Preserve null and explicit reason/status. Reject demo, malformed, stale or temporally ineligible input; never impute zero or neutral. Missing REQUIRED_CORE makes its dependent pillar UNAVAILABLE. Optional/parked/excluded features cannot substitute for core.",
+      "existing_or_new": "EXISTING_PORTFOLIO_ONLY",
+      "depends_on": [
+        "raw_portfolio_history",
+        "raw_portfolio_holdings"
+      ],
+      "unit": "portfolio-specific",
+      "notes": "Do not ingest personal holdings or synthetic demos into regime engine."
+    },
+    {
+      "feature_id": "btc_daily",
+      "name": "Flujo BTC diario",
+      "family": "btc_flows",
+      "source": {
+        "audit_ids": [
+          "S15",
+          "S16"
+        ],
+        "existing_field_or_symbol": "btcEtfFlows.flows.latestTotalNetFlow",
+        "providers": [
+          {
+            "name": "Bitbo / BitcoinTreasuries",
+            "url": "https://bitbo.io/treasuries/etf-flows/"
+          },
+          {
+            "name": "Farside Investors fallback",
+            "url": "https://farside.co.uk/bitcoin-etf-flow-all-data/"
+          }
+        ]
+      },
+      "economic_meaning": "Demanda neta reportada vía vehículos BTC, específica de esa satellite.",
+      "transform": "Use reported daily total with raw row and coverage. Recompute only if all expected fund values are observed and reconcile explicitly; null never zero.",
+      "window": "One published session",
+      "freshness": {
+        "policy_ref": "SOURCE_BTC_PUBLICATION",
+        "validation_parameter": "FRESHNESS_POLICY",
+        "available_at_required": true
+      },
+      "minimum_history": "1 complete eligible row; legacy parser itself requires >=5 rows",
+      "dependency_group": "btc_etf_flows",
+      "required_or_optional": "OPTIONAL_EVIDENCE",
+      "missing_behavior": "Preserve null and explicit reason/status. Reject demo, malformed, stale or temporally ineligible input; never impute zero or neutral. Missing REQUIRED_CORE makes its dependent pillar UNAVAILABLE. Optional/parked/excluded features cannot substitute for core.",
+      "existing_or_new": "EXISTING_TOTAL_NEEDS_RAW_NULL_AND_COVERAGE",
+      "depends_on": [
+        "raw_btc_rows"
+      ],
+      "unit": "USD millions",
+      "notes": ""
+    },
+    {
+      "feature_id": "btc_rolling_5",
+      "name": "Flujo BTC rolling 5",
+      "family": "btc_flows",
+      "source": {
+        "audit_ids": [
+          "S16"
+        ],
+        "existing_field_or_symbol": "btcEtfFlows.flows.rolling5dNetFlow",
+        "providers": [
+          {
+            "name": "Bitbo / BitcoinTreasuries",
+            "url": "https://bitbo.io/treasuries/etf-flows/"
+          },
+          {
+            "name": "Farside Investors fallback",
+            "url": "https://farside.co.uk/bitcoin-etf-flow-all-data/"
+          }
+        ]
+      },
+      "economic_meaning": "Acumulación de las mismas filas de flujo, sin independencia adicional.",
+      "transform": "sum of last 5 eligible daily totals; every expected session observed; reject incomplete window.",
+      "window": "Last 5 fund sessions",
+      "freshness": {
+        "policy_ref": "SOURCE_BTC_PUBLICATION",
+        "validation_parameter": "FRESHNESS_POLICY",
+        "available_at_required": true
+      },
+      "minimum_history": "5 complete dated eligible total rows",
+      "dependency_group": "btc_etf_flows",
+      "required_or_optional": "OPTIONAL_EVIDENCE",
+      "missing_behavior": "Preserve null and explicit reason/status. Reject demo, malformed, stale or temporally ineligible input; never impute zero or neutral. Missing REQUIRED_CORE makes its dependent pillar UNAVAILABLE. Optional/parked/excluded features cannot substitute for core.",
+      "existing_or_new": "EXISTING_TRANSFORM_NEEDS_RAW_COVERAGE",
+      "depends_on": [
+        "raw_btc_rows"
+      ],
+      "unit": "USD millions",
+      "notes": ""
+    },
+    {
+      "feature_id": "btc_rolling_10",
+      "name": "Flujo BTC rolling 10",
+      "family": "btc_flows",
+      "source": {
+        "audit_ids": [
+          "S16"
+        ],
+        "existing_field_or_symbol": "btcEtfFlows.flows.rolling10dNetFlow",
+        "providers": [
+          {
+            "name": "Bitbo / BitcoinTreasuries",
+            "url": "https://bitbo.io/treasuries/etf-flows/"
+          },
+          {
+            "name": "Farside Investors fallback",
+            "url": "https://farside.co.uk/bitcoin-etf-flow-all-data/"
+          }
+        ]
+      },
+      "economic_meaning": "Acumulación de las mismas filas de flujo, sin independencia adicional.",
+      "transform": "sum of last 10 eligible daily totals; every expected session observed; reject incomplete window.",
+      "window": "Last 10 fund sessions",
+      "freshness": {
+        "policy_ref": "SOURCE_BTC_PUBLICATION",
+        "validation_parameter": "FRESHNESS_POLICY",
+        "available_at_required": true
+      },
+      "minimum_history": "10 complete dated eligible total rows",
+      "dependency_group": "btc_etf_flows",
+      "required_or_optional": "OPTIONAL_EVIDENCE",
+      "missing_behavior": "Preserve null and explicit reason/status. Reject demo, malformed, stale or temporally ineligible input; never impute zero or neutral. Missing REQUIRED_CORE makes its dependent pillar UNAVAILABLE. Optional/parked/excluded features cannot substitute for core.",
+      "existing_or_new": "EXISTING_TRANSFORM_NEEDS_RAW_COVERAGE",
+      "depends_on": [
+        "raw_btc_rows"
+      ],
+      "unit": "USD millions",
+      "notes": ""
+    },
+    {
+      "feature_id": "btc_rolling_20",
+      "name": "Flujo BTC rolling 20",
+      "family": "btc_flows",
+      "source": {
+        "audit_ids": [
+          "S16"
+        ],
+        "existing_field_or_symbol": "btcEtfFlows.flows.rolling20dNetFlow",
+        "providers": [
+          {
+            "name": "Bitbo / BitcoinTreasuries",
+            "url": "https://bitbo.io/treasuries/etf-flows/"
+          },
+          {
+            "name": "Farside Investors fallback",
+            "url": "https://farside.co.uk/bitcoin-etf-flow-all-data/"
+          }
+        ]
+      },
+      "economic_meaning": "Acumulación de las mismas filas de flujo, sin independencia adicional.",
+      "transform": "sum of last 20 eligible daily totals; every expected session observed; reject incomplete window.",
+      "window": "Last 20 fund sessions",
+      "freshness": {
+        "policy_ref": "SOURCE_BTC_PUBLICATION",
+        "validation_parameter": "FRESHNESS_POLICY",
+        "available_at_required": true
+      },
+      "minimum_history": "20 complete dated eligible total rows",
+      "dependency_group": "btc_etf_flows",
+      "required_or_optional": "OPTIONAL_EVIDENCE",
+      "missing_behavior": "Preserve null and explicit reason/status. Reject demo, malformed, stale or temporally ineligible input; never impute zero or neutral. Missing REQUIRED_CORE makes its dependent pillar UNAVAILABLE. Optional/parked/excluded features cannot substitute for core.",
+      "existing_or_new": "EXISTING_TRANSFORM_NEEDS_RAW_COVERAGE",
+      "depends_on": [
+        "raw_btc_rows"
+      ],
+      "unit": "USD millions",
+      "notes": ""
+    },
+    {
+      "feature_id": "btc_streak",
+      "name": "Racha de flujos BTC",
+      "family": "btc_flows",
+      "source": {
+        "audit_ids": [
+          "S16"
+        ],
+        "existing_field_or_symbol": "btcEtfFlows.flows.flowStreak",
+        "providers": [
+          {
+            "name": "Bitbo / BitcoinTreasuries",
+            "url": "https://bitbo.io/treasuries/etf-flows/"
+          },
+          {
+            "name": "Farside Investors fallback",
+            "url": "https://farside.co.uk/bitcoin-etf-flow-all-data/"
+          }
+        ]
+      },
+      "economic_meaning": "Persistencia del signo observado de flujos.",
+      "transform": "Count contiguous latest same nonzero signs; zero breaks; missing ends known coverage and emits censored=true; history start also censored.",
+      "window": "Contiguous available suffix",
+      "freshness": {
+        "policy_ref": "SOURCE_BTC_PUBLICATION",
+        "validation_parameter": "FRESHNESS_POLICY",
+        "available_at_required": true
+      },
+      "minimum_history": "1 eligible row; complete preceding history required to claim uncensored length",
+      "dependency_group": "btc_etf_flows",
+      "required_or_optional": "OPTIONAL_EVIDENCE",
+      "missing_behavior": "Preserve null and explicit reason/status. Reject demo, malformed, stale or temporally ineligible input; never impute zero or neutral. Missing REQUIRED_CORE makes its dependent pillar UNAVAILABLE. Optional/parked/excluded features cannot substitute for core.",
+      "existing_or_new": "EXISTING_TRANSFORM_REQUIRES_CENSOR_FLAG",
+      "depends_on": [
+        "raw_btc_rows"
+      ],
+      "unit": "sessions + direction + censored",
+      "notes": ""
+    },
+    {
+      "feature_id": "btc_breadth",
+      "name": "Breadth de fondos BTC",
+      "family": "btc_flows",
+      "source": {
+        "audit_ids": [
+          "S15",
+          "S16"
+        ],
+        "existing_field_or_symbol": "btcEtfFlows.flows.breadth; latestFundFlows",
+        "providers": [
+          {
+            "name": "Bitbo / BitcoinTreasuries",
+            "url": "https://bitbo.io/treasuries/etf-flows/"
+          },
+          {
+            "name": "Farside Investors fallback",
+            "url": "https://farside.co.uk/bitcoin-etf-flow-all-data/"
+          }
+        ]
+      },
+      "economic_meaning": "Distribución de flujos entre fondos, misma fuente de los totales.",
+      "transform": "Count separately positive, negative, observed zero and missing among explicitly versioned expected funds.",
+      "window": "One fund session",
+      "freshness": {
+        "policy_ref": "SOURCE_BTC_PUBLICATION",
+        "validation_parameter": "FRESHNESS_POLICY",
+        "available_at_required": true
+      },
+      "minimum_history": "Raw cells for entire expected universe, including nulls; counts carry coverage",
+      "dependency_group": "btc_etf_flows",
+      "required_or_optional": "OPTIONAL_EVIDENCE",
+      "missing_behavior": "Preserve null and explicit reason/status. Reject demo, malformed, stale or temporally ineligible input; never impute zero or neutral. Missing REQUIRED_CORE makes its dependent pillar UNAVAILABLE. Optional/parked/excluded features cannot substitute for core.",
+      "existing_or_new": "EXISTING_AGGREGATE_LOSES_MISSING_INFORMATION",
+      "depends_on": [
+        "raw_btc_rows"
+      ],
+      "unit": "counts by status",
+      "notes": "flatOrMissing cannot be reverse-engineered; legacy fund flow nulls became 0."
+    },
+    {
+      "feature_id": "btc_legacy_severity",
+      "name": "Severidad/lectura BTC V1",
+      "family": "btc_flows",
+      "source": {
+        "audit_ids": [
+          "S16"
+        ],
+        "existing_field_or_symbol": "dailyLevel; recentTrend; readingSeverity",
+        "providers": [
+          {
+            "name": "Bitbo / BitcoinTreasuries",
+            "url": "https://bitbo.io/treasuries/etf-flows/"
+          },
+          {
+            "name": "Farside Investors fallback",
+            "url": "https://farside.co.uk/bitcoin-etf-flow-all-data/"
+          }
+        ]
+      },
+      "economic_meaning": "Resumen derivado específico de crypto ETF flows.",
+      "transform": "Legacy classification of daily, rolling, breadth and streak; not a vote in V2.",
+      "window": "1/5/20-session legacy combination",
+      "freshness": {
+        "policy_ref": "SOURCE_BTC_PUBLICATION",
+        "validation_parameter": "FRESHNESS_POLICY",
+        "available_at_required": true
+      },
+      "minimum_history": "Complete underlying windows for interpretation",
+      "dependency_group": "btc_etf_flows",
+      "required_or_optional": "EXCLUDED",
+      "missing_behavior": "Preserve null and explicit reason/status. Reject demo, malformed, stale or temporally ineligible input; never impute zero or neutral. Missing REQUIRED_CORE makes its dependent pillar UNAVAILABLE. Optional/parked/excluded features cannot substitute for core.",
+      "existing_or_new": "EXISTING_DERIVED_LABEL",
+      "depends_on": [
+        "btc_daily",
+        "btc_rolling_5",
+        "btc_rolling_20",
+        "btc_breadth",
+        "btc_streak"
+      ],
+      "unit": "categorical",
+      "notes": ""
+    },
+    {
+      "feature_id": "btc_cumulative",
+      "name": "Cumulativo de tabla BTC",
+      "family": "btc_flows",
+      "source": {
+        "audit_ids": [
+          "S16"
+        ],
+        "existing_field_or_symbol": "btcEtfFlows.flows.cumulativeNetFlow",
+        "providers": [
+          {
+            "name": "Bitbo / BitcoinTreasuries",
+            "url": "https://bitbo.io/treasuries/etf-flows/"
+          },
+          {
+            "name": "Farside Investors fallback",
+            "url": "https://farside.co.uk/bitcoin-etf-flow-all-data/"
+          }
+        ]
+      },
+      "economic_meaning": "Suma del tramo descargado, no necesariamente desde inicio.",
+      "transform": "sum(all eligible rows in explicitly bounded retrieved table); label exact first/last session and coverage.",
+      "window": "Entire captured table only",
+      "freshness": {
+        "policy_ref": "SOURCE_BTC_PUBLICATION",
+        "validation_parameter": "FRESHNESS_POLICY",
+        "available_at_required": true
+      },
+      "minimum_history": "All rows in declared interval; no inception claim without verified inception coverage",
+      "dependency_group": "btc_etf_flows",
+      "required_or_optional": "OPTIONAL_EVIDENCE",
+      "missing_behavior": "Preserve null and explicit reason/status. Reject demo, malformed, stale or temporally ineligible input; never impute zero or neutral. Missing REQUIRED_CORE makes its dependent pillar UNAVAILABLE. Optional/parked/excluded features cannot substitute for core.",
+      "existing_or_new": "EXISTING_TRANSFORM_NEEDS_COVERAGE_LABEL",
+      "depends_on": [
+        "raw_btc_rows"
+      ],
+      "unit": "USD millions",
+      "notes": ""
+    },
+    {
+      "feature_id": "gld_fund_data",
+      "name": "Shares, NAV y AUM GLD",
+      "family": "gld_pressure",
+      "source": {
+        "audit_ids": [
+          "S17"
+        ],
+        "existing_field_or_symbol": "gldFlowPressure.nav/sharesOutstanding/totalNetAssets",
+        "providers": [
+          {
+            "name": "State Street / SPDR Gold Shares",
+            "url": "https://www.ssga.com/library-content/products/fund-data/etfs/us/navhist-us-en-gld.xlsx"
+          }
+        ]
+      },
+      "economic_meaning": "Participaciones para cambios; NAV/AUM para coherencia.",
+      "transform": "Retain dated positive shares, NAV, AUM. Legacy coherence check abs(NAV*shares-AUM)/AUM <= .01 over last 21 rows; discrepancies preserved.",
+      "window": "Current plus required window",
+      "freshness": {
+        "policy_ref": "SOURCE_SSGA_PUBLICATION",
+        "validation_parameter": "FRESHNESS_POLICY",
+        "available_at_required": true
+      },
+      "minimum_history": "21 eligible dated rows for legacy adapter; elementary current values require 1",
+      "dependency_group": "gld_share_pressure",
+      "required_or_optional": "OPTIONAL_EVIDENCE",
+      "missing_behavior": "Preserve null and explicit reason/status. Reject demo, malformed, stale or temporally ineligible input; never impute zero or neutral. Missing REQUIRED_CORE makes its dependent pillar UNAVAILABLE. Optional/parked/excluded features cannot substitute for core.",
+      "existing_or_new": "EXISTING_RAW_DATA_HISTORY_TRUNCATED",
+      "depends_on": [
+        "raw_gld_rows"
+      ],
+      "unit": "shares / USD per share / USD",
+      "notes": "Control tolerance inherited as descriptive source check; not a regime band."
+    },
+    {
+      "feature_id": "gld_shares_change_1",
+      "name": "Cambio participaciones GLD 1",
+      "family": "gld_pressure",
+      "source": {
+        "audit_ids": [
+          "S17"
+        ],
+        "existing_field_or_symbol": "gldFlowPressure.oneDayShareChange/Pct",
+        "providers": [
+          {
+            "name": "State Street / SPDR Gold Shares",
+            "url": "https://www.ssga.com/library-content/products/fund-data/etfs/us/navhist-us-en-gld.xlsx"
+          }
+        ]
+      },
+      "economic_meaning": "Creaciones/reembolsos aproximados a partir de participaciones.",
+      "transform": "delta=shares[t]-shares[t-1]; fraction=delta/shares[t-1]; preserve both units.",
+      "window": "Last 1 fund sessions",
+      "freshness": {
+        "policy_ref": "SOURCE_SSGA_PUBLICATION",
+        "validation_parameter": "FRESHNESS_POLICY",
+        "available_at_required": true
+      },
+      "minimum_history": "2 eligible dated rows, all expected sessions",
+      "dependency_group": "gld_share_pressure",
+      "required_or_optional": "OPTIONAL_EVIDENCE",
+      "missing_behavior": "Preserve null and explicit reason/status. Reject demo, malformed, stale or temporally ineligible input; never impute zero or neutral. Missing REQUIRED_CORE makes its dependent pillar UNAVAILABLE. Optional/parked/excluded features cannot substitute for core.",
+      "existing_or_new": "EXISTING_TRANSFORM_REQUIRES_COMPLETE_RAW_WINDOW",
+      "depends_on": [
+        "raw_gld_rows"
+      ],
+      "unit": "shares and fraction",
+      "notes": "Legacy Pct is a fraction, unlike VIX/sector percent. For 20 sessions, returned history length 20 is insufficient."
+    },
+    {
+      "feature_id": "gld_pressure_usd_1",
+      "name": "Presión GLD implícita USD 1",
+      "family": "gld_pressure",
+      "source": {
+        "audit_ids": [
+          "S17"
+        ],
+        "existing_field_or_symbol": "gldFlowPressure.oneDayImpliedPressureUsd",
+        "providers": [
+          {
+            "name": "State Street / SPDR Gold Shares",
+            "url": "https://www.ssga.com/library-content/products/fund-data/etfs/us/navhist-us-en-gld.xlsx"
+          }
+        ]
+      },
+      "economic_meaning": "Proxy monetario a NAV final, no flujo oficial.",
+      "transform": "gld_shares_change_1.delta * NAV[t]; not sum of daily monetary flows.",
+      "window": "Last 1 fund sessions",
+      "freshness": {
+        "policy_ref": "SOURCE_SSGA_PUBLICATION",
+        "validation_parameter": "FRESHNESS_POLICY",
+        "available_at_required": true
+      },
+      "minimum_history": "2 eligible rows and NAV at endpoint",
+      "dependency_group": "gld_share_pressure",
+      "required_or_optional": "OPTIONAL_EVIDENCE",
+      "missing_behavior": "Preserve null and explicit reason/status. Reject demo, malformed, stale or temporally ineligible input; never impute zero or neutral. Missing REQUIRED_CORE makes its dependent pillar UNAVAILABLE. Optional/parked/excluded features cannot substitute for core.",
+      "existing_or_new": "EXISTING_TRANSFORM_REQUIRES_COMPLETE_RAW_WINDOW",
+      "depends_on": [
+        "gld_shares_change_1",
+        "gld_fund_data"
+      ],
+      "unit": "USD",
+      "notes": ""
+    },
+    {
+      "feature_id": "gld_shares_change_5",
+      "name": "Cambio participaciones GLD 5",
+      "family": "gld_pressure",
+      "source": {
+        "audit_ids": [
+          "S17"
+        ],
+        "existing_field_or_symbol": "gldFlowPressure.fiveDayShareChange/Pct",
+        "providers": [
+          {
+            "name": "State Street / SPDR Gold Shares",
+            "url": "https://www.ssga.com/library-content/products/fund-data/etfs/us/navhist-us-en-gld.xlsx"
+          }
+        ]
+      },
+      "economic_meaning": "Creaciones/reembolsos aproximados a partir de participaciones.",
+      "transform": "delta=shares[t]-shares[t-5]; fraction=delta/shares[t-5]; preserve both units.",
+      "window": "Last 5 fund sessions",
+      "freshness": {
+        "policy_ref": "SOURCE_SSGA_PUBLICATION",
+        "validation_parameter": "FRESHNESS_POLICY",
+        "available_at_required": true
+      },
+      "minimum_history": "6 eligible dated rows, all expected sessions",
+      "dependency_group": "gld_share_pressure",
+      "required_or_optional": "OPTIONAL_EVIDENCE",
+      "missing_behavior": "Preserve null and explicit reason/status. Reject demo, malformed, stale or temporally ineligible input; never impute zero or neutral. Missing REQUIRED_CORE makes its dependent pillar UNAVAILABLE. Optional/parked/excluded features cannot substitute for core.",
+      "existing_or_new": "EXISTING_TRANSFORM_REQUIRES_COMPLETE_RAW_WINDOW",
+      "depends_on": [
+        "raw_gld_rows"
+      ],
+      "unit": "shares and fraction",
+      "notes": "Legacy Pct is a fraction, unlike VIX/sector percent. For 20 sessions, returned history length 20 is insufficient."
+    },
+    {
+      "feature_id": "gld_pressure_usd_5",
+      "name": "Presión GLD implícita USD 5",
+      "family": "gld_pressure",
+      "source": {
+        "audit_ids": [
+          "S17"
+        ],
+        "existing_field_or_symbol": "gldFlowPressure.fiveDayImpliedPressureUsd",
+        "providers": [
+          {
+            "name": "State Street / SPDR Gold Shares",
+            "url": "https://www.ssga.com/library-content/products/fund-data/etfs/us/navhist-us-en-gld.xlsx"
+          }
+        ]
+      },
+      "economic_meaning": "Proxy monetario a NAV final, no flujo oficial.",
+      "transform": "gld_shares_change_5.delta * NAV[t]; not sum of daily monetary flows.",
+      "window": "Last 5 fund sessions",
+      "freshness": {
+        "policy_ref": "SOURCE_SSGA_PUBLICATION",
+        "validation_parameter": "FRESHNESS_POLICY",
+        "available_at_required": true
+      },
+      "minimum_history": "6 eligible rows and NAV at endpoint",
+      "dependency_group": "gld_share_pressure",
+      "required_or_optional": "OPTIONAL_EVIDENCE",
+      "missing_behavior": "Preserve null and explicit reason/status. Reject demo, malformed, stale or temporally ineligible input; never impute zero or neutral. Missing REQUIRED_CORE makes its dependent pillar UNAVAILABLE. Optional/parked/excluded features cannot substitute for core.",
+      "existing_or_new": "EXISTING_TRANSFORM_REQUIRES_COMPLETE_RAW_WINDOW",
+      "depends_on": [
+        "gld_shares_change_5",
+        "gld_fund_data"
+      ],
+      "unit": "USD",
+      "notes": ""
+    },
+    {
+      "feature_id": "gld_shares_change_20",
+      "name": "Cambio participaciones GLD 20",
+      "family": "gld_pressure",
+      "source": {
+        "audit_ids": [
+          "S17"
+        ],
+        "existing_field_or_symbol": "gldFlowPressure.twentyDayShareChange/Pct",
+        "providers": [
+          {
+            "name": "State Street / SPDR Gold Shares",
+            "url": "https://www.ssga.com/library-content/products/fund-data/etfs/us/navhist-us-en-gld.xlsx"
+          }
+        ]
+      },
+      "economic_meaning": "Creaciones/reembolsos aproximados a partir de participaciones.",
+      "transform": "delta=shares[t]-shares[t-20]; fraction=delta/shares[t-20]; preserve both units.",
+      "window": "Last 20 fund sessions",
+      "freshness": {
+        "policy_ref": "SOURCE_SSGA_PUBLICATION",
+        "validation_parameter": "FRESHNESS_POLICY",
+        "available_at_required": true
+      },
+      "minimum_history": "21 eligible dated rows, all expected sessions",
+      "dependency_group": "gld_share_pressure",
+      "required_or_optional": "OPTIONAL_EVIDENCE",
+      "missing_behavior": "Preserve null and explicit reason/status. Reject demo, malformed, stale or temporally ineligible input; never impute zero or neutral. Missing REQUIRED_CORE makes its dependent pillar UNAVAILABLE. Optional/parked/excluded features cannot substitute for core.",
+      "existing_or_new": "EXISTING_TRANSFORM_REQUIRES_COMPLETE_RAW_WINDOW",
+      "depends_on": [
+        "raw_gld_rows"
+      ],
+      "unit": "shares and fraction",
+      "notes": "Legacy Pct is a fraction, unlike VIX/sector percent. For 20 sessions, returned history length 20 is insufficient."
+    },
+    {
+      "feature_id": "gld_pressure_usd_20",
+      "name": "Presión GLD implícita USD 20",
+      "family": "gld_pressure",
+      "source": {
+        "audit_ids": [
+          "S17"
+        ],
+        "existing_field_or_symbol": "gldFlowPressure.twentyDayImpliedPressureUsd",
+        "providers": [
+          {
+            "name": "State Street / SPDR Gold Shares",
+            "url": "https://www.ssga.com/library-content/products/fund-data/etfs/us/navhist-us-en-gld.xlsx"
+          }
+        ]
+      },
+      "economic_meaning": "Proxy monetario a NAV final, no flujo oficial.",
+      "transform": "gld_shares_change_20.delta * NAV[t]; not sum of daily monetary flows.",
+      "window": "Last 20 fund sessions",
+      "freshness": {
+        "policy_ref": "SOURCE_SSGA_PUBLICATION",
+        "validation_parameter": "FRESHNESS_POLICY",
+        "available_at_required": true
+      },
+      "minimum_history": "21 eligible rows and NAV at endpoint",
+      "dependency_group": "gld_share_pressure",
+      "required_or_optional": "OPTIONAL_EVIDENCE",
+      "missing_behavior": "Preserve null and explicit reason/status. Reject demo, malformed, stale or temporally ineligible input; never impute zero or neutral. Missing REQUIRED_CORE makes its dependent pillar UNAVAILABLE. Optional/parked/excluded features cannot substitute for core.",
+      "existing_or_new": "EXISTING_TRANSFORM_REQUIRES_COMPLETE_RAW_WINDOW",
+      "depends_on": [
+        "gld_shares_change_20",
+        "gld_fund_data"
+      ],
+      "unit": "USD",
+      "notes": ""
+    },
+    {
+      "feature_id": "gld_legacy_state",
+      "name": "Etiqueta presión GLD V1",
+      "family": "gld_pressure",
+      "source": {
+        "audit_ids": [
+          "S17"
+        ],
+        "existing_field_or_symbol": "gldFlowPressure.pressureState",
+        "providers": [
+          {
+            "name": "State Street / SPDR Gold Shares",
+            "url": "https://www.ssga.com/library-content/products/fund-data/etfs/us/navhist-us-en-gld.xlsx"
+          }
+        ]
+      },
+      "economic_meaning": "Resumen legado de dos ventanas de la misma satellite.",
+      "transform": "Existing five/twenty-day fraction comparisons with neutral band .0005; preserve contradictory windows in V2 evidence rather than copying neutral label.",
+      "window": "5/20 fund sessions",
+      "freshness": {
+        "policy_ref": "SOURCE_SSGA_PUBLICATION",
+        "validation_parameter": "FRESHNESS_POLICY",
+        "available_at_required": true
+      },
+      "minimum_history": "21 eligible rows",
+      "dependency_group": "gld_share_pressure",
+      "required_or_optional": "EXCLUDED",
+      "missing_behavior": "Preserve null and explicit reason/status. Reject demo, malformed, stale or temporally ineligible input; never impute zero or neutral. Missing REQUIRED_CORE makes its dependent pillar UNAVAILABLE. Optional/parked/excluded features cannot substitute for core.",
+      "existing_or_new": "EXISTING_DERIVED_LABEL",
+      "depends_on": [
+        "gld_shares_change_5",
+        "gld_shares_change_20"
+      ],
+      "unit": "categorical",
+      "notes": ""
+    }
+  ]
+}

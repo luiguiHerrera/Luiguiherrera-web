@@ -1,0 +1,467 @@
+{
+  "version": "regime-v2-dependencies/1.0.0",
+  "concordance_units": [
+    {
+      "dependency_group": "equity_price_complex",
+      "core_vote_limit": 1,
+      "independence_claim": "No duplicated economic lineage; statistical independence not established."
+    },
+    {
+      "dependency_group": "implied_volatility_complex",
+      "core_vote_limit": 1,
+      "independence_claim": "No duplicated economic lineage; statistical independence not established."
+    },
+    {
+      "dependency_group": "btc_etf_flows",
+      "core_vote_limit": 0,
+      "independence_claim": "No duplicated economic lineage; statistical independence not established."
+    },
+    {
+      "dependency_group": "gld_share_pressure",
+      "core_vote_limit": 0,
+      "independence_claim": "No duplicated economic lineage; statistical independence not established."
+    },
+    {
+      "dependency_group": "portfolio_specific",
+      "core_vote_limit": 0,
+      "independence_claim": "No duplicated economic lineage; statistical independence not established."
+    }
+  ],
+  "raw_nodes": [
+    {
+      "id": "raw_sector_prices",
+      "dependency_group": "equity_price_complex",
+      "audit_ids": [
+        "S03",
+        "S04"
+      ],
+      "contract": "Dated 11-ETF panel retained before lossy presentation; source/price-basis unresolved."
+    },
+    {
+      "id": "raw_statistical_prices",
+      "dependency_group": "equity_price_complex",
+      "audit_ids": [
+        "S09",
+        "S10",
+        "S20"
+      ],
+      "contract": "Same economic equity price complex regardless of vendor; latest static snapshots are not current nor historical vintages."
+    },
+    {
+      "id": "raw_regime_archive",
+      "dependency_group": "equity_price_complex",
+      "audit_ids": [
+        "S19",
+        "S21"
+      ],
+      "contract": "Prospective same-version regime snapshots; not supplied as a continuous archive in HEAD."
+    },
+    {
+      "id": "raw_market_holdings",
+      "dependency_group": "equity_price_complex",
+      "audit_ids": [
+        "S08",
+        "S18"
+      ],
+      "contract": "Absent market constituent-weight publication contract."
+    },
+    {
+      "id": "raw_vix_history",
+      "dependency_group": "implied_volatility_complex",
+      "audit_ids": [
+        "S11",
+        "S12"
+      ],
+      "contract": "Full eligible FRED VIXCLS population with vintages."
+    },
+    {
+      "id": "raw_vx_settlements",
+      "dependency_group": "implied_volatility_complex",
+      "audit_ids": [
+        "S13",
+        "S14"
+      ],
+      "contract": "Raw monthly contract settlements with date and availability; same economic complex as VIX."
+    },
+    {
+      "id": "raw_btc_rows",
+      "dependency_group": "btc_etf_flows",
+      "audit_ids": [
+        "S15",
+        "S16"
+      ],
+      "contract": "Original cells and total coverage, not legacy zero-filled fund values."
+    },
+    {
+      "id": "raw_gld_rows",
+      "dependency_group": "gld_share_pressure",
+      "audit_ids": [
+        "S17"
+      ],
+      "contract": "All needed dated shares/NAV/AUM rows; at least 21 for 20-session differences."
+    },
+    {
+      "id": "raw_portfolio_holdings",
+      "dependency_group": "portfolio_specific",
+      "audit_ids": [
+        "S18"
+      ],
+      "contract": "Portfolio-specific user/demonstration inputs; never global-market core."
+    },
+    {
+      "id": "raw_portfolio_history",
+      "dependency_group": "portfolio_specific",
+      "audit_ids": [
+        "S18"
+      ],
+      "contract": "Portfolio-specific history and scenario contracts; PARK."
+    }
+  ],
+  "edges": [
+    {
+      "from": "raw_sector_prices",
+      "to": "eq_returns_5"
+    },
+    {
+      "from": "raw_sector_prices",
+      "to": "eq_returns_21"
+    },
+    {
+      "from": "raw_sector_prices",
+      "to": "eq_returns_63"
+    },
+    {
+      "from": "eq_returns_5",
+      "to": "eq_positive_5"
+    },
+    {
+      "from": "eq_returns_21",
+      "to": "eq_positive_21"
+    },
+    {
+      "from": "raw_statistical_prices",
+      "to": "eq_above_ma200"
+    },
+    {
+      "from": "raw_statistical_prices",
+      "to": "eq_rsp_spy_21"
+    },
+    {
+      "from": "raw_statistical_prices",
+      "to": "eq_iwm_spy_21"
+    },
+    {
+      "from": "eq_returns_21",
+      "to": "eq_growth_21"
+    },
+    {
+      "from": "eq_returns_21",
+      "to": "eq_cyclical_21"
+    },
+    {
+      "from": "eq_returns_21",
+      "to": "eq_defensive_21"
+    },
+    {
+      "from": "eq_growth_21",
+      "to": "eq_leadership_gap"
+    },
+    {
+      "from": "eq_cyclical_21",
+      "to": "eq_leadership_gap"
+    },
+    {
+      "from": "eq_defensive_21",
+      "to": "eq_leadership_gap"
+    },
+    {
+      "from": "eq_growth_21",
+      "to": "eq_legacy_leadership"
+    },
+    {
+      "from": "eq_cyclical_21",
+      "to": "eq_legacy_leadership"
+    },
+    {
+      "from": "eq_defensive_21",
+      "to": "eq_legacy_leadership"
+    },
+    {
+      "from": "eq_returns_5",
+      "to": "eq_dispersion_5"
+    },
+    {
+      "from": "eq_returns_21",
+      "to": "eq_dispersion_21"
+    },
+    {
+      "from": "raw_regime_archive",
+      "to": "eq_leadership_persistence"
+    },
+    {
+      "from": "raw_market_holdings",
+      "to": "eq_holdings_concentration"
+    },
+    {
+      "from": "raw_vix_history",
+      "to": "vix_level"
+    },
+    {
+      "from": "raw_vix_history",
+      "to": "vix_change_points_1"
+    },
+    {
+      "from": "raw_vix_history",
+      "to": "vix_change_points_5"
+    },
+    {
+      "from": "raw_vix_history",
+      "to": "vix_change_points_21"
+    },
+    {
+      "from": "raw_vix_history",
+      "to": "vix_momentum_1"
+    },
+    {
+      "from": "raw_vix_history",
+      "to": "vix_momentum_5"
+    },
+    {
+      "from": "raw_vix_history",
+      "to": "vix_percentile"
+    },
+    {
+      "from": "vix_level",
+      "to": "vix_legacy_composite"
+    },
+    {
+      "from": "vix_percentile",
+      "to": "vix_legacy_composite"
+    },
+    {
+      "from": "vix_momentum_1",
+      "to": "vix_legacy_composite"
+    },
+    {
+      "from": "vix_momentum_5",
+      "to": "vix_legacy_composite"
+    },
+    {
+      "from": "raw_vx_settlements",
+      "to": "vx_contracts"
+    },
+    {
+      "from": "vx_contracts",
+      "to": "vx_spread_12"
+    },
+    {
+      "from": "vx_contracts",
+      "to": "vx_slope_12"
+    },
+    {
+      "from": "vx_contracts",
+      "to": "vx_spread_13"
+    },
+    {
+      "from": "vx_contracts",
+      "to": "vx_slope_13"
+    },
+    {
+      "from": "vx_contracts",
+      "to": "vx_curvature"
+    },
+    {
+      "from": "raw_sector_prices",
+      "to": "corr_mean_21"
+    },
+    {
+      "from": "raw_sector_prices",
+      "to": "corr_mean_63"
+    },
+    {
+      "from": "corr_mean_21",
+      "to": "corr_window_spread"
+    },
+    {
+      "from": "corr_mean_63",
+      "to": "corr_window_spread"
+    },
+    {
+      "from": "raw_sector_prices",
+      "to": "corr_change_21"
+    },
+    {
+      "from": "raw_sector_prices",
+      "to": "corr_defensive_growth_21"
+    },
+    {
+      "from": "raw_sector_prices",
+      "to": "realized_ewma"
+    },
+    {
+      "from": "realized_ewma",
+      "to": "realized_ewma_change"
+    },
+    {
+      "from": "raw_sector_prices",
+      "to": "realized_ewma_change"
+    },
+    {
+      "from": "raw_sector_prices",
+      "to": "realized_garch"
+    },
+    {
+      "from": "realized_ewma",
+      "to": "realized_garch"
+    },
+    {
+      "from": "realized_ewma",
+      "to": "legacy_fragility_score"
+    },
+    {
+      "from": "realized_garch",
+      "to": "legacy_fragility_score"
+    },
+    {
+      "from": "corr_mean_21",
+      "to": "legacy_fragility_score"
+    },
+    {
+      "from": "eq_dispersion_5",
+      "to": "legacy_fragility_score"
+    },
+    {
+      "from": "eq_dispersion_21",
+      "to": "legacy_fragility_score"
+    },
+    {
+      "from": "eq_legacy_leadership",
+      "to": "legacy_fragility_score"
+    },
+    {
+      "from": "raw_portfolio_holdings",
+      "to": "pfl_concentration"
+    },
+    {
+      "from": "raw_portfolio_history",
+      "to": "pfl_covariance"
+    },
+    {
+      "from": "raw_portfolio_holdings",
+      "to": "pfl_covariance"
+    },
+    {
+      "from": "raw_portfolio_history",
+      "to": "pfl_stress"
+    },
+    {
+      "from": "raw_portfolio_holdings",
+      "to": "pfl_stress"
+    },
+    {
+      "from": "raw_btc_rows",
+      "to": "btc_daily"
+    },
+    {
+      "from": "raw_btc_rows",
+      "to": "btc_rolling_5"
+    },
+    {
+      "from": "raw_btc_rows",
+      "to": "btc_rolling_10"
+    },
+    {
+      "from": "raw_btc_rows",
+      "to": "btc_rolling_20"
+    },
+    {
+      "from": "raw_btc_rows",
+      "to": "btc_streak"
+    },
+    {
+      "from": "raw_btc_rows",
+      "to": "btc_breadth"
+    },
+    {
+      "from": "btc_daily",
+      "to": "btc_legacy_severity"
+    },
+    {
+      "from": "btc_rolling_5",
+      "to": "btc_legacy_severity"
+    },
+    {
+      "from": "btc_rolling_20",
+      "to": "btc_legacy_severity"
+    },
+    {
+      "from": "btc_breadth",
+      "to": "btc_legacy_severity"
+    },
+    {
+      "from": "btc_streak",
+      "to": "btc_legacy_severity"
+    },
+    {
+      "from": "raw_btc_rows",
+      "to": "btc_cumulative"
+    },
+    {
+      "from": "raw_gld_rows",
+      "to": "gld_fund_data"
+    },
+    {
+      "from": "raw_gld_rows",
+      "to": "gld_shares_change_1"
+    },
+    {
+      "from": "gld_shares_change_1",
+      "to": "gld_pressure_usd_1"
+    },
+    {
+      "from": "gld_fund_data",
+      "to": "gld_pressure_usd_1"
+    },
+    {
+      "from": "raw_gld_rows",
+      "to": "gld_shares_change_5"
+    },
+    {
+      "from": "gld_shares_change_5",
+      "to": "gld_pressure_usd_5"
+    },
+    {
+      "from": "gld_fund_data",
+      "to": "gld_pressure_usd_5"
+    },
+    {
+      "from": "raw_gld_rows",
+      "to": "gld_shares_change_20"
+    },
+    {
+      "from": "gld_shares_change_20",
+      "to": "gld_pressure_usd_20"
+    },
+    {
+      "from": "gld_fund_data",
+      "to": "gld_pressure_usd_20"
+    },
+    {
+      "from": "gld_shares_change_5",
+      "to": "gld_legacy_state"
+    },
+    {
+      "from": "gld_shares_change_20",
+      "to": "gld_legacy_state"
+    }
+  ],
+  "forbidden_extra_votes": [
+    "sector dispersion",
+    "EWMA versus GARCH",
+    "corr21 versus corr63",
+    "participation versus leadership versus fragility",
+    "VIX level versus percentile versus momentum",
+    "VIX versus futures without independence evidence",
+    "BTC daily versus rolling versus streak versus breadth"
+  ]
+}

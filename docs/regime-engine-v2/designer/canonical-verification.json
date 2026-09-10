@@ -1,0 +1,445 @@
+{
+  "status": "PASS",
+  "started_at": "2026-09-08T20:29:03.708575+00:00",
+  "completed_at": "2026-09-08T20:29:35.636440+00:00",
+  "scope": "Frozen C03/Maintainer conformance, existing V1/reports and deterministic Designer presentation. Groweer tests remain offline research only.",
+  "commands": [
+    {
+      "name": "conformance",
+      "command": [
+        "node",
+        "--disable-warning=MODULE_TYPELESS_PACKAGE_JSON",
+        "scripts/regime-v2-conformance.mts",
+        "--output-dir",
+        "/Users/quantlab/Developer/web/Luiguiherrera-web/docs/regime-engine-v2/designer/verification-conformance"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 31.807331,
+      "log": "docs/regime-engine-v2/designer/canonical-conformance.log",
+      "log_sha256": "0ae86699a5a32f7d58bf3e604400cf875fd04900d6e5cf404b7a4be2a379cf06"
+    },
+    {
+      "name": "sweeper-attacks",
+      "command": [
+        "node",
+        "--disable-warning=MODULE_TYPELESS_PACKAGE_JSON",
+        "docs/regime-engine-v2/sweeper/adversarial.mjs",
+        "/Users/quantlab/Developer/web/Luiguiherrera-web/docs/regime-engine-v2/designer/sweeper-attacks.json"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 18.908646958,
+      "log": "docs/regime-engine-v2/designer/canonical-sweeper-attacks.log",
+      "log_sha256": "d3c1a19321c4efaafe49ba41263b371c242e3ab59898fbe9a9e778c96712e3cf"
+    },
+    {
+      "name": "node-tests",
+      "command": [
+        "node",
+        "--disable-warning=MODULE_TYPELESS_PACKAGE_JSON",
+        "--import",
+        "./scripts/trends-test-register.mjs",
+        "--experimental-test-module-mocks",
+        "--test",
+        "lib/dashboard/adapters/vix-term-structure.test.ts",
+        "lib/personal-finance/budget/budget-plan-export.test.ts",
+        "lib/personal-finance/budget/projection-calculations.test.ts",
+        "lib/personal-finance/budget/projection-presentation.test.ts",
+        "lib/personal-finance/budget/target-calculations.test.ts",
+        "lib/portfolio-fragility/analysis-view.test.ts",
+        "lib/portfolio-fragility/conformance.test.ts",
+        "lib/portfolio-fragility/engine.test.ts",
+        "lib/portfolio-fragility/format.test.ts",
+        "lib/portfolio-fragility/input-session.test.ts",
+        "lib/regime-engine-v2/engine.test.ts",
+        "lib/reports/first-september-2026.test.mts",
+        "lib/reports/weekly-review.test.mts",
+        "lib/research/tom-decay/chart-geometry.test.ts",
+        "lib/research/tom-decay/freeze.test.ts",
+        "lib/research/tom-decay/parse.test.ts",
+        "lib/trends/capital/normalize.test.ts",
+        "lib/trends/capital/pipeline.test.ts",
+        "lib/trends/capital/public-capital.test.tsx",
+        "lib/trends/trends.test.tsx"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 3.9936582919999997,
+      "log": "docs/regime-engine-v2/designer/canonical-node-tests.log",
+      "log_sha256": "6fa64a622342c7643b0c8ab13a102c87673faaa9979941946c329a60727c689d"
+    },
+    {
+      "name": "operations-tests",
+      "command": [
+        "node",
+        "--disable-warning=MODULE_TYPELESS_PACKAGE_JSON",
+        "--import",
+        "./scripts/trends-test-register.mjs",
+        "--experimental-test-module-mocks",
+        "--test",
+        "lib/regime-engine-v2/operations/dashboard-shadow.test.ts",
+        "lib/regime-engine-v2/operations/public-preservation.test.ts",
+        "lib/regime-engine-v2/operations/source-input.test.ts",
+        "lib/regime-engine-v2/operations/snapshot.test.ts",
+        "lib/regime-engine-v2/operations/normalizer-preservation.test.mjs"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 1.697373917,
+      "log": "docs/regime-engine-v2/designer/canonical-operations-tests.log",
+      "log_sha256": "7f3e6668b4443307d17b3569bea32d04c3010429be50c52f4dbacb9d47cfe93c"
+    },
+    {
+      "name": "designer-tests",
+      "command": [
+        "node",
+        "--disable-warning=MODULE_TYPELESS_PACKAGE_JSON",
+        "--import",
+        "./scripts/trends-test-register.mjs",
+        "--experimental-test-module-mocks",
+        "--test",
+        "lib/dashboard/regime-v2-presentation.test.ts",
+        "lib/dashboard/regime-v2-preview.test.mjs",
+        "lib/dashboard/regime-v2-render.test.mjs",
+        "scripts/regime-v2-design-fixtures.test.ts"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 0.7118867089999998,
+      "log": "docs/regime-engine-v2/designer/canonical-designer-tests.log",
+      "log_sha256": "c31048f742650e31351148021650c032d33b2c3cdcd833f19f318146e2806ed6"
+    },
+    {
+      "name": "designer-fixtures-check",
+      "command": [
+        "node",
+        "--disable-warning=MODULE_TYPELESS_PACKAGE_JSON",
+        "scripts/regime-v2-design-fixtures.mts",
+        "--check"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 0.4637538339999998,
+      "log": "docs/regime-engine-v2/designer/canonical-designer-fixtures-check.log",
+      "log_sha256": "f3f3f46fba405195f28a22d1348378d4bcd4750da2a4483a365e307d1ff6d78e"
+    },
+    {
+      "name": "python-tests",
+      "command": [
+        "python3",
+        "scripts/test-capital-xml.py"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 0.08225774999999969,
+      "log": "docs/regime-engine-v2/designer/canonical-python-tests.log",
+      "log_sha256": "0d6653413f55f7cf64dbfab59b6b29c640ade8e63585414ab2a44a0892a5ed0a"
+    },
+    {
+      "name": "challenger-tests",
+      "command": [
+        "node",
+        "--disable-warning=MODULE_TYPELESS_PACKAGE_JSON",
+        "--test",
+        "docs/regime-engine-v2/groweer/challengers.test.mjs"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 0.10930558299999982,
+      "log": "docs/regime-engine-v2/designer/canonical-challenger-tests.log",
+      "log_sha256": "5002437b25572733da8a020559514b659305c8c5fea00a3442ac5a9ef6ff9faa"
+    },
+    {
+      "name": "reports-validate",
+      "command": [
+        "npm",
+        "run",
+        "reports:validate"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 4.860403208000001,
+      "log": "docs/regime-engine-v2/designer/canonical-reports-validate.log",
+      "log_sha256": "17a8278ec97176ddc182bfa8257e3eed789000b7f6428e57c0d238786eff1136"
+    },
+    {
+      "name": "reports-check",
+      "command": [
+        "npm",
+        "run",
+        "reports:check"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 0.42657337499999937,
+      "log": "docs/regime-engine-v2/designer/canonical-reports-check.log",
+      "log_sha256": "b81d3c1a89f1730de7441ac54fa6fb19dcba8f4f9bfedee63a2abb49315cc7ab"
+    },
+    {
+      "name": "editorial",
+      "command": [
+        "npm",
+        "run",
+        "validate:editorial"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 0.15844387499999968,
+      "log": "docs/regime-engine-v2/designer/canonical-editorial.log",
+      "log_sha256": "7d4f85ccc8a0544b81b0d60fac223b80184e1bd1faaa7822e4bb1b5a2963524f"
+    },
+    {
+      "name": "designer-tests-20260908T203308241307Z",
+      "command": [
+        "node",
+        "--disable-warning=MODULE_TYPELESS_PACKAGE_JSON",
+        "--import",
+        "./scripts/trends-test-register.mjs",
+        "--experimental-test-module-mocks",
+        "--test",
+        "lib/dashboard/regime-v2-presentation.test.ts",
+        "lib/dashboard/regime-v2-preview.test.mjs",
+        "lib/dashboard/regime-v2-render.test.mjs",
+        "scripts/regime-v2-design-fixtures.test.ts"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 0.7145969999999999,
+      "log": "docs/regime-engine-v2/designer/canonical-designer-tests-20260908T203308241307Z.log",
+      "log_sha256": "3ee0f6efc65e52d31a37e155d43f76b246ba1778c00de32674b28918a6fa25b8"
+    },
+    {
+      "name": "designer-fixtures-check-20260908T203308241307Z",
+      "command": [
+        "node",
+        "--disable-warning=MODULE_TYPELESS_PACKAGE_JSON",
+        "scripts/regime-v2-design-fixtures.mts",
+        "--check"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 0.4212403749999999,
+      "log": "docs/regime-engine-v2/designer/canonical-designer-fixtures-check-20260908T203308241307Z.log",
+      "log_sha256": "f3f3f46fba405195f28a22d1348378d4bcd4750da2a4483a365e307d1ff6d78e"
+    }
+  ],
+  "required_checks": {
+    "all_commands_exit_zero": true,
+    "golden_464": true,
+    "historical_R2_1930": true,
+    "public_C03_history_1930": true,
+    "accepted_sweeper_history_identical": true,
+    "sweeper_attacks_110": true,
+    "existing_node_302": true,
+    "maintainer_operations_78": true,
+    "designer_all_pass": true,
+    "presentation_stable_during_final_test_pass": true,
+    "python_7": true,
+    "offline_groweer_challengers_36": true,
+    "canonical_and_operations_21_files_preserved": true,
+    "all_prior_stage_artifacts_preserved": true,
+    "public_UI_source_files_preserved_except_reviewed_boundary": true,
+    "all_other_input_files_preserved": true
+  },
+  "p8_golden": {
+    "passed": 464,
+    "total": 464,
+    "fixed_C03_cases": 84
+  },
+  "historical_R2": {
+    "passed": 1930,
+    "total": 1930,
+    "accepted_sweeper_outputs_equal": true,
+    "point_in_time_OOS": false
+  },
+  "sweeper_attacks": {
+    "passed": 110,
+    "total": 110,
+    "raw_crossed_space": 576
+  },
+  "node_tests": {
+    "tests": 302,
+    "pass": 302,
+    "fail": 0,
+    "cancelled": 0,
+    "skipped": 0,
+    "todo": 0
+  },
+  "operations_tests": {
+    "tests": 78,
+    "pass": 78,
+    "fail": 0,
+    "cancelled": 0,
+    "skipped": 0,
+    "todo": 0
+  },
+  "designer_tests": {
+    "tests": 59,
+    "pass": 59,
+    "fail": 0,
+    "cancelled": 0,
+    "skipped": 0,
+    "todo": 0
+  },
+  "python_tests": {
+    "passed": 7,
+    "total": 7
+  },
+  "offline_challenger_tests": {
+    "tests": 36,
+    "pass": 36,
+    "fail": 0,
+    "cancelled": 0,
+    "skipped": 0,
+    "todo": 0
+  },
+  "tests_accounting": {
+    "breakdown": {
+      "existing_node": {
+        "passed": 302,
+        "total": 302
+      },
+      "maintainer_operations": {
+        "passed": 78,
+        "total": 78
+      },
+      "designer_presentation": {
+        "passed": 59,
+        "total": 59
+      },
+      "existing_python": {
+        "passed": 7,
+        "total": 7
+      },
+      "sweeper_attacks": {
+        "passed": 110,
+        "total": 110
+      },
+      "offline_groweer_challengers": {
+        "passed": 36,
+        "total": 36
+      }
+    },
+    "passed": 592,
+    "total": 592,
+    "note": "Golden 464 and history 1930 are reported separately; reports/editorial are successful commands, not invented test counts. Offline challenger checks do not imply canonical adoption."
+  },
+  "preservation": {
+    "input_manifest_sha256": "5265205fdb49c4ab5845ee17f91802848890da2df29375781a869b831e4d9b4d",
+    "maintainer_input_manifest_sha256": "e78dc365b8808a63deed46315a7ddb7c9e6541f263329baa5ab35bbb1be2e9dd",
+    "canonical_and_operations_files": 21,
+    "prior_artifacts": 474,
+    "protected_public_UI_files": 122,
+    "protected_input_files": 1014,
+    "before_differences": [],
+    "after_differences": [],
+    "allowed_existing_edits": [
+      "app/(es)/dashboard/page.tsx"
+    ],
+    "actual_allowed_existing_edits": [
+      {
+        "path": "app/(es)/dashboard/page.tsx",
+        "expected": "0540948ce61ce6703e8a043276a030b9b7dfb24ffcab7eadc17ab84810dd0b5a",
+        "observed": "52fb6a294696c7fa5490debaa3c162e62f4253a5f1e4ca38b6637a3138c1bf21"
+      }
+    ]
+  },
+  "designer_final_source_hashes": {
+    "app/(es)/internal/regime-v2/page.tsx": "8b384ba8f0df24e9ffdefd0bff0ec2fef2049791e718d72ce87e38a6fe2be6c0",
+    "app/en/internal/regime-v2/page.tsx": "55a267714f6a71421927d84ded97d4ed478571b274ca612c041967018508a1b1",
+    "components/dashboard/DashboardRegimeV1.tsx": "92d7ef8bc01d4725d740ddea73cf83086743a93eb5d8271aba8872c83b0982cc",
+    "components/dashboard/RegimeV2Disclosure.tsx": "120e7dff5f4f0fe787268be436fdae9f4caf7239b7d6a58d480c7516dc652014",
+    "components/dashboard/RegimeV2Preview.tsx": "37dd9680ee7318c42fe0e22390f53fda59b8b9dbb0359fbdf1c5c3ce30908627",
+    "components/dashboard/RegimeV2Surface.tsx": "add309968305efc955c03dbf0ee3eda8dbfc04418c7bf30fbf7e40bf21c50487",
+    "components/dashboard/regime-v2.module.css": "8a0811d1e0f15d7db26397a5ee0cfe64ca50ff687479816ecb4903294e90ce09",
+    "docs/regime-engine-v2/designer/fixtures/broad-complete.json": "a4d33bcec41d2f6a20107495963080a1a6896ca8c346008e40204899d2ee3bb9",
+    "docs/regime-engine-v2/designer/fixtures/defensive-complete.json": "356f1f76419ee8f8780da4f8fdfa41ff88b778db06493fe52ab3e61cc91a2c7c",
+    "docs/regime-engine-v2/designer/fixtures/incomplete-missing-core.json": "1be049a46b71deddd941d044139fd64cd58222ade5094000ae728d0848e9db0a",
+    "docs/regime-engine-v2/designer/fixtures/incomplete-stale.json": "585db0dea40191b622777e7ae2d3fc9deb06bff7a48366fd7d317781e122e74c",
+    "docs/regime-engine-v2/designer/fixtures/incomplete-unknown-calendar.json": "12c71ff670221cc4184a98ab4cbee91241832558c54c507d3dcb9bbb0d3a0c01",
+    "docs/regime-engine-v2/designer/fixtures/incomplete-with-shock.json": "483232eefbd249d8bc8a50b1f282a478546ddb3e7866d78ccde37a4fc7b6279d",
+    "docs/regime-engine-v2/designer/fixtures/selective-partial.json": "6c2c6218add0f101b505cc2b666614a2bdc233b122c60628962af09bfc1989b9",
+    "docs/regime-engine-v2/designer/fixtures/stress-absolute.json": "1d09e274525916ee381f145c77b8cafc5c858b171fddd5b2daa2fc61202fa29c",
+    "docs/regime-engine-v2/designer/fixtures/stress-joint.json": "c729a8f43156d8a8bca1afa871b7380ccdfe453a61799f9d8df1bf7760afc117",
+    "docs/regime-engine-v2/designer/fixtures/transition-conflict.json": "950c8aa11fd9c8bc66814479c77f7ed3641ada8b415a25111a71ce206082f853",
+    "docs/regime-engine-v2/designer/fixtures/transition-fragility.json": "8b4d97ed825cc025668a1034ff5184393227969a8a7e75d8cc0c0c0ab4c27348",
+    "docs/regime-engine-v2/designer/fixtures/transition-watch.json": "5407f6a4edfcea04f5afef36f3734a6c71ab4a751cf62108ea279eabdb4aef87",
+    "lib/dashboard/regime-v2-presentation.test.ts": "e1859c119f0ed8ae842af930c9af2cf574479c1843cfc29179d05842973013e1",
+    "lib/dashboard/regime-v2-presentation.ts": "a3ea4c767b46bc51f20be07a06b0a4a91457607f9221c0cfd80dffbfa4a73f53",
+    "lib/dashboard/regime-v2-preview.test.mjs": "6a22ed85c34d82c90e962c6ff285e2a38ca6e77189a77e033a2c549b3fcbd04d",
+    "lib/dashboard/regime-v2-render.test.mjs": "2a0e24fd385357da35465b3f6ef0b25cc5b2e99f57b1c23fea6615cafff2c678",
+    "scripts/regime-v2-design-fixtures.mts": "e8f60059586dc55f294796ddef59084c4b17d3b643cc45c3d84889f27bc68d9b",
+    "scripts/regime-v2-design-fixtures.test.ts": "aa0564c02ff0323ae9cc1a4e1ce1d22e2ef6c290c3f59cf737cc726d2fcaf6cc",
+    "scripts/regime-v2-design-render.mjs": "e9bc9e4ea50a899cff1b70896ded1ac83d3d006654828eb9898c8e64bab50fb1"
+  },
+  "designer_rerun_after_detected_source_edits": true,
+  "environment": {
+    "PYTHONDONTWRITEBYTECODE": "1",
+    "V2_SHADOW": "OFF unless explicit isolated test override",
+    "runtime_datasets_written_to_git": false
+  },
+  "canonical_engine_modified": false,
+  "canonical_methodology_modified": false,
+  "production_cutover": false,
+  "separate_root_verification": [
+    "typecheck",
+    "lint",
+    "build",
+    "browser visual and responsive QA",
+    "accessibility",
+    "performance",
+    "preview-off regression"
+  ],
+  "presentation_refresh": {
+    "completed_at": "2026-09-08T20:33:09.463942+00:00",
+    "preceding_report": "docs/regime-engine-v2/designer/canonical-verification-before-20260908T203308241307Z.json",
+    "preceding_report_sha256": "a0d7eac05f1887a1d1675a5586c06ab83b2ff6b6ebef269a687c4405152ae811",
+    "why": "Presentation implementation changed after the successful full canonical run; canonical, V1 and Maintainer source bytes remain identical, so only Designer tests and fixture reproducibility are repeated.",
+    "before_source_hashes": {
+      "app/(es)/internal/regime-v2/page.tsx": "8b384ba8f0df24e9ffdefd0bff0ec2fef2049791e718d72ce87e38a6fe2be6c0",
+      "app/en/internal/regime-v2/page.tsx": "55a267714f6a71421927d84ded97d4ed478571b274ca612c041967018508a1b1",
+      "components/dashboard/DashboardRegimeV1.tsx": "92d7ef8bc01d4725d740ddea73cf83086743a93eb5d8271aba8872c83b0982cc",
+      "components/dashboard/RegimeV2Disclosure.tsx": "120e7dff5f4f0fe787268be436fdae9f4caf7239b7d6a58d480c7516dc652014",
+      "components/dashboard/RegimeV2Preview.tsx": "37dd9680ee7318c42fe0e22390f53fda59b8b9dbb0359fbdf1c5c3ce30908627",
+      "components/dashboard/RegimeV2Surface.tsx": "add309968305efc955c03dbf0ee3eda8dbfc04418c7bf30fbf7e40bf21c50487",
+      "components/dashboard/regime-v2.module.css": "8a0811d1e0f15d7db26397a5ee0cfe64ca50ff687479816ecb4903294e90ce09",
+      "docs/regime-engine-v2/designer/fixtures/broad-complete.json": "a4d33bcec41d2f6a20107495963080a1a6896ca8c346008e40204899d2ee3bb9",
+      "docs/regime-engine-v2/designer/fixtures/defensive-complete.json": "356f1f76419ee8f8780da4f8fdfa41ff88b778db06493fe52ab3e61cc91a2c7c",
+      "docs/regime-engine-v2/designer/fixtures/incomplete-missing-core.json": "1be049a46b71deddd941d044139fd64cd58222ade5094000ae728d0848e9db0a",
+      "docs/regime-engine-v2/designer/fixtures/incomplete-stale.json": "585db0dea40191b622777e7ae2d3fc9deb06bff7a48366fd7d317781e122e74c",
+      "docs/regime-engine-v2/designer/fixtures/incomplete-unknown-calendar.json": "12c71ff670221cc4184a98ab4cbee91241832558c54c507d3dcb9bbb0d3a0c01",
+      "docs/regime-engine-v2/designer/fixtures/incomplete-with-shock.json": "483232eefbd249d8bc8a50b1f282a478546ddb3e7866d78ccde37a4fc7b6279d",
+      "docs/regime-engine-v2/designer/fixtures/selective-partial.json": "6c2c6218add0f101b505cc2b666614a2bdc233b122c60628962af09bfc1989b9",
+      "docs/regime-engine-v2/designer/fixtures/stress-absolute.json": "1d09e274525916ee381f145c77b8cafc5c858b171fddd5b2daa2fc61202fa29c",
+      "docs/regime-engine-v2/designer/fixtures/stress-joint.json": "c729a8f43156d8a8bca1afa871b7380ccdfe453a61799f9d8df1bf7760afc117",
+      "docs/regime-engine-v2/designer/fixtures/transition-conflict.json": "950c8aa11fd9c8bc66814479c77f7ed3641ada8b415a25111a71ce206082f853",
+      "docs/regime-engine-v2/designer/fixtures/transition-fragility.json": "8b4d97ed825cc025668a1034ff5184393227969a8a7e75d8cc0c0c0ab4c27348",
+      "docs/regime-engine-v2/designer/fixtures/transition-watch.json": "5407f6a4edfcea04f5afef36f3734a6c71ab4a751cf62108ea279eabdb4aef87",
+      "lib/dashboard/regime-v2-presentation.test.ts": "e1859c119f0ed8ae842af930c9af2cf574479c1843cfc29179d05842973013e1",
+      "lib/dashboard/regime-v2-presentation.ts": "a3ea4c767b46bc51f20be07a06b0a4a91457607f9221c0cfd80dffbfa4a73f53",
+      "lib/dashboard/regime-v2-preview.test.mjs": "6a22ed85c34d82c90e962c6ff285e2a38ca6e77189a77e033a2c549b3fcbd04d",
+      "lib/dashboard/regime-v2-render.test.mjs": "2a0e24fd385357da35465b3f6ef0b25cc5b2e99f57b1c23fea6615cafff2c678",
+      "scripts/regime-v2-design-fixtures.mts": "e8f60059586dc55f294796ddef59084c4b17d3b643cc45c3d84889f27bc68d9b",
+      "scripts/regime-v2-design-fixtures.test.ts": "aa0564c02ff0323ae9cc1a4e1ce1d22e2ef6c290c3f59cf737cc726d2fcaf6cc",
+      "scripts/regime-v2-design-render.mjs": "e9bc9e4ea50a899cff1b70896ded1ac83d3d006654828eb9898c8e64bab50fb1"
+    },
+    "after_source_hashes": {
+      "app/(es)/internal/regime-v2/page.tsx": "8b384ba8f0df24e9ffdefd0bff0ec2fef2049791e718d72ce87e38a6fe2be6c0",
+      "app/en/internal/regime-v2/page.tsx": "55a267714f6a71421927d84ded97d4ed478571b274ca612c041967018508a1b1",
+      "components/dashboard/DashboardRegimeV1.tsx": "92d7ef8bc01d4725d740ddea73cf83086743a93eb5d8271aba8872c83b0982cc",
+      "components/dashboard/RegimeV2Disclosure.tsx": "120e7dff5f4f0fe787268be436fdae9f4caf7239b7d6a58d480c7516dc652014",
+      "components/dashboard/RegimeV2Preview.tsx": "37dd9680ee7318c42fe0e22390f53fda59b8b9dbb0359fbdf1c5c3ce30908627",
+      "components/dashboard/RegimeV2Surface.tsx": "add309968305efc955c03dbf0ee3eda8dbfc04418c7bf30fbf7e40bf21c50487",
+      "components/dashboard/regime-v2.module.css": "8a0811d1e0f15d7db26397a5ee0cfe64ca50ff687479816ecb4903294e90ce09",
+      "docs/regime-engine-v2/designer/fixtures/broad-complete.json": "a4d33bcec41d2f6a20107495963080a1a6896ca8c346008e40204899d2ee3bb9",
+      "docs/regime-engine-v2/designer/fixtures/defensive-complete.json": "356f1f76419ee8f8780da4f8fdfa41ff88b778db06493fe52ab3e61cc91a2c7c",
+      "docs/regime-engine-v2/designer/fixtures/incomplete-missing-core.json": "1be049a46b71deddd941d044139fd64cd58222ade5094000ae728d0848e9db0a",
+      "docs/regime-engine-v2/designer/fixtures/incomplete-stale.json": "585db0dea40191b622777e7ae2d3fc9deb06bff7a48366fd7d317781e122e74c",
+      "docs/regime-engine-v2/designer/fixtures/incomplete-unknown-calendar.json": "12c71ff670221cc4184a98ab4cbee91241832558c54c507d3dcb9bbb0d3a0c01",
+      "docs/regime-engine-v2/designer/fixtures/incomplete-with-shock.json": "483232eefbd249d8bc8a50b1f282a478546ddb3e7866d78ccde37a4fc7b6279d",
+      "docs/regime-engine-v2/designer/fixtures/selective-partial.json": "6c2c6218add0f101b505cc2b666614a2bdc233b122c60628962af09bfc1989b9",
+      "docs/regime-engine-v2/designer/fixtures/stress-absolute.json": "1d09e274525916ee381f145c77b8cafc5c858b171fddd5b2daa2fc61202fa29c",
+      "docs/regime-engine-v2/designer/fixtures/stress-joint.json": "c729a8f43156d8a8bca1afa871b7380ccdfe453a61799f9d8df1bf7760afc117",
+      "docs/regime-engine-v2/designer/fixtures/transition-conflict.json": "950c8aa11fd9c8bc66814479c77f7ed3641ada8b415a25111a71ce206082f853",
+      "docs/regime-engine-v2/designer/fixtures/transition-fragility.json": "8b4d97ed825cc025668a1034ff5184393227969a8a7e75d8cc0c0c0ab4c27348",
+      "docs/regime-engine-v2/designer/fixtures/transition-watch.json": "5407f6a4edfcea04f5afef36f3734a6c71ab4a751cf62108ea279eabdb4aef87",
+      "lib/dashboard/regime-v2-presentation.test.ts": "e1859c119f0ed8ae842af930c9af2cf574479c1843cfc29179d05842973013e1",
+      "lib/dashboard/regime-v2-presentation.ts": "a3ea4c767b46bc51f20be07a06b0a4a91457607f9221c0cfd80dffbfa4a73f53",
+      "lib/dashboard/regime-v2-preview.test.mjs": "6a22ed85c34d82c90e962c6ff285e2a38ca6e77189a77e033a2c549b3fcbd04d",
+      "lib/dashboard/regime-v2-render.test.mjs": "2a0e24fd385357da35465b3f6ef0b25cc5b2e99f57b1c23fea6615cafff2c678",
+      "scripts/regime-v2-design-fixtures.mts": "e8f60059586dc55f294796ddef59084c4b17d3b643cc45c3d84889f27bc68d9b",
+      "scripts/regime-v2-design-fixtures.test.ts": "aa0564c02ff0323ae9cc1a4e1ce1d22e2ef6c290c3f59cf737cc726d2fcaf6cc",
+      "scripts/regime-v2-design-render.mjs": "e9bc9e4ea50a899cff1b70896ded1ac83d3d006654828eb9898c8e64bab50fb1"
+    },
+    "frozen_before_differences": [],
+    "frozen_after_differences": []
+  }
+}

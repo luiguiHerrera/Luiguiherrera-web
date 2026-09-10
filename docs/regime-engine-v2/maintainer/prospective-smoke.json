@@ -1,0 +1,130 @@
+{
+  "status": "PASS",
+  "scope": "One authorized local execution of existing live Dashboard acquisition; no deployment or persistent flag activation. Runtime raw bytes remain outside Git.",
+  "snapshotId": "b3d4f8fe108e9cd9aa297c05d9a05359bcc27cd81d9aeebb537d8d9ae947af99",
+  "snapshotFile": "/private/tmp/regime-v2-maintainer-prospective/snapshots/b3d4f8fe108e9cd9aa297c05d9a05359bcc27cd81d9aeebb537d8d9ae947af99.json",
+  "snapshotFileSha256": "4c610154a6c31373b2a686f4a3615296de598815c6d98e69a41d456bf01b0619",
+  "asOf": "2026-09-08T18:43:03.428Z",
+  "v1": {
+    "confidence": 62,
+    "outputHash": "c0ca115775b0ae9d4225ba6ca6aed0ca2d83821ba79a41b165dc073aba79377f",
+    "regime": "Neutral / mixto",
+    "score": 54,
+    "version": "regime-v1/legacy-45-40-15; source-sha256=4513411deacf42d80bfbd2d8739c3b3c0e1f4cbf2eab91a66ba35ed01ca53f87"
+  },
+  "v2": {
+    "engineVersion": "regime-v2/1.0.0-builder",
+    "parameterSet": "C03",
+    "regime": null,
+    "systemState": "INCOMPLETE",
+    "concordance": null,
+    "uncertainty": null,
+    "dataQuality": "INSUFFICIENT",
+    "replayClass": "UNKNOWN"
+  },
+  "captureCount": 5,
+  "captures": [
+    {
+      "captureId": "20e13e4aadfc95be197bc1c2f92e03918f67a614641f87d43df4e570af662d2e",
+      "sourceId": "VX_OFFICIAL",
+      "sourceVersion": "cboe-cfe-daily-csv/1.0.0",
+      "sourceUrl": "https://www-api.cboe.com/us/futures/market_statistics/settlement/csv/?dt=2026-09-05",
+      "startedAt": "2026-09-08T18:43:02.822Z",
+      "completedAt": "2026-09-08T18:43:02.823Z",
+      "rawHash": "fb3907637b20ec51927e44bd0c06628cc47fb9cde8f317c743131a779dbaf39d",
+      "origin": "PROSPECTIVE",
+      "rawBytes": 38,
+      "sourcePublishedAt": null,
+      "replayClass": "UNKNOWN",
+      "fileSha256": "86f29c3f27418f5c43bfa79bb8a07edad55d7087fcee4eda3ec6e5ea2cacf880"
+    },
+    {
+      "captureId": "424cc7638a14254758bc60329ccc04e02986dc44fa29c4ee6c66b1419d63bc37",
+      "sourceId": "VX_OFFICIAL",
+      "sourceVersion": "cboe-cfe-daily-csv/1.0.0",
+      "sourceUrl": "https://www-api.cboe.com/us/futures/market_statistics/settlement/csv/?dt=2026-09-08",
+      "startedAt": "2026-09-08T18:43:01.347Z",
+      "completedAt": "2026-09-08T18:43:01.348Z",
+      "rawHash": "fb3907637b20ec51927e44bd0c06628cc47fb9cde8f317c743131a779dbaf39d",
+      "origin": "PROSPECTIVE",
+      "rawBytes": 38,
+      "sourcePublishedAt": null,
+      "replayClass": "UNKNOWN",
+      "fileSha256": "c2516a909a546d9ea5ad5f2134a0eca4503d4272fe06f8db7a2a4cfb013546e1"
+    },
+    {
+      "captureId": "7e9a6d60583a71678fe067a06d86bdefa06b33d51fb2fd0f4d30674681d4a4b6",
+      "sourceId": "VX_OFFICIAL",
+      "sourceVersion": "cboe-cfe-daily-csv/1.0.0",
+      "sourceUrl": "https://www-api.cboe.com/us/futures/market_statistics/settlement/csv/?dt=2026-09-07",
+      "startedAt": "2026-09-08T18:43:01.857Z",
+      "completedAt": "2026-09-08T18:43:01.857Z",
+      "rawHash": "fb3907637b20ec51927e44bd0c06628cc47fb9cde8f317c743131a779dbaf39d",
+      "origin": "PROSPECTIVE",
+      "rawBytes": 38,
+      "sourcePublishedAt": null,
+      "replayClass": "UNKNOWN",
+      "fileSha256": "9387649b913989ef4edb3bcf12ce336d02a20628f124451e6e623ee72c442d52"
+    },
+    {
+      "captureId": "bd42e68d2234a3052ab23f865cda62cdedeb98354b047b89c04679463c2eeb50",
+      "sourceId": "VX_OFFICIAL",
+      "sourceVersion": "cboe-cfe-daily-csv/1.0.0",
+      "sourceUrl": "https://www-api.cboe.com/us/futures/market_statistics/settlement/csv/?dt=2026-09-04",
+      "startedAt": "2026-09-08T18:43:03.423Z",
+      "completedAt": "2026-09-08T18:43:03.423Z",
+      "rawHash": "91eb826774fe7f318aaa2df8cbeb749bbd3fa1ddac2e48ca1e46afddd7aaeee3",
+      "origin": "PROSPECTIVE",
+      "rawBytes": 1731,
+      "sourcePublishedAt": null,
+      "replayClass": "UNKNOWN",
+      "fileSha256": "41bc6688ba6ead76623cdf2f1f922ffd28d39d47615d2f4d8d2788acb495d6eb"
+    },
+    {
+      "captureId": "c09db3335ef1667be6d50ed17b8346feac89fad5c132de993a253b20c9acfc95",
+      "sourceId": "VX_OFFICIAL",
+      "sourceVersion": "cboe-cfe-daily-csv/1.0.0",
+      "sourceUrl": "https://www-api.cboe.com/us/futures/market_statistics/settlement/csv/?dt=2026-09-06",
+      "startedAt": "2026-09-08T18:43:02.375Z",
+      "completedAt": "2026-09-08T18:43:02.377Z",
+      "rawHash": "fb3907637b20ec51927e44bd0c06628cc47fb9cde8f317c743131a779dbaf39d",
+      "origin": "PROSPECTIVE",
+      "rawBytes": 38,
+      "sourcePublishedAt": null,
+      "replayClass": "UNKNOWN",
+      "fileSha256": "a9e771cb0da273a8eacc8e61cf443902389533720c3fc8a8d84279fb4b01fd32"
+    }
+  ],
+  "calendarConfigured": false,
+  "sourceBundleConfigured": false,
+  "realCompleteR0Witness": false,
+  "sourcePublishedAtInvented": false,
+  "historyReclassified": false,
+  "exactReplay": {
+    "status": "MATCH",
+    "snapshotId": "b3d4f8fe108e9cd9aa297c05d9a05359bcc27cd81d9aeebb537d8d9ae947af99",
+    "engineVersion": "regime-v2/1.0.0-builder",
+    "parameterSet": "C03",
+    "regime": null,
+    "systemState": "INCOMPLETE",
+    "replayClass": "UNKNOWN",
+    "outputHash": "c27b779717f94752634714551e7bec3235127163aa247c5025545b747036f5cb"
+  },
+  "evidencePlan": {
+    "absoluteStressBranchObserved": false,
+    "adjudicatedTransitions": 0,
+    "automaticPromotion": false,
+    "conflictingPillarEpisodeCandidates": 0,
+    "countsAreNotStatisticalGuarantees": true,
+    "jointStressBranchObserved": false,
+    "materialVolatilityEpisodeCandidates": 0,
+    "observedTransitionCandidates": 0,
+    "origin": "UNVERIFIED",
+    "targets": {
+      "adjudicableTransitions": 100,
+      "conflictingPillarEpisodes": 100,
+      "materialVolatilityEpisodes": 60
+    }
+  },
+  "limitation": "Successful capture/storage/unknown-calendar degradation test, not a complete live V2 signal or PIT OOS proof. Temporary storage is not durable deployment configuration."
+}

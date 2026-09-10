@@ -1,0 +1,177 @@
+{
+  "status": "PASS",
+  "files_count": 24,
+  "existing_files_modified": 0,
+  "scope": "Only Builder additions. No V1/UI/P8 file altered. Manifest excludes its own self-referential hash.",
+  "candidate_payload_sha256": "7f0da813ed6bd96cca6dee007c4e804797fe09b012a2bdea1b7c40753b9550b3",
+  "files": [
+    {
+      "path": "/Users/quantlab/Developer/web/Luiguiherrera-web/docs/regime-engine-v2/builder/README.md",
+      "repository_path": "docs/regime-engine-v2/builder/README.md",
+      "change": "ADDED",
+      "purpose": "Control Tower delivery, API, limitations and reproduction.",
+      "sha256": "83341d491fd360620997cb20cc76336da24c0ed7d0e904b17ed52d107b90f2b7"
+    },
+    {
+      "path": "/Users/quantlab/Developer/web/Luiguiherrera-web/docs/regime-engine-v2/builder/baseline.json",
+      "repository_path": "docs/regime-engine-v2/builder/baseline.json",
+      "change": "ADDED",
+      "purpose": "Repository state recorded before any implementation.",
+      "sha256": "9114b7e57a93f7ade10ca021337fef4a4487e9ef7f63ccbefb747ec55724117b"
+    },
+    {
+      "path": "/Users/quantlab/Developer/web/Luiguiherrera-web/docs/regime-engine-v2/builder/conformance.json",
+      "repository_path": "docs/regime-engine-v2/builder/conformance.json",
+      "change": "ADDED",
+      "purpose": "464 golden/1930 historical observed conformance results.",
+      "sha256": "0ae86699a5a32f7d58bf3e604400cf875fd04900d6e5cf404b7a4be2a379cf06"
+    },
+    {
+      "path": "/Users/quantlab/Developer/web/Luiguiherrera-web/docs/regime-engine-v2/builder/delivery.json",
+      "repository_path": "docs/regime-engine-v2/builder/delivery.json",
+      "change": "ADDED",
+      "purpose": "Required final Builder status and exact change list.",
+      "sha256": "57b47d93b7cb3965ab7371999a6080f406c0b6bafd3ba0cdf6a85658085f6662"
+    },
+    {
+      "path": "/Users/quantlab/Developer/web/Luiguiherrera-web/docs/regime-engine-v2/builder/files-changed.json",
+      "repository_path": "docs/regime-engine-v2/builder/files-changed.json",
+      "change": "ADDED",
+      "purpose": "This exact change inventory and candidate hashes.",
+      "sha256": null
+    },
+    {
+      "path": "/Users/quantlab/Developer/web/Luiguiherrera-web/docs/regime-engine-v2/builder/full-test-command.json",
+      "repository_path": "docs/regime-engine-v2/builder/full-test-command.json",
+      "change": "ADDED",
+      "purpose": "First complete-suite command trace; final results are in verification.json.",
+      "sha256": "65081130367e92b1c8823c62ae98857348093fd0f9b4364327aa93750b4a35ea"
+    },
+    {
+      "path": "/Users/quantlab/Developer/web/Luiguiherrera-web/docs/regime-engine-v2/builder/historical-r2-output.json",
+      "repository_path": "docs/regime-engine-v2/builder/historical-r2-output.json",
+      "change": "ADDED",
+      "purpose": "R2-only per-session outputs and hashes for independent review.",
+      "sha256": "baeaa34545fd43109b9f94f6cfe4771858c00a3333a4e2d600213f5792f6cf3a"
+    },
+    {
+      "path": "/Users/quantlab/Developer/web/Luiguiherrera-web/docs/regime-engine-v2/builder/preservation.json",
+      "repository_path": "docs/regime-engine-v2/builder/preservation.json",
+      "change": "ADDED",
+      "purpose": "Byte preservation audit of all 819 original files.",
+      "sha256": "a2fef06f441f4514fb2f735cb3f8d23ab044221c94b407a8397f2c719145fca7"
+    },
+    {
+      "path": "/Users/quantlab/Developer/web/Luiguiherrera-web/docs/regime-engine-v2/builder/shadow-example.json",
+      "repository_path": "docs/regime-engine-v2/builder/shadow-example.json",
+      "change": "ADDED",
+      "purpose": "Internal V1-preserving parallel example, not a public output.",
+      "sha256": "2e8b356831ff88246370e00b6caf88100551cbf7afca242511196ef498750432"
+    },
+    {
+      "path": "/Users/quantlab/Developer/web/Luiguiherrera-web/docs/regime-engine-v2/builder/shadow-input-r2.json",
+      "repository_path": "docs/regime-engine-v2/builder/shadow-input-r2.json",
+      "change": "ADDED",
+      "purpose": "Reproducible internal R2 normalized envelope.",
+      "sha256": "b45459953f4cae0ad0ff24e376ad749aaac71132301e790050b5fafdd02c71c9"
+    },
+    {
+      "path": "/Users/quantlab/Developer/web/Luiguiherrera-web/docs/regime-engine-v2/builder/verification.json",
+      "repository_path": "docs/regime-engine-v2/builder/verification.json",
+      "change": "ADDED",
+      "purpose": "Final tests/typecheck/lint/build/editorial results and actual environment.",
+      "sha256": "793d6cdaa7f373d282e4e4b623afd0c26ce011f4cdfd7fbcc3497dc7b734c214"
+    },
+    {
+      "path": "/Users/quantlab/Developer/web/Luiguiherrera-web/lib/regime-engine-v2/capture.ts",
+      "repository_path": "lib/regime-engine-v2/capture.ts",
+      "change": "ADDED",
+      "purpose": "Prospective immutable source capture and deduplication.",
+      "sha256": "e0a2c38710f988843cc5a804cdbb9adbc65f97e7074fcdd0afe412637e6bb813"
+    },
+    {
+      "path": "/Users/quantlab/Developer/web/Luiguiherrera-web/lib/regime-engine-v2/contract.ts",
+      "repository_path": "lib/regime-engine-v2/contract.ts",
+      "change": "ADDED",
+      "purpose": "Frozen C03/table/registry projection and source hashes.",
+      "sha256": "a51570431b79ec7703e3270a88a9288bb43b581e5f5d762b391038814f405e29"
+    },
+    {
+      "path": "/Users/quantlab/Developer/web/Luiguiherrera-web/lib/regime-engine-v2/core.ts",
+      "repository_path": "lib/regime-engine-v2/core.ts",
+      "change": "ADDED",
+      "purpose": "P8 numeric transforms and exact precedence/concordance/uncertainty.",
+      "sha256": "664720faa860f27d3648e495b32bc0e14faf25a45ea2c0b2c53d4dc248f36a81"
+    },
+    {
+      "path": "/Users/quantlab/Developer/web/Luiguiherrera-web/lib/regime-engine-v2/engine.test.ts",
+      "repository_path": "lib/regime-engine-v2/engine.test.ts",
+      "change": "ADDED",
+      "purpose": "Required Builder integration and invariant tests.",
+      "sha256": "d1d1a5632179d0f7f3f807805ce4b4151fd7b69f0f2c6ababa99fda266df22eb"
+    },
+    {
+      "path": "/Users/quantlab/Developer/web/Luiguiherrera-web/lib/regime-engine-v2/engine.ts",
+      "repository_path": "lib/regime-engine-v2/engine.ts",
+      "change": "ADDED",
+      "purpose": "Public C03 engine with source/calendar/freshness checks and versioned output.",
+      "sha256": "81fbd9cb6be197fd22212fc0129de07fa3bbd872ec1a9deefdc4904b4bc6aa94"
+    },
+    {
+      "path": "/Users/quantlab/Developer/web/Luiguiherrera-web/lib/regime-engine-v2/features.ts",
+      "repository_path": "lib/regime-engine-v2/features.ts",
+      "change": "ADDED",
+      "purpose": "59-feature evidence graph and native satellite/diagnostic transformations.",
+      "sha256": "009b38ed0635f906e35e8f2fb77c01656bed3c2489b19c00f162f349e7213488"
+    },
+    {
+      "path": "/Users/quantlab/Developer/web/Luiguiherrera-web/lib/regime-engine-v2/math.ts",
+      "repository_path": "lib/regime-engine-v2/math.ts",
+      "change": "ADDED",
+      "purpose": "Numerics, canonical hashes and immutable output.",
+      "sha256": "82af814a436b6cd5877f34b93fef7535827f355f7bf9225d70e8349c15fa9138"
+    },
+    {
+      "path": "/Users/quantlab/Developer/web/Luiguiherrera-web/lib/regime-engine-v2/normalize.ts",
+      "repository_path": "lib/regime-engine-v2/normalize.ts",
+      "change": "ADDED",
+      "purpose": "Verified native source-field normalization; no close fallback.",
+      "sha256": "a9ff8c6dc985aefc3a04b2c5d62a87e54664819bdbd95d84afc9fb91333b623e"
+    },
+    {
+      "path": "/Users/quantlab/Developer/web/Luiguiherrera-web/lib/regime-engine-v2/shadow.ts",
+      "repository_path": "lib/regime-engine-v2/shadow.ts",
+      "change": "ADDED",
+      "purpose": "V1-isolated shadow and transition/duration instrumentation.",
+      "sha256": "769ad64283b247ed841483dff07dbd6da81c1106875f015494fd245bff9d42b2"
+    },
+    {
+      "path": "/Users/quantlab/Developer/web/Luiguiherrera-web/lib/regime-engine-v2/temporal.ts",
+      "repository_path": "lib/regime-engine-v2/temporal.ts",
+      "change": "ADDED",
+      "purpose": "Availability, replay, calendars and complete session windows.",
+      "sha256": "2805c3beaecd9ff031991384e92fda4f9a87004b65da55721b6ccbc40aa70a75"
+    },
+    {
+      "path": "/Users/quantlab/Developer/web/Luiguiherrera-web/lib/regime-engine-v2/types.ts",
+      "repository_path": "lib/regime-engine-v2/types.ts",
+      "change": "ADDED",
+      "purpose": "Typed raw/normalized/temporal and qualitative output contracts.",
+      "sha256": "434840358739974a277817fbcea60dcdcf8ff01c08815f026b301a51cf849622"
+    },
+    {
+      "path": "/Users/quantlab/Developer/web/Luiguiherrera-web/scripts/regime-v2-conformance.mts",
+      "repository_path": "scripts/regime-v2-conformance.mts",
+      "change": "ADDED",
+      "purpose": "Frozen Python/P8 testing oracle and native TypeScript historical conformance; offline only.",
+      "sha256": "355358d9132d9f0d441c33cd368f0556375a6bdb7b1c2e7cb8d0ed911816ac82"
+    },
+    {
+      "path": "/Users/quantlab/Developer/web/Luiguiherrera-web/scripts/regime-v2-shadow.mts",
+      "repository_path": "scripts/regime-v2-shadow.mts",
+      "change": "ADDED",
+      "purpose": "Internal explicit CLI; no public route or scheduler.",
+      "sha256": "0c13eed54ddd624d6e7568bf125a34ebd54bf74c9ac13f605341190a04d0ad0e"
+    }
+  ]
+}

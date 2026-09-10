@@ -1,0 +1,627 @@
+{
+  "price_inputs": {
+    "XLK": {
+      "source_sha256": "08a10599fa315fd64a4a36923f1fbe2e0349a9fb82cffa91c89ac077e0e1c2a6",
+      "rows": 2181,
+      "first": "2018-01-02",
+      "last": "2026-09-04",
+      "missing_adjusted_dates": [],
+      "dates_where_adjusted_differs_from_source_close": 2127,
+      "corporate_action_count": 35,
+      "corporate_action_examples": [
+        {
+          "date": "2025-12-05",
+          "type": "splits",
+          "details": {
+            "date": 1764945000,
+            "numerator": 2.0,
+            "denominator": 1.0,
+            "splitRatio": "2:1"
+          }
+        },
+        {
+          "date": "2025-12-22",
+          "type": "dividends",
+          "details": {
+            "amount": 0.219,
+            "date": 1766413800
+          }
+        },
+        {
+          "date": "2026-03-23",
+          "type": "dividends",
+          "details": {
+            "amount": 0.168,
+            "date": 1774272600
+          }
+        },
+        {
+          "date": "2026-06-22",
+          "type": "dividends",
+          "details": {
+            "amount": 0.228,
+            "date": 1782135000
+          }
+        }
+      ]
+    },
+    "XLY": {
+      "source_sha256": "31a842266f5be063e5bcbb9487f67acbe957b88e74852473eb879cc63e2e543e",
+      "rows": 2181,
+      "first": "2018-01-02",
+      "last": "2026-09-04",
+      "missing_adjusted_dates": [],
+      "dates_where_adjusted_differs_from_source_close": 2127,
+      "corporate_action_count": 35,
+      "corporate_action_examples": [
+        {
+          "date": "2025-12-05",
+          "type": "splits",
+          "details": {
+            "date": 1764945000,
+            "numerator": 2.0,
+            "denominator": 1.0,
+            "splitRatio": "2:1"
+          }
+        },
+        {
+          "date": "2025-12-22",
+          "type": "dividends",
+          "details": {
+            "amount": 0.241,
+            "date": 1766413800
+          }
+        },
+        {
+          "date": "2026-03-23",
+          "type": "dividends",
+          "details": {
+            "amount": 0.216,
+            "date": 1774272600
+          }
+        },
+        {
+          "date": "2026-06-22",
+          "type": "dividends",
+          "details": {
+            "amount": 0.233,
+            "date": 1782135000
+          }
+        }
+      ]
+    },
+    "XLC": {
+      "source_sha256": "d407c24e740b4d20fe19824a76320e2bd6081f86395c3c75c64b9e26ca4fa84a",
+      "rows": 2065,
+      "first": "2018-06-19",
+      "last": "2026-09-04",
+      "missing_adjusted_dates": [],
+      "dates_where_adjusted_differs_from_source_close": 2011,
+      "corporate_action_count": 32,
+      "corporate_action_examples": [
+        {
+          "date": "2025-09-22",
+          "type": "dividends",
+          "details": {
+            "amount": 0.415,
+            "date": 1758547800
+          }
+        },
+        {
+          "date": "2025-12-22",
+          "type": "dividends",
+          "details": {
+            "amount": 0.376,
+            "date": 1766413800
+          }
+        },
+        {
+          "date": "2026-03-23",
+          "type": "dividends",
+          "details": {
+            "amount": 0.357,
+            "date": 1774272600
+          }
+        },
+        {
+          "date": "2026-06-22",
+          "type": "dividends",
+          "details": {
+            "amount": 0.284,
+            "date": 1782135000
+          }
+        }
+      ]
+    },
+    "XLF": {
+      "source_sha256": "beebebe4f4c9eb599408a979a4b828f7032e8674aaed9b956b99c48f0920a337",
+      "rows": 2181,
+      "first": "2018-01-02",
+      "last": "2026-09-04",
+      "missing_adjusted_dates": [],
+      "dates_where_adjusted_differs_from_source_close": 2127,
+      "corporate_action_count": 34,
+      "corporate_action_examples": [
+        {
+          "date": "2025-09-22",
+          "type": "dividends",
+          "details": {
+            "amount": 0.178,
+            "date": 1758547800
+          }
+        },
+        {
+          "date": "2025-12-22",
+          "type": "dividends",
+          "details": {
+            "amount": 0.191,
+            "date": 1766413800
+          }
+        },
+        {
+          "date": "2026-03-23",
+          "type": "dividends",
+          "details": {
+            "amount": 0.251,
+            "date": 1774272600
+          }
+        },
+        {
+          "date": "2026-06-22",
+          "type": "dividends",
+          "details": {
+            "amount": 0.187,
+            "date": 1782135000
+          }
+        }
+      ]
+    },
+    "XLE": {
+      "source_sha256": "f7d14c7ae8020ee755e9856b41111061d660cdbb7c479777cedaace6dfee97e3",
+      "rows": 2181,
+      "first": "2018-01-02",
+      "last": "2026-09-04",
+      "missing_adjusted_dates": [],
+      "dates_where_adjusted_differs_from_source_close": 2127,
+      "corporate_action_count": 36,
+      "corporate_action_examples": [
+        {
+          "date": "2025-12-05",
+          "type": "splits",
+          "details": {
+            "date": 1764945000,
+            "numerator": 2.0,
+            "denominator": 1.0,
+            "splitRatio": "2:1"
+          }
+        },
+        {
+          "date": "2025-12-22",
+          "type": "dividends",
+          "details": {
+            "amount": 0.373,
+            "date": 1766413800
+          }
+        },
+        {
+          "date": "2026-03-23",
+          "type": "dividends",
+          "details": {
+            "amount": 0.385,
+            "date": 1774272600
+          }
+        },
+        {
+          "date": "2026-06-22",
+          "type": "dividends",
+          "details": {
+            "amount": 0.385,
+            "date": 1782135000
+          }
+        }
+      ]
+    },
+    "XLI": {
+      "source_sha256": "841af851ad2c59302fea1fc99b41d67ff124418633c92b20ffad5777e7e89fbb",
+      "rows": 2181,
+      "first": "2018-01-02",
+      "last": "2026-09-04",
+      "missing_adjusted_dates": [],
+      "dates_where_adjusted_differs_from_source_close": 2127,
+      "corporate_action_count": 34,
+      "corporate_action_examples": [
+        {
+          "date": "2025-09-22",
+          "type": "dividends",
+          "details": {
+            "amount": 0.63,
+            "date": 1758547800
+          }
+        },
+        {
+          "date": "2025-12-22",
+          "type": "dividends",
+          "details": {
+            "amount": 0.532,
+            "date": 1766413800
+          }
+        },
+        {
+          "date": "2026-03-23",
+          "type": "dividends",
+          "details": {
+            "amount": 0.453,
+            "date": 1774272600
+          }
+        },
+        {
+          "date": "2026-06-22",
+          "type": "dividends",
+          "details": {
+            "amount": 0.444,
+            "date": 1782135000
+          }
+        }
+      ]
+    },
+    "XLB": {
+      "source_sha256": "f21f49170520d896b2204db6aba5c604148a4b04c3584183706c353f8f78d280",
+      "rows": 2181,
+      "first": "2018-01-02",
+      "last": "2026-09-04",
+      "missing_adjusted_dates": [],
+      "dates_where_adjusted_differs_from_source_close": 2127,
+      "corporate_action_count": 35,
+      "corporate_action_examples": [
+        {
+          "date": "2025-12-05",
+          "type": "splits",
+          "details": {
+            "date": 1764945000,
+            "numerator": 2.0,
+            "denominator": 1.0,
+            "splitRatio": "2:1"
+          }
+        },
+        {
+          "date": "2025-12-22",
+          "type": "dividends",
+          "details": {
+            "amount": 0.233,
+            "date": 1766413800
+          }
+        },
+        {
+          "date": "2026-03-23",
+          "type": "dividends",
+          "details": {
+            "amount": 0.208,
+            "date": 1774272600
+          }
+        },
+        {
+          "date": "2026-06-22",
+          "type": "dividends",
+          "details": {
+            "amount": 0.193,
+            "date": 1782135000
+          }
+        }
+      ]
+    },
+    "XLV": {
+      "source_sha256": "07110d28b37afd7f2930ff7d2c2de9337ed65b9917f69f57c85ba56379250499",
+      "rows": 2181,
+      "first": "2018-01-02",
+      "last": "2026-09-04",
+      "missing_adjusted_dates": [],
+      "dates_where_adjusted_differs_from_source_close": 2127,
+      "corporate_action_count": 35,
+      "corporate_action_examples": [
+        {
+          "date": "2025-09-22",
+          "type": "dividends",
+          "details": {
+            "amount": 0.625,
+            "date": 1758547800
+          }
+        },
+        {
+          "date": "2025-12-22",
+          "type": "dividends",
+          "details": {
+            "amount": 0.657,
+            "date": 1766413800
+          }
+        },
+        {
+          "date": "2026-03-23",
+          "type": "dividends",
+          "details": {
+            "amount": 0.595,
+            "date": 1774272600
+          }
+        },
+        {
+          "date": "2026-06-22",
+          "type": "dividends",
+          "details": {
+            "amount": 0.656,
+            "date": 1782135000
+          }
+        }
+      ]
+    },
+    "XLP": {
+      "source_sha256": "e69b1cdfe161cbdeb9d5e321823dc7ef1bdb173ea66c02467e3bc90938de8ed9",
+      "rows": 2181,
+      "first": "2018-01-02",
+      "last": "2026-09-04",
+      "missing_adjusted_dates": [],
+      "dates_where_adjusted_differs_from_source_close": 2127,
+      "corporate_action_count": 34,
+      "corporate_action_examples": [
+        {
+          "date": "2025-09-22",
+          "type": "dividends",
+          "details": {
+            "amount": 0.541,
+            "date": 1758547800
+          }
+        },
+        {
+          "date": "2025-12-22",
+          "type": "dividends",
+          "details": {
+            "amount": 0.627,
+            "date": 1766413800
+          }
+        },
+        {
+          "date": "2026-03-23",
+          "type": "dividends",
+          "details": {
+            "amount": 0.455,
+            "date": 1774272600
+          }
+        },
+        {
+          "date": "2026-06-22",
+          "type": "dividends",
+          "details": {
+            "amount": 0.574,
+            "date": 1782135000
+          }
+        }
+      ]
+    },
+    "XLU": {
+      "source_sha256": "882db2c4e157bb17a7a398543e4791afcc32b5fe08a01de613eed9ff341e301e",
+      "rows": 2181,
+      "first": "2018-01-02",
+      "last": "2026-09-04",
+      "missing_adjusted_dates": [],
+      "dates_where_adjusted_differs_from_source_close": 2127,
+      "corporate_action_count": 35,
+      "corporate_action_examples": [
+        {
+          "date": "2025-12-05",
+          "type": "splits",
+          "details": {
+            "date": 1764945000,
+            "numerator": 2.0,
+            "denominator": 1.0,
+            "splitRatio": "2:1"
+          }
+        },
+        {
+          "date": "2025-12-22",
+          "type": "dividends",
+          "details": {
+            "amount": 0.317,
+            "date": 1766413800
+          }
+        },
+        {
+          "date": "2026-03-23",
+          "type": "dividends",
+          "details": {
+            "amount": 0.31,
+            "date": 1774272600
+          }
+        },
+        {
+          "date": "2026-06-22",
+          "type": "dividends",
+          "details": {
+            "amount": 0.284,
+            "date": 1782135000
+          }
+        }
+      ]
+    },
+    "XLRE": {
+      "source_sha256": "fd7564d4858015f9120d77927943a568e1c27b03ad379329b60f8d26e011bf91",
+      "rows": 2181,
+      "first": "2018-01-02",
+      "last": "2026-09-04",
+      "missing_adjusted_dates": [],
+      "dates_where_adjusted_differs_from_source_close": 2127,
+      "corporate_action_count": 34,
+      "corporate_action_examples": [
+        {
+          "date": "2025-09-22",
+          "type": "dividends",
+          "details": {
+            "amount": 0.317,
+            "date": 1758547800
+          }
+        },
+        {
+          "date": "2025-12-22",
+          "type": "dividends",
+          "details": {
+            "amount": 0.436,
+            "date": 1766413800
+          }
+        },
+        {
+          "date": "2026-03-23",
+          "type": "dividends",
+          "details": {
+            "amount": 0.271,
+            "date": 1774272600
+          }
+        },
+        {
+          "date": "2026-06-22",
+          "type": "dividends",
+          "details": {
+            "amount": 0.381,
+            "date": 1782135000
+          }
+        }
+      ]
+    },
+    "SPY": {
+      "source_sha256": "9e5422b97898c0479d4d2c87d489f59b33bf48f8157fabfb982ab2b8679f5310",
+      "rows": 2181,
+      "first": "2018-01-02",
+      "last": "2026-09-04",
+      "missing_adjusted_dates": [],
+      "dates_where_adjusted_differs_from_source_close": 2126,
+      "corporate_action_count": 34,
+      "corporate_action_examples": [
+        {
+          "date": "2025-09-19",
+          "type": "dividends",
+          "details": {
+            "amount": 1.831,
+            "date": 1758288600
+          }
+        },
+        {
+          "date": "2025-12-19",
+          "type": "dividends",
+          "details": {
+            "amount": 1.993,
+            "date": 1766154600
+          }
+        },
+        {
+          "date": "2026-03-20",
+          "type": "dividends",
+          "details": {
+            "amount": 1.797,
+            "date": 1774013400
+          }
+        },
+        {
+          "date": "2026-06-18",
+          "type": "dividends",
+          "details": {
+            "amount": 1.904,
+            "date": 1781789400
+          }
+        }
+      ]
+    },
+    "RSP": {
+      "source_sha256": "38fd97ee6e4c0510f805cb534e8e1f1a635284922a4f14970c5e8ffb94139b07",
+      "rows": 2181,
+      "first": "2018-01-02",
+      "last": "2026-09-04",
+      "missing_adjusted_dates": [],
+      "dates_where_adjusted_differs_from_source_close": 2127,
+      "corporate_action_count": 34,
+      "corporate_action_examples": [
+        {
+          "date": "2025-09-22",
+          "type": "dividends",
+          "details": {
+            "amount": 0.82,
+            "date": 1758547800
+          }
+        },
+        {
+          "date": "2025-12-22",
+          "type": "dividends",
+          "details": {
+            "amount": 0.764,
+            "date": 1766413800
+          }
+        },
+        {
+          "date": "2026-03-23",
+          "type": "dividends",
+          "details": {
+            "amount": 0.812,
+            "date": 1774272600
+          }
+        },
+        {
+          "date": "2026-06-22",
+          "type": "dividends",
+          "details": {
+            "amount": 0.81,
+            "date": 1782135000
+          }
+        }
+      ]
+    },
+    "IWM": {
+      "source_sha256": "72cb2d042be51ec64e7d0b0b47fea486537faca1af8661812df7cf6d606ae5d2",
+      "rows": 2181,
+      "first": "2018-01-02",
+      "last": "2026-09-04",
+      "missing_adjusted_dates": [],
+      "dates_where_adjusted_differs_from_source_close": 2123,
+      "corporate_action_count": 34,
+      "corporate_action_examples": [
+        {
+          "date": "2025-09-16",
+          "type": "dividends",
+          "details": {
+            "amount": 0.677,
+            "date": 1758029400
+          }
+        },
+        {
+          "date": "2025-12-16",
+          "type": "dividends",
+          "details": {
+            "amount": 0.842,
+            "date": 1765895400
+          }
+        },
+        {
+          "date": "2026-03-17",
+          "type": "dividends",
+          "details": {
+            "amount": 0.442,
+            "date": 1773754200
+          }
+        },
+        {
+          "date": "2026-06-15",
+          "type": "dividends",
+          "details": {
+            "amount": 0.695,
+            "date": 1781530200
+          }
+        }
+      ]
+    }
+  },
+  "vix": {
+    "rows": 9266,
+    "first": "1990-01-02",
+    "last": "2026-09-04",
+    "source_sha256": "5f6a4197e929ee7a1eb999db2938c7f6049114c9fd29eb5d80e356dabe43d658"
+  },
+  "vx": {
+    "contracts": 108,
+    "definition": "Official Settle, not Close; expected monthly slots kept even if a settlement is missing."
+  },
+  "missing_is_not_backfilled": true
+}

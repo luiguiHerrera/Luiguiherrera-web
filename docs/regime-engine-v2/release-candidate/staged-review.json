@@ -1,0 +1,38 @@
+{
+  "status": "PASS",
+  "stage": "precommit_initial",
+  "stagedFiles": 591,
+  "unexpectedPaths": [],
+  "stagedBytesMatchReviewedWorktree": true,
+  "trackedDeletes": [],
+  "fullDiff": {
+    "localPath": "local/staged.diff",
+    "sha256": "db9926db822b795dfa474b79591574002067955894088c0dffe766743915e59b",
+    "bytes": 65596232
+  },
+  "commands": [
+    [
+      "git",
+      "diff",
+      "--cached",
+      "--stat"
+    ],
+    [
+      "git",
+      "diff",
+      "--cached",
+      "--name-status"
+    ],
+    [
+      "git",
+      "diff",
+      "--cached",
+      "--binary",
+      "--no-ext-diff"
+    ]
+  ],
+  "method": "Exhaustive path and blob comparison against explicit reviewed list. Every tracked source hunk and new source is reviewed in source-audit; all historical evidence and archive members are scanned in hygiene-scan/evidence-audit. Full diff retained locally without truncation. Final refreshed audit repeats these checks after release manifests are added.",
+  "unrelatedFiles": 0,
+  "secretsFound": 0,
+  "accidentalGeneratedFiles": 0
+}

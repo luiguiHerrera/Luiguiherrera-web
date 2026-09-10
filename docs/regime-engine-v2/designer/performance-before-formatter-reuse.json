@@ -1,0 +1,894 @@
+{
+  "schemaVersion": "regime-v2-designer-performance/1.0.0",
+  "status": "REVISE",
+  "scope": "LOCAL_REACT_19_SERVER_RENDER",
+  "node": "v26.5.0",
+  "react": "19.0.0",
+  "noSlaDefined": true,
+  "protocol": "Actual extracted V1 top area versus full V2 candidate (including native disclosure content). 30 V1 / 20 V2 warmups, 250 V1 / 120 V2 measured renders per locale/state; presentation measured separately. Five fresh process pairs. No engine execution or network inside render timing.",
+  "limitations": [
+    "SSR timing excludes browser layout, paint, navigation and Next build/response overhead.",
+    "V1 and V2 represent different data scenarios; compare component work, not market readings.",
+    "Cold process duration includes Node and the local TypeScript test loader; first-render figures isolate render calls.",
+    "CSS module classes use a deterministic local identity adapter; measured standalone HTML bytes omit Next RSC envelopes and production CSS hashes.",
+    "Finite warmed memory observation is not a proof against all leaks."
+  ],
+  "sourcesUnchangedDuringMeasurement": true,
+  "sourceHashes": {
+    "components/dashboard/DashboardRegimeV1.tsx": "92d7ef8bc01d4725d740ddea73cf83086743a93eb5d8271aba8872c83b0982cc",
+    "components/dashboard/RegimeV2Surface.tsx": "e82ef1286515d7d1e5be1dff511b190ad9657f2859ff05edf0aa825f2e9f6f40",
+    "components/dashboard/RegimeV2Disclosure.tsx": "120e7dff5f4f0fe787268be436fdae9f4caf7239b7d6a58d480c7516dc652014",
+    "components/dashboard/regime-v2.module.css": "8a0811d1e0f15d7db26397a5ee0cfe64ca50ff687479816ecb4903294e90ce09",
+    "lib/dashboard/regime-v2-presentation.ts": "e2bda4a2afad3fb484aed195f12b139b00e55eb803f4d64b7ab8f2a7b5b3318e"
+  },
+  "rows": [
+    {
+      "locale": "es",
+      "id": "broad-complete",
+      "v1": {
+        "samples": 250,
+        "minMs": 0.051375000000007276,
+        "medianMs": 0.06091599999996333,
+        "p95Ms": 0.09499999999997044,
+        "maxMs": 0.4729159999999979
+      },
+      "v2": {
+        "samples": 120,
+        "minMs": 1.2500830000000178,
+        "medianMs": 1.3635000000000446,
+        "p95Ms": 1.696374999999989,
+        "maxMs": 2.100833000000023
+      },
+      "presentation": {
+        "samples": 120,
+        "minMs": 0.12954200000001492,
+        "medianMs": 0.15679199999999582,
+        "p95Ms": 0.2084169999999972,
+        "maxMs": 0.36554100000000744
+      },
+      "medianRenderDeltaMs": 1.3025840000000812,
+      "medianRenderRatio": 22.383281896396106,
+      "v1HtmlBytes": 4828,
+      "v2HtmlBytes": 30168,
+      "fixtureOutputBytes": 27808,
+      "serverViewBytes": 56068
+    },
+    {
+      "locale": "es",
+      "id": "selective-partial",
+      "v1": {
+        "samples": 250,
+        "minMs": 0.051375000000007276,
+        "medianMs": 0.06091599999996333,
+        "p95Ms": 0.09499999999997044,
+        "maxMs": 0.4729159999999979
+      },
+      "v2": {
+        "samples": 120,
+        "minMs": 1.1489579999999933,
+        "medianMs": 1.2160410000000184,
+        "p95Ms": 1.4624160000000757,
+        "maxMs": 1.6108330000000706
+      },
+      "presentation": {
+        "samples": 120,
+        "minMs": 0.11029200000007222,
+        "medianMs": 0.11820799999998144,
+        "p95Ms": 0.1514159999999265,
+        "maxMs": 0.29320899999993344
+      },
+      "medianRenderDeltaMs": 1.155125000000055,
+      "medianRenderRatio": 19.962587825870877,
+      "v1HtmlBytes": 4828,
+      "v2HtmlBytes": 30900,
+      "fixtureOutputBytes": 27805,
+      "serverViewBytes": 56618
+    },
+    {
+      "locale": "es",
+      "id": "transition-conflict",
+      "v1": {
+        "samples": 250,
+        "minMs": 0.051375000000007276,
+        "medianMs": 0.06091599999996333,
+        "p95Ms": 0.09499999999997044,
+        "maxMs": 0.4729159999999979
+      },
+      "v2": {
+        "samples": 120,
+        "minMs": 1.157542000000035,
+        "medianMs": 1.3081670000000258,
+        "p95Ms": 2.5402090000000044,
+        "maxMs": 3.029125000000022
+      },
+      "presentation": {
+        "samples": 120,
+        "minMs": 0.11129099999993741,
+        "medianMs": 0.12962500000003274,
+        "p95Ms": 0.23012500000004366,
+        "maxMs": 0.5049169999999776
+      },
+      "medianRenderDeltaMs": 1.2472510000000625,
+      "medianRenderRatio": 21.4749326942152,
+      "v1HtmlBytes": 4828,
+      "v2HtmlBytes": 31035,
+      "fixtureOutputBytes": 27800,
+      "serverViewBytes": 56981
+    },
+    {
+      "locale": "es",
+      "id": "transition-watch",
+      "v1": {
+        "samples": 250,
+        "minMs": 0.051375000000007276,
+        "medianMs": 0.06091599999996333,
+        "p95Ms": 0.09499999999997044,
+        "maxMs": 0.4729159999999979
+      },
+      "v2": {
+        "samples": 120,
+        "minMs": 1.1673329999998714,
+        "medianMs": 1.2727499999999736,
+        "p95Ms": 1.8866249999998672,
+        "maxMs": 50.02920900000004
+      },
+      "presentation": {
+        "samples": 120,
+        "minMs": 0.11587499999995998,
+        "medianMs": 0.14533300000016425,
+        "p95Ms": 0.2218750000001819,
+        "maxMs": 0.4607499999999618
+      },
+      "medianRenderDeltaMs": 1.2118340000000103,
+      "medianRenderRatio": 20.893525510551246,
+      "v1HtmlBytes": 4828,
+      "v2HtmlBytes": 31108,
+      "fixtureOutputBytes": 27769,
+      "serverViewBytes": 57057
+    },
+    {
+      "locale": "es",
+      "id": "transition-fragility",
+      "v1": {
+        "samples": 250,
+        "minMs": 0.051375000000007276,
+        "medianMs": 0.06091599999996333,
+        "p95Ms": 0.09499999999997044,
+        "maxMs": 0.4729159999999979
+      },
+      "v2": {
+        "samples": 120,
+        "minMs": 1.1573330000001079,
+        "medianMs": 1.2180829999999787,
+        "p95Ms": 1.6289580000000115,
+        "maxMs": 2.1292499999999563
+      },
+      "presentation": {
+        "samples": 120,
+        "minMs": 0.11608299999988958,
+        "medianMs": 0.1230000000000473,
+        "p95Ms": 0.17766699999992852,
+        "maxMs": 0.3941250000000309
+      },
+      "medianRenderDeltaMs": 1.1571670000000154,
+      "medianRenderRatio": 19.99610939655775,
+      "v1HtmlBytes": 4828,
+      "v2HtmlBytes": 31008,
+      "fixtureOutputBytes": 27815,
+      "serverViewBytes": 56949
+    },
+    {
+      "locale": "es",
+      "id": "defensive-complete",
+      "v1": {
+        "samples": 250,
+        "minMs": 0.051375000000007276,
+        "medianMs": 0.06091599999996333,
+        "p95Ms": 0.09499999999997044,
+        "maxMs": 0.4729159999999979
+      },
+      "v2": {
+        "samples": 120,
+        "minMs": 1.2177919999999176,
+        "medianMs": 1.3132920000000468,
+        "p95Ms": 1.6203330000000733,
+        "maxMs": 1.862916000000041
+      },
+      "presentation": {
+        "samples": 120,
+        "minMs": 0.1344169999999849,
+        "medianMs": 0.1441660000000411,
+        "p95Ms": 0.17879100000004655,
+        "maxMs": 0.49120799999991505
+      },
+      "medianRenderDeltaMs": 1.2523760000000834,
+      "medianRenderRatio": 21.559064941900935,
+      "v1HtmlBytes": 4828,
+      "v2HtmlBytes": 30226,
+      "fixtureOutputBytes": 27862,
+      "serverViewBytes": 56209
+    },
+    {
+      "locale": "es",
+      "id": "stress-absolute",
+      "v1": {
+        "samples": 250,
+        "minMs": 0.051375000000007276,
+        "medianMs": 0.06091599999996333,
+        "p95Ms": 0.09499999999997044,
+        "maxMs": 0.4729159999999979
+      },
+      "v2": {
+        "samples": 120,
+        "minMs": 1.200207999999975,
+        "medianMs": 1.2819580000000315,
+        "p95Ms": 1.585166000000072,
+        "maxMs": 1.9542500000000018
+      },
+      "presentation": {
+        "samples": 120,
+        "minMs": 0.1319579999999405,
+        "medianMs": 0.1348329999998441,
+        "p95Ms": 0.1503339999999298,
+        "maxMs": 0.42154100000016115
+      },
+      "medianRenderDeltaMs": 1.2210420000000681,
+      "medianRenderRatio": 21.044684483564303,
+      "v1HtmlBytes": 4828,
+      "v2HtmlBytes": 30430,
+      "fixtureOutputBytes": 27791,
+      "serverViewBytes": 56310
+    },
+    {
+      "locale": "es",
+      "id": "stress-joint",
+      "v1": {
+        "samples": 250,
+        "minMs": 0.051375000000007276,
+        "medianMs": 0.06091599999996333,
+        "p95Ms": 0.09499999999997044,
+        "maxMs": 0.4729159999999979
+      },
+      "v2": {
+        "samples": 120,
+        "minMs": 1.135041000000001,
+        "medianMs": 1.1843750000000455,
+        "p95Ms": 1.3120409999999083,
+        "maxMs": 1.5856670000000577
+      },
+      "presentation": {
+        "samples": 120,
+        "minMs": 0.1122499999999036,
+        "medianMs": 0.11950000000001637,
+        "p95Ms": 0.15258300000004965,
+        "maxMs": 0.4487500000000182
+      },
+      "medianRenderDeltaMs": 1.1234590000000821,
+      "medianRenderRatio": 19.44275723948976,
+      "v1HtmlBytes": 4828,
+      "v2HtmlBytes": 30842,
+      "fixtureOutputBytes": 27794,
+      "serverViewBytes": 56523
+    },
+    {
+      "locale": "es",
+      "id": "incomplete-missing-core",
+      "v1": {
+        "samples": 250,
+        "minMs": 0.051375000000007276,
+        "medianMs": 0.06091599999996333,
+        "p95Ms": 0.09499999999997044,
+        "maxMs": 0.4729159999999979
+      },
+      "v2": {
+        "samples": 120,
+        "minMs": 1.1612079999999878,
+        "medianMs": 1.2394999999996799,
+        "p95Ms": 1.7058750000001055,
+        "maxMs": 1.9417499999999563
+      },
+      "presentation": {
+        "samples": 120,
+        "minMs": 0.07716699999991761,
+        "medianMs": 0.08220799999980954,
+        "p95Ms": 0.12062500000001819,
+        "maxMs": 0.4390410000000884
+      },
+      "medianRenderDeltaMs": 1.1785839999997165,
+      "medianRenderRatio": 20.347691903611956,
+      "v1HtmlBytes": 4828,
+      "v2HtmlBytes": 30081,
+      "fixtureOutputBytes": 26615,
+      "serverViewBytes": 55925
+    },
+    {
+      "locale": "es",
+      "id": "incomplete-unknown-calendar",
+      "v1": {
+        "samples": 250,
+        "minMs": 0.051375000000007276,
+        "medianMs": 0.06091599999996333,
+        "p95Ms": 0.09499999999997044,
+        "maxMs": 0.4729159999999979
+      },
+      "v2": {
+        "samples": 120,
+        "minMs": 1.1367499999996653,
+        "medianMs": 1.186333999999988,
+        "p95Ms": 1.473041000000194,
+        "maxMs": 1.9953749999999673
+      },
+      "presentation": {
+        "samples": 120,
+        "minMs": 0.05266600000004473,
+        "medianMs": 0.05366600000024846,
+        "p95Ms": 0.06479100000024118,
+        "maxMs": 0.33258299999988594
+      },
+      "medianRenderDeltaMs": 1.1254180000000247,
+      "medianRenderRatio": 19.474916278165047,
+      "v1HtmlBytes": 4828,
+      "v2HtmlBytes": 30907,
+      "fixtureOutputBytes": 62916,
+      "serverViewBytes": 318592
+    },
+    {
+      "locale": "es",
+      "id": "incomplete-stale",
+      "v1": {
+        "samples": 250,
+        "minMs": 0.051375000000007276,
+        "medianMs": 0.06091599999996333,
+        "p95Ms": 0.09499999999997044,
+        "maxMs": 0.4729159999999979
+      },
+      "v2": {
+        "samples": 120,
+        "minMs": 1.1292499999999563,
+        "medianMs": 1.1669580000002497,
+        "p95Ms": 1.22524999999996,
+        "maxMs": 1.5732090000001335
+      },
+      "presentation": {
+        "samples": 120,
+        "minMs": 0.052167000000281405,
+        "medianMs": 0.053625000000010914,
+        "p95Ms": 0.06595900000002075,
+        "maxMs": 0.26633399999991525
+      },
+      "medianRenderDeltaMs": 1.1060420000002864,
+      "medianRenderRatio": 19.15683892574943,
+      "v1HtmlBytes": 4828,
+      "v2HtmlBytes": 30990,
+      "fixtureOutputBytes": 27008,
+      "serverViewBytes": 63271
+    },
+    {
+      "locale": "es",
+      "id": "incomplete-with-shock",
+      "v1": {
+        "samples": 250,
+        "minMs": 0.051375000000007276,
+        "medianMs": 0.06091599999996333,
+        "p95Ms": 0.09499999999997044,
+        "maxMs": 0.4729159999999979
+      },
+      "v2": {
+        "samples": 120,
+        "minMs": 1.0822499999999309,
+        "medianMs": 1.1190839999999298,
+        "p95Ms": 1.205000000000382,
+        "maxMs": 1.634958000000097
+      },
+      "presentation": {
+        "samples": 120,
+        "minMs": 0.07745799999975134,
+        "medianMs": 0.08174999999982901,
+        "p95Ms": 0.09245800000007875,
+        "maxMs": 0.5800419999995938
+      },
+      "medianRenderDeltaMs": 1.0581679999999665,
+      "medianRenderRatio": 18.370937028048516,
+      "v1HtmlBytes": 4828,
+      "v2HtmlBytes": 29934,
+      "fixtureOutputBytes": 26626,
+      "serverViewBytes": 55165
+    },
+    {
+      "locale": "en",
+      "id": "broad-complete",
+      "v1": {
+        "samples": 250,
+        "minMs": 0.144832999999835,
+        "medianMs": 0.14937500000041837,
+        "p95Ms": 0.16895900000008623,
+        "maxMs": 0.42729200000030687
+      },
+      "v2": {
+        "samples": 120,
+        "minMs": 1.172874999999749,
+        "medianMs": 1.2352919999998448,
+        "p95Ms": 1.6632089999998243,
+        "maxMs": 2.4421669999996993
+      },
+      "presentation": {
+        "samples": 120,
+        "minMs": 0.12950000000000728,
+        "medianMs": 0.13270900000043184,
+        "p95Ms": 0.15370900000016263,
+        "maxMs": 0.3924579999998059
+      },
+      "medianRenderDeltaMs": 1.0859169999994265,
+      "medianRenderRatio": 8.269737238469524,
+      "v1HtmlBytes": 4778,
+      "v2HtmlBytes": 29700,
+      "fixtureOutputBytes": 27808,
+      "serverViewBytes": 55630
+    },
+    {
+      "locale": "en",
+      "id": "selective-partial",
+      "v1": {
+        "samples": 250,
+        "minMs": 0.144832999999835,
+        "medianMs": 0.14937500000041837,
+        "p95Ms": 0.16895900000008623,
+        "maxMs": 0.42729200000030687
+      },
+      "v2": {
+        "samples": 120,
+        "minMs": 1.1019160000000738,
+        "medianMs": 1.148040999999921,
+        "p95Ms": 1.4774999999999636,
+        "maxMs": 1.758708000000297
+      },
+      "presentation": {
+        "samples": 120,
+        "minMs": 0.11420799999996234,
+        "medianMs": 0.14037500000040382,
+        "p95Ms": 0.3623330000000351,
+        "maxMs": 0.7992920000001504
+      },
+      "medianRenderDeltaMs": 0.9986659999995027,
+      "medianRenderRatio": 7.685630125500958,
+      "v1HtmlBytes": 4778,
+      "v2HtmlBytes": 30344,
+      "fixtureOutputBytes": 27805,
+      "serverViewBytes": 56054
+    },
+    {
+      "locale": "en",
+      "id": "transition-conflict",
+      "v1": {
+        "samples": 250,
+        "minMs": 0.144832999999835,
+        "medianMs": 0.14937500000041837,
+        "p95Ms": 0.16895900000008623,
+        "maxMs": 0.42729200000030687
+      },
+      "v2": {
+        "samples": 120,
+        "minMs": 1.112999999999829,
+        "medianMs": 1.172708000000057,
+        "p95Ms": 1.3048750000002656,
+        "maxMs": 1.8636249999999563
+      },
+      "presentation": {
+        "samples": 120,
+        "minMs": 0.11249999999972715,
+        "medianMs": 0.11625000000003638,
+        "p95Ms": 0.1327499999997599,
+        "maxMs": 0.32249999999976353
+      },
+      "medianRenderDeltaMs": 1.0233329999996386,
+      "medianRenderRatio": 7.850764853534878,
+      "v1HtmlBytes": 4778,
+      "v2HtmlBytes": 30512,
+      "fixtureOutputBytes": 27800,
+      "serverViewBytes": 56454
+    },
+    {
+      "locale": "en",
+      "id": "transition-watch",
+      "v1": {
+        "samples": 250,
+        "minMs": 0.144832999999835,
+        "medianMs": 0.14937500000041837,
+        "p95Ms": 0.16895900000008623,
+        "maxMs": 0.42729200000030687
+      },
+      "v2": {
+        "samples": 120,
+        "minMs": 1.1120829999999842,
+        "medianMs": 1.1472090000002026,
+        "p95Ms": 1.2197500000002037,
+        "maxMs": 1.4568750000003092
+      },
+      "presentation": {
+        "samples": 120,
+        "minMs": 0.11200000000008004,
+        "medianMs": 0.1146670000002814,
+        "p95Ms": 0.13408299999991868,
+        "maxMs": 0.37991599999986647
+      },
+      "medianRenderDeltaMs": 0.9978339999997843,
+      "medianRenderRatio": 7.680060251025871,
+      "v1HtmlBytes": 4778,
+      "v2HtmlBytes": 30576,
+      "fixtureOutputBytes": 27769,
+      "serverViewBytes": 56517
+    },
+    {
+      "locale": "en",
+      "id": "transition-fragility",
+      "v1": {
+        "samples": 250,
+        "minMs": 0.144832999999835,
+        "medianMs": 0.14937500000041837,
+        "p95Ms": 0.16895900000008623,
+        "maxMs": 0.42729200000030687
+      },
+      "v2": {
+        "samples": 120,
+        "minMs": 1.1130419999999503,
+        "medianMs": 1.189542000000074,
+        "p95Ms": 1.509291999999732,
+        "maxMs": 1.7861250000000837
+      },
+      "presentation": {
+        "samples": 120,
+        "minMs": 0.11124999999992724,
+        "medianMs": 0.12095799999997325,
+        "p95Ms": 0.17987499999981083,
+        "maxMs": 0.43033299999979135
+      },
+      "medianRenderDeltaMs": 1.0401669999996557,
+      "medianRenderRatio": 7.9634610878443,
+      "v1HtmlBytes": 4778,
+      "v2HtmlBytes": 30466,
+      "fixtureOutputBytes": 27815,
+      "serverViewBytes": 56403
+    },
+    {
+      "locale": "en",
+      "id": "defensive-complete",
+      "v1": {
+        "samples": 250,
+        "minMs": 0.144832999999835,
+        "medianMs": 0.14937500000041837,
+        "p95Ms": 0.16895900000008623,
+        "maxMs": 0.42729200000030687
+      },
+      "v2": {
+        "samples": 120,
+        "minMs": 1.1677920000001905,
+        "medianMs": 1.2336669999999685,
+        "p95Ms": 1.4779590000002827,
+        "maxMs": 1.864958999999999
+      },
+      "presentation": {
+        "samples": 120,
+        "minMs": 0.12599999999974898,
+        "medianMs": 0.1301669999998012,
+        "p95Ms": 0.1437500000001819,
+        "maxMs": 0.4372920000000704
+      },
+      "medianRenderDeltaMs": 1.0842919999995502,
+      "medianRenderRatio": 8.258858577382515,
+      "v1HtmlBytes": 4778,
+      "v2HtmlBytes": 29683,
+      "fixtureOutputBytes": 27862,
+      "serverViewBytes": 55692
+    },
+    {
+      "locale": "en",
+      "id": "stress-absolute",
+      "v1": {
+        "samples": 250,
+        "minMs": 0.144832999999835,
+        "medianMs": 0.14937500000041837,
+        "p95Ms": 0.16895900000008623,
+        "maxMs": 0.42729200000030687
+      },
+      "v2": {
+        "samples": 120,
+        "minMs": 1.1819590000000062,
+        "medianMs": 1.2122920000001614,
+        "p95Ms": 1.3043330000000424,
+        "maxMs": 1.5856669999998303
+      },
+      "presentation": {
+        "samples": 120,
+        "minMs": 0.1257500000001528,
+        "medianMs": 0.12924999999995634,
+        "p95Ms": 0.14670799999976225,
+        "maxMs": 0.36479200000030687
+      },
+      "medianRenderDeltaMs": 1.062916999999743,
+      "medianRenderRatio": 8.115762343074584,
+      "v1HtmlBytes": 4778,
+      "v2HtmlBytes": 29941,
+      "fixtureOutputBytes": 27791,
+      "serverViewBytes": 55845
+    },
+    {
+      "locale": "en",
+      "id": "stress-joint",
+      "v1": {
+        "samples": 250,
+        "minMs": 0.144832999999835,
+        "medianMs": 0.14937500000041837,
+        "p95Ms": 0.16895900000008623,
+        "maxMs": 0.42729200000030687
+      },
+      "v2": {
+        "samples": 120,
+        "minMs": 1.1189170000006925,
+        "medianMs": 1.1494999999995343,
+        "p95Ms": 1.4649579999995694,
+        "maxMs": 169.95529200000055
+      },
+      "presentation": {
+        "samples": 120,
+        "minMs": 0.11208299999998417,
+        "medianMs": 0.11508299999968585,
+        "p95Ms": 0.14158300000053714,
+        "maxMs": 0.501749999999447
+      },
+      "medianRenderDeltaMs": 1.000124999999116,
+      "medianRenderRatio": 7.695397489515078,
+      "v1HtmlBytes": 4778,
+      "v2HtmlBytes": 30316,
+      "fixtureOutputBytes": 27794,
+      "serverViewBytes": 55993
+    },
+    {
+      "locale": "en",
+      "id": "incomplete-missing-core",
+      "v1": {
+        "samples": 250,
+        "minMs": 0.144832999999835,
+        "medianMs": 0.14937500000041837,
+        "p95Ms": 0.16895900000008623,
+        "maxMs": 0.42729200000030687
+      },
+      "v2": {
+        "samples": 120,
+        "minMs": 1.10991599999943,
+        "medianMs": 1.1295420000005834,
+        "p95Ms": 1.185417000000598,
+        "maxMs": 1.4373329999998532
+      },
+      "presentation": {
+        "samples": 120,
+        "minMs": 0.07529199999953562,
+        "medianMs": 0.07679100000041217,
+        "p95Ms": 0.0814170000003287,
+        "maxMs": 0.35483300000032614
+      },
+      "medianRenderDeltaMs": 0.980167000000165,
+      "medianRenderRatio": 7.561787447681471,
+      "v1HtmlBytes": 4778,
+      "v2HtmlBytes": 29621,
+      "fixtureOutputBytes": 26615,
+      "serverViewBytes": 55445
+    },
+    {
+      "locale": "en",
+      "id": "incomplete-unknown-calendar",
+      "v1": {
+        "samples": 250,
+        "minMs": 0.144832999999835,
+        "medianMs": 0.14937500000041837,
+        "p95Ms": 0.16895900000008623,
+        "maxMs": 0.42729200000030687
+      },
+      "v2": {
+        "samples": 120,
+        "minMs": 1.1162079999994603,
+        "medianMs": 1.1348750000006476,
+        "p95Ms": 1.1951659999995172,
+        "maxMs": 1.4387499999993452
+      },
+      "presentation": {
+        "samples": 120,
+        "minMs": 0.05045900000004622,
+        "medianMs": 0.05249999999978172,
+        "p95Ms": 0.06675000000086584,
+        "maxMs": 0.2347909999998592
+      },
+      "medianRenderDeltaMs": 0.9855000000002292,
+      "medianRenderRatio": 7.597489539732011,
+      "v1HtmlBytes": 4778,
+      "v2HtmlBytes": 30350,
+      "fixtureOutputBytes": 62916,
+      "serverViewBytes": 317465
+    },
+    {
+      "locale": "en",
+      "id": "incomplete-stale",
+      "v1": {
+        "samples": 250,
+        "minMs": 0.144832999999835,
+        "medianMs": 0.14937500000041837,
+        "p95Ms": 0.16895900000008623,
+        "maxMs": 0.42729200000030687
+      },
+      "v2": {
+        "samples": 120,
+        "minMs": 1.121499999999287,
+        "medianMs": 1.1421250000003056,
+        "p95Ms": 1.1966670000001614,
+        "maxMs": 1.4131250000000364
+      },
+      "presentation": {
+        "samples": 120,
+        "minMs": 0.05037499999980355,
+        "medianMs": 0.05095900000014808,
+        "p95Ms": 0.058458000000428,
+        "maxMs": 0.09470899999996618
+      },
+      "medianRenderDeltaMs": 0.9927499999998872,
+      "medianRenderRatio": 7.646025104583141,
+      "v1HtmlBytes": 4778,
+      "v2HtmlBytes": 30379,
+      "fixtureOutputBytes": 27008,
+      "serverViewBytes": 61875
+    },
+    {
+      "locale": "en",
+      "id": "incomplete-with-shock",
+      "v1": {
+        "samples": 250,
+        "minMs": 0.144832999999835,
+        "medianMs": 0.14937500000041837,
+        "p95Ms": 0.16895900000008623,
+        "maxMs": 0.42729200000030687
+      },
+      "v2": {
+        "samples": 120,
+        "minMs": 1.0741670000006707,
+        "medianMs": 1.100083000000268,
+        "p95Ms": 1.2039159999994808,
+        "maxMs": 1.3948750000008658
+      },
+      "presentation": {
+        "samples": 120,
+        "minMs": 0.07449999999971624,
+        "medianMs": 0.07587499999954161,
+        "p95Ms": 0.09170799999992596,
+        "maxMs": 0.29424999999991996
+      },
+      "medianRenderDeltaMs": 0.9507079999998496,
+      "medianRenderRatio": 7.3645723849184055,
+      "v1HtmlBytes": 4778,
+      "v2HtmlBytes": 29451,
+      "fixtureOutputBytes": 26626,
+      "serverViewBytes": 54665
+    }
+  ],
+  "cold": [
+    {
+      "pair": 0,
+      "processMs": 182.20016599999963,
+      "kind": "v1",
+      "moduleAndFirstRenderMs": 57.584833,
+      "firstRenderMs": 3.100625000000008,
+      "htmlBytes": 4828
+    },
+    {
+      "pair": 0,
+      "processMs": 193.64116700000068,
+      "kind": "v2",
+      "modulePresentationAndFirstRenderMs": 72.26258299999999,
+      "presentationMs": 7.565499999999986,
+      "firstRenderMs": 7.5106250000000045,
+      "htmlBytes": 30900
+    },
+    {
+      "pair": 1,
+      "processMs": 179.70874999999978,
+      "kind": "v1",
+      "moduleAndFirstRenderMs": 56.788833999999994,
+      "firstRenderMs": 3.13708299999999,
+      "htmlBytes": 4828
+    },
+    {
+      "pair": 1,
+      "processMs": 196.8606660000005,
+      "kind": "v2",
+      "modulePresentationAndFirstRenderMs": 73.134917,
+      "presentationMs": 7.707708999999994,
+      "firstRenderMs": 7.821374999999989,
+      "htmlBytes": 30900
+    },
+    {
+      "pair": 2,
+      "processMs": 179.58520800000042,
+      "kind": "v1",
+      "moduleAndFirstRenderMs": 56.26308300000001,
+      "firstRenderMs": 3.0177500000000066,
+      "htmlBytes": 4828
+    },
+    {
+      "pair": 2,
+      "processMs": 196.12816699999985,
+      "kind": "v2",
+      "modulePresentationAndFirstRenderMs": 72.295416,
+      "presentationMs": 7.768000000000001,
+      "firstRenderMs": 7.57204200000001,
+      "htmlBytes": 30900
+    },
+    {
+      "pair": 3,
+      "processMs": 178.27612500000032,
+      "kind": "v1",
+      "moduleAndFirstRenderMs": 56.15462500000001,
+      "firstRenderMs": 3.0166249999999764,
+      "htmlBytes": 4828
+    },
+    {
+      "pair": 3,
+      "processMs": 197.31020799999988,
+      "kind": "v2",
+      "modulePresentationAndFirstRenderMs": 71.988916,
+      "presentationMs": 7.720291000000003,
+      "firstRenderMs": 7.342666000000008,
+      "htmlBytes": 30900
+    },
+    {
+      "pair": 4,
+      "processMs": 179.65758300000016,
+      "kind": "v1",
+      "moduleAndFirstRenderMs": 56.16737500000001,
+      "firstRenderMs": 3.0117919999999856,
+      "htmlBytes": 4828
+    },
+    {
+      "pair": 4,
+      "processMs": 195.9138750000002,
+      "kind": "v2",
+      "modulePresentationAndFirstRenderMs": 72.505291,
+      "presentationMs": 7.623457999999999,
+      "firstRenderMs": 7.581665999999984,
+      "htmlBytes": 30900
+    }
+  ],
+  "memory": {
+    "gcAvailable": true,
+    "before": {
+      "rss": 2410119168,
+      "heapTotal": 126812160,
+      "heapUsed": 24417200,
+      "external": 24228779,
+      "arrayBuffers": 148556
+    },
+    "after": {
+      "rss": 2416476160,
+      "heapTotal": 126812160,
+      "heapUsed": 24367728,
+      "external": 24228819,
+      "arrayBuffers": 148556
+    },
+    "heapUsedDeltaBytes": -49472,
+    "rssDeltaBytes": 6356992,
+    "renders": 1000
+  },
+  "clientBoundary": {
+    "v2SurfaceServerComponent": true,
+    "dedicatedV2ClientEntrypoints": 1,
+    "normalizedInputsShippedToClient": false,
+    "fixtureGeneratorImportedIntoRender": false,
+    "clientEntry": "components/dashboard/RegimeV2Disclosure.tsx",
+    "clientSourceBytes": 1811,
+    "clientDataProps": [
+      "children: pre-rendered server content",
+      "className: CSS class"
+    ],
+    "completeViewPassedAsClientProp": false,
+    "disclosureMechanism": "Native details/summary plus a small client navigation wrapper that reveals ancestor disclosures and moves keyboard focus for evidence anchors. No engine, fixture input or presentation computation crosses the client boundary.",
+    "verificationScope": "Source inspection plus SSR; Next build route and browser asset checks recorded by root verification."
+  },
+  "verdictBasis": "No new runtime dependency, render loop, animation or dashboard-wide client boundary. Measured absolute timing, response markup growth and finite memory observation are reported without a fabricated latency SLA.",
+  "finding": "D-RENDER-ICU-001: repeated formatter construction produced a 2.41 GB RSS observation after the complete warm benchmark; retain evidence before bounded formatter reuse."
+}

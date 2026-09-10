@@ -1,0 +1,28 @@
+{
+  "status": "PASS",
+  "scope": "P8_ORACLE_CONFORMANCE_R2_NOT_PIT_OOS",
+  "goldenPassed": 464,
+  "goldenTotal": 464,
+  "fixedC03GoldenCases": 84,
+  "otherParametersScope": "Internal numeric kernel with the unchanged frozen fixture parameters; public engine has no parameter override",
+  "historicalPassed": 1930,
+  "historicalTotal": 1930,
+  "publicC03HistoricalPassed": 1930,
+  "historicalWitnesses": {
+    "DEFENSIVE": "2019-01-02",
+    "TRANSITION": "2019-01-04",
+    "RISK_ON_BROAD": "2019-01-30",
+    "RISK_ON_SELECTIVE": "2019-02-25",
+    "STRESS": "2020-02-25"
+  },
+  "numericAbsoluteTolerance": 1e-10,
+  "contractHashes": {
+    "parameter-manifest.json": "5d6398426fcbfa1650695bbf3d971127e9076403c2832876b7f188e360836732",
+    "price-series-contract.json": "cbccf03ae9e261eb6a240804ec57bc1e4ecd7f01a1a7dbd59c1e7b5a84fade59",
+    "temporal-availability-contract.json": "0ba4661ac39c4f2be50a8a17104c0c504db0d4159cf850b60d865d8a98e492d9",
+    "freshness-policy.json": "870d75029e89f4b8b9baad212186fc3b759636088f0cd9a101511763e0158740",
+    "feature-registry-qualified.json": "8ac0a0de2ffcab341920073181c1fa05da066696db6185ccdbca7ef4006ae47b"
+  },
+  "oracleExpandedFromFrozenCode": true,
+  "frozenOracleFilesModified": false
+}

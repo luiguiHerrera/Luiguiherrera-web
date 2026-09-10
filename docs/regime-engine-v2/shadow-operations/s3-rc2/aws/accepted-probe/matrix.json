@@ -1,0 +1,660 @@
+{
+  "schemaVersion": 1,
+  "scope": "Frozen accepted probe offline cases, imported unchanged; no claim of fresh remote execution",
+  "sourceReportSha256": "8d5c9cc37086afce7c4344a74681b86d8abf144bd882f144ce1ecadaa13e940f",
+  "cases": [
+    {
+      "name": "required bucket metadata GetBucketVersioning",
+      "action": "s3:GetBucketVersioning",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1",
+      "context": {
+        "aws:SecureTransport": true
+      },
+      "expected": "ALLOW_REQUEST",
+      "observed": "ALLOW_REQUEST"
+    },
+    {
+      "name": "other bucket metadata excluded GetBucketVersioning",
+      "action": "s3:GetBucketVersioning",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1-other",
+      "context": {
+        "aws:SecureTransport": true
+      },
+      "expected": "IMPLICIT_DENY",
+      "observed": "IMPLICIT_DENY"
+    },
+    {
+      "name": "required bucket metadata GetBucketPublicAccessBlock",
+      "action": "s3:GetBucketPublicAccessBlock",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1",
+      "context": {
+        "aws:SecureTransport": true
+      },
+      "expected": "ALLOW_REQUEST",
+      "observed": "ALLOW_REQUEST"
+    },
+    {
+      "name": "other bucket metadata excluded GetBucketPublicAccessBlock",
+      "action": "s3:GetBucketPublicAccessBlock",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1-other",
+      "context": {
+        "aws:SecureTransport": true
+      },
+      "expected": "IMPLICIT_DENY",
+      "observed": "IMPLICIT_DENY"
+    },
+    {
+      "name": "required bucket metadata GetEncryptionConfiguration",
+      "action": "s3:GetEncryptionConfiguration",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1",
+      "context": {
+        "aws:SecureTransport": true
+      },
+      "expected": "ALLOW_REQUEST",
+      "observed": "ALLOW_REQUEST"
+    },
+    {
+      "name": "other bucket metadata excluded GetEncryptionConfiguration",
+      "action": "s3:GetEncryptionConfiguration",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1-other",
+      "context": {
+        "aws:SecureTransport": true
+      },
+      "expected": "IMPLICIT_DENY",
+      "observed": "IMPLICIT_DENY"
+    },
+    {
+      "name": "immutable.json create with star",
+      "action": "s3:PutObject",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/regime-v2/_probe/123456-1/immutable.json",
+      "context": {
+        "aws:SecureTransport": true,
+        "s3:if-none-match": "*"
+      },
+      "expected": "ALLOW_REQUEST",
+      "observed": "ALLOW_REQUEST"
+    },
+    {
+      "name": "immutable.json no header",
+      "action": "s3:PutObject",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/regime-v2/_probe/123456-1/immutable.json",
+      "context": {
+        "aws:SecureTransport": true
+      },
+      "expected": "EXPLICIT_DENY",
+      "observed": "EXPLICIT_DENY"
+    },
+    {
+      "name": "immutable.json CAS cannot mutate immutable key",
+      "action": "s3:PutObject",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/regime-v2/_probe/123456-1/immutable.json",
+      "context": {
+        "aws:SecureTransport": true,
+        "s3:if-match": "etag"
+      },
+      "expected": "EXPLICIT_DENY",
+      "observed": "EXPLICIT_DENY"
+    },
+    {
+      "name": "immutable.json invalid create conditional value",
+      "action": "s3:PutObject",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/regime-v2/_probe/123456-1/immutable.json",
+      "context": {
+        "aws:SecureTransport": true,
+        "s3:if-none-match": "not-star"
+      },
+      "expected": "EXPLICIT_DENY",
+      "observed": "EXPLICIT_DENY"
+    },
+    {
+      "name": "delete-sentinel.json create with star",
+      "action": "s3:PutObject",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/regime-v2/_probe/123456-1/delete-sentinel.json",
+      "context": {
+        "aws:SecureTransport": true,
+        "s3:if-none-match": "*"
+      },
+      "expected": "ALLOW_REQUEST",
+      "observed": "ALLOW_REQUEST"
+    },
+    {
+      "name": "delete-sentinel.json no header",
+      "action": "s3:PutObject",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/regime-v2/_probe/123456-1/delete-sentinel.json",
+      "context": {
+        "aws:SecureTransport": true
+      },
+      "expected": "EXPLICIT_DENY",
+      "observed": "EXPLICIT_DENY"
+    },
+    {
+      "name": "delete-sentinel.json CAS cannot mutate immutable key",
+      "action": "s3:PutObject",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/regime-v2/_probe/123456-1/delete-sentinel.json",
+      "context": {
+        "aws:SecureTransport": true,
+        "s3:if-match": "etag"
+      },
+      "expected": "EXPLICIT_DENY",
+      "observed": "EXPLICIT_DENY"
+    },
+    {
+      "name": "delete-sentinel.json invalid create conditional value",
+      "action": "s3:PutObject",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/regime-v2/_probe/123456-1/delete-sentinel.json",
+      "context": {
+        "aws:SecureTransport": true,
+        "s3:if-none-match": "not-star"
+      },
+      "expected": "EXPLICIT_DENY",
+      "observed": "EXPLICIT_DENY"
+    },
+    {
+      "name": "unconditional.json create with star",
+      "action": "s3:PutObject",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/regime-v2/_probe/123456-1/unconditional.json",
+      "context": {
+        "aws:SecureTransport": true,
+        "s3:if-none-match": "*"
+      },
+      "expected": "ALLOW_REQUEST",
+      "observed": "ALLOW_REQUEST"
+    },
+    {
+      "name": "unconditional.json no header",
+      "action": "s3:PutObject",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/regime-v2/_probe/123456-1/unconditional.json",
+      "context": {
+        "aws:SecureTransport": true
+      },
+      "expected": "EXPLICIT_DENY",
+      "observed": "EXPLICIT_DENY"
+    },
+    {
+      "name": "unconditional.json CAS cannot mutate immutable key",
+      "action": "s3:PutObject",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/regime-v2/_probe/123456-1/unconditional.json",
+      "context": {
+        "aws:SecureTransport": true,
+        "s3:if-match": "etag"
+      },
+      "expected": "EXPLICIT_DENY",
+      "observed": "EXPLICIT_DENY"
+    },
+    {
+      "name": "unconditional.json invalid create conditional value",
+      "action": "s3:PutObject",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/regime-v2/_probe/123456-1/unconditional.json",
+      "context": {
+        "aws:SecureTransport": true,
+        "s3:if-none-match": "not-star"
+      },
+      "expected": "EXPLICIT_DENY",
+      "observed": "EXPLICIT_DENY"
+    },
+    {
+      "name": "future-object.json create with star",
+      "action": "s3:PutObject",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/regime-v2/_probe/123456-1/future-object.json",
+      "context": {
+        "aws:SecureTransport": true,
+        "s3:if-none-match": "*"
+      },
+      "expected": "ALLOW_REQUEST",
+      "observed": "ALLOW_REQUEST"
+    },
+    {
+      "name": "future-object.json no header",
+      "action": "s3:PutObject",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/regime-v2/_probe/123456-1/future-object.json",
+      "context": {
+        "aws:SecureTransport": true
+      },
+      "expected": "EXPLICIT_DENY",
+      "observed": "EXPLICIT_DENY"
+    },
+    {
+      "name": "future-object.json CAS cannot mutate immutable key",
+      "action": "s3:PutObject",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/regime-v2/_probe/123456-1/future-object.json",
+      "context": {
+        "aws:SecureTransport": true,
+        "s3:if-match": "etag"
+      },
+      "expected": "EXPLICIT_DENY",
+      "observed": "EXPLICIT_DENY"
+    },
+    {
+      "name": "future-object.json invalid create conditional value",
+      "action": "s3:PutObject",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/regime-v2/_probe/123456-1/future-object.json",
+      "context": {
+        "aws:SecureTransport": true,
+        "s3:if-none-match": "not-star"
+      },
+      "expected": "EXPLICIT_DENY",
+      "observed": "EXPLICIT_DENY"
+    },
+    {
+      "name": "nested/other.json create with star",
+      "action": "s3:PutObject",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/regime-v2/_probe/123456-1/nested/other.json",
+      "context": {
+        "aws:SecureTransport": true,
+        "s3:if-none-match": "*"
+      },
+      "expected": "ALLOW_REQUEST",
+      "observed": "ALLOW_REQUEST"
+    },
+    {
+      "name": "nested/other.json no header",
+      "action": "s3:PutObject",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/regime-v2/_probe/123456-1/nested/other.json",
+      "context": {
+        "aws:SecureTransport": true
+      },
+      "expected": "EXPLICIT_DENY",
+      "observed": "EXPLICIT_DENY"
+    },
+    {
+      "name": "nested/other.json CAS cannot mutate immutable key",
+      "action": "s3:PutObject",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/regime-v2/_probe/123456-1/nested/other.json",
+      "context": {
+        "aws:SecureTransport": true,
+        "s3:if-match": "etag"
+      },
+      "expected": "EXPLICIT_DENY",
+      "observed": "EXPLICIT_DENY"
+    },
+    {
+      "name": "nested/other.json invalid create conditional value",
+      "action": "s3:PutObject",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/regime-v2/_probe/123456-1/nested/other.json",
+      "context": {
+        "aws:SecureTransport": true,
+        "s3:if-none-match": "not-star"
+      },
+      "expected": "EXPLICIT_DENY",
+      "observed": "EXPLICIT_DENY"
+    },
+    {
+      "name": "latest initial create",
+      "action": "s3:PutObject",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/regime-v2/_probe/123456-1/latest.json",
+      "context": {
+        "aws:SecureTransport": true,
+        "s3:if-none-match": "*"
+      },
+      "expected": "ALLOW_REQUEST",
+      "observed": "ALLOW_REQUEST"
+    },
+    {
+      "name": "latest CAS current or stale ETag admitted for S3 evaluation",
+      "action": "s3:PutObject",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/regime-v2/_probe/123456-1/latest.json",
+      "context": {
+        "aws:SecureTransport": true,
+        "s3:if-match": "service-must-compare"
+      },
+      "expected": "ALLOW_REQUEST",
+      "observed": "ALLOW_REQUEST"
+    },
+    {
+      "name": "latest unconditional rejected",
+      "action": "s3:PutObject",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/regime-v2/_probe/123456-1/latest.json",
+      "context": {
+        "aws:SecureTransport": true
+      },
+      "expected": "EXPLICIT_DENY",
+      "observed": "EXPLICIT_DENY"
+    },
+    {
+      "name": "read known object",
+      "action": "s3:GetObject",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/regime-v2/_probe/123456-1/immutable.json",
+      "context": {
+        "aws:SecureTransport": true
+      },
+      "expected": "ALLOW_REQUEST",
+      "observed": "ALLOW_REQUEST"
+    },
+    {
+      "name": "delete forbidden DeleteObject",
+      "action": "s3:DeleteObject",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/regime-v2/_probe/123456-1/delete-sentinel.json",
+      "context": {
+        "aws:SecureTransport": true
+      },
+      "expected": "EXPLICIT_DENY",
+      "observed": "EXPLICIT_DENY"
+    },
+    {
+      "name": "delete forbidden DeleteObjectVersion",
+      "action": "s3:DeleteObjectVersion",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/regime-v2/_probe/123456-1/delete-sentinel.json",
+      "context": {
+        "aws:SecureTransport": true
+      },
+      "expected": "EXPLICIT_DENY",
+      "observed": "EXPLICIT_DENY"
+    },
+    {
+      "name": "non-probe read excluded regime-v2/observations/a.json",
+      "action": "s3:GetObject",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/regime-v2/observations/a.json",
+      "context": {
+        "aws:SecureTransport": true
+      },
+      "expected": "IMPLICIT_DENY",
+      "observed": "IMPLICIT_DENY"
+    },
+    {
+      "name": "non-probe conditional write excluded regime-v2/observations/a.json",
+      "action": "s3:PutObject",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/regime-v2/observations/a.json",
+      "context": {
+        "aws:SecureTransport": true,
+        "s3:if-none-match": "*"
+      },
+      "expected": "IMPLICIT_DENY",
+      "observed": "IMPLICIT_DENY"
+    },
+    {
+      "name": "non-probe read excluded regime-v2/runs/a.json",
+      "action": "s3:GetObject",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/regime-v2/runs/a.json",
+      "context": {
+        "aws:SecureTransport": true
+      },
+      "expected": "IMPLICIT_DENY",
+      "observed": "IMPLICIT_DENY"
+    },
+    {
+      "name": "non-probe conditional write excluded regime-v2/runs/a.json",
+      "action": "s3:PutObject",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/regime-v2/runs/a.json",
+      "context": {
+        "aws:SecureTransport": true,
+        "s3:if-none-match": "*"
+      },
+      "expected": "IMPLICIT_DENY",
+      "observed": "IMPLICIT_DENY"
+    },
+    {
+      "name": "non-probe read excluded regime-v2/indexes/a.json",
+      "action": "s3:GetObject",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/regime-v2/indexes/a.json",
+      "context": {
+        "aws:SecureTransport": true
+      },
+      "expected": "IMPLICIT_DENY",
+      "observed": "IMPLICIT_DENY"
+    },
+    {
+      "name": "non-probe conditional write excluded regime-v2/indexes/a.json",
+      "action": "s3:PutObject",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/regime-v2/indexes/a.json",
+      "context": {
+        "aws:SecureTransport": true,
+        "s3:if-none-match": "*"
+      },
+      "expected": "IMPLICIT_DENY",
+      "observed": "IMPLICIT_DENY"
+    },
+    {
+      "name": "non-probe read excluded regime-v2/_probe-other/a.json",
+      "action": "s3:GetObject",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/regime-v2/_probe-other/a.json",
+      "context": {
+        "aws:SecureTransport": true
+      },
+      "expected": "IMPLICIT_DENY",
+      "observed": "IMPLICIT_DENY"
+    },
+    {
+      "name": "non-probe conditional write excluded regime-v2/_probe-other/a.json",
+      "action": "s3:PutObject",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/regime-v2/_probe-other/a.json",
+      "context": {
+        "aws:SecureTransport": true,
+        "s3:if-none-match": "*"
+      },
+      "expected": "IMPLICIT_DENY",
+      "observed": "IMPLICIT_DENY"
+    },
+    {
+      "name": "non-probe read excluded statistical-levels/a.json",
+      "action": "s3:GetObject",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/statistical-levels/a.json",
+      "context": {
+        "aws:SecureTransport": true
+      },
+      "expected": "IMPLICIT_DENY",
+      "observed": "IMPLICIT_DENY"
+    },
+    {
+      "name": "non-probe conditional write excluded statistical-levels/a.json",
+      "action": "s3:PutObject",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/statistical-levels/a.json",
+      "context": {
+        "aws:SecureTransport": true,
+        "s3:if-none-match": "*"
+      },
+      "expected": "IMPLICIT_DENY",
+      "observed": "IMPLICIT_DENY"
+    },
+    {
+      "name": "unneeded/admin bucket action excluded ListBucket",
+      "action": "s3:ListBucket",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1",
+      "context": {
+        "aws:SecureTransport": true
+      },
+      "expected": "IMPLICIT_DENY",
+      "observed": "IMPLICIT_DENY"
+    },
+    {
+      "name": "unneeded/admin bucket action excluded ListBucketVersions",
+      "action": "s3:ListBucketVersions",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1",
+      "context": {
+        "aws:SecureTransport": true
+      },
+      "expected": "IMPLICIT_DENY",
+      "observed": "IMPLICIT_DENY"
+    },
+    {
+      "name": "unneeded/admin bucket action excluded ListBucketMultipartUploads",
+      "action": "s3:ListBucketMultipartUploads",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1",
+      "context": {
+        "aws:SecureTransport": true
+      },
+      "expected": "IMPLICIT_DENY",
+      "observed": "IMPLICIT_DENY"
+    },
+    {
+      "name": "unneeded/admin bucket action excluded GetBucketLocation",
+      "action": "s3:GetBucketLocation",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1",
+      "context": {
+        "aws:SecureTransport": true
+      },
+      "expected": "IMPLICIT_DENY",
+      "observed": "IMPLICIT_DENY"
+    },
+    {
+      "name": "unneeded/admin bucket action excluded GetBucketPolicy",
+      "action": "s3:GetBucketPolicy",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1",
+      "context": {
+        "aws:SecureTransport": true
+      },
+      "expected": "IMPLICIT_DENY",
+      "observed": "IMPLICIT_DENY"
+    },
+    {
+      "name": "unneeded/admin bucket action excluded GetBucketObjectLockConfiguration",
+      "action": "s3:GetBucketObjectLockConfiguration",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1",
+      "context": {
+        "aws:SecureTransport": true
+      },
+      "expected": "IMPLICIT_DENY",
+      "observed": "IMPLICIT_DENY"
+    },
+    {
+      "name": "unneeded/admin bucket action excluded GetLifecycleConfiguration",
+      "action": "s3:GetLifecycleConfiguration",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1",
+      "context": {
+        "aws:SecureTransport": true
+      },
+      "expected": "IMPLICIT_DENY",
+      "observed": "IMPLICIT_DENY"
+    },
+    {
+      "name": "unneeded/admin bucket action excluded PutBucketPolicy",
+      "action": "s3:PutBucketPolicy",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1",
+      "context": {
+        "aws:SecureTransport": true
+      },
+      "expected": "IMPLICIT_DENY",
+      "observed": "IMPLICIT_DENY"
+    },
+    {
+      "name": "unneeded/admin bucket action excluded PutBucketAcl",
+      "action": "s3:PutBucketAcl",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1",
+      "context": {
+        "aws:SecureTransport": true
+      },
+      "expected": "IMPLICIT_DENY",
+      "observed": "IMPLICIT_DENY"
+    },
+    {
+      "name": "unneeded/admin bucket action excluded PutBucketVersioning",
+      "action": "s3:PutBucketVersioning",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1",
+      "context": {
+        "aws:SecureTransport": true
+      },
+      "expected": "IMPLICIT_DENY",
+      "observed": "IMPLICIT_DENY"
+    },
+    {
+      "name": "unneeded/admin bucket action excluded PutBucketPublicAccessBlock",
+      "action": "s3:PutBucketPublicAccessBlock",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1",
+      "context": {
+        "aws:SecureTransport": true
+      },
+      "expected": "IMPLICIT_DENY",
+      "observed": "IMPLICIT_DENY"
+    },
+    {
+      "name": "unneeded/admin bucket action excluded PutLifecycleConfiguration",
+      "action": "s3:PutLifecycleConfiguration",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1",
+      "context": {
+        "aws:SecureTransport": true
+      },
+      "expected": "IMPLICIT_DENY",
+      "observed": "IMPLICIT_DENY"
+    },
+    {
+      "name": "unneeded/admin bucket action excluded DeleteBucket",
+      "action": "s3:DeleteBucket",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1",
+      "context": {
+        "aws:SecureTransport": true
+      },
+      "expected": "IMPLICIT_DENY",
+      "observed": "IMPLICIT_DENY"
+    },
+    {
+      "name": "unneeded object action excluded GetObjectVersion",
+      "action": "s3:GetObjectVersion",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/regime-v2/_probe/123456-1/immutable.json",
+      "context": {
+        "aws:SecureTransport": true
+      },
+      "expected": "IMPLICIT_DENY",
+      "observed": "IMPLICIT_DENY"
+    },
+    {
+      "name": "unneeded object action excluded PutObjectAcl",
+      "action": "s3:PutObjectAcl",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/regime-v2/_probe/123456-1/immutable.json",
+      "context": {
+        "aws:SecureTransport": true
+      },
+      "expected": "IMPLICIT_DENY",
+      "observed": "IMPLICIT_DENY"
+    },
+    {
+      "name": "unneeded object action excluded PutObjectTagging",
+      "action": "s3:PutObjectTagging",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/regime-v2/_probe/123456-1/immutable.json",
+      "context": {
+        "aws:SecureTransport": true
+      },
+      "expected": "IMPLICIT_DENY",
+      "observed": "IMPLICIT_DENY"
+    },
+    {
+      "name": "unneeded object action excluded PutObjectRetention",
+      "action": "s3:PutObjectRetention",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/regime-v2/_probe/123456-1/immutable.json",
+      "context": {
+        "aws:SecureTransport": true
+      },
+      "expected": "IMPLICIT_DENY",
+      "observed": "IMPLICIT_DENY"
+    },
+    {
+      "name": "unneeded object action excluded PutObjectLegalHold",
+      "action": "s3:PutObjectLegalHold",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/regime-v2/_probe/123456-1/immutable.json",
+      "context": {
+        "aws:SecureTransport": true
+      },
+      "expected": "IMPLICIT_DENY",
+      "observed": "IMPLICIT_DENY"
+    },
+    {
+      "name": "HTTPS mandatory s3:GetObject",
+      "action": "s3:GetObject",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/regime-v2/_probe/123456-1/immutable.json",
+      "context": {
+        "aws:SecureTransport": false
+      },
+      "expected": "EXPLICIT_DENY",
+      "observed": "EXPLICIT_DENY"
+    },
+    {
+      "name": "HTTPS mandatory s3:PutObject",
+      "action": "s3:PutObject",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/regime-v2/_probe/123456-1/latest.json",
+      "context": {
+        "aws:SecureTransport": false,
+        "s3:if-match": "etag"
+      },
+      "expected": "EXPLICIT_DENY",
+      "observed": "EXPLICIT_DENY"
+    },
+    {
+      "name": "HTTPS mandatory s3:GetBucketVersioning",
+      "action": "s3:GetBucketVersioning",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1",
+      "context": {
+        "aws:SecureTransport": false
+      },
+      "expected": "EXPLICIT_DENY",
+      "observed": "EXPLICIT_DENY"
+    }
+  ]
+}

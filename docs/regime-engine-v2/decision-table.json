@@ -1,0 +1,184 @@
+{
+  "version": "regime-v2-rules/1.0.0-symbolic",
+  "match_policy": "FIRST_MATCH",
+  "status": "PARAMETERS_UNBOUND",
+  "input_vocabularies": {
+    "participation": [
+      "FAVORABLE",
+      "MIXED",
+      "ADVERSE",
+      "UNAVAILABLE"
+    ],
+    "leadership": [
+      "FAVORABLE",
+      "MIXED",
+      "ADVERSE",
+      "UNAVAILABLE"
+    ],
+    "volatility": [
+      "BENIGN",
+      "WATCH",
+      "ADVERSE",
+      "STRESS",
+      "UNAVAILABLE"
+    ],
+    "fragility": [
+      "LOW",
+      "RISING",
+      "HIGH",
+      "UNAVAILABLE"
+    ]
+  },
+  "regime_vocabulary": [
+    "RISK_ON_BROAD",
+    "RISK_ON_SELECTIVE",
+    "TRANSITION",
+    "DEFENSIVE",
+    "STRESS"
+  ],
+  "labels_es": {
+    "RISK_ON_BROAD": "RISK-ON AMPLIO",
+    "RISK_ON_SELECTIVE": "RISK-ON SELECTIVO",
+    "TRANSITION": "TRANSICIÓN",
+    "DEFENSIVE": "DEFENSIVO",
+    "STRESS": "STRESS"
+  },
+  "rules": [
+    {
+      "id": "R00",
+      "when": {
+        "any_unavailable": [
+          "participation",
+          "leadership",
+          "volatility",
+          "fragility"
+        ]
+      },
+      "reading_status": "INCOMPLETE",
+      "regime": null
+    },
+    {
+      "id": "R01",
+      "when": {
+        "volatility": [
+          "STRESS"
+        ]
+      },
+      "reading_status": "COMPLETE",
+      "regime": "STRESS"
+    },
+    {
+      "id": "R02",
+      "when": {
+        "equity": [
+          "ADVERSE"
+        ],
+        "volatility": [
+          "WATCH",
+          "ADVERSE"
+        ]
+      },
+      "reading_status": "COMPLETE",
+      "regime": "DEFENSIVE"
+    },
+    {
+      "id": "R03",
+      "when": {
+        "volatility": [
+          "ADVERSE"
+        ],
+        "fragility": [
+          "HIGH"
+        ]
+      },
+      "reading_status": "COMPLETE",
+      "regime": "DEFENSIVE"
+    },
+    {
+      "id": "R04",
+      "when": {
+        "participation": [
+          "FAVORABLE"
+        ],
+        "leadership": [
+          "FAVORABLE"
+        ],
+        "volatility": [
+          "BENIGN"
+        ],
+        "fragility": [
+          "LOW"
+        ]
+      },
+      "reading_status": "COMPLETE",
+      "regime": "RISK_ON_BROAD"
+    },
+    {
+      "id": "R05",
+      "when": {
+        "participation": [
+          "MIXED"
+        ],
+        "leadership": [
+          "FAVORABLE"
+        ],
+        "volatility": [
+          "BENIGN"
+        ],
+        "fragility": [
+          "LOW"
+        ]
+      },
+      "reading_status": "COMPLETE",
+      "regime": "RISK_ON_SELECTIVE"
+    },
+    {
+      "id": "R06",
+      "when": {},
+      "reading_status": "COMPLETE",
+      "regime": "TRANSITION"
+    }
+  ],
+  "witnesses": [
+    {
+      "participation": "FAVORABLE",
+      "leadership": "FAVORABLE",
+      "volatility": "BENIGN",
+      "fragility": "LOW",
+      "expected": "RISK_ON_BROAD",
+      "rule": "R04"
+    },
+    {
+      "participation": "MIXED",
+      "leadership": "FAVORABLE",
+      "volatility": "BENIGN",
+      "fragility": "LOW",
+      "expected": "RISK_ON_SELECTIVE",
+      "rule": "R05"
+    },
+    {
+      "participation": "ADVERSE",
+      "leadership": "MIXED",
+      "volatility": "BENIGN",
+      "fragility": "RISING",
+      "expected": "TRANSITION",
+      "rule": "R06"
+    },
+    {
+      "participation": "ADVERSE",
+      "leadership": "ADVERSE",
+      "volatility": "ADVERSE",
+      "fragility": "HIGH",
+      "expected": "DEFENSIVE",
+      "rule": "R02"
+    },
+    {
+      "participation": "FAVORABLE",
+      "leadership": "FAVORABLE",
+      "volatility": "STRESS",
+      "fragility": "LOW",
+      "expected": "STRESS",
+      "rule": "R01"
+    }
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "url": "https://query1.finance.yahoo.com/v8/finance/chart/XLRE?period1=1514764800&period2=1788566400&interval=1d&events=div%2Csplits&includeAdjustedClose=true",
+  "status": "CAPTURED",
+  "http_status": 200,
+  "capture_started_at": "2026-09-08T14:09:01.387717+00:00",
+  "captured_at": "2026-09-08T14:09:01.695023+00:00",
+  "available_at": "2026-09-08T14:09:01.695023+00:00",
+  "availability_certainty": "CONSERVATIVE_BOUND",
+  "source_published_at": null,
+  "historical_replay_class": "R2",
+  "raw_sha256": "fd7564d4858015f9120d77927943a568e1c27b03ad379329b60f8d26e011bf91",
+  "raw_bytes": 240250,
+  "file": "yahoo-XLRE.json.gz",
+  "http_date_not_publication": "Tue, 08 Sep 2026 14:09:01 GMT",
+  "last_modified_not_vintage_guarantee": null
+}

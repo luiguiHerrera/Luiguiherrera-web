@@ -1,0 +1,18 @@
+{
+  "status": "PASS",
+  "process_V2_SHADOW": "NOT_SET",
+  "localConfig": [
+    {
+      "path": ".env.local",
+      "V2_SHADOW": "NOT_SET",
+      "other_values": "OMITTED"
+    }
+  ],
+  "default": "OFF",
+  "source": ".env.example and accepted dashboard-shadow contract",
+  "changed": false,
+  "LIVE_COMPLETE_V2_CAPTURE": "NO",
+  "OFFICIAL_CALENDAR_CONFIGURED": "NO",
+  "SHADOW_ACTIVE": "NO",
+  "note": "Read-only audit of the shadow flag; no other local credential values are persisted. Next-gate blockers remain as accepted."
+}

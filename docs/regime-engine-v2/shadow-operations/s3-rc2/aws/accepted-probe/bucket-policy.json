@@ -1,0 +1,59 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "DenyInsecureTransport",
+      "Effect": "Deny",
+      "Principal": "*",
+      "Action": "s3:*",
+      "Resource": [
+        "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1",
+        "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/*"
+      ],
+      "Condition": {
+        "Bool": {
+          "aws:SecureTransport": "false"
+        }
+      }
+    },
+    {
+      "Sid": "DenyUnconditionalProbeWrites",
+      "Effect": "Deny",
+      "Principal": "*",
+      "Action": "s3:PutObject",
+      "Resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/regime-v2/_probe/*",
+      "Condition": {
+        "Null": {
+          "s3:if-none-match": "true",
+          "s3:if-match": "true"
+        }
+      }
+    },
+    {
+      "Sid": "ProbeWriterCreateOnlyExceptLatest",
+      "Effect": "Deny",
+      "Principal": {
+        "AWS": "arn:aws:iam::732159826922:role/RegimeV2S3Probe"
+      },
+      "Action": "s3:PutObject",
+      "NotResource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/regime-v2/_probe/*/latest.json",
+      "Condition": {
+        "StringNotEquals": {
+          "s3:if-none-match": "*"
+        }
+      }
+    },
+    {
+      "Sid": "NeverDeleteByProbeWriter",
+      "Effect": "Deny",
+      "Principal": {
+        "AWS": "arn:aws:iam::732159826922:role/RegimeV2S3Probe"
+      },
+      "Action": [
+        "s3:DeleteObject",
+        "s3:DeleteObjectVersion"
+      ],
+      "Resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/regime-v2/_probe/*"
+    }
+  ]
+}

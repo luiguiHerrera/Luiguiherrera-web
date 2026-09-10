@@ -1,0 +1,48 @@
+{
+  "phase": "READ_ONLY_REPLAY_OF_FROZEN_BUILDER",
+  "originalDirectory": "/var/folders/dk/54wtdzv133nb6403dxn6d6z40000gn/T/regime-sweeper-original-ics1dt9n",
+  "btcWrongUnit": {
+    "featureId": "btc_daily",
+    "role": "SATELLITE",
+    "family": "btc_flows",
+    "unit": "USD millions",
+    "value": 1,
+    "status": "AVAILABLE",
+    "reasons": [],
+    "parents": [
+      "raw_btc_rows"
+    ],
+    "replayClass": "R2"
+  },
+  "yahooExtraAdjclose": {
+    "packetStatus": "AVAILABLE",
+    "regime": "RISK_ON_SELECTIVE"
+  },
+  "note": "Reproduced using archived original Builder bytes, before any repair of these two boundaries.",
+  "findings": [
+    {
+      "finding_id": "S13",
+      "severity": "MEDIUM",
+      "component": "engine.ts native satellite units",
+      "description": "A BTC packet explicitly labeled EUR is emitted as USD millions. Native satellite series/unit declarations are not checked.",
+      "evidence": "btcWrongUnit",
+      "builder_claim_affected": "NATIVE_UNITS, DATA_QUALITY_SEMANTICS",
+      "repair_required": true,
+      "repair_performed": false,
+      "methodology_impact": "NONE; enforce existing P8 units",
+      "status": "OPEN"
+    },
+    {
+      "finding_id": "S14",
+      "severity": "MEDIUM",
+      "component": "normalize.ts Yahoo array alignment",
+      "description": "An adjclose array longer than timestamps is silently truncated and the malformed aligned native payload is accepted.",
+      "evidence": "yahooExtraAdjclose",
+      "builder_claim_affected": "ADJCLOSE_CONTRACT, ERROR_SEMANTICS",
+      "repair_required": true,
+      "repair_performed": false,
+      "methodology_impact": "NONE; enforce native aligned-array contract",
+      "status": "OPEN"
+    }
+  ]
+}

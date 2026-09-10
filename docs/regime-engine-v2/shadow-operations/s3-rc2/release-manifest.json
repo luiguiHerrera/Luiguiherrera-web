@@ -1,0 +1,298 @@
+{
+  "schemaVersion": 1,
+  "sealedAt": "2026-09-10T09:50:49.163799+00:00",
+  "baseCommit": "330e95bf131fc824c4710ff5df734cafdc719263",
+  "baseTree": "b4a13fef321e9250b42e421b0e58a27e2488b685",
+  "architecture": "EVIDENCE_STATE_ENGINE",
+  "parameterSet": "C03",
+  "productDecisionEngineChanged": false,
+  "methodologyChanged": false,
+  "externalBootstrapCommit": "b094ddbb0a0e01f5fd8a244ad8f6ac3861f158dc",
+  "externalBootstrapRun": 34456114945,
+  "manifestExcludesItsOwnHash": true,
+  "changes": [
+    {
+      "path": ".env.example",
+      "beforeSha256": "a9e65067ab4e2aa5e7fa2b40888d1472b9bf3825069c6087f5347232c2d46a55",
+      "afterSha256": "3b2f4f862f287dada80a5d7c49c0f0c3badecea65bc158b70cc456ef0b9c0c73"
+    },
+    {
+      "path": ".github/workflows/regime-v2-shadow.yml",
+      "beforeSha256": null,
+      "afterSha256": "4bb08ad169816d714075fce4ffeb9b56272346ef71c4bf8193fcf2b7efc2404e"
+    },
+    {
+      "path": "docs/regime-engine-v2/shadow-operations/s3-rc2/README.md",
+      "beforeSha256": null,
+      "afterSha256": "2279e3856f98e0a9170f8da7ed733a53b9a0f5527f3ca9c6a279bd08842f16d5"
+    },
+    {
+      "path": "docs/regime-engine-v2/shadow-operations/s3-rc2/aws/accepted-probe/bucket-policy.json",
+      "beforeSha256": null,
+      "afterSha256": "23bf40aabcd8adba05beb9e5352bd1e50aa31335bff27c16e288f8d067ebf68b"
+    },
+    {
+      "path": "docs/regime-engine-v2/shadow-operations/s3-rc2/aws/accepted-probe/create-bucket.json",
+      "beforeSha256": null,
+      "afterSha256": "937273a03875e0e62433f78260ebbd11df659dcb7d05562a556df36e784238f4"
+    },
+    {
+      "path": "docs/regime-engine-v2/shadow-operations/s3-rc2/aws/accepted-probe/encryption.json",
+      "beforeSha256": null,
+      "afterSha256": "a9c6b7c21e5d7afccb1a97d12c9972f5f0432c4ebb5345ebf5041794bc1b342a"
+    },
+    {
+      "path": "docs/regime-engine-v2/shadow-operations/s3-rc2/aws/accepted-probe/manifest.json",
+      "beforeSha256": null,
+      "afterSha256": "383d7df87f92526ecaada718027f33e058ba44b34184aadba88d18ad29248b1d"
+    },
+    {
+      "path": "docs/regime-engine-v2/shadow-operations/s3-rc2/aws/accepted-probe/matrix.json",
+      "beforeSha256": null,
+      "afterSha256": "c0bcd03655f6c8573a64ce9a5ed56cd2a253acd77813f932a1797350124a3fd4"
+    },
+    {
+      "path": "docs/regime-engine-v2/shadow-operations/s3-rc2/aws/accepted-probe/public-access-block.json",
+      "beforeSha256": null,
+      "afterSha256": "cb83e29507ea5301a4f6a4e8cb4111eb4bd72c14608f0685e1a66d27d9cc4386"
+    },
+    {
+      "path": "docs/regime-engine-v2/shadow-operations/s3-rc2/aws/accepted-probe/trust-policy.json",
+      "beforeSha256": null,
+      "afterSha256": "f5b9e5f5476c3e282327a01b4759d473c96e0843f42becb901783d76212822dc"
+    },
+    {
+      "path": "docs/regime-engine-v2/shadow-operations/s3-rc2/aws/accepted-probe/versioning.json",
+      "beforeSha256": null,
+      "afterSha256": "8aaf6c5639d887a190955cf718b92595e07b57aa6021134f0c2084e61ce2926e"
+    },
+    {
+      "path": "docs/regime-engine-v2/shadow-operations/s3-rc2/aws/accepted-probe/writer-policy.json",
+      "beforeSha256": null,
+      "afterSha256": "eb1240ff80099a181f0a5bc3af7aebe4b9320add2c21d988253d94cb1cb380d0"
+    },
+    {
+      "path": "docs/regime-engine-v2/shadow-operations/s3-rc2/aws/apply-readback.json",
+      "beforeSha256": null,
+      "afterSha256": "d2e7a809970086bad88ef703b888007cb9367de16ddefed47a68f8ce8517c4d5"
+    },
+    {
+      "path": "docs/regime-engine-v2/shadow-operations/s3-rc2/aws/baseline-readback.json",
+      "beforeSha256": null,
+      "afterSha256": "d99ba32e45cbc67267d10fcd6d9aae511a5517e8a7c8fb0d41ada96c4caaaa34"
+    },
+    {
+      "path": "docs/regime-engine-v2/shadow-operations/s3-rc2/aws/iam-identity-simulation.json",
+      "beforeSha256": null,
+      "afterSha256": "764562cd78a243b469e131119b83ad7d04c5c1697dd829d3127fd68a2807537f"
+    },
+    {
+      "path": "docs/regime-engine-v2/shadow-operations/s3-rc2/aws/policies/combined-bucket.json",
+      "beforeSha256": null,
+      "afterSha256": "4bddc4a3f74b2b4612dedd2a89ac18572b70abf33100f9de21c1416efdb1464c"
+    },
+    {
+      "path": "docs/regime-engine-v2/shadow-operations/s3-rc2/aws/policies/shadow-trust.json",
+      "beforeSha256": null,
+      "afterSha256": "f5b9e5f5476c3e282327a01b4759d473c96e0843f42becb901783d76212822dc"
+    },
+    {
+      "path": "docs/regime-engine-v2/shadow-operations/s3-rc2/aws/policies/shadow-writer.json",
+      "beforeSha256": null,
+      "afterSha256": "5e6796304465ea4912efda67d412fc5ad1f945cdb67e9d1a985130b09c91f04b"
+    },
+    {
+      "path": "docs/regime-engine-v2/shadow-operations/s3-rc2/aws/policy-matrix-final.json",
+      "beforeSha256": null,
+      "afterSha256": "97210a5b0360501ee2a3aba3c8acbf95247a05eb73ee1e0d1e5e228e7a5cf1fc"
+    },
+    {
+      "path": "docs/regime-engine-v2/shadow-operations/s3-rc2/aws/policy-package-manifest.json",
+      "beforeSha256": null,
+      "afterSha256": "f42d8c31af09e69d398fc6214e00103f31d672517835c04593bd6e87b23b4721"
+    },
+    {
+      "path": "docs/regime-engine-v2/shadow-operations/s3-rc2/aws/test-policies.py",
+      "beforeSha256": null,
+      "afterSha256": "b8202c93b667f7c339ddcc91edd0d6bee6acc11a6a4b8bc3d8447356f8fa5729"
+    },
+    {
+      "path": "docs/regime-engine-v2/shadow-operations/s3-rc2/deny-network.cjs",
+      "beforeSha256": null,
+      "afterSha256": "8884da49f2cd9a5c57a818a42c3443fdcabc577bbb8473eb24c57c5e8799cceb"
+    },
+    {
+      "path": "docs/regime-engine-v2/shadow-operations/s3-rc2/deny-network.test.mjs",
+      "beforeSha256": null,
+      "afterSha256": "c9be8341eeba010393cc462a03f4be1f851570a57773fe406c03aecd6298e043"
+    },
+    {
+      "path": "docs/regime-engine-v2/shadow-operations/s3-rc2/run-verification.py",
+      "beforeSha256": null,
+      "afterSha256": "c1c46b24b60457b22cc5cbada695ec15651bbf05180f922b7825ddf84e0cd33f"
+    },
+    {
+      "path": "docs/regime-engine-v2/shadow-readiness-rc1/capture-calendar-sources.mjs",
+      "beforeSha256": null,
+      "afterSha256": "1bf656b1190eba34590dc886df847495f3febe5ffebd0e0d27338c292279c593"
+    },
+    {
+      "path": "docs/regime-engine-v2/shadow-readiness-rc1/capture-market-sources.mjs",
+      "beforeSha256": null,
+      "afterSha256": "6000ff808930070fdd68df2c99a8d6c4bec238493405cb27f94bca0354d86015"
+    },
+    {
+      "path": "docs/regime-engine-v2/shadow-readiness-rc1/evaluate-live-capture.mjs",
+      "beforeSha256": null,
+      "afterSha256": "b5a71c783d523bef155aedaebdc3ce047079ce94159cd67eecbfb96190aed07f"
+    },
+    {
+      "path": "docs/regime-engine-v2/shadow-readiness-rc1/materialize-calendar.mjs",
+      "beforeSha256": null,
+      "afterSha256": "a722f3d827c0aa81136b131f434b75ab2436c413e541b26601b780358635fbcc"
+    },
+    {
+      "path": "lib/dashboard/get-dashboard-data.ts",
+      "beforeSha256": "ecb2df82c5e185b7d22b4be16f7b3c22b045f736c72a3624d0fb15dfd9456740",
+      "afterSha256": "323896dde7f13c42fbac800057d9f1165db4e0b46ec7d0191857b0c23811eec3"
+    },
+    {
+      "path": "lib/dashboard/get-home-dashboard-preview-data.ts",
+      "beforeSha256": "117b9e2fd3d0acbbb181c3705d6739a8e3bcaebde05742804a761785a9f9b3ba",
+      "afterSha256": "9cd838452d83cea319a3676d10290d2069592e97fb55b68e67a55c2246da38fc"
+    },
+    {
+      "path": "lib/dashboard/public-shadow-isolation.test.mjs",
+      "beforeSha256": null,
+      "afterSha256": "aba795fd291d23de7a32cc38414c8cba59b59246cfa40c70ed1770e287e1c3a4"
+    },
+    {
+      "path": "lib/dashboard/regime-v2-render.test.mjs",
+      "beforeSha256": "2a0e24fd385357da35465b3f6ef0b25cc5b2e99f57b1c23fea6615cafff2c678",
+      "afterSha256": "352c95cc124b797e5a81b363d952a999fc42910afb8f04d1d4a935e5c0df6645"
+    },
+    {
+      "path": "lib/regime-engine-v2/calendars/reviewed-2026.json",
+      "beforeSha256": null,
+      "afterSha256": "570adddeef6e6dfdfa313cafb3c98c7a6793e3a932b49387132a99deb17e396a"
+    },
+    {
+      "path": "lib/regime-engine-v2/operations/calendar-package.test.ts",
+      "beforeSha256": null,
+      "afterSha256": "86797b3d222bad62b5bdc3888beca884c899301f4f0ee79cda0305b43d9cf4f8"
+    },
+    {
+      "path": "lib/regime-engine-v2/operations/calendar-package.ts",
+      "beforeSha256": null,
+      "afterSha256": "b801a0c5cb4cbc9ff009d01ee943ecf792b5dfe3e220feb12949e0f2ca79d663"
+    },
+    {
+      "path": "lib/regime-engine-v2/operations/job-cli.test.mjs",
+      "beforeSha256": null,
+      "afterSha256": "ba48ed64202e6b00e087e0312730702b1b55efdc510d7610a20580a9a4c9cebb"
+    },
+    {
+      "path": "lib/regime-engine-v2/operations/job-sources.test.ts",
+      "beforeSha256": null,
+      "afterSha256": "86122657a83f2cd5245204af675a2ff97f5147e04f8d027c3e196adfe2dcb259"
+    },
+    {
+      "path": "lib/regime-engine-v2/operations/job-sources.ts",
+      "beforeSha256": null,
+      "afterSha256": "f9ad71864c5117f167ff5636e733d6efca80fe685fbdf20188cc680424a832cf"
+    },
+    {
+      "path": "lib/regime-engine-v2/operations/job-storage.test.ts",
+      "beforeSha256": null,
+      "afterSha256": "e9d8f5b3883fef844d965a0f85e379ece17a6ed165917cdd8b69f437e0e81462"
+    },
+    {
+      "path": "lib/regime-engine-v2/operations/job-storage.ts",
+      "beforeSha256": null,
+      "afterSha256": "4aba1b4562d4ac7b134b3de7382daac8a2426e123053a74f81589e2e440ee733"
+    },
+    {
+      "path": "lib/regime-engine-v2/operations/s3-storage.test-fixture.ts",
+      "beforeSha256": null,
+      "afterSha256": "1ca29e315baefd3d14e86b9a7a44c0d7fb57287a2b2cc7f07cae031d22e514ec"
+    },
+    {
+      "path": "lib/regime-engine-v2/operations/s3-storage.test.ts",
+      "beforeSha256": null,
+      "afterSha256": "db5b71e6b2d482bf70e1e1d4548acc73c6f92a344f506975b4711d4a2c906472"
+    },
+    {
+      "path": "lib/regime-engine-v2/operations/s3-storage.ts",
+      "beforeSha256": null,
+      "afterSha256": "566c0a1bffd7d2e701347bfe520e5aa2a0d2b486aa0f3cd2ead81b00e8d473d2"
+    },
+    {
+      "path": "lib/regime-engine-v2/operations/shadow-job-s3.test.ts",
+      "beforeSha256": null,
+      "afterSha256": "7f6a348a6bc94d661ab6cc5c0e466162252220c3318332781d6d1fe3feddfc50"
+    },
+    {
+      "path": "lib/regime-engine-v2/operations/shadow-job.test-fixture.ts",
+      "beforeSha256": null,
+      "afterSha256": "9edb8c93cb9022be3525ba19bfde8791a5baa1476378f9c81c22ac7540c02e0e"
+    },
+    {
+      "path": "lib/regime-engine-v2/operations/shadow-job.test.ts",
+      "beforeSha256": null,
+      "afterSha256": "de99ddb292a25ce839d5abd956155dda7b2cde4e20d541245d0ed2e6eaa7ad94"
+    },
+    {
+      "path": "lib/regime-engine-v2/operations/shadow-job.ts",
+      "beforeSha256": null,
+      "afterSha256": "0b5db875925687d287acac3a66a6b2af57c441baf4c92c2aecd03a04cf92cc26"
+    },
+    {
+      "path": "lib/regime-engine-v2/operations/shadow-workflow.test.mjs",
+      "beforeSha256": null,
+      "afterSha256": "4f793e9df5b18ab1a39ea116b654a695f3b5601abf7595c2fb1c5ea4a6af83e3"
+    },
+    {
+      "path": "lib/regime-engine-v2/operations/source-input.ts",
+      "beforeSha256": "093a41e1aa6dda588b86f65286b451893e0418fffb4d88b0f27d58d1545259ab",
+      "afterSha256": "91b8cfa363da7ee8c21a6b81a8c0e1a67909683b2a67b2dbd5a286ec8488b0a7"
+    },
+    {
+      "path": "scripts/regime-v2-run-shadow.mts",
+      "beforeSha256": null,
+      "afterSha256": "d6b272b85995c4ae9ef0c54fed37663704fe5983ace3d1fa2ffcb71030e8fce4"
+    },
+    {
+      "path": "scripts/regime-v2-terminal-fallback.mjs",
+      "beforeSha256": null,
+      "afterSha256": "348731848761bac3fbed1b85ad4a670abe434a101043984217f0330ffe2a4337"
+    }
+  ],
+  "supplementalTests": [
+    "docs/regime-engine-v2/shadow-operations/s3-rc2/deny-network.test.mjs",
+    "lib/dashboard/public-shadow-isolation.test.mjs",
+    "lib/regime-engine-v2/operations/calendar-package.test.ts",
+    "lib/regime-engine-v2/operations/job-cli.test.mjs",
+    "lib/regime-engine-v2/operations/job-sources.test.ts",
+    "lib/regime-engine-v2/operations/job-storage.test.ts",
+    "lib/regime-engine-v2/operations/s3-storage.test.ts",
+    "lib/regime-engine-v2/operations/shadow-job-s3.test.ts",
+    "lib/regime-engine-v2/operations/shadow-job.test.ts",
+    "lib/regime-engine-v2/operations/shadow-workflow.test.mjs"
+  ],
+  "expectedSupplementalTests": 142,
+  "supplementalGroupCounts": {
+    "localStorage": 18,
+    "shadowCoordinator": 18,
+    "s3StorageContract": 22,
+    "s3CoordinatorIntegration": 8,
+    "cli": 19,
+    "workflow": 13,
+    "calendar": 12,
+    "sources": 19,
+    "publicIsolation": 7,
+    "networkGuard": 6
+  },
+  "remoteIntegrationPerformed": false,
+  "shadowWriterOidcLive": "NOT_RUN",
+  "remoteProductionPrefixCanary": "NOT_RUN"
+}

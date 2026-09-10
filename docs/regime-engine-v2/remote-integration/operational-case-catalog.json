@@ -1,0 +1,889 @@
+{
+  "schemaVersion": "integration-operational-case-catalog/1.0.0",
+  "role": "Static case identities only; no historical result is an input to current PASS.",
+  "sourceRC2": "2271bee0a21aadd12ab2f45d080c58c94b696326",
+  "catalogSourceSha256": "6305bfaed60bc61864f54f2f15bce2155f85b9f03dd5ba180f17b531edb7043e",
+  "testSourceSha256": {
+    "lib/regime-engine-v2/operations/job-storage.test.ts": "e9d8f5b3883fef844d965a0f85e379ece17a6ed165917cdd8b69f437e0e81462",
+    "lib/regime-engine-v2/operations/shadow-job.test.ts": "de99ddb292a25ce839d5abd956155dda7b2cde4e20d541245d0ed2e6eaa7ad94",
+    "lib/regime-engine-v2/operations/s3-storage.test.ts": "db5b71e6b2d482bf70e1e1d4548acc73c6f92a344f506975b4711d4a2c906472",
+    "lib/regime-engine-v2/operations/shadow-job-s3.test.ts": "7f6a348a6bc94d661ab6cc5c0e466162252220c3318332781d6d1fe3feddfc50"
+  },
+  "categories": {
+    "STORAGE_CONTRACT_TESTS": {
+      "testIds": [
+        "S3_CONTRACT-01",
+        "S3_CONTRACT-02",
+        "S3_CONTRACT-03",
+        "S3_CONTRACT-04",
+        "S3_CONTRACT-05",
+        "S3_CONTRACT-06",
+        "S3_CONTRACT-07",
+        "S3_CONTRACT-08",
+        "S3_CONTRACT-09",
+        "S3_CONTRACT-10",
+        "S3_CONTRACT-11",
+        "S3_CONTRACT-12",
+        "S3_CONTRACT-13",
+        "S3_CONTRACT-14",
+        "S3_CONTRACT-15",
+        "S3_CONTRACT-16",
+        "S3_CONTRACT-17",
+        "S3_CONTRACT-18",
+        "S3_CONTRACT-19",
+        "S3_CONTRACT-20",
+        "S3_CONTRACT-21",
+        "S3_CONTRACT-22"
+      ],
+      "definition": "All registered S3 adapter contract tests; excludes local adapter and coordinator tests."
+    },
+    "CONCURRENCY_TESTS": {
+      "testIds": [
+        "LOCAL_STORAGE-13",
+        "LOCAL_STORAGE-14",
+        "LOCAL_STORAGE-17",
+        "LOCAL_COORDINATOR-05",
+        "S3_CONTRACT-14",
+        "S3_COORDINATOR-01",
+        "S3_COORDINATOR-02",
+        "S3_COORDINATOR-03"
+      ],
+      "definition": "Only tests with deliberately overlapping asynchronous or OS-process writers/lock contenders; simulated conflict loops alone are not counted."
+    },
+    "FAILURE_TESTS": {
+      "testIds": [
+        "LOCAL_COORDINATOR-08",
+        "LOCAL_COORDINATOR-10",
+        "LOCAL_COORDINATOR-14",
+        "LOCAL_COORDINATOR-16",
+        "S3_CONTRACT-01",
+        "S3_CONTRACT-05",
+        "S3_CONTRACT-06",
+        "S3_CONTRACT-08",
+        "S3_CONTRACT-12",
+        "S3_CONTRACT-14",
+        "S3_CONTRACT-16",
+        "S3_CONTRACT-17",
+        "S3_CONTRACT-22",
+        "S3_COORDINATOR-04",
+        "S3_COORDINATOR-05",
+        "S3_COORDINATOR-06",
+        "S3_COORDINATOR-07"
+      ],
+      "definition": "Distinct executed tests selected to cover all 14 required section-42 scenarios. Includes expected recovery cases (equivalent existing observation and absent latest); not an exhaustive count of every negative assertion in the 66-test suite."
+    }
+  },
+  "cases": [
+    {
+      "id": "LOCAL_STORAGE-01",
+      "group": "LOCAL_STORAGE",
+      "name": "production factory fails closed without creating a local fallback",
+      "file": "lib/regime-engine-v2/operations/job-storage.test.ts",
+      "lines": {
+        "start": 25,
+        "end": 27
+      },
+      "reportedSubsets": []
+    },
+    {
+      "id": "LOCAL_STORAGE-02",
+      "group": "LOCAL_STORAGE",
+      "name": "local storage is explicit, private and never operational production storage",
+      "file": "lib/regime-engine-v2/operations/job-storage.test.ts",
+      "lines": {
+        "start": 28,
+        "end": 36
+      },
+      "reportedSubsets": []
+    },
+    {
+      "id": "LOCAL_STORAGE-03",
+      "group": "LOCAL_STORAGE",
+      "name": "immutable create is deterministic across property ordering and rejects conflicting bytes",
+      "file": "lib/regime-engine-v2/operations/job-storage.test.ts",
+      "lines": {
+        "start": 37,
+        "end": 43
+      },
+      "reportedSubsets": []
+    },
+    {
+      "id": "LOCAL_STORAGE-04",
+      "group": "LOCAL_STORAGE",
+      "name": "read verification detects corrupted envelope and preserved content with wrong hash",
+      "file": "lib/regime-engine-v2/operations/job-storage.test.ts",
+      "lines": {
+        "start": 44,
+        "end": 51
+      },
+      "reportedSubsets": []
+    },
+    {
+      "id": "LOCAL_STORAGE-05",
+      "group": "LOCAL_STORAGE",
+      "name": "non-JSON, cyclic, sparse, accessor and oversized values cannot become observations",
+      "file": "lib/regime-engine-v2/operations/job-storage.test.ts",
+      "lines": {
+        "start": 52,
+        "end": 60
+      },
+      "reportedSubsets": []
+    },
+    {
+      "id": "LOCAL_STORAGE-06",
+      "group": "LOCAL_STORAGE",
+      "name": "object keys cannot escape, enter reserved mutable namespace or traverse symlinks",
+      "file": "lib/regime-engine-v2/operations/job-storage.test.ts",
+      "lines": {
+        "start": 61,
+        "end": 68
+      },
+      "reportedSubsets": []
+    },
+    {
+      "id": "LOCAL_STORAGE-07",
+      "group": "LOCAL_STORAGE",
+      "name": "unsafe pre-existing directory permissions and repository symlinks fail config",
+      "file": "lib/regime-engine-v2/operations/job-storage.test.ts",
+      "lines": {
+        "start": 69,
+        "end": 75
+      },
+      "reportedSubsets": []
+    },
+    {
+      "id": "LOCAL_STORAGE-08",
+      "group": "LOCAL_STORAGE",
+      "name": "latest cannot precede its verified immutable observation or point at a mismatched identity",
+      "file": "lib/regime-engine-v2/operations/job-storage.test.ts",
+      "lines": {
+        "start": 76,
+        "end": 84
+      },
+      "reportedSubsets": []
+    },
+    {
+      "id": "LOCAL_STORAGE-09",
+      "group": "LOCAL_STORAGE",
+      "name": "same observation is unchanged; an older session or older same-session asOf never rewinds latest",
+      "file": "lib/regime-engine-v2/operations/job-storage.test.ts",
+      "lines": {
+        "start": 85,
+        "end": 95
+      },
+      "reportedSubsets": []
+    },
+    {
+      "id": "LOCAL_STORAGE-10",
+      "group": "LOCAL_STORAGE",
+      "name": "equal canonical ordering with different identities conflicts without overwriting either snapshot",
+      "file": "lib/regime-engine-v2/operations/job-storage.test.ts",
+      "lines": {
+        "start": 96,
+        "end": 104
+      },
+      "reportedSubsets": []
+    },
+    {
+      "id": "LOCAL_STORAGE-11",
+      "group": "LOCAL_STORAGE",
+      "name": "pointer write failure leaves an already verified immutable snapshot recoverable",
+      "file": "lib/regime-engine-v2/operations/job-storage.test.ts",
+      "lines": {
+        "start": 105,
+        "end": 111
+      },
+      "reportedSubsets": []
+    },
+    {
+      "id": "LOCAL_STORAGE-12",
+      "group": "LOCAL_STORAGE",
+      "name": "snapshot conflict cannot update canonical latest",
+      "file": "lib/regime-engine-v2/operations/job-storage.test.ts",
+      "lines": {
+        "start": 112,
+        "end": 119
+      },
+      "reportedSubsets": []
+    },
+    {
+      "id": "LOCAL_STORAGE-13",
+      "group": "LOCAL_STORAGE",
+      "name": "one transaction serializes overlapping publication operations",
+      "file": "lib/regime-engine-v2/operations/job-storage.test.ts",
+      "lines": {
+        "start": 120,
+        "end": 128
+      },
+      "reportedSubsets": [
+        "CONCURRENCY_TESTS"
+      ]
+    },
+    {
+      "id": "LOCAL_STORAGE-14",
+      "group": "LOCAL_STORAGE",
+      "name": "exclusive ownership persists through awaited work and is released on failure",
+      "file": "lib/regime-engine-v2/operations/job-storage.test.ts",
+      "lines": {
+        "start": 129,
+        "end": 136
+      },
+      "reportedSubsets": [
+        "CONCURRENCY_TESTS"
+      ]
+    },
+    {
+      "id": "LOCAL_STORAGE-15",
+      "group": "LOCAL_STORAGE",
+      "name": "expired transaction capability cannot modify latest or create records",
+      "file": "lib/regime-engine-v2/operations/job-storage.test.ts",
+      "lines": {
+        "start": 137,
+        "end": 142
+      },
+      "reportedSubsets": []
+    },
+    {
+      "id": "LOCAL_STORAGE-16",
+      "group": "LOCAL_STORAGE",
+      "name": "an abandoned writer lock fails closed without deleting or stealing it",
+      "file": "lib/regime-engine-v2/operations/job-storage.test.ts",
+      "lines": {
+        "start": 143,
+        "end": 149
+      },
+      "reportedSubsets": []
+    },
+    {
+      "id": "LOCAL_STORAGE-17",
+      "group": "LOCAL_STORAGE",
+      "name": "separate OS processes preserve newer predecessor when the older run finishes last",
+      "file": "lib/regime-engine-v2/operations/job-storage.test.ts",
+      "lines": {
+        "start": 150,
+        "end": 170
+      },
+      "reportedSubsets": [
+        "CONCURRENCY_TESTS"
+      ]
+    },
+    {
+      "id": "LOCAL_STORAGE-18",
+      "group": "LOCAL_STORAGE",
+      "name": "immutable observations and pointer remain verifiable after reopening the adapter",
+      "file": "lib/regime-engine-v2/operations/job-storage.test.ts",
+      "lines": {
+        "start": 171,
+        "end": 178
+      },
+      "reportedSubsets": []
+    },
+    {
+      "id": "LOCAL_COORDINATOR-01",
+      "group": "LOCAL_COORDINATOR",
+      "name": "schedule happy path uses raw boundary, C03, replay and publication",
+      "file": "lib/regime-engine-v2/operations/shadow-job.test.ts",
+      "lines": {
+        "start": 25,
+        "end": 32
+      },
+      "reportedSubsets": []
+    },
+    {
+      "id": "LOCAL_COORDINATOR-02",
+      "group": "LOCAL_COORDINATOR",
+      "name": "workflow_dispatch happy path uses raw boundary, C03, replay and publication",
+      "file": "lib/regime-engine-v2/operations/shadow-job.test.ts",
+      "lines": {
+        "start": 25,
+        "end": 32
+      },
+      "reportedSubsets": []
+    },
+    {
+      "id": "LOCAL_COORDINATOR-03",
+      "group": "LOCAL_COORDINATOR",
+      "name": "same observation rerun reuses exact output and identity with zero new GETs",
+      "file": "lib/regime-engine-v2/operations/shadow-job.test.ts",
+      "lines": {
+        "start": 33,
+        "end": 37
+      },
+      "reportedSubsets": []
+    },
+    {
+      "id": "LOCAL_COORDINATOR-04",
+      "group": "LOCAL_COORDINATOR",
+      "name": "weekend trigger without a new closed session reuses Friday observation",
+      "file": "lib/regime-engine-v2/operations/shadow-job.test.ts",
+      "lines": {
+        "start": 38,
+        "end": 46
+      },
+      "reportedSubsets": []
+    },
+    {
+      "id": "LOCAL_COORDINATOR-05",
+      "group": "LOCAL_COORDINATOR",
+      "name": "two concurrent attempts have one canonical observation and one acquisition",
+      "file": "lib/regime-engine-v2/operations/shadow-job.test.ts",
+      "lines": {
+        "start": 47,
+        "end": 50
+      },
+      "reportedSubsets": [
+        "CONCURRENCY_TESTS"
+      ]
+    },
+    {
+      "id": "LOCAL_COORDINATOR-06",
+      "group": "LOCAL_COORDINATOR",
+      "name": "operational identity binds exact cut, temporal source identities and predecessor snapshot",
+      "file": "lib/regime-engine-v2/operations/shadow-job.test.ts",
+      "lines": {
+        "start": 51,
+        "end": 61
+      },
+      "reportedSubsets": []
+    },
+    {
+      "id": "LOCAL_COORDINATOR-07",
+      "group": "LOCAL_COORDINATOR",
+      "name": "source unavailable ends with durable terminal and no latest",
+      "file": "lib/regime-engine-v2/operations/shadow-job.test.ts",
+      "lines": {
+        "start": 62,
+        "end": 65
+      },
+      "reportedSubsets": []
+    },
+    {
+      "id": "LOCAL_COORDINATOR-08",
+      "group": "LOCAL_COORDINATOR",
+      "name": "calendar expired fails before capture",
+      "file": "lib/regime-engine-v2/operations/shadow-job.test.ts",
+      "lines": {
+        "start": 66,
+        "end": 68
+      },
+      "reportedSubsets": [
+        "FAILURE_TESTS"
+      ]
+    },
+    {
+      "id": "LOCAL_COORDINATOR-09",
+      "group": "LOCAL_COORDINATOR",
+      "name": "calendar unknown before authority was known fails before capture",
+      "file": "lib/regime-engine-v2/operations/shadow-job.test.ts",
+      "lines": {
+        "start": 66,
+        "end": 68
+      },
+      "reportedSubsets": []
+    },
+    {
+      "id": "LOCAL_COORDINATOR-10",
+      "group": "LOCAL_COORDINATOR",
+      "name": "engine INCOMPLETE is retained as failure evidence without latest or economic session index",
+      "file": "lib/regime-engine-v2/operations/shadow-job.test.ts",
+      "lines": {
+        "start": 69,
+        "end": 73
+      },
+      "reportedSubsets": [
+        "FAILURE_TESTS"
+      ]
+    },
+    {
+      "id": "LOCAL_COORDINATOR-11",
+      "group": "LOCAL_COORDINATOR",
+      "name": "engine exception is terminal with no latest",
+      "file": "lib/regime-engine-v2/operations/shadow-job.test.ts",
+      "lines": {
+        "start": 74,
+        "end": 76
+      },
+      "reportedSubsets": []
+    },
+    {
+      "id": "LOCAL_COORDINATOR-12",
+      "group": "LOCAL_COORDINATOR",
+      "name": "snapshot write failure never publishes latest",
+      "file": "lib/regime-engine-v2/operations/shadow-job.test.ts",
+      "lines": {
+        "start": 83,
+        "end": 85
+      },
+      "reportedSubsets": []
+    },
+    {
+      "id": "LOCAL_COORDINATOR-13",
+      "group": "LOCAL_COORDINATOR",
+      "name": "latest failure retains verified immutable snapshot and recovery does not reacquire",
+      "file": "lib/regime-engine-v2/operations/shadow-job.test.ts",
+      "lines": {
+        "start": 86,
+        "end": 90
+      },
+      "reportedSubsets": []
+    },
+    {
+      "id": "LOCAL_COORDINATOR-14",
+      "group": "LOCAL_COORDINATOR",
+      "name": "timeout during non-cooperating acquisition emits one terminal and no late publication",
+      "file": "lib/regime-engine-v2/operations/shadow-job.test.ts",
+      "lines": {
+        "start": 91,
+        "end": 95
+      },
+      "reportedSubsets": [
+        "FAILURE_TESTS"
+      ]
+    },
+    {
+      "id": "LOCAL_COORDINATOR-15",
+      "group": "LOCAL_COORDINATOR",
+      "name": "rollback OFF calls no calendar, capture, engine or storage",
+      "file": "lib/regime-engine-v2/operations/shadow-job.test.ts",
+      "lines": {
+        "start": 96,
+        "end": 98
+      },
+      "reportedSubsets": []
+    },
+    {
+      "id": "LOCAL_COORDINATOR-16",
+      "group": "LOCAL_COORDINATOR",
+      "name": "production store absent is terminal and fail-closed before fetch",
+      "file": "lib/regime-engine-v2/operations/shadow-job.test.ts",
+      "lines": {
+        "start": 99,
+        "end": 101
+      },
+      "reportedSubsets": [
+        "FAILURE_TESTS"
+      ]
+    },
+    {
+      "id": "LOCAL_COORDINATOR-17",
+      "group": "LOCAL_COORDINATOR",
+      "name": "market capture before calendar preflight is rejected",
+      "file": "lib/regime-engine-v2/operations/shadow-job.test.ts",
+      "lines": {
+        "start": 102,
+        "end": 104
+      },
+      "reportedSubsets": []
+    },
+    {
+      "id": "LOCAL_COORDINATOR-18",
+      "group": "LOCAL_COORDINATOR",
+      "name": "session changing during acquisition rejects the cut without retrospective selection",
+      "file": "lib/regime-engine-v2/operations/shadow-job.test.ts",
+      "lines": {
+        "start": 105,
+        "end": 108
+      },
+      "reportedSubsets": []
+    },
+    {
+      "id": "S3_CONTRACT-01",
+      "group": "S3_CONTRACT",
+      "name": "S3 construction is inert and rejects missing or unapproved resource configuration",
+      "file": "lib/regime-engine-v2/operations/s3-storage.test.ts",
+      "lines": {
+        "start": 13,
+        "end": 20
+      },
+      "reportedSubsets": [
+        "STORAGE_CONTRACT_TESTS",
+        "FAILURE_TESTS"
+      ]
+    },
+    {
+      "id": "S3_CONTRACT-02",
+      "group": "S3_CONTRACT",
+      "name": "preflight validates CLI capabilities, assumed writer identity and only three bucket controls",
+      "file": "lib/regime-engine-v2/operations/s3-storage.test.ts",
+      "lines": {
+        "start": 21,
+        "end": 27
+      },
+      "reportedSubsets": [
+        "STORAGE_CONTRACT_TESTS"
+      ]
+    },
+    {
+      "id": "S3_CONTRACT-03",
+      "group": "S3_CONTRACT",
+      "name": "unsupported CLI, wrong identity and unsafe bucket controls fail before object operations",
+      "file": "lib/regime-engine-v2/operations/s3-storage.test.ts",
+      "lines": {
+        "start": 28,
+        "end": 40
+      },
+      "reportedSubsets": [
+        "STORAGE_CONTRACT_TESTS"
+      ]
+    },
+    {
+      "id": "S3_CONTRACT-04",
+      "group": "S3_CONTRACT",
+      "name": "key plan refuses probe, arbitrary indexes, traversal and shell-shaped inputs before CLI",
+      "file": "lib/regime-engine-v2/operations/s3-storage.test.ts",
+      "lines": {
+        "start": 41,
+        "end": 45
+      },
+      "reportedSubsets": [
+        "STORAGE_CONTRACT_TESTS"
+      ]
+    },
+    {
+      "id": "S3_CONTRACT-05",
+      "group": "S3_CONTRACT",
+      "name": "immutable create reads back the canonical envelope and equal bytes are idempotent",
+      "file": "lib/regime-engine-v2/operations/s3-storage.test.ts",
+      "lines": {
+        "start": 46,
+        "end": 54
+      },
+      "reportedSubsets": [
+        "STORAGE_CONTRACT_TESTS",
+        "FAILURE_TESTS"
+      ]
+    },
+    {
+      "id": "S3_CONTRACT-06",
+      "group": "S3_CONTRACT",
+      "name": "incompatible existing immutable bytes are a critical collision and never overwritten",
+      "file": "lib/regime-engine-v2/operations/s3-storage.test.ts",
+      "lines": {
+        "start": 55,
+        "end": 60
+      },
+      "reportedSubsets": [
+        "STORAGE_CONTRACT_TESTS",
+        "FAILURE_TESTS"
+      ]
+    },
+    {
+      "id": "S3_CONTRACT-07",
+      "group": "S3_CONTRACT",
+      "name": "read-back rejects envelope corruption and mismatched created version",
+      "file": "lib/regime-engine-v2/operations/s3-storage.test.ts",
+      "lines": {
+        "start": 61,
+        "end": 67
+      },
+      "reportedSubsets": [
+        "STORAGE_CONTRACT_TESTS"
+      ]
+    },
+    {
+      "id": "S3_CONTRACT-08",
+      "group": "S3_CONTRACT",
+      "name": "403 on a missing key requires an exact-key ListObjectsV2 with max-keys1 and no pagination",
+      "file": "lib/regime-engine-v2/operations/s3-storage.test.ts",
+      "lines": {
+        "start": 68,
+        "end": 72
+      },
+      "reportedSubsets": [
+        "STORAGE_CONTRACT_TESTS",
+        "FAILURE_TESTS"
+      ]
+    },
+    {
+      "id": "S3_CONTRACT-09",
+      "group": "S3_CONTRACT",
+      "name": "403 for an existing object or denied existence list stays a failure",
+      "file": "lib/regime-engine-v2/operations/s3-storage.test.ts",
+      "lines": {
+        "start": 73,
+        "end": 78
+      },
+      "reportedSubsets": [
+        "STORAGE_CONTRACT_TESTS"
+      ]
+    },
+    {
+      "id": "S3_CONTRACT-10",
+      "group": "S3_CONTRACT",
+      "name": "an ambiguous existence listing cannot authorize treating a key as absent",
+      "file": "lib/regime-engine-v2/operations/s3-storage.test.ts",
+      "lines": {
+        "start": 79,
+        "end": 82
+      },
+      "reportedSubsets": [
+        "STORAGE_CONTRACT_TESTS"
+      ]
+    },
+    {
+      "id": "S3_CONTRACT-11",
+      "group": "S3_CONTRACT",
+      "name": "latest cannot precede its exact read-verified observation",
+      "file": "lib/regime-engine-v2/operations/s3-storage.test.ts",
+      "lines": {
+        "start": 83,
+        "end": 89
+      },
+      "reportedSubsets": [
+        "STORAGE_CONTRACT_TESTS"
+      ]
+    },
+    {
+      "id": "S3_CONTRACT-12",
+      "group": "S3_CONTRACT",
+      "name": "latest first create, CAS advance, identical reuse and stale rejection retain the newest pointer",
+      "file": "lib/regime-engine-v2/operations/s3-storage.test.ts",
+      "lines": {
+        "start": 90,
+        "end": 98
+      },
+      "reportedSubsets": [
+        "STORAGE_CONTRACT_TESTS",
+        "FAILURE_TESTS"
+      ]
+    },
+    {
+      "id": "S3_CONTRACT-13",
+      "group": "S3_CONTRACT",
+      "name": "different version compatibility and equal ordering with different observations cannot advance",
+      "file": "lib/regime-engine-v2/operations/s3-storage.test.ts",
+      "lines": {
+        "start": 99,
+        "end": 106
+      },
+      "reportedSubsets": [
+        "STORAGE_CONTRACT_TESTS"
+      ]
+    },
+    {
+      "id": "S3_CONTRACT-14",
+      "group": "S3_CONTRACT",
+      "name": "two independent adapters cannot let the older stale ETag writer rewind latest",
+      "file": "lib/regime-engine-v2/operations/s3-storage.test.ts",
+      "lines": {
+        "start": 107,
+        "end": 118
+      },
+      "reportedSubsets": [
+        "STORAGE_CONTRACT_TESTS",
+        "CONCURRENCY_TESTS",
+        "FAILURE_TESTS"
+      ]
+    },
+    {
+      "id": "S3_CONTRACT-15",
+      "group": "S3_CONTRACT",
+      "name": "CAS conflict rereads are bounded and never fall back to an unconditional put",
+      "file": "lib/regime-engine-v2/operations/s3-storage.test.ts",
+      "lines": {
+        "start": 119,
+        "end": 126
+      },
+      "reportedSubsets": [
+        "STORAGE_CONTRACT_TESTS"
+      ]
+    },
+    {
+      "id": "S3_CONTRACT-16",
+      "group": "S3_CONTRACT",
+      "name": "observation and latest write failures preserve existing objects and never delete",
+      "file": "lib/regime-engine-v2/operations/s3-storage.test.ts",
+      "lines": {
+        "start": 127,
+        "end": 134
+      },
+      "reportedSubsets": [
+        "STORAGE_CONTRACT_TESTS",
+        "FAILURE_TESTS"
+      ]
+    },
+    {
+      "id": "S3_CONTRACT-17",
+      "group": "S3_CONTRACT",
+      "name": "run records are immutable per attempt and a run write failure cannot change observations",
+      "file": "lib/regime-engine-v2/operations/s3-storage.test.ts",
+      "lines": {
+        "start": 135,
+        "end": 142
+      },
+      "reportedSubsets": [
+        "STORAGE_CONTRACT_TESTS",
+        "FAILURE_TESTS"
+      ]
+    },
+    {
+      "id": "S3_CONTRACT-18",
+      "group": "S3_CONTRACT",
+      "name": "CLI errors retain a bounded AWS class without provider error details",
+      "file": "lib/regime-engine-v2/operations/s3-storage.test.ts",
+      "lines": {
+        "start": 143,
+        "end": 146
+      },
+      "reportedSubsets": [
+        "STORAGE_CONTRACT_TESTS"
+      ]
+    },
+    {
+      "id": "S3_CONTRACT-19",
+      "group": "S3_CONTRACT",
+      "name": "JSON AWS error codes preserve missing, denied and conditional behavior without private details",
+      "file": "lib/regime-engine-v2/operations/s3-storage.test.ts",
+      "lines": {
+        "start": 147,
+        "end": 154
+      },
+      "reportedSubsets": [
+        "STORAGE_CONTRACT_TESTS"
+      ]
+    },
+    {
+      "id": "S3_CONTRACT-20",
+      "group": "S3_CONTRACT",
+      "name": "GetObject range bounds downloaded bytes before any body is parsed",
+      "file": "lib/regime-engine-v2/operations/s3-storage.test.ts",
+      "lines": {
+        "start": 155,
+        "end": 160
+      },
+      "reportedSubsets": [
+        "STORAGE_CONTRACT_TESTS"
+      ]
+    },
+    {
+      "id": "S3_CONTRACT-21",
+      "group": "S3_CONTRACT",
+      "name": "pointer compatibility cannot be asserted over an incompatible observation or prior pointer",
+      "file": "lib/regime-engine-v2/operations/s3-storage.test.ts",
+      "lines": {
+        "start": 161,
+        "end": 167
+      },
+      "reportedSubsets": [
+        "STORAGE_CONTRACT_TESTS"
+      ]
+    },
+    {
+      "id": "S3_CONTRACT-22",
+      "group": "S3_CONTRACT",
+      "name": "missing caller credentials and an unavailable bucket fail preflight with safe bounded diagnostics",
+      "file": "lib/regime-engine-v2/operations/s3-storage.test.ts",
+      "lines": {
+        "start": 168,
+        "end": 175
+      },
+      "reportedSubsets": [
+        "STORAGE_CONTRACT_TESTS",
+        "FAILURE_TESTS"
+      ]
+    },
+    {
+      "id": "S3_COORDINATOR-01",
+      "group": "S3_COORDINATOR",
+      "name": "independent S3 attempts with identical full inputs create one economic object and two immutable terminal records",
+      "file": "lib/regime-engine-v2/operations/shadow-job-s3.test.ts",
+      "lines": {
+        "start": 29,
+        "end": 38
+      },
+      "reportedSubsets": [
+        "CONCURRENCY_TESTS"
+      ]
+    },
+    {
+      "id": "S3_COORDINATOR-02",
+      "group": "S3_COORDINATOR",
+      "name": "a slower identical acquisition rechecks the completed session before creating a second predecessor snapshot",
+      "file": "lib/regime-engine-v2/operations/shadow-job-s3.test.ts",
+      "lines": {
+        "start": 39,
+        "end": 47
+      },
+      "reportedSubsets": [
+        "CONCURRENCY_TESTS"
+      ]
+    },
+    {
+      "id": "S3_COORDINATOR-03",
+      "group": "S3_COORDINATOR",
+      "name": "different actual cuts retain distinct immutable candidates while first session election reuses original inputs",
+      "file": "lib/regime-engine-v2/operations/shadow-job-s3.test.ts",
+      "lines": {
+        "start": 48,
+        "end": 61
+      },
+      "reportedSubsets": [
+        "CONCURRENCY_TESTS"
+      ]
+    },
+    {
+      "id": "S3_COORDINATOR-04",
+      "group": "S3_COORDINATOR",
+      "name": "exhausted latest CAS preserves the verified orphan and a later attempt recovers it with zero market requests",
+      "file": "lib/regime-engine-v2/operations/shadow-job-s3.test.ts",
+      "lines": {
+        "start": 62,
+        "end": 70
+      },
+      "reportedSubsets": [
+        "FAILURE_TESTS"
+      ]
+    },
+    {
+      "id": "S3_COORDINATOR-05",
+      "group": "S3_COORDINATOR",
+      "name": "S3 observation write failure creates a terminal record and no economic pointer",
+      "file": "lib/regime-engine-v2/operations/shadow-job-s3.test.ts",
+      "lines": {
+        "start": 71,
+        "end": 75
+      },
+      "reportedSubsets": [
+        "FAILURE_TESTS"
+      ]
+    },
+    {
+      "id": "S3_COORDINATOR-06",
+      "group": "S3_COORDINATOR",
+      "name": "S3 terminal persistence failure leaves a verified observation and reports the failed attempt through onTerminal",
+      "file": "lib/regime-engine-v2/operations/shadow-job-s3.test.ts",
+      "lines": {
+        "start": 76,
+        "end": 81
+      },
+      "reportedSubsets": [
+        "FAILURE_TESTS"
+      ]
+    },
+    {
+      "id": "S3_COORDINATOR-07",
+      "group": "S3_COORDINATOR",
+      "name": "S3 source failure and incomplete raw evidence never create an economic observation or latest",
+      "file": "lib/regime-engine-v2/operations/shadow-job-s3.test.ts",
+      "lines": {
+        "start": 82,
+        "end": 90
+      },
+      "reportedSubsets": [
+        "FAILURE_TESTS"
+      ]
+    },
+    {
+      "id": "S3_COORDINATOR-08",
+      "group": "S3_COORDINATOR",
+      "name": "OFF and unknown calendar make zero S3 CLI calls and zero source acquisitions",
+      "file": "lib/regime-engine-v2/operations/shadow-job-s3.test.ts",
+      "lines": {
+        "start": 91,
+        "end": 96
+      },
+      "reportedSubsets": []
+    }
+  ],
+  "countingPolicy": "A test is a registered node:test case appearing exactly once in the preserved PASS log. Assertions, parameter iterations inside one registered test, helper calls and mappings do not add tests. The two explicit registration loops each contribute two distinct named cases. Reported categories overlap and MUST NOT be added to each other or to 66."
+}

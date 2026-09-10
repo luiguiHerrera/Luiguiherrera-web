@@ -1,0 +1,33 @@
+{
+  "status": "PASS",
+  "scope": "V1_LITERAL_EXTRACTION_AND_ACTUAL_REACT_SSR",
+  "extraction": {
+    "originalSha256": "0540948ce61ce6703e8a043276a030b9b7dfb24ffcab7eadc17ab84810dd0b5a",
+    "pageSha256": "52fb6a294696c7fa5490debaa3c162e62f4253a5f1e4ca38b6637a3138c1bf21",
+    "extractedComponentSha256": "92d7ef8bc01d4725d740ddea73cf83086743a93eb5d8271aba8872c83b0982cc",
+    "unchangedOutsideTopExtraction": true
+  },
+  "locales": [
+    {
+      "locale": "es",
+      "status": "PASS",
+      "originalMarkupSha256": "75e64f5f85b99a54a75bb7ea5eb5f7c98bd2afe3ca7ed4ccd88f3e406bae85da",
+      "currentMarkupSha256": "75e64f5f85b99a54a75bb7ea5eb5f7c98bd2afe3ca7ed4ccd88f3e406bae85da",
+      "markupBytes": 4828,
+      "exactMarkupMatch": true
+    },
+    {
+      "locale": "en",
+      "status": "PASS",
+      "originalMarkupSha256": "0802e9c7893154df4bc4fb76c1155ee3b0cc59565aeffd94e6fe3b461b7e207e",
+      "currentMarkupSha256": "0802e9c7893154df4bc4fb76c1155ee3b0cc59565aeffd94e6fe3b461b7e207e",
+      "markupBytes": 4778,
+      "exactMarkupMatch": true
+    }
+  ],
+  "referenceSha256": "e8d1aa1edf47289e098b4dbbe02703f1b68f8e772cde3bccfed2b3a7b8a6868b",
+  "publicV2Import": false,
+  "publicV2FlagBranch": false,
+  "originalAuthority": "Frozen Maintainer public Dashboard page, hash verified against Designer input-manifest before extraction.",
+  "limitations": "SSR markup and byte-level code preservation; browser layout, header/footer and route checks are recorded separately by Designer visual QA."
+}

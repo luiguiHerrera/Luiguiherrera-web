@@ -1,0 +1,16 @@
+[
+  {
+    "path": "AGENTS.md",
+    "sha256": "63f2c50380ed6303237cce215ce27af1d620d094c215e28d1b1538a3c070e3bb",
+    "content": "<!-- BEGIN:nextjs-agent-rules -->\n\n# This is NOT the Next.js you know\n\nThis version has breaking changes \u2014 APIs, conventions, and file structure may all differ from your training data. Read the relevant guide in `node_modules/next/dist/docs/` (resolved from this file's directory; in monorepos the `next` package may not be visible from the repo root) before writing any code. Heed deprecation notices.\n\nThis block is written and re-added by `next dev` \u2014 verify at `node_modules/next/dist/server/lib/generate-agent-files.js`. Removing it from a diff only re-creates the uncommitted change; committing it with your work keeps the tree clean.\n\n<!-- END:nextjs-agent-rules -->\n",
+    "origin": "next dev16.3.1 automatic generation; absent in frozenDesigner input",
+    "restoredToAbsent": true
+  },
+  {
+    "path": "CLAUDE.md",
+    "sha256": "336cc4fbf19beaada7ccf9986414fa91851a8d7a07dfb3ccbe800a69eed0ab49",
+    "content": "@AGENTS.md\n",
+    "origin": "next dev16.3.1 automatic generation; absent in frozenDesigner input",
+    "restoredToAbsent": true
+  }
+]

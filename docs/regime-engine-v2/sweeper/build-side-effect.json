@@ -1,0 +1,7 @@
+{
+  "build_exit_code": 0,
+  "next_env_changed_by_build": true,
+  "original_bytes_restored": true,
+  "restored_sha256": "1862ac4bbbc5192d4bf562161df66ea547ed3e67173100656ab606ae9797db2b",
+  "note": "Restored only the generated build side effect from verified Sweeper entry bytes."
+}

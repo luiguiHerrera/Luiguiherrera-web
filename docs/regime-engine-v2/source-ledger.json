@@ -1,0 +1,131 @@
+{
+  "version": "regime-v2-source-audit/1.0.0",
+  "sources": [
+    {
+      "source_id": "S01",
+      "path": "lib/dashboard/get-dashboard-data.ts",
+      "symbols_or_fields": "getDashboardData",
+      "sha256": "323896dde7f13c42fbac800057d9f1165db4e0b46ec7d0191857b0c23811eec3"
+    },
+    {
+      "source_id": "S02",
+      "path": "lib/dashboard/regime-scoring.ts",
+      "symbols_or_fields": "CURRENT_WEIGHTS; buildRegimeSummary; labelFromScore",
+      "sha256": "4513411deacf42d80bfbd2d8739c3b3c0e1f4cbf2eab91a66ba35ed01ca53f87"
+    },
+    {
+      "source_id": "S03",
+      "path": "lib/dashboard/adapters/sector-etfs.ts",
+      "symbols_or_fields": "buildSectorSnapshot; buildMetrics; sectorEtfs",
+      "sha256": "6f0463e34f2179337186b0f612a9932846c81d27b6f04c84b112aec79d17a423"
+    },
+    {
+      "source_id": "S04",
+      "path": "lib/dashboard/adapters/sector-etfs.ts",
+      "symbols_or_fields": "parseAlphaVantagePrices; fetchSectorHistory",
+      "sha256": "6f0463e34f2179337186b0f612a9932846c81d27b6f04c84b112aec79d17a423"
+    },
+    {
+      "source_id": "S05",
+      "path": "lib/dashboard/adapters/sector-etfs.ts",
+      "symbols_or_fields": "fallbackSectorResult",
+      "sha256": "6f0463e34f2179337186b0f612a9932846c81d27b6f04c84b112aec79d17a423"
+    },
+    {
+      "source_id": "S06",
+      "path": "lib/dashboard/math.ts",
+      "symbols_or_fields": "averageCorrelation; correlation",
+      "sha256": "2361f6f0fcd93fcc0c8a9334ddc542a0d34f95fcb15d3a51a7c6a326da6d4209"
+    },
+    {
+      "source_id": "S07",
+      "path": "lib/dashboard/risk-models.ts",
+      "symbols_or_fields": "buildQuantRiskData",
+      "sha256": "e2d0fcdcbc10df8ed8f655a3b97bed3bc92a2570ef401594951dcb0962713b49"
+    },
+    {
+      "source_id": "S08",
+      "path": "lib/market/breadth-proxies.ts",
+      "symbols_or_fields": "breadthProxyPlan",
+      "sha256": "81acfed00871d261429f93de7966bcec3bcaf9f49dc50e90c8acf46a9599df84"
+    },
+    {
+      "source_id": "S09",
+      "path": "lib/statistical-levels/generated/manifest.json",
+      "symbols_or_fields": "generatedAt; snapshotGeneratedAt; summaries",
+      "sha256": "e0793ecf3c43cc8189131e167351726177e831a97b0b8443205d22dbb443dd4f"
+    },
+    {
+      "source_id": "S10",
+      "path": "scripts/build-statistical-levels.mjs",
+      "symbols_or_fields": "parseCsv; normalizeRow; compactSeries",
+      "sha256": "e8c5c25cb84a6d6cee9c0b1fa6195b37e59ea22a75e9c988379adcc2163a9494"
+    },
+    {
+      "source_id": "S11",
+      "path": "lib/dashboard/adapters/vix.ts",
+      "symbols_or_fields": "getVixData; percentileFor; vixTrendFor",
+      "sha256": "7b805ec460545d9e97d2ff9bdcd671ae200abef9b9c0552378d4b4228fca7c6e"
+    },
+    {
+      "source_id": "S12",
+      "path": "lib/dashboard/adapters/vix.ts",
+      "symbols_or_fields": "fetchFredWithApiKey",
+      "sha256": "7b805ec460545d9e97d2ff9bdcd671ae200abef9b9c0552378d4b4228fca7c6e"
+    },
+    {
+      "source_id": "S13",
+      "path": "lib/dashboard/adapters/vix-term-structure.ts",
+      "symbols_or_fields": "getVixTermStructureData; selectMonthlyVixContracts",
+      "sha256": "ba07816f22643708100be86f149c0463676a5fe5ca963a0ae0cef14f0d562fb7"
+    },
+    {
+      "source_id": "S14",
+      "path": "lib/dashboard/adapters/vix-term-structure.ts",
+      "symbols_or_fields": "buildDataFromContracts; classifySlope",
+      "sha256": "ba07816f22643708100be86f149c0463676a5fe5ca963a0ae0cef14f0d562fb7"
+    },
+    {
+      "source_id": "S15",
+      "path": "lib/dashboard/adapters/btc-etf-flows.ts",
+      "symbols_or_fields": "parsePublicFlowRows",
+      "sha256": "c0eb5cc5be1106b52795ada4ad892a9e9117c11fc9b4519b74c46a88ce8d06a4"
+    },
+    {
+      "source_id": "S16",
+      "path": "lib/dashboard/adapters/btc-etf-flows.ts",
+      "symbols_or_fields": "buildBtcDataFromRows",
+      "sha256": "c0eb5cc5be1106b52795ada4ad892a9e9117c11fc9b4519b74c46a88ce8d06a4"
+    },
+    {
+      "source_id": "S17",
+      "path": "lib/dashboard/adapters/gld-flow-pressure.ts",
+      "symbols_or_fields": "getGldFlowPressure; windowMetrics",
+      "sha256": "83437696f04142521b763b8cfd46398b9b7937ae762788d62995c3bdc6d51c69"
+    },
+    {
+      "source_id": "S18",
+      "path": "lib/portfolio-fragility/engine.ts",
+      "symbols_or_fields": "concentrationMetrics; analyzePortfolio; covarianceStress",
+      "sha256": "0e8eaec00d853644ac8af6494e8239d81ad4aead9f5b32477cd352a03b8f2d7c"
+    },
+    {
+      "source_id": "S19",
+      "path": "lib/reports/snapshots/primer-informe-septiembre-2026/integrity.json",
+      "symbols_or_fields": "asOf; capturedAt; files",
+      "sha256": "3e90386bfde2f76206449d8d84d342d28569609f7609578f746bcdcb0520b7cb"
+    },
+    {
+      "source_id": "S20",
+      "path": "lib/reports/snapshots/primer-informe-septiembre-2026/prices-evidence.json.gz",
+      "symbols_or_fields": "ticker.rows; ticker.url; ticker.sha256",
+      "sha256": "faef2218ab59a796786e90696a93ddf0005de681bf1cf29a33feb57d67e18387"
+    },
+    {
+      "source_id": "S21",
+      "path": "lib/reports/historical-automatic-readings.ts",
+      "symbols_or_fields": "HistoricalAutomaticReadingsSnapshot; frozen historical entries",
+      "sha256": "13db87cb17f43165fb4a6b10c7b0bb140ad5665150ac7f8736d1af679d80da72"
+    }
+  ]
+}

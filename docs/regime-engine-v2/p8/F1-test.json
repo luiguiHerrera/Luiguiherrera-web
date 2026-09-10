@@ -1,0 +1,396 @@
+{
+  "status": "EVALUATED_ONCE_AFTER_SEALS",
+  "validation_sha256": "508abcc4dffc2cf74624cc0a9c3e61953ba31ec2d26fee95f62ff6eb1e59634b",
+  "selected_id_unchanged": "C03",
+  "metrics": {
+    "decisions": 250,
+    "complete": 250,
+    "missing": 0,
+    "occupancy": {
+      "RISK_ON_BROAD": 45,
+      "RISK_ON_SELECTIVE": 69,
+      "TRANSITION": 126,
+      "DEFENSIVE": 10,
+      "STRESS": 0
+    },
+    "occupancy_fraction_of_classifiable": {
+      "RISK_ON_BROAD": 0.18,
+      "RISK_ON_SELECTIVE": 0.276,
+      "TRANSITION": 0.504,
+      "DEFENSIVE": 0.04,
+      "STRESS": 0.0
+    },
+    "max_single_regime_occupancy": 0.504,
+    "adjacent_eligible_pairs": 249,
+    "transitions": 72,
+    "turnover": 0.2891566265060241,
+    "flip_flop_count": 35,
+    "flip_flop_per_adjacent_pair": 0.14056224899598393,
+    "median_run_sessions": 2,
+    "runs": 73,
+    "censored_runs": 2,
+    "median_run_by_state": {
+      "RISK_ON_BROAD": 3,
+      "RISK_ON_SELECTIVE": 1.5,
+      "TRANSITION": 3.0,
+      "DEFENSIVE": 1.5,
+      "STRESS": null
+    },
+    "historically_observed": [
+      "RISK_ON_BROAD",
+      "RISK_ON_SELECTIVE",
+      "TRANSITION",
+      "DEFENSIVE"
+    ],
+    "historically_absent_not_raw_unreachable": [
+      "STRESS"
+    ],
+    "pillar_occupancy": {
+      "participation": {
+        "ADVERSE": 43,
+        "MIXED": 144,
+        "FAVORABLE": 63
+      },
+      "leadership": {
+        "ADVERSE": 14,
+        "MIXED": 39,
+        "FAVORABLE": 197
+      },
+      "equity": {
+        "ADVERSE": 14,
+        "MIXED": 187,
+        "FAVORABLE": 49
+      },
+      "volatility": {
+        "WATCH": 55,
+        "BENIGN": 192,
+        "ADVERSE": 3
+      },
+      "fragility": {
+        "HIGH": 21,
+        "LOW": 208,
+        "RISING": 21
+      }
+    }
+  },
+  "sensitivity": {
+    "median_disagreement": 0.004,
+    "worst_disagreement": 0.112,
+    "perturbations": [
+      {
+        "parameter": "k_weak",
+        "direction": -1,
+        "value": 2,
+        "comparison_decisions": 250,
+        "changed_regime_count": 8,
+        "disagreement": 0.032
+      },
+      {
+        "parameter": "k_weak",
+        "direction": 1,
+        "value": 4,
+        "comparison_decisions": 250,
+        "changed_regime_count": 7,
+        "disagreement": 0.028
+      },
+      {
+        "parameter": "k_broad",
+        "direction": -1,
+        "value": 7,
+        "comparison_decisions": 250,
+        "changed_regime_count": 14,
+        "disagreement": 0.056
+      },
+      {
+        "parameter": "k_broad",
+        "direction": 1,
+        "value": 9,
+        "comparison_decisions": 250,
+        "changed_regime_count": 19,
+        "disagreement": 0.076
+      },
+      {
+        "parameter": "leadership_gap",
+        "direction": -1,
+        "value": 0.9,
+        "comparison_decisions": 250,
+        "changed_regime_count": 2,
+        "disagreement": 0.008
+      },
+      {
+        "parameter": "leadership_gap",
+        "direction": 1,
+        "value": 1.1,
+        "comparison_decisions": 250,
+        "changed_regime_count": 3,
+        "disagreement": 0.012
+      },
+      {
+        "parameter": "v_watch",
+        "direction": -1,
+        "value": 18.0,
+        "comparison_decisions": 250,
+        "changed_regime_count": 27,
+        "disagreement": 0.108
+      },
+      {
+        "parameter": "v_watch",
+        "direction": 1,
+        "value": 22.0,
+        "comparison_decisions": 250,
+        "changed_regime_count": 10,
+        "disagreement": 0.04
+      },
+      {
+        "parameter": "v_adverse",
+        "direction": -1,
+        "value": 22.5,
+        "comparison_decisions": 250,
+        "changed_regime_count": 0,
+        "disagreement": 0.0
+      },
+      {
+        "parameter": "v_adverse",
+        "direction": 1,
+        "value": 27.500000000000004,
+        "comparison_decisions": 250,
+        "changed_regime_count": 0,
+        "disagreement": 0.0
+      },
+      {
+        "parameter": "v_stress",
+        "direction": -1,
+        "value": 31.5,
+        "comparison_decisions": 250,
+        "changed_regime_count": 0,
+        "disagreement": 0.0
+      },
+      {
+        "parameter": "v_stress",
+        "direction": 1,
+        "value": 38.5,
+        "comparison_decisions": 250,
+        "changed_regime_count": 0,
+        "disagreement": 0.0
+      },
+      {
+        "parameter": "jump_1",
+        "direction": -1,
+        "value": 9.0,
+        "comparison_decisions": 250,
+        "changed_regime_count": 1,
+        "disagreement": 0.004
+      },
+      {
+        "parameter": "jump_1",
+        "direction": 1,
+        "value": 11.0,
+        "comparison_decisions": 250,
+        "changed_regime_count": 1,
+        "disagreement": 0.004
+      },
+      {
+        "parameter": "jump_5",
+        "direction": -1,
+        "value": 18.0,
+        "comparison_decisions": 250,
+        "changed_regime_count": 1,
+        "disagreement": 0.004
+      },
+      {
+        "parameter": "jump_5",
+        "direction": 1,
+        "value": 22.0,
+        "comparison_decisions": 250,
+        "changed_regime_count": 0,
+        "disagreement": 0.0
+      },
+      {
+        "parameter": "curve_flat",
+        "direction": -1,
+        "value": 1.8,
+        "comparison_decisions": 250,
+        "changed_regime_count": 0,
+        "disagreement": 0.0
+      },
+      {
+        "parameter": "curve_flat",
+        "direction": 1,
+        "value": 2.2,
+        "comparison_decisions": 250,
+        "changed_regime_count": 1,
+        "disagreement": 0.004
+      },
+      {
+        "parameter": "curve_adverse",
+        "direction": -1,
+        "value": 4.5,
+        "comparison_decisions": 250,
+        "changed_regime_count": 0,
+        "disagreement": 0.0
+      },
+      {
+        "parameter": "curve_adverse",
+        "direction": 1,
+        "value": 5.5,
+        "comparison_decisions": 250,
+        "changed_regime_count": 0,
+        "disagreement": 0.0
+      },
+      {
+        "parameter": "rho_floor",
+        "direction": -1,
+        "value": 0.36000000000000004,
+        "comparison_decisions": 250,
+        "changed_regime_count": 0,
+        "disagreement": 0.0
+      },
+      {
+        "parameter": "rho_floor",
+        "direction": 1,
+        "value": 0.44000000000000006,
+        "comparison_decisions": 250,
+        "changed_regime_count": 0,
+        "disagreement": 0.0
+      },
+      {
+        "parameter": "rho_high",
+        "direction": -1,
+        "value": 0.5850000000000001,
+        "comparison_decisions": 250,
+        "changed_regime_count": 28,
+        "disagreement": 0.112
+      },
+      {
+        "parameter": "rho_high",
+        "direction": 1,
+        "value": 0.7150000000000001,
+        "comparison_decisions": 250,
+        "changed_regime_count": 12,
+        "disagreement": 0.048
+      },
+      {
+        "parameter": "delta_rising",
+        "direction": -1,
+        "value": 0.09000000000000001,
+        "comparison_decisions": 250,
+        "changed_regime_count": 3,
+        "disagreement": 0.012
+      },
+      {
+        "parameter": "delta_rising",
+        "direction": 1,
+        "value": 0.11000000000000001,
+        "comparison_decisions": 250,
+        "changed_regime_count": 6,
+        "disagreement": 0.024
+      }
+    ]
+  },
+  "failures": [],
+  "regime_differentiation": {
+    "RISK_ON_BROAD": {
+      "n": 45,
+      "median_trailing_realized_vol_21": 11.234479412653515,
+      "median_vix": 13.65,
+      "role": "POST_SELECTION_ENDOGENOUS_DIAGNOSTIC_NOT_OBJECTIVE"
+    },
+    "RISK_ON_SELECTIVE": {
+      "n": 69,
+      "median_trailing_realized_vol_21": 12.344566683353381,
+      "median_vix": 16.81,
+      "role": "POST_SELECTION_ENDOGENOUS_DIAGNOSTIC_NOT_OBJECTIVE"
+    },
+    "TRANSITION": {
+      "n": 126,
+      "median_trailing_realized_vol_21": 12.657832153432704,
+      "median_vix": 17.575,
+      "role": "POST_SELECTION_ENDOGENOUS_DIAGNOSTIC_NOT_OBJECTIVE"
+    },
+    "DEFENSIVE": {
+      "n": 10,
+      "median_trailing_realized_vol_21": 14.713464319753042,
+      "median_vix": 22.310000000000002,
+      "role": "POST_SELECTION_ENDOGENOUS_DIAGNOSTIC_NOT_OBJECTIVE"
+    },
+    "STRESS": {
+      "n": 0,
+      "median_trailing_realized_vol_21": null,
+      "median_vix": null,
+      "role": "POST_SELECTION_ENDOGENOUS_DIAGNOSTIC_NOT_OBJECTIVE"
+    }
+  },
+  "annual_stability": {
+    "2023": {
+      "decisions": 250,
+      "complete": 250,
+      "missing": 0,
+      "occupancy": {
+        "RISK_ON_BROAD": 45,
+        "RISK_ON_SELECTIVE": 69,
+        "TRANSITION": 126,
+        "DEFENSIVE": 10,
+        "STRESS": 0
+      },
+      "occupancy_fraction_of_classifiable": {
+        "RISK_ON_BROAD": 0.18,
+        "RISK_ON_SELECTIVE": 0.276,
+        "TRANSITION": 0.504,
+        "DEFENSIVE": 0.04,
+        "STRESS": 0.0
+      },
+      "max_single_regime_occupancy": 0.504,
+      "adjacent_eligible_pairs": 249,
+      "transitions": 72,
+      "turnover": 0.2891566265060241,
+      "flip_flop_count": 35,
+      "flip_flop_per_adjacent_pair": 0.14056224899598393,
+      "median_run_sessions": 2,
+      "runs": 73,
+      "censored_runs": 2,
+      "median_run_by_state": {
+        "RISK_ON_BROAD": 3,
+        "RISK_ON_SELECTIVE": 1.5,
+        "TRANSITION": 3.0,
+        "DEFENSIVE": 1.5,
+        "STRESS": null
+      },
+      "historically_observed": [
+        "RISK_ON_BROAD",
+        "RISK_ON_SELECTIVE",
+        "TRANSITION",
+        "DEFENSIVE"
+      ],
+      "historically_absent_not_raw_unreachable": [
+        "STRESS"
+      ],
+      "pillar_occupancy": {
+        "participation": {
+          "ADVERSE": 43,
+          "MIXED": 144,
+          "FAVORABLE": 63
+        },
+        "leadership": {
+          "ADVERSE": 14,
+          "MIXED": 39,
+          "FAVORABLE": 197
+        },
+        "equity": {
+          "ADVERSE": 14,
+          "MIXED": 187,
+          "FAVORABLE": 49
+        },
+        "volatility": {
+          "WATCH": 55,
+          "BENIGN": 192,
+          "ADVERSE": 3
+        },
+        "fragility": {
+          "HIGH": 21,
+          "LOW": 208,
+          "RISING": 21
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,3290 @@
+{
+  "schemaVersion": "regime-v2-copy-contract/1.0.0",
+  "status": "DESIGN_CANDIDATE_ONLY",
+  "authority": "EXACT_REGIME_OUTPUT",
+  "runtime": "buildRegimeV2View(output: RegimeOutput, locale: es | en)",
+  "implementation": "lib/dashboard/regime-v2-presentation.ts",
+  "tests": "lib/dashboard/regime-v2-presentation.test.ts",
+  "inputAuthority": "docs/regime-engine-v2/designer/input-manifest.json",
+  "architecture": "EVIDENCE_STATE_ENGINE",
+  "parameterSet": "C03",
+  "parameters": {
+    "k_weak": 3,
+    "k_broad": 8,
+    "leadership_gap": 1,
+    "v_watch": 20,
+    "v_adverse": 25,
+    "v_stress": 35,
+    "jump_1": 10,
+    "jump_5": 20,
+    "curve_flat": 2,
+    "curve_adverse": 5,
+    "rho_floor": 0.4,
+    "rho_high": 0.65,
+    "delta_rising": 0.1
+  },
+  "ruleVersion": "regime-v2-rules/1.0.0-symbolic",
+  "methodologyChanged": false,
+  "runtimeGeneration": "DETERMINISTIC_LOCAL_PURE_FUNCTION",
+  "llmAtRuntime": false,
+  "vocabulary": {
+    "economic": {
+      "RISK_ON_BROAD": "RISK-ON AMPLIO",
+      "RISK_ON_SELECTIVE": "RISK-ON SELECTIVO",
+      "TRANSITION": "TRANSICIÓN",
+      "DEFENSIVE": "DEFENSIVO",
+      "STRESS": "STRESS"
+    },
+    "technical": {
+      "INCOMPLETE": {
+        "es": "LECTURA INCOMPLETA",
+        "en": "INCOMPLETE READING",
+        "economicRegime": false
+      }
+    }
+  },
+  "invariantFields": [
+    "regime",
+    "systemState",
+    "pillarStates",
+    "concordance",
+    "uncertainty",
+    "dataQuality",
+    "asOf",
+    "observationDate",
+    "replayClass",
+    "ruleId",
+    "versions",
+    "sourceStatus"
+  ],
+  "secondarySignal": {
+    "primary": "CONCORDANCE",
+    "display": "HIGH/MEDIUM/LOW translated without numeric mapping",
+    "percentage": false,
+    "interpretation": "Directional agreement of the two actual dependency contributions. HIGH is possible in an adverse market.",
+    "uncertainty": "Evidence/details only; plausible regimes translated exactly.",
+    "quality": "COMPLETE is quiet; PARTIAL and INSUFFICIENT remain prominent."
+  },
+  "selection": {
+    "methodology": "Translations of existing pillar states and R00–R06. No state is recomputed by this view.",
+    "favorableStates": {
+      "participation": "FAVORABLE",
+      "leadership": "FAVORABLE",
+      "volatility": "BENIGN",
+      "fragility": "LOW"
+    },
+    "supports": {
+      "maximum": 3,
+      "order": [
+        "participation",
+        "leadership",
+        "volatility",
+        "fragility"
+      ],
+      "filling": "NONE"
+    },
+    "brakes": {
+      "maximum": 3,
+      "orderDefault": [
+        "participation",
+        "leadership",
+        "volatility",
+        "fragility"
+      ],
+      "orderForStressOrR03": [
+        "volatility",
+        "fragility",
+        "participation",
+        "leadership"
+      ],
+      "eligibility": "Available pillar translations outside the listed favorable state. UNAVAILABLE is never a market brake.",
+      "filling": "NONE"
+    },
+    "stress": "The already adjudicated STRESS pillar chooses level-trigger wording if actual VIX meets canonical v_stress using the frozen numeric tolerance; otherwise it describes the existing joint branch. This does not adjudicate, smooth or suppress STRESS.",
+    "incomplete": "Always a technical title with no economic fallback, support list or brake list. Pending source conditions and core missing reasons retain their true codes in details.",
+    "watch": {
+      "maximum": 2,
+      "economic": "Names current canonical conditions whose change requires re-evaluation. No outcome, return, direction forecast or trade instruction.",
+      "broad": "Participation/leadership remaining favorable.",
+      "selective": "Participation becoming favorable with other pillars unchanged.",
+      "stress": "Whether the existing STRESS condition still holds.",
+      "defensive": "The actual R02 or R03 participating pillar states.",
+      "transition": "Changes in participation/leadership and volatility/fragility combinations, without implying those pillars are currently unaligned.",
+      "incomplete": "Restore identified core source conditions/windows. Source restoration is not portrayed as a market event."
+    },
+    "stressHeadings": {
+      "es": [
+        "Evidencia favorable",
+        "Evidencia adversa"
+      ],
+      "en": [
+        "Favorable evidence",
+        "Adverse evidence"
+      ],
+      "appliesWhen": "Presented economic state is STRESS",
+      "reason": "Avoid implying that favorable equity evidence activates STRESS or that the actual adverse volatility trigger holds STRESS back. Underlying claims, selection, attribution and R01 remain unchanged."
+    }
+  },
+  "attribution": {
+    "claimFields": [
+      "pillarIds",
+      "featureIds",
+      "sourceKeys",
+      "evidenceHref",
+      "ruleId"
+    ],
+    "measurementAnchor": "#v2-measurement-{featureId}",
+    "pillarAnchor": "#v2-pillar-{id}",
+    "lineage": "Equity claims cite all 11 actual sector ETF parents; VIX/VX/BTC/GLD cite their actual source-status keys. No SPY/RSP/IWM proxy substitution.",
+    "measurementFields": [
+      "rawValue",
+      "value",
+      "unit",
+      "status",
+      "reasons",
+      "parents",
+      "replayClass",
+      "asOf",
+      "observationDate",
+      "sources"
+    ],
+    "sourceFields": [
+      "sourceId",
+      "sourceVersion",
+      "vintageHash",
+      "observationDate",
+      "sourcePublishedAt",
+      "availableAt",
+      "capturedAt",
+      "replayClass",
+      "availabilityCertainty"
+    ],
+    "nulls": "Remain missing, including unknown publication timestamps. Display formatting never creates zero from null.",
+    "numbers": "Actual measurements may be rounded for readability; raw values remain exact in the view. Measurement percentages are units, not confidence/probability."
+  },
+  "prohibitions": [
+    "no score",
+    "no confidence percentages",
+    "no uncalibrated probability",
+    "no prescriptive trade copy",
+    "no missing→STRESS",
+    "no missing→TRANSITION",
+    "no sixth economic regime",
+    "no H1/challenger UI",
+    "no persistence adjudication",
+    "no satellite votes",
+    "no R2→point-in-time claim",
+    "no fixture→live claim"
+  ],
+  "satelliteRole": {
+    "role": "CONTEXTUAL_ONLY",
+    "votes": 0,
+    "separate": true
+  },
+  "displayLimitations": {
+    "liveCompleteV2Capture": false,
+    "historical": "R2 reconstruction; no point-in-time OOS since 2019",
+    "fixtures": "Design/test scenarios with synthetic provenance, not a current market reading."
+  },
+  "repairedDraftCopy": [
+    {
+      "finding_id": "D-COPY-ALIGNMENT-001",
+      "severity": "LOW",
+      "component": "transition watch copy",
+      "description": "The initial draft implied participation and leadership were not currently aligned in every TRANSITION scenario.",
+      "originalEvidence": "Si participación y liderazgo pasan a confirmar la misma dirección.",
+      "observedFixture": "transition-watch has favorable participation and leadership with WATCH volatility; the original phrasing therefore implied an absent condition.",
+      "repair": "Si cambia la combinación de participación y liderazgo. / Whether the participation and leadership combination changes.",
+      "engine_impact": "NONE",
+      "public_default_impact": "NONE",
+      "status": "CLOSED",
+      "verification": "A regression test verifies that transition-watch has favorable participation and leadership, and that ES/EN watch copy does not imply they have yet to confirm the same direction."
+    },
+    {
+      "finding_id": "D-COPY-STRESS-002",
+      "severity": "LOW",
+      "component": "STRESS hero section labels",
+      "description": "The original English headings WHAT SUPPORTS IT / WHAT HOLDS IT BACK could reverse the perceived role of the evidence when the regime title was STRESS: favorable equity observations appeared to support STRESS, while its actual VIX trigger appeared to hold STRESS back.",
+      "evidence": {
+        "original_labels_en": [
+          "What supports it",
+          "What holds it back"
+        ],
+        "original_labels_es": [
+          "Qué impulsa",
+          "Qué frena"
+        ],
+        "observed_trigger": "The VIX level activates STRESS.",
+        "original_screenshots": [
+          {
+            "path": "docs/regime-engine-v2/designer/screenshots/initial/desktop-en-stress-before-labels.png",
+            "sha256": "a65eafc258b70cec6695ce0873df8349d0da4d71a80422e4373ab844f5218676"
+          },
+          {
+            "path": "docs/regime-engine-v2/designer/screenshots/initial/mobile-en-stress-before-labels.png",
+            "sha256": "9befd0becb72b3681297d0147c4f7aac504ad467e82d9a07d69757de4720203c"
+          }
+        ],
+        "repaired_screenshots": [
+          {
+            "path": "docs/regime-engine-v2/designer/screenshots/desktop-es-stress-absolute.png",
+            "sha256": "5d60b9b865db413b661ce6ad3feb32d4bf2243d092b1bc2825ef6e379b107cfa"
+          },
+          {
+            "path": "docs/regime-engine-v2/designer/screenshots/desktop-en-stress-absolute.png",
+            "sha256": "24eaf0cb2ab00c2701e51c5f9bccc9567187499c7eada8389d8aeb806a277ee5"
+          },
+          {
+            "path": "docs/regime-engine-v2/designer/screenshots/mobile-es-stress-absolute.png",
+            "sha256": "c257f198e3f98d5b871d2f7083277d90765352a789b60897dd9458d0cd98e803"
+          },
+          {
+            "path": "docs/regime-engine-v2/designer/screenshots/mobile-en-stress-absolute.png",
+            "sha256": "4594114b482feafb2364171350e743e2c3e000d202160e1630ccfc87ef465e78"
+          }
+        ]
+      },
+      "repair": {
+        "condition": "state === STRESS",
+        "labels_es": [
+          "Evidencia favorable",
+          "Evidencia adversa"
+        ],
+        "labels_en": [
+          "Favorable evidence",
+          "Adverse evidence"
+        ],
+        "claimsChanged": false,
+        "selectionChanged": false,
+        "outputChanged": false
+      },
+      "engine_impact": "NONE",
+      "public_default_impact": "NONE",
+      "status": "CLOSED",
+      "verification": "25/25 presentation tests PASS, including both absolute and joint STRESS in ES/EN. Final regenerated desktop ES/EN, mobile ES/EN and grayscale STRESS screenshots inspected directly: favorable/adverse headings are visible, original claims unchanged, real VIX trigger remains explicit. Browser matrix24/24 PASS."
+    }
+  ],
+  "testEvidence": {
+    "command": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --experimental-strip-types --test lib/dashboard/regime-v2-presentation.test.ts",
+    "result": "25/25 PASS",
+    "fixtureCount": 12,
+    "locales": [
+      "es",
+      "en"
+    ]
+  },
+  "examples": [
+    {
+      "id": "broad-complete",
+      "fixtureSha256": "a4d33bcec41d2f6a20107495963080a1a6896ca8c346008e40204899d2ee3bb9",
+      "outputSha256": "e8ea1bb524535fca78dbde16e61838ab69bd8e0dd0e871fe0869d2bffdcc642f",
+      "es": {
+        "title": "RISK-ON AMPLIO",
+        "interpretation": "Participación amplia y liderazgo favorable, con volatilidad benigna y fragilidad baja.",
+        "concordance": {
+          "code": "HIGH",
+          "label": "Concordancia",
+          "value": "Alta",
+          "description": "Acuerdo direccional entre las dos familias de evidencia del motor; no es una probabilidad."
+        },
+        "uncertainty": {
+          "code": "LOW",
+          "label": "Incertidumbre",
+          "value": "Baja",
+          "description": "Diversidad de regímenes plausibles al expandir los estados intermedios; no es probabilidad de caída.",
+          "plausibleRegimes": [
+            "RISK-ON AMPLIO"
+          ]
+        },
+        "dataQuality": {
+          "code": "COMPLETE",
+          "label": "Calidad de datos",
+          "value": "Completa",
+          "prominent": false,
+          "description": "Datos requeridos y opcionales del perfil disponibles; no representa confianza estadística."
+        },
+        "supports": [
+          {
+            "id": "participation",
+            "text": "Avances extendidos a 5 y 21 sesiones.",
+            "pillarIds": [
+              "participation"
+            ],
+            "featureIds": [
+              "eq_positive_5",
+              "eq_positive_21"
+            ],
+            "sourceKeys": [
+              "XLK",
+              "XLY",
+              "XLC",
+              "XLF",
+              "XLE",
+              "XLI",
+              "XLB",
+              "XLV",
+              "XLP",
+              "XLU",
+              "XLRE"
+            ],
+            "evidenceHref": "#v2-measurement-eq_positive_5",
+            "ruleId": "R04"
+          },
+          {
+            "id": "leadership",
+            "text": "Crecimiento o cíclicos lideran frente a defensivos.",
+            "pillarIds": [
+              "participation"
+            ],
+            "featureIds": [
+              "eq_leadership_gap"
+            ],
+            "sourceKeys": [
+              "XLK",
+              "XLY",
+              "XLC",
+              "XLF",
+              "XLE",
+              "XLI",
+              "XLB",
+              "XLV",
+              "XLP",
+              "XLU",
+              "XLRE"
+            ],
+            "evidenceHref": "#v2-measurement-eq_leadership_gap",
+            "ruleId": "R04"
+          },
+          {
+            "id": "volatility",
+            "text": "VIX y curva sin alerta del motor.",
+            "pillarIds": [
+              "volatility"
+            ],
+            "featureIds": [
+              "vix_level",
+              "vix_momentum_1",
+              "vix_momentum_5",
+              "vx_slope_12"
+            ],
+            "sourceKeys": [
+              "VIX",
+              "VX"
+            ],
+            "evidenceHref": "#v2-measurement-vix_level",
+            "ruleId": "R04"
+          }
+        ],
+        "brakes": [],
+        "watch": [
+          {
+            "id": "watch-breadth",
+            "text": "Si participación o liderazgo dejan de ser favorables.",
+            "pillarIds": [
+              "participation"
+            ],
+            "featureIds": [
+              "eq_positive_5",
+              "eq_positive_21",
+              "eq_leadership_gap"
+            ],
+            "sourceKeys": [
+              "XLK",
+              "XLY",
+              "XLC",
+              "XLF",
+              "XLE",
+              "XLI",
+              "XLB",
+              "XLV",
+              "XLP",
+              "XLU",
+              "XLRE"
+            ],
+            "evidenceHref": "#v2-measurement-eq_positive_5",
+            "ruleId": "R04"
+          }
+        ]
+      },
+      "en": {
+        "title": "BROAD RISK-ON",
+        "interpretation": "Broad participation and favorable leadership, with benign volatility and low fragility.",
+        "concordance": {
+          "code": "HIGH",
+          "label": "Concordance",
+          "value": "High",
+          "description": "Directional agreement between the engine’s two evidence families; it is not a probability."
+        },
+        "uncertainty": {
+          "code": "LOW",
+          "label": "Uncertainty",
+          "value": "Low",
+          "description": "Diversity of plausible regimes when intermediate states are expanded; it is not a probability of decline.",
+          "plausibleRegimes": [
+            "BROAD RISK-ON"
+          ]
+        },
+        "dataQuality": {
+          "code": "COMPLETE",
+          "label": "Data quality",
+          "value": "Complete",
+          "prominent": false,
+          "description": "Required and selected optional data is available; this does not represent statistical confidence."
+        },
+        "supports": [
+          {
+            "id": "participation",
+            "text": "Gains extend across sectors over 5 and 21 sessions.",
+            "pillarIds": [
+              "participation"
+            ],
+            "featureIds": [
+              "eq_positive_5",
+              "eq_positive_21"
+            ],
+            "sourceKeys": [
+              "XLK",
+              "XLY",
+              "XLC",
+              "XLF",
+              "XLE",
+              "XLI",
+              "XLB",
+              "XLV",
+              "XLP",
+              "XLU",
+              "XLRE"
+            ],
+            "evidenceHref": "#v2-measurement-eq_positive_5",
+            "ruleId": "R04"
+          },
+          {
+            "id": "leadership",
+            "text": "Growth or cyclicals lead defensives.",
+            "pillarIds": [
+              "participation"
+            ],
+            "featureIds": [
+              "eq_leadership_gap"
+            ],
+            "sourceKeys": [
+              "XLK",
+              "XLY",
+              "XLC",
+              "XLF",
+              "XLE",
+              "XLI",
+              "XLB",
+              "XLV",
+              "XLP",
+              "XLU",
+              "XLRE"
+            ],
+            "evidenceHref": "#v2-measurement-eq_leadership_gap",
+            "ruleId": "R04"
+          },
+          {
+            "id": "volatility",
+            "text": "VIX and the curve trigger no engine alert.",
+            "pillarIds": [
+              "volatility"
+            ],
+            "featureIds": [
+              "vix_level",
+              "vix_momentum_1",
+              "vix_momentum_5",
+              "vx_slope_12"
+            ],
+            "sourceKeys": [
+              "VIX",
+              "VX"
+            ],
+            "evidenceHref": "#v2-measurement-vix_level",
+            "ruleId": "R04"
+          }
+        ],
+        "brakes": [],
+        "watch": [
+          {
+            "id": "watch-breadth",
+            "text": "Whether participation or leadership ceases to be favorable.",
+            "pillarIds": [
+              "participation"
+            ],
+            "featureIds": [
+              "eq_positive_5",
+              "eq_positive_21",
+              "eq_leadership_gap"
+            ],
+            "sourceKeys": [
+              "XLK",
+              "XLY",
+              "XLC",
+              "XLF",
+              "XLE",
+              "XLI",
+              "XLB",
+              "XLV",
+              "XLP",
+              "XLU",
+              "XLRE"
+            ],
+            "evidenceHref": "#v2-measurement-eq_positive_5",
+            "ruleId": "R04"
+          }
+        ]
+      }
+    },
+    {
+      "id": "defensive-complete",
+      "fixtureSha256": "356f1f76419ee8f8780da4f8fdfa41ff88b778db06493fe52ab3e61cc91a2c7c",
+      "outputSha256": "f924cf0b4db6090314ebc99e829aaa65872469f090d61d7740fe0404af12f880",
+      "es": {
+        "title": "DEFENSIVO",
+        "interpretation": "El bloque de participación y liderazgo es adverso, con volatilidad en vigilancia o adversa.",
+        "concordance": {
+          "code": "HIGH",
+          "label": "Concordancia",
+          "value": "Alta",
+          "description": "Acuerdo direccional entre las dos familias de evidencia del motor; no es una probabilidad."
+        },
+        "uncertainty": {
+          "code": "LOW",
+          "label": "Incertidumbre",
+          "value": "Baja",
+          "description": "Diversidad de regímenes plausibles al expandir los estados intermedios; no es probabilidad de caída.",
+          "plausibleRegimes": [
+            "DEFENSIVO"
+          ]
+        },
+        "dataQuality": {
+          "code": "COMPLETE",
+          "label": "Calidad de datos",
+          "value": "Completa",
+          "prominent": false,
+          "description": "Datos requeridos y opcionales del perfil disponibles; no representa confianza estadística."
+        },
+        "supports": [],
+        "brakes": [
+          {
+            "id": "participation",
+            "text": "Pocos sectores avanzan en ambas ventanas.",
+            "pillarIds": [
+              "participation"
+            ],
+            "featureIds": [
+              "eq_positive_5",
+              "eq_positive_21"
+            ],
+            "sourceKeys": [
+              "XLK",
+              "XLY",
+              "XLC",
+              "XLF",
+              "XLE",
+              "XLI",
+              "XLB",
+              "XLV",
+              "XLP",
+              "XLU",
+              "XLRE"
+            ],
+            "evidenceHref": "#v2-measurement-eq_positive_5",
+            "ruleId": "R02"
+          },
+          {
+            "id": "leadership",
+            "text": "Los defensivos superan a crecimiento y cíclicos.",
+            "pillarIds": [
+              "participation"
+            ],
+            "featureIds": [
+              "eq_leadership_gap"
+            ],
+            "sourceKeys": [
+              "XLK",
+              "XLY",
+              "XLC",
+              "XLF",
+              "XLE",
+              "XLI",
+              "XLB",
+              "XLV",
+              "XLP",
+              "XLU",
+              "XLRE"
+            ],
+            "evidenceHref": "#v2-measurement-eq_leadership_gap",
+            "ruleId": "R02"
+          },
+          {
+            "id": "volatility",
+            "text": "El nivel del VIX o la curva de futuros es adverso.",
+            "pillarIds": [
+              "volatility"
+            ],
+            "featureIds": [
+              "vix_level",
+              "vix_momentum_1",
+              "vix_momentum_5",
+              "vx_slope_12"
+            ],
+            "sourceKeys": [
+              "VIX",
+              "VX"
+            ],
+            "evidenceHref": "#v2-measurement-vix_level",
+            "ruleId": "R02"
+          }
+        ],
+        "watch": [
+          {
+            "id": "watch-defensive",
+            "text": "Si cambia el bloque adverso de participación y liderazgo o la volatilidad en vigilancia/adversa.",
+            "pillarIds": [
+              "participation",
+              "volatility"
+            ],
+            "featureIds": [
+              "eq_positive_5",
+              "eq_positive_21",
+              "eq_leadership_gap",
+              "vix_level",
+              "vix_momentum_1",
+              "vix_momentum_5",
+              "vx_slope_12"
+            ],
+            "sourceKeys": [
+              "XLK",
+              "XLY",
+              "XLC",
+              "XLF",
+              "XLE",
+              "XLI",
+              "XLB",
+              "XLV",
+              "XLP",
+              "XLU",
+              "XLRE",
+              "VIX",
+              "VX"
+            ],
+            "evidenceHref": "#v2-measurement-eq_positive_5",
+            "ruleId": "R02"
+          }
+        ]
+      },
+      "en": {
+        "title": "DEFENSIVE",
+        "interpretation": "The participation and leadership block is adverse, with watch or adverse volatility.",
+        "concordance": {
+          "code": "HIGH",
+          "label": "Concordance",
+          "value": "High",
+          "description": "Directional agreement between the engine’s two evidence families; it is not a probability."
+        },
+        "uncertainty": {
+          "code": "LOW",
+          "label": "Uncertainty",
+          "value": "Low",
+          "description": "Diversity of plausible regimes when intermediate states are expanded; it is not a probability of decline.",
+          "plausibleRegimes": [
+            "DEFENSIVE"
+          ]
+        },
+        "dataQuality": {
+          "code": "COMPLETE",
+          "label": "Data quality",
+          "value": "Complete",
+          "prominent": false,
+          "description": "Required and selected optional data is available; this does not represent statistical confidence."
+        },
+        "supports": [],
+        "brakes": [
+          {
+            "id": "participation",
+            "text": "Few sectors advance in either window.",
+            "pillarIds": [
+              "participation"
+            ],
+            "featureIds": [
+              "eq_positive_5",
+              "eq_positive_21"
+            ],
+            "sourceKeys": [
+              "XLK",
+              "XLY",
+              "XLC",
+              "XLF",
+              "XLE",
+              "XLI",
+              "XLB",
+              "XLV",
+              "XLP",
+              "XLU",
+              "XLRE"
+            ],
+            "evidenceHref": "#v2-measurement-eq_positive_5",
+            "ruleId": "R02"
+          },
+          {
+            "id": "leadership",
+            "text": "Defensives lead both growth and cyclicals.",
+            "pillarIds": [
+              "participation"
+            ],
+            "featureIds": [
+              "eq_leadership_gap"
+            ],
+            "sourceKeys": [
+              "XLK",
+              "XLY",
+              "XLC",
+              "XLF",
+              "XLE",
+              "XLI",
+              "XLB",
+              "XLV",
+              "XLP",
+              "XLU",
+              "XLRE"
+            ],
+            "evidenceHref": "#v2-measurement-eq_leadership_gap",
+            "ruleId": "R02"
+          },
+          {
+            "id": "volatility",
+            "text": "The VIX level or futures curve is adverse.",
+            "pillarIds": [
+              "volatility"
+            ],
+            "featureIds": [
+              "vix_level",
+              "vix_momentum_1",
+              "vix_momentum_5",
+              "vx_slope_12"
+            ],
+            "sourceKeys": [
+              "VIX",
+              "VX"
+            ],
+            "evidenceHref": "#v2-measurement-vix_level",
+            "ruleId": "R02"
+          }
+        ],
+        "watch": [
+          {
+            "id": "watch-defensive",
+            "text": "Whether the adverse participation and leadership block or watch/adverse volatility changes.",
+            "pillarIds": [
+              "participation",
+              "volatility"
+            ],
+            "featureIds": [
+              "eq_positive_5",
+              "eq_positive_21",
+              "eq_leadership_gap",
+              "vix_level",
+              "vix_momentum_1",
+              "vix_momentum_5",
+              "vx_slope_12"
+            ],
+            "sourceKeys": [
+              "XLK",
+              "XLY",
+              "XLC",
+              "XLF",
+              "XLE",
+              "XLI",
+              "XLB",
+              "XLV",
+              "XLP",
+              "XLU",
+              "XLRE",
+              "VIX",
+              "VX"
+            ],
+            "evidenceHref": "#v2-measurement-eq_positive_5",
+            "ruleId": "R02"
+          }
+        ]
+      }
+    },
+    {
+      "id": "incomplete-missing-core",
+      "fixtureSha256": "1be049a46b71deddd941d044139fd64cd58222ade5094000ae728d0848e9db0a",
+      "outputSha256": "7a5181ac3acea8b39b670dca66309bee06101f8b22f838f26405a4cf91525cc0",
+      "es": {
+        "title": "LECTURA INCOMPLETA",
+        "interpretation": "Falta evidencia suficiente para adjudicar un régimen con las reglas V2.",
+        "concordance": {
+          "code": null,
+          "label": "Concordancia",
+          "value": "No disponible",
+          "description": "Acuerdo direccional entre las dos familias de evidencia del motor; no es una probabilidad."
+        },
+        "uncertainty": {
+          "code": null,
+          "label": "Incertidumbre",
+          "value": "No disponible",
+          "description": "Diversidad de regímenes plausibles al expandir los estados intermedios; no es probabilidad de caída.",
+          "plausibleRegimes": []
+        },
+        "dataQuality": {
+          "code": "INSUFFICIENT",
+          "label": "Calidad de datos",
+          "value": "Insuficiente",
+          "prominent": true,
+          "description": "La evidencia necesaria es insuficiente. No se adjudica un régimen económico."
+        },
+        "supports": [],
+        "brakes": [],
+        "watch": [
+          {
+            "id": "watch-window",
+            "text": "Completar las ventanas de datos que necesita el motor.",
+            "pillarIds": [],
+            "featureIds": [],
+            "sourceKeys": [],
+            "evidenceHref": "#v2-data-status",
+            "ruleId": "R00"
+          }
+        ]
+      },
+      "en": {
+        "title": "INCOMPLETE READING",
+        "interpretation": "There is not enough evidence to assign a regime under the V2 rules.",
+        "concordance": {
+          "code": null,
+          "label": "Concordance",
+          "value": "Unavailable",
+          "description": "Directional agreement between the engine’s two evidence families; it is not a probability."
+        },
+        "uncertainty": {
+          "code": null,
+          "label": "Uncertainty",
+          "value": "Unavailable",
+          "description": "Diversity of plausible regimes when intermediate states are expanded; it is not a probability of decline.",
+          "plausibleRegimes": []
+        },
+        "dataQuality": {
+          "code": "INSUFFICIENT",
+          "label": "Data quality",
+          "value": "Insufficient",
+          "prominent": true,
+          "description": "Required evidence is insufficient. No economic regime is assigned."
+        },
+        "supports": [],
+        "brakes": [],
+        "watch": [
+          {
+            "id": "watch-window",
+            "text": "Complete the data windows required by the engine.",
+            "pillarIds": [],
+            "featureIds": [],
+            "sourceKeys": [],
+            "evidenceHref": "#v2-data-status",
+            "ruleId": "R00"
+          }
+        ]
+      }
+    },
+    {
+      "id": "incomplete-stale",
+      "fixtureSha256": "585db0dea40191b622777e7ae2d3fc9deb06bff7a48366fd7d317781e122e74c",
+      "outputSha256": "fbcbfd260b7cddc0d16ef53b4edd9fdaacc5ec4b2d7c8b40aae4d7aa9235b471",
+      "es": {
+        "title": "LECTURA INCOMPLETA",
+        "interpretation": "Falta evidencia suficiente para adjudicar un régimen con las reglas V2.",
+        "concordance": {
+          "code": null,
+          "label": "Concordancia",
+          "value": "No disponible",
+          "description": "Acuerdo direccional entre las dos familias de evidencia del motor; no es una probabilidad."
+        },
+        "uncertainty": {
+          "code": null,
+          "label": "Incertidumbre",
+          "value": "No disponible",
+          "description": "Diversidad de regímenes plausibles al expandir los estados intermedios; no es probabilidad de caída.",
+          "plausibleRegimes": []
+        },
+        "dataQuality": {
+          "code": "INSUFFICIENT",
+          "label": "Calidad de datos",
+          "value": "Insuficiente",
+          "prominent": true,
+          "description": "La evidencia necesaria es insuficiente. No se adjudica un régimen económico."
+        },
+        "supports": [],
+        "brakes": [],
+        "watch": [
+          {
+            "id": "pending-0",
+            "text": "Evidencia de una sesión distinta de la requerida",
+            "pillarIds": [],
+            "featureIds": [],
+            "sourceKeys": [
+              "XLK",
+              "XLY",
+              "XLC",
+              "XLF",
+              "XLE",
+              "XLI",
+              "XLB",
+              "XLV",
+              "XLP",
+              "XLU",
+              "XLRE",
+              "VIX",
+              "VX"
+            ],
+            "evidenceHref": "#v2-data-status",
+            "ruleId": "R00"
+          }
+        ]
+      },
+      "en": {
+        "title": "INCOMPLETE READING",
+        "interpretation": "There is not enough evidence to assign a regime under the V2 rules.",
+        "concordance": {
+          "code": null,
+          "label": "Concordance",
+          "value": "Unavailable",
+          "description": "Directional agreement between the engine’s two evidence families; it is not a probability."
+        },
+        "uncertainty": {
+          "code": null,
+          "label": "Uncertainty",
+          "value": "Unavailable",
+          "description": "Diversity of plausible regimes when intermediate states are expanded; it is not a probability of decline.",
+          "plausibleRegimes": []
+        },
+        "dataQuality": {
+          "code": "INSUFFICIENT",
+          "label": "Data quality",
+          "value": "Insufficient",
+          "prominent": true,
+          "description": "Required evidence is insufficient. No economic regime is assigned."
+        },
+        "supports": [],
+        "brakes": [],
+        "watch": [
+          {
+            "id": "pending-0",
+            "text": "Evidence belongs to a different session",
+            "pillarIds": [],
+            "featureIds": [],
+            "sourceKeys": [
+              "XLK",
+              "XLY",
+              "XLC",
+              "XLF",
+              "XLE",
+              "XLI",
+              "XLB",
+              "XLV",
+              "XLP",
+              "XLU",
+              "XLRE",
+              "VIX",
+              "VX"
+            ],
+            "evidenceHref": "#v2-data-status",
+            "ruleId": "R00"
+          }
+        ]
+      }
+    },
+    {
+      "id": "incomplete-unknown-calendar",
+      "fixtureSha256": "12c71ff670221cc4184a98ab4cbee91241832558c54c507d3dcb9bbb0d3a0c01",
+      "outputSha256": "728ac2a39e1f963af65328b60a63916338415e8f5a023be37584aba73473e5af",
+      "es": {
+        "title": "LECTURA INCOMPLETA",
+        "interpretation": "Falta evidencia suficiente para adjudicar un régimen con las reglas V2.",
+        "concordance": {
+          "code": null,
+          "label": "Concordancia",
+          "value": "No disponible",
+          "description": "Acuerdo direccional entre las dos familias de evidencia del motor; no es una probabilidad."
+        },
+        "uncertainty": {
+          "code": null,
+          "label": "Incertidumbre",
+          "value": "No disponible",
+          "description": "Diversidad de regímenes plausibles al expandir los estados intermedios; no es probabilidad de caída.",
+          "plausibleRegimes": []
+        },
+        "dataQuality": {
+          "code": "INSUFFICIENT",
+          "label": "Calidad de datos",
+          "value": "Insuficiente",
+          "prominent": true,
+          "description": "La evidencia necesaria es insuficiente. No se adjudica un régimen económico."
+        },
+        "supports": [],
+        "brakes": [],
+        "watch": [
+          {
+            "id": "pending-0",
+            "text": "Calendario de sesión no verificado",
+            "pillarIds": [],
+            "featureIds": [],
+            "sourceKeys": [
+              "XLK",
+              "XLY",
+              "XLC",
+              "XLF",
+              "XLE",
+              "XLI",
+              "XLB",
+              "XLV",
+              "XLP",
+              "XLU",
+              "XLRE"
+            ],
+            "evidenceHref": "#v2-data-status",
+            "ruleId": "R00"
+          },
+          {
+            "id": "pending-1",
+            "text": "Las fuentes no corresponden a la misma sesión",
+            "pillarIds": [],
+            "featureIds": [],
+            "sourceKeys": [
+              "VIX",
+              "VX"
+            ],
+            "evidenceHref": "#v2-data-status",
+            "ruleId": "R00"
+          }
+        ]
+      },
+      "en": {
+        "title": "INCOMPLETE READING",
+        "interpretation": "There is not enough evidence to assign a regime under the V2 rules.",
+        "concordance": {
+          "code": null,
+          "label": "Concordance",
+          "value": "Unavailable",
+          "description": "Directional agreement between the engine’s two evidence families; it is not a probability."
+        },
+        "uncertainty": {
+          "code": null,
+          "label": "Uncertainty",
+          "value": "Unavailable",
+          "description": "Diversity of plausible regimes when intermediate states are expanded; it is not a probability of decline.",
+          "plausibleRegimes": []
+        },
+        "dataQuality": {
+          "code": "INSUFFICIENT",
+          "label": "Data quality",
+          "value": "Insufficient",
+          "prominent": true,
+          "description": "Required evidence is insufficient. No economic regime is assigned."
+        },
+        "supports": [],
+        "brakes": [],
+        "watch": [
+          {
+            "id": "pending-0",
+            "text": "Session calendar not verified",
+            "pillarIds": [],
+            "featureIds": [],
+            "sourceKeys": [
+              "XLK",
+              "XLY",
+              "XLC",
+              "XLF",
+              "XLE",
+              "XLI",
+              "XLB",
+              "XLV",
+              "XLP",
+              "XLU",
+              "XLRE"
+            ],
+            "evidenceHref": "#v2-data-status",
+            "ruleId": "R00"
+          },
+          {
+            "id": "pending-1",
+            "text": "Sources do not cover the same session",
+            "pillarIds": [],
+            "featureIds": [],
+            "sourceKeys": [
+              "VIX",
+              "VX"
+            ],
+            "evidenceHref": "#v2-data-status",
+            "ruleId": "R00"
+          }
+        ]
+      }
+    },
+    {
+      "id": "incomplete-with-shock",
+      "fixtureSha256": "483232eefbd249d8bc8a50b1f282a478546ddb3e7866d78ccde37a4fc7b6279d",
+      "outputSha256": "89acc004baf1925721324058d22cd447ea7e255a1f7d316677cfce24bb248e7f",
+      "es": {
+        "title": "LECTURA INCOMPLETA",
+        "interpretation": "Falta evidencia suficiente para adjudicar un régimen con las reglas V2.",
+        "concordance": {
+          "code": null,
+          "label": "Concordancia",
+          "value": "No disponible",
+          "description": "Acuerdo direccional entre las dos familias de evidencia del motor; no es una probabilidad."
+        },
+        "uncertainty": {
+          "code": null,
+          "label": "Incertidumbre",
+          "value": "No disponible",
+          "description": "Diversidad de regímenes plausibles al expandir los estados intermedios; no es probabilidad de caída.",
+          "plausibleRegimes": []
+        },
+        "dataQuality": {
+          "code": "INSUFFICIENT",
+          "label": "Calidad de datos",
+          "value": "Insuficiente",
+          "prominent": true,
+          "description": "La evidencia necesaria es insuficiente. No se adjudica un régimen económico."
+        },
+        "supports": [],
+        "brakes": [],
+        "watch": [
+          {
+            "id": "pending-0",
+            "text": "Fuente pendiente",
+            "pillarIds": [],
+            "featureIds": [],
+            "sourceKeys": [
+              "XLK"
+            ],
+            "evidenceHref": "#v2-data-status",
+            "ruleId": "R00"
+          }
+        ]
+      },
+      "en": {
+        "title": "INCOMPLETE READING",
+        "interpretation": "There is not enough evidence to assign a regime under the V2 rules.",
+        "concordance": {
+          "code": null,
+          "label": "Concordance",
+          "value": "Unavailable",
+          "description": "Directional agreement between the engine’s two evidence families; it is not a probability."
+        },
+        "uncertainty": {
+          "code": null,
+          "label": "Uncertainty",
+          "value": "Unavailable",
+          "description": "Diversity of plausible regimes when intermediate states are expanded; it is not a probability of decline.",
+          "plausibleRegimes": []
+        },
+        "dataQuality": {
+          "code": "INSUFFICIENT",
+          "label": "Data quality",
+          "value": "Insufficient",
+          "prominent": true,
+          "description": "Required evidence is insufficient. No economic regime is assigned."
+        },
+        "supports": [],
+        "brakes": [],
+        "watch": [
+          {
+            "id": "pending-0",
+            "text": "Source pending",
+            "pillarIds": [],
+            "featureIds": [],
+            "sourceKeys": [
+              "XLK"
+            ],
+            "evidenceHref": "#v2-data-status",
+            "ruleId": "R00"
+          }
+        ]
+      }
+    },
+    {
+      "id": "selective-partial",
+      "fixtureSha256": "6c2c6218add0f101b505cc2b666614a2bdc233b122c60628962af09bfc1989b9",
+      "outputSha256": "1accfb99fda2bde4fcf6dd3fe0a50cda822fed200ad757a8509416d549ef0458",
+      "es": {
+        "title": "RISK-ON SELECTIVO",
+        "interpretation": "El liderazgo es favorable; la participación aún no es suficientemente amplia.",
+        "concordance": {
+          "code": "MEDIUM",
+          "label": "Concordancia",
+          "value": "Media",
+          "description": "Acuerdo direccional entre las dos familias de evidencia del motor; no es una probabilidad."
+        },
+        "uncertainty": {
+          "code": "HIGH",
+          "label": "Incertidumbre",
+          "value": "Alta",
+          "description": "Diversidad de regímenes plausibles al expandir los estados intermedios; no es probabilidad de caída.",
+          "plausibleRegimes": [
+            "RISK-ON AMPLIO",
+            "RISK-ON SELECTIVO",
+            "TRANSICIÓN"
+          ]
+        },
+        "dataQuality": {
+          "code": "PARTIAL",
+          "label": "Calidad de datos",
+          "value": "Parcial",
+          "prominent": true,
+          "description": "La evidencia necesaria permite la lectura, pero faltan datos opcionales o tienen incidencias."
+        },
+        "supports": [
+          {
+            "id": "leadership",
+            "text": "Crecimiento o cíclicos lideran frente a defensivos.",
+            "pillarIds": [
+              "participation"
+            ],
+            "featureIds": [
+              "eq_leadership_gap"
+            ],
+            "sourceKeys": [
+              "XLK",
+              "XLY",
+              "XLC",
+              "XLF",
+              "XLE",
+              "XLI",
+              "XLB",
+              "XLV",
+              "XLP",
+              "XLU",
+              "XLRE"
+            ],
+            "evidenceHref": "#v2-measurement-eq_leadership_gap",
+            "ruleId": "R05"
+          },
+          {
+            "id": "volatility",
+            "text": "VIX y curva sin alerta del motor.",
+            "pillarIds": [
+              "volatility"
+            ],
+            "featureIds": [
+              "vix_level",
+              "vix_momentum_1",
+              "vix_momentum_5",
+              "vx_slope_12"
+            ],
+            "sourceKeys": [
+              "VIX",
+              "VX"
+            ],
+            "evidenceHref": "#v2-measurement-vix_level",
+            "ruleId": "R05"
+          },
+          {
+            "id": "fragility",
+            "text": "La fragilidad no alcanza un estado alto ni ascendente.",
+            "pillarIds": [
+              "fragility"
+            ],
+            "featureIds": [
+              "corr_mean_21",
+              "corr_mean_63",
+              "corr_window_spread"
+            ],
+            "sourceKeys": [
+              "XLK",
+              "XLY",
+              "XLC",
+              "XLF",
+              "XLE",
+              "XLI",
+              "XLB",
+              "XLV",
+              "XLP",
+              "XLU",
+              "XLRE"
+            ],
+            "evidenceHref": "#v2-measurement-corr_mean_21",
+            "ruleId": "R05"
+          }
+        ],
+        "brakes": [
+          {
+            "id": "participation",
+            "text": "La participación aún no cumple la condición de amplitud.",
+            "pillarIds": [
+              "participation"
+            ],
+            "featureIds": [
+              "eq_positive_5",
+              "eq_positive_21"
+            ],
+            "sourceKeys": [
+              "XLK",
+              "XLY",
+              "XLC",
+              "XLF",
+              "XLE",
+              "XLI",
+              "XLB",
+              "XLV",
+              "XLP",
+              "XLU",
+              "XLRE"
+            ],
+            "evidenceHref": "#v2-measurement-eq_positive_5",
+            "ruleId": "R05"
+          }
+        ],
+        "watch": [
+          {
+            "id": "watch-amplitude",
+            "text": "Si la participación pasa a favorable y los demás pilares mantienen su estado.",
+            "pillarIds": [
+              "participation"
+            ],
+            "featureIds": [
+              "eq_positive_5",
+              "eq_positive_21",
+              "eq_leadership_gap"
+            ],
+            "sourceKeys": [
+              "XLK",
+              "XLY",
+              "XLC",
+              "XLF",
+              "XLE",
+              "XLI",
+              "XLB",
+              "XLV",
+              "XLP",
+              "XLU",
+              "XLRE"
+            ],
+            "evidenceHref": "#v2-measurement-eq_positive_5",
+            "ruleId": "R05"
+          }
+        ]
+      },
+      "en": {
+        "title": "SELECTIVE RISK-ON",
+        "interpretation": "Leadership is favorable; participation is not yet broad enough.",
+        "concordance": {
+          "code": "MEDIUM",
+          "label": "Concordance",
+          "value": "Medium",
+          "description": "Directional agreement between the engine’s two evidence families; it is not a probability."
+        },
+        "uncertainty": {
+          "code": "HIGH",
+          "label": "Uncertainty",
+          "value": "High",
+          "description": "Diversity of plausible regimes when intermediate states are expanded; it is not a probability of decline.",
+          "plausibleRegimes": [
+            "BROAD RISK-ON",
+            "SELECTIVE RISK-ON",
+            "TRANSITION"
+          ]
+        },
+        "dataQuality": {
+          "code": "PARTIAL",
+          "label": "Data quality",
+          "value": "Partial",
+          "prominent": true,
+          "description": "Required evidence supports the reading, but optional data is missing or has issues."
+        },
+        "supports": [
+          {
+            "id": "leadership",
+            "text": "Growth or cyclicals lead defensives.",
+            "pillarIds": [
+              "participation"
+            ],
+            "featureIds": [
+              "eq_leadership_gap"
+            ],
+            "sourceKeys": [
+              "XLK",
+              "XLY",
+              "XLC",
+              "XLF",
+              "XLE",
+              "XLI",
+              "XLB",
+              "XLV",
+              "XLP",
+              "XLU",
+              "XLRE"
+            ],
+            "evidenceHref": "#v2-measurement-eq_leadership_gap",
+            "ruleId": "R05"
+          },
+          {
+            "id": "volatility",
+            "text": "VIX and the curve trigger no engine alert.",
+            "pillarIds": [
+              "volatility"
+            ],
+            "featureIds": [
+              "vix_level",
+              "vix_momentum_1",
+              "vix_momentum_5",
+              "vx_slope_12"
+            ],
+            "sourceKeys": [
+              "VIX",
+              "VX"
+            ],
+            "evidenceHref": "#v2-measurement-vix_level",
+            "ruleId": "R05"
+          },
+          {
+            "id": "fragility",
+            "text": "Fragility reaches neither the high nor rising state.",
+            "pillarIds": [
+              "fragility"
+            ],
+            "featureIds": [
+              "corr_mean_21",
+              "corr_mean_63",
+              "corr_window_spread"
+            ],
+            "sourceKeys": [
+              "XLK",
+              "XLY",
+              "XLC",
+              "XLF",
+              "XLE",
+              "XLI",
+              "XLB",
+              "XLV",
+              "XLP",
+              "XLU",
+              "XLRE"
+            ],
+            "evidenceHref": "#v2-measurement-corr_mean_21",
+            "ruleId": "R05"
+          }
+        ],
+        "brakes": [
+          {
+            "id": "participation",
+            "text": "Participation does not meet the broad condition.",
+            "pillarIds": [
+              "participation"
+            ],
+            "featureIds": [
+              "eq_positive_5",
+              "eq_positive_21"
+            ],
+            "sourceKeys": [
+              "XLK",
+              "XLY",
+              "XLC",
+              "XLF",
+              "XLE",
+              "XLI",
+              "XLB",
+              "XLV",
+              "XLP",
+              "XLU",
+              "XLRE"
+            ],
+            "evidenceHref": "#v2-measurement-eq_positive_5",
+            "ruleId": "R05"
+          }
+        ],
+        "watch": [
+          {
+            "id": "watch-amplitude",
+            "text": "Whether participation becomes favorable while the other pillars retain their state.",
+            "pillarIds": [
+              "participation"
+            ],
+            "featureIds": [
+              "eq_positive_5",
+              "eq_positive_21",
+              "eq_leadership_gap"
+            ],
+            "sourceKeys": [
+              "XLK",
+              "XLY",
+              "XLC",
+              "XLF",
+              "XLE",
+              "XLI",
+              "XLB",
+              "XLV",
+              "XLP",
+              "XLU",
+              "XLRE"
+            ],
+            "evidenceHref": "#v2-measurement-eq_positive_5",
+            "ruleId": "R05"
+          }
+        ]
+      }
+    },
+    {
+      "id": "stress-absolute",
+      "fixtureSha256": "1d09e274525916ee381f145c77b8cafc5c858b171fddd5b2daa2fc61202fa29c",
+      "outputSha256": "146fb2c347e076fb04bb66e75d522853d3828fbff1b17dfc8e9be2019e008fae",
+      "es": {
+        "title": "STRESS",
+        "interpretation": "La volatilidad activa la regla de STRESS, con prioridad sobre los demás pilares.",
+        "concordance": {
+          "code": "LOW",
+          "label": "Concordancia",
+          "value": "Baja",
+          "description": "Acuerdo direccional entre las dos familias de evidencia del motor; no es una probabilidad."
+        },
+        "uncertainty": {
+          "code": "LOW",
+          "label": "Incertidumbre",
+          "value": "Baja",
+          "description": "Diversidad de regímenes plausibles al expandir los estados intermedios; no es probabilidad de caída.",
+          "plausibleRegimes": [
+            "STRESS"
+          ]
+        },
+        "dataQuality": {
+          "code": "COMPLETE",
+          "label": "Calidad de datos",
+          "value": "Completa",
+          "prominent": false,
+          "description": "Datos requeridos y opcionales del perfil disponibles; no representa confianza estadística."
+        },
+        "supports": [
+          {
+            "id": "participation",
+            "text": "Avances extendidos a 5 y 21 sesiones.",
+            "pillarIds": [
+              "participation"
+            ],
+            "featureIds": [
+              "eq_positive_5",
+              "eq_positive_21"
+            ],
+            "sourceKeys": [
+              "XLK",
+              "XLY",
+              "XLC",
+              "XLF",
+              "XLE",
+              "XLI",
+              "XLB",
+              "XLV",
+              "XLP",
+              "XLU",
+              "XLRE"
+            ],
+            "evidenceHref": "#v2-measurement-eq_positive_5",
+            "ruleId": "R01"
+          },
+          {
+            "id": "leadership",
+            "text": "Crecimiento o cíclicos lideran frente a defensivos.",
+            "pillarIds": [
+              "participation"
+            ],
+            "featureIds": [
+              "eq_leadership_gap"
+            ],
+            "sourceKeys": [
+              "XLK",
+              "XLY",
+              "XLC",
+              "XLF",
+              "XLE",
+              "XLI",
+              "XLB",
+              "XLV",
+              "XLP",
+              "XLU",
+              "XLRE"
+            ],
+            "evidenceHref": "#v2-measurement-eq_leadership_gap",
+            "ruleId": "R01"
+          },
+          {
+            "id": "fragility",
+            "text": "La fragilidad no alcanza un estado alto ni ascendente.",
+            "pillarIds": [
+              "fragility"
+            ],
+            "featureIds": [
+              "corr_mean_21",
+              "corr_mean_63",
+              "corr_window_spread"
+            ],
+            "sourceKeys": [
+              "XLK",
+              "XLY",
+              "XLC",
+              "XLF",
+              "XLE",
+              "XLI",
+              "XLB",
+              "XLV",
+              "XLP",
+              "XLU",
+              "XLRE"
+            ],
+            "evidenceHref": "#v2-measurement-corr_mean_21",
+            "ruleId": "R01"
+          }
+        ],
+        "brakes": [
+          {
+            "id": "volatility",
+            "text": "El nivel del VIX activa STRESS.",
+            "pillarIds": [
+              "volatility"
+            ],
+            "featureIds": [
+              "vix_level",
+              "vix_momentum_1",
+              "vix_momentum_5",
+              "vx_slope_12"
+            ],
+            "sourceKeys": [
+              "VIX",
+              "VX"
+            ],
+            "evidenceHref": "#v2-measurement-vix_level",
+            "ruleId": "R01"
+          }
+        ],
+        "watch": [
+          {
+            "id": "watch-stress",
+            "text": "Si el bloque de volatilidad sigue cumpliendo las condiciones de STRESS.",
+            "pillarIds": [
+              "volatility"
+            ],
+            "featureIds": [
+              "vix_level",
+              "vix_momentum_1",
+              "vix_momentum_5",
+              "vx_slope_12"
+            ],
+            "sourceKeys": [
+              "VIX",
+              "VX"
+            ],
+            "evidenceHref": "#v2-measurement-vix_level",
+            "ruleId": "R01"
+          }
+        ]
+      },
+      "en": {
+        "title": "STRESS",
+        "interpretation": "Volatility activates the STRESS rule, taking precedence over the other pillars.",
+        "concordance": {
+          "code": "LOW",
+          "label": "Concordance",
+          "value": "Low",
+          "description": "Directional agreement between the engine’s two evidence families; it is not a probability."
+        },
+        "uncertainty": {
+          "code": "LOW",
+          "label": "Uncertainty",
+          "value": "Low",
+          "description": "Diversity of plausible regimes when intermediate states are expanded; it is not a probability of decline.",
+          "plausibleRegimes": [
+            "STRESS"
+          ]
+        },
+        "dataQuality": {
+          "code": "COMPLETE",
+          "label": "Data quality",
+          "value": "Complete",
+          "prominent": false,
+          "description": "Required and selected optional data is available; this does not represent statistical confidence."
+        },
+        "supports": [
+          {
+            "id": "participation",
+            "text": "Gains extend across sectors over 5 and 21 sessions.",
+            "pillarIds": [
+              "participation"
+            ],
+            "featureIds": [
+              "eq_positive_5",
+              "eq_positive_21"
+            ],
+            "sourceKeys": [
+              "XLK",
+              "XLY",
+              "XLC",
+              "XLF",
+              "XLE",
+              "XLI",
+              "XLB",
+              "XLV",
+              "XLP",
+              "XLU",
+              "XLRE"
+            ],
+            "evidenceHref": "#v2-measurement-eq_positive_5",
+            "ruleId": "R01"
+          },
+          {
+            "id": "leadership",
+            "text": "Growth or cyclicals lead defensives.",
+            "pillarIds": [
+              "participation"
+            ],
+            "featureIds": [
+              "eq_leadership_gap"
+            ],
+            "sourceKeys": [
+              "XLK",
+              "XLY",
+              "XLC",
+              "XLF",
+              "XLE",
+              "XLI",
+              "XLB",
+              "XLV",
+              "XLP",
+              "XLU",
+              "XLRE"
+            ],
+            "evidenceHref": "#v2-measurement-eq_leadership_gap",
+            "ruleId": "R01"
+          },
+          {
+            "id": "fragility",
+            "text": "Fragility reaches neither the high nor rising state.",
+            "pillarIds": [
+              "fragility"
+            ],
+            "featureIds": [
+              "corr_mean_21",
+              "corr_mean_63",
+              "corr_window_spread"
+            ],
+            "sourceKeys": [
+              "XLK",
+              "XLY",
+              "XLC",
+              "XLF",
+              "XLE",
+              "XLI",
+              "XLB",
+              "XLV",
+              "XLP",
+              "XLU",
+              "XLRE"
+            ],
+            "evidenceHref": "#v2-measurement-corr_mean_21",
+            "ruleId": "R01"
+          }
+        ],
+        "brakes": [
+          {
+            "id": "volatility",
+            "text": "The VIX level activates STRESS.",
+            "pillarIds": [
+              "volatility"
+            ],
+            "featureIds": [
+              "vix_level",
+              "vix_momentum_1",
+              "vix_momentum_5",
+              "vx_slope_12"
+            ],
+            "sourceKeys": [
+              "VIX",
+              "VX"
+            ],
+            "evidenceHref": "#v2-measurement-vix_level",
+            "ruleId": "R01"
+          }
+        ],
+        "watch": [
+          {
+            "id": "watch-stress",
+            "text": "Whether the volatility block continues to meet the STRESS conditions.",
+            "pillarIds": [
+              "volatility"
+            ],
+            "featureIds": [
+              "vix_level",
+              "vix_momentum_1",
+              "vix_momentum_5",
+              "vx_slope_12"
+            ],
+            "sourceKeys": [
+              "VIX",
+              "VX"
+            ],
+            "evidenceHref": "#v2-measurement-vix_level",
+            "ruleId": "R01"
+          }
+        ]
+      }
+    },
+    {
+      "id": "stress-joint",
+      "fixtureSha256": "c729a8f43156d8a8bca1afa871b7380ccdfe453a61799f9d8df1bf7760afc117",
+      "outputSha256": "a11b2ff9d2894eafa8f493feb06ea5e085a36ea403c0740eb7f801d4d73400fc",
+      "es": {
+        "title": "STRESS",
+        "interpretation": "La volatilidad activa la regla de STRESS, con prioridad sobre los demás pilares.",
+        "concordance": {
+          "code": "LOW",
+          "label": "Concordancia",
+          "value": "Baja",
+          "description": "Acuerdo direccional entre las dos familias de evidencia del motor; no es una probabilidad."
+        },
+        "uncertainty": {
+          "code": "LOW",
+          "label": "Incertidumbre",
+          "value": "Baja",
+          "description": "Diversidad de regímenes plausibles al expandir los estados intermedios; no es probabilidad de caída.",
+          "plausibleRegimes": [
+            "STRESS"
+          ]
+        },
+        "dataQuality": {
+          "code": "PARTIAL",
+          "label": "Calidad de datos",
+          "value": "Parcial",
+          "prominent": true,
+          "description": "La evidencia necesaria permite la lectura, pero faltan datos opcionales o tienen incidencias."
+        },
+        "supports": [
+          {
+            "id": "participation",
+            "text": "Avances extendidos a 5 y 21 sesiones.",
+            "pillarIds": [
+              "participation"
+            ],
+            "featureIds": [
+              "eq_positive_5",
+              "eq_positive_21"
+            ],
+            "sourceKeys": [
+              "XLK",
+              "XLY",
+              "XLC",
+              "XLF",
+              "XLE",
+              "XLI",
+              "XLB",
+              "XLV",
+              "XLP",
+              "XLU",
+              "XLRE"
+            ],
+            "evidenceHref": "#v2-measurement-eq_positive_5",
+            "ruleId": "R01"
+          },
+          {
+            "id": "leadership",
+            "text": "Crecimiento o cíclicos lideran frente a defensivos.",
+            "pillarIds": [
+              "participation"
+            ],
+            "featureIds": [
+              "eq_leadership_gap"
+            ],
+            "sourceKeys": [
+              "XLK",
+              "XLY",
+              "XLC",
+              "XLF",
+              "XLE",
+              "XLI",
+              "XLB",
+              "XLV",
+              "XLP",
+              "XLU",
+              "XLRE"
+            ],
+            "evidenceHref": "#v2-measurement-eq_leadership_gap",
+            "ruleId": "R01"
+          },
+          {
+            "id": "fragility",
+            "text": "La fragilidad no alcanza un estado alto ni ascendente.",
+            "pillarIds": [
+              "fragility"
+            ],
+            "featureIds": [
+              "corr_mean_21",
+              "corr_mean_63",
+              "corr_window_spread"
+            ],
+            "sourceKeys": [
+              "XLK",
+              "XLY",
+              "XLC",
+              "XLF",
+              "XLE",
+              "XLI",
+              "XLB",
+              "XLV",
+              "XLP",
+              "XLU",
+              "XLRE"
+            ],
+            "evidenceHref": "#v2-measurement-corr_mean_21",
+            "ruleId": "R01"
+          }
+        ],
+        "brakes": [
+          {
+            "id": "volatility",
+            "text": "Coinciden VIX adverso, salto rápido e inversión de curva.",
+            "pillarIds": [
+              "volatility"
+            ],
+            "featureIds": [
+              "vix_level",
+              "vix_momentum_1",
+              "vix_momentum_5",
+              "vx_slope_12"
+            ],
+            "sourceKeys": [
+              "VIX",
+              "VX"
+            ],
+            "evidenceHref": "#v2-measurement-vix_level",
+            "ruleId": "R01"
+          }
+        ],
+        "watch": [
+          {
+            "id": "watch-stress",
+            "text": "Si el bloque de volatilidad sigue cumpliendo las condiciones de STRESS.",
+            "pillarIds": [
+              "volatility"
+            ],
+            "featureIds": [
+              "vix_level",
+              "vix_momentum_1",
+              "vix_momentum_5",
+              "vx_slope_12"
+            ],
+            "sourceKeys": [
+              "VIX",
+              "VX"
+            ],
+            "evidenceHref": "#v2-measurement-vix_level",
+            "ruleId": "R01"
+          }
+        ]
+      },
+      "en": {
+        "title": "STRESS",
+        "interpretation": "Volatility activates the STRESS rule, taking precedence over the other pillars.",
+        "concordance": {
+          "code": "LOW",
+          "label": "Concordance",
+          "value": "Low",
+          "description": "Directional agreement between the engine’s two evidence families; it is not a probability."
+        },
+        "uncertainty": {
+          "code": "LOW",
+          "label": "Uncertainty",
+          "value": "Low",
+          "description": "Diversity of plausible regimes when intermediate states are expanded; it is not a probability of decline.",
+          "plausibleRegimes": [
+            "STRESS"
+          ]
+        },
+        "dataQuality": {
+          "code": "PARTIAL",
+          "label": "Data quality",
+          "value": "Partial",
+          "prominent": true,
+          "description": "Required evidence supports the reading, but optional data is missing or has issues."
+        },
+        "supports": [
+          {
+            "id": "participation",
+            "text": "Gains extend across sectors over 5 and 21 sessions.",
+            "pillarIds": [
+              "participation"
+            ],
+            "featureIds": [
+              "eq_positive_5",
+              "eq_positive_21"
+            ],
+            "sourceKeys": [
+              "XLK",
+              "XLY",
+              "XLC",
+              "XLF",
+              "XLE",
+              "XLI",
+              "XLB",
+              "XLV",
+              "XLP",
+              "XLU",
+              "XLRE"
+            ],
+            "evidenceHref": "#v2-measurement-eq_positive_5",
+            "ruleId": "R01"
+          },
+          {
+            "id": "leadership",
+            "text": "Growth or cyclicals lead defensives.",
+            "pillarIds": [
+              "participation"
+            ],
+            "featureIds": [
+              "eq_leadership_gap"
+            ],
+            "sourceKeys": [
+              "XLK",
+              "XLY",
+              "XLC",
+              "XLF",
+              "XLE",
+              "XLI",
+              "XLB",
+              "XLV",
+              "XLP",
+              "XLU",
+              "XLRE"
+            ],
+            "evidenceHref": "#v2-measurement-eq_leadership_gap",
+            "ruleId": "R01"
+          },
+          {
+            "id": "fragility",
+            "text": "Fragility reaches neither the high nor rising state.",
+            "pillarIds": [
+              "fragility"
+            ],
+            "featureIds": [
+              "corr_mean_21",
+              "corr_mean_63",
+              "corr_window_spread"
+            ],
+            "sourceKeys": [
+              "XLK",
+              "XLY",
+              "XLC",
+              "XLF",
+              "XLE",
+              "XLI",
+              "XLB",
+              "XLV",
+              "XLP",
+              "XLU",
+              "XLRE"
+            ],
+            "evidenceHref": "#v2-measurement-corr_mean_21",
+            "ruleId": "R01"
+          }
+        ],
+        "brakes": [
+          {
+            "id": "volatility",
+            "text": "Adverse VIX, a fast jump and an inverted curve coincide.",
+            "pillarIds": [
+              "volatility"
+            ],
+            "featureIds": [
+              "vix_level",
+              "vix_momentum_1",
+              "vix_momentum_5",
+              "vx_slope_12"
+            ],
+            "sourceKeys": [
+              "VIX",
+              "VX"
+            ],
+            "evidenceHref": "#v2-measurement-vix_level",
+            "ruleId": "R01"
+          }
+        ],
+        "watch": [
+          {
+            "id": "watch-stress",
+            "text": "Whether the volatility block continues to meet the STRESS conditions.",
+            "pillarIds": [
+              "volatility"
+            ],
+            "featureIds": [
+              "vix_level",
+              "vix_momentum_1",
+              "vix_momentum_5",
+              "vx_slope_12"
+            ],
+            "sourceKeys": [
+              "VIX",
+              "VX"
+            ],
+            "evidenceHref": "#v2-measurement-vix_level",
+            "ruleId": "R01"
+          }
+        ]
+      }
+    },
+    {
+      "id": "transition-conflict",
+      "fixtureSha256": "950c8aa11fd9c8bc66814479c77f7ed3641ada8b415a25111a71ce206082f853",
+      "outputSha256": "18e3e74bb5a229f04eb1a4fde7f031292418ba80093119e657b06bca36588413",
+      "es": {
+        "title": "TRANSICIÓN",
+        "interpretation": "Participación adversa y volatilidad benigna: la combinación no cumple una adjudicación más específica.",
+        "concordance": {
+          "code": "LOW",
+          "label": "Concordancia",
+          "value": "Baja",
+          "description": "Acuerdo direccional entre las dos familias de evidencia del motor; no es una probabilidad."
+        },
+        "uncertainty": {
+          "code": "LOW",
+          "label": "Incertidumbre",
+          "value": "Baja",
+          "description": "Diversidad de regímenes plausibles al expandir los estados intermedios; no es probabilidad de caída.",
+          "plausibleRegimes": [
+            "TRANSICIÓN"
+          ]
+        },
+        "dataQuality": {
+          "code": "PARTIAL",
+          "label": "Calidad de datos",
+          "value": "Parcial",
+          "prominent": true,
+          "description": "La evidencia necesaria permite la lectura, pero faltan datos opcionales o tienen incidencias."
+        },
+        "supports": [
+          {
+            "id": "volatility",
+            "text": "VIX y curva sin alerta del motor.",
+            "pillarIds": [
+              "volatility"
+            ],
+            "featureIds": [
+              "vix_level",
+              "vix_momentum_1",
+              "vix_momentum_5",
+              "vx_slope_12"
+            ],
+            "sourceKeys": [
+              "VIX",
+              "VX"
+            ],
+            "evidenceHref": "#v2-measurement-vix_level",
+            "ruleId": "R06"
+          },
+          {
+            "id": "fragility",
+            "text": "La fragilidad no alcanza un estado alto ni ascendente.",
+            "pillarIds": [
+              "fragility"
+            ],
+            "featureIds": [
+              "corr_mean_21",
+              "corr_mean_63",
+              "corr_window_spread"
+            ],
+            "sourceKeys": [
+              "XLK",
+              "XLY",
+              "XLC",
+              "XLF",
+              "XLE",
+              "XLI",
+              "XLB",
+              "XLV",
+              "XLP",
+              "XLU",
+              "XLRE"
+            ],
+            "evidenceHref": "#v2-measurement-corr_mean_21",
+            "ruleId": "R06"
+          }
+        ],
+        "brakes": [
+          {
+            "id": "participation",
+            "text": "Pocos sectores avanzan en ambas ventanas.",
+            "pillarIds": [
+              "participation"
+            ],
+            "featureIds": [
+              "eq_positive_5",
+              "eq_positive_21"
+            ],
+            "sourceKeys": [
+              "XLK",
+              "XLY",
+              "XLC",
+              "XLF",
+              "XLE",
+              "XLI",
+              "XLB",
+              "XLV",
+              "XLP",
+              "XLU",
+              "XLRE"
+            ],
+            "evidenceHref": "#v2-measurement-eq_positive_5",
+            "ruleId": "R06"
+          },
+          {
+            "id": "leadership",
+            "text": "El liderazgo no define una dirección favorable o adversa.",
+            "pillarIds": [
+              "participation"
+            ],
+            "featureIds": [
+              "eq_leadership_gap"
+            ],
+            "sourceKeys": [
+              "XLK",
+              "XLY",
+              "XLC",
+              "XLF",
+              "XLE",
+              "XLI",
+              "XLB",
+              "XLV",
+              "XLP",
+              "XLU",
+              "XLRE"
+            ],
+            "evidenceHref": "#v2-measurement-eq_leadership_gap",
+            "ruleId": "R06"
+          }
+        ],
+        "watch": [
+          {
+            "id": "watch-equity",
+            "text": "Si cambia la combinación de participación y liderazgo.",
+            "pillarIds": [
+              "participation"
+            ],
+            "featureIds": [
+              "eq_positive_5",
+              "eq_positive_21",
+              "eq_leadership_gap"
+            ],
+            "sourceKeys": [
+              "XLK",
+              "XLY",
+              "XLC",
+              "XLF",
+              "XLE",
+              "XLI",
+              "XLB",
+              "XLV",
+              "XLP",
+              "XLU",
+              "XLRE"
+            ],
+            "evidenceHref": "#v2-measurement-eq_positive_5",
+            "ruleId": "R06"
+          },
+          {
+            "id": "watch-volatility",
+            "text": "Si cambia la combinación de volatilidad y fragilidad que limita la adjudicación.",
+            "pillarIds": [
+              "volatility",
+              "fragility"
+            ],
+            "featureIds": [
+              "vix_level",
+              "vix_momentum_1",
+              "vix_momentum_5",
+              "vx_slope_12",
+              "corr_mean_21",
+              "corr_mean_63",
+              "corr_window_spread"
+            ],
+            "sourceKeys": [
+              "VIX",
+              "VX",
+              "XLK",
+              "XLY",
+              "XLC",
+              "XLF",
+              "XLE",
+              "XLI",
+              "XLB",
+              "XLV",
+              "XLP",
+              "XLU",
+              "XLRE"
+            ],
+            "evidenceHref": "#v2-measurement-vix_level",
+            "ruleId": "R06"
+          }
+        ]
+      },
+      "en": {
+        "title": "TRANSITION",
+        "interpretation": "Adverse participation and benign volatility: this combination does not meet a more specific adjudication.",
+        "concordance": {
+          "code": "LOW",
+          "label": "Concordance",
+          "value": "Low",
+          "description": "Directional agreement between the engine’s two evidence families; it is not a probability."
+        },
+        "uncertainty": {
+          "code": "LOW",
+          "label": "Uncertainty",
+          "value": "Low",
+          "description": "Diversity of plausible regimes when intermediate states are expanded; it is not a probability of decline.",
+          "plausibleRegimes": [
+            "TRANSITION"
+          ]
+        },
+        "dataQuality": {
+          "code": "PARTIAL",
+          "label": "Data quality",
+          "value": "Partial",
+          "prominent": true,
+          "description": "Required evidence supports the reading, but optional data is missing or has issues."
+        },
+        "supports": [
+          {
+            "id": "volatility",
+            "text": "VIX and the curve trigger no engine alert.",
+            "pillarIds": [
+              "volatility"
+            ],
+            "featureIds": [
+              "vix_level",
+              "vix_momentum_1",
+              "vix_momentum_5",
+              "vx_slope_12"
+            ],
+            "sourceKeys": [
+              "VIX",
+              "VX"
+            ],
+            "evidenceHref": "#v2-measurement-vix_level",
+            "ruleId": "R06"
+          },
+          {
+            "id": "fragility",
+            "text": "Fragility reaches neither the high nor rising state.",
+            "pillarIds": [
+              "fragility"
+            ],
+            "featureIds": [
+              "corr_mean_21",
+              "corr_mean_63",
+              "corr_window_spread"
+            ],
+            "sourceKeys": [
+              "XLK",
+              "XLY",
+              "XLC",
+              "XLF",
+              "XLE",
+              "XLI",
+              "XLB",
+              "XLV",
+              "XLP",
+              "XLU",
+              "XLRE"
+            ],
+            "evidenceHref": "#v2-measurement-corr_mean_21",
+            "ruleId": "R06"
+          }
+        ],
+        "brakes": [
+          {
+            "id": "participation",
+            "text": "Few sectors advance in either window.",
+            "pillarIds": [
+              "participation"
+            ],
+            "featureIds": [
+              "eq_positive_5",
+              "eq_positive_21"
+            ],
+            "sourceKeys": [
+              "XLK",
+              "XLY",
+              "XLC",
+              "XLF",
+              "XLE",
+              "XLI",
+              "XLB",
+              "XLV",
+              "XLP",
+              "XLU",
+              "XLRE"
+            ],
+            "evidenceHref": "#v2-measurement-eq_positive_5",
+            "ruleId": "R06"
+          },
+          {
+            "id": "leadership",
+            "text": "Leadership has no favorable or adverse direction.",
+            "pillarIds": [
+              "participation"
+            ],
+            "featureIds": [
+              "eq_leadership_gap"
+            ],
+            "sourceKeys": [
+              "XLK",
+              "XLY",
+              "XLC",
+              "XLF",
+              "XLE",
+              "XLI",
+              "XLB",
+              "XLV",
+              "XLP",
+              "XLU",
+              "XLRE"
+            ],
+            "evidenceHref": "#v2-measurement-eq_leadership_gap",
+            "ruleId": "R06"
+          }
+        ],
+        "watch": [
+          {
+            "id": "watch-equity",
+            "text": "Whether the participation and leadership combination changes.",
+            "pillarIds": [
+              "participation"
+            ],
+            "featureIds": [
+              "eq_positive_5",
+              "eq_positive_21",
+              "eq_leadership_gap"
+            ],
+            "sourceKeys": [
+              "XLK",
+              "XLY",
+              "XLC",
+              "XLF",
+              "XLE",
+              "XLI",
+              "XLB",
+              "XLV",
+              "XLP",
+              "XLU",
+              "XLRE"
+            ],
+            "evidenceHref": "#v2-measurement-eq_positive_5",
+            "ruleId": "R06"
+          },
+          {
+            "id": "watch-volatility",
+            "text": "Whether the volatility and fragility combination limiting adjudication changes.",
+            "pillarIds": [
+              "volatility",
+              "fragility"
+            ],
+            "featureIds": [
+              "vix_level",
+              "vix_momentum_1",
+              "vix_momentum_5",
+              "vx_slope_12",
+              "corr_mean_21",
+              "corr_mean_63",
+              "corr_window_spread"
+            ],
+            "sourceKeys": [
+              "VIX",
+              "VX",
+              "XLK",
+              "XLY",
+              "XLC",
+              "XLF",
+              "XLE",
+              "XLI",
+              "XLB",
+              "XLV",
+              "XLP",
+              "XLU",
+              "XLRE"
+            ],
+            "evidenceHref": "#v2-measurement-vix_level",
+            "ruleId": "R06"
+          }
+        ]
+      }
+    },
+    {
+      "id": "transition-fragility",
+      "fixtureSha256": "8b4d97ed825cc025668a1034ff5184393227969a8a7e75d8cc0c0c0ab4c27348",
+      "outputSha256": "a864c18fe7d389f09c909acaadcb923bdb793356a4335bea9cbc6bf667bc5b9b",
+      "es": {
+        "title": "TRANSICIÓN",
+        "interpretation": "Participación adversa y volatilidad benigna: la combinación no cumple una adjudicación más específica.",
+        "concordance": {
+          "code": "LOW",
+          "label": "Concordancia",
+          "value": "Baja",
+          "description": "Acuerdo direccional entre las dos familias de evidencia del motor; no es una probabilidad."
+        },
+        "uncertainty": {
+          "code": "LOW",
+          "label": "Incertidumbre",
+          "value": "Baja",
+          "description": "Diversidad de regímenes plausibles al expandir los estados intermedios; no es probabilidad de caída.",
+          "plausibleRegimes": [
+            "TRANSICIÓN"
+          ]
+        },
+        "dataQuality": {
+          "code": "PARTIAL",
+          "label": "Calidad de datos",
+          "value": "Parcial",
+          "prominent": true,
+          "description": "La evidencia necesaria permite la lectura, pero faltan datos opcionales o tienen incidencias."
+        },
+        "supports": [
+          {
+            "id": "volatility",
+            "text": "VIX y curva sin alerta del motor.",
+            "pillarIds": [
+              "volatility"
+            ],
+            "featureIds": [
+              "vix_level",
+              "vix_momentum_1",
+              "vix_momentum_5",
+              "vx_slope_12"
+            ],
+            "sourceKeys": [
+              "VIX",
+              "VX"
+            ],
+            "evidenceHref": "#v2-measurement-vix_level",
+            "ruleId": "R06"
+          }
+        ],
+        "brakes": [
+          {
+            "id": "participation",
+            "text": "Pocos sectores avanzan en ambas ventanas.",
+            "pillarIds": [
+              "participation"
+            ],
+            "featureIds": [
+              "eq_positive_5",
+              "eq_positive_21"
+            ],
+            "sourceKeys": [
+              "XLK",
+              "XLY",
+              "XLC",
+              "XLF",
+              "XLE",
+              "XLI",
+              "XLB",
+              "XLV",
+              "XLP",
+              "XLU",
+              "XLRE"
+            ],
+            "evidenceHref": "#v2-measurement-eq_positive_5",
+            "ruleId": "R06"
+          },
+          {
+            "id": "leadership",
+            "text": "Los defensivos superan a crecimiento y cíclicos.",
+            "pillarIds": [
+              "participation"
+            ],
+            "featureIds": [
+              "eq_leadership_gap"
+            ],
+            "sourceKeys": [
+              "XLK",
+              "XLY",
+              "XLC",
+              "XLF",
+              "XLE",
+              "XLI",
+              "XLB",
+              "XLV",
+              "XLP",
+              "XLU",
+              "XLRE"
+            ],
+            "evidenceHref": "#v2-measurement-eq_leadership_gap",
+            "ruleId": "R06"
+          },
+          {
+            "id": "fragility",
+            "text": "La correlación reciente entre sectores es alta.",
+            "pillarIds": [
+              "fragility"
+            ],
+            "featureIds": [
+              "corr_mean_21",
+              "corr_mean_63",
+              "corr_window_spread"
+            ],
+            "sourceKeys": [
+              "XLK",
+              "XLY",
+              "XLC",
+              "XLF",
+              "XLE",
+              "XLI",
+              "XLB",
+              "XLV",
+              "XLP",
+              "XLU",
+              "XLRE"
+            ],
+            "evidenceHref": "#v2-measurement-corr_mean_21",
+            "ruleId": "R06"
+          }
+        ],
+        "watch": [
+          {
+            "id": "watch-equity",
+            "text": "Si cambia la combinación de participación y liderazgo.",
+            "pillarIds": [
+              "participation"
+            ],
+            "featureIds": [
+              "eq_positive_5",
+              "eq_positive_21",
+              "eq_leadership_gap"
+            ],
+            "sourceKeys": [
+              "XLK",
+              "XLY",
+              "XLC",
+              "XLF",
+              "XLE",
+              "XLI",
+              "XLB",
+              "XLV",
+              "XLP",
+              "XLU",
+              "XLRE"
+            ],
+            "evidenceHref": "#v2-measurement-eq_positive_5",
+            "ruleId": "R06"
+          },
+          {
+            "id": "watch-volatility",
+            "text": "Si cambia la combinación de volatilidad y fragilidad que limita la adjudicación.",
+            "pillarIds": [
+              "volatility",
+              "fragility"
+            ],
+            "featureIds": [
+              "vix_level",
+              "vix_momentum_1",
+              "vix_momentum_5",
+              "vx_slope_12",
+              "corr_mean_21",
+              "corr_mean_63",
+              "corr_window_spread"
+            ],
+            "sourceKeys": [
+              "VIX",
+              "VX",
+              "XLK",
+              "XLY",
+              "XLC",
+              "XLF",
+              "XLE",
+              "XLI",
+              "XLB",
+              "XLV",
+              "XLP",
+              "XLU",
+              "XLRE"
+            ],
+            "evidenceHref": "#v2-measurement-vix_level",
+            "ruleId": "R06"
+          }
+        ]
+      },
+      "en": {
+        "title": "TRANSITION",
+        "interpretation": "Adverse participation and benign volatility: this combination does not meet a more specific adjudication.",
+        "concordance": {
+          "code": "LOW",
+          "label": "Concordance",
+          "value": "Low",
+          "description": "Directional agreement between the engine’s two evidence families; it is not a probability."
+        },
+        "uncertainty": {
+          "code": "LOW",
+          "label": "Uncertainty",
+          "value": "Low",
+          "description": "Diversity of plausible regimes when intermediate states are expanded; it is not a probability of decline.",
+          "plausibleRegimes": [
+            "TRANSITION"
+          ]
+        },
+        "dataQuality": {
+          "code": "PARTIAL",
+          "label": "Data quality",
+          "value": "Partial",
+          "prominent": true,
+          "description": "Required evidence supports the reading, but optional data is missing or has issues."
+        },
+        "supports": [
+          {
+            "id": "volatility",
+            "text": "VIX and the curve trigger no engine alert.",
+            "pillarIds": [
+              "volatility"
+            ],
+            "featureIds": [
+              "vix_level",
+              "vix_momentum_1",
+              "vix_momentum_5",
+              "vx_slope_12"
+            ],
+            "sourceKeys": [
+              "VIX",
+              "VX"
+            ],
+            "evidenceHref": "#v2-measurement-vix_level",
+            "ruleId": "R06"
+          }
+        ],
+        "brakes": [
+          {
+            "id": "participation",
+            "text": "Few sectors advance in either window.",
+            "pillarIds": [
+              "participation"
+            ],
+            "featureIds": [
+              "eq_positive_5",
+              "eq_positive_21"
+            ],
+            "sourceKeys": [
+              "XLK",
+              "XLY",
+              "XLC",
+              "XLF",
+              "XLE",
+              "XLI",
+              "XLB",
+              "XLV",
+              "XLP",
+              "XLU",
+              "XLRE"
+            ],
+            "evidenceHref": "#v2-measurement-eq_positive_5",
+            "ruleId": "R06"
+          },
+          {
+            "id": "leadership",
+            "text": "Defensives lead both growth and cyclicals.",
+            "pillarIds": [
+              "participation"
+            ],
+            "featureIds": [
+              "eq_leadership_gap"
+            ],
+            "sourceKeys": [
+              "XLK",
+              "XLY",
+              "XLC",
+              "XLF",
+              "XLE",
+              "XLI",
+              "XLB",
+              "XLV",
+              "XLP",
+              "XLU",
+              "XLRE"
+            ],
+            "evidenceHref": "#v2-measurement-eq_leadership_gap",
+            "ruleId": "R06"
+          },
+          {
+            "id": "fragility",
+            "text": "Recent sector correlation is high.",
+            "pillarIds": [
+              "fragility"
+            ],
+            "featureIds": [
+              "corr_mean_21",
+              "corr_mean_63",
+              "corr_window_spread"
+            ],
+            "sourceKeys": [
+              "XLK",
+              "XLY",
+              "XLC",
+              "XLF",
+              "XLE",
+              "XLI",
+              "XLB",
+              "XLV",
+              "XLP",
+              "XLU",
+              "XLRE"
+            ],
+            "evidenceHref": "#v2-measurement-corr_mean_21",
+            "ruleId": "R06"
+          }
+        ],
+        "watch": [
+          {
+            "id": "watch-equity",
+            "text": "Whether the participation and leadership combination changes.",
+            "pillarIds": [
+              "participation"
+            ],
+            "featureIds": [
+              "eq_positive_5",
+              "eq_positive_21",
+              "eq_leadership_gap"
+            ],
+            "sourceKeys": [
+              "XLK",
+              "XLY",
+              "XLC",
+              "XLF",
+              "XLE",
+              "XLI",
+              "XLB",
+              "XLV",
+              "XLP",
+              "XLU",
+              "XLRE"
+            ],
+            "evidenceHref": "#v2-measurement-eq_positive_5",
+            "ruleId": "R06"
+          },
+          {
+            "id": "watch-volatility",
+            "text": "Whether the volatility and fragility combination limiting adjudication changes.",
+            "pillarIds": [
+              "volatility",
+              "fragility"
+            ],
+            "featureIds": [
+              "vix_level",
+              "vix_momentum_1",
+              "vix_momentum_5",
+              "vx_slope_12",
+              "corr_mean_21",
+              "corr_mean_63",
+              "corr_window_spread"
+            ],
+            "sourceKeys": [
+              "VIX",
+              "VX",
+              "XLK",
+              "XLY",
+              "XLC",
+              "XLF",
+              "XLE",
+              "XLI",
+              "XLB",
+              "XLV",
+              "XLP",
+              "XLU",
+              "XLRE"
+            ],
+            "evidenceHref": "#v2-measurement-vix_level",
+            "ruleId": "R06"
+          }
+        ]
+      }
+    },
+    {
+      "id": "transition-watch",
+      "fixtureSha256": "5407f6a4edfcea04f5afef36f3734a6c71ab4a751cf62108ea279eabdb4aef87",
+      "outputSha256": "ea9229360e72d5d661c295b50d7f498607d4dcc4adf76bef1d60ef4f40b1692b",
+      "es": {
+        "title": "TRANSICIÓN",
+        "interpretation": "Participación favorable y volatilidad en vigilancia: la combinación no cumple una adjudicación más específica.",
+        "concordance": {
+          "code": "MEDIUM",
+          "label": "Concordancia",
+          "value": "Media",
+          "description": "Acuerdo direccional entre las dos familias de evidencia del motor; no es una probabilidad."
+        },
+        "uncertainty": {
+          "code": "MEDIUM",
+          "label": "Incertidumbre",
+          "value": "Media",
+          "description": "Diversidad de regímenes plausibles al expandir los estados intermedios; no es probabilidad de caída.",
+          "plausibleRegimes": [
+            "RISK-ON AMPLIO",
+            "TRANSICIÓN"
+          ]
+        },
+        "dataQuality": {
+          "code": "PARTIAL",
+          "label": "Calidad de datos",
+          "value": "Parcial",
+          "prominent": true,
+          "description": "La evidencia necesaria permite la lectura, pero faltan datos opcionales o tienen incidencias."
+        },
+        "supports": [
+          {
+            "id": "participation",
+            "text": "Avances extendidos a 5 y 21 sesiones.",
+            "pillarIds": [
+              "participation"
+            ],
+            "featureIds": [
+              "eq_positive_5",
+              "eq_positive_21"
+            ],
+            "sourceKeys": [
+              "XLK",
+              "XLY",
+              "XLC",
+              "XLF",
+              "XLE",
+              "XLI",
+              "XLB",
+              "XLV",
+              "XLP",
+              "XLU",
+              "XLRE"
+            ],
+            "evidenceHref": "#v2-measurement-eq_positive_5",
+            "ruleId": "R06"
+          },
+          {
+            "id": "leadership",
+            "text": "Crecimiento o cíclicos lideran frente a defensivos.",
+            "pillarIds": [
+              "participation"
+            ],
+            "featureIds": [
+              "eq_leadership_gap"
+            ],
+            "sourceKeys": [
+              "XLK",
+              "XLY",
+              "XLC",
+              "XLF",
+              "XLE",
+              "XLI",
+              "XLB",
+              "XLV",
+              "XLP",
+              "XLU",
+              "XLRE"
+            ],
+            "evidenceHref": "#v2-measurement-eq_leadership_gap",
+            "ruleId": "R06"
+          },
+          {
+            "id": "fragility",
+            "text": "La fragilidad no alcanza un estado alto ni ascendente.",
+            "pillarIds": [
+              "fragility"
+            ],
+            "featureIds": [
+              "corr_mean_21",
+              "corr_mean_63",
+              "corr_window_spread"
+            ],
+            "sourceKeys": [
+              "XLK",
+              "XLY",
+              "XLC",
+              "XLF",
+              "XLE",
+              "XLI",
+              "XLB",
+              "XLV",
+              "XLP",
+              "XLU",
+              "XLRE"
+            ],
+            "evidenceHref": "#v2-measurement-corr_mean_21",
+            "ruleId": "R06"
+          }
+        ],
+        "brakes": [
+          {
+            "id": "volatility",
+            "text": "El nivel o cambio del VIX, o la curva, activan vigilancia.",
+            "pillarIds": [
+              "volatility"
+            ],
+            "featureIds": [
+              "vix_level",
+              "vix_momentum_1",
+              "vix_momentum_5",
+              "vx_slope_12"
+            ],
+            "sourceKeys": [
+              "VIX",
+              "VX"
+            ],
+            "evidenceHref": "#v2-measurement-vix_level",
+            "ruleId": "R06"
+          }
+        ],
+        "watch": [
+          {
+            "id": "watch-equity",
+            "text": "Si cambia la combinación de participación y liderazgo.",
+            "pillarIds": [
+              "participation"
+            ],
+            "featureIds": [
+              "eq_positive_5",
+              "eq_positive_21",
+              "eq_leadership_gap"
+            ],
+            "sourceKeys": [
+              "XLK",
+              "XLY",
+              "XLC",
+              "XLF",
+              "XLE",
+              "XLI",
+              "XLB",
+              "XLV",
+              "XLP",
+              "XLU",
+              "XLRE"
+            ],
+            "evidenceHref": "#v2-measurement-eq_positive_5",
+            "ruleId": "R06"
+          },
+          {
+            "id": "watch-volatility",
+            "text": "Si cambia la combinación de volatilidad y fragilidad que limita la adjudicación.",
+            "pillarIds": [
+              "volatility",
+              "fragility"
+            ],
+            "featureIds": [
+              "vix_level",
+              "vix_momentum_1",
+              "vix_momentum_5",
+              "vx_slope_12",
+              "corr_mean_21",
+              "corr_mean_63",
+              "corr_window_spread"
+            ],
+            "sourceKeys": [
+              "VIX",
+              "VX",
+              "XLK",
+              "XLY",
+              "XLC",
+              "XLF",
+              "XLE",
+              "XLI",
+              "XLB",
+              "XLV",
+              "XLP",
+              "XLU",
+              "XLRE"
+            ],
+            "evidenceHref": "#v2-measurement-vix_level",
+            "ruleId": "R06"
+          }
+        ]
+      },
+      "en": {
+        "title": "TRANSITION",
+        "interpretation": "Favorable participation and watch volatility: this combination does not meet a more specific adjudication.",
+        "concordance": {
+          "code": "MEDIUM",
+          "label": "Concordance",
+          "value": "Medium",
+          "description": "Directional agreement between the engine’s two evidence families; it is not a probability."
+        },
+        "uncertainty": {
+          "code": "MEDIUM",
+          "label": "Uncertainty",
+          "value": "Medium",
+          "description": "Diversity of plausible regimes when intermediate states are expanded; it is not a probability of decline.",
+          "plausibleRegimes": [
+            "BROAD RISK-ON",
+            "TRANSITION"
+          ]
+        },
+        "dataQuality": {
+          "code": "PARTIAL",
+          "label": "Data quality",
+          "value": "Partial",
+          "prominent": true,
+          "description": "Required evidence supports the reading, but optional data is missing or has issues."
+        },
+        "supports": [
+          {
+            "id": "participation",
+            "text": "Gains extend across sectors over 5 and 21 sessions.",
+            "pillarIds": [
+              "participation"
+            ],
+            "featureIds": [
+              "eq_positive_5",
+              "eq_positive_21"
+            ],
+            "sourceKeys": [
+              "XLK",
+              "XLY",
+              "XLC",
+              "XLF",
+              "XLE",
+              "XLI",
+              "XLB",
+              "XLV",
+              "XLP",
+              "XLU",
+              "XLRE"
+            ],
+            "evidenceHref": "#v2-measurement-eq_positive_5",
+            "ruleId": "R06"
+          },
+          {
+            "id": "leadership",
+            "text": "Growth or cyclicals lead defensives.",
+            "pillarIds": [
+              "participation"
+            ],
+            "featureIds": [
+              "eq_leadership_gap"
+            ],
+            "sourceKeys": [
+              "XLK",
+              "XLY",
+              "XLC",
+              "XLF",
+              "XLE",
+              "XLI",
+              "XLB",
+              "XLV",
+              "XLP",
+              "XLU",
+              "XLRE"
+            ],
+            "evidenceHref": "#v2-measurement-eq_leadership_gap",
+            "ruleId": "R06"
+          },
+          {
+            "id": "fragility",
+            "text": "Fragility reaches neither the high nor rising state.",
+            "pillarIds": [
+              "fragility"
+            ],
+            "featureIds": [
+              "corr_mean_21",
+              "corr_mean_63",
+              "corr_window_spread"
+            ],
+            "sourceKeys": [
+              "XLK",
+              "XLY",
+              "XLC",
+              "XLF",
+              "XLE",
+              "XLI",
+              "XLB",
+              "XLV",
+              "XLP",
+              "XLU",
+              "XLRE"
+            ],
+            "evidenceHref": "#v2-measurement-corr_mean_21",
+            "ruleId": "R06"
+          }
+        ],
+        "brakes": [
+          {
+            "id": "volatility",
+            "text": "The VIX level or change, or the curve, activates watch.",
+            "pillarIds": [
+              "volatility"
+            ],
+            "featureIds": [
+              "vix_level",
+              "vix_momentum_1",
+              "vix_momentum_5",
+              "vx_slope_12"
+            ],
+            "sourceKeys": [
+              "VIX",
+              "VX"
+            ],
+            "evidenceHref": "#v2-measurement-vix_level",
+            "ruleId": "R06"
+          }
+        ],
+        "watch": [
+          {
+            "id": "watch-equity",
+            "text": "Whether the participation and leadership combination changes.",
+            "pillarIds": [
+              "participation"
+            ],
+            "featureIds": [
+              "eq_positive_5",
+              "eq_positive_21",
+              "eq_leadership_gap"
+            ],
+            "sourceKeys": [
+              "XLK",
+              "XLY",
+              "XLC",
+              "XLF",
+              "XLE",
+              "XLI",
+              "XLB",
+              "XLV",
+              "XLP",
+              "XLU",
+              "XLRE"
+            ],
+            "evidenceHref": "#v2-measurement-eq_positive_5",
+            "ruleId": "R06"
+          },
+          {
+            "id": "watch-volatility",
+            "text": "Whether the volatility and fragility combination limiting adjudication changes.",
+            "pillarIds": [
+              "volatility",
+              "fragility"
+            ],
+            "featureIds": [
+              "vix_level",
+              "vix_momentum_1",
+              "vix_momentum_5",
+              "vx_slope_12",
+              "corr_mean_21",
+              "corr_mean_63",
+              "corr_window_spread"
+            ],
+            "sourceKeys": [
+              "VIX",
+              "VX",
+              "XLK",
+              "XLY",
+              "XLC",
+              "XLF",
+              "XLE",
+              "XLI",
+              "XLB",
+              "XLV",
+              "XLP",
+              "XLU",
+              "XLRE"
+            ],
+            "evidenceHref": "#v2-measurement-vix_level",
+            "ruleId": "R06"
+          }
+        ]
+      }
+    }
+  ]
+}

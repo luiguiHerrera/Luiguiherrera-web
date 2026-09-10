@@ -1,0 +1,466 @@
+{
+  "status": "EVALUATED_ONCE_AFTER_SEALS",
+  "validation_sha256": "47cf062ace0a1b1c32a641adfceb8038c1ddb7aaf93ad13947847330e7e28132",
+  "selected_id_unchanged": "C03",
+  "metrics": {
+    "decisions": 420,
+    "complete": 420,
+    "missing": 0,
+    "occupancy": {
+      "RISK_ON_BROAD": 71,
+      "RISK_ON_SELECTIVE": 144,
+      "TRANSITION": 140,
+      "DEFENSIVE": 52,
+      "STRESS": 13
+    },
+    "occupancy_fraction_of_classifiable": {
+      "RISK_ON_BROAD": 0.16904761904761906,
+      "RISK_ON_SELECTIVE": 0.34285714285714286,
+      "TRANSITION": 0.3333333333333333,
+      "DEFENSIVE": 0.12380952380952381,
+      "STRESS": 0.030952380952380953
+    },
+    "max_single_regime_occupancy": 0.34285714285714286,
+    "adjacent_eligible_pairs": 419,
+    "transitions": 139,
+    "turnover": 0.3317422434367542,
+    "flip_flop_count": 62,
+    "flip_flop_per_adjacent_pair": 0.14797136038186157,
+    "median_run_sessions": 2.0,
+    "runs": 140,
+    "censored_runs": 2,
+    "median_run_by_state": {
+      "RISK_ON_BROAD": 2,
+      "RISK_ON_SELECTIVE": 2.0,
+      "TRANSITION": 3.0,
+      "DEFENSIVE": 2.0,
+      "STRESS": 1
+    },
+    "historically_observed": [
+      "RISK_ON_BROAD",
+      "RISK_ON_SELECTIVE",
+      "TRANSITION",
+      "DEFENSIVE",
+      "STRESS"
+    ],
+    "historically_absent_not_raw_unreachable": [],
+    "pillar_occupancy": {
+      "participation": {
+        "ADVERSE": 39,
+        "MIXED": 292,
+        "FAVORABLE": 89
+      },
+      "leadership": {
+        "FAVORABLE": 281,
+        "MIXED": 61,
+        "ADVERSE": 78
+      },
+      "equity": {
+        "MIXED": 262,
+        "FAVORABLE": 76,
+        "ADVERSE": 82
+      },
+      "volatility": {
+        "WATCH": 93,
+        "BENIGN": 290,
+        "STRESS": 13,
+        "ADVERSE": 24
+      },
+      "fragility": {
+        "RISING": 24,
+        "HIGH": 28,
+        "LOW": 368
+      }
+    }
+  },
+  "sensitivity": {
+    "median_disagreement": 0.004761904761904762,
+    "worst_disagreement": 0.09761904761904762,
+    "perturbations": [
+      {
+        "parameter": "k_weak",
+        "direction": -1,
+        "value": 2,
+        "comparison_decisions": 420,
+        "changed_regime_count": 3,
+        "disagreement": 0.007142857142857143
+      },
+      {
+        "parameter": "k_weak",
+        "direction": 1,
+        "value": 4,
+        "comparison_decisions": 420,
+        "changed_regime_count": 8,
+        "disagreement": 0.01904761904761905
+      },
+      {
+        "parameter": "k_broad",
+        "direction": -1,
+        "value": 7,
+        "comparison_decisions": 420,
+        "changed_regime_count": 41,
+        "disagreement": 0.09761904761904762
+      },
+      {
+        "parameter": "k_broad",
+        "direction": 1,
+        "value": 9,
+        "comparison_decisions": 420,
+        "changed_regime_count": 31,
+        "disagreement": 0.07380952380952381
+      },
+      {
+        "parameter": "leadership_gap",
+        "direction": -1,
+        "value": 0.9,
+        "comparison_decisions": 420,
+        "changed_regime_count": 1,
+        "disagreement": 0.002380952380952381
+      },
+      {
+        "parameter": "leadership_gap",
+        "direction": 1,
+        "value": 1.1,
+        "comparison_decisions": 420,
+        "changed_regime_count": 6,
+        "disagreement": 0.014285714285714285
+      },
+      {
+        "parameter": "v_watch",
+        "direction": -1,
+        "value": 18.0,
+        "comparison_decisions": 420,
+        "changed_regime_count": 37,
+        "disagreement": 0.0880952380952381
+      },
+      {
+        "parameter": "v_watch",
+        "direction": 1,
+        "value": 22.0,
+        "comparison_decisions": 420,
+        "changed_regime_count": 3,
+        "disagreement": 0.007142857142857143
+      },
+      {
+        "parameter": "v_adverse",
+        "direction": -1,
+        "value": 22.5,
+        "comparison_decisions": 420,
+        "changed_regime_count": 8,
+        "disagreement": 0.01904761904761905
+      },
+      {
+        "parameter": "v_adverse",
+        "direction": 1,
+        "value": 27.500000000000004,
+        "comparison_decisions": 420,
+        "changed_regime_count": 2,
+        "disagreement": 0.004761904761904762
+      },
+      {
+        "parameter": "v_stress",
+        "direction": -1,
+        "value": 31.5,
+        "comparison_decisions": 420,
+        "changed_regime_count": 1,
+        "disagreement": 0.002380952380952381
+      },
+      {
+        "parameter": "v_stress",
+        "direction": 1,
+        "value": 38.5,
+        "comparison_decisions": 420,
+        "changed_regime_count": 1,
+        "disagreement": 0.002380952380952381
+      },
+      {
+        "parameter": "jump_1",
+        "direction": -1,
+        "value": 9.0,
+        "comparison_decisions": 420,
+        "changed_regime_count": 1,
+        "disagreement": 0.002380952380952381
+      },
+      {
+        "parameter": "jump_1",
+        "direction": 1,
+        "value": 11.0,
+        "comparison_decisions": 420,
+        "changed_regime_count": 2,
+        "disagreement": 0.004761904761904762
+      },
+      {
+        "parameter": "jump_5",
+        "direction": -1,
+        "value": 18.0,
+        "comparison_decisions": 420,
+        "changed_regime_count": 0,
+        "disagreement": 0.0
+      },
+      {
+        "parameter": "jump_5",
+        "direction": 1,
+        "value": 22.0,
+        "comparison_decisions": 420,
+        "changed_regime_count": 0,
+        "disagreement": 0.0
+      },
+      {
+        "parameter": "curve_flat",
+        "direction": -1,
+        "value": 1.8,
+        "comparison_decisions": 420,
+        "changed_regime_count": 0,
+        "disagreement": 0.0
+      },
+      {
+        "parameter": "curve_flat",
+        "direction": 1,
+        "value": 2.2,
+        "comparison_decisions": 420,
+        "changed_regime_count": 0,
+        "disagreement": 0.0
+      },
+      {
+        "parameter": "curve_adverse",
+        "direction": -1,
+        "value": 4.5,
+        "comparison_decisions": 420,
+        "changed_regime_count": 0,
+        "disagreement": 0.0
+      },
+      {
+        "parameter": "curve_adverse",
+        "direction": 1,
+        "value": 5.5,
+        "comparison_decisions": 420,
+        "changed_regime_count": 1,
+        "disagreement": 0.002380952380952381
+      },
+      {
+        "parameter": "rho_floor",
+        "direction": -1,
+        "value": 0.36000000000000004,
+        "comparison_decisions": 420,
+        "changed_regime_count": 0,
+        "disagreement": 0.0
+      },
+      {
+        "parameter": "rho_floor",
+        "direction": 1,
+        "value": 0.44000000000000006,
+        "comparison_decisions": 420,
+        "changed_regime_count": 4,
+        "disagreement": 0.009523809523809525
+      },
+      {
+        "parameter": "rho_high",
+        "direction": -1,
+        "value": 0.5850000000000001,
+        "comparison_decisions": 420,
+        "changed_regime_count": 3,
+        "disagreement": 0.007142857142857143
+      },
+      {
+        "parameter": "rho_high",
+        "direction": 1,
+        "value": 0.7150000000000001,
+        "comparison_decisions": 420,
+        "changed_regime_count": 0,
+        "disagreement": 0.0
+      },
+      {
+        "parameter": "delta_rising",
+        "direction": -1,
+        "value": 0.09000000000000001,
+        "comparison_decisions": 420,
+        "changed_regime_count": 3,
+        "disagreement": 0.007142857142857143
+      },
+      {
+        "parameter": "delta_rising",
+        "direction": 1,
+        "value": 0.11000000000000001,
+        "comparison_decisions": 420,
+        "changed_regime_count": 3,
+        "disagreement": 0.007142857142857143
+      }
+    ]
+  },
+  "failures": [],
+  "regime_differentiation": {
+    "RISK_ON_BROAD": {
+      "n": 71,
+      "median_trailing_realized_vol_21": 8.861441476021435,
+      "median_vix": 16.36,
+      "role": "POST_SELECTION_ENDOGENOUS_DIAGNOSTIC_NOT_OBJECTIVE"
+    },
+    "RISK_ON_SELECTIVE": {
+      "n": 144,
+      "median_trailing_realized_vol_21": 8.74973732566572,
+      "median_vix": 16.36,
+      "role": "POST_SELECTION_ENDOGENOUS_DIAGNOSTIC_NOT_OBJECTIVE"
+    },
+    "TRANSITION": {
+      "n": 140,
+      "median_trailing_realized_vol_21": 10.402022864550478,
+      "median_vix": 18.5,
+      "role": "POST_SELECTION_ENDOGENOUS_DIAGNOSTIC_NOT_OBJECTIVE"
+    },
+    "DEFENSIVE": {
+      "n": 52,
+      "median_trailing_realized_vol_21": 10.650413740867013,
+      "median_vix": 22.58,
+      "role": "POST_SELECTION_ENDOGENOUS_DIAGNOSTIC_NOT_OBJECTIVE"
+    },
+    "STRESS": {
+      "n": 13,
+      "median_trailing_realized_vol_21": 28.063524626369517,
+      "median_vix": 33.62,
+      "role": "POST_SELECTION_ENDOGENOUS_DIAGNOSTIC_NOT_OBJECTIVE"
+    }
+  },
+  "annual_stability": {
+    "2025": {
+      "decisions": 250,
+      "complete": 250,
+      "missing": 0,
+      "occupancy": {
+        "RISK_ON_BROAD": 53,
+        "RISK_ON_SELECTIVE": 65,
+        "TRANSITION": 80,
+        "DEFENSIVE": 42,
+        "STRESS": 10
+      },
+      "occupancy_fraction_of_classifiable": {
+        "RISK_ON_BROAD": 0.212,
+        "RISK_ON_SELECTIVE": 0.26,
+        "TRANSITION": 0.32,
+        "DEFENSIVE": 0.168,
+        "STRESS": 0.04
+      },
+      "max_single_regime_occupancy": 0.32,
+      "adjacent_eligible_pairs": 249,
+      "transitions": 84,
+      "turnover": 0.3373493975903614,
+      "flip_flop_count": 31,
+      "flip_flop_per_adjacent_pair": 0.12449799196787148,
+      "median_run_sessions": 2,
+      "runs": 85,
+      "censored_runs": 2,
+      "median_run_by_state": {
+        "RISK_ON_BROAD": 1.5,
+        "RISK_ON_SELECTIVE": 2.0,
+        "TRANSITION": 3.0,
+        "DEFENSIVE": 2,
+        "STRESS": 1.0
+      },
+      "historically_observed": [
+        "RISK_ON_BROAD",
+        "RISK_ON_SELECTIVE",
+        "TRANSITION",
+        "DEFENSIVE",
+        "STRESS"
+      ],
+      "historically_absent_not_raw_unreachable": [],
+      "pillar_occupancy": {
+        "participation": {
+          "ADVERSE": 29,
+          "MIXED": 152,
+          "FAVORABLE": 69
+        },
+        "leadership": {
+          "FAVORABLE": 158,
+          "MIXED": 37,
+          "ADVERSE": 55
+        },
+        "equity": {
+          "MIXED": 133,
+          "FAVORABLE": 58,
+          "ADVERSE": 59
+        },
+        "volatility": {
+          "WATCH": 62,
+          "BENIGN": 165,
+          "STRESS": 10,
+          "ADVERSE": 13
+        },
+        "fragility": {
+          "RISING": 21,
+          "HIGH": 28,
+          "LOW": 201
+        }
+      }
+    },
+    "2026": {
+      "decisions": 170,
+      "complete": 170,
+      "missing": 0,
+      "occupancy": {
+        "RISK_ON_BROAD": 18,
+        "RISK_ON_SELECTIVE": 79,
+        "TRANSITION": 60,
+        "DEFENSIVE": 10,
+        "STRESS": 3
+      },
+      "occupancy_fraction_of_classifiable": {
+        "RISK_ON_BROAD": 0.10588235294117647,
+        "RISK_ON_SELECTIVE": 0.4647058823529412,
+        "TRANSITION": 0.35294117647058826,
+        "DEFENSIVE": 0.058823529411764705,
+        "STRESS": 0.01764705882352941
+      },
+      "max_single_regime_occupancy": 0.4647058823529412,
+      "adjacent_eligible_pairs": 169,
+      "transitions": 55,
+      "turnover": 0.3254437869822485,
+      "flip_flop_count": 31,
+      "flip_flop_per_adjacent_pair": 0.1834319526627219,
+      "median_run_sessions": 2.0,
+      "runs": 56,
+      "censored_runs": 2,
+      "median_run_by_state": {
+        "RISK_ON_BROAD": 2,
+        "RISK_ON_SELECTIVE": 3,
+        "TRANSITION": 2.5,
+        "DEFENSIVE": 2,
+        "STRESS": 1
+      },
+      "historically_observed": [
+        "RISK_ON_BROAD",
+        "RISK_ON_SELECTIVE",
+        "TRANSITION",
+        "DEFENSIVE",
+        "STRESS"
+      ],
+      "historically_absent_not_raw_unreachable": [],
+      "pillar_occupancy": {
+        "participation": {
+          "MIXED": 140,
+          "FAVORABLE": 20,
+          "ADVERSE": 10
+        },
+        "leadership": {
+          "FAVORABLE": 123,
+          "MIXED": 24,
+          "ADVERSE": 23
+        },
+        "equity": {
+          "MIXED": 129,
+          "FAVORABLE": 18,
+          "ADVERSE": 23
+        },
+        "volatility": {
+          "BENIGN": 125,
+          "WATCH": 31,
+          "STRESS": 3,
+          "ADVERSE": 11
+        },
+        "fragility": {
+          "LOW": 167,
+          "RISING": 3
+        }
+      }
+    }
+  }
+}

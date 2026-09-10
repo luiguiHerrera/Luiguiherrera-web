@@ -1,0 +1,209 @@
+[dashboard:btc-etf-flows] {
+  message: 'source_response',
+  source: 'bitbo',
+  url: 'https://bitbo.io/treasuries/etf-flows/',
+  attempt: 1,
+  status: 404,
+  htmlLength: 0
+}
+[dashboard:vix] {
+  reason: 'fred_csv_error',
+  source: 'FRED public CSV VIXCLS',
+  status: 404,
+  header: ''
+}
+[dashboard:vix] {
+  reason: 'insufficient_valid_vix_history',
+  source: 'FRED public CSV VIXCLS',
+  validObservations: 0
+}
+[dashboard:btc-etf-flows] {
+  reason: 'source_fetch_or_parse_failed',
+  source: 'bitbo',
+  url: 'https://bitbo.io/treasuries/etf-flows/',
+  message: 'Bitbo / BitcoinTreasuries HTTP 404'
+}
+[dashboard:btc-etf-flows] {
+  reason: 'btc_flow_source_failed',
+  source: 'bitbo',
+  message: 'https://bitbo.io/treasuries/etf-flows/: Bitbo / BitcoinTreasuries HTTP 404'
+}
+[dashboard:vix-term-structure] {
+  source: 'cboe_settlement',
+  status: 404,
+  settlementDate: '2026-09-04',
+  monthlyContractsFound: 0,
+  selectedSymbols: [],
+  sourceStatus: 'pending'
+}
+[dashboard:btc-etf-flows] {
+  message: 'source_response',
+  source: 'bitbo',
+  url: 'https://bitbo.io/treasuries/etf-flows/',
+  attempt: 2,
+  status: 404,
+  htmlLength: 0
+}
+[dashboard:vix-term-structure] {
+  source: 'cboe_settlement',
+  status: 404,
+  settlementDate: '2026-09-03',
+  monthlyContractsFound: 0,
+  selectedSymbols: [],
+  sourceStatus: 'pending'
+}
+[dashboard:btc-etf-flows] {
+  message: 'source_response',
+  source: 'farside',
+  url: 'https://farside.co.uk/bitcoin-etf-flow-all-data/',
+  attempt: 1,
+  status: 404,
+  htmlLength: 0
+}
+[dashboard:btc-etf-flows] {
+  message: 'source_response',
+  source: 'farside',
+  url: 'https://farside.co.uk/bitcoin-etf-flow-all-data/',
+  attempt: 2,
+  status: 404,
+  htmlLength: 0
+}
+[dashboard:btc-etf-flows] {
+  reason: 'source_fetch_or_parse_failed',
+  source: 'farside',
+  url: 'https://farside.co.uk/bitcoin-etf-flow-all-data/',
+  message: 'Farside Investors HTTP 404'
+}
+[dashboard:vix-term-structure] {
+  source: 'cboe_settlement',
+  status: 404,
+  settlementDate: '2026-09-02',
+  monthlyContractsFound: 0,
+  selectedSymbols: [],
+  sourceStatus: 'pending'
+}
+[dashboard:btc-etf-flows] {
+  message: 'source_response',
+  source: 'farside',
+  url: 'https://farside.co.uk/btc/',
+  attempt: 1,
+  status: 404,
+  htmlLength: 0
+}
+[dashboard:vix-term-structure] {
+  source: 'cboe_settlement',
+  status: 404,
+  settlementDate: '2026-09-01',
+  monthlyContractsFound: 0,
+  selectedSymbols: [],
+  sourceStatus: 'pending'
+}
+[dashboard:btc-etf-flows] {
+  message: 'source_response',
+  source: 'farside',
+  url: 'https://farside.co.uk/btc/',
+  attempt: 2,
+  status: 404,
+  htmlLength: 0
+}
+[dashboard:btc-etf-flows] {
+  reason: 'source_fetch_or_parse_failed',
+  source: 'farside',
+  url: 'https://farside.co.uk/btc/',
+  message: 'Farside Investors HTTP 404'
+}
+[dashboard:btc-etf-flows] {
+  reason: 'btc_flow_source_failed',
+  source: 'farside',
+  message: 'https://farside.co.uk/bitcoin-etf-flow-all-data/: Farside Investors HTTP 404 | https://farside.co.uk/btc/: Farside Investors HTTP 404'
+}
+[dashboard:btc-etf-flows] {
+  reason: 'Bitbo / BitcoinTreasuries: https://bitbo.io/treasuries/etf-flows/: Bitbo / BitcoinTreasuries HTTP 404 | Farside Investors: https://farside.co.uk/bitcoin-etf-flow-all-data/: Farside Investors HTTP 404 | https://farside.co.uk/btc/: Farside Investors HTTP 404'
+}
+[dashboard:vix-term-structure] {
+  source: 'cboe_settlement',
+  status: 404,
+  settlementDate: '2026-08-31',
+  monthlyContractsFound: 0,
+  selectedSymbols: [],
+  sourceStatus: 'pending'
+}
+[dashboard:vix-term-structure] {
+  source: 'cboe_settlement',
+  status: 404,
+  settlementDate: '2026-08-30',
+  monthlyContractsFound: 0,
+  selectedSymbols: [],
+  sourceStatus: 'pending'
+}
+[dashboard:vix-term-structure] {
+  source: 'cboe_settlement',
+  status: 404,
+  settlementDate: '2026-08-29',
+  monthlyContractsFound: 0,
+  selectedSymbols: [],
+  sourceStatus: 'pending'
+}
+[dashboard:vix-term-structure] {
+  source: 'cboe_settlement',
+  status: 404,
+  settlementDate: '2026-08-28',
+  monthlyContractsFound: 0,
+  selectedSymbols: [],
+  sourceStatus: 'pending'
+}
+[dashboard:vix-term-structure] {
+  source: 'cboe_settlement',
+  status: 404,
+  settlementDate: '2026-08-27',
+  monthlyContractsFound: 0,
+  selectedSymbols: [],
+  sourceStatus: 'pending'
+}
+[dashboard:vix-term-structure] {
+  source: 'cboe_settlement',
+  status: 404,
+  settlementDate: '2026-08-26',
+  monthlyContractsFound: 0,
+  selectedSymbols: [],
+  sourceStatus: 'pending'
+}
+[dashboard:vix-term-structure] {
+  source: 'cboe_settlement',
+  status: 404,
+  settlementDate: '2026-08-25',
+  monthlyContractsFound: 0,
+  selectedSymbols: [],
+  sourceStatus: 'pending'
+}
+[dashboard:vix-term-structure] {
+  source: 'cboe_settlement',
+  status: 404,
+  settlementDate: '2026-08-24',
+  monthlyContractsFound: 0,
+  selectedSymbols: [],
+  sourceStatus: 'pending'
+}
+[dashboard:vix-term-structure] {
+  source: 'cboe_settlement',
+  reason: 'insufficient_monthly_vx_contracts',
+  monthlyContractsFound: 0,
+  selectedSymbols: [],
+  sourceStatus: 'pending'
+}
+✔ Designer public page contains only the exact accepted V1 top-area extraction (2.137166ms)
+✔ V1 preview reference is reproduced by actual adapters and scoring with unavailable providers (133.813083ms)
+✔ V1 es extracted SSR markup equals accepted original literal JSX exactly (49.791416ms)
+✔ V1 en extracted SSR markup equals accepted original literal JSX exactly (5.411375ms)
+✔ Every V2 es fixture has resolved evidence anchors and progressive disclosure in actual SSR (41.958625ms)
+✔ Every V2 en fixture has resolved evidence anchors and progressive disclosure in actual SSR (16.3415ms)
+✔ Bounded formatter reuse preserves exact V2 es SSR markup across every fixture (42.057333ms)
+✔ Bounded formatter reuse preserves exact V2 en SSR markup across every fixture (35.61375ms)
+ℹ tests 8
+ℹ suites 0
+ℹ pass 8
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 477.988708

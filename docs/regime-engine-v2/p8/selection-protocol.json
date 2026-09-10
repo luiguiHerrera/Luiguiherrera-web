@@ -1,0 +1,227 @@
+{
+  "version": "p8-selection-protocol/1.0.0",
+  "architecture": "EVIDENCE_STATE_ENGINE",
+  "frozen_at": "2026-09-08T14:07:07.068660+00:00",
+  "phase_at_freeze": "Before computing any candidate historical states, validation or test results",
+  "candidate_grid": [
+    {
+      "id": "C00",
+      "parameters": {
+        "k_weak": 3,
+        "k_broad": 8,
+        "leadership_gap": 1.0,
+        "v_watch": 20.0,
+        "v_adverse": 25.0,
+        "v_stress": 30.0,
+        "jump_1": 8.0,
+        "jump_5": 15.0,
+        "curve_flat": 2.0,
+        "curve_adverse": 5.0,
+        "rho_floor": 0.4,
+        "rho_high": 0.65,
+        "delta_rising": 0.1
+      },
+      "rationale": "Legacy VIX/curve/leadership seeds; supermajority participation and proposed nested-correlation bands."
+    },
+    {
+      "id": "C01",
+      "parameters": {
+        "k_weak": 2,
+        "k_broad": 9,
+        "leadership_gap": 1.0,
+        "v_watch": 20.0,
+        "v_adverse": 25.0,
+        "v_stress": 30.0,
+        "jump_1": 8.0,
+        "jump_5": 15.0,
+        "curve_flat": 2.0,
+        "curve_adverse": 5.0,
+        "rho_floor": 0.4,
+        "rho_high": 0.65,
+        "delta_rising": 0.1
+      },
+      "rationale": "Stricter supermajority and weak-participation definition."
+    },
+    {
+      "id": "C02",
+      "parameters": {
+        "k_weak": 3,
+        "k_broad": 8,
+        "leadership_gap": 0.75,
+        "v_watch": 20.0,
+        "v_adverse": 25.0,
+        "v_stress": 30.0,
+        "jump_1": 8.0,
+        "jump_5": 15.0,
+        "curve_flat": 2.0,
+        "curve_adverse": 5.0,
+        "rho_floor": 0.4,
+        "rho_high": 0.65,
+        "delta_rising": 0.1
+      },
+      "rationale": "Smaller economically visible non-defensive leadership gap."
+    },
+    {
+      "id": "C03",
+      "parameters": {
+        "k_weak": 3,
+        "k_broad": 8,
+        "leadership_gap": 1.0,
+        "v_watch": 20.0,
+        "v_adverse": 25.0,
+        "v_stress": 35.0,
+        "jump_1": 10.0,
+        "jump_5": 20.0,
+        "curve_flat": 2.0,
+        "curve_adverse": 5.0,
+        "rho_floor": 0.4,
+        "rho_high": 0.65,
+        "delta_rising": 0.1
+      },
+      "rationale": "Require stronger level/momentum for shock; no return optimization."
+    },
+    {
+      "id": "C04",
+      "parameters": {
+        "k_weak": 3,
+        "k_broad": 8,
+        "leadership_gap": 1.0,
+        "v_watch": 20.0,
+        "v_adverse": 25.0,
+        "v_stress": 30.0,
+        "jump_1": 8.0,
+        "jump_5": 15.0,
+        "curve_flat": 2.0,
+        "curve_adverse": 5.0,
+        "rho_floor": 0.5,
+        "rho_high": 0.7,
+        "delta_rising": 0.1
+      },
+      "rationale": "Require greater co-movement; retain nested-window deterioration definition."
+    },
+    {
+      "id": "C05",
+      "parameters": {
+        "k_weak": 3,
+        "k_broad": 8,
+        "leadership_gap": 1.0,
+        "v_watch": 20.0,
+        "v_adverse": 25.0,
+        "v_stress": 30.0,
+        "jump_1": 8.0,
+        "jump_5": 15.0,
+        "curve_flat": 1.0,
+        "curve_adverse": 3.0,
+        "rho_floor": 0.4,
+        "rho_high": 0.65,
+        "delta_rising": 0.1
+      },
+      "rationale": "Narrower flat band and earlier material inversion. All are research candidates, not approved defaults."
+    }
+  ],
+  "folds": [
+    {
+      "id": "F1",
+      "train": [
+        "2019-01-01",
+        "2021-12-31"
+      ],
+      "validation": [
+        "2022-01-01",
+        "2022-12-31"
+      ],
+      "test": [
+        "2023-01-01",
+        "2023-12-31"
+      ]
+    },
+    {
+      "id": "F2",
+      "train": [
+        "2019-01-01",
+        "2022-12-31"
+      ],
+      "validation": [
+        "2023-01-01",
+        "2023-12-31"
+      ],
+      "test": [
+        "2024-01-01",
+        "2024-12-31"
+      ]
+    },
+    {
+      "id": "F3",
+      "train": [
+        "2019-01-01",
+        "2023-12-31"
+      ],
+      "validation": [
+        "2024-01-01",
+        "2024-12-31"
+      ],
+      "test": [
+        "2025-01-01",
+        "2026-09-04"
+      ]
+    }
+  ],
+  "data_scope": {
+    "core_universe": [
+      "XLK",
+      "XLY",
+      "XLC",
+      "XLF",
+      "XLE",
+      "XLI",
+      "XLB",
+      "XLV",
+      "XLP",
+      "XLU",
+      "XLRE"
+    ],
+    "warmup_start": "2018-01-01",
+    "end": "2026-09-04",
+    "history_source_plan": "Existing Yahoo adjusted-close capture pipeline and official Cboe VIX/VX raw archives; no source substitution after candidate outcomes.",
+    "replay_class": "R2 unless exact vintage availability is separately proved; calendar holdouts are not strict PIT OOS."
+  },
+  "minimum_complete_decisions": {
+    "train": 750,
+    "validation": 240,
+    "test": 240
+  },
+  "metrics": {
+    "occupancy": "count/fraction of each classified state; all missing dates reported separately, never dropped from coverage denominator",
+    "persistence": "run length in eligible decision sessions; gaps break runs; first/last runs flagged censored",
+    "turnover": "changes / adjacent eligible pairs; gaps excluded from pairs but counted as missing",
+    "flip_flop": "A-B-A with intervening B lasting <=2 sessions; count / adjacent eligible pairs",
+    "threshold_sensitivity": "one-at-a-time +/-10% continuous parameters, +/-1 for integer counts, constrained to frozen domains; disagreement over identical complete dates; report median and worst",
+    "subperiod_stability": "annual occupancy, turnover and persistence; changing risk conditions need not have equal occupancies",
+    "regime_differentiation": "post-selection diagnostic of contemporaneous/trailing realized volatility, breadth, correlation and VIX; endogenous descriptors, not independent proof or selection objective",
+    "missing_robustness": "raw missing, stale, future availability, malformed and degenerate inputs yield honest incomplete states"
+  },
+  "qualification_criteria": {
+    "raw_invariants": "all raw witnesses and boundaries pass",
+    "max_single_regime_occupancy": 0.95,
+    "median_run_sessions_minimum": 2,
+    "turnover_maximum": 0.45,
+    "flip_flop_per_adjacent_pair_maximum": 0.35,
+    "sensitivity_median_disagreement_maximum": 0.15,
+    "sensitivity_worst_disagreement_maximum": 0.25,
+    "historically_absent_state": "flag and distinguish from raw-unreachable; no forced historical witness",
+    "subperiod_rule": "report annual behavior, no equal-occupancy requirement; no editing thresholds in response"
+  },
+  "selection_rule": "On TRAIN only: discard candidates failing any criterion; lexicographic minimum (worst threshold disagreement, turnover, flip-flop, candidate id). No weighted objective. If none pass or coverage insufficient, select none.",
+  "validation_rule": "Seal training selection and hash before validation; compare all frozen candidates descriptively, never reselect on validation. Failures remain visible.",
+  "test_rule": "After sealing training selection and validation result, evaluate the selected candidate once on test. No retuning or replacing failed candidates. Report R2 limitations prominently.",
+  "walk_forward_rule": "Advance the three predetermined folds; a later training fold may consume an earlier test period only chronologically. Final binding, if qualified, is F3 training selection; F1/F2 diagnose drift.",
+  "forbidden_selection_targets": [
+    "future_return",
+    "Sharpe",
+    "PnL",
+    "hit_rate",
+    "market_direction_prediction"
+  ],
+  "source_attempt_budget": "Public official/provider endpoints only; at most one initial attempt plus one retry per archive. No paid data, purchases, credentials or changes to application fetchers.",
+  "gate_semantics": "Builder readiness means faithful implementability, never production validation. R2 empirical qualification is explicitly limited and cannot open production gate."
+}

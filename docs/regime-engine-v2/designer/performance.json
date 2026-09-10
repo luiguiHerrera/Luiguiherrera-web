@@ -1,0 +1,1048 @@
+{
+  "schemaVersion": "regime-v2-designer-performance/1.0.0",
+  "status": "PASS",
+  "scope": "LOCAL_REACT_19_SERVER_RENDER",
+  "node": "v26.5.0",
+  "react": "19.0.0",
+  "noSlaDefined": true,
+  "protocol": "Actual extracted V1 top area versus full V2 candidate (including native disclosure content). 30 V1 / 20 V2 warmups, 250 V1 / 120 V2 measured renders per locale/state; presentation measured separately. Five fresh process pairs. No engine execution or network inside render timing.",
+  "limitations": [
+    "SSR timing excludes browser layout, paint, navigation and Next build/response overhead.",
+    "V1 and V2 represent different data scenarios; compare component work, not market readings.",
+    "Cold process duration includes Node and the local TypeScript test loader; first-render figures isolate render calls.",
+    "CSS module classes use a deterministic local identity adapter; measured standalone HTML bytes omit Next RSC envelopes and production CSS hashes.",
+    "Finite warmed memory observation is not a proof against all leaks."
+  ],
+  "sourcesUnchangedDuringMeasurement": true,
+  "sourceHashes": {
+    "components/dashboard/DashboardRegimeV1.tsx": "92d7ef8bc01d4725d740ddea73cf83086743a93eb5d8271aba8872c83b0982cc",
+    "components/dashboard/RegimeV2Surface.tsx": "add309968305efc955c03dbf0ee3eda8dbfc04418c7bf30fbf7e40bf21c50487",
+    "components/dashboard/RegimeV2Disclosure.tsx": "120e7dff5f4f0fe787268be436fdae9f4caf7239b7d6a58d480c7516dc652014",
+    "components/dashboard/regime-v2.module.css": "8a0811d1e0f15d7db26397a5ee0cfe64ca50ff687479816ecb4903294e90ce09",
+    "lib/dashboard/regime-v2-presentation.ts": "a3ea4c767b46bc51f20be07a06b0a4a91457607f9221c0cfd80dffbfa4a73f53"
+  },
+  "rows": [
+    {
+      "locale": "es",
+      "id": "broad-complete",
+      "v1": {
+        "samples": 250,
+        "minMs": 0.0524170000000197,
+        "medianMs": 0.057332999999999856,
+        "p95Ms": 0.07224999999999682,
+        "maxMs": 0.24754200000000992
+      },
+      "v2": {
+        "samples": 120,
+        "minMs": 0.5847499999999854,
+        "medianMs": 0.6252910000000043,
+        "p95Ms": 0.7574169999999754,
+        "maxMs": 0.8411250000000337
+      },
+      "presentation": {
+        "samples": 120,
+        "minMs": 0.12683299999997644,
+        "medianMs": 0.15645799999998644,
+        "p95Ms": 0.20733400000000302,
+        "maxMs": 0.3759589999999662
+      },
+      "medianRenderDeltaMs": 0.5679580000000044,
+      "medianRenderRatio": 10.906301780824409,
+      "v1HtmlBytes": 4828,
+      "v2HtmlBytes": 30168,
+      "fixtureOutputBytes": 27808,
+      "serverViewBytes": 56068
+    },
+    {
+      "locale": "es",
+      "id": "selective-partial",
+      "v1": {
+        "samples": 250,
+        "minMs": 0.0524170000000197,
+        "medianMs": 0.057332999999999856,
+        "p95Ms": 0.07224999999999682,
+        "maxMs": 0.24754200000000992
+      },
+      "v2": {
+        "samples": 120,
+        "minMs": 0.5964999999999918,
+        "medianMs": 0.6102500000000077,
+        "p95Ms": 0.7561249999999973,
+        "maxMs": 0.8076249999999732
+      },
+      "presentation": {
+        "samples": 120,
+        "minMs": 0.11020899999999756,
+        "medianMs": 0.11416700000000901,
+        "p95Ms": 0.1394170000000372,
+        "maxMs": 0.22195899999996982
+      },
+      "medianRenderDeltaMs": 0.5529170000000079,
+      "medianRenderRatio": 10.643957232309651,
+      "v1HtmlBytes": 4828,
+      "v2HtmlBytes": 30900,
+      "fixtureOutputBytes": 27805,
+      "serverViewBytes": 56618
+    },
+    {
+      "locale": "es",
+      "id": "transition-conflict",
+      "v1": {
+        "samples": 250,
+        "minMs": 0.0524170000000197,
+        "medianMs": 0.057332999999999856,
+        "p95Ms": 0.07224999999999682,
+        "maxMs": 0.24754200000000992
+      },
+      "v2": {
+        "samples": 120,
+        "minMs": 0.5983340000000226,
+        "medianMs": 0.6184170000000222,
+        "p95Ms": 0.7321249999999964,
+        "maxMs": 0.7830829999999764
+      },
+      "presentation": {
+        "samples": 120,
+        "minMs": 0.10870799999997871,
+        "medianMs": 0.13075000000003456,
+        "p95Ms": 0.17725000000007185,
+        "maxMs": 0.4401659999999765
+      },
+      "medianRenderDeltaMs": 0.5610840000000223,
+      "medianRenderRatio": 10.786405734917478,
+      "v1HtmlBytes": 4828,
+      "v2HtmlBytes": 31035,
+      "fixtureOutputBytes": 27800,
+      "serverViewBytes": 56981
+    },
+    {
+      "locale": "es",
+      "id": "transition-watch",
+      "v1": {
+        "samples": 250,
+        "minMs": 0.0524170000000197,
+        "medianMs": 0.057332999999999856,
+        "p95Ms": 0.07224999999999682,
+        "maxMs": 0.24754200000000992
+      },
+      "v2": {
+        "samples": 120,
+        "minMs": 0.5997089999999616,
+        "medianMs": 0.6178749999999127,
+        "p95Ms": 0.6778749999999718,
+        "maxMs": 0.8442079999999805
+      },
+      "presentation": {
+        "samples": 120,
+        "minMs": 0.10987499999998818,
+        "medianMs": 0.11266699999998764,
+        "p95Ms": 0.12620800000001964,
+        "maxMs": 0.34791599999994105
+      },
+      "medianRenderDeltaMs": 0.5605419999999128,
+      "medianRenderRatio": 10.776952191581014,
+      "v1HtmlBytes": 4828,
+      "v2HtmlBytes": 31108,
+      "fixtureOutputBytes": 27769,
+      "serverViewBytes": 57057
+    },
+    {
+      "locale": "es",
+      "id": "transition-fragility",
+      "v1": {
+        "samples": 250,
+        "minMs": 0.0524170000000197,
+        "medianMs": 0.057332999999999856,
+        "p95Ms": 0.07224999999999682,
+        "maxMs": 0.24754200000000992
+      },
+      "v2": {
+        "samples": 120,
+        "minMs": 0.6021660000000111,
+        "medianMs": 0.6194169999999986,
+        "p95Ms": 0.9439170000000559,
+        "maxMs": 1.921624999999949
+      },
+      "presentation": {
+        "samples": 120,
+        "minMs": 0.1144170000000031,
+        "medianMs": 0.1460420000000795,
+        "p95Ms": 0.17737499999998363,
+        "maxMs": 0.33225000000004457
+      },
+      "medianRenderDeltaMs": 0.5620839999999987,
+      "medianRenderRatio": 10.803847696788937,
+      "v1HtmlBytes": 4828,
+      "v2HtmlBytes": 31008,
+      "fixtureOutputBytes": 27815,
+      "serverViewBytes": 56949
+    },
+    {
+      "locale": "es",
+      "id": "defensive-complete",
+      "v1": {
+        "samples": 250,
+        "minMs": 0.0524170000000197,
+        "medianMs": 0.057332999999999856,
+        "p95Ms": 0.07224999999999682,
+        "maxMs": 0.24754200000000992
+      },
+      "v2": {
+        "samples": 120,
+        "minMs": 0.5855839999999262,
+        "medianMs": 0.6024999999999636,
+        "p95Ms": 0.6441250000000309,
+        "maxMs": 0.80600000000004
+      },
+      "presentation": {
+        "samples": 120,
+        "minMs": 0.13095799999996416,
+        "medianMs": 0.13408300000003237,
+        "p95Ms": 0.1486250000000382,
+        "maxMs": 0.2973749999999882
+      },
+      "medianRenderDeltaMs": 0.5451669999999638,
+      "medianRenderRatio": 10.508782027801878,
+      "v1HtmlBytes": 4828,
+      "v2HtmlBytes": 30226,
+      "fixtureOutputBytes": 27862,
+      "serverViewBytes": 56209
+    },
+    {
+      "locale": "es",
+      "id": "stress-absolute",
+      "v1": {
+        "samples": 250,
+        "minMs": 0.0524170000000197,
+        "medianMs": 0.057332999999999856,
+        "p95Ms": 0.07224999999999682,
+        "maxMs": 0.24754200000000992
+      },
+      "v2": {
+        "samples": 120,
+        "minMs": 0.5932080000000042,
+        "medianMs": 0.6229580000000396,
+        "p95Ms": 0.6880420000001095,
+        "maxMs": 0.8374999999999773
+      },
+      "presentation": {
+        "samples": 120,
+        "minMs": 0.13058300000000145,
+        "medianMs": 0.1336669999999458,
+        "p95Ms": 0.14716699999996763,
+        "maxMs": 0.3432919999999058
+      },
+      "medianRenderDeltaMs": 0.5656250000000398,
+      "medianRenderRatio": 10.86560968377795,
+      "v1HtmlBytes": 4828,
+      "v2HtmlBytes": 30444,
+      "fixtureOutputBytes": 27791,
+      "serverViewBytes": 56324
+    },
+    {
+      "locale": "es",
+      "id": "stress-joint",
+      "v1": {
+        "samples": 250,
+        "minMs": 0.0524170000000197,
+        "medianMs": 0.057332999999999856,
+        "p95Ms": 0.07224999999999682,
+        "maxMs": 0.24754200000000992
+      },
+      "v2": {
+        "samples": 120,
+        "minMs": 0.5984999999998308,
+        "medianMs": 0.6181659999999738,
+        "p95Ms": 0.6911250000000564,
+        "maxMs": 0.8474169999999503
+      },
+      "presentation": {
+        "samples": 120,
+        "minMs": 0.11187500000005457,
+        "medianMs": 0.11520900000004985,
+        "p95Ms": 0.1420419999999467,
+        "maxMs": 0.28766700000005585
+      },
+      "medianRenderDeltaMs": 0.5608329999999739,
+      "medianRenderRatio": 10.782027802486793,
+      "v1HtmlBytes": 4828,
+      "v2HtmlBytes": 30856,
+      "fixtureOutputBytes": 27794,
+      "serverViewBytes": 56537
+    },
+    {
+      "locale": "es",
+      "id": "incomplete-missing-core",
+      "v1": {
+        "samples": 250,
+        "minMs": 0.0524170000000197,
+        "medianMs": 0.057332999999999856,
+        "p95Ms": 0.07224999999999682,
+        "maxMs": 0.24754200000000992
+      },
+      "v2": {
+        "samples": 120,
+        "minMs": 0.5857499999999618,
+        "medianMs": 0.6317500000000109,
+        "p95Ms": 0.7407500000001619,
+        "maxMs": 1.147959000000128
+      },
+      "presentation": {
+        "samples": 120,
+        "minMs": 0.07633299999997689,
+        "medianMs": 0.07945900000004258,
+        "p95Ms": 0.09124999999994543,
+        "maxMs": 0.2720840000001772
+      },
+      "medianRenderDeltaMs": 0.5744170000000111,
+      "medianRenderRatio": 11.018959412554942,
+      "v1HtmlBytes": 4828,
+      "v2HtmlBytes": 30081,
+      "fixtureOutputBytes": 26615,
+      "serverViewBytes": 55925
+    },
+    {
+      "locale": "es",
+      "id": "incomplete-unknown-calendar",
+      "v1": {
+        "samples": 250,
+        "minMs": 0.0524170000000197,
+        "medianMs": 0.057332999999999856,
+        "p95Ms": 0.07224999999999682,
+        "maxMs": 0.24754200000000992
+      },
+      "v2": {
+        "samples": 120,
+        "minMs": 0.590874999999869,
+        "medianMs": 0.6106250000000273,
+        "p95Ms": 0.6802920000000086,
+        "maxMs": 0.8270419999998921
+      },
+      "presentation": {
+        "samples": 120,
+        "minMs": 0.052290999999968335,
+        "medianMs": 0.0542920000000322,
+        "p95Ms": 0.062374999999974534,
+        "maxMs": 0.1943340000000262
+      },
+      "medianRenderDeltaMs": 0.5532920000000274,
+      "medianRenderRatio": 10.650497968011944,
+      "v1HtmlBytes": 4828,
+      "v2HtmlBytes": 30907,
+      "fixtureOutputBytes": 62916,
+      "serverViewBytes": 318592
+    },
+    {
+      "locale": "es",
+      "id": "incomplete-stale",
+      "v1": {
+        "samples": 250,
+        "minMs": 0.0524170000000197,
+        "medianMs": 0.057332999999999856,
+        "p95Ms": 0.07224999999999682,
+        "maxMs": 0.24754200000000992
+      },
+      "v2": {
+        "samples": 120,
+        "minMs": 0.5939160000000356,
+        "medianMs": 0.6115419999998721,
+        "p95Ms": 0.6738339999999425,
+        "maxMs": 0.832540999999992
+      },
+      "presentation": {
+        "samples": 120,
+        "minMs": 0.05208300000003874,
+        "medianMs": 0.05283299999996416,
+        "p95Ms": 0.06087499999989632,
+        "maxMs": 0.20529099999998834
+      },
+      "medianRenderDeltaMs": 0.5542089999998723,
+      "medianRenderRatio": 10.666492247045744,
+      "v1HtmlBytes": 4828,
+      "v2HtmlBytes": 30990,
+      "fixtureOutputBytes": 27008,
+      "serverViewBytes": 63271
+    },
+    {
+      "locale": "es",
+      "id": "incomplete-with-shock",
+      "v1": {
+        "samples": 250,
+        "minMs": 0.0524170000000197,
+        "medianMs": 0.057332999999999856,
+        "p95Ms": 0.07224999999999682,
+        "maxMs": 0.24754200000000992
+      },
+      "v2": {
+        "samples": 120,
+        "minMs": 0.5907079999999496,
+        "medianMs": 0.6302080000000387,
+        "p95Ms": 0.6980829999999969,
+        "maxMs": 1.0171660000000884
+      },
+      "presentation": {
+        "samples": 120,
+        "minMs": 0.07662499999992178,
+        "medianMs": 0.08024999999997817,
+        "p95Ms": 0.09179100000005747,
+        "maxMs": 0.4406659999999647
+      },
+      "medianRenderDeltaMs": 0.5728750000000389,
+      "medianRenderRatio": 10.992063907349001,
+      "v1HtmlBytes": 4828,
+      "v2HtmlBytes": 29934,
+      "fixtureOutputBytes": 26626,
+      "serverViewBytes": 55165
+    },
+    {
+      "locale": "en",
+      "id": "broad-complete",
+      "v1": {
+        "samples": 250,
+        "minMs": 0.146916999999803,
+        "medianMs": 0.15504200000009405,
+        "p95Ms": 0.16733300000009876,
+        "maxMs": 0.29112499999996544
+      },
+      "v2": {
+        "samples": 120,
+        "minMs": 0.617958999999928,
+        "medianMs": 0.6486250000000382,
+        "p95Ms": 1.0085830000000442,
+        "maxMs": 1.9866250000000036
+      },
+      "presentation": {
+        "samples": 120,
+        "minMs": 0.14341699999999946,
+        "medianMs": 0.15162499999996726,
+        "p95Ms": 0.2867919999998776,
+        "maxMs": 0.4232919999999467
+      },
+      "medianRenderDeltaMs": 0.49358299999994415,
+      "medianRenderRatio": 4.183543813931998,
+      "v1HtmlBytes": 4778,
+      "v2HtmlBytes": 29700,
+      "fixtureOutputBytes": 27808,
+      "serverViewBytes": 55630
+    },
+    {
+      "locale": "en",
+      "id": "selective-partial",
+      "v1": {
+        "samples": 250,
+        "minMs": 0.146916999999803,
+        "medianMs": 0.15504200000009405,
+        "p95Ms": 0.16733300000009876,
+        "maxMs": 0.29112499999996544
+      },
+      "v2": {
+        "samples": 120,
+        "minMs": 0.6430420000001504,
+        "medianMs": 0.6568749999999,
+        "p95Ms": 0.7322500000000218,
+        "maxMs": 1.082834000000048
+      },
+      "presentation": {
+        "samples": 120,
+        "minMs": 0.11658299999999144,
+        "medianMs": 0.12391700000011951,
+        "p95Ms": 0.13450000000011642,
+        "maxMs": 0.47199999999998
+      },
+      "medianRenderDeltaMs": 0.5018329999998059,
+      "medianRenderRatio": 4.236755201813066,
+      "v1HtmlBytes": 4778,
+      "v2HtmlBytes": 30344,
+      "fixtureOutputBytes": 27805,
+      "serverViewBytes": 56054
+    },
+    {
+      "locale": "en",
+      "id": "transition-conflict",
+      "v1": {
+        "samples": 250,
+        "minMs": 0.146916999999803,
+        "medianMs": 0.15504200000009405,
+        "p95Ms": 0.16733300000009876,
+        "maxMs": 0.29112499999996544
+      },
+      "v2": {
+        "samples": 120,
+        "minMs": 0.6371249999999691,
+        "medianMs": 0.6688750000000709,
+        "p95Ms": 1.179209000000128,
+        "maxMs": 1.6030000000000655
+      },
+      "presentation": {
+        "samples": 120,
+        "minMs": 0.12229099999990467,
+        "medianMs": 0.12562500000012733,
+        "p95Ms": 0.15087499999981446,
+        "maxMs": 0.45383399999991525
+      },
+      "medianRenderDeltaMs": 0.5138329999999769,
+      "medianRenderRatio": 4.314153584187931,
+      "v1HtmlBytes": 4778,
+      "v2HtmlBytes": 30512,
+      "fixtureOutputBytes": 27800,
+      "serverViewBytes": 56454
+    },
+    {
+      "locale": "en",
+      "id": "transition-watch",
+      "v1": {
+        "samples": 250,
+        "minMs": 0.146916999999803,
+        "medianMs": 0.15504200000009405,
+        "p95Ms": 0.16733300000009876,
+        "maxMs": 0.29112499999996544
+      },
+      "v2": {
+        "samples": 120,
+        "minMs": 0.6117500000000291,
+        "medianMs": 0.6666669999999613,
+        "p95Ms": 0.9296669999998812,
+        "maxMs": 1.3758329999998296
+      },
+      "presentation": {
+        "samples": 120,
+        "minMs": 0.11516600000004473,
+        "medianMs": 0.11908400000015718,
+        "p95Ms": 0.13779199999999037,
+        "maxMs": 0.29933299999993324
+      },
+      "medianRenderDeltaMs": 0.5116249999998672,
+      "medianRenderRatio": 4.299912281830451,
+      "v1HtmlBytes": 4778,
+      "v2HtmlBytes": 30576,
+      "fixtureOutputBytes": 27769,
+      "serverViewBytes": 56517
+    },
+    {
+      "locale": "en",
+      "id": "transition-fragility",
+      "v1": {
+        "samples": 250,
+        "minMs": 0.146916999999803,
+        "medianMs": 0.15504200000009405,
+        "p95Ms": 0.16733300000009876,
+        "maxMs": 0.29112499999996544
+      },
+      "v2": {
+        "samples": 120,
+        "minMs": 0.6012080000000424,
+        "medianMs": 0.6308330000001661,
+        "p95Ms": 0.6808340000000044,
+        "maxMs": 0.9053749999998217
+      },
+      "presentation": {
+        "samples": 120,
+        "minMs": 0.11300000000028376,
+        "medianMs": 0.11912500000016735,
+        "p95Ms": 0.14274999999997817,
+        "maxMs": 0.3407500000002983
+      },
+      "medianRenderDeltaMs": 0.475791000000072,
+      "medianRenderRatio": 4.068787812333325,
+      "v1HtmlBytes": 4778,
+      "v2HtmlBytes": 30466,
+      "fixtureOutputBytes": 27815,
+      "serverViewBytes": 56403
+    },
+    {
+      "locale": "en",
+      "id": "defensive-complete",
+      "v1": {
+        "samples": 250,
+        "minMs": 0.146916999999803,
+        "medianMs": 0.15504200000009405,
+        "p95Ms": 0.16733300000009876,
+        "maxMs": 0.29112499999996544
+      },
+      "v2": {
+        "samples": 120,
+        "minMs": 0.5801249999999527,
+        "medianMs": 0.6080419999998412,
+        "p95Ms": 0.6749580000000606,
+        "maxMs": 0.8311250000001564
+      },
+      "presentation": {
+        "samples": 120,
+        "minMs": 0.1290409999996882,
+        "medianMs": 0.13295800000014424,
+        "p95Ms": 0.14924999999993815,
+        "maxMs": 0.32108300000027157
+      },
+      "medianRenderDeltaMs": 0.45299999999974716,
+      "medianRenderRatio": 3.9217889346078634,
+      "v1HtmlBytes": 4778,
+      "v2HtmlBytes": 29683,
+      "fixtureOutputBytes": 27862,
+      "serverViewBytes": 55692
+    },
+    {
+      "locale": "en",
+      "id": "stress-absolute",
+      "v1": {
+        "samples": 250,
+        "minMs": 0.146916999999803,
+        "medianMs": 0.15504200000009405,
+        "p95Ms": 0.16733300000009876,
+        "maxMs": 0.29112499999996544
+      },
+      "v2": {
+        "samples": 120,
+        "minMs": 0.5995000000002619,
+        "medianMs": 0.622791999999663,
+        "p95Ms": 0.6797080000001188,
+        "maxMs": 0.9064589999998134
+      },
+      "presentation": {
+        "samples": 120,
+        "minMs": 0.13116700000000492,
+        "medianMs": 0.13579200000003766,
+        "p95Ms": 0.1520829999999478,
+        "maxMs": 0.34420799999998053
+      },
+      "medianRenderDeltaMs": 0.4677499999995689,
+      "medianRenderRatio": 4.016924446274462,
+      "v1HtmlBytes": 4778,
+      "v2HtmlBytes": 29941,
+      "fixtureOutputBytes": 27791,
+      "serverViewBytes": 55845
+    },
+    {
+      "locale": "en",
+      "id": "stress-joint",
+      "v1": {
+        "samples": 250,
+        "minMs": 0.146916999999803,
+        "medianMs": 0.15504200000009405,
+        "p95Ms": 0.16733300000009876,
+        "maxMs": 0.29112499999996544
+      },
+      "v2": {
+        "samples": 120,
+        "minMs": 0.5972499999998035,
+        "medianMs": 0.6229580000003807,
+        "p95Ms": 0.7025829999997768,
+        "maxMs": 0.8453749999998763
+      },
+      "presentation": {
+        "samples": 120,
+        "minMs": 0.11187500000005457,
+        "medianMs": 0.11933300000009694,
+        "p95Ms": 0.14804099999992104,
+        "maxMs": 0.46641700000009223
+      },
+      "medianRenderDeltaMs": 0.46791600000028666,
+      "medianRenderRatio": 4.017995123901929,
+      "v1HtmlBytes": 4778,
+      "v2HtmlBytes": 30316,
+      "fixtureOutputBytes": 27794,
+      "serverViewBytes": 55993
+    },
+    {
+      "locale": "en",
+      "id": "incomplete-missing-core",
+      "v1": {
+        "samples": 250,
+        "minMs": 0.146916999999803,
+        "medianMs": 0.15504200000009405,
+        "p95Ms": 0.16733300000009876,
+        "maxMs": 0.29112499999996544
+      },
+      "v2": {
+        "samples": 120,
+        "minMs": 0.5975839999996424,
+        "medianMs": 0.6337499999999636,
+        "p95Ms": 0.9671250000001237,
+        "maxMs": 1.7145829999999478
+      },
+      "presentation": {
+        "samples": 120,
+        "minMs": 0.07795899999973699,
+        "medianMs": 0.08279200000015408,
+        "p95Ms": 0.09558400000014444,
+        "maxMs": 0.2397499999997308
+      },
+      "medianRenderDeltaMs": 0.47870799999986957,
+      "medianRenderRatio": 4.087602069114041,
+      "v1HtmlBytes": 4778,
+      "v2HtmlBytes": 29621,
+      "fixtureOutputBytes": 26615,
+      "serverViewBytes": 55445
+    },
+    {
+      "locale": "en",
+      "id": "incomplete-unknown-calendar",
+      "v1": {
+        "samples": 250,
+        "minMs": 0.146916999999803,
+        "medianMs": 0.15504200000009405,
+        "p95Ms": 0.16733300000009876,
+        "maxMs": 0.29112499999996544
+      },
+      "v2": {
+        "samples": 120,
+        "minMs": 0.6326249999997344,
+        "medianMs": 0.6548749999997199,
+        "p95Ms": 0.9443750000000364,
+        "maxMs": 2.00525000000016
+      },
+      "presentation": {
+        "samples": 120,
+        "minMs": 0.05441700000028504,
+        "medianMs": 0.05904099999997925,
+        "p95Ms": 0.09116699999958655,
+        "maxMs": 0.325083000000177
+      },
+      "medianRenderDeltaMs": 0.4998329999996258,
+      "medianRenderRatio": 4.223855471416278,
+      "v1HtmlBytes": 4778,
+      "v2HtmlBytes": 30350,
+      "fixtureOutputBytes": 62916,
+      "serverViewBytes": 317465
+    },
+    {
+      "locale": "en",
+      "id": "incomplete-stale",
+      "v1": {
+        "samples": 250,
+        "minMs": 0.146916999999803,
+        "medianMs": 0.15504200000009405,
+        "p95Ms": 0.16733300000009876,
+        "maxMs": 0.29112499999996544
+      },
+      "v2": {
+        "samples": 120,
+        "minMs": 0.6073330000003807,
+        "medianMs": 0.6933340000000499,
+        "p95Ms": 1.1610000000000582,
+        "maxMs": 1.6376250000002983
+      },
+      "presentation": {
+        "samples": 120,
+        "minMs": 0.05024999999977808,
+        "medianMs": 0.0538339999998243,
+        "p95Ms": 0.0652909999998883,
+        "maxMs": 0.2690419999998994
+      },
+      "medianRenderDeltaMs": 0.5382919999999558,
+      "medianRenderRatio": 4.471910837061114,
+      "v1HtmlBytes": 4778,
+      "v2HtmlBytes": 30379,
+      "fixtureOutputBytes": 27008,
+      "serverViewBytes": 61875
+    },
+    {
+      "locale": "en",
+      "id": "incomplete-with-shock",
+      "v1": {
+        "samples": 250,
+        "minMs": 0.146916999999803,
+        "medianMs": 0.15504200000009405,
+        "p95Ms": 0.16733300000009876,
+        "maxMs": 0.29112499999996544
+      },
+      "v2": {
+        "samples": 120,
+        "minMs": 0.5867910000001757,
+        "medianMs": 0.6194169999998849,
+        "p95Ms": 0.6692920000000413,
+        "maxMs": 0.8341669999999795
+      },
+      "presentation": {
+        "samples": 120,
+        "minMs": 0.07445800000004965,
+        "medianMs": 0.07925000000022919,
+        "p95Ms": 0.0909590000001117,
+        "maxMs": 0.16079199999967386
+      },
+      "medianRenderDeltaMs": 0.4643749999997908,
+      "medianRenderRatio": 3.995156151233273,
+      "v1HtmlBytes": 4778,
+      "v2HtmlBytes": 29451,
+      "fixtureOutputBytes": 26626,
+      "serverViewBytes": 54665
+    }
+  ],
+  "cold": [
+    {
+      "pair": 0,
+      "processMs": 197.88141700000006,
+      "kind": "v1",
+      "moduleAndFirstRenderMs": 60.247083,
+      "firstRenderMs": 3.220916999999986,
+      "htmlBytes": 4828,
+      "memoryBeforeModule": {
+        "rss": 128237568,
+        "heapTotal": 20267008,
+        "heapUsed": 16990560,
+        "external": 29359157,
+        "arrayBuffers": 9076346
+      },
+      "memoryAfterRender": {
+        "rss": 163938304,
+        "heapTotal": 32178176,
+        "heapUsed": 29833928,
+        "external": 35986607,
+        "arrayBuffers": 11907466
+      }
+    },
+    {
+      "pair": 0,
+      "processMs": 216.6951670000003,
+      "kind": "v2",
+      "modulePresentationAndFirstRenderMs": 75.31037500000001,
+      "presentationMs": 2.350042000000002,
+      "firstRenderMs": 5.707040999999975,
+      "htmlBytes": 30900,
+      "memoryBeforeModule": {
+        "rss": 126435328,
+        "heapTotal": 18432000,
+        "heapUsed": 14680680,
+        "external": 29359121,
+        "arrayBuffers": 9076310
+      },
+      "memoryAfterRender": {
+        "rss": 174735360,
+        "heapTotal": 35061760,
+        "heapUsed": 28621424,
+        "external": 36052143,
+        "arrayBuffers": 11973002
+      }
+    },
+    {
+      "pair": 1,
+      "processMs": 183.92995799999971,
+      "kind": "v1",
+      "moduleAndFirstRenderMs": 58.529416999999995,
+      "firstRenderMs": 3.014333999999991,
+      "htmlBytes": 4828,
+      "memoryBeforeModule": {
+        "rss": 127221760,
+        "heapTotal": 20267008,
+        "heapUsed": 17110352,
+        "external": 29359157,
+        "arrayBuffers": 9076346
+      },
+      "memoryAfterRender": {
+        "rss": 163250176,
+        "heapTotal": 31916032,
+        "heapUsed": 29776104,
+        "external": 35986607,
+        "arrayBuffers": 11907466
+      }
+    },
+    {
+      "pair": 1,
+      "processMs": 213.45125000000007,
+      "kind": "v2",
+      "modulePresentationAndFirstRenderMs": 82.42725000000002,
+      "presentationMs": 2.4462919999999997,
+      "firstRenderMs": 5.765625,
+      "htmlBytes": 30900,
+      "memoryBeforeModule": {
+        "rss": 125943808,
+        "heapTotal": 18169856,
+        "heapUsed": 14641720,
+        "external": 29359121,
+        "arrayBuffers": 9076310
+      },
+      "memoryAfterRender": {
+        "rss": 175226880,
+        "heapTotal": 34799616,
+        "heapUsed": 29067976,
+        "external": 36052143,
+        "arrayBuffers": 11973002
+      }
+    },
+    {
+      "pair": 2,
+      "processMs": 201.7545,
+      "kind": "v1",
+      "moduleAndFirstRenderMs": 60.333292,
+      "firstRenderMs": 3.5932090000000017,
+      "htmlBytes": 4828,
+      "memoryBeforeModule": {
+        "rss": 126304256,
+        "heapTotal": 18169856,
+        "heapUsed": 14643208,
+        "external": 29359121,
+        "arrayBuffers": 9076310
+      },
+      "memoryAfterRender": {
+        "rss": 165052416,
+        "heapTotal": 34013184,
+        "heapUsed": 27054968,
+        "external": 33155226,
+        "arrayBuffers": 9076085
+      }
+    },
+    {
+      "pair": 2,
+      "processMs": 218.78558300000032,
+      "kind": "v2",
+      "modulePresentationAndFirstRenderMs": 76.340125,
+      "presentationMs": 2.220792000000017,
+      "firstRenderMs": 5.742917000000006,
+      "htmlBytes": 30900,
+      "memoryBeforeModule": {
+        "rss": 128466944,
+        "heapTotal": 20267008,
+        "heapUsed": 17109704,
+        "external": 29359157,
+        "arrayBuffers": 9076346
+      },
+      "memoryAfterRender": {
+        "rss": 176111616,
+        "heapTotal": 35323904,
+        "heapUsed": 27395824,
+        "external": 36052143,
+        "arrayBuffers": 9141621
+      }
+    },
+    {
+      "pair": 3,
+      "processMs": 193.54424999999992,
+      "kind": "v1",
+      "moduleAndFirstRenderMs": 61.74033299999999,
+      "firstRenderMs": 3.0413330000000087,
+      "htmlBytes": 4828,
+      "memoryBeforeModule": {
+        "rss": 125878272,
+        "heapTotal": 17907712,
+        "heapUsed": 14641864,
+        "external": 29359121,
+        "arrayBuffers": 9076310
+      },
+      "memoryAfterRender": {
+        "rss": 165068800,
+        "heapTotal": 34275328,
+        "heapUsed": 27389304,
+        "external": 33155226,
+        "arrayBuffers": 9076085
+      }
+    },
+    {
+      "pair": 3,
+      "processMs": 194.75012499999957,
+      "kind": "v2",
+      "modulePresentationAndFirstRenderMs": 71.86445800000001,
+      "presentationMs": 2.2677500000000066,
+      "firstRenderMs": 5.368083000000013,
+      "htmlBytes": 30900,
+      "memoryBeforeModule": {
+        "rss": 127123456,
+        "heapTotal": 20267008,
+        "heapUsed": 16996144,
+        "external": 29359157,
+        "arrayBuffers": 9076346
+      },
+      "memoryAfterRender": {
+        "rss": 175079424,
+        "heapTotal": 34799616,
+        "heapUsed": 32554200,
+        "external": 36052143,
+        "arrayBuffers": 11973002
+      }
+    },
+    {
+      "pair": 4,
+      "processMs": 181.45683400000053,
+      "kind": "v1",
+      "moduleAndFirstRenderMs": 56.974749999999986,
+      "firstRenderMs": 3.0535420000000215,
+      "htmlBytes": 4828,
+      "memoryBeforeModule": {
+        "rss": 127123456,
+        "heapTotal": 20267008,
+        "heapUsed": 16990528,
+        "external": 29359157,
+        "arrayBuffers": 9076346
+      },
+      "memoryAfterRender": {
+        "rss": 163528704,
+        "heapTotal": 32178176,
+        "heapUsed": 29702152,
+        "external": 35986607,
+        "arrayBuffers": 11907466
+      }
+    },
+    {
+      "pair": 4,
+      "processMs": 204.57037500000024,
+      "kind": "v2",
+      "modulePresentationAndFirstRenderMs": 79.255583,
+      "presentationMs": 2.3002910000000156,
+      "firstRenderMs": 5.677875,
+      "htmlBytes": 30900,
+      "memoryBeforeModule": {
+        "rss": 127270912,
+        "heapTotal": 20267008,
+        "heapUsed": 16991088,
+        "external": 29359157,
+        "arrayBuffers": 9076346
+      },
+      "memoryAfterRender": {
+        "rss": 174735360,
+        "heapTotal": 34275328,
+        "heapUsed": 27693064,
+        "external": 33220762,
+        "arrayBuffers": 9141621
+      }
+    }
+  ],
+  "memory": {
+    "gcAvailable": true,
+    "initialBeforeImports": {
+      "rss": 128483328,
+      "heapTotal": 20267008,
+      "heapUsed": 17658888,
+      "external": 29360279,
+      "arrayBuffers": 9076346
+    },
+    "afterImports": {
+      "rss": 182599680,
+      "heapTotal": 42139648,
+      "heapUsed": 22578272,
+      "external": 33221884,
+      "arrayBuffers": 148556
+    },
+    "before": {
+      "rss": 293421056,
+      "heapTotal": 111345664,
+      "heapUsed": 24327288,
+      "external": 24228819,
+      "arrayBuffers": 148556
+    },
+    "after": {
+      "rss": 294109184,
+      "heapTotal": 111607808,
+      "heapUsed": 24377304,
+      "external": 24228819,
+      "arrayBuffers": 148556
+    },
+    "heapUsedDeltaBytes": 50016,
+    "rssDeltaBytes": 688128,
+    "fullHarnessRssDeltaBytes": 111509504,
+    "renders": 1000
+  },
+  "clientBoundary": {
+    "v2SurfaceServerComponent": true,
+    "dedicatedV2ClientEntrypoints": 1,
+    "normalizedInputsShippedToClient": false,
+    "fixtureGeneratorImportedIntoRender": false,
+    "clientEntry": "components/dashboard/RegimeV2Disclosure.tsx",
+    "clientSourceBytes": 1811,
+    "clientDataProps": [
+      "children: pre-rendered server content",
+      "className: CSS class"
+    ],
+    "completeViewPassedAsClientProp": false,
+    "disclosureMechanism": "Native details/summary plus a small client navigation wrapper that reveals ancestor disclosures and moves keyboard focus for evidence anchors. No engine, fixture input or presentation computation crosses the client boundary.",
+    "verificationScope": "Source inspection plus SSR; Next build route and browser asset checks recorded by root verification."
+  },
+  "verdictBasis": "No new runtime dependency, render loop, animation or dashboard-wide client boundary. Measured absolute timing, response markup growth and finite memory observation are reported without a fabricated latency SLA."
+}

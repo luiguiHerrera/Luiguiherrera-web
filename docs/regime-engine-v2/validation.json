@@ -1,0 +1,120 @@
+{
+  "scope": "PROTOTYPE_CONTRACT_ONLY",
+  "spec_version": "regime-v2-prototype/1.0.0",
+  "feature_count": 59,
+  "raw_node_count": 10,
+  "abstract_configurations": 320,
+  "abstract_occupancy_not_historical_frequency": {
+    "RISK_ON_BROAD": 1,
+    "RISK_ON_SELECTIVE": 1,
+    "TRANSITION": 55,
+    "DEFENSIVE": 24,
+    "STRESS": 27,
+    "INCOMPLETE": 212
+  },
+  "checks_passed": 16,
+  "checks_total": 16,
+  "checks": [
+    {
+      "name": "Registry: thirteen required fields, unique IDs and known source references",
+      "status": "PASS"
+    },
+    {
+      "name": "Dependency graph: all parents resolve, same group, no cycles, exact registry edge set",
+      "status": "PASS"
+    },
+    {
+      "name": "Core grouping: only two nonduplicated units; satellites and PFL have zero votes",
+      "status": "PASS"
+    },
+    {
+      "name": "Optional quality profile: only declared optional evidence, no silently activated parked signal",
+      "status": "PASS"
+    },
+    {
+      "name": "Unbound parameters: gate closed and no runtime/defaults",
+      "status": "PASS"
+    },
+    {
+      "name": "Decision table: closed vocabulary, canonical precedence, technical missing outside regime enum",
+      "status": "PASS"
+    },
+    {
+      "name": "Exhaustive abstract coverage: 320 configurations, 108 complete and 212 incomplete",
+      "status": "PASS"
+    },
+    {
+      "name": "Every declared market state has a conceptual witness with the expected rule",
+      "status": "PASS"
+    },
+    {
+      "name": "Missing is not neutral: each critical dimension independently makes reading incomplete",
+      "status": "PASS"
+    },
+    {
+      "name": "Shock precedence respects missing gate and bypasses all complete-state alternatives",
+      "status": "PASS"
+    },
+    {
+      "name": "Contradictions: weak breadth/benign VIX/rising fragility stays transition",
+      "status": "PASS"
+    },
+    {
+      "name": "Satellite isolation across the entire table: extreme, absent and stale enrichment ignored",
+      "status": "PASS"
+    },
+    {
+      "name": "Qualitative dimensions: full vocabulary reachable; observed regime always plausible",
+      "status": "PASS"
+    },
+    {
+      "name": "Source audit is pinned to the inspected local bytes",
+      "status": "PASS"
+    },
+    {
+      "name": "Historical V1 integrity: frozen files retain their existing hashes and values",
+      "status": "PASS"
+    },
+    {
+      "name": "V1 conceptual maximum remains below the constructive threshold after rounding",
+      "status": "PASS"
+    }
+  ],
+  "conceptual_reachability": "PASS",
+  "raw_input_reachability": "NOT_VALIDATED",
+  "parameter_validation": "NOT_VALIDATED",
+  "historical_point_in_time_replay": "NOT_RUN",
+  "production_satellite_isolation": "NOT_RUN",
+  "production_dependency_sweep": "NOT_RUN",
+  "historical_benchmark_comparison": "NOT_RUN",
+  "production_engine": "NOT_IMPLEMENTED",
+  "typecheck": "NOT_RUN_DOCUMENTATION_ONLY",
+  "build": "NOT_RUN_DOCUMENTATION_ONLY",
+  "lint": "NOT_RUN_DOCUMENTATION_ONLY",
+  "visual_qa": "NOT_APPLICABLE",
+  "builder_ready": false,
+  "release_candidate": false,
+  "unresolved_parameters": [
+    "PRICE_BASIS",
+    "PARTICIPATION_BANDS",
+    "LEADERSHIP_GAP",
+    "VOLATILITY_BANDS",
+    "VOLATILITY_MOMENTUM",
+    "CURVE_BANDS",
+    "CORRELATION_BANDS",
+    "FRESHNESS_POLICY",
+    "SOURCE_AVAILABILITY"
+  ],
+  "artifacts_sha256": {
+    "README.md": "4764302dc27984a46106afb04927e8c6aca72c10104e3f3f91d2b68136055887",
+    "feature-registry.json": "f7270f43ebf78775d7be5a5bd566fc9885a7f500f3cd1d601d5c68f31c9c3539",
+    "dependency-map.json": "1b6dbc306804ca2d34929ccb8cb034a1a0ae31cc3e6509ebd5c38ff5437cb8d5",
+    "parameters.json": "53bbfcd4396fd91c958a1cd5d38d75b82fdb63b21f5d26f17ad0460bde2b5bce",
+    "decision-table.json": "0dae14cb724e1772231ab0158e3112ca4ebb1d5350ba45044b592b8d051bbe51",
+    "specification.md": "1e83c670a2ce808911d6c5f7a2b9e89f5356e8803051d349286b58c5d8b5a10b",
+    "acceptance-contract.md": "787caa957ca8e48de907a9043e283f2dd549217470e963fbb5a7e6d60d7e41ae",
+    "source-audit.md": "ac3bbe0a37ee01ea601c4a4a4ebc9545a30e2e72f24d38c90f4f5a1c38d6a796",
+    "source-ledger.json": "7f8b97faf17b4a56893298ca2263a2fa9f53b5442dcd569250f4801a6565ef9a",
+    "prototype-check.mjs": "9db99c9cbd3b6bd29032502dbab390fdc0d8784c0591d0fe531f78e9bedaaf0e"
+  }
+}
