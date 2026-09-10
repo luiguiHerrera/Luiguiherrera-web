@@ -11,6 +11,7 @@ on:
         options:
           - ADOPT_EXISTING_PRODUCTION_BASELINE
           - PROMOTE_EXACT_STATISTICAL_LEVELS_CANDIDATE
+          - PROBE_IDENTITY
       candidate_git_sha:
         description: Future qualified data candidate SHA; leave empty for baseline adoption
         type: string
@@ -31,6 +32,14 @@ on:
         description: Certified previous daily marker date UTC; leave empty for baseline adoption
         type: string
         default: ''
+      probe_git_sha:
+        description: Immutable Preview fixture SHA for PROBE_IDENTITY only
+        type: string
+        default: ''
+      probe_deployment_id:
+        description: Exact Preview deployment ID for PROBE_IDENTITY only
+        type: string
+        default: ''
 permissions:
   contents: read
 concurrency:
@@ -39,7 +48,7 @@ concurrency:
 jobs:
   candidate-qa:
     name: Statistical Levels candidate QA
-    if: github.repository == 'luiguiHerrera/Luiguiherrera-web' && github.ref == 'refs/heads/vercel-deployment'
+    if: (inputs.operation == 'ADOPT_EXISTING_PRODUCTION_BASELINE' || inputs.operation == 'PROMOTE_EXACT_STATISTICAL_LEVELS_CANDIDATE') && github.repository == 'luiguiHerrera/Luiguiherrera-web' && github.ref == 'refs/heads/vercel-deployment'
     runs-on: ubuntu-24.04
     timeout-minutes: 40
     permissions:
@@ -62,7 +71,7 @@ jobs:
       - name: Verify frozen helper bytes before executing any helper
         working-directory: scripts/statistical-levels-release
         env:
-          EXPECTED_SOURCE_SUMS: d06af2d1eaec507666000f307ec7df4e9b55da53f6fdc667191f7adfa50a0167
+          EXPECTED_SOURCE_SUMS: 7d2d72fcad81118d7dfedc437fe560385a2c46f9784326910eedc7091b2586fa
         run: |
           printf '%s  SOURCE_SHA256SUMS\n' "$EXPECTED_SOURCE_SUMS" | sha256sum --check --strict
           sha256sum --check --strict SOURCE_SHA256SUMS
@@ -101,7 +110,7 @@ jobs:
   invoke-controller:
     name: Statistical Levels release controller
     needs: [candidate-qa, seal-qa]
-    if: needs.candidate-qa.result == 'success' && needs.seal-qa.result == 'success' && github.repository == 'luiguiHerrera/Luiguiherrera-web' && github.ref == 'refs/heads/vercel-deployment'
+    if: (inputs.operation == 'ADOPT_EXISTING_PRODUCTION_BASELINE' || inputs.operation == 'PROMOTE_EXACT_STATISTICAL_LEVELS_CANDIDATE') && needs.candidate-qa.result == 'success' && needs.seal-qa.result == 'success' && github.repository == 'luiguiHerrera/Luiguiherrera-web' && github.ref == 'refs/heads/vercel-deployment'
     runs-on: ubuntu-24.04
     timeout-minutes: 25
     permissions:
@@ -120,7 +129,7 @@ jobs:
       - name: Verify frozen helper bytes before executing any helper
         working-directory: scripts/statistical-levels-release
         env:
-          EXPECTED_SOURCE_SUMS: d06af2d1eaec507666000f307ec7df4e9b55da53f6fdc667191f7adfa50a0167
+          EXPECTED_SOURCE_SUMS: 7d2d72fcad81118d7dfedc437fe560385a2c46f9784326910eedc7091b2586fa
         run: |
           printf '%s  SOURCE_SHA256SUMS\n' "$EXPECTED_SOURCE_SUMS" | sha256sum --check --strict
           sha256sum --check --strict SOURCE_SHA256SUMS
@@ -146,3 +155,100 @@ jobs:
           inline-session-policy: '{"Version":"2012-10-17","Statement":[{"Effect":"Allow","Action":"lambda:InvokeFunction","Resource":"arn:aws:lambda:eu-south-2:732159826922:function:statistical-levels-vercel-release-controller"}]}'
       - name: Invoke the exact controller once; no direct promotion or automatic retry
         run: node scripts/statistical-levels-release/scripts/invoke.mjs
+  identity-probe:
+    name: Statistical Levels non-release identity probe
+    if: inputs.operation == 'PROBE_IDENTITY' && github.repository == 'luiguiHerrera/Luiguiherrera-web' && github.ref == 'refs/heads/vercel-deployment'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 40
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - name: Check out probe execution source
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+          fetch-depth: 1
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38
+        with:
+          node-version: '22.23.2'
+          package-manager-cache: false
+      - name: Verify frozen probe helper bytes
+        id: source_integrity
+        working-directory: scripts/statistical-levels-release
+        env:
+          EXPECTED_SOURCE_SUMS: 7d2d72fcad81118d7dfedc437fe560385a2c46f9784326910eedc7091b2586fa
+        run: |
+          printf '%s  SOURCE_SHA256SUMS\n' "$EXPECTED_SOURCE_SUMS" | sha256sum --check --strict
+          sha256sum --check --strict SOURCE_SHA256SUMS
+      - name: Verify execution identity and resolve the exact public Preview tuple
+        id: resolve
+        run: node scripts/statistical-levels-release/scripts/probe-cli.mjs preflight
+      - name: Check out verified immutable Preview fixture
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+        with:
+          ref: ${{ steps.resolve.outputs.candidate_sha }}
+          path: .identity-probe-candidate
+          persist-credentials: false
+          fetch-depth: 1
+      - name: Install locked QA dependencies without lifecycle scripts
+        run: |
+          npm ci --prefix .identity-probe-candidate --ignore-scripts --no-audit --no-fund --userconfig=/dev/null --registry=https://registry.npmjs.org
+          npm ci --prefix scripts/statistical-levels-release/qa-dependencies --ignore-scripts --no-audit --no-fund --userconfig=/dev/null --registry=https://registry.npmjs.org
+          node scripts/statistical-levels-release/qa-dependencies/node_modules/playwright/cli.js install --with-deps chromium
+      - name: Protected Preview QA through exact-origin Trusted Sources OIDC
+        id: qa
+        run: node scripts/statistical-levels-release/scripts/probe-cli.mjs qa
+      - name: Validate QA attestation and audience-specific AWS OIDC claims
+        run: node scripts/statistical-levels-release/scripts/probe-cli.mjs aws-preflight
+      - name: Assume only dedicated release invoker with all non-identity actions denied
+        id: aws_assume
+        uses: aws-actions/configure-aws-credentials@cbe3b392738ccf3f987d68400dafcf4b0624a56c
+        with:
+          aws-region: eu-south-2
+          role-to-assume: arn:aws:iam::732159826922:role/LuiguiHerreraStatisticalLevelsReleaseInvoker
+          audience: sts.amazonaws.com
+          allowed-account-ids: '732159826922'
+          role-session-name: sl-probe-${{ github.run_id }}
+          role-duration-seconds: 1800
+          unset-current-credentials: true
+          use-existing-credentials: false
+          output-credentials: false
+          mask-aws-account-id: true
+          disable-retry: true
+          action-timeout-s: 60
+          inline-session-policy: '{"Version":"2012-10-17","Statement":[{"Effect":"Deny","NotAction":"sts:GetCallerIdentity","Resource":"*"}]}'
+      - name: Prove exact assumed role through STS identity only
+        id: aws_identity
+        run: node scripts/statistical-levels-release/scripts/probe-cli.mjs aws-identity
+      - name: Reverify helper bytes and finalize sanitized non-secret probe evidence
+        id: evidence
+        if: always() && steps.source_integrity.outcome == 'success'
+        working-directory: scripts/statistical-levels-release
+        env:
+          EXPECTED_SOURCE_SUMS: 7d2d72fcad81118d7dfedc437fe560385a2c46f9784326910eedc7091b2586fa
+          PROBE_RESOLVE_OUTCOME: ${{ steps.resolve.outcome }}
+          PROBE_QA_OUTCOME: ${{ steps.qa.outcome }}
+          PROBE_AWS_ASSUME_OUTCOME: ${{ steps.aws_assume.outcome }}
+          PROBE_AWS_IDENTITY_OUTCOME: ${{ steps.aws_identity.outcome }}
+        run: |
+          printf '%s  SOURCE_SHA256SUMS\n' "$EXPECTED_SOURCE_SUMS" | sha256sum --check --strict
+          sha256sum --check --strict SOURCE_SHA256SUMS
+          node scripts/probe-cli.mjs evidence
+      - name: Retain only the six sanitized identity-probe evidence files
+        if: always() && steps.source_integrity.outcome == 'success' && steps.evidence.outputs.ready == 'true'
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+        with:
+          name: statistical-levels-identity-probe-evidence
+          path: |
+            ${{ runner.temp }}/statistical-levels-identity-probe/artifact/probe-summary.json
+            ${{ runner.temp }}/statistical-levels-identity-probe/artifact/trusted-sources-qa.json
+            ${{ runner.temp }}/statistical-levels-identity-probe/artifact/application-network-summary.json
+            ${{ runner.temp }}/statistical-levels-identity-probe/artifact/aws-oidc-summary.json
+            ${{ runner.temp }}/statistical-levels-identity-probe/artifact/qa-attestation.json
+            ${{ runner.temp }}/statistical-levels-identity-probe/artifact/evidence-sha256.json
+          retention-days: 7
+          if-no-files-found: error
+          include-hidden-files: false
+          overwrite: false

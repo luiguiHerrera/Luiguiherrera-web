@@ -18,6 +18,19 @@ export async function github(relative) {
   const text = await response.text(); need(text.length < 2_000_000, 'GITHUB_RESPONSE_SIZE');
   return JSON.parse(text);
 }
+// Preserve every legacy input value/error; strip only GitHub's known empty probe defaults.
+export function normalizeReleaseInputs(inputs) {
+  const keys = ['probe_git_sha', 'probe_deployment_id'];
+  if (!inputs || typeof inputs !== 'object' || Array.isArray(inputs) || !keys.some(key => Object.hasOwn(inputs, key))) return inputs;
+  const releaseInputs = { ...inputs };
+  for (const key of keys) {
+    if (Object.hasOwn(releaseInputs, key)) {
+      need(releaseInputs[key] === '', 'RELEASE_PROBE_INPUT_FORBIDDEN');
+      delete releaseInputs[key];
+    }
+  }
+  return releaseInputs;
+}
 export async function assertWorkflow(env = process.env) {
   const frozen = JSON.parse(await fs.readFile(path.join(packageRoot, 'workflow-freeze.json'), 'utf8'));
   need(/^[a-f0-9]{40}$/.test(env.GITHUB_SHA ?? ''), 'WORKFLOW_EXECUTION_SHA');
@@ -33,7 +46,7 @@ export async function assertWorkflow(env = process.env) {
     need(sha(await fs.readFile(path.join(packageRoot, name))) === expected, 'SOURCE_BUNDLE_MISMATCH');
   }
   const event = JSON.parse(await fs.readFile(env.GITHUB_EVENT_PATH, 'utf8'));
-  const target = selectTarget(event.inputs ?? {});
+  const target = selectTarget(normalizeReleaseInputs(event.inputs ?? {}));
   const run = execution(env);
   validateRunMetadata(await github('/actions/runs/' + run.id), run);
   const tip = await github('/git/ref/heads/' + P.branch);

@@ -1,0 +1,415 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "description": "Separate non-release Preview identity-probe attestation. No controller payload or publication authorization. All identity and product-report fields are explicit; no credentials or arbitrary URLs.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "kind",
+    "operation",
+    "phase",
+    "classification",
+    "production_release_target",
+    "workflow_path",
+    "workflow_sha256",
+    "workflow_run_id",
+    "workflow_run_attempt",
+    "workflow_execution_sha",
+    "probe_git_sha",
+    "probe_deployment_id",
+    "preview_origin",
+    "project_id",
+    "authority_run_id",
+    "sealed_manifest_sha256",
+    "qa_suite_version",
+    "result",
+    "timestamp",
+    "preview_metadata",
+    "product_report_sha256",
+    "product_report",
+    "attestation_sha256"
+  ],
+  "properties": {
+    "kind": {
+      "const": "statistical-levels.identity-probe-attestation.v1"
+    },
+    "operation": {
+      "const": "PROBE_IDENTITY"
+    },
+    "phase": {
+      "const": "preview"
+    },
+    "classification": {
+      "const": "PROBE_ONLY"
+    },
+    "production_release_target": {
+      "const": false
+    },
+    "workflow_path": {
+      "const": ".github/workflows/statistical-levels-release.yml"
+    },
+    "workflow_sha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "workflow_run_id": {
+      "type": "string",
+      "pattern": "^[1-9][0-9]{0,19}$"
+    },
+    "workflow_run_attempt": {
+      "type": "string",
+      "pattern": "^[1-9][0-9]{0,19}$"
+    },
+    "workflow_execution_sha": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{40}$"
+    },
+    "probe_git_sha": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{40}$"
+    },
+    "probe_deployment_id": {
+      "type": "string",
+      "pattern": "^dpl_[a-zA-Z0-9]{10,80}$"
+    },
+    "preview_origin": {
+      "type": "string",
+      "pattern": "^https://luiguiherrera-[a-z0-9]+-luigui-herrera-s-projects\\.vercel\\.app$"
+    },
+    "project_id": {
+      "const": "prj_kT4Z9GpDUghMK5Xfd9E3SzV2PvE6"
+    },
+    "authority_run_id": {
+      "type": "string",
+      "pattern": "^[0-9]{8}T[0-9]{9}Z-[a-f0-9-]{36}$"
+    },
+    "sealed_manifest_sha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "qa_suite_version": {
+      "const": "statistical-levels-release-qa.v1"
+    },
+    "result": {
+      "const": "PASS"
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time",
+      "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(\\.[0-9]{3})?Z$"
+    },
+    "preview_metadata": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "github_deployment_id",
+        "status_id",
+        "status_sha256",
+        "commit_status_id",
+        "commit_status_sha256"
+      ],
+      "properties": {
+        "github_deployment_id": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 9007199254740991
+        },
+        "status_id": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 9007199254740991
+        },
+        "status_sha256": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "commit_status_id": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 9007199254740991
+        },
+        "commit_status_sha256": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        }
+      }
+    },
+    "product_report_sha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "product_report": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "result",
+        "gates",
+        "snapshot_count",
+        "provenance_coverage",
+        "capability_ids",
+        "routes",
+        "viewports",
+        "application_console_errors",
+        "required_application_request_failures",
+        "broken_assets",
+        "hydration_errors",
+        "overflow",
+        "raw_platform_events",
+        "raw_rsc_events",
+        "unclassified_failures",
+        "expected_values"
+      ],
+      "properties": {
+        "result": {
+          "const": "PASS"
+        },
+        "snapshot_count": {
+          "const": 81
+        },
+        "provenance_coverage": {
+          "const": 100
+        },
+        "capability_ids": {
+          "const": [
+            "SL-CAP-001",
+            "SL-CAP-002",
+            "SL-CAP-003",
+            "SL-CAP-004",
+            "SL-CAP-005",
+            "SL-CAP-006",
+            "SL-CAP-007",
+            "SL-CAP-008",
+            "SL-CAP-009",
+            "SL-CAP-010",
+            "SL-CAP-011",
+            "SL-CAP-012",
+            "SL-CAP-013",
+            "SL-CAP-014",
+            "SL-CAP-015",
+            "SL-CAP-016",
+            "SL-CAP-017",
+            "SL-CAP-018",
+            "SL-CAP-019",
+            "SL-CAP-020",
+            "SL-CAP-021",
+            "SL-CAP-022",
+            "SL-CAP-023",
+            "SL-CAP-024",
+            "SL-CAP-025",
+            "SL-CAP-026",
+            "SL-CAP-027",
+            "SL-CAP-028",
+            "SL-CAP-029",
+            "SL-CAP-030",
+            "SL-CAP-031",
+            "SL-CAP-032",
+            "SL-CAP-033",
+            "SL-CAP-034",
+            "SL-CAP-035",
+            "SL-CAP-036",
+            "SL-CAP-037",
+            "SL-CAP-038",
+            "SL-CAP-039",
+            "SL-CAP-040",
+            "SL-CAP-041",
+            "SL-CAP-042",
+            "SL-CAP-043",
+            "SL-CAP-044",
+            "SL-CAP-045",
+            "SL-CAP-046",
+            "SL-CAP-047",
+            "SL-CAP-048",
+            "SL-CAP-049",
+            "SL-CAP-050",
+            "SL-CAP-051",
+            "SL-CAP-052",
+            "SL-CAP-053",
+            "SL-CAP-054",
+            "SL-CAP-055",
+            "SL-CAP-056",
+            "SL-CAP-057",
+            "SL-CAP-058",
+            "SL-CAP-059",
+            "SL-CAP-060",
+            "SL-CAP-061",
+            "SL-CAP-062",
+            "SL-CAP-063",
+            "SL-CAP-064",
+            "SL-CAP-065",
+            "SL-CAP-066",
+            "SL-CAP-067",
+            "SL-CAP-068",
+            "SL-CAP-069",
+            "SL-CAP-070",
+            "SL-CAP-071",
+            "SL-CAP-072",
+            "SL-CAP-073",
+            "SL-CAP-074",
+            "SL-CAP-075",
+            "SL-CAP-076",
+            "SL-CAP-077",
+            "SL-CAP-078",
+            "SL-CAP-079",
+            "SL-CAP-080",
+            "SL-CAP-081",
+            "SL-CAP-082",
+            "SL-CAP-083",
+            "SL-CAP-084",
+            "SL-CAP-085",
+            "SL-CAP-086",
+            "SL-CAP-087"
+          ]
+        },
+        "routes": {
+          "const": [
+            "/niveles-estadisticos",
+            "/en/statistical-levels"
+          ]
+        },
+        "viewports": {
+          "const": [
+            [
+              1440,
+              900
+            ],
+            [
+              390,
+              844
+            ]
+          ]
+        },
+        "application_console_errors": {
+          "type": "integer",
+          "const": 0
+        },
+        "required_application_request_failures": {
+          "type": "integer",
+          "const": 0
+        },
+        "broken_assets": {
+          "type": "integer",
+          "const": 0
+        },
+        "hydration_errors": {
+          "type": "integer",
+          "const": 0
+        },
+        "overflow": {
+          "type": "integer",
+          "const": 0
+        },
+        "raw_platform_events": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "sha256",
+              "count",
+              "classification"
+            ],
+            "properties": {
+              "sha256": {
+                "type": "string",
+                "pattern": "^[a-f0-9]{64}$"
+              },
+              "count": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "classification": {
+                "const": "platform_non_application"
+              }
+            }
+          }
+        },
+        "raw_rsc_events": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "sha256",
+              "count",
+              "classification"
+            ],
+            "properties": {
+              "sha256": {
+                "type": "string",
+                "pattern": "^[a-f0-9]{64}$"
+              },
+              "count": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "classification": {
+                "const": "rsc_non_application"
+              }
+            }
+          }
+        },
+        "unclassified_failures": {
+          "const": []
+        },
+        "expected_values": {
+          "const": "PASS"
+        },
+        "gates": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "SEASONALITY",
+            "DRAWDOWN",
+            "PATTERNS",
+            "NULL_STATES",
+            "CORRELATION",
+            "SL_DEF_001",
+            "SL_DEF_002",
+            "SL_DEF_003",
+            "SL_DEF_004",
+            "SL_DEF_005",
+            "SL_DEF_006"
+          ],
+          "properties": {
+            "SEASONALITY": {
+              "const": "PASS"
+            },
+            "DRAWDOWN": {
+              "const": "PASS"
+            },
+            "PATTERNS": {
+              "const": "PASS"
+            },
+            "NULL_STATES": {
+              "const": "PASS"
+            },
+            "CORRELATION": {
+              "const": "PASS"
+            },
+            "SL_DEF_001": {
+              "const": "PASS"
+            },
+            "SL_DEF_002": {
+              "const": "PASS"
+            },
+            "SL_DEF_003": {
+              "const": "PASS"
+            },
+            "SL_DEF_004": {
+              "const": "PASS"
+            },
+            "SL_DEF_005": {
+              "const": "PASS"
+            },
+            "SL_DEF_006": {
+              "const": "PASS"
+            }
+          }
+        }
+      }
+    },
+    "attestation_sha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    }
+  }
+}

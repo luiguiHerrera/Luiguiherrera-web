@@ -1,10 +1,11 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
-import { P, need, sha, canonical, validateTarget, ADOPT } from './release-core.mjs';
-import { createHarness } from './browser-harness.mjs';
+import { P, need, sha, canonical } from './release-core.mjs';
+import { validateProbeTarget } from './probe-core.mjs';
+import { createReadOnlyHarness } from './browser-harness-base.mjs';
 import { runReadOnlyQA } from './qa-runner.mjs';
 
-export async function verifyInputs(codeRoot, inputManifest, target) {
+export async function verifyProbeInputs(codeRoot, inputManifest, target) {
   for (const [file, expected] of Object.entries(inputManifest)) {
     need(!file.includes('..') && !path.isAbsolute(file), 'QA_INPUT_PATH');
     const stat = await fs.lstat(path.join(codeRoot, file));
@@ -27,10 +28,8 @@ export async function verifyInputs(codeRoot, inputManifest, target) {
   for (const key of ['RAW_MANIFEST_SHA256', 'RAW_ARCHIVE_MANIFEST_SHA256', 'RAW_ARCHIVE_SEAL_SHA256']) need(/^[a-f0-9]{64}$/.test(config[key]), 'PROVENANCE_HASH');
   need(Number.isFinite(Date.parse(config.SNAPSHOT_CUTOFF)), 'PROVENANCE_CUTOFF');
   const authority = { authority_run_id: provenance.BASELINE_ID, sealed_manifest_sha256: config.RAW_ARCHIVE_SEAL_SHA256 };
-  // Source/component bytes stay pinned; all data hashes come from this candidate's sidecar.
-  if (target.operation === ADOPT) need(sha(provenanceBytes) === P.baseline.provenance_sha256, 'BASELINE_PROVENANCE_HASH');
-  else need(provenance.BASELINE_ID.slice(0, 8) > P.baseline.authority_run_id.slice(0, 8), 'FUTURE_AUTHORITY_REQUIRED');
-  if (target.origin) validateTarget({ ...target, ...authority });
+  // Probe authority is evidence only; it is never evaluated or selected for publication.
+  validateProbeTarget({ ...target, ...authority });
   need(provenance.snapshots.length === 81 && new Set(provenance.snapshots.map(x => x.FILE)).size === 81, 'SNAPSHOT_COVERAGE');
   const expectedPaths = P.allowlist.filter(x => x.startsWith('lib/statistical-levels/generated/')).sort();
   need(canonical(provenance.snapshots.map(x => 'lib/statistical-levels/generated/' + x.FILE).sort()).equals(canonical(expectedPaths)), 'SNAPSHOT_PATH_SET');
@@ -48,7 +47,13 @@ export async function verifyInputs(codeRoot, inputManifest, target) {
   need(canonical(JSON.parse(ledgerFile).capabilities.map(x => x.ID)).equals(canonical(P.capabilities)), 'CAPABILITY_LEDGER');
   return authority;
 }
-export async function runCandidateQA(options) {
-  await verifyInputs(options.codeRoot, options.inputManifest, options.target);
-  return runReadOnlyQA(options, createHarness);
+export async function runProbeQA(options) {
+  const authority = await verifyProbeInputs(options.codeRoot, options.inputManifest, options.target);
+  const target = { ...options.target, ...authority };
+  validateProbeTarget(target);
+  const report = await runReadOnlyQA({ ...options, target }, (verified, tokenSource, out) => {
+    validateProbeTarget(verified);
+    return createReadOnlyHarness(verified, tokenSource, out, false);
+  });
+  return { report, target };
 }
