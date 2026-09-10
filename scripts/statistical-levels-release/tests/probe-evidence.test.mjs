@@ -46,8 +46,9 @@ function blank(outcomes) {
 // Exercise the real bounded preflight producer with an in-memory transport.
 // These current probe evidence fixtures are unrelated to historical data oracles.
 const seedTarget = fixture().context.target;
+let seedRequests = 0;
 const session = createProbeHttpSession({ target: seedTarget, tokenSource: { get: async () => 'synthetic-unit-credential' },
-  transport: async () => new Response('<html><div id="sl-controls"></div><div id="sl-authority">' +
+  transport: async () => seedRequests++ === 0 ? new Response('', { status: 302, headers: { location: 'https://vercel.com/login' } }) : new Response('<html><div id="sl-controls"></div><div id="sl-authority">' +
     seedTarget.authority_run_id + '</div></html>', { status: 200, headers: { 'content-type': 'text/html' } }),
   onEvidence: value => { httpFixture = value; } });
 await session.get(origin + '/niveles-estadisticos');
@@ -332,7 +333,7 @@ test('redirect diagnostic wrapper preserves exact V3 direct-job metadata for bot
   const input = fixture(), json = decode(buildProbeEvidence(input));
   assert.equal(json['probe-summary.json'].schema_version, 'statistical-levels.identity-probe-summary.v3');
   for (const name of ['trusted-sources-qa.json', 'aws-oidc-summary.json']) {
-    assert.ok(json[name].schema_version.endsWith(name === 'trusted-sources-qa.json' ? '.v4' : '.v3'));
+    assert.ok(json[name].schema_version.endsWith(name === 'trusted-sources-qa.json' ? '.v5' : '.v3'));
     assert.equal(json[name].oidc_claim_evidence[0].schema_version, 'statistical-levels.probe-oidc-evidence.v3');
     const c = json[name].oidc_claim_evidence[0].claims;
     assert.equal(c.job_workflow_ref_value, P.workflow_ref);
@@ -362,7 +363,7 @@ test('HTTP preflight survives canonical journal serialization and fixture-bound 
 });
 
 test('one passing language preflight cannot certify both product routes', () => {
-  const input = fixture(); input.httpPreflight.routes.pop();
+  const input = fixture(); input.httpPreflight.routes.pop(); input.httpPreflight.token_source_get_count = 1; input.httpPreflight.trusted_http_request_count = 1;
   const json = decode(buildProbeEvidence(input));
   assert.equal(json['trusted-sources-qa.json'].http_access_through_trusted_source, 'PASS');
   assert.equal(json['probe-summary.json'].result, 'FAIL');
@@ -418,13 +419,13 @@ test('matching protection redirects retain exact safe diagnostics in the six-fil
       return new Response(null, { status: 302, headers: { location: 'https://vercel.com/login?token=private-query-marker#private-fragment-marker',
         server: 'Vercel', 'set-cookie': 'private-cookie-marker' } });
     }, onEvidence: value => { latest = value; } });
-  await assert.rejects(probe.get(origin + '/niveles-estadisticos'), /TRUSTED_SOURCE_NOT_ACCEPTED_BY_PROTECTION_LAYER/);
+  await assert.rejects(probe.get(origin + '/niveles-estadisticos'), /BLOCKED_TRUSTED_SOURCES_LIVE_CONFIRMED/);
   assert.equal(calls, 2);
   input.httpPreflight = JSON.parse(canonical(latest));
   const json = decode(buildProbeEvidence(input));
   const saved = json['trusted-sources-qa.json'];
   assert.equal(saved.http_access_through_trusted_source, 'FAIL');
-  assert.equal(saved.http_preflight.error_code, 'TRUSTED_SOURCE_NOT_ACCEPTED_BY_PROTECTION_LAYER');
+  assert.equal(saved.http_preflight.error_code, 'BLOCKED_TRUSTED_SOURCES_LIVE_CONFIRMED');
   assert.equal(saved.http_preflight.anonymous.http_status_exact, 302);
   assert.equal(saved.http_preflight.routes[0].hops[0].http_status_exact, 302);
   assert.equal(saved.http_preflight.routes[0].hops[0].location.host, 'vercel.com');
@@ -432,4 +433,54 @@ test('matching protection redirects retain exact safe diagnostics in the six-fil
   assert.equal(saved.http_preflight.routes[0].hops[0].location.query_present, true);
   for (const marker of [token, 'private-query-marker', 'private-fragment-marker', 'private-cookie-marker']) assert.ok(!JSON.stringify(json).includes(marker));
   assert.equal(json['aws-oidc-summary.json'].result, 'NOT_RUN');
+});
+
+async function baselineStoppedFixture(kind) {
+  const input = failedQA(); input.oidcEvidence = []; input.accounting = null; let latest, tokenCalls = 0;
+  const body = '<html><div id="sl-controls"></div><div id="sl-authority">' + input.context.target.authority_run_id + '</div></html>';
+  const probe = createProbeHttpSession({ target: input.context.target,
+    tokenSource: { get: async () => { tokenCalls++; throw new Error('must not request a credential'); } },
+    transport: async () => new Response(kind === 'PUBLIC' ? body : '', { status: kind === 'PUBLIC' ? 200 : 503, headers: { 'content-type': 'text/html' } }),
+    onEvidence: value => { latest = value; } });
+  await assert.rejects(probe.establishAnonymousBaseline()); assert.equal(tokenCalls, 0);
+  input.httpPreflight = JSON.parse(canonical(latest)); return input;
+}
+for (const kind of ['PUBLIC', 'AMBIGUOUS']) {
+  test('20 evidence records ' + kind + ' baseline and no OIDC/trusted/QA/AWS attempt', async () => {
+    const input = await baselineStoppedFixture(kind), json = decode(buildProbeEvidence(input));
+    const trusted = json['trusted-sources-qa.json'];
+    assert.equal(trusted.schema_version, 'statistical-levels.identity-probe-trusted-sources.v5');
+    assert.equal(trusted.anonymous_protection_baseline, kind);
+    assert.equal(trusted.anonymous_http_status, kind === 'PUBLIC' ? 200 : 503);
+    assert.equal(trusted.vercel_oidc_token_requested, false); assert.equal(trusted.trusted_request_attempted, false);
+    assert.equal(trusted.oidc_validation_result, 'NOT_RUN'); assert.equal(trusted.http_access_through_trusted_source, 'NOT_RUN');
+    assert.equal(trusted.trusted_sources_access, 'NOT_RUN'); assert.equal(trusted.trusted_sources_live_certified, false);
+    assert.equal(trusted.baseline_stop_reason, kind === 'PUBLIC' ? 'BLOCKED_PREVIEW_NOT_DEMONSTRABLY_PROTECTED' : 'BLOCKED_ANONYMOUS_PROTECTION_BASELINE_AMBIGUOUS');
+    assert.equal(trusted.preview_qa_result, 'NOT_RUN');
+    assert.equal(trusted.product_report, null); assert.equal(json['qa-attestation.json'].attestation, null);
+    assert.equal(json['aws-oidc-summary.json'].result, 'NOT_RUN');
+    assert.ok(!json['probe-summary.json'].evidence_issues.includes('HTTP_WITHOUT_PASSING_OIDC'));
+  });
+  test(kind + ' evidence rejects forged successful OIDC/QA/AWS outcomes', async () => {
+    const stopped = await baselineStoppedFixture(kind), input = fixture(); input.httpPreflight = stopped.httpPreflight;
+    const json = decode(buildProbeEvidence(input)); assert.equal(json['probe-summary.json'].result, 'FAIL');
+    for (const issue of ['OIDC_WITHOUT_PROTECTED_BASELINE', 'QA_WITHOUT_PROTECTED_BASELINE', 'AWS_WITHOUT_PROTECTED_BASELINE']) assert.ok(json['probe-summary.json'].evidence_issues.includes(issue), issue);
+    assert.equal(json['trusted-sources-qa.json'].trusted_sources_live_certified, false);
+    assert.equal(json['trusted-sources-qa.json'].trusted_sources_access, 'NOT_RUN');
+    assert.equal(json['aws-oidc-summary.json'].result, 'FAIL'); // Proof cannot override the failed protection/QA prerequisites.
+  });
+  for (const mutate of [x => { x.anonymous_protection_baseline = 'PROTECTED'; }, x => { x.vercel_oidc_token_requested = true; },
+    x => { x.trusted_request_attempted = true; }, x => { x.trusted_sources_live_certified = true; }]) {
+    test(kind + ' cannot be relabeled as protected/token/trusted/live in sanitized evidence: ' + mutate.toString(), async () => {
+      const input = await baselineStoppedFixture(kind); mutate(input.httpPreflight);
+      const json = decode(buildProbeEvidence(input)); assert.equal(json['probe-summary.json'].result, 'FAIL');
+      assert.equal(json['trusted-sources-qa.json'].http_preflight, null); assert.equal(json['trusted-sources-qa.json'].trusted_sources_live_certified, false);
+      assert.ok(json['probe-summary.json'].evidence_issues.includes('INVALID_HTTP_PREFLIGHT'));
+    });
+  }
+}
+test('20 protected success evidence independently certifies exact affirmative baseline', () => {
+  const json = decode(buildProbeEvidence(fixture())), trusted = json['trusted-sources-qa.json'];
+  assert.equal(trusted.anonymous_protection_baseline, 'PROTECTED'); assert.equal(trusted.vercel_oidc_token_requested, true);
+  assert.equal(trusted.trusted_request_attempted, true); assert.equal(trusted.trusted_sources_access, 'PASS'); assert.equal(trusted.trusted_sources_live_certified, true);
 });

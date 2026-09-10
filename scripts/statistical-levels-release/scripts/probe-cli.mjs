@@ -1,9 +1,10 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
-import { P, need, canonical, oidcLease } from './release-core.mjs';
+import { P, need, canonical } from './release-core.mjs';
 import { attestProbe, validateProbeAttestation } from './probe-core.mjs';
 import { assertProbeWorkflow, resolveProbeDeployment, probeOIDC, readProbeRoleIdentity, readProbeOIDCEvidence, packageRoot, candidateRoot, execution } from './probe-runtime.mjs';
 import { writeProbeEvidence } from './probe-evidence.mjs';
+import { requireProtectedProbeHTTP } from './probe-gate.mjs';
 
 const root = path.join(process.env.RUNNER_TEMP ?? '', 'statistical-levels-identity-probe');
 const qaDirectory = path.join(root, 'qa');
@@ -42,15 +43,15 @@ try {
       const { verifyProbeInputs, runProbeQA } = await import('./probe-qa.mjs');
       const verified = { ...target, ...await verifyProbeInputs(candidateRoot, inputs, target) };
       await save(stateFile, { run, target: verified, workflow_sha256: frozen.workflow_sha256 });
-      const tokenSource = oidcLease(await probeOIDC(P.vercel_audience), () => probeOIDC(P.vercel_audience));
-      try {
-        const { report } = await runProbeQA({ target: verified, tokenSource, out: qaDirectory, codeRoot: candidateRoot, inputManifest: inputs });
-        await save(path.join(root, 'qa-attestation.json'), attestProbe(report, run, verified, frozen.workflow_sha256, new Date().toISOString()));
-      } finally { tokenSource.clear(); }
+      const { report } = await runProbeQA({ target: verified,
+        requestOIDCToken: () => probeOIDC(P.vercel_audience),
+        out: qaDirectory, codeRoot: candidateRoot, inputManifest: inputs });
+      await save(path.join(root, 'qa-attestation.json'), attestProbe(report, run, verified, frozen.workflow_sha256, new Date().toISOString()));
     } else {
       const context = JSON.parse(await fs.readFile(stateFile, 'utf8'));
       const attestation = JSON.parse(await fs.readFile(path.join(root, 'qa-attestation.json'), 'utf8'));
       validateProbeAttestation(attestation, run, context.target, frozen.workflow_sha256);
+      requireProtectedProbeHTTP(await readOptional(path.join(qaDirectory, 'http-preflight.json')), context.target);
       const age = Date.now() - Date.parse(attestation.timestamp);
       need(age >= 0 && age <= 86400000, 'PROBE_QA_EXPIRED');
       need(context.target.candidate_git_sha === frozen.target.candidate_git_sha && context.target.deployment_id === frozen.target.deployment_id, 'PROBE_FIXTURE_CHANGED');

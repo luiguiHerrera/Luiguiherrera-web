@@ -4,7 +4,8 @@ import { P, need, sha, canonical } from './release-core.mjs';
 import { validateProbeTarget } from './probe-core.mjs';
 import { createReadOnlyHarness } from './browser-harness-base.mjs';
 import { runReadOnlyQA } from './qa-runner.mjs';
-import { createProbeHttpSession, validateProbeHttpEvidence } from './probe-http.mjs';
+import { validateProbeHttpEvidence } from './probe-http.mjs';
+import { runProtectedProbeQA } from './probe-gate.mjs';
 
 export async function verifyProbeInputs(codeRoot, inputManifest, target) {
   for (const [file, expected] of Object.entries(inputManifest)) {
@@ -52,17 +53,18 @@ export async function runProbeQA(options) {
   const authority = await verifyProbeInputs(options.codeRoot, options.inputManifest, options.target);
   const target = { ...options.target, ...authority };
   validateProbeTarget(target);
-  const report = await runReadOnlyQA({ ...options, target }, async (verified, tokenSource, out) => {
-    validateProbeTarget(verified);
-    const harness = await createReadOnlyHarness(verified, tokenSource, out, false);
-    const preflight = createProbeHttpSession({ target: verified, tokenSource,
-      onEvidence: async value => {
-        const safe = validateProbeHttpEvidence(value, verified);
-        await fs.writeFile(path.join(out, 'http-preflight.json'), canonical(safe), { mode: 0o600 });
-      } });
-    // Only this probe substitutes its bounded diagnostic GET. The shared release
-    // browser and QA runner, and every ADOPT/PROMOTE transport, remain unchanged.
-    return { ...harness, protectedGet: url => preflight.get(url) };
+  await fs.mkdir(options.out, { recursive: true, mode: 0o700 });
+  const report = await runProtectedProbeQA({ target, requestOIDCToken: options.requestOIDCToken,
+    onEvidence: async value => {
+      const safe = validateProbeHttpEvidence(value, target);
+      await fs.writeFile(path.join(options.out, 'http-preflight.json'), canonical(safe), { mode: 0o600 });
+    },
+    runQA: ({ tokenSource, protectedGet }) => runReadOnlyQA({ ...options, target, tokenSource }, async verified => {
+      validateProbeTarget(verified);
+      const harness = await createReadOnlyHarness(verified, tokenSource, options.out, false);
+      // Shared release browser and ADOPT/PROMOTE transport remain unchanged.
+      return { ...harness, protectedGet };
+    })
   });
   return { report, target };
 }

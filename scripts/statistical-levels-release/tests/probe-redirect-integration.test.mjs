@@ -24,9 +24,11 @@ test('16: proven OIDC V3 validator and runtime identity boundary remain exact fr
   assert.equal(digest(await read('scripts/probe-runtime.mjs')), 'a0c808af84d5f8f047a823bb88ae9247fdceb93099d0274e4c0eeb2b6d66a3a8');
 });
 
-test('17: probe entry retains OIDC-before-HTTP ordering and never imports controller invocation', async () => {
+test('17: probe entry defers OIDC creation to protected-baseline gate and never imports controller invocation', async () => {
   const cli = await read('scripts/probe-cli.mjs');
-  assert.ok(cli.indexOf('oidcLease(await probeOIDC(P.vercel_audience)') < cli.indexOf('await runProbeQA('));
+  assert.doesNotMatch(cli, /oidcLease/);
+  assert.match(cli, /requestOIDCToken: \(\) => probeOIDC\(P\.vercel_audience\)/);
+  assert.ok(cli.indexOf('requireProtectedProbeHTTP(await readOptional') < cli.indexOf("if (mode === 'aws-preflight')"));
   assert.match(cli, /httpPreflight: await readOptional\(path.join\(qaDirectory, 'http-preflight.json'\)\)/);
   for (const file of ['scripts/probe-cli.mjs', 'scripts/probe-http.mjs', 'scripts/probe-qa.mjs']) {
     assert.doesNotMatch(await read(file), /import[^\n]*(?:invoke|runtime-io|child_process|aws-sdk)|InvokeFunction|GetSecretValue|PutObject|api\.vercel\.com/);

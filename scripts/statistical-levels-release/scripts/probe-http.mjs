@@ -2,7 +2,7 @@
 import { createHash } from 'node:crypto';
 import { validateProbeTarget } from './probe-core.mjs';
 
-export const PROBE_HTTP_SCHEMA = 'statistical-levels.probe-http-evidence.v1';
+export const PROBE_HTTP_SCHEMA = 'statistical-levels.probe-http-evidence.v2';
 export const PROBE_HTTP_PATHS = Object.freeze(['/niveles-estadisticos', '/en/statistical-levels']);
 export const PROBE_HTTP_MAX_REDIRECTS = 2;
 const TOKEN_HEADER = 'x-vercel-trusted-oidc-idp-token';
@@ -12,9 +12,12 @@ const AUTH_PATHS = ['/login', '/sso-api', '/sso-api/login', '/auth/login'];
 const LOCATION_KEYS = ['present', 'scheme', 'host', 'path', 'query_present', 'fragment_present', 'origin_classification', 'valid', 'userinfo_present', 'port_present', 'host_redacted', 'path_redacted', 'host_sha256', 'path_sha256'];
 const RESPONSE_KEYS = ['request_path', 'http_status_exact', 'location', 'headers', 'classification'];
 const ROUTE_KEYS = ['path', 'result', 'error_code', 'classification', 'final_path', 'authority_match', 'html_content_type', 'application_structure_match', 'hops'];
-const EVIDENCE_KEYS = ['schema_version', 'operation', 'fixture', 'max_redirects', 'anonymous', 'routes', 'result', 'access', 'classification', 'error_code', 'cross_origin_oidc_forward'];
+const EVIDENCE_KEYS = ['schema_version', 'operation', 'fixture', 'max_redirects', 'anonymous', 'routes', 'result', 'access', 'classification', 'error_code', 'cross_origin_oidc_forward', 'anonymous_hops', 'anonymous_http_request_count', 'anonymous_baseline_complete', 'anonymous_protection_baseline', 'anonymous_content_classification', 'anonymous_authority_match', 'anonymous_html_content_type', 'anonymous_application_structure_match', 'anonymous_baseline_error_code', 'vercel_oidc_token_requested', 'token_source_get_count', 'trusted_request_attempted', 'trusted_http_request_count', 'trusted_sources_access', 'trusted_sources_live_certified'];
 const FIXTURE_KEYS = ['origin', 'candidate_git_sha', 'deployment_id', 'authority_run_id', 'sealed_manifest_sha256'];
-const ERRORS = ['PROBE_HTTP_REQUEST_SCOPE', 'PROBE_HTTP_TOKEN_UNAVAILABLE', 'PROBE_HTTP_TRANSPORT_FAILURE', 'PROBE_HTTP_RESPONSE_INVALID', 'PROBE_HTTP_TRANSPORT_REDIRECT', 'PROBE_HTTP_REDIRECT_LOCATION', 'PROBE_HTTP_UNSAFE_REDIRECT', 'PROBE_HTTP_REDIRECT_LOOP', 'PROBE_HTTP_REDIRECT_LIMIT', 'PROBE_HTTP_CROSS_ORIGIN_REDIRECT', 'PROBE_HTTP_PROTECTION_AUTH_REDIRECT', 'TRUSTED_SOURCE_NOT_ACCEPTED_BY_PROTECTION_LAYER', 'BLOCKED_PREVIEW_READINESS_INCONSISTENCY', 'PROBE_HTTP_PLATFORM_REDIRECT', 'PROBE_HTTP_PLATFORM_ERROR', 'PROBE_HTTP_STATUS', 'PROBE_HTTP_BODY_READ_FAILURE', 'PROBE_HTTP_BODY_SIZE', 'PROBE_HTTP_CONTENT_TYPE', 'PROBE_HTTP_FIXTURE_CONTENT_MISMATCH', 'PROBE_HTTP_SECRET_IN_CONTENT'];
+const ERRORS = ['PROBE_HTTP_REQUEST_SCOPE', 'PROBE_HTTP_TOKEN_UNAVAILABLE', 'PROBE_HTTP_TRANSPORT_FAILURE', 'PROBE_HTTP_RESPONSE_INVALID', 'PROBE_HTTP_TRANSPORT_REDIRECT', 'PROBE_HTTP_REDIRECT_LOCATION', 'PROBE_HTTP_UNSAFE_REDIRECT', 'PROBE_HTTP_REDIRECT_LOOP', 'PROBE_HTTP_REDIRECT_LIMIT', 'PROBE_HTTP_CROSS_ORIGIN_REDIRECT', 'PROBE_HTTP_PROTECTION_AUTH_REDIRECT', 'BLOCKED_TRUSTED_SOURCES_LIVE_CONFIRMED', 'BLOCKED_PREVIEW_READINESS_INCONSISTENCY', 'PROBE_HTTP_PLATFORM_REDIRECT', 'PROBE_HTTP_PLATFORM_ERROR', 'PROBE_HTTP_STATUS', 'PROBE_HTTP_BODY_READ_FAILURE', 'PROBE_HTTP_BODY_SIZE', 'PROBE_HTTP_CONTENT_TYPE', 'PROBE_HTTP_FIXTURE_CONTENT_MISMATCH', 'PROBE_HTTP_SECRET_IN_CONTENT'];
+const BASELINE_PUBLIC = 'BLOCKED_PREVIEW_NOT_DEMONSTRABLY_PROTECTED';
+const BASELINE_AMBIGUOUS = 'BLOCKED_ANONYMOUS_PROTECTION_BASELINE_AMBIGUOUS';
+ERRORS.push(BASELINE_PUBLIC, BASELINE_AMBIGUOUS);
 const HASH = /^[a-f0-9]{64}$/;
 function copy(value) {
   if (value === null || typeof value === 'string' || typeof value === 'boolean') return value;
@@ -134,7 +137,7 @@ function sameLogin(a, b) {
 function redirectFailure(response, evidence, route) {
   if (response.classification === 'VERCEL_PLATFORM_ERROR') return 'PROBE_HTTP_PLATFORM_ERROR';
   if (response.classification === 'DEPLOYMENT_NOT_READY') return 'BLOCKED_PREVIEW_READINESS_INCONSISTENCY';
-  if (response.classification === 'PROTECTION_AUTH_REDIRECT') return sameLogin(evidence.anonymous, response) ? 'TRUSTED_SOURCE_NOT_ACCEPTED_BY_PROTECTION_LAYER' : 'PROBE_HTTP_PROTECTION_AUTH_REDIRECT';
+  if (response.classification === 'PROTECTION_AUTH_REDIRECT') return sameLogin(evidence.anonymous, response) ? 'BLOCKED_TRUSTED_SOURCES_LIVE_CONFIRMED' : 'PROBE_HTTP_PROTECTION_AUTH_REDIRECT';
   if (response.classification === 'OTHER_VERCEL_PLATFORM_REDIRECT') return 'PROBE_HTTP_PLATFORM_REDIRECT';
   if (response.classification === 'CROSS_ORIGIN_APPLICATION_OR_CANONICAL_REDIRECT') return 'PROBE_HTTP_CROSS_ORIGIN_REDIRECT';
   if (!response.location.present) return 'PROBE_HTTP_REDIRECT_LOCATION';
@@ -168,27 +171,72 @@ function validateResponse(value, fixture) {
   }
   invariant(value.classification === responseClass(value));
 }
+function positiveProtection(response) {
+  const location = response?.location;
+  return response?.classification === 'PROTECTION_AUTH_REDIRECT' && [301, 302, 303, 307, 308].includes(response.http_status_exact) && location.valid && location.scheme === 'https' &&
+    location.origin_classification === 'CROSS_ORIGIN' && !location.userinfo_present && !location.port_present;
+}
+function equivalent(a, b) {
+  if (a === b) return true;
+  if (!a || !b || typeof a !== 'object' || typeof b !== 'object') return false;
+  const names = Object.keys(a).sort(), other = Object.keys(b).sort();
+  return names.length === other.length && names.every((key, i) => key === other[i] && equivalent(a[key], b[key]));
+}
+function validateChain(hops, fixture, initialPath) {
+  invariant(Array.isArray(hops) && hops.length <= 3);
+  hops.forEach(hop => validateResponse(hop, fixture));
+  if (hops.length) invariant(hops[0].request_path === initialPath);
+  for (let i = 1; i < hops.length; i++) {
+    const previous = hops[i - 1];
+    invariant(['SAME_ORIGIN_APPLICATION_REDIRECT', 'SAME_ORIGIN_CANONICAL_PATH_REDIRECT'].includes(previous.classification) && followAllowed(previous.location, fixture));
+    invariant(hops[i].request_path === previous.location.path && !hops.slice(0, i).some(hop => hop.request_path === hops[i].request_path));
+  }
+}
 export function validateProbeHttpEvidence(value, target) {
   value = copy(value);
   keys(value, EVIDENCE_KEYS); keys(value.fixture, FIXTURE_KEYS);
   const fixture = validFixture({ operation: 'PROBE_IDENTITY', phase: 'preview', ...value.fixture });
-  if (target) invariant(JSON.stringify(fixture) === JSON.stringify(validFixture(target)), 'PROBE_HTTP_FIXTURE_MISMATCH');
+  if (target) invariant(equivalent(fixture, validFixture(target)), 'PROBE_HTTP_FIXTURE_MISMATCH');
   invariant(value.schema_version === PROBE_HTTP_SCHEMA && value.operation === 'PROBE_IDENTITY' && value.max_redirects === 2 && value.cross_origin_oidc_forward === false);
   invariant(Array.isArray(value.routes) && value.routes.length <= 2);
   invariant(['NOT_CERTIFIED', 'PASS', 'FAIL'].includes(value.result) && ['NOT_ATTEMPTED', 'NOT_CERTIFIED', 'PASS', 'FAIL'].includes(value.access));
   invariant(value.error_code === null || ERRORS.includes(value.error_code));
-  if (value.anonymous !== null) { validateResponse(value.anonymous, fixture); invariant(value.anonymous.request_path === PROBE_HTTP_PATHS[0]); }
+  validateChain(value.anonymous_hops, fixture, PROBE_HTTP_PATHS[0]);
+  invariant(value.anonymous_hops.slice(0, -1).every(hop => [301, 302, 303, 307, 308].includes(hop.http_status_exact)));
+  invariant(equivalent(value.anonymous, value.anonymous_hops.at(-1) ?? null));
+  for (const name of ['anonymous_baseline_complete', 'anonymous_authority_match', 'anonymous_html_content_type', 'anonymous_application_structure_match', 'vercel_oidc_token_requested', 'trusted_request_attempted', 'trusted_sources_live_certified']) invariant(typeof value[name] === 'boolean');
+  for (const [name, maximum] of [['anonymous_http_request_count', 3], ['token_source_get_count', 2], ['trusted_http_request_count', 6]]) invariant(Number.isInteger(value[name]) && value[name] >= 0 && value[name] <= maximum);
+  invariant(value.anonymous_http_request_count >= value.anonymous_hops.length && value.anonymous_http_request_count <= value.anonymous_hops.length + 1);
+  invariant(value.vercel_oidc_token_requested === (value.token_source_get_count > 0) && value.trusted_request_attempted === (value.trusted_http_request_count > 0));
+  invariant(value.token_source_get_count <= value.routes.length);
+  invariant(['NOT_INSPECTED', 'NOT_APPLICATION_RESPONSE', 'VERIFIED_APPLICATION_CONTENT', 'UNVERIFIED_CONTENT', 'UNREADABLE_CONTENT'].includes(value.anonymous_content_classification));
+  invariant(value.anonymous_baseline_error_code === null || ERRORS.includes(value.anonymous_baseline_error_code));
+  const anonymousContent = value.anonymous?.classification === 'APPLICATION_CONTENT_CANDIDATE' && value.anonymous_authority_match && value.anonymous_html_content_type && value.anonymous_application_structure_match;
+  if (value.anonymous_content_classification === 'VERIFIED_APPLICATION_CONTENT') invariant(anonymousContent);
+  else invariant(!anonymousContent);
+  if (['NOT_INSPECTED', 'NOT_APPLICATION_RESPONSE'].includes(value.anonymous_content_classification)) invariant(!value.anonymous_authority_match && !value.anonymous_html_content_type && !value.anonymous_application_structure_match);
+  if (!value.anonymous_baseline_complete) invariant(value.anonymous_protection_baseline === null && value.anonymous_baseline_error_code === null && value.result === 'NOT_CERTIFIED');
+  else {
+    const derived = value.anonymous_baseline_error_code !== null ? 'AMBIGUOUS' :
+      positiveProtection(value.anonymous) ? 'PROTECTED' : anonymousContent ? 'PUBLIC' : 'AMBIGUOUS';
+    invariant(value.anonymous_protection_baseline === derived);
+    if (derived === 'PROTECTED') invariant(value.anonymous_content_classification === 'NOT_APPLICATION_RESPONSE');
+    if (derived === 'PUBLIC') invariant(value.anonymous_content_classification === 'VERIFIED_APPLICATION_CONTENT' && value.result === 'FAIL' && value.error_code === BASELINE_PUBLIC);
+    if (derived === 'AMBIGUOUS') invariant(value.result === 'FAIL' && (value.error_code === BASELINE_AMBIGUOUS ||
+      (value.error_code === 'PROBE_HTTP_REQUEST_SCOPE' && value.anonymous_baseline_error_code === 'PROBE_HTTP_REQUEST_SCOPE' && value.anonymous_http_request_count === 0)));
+  }
+  if (value.error_code === BASELINE_PUBLIC) invariant(value.anonymous_protection_baseline === 'PUBLIC');
+  if (value.error_code === BASELINE_AMBIGUOUS) invariant(value.anonymous_protection_baseline === 'AMBIGUOUS');
+  if (value.anonymous_protection_baseline !== 'PROTECTED') {
+    invariant(!value.vercel_oidc_token_requested && value.token_source_get_count === 0 && !value.trusted_request_attempted && value.trusted_http_request_count === 0 && value.routes.length === 0);
+  }
+  let trustedResponses = 0;
   for (const [index, route] of value.routes.entries()) {
     keys(route, ROUTE_KEYS); invariant(route.path === PROBE_HTTP_PATHS[index] && ['IN_PROGRESS', 'PASS', 'FAIL'].includes(route.result));
     invariant(route.error_code === null || ERRORS.includes(route.error_code));
     for (const name of ['authority_match', 'html_content_type', 'application_structure_match']) invariant(typeof route[name] === 'boolean');
-    invariant(Array.isArray(route.hops) && route.hops.length <= 3);
-    route.hops.forEach(hop => validateResponse(hop, fixture));
-    if (route.hops.length) invariant(value.anonymous !== null && route.hops[0].request_path === route.path);
-    for (let i = 1; i < route.hops.length; i++) {
-      const previous = route.hops[i - 1]; invariant(previous.http_status_exact >= 300 && previous.http_status_exact < 400 && followAllowed(previous.location, fixture));
-      invariant(route.hops[i].request_path === previous.location.path && !route.hops.slice(0, i).some(hop => hop.request_path === route.hops[i].request_path));
-    }
+    validateChain(route.hops, fixture, route.path); trustedResponses += route.hops.length;
+    if (route.hops.length) invariant(value.vercel_oidc_token_requested && value.trusted_request_attempted);
     const last = route.hops.at(-1);
     if (route.result === 'PASS') invariant(last && last.http_status_exact >= 200 && last.http_status_exact < 300 && last.classification === 'APPLICATION_CONTENT_CANDIDATE' && route.final_path === last.request_path && route.authority_match && route.html_content_type && route.application_structure_match && route.error_code === null && route.classification === 'VERIFIED_APPLICATION_CONTENT');
     else invariant(route.final_path === null);
@@ -200,9 +248,12 @@ export function validateProbeHttpEvidence(value, target) {
     }
     if (index > 0) invariant(value.routes[index - 1].result === 'PASS');
   }
-  if (value.result === 'PASS') invariant(value.routes.length >= 1 && value.anonymous !== null && value.anonymous.classification !== 'DEPLOYMENT_NOT_READY' && value.routes.every(route => route.result === 'PASS') && value.access === 'PASS' && value.error_code === null && value.classification === 'VERIFIED_APPLICATION_CONTENT');
-  else if (value.result === 'FAIL') invariant(ERRORS.includes(value.error_code) && value.classification === value.error_code && value.access === (value.routes.some(route => route.hops.length) ? 'FAIL' : 'NOT_ATTEMPTED'));
+  invariant(value.trusted_http_request_count >= trustedResponses && value.trusted_http_request_count <= trustedResponses + 1);
+  if (value.result === 'PASS') invariant(value.anonymous_baseline_complete && value.anonymous_protection_baseline === 'PROTECTED' && value.routes.length >= 1 && value.routes.every(route => route.result === 'PASS') && value.access === 'PASS' && value.error_code === null && value.classification === 'VERIFIED_APPLICATION_CONTENT');
+  else if (value.result === 'FAIL') invariant(ERRORS.includes(value.error_code) && value.classification === value.error_code && value.access === (value.trusted_request_attempted ? 'FAIL' : 'NOT_ATTEMPTED'));
   else invariant(value.error_code === null && value.access === 'NOT_CERTIFIED' && value.classification === 'IN_PROGRESS');
+  invariant(value.trusted_sources_access === (value.result === 'PASS' ? 'PASS' : value.result === 'FAIL' && value.trusted_request_attempted ? 'FAIL' : 'NOT_RUN'));
+  invariant(value.trusted_sources_live_certified === (value.result === 'PASS'));
   return copy(value);
 }
 async function boundedText(response) {
@@ -213,44 +264,110 @@ async function boundedText(response) {
 }
 
 export function createProbeHttpSession({ target, tokenSource, transport = fetch, onEvidence }) {
-  const fixture = validFixture(target); invariant(typeof tokenSource?.get === 'function' && typeof transport === 'function' && typeof onEvidence === 'function', 'PROBE_HTTP_OPTIONS');
+  const fixture = validFixture(target), tokenGet = tokenSource && Object.getOwnPropertyDescriptor(tokenSource, 'get')?.value;
+  invariant(typeof tokenGet === 'function' && typeof transport === 'function' && typeof onEvidence === 'function', 'PROBE_HTTP_OPTIONS');
   let closed = false, busy = false;
   const state = { schema_version: PROBE_HTTP_SCHEMA, operation: 'PROBE_IDENTITY', fixture, max_redirects: 2,
-    anonymous: null, routes: [], result: 'NOT_CERTIFIED', access: 'NOT_CERTIFIED', classification: 'IN_PROGRESS', error_code: null, cross_origin_oidc_forward: false };
+    anonymous: null, anonymous_hops: [], anonymous_http_request_count: 0, anonymous_baseline_complete: false,
+    anonymous_protection_baseline: null, anonymous_content_classification: 'NOT_INSPECTED', anonymous_authority_match: false,
+    anonymous_html_content_type: false, anonymous_application_structure_match: false, anonymous_baseline_error_code: null,
+    vercel_oidc_token_requested: false, token_source_get_count: 0, trusted_request_attempted: false, trusted_http_request_count: 0,
+    trusted_sources_access: 'NOT_RUN', trusted_sources_live_certified: false,
+    routes: [], result: 'NOT_CERTIFIED', access: 'NOT_CERTIFIED', classification: 'IN_PROGRESS', error_code: null, cross_origin_oidc_forward: false };
   const evidence = () => validateProbeHttpEvidence(state, target);
   const persist = async () => { const safe = evidence(); try { await onEvidence(safe); } catch { closed = true; fail('PROBE_HTTP_EVIDENCE_WRITE_FAILED'); } };
   async function reject(code, route) {
     closed = true; if (route) Object.assign(route, { result: 'FAIL', error_code: code, classification: code, final_path: null });
-    Object.assign(state, { result: 'FAIL', access: state.routes.some(item => item.hops.length) ? 'FAIL' : 'NOT_ATTEMPTED', classification: code, error_code: code });
+    if (!state.anonymous_baseline_complete) {
+      Object.assign(state, { anonymous_baseline_complete: true, anonymous_protection_baseline: 'AMBIGUOUS', anonymous_baseline_error_code: code });
+      if (state.anonymous_http_request_count > 0) code = BASELINE_AMBIGUOUS;
+    }
+    Object.assign(state, { result: 'FAIL', access: state.trusted_request_attempted ? 'FAIL' : 'NOT_ATTEMPTED', classification: code, error_code: code,
+      trusted_sources_access: state.trusted_request_attempted ? 'FAIL' : 'NOT_RUN', trusted_sources_live_certified: false });
     await persist(); fail(code);
+  }
+  async function rejectAnonymous(diagnostic) {
+    Object.assign(state, { anonymous_baseline_complete: true, anonymous_protection_baseline: 'AMBIGUOUS', anonymous_baseline_error_code: diagnostic });
+    return reject(BASELINE_AMBIGUOUS);
   }
   async function request(url, token, route, anonymous) {
     if (closed) fail(state.error_code ?? 'PROBE_HTTP_REQUEST_SCOPE');
+    if (anonymous) state.anonymous_http_request_count++;
+    else { state.trusted_request_attempted = true; state.trusted_http_request_count++; }
     let response;
+    const abort = code => anonymous ? rejectAnonymous(code) : reject(code, route);
     try { response = await transport(url, { method: 'GET', redirect: 'manual', credentials: 'omit', headers: anonymous ? {} : { [TOKEN_HEADER]: token }, signal: AbortSignal.timeout(30000) }); }
-    catch { return reject('PROBE_HTTP_TRANSPORT_FAILURE', route); }
+    catch { return abort('PROBE_HTTP_TRANSPORT_FAILURE'); }
     if (closed) fail(state.error_code ?? 'PROBE_HTTP_REQUEST_SCOPE');
     let record;
-    try { record = sanitizeProbeHttpResponse(response, url, fixture.origin, [token]); } catch { return reject('PROBE_HTTP_RESPONSE_INVALID', route); }
-    if (anonymous) state.anonymous = record; else route.hops.push(record);
+    try { record = sanitizeProbeHttpResponse(response, url, fixture.origin, anonymous ? [] : [token]); } catch { return abort('PROBE_HTTP_RESPONSE_INVALID'); }
+    if (anonymous) { state.anonymous = record; state.anonymous_hops.push(record); } else route.hops.push(record);
     await persist();
-    if (response.redirected === true || (response.url && response.url !== url)) return reject('PROBE_HTTP_TRANSPORT_REDIRECT', route);
+    if (closed) fail(state.error_code ?? 'PROBE_HTTP_REQUEST_SCOPE');
+    if (response.redirected === true || (response.url && response.url !== url)) return abort('PROBE_HTTP_TRANSPORT_REDIRECT');
     return response;
   }
-  async function get(url) {
-    if (closed || busy || state.routes.length >= 2 || typeof url !== 'string' || url !== fixture.origin + PROBE_HTTP_PATHS[state.routes.length]) return reject('PROBE_HTTP_REQUEST_SCOPE');
-    busy = true;
-    const route = { path: PROBE_HTTP_PATHS[state.routes.length], result: 'IN_PROGRESS', error_code: null, classification: 'IN_PROGRESS', final_path: null, authority_match: false, html_content_type: false, application_structure_match: false, hops: [] };
-    state.routes.push(route); Object.assign(state, { result: 'NOT_CERTIFIED', access: 'NOT_CERTIFIED', classification: 'IN_PROGRESS', error_code: null });
-    try {
-      let token;
-      // The caller's lease is created only after frozen OIDC validation. Obtain it before any HTTP.
-      try { token = await tokenSource.get(); } catch { return await reject('PROBE_HTTP_TOKEN_UNAVAILABLE', route); }
-      if (typeof token !== 'string' || !token.length || token.length > 20000 || /[\r\n\u0000]/.test(token)) return await reject('PROBE_HTTP_TOKEN_UNAVAILABLE', route);
-      if (state.anonymous === null) {
-        await request(url, token, route, true);
-        if (state.anonymous.classification === 'DEPLOYMENT_NOT_READY') return await reject('BLOCKED_PREVIEW_READINESS_INCONSISTENCY', route);
+  async function establish() {
+    if (state.anonymous_baseline_complete) {
+      if (state.anonymous_protection_baseline === 'PROTECTED') return evidence();
+      fail(state.error_code ?? BASELINE_AMBIGUOUS);
+    }
+    let next = fixture.origin + PROBE_HTTP_PATHS[0];
+    while (true) {
+      const response = await request(next, null, null, true), record = state.anonymous;
+      if (positiveProtection(record)) {
+        Object.assign(state, { anonymous_baseline_complete: true, anonymous_protection_baseline: 'PROTECTED', anonymous_content_classification: 'NOT_APPLICATION_RESPONSE' });
+        await persist(); if (closed) fail(state.error_code ?? 'PROBE_HTTP_REQUEST_SCOPE'); return evidence();
       }
+      if (record.http_status_exact >= 300 && record.http_status_exact < 400) {
+        state.anonymous_content_classification = 'NOT_APPLICATION_RESPONSE';
+        if (![301, 302, 303, 307, 308].includes(record.http_status_exact)) return rejectAnonymous('PROBE_HTTP_STATUS');
+        const code = redirectFailure(record, state, { hops: state.anonymous_hops });
+        if (code) return rejectAnonymous(code);
+        next = fixture.origin + record.location.path; continue;
+      }
+      if (record.classification !== 'APPLICATION_CONTENT_CANDIDATE') {
+        state.anonymous_content_classification = 'NOT_APPLICATION_RESPONSE';
+        return rejectAnonymous(record.classification === 'VERCEL_PLATFORM_ERROR' ? 'PROBE_HTTP_PLATFORM_ERROR' : 'PROBE_HTTP_STATUS');
+      }
+      let contentType; try { contentType = response.headers.get('content-type'); } catch { return rejectAnonymous('PROBE_HTTP_RESPONSE_INVALID'); }
+      state.anonymous_html_content_type = typeof contentType === 'string' && /^text\/html(?:\s*;|\s*$)/i.test(contentType);
+      state.anonymous_content_classification = 'UNVERIFIED_CONTENT';
+      if (!state.anonymous_html_content_type) return rejectAnonymous('PROBE_HTTP_CONTENT_TYPE');
+      let html;
+      try { html = await boundedText(response); } catch (error) {
+        state.anonymous_content_classification = 'UNREADABLE_CONTENT';
+        return rejectAnonymous(error.message === 'PROBE_HTTP_BODY_SIZE' ? 'PROBE_HTTP_BODY_SIZE' : 'PROBE_HTTP_BODY_READ_FAILURE');
+      }
+      state.anonymous_authority_match = html.includes(fixture.authority_run_id);
+      state.anonymous_application_structure_match = /id=["']sl-controls["']/.test(html) && /id=["']sl-authority["']/.test(html);
+      if (!state.anonymous_authority_match || !state.anonymous_application_structure_match) return rejectAnonymous('PROBE_HTTP_FIXTURE_CONTENT_MISMATCH');
+      Object.assign(state, { anonymous_baseline_complete: true, anonymous_protection_baseline: 'PUBLIC', anonymous_content_classification: 'VERIFIED_APPLICATION_CONTENT' });
+      return reject(BASELINE_PUBLIC);
+    }
+  }
+  async function establishAnonymousBaseline() {
+    if (closed) fail(state.error_code ?? 'PROBE_HTTP_REQUEST_SCOPE');
+    if (busy) return reject('PROBE_HTTP_REQUEST_SCOPE');
+    busy = true;
+    try { return await establish(); } finally { busy = false; }
+  }
+  async function get(url) {
+    if (closed) fail(state.error_code ?? 'PROBE_HTTP_REQUEST_SCOPE');
+    if (busy || state.routes.length >= 2 || typeof url !== 'string' || url !== fixture.origin + PROBE_HTTP_PATHS[state.routes.length]) return reject('PROBE_HTTP_REQUEST_SCOPE');
+    busy = true;
+    try {
+      await establish();
+      if (closed) fail(state.error_code ?? 'PROBE_HTTP_REQUEST_SCOPE');
+      invariant(state.anonymous_baseline_complete && state.anonymous_protection_baseline === 'PROTECTED', BASELINE_AMBIGUOUS);
+      const route = { path: PROBE_HTTP_PATHS[state.routes.length], result: 'IN_PROGRESS', error_code: null, classification: 'IN_PROGRESS', final_path: null, authority_match: false, html_content_type: false, application_structure_match: false, hops: [] };
+      state.routes.push(route); Object.assign(state, { result: 'NOT_CERTIFIED', access: 'NOT_CERTIFIED', classification: 'IN_PROGRESS', error_code: null, trusted_sources_access: 'NOT_RUN', trusted_sources_live_certified: false });
+      let token;
+      // This lease read is structurally unreachable until the anonymous protection proof is persisted.
+      state.vercel_oidc_token_requested = true; state.token_source_get_count++;
+      try { token = await tokenGet.call(tokenSource); } catch { return await reject('PROBE_HTTP_TOKEN_UNAVAILABLE', route); }
+      if (closed) fail(state.error_code ?? 'PROBE_HTTP_REQUEST_SCOPE');
+      if (typeof token !== 'string' || !token.length || token.length > 20000 || /[\r\n\u0000]/.test(token)) return await reject('PROBE_HTTP_TOKEN_UNAVAILABLE', route);
       let next = url;
       while (true) {
         const response = await request(next, token, route, false), record = route.hops.at(-1), status = record.http_status_exact;
@@ -269,12 +386,12 @@ export function createProbeHttpSession({ target, tokenSource, transport = fetch,
         route.application_structure_match = /id=["']sl-controls["']/.test(html) && /id=["']sl-authority["']/.test(html);
         if (!route.authority_match || !route.application_structure_match) return await reject('PROBE_HTTP_FIXTURE_CONTENT_MISMATCH', route);
         Object.assign(route, { result: 'PASS', classification: 'VERIFIED_APPLICATION_CONTENT', final_path: record.request_path });
-        Object.assign(state, { result: 'PASS', access: 'PASS', classification: 'VERIFIED_APPLICATION_CONTENT', error_code: null });
+        Object.assign(state, { result: 'PASS', access: 'PASS', classification: 'VERIFIED_APPLICATION_CONTENT', error_code: null, trusted_sources_access: 'PASS', trusted_sources_live_certified: true });
         await persist(); return new Response(html, { status: response.status, headers: { 'content-type': 'text/html; charset=utf-8' } });
       }
     } finally { busy = false; }
   }
-  return Object.freeze({ get, evidence });
+  return Object.freeze({ establishAnonymousBaseline, get, evidence });
 }
 export async function runProbePreflight(options) {
   const session = createProbeHttpSession(options); await session.get(options.target.origin + PROBE_HTTP_PATHS[0]); return session.evidence();

@@ -136,7 +136,10 @@ export function buildProbeEvidence(input) {
     need(context?.target, 'HTTP_PREFLIGHT_TARGET');
     return validateProbeHttpEvidence(value, context.target);
   }, 'INVALID_HTTP_PREFLIGHT');
-  if (httpPreflight && !vercelOIDC.some(value => value.result === 'PASS')) issues.push('HTTP_WITHOUT_PASSING_OIDC');
+  const protectedBaseline = httpPreflight?.anonymous_protection_baseline === 'PROTECTED' && httpPreflight.anonymous_baseline_complete === true;
+  if (httpPreflight?.trusted_request_attempted && !vercelOIDC.some(value => value.result === 'PASS')) issues.push('HTTP_WITHOUT_PASSING_OIDC');
+  if (httpPreflight && !protectedBaseline && (vercelOIDC.length || awsOIDC.length)) issues.push('OIDC_WITHOUT_PROTECTED_BASELINE');
+  if (httpPreflight && !httpPreflight.vercel_oidc_token_requested && vercelOIDC.length) issues.push('UNEXPECTED_VERCEL_TOKEN_REQUEST');
   if (oidc.some(value => value.audience_kind === 'UNSUPPORTED')) issues.push('UNSUPPORTED_OIDC_AUDIENCE');
   let outcomes;
   try {
@@ -167,10 +170,13 @@ export function buildProbeEvidence(input) {
   const noNetworkFailures = accounting && accounting.application_console_errors === 0 &&
     accounting.required_application_request_failures === 0 && accounting.hydration_errors === 0 &&
     accounting.unclassified_failures.length === 0 && accounting.authFailures.length === 0;
-  const httpComplete = httpPreflight?.result === 'PASS' && httpPreflight.access === 'PASS' &&
+  const httpComplete = protectedBaseline && httpPreflight?.result === 'PASS' && httpPreflight.trusted_sources_access === 'PASS' &&
+    httpPreflight.trusted_sources_live_certified === true &&
     canonical(httpPreflight.routes.map(route => route.path)).equals(canonical(['/niveles-estadisticos', '/en/statistical-levels']));
-  const complete = { resolve: !!context?.target, qa: !!(report && accounting && attestation && noNetworkFailures && httpComplete && oidcResult(vercelOIDC) === 'PASS'),
-    aws_assume: oidcResult(awsOIDC) === 'PASS', aws_identity: !!aws && oidcResult(awsOIDC) === 'PASS' };
+  const qaComplete = !!(report && accounting && attestation && noNetworkFailures && httpComplete && oidcResult(vercelOIDC) === 'PASS' &&
+    !issues.includes('OIDC_EXECUTION_CONTEXT_MISMATCH'));
+  const complete = { resolve: !!context?.target, qa: qaComplete,
+    aws_assume: qaComplete && oidcResult(awsOIDC) === 'PASS', aws_identity: qaComplete && !!aws && oidcResult(awsOIDC) === 'PASS' };
   const steps = {};
   for (const name of outcomeNames) {
     const outcome = outcomes[name];
@@ -185,24 +191,40 @@ export function buildProbeEvidence(input) {
   if (outcomes.qa === 'skipped' && vercelOIDC.length) issues.push('UNEXPECTED_VERCEL_OIDC_EVIDENCE');
   if (awsOIDC.length && steps.qa.result !== 'PASS') issues.push('AWS_OIDC_WITHOUT_PASSING_QA');
   if (outcomes.aws_identity === 'skipped' && aws) issues.push('UNEXPECTED_AWS_EVIDENCE');
+  if (httpPreflight && !protectedBaseline && (report || accounting || attestation || outcomes.qa === 'success')) issues.push('QA_WITHOUT_PROTECTED_BASELINE');
+  if (httpPreflight && !protectedBaseline && (aws || awsOIDC.length || ['aws_assume', 'aws_identity'].some(k => outcomes[k] === 'success'))) issues.push('AWS_WITHOUT_PROTECTED_BASELINE');
   const uniqueIssues = [...new Set(issues)].sort();
   const result = uniqueIssues.length || oidc.some(value => value.result === 'FAIL') || Object.values(steps).some(x => x.result === 'FAIL') ? 'FAIL' :
     Object.values(steps).every(x => x.result === 'PASS') ? 'PASS' : 'NOT_RUN';
   const safeContext = context ?? { run: null, target: null, workflow_sha256: null };
   const qaState = steps.qa.result === 'PASS' && uniqueIssues.some(x => /PRODUCT|NETWORK|ATTESTATION|QA_WITHOUT/.test(x)) ? 'FAIL' : steps.qa.result;
-  // The first token must pass validation before any Preview transport is created.
-  // A later refresh rejection cannot certify that HTTP was never attempted.
+  // Anonymous evidence exists before token creation. It cannot imply trusted access or successful QA.
+  const baselineStopped = httpPreflight && ['PUBLIC', 'AMBIGUOUS'].includes(httpPreflight.anonymous_protection_baseline);
+  const noTrustedHTTP = httpPreflight && !httpPreflight.trusted_request_attempted;
   const beforeHTTP = vercelOIDC.length > 0 && vercelOIDC[0].result === 'FAIL' &&
     !vercelOIDC.some(value => value.result === 'PASS') && !httpPreflight && !report && !accounting && !attestation;
-  const access = httpPreflight && oidcResult(vercelOIDC) === 'PASS' ? httpPreflight.access : beforeHTTP ? 'NOT_ATTEMPTED' :
+  const trustedProof = protectedBaseline && oidcResult(vercelOIDC) === 'PASS' &&
+    !uniqueIssues.some(value => /OIDC_EXECUTION_CONTEXT_MISMATCH|INVALID_HTTP_PREFLIGHT|INVALID_OIDC_EVIDENCE/.test(value));
+  const access = baselineStopped || noTrustedHTTP ? 'NOT_RUN' : trustedProof ? httpPreflight.trusted_sources_access : beforeHTTP ? 'NOT_ATTEMPTED' :
     qaState === 'NOT_RUN' ? 'NOT_RUN' : 'NOT_CERTIFIED';
+  const liveCertified = trustedProof && access === 'PASS' && httpPreflight.trusted_sources_live_certified === true;
   const evidence = {
     'probe-summary.json': { schema_version: 'statistical-levels.identity-probe-summary.v3', operation: OPERATION,
       classification: 'PROBE_ONLY', production_release_target: false, result, ...safeContext, steps, evidence_issues: uniqueIssues,
       failed_oidc_gates: oidc.filter(value => value.result === 'FAIL').map(({ audience_kind, error_code }) => ({ audience_kind, error_code })) },
-    'trusted-sources-qa.json': { schema_version: 'statistical-levels.identity-probe-trusted-sources.v4', result: qaState,
+    'trusted-sources-qa.json': { schema_version: 'statistical-levels.identity-probe-trusted-sources.v5', result: qaState,
       preview_origin: context?.target?.origin ?? null, http_access_through_trusted_source: access,
       audience: P.vercel_audience, oidc_validation_result: oidcResult(vercelOIDC), oidc_claim_evidence: vercelOIDC,
+      anonymous_http_status: httpPreflight?.anonymous?.http_status_exact ?? null,
+      anonymous_redirect_classification: httpPreflight?.anonymous?.classification ?? null,
+      anonymous_content_classification: httpPreflight?.anonymous_content_classification ?? null,
+      anonymous_protection_baseline: httpPreflight?.anonymous_protection_baseline ?? null,
+      vercel_oidc_token_requested: httpPreflight?.vercel_oidc_token_requested ?? (vercelOIDC.length > 0),
+      trusted_request_attempted: httpPreflight?.trusted_request_attempted ?? null,
+      trusted_sources_access: access === 'PASS' || access === 'FAIL' ? access : 'NOT_RUN',
+      trusted_sources_live_certified: liveCertified,
+      baseline_stop_reason: baselineStopped ? httpPreflight.error_code : null,
+      preview_qa_result: baselineStopped ? 'NOT_RUN' : qaState,
       http_preflight: httpPreflight, product_report: report },
     'application-network-summary.json': { schema_version: 'statistical-levels.identity-probe-network.v1', result: accounting ?
       (qaState === 'PASS' && noNetworkFailures ? 'PASS' : 'FAIL') : steps.qa.result === 'NOT_RUN' ? 'NOT_RUN' : 'FAIL',
