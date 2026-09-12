@@ -9,12 +9,12 @@ const observerPrefix = 'globalThis.__SL_RELEASE_QA__?.observability?.';
 const names = ['qa-statistical-levels.mjs', 'qa-statistical-levels-defects.mjs', 'qa-statistical-levels-interaction-polish.mjs'];
 const expected = {
   "qa-statistical-levels.mjs": {
-    "ast_sha256": "8bd0c9f95ae9758e94958323e015db23150466a6f5d014029fcf320ed4ae39ce",
+    "ast_sha256": "ca894ded3ab52f465a71775ce47a52b407548a13ceaea1d12ec5f423612c1d0d",
     "lines": 161,
     "assertion_count": 34,
     "assertions_sha256": "8498855f81f3c091839227ef8db34e1c0e66dd33ab1e9694bdbea1a560b2d89a",
     "await_count": 141,
-    "sleep_call_count": 13,
+    "sleep_call_count": 12,
     "source_sha256": "eb131de3cca2a3a86c1085d49c1adf0cfd707306308d2269d06a438517dc03e4"
   },
   "qa-statistical-levels-defects.mjs": {
