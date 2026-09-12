@@ -1,6 +1,6 @@
 // Run against a production server and a disposable Chromium CDP profile.
 // node scripts/qa-investor-entry.mjs http://127.0.0.1:3107 9337 /tmp/investor-evidence
-import assert from 'node:assert/strict';
+import assert from 'node:assert/strict'; import { weeklyReturnDisplay } from './statistical-levels-release/scripts/qa/weekly-return-display-contract.mjs';
 import fs from 'node:fs/promises';
 import path from 'node:path';
 
@@ -120,7 +120,7 @@ try {
     const actual=await c.evaluate(`[...document.querySelectorAll('.sl-weeks article')].map(e=>({week:Number(e.dataset.week),value:e.querySelector('.sl-week-value').textContent,rate:e.querySelector('.sl-week-rate strong').textContent,n:e.querySelector('small').textContent,limited:e.dataset.limited,dir:e.querySelector('.sl-return-micro').dataset.direction,width:e.querySelector('.sl-win-micro>span').style.width,color:getComputedStyle(e.querySelector('.sl-return-fill')).backgroundColor,opacity:getComputedStyle(e.querySelector('.sl-return-fill')).opacity}))`);
     assert.equal(actual.length,5);
     for(const row of actual){const cell=weekly.find(cell=>cell.weekOfMonth===row.week),n=cell?.sampleSize??0;
-      const expectedValue=n&&cell.averageReturn!==null?`${cell.averageReturn>0?'+':''}${(cell.averageReturn*100).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2})}%`:'n/d';
+      const expectedValue=n&&cell.averageReturn!==null?weeklyReturnDisplay(cell.averageReturn):'n/d';
       assert.equal(row.value,expectedValue);assert.equal(row.rate,n&&cell.winRate!==null?`${(cell.winRate*100).toFixed(0)}%`:'n/d');assert.ok(row.n.includes(`N ${n}`));assert.equal(row.limited,String(n<5));
       if(n){assert.equal(row.dir,cell.averageReturn<0?'negative':cell.averageReturn>0?'positive':'zero');assert.ok(Math.abs(parseFloat(row.width)-cell.winRate*100)<.0001);}
       assert.equal(row.color,'rgb(18, 59, 61)');assert.equal(row.opacity,n<5?'0.55':'1');

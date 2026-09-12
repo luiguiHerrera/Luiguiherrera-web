@@ -27,7 +27,7 @@ const expected = {
     "source_sha256": "072d0dfe69a4daedacdbd4dd3380d98e81b083b5020e627373d54632289321c6"
   },
   "qa-statistical-levels-interaction-polish.mjs": {
-    "ast_sha256": "f764c896ea651950dfa30a56ea9b155e04e1f9e865bcb1dc0dce9c8d963d0658",
+    "ast_sha256": "8731ba955816a29d596c579d513508dbd43d0c607d53a6ebfa648532495e3cf3",
     "lines": 163,
     "assertion_count": 47,
     "assertions_sha256": "d63d76559c3169914345ce422dc710507b7021a493b79e89ded2822ba8740216",
