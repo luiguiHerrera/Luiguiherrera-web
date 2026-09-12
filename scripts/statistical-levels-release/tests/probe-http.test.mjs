@@ -1,3 +1,4 @@
+import { fixtureHTML } from './probe-fixture-html.mjs';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { createProbeHttpSession, runProbePreflight, sanitizeProbeLocation, sanitizeProbeHttpResponse, validateProbeHttpEvidence, PROBE_HTTP_SCHEMA } from '../scripts/probe-http.mjs';
@@ -6,7 +7,7 @@ const path = '/niveles-estadisticos', en = '/en/statistical-levels';
 const target = { operation: 'PROBE_IDENTITY', phase: 'preview', candidate_git_sha: 'a'.repeat(40), deployment_id: 'dpl_SyntheticProbeFixture123', origin,
   authority_run_id: '20260908T125656658Z-a4743804-e5f1-495a-b34e-5948d5db4d2d', sealed_manifest_sha256: 'b'.repeat(64) };
 const token = 'synthetic-oidc-value-only';
-const html = '<html><div id="sl-controls"></div><div id="sl-authority">' + target.authority_run_id + '</div></html>';
+const html = fixtureHTML();
 const app = (body = html, headers = {}) => new Response(body, { status: 200, headers: { 'content-type': 'text/html; charset=utf-8', ...headers } });
 const redirect = (status, location, headers = {}) => new Response('', { status, headers: { ...(location === null ? {} : { location }), ...headers } });
 const login = 'https://vercel.com/login?next=sensitive-query-value';
@@ -26,7 +27,7 @@ async function rejected(responses, code, options) {
 test('1 direct authenticated200 requires exact fixture application HTML and persists PASS', async () => {
   const h = await run([redirect(302, login), app()]);
   assert.equal(h.evidence.result, 'PASS'); assert.equal(h.evidence.schema_version, PROBE_HTTP_SCHEMA);
-  assert.equal(h.evidence.routes[0].authority_match, true); assert.equal(await h.response.text(), html);
+  assert.equal(h.evidence.routes[0].sl_controls_dom_present, true); assert.equal(await h.response.text(), html);
   assert.deepEqual(h.calls[0].init.headers, {}); assert.equal(h.calls[1].init.headers['x-vercel-trusted-oidc-idp-token'], token);
   assert.ok(h.calls.every(x => x.init.redirect === 'manual' && x.init.method === 'GET' && x.init.credentials === 'omit'));
   assert.equal(h.events[0], 'http-1'); assert.ok(h.events.indexOf('validated-token-lease') > h.events.indexOf('persist-NOT_CERTIFIED')); assert.deepEqual(h.tokenBaselines, ['PROTECTED']);
@@ -69,7 +70,7 @@ test('10 more than two same-origin redirects fails at the third redirect', async
   assert.equal(h.calls.length, 4); assert.equal(h.journal.at(-1).routes[0].hops.length, 3);
 });
 test('exactly two safe redirects can reach authenticated fixture content', async () => {
-  const h = await run([redirect(302, login), redirect(307, '/one'), redirect(308, '/two'), app()]); assert.equal(h.evidence.result, 'PASS'); assert.equal(h.calls.length, 4);
+  const h = await run([redirect(302, login), redirect(307, '/one'), redirect(308, path + '/'), app()]); assert.equal(h.evidence.result, 'PASS'); assert.equal(h.calls.length, 4);
 });
 for (const suffix of ['?token=sensitive-query-value', '?ordinary=value', '?', '#sensitive-fragment', '#']) test('11 any query or fragment redirect is conservatively refused: ' + suffix[0], async () => {
   const h = await rejected([redirect(302, login), redirect(307, '/safe' + suffix)], 'PROBE_HTTP_UNSAFE_REDIRECT'); assert.equal(h.calls.length, 2);
@@ -100,18 +101,18 @@ for (const bad of ['https://other.example/niveles-estadisticos', origin + '/', o
   const h = harness([]); await assert.rejects(h.session.get(bad), { message: 'PROBE_HTTP_REQUEST_SCOPE' }); assert.equal(h.calls.length, 0);
   assert.equal(h.journal.at(-1).access, 'NOT_ATTEMPTED'); assert.ok(!JSON.stringify(h.journal).includes('other.example'));
 });
-test('15 correct path with another authority marker is not accepted as the exact fixture', async () => {
-  await rejected([redirect(302, login), app(html.replace(target.authority_run_id, 'another-authority'))], 'PROBE_HTTP_FIXTURE_CONTENT_MISMATCH');
+test('HTTP binds actual SSR without authority; later browser stage owns exact authority comparison', async () => {
+  const h = await run([redirect(302, login), app()]); assert.equal(h.evidence.routes[0].sl_authority_dom_present, false); assert.equal(h.evidence.http_application_fixture_binding, 'PASS');
 });
 test('authority text alone without actual Statistical Levels structures cannot certify an auth page', async () => {
-  await rejected([redirect(302, login), app(target.authority_run_id)], 'PROBE_HTTP_FIXTURE_CONTENT_MISMATCH');
+  await rejected([redirect(302, login), app(target.authority_run_id)], 'PROBE_HTTP_SL_CONTROLS_MISSING');
 });
 test('HTML content-type is mandatory even when authority and component markers occur in text', async () => {
   await rejected([redirect(302, login), new Response(html, { status: 200, headers: { 'content-type': 'text/plain' } })], 'PROBE_HTTP_CONTENT_TYPE');
 });
 test('EN route uses the same fixture and no second anonymous control', async () => {
-  const h = await run([redirect(302, login), app(), app()]); const response = await h.session.get(origin + en);
-  assert.equal(await response.text(), html); assert.equal(h.calls.length, 3); assert.equal(h.calls[2].init.headers['x-vercel-trusted-oidc-idp-token'], token);
+  const h = await run([redirect(302, login), app(), app(fixtureHTML(en))]); const response = await h.session.get(origin + en);
+  assert.equal(await response.text(), fixtureHTML(en)); assert.equal(h.calls.length, 3); assert.equal(h.calls[2].init.headers['x-vercel-trusted-oidc-idp-token'], token);
   assert.deepEqual(h.session.evidence().routes.map(x => [x.path, x.result]), [[path, 'PASS'], [en, 'PASS']]);
 });
 test('canonical success cannot hide a later EN failure', async () => {
@@ -154,7 +155,7 @@ test('transport cannot silently follow redirects even if its final body is valid
 });
 test('strict evidence rejects unknown fields, inconsistent PASS, unbound fixture and secret header fields', async () => {
   const { evidence } = await run([redirect(302, login), app()]);
-  const mutations = [x => { x.token = token; }, x => { x.fixture.candidate_git_sha = 'c'.repeat(40); }, x => { x.routes[0].authority_match = false; },
+  const mutations = [x => { x.token = token; }, x => { x.fixture.candidate_git_sha = 'c'.repeat(40); }, x => { x.routes[0].sl_controls_dom_present = false; },
     x => { x.routes[0].hops[0].http_status_exact = 307; }, x => { x.routes[0].hops[0].headers['set-cookie'] = 'private'; },
     x => { x.routes[0].hops[0].location.query_values = 'private'; }, x => { x.cross_origin_oidc_forward = true; }, x => { x.max_redirects = 3; },
     x => { x.routes[0].hops[0].classification = 'PROTECTION_AUTH_REDIRECT'; }, x => { x.routes[0].final_path = '/different'; }];
@@ -181,7 +182,7 @@ test('validator rejects inherited toJSON and nested getters without evaluating t
   const { evidence } = await run([redirect(302, login), app()]); let invoked = false;
   const inherited = Object.create({ toJSON() { invoked = true; return token; } }); Object.assign(inherited, evidence);
   assert.throws(() => validateProbeHttpEvidence(inherited, target)); assert.equal(invoked, false);
-  const nested = structuredClone(evidence); Object.defineProperty(nested.routes[0], 'authority_match', { enumerable: true, get() { invoked = true; return true; } });
+  const nested = structuredClone(evidence); Object.defineProperty(nested.routes[0], 'sl_controls_dom_present', { enumerable: true, get() { invoked = true; return true; } });
   assert.throws(() => validateProbeHttpEvidence(nested, target)); assert.equal(invoked, false);
 });
 for (const part of ['z'.repeat(20), 'y'.repeat(32), 'w'.repeat(40), ['vcp_', 'synthetic'].join('')]) test('opaque20–40 and Vercel credential path segments are redacted', async () => {
@@ -256,7 +257,7 @@ test('gate7 protected anonymous baseline plus trusted fixture200 certifies causa
   assert.equal(h.evidence.trusted_sources_live_certified, true); assert.equal(h.counters.oidcRequests, 1);
 });
 test('gate8 protected baseline plus safe trusted redirect ends in verified fixture PASS', async () => {
-  const h = await run([redirect(302, login), redirect(308, '/normal-app'), app()]);
+  const h = await run([redirect(302, login), redirect(308, path + '/'), app()]);
   assert.equal(h.evidence.trusted_sources_access, 'PASS'); assert.equal(h.evidence.trusted_http_request_count, 2);
   assert.equal(h.counters.oidcRequests, 1); assert.equal(h.calls[2].init.headers['x-vercel-trusted-oidc-idp-token'], token);
 });
@@ -302,7 +303,7 @@ for (const location of ['http://vercel.com/login', 'https://vercel.com:443/login
   const h = await rejected([redirect(302, location)], 'BLOCKED_ANONYMOUS_PROTECTION_BASELINE_AMBIGUOUS'); assertNoTrustedReachability(h, 'AMBIGUOUS');
 });
 for (const kind of ['empty', 'wrong-fixture', 'platform-error', 'network']) test('unverified anonymous content or anomaly remains ambiguous: ' + kind, async () => {
-  const response = kind === 'empty' ? app('') : kind === 'wrong-fixture' ? app(html.replace(target.authority_run_id, 'other')) : kind === 'platform-error' ? app(html, { 'x-vercel-error': 'FUNCTION_INVOCATION_FAILED' }) : new Error('unrecorded-network-detail');
+  const response = kind === 'empty' ? app('') : kind === 'wrong-fixture' ? app(fixtureHTML(en)) : kind === 'platform-error' ? app(html, { 'x-vercel-error': 'FUNCTION_INVOCATION_FAILED' }) : new Error('unrecorded-network-detail');
   const h = await rejected([response], 'BLOCKED_ANONYMOUS_PROTECTION_BASELINE_AMBIGUOUS'); assertNoTrustedReachability(h, 'AMBIGUOUS'); assert.doesNotMatch(JSON.stringify(h.journal), /unrecorded-network-detail/);
 });
 test('anonymous two-hop bound and loop are enforced without any token helper call', async () => {

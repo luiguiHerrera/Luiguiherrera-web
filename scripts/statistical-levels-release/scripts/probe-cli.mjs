@@ -4,6 +4,7 @@ import { P, need, canonical } from './release-core.mjs';
 import { attestProbe, validateProbeAttestation } from './probe-core.mjs';
 import { assertProbeWorkflow, resolveProbeDeployment, probeOIDC, readProbeRoleIdentity, readProbeOIDCEvidence, packageRoot, candidateRoot, execution } from './probe-runtime.mjs';
 import { writeProbeEvidence } from './probe-evidence.mjs';
+import { requireProbeBrowserAuthority } from './probe-browser-authority.mjs';
 import { requireProtectedProbeHTTP, requireProbeCertificationHTTP, requireProbeQATokenBudget } from './probe-gate.mjs';
 
 const root = path.join(process.env.RUNNER_TEMP ?? '', 'statistical-levels-identity-probe');
@@ -27,6 +28,7 @@ try {
       httpPreflight: await readOptional(path.join(qaDirectory, 'http-preflight.json')),
       certificationHttp: await readOptional(path.join(qaDirectory, 'trusted-sources-certification.json')),
       tokenBudget: await readOptional(path.join(qaDirectory, 'token-budget.json')),
+      browserAuthority: await readOptional(path.join(qaDirectory, 'browser-authority.json')),
       awsProof: await readOptional(path.join(root, 'aws-proof.json')),
       attestation: await readOptional(path.join(root, 'qa-attestation.json')),
       oidcEvidence: await readProbeOIDCEvidence() });
@@ -48,6 +50,7 @@ try {
       const { report } = await runProbeQA({ target: verified,
         requestOIDCToken: () => probeOIDC(P.vercel_audience),
         out: qaDirectory, codeRoot: candidateRoot, inputManifest: inputs });
+      requireProbeBrowserAuthority(await readOptional(path.join(qaDirectory, 'browser-authority.json')), verified);
       await save(path.join(root, 'qa-attestation.json'), attestProbe(report, run, verified, frozen.workflow_sha256, new Date().toISOString()));
     } else {
       const context = JSON.parse(await fs.readFile(stateFile, 'utf8'));
@@ -56,6 +59,7 @@ try {
       requireProtectedProbeHTTP(await readOptional(path.join(qaDirectory, 'http-preflight.json')), context.target);
       requireProbeCertificationHTTP(await readOptional(path.join(qaDirectory, 'trusted-sources-certification.json')), context.target);
       requireProbeQATokenBudget(await readOptional(path.join(qaDirectory, 'token-budget.json')), context.target.origin);
+      requireProbeBrowserAuthority(await readOptional(path.join(qaDirectory, 'browser-authority.json')), context.target);
       const age = Date.now() - Date.parse(attestation.timestamp);
       need(age >= 0 && age <= 86400000, 'PROBE_QA_EXPIRED');
       need(context.target.candidate_git_sha === frozen.target.candidate_git_sha && context.target.deployment_id === frozen.target.deployment_id, 'PROBE_FIXTURE_CHANGED');

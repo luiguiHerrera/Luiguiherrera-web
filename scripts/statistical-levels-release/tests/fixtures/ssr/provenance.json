@@ -1,0 +1,11 @@
+{
+  "fixture_git_sha": "4ee6adb006f360fea13837db5f7d45815f297b55",
+  "render": "Offline actual route component SSR with ReactDOM and native Next App Router contexts; no full document or Flight representation",
+  "source": "components/statistical-levels/StatLevelsLab.tsx; app/(es)/niveles-estadisticos/page.tsx; app/en/statistical-levels/page.tsx",
+  "fixture_audit_sha256": "a6d9b138525a3ab5c00e10b0f55ae0d8cd0da205ef1f726b5375a2608f88e623",
+  "fixture_render_report_sha256": "d7d67659cfbcf361fb290cb13ab72b33c2842f7dfa47892936ba1a3ef4386aa0",
+  "html_sha256": {
+    "es": "473d1969388694855dec3f6757ed83c7d88a00e3958167296a4af34d6120eb70",
+    "en": "82addcb3051356d21178314442504b2093c3d6e56b29357cf049b4d4ef64754c"
+  }
+}

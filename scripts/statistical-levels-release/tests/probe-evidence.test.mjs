@@ -15,6 +15,18 @@ import { buildProbeEvidence, probeEvidenceFiles, sanitizeProbeAccounting, writeP
 const origin = 'https://luiguiherrera-fixture-luigui-herrera-s-projects.vercel.app';
 const decode = files => Object.fromEntries(Object.entries(files).map(([name, bytes]) => [name, JSON.parse(bytes)]));
 let httpFixture = null, certificationFixture = null, budgetFixture = null;
+function validSSR(route = '/niveles-estadisticos') {
+  const h1 = route === '/en/statistical-levels' ? 'Where is this asset relative to its own history?' : '¿Dónde está este activo frente a su propia historia?';
+  return '<html><body><div class="sl-page"><header class="sl-heading"><h1>' + h1 + '</h1></header><div id="sl-controls" class="sl-controls"></div></div></body></html>';
+}
+function browserAuthority(target) {
+  return { schema_version: 'statistical-levels.probe-browser-authority.v1',
+    fixture: { origin: target.origin, deployment_id: target.deployment_id, candidate_git_sha: target.candidate_git_sha,
+      authority_run_id: target.authority_run_id, sealed_manifest_sha256: target.sealed_manifest_sha256 },
+    result: 'PASS', error_code: null, routes: ['/niveles-estadisticos', '/en/statistical-levels'].map(path => ({ path,
+      route_identity_exact_match: true, open_guide_action: 'CLICKED', guide_open: true, sl_authority_dom_present: true, authority_field_structured: true,
+      browser_authority_run_id_exact_match: true, result: 'PASS', error_code: null })) };
+}
 function fixture(events = []) {
   const context = { run: { id: '12345', attempt: '2', execution_sha: 'b'.repeat(40) }, workflow_sha256: 'c'.repeat(64),
     target: { operation: 'PROBE_IDENTITY', phase: 'preview', candidate_git_sha: 'a'.repeat(40),
@@ -33,13 +45,13 @@ function fixture(events = []) {
     session_match: true, workflow_run_id: context.run.id, workflow_run_attempt: context.run.attempt, workflow_execution_sha: context.run.execution_sha };
   return { context, outcomes: { resolve: 'success', qa: 'success', aws_assume: 'success', aws_identity: 'success' },
     productReport, accounting, awsProof, attestation, httpPreflight: structuredClone(httpFixture),
-    certificationHttp: structuredClone(certificationFixture), tokenBudget: structuredClone(budgetFixture),
+    certificationHttp: structuredClone(certificationFixture), tokenBudget: structuredClone(budgetFixture), browserAuthority: browserAuthority(context.target),
     oidcEvidence: [signedFixture().evidence, signedFixture(P.aws_audience).evidence] };
 }
 function failedQA(events = []) {
   const value = fixture();
   return { ...value, outcomes: { resolve: 'success', qa: 'failure', aws_assume: 'skipped', aws_identity: 'skipped' },
-    oidcEvidence: [signedFixture().evidence], accounting: { ...account(events, false, origin), authFailures: [] }, httpPreflight: null, certificationHttp: null, tokenBudget: null, productReport: null, awsProof: null, attestation: null };
+    oidcEvidence: [signedFixture().evidence], accounting: { ...account(events, false, origin), authFailures: [] }, httpPreflight: null, certificationHttp: null, tokenBudget: null, browserAuthority: null, productReport: null, awsProof: null, attestation: null };
 }
 function blank(outcomes) {
   const value = fixture();
@@ -51,8 +63,7 @@ function blank(outcomes) {
 const seedTarget = fixture().context.target;
 let seedRequests = 0;
 const session = createProbeHttpSession({ target: seedTarget, tokenSource: { get: async () => 'synthetic-unit-credential' },
-  transport: async () => seedRequests++ === 0 ? new Response('', { status: 302, headers: { location: 'https://vercel.com/login' } }) : new Response('<html><div id="sl-controls"></div><div id="sl-authority">' +
-    seedTarget.authority_run_id + '</div></html>', { status: 200, headers: { 'content-type': 'text/html' } }),
+  transport: async url => seedRequests++ === 0 ? new Response('', { status: 302, headers: { location: 'https://vercel.com/login' } }) : new Response(validSSR(new URL(url).pathname), { status: 200, headers: { 'content-type': 'text/html' } }),
   onEvidence: value => { httpFixture = value; } });
 await session.get(origin + '/niveles-estadisticos');
 certificationFixture = structuredClone(httpFixture);
@@ -126,7 +137,7 @@ test('partial resolved target retains verified Preview and full failing network 
   assert.equal(json['application-network-summary.json'].accounting.required_application_request_failures, 1);
 });
 
-for (const field of ['productReport', 'accounting', 'attestation', 'awsProof', 'httpPreflight', 'certificationHttp', 'tokenBudget']) {
+for (const field of ['productReport', 'accounting', 'attestation', 'awsProof', 'httpPreflight', 'certificationHttp', 'tokenBudget', 'browserAuthority']) {
   test(`successful step with missing ${field} evidence fails closed`, () => {
     const input = fixture(); input[field] = null;
     assert.equal(decode(buildProbeEvidence(input))['probe-summary.json'].result, 'FAIL');
@@ -342,7 +353,7 @@ test('redirect diagnostic wrapper preserves exact V3 direct-job metadata for bot
   const input = fixture(), json = decode(buildProbeEvidence(input));
   assert.equal(json['probe-summary.json'].schema_version, 'statistical-levels.identity-probe-summary.v3');
   for (const name of ['trusted-sources-qa.json', 'aws-oidc-summary.json']) {
-    assert.ok(json[name].schema_version.endsWith(name === 'trusted-sources-qa.json' ? '.v6' : '.v3'));
+    assert.ok(json[name].schema_version.endsWith(name === 'trusted-sources-qa.json' ? '.v7' : '.v3'));
     assert.equal(json[name].oidc_claim_evidence[0].schema_version, 'statistical-levels.probe-oidc-evidence.v3');
     const c = json[name].oidc_claim_evidence[0].claims;
     assert.equal(c.job_workflow_ref_value, P.workflow_ref);
@@ -450,7 +461,7 @@ test('matching protection redirects retain exact safe diagnostics in the six-fil
 
 async function baselineStoppedFixture(kind) {
   const input = failedQA(); input.oidcEvidence = []; input.accounting = null; let latest, tokenCalls = 0;
-  const body = '<html><div id="sl-controls"></div><div id="sl-authority">' + input.context.target.authority_run_id + '</div></html>';
+  const body = validSSR();
   const probe = createProbeHttpSession({ target: input.context.target,
     tokenSource: { get: async () => { tokenCalls++; throw new Error('must not request a credential'); } },
     transport: async () => new Response(kind === 'PUBLIC' ? body : '', { status: kind === 'PUBLIC' ? 200 : 503, headers: { 'content-type': 'text/html' } }),
@@ -464,7 +475,7 @@ for (const kind of ['PUBLIC', 'AMBIGUOUS']) {
   test('20 evidence records ' + kind + ' baseline and no OIDC/trusted/QA/AWS attempt', async () => {
     const input = await baselineStoppedFixture(kind), json = decode(buildProbeEvidence(input));
     const trusted = json['trusted-sources-qa.json'];
-    assert.equal(trusted.schema_version, 'statistical-levels.identity-probe-trusted-sources.v6');
+    assert.equal(trusted.schema_version, 'statistical-levels.identity-probe-trusted-sources.v7');
     assert.equal(trusted.anonymous_protection_baseline, kind);
     assert.equal(trusted.anonymous_http_status, kind === 'PUBLIC' ? 200 : 503);
     assert.equal(trusted.vercel_oidc_token_requested, false); assert.equal(trusted.trusted_request_attempted, false);
@@ -504,7 +515,7 @@ async function lifecycleEvidence(mode) {
   const input = fixture();
   let now = 1800000000000, requests = 0, httpCalls = 0, failure = null;
   const realNow = Date.now; Date.now = () => now;
-  const html = '<html><div id="sl-controls"></div><div id="sl-authority">' + input.context.target.authority_run_id + '</div></html>';
+
   try {
     await runProtectedProbeQA({ target: input.context.target,
       requestOIDCToken: async () => {
@@ -515,11 +526,11 @@ async function lifecycleEvidence(mode) {
       onEvidence: value => { input.httpPreflight = value; },
       onTokenEvidence: value => { input.tokenBudget = value; },
       onCertificationEvidence: value => { input.certificationHttp = value; },
-      transport: async () => {
+      transport: async url => {
         httpCalls++;
         if (httpCalls === 1) return new Response('', { status: 302, headers: { location: 'https://vercel.com/login' } });
         if (mode === 'EN-failure' && httpCalls === 3) return new Response('', { status: 503 });
-        return new Response(html, { status: 200, headers: { 'content-type': 'text/html' } });
+        return new Response(validSSR(new URL(url).pathname), { status: 200, headers: { 'content-type': 'text/html' } });
       },
       runQA: async ({ tokenSource }) => {
         if (mode !== 'no-refresh') { now += 575000; await tokenSource.get(); }
@@ -532,7 +543,7 @@ async function lifecycleEvidence(mode) {
   if (requests === 2) input.oidcEvidence.push(mode === 'refresh-identity-failure' ? signedFixture(P.vercel_audience, { environment: 'unexpected' }).evidence : signedFixture().evidence);
   if (failure) {
     input.outcomes.qa = 'failure'; input.outcomes.aws_assume = input.outcomes.aws_identity = 'skipped';
-    input.productReport = input.accounting = input.attestation = input.awsProof = null;
+    input.productReport = input.accounting = input.attestation = input.awsProof = input.browserAuthority = null;
   } else input.oidcEvidence.push(signedFixture(P.aws_audience).evidence);
   return { input, requests, failure };
 }
@@ -574,4 +585,101 @@ test('a valid budget from certification intermediate state cannot authorize QA/A
   Object.assign(input.tokenBudget, { phase: 'CERTIFICATION', certification_recorded: false, trusted_sources_certified_before_qa_refresh: false });
   const result = decode(buildProbeEvidence(input));
   assert.equal(result['probe-summary.json'].result, 'FAIL'); assert.equal(result['aws-oidc-summary.json'].result, 'FAIL');
+});
+
+// Three independent layers: protection acceptance, initial DOM binding, then browser authority/product QA.
+async function httpLayerFailure(html, status = 200) {
+  const input = failedQA(); input.accounting = null;
+  let requests = 0;
+  await assert.rejects(runProtectedProbeQA({ target: input.context.target,
+    requestOIDCToken: async () => ['unit', Buffer.from(JSON.stringify({ exp: Math.floor(Date.now() / 1000) + 600 })).toString('base64url'), 'unit'].join('.'),
+    onEvidence: value => { input.httpPreflight = value; },
+    onTokenEvidence: value => { input.tokenBudget = value; },
+    onCertificationEvidence: value => { input.certificationHttp = value; },
+    transport: async () => requests++ === 0 ? new Response('', { status: 302, headers: { location: 'https://vercel.com/login' } }) :
+      new Response(html, { status, headers: status === 302 ? { location: 'https://vercel.com/login' } : { 'content-type': 'text/html' } }),
+    runQA: async () => { assert.fail('browser QA must not run after failed HTTP binding'); }
+  }));
+  return input;
+}
+for (const [name, html] of [
+  ['generic unrelated HTML', '<html><body><h1>Unrelated</h1></body></html>'],
+  ['marker names only in comments', '<html><body><!-- <div class="sl-page"><header class="sl-heading"><h1>¿Dónde está este activo frente a su propia historia?</h1></header><div id="sl-controls" class="sl-controls"></div></div> --></body></html>'],
+  ['marker names only in script string', '<html><body><script>const stale = \'<div id="sl-controls" class="sl-controls"></div>\';</script></body></html>'],
+]) test('layer 2 failure preserves validated layer 1 and cannot reach layer 3/AWS: ' + name, async () => {
+  const input = await httpLayerFailure(html), json = decode(buildProbeEvidence(input)), trusted = json['trusted-sources-qa.json'];
+  assert.equal(trusted.vercel_protection_oidc_accepted, true);
+  assert.equal(trusted.trusted_sources_access, 'PASS'); assert.equal(trusted.trusted_sources_live_certified, true);
+  assert.equal(trusted.http_application_fixture_binding, 'FAIL');
+  assert.equal(trusted.browser_authority_run_id_exact_match, 'NOT_RUN'); assert.equal(trusted.preview_product_qa, 'NOT_RUN');
+  assert.equal(trusted.browser_authority, null); assert.equal(trusted.certification_http, null);
+  assert.equal(trusted.vercel_certification_oidc_token_request_count, 1); assert.equal(trusted.vercel_post_certification_qa_refresh_count, 0);
+  assert.equal(json['aws-oidc-summary.json'].result, 'NOT_RUN');
+});
+
+test('protection denial remains layer 1 FAIL rather than false HTTP application success', async () => {
+  const json = decode(buildProbeEvidence(await httpLayerFailure('', 302))), trusted = json['trusted-sources-qa.json'];
+  assert.equal(trusted.vercel_protection_oidc_accepted, false); assert.equal(trusted.trusted_sources_access, 'FAIL');
+  assert.equal(trusted.http_application_fixture_binding, 'FAIL'); assert.equal(trusted.browser_authority_run_id_exact_match, 'NOT_RUN');
+});
+
+test('valid SSR with no sl-authority separately records browser-mounted exact authority', () => {
+  const json = decode(buildProbeEvidence(fixture())), trusted = json['trusted-sources-qa.json'];
+  assert.equal(trusted.vercel_protection_oidc_accepted, true); assert.equal(trusted.http_application_fixture_binding, 'PASS');
+  assert.equal(trusted.sl_controls_dom_present, true); assert.equal(trusted.second_ssr_marker_match, true);
+  assert.equal(trusted.http_sl_authority_dom_present, false); assert.equal(trusted.sl_authority_dom_present, true);
+  assert.equal(trusted.browser_authority_run_id_exact_match, 'PASS'); assert.equal(trusted.preview_product_qa, 'PASS');
+  assert.equal(json['probe-summary.json'].result, 'PASS');
+});
+
+function failedBrowserAuthority(input, error = 'BROWSER_AUTHORITY_MISMATCH') {
+  input.outcomes.qa = 'failure'; input.outcomes.aws_assume = input.outcomes.aws_identity = 'skipped';
+  input.attestation = input.awsProof = null; input.oidcEvidence = [signedFixture().evidence];
+  input.browserAuthority.result = 'FAIL'; input.browserAuthority.error_code = error;
+  const route = input.browserAuthority.routes[1]; route.result = 'FAIL'; route.error_code = error;
+  route.browser_authority_run_id_exact_match = false;
+  if (error === 'BROWSER_AUTHORITY_DOM') { route.sl_authority_dom_present = false; route.authority_field_structured = false; }
+  return input;
+}
+for (const error of ['BROWSER_AUTHORITY_MISMATCH', 'BROWSER_AUTHORITY_DOM']) test('browser authority rejection preserves both earlier layers: ' + error, () => {
+  const input = failedBrowserAuthority(fixture(), error), json = decode(buildProbeEvidence(input)), trusted = json['trusted-sources-qa.json'];
+  assert.equal(trusted.vercel_protection_oidc_accepted, true); assert.equal(trusted.trusted_sources_access, 'PASS');
+  assert.equal(trusted.http_application_fixture_binding, 'PASS'); assert.equal(trusted.certification_http.routes.length, 1);
+  assert.equal(trusted.browser_authority_run_id_exact_match, 'FAIL'); assert.equal(trusted.preview_product_qa, 'FAIL');
+  assert.equal(trusted.browser_authority.error_code, error); assert.equal(json['aws-oidc-summary.json'].result, 'NOT_RUN');
+});
+
+test('malformed browser proof cannot leak its values or rewrite earlier layer facts', () => {
+  const input = fixture(); input.browserAuthority.observed_raw_html = 'private-browser-evidence-marker';
+  const json = decode(buildProbeEvidence(input)), trusted = json['trusted-sources-qa.json'];
+  assert.equal(trusted.vercel_protection_oidc_accepted, true); assert.equal(trusted.http_application_fixture_binding, 'PASS');
+  assert.equal(trusted.browser_authority, null); assert.equal(json['probe-summary.json'].result, 'FAIL');
+  assert.ok(json['probe-summary.json'].evidence_issues.includes('INVALID_BROWSER_AUTHORITY'));
+  assert.ok(!JSON.stringify(json).includes('private-browser-evidence-marker'));
+});
+for (const mutate of [
+  x => { x.fixture.origin = 'https://luiguiherrera-otherfixture-luigui-herrera-s-projects.vercel.app'; },
+  x => { x.fixture.candidate_git_sha = 'f'.repeat(40); },
+  x => { x.fixture.deployment_id = 'dpl_AnotherFixture012345'; },
+  x => { x.fixture.authority_run_id += '-different'; },
+  x => { x.fixture.sealed_manifest_sha256 = 'f'.repeat(64); },
+  x => { x.routes[0].browser_authority_run_id_exact_match = false; },
+  x => { x.routes[0].route_identity_exact_match = false; },
+  x => { x.routes[0].guide_open = false; },
+  x => { x.routes.pop(); },
+]) test('forged or foreign browser proof cannot authorize QA/AWS: ' + mutate.toString(), () => {
+  const input = fixture(); mutate(input.browserAuthority);
+  const json = decode(buildProbeEvidence(input)), trusted = json['trusted-sources-qa.json'];
+  assert.equal(json['probe-summary.json'].result, 'FAIL'); assert.equal(json['aws-oidc-summary.json'].result, 'FAIL');
+  assert.equal(trusted.vercel_protection_oidc_accepted, true); assert.equal(trusted.http_application_fixture_binding, 'PASS');
+  assert.equal(trusted.browser_authority_run_id_exact_match, 'FAIL');
+});
+
+test('the CLI requires exact browser authority before attestation and again before AWS', async () => {
+  const source = await fs.readFile(new URL('../scripts/probe-cli.mjs', import.meta.url), 'utf8');
+  const first = source.indexOf("requireProbeBrowserAuthority(await readOptional(path.join(qaDirectory, 'browser-authority.json')), verified)");
+  const attestation = source.indexOf("await save(path.join(root, 'qa-attestation.json'), attestProbe");
+  const next = source.indexOf("requireProbeBrowserAuthority(await readOptional(path.join(qaDirectory, 'browser-authority.json')), context.target)");
+  const aws = source.indexOf("if (mode === 'aws-preflight') await probeOIDC(P.aws_audience)");
+  assert.ok(first > 0 && first < attestation); assert.ok(next > attestation && next < aws);
 });

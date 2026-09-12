@@ -1,3 +1,4 @@
+import { fixtureHTML } from './probe-fixture-html.mjs';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs/promises';
@@ -6,8 +7,7 @@ import { P } from '../scripts/release-core.mjs';
 const target = { operation: 'PROBE_IDENTITY', phase: 'preview', candidate_git_sha: 'a'.repeat(40),
   deployment_id: 'dpl_GatedProbeFixture123', origin: 'https://luiguiherrera-gatedfixture-luigui-herrera-s-projects.vercel.app',
   authority_run_id: P.baseline.authority_run_id, sealed_manifest_sha256: P.baseline.sealed_manifest_sha256 };
-const html = '<html><div id="sl-controls"></div><div id="sl-authority">' + target.authority_run_id + '</div></html>';
-const app = () => new Response(html, { status: 200, headers: { 'content-type': 'text/html' } });
+const app = (path = '/niveles-estadisticos') => new Response(fixtureHTML(path), { status: 200, headers: { 'content-type': 'text/html' } });
 const login = () => new Response('', { status: 302, headers: { location: 'https://vercel.com/login' } });
 const redir = location => new Response('', { status: 307, headers: { location } });
 async function execute(responses, options = {}) {
@@ -37,7 +37,7 @@ async function execute(responses, options = {}) {
       runQA: async ({ tokenSource, protectedGet }) => {
         requireProtectedProbeHTTP(latest, target); count.qa++; order.push('QA');
         assert.ok(await tokenSource.get());
-        for (const path of ['/niveles-estadisticos', '/en/statistical-levels']) assert.equal(await (await protectedGet(target.origin + path)).text(), html);
+        for (const path of ['/niveles-estadisticos', '/en/statistical-levels']) assert.equal(await (await protectedGet(target.origin + path)).text(), fixtureHTML(path));
         await assert.rejects(protectedGet(target.origin + '/niveles-estadisticos'), { message: 'PROBE_QA_PREFLIGHT_SCOPE' });
         return { local_mock_qa: true };
       }
@@ -65,7 +65,7 @@ for (const [name, responses, classification, code] of [
   assert.throws(() => requireProtectedProbeHTTP(result.latest, target));
 });
 test('6/7/13 recognized protection creates exactly one token only after persisted baseline and reaches QA/AWS once', async () => {
-  const result = await execute([login(), app(), app()]); assert.equal(result.error, null);
+  const result = await execute([login(), app(), app('/en/statistical-levels')]); assert.equal(result.error, null);
   assert.deepEqual(result.count, { vercel_oidc: 1, anonymous_http: 1, trusted_http: 2, qa: 1, aws_oidc: 1, controller: 0 });
   assert.ok(result.order.indexOf('BASELINE_PROTECTED') < result.order.indexOf('VERCEL_OIDC'));
   assert.ok(result.order.indexOf('VERCEL_OIDC') < result.order.indexOf('TRUSTED_HTTP'));
@@ -73,7 +73,7 @@ test('6/7/13 recognized protection creates exactly one token only after persiste
   assert.equal(result.latest.trusted_sources_access, 'PASS'); assert.equal(result.latest.trusted_sources_live_certified, true);
 });
 test('8 protected baseline plus trusted safe same-origin redirect reaches exact content', async () => {
-  const result = await execute([login(), redir('/niveles-estadisticos/'), app(), app()]);
+  const result = await execute([login(), redir('/niveles-estadisticos/'), app(), app('/en/statistical-levels')]);
   assert.equal(result.error, null); assert.equal(result.count.vercel_oidc, 1); assert.equal(result.count.trusted_http, 3); assert.equal(result.count.qa, 1);
 });
 for (const [name, trusted, code] of [

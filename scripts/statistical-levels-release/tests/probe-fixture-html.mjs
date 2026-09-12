@@ -1,0 +1,2 @@
+// Genuine minimal DOM structure from immutable fixture4ee6adb; authority deliberately absent in SSR.
+export const fixtureHTML = (path = '/niveles-estadisticos') => '<div class="sl-page"><header class="sl-heading"><h1>' + (path === '/en/statistical-levels' ? 'Where is this asset relative to its own history?' : '¿Dónde está este activo frente a su propia historia?') + '</h1></header><div id="sl-controls" class="sl-controls"></div></div>';

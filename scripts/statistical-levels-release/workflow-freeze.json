@@ -1,10 +1,10 @@
 {
   "workflow_path": ".github/workflows/statistical-levels-release.yml",
-  "workflow_sha256": "aa91e9111911954c01f739a8bd5810d41139e2af58f45bc773f581b59615e5ad",
+  "workflow_sha256": "66b3bac9dd41e48dc414f132f33392a1a267ec01f5cfcc1b9b9557bbd0fa6dea",
   "encoding": "UTF-8 without BOM",
   "line_endings": "LF",
   "final_newline": true,
-  "source_sums_sha256": "e6a9250a8f021afbdda4ebc798da68011c08900b7cbd99047113650eab9f8460",
+  "source_sums_sha256": "08704e718042d6a1bbd81ecd378aa2380dccbebdffc6d7d4e7b4813582e8ec7b",
   "bootstrap_release_target": null,
   "first_future_release_target": null
 }

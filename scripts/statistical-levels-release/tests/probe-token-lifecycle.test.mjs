@@ -1,11 +1,11 @@
+import { fixtureHTML } from './probe-fixture-html.mjs';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { runProtectedProbeQA, requireProbeCertificationHTTP } from '../scripts/probe-gate.mjs';
 import { P } from '../scripts/release-core.mjs';
 const target = { operation:'PROBE_IDENTITY', phase:'preview', candidate_git_sha:'a'.repeat(40), deployment_id:'dpl_PhaseBudgetFixture123',
   origin:'https://luiguiherrera-phasefixture-luigui-herrera-s-projects.vercel.app', authority_run_id:P.baseline.authority_run_id, sealed_manifest_sha256:P.baseline.sealed_manifest_sha256 };
-const html = '<html><div id="sl-controls"></div><div id="sl-authority">'+target.authority_run_id+'</div></html>';
-const app=()=>new Response(html,{status:200,headers:{'content-type':'text/html'}});
+const app=(path='/niveles-estadisticos')=>new Response(fixtureHTML(path),{status:200,headers:{'content-type':'text/html'}});
 const login=()=>new Response('',{status:302,headers:{location:'https://vercel.com/login'}});
 const redirect=url=>new Response('',{status:307,headers:{location:url}});
 async function scenario(options={}) {
@@ -38,11 +38,11 @@ async function scenario(options={}) {
         else{calls.anonymous_http++;assert.equal(calls.certification+calls.qa_refresh,0);}
         const response=replies[n++];assert.ok(response,'No unexpected HTTP');
         if(options.advanceAtHttp===n)now+=(options.advanceSeconds??575)*1000;
-        return response();
+        return response(new URL(url).pathname.replace(/\/$/,''));
       },
       runQA:async({tokenSource,protectedGet})=>{
         calls.qa++;events.push('QA');assert.ok(receipt);assert.equal(budget.trusted_sources_certified,true);
-        for(const route of ['/niveles-estadisticos','/en/statistical-levels'])assert.equal(await(await protectedGet(target.origin+route)).text(),html);
+        for(const route of ['/niveles-estadisticos','/en/statistical-levels'])assert.equal(await(await protectedGet(target.origin+route)).text(),fixtureHTML(route));
         await options.qa?.({tokenSource,advance:s=>{now+=s*1000;},calls,events,budget:()=>budget});
         return {mock_qa:'PASS'};
       }
@@ -65,7 +65,7 @@ for(const ttl of [0,29,30])test('fresh certification token remaining'+ttl+' fail
   assert.equal(x.calls.certification,1);assert.equal(x.calls.qa_refresh,0);assert.equal(x.calls.trusted_http,0);assert.equal(x.calls.qa,0);
 });
 for(const hops of [1,2])test('same certification token reused for '+hops+' safe same-origin redirect hops',async()=>{
-  const x=await scenario({ttl:45,replies:[login,()=>redirect('/safe-one'),...(hops===2?[()=>redirect('/safe-two')]:[]),app,app]});
+  const x=await scenario({ttl:45,replies:[login,()=>redirect(hops===2?'/safe-one':'/niveles-estadisticos/'),...(hops===2?[()=>redirect('/niveles-estadisticos/')]:[]),app,app]});
   assert.equal(x.failure,null);assert.equal(x.calls.certification,1);assert.equal(x.calls.qa_refresh,0);
   assert.equal(x.calls.trusted_http,hops+2);assert.equal(new Set(x.sentTokens).size,1);
   assert.equal(x.receipt.routes[0].hops.length,hops+1);
@@ -92,7 +92,7 @@ test('45 seconds remains usable in QA; old proactive60 trigger is not used',asyn
   const x=await scenario({qa:async({tokenSource,advance})=>{advance(555);await tokenSource.get();}});assert.equal(x.failure,null);assert.equal(x.calls.qa_refresh,0);
 });
 test('certification redirect reuses the acquired token despite elapsed time; renewal waits for recorded certification',async()=>{
-  const x=await scenario({ttl:45,replies:[login,()=>redirect('/safe'),app,app],advanceAtHttp:2,advanceSeconds:20});
+  const x=await scenario({ttl:45,replies:[login,()=>redirect('/niveles-estadisticos/'),app,app],advanceAtHttp:2,advanceSeconds:20});
   assert.equal(x.failure,null);assert.equal(x.calls.certification,1);assert.equal(x.calls.qa_refresh,1);assert.equal(x.sentTokens[0],x.sentTokens[1]);
   assert.ok(x.events.indexOf('CERT_RECEIPT')<x.events.indexOf('QA_REFRESH'));assert.equal(x.receipt.routes[0].hops.length,2);
 });
