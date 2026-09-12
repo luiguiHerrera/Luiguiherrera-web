@@ -532,6 +532,7 @@ async function lifecycleEvidence(mode) {
         httpCalls++;
         if (httpCalls === 1) return new Response('', { status: 302, headers: { location: 'https://vercel.com/login' } });
         if (mode === 'EN-failure' && httpCalls === 3) return new Response('', { status: 503 });
+        if (mode === 'QA-cache-failure' && httpCalls === 4) return new Response('', { status: 307, headers: { location: 'https://unrelated.example/metodologia' } });
         return new Response(validSSR(new URL(url).pathname), { status: 200, headers: { 'content-type': 'text/html' } });
       },
       runQA: async ({ tokenSource }) => {
@@ -568,6 +569,17 @@ for (const mode of ['refresh-identity-failure', 'budget-exhausted', 'EN-failure'
   assert.equal(qa.result, 'FAIL'); assert.equal(result['aws-oidc-summary.json'].result, 'NOT_RUN');
   assert.equal(qa.vercel_certification_oidc_token_request_count, 1); assert.ok(qa.vercel_total_oidc_token_request_count <= 2);
   if (mode === 'budget-exhausted') assert.equal(qa.token_budget_stop_reason, 'BLOCKED_QA_OIDC_REFRESH_BUDGET_EXCEEDED');
+});
+test('post-certification QA-cache transport failure retains safe ten-file evidence with certification PASS and AWS NOT_RUN', async () => {
+  const { input, requests, failure } = await lifecycleEvidence('QA-cache-failure');
+  assert.equal(failure, 'PROBE_QA_HTTP_REDIRECT'); assert.equal(requests, 1);
+  const result = decode(buildProbeEvidence(input)), qa = result['trusted-sources-qa.json'];
+  assert.equal(Object.keys(result).length, 10); assert.equal(result['probe-summary.json'].result, 'FAIL');
+  assert.equal(qa.trusted_sources_access, 'PASS'); assert.equal(qa.trusted_sources_live_certified, true);
+  assert.equal(qa.http_application_fixture_binding, 'PASS'); assert.equal(qa.http_preflight.routes.length, 2);
+  assert.equal(qa.certification_http.routes.length, 1); assert.equal(qa.preview_product_qa, 'NOT_RUN');
+  assert.equal(result['aws-oidc-summary.json'].result, 'NOT_RUN');
+  assert.doesNotMatch(JSON.stringify(result), /unrelated\.example|local\.synthetic\.lease/);
 });
 for (const mutate of [
   x => { x.tokenBudget.vercel_certification_oidc_token_request_count = 2; },

@@ -1,4 +1,4 @@
-// Frozen security/classifier/ADOPT/PROMOTE contracts remain exact across the authorized metadata repair.
+// Frozen security/classifier/ADOPT/PROMOTE contracts remain exact across the authorized post-certification QA-cache repair.
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
@@ -10,7 +10,6 @@ const expected = {
     "scripts/network-accounting.mjs": "a423eb268dc046cdb1c022587621afb33671f70f72f0dc1c519a9a5d481acc10"
   },
   "Custom Trusted Source and anonymous baseline logic unchanged": {
-    "scripts/probe-gate.mjs": "0365b98b2b84e8db364aabfcac52199d467564c7d64169fc9b39bced5d320d6e",
     "scripts/probe-http.mjs": "036a21186195bfaecadfe046d08786b69f692b730e2144da7b450f8d319614df"
   },
   "HTTP application fixture binding unchanged": {
@@ -69,4 +68,16 @@ test('metadata repair preserves exact OIDC journals, token validation, execution
     if (Object.hasOwn(frozenIdentityFunctions, name)) observed[name] = createHash('sha256').update(node.getText(ast)).digest('hex');
   }
   assert.deepEqual(observed, frozenIdentityFunctions);
+});
+
+// The orchestration may preload extra QA routes; these certificate/token validators may not change.
+const frozenProbeGateValidators = {"requireProbeCertificationHTTP": "ce2101bdfa119d7bdc60427bf6c0ba442604f50940fad0270dc1ac6522b61b7c", "requireProtectedProbeHTTP": "91b75a77847a882a8ad8086f6a34df5c1fa5c2170be90ca88a7a0f2a96e9983f", "requireProbeQATokenBudget": "d5028ea7416faa4e86a0428ae2da6cfa7f31d47d4557e5a9531e6aaef48143cd"};
+test('QA cache repair preserves complete exact certification and token-budget validators', async () => {
+  const source = await readFile(new URL('../scripts/probe-gate.mjs', import.meta.url), 'utf8');
+  const ast = ts.createSourceFile('probe-gate.mjs', source, ts.ScriptTarget.Latest, true, ts.ScriptKind.JS);
+  const observed = {};
+  for (const node of ast.statements) {
+    if (Object.hasOwn(frozenProbeGateValidators, node.name?.text)) observed[node.name.text] = createHash('sha256').update(node.getText(ast)).digest('hex');
+  }
+  assert.deepEqual(observed, frozenProbeGateValidators);
 });

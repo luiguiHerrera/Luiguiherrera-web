@@ -2,6 +2,7 @@
 import { need, canonical } from './release-core.mjs';
 import { createProbeHttpSession, validateProbeHttpEvidence, PROBE_HTTP_PATHS } from './probe-http.mjs';
 import { createProbeTokenBudget, validateProbeTokenBudgetEvidence } from './probe-token-budget.mjs';
+import { createProbeQACache } from './probe-qa-http.mjs';
 
 export function requireProbeCertificationHTTP(value, target) {
   const proof = validateProbeHttpEvidence(value, target);
@@ -57,11 +58,10 @@ export async function runProtectedProbeQA({ target, requestOIDCToken, onEvidence
     certified = true;
     for (const route of PROBE_HTTP_PATHS.slice(1)) responses.set(target.origin + route, await session.get(target.origin + route));
     requireProtectedProbeHTTP(session.evidence(), target);
-    const protectedGet = async url => {
-      assertProtected();
-      need(responses.has(url), 'PROBE_QA_PREFLIGHT_SCOPE');
-      const response = responses.get(url); responses.delete(url); return response;
-    };
+    const protectedGet = await createProbeQACache({ origin: target.origin, certifiedResponses: responses,
+      tokenSource: budget.qaTokenSource, assertCertified: () => {
+        assertProtected(); need(certified, 'BLOCKED_QA_BEFORE_TRUST_CERTIFICATION');
+      }, ...(transport ? { transport } : {}) });
     const result = await runQA({ tokenSource, protectedGet });
     requireProbeQATokenBudget(budget.evidence(), target.origin);
     return result;

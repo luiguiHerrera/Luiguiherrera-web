@@ -8,6 +8,7 @@ const target = { operation: 'PROBE_IDENTITY', phase: 'preview', candidate_git_sh
   deployment_id: 'dpl_GatedProbeFixture123', origin: 'https://luiguiherrera-gatedfixture-luigui-herrera-s-projects.vercel.app',
   authority_run_id: P.baseline.authority_run_id, sealed_manifest_sha256: P.baseline.sealed_manifest_sha256 };
 const app = (path = '/niveles-estadisticos') => new Response(fixtureHTML(path), { status: 200, headers: { 'content-type': 'text/html' } });
+const methodology = () => new Response('<h1>Methodology</h1>', { status: 200, headers: { 'content-type': 'text/html' } });
 const login = () => new Response('', { status: 302, headers: { location: 'https://vercel.com/login' } });
 const redir = location => new Response('', { status: 307, headers: { location } });
 async function execute(responses, options = {}) {
@@ -65,16 +66,16 @@ for (const [name, responses, classification, code] of [
   assert.throws(() => requireProtectedProbeHTTP(result.latest, target));
 });
 test('6/7/13 recognized protection creates exactly one token only after persisted baseline and reaches QA/AWS once', async () => {
-  const result = await execute([login(), app(), app('/en/statistical-levels')]); assert.equal(result.error, null);
-  assert.deepEqual(result.count, { vercel_oidc: 1, anonymous_http: 1, trusted_http: 2, qa: 1, aws_oidc: 1, controller: 0 });
+  const result = await execute([login(), app(), app('/en/statistical-levels'), methodology(), methodology()]); assert.equal(result.error, null);
+  assert.deepEqual(result.count, { vercel_oidc: 1, anonymous_http: 1, trusted_http: 4, qa: 1, aws_oidc: 1, controller: 0 });
   assert.ok(result.order.indexOf('BASELINE_PROTECTED') < result.order.indexOf('VERCEL_OIDC'));
   assert.ok(result.order.indexOf('VERCEL_OIDC') < result.order.indexOf('TRUSTED_HTTP'));
   assert.ok(result.order.indexOf('TRUSTED_HTTP') < result.order.indexOf('QA'));
   assert.equal(result.latest.trusted_sources_access, 'PASS'); assert.equal(result.latest.trusted_sources_live_certified, true);
 });
 test('8 protected baseline plus trusted safe same-origin redirect reaches exact content', async () => {
-  const result = await execute([login(), redir('/niveles-estadisticos/'), app(), app('/en/statistical-levels')]);
-  assert.equal(result.error, null); assert.equal(result.count.vercel_oidc, 1); assert.equal(result.count.trusted_http, 3); assert.equal(result.count.qa, 1);
+  const result = await execute([login(), redir('/niveles-estadisticos/'), app(), app('/en/statistical-levels'), methodology(), methodology()]);
+  assert.equal(result.error, null); assert.equal(result.count.vercel_oidc, 1); assert.equal(result.count.trusted_http, 5); assert.equal(result.count.qa, 1);
 });
 for (const [name, trusted, code] of [
   ['9 equivalent protection denial', login, 'BLOCKED_TRUSTED_SOURCES_LIVE_CONFIRMED'],

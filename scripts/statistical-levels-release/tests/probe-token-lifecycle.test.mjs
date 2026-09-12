@@ -6,6 +6,7 @@ import { P } from '../scripts/release-core.mjs';
 const target = { operation:'PROBE_IDENTITY', phase:'preview', candidate_git_sha:'a'.repeat(40), deployment_id:'dpl_PhaseBudgetFixture123',
   origin:'https://luiguiherrera-phasefixture-luigui-herrera-s-projects.vercel.app', authority_run_id:P.baseline.authority_run_id, sealed_manifest_sha256:P.baseline.sealed_manifest_sha256 };
 const app=(path='/niveles-estadisticos')=>new Response(fixtureHTML(path),{status:200,headers:{'content-type':'text/html'}});
+const methodology=()=>new Response('<h1>Methodology</h1>',{status:200,headers:{'content-type':'text/html'}});
 const login=()=>new Response('',{status:302,headers:{location:'https://vercel.com/login'}});
 const redirect=url=>new Response('',{status:307,headers:{location:url}});
 async function scenario(options={}) {
@@ -13,7 +14,7 @@ async function scenario(options={}) {
   const original=Date.now;Date.now=()=>now;
   const calls={certification:0,qa_refresh:0,trusted_http:0,anonymous_http:0,qa:0,aws:0,controller:0};
   const events=[],sentTokens=[];let n=0;
-  const replies=options.replies??[login,app,app];
+  const replies=options.replies??[login,app,app,methodology,methodology];
   try {
     await runProtectedProbeQA({target,
       requestOIDCToken:async()=>{
@@ -57,7 +58,7 @@ for(const [kind,replies] of [['PUBLIC',[app]],['AMBIGUOUS',[()=>new Response('',
 });
 test('one certification token and valid QA reuse; AWS audience does not increment Vercel counters',async()=>{
   const x=await scenario({qa:async({tokenSource})=>{await tokenSource.get();}});assert.equal(x.failure,null);
-  assert.deepEqual(x.calls,{certification:1,qa_refresh:0,trusted_http:2,anonymous_http:1,qa:1,aws:1,controller:0});
+  assert.deepEqual(x.calls,{certification:1,qa_refresh:0,trusted_http:4,anonymous_http:1,qa:1,aws:1,controller:0});
   assert.ok(x.events.indexOf('BASELINE_PROTECTED')<x.events.indexOf('CERT_TOKEN'));
 });
 for(const ttl of [0,29,30])test('fresh certification token remaining'+ttl+' fails closed without second acquisition',async()=>{
@@ -65,9 +66,9 @@ for(const ttl of [0,29,30])test('fresh certification token remaining'+ttl+' fail
   assert.equal(x.calls.certification,1);assert.equal(x.calls.qa_refresh,0);assert.equal(x.calls.trusted_http,0);assert.equal(x.calls.qa,0);
 });
 for(const hops of [1,2])test('same certification token reused for '+hops+' safe same-origin redirect hops',async()=>{
-  const x=await scenario({ttl:45,replies:[login,()=>redirect(hops===2?'/safe-one':'/niveles-estadisticos/'),...(hops===2?[()=>redirect('/niveles-estadisticos/')]:[]),app,app]});
+  const x=await scenario({ttl:45,replies:[login,()=>redirect(hops===2?'/safe-one':'/niveles-estadisticos/'),...(hops===2?[()=>redirect('/niveles-estadisticos/')]:[]),app,app,methodology,methodology]});
   assert.equal(x.failure,null);assert.equal(x.calls.certification,1);assert.equal(x.calls.qa_refresh,0);
-  assert.equal(x.calls.trusted_http,hops+2);assert.equal(new Set(x.sentTokens).size,1);
+  assert.equal(x.calls.trusted_http,hops+4);assert.equal(new Set(x.sentTokens).size,1);
   assert.equal(x.receipt.routes[0].hops.length,hops+1);
 });
 test('cross-origin redirect is not followed and cannot trigger QA refresh',async()=>{
@@ -92,7 +93,7 @@ test('45 seconds remains usable in QA; old proactive60 trigger is not used',asyn
   const x=await scenario({qa:async({tokenSource,advance})=>{advance(555);await tokenSource.get();}});assert.equal(x.failure,null);assert.equal(x.calls.qa_refresh,0);
 });
 test('certification redirect reuses the acquired token despite elapsed time; renewal waits for recorded certification',async()=>{
-  const x=await scenario({ttl:45,replies:[login,()=>redirect('/niveles-estadisticos/'),app,app],advanceAtHttp:2,advanceSeconds:20});
+  const x=await scenario({ttl:45,replies:[login,()=>redirect('/niveles-estadisticos/'),app,app,methodology,methodology],advanceAtHttp:2,advanceSeconds:20});
   assert.equal(x.failure,null);assert.equal(x.calls.certification,1);assert.equal(x.calls.qa_refresh,1);assert.equal(x.sentTokens[0],x.sentTokens[1]);
   assert.ok(x.events.indexOf('CERT_RECEIPT')<x.events.indexOf('QA_REFRESH'));assert.equal(x.receipt.routes[0].hops.length,2);
 });
