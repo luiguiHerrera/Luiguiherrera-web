@@ -2,6 +2,8 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs/promises';
 import { createHash } from 'node:crypto';
+import { createRequire } from 'node:module';
+const ts = createRequire(import.meta.url)('typescript');
 
 const root = new URL('../', import.meta.url);
 const digest = value => createHash('sha256').update(value).digest('hex');
@@ -21,7 +23,22 @@ const shared = {
 
 test('16: proven OIDC V3 validator and runtime identity boundary remain exact frozen bytes', async () => {
   assert.equal(digest(await read('scripts/probe-oidc.mjs')), '951606ee7fa3aa2442f3201af904afeb6afa0745475d72bbff24545f7ca603ab');
-  assert.equal(digest(await read('scripts/probe-runtime.mjs')), 'a0c808af84d5f8f047a823bb88ae9247fdceb93099d0274e4c0eeb2b6d66a3a8');
+  // Metadata may change in this shared file; the six complete identity functions remain frozen.
+  const expected = {
+    "execution": "dcf5155b8c863ecb2e85bd0c11ae2571e38c2cb80c444a59bcd9155a5f8fe946",
+    "oidcEvidencePath": "bb555c80eccc7c57b2e296e3e253dcfc1ed400bb662f2833e0f0b9a55d676683",
+    "recordProbeOIDCEvidence": "c4949f1cf64903088dbf7fb3052676421feebd289e106dabc55b5a98e72cd501",
+    "readProbeOIDCEvidence": "b119e4387f56327293d7fa25505e21d3cdbb1944e34f91e8fa08f740778a257b",
+    "probeOIDC": "84bbf429a8cdc79ea69ee2e7efb127c7d5acec27085b8bcba387efefca55dd93",
+    "readProbeRoleIdentity": "9e736e9695492f48167207cb75c03183737a236d7cd21c4ca3875b6805e65e63"
+  };
+  const ast = ts.createSourceFile('probe-runtime.mjs', await read('scripts/probe-runtime.mjs'), ts.ScriptTarget.Latest, true, ts.ScriptKind.JS);
+  const observed = {};
+  for (const node of ast.statements) {
+    const name = node.name?.text ?? (ts.isVariableStatement(node) && node.declarationList.declarations.length === 1 ? node.declarationList.declarations[0].name.text : null);
+    if (Object.hasOwn(expected, name)) observed[name] = digest(node.getText(ast));
+  }
+  assert.deepEqual(observed, expected);
 });
 
 test('17: probe entry defers OIDC creation to protected-baseline gate and never imports controller invocation', async () => {

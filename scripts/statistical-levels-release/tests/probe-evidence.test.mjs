@@ -11,6 +11,7 @@ import { createProbeHttpSession } from '../scripts/probe-http.mjs';
 import { createProbeTokenBudget } from '../scripts/probe-token-budget.mjs';
 import { runProtectedProbeQA } from '../scripts/probe-gate.mjs';
 import { buildProbeEvidence, probeEvidenceFiles, sanitizeProbeAccounting, writeProbeEvidence } from '../scripts/probe-evidence.mjs';
+import { recordProbeMetadataGateFailure, readProbeMetadataEvidence } from '../scripts/probe-metadata-observability.mjs';
 import { createProductQAObservability, productQAObservabilityFiles } from '../scripts/product-qa-observability.mjs';
 
 const origin = 'https://luiguiherrera-fixture-luigui-herrera-s-projects.vercel.app';
@@ -75,7 +76,7 @@ await seedBudget.certificationTokenSource.get();
 await seedBudget.markCertified();
 await session.get(origin + '/en/statistical-levels');
 
-test('evidence has exactly nine canonical JSON files; manifest covers other eight exact bytes', () => {
+test('evidence has exactly ten canonical JSON files; manifest covers other nine exact bytes', () => {
   const files = buildProbeEvidence(fixture()), json = decode(files);
   assert.deepEqual(Object.keys(files).sort(), [...probeEvidenceFiles].sort());
   assert.equal(json['probe-summary.json'].result, 'PASS');
@@ -259,7 +260,7 @@ test('skipped steps cannot reuse stale successful evidence', () => {
   assert.ok(json['probe-summary.json'].evidence_issues.includes('UNEXPECTED_QA_EVIDENCE'));
 });
 
-test('writer emits only the nine allowlisted files and refuses a raw/screenshot directory', async () => {
+test('writer emits only the ten allowlisted files and refuses a raw/screenshot directory', async () => {
   const root = await fs.mkdtemp(path.join(os.tmpdir(), 'probe-evidence-unit-'));
   try {
     const out = path.join(root, 'evidence'); await writeProbeEvidence(out, fixture());
@@ -429,7 +430,7 @@ test('raw extra HTTP headers and inherited serializers cannot enter the artifact
   assert.ok(!JSON.stringify(otherJSON).includes('private-cookie-marker'));
 });
 
-test('matching protection redirects retain exact safe diagnostics in the nine-file failure artifact', async () => {
+test('matching protection redirects retain exact safe diagnostics in the ten-file failure artifact', async () => {
   const input = failedQA(); let latest, calls = 0;
   const token = signedFixture().token;
   const probe = createProbeHttpSession({ target: input.context.target, tokenSource: { get: async () => token },
@@ -687,7 +688,7 @@ test('the CLI requires exact browser authority before attestation and again befo
 
 
 // Evidence-only extension: legacy result bytes stay independent of observability availability.
-test('observability retains the exact first assertion through finalizer and canonical nine-file publication', async () => {
+test('observability retains the exact first assertion through finalizer and canonical ten-file publication', async () => {
   const dir = await fs.mkdtemp(path.join(os.tmpdir(), 'sl-observation-artifact-'));
   try {
     const rsc = { kind: 'request_failure', url: origin + '/niveles-estadisticos?_rsc=discarded-query-value',
@@ -750,4 +751,38 @@ test('cleanup abort before classifier still preserves valid pending first-failur
     assert.equal(files['product-qa-phase-summary.json'].evidence.classifier_alignment, 'PENDING');
     assert.equal(files['probe-summary.json'].result, 'FAIL');
   } finally { await fs.rm(dir, { recursive: true, force: true }); }
+});
+
+
+test('metadata evidence status never changes the eight existing evidence payloads or product outcomes', async () => {
+  const directory = await fs.mkdtemp(path.join(os.tmpdir(), 'probe-metadata-evidence-'));
+  try {
+    const env = { RUNNER_TEMP: directory };
+    recordProbeMetadataGateFailure('PROBE_PUBLIC_METADATA_UNAVAILABLE', env);
+    const metadata = readProbeMetadataEvidence(env);
+    assert.equal(metadata.request_count, 0);
+    assert.equal(metadata.gate_failures[0].attempted, false);
+    for (const source of [fixture(), failedQA(), blank({ resolve: 'failure', qa: 'skipped', aws_assume: 'skipped', aws_identity: 'skipped' })]) {
+      const before = buildProbeEvidence(source);
+      const cases = [
+        [undefined, 'NOT_AVAILABLE'], [null, 'NOT_AVAILABLE'], [metadata, 'RECORDED'],
+        [{ ...metadata, cookie: 'metadata-secret-canary' }, 'REJECTED'],
+        [{ metadata_read_error: true }, 'REJECTED'],
+      ];
+      let getterCalled = false;
+      const accessor = Object.defineProperty({}, 'events', { enumerable: true, get() { getterCalled = true; return 'metadata-secret-canary'; } });
+      cases.push([accessor, 'REJECTED']);
+      for (const [value, status] of cases) {
+        const after = buildProbeEvidence({ ...source, metadataResolution: value });
+        const original = probeEvidenceFiles.filter(name => !['metadata-resolution.json', 'evidence-sha256.json'].includes(name));
+        assert.equal(original.length, 8);
+        for (const name of original) assert.deepEqual(after[name], before[name], name + ' must remain byte identical');
+        const wrapper = JSON.parse(after['metadata-resolution.json']);
+        assert.equal(wrapper.capture_status, status);
+        assert.equal(wrapper.error_code, status === 'REJECTED' ? 'INVALID_METADATA_EVIDENCE' : null);
+        for (const bytes of Object.values(after)) assert.ok(!bytes.includes('metadata-secret-canary'));
+      }
+      assert.equal(getterCalled, false);
+    }
+  } finally { await fs.rm(directory, { recursive: true, force: true }); }
 });

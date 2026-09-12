@@ -4,6 +4,8 @@ import { execFileSync } from 'node:child_process';
 import { P, need, sha, canonical, validateRun, validateRunMetadata, validateAncestry } from './release-core.mjs';
 import { selectProbeTarget, resolveProbePreview, validateProbeRoleIdentity } from './probe-core.mjs';
 import { evaluateProbeOIDC, validateProbeOIDCEvidence } from './probe-oidc.mjs';
+import { fetchProbeMetadata, recordProbeMetadataGateFailure } from './probe-metadata-observability.mjs';
+import { readRegisteredProbeFixture, requireRegisteredProbeTarget, requireRegisteredProbeResolution } from './probe-fixture-registry.mjs';
 
 export const packageRoot = path.resolve(import.meta.dirname, '..');
 export const codeRoot = path.resolve(packageRoot, '../..');
@@ -12,54 +14,58 @@ export const execution = (env = process.env) => ({ id: env.GITHUB_RUN_ID, attemp
 
 // Public metadata only. No operator-provided endpoint or GitHub credential is accepted.
 export async function probeGithub(relative) {
-  need([/^\/actions\/runs\/[1-9][0-9]*$/, /^\/git\/ref\/heads\/vercel-deployment$/,
-    /^\/compare\/[a-f0-9]{40}\.\.\.[a-f0-9]{40}\?per_page=1$/,
-    /^\/deployments\?sha=[a-f0-9]{40}&per_page=100$/,
-    /^\/deployments\/[1-9][0-9]*\/statuses\?per_page=100$/,
-    /^\/commits\/[a-f0-9]{40}\/statuses\?per_page=100$/].some(pattern => pattern.test(relative)), 'PROBE_GITHUB_PATH');
-  const response = await fetch('https://api.github.com/repos/' + P.repository + relative, {
-    method: 'GET', redirect: 'error', signal: AbortSignal.timeout(30000),
-    headers: { Accept: 'application/vnd.github+json', 'X-GitHub-Api-Version': '2022-11-28' } });
-  need(response.ok, 'PROBE_PUBLIC_METADATA_UNAVAILABLE');
-  const text = await response.text(); need(text.length < 2_000_000, 'PROBE_METADATA_SIZE');
-  return JSON.parse(text);
+  return fetchProbeMetadata(relative);
 }
 
 export async function assertProbeWorkflow(env = process.env) {
-  const frozen = JSON.parse(await fs.readFile(path.join(packageRoot, 'workflow-freeze.json'), 'utf8'));
-  need(/^[a-f0-9]{40}$/.test(env.GITHUB_SHA ?? ''), 'WORKFLOW_EXECUTION_SHA');
-  // The only Git subprocess is a read of the pinned workflow blob.
-  const bytes = execFileSync('git', ['show', env.GITHUB_SHA + ':' + P.workflow_path], { cwd: codeRoot, stdio: ['ignore', 'pipe', 'pipe'] });
-  validateRun(env, bytes, frozen);
-  need((await fs.readFile(path.join(codeRoot, P.workflow_path))).equals(bytes), 'CHECKOUT_WORKFLOW_DRIFT');
-  const bundle = JSON.parse(await fs.readFile(path.join(packageRoot, 'source-manifest.json'), 'utf8'));
-  for (const [name, expected] of Object.entries(bundle)) {
-    need(!name.includes('..') && !path.isAbsolute(name), 'SOURCE_MANIFEST_PATH');
-    const stat = await fs.lstat(path.join(packageRoot, name));
-    need(stat.isFile() && !stat.isSymbolicLink(), 'SOURCE_SYMLINK');
-    need(sha(await fs.readFile(path.join(packageRoot, name))) === expected, 'SOURCE_BUNDLE_MISMATCH');
+  try {
+    const frozen = JSON.parse(await fs.readFile(path.join(packageRoot, 'workflow-freeze.json'), 'utf8'));
+    need(/^[a-f0-9]{40}$/.test(env.GITHUB_SHA ?? ''), 'WORKFLOW_EXECUTION_SHA');
+    // The only Git subprocess is a read of the pinned workflow blob.
+    const bytes = execFileSync('git', ['show', env.GITHUB_SHA + ':' + P.workflow_path], { cwd: codeRoot, stdio: ['ignore', 'pipe', 'pipe'] });
+    validateRun(env, bytes, frozen);
+    need((await fs.readFile(path.join(codeRoot, P.workflow_path))).equals(bytes), 'CHECKOUT_WORKFLOW_DRIFT');
+    const bundle = JSON.parse(await fs.readFile(path.join(packageRoot, 'source-manifest.json'), 'utf8'));
+    for (const [name, expected] of Object.entries(bundle)) {
+      need(!name.includes('..') && !path.isAbsolute(name), 'SOURCE_MANIFEST_PATH');
+      const stat = await fs.lstat(path.join(packageRoot, name));
+      need(stat.isFile() && !stat.isSymbolicLink(), 'SOURCE_SYMLINK');
+      need(sha(await fs.readFile(path.join(packageRoot, name))) === expected, 'SOURCE_BUNDLE_MISMATCH');
+    }
+    const event = JSON.parse(await fs.readFile(env.GITHUB_EVENT_PATH, 'utf8'));
+    const target = selectProbeTarget(event.inputs ?? {}), run = execution(env);
+    requireRegisteredProbeTarget(target, await readRegisteredProbeFixture());
+    validateRunMetadata(await probeGithub('/actions/runs/' + run.id), run);
+    const tip = await probeGithub('/git/ref/heads/' + P.branch);
+    need(tip.object.sha === run.execution_sha, 'WORKFLOW_BRANCH_DRIFT');
+    validateAncestry(await probeGithub('/compare/' + target.candidate_git_sha + '...' + run.execution_sha + '?per_page=1'), run.execution_sha, target.candidate_git_sha);
+    return { ...frozen, target };
+  } catch (error) {
+    try { recordProbeMetadataGateFailure(Object.getOwnPropertyDescriptor(error, 'message')?.value, env); }
+    catch { /* Diagnostics cannot replace the original metadata error. */ }
+    throw error;
   }
-  const event = JSON.parse(await fs.readFile(env.GITHUB_EVENT_PATH, 'utf8'));
-  const target = selectProbeTarget(event.inputs ?? {}), run = execution(env);
-  validateRunMetadata(await probeGithub('/actions/runs/' + run.id), run);
-  const tip = await probeGithub('/git/ref/heads/' + P.branch);
-  need(tip.object.sha === run.execution_sha, 'WORKFLOW_BRANCH_DRIFT');
-  validateAncestry(await probeGithub('/compare/' + target.candidate_git_sha + '...' + run.execution_sha + '?per_page=1'), run.execution_sha, target.candidate_git_sha);
-  return { ...frozen, target };
 }
 
 export async function resolveProbeDeployment(target) {
-  const [deployments, commits] = await Promise.all([
-    probeGithub('/deployments?sha=' + target.candidate_git_sha + '&per_page=100'),
-    probeGithub('/commits/' + target.candidate_git_sha + '/statuses?per_page=100')]);
-  need(Array.isArray(deployments) && deployments.length < 100, 'DEPLOYMENT_METADATA_INCOMPLETE');
-  const statuses = {};
-  for (const item of deployments) {
-    need(Number.isSafeInteger(item.id) && item.id > 0, 'GITHUB_DEPLOYMENT_ID');
-    if (item.sha === target.candidate_git_sha && item.environment === 'Preview' && item.production_environment === false)
-      statuses[String(item.id)] = await probeGithub('/deployments/' + item.id + '/statuses?per_page=100');
+  try {
+    const registered = requireRegisteredProbeTarget(target, await readRegisteredProbeFixture());
+    const [deployments, commits] = await Promise.all([
+      probeGithub('/deployments?sha=' + target.candidate_git_sha + '&per_page=100'),
+      probeGithub('/commits/' + target.candidate_git_sha + '/statuses?per_page=100')]);
+    need(Array.isArray(deployments) && deployments.length < 100, 'DEPLOYMENT_METADATA_INCOMPLETE');
+    const statuses = {};
+    for (const item of deployments) {
+      need(Number.isSafeInteger(item.id) && item.id > 0, 'GITHUB_DEPLOYMENT_ID');
+      if (item.sha === target.candidate_git_sha && item.environment === 'Preview' && item.production_environment === false)
+        statuses[String(item.id)] = await probeGithub('/deployments/' + item.id + '/statuses?per_page=100');
+    }
+    return requireRegisteredProbeResolution(resolveProbePreview(deployments, statuses, commits, target), registered);
+  } catch (error) {
+    try { recordProbeMetadataGateFailure(Object.getOwnPropertyDescriptor(error, 'message')?.value, process.env); }
+    catch { /* Diagnostics cannot replace the original metadata error. */ }
+    throw error;
   }
-  return resolveProbePreview(deployments, statuses, commits, target);
 }
 
 function oidcEvidencePath(env) {

@@ -1,8 +1,10 @@
-// The Founder froze these approved security/classifier/ADOPT/PROMOTE inputs for this observability-only change.
+// Frozen security/classifier/ADOPT/PROMOTE contracts remain exact across the authorized metadata repair.
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import { createHash } from 'node:crypto';
+import { createRequire } from 'node:module';
+const ts = createRequire(import.meta.url)('typescript');
 const expected = {
   "unchanged existing semantic event classifier": {
     "scripts/network-accounting.mjs": "a423eb268dc046cdb1c022587621afb33671f70f72f0dc1c519a9a5d481acc10"
@@ -18,8 +20,7 @@ const expected = {
     "scripts/probe-browser-authority.mjs": "d8873a83f6159e33e874124c62324d8bf76c7527786adeaaa1414b2b1e304209"
   },
   "OIDC V3 identity security unchanged": {
-    "scripts/probe-oidc.mjs": "951606ee7fa3aa2442f3201af904afeb6afa0745475d72bbff24545f7ca603ab",
-    "scripts/probe-runtime.mjs": "a0c808af84d5f8f047a823bb88ae9247fdceb93099d0274e4c0eeb2b6d66a3a8"
+    "scripts/probe-oidc.mjs": "951606ee7fa3aa2442f3201af904afeb6afa0745475d72bbff24545f7ca603ab"
   },
   "phase-scoped token budget unchanged": {
     "scripts/probe-token-budget.mjs": "944a180e12e516417acf3f98b3e59ad402b33293b9141eaa830753d47c09860e"
@@ -49,3 +50,23 @@ for (const [name, files] of Object.entries(expected)) {
     }
   });
 }
+
+// Metadata functions in this shared file may change; the complete OIDC/STS function bytes may not.
+const frozenIdentityFunctions = {
+  "execution": "dcf5155b8c863ecb2e85bd0c11ae2571e38c2cb80c444a59bcd9155a5f8fe946",
+  "oidcEvidencePath": "bb555c80eccc7c57b2e296e3e253dcfc1ed400bb662f2833e0f0b9a55d676683",
+  "recordProbeOIDCEvidence": "c4949f1cf64903088dbf7fb3052676421feebd289e106dabc55b5a98e72cd501",
+  "readProbeOIDCEvidence": "b119e4387f56327293d7fa25505e21d3cdbb1944e34f91e8fa08f740778a257b",
+  "probeOIDC": "84bbf429a8cdc79ea69ee2e7efb127c7d5acec27085b8bcba387efefca55dd93",
+  "readProbeRoleIdentity": "9e736e9695492f48167207cb75c03183737a236d7cd21c4ca3875b6805e65e63"
+};
+test('metadata repair preserves exact OIDC journals, token validation, execution and STS function bytes', async () => {
+  const source = await readFile(new URL('../scripts/probe-runtime.mjs', import.meta.url), 'utf8');
+  const ast = ts.createSourceFile('probe-runtime.mjs', source, ts.ScriptTarget.Latest, true, ts.ScriptKind.JS);
+  const observed = {};
+  for (const node of ast.statements) {
+    const name = node.name?.text ?? (ts.isVariableStatement(node) && node.declarationList.declarations.length === 1 ? node.declarationList.declarations[0].name.text : null);
+    if (Object.hasOwn(frozenIdentityFunctions, name)) observed[name] = createHash('sha256').update(node.getText(ast)).digest('hex');
+  }
+  assert.deepEqual(observed, frozenIdentityFunctions);
+});

@@ -8,10 +8,11 @@ import { requireProbeCertificationHTTP, requireProbeQATokenBudget } from './prob
 import { validateProbeTokenBudgetEvidence } from './probe-token-budget.mjs';
 import { validateProbeBrowserAuthorityEvidence, requireProbeBrowserAuthority } from './probe-browser-authority.mjs';
 import { validateProductQAObservabilityEvidence, productQAObservabilityFiles } from './product-qa-observability.mjs';
+import { validateProbeMetadataEvidence } from './probe-metadata-observability.mjs';
 
 export const probeEvidenceFiles = Object.freeze([
   'probe-summary.json', 'trusted-sources-qa.json', 'application-network-summary.json',
-  'aws-oidc-summary.json', 'qa-attestation.json', ...productQAObservabilityFiles, 'evidence-sha256.json',
+  'aws-oidc-summary.json', 'qa-attestation.json', ...productQAObservabilityFiles, 'metadata-resolution.json', 'evidence-sha256.json',
 ]);
 const HASH = /^[a-f0-9]{64}$/, SHA = /^[a-f0-9]{40}$/, ID = /^[1-9][0-9]{0,19}$/;
 const OPERATION = 'PROBE_IDENTITY';
@@ -124,7 +125,7 @@ export function buildProbeEvidence(input) {
     try { return validator(value); } catch { issues.push(code); return null; }
   }
   need(input && typeof input === 'object' && !Array.isArray(input), 'EVIDENCE_INPUT');
-  const allowed = ['context', 'outcomes', 'productReport', 'accounting', 'awsProof', 'attestation', 'oidcEvidence', 'httpPreflight', 'certificationHttp', 'tokenBudget', 'browserAuthority', 'productObservability'];
+  const allowed = ['context', 'outcomes', 'productReport', 'accounting', 'awsProof', 'attestation', 'oidcEvidence', 'httpPreflight', 'certificationHttp', 'tokenBudget', 'browserAuthority', 'productObservability', 'metadataResolution'];
   if (Object.keys(input).some(k => !allowed.includes(k))) issues.push('UNEXPECTED_INPUT_FIELD');
   const context = inspect(input.context, validContext, 'INVALID_CONTEXT');
   const oidc = inspect(input.oidcEvidence, value => {
@@ -316,6 +317,16 @@ export function buildProbeEvidence(input) {
       capture_status: observationStatus, error_code: observationError, evidence: observation?.[key] ?? null,
     };
   }
+  // Metadata diagnostics are independently validated and never change earlier-layer or product outcomes.
+  let metadata = null, metadataStatus = 'NOT_AVAILABLE', metadataError = null;
+  if (input.metadataResolution != null) {
+    try { metadata = validateProbeMetadataEvidence(input.metadataResolution); metadataStatus = 'RECORDED'; }
+    catch { metadataStatus = 'REJECTED'; metadataError = 'INVALID_METADATA_EVIDENCE'; }
+  }
+  evidence['metadata-resolution.json'] = {
+    schema_version: 'statistical-levels.identity-probe-metadata-artifact.v1',
+    capture_status: metadataStatus, error_code: metadataError, evidence: metadata,
+  };
   const files = Object.fromEntries(Object.entries(evidence).map(([name, value]) => [name, canonical(value)]));
   files['evidence-sha256.json'] = canonical({ schema_version: 'statistical-levels.identity-probe-evidence-sha256.v1', algorithm: 'SHA256',
     files: Object.fromEntries(Object.keys(files).sort().map(name => [name, { sha256: sha(files[name]), bytes: files[name].length }])) });
@@ -328,7 +339,7 @@ export async function writeProbeEvidence(directory, input) {
   await fs.mkdir(destination, { recursive: true, mode: 0o700 });
   const stat = await fs.lstat(destination);
   need(stat.isDirectory() && !stat.isSymbolicLink() && (await fs.readdir(destination)).length === 0, 'EVIDENCE_DESTINATION_NOT_EMPTY_OR_UNSAFE');
-  // Publish the complete nine-file bundle together; a write failure cannot expose a partial artifact.
+  // Publish the complete ten-file bundle together; a write failure cannot expose a partial artifact.
   const staging = await fs.mkdtemp(path.join(path.dirname(destination), '.probe-evidence-publish-'));
   try {
     for (const name of probeEvidenceFiles) await fs.writeFile(path.join(staging, name), files[name], { flag: 'wx', mode: 0o600 });

@@ -5,6 +5,7 @@ import { attestProbe, validateProbeAttestation } from './probe-core.mjs';
 import { assertProbeWorkflow, resolveProbeDeployment, probeOIDC, readProbeRoleIdentity, readProbeOIDCEvidence, packageRoot, candidateRoot, execution } from './probe-runtime.mjs';
 import { writeProbeEvidence } from './probe-evidence.mjs';
 import { productQAObservabilityFiles } from './product-qa-observability.mjs';
+import { readProbeMetadataEvidence } from './probe-metadata-observability.mjs';
 import { requireProbeBrowserAuthority } from './probe-browser-authority.mjs';
 import { requireProtectedProbeHTTP, requireProbeCertificationHTTP, requireProbeQATokenBudget } from './probe-gate.mjs';
 
@@ -19,6 +20,9 @@ try {
   need(['preflight', 'qa', 'aws-preflight', 'aws-identity', 'evidence'].includes(mode), 'PROBE_MODE');
   if (mode === 'evidence') {
     const context = await readOptional(stateFile);
+    let metadataResolution = null;
+    try { metadataResolution = await readProbeMetadataEvidence(); }
+    catch { metadataResolution = { metadata_read_error: true }; }
     const [firstFailure, timeline, phaseSummary] = await Promise.all(productQAObservabilityFiles.map(name => readOptional(path.join(qaDirectory, name))));
     const productObservability = firstFailure === null && timeline === null && phaseSummary === null ? null : { firstFailure, timeline, phaseSummary };
     const summary = await writeProbeEvidence(path.join(root, 'artifact'), {
@@ -28,6 +32,7 @@ try {
         aws_assume: process.env.PROBE_AWS_ASSUME_OUTCOME, aws_identity: process.env.PROBE_AWS_IDENTITY_OUTCOME },
       productReport: await readOptional(path.join(qaDirectory, 'product-report.json')),
       productObservability,
+      metadataResolution,
       accounting: await readOptional(path.join(qaDirectory, 'network-accounting.json')),
       httpPreflight: await readOptional(path.join(qaDirectory, 'http-preflight.json')),
       certificationHttp: await readOptional(path.join(qaDirectory, 'trusted-sources-certification.json')),
