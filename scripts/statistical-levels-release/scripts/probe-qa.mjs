@@ -2,7 +2,7 @@ import fs from 'node:fs/promises';
 import path from 'node:path';
 import { P, need, sha, canonical } from './release-core.mjs';
 import { validateProbeTarget } from './probe-core.mjs';
-import { createReadOnlyHarness } from './browser-harness-base.mjs';
+import { createProbeProductHarness } from './probe-product-browser-harness.mjs';
 import { runProbeProductQA } from './probe-product-qa.mjs';
 import { validateProbeHttpEvidence } from './probe-http.mjs';
 import { runProtectedProbeQA, requireProbeCertificationHTTP } from './probe-gate.mjs';
@@ -68,10 +68,10 @@ export async function runProbeQA(options) {
       const safe = validateProbeHttpEvidence(value, target);
       await fs.writeFile(path.join(options.out, 'http-preflight.json'), canonical(safe), { mode: 0o600 });
     },
-    runQA: ({ tokenSource, protectedGet }) => runProbeProductQA({ ...options, target, tokenSource }, async verified => {
+    runQA: ({ tokenSource, protectedGet }) => runProbeProductQA({ ...options, target, tokenSource }, async (verified, observability) => {
       validateProbeTarget(verified);
-      const harness = await createReadOnlyHarness(verified, tokenSource, options.out, false);
-      // Shared release browser and ADOPT/PROMOTE transport remain unchanged.
+      const harness = await createProbeProductHarness(verified, tokenSource, options.out, false, observability);
+      // Only the PROBE harness receives passive product observability; transport remains unchanged.
       return { ...harness, protectedGet };
     })
   });

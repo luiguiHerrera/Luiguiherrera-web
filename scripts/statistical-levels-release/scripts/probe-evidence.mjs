@@ -7,10 +7,11 @@ import { validateProbeHttpEvidence } from './probe-http.mjs';
 import { requireProbeCertificationHTTP, requireProbeQATokenBudget } from './probe-gate.mjs';
 import { validateProbeTokenBudgetEvidence } from './probe-token-budget.mjs';
 import { validateProbeBrowserAuthorityEvidence, requireProbeBrowserAuthority } from './probe-browser-authority.mjs';
+import { validateProductQAObservabilityEvidence, productQAObservabilityFiles } from './product-qa-observability.mjs';
 
 export const probeEvidenceFiles = Object.freeze([
   'probe-summary.json', 'trusted-sources-qa.json', 'application-network-summary.json',
-  'aws-oidc-summary.json', 'qa-attestation.json', 'evidence-sha256.json',
+  'aws-oidc-summary.json', 'qa-attestation.json', ...productQAObservabilityFiles, 'evidence-sha256.json',
 ]);
 const HASH = /^[a-f0-9]{64}$/, SHA = /^[a-f0-9]{40}$/, ID = /^[1-9][0-9]{0,19}$/;
 const OPERATION = 'PROBE_IDENTITY';
@@ -123,7 +124,7 @@ export function buildProbeEvidence(input) {
     try { return validator(value); } catch { issues.push(code); return null; }
   }
   need(input && typeof input === 'object' && !Array.isArray(input), 'EVIDENCE_INPUT');
-  const allowed = ['context', 'outcomes', 'productReport', 'accounting', 'awsProof', 'attestation', 'oidcEvidence', 'httpPreflight', 'certificationHttp', 'tokenBudget', 'browserAuthority'];
+  const allowed = ['context', 'outcomes', 'productReport', 'accounting', 'awsProof', 'attestation', 'oidcEvidence', 'httpPreflight', 'certificationHttp', 'tokenBudget', 'browserAuthority', 'productObservability'];
   if (Object.keys(input).some(k => !allowed.includes(k))) issues.push('UNEXPECTED_INPUT_FIELD');
   const context = inspect(input.context, validContext, 'INVALID_CONTEXT');
   const oidc = inspect(input.oidcEvidence, value => {
@@ -298,6 +299,23 @@ export function buildProbeEvidence(input) {
       credential_model: 'GITHUB_OIDC', oidc_validation_result: oidcResult(awsOIDC), oidc_claim_evidence: awsOIDC, identity: aws },
     'qa-attestation.json': { schema_version: 'statistical-levels.identity-probe-attestation-evidence.v1', result: qaState, attestation },
   };
+  // Dedicated diagnostics do not participate in legacy result/QA/AWS predicates.
+  // Missing or rejected observability remains explicit; it cannot rewrite a product conclusion.
+  let observation = null, observationStatus = 'NOT_AVAILABLE', observationError = null;
+  if (input.productObservability != null) {
+    try {
+      observation = validateProductQAObservabilityEvidence(input.productObservability, context?.target?.origin, input.accounting);
+      observationStatus = 'RECORDED';
+    } catch {
+      observationStatus = 'REJECTED'; observationError = 'INVALID_PRODUCT_OBSERVABILITY';
+    }
+  }
+  for (const [index, key] of ['firstFailure', 'timeline', 'phaseSummary'].entries()) {
+    evidence[productQAObservabilityFiles[index]] = {
+      schema_version: 'statistical-levels.identity-probe-product-observability-artifact.v1',
+      capture_status: observationStatus, error_code: observationError, evidence: observation?.[key] ?? null,
+    };
+  }
   const files = Object.fromEntries(Object.entries(evidence).map(([name, value]) => [name, canonical(value)]));
   files['evidence-sha256.json'] = canonical({ schema_version: 'statistical-levels.identity-probe-evidence-sha256.v1', algorithm: 'SHA256',
     files: Object.fromEntries(Object.keys(files).sort().map(name => [name, { sha256: sha(files[name]), bytes: files[name].length }])) });
@@ -310,7 +328,7 @@ export async function writeProbeEvidence(directory, input) {
   await fs.mkdir(destination, { recursive: true, mode: 0o700 });
   const stat = await fs.lstat(destination);
   need(stat.isDirectory() && !stat.isSymbolicLink() && (await fs.readdir(destination)).length === 0, 'EVIDENCE_DESTINATION_NOT_EMPTY_OR_UNSAFE');
-  // Publish the complete six-file bundle together; a write failure cannot expose a partial artifact.
+  // Publish the complete nine-file bundle together; a write failure cannot expose a partial artifact.
   const staging = await fs.mkdtemp(path.join(path.dirname(destination), '.probe-evidence-publish-'));
   try {
     for (const name of probeEvidenceFiles) await fs.writeFile(path.join(staging, name), files[name], { flag: 'wx', mode: 0o600 });

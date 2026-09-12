@@ -11,6 +11,7 @@ import { createProbeHttpSession } from '../scripts/probe-http.mjs';
 import { createProbeTokenBudget } from '../scripts/probe-token-budget.mjs';
 import { runProtectedProbeQA } from '../scripts/probe-gate.mjs';
 import { buildProbeEvidence, probeEvidenceFiles, sanitizeProbeAccounting, writeProbeEvidence } from '../scripts/probe-evidence.mjs';
+import { createProductQAObservability, productQAObservabilityFiles } from '../scripts/product-qa-observability.mjs';
 
 const origin = 'https://luiguiherrera-fixture-luigui-herrera-s-projects.vercel.app';
 const decode = files => Object.fromEntries(Object.entries(files).map(([name, bytes]) => [name, JSON.parse(bytes)]));
@@ -74,7 +75,7 @@ await seedBudget.certificationTokenSource.get();
 await seedBudget.markCertified();
 await session.get(origin + '/en/statistical-levels');
 
-test('evidence has exactly six canonical JSON files; manifest covers other five exact bytes', () => {
+test('evidence has exactly nine canonical JSON files; manifest covers other eight exact bytes', () => {
   const files = buildProbeEvidence(fixture()), json = decode(files);
   assert.deepEqual(Object.keys(files).sort(), [...probeEvidenceFiles].sort());
   assert.equal(json['probe-summary.json'].result, 'PASS');
@@ -258,7 +259,7 @@ test('skipped steps cannot reuse stale successful evidence', () => {
   assert.ok(json['probe-summary.json'].evidence_issues.includes('UNEXPECTED_QA_EVIDENCE'));
 });
 
-test('writer emits only the six allowlisted files and refuses a raw/screenshot directory', async () => {
+test('writer emits only the nine allowlisted files and refuses a raw/screenshot directory', async () => {
   const root = await fs.mkdtemp(path.join(os.tmpdir(), 'probe-evidence-unit-'));
   try {
     const out = path.join(root, 'evidence'); await writeProbeEvidence(out, fixture());
@@ -428,7 +429,7 @@ test('raw extra HTTP headers and inherited serializers cannot enter the artifact
   assert.ok(!JSON.stringify(otherJSON).includes('private-cookie-marker'));
 });
 
-test('matching protection redirects retain exact safe diagnostics in the six-file failure artifact', async () => {
+test('matching protection redirects retain exact safe diagnostics in the nine-file failure artifact', async () => {
   const input = failedQA(); let latest, calls = 0;
   const token = signedFixture().token;
   const probe = createProbeHttpSession({ target: input.context.target, tokenSource: { get: async () => token },
@@ -682,4 +683,71 @@ test('the CLI requires exact browser authority before attestation and again befo
   const next = source.indexOf("requireProbeBrowserAuthority(await readOptional(path.join(qaDirectory, 'browser-authority.json')), context.target)");
   const aws = source.indexOf("if (mode === 'aws-preflight') await probeOIDC(P.aws_audience)");
   assert.ok(first > 0 && first < attestation); assert.ok(next > attestation && next < aws);
+});
+
+
+// Evidence-only extension: legacy result bytes stay independent of observability availability.
+test('observability retains the exact first assertion through finalizer and canonical nine-file publication', async () => {
+  const dir = await fs.mkdtemp(path.join(os.tmpdir(), 'sl-observation-artifact-'));
+  try {
+    const rsc = { kind: 'request_failure', url: origin + '/niveles-estadisticos?_rsc=discarded-query-value',
+      type: 'Fetch', canceled: true, rsc: true, prefetch: true, error_code: 'net::ERR_ABORTED' };
+    const platform = { kind: 'request_failure', url: 'https://vercel.live/_next-live/feedback/session', type: 'Script' };
+    const input = failedQA([rsc, platform]);
+    const observer = createProductQAObservability({ out: path.join(dir, 'qa'), origin });
+    observer.context({ suite_id: 'qa-statistical-levels.mjs', test_id: 'keyboard-order', test_name: 'keyboard order',
+      assertion_id: 'focus-window', action_id: 'Tab', route: '/niveles-estadisticos',
+      source_file: 'scripts/statistical-levels-release/scripts/qa/qa-statistical-levels.mjs', source_line: 147 });
+    observer.recordEvent(rsc);
+    const first = new assert.AssertionError({ actual: false, expected: true, operator: 'strictEqual', message: 'keyboard order must reach 3Y' });
+    assert.equal(observer.captureFailure(first), first);
+    observer.recordEvent(platform);
+    observer.captureFailure(new Error('PRODUCT_SUITE_FAILED'));
+    observer.finish(input.accounting);
+    const productObservability = observer.evidence();
+    const original = buildProbeEvidence(input), changed = buildProbeEvidence({ ...input, productObservability });
+    for (const name of ['probe-summary.json', 'trusted-sources-qa.json', 'application-network-summary.json', 'aws-oidc-summary.json', 'qa-attestation.json']) assert.deepEqual(changed[name], original[name], name);
+    const decoded = decode(changed);
+    for (const name of productQAObservabilityFiles) assert.equal(decoded[name].capture_status, 'RECORDED');
+    const captured = decoded['first-product-failure.json'].evidence.failure;
+    assert.equal(captured.message, first.message); assert.equal(captured.expected, true); assert.equal(captured.actual, false);
+    assert.equal(captured.assertion_id, 'focus-window');
+    assert.equal(decoded['probe-summary.json'].result, 'FAIL');
+    const published = path.join(dir, 'artifact');
+    await writeProbeEvidence(published, { ...input, productObservability });
+    assert.deepEqual((await fs.readdir(published)).sort(), [...probeEvidenceFiles].sort());
+    const combined = Object.values(changed).map(bytes => bytes.toString()).join('');
+    assert.ok(!combined.includes('discarded-query-value'));
+  } finally { await fs.rm(dir, { recursive: true, force: true }); }
+});
+
+test('unavailable or hostile observation cannot rewrite legacy PASS/FAIL or expose unsafe fields', () => {
+  const input = fixture(), baseline = buildProbeEvidence(input);
+  for (const observation of [null, { firstFailure: { token: 'must-never-export-this-input' }, timeline: null, phaseSummary: null }]) {
+    const value = buildProbeEvidence({ ...input, productObservability: observation });
+    for (const name of ['probe-summary.json', 'trusted-sources-qa.json', 'application-network-summary.json', 'aws-oidc-summary.json', 'qa-attestation.json']) assert.deepEqual(value[name], baseline[name], name);
+    for (const name of productQAObservabilityFiles) {
+      const file = JSON.parse(value[name]);
+      assert.equal(file.capture_status, observation === null ? 'NOT_AVAILABLE' : 'REJECTED');
+      assert.equal(file.evidence, null);
+      assert.ok(!value[name].toString().includes('must-never-export-this-input'));
+    }
+  }
+});
+
+test('cleanup abort before classifier still preserves valid pending first-failure evidence', async () => {
+  const dir = await fs.mkdtemp(path.join(os.tmpdir(), 'sl-observation-cleanup-'));
+  try {
+    const observer = createProductQAObservability({ out: dir, origin });
+    observer.context({ suite_id: 'qa-statistical-levels.mjs', test_id: 'cleanup-fixture', action_id: 'assertion' });
+    const first = new assert.AssertionError({ actual: 0, expected: 1, operator: 'strictEqual', message: 'first failure survives close abort' });
+    observer.captureFailure(first);
+    observer.lifecycle('BROWSER_CLOSE_ABORTED'); observer.flush();
+    const input = failedQA(); input.accounting = null;
+    const files = decode(buildProbeEvidence({ ...input, productObservability: observer.evidence() }));
+    assert.equal(files['first-product-failure.json'].capture_status, 'RECORDED');
+    assert.equal(files['first-product-failure.json'].evidence.failure.message, first.message);
+    assert.equal(files['product-qa-phase-summary.json'].evidence.classifier_alignment, 'PENDING');
+    assert.equal(files['probe-summary.json'].result, 'FAIL');
+  } finally { await fs.rm(dir, { recursive: true, force: true }); }
 });

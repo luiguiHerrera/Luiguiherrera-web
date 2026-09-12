@@ -71,7 +71,7 @@ jobs:
       - name: Verify frozen helper bytes before executing any helper
         working-directory: scripts/statistical-levels-release
         env:
-          EXPECTED_SOURCE_SUMS: 08704e718042d6a1bbd81ecd378aa2380dccbebdffc6d7d4e7b4813582e8ec7b
+          EXPECTED_SOURCE_SUMS: 4101ad6bc8cba337bf46fda9f3a954e0db8e02a3f22e297816adc208d5f337e2
         run: |
           printf '%s  SOURCE_SHA256SUMS\n' "$EXPECTED_SOURCE_SUMS" | sha256sum --check --strict
           sha256sum --check --strict SOURCE_SHA256SUMS
@@ -129,7 +129,7 @@ jobs:
       - name: Verify frozen helper bytes before executing any helper
         working-directory: scripts/statistical-levels-release
         env:
-          EXPECTED_SOURCE_SUMS: 08704e718042d6a1bbd81ecd378aa2380dccbebdffc6d7d4e7b4813582e8ec7b
+          EXPECTED_SOURCE_SUMS: 4101ad6bc8cba337bf46fda9f3a954e0db8e02a3f22e297816adc208d5f337e2
         run: |
           printf '%s  SOURCE_SHA256SUMS\n' "$EXPECTED_SOURCE_SUMS" | sha256sum --check --strict
           sha256sum --check --strict SOURCE_SHA256SUMS
@@ -178,7 +178,7 @@ jobs:
         id: source_integrity
         working-directory: scripts/statistical-levels-release
         env:
-          EXPECTED_SOURCE_SUMS: 08704e718042d6a1bbd81ecd378aa2380dccbebdffc6d7d4e7b4813582e8ec7b
+          EXPECTED_SOURCE_SUMS: 4101ad6bc8cba337bf46fda9f3a954e0db8e02a3f22e297816adc208d5f337e2
         run: |
           printf '%s  SOURCE_SHA256SUMS\n' "$EXPECTED_SOURCE_SUMS" | sha256sum --check --strict
           sha256sum --check --strict SOURCE_SHA256SUMS
@@ -237,7 +237,7 @@ jobs:
         if: always() && steps.source_integrity.outcome == 'success'
         working-directory: scripts/statistical-levels-release
         env:
-          EXPECTED_SOURCE_SUMS: 08704e718042d6a1bbd81ecd378aa2380dccbebdffc6d7d4e7b4813582e8ec7b
+          EXPECTED_SOURCE_SUMS: 4101ad6bc8cba337bf46fda9f3a954e0db8e02a3f22e297816adc208d5f337e2
           PROBE_RESOLVE_OUTCOME: ${{ steps.resolve.outcome }}
           PROBE_QA_OUTCOME: ${{ steps.qa.outcome }}
           PROBE_AWS_ASSUME_OUTCOME: ${{ steps.aws_assume.outcome }}
@@ -246,7 +246,7 @@ jobs:
           printf '%s  SOURCE_SHA256SUMS\n' "$EXPECTED_SOURCE_SUMS" | sha256sum --check --strict
           sha256sum --check --strict SOURCE_SHA256SUMS
           node scripts/probe-cli.mjs evidence
-      - name: Retain only the six sanitized identity-probe evidence files
+      - name: Retain only the nine sanitized identity-probe evidence files
         if: always() && steps.source_integrity.outcome == 'success' && steps.evidence.outputs.ready == 'true'
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
         with:
@@ -257,6 +257,9 @@ jobs:
             ${{ runner.temp }}/statistical-levels-identity-probe/artifact/application-network-summary.json
             ${{ runner.temp }}/statistical-levels-identity-probe/artifact/aws-oidc-summary.json
             ${{ runner.temp }}/statistical-levels-identity-probe/artifact/qa-attestation.json
+            ${{ runner.temp }}/statistical-levels-identity-probe/artifact/first-product-failure.json
+            ${{ runner.temp }}/statistical-levels-identity-probe/artifact/product-qa-event-timeline.json
+            ${{ runner.temp }}/statistical-levels-identity-probe/artifact/product-qa-phase-summary.json
             ${{ runner.temp }}/statistical-levels-identity-probe/artifact/evidence-sha256.json
           retention-days: 7
           if-no-files-found: error
