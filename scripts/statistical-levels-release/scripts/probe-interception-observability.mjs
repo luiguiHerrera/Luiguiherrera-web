@@ -4,8 +4,9 @@ import path from 'node:path';
 import { createHash } from 'node:crypto';
 import { PROBE_TOKEN_BUDGET_ERRORS } from './probe-token-budget.mjs';
 
-export const INTERCEPTION_EVIDENCE_SCHEMA = 'statistical-levels.probe-interception-failures.v1';
+export const INTERCEPTION_EVIDENCE_SCHEMA = 'statistical-levels.probe-interception-failures.v2';
 export const INTERCEPTION_EVIDENCE_FILE = 'interception-failures.json';
+export const INTERCEPTION_CONTINUATION_CLASSES = Object.freeze(['REQUEST_NO_LONGER_INTERCEPTABLE', 'CDP_TARGET_OR_SESSION_CLOSED', 'CDP_INVALID_PARAMETERS', 'CDP_PROTOCOL_OTHER', 'NOT_APPLICABLE']);
 const STAGES = ['REDIRECT_LOOKUP', 'REQUEST_URL_PARSING', 'TOKEN_ACQUISITION', 'HEADER_SCOPE_VALIDATION',
   'REQUEST_CONTINUATION', 'FAIL_REQUEST_FALLBACK', 'UNKNOWN'];
 const LIFECYCLES = ['ACTIVE', 'CLOSING', 'CLOSED', 'CONTEXT_CLOSING', 'BROWSER_CLOSING', 'UNKNOWN'];
@@ -22,8 +23,26 @@ const CODES = {
   HEADER_SCOPE_VALIDATION: [...HEADER_CODES, 'HEADER_SCOPE_REJECTION'],
   REQUEST_CONTINUATION: ['CONTINUE_REQUEST_ERROR'], FAIL_REQUEST_FALLBACK: ['FAIL_REQUEST_ERROR'], UNKNOWN: ['INTERCEPTION_UNKNOWN_ERROR'],
 };
-const FIELDS = ['failure_stage', 'safe_error_code', 'page_id', 'page_lifecycle', 'request_sequence', 'resource_type',
-  'method', 'destination_origin_class', 'redirected_from_origin_class', 'same_origin_target', 'redirect_present', 'path_sha256'];
+const CONTINUATION_STAGES = ['REQUEST_CONTINUATION', 'FAIL_REQUEST_FALLBACK'];
+const CONTINUATION_CLASSES = ['REQUEST_NO_LONGER_INTERCEPTABLE', 'CDP_TARGET_OR_SESSION_CLOSED',
+  'CDP_INVALID_PARAMETERS', 'CDP_PROTOCOL_OTHER', 'NOT_APPLICABLE'];
+// Fixed Chromium/CDP and Playwright wrapper markers. Matching is substring-only against a finite
+// table; the message itself is never retained and anything unmatched stays CDP_PROTOCOL_OTHER.
+const CONTINUATION_MARKERS = [
+  ['Invalid InterceptionId', 'REQUEST_NO_LONGER_INTERCEPTABLE'],
+  ['Session with given id not found', 'CDP_TARGET_OR_SESSION_CLOSED'],
+  ['Session closed', 'CDP_TARGET_OR_SESSION_CLOSED'],
+  ['Target closed', 'CDP_TARGET_OR_SESSION_CLOSED'],
+  ['Target page, context or browser has been closed', 'CDP_TARGET_OR_SESSION_CLOSED'],
+  ['Browser has been closed', 'CDP_TARGET_OR_SESSION_CLOSED'],
+  ['Invalid header', 'CDP_INVALID_PARAMETERS'],
+  ['Invalid parameters', 'CDP_INVALID_PARAMETERS'],
+];
+// Same derivation the existing accounting classifier already applies; booleans only, never values.
+const PREFETCH_HEADERS = [['next-router-prefetch', '1'], ['purpose', 'prefetch']];
+const FIELDS = ['failure_stage', 'safe_error_code', 'continuation_failure_class', 'page_id', 'page_lifecycle',
+  'request_sequence', 'resource_type', 'method', 'destination_origin_class', 'redirected_from_origin_class',
+  'same_origin_target', 'redirect_present', 'path_sha256', 'rsc', 'prefetch'];
 const valid = condition => { if (!condition) throw new Error('INTERCEPTION_EVIDENCE_INVALID'); };
 // Inspect only own data descriptors. Never invoke getters, toJSON, coercions or a thrown object's stack.
 function own(value, key) {
@@ -76,6 +95,31 @@ function safeCode(stage, error) {
   }
   return CODES[stage].at(-1);
 }
+// Diagnostic only: this classification never decides whether a request continues or fails.
+function continuationClass(stage, error) {
+  if (!CONTINUATION_STAGES.includes(stage)) return 'NOT_APPLICABLE';
+  const message = own(error, 'message');
+  if (typeof message !== 'string' || message.length > 4096) return 'CDP_PROTOCOL_OTHER';
+  for (const [marker, code] of CONTINUATION_MARKERS) if (message.includes(marker)) return code;
+  return 'CDP_PROTOCOL_OTHER';
+}
+function headerBooleans(request) {
+  const result = { rsc: false, prefetch: false };
+  const headers = own(request, 'headers');
+  if (headers === null || typeof headers !== 'object') return result;
+  let keys;
+  try { keys = Reflect.ownKeys(headers); } catch { return result; }
+  if (!Array.isArray(keys) || keys.length > 512) return result;
+  for (const key of keys) {
+    if (typeof key !== 'string') continue;
+    const value = own(headers, key);
+    if (typeof value !== 'string' || value.length > 256) continue;
+    const name = key.toLowerCase(), lowered = value.toLowerCase();
+    if (name === 'rsc' && value === '1') result.rsc = true;
+    for (const [header, expected] of PREFETCH_HEADERS) if (name === header && lowered === expected) result.prefetch = true;
+  }
+  return result;
+}
 function safeRecord(input) {
   const stage = member(STAGES, own(input, 'failureStage'), 'UNKNOWN');
   const event = own(input, 'event'), request = own(event, 'request');
@@ -84,8 +128,10 @@ function safeRecord(input) {
   const sequence = own(input, 'requestSequence'), pageId = own(input, 'pageId');
   const redirectId = own(event, 'redirectedRequestId');
   const redirectPresent = typeof redirectId === 'string' && redirectId.length > 0;
+  const flags = headerBooleans(request);
   return {
     failure_stage: stage, safe_error_code: safeCode(stage, own(input, 'error')),
+    continuation_failure_class: continuationClass(stage, own(input, 'error')),
     page_id: typeof pageId === 'string' && /^page-[1-9][0-9]{0,14}$/.test(pageId) ? pageId : 'UNKNOWN',
     page_lifecycle: member(LIFECYCLES, own(input, 'pageLifecycle'), 'UNKNOWN'),
     request_sequence: Number.isSafeInteger(sequence) && sequence > 0 ? sequence : null,
@@ -96,6 +142,7 @@ function safeRecord(input) {
     same_origin_target: parsed && typeof origin === 'string' ? parsed.origin === origin : null,
     redirect_present: redirectPresent,
     path_sha256: parsed ? createHash('sha256').update(parsed.pathname).digest('hex') : null,
+    rsc: flags.rsc, prefetch: flags.prefetch,
   };
 }
 function validatedEvidence(input) {
@@ -104,6 +151,10 @@ function validatedEvidence(input) {
   const records = dataArray(value.records, 100000).map(inputRecord => {
     const record = exactData(inputRecord, FIELDS);
     valid(STAGES.includes(record.failure_stage) && CODES[record.failure_stage].includes(record.safe_error_code));
+    valid(CONTINUATION_CLASSES.includes(record.continuation_failure_class));
+    valid(CONTINUATION_STAGES.includes(record.failure_stage) || record.continuation_failure_class === 'NOT_APPLICABLE');
+    valid(record.continuation_failure_class !== 'NOT_APPLICABLE' || !CONTINUATION_STAGES.includes(record.failure_stage));
+    valid(typeof record.rsc === 'boolean' && typeof record.prefetch === 'boolean');
     valid(typeof record.page_id === 'string' && (record.page_id === 'UNKNOWN' || /^page-[1-9][0-9]{0,14}$/.test(record.page_id)));
     valid(LIFECYCLES.includes(record.page_lifecycle));
     valid(record.request_sequence === null || (Number.isSafeInteger(record.request_sequence) && record.request_sequence > 0));

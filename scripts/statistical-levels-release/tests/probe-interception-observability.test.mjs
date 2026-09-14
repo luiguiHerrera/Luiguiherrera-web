@@ -5,7 +5,7 @@ import os from 'node:os';
 import path from 'node:path';
 import { createHash } from 'node:crypto';
 import { createInterceptionObservability, validateInterceptionEvidence, INTERCEPTION_EVIDENCE_SCHEMA,
-  INTERCEPTION_EVIDENCE_FILE } from '../scripts/probe-interception-observability.mjs';
+  INTERCEPTION_EVIDENCE_FILE, INTERCEPTION_CONTINUATION_CLASSES } from '../scripts/probe-interception-observability.mjs';
 
 const origin = 'https://probe-fixture.vercel.app';
 const secret = 'sensitive-unit-marker-never-in-evidence';
@@ -75,7 +75,10 @@ test('only path hash and origin classes persist; full query URL headers bodies a
   assert.equal(record.redirected_from_origin_class, 'CROSS_ORIGIN');
   assert.equal(record.redirect_present, true); assert.equal(record.same_origin_target, true);
   for (const forbidden of [secret, origin, '/levels', 'https://unrelated.example', 'Authorization', 'Cookie', 'postData', 'private-request-id', 'private-redirect']) assert.ok(!bytes.includes(forbidden));
-  assert.equal(Object.keys(record).length, 12);
+  assert.deepEqual(Object.keys(record).sort(), ['continuation_failure_class', 'destination_origin_class', 'failure_stage',
+    'method', 'page_id', 'page_lifecycle', 'path_sha256', 'prefetch', 'redirect_present', 'redirected_from_origin_class',
+    'request_sequence', 'resource_type', 'rsc', 'safe_error_code', 'same_origin_target']);
+  assert.equal(Object.keys(record).length, 15);
 });
 test('unknown structural values and invalid URL cannot exfiltrate metadata', t => {
   const f = fixture(t), value = base();
@@ -144,4 +147,82 @@ test('a redirect with unavailable lookup source is UNKNOWN, never reported as no
   f.observer.record(value);
   const record = f.observer.flush().records[0];
   assert.equal(record.redirect_present, true); assert.equal(record.redirected_from_origin_class, 'UNKNOWN');
+});
+
+// Continuation-failure discrimination. Markers are the exact strings real Chromium/CDP returns;
+// classification is diagnostic only and never changes whether a request continues or fails.
+for (const [stage, thrown, expected] of [
+  ['REQUEST_CONTINUATION', 'Invalid InterceptionId.', 'REQUEST_NO_LONGER_INTERCEPTABLE'],
+  ['FAIL_REQUEST_FALLBACK', 'Invalid InterceptionId.', 'REQUEST_NO_LONGER_INTERCEPTABLE'],
+  ['REQUEST_CONTINUATION', 'Session with given id not found.', 'CDP_TARGET_OR_SESSION_CLOSED'],
+  ['REQUEST_CONTINUATION', 'Protocol error (Fetch.continueRequest): Target closed', 'CDP_TARGET_OR_SESSION_CLOSED'],
+  ['REQUEST_CONTINUATION', 'Target page, context or browser has been closed', 'CDP_TARGET_OR_SESSION_CLOSED'],
+  ['REQUEST_CONTINUATION', 'Invalid header: authorization', 'CDP_INVALID_PARAMETERS'],
+  ['REQUEST_CONTINUATION', 'something entirely unknown', 'CDP_PROTOCOL_OTHER'],
+  ['REQUEST_CONTINUATION', secret, 'CDP_PROTOCOL_OTHER'],
+]) {
+  test('continuation class: ' + stage + '/' + expected, t => {
+    const f = fixture(t);
+    if (stage === 'FAIL_REQUEST_FALLBACK') f.observer.record(base({ error: new Error('primary') }));
+    f.observer.record(base({ failureStage: stage, error: new Error(thrown) }));
+    const record = f.saved().records.at(-1);
+    assert.equal(record.continuation_failure_class, expected);
+    assert.ok(INTERCEPTION_CONTINUATION_CLASSES.includes(record.continuation_failure_class));
+    assert.equal(record.safe_error_code, stage === 'REQUEST_CONTINUATION' ? 'CONTINUE_REQUEST_ERROR' : 'FAIL_REQUEST_ERROR');
+    assert.deepEqual(validateInterceptionEvidence(f.saved()), f.saved());
+    assert.equal(JSON.stringify(f.saved()).includes(secret), false);
+    assert.equal(JSON.stringify(f.saved()).includes('authorization'), false);
+  });
+}
+test('non-continuation stages carry NOT_APPLICABLE and never a CDP class', t => {
+  const f = fixture(t);
+  const stages = ['REDIRECT_LOOKUP', 'REQUEST_URL_PARSING', 'TOKEN_ACQUISITION', 'HEADER_SCOPE_VALIDATION'];
+  stages.forEach((stage, i) => f.observer.record(base({ failureStage: stage, requestSequence: i + 1,
+    error: new Error('Invalid InterceptionId.') })));
+  const records = f.observer.flush().records;
+  assert.equal(records.length, 4);
+  assert.ok(records.every(r => r.continuation_failure_class === 'NOT_APPLICABLE'));
+});
+test('rsc and prefetch booleans are derived without retaining any header value', t => {
+  const f = fixture(t);
+  let n = 0;
+  const withHeaders = headers => base({ requestSequence: ++n, event: { requestId: 'private-request-id', resourceType: 'Fetch',
+    request: { url: origin + '/en/debt?_rsc=' + secret, method: 'GET', headers, postData: secret } } });
+  f.observer.record(withHeaders({ RSC: '1', 'Next-Router-Prefetch': '1', Authorization: secret, Cookie: secret }));
+  f.observer.record(withHeaders({ rsc: '1', Purpose: 'prefetch', Authorization: secret }));
+  f.observer.record(withHeaders({ Authorization: secret }));
+  const records = f.observer.flush().records;
+  assert.deepEqual(records.map(r => r.rsc), [true, true, false]);
+  assert.deepEqual(records.map(r => r.prefetch), [true, true, false]);
+  const bytes = JSON.stringify(f.saved());
+  for (const forbidden of [secret, 'Authorization', 'Cookie', 'Next-Router-Prefetch', '/en/debt']) assert.ok(!bytes.includes(forbidden));
+});
+test('hostile header containers cannot throw, leak or invoke accessors', t => {
+  const f = fixture(t); let calls = 0;
+  const bomb = () => { calls++; throw new Error(secret); };
+  const hostile = {}; Object.defineProperty(hostile, 'rsc', { get: bomb, enumerable: true });
+  const proxy = new Proxy({}, { ownKeys() { throw new Error(secret); } });
+  [hostile, proxy, null, 'not-an-object', 42].forEach((headers, i) => {
+    f.observer.record(base({ requestSequence: i + 1, event: { requestId: 'x', resourceType: 'Fetch',
+      request: { url: origin + '/levels', method: 'GET', headers } } }));
+  });
+  const records = f.observer.flush().records;
+  assert.equal(records.length, 5);
+  assert.ok(records.every(r => r.rsc === false && r.prefetch === false));
+  assert.equal(calls, 0);
+  assert.equal(JSON.stringify(f.saved()).includes(secret), false);
+});
+test('strict validation rejects unknown or stage-mismatched continuation classes and non-boolean flags', t => {
+  const f = fixture(t); f.observer.record(base());
+  for (const mutate of [
+    value => { value.records[0].continuation_failure_class = secret; },
+    value => { value.records[0].continuation_failure_class = 'NOT_APPLICABLE'; },
+    value => { delete value.records[0].continuation_failure_class; },
+    value => { value.records[0].rsc = 'true'; },
+    value => { value.records[0].prefetch = 1; },
+    value => { delete value.records[0].rsc; },
+  ]) {
+    const evidence = structuredClone(f.saved()); mutate(evidence);
+    assert.throws(() => validateInterceptionEvidence(evidence), /^Error: INTERCEPTION_EVIDENCE_INVALID$/);
+  }
 });

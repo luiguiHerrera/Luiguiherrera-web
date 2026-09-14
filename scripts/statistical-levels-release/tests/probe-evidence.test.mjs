@@ -900,10 +900,11 @@ test('interception validation never invokes input getters or toJSON while reject
 
 const emptyInterceptionWitness = { schema_version: INTERCEPTION_EVIDENCE_SCHEMA, records: [], capture_issues: [] };
 const nonemptyInterceptionWitness = { ...emptyInterceptionWitness, records: [{
-  failure_stage: 'TOKEN_ACQUISITION', safe_error_code: 'TOKEN_SOURCE_ERROR', page_id: 'page-1',
+  failure_stage: 'TOKEN_ACQUISITION', safe_error_code: 'TOKEN_SOURCE_ERROR',
+  continuation_failure_class: 'NOT_APPLICABLE', page_id: 'page-1',
   page_lifecycle: 'CLOSED', request_sequence: 1, resource_type: 'Fetch', method: 'GET',
   destination_origin_class: 'EXACT_PREVIEW', redirected_from_origin_class: 'NONE', same_origin_target: true,
-  redirect_present: false, path_sha256: sha('/levels'),
+  redirect_present: false, path_sha256: sha('/levels'), rsc: false, prefetch: false,
 }] };
 const emptyInterceptionBytes = JSON.stringify(emptyInterceptionWitness) + '\n';
 const nonemptyInterceptionBytes = JSON.stringify(nonemptyInterceptionWitness) + '\n';
