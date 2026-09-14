@@ -3,7 +3,7 @@ import path from 'node:path';
 import { P, need, canonical } from './release-core.mjs';
 import { attestProbe, validateProbeAttestation } from './probe-core.mjs';
 import { assertProbeWorkflow, resolveProbeDeployment, probeOIDC, readProbeRoleIdentity, readProbeOIDCEvidence, packageRoot, candidateRoot, execution } from './probe-runtime.mjs';
-import { writeProbeEvidence } from './probe-evidence.mjs';
+import { readInterceptionEvidenceFile, writeProbeEvidence } from './probe-evidence.mjs';
 import { productQAObservabilityFiles } from './product-qa-observability.mjs';
 import { readProbeMetadataEvidence } from './probe-metadata-observability.mjs';
 import { requireProbeBrowserAuthority } from './probe-browser-authority.mjs';
@@ -13,7 +13,10 @@ const root = path.join(process.env.RUNNER_TEMP ?? '', 'statistical-levels-identi
 const qaDirectory = path.join(root, 'qa');
 const stateFile = path.join(root, 'verified-context.json');
 async function save(file, value) { await fs.writeFile(file, canonical(value), { mode: 0o600 }); }
-async function readOptional(file) { try { return JSON.parse(await fs.readFile(file, 'utf8')); } catch { return null; } }
+async function readOptional(file, unreadable = null) {
+  try { return JSON.parse(await fs.readFile(file, 'utf8')); }
+  catch (error) { return error?.code === 'ENOENT' ? null : unreadable; }
+}
 try {
   need(process.env.RUNNER_TEMP && path.isAbsolute(process.env.RUNNER_TEMP), 'PROBE_RUNNER_TEMP');
   const mode = process.argv[2];
@@ -34,6 +37,7 @@ try {
       productObservability,
       metadataResolution,
       accounting: await readOptional(path.join(qaDirectory, 'network-accounting.json')),
+      interceptionFailures: await readInterceptionEvidenceFile(path.join(qaDirectory, 'interception-failures.json')),
       httpPreflight: await readOptional(path.join(qaDirectory, 'http-preflight.json')),
       certificationHttp: await readOptional(path.join(qaDirectory, 'trusted-sources-certification.json')),
       tokenBudget: await readOptional(path.join(qaDirectory, 'token-budget.json')),

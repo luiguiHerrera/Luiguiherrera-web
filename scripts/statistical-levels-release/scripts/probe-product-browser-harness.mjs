@@ -3,6 +3,7 @@ import fs from 'node:fs/promises';
 import path from 'node:path';
 import { need, headersForRequest, protectedGet, publicProductionGet } from './release-core.mjs';
 import { account } from './network-accounting.mjs';
+import { createInterceptionObservability } from './probe-interception-observability.mjs';
 
 export async function createProbeProductHarness(target, tokenSource, out, production, observability) {
   need(production ? tokenSource === undefined : typeof tokenSource?.get === 'function', 'QA_CREDENTIAL_MODE');
@@ -11,6 +12,7 @@ export async function createProbeProductHarness(target, tokenSource, out, produc
   const browser = await chromium.launch({ headless: true,
     env: { PATH: process.env.PATH, HOME: out, LANG: 'en_US.UTF-8', TZ: 'UTC' } });
   const pages = new Set(), events = [], authFailures = [];
+  const interception = createInterceptionObservability(out), pageLifecycles = new Map();
   let pageSequence = 0;
   async function createPage() {
     const context = await browser.newContext({ serviceWorkers: 'block', locale: 'en-US', timezoneId: 'UTC' });
@@ -18,24 +20,46 @@ export async function createProbeProductHarness(target, tokenSource, out, produc
     const cdp = await context.newCDPSession(page), requests = new Map(), paused = new Map();
     const pending = new Set();
     const pageId = 'page-' + (++pageSequence), requestMetadata = new Map();
-    let viewport = null, lifecycle = 'ACTIVE';
+    let viewport = null, lifecycle = 'ACTIVE', requestSequence = 0;
+    pageLifecycles.set(context, value => { lifecycle = value; });
     const metadata = extra => ({ page_id: pageId, viewport, route: page.url(), lifecycle, ...extra });
     const observeLast = extra => observability?.recordEvent(events[events.length - 1], metadata(extra));
     observability?.lifecycle('PAGE_CREATED', metadata({}));
     // Gated separately by complete raw accounting; no event is thrown away.
     const errors = { console: [], exceptions: [], network: [], http: [] };
     if (!production) cdp.on('Fetch.requestPaused', event => {
+      const sequence = ++requestSequence;
       const task = (async () => {
+        let failureStage = 'REDIRECT_LOOKUP', previous;
+        const recordFailure = error => interception.record({ failureStage, error, pageId,
+          pageLifecycle: lifecycle, requestSequence: sequence, event, previous, origin: target.origin });
         try {
-          const previous = event.redirectedRequestId ? paused.get(event.redirectedRequestId) : null;
+          previous = event.redirectedRequestId ? paused.get(event.redirectedRequestId) : null;
           paused.set(event.requestId, event.request.url);
-          const headers = headersForRequest(event.request.url, event.request.headers, new URL(event.request.url).origin === target.origin ? await tokenSource.get() : undefined, previous, target.origin);
+          // Preserve argument evaluation order; stage markers add no waits or request decisions.
+          const requestURL = event.request.url, requestHeaders = event.request.headers;
+          failureStage = 'REQUEST_URL_PARSING';
+          const destination = new URL(requestURL);
+          failureStage = 'TOKEN_ACQUISITION';
+          const token = destination.origin === target.origin ? await tokenSource.get() : undefined;
+          failureStage = 'HEADER_SCOPE_VALIDATION';
+          const headers = headersForRequest(requestURL, requestHeaders, token, previous, target.origin);
+          failureStage = 'REQUEST_CONTINUATION';
           // CDP documents overrides as applying only to THIS request, not redirects.
           await cdp.send('Fetch.continueRequest', { requestId: event.requestId,
             headers: Object.entries(headers).map(([name, value]) => ({ name, value: String(value) })) });
-        } catch {
+        } catch (error) {
+          recordFailure(error);
           authFailures.push('CREDENTIAL_SCOPE_OR_REDIRECT_REJECTED');
-          await cdp.send('Fetch.failRequest', { requestId: event.requestId, errorReason: 'BlockedByClient' }).catch(() => {});
+          failureStage = 'FAIL_REQUEST_FALLBACK';
+          let fallback;
+          try {
+            fallback = cdp.send('Fetch.failRequest', { requestId: event.requestId, errorReason: 'BlockedByClient' });
+          } catch (fallbackError) {
+            recordFailure(fallbackError);
+            throw fallbackError; // Preserve the original synchronous-send failure propagation.
+          }
+          await fallback.catch(fallbackError => { recordFailure(fallbackError); });
         }
       })();
       pending.add(task); task.finally(() => pending.delete(task));
@@ -100,7 +124,7 @@ export async function createProbeProductHarness(target, tokenSource, out, produc
       lifecycle = 'CLOSING'; observability?.lifecycle('PAGE_CLOSE_START', metadata({}));
       // Flush all current requests before browser teardown; no blanket canceled filter.
       try {
-        await Promise.all([...pending]); await context.close(); pages.delete(context);
+        await Promise.all([...pending]); await context.close(); pages.delete(context); pageLifecycles.delete(context);
         lifecycle = 'CLOSED';
       } finally {
         observability?.lifecycle(lifecycle === 'CLOSED' ? 'PAGE_CLOSED' : 'PAGE_CLOSE_ABORTED', metadata({}));
@@ -113,7 +137,12 @@ export async function createProbeProductHarness(target, tokenSource, out, produc
       observability?.lifecycle('BROWSER_CLOSE_START', {});
       let browserClosed = false;
       try {
-        for (const context of pages) await context.close();
+        for (const context of pages) {
+          // Metadata only: finish retains its original close order and pending-set behavior.
+          pageLifecycles.get(context)?.('CLOSING');
+          await context.close();
+          pageLifecycles.get(context)?.('CLOSED');
+        }
         await browser.close(); tokenSource?.clear();
         browserClosed = true;
       } finally {
@@ -123,6 +152,7 @@ export async function createProbeProductHarness(target, tokenSource, out, produc
       const result = account(events, finalProductPassed, target.origin);
       observability?.finish(result);
       await fs.writeFile(path.join(out, 'network-accounting.json'), JSON.stringify({ ...result, authFailures }, null, 2) + '\n');
+      interception.flush();
       need(authFailures.length === 0, 'CREDENTIAL_SCOPE_FAILURE');
       return result;
     } };

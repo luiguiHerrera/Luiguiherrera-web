@@ -9,11 +9,22 @@ import { validateProbeTokenBudgetEvidence } from './probe-token-budget.mjs';
 import { validateProbeBrowserAuthorityEvidence, requireProbeBrowserAuthority } from './probe-browser-authority.mjs';
 import { validateProductQAObservabilityEvidence, productQAObservabilityFiles } from './product-qa-observability.mjs';
 import { validateProbeMetadataEvidence } from './probe-metadata-observability.mjs';
+import { validateInterceptionEvidence } from './probe-interception-observability.mjs';
 
 export const probeEvidenceFiles = Object.freeze([
   'probe-summary.json', 'trusted-sources-qa.json', 'application-network-summary.json',
   'aws-oidc-summary.json', 'qa-attestation.json', ...productQAObservabilityFiles, 'metadata-resolution.json', 'evidence-sha256.json',
 ]);
+// Keep filesystem presence separate from every parseable JSON value, including null.
+export async function readInterceptionEvidenceFile(file) {
+  let bytes;
+  try { bytes = await fs.readFile(file, 'utf8'); }
+  catch (error) {
+    return error?.code === 'ENOENT' ? { present: false } : { present: true, capture_read_error: true };
+  }
+  try { return { present: true, value: JSON.parse(bytes) }; }
+  catch { return { present: true, capture_read_error: true }; }
+}
 const HASH = /^[a-f0-9]{64}$/, SHA = /^[a-f0-9]{40}$/, ID = /^[1-9][0-9]{0,19}$/;
 const OPERATION = 'PROBE_IDENTITY';
 const outcomeNames = ['resolve', 'qa', 'aws_assume', 'aws_identity'];
@@ -125,7 +136,7 @@ export function buildProbeEvidence(input) {
     try { return validator(value); } catch { issues.push(code); return null; }
   }
   need(input && typeof input === 'object' && !Array.isArray(input), 'EVIDENCE_INPUT');
-  const allowed = ['context', 'outcomes', 'productReport', 'accounting', 'awsProof', 'attestation', 'oidcEvidence', 'httpPreflight', 'certificationHttp', 'tokenBudget', 'browserAuthority', 'productObservability', 'metadataResolution'];
+  const allowed = ['context', 'outcomes', 'productReport', 'accounting', 'awsProof', 'attestation', 'oidcEvidence', 'httpPreflight', 'certificationHttp', 'tokenBudget', 'browserAuthority', 'productObservability', 'metadataResolution', 'interceptionFailures'];
   if (Object.keys(input).some(k => !allowed.includes(k))) issues.push('UNEXPECTED_INPUT_FIELD');
   const context = inspect(input.context, validContext, 'INVALID_CONTEXT');
   const oidc = inspect(input.oidcEvidence, value => {
@@ -184,6 +195,24 @@ export function buildProbeEvidence(input) {
     return jsonCopy(value);
   }, 'INVALID_PRODUCT_REPORT');
   const accounting = inspect(input.accounting, value => sanitizeProbeAccounting(value, context?.target?.origin), 'INVALID_NETWORK_ACCOUNTING');
+  // A legacy absent sidecar remains compatible. A present invalid or incomplete witness cannot authorize QA.
+  const interceptionFile = Object.hasOwn(input, 'interceptionFailures') ? input.interceptionFailures : { present: false };
+  let interceptionPresent = true, interception = null;
+  try {
+    if (interceptionFile?.present === false) {
+      exactKeys(interceptionFile, ['present']);
+      interceptionPresent = false;
+    } else {
+      exactKeys(interceptionFile, ['present', 'value']);
+      need(interceptionFile.present === true, 'INTERCEPTION_EVIDENCE_INVALID');
+      interception = validateInterceptionEvidence(interceptionFile.value);
+    }
+  } catch { issues.push('INVALID_INTERCEPTION_EVIDENCE'); }
+  const interceptionCountMismatch = !!(interception && accounting &&
+    interception.records.filter(record => record.failure_stage !== 'FAIL_REQUEST_FALLBACK').length < accounting.authFailures.length);
+  if (interceptionCountMismatch) issues.push('INTERCEPTION_AUTH_FAILURE_COUNT_MISMATCH');
+  const interceptionClear = !interceptionPresent || (interception && !interceptionCountMismatch &&
+    interception.records.length === 0 && interception.capture_issues.length === 0);
   const aws = inspect(input.awsProof, value => { need(context, 'EVIDENCE_RUN'); return validAWS(value, context.run); }, 'INVALID_AWS_PROOF');
   const attestation = inspect(input.attestation, value => {
     need(context?.target && report, 'EVIDENCE_QA_BINDING');
@@ -208,7 +237,7 @@ export function buildProbeEvidence(input) {
   if (browserAuthority && !certifiedBudget) issues.push('BROWSER_AUTHORITY_WITHOUT_HTTP_CERTIFICATION');
   const noNetworkFailures = accounting && accounting.application_console_errors === 0 &&
     accounting.required_application_request_failures === 0 && accounting.hydration_errors === 0 &&
-    accounting.unclassified_failures.length === 0 && accounting.authFailures.length === 0;
+    accounting.unclassified_failures.length === 0 && accounting.authFailures.length === 0 && interceptionClear;
   const httpComplete = protectedBaseline && httpPreflight?.result === 'PASS' && httpPreflight.http_application_fixture_binding === 'PASS' && httpPreflight.trusted_sources_access === 'PASS' &&
     httpPreflight.trusted_sources_live_certified === true &&
     canonical(httpPreflight.routes.map(route => route.path)).equals(canonical(['/niveles-estadisticos', '/en/statistical-levels']));
@@ -294,6 +323,8 @@ export function buildProbeEvidence(input) {
     'application-network-summary.json': { schema_version: 'statistical-levels.identity-probe-network.v1', result: accounting ?
       (qaState === 'PASS' && noNetworkFailures ? 'PASS' : 'FAIL') : steps.qa.result === 'NOT_RUN' ? 'NOT_RUN' : 'FAIL',
       preview_origin: context?.target?.origin ?? null, unrelated_origin_redaction: 'SHA256', accounting,
+      ...(interceptionPresent ? { interception_failures: { capture_status: !interception ? 'REJECTED' : interceptionCountMismatch ? 'INCOMPLETE' : 'RECORDED',
+        error_code: !interception ? 'INVALID_INTERCEPTION_EVIDENCE' : interceptionCountMismatch ? 'INTERCEPTION_AUTH_FAILURE_COUNT_MISMATCH' : null, evidence: interception } } : {}),
       rejected_accounting_sha256: input.accounting != null && !accounting ? rejectedDigest(input.accounting) : null },
     'aws-oidc-summary.json': { schema_version: 'statistical-levels.identity-probe-aws.v3',
       result: steps.aws_identity.result, assume_role_with_web_identity: steps.aws_assume.result,

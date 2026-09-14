@@ -5,12 +5,13 @@ import os from 'node:os';
 import path from 'node:path';
 import { P, canonical, productGates, sha } from '../scripts/release-core.mjs';
 import { account } from '../scripts/network-accounting.mjs';
+import { createInterceptionObservability, INTERCEPTION_EVIDENCE_SCHEMA } from '../scripts/probe-interception-observability.mjs';
 import { signedFixture } from './probe-oidc-fixture.mjs';
 import { attestProbe } from '../scripts/probe-core.mjs';
 import { createProbeHttpSession } from '../scripts/probe-http.mjs';
 import { createProbeTokenBudget } from '../scripts/probe-token-budget.mjs';
 import { runProtectedProbeQA } from '../scripts/probe-gate.mjs';
-import { buildProbeEvidence, probeEvidenceFiles, sanitizeProbeAccounting, writeProbeEvidence } from '../scripts/probe-evidence.mjs';
+import { buildProbeEvidence, probeEvidenceFiles, readInterceptionEvidenceFile, sanitizeProbeAccounting, writeProbeEvidence } from '../scripts/probe-evidence.mjs';
 import { recordProbeMetadataGateFailure, readProbeMetadataEvidence } from '../scripts/probe-metadata-observability.mjs';
 import { createProductQAObservability, productQAObservabilityFiles } from '../scripts/product-qa-observability.mjs';
 
@@ -797,4 +798,178 @@ test('metadata evidence status never changes the eight existing evidence payload
       assert.equal(getterCalled, false);
     }
   } finally { await fs.rm(directory, { recursive: true, force: true }); }
+});
+
+
+test('legacy absent interception witness preserves exact evidence while an empty new witness remains PASS', () => {
+  const legacy = fixture();
+  const files = buildProbeEvidence(legacy);
+  assert.deepEqual(buildProbeEvidence({ ...legacy, interceptionFailures: { present: false } }), files);
+  const input = { ...legacy, interceptionFailures: { present: true, value: { schema_version: INTERCEPTION_EVIDENCE_SCHEMA, records: [], capture_issues: [] } } };
+  const json = decode(buildProbeEvidence(input));
+  assert.equal(json['probe-summary.json'].result, 'PASS');
+  assert.deepEqual(json['application-network-summary.json'].interception_failures, {
+    capture_status: 'RECORDED', error_code: null, evidence: input.interceptionFailures.value,
+  });
+  assert.equal(Object.keys(json).length, 10);
+});
+
+test('explicit null interception input is invalid rather than legacy property omission', () => {
+  const input = fixture(); input.interceptionFailures = null;
+  const json = decode(buildProbeEvidence(input));
+  assert.equal(json['probe-summary.json'].result, 'FAIL');
+  assert.equal(json['trusted-sources-qa.json'].result, 'FAIL');
+  assert.ok(json['probe-summary.json'].evidence_issues.includes('INVALID_INTERCEPTION_EVIDENCE'));
+  assert.deepEqual(json['application-network-summary.json'].interception_failures, {
+    capture_status: 'REJECTED', error_code: 'INVALID_INTERCEPTION_EVIDENCE', evidence: null,
+  });
+});
+
+test('CLI reads the interception sidecar with the same presence-aware reader used by boundary tests', async () => {
+  const source = await fs.readFile(new URL('../scripts/probe-cli.mjs', import.meta.url), 'utf8');
+  assert.match(source, /import\s+\{[^}]*\breadInterceptionEvidenceFile\b[^}]*\}\s+from '\.\/probe-evidence\.mjs'/);
+  assert.match(source, /interceptionFailures:\s*await readInterceptionEvidenceFile\(path\.join\(qaDirectory, 'interception-failures\.json'\)\)/);
+  assert.doesNotMatch(source, /readOptional\([^\n]*interception-failures\.json/);
+});
+
+test('interception sidecar reaches ten-file artifact with individual causes and matching manifest hashes', async t => {
+  const directory = await fs.mkdtemp(path.join(os.tmpdir(), 'sl-probe-interception-evidence-'));
+  t.after(() => fs.rm(directory, { recursive: true, force: true }));
+  const observer = createInterceptionObservability(directory);
+  for (const [failureStage, error] of [['HEADER_SCOPE_VALIDATION', new Error('CROSS_ORIGIN_REDIRECT')], ['FAIL_REQUEST_FALLBACK', new Error('unit-private-fallback-secret')]]) observer.record({
+    failureStage, error, pageId: 'page-1', pageLifecycle: 'CLOSING', requestSequence: 1, origin,
+    previous: 'https://other.example/private?key=unit-private-query-secret',
+    event: { redirectedRequestId: 'unsafe-private-id', resourceType: 'Fetch', request: { url: origin + '/levels?key=unit-private-query-secret', method: 'GET', headers: { Authorization: 'unit-private-header-secret' } } },
+  });
+  const input = fixture(); input.accounting.authFailures.push('CREDENTIAL_SCOPE_OR_REDIRECT_REJECTED');
+  input.interceptionFailures = { present: true, value: observer.flush() };
+  const files = buildProbeEvidence(input), json = decode(files), details = json['application-network-summary.json'].interception_failures;
+  assert.equal(details.capture_status, 'RECORDED'); assert.equal(details.evidence.records.length, 2);
+  assert.deepEqual(details.evidence.records.map(record => record.safe_error_code), ['CROSS_ORIGIN_REDIRECT', 'FAIL_REQUEST_ERROR']);
+  assert.equal(json['probe-summary.json'].result, 'FAIL'); assert.equal(json['trusted-sources-qa.json'].preview_product_qa, 'FAIL');
+  assert.equal(json['application-network-summary.json'].accounting.authFailures.length, 1);
+  assert.equal(Object.keys(files).length, 10);
+  for (const [name, entry] of Object.entries(json['evidence-sha256.json'].files)) assert.equal(entry.sha256, sha(files[name]));
+  const bytes = Buffer.concat(Object.values(files)).toString();
+  for (const marker of ['unit-private-fallback-secret', 'unit-private-query-secret', 'unit-private-header-secret', 'unsafe-private-id']) assert.ok(!bytes.includes(marker));
+});
+
+test('late primary details cannot turn zero auth count into PASS; original count cannot vanish behind incomplete details', async t => {
+  const directory = await fs.mkdtemp(path.join(os.tmpdir(), 'sl-probe-interception-count-'));
+  t.after(() => fs.rm(directory, { recursive: true, force: true }));
+  const observer = createInterceptionObservability(directory);
+  observer.record({ failureStage: 'REQUEST_CONTINUATION', error: new Error('private-CDP-message'), pageId: 'page-1',
+    pageLifecycle: 'CLOSED', requestSequence: 1, origin, previous: null,
+    event: { resourceType: 'Fetch', request: { url: origin + '/levels', method: 'GET' } } });
+  const input = fixture(); input.interceptionFailures = { present: true, value: observer.flush() };
+  let json = decode(buildProbeEvidence(input));
+  assert.equal(json['probe-summary.json'].result, 'FAIL');
+  assert.equal(json['application-network-summary.json'].interception_failures.capture_status, 'RECORDED');
+  input.accounting.authFailures = ['CREDENTIAL_SCOPE_OR_REDIRECT_REJECTED', 'CREDENTIAL_SCOPE_OR_REDIRECT_REJECTED'];
+  json = decode(buildProbeEvidence(input));
+  assert.equal(json['probe-summary.json'].result, 'FAIL');
+  assert.equal(json['application-network-summary.json'].interception_failures.capture_status, 'INCOMPLETE');
+  assert.equal(json['application-network-summary.json'].interception_failures.evidence.records.length, 1);
+  assert.equal(json['application-network-summary.json'].interception_failures.error_code, 'INTERCEPTION_AUTH_FAILURE_COUNT_MISMATCH');
+  assert.equal(json['application-network-summary.json'].accounting.authFailures.length, 2);
+  assert.ok(json['probe-summary.json'].evidence_issues.includes('INTERCEPTION_AUTH_FAILURE_COUNT_MISMATCH'));
+});
+
+for (const interceptionFailures of [
+  { present: true, capture_read_error: true },
+  { present: true, value: { schema_version: INTERCEPTION_EVIDENCE_SCHEMA, records: [], capture_issues: ['PERSISTENCE_WRITE_FAILED'] } },
+  { present: true, value: { schema_version: INTERCEPTION_EVIDENCE_SCHEMA, records: [], capture_issues: [], unsafe: 'must-not-appear-interception' } },
+]) test('malformed or incomplete interception capture cannot authorize PASS or persist rejected content', () => {
+  const input = fixture(); input.interceptionFailures = interceptionFailures;
+  const files = buildProbeEvidence(input), json = decode(files);
+  assert.equal(json['probe-summary.json'].result, 'FAIL');
+  assert.ok(!Buffer.concat(Object.values(files)).toString().includes('must-not-appear-interception'));
+});
+
+test('interception validation never invokes input getters or toJSON while rejecting', () => {
+  let calls = 0;
+  const bomb = () => { calls++; throw new Error('private-getter-error'); };
+  const input = fixture();
+  input.interceptionFailures = { present: true, value: { schema_version: INTERCEPTION_EVIDENCE_SCHEMA, records: [], capture_issues: [] } };
+  Object.defineProperty(input.interceptionFailures.value, 'records', { get: bomb });
+  Object.defineProperty(input.interceptionFailures.value, 'toJSON', { value: bomb });
+  const files = buildProbeEvidence(input), json = decode(files);
+  assert.equal(calls, 0); assert.equal(json['probe-summary.json'].result, 'FAIL');
+  assert.ok(!Buffer.concat(Object.values(files)).toString().includes('private-getter-error'));
+});
+
+const emptyInterceptionWitness = { schema_version: INTERCEPTION_EVIDENCE_SCHEMA, records: [], capture_issues: [] };
+const nonemptyInterceptionWitness = { ...emptyInterceptionWitness, records: [{
+  failure_stage: 'TOKEN_ACQUISITION', safe_error_code: 'TOKEN_SOURCE_ERROR', page_id: 'page-1',
+  page_lifecycle: 'CLOSED', request_sequence: 1, resource_type: 'Fetch', method: 'GET',
+  destination_origin_class: 'EXACT_PREVIEW', redirected_from_origin_class: 'NONE', same_origin_target: true,
+  redirect_present: false, path_sha256: sha('/levels'),
+}] };
+const emptyInterceptionBytes = JSON.stringify(emptyInterceptionWitness) + '\n';
+const nonemptyInterceptionBytes = JSON.stringify(nonemptyInterceptionWitness) + '\n';
+
+for (const scenario of [
+  { id: 'CASE_1_FILE_ABSENT', result: 'PASS', absent: true },
+  { id: 'CASE_2_PRESENT_NULL', bytes: 'null\n', result: 'FAIL', status: 'REJECTED' },
+  { id: 'CASE_3_PRESENT_CORRUPT_JSON', bytes: '{"private-boundary-secret":', result: 'FAIL', status: 'REJECTED', readError: true },
+  { id: 'CASE_4_PRESENT_EMPTY_OBJECT', bytes: '{}\n', result: 'FAIL', status: 'REJECTED' },
+  { id: 'CASE_5_PRESENT_EMPTY_ARRAY', bytes: '[]\n', result: 'FAIL', status: 'REJECTED' },
+  { id: 'CASE_6_PRESENT_VALID_EMPTY_WITNESS', bytes: emptyInterceptionBytes, result: 'PASS', status: 'RECORDED' },
+  { id: 'CASE_7_PRESENT_VALID_NONEMPTY_WITNESS', bytes: nonemptyInterceptionBytes, result: 'FAIL', status: 'RECORDED' },
+  { id: 'AUTH0_ABSENT', authCount: 0, result: 'PASS', absent: true },
+  { id: 'AUTH0_NULL', authCount: 0, bytes: 'null\n', result: 'FAIL', status: 'REJECTED' },
+  { id: 'AUTH1_ABSENT', authCount: 1, result: 'FAIL', absent: true },
+  { id: 'AUTH1_NULL', authCount: 1, bytes: 'null\n', result: 'FAIL', status: 'REJECTED' },
+  { id: 'AUTH1_VALID_MATCHING', authCount: 1, bytes: nonemptyInterceptionBytes, result: 'FAIL', status: 'RECORDED' },
+  { id: 'AUTH1_VALID_MISMATCHING', authCount: 1, bytes: emptyInterceptionBytes, result: 'FAIL', status: 'INCOMPLETE' },
+  { id: 'PRESENT_TRUE', bytes: 'true\n', result: 'FAIL', status: 'REJECTED' },
+  { id: 'PRESENT_FALSE', bytes: 'false\n', result: 'FAIL', status: 'REJECTED' },
+  { id: 'PRESENT_NUMBER', bytes: '0\n', result: 'FAIL', status: 'REJECTED' },
+  { id: 'PRESENT_STRING', bytes: '"private-boundary-secret"\n', result: 'FAIL', status: 'REJECTED' },
+  { id: 'READ_ERROR_NOT_ENOENT', directory: true, result: 'FAIL', status: 'REJECTED', readError: true },
+]) test('interception filesystem boundary: ' + scenario.id, async t => {
+  const directory = await fs.mkdtemp(path.join(os.tmpdir(), 'sl-interception-boundary-'));
+  t.after(() => fs.rm(directory, { recursive: true, force: true }));
+  const file = path.join(directory, 'interception-failures.json');
+  if (scenario.directory) await fs.mkdir(file);
+  else if (!scenario.absent) await fs.writeFile(file, scenario.bytes);
+
+  const input = fixture(), legacyFiles = buildProbeEvidence(input);
+  assert.equal(decode(legacyFiles)['probe-summary.json'].result, 'PASS');
+  input.accounting.authFailures = Array(scenario.authCount ?? 0).fill('CREDENTIAL_SCOPE_OR_REDIRECT_REJECTED');
+  input.interceptionFailures = await readInterceptionEvidenceFile(file);
+  assert.deepEqual(input.interceptionFailures, scenario.absent ? { present: false } : scenario.readError ?
+    { present: true, capture_read_error: true } : { present: true, value: JSON.parse(scenario.bytes) });
+
+  const files = buildProbeEvidence(input), artifact = path.join(directory, 'artifact');
+  const summary = await writeProbeEvidence(artifact, input);
+  const published = Object.fromEntries(await Promise.all(probeEvidenceFiles.map(async name => [name, await fs.readFile(path.join(artifact, name))])));
+  assert.deepEqual(published, files);
+  const json = decode(published), network = json['application-network-summary.json'];
+  assert.equal(summary.result, scenario.result);
+  assert.equal(json['probe-summary.json'].result, scenario.result);
+  assert.equal(json['trusted-sources-qa.json'].result, scenario.result);
+  assert.equal(json['trusted-sources-qa.json'].preview_product_qa, scenario.result);
+  assert.equal(json['qa-attestation.json'].result, scenario.result);
+  assert.equal(network.result, scenario.result);
+  assert.equal(network.accounting.authFailures.length, scenario.authCount ?? 0);
+
+  if (scenario.absent) {
+    assert.equal(Object.hasOwn(network, 'interception_failures'), false);
+    assert.equal(summary.evidence_issues.includes('INVALID_INTERCEPTION_EVIDENCE'), false);
+    if (!scenario.authCount) assert.deepEqual(published, legacyFiles);
+  } else {
+    assert.equal(network.interception_failures.capture_status, scenario.status);
+    const error = scenario.status === 'REJECTED' ? 'INVALID_INTERCEPTION_EVIDENCE' :
+      scenario.status === 'INCOMPLETE' ? 'INTERCEPTION_AUTH_FAILURE_COUNT_MISMATCH' : null;
+    assert.equal(network.interception_failures.error_code, error);
+    assert.deepEqual(network.interception_failures.evidence, scenario.status === 'REJECTED' ? null : JSON.parse(scenario.bytes));
+    if (error) assert.ok(summary.evidence_issues.includes(error));
+    else assert.equal(summary.evidence_issues.includes('INVALID_INTERCEPTION_EVIDENCE'), false);
+  }
+  assert.equal(Object.keys(published).length, 10);
+  for (const [name, entry] of Object.entries(json['evidence-sha256.json'].files)) {
+    assert.equal(entry.sha256, sha(published[name])); assert.equal(entry.bytes, published[name].length);
+  }
+  assert.ok(!Buffer.concat(Object.values(published)).toString().includes('private-boundary-secret'));
 });

@@ -41,6 +41,7 @@ async function importHarness(url, fake) {
   let source = await fs.readFile(url, 'utf8');
   source = source.replace("'./release-core.mjs'", JSON.stringify(new URL('../scripts/release-core.mjs', import.meta.url).href))
     .replace("'./network-accounting.mjs'", JSON.stringify(new URL('../scripts/network-accounting.mjs', import.meta.url).href))
+    .replace("'./probe-interception-observability.mjs'", JSON.stringify(new URL('../scripts/probe-interception-observability.mjs', import.meta.url).href))
     .replace("await import('../qa-dependencies/node_modules/playwright/index.mjs')", `globalThis.__SL_TEST_PLAYWRIGHT_FACTORIES__.get(${JSON.stringify(id)})`);
   return import('data:text/javascript;base64,' + Buffer.from(source).toString('base64'));
 }
@@ -130,5 +131,7 @@ test('probe harness preserves exact raw events.push expressions and original tim
   assert.deepEqual(expressions(probe, 'account'), expressions(shared, 'account'));
   assert.deepEqual(expressions(probe, 'sleep'), expressions(shared, 'sleep'));
   assert.deepEqual(expressions(probe, 'setTimeout'), expressions(shared, 'setTimeout'));
-  assert.deepEqual(expressions(probe, 'headersForRequest'), expressions(shared, 'headersForRequest'));
+  // The unchanged policy function now receives the same arguments in explicit diagnostic stages.
+  // Behavioral equivalence (including blocked requests) is covered by interception differential tests.
+  assert.deepEqual(expressions(probe, 'headersForRequest'), ['headersForRequest(requestURL, requestHeaders, token, previous, target.origin)']);
 });
