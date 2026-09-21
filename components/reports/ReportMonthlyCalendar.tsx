@@ -72,7 +72,7 @@ export function ReportMonthlyCalendar({ events, report }: ReportMonthlyCalendarP
       requestAnimationFrame(() => eventButtonRefs.current.get(triggerId)?.focus());
     }
   };
-  const days = getMonthGrid(calendarConfig.year, calendarConfig.month);
+  const days = getMonthGrid(calendarConfig.year, calendarConfig.month, calendarConfig);
 
   useEffect(() => {
     const onKeyDown = (event: KeyboardEvent) => {

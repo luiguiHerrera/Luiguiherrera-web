@@ -45,7 +45,7 @@ function dashboardButton() {
   );
 }
 
-export function HistoricalAutomaticMarketReadings({ snapshot }: { snapshot: HistoricalAutomaticReadingsSnapshot }) {
+export function HistoricalAutomaticMarketReadings({ snapshot, layout }: { snapshot: HistoricalAutomaticReadingsSnapshot; layout?: "vix-flows" }) {
   const sectorBars = Array.from(
     { length: snapshot.sectors.totalCount },
     (_, index) => index < snapshot.sectors.positiveCount,
@@ -95,7 +95,14 @@ export function HistoricalAutomaticMarketReadings({ snapshot }: { snapshot: Hist
           ) : null}
 
           <section className="border border-petrol/35 bg-panel p-4 shadow-[0_10px_30px_rgba(31,35,40,0.035)] md:p-6">
-            <div className="grid gap-5 lg:grid-cols-[1fr_0.54fr] lg:items-end">
+            {snapshot.regime.score === null && snapshot.regime.confidence === null ? <>
+              <h3 className="text-base font-semibold text-ink">Régimen V1 no publicado</h3>
+              <p className="mt-2 text-sm leading-6 text-muted">No existe evidencia suficiente para reconstruir el estado exacto del motor al cierre del {snapshot.dataDate.slice(8, 10)}/{snapshot.dataDate.slice(5, 7)}.</p>
+              <details className="mt-3 text-xs leading-6 text-muted">
+                <summary className="cursor-pointer font-semibold text-petrol">Ver límite metodológico</summary>
+                <p className="mt-2">{snapshot.regime.interpretation}</p>
+              </details>
+            </> : <div className="grid gap-5 lg:grid-cols-[1fr_0.54fr] lg:items-end">
               <div>
                 <p className="text-xs font-semibold uppercase text-brass">Régimen</p>
                 <h3 className="mt-3 text-2xl font-semibold leading-tight text-ink">{snapshot.regime.label}</h3>
@@ -110,7 +117,7 @@ export function HistoricalAutomaticMarketReadings({ snapshot }: { snapshot: Hist
                 <Metric label="Confianza" value={snapshot.regime.confidence === null ? "No publicada" : `${snapshot.regime.confidence}%`} emphasis />
                 <Metric label="Sesgo" value={snapshot.regime.bias} />
               </div>
-            </div>
+            </div>}
           </section>
 
           <ReportSection headingLevel={snapshot.displayTitle ? 3 : 2} eyebrow="Régimen" title="Resumen de señales">
@@ -259,7 +266,7 @@ export function HistoricalAutomaticMarketReadings({ snapshot }: { snapshot: Hist
             </ReportSection>
           ) : null}
 
-          <div className="grid gap-5 lg:grid-cols-2">
+          <div className={layout === "vix-flows" ? "grid gap-5 md:grid-cols-2" : "grid gap-5 lg:grid-cols-2"}>
             <ReportSection headingLevel={snapshot.displayTitle ? 3 : 2} eyebrow="VIX" title="Volatilidad">
               {snapshot.vix ? <>
               <div className="grid gap-4">
@@ -285,7 +292,7 @@ export function HistoricalAutomaticMarketReadings({ snapshot }: { snapshot: Hist
                     ))}
                   </div>
                 </div>
-                <div className="grid gap-2 sm:grid-cols-3">
+                <div className={layout === "vix-flows" ? "grid gap-2 xl:grid-cols-3" : "grid gap-2 sm:grid-cols-3"}>
                   {snapshot.vix.change1d === undefined
                     ? <Metric label="Percentil" value={snapshot.vix.percentileLabel ?? "No registrado al corte"} />
                     : <Metric label="Cambio 1D" value={formatSignedNumber(snapshot.vix.change1d)} />}
@@ -310,6 +317,7 @@ export function HistoricalAutomaticMarketReadings({ snapshot }: { snapshot: Hist
               </div></> : <p className="text-sm leading-6 text-muted">No disponible al cierre. El snapshot no se completa con datos vivos posteriores.</p>}
             </ReportSection>
 
+            <div className={layout === "vix-flows" ? "grid min-w-0 gap-5" : "contents"}>
             <ReportSection headingLevel={snapshot.displayTitle ? 3 : 2} eyebrow="Flujos" title="BTC ETF flows">
               {snapshot.btcEtfFlows ? <>
               <div className="grid gap-2 sm:grid-cols-2">
@@ -351,6 +359,7 @@ export function HistoricalAutomaticMarketReadings({ snapshot }: { snapshot: Hist
                 {snapshot.gldFlowPressure.sourceNote}
               </p></> : <p className="text-sm leading-6 text-muted">No disponible al cierre.</p>}
             </ReportSection>
+            </div>
           </div>
 
           {snapshot.statisticalAssets?.length ? (

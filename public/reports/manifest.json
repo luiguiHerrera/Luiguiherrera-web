@@ -189,8 +189,8 @@
         "html": {
           "mimeType": "text/html; charset=utf-8",
           "path": "/reports/segundo-informe-septiembre-2026.html",
-          "sha256": "520823a268b7417eeeab333fd23d7292446b40196452b5093e5886db17fc0451",
-          "size": 73906
+          "sha256": "908286825b6c44b24c8a248b11ee71010e339efdb43bf68c557a09f3ca64e4e7",
+          "size": 74834
         },
         "ics": {
           "mimeType": "text/calendar; charset=utf-8",
@@ -201,20 +201,20 @@
         "markdown": {
           "mimeType": "text/markdown; charset=utf-8",
           "path": "/reports/segundo-informe-septiembre-2026.md",
-          "sha256": "455090c92db7ffc15d8ae8790e86681e0979ce692ffefe2cb6318482ad2c7b1e",
-          "size": 44583
+          "sha256": "6875e2f22d8f2e198ada8ca6c74b532e7a2925b1264a9e41b5d2223fcb14e567",
+          "size": 46451
         },
         "pdf": {
           "mimeType": "application/pdf",
           "path": "/reports/segundo-informe-septiembre-2026.pdf",
-          "sha256": "b635afc5e576452b56f029da2f58f33c27525ea93a3da5eaf575647fd3b32999",
-          "size": 61344
+          "sha256": "1123b491184be09aba7ed08216b6022dfa7c3ee66bf5f61d2d83ac495472347b",
+          "size": 65745
         }
       },
       "id": "segundo-informe-septiembre-2026",
       "modifiedAt": "2026-09-21",
       "publishedAt": "2026-09-21",
-      "sourceHash": "178d496b3403c2808923f8e1b32f1f4aaef601268a879b41f0edd48f9192910d"
+      "sourceHash": "31eb74fa9807ab27626f4dbcce304ac1efed4b24d933e34ec50c8186ac271a8c"
     }
   ],
   "schemaVersion": "1.0.0"

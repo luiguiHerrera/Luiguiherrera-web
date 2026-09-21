@@ -7,7 +7,7 @@ import type { HistoricalAutomaticReadingsSnapshot } from "@/lib/reports/historic
 
 type AutomaticMarketReadingsProps =
   | { mode: "live"; data: WeeklyReportData }
-  | { mode: "historical"; snapshot: HistoricalAutomaticReadingsSnapshot };
+  | { mode: "historical"; snapshot: HistoricalAutomaticReadingsSnapshot; layout?: "vix-flows" };
 
 type StatisticalLevelAsset = WeeklyReportData["statisticalLevels"][number];
 
@@ -146,7 +146,7 @@ function formatStatMetric(value: number | null | undefined, digits: number) {
 
 export function AutomaticMarketReadings(props: AutomaticMarketReadingsProps) {
   if (props.mode === "historical") {
-    return <HistoricalAutomaticMarketReadings snapshot={props.snapshot} />;
+    return <HistoricalAutomaticMarketReadings snapshot={props.snapshot} layout={props.layout} />;
   }
 
   return <LiveAutomaticMarketReadings data={props.data} />;

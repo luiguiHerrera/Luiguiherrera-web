@@ -1,0 +1,50 @@
+[
+  {
+    "url": "https://www.luiguiherrera.com/dashboard",
+    "result": "200\thttps://www.luiguiherrera.com/dashboard",
+    "error": ""
+  },
+  {
+    "url": "https://www.federalreserve.gov/releases/h15/",
+    "result": "200\thttps://www.federalreserve.gov/releases/h15/",
+    "error": ""
+  },
+  {
+    "url": "https://fred.stlouisfed.org/series/BAMLH0A0HYM2",
+    "result": "000\thttps://fred.stlouisfed.org/series/BAMLH0A0HYM2",
+    "error": "curl: (92) HTTP/2 stream 1 was not closed cleanly: INTERNAL_ERROR (err 2)\n",
+    "alternateVerification": "Exact URL opened by web reader on 2026-09-21; substantive page content and title verified; not 404."
+  },
+  {
+    "url": "https://www.eia.gov/outlooks/steo/",
+    "result": "200\thttps://www.eia.gov/outlooks/steo/",
+    "error": ""
+  },
+  {
+    "url": "https://www.gold.org/goldhub/research/gold-etfs-holdings-and-flows/2026/09",
+    "result": "200\thttps://www.gold.org/goldhub/research/gold-etfs-holdings-and-flows/2026/09",
+    "error": ""
+  },
+  {
+    "url": "https://fred.stlouisfed.org/series/QCNR628BIS",
+    "result": "000\thttps://fred.stlouisfed.org/series/QCNR628BIS",
+    "error": "curl: (92) HTTP/2 stream 1 was not closed cleanly: INTERNAL_ERROR (err 2)\n",
+    "alternateVerification": "Exact URL opened by web reader on 2026-09-21; substantive page content and title verified; not 404."
+  },
+  {
+    "url": "https://www.boj.or.jp/en/mopo/mpmdeci/mpr_2026/k260918a.pdf",
+    "result": "200\thttps://www.boj.or.jp/en/mopo/mpmdeci/mpr_2026/k260918a.pdf",
+    "error": ""
+  },
+  {
+    "url": "https://farside.co.uk/bitcoin-etf-flow-all-data/",
+    "result": "403\thttps://farside.co.uk/bitcoin-etf-flow-all-data/",
+    "error": "",
+    "alternateVerification": "Exact URL opened by web reader on 2026-09-21; substantive page content and title verified; not 404."
+  },
+  {
+    "url": "https://www.alianza.com.co/",
+    "result": "200\thttps://www.alianza.com.co/",
+    "error": ""
+  }
+]

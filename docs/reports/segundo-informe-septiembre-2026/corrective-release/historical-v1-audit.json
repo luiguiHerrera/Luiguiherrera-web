@@ -1,0 +1,681 @@
+{
+  "cutoff": "2026-09-18T23:59:59Z",
+  "historicalV1Reproduced": false,
+  "deployment": {
+    "id": "dpl_FwDTx8HZPNdPZDEiFKGxAVjxfcZ6",
+    "url": "https://luiguiherrera-g0n62qbg5-luigui-herrera-s-projects.vercel.app",
+    "createdAt": "2026-09-08T15:43:49.728000+00:00",
+    "readyAt": "2026-09-08T15:45:06.682000+00:00",
+    "aliasAssignedAt": "2026-09-08T15:45:07.072000+00:00",
+    "commit": "4ee6adb006f360fea13837db5f7d45815f297b55",
+    "aliases": [
+      "www.luiguiherrera.com",
+      "luiguiherrera-web.vercel.app",
+      "luiguiherrera.com",
+      "luiguiherrera-web-luigui-herrera-s-projects.vercel.app",
+      "luiguiherrera-web-git-vercel-d-b4e5a6-luigui-herrera-s-projects.vercel.app"
+    ],
+    "target": "production"
+  },
+  "productionHistory": [
+    {
+      "uid": "dpl_MFw2Rck2ENDNSzRDVeffa6aSbWcP",
+      "url": "luiguiherrera-pj555r1qf-luigui-herrera-s-projects.vercel.app",
+      "created": 1790005566718,
+      "ready": 1790005675311,
+      "target": "production",
+      "state": "READY",
+      "meta": {
+        "githubCommitMessage": "feat(reports): publish approved second September 2026 report",
+        "githubCommitRef": "codex/segundo-septiembre-production-only",
+        "githubCommitSha": "1245162074e5aef147e3384b1e7c978332e6b45d"
+      }
+    },
+    {
+      "uid": "dpl_FwDTx8HZPNdPZDEiFKGxAVjxfcZ6",
+      "url": "luiguiherrera-g0n62qbg5-luigui-herrera-s-projects.vercel.app",
+      "created": 1788882229728,
+      "ready": 1788882306682,
+      "target": "production",
+      "state": "READY",
+      "meta": {
+        "githubCommitMessage": "feat(pfl): ship P0 input integrity and first useful insight",
+        "githubCommitRef": "vercel-deployment",
+        "githubCommitSha": "4ee6adb006f360fea13837db5f7d45815f297b55"
+      }
+    },
+    {
+      "uid": "dpl_5L7cZZNoAfSWKCc1itEuz6YDFFu1",
+      "url": "luiguiherrera-nqowd6y0h-luigui-herrera-s-projects.vercel.app",
+      "created": 1788880669997,
+      "ready": 1788880735231,
+      "target": "production",
+      "state": "READY",
+      "meta": {
+        "githubCommitMessage": "fix(report): clarify ethereum outlook",
+        "githubCommitRef": "vercel-deployment",
+        "githubCommitSha": "e9a45a458c367573a515059ba0de7afe6ddb90c6"
+      }
+    },
+    {
+      "uid": "dpl_HT1zAiyqbPjNRAMgjg1fJGQrdrqo",
+      "url": "luiguiherrera-c1mebiab4-luigui-herrera-s-projects.vercel.app",
+      "created": 1788821117136,
+      "ready": 1788821179131,
+      "target": "production",
+      "state": "READY",
+      "meta": {
+        "githubCommitMessage": "fix(home): link strategy card to research overview",
+        "githubCommitRef": "main",
+        "githubCommitSha": "9fd1b9205e40a0e68e90e780892726353175c0ae"
+      }
+    },
+    {
+      "uid": "dpl_J2XgnBEjmpUUEfVhurDQ6P6qaHhu",
+      "url": "luiguiherrera-ec77zm0dv-luigui-herrera-s-projects.vercel.app",
+      "created": 1788820365678,
+      "ready": 1788820428843,
+      "target": "production",
+      "state": "READY",
+      "meta": {
+        "githubCommitMessage": "feat(home): refine question cards and mobile density",
+        "githubCommitRef": "main",
+        "githubCommitSha": "ea9737a55742f318f417048a8cbf0c06a82f0545"
+      }
+    },
+    {
+      "uid": "dpl_F48ngKLHCDEraEu2iKWWBpgTiMGi",
+      "url": "luiguiherrera-3d8cyxmfx-luigui-herrera-s-projects.vercel.app",
+      "created": 1788815756309,
+      "ready": 1788815819639,
+      "target": "production",
+      "state": "READY",
+      "meta": {
+        "githubCommitMessage": "fix(reports): refresh September editorial references and ODD event",
+        "githubCommitRef": "vercel-deployment",
+        "githubCommitSha": "01c5dcfe60d4c3ca37ab0e8c9af40a160a495be0"
+      }
+    },
+    {
+      "uid": "dpl_ByR9Po8CYAb2Q1hJWzsY6torbwGQ",
+      "url": "luiguiherrera-2ndinaxhg-luigui-herrera-s-projects.vercel.app",
+      "created": 1788784100259,
+      "ready": 1788784160205,
+      "target": "production",
+      "state": "READY",
+      "meta": {
+        "githubCommitMessage": "fix(deps): patch inherited audit vulnerabilities",
+        "githubCommitRef": "vercel-deployment",
+        "githubCommitSha": "3efd28f11080de3c44ff4cd636503fd98cd2cdbe"
+      }
+    },
+    {
+      "uid": "dpl_D6xEkGG47AeDszn2D9uzS3VLamVp",
+      "url": "luiguiherrera-797kdtag9-luigui-herrera-s-projects.vercel.app",
+      "created": 1788782043168,
+      "ready": 1788782107171,
+      "target": "production",
+      "state": "READY",
+      "meta": {
+        "githubCommitMessage": "feat(trends): refine trends editorial experience",
+        "githubCommitRef": "vercel-deployment",
+        "githubCommitSha": "5b8531cc0d3670fdd9beaa55ca57449e56a2d94c"
+      }
+    },
+    {
+      "uid": "dpl_Bc5ZXzUpQfR7VBN1LdZ4dimUL3EZ",
+      "url": "luiguiherrera-pjfuoo7x5-luigui-herrera-s-projects.vercel.app",
+      "created": 1788780715655,
+      "ready": 1788780781586,
+      "target": "production",
+      "state": "READY",
+      "meta": {
+        "githubCommitMessage": "feat(reports): integrate frozen September report on current production",
+        "githubCommitRef": "vercel-deployment",
+        "githubCommitSha": "e196b40969688e844737e9c163dcfd13e2213b8d"
+      }
+    },
+    {
+      "uid": "dpl_7LutojAmHiRycSSp2rKuvn5mNiwg",
+      "url": "luiguiherrera-9j0ak4kkd-luigui-herrera-s-projects.vercel.app",
+      "created": 1788773944492,
+      "ready": 1788774011345,
+      "target": "production",
+      "state": "READY",
+      "meta": {
+        "githubCommitMessage": "style(statistical-levels): improve seasonality and chart interactions",
+        "githubCommitRef": "vercel-deployment",
+        "githubCommitSha": "a933afcd287ffea28ed0e5ff163b390deefa2487"
+      }
+    },
+    {
+      "uid": "dpl_DTNLN2nWFYvsSQ8i646s9TwtJhGt",
+      "url": "luiguiherrera-6mez86f2o-luigui-herrera-s-projects.vercel.app",
+      "created": 1788766687850,
+      "ready": 1788766764517,
+      "target": "production",
+      "state": "READY",
+      "meta": {
+        "githubCommitMessage": "feat(trends): add structural trends and disclosed holdings overlap",
+        "githubCommitRef": "vercel-deployment",
+        "githubCommitSha": "8e427c74e3bf495a547bea6d42c0de0b949be5f5"
+      }
+    },
+    {
+      "uid": "dpl_2qHqwZhQVBywcchifUfFDgCxdwnm",
+      "url": "luiguiherrera-l492o8ai6-luigui-herrera-s-projects.vercel.app",
+      "created": 1788742187868,
+      "ready": 1788742245621,
+      "target": "production",
+      "state": "READY",
+      "meta": {
+        "githubCommitMessage": "refactor(statistical-levels): simplify experience and repair historical analytics",
+        "githubCommitRef": "vercel-deployment",
+        "githubCommitSha": "80e5cc26d29d68d71ff55022f6897bd3e08640bf"
+      }
+    },
+    {
+      "uid": "dpl_3BVYzV5GXN34gtzcryig5man46hF",
+      "url": "luiguiherrera-gkwt8jbl5-luigui-herrera-s-projects.vercel.app",
+      "created": 1788702707779,
+      "ready": 1788702769021,
+      "target": "production",
+      "state": "READY",
+      "meta": {
+        "githubCommitMessage": "refactor(investor): add dashboard and reports market paths",
+        "githubCommitRef": "vercel-deployment",
+        "githubCommitSha": "5859071ac43180decec28570bc3859dd905734f7"
+      }
+    },
+    {
+      "uid": "dpl_BSaLXiwtEBLY6FMSzYxryoWcieX4",
+      "url": "luiguiherrera-ae4zgi4as-luigui-herrera-s-projects.vercel.app",
+      "created": 1788668983721,
+      "ready": 1788669034479,
+      "target": "production",
+      "state": "READY",
+      "meta": {
+        "githubCommitMessage": "refactor(investor): create guided market entry experience",
+        "githubCommitRef": "vercel-deployment",
+        "githubCommitSha": "70b31d0d669d4d90dc1bade7af5710da9d62c87b"
+      }
+    },
+    {
+      "uid": "dpl_EmirUrTteGzUZuDNm8AmNsanCdFZ",
+      "url": "luiguiherrera-p1539n83k-luigui-herrera-s-projects.vercel.app",
+      "created": 1788553974917,
+      "ready": 1788554049409,
+      "target": "production",
+      "state": "READY",
+      "meta": {
+        "githubCommitMessage": "style(personal-finance): refine editorial display typography",
+        "githubCommitRef": "vercel-deployment",
+        "githubCommitSha": "33e3218e72f9ac581a2c59e7e966837e20f14cc3"
+      }
+    },
+    {
+      "uid": "dpl_Axvk2irPd6hafAWMWXQZ31VFVt8m",
+      "url": "luiguiherrera-c57fwfwy1-luigui-herrera-s-projects.vercel.app",
+      "created": 1788477847489,
+      "ready": 1788477908490,
+      "target": "production",
+      "state": "READY",
+      "meta": {
+        "githubCommitMessage": "refactor(personal-finance): refine guided paths and investor bridge",
+        "githubCommitRef": "vercel-deployment",
+        "githubCommitSha": "33acbbc403069830f33a2bb7e9285030b169d5d7"
+      }
+    },
+    {
+      "uid": "dpl_rzhK9oFxnesTihcGnVmD38fRAGMn",
+      "url": "luiguiherrera-2w0s0og6k-luigui-herrera-s-projects.vercel.app",
+      "created": 1788464369556,
+      "ready": 1788464442877,
+      "target": "production",
+      "state": "READY",
+      "meta": {
+        "githubCommitMessage": "refactor(personal-finance): create guided financial entry experience",
+        "githubCommitRef": "vercel-deployment",
+        "githubCommitSha": "bada9c31afa18d7573d35a158badcaf6c8c29972"
+      }
+    },
+    {
+      "uid": "dpl_47zAttKN3xpcfRDRoQiG3QRg1YG3",
+      "url": "luiguiherrera-5x6sqpq1g-luigui-herrera-s-projects.vercel.app",
+      "created": 1788344126758,
+      "ready": 1788344190053,
+      "target": "production",
+      "state": "READY",
+      "meta": {
+        "githubCommitMessage": "refactor(home): simplify navigation and showcase market dashboard",
+        "githubCommitRef": "vercel-deployment",
+        "githubCommitSha": "70c7e83ebb2cef8714ddabf3408053968bc5a2e3"
+      }
+    },
+    {
+      "uid": "dpl_G3phdxBoLWyx5VP7Pdk1qTtds27B",
+      "url": "luiguiherrera-8gxkpdpve-luigui-herrera-s-projects.vercel.app",
+      "created": 1788205182537,
+      "ready": 1788205249983,
+      "target": "production",
+      "state": "READY",
+      "meta": {
+        "githubCommitMessage": "refactor(dashboard): preserve BTC flow display precision",
+        "githubCommitRef": "vercel-deployment",
+        "githubCommitSha": "0adad1da7b533f94357d4e0b99634bd7a5291f62"
+      }
+    },
+    {
+      "uid": "dpl_DZUrEB1zrRB31pY7xECMRuVH8wpE",
+      "url": "luiguiherrera-97olhhzn2-luigui-herrera-s-projects.vercel.app",
+      "created": 1788197618591,
+      "ready": 1788197678859,
+      "target": "production",
+      "state": "READY",
+      "meta": {
+        "githubCommitMessage": "fix(dashboard): improve semantic hierarchy and touch targets",
+        "githubCommitRef": "vercel-deployment",
+        "githubCommitSha": "2c0fd2ec34465d748d08fa7bf489a98b77611e8d"
+      }
+    },
+    {
+      "uid": "dpl_BrSZG7n5MMGNBkfqfFBfWBPPD5vC",
+      "url": "luiguiherrera-6mhvelwcr-luigui-herrera-s-projects.vercel.app",
+      "created": 1788194878142,
+      "ready": 1788194940550,
+      "target": "production",
+      "state": "READY",
+      "meta": {
+        "githubCommitMessage": "fix(dashboard): clarify BTC data freshness and provenance",
+        "githubCommitRef": "vercel-deployment",
+        "githubCommitSha": "25830b562a80743a09de82e6e64e50d11d00f922"
+      }
+    },
+    {
+      "uid": "dpl_FHzMU5sHdQgMKcrZ19scVgefyRqC",
+      "url": "luiguiherrera-l4qrqinsy-luigui-herrera-s-projects.vercel.app",
+      "created": 1788185702933,
+      "ready": 1788185759998,
+      "target": "production",
+      "state": "READY",
+      "meta": {
+        "githubCommitMessage": "fix(dashboard): localize sector provenance in English",
+        "githubCommitRef": "vercel-deployment",
+        "githubCommitSha": "637216e01b9eb4f7a7931ca37d3422c783655296"
+      }
+    },
+    {
+      "uid": "dpl_igw2mrmU5n2HKW5sp7eeK9MeE1oT",
+      "url": "luiguiherrera-o8jun2wqg-luigui-herrera-s-projects.vercel.app",
+      "created": 1788166560152,
+      "ready": 1788166622842,
+      "target": "production",
+      "state": "READY",
+      "meta": {
+        "githubCommitMessage": "fix(dashboard): use real sector data in production",
+        "githubCommitRef": "vercel-deployment",
+        "githubCommitSha": "a30fc0137b890557d35c22c5f8957623fe4f0a85"
+      }
+    },
+    {
+      "uid": "dpl_3UQZXsG6LJ1D3gk1314mdebFHETm",
+      "url": "luiguiherrera-inamqagw9-luigui-herrera-s-projects.vercel.app",
+      "created": 1788136904931,
+      "ready": 1788137004727,
+      "target": "production",
+      "state": "READY",
+      "meta": {
+        "githubCommitMessage": "refactor(dashboard): redesign capital flows",
+        "githubCommitRef": "vercel-deployment",
+        "githubCommitSha": "843616e9596c8be648118b5beba39e06353fb437"
+      }
+    },
+    {
+      "uid": "dpl_69etCj3ykPGqm5kitd3Wv2FVv22J",
+      "url": "luiguiherrera-d9hcjgwjm-luigui-herrera-s-projects.vercel.app",
+      "created": 1788129601384,
+      "ready": 1788129712298,
+      "target": "production",
+      "state": "READY",
+      "meta": {
+        "githubCommitMessage": "refactor(dashboard): redesign quantitative risk",
+        "githubCommitRef": "vercel-deployment",
+        "githubCommitSha": "be42c12befc4a3d54d91801fc5ce4052ab451a9c"
+      }
+    },
+    {
+      "uid": "dpl_9waBHo6f5jzWAstJbtsqZy3Z5fX1",
+      "url": "luiguiherrera-i93n0s4of-luigui-herrera-s-projects.vercel.app",
+      "created": 1788121107785,
+      "ready": 1788121231188,
+      "target": "production",
+      "state": "READY",
+      "meta": {
+        "githubCommitMessage": "refactor(dashboard): redesign market participation",
+        "githubCommitRef": "vercel-deployment",
+        "githubCommitSha": "f1060b59911745b2d15ebbb93c92a1a1ebe96f08"
+      }
+    },
+    {
+      "uid": "dpl_4PC7G9ASsJLTZ9jYAWr3YyHakHmX",
+      "url": "luiguiherrera-gn56qoptb-luigui-herrera-s-projects.vercel.app",
+      "created": 1788113967192,
+      "ready": 1788114093754,
+      "target": "production",
+      "state": "READY",
+      "meta": {
+        "githubCommitMessage": "refactor(dashboard): establish unified visual hierarchy",
+        "githubCommitRef": "vercel-deployment",
+        "githubCommitSha": "18e78927efa2997d74d2db2a2e0ebc07c37809a3"
+      }
+    },
+    {
+      "uid": "dpl_5mqJHUv7nYGNpgCNeSLYfxGmwjDG",
+      "url": "luiguiherrera-exxt2j8e3-luigui-herrera-s-projects.vercel.app",
+      "created": 1788105251942,
+      "ready": 1788105384154,
+      "target": "production",
+      "state": "READY",
+      "meta": {
+        "githubCommitMessage": "feat(dashboard): unify VIX volatility analysis",
+        "githubCommitRef": "vercel-deployment",
+        "githubCommitSha": "e0cedcdfbedb68f6fd55b4b5b3e55f1c3fc8d0ce"
+      }
+    },
+    {
+      "uid": "dpl_6Rnny4NdiwJoZMpNbREiMUabdEuS",
+      "url": "luiguiherrera-n0knvsuse-luigui-herrera-s-projects.vercel.app",
+      "created": 1788095799896,
+      "ready": 1788095927570,
+      "target": "production",
+      "state": "READY",
+      "meta": {
+        "githubCommitMessage": "refactor(dashboard): finalize VIX term structure presentation",
+        "githubCommitRef": "vercel-deployment",
+        "githubCommitSha": "9678c8ba2c6a7ff3c1af3f63b7744eff0fdd300c"
+      }
+    },
+    {
+      "uid": "dpl_Fqps2h9xCrAi6VEdhyUAWkUZjwaj",
+      "url": "luiguiherrera-ogzpz67gi-luigui-herrera-s-projects.vercel.app",
+      "created": 1788048927153,
+      "ready": 1788049047804,
+      "target": "production",
+      "state": "READY",
+      "meta": {
+        "githubCommitMessage": "refactor(dashboard): simplify VIX term structure presentation",
+        "githubCommitRef": "vercel-deployment",
+        "githubCommitSha": "22c3ec8dfb0a76700618f118a69b8f196b7bf0d7"
+      }
+    },
+    {
+      "uid": "dpl_2qU8wjJYbzBJ3LaSceSihQLnR7yP",
+      "url": "luiguiherrera-kxqcmxyl4-luigui-herrera-s-projects.vercel.app",
+      "created": 1788006375396,
+      "ready": 1788006486328,
+      "target": "production",
+      "state": "READY",
+      "meta": {
+        "githubCommitMessage": "feat(dashboard): extend VIX term structure to nine contracts",
+        "githubCommitRef": "vercel-deployment",
+        "githubCommitSha": "745d9d906cad882d6ee3060bd2292d67a2fdc0e4"
+      }
+    }
+  ],
+  "aliasEvents": [
+    {
+      "id": "uev_LZUxUpetS71VpYiUH5l0Rf81",
+      "type": "aliases-assigned",
+      "createdAt": 1790005434691,
+      "text": "luiguiHerrera assigned an alias to luiguiherrera-i09lf2lgs-luigui-herrera-s-projects.vercel.app"
+    },
+    {
+      "id": "uev_MBVNBl6Ddlm9wr8w4TkT9DlP",
+      "type": "aliases-assigned",
+      "createdAt": 1790005109563,
+      "text": "luiguiHerrera assigned an alias to luiguiherrera-op9seh70v-luigui-herrera-s-projects.vercel.app"
+    },
+    {
+      "id": "uev_OF7ME9WmQq1ulgN16IW0479m",
+      "type": "aliases-assigned",
+      "createdAt": 1789821866350,
+      "text": "github-actions[bot] assigned an alias to luiguiherrera-67vnnirqs-luigui-herrera-s-projects.vercel.app"
+    },
+    {
+      "id": "uev_3fN2fOmMeOmRBoVO8QwpAbJJ",
+      "type": "aliases-assigned",
+      "createdAt": 1789737049846,
+      "text": "github-actions[bot] assigned an alias to luiguiherrera-8s5izpt65-luigui-herrera-s-projects.vercel.app"
+    },
+    {
+      "id": "uev_UvdSB3CYpUIDfVOFpkOPOLGD",
+      "type": "aliases-assigned",
+      "createdAt": 1789652808311,
+      "text": "github-actions[bot] assigned an alias to luiguiherrera-g2hxgkkqz-luigui-herrera-s-projects.vercel.app"
+    },
+    {
+      "id": "uev_T6sot2LlfF7MX6KFYSE83Y25",
+      "type": "aliases-assigned",
+      "createdAt": 1789566382686,
+      "text": "github-actions[bot] assigned an alias to luiguiherrera-nqo6b0awm-luigui-herrera-s-projects.vercel.app"
+    },
+    {
+      "id": "uev_i1h0XLz9vqBbrgAM14G7nepi",
+      "type": "aliases-assigned",
+      "createdAt": 1789480351679,
+      "text": "github-actions[bot] assigned an alias to luiguiherrera-khz32b69z-luigui-herrera-s-projects.vercel.app"
+    },
+    {
+      "id": "uev_aFa6cdtbNwwFuyEENXOTXehg",
+      "type": "aliases-assigned",
+      "createdAt": 1789452206470,
+      "text": "luiguiHerrera assigned an alias to luiguiherrera-pnxs4sr5v-luigui-herrera-s-projects.vercel.app"
+    },
+    {
+      "id": "uev_iHPKFE9CVTBrWAb44KsTUU4H",
+      "type": "aliases-assigned",
+      "createdAt": 1789384314244,
+      "text": "luiguiHerrera assigned an alias to luiguiherrera-1wew04uil-luigui-herrera-s-projects.vercel.app"
+    },
+    {
+      "id": "uev_lqxFss5hYBhh6uz7kDlKMxOe",
+      "type": "aliases-assigned",
+      "createdAt": 1789249395275,
+      "text": "luiguiHerrera assigned an alias to luiguiherrera-5d9i66oi7-luigui-herrera-s-projects.vercel.app"
+    },
+    {
+      "id": "uev_Y8WT9eZEgZ1E3VhDM9r6QJMW",
+      "type": "aliases-assigned",
+      "createdAt": 1789237366638,
+      "text": "luiguiHerrera assigned an alias to luiguiherrera-jw0ywjxfj-luigui-herrera-s-projects.vercel.app"
+    },
+    {
+      "id": "uev_9YcQlInVUp2F6t84p8D4abuM",
+      "type": "aliases-assigned",
+      "createdAt": 1789232836685,
+      "text": "luiguiHerrera assigned an alias to luiguiherrera-19crd6qbg-luigui-herrera-s-projects.vercel.app"
+    },
+    {
+      "id": "uev_aH994gLnP8uwy2ZmtiTveyBE",
+      "type": "aliases-assigned",
+      "createdAt": 1789228944342,
+      "text": "luiguiHerrera assigned an alias to luiguiherrera-gz7767zw6-luigui-herrera-s-projects.vercel.app"
+    },
+    {
+      "id": "uev_jR3rGZJeQ3PbN5wARjTiGg81",
+      "type": "aliases-assigned",
+      "createdAt": 1789224225315,
+      "text": "luiguiHerrera assigned an alias to luiguiherrera-l7cw2ll50-luigui-herrera-s-projects.vercel.app"
+    },
+    {
+      "id": "uev_mcdNu5lgXisDKZ4WVfWJbo4G",
+      "type": "aliases-assigned",
+      "createdAt": 1789218293045,
+      "text": "luiguiHerrera assigned an alias to luiguiherrera-p1afn02mq-luigui-herrera-s-projects.vercel.app"
+    },
+    {
+      "id": "uev_O7iFmiGZcFp03JpPgSCwuoqk",
+      "type": "aliases-assigned",
+      "createdAt": 1789215761828,
+      "text": "github-actions[bot] assigned an alias to luiguiherrera-507e0vt0y-luigui-herrera-s-projects.vercel.app"
+    },
+    {
+      "id": "uev_2EhllJgeaeDeGE1msbU1cgjY",
+      "type": "aliases-assigned",
+      "createdAt": 1789131821526,
+      "text": "github-actions[bot] assigned an alias to luiguiherrera-3yqielwft-luigui-herrera-s-projects.vercel.app"
+    },
+    {
+      "id": "uev_P3IazGRP957DCXs3jiCYJI8f",
+      "type": "aliases-assigned",
+      "createdAt": 1789069987138,
+      "text": "luiguiHerrera assigned an alias to luiguiherrera-qby4j8mr0-luigui-herrera-s-projects.vercel.app"
+    },
+    {
+      "id": "uev_UbLxFSSJ23kfQrUrIUGJtVbd",
+      "type": "aliases-assigned",
+      "createdAt": 1789061792448,
+      "text": "luiguiHerrera assigned an alias to luiguiherrera-gk28qj3hi-luigui-herrera-s-projects.vercel.app"
+    },
+    {
+      "id": "uev_Fzmpaf4U6TGPCtfeJA8s8aIE",
+      "type": "aliases-assigned",
+      "createdAt": 1789058440697,
+      "text": "luiguiHerrera assigned an alias to luiguiherrera-g0t67vm0i-luigui-herrera-s-projects.vercel.app"
+    },
+    {
+      "id": "uev_2b1U0hswjajE9hrVGUTeusQF",
+      "type": "aliases-assigned",
+      "createdAt": 1789051916228,
+      "text": "luiguiHerrera assigned an alias to luiguiherrera-brlhy3vtf-luigui-herrera-s-projects.vercel.app"
+    },
+    {
+      "id": "uev_J1XkCZ5jdQ9BTD5TgThHijDh",
+      "type": "aliases-assigned",
+      "createdAt": 1789045767092,
+      "text": "github-actions[bot] assigned an alias to luiguiherrera-a287qftan-luigui-herrera-s-projects.vercel.app"
+    },
+    {
+      "id": "uev_Fmk9rtV0w8rpHVYhh11y172g",
+      "type": "aliases-assigned",
+      "createdAt": 1789042375480,
+      "text": "luiguiHerrera assigned an alias to luiguiherrera-hqkmpajxu-luigui-herrera-s-projects.vercel.app"
+    },
+    {
+      "id": "uev_gdcZUXps1dasMzGNBYCanzgX",
+      "type": "aliases-assigned",
+      "createdAt": 1789032693959,
+      "text": "luiguiHerrera assigned an alias to luiguiherrera-ehx5n2fho-luigui-herrera-s-projects.vercel.app"
+    },
+    {
+      "id": "uev_hlOKdQ7WyNXhS6xzuid1IsBB",
+      "type": "aliases-assigned",
+      "createdAt": 1788959456905,
+      "text": "github-actions[bot] assigned an alias to luiguiherrera-172kf2j41-luigui-herrera-s-projects.vercel.app"
+    },
+    {
+      "id": "uev_IMv9JQYp6kVOFQGQd7Pcxi8I",
+      "type": "aliases-assigned",
+      "createdAt": 1788955639729,
+      "text": "luiguiHerrera assigned an alias to luiguiherrera-9t1d5dv9u-luigui-herrera-s-projects.vercel.app"
+    },
+    {
+      "id": "uev_W41tzTthmzG53tBM1otiRFFR",
+      "type": "aliases-assigned",
+      "createdAt": 1788882307076,
+      "text": "luiguiHerrera assigned 5 aliases to luiguiherrera-g0n62qbg5-luigui-herrera-s-projects.vercel.app"
+    },
+    {
+      "id": "uev_wKGjydT0Oc6KcDEl1v0im4q4",
+      "type": "aliases-assigned",
+      "createdAt": 1788882164779,
+      "text": "luiguiHerrera assigned an alias to luiguiherrera-ddqf0dzk8-luigui-herrera-s-projects.vercel.app"
+    },
+    {
+      "id": "uev_XPZjnWhjd0CtSmpiMq1a7dtI",
+      "type": "aliases-assigned",
+      "createdAt": 1788880735508,
+      "text": "luiguiHerrera assigned 5 aliases to luiguiherrera-nqowd6y0h-luigui-herrera-s-projects.vercel.app"
+    },
+    {
+      "id": "uev_HdMLGDrLRnd92mA5SJYdkGiD",
+      "type": "aliases-assigned",
+      "createdAt": 1788880618006,
+      "text": "luiguiHerrera assigned an alias to luiguiherrera-hfs8oegi7-luigui-herrera-s-projects.vercel.app"
+    },
+    {
+      "id": "uev_sB5DwP4Hb7GiA3iIEPE56FLZ",
+      "type": "aliases-assigned",
+      "createdAt": 1788872770573,
+      "text": "github-actions[bot] assigned an alias to luiguiherrera-l6rz6mv7v-luigui-herrera-s-projects.vercel.app"
+    },
+    {
+      "id": "uev_bgbUTLTnBI0BqWXYWFOA02s0",
+      "type": "aliases-assigned",
+      "createdAt": 1788863311801,
+      "text": "github-actions[bot] assigned an alias to luiguiherrera-doj2fb15e-luigui-herrera-s-projects.vercel.app"
+    },
+    {
+      "id": "uev_mRGgchnmIR9TdgqFfai8DZrZ",
+      "type": "aliases-assigned",
+      "createdAt": 1788861429508,
+      "text": "luiguiHerrera assigned an alias to luiguiherrera-4jqcmxvp2-luigui-herrera-s-projects.vercel.app"
+    }
+  ],
+  "historyPagination": {
+    "count": 100,
+    "next": 1787735379879,
+    "prev": 1790005566718
+  },
+  "codeSha256": {
+    "lib/dashboard/regime-scoring.ts": "b9822768cbda1954f571cc99d4b1c076ed931d21e568b1aaccc5c0857e33e2db",
+    "lib/dashboard/get-dashboard-data.ts": "a1f530dd9395d9a6d1854280ce52168617ab976819fea71b9ea78d30d0324acd",
+    "lib/dashboard/adapters/sector-etfs.ts": "25c0168e9ff260860f2148f9c699eca7bb823f505e21cff4890f7689b15b02f8",
+    "lib/dashboard/adapters/sector-data-core.ts": "2c66d71bb6e5482ad5c1419a7fc9384aed023b2a0b919b998ca020a32c36c5a2",
+    "lib/dashboard/adapters/vix.ts": "6e601004ff4effe09c596749abd269795e4faf9a5bbaa5f036c7d2051d30dbab",
+    "lib/dashboard/adapters/btc-etf-flows.ts": "5fd4f6c7ff7b2e2daae2e3ac3f3f5a8d887965d965957fc25a45e425cd48384a"
+  },
+  "codeIdenticalToPriorReconciliation": true,
+  "ciReceipts": [
+    {
+      "startedAt": "2026-09-18T13:06:01.120Z",
+      "completedAt": "2026-09-18T13:06:36.058Z",
+      "expectedSession": "2026-09-17",
+      "observationKey": "regime-v2/observations/regime-v2-1.0.0-builder/C03/2026-09-17/39ede9a225409e8b4053f3ac9b720d83466feac50d6ffc3b7ac31c1a769aeaca.json"
+    },
+    {
+      "startedAt": "2026-09-19T12:38:58.859Z",
+      "completedAt": "2026-09-19T12:39:39.200Z",
+      "expectedSession": "2026-09-18",
+      "observationKey": "regime-v2/observations/regime-v2-1.0.0-builder/C03/2026-09-18/00575db140dcdb43ea9ed593b7c51c56ca031f00795e493336d12fdf6ea74092.json"
+    }
+  ],
+  "historicalInputs": {
+    "sectorDate": null,
+    "vixDate": null,
+    "btcDate": null,
+    "btcSelectedSource": null
+  },
+  "brokenEdge": "deployed code -> time-admissible inputs (including source selection and persistent cache state); therefore no authoritative replay",
+  "runtimeLogAttempts": [
+    {
+      "range": "2026-09-18T00:00:00Z/2026-09-18T23:59:59Z",
+      "result": "Vercel CLI Response Error 400"
+    },
+    {
+      "range": "2026-09-18T20:00:00Z/2026-09-18T23:59:59Z",
+      "result": "Vercel CLI Response Error 400"
+    }
+  ],
+  "rawEvidenceSha256": {
+    "report-repair-vercel-history.json": "080794e8b1d9c32a259a05999ac155ce8486f1d986c913e7baf0aa5b2ad00b1b",
+    "report-repair-ci-artifacts-18.json": "691e708662117771db495f2926de5dccda27d14e7b78c2fe21a902e8b0ca95c0",
+    "report-repair-cutoff-events.json": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+    "report-repair-ci-artifacts-19.json": "4f334516d3ab63113c6bff21eadb667f2f8edea6309f81c3c0a5ae4d78050403",
+    "report-repair-alias-events.json": "e98c02930c0e8cf1fd48f86906a07c82c7a916b212fdb786573c65c8abfc31a5",
+    "report-repair-cutoff-deployment.json": "9768f21a6f592bcc09d284848d0f5a4208656cb5dbc65fa2faf935dfe1a341f9",
+    "report-repair-cutoff-github-status.json": "0f8d81e4362cf194288f3d1e7f8af7655cc087da26403b771402ddabd15f8193",
+    "report-repair-current-deployment.json": "4d191c2dd3306154efb3e77f1e5a48e9a8dc72094e2cf4a53804cf977e5f6cb6",
+    "report-repair-ci-runs.json": "99ef085e4fc65a9f7c9b234e977bf58851f59a8682696015f51c6408938b196c"
+  }
+}

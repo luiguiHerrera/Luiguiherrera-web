@@ -4,6 +4,7 @@ import calendar
 import html
 import json
 import os
+import re
 import sys
 from pathlib import Path
 
@@ -319,10 +320,17 @@ def add_monthly_calendar(story, items, styles, presentation):
             day = int(item["dateStart"][-2:])
             by_day.setdefault(day, []).append(item)
     cell_count = ((first_weekday + day_count + 6) // 7) * 7
+    start_day = 1
+    if presentation.get("calendarView") == "remaining":
+        start = presentation.get("calendarStartDate", "")
+        if not re.fullmatch(r"\d{4}-\d{2}-\d{2}", start) or not start.startswith(prefix) or not 1 <= int(start[-2:]) <= day_count:
+            raise ValueError("Remaining calendar requires a valid calendarStartDate in its month")
+        start_day = int(start[-2:])
+    first_cell = ((first_weekday + start_day - 1) // 7) * 7
     cells = []
-    for index in range(cell_count):
+    for index in range(first_cell, cell_count):
         day = index - first_weekday + 1
-        if day < 1 or day > day_count:
+        if day < start_day or day > day_count:
             cells.append(p(" ", styles["small"]))
             continue
         lines = [str(day)]
@@ -331,7 +339,7 @@ def add_monthly_calendar(story, items, styles, presentation):
         cells.append(p("\n".join(lines), styles["small"]))
     header_style = PDF["ParagraphStyle"]("calendar_header", parent=styles["small"], textColor=colors.white)
     data = [[p(day, header_style) for day in ["Lun", "Mar", "Mié", "Jue", "Vie", "Sáb", "Dom"]]]
-    data.extend([cells[row : row + 7] for row in range(0, cell_count, 7)])
+    data.extend([cells[row : row + 7] for row in range(0, len(cells), 7)])
     table = Table(data, colWidths=[24 * mm] * 7, repeatRows=1, hAlign="LEFT")
     commands = [
         ("VALIGN", (0, 0), (-1, -1), "TOP"),
@@ -492,18 +500,26 @@ def add_historical_snapshot(story, snapshot, styles):
         story.append(p(comparison["interpretation"], styles["body"]))
         story.append(PDF["KeepTogether"]([p(comparison["methodology"], styles["small"])]))
     regime = snapshot["regime"]
-    story.append(
-        info_table(
-            [
-                ("Régimen al corte", regime["label"]),
-                ("Puntuación", "No publicada" if regime["score"] is None else f"{regime['score']}/100"),
-                ("Confianza", "No publicada" if regime["confidence"] is None else f"{regime['confidence']}%"),
-                ("Sesgo", regime["bias"]),
-                ("Interpretación histórica", regime["interpretation"]),
-            ],
-            styles,
+    if regime["score"] is None and regime["confidence"] is None:
+        story.append(PDF["KeepTogether"]([
+            p("Régimen V1 no publicado", styles["h3"]),
+            p(f"No existe evidencia suficiente para reconstruir el estado exacto del motor al cierre del {snapshot['dataDate'][8:10]}/{snapshot['dataDate'][5:7]}.", styles["body"]),
+            p("Ver límite metodológico", styles["h3"]),
+            p(regime["interpretation"], styles["small"]),
+        ]))
+    else:
+        story.append(
+            info_table(
+                [
+                    ("Régimen al corte", regime["label"]),
+                    ("Puntuación", "No publicada" if regime["score"] is None else f"{regime['score']}/100"),
+                    ("Confianza", "No publicada" if regime["confidence"] is None else f"{regime['confidence']}%"),
+                    ("Sesgo", regime["bias"]),
+                    ("Interpretación histórica", regime["interpretation"]),
+                ],
+                styles,
+            )
         )
-    )
     for title, key in [
         ("Qué impulsó", "support"),
         ("Qué frenó", "caution"),
@@ -896,6 +912,8 @@ def add_section(story, section, styles, root, published_at, description, force_b
                 story.append(PDF["KeepTogether"]([
                     p(item["name"], styles["h3"]),
                     p(f"Qué mira: {item['whatLooksAt']} Qué cambiaría la lectura: {item['whatWouldChange']}", styles["body"]),
+                    *([PDF["Paragraph"](f'<link href="{html.escape(model["canonicalUrl"] + item["href"] if item["href"].startswith("#") else "https://www.luiguiherrera.com" + item["href"] if item["href"].startswith("/") else item["href"], quote=True)}">{paragraph_text(item["linkLabel"])}</link>', styles["small"])]
+                      if item.get("href") and item.get("linkLabel") and item.get("asOf", "") <= (model.get("editorialCutoffAt") or model["publishedAt"]) else []),
                     *([PDF["Paragraph"](f'<link href="{html.escape(item["href"], quote=True)}">{paragraph_text(item["linkLabel"])}: {paragraph_text(item["href"])}</link>', styles["small"]),
                        p(f"{item['source']} · Actualización editorial: {item['asOf']}.", styles["small"])]
                       if item.get("asOf", "") > (model.get("editorialCutoffAt") or model["publishedAt"]) and item.get("href") and item.get("linkLabel") else []),
@@ -970,18 +988,17 @@ def add_section(story, section, styles, root, published_at, description, force_b
                 )
             )
     elif kind == "sources":
+        source_style = PDF["ParagraphStyle"]("source_entry", parent=styles["body"], spaceAfter=3)
         for group in section.get("sourceGroups", []):
             group_story = [p(group["title"], styles["h2"])]
-            for entry in group["entries"]:
-                entry_story = [p(entry["label"] + (" · " + entry["note"] if entry.get("note") else ""), styles["body"])]
+            for entry_index, entry in enumerate(group["entries"]):
+                entry_story = [p(entry["label"] + (" · " + entry["note"] if entry.get("note") else ""), source_style)]
                 if entry.get("href"):
                     entry_story.append(p(entry["href"], styles["small"]))
-                group_story.extend(entry_story)
-            story.append(PDF["KeepTogether"](group_story))
+                story.append(PDF["KeepTogether"]((group_story if entry_index == 0 else []) + entry_story))
         story.append(p("Fuentes y método", styles["h2"]))
         story.append(p(section["sourcesNote"], styles["body"]))
-        story.append(p("Limitaciones y aviso educativo", styles["h2"]))
-        story.append(p(section["disclaimer"], styles["disclaimer"]))
+        story.append(PDF["KeepTogether"]([p("Limitaciones y aviso educativo", styles["h2"]), p(section["disclaimer"], styles["disclaimer"])]))
     else:
         raise SystemExit(f"Unsupported section kind: {kind}")
 

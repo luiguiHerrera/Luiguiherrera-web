@@ -57,13 +57,11 @@ Amplitud normalizada a cinco sesiones en cada corte: 28/08–04/09 y 11/09–18/
 
 ### Régimen al corte
 
-| Campo | Valor |
-|---|---|
-| Régimen | V1 al 18/09: no reproducido |
-| Puntuación | No publicada |
-| Confianza | No publicada |
-| Sesgo | No publicado |
-| Interpretación histórica | Se omiten score, confianza y comparación de régimen. La captura del Dashboard del 21/09 reproduce 70/100 y 74 % de confianza, pero utiliza Bitbo parcial hasta el 17/09; no demuestra qué habría admitido el adaptador al cierre del 18/09. Farside se utiliza exclusivamente para el bloque independiente de flujos. |
+**Régimen V1 no publicado**
+
+No existe evidencia suficiente para reconstruir el estado exacto del motor al cierre del 18/09.
+
+**Ver límite metodológico:** Se omiten score, confianza y comparación de régimen. La captura del Dashboard del 21/09 reproduce 70/100 y 74 % de confianza, pero utiliza Bitbo parcial hasta el 17/09; no demuestra qué habría admitido el adaptador al cierre del 18/09. Farside se utiliza exclusivamente para el bloque independiente de flujos.
 
 #### Qué impulsó
 
@@ -598,6 +596,42 @@ Seguimiento condicional · 2026-09-21. Lectura editorial; datos automáticos con
 | Monetización del software | Uso convertido en ingresos, FCF por acción e ingresos por empleado. | Mejor caja por acción sin depender de dilución distinguiría adopción tecnológica de creación de valor. |
 | USD / COP: factores regionales | Prima fiscal, instituciones, petróleo, tasas de BanRep y apetito por LatAm. | Mejoras locales con entorno externo favorable reducirían presión; deterioro simultáneo la elevaría. |
 
+- **Amplitud del S&P:** [Ver Dashboard](https://www.luiguiherrera.com/dashboard).
+
+- **RSP / SPY:** [Ver Dashboard](https://www.luiguiherrera.com/dashboard).
+
+- **IWM / SPY:** [Ver Dashboard](https://www.luiguiherrera.com/dashboard).
+
+- **Treasury 10Y:** [Ver Fed H.15](https://www.federalreserve.gov/releases/h15/).
+
+- **Treasury 30Y:** [Ver Fed H.15](https://www.federalreserve.gov/releases/h15/).
+
+- **MOVE:** [Ver fuente y metodología](https://www.luiguiherrera.com/informes/segundo-informe-septiembre-2026#fuentes-y-aviso).
+
+- **Crédito corporativo:** [Ver spread High Yield en FRED](https://fred.stlouisfed.org/series/BAMLH0A0HYM2).
+
+- **Petróleo y transporte:** [Ver perspectivas de energía EIA](https://www.eia.gov/outlooks/steo/).
+
+- **DXY:** [Ver contexto del dólar](https://www.luiguiherrera.com/informes/segundo-informe-septiembre-2026#usd-cop).
+
+- **GLD y demanda de oro:** [Ver World Gold Council](https://www.gold.org/goldhub/research/gold-etfs-holdings-and-flows/2026/09).
+
+- **China: consumidor e inmobiliario:** [Ver datos FRED/BIS](https://fred.stlouisfed.org/series/QCNR628BIS).
+
+- **BOJ, yen y JGB:** [Ver BOJ](https://www.boj.or.jp/en/mopo/mpmdeci/mpr_2026/k260918a.pdf).
+
+- **Flujos ETF de Bitcoin:** [Ver Farside](https://farside.co.uk/bitcoin-etf-flow-all-data/).
+
+- **ETH / BTC:** [Ver bloque de Ethereum](https://www.luiguiherrera.com/informes/segundo-informe-septiembre-2026#ethereum).
+
+- **Semiconductores y concentración de posiciones:** [Ver fuente y metodología](https://www.luiguiherrera.com/informes/segundo-informe-septiembre-2026#fuentes-y-aviso).
+
+- **CAPEX de IA frente a FCF:** [Ver bloque de IA](https://www.luiguiherrera.com/informes/segundo-informe-septiembre-2026#ia-tecnologia).
+
+- **Monetización del software:** [Ver bloque de IA](https://www.luiguiherrera.com/informes/segundo-informe-septiembre-2026#ia-tecnologia).
+
+- **USD / COP: factores regionales:** [Ver Alianza](https://www.alianza.com.co/).
+
 ## Fuentes y metodología
 
 ### A. Material institucional aportado por el editor
@@ -621,9 +655,6 @@ Seguimiento condicional · 2026-09-21. Lectura editorial; datos automáticos con
 - [[B10] EIA · Europe Brent Spot Price FOB · observación 15/09](https://www.eia.gov/dnav/pet/hist/RBRTED.htm)
 - [[B11] EIA · Cushing WTI Spot Price FOB · observación 15/09](https://www.eia.gov/dnav/pet/hist/RWTCd.htm)
 - [[B12] Baltic Exchange · Tanker report, week 38 · 18/09/2026](https://www.balticexchange.com/en/data-services/WeeklyRoundup/tanker/news/2026/tanker-report-week-38.html)
-
-### B. Fuentes oficiales y públicas · continuación
-
 - [[B13] Goldman Sachs Research · The S&P 500 Is Forecast to Climb as Earnings Growth Powers Stocks Higher · 28/05/2026](https://www.goldmansachs.com/insights/articles/s-and-p-500-forecast-to-climb-as-earnings-growth-powers-stocks-higher)
 - [[B14] S&P DJI · S&P U.S. Indices Methodology](https://www.spglobal.com/spdji/en/methodology/article/sp-us-indices-methodology/)
 - [[B15] River / Sam Baker · The Case for a 10% Bitcoin Allocation · 02/09/2026](https://river.com/content/the-case-for-a-10-bitcoin-allocation)

@@ -118,7 +118,7 @@ function renderHistoricalHtml(section: Extract<ReportExportSection, { kind: "his
     ${snapshot.closingLabel ? `<p>${esc(snapshot.closingLabel)}</p><p class="historical-note">${esc(snapshot.sourceNote ?? '')}</p>` : ''}
     <p class="historical-note">Corte de esta edición: <strong>${snapshot.dataDate}</strong>. Cada módulo conserva la última fecha disponible de su fuente.</p>
     ${comparison ? `<h3>${esc(comparison.title)}</h3>${htmlTable(['Métrica', comparison.fromLabel, comparison.toLabel], comparison.rows.map(row => [row.metric, row.before, row.after]))}<p>${esc(comparison.message)}</p><p>${esc(comparison.interpretation)}</p><p class="historical-note">${esc(comparison.methodology)}</p>` : ''}<h3>Régimen al corte</h3>
-    ${htmlTable(
+    ${regime.score === null && regime.confidence === null ? `<h4>Régimen V1 no publicado</h4><p>No existe evidencia suficiente para reconstruir el estado exacto del motor al cierre del ${snapshot.dataDate.slice(8, 10)}/${snapshot.dataDate.slice(5, 7)}.</p><details><summary>Ver límite metodológico</summary><p>${esc(regime.interpretation)}</p></details>` : htmlTable(
       ["Campo", "Valor"],
       [
         ["Régimen", regime.label],
@@ -358,7 +358,7 @@ function renderMonthlyCalendarHtml(items: Extract<ReportExportSection, { kind: "
   const year = model.presentation?.year ?? Number(model.publishedAt.slice(0, 4));
   const month = model.presentation?.month ?? Number(model.publishedAt.slice(5, 7));
   const title = model.presentation?.localizedTitle ?? new Intl.DateTimeFormat(model.presentation?.locale ?? "es-ES", { month: "long", year: "numeric", timeZone: "UTC" }).format(new Date(Date.UTC(year, month - 1, 1)));
-  const days = getMonthGrid(year, month);
+  const days = getMonthGrid(year, month, model.presentation);
   return `<div class="month-calendar" aria-label="Calendario de ${esc(title)}">
     ${["Lun", "Mar", "Mié", "Jue", "Vie", "Sáb", "Dom"].map((day) => `<div class="month-calendar__weekday">${day}</div>`).join("")}
     ${days.map((day) => {
@@ -456,7 +456,7 @@ function renderSectionHtml(section: ReportExportSection, model: ReportExportMode
     case "asset-readings":
       body = section.items
         .map(
-          (item) => `<article class="asset">
+          (item) => `<article class="asset"${item.id ? ` id="${esc(item.id)}"` : ""}>
             <p class="eyebrow">${esc(item.asset)} · ${esc(item.badge)}</p>
             <h3>${esc(item.headline)}</h3>
             ${htmlTable(
@@ -516,7 +516,7 @@ function renderSectionHtml(section: ReportExportSection, model: ReportExportMode
         const first = section.items[0];
         // Later editorial references remain visible beside the frozen compact checklist.
         const revisedReferences = section.items.filter(item => item.asOf && item.asOf > (model.editorialCutoffAt ?? model.publishedAt) && item.href && item.linkLabel);
-        body = `<p>${esc(first.statusLabel)} · ${esc(first.asOf)}. ${esc(first.source)}</p>${htmlTable(["Factor", "Qué mira", "Qué cambiaría la lectura"], section.items.map(item=>[item.name, item.whatLooksAt, item.whatWouldChange ?? item.whyItMatters]))}${revisedReferences.map(item => `<p><strong>${esc(item.name)}:</strong> <a href="${esc(item.href)}" target="_blank" rel="noopener noreferrer">${esc(item.linkLabel)} ↗</a><br>${esc(item.source)} · Actualización editorial: ${esc(item.asOf)}.</p>`).join("")}`;
+        body = `<p>${esc(first.statusLabel)} · ${esc(first.asOf)}. ${esc(first.source)}</p>${htmlTable(["Factor", "Qué mira", "Qué cambiaría la lectura"], section.items.map(item=>[item.name, item.whatLooksAt, item.whatWouldChange ?? item.whyItMatters]))}${section.items.filter(item => (item.href ?? item.reference?.href) && !revisedReferences.includes(item)).map(item => `<p><strong>${esc(item.name)}:</strong> <a href="${esc((item.href ?? item.reference!.href).startsWith("#") ? model.canonicalUrl + (item.href ?? item.reference!.href) : absoluteUrl(item.href ?? item.reference!.href))}">${esc(item.linkLabel ?? item.reference!.label)}</a></p>`).join("")}${revisedReferences.map(item => `<p><strong>${esc(item.name)}:</strong> <a href="${esc(item.href)}" target="_blank" rel="noopener noreferrer">${esc(item.linkLabel)} ↗</a><br>${esc(item.source)} · Actualización editorial: ${esc(item.asOf)}.</p>`).join("")}`;
         break;
       }
       body = model.presentation?.watchlistStyle === "dashboard" ? renderWatchlistDashboardHtml(section.items, model) : section.items
@@ -611,13 +611,17 @@ ${comparison.methodology}
 
 ` : ''}### Régimen al corte
 
-| Campo | Valor |
+${snapshot.regime.score === null && snapshot.regime.confidence === null ? `**Régimen V1 no publicado**
+
+No existe evidencia suficiente para reconstruir el estado exacto del motor al cierre del ${snapshot.dataDate.slice(8, 10)}/${snapshot.dataDate.slice(5, 7)}.
+
+**Ver límite metodológico:** ${snapshot.regime.interpretation}` : `| Campo | Valor |
 |---|---|
 | Régimen | ${snapshot.regime.label} |
 | Puntuación | ${snapshot.regime.score === null ? "No publicada" : `${snapshot.regime.score}/100`} |
 | Confianza | ${snapshot.regime.confidence === null ? "No publicada" : `${snapshot.regime.confidence}%`} |
 | Sesgo | ${snapshot.regime.bias} |
-| Interpretación histórica | ${snapshot.regime.interpretation} |
+| Interpretación histórica | ${snapshot.regime.interpretation} |`}
 
 #### Qué impulsó
 
@@ -821,7 +825,7 @@ ${section.scenarios.length ? `### Escenarios\n\n${section.scenarios.map((item) =
       if (model.presentation?.contextStyle === "prose") {
         const first = section.items[0];
         const revisedReferences = section.items.filter(item => item.asOf && item.asOf > (model.editorialCutoffAt ?? model.publishedAt) && item.href && item.linkLabel);
-        return `${heading}\n\n${first.statusLabel} · ${first.asOf}. ${first.source}\n\n| Factor | Qué mira | Qué cambiaría la lectura |\n|---|---|---|\n${section.items.map(item=>`| ${item.name} | ${item.whatLooksAt} | ${item.whatWouldChange} |`).join("\n")}${revisedReferences.map(item => `\n\n- **${item.name}:** [${item.linkLabel}](${item.href}). ${item.source} Actualización editorial: ${item.asOf}.`).join("")}`;
+        return `${heading}\n\n${first.statusLabel} · ${first.asOf}. ${first.source}\n\n| Factor | Qué mira | Qué cambiaría la lectura |\n|---|---|---|\n${section.items.map(item=>`| ${item.name} | ${item.whatLooksAt} | ${item.whatWouldChange} |`).join("\n")}${section.items.filter(item => (item.href ?? item.reference?.href) && !revisedReferences.includes(item)).map(item => `\n\n- **${item.name}:** [${item.linkLabel ?? item.reference!.label}](${(item.href ?? item.reference!.href).startsWith("#") ? model.canonicalUrl + (item.href ?? item.reference!.href) : absoluteUrl(item.href ?? item.reference!.href)}).`).join("")}${revisedReferences.map(item => `\n\n- **${item.name}:** [${item.linkLabel}](${item.href}). ${item.source} Actualización editorial: ${item.asOf}.`).join("")}`;
       }
       return `${heading}\n\n${section.items
         .map((item) => {
@@ -1272,9 +1276,7 @@ function substantiveNeedles(section: ReportExportSection, model: ReportExportMod
       if (snapshot.closingLabel) values.push(snapshot.closingLabel, snapshot.sourceNote ?? "");
       values.push(
         snapshot.dataDate,
-        snapshot.regime.label,
-        snapshot.regime.score === null ? "No publicada" : `${snapshot.regime.score}/100`,
-        snapshot.regime.confidence === null ? "No publicada" : `${snapshot.regime.confidence}%`,
+        ...(snapshot.regime.score === null && snapshot.regime.confidence === null ? ["Régimen V1 no publicado", "Ver límite metodológico"] : [snapshot.regime.label, `${snapshot.regime.score}/100`, `${snapshot.regime.confidence}%`]),
         snapshot.regime.interpretation,
         ...snapshot.regime.support,
         ...snapshot.regime.caution,

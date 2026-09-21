@@ -1,6 +1,7 @@
 import { ReportQuantitativePanels } from "@/components/reports/ReportQuantitativePanels";
 import Link from "next/link";
 import { EditorialByline } from "@/components/editorial/EditorialByline";
+import { ReportAssetAnchors } from "@/components/reports/ReportAssetAnchors";
 import { AutomaticMarketReadings } from "@/components/reports/AutomaticMarketReadings";
 import { ReportFigure } from "@/components/reports/ReportFigure";
 import { ReportMonthlyCalendar } from "@/components/reports/ReportMonthlyCalendar";
@@ -169,7 +170,7 @@ export function MarketReportContent({
       </section>
 
       {automaticReadings ? (
-        <AutomaticMarketReadings mode="historical" snapshot={automaticReadings} />
+        <AutomaticMarketReadings mode="historical" snapshot={automaticReadings} layout={report.presentation?.marketReadingsLayout} />
       ) : null}
 
       <section id="lectura-seguimiento" className="grid scroll-mt-24 gap-6 border-y border-line py-8 md:py-10 lg:grid-cols-[0.34fr_1fr]">
@@ -178,8 +179,9 @@ export function MarketReportContent({
           <h2 className="mt-2 text-2xl font-semibold leading-tight text-ink md:text-3xl">{assetSectionTitle}</h2>
         </div>
         <div className="grid gap-4">
+          {report.assetReadings.some(asset => asset.id) ? <ReportAssetAnchors /> : null}
           {report.assetReadings.map((asset) => (
-            <details key={asset.asset} className="group border border-line bg-panel open:border-petrol/45 open:shadow-[0_16px_36px_rgba(31,35,40,0.06)]">
+            <details key={asset.asset} id={asset.id} className="group scroll-mt-24 border border-line bg-panel open:border-petrol/45 open:shadow-[0_16px_36px_rgba(31,35,40,0.06)]">
               <summary className="grid cursor-pointer list-none gap-3 px-5 py-4 marker:hidden md:grid-cols-[0.24fr_1fr_auto_auto] md:items-center">
                 <h3 className="text-lg font-semibold text-ink">{asset.asset}</h3>
                 <p className="text-sm leading-6 text-muted">{asset.headline}</p>

@@ -24,132 +24,168 @@ const event = (date: string, title: string, why: string): MarketReportCalendarIt
   dateConfirmationStatus: 'confirmed', sourceLabel: 'Bureau of Economic Analysis · calendario consultado el 21/09/2026',
   sourceHref: bea, trackingHref: bea, trackingLabel: 'Consultar fuente oficial', affectedAssets: ['S&P 500', 'Oro', 'BTC / ETH', 'Dólar'],
 });
-const watch: Array<[string, string, string, string, MarketReportWatchItem['category']]> = [
+const watch: Array<[string, string, string, string, MarketReportWatchItem['category'], string, string]> = [
   [
     "breadth",
     "Amplitud del S&P",
     "Sectores positivos y sectores sobre su media de 200 sesiones.",
     "Una recuperación sostenida desde 2/11 y 4/11 reforzaría el respaldo interno.",
-    "market-structure"
+    "market-structure",
+    "/dashboard",
+    "Ver Dashboard"
   ],
   [
     "rsp",
     "RSP / SPY",
     "Participación del S&P equiponderado frente al ponderado por capitalización.",
     "Que RSP deje de rezagarse reduciría la dependencia de las mayores compañías.",
-    "market-structure"
+    "market-structure",
+    "/dashboard",
+    "Ver Dashboard"
   ],
   [
     "iwm",
     "IWM / SPY",
     "Pequeñas compañías frente a las grandes.",
     "Una mejora relativa persistente confirmaría que la recuperación alcanza empresas más sensibles a financiación.",
-    "market-structure"
+    "market-structure",
+    "/dashboard",
+    "Ver Dashboard"
   ],
   [
     "ust10",
     "Treasury 10Y",
     "Nivel y velocidad de cambio del rendimiento a diez años.",
     "Estabilidad aliviaría valoración; un salto rápido exigiría más beneficios para sostener precios.",
-    "rates-credit"
+    "rates-credit",
+    "https://www.federalreserve.gov/releases/h15/",
+    "Ver Fed H.15"
   ],
   [
     "ust30",
     "Treasury 30Y",
     "Demanda por duración y rendimiento a treinta años.",
     "Un aumento desacoplado del tramo corto apuntaría a más presión sobre financiación de largo plazo.",
-    "rates-credit"
+    "rates-credit",
+    "https://www.federalreserve.gov/releases/h15/",
+    "Ver Fed H.15"
   ],
   [
     "move",
     "MOVE",
     "Volatilidad implícita de los bonos del Tesoro.",
     "Un salto junto con yields y pérdidas de amplitud convertiría el coste del dinero en una tensión más inmediata.",
-    "rates-credit"
+    "rates-credit",
+    "#fuentes-y-aviso",
+    "Ver fuente y metodología"
   ],
   [
     "credit",
     "Crédito corporativo",
     "Diferencial exigido a empresas frente al Treasury comparable.",
     "Una ampliación persistente indicaría que la presión ya afecta al riesgo de financiación empresarial.",
-    "rates-credit"
+    "rates-credit",
+    "https://fred.stlouisfed.org/series/BAMLH0A0HYM2",
+    "Ver spread High Yield en FRED"
   ],
   [
     "energy",
     "Petróleo y transporte",
     "Brent, WTI, rutas disponibles y fletes de petroleros.",
     "Menores costes de entrega aliviarían inflación; barril y transporte al alza prolongarían la presión.",
-    "fx-commodities"
+    "fx-commodities",
+    "https://www.eia.gov/outlooks/steo/",
+    "Ver perspectivas de energía EIA"
   ],
   [
     "dxy",
     "DXY",
     "Fortaleza del dólar frente a su cesta de divisas.",
     "Una aceleración simultánea con yields endurecería el entorno de oro, Asia y cripto.",
-    "fx-commodities"
+    "fx-commodities",
+    "#usd-cop",
+    "Ver contexto del dólar"
   ],
   [
     "gold",
     "GLD y demanda de oro",
     "Participaciones de GLD y toneladas de ETF globales, con sus fechas distintas.",
     "Demanda persistente durante caídas apoyaría la lectura; salidas sostenidas la debilitarían.",
-    "fx-commodities"
+    "fx-commodities",
+    "https://www.gold.org/goldhub/research/gold-etfs-holdings-and-flows/2026/09",
+    "Ver World Gold Council"
   ],
   [
     "china",
     "China: consumidor e inmobiliario",
     "Precios reales residenciales y transmisión al gasto doméstico.",
     "Estabilización inmobiliaria acompañada de consumo más firme daría contenido a la tesis de valoración.",
-    "macro-global"
+    "macro-global",
+    "https://fred.stlouisfed.org/series/QCNR628BIS",
+    "Ver datos FRED/BIS"
   ],
   [
     "japan",
     "BOJ, yen y JGB",
     "Aplicación de la decisión del BOJ, divisa y bonos japoneses.",
     "Un ajuste brusco de yen o JGB elevaría el riesgo de transmisión a exportadores y financiación global.",
-    "macro-global"
+    "macro-global",
+    "https://www.boj.or.jp/en/mopo/mpmdeci/mpr_2026/k260918a.pdf",
+    "Ver BOJ"
   ],
   [
     "btcflows",
     "Flujos ETF de Bitcoin",
     "Saldo de cinco sesiones completas y continuidad de entradas.",
     "Entradas repartidas en más sesiones darían más respaldo que un cierre semanal apenas positivo.",
-    "crypto"
+    "crypto",
+    "https://farside.co.uk/bitcoin-etf-flow-all-data/",
+    "Ver Farside"
   ],
   [
     "ethbtc",
     "ETH / BTC",
     "Cociente de cierres diarios UTC en la misma fuente.",
     "Fortaleza relativa sostenida, junto con liquidez, apoyaría una ampliación del rally cripto.",
-    "crypto"
+    "crypto",
+    "#ethereum",
+    "Ver bloque de Ethereum"
   ],
   [
     "semis",
     "Semiconductores y concentración de posiciones",
     "Liderazgo relativo y exposición muy concurrida según BofA.",
     "Resultados fuertes con participación más amplia reducirían vulnerabilidad; pérdida de líderes la aumentaría.",
-    "technology-ai"
+    "technology-ai",
+    "#fuentes-y-aviso",
+    "Ver fuente y metodología"
   ],
   [
     "capex",
     "CAPEX de IA frente a FCF",
     "Inversión de capital frente al flujo de caja libre y necesidad de deuda.",
     "Más inversión financiada con caja y retornos observables reforzaría la sostenibilidad del ciclo.",
-    "technology-ai"
+    "technology-ai",
+    "#ia-tecnologia",
+    "Ver bloque de IA"
   ],
   [
     "software",
     "Monetización del software",
     "Uso convertido en ingresos, FCF por acción e ingresos por empleado.",
     "Mejor caja por acción sin depender de dilución distinguiría adopción tecnológica de creación de valor.",
-    "technology-ai"
+    "technology-ai",
+    "#ia-tecnologia",
+    "Ver bloque de IA"
   ],
   [
     "cop",
     "USD / COP: factores regionales",
     "Prima fiscal, instituciones, petróleo, tasas de BanRep y apetito por LatAm.",
     "Mejoras locales con entorno externo favorable reducirían presión; deterioro simultáneo la elevaría.",
-    "macro-global"
+    "macro-global",
+    "https://www.alianza.com.co/",
+    "Ver Alianza"
   ]
 ];
 
@@ -167,6 +203,8 @@ export const secondSeptember2026Report: MarketReport = freeze({
   pdfHref: `/reports/${reportId}.pdf`,
   presentation: {
     assetReadingsStartNewPage: true,
+    marketReadingsLayout: "vix-flows",
+    calendarView: "remaining", calendarStartDate: "2026-09-21",
     contextTitle: 'Contexto general', contextStyle: 'prose', openingLine: 'El índice cambió poco; la calidad interna del mercado se deterioró.',
     prospectivePeriod: 'Desde el 21 de septiembre de 2026 hasta la siguiente publicación del informe.', calendarStyle: 'monthly',
     sectionTitles: { assetReadings: 'Lectura por activo', calendar: 'Calendario de eventos', watchlist: 'Lista de control', sources: 'Fuentes y metodología' },
@@ -195,7 +233,7 @@ export const secondSeptember2026Report: MarketReport = freeze({
   }
 ],
   assetReadings: [
-    { asset: 'S&P 500', headline: "El índice aguanta con menos mercado detrás", badge: "bonos, beneficios y amplitud",
+    { id: 'sp500', asset: 'S&P 500', headline: "El índice aguanta con menos mercado detrás", badge: "bonos, beneficios y amplitud",
       story: "SPY cerró en 761,69 USD. Entre las dos ventanas, la desventaja de RSP frente a SPY pasa de −0,88 a −1,11 puntos porcentuales; la de IWM, de −0,02 a −1,31. QQQ amplía su ventaja de +0,24 a +1,01. RSP da igual peso a las compañías; IWM sigue pequeñas empresas. El contraste muestra dónde falta participación. Los recuentos sobre MA200 son sectoriales: no describen el porcentaje de las 500 compañías. [C1]",
       changed: "AAII ofrece otro contraste: en la semana terminada el 16/09, el 53,3 % de los encuestados era bajista, el 28,8 % alcista y el 17,9 % neutral. El pesimismo del inversor individual es mayor de lo que sugiere el índice; no basta para inferir una señal de compra. [B3]",
       expected: "Detrick mantuvo una lectura constructiva tras la subida de la Fed del 16/09. Es una opinión externa; aquí la confirmación exige que RSP e IWM dejen de rezagarse y que MOVE, la volatilidad implícita de los bonos del Tesoro, no señale un ajuste desordenado. [B20]",
@@ -213,22 +251,22 @@ export const secondSeptember2026Report: MarketReport = freeze({
         notes: ['Detrick señaló el 31/08 la debilidad histórica de septiembre, pero consideró que 2026 podía apartarse de ella. Esa opinión no sustituye nuestras muestras: octubre y noviembre son cálculos propios de Statistical Levels, no cifras de Carson. [B19]', SEASONALITY_DISCLAIMER],
       }],
     },
-    { asset: 'Oro', headline: "Demanda persistente, precio en extensión alta", badge: "ETF, dólar y yields reales",
+    { id: 'oro', asset: 'Oro', headline: "Demanda persistente, precio en extensión alta", badge: "ETF, dólar y yields reales",
       story: "GLD cerró en 401,17 USD, por encima de WAHE (398,23) y cerca de WSHE (404,19): una extensión estadística alta desde la apertura semanal. Sus participaciones aumentaron aproximadamente un 0,93 % en cinco sesiones. Ese indicador indirecto de demanda no equivale a entradas monetarias oficiales. [C1–C2]",
       changed: "El World Gold Council aporta una escala distinta: agosto sumó 18.000 millones de dólares y 121 toneladas en ETF globales de oro, hasta un récord de 4.189 toneladas. La demanda persistió durante las correcciones. Son datos mensuales hasta el 31/08; no se suman al cambio semanal de GLD. [B4]",
       expected: "La siguiente prueba es si las tenencias resisten una corrección con dólar firme y rendimientos reales —descontada la inflación— elevados. Ventas persistentes de los fondos debilitarían la lectura de demanda; estabilidad de sus posiciones la sostendría.", quantitativePanels: quant('GLD'),
     },
-    { asset: 'China', headline: "Lo barato sigue necesitando confirmación", badge: "riqueza doméstica y consumo",
+    { id: 'china', asset: 'China', headline: "Lo barato sigue necesitando confirmación", badge: "riqueza doméstica y consumo",
       story: "FXI cerró en 34,32 USD. La tesis del Primer Informe sigue abierta: el descuento de valoración necesita traducirse en demanda interna. La serie BIS publicada por FRED sitúa los precios residenciales reales en 85,13 en el primer trimestre de 2026, frente a 91,61 un año antes (2010=100). Es una referencia trimestral de debilidad inmobiliaria, no un dato de septiembre. [B5]",
       changed: "La vivienda añade una restricción concreta a la tesis de valoración: su caída puede debilitar la riqueza percibida y llevar a los hogares a aplazar gasto. Esa transmisión doméstica merece más atención que una posible rotación global hacia Asia.",
       expected: "La señal útil sería una estabilización inmobiliaria acompañada de mayor gasto de los hogares. Un repunte aislado de FXI no resolvería esa prueba.", quantitativePanels: quant('FXI'),
     },
-    { asset: 'Japón', headline: "El BOJ confirma otro paso de normalización", badge: "decisión, yen y JGB",
+    { id: 'japon', asset: 'Japón', headline: "El BOJ confirma otro paso de normalización", badge: "decisión, yen y JGB",
       story: "El 18/09 el Banco de Japón decidió elevar el tipo del mercado monetario a alrededor del 1,25 %, desde el 1,00 %, con efecto el 24/09. El aumento de 25 puntos básicos fue aprobado por siete votos contra dos. EWJ cerró el 18/09 en 97,00 USD. La reunión ya es un hecho; la aplicación del nuevo tipo es posterior al corte de mercado. [B6]",
       changed: "La pregunta ya no es qué decidirá el BOJ, sino cómo absorberán su aplicación los JGB —bonos del Gobierno japonés— y el yen. La deuda que se refinancie y la conversión de beneficios al exterior son dos canales a vigilar; no se atribuye aquí una reacción de mercado no verificada.",
       expected: "Tras el 24/09, conviene separar la respuesta de la bolsa local de su conversión a dólares en EWJ. Una dislocación simultánea de bonos y divisa exigiría revisar la lectura, aunque el ETF por sí solo pareciera estable.", quantitativePanels: quant('EWJ'),
     },
-    { asset: 'Bitcoin', headline: "Precio, flujos y calendario cuentan historias distintas", badge: "tres lentes de corto plazo",
+    { id: 'bitcoin', asset: 'Bitcoin', headline: "Precio, flujos y calendario cuentan historias distintas", badge: "tres lentes de corto plazo",
       story: "Precio: Bitcoin cerró el día UTC del 18/09 en 80.901,46 USD, cerca de WAHE (82.260,60). El cierre se sitúa en la parte alta del recorrido semanal medio; esa proximidad no convierte la extensión en resistencia ni asegura continuidad. [C2]",
       changed: "Flujos: Farside registra +6,1 millones de dólares del 14 al 18/09, frente a +986,7 millones en las cinco sesiones del Primer Informe. Jueves y viernes devolvieron el saldo a terreno apenas positivo. La mejora final no reproduce la acumulación de comienzos de mes. [B7]",
       expected: "Estacionalidad: las tablas Midterm y 2020–2025 responden a muestras distintas. Octubre ofrece un antecedente favorable, pero seis observaciones no prueban un patrón robusto. La referencia River usa años, no semanas, y no justifica una lectura táctica del precio.",
@@ -245,7 +283,7 @@ export const secondSeptember2026Report: MarketReport = freeze({
         notes: ['River parte de entradas acumuladas de 1,3–5,3 billones de dólares y supone que cada dólar de entrada añade tres dólares a la capitalización. El rango depende de esos supuestos y de la continuidad de relaciones históricas; no es un intervalo de confianza, una predicción propia ni una fecha objetivo única en 2031.'],
       }],
     },
-    { asset: 'Ethereum', headline: "¿Se amplía el rally más allá de Bitcoin?", badge: "recuperación sin confirmación sostenida",
+    { id: 'ethereum', asset: 'Ethereum', headline: "¿Se amplía el rally más allá de Bitcoin?", badge: "recuperación sin confirmación sostenida",
       story: "Ethereum cerró en 2.611,35 USD, cerca de WAHE (2.691,48). El rebote en dólares necesita contrastarse con BTC para saber si cripto está ganando participación más allá de su principal activo. [C2]",
       changed: "ETH/BTC gana un 4,71 % entre el 04 y el 18/09, pero cede un 0,94 % en la última semana. Los cierres UTC homogéneos de la tabla muestran una recuperación entre cortes que todavía no es sostenida. [C4]",
       expected: "La prueba será encadenar fortaleza relativa en ETH/BTC, con liquidez suficiente. Si el cociente vuelve a caer mientras ETH sube en dólares, el rebote no confirmará una ampliación del rally.", quantitativePanels: [...quant('ETHUSD'), {
@@ -254,7 +292,7 @@ export const secondSeptember2026Report: MarketReport = freeze({
         notes: ['Variaciones calculadas antes del redondeo: +4,71 % entre el 04 y el 18/09; −0,94 % entre el 11 y el 18/09. No equivale a flujos ni a actividad de red.'],
       }],
     },
-    { asset: 'IA / Tecnología', headline: "Liderazgo fuerte, una exigencia mayor de caja", badge: "bloque especial",
+    { id: 'ia-tecnologia', asset: 'IA / Tecnología', headline: "Liderazgo fuerte, una exigencia mayor de caja", badge: "bloque especial",
       story: "BofA septiembre sigue señalando las posiciones compradoras en semiconductores globales como una operación muy concurrida. Ese crowding —muchos inversores en la misma posición— hace que buenos resultados y vulnerabilidad a ventas simultáneas puedan coexistir. La ventaja relativa de QQQ no elimina ese riesgo. [A1, C1]",
       changed: "La hipótesis de software de J.P. Morgan del 19/08 sigue abierta. Esta edición concreta cómo contrastarla: CAPEX —inversión en equipos e infraestructura— financiable y más uso convertido en flujo de caja libre (FCF) por acción. La tabla distingue adopción de creación de valor. [A2]",
       expected: "Indeed Hiring Lab encuentra mayor crecimiento del salario anunciado en ocupaciones expuestas a IA, en parte por vacantes de mayor nivel. La asociación es compatible con una prima para trabajos complementarios a la tecnología; no prueba causalidad ni salarios efectivamente pagados. Monetizar IA también puede exigir más gasto laboral. [B8]",
@@ -269,12 +307,12 @@ export const secondSeptember2026Report: MarketReport = freeze({
         ], notes: ['Rule of 40 usa 40 puntos como referencia de suma, no como garantía de valor. No se asigna un peso universal a Rule of X ni se calcula un ranking sin metodología homogénea.'],
       }],
     },
-    { asset: 'Energía / petróleo', headline: "El shock no termina en el precio del barril", badge: "oferta física, fletes e inflación",
+    { id: 'energia-petroleo', asset: 'Energía / petróleo', headline: "El shock no termina en el precio del barril", badge: "oferta física, fletes e inflación",
       story: "La EIA incorpora las interrupciones de Oriente Medio y las restricciones de Hormuz a su escenario de septiembre. En sus series spot, la última observación disponible es el 15/09: Brent 130,80 USD/barril y WTI 107,02. Son precios físicos, no futuros ni cierres del 18/09. [B9–B11]",
       changed: "Baltic Exchange documenta el 18/09 nuevos aumentos de fletes de grandes petroleros hacia China. El shock encarece tanto el crudo como su entrega. Mirar solo el barril deja fuera una parte del coste que llega a empresas y consumidores. [B12]",
       expected: "El canal para este informe es guerra e interrupciones → barril y transporte → inflación → Fed y yields → valoración bursátil. Si persiste, presiona márgenes y dificulta el alivio monetario. Normalizar rutas y fletes reduciría esa presión, sin garantizar un giro de la Fed.",
     },
-    { asset: 'USD/COP', headline: "La prima local también necesita confirmación", badge: "recuadro regional",
+    { id: 'usd-cop', asset: 'USD/COP', headline: "La prima local también necesita confirmación", badge: "recuadro regional",
       story: "Alianza Research / Alianza Valores y Felipe Campos quedan como referencias de seguimiento. El marco separa tres etapas del ciclo político: expectativas preelectorales, reacción al resultado y evaluación del gobierno. Son etapas analíticas, no tres eventos pendientes ni una predicción electoral. [A3]",
       changed: "El petróleo puede aumentar el ingreso exportador mientras un shock global fortalece el dólar y reduce el apetito por LatAm. La prima fiscal e institucional y las tasas del Banco de la República condicionan cuál de esas fuerzas pesa más sobre USD/COP.",
       expected: "Menor incertidumbre fiscal e institucional, con condiciones externas favorables, podría reducir la prima exigida al peso. Tensiones locales y dólar fuerte podrían elevarla. El marco no asigna rangos, preferencias políticas ni un resultado electoral.",
@@ -290,7 +328,7 @@ export const secondSeptember2026Report: MarketReport = freeze({
     { title: 'Ruta favorable · Vuelve la participación', body: 'RSP e IWM recuperan participación, los flujos se reparten y petróleo y transporte dejan de añadir inflación. Con rendimientos estables o descendentes, el avance necesitaría menos compensación de unas pocas compañías.' },
     { title: 'Ruta adversa · Fallan amplitud y líderes', body: 'Un salto de yields y MOVE coincide con crédito más caro y otra aceleración energética. Los rezagados siguen cayendo y también fallan los líderes tecnológicos. El deterioro interno pasa a afectar al índice agregado.' },
   ] },
-  watchlist: watch.map(([key, name, whatLooksAt, whatWouldChange, category]) => ({ key, name, whatLooksAt, whatWouldChange, category, status: 'watch', statusLabel: 'Seguimiento condicional', whyItMatters: whatWouldChange, currentReading: whatLooksAt, asOf: '2026-09-21', source: 'Lectura editorial; datos automáticos congelados al 18/09 con las salvedades documentadas.' })),
+  watchlist: watch.map(([key, name, whatLooksAt, whatWouldChange, category, href, linkLabel]) => ({ key, href, linkLabel, name, whatLooksAt, whatWouldChange, category, status: 'watch', statusLabel: 'Seguimiento condicional', whyItMatters: whatWouldChange, currentReading: whatLooksAt, asOf: '2026-09-21', source: 'Lectura editorial; datos automáticos congelados al 18/09 con las salvedades documentadas.' })),
   sourceGroups: [
     { title: 'A. Material institucional aportado por el editor', entries: [
       { label: '[A1] BofA · Global Fund Manager Survey · septiembre de 2026', note: 'Encuesta 4–10/09. Riesgos, semiconductores, exposición a acciones y efectivo: material aportado por el editor, sin extrapolar agosto.' },
@@ -311,8 +349,6 @@ export const secondSeptember2026Report: MarketReport = freeze({
       { label: '[B10] EIA · Europe Brent Spot Price FOB · observación 15/09', href: 'https://www.eia.gov/dnav/pet/hist/RBRTED.htm' },
       { label: '[B11] EIA · Cushing WTI Spot Price FOB · observación 15/09', href: 'https://www.eia.gov/dnav/pet/hist/RWTCd.htm' },
       { label: '[B12] Baltic Exchange · Tanker report, week 38 · 18/09/2026', href: 'https://www.balticexchange.com/en/data-services/WeeklyRoundup/tanker/news/2026/tanker-report-week-38.html' },
-    ] },
-    { title: 'B. Fuentes oficiales y públicas · continuación', entries: [
       { label: '[B13] Goldman Sachs Research · The S&P 500 Is Forecast to Climb as Earnings Growth Powers Stocks Higher · 28/05/2026', href: 'https://www.goldmansachs.com/insights/articles/s-and-p-500-forecast-to-climb-as-earnings-growth-powers-stocks-higher' },
       { label: '[B14] S&P DJI · S&P U.S. Indices Methodology', href: 'https://www.spglobal.com/spdji/en/methodology/article/sp-us-indices-methodology/' },
       { label: '[B15] River / Sam Baker · The Case for a 10% Bitcoin Allocation · 02/09/2026', href: 'https://river.com/content/the-case-for-a-10-bitcoin-allocation' },
