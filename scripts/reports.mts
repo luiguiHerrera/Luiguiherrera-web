@@ -7,6 +7,7 @@ import os from "node:os";
 import path from "node:path";
 import {
   buildAllReportExportModels,
+  buildReportExportModel,
   REPORT_EXPORT_AUTHOR,
   REPORT_EXPORT_SCHEMA_VERSION,
   REPORT_SITE_URL,
@@ -101,7 +102,7 @@ function renderMetadataHtml(model: ReportExportModel) {
     ["Actualización", model.modifiedAt],
     ["Corte editorial", model.editorialCutoffAt ?? "No aplica"],
     ["Corte de datos de mercado", model.automaticDataCutoffAt ?? "No aplica"],
-    ["URL editorial primaria", `<a href="${model.canonicalUrl}">${model.canonicalUrl}</a>`],
+    [model.status === "borrador" ? "URL prevista · sin publicar" : "URL editorial primaria", `<a href="${model.canonicalUrl}">${model.canonicalUrl}</a>`],
   ];
   return `<dl class="metadata">${rows
     .map(([label, value]) => `<div><dt>${label}</dt><dd>${value}</dd></div>`)
@@ -112,10 +113,11 @@ function renderHistoricalHtml(section: Extract<ReportExportSection, { kind: "his
   const snapshot = section.snapshot;
   const regime = snapshot.regime;
   const review = snapshot.weeklyReview;
+  const comparison = snapshot.cutoffComparison;
   return `
     ${snapshot.closingLabel ? `<p>${esc(snapshot.closingLabel)}</p><p class="historical-note">${esc(snapshot.sourceNote ?? '')}</p>` : ''}
     <p class="historical-note">Corte de esta edición: <strong>${snapshot.dataDate}</strong>. Cada módulo conserva la última fecha disponible de su fuente.</p>
-    <h3>Régimen al corte</h3>
+    ${comparison ? `<h3>${esc(comparison.title)}</h3>${htmlTable(['Métrica', comparison.fromLabel, comparison.toLabel], comparison.rows.map(row => [row.metric, row.before, row.after]))}<p>${esc(comparison.message)}</p><p>${esc(comparison.interpretation)}</p><p class="historical-note">${esc(comparison.methodology)}</p>` : ''}<h3>Régimen al corte</h3>
     ${htmlTable(
       ["Campo", "Valor"],
       [
@@ -152,7 +154,7 @@ function renderHistoricalHtml(section: Extract<ReportExportSection, { kind: "his
       [
         ["Sectores positivos", `${snapshot.sectors.positiveCount} / ${snapshot.sectors.totalCount}`],
         ["Sectores negativos", String(snapshot.sectors.negativeCount)],
-        ["Dispersión 1W", `${formatSigned(snapshot.sectors.dispersion1w)}%`],
+        ["Dispersión 1W", `${formatSigned(snapshot.sectors.dispersion1w)}${snapshot.dispersionUnit === "pp" ? " pp" : "%"}`],
         ["Lectura al publicar", snapshot.sectors.reading],
       ],
     )}
@@ -197,7 +199,7 @@ function renderHistoricalHtml(section: Extract<ReportExportSection, { kind: "his
         ["Volatilidad EWMA", `${formatSigned(snapshot.quantRadar.ewmaVolAnnualized)}%`],
         ["Volatilidad GARCH", `${formatSigned(snapshot.quantRadar.garchVolForecast)}%`],
         ["Correlación promedio", snapshot.quantRadar.averageCorrelation21d.toFixed(2)],
-        ["Dispersión sectorial", `${formatSigned(snapshot.quantRadar.sectorDispersion1w)}%`],
+        ["Dispersión sectorial", `${formatSigned(snapshot.quantRadar.sectorDispersion1w)}${snapshot.dispersionUnit === "pp" ? " pp" : "%"}`],
       ],
     )}` : ""}
     <h3>VIX - Volatilidad al corte</h3>
@@ -565,7 +567,7 @@ function renderHtml(model: ReportExportModel) {
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>${esc(model.editionName)} · ${esc(model.title)} | Luigui Herrera</title>
   <meta name="description" content="${esc(model.description)}">
-  <meta name="author" content="${model.author}">
+  <meta name="author" content="${model.author}">${model.status === "borrador" ? '\n  <meta name="robots" content="noindex, nofollow">' : ""}
   <meta name="date" content="${model.publishedAt}">
   <link rel="canonical" href="${model.canonicalUrl}">
   <style>${reportCss(Boolean(model.presentation?.timelineStyle || model.presentation?.calendarStyle || model.presentation?.watchlistStyle))}</style>
@@ -573,12 +575,12 @@ function renderHtml(model: ReportExportModel) {
 <body>
   <main>
     <header class="cover">
-      <p class="eyebrow">${esc(model.editionName)}</p>
+      <p class="eyebrow">${esc(model.editionName)}</p>${model.status === "borrador" ? '<p><strong>Candidato editorial · sin publicar</strong></p>' : ""}
       <h1>${esc(model.title)}</h1>
       <p class="subtitle">${esc(model.subtitle)}</p>
       ${renderMetadataHtml(model)}
       ${model.presentation?.prospectivePeriod ? `<p>Periodo prospectivo: ${esc(model.presentation.prospectivePeriod)}</p>` : ""}
-      <p class="primary-url">Página editorial primaria: <a href="${model.canonicalUrl}">${model.canonicalUrl}</a></p>
+      <p class="primary-url">${model.status === "borrador" ? "URL prevista · sin publicar" : "Página editorial primaria"}: <a href="${model.canonicalUrl}">${model.canonicalUrl}</a></p>
     </header>
     ${model.sections.map((section) => renderSectionHtml(section, model)).join("\n")}
   </main>
@@ -592,9 +594,22 @@ function renderHistoricalMarkdown(
 ) {
   const snapshot = section.snapshot;
   const review = snapshot.weeklyReview;
+  const comparison = snapshot.cutoffComparison;
   return `${snapshot.closingLabel ? `${snapshot.closingLabel}\n\n${snapshot.sourceNote}\n\n` : ''}Corte de esta edición: **${snapshot.dataDate}**. Cada módulo conserva la última fecha disponible de su fuente.
 
-### Régimen al corte
+${comparison ? `### ${comparison.title}
+
+| Métrica | ${comparison.fromLabel} | ${comparison.toLabel} |
+|---|---|---|
+${comparison.rows.map(row => `| ${row.metric} | ${row.before} | ${row.after} |`).join('\n')}
+
+${comparison.message}
+
+${comparison.interpretation}
+
+${comparison.methodology}
+
+` : ''}### Régimen al corte
 
 | Campo | Valor |
 |---|---|
@@ -651,7 +666,7 @@ ${snapshot.indices
 
 - Sectores positivos: **${snapshot.sectors.positiveCount} / ${snapshot.sectors.totalCount}**
 - Sectores negativos: **${snapshot.sectors.negativeCount}**
-- Dispersión 1W: **${formatSigned(snapshot.sectors.dispersion1w)}%**
+- Dispersión 1W: **${formatSigned(snapshot.sectors.dispersion1w)}${snapshot.dispersionUnit === "pp" ? " pp" : "%"}**
 - Lectura al publicar: ${snapshot.sectors.reading}
 
 | Grupo | Ticker | Nombre | Retorno 1W |
@@ -677,7 +692,7 @@ ${snapshot.breadth ? `### Amplitud relativa al corte
 - Volatilidad EWMA: **${formatSigned(snapshot.quantRadar.ewmaVolAnnualized)}%**
 - Volatilidad GARCH: **${formatSigned(snapshot.quantRadar.garchVolForecast)}%**
 - Correlación promedio: **${snapshot.quantRadar.averageCorrelation21d.toFixed(2)}**
-- Dispersión sectorial: **${formatSigned(snapshot.quantRadar.sectorDispersion1w)}%**
+- Dispersión sectorial: **${formatSigned(snapshot.quantRadar.sectorDispersion1w)}${snapshot.dispersionUnit === "pp" ? " pp" : "%"}**
 
 ` : ""}### VIX - Volatilidad al corte
 
@@ -844,6 +859,7 @@ ${section.disclaimer}`;
 
 function renderMarkdown(model: ReportExportModel) {
   const metadata = [
+    ...(model.status === "borrador" ? ["- Estado: Candidato editorial · sin publicar"] : []),
     `- Edición: ${model.editionName}`,
     `- Autor: ${model.author}`,
     `- Publicación: ${model.publishedAt}`,
@@ -858,7 +874,7 @@ ${model.subtitle}
 
 ${metadata.join("\n")}
 
-> La página editorial indicada arriba es la representación primaria de este informe.
+${model.status === "borrador" ? "> Candidato privado. La URL editorial indicada es la prevista; esta edición no está publicada." : "> La página editorial indicada arriba es la representación primaria de este informe."}
 
 ${model.presentation?.prospectivePeriod ? `Periodo prospectivo: ${model.presentation.prospectivePeriod}\n\n` : ""}${model.sections.map((section) => renderSectionMarkdown(section, model)).join("\n\n")}
 `.replace(/[ \t]+$/gm, "");
@@ -1121,6 +1137,7 @@ function generateInto(outputDir: string, inputLlms: string) {
   const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), "geo01b-models-"));
   try {
     for (const model of models) {
+      assert.notEqual(model.status, "borrador", "Un candidato no puede entrar en el generador público.");
       if (model.status === "archivado") {
         for (const relativeName of [
           `${model.id}.html`,
@@ -1248,6 +1265,10 @@ function substantiveNeedles(section: ReportExportSection, model: ReportExportMod
       break;
     case "historical-snapshot": {
       const snapshot = section.snapshot;
+      const comparison = snapshot.cutoffComparison;
+      if (comparison) values.push(comparison.title, comparison.fromLabel, comparison.toLabel,
+        comparison.message, comparison.interpretation, comparison.methodology,
+        ...comparison.rows.flatMap(row => [row.metric, row.before, row.after]));
       if (snapshot.closingLabel) values.push(snapshot.closingLabel, snapshot.sourceNote ?? "");
       values.push(
         snapshot.dataDate,
@@ -1543,7 +1564,32 @@ function checkForDrift() {
   }
 }
 
-if (command === "generate") {
+if (command === "candidate") {
+  // Private, fixed destination: never public/reports, manifest or llms.txt.
+  const { secondSeptember2026Report: report, secondSeptember2026AutomaticReadings: snapshot } = await import('../lib/reports/second-september-2026.ts');
+  assert.equal(report.status, 'borrador');
+  assert(!models.some(model => model.id === report.id), 'Candidate must remain outside the public registry');
+  const model = buildReportExportModel(report, snapshot);
+  const output = path.join(root, 'docs/reports', report.id, 'preview');
+  fs.mkdirSync(output, { recursive: true });
+  const html = renderHtml(model), markdown = renderMarkdown(model), ics = renderIcs(model);
+  fs.writeFileSync(path.join(output, `${model.id}.html`), html);
+  fs.writeFileSync(path.join(output, `${model.id}.md`), markdown);
+  fs.writeFileSync(path.join(output, `${model.id}-calendar.ics`), ics);
+  const modelPath = path.join(output, 'export-model.json');
+  fs.writeFileSync(modelPath, stableStringify(model, 2) + '\n');
+  const pdfPath = path.join(output, `${model.id}.pdf`);
+  runPdfPython(['generate', modelPath, pdfPath, root]);
+  const pdf = inspectPdf(pdfPath);
+  assert.deepEqual(pdf.blankPages, []);
+  for (const section of model.sections) for (const value of substantiveNeedles(section, model)) {
+    assertContains(html, value, 'Candidate HTML');
+    assertContains(markdown, value, 'Candidate Markdown');
+    assertContains(pdf.text, value, 'Candidate PDF');
+  }
+  validateIcs(model, ics);
+  console.log(`Private candidate verified: HTML, Markdown, PDF (${pdf.pages} pages), ICS. ${output}`);
+} else if (command === "generate") {
   const currentLlms = fs.readFileSync(llmsPath, "utf8");
   const generated = generateInto(reportsDir, currentLlms);
   fs.writeFileSync(llmsPath, generated.llms, "utf8");

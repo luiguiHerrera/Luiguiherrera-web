@@ -480,6 +480,17 @@ def add_historical_snapshot(story, snapshot, styles):
             styles["body"],
         )
     )
+    comparison = snapshot.get("cutoffComparison")
+    if comparison:
+        story.append(p(comparison["title"], styles["h2"]))
+        story.append(data_table(
+            ["Métrica", comparison["fromLabel"], comparison["toLabel"]],
+            [[row["metric"], row["before"], row["after"]] for row in comparison["rows"]],
+            styles,
+        ))
+        story.append(p(comparison["message"], styles["body"]))
+        story.append(p(comparison["interpretation"], styles["body"]))
+        story.append(PDF["KeepTogether"]([p(comparison["methodology"], styles["small"])]))
     regime = snapshot["regime"]
     story.append(
         info_table(
@@ -544,7 +555,7 @@ def add_historical_snapshot(story, snapshot, styles):
             [
                 ("Sectores positivos", f"{sectors['positiveCount']} / {sectors['totalCount']}"),
                 ("Sectores negativos", str(sectors["negativeCount"])),
-                ("Dispersión 1W", f"{sectors['dispersion1w']:+.1f}%"),
+                ("Dispersión 1W", f"{sectors['dispersion1w']:+.1f}{' pp' if snapshot.get('dispersionUnit') == 'pp' else '%'}"),
                 ("Lectura al publicar", sectors["reading"]),
             ],
             styles,
@@ -604,7 +615,7 @@ def add_historical_snapshot(story, snapshot, styles):
                     ("Volatilidad EWMA", f"{radar['ewmaVolAnnualized']:+.1f}%"),
                     ("Volatilidad GARCH", f"{radar['garchVolForecast']:+.1f}%"),
                     ("Correlación promedio", f"{radar['averageCorrelation21d']:.2f}"),
-                    ("Dispersión sectorial", f"{radar['sectorDispersion1w']:+.1f}%"),
+                    ("Dispersión sectorial", f"{radar['sectorDispersion1w']:+.1f}{' pp' if snapshot.get('dispersionUnit') == 'pp' else '%'}"),
                 ],
                 styles,
             ),
@@ -746,6 +757,8 @@ def add_figure(story, item, styles, root):
 
 def add_section(story, section, styles, root, published_at, description, force_break, model):
     kind = section["kind"]
+    # Private previews start the asset chapter on a fresh page; published bytes stay stable.
+    force_break = force_break or ((model.get("status") == "borrador" or model.get("presentation", {}).get("assetReadingsStartNewPage")) and kind == "asset-readings")
     presentation = model.get("presentation", {})
     enhanced_timeline = presentation.get("timelineStyle") == "progression"
     enhanced_calendar = presentation.get("calendarStyle") == "monthly"
@@ -999,6 +1012,7 @@ def generate_pdf(model_path, output_path, root):
     story = [
         PDF["Spacer"](1, 35 * mm),
         p(model["editionName"].upper(), styles["edition"]),
+        *([p("Candidato editorial · sin publicar", styles["h2"])] if model.get("status") == "borrador" else []),
         p(model["title"], styles["title"]),
         p(model["subtitle"], styles["subtitle"]),
         info_table(
@@ -1009,7 +1023,7 @@ def generate_pdf(model_path, output_path, root):
                 ("Corte editorial", model.get("editorialCutoffAt", "No aplica")),
                 ("Corte de datos de mercado", model.get("automaticDataCutoffAt", "No aplica")),
                 *([("Periodo prospectivo", model["presentation"]["prospectivePeriod"])] if model.get("presentation", {}).get("prospectivePeriod") else []),
-                ("URL editorial primaria", model["canonicalUrl"]),
+                ("URL prevista · sin publicar" if model.get("status") == "borrador" else "URL editorial primaria", model["canonicalUrl"]),
             ],
             styles,
         ),

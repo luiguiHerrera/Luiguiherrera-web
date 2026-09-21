@@ -1,0 +1,16 @@
+{
+  "asOf": "2026-09-18",
+  "baselineId": "20260919T123549852Z-dfaa8586-f547-42f9-99e3-03f6c1f118cb",
+  "files": {
+    "authority-evidence.json.gz": "6b4984010dbb194f4899c892d14f94d90c41be4cd74dfb8e03ebc15f49e97854",
+    "automatic.json": "849e14dd6cccc2965b559ada3ca5a104546a9a3afc83f60e1319c097f9b82520",
+    "breadth-evidence.json.gz": "fd7838b5448cb258a8082539d47b865bc8131aeb3e6082fe89abbd0a7410fea7",
+    "btc-source.json": "79a494ec6a0cdcac83e9b433996f75109c044e315e57fbf85f518441a4848756",
+    "dashboard-evidence.json": "789f8de6a1b978b51e5e0da49c9dd74386024a98ff55e45a98a9a961271d0aa5",
+    "dashboard-page.html.gz": "4ce2ea85275870968b782c479619ee9c2441cdee1d236a0a90edd801da046d95",
+    "historical-seasonality.json": "ea1e1372f978bc0f7e2b25f77a89db9343d196ee3b741c1dd20d8f0a060ee217",
+    "reconciliation-code.json.gz": "293cd940f6cd64066fb86f8f25cc4e09aa54d94228534a7d580dbf675464afbc",
+    "reconciliation.json": "ca1b1bf9324a8790b04bef08b1680559472ad98759e6059ed0173f20a3851831",
+    "statistical.json": "ce0b01acc94af35213f1edffd0df7fd1a8299f33dbba3f176d0207303558fe14"
+  }
+}

@@ -143,7 +143,8 @@ for(const [ticker,n] of Object.entries({SPY:8,GLD:5,FXI:5,EWJ:7,BTCUSD:2,ETHUSD:
 }
 
 test('canonical content, asset order, future confirmed calendar and historical implied moves',()=>{
-  assert.equal(activeMarketReport.id,id);
+  assert.equal(activeMarketReport.id,'segundo-informe-septiembre-2026');
+  assert.equal(report.status,'archivado');
   assert.equal(marketReports.filter(r=>r.status==='actual').length,1);
   assert.equal(report.editorialCutoffAt,'2026-09-06');
   assert.equal(report.automaticDataCutoffAt,'2026-09-04');
@@ -175,7 +176,7 @@ test('canonical content, asset order, future confirmed calendar and historical i
 
 test('all previously published artifacts remain byte-identical to the base commit',()=>{
   const baseCommit='80e5cc26d29d68d71ff55022f6897bd3e08640bf';
-  for(const old of marketReports.filter(r=>r.id!==id)){
+  for(const old of marketReports.filter(r=>r.publishedAt<report.publishedAt)){
     for(const ext of ['pdf','html','md',...(old.calendarHref ? ['ics'] : [])]){
       const file=ext==='ics' ? `public${old.calendarHref}` : `public/reports/${old.id}.${ext}`;
       const original=execFileSync('git',['show',`${baseCommit}:${file}`],{maxBuffer:20*1024*1024});

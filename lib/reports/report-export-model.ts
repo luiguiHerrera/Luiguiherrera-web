@@ -283,9 +283,11 @@ function reportSections(
   return sections;
 }
 
-export function buildReportExportModel(report: MarketReport): ReportExportModel {
+export function buildReportExportModel(
+  report: MarketReport,
+  snapshot: HistoricalAutomaticReadingsSnapshot | null = getHistoricalAutomaticReadings(report.id),
+): ReportExportModel {
   const canonicalUrl = `${REPORT_SITE_URL}/informes/${report.id}`;
-  const snapshot = getHistoricalAutomaticReadings(report.id);
   const events = structuredEvents(report, canonicalUrl);
 
   return {
@@ -316,5 +318,5 @@ export function buildReportExportModel(report: MarketReport): ReportExportModel 
 }
 
 export function buildAllReportExportModels() {
-  return marketReports.map(buildReportExportModel);
+  return marketReports.map(report => buildReportExportModel(report));
 }

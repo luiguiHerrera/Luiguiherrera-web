@@ -1,0 +1,27 @@
+{
+  "url": "https://farside.co.uk/bitcoin-etf-flow-all-data/",
+  "retrievedAt": "2026-09-21",
+  "method": "Public table read via web tool; daily totals in USD millions, no 21/09 placeholder admitted.",
+  "rows": [
+    {
+      "date": "2026-09-14",
+      "total": 159.9
+    },
+    {
+      "date": "2026-09-15",
+      "total": -450.4
+    },
+    {
+      "date": "2026-09-16",
+      "total": -295.9
+    },
+    {
+      "date": "2026-09-17",
+      "total": 159.5
+    },
+    {
+      "date": "2026-09-18",
+      "total": 433.0
+    }
+  ]
+}

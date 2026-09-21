@@ -1,0 +1,338 @@
+{
+  "schema": "second-september.reconciliation.v1",
+  "baselineId": "20260919T123549852Z-dfaa8586-f547-42f9-99e3-03f6c1f118cb",
+  "sourceRevision": "c74e95c3f0b4e70d1a830452dc781357145cd7eb",
+  "codeHashes": {
+    "lib/dashboard/math.ts": "2361f6f0fcd93fcc0c8a9334ddc542a0d34f95fcb15d3a51a7c6a326da6d4209",
+    "lib/dashboard/risk-models.ts": "d13513032ff1fd3815a53e40e1845695cd056b847a729dc4b5078f06504aa5fd",
+    "lib/dashboard/regime-scoring.ts": "b9822768cbda1954f571cc99d4b1c076ed931d21e568b1aaccc5c0857e33e2db",
+    "lib/dashboard/adapters/sector-data-core.ts": "2c66d71bb6e5482ad5c1419a7fc9384aed023b2a0b919b998ca020a32c36c5a2",
+    "lib/dashboard/adapters/sector-etfs.ts": "25c0168e9ff260860f2148f9c699eca7bb823f505e21cff4890f7689b15b02f8",
+    "lib/dashboard/adapters/btc-etf-flows.ts": "5fd4f6c7ff7b2e2daae2e3ac3f3f5a8d887965d965957fc25a45e425cd48384a"
+  },
+  "exactV1At18Reproduced": false,
+  "v1Decision": "Omitir régimen, score y confianza de la comparación. El replay reproduce la captura del 21/09, no prueba el estado del adaptador ni el despliegue al cierre del 18/09. No se cambia Bitbo por Farside dentro del motor.",
+  "observedV1": {
+    "retrievedAt": "2026-09-21",
+    "score": 70,
+    "confidence": 74,
+    "status": "delayed",
+    "sectorDate": "2026-09-18",
+    "vixDate": "2026-09-17",
+    "btcDate": "Sep 17, 2026",
+    "btcSource": "Bitbo / BitcoinTreasuries",
+    "btcCoverage": "partial",
+    "btcRows": 10
+  },
+  "radarAuthority": "Alpha Vantage TIME_SERIES_DAILY, cierre sin ajustar, 11 ETF, 100 precios / 99 retornos simples por corte. Replay exacto buildQuantRiskData de la revisión congelada; media equiponderada diaria, anualización 252, EWMA lambda 0,94, GARCH alpha 0,06 beta 0,90 y omega derivado de varianza muestral. Correlación media de 55 pares a 21 sesiones; dispersión = máximo menos mínimo de retorno 5D, en pp.",
+  "breadthAuthority": "Statistical Levels / Yahoo: cierres diarios ajustados publicados a dos decimales del mismo baseline 19/09. Diferencia de retornos simples ETF menos SPY, en pp, cinco intervalos / seis cierres. MA200 publicada por esa misma autoridad sobre los mismos 11 ETF; no se usa Alpha Vantage para MA200.",
+  "breadthWindow": "5 sesiones terminadas en cada corte: 28/08–04/09 y 11/09–18/09. El primer informe conserva intacta su ventana original de cuatro intervalos.",
+  "btcAuthority": "https://farside.co.uk/bitcoin-etf-flow-all-data/",
+  "btc5dUsdMillions": 6.1,
+  "btcInflowStreak": 2,
+  "spyBetweenCutoffsPct": -0.8577601915968014,
+  "cuts": {
+    "2026-09-04": {
+      "radar": {
+        "garchVolForecast": 7.666790501902986,
+        "ewmaVolAnnualized": 7.3880977901044265,
+        "averageCorrelation21d": 0.1453745726616991,
+        "fragilityScore": 20,
+        "fragilityLabel": "Baja",
+        "sectorDispersion1w": 4.163949128446765
+      },
+      "positiveSectors": 4,
+      "negativeSectors": 6,
+      "returns": {
+        "SPY": {
+          "sessions": [
+            "2026-08-28",
+            "2026-08-31",
+            "2026-09-01",
+            "2026-09-02",
+            "2026-09-03",
+            "2026-09-04"
+          ],
+          "startClose": 767.44,
+          "endClose": 768.28,
+          "returnPct": 0.10945481079953634
+        },
+        "RSP": {
+          "sessions": [
+            "2026-08-28",
+            "2026-08-31",
+            "2026-09-01",
+            "2026-09-02",
+            "2026-09-03",
+            "2026-09-04"
+          ],
+          "startClose": 220.69,
+          "endClose": 219,
+          "returnPct": -0.7657800534686676
+        },
+        "IWM": {
+          "sessions": [
+            "2026-08-28",
+            "2026-08-31",
+            "2026-09-01",
+            "2026-09-02",
+            "2026-09-03",
+            "2026-09-04"
+          ],
+          "startClose": 294.98,
+          "endClose": 295.24,
+          "returnPct": 0.08814156891991942
+        },
+        "QQQ": {
+          "sessions": [
+            "2026-08-28",
+            "2026-08-31",
+            "2026-09-01",
+            "2026-09-02",
+            "2026-09-03",
+            "2026-09-04"
+          ],
+          "startClose": 716.43,
+          "endClose": 718.96,
+          "returnPct": 0.3531398740979741
+        }
+      },
+      "breadth": {
+        "RSP": -0.875234864268204,
+        "IWM": -0.021313241879616918,
+        "QQQ": 0.24368506329843775
+      },
+      "longAverage": [
+        {
+          "ticker": "XLK",
+          "date": "2026-09-04",
+          "close": 187.28,
+          "ma200": 160.12,
+          "above": true
+        },
+        {
+          "ticker": "XLF",
+          "date": "2026-09-04",
+          "close": 58.1,
+          "ma200": 53.22,
+          "above": true
+        },
+        {
+          "ticker": "XLV",
+          "date": "2026-09-04",
+          "close": 171.45,
+          "ma200": 154.55,
+          "above": true
+        },
+        {
+          "ticker": "XLE",
+          "date": "2026-09-04",
+          "close": 64.06,
+          "ma200": 54.37,
+          "above": true
+        },
+        {
+          "ticker": "XLY",
+          "date": "2026-09-04",
+          "close": 114.91,
+          "ma200": 116.67,
+          "above": false
+        },
+        {
+          "ticker": "XLP",
+          "date": "2026-09-04",
+          "close": 84.58,
+          "ma200": 82.65,
+          "above": true
+        },
+        {
+          "ticker": "XLI",
+          "date": "2026-09-04",
+          "close": 175.27,
+          "ma200": 170.2,
+          "above": true
+        },
+        {
+          "ticker": "XLB",
+          "date": "2026-09-04",
+          "close": 52.44,
+          "ma200": 49.82,
+          "above": true
+        },
+        {
+          "ticker": "XLU",
+          "date": "2026-09-04",
+          "close": 43.08,
+          "ma200": 44.29,
+          "above": false
+        },
+        {
+          "ticker": "XLRE",
+          "date": "2026-09-04",
+          "close": 43.93,
+          "ma200": 42.63,
+          "above": true
+        },
+        {
+          "ticker": "XLC",
+          "date": "2026-09-04",
+          "close": 112.03,
+          "ma200": 113.61,
+          "above": false
+        }
+      ],
+      "sectorsAboveMA200": 8
+    },
+    "2026-09-18": {
+      "radar": {
+        "garchVolForecast": 8.225730815490758,
+        "ewmaVolAnnualized": 7.920441046139852,
+        "averageCorrelation21d": 0.19876630535088005,
+        "fragilityScore": 20,
+        "fragilityLabel": "Baja",
+        "sectorDispersion1w": 4.875536306554185
+      },
+      "positiveSectors": 2,
+      "negativeSectors": 9,
+      "returns": {
+        "SPY": {
+          "sessions": [
+            "2026-09-11",
+            "2026-09-14",
+            "2026-09-15",
+            "2026-09-16",
+            "2026-09-17",
+            "2026-09-18"
+          ],
+          "startClose": 762.4,
+          "endClose": 761.69,
+          "returnPct": -0.09312696747113547
+        },
+        "RSP": {
+          "sessions": [
+            "2026-09-11",
+            "2026-09-14",
+            "2026-09-15",
+            "2026-09-16",
+            "2026-09-17",
+            "2026-09-18"
+          ],
+          "startClose": 214.87,
+          "endClose": 212.29,
+          "returnPct": -1.2007260203844239
+        },
+        "IWM": {
+          "sessions": [
+            "2026-09-11",
+            "2026-09-14",
+            "2026-09-15",
+            "2026-09-16",
+            "2026-09-17",
+            "2026-09-18"
+          ],
+          "startClose": 288.14,
+          "endClose": 284.1,
+          "returnPct": -1.4020962032345263
+        },
+        "QQQ": {
+          "sessions": [
+            "2026-09-11",
+            "2026-09-14",
+            "2026-09-15",
+            "2026-09-16",
+            "2026-09-17",
+            "2026-09-18"
+          ],
+          "startClose": 714.88,
+          "endClose": 721.45,
+          "returnPct": 0.9190353625783354
+        }
+      },
+      "breadth": {
+        "RSP": -1.1075990529132884,
+        "IWM": -1.3089692357633909,
+        "QQQ": 1.0121623300494709
+      },
+      "longAverage": [
+        {
+          "ticker": "XLK",
+          "date": "2026-09-18",
+          "close": 189.6,
+          "ma200": 162.24,
+          "above": true
+        },
+        {
+          "ticker": "XLF",
+          "date": "2026-09-18",
+          "close": 55.86,
+          "ma200": 53.45,
+          "above": true
+        },
+        {
+          "ticker": "XLV",
+          "date": "2026-09-18",
+          "close": 168.39,
+          "ma200": 155.18,
+          "above": true
+        },
+        {
+          "ticker": "XLE",
+          "date": "2026-09-18",
+          "close": 64.31,
+          "ma200": 55.31,
+          "above": true
+        },
+        {
+          "ticker": "XLY",
+          "date": "2026-09-18",
+          "close": 111.03,
+          "ma200": 116.58,
+          "above": false
+        },
+        {
+          "ticker": "XLP",
+          "date": "2026-09-18",
+          "close": 82.8,
+          "ma200": 82.97,
+          "above": false
+        },
+        {
+          "ticker": "XLI",
+          "date": "2026-09-18",
+          "close": 169.75,
+          "ma200": 171.14,
+          "above": false
+        },
+        {
+          "ticker": "XLB",
+          "date": "2026-09-18",
+          "close": 49.99,
+          "ma200": 50.17,
+          "above": false
+        },
+        {
+          "ticker": "XLU",
+          "date": "2026-09-18",
+          "close": 41.1,
+          "ma200": 44.22,
+          "above": false
+        },
+        {
+          "ticker": "XLRE",
+          "date": "2026-09-18",
+          "close": 42.53,
+          "ma200": 42.78,
+          "above": false
+        },
+        {
+          "ticker": "XLC",
+          "date": "2026-09-18",
+          "close": 110.81,
+          "ma200": 113.63,
+          "above": false
+        }
+      ],
+      "sectorsAboveMA200": 4
+    }
+  }
+}

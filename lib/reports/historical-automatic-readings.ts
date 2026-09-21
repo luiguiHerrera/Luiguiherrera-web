@@ -1,8 +1,22 @@
+import { secondSeptember2026AutomaticReadings } from "./second-september-2026.ts";
 import septemberSnapshot from "./snapshots/primer-informe-septiembre-2026/automatic.json" with { type: "json" };
 import septemberWeeklyReview from "./snapshots/primer-informe-septiembre-2026/weekly-review.json" with { type: "json" };
 
 export type HistoricalAutomaticReadingsSnapshot = {
   dataDate: string;
+  dispersionUnit?: "pp";
+  /** Optional frozen comparison. Adds context without replacing the closing snapshot. */
+  cutoffComparison?: {
+    title: string;
+    fromDate: string;
+    toDate: string;
+    fromLabel: string;
+    toLabel: string;
+    rows: Array<{ metric: string; before: string; after: string; authority?: string; methodology?: string; interpretation?: string }>;
+    message: string;
+    interpretation: string;
+    methodology: string;
+  };
   displayTitle?: string;
   closingLabel?: string;
   sourceNote?: string;
@@ -377,6 +391,7 @@ export const firstSeptember2026AutomaticReadings: HistoricalAutomaticReadingsSna
 });
 
 const historicalSnapshots = new Map<string, HistoricalAutomaticReadingsSnapshot>([
+  ["segundo-informe-septiembre-2026", secondSeptember2026AutomaticReadings],
   ["segundo-informe-julio-2026", secondJuly2026AutomaticReadings],
   ["primer-informe-agosto-2026", firstAugust2026AutomaticReadings],
   ["segundo-informe-agosto-2026", secondAugust2026AutomaticReadings],
