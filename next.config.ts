@@ -213,6 +213,14 @@ const nextConfig: NextConfig = {
           },
         ],
       },
+      ...["html", "pdf"].map((extension) => ({
+        source: `/reports/segundo-informe-septiembre-2026.${extension}`,
+        headers: [{ key: "Link", value: '<https://www.luiguiherrera.com/informes/segundo-informe-septiembre-2026>; rel="canonical"' }],
+      })),
+      ...[".md", "-calendar.ics"].map((suffix) => ({
+        source: `/reports/segundo-informe-septiembre-2026${suffix}`,
+        headers: [{ key: "X-Robots-Tag", value: "noindex, follow" }],
+      })),
     ];
   },
 };

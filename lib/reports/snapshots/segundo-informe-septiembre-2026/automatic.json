@@ -1,0 +1,266 @@
+{
+  "dataDate": "2026-09-18",
+  "displayTitle": "Lecturas de mercado al cierre",
+  "closingLabel": "Estado del mercado al cierre del 18 de septiembre de 2026",
+  "sourceNote": "Datos congelados: sectores y radar del 18/09 recuperados en la consulta del 21/09, con replay exacto del radar sobre los 11 ETF de Alpha Vantage. Amplitud relativa y MA200: misma autoridad Statistical Levels / Yahoo en ambos cortes. VIX spot conserva la fecha 17/09. Flujos BTC: Farside, cinco sesiones completas. No se publica régimen, score ni confianza V1 del 18/09: no existe evidencia suficiente del estado histórico del adaptador.",
+  "cutoffComparison": {
+    "title": "Qué cambió desde el Primer Informe",
+    "fromDate": "2026-09-04",
+    "toDate": "2026-09-18",
+    "fromLabel": "04/09",
+    "toLabel": "18/09",
+    "rows": [
+      {
+        "metric": "Sectores positivos",
+        "before": "4/11",
+        "after": "2/11",
+        "authority": "Dashboard / Alpha Vantage",
+        "methodology": "Mismos 11 ETF, cierre diario, retorno de 5 sesiones > 0.",
+        "interpretation": "Menor participación."
+      },
+      {
+        "metric": "Sectores sobre MA200",
+        "before": "8/11",
+        "after": "4/11",
+        "authority": "Statistical Levels / Yahoo, baseline 19/09",
+        "methodology": "Mismos 11 ETF; cierre ajustado > MA200 ajustada publicada en cada fecha.",
+        "interpretation": "Menor respaldo de largo plazo."
+      },
+      {
+        "metric": "RSP vs SPY",
+        "before": "-0,88 pp",
+        "after": "-1,11 pp",
+        "authority": "Statistical Levels / Yahoo, baseline 19/09",
+        "methodology": "Retorno simple ajustado de 5 sesiones del ETF menos SPY; seis cierres publicados a dos decimales.",
+        "interpretation": "Pérdida relativa frente a SPY."
+      },
+      {
+        "metric": "IWM vs SPY",
+        "before": "-0,02 pp",
+        "after": "-1,31 pp",
+        "authority": "Statistical Levels / Yahoo, baseline 19/09",
+        "methodology": "Retorno simple ajustado de 5 sesiones del ETF menos SPY; seis cierres publicados a dos decimales.",
+        "interpretation": "Pérdida relativa frente a SPY."
+      },
+      {
+        "metric": "QQQ vs SPY",
+        "before": "+0,24 pp",
+        "after": "+1,01 pp",
+        "authority": "Statistical Levels / Yahoo, baseline 19/09",
+        "methodology": "Retorno simple ajustado de 5 sesiones del ETF menos SPY; seis cierres publicados a dos decimales.",
+        "interpretation": "Mayor liderazgo relativo de QQQ."
+      },
+      {
+        "metric": "Dispersión sectorial",
+        "before": "+4,16 pp",
+        "after": "+4,88 pp",
+        "authority": "Dashboard / Alpha Vantage",
+        "methodology": "Máximo menos mínimo de los 11 retornos sectoriales a 5 sesiones.",
+        "interpretation": "Aumenta la separación entre sectores."
+      },
+      {
+        "metric": "Fragilidad",
+        "before": "20/100 Baja",
+        "after": "20/100 Baja",
+        "authority": "Dashboard V1 / buildQuantRiskData",
+        "methodology": "Mismo universo, reglas y parámetros; replay exacto de ambos snapshots.",
+        "interpretation": "El indicador no cambia de categoría."
+      },
+      {
+        "metric": "Correlación media 21D",
+        "before": "0,145",
+        "after": "0,199",
+        "authority": "Dashboard / Alpha Vantage",
+        "methodology": "Media de las 55 correlaciones entre los mismos 11 ETF, 21 retornos diarios.",
+        "interpretation": "Aumenta moderadamente."
+      },
+      {
+        "metric": "EWMA vol.",
+        "before": "7,39 %",
+        "after": "7,92 %",
+        "authority": "Dashboard V1 / Alpha Vantage",
+        "methodology": "99 retornos diarios equiponderados, lambda 0,94, anualización 252.",
+        "interpretation": "Aumenta moderadamente."
+      },
+      {
+        "metric": "GARCH vol.",
+        "before": "7,67 %",
+        "after": "8,23 %",
+        "authority": "Dashboard V1 / Alpha Vantage",
+        "methodology": "99 retornos diarios equiponderados, alpha 0,06, beta 0,90, omega derivado de varianza; anualización 252.",
+        "interpretation": "Aumenta moderadamente."
+      }
+    ],
+    "message": "El índice cambió poco; la calidad interna del mercado se deterioró.",
+    "interpretation": "SPY retrocedió un 0,86 % entre ambos cierres ajustados. La participación se estrechó: menos sectores avanzan, menos permanecen sobre MA200 y QQQ gana ventaja relativa. El radar reproduce un aumento moderado de volatilidad, con fragilidad todavía baja. Los flujos BTC mejoraron al final de la semana, pero sus cinco sesiones quedan casi equilibradas. No se compara el régimen V1 sin una reproducción histórica exacta.",
+    "methodology": "Amplitud normalizada a cinco sesiones en cada corte: 28/08–04/09 y 11/09–18/09, usando seis cierres ajustados del mismo baseline Statistical Levels / Yahoo, publicados a dos decimales. Se recalcula el 04/09 solo para esta tabla; el Primer Informe conserva su ventana original. Sectores positivos y dispersión: mismos 11 ETF de Alpha Vantage, cierre sin ajustar y cinco sesiones; dispersión en puntos porcentuales. MA200: mismos 11 ETF, serie ajustada de Statistical Levels. EWMA, GARCH, correlación y fragilidad reproducidos con el mismo motor y las series sectoriales congeladas de ambos cortes; no proceden de Statistical Levels."
+  },
+  "regime": {
+    "label": "V1 al 18/09: no reproducido",
+    "score": null,
+    "confidence": null,
+    "bias": "No publicado",
+    "interpretation": "Se omiten score, confianza y comparación de régimen. La captura del Dashboard del 21/09 reproduce 70/100 y 74 % de confianza, pero utiliza Bitbo parcial hasta el 17/09; no demuestra qué habría admitido el adaptador al cierre del 18/09. Farside se utiliza exclusivamente para el bloque independiente de flujos.",
+    "support": [
+      "Salud y tecnología lideran la ventana sectorial; QQQ gana +1,01 pp frente a SPY en cinco sesiones.",
+      "VIX spot: 15,44, última observación disponible del 17/09.",
+      "Farside: dos sesiones consecutivas de entradas; acumulado de cinco sesiones +6,1 M USD."
+    ],
+    "caution": [
+      "Solo 2/11 sectores positivos y 4/11 sobre MA200.",
+      "RSP/SPY −1,11 pp e IWM/SPY −1,31 pp; dispersión sectorial 4,88 pp.",
+      "La curva VX pasa de fuerte contango a contango moderado."
+    ],
+    "watch": [
+      "Comprobar si el liderazgo tecnológico vuelve a extenderse al resto del mercado.",
+      "Valorar la continuidad de entradas BTC más allá de las dos últimas sesiones."
+    ]
+  },
+  "indices": null,
+  "sectors": {
+    "positiveCount": 2,
+    "totalCount": 11,
+    "negativeCount": 9,
+    "dispersion1w": 4.875536306554185,
+    "leaders": [
+      {
+        "ticker": "XLV",
+        "name": "Salud",
+        "return1w": 1.832365747460063
+      },
+      {
+        "ticker": "XLK",
+        "name": "Tecnología",
+        "return1w": 1.028400916502381
+      }
+    ],
+    "laggards": [
+      {
+        "ticker": "XLU",
+        "name": "Utilities",
+        "return1w": -3.0431705590941216
+      },
+      {
+        "ticker": "XLF",
+        "name": "Financieras",
+        "return1w": -2.427947598253277
+      },
+      {
+        "ticker": "XLRE",
+        "name": "Real Estate",
+        "return1w": -2.049746660525109
+      }
+    ],
+    "reading": "La lectura sugiere una rotación growth. No implica dirección futura del mercado."
+  },
+  "breadth": {
+    "windowLabel": "5 sesiones · 11/09–18/09",
+    "rspVsSpy1wPp": -1.1075990529132884,
+    "iwmVsSpy1wPp": -1.3089692357633909,
+    "qqqVsSpy1wPp": 1.0121623300494709,
+    "sectorsOverLongAverage": 4,
+    "sectorsOverLongAverageTotal": 11,
+    "reading": "Retornos simples ajustados del ETF menos SPY en cinco sesiones; cierres publicados del mismo baseline Statistical Levels / Yahoo. MA200 sobre los 11 ETF sectoriales de esa autoridad. No es el retorno acumulado entre informes."
+  },
+  "quantRadar": {
+    "fragilityScore": 20,
+    "fragilityLabel": "Baja",
+    "ewmaVolAnnualized": 7.920441046139852,
+    "garchVolForecast": 8.225730815490758,
+    "averageCorrelation21d": 0.19876630535088005,
+    "sectorDispersion1w": 4.875536306554185
+  },
+  "vix": {
+    "asOf": "2026-09-17",
+    "level": 15.44,
+    "stateLabel": "Normal bajo",
+    "status": "Normal bajo",
+    "momentum": "Descendente",
+    "curve": "Contango moderado",
+    "curveText": "Los contratos más largos cotizan por encima del vencimiento cercano. Es una estructura habitual en entornos de volatilidad más ordenada.",
+    "change1d": -2.2700000000000014,
+    "percentileLabel": "34.9"
+  },
+  "vixTermStructure": {
+    "classification": "Contango moderado",
+    "vx2MinusVx1": 0.6637999999999984,
+    "slopeVx1Vx2Pct": 3.679376534690215,
+    "vx3MinusVx1": 1.0838999999999999,
+    "points": [
+      {
+        "label": "VX1",
+        "symbol": "VX/V6",
+        "contract": "oct de 2026",
+        "expirationDate": "2026-10-21",
+        "value": 18.0411
+      },
+      {
+        "label": "VX2",
+        "symbol": "VX/X6",
+        "contract": "nov de 2026",
+        "expirationDate": "2026-11-18",
+        "value": 18.7049
+      },
+      {
+        "label": "VX3",
+        "symbol": "VX/Z6",
+        "contract": "dic de 2026",
+        "expirationDate": "2026-12-16",
+        "value": 19.125
+      },
+      {
+        "label": "VX4",
+        "symbol": "VX/F7",
+        "contract": "ene de 2027",
+        "expirationDate": "2027-01-20",
+        "value": 19.8901
+      },
+      {
+        "label": "VX5",
+        "symbol": "VX/G7",
+        "contract": "feb de 2027",
+        "expirationDate": "2027-02-17",
+        "value": 20.3
+      },
+      {
+        "label": "VX6",
+        "symbol": "VX/H7",
+        "contract": "mar de 2027",
+        "expirationDate": "2027-03-17",
+        "value": 20.475
+      },
+      {
+        "label": "VX7",
+        "symbol": "VX/J7",
+        "contract": "abr de 2027",
+        "expirationDate": "2027-04-21",
+        "value": 20.775
+      },
+      {
+        "label": "VX8",
+        "symbol": "VX/K7",
+        "contract": "may de 2027",
+        "expirationDate": "2027-05-18",
+        "value": 20.9396
+      }
+    ]
+  },
+  "btcEtfFlows": {
+    "asOf": "2026-09-18",
+    "lastDayUsdMillions": 433,
+    "rolling5dUsdMillions": 6.1,
+    "streakLabel": "Racha de 2 días de entradas",
+    "reading": "Los flujos mejoraron con fuerza al final de la semana: dos sesiones consecutivas de entradas llevaron el acumulado de cinco días a aproximadamente +6 M USD (+6,1 M exactos). La recuperación es visible, pero la ventana completa sigue prácticamente equilibrada y todavía no reproduce la acumulación observada a comienzos de septiembre."
+  },
+  "gldFlowPressure": {
+    "asOf": "2026-09-18",
+    "sharesChange1dPct": 0.40639393118396094,
+    "sharesChange5dPct": 0.9259259259259258,
+    "sharesChange20dPct": 1.7852238396045044,
+    "label": "Entrada neta probable",
+    "summary": "GLD muestra entrada neta probable a 5 sesiones, usando cambios en participaciones como proxy de presión de flujos.",
+    "sourceNote": "Cálculo propio con datos diarios de NAV, participaciones y activos netos publicados por State Street. No representa flujos oficiales reportados por el fondo."
+  },
+  "statisticalAssets": null,
+  "dispersionUnit": "pp"
+}

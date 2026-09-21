@@ -45,3 +45,53 @@ export function buildReportAssetSnapshot(asset, sourceRows, asOf, provider) {
     reading: {lastClose:record.lastClose,lastDate:record.lastDate,returns:record.returns,distanceLongAverage:record.distanceToMovingAverages.ma200,percentile:record.windows['5Y'].ma200ExtensionPercentile,zScore:record.windows['5Y'].ma200ExtensionZScore,currentDrawdown:record.windows.Full.currentDrawdown},
   });
 }
+
+// Freeze already-generated authority without re-estimating statistical levels.
+// The baseline's crypto mark may be from Saturday; only completed daily observations
+// are eligible for a Friday report. Keep the predecessor's frozen pre-year sample.
+export function freezeGeneratedReportAsset(record, generatedSeasonality, historicalSeasonality, asOf) {
+  const cutoffYear = Number(asOf.slice(0, 4));
+  const daily = record.frequencies.daily.recentPeriods.find(row => row.period === asOf);
+  if (!daily || daily.periodEnd !== asOf) throw new Error(`${record.ticker}: missing exact close for ${asOf}`);
+  if (record.dataAuthority?.lastCompletedObservation.daily !== asOf) throw new Error('Authority daily cutoff mismatch');
+  const sourceLevels = record.keyStatisticalLevels.weekly;
+  const monday = new Date(`${asOf}T00:00:00Z`);
+  monday.setUTCDate(monday.getUTCDate() - (monday.getUTCDay() + 6) % 7);
+  const periodStart = monday.toISOString().slice(0, 10);
+  const opening = record.frequencies.daily.recentPeriods.find(row => row.period === periodStart);
+  const markMonday = new Date(`${record.currentMark.date}T00:00:00Z`);
+  markMonday.setUTCDate(markMonday.getUTCDate() - (markMonday.getUTCDay() + 6) % 7);
+  if (!opening || markMonday.toISOString().slice(0, 10) !== periodStart) throw new Error('Authority opening belongs to a different week');
+  if (!historicalSeasonality.years.length || historicalSeasonality.years.length > 10 ||
+      historicalSeasonality.years.some(year => year >= cutoffYear || year % 4 !== 2) ||
+      historicalSeasonality.observations.some(row => row.year >= cutoffYear)) throw new Error('Invalid full-year Midterm sample');
+  const monthly = generatedSeasonality.windows.All.monthly.presidentialCycle.midterm.find(row => row.month === 9);
+  for (const key of ['sampleSize', 'averageReturn', 'winRate']) {
+    if (monthly[key] !== historicalSeasonality[key]) throw new Error(`Historical seasonality drift: ${record.ticker}/${key}`);
+  }
+  const levels = structuredClone(sourceLevels);
+  levels.lastClose = daily.close;
+  // Published distance contract: price / level - 1, rounded to four decimals.
+  // Rebind distances only; no re-estimation of openings, levels or historical samples.
+  levels.distances = Object.fromEntries(Object.entries(levels.levels).map(([key, value]) => [key, Number((daily.close / value - 1).toFixed(4))]));
+  const { WSLE, WALE, WAHE, WSHE } = levels.levels;
+  levels.location = daily.close > WSHE ? 'Por encima de extensión por semana extrema'
+    : daily.close >= WAHE ? 'Cerca de extensión por semana alta'
+    : daily.close <= WSLE ? 'Por debajo de extensión por semana extrema'
+    : daily.close <= WALE ? 'Cerca de extensión por semana baja' : 'Dentro del rango por semana medio';
+  return {
+    ticker: record.ticker, symbol: record.ticker === 'BTCUSD' ? 'BTC-USD' : record.ticker === 'ETHUSD' ? 'ETH-USD' : record.ticker,
+    asOf, provider: 'Yahoo Finance · autoridad Statistical Levels persistida', periodStart,
+    closeConvention: record.category === 'Cripto'
+      ? `Cierre diario UTC del ${asOf}; semana de lunes a domingo, aún incompleta al corte.`
+      : 'Cierre regular ajustado del proveedor, congelado en la autoridad.',
+    levels, seasonality: structuredClone(historicalSeasonality),
+    provenance: {
+      baselineId: record.dataAuthority.baselineId, rawSha256: record.dataAuthority.rawSha256,
+      closePath: `frequencies.daily.recentPeriods[period=${asOf}].close`,
+      levelsPath: 'keyStatisticalLevels.weekly',
+      seasonalitySource: 'Muestra inmutable del Primer Informe, años completos anteriores a 2026; controles mensuales idénticos al baseline del 19/09.',
+      distancePrecision: 'Distancias respecto a los niveles publicados a dos decimales; no respecto a extensiones internas sin redondear.',
+    },
+  };
+}

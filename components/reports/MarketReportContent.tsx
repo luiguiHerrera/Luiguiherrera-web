@@ -99,7 +99,7 @@ export function MarketReportContent({
           <div className="flex flex-wrap items-center gap-2">
             <p className="text-xs font-semibold uppercase text-petrol">{reportDisplayName(report)}</p>
             <span className="border border-brass/40 bg-white/70 px-2 py-1 text-[10px] font-semibold uppercase text-brass">
-              {report.status === "actual" ? "Informe actual" : "Archivado"}
+              {report.status === "borrador" ? "Candidato editorial · sin publicar" : report.status === "actual" ? "Informe actual" : "Archivado"}
             </span>
           </div>
           <h1 className="mt-2 text-3xl font-semibold leading-tight text-ink md:text-5xl">{report.title}</h1>

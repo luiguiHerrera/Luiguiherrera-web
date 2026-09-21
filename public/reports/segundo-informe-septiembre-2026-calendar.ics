@@ -1,0 +1,50 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Luigui Herrera//Market Reports//ES
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+X-WR-CALNAME:Segundo informe de septiembre
+BEGIN:VEVENT
+UID:segundo-informe-septiembre-2026-posicion-de-inversion-y-transacciones-i
+ nternacionales-de-ee-uu-segundo-trimestre@luigui-herrera
+DTSTAMP:20260921T000000Z
+DTSTART:20260924T123000Z
+SUMMARY:Segundo informe de septiembre: Posición de inversión y transaccio
+ nes internacionales de EE. UU. · segundo trimestre
+DESCRIPTION:24 de septiembre. Fecha y hora confirmadas por fuente primaria.
+  08:30 ET / 14:30 CEST. Permite contextualizar financiación y flujos inte
+ rnacionales. Activos o factores: S&P 500\, Oro\, BTC / ETH\, Dólar. Fuent
+ e de fecha/hora: Bureau of Economic Analysis · calendario consultado el 2
+ 1/09/2026 (https://www.bea.gov/news/schedule/full).
+URL:https://www.bea.gov/news/schedule/full
+END:VEVENT
+BEGIN:VEVENT
+UID:segundo-informe-septiembre-2026-pib-tercera-estimacion-del-segundo-trim
+ estre-y-beneficios-corporativos@luigui-herrera
+DTSTAMP:20260921T000000Z
+DTSTART:20260930T123000Z
+SUMMARY:Segundo informe de septiembre: PIB · tercera estimación del segun
+ do trimestre y beneficios corporativos
+DESCRIPTION:30 de septiembre. Fecha y hora confirmadas por fuente primaria.
+  08:30 ET / 14:30 CEST. Contrasta crecimiento y beneficios con el aumento 
+ del coste del capital. Activos o factores: S&P 500\, Oro\, BTC / ETH\, Dó
+ lar. Fuente de fecha/hora: Bureau of Economic Analysis · calendario consu
+ ltado el 21/09/2026 (https://www.bea.gov/news/schedule/full).
+URL:https://www.bea.gov/news/schedule/full
+END:VEVENT
+BEGIN:VEVENT
+UID:segundo-informe-septiembre-2026-pce-ingresos-y-gasto-personal-de-agosto
+ @luigui-herrera
+DTSTAMP:20260921T000000Z
+DTSTART:20260930T123000Z
+SUMMARY:Segundo informe de septiembre: PCE\, ingresos y gasto personal de a
+ gosto
+DESCRIPTION:30 de septiembre. Fecha y hora confirmadas por fuente primaria.
+  08:30 ET / 14:30 CEST. Referencia de inflación y consumo para evaluar la
+  persistencia de la presión de tipos. Activos o factores: S&P 500\, Oro\,
+  BTC / ETH\, Dólar. Fuente de fecha/hora: Bureau of Economic Analysis · 
+ calendario consultado el 21/09/2026 (https://www.bea.gov/news/schedule/ful
+ l).
+URL:https://www.bea.gov/news/schedule/full
+END:VEVENT
+END:VCALENDAR

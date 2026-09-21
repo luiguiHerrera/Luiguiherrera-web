@@ -1,3 +1,4 @@
+import { secondSeptember2026Report } from "./second-september-2026.ts";
 import { firstSeptember2026Report } from "./first-september-2026.ts";
 import type { ReportQuantitativePanel } from "./report-statistical-panels";
 
@@ -126,6 +127,8 @@ export type MarketReportStockpickingTheme = {
 };
 
 export type MarketReportPresentation = {
+  /** Preserve the approved print chapter boundary across publication states. */
+  assetReadingsStartNewPage?: boolean;
   contextTitle?: string;
   contextStyle?: "prose";
   openingLine?: string;
@@ -198,7 +201,7 @@ export type MarketReport = {
   htmlHref?: string;
   markdownHref?: string;
   pdfHref?: string;
-  status: "actual" | "archivado";
+  status: "actual" | "archivado" | "borrador";
   /** Optional: en el formato condensado el contexto general cumple esta función. */
   thesis?: string;
   /** Optional: en el formato condensado el contexto general cumple esta función. */
@@ -2092,7 +2095,8 @@ export const marketReports: MarketReport[] = [
     disclaimer:
       "Este informe organiza información pública, datos de mercado y análisis de terceros con fines exclusivamente educativos e informativos. No constituye asesoría financiera personalizada, recomendación de inversión ni instrucción para comprar, vender o mantener activos. Las rutas descritas son escenarios condicionales, no predicciones. Posicionamiento, estacionalidad, análisis técnico, flujos y movimientos implícitos de opciones pueden ayudar a interpretar el contexto, pero no garantizan resultados futuros. Las lecturas automáticas de este informe están congeladas al cierre del 14 de agosto de 2026 para preservar la fotografía histórica con la que fue publicado. El Dashboard continúa actualizándose con los datos más recientes disponibles y puede mostrar valores distintos.",
   },
-  firstSeptember2026Report,
+  { ...firstSeptember2026Report, status: "archivado" },
+  secondSeptember2026Report,
 ];
 
 export const activeMarketReport = marketReports.find((report) => report.status === "actual") ?? marketReports[0];

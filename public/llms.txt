@@ -85,6 +85,15 @@ This section is a complementary discovery aid, not an official indexing protocol
 - Secondary downloadable HTML representation: https://www.luiguiherrera.com/reports/primer-informe-septiembre-2026.html
 - Structured calendar events: https://www.luiguiherrera.com/reports/primer-informe-septiembre-2026-calendar.ics
 
+### Segundo informe de septiembre
+- Primary canonical editorial URL: https://www.luiguiherrera.com/informes/segundo-informe-septiembre-2026
+- Description: El índice cambió poco; la calidad interna del mercado se deterioró. Beneficios y tecnología sostienen el equilibrio frente a yields elevados, energía más cara y menor amplitud.
+- Published: 2026-09-21
+- Markdown auxiliary machine-readable representation: https://www.luiguiherrera.com/reports/segundo-informe-septiembre-2026.md
+- PDF human-readable download: https://www.luiguiherrera.com/reports/segundo-informe-septiembre-2026.pdf
+- Secondary downloadable HTML representation: https://www.luiguiherrera.com/reports/segundo-informe-septiembre-2026.html
+- Structured calendar events: https://www.luiguiherrera.com/reports/segundo-informe-septiembre-2026-calendar.ics
+
 ## Source and method notes
 - Dashboard methodology: https://www.luiguiherrera.com/metodologia
 - TD3 research: https://www.luiguiherrera.com/investigacion/td3

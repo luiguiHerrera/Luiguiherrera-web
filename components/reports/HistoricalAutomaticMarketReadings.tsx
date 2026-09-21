@@ -71,6 +71,29 @@ export function HistoricalAutomaticMarketReadings({ snapshot }: { snapshot: Hist
         <div className="grid min-w-0 gap-5">
           {snapshot.closingLabel ? <p className="text-base font-medium text-ink">{snapshot.closingLabel}</p> : null}
           {snapshot.sourceNote ? <p className="border-l-2 border-brass pl-3 text-xs leading-6 text-muted">{snapshot.sourceNote}</p> : null}
+          {snapshot.cutoffComparison ? (
+            <ReportSection headingLevel={snapshot.displayTitle ? 3 : 2} eyebrow="Evolución entre cortes" title={snapshot.cutoffComparison.title}>
+              <div className="overflow-x-auto" role="region" aria-label="Comparación entre cortes" tabIndex={0}>
+                <table className="w-full border-collapse text-left text-sm">
+                  <caption className="sr-only">{snapshot.cutoffComparison.title}</caption>
+                  <thead><tr>
+                    <th scope="col" className="border-b border-line bg-panelSoft p-3">Métrica</th>
+                    <th scope="col" className="border-b border-line bg-panelSoft p-3"><time dateTime={snapshot.cutoffComparison.fromDate}>{snapshot.cutoffComparison.fromLabel}</time></th>
+                    <th scope="col" className="border-b border-line bg-panelSoft p-3"><time dateTime={snapshot.cutoffComparison.toDate}>{snapshot.cutoffComparison.toLabel}</time></th>
+                  </tr></thead>
+                  <tbody>{snapshot.cutoffComparison.rows.map(row => <tr key={row.metric}>
+                    <th scope="row" className="border-b border-line p-3 font-medium text-ink">{row.metric}</th>
+                    <td className="border-b border-line p-3 tabular-nums text-muted">{row.before}</td>
+                    <td className="border-b border-line p-3 tabular-nums text-ink">{row.after}</td>
+                  </tr>)}</tbody>
+                </table>
+              </div>
+              <p className="mt-4 border-l-2 border-brass pl-4 font-medium text-ink">{snapshot.cutoffComparison.message}</p>
+              <p className="mt-3 text-sm leading-6 text-muted">{snapshot.cutoffComparison.interpretation}</p>
+              <p className="mt-3 text-xs leading-6 text-muted">{snapshot.cutoffComparison.methodology}</p>
+            </ReportSection>
+          ) : null}
+
           <section className="border border-petrol/35 bg-panel p-4 shadow-[0_10px_30px_rgba(31,35,40,0.035)] md:p-6">
             <div className="grid gap-5 lg:grid-cols-[1fr_0.54fr] lg:items-end">
               <div>
@@ -186,7 +209,7 @@ export function HistoricalAutomaticMarketReadings({ snapshot }: { snapshot: Hist
                   <EditorialNote
                     title="Lectura al publicar"
                     body={snapshot.sectors.reading}
-                    footer={`Dispersión 1W: ${formatPercent(snapshot.sectors.dispersion1w)}`}
+                    footer={`Dispersión 1W: ${snapshot.dispersionUnit === "pp" ? `${formatNumber(snapshot.sectors.dispersion1w)} pp` : formatPercent(snapshot.sectors.dispersion1w)}`}
                   />
                   {dashboardButton()}
                 </div>
@@ -227,7 +250,7 @@ export function HistoricalAutomaticMarketReadings({ snapshot }: { snapshot: Hist
                 <Metric label="Volatilidad EWMA" value={formatPercent(snapshot.quantRadar.ewmaVolAnnualized)} />
                 <Metric label="Volatilidad GARCH" value={formatPercent(snapshot.quantRadar.garchVolForecast)} />
                 <Metric label="Correlación promedio" value={snapshot.quantRadar.averageCorrelation21d.toFixed(2)} />
-                <Metric label="Dispersión sectorial" value={formatPercent(snapshot.quantRadar.sectorDispersion1w)} />
+                <Metric label="Dispersión sectorial" value={snapshot.dispersionUnit === "pp" ? `${formatNumber(snapshot.quantRadar.sectorDispersion1w)} pp` : formatPercent(snapshot.quantRadar.sectorDispersion1w)} />
               </div>
               <p className="mt-4 border-t border-line pt-4 text-xs leading-5 text-muted">
                 Estos modelos estiman condiciones estadísticas de riesgo bajo supuestos históricos; no anticipan por sí
