@@ -1,6 +1,6 @@
 "use client";
 
-import Link from "next/link";
+import { PreserveReportLink as Link } from "./PreserveReportLink";
 import { usePathname } from "next/navigation";
 import { MarketLabMark } from "@/components/brand/MarketLabMark";
 import { getDictionary } from "@/lib/i18n/get-dictionary";

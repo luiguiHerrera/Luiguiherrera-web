@@ -1,4 +1,5 @@
-import Link from "next/link";
+import { ReportLink as Link, ReportAnchor, ReportParagraph, ReportText } from "@/components/reports/ReportSourcePolicy";
+
 import { ReportSection } from "@/components/reports/ReportSection";
 import { formatEditorialDate } from "@/lib/editorial/dates";
 import type { HistoricalAutomaticReadingsSnapshot } from "@/lib/reports/historical-automatic-readings";
@@ -57,25 +58,25 @@ export function HistoricalAutomaticMarketReadings({ snapshot, layout }: { snapsh
     <section className="border-y border-line py-8 md:py-10">
       <div className="grid gap-5 lg:grid-cols-[0.34fr_1fr]">
         <div>
-          <p className="text-xs font-semibold uppercase text-petrol">
+          <ReportParagraph className="text-xs font-semibold uppercase text-petrol">
             Lecturas de mercado al cierre
-          </p>
+          </ReportParagraph>
           <h2 className="mt-2 text-2xl font-semibold leading-tight text-ink md:text-3xl">
-            {snapshot.displayTitle ?? "Régimen, sectores, volatilidad y flujos"}
+            <ReportText>{snapshot.displayTitle ?? "Régimen, sectores, volatilidad y flujos"}</ReportText>
           </h2>
-          <p className="mt-4 text-sm leading-6 text-muted">
+          <ReportParagraph className="mt-4 text-sm leading-6 text-muted">
             Datos disponibles hasta{" "}
             <time dateTime={snapshot.dataDate}>{formatEditorialDate(snapshot.dataDate, "es")}</time>.
-          </p>
+          </ReportParagraph>
         </div>
         <div className="grid min-w-0 gap-5">
-          {snapshot.closingLabel ? <p className="text-base font-medium text-ink">{snapshot.closingLabel}</p> : null}
-          {snapshot.sourceNote ? <p className="border-l-2 border-brass pl-3 text-xs leading-6 text-muted">{snapshot.sourceNote}</p> : null}
+          {snapshot.closingLabel ? <ReportParagraph className="text-base font-medium text-ink">{snapshot.closingLabel}</ReportParagraph> : null}
+          {snapshot.sourceNote ? <ReportParagraph className="border-l-2 border-brass pl-3 text-xs leading-6 text-muted">{snapshot.sourceNote}</ReportParagraph> : null}
           {snapshot.cutoffComparison ? (
             <ReportSection headingLevel={snapshot.displayTitle ? 3 : 2} eyebrow="Evolución entre cortes" title={snapshot.cutoffComparison.title}>
               <div className="overflow-x-auto" role="region" aria-label="Comparación entre cortes" tabIndex={0}>
                 <table className="w-full border-collapse text-left text-sm">
-                  <caption className="sr-only">{snapshot.cutoffComparison.title}</caption>
+                  <caption className="sr-only"><ReportText>{snapshot.cutoffComparison.title}</ReportText></caption>
                   <thead><tr>
                     <th scope="col" className="border-b border-line bg-panelSoft p-3">Métrica</th>
                     <th scope="col" className="border-b border-line bg-panelSoft p-3"><time dateTime={snapshot.cutoffComparison.fromDate}>{snapshot.cutoffComparison.fromLabel}</time></th>
@@ -88,25 +89,39 @@ export function HistoricalAutomaticMarketReadings({ snapshot, layout }: { snapsh
                   </tr>)}</tbody>
                 </table>
               </div>
-              <p className="mt-4 border-l-2 border-brass pl-4 font-medium text-ink">{snapshot.cutoffComparison.message}</p>
-              <p className="mt-3 text-sm leading-6 text-muted">{snapshot.cutoffComparison.interpretation}</p>
-              <p className="mt-3 text-xs leading-6 text-muted">{snapshot.cutoffComparison.methodology}</p>
+              <ReportParagraph className="mt-4 border-l-2 border-brass pl-4 font-medium text-ink">{snapshot.cutoffComparison.message}</ReportParagraph>
+              <ReportParagraph className="mt-3 text-sm leading-6 text-muted">{snapshot.cutoffComparison.interpretation}</ReportParagraph>
+              <ReportParagraph className="mt-3 text-xs leading-6 text-muted">{snapshot.cutoffComparison.methodology}</ReportParagraph>
             </ReportSection>
           ) : null}
 
           <section className="border border-petrol/35 bg-panel p-4 shadow-[0_10px_30px_rgba(31,35,40,0.035)] md:p-6">
-            {snapshot.regime.score === null && snapshot.regime.confidence === null ? <>
+            {snapshot.regime.reconstruction ? <>
+              <ReportParagraph className="text-xs font-semibold uppercase text-brass">Régimen V1 al 18/09</ReportParagraph>
+              <h3 className="mt-2 text-2xl font-semibold text-ink">{snapshot.regime.label}</h3>
+              <div className="mt-4 grid gap-3 sm:grid-cols-3">
+                <Metric label="Sesgo" value={snapshot.regime.bias} />
+                <Metric label="Score reconstruido" value={`${snapshot.regime.reconstruction.scoreRange.join('–')} / 100`} emphasis />
+                <Metric label="Confianza" value="No se publica una cifra puntual" />
+              </div>
+              <ReportParagraph className="mt-4 text-sm leading-6 text-muted">{snapshot.regime.interpretation}</ReportParagraph>
+              <details className="mt-3 text-xs leading-6 text-muted">
+                <summary className="cursor-pointer font-semibold text-petrol">Ver metodología</summary>
+                <ReportParagraph className="mt-3">{snapshot.regime.reconstruction.methodology}</ReportParagraph>
+                <Link className="mt-2 inline-block underline underline-offset-4" href={snapshot.regime.reconstruction.methodologyHref}>Replay acotado · código y evidencia [C5]</Link>
+              </details>
+            </> : snapshot.regime.score === null && snapshot.regime.confidence === null ? <>
               <h3 className="text-base font-semibold text-ink">Régimen V1 no publicado</h3>
-              <p className="mt-2 text-sm leading-6 text-muted">No existe evidencia suficiente para reconstruir el estado exacto del motor al cierre del {snapshot.dataDate.slice(8, 10)}/{snapshot.dataDate.slice(5, 7)}.</p>
+              <ReportParagraph className="mt-2 text-sm leading-6 text-muted">No existe evidencia suficiente para reconstruir el estado exacto del motor al cierre del {snapshot.dataDate.slice(8, 10)}/{snapshot.dataDate.slice(5, 7)}.</ReportParagraph>
               <details className="mt-3 text-xs leading-6 text-muted">
                 <summary className="cursor-pointer font-semibold text-petrol">Ver límite metodológico</summary>
-                <p className="mt-2">{snapshot.regime.interpretation}</p>
+                <ReportParagraph className="mt-2">{snapshot.regime.interpretation}</ReportParagraph>
               </details>
             </> : <div className="grid gap-5 lg:grid-cols-[1fr_0.54fr] lg:items-end">
               <div>
-                <p className="text-xs font-semibold uppercase text-brass">Régimen</p>
+                <ReportParagraph className="text-xs font-semibold uppercase text-brass">Régimen</ReportParagraph>
                 <h3 className="mt-3 text-2xl font-semibold leading-tight text-ink">{snapshot.regime.label}</h3>
-                <p className="mt-3 text-sm leading-6 text-muted">{snapshot.regime.interpretation}</p>
+                <ReportParagraph className="mt-3 text-sm leading-6 text-muted">{snapshot.regime.interpretation}</ReportParagraph>
               </div>
               <div className="grid gap-2 sm:grid-cols-2">
                 <Metric
@@ -135,17 +150,17 @@ export function HistoricalAutomaticMarketReadings({ snapshot, layout }: { snapsh
                   <div key={title}>
                     <h4 className="text-base font-semibold text-ink">{title}</h4>
                     <ul className="mt-3 grid list-disc gap-3 pl-5 text-sm leading-6 text-muted">
-                      {items.map(item => <li key={item}>{item}</li>)}
+                      {items.map(item => <li key={item}><ReportText>{item}</ReportText></li>)}
                     </ul>
                   </div>
                 ))}
-                <p className="border-l-2 border-brass pl-4 text-sm leading-6 text-ink">{snapshot.weeklyReview.closing}</p>
+                <ReportParagraph className="border-l-2 border-brass pl-4 text-sm leading-6 text-ink">{snapshot.weeklyReview.closing}</ReportParagraph>
                 <details className="border-t border-line pt-3 text-xs leading-6 text-muted">
                   <summary className="cursor-pointer font-semibold text-petrol">Método y fuentes · cierre congelado al {formatEditorialDate(snapshot.weeklyReview.asOf, "es")}</summary>
-                  <p className="mt-3">{snapshot.weeklyReview.methodology}</p>
-                  {snapshot.weeklyReview.notes.map(note => <p className="mt-2" key={note}>{note}</p>)}
+                  <ReportParagraph className="mt-3">{snapshot.weeklyReview.methodology}</ReportParagraph>
+                  {snapshot.weeklyReview.notes.map(note => <ReportParagraph className="mt-2" key={note}>{note}</ReportParagraph>)}
                   <ul className="mt-2">
-                    {snapshot.weeklyReview.sources.map(source => <li key={source.href}><a className="underline underline-offset-4" href={source.href} target="_blank" rel="noreferrer">{source.label}</a></li>)}
+                    {snapshot.weeklyReview.sources.map(source => <li key={source.href}><ReportAnchor className="underline underline-offset-4" href={source.href} target="_blank" rel="noreferrer">{source.label}</ReportAnchor></li>)}
                   </ul>
                 </details>
               </div>
@@ -159,23 +174,23 @@ export function HistoricalAutomaticMarketReadings({ snapshot, layout }: { snapsh
                 <article key={asset.ticker} className="border border-line bg-panelSoft p-4">
                   <div className="flex items-start justify-between gap-3">
                     <div>
-                      <p className="text-lg font-semibold text-ink">{asset.ticker}</p>
-                      <p className="mt-1 text-xs leading-5 text-muted">{indexNames[asset.ticker]}</p>
+                      <ReportParagraph className="text-lg font-semibold text-ink">{asset.ticker}</ReportParagraph>
+                      <ReportParagraph className="mt-1 text-xs leading-5 text-muted">{indexNames[asset.ticker]}</ReportParagraph>
                     </div>
                     <span className="text-right text-lg font-semibold text-ink">
                       {formatPercent(asset.return1w)}
                     </span>
                   </div>
                   <div className="mt-4 grid gap-2 text-sm leading-6 text-muted">
-                    <p className="font-semibold text-ink">{structureLabel(asset.distanceLongAverage)}</p>
-                    <p>
+                    <ReportParagraph className="font-semibold text-ink">{structureLabel(asset.distanceLongAverage)}</ReportParagraph>
+                    <ReportParagraph>
                       Media larga:{" "}
                       <span className="font-semibold text-ink">{formatPercent(asset.distanceLongAverage)}</span>
-                    </p>
-                    <p>
+                    </ReportParagraph>
+                    <ReportParagraph>
                       Distancia a máximos:{" "}
                       <span className="font-semibold text-ink">{formatPercent(asset.distanceFromHigh)}</span>
-                    </p>
+                    </ReportParagraph>
                   </div>
                 </article>
               ))}
@@ -188,12 +203,12 @@ export function HistoricalAutomaticMarketReadings({ snapshot, layout }: { snapsh
               <div className="border border-line bg-panelSoft p-4">
                 <div className="flex items-start justify-between gap-3">
                   <div>
-                    <p className="text-sm font-semibold text-ink">Sectores positivos</p>
-                    <p className="mt-1 text-xs leading-5 text-muted">Participación semanal al cierre del informe.</p>
+                    <ReportParagraph className="text-sm font-semibold text-ink">Sectores positivos</ReportParagraph>
+                    <ReportParagraph className="mt-1 text-xs leading-5 text-muted">Participación semanal al cierre del informe.</ReportParagraph>
                   </div>
-                  <p className="text-lg font-semibold text-ink">
+                  <ReportParagraph className="text-lg font-semibold text-ink">
                     {snapshot.sectors.positiveCount} / {snapshot.sectors.totalCount}
-                  </p>
+                  </ReportParagraph>
                 </div>
                 <div className="mt-4 grid grid-cols-11 gap-1" aria-hidden="true">
                   {sectorBars.map((isPositive, index) => (
@@ -203,9 +218,9 @@ export function HistoricalAutomaticMarketReadings({ snapshot, layout }: { snapsh
                     />
                   ))}
                 </div>
-                <p className="mt-3 text-xs leading-5 text-muted">
+                <ReportParagraph className="mt-3 text-xs leading-5 text-muted">
                   {snapshot.sectors.negativeCount} sectores negativos o rezagados en la ventana semanal.
-                </p>
+                </ReportParagraph>
               </div>
               <div className="grid gap-3 sm:grid-cols-2">
                 <CompactList title="Líderes" items={snapshot.sectors.leaders} />
@@ -240,7 +255,7 @@ export function HistoricalAutomaticMarketReadings({ snapshot, layout }: { snapsh
                 />
               </div>
               <div className="mt-4 flex flex-col gap-3 border-t border-line pt-4 md:flex-row md:items-start md:justify-between">
-                <p className="text-sm leading-6 text-muted">{snapshot.breadth.reading}</p>
+                <ReportParagraph className="text-sm leading-6 text-muted">{snapshot.breadth.reading}</ReportParagraph>
                 {dashboardButton()}
               </div>
             </ReportSection>
@@ -259,10 +274,10 @@ export function HistoricalAutomaticMarketReadings({ snapshot, layout }: { snapsh
                 <Metric label="Correlación promedio" value={snapshot.quantRadar.averageCorrelation21d.toFixed(2)} />
                 <Metric label="Dispersión sectorial" value={snapshot.dispersionUnit === "pp" ? `${formatNumber(snapshot.quantRadar.sectorDispersion1w)} pp` : formatPercent(snapshot.quantRadar.sectorDispersion1w)} />
               </div>
-              <p className="mt-4 border-t border-line pt-4 text-xs leading-5 text-muted">
+              <ReportParagraph className="mt-4 border-t border-line pt-4 text-xs leading-5 text-muted">
                 Estos modelos estiman condiciones estadísticas de riesgo bajo supuestos históricos; no anticipan por sí
                 solos el comportamiento del mercado.
-              </p>
+              </ReportParagraph>
             </ReportSection>
           ) : null}
 
@@ -273,10 +288,10 @@ export function HistoricalAutomaticMarketReadings({ snapshot, layout }: { snapsh
                 <div className="border border-line bg-panelSoft p-4">
                   <div className="flex items-start justify-between gap-3">
                     <div>
-                      <p className="text-sm font-semibold text-ink">Nivel al corte</p>
-                      <p className="mt-1 text-xs leading-5 text-muted">Estado: {snapshot.vix.stateLabel}</p>
+                      <ReportParagraph className="text-sm font-semibold text-ink">Nivel al corte</ReportParagraph>
+                      <ReportParagraph className="mt-1 text-xs leading-5 text-muted">Estado: {snapshot.vix.stateLabel}</ReportParagraph>
                     </div>
-                    <p className="text-2xl font-semibold leading-none text-ink">{formatNumber(snapshot.vix.level)}</p>
+                    <ReportParagraph className="text-2xl font-semibold leading-none text-ink">{formatNumber(snapshot.vix.level)}</ReportParagraph>
                   </div>
                   <div className="mt-4 flex items-center justify-between text-[10px] font-semibold uppercase text-muted">
                     <span>Calma</span>
@@ -312,9 +327,9 @@ export function HistoricalAutomaticMarketReadings({ snapshot, layout }: { snapsh
                 ) : null}
               </div>
               <div className="mt-4 flex flex-col gap-3 border-t border-line pt-4 md:flex-row md:items-start md:justify-between">
-                <p className="text-sm leading-6 text-muted">{snapshot.vix.curveText}</p>
+                <ReportParagraph className="text-sm leading-6 text-muted">{snapshot.vix.curveText}</ReportParagraph>
                 {dashboardButton()}
-              </div></> : <p className="text-sm leading-6 text-muted">No disponible al cierre. El snapshot no se completa con datos vivos posteriores.</p>}
+              </div></> : <ReportParagraph className="text-sm leading-6 text-muted">No disponible al cierre. El snapshot no se completa con datos vivos posteriores.</ReportParagraph>}
             </ReportSection>
 
             <div className={layout === "vix-flows" ? "grid min-w-0 gap-5" : "contents"}>
@@ -326,7 +341,7 @@ export function HistoricalAutomaticMarketReadings({ snapshot, layout }: { snapsh
                 <Metric label={"BTC ETF 5D al corte"} value={formatUsdMillions(snapshot.btcEtfFlows.rolling5dUsdMillions)} />
                 <Metric label="Racha al corte" value={snapshot.btcEtfFlows.streakLabel} />
               </div>
-              <p className="mt-4 text-sm leading-6 text-muted">{snapshot.btcEtfFlows.reading}</p></> : <p className="text-sm leading-6 text-muted">No disponible al cierre.</p>}
+              <ReportParagraph className="mt-4 text-sm leading-6 text-muted">{snapshot.btcEtfFlows.reading}</ReportParagraph></> : <ReportParagraph className="text-sm leading-6 text-muted">No disponible al cierre.</ReportParagraph>}
             </ReportSection>
 
             <ReportSection headingLevel={snapshot.displayTitle ? 3 : 2} eyebrow="Oro" title="Presión de flujos en GLD">
@@ -354,26 +369,26 @@ export function HistoricalAutomaticMarketReadings({ snapshot, layout }: { snapsh
                   value={<time dateTime={snapshot.gldFlowPressure.asOf}>{snapshot.gldFlowPressure.asOf}</time>}
                 />
               </div>
-              <p className="mt-4 text-sm leading-6 text-muted">{snapshot.gldFlowPressure.summary}</p>
-              <p className="mt-3 border-t border-line pt-3 text-xs leading-5 text-muted">
+              <ReportParagraph className="mt-4 text-sm leading-6 text-muted">{snapshot.gldFlowPressure.summary}</ReportParagraph>
+              <ReportParagraph className="mt-3 border-t border-line pt-3 text-xs leading-5 text-muted">
                 {snapshot.gldFlowPressure.sourceNote}
-              </p></> : <p className="text-sm leading-6 text-muted">No disponible al cierre.</p>}
+              </ReportParagraph></> : <ReportParagraph className="text-sm leading-6 text-muted">No disponible al cierre.</ReportParagraph>}
             </ReportSection>
             </div>
           </div>
 
           {snapshot.statisticalAssets?.length ? (
           <ReportSection headingLevel={snapshot.displayTitle ? 3 : 2} eyebrow="Activos" title="Posición técnica por activo">
-            <p className="mb-4 text-sm leading-6 text-muted">
+            <ReportParagraph className="mb-4 text-sm leading-6 text-muted">
               Percentil, z-score, distancia frente a la media de largo plazo y último cierre disponible.
-            </p>
+            </ReportParagraph>
             <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-3">
               {snapshot.statisticalAssets.map((asset) => (
                 <article key={asset.label} className="border border-line bg-panelSoft p-4">
                   <div className="flex items-start justify-between gap-3">
                     <div>
-                      <p className="text-lg font-semibold text-ink">{asset.label}</p>
-                      <p className="mt-1 text-xs leading-5 text-muted">{asset.symbol ?? asset.label}</p>
+                      <ReportParagraph className="text-lg font-semibold text-ink">{asset.label}</ReportParagraph>
+                      <ReportParagraph className="mt-1 text-xs leading-5 text-muted">{asset.symbol ?? asset.label}</ReportParagraph>
                     </div>
                     <span className="shrink-0 border border-brass/35 bg-white px-2 py-1 text-[11px] font-semibold uppercase text-brass">
                       Dato al corte
@@ -381,18 +396,18 @@ export function HistoricalAutomaticMarketReadings({ snapshot, layout }: { snapsh
                   </div>
                   <StatisticalRangeBar percentile={asset.percentile} />
                   <div className="mt-4 grid gap-2 text-sm text-muted">
-                    <p>Percentil <span className="font-semibold text-ink">{asset.percentile.toFixed(1)}</span></p>
-                    <p>Z-score <span className="font-semibold text-ink">{asset.zScore.toFixed(2)}</span></p>
-                    <p>
+                    <ReportParagraph>Percentil <span className="font-semibold text-ink">{asset.percentile.toFixed(1)}</span></ReportParagraph>
+                    <ReportParagraph>Z-score <span className="font-semibold text-ink">{asset.zScore.toFixed(2)}</span></ReportParagraph>
+                    <ReportParagraph>
                       Distancia a media larga{" "}
                       <span className="font-semibold text-ink">{formatPercent(asset.distanceLongAverage)}</span>
-                    </p>
-                    <p>
+                    </ReportParagraph>
+                    <ReportParagraph>
                       Último cierre al corte{" "}
                       <span className="font-semibold text-ink">
                         {formatNumber(asset.lastClose, asset.label === "BTC" ? 0 : 2)}
                       </span>
-                    </p>
+                    </ReportParagraph>
                   </div>
                 </article>
               ))}
@@ -416,10 +431,10 @@ function Metric({
 }) {
   return (
     <div className="border border-line bg-panelSoft px-3 py-2">
-      <p className="text-[11px] uppercase text-muted">{label}</p>
-      <p className={emphasis ? "mt-1 text-lg font-semibold leading-6 text-ink" : "mt-1 font-semibold leading-6 text-ink"}>
+      <ReportParagraph className="text-[11px] uppercase text-muted">{label}</ReportParagraph>
+      <ReportParagraph className={emphasis ? "mt-1 text-lg font-semibold leading-6 text-ink" : "mt-1 font-semibold leading-6 text-ink"}>
         {value}
-      </p>
+      </ReportParagraph>
     </div>
   );
 }
@@ -427,9 +442,9 @@ function Metric({
 function SignalList({ items, title }: { items: string[]; title: string }) {
   return (
     <div className="border border-line bg-panelSoft p-4">
-      <p className="text-sm font-semibold text-ink">{title}</p>
+      <ReportParagraph className="text-sm font-semibold text-ink">{title}</ReportParagraph>
       <div className="mt-3 grid gap-2 text-sm leading-6 text-muted">
-        {items.map((item, index) => <p key={`${title}-${index}`}>{item}</p>)}
+        {items.map((item, index) => <ReportParagraph key={`${title}-${index}`}>{item}</ReportParagraph>)}
       </div>
     </div>
   );
@@ -444,7 +459,7 @@ function CompactList({
 }) {
   return (
     <div className="border border-line bg-panelSoft p-4">
-      <p className="text-sm font-semibold text-ink">{title}</p>
+      <ReportParagraph className="text-sm font-semibold text-ink">{title}</ReportParagraph>
       <div className="mt-3 grid gap-2">
         {items.map((item) => (
           <div key={item.ticker} className="flex items-start justify-between gap-3 text-sm leading-6">
@@ -460,9 +475,9 @@ function CompactList({
 function EditorialNote({ body, footer, title }: { body: string; footer: string; title: string }) {
   return (
     <div>
-      <p className="text-sm font-semibold text-ink">{title}</p>
-      <p className="mt-2 text-sm leading-6 text-muted">{body}</p>
-      <p className="mt-2 text-xs leading-5 text-muted">{footer}</p>
+      <ReportParagraph className="text-sm font-semibold text-ink">{title}</ReportParagraph>
+      <ReportParagraph className="mt-2 text-sm leading-6 text-muted">{body}</ReportParagraph>
+      <ReportParagraph className="mt-2 text-xs leading-5 text-muted">{footer}</ReportParagraph>
     </div>
   );
 }

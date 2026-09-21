@@ -1,0 +1,184 @@
+[
+  {
+    "url": "https://finance.yahoo.com/quote/BTC-USD/history/",
+    "httpStatus": "200",
+    "finalUrl": "https://finance.yahoo.com/quote/BTC-USD/history/",
+    "error": null,
+    "checkedAt": "2026-09-21T23:10:38.944271+00:00"
+  },
+  {
+    "url": "https://finance.yahoo.com/quote/ETH-USD/history/",
+    "httpStatus": "200",
+    "finalUrl": "https://finance.yahoo.com/quote/ETH-USD/history/",
+    "error": null,
+    "checkedAt": "2026-09-21T23:10:38.888642+00:00"
+  },
+  {
+    "url": "https://finance.yahoo.com/quote/EWJ/history/",
+    "httpStatus": "200",
+    "finalUrl": "https://finance.yahoo.com/quote/EWJ/history/",
+    "error": null,
+    "checkedAt": "2026-09-21T23:10:38.718627+00:00"
+  },
+  {
+    "url": "https://finance.yahoo.com/quote/FXI/history/",
+    "httpStatus": "404",
+    "finalUrl": "https://finance.yahoo.com/quote/FXI/history/",
+    "error": null,
+    "checkedAt": "2026-09-21T23:10:38.855677+00:00"
+  },
+  {
+    "url": "https://finance.yahoo.com/quote/GLD/history/",
+    "httpStatus": "200",
+    "finalUrl": "https://finance.yahoo.com/quote/GLD/history/",
+    "error": null,
+    "checkedAt": "2026-09-21T23:10:38.626263+00:00"
+  },
+  {
+    "url": "https://finance.yahoo.com/quote/IWM/history/",
+    "httpStatus": "200",
+    "finalUrl": "https://finance.yahoo.com/quote/IWM/history/",
+    "error": null,
+    "checkedAt": "2026-09-21T23:10:38.857027+00:00"
+  },
+  {
+    "url": "https://finance.yahoo.com/quote/QQQ/history/",
+    "httpStatus": "200",
+    "finalUrl": "https://finance.yahoo.com/quote/QQQ/history/",
+    "error": null,
+    "checkedAt": "2026-09-21T23:10:38.937385+00:00"
+  },
+  {
+    "url": "https://finance.yahoo.com/quote/RSP/history/",
+    "httpStatus": "200",
+    "finalUrl": "https://finance.yahoo.com/quote/RSP/history/",
+    "error": null,
+    "checkedAt": "2026-09-21T23:10:38.668775+00:00"
+  },
+  {
+    "url": "https://finance.yahoo.com/quote/SPY/history/",
+    "httpStatus": "200",
+    "finalUrl": "https://finance.yahoo.com/quote/SPY/history/",
+    "error": null,
+    "checkedAt": "2026-09-21T23:10:39.431129+00:00"
+  },
+  {
+    "url": "https://finance.yahoo.com/quote/XLB/history/",
+    "httpStatus": "404",
+    "finalUrl": "https://finance.yahoo.com/quote/XLB/history/",
+    "error": null,
+    "checkedAt": "2026-09-21T23:10:39.595142+00:00"
+  },
+  {
+    "url": "https://finance.yahoo.com/quote/XLC/history/",
+    "httpStatus": "200",
+    "finalUrl": "https://finance.yahoo.com/quote/XLC/history/",
+    "error": null,
+    "checkedAt": "2026-09-21T23:10:39.517885+00:00"
+  },
+  {
+    "url": "https://finance.yahoo.com/quote/XLE/history/",
+    "httpStatus": "200",
+    "finalUrl": "https://finance.yahoo.com/quote/XLE/history/",
+    "error": null,
+    "checkedAt": "2026-09-21T23:10:39.675868+00:00"
+  },
+  {
+    "url": "https://finance.yahoo.com/quote/XLF/history/",
+    "httpStatus": "404",
+    "finalUrl": "https://finance.yahoo.com/quote/XLF/history/",
+    "error": null,
+    "checkedAt": "2026-09-21T23:10:39.725946+00:00"
+  },
+  {
+    "url": "https://finance.yahoo.com/quote/XLI/history/",
+    "httpStatus": "200",
+    "finalUrl": "https://finance.yahoo.com/quote/XLI/history/",
+    "error": null,
+    "checkedAt": "2026-09-21T23:10:39.669405+00:00"
+  },
+  {
+    "url": "https://finance.yahoo.com/quote/XLK/history/",
+    "httpStatus": "200",
+    "finalUrl": "https://finance.yahoo.com/quote/XLK/history/",
+    "error": null,
+    "checkedAt": "2026-09-21T23:10:39.750108+00:00"
+  },
+  {
+    "url": "https://finance.yahoo.com/quote/XLP/history/",
+    "httpStatus": "200",
+    "finalUrl": "https://finance.yahoo.com/quote/XLP/history/",
+    "error": null,
+    "checkedAt": "2026-09-21T23:10:39.643452+00:00"
+  },
+  {
+    "url": "https://finance.yahoo.com/quote/XLRE/history/",
+    "httpStatus": "404",
+    "finalUrl": "https://finance.yahoo.com/quote/XLRE/history/",
+    "error": null,
+    "checkedAt": "2026-09-21T23:10:40.309246+00:00"
+  },
+  {
+    "url": "https://finance.yahoo.com/quote/XLU/history/",
+    "httpStatus": "200",
+    "finalUrl": "https://finance.yahoo.com/quote/XLU/history/",
+    "error": null,
+    "checkedAt": "2026-09-21T23:10:40.401198+00:00"
+  },
+  {
+    "url": "https://finance.yahoo.com/quote/XLV/history/",
+    "httpStatus": "200",
+    "finalUrl": "https://finance.yahoo.com/quote/XLV/history/",
+    "error": null,
+    "checkedAt": "2026-09-21T23:10:40.537551+00:00"
+  },
+  {
+    "url": "https://finance.yahoo.com/quote/XLY/history/",
+    "httpStatus": "200",
+    "finalUrl": "https://finance.yahoo.com/quote/XLY/history/",
+    "error": null,
+    "checkedAt": "2026-09-21T23:10:40.301724+00:00"
+  },
+  {
+    "url": "https://github.com/luiguiHerrera/Luiguiherrera-web/blob/5297846a7c856ef0adecb2d6ee8b38594ebd3b47/docs/reports/segundo-informe-septiembre-2026/corrective-release/README.md",
+    "httpStatus": "200",
+    "finalUrl": "https://github.com/luiguiHerrera/Luiguiherrera-web/blob/5297846a7c856ef0adecb2d6ee8b38594ebd3b47/docs/reports/segundo-informe-septiembre-2026/corrective-release/README.md",
+    "error": null,
+    "checkedAt": "2026-09-21T23:10:40.582690+00:00"
+  },
+  {
+    "url": "https://github.com/luiguiHerrera/Luiguiherrera-web/blob/5297846a7c856ef0adecb2d6ee8b38594ebd3b47/docs/reports/segundo-informe-septiembre-2026/corrective-release/deployed-v1-code.json",
+    "httpStatus": "200",
+    "finalUrl": "https://github.com/luiguiHerrera/Luiguiherrera-web/blob/5297846a7c856ef0adecb2d6ee8b38594ebd3b47/docs/reports/segundo-informe-septiembre-2026/corrective-release/deployed-v1-code.json",
+    "error": null,
+    "checkedAt": "2026-09-21T23:10:40.598594+00:00"
+  },
+  {
+    "url": "https://github.com/luiguiHerrera/Luiguiherrera-web/blob/5297846a7c856ef0adecb2d6ee8b38594ebd3b47/lib/reports/snapshots/segundo-informe-septiembre-2026/dashboard-evidence.json",
+    "httpStatus": "200",
+    "finalUrl": "https://github.com/luiguiHerrera/Luiguiherrera-web/blob/5297846a7c856ef0adecb2d6ee8b38594ebd3b47/lib/reports/snapshots/segundo-informe-septiembre-2026/dashboard-evidence.json",
+    "error": null,
+    "checkedAt": "2026-09-21T23:10:40.749206+00:00"
+  },
+  {
+    "url": "https://github.com/luiguiHerrera/Luiguiherrera-web/blob/5297846a7c856ef0adecb2d6ee8b38594ebd3b47/lib/reports/snapshots/segundo-informe-septiembre-2026/integrity.json",
+    "httpStatus": "200",
+    "finalUrl": "https://github.com/luiguiHerrera/Luiguiherrera-web/blob/5297846a7c856ef0adecb2d6ee8b38594ebd3b47/lib/reports/snapshots/segundo-informe-septiembre-2026/integrity.json",
+    "error": null,
+    "checkedAt": "2026-09-21T23:10:40.584758+00:00"
+  },
+  {
+    "url": "https://github.com/luiguiHerrera/Luiguiherrera-web/blob/5297846a7c856ef0adecb2d6ee8b38594ebd3b47/lib/reports/snapshots/segundo-informe-septiembre-2026/reconciliation.json",
+    "httpStatus": "200",
+    "finalUrl": "https://github.com/luiguiHerrera/Luiguiherrera-web/blob/5297846a7c856ef0adecb2d6ee8b38594ebd3b47/lib/reports/snapshots/segundo-informe-septiembre-2026/reconciliation.json",
+    "error": null,
+    "checkedAt": "2026-09-21T23:10:41.060690+00:00"
+  },
+  {
+    "url": "https://github.com/luiguiHerrera/Luiguiherrera-web/blob/5297846a7c856ef0adecb2d6ee8b38594ebd3b47/lib/reports/snapshots/segundo-informe-septiembre-2026/statistical.json",
+    "httpStatus": "200",
+    "finalUrl": "https://github.com/luiguiHerrera/Luiguiherrera-web/blob/5297846a7c856ef0adecb2d6ee8b38594ebd3b47/lib/reports/snapshots/segundo-informe-septiembre-2026/statistical.json",
+    "error": null,
+    "checkedAt": "2026-09-21T23:10:41.215412+00:00"
+  }
+]

@@ -1,6 +1,6 @@
 # El índice resiste, pero el mercado se estrecha
 
-La Fed volvió a subir tasas y el Treasury a 10 años superó el 5 %. El S&P 500 resistió, pero debajo del índice la participación se deterioró: menos sectores avanzan, menos permanecen sobre sus medias de largo plazo y el liderazgo vuelve a concentrarse en tecnología.
+La [Fed](https://www.federalreserve.gov/newsevents/pressreleases/monetary20260916a.htm) volvió a subir tasas y el Treasury a 10 años superó el 5 %. El S&P 500 resistió, pero debajo del índice la participación se deterioró: menos sectores avanzan, menos permanecen sobre sus medias de largo plazo y el liderazgo vuelve a concentrarse en tecnología.
 
 - Edición: Segundo informe de septiembre
 - Autor: Luigui Herrera
@@ -16,9 +16,9 @@ Periodo prospectivo: Desde el 21 de septiembre de 2026 hasta la siguiente public
 
 ## Contexto general
 
-En el Primer Informe, unos rendimientos largos elevados eran el riesgo que las acciones debían absorber. Ahora hay hechos: la Fed subió 25 puntos básicos el 16/09, hasta 3,75–4,00 %, y el Treasury a diez años superó el 5 %. Los rendimientos —yields— aumentaron el coste de financiación; el ajuste bursátil apareció sobre todo debajo del índice. [B1–B2]
+En el [Primer Informe](https://www.luiguiherrera.com/informes/primer-informe-septiembre-2026), unos rendimientos largos elevados eran el riesgo que las acciones debían absorber. Ahora hay hechos: la [Fed](https://www.federalreserve.gov/newsevents/pressreleases/monetary20260916a.htm) subió 25 puntos básicos el 16/09, hasta 3,75–4,00 %, y el Treasury a diez años superó el 5 %. Los rendimientos —yields— aumentaron el coste de financiación; el ajuste bursátil apareció sobre todo debajo del índice. [B1–B2]
 
-Los sectores positivos pasaron de 4/11 a 2/11 y los situados sobre su media de 200 sesiones (MA200), de 8/11 a 4/11. La amplitud —cuántas partes del mercado participan— perdió respaldo. Los fondos cotizados (ETF) permiten contrastar grandes compañías, pequeñas y tecnología. La tabla compara ventanas homogéneas de cinco sesiones y seis cierres; no mide la rentabilidad acumulada entre cortes. [C1]
+Los sectores positivos pasaron de 4/11 a 2/11 y los situados sobre su media de 200 sesiones (MA200), de 8/11 a 4/11. La amplitud —cuántas partes del mercado participan— perdió respaldo. Los fondos cotizados (ETF) permiten contrastar grandes compañías, pequeñas y tecnología. La tabla compara ventanas homogéneas de cinco sesiones y seis cierres; no mide la rentabilidad acumulada entre cortes. [[C1]](https://www.luiguiherrera.com/dashboard)
 
 El BofA FMS de septiembre, encuestado del 4 al 10/09, sitúa una subida desordenada de rendimientos como principal riesgo extremo, por delante de IA. Frente al marco de agosto, se modera la exposición a acciones y aumenta ligeramente el efectivo. Es la percepción de los gestores, no una predicción del próximo movimiento. [A1]
 
@@ -30,11 +30,11 @@ El índice cambió poco; la calidad interna del mercado se deterioró.
 
 Estado del mercado al cierre del 18 de septiembre de 2026
 
-Datos congelados: sectores y radar del 18/09 recuperados en la consulta del 21/09, con replay exacto del radar sobre los 11 ETF de Alpha Vantage. Amplitud relativa y MA200: misma autoridad Statistical Levels / Yahoo en ambos cortes. VIX spot conserva la fecha 17/09. Flujos BTC: Farside, cinco sesiones completas. No se publica régimen, score ni confianza V1 del 18/09: no existe evidencia suficiente del estado histórico del adaptador.
+Datos congelados: sectores y radar del 18/09 recuperados en la consulta del 21/09, con replay exacto del radar sobre los 11 ETF de [Alpha Vantage](https://www.alphavantage.co/documentation/#daily). Amplitud relativa y MA200: misma autoridad [Statistical Levels](https://www.luiguiherrera.com/methodology/segundo-informe-septiembre-2026-datos.html) / [Yahoo](https://www.luiguiherrera.com/methodology/segundo-informe-septiembre-2026-datos.html) en ambos cortes. VIX spot conserva la fecha 17/09. Flujos BTC: [Farside](https://farside.co.uk/bitcoin-etf-flow-all-data/), cinco sesiones completas. La clasificación V1 se presenta como replay acotado condicionado a sectores y VIX reconciliados; no como captura exacta del motor. No se publica score ni confianza puntuales.
 
 Corte de esta edición: **2026-09-18**. Cada módulo conserva la última fecha disponible de su fuente.
 
-### Qué cambió desde el Primer Informe
+### Qué cambió desde el [Primer Informe](https://www.luiguiherrera.com/informes/primer-informe-septiembre-2026)
 
 | Métrica | 04/09 | 18/09 |
 |---|---|---|
@@ -53,21 +53,29 @@ El índice cambió poco; la calidad interna del mercado se deterioró.
 
 SPY retrocedió un 0,86 % entre ambos cierres ajustados. La participación se estrechó: menos sectores avanzan, menos permanecen sobre MA200 y QQQ gana ventaja relativa. El radar reproduce un aumento moderado de volatilidad, con fragilidad todavía baja. Los flujos BTC mejoraron al final de la semana, pero sus cinco sesiones quedan casi equilibradas. No se compara el régimen V1 sin una reproducción histórica exacta.
 
-Amplitud normalizada a cinco sesiones en cada corte: 28/08–04/09 y 11/09–18/09, usando seis cierres ajustados del mismo baseline Statistical Levels / Yahoo, publicados a dos decimales. Se recalcula el 04/09 solo para esta tabla; el Primer Informe conserva su ventana original. Sectores positivos y dispersión: mismos 11 ETF de Alpha Vantage, cierre sin ajustar y cinco sesiones; dispersión en puntos porcentuales. MA200: mismos 11 ETF, serie ajustada de Statistical Levels. EWMA, GARCH, correlación y fragilidad reproducidos con el mismo motor y las series sectoriales congeladas de ambos cortes; no proceden de Statistical Levels.
+Amplitud normalizada a cinco sesiones en cada corte: 28/08–04/09 y 11/09–18/09, usando seis cierres ajustados del mismo baseline [Statistical Levels](https://www.luiguiherrera.com/methodology/segundo-informe-septiembre-2026-datos.html) / [Yahoo](https://www.luiguiherrera.com/methodology/segundo-informe-septiembre-2026-datos.html), publicados a dos decimales. Se recalcula el 04/09 solo para esta tabla; el [Primer Informe](https://www.luiguiherrera.com/informes/primer-informe-septiembre-2026) conserva su ventana original. Sectores positivos y dispersión: mismos 11 ETF de [Alpha Vantage](https://www.alphavantage.co/documentation/#daily), cierre sin ajustar y cinco sesiones; dispersión en puntos porcentuales. MA200: mismos 11 ETF, serie ajustada de [Statistical Levels](https://www.luiguiherrera.com/methodology/segundo-informe-septiembre-2026-datos.html). EWMA, GARCH, correlación y fragilidad reproducidos con el mismo motor y las series sectoriales congeladas de ambos cortes; no proceden de [Statistical Levels](https://www.luiguiherrera.com/methodology/segundo-informe-septiembre-2026-datos.html).
 
-### Régimen al corte
+### Régimen V1 al 18/09
 
-**Régimen V1 no publicado**
+**Risk-on selectivo**
 
-No existe evidencia suficiente para reconstruir el estado exacto del motor al cierre del 18/09.
+| Campo | Valor |
+|---|---|
+| Sesgo | Favorable |
+| Score reconstruido | 70–77 / 100 |
+| Confianza | No se publica una cifra puntual |
 
-**Ver límite metodológico:** Se omiten score, confianza y comparación de régimen. La captura del Dashboard del 21/09 reproduce 70/100 y 74 % de confianza, pero utiliza Bitbo parcial hasta el 17/09; no demuestra qué habría admitido el adaptador al cierre del 18/09. Farside se utiliza exclusivamente para el bloque independiente de flujos.
+La clasificación se reconstruye con el código V1 desplegado al corte. Los pilares sectorial y VIX son reproducibles; la caché exacta del pilar BTC no quedó preservada. Todos los estados admisibles de ese pilar producen la misma clasificación: Risk-on selectivo.
+
+**Ver metodología:** Replay condicionado a mantener fijas las observaciones sectoriales del 18/09 y el VIX del 17/09 recuperados el 21/09. Su admisión exacta en la caché histórica tampoco quedó acreditada. Se ejecuta el código del commit 4ee6adb006f360fea13837db5f7d45815f297b55 sobre 6.049 casos, un conjunto conservador que cubre todas las ramas del score BTC: disponibilidad, fuente, severidad y racha. Sectores y VIX aportan 66,3 puntos; BTC aporta entre 3,6 y 11,1. El redondeo del motor produce 70–77 y todos los casos mantienen Risk-on selectivo. Este rango describe estados del modelo, no un intervalo de confianza. No se elige un score ni una confianza puntual, ni se afirma haber recuperado el estado exacto de la caché al corte.
+
+[Replay acotado · código y evidencia [C5]](https://www.luiguiherrera.com/methodology/segundo-informe-septiembre-2026-regimen.html)
 
 #### Qué impulsó
 
 - Salud y tecnología lideran la ventana sectorial; QQQ gana +1,01 pp frente a SPY en cinco sesiones.
 - VIX spot: 15,44, última observación disponible del 17/09.
-- Farside: dos sesiones consecutivas de entradas; acumulado de cinco sesiones +6,1 M USD.
+- [Farside](https://farside.co.uk/bitcoin-etf-flow-all-data/): dos sesiones consecutivas de entradas; acumulado de cinco sesiones +6,1 M USD.
 
 #### Qué frenó
 
@@ -101,7 +109,7 @@ No existe evidencia suficiente para reconstruir el estado exacto del motor al ci
 - IWM/SPY 5 sesiones · 11/09–18/09: **-1.3 pp**
 - QQQ/SPY 5 sesiones · 11/09–18/09: **+1.0 pp**
 - Sectores sobre media larga: **4 / 11**
-- Lectura al publicar: Retornos simples ajustados del ETF menos SPY en cinco sesiones; cierres publicados del mismo baseline Statistical Levels / Yahoo. MA200 sobre los 11 ETF sectoriales de esa autoridad. No es el retorno acumulado entre informes.
+- Lectura al publicar: Retornos simples ajustados del ETF menos SPY en cinco sesiones; cierres publicados del mismo baseline [Statistical Levels](https://www.luiguiherrera.com/methodology/segundo-informe-septiembre-2026-datos.html) / [Yahoo](https://www.luiguiherrera.com/methodology/segundo-informe-septiembre-2026-datos.html). MA200 sobre los 11 ETF sectoriales de esa autoridad. No es el retorno acumulado entre informes.
 
 ### Radar cuantitativo al corte
 
@@ -154,7 +162,7 @@ No existe evidencia suficiente para reconstruir el estado exacto del motor al ci
 - Cambio 5D en participaciones: **+0.93%**
 - Cambio 20D en participaciones: **+1.79%**
 - Resumen: GLD muestra entrada neta probable a 5 sesiones, usando cambios en participaciones como proxy de presión de flujos.
-- Limitación de fuente: Cálculo propio con datos diarios de NAV, participaciones y activos netos publicados por State Street. No representa flujos oficiales reportados por el fondo.
+- Limitación de fuente: Cálculo propio con datos diarios de NAV, participaciones y activos netos publicados por [State Street](https://www.ssga.com/library-content/products/fund-data/etfs/us/navhist-us-en-gld.xlsx). No representa flujos oficiales reportados por el fondo.
 
 
 ## Lectura por activo
@@ -165,25 +173,25 @@ No existe evidencia suficiente para reconstruir el estado exacto del motor al ci
 
 Clasificación: **bonos, beneficios y amplitud**
 
-- **Qué pasó:** SPY cerró en 761,69 USD. Entre las dos ventanas, la desventaja de RSP frente a SPY pasa de −0,88 a −1,11 puntos porcentuales; la de IWM, de −0,02 a −1,31. QQQ amplía su ventaja de +0,24 a +1,01. RSP da igual peso a las compañías; IWM sigue pequeñas empresas. El contraste muestra dónde falta participación. Los recuentos sobre MA200 son sectoriales: no describen el porcentaje de las 500 compañías. [C1]
-- **Qué cambió:** AAII ofrece otro contraste: en la semana terminada el 16/09, el 53,3 % de los encuestados era bajista, el 28,8 % alcista y el 17,9 % neutral. El pesimismo del inversor individual es mayor de lo que sugiere el índice; no basta para inferir una señal de compra. [B3]
-- **Qué esperamos:** Detrick mantuvo una lectura constructiva tras la subida de la Fed del 16/09. Es una opinión externa; aquí la confirmación exige que RSP e IWM dejen de rezagarse y que MOVE, la volatilidad implícita de los bonos del Tesoro, no señale un ajuste desordenado. [B20]
+- **Qué pasó:** SPY cerró en 761,69 USD. Entre las dos ventanas, la desventaja de RSP frente a SPY pasa de −0,88 a −1,11 puntos porcentuales; la de IWM, de −0,02 a −1,31. QQQ amplía su ventaja de +0,24 a +1,01. RSP da igual peso a las compañías; IWM sigue pequeñas empresas. El contraste muestra dónde falta participación. Los recuentos sobre MA200 son sectoriales: no describen el porcentaje de las 500 compañías. [[C1]](https://www.luiguiherrera.com/dashboard)
+- **Qué cambió:** [AAII](https://www.aaii.com/sentimentsurvey) ofrece otro contraste: en la semana terminada el 16/09, el 53,3 % de los encuestados era bajista, el 28,8 % alcista y el 17,9 % neutral. El pesimismo del inversor individual es mayor de lo que sugiere el índice; no basta para inferir una señal de compra. [[B3]](https://www.aaii.com/sentimentsurvey)
+- **Qué esperamos:** [Detrick](https://www.carsongroup.com/insights/blog/a-dove-in-hawks-clothing/) mantuvo una lectura constructiva tras la subida de la [Fed](https://www.federalreserve.gov/newsevents/pressreleases/monetary20260916a.htm) del 16/09. Es una opinión externa; aquí la confirmación exige que RSP e IWM dejen de rezagarse y que MOVE, la volatilidad implícita de los bonos del Tesoro, no señale un ajuste desordenado. [[B20]](https://www.carsongroup.com/insights/blog/a-dove-in-hawks-clothing/)
 
-#### Goldman: beneficios antes que múltiplos
+#### [Goldman](https://www.goldmansachs.com/insights/articles/s-and-p-500-forecast-to-climb-as-earnings-growth-powers-stocks-higher): beneficios antes que múltiplos
 
-Dos referencias primarias de Goldman Sachs Research, con fechas distintas. Las previsiones de mayo no se presentan como una revisión de septiembre. [B13, B18]
+Dos referencias primarias de [Goldman Sachs Research](https://www.goldmansachs.com/insights/articles/s-and-p-500-forecast-to-climb-as-earnings-growth-powers-stocks-higher), con fechas distintas. Las previsiones de mayo no se presentan como una revisión de septiembre. [B13, B18]
 
-| Referencia del 28/05/2026 | Previsión de Goldman |
+| Referencia del 28/05/2026 | Previsión de [Goldman](https://www.goldmansachs.com/insights/articles/s-and-p-500-forecast-to-climb-as-earnings-growth-powers-stocks-higher) |
 | --- | --- |
 | S&P 500 · cierre de 2026 | 8.000 puntos |
 | Beneficio por acción (EPS) · 2026 | 340 USD |
 | Beneficio por acción (EPS) · 2027 | 385 USD |
 
-En mayo, Goldman atribuía el rally a beneficios, no a una valoración creciente, y vinculaba aproximadamente la mitad del crecimiento de beneficios de 2026 a proveedores y beneficiarios de infraestructura de IA. Son previsiones externas, no objetivos del informe. [B13]
+En mayo, [Goldman](https://www.goldmansachs.com/insights/articles/s-and-p-500-forecast-to-climb-as-earnings-growth-powers-stocks-higher) atribuía el rally a beneficios, no a una valoración creciente, y vinculaba aproximadamente la mitad del crecimiento de beneficios de 2026 a proveedores y beneficiarios de infraestructura de IA. Son previsiones externas, no objetivos del informe. [[B13]](https://www.goldmansachs.com/insights/articles/s-and-p-500-forecast-to-climb-as-earnings-growth-powers-stocks-higher)
 
-El 15/09, Goldman documenta que el forward P/E —precio respecto al beneficio esperado a doce meses— había bajado de unas 22 a 19 veces en 2026. La valoración relativa frente a bonos seguía aproximadamente estable. Deuda fija y vencimientos largos amortiguan el impacto inmediato de tasas en grandes compañías; mayor crecimiento puede compensar parte de la presión sobre su valoración. [B18]
+El 15/09, [Goldman](https://www.goldmansachs.com/insights/articles/can-the-s-and-p-500-rally-as-treasury-yields-rise) documenta que el forward P/E —precio respecto al beneficio esperado a doce meses— había bajado de unas 22 a 19 veces en 2026. La valoración relativa frente a bonos seguía aproximadamente estable. Deuda fija y vencimientos largos amortiguan el impacto inmediato de tasas en grandes compañías; mayor crecimiento puede compensar parte de la presión sobre su valoración. [[B18]](https://www.goldmansachs.com/insights/articles/can-the-s-and-p-500-rally-as-treasury-yields-rise)
 
-La lectura exige beneficios que se materialicen: la protección del balance da tiempo, no elimina el riesgo. Además, el S&P pondera por capitalización; no replica al hogar ni a la empresa promedio. El consumo sigue importando aunque su peso económico difiera del bursátil. [B14]
+La lectura exige beneficios que se materialicen: la protección del balance da tiempo, no elimina el riesgo. Además, el S&P pondera por capitalización; no replica al hogar ni a la empresa promedio. El consumo sigue importando aunque su peso económico difiera del bursátil. [[B14]](https://www.spglobal.com/spdji/en/methodology/article/sp-us-indices-methodology/)
 
 #### Niveles estadísticos
 
@@ -200,7 +208,7 @@ SPY · Semanal · Apertura 2026-09-14 · Precio al cierre del 2026-09-18: 761,69
 
 Extensiones históricas desde la apertura del periodo. No implican soporte, resistencia ni dirección futura.
 
-Yahoo Finance · autoridad Statistical Levels persistida. Cierre regular ajustado del proveedor, congelado en la autoridad. Distancia = precio / nivel − 1. La semana al corte queda fuera de la muestra de estimación.
+[Yahoo Finance](https://www.luiguiherrera.com/methodology/segundo-informe-septiembre-2026-datos.html) · autoridad [Statistical Levels](https://www.luiguiherrera.com/methodology/segundo-informe-septiembre-2026-datos.html) persistida. Cierre regular ajustado del proveedor, congelado en la autoridad. Distancia = precio / nivel − 1. La semana al corte queda fuera de la muestra de estimación.
 
 #### Estacionalidad de septiembre
 
@@ -230,7 +238,7 @@ SPY · All · ocho ciclos Midterm completos anteriores a 2026. Cálculos propios
 | Octubre | +3,72 % | 87,5 % | 8 |
 | Noviembre | +2,49 % | 75,0 % | 8 |
 
-Detrick señaló el 31/08 la debilidad histórica de septiembre, pero consideró que 2026 podía apartarse de ella. Esa opinión no sustituye nuestras muestras: octubre y noviembre son cálculos propios de Statistical Levels, no cifras de Carson. [B19]
+[Detrick](https://www.carsongroup.com/insights/blog/why-the-worst-month-of-the-year-likely-wont-bring-rain/) señaló el 31/08 la debilidad histórica de septiembre, pero consideró que 2026 podía apartarse de ella. Esa opinión no sustituye nuestras muestras: octubre y noviembre son cálculos propios de [Statistical Levels](https://www.luiguiherrera.com/methodology/segundo-informe-septiembre-2026-datos.html), no cifras de [Carson](https://www.carsongroup.com/insights/blog/why-the-worst-month-of-the-year-likely-wont-bring-rain/). [[B19]](https://www.carsongroup.com/insights/blog/why-the-worst-month-of-the-year-likely-wont-bring-rain/)
 
 La estacionalidad aporta contexto histórico. No implica que el patrón vaya a repetirse.
 
@@ -241,7 +249,7 @@ La estacionalidad aporta contexto histórico. No implica que el patrón vaya a r
 Clasificación: **ETF, dólar y yields reales**
 
 - **Qué pasó:** GLD cerró en 401,17 USD, por encima de WAHE (398,23) y cerca de WSHE (404,19): una extensión estadística alta desde la apertura semanal. Sus participaciones aumentaron aproximadamente un 0,93 % en cinco sesiones. Ese indicador indirecto de demanda no equivale a entradas monetarias oficiales. [C1–C2]
-- **Qué cambió:** El World Gold Council aporta una escala distinta: agosto sumó 18.000 millones de dólares y 121 toneladas en ETF globales de oro, hasta un récord de 4.189 toneladas. La demanda persistió durante las correcciones. Son datos mensuales hasta el 31/08; no se suman al cambio semanal de GLD. [B4]
+- **Qué cambió:** El [World Gold Council](https://www.gold.org/goldhub/research/gold-etfs-holdings-and-flows/2026/09) aporta una escala distinta: agosto sumó 18.000 millones de dólares y 121 toneladas en ETF globales de oro, hasta un récord de 4.189 toneladas. La demanda persistió durante las correcciones. Son datos mensuales hasta el 31/08; no se suman al cambio semanal de GLD. [[B4]](https://www.gold.org/goldhub/research/gold-etfs-holdings-and-flows/2026/09)
 - **Qué esperamos:** La siguiente prueba es si las tenencias resisten una corrección con dólar firme y rendimientos reales —descontada la inflación— elevados. Ventas persistentes de los fondos debilitarían la lectura de demanda; estabilidad de sus posiciones la sostendría.
 
 #### Niveles estadísticos
@@ -259,7 +267,7 @@ GLD · Semanal · Apertura 2026-09-14 · Precio al cierre del 2026-09-18: 401,17
 
 Extensiones históricas desde la apertura del periodo. No implican soporte, resistencia ni dirección futura.
 
-Yahoo Finance · autoridad Statistical Levels persistida. Cierre regular ajustado del proveedor, congelado en la autoridad. Distancia = precio / nivel − 1. La semana al corte queda fuera de la muestra de estimación.
+[Yahoo Finance](https://www.luiguiherrera.com/methodology/segundo-informe-septiembre-2026-datos.html) · autoridad [Statistical Levels](https://www.luiguiherrera.com/methodology/segundo-informe-septiembre-2026-datos.html) persistida. Cierre regular ajustado del proveedor, congelado en la autoridad. Distancia = precio / nivel − 1. La semana al corte queda fuera de la muestra de estimación.
 
 #### Estacionalidad de septiembre
 
@@ -285,7 +293,7 @@ La estacionalidad aporta contexto histórico. No implica que el patrón vaya a r
 
 Clasificación: **riqueza doméstica y consumo**
 
-- **Qué pasó:** FXI cerró en 34,32 USD. La tesis del Primer Informe sigue abierta: el descuento de valoración necesita traducirse en demanda interna. La serie BIS publicada por FRED sitúa los precios residenciales reales en 85,13 en el primer trimestre de 2026, frente a 91,61 un año antes (2010=100). Es una referencia trimestral de debilidad inmobiliaria, no un dato de septiembre. [B5]
+- **Qué pasó:** FXI cerró en 34,32 USD. La tesis del [Primer Informe](https://www.luiguiherrera.com/informes/primer-informe-septiembre-2026) sigue abierta: el descuento de valoración necesita traducirse en demanda interna. La serie [BIS](https://fred.stlouisfed.org/series/QCNR628BIS) publicada por [FRED](https://fred.stlouisfed.org/series/VIXCLS) sitúa los precios residenciales reales en 85,13 en el primer trimestre de 2026, frente a 91,61 un año antes (2010=100). Es una referencia trimestral de debilidad inmobiliaria, no un dato de septiembre. [[B5]](https://fred.stlouisfed.org/series/QCNR628BIS)
 - **Qué cambió:** La vivienda añade una restricción concreta a la tesis de valoración: su caída puede debilitar la riqueza percibida y llevar a los hogares a aplazar gasto. Esa transmisión doméstica merece más atención que una posible rotación global hacia Asia.
 - **Qué esperamos:** La señal útil sería una estabilización inmobiliaria acompañada de mayor gasto de los hogares. Un repunte aislado de FXI no resolvería esa prueba.
 
@@ -304,7 +312,7 @@ FXI · Semanal · Apertura 2026-09-14 · Precio al cierre del 2026-09-18: 34,32 
 
 Extensiones históricas desde la apertura del periodo. No implican soporte, resistencia ni dirección futura.
 
-Yahoo Finance · autoridad Statistical Levels persistida. Cierre regular ajustado del proveedor, congelado en la autoridad. Distancia = precio / nivel − 1. La semana al corte queda fuera de la muestra de estimación.
+[Yahoo Finance](https://www.luiguiherrera.com/methodology/segundo-informe-septiembre-2026-datos.html) · autoridad [Statistical Levels](https://www.luiguiherrera.com/methodology/segundo-informe-septiembre-2026-datos.html) persistida. Cierre regular ajustado del proveedor, congelado en la autoridad. Distancia = precio / nivel − 1. La semana al corte queda fuera de la muestra de estimación.
 
 #### Estacionalidad de septiembre
 
@@ -326,12 +334,12 @@ La estacionalidad aporta contexto histórico. No implica que el patrón vaya a r
 
 ### Japón
 
-**El BOJ confirma otro paso de normalización**
+**El [BOJ](https://www.boj.or.jp/en/mopo/mpmdeci/mpr_2026/k260918a.pdf) confirma otro paso de normalización**
 
 Clasificación: **decisión, yen y JGB**
 
-- **Qué pasó:** El 18/09 el Banco de Japón decidió elevar el tipo del mercado monetario a alrededor del 1,25 %, desde el 1,00 %, con efecto el 24/09. El aumento de 25 puntos básicos fue aprobado por siete votos contra dos. EWJ cerró el 18/09 en 97,00 USD. La reunión ya es un hecho; la aplicación del nuevo tipo es posterior al corte de mercado. [B6]
-- **Qué cambió:** La pregunta ya no es qué decidirá el BOJ, sino cómo absorberán su aplicación los JGB —bonos del Gobierno japonés— y el yen. La deuda que se refinancie y la conversión de beneficios al exterior son dos canales a vigilar; no se atribuye aquí una reacción de mercado no verificada.
+- **Qué pasó:** El 18/09 el Banco de Japón decidió elevar el tipo del mercado monetario a alrededor del 1,25 %, desde el 1,00 %, con efecto el 24/09. El aumento de 25 puntos básicos fue aprobado por siete votos contra dos. EWJ cerró el 18/09 en 97,00 USD. La reunión ya es un hecho; la aplicación del nuevo tipo es posterior al corte de mercado. [[B6]](https://www.boj.or.jp/en/mopo/mpmdeci/mpr_2026/k260918a.pdf)
+- **Qué cambió:** La pregunta ya no es qué decidirá el [BOJ](https://www.boj.or.jp/en/mopo/mpmdeci/mpr_2026/k260918a.pdf), sino cómo absorberán su aplicación los JGB —bonos del Gobierno japonés— y el yen. La deuda que se refinancie y la conversión de beneficios al exterior son dos canales a vigilar; no se atribuye aquí una reacción de mercado no verificada.
 - **Qué esperamos:** Tras el 24/09, conviene separar la respuesta de la bolsa local de su conversión a dólares en EWJ. Una dislocación simultánea de bonos y divisa exigiría revisar la lectura, aunque el ETF por sí solo pareciera estable.
 
 #### Niveles estadísticos
@@ -349,7 +357,7 @@ EWJ · Semanal · Apertura 2026-09-14 · Precio al cierre del 2026-09-18: 97,00 
 
 Extensiones históricas desde la apertura del periodo. No implican soporte, resistencia ni dirección futura.
 
-Yahoo Finance · autoridad Statistical Levels persistida. Cierre regular ajustado del proveedor, congelado en la autoridad. Distancia = precio / nivel − 1. La semana al corte queda fuera de la muestra de estimación.
+[Yahoo Finance](https://www.luiguiherrera.com/methodology/segundo-informe-septiembre-2026-datos.html) · autoridad [Statistical Levels](https://www.luiguiherrera.com/methodology/segundo-informe-septiembre-2026-datos.html) persistida. Cierre regular ajustado del proveedor, congelado en la autoridad. Distancia = precio / nivel − 1. La semana al corte queda fuera de la muestra de estimación.
 
 #### Estacionalidad de septiembre
 
@@ -375,9 +383,9 @@ La estacionalidad aporta contexto histórico. No implica que el patrón vaya a r
 
 Clasificación: **tres lentes de corto plazo**
 
-- **Qué pasó:** Precio: Bitcoin cerró el día UTC del 18/09 en 80.901,46 USD, cerca de WAHE (82.260,60). El cierre se sitúa en la parte alta del recorrido semanal medio; esa proximidad no convierte la extensión en resistencia ni asegura continuidad. [C2]
-- **Qué cambió:** Flujos: Farside registra +6,1 millones de dólares del 14 al 18/09, frente a +986,7 millones en las cinco sesiones del Primer Informe. Jueves y viernes devolvieron el saldo a terreno apenas positivo. La mejora final no reproduce la acumulación de comienzos de mes. [B7]
-- **Qué esperamos:** Estacionalidad: las tablas Midterm y 2020–2025 responden a muestras distintas. Octubre ofrece un antecedente favorable, pero seis observaciones no prueban un patrón robusto. La referencia River usa años, no semanas, y no justifica una lectura táctica del precio.
+- **Qué pasó:** Precio: Bitcoin cerró el día UTC del 18/09 en 80.901,46 USD, cerca de WAHE (82.260,60). El cierre se sitúa en la parte alta del recorrido semanal medio; esa proximidad no convierte la extensión en resistencia ni asegura continuidad. [[C2]](https://www.luiguiherrera.com/methodology/segundo-informe-septiembre-2026-datos.html)
+- **Qué cambió:** Flujos: [Farside](https://farside.co.uk/bitcoin-etf-flow-all-data/) registra +6,1 millones de dólares del 14 al 18/09, frente a +986,7 millones en las cinco sesiones del [Primer Informe](https://www.luiguiherrera.com/informes/primer-informe-septiembre-2026). Jueves y viernes devolvieron el saldo a terreno apenas positivo. La mejora final no reproduce la acumulación de comienzos de mes. [[B7]](https://farside.co.uk/bitcoin-etf-flow-all-data/)
+- **Qué esperamos:** Estacionalidad: las tablas Midterm y 2020–2025 responden a muestras distintas. Octubre ofrece un antecedente favorable, pero seis observaciones no prueban un patrón robusto. La referencia [River](https://river.com/content/the-case-for-a-10-bitcoin-allocation) usa años, no semanas, y no justifica una lectura táctica del precio.
 
 #### Niveles estadísticos
 
@@ -394,7 +402,7 @@ BTCUSD · Semanal · Apertura 2026-09-14 · Precio al cierre del 2026-09-18: 80.
 
 Extensiones históricas desde la apertura del periodo. No implican soporte, resistencia ni dirección futura.
 
-Yahoo Finance · autoridad Statistical Levels persistida. Cierre diario UTC del 2026-09-18; semana de lunes a domingo, aún incompleta al corte. Distancia = precio / nivel − 1. La semana al corte queda fuera de la muestra de estimación.
+[Yahoo Finance](https://www.luiguiherrera.com/methodology/segundo-informe-septiembre-2026-datos.html) · autoridad [Statistical Levels](https://www.luiguiherrera.com/methodology/segundo-informe-septiembre-2026-datos.html) persistida. Cierre diario UTC del 2026-09-18; semana de lunes a domingo, aún incompleta al corte. Distancia = precio / nivel − 1. La semana al corte queda fuera de la muestra de estimación.
 
 #### Estacionalidad de septiembre
 
@@ -433,13 +441,13 @@ La estacionalidad aporta contexto histórico. No implica que el patrón vaya a r
 
 #### Bitcoin · referencia estructural de largo plazo
 
-River · Sam Baker · 02/09/2026. Horizonte de años; no valida entradas tácticas ni flujos semanales. [B15]
+[River](https://river.com/content/the-case-for-a-10-bitcoin-allocation) · [Sam Baker](https://river.com/content/the-case-for-a-10-bitcoin-allocation) · 02/09/2026. Horizonte de años; no valida entradas tácticas ni flujos semanales. [[B15]](https://river.com/content/the-case-for-a-10-bitcoin-allocation)
 
-| Horizonte de River | Rango de escenario |
+| Horizonte de [River](https://river.com/content/the-case-for-a-10-bitcoin-allocation) | Rango de escenario |
 | --- | --- |
 | Próximos 3–5 años (2029–2031) | 250.000–840.000 USD por BTC |
 
-River parte de entradas acumuladas de 1,3–5,3 billones de dólares y supone que cada dólar de entrada añade tres dólares a la capitalización. El rango depende de esos supuestos y de la continuidad de relaciones históricas; no es un intervalo de confianza, una predicción propia ni una fecha objetivo única en 2031.
+[River](https://river.com/content/the-case-for-a-10-bitcoin-allocation) parte de entradas acumuladas de 1,3–5,3 billones de dólares y supone que cada dólar de entrada añade tres dólares a la capitalización. El rango depende de esos supuestos y de la continuidad de relaciones históricas; no es un intervalo de confianza, una predicción propia ni una fecha objetivo única en 2031.
 
 ### Ethereum
 
@@ -447,7 +455,7 @@ River parte de entradas acumuladas de 1,3–5,3 billones de dólares y supone qu
 
 Clasificación: **recuperación sin confirmación sostenida**
 
-- **Qué pasó:** Ethereum cerró en 2.611,35 USD, cerca de WAHE (2.691,48). El rebote en dólares necesita contrastarse con BTC para saber si cripto está ganando participación más allá de su principal activo. [C2]
+- **Qué pasó:** Ethereum cerró en 2.611,35 USD, cerca de WAHE (2.691,48). El rebote en dólares necesita contrastarse con BTC para saber si cripto está ganando participación más allá de su principal activo. [[C2]](https://www.luiguiherrera.com/methodology/segundo-informe-septiembre-2026-datos.html)
 - **Qué cambió:** ETH/BTC gana un 4,71 % entre el 04 y el 18/09, pero cede un 0,94 % en la última semana. Los cierres UTC homogéneos de la tabla muestran una recuperación entre cortes que todavía no es sostenida. [C4]
 - **Qué esperamos:** La prueba será encadenar fortaleza relativa en ETH/BTC, con liquidez suficiente. Si el cociente vuelve a caer mientras ETH sube en dólares, el rebote no confirmará una ampliación del rally.
 
@@ -466,7 +474,7 @@ ETHUSD · Semanal · Apertura 2026-09-14 · Precio al cierre del 2026-09-18: 261
 
 Extensiones históricas desde la apertura del periodo. No implican soporte, resistencia ni dirección futura.
 
-Yahoo Finance · autoridad Statistical Levels persistida. Cierre diario UTC del 2026-09-18; semana de lunes a domingo, aún incompleta al corte. Distancia = precio / nivel − 1. La semana al corte queda fuera de la muestra de estimación.
+[Yahoo Finance](https://www.luiguiherrera.com/methodology/segundo-informe-septiembre-2026-datos.html) · autoridad [Statistical Levels](https://www.luiguiherrera.com/methodology/segundo-informe-septiembre-2026-datos.html) persistida. Cierre diario UTC del 2026-09-18; semana de lunes a domingo, aún incompleta al corte. Distancia = precio / nivel − 1. La semana al corte queda fuera de la muestra de estimación.
 
 #### Estacionalidad de septiembre
 
@@ -506,7 +514,7 @@ Clasificación: **bloque especial**
 
 - **Qué pasó:** BofA septiembre sigue señalando las posiciones compradoras en semiconductores globales como una operación muy concurrida. Ese crowding —muchos inversores en la misma posición— hace que buenos resultados y vulnerabilidad a ventas simultáneas puedan coexistir. La ventaja relativa de QQQ no elimina ese riesgo. [A1, C1]
 - **Qué cambió:** La hipótesis de software de J.P. Morgan del 19/08 sigue abierta. Esta edición concreta cómo contrastarla: CAPEX —inversión en equipos e infraestructura— financiable y más uso convertido en flujo de caja libre (FCF) por acción. La tabla distingue adopción de creación de valor. [A2]
-- **Qué esperamos:** Indeed Hiring Lab encuentra mayor crecimiento del salario anunciado en ocupaciones expuestas a IA, en parte por vacantes de mayor nivel. La asociación es compatible con una prima para trabajos complementarios a la tecnología; no prueba causalidad ni salarios efectivamente pagados. Monetizar IA también puede exigir más gasto laboral. [B8]
+- **Qué esperamos:** [Indeed Hiring Lab](https://hiringlab.indeed.com/2026/09/17/ai-exposure-isnt-squeezing-advertised-pay-in-the-us-its-boosting-it/) encuentra mayor crecimiento del salario anunciado en ocupaciones expuestas a IA, en parte por vacantes de mayor nivel. La asociación es compatible con una prima para trabajos complementarios a la tecnología; no prueba causalidad ni salarios efectivamente pagados. Monetizar IA también puede exigir más gasto laboral. [[B8]](https://hiringlab.indeed.com/2026/09/17/ai-exposure-isnt-squeezing-advertised-pay-in-the-us-its-boosting-it/)
 
 #### Software: del uso a la caja por acción
 
@@ -527,9 +535,9 @@ Rule of 40 usa 40 puntos como referencia de suma, no como garantía de valor. No
 
 Clasificación: **oferta física, fletes e inflación**
 
-- **Qué pasó:** La EIA incorpora las interrupciones de Oriente Medio y las restricciones de Hormuz a su escenario de septiembre. En sus series spot, la última observación disponible es el 15/09: Brent 130,80 USD/barril y WTI 107,02. Son precios físicos, no futuros ni cierres del 18/09. [B9–B11]
-- **Qué cambió:** Baltic Exchange documenta el 18/09 nuevos aumentos de fletes de grandes petroleros hacia China. El shock encarece tanto el crudo como su entrega. Mirar solo el barril deja fuera una parte del coste que llega a empresas y consumidores. [B12]
-- **Qué esperamos:** El canal para este informe es guerra e interrupciones → barril y transporte → inflación → Fed y yields → valoración bursátil. Si persiste, presiona márgenes y dificulta el alivio monetario. Normalizar rutas y fletes reduciría esa presión, sin garantizar un giro de la Fed.
+- **Qué pasó:** La [EIA](https://www.eia.gov/outlooks/steo/) incorpora las interrupciones de Oriente Medio y las restricciones de Hormuz a su escenario de septiembre. En sus series spot, la última observación disponible es el 15/09: Brent 130,80 USD/barril y WTI 107,02. Son precios físicos, no futuros ni cierres del 18/09. [B9–B11]
+- **Qué cambió:** [Baltic Exchange](https://www.balticexchange.com/en/data-services/WeeklyRoundup/tanker/news/2026/tanker-report-week-38.html) documenta el 18/09 nuevos aumentos de fletes de grandes petroleros hacia China. El shock encarece tanto el crudo como su entrega. Mirar solo el barril deja fuera una parte del coste que llega a empresas y consumidores. [[B12]](https://www.balticexchange.com/en/data-services/WeeklyRoundup/tanker/news/2026/tanker-report-week-38.html)
+- **Qué esperamos:** El canal para este informe es guerra e interrupciones → barril y transporte → inflación → [Fed](https://www.federalreserve.gov/newsevents/pressreleases/monetary20260916a.htm) y yields → valoración bursátil. Si persiste, presiona márgenes y dificulta el alivio monetario. Normalizar rutas y fletes reduciría esa presión, sin garantizar un giro de la [Fed](https://www.federalreserve.gov/newsevents/pressreleases/monetary20260916a.htm).
 
 ### USD/COP
 
@@ -538,7 +546,7 @@ Clasificación: **oferta física, fletes e inflación**
 Clasificación: **recuadro regional**
 
 - **Qué pasó:** Alianza Research / Alianza Valores y Felipe Campos quedan como referencias de seguimiento. El marco separa tres etapas del ciclo político: expectativas preelectorales, reacción al resultado y evaluación del gobierno. Son etapas analíticas, no tres eventos pendientes ni una predicción electoral. [A3]
-- **Qué cambió:** El petróleo puede aumentar el ingreso exportador mientras un shock global fortalece el dólar y reduce el apetito por LatAm. La prima fiscal e institucional y las tasas del Banco de la República condicionan cuál de esas fuerzas pesa más sobre USD/COP.
+- **Qué cambió:** El petróleo puede aumentar el ingreso exportador mientras un shock global fortalece el dólar y reduce el apetito por LatAm. La prima fiscal e institucional y las tasas del [Banco de la República](https://suameca.banrep.gov.co/estadisticas-economicas/informacionSerie/59/tasas_interes_politica_monetaria) condicionan cuál de esas fuerzas pesa más sobre USD/COP.
 - **Qué esperamos:** Menor incertidumbre fiscal e institucional, con condiciones externas favorables, podría reducir la prima exigida al peso. Tensiones locales y dólar fuerte podrían elevarla. El marco no asigna rangos, preferencias políticas ni un resultado electoral.
 
 ## Calendario de eventos
@@ -588,7 +596,7 @@ Seguimiento condicional · 2026-09-21. Lectura editorial; datos automáticos con
 | DXY | Fortaleza del dólar frente a su cesta de divisas. | Una aceleración simultánea con yields endurecería el entorno de oro, Asia y cripto. |
 | GLD y demanda de oro | Participaciones de GLD y toneladas de ETF globales, con sus fechas distintas. | Demanda persistente durante caídas apoyaría la lectura; salidas sostenidas la debilitarían. |
 | China: consumidor e inmobiliario | Precios reales residenciales y transmisión al gasto doméstico. | Estabilización inmobiliaria acompañada de consumo más firme daría contenido a la tesis de valoración. |
-| BOJ, yen y JGB | Aplicación de la decisión del BOJ, divisa y bonos japoneses. | Un ajuste brusco de yen o JGB elevaría el riesgo de transmisión a exportadores y financiación global. |
+| [BOJ](https://www.boj.or.jp/en/mopo/mpmdeci/mpr_2026/k260918a.pdf), yen y JGB | Aplicación de la decisión del [BOJ](https://www.boj.or.jp/en/mopo/mpmdeci/mpr_2026/k260918a.pdf), divisa y bonos japoneses. | Un ajuste brusco de yen o JGB elevaría el riesgo de transmisión a exportadores y financiación global. |
 | Flujos ETF de Bitcoin | Saldo de cinco sesiones completas y continuidad de entradas. | Entradas repartidas en más sesiones darían más respaldo que un cierre semanal apenas positivo. |
 | ETH / BTC | Cociente de cierres diarios UTC en la misma fuente. | Fortaleza relativa sostenida, junto con liquidez, apoyaría una ampliación del rally cripto. |
 | Semiconductores y concentración de posiciones | Liderazgo relativo y exposición muy concurrida según BofA. | Resultados fuertes con participación más amplia reducirían vulnerabilidad; pérdida de líderes la aumentaría. |
@@ -618,7 +626,7 @@ Seguimiento condicional · 2026-09-21. Lectura editorial; datos automáticos con
 
 - **China: consumidor e inmobiliario:** [Ver datos FRED/BIS](https://fred.stlouisfed.org/series/QCNR628BIS).
 
-- **BOJ, yen y JGB:** [Ver BOJ](https://www.boj.or.jp/en/mopo/mpmdeci/mpr_2026/k260918a.pdf).
+- **[BOJ](https://www.boj.or.jp/en/mopo/mpmdeci/mpr_2026/k260918a.pdf), yen y JGB:** [Ver BOJ](https://www.boj.or.jp/en/mopo/mpmdeci/mpr_2026/k260918a.pdf).
 
 - **Flujos ETF de Bitcoin:** [Ver Farside](https://farside.co.uk/bitcoin-etf-flow-all-data/).
 
@@ -636,9 +644,9 @@ Seguimiento condicional · 2026-09-21. Lectura editorial; datos automáticos con
 
 ### A. Material institucional aportado por el editor
 
-- [A1] BofA · Global Fund Manager Survey · septiembre de 2026 · Encuesta 4–10/09. Riesgos, semiconductores, exposición a acciones y efectivo: material aportado por el editor, sin extrapolar agosto.
-- [A2] J.P. Morgan · Software — Industry Thoughts and Rank Order / AI Disruption · 19/08/2026 · Marco histórico del Primer Informe, utilizado como hipótesis de seguimiento.
-- [A3] Alianza Research / Alianza Valores · Felipe Campos · Referencia institucional identificada por el editor. Los escenarios numéricos no se incorporan: falta el documento fechado. El recuadro desarrolla factores y etapas de seguimiento, no atribuye un pronóstico cuantitativo.
+- [A1] BofA · Global Fund Manager Survey · septiembre de 2026 · Encuesta 4–10/09. Riesgos, semiconductores, exposición a acciones y efectivo: material aportado por el editor, sin URL pública y sin extrapolar agosto.
+- [A2] J.P. Morgan · Software — Industry Thoughts and Rank Order / AI Disruption · 19/08/2026 · Marco histórico del [Primer Informe](https://www.luiguiherrera.com/informes/primer-informe-septiembre-2026), utilizado como hipótesis de seguimiento. Material institucional aportado por el editor, sin URL pública.
+- [A3] Alianza Research / Alianza Valores · Felipe Campos · Material institucional identificado por el editor, sin documento público fechado. Los escenarios numéricos no se incorporan: falta el documento fechado. El recuadro desarrolla factores y etapas de seguimiento, no atribuye un pronóstico cuantitativo.
 
 ### B. Fuentes oficiales y públicas
 
@@ -646,7 +654,7 @@ Seguimiento condicional · 2026-09-21. Lectura editorial; datos automáticos con
 - [[B2] Federal Reserve / Treasury · H.15 · publicado el 18/09](https://www.federalreserve.gov/releases/h15/) · Diez años: 5,01 % el 16/09; no se presenta como cierre del 18/09.
 - [[B3] AAII · semana terminada el 16/09/2026](https://www.aaii.com/sentimentsurvey)
 - [[B4] World Gold Council · Global demand drives record holdings · agosto de 2026](https://www.gold.org/goldhub/research/gold-etfs-holdings-and-flows/2026/09) · Datos hasta el 31/08: +121 t, entradas de 18.000 M USD y tenencias de 4.189 t.
-- [[B5] FRED / BIS · precios residenciales reales de China · QCNR628BIS](https://fred.stlouisfed.org/series/QCNR628BIS) · Fuentes nacionales / BIS Residential Property Price database. Trimestral, 2010=100, sin ajuste estacional; último dato: primer trimestre de 2026.
+- [[B5] FRED / BIS · precios residenciales reales de China · QCNR628BIS](https://fred.stlouisfed.org/series/QCNR628BIS) · Fuentes nacionales / [BIS](https://fred.stlouisfed.org/series/QCNR628BIS) Residential Property Price database. Trimestral, 2010=100, sin ajuste estacional; último dato: primer trimestre de 2026.
 - [[B6] Bank of Japan · Statement on Monetary Policy · 18/09/2026](https://www.boj.or.jp/en/mopo/mpmdeci/mpr_2026/k260918a.pdf) · Tipo alrededor de 1,25 %, con efecto el 24/09.
 - [BOJ · referencia oficial: aumento desde 1,00 %](https://www.boj.or.jp/en/mopo/mpmdeci/mpr_2026/k260918b.pdf)
 - [[B7] Farside · Bitcoin ETF flows · 14–18/09](https://farside.co.uk/bitcoin-etf-flow-all-data/) · Cinco sesiones completas; se excluye la fila incompleta del 21/09.
@@ -663,18 +671,25 @@ Seguimiento condicional · 2026-09-21. Lectura editorial; datos automáticos con
 - [[B18] Goldman Sachs Research · Can the S&P 500 Rally as Treasury Yields Rise? · 15/09/2026](https://www.goldmansachs.com/insights/articles/can-the-s-and-p-500-rally-as-treasury-yields-rise)
 - [[B19] Ryan Detrick / Carson · Why The Worst Month of the Year Likely Won’t Bring Rain · 31/08/2026](https://www.carsongroup.com/insights/blog/why-the-worst-month-of-the-year-likely-wont-bring-rain/)
 - [[B20] Ryan Detrick / Carson · A Dove In Hawk’s Clothing? · 17/09/2026](https://www.carsongroup.com/insights/blog/a-dove-in-hawks-clothing/)
+- [[B21] FRED / ICE BofA · US High Yield Option-Adjusted Spread](https://fred.stlouisfed.org/series/BAMLH0A0HYM2) · Destino de seguimiento del crédito; no aporta una observación nueva al cierre congelado.
+- [[B22] Alpha Vantage · TIME_SERIES_DAILY](https://www.alphavantage.co/documentation/#daily) · Cierres sin ajustar para los 11 ETF sectoriales y el radar; series congeladas del informe.
+- [[B23] FRED / CBOE · VIXCLS](https://fred.stlouisfed.org/series/VIXCLS) · VIX spot del 17/09; fuente del adapter V1.
+- [[B24] Bitbo / BitcoinTreasuries · Bitcoin ETF flows](https://bitbo.io/treasuries/etf-flows/) · Fuente primaria del adapter V1; tabla histórica y caché no preservadas al corte. No sustituye [Farside](https://farside.co.uk/bitcoin-etf-flow-all-data/) en los flujos independientes.
+- [[B25] Alianza · referencia institucional pública](https://www.alianza.com.co/) · Identificación de la institución y seguimiento. No es fuente de escenarios numéricos de Felipe Campos; véase A3.
+- [[B26] Banco de la República · tasa de política monetaria](https://suameca.banrep.gov.co/estadisticas-economicas/informacionSerie/59/tasas_interes_politica_monetaria) · Referencia institucional para el marco de seguimiento de USD/COP; no se añade una cifra al informe.
 
 ### C. Datos propios
 
-- [[C1] Dashboard y comparación 04/09 → 18/09](https://www.luiguiherrera.com/dashboard) · Cinco sesiones / seis cierres por ventana. Radar: Alpha Vantage. VIX: 17/09. Enlace vivo; captura congelada.
-- [C2] Statistical Levels · autoridad del 19/09; cierres admitidos hasta el 18/09 · Cripto: cierre UTC. Midterm excluye 2026, con N real; SPY otoño: ocho ciclos.
+- [[C1] Dashboard y comparación 04/09 → 18/09](https://www.luiguiherrera.com/dashboard) · Cinco sesiones / seis cierres por ventana. Radar: [Alpha Vantage](https://www.alphavantage.co/documentation/#daily). VIX: 17/09. Enlace vivo; captura congelada.
+- [[C2] Statistical Levels · autoridad del 19/09; cierres admitidos hasta el 18/09](https://www.luiguiherrera.com/methodology/segundo-informe-septiembre-2026-datos.html) · [Yahoo Finance](https://www.luiguiherrera.com/methodology/segundo-informe-septiembre-2026-datos.html): series históricas, con enlaces por activo en la metodología. Cripto: cierre UTC. Midterm excluye 2026, con N real; SPY otoño: ocho ciclos.
 - [C3] Bitcoin 2020–2025 · segunda muestra propia · Seis años completos; 2026 parcial excluido.
 - [C4] ETH/BTC · cálculo editorial sobre cierres congelados · Misma serie UTC; variaciones antes del redondeo. Evidencia conservada.
-- [Primer Informe de septiembre · referencia editorial e histórica](https://www.luiguiherrera.com/informes/primer-informe-septiembre-2026)
+- [[C5] Replay acotado del Régimen V1 · deployment del 18/09/2026 · commit 4ee6adb006f360fea13837db5f7d45815f297b55](https://www.luiguiherrera.com/methodology/segundo-informe-septiembre-2026-regimen.html) · 6.049 casos; categoría invariante y rango 70–77, condicionados a sectores del 18/09 y VIX del 17/09 recuperados el 21/09. No identifica la caché histórica exacta ni publica confianza puntual.
+- [[C6] Primer Informe de septiembre · referencia editorial e histórica](https://www.luiguiherrera.com/informes/primer-informe-septiembre-2026)
 
 ### Fuentes y método
 
-Mercado al 18/09; edición y consulta de fuentes al 21/09. Cada serie conserva fecha y convención. Diez métricas comparables; V1 histórico omitido. Niveles desde apertura semanal y muestras estacionales separadas. Referencias externas atribuidas, no objetivos propios.
+Mercado al 18/09; edición y consulta de fuentes al 21/09. Cada serie conserva fecha y convención. Diez métricas comparables; clasificación V1 reconstruida mediante replay acotado, condicionado a sectores y VIX reconciliados. Niveles desde apertura semanal y muestras estacionales separadas. Referencias externas atribuidas, no objetivos propios.
 
 ### Limitaciones y aviso educativo
 

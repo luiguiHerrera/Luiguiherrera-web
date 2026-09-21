@@ -1,3 +1,4 @@
+import { sourcePolicyHtml, sourcePolicyMarkdown } from '../lib/reports/report-source-links.ts';
 import type { ReportQuantitativePanel } from "../lib/reports/report-statistical-panels";
 import assert from "node:assert/strict";
 import { spawnSync } from "node:child_process";
@@ -118,7 +119,7 @@ function renderHistoricalHtml(section: Extract<ReportExportSection, { kind: "his
     ${snapshot.closingLabel ? `<p>${esc(snapshot.closingLabel)}</p><p class="historical-note">${esc(snapshot.sourceNote ?? '')}</p>` : ''}
     <p class="historical-note">Corte de esta edición: <strong>${snapshot.dataDate}</strong>. Cada módulo conserva la última fecha disponible de su fuente.</p>
     ${comparison ? `<h3>${esc(comparison.title)}</h3>${htmlTable(['Métrica', comparison.fromLabel, comparison.toLabel], comparison.rows.map(row => [row.metric, row.before, row.after]))}<p>${esc(comparison.message)}</p><p>${esc(comparison.interpretation)}</p><p class="historical-note">${esc(comparison.methodology)}</p>` : ''}<h3>Régimen al corte</h3>
-    ${regime.score === null && regime.confidence === null ? `<h4>Régimen V1 no publicado</h4><p>No existe evidencia suficiente para reconstruir el estado exacto del motor al cierre del ${snapshot.dataDate.slice(8, 10)}/${snapshot.dataDate.slice(5, 7)}.</p><details><summary>Ver límite metodológico</summary><p>${esc(regime.interpretation)}</p></details>` : htmlTable(
+    ${regime.reconstruction ? `<h4>Régimen V1 al 18/09</h4><h3>${esc(regime.label)}</h3>${htmlTable(['Campo','Valor'], [['Sesgo',regime.bias],['Score reconstruido',regime.reconstruction.scoreRange.join('–')+' / 100'],['Confianza','No se publica una cifra puntual']])}<p>${esc(regime.interpretation)}</p><details><summary>Ver metodología</summary><p>${esc(regime.reconstruction.methodology)}</p><a href="${esc(absoluteUrl(regime.reconstruction.methodologyHref))}">Replay acotado · código y evidencia [C5]</a></details>` : regime.score === null && regime.confidence === null ? `<h4>Régimen V1 no publicado</h4><p>No existe evidencia suficiente para reconstruir el estado exacto del motor al cierre del ${snapshot.dataDate.slice(8, 10)}/${snapshot.dataDate.slice(5, 7)}.</p><details><summary>Ver límite metodológico</summary><p>${esc(regime.interpretation)}</p></details>` : htmlTable(
       ["Campo", "Valor"],
       [
         ["Régimen", regime.label],
@@ -560,7 +561,7 @@ function renderSectionHtml(section: ReportExportSection, model: ReportExportMode
 }
 
 function renderHtml(model: ReportExportModel) {
-  return `<!doctype html>
+  const output = `<!doctype html>
 <html lang="es">
 <head>
   <meta charset="utf-8">
@@ -587,6 +588,7 @@ function renderHtml(model: ReportExportModel) {
 </body>
 </html>
 `.replace(/[ \t]+$/gm, "");
+  return model.presentation?.linksOpenNewTab ? sourcePolicyHtml(output, model.presentation.sourceLinks ?? [], model.canonicalUrl) : output;
 }
 
 function renderHistoricalMarkdown(
@@ -609,9 +611,21 @@ ${comparison.interpretation}
 
 ${comparison.methodology}
 
-` : ''}### Régimen al corte
+` : ''}${snapshot.regime.reconstruction ? "" : "### Régimen al corte\n\n"}${snapshot.regime.reconstruction ? `### Régimen V1 al 18/09
 
-${snapshot.regime.score === null && snapshot.regime.confidence === null ? `**Régimen V1 no publicado**
+**${snapshot.regime.label}**
+
+| Campo | Valor |
+|---|---|
+| Sesgo | ${snapshot.regime.bias} |
+| Score reconstruido | ${snapshot.regime.reconstruction.scoreRange.join('–')} / 100 |
+| Confianza | No se publica una cifra puntual |
+
+${snapshot.regime.interpretation}
+
+**Ver metodología:** ${snapshot.regime.reconstruction.methodology}
+
+[Replay acotado · código y evidencia [C5]](${absoluteUrl(snapshot.regime.reconstruction.methodologyHref)})` : snapshot.regime.score === null && snapshot.regime.confidence === null ? `**Régimen V1 no publicado**
 
 No existe evidencia suficiente para reconstruir el estado exacto del motor al cierre del ${snapshot.dataDate.slice(8, 10)}/${snapshot.dataDate.slice(5, 7)}.
 
@@ -872,7 +886,7 @@ function renderMarkdown(model: ReportExportModel) {
     `- Corte de datos de mercado: ${model.automaticDataCutoffAt ?? "No aplica"}`,
     `- URL editorial primaria: ${model.canonicalUrl}`,
   ];
-  return `# ${model.title}
+  const output = `# ${model.title}
 
 ${model.subtitle}
 
@@ -882,6 +896,7 @@ ${model.status === "borrador" ? "> Candidato privado. La URL editorial indicada 
 
 ${model.presentation?.prospectivePeriod ? `Periodo prospectivo: ${model.presentation.prospectivePeriod}\n\n` : ""}${model.sections.map((section) => renderSectionMarkdown(section, model)).join("\n\n")}
 `.replace(/[ \t]+$/gm, "");
+  return model.presentation?.linksOpenNewTab ? sourcePolicyMarkdown(output, model.presentation.sourceLinks ?? [], model.canonicalUrl) : output;
 }
 
 function reportCss(enhanced = false) {
@@ -1202,10 +1217,12 @@ function generateInto(outputDir: string, inputLlms: string) {
 
 function normalizedText(value: string) {
   return value
+    .replace(/!?\[((?:[^\[\]]|\[[^\]]*\])*)\]\([^\s)]+\)/g, "$1")
     .replace(/&nbsp;/g, " ")
     .replace(/&amp;/g, "&")
     .replace(/&quot;/g, '"')
     .replace(/&#39;|&apos;/g, "'")
+    .replace(/<\/?a\b[^>]*>/g, "")
     .replace(/<[^>]+>/g, " ")
     .replace(/[\u2011\u2012\u2013\u2014\u2212]/g, "-")
     .replace(/\u2192/g, "->")
@@ -1276,7 +1293,7 @@ function substantiveNeedles(section: ReportExportSection, model: ReportExportMod
       if (snapshot.closingLabel) values.push(snapshot.closingLabel, snapshot.sourceNote ?? "");
       values.push(
         snapshot.dataDate,
-        ...(snapshot.regime.score === null && snapshot.regime.confidence === null ? ["Régimen V1 no publicado", "Ver límite metodológico"] : [snapshot.regime.label, `${snapshot.regime.score}/100`, `${snapshot.regime.confidence}%`]),
+        ...(snapshot.regime.reconstruction ? ["Régimen V1 al 18/09",snapshot.regime.label,"70–77 / 100", "No se publica una cifra puntual",snapshot.regime.reconstruction.methodology] : snapshot.regime.score === null && snapshot.regime.confidence === null ? ["Régimen V1 no publicado", "Ver límite metodológico"] : [snapshot.regime.label, `${snapshot.regime.score}/100`, `${snapshot.regime.confidence}%`]),
         snapshot.regime.interpretation,
         ...snapshot.regime.support,
         ...snapshot.regime.caution,

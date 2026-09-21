@@ -1,5 +1,6 @@
+import { ReportLink as Link, ReportAnchor, ReportParagraph, ReportText, ReportSourcePolicy } from "@/components/reports/ReportSourcePolicy";
 import { ReportQuantitativePanels } from "@/components/reports/ReportQuantitativePanels";
-import Link from "next/link";
+
 import { EditorialByline } from "@/components/editorial/EditorialByline";
 import { ReportAssetAnchors } from "@/components/reports/ReportAssetAnchors";
 import { AutomaticMarketReadings } from "@/components/reports/AutomaticMarketReadings";
@@ -87,7 +88,7 @@ export function MarketReportContent({
   ] as const;
 
   return (
-    <article id={report.id} className="scroll-mt-24">
+    <ReportSourcePolicy newTab={report.presentation?.linksOpenNewTab} sources={report.presentation?.sourceLinks}><article id={report.id} className="scroll-mt-24">
       <Link
         className="inline-flex min-h-10 items-center border-b border-petrol/30 text-sm font-semibold text-petrol transition hover:border-petrol"
         href="/informes"
@@ -98,7 +99,7 @@ export function MarketReportContent({
       <section className={`mt-6 grid gap-6 border-y border-line py-8 md:py-10 ${hasHeadlineSummary ? "lg:grid-cols-[0.34fr_1fr]" : ""}`}>
         <div>
           <div className="flex flex-wrap items-center gap-2">
-            <p className="text-xs font-semibold uppercase text-petrol">{reportDisplayName(report)}</p>
+            <ReportParagraph className="text-xs font-semibold uppercase text-petrol">{reportDisplayName(report)}</ReportParagraph>
             <span className="border border-brass/40 bg-white/70 px-2 py-1 text-[10px] font-semibold uppercase text-brass">
               {report.status === "borrador" ? "Candidato editorial · sin publicar" : report.status === "actual" ? "Informe actual" : "Archivado"}
             </span>
@@ -107,20 +108,21 @@ export function MarketReportContent({
           <EditorialByline
             automaticDataCutoffAt={report.automaticDataCutoffAt}
             editorialCutoffAt={report.editorialCutoffAt}
+            linksOpenNewTab={report.presentation?.linksOpenNewTab}
             locale="es"
             modifiedAt={report.modifiedAt}
             publishedAt={report.publishedAt}
           />
-          <p className="mt-4 text-base leading-7 text-muted">{report.subtitle}</p>
-          {report.presentation?.prospectivePeriod ? <p className="mt-3 text-sm text-muted">Periodo prospectivo: {report.presentation.prospectivePeriod}</p> : null}
+          <ReportParagraph className="mt-4 text-base leading-7 text-muted">{report.subtitle}</ReportParagraph>
+          {report.presentation?.prospectivePeriod ? <ReportParagraph className="mt-3 text-sm text-muted">Periodo prospectivo: {report.presentation.prospectivePeriod}</ReportParagraph> : null}
           <ReportExportLinks report={report} />
         </div>
         {hasHeadlineSummary ? (
           <div className="grid gap-6">
             {report.thesis ? (
               <section>
-                <p className="text-xs font-semibold uppercase text-brass">Tesis principal</p>
-                <p className="mt-3 text-base leading-8 text-muted">{report.thesis}</p>
+                <ReportParagraph className="text-xs font-semibold uppercase text-brass">Tesis principal</ReportParagraph>
+                <ReportParagraph className="mt-3 text-base leading-8 text-muted">{report.thesis}</ReportParagraph>
               </section>
             ) : null}
 
@@ -128,12 +130,12 @@ export function MarketReportContent({
               <section>
                 {report.executiveSummary?.length ? (
                   <>
-                    <p className="text-xs font-semibold uppercase text-petrol">Resumen ejecutivo</p>
+                    <ReportParagraph className="text-xs font-semibold uppercase text-petrol">Resumen ejecutivo</ReportParagraph>
                     <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
                       {report.executiveSummary.map((item) => (
                         <article key={item.title} className="border border-line bg-panel p-4">
-                          <p className="text-sm font-semibold uppercase text-petrol">{item.title}</p>
-                          <p className="mt-3 text-sm leading-6 text-muted">{item.text}</p>
+                          <ReportParagraph className="text-sm font-semibold uppercase text-petrol">{item.title}</ReportParagraph>
+                          <ReportParagraph className="mt-3 text-sm leading-6 text-muted">{item.text}</ReportParagraph>
                         </article>
                       ))}
                     </div>
@@ -142,10 +144,10 @@ export function MarketReportContent({
                 {report.transversalFactor ? (
                   <article className="mt-3 border border-brass/35 bg-panelSoft p-4">
                     {report.transversalFactor.label ? (
-                      <p className="text-xs font-semibold uppercase text-brass">{report.transversalFactor.label}</p>
+                      <ReportParagraph className="text-xs font-semibold uppercase text-brass">{report.transversalFactor.label}</ReportParagraph>
                     ) : null}
                     <h3 className="mt-2 text-sm font-semibold uppercase text-petrol">{report.transversalFactor.title}</h3>
-                    <p className="mt-2 text-sm leading-6 text-muted">{report.transversalFactor.text}</p>
+                    <ReportParagraph className="mt-2 text-sm leading-6 text-muted">{report.transversalFactor.text}</ReportParagraph>
                   </article>
                 ) : null}
               </section>
@@ -156,12 +158,12 @@ export function MarketReportContent({
 
       <section id={report.presentation?.contextTitle ? "contexto-general" : "contexto-por-activo"} className="grid scroll-mt-24 gap-6 py-8 md:py-10 lg:grid-cols-[0.34fr_1fr]">
         <div>
-          <p className="text-xs font-semibold uppercase text-petrol">Qué pasó</p>
+          <ReportParagraph className="text-xs font-semibold uppercase text-petrol">Qué pasó</ReportParagraph>
           <h2 className="mt-2 text-2xl font-semibold leading-tight text-ink md:text-3xl">{contextTitle}</h2>
         </div>
         {report.presentation?.contextStyle === "prose" ? <div className="grid gap-4">
-          {report.whatHappened.map(block => <p key={block.title} className="text-sm leading-7 text-muted md:text-base">{block.body}</p>)}
-          <p className="border-l-2 border-brass pl-4 text-base font-medium leading-7 text-ink">{report.presentation.openingLine}</p>
+          {report.whatHappened.map(block => <ReportParagraph key={block.title} className="text-sm leading-7 text-muted md:text-base">{block.body}</ReportParagraph>)}
+          <ReportParagraph className="border-l-2 border-brass pl-4 text-base font-medium leading-7 text-ink">{report.presentation.openingLine}</ReportParagraph>
         </div> : <div className="grid gap-3 md:grid-cols-2">
           {report.whatHappened.map((block) => (
             <ContextByAssetCard key={block.title} block={block} />
@@ -175,7 +177,7 @@ export function MarketReportContent({
 
       <section id="lectura-seguimiento" className="grid scroll-mt-24 gap-6 border-y border-line py-8 md:py-10 lg:grid-cols-[0.34fr_1fr]">
         <div>
-          <p className="text-xs font-semibold uppercase text-petrol">Qué esperamos</p>
+          <ReportParagraph className="text-xs font-semibold uppercase text-petrol">Qué esperamos</ReportParagraph>
           <h2 className="mt-2 text-2xl font-semibold leading-tight text-ink md:text-3xl">{assetSectionTitle}</h2>
         </div>
         <div className="grid gap-4">
@@ -184,7 +186,7 @@ export function MarketReportContent({
             <details key={asset.asset} id={asset.id} className="group scroll-mt-24 border border-line bg-panel open:border-petrol/45 open:shadow-[0_16px_36px_rgba(31,35,40,0.06)]">
               <summary className="grid cursor-pointer list-none gap-3 px-5 py-4 marker:hidden md:grid-cols-[0.24fr_1fr_auto_auto] md:items-center">
                 <h3 className="text-lg font-semibold text-ink">{asset.asset}</h3>
-                <p className="text-sm leading-6 text-muted">{asset.headline}</p>
+                <ReportParagraph className="text-sm leading-6 text-muted">{asset.headline}</ReportParagraph>
                 <span className="w-fit border border-brass/40 bg-white/70 px-3 py-1 text-[11px] font-semibold uppercase text-brass">
                   {asset.badge}
                 </span>
@@ -218,7 +220,7 @@ export function MarketReportContent({
                   </div>
                   {asset.timeline ? (
                     <div className={`border border-line bg-paper p-4 ${enhancedTimeline ? "lg:col-span-2" : ""}`}>
-                      <p className="text-xs font-semibold uppercase text-petrol">Secuencia de lectura</p>
+                      <ReportParagraph className="text-xs font-semibold uppercase text-petrol">Secuencia de lectura</ReportParagraph>
                       {enhancedTimeline ? (
                         <ol className="report-reading-flow mt-4 grid gap-4 md:grid-cols-3" aria-label={`Secuencia de lectura para ${asset.asset}`}>
                           <TimelineStep enhanced number="1" title="Antes — Contexto" body={asset.timeline.before} />
@@ -243,20 +245,20 @@ export function MarketReportContent({
 
       <section id="calendario-y-escenarios" className="grid scroll-mt-24 gap-6 py-8 md:py-10 lg:grid-cols-[0.34fr_1fr]">
         <div>
-          <p className="text-xs font-semibold uppercase text-petrol">{calendarSectionLabel}</p>
+          <ReportParagraph className="text-xs font-semibold uppercase text-petrol">{calendarSectionLabel}</ReportParagraph>
           <h2 className="mt-2 text-2xl font-semibold leading-tight text-ink md:text-3xl">{calendarSectionTitle}</h2>
           {report.calendarHref ? (
             <>
-              <p className="mt-3 text-sm leading-6 text-muted">
+              <ReportParagraph className="mt-3 text-sm leading-6 text-muted">
                 Puedes descargar estas fechas en formato iCalendar para revisarlas en tu calendario personal.
-              </p>
-              <a
+              </ReportParagraph>
+              <ReportAnchor
                 className="mt-4 inline-flex min-h-10 items-center justify-center rounded-[4px] border border-petrol bg-petrol px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-panel hover:text-petrol"
                 download
                 href={report.calendarHref}
               >
                 Descargar calendario (.ics)
-              </a>
+              </ReportAnchor>
             </>
           ) : null}
         </div>
@@ -267,17 +269,17 @@ export function MarketReportContent({
             <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
               {calendar.map((item) => (
                 <article key={`${item.dateLabel}-${item.event}`} className="border border-line bg-white/70 p-4">
-                  <p className="text-xs font-semibold uppercase text-brass">{item.dateLabel}</p>
+                  <ReportParagraph className="text-xs font-semibold uppercase text-brass">{item.dateLabel}</ReportParagraph>
                   <h3 className="mt-2 text-sm font-semibold leading-6 text-ink">{item.event}</h3>
-                  <p className="mt-2 text-sm leading-6 text-muted">{item.whyItMatters}</p>
+                  <ReportParagraph className="mt-2 text-sm leading-6 text-muted">{item.whyItMatters}</ReportParagraph>
                   {item.dateStart ? (
-                    <a
+                    <ReportAnchor
                       className="mt-3 inline-flex min-h-8 w-fit items-center border-b border-petrol/30 text-xs font-semibold text-petrol transition hover:border-petrol"
                       download={`${report.id}-${calendarSlug(item.event)}.ics`}
                       href={calendarItemDataUri(report, item)}
                     >
                       Agregar al calendario
-                    </a>
+                    </ReportAnchor>
                   ) : null}
                 </article>
               ))}
@@ -287,7 +289,7 @@ export function MarketReportContent({
             {report.scenarios.map((scenario) => (
               <article key={scenario.title} className="border border-line bg-panel p-5">
                 <h3 className="text-lg font-semibold text-ink">{scenario.title}</h3>
-                <p className="mt-3 text-sm leading-7 text-muted">{scenario.body}</p>
+                <ReportParagraph className="mt-3 text-sm leading-7 text-muted">{scenario.body}</ReportParagraph>
               </article>
             ))}
           </div> : null}
@@ -296,18 +298,18 @@ export function MarketReportContent({
 
       {report.probableRoutes ? (
         <section id="rutas-probables" className="grid scroll-mt-24 gap-6 border-t border-line py-8 md:py-10 lg:grid-cols-[0.34fr_1fr]">
-          <div><p className="text-xs font-semibold uppercase text-petrol">Escenarios condicionales</p><h2 className="mt-2 text-2xl font-semibold text-ink md:text-3xl">{report.probableRoutes.title}</h2><p className="mt-3 text-sm leading-6 text-muted">{report.presentation?.contextStyle === "prose" ? "Tres rutas condicionales, sin probabilidades asignadas." : report.probableRoutes.note}</p></div>
+          <div><ReportParagraph className="text-xs font-semibold uppercase text-petrol">Escenarios condicionales</ReportParagraph><h2 className="mt-2 text-2xl font-semibold text-ink md:text-3xl">{report.probableRoutes.title}</h2><ReportParagraph className="mt-3 text-sm leading-6 text-muted">{report.presentation?.contextStyle === "prose" ? "Tres rutas condicionales, sin probabilidades asignadas." : report.probableRoutes.note}</ReportParagraph></div>
           <div className="grid gap-5">
-            {report.probableRoutes.engines?.length ? <div className="grid gap-3 md:grid-cols-3">{report.probableRoutes.engines.map((item) => <article key={item.title} className="border-l-2 border-petrol bg-panel p-4"><p className="text-xs font-semibold uppercase text-petrol">Motor</p><h3 className="mt-2 font-semibold text-ink">{item.title}</h3><p className="mt-2 text-sm leading-6 text-muted">{item.body}</p></article>)}</div> : null}
-            <div className="grid gap-3 md:grid-cols-3">{report.probableRoutes.scenarios.map((item) => <article key={item.title} className="border border-line bg-panelSoft p-4"><h3 className="font-semibold text-ink">{item.title}</h3><p className="mt-2 text-sm leading-6 text-muted">{item.body}</p></article>)}</div>
-            {report.presentation?.contextStyle === "prose" ? <p className="text-sm leading-6 text-muted">{report.probableRoutes.note}</p> : null}
+            {report.probableRoutes.engines?.length ? <div className="grid gap-3 md:grid-cols-3">{report.probableRoutes.engines.map((item) => <article key={item.title} className="border-l-2 border-petrol bg-panel p-4"><ReportParagraph className="text-xs font-semibold uppercase text-petrol">Motor</ReportParagraph><h3 className="mt-2 font-semibold text-ink">{item.title}</h3><ReportParagraph className="mt-2 text-sm leading-6 text-muted">{item.body}</ReportParagraph></article>)}</div> : null}
+            <div className="grid gap-3 md:grid-cols-3">{report.probableRoutes.scenarios.map((item) => <article key={item.title} className="border border-line bg-panelSoft p-4"><h3 className="font-semibold text-ink">{item.title}</h3><ReportParagraph className="mt-2 text-sm leading-6 text-muted">{item.body}</ReportParagraph></article>)}</div>
+            {report.presentation?.contextStyle === "prose" ? <ReportParagraph className="text-sm leading-6 text-muted">{report.probableRoutes.note}</ReportParagraph> : null}
           </div>
         </section>
       ) : null}
 
       <section id="senales-a-vigilar" className="grid scroll-mt-24 gap-6 border-y border-line py-8 md:py-10 lg:grid-cols-[0.34fr_1fr]">
         <div>
-          <p className="text-xs font-semibold uppercase text-petrol">Señales a vigilar</p>
+          <ReportParagraph className="text-xs font-semibold uppercase text-petrol">Señales a vigilar</ReportParagraph>
           <h2 className="mt-2 text-2xl font-semibold leading-tight text-ink md:text-3xl">{watchlistSectionTitle}</h2>
         </div>
         {enhancedWatchlist ? (
@@ -339,21 +341,21 @@ export function MarketReportContent({
 
       <section id="fuentes-y-aviso" className="grid scroll-mt-24 gap-6 py-8 md:py-10 lg:grid-cols-[0.34fr_1fr]">
         <div>
-          <p className="text-xs font-semibold uppercase text-petrol">{sourcesSectionTitle}</p>
+          <ReportParagraph className="text-xs font-semibold uppercase text-petrol">{sourcesSectionTitle}</ReportParagraph>
           <h2 className="mt-2 text-2xl font-semibold leading-tight text-ink md:text-3xl">{report.sourceGroups ? sourcesSectionTitle : "Marco de lectura"}</h2>
         </div>
         <div className="border border-line bg-panelSoft p-5">
           {report.sourceGroups?.map(group => <section key={group.title} className="mb-5">
             <h3 className="font-semibold text-ink">{group.title}</h3>
-            <ul className="mt-2 grid gap-2 text-sm leading-6 text-muted">{group.entries.map(entry=><li key={entry.label}>{entry.href ? <a className="underline decoration-petrol/30 underline-offset-4 hover:text-petrol" href={entry.href}>{entry.label}</a> : entry.label}{entry.note ? <span className="block text-xs">{entry.note}</span> : null}</li>)}</ul>
+            <ul className="mt-2 grid gap-2 text-sm leading-6 text-muted">{group.entries.map(entry=><li key={entry.label}>{entry.href ? <ReportAnchor className="underline decoration-petrol/30 underline-offset-4 hover:text-petrol" href={entry.href}>{entry.label}</ReportAnchor> : entry.label}{entry.note ? <span className="block text-xs"><ReportText>{entry.note}</ReportText></span> : null}</li>)}</ul>
           </section>)}
-          <p className="text-sm leading-7 text-muted">{report.sourcesNote}</p>
-          <p className="mt-3 whitespace-pre-line border-t border-line pt-3 text-sm leading-7 text-muted">{report.disclaimer}</p>
+          <ReportParagraph className="text-sm leading-7 text-muted">{report.sourcesNote}</ReportParagraph>
+          <ReportParagraph className="mt-3 whitespace-pre-line border-t border-line pt-3 text-sm leading-7 text-muted">{report.disclaimer}</ReportParagraph>
         </div>
       </section>
 
       <ReportNavigation nextReport={nextReport} previousReport={previousReport} />
-    </article>
+    </article></ReportSourcePolicy>
   );
 }
 
@@ -370,14 +372,14 @@ function ReportExportLinks({ report }: { report: MarketReport }) {
   return (
     <div className="mt-4 flex flex-wrap gap-2">
       {links.map((link) => (
-        <a
+        <ReportAnchor
           key={link.href}
           className="inline-flex min-h-9 w-fit items-center justify-center rounded-[4px] border border-line bg-panel px-3 py-2 text-xs font-semibold text-ink transition hover:border-petrol hover:text-petrol"
           download={link.download || undefined}
           href={link.href}
         >
           {link.label}
-        </a>
+        </ReportAnchor>
       ))}
     </div>
   );
@@ -386,8 +388,8 @@ function ReportExportLinks({ report }: { report: MarketReport }) {
 function ReadingColumn({ body, title }: { body: string; title: string }) {
   return (
     <div className="border-l border-brass/50 pl-3">
-      <p className="text-xs font-semibold uppercase text-brass">{title}</p>
-      <p className="mt-2 text-sm leading-6 text-muted">{body}</p>
+      <ReportParagraph className="text-xs font-semibold uppercase text-brass">{title}</ReportParagraph>
+      <ReportParagraph className="mt-2 text-sm leading-6 text-muted">{body}</ReportParagraph>
     </div>
   );
 }
@@ -400,8 +402,8 @@ function TimelineStep({ body, enhanced = false, number, title }: { body: string;
           {number}
         </span>
         <div>
-          <p className="text-sm font-semibold text-ink">{title}</p>
-          <p className="mt-1 text-sm leading-6 text-muted">{body}</p>
+          <ReportParagraph className="text-sm font-semibold text-ink">{title}</ReportParagraph>
+          <ReportParagraph className="mt-1 text-sm leading-6 text-muted">{body}</ReportParagraph>
         </div>
       </li>
     );
@@ -412,8 +414,8 @@ function TimelineStep({ body, enhanced = false, number, title }: { body: string;
         {number}
       </span>
       <div>
-        <p className="text-sm font-semibold text-ink">{title}</p>
-        <p className="mt-1 text-sm leading-6 text-muted">{body}</p>
+        <ReportParagraph className="text-sm font-semibold text-ink">{title}</ReportParagraph>
+        <ReportParagraph className="mt-1 text-sm leading-6 text-muted">{body}</ReportParagraph>
       </div>
     </div>
   );
@@ -425,7 +427,7 @@ function ContextByAssetCard({ block }: { block: MarketReport["whatHappened"][num
       <summary className="grid min-h-24 cursor-pointer list-none gap-3 px-5 py-4 marker:hidden focus-visible:ring-2 focus-visible:ring-petrol/25 focus-visible:ring-offset-2 focus-visible:ring-offset-paper md:grid-cols-[1fr_auto] md:items-start">
         <div>
           <h3 className="text-lg font-semibold text-ink">{block.title}</h3>
-          <p className="mt-2 text-sm leading-6 text-muted">{block.summary}</p>
+          <ReportParagraph className="mt-2 text-sm leading-6 text-muted">{block.summary}</ReportParagraph>
         </div>
         <span className="w-fit text-xs font-semibold uppercase text-brass">
           <span className="details-open-label">ABRIR</span>
@@ -433,7 +435,7 @@ function ContextByAssetCard({ block }: { block: MarketReport["whatHappened"][num
         </span>
       </summary>
       <div className="border-t border-line px-5 pb-5 pt-4">
-        <p className="text-sm leading-7 text-muted">{block.body}</p>
+        <ReportParagraph className="text-sm leading-7 text-muted">{block.body}</ReportParagraph>
       </div>
     </details>
   );
@@ -464,13 +466,13 @@ function WatchControlItem({ compact = false, item, report }: { compact?: boolean
     return (
       <article className="flex h-full flex-col border border-line bg-panel p-4 transition hover:border-petrol/45">
         <div className="flex flex-wrap items-start justify-between gap-3">
-          <h4 className="text-base font-semibold leading-6 text-ink">{item.name}</h4>
+          <h4 className="text-base font-semibold leading-6 text-ink"><ReportText>{item.name}</ReportText></h4>
           <span className={`border px-2 py-1 text-[10px] font-semibold uppercase tracking-[0.1em] ${statusClass}`}>{statusLabel}</span>
         </div>
-        <p className="mt-3 text-sm leading-6 text-muted">{currentReading}</p>
+        <ReportParagraph className="mt-3 text-sm leading-6 text-muted">{currentReading}</ReportParagraph>
         <div className="mt-3 border-l-2 border-brass/45 pl-3">
-          <p className="text-[10px] font-semibold uppercase tracking-[0.12em] text-brass">Qué cambiaría la lectura</p>
-          <p className="mt-1 text-sm leading-6 text-ink">{whatWouldChange}</p>
+          <ReportParagraph className="text-[10px] font-semibold uppercase tracking-[0.12em] text-brass">Qué cambiaría la lectura</ReportParagraph>
+          <ReportParagraph className="mt-1 text-sm leading-6 text-ink">{whatWouldChange}</ReportParagraph>
         </div>
         <div className="mt-auto pt-4">
           {href && linkLabel ? (
@@ -484,7 +486,7 @@ function WatchControlItem({ compact = false, item, report }: { compact?: boolean
               {linkLabel}<span aria-hidden="true">{external ? "↗" : "→"}</span>
             </Link>
           ) : (
-            <p className="border border-line bg-panelSoft px-3 py-2 text-xs leading-5 text-muted">Seguimiento institucional no disponible públicamente.</p>
+            <ReportParagraph className="border border-line bg-panelSoft px-3 py-2 text-xs leading-5 text-muted">Seguimiento institucional no disponible públicamente.</ReportParagraph>
           )}
           <details className="group mt-3 border-t border-line pt-3">
             <summary className="flex min-h-10 cursor-pointer list-none items-center justify-between text-sm font-semibold text-petrol marker:hidden">
@@ -495,8 +497,8 @@ function WatchControlItem({ compact = false, item, report }: { compact?: boolean
               <ReadingColumn title="Qué mira" body={item.whatLooksAt} />
               <ReadingColumn title="Por qué importa" body={item.whyItMatters} />
               <div className="border-t border-line pt-3 text-xs leading-5 text-muted">
-                <p><span className="font-semibold uppercase text-brass">Corte:</span> {asOf}</p>
-                <p className="mt-1"><span className="font-semibold uppercase text-brass">Fuente:</span> {source}</p>
+                <ReportParagraph><span className="font-semibold uppercase text-brass">Corte:</span> {asOf}</ReportParagraph>
+                <ReportParagraph className="mt-1"><span className="font-semibold uppercase text-brass">Fuente:</span> {source}</ReportParagraph>
               </div>
             </div>
           </details>
@@ -509,8 +511,8 @@ function WatchControlItem({ compact = false, item, report }: { compact?: boolean
     <details className="group border border-line bg-panel open:border-petrol/45">
       <summary className="grid cursor-pointer list-none gap-3 px-4 py-3 marker:hidden md:grid-cols-[1fr_auto] md:items-center">
         <div>
-          <span className="text-sm font-semibold text-ink">{item.name}</span>
-          <p className="mt-1 text-xs font-semibold uppercase text-brass">{statusLabel}</p>
+          <span className="text-sm font-semibold text-ink"><ReportText>{item.name}</ReportText></span>
+          <ReportParagraph className="mt-1 text-xs font-semibold uppercase text-brass">{statusLabel}</ReportParagraph>
         </div>
         <span className="w-fit text-xs font-semibold uppercase text-brass">
           <span className="details-open-label">ABRIR</span>
@@ -525,12 +527,12 @@ function WatchControlItem({ compact = false, item, report }: { compact?: boolean
           <ReadingColumn title="Qué cambiaría" body={whatWouldChange} />
         </div>
         <div className="mt-4 border-t border-line pt-3 text-xs leading-5 text-muted">
-          <p>
+          <ReportParagraph>
             <span className="font-semibold uppercase text-brass">Fecha:</span> {asOf}
-          </p>
-          <p className="mt-1">
+          </ReportParagraph>
+          <ReportParagraph className="mt-1">
             <span className="font-semibold uppercase text-brass">Fuente:</span> {source}
-          </p>
+          </ReportParagraph>
           {href && linkLabel ? (
             <Link
               className="mt-3 inline-flex min-h-8 w-fit items-center border-b border-petrol/30 text-sm font-semibold text-petrol transition hover:border-petrol"

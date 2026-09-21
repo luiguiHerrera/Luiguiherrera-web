@@ -77,6 +77,35 @@ def paragraph_text(value):
     return html.escape(clean_text(value)).replace("\n", "<br/>")
 
 
+SOURCE_LINKS = []
+CANONICAL = ""
+
+def source_linked_text(value):
+    text = str(value)
+    if not SOURCE_LINKS:
+        return paragraph_text(text)
+    # URL-only paragraphs are used by the source appendix and metadata.
+    if re.match(r"^(https?://|/)[^\s]+$", text):
+        href = "https://www.luiguiherrera.com" + text if text.startswith("/") else text
+        return f'<link href="{html.escape(href, quote=True)}">{paragraph_text(text)}</link>'
+    names = sorted(set(n for s in SOURCE_LINKS for n in s["names"] + ["["+s["id"]+"]"]), key=len, reverse=True)
+    pattern = r"(?<!\w)(?:" + "|".join(re.escape(n) for n in names) + r")(?!\w)"
+    output, end = [], 0
+    for m in re.finditer(pattern, text, re.I):
+        output.append(paragraph_text(text[end:m.start()]))
+        candidates = [s for s in SOURCE_LINKS if m[0].lower() in [n.lower() for n in s["names"] + ["["+s["id"]+"]"]]]
+        source = next((s for s in candidates if "["+s["id"]+"]" in text), candidates[0])
+        href = source.get("href")
+        if href:
+            href = CANONICAL + href if href.startswith("#") else "https://www.luiguiherrera.com" + href if href.startswith("/") else href
+            output.append(f'<link href="{html.escape(href, quote=True)}">{paragraph_text(m[0])}</link>')
+        else:
+            output.append(paragraph_text(m[0]))
+        end = m.end()
+    output.append(paragraph_text(text[end:]))
+    return "".join(output)
+
+
 def build_styles():
     styles = PDF["getSampleStyleSheet"]()
     ParagraphStyle = PDF["ParagraphStyle"]
@@ -194,12 +223,12 @@ def build_styles():
 
 
 def p(value, style):
-    return PDF["Paragraph"](paragraph_text(value), style)
+    return PDF["Paragraph"](source_linked_text(value), style)
 
 
 def bullet(value, styles):
     return PDF["Paragraph"](
-        f"&#8226;&nbsp; {paragraph_text(value)}",
+        f"&#8226;&nbsp; {source_linked_text(value)}",
         styles["body"],
     )
 
@@ -500,7 +529,18 @@ def add_historical_snapshot(story, snapshot, styles):
         story.append(p(comparison["interpretation"], styles["body"]))
         story.append(PDF["KeepTogether"]([p(comparison["methodology"], styles["small"])]))
     regime = snapshot["regime"]
-    if regime["score"] is None and regime["confidence"] is None:
+    if regime.get("reconstruction"):
+        reconstruction = regime["reconstruction"]
+        story.extend([
+            p("Régimen V1 al 18/09", styles["h3"]),
+            p(regime["label"], styles["h2"]),
+            info_table([("Sesgo", regime["bias"]), ("Score reconstruido", "–".join(map(str,reconstruction["scoreRange"]))+" / 100"), ("Confianza", "No se publica una cifra puntual")], styles),
+            p(regime["interpretation"], styles["body"]),
+            p("Ver metodología", styles["h3"]),
+            p(reconstruction["methodology"], styles["small"]),
+            p("Replay acotado · código y evidencia [C5]", styles["small"]),
+        ])
+    elif regime["score"] is None and regime["confidence"] is None:
         story.append(PDF["KeepTogether"]([
             p("Régimen V1 no publicado", styles["h3"]),
             p(f"No existe evidencia suficiente para reconstruir el estado exacto del motor al cierre del {snapshot['dataDate'][8:10]}/{snapshot['dataDate'][5:7]}.", styles["body"]),
@@ -1011,6 +1051,9 @@ def deterministic_canvas(filename, **kwargs):
 
 def generate_pdf(model_path, output_path, root):
     model = json.loads(Path(model_path).read_text(encoding="utf-8"))
+    global SOURCE_LINKS, CANONICAL
+    SOURCE_LINKS = model.get("presentation", {}).get("sourceLinks", [])
+    CANONICAL = model["canonicalUrl"]
     styles = build_styles()
     mm = PDF["mm"]
     doc = PDF["SimpleDocTemplate"](

@@ -139,6 +139,8 @@ export type MarketReportPresentation = {
   calendarView?: "full-month" | "remaining";
   calendarStartDate?: string;
   marketReadingsLayout?: "vix-flows";
+  linksOpenNewTab?: boolean;
+  sourceLinks?: import("./report-source-links").ReportSourceLink[];
   watchlistStyle?: "dashboard";
   /** Títulos canónicos por sección cuando la edición usa un orden editorial propio. */
   sectionTitles?: {

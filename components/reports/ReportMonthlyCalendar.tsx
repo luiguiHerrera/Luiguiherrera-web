@@ -1,5 +1,8 @@
 "use client";
 
+import { ReportAnchor, ReportParagraph } from "@/components/reports/ReportSourcePolicy";
+
+
 import { useEffect, useMemo, useRef, useState } from "react";
 import type { MarketReport, MarketReportCalendarItem } from "@/lib/reports/market-reports";
 import { formatEvidenceConsultedAt, getCalendarConfig, getMonthGrid, isEventInMonth } from "@/lib/reports/report-presentation";
@@ -99,7 +102,7 @@ export function ReportMonthlyCalendar({ events, report }: ReportMonthlyCalendarP
       <div className="min-w-0 border border-line bg-panel" aria-label={`Calendario de ${calendarConfig.title}`}>
         <div className="flex flex-wrap items-center justify-between gap-3 border-b border-line px-4 py-3">
           <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.14em] text-brass">Calendario mensual</p>
+            <ReportParagraph className="text-xs font-semibold uppercase tracking-[0.14em] text-brass">Calendario mensual</ReportParagraph>
             <h3 className="mt-1 text-lg font-semibold text-ink">{calendarConfig.title}</h3>
           </div>
           <ul className="flex flex-wrap gap-2" aria-label="Leyenda del calendario">
@@ -173,7 +176,7 @@ export function ReportMonthlyCalendar({ events, report }: ReportMonthlyCalendarP
           <>
             <div className="flex items-start justify-between gap-3">
               <div>
-                <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-brass">{categoryLabels[categoryFor(selected)]}</p>
+                <ReportParagraph className="text-[10px] font-semibold uppercase tracking-[0.14em] text-brass">{categoryLabels[categoryFor(selected)]}</ReportParagraph>
                 <h3 className="mt-1 text-lg font-semibold leading-6 text-ink">{selected.event}</h3>
               </div>
               <button type="button" className="min-h-10 min-w-10 border border-line bg-panel text-lg text-muted hover:border-petrol hover:text-petrol" onClick={() => closeDetail(true)} aria-label="Cerrar detalle del evento">
@@ -207,25 +210,25 @@ export function ReportMonthlyCalendar({ events, report }: ReportMonthlyCalendarP
                 <dt className="text-[10px] font-semibold uppercase text-brass">Confirmación</dt>
                 <dd className="mt-1 text-ink">{confirmationLabel(selected)}</dd>
               </div>
-              {selected.impliedMovePct !== undefined ? <div><dt className="text-[10px] font-semibold uppercase text-brass">Movimiento implícito esperado</dt><dd className="mt-1 text-ink">{selected.impliedMoveApproximate ? "≈" : ""}±{selected.impliedMovePct.toFixed(2).replace(".", ",")} % · {selected.impliedMoveProviderHref ? <a className="font-semibold text-petrol" href={selected.impliedMoveProviderHref} target="_blank" rel="noopener noreferrer">{selected.impliedMoveProvider} ↗</a> : selected.impliedMoveProvider}{selected.impliedMoveConsultedAt ? ` · consulta ${formatEvidenceConsultedAt(selected.impliedMoveConsultedAt)}` : ""}</dd></div> : null}
+              {selected.impliedMovePct !== undefined ? <div><dt className="text-[10px] font-semibold uppercase text-brass">Movimiento implícito esperado</dt><dd className="mt-1 text-ink">{selected.impliedMoveApproximate ? "≈" : ""}±{selected.impliedMovePct.toFixed(2).replace(".", ",")} % · {selected.impliedMoveProviderHref ? <ReportAnchor className="font-semibold text-petrol" href={selected.impliedMoveProviderHref} target="_blank" rel="noopener noreferrer">{selected.impliedMoveProvider} ↗</ReportAnchor> : selected.impliedMoveProvider}{selected.impliedMoveConsultedAt ? ` · consulta ${formatEvidenceConsultedAt(selected.impliedMoveConsultedAt)}` : ""}</dd></div> : null}
             </dl>
             <div className="mt-4 grid gap-2 border-t border-line pt-3">
               {selected.trackingHref && selected.trackingLabel ? (
-                <a className="inline-flex min-h-10 items-center justify-between gap-2 border border-petrol bg-petrol px-3 py-2 text-sm font-semibold text-white transition hover:bg-panel hover:text-petrol" href={selected.trackingHref} target={selected.trackingHref.startsWith("http") ? "_blank" : undefined} rel={selected.trackingHref.startsWith("http") ? "noopener noreferrer" : undefined} aria-label={`${selected.trackingLabel}${selected.trackingHref.startsWith("http") ? ", abre en una pestaña nueva" : ""}`}>
+                <ReportAnchor className="inline-flex min-h-10 items-center justify-between gap-2 border border-petrol bg-petrol px-3 py-2 text-sm font-semibold text-white transition hover:bg-panel hover:text-petrol" href={selected.trackingHref} target={selected.trackingHref.startsWith("http") ? "_blank" : undefined} rel={selected.trackingHref.startsWith("http") ? "noopener noreferrer" : undefined} aria-label={`${selected.trackingLabel}${selected.trackingHref.startsWith("http") ? ", abre en una pestaña nueva" : ""}`}>
                   {selected.trackingLabel} {selected.trackingHref.startsWith("http") ? <ExternalMark /> : null}
-                </a>
+                </ReportAnchor>
               ) : null}
               {selected.sourceHref && selected.sourceLabel ? (
-                <a className="inline-flex min-h-10 items-center justify-between gap-2 border-b border-petrol/35 py-2 text-sm font-semibold text-petrol" href={selected.sourceHref} target="_blank" rel="noopener noreferrer" aria-label={`${selected.sourceLabel}, abre en una pestaña nueva`}>
+                <ReportAnchor className="inline-flex min-h-10 items-center justify-between gap-2 border-b border-petrol/35 py-2 text-sm font-semibold text-petrol" href={selected.sourceHref} target="_blank" rel="noopener noreferrer" aria-label={`${selected.sourceLabel}, abre en una pestaña nueva`}>
                   {selected.sourceLabel} <ExternalMark />
-                </a>
+                </ReportAnchor>
               ) : null}
             </div>
           </>
         ) : (
           <div className="py-6 text-center">
-            <p className="text-sm font-semibold text-ink">Selecciona un evento</p>
-            <p className="mt-2 text-sm leading-6 text-muted">Usa un marcador del calendario para ver hora, fuente y activos relacionados.</p>
+            <ReportParagraph className="text-sm font-semibold text-ink">Selecciona un evento</ReportParagraph>
+            <ReportParagraph className="mt-2 text-sm leading-6 text-muted">Usa un marcador del calendario para ver hora, fuente y activos relacionados.</ReportParagraph>
           </div>
         )}
       </aside>

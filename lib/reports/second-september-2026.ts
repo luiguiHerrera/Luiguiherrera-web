@@ -1,5 +1,6 @@
 import type { MarketReport, MarketReportCalendarItem, MarketReportWatchItem } from './market-reports';
 import type { HistoricalAutomaticReadingsSnapshot } from './historical-automatic-readings';
+import { secondSeptemberSourceLinks, boundedRegime } from './second-september-source-policy.ts';
 import statistics from './snapshots/segundo-informe-septiembre-2026/statistical.json' with { type: 'json' };
 import automatic from './snapshots/segundo-informe-septiembre-2026/automatic.json' with { type: 'json' };
 import { statisticalPanels, SEASONALITY_DISCLAIMER } from './report-statistical-panels.ts';
@@ -13,7 +14,7 @@ function freeze<T extends object>(value: T): T {
   for (const child of Object.values(value)) if (child && typeof child === 'object') freeze(child);
   return Object.freeze(value);
 }
-export const secondSeptember2026AutomaticReadings: HistoricalAutomaticReadingsSnapshot = freeze({ ...automatic, dispersionUnit: automatic.dispersionUnit === 'pp' ? 'pp' : undefined });
+export const secondSeptember2026AutomaticReadings: HistoricalAutomaticReadingsSnapshot = freeze({ ...automatic, sourceNote: automatic.sourceNote.replace('No se publica régimen, score ni confianza V1 del 18/09: no existe evidencia suficiente del estado histórico del adaptador.', 'La clasificación V1 se presenta como replay acotado condicionado a sectores y VIX reconciliados; no como captura exacta del motor. No se publica score ni confianza puntuales.'), regime: { ...automatic.regime, ...boundedRegime }, dispersionUnit: automatic.dispersionUnit === 'pp' ? 'pp' : undefined });
 const fed = 'https://www.federalreserve.gov/newsevents/pressreleases/monetary20260916a.htm';
 const h15 = 'https://www.federalreserve.gov/releases/h15/';
 const bea = 'https://www.bea.gov/news/schedule/full';
@@ -204,6 +205,8 @@ export const secondSeptember2026Report: MarketReport = freeze({
   presentation: {
     assetReadingsStartNewPage: true,
     marketReadingsLayout: "vix-flows",
+    linksOpenNewTab: true,
+    sourceLinks: secondSeptemberSourceLinks,
     calendarView: "remaining", calendarStartDate: "2026-09-21",
     contextTitle: 'Contexto general', contextStyle: 'prose', openingLine: 'El índice cambió poco; la calidad interna del mercado se deterioró.',
     prospectivePeriod: 'Desde el 21 de septiembre de 2026 hasta la siguiente publicación del informe.', calendarStyle: 'monthly',
@@ -331,9 +334,9 @@ export const secondSeptember2026Report: MarketReport = freeze({
   watchlist: watch.map(([key, name, whatLooksAt, whatWouldChange, category, href, linkLabel]) => ({ key, href, linkLabel, name, whatLooksAt, whatWouldChange, category, status: 'watch', statusLabel: 'Seguimiento condicional', whyItMatters: whatWouldChange, currentReading: whatLooksAt, asOf: '2026-09-21', source: 'Lectura editorial; datos automáticos congelados al 18/09 con las salvedades documentadas.' })),
   sourceGroups: [
     { title: 'A. Material institucional aportado por el editor', entries: [
-      { label: '[A1] BofA · Global Fund Manager Survey · septiembre de 2026', note: 'Encuesta 4–10/09. Riesgos, semiconductores, exposición a acciones y efectivo: material aportado por el editor, sin extrapolar agosto.' },
-      { label: '[A2] J.P. Morgan · Software — Industry Thoughts and Rank Order / AI Disruption · 19/08/2026', note: 'Marco histórico del Primer Informe, utilizado como hipótesis de seguimiento.' },
-      { label: '[A3] Alianza Research / Alianza Valores · Felipe Campos', note: 'Referencia institucional identificada por el editor. Los escenarios numéricos no se incorporan: falta el documento fechado. El recuadro desarrolla factores y etapas de seguimiento, no atribuye un pronóstico cuantitativo.' },
+      { label: '[A1] BofA · Global Fund Manager Survey · septiembre de 2026', note: 'Encuesta 4–10/09. Riesgos, semiconductores, exposición a acciones y efectivo: material aportado por el editor, sin URL pública y sin extrapolar agosto.' },
+      { label: '[A2] J.P. Morgan · Software — Industry Thoughts and Rank Order / AI Disruption · 19/08/2026', note: 'Marco histórico del Primer Informe, utilizado como hipótesis de seguimiento. Material institucional aportado por el editor, sin URL pública.' },
+      { label: '[A3] Alianza Research / Alianza Valores · Felipe Campos', note: 'Material institucional identificado por el editor, sin documento público fechado. Los escenarios numéricos no se incorporan: falta el documento fechado. El recuadro desarrolla factores y etapas de seguimiento, no atribuye un pronóstico cuantitativo.' },
     ] },
     { title: 'B. Fuentes oficiales y públicas', entries: [
       { label: '[B1] Federal Reserve · FOMC · 16/09/2026', href: fed },
@@ -357,15 +360,22 @@ export const secondSeptember2026Report: MarketReport = freeze({
       { label: '[B18] Goldman Sachs Research · Can the S&P 500 Rally as Treasury Yields Rise? · 15/09/2026', href: 'https://www.goldmansachs.com/insights/articles/can-the-s-and-p-500-rally-as-treasury-yields-rise' },
       { label: '[B19] Ryan Detrick / Carson · Why The Worst Month of the Year Likely Won’t Bring Rain · 31/08/2026', href: 'https://www.carsongroup.com/insights/blog/why-the-worst-month-of-the-year-likely-wont-bring-rain/' },
       { label: '[B20] Ryan Detrick / Carson · A Dove In Hawk’s Clothing? · 17/09/2026', href: 'https://www.carsongroup.com/insights/blog/a-dove-in-hawks-clothing/' },
+      { label: '[B21] FRED / ICE BofA · US High Yield Option-Adjusted Spread', href: 'https://fred.stlouisfed.org/series/BAMLH0A0HYM2', note: 'Destino de seguimiento del crédito; no aporta una observación nueva al cierre congelado.' },
+      { label: '[B22] Alpha Vantage · TIME_SERIES_DAILY', href: 'https://www.alphavantage.co/documentation/#daily', note: 'Cierres sin ajustar para los 11 ETF sectoriales y el radar; series congeladas del informe.' },
+      { label: '[B23] FRED / CBOE · VIXCLS', href: 'https://fred.stlouisfed.org/series/VIXCLS', note: 'VIX spot del 17/09; fuente del adapter V1.' },
+      { label: '[B24] Bitbo / BitcoinTreasuries · Bitcoin ETF flows', href: 'https://bitbo.io/treasuries/etf-flows/', note: 'Fuente primaria del adapter V1; tabla histórica y caché no preservadas al corte. No sustituye Farside en los flujos independientes.' },
+      { label: '[B25] Alianza · referencia institucional pública', href: 'https://www.alianza.com.co/', note: 'Identificación de la institución y seguimiento. No es fuente de escenarios numéricos de Felipe Campos; véase A3.' },
+      { label: '[B26] Banco de la República · tasa de política monetaria', href: 'https://suameca.banrep.gov.co/estadisticas-economicas/informacionSerie/59/tasas_interes_politica_monetaria', note: 'Referencia institucional para el marco de seguimiento de USD/COP; no se añade una cifra al informe.' },
     ] },
     { title: 'C. Datos propios', entries: [
       { label: '[C1] Dashboard y comparación 04/09 → 18/09', href: '/dashboard', note: 'Cinco sesiones / seis cierres por ventana. Radar: Alpha Vantage. VIX: 17/09. Enlace vivo; captura congelada.' },
-      { label: '[C2] Statistical Levels · autoridad del 19/09; cierres admitidos hasta el 18/09', note: 'Cripto: cierre UTC. Midterm excluye 2026, con N real; SPY otoño: ocho ciclos.' },
+      { label: '[C2] Statistical Levels · autoridad del 19/09; cierres admitidos hasta el 18/09', href: '/methodology/segundo-informe-septiembre-2026-datos.html', note: 'Yahoo Finance: series históricas, con enlaces por activo en la metodología. Cripto: cierre UTC. Midterm excluye 2026, con N real; SPY otoño: ocho ciclos.' },
       { label: '[C3] Bitcoin 2020–2025 · segunda muestra propia', note: 'Seis años completos; 2026 parcial excluido.' },
       { label: '[C4] ETH/BTC · cálculo editorial sobre cierres congelados', note: 'Misma serie UTC; variaciones antes del redondeo. Evidencia conservada.' },
-      { label: 'Primer Informe de septiembre · referencia editorial e histórica', href: '/informes/primer-informe-septiembre-2026' },
+      { label: '[C5] Replay acotado del Régimen V1 · deployment del 18/09/2026 · commit 4ee6adb006f360fea13837db5f7d45815f297b55', href: '/methodology/segundo-informe-septiembre-2026-regimen.html', note: '6.049 casos; categoría invariante y rango 70–77, condicionados a sectores del 18/09 y VIX del 17/09 recuperados el 21/09. No identifica la caché histórica exacta ni publica confianza puntual.' },
+      { label: '[C6] Primer Informe de septiembre · referencia editorial e histórica', href: '/informes/primer-informe-septiembre-2026' },
     ] },
   ],
-  sourcesNote: 'Mercado al 18/09; edición y consulta de fuentes al 21/09. Cada serie conserva fecha y convención. Diez métricas comparables; V1 histórico omitido. Niveles desde apertura semanal y muestras estacionales separadas. Referencias externas atribuidas, no objetivos propios.',
+  sourcesNote: 'Mercado al 18/09; edición y consulta de fuentes al 21/09. Cada serie conserva fecha y convención. Diez métricas comparables; clasificación V1 reconstruida mediante replay acotado, condicionado a sectores y VIX reconciliados. Niveles desde apertura semanal y muestras estacionales separadas. Referencias externas atribuidas, no objetivos propios.',
   disclaimer: 'Contenido educativo, sin asesoría personalizada ni recomendaciones. Escenarios condicionales; la estacionalidad no garantiza resultados. Niveles: extensiones históricas, no soportes, resistencias ni objetivos.',
 } satisfies MarketReport);

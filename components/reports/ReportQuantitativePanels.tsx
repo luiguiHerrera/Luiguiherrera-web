@@ -1,19 +1,20 @@
+import { ReportParagraph, ReportText } from "@/components/reports/ReportSourcePolicy";
 import type { ReportQuantitativePanel } from '@/lib/reports/report-statistical-panels';
 
 export function ReportQuantitativePanels({ panels, asset }: { panels: ReportQuantitativePanel[]; asset: string }) {
   return <div className="grid min-w-0 gap-5">
     {panels.map(panel => <section key={panel.title} className="min-w-0 border border-line bg-paper p-3 sm:p-4" aria-label={`${panel.title} · ${asset}`}>
-      <h4 className="text-sm font-semibold text-petrol">{panel.title}</h4>
-      <p className="mt-2 text-sm leading-6 text-muted">{panel.intro}</p>
+      <h4 className="text-sm font-semibold text-petrol"><ReportText>{panel.title}</ReportText></h4>
+      <ReportParagraph className="mt-2 text-sm leading-6 text-muted">{panel.intro}</ReportParagraph>
       {panel.range ? <StatisticalRange range={panel.range} asset={asset} /> : null}
       {panel.rows.length ? <div className="mt-3 overflow-x-auto" role="region" aria-label={`Tabla de ${panel.title} · ${asset}`} tabIndex={0}>
         <table className="w-full border-collapse text-left text-xs sm:text-sm">
-          <caption className="sr-only">{panel.title} · {asset}</caption>
-          <thead><tr>{panel.headers.map(header=><th key={header} scope="col" className="border-b border-line bg-panelSoft p-2 font-semibold text-ink">{header}</th>)}</tr></thead>
-          <tbody>{panel.rows.map(row=><tr key={row[0]}>{row.map((cell,index)=>index===0?<th key={index} scope="row" className="border-b border-line p-2 font-medium text-ink">{cell}</th>:<td key={index} className="border-b border-line p-2 tabular-nums text-muted">{cell}</td>)}</tr>)}</tbody>
+          <caption className="sr-only"><ReportText>{panel.title}</ReportText> · {asset}</caption>
+          <thead><tr>{panel.headers.map(header=><th key={header} scope="col" className="border-b border-line bg-panelSoft p-2 font-semibold text-ink"><ReportText>{header}</ReportText></th>)}</tr></thead>
+          <tbody>{panel.rows.map(row=><tr key={row[0]}>{row.map((cell,index)=>index===0?<th key={index} scope="row" className="border-b border-line p-2 font-medium text-ink"><ReportText>{cell}</ReportText></th>:<td key={index} className="border-b border-line p-2 tabular-nums text-muted"><ReportText>{cell}</ReportText></td>)}</tr>)}</tbody>
         </table>
       </div> : null}
-      {panel.notes.map(note=><p key={note} className="mt-3 text-xs leading-5 text-muted">{note}</p>)}
+      {panel.notes.map(note=><ReportParagraph key={note} className="mt-3 text-xs leading-5 text-muted">{note}</ReportParagraph>)}
     </section>)}
   </div>;
 }

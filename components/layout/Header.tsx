@@ -1,6 +1,6 @@
 "use client";
 
-import Link from "next/link";
+import { PreserveReportLink as Link } from "./PreserveReportLink";
 import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
 import type { FocusEvent, KeyboardEvent, MouseEvent, ReactNode } from "react";
@@ -65,7 +65,7 @@ function HeaderLink({
   const router = useRouter();
 
   function handleClick(event: MouseEvent<HTMLAnchorElement>) {
-    if (!isDiagnosticHref(href)) return;
+    if (event.currentTarget.target === "_blank" || event.ctrlKey || event.metaKey || !isDiagnosticHref(href)) return;
     event.preventDefault();
     router.push(withDiagnosticRestart(href));
   }

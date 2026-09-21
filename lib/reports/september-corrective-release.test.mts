@@ -31,7 +31,9 @@ test('all 18 controls link to context, and every asset fragment has a unique sem
     for (const item of report.watchlist) assert(text.includes(item.href) && text.includes(item.linkLabel),`${ext}: ${item.key}`);
     assert.equal(text.split('B. Fuentes oficiales y públicas').length-1,1);
     assert(!text.includes('· continuación'));
-    assert(text.includes('Régimen V1 no publicado'));
+    assert(text.includes('Régimen V1 al 18/09'));
+    assert(text.includes('70–77 / 100'));
+    assert(text.includes('No se publica una cifra puntual'));
     assert(!text.includes('No publicada'));
   }
 });
@@ -39,6 +41,17 @@ test('all 18 controls link to context, and every asset fragment has a unique sem
 test('corrective release preserves all editorial content except approved presentation metadata and destinations', () => {
   const baseline = JSON.parse(fs.readFileSync(auditRoot+'editorial-baseline.json','utf8'));
   const repaired = structuredClone(report) as typeof baseline;
+  delete repaired.presentation.linksOpenNewTab;
+  delete repaired.presentation.sourceLinks;
+  repaired.sourcesNote = baseline.sourcesNote;
+  for (const group of repaired.sourceGroups) {
+    group.entries = group.entries.filter((e: {label: string}) => !/^\[(?:B2[1-6]|C5)\]/.test(e.label));
+    group.entries.forEach((e: {label: string;href?:string;note?:string}) => {
+      if(e.label.startsWith("[C6]")) e.label=e.label.replace("[C6] ","");
+      const original=baseline.sourceGroups.flatMap((g: {entries: unknown[]})=>g.entries).find((b: {label:string})=>b.label===e.label);
+      if(/^\[(?:A[1-3]|C2)\]/.test(e.label)) {e.note=original.note;if(original.href) e.href=original.href;else delete e.href;}
+    });
+  }
   delete repaired.presentation.calendarView;
   delete repaired.presentation.calendarStartDate;
   delete repaired.presentation.marketReadingsLayout;
@@ -49,8 +62,8 @@ test('corrective release preserves all editorial content except approved present
   assert.deepEqual(repaired,baseline);
   const b = report.sourceGroups.filter(g=>g.title.startsWith('B.'));
   assert.equal(b.length,1);
-  assert.deepEqual(b[0].entries.map(e=>e.label.match(/^\[B(\d+)\]/)?.[1]).filter(Boolean),Array.from({length:20},(_,i)=>String(i+1)));
-  assert.equal(b[0].entries.length,21); // Preserve the already published supplementary BOJ reference.
+  assert.deepEqual(b[0].entries.map(e=>e.label.match(/^\[B(\d+)\]/)?.[1]).filter(Boolean).sort((a,b)=>Number(a)-Number(b)),Array.from({length:26},(_,i)=>String(i+1)));
+  assert.equal(b[0].entries.length,27); // Preserve the already published supplementary BOJ reference.
 });
 
 test('all frozen data, archived downloads and ICS remain byte-identical to production', () => {

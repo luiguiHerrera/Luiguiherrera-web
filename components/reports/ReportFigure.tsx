@@ -1,3 +1,4 @@
+import { ReportAnchor } from "@/components/reports/ReportSourcePolicy";
 import Image from "next/image";
 
 type ReportFigureProps = {
@@ -25,7 +26,7 @@ export function ReportFigure({
 }: ReportFigureProps) {
   return (
     <figure className="overflow-hidden border border-line bg-white">
-      <a href={src} target="_blank" rel="noreferrer" aria-label="Abrir figura en tamaño original">
+      <ReportAnchor href={src} target="_blank" rel="noreferrer" aria-label="Abrir figura en tamaño original">
         <Image
           alt={alt}
           className="h-auto w-full"
@@ -35,14 +36,14 @@ export function ReportFigure({
           src={src}
           width={width}
         />
-      </a>
+      </ReportAnchor>
       <figcaption className="grid gap-2 border-t border-line bg-panelSoft px-4 py-3 text-sm leading-6">
         <span className="text-ink">{caption}</span>
         <span className="text-xs leading-5 text-muted">
           {sourceHref ? (
-            <a className="border-b border-petrol/30 text-petrol transition hover:border-petrol" href={sourceHref} target="_blank" rel="noreferrer">
+            <ReportAnchor className="border-b border-petrol/30 text-petrol transition hover:border-petrol" href={sourceHref} target="_blank" rel="noreferrer">
               {source}
-            </a>
+            </ReportAnchor>
           ) : (
             source
           )}

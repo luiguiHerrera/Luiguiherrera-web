@@ -16,7 +16,7 @@ export function ReportAssetAnchors() {
     }
     function onClick(event: MouseEvent) {
       const anchor = event.target instanceof Element ? event.target.closest("a") : null;
-      if (anchor?.hash && anchor.pathname === window.location.pathname && anchor.origin === window.location.origin) {
+      if (anchor?.target !== "_blank" && !event.metaKey && !event.ctrlKey && anchor?.hash && anchor.pathname === window.location.pathname && anchor.origin === window.location.origin) {
         requestAnimationFrame(() => revealTarget(anchor.hash));
       }
     }
