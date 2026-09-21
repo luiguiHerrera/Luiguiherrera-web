@@ -642,7 +642,7 @@ Seguimiento condicional · 2026-09-21. Lectura editorial; datos automáticos con
 
 ## Fuentes y metodología
 
-### A. Material institucional aportado por el editor
+### A. Investigación institucional
 
 - [A1] BofA · Global Fund Manager Survey · septiembre de 2026 · Encuesta 4–10/09. Riesgos, semiconductores, exposición a acciones y efectivo: material aportado por el editor, sin URL pública y sin extrapolar agosto.
 - [A2] J.P. Morgan · Software — Industry Thoughts and Rank Order / AI Disruption · 19/08/2026 · Marco histórico del [Primer Informe](https://www.luiguiherrera.com/informes/primer-informe-septiembre-2026), utilizado como hipótesis de seguimiento. Material institucional aportado por el editor, sin URL pública.
@@ -678,7 +678,7 @@ Seguimiento condicional · 2026-09-21. Lectura editorial; datos automáticos con
 - [[B25] Alianza · referencia institucional pública](https://www.alianza.com.co/) · Identificación de la institución y seguimiento. No es fuente de escenarios numéricos de Felipe Campos; véase A3.
 - [[B26] Banco de la República · tasa de política monetaria](https://suameca.banrep.gov.co/estadisticas-economicas/informacionSerie/59/tasas_interes_politica_monetaria) · Referencia institucional para el marco de seguimiento de USD/COP; no se añade una cifra al informe.
 
-### C. Datos propios
+### C. Datos y cálculos propios
 
 - [[C1] Dashboard y comparación 04/09 → 18/09](https://www.luiguiherrera.com/dashboard) · Cinco sesiones / seis cierres por ventana. Radar: [Alpha Vantage](https://www.alphavantage.co/documentation/#daily). VIX: 17/09. Enlace vivo; captura congelada.
 - [[C2] Statistical Levels · autoridad del 19/09; cierres admitidos hasta el 18/09](https://www.luiguiherrera.com/methodology/segundo-informe-septiembre-2026-datos.html) · [Yahoo Finance](https://www.luiguiherrera.com/methodology/segundo-informe-septiembre-2026-datos.html): series históricas, con enlaces por activo en la metodología. Cripto: cierre UTC. Midterm excluye 2026, con N real; SPY otoño: ocho ciclos.

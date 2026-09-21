@@ -333,7 +333,7 @@ export const secondSeptember2026Report: MarketReport = freeze({
   ] },
   watchlist: watch.map(([key, name, whatLooksAt, whatWouldChange, category, href, linkLabel]) => ({ key, href, linkLabel, name, whatLooksAt, whatWouldChange, category, status: 'watch', statusLabel: 'Seguimiento condicional', whyItMatters: whatWouldChange, currentReading: whatLooksAt, asOf: '2026-09-21', source: 'Lectura editorial; datos automáticos congelados al 18/09 con las salvedades documentadas.' })),
   sourceGroups: [
-    { title: 'A. Material institucional aportado por el editor', entries: [
+    { title: 'A. Investigación institucional', entries: [
       { label: '[A1] BofA · Global Fund Manager Survey · septiembre de 2026', note: 'Encuesta 4–10/09. Riesgos, semiconductores, exposición a acciones y efectivo: material aportado por el editor, sin URL pública y sin extrapolar agosto.' },
       { label: '[A2] J.P. Morgan · Software — Industry Thoughts and Rank Order / AI Disruption · 19/08/2026', note: 'Marco histórico del Primer Informe, utilizado como hipótesis de seguimiento. Material institucional aportado por el editor, sin URL pública.' },
       { label: '[A3] Alianza Research / Alianza Valores · Felipe Campos', note: 'Material institucional identificado por el editor, sin documento público fechado. Los escenarios numéricos no se incorporan: falta el documento fechado. El recuadro desarrolla factores y etapas de seguimiento, no atribuye un pronóstico cuantitativo.' },
@@ -367,7 +367,7 @@ export const secondSeptember2026Report: MarketReport = freeze({
       { label: '[B25] Alianza · referencia institucional pública', href: 'https://www.alianza.com.co/', note: 'Identificación de la institución y seguimiento. No es fuente de escenarios numéricos de Felipe Campos; véase A3.' },
       { label: '[B26] Banco de la República · tasa de política monetaria', href: 'https://suameca.banrep.gov.co/estadisticas-economicas/informacionSerie/59/tasas_interes_politica_monetaria', note: 'Referencia institucional para el marco de seguimiento de USD/COP; no se añade una cifra al informe.' },
     ] },
-    { title: 'C. Datos propios', entries: [
+    { title: 'C. Datos y cálculos propios', entries: [
       { label: '[C1] Dashboard y comparación 04/09 → 18/09', href: '/dashboard', note: 'Cinco sesiones / seis cierres por ventana. Radar: Alpha Vantage. VIX: 17/09. Enlace vivo; captura congelada.' },
       { label: '[C2] Statistical Levels · autoridad del 19/09; cierres admitidos hasta el 18/09', href: '/methodology/segundo-informe-septiembre-2026-datos.html', note: 'Yahoo Finance: series históricas, con enlaces por activo en la metodología. Cripto: cierre UTC. Midterm excluye 2026, con N real; SPY otoño: ocho ciclos.' },
       { label: '[C3] Bitcoin 2020–2025 · segunda muestra propia', note: 'Seis años completos; 2026 parcial excluido.' },
