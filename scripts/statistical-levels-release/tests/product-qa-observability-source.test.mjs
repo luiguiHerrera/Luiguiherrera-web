@@ -66,10 +66,13 @@ function stripObservers(source) {
 const print = source => ts.createPrinter({ removeComments: true, newLine: ts.NewLineKind.LineFeed }).printFile(source);
 function collect(source, predicate) { const found = []; function visit(node) { if (predicate(node)) found.push(node); ts.forEachChild(node, visit); } visit(source); return found; }
 const sources = await Promise.all(names.map(async name => { const text = await fs.readFile(new URL('../scripts/qa/' + name, import.meta.url), 'utf8'); return { name, text, ast: parse(text, name) }; }));
+const spyWait = "await waitForAssetTransition(c,{asset:'SPY',pickerTitle:'SPDR S&P 500 ETF',frequency:'weekly',window:'3Y'});";
 for (const { name, text, ast } of sources) {
-  test(name + ': stripping only observer nodes restores the exact frozen executable AST', () => {
+  test(name + ': removing the qualified SPY wait and observers restores the exact frozen AST', () => {
     assert.equal(ast.parseDiagnostics.length, 0);
-    assert.equal(sha(print(stripObservers(ast))), expected[name].ast_sha256);
+    const original = name === 'qa-statistical-levels.mjs' ? parse(text.replace(spyWait, 'await sleep(650);'), name) : ast;
+    if (name === 'qa-statistical-levels.mjs') assert.equal(text.split(spyWait).length, 2);
+    assert.equal(sha(print(stripObservers(original))), expected[name].ast_sha256);
     assert.equal(text.split('\n').length, expected[name].lines, 'declared original source lines remain exact candidate lines');
   });
   test(name + ': every original assertion retains exact callee, arguments and source line', () => {
@@ -91,7 +94,7 @@ for (const { name, text, ast } of sources) {
       }
     }
     assert.equal(collect(ast, node => ts.isAwaitExpression(node)).length, expected[name].await_count);
-    assert.equal(collect(ast, node => ts.isCallExpression(node) && node.expression.getText(ast) === 'sleep').length, expected[name].sleep_call_count);
+    assert.equal(collect(ast, node => ts.isCallExpression(node) && node.expression.getText(ast) === 'sleep').length, expected[name].sleep_call_count - (name === 'qa-statistical-levels.mjs' ? 1 : 0));
   });
   test(name + ': first underlying error is captured before unchanged generic suite failure', () => {
     const caught = collect(ast, ts.isCatchClause); assert.equal(caught.length, 1);

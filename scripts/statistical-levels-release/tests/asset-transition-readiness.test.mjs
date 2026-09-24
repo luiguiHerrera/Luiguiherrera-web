@@ -249,6 +249,7 @@ test('invalid target is rejected before browser access', async () => {
 
 const hash = value => createHash('sha256').update(value).digest('hex');
 const waitCall = "await waitForAssetTransition(c,{asset:'GLD',pickerTitle:'SPDR Gold Shares',frequency:'weekly',window:'5Y'});";
+const spyWaitCall = "await waitForAssetTransition(c,{asset:'SPY',pickerTitle:'SPDR S&P 500 ETF',frequency:'weekly',window:'3Y'});";
 test('ready identity with wrong numeric data still fails the unchanged independent metric assertion', async () => {
   const state = fixture(); assert.equal(evaluate(state), true);
   const source = readFileSync(new URL('../scripts/qa/qa-statistical-levels.mjs', import.meta.url), 'utf8');
@@ -267,12 +268,16 @@ for (const [name, relative, importSuffix, beforeHash, lineCount, gldLine, metric
   ['frozen hosted QA', '../scripts/qa/qa-statistical-levels.mjs', " import { waitForAssetTransition } from './asset-transition-readiness.mjs';", 'b7f586dd1539b523a56b7065f776674094839cb46d85daa5e93652e3ba849794', 161, 135, 'de34435c1dd9c10e5b60db7840c32333194b10ad960fc1f5467dcf92d4f60343'],
   ['standalone QA', '../../qa-statistical-levels.mjs', " import { waitForAssetTransition } from './statistical-levels-release/scripts/qa/asset-transition-readiness.mjs';", '39e073bddfe012fc6f38135a10d4f6467e2582dd87435efb95363838a3846118', 205, 179, 'b4425fd263e11046e5c3e21db3d825b6bc3b155323b05a0767d78c24b88f17ea']
 ]) {
-  test(name + ' differs from ba701 only by appended import and the post-GLD wait', () => {
+  test(name + ' preserves the GLD certificate after removing only the qualified SPY wait', () => {
     const source = readFileSync(new URL(relative, import.meta.url), 'utf8');
     assert.equal(source.split(importSuffix).length, 2); assert.equal(source.split(waitCall).length, 2);
     assert.equal(source.split('\n').length, lineCount);
     assert.ok(source.split('\n')[gldLine - 1].includes(waitCall));
-    assert.equal(hash(source.replace(importSuffix, '').replace(waitCall, 'await sleep(650);')), beforeHash);
+    if (name === 'frozen hosted QA') {
+      assert.equal(source.split(spyWaitCall).length, 2);
+      assert.ok(source.split('\n')[131].includes(spyWaitCall));
+    } else assert.equal(source.includes(spyWaitCall), false);
+    assert.equal(hash(source.replace(spyWaitCall, 'await sleep(650);').replace(importSuffix, '').replace(waitCall, 'await sleep(650);')), beforeHash);
   });
   test(name + ' retains original independent metricCheck bytes and assertion', () => {
     const source = readFileSync(new URL(relative, import.meta.url), 'utf8');
@@ -352,4 +357,91 @@ test('reordering current metric nodes cannot borrow their individual output witn
 test('a renamed panel cannot borrow another committed section identity', () => {
   const state = fixture(); state.hosts.get(state.panel).memoizedProps.id='sl-risk';
   assert.equal(evaluate(state), false);
+});
+
+// Same asset, different window: target controls cannot attest an older owner.
+// Opaque fixture output is intentionally unrelated to any numerical oracle.
+const spyTarget = window => ({ asset: 'SPY', pickerTitle: 'SPDR S&P 500 ETF', frequency: 'weekly', window });
+function spyWindowFixture(controls = '3Y', committed = '5Y') {
+  const state = fixture(); coherentIdentity(state, 'SPY', 'SPY', spyTarget(controls).pickerTitle);
+  state.location.search = `?asset=SPY&frequency=weekly&window=${controls}&review=1`;
+  state.windowControl.value = controls;
+  state.selectionIdentity.text = `Semanal · ${controls.replace('Y', 'A')} · Historial completado`;
+  state.regionContext.text = `Semanal · ${controls.replace('Y', 'A')}`;
+  state.owner.memoizedProps.asset.frequencies.weekly.windows = { '3Y': {}, '5Y': {}, '10Y': {} };
+  state.owner.memoizedProps.selection.window = committed;
+  return state;
+}
+const spyReady = (state, window = '3Y') => evaluate(state, assetTransitionReadinessExpression(spyTarget(window)));
+test('SPY A: URL/control 3Y with committed 5Y remains false for the same asset', () => {
+  const state = spyWindowFixture(); assert.equal(spyReady(state), false);
+  assert.equal(state.owner.memoizedProps.asset.ticker, 'SPY');
+});
+test('SPY B: committed 3Y and matching opaque DOM qualify without numeric expectations', () => {
+  assert.equal(spyReady(spyWindowFixture('3Y', '3Y')), true);
+});
+test('SPY C: delayed same-asset target stays false until its owner commits', async () => {
+  const state = spyWindowFixture(); let calls = 0;
+  await waitForAssetTransition({ evaluate: async expression => {
+    calls++; if (calls === 4) state.owner.memoizedProps.selection.window = '3Y';
+    const ready = evaluate(state, expression); assert.equal(ready, calls === 4); return ready;
+  } }, spyTarget('3Y'), { timeoutMs: 1000, pollMs: 1 });
+  assert.equal(calls, 4);
+});
+test('SPY D: target-like controls followed by older owners cannot qualify', () => {
+  const state = spyWindowFixture();
+  for (const window of ['5Y', '10Y', '5Y']) {
+    state.owner.memoizedProps.selection.window = window; assert.equal(spyReady(state), false);
+  }
+});
+test('SPY E: late old 3Y commit cannot satisfy newer 10Y controls', () => {
+  const state = spyWindowFixture('10Y', '5Y');
+  for (const window of ['5Y', '3Y']) {
+    state.owner.memoizedProps.selection.window = window; assert.equal(spyReady(state, '10Y'), false);
+  }
+  state.owner.memoizedProps.selection.window = '10Y'; assert.equal(spyReady(state, '10Y'), true);
+});
+for (const [kind, tag, properties] of [['root', 'div', { className: 'sl-page' }], ['panel', 'section', { id: 'sl-unusual' }]]) {
+  test('SPY F: duplicate visible ' + kind + ' fails closed', () => {
+    const state = spyWindowFixture('3Y', '3Y'); state.document.append(element(tag, properties));
+    assert.equal(spyReady(state), false);
+  });
+}
+test('SPY G: never-committing target times out without changing old committed state', async () => {
+  const state = spyWindowFixture();
+  await assert.rejects(waitForAssetTransition({ evaluate: async expression => evaluate(state, expression) }, spyTarget('3Y'),
+    { timeoutMs: 20, pollMs: 1 }), { message: 'ASSET_TRANSITION_READINESS_TIMEOUT' });
+  assert.equal(state.owner.memoizedProps.selection.window, '5Y');
+});
+test('SPY H: DOM mutation inconsistent with committed primitive output fails closed', () => {
+  const state = spyWindowFixture('3Y', '3Y'); state.metrics[0].text = 'mutated-live-text';
+  assert.equal(spyReady(state), false);
+});
+test('SPY reverse-window identity is supported without changing the history.back path', () => {
+  assert.equal(spyReady(spyWindowFixture('5Y', '3Y'), '5Y'), false);
+  assert.equal(spyReady(spyWindowFixture('5Y', '5Y'), '5Y'), true);
+});
+test('SPY repair is the sole executable change to the exact bbb7f337 harness', () => {
+  const source = readFileSync(new URL('../scripts/qa/qa-statistical-levels.mjs', import.meta.url), 'utf8');
+  assert.equal(source.split(spyWaitCall).length, 2);
+  assert.equal(hash(source.replace(spyWaitCall, 'await sleep(650);')), '7e9f77786f435aea1e6187bdb3a274fb35baab1efeb0b0a9ccdb064ea9536eac');
+  assert.ok(source.split('\n')[133].includes('await sleep(650);'));
+});
+test('SPY exact repaired action cannot read metrics until semantic readiness resolves', async () => {
+  const source = readFileSync(new URL('../scripts/qa/qa-statistical-levels.mjs', import.meta.url), 'utf8');
+  const run = new Function('c', 'waitForAssetTransition', 'metricCheck', 'globalThis', `return (async () => {${source.split('\n')[131]}})()`);
+  let release; const gate = new Promise(resolve => { release = resolve; }), events = [];
+  const client = { click: async selector => { assert.equal(selector, '[data-window="3Y"]'); events.push('click'); } };
+  const pending = run(client, async (c, requested) => {
+    assert.equal(c, client); assert.deepEqual(requested, spyTarget('3Y')); events.push('wait'); await gate;
+  }, async (c, ...identity) => { assert.equal(c, client); assert.deepEqual(identity, ['SPY', 'weekly', '3Y']); events.push('metricCheck'); }, {});
+  await new Promise(resolve => setImmediate(resolve)); assert.deepEqual(events, ['click', 'wait']);
+  release(); await pending; assert.deepEqual(events, ['click', 'wait', 'metricCheck']);
+});
+test('SPY readiness timeout propagates and prevents the old premature assertion', async () => {
+  const source = readFileSync(new URL('../scripts/qa/qa-statistical-levels.mjs', import.meta.url), 'utf8');
+  const run = new Function('c', 'waitForAssetTransition', 'metricCheck', 'globalThis', `return (async () => {${source.split('\n')[131]}})()`);
+  const failure = new Error('ASSET_TRANSITION_READINESS_TIMEOUT'); let reads = 0;
+  await assert.rejects(run({ click: async () => {} }, async () => { throw failure; }, async () => { reads++; }, {}), error => error === failure);
+  assert.equal(reads, 0);
 });
