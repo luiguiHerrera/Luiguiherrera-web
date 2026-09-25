@@ -342,7 +342,7 @@
                 "minimum": 0
               },
               "classification": {
-                "const": "rsc_non_application"
+                "const": "rsc_transition_completed_non_application"
               }
             }
           }

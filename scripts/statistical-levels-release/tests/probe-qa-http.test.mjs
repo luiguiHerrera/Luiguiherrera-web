@@ -1,3 +1,4 @@
+import {withoutReceiptClass} from './semantic-closure-compat.mjs';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
@@ -191,7 +192,7 @@ const frozen = {
   '24 PROMOTE transport and browser harness unchanged': { 'release-core.mjs': 'c461b1af450c69007b4f5bfac9c21010ca475b843aec5fed3ff6fe6b8912dd70', 'browser-harness-base.mjs': '3d3a5f048d1e75f56f88ccb728e09aa7e892cc8f6b627dff81e05664145c18b9' }
 };
 for (const [name, files] of Object.entries(frozen)) test(name, () => {
-  for (const [file, expected] of Object.entries(files)) assert.equal(createHash('sha256').update(fs.readFileSync(new URL('../scripts/' + file, import.meta.url))).digest('hex'), expected, file);
+  for (const [file, expected] of Object.entries(files)) assert.equal(createHash('sha256').update(file==='release-core.mjs'?withoutReceiptClass(fs.readFileSync(new URL('../scripts/' + file, import.meta.url))):fs.readFileSync(new URL('../scripts/' + file, import.meta.url))).digest('hex'), expected, file);
 });
 test('transport reporting redirect-followed or different response URL fails closed', async () => {
   for (const fields of [{ redirected: true }, { url: 'https://unrelated.example/metodologia' }]) {

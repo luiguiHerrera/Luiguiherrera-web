@@ -63,6 +63,8 @@ function HeaderLink({
   href: string;
 }) {
   const router = useRouter();
+  const pathname = usePathname();
+  const prefetch = pathname === "/niveles-estadisticos" || pathname === "/en/statistical-levels" ? false : undefined;
 
   function handleClick(event: MouseEvent<HTMLAnchorElement>) {
     if (!isDiagnosticHref(href)) return;
@@ -71,7 +73,7 @@ function HeaderLink({
   }
 
   return (
-    <Link aria-current={ariaCurrent} href={href} onClick={handleClick} className={className}>
+    <Link prefetch={prefetch} aria-current={ariaCurrent} href={href} onClick={handleClick} className={className}>
       {children}
     </Link>
   );
@@ -189,6 +191,7 @@ const personalFinancePaths = {
 
 function HeaderForPathname({ pathname }: { pathname: string }) {
   const [mobileOpen, setMobileOpen] = useState(false);
+  const prefetch = pathname === "/niveles-estadisticos" || pathname === "/en/statistical-levels" ? false : undefined;
   const locale = localeFromPathname(pathname);
   const dictionary = getDictionary(locale);
   const hrefs = navHrefs[locale];
@@ -223,7 +226,7 @@ function HeaderForPathname({ pathname }: { pathname: string }) {
     <header onKeyDown={handleHeaderKeyDown} className="sticky top-0 z-50 border-b border-line/80 bg-[#fffdf8]/96 shadow-[0_1px_18px_rgba(11,52,54,0.045)] backdrop-blur-xl">
       <div className="mx-auto flex max-w-7xl items-center justify-between gap-3 px-3 py-2.5 sm:px-4 lg:px-5">
         <div className="flex min-w-0 items-center justify-between gap-3">
-          <Link href={hrefs.home} className="flex min-w-0 flex-1 items-center transition hover:opacity-75">
+          <Link prefetch={prefetch} href={hrefs.home} className="flex min-w-0 flex-1 items-center transition hover:opacity-75">
             <span className="sr-only">{dictionary.layout.brand}</span>
             <MarketLabMark />
           </Link>

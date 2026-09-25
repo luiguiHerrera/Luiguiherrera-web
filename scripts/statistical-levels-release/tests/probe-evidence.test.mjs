@@ -1,3 +1,4 @@
+import {createRequestInstanceCollector} from '../scripts/probe-request-instances.mjs';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs/promises';
@@ -92,17 +93,17 @@ test('evidence has exactly ten canonical JSON files; manifest covers other nine 
   }
 });
 
-test('full ledger preserves duplicate RSC/platform evidence and original grouped hashes', () => {
+test('full ledger preserves duplicates while header-only canceled RSC remain required failures', () => {
   const rsc = { kind: 'request_failure', url: origin + '/niveles-estadisticos?_rsc=private', type: 'Fetch',
     canceled: true, rsc: true, prefetch: true, error_code: 'net::ERR_ABORTED' };
   const platform = { kind: 'console_error', url: 'https://vercel.live/_next-live/feedback/session?secret=hidden', source: 'Runtime.consoleAPICalled' };
   const value = fixture([rsc, rsc, platform]), json = decode(buildProbeEvidence(value));
   const saved = json['application-network-summary.json'].accounting;
-  assert.equal(saved.ledger.length, 3); assert.equal(saved.raw_rsc_events[0].count, 2);
+  assert.equal(saved.ledger.length, 3); assert.equal(saved.raw_rsc_events.length, 0);assert.equal(saved.required_application_request_failures,2);
   assert.deepEqual(saved.raw_rsc_events, value.accounting.raw_rsc_events);
   assert.deepEqual(saved.raw_platform_events, value.accounting.raw_platform_events);
   assert.deepEqual(saved.ledger, value.accounting.ledger);
-  assert.equal(json['probe-summary.json'].result, 'PASS');
+  assert.equal(json['probe-summary.json'].result, 'FAIL');
 });
 
 test('failed preflight emits FAIL plus NOT_RUN downstream without assuming any identity', () => {
@@ -973,4 +974,59 @@ for (const scenario of [
     assert.equal(entry.sha256, sha(published[name])); assert.equal(entry.bytes, published[name].length);
   }
   assert.ok(!Buffer.concat(Object.values(published)).toString().includes('private-boundary-secret'));
+});
+
+// Continuation failures remain fail-closed without any lifecycle exemption.
+function canceledPrefetchInput() {
+  const input = fixture([{kind:'request_failure',url:origin+'/en/dashboard',type:'XHR',canceled:true,rsc:true,prefetch:true,error_code:'net::ERR_ABORTED'}]), pathHash = sha('/en/dashboard');
+  const shared = { page_id:'page-9',page_lifecycle:'ACTIVE',request_sequence:801,resource_type:'XHR',method:'GET',destination_origin_class:'EXACT_PREVIEW',redirected_from_origin_class:'NONE',same_origin_target:true,redirect_present:false,path_sha256:pathHash,rsc:true,prefetch:true,continuation_failure_class:'REQUEST_NO_LONGER_INTERCEPTABLE' };
+  input.interceptionFailures = {present:true,value:{schema_version:INTERCEPTION_EVIDENCE_SCHEMA,capture_issues:[],records:[
+    {...shared,failure_stage:'REQUEST_CONTINUATION',safe_error_code:'CONTINUE_REQUEST_ERROR'},
+    {...shared,failure_stage:'FAIL_REQUEST_FALLBACK',safe_error_code:'FAIL_REQUEST_ERROR'}]}};
+  return input;
+}
+test('new accounting retains a separate finite transport gate even without credential failures',()=>{
+ const input=fixture();input.accounting.transportFailures=['INTERCEPTION_TRANSPORT_FAILURE'];
+ const json=decode(buildProbeEvidence(input));assert.equal(json['probe-summary.json'].result,'FAIL');
+ assert.equal(json['application-network-summary.json'].accounting.authFailures.length,0);
+ assert.deepEqual(json['application-network-summary.json'].accounting.transportFailures,['INTERCEPTION_TRANSPORT_FAILURE']);
+});
+for(const malformed of [null,{},['CREDENTIAL_SCOPE_FAILURE'],['UNKNOWN'],42]) test('present-invalid transport evidence is rejected: '+JSON.stringify(malformed),()=>{
+ const input=fixture();input.accounting.transportFailures=malformed;
+ const json=decode(buildProbeEvidence(input));assert.equal(json['probe-summary.json'].result,'FAIL');assert.ok(json['probe-summary.json'].evidence_issues.includes('INVALID_NETWORK_ACCOUNTING'));
+});
+test('stage counters cannot relabel a known continuation as credentials or erase an unproved transport failure',()=>{
+ for(const variant of ['credential-label','missing-transport']){
+  const input=canceledPrefetchInput();
+  input.accounting.transportFailures=[];
+  if(variant==='credential-label')input.accounting.authFailures=['CREDENTIAL_SCOPE_OR_REDIRECT_REJECTED'];
+  const json=decode(buildProbeEvidence(input));assert.equal(json['probe-summary.json'].result,'FAIL');assert.ok(json['probe-summary.json'].evidence_issues.includes('INTERCEPTION_STAGE_COUNT_MISMATCH'));
+ }
+});
+for (const location of ['field', 'entry', 'sparse']) test('transport evidence rejects accessors and holes without invoking them: '+location,()=>{
+ const input=fixture();let calls=0;input.accounting.transportFailures=[];
+ if(location==='field')Object.defineProperty(input.accounting,'transportFailures',{get(){calls++;throw new Error('getter');},enumerable:true});
+ else if(location==='entry')Object.defineProperty(input.accounting.transportFailures,'0',{get(){calls++;throw new Error('getter');},enumerable:true});
+ else input.accounting.transportFailures.length=1;
+ assert.equal(decode(buildProbeEvidence(input))['probe-summary.json'].result,'FAIL');assert.equal(calls,0);
+});
+
+import {createTransitionCapture,transitions,transitionSchema} from '../scripts/probe-transition-receipts.mjs';
+import {safeEvent} from '../scripts/network-accounting.mjs';
+function completedTransitionInput(){
+ const input=fixture(),spec=transitions.T1,c=createTransitionCapture(origin),url=origin+spec.route+'?asset=SPY&frequency=weekly&window=3Y';
+ const id=c.start('page-1','T1',spec,'ACTIVE'),request={requestId:'memory-id',frameId:'frame',loaderId:'loader',documentURL:origin+spec.route,request:{url,method:'GET',headers:{RSC:'1'}},type:'Fetch'},binding=createRequestInstanceCollector(origin).request('page-1',request,spec,id);c.request('page-1','memory-id',request,'ACTIVE',binding);c.response('page-1','memory-id',200,'ACTIVE');
+ const raw={request_evidence:binding,kind:'request_failure',url,type:'Fetch',rsc:true,prefetch:false,canceled:true,error_code:'net::ERR_ABORTED'};
+ c.failure('page-1','memory-id',{canceled:true,errorText:'net::ERR_ABORTED'},0,'ACTIVE');c.complete('page-1','T1',{metric:true,readiness:true},'ACTIVE');
+ input.accounting={...account([raw],false,origin,c.evidence([safeEvent(raw)])),authFailures:[]};input.productReport.raw_rsc_events=input.accounting.raw_rsc_events;
+ input.attestation=attestProbe(input.productReport,input.context.run,input.context.target,input.context.workflow_sha256,'2026-09-10T08:00:00Z');return input;
+}
+test('transition receipt reaches exact ten-file artifact with independently checked event index and digest',()=>{const input=completedTransitionInput(),out=decode(buildProbeEvidence(input));assert.equal(out['probe-summary.json'].result,'PASS');assert.equal(out['application-network-summary.json'].accounting.transition_receipts.records.length,1);});
+for(const mutate of [i=>delete i.accounting.transition_receipts,i=>i.accounting.transition_receipts.records[0].event_index=9,i=>i.accounting.transition_receipts.records[0].metric_pass=false,i=>i.accounting.transition_receipts.records.push({...i.accounting.transition_receipts.records[0]}),i=>i.accounting.transition_receipts=null])test('missing, false, ambiguous or malformed completion evidence cannot authorize artifact PASS',()=>{const input=completedTransitionInput();mutate(input);assert.equal(decode(buildProbeEvidence(input))['probe-summary.json'].result,'FAIL');});
+test('new accounting cannot reuse historical header-only exemption',()=>{const input=canceledPrefetchInput();input.accounting.transition_receipts={schema_version:transitionSchema,records:[],capture_issues:[]};input.accounting.ledger[0].classification='rsc_non_application';assert.equal(decode(buildProbeEvidence(input))['probe-summary.json'].result,'FAIL');});
+test('receipt getter is rejected by artifact construction without execution',()=>{const input=completedTransitionInput();let calls=0;Object.defineProperty(input.accounting.transition_receipts.records[0],'metric_pass',{get(){calls++;return true;}});assert.equal(decode(buildProbeEvidence(input))['probe-summary.json'].result,'FAIL');assert.equal(calls,0);});
+test('omitting the new receipt field cannot revive the historical prefetch-header exemption',()=>{
+ const raw={kind:'request_failure',url:origin+'/niveles-estadisticos',type:'Fetch',canceled:true,rsc:true,prefetch:true,error_code:'net::ERR_ABORTED'};
+ const a=account([raw],true,origin);a.ledger[0].classification='rsc_non_application';a.required_application_request_failures=0;a.raw_rsc_events=[{sha256:sha(canonical(a.ledger[0].event)),count:1,classification:'rsc_non_application'}];
+ assert.throws(()=>sanitizeProbeAccounting(a,origin),/EVIDENCE_EVENT_CLASSIFICATION/);
 });

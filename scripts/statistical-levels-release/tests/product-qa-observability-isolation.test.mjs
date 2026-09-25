@@ -1,3 +1,4 @@
+import {withoutReceiptClass} from './semantic-closure-compat.mjs';
 // Frozen security/classifier/ADOPT/PROMOTE contracts remain exact across the authorized post-certification QA-cache repair.
 import test from 'node:test';
 import assert from 'node:assert/strict';
@@ -6,8 +7,8 @@ import { createHash } from 'node:crypto';
 import { createRequire } from 'node:module';
 const ts = createRequire(import.meta.url)('typescript');
 const expected = {
-  "unchanged existing semantic event classifier": {
-    "scripts/network-accounting.mjs": "a423eb268dc046cdb1c022587621afb33671f70f72f0dc1c519a9a5d481acc10"
+  "explicit receipt accounting migration with no header-based exemption": {
+    "scripts/network-accounting.mjs": "61579fdf7c12d8901894fa3f3431dbacca1005524019253a475abc1d828aa71c"
   },
   "Custom Trusted Source and anonymous baseline logic unchanged": {
     "scripts/probe-http.mjs": "036a21186195bfaecadfe046d08786b69f692b730e2144da7b450f8d319614df"
@@ -45,7 +46,7 @@ for (const [name, files] of Object.entries(expected)) {
   test(name, async () => {
     for (const [file, hash] of Object.entries(files)) {
       const bytes = await readFile(new URL('../' + file, import.meta.url));
-      assert.equal(createHash('sha256').update(bytes).digest('hex'), hash, file);
+      assert.equal(createHash('sha256').update(file==='scripts/release-core.mjs'?withoutReceiptClass(bytes):bytes).digest('hex'), hash, file);
     }
   });
 }

@@ -46,6 +46,7 @@ async function load(which, fake) {
     source = source.replace("'./" + name + ".mjs'", JSON.stringify(new URL('../scripts/' + name + '.mjs', import.meta.url).href));
   }
   source = source.replace("await import('../qa-dependencies/node_modules/playwright/index.mjs')", `globalThis.__SL_INTERCEPTION_TEST_FACTORIES__.get(${JSON.stringify(id)})`);
+  source=source.replace(/(['"])(\.\/[^'"]+\.mjs)\1/g,(_,q,relative)=>JSON.stringify(new URL(relative,new URL('../scripts/probe-product-browser-harness.mjs',import.meta.url)).href));
   return import('data:text/javascript;base64,' + Buffer.from(source).toString('base64'));
 }
 
@@ -69,6 +70,15 @@ async function exercise(which, { target = origin, token = 'synthetic-token', tok
   } finally { await fs.rm(out, { recursive: true, force: true }); }
 }
 
+function assertSeparatedAccounting(candidate, original, transportCount = 0) {
+  const { transportFailures, authFailures, transition_receipts, ...raw } = candidate;
+  assert.equal(transition_receipts.records.length,0);
+  const { authFailures: oldAuth, ...oldRaw } = original;
+  assert.deepEqual(raw, oldRaw);
+  assert.deepEqual(transportFailures, Array(transportCount).fill('INTERCEPTION_TRANSPORT_FAILURE'));
+  assert.deepEqual(authFailures, Array(oldAuth.length - transportCount).fill('CREDENTIAL_SCOPE_OR_REDIRECT_REJECTED'));
+}
+
 const cases = [
   { id: 'A_CROSS_ORIGIN', events: [request('parent'), request('redirect', 'https://outside.example/asset.js', { redirectedRequestId: 'parent' })], stage: 'HEADER_SCOPE_VALIDATION', code: 'CROSS_ORIGIN_REDIRECT' },
   { id: 'B_CREDENTIAL_DESTINATION', events: [request('userinfo', origin.replace('https://', 'https://user:private@'))], stage: 'HEADER_SCOPE_VALIDATION', code: 'CREDENTIAL_DESTINATION' },
@@ -79,9 +89,9 @@ const cases = [
 ];
 for (const fixture of cases) test(fixture.id + ': safe cause survives and browser policy matches unchanged original', async () => {
   const original = await exercise('original', fixture), candidate = await exercise('candidate', fixture);
-  assert.equal(candidate.failure, 'CREDENTIAL_SCOPE_FAILURE');
+  assert.equal(candidate.failure, fixture.stage === 'REQUEST_CONTINUATION' ? 'INTERCEPTION_TRANSPORT_FAILURE' : 'CREDENTIAL_SCOPE_FAILURE');
   assert.deepEqual(candidate.commands, original.commands);
-  assert.deepEqual(candidate.accounting, original.accounting);
+  assertSeparatedAccounting(candidate.accounting, original.accounting, fixture.stage === 'REQUEST_CONTINUATION' ? 1 : 0);
   assert.equal(candidate.acquisitions, original.acquisitions); assert.equal(candidate.cleared, original.cleared);
   const records = candidate.observation.records;
   assert.equal(records.length, 1); assert.equal(records[0].failure_stage, fixture.stage);
@@ -94,15 +104,15 @@ test('successful target, external, redirect and credential scrubbing retain exac
     request('redirect', origin + '/other', { redirectedRequestId: 'target' }), request('external', 'https://outside.example/file.js'),
     request('inward', origin + '/inward', { redirectedRequestId: 'external' })] };
   const original = await exercise('original', fixture), candidate = await exercise('candidate', fixture);
-  assert.deepEqual(candidate.commands, original.commands); assert.deepEqual(candidate.accounting, original.accounting);
+  assert.deepEqual(candidate.commands, original.commands); assertSeparatedAccounting(candidate.accounting, original.accounting);
   assert.equal(candidate.failure, null); assert.equal(candidate.acquisitions, original.acquisitions);
   assert.deepEqual(candidate.observation.records, []);
 });
 
 test('E_TEARDOWN: continue error records closing lifecycle without changing the late request race', async () => {
   const original = await exercise('original', { lateRequests: 1 }), candidate = await exercise('candidate', { lateRequests: 1 });
-  assert.deepEqual(candidate.commands, original.commands); assert.deepEqual(candidate.accounting, original.accounting);
-  assert.equal(candidate.failure, 'CREDENTIAL_SCOPE_FAILURE');
+  assert.deepEqual(candidate.commands, original.commands); assertSeparatedAccounting(candidate.accounting, original.accounting, 1);
+  assert.equal(candidate.failure, 'INTERCEPTION_TRANSPORT_FAILURE');
   assert.equal(candidate.observation.records[0].failure_stage, 'REQUEST_CONTINUATION');
   assert.equal(candidate.observation.records[0].page_lifecycle, 'CLOSING');
 });
@@ -110,8 +120,8 @@ test('E_TEARDOWN: continue error records closing lifecycle without changing the 
 test('F_FAIL_REQUEST_FALLBACK: secondary failure retains original and does not alter authFailures multiplicity', async () => {
   const fixture = { continueError: 'synthetic target closed', fallbackError: 'synthetic interception missing', events: [request('f')] };
   const original = await exercise('original', fixture), candidate = await exercise('candidate', fixture);
-  assert.deepEqual(candidate.commands, original.commands); assert.deepEqual(candidate.accounting, original.accounting);
-  assert.equal(candidate.accounting.authFailures.length, 1); assert.equal(candidate.failure, 'CREDENTIAL_SCOPE_FAILURE');
+  assert.deepEqual(candidate.commands, original.commands); assertSeparatedAccounting(candidate.accounting, original.accounting, 1);
+  assert.equal(candidate.accounting.authFailures.length, 0); assert.equal(candidate.accounting.transportFailures.length, 1); assert.equal(candidate.failure, 'INTERCEPTION_TRANSPORT_FAILURE');
   assert.deepEqual(candidate.observation.records.map(r => r.failure_stage), ['REQUEST_CONTINUATION', 'FAIL_REQUEST_FALLBACK']);
   assert.deepEqual(candidate.observation.records.map(r => r.safe_error_code), ['CONTINUE_REQUEST_ERROR', 'FAIL_REQUEST_ERROR']);
   assert.equal(candidate.observation.records[0].request_sequence, candidate.observation.records[1].request_sequence);
@@ -119,7 +129,7 @@ test('F_FAIL_REQUEST_FALLBACK: secondary failure retains original and does not a
 
 test('G_MULTIPLE_FAILURES: twelve late requests retain twelve individual identities and all gate entries', async () => {
   const candidate = await exercise('candidate', { lateRequests: 12 });
-  assert.equal(candidate.failure, 'CREDENTIAL_SCOPE_FAILURE'); assert.equal(candidate.accounting.authFailures.length, 12);
+  assert.equal(candidate.failure, 'INTERCEPTION_TRANSPORT_FAILURE'); assert.equal(candidate.accounting.authFailures.length, 0); assert.equal(candidate.accounting.transportFailures.length, 12);
   assert.equal(candidate.observation.records.length, 12);
   assert.equal(new Set(candidate.observation.records.map(r => r.page_id + ':' + r.request_sequence)).size, 12);
   assert.ok(candidate.observation.records.every(r => r.page_lifecycle === 'CLOSING'));
@@ -152,9 +162,19 @@ test('finish closes remaining contexts without adding a pending drain, while mar
     const fake = transport({ lateRequests: 1 }), loaded = await load('candidate', fake);
     const harness = await loaded.createProbeProductHarness({ origin }, { get: async () => 'synthetic-token', clear() {} }, out, false);
     await harness.createPage();
-    await assert.rejects(harness.finish(true), /CREDENTIAL_SCOPE_FAILURE/);
+    await assert.rejects(harness.finish(true), /INTERCEPTION_TRANSPORT_FAILURE/);
     const observed = JSON.parse(await fs.readFile(path.join(out, 'interception-failures.json'), 'utf8'));
     assert.equal(observed.records.length, 1); assert.equal(observed.records[0].page_lifecycle, 'CLOSING');
     assert.deepEqual(fake.commands.filter(([m]) => m.endsWith('.close')).map(([m]) => m), ['context.close', 'browser.close']);
   } finally { await fs.rm(out, { recursive: true, force: true }); }
+});
+
+test('REQUEST_NO_LONGER_INTERCEPTABLE is a blocking transport failure with no prefetch lifecycle exemption', async () => {
+  const fixture = { continueError: 'Protocol error (Fetch.continueRequest): Invalid InterceptionId.', fallbackError: 'Protocol error (Fetch.failRequest): Invalid InterceptionId.', events: [request('canceled', origin + '/niveles-estadisticos', { resourceType: 'Fetch', networkId: 'memory-network', request: { url: origin + '/niveles-estadisticos', method: 'GET', headers: { RSC: '1', 'Next-Router-Prefetch': '1' } } })] };
+  const candidate = await exercise('candidate', fixture);
+  assert.equal(candidate.failure, 'INTERCEPTION_TRANSPORT_FAILURE');
+  assert.deepEqual(candidate.accounting.authFailures, []);
+  assert.deepEqual(candidate.accounting.transportFailures, ['INTERCEPTION_TRANSPORT_FAILURE']);
+  assert.equal(candidate.observation.records.length, 2);
+  assert.ok(candidate.observation.records.every(r => r.continuation_failure_class === 'REQUEST_NO_LONGER_INTERCEPTABLE'));
 });

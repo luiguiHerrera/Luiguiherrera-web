@@ -1,3 +1,4 @@
+import {withoutReceiptHooks} from './semantic-closure-compat.mjs';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import vm from 'node:vm';
@@ -268,7 +269,7 @@ for (const [name, relative, importSuffix, beforeHash, lineCount, gldLine, metric
   ['frozen hosted QA', '../scripts/qa/qa-statistical-levels.mjs', " import { waitForAssetTransition } from './asset-transition-readiness.mjs';", 'b7f586dd1539b523a56b7065f776674094839cb46d85daa5e93652e3ba849794', 161, 135, 'de34435c1dd9c10e5b60db7840c32333194b10ad960fc1f5467dcf92d4f60343'],
   ['standalone QA', '../../qa-statistical-levels.mjs', " import { waitForAssetTransition } from './statistical-levels-release/scripts/qa/asset-transition-readiness.mjs';", '39e073bddfe012fc6f38135a10d4f6467e2582dd87435efb95363838a3846118', 205, 179, 'b4425fd263e11046e5c3e21db3d825b6bc3b155323b05a0767d78c24b88f17ea']
 ]) {
-  test(name + ' preserves the GLD certificate after removing only the qualified SPY wait', () => {
+  test(name + ' preserves the GLD certificate after removing the authorized receipt hooks and qualified SPY wait', () => {
     const source = readFileSync(new URL(relative, import.meta.url), 'utf8');
     assert.equal(source.split(importSuffix).length, 2); assert.equal(source.split(waitCall).length, 2);
     assert.equal(source.split('\n').length, lineCount);
@@ -277,7 +278,7 @@ for (const [name, relative, importSuffix, beforeHash, lineCount, gldLine, metric
       assert.equal(source.split(spyWaitCall).length, 2);
       assert.ok(source.split('\n')[131].includes(spyWaitCall));
     } else assert.equal(source.includes(spyWaitCall), false);
-    assert.equal(hash(source.replace(spyWaitCall, 'await sleep(650);').replace(importSuffix, '').replace(waitCall, 'await sleep(650);')), beforeHash);
+    assert.equal(hash(withoutReceiptHooks(source).replace(spyWaitCall, 'await sleep(650);').replace(importSuffix, '').replace(waitCall, 'await sleep(650);')), beforeHash);
   });
   test(name + ' retains original independent metricCheck bytes and assertion', () => {
     const source = readFileSync(new URL(relative, import.meta.url), 'utf8');
@@ -421,10 +422,10 @@ test('SPY reverse-window identity is supported without changing the history.back
   assert.equal(spyReady(spyWindowFixture('5Y', '3Y'), '5Y'), false);
   assert.equal(spyReady(spyWindowFixture('5Y', '5Y'), '5Y'), true);
 });
-test('SPY repair is the sole executable change to the exact bbb7f337 harness', () => {
+test('SPY repair plus explicit receipt hooks are the sole executable changes to the exact bbb7f337 harness', () => {
   const source = readFileSync(new URL('../scripts/qa/qa-statistical-levels.mjs', import.meta.url), 'utf8');
   assert.equal(source.split(spyWaitCall).length, 2);
-  assert.equal(hash(source.replace(spyWaitCall, 'await sleep(650);')), '7e9f77786f435aea1e6187bdb3a274fb35baab1efeb0b0a9ccdb064ea9536eac');
+  assert.equal(hash(withoutReceiptHooks(source).replace(spyWaitCall, 'await sleep(650);')), '7e9f77786f435aea1e6187bdb3a274fb35baab1efeb0b0a9ccdb064ea9536eac');
   assert.ok(source.split('\n')[133].includes('await sleep(650);'));
 });
 test('SPY exact repaired action cannot read metrics until semantic readiness resolves', async () => {

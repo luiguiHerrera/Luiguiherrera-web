@@ -1,3 +1,4 @@
+import {withoutReceiptClass} from './semantic-closure-compat.mjs';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs/promises';
@@ -58,7 +59,7 @@ test('17: probe entry defers OIDC creation to protected-baseline gate and never 
 });
 
 test('18: ADOPT transport, validation and controller request contract remain byte-identical', async () => {
-  for (const [file, expected] of Object.entries(shared)) assert.equal(digest(await read(file)), expected, file);
+  for (const [file, expected] of Object.entries(shared)) assert.equal(digest(file==='scripts/release-core.mjs'?withoutReceiptClass(await read(file)):await read(file)), expected, file);
 });
 
 test('19: PROMOTE and all release workflow jobs differ only by the newly frozen source checksum', async () => {

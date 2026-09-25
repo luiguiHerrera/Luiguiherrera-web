@@ -295,3 +295,18 @@ test('implicit OPEN_AT_NEXT_START endpoint and empty viewport ID fallback remain
   assert.equal(bundle.phaseSummary.viewports[0].result, 'OPEN_AT_NEXT_START');
   assert.equal(bundle.phaseSummary.viewports[0].viewport_id, 'viewport-1');
 });
+
+test('request-start snapshot is passive, immutable and preserves its start action after context advances',async()=>{
+ const out=fs.mkdtempSync(path.join(os.tmpdir(),'sl-passive-start-'));
+ try {
+  const observer=createProductQAObservability({out,origin,codeRoot:out});
+  observer.context({suite_id:'sl-main',test_id:'sl-main:L132',action_id:'sl-main:L132:C9:c-click',route:'/niveles-estadisticos?asset=SPY&window=3Y',viewport:{id:'desktop',width:1440,height:900}});
+  const before=observer.evidence().timeline.events.length,start=observer.requestStartContext();
+  assert.equal(observer.evidence().timeline.events.length,before);assert.ok(Object.isFrozen(start));assert.ok(Object.isFrozen(start.route));
+  observer.context({action_id:'sl-main:L135:C41:c-click'});
+  observer.recordEvent({kind:'request_failure',url:origin+'/niveles-estadisticos',canceled:true,error_code:'net::ERR_ABORTED',rsc:true,prefetch:false},{request_start_context:start});
+  const event=observer.evidence().timeline.events.at(-1);
+  assert.equal(event.context.action_id,'sl-main:L135:C41:c-click');assert.equal(event.safe_metadata.request_start_context.action_id,'sl-main:L132:C9:c-click');
+  assert.deepEqual(event.safe_metadata.request_start_context.route,start.route);assert.ok(!JSON.stringify(event.safe_metadata).includes('asset=SPY'));
+ }finally{fs.rmSync(out,{recursive:true,force:true});}
+});

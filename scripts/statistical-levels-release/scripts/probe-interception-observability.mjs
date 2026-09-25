@@ -203,3 +203,8 @@ export function createInterceptionObservability(out) {
     },
   };
 }
+
+// Continuation errors are transport failures, never evidence of credential-scope failure.
+export function interceptionFailureCategory(stage) {
+  return ['REQUEST_CONTINUATION', 'FAIL_REQUEST_FALLBACK'].includes(stage) ? 'INTERCEPTION_TRANSPORT_FAILURE' : 'CREDENTIAL_OR_POLICY_FAILURE';
+}

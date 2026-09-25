@@ -1,3 +1,4 @@
+import {withoutReceiptHooks} from './semantic-closure-compat.mjs';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs/promises';
@@ -70,7 +71,7 @@ const spyWait = "await waitForAssetTransition(c,{asset:'SPY',pickerTitle:'SPDR S
 for (const { name, text, ast } of sources) {
   test(name + ': removing the qualified SPY wait and observers restores the exact frozen AST', () => {
     assert.equal(ast.parseDiagnostics.length, 0);
-    const original = name === 'qa-statistical-levels.mjs' ? parse(text.replace(spyWait, 'await sleep(650);'), name) : ast;
+    const original = name === 'qa-statistical-levels.mjs' ? parse(withoutReceiptHooks(text).replace(spyWait, 'await sleep(650);'), name) : ast;
     if (name === 'qa-statistical-levels.mjs') assert.equal(text.split(spyWait).length, 2);
     assert.equal(sha(print(stripObservers(original))), expected[name].ast_sha256);
     assert.equal(text.split('\n').length, expected[name].lines, 'declared original source lines remain exact candidate lines');
@@ -93,7 +94,7 @@ for (const { name, text, ast } of sources) {
         assert.ok(/\.startsWith$/.test(nested.expression.getText(ast)), 'metadata may only derive locale from existing route strings');
       }
     }
-    assert.equal(collect(ast, node => ts.isAwaitExpression(node)).length, expected[name].await_count);
+    assert.equal(collect(ast, node => ts.isAwaitExpression(node)).length, expected[name].await_count + (name==='qa-statistical-levels.mjs'?4:0));
     assert.equal(collect(ast, node => ts.isCallExpression(node) && node.expression.getText(ast) === 'sleep').length, expected[name].sleep_call_count - (name === 'qa-statistical-levels.mjs' ? 1 : 0));
   });
   test(name + ': first underlying error is captured before unchanged generic suite failure', () => {
@@ -144,4 +145,17 @@ test('original load calls execute once with unchanged arguments and explicit vie
   events.length = 0;
   assert.equal(run({ __SL_RELEASE_QA__: {} }, load, page, routes, 'es', 'mobile-primary-es', 390, 844), 'same-original-result');
   assert.equal(calls, 2); assert.equal(events.length, 0);
+});
+
+for(const [line,kind] of [[132,'T1'],[135,'T2'],[136,'T3'],[137,'T4']])test(kind+' actual QA action starts receipt synchronously and completion cannot precede or retry metrics',async()=>{
+ const text=sources[0].text.split('\n')[line-1];
+ const run=new Function('c','waitForAssetTransition','metricCheck','open','select','sleep','globalThis',`return (async()=>{${text}})()`);
+ for(const fails of [false,true]){
+  const order=[];let started=false;
+  const c={transitionStart:k=>{assert.equal(k,kind);started=true;order.push('start');},click:async()=>{assert.ok(started);order.push('action');},transitionComplete:async k=>{assert.equal(k,kind);assert.equal(order.at(-1),'metric');order.push('complete');}};
+  const metric=async()=>{order.push('metric');if(fails)throw new Error('ORIGINAL_METRIC_FAILURE');};
+  const result=run(c,async()=>order.push('readiness'),metric,async()=>{},async()=>{assert.ok(started);order.push('action');},async()=>{},{});
+  if(fails)await assert.rejects(result,/ORIGINAL_METRIC_FAILURE/);else await result;
+  assert.equal(order.filter(x=>x==='metric').length,1);assert.equal(order.filter(x=>x==='action').length,1);assert.equal(order.includes('complete'),!fails);assert.ok(order.indexOf('start')<order.indexOf('action'));
+ }
 });

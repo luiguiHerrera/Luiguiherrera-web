@@ -8,6 +8,7 @@ import { localeFromPathname } from "@/lib/i18n/locales";
 
 export function Footer() {
   const pathname = usePathname();
+  const prefetch = pathname === "/niveles-estadisticos" || pathname === "/en/statistical-levels" ? false : undefined;
   const locale = localeFromPathname(pathname);
   const dictionary = getDictionary(locale);
   const methodologyHref = locale === "en" ? "/en/methodology" : "/metodologia";
@@ -52,10 +53,10 @@ export function Footer() {
           ? (locale === "en" ? "© Luigui Herrera. All rights reserved." : "© Luigui Herrera. Todos los derechos reservados.")
           : dictionary.layout.footerText}</p>
         <div className="flex flex-wrap gap-x-5 gap-y-2 border-t border-white/15 pt-4 md:border-t-0 md:pt-0">
-          <Link className="font-semibold text-white transition hover:text-white/80" href={methodologyHref}>
+          <Link prefetch={prefetch} className="font-semibold text-white transition hover:text-white/80" href={methodologyHref}>
             {dictionary.layout.methodology}
           </Link>
-          <Link className="font-semibold text-white transition hover:text-white/80" href={legalHref}>
+          <Link prefetch={prefetch} className="font-semibold text-white transition hover:text-white/80" href={legalHref}>
             {dictionary.layout.legal}
           </Link>
         </div>

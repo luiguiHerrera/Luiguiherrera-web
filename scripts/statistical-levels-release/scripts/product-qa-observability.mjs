@@ -1,3 +1,4 @@
+import { validateRequestEvidence } from './probe-request-instances.mjs';
 // Passive, probe-only evidence. This module never classifies application effects.
 import fs from 'node:fs';
 import path from 'node:path';
@@ -10,7 +11,7 @@ export const productQAObservabilityFiles = Object.freeze([
   'first-product-failure.json', 'product-qa-event-timeline.json', 'product-qa-phase-summary.json',
 ]);
 const SCHEMAS = ['statistical-levels.first-product-failure.v1', 'statistical-levels.product-qa-event-timeline.v1', 'statistical-levels.product-qa-phase-summary.v1'];
-const LABELS = ['rsc_non_application', 'platform_non_application', 'required_application_request_failure', 'application_console_error', 'hydration_or_application_exception', 'unclassified'];
+const LABELS = ['rsc_transition_completed_non_application', 'platform_non_application', 'required_application_request_failure', 'application_console_error', 'hydration_or_application_exception', 'unclassified'];
 const CONTEXT_KEYS = ['suite_id', 'test_id', 'test_name', 'assertion_id', 'action_id', 'viewport', 'route', 'source_file', 'source_line', 'source_column'];
 const COUNTERS = ['raw_rsc_cancellations', 'current_classifier_required_failures', 'vercel_platform_events', 'current_classifier_application_console_errors', 'unknown_network_events', 'unknown_console_events'];
 const LIFECYCLES = ['PAGE_CREATED', 'PAGE_CLOSE_START', 'PAGE_CLOSED', 'PAGE_CLOSE_ABORTED', 'BROWSER_CLOSE_START', 'BROWSER_CLOSED', 'BROWSER_CLOSE_ABORTED'];
@@ -125,7 +126,7 @@ function safeMetadata(value, origin) {
     lifecycle: ['ACTIVE', 'CLOSING', 'CLOSED'].includes(own(value, 'lifecycle')) ? own(value, 'lifecycle') : 'UNKNOWN',
     source_timestamp: typeof own(value, 'source_timestamp') === 'number' && Number.isFinite(own(value, 'source_timestamp')) && own(value, 'source_timestamp') >= 0 ? own(value, 'source_timestamp') : null,
     source_clock_domain: ['CDP_NETWORK_MONOTONIC_SECONDS', 'CDP_RUNTIME_EPOCH_MILLISECONDS'].includes(own(value, 'source_clock_domain')) ? own(value, 'source_clock_domain') : 'UNKNOWN',
-    request_start_context: own(value, 'request_start_context') ? safeContext(own(value, 'request_start_context'), Object.fromEntries(CONTEXT_KEYS.map(k => [k, null])), origin) : null };
+    request_start_context: capturedContexts.has(own(value, 'request_start_context')) ? clone(own(value, 'request_start_context')) : own(value, 'request_start_context') ? safeContext(own(value, 'request_start_context'), Object.fromEntries(CONTEXT_KEYS.map(k => [k, null])), origin) : null };
 }
 function stackLocation(error) {
   let stack = property(error, 'stack');
@@ -171,6 +172,12 @@ function counters(events, boundary) {
   return result;
 }
 
+// Branded immutable snapshots preserve already-sanitized routes without reinterpreting them as raw URLs.
+const capturedContexts = new WeakSet();
+function immutableContext(value) {
+  if (value && typeof value === 'object') { for (const child of Object.values(value)) immutableContext(child); Object.freeze(value); }
+  return value;
+}
 export function createProductQAObservability({ out, origin, codeRoot, clock = () => performance.now() }) {
   const started = clock(); let sequence = 0, lastMs = 0, current = Object.fromEntries(CONTEXT_KEYS.map(key => [key, null]));
   let first = null, productStart = null, alignment = 'PENDING', persistence = 'PENDING', persistenceFailures = 0;
@@ -217,6 +224,10 @@ export function createProductQAObservability({ out, origin, codeRoot, clock = ()
   }
   const guarded = (code, action, fallback) => { try { return action(); } catch { issues.add(code); return fallback; } };
   const api = {
+    hasProductFailure() { return first !== null; },
+    requestStartContext() { return guarded('OBSERVABILITY_CONTEXT_FAILED', () => {
+      const snapshot = immutableContext(clone(current)); capturedContexts.add(snapshot); return snapshot;
+    }, null); },
     productStart() { return guarded('OBSERVABILITY_PRODUCT_START_FAILED', () => {
       if (productStart) return productStart.event_id;
       if (first) { issues.add('OBSERVABILITY_PRODUCT_START_AFTER_FAILURE'); return null; }
@@ -369,7 +380,8 @@ export function validateProductQAObservabilityEvidence(input, origin, existingAc
     need(event.relative_ms_from_product_qa_start === (summary.product_qa_start_relative_ms === null ? null : event.relative_ms - summary.product_qa_start_relative_ms));
     if (event.event_kind === 'RAW_EVENT') {
       rawCount++; need(event.raw_event !== null && (event.current_classifier_label === null || LABELS.includes(event.current_classifier_label)));
-      keys(event.raw_event, ['kind', 'origin', 'path', 'type', 'status', 'canceled', 'rsc', 'prefetch', 'error_code', 'source']);
+      keys(event.raw_event, ['kind', 'origin', 'path', 'type', 'status', 'canceled', 'rsc', 'prefetch', 'error_code', 'source',...(Object.hasOwn(event.raw_event,'request_evidence')?['request_evidence']:[])]);
+      if(Object.hasOwn(event.raw_event,'request_evidence'))validateRequestEvidence(event.raw_event.request_evidence);
       const raw = event.raw_event;
       need(['request_failure', 'console_error', 'exception', 'unknown', 'unclassified'].includes(raw.kind));
       need([timeline.origin, 'https://vercel.live', '', 'null'].includes(raw.origin) || /^sha256:[a-f0-9]{64}$/.test(raw.origin));

@@ -43,6 +43,7 @@ async function importHarness(url, fake) {
     .replace("'./network-accounting.mjs'", JSON.stringify(new URL('../scripts/network-accounting.mjs', import.meta.url).href))
     .replace("'./probe-interception-observability.mjs'", JSON.stringify(new URL('../scripts/probe-interception-observability.mjs', import.meta.url).href))
     .replace("await import('../qa-dependencies/node_modules/playwright/index.mjs')", `globalThis.__SL_TEST_PLAYWRIGHT_FACTORIES__.get(${JSON.stringify(id)})`);
+  source=source.replace(/(['"])(\.\/[^'"]+\.mjs)\1/g,(_,q,relative)=>JSON.stringify(new URL(relative,new URL('../scripts/probe-product-browser-harness.mjs',import.meta.url)).href));
   return import('data:text/javascript;base64,' + Buffer.from(source).toString('base64'));
 }
 function emitRequest(cdp, id, url, headers = {}, type = 'Fetch') {
@@ -88,9 +89,19 @@ for (const passed of [false, true]) test('shared/probe harness exact raw account
   const out = await fs.mkdtemp(path.join(os.tmpdir(), 'sl-harness-differential-'));
   try {
     const shared = await execute(out, false, passed), probe = await execute(out, true, passed, !passed);
-    assert.deepEqual(probe.commands, shared.commands, 'no additional browser/CDP requests or changed action parameters');
+    assert.deepEqual(probe.commands, shared.commands, 'request and action commands unchanged');
     assert.deepEqual(probe.launches, shared.launches); assert.equal(probe.tokens, shared.tokens); assert.equal(probe.cleared, shared.cleared);
-    assert.deepEqual(probe.result, shared.result); assert.equal(probe.file, shared.file);
+    const {transition_receipts,...probeLegacy}=structuredClone(probe.result);
+    // Authorized migration adds collector identity to raw rows. Generic events and labels remain exact.
+    for(const row of probeLegacy.ledger)delete row.event.request_evidence;
+    const genericShared=structuredClone(shared.result);
+    // Platform grouping now hashes the independently bound raw event as well.
+    probeLegacy.raw_platform_events=genericShared.raw_platform_events;
+    assert.deepEqual(probeLegacy,genericShared);assert.equal(transition_receipts.records.length,0);
+    assert.deepEqual(JSON.parse(probe.file),{...probe.result,authFailures:[],transportFailures:[]});
+    const bound=probe.result.ledger.filter(x=>x.event.request_evidence);assert.equal(bound.length,4);
+    assert.equal(new Set(bound.map(x=>x.event.request_evidence.request_instance_id)).size,4);
+    assert.ok(bound.every(x=>x.event.request_evidence.document_proven===false));
     assert.equal(probe.result.ledger.length, 8); assert.equal(probe.observer.phaseSummary.raw_event_count, 8);
     assert.equal(probe.observer.phaseSummary.classifier_alignment, 'PASS'); assert.deepEqual(probe.observer.phaseSummary.capture_issues, []);
     const raw = probe.observer.timeline.events.filter(event => event.event_kind === 'RAW_EVENT');
@@ -127,8 +138,9 @@ test('probe harness preserves exact raw events.push expressions and original tim
   const parse = async url => { const text = await fs.readFile(url, 'utf8'); return ts.createSourceFile(url.pathname, text, ts.ScriptTarget.Latest, true, ts.ScriptKind.JS); };
   const shared = await parse(sharedURL), probe = await parse(probeURL);
   const expressions = (ast, name) => { const found = []; function visit(node) { if (ts.isCallExpression(node) && node.expression.getText(ast) === name) found.push(ts.createPrinter({ removeComments: true }).printNode(ts.EmitHint.Expression, node, ast)); ts.forEachChild(node, visit); } visit(ast); return found; };
-  assert.deepEqual(expressions(probe, 'events.push'), expressions(shared, 'events.push'));
-  assert.deepEqual(expressions(probe, 'account'), expressions(shared, 'account'));
+  const rawProbe=expressions(probe,'events.push').map(x=>x.replace('...(requests.has(e.requestId) ? { request_evidence: requests.get(e.requestId).request_evidence } : {}), ',''));
+  assert.deepEqual(rawProbe,expressions(shared,'events.push'));
+  assert.deepEqual(expressions(probe, 'account'), ['account(events, finalProductPassed, target.origin, transitionEvidence)']);
   assert.deepEqual(expressions(probe, 'sleep'), expressions(shared, 'sleep'));
   assert.deepEqual(expressions(probe, 'setTimeout'), expressions(shared, 'setTimeout'));
   // The unchanged policy function now receives the same arguments in explicit diagnostic stages.

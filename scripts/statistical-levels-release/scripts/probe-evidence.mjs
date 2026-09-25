@@ -1,5 +1,7 @@
+import { validateRequestEvidence } from './probe-request-instances.mjs';
 import fs from 'node:fs/promises';
 import path from 'node:path';
+import { types } from 'node:util';
 import { canonical, exactKeys, need, P, sha, validateProductReport, verifiedOrigin } from './release-core.mjs';
 import { validateProbeAttestation } from './probe-core.mjs';
 import { validateProbeOIDCEvidence } from './probe-oidc.mjs';
@@ -10,6 +12,9 @@ import { validateProbeBrowserAuthorityEvidence, requireProbeBrowserAuthority } f
 import { validateProductQAObservabilityEvidence, productQAObservabilityFiles } from './product-qa-observability.mjs';
 import { validateProbeMetadataEvidence } from './probe-metadata-observability.mjs';
 import { validateInterceptionEvidence } from './probe-interception-observability.mjs';
+
+import { validateTransitionReceipts, transitionClass, requireReceiptData } from './probe-transition-receipts.mjs';
+import { interceptionFailureCategory } from './probe-interception-observability.mjs';
 
 export const probeEvidenceFiles = Object.freeze([
   'probe-summary.json', 'trusted-sources-qa.json', 'application-network-summary.json',
@@ -84,12 +89,18 @@ function group(ledger, classification) {
 }
 export function sanitizeProbeAccounting(input, previewOrigin) {
   need(previewOrigin && verifiedOrigin(previewOrigin) === previewOrigin, 'EVIDENCE_ACCOUNTING_PREVIEW');
+  const hasReceipts = input && Object.hasOwn(input,'transition_receipts');
+  requireReceiptData(input);
+  const receipts = hasReceipts ? validateTransitionReceipts(Object.getOwnPropertyDescriptor(input,'transition_receipts')?.value, input.ledger?.map(x=>x.event),previewOrigin) : null;
+  const completed = new Set(receipts?.records.map(p=>p.event_index)??[]);
   const hasAuth = input && Object.hasOwn(input, 'authFailures');
-  exactKeys(input, hasAuth ? [...accountingKeys, 'authFailures'] : accountingKeys);
+  const hasTransport = input && Object.hasOwn(input, 'transportFailures');
+  exactKeys(input, [...accountingKeys, ...(hasReceipts ? ['transition_receipts'] : []), ...(hasAuth ? ['authFailures'] : []), ...(hasTransport ? ['transportFailures'] : [])]);
   need(Array.isArray(input.ledger) && input.ledger.length <= 100000, 'EVIDENCE_LEDGER_SIZE');
   const original = [], ledger = [];
-  for (const item of input.ledger) {
-    exactKeys(item, ['event', 'classification']); exactKeys(item.event, eventKeys);
+  for (const [index,item] of input.ledger.entries()) {
+    exactKeys(item, ['event', 'classification']); exactKeys(item.event, [...eventKeys,...(Object.hasOwn(item.event,'request_evidence')?['request_evidence']:[])]);
+    if(Object.hasOwn(item.event,'request_evidence'))validateRequestEvidence(Object.getOwnPropertyDescriptor(item.event,'request_evidence')?.value);
     const event = item.event;
     need(typeof event.kind === 'string' && Object.hasOwn(classificationForKind, event.kind) && eventTypes.includes(event.type), 'EVIDENCE_EVENT_ENUM');
     need(Number.isInteger(event.status) && event.status >= 0 && event.status <= 599, 'EVIDENCE_EVENT_STATUS');
@@ -99,13 +110,11 @@ export function sanitizeProbeAccounting(input, previewOrigin) {
     const origin = safeOrigin(event.origin, previewOrigin);
     need(event.path === '' || matches(HASH, event.path) || (event.origin === 'https://vercel.live' && event.path === '/_next-live/feedback/'), 'EVIDENCE_EVENT_PATH');
     const platform = event.origin === 'https://vercel.live' && event.path === '/_next-live/feedback/' && ['request_failure', 'console_error', 'exception'].includes(event.kind);
-    const rsc = event.kind === 'request_failure' && event.origin === previewOrigin && event.canceled &&
-      event.rsc && event.prefetch && event.error_code === 'net::ERR_ABORTED';
     need(platform ? item.classification === 'platform_non_application' :
-      item.classification === classificationForKind[event.kind] || (rsc && item.classification === 'rsc_non_application'), 'EVIDENCE_EVENT_CLASSIFICATION');
+      item.classification === classificationForKind[event.kind] || (completed.has(index) && event.origin===previewOrigin && item.classification===transitionClass), 'EVIDENCE_EVENT_CLASSIFICATION');
     original.push(jsonCopy(item)); ledger.push({ event: { ...jsonCopy(event), origin }, classification: item.classification });
   }
-  const grouped = { raw_platform_events: group(original, 'platform_non_application'), raw_rsc_events: group(original, 'rsc_non_application') };
+  const grouped = { raw_platform_events: group(original, 'platform_non_application'), raw_rsc_events: group(original, transitionClass) };
   for (const key of Object.keys(grouped)) need(equal(input[key], grouped[key]), 'EVIDENCE_ACCOUNTING_GROUPS');
   const counters = { application_console_errors: 'application_console_error', required_application_request_failures: 'required_application_request_failure', hydration_errors: 'hydration_or_application_exception' };
   const result = { ...grouped };
@@ -117,7 +126,15 @@ export function sanitizeProbeAccounting(input, previewOrigin) {
   need(equal(input.unclassified_failures, unclassified), 'EVIDENCE_UNCLASSIFIED_EVENTS');
   const authFailures = hasAuth ? input.authFailures : [];
   need(Array.isArray(authFailures) && authFailures.length <= 100000 && authFailures.every(x => x === 'CREDENTIAL_SCOPE_OR_REDIRECT_REJECTED'), 'EVIDENCE_AUTH_FAILURE');
-  return { ...result, unclassified_failures: unclassified, ledger, authFailures: [...authFailures] };
+  const transportDescriptor = hasTransport ? Object.getOwnPropertyDescriptor(input, 'transportFailures') : null;
+  need(!hasTransport || Object.hasOwn(transportDescriptor, 'value'), 'EVIDENCE_TRANSPORT_FAILURE');
+  const transportFailures = hasTransport ? transportDescriptor.value : [];
+  need(Array.isArray(transportFailures) && transportFailures.length <= 100000 && Reflect.ownKeys(transportFailures).length === transportFailures.length + 1, 'EVIDENCE_TRANSPORT_FAILURE');
+  for (let i = 0; i < transportFailures.length; i++) {
+    const entry = Object.getOwnPropertyDescriptor(transportFailures, String(i));
+    need(entry && Object.hasOwn(entry, 'value') && entry.value === 'INTERCEPTION_TRANSPORT_FAILURE', 'EVIDENCE_TRANSPORT_FAILURE');
+  }
+  return { ...result, ...(hasReceipts ? {transition_receipts:receipts} : {}), unclassified_failures: unclassified, ledger, authFailures: [...authFailures], ...(hasTransport ? { transportFailures: [...transportFailures] } : {}) };
 }
 function validAWS(proof, run) {
   exactKeys(proof, ['result', 'assumed_role', 'account_match', 'session_match', 'workflow_run_id', 'workflow_run_attempt', 'workflow_execution_sha']);
@@ -126,7 +143,23 @@ function validAWS(proof, run) {
   return jsonCopy(proof);
 }
 function rejectedDigest(input) {
-  try { const bytes = canonical(input); return bytes.length <= 20_000_000 ? sha(bytes) : null; } catch { return null; }
+  // Rejected evidence must not execute accessors while producing its diagnostic digest.
+  let remaining = 100000;
+  function copy(value, depth = 0) {
+    need(--remaining >= 0 && depth <= 40, 'EVIDENCE_DIGEST_LIMIT');
+    if (value === null || ['string', 'number', 'boolean', 'undefined'].includes(typeof value)) return value;
+    need(typeof value === 'object' && !types.isProxy(value), 'EVIDENCE_DIGEST_DATA');
+    need(Array.isArray(value) || [null, Object.prototype].includes(Object.getPrototypeOf(value)), 'EVIDENCE_DIGEST_DATA');
+    const result = Array.isArray(value) ? [] : Object.create(null);
+    for (const key of Reflect.ownKeys(value)) {
+      need(typeof key === 'string', 'EVIDENCE_DIGEST_DATA');
+      const descriptor = Object.getOwnPropertyDescriptor(value, key);
+      need(Object.hasOwn(descriptor, 'value'), 'EVIDENCE_DIGEST_DATA');
+      if (descriptor.enumerable) Object.defineProperty(result, key, { value: copy(descriptor.value, depth + 1), enumerable: true });
+    }
+    return result;
+  }
+  try { const bytes = canonical(copy(input)); return bytes.length <= 20_000_000 ? sha(bytes) : null; } catch { return null; }
 }
 
 export function buildProbeEvidence(input) {
@@ -211,8 +244,16 @@ export function buildProbeEvidence(input) {
   const interceptionCountMismatch = !!(interception && accounting &&
     interception.records.filter(record => record.failure_stage !== 'FAIL_REQUEST_FALLBACK').length < accounting.authFailures.length);
   if (interceptionCountMismatch) issues.push('INTERCEPTION_AUTH_FAILURE_COUNT_MISMATCH');
-  const interceptionClear = !interceptionPresent || (interception && !interceptionCountMismatch &&
-    interception.records.length === 0 && interception.capture_issues.length === 0);
+  let stageCountMismatch = false;
+  if (accounting && Object.hasOwn(accounting, 'transportFailures') && interception) {
+    const primaries = interception.records.filter(r => r.failure_stage !== 'FAIL_REQUEST_FALLBACK');
+    const transportCount = primaries.filter(r => interceptionFailureCategory(r.failure_stage) === 'INTERCEPTION_TRANSPORT_FAILURE').length;
+    stageCountMismatch = accounting.authFailures.length !== primaries.length - transportCount ||
+      accounting.transportFailures.length !== transportCount;
+    if (stageCountMismatch) issues.push('INTERCEPTION_STAGE_COUNT_MISMATCH');
+  }
+  const interceptionClear = !stageCountMismatch && (!interceptionPresent || (interception && !interceptionCountMismatch &&
+    interception.records.length === 0 && interception.capture_issues.length === 0));
   const aws = inspect(input.awsProof, value => { need(context, 'EVIDENCE_RUN'); return validAWS(value, context.run); }, 'INVALID_AWS_PROOF');
   const attestation = inspect(input.attestation, value => {
     need(context?.target && report, 'EVIDENCE_QA_BINDING');
@@ -237,7 +278,7 @@ export function buildProbeEvidence(input) {
   if (browserAuthority && !certifiedBudget) issues.push('BROWSER_AUTHORITY_WITHOUT_HTTP_CERTIFICATION');
   const noNetworkFailures = accounting && accounting.application_console_errors === 0 &&
     accounting.required_application_request_failures === 0 && accounting.hydration_errors === 0 &&
-    accounting.unclassified_failures.length === 0 && accounting.authFailures.length === 0 && interceptionClear;
+    accounting.unclassified_failures.length === 0 && accounting.authFailures.length === 0 && (accounting.transportFailures?.length ?? 0) === 0 && interceptionClear;
   const httpComplete = protectedBaseline && httpPreflight?.result === 'PASS' && httpPreflight.http_application_fixture_binding === 'PASS' && httpPreflight.trusted_sources_access === 'PASS' &&
     httpPreflight.trusted_sources_live_certified === true &&
     canonical(httpPreflight.routes.map(route => route.path)).equals(canonical(['/niveles-estadisticos', '/en/statistical-levels']));

@@ -166,7 +166,7 @@ export function validateProductReport(report) {
     for (const event of report[kind]) {
       exactKeys(event, ['sha256', 'count', 'classification'], 'UNSAFE_RAW_ACCOUNTING');
       need(/^[a-f0-9]{64}$/.test(event.sha256) && Number.isInteger(event.count) && event.count >= 0 &&
-        event.classification === (kind === 'raw_rsc_events' ? 'rsc_non_application' : 'platform_non_application'), 'RAW_ACCOUNTING_INVALID');
+        event.classification === (kind === 'raw_rsc_events' ? 'rsc_transition_completed_non_application' : 'platform_non_application'), 'RAW_ACCOUNTING_INVALID');
     }
   }
 }
