@@ -41,8 +41,8 @@ function mockMetadata(t, data) {
 
 test('registry is the exact approved five-field non-secret Preview declaration', async () => {
   assert.deepEqual(await readRegisteredProbeFixture(), {
-    deployment_id: 'dpl_EpR6VpdNzQbjLs2qJbk8vYfqQ1JH', git_sha: '75a84110260c0a7df6b6a13be14a4adae5373886',
-    origin: 'https://luiguiherrera-db0i8qqnu-luigui-herrera-s-projects.vercel.app', project: 'luiguiherrera-web', environment: 'Preview',
+    deployment_id: 'dpl_6KQXAyzZ3ULxiohVdxmqENiQT1F1', git_sha: '75a84110260c0a7df6b6a13be14a4adae5373886',
+    origin: 'https://luiguiherrera-mbm8tkr5p-luigui-herrera-s-projects.vercel.app', project: 'luiguiherrera-web', environment: 'Preview',
   });
   assert.deepEqual(requireRegisteredProbeTarget(target, fixture), fixture);
 });
