@@ -27,7 +27,7 @@ const expected = {
   },
   "PROBE target authorization and controller-exclusion contracts unchanged": {
     "scripts/probe-core.mjs": "1f9febf65554472832d4858af453662d87f27925e5b282cfe2b04a6b66ebba41",
-    "policy.json": "c194090cdb1db2ce6aee032492aab95dac85c32405be7e8d0855f43bc728fd22",
+    "policy.json": "672c81cce8eb0e84869e111e4816a46716edf402f9a546caa06f3b33c8382aec",
     "controller-request-schema.json": "d44337f72a9970d9db8e5d24ec1c400b4a5a4db9d4e3110b054727e6c9a224d3",
     "controller-qa-schema.json": "3fece1fd42493bc6210c1ea901459f50c85fc2deb24d177e0dadf51b35a063d8"
   },

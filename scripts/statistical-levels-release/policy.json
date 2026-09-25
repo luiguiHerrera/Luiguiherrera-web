@@ -99,7 +99,7 @@
   "source_bundle": [
     {
       "file": "scripts/build-statistical-levels.mjs",
-      "SHA256": "e298c952e02112757d09ccf089383dd4653e044b305cd4d45e5f624857b04f6c"
+      "SHA256": "d26a5d548a0a0925f9336dc76c52eb89e7fd89c5d094c38100da0ed79bffeb97"
     },
     {
       "file": "scripts/statistical-levels-offline.mjs",
