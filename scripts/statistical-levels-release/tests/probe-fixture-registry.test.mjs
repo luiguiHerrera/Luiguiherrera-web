@@ -41,8 +41,8 @@ function mockMetadata(t, data) {
 
 test('registry is the exact approved five-field non-secret Preview declaration', async () => {
   assert.deepEqual(await readRegisteredProbeFixture(), {
-    deployment_id: 'dpl_8iA33DzPN63dNoD9Hk6puJjc5XwH', git_sha: '4ee6adb006f360fea13837db5f7d45815f297b55',
-    origin: 'https://luiguiherrera-ddqf0dzk8-luigui-herrera-s-projects.vercel.app', project: 'luiguiherrera-web', environment: 'Preview',
+    deployment_id: 'dpl_EpR6VpdNzQbjLs2qJbk8vYfqQ1JH', git_sha: '75a84110260c0a7df6b6a13be14a4adae5373886',
+    origin: 'https://luiguiherrera-db0i8qqnu-luigui-herrera-s-projects.vercel.app', project: 'luiguiherrera-web', environment: 'Preview',
   });
   assert.deepEqual(requireRegisteredProbeTarget(target, fixture), fixture);
 });
@@ -63,6 +63,15 @@ test('a syntactically valid unregistered deployment fails before any public requ
 test('a syntactically valid unregistered commit fails before any public request', async t => {
   t.mock.method(globalThis, 'fetch', () => assert.fail('Unregistered commit reached transport'));
   await assert.rejects(resolveProbeDeployment({ ...target, candidate_git_sha: 'a'.repeat(40) }), /PROBE_UNREGISTERED_GIT_SHA/);
+});
+
+test('the superseded historical fixture is rejected without a fallback or public request', async t => {
+  t.mock.method(globalThis, 'fetch', () => assert.fail('Historical fixture reached transport'));
+  const historical = { ...target, candidate_git_sha: '4ee6adb006f360fea13837db5f7d45815f297b55',
+    deployment_id: 'dpl_8iA33DzPN63dNoD9Hk6puJjc5XwH' };
+  assert.throws(() => requireRegisteredProbeTarget(historical, fixture), /PROBE_UNREGISTERED_GIT_SHA/);
+  await assert.rejects(resolveProbeDeployment(historical), /PROBE_UNREGISTERED_GIT_SHA/);
+  await assert.rejects(resolveProbeDeployment({ ...target, deployment_id: historical.deployment_id }), /PROBE_UNREGISTERED_DEPLOYMENT/);
 });
 
 test('caller origin and latest selectors are rejected before transport', async t => {
@@ -106,6 +115,7 @@ test('even a same-project Preview origin must equal the exact registered origin'
 test('registered fixture still requires live exact Vercel-bot metadata before resolution', async t => {
   const calls = mockMetadata(t, metadata());
   const resolved = await resolveProbeDeployment(target);
+  assert.equal(requireRegisteredProbeResolution(resolved, fixture), resolved);
   assert.equal(resolved.origin, fixture.origin);assert.equal(resolved.deployment_id, fixture.deployment_id);
   assert.equal(resolved.candidate_git_sha, fixture.git_sha);assert.equal(resolved.github_deployment_id, 101);
   assert.equal(resolved.status_id, 202);assert.equal(resolved.commit_status_id, 303);
