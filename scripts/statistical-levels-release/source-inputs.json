@@ -36,8 +36,8 @@
   "docs/statistical-levels-capability-ledger.json": "1a26f1f84a29b9073a9abcc56d440398b4816999a6c569171c4084162b6b8a7e",
   "lib/statistical-levels/baseline-policy.mjs": "cf6f2aa44d9711d37cccd02c28f396497d2c1620dfae72c5edec1d829d423523",
   "lib/statistical-levels/defect-repairs.mjs": "5fee525b1a7e453dc149b91a92b5eb427f55c7231b031aae9f04cbde932925d1",
-  "package-lock.json": "7268cc84e28499acbb7925b703d85bcb6aa2865303c2143b299a3a283b288ba2",
-  "package.json": "71e870cf1284d223c8f9f25140cea027d0c7d82802491e0dbb920ce878cc852f",
+  "package-lock.json": "33553dbfe872301ab6ce40fe11a039999869603402839814fdd2df903c030600",
+  "package.json": "4531c0d5764f158932084924bb6fc3a3aa31b6543444941097a539951efd5bf9",
   "scripts/build-statistical-levels.mjs": "d26a5d548a0a0925f9336dc76c52eb89e7fd89c5d094c38100da0ed79bffeb97",
   "scripts/statistical-levels-offline.mjs": "5a4193bc3937b36ff71f48a8277be9b7aa277091bff058545cd01034f5b335f1"
 }
