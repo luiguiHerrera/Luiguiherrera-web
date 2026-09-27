@@ -71,7 +71,7 @@ jobs:
       - name: Verify frozen helper bytes before executing any helper
         working-directory: scripts/statistical-levels-release
         env:
-          EXPECTED_SOURCE_SUMS: 02f44df2ee76e0b267c6b2b85160331d9ff7f34bf6d61503fbec9385d5158c77
+          EXPECTED_SOURCE_SUMS: 01f67518bfe679c9caeab54dd26c19fe4ceef3d4563b7c2aa0ac516df404b45a
         run: |
           printf '%s  SOURCE_SHA256SUMS\n' "$EXPECTED_SOURCE_SUMS" | sha256sum --check --strict
           sha256sum --check --strict SOURCE_SHA256SUMS
@@ -93,6 +93,20 @@ jobs:
       - name: Public Production or exact Preview QA with canonical non-secret attestation outputs
         id: qa
         run: node scripts/statistical-levels-release/scripts/cli.mjs qa
+      - name: Retain sanitized candidate QA failure diagnostics
+        if: failure() && steps.qa.outcome == 'failure'
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+        with:
+          name: statistical-levels-candidate-qa-failure-diagnostics
+          path: |
+            ${{ runner.temp }}/statistical-levels-candidate-qa/network-accounting.json
+            ${{ runner.temp }}/statistical-levels-candidate-qa/browser-report.json
+            ${{ runner.temp }}/statistical-levels-candidate-qa/defect-browser-report.json
+            ${{ runner.temp }}/statistical-levels-candidate-qa/interaction-browser-report.json
+          retention-days: 7
+          if-no-files-found: warn
+          include-hidden-files: false
+          overwrite: false
   seal-qa:
     name: statistical-levels-candidate-qa-sha256-${{ needs.candidate-qa.outputs.qa_payload_sha256 }}
     needs: candidate-qa
@@ -129,7 +143,7 @@ jobs:
       - name: Verify frozen helper bytes before executing any helper
         working-directory: scripts/statistical-levels-release
         env:
-          EXPECTED_SOURCE_SUMS: 02f44df2ee76e0b267c6b2b85160331d9ff7f34bf6d61503fbec9385d5158c77
+          EXPECTED_SOURCE_SUMS: 01f67518bfe679c9caeab54dd26c19fe4ceef3d4563b7c2aa0ac516df404b45a
         run: |
           printf '%s  SOURCE_SHA256SUMS\n' "$EXPECTED_SOURCE_SUMS" | sha256sum --check --strict
           sha256sum --check --strict SOURCE_SHA256SUMS
@@ -178,7 +192,7 @@ jobs:
         id: source_integrity
         working-directory: scripts/statistical-levels-release
         env:
-          EXPECTED_SOURCE_SUMS: 02f44df2ee76e0b267c6b2b85160331d9ff7f34bf6d61503fbec9385d5158c77
+          EXPECTED_SOURCE_SUMS: 01f67518bfe679c9caeab54dd26c19fe4ceef3d4563b7c2aa0ac516df404b45a
         run: |
           printf '%s  SOURCE_SHA256SUMS\n' "$EXPECTED_SOURCE_SUMS" | sha256sum --check --strict
           sha256sum --check --strict SOURCE_SHA256SUMS
@@ -237,7 +251,7 @@ jobs:
         if: always() && steps.source_integrity.outcome == 'success'
         working-directory: scripts/statistical-levels-release
         env:
-          EXPECTED_SOURCE_SUMS: 02f44df2ee76e0b267c6b2b85160331d9ff7f34bf6d61503fbec9385d5158c77
+          EXPECTED_SOURCE_SUMS: 01f67518bfe679c9caeab54dd26c19fe4ceef3d4563b7c2aa0ac516df404b45a
           PROBE_RESOLVE_OUTCOME: ${{ steps.resolve.outcome }}
           PROBE_QA_OUTCOME: ${{ steps.qa.outcome }}
           PROBE_AWS_ASSUME_OUTCOME: ${{ steps.aws_assume.outcome }}

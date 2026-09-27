@@ -66,5 +66,5 @@ test('19: PROMOTE and all release workflow jobs differ only by the newly frozen 
   const workflow = await fs.readFile(new URL('../../.github/workflows/statistical-levels-release.yml', root), 'utf8');
   const release = workflow.split('  identity-probe:\n')[0]
     .replace(/(EXPECTED_SOURCE_SUMS: )[a-f0-9]{64}/g, '$1<FROZEN_SOURCE_SUMS>');
-  assert.equal(digest(release), 'bbb2a40f85ba7314a7189d121425b6b6559858cc460c1a91b2f7654d8b9af481');
+  assert.equal(digest(release), '301292aa05a3b51fbdc0867f63fd3f89dc1c8d7544a92397f9bb6618e0460fc7');
 });

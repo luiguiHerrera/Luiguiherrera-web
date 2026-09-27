@@ -69,7 +69,7 @@
   "tests/probe-oidc.test.mjs": "04b965760ce8727569acb347ef82803057551ddb240badffa69a185eaa55e693",
   "tests/probe-product-browser-harness.test.mjs": "13dddfb96b61cc3fa80960a2a80d296ae81081637529d20e2cbe79e393753dc8",
   "tests/probe-qa-http.test.mjs": "6a8a3e38cb6d76ef9c05bfa1a5cbdfc9bd47e2937b5376abc6b339472490bfaa",
-  "tests/probe-redirect-integration.test.mjs": "73d49a01993fcb16e98dd69818ef00521f3643e6c6019d53b7072de3d2cf6257",
+  "tests/probe-redirect-integration.test.mjs": "77b109192b544389c5ac3738e33f9c5bb919ece816f21f8b4924bbff487557ee",
   "tests/probe-request-instances.test.mjs": "78e3fb4b2fbbac2430cfd5fa48d73de1306c4173c1d5aa4a6a843546bfd6a7ac",
   "tests/probe-runtime.test.mjs": "a125e2a4c42a91fc90eeefc867f955a89677355eef8500f69752544cb3adcdb5",
   "tests/probe-token-budget.test.mjs": "f52b76e080c609c048c943070d91217785a927b802c9b3e5a0a1fc96b8819161",
