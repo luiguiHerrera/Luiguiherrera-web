@@ -60,7 +60,7 @@ for(const timing of ['before drain','during drain','before freeze'])test('materi
 // execute unchanged. Literal hostile payloads are independent of the converter.
 async function harness(){const cdp=new EventEmitter();cdp.send=async()=>({result:{value:true}});const context={newPage:async()=>({url:()=>origin+'/'}),newCDPSession:async()=>cdp,close:async()=>cdp.emit('close')};
  globalThis.__SL_MATERIAL_TEST={launch:async()=>({newContext:async()=>context,close:async()=>{}})};
- const module=new URL('../scripts/browser-harness-base.mjs',import.meta.url);const source=fs.readFileSync(module,'utf8').replace(/(['"])(\.\/[^'"]+\.mjs)\1/g,(_,q,v)=>JSON.stringify(new URL(v,module).href)).replace("await import('../qa-dependencies/node_modules/playwright/index.mjs')",'{chromium:globalThis.__SL_MATERIAL_TEST}');
+ const harnessModuleUrl=new URL('../scripts/browser-harness-base.mjs',import.meta.url);const source=fs.readFileSync(harnessModuleUrl,'utf8').replace(/(['"])(\.\/[^'"]+\.mjs)\1/g,(_,q,v)=>JSON.stringify(new URL(v,harnessModuleUrl).href)).replace("await import('../qa-dependencies/node_modules/playwright/index.mjs')",'{chromium:globalThis.__SL_MATERIAL_TEST}');
  const {createReadOnlyHarness}=await import('data:text/javascript;base64,'+Buffer.from(source).toString('base64'));const out=fs.mkdtempSync(path.join(os.tmpdir(),'sl-materialization-')),h=await createReadOnlyHarness({origin},undefined,out,true),p=await h.createPage();
  return {cdp,out,finish:async()=>{await p.close();await assert.rejects(h.finish(true),/ADOPT_REQUEST_EVIDENCE_INVALID/);return {evidence:JSON.parse(fs.readFileSync(path.join(out,'adopt-request-evidence.json'))),result:JSON.parse(fs.readFileSync(path.join(out,'network-accounting.json')))};}};
 }

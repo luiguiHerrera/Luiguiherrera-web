@@ -77,8 +77,8 @@ for(const corrupt of ['missing ledger','duplicate ledger','unobserved failure','
 async function harness(){const cdp=new EventEmitter();cdp.send=async()=>({result:{value:true}});
  const context={newPage:async()=>({url:()=>origin+'/'}),newCDPSession:async()=>cdp,close:async()=>cdp.emit('close')};
  globalThis.__SL_INGRESS_TEST={launch:async()=>({newContext:async()=>context,close:async()=>{}})};
- const module=new URL('../scripts/browser-harness-base.mjs',import.meta.url);let source=fs.readFileSync(module,'utf8');
- source=source.replace(/(['"])(\.\/[^'"]+\.mjs)\1/g,(_,q,v)=>JSON.stringify(new URL(v,module).href)).replace("await import('../qa-dependencies/node_modules/playwright/index.mjs')",'{chromium:globalThis.__SL_INGRESS_TEST}');
+ const harnessModuleUrl=new URL('../scripts/browser-harness-base.mjs',import.meta.url);let source=fs.readFileSync(harnessModuleUrl,'utf8');
+ source=source.replace(/(['"])(\.\/[^'"]+\.mjs)\1/g,(_,q,v)=>JSON.stringify(new URL(v,harnessModuleUrl).href)).replace("await import('../qa-dependencies/node_modules/playwright/index.mjs')",'{chromium:globalThis.__SL_INGRESS_TEST}');
  const {createReadOnlyHarness}=await import('data:text/javascript;base64,'+Buffer.from(source).toString('base64'));
  const out=fs.mkdtempSync(path.join(os.tmpdir(),'sl-native-ingress-')),h=await createReadOnlyHarness({origin},undefined,out,true),p=await h.createPage();
  const lines=()=>fs.readFileSync(path.join(out,'native-ingress.jsonl'),'utf8').trim().split('\n').map(x=>JSON.parse(x));
