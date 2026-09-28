@@ -8,7 +8,7 @@ import { createRequire } from 'node:module';
 const ts = createRequire(import.meta.url)('typescript');
 const expected = {
   "explicit receipt accounting migration with no header-based exemption": {
-    "scripts/network-accounting.mjs": "61579fdf7c12d8901894fa3f3431dbacca1005524019253a475abc1d828aa71c"
+    "scripts/network-accounting.mjs": "a9058dca108abf3920ce3cfe0260b800f1978bc6aa5d4c1d69c4e322584432ca"
   },
   "Custom Trusted Source and anonymous baseline logic unchanged": {
     "scripts/probe-http.mjs": "036a21186195bfaecadfe046d08786b69f692b730e2144da7b450f8d319614df"
@@ -31,14 +31,14 @@ const expected = {
     "controller-request-schema.json": "d44337f72a9970d9db8e5d24ec1c400b4a5a4db9d4e3110b054727e6c9a224d3",
     "controller-qa-schema.json": "3fece1fd42493bc6210c1ea901459f50c85fc2deb24d177e0dadf51b35a063d8"
   },
-  "ADOPT shared runner and transport behavior unchanged": {
+  "ADOPT evidence wiring is pinned; shared runner and transport unchanged": {
     "scripts/qa-runner.mjs": "4584b988912f702a3b79f8de19640dd8eb0c0ebf61e45d0330af6ae975c03262",
-    "scripts/browser-harness-base.mjs": "3d3a5f048d1e75f56f88ccb728e09aa7e892cc8f6b627dff81e05664145c18b9",
+    "scripts/browser-harness-base.mjs": "a31d2f4b3b247b2d40ae0eb8c3d963fc5756b1d37fee701155f457866c771272",
     "scripts/release-core.mjs": "c461b1af450c69007b4f5bfac9c21010ca475b843aec5fed3ff6fe6b8912dd70"
   },
-  "PROMOTE shared runner and transport behavior unchanged": {
+  "PROMOTE shared runner unchanged; ADOPT-only harness extension pinned": {
     "scripts/qa-runner.mjs": "4584b988912f702a3b79f8de19640dd8eb0c0ebf61e45d0330af6ae975c03262",
-    "scripts/browser-harness-base.mjs": "3d3a5f048d1e75f56f88ccb728e09aa7e892cc8f6b627dff81e05664145c18b9",
+    "scripts/browser-harness-base.mjs": "a31d2f4b3b247b2d40ae0eb8c3d963fc5756b1d37fee701155f457866c771272",
     "scripts/release-core.mjs": "c461b1af450c69007b4f5bfac9c21010ca475b843aec5fed3ff6fe6b8912dd70"
   }
 };

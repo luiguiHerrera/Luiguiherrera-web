@@ -12,7 +12,7 @@ const read = file => fs.readFile(new URL(file, root), 'utf8');
 const shared = {
   'scripts/release-core.mjs': 'c461b1af450c69007b4f5bfac9c21010ca475b843aec5fed3ff6fe6b8912dd70',
   'scripts/qa-runner.mjs': '4584b988912f702a3b79f8de19640dd8eb0c0ebf61e45d0330af6ae975c03262',
-  'scripts/browser-harness-base.mjs': '3d3a5f048d1e75f56f88ccb728e09aa7e892cc8f6b627dff81e05664145c18b9',
+  'scripts/browser-harness-base.mjs': 'a31d2f4b3b247b2d40ae0eb8c3d963fc5756b1d37fee701155f457866c771272',
   'scripts/browser-harness.mjs': '2896a2c3f2886321eb47291a007fdf272ec95f4f4a593362d9a4a4ca6f04bf4c',
   'scripts/runtime-io.mjs': 'b114b3e246ae4bdbf1af1a3823218b65f53a18ca26719a6740b11538344a912e',
   'scripts/cli.mjs': 'c353aca844d0d69973d0bcd8abd9bf9539fd908245aca49d0caffcdb4a8c2407',
@@ -58,13 +58,13 @@ test('17: probe entry defers OIDC creation to protected-baseline gate and never 
   assert.doesNotMatch(probe, /invoke\.mjs|environment:|contents: write|secrets:/);
 });
 
-test('18: ADOPT transport, validation and controller request contract remain byte-identical', async () => {
+test('18: ADOPT evidence integration is pinned; transport, validation and controller contracts remain frozen', async () => {
   for (const [file, expected] of Object.entries(shared)) assert.equal(digest(file==='scripts/release-core.mjs'?withoutReceiptClass(await read(file)):await read(file)), expected, file);
 });
 
-test('19: PROMOTE and all release workflow jobs differ only by the newly frozen source checksum', async () => {
+test('19: release jobs retain the pinned diagnostic allowlist and frozen source checksum', async () => {
   const workflow = await fs.readFile(new URL('../../.github/workflows/statistical-levels-release.yml', root), 'utf8');
   const release = workflow.split('  identity-probe:\n')[0]
     .replace(/(EXPECTED_SOURCE_SUMS: )[a-f0-9]{64}/g, '$1<FROZEN_SOURCE_SUMS>');
-  assert.equal(digest(release), '301292aa05a3b51fbdc0867f63fd3f89dc1c8d7544a92397f9bb6618e0460fc7');
+  assert.equal(digest(release), 'dfa8a5bd21bd02cc03a3137b8de54d6108d2ca31dbedc094fe76250e3de6ba42');
 });

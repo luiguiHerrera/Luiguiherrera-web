@@ -42,14 +42,15 @@ export function createRequestInstanceCollector(origin) {
   function page(id){if(!pages.has(id))pages.set(id,{documents:new Map()});return pages.get(id);}
   function document(p,frame,loader){const key=frame&&loader?frame+':'+loader:null;if(key&&p.documents.has(key))return p.documents.get(key);const id='document-'+(++documentOrdinal);if(key)p.documents.set(key,id);return id;}
   function frameNavigated(pageId,frame){document(page(pageId),frame.id,frame.loaderId);}
-  function request(pageId,e,context,active_transition_id,transitionContext=context) {
+  function request(pageId,e,context,active_transition_id,transitionContext=context,consumerEligible=true) {
     const p=page(pageId),document_instance_id=document(p,e.frameId,e.loaderId),network_request_ordinal=++ordinal;
-    let doc;try{doc=new URL(e.documentURL);}catch{doc=null;}
+    const documentURL=e.documentURL; // Native access errors belong to the ingress boundary, not URL fallback.
+    let doc;try{doc=new URL(documentURL);}catch{doc=null;}
     const v={capture_id,request_instance_id:capture_id+':'+pageId+':'+document_instance_id+':request-'+network_request_ordinal,page_id:pageId,document_instance_id,network_request_ordinal,
       document_proven:!!(e.frameId&&e.loaderId&&doc?.origin===origin&&!doc.username&&!doc.password),destination_sha256:destinationFingerprint(e.request.url,origin),document_path_sha256:sha(doc?.pathname??''),
       method:['GET','POST','PUT','DELETE','HEAD','OPTIONS','PATCH'].includes(e.request.method)?e.request.method:'OTHER',request_start_context_sha256:startContextFingerprint(context),active_transition_id:active_transition_id??null,active_transition_context_sha256:active_transition_id?startContextFingerprint(transitionContext):null,consumer:{kind:'unknown'}};
     const headers=Object.fromEntries(Object.entries(e.request.headers??{}).map(([k,v])=>[k.toLowerCase(),v]));
-    if(v.active_transition_id&&headers.rsc==='1'&&headers['next-router-prefetch']!=='1'&&headers.purpose!=='prefetch') {
+    if(consumerEligible===true&&v.active_transition_id&&headers.rsc==='1'&&headers['next-router-prefetch']!=='1'&&headers.purpose!=='prefetch') {
       try{const u=new URL(e.request.url),target=Object.fromEntries(['asset','frequency','window'].map(k=>[k,u.searchParams.get(k)]));
         if(v.destination_sha256&&['asset','frequency','window'].every(k=>u.searchParams.getAll(k).length===1)&&!u.searchParams.has('symbol')&&['SPY','GLD'].includes(target.asset)&&['weekly','daily'].includes(target.frequency)&&['5Y','3Y','Full'].includes(target.window))v.consumer={kind:'transition',target};}catch{}
     }

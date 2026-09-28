@@ -139,10 +139,20 @@ test('probe harness preserves exact raw events.push expressions and original tim
   const shared = await parse(sharedURL), probe = await parse(probeURL);
   const expressions = (ast, name) => { const found = []; function visit(node) { if (ts.isCallExpression(node) && node.expression.getText(ast) === name) found.push(ts.createPrinter({ removeComments: true }).printNode(ts.EmitHint.Expression, node, ast)); ts.forEachChild(node, visit); } visit(ast); return found; };
   const rawProbe=expressions(probe,'events.push').map(x=>x.replace('...(requests.has(e.requestId) ? { request_evidence: requests.get(e.requestId).request_evidence } : {}), ',''));
-  assert.deepEqual(rawProbe,expressions(shared,'events.push'));
+  const pushes=expressions(shared,'events.push');
+  assert.ok(pushes.includes('events.push({ ...raw, ...(identity ? { failure_evidence: identity } : {}) })'));
+  // Missing identity is an ADOPT-only blocking observation. Preview keeps its
+  // original event path; the optional collector is absent in that mode.
+  assert.ok(pushes.includes('events.push(unresolved.event)'));
+  assert.deepEqual(expressions(shared,'adopt?.unresolvedNative'),['adopt?.unresolvedNative(pageId, kind, native, events.length)']);
+  // The existing exception payloads are unchanged; ADOPT adds only the checked identity.
+  const exceptions=expressions(shared,'recordException').map(x=>x.replace(/^recordException\(e, /,'events.push('));
+  assert.deepEqual(rawProbe,[...pushes.filter(x=>!x.includes('...raw')&&x!=='events.push(unresolved.event)'), ...exceptions]);
   assert.deepEqual(expressions(probe, 'account'), ['account(events, finalProductPassed, target.origin, transitionEvidence)']);
   assert.deepEqual(expressions(probe, 'sleep'), expressions(shared, 'sleep'));
-  assert.deepEqual(expressions(probe, 'setTimeout'), expressions(shared, 'setTimeout'));
+  // The ADOPT-only transport-close deadline rejects a missing CDP drain; it
+  // does not wait for, suppress, or reclassify network failures.
+  assert.deepEqual(expressions(shared, 'setTimeout'), [...expressions(probe, 'setTimeout'), "setTimeout(() => reject(new Error('CDP_DRAIN_UNCONFIRMED')), 5000)"]);
   // The unchanged policy function now receives the same arguments in explicit diagnostic stages.
   // Behavioral equivalence (including blocked requests) is covered by interception differential tests.
   assert.deepEqual(expressions(probe, 'headersForRequest'), ['headersForRequest(requestURL, requestHeaders, token, previous, target.origin)']);
