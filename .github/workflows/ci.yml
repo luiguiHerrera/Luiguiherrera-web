@@ -10,16 +10,56 @@ permissions:
 jobs:
   validate:
     runs-on: ubuntu-latest
+    timeout-minutes: 40
+    env:
+      NEXT_TELEMETRY_DISABLED: "1"
+      CI_EVENT_SHA: ${{ github.sha }}
+      CI_EVIDENCE: ${{ runner.temp }}/statistical-levels-ci
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v6
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 0
+          persist-credentials: false
 
       - name: Setup Node
         uses: actions/setup-node@v6
         with:
-          node-version: "22"
+          node-version: "22.23.2"
           cache: npm
+
+      - name: Bind qualification to event SHA and governed two-parent lineage
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$CI_EVIDENCE"
+          python3 - <<'PYCODE'
+          import hashlib,json,os,re,subprocess
+          from pathlib import Path
+          root=Path.cwd(); out=Path(os.environ['CI_EVIDENCE'])
+          git=lambda *args: subprocess.check_output(['git',*args])
+          head=git('rev-parse','HEAD').decode().strip()
+          assert re.fullmatch('[a-f0-9]{40}',os.environ['CI_EVENT_SHA'])
+          assert head==os.environ['CI_EVENT_SHA']==os.environ['GITHUB_SHA'], 'WRONG_TESTED_SHA'
+          subprocess.run(['git','diff','--exit-code','HEAD','--'],check=True)
+          parents=git('show','-s','--format=%P','HEAD').decode().strip().split()
+          execution='0c8fce262fce44650729883862ec948778ebea45'
+          production='c60b17c6ddc5a08fcd402328f69e73f6e1e41b5f'
+          is_integration_push=os.environ['GITHUB_EVENT_NAME']=='push' and os.environ['GITHUB_REF']=='refs/heads/vercel-deployment'
+          if is_integration_push:
+              assert parents==[execution,production], 'WRONG_ORDERED_PARENTS'
+              for parent in [execution,production]:
+                  subprocess.run(['git','merge-base','--is-ancestor',parent,head],check=True)
+          # PR checks exercise their event SHA; they never certify the integration push.
+          subject={'head_sha':head,'parents':parents,'event':os.environ['GITHUB_EVENT_NAME'],'ref':os.environ['GITHUB_REF'],'run_id':os.environ['GITHUB_RUN_ID'],'run_attempt':os.environ['GITHUB_RUN_ATTEMPT'],'integration_push':is_integration_push}
+          paths=sorted(git('ls-files','-z').decode().rstrip('\0').split('\0'))
+          files={p:{'mode':format((root/p).stat().st_mode,'o'),'sha256':hashlib.sha256((root/p).read_bytes()).hexdigest()} for p in paths}
+          (out/'subject.json').write_text(json.dumps(subject,sort_keys=True)+'\n')
+          (out/'before.json').write_text(json.dumps(files,sort_keys=True)+'\n')
+          print(json.dumps(subject))
+          PYCODE
 
       - name: Install dependencies
         run: npm ci
@@ -38,3 +78,132 @@ jobs:
 
       - name: Build
         run: npm run build
+
+      - name: Verify canonical source bundle, sums, release pins, freeze and policy hashes
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PYCODE'
+          import hashlib,json,re,subprocess
+          from pathlib import Path
+          root=Path.cwd(); base=root/'scripts/statistical-levels-release'
+          sha=lambda data:hashlib.sha256(data).hexdigest()
+          def unique(p):
+              def pairs(items):
+                  assert len(items)==len(dict(items)), 'DUPLICATE_JSON_KEY'
+                  return dict(items)
+              return json.loads(p.read_text(),object_pairs_hook=pairs)
+          manifest=unique(base/'source-manifest.json')
+          tracked=subprocess.check_output(['git','ls-files','-z','scripts/statistical-levels-release/']).decode().rstrip('\0').split('\0')
+          expected={str(Path(p).relative_to('scripts/statistical-levels-release')) for p in tracked}-{'SOURCE_SHA256SUMS','source-manifest.json','workflow-freeze.json'}
+          assert set(manifest)==expected and len(manifest)==94, 'BUNDLE_INVENTORY'
+          for name,digest in manifest.items():
+              p=Path(name); assert not p.is_absolute() and '..' not in p.parts
+              assert all(not parent.is_symlink() for parent in [base/p,*(base/p).parents])
+              assert (base/p).is_file() and sha((base/p).read_bytes())==digest, name
+          assert (base/'source-manifest.json').read_text()==json.dumps(dict(sorted(manifest.items())),indent=2)+'\n'
+          sums={**manifest,'source-manifest.json':sha((base/'source-manifest.json').read_bytes())}
+          canonical=''.join(v+'  '+p+'\n' for p,v in sorted(sums.items()))
+          assert len(sums)==95 and (base/'SOURCE_SHA256SUMS').read_text()==canonical, 'SOURCE_SUMS'
+          inputs=unique(base/'source-inputs.json'); assert len(inputs)==41
+          for name,digest in inputs.items():
+              p=Path(name); assert not p.is_absolute() and '..' not in p.parts
+              assert all(not parent.is_symlink() for parent in [root/p,*(root/p).parents])
+              assert sha((root/p).read_bytes())==digest, name
+          workflow=(root/'.github/workflows/statistical-levels-release.yml').read_bytes()
+          pins=re.findall(rb'EXPECTED_SOURCE_SUMS: ([a-f0-9]{64})',workflow)
+          assert len(pins)==4 and all(p.decode()==sha(canonical.encode()) for p in pins), 'WORKFLOW_PINS'
+          frozen=unique(base/'workflow-freeze.json')
+          assert frozen['workflow_path']=='.github/workflows/statistical-levels-release.yml'
+          assert frozen['workflow_sha256']==sha(workflow) and frozen['source_sums_sha256']==sha(canonical.encode()), 'FREEZE_PARITY'
+          assert not workflow.startswith(b'\xef\xbb\xbf') and b'\r' not in workflow and workflow.endswith(b'\n')
+          policy_hash=sha((base/'policy.json').read_bytes())
+          for name in ['probe-redirect-integration.test.mjs','product-qa-observability-isolation.test.mjs']:
+              match=re.search(r"[\"']policy\.json[\"']:\s*[\"']([a-f0-9]{64})[\"']",(base/'tests'/name).read_text())
+              assert match and match[1]==policy_hash, 'POLICY_HASH'
+          preservation=unique(root/'docs/statistical-levels-execution-requalification-manifest.json')
+          for entry in preservation['statistical_files']+preservation['historical_files']:
+              assert entry['source_commit'] in ['0c8fce262fce44650729883862ec948778ebea45','c60b17c6ddc5a08fcd402328f69e73f6e1e41b5f']
+              original=subprocess.check_output(['git','show',entry['source_commit']+':'+entry['path']])
+              assert sha(original)==entry['sha256']==sha((root/entry['path']).read_bytes()), entry['path']
+          print(json.dumps({'source_bundle':'PASS','source_sums':'PASS','workflow_pins':'PASS','freeze':'PASS','policy_hash':'PASS','preservation':'PASS'}))
+          PYCODE
+
+      - name: Install locked browser test dependencies
+        shell: bash
+        run: |
+          set -euo pipefail
+          npm ci --prefix scripts/statistical-levels-release/qa-dependencies --ignore-scripts --no-audit --no-fund
+          node scripts/statistical-levels-release/qa-dependencies/node_modules/playwright/cli.js install --with-deps chromium
+
+      - name: Run existing release, native proof, policy and security tests
+        shell: bash
+        run: |
+          set -euo pipefail
+          export SL_CAUSAL_BROWSER_TEST=1
+          export SL_NEXT_LOCAL_ORIGIN=http://127.0.0.1:31876
+          export SL_NEXT_LOCAL_EVIDENCE="$CI_EVIDENCE/native-next"
+          export SL_CAUSAL_TEST_EVIDENCE="$CI_EVIDENCE/native-fixtures"
+          node node_modules/next/dist/bin/next start -H 127.0.0.1 -p 31876 > "$CI_EVIDENCE/server.log" 2>&1 &
+          server_pid=$!
+          trap 'status=$?; trap - EXIT; kill "$server_pid"; wait "$server_pid" || test "$?" -eq 143; exit "$status"' EXIT
+          node --input-type=module - <<'JS'
+          import assert from 'node:assert/strict';
+          let ready=false;
+          for(let attempt=0;attempt<120;attempt++) {
+            try { const r=await fetch(process.env.SL_NEXT_LOCAL_ORIGIN+'/niveles-estadisticos',{signal:AbortSignal.timeout(2000)});if(r.ok){ready=true;break;} } catch { /* bounded readiness retry only */ }
+            await new Promise(resolve=>setTimeout(resolve,500));
+          }
+          assert.ok(ready,'LOCAL_APPLICATION_NOT_READY');
+          JS
+          node --test --test-concurrency=2 --test-reporter=tap scripts/statistical-levels-release/tests/*.test.mjs | tee "$CI_EVIDENCE/release.tap"
+
+      - name: Run production correction and product contracts including synthetic storage failures
+        shell: bash
+        run: |
+          set -euo pipefail
+          node --import ./scripts/trends-test-register.mjs --experimental-test-module-mocks --experimental-strip-types --test --test-reporter=tap lib/reports/first-september-2026.test.mts lib/reports/second-september-2026.test.mts lib/reports/september-corrective-release.test.mts lib/reports/second-september-source-policy.test.mts | tee "$CI_EVIDENCE/reports.tap"
+          node --experimental-strip-types --test --test-reporter=tap lib/statistical-levels/baseline.test.mjs lib/statistical-levels/contracts.test.ts lib/statistical-levels/defect-repairs.test.ts scripts/statistical-levels-storage.test.mjs components/statistical-levels/interaction-presentation.test.ts | tee "$CI_EVIDENCE/product.tap"
+
+      - name: Reject missing or skipped mandatory coverage and candidate drift
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PYCODE'
+          import hashlib,json,os,re,subprocess
+          from pathlib import Path
+          root=Path.cwd();out=Path(os.environ['CI_EVIDENCE']);summary={}
+          allowed_product_skips={
+          'archived raw identity and final completed history are independently bound',
+          'identical frozen archived bytes reproduce all 81 snapshots; sidecar corruption blocks validation',
+          ' two complete regenerations from archived raw have identical 81-file and provenance manifests'.strip()}
+          for name,minimum in [('release',1743),('reports',31),('product',68)]:
+              text=(out/(name+'.tap')).read_text()
+              counts={key:int(re.search(r'^# '+key+r' (\d+)$',text,re.M)[1]) for key in ['tests','pass','fail','cancelled','skipped','todo']}
+              assert counts['tests']>=minimum and counts['fail']==counts['cancelled']==counts['todo']==0, (name,counts)
+              assert counts['tests']==counts['pass']+counts['skipped'], 'INCONSISTENT_TEST_ACCOUNTING'
+              skipped=re.findall(r'^\s*ok \d+ - (.*?) # SKIP(?: .*)?$',text,re.M)
+              assert len(skipped)==counts['skipped'], 'UNACCOUNTED_SKIP'
+              assert len(skipped)==len(set(skipped)), 'DUPLICATE_SKIP'
+              assert set(skipped)<=(allowed_product_skips if name=='product' else set()), (name,skipped)
+              if name=='product':
+                  for failure in ['identity','storage','partial','collision','readback','manifest','provenance','validation']:
+                      assert len(re.findall(r'^ok \d+ - real adapter failure injection: '+failure+r'$',text,re.M))==1, 'STORAGE_CASE_NOT_EXECUTED'
+              summary[name]={'counts':counts,'explicit_local_only_or_nonapplicable_skips':skipped}
+          assert len(list((root/'scripts/statistical-levels-release/tests').glob('*.test.mjs')))==34
+          before=json.loads((out/'before.json').read_text())
+          paths=sorted(subprocess.check_output(['git','ls-files','-z']).decode().rstrip('\0').split('\0'))
+          assert paths==sorted(before)
+          after={p:{'mode':format((root/p).stat().st_mode,'o'),'sha256':hashlib.sha256((root/p).read_bytes()).hexdigest()} for p in paths}
+          assert after==before, 'GOVERNED_BYTES_CHANGED'
+          subject=json.loads((out/'subject.json').read_text());assert subject['head_sha']==os.environ['CI_EVENT_SHA']
+          assert subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip()==subject['head_sha']
+          summary['subject']=subject
+          summary['integration_qualification_complete']=subject['integration_push']
+          summary['covered_obligations']=['C%02d'%i for i in range(1,14) if i!=11 or subject['integration_push']]
+          summary['lineage_tests_executed']=True
+          summary['governed_two_parent_topology_verified']=subject['integration_push']
+          summary['candidate_content_sha256']=hashlib.sha256(json.dumps(after,sort_keys=True,separators=(',',':')).encode()).hexdigest()
+          (out/'qualification-summary.json').write_text(json.dumps(summary,indent=2)+'\n')
+          print(json.dumps(summary,indent=2))
+          PYCODE

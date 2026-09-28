@@ -88,3 +88,36 @@ for(const status of ['MATERIALIZING','FAILED','INVENTED'])test('positive evidenc
  v.evidence.journal.find(e=>e.kind==='NATIVE_INGRESS').materialization_status=status;
  const audit=auditAdoptRequestEvidence(v.evidence,[],v.result,origin,[]);assert.equal(audit.status,'FAIL');assert.ok(audit.issues.includes(status==='FAILED'?'MATERIALIZATION_STATE_MISMATCH':'MATERIALIZATION_INCOMPLETE'));
 });
+
+test('native script witness: durable capture precedes property reads, no deferred hash reaches classification',()=>{
+ const snapshots=[],c=createAdoptRequestEvidence('https://www.luiguiherrera.com',v=>snapshots.push(structuredClone(v))),raw=[];
+ c.listenerStart('page-1');c.pageLifecycle('page-1','ACTIVE');let reads=0;
+ const native={get scriptId(){assert.equal(snapshots[0].interpretation_status,'NOT_YET_INTERPRETED');reads++;return 'code';},get hash(){throw new Error('hostile native getter');}};
+ c.scriptParsed('page-1',native,raw);c.scriptParsed('page-1',native,raw);
+ assert.equal(reads,1);assert.equal(raw.length,1);assert.equal(raw[0].kind,'native_script_proof_failure');
+ assert.equal(snapshots.length,4);assert.equal(snapshots[1].materialization_status,'FAILED');assert.equal(snapshots[3].interpretation_status,'DUPLICATE');
+ assert.equal(c.verifyIngress(snapshots).status,'PASS');
+});
+test('native script witness: hash coercion is rejected without invoking native conversion',()=>{
+ const c=createAdoptRequestEvidence('https://www.luiguiherrera.com'),raw=[];c.listenerStart('page-1');let coerced=0;
+ c.scriptParsed('page-1',{scriptId:'code',hash:{toString(){coerced++;return '0'.repeat(64);}}},raw);
+ assert.equal(coerced,0);assert.equal(raw.length,1);
+});
+test('classification cannot read an unprotected native wrapper',()=>{
+ const c=createAdoptRequestEvidence('https://www.luiguiherrera.com');let read=false;
+ assert.throws(()=>c.classification('page-1',{get request(){read=true;throw Error();}}),/UNMATERIALIZED_CLASSIFICATION_INPUT/);assert.equal(read,false);
+});
+
+test('native script witness: durability loss and conflicting script identity remain retained failures',()=>{
+ for(const mode of ['receive','settled','conflict']) {
+  let writes=0;const snapshots=[],raw=[];
+  const c=createAdoptRequestEvidence(origin,e=>{writes++;if(writes===(mode==='receive'?1:mode==='settled'?2:-1))throw Error('durability');snapshots.push(structuredClone(e));});
+  c.listenerStart(page);c.pageLifecycle(page,'ACTIVE');
+  const native={scriptId:'s',hash:'a'.repeat(64),length:12,startLine:0,startColumn:0,executionContextAuxData:{isDefault:true}};
+  c.scriptParsed(page,native,raw);if(mode==='conflict')c.scriptParsed(page,{...native,hash:'b'.repeat(64)},raw);
+  c.pageLifecycle(page,'CLOSING');c.listenerDrain(page);c.sourceClosed(page);c.pageLifecycle(page,'CLOSED');c.freeze();
+  const receipts=c.receipts(raw),result=account(raw,false,origin,receipts),e=c.evidence(raw,result,receipts);
+  assert.equal(raw.length,1);assert.equal(result.unclassified_failures.length,1);assert.equal(auditAdoptRequestEvidence(e,raw,result,origin,[]).status,'FAIL');
+  assert.equal(c.verifyIngress(snapshots).status,mode==='conflict'?'PASS':'FAIL');
+ }
+});

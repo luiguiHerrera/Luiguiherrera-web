@@ -1,0 +1,99 @@
+{
+  "web": {
+    "anchors": 149,
+    "unsafeAnchors": 0,
+    "unlinkedPublicMentions": 0,
+    "watchlistDestinations": 18
+  },
+  "html": {
+    "anchors": 146,
+    "unsafeAnchors": 0,
+    "unlinkedPublicMentions": 0,
+    "watchlistDestinations": 18
+  },
+  "pdf": {
+    "pages": 22,
+    "clickableURIAnnotations": 210,
+    "allPublicSourcesClickable": true,
+    "watchlistDestinations": 18
+  },
+  "markdown": {
+    "allFooterEntriesAndDestinationsPresent": true
+  },
+  "externalDomainsAndUsage": {
+    "www.federalreserve.gov": [
+      "[B1] Federal Reserve · FOMC · 16/09/2026",
+      "[B2] Federal Reserve / Treasury · H.15 · publicado el 18/09"
+    ],
+    "www.aaii.com": [
+      "[B3] AAII · semana terminada el 16/09/2026"
+    ],
+    "www.gold.org": [
+      "[B4] World Gold Council · Global demand drives record holdings · agosto de 2026"
+    ],
+    "fred.stlouisfed.org": [
+      "[B5] FRED / BIS · precios residenciales reales de China · QCNR628BIS",
+      "[B21] FRED / ICE BofA · US High Yield Option-Adjusted Spread",
+      "[B23] FRED / CBOE · VIXCLS"
+    ],
+    "www.boj.or.jp": [
+      "[B6] Bank of Japan · Statement on Monetary Policy · 18/09/2026",
+      "BOJ · referencia oficial: aumento desde 1,00 %"
+    ],
+    "farside.co.uk": [
+      "[B7] Farside · Bitcoin ETF flows · 14–18/09"
+    ],
+    "hiringlab.indeed.com": [
+      "[B8] Indeed Hiring Lab · AI Exposure Isn’t Squeezing Advertised Pay in the US — It’s Boosting It · 17/09/2026"
+    ],
+    "www.eia.gov": [
+      "[B9] EIA · Short-Term Energy Outlook · 09/09/2026",
+      "[B10] EIA · Europe Brent Spot Price FOB · observación 15/09",
+      "[B11] EIA · Cushing WTI Spot Price FOB · observación 15/09"
+    ],
+    "www.balticexchange.com": [
+      "[B12] Baltic Exchange · Tanker report, week 38 · 18/09/2026"
+    ],
+    "www.goldmansachs.com": [
+      "[B13] Goldman Sachs Research · The S&P 500 Is Forecast to Climb as Earnings Growth Powers Stocks Higher · 28/05/2026",
+      "[B18] Goldman Sachs Research · Can the S&P 500 Rally as Treasury Yields Rise? · 15/09/2026"
+    ],
+    "www.spglobal.com": [
+      "[B14] S&P DJI · S&P U.S. Indices Methodology"
+    ],
+    "river.com": [
+      "[B15] River / Sam Baker · The Case for a 10% Bitcoin Allocation · 02/09/2026"
+    ],
+    "www.bea.gov": [
+      "[B16] BEA · calendario oficial consultado el 21/09/2026"
+    ],
+    "www.ssga.com": [
+      "[B17] State Street · participaciones de GLD"
+    ],
+    "www.carsongroup.com": [
+      "[B19] Ryan Detrick / Carson · Why The Worst Month of the Year Likely Won’t Bring Rain · 31/08/2026",
+      "[B20] Ryan Detrick / Carson · A Dove In Hawk’s Clothing? · 17/09/2026"
+    ],
+    "www.alphavantage.co": [
+      "[B22] Alpha Vantage · TIME_SERIES_DAILY"
+    ],
+    "bitbo.io": [
+      "[B24] Bitbo / BitcoinTreasuries · Bitcoin ETF flows"
+    ],
+    "www.alianza.com.co": [
+      "[B25] Alianza · referencia institucional pública"
+    ],
+    "suameca.banrep.gov.co": [
+      "[B26] Banco de la República · tasa de política monetaria"
+    ]
+  },
+  "EXTERNAL_LINKS_TARGET_BLANK": "PASS",
+  "EXTERNAL_LINKS_REL_NOOPENER": "PASS",
+  "MENTIONED_SOURCES_WITH_FOOTER_ENTRY": "PASS",
+  "MENTIONED_PUBLIC_SOURCES_LINKED_INLINE": "PASS",
+  "WATCHLIST_LINKS": "18/18",
+  "WATCHLIST_TARGET_BLANK": "18/18",
+  "WATCHLIST_REL_SAFE": "18/18",
+  "PUBLIC_SOURCE_GROUPS": 1,
+  "formatLimits": "HTML and web enforce new tabs. Markdown and PDF preserve clickable destinations; the viewer controls tab/window behavior. No in-page anchor exception."
+}

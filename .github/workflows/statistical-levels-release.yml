@@ -71,7 +71,7 @@ jobs:
       - name: Verify frozen helper bytes before executing any helper
         working-directory: scripts/statistical-levels-release
         env:
-          EXPECTED_SOURCE_SUMS: a6b3c2ad49d7d5e285636482f86dda91c314b8587a2b2efae2a75f1d1444d969
+          EXPECTED_SOURCE_SUMS: c88332841804f6b5815aea5c5127f2565cc2aca9081ebf3d3f933f4f296d695f
         run: |
           printf '%s  SOURCE_SHA256SUMS\n' "$EXPECTED_SOURCE_SUMS" | sha256sum --check --strict
           sha256sum --check --strict SOURCE_SHA256SUMS
@@ -157,7 +157,7 @@ jobs:
       - name: Verify frozen helper bytes before executing any helper
         working-directory: scripts/statistical-levels-release
         env:
-          EXPECTED_SOURCE_SUMS: a6b3c2ad49d7d5e285636482f86dda91c314b8587a2b2efae2a75f1d1444d969
+          EXPECTED_SOURCE_SUMS: c88332841804f6b5815aea5c5127f2565cc2aca9081ebf3d3f933f4f296d695f
         run: |
           printf '%s  SOURCE_SHA256SUMS\n' "$EXPECTED_SOURCE_SUMS" | sha256sum --check --strict
           sha256sum --check --strict SOURCE_SHA256SUMS
@@ -206,7 +206,7 @@ jobs:
         id: source_integrity
         working-directory: scripts/statistical-levels-release
         env:
-          EXPECTED_SOURCE_SUMS: a6b3c2ad49d7d5e285636482f86dda91c314b8587a2b2efae2a75f1d1444d969
+          EXPECTED_SOURCE_SUMS: c88332841804f6b5815aea5c5127f2565cc2aca9081ebf3d3f933f4f296d695f
         run: |
           printf '%s  SOURCE_SHA256SUMS\n' "$EXPECTED_SOURCE_SUMS" | sha256sum --check --strict
           sha256sum --check --strict SOURCE_SHA256SUMS
@@ -265,7 +265,7 @@ jobs:
         if: always() && steps.source_integrity.outcome == 'success'
         working-directory: scripts/statistical-levels-release
         env:
-          EXPECTED_SOURCE_SUMS: a6b3c2ad49d7d5e285636482f86dda91c314b8587a2b2efae2a75f1d1444d969
+          EXPECTED_SOURCE_SUMS: c88332841804f6b5815aea5c5127f2565cc2aca9081ebf3d3f933f4f296d695f
           PROBE_RESOLVE_OUTCOME: ${{ steps.resolve.outcome }}
           PROBE_QA_OUTCOME: ${{ steps.qa.outcome }}
           PROBE_AWS_ASSUME_OUTCOME: ${{ steps.aws_assume.outcome }}

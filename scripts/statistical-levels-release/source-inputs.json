@@ -1,7 +1,7 @@
 {
-  "components/layout/Footer.tsx": "67fc725c0a66ec399419b7347e7aa333ce97737727edc12cbb9fb637bc1cb427",
-  "components/layout/Header.tsx": "7432e732d46151a099f77e9b3c34eed3a6f38507dc46a4c9227d064c12cd6fa0",
-  "components/layout/LanguageSwitcher.tsx": "83fd058eca0d2772ad98ed41cf9117f66afe17cd0d56d3e121ff5670e453d2ec",
+  "components/layout/Footer.tsx": "737f0f2eb16941815740dbfde9cbcd136acd9c1a845256dbdbf20b0264f68e61",
+  "components/layout/Header.tsx": "382bd6b09abfcd4bd8f4548e7a901335f210ef475375b6825db0707c82ac9117",
+  "components/layout/LanguageSwitcher.tsx": "19556da53333c8b17ccf12b911b0eff9f9e667d94a65920fe0aa7251e7761634",
   "components/statistical-levels/AdvancedSeasonalityPanel.tsx": "fcdf39f78835d5f69c7203e51bc72f26eeaebdca1cc13d308539d4f25d794e86",
   "components/statistical-levels/AssetComparisonTable.tsx": "24d50722a502ea8fc438f0305d63eac816092ca5a7d182d5460afc8d90cc48ae",
   "components/statistical-levels/AssetSelector.tsx": "8b61805d834e233b4c9ff20ff82d00cae017f6d3b3fca447c5d8705651a6d2d5",

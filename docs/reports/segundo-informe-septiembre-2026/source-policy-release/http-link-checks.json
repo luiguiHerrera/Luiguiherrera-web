@@ -1,0 +1,191 @@
+[
+  {
+    "url": "https://bitbo.io/treasuries/etf-flows/",
+    "httpStatus": "200",
+    "finalUrl": "https://bitbo.io/treasuries/etf-flows/",
+    "error": null,
+    "checkedAt": "2026-09-21T23:03:08.730688+00:00"
+  },
+  {
+    "url": "https://farside.co.uk/bitcoin-etf-flow-all-data/",
+    "httpStatus": "403",
+    "finalUrl": "https://farside.co.uk/bitcoin-etf-flow-all-data/",
+    "error": null,
+    "checkedAt": "2026-09-21T23:03:07.104484+00:00"
+  },
+  {
+    "url": "https://fred.stlouisfed.org/series/BAMLH0A0HYM2",
+    "httpStatus": "000",
+    "finalUrl": "https://fred.stlouisfed.org/series/BAMLH0A0HYM2",
+    "error": "curl: (92) HTTP/2 stream 1 was not closed cleanly: INTERNAL_ERROR (err 2)",
+    "checkedAt": "2026-09-21T23:03:07.167769+00:00"
+  },
+  {
+    "url": "https://fred.stlouisfed.org/series/QCNR628BIS",
+    "httpStatus": "000",
+    "finalUrl": "https://fred.stlouisfed.org/series/QCNR628BIS",
+    "error": "curl: (92) HTTP/2 stream 1 was not closed cleanly: INTERNAL_ERROR (err 2)",
+    "checkedAt": "2026-09-21T23:03:07.141581+00:00"
+  },
+  {
+    "url": "https://fred.stlouisfed.org/series/VIXCLS",
+    "httpStatus": "000",
+    "finalUrl": "https://fred.stlouisfed.org/series/VIXCLS",
+    "error": "curl: (92) HTTP/2 stream 1 was not closed cleanly: INTERNAL_ERROR (err 2)",
+    "checkedAt": "2026-09-21T23:03:07.160826+00:00"
+  },
+  {
+    "url": "https://hiringlab.indeed.com/2026/09/17/ai-exposure-isnt-squeezing-advertised-pay-in-the-us-its-boosting-it/",
+    "httpStatus": "200",
+    "finalUrl": "https://hiringlab.indeed.com/2026/09/17/ai-exposure-isnt-squeezing-advertised-pay-in-the-us-its-boosting-it/",
+    "error": null,
+    "checkedAt": "2026-09-21T23:03:07.755948+00:00"
+  },
+  {
+    "url": "https://river.com/content/the-case-for-a-10-bitcoin-allocation",
+    "httpStatus": "200",
+    "finalUrl": "https://river.com/content/the-case-for-a-10-bitcoin-allocation",
+    "error": null,
+    "checkedAt": "2026-09-21T23:03:09.064154+00:00"
+  },
+  {
+    "url": "https://suameca.banrep.gov.co/estadisticas-economicas/informacionSerie/59/tasas_interes_politica_monetaria",
+    "httpStatus": "200",
+    "finalUrl": "https://suameca.banrep.gov.co/estadisticas-economicas/informacionSerie/59/tasas_interes_politica_monetaria",
+    "error": null,
+    "checkedAt": "2026-09-21T23:03:08.276567+00:00"
+  },
+  {
+    "url": "https://www.aaii.com/sentimentsurvey",
+    "httpStatus": "403",
+    "finalUrl": "https://www.aaii.com/sentimentsurvey",
+    "error": null,
+    "checkedAt": "2026-09-21T23:03:07.263915+00:00"
+  },
+  {
+    "url": "https://www.alianza.com.co/",
+    "httpStatus": "200",
+    "finalUrl": "https://www.alianza.com.co/",
+    "error": null,
+    "checkedAt": "2026-09-21T23:03:07.437465+00:00"
+  },
+  {
+    "url": "https://www.alphavantage.co/documentation/#daily",
+    "httpStatus": "200",
+    "finalUrl": "https://www.alphavantage.co/documentation/#daily",
+    "error": null,
+    "checkedAt": "2026-09-21T23:03:08.034462+00:00"
+  },
+  {
+    "url": "https://www.balticexchange.com/en/data-services/WeeklyRoundup/tanker/news/2026/tanker-report-week-38.html",
+    "httpStatus": "200",
+    "finalUrl": "https://www.balticexchange.com/en/data-services/WeeklyRoundup/tanker/news/2026/tanker-report-week-38.html",
+    "error": null,
+    "checkedAt": "2026-09-21T23:03:07.456130+00:00"
+  },
+  {
+    "url": "https://www.bea.gov/news/schedule/full",
+    "httpStatus": "200",
+    "finalUrl": "https://www.bea.gov/news/schedule/full",
+    "error": null,
+    "checkedAt": "2026-09-21T23:03:07.965706+00:00"
+  },
+  {
+    "url": "https://www.boj.or.jp/en/mopo/mpmdeci/mpr_2026/k260918a.pdf",
+    "httpStatus": "200",
+    "finalUrl": "https://www.boj.or.jp/en/mopo/mpmdeci/mpr_2026/k260918a.pdf",
+    "error": null,
+    "checkedAt": "2026-09-21T23:03:08.003734+00:00"
+  },
+  {
+    "url": "https://www.boj.or.jp/en/mopo/mpmdeci/mpr_2026/k260918b.pdf",
+    "httpStatus": "200",
+    "finalUrl": "https://www.boj.or.jp/en/mopo/mpmdeci/mpr_2026/k260918b.pdf",
+    "error": null,
+    "checkedAt": "2026-09-21T23:03:08.006065+00:00"
+  },
+  {
+    "url": "https://www.carsongroup.com/insights/blog/a-dove-in-hawks-clothing/",
+    "httpStatus": "403",
+    "finalUrl": "https://www.carsongroup.com/insights/blog/a-dove-in-hawks-clothing/",
+    "error": null,
+    "checkedAt": "2026-09-21T23:03:07.942672+00:00"
+  },
+  {
+    "url": "https://www.carsongroup.com/insights/blog/why-the-worst-month-of-the-year-likely-wont-bring-rain/",
+    "httpStatus": "403",
+    "finalUrl": "https://www.carsongroup.com/insights/blog/why-the-worst-month-of-the-year-likely-wont-bring-rain/",
+    "error": null,
+    "checkedAt": "2026-09-21T23:03:08.032668+00:00"
+  },
+  {
+    "url": "https://www.eia.gov/dnav/pet/hist/RBRTED.htm",
+    "httpStatus": "200",
+    "finalUrl": "https://www.eia.gov/dnav/pet/hist/RBRTED.htm",
+    "error": null,
+    "checkedAt": "2026-09-21T23:03:18.840658+00:00"
+  },
+  {
+    "url": "https://www.eia.gov/dnav/pet/hist/RWTCd.htm",
+    "httpStatus": "200",
+    "finalUrl": "https://www.eia.gov/dnav/pet/hist/RWTCd.htm",
+    "error": null,
+    "checkedAt": "2026-09-21T23:03:19.189405+00:00"
+  },
+  {
+    "url": "https://www.eia.gov/outlooks/steo/",
+    "httpStatus": "200",
+    "finalUrl": "https://www.eia.gov/outlooks/steo/",
+    "error": null,
+    "checkedAt": "2026-09-21T23:03:18.958097+00:00"
+  },
+  {
+    "url": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20260916a.htm",
+    "httpStatus": "200",
+    "finalUrl": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20260916a.htm",
+    "error": null,
+    "checkedAt": "2026-09-21T23:03:08.244949+00:00"
+  },
+  {
+    "url": "https://www.federalreserve.gov/releases/h15/",
+    "httpStatus": "200",
+    "finalUrl": "https://www.federalreserve.gov/releases/h15/",
+    "error": null,
+    "checkedAt": "2026-09-21T23:03:08.149075+00:00"
+  },
+  {
+    "url": "https://www.gold.org/goldhub/research/gold-etfs-holdings-and-flows/2026/09",
+    "httpStatus": "200",
+    "finalUrl": "https://www.gold.org/goldhub/research/gold-etfs-holdings-and-flows/2026/09",
+    "error": null,
+    "checkedAt": "2026-09-21T23:03:08.265024+00:00"
+  },
+  {
+    "url": "https://www.goldmansachs.com/insights/articles/can-the-s-and-p-500-rally-as-treasury-yields-rise",
+    "httpStatus": "200",
+    "finalUrl": "https://www.goldmansachs.com/insights/articles/can-the-s-and-p-500-rally-as-treasury-yields-rise",
+    "error": null,
+    "checkedAt": "2026-09-21T23:03:08.574579+00:00"
+  },
+  {
+    "url": "https://www.goldmansachs.com/insights/articles/s-and-p-500-forecast-to-climb-as-earnings-growth-powers-stocks-higher",
+    "httpStatus": "200",
+    "finalUrl": "https://www.goldmansachs.com/insights/articles/s-and-p-500-forecast-to-climb-as-earnings-growth-powers-stocks-higher",
+    "error": null,
+    "checkedAt": "2026-09-21T23:03:09.052464+00:00"
+  },
+  {
+    "url": "https://www.spglobal.com/spdji/en/methodology/article/sp-us-indices-methodology/",
+    "httpStatus": "403",
+    "finalUrl": "https://www.spglobal.com/spdji/en/methodology/article/sp-us-indices-methodology/",
+    "error": null,
+    "checkedAt": "2026-09-21T23:03:08.450850+00:00"
+  },
+  {
+    "url": "https://www.ssga.com/library-content/products/fund-data/etfs/us/navhist-us-en-gld.xlsx",
+    "httpStatus": "200",
+    "finalUrl": "https://www.ssga.com/library-content/products/fund-data/etfs/us/navhist-us-en-gld.xlsx",
+    "error": null,
+    "checkedAt": "2026-09-21T23:03:09.639308+00:00"
+  }
+]

@@ -9,20 +9,32 @@ export function getCalendarConfig(report: MarketReport) {
     year,
     month,
     locale,
+    calendarView: report.presentation?.calendarView,
+    calendarStartDate: report.presentation?.calendarStartDate,
     title: report.presentation?.localizedTitle ?? new Intl.DateTimeFormat(locale, { month: "long", year: "numeric", timeZone: "UTC" }).format(new Date(Date.UTC(year, month - 1, 1))),
     primaryTimeZone: report.presentation?.primaryTimeZone ?? "UTC",
     displayTimeZones: report.presentation?.displayTimeZones ?? [],
   };
 }
 
-export function getMonthGrid(year: number, month: number) {
+export function getMonthGrid(year: number, month: number, presentation: { calendarView?: "full-month" | "remaining"; calendarStartDate?: string } = {}) {
   const dayCount = new Date(Date.UTC(year, month, 0)).getUTCDate();
   const sundayIndex = new Date(Date.UTC(year, month - 1, 1)).getUTCDay();
   const mondayOffset = (sundayIndex + 6) % 7;
   const cellCount = Math.ceil((mondayOffset + dayCount) / 7) * 7;
-  return Array.from({ length: cellCount }, (_, index) => {
-    const day = index - mondayOffset + 1;
-    return day >= 1 && day <= dayCount ? day : null;
+  let startDay = 1;
+  if (presentation.calendarView === "remaining") {
+    const start = presentation.calendarStartDate ?? "";
+    const prefix = `${year}-${String(month).padStart(2, "0")}-`;
+    startDay = Number(start.slice(-2));
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(start) || !start.startsWith(prefix) || startDay < 1 || startDay > dayCount) {
+      throw new Error("Remaining calendar requires a valid calendarStartDate in its month");
+    }
+  }
+  const firstCell = Math.floor((mondayOffset + startDay - 1) / 7) * 7;
+  return Array.from({ length: cellCount - firstCell }, (_, index) => {
+    const day = index + firstCell - mondayOffset + 1;
+    return day >= startDay && day <= dayCount ? day : null;
   });
 }
 

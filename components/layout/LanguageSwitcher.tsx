@@ -1,6 +1,6 @@
 "use client";
 
-import Link from "next/link";
+import { PreserveReportLink as Link } from "./PreserveReportLink";
 import { usePathname, useSearchParams } from "next/navigation";
 import { localeFromPathname, type Locale } from "@/lib/i18n/locales";
 import { translatePathname, withSearch } from "@/lib/i18n/routes";

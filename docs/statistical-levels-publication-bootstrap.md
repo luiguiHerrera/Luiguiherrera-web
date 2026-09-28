@@ -16,6 +16,31 @@ The founder's 2026-09-08 decision is to adopt an already-published baseline. The
 
 Authority A, `20260908T101853239Z-d6062b3a-bd2f-4710-8875-9c27f1449e89`, remains valid historical evidence. Neither A nor N's earlier commit is a release target. Publishing their old trees would undo current work. Copying N onto current Production would produce no changes, so no reconstruction or synthetic publication commit is required.
 
+## Prospective execution-lineage requalification
+
+The local Step 26.5.3 candidate requalifies the existing production identity as
+`c60b17c6ddc5a08fcd402328f69e73f6e1e41b5f` / `dpl_BBWPr52pL9JmHQwtAGKkNNSg9a8Q`.
+This later report-correction deployment retains the same 82 Statistical Levels
+publication files and September 8 authority recorded above. The historical
+certified-state description remains evidence of that earlier identity.
+
+The reconciled execution source must descend from both this production commit
+and approved execution `0c8fce262fce44650729883862ec948778ebea45`. Its execution
+commit is distinct from the production target: constructing or reviewing it does
+not certify production, create a publication marker, promote a Preview, or
+establish external approval. The deployed controller baseline must be separately
+reconciled before a hosted operation can qualify. Fresh exact execution CI,
+workflow approval/readback, registered compatible Preview proof, and same-run
+ADOPT production QA/attestation remain mandatory governed gates.
+
+The report preservation fixture in
+`docs/statistical-levels-execution-requalification-manifest.json` distinguishes
+unchanged archived report inputs from the already-approved execution candidate's
+later active Statistical Levels snapshots. It also binds the four report exports
+that the original correction test explicitly permitted to change to their exact
+corrected production bytes. It does not overwrite the historical report baseline
+or change the authority selected for existing-production ADOPT.
+
 ## One-time baseline adoption
 
 `ADOPT_EXISTING_PRODUCTION_BASELINE` performs read, verify, certify and create-marker operations. It does not promote or rebuild a deployment. Its runtime has no Vercel write method or write-capable HTTP interface. Its separate fixed promotion operation is `PROMOTE_EXACT_STATISTICAL_LEVELS_CANDIDATE`.

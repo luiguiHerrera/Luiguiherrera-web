@@ -14,10 +14,10 @@ function setup(kind='T1') {
  const c=createAdoptRequestEvidence(origin),raw=[];c.listenerStart(page);c.pageLifecycle(page,'ACTIVE');c.observability.context(transitions[kind]);c.start(page,kind);
  const control=actionControls[kind],a=c.action(page,control.type,control.type==='CLICK'?control.selector:selectionExpression(kind));
  c.registerAction({...a,script_sha256:scriptFingerprint(page,'marker'),source_sha256:sha(control.type==='CLICK'?listenerMarker:selectionExpression(kind)),source_url_sha256:sha('https://sl-qa.invalid/action/'+a.action_instance_id)});c.beginAction(a.action_instance_id);
- function request({id='r',marker=true,headers={RSC:'1','Next-Router-Prefetch':'0'},redirect=false,incomplete=false,parent,sourceURL}={}) {
+ function request({id='r',marker=true,headers={RSC:'1','Next-Router-Prefetch':'0'},redirect=false,incomplete=false,parent,sourceURL,stack}={}) {
    const url=origin+'/niveles-estadisticos?'+new URLSearchParams(transitions[kind].target_state);
    const event={requestId:id,type:'Fetch',frameId:'f',loaderId:'l',documentURL:origin+'/niveles-estadisticos',request:{url,method:'GET',headers},
-     initiator:{type:'script',...(parent?{requestId:parent}:{}),stack:{callFrames:[{scriptId:marker?'marker':'unrelated',url:sourceURL??origin+'/app.js',lineNumber:0,columnNumber:0}],...(incomplete?{parentId:{id:'unresolved'}}:{})}},...(redirect?{redirectResponse:{status:307}}:{})};
+     initiator:{type:'script',...(parent?{requestId:parent}:{}),stack:stack??{callFrames:[{scriptId:marker?'marker':'unrelated',url:sourceURL??origin+'/app.js',lineNumber:0,columnNumber:0}],...(incomplete?{parentId:{id:'unresolved'}}:{})}},...(redirect?{redirectResponse:{status:307}}:{})};
    const b=c.request(page,event);return {event,b};
  }
  function fail(r) {c.response(page,{requestId:r.event.requestId,response:{status:200}});c.failure(page,{requestId:r.event.requestId,canceled:true,errorText:'net::ERR_ABORTED'},raw.length);
@@ -153,4 +153,103 @@ test('prefetch causality: script parent is explicit even when tested-action owne
 test('prefetch causality: browser Sec-Purpose prefetch cannot be counted as a second transition consumer',()=>{
  const f=setup();f.fail(f.request());f.fail(f.request({id:'browser-prefetch',headers:{RSC:'1','Sec-Purpose':'prefetch;prerender'}}));const v=f.finish();
  assert.equal(v.receipts.records.length,1);assert.equal(v.result.ledger.length,2);assert.equal(v.result.required_application_request_failures,1);assert.equal(v.evidence.requests[1].prefetch_classification,'YES');assert.equal(v.evidence.requests[1].consumer,'PREFETCH');assert.equal(v.evidence.requests[1].request_evidence.consumer.kind,'unknown');assert.equal(v.audit().status,'PASS');
+});
+
+// Literal independently authored CDP observations. Expected hashes/callsites are
+// not emitted by the classifier under test. The real application test below
+// separately requires the browser to produce the same native witness.
+const navigationScript={scriptId:'next',hash:'0b743564483f80db5a365086eff276584467f2631408c2dc19ef1f3314f43125',length:159932,startLine:0,startColumn:0,isLiveEdit:false,executionContextAuxData:{isDefault:true}};
+const navigationStack=()=>({callFrames:[{scriptId:'next',lineNumber:1,columnNumber:34882},{scriptId:'next',lineNumber:0,columnNumber:18680},{scriptId:'next',lineNumber:0,columnNumber:16645}],parent:{callFrames:[{scriptId:'marker',lineNumber:0,columnNumber:0}]}});
+function navigationFixture({script={},stack=navigationStack(),headers={RSC:'1'},count=1,abort=true,parent,expectedPrefetch='NO'}={}) {
+ const f=setup();f.c.scriptParsed(page,{...navigationScript,...script},f.raw);
+ for(let i=0;i<count;i++) {
+  const r=f.request({id:'native-'+i,headers,stack:structuredClone(stack),parent});
+  if(abort){f.fail(r);f.raw.at(-1).prefetch=expectedPrefetch==='UNKNOWN'?'UNKNOWN':expectedPrefetch==='YES';}else{f.c.response(page,{requestId:r.event.requestId,response:{status:200}});f.c.finished(page,{requestId:r.event.requestId});}
+ }
+ return {...f,...f.finish()};
+}
+for(const abort of [false,true])test('native Next proof: exact independent completed primary '+(abort?'retained conditional abort':'success without receipt'),()=>{
+ const f=navigationFixture({abort});assert.equal(f.audit().status,'PASS');const r=f.evidence.requests[0];
+ assert.equal(r.prefetch_classification,'NO');assert.equal(r.classification_evidence.prefetch,'NATIVE_NEXT_NAVIGATION');assert.equal(r.request_role,'PRIMARY_APPLICATION');
+ assert.equal(f.evidence.requests.filter(r=>r.causality_status==='PROVEN').length,1);assert.equal(f.result.ledger.length,abort?1:0);
+ assert.equal(r.terminal_state,abort?'FAILED':'FINISHED');assert.equal(f.receipts.records.length,abort?1:0);assert.equal(f.result.required_application_request_failures,0);
+});
+for(const [name,options]of Object.entries({
+ 'different executable bytes':{expectedPrefetch:'UNKNOWN',script:{hash:'0'.repeat(64)}},
+ 'wrong native callsite':{expectedPrefetch:'UNKNOWN',stack:{...navigationStack(),callFrames:[{scriptId:'next',lineNumber:0,columnNumber:16644}]}},
+ 'full-prefetch createFetch without navigation':{expectedPrefetch:'UNKNOWN',stack:{...navigationStack(),callFrames:navigationStack().callFrames.slice(0,2)}},
+ 'unresolved async parent':{expectedPrefetch:'UNKNOWN',stack:{...navigationStack(),parentId:{id:'unknown'}}},
+ 'unrelated action':{stack:{callFrames:navigationStack().callFrames,parent:{callFrames:[{scriptId:'unrelated',lineNumber:0,columnNumber:0}]}}},
+ 'live-edited code':{expectedPrefetch:'UNKNOWN',script:{isLiveEdit:true}},
+ 'isolated context':{expectedPrefetch:'UNKNOWN',script:{executionContextAuxData:{isDefault:false}}},
+ 'explicit prefetch conflicts with navigation':{expectedPrefetch:'UNKNOWN',headers:{RSC:'1','Next-Router-Prefetch':'1'}},
+ 'unknown marker conflicts with navigation':{expectedPrefetch:'UNKNOWN',headers:{RSC:'1','Next-Router-Prefetch':'unknown'}},
+ 'zero primary':{count:0},'two same-URL primaries':{count:2},
+ 'four unproven candidates':{expectedPrefetch:'UNKNOWN',count:4,script:{hash:'0'.repeat(64)}},
+ 'unmapped parent':{parent:'missing'},
+}))test('native Next proof fails closed: '+name,()=>{
+ const f=navigationFixture(options);assert.equal(f.audit().status,'FAIL');assert.ok(f.evidence.requests.every(r=>r.causality_status==='UNKNOWN'));
+ assert.equal(f.result.ledger.length,options.count??1);assert.equal(f.result.required_application_request_failures,options.count??1);
+});
+for(const [name,mutate]of Object.entries({
+ 'missing script observation':f=>f.evidence.journal=f.evidence.journal.filter(e=>e.kind!=='NATIVE_SCRIPT_INGRESS'),
+ 'cross-page script observation':f=>f.evidence.journal.find(e=>e.kind==='NATIVE_SCRIPT_INGRESS').page_id='page-99',
+ 'forged intent callsite':f=>f.evidence.requests[0].native_intent.frames[2].column++,
+ 'forged role':f=>f.evidence.requests[0].request_role='RSC_CHILD',
+ 'missing abort receipt':f=>{f.evidence.transition_receipts.records=[];},
+ 'success substituted for FAILED':f=>f.evidence.requests[0].terminal_state='FINISHED',
+}))test('native Next independent replay rejects '+name,()=>{const f=navigationFixture();assert.equal(f.audit().status,'PASS');mutate(f);assert.equal(f.audit().status,'FAIL');});
+
+test('native roles: proven RSC child stays distinct and cannot obtain a primary abort exemption',()=>{
+ const f=setup();const root=f.request();f.c.response(page,{requestId:'r',response:{status:200}});f.c.finished(page,{requestId:'r'});
+ f.fail(f.request({id:'child',parent:'r'}));const v=f.finish();
+ assert.deepEqual(v.evidence.requests.map(r=>r.request_role),['PRIMARY_APPLICATION','RSC_CHILD']);
+ assert.equal(v.evidence.requests.filter(r=>r.causality_status==='PROVEN').length,1);
+ assert.equal(v.result.ledger.length,1);assert.equal(v.result.required_application_request_failures,1);assert.equal(v.receipts.records.length,0);
+ assert.equal(root.b.request_instance_id,v.evidence.requests[1].causal_parent);assert.equal(v.audit().status,'PASS');
+});
+
+// Uses the unchanged application and frozen UI actions as an independent local
+// producer. No classifier-generated headers, receipt fixtures or fetch patch.
+// The caller supplies an already built locked application on loopback only.
+test('locked Next application: T1–T4 native navigation proof and exact conditional accounting',{skip:!process.env.SL_NEXT_LOCAL_ORIGIN,timeout:600000},async()=>{
+ const origin=process.env.SL_NEXT_LOCAL_ORIGIN;
+ assert.equal(new URL(origin).hostname,'127.0.0.1');
+ const {createReadOnlyHarness}=await import('../scripts/browser-harness-base.mjs');
+ const {renderFixtures}=await import('../scripts/render-fixtures.mjs');
+ const {tmpdir}=await import('node:os');
+ const out=process.env.SL_NEXT_LOCAL_EVIDENCE??await fs.mkdtemp(path.join(tmpdir(),'sl-native-next-'));
+ await fs.mkdir(out,{recursive:true});await renderFixtures(process.cwd(),out);
+ const harness=await createReadOnlyHarness({origin},undefined,out,true),argv=process.argv;
+ globalThis.__SL_RELEASE_QA__={...harness,protectedGet:async url=>{assert.equal(new URL(url).origin,origin);return fetch(url,{redirect:'error'});}};
+ process.argv=[process.execPath,'local-native-proof',origin,'0',out];let passed=false;
+ try {
+  await import('../scripts/qa/qa-statistical-levels.mjs');
+  const report=JSON.parse(await fs.readFile(path.join(out,'browser-report.json'),'utf8'));
+  assert.equal(report.PASS,true);passed=true;
+ }finally{delete globalThis.__SL_RELEASE_QA__;process.argv=argv;await harness.finish(passed);}
+ const evidence=JSON.parse(await fs.readFile(path.join(out,'adopt-request-evidence.json'),'utf8'));
+ for(const kind of ['T1','T2','T3','T4']) {
+  const primaries=evidence.requests.filter(r=>r.transition_type===kind&&r.causality_status==='PROVEN');assert.equal(primaries.length,1);
+  assert.equal(primaries[0].classification_evidence.prefetch,'NATIVE_NEXT_NAVIGATION');assert.equal(primaries[0].request_role,'PRIMARY_APPLICATION');
+ }
+});
+
+test('native action context survives a later ambient UI poll without rewriting that observation',()=>{
+ const f=setup();f.c.observability.context({suite_id:'poll',test_id:'later',action_id:'later'});f.fail(f.request());const v=f.finish();
+ assert.equal(v.audit().status,'PASS');const r=v.evidence.requests[0];assert.equal(r.request_context_binding.source,'NATIVE_ACTION_ANCESTRY');
+ assert.notEqual(r.request_context_binding.observed_context_sha256,r.request_evidence.request_start_context_sha256);
+ r.request_context_binding.action_instance_id='action-wrong';assert.equal(v.audit().status,'FAIL');
+});
+test('ambient context drift cannot grant an unrelated request action ownership',()=>{
+ const f=setup();f.c.observability.context({suite_id:'poll',test_id:'later',action_id:'later'});f.fail(f.request({marker:false}));const v=f.finish();
+ assert.equal(v.audit().status,'FAIL');assert.equal(v.evidence.requests[0].request_context_binding.source,'OBSERVED_CONTEXT');assert.equal(v.result.required_application_request_failures,1);
+});
+
+test('positive causal request set: successful primary and explicit finished RSC child both remain represented',()=>{
+ const f=setup();f.request();f.request({id:'child',parent:'r'});
+ for(const requestId of ['r','child']){f.c.response(page,{requestId,response:{status:200}});f.c.finished(page,{requestId});}
+ const v=f.finish();assert.equal(v.audit().status,'PASS');assert.equal(v.result.required_application_request_failures,0);
+ assert.deepEqual(v.evidence.requests.map(r=>r.request_role),['PRIMARY_APPLICATION','RSC_CHILD']);assert.equal(v.receipts.records.length,0);
+ assert.equal(v.evidence.transition_accounting[0].request_ids.length,2);
 });

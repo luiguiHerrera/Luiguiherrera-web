@@ -236,8 +236,8 @@
   "repository_owner_id": "280950454",
   "workflow_name": "Statistical Levels controlled release",
   "baseline": {
-    "production_git_sha": "4ee6adb006f360fea13837db5f7d45815f297b55",
-    "production_deployment_id": "dpl_FwDTx8HZPNdPZDEiFKGxAVjxfcZ6",
+    "production_git_sha": "c60b17c6ddc5a08fcd402328f69e73f6e1e41b5f",
+    "production_deployment_id": "dpl_BBWPr52pL9JmHQwtAGKkNNSg9a8Q",
     "authority_run_id": "20260908T125656658Z-a4743804-e5f1-495a-b34e-5948d5db4d2d",
     "sealed_manifest_sha256": "129f45149f6a280f1681ce3903a304e18a07dbaa6894bcc8e9b94587dbdf26cb",
     "main_sha_observed": "9fd1b9205e40a0e68e90e780892726353175c0ae",

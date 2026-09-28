@@ -14,6 +14,40 @@ export function selectionExpression(kind) {
   return `(() => { const el=document.querySelector(${JSON.stringify(c.selector)}); el.value=${JSON.stringify(c.value)};el.dispatchEvent(new Event('change',{bubbles:true}));})()`;
 }
 export const scriptFingerprint=(page,id)=>sha(page+':script:'+id);
+// Reviewed locked Next 16.3.6 production bytes. CDP scriptParsed.hash is the
+// SHA256 of executable source, not its URL/name. These exact adjacent native
+// frames are fetch wrapper -> createFetch -> fetchServerResponse. Full prefetch
+// uses createFetch directly and does NOT enter fetchServerResponse. A different
+// build/callsite remains UNKNOWN; do not infer intent from missing headers.
+export const navigationCode = Object.freeze({
+  sha256:'0b743564483f80db5a365086eff276584467f2631408c2dc19ef1f3314f43125',
+  length:159932,frames:Object.freeze([[1,34882],[0,18680],[0,16645]].map(Object.freeze))
+});
+export function nativeNavigationProven(witness) {
+  const s=witness?.script,frames=witness?.frames;
+  return !!(s&&s.code_sha256===navigationCode.sha256&&s.length===navigationCode.length&&
+    s.default_context===true&&s.live_edit===false&&s.start_line===0&&s.start_column===0&&
+    witness.complete===true&&Array.isArray(frames)&&frames.length>=3&&
+    navigationCode.frames.every(([line,column],i)=>frames[i].script_sha256===s.script_sha256&&frames[i].line===line&&frames[i].column===column));
+}
+export function nativeIntentSignals(base,type,witness) {
+  if(!nativeNavigationProven(witness))return base;
+  if(type!=='Fetch'||base.rsc!=='YES'||base.prefetch==='YES'||!witness.header_compatible)return {rsc:base.rsc,prefetch:'UNKNOWN'};
+  return {rsc:'YES',prefetch:'NO'};
+}
+// Child/redirect roles never receive the primary receipt exception. Role is
+// separate from terminal lifecycle (including FAILED) and from gate admission.
+export function requestRole(r,actions,requests) {
+  const c=causalDecision(r,actions,requests);
+  if(r.prefetch_classification==='YES')return 'PREFETCH';
+  if(r.causal_relation==='REDIRECT'&&requests.some(p=>p.request_id===r.redirect_parent_id&&p.terminal_state==='REDIRECTED'))return 'REDIRECT';
+  const p=requests.find(p=>p.request_id===r.causal_parent);
+  if(p&&r.causal_relation==='CDP_INITIATOR_REQUEST'&&r.prefetch_classification==='NO'&&
+    c.action_ancestry==='PROVEN'&&causalDecision(p,actions,requests).action_instance_id===c.action_instance_id&&
+    p.request_evidence.page_id===r.request_evidence.page_id&&p.request_evidence.document_instance_id===r.request_evidence.document_instance_id)
+    return r.rsc_classification==='YES'?'RSC_CHILD':'SECONDARY_APPLICATION';
+  return c.status==='PROVEN'?'PRIMARY_APPLICATION':'UNRESOLVED_RELEVANT';
+}
 export function initiatorScripts(page,initiator) {
   const scripts=[];let stack=initiator?.stack,depth=0;
   while(stack&&depth++<32) {
@@ -129,7 +163,11 @@ export function causalDecision(request,actions,requests) {
   if(matches.length!==1||!request.initiator_scripts.complete)return {status:'UNKNOWN',action_instance_id:'UNKNOWN',action_ancestry:'UNKNOWN'};
   const a=matches[0],control=actionControls[a.kind];
   const expectedSource=control?.type==='CLICK'?listenerMarker:control?selectionExpression(a.kind):'';
-  const siblings=requests.filter(r=>r.initiator_scripts.scripts.includes(a.script_sha256)&&r.prefetch_classification!=='YES');
+  const siblings=requests.filter(r=>r.initiator_scripts.scripts.includes(a.script_sha256)&&r.prefetch_classification!=='YES'&&
+    !(r.causal_relation==='CDP_INITIATOR_REQUEST'&&r.prefetch_classification==='NO'&&r.rsc_classification==='YES'&&r.initiator_scripts.complete&&
+      requests.some(p=>p.request_id===r.causal_parent&&p.event_sequences[0]<r.event_sequences[0]&&p.causal_relation==='CDP_SCRIPT_INITIATOR'&&
+        p.protocol_request_sha256===r.initiator.parent_protocol_sha256&&p.initiator_scripts.scripts.includes(a.script_sha256)&&
+        p.request_evidence.page_id===r.request_evidence.page_id&&p.request_evidence.document_instance_id===r.request_evidence.document_instance_id)));
   const ancestry=!!control&&a.source_sha256===sha(expectedSource)&&a.dispatch_ack===true&&
     (control.type==='EVALUATE'||a.event_seen===true&&a.listener_calls>0);
   const proven=ancestry&&

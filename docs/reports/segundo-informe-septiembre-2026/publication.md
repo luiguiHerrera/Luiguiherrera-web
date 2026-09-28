@@ -2,7 +2,9 @@
 
 Decisión del Founder: PUBLICAR, 21/09/2026.
 
-Base de producción: c74e95c3f0b4e70d1a830452dc781357145cd7eb.
+Base del dominio público: 4ee6adb006f360fea13837db5f7d45815f297b55 (despliegue dpl_FwDTx8HZPNdPZDEiFKGxAVjxfcZ6).
+
+El commit d237806 incorpora el informe en vercel-deployment, pero esa rama genera Preview. Este despliegue aplica únicamente ese commit sobre la versión activa del dominio, sin promover los demás cambios pendientes de la rama.
 URL: https://www.luiguiherrera.com/informes/segundo-informe-septiembre-2026
 
 El Segundo Informe queda como única edición actual. El Primero pasa a archivado en el registro; sus contenidos, correcciones posteriores y descargas de producción se conservan.

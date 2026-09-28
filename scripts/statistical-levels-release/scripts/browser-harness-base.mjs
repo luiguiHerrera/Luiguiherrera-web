@@ -4,7 +4,7 @@ import path from 'node:path';
 import { need, headersForRequest, protectedGet, publicProductionGet } from './release-core.mjs';
 import { account, irrelevantNativeLevels } from './network-accounting.mjs';
 import { createAdoptRequestEvidence, auditAdoptRequestEvidence } from './adopt-request-evidence.mjs';
-import { installCausalBridge, classifyRequestSignals } from './adopt-causal-bridge.mjs';
+import { installCausalBridge } from './adopt-causal-bridge.mjs';
 import { transitions } from './probe-transition-receipts.mjs';
 import { assetTransitionReadinessExpression } from './qa/asset-transition-readiness.mjs';
 
@@ -29,6 +29,7 @@ export async function createReadOnlyHarness(target, tokenSource, out, production
     const onNative=(type,interpret)=>cdp.on(type,native=>adopt
       ? adopt.nativeIngress(pageId,type,native,events,safe=>interpret(safe)) : interpret(native));
     if (adopt) {
+      cdp.on('Debugger.scriptParsed', native => adopt.scriptParsed(pageId,native,events));
       onNative('Page.frameNavigated', e => adopt.frameNavigated(pageId, e));
       onNative('Network.loadingFinished', e => {if(!retainUnresolved('FINISHED',e))adopt.finished(pageId,e);});
     }
@@ -53,7 +54,7 @@ export async function createReadOnlyHarness(target, tokenSource, out, production
     onNative('Network.requestWillBeSent', e => {
       if(retainUnresolved('REQUEST',e))return;
       const headers = Object.fromEntries(Object.entries(e.request.headers).map(([k, v]) => [k.toLowerCase(), v]));
-      const signals = adopt ? classifyRequestSignals(e.request.headers,e.type) : null;
+      const signals = adopt ? adopt.classification(pageId,e) : null;
       requests.set(e.requestId, { ...(adopt ? { request_evidence: adopt.request(pageId, e) } : {}), url: e.request.url, type: e.type,
         rsc: signals?.rsc === 'UNKNOWN' ? 'UNKNOWN' : signals ? signals.rsc === 'YES' : headers.rsc === '1', prefetch: signals?.prefetch === 'UNKNOWN' ? 'UNKNOWN' : signals ? signals.prefetch === 'YES' : headers['next-router-prefetch'] === '1' || headers.purpose === 'prefetch' });
     });

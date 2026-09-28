@@ -1,0 +1,41 @@
+{
+  "schema": "bounded-v1/1",
+  "deployment": "dpl_FwDTx8HZPNdPZDEiFKGxAVjxfcZ6",
+  "commit": "4ee6adb006f360fea13837db5f7d45815f297b55",
+  "codeSha256": "b9822768cbda1954f571cc99d4b1c076ed931d21e568b1aaccc5c0857e33e2db",
+  "inputSha256": "ced4041872cff7f13dbf245ede900f7cb449a12acfd2f0e46012b5dea30433e9",
+  "inputCaptureDate": "2026-09-21",
+  "sectorDate": "2026-09-18",
+  "vixDate": "2026-09-17",
+  "exactHistoricalCacheProven": false,
+  "premise": "Hold the reconciled sector and VIX observations fixed. Their numeric replay is reproducible; their precise historical cache admission is not independently attested.",
+  "btcDomain": "All score-relevant branches, not selected example tables; primary/fallback/unavailable, all severities and both streak thresholds, all statuses and coverage penalty thresholds.",
+  "enumeratedCases": 6049,
+  "scoreRange": [
+    70,
+    77
+  ],
+  "labels": [
+    "Risk-on selectivo"
+  ],
+  "biases": [
+    "favorable"
+  ],
+  "classificationInvariant": true,
+  "pointScorePublished": false,
+  "confidencePointPublished": false,
+  "extremeWitnesses": [
+    {
+      "id": "negative/outflow/3/automated/primary/20",
+      "score": 70,
+      "label": "Risk-on selectivo",
+      "bias": "favorable"
+    },
+    {
+      "id": "positive/inflow/3/automated/primary/20",
+      "score": 77,
+      "label": "Risk-on selectivo",
+      "bias": "favorable"
+    }
+  ]
+}

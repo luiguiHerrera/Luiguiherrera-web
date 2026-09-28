@@ -4,11 +4,13 @@ type EditorialBylineProps = {
   automaticDataCutoffAt?: string;
   editorialCutoffAt?: string;
   locale: EditorialLocale;
+  linksOpenNewTab?: boolean;
   modifiedAt: string;
   publishedAt: string;
 };
 
 export function EditorialByline({
+  linksOpenNewTab,
   automaticDataCutoffAt,
   editorialCutoffAt,
   locale,
@@ -21,7 +23,7 @@ export function EditorialByline({
     <div className="mt-4 flex flex-wrap gap-x-4 gap-y-1 text-xs leading-5 text-muted">
       <p>
         {isSpanish ? "Por" : "By"}{" "}
-        <a className="font-semibold text-petrol underline decoration-petrol/30 underline-offset-4" href="https://www.luiguiherrera.com">
+        <a target={linksOpenNewTab ? "_blank" : undefined} rel={linksOpenNewTab ? "noopener noreferrer" : undefined} className="font-semibold text-petrol underline decoration-petrol/30 underline-offset-4" href="https://www.luiguiherrera.com">
           Luigui Herrera
         </a>
       </p>

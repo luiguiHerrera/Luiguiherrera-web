@@ -32,6 +32,7 @@ export type HistoricalAutomaticReadingsSnapshot = {
     sources: Array<{ label: string; href: string }>;
   };
   regime: {
+    reconstruction?: { scoreRange: [number, number]; methodology: string; methodologyHref: string };
     label: string;
     score: number | null;
     confidence: number | null;

@@ -12,12 +12,12 @@ const read = file => fs.readFile(new URL(file, root), 'utf8');
 const shared = {
   'scripts/release-core.mjs': 'c461b1af450c69007b4f5bfac9c21010ca475b843aec5fed3ff6fe6b8912dd70',
   'scripts/qa-runner.mjs': '4584b988912f702a3b79f8de19640dd8eb0c0ebf61e45d0330af6ae975c03262',
-  'scripts/browser-harness-base.mjs': 'a31d2f4b3b247b2d40ae0eb8c3d963fc5756b1d37fee701155f457866c771272',
+  'scripts/browser-harness-base.mjs': '4c1953a99841b6234dd9a5e5f5fb98fcf721e377d6b95c4157fc690a345fac4b',
   'scripts/browser-harness.mjs': '2896a2c3f2886321eb47291a007fdf272ec95f4f4a593362d9a4a4ca6f04bf4c',
   'scripts/runtime-io.mjs': 'b114b3e246ae4bdbf1af1a3823218b65f53a18ca26719a6740b11538344a912e',
   'scripts/cli.mjs': 'c353aca844d0d69973d0bcd8abd9bf9539fd908245aca49d0caffcdb4a8c2407',
   'scripts/invoke.mjs': '95902e9029354124eba014dab478324f2318caf3a7a5ddf26732211d5819d113',
-  'policy.json': '672c81cce8eb0e84869e111e4816a46716edf402f9a546caa06f3b33c8382aec',
+  'policy.json': 'e8865e7b7c392147f111a4f558434d536cbdfbb648d463053a74701b2bb98e9a',
   'controller-request-schema.json': 'd44337f72a9970d9db8e5d24ec1c400b4a5a4db9d4e3110b054727e6c9a224d3',
   'controller-qa-schema.json': '3fece1fd42493bc6210c1ea901459f50c85fc2deb24d177e0dadf51b35a063d8',
 };
@@ -58,7 +58,7 @@ test('17: probe entry defers OIDC creation to protected-baseline gate and never 
   assert.doesNotMatch(probe, /invoke\.mjs|environment:|contents: write|secrets:/);
 });
 
-test('18: ADOPT evidence integration is pinned; transport, validation and controller contracts remain frozen', async () => {
+test('18: requalified production target policy is pinned; ADOPT transport, validation and controller contracts remain frozen', async () => {
   for (const [file, expected] of Object.entries(shared)) assert.equal(digest(file==='scripts/release-core.mjs'?withoutReceiptClass(await read(file)):await read(file)), expected, file);
 });
 

@@ -1,0 +1,763 @@
+{
+  "schema": "statistical-levels.execution-requalification-preservation.v1",
+  "production_commit": "c60b17c6ddc5a08fcd402328f69e73f6e1e41b5f",
+  "approved_execution_commit": "0c8fce262fce44650729883862ec948778ebea45",
+  "merge_base_commit": "4ee6adb006f360fea13837db5f7d45815f297b55",
+  "historical_manifest_sha256": "18960688b09fef4d87aa15259b2dcb7209a4d0dfc760896582b84b4c1ce0ef08",
+  "statistical_files": [
+    {
+      "path": "lib/statistical-levels/generated-provenance.json",
+      "source_commit": "0c8fce262fce44650729883862ec948778ebea45",
+      "sha256": "7a8dac052669b76727175ee1d9a2e7d0f268e6dfcd1c640dfbb292eea824a800"
+    },
+    {
+      "path": "lib/statistical-levels/generated/assets/AIQ.json",
+      "source_commit": "0c8fce262fce44650729883862ec948778ebea45",
+      "sha256": "5cec61e747c13cbbc5a6afcf1dfa562cd7f06bc7670daecbf82babf1bd6deab8"
+    },
+    {
+      "path": "lib/statistical-levels/generated/assets/BOTZ.json",
+      "source_commit": "0c8fce262fce44650729883862ec948778ebea45",
+      "sha256": "dbd566b29d259aa9d8d5a8a4ef0e433c5cb3d1c5ecea80d5185ac280935e0e20"
+    },
+    {
+      "path": "lib/statistical-levels/generated/assets/BTCUSD.json",
+      "source_commit": "0c8fce262fce44650729883862ec948778ebea45",
+      "sha256": "f4c161ee06eef141804ecdf057f780f620f7d4f401327b8d0700d3817a2e3e57"
+    },
+    {
+      "path": "lib/statistical-levels/generated/assets/CIBR.json",
+      "source_commit": "0c8fce262fce44650729883862ec948778ebea45",
+      "sha256": "0adb7eb2874fe28feba1a6245270b2cab51cbad2e8bcb2c7e4dd585b2adc02c2"
+    },
+    {
+      "path": "lib/statistical-levels/generated/assets/DIA.json",
+      "source_commit": "0c8fce262fce44650729883862ec948778ebea45",
+      "sha256": "9f8a2adda29d39791c7f4f740674f7233fa5cc279b0e7ff96e985d82ec901639"
+    },
+    {
+      "path": "lib/statistical-levels/generated/assets/EEM.json",
+      "source_commit": "0c8fce262fce44650729883862ec948778ebea45",
+      "sha256": "1611384baec6bd16f5bb4b639ab604e03329fd29cee62254a3aa6e6102a441ec"
+    },
+    {
+      "path": "lib/statistical-levels/generated/assets/EFA.json",
+      "source_commit": "0c8fce262fce44650729883862ec948778ebea45",
+      "sha256": "77dcdc42be6b0aeec042a578de5b1c451c1827efda4ba745511a7d930a74ea48"
+    },
+    {
+      "path": "lib/statistical-levels/generated/assets/ETHUSD.json",
+      "source_commit": "0c8fce262fce44650729883862ec948778ebea45",
+      "sha256": "2eb3ec2ad4dcf231cf494b1ee875e5ffc9df057f9c3c4b8ea7345dcb3bbc629b"
+    },
+    {
+      "path": "lib/statistical-levels/generated/assets/EWJ.json",
+      "source_commit": "0c8fce262fce44650729883862ec948778ebea45",
+      "sha256": "c9ec6d96c4748294bef170d7e508eae4981b86b46f03cda5b31f8fbdb253d76e"
+    },
+    {
+      "path": "lib/statistical-levels/generated/assets/FINX.json",
+      "source_commit": "0c8fce262fce44650729883862ec948778ebea45",
+      "sha256": "748b3d3b1b99dbac14c56c767ae34dbfa1f1b393606edf005e69561e89838333"
+    },
+    {
+      "path": "lib/statistical-levels/generated/assets/FXI.json",
+      "source_commit": "0c8fce262fce44650729883862ec948778ebea45",
+      "sha256": "1e65990df6aa239de8074f69cee09cf01494d971c4082a8f36b12785f8f6b4c2"
+    },
+    {
+      "path": "lib/statistical-levels/generated/assets/GLD.json",
+      "source_commit": "0c8fce262fce44650729883862ec948778ebea45",
+      "sha256": "b4dceb4b3bf50a4817a2a893b1895154b93c5029f4d5a5568cda63d957e05e33"
+    },
+    {
+      "path": "lib/statistical-levels/generated/assets/HYG.json",
+      "source_commit": "0c8fce262fce44650729883862ec948778ebea45",
+      "sha256": "1f65a595047cb92ef02224e4bcb6ebd1534f9e9dd64de5a6ff4050103538bb30"
+    },
+    {
+      "path": "lib/statistical-levels/generated/assets/IEF.json",
+      "source_commit": "0c8fce262fce44650729883862ec948778ebea45",
+      "sha256": "5cbc38bf442a740252cad64a94f6a1f290c4d498c62c7f2cd4a87d6b3489af17"
+    },
+    {
+      "path": "lib/statistical-levels/generated/assets/ITA.json",
+      "source_commit": "0c8fce262fce44650729883862ec948778ebea45",
+      "sha256": "73820263c39c8f5004d2c65fac1fa32e9998d171a9d133d866872b39e3dde582"
+    },
+    {
+      "path": "lib/statistical-levels/generated/assets/IWM.json",
+      "source_commit": "0c8fce262fce44650729883862ec948778ebea45",
+      "sha256": "7e9ce6a09ab4089cca19415bb90273329ead82e3cb36500555fbad93fc77dcfe"
+    },
+    {
+      "path": "lib/statistical-levels/generated/assets/LQD.json",
+      "source_commit": "0c8fce262fce44650729883862ec948778ebea45",
+      "sha256": "58167ae202465098c3a4b1fe30a8601fdf5abd76ad853a2aa7323f07b9b543a6"
+    },
+    {
+      "path": "lib/statistical-levels/generated/assets/PAVE.json",
+      "source_commit": "0c8fce262fce44650729883862ec948778ebea45",
+      "sha256": "a0d6b30a9d0e38a676a74156ccaf9519634fd789aa914f5250a53b7daebe3426"
+    },
+    {
+      "path": "lib/statistical-levels/generated/assets/PHO.json",
+      "source_commit": "0c8fce262fce44650729883862ec948778ebea45",
+      "sha256": "e527ffe59f11657f7029377dd6bcd9d04896a5cae434db180fecd7581fee9468"
+    },
+    {
+      "path": "lib/statistical-levels/generated/assets/QQQ.json",
+      "source_commit": "0c8fce262fce44650729883862ec948778ebea45",
+      "sha256": "fae21072f6379c9df4ab101e47b1d325c1451d269d5add65dadb38b8dc1a9dc8"
+    },
+    {
+      "path": "lib/statistical-levels/generated/assets/RSP.json",
+      "source_commit": "0c8fce262fce44650729883862ec948778ebea45",
+      "sha256": "e12ce32e2e60ec586d6a249a78fc4d548d8e1cd2c620a36be4e196a930c19cd6"
+    },
+    {
+      "path": "lib/statistical-levels/generated/assets/SHY.json",
+      "source_commit": "0c8fce262fce44650729883862ec948778ebea45",
+      "sha256": "bb8cea57e2e179781292df86cce60ba4d6083aa3bb9fb1b3220d3c2efd4c1c83"
+    },
+    {
+      "path": "lib/statistical-levels/generated/assets/SLV.json",
+      "source_commit": "0c8fce262fce44650729883862ec948778ebea45",
+      "sha256": "3e0b256730c6cf97145e9a03622ca0791f42c966b68da98589642033408c1c61"
+    },
+    {
+      "path": "lib/statistical-levels/generated/assets/SMH.json",
+      "source_commit": "0c8fce262fce44650729883862ec948778ebea45",
+      "sha256": "aa5684a18db09d26c64f1fb75ec9d3878c9ab4bc4f5a77c9313929732eefdf8a"
+    },
+    {
+      "path": "lib/statistical-levels/generated/assets/SPY.json",
+      "source_commit": "0c8fce262fce44650729883862ec948778ebea45",
+      "sha256": "9ed4d90c6af9080335ee7c5648c47b87abed03a79ef6abfc5e56c6ce4b1db5ce"
+    },
+    {
+      "path": "lib/statistical-levels/generated/assets/TLT.json",
+      "source_commit": "0c8fce262fce44650729883862ec948778ebea45",
+      "sha256": "b1644aaa387ac39bfc03b268cc81a8f7c877a567e183eb94d1a6c4eddda14eb4"
+    },
+    {
+      "path": "lib/statistical-levels/generated/assets/USO.json",
+      "source_commit": "0c8fce262fce44650729883862ec948778ebea45",
+      "sha256": "ff9c9b6dbccb61e7a0b586dfbdda1881e4571232383663f16dc357b14975e9ea"
+    },
+    {
+      "path": "lib/statistical-levels/generated/assets/UUP.json",
+      "source_commit": "0c8fce262fce44650729883862ec948778ebea45",
+      "sha256": "3b03e9ab64d47783a853057ce89714b738b4888aa0750f4446fe90efa8ad7d0c"
+    },
+    {
+      "path": "lib/statistical-levels/generated/assets/VOO.json",
+      "source_commit": "0c8fce262fce44650729883862ec948778ebea45",
+      "sha256": "1ac3704f26a094a2508863ac18263d99e0aa057035229c6639b3572fc80d1c16"
+    },
+    {
+      "path": "lib/statistical-levels/generated/assets/XLB.json",
+      "source_commit": "0c8fce262fce44650729883862ec948778ebea45",
+      "sha256": "5852c711d578ce193735a23425683121485702825eae113dd21b7a31bfd7bf70"
+    },
+    {
+      "path": "lib/statistical-levels/generated/assets/XLC.json",
+      "source_commit": "0c8fce262fce44650729883862ec948778ebea45",
+      "sha256": "08bf3c0a83faae61917bc47105e880cf6fa15a0a3cc26aa361bdb345f9b4bd49"
+    },
+    {
+      "path": "lib/statistical-levels/generated/assets/XLE.json",
+      "source_commit": "0c8fce262fce44650729883862ec948778ebea45",
+      "sha256": "fa8c75c2deda618f89cede6e603089f1b1074e581f75a1c13d9fa3021a228046"
+    },
+    {
+      "path": "lib/statistical-levels/generated/assets/XLF.json",
+      "source_commit": "0c8fce262fce44650729883862ec948778ebea45",
+      "sha256": "166f8c37971149676c7c3980f88a7c77c025d283fe8f7aeb771f179ab2d30ce0"
+    },
+    {
+      "path": "lib/statistical-levels/generated/assets/XLI.json",
+      "source_commit": "0c8fce262fce44650729883862ec948778ebea45",
+      "sha256": "caaa5a5e15e6e3fca6cc2432ff2fb02da4b62271acb04302c575641807f6d81d"
+    },
+    {
+      "path": "lib/statistical-levels/generated/assets/XLK.json",
+      "source_commit": "0c8fce262fce44650729883862ec948778ebea45",
+      "sha256": "84c2ab8f674306fb0ea6d89c600bc6b5a86a89b7f16932191597e94a8816890b"
+    },
+    {
+      "path": "lib/statistical-levels/generated/assets/XLP.json",
+      "source_commit": "0c8fce262fce44650729883862ec948778ebea45",
+      "sha256": "b0b6ce48b55991c66d7aa17a1d1cd9c818ad63fcb1cb820506212cb1166b1b06"
+    },
+    {
+      "path": "lib/statistical-levels/generated/assets/XLRE.json",
+      "source_commit": "0c8fce262fce44650729883862ec948778ebea45",
+      "sha256": "167c2a23516b3a337117fbe93b9b30d2721e93201b7103d0236f3de7d35da7ef"
+    },
+    {
+      "path": "lib/statistical-levels/generated/assets/XLU.json",
+      "source_commit": "0c8fce262fce44650729883862ec948778ebea45",
+      "sha256": "181fc1f24522f169c71156200d3265065c27b341a7267a8d1168144bc4e69d07"
+    },
+    {
+      "path": "lib/statistical-levels/generated/assets/XLV.json",
+      "source_commit": "0c8fce262fce44650729883862ec948778ebea45",
+      "sha256": "f51259f72c720e96b28b5f34ebfc40132bc7569115b187c8390436a0d0401301"
+    },
+    {
+      "path": "lib/statistical-levels/generated/assets/XLY.json",
+      "source_commit": "0c8fce262fce44650729883862ec948778ebea45",
+      "sha256": "7aa97e37b318b545ff703ce0aa00d1149de74eca25b1e18aad174026a5e2abec"
+    },
+    {
+      "path": "lib/statistical-levels/generated/manifest.json",
+      "source_commit": "0c8fce262fce44650729883862ec948778ebea45",
+      "sha256": "c32a68d835786b9230d3b584b7ee926ab6bea38a3f782a6870597657532aa5bd"
+    },
+    {
+      "path": "lib/statistical-levels/generated/seasonality/AIQ.json",
+      "source_commit": "0c8fce262fce44650729883862ec948778ebea45",
+      "sha256": "d24055fecdea916ca9364fa61d5c54e2ab7b64eb50e225981ef5af8eda839dd6"
+    },
+    {
+      "path": "lib/statistical-levels/generated/seasonality/BOTZ.json",
+      "source_commit": "0c8fce262fce44650729883862ec948778ebea45",
+      "sha256": "6e82f7f1d4649d91fa8e548aa4b991a84b7071411b0beca27779cb3393190f44"
+    },
+    {
+      "path": "lib/statistical-levels/generated/seasonality/BTCUSD.json",
+      "source_commit": "0c8fce262fce44650729883862ec948778ebea45",
+      "sha256": "3f64a6ab65cc6d76e4d88f688527661c23c40b7907ec46ccafc0e704502e2837"
+    },
+    {
+      "path": "lib/statistical-levels/generated/seasonality/CIBR.json",
+      "source_commit": "0c8fce262fce44650729883862ec948778ebea45",
+      "sha256": "a2553474d8c39eab8b3681cb450b60626fa1dc9fe9496c6efc6a3f8043175078"
+    },
+    {
+      "path": "lib/statistical-levels/generated/seasonality/DIA.json",
+      "source_commit": "0c8fce262fce44650729883862ec948778ebea45",
+      "sha256": "2cbdcec6584e9ebf92488999c704bdf5dedd7c5141dacf710b7409becf3191e5"
+    },
+    {
+      "path": "lib/statistical-levels/generated/seasonality/EEM.json",
+      "source_commit": "0c8fce262fce44650729883862ec948778ebea45",
+      "sha256": "7f36407661b9beb7bf602ed3fd33c4441ede4e4745bc0cfe0c91dd8312a18ad9"
+    },
+    {
+      "path": "lib/statistical-levels/generated/seasonality/EFA.json",
+      "source_commit": "0c8fce262fce44650729883862ec948778ebea45",
+      "sha256": "324f0ac53789419700193488b11c4491efad8de506e7ee1a02b3d684e712c118"
+    },
+    {
+      "path": "lib/statistical-levels/generated/seasonality/ETHUSD.json",
+      "source_commit": "0c8fce262fce44650729883862ec948778ebea45",
+      "sha256": "887729e54def6d10c83827d6f0e81c3b3d116d5dc4a144b27c683320c34e1858"
+    },
+    {
+      "path": "lib/statistical-levels/generated/seasonality/EWJ.json",
+      "source_commit": "0c8fce262fce44650729883862ec948778ebea45",
+      "sha256": "359d2a328b292515128d76fa12d797cca1d766fe9ea58200528b6ccf3d9d0f22"
+    },
+    {
+      "path": "lib/statistical-levels/generated/seasonality/FINX.json",
+      "source_commit": "0c8fce262fce44650729883862ec948778ebea45",
+      "sha256": "b64ee77d4c320363985982d11c3c8cca3daea9b59d6021b5b3dd784e126afdbd"
+    },
+    {
+      "path": "lib/statistical-levels/generated/seasonality/FXI.json",
+      "source_commit": "0c8fce262fce44650729883862ec948778ebea45",
+      "sha256": "3eed2d659bef43c8d2e5e4f6e48bec7129e8d7eb28d9ecc25667030c28a8b927"
+    },
+    {
+      "path": "lib/statistical-levels/generated/seasonality/GLD.json",
+      "source_commit": "0c8fce262fce44650729883862ec948778ebea45",
+      "sha256": "156d4eab7f8c36eb2b87ce14c9b634f13d3651b27bfcc018aa7c6926f108253e"
+    },
+    {
+      "path": "lib/statistical-levels/generated/seasonality/HYG.json",
+      "source_commit": "0c8fce262fce44650729883862ec948778ebea45",
+      "sha256": "4eb32e11f837b5970f773a45b1179fdef04a049c04812aa130063b7066f51857"
+    },
+    {
+      "path": "lib/statistical-levels/generated/seasonality/IEF.json",
+      "source_commit": "0c8fce262fce44650729883862ec948778ebea45",
+      "sha256": "4db29482129fc2c493932a4c64cdadaac5005cef314517fd35654a32aba00250"
+    },
+    {
+      "path": "lib/statistical-levels/generated/seasonality/ITA.json",
+      "source_commit": "0c8fce262fce44650729883862ec948778ebea45",
+      "sha256": "2a625a0eb77812b0a26b80b95645e738afe69f30280696413cbeaab06709386d"
+    },
+    {
+      "path": "lib/statistical-levels/generated/seasonality/IWM.json",
+      "source_commit": "0c8fce262fce44650729883862ec948778ebea45",
+      "sha256": "29920d8b091dc67b301d36bb06c1bb98928bd87ba2272aa9005d69072535f799"
+    },
+    {
+      "path": "lib/statistical-levels/generated/seasonality/LQD.json",
+      "source_commit": "0c8fce262fce44650729883862ec948778ebea45",
+      "sha256": "1011ea013edcf87b3dfc2edc6400b75c3282a201bcc420ef515f5968eb0d680a"
+    },
+    {
+      "path": "lib/statistical-levels/generated/seasonality/PAVE.json",
+      "source_commit": "0c8fce262fce44650729883862ec948778ebea45",
+      "sha256": "6e15081c248ee32e68634ce2aeeef5e4f1f2b14234d88c083dcf5a397c0c9548"
+    },
+    {
+      "path": "lib/statistical-levels/generated/seasonality/PHO.json",
+      "source_commit": "0c8fce262fce44650729883862ec948778ebea45",
+      "sha256": "719d3553f7186d6e5106ddac76e841aff2ae69b57d406703d9f82c7def53bd94"
+    },
+    {
+      "path": "lib/statistical-levels/generated/seasonality/QQQ.json",
+      "source_commit": "0c8fce262fce44650729883862ec948778ebea45",
+      "sha256": "553ce185fac6b311a6e965250e524a7163175cbc68d2a4c590fb38018bcf3097"
+    },
+    {
+      "path": "lib/statistical-levels/generated/seasonality/RSP.json",
+      "source_commit": "0c8fce262fce44650729883862ec948778ebea45",
+      "sha256": "162bec6e8e5b489f08f9c65b7e8a43038489c852d8e5bfc19985de9aab4a2e42"
+    },
+    {
+      "path": "lib/statistical-levels/generated/seasonality/SHY.json",
+      "source_commit": "0c8fce262fce44650729883862ec948778ebea45",
+      "sha256": "561f44305ff0cdde92eb9b4306e25b368c31056fd3d93423a2292dee15061b5e"
+    },
+    {
+      "path": "lib/statistical-levels/generated/seasonality/SLV.json",
+      "source_commit": "0c8fce262fce44650729883862ec948778ebea45",
+      "sha256": "20391435ab3ce7407e53bb0b319a3314701f4581342bf9636b9aa90fb40c050d"
+    },
+    {
+      "path": "lib/statistical-levels/generated/seasonality/SMH.json",
+      "source_commit": "0c8fce262fce44650729883862ec948778ebea45",
+      "sha256": "fcfaa05ee0b0bc45030c8ef46a69c950eeec57a1877c704cf15b128ae09d6d26"
+    },
+    {
+      "path": "lib/statistical-levels/generated/seasonality/SPY.json",
+      "source_commit": "0c8fce262fce44650729883862ec948778ebea45",
+      "sha256": "e3ab3749e620e87da5af746cf473c696eb89602da2eaf8e1b797086185e2961a"
+    },
+    {
+      "path": "lib/statistical-levels/generated/seasonality/TLT.json",
+      "source_commit": "0c8fce262fce44650729883862ec948778ebea45",
+      "sha256": "2b04cfb89e3445596d2e1d35ff856a7fac54c5f132bee3daae6f49a879c572da"
+    },
+    {
+      "path": "lib/statistical-levels/generated/seasonality/USO.json",
+      "source_commit": "0c8fce262fce44650729883862ec948778ebea45",
+      "sha256": "8f20e6c67bd72abf511dc6506636e97ef77a43fe67c6980b235bca0bcc6df070"
+    },
+    {
+      "path": "lib/statistical-levels/generated/seasonality/UUP.json",
+      "source_commit": "0c8fce262fce44650729883862ec948778ebea45",
+      "sha256": "a57f926cb73d6b33d2aee2b7ae62e9ec3f8bdeeaf10d1e3946d00f1886ef32fc"
+    },
+    {
+      "path": "lib/statistical-levels/generated/seasonality/VOO.json",
+      "source_commit": "0c8fce262fce44650729883862ec948778ebea45",
+      "sha256": "fb00640daa0b21b7ec74782dc2d701bc5cab08960319557a21ef94973d922217"
+    },
+    {
+      "path": "lib/statistical-levels/generated/seasonality/XLB.json",
+      "source_commit": "0c8fce262fce44650729883862ec948778ebea45",
+      "sha256": "520c06c568574eeb01677091198631fe3c86b4cc846d4fcae034343cc67afbe4"
+    },
+    {
+      "path": "lib/statistical-levels/generated/seasonality/XLC.json",
+      "source_commit": "0c8fce262fce44650729883862ec948778ebea45",
+      "sha256": "0b056a60614162906cd4f741cc0442beeffe9e5429b6ebf03f22b6d0b5448aad"
+    },
+    {
+      "path": "lib/statistical-levels/generated/seasonality/XLE.json",
+      "source_commit": "0c8fce262fce44650729883862ec948778ebea45",
+      "sha256": "f46ae54a5fde786791a9e16270f541156dd52816dcdc77706ef8215f0c21eaa8"
+    },
+    {
+      "path": "lib/statistical-levels/generated/seasonality/XLF.json",
+      "source_commit": "0c8fce262fce44650729883862ec948778ebea45",
+      "sha256": "11e0448a4c4499adbcc2e2ac931017604a18bc8fd4530157bee5bafbc1c3d54f"
+    },
+    {
+      "path": "lib/statistical-levels/generated/seasonality/XLI.json",
+      "source_commit": "0c8fce262fce44650729883862ec948778ebea45",
+      "sha256": "546e054266a455542389affe278f9356d7c47ff1581a93499a2e839bb0439544"
+    },
+    {
+      "path": "lib/statistical-levels/generated/seasonality/XLK.json",
+      "source_commit": "0c8fce262fce44650729883862ec948778ebea45",
+      "sha256": "c64e925da16fe9b4a681e5182d46ba34b1ce27611126575feb265ee6f7b9b3a0"
+    },
+    {
+      "path": "lib/statistical-levels/generated/seasonality/XLP.json",
+      "source_commit": "0c8fce262fce44650729883862ec948778ebea45",
+      "sha256": "9d985e90e5b4b05271fa3a9b927b77cbb1d49faf9973d98899486c2b8c4a6744"
+    },
+    {
+      "path": "lib/statistical-levels/generated/seasonality/XLRE.json",
+      "source_commit": "0c8fce262fce44650729883862ec948778ebea45",
+      "sha256": "f746127347cf35261b6c24b0445165ca0ebc70c0062e4b7a61a3cf8593701db7"
+    },
+    {
+      "path": "lib/statistical-levels/generated/seasonality/XLU.json",
+      "source_commit": "0c8fce262fce44650729883862ec948778ebea45",
+      "sha256": "5b45b1db75ab905ac1c1260bca002f186bcc79511194e0cc50a08ef2fd173b92"
+    },
+    {
+      "path": "lib/statistical-levels/generated/seasonality/XLV.json",
+      "source_commit": "0c8fce262fce44650729883862ec948778ebea45",
+      "sha256": "c86e9b31713279e176fd9ec78f9b0ce2f3a3023b481b272a0adb68e5eeaa36d7"
+    },
+    {
+      "path": "lib/statistical-levels/generated/seasonality/XLY.json",
+      "source_commit": "0c8fce262fce44650729883862ec948778ebea45",
+      "sha256": "0b09edd3228c63c61328ff6c7493a611523f08d325d9f573fe5e16779026673f"
+    }
+  ],
+  "historical_files": [
+    {
+      "path": "lib/reports/snapshots/primer-informe-septiembre-2026/automatic.json",
+      "source_commit": "c60b17c6ddc5a08fcd402328f69e73f6e1e41b5f",
+      "historical_sha256": "945692213bc501f8ade3a2ea2da008d7f279b32376099d38baf4a36d8082f879",
+      "sha256": "945692213bc501f8ade3a2ea2da008d7f279b32376099d38baf4a36d8082f879"
+    },
+    {
+      "path": "lib/reports/snapshots/primer-informe-septiembre-2026/btc-source.json",
+      "source_commit": "c60b17c6ddc5a08fcd402328f69e73f6e1e41b5f",
+      "historical_sha256": "228a63f829b28af82d891ac7d5d046799eba358910e5b528470e50c85575ef23",
+      "sha256": "228a63f829b28af82d891ac7d5d046799eba358910e5b528470e50c85575ef23"
+    },
+    {
+      "path": "lib/reports/snapshots/primer-informe-septiembre-2026/dashboard-evidence.json",
+      "source_commit": "c60b17c6ddc5a08fcd402328f69e73f6e1e41b5f",
+      "historical_sha256": "e86698edf44aaa0aa67e1d7124b10c89ab128b1787585c08fa6e1df5ebfee524",
+      "sha256": "e86698edf44aaa0aa67e1d7124b10c89ab128b1787585c08fa6e1df5ebfee524"
+    },
+    {
+      "path": "lib/reports/snapshots/primer-informe-septiembre-2026/integrity.json",
+      "source_commit": "c60b17c6ddc5a08fcd402328f69e73f6e1e41b5f",
+      "historical_sha256": "3e90386bfde2f76206449d8d84d342d28569609f7609578f746bcdcb0520b7cb",
+      "sha256": "3e90386bfde2f76206449d8d84d342d28569609f7609578f746bcdcb0520b7cb"
+    },
+    {
+      "path": "lib/reports/snapshots/primer-informe-septiembre-2026/prices-evidence.json.gz",
+      "source_commit": "c60b17c6ddc5a08fcd402328f69e73f6e1e41b5f",
+      "historical_sha256": "faef2218ab59a796786e90696a93ddf0005de681bf1cf29a33feb57d67e18387",
+      "sha256": "faef2218ab59a796786e90696a93ddf0005de681bf1cf29a33feb57d67e18387"
+    },
+    {
+      "path": "lib/reports/snapshots/primer-informe-septiembre-2026/statistical.json",
+      "source_commit": "c60b17c6ddc5a08fcd402328f69e73f6e1e41b5f",
+      "historical_sha256": "a93c1e9c97b5925a5ce6b9aa795a340795a26967ef2544e7da7953dab60d6e6b",
+      "sha256": "a93c1e9c97b5925a5ce6b9aa795a340795a26967ef2544e7da7953dab60d6e6b"
+    },
+    {
+      "path": "lib/reports/snapshots/primer-informe-septiembre-2026/weekly-review-evidence.json.gz",
+      "source_commit": "c60b17c6ddc5a08fcd402328f69e73f6e1e41b5f",
+      "historical_sha256": "bfed97e77290056ae439148ad44d52a6f240f65055e2003b085caea314a0fc66",
+      "sha256": "bfed97e77290056ae439148ad44d52a6f240f65055e2003b085caea314a0fc66"
+    },
+    {
+      "path": "lib/reports/snapshots/primer-informe-septiembre-2026/weekly-review.json",
+      "source_commit": "c60b17c6ddc5a08fcd402328f69e73f6e1e41b5f",
+      "historical_sha256": "7d3e923ed05cdabb99393860167a37e47337c4fc81963ee1e20cea6bf18e9a12",
+      "sha256": "7d3e923ed05cdabb99393860167a37e47337c4fc81963ee1e20cea6bf18e9a12"
+    },
+    {
+      "path": "lib/reports/snapshots/segundo-informe-septiembre-2026/authority-evidence.json.gz",
+      "source_commit": "c60b17c6ddc5a08fcd402328f69e73f6e1e41b5f",
+      "historical_sha256": "6b4984010dbb194f4899c892d14f94d90c41be4cd74dfb8e03ebc15f49e97854",
+      "sha256": "6b4984010dbb194f4899c892d14f94d90c41be4cd74dfb8e03ebc15f49e97854"
+    },
+    {
+      "path": "lib/reports/snapshots/segundo-informe-septiembre-2026/automatic.json",
+      "source_commit": "c60b17c6ddc5a08fcd402328f69e73f6e1e41b5f",
+      "historical_sha256": "849e14dd6cccc2965b559ada3ca5a104546a9a3afc83f60e1319c097f9b82520",
+      "sha256": "849e14dd6cccc2965b559ada3ca5a104546a9a3afc83f60e1319c097f9b82520"
+    },
+    {
+      "path": "lib/reports/snapshots/segundo-informe-septiembre-2026/breadth-evidence.json.gz",
+      "source_commit": "c60b17c6ddc5a08fcd402328f69e73f6e1e41b5f",
+      "historical_sha256": "fd7838b5448cb258a8082539d47b865bc8131aeb3e6082fe89abbd0a7410fea7",
+      "sha256": "fd7838b5448cb258a8082539d47b865bc8131aeb3e6082fe89abbd0a7410fea7"
+    },
+    {
+      "path": "lib/reports/snapshots/segundo-informe-septiembre-2026/btc-source.json",
+      "source_commit": "c60b17c6ddc5a08fcd402328f69e73f6e1e41b5f",
+      "historical_sha256": "79a494ec6a0cdcac83e9b433996f75109c044e315e57fbf85f518441a4848756",
+      "sha256": "79a494ec6a0cdcac83e9b433996f75109c044e315e57fbf85f518441a4848756"
+    },
+    {
+      "path": "lib/reports/snapshots/segundo-informe-septiembre-2026/dashboard-evidence.json",
+      "source_commit": "c60b17c6ddc5a08fcd402328f69e73f6e1e41b5f",
+      "historical_sha256": "789f8de6a1b978b51e5e0da49c9dd74386024a98ff55e45a98a9a961271d0aa5",
+      "sha256": "789f8de6a1b978b51e5e0da49c9dd74386024a98ff55e45a98a9a961271d0aa5"
+    },
+    {
+      "path": "lib/reports/snapshots/segundo-informe-septiembre-2026/dashboard-page.html.gz",
+      "source_commit": "c60b17c6ddc5a08fcd402328f69e73f6e1e41b5f",
+      "historical_sha256": "4ce2ea85275870968b782c479619ee9c2441cdee1d236a0a90edd801da046d95",
+      "sha256": "4ce2ea85275870968b782c479619ee9c2441cdee1d236a0a90edd801da046d95"
+    },
+    {
+      "path": "lib/reports/snapshots/segundo-informe-septiembre-2026/historical-seasonality.json",
+      "source_commit": "c60b17c6ddc5a08fcd402328f69e73f6e1e41b5f",
+      "historical_sha256": "ea1e1372f978bc0f7e2b25f77a89db9343d196ee3b741c1dd20d8f0a060ee217",
+      "sha256": "ea1e1372f978bc0f7e2b25f77a89db9343d196ee3b741c1dd20d8f0a060ee217"
+    },
+    {
+      "path": "lib/reports/snapshots/segundo-informe-septiembre-2026/integrity.json",
+      "source_commit": "c60b17c6ddc5a08fcd402328f69e73f6e1e41b5f",
+      "historical_sha256": "90367f108262b065866d45323eea440124456d4578ffeb3c8ad04e2777e4c460",
+      "sha256": "90367f108262b065866d45323eea440124456d4578ffeb3c8ad04e2777e4c460"
+    },
+    {
+      "path": "lib/reports/snapshots/segundo-informe-septiembre-2026/reconciliation-code.json.gz",
+      "source_commit": "c60b17c6ddc5a08fcd402328f69e73f6e1e41b5f",
+      "historical_sha256": "293cd940f6cd64066fb86f8f25cc4e09aa54d94228534a7d580dbf675464afbc",
+      "sha256": "293cd940f6cd64066fb86f8f25cc4e09aa54d94228534a7d580dbf675464afbc"
+    },
+    {
+      "path": "lib/reports/snapshots/segundo-informe-septiembre-2026/reconciliation.json",
+      "source_commit": "c60b17c6ddc5a08fcd402328f69e73f6e1e41b5f",
+      "historical_sha256": "ca1b1bf9324a8790b04bef08b1680559472ad98759e6059ed0173f20a3851831",
+      "sha256": "ca1b1bf9324a8790b04bef08b1680559472ad98759e6059ed0173f20a3851831"
+    },
+    {
+      "path": "lib/reports/snapshots/segundo-informe-septiembre-2026/statistical.json",
+      "source_commit": "c60b17c6ddc5a08fcd402328f69e73f6e1e41b5f",
+      "historical_sha256": "ce0b01acc94af35213f1edffd0df7fd1a8299f33dbba3f176d0207303558fe14",
+      "sha256": "ce0b01acc94af35213f1edffd0df7fd1a8299f33dbba3f176d0207303558fe14"
+    },
+    {
+      "path": "lib/statistical-levels/asset-universe.ts",
+      "source_commit": "c60b17c6ddc5a08fcd402328f69e73f6e1e41b5f",
+      "historical_sha256": "2c20e1aa91fcb5879b379ee78223711a446fd89c476412615fab91ed5182570c",
+      "sha256": "2c20e1aa91fcb5879b379ee78223711a446fd89c476412615fab91ed5182570c"
+    },
+    {
+      "path": "lib/statistical-levels/baseline-config.json",
+      "source_commit": "c60b17c6ddc5a08fcd402328f69e73f6e1e41b5f",
+      "historical_sha256": "e2cd68408badeafd3bde924acceb8e2f855cbd11227c963352bf48b250db5ef9",
+      "sha256": "e2cd68408badeafd3bde924acceb8e2f855cbd11227c963352bf48b250db5ef9"
+    },
+    {
+      "path": "lib/statistical-levels/baseline-policy.mjs",
+      "source_commit": "c60b17c6ddc5a08fcd402328f69e73f6e1e41b5f",
+      "historical_sha256": "cf6f2aa44d9711d37cccd02c28f396497d2c1620dfae72c5edec1d829d423523",
+      "sha256": "cf6f2aa44d9711d37cccd02c28f396497d2c1620dfae72c5edec1d829d423523"
+    },
+    {
+      "path": "lib/statistical-levels/baseline.test.mjs",
+      "source_commit": "c60b17c6ddc5a08fcd402328f69e73f6e1e41b5f",
+      "historical_sha256": "baaeaed7beb62e0070c4755d95723dd48015f442355fe259db4e009bf8ba722f",
+      "sha256": "baaeaed7beb62e0070c4755d95723dd48015f442355fe259db4e009bf8ba722f"
+    },
+    {
+      "path": "lib/statistical-levels/calculations.ts",
+      "source_commit": "c60b17c6ddc5a08fcd402328f69e73f6e1e41b5f",
+      "historical_sha256": "3362a83d23c3c4dfd452844e50a0ee0f01eb936cf5e906f93b10ec305ba799dc",
+      "sha256": "3362a83d23c3c4dfd452844e50a0ee0f01eb936cf5e906f93b10ec305ba799dc"
+    },
+    {
+      "path": "lib/statistical-levels/contracts.test.ts",
+      "source_commit": "c60b17c6ddc5a08fcd402328f69e73f6e1e41b5f",
+      "historical_sha256": "97b67a10adc2674109a76b5e0f50b7408d3c224816ecb6deaed3cd2646af318e",
+      "sha256": "97b67a10adc2674109a76b5e0f50b7408d3c224816ecb6deaed3cd2646af318e"
+    },
+    {
+      "path": "lib/statistical-levels/defect-repairs.d.mts",
+      "source_commit": "c60b17c6ddc5a08fcd402328f69e73f6e1e41b5f",
+      "historical_sha256": "c2ea9512fc653fb116b026d90de6944e658716772681c330fef7203c4ec8ca0d",
+      "sha256": "c2ea9512fc653fb116b026d90de6944e658716772681c330fef7203c4ec8ca0d"
+    },
+    {
+      "path": "lib/statistical-levels/defect-repairs.mjs",
+      "source_commit": "c60b17c6ddc5a08fcd402328f69e73f6e1e41b5f",
+      "historical_sha256": "5fee525b1a7e453dc149b91a92b5eb427f55c7231b031aae9f04cbde932925d1",
+      "sha256": "5fee525b1a7e453dc149b91a92b5eb427f55c7231b031aae9f04cbde932925d1"
+    },
+    {
+      "path": "lib/statistical-levels/defect-repairs.test.ts",
+      "source_commit": "c60b17c6ddc5a08fcd402328f69e73f6e1e41b5f",
+      "historical_sha256": "5c08ea3e0bee2dd0d3e64d2a7a957e58cbc7cef532c3698def38eb5c2ea10bdf",
+      "sha256": "5c08ea3e0bee2dd0d3e64d2a7a957e58cbc7cef532c3698def38eb5c2ea10bdf"
+    },
+    {
+      "path": "lib/statistical-levels/display.ts",
+      "source_commit": "c60b17c6ddc5a08fcd402328f69e73f6e1e41b5f",
+      "historical_sha256": "6c44fa9a3b9d522055d993582e308d31ae4266244f65928fbc4ef68a04234ee9",
+      "sha256": "6c44fa9a3b9d522055d993582e308d31ae4266244f65928fbc4ef68a04234ee9"
+    },
+    {
+      "path": "lib/statistical-levels/generated-data.ts",
+      "source_commit": "c60b17c6ddc5a08fcd402328f69e73f6e1e41b5f",
+      "historical_sha256": "55b356ead03530435bdb1cf32b9198a9717405cdf3c6c1ffb6b23b2a8cb0bcbf",
+      "sha256": "55b356ead03530435bdb1cf32b9198a9717405cdf3c6c1ffb6b23b2a8cb0bcbf"
+    },
+    {
+      "path": "lib/statistical-levels/get-statistical-levels-data.ts",
+      "source_commit": "c60b17c6ddc5a08fcd402328f69e73f6e1e41b5f",
+      "historical_sha256": "ffc5c2ce32782cff30ad4259912b793bc99c365d94b66cb2a6975ef5d4784f00",
+      "sha256": "ffc5c2ce32782cff30ad4259912b793bc99c365d94b66cb2a6975ef5d4784f00"
+    },
+    {
+      "path": "lib/statistical-levels/interpretation.ts",
+      "source_commit": "c60b17c6ddc5a08fcd402328f69e73f6e1e41b5f",
+      "historical_sha256": "c1a36c9b2a5796824c02f8ff247fdf758de76ebd3b3922d4747172debe24eecf",
+      "sha256": "c1a36c9b2a5796824c02f8ff247fdf758de76ebd3b3922d4747172debe24eecf"
+    },
+    {
+      "path": "lib/statistical-levels/types.ts",
+      "source_commit": "c60b17c6ddc5a08fcd402328f69e73f6e1e41b5f",
+      "historical_sha256": "49360299efb1bc8d2ec377d91b8d6a510e6f858a8ef21b5debafb90df96e02e8",
+      "sha256": "49360299efb1bc8d2ec377d91b8d6a510e6f858a8ef21b5debafb90df96e02e8"
+    },
+    {
+      "path": "public/reports/manifest.json",
+      "source_commit": "c60b17c6ddc5a08fcd402328f69e73f6e1e41b5f",
+      "historical_sha256": "52a166a8529fc15203a7b32b57691b1f2bce41992cd067c8c97be46bea834826",
+      "sha256": "9ac27b27b75d7b41ab9df7134191e344c415e1597a7e6f287e8cd55a5572c159"
+    },
+    {
+      "path": "public/reports/primer-informe-agosto-2026-calendar.ics",
+      "source_commit": "c60b17c6ddc5a08fcd402328f69e73f6e1e41b5f",
+      "historical_sha256": "ed1baaf8b53afadff4fafb66a7bd25be2ece90e79abfbdf883ed338bdcc88638",
+      "sha256": "ed1baaf8b53afadff4fafb66a7bd25be2ece90e79abfbdf883ed338bdcc88638"
+    },
+    {
+      "path": "public/reports/primer-informe-agosto-2026.html",
+      "source_commit": "c60b17c6ddc5a08fcd402328f69e73f6e1e41b5f",
+      "historical_sha256": "620198a7530bd8c2a5984d313819fe43202c75ae7ac2dd4648a79edfe807d575",
+      "sha256": "620198a7530bd8c2a5984d313819fe43202c75ae7ac2dd4648a79edfe807d575"
+    },
+    {
+      "path": "public/reports/primer-informe-agosto-2026.md",
+      "source_commit": "c60b17c6ddc5a08fcd402328f69e73f6e1e41b5f",
+      "historical_sha256": "0c466c8f068b368d44ccd9f8cccf64a1bf9bf2be1f882e81cec59f2a1e370e29",
+      "sha256": "0c466c8f068b368d44ccd9f8cccf64a1bf9bf2be1f882e81cec59f2a1e370e29"
+    },
+    {
+      "path": "public/reports/primer-informe-agosto-2026.pdf",
+      "source_commit": "c60b17c6ddc5a08fcd402328f69e73f6e1e41b5f",
+      "historical_sha256": "d95e214bc8f4942697f313c0c86594809fff73d29e748fae6253bedaf22b61ac",
+      "sha256": "d95e214bc8f4942697f313c0c86594809fff73d29e748fae6253bedaf22b61ac"
+    },
+    {
+      "path": "public/reports/primer-informe-julio-2026-calendar.ics",
+      "source_commit": "c60b17c6ddc5a08fcd402328f69e73f6e1e41b5f",
+      "historical_sha256": "9058f4f61f339423bd077458bb18d8334ee384dd162d148abae448ec048dd798",
+      "sha256": "9058f4f61f339423bd077458bb18d8334ee384dd162d148abae448ec048dd798"
+    },
+    {
+      "path": "public/reports/primer-informe-julio-2026.html",
+      "source_commit": "c60b17c6ddc5a08fcd402328f69e73f6e1e41b5f",
+      "historical_sha256": "751932790e2408ad5974ed817868bd23619ae41c6e1373dd7a23cd9ca379195e",
+      "sha256": "751932790e2408ad5974ed817868bd23619ae41c6e1373dd7a23cd9ca379195e"
+    },
+    {
+      "path": "public/reports/primer-informe-julio-2026.md",
+      "source_commit": "c60b17c6ddc5a08fcd402328f69e73f6e1e41b5f",
+      "historical_sha256": "c9fa1cd7379123b3cf8f79614e3dea5fa56840532d1d0c30007f62cb9a0c5bb1",
+      "sha256": "c9fa1cd7379123b3cf8f79614e3dea5fa56840532d1d0c30007f62cb9a0c5bb1"
+    },
+    {
+      "path": "public/reports/primer-informe-julio-2026.pdf",
+      "source_commit": "c60b17c6ddc5a08fcd402328f69e73f6e1e41b5f",
+      "historical_sha256": "de6c10ce5f4f924a63fdd18cc1617b8ae2b5e319098ceca88311a87af16dddc2",
+      "sha256": "de6c10ce5f4f924a63fdd18cc1617b8ae2b5e319098ceca88311a87af16dddc2"
+    },
+    {
+      "path": "public/reports/primer-informe-septiembre-2026-calendar.ics",
+      "source_commit": "c60b17c6ddc5a08fcd402328f69e73f6e1e41b5f",
+      "historical_sha256": "f1833ee2993538948a9e18795ebbc50177fcb0cb26b88d032ad23b4198b53c32",
+      "sha256": "f1833ee2993538948a9e18795ebbc50177fcb0cb26b88d032ad23b4198b53c32"
+    },
+    {
+      "path": "public/reports/primer-informe-septiembre-2026.html",
+      "source_commit": "c60b17c6ddc5a08fcd402328f69e73f6e1e41b5f",
+      "historical_sha256": "4cb16b7cdfc2d73dfc2223618f8dccf5572913e9c43aa95a7a0652d95f437ca6",
+      "sha256": "4cb16b7cdfc2d73dfc2223618f8dccf5572913e9c43aa95a7a0652d95f437ca6"
+    },
+    {
+      "path": "public/reports/primer-informe-septiembre-2026.md",
+      "source_commit": "c60b17c6ddc5a08fcd402328f69e73f6e1e41b5f",
+      "historical_sha256": "f6e2d8a3ac7efe7b0c9f7a7ad09daf8377d0a25cdbe43483def98d56ca7082d9",
+      "sha256": "f6e2d8a3ac7efe7b0c9f7a7ad09daf8377d0a25cdbe43483def98d56ca7082d9"
+    },
+    {
+      "path": "public/reports/primer-informe-septiembre-2026.pdf",
+      "source_commit": "c60b17c6ddc5a08fcd402328f69e73f6e1e41b5f",
+      "historical_sha256": "8b06507ce41819de9d6ab2bfc9b550b063afb5782c5238c29f61cd1854199dd5",
+      "sha256": "8b06507ce41819de9d6ab2bfc9b550b063afb5782c5238c29f61cd1854199dd5"
+    },
+    {
+      "path": "public/reports/segundo-informe-agosto-2026-calendar.ics",
+      "source_commit": "c60b17c6ddc5a08fcd402328f69e73f6e1e41b5f",
+      "historical_sha256": "eb5ead8cac703763d8c0461172cbfded7518691ccc77f9fe0b3f72e980dc77b3",
+      "sha256": "eb5ead8cac703763d8c0461172cbfded7518691ccc77f9fe0b3f72e980dc77b3"
+    },
+    {
+      "path": "public/reports/segundo-informe-agosto-2026.html",
+      "source_commit": "c60b17c6ddc5a08fcd402328f69e73f6e1e41b5f",
+      "historical_sha256": "383edb037d4e697e7083754ad5f01f3275cdd896ea105a0de578d567ccd23886",
+      "sha256": "383edb037d4e697e7083754ad5f01f3275cdd896ea105a0de578d567ccd23886"
+    },
+    {
+      "path": "public/reports/segundo-informe-agosto-2026.md",
+      "source_commit": "c60b17c6ddc5a08fcd402328f69e73f6e1e41b5f",
+      "historical_sha256": "5a267530dcb66c963c6a383a50d3635a1e94ce6037853cd2dde608c05feb56a6",
+      "sha256": "5a267530dcb66c963c6a383a50d3635a1e94ce6037853cd2dde608c05feb56a6"
+    },
+    {
+      "path": "public/reports/segundo-informe-agosto-2026.pdf",
+      "source_commit": "c60b17c6ddc5a08fcd402328f69e73f6e1e41b5f",
+      "historical_sha256": "1f8a40e7f3aff392575ac09c7087642d22d3e4b2082581d031a7a7a90ec043ae",
+      "sha256": "1f8a40e7f3aff392575ac09c7087642d22d3e4b2082581d031a7a7a90ec043ae"
+    },
+    {
+      "path": "public/reports/segundo-informe-julio-2026.html",
+      "source_commit": "c60b17c6ddc5a08fcd402328f69e73f6e1e41b5f",
+      "historical_sha256": "4335b6a4c338be7fa00b13ebb279ae27c5e4139aba5ba13ac816a12cb1c81140",
+      "sha256": "4335b6a4c338be7fa00b13ebb279ae27c5e4139aba5ba13ac816a12cb1c81140"
+    },
+    {
+      "path": "public/reports/segundo-informe-julio-2026.md",
+      "source_commit": "c60b17c6ddc5a08fcd402328f69e73f6e1e41b5f",
+      "historical_sha256": "2a756eef362b74d1a78749ef318206f9794580a71e51d13e303c40f3f0be1403",
+      "sha256": "2a756eef362b74d1a78749ef318206f9794580a71e51d13e303c40f3f0be1403"
+    },
+    {
+      "path": "public/reports/segundo-informe-julio-2026.pdf",
+      "source_commit": "c60b17c6ddc5a08fcd402328f69e73f6e1e41b5f",
+      "historical_sha256": "ca106189e0684ec8a355fcf61e5f6502b83215d3422354e084baa3d359cc6ec2",
+      "sha256": "ca106189e0684ec8a355fcf61e5f6502b83215d3422354e084baa3d359cc6ec2"
+    },
+    {
+      "path": "public/reports/segundo-informe-septiembre-2026-calendar.ics",
+      "source_commit": "c60b17c6ddc5a08fcd402328f69e73f6e1e41b5f",
+      "historical_sha256": "131d121f758c04dce31e20bb470f84a1bb9aea81abdf68813e6b2205843f29a2",
+      "sha256": "131d121f758c04dce31e20bb470f84a1bb9aea81abdf68813e6b2205843f29a2"
+    },
+    {
+      "path": "public/reports/segundo-informe-septiembre-2026.html",
+      "source_commit": "c60b17c6ddc5a08fcd402328f69e73f6e1e41b5f",
+      "historical_sha256": "520823a268b7417eeeab333fd23d7292446b40196452b5093e5886db17fc0451",
+      "sha256": "d5a9ecce3a12985de4495298a142876882834ac02ac08209ea7ac4aca94db7dd"
+    },
+    {
+      "path": "public/reports/segundo-informe-septiembre-2026.md",
+      "source_commit": "c60b17c6ddc5a08fcd402328f69e73f6e1e41b5f",
+      "historical_sha256": "455090c92db7ffc15d8ae8790e86681e0979ce692ffefe2cb6318482ad2c7b1e",
+      "sha256": "414e73cc3eb43b0788d8c5cdf901acb24eba106cad7ac9e1fa38377cfae6e5c1"
+    },
+    {
+      "path": "public/reports/segundo-informe-septiembre-2026.pdf",
+      "source_commit": "c60b17c6ddc5a08fcd402328f69e73f6e1e41b5f",
+      "historical_sha256": "b635afc5e576452b56f029da2f58f33c27525ea93a3da5eaf575647fd3b32999",
+      "sha256": "3b642597734d934b2f0e9d86ca23533302e4de63052b7d1e6adf5dd92818df6f"
+    }
+  ]
+}

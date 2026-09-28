@@ -189,7 +189,7 @@ const frozen = {
   '21 metadata resolver and diagnostics unchanged': { 'probe-runtime.mjs': '4ae5cc4bbdb34b20366bcdace9043f4bcc2f0029bf9cc4385d6d7ab7e4cb899e' },
   '22 PROBE cannot invoke controller; authorization source unchanged': { 'probe-core.mjs': '1f9febf65554472832d4858af453662d87f27925e5b282cfe2b04a6b66ebba41' },
   '23 ADOPT transport and runner unchanged': { 'release-core.mjs': 'c461b1af450c69007b4f5bfac9c21010ca475b843aec5fed3ff6fe6b8912dd70', 'qa-runner.mjs': '4584b988912f702a3b79f8de19640dd8eb0c0ebf61e45d0330af6ae975c03262' },
-  '24 PROMOTE transport unchanged and ADOPT-only harness extension pinned': { 'release-core.mjs': 'c461b1af450c69007b4f5bfac9c21010ca475b843aec5fed3ff6fe6b8912dd70', 'browser-harness-base.mjs': 'a31d2f4b3b247b2d40ae0eb8c3d963fc5756b1d37fee701155f457866c771272' }
+  '24 PROMOTE transport unchanged and ADOPT-only harness extension pinned': { 'release-core.mjs': 'c461b1af450c69007b4f5bfac9c21010ca475b843aec5fed3ff6fe6b8912dd70', 'browser-harness-base.mjs': '4c1953a99841b6234dd9a5e5f5fb98fcf721e377d6b95c4157fc690a345fac4b' }
 };
 for (const [name, files] of Object.entries(frozen)) test(name, () => {
   for (const [file, expected] of Object.entries(files)) assert.equal(createHash('sha256').update(file==='release-core.mjs'?withoutReceiptClass(fs.readFileSync(new URL('../scripts/' + file, import.meta.url))):fs.readFileSync(new URL('../scripts/' + file, import.meta.url))).digest('hex'), expected, file);

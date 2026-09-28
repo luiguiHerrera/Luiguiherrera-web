@@ -1,5 +1,5 @@
 import {withoutReceiptClass} from './semantic-closure-compat.mjs';
-// Frozen security/classifier/ADOPT/PROMOTE contracts remain exact across the authorized post-certification QA-cache repair.
+// The requalified production target policy is pinned explicitly; other frozen security/classifier/ADOPT/PROMOTE contracts remain exact.
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
@@ -25,20 +25,20 @@ const expected = {
   "phase-scoped token budget unchanged": {
     "scripts/probe-token-budget.mjs": "944a180e12e516417acf3f98b3e59ad402b33293b9141eaa830753d47c09860e"
   },
-  "PROBE target authorization and controller-exclusion contracts unchanged": {
+  "requalified production target policy pinned; PROBE authorization and controller exclusion unchanged": {
     "scripts/probe-core.mjs": "1f9febf65554472832d4858af453662d87f27925e5b282cfe2b04a6b66ebba41",
-    "policy.json": "672c81cce8eb0e84869e111e4816a46716edf402f9a546caa06f3b33c8382aec",
+    "policy.json": "e8865e7b7c392147f111a4f558434d536cbdfbb648d463053a74701b2bb98e9a",
     "controller-request-schema.json": "d44337f72a9970d9db8e5d24ec1c400b4a5a4db9d4e3110b054727e6c9a224d3",
     "controller-qa-schema.json": "3fece1fd42493bc6210c1ea901459f50c85fc2deb24d177e0dadf51b35a063d8"
   },
   "ADOPT evidence wiring is pinned; shared runner and transport unchanged": {
     "scripts/qa-runner.mjs": "4584b988912f702a3b79f8de19640dd8eb0c0ebf61e45d0330af6ae975c03262",
-    "scripts/browser-harness-base.mjs": "a31d2f4b3b247b2d40ae0eb8c3d963fc5756b1d37fee701155f457866c771272",
+    "scripts/browser-harness-base.mjs": "4c1953a99841b6234dd9a5e5f5fb98fcf721e377d6b95c4157fc690a345fac4b",
     "scripts/release-core.mjs": "c461b1af450c69007b4f5bfac9c21010ca475b843aec5fed3ff6fe6b8912dd70"
   },
   "PROMOTE shared runner unchanged; ADOPT-only harness extension pinned": {
     "scripts/qa-runner.mjs": "4584b988912f702a3b79f8de19640dd8eb0c0ebf61e45d0330af6ae975c03262",
-    "scripts/browser-harness-base.mjs": "a31d2f4b3b247b2d40ae0eb8c3d963fc5756b1d37fee701155f457866c771272",
+    "scripts/browser-harness-base.mjs": "4c1953a99841b6234dd9a5e5f5fb98fcf721e377d6b95c4157fc690a345fac4b",
     "scripts/release-core.mjs": "c461b1af450c69007b4f5bfac9c21010ca475b843aec5fed3ff6fe6b8912dd70"
   }
 };
