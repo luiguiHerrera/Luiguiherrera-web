@@ -1,6 +1,8 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs/promises';
+import { spawnSync } from 'node:child_process';
+import { fileURLToPath } from 'node:url';
 import { P, sha } from '../scripts/release-core.mjs';
 import { selectProbeTarget } from '../scripts/probe-core.mjs';
 import { resolveProbeDeployment } from '../scripts/probe-runtime.mjs';
@@ -41,8 +43,8 @@ function mockMetadata(t, data) {
 
 test('registry is the exact approved five-field non-secret Preview declaration', async () => {
   assert.deepEqual(await readRegisteredProbeFixture(), {
-    deployment_id: 'dpl_BMtQ4tLPJBq9rgwpeGPecj2CGHEe', git_sha: 'd12c6575adcd4786e11aa1c6ea787df1cb231fed',
-    origin: 'https://luiguiherrera-kywipydlx-luigui-herrera-s-projects.vercel.app', project: 'luiguiherrera-web', environment: 'Preview',
+    deployment_id: 'dpl_6wA7tYMv6yNhoMQJDXN3S9JXWw9J', git_sha: 'c8454dc06bae4bfc2d6fbc90cf9ffa4f94bb63c1',
+    origin: 'https://luiguiherrera-7vs8qeq5j-luigui-herrera-s-projects.vercel.app', project: 'luiguiherrera-web', environment: 'Preview',
   });
   assert.deepEqual(requireRegisteredProbeTarget(target, fixture), fixture);
 });
@@ -151,3 +153,166 @@ test('registration preserves bot identity and project scope rejection', async t 
   mockMetadata(t, data);
   await assert.rejects(resolveProbeDeployment(target), /PROBE_VERCEL_ID_BINDING/);
 });
+
+// Execute the workflow's Python, not a duplicate lineage implementation. Git responses
+// model an uncommitted future E; all predecessor/product blobs come from real Git.
+const repositoryRoot = fileURLToPath(new URL('../../../', import.meta.url));
+const ciText = await fs.readFile(new URL('../../../.github/workflows/ci.yml', import.meta.url), 'utf8');
+const ciPython = [...ciText.matchAll(/^          python3 - <<'PYCODE'\n([\s\S]*?)^          PYCODE$/gm)]
+  .map(match => match[1].split('\n').map(line => line.replace(/^ {10}/, '')).join('\n'));
+assert.equal(ciPython.length, 3, 'Expected actual binding, integrity and accounting programs');
+const successorModel = String.raw`
+import json,sys,os,hashlib,subprocess,tempfile,contextlib,io
+from pathlib import Path
+from unittest.mock import patch
+payload=json.load(sys.stdin); case=payload['case']; root=Path.cwd()
+R='c8454dc06bae4bfc2d6fbc90cf9ffa4f94bb63c1'; M='e7872b9c0e5bb0be3e090fbe2c5b930d68dcbece'
+C='0c8fce262fce44650729883862ec948778ebea45'; P='c60b17c6ddc5a08fcd402328f69e73f6e1e41b5f'; E='f'*40
+original_output=subprocess.check_output; original_run=subprocess.run
+original_bytes=Path.read_bytes; original_text=Path.read_text
+allowed=['.github/workflows/ci.yml','.github/workflows/statistical-levels-release.yml',
+'scripts/statistical-levels-release/probe-fixture.json',
+'scripts/statistical-levels-release/tests/probe-fixture-registry.test.mjs',
+'scripts/statistical-levels-release/source-manifest.json',
+'scripts/statistical-levels-release/SOURCE_SHA256SUMS',
+'scripts/statistical-levels-release/workflow-freeze.json']
+assert original_output(['git','show','-s','--format=%P',R]).decode().strip()==M
+assert original_output(['git','show','-s','--format=%P',M]).decode().strip().split()==[C,P]
+for ancestor in [M,C,P]: original_run(['git','merge-base','--is-ancestor',ancestor,R],check=True)
+ancestry=[]
+def output(args,**kwargs):
+    if args==['git','rev-parse','HEAD']: value=E.encode()+b'\n'
+    elif args==['git','show','-s','--format=%P','HEAD']:
+        parents={'unrelated':['a'*40],'sibling':[M],'stale':[C],'grandchild':['b'*40],'multiple_parents':[R,M]}.get(case,[R])
+        value=(' '.join(parents)+'\n').encode()
+    elif args==['git','show','-s','--format=%P',R]: value=((C if case=='wrong_predecessor_parent' else M)+'\n').encode()
+    elif args==['git','show','-s','--format=%P',M]: value=(' '.join([P,C] if case=='reversed_anchor' else [C,P])+'\n').encode()
+    elif args==['git','diff','--raw','--no-abbrev','--no-renames','-z',R,'HEAD','--']:
+        names=allowed+(['unreviewed.txt'] if case=='unreviewed_path' else [])
+        if case=='missing_delta': names=names[:-1]
+        value=b''.join((':100644 '+('100755' if case=='changed_mode' else '100644')+' '+'a'*40+' '+'b'*40+' M\0'+name+'\0').encode() for name in names)
+    elif args==['git','show',R+':components/layout/Footer.tsx'] and case=='wrong_preview_input': value=b'incorrect Preview bytes'
+    else: return original_output(args,**kwargs)
+    return value.decode() if kwargs.get('text') else value
+
+def run(args,**kwargs):
+    if args[:2] in [['git','show'],['git','ls-files']]: return original_run(args,**kwargs)
+    if args[:3]==['git','diff','--exit-code']:
+        if case=='dirty': raise subprocess.CalledProcessError(1,args)
+        return subprocess.CompletedProcess(args,0)
+    if args[:3]==['git','merge-base','--is-ancestor']:
+        assert args[3] in [R,M,C,P] and args[4]==E
+        ancestry.append(args[3])
+        if case=='missing_ancestry' and args[3]==P: raise subprocess.CalledProcessError(1,args)
+        return subprocess.CompletedProcess(args,0)
+    raise AssertionError('Unexpected command '+repr(args))
+
+def read_bytes(path):
+    value=original_bytes(path)
+    name=str(path.relative_to(root)) if path.is_relative_to(root) else ''
+    if name=='scripts/statistical-levels-release/probe-fixture.json':
+        data=json.loads(value)
+        if case=='wrong_registration': data['git_sha']='a'*40
+        if case=='extra_registration_field': data['latest']=True
+        if case=='wrong_origin': data['origin']='https://wrong.vercel.app'
+        if case=='duplicate_registration_key': return value.rstrip()[:-1]+b',"project":"luiguiherrera-web"}'
+        value=json.dumps(data).encode()
+    if name=='scripts/statistical-levels-release/source-inputs.json' and case=='wrong_input_inventory': value+=b' '
+    if name=='components/layout/Footer.tsx' and case=='wrong_product_input': value+=b'changed'
+    return value
+
+with tempfile.TemporaryDirectory(prefix='sl-successor-guard-') as directory:
+    env={'CI_EVENT_SHA':'refs/heads/vercel-deployment' if case=='mutable_ref' else E,
+         'GITHUB_SHA':'a'*40 if case=='wrong_sha' else E,'GITHUB_EVENT_NAME':'pull_request' if case=='pr_nonqualification' else 'push',
+         'GITHUB_REF':'refs/pull/1/merge' if case=='pr_nonqualification' else 'refs/heads/vercel-deployment',
+         'GITHUB_RUN_ID':'123','GITHUB_RUN_ATTEMPT':'1','CI_EVIDENCE':directory}
+    try:
+        with patch.dict(os.environ,env),patch('subprocess.check_output',output),patch('subprocess.run',run),patch.object(Path,'read_bytes',read_bytes),contextlib.redirect_stdout(io.StringIO()):
+            exec(compile(payload['guard'],'actual-ci-guard','exec'),{})
+        subject=json.loads((Path(directory)/'subject.json').read_text())
+        if case=='pr_nonqualification':
+            assert not subject['integration_push'] and not subject['lineage']['registration_successor_parent_verified']
+            assert not subject['lineage']['registration_content_verified'] and ancestry==[]
+        else:
+            assert subject['parents']==[R] and subject['lineage']['qualified_predecessor_parents']==[M]
+            assert subject['lineage']['merge_anchor_parents']==[C,P] and ancestry==[R,M,C,P]
+        if case in ['stale_run','stale_attempt']:
+            subject['run_id' if case=='stale_run' else 'run_attempt']='999'
+            (Path(directory)/'subject.json').write_text(json.dumps(subject))
+            tail=payload['summary'][payload['summary'].index("subject=json.loads"):]
+            with patch.dict(os.environ,env),patch('subprocess.check_output',output),contextlib.redirect_stdout(io.StringIO()):
+                exec(compile(tail,'actual-ci-summary','exec'),{'out':Path(directory),'root':root,'summary':{},'after':{},'json':json,'os':os,'subprocess':subprocess,'hashlib':hashlib})
+        if case in ['wrong_sums','wrong_workflow']:
+            # Use the qualified predecessor's stored bytes, without rebuilding or
+            # writing any derived artifact; tamper only at the read boundary.
+            def predecessor_bytes(path):
+                name=str(path.relative_to(root))
+                value=original_output(['git','show',R+':'+name])
+                if case=='wrong_sums' and name.endswith('/SOURCE_SHA256SUMS'): value+=b'invalid checksum\n'
+                if case=='wrong_workflow' and name=='.github/workflows/statistical-levels-release.yml': value+=b'# invalid workflow identity\n'
+                return value
+            def predecessor_text(path,*args,**kwargs): return predecessor_bytes(path).decode()
+            with patch.object(Path,'read_bytes',predecessor_bytes),patch.object(Path,'read_text',predecessor_text),contextlib.redirect_stdout(io.StringIO()):
+                exec(compile(payload['integrity'],'actual-ci-integrity','exec'),{})
+        print(json.dumps({'accepted':True}))
+    except (AssertionError,subprocess.CalledProcessError) as error:
+        print(json.dumps({'accepted':False,'error':str(error)}))
+`;
+
+const successorCases = {
+  valid: null,
+  unrelated: 'WRONG_REGISTRATION_SUCCESSOR_PARENT',
+  sibling: 'WRONG_REGISTRATION_SUCCESSOR_PARENT',
+  stale: 'WRONG_REGISTRATION_SUCCESSOR_PARENT',
+  grandchild: 'WRONG_REGISTRATION_SUCCESSOR_PARENT',
+  multiple_parents: 'WRONG_REGISTRATION_SUCCESSOR_PARENT',
+  wrong_predecessor_parent: 'WRONG_QUALIFIED_PREDECESSOR_PARENT',
+  reversed_anchor: 'WRONG_ORDERED_ANCHOR_PARENTS',
+  missing_ancestry: 'returned non-zero exit status',
+  wrong_sha: 'WRONG_TESTED_SHA',
+  mutable_ref: 'EVENT_SHA_NOT_IMMUTABLE',
+  wrong_registration: 'WRONG_SUCCESSOR_REGISTRATION',
+  extra_registration_field: 'WRONG_SUCCESSOR_REGISTRATION',
+  wrong_origin: 'WRONG_SUCCESSOR_REGISTRATION',
+  duplicate_registration_key: 'DUPLICATE_SUCCESSOR_JSON_KEY',
+  wrong_input_inventory: 'SUCCESSOR_INPUT_INVENTORY_CHANGED',
+  wrong_product_input: 'SUCCESSOR_PRODUCT_INPUT_CHANGED',
+  wrong_preview_input: 'REGISTERED_PREVIEW_INPUT_MISMATCH',
+  unreviewed_path: 'SUCCESSOR_CONTENT_SCOPE',
+  changed_mode: 'SUCCESSOR_FILE_MODE_OR_STATUS',
+  missing_delta: 'SUCCESSOR_CONTENT_SCOPE',
+  dirty: 'returned non-zero exit status',
+  pr_nonqualification: null,
+  stale_run: 'CROSS_RUN_SUBJECT',
+  stale_attempt: 'CROSS_RUN_SUBJECT',
+  wrong_sums: 'SOURCE_SUMS',
+  wrong_workflow: 'FREEZE_PARITY',
+};
+
+// Approval of arbitrary bytes within the permitted files is deliberately NOT
+// inferred here: independent review and exact reviewed-tree/commit parity are
+// separate mandatory integration gates. The path negative tests only that boundary.
+test('governed successor: identity', () => {
+  assert.deepEqual(validateRegisteredProbeFixture(fixture), {
+    deployment_id: 'dpl_6wA7tYMv6yNhoMQJDXN3S9JXWw9J',
+    git_sha: 'c8454dc06bae4bfc2d6fbc90cf9ffa4f94bb63c1',
+    origin: 'https://luiguiherrera-7vs8qeq5j-luigui-herrera-s-projects.vercel.app',
+    project: 'luiguiherrera-web', environment: 'Preview',
+  });
+  assert.deepEqual(requireRegisteredProbeTarget(target, fixture), fixture);
+  assert.throws(() => requireRegisteredProbeTarget({ ...target,
+    candidate_git_sha: 'd12c6575adcd4786e11aa1c6ea787df1cb231fed' }, fixture), /PROBE_UNREGISTERED_GIT_SHA/);
+});
+
+for (const [name, expectedError] of Object.entries(successorCases)) {
+  test('governed successor: ' + name, () => {
+    const result = spawnSync('python3', ['-c', successorModel], {
+      cwd: repositoryRoot, encoding: 'utf8', timeout: 60000,
+      input: JSON.stringify({ case: name, guard: ciPython[0], integrity: ciPython[1], summary: ciPython[2] }),
+    });
+    assert.equal(result.status, 0, result.stderr || String(result.error));
+    const output = JSON.parse(result.stdout);
+    assert.equal(output.accepted, expectedError === null, JSON.stringify(output));
+    if (expectedError !== null) assert.ok(output.error.includes(expectedError), JSON.stringify(output));
+  });
+}

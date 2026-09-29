@@ -29,7 +29,7 @@ jobs:
           node-version: "22.23.2"
           cache: npm
 
-      - name: Bind qualification to event SHA and governed repair-child lineage
+      - name: Bind qualification to event SHA and governed registration-successor lineage
         shell: bash
         run: |
           set -euo pipefail
@@ -42,24 +42,62 @@ jobs:
           root=Path.cwd(); out=Path(os.environ['CI_EVIDENCE'])
           git=lambda *args: subprocess.check_output(['git',*args])
           head=git('rev-parse','HEAD').decode().strip()
-          assert re.fullmatch('[a-f0-9]{40}',os.environ['CI_EVENT_SHA'])
+          assert re.fullmatch('[a-f0-9]{40}',os.environ['CI_EVENT_SHA']), 'EVENT_SHA_NOT_IMMUTABLE'
           assert head==os.environ['CI_EVENT_SHA']==os.environ['GITHUB_SHA'], 'WRONG_TESTED_SHA'
           subprocess.run(['git','diff','--exit-code','HEAD','--'],check=True)
           parents=git('show','-s','--format=%P','HEAD').decode().strip().split()
           execution='0c8fce262fce44650729883862ec948778ebea45'
           production='c60b17c6ddc5a08fcd402328f69e73f6e1e41b5f'
           merge_anchor='e7872b9c0e5bb0be3e090fbe2c5b930d68dcbece'
+          qualified_predecessor='c8454dc06bae4bfc2d6fbc90cf9ffa4f94bb63c1'
+          predecessor_parents=None
           anchor_parents=None
           is_integration_push=os.environ['GITHUB_EVENT_NAME']=='push' and os.environ['GITHUB_REF']=='refs/heads/vercel-deployment'
           if is_integration_push:
-              assert parents==[merge_anchor], 'WRONG_REPAIR_PARENT'
+              assert parents==[qualified_predecessor], 'WRONG_REGISTRATION_SUCCESSOR_PARENT'
+              predecessor_parents=git('show','-s','--format=%P',qualified_predecessor).decode().strip().split()
+              assert predecessor_parents==[merge_anchor], 'WRONG_QUALIFIED_PREDECESSOR_PARENT'
               anchor_parents=git('show','-s','--format=%P',merge_anchor).decode().strip().split()
               assert anchor_parents==[execution,production], 'WRONG_ORDERED_ANCHOR_PARENTS'
-              for parent in [merge_anchor,execution,production]:
+              for parent in [qualified_predecessor,merge_anchor,execution,production]:
                   subprocess.run(['git','merge-base','--is-ancestor',parent,head],check=True)
+              allowed={
+                  '.github/workflows/ci.yml','.github/workflows/statistical-levels-release.yml',
+                  'scripts/statistical-levels-release/probe-fixture.json',
+                  'scripts/statistical-levels-release/tests/probe-fixture-registry.test.mjs',
+                  'scripts/statistical-levels-release/source-manifest.json',
+                  'scripts/statistical-levels-release/SOURCE_SHA256SUMS',
+                  'scripts/statistical-levels-release/workflow-freeze.json'}
+              delta=git('diff','--raw','--no-abbrev','--no-renames','-z',qualified_predecessor,'HEAD','--').decode().rstrip('\0').split('\0')
+              assert len(delta)%2==0, 'SUCCESSOR_DELTA_FORMAT'
+              changed=[]
+              for header,name in zip(delta[::2],delta[1::2]):
+                  fields=header.split()
+                  assert len(fields)==5 and fields[0]==':100644' and fields[1]=='100644' and fields[4]=='M', 'SUCCESSOR_FILE_MODE_OR_STATUS'
+                  changed.append(name)
+              assert len(changed)==len(allowed) and set(changed)==allowed, 'SUCCESSOR_CONTENT_SCOPE'
+              def unique_json(data):
+                  def pairs(items):
+                      assert len(items)==len(dict(items)), 'DUPLICATE_SUCCESSOR_JSON_KEY'
+                      return dict(items)
+                  return json.loads(data,object_pairs_hook=pairs)
+              base=root/'scripts/statistical-levels-release'
+              registered=unique_json((base/'probe-fixture.json').read_bytes())
+              assert registered=={'git_sha':qualified_predecessor,'deployment_id':'dpl_6wA7tYMv6yNhoMQJDXN3S9JXWw9J',
+                  'origin':'https://luiguiherrera-7vs8qeq5j-luigui-herrera-s-projects.vercel.app',
+                  'project':'luiguiherrera-web','environment':'Preview'}, 'WRONG_SUCCESSOR_REGISTRATION'
+              input_path='scripts/statistical-levels-release/source-inputs.json'
+              input_bytes=(root/input_path).read_bytes()
+              assert input_bytes==git('show',qualified_predecessor+':'+input_path), 'SUCCESSOR_INPUT_INVENTORY_CHANGED'
+              inputs=unique_json(input_bytes)
+              assert len(inputs)==41, 'SUCCESSOR_INPUT_COUNT'
+              for name,digest in inputs.items():
+                  assert hashlib.sha256((root/name).read_bytes()).hexdigest()==digest, 'SUCCESSOR_PRODUCT_INPUT_CHANGED'
+                  assert hashlib.sha256(git('show',qualified_predecessor+':'+name)).hexdigest()==digest, 'REGISTERED_PREVIEW_INPUT_MISMATCH'
+              # Review approval is a separate exact-tree pre-push gate, never inferred from ancestry.
           # PR checks exercise their event SHA; they never certify the integration push.
           subject={'head_sha':head,'parents':parents,'event':os.environ['GITHUB_EVENT_NAME'],'ref':os.environ['GITHUB_REF'],'run_id':os.environ['GITHUB_RUN_ID'],'run_attempt':os.environ['GITHUB_RUN_ATTEMPT'],'integration_push':is_integration_push}
-          subject['lineage']={'merge_anchor_sha':merge_anchor,'merge_anchor_parents':anchor_parents,'repair_parent_verified':is_integration_push,'two_parent_anchor_verified':is_integration_push}
+          subject['lineage']={'qualified_predecessor_sha':qualified_predecessor,'qualified_predecessor_parents':predecessor_parents,'merge_anchor_sha':merge_anchor,'merge_anchor_parents':anchor_parents,'registration_successor_parent_verified':is_integration_push,'registration_content_verified':is_integration_push,'two_parent_anchor_verified':is_integration_push}
           paths=sorted(git('ls-files','-z').decode().rstrip('\0').split('\0'))
           files={p:{'mode':format((root/p).stat().st_mode,'o'),'sha256':hashlib.sha256((root/p).read_bytes()).hexdigest()} for p in paths}
           (out/'subject.json').write_text(json.dumps(subject,sort_keys=True)+'\n')
@@ -183,7 +221,7 @@ jobs:
           'archived raw identity and final completed history are independently bound',
           'identical frozen archived bytes reproduce all 81 snapshots; sidecar corruption blocks validation',
           ' two complete regenerations from archived raw have identical 81-file and provenance manifests'.strip()}
-          for name,minimum in [('release',1743),('reports',31),('product',68)]:
+          for name,minimum in [('release',1771),('reports',31),('product',68)]:
               text=(out/(name+'.tap')).read_text()
               counts={key:int(re.search(r'^# '+key+r' (\d+)$',text,re.M)[1]) for key in ['tests','pass','fail','cancelled','skipped','todo']}
               assert counts['tests']>=minimum and counts['fail']==counts['cancelled']==counts['todo']==0, (name,counts)
@@ -192,6 +230,9 @@ jobs:
               assert len(skipped)==counts['skipped'], 'UNACCOUNTED_SKIP'
               assert len(skipped)==len(set(skipped)), 'DUPLICATE_SKIP'
               assert set(skipped)<=(allowed_product_skips if name=='product' else set()), (name,skipped)
+              if name=='release':
+                  for case in ['identity','valid','unrelated','sibling','stale','grandchild','multiple_parents','wrong_predecessor_parent','reversed_anchor','missing_ancestry','wrong_sha','mutable_ref','wrong_registration','extra_registration_field','wrong_origin','duplicate_registration_key','wrong_input_inventory','wrong_product_input','wrong_preview_input','unreviewed_path','changed_mode','missing_delta','dirty','pr_nonqualification','stale_run','stale_attempt','wrong_sums','wrong_workflow']:
+                      assert len(re.findall(r'^ok \d+ - governed successor: '+case+r'$',text,re.M))==1, 'SUCCESSOR_GUARD_CASE_NOT_EXECUTED'
               if name=='product':
                   for failure in ['identity','storage','partial','collision','readback','manifest','provenance','validation']:
                       assert len(re.findall(r'^ok \d+ - real adapter failure injection: '+failure+r'$',text,re.M))==1, 'STORAGE_CASE_NOT_EXECUTED'
@@ -203,12 +244,17 @@ jobs:
           after={p:{'mode':format((root/p).stat().st_mode,'o'),'sha256':hashlib.sha256((root/p).read_bytes()).hexdigest()} for p in paths}
           assert after==before, 'GOVERNED_BYTES_CHANGED'
           subject=json.loads((out/'subject.json').read_text());assert subject['head_sha']==os.environ['CI_EVENT_SHA']
+          assert subject['head_sha']==os.environ['GITHUB_SHA'], 'WRONG_SUMMARY_SHA'
+          assert subject['run_id']==os.environ['GITHUB_RUN_ID'] and subject['run_attempt']==os.environ['GITHUB_RUN_ATTEMPT'], 'CROSS_RUN_SUBJECT'
+          assert subject['event']==os.environ['GITHUB_EVENT_NAME'] and subject['ref']==os.environ['GITHUB_REF'], 'WRONG_SUBJECT_EVENT'
+          assert subject['integration_push']==(os.environ['GITHUB_EVENT_NAME']=='push' and os.environ['GITHUB_REF']=='refs/heads/vercel-deployment'), 'WRONG_INTEGRATION_CLASS'
           assert subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip()==subject['head_sha']
           summary['subject']=subject
           summary['integration_qualification_complete']=subject['integration_push']
           summary['covered_obligations']=['C%02d'%i for i in range(1,14) if i!=11 or subject['integration_push']]
           summary['lineage_tests_executed']=True
-          summary['governed_repair_parent_verified']=subject['lineage']['repair_parent_verified']
+          summary['governed_registration_successor_parent_verified']=subject['lineage']['registration_successor_parent_verified']
+          summary['governed_registration_content_verified']=subject['lineage']['registration_content_verified']
           summary['governed_two_parent_anchor_verified']=subject['lineage']['two_parent_anchor_verified']
           summary['candidate_content_sha256']=hashlib.sha256(json.dumps(after,sort_keys=True,separators=(',',':')).encode()).hexdigest()
           (out/'qualification-summary.json').write_text(json.dumps(summary,indent=2)+'\n')
