@@ -23,12 +23,15 @@ const report = () => ({ result: 'PASS', gates: Object.fromEntries(productGates.m
 const creator = { login: P.vercel_creator_login, id: P.vercel_creator_id };
 function metadata() {
   return {
-    deployments: [{ id: 100, creator, sha: inputs.probe_git_sha, environment: 'Preview', production_environment: false }],
-    statusSets: { '100': [{ id: 200, creator, state: 'success', environment: 'Preview', updated_at: time,
+    deployments: [{ id: 100, creator, sha: inputs.probe_git_sha, environment: 'Preview', production_environment: false,
+      url: `https://api.github.com/repos/${P.repository}/deployments/100`, created_at: time, updated_at: time }],
+    statusSets: { '100': [{ id: 200, creator, state: 'success', environment: 'Preview', created_at: time, updated_at: time,
+      url: `https://api.github.com/repos/${P.repository}/deployments/100/statuses/200`,
       environment_url: origin, target_url: origin, log_url: origin,
       deployment_url: `https://api.github.com/repos/${P.repository}/deployments/100` }] },
     commitStatuses: [{ id: 300, creator, state: 'success', context: 'Vercel',
-      target_url: P.vercel_details_base_url + inputs.probe_deployment_id.slice(4), updated_at: time }],
+      url: `https://api.github.com/repos/${P.repository}/statuses/${inputs.probe_git_sha}`,
+      target_url: P.vercel_details_base_url + inputs.probe_deployment_id.slice(4), created_at: time, updated_at: time }],
   };
 }
 function resolve(data = metadata()) {
@@ -120,7 +123,7 @@ for (const [name, delta] of [
   ['failed', { state: 'failure' }], ['inactive', { state: 'inactive' }],
   ['untrusted', { creator: { ...creator, id: 1 } }],
 ]) test('newer ' + name + ' status on same Preview cannot revive older success', () => {
-  const d = metadata(); d.statusSets['100'].push({ ...d.statusSets['100'][0], id: 201, ...delta });
+  const d = metadata(); d.statusSets['100'].push({ ...d.statusSets['100'][0], id: 201, url: `https://api.github.com/repos/${P.repository}/deployments/100/statuses/201`, ...delta });
   assert.throws(() => resolve(d), /PROBE_PREVIEW_METADATA_AMBIGUOUS/);
 });
 for (const [name, mutate] of [
@@ -135,7 +138,7 @@ for (const [name, mutate] of [
   ['wrong status context', d => { d.commitStatuses[0].context = 'Unknown'; }],
   ['Production deployment', d => { d.deployments[0].production_environment = true; }],
   ['Production status', d => { d.statusSets['100'][0].environment = 'Production'; }],
-  ['timestamp mismatch', d => { d.statusSets['100'][0].updated_at = '2026-09-10T09:00:00Z'; }],
+  ['update before creation', d => { d.statusSets['100'][0].updated_at = '2026-09-10T07:59:59Z'; }],
   ['invalid timestamp', d => { d.commitStatuses[0].updated_at = '2026-02-30T08:00:00Z'; }],
   ['wrong deployment link', d => { d.statusSets['100'][0].deployment_url += '/other'; }],
   ['wrong target link', d => { d.statusSets['100'][0].target_url = 'https://other.invalid'; }],
@@ -154,8 +157,9 @@ for (const [name, mutate] of [
   const d = metadata(); mutate(d); assert.throws(() => resolve(d));
 });
 test('two independently matching Preview deployments are ambiguous', () => {
-  const d = metadata(); d.deployments.push({ ...d.deployments[0], id: 101 });
+  const d = metadata(); d.deployments.push({ ...d.deployments[0], id: 101, url: `https://api.github.com/repos/${P.repository}/deployments/101` });
   d.statusSets['101'] = [{ ...d.statusSets['100'][0], id: 201,
+    url: `https://api.github.com/repos/${P.repository}/deployments/101/statuses/201`,
     deployment_url: `https://api.github.com/repos/${P.repository}/deployments/101` }];
   assert.throws(() => resolve(d), /PROBE_PREVIEW_METADATA_AMBIGUOUS/);
 });
@@ -163,6 +167,121 @@ test('resolver rejects caller-provided resolved origin or proof', () => {
   const d = metadata();
   assert.throws(() => resolveProbePreview(d.deployments, d.statusSets, d.commitStatuses,
     { ...selectProbeTarget(inputs), origin }), /PROBE_UNRESOLVED_TARGET/);
+});
+
+// Independent literals from the adjudicated registered Preview, not resolver output.
+test('timestamp repair: exact registered Preview pending-to-success history', () => {
+  const registered = { operation: PROBE, phase: 'preview',
+    candidate_git_sha: 'c8454dc06bae4bfc2d6fbc90cf9ffa4f94bb63c1',
+    deployment_id: 'dpl_6wA7tYMv6yNhoMQJDXN3S9JXWw9J' };
+  const api = 'https://api.github.com/repos/luiguiHerrera/Luiguiherrera-web';
+  const bot = { login: 'vercel[bot]', id: 35613825 };
+  const registeredOrigin = 'https://luiguiherrera-7vs8qeq5j-luigui-herrera-s-projects.vercel.app';
+  const deployments = [{ id: 6722080741, creator: bot, sha: registered.candidate_git_sha,
+    environment: 'Preview', production_environment: false, url: api + '/deployments/6722080741',
+    created_at: '2026-09-28T22:33:37Z', updated_at: '2026-09-28T22:33:37Z' }];
+  const statuses = { '6722080741': [{ id: 18971942414, creator: bot, state: 'success', environment: 'Preview',
+    url: api + '/deployments/6722080741/statuses/18971942414', deployment_url: api + '/deployments/6722080741',
+    environment_url: registeredOrigin, target_url: registeredOrigin, log_url: registeredOrigin,
+    created_at: '2026-09-28T22:33:37Z', updated_at: '2026-09-28T22:33:37Z' }] };
+  const commits = [{ id: 55126520438, creator: bot, state: 'success', context: 'Vercel',
+    url: api + '/statuses/c8454dc06bae4bfc2d6fbc90cf9ffa4f94bb63c1',
+    target_url: 'https://vercel.com/luigui-herrera-s-projects/luiguiherrera-web/6wA7tYMv6yNhoMQJDXN3S9JXWw9J',
+    created_at: '2026-09-28T22:33:36Z', updated_at: '2026-09-28T22:33:36Z' }];
+  commits.push({ ...commits[0], id: 55126440840, state: 'pending',
+    created_at: '2026-09-28T22:32:16Z', updated_at: '2026-09-28T22:32:16Z' });
+  // Vercel READY is adjudication context, never a new resolver clock/input.
+  const readyAt = '2026-09-28T22:33:36.386Z';
+  assert.equal(Date.parse(commits[0].created_at) - Date.parse(readyAt), -386);
+  assert.equal(Date.parse(statuses['6722080741'][0].created_at) - Date.parse(readyAt), 614);
+  assert.notEqual(commits[0].updated_at, statuses['6722080741'][0].updated_at);
+  const resolved = resolveProbePreview(deployments, statuses, commits, registered);
+  assert.equal(resolved.origin, registeredOrigin);
+  assert.equal(resolved.deployment_id, 'dpl_6wA7tYMv6yNhoMQJDXN3S9JXWw9J');
+  assert.equal(resolved.candidate_git_sha, 'c8454dc06bae4bfc2d6fbc90cf9ffa4f94bb63c1');
+  assert.equal(resolved.github_deployment_id, 6722080741);
+  assert.equal(resolved.status_id, 18971942414); assert.equal(resolved.commit_status_id, 55126520438);
+  assert.equal(resolved.status_sha256, sha(canonical(statuses['6722080741'][0])));
+  assert.equal(resolved.commit_status_sha256, sha(canonical(commits[0])));
+});
+
+for (const [name, commitTime, statusTime] of [
+  ['exact equality', time, time],
+  ['equivalent represented instant', '2026-09-10T08:00:00Z', time],
+  ['commit publication first', time, '2026-09-10T09:00:00Z'],
+  ['deployment status publication first', '2026-09-10T09:00:00Z', time],
+  ['no maximum propagation window', time, '2027-09-10T08:00:00Z'],
+]) test('timestamp repair: ' + name, () => {
+  const d = metadata();
+  d.commitStatuses[0].created_at = d.commitStatuses[0].updated_at = commitTime;
+  d.statusSets['100'][0].created_at = d.statusSets['100'][0].updated_at = statusTime;
+  assert.equal(resolve(d).origin, origin);
+});
+
+test('timestamp repair: old record update does not reorder status creation history', () => {
+  const d = metadata(); d.commitStatuses.push({ ...d.commitStatuses[0], id: 299, state: 'pending',
+    created_at: '2026-09-10T07:59:59Z', updated_at: '2026-09-10T09:00:00Z' });
+  assert.equal(resolve(d).commit_status_id, 300);
+});
+
+const resources = { deployment: d => d.deployments[0], commit: d => d.commitStatuses[0],
+  status: d => d.statusSets['100'][0] };
+for (const [resource, record] of Object.entries(resources)) {
+  for (const field of ['created_at', 'updated_at']) {
+    for (const [name, value] of [['missing', undefined], ['UNKNOWN', 'UNKNOWN'],
+      ['invalid calendar date', '2026-02-30T08:00:00Z'], ['invalid leap day', '2026-02-29T08:00:00Z'],
+      ['invalid format', '2026-09-10 08:00:00'], ['numeric', 1790634816386]]) {
+      test(`timestamp repair rejects ${resource} ${field} ${name}`, () => {
+        const d = metadata(); record(d)[field] = value;
+        assert.throws(() => resolve(d), /PROBE_TIMESTAMP/);
+      });
+    }
+  }
+  test('timestamp repair rejects update before creation: ' + resource, () => {
+    const d = metadata(); record(d).updated_at = '2026-09-10T07:59:59Z';
+    assert.throws(() => resolve(d), /PROBE_TIMESTAMP/);
+  });
+}
+test('timestamp repair rejects status creation before its deployment', () => {
+  const d = metadata(); d.statusSets['100'][0].created_at = '2026-09-10T07:59:59Z';
+  assert.throws(() => resolve(d), /PROBE_TIMESTAMP/);
+});
+for (const stream of ['commit', 'status']) test('timestamp repair rejects inverted creation history: ' + stream, () => {
+  const d = metadata();
+  if (stream === 'commit') d.commitStatuses.push({ ...d.commitStatuses[0], id: 301,
+    created_at: '2026-09-10T07:59:59Z' });
+  else {
+    d.deployments[0].created_at = '2026-09-10T07:00:00Z';
+    d.statusSets['100'].push({ ...d.statusSets['100'][0], id: 201,
+      url: `https://api.github.com/repos/${P.repository}/deployments/100/statuses/201`,
+      created_at: '2026-09-10T07:59:59Z' });
+  }
+  assert.throws(() => resolve(d), /PROBE_TIMESTAMP/);
+});
+for (const state of ['failure', 'error', 'pending', 'inactive', 'queued', 'in_progress', 'UNKNOWN']) {
+  for (const stream of ['commit', 'status']) test(`timestamp repair rejects newer ${stream} ${state}`, () => {
+    const d = metadata();
+    if (stream === 'commit') d.commitStatuses.push({ ...d.commitStatuses[0], id: 301, state });
+    else d.statusSets['100'].push({ ...d.statusSets['100'][0], id: 201, state,
+      url: `https://api.github.com/repos/${P.repository}/deployments/100/statuses/201` });
+    assert.throws(() => resolve(d), stream === 'commit' ? /PROBE_VERCEL_ID_BINDING/ : /PROBE_PREVIEW_METADATA_AMBIGUOUS/);
+  });
+}
+test('timestamp repair rejects newer untrusted exact-ID commit head', () => {
+  const d = metadata(); d.commitStatuses.push({ ...d.commitStatuses[0], id: 301, creator: { ...creator, id: 1 } });
+  assert.throws(() => resolve(d), /PROBE_VERCEL_ID_BINDING/);
+});
+for (const [name, mutate, code] of [
+  ['cross-commit record URL', d => { d.commitStatuses[0].url = `https://api.github.com/repos/${P.repository}/statuses/${'a'.repeat(40)}`; }, /PROBE_VERCEL_ID_BINDING/],
+  ['cross-repository commit URL', d => { d.commitStatuses[0].url = d.commitStatuses[0].url.replace(P.repository, 'other/repo'); }, /PROBE_VERCEL_ID_BINDING/],
+  ['cross-deployment object URL', d => { d.deployments[0].url += '1'; }, /PROBE_DEPLOYMENT_LINK/],
+  ['cross-deployment status URL', d => { d.statusSets['100'][0].url = `https://api.github.com/repos/${P.repository}/deployments/101/statuses/200`; }, /PROBE_DEPLOYMENT_LINK/],
+  ['cross-status record URL', d => { d.statusSets['100'][0].url += '1'; }, /PROBE_DEPLOYMENT_LINK/],
+  ['missing commit link', d => { delete d.commitStatuses[0].url; }, /PROBE_VERCEL_ID_BINDING/],
+  ['missing deployment link', d => { delete d.deployments[0].url; }, /PROBE_DEPLOYMENT_LINK/],
+  ['missing status link', d => { delete d.statusSets['100'][0].url; }, /PROBE_DEPLOYMENT_LINK/],
+]) test('timestamp repair rejects ' + name, () => {
+  const d = metadata(); mutate(d); assert.throws(() => resolve(d), code);
 });
 
 test('probe attestation binds independent run and fixture with no release payload', () => {

@@ -1,3 +1,6 @@
+import { readFileSync } from 'node:fs';
+import * as probeContract from '../scripts/probe-core.mjs';
+import * as releaseContract from '../scripts/release-core.mjs';
 import {withoutReceiptClass} from './semantic-closure-compat.mjs';
 // The requalified production target policy is pinned explicitly; other frozen security/classifier/ADOPT/PROMOTE contracts remain exact.
 import test from 'node:test';
@@ -26,7 +29,6 @@ const expected = {
     "scripts/probe-token-budget.mjs": "944a180e12e516417acf3f98b3e59ad402b33293b9141eaa830753d47c09860e"
   },
   "requalified production target policy pinned; PROBE authorization and controller exclusion unchanged": {
-    "scripts/probe-core.mjs": "1f9febf65554472832d4858af453662d87f27925e5b282cfe2b04a6b66ebba41",
     "policy.json": "e8865e7b7c392147f111a4f558434d536cbdfbb648d463053a74701b2bb98e9a",
     "controller-request-schema.json": "d44337f72a9970d9db8e5d24ec1c400b4a5a4db9d4e3110b054727e6c9a224d3",
     "controller-qa-schema.json": "3fece1fd42493bc6210c1ea901459f50c85fc2deb24d177e0dadf51b35a063d8"
@@ -44,6 +46,10 @@ const expected = {
 };
 for (const [name, files] of Object.entries(expected)) {
   test(name, async () => {
+    if (name === 'requalified production target policy pinned; PROBE authorization and controller exclusion unchanged') {
+      assertProbePreservation(probeSourceText());
+      assertProbeSecuritySemantics();
+    }
     for (const [file, hash] of Object.entries(files)) {
       const bytes = await readFile(new URL('../' + file, import.meta.url));
       assert.equal(createHash('sha256').update(file==='scripts/release-core.mjs'?withoutReceiptClass(bytes):bytes).digest('hex'), hash, file);
@@ -81,4 +87,283 @@ test('QA cache repair preserves complete exact certification and token-budget va
     if (Object.hasOwn(frozenProbeGateValidators, node.name?.text)) observed[node.name.text] = createHash('sha256').update(node.getText(ast)).digest('hex');
   }
   assert.deepEqual(observed, frozenProbeGateValidators);
+});
+
+// Step26.5.6.2.4.1: security literals from f7e3fe8e3e3cd8bdea753873c31d78f146cdc923.
+// Metadata literals come separately from the frozen Step26.5.6.2.2 adjudicated target.
+// Neither baseline is obtained from the implementation while these tests run.
+const probeSecurityPins = {
+  "ImportDeclaration": "b91501084153fddb0050bbf39fd12023ff6ed2b9fe5cbbb16036f4ceba55ffda",
+  "PROBE": "062ed85ea55ef93f48dac4e6b2e5f70bb1a3ff348a009adfb2eb7d8f4859a572",
+  "SHA,HASH,DEPLOYMENT": "8a5b7636f1d9f02d46a000f60791e26334743476ad89b9c2f62142fba9ca1110",
+  "RUN": "4b94222b2ca1960096eaed321ce5e24d9cea47f1d990b8008486ba0f89e5cb94",
+  "matches": "1ac97bad2411e08fb5417b2fa9354c621dd0d2338563a8a1cb6b234c368fc910",
+  "releaseInputs": "04cda7c53aed718af18d69bdc768fb42329d4eccc5263520196b0aa6a1453a5f",
+  "metadataKeys": "9a4bba7af3eb9c3359f64b32e64141b074129348b027fe31ca67cb19d2a6108c",
+  "targetKeys": "ae6e148c642fc2cfd6c721f3f1b8d8bbd02a854451f537e4c514510b23cba32c",
+  "selectProbeTarget": "3132ba38e423d709716e940129b72b8519303d82f5648d5317ba285ee5a9a629",
+  "fixtureIdentity": "d34f3a8bd5c8364050641629def39d14fc09fc2431c965527d5160057e852149",
+  "metadataProof": "7b55802e85f026140c500ca2e8ff7cfebe7949a1641c4c4057a6c85bd2c21c4d",
+  "validateProbeTarget": "f8d93ad703d3e9510de315f8d4c8518b9c12f3baa9344382ddecd4e943e1376e",
+  "completePage": "f960660e868164a5b1e41ef203cd6a6280b47f695ee2e401bbf588832c6cb9d6",
+  "validateRun": "10d739ae3c0c0a2edba951962206417d41f4b814478d51672ebe2dac443eb373",
+  "attestProbe": "b3c6c72cd40330d6c02f03e577e953ba6b7fe560714cf2f227b56515eddc0d49",
+  "validateProbeAttestation": "7a94e4242ac2b5d246bab336bc0a918f20a99c6e5897470ea1a6b9d69001811c",
+  "validateProbeRoleIdentity": "dc0435c576b20d96c6429b4c1cab1c0060b6ed146a57c525a392a827af31240c"
+};
+const authorizedMetadataPins = {
+  "timestamp": "4a9f93fe771ae034fb65083e053aa7748594a6f8a99aded5b74d0a9019af26a6",
+  "recordTime": "712a248d86e3752851fc9133ad5694f78fb29ec3d47884cb77ecb4274246814a",
+  "currentStatus": "6fc029a70e11ef255d45319ae1929cbb512dabaab311315854b5fc362c2f6f1d",
+  "resolveProbePreview": "6d4a0cb00e85c7c5a9f3a46dc12f24b9a42745604a2fd915dbb1ffab47ed8f3e"
+};
+const probeDeclarationInventory = [
+  [
+    "ImportDeclaration",
+    "import",
+    false
+  ],
+  [
+    "PROBE",
+    "variable",
+    true
+  ],
+  [
+    "SHA,HASH,DEPLOYMENT",
+    "variable",
+    false
+  ],
+  [
+    "RUN",
+    "variable",
+    false
+  ],
+  [
+    "matches",
+    "variable",
+    false
+  ],
+  [
+    "releaseInputs",
+    "variable",
+    false
+  ],
+  [
+    "metadataKeys",
+    "variable",
+    false
+  ],
+  [
+    "targetKeys",
+    "variable",
+    false
+  ],
+  [
+    "selectProbeTarget",
+    "function",
+    true
+  ],
+  [
+    "fixtureIdentity",
+    "function",
+    false
+  ],
+  [
+    "metadataProof",
+    "function",
+    false
+  ],
+  [
+    "validateProbeTarget",
+    "function",
+    true
+  ],
+  [
+    "completePage",
+    "function",
+    false
+  ],
+  [
+    "timestamp",
+    "function",
+    false
+  ],
+  [
+    "recordTime",
+    "function",
+    false
+  ],
+  [
+    "currentStatus",
+    "function",
+    false
+  ],
+  [
+    "resolveProbePreview",
+    "function",
+    true
+  ],
+  [
+    "validateRun",
+    "function",
+    false
+  ],
+  [
+    "attestProbe",
+    "function",
+    true
+  ],
+  [
+    "validateProbeAttestation",
+    "function",
+    true
+  ],
+  [
+    "validateProbeRoleIdentity",
+    "function",
+    true
+  ]
+];
+const timestampValidationPin = 'fefc9e0f73419b12dcb6fc97bfe6550c1e1de80b53fdc236d76a0fb5e18a44ea';
+const probeSourceText = () => readFileSync(new URL('../scripts/probe-core.mjs', import.meta.url), 'utf8');
+const regionHash = text => createHash('sha256').update(text).digest('hex');
+function probeRegions(source) {
+  const ast = ts.createSourceFile('probe-core.mjs', source, ts.ScriptTarget.Latest, true, ts.ScriptKind.JS);
+  assert.equal(ast.parseDiagnostics.length, 0, 'PROBE_CORE_PARSE');
+  const inventory = ast.statements.map(node => {
+    const kind = ts.isImportDeclaration(node) ? 'import' : ts.isFunctionDeclaration(node) ? 'function' : ts.isVariableStatement(node) ? 'variable' : 'UNKNOWN';
+    const name = kind === 'import' ? 'ImportDeclaration' : kind === 'function' ? node.name?.text : kind === 'variable' ? node.declarationList.declarations.map(d => d.name.getText(ast)).join(',') : 'UNKNOWN';
+    return [name, kind, Boolean(node.modifiers?.some(m => m.kind === ts.SyntaxKind.ExportKeyword))];
+  });
+  assert.deepEqual(inventory, probeDeclarationInventory, 'PROBE_CORE_INVENTORY');
+  assert.equal(new Set(inventory.map(x => x[0])).size, inventory.length, 'PROBE_CORE_INVENTORY_DUPLICATE');
+  return { ast, nodes: new Map(ast.statements.map((node, i) => [inventory[i][0], node])) };
+}
+function assertProbeSecurityRegions(source) {
+  const { ast, nodes } = probeRegions(source);
+  for (const [name, expected] of Object.entries(probeSecurityPins))
+    assert.equal(regionHash(nodes.get(name).getText(ast)), expected, 'PROBE_CORE_SECURITY:' + name);
+  const body = nodes.get('timestamp').body.statements;
+  assert.equal(body.length, 2, 'PROBE_CORE_TIMESTAMP_SHAPE');
+  assert.equal(regionHash(body[0].getText(ast)), timestampValidationPin, 'PROBE_CORE_TIMESTAMP_VALIDATION');
+  assert.equal(body[1].getText(ast), 'return Date.parse(value);', 'PROBE_CORE_TIMESTAMP_RETURN');
+}
+function assertAuthorizedProbeMetadata(source) {
+  const { ast, nodes } = probeRegions(source);
+  for (const [name, expected] of Object.entries(authorizedMetadataPins))
+    assert.equal(regionHash(nodes.get(name).getText(ast)), expected, 'PROBE_CORE_METADATA:' + name);
+}
+function assertProbePreservation(source) {
+  assertProbeSecurityRegions(source);
+  assertAuthorizedProbeMetadata(source);
+}
+// Synthetic immutable inputs; no transport, workflow dispatch, OIDC or controller execution.
+const preservationInputs = { operation: 'PROBE_IDENTITY', probe_git_sha: 'a'.repeat(40), probe_deployment_id: 'dpl_PreservationFixture123' };
+const preservationRun = { id: '500', attempt: '1', execution_sha: 'b'.repeat(40) };
+const preservationTarget = { operation: 'PROBE_IDENTITY', phase: 'preview', candidate_git_sha: 'a'.repeat(40),
+  deployment_id: 'dpl_PreservationFixture123', origin: 'https://luiguiherrera-preservation-luigui-herrera-s-projects.vercel.app',
+  authority_run_id: '20260908T125656658Z-a4743804-e5f1-495a-b34e-5948d5db4d2d', sealed_manifest_sha256: 'c'.repeat(64),
+  github_deployment_id: 100, status_id: 200, status_sha256: 'd'.repeat(64), commit_status_id: 300, commit_status_sha256: 'e'.repeat(64) };
+const preservationReport = () => ({ result: 'PASS',
+  gates: Object.fromEntries(['SEASONALITY','DRAWDOWN','PATTERNS','NULL_STATES','CORRELATION','SL_DEF_001','SL_DEF_002','SL_DEF_003','SL_DEF_004','SL_DEF_005','SL_DEF_006'].map(k => [k, 'PASS'])),
+  snapshot_count: 81, provenance_coverage: 100, capability_ids: Array.from({ length: 87 }, (_, i) => 'SL-CAP-' + String(i + 1).padStart(3, '0')),
+  routes: ['/niveles-estadisticos', '/en/statistical-levels'], viewports: [[1440,900],[390,844]],
+  application_console_errors: 0, required_application_request_failures: 0, broken_assets: 0, hydration_errors: 0, overflow: 0,
+  raw_platform_events: [], raw_rsc_events: [], unclassified_failures: [], expected_values: 'PASS' });
+const preservationEnvelope = () => probeContract.attestProbe(preservationReport(), preservationRun, preservationTarget, 'f'.repeat(64), '2026-09-10T08:00:00Z');
+const preservationSemantics = {
+  PROBE_ONLY() {
+    assert.equal(probeContract.PROBE, 'PROBE_IDENTITY');
+    assert.deepEqual(probeContract.selectProbeTarget(preservationInputs), { operation: 'PROBE_IDENTITY', phase: 'preview', candidate_git_sha: 'a'.repeat(40), deployment_id: 'dpl_PreservationFixture123' });
+  },
+  RELEASE_INPUTS() {
+    for (const field of ['candidate_git_sha','candidate_deployment_id','expected_previous_production_sha','expected_previous_production_deployment','previous_publication_date'])
+      assert.throws(() => probeContract.selectProbeTarget({ ...preservationInputs, [field]: 'forbidden' }), { message: 'PROBE_RELEASE_INPUT_FORBIDDEN' });
+    for (const field of ['controller_request','controller_payload','role_arn','origin'])
+      assert.throws(() => probeContract.selectProbeTarget({ ...preservationInputs, [field]: 'forbidden' }), { message: 'PROBE_INPUT_FIELDS' });
+  },
+  ADOPT_ISOLATION() {
+    assert.throws(() => probeContract.selectProbeTarget({ ...preservationInputs, operation: 'ADOPT_EXISTING_PRODUCTION_BASELINE' }), { message: 'PROBE_OPERATION_REQUIRED' });
+    assert.throws(() => releaseContract.selectTarget(preservationInputs));
+  },
+  PROMOTE_ISOLATION() {
+    assert.throws(() => probeContract.selectProbeTarget({ ...preservationInputs, operation: 'PROMOTE_EXACT_STATISTICAL_LEVELS_CANDIDATE' }), { message: 'PROBE_OPERATION_REQUIRED' });
+    assert.throws(() => releaseContract.validateTarget(preservationTarget));
+  },
+  POLICY_BINDING() {
+    assert.equal(regionHash(readFileSync(new URL('../policy.json', import.meta.url))), 'e8865e7b7c392147f111a4f558434d536cbdfbb648d463053a74701b2bb98e9a');
+    assert.equal(releaseContract.P.account_id, '732159826922');
+    assert.equal(releaseContract.P.release_role_arn, 'arn:aws:iam::732159826922:role/LuiguiHerreraStatisticalLevelsReleaseInvoker');
+    assert.equal(releaseContract.P.aws_audience, 'sts.amazonaws.com');
+    assert.equal(releaseContract.P.vercel_audience, 'https://github.com/luiguiHerrera');
+    assert.equal(releaseContract.P.aws_subject, 'repo:luiguiHerrera/Luiguiherrera-web:ref:refs/heads/vercel-deployment');
+  },
+  ROLE_IDENTITY() {
+    const identity = { Account: '732159826922', Arn: 'arn:aws:sts::732159826922:assumed-role/LuiguiHerreraStatisticalLevelsReleaseInvoker/sl-probe-500', UserId: 'AROA' + 'A'.repeat(17) + ':sl-probe-500' };
+    assert.deepEqual(probeContract.validateProbeRoleIdentity(identity, preservationRun), { result: 'PASS', assumed_role: 'LuiguiHerreraStatisticalLevelsReleaseInvoker', account_match: true, session_match: true, workflow_run_id: '500', workflow_run_attempt: '1', workflow_execution_sha: 'b'.repeat(40) });
+    for (const delta of [{ Account: '000000000000' }, { Arn: identity.Arn.replace('ReleaseInvoker', 'OtherRole') }, { Arn: identity.Arn.replace('500', '501') }, { UserId: identity.UserId.replace('AROA', 'AIDA') }])
+      assert.throws(() => probeContract.validateProbeRoleIdentity({ ...identity, ...delta }, preservationRun), { message: 'PROBE_AWS_ROLE_MISMATCH' });
+  },
+  ATTESTATION_CONTROLLER_EXCLUSION() {
+    const envelope = preservationEnvelope();
+    assert.deepEqual(Object.keys(envelope).sort(), ['kind','operation','phase','classification','production_release_target','workflow_path','workflow_sha256','workflow_run_id','workflow_run_attempt','workflow_execution_sha','probe_git_sha','probe_deployment_id','preview_origin','project_id','authority_run_id','sealed_manifest_sha256','qa_suite_version','result','timestamp','preview_metadata','product_report_sha256','product_report','attestation_sha256'].sort());
+    assert.equal(envelope.kind, 'statistical-levels.identity-probe-attestation.v1');
+    assert.equal(envelope.operation, 'PROBE_IDENTITY'); assert.equal(envelope.phase, 'preview');
+    assert.equal(envelope.classification, 'PROBE_ONLY'); assert.equal(envelope.production_release_target, false);
+    assert.equal(envelope.probe_git_sha, 'a'.repeat(40)); assert.equal(envelope.workflow_execution_sha, 'b'.repeat(40));
+    assert.throws(() => releaseContract.validateControllerRequest(envelope));
+    for (const key of ['controller_payload','controller_request','qa_attestation','previous_publication_date']) {
+      assert.equal(Object.hasOwn(envelope, key), false);
+      assert.throws(() => probeContract.validateProbeAttestation({ ...envelope, [key]: {} }, preservationRun, preservationTarget, 'f'.repeat(64)), { message: 'PROBE_ATTESTATION_FIELDS' });
+    }
+    for (const operation of ['ADOPT_EXISTING_PRODUCTION_BASELINE','PROMOTE_EXACT_STATISTICAL_LEVELS_CANDIDATE'])
+      assert.throws(() => probeContract.attestProbe(preservationReport(), preservationRun, { ...preservationTarget, operation }, 'f'.repeat(64), '2026-09-10T08:00:00Z'), { message: 'PROBE_FIXTURE_IDENTITY' });
+    assert.equal(regionHash(readFileSync(new URL('../probe-attestation-schema.json', import.meta.url))), 'c4293cfd35f926e7f5b26bd84390c74cae83a8d4a9174c51682c852360e7dfa9');
+  },
+  WORKFLOW_CONTROLLER_EXCLUSION() {
+    const workflow = readFileSync(new URL('../../../.github/workflows/statistical-levels-release.yml', import.meta.url), 'utf8');
+    const guard = workflow.split('\n').find(line => line.includes('needs.candidate-qa.result') && line.includes('needs.seal-qa.result'));
+    assert.equal(guard, "    if: (inputs.operation == 'ADOPT_EXISTING_PRODUCTION_BASELINE' || inputs.operation == 'PROMOTE_EXACT_STATISTICAL_LEVELS_CANDIDATE') && needs.candidate-qa.result == 'success' && needs.seal-qa.result == 'success' && github.repository == 'luiguiHerrera/Luiguiherrera-web' && github.ref == 'refs/heads/vercel-deployment'");
+    assert.ok(workflow.includes('inline-session-policy: \'{"Version":"2012-10-17","Statement":[{"Effect":"Deny","NotAction":"sts:GetCallerIdentity","Resource":"*"}]}\''));
+  },
+};
+function assertProbeSecuritySemantics() { for (const check of Object.values(preservationSemantics)) check(); }
+test('product QA preservation: narrow predecessor security pins', () => assertProbeSecurityRegions(probeSourceText()));
+test('product QA preservation: exact authorized metadata regions', () => assertAuthorizedProbeMetadata(probeSourceText()));
+for (const [name, check] of Object.entries(preservationSemantics)) test('product QA preservation: semantic ' + name, check);
+function replacePreservationText(source, before, after) {
+  assert.equal(source.split(before).length, 2, 'mutation fixture must match exactly once');
+  return source.replace(before, after);
+}
+const preservationMutations = {
+  controller_call: s => replacePreservationText(s, 'export function selectProbeTarget(inputs) {', 'export function selectProbeTarget(inputs) { invokeController();'),
+  authorization_import: s => replacePreservationText(s, "from './release-core.mjs'", "from './other-authority.mjs'"),
+  release_request: s => replacePreservationText(s, 'classification: \'PROBE_ONLY\'', 'controller_request: {}, classification: \'PROBE_ONLY\''),
+  release_fields: s => replacePreservationText(s, "['candidate_git_sha', 'candidate_deployment_id', 'expected_previous_production_sha',", "['candidate_git_sha', 'expected_previous_production_sha',"),
+  policy_binding: s => replacePreservationText(s, 'project_id: P.project', "project_id: 'other-project'"),
+  role_identity: s => replacePreservationText(s, 'identity.Account === P.account_id', 'true'),
+  attestation_contract: s => replacePreservationText(s, 'production_release_target: false', 'production_release_target: true'),
+  adopt_isolation: s => replacePreservationText(s, "export const PROBE = 'PROBE_IDENTITY'", "export const PROBE = 'ADOPT_EXISTING_PRODUCTION_BASELINE'"),
+  promote_isolation: s => replacePreservationText(s, "export const PROBE = 'PROBE_IDENTITY'", "export const PROBE = 'PROMOTE_EXACT_STATISTICAL_LEVELS_CANDIDATE'"),
+  unapproved_region: s => replacePreservationText(s, 'new Set(values.map(x => x.id)).size === values.length', 'true'),
+  timestamp_validation: s => replacePreservationText(s, 'Number.isFinite(Date.parse(value))', 'true'),
+  timestamp_return: s => replacePreservationText(s, 'return Date.parse(value);', 'return 0;'),
+  top_level_call: s => s + '\ninvokeController();\n',
+  extra_import: s => s + "\nimport './controller.mjs';\n",
+  extra_export: s => s + '\nexport { attestProbe as releaseRequest };\n',
+  duplicate_declaration: s => s + '\nfunction validateRun(run) {}\n',
+  missing_declaration: s => replacePreservationText(s, 'const RUN = /^[1-9][0-9]{0,19}$/;', ''),
+  unknown_declaration: s => s + '\nconst bypass = true;\n',
+  changed_export: s => replacePreservationText(s, 'function fixtureIdentity(target)', 'export function fixtureIdentity(target)'),
+  malformed_ast: s => s + '\nfunction {',
+  metadata_timestamp_call: s => replacePreservationText(s, 'function timestamp(value) {', 'function timestamp(value) { invokeController();'),
+  metadata_recordTime_call: s => replacePreservationText(s, 'function recordTime(record) {', 'function recordTime(record) { invokeController();'),
+  metadata_currentStatus_call: s => replacePreservationText(s, 'function currentStatus(records, validateLink, parentCreated) {', 'function currentStatus(records, validateLink, parentCreated) { invokeController();'),
+  metadata_resolveProbePreview_call: s => replacePreservationText(s, 'export function resolveProbePreview(deployments, statusSets, commitStatuses, target) {', 'export function resolveProbePreview(deployments, statusSets, commitStatuses, target) { invokeController();'),
+};
+for (const [name, mutate] of Object.entries(preservationMutations)) test('product QA preservation: rejects ' + name, () => {
+  const source = probeSourceText(), changed = mutate(source);
+  assert.notEqual(changed, source);
+  // Parse/check only: never evaluate, import or execute mutated source.
+  assert.throws(() => assertProbePreservation(changed), /PROBE_CORE_(?:PARSE|INVENTORY|SECURITY|METADATA|TIMESTAMP)/);
 });

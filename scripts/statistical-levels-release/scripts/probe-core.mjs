@@ -57,6 +57,28 @@ function timestamp(value) {
   need(typeof value === 'string' && /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d{3})?Z$/.test(value) &&
     Number.isFinite(Date.parse(value)) && new Date(value).toISOString() === (value.includes('.') ? value : value.replace('Z', '.000Z')),
   'PROBE_TIMESTAMP');
+  return Date.parse(value);
+}
+
+function recordTime(record) {
+  const created = timestamp(record.created_at), updated = timestamp(record.updated_at);
+  need(created <= updated, 'PROBE_TIMESTAMP');
+  return created;
+}
+
+function currentStatus(records, validateLink, parentCreated) {
+  // IDs order only this resource stream. Select before checking trust/state;
+  // never revive an earlier success. Equal-second creations remain valid.
+  const ordered = [...records].sort((a, b) => a.id - b.id);
+  let previousCreated;
+  for (const record of ordered) {
+    validateLink(record);
+    const created = recordTime(record);
+    need((previousCreated === undefined || previousCreated <= created) &&
+      (parentCreated === undefined || parentCreated <= created), 'PROBE_TIMESTAMP');
+    previousCreated = created;
+  }
+  return ordered.at(-1);
 }
 
 export function resolveProbePreview(deployments, statusSets, commitStatuses, target) {
@@ -69,21 +91,25 @@ export function resolveProbePreview(deployments, statusSets, commitStatuses, tar
   const creator = x => x?.creator?.login === P.vercel_creator_login && x.creator.id === P.vercel_creator_id;
   const details = P.vercel_details_base_url + target.deployment_id.slice(4);
   // A later Production deployment of the same commit must not replace this exact Preview.
-  const selected = commitStatuses.filter(x => x.context === 'Vercel' && x.target_url === details)
-    .sort((a, b) => b.id - a.id)[0];
+  const api = `https://api.github.com/repos/${P.repository}`;
+  const selected = currentStatus(commitStatuses.filter(x => x.context === 'Vercel' && x.target_url === details),
+    x => need(x.url === `${api}/statuses/${target.candidate_git_sha}`, 'PROBE_VERCEL_ID_BINDING'));
   need(selected && creator(selected) && selected.state === 'success', 'PROBE_VERCEL_ID_BINDING');
-  timestamp(selected.updated_at);
   const matches = [];
   for (const deployment of deployments) {
     if (!creator(deployment) || deployment.sha !== target.candidate_git_sha ||
       deployment.environment !== 'Preview' || deployment.production_environment !== false) continue;
+    const parentURL = `${api}/deployments/${deployment.id}`;
+    need(deployment.url === parentURL, 'PROBE_DEPLOYMENT_LINK');
+    const parentCreated = recordTime(deployment);
     const statuses = statusSets[String(deployment.id)];
     completePage(statuses, 'PROBE_DEPLOYMENT_STATUS_INCOMPLETE');
     // Never revive an older success after this GitHub deployment is failed or made inactive.
-    const status = [...statuses].sort((a, b) => b.id - a.id)[0];
-    if (!status || !creator(status) || status.state !== 'success' || status.environment !== 'Preview' ||
-      status.updated_at !== selected.updated_at) continue;
-    need(status.deployment_url === `https://api.github.com/repos/${P.repository}/deployments/${deployment.id}`, 'PROBE_DEPLOYMENT_LINK');
+    const status = currentStatus(statuses, x => need(x.deployment_url === parentURL &&
+      x.url === `${parentURL}/statuses/${x.id}`, 'PROBE_DEPLOYMENT_LINK'), parentCreated);
+    if (!status || !creator(status) || status.state !== 'success' || status.environment !== 'Preview') continue;
+    // Independent commit/deployment status publications share identity links,
+    // not an event timestamp or a cross-stream temporal ordering requirement.
     need(typeof status.environment_url === 'string', 'PROBE_PREVIEW_LINKS');
     const origin = verifiedOrigin(status.environment_url, 'preview');
     need(status.environment_url === origin && status.target_url === origin && status.log_url === origin, 'PROBE_PREVIEW_LINKS');

@@ -29,7 +29,7 @@ jobs:
           node-version: "22.23.2"
           cache: npm
 
-      - name: Bind qualification to event SHA and governed registration-successor lineage
+      - name: Bind qualification to event SHA and governed metadata-repair successor lineage
         shell: bash
         run: |
           set -euo pipefail
@@ -50,25 +50,32 @@ jobs:
           production='c60b17c6ddc5a08fcd402328f69e73f6e1e41b5f'
           merge_anchor='e7872b9c0e5bb0be3e090fbe2c5b930d68dcbece'
           qualified_predecessor='c8454dc06bae4bfc2d6fbc90cf9ffa4f94bb63c1'
+          repair_parent='f7e3fe8e3e3cd8bdea753873c31d78f146cdc923'
+          repair_parent_parents=None
           predecessor_parents=None
           anchor_parents=None
           is_integration_push=os.environ['GITHUB_EVENT_NAME']=='push' and os.environ['GITHUB_REF']=='refs/heads/vercel-deployment'
           if is_integration_push:
-              assert parents==[qualified_predecessor], 'WRONG_REGISTRATION_SUCCESSOR_PARENT'
+              assert parents==[repair_parent], 'WRONG_METADATA_REPAIR_PARENT'
+              repair_parent_parents=git('show','-s','--format=%P',repair_parent).decode().strip().split()
+              assert repair_parent_parents==[qualified_predecessor], 'WRONG_REGISTRATION_SUCCESSOR_PARENT'
               predecessor_parents=git('show','-s','--format=%P',qualified_predecessor).decode().strip().split()
               assert predecessor_parents==[merge_anchor], 'WRONG_QUALIFIED_PREDECESSOR_PARENT'
               anchor_parents=git('show','-s','--format=%P',merge_anchor).decode().strip().split()
               assert anchor_parents==[execution,production], 'WRONG_ORDERED_ANCHOR_PARENTS'
-              for parent in [qualified_predecessor,merge_anchor,execution,production]:
+              for parent in [repair_parent,qualified_predecessor,merge_anchor,execution,production]:
                   subprocess.run(['git','merge-base','--is-ancestor',parent,head],check=True)
               allowed={
                   '.github/workflows/ci.yml','.github/workflows/statistical-levels-release.yml',
-                  'scripts/statistical-levels-release/probe-fixture.json',
+                  'scripts/statistical-levels-release/scripts/probe-core.mjs',
+                  'scripts/statistical-levels-release/tests/probe-core.test.mjs',
+                  'scripts/statistical-levels-release/tests/probe-qa-http.test.mjs',
+                  'scripts/statistical-levels-release/tests/product-qa-observability-isolation.test.mjs',
                   'scripts/statistical-levels-release/tests/probe-fixture-registry.test.mjs',
                   'scripts/statistical-levels-release/source-manifest.json',
                   'scripts/statistical-levels-release/SOURCE_SHA256SUMS',
                   'scripts/statistical-levels-release/workflow-freeze.json'}
-              delta=git('diff','--raw','--no-abbrev','--no-renames','-z',qualified_predecessor,'HEAD','--').decode().rstrip('\0').split('\0')
+              delta=git('diff','--raw','--no-abbrev','--no-renames','-z',repair_parent,'HEAD','--').decode().rstrip('\0').split('\0')
               assert len(delta)%2==0, 'SUCCESSOR_DELTA_FORMAT'
               changed=[]
               for header,name in zip(delta[::2],delta[1::2]):
@@ -86,18 +93,21 @@ jobs:
               assert registered=={'git_sha':qualified_predecessor,'deployment_id':'dpl_6wA7tYMv6yNhoMQJDXN3S9JXWw9J',
                   'origin':'https://luiguiherrera-7vs8qeq5j-luigui-herrera-s-projects.vercel.app',
                   'project':'luiguiherrera-web','environment':'Preview'}, 'WRONG_SUCCESSOR_REGISTRATION'
+              assert (base/'probe-fixture.json').read_bytes()==git('show',repair_parent+':scripts/statistical-levels-release/probe-fixture.json'), 'REPAIR_REGISTRATION_BYTES_CHANGED'
               input_path='scripts/statistical-levels-release/source-inputs.json'
               input_bytes=(root/input_path).read_bytes()
               assert input_bytes==git('show',qualified_predecessor+':'+input_path), 'SUCCESSOR_INPUT_INVENTORY_CHANGED'
+              assert input_bytes==git('show',repair_parent+':'+input_path), 'REPAIR_INPUT_INVENTORY_CHANGED'
               inputs=unique_json(input_bytes)
               assert len(inputs)==41, 'SUCCESSOR_INPUT_COUNT'
               for name,digest in inputs.items():
                   assert hashlib.sha256((root/name).read_bytes()).hexdigest()==digest, 'SUCCESSOR_PRODUCT_INPUT_CHANGED'
                   assert hashlib.sha256(git('show',qualified_predecessor+':'+name)).hexdigest()==digest, 'REGISTERED_PREVIEW_INPUT_MISMATCH'
+                  assert hashlib.sha256(git('show',repair_parent+':'+name)).hexdigest()==digest, 'REPAIR_PARENT_INPUT_MISMATCH'
               # Review approval is a separate exact-tree pre-push gate, never inferred from ancestry.
           # PR checks exercise their event SHA; they never certify the integration push.
           subject={'head_sha':head,'parents':parents,'event':os.environ['GITHUB_EVENT_NAME'],'ref':os.environ['GITHUB_REF'],'run_id':os.environ['GITHUB_RUN_ID'],'run_attempt':os.environ['GITHUB_RUN_ATTEMPT'],'integration_push':is_integration_push}
-          subject['lineage']={'qualified_predecessor_sha':qualified_predecessor,'qualified_predecessor_parents':predecessor_parents,'merge_anchor_sha':merge_anchor,'merge_anchor_parents':anchor_parents,'registration_successor_parent_verified':is_integration_push,'registration_content_verified':is_integration_push,'two_parent_anchor_verified':is_integration_push}
+          subject['lineage']={'repair_parent_sha':repair_parent,'repair_parent_parents':repair_parent_parents,'metadata_repair_parent_verified':is_integration_push,'qualified_predecessor_sha':qualified_predecessor,'qualified_predecessor_parents':predecessor_parents,'merge_anchor_sha':merge_anchor,'merge_anchor_parents':anchor_parents,'registration_successor_parent_verified':is_integration_push,'registration_content_verified':is_integration_push,'two_parent_anchor_verified':is_integration_push}
           paths=sorted(git('ls-files','-z').decode().rstrip('\0').split('\0'))
           files={p:{'mode':format((root/p).stat().st_mode,'o'),'sha256':hashlib.sha256((root/p).read_bytes()).hexdigest()} for p in paths}
           (out/'subject.json').write_text(json.dumps(subject,sort_keys=True)+'\n')
@@ -221,7 +231,7 @@ jobs:
           'archived raw identity and final completed history are independently bound',
           'identical frozen archived bytes reproduce all 81 snapshots; sidecar corruption blocks validation',
           ' two complete regenerations from archived raw have identical 81-file and provenance manifests'.strip()}
-          for name,minimum in [('release',1771),('reports',31),('product',68)]:
+          for name,minimum in [('release',1964),('reports',31),('product',68)]:
               text=(out/(name+'.tap')).read_text()
               counts={key:int(re.search(r'^# '+key+r' (\d+)$',text,re.M)[1]) for key in ['tests','pass','fail','cancelled','skipped','todo']}
               assert counts['tests']>=minimum and counts['fail']==counts['cancelled']==counts['todo']==0, (name,counts)
@@ -233,6 +243,205 @@ jobs:
               if name=='release':
                   for case in ['identity','valid','unrelated','sibling','stale','grandchild','multiple_parents','wrong_predecessor_parent','reversed_anchor','missing_ancestry','wrong_sha','mutable_ref','wrong_registration','extra_registration_field','wrong_origin','duplicate_registration_key','wrong_input_inventory','wrong_product_input','wrong_preview_input','unreviewed_path','changed_mode','missing_delta','dirty','pr_nonqualification','stale_run','stale_attempt','wrong_sums','wrong_workflow']:
                       assert len(re.findall(r'^ok \d+ - governed successor: '+case+r'$',text,re.M))==1, 'SUCCESSOR_GUARD_CASE_NOT_EXECUTED'
+                  required_repair_cases=[
+                      "timestamp repair: exact registered Preview pending-to-success history",
+                      "timestamp repair: exact equality",
+                      "timestamp repair: equivalent represented instant",
+                      "timestamp repair: commit publication first",
+                      "timestamp repair: deployment status publication first",
+                      "timestamp repair: no maximum propagation window",
+                      "timestamp repair: old record update does not reorder status creation history",
+                      "timestamp repair rejects deployment created_at missing",
+                      "timestamp repair rejects deployment created_at UNKNOWN",
+                      "timestamp repair rejects deployment created_at invalid calendar date",
+                      "timestamp repair rejects deployment created_at invalid leap day",
+                      "timestamp repair rejects deployment created_at invalid format",
+                      "timestamp repair rejects deployment created_at numeric",
+                      "timestamp repair rejects deployment updated_at missing",
+                      "timestamp repair rejects deployment updated_at UNKNOWN",
+                      "timestamp repair rejects deployment updated_at invalid calendar date",
+                      "timestamp repair rejects deployment updated_at invalid leap day",
+                      "timestamp repair rejects deployment updated_at invalid format",
+                      "timestamp repair rejects deployment updated_at numeric",
+                      "timestamp repair rejects update before creation: deployment",
+                      "timestamp repair rejects commit created_at missing",
+                      "timestamp repair rejects commit created_at UNKNOWN",
+                      "timestamp repair rejects commit created_at invalid calendar date",
+                      "timestamp repair rejects commit created_at invalid leap day",
+                      "timestamp repair rejects commit created_at invalid format",
+                      "timestamp repair rejects commit created_at numeric",
+                      "timestamp repair rejects commit updated_at missing",
+                      "timestamp repair rejects commit updated_at UNKNOWN",
+                      "timestamp repair rejects commit updated_at invalid calendar date",
+                      "timestamp repair rejects commit updated_at invalid leap day",
+                      "timestamp repair rejects commit updated_at invalid format",
+                      "timestamp repair rejects commit updated_at numeric",
+                      "timestamp repair rejects update before creation: commit",
+                      "timestamp repair rejects status created_at missing",
+                      "timestamp repair rejects status created_at UNKNOWN",
+                      "timestamp repair rejects status created_at invalid calendar date",
+                      "timestamp repair rejects status created_at invalid leap day",
+                      "timestamp repair rejects status created_at invalid format",
+                      "timestamp repair rejects status created_at numeric",
+                      "timestamp repair rejects status updated_at missing",
+                      "timestamp repair rejects status updated_at UNKNOWN",
+                      "timestamp repair rejects status updated_at invalid calendar date",
+                      "timestamp repair rejects status updated_at invalid leap day",
+                      "timestamp repair rejects status updated_at invalid format",
+                      "timestamp repair rejects status updated_at numeric",
+                      "timestamp repair rejects update before creation: status",
+                      "timestamp repair rejects status creation before its deployment",
+                      "timestamp repair rejects inverted creation history: commit",
+                      "timestamp repair rejects inverted creation history: status",
+                      "timestamp repair rejects newer commit failure",
+                      "timestamp repair rejects newer status failure",
+                      "timestamp repair rejects newer commit error",
+                      "timestamp repair rejects newer status error",
+                      "timestamp repair rejects newer commit pending",
+                      "timestamp repair rejects newer status pending",
+                      "timestamp repair rejects newer commit inactive",
+                      "timestamp repair rejects newer status inactive",
+                      "timestamp repair rejects newer commit queued",
+                      "timestamp repair rejects newer status queued",
+                      "timestamp repair rejects newer commit in_progress",
+                      "timestamp repair rejects newer status in_progress",
+                      "timestamp repair rejects newer commit UNKNOWN",
+                      "timestamp repair rejects newer status UNKNOWN",
+                      "timestamp repair rejects newer untrusted exact-ID commit head",
+                      "timestamp repair rejects cross-commit record URL",
+                      "timestamp repair rejects cross-repository commit URL",
+                      "timestamp repair rejects cross-deployment object URL",
+                      "timestamp repair rejects cross-deployment status URL",
+                      "timestamp repair rejects cross-status record URL",
+                      "timestamp repair rejects missing commit link",
+                      "timestamp repair rejects missing deployment link",
+                      "timestamp repair rejects missing status link",
+                      "registered runtime accepts independent publication times through exact origin gate",
+                      "governed metadata repair: valid",
+                      "governed metadata repair: unrelated",
+                      "governed metadata repair: sibling",
+                      "governed metadata repair: stale",
+                      "governed metadata repair: grandchild",
+                      "governed metadata repair: multiple_parents",
+                      "governed metadata repair: wrong_predecessor_parent",
+                      "governed metadata repair: reversed_anchor",
+                      "governed metadata repair: missing_ancestry",
+                      "governed metadata repair: wrong_sha",
+                      "governed metadata repair: mutable_ref",
+                      "governed metadata repair: wrong_registration",
+                      "governed metadata repair: extra_registration_field",
+                      "governed metadata repair: wrong_origin",
+                      "governed metadata repair: duplicate_registration_key",
+                      "governed metadata repair: wrong_input_inventory",
+                      "governed metadata repair: wrong_product_input",
+                      "governed metadata repair: wrong_preview_input",
+                      "governed metadata repair: unreviewed_path",
+                      "governed metadata repair: changed_mode",
+                      "governed metadata repair: missing_delta",
+                      "governed metadata repair: dirty",
+                      "governed metadata repair: pr_nonqualification",
+                      "governed metadata repair: stale_run",
+                      "governed metadata repair: stale_attempt",
+                      "governed metadata repair: wrong_sums",
+                      "governed metadata repair: wrong_workflow",
+                      "governed metadata repair: wrong_repair_parent_parent",
+                      "governed metadata repair: registration_byte_drift",
+                      "governed metadata repair: wrong_repair_input",
+                      "governed metadata repair: cross_run_subject",
+                      "governed metadata repair: wrong_subject_sha",
+                      "metadata repair accounting: coverage_valid",
+                      "metadata repair accounting: coverage_missing_repair",
+                      "metadata repair accounting: coverage_missing_historical",
+                      "metadata repair accounting: coverage_missing_storage",
+                      "metadata repair accounting: coverage_duplicate_repair",
+                      "metadata repair accounting: coverage_low_count",
+                      "metadata repair accounting: coverage_skipped_release",
+                      "metadata repair accounting: coverage_failed_release",
+                      "metadata repair accounting: coverage_drift",
+                      "metadata repair accounting: coverage_wrong_event",
+                      "metadata repair accounting: coverage_wrong_class",
+                      "metadata repair accounting: qualified_integrity",
+                      "22 PROBE cannot invoke controller; authorization source unchanged",
+                      "requalified production target policy pinned; PROBE authorization and controller exclusion unchanged",
+                      "probe QA preservation: narrow predecessor security pins",
+                      "probe QA preservation: exact authorized metadata regions",
+                      "probe QA preservation: semantic PROBE_ONLY",
+                      "probe QA preservation: semantic RELEASE_INPUTS",
+                      "probe QA preservation: semantic ADOPT_ISOLATION",
+                      "probe QA preservation: semantic PROMOTE_ISOLATION",
+                      "probe QA preservation: semantic POLICY_BINDING",
+                      "probe QA preservation: semantic ROLE_IDENTITY",
+                      "probe QA preservation: semantic ATTESTATION_CONTROLLER_EXCLUSION",
+                      "probe QA preservation: semantic WORKFLOW_CONTROLLER_EXCLUSION",
+                      "probe QA preservation: rejects controller_call",
+                      "probe QA preservation: rejects authorization_import",
+                      "probe QA preservation: rejects release_request",
+                      "probe QA preservation: rejects release_fields",
+                      "probe QA preservation: rejects policy_binding",
+                      "probe QA preservation: rejects role_identity",
+                      "probe QA preservation: rejects attestation_contract",
+                      "probe QA preservation: rejects adopt_isolation",
+                      "probe QA preservation: rejects promote_isolation",
+                      "probe QA preservation: rejects unapproved_region",
+                      "probe QA preservation: rejects timestamp_validation",
+                      "probe QA preservation: rejects timestamp_return",
+                      "probe QA preservation: rejects top_level_call",
+                      "probe QA preservation: rejects extra_import",
+                      "probe QA preservation: rejects extra_export",
+                      "probe QA preservation: rejects duplicate_declaration",
+                      "probe QA preservation: rejects missing_declaration",
+                      "probe QA preservation: rejects unknown_declaration",
+                      "probe QA preservation: rejects changed_export",
+                      "probe QA preservation: rejects malformed_ast",
+                      "probe QA preservation: rejects metadata_timestamp_call",
+                      "probe QA preservation: rejects metadata_recordTime_call",
+                      "probe QA preservation: rejects metadata_currentStatus_call",
+                      "probe QA preservation: rejects metadata_resolveProbePreview_call",
+                      "product QA preservation: narrow predecessor security pins",
+                      "product QA preservation: exact authorized metadata regions",
+                      "product QA preservation: semantic PROBE_ONLY",
+                      "product QA preservation: semantic RELEASE_INPUTS",
+                      "product QA preservation: semantic ADOPT_ISOLATION",
+                      "product QA preservation: semantic PROMOTE_ISOLATION",
+                      "product QA preservation: semantic POLICY_BINDING",
+                      "product QA preservation: semantic ROLE_IDENTITY",
+                      "product QA preservation: semantic ATTESTATION_CONTROLLER_EXCLUSION",
+                      "product QA preservation: semantic WORKFLOW_CONTROLLER_EXCLUSION",
+                      "product QA preservation: rejects controller_call",
+                      "product QA preservation: rejects authorization_import",
+                      "product QA preservation: rejects release_request",
+                      "product QA preservation: rejects release_fields",
+                      "product QA preservation: rejects policy_binding",
+                      "product QA preservation: rejects role_identity",
+                      "product QA preservation: rejects attestation_contract",
+                      "product QA preservation: rejects adopt_isolation",
+                      "product QA preservation: rejects promote_isolation",
+                      "product QA preservation: rejects unapproved_region",
+                      "product QA preservation: rejects timestamp_validation",
+                      "product QA preservation: rejects timestamp_return",
+                      "product QA preservation: rejects top_level_call",
+                      "product QA preservation: rejects extra_import",
+                      "product QA preservation: rejects extra_export",
+                      "product QA preservation: rejects duplicate_declaration",
+                      "product QA preservation: rejects missing_declaration",
+                      "product QA preservation: rejects unknown_declaration",
+                      "product QA preservation: rejects changed_export",
+                      "product QA preservation: rejects malformed_ast",
+                      "product QA preservation: rejects metadata_timestamp_call",
+                      "product QA preservation: rejects metadata_recordTime_call",
+                      "product QA preservation: rejects metadata_currentStatus_call",
+                      "product QA preservation: rejects metadata_resolveProbePreview_call",
+                      "governed metadata repair: missing_probe_qa_path",
+                      "governed metadata repair: missing_product_qa_path",
+                      "governed metadata repair: duplicate_probe_qa_path",
+                      "governed metadata repair: duplicate_product_qa_path",
+                      "metadata repair accounting: coverage_missing_probe_preservation",
+                      "metadata repair accounting: coverage_missing_product_preservation",
+                      "metadata repair accounting: coverage_duplicate_probe_preservation",
+                      "metadata repair accounting: coverage_duplicate_product_preservation",
+                  ]
+                  for required in required_repair_cases:
+                      assert len(re.findall(r'^ok \d+ - '+re.escape(required)+r'$',text,re.M))==1, 'METADATA_REPAIR_CASE_NOT_EXECUTED'
               if name=='product':
                   for failure in ['identity','storage','partial','collision','readback','manifest','provenance','validation']:
                       assert len(re.findall(r'^ok \d+ - real adapter failure injection: '+failure+r'$',text,re.M))==1, 'STORAGE_CASE_NOT_EXECUTED'
@@ -243,7 +452,7 @@ jobs:
           assert paths==sorted(before)
           after={p:{'mode':format((root/p).stat().st_mode,'o'),'sha256':hashlib.sha256((root/p).read_bytes()).hexdigest()} for p in paths}
           assert after==before, 'GOVERNED_BYTES_CHANGED'
-          subject=json.loads((out/'subject.json').read_text());assert subject['head_sha']==os.environ['CI_EVENT_SHA']
+          subject=json.loads((out/'subject.json').read_text());assert subject['head_sha']==os.environ['CI_EVENT_SHA'], 'WRONG_SUBJECT_SHA'
           assert subject['head_sha']==os.environ['GITHUB_SHA'], 'WRONG_SUMMARY_SHA'
           assert subject['run_id']==os.environ['GITHUB_RUN_ID'] and subject['run_attempt']==os.environ['GITHUB_RUN_ATTEMPT'], 'CROSS_RUN_SUBJECT'
           assert subject['event']==os.environ['GITHUB_EVENT_NAME'] and subject['ref']==os.environ['GITHUB_REF'], 'WRONG_SUBJECT_EVENT'
@@ -253,6 +462,7 @@ jobs:
           summary['integration_qualification_complete']=subject['integration_push']
           summary['covered_obligations']=['C%02d'%i for i in range(1,14) if i!=11 or subject['integration_push']]
           summary['lineage_tests_executed']=True
+          summary['governed_metadata_repair_parent_verified']=subject['lineage']['metadata_repair_parent_verified']
           summary['governed_registration_successor_parent_verified']=subject['lineage']['registration_successor_parent_verified']
           summary['governed_registration_content_verified']=subject['lineage']['registration_content_verified']
           summary['governed_two_parent_anchor_verified']=subject['lineage']['two_parent_anchor_verified']
