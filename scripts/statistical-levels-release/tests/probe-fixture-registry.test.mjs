@@ -183,6 +183,11 @@ assert.equal(historicalCI.status, 0, historicalCI.stderr);
 const historicalPython = [...historicalCI.stdout.matchAll(/^          python3 - <<'PYCODE'\n([\s\S]*?)^          PYCODE$/gm)]
   .map(match => match[1].split('\n').map(line => line.replace(/^ {10}/, '')).join('\n'));
 assert.equal(historicalPython.length, 3);
+// Historical guard regressions use the immutable implementation they qualified.
+// The current successor guard is exercised separately below with live candidate inputs.
+const metadataCI=spawnSync('git',['show','d290691156b933ba62e5e8f6489dc870568126e0:.github/workflows/ci.yml'],{cwd:repositoryRoot,encoding:'utf8'});
+assert.equal(metadataCI.status,0,metadataCI.stderr);
+const metadataPython=[...metadataCI.stdout.matchAll(/^          python3 - <<'PYCODE'\n([\s\S]*?)^          PYCODE$/gm)].map(m=>m[1].split('\n').map(l=>l.replace(/^ {10}/,'')).join('\n'));
 const successorModel = String.raw`
 import json,sys,os,hashlib,subprocess,tempfile,contextlib,io
 from pathlib import Path
@@ -192,7 +197,11 @@ R='c8454dc06bae4bfc2d6fbc90cf9ffa4f94bb63c1'; M='e7872b9c0e5bb0be3e090fbe2c5b930
 C='0c8fce262fce44650729883862ec948778ebea45'; P='c60b17c6ddc5a08fcd402328f69e73f6e1e41b5f'; E='f'*40
 B='f7e3fe8e3e3cd8bdea753873c31d78f146cdc923'; direct=B if repair else R
 original_output=subprocess.check_output; original_run=subprocess.run
-original_bytes=Path.read_bytes; original_text=Path.read_text
+original_bytes=Path.read_bytes; original_text=Path.read_text; original_glob=Path.glob
+def historical_glob(path,pattern):
+    if path==root/'scripts/statistical-levels-release/tests' and pattern=='*.test.mjs':
+        return iter(root/p for p in original_output(['git','ls-tree','-r','--name-only','d290691156b933ba62e5e8f6489dc870568126e0','--','scripts/statistical-levels-release/tests']).decode().splitlines() if p.endswith('.test.mjs'))
+    return original_glob(path,pattern)
 allowed=['.github/workflows/ci.yml','.github/workflows/statistical-levels-release.yml',
 'scripts/statistical-levels-release/probe-fixture.json',
 'scripts/statistical-levels-release/tests/probe-fixture-registry.test.mjs',
@@ -207,6 +216,7 @@ assert original_output(['git','show','-s','--format=%P',B]).decode().strip()==R
 assert original_output(['git','show','-s','--format=%P',R]).decode().strip()==M
 assert original_output(['git','show','-s','--format=%P',M]).decode().strip().split()==[C,P]
 for ancestor in [M,C,P]: original_run(['git','merge-base','--is-ancestor',ancestor,R],check=True)
+historical_inputs=json.loads(original_output(['git','show',R+':scripts/statistical-levels-release/source-inputs.json']))
 ancestry=[]
 def output(args,**kwargs):
     if args==['git','rev-parse','HEAD']: value=E.encode()+b'\n'
@@ -244,6 +254,8 @@ def run(args,**kwargs):
 def read_bytes(path):
     value=original_bytes(path)
     name=str(path.relative_to(root)) if path.is_relative_to(root) else ''
+    if name=='scripts/statistical-levels-release/source-inputs.json' or name in historical_inputs:
+        value=original_output(['git','show',R+':'+name])
     if name=='scripts/statistical-levels-release/probe-fixture.json':
         data=json.loads(value)
         if case=='wrong_registration': data['git_sha']='a'*40
@@ -262,7 +274,7 @@ with tempfile.TemporaryDirectory(prefix='sl-successor-guard-') as directory:
          'GITHUB_REF':'refs/pull/1/merge' if case=='pr_nonqualification' else 'refs/heads/vercel-deployment',
          'GITHUB_RUN_ID':'123','GITHUB_RUN_ATTEMPT':'1','CI_EVIDENCE':directory}
     try:
-        with patch.dict(os.environ,env),patch('subprocess.check_output',output),patch('subprocess.run',run),patch.object(Path,'read_bytes',read_bytes),contextlib.redirect_stdout(io.StringIO()):
+        with patch.dict(os.environ,env),patch('subprocess.check_output',output),patch('subprocess.run',run),patch.object(Path,'read_bytes',read_bytes),patch.object(Path,'glob',historical_glob),contextlib.redirect_stdout(io.StringIO()):
             exec(compile(payload['guard'],'actual-ci-guard','exec'),{})
         subject=json.loads((Path(directory)/'subject.json').read_text())
         if case=='pr_nonqualification':
@@ -278,7 +290,7 @@ with tempfile.TemporaryDirectory(prefix='sl-successor-guard-') as directory:
             subject['head_sha' if case=='wrong_subject_sha' else 'run_id' if case in ['stale_run','cross_run_subject'] else 'run_attempt']='999'
             (Path(directory)/'subject.json').write_text(json.dumps(subject))
             tail=payload['summary'][payload['summary'].index("subject=json.loads"):]
-            with patch.dict(os.environ,env),patch('subprocess.check_output',output),contextlib.redirect_stdout(io.StringIO()):
+            with patch.dict(os.environ,env),patch('subprocess.check_output',output),patch.object(Path,'read_bytes',read_bytes),patch.object(Path,'glob',historical_glob),contextlib.redirect_stdout(io.StringIO()):
                 exec(compile(tail,'actual-ci-summary','exec'),{'out':Path(directory),'root':root,'summary':{},'after':{},'json':json,'os':os,'subprocess':subprocess,'hashlib':hashlib})
         if case.startswith('coverage_'):
             for suite,count in [('release',1964),('reports',31),('product',68)]:
@@ -306,7 +318,7 @@ with tempfile.TemporaryDirectory(prefix='sl-successor-guard-') as directory:
             if case=='coverage_wrong_event': subject['event']='workflow_dispatch'
             if case=='coverage_wrong_class': subject['integration_push']=False
             (Path(directory)/'subject.json').write_text(json.dumps(subject))
-            with patch.dict(os.environ,env),patch('subprocess.check_output',output),contextlib.redirect_stdout(io.StringIO()):
+            with patch.dict(os.environ,env),patch('subprocess.check_output',output),patch.object(Path,'read_bytes',read_bytes),patch.object(Path,'glob',historical_glob),contextlib.redirect_stdout(io.StringIO()):
                 exec(compile(payload['summary'],'actual-ci-summary','exec'),{})
             summary=json.loads((Path(directory)/'qualification-summary.json').read_text())
             assert summary['covered_obligations']==['C%02d'%i for i in range(1,14)]
@@ -326,7 +338,8 @@ with tempfile.TemporaryDirectory(prefix='sl-successor-guard-') as directory:
                 exec(compile(payload['integrity'],'actual-ci-integrity','exec'),{})
         print(json.dumps({'accepted':True}))
     except (AssertionError,subprocess.CalledProcessError) as error:
-        print(json.dumps({'accepted':False,'error':str(error)}))
+        import traceback
+        print(json.dumps({'accepted':False,'error':str(error),'model_trace':traceback.format_tb(error.__traceback__)}))
 `;
 
 const successorCases = {
@@ -405,7 +418,7 @@ for (const [name, expectedError] of Object.entries(repairCases)) {
   test('governed metadata repair: ' + name, () => {
     const result = spawnSync('python3', ['-c', successorModel], {
       cwd: repositoryRoot, encoding: 'utf8', timeout: 60000,
-      input: JSON.stringify({ case: name, repair: true, guard: ciPython[0], integrity: ciPython[1], summary: ciPython[2] }),
+      input: JSON.stringify({ case: name, repair: true, guard: metadataPython[0], integrity: metadataPython[1], summary: metadataPython[2] }),
     });
     assert.equal(result.status, 0, result.stderr || String(result.error));
     const output = JSON.parse(result.stdout);
@@ -649,7 +662,7 @@ for (const [name, expectedError] of Object.entries(accountingCases)) {
       cwd: repositoryRoot, encoding: 'utf8', timeout: 60000,
       input: JSON.stringify({ case: name, repair: true, mandatory: [...mandatoryCases,
         ...Object.keys(accountingCases).map(name => 'metadata repair accounting: ' + name)],
-        guard: ciPython[0], integrity: ciPython[1], summary: ciPython[2] }),
+        guard: metadataPython[0], integrity: metadataPython[1], summary: metadataPython[2] }),
     });
     assert.equal(result.status, 0, result.stderr || String(result.error));
     const output = JSON.parse(result.stdout);
@@ -657,3 +670,187 @@ for (const [name, expectedError] of Object.entries(accountingCases)) {
     if (expectedError !== null) assert.ok(output.error.includes(expectedError), JSON.stringify(output));
   });
 }
+
+const runtimeExpectedDelta={
+  "scripts/statistical-levels-release/tests/probe-product-browser-harness.test.mjs": "M",
+  ".github/workflows/ci.yml": "M",
+  ".github/workflows/statistical-levels-release.yml": "M",
+  "app/(es)/niveles-estadisticos/page.tsx": "M",
+  "app/api/statistical-levels/asset/route.ts": "A",
+  "app/en/statistical-levels/page.tsx": "M",
+  "components/statistical-levels/StatLevelsLab.tsx": "M",
+  "docs/statistical-levels-architecture-aware-transition-evidence.md": "A",
+  "lib/reports/september-corrective-release.test.mts": "M",
+  "lib/statistical-levels/runtime-snapshot.ts": "A",
+  "scripts/qa-statistical-levels-runtime.mjs": "A",
+  "scripts/statistical-levels-release/SOURCE_SHA256SUMS": "M",
+  "scripts/statistical-levels-release/probe-source-inputs.json": "A",
+  "scripts/statistical-levels-release/scripts/adopt-causal-bridge.mjs": "M",
+  "scripts/statistical-levels-release/scripts/adopt-request-evidence.mjs": "M",
+  "scripts/statistical-levels-release/scripts/browser-harness-base.mjs": "M",
+  "scripts/statistical-levels-release/scripts/probe-cli.mjs": "M",
+  "scripts/statistical-levels-release/scripts/probe-fixture-registry.mjs": "M",
+  "scripts/statistical-levels-release/scripts/probe-qa.mjs": "M",
+  "scripts/statistical-levels-release/scripts/runtime-transition-receipts.mjs": "A",
+  "scripts/statistical-levels-release/source-inputs.json": "M",
+  "scripts/statistical-levels-release/source-manifest.json": "M",
+  "scripts/statistical-levels-release/tests/adopt-causal-bridge.test.mjs": "M",
+  "scripts/statistical-levels-release/tests/input-manifest-roles.test.mjs": "A",
+  "scripts/statistical-levels-release/tests/probe-fixture-registry.test.mjs": "M",
+  "scripts/statistical-levels-release/tests/probe-qa-http.test.mjs": "M",
+  "scripts/statistical-levels-release/tests/probe-redirect-integration.test.mjs": "M",
+  "scripts/statistical-levels-release/tests/product-qa-observability-isolation.test.mjs": "M",
+  "scripts/statistical-levels-release/tests/runtime-transition-receipts.test.mjs": "A",
+  "scripts/statistical-levels-release/tests/statistical-levels-runtime.test.mjs": "A",
+  "scripts/statistical-levels-release/workflow-freeze.json": "M",
+  "package-lock.json": "M"
+};
+
+const runtimeGuardModel=String.raw`
+import json,sys,os,hashlib,subprocess,tempfile,contextlib,io
+from pathlib import Path
+from unittest.mock import patch
+v=json.load(sys.stdin);case=v['case'];root=Path.cwd();head='f'*40
+output=subprocess.check_output;run=subprocess.run;read=Path.read_bytes;text=Path.read_text
+# The actual candidate checkout supplies the next successor's direct parent.
+# Never take this value from the workflow constant: that masked the stale guard.
+parent=output(['git','rev-parse','HEAD']).decode().strip()
+assert parent=='65aec8374a896bb7323dcd76af7263fb437610fa', 'WRONG_IMPLEMENTATION_CHECKOUT'
+stale=output(['git','show','-s','--format=%P',parent]).decode().strip()
+assert stale=='94e8ef63bea09b1043bad217946736503b147731'
+assert output(['git','show','-s','--format=%P',stale]).decode().strip()=='578498f33b5bf7c70f5c43894d05f67aea409a00', 'WRONG_IMPLEMENTATION_PREDECESSOR'
+expected=v['delta'];seen=[]
+def git(args,**kwargs):
+    if args==['git','rev-parse','HEAD']: return (head+'\n').encode()
+    if args==['git','show','-s','--format=%P','HEAD']:
+        parents={'wrong_parent':['a'*40],'stale_parent':[stale],
+                 'arbitrary_descendant':['b'*40],
+                 'unrelated_ancestor':['c60b17c6ddc5a08fcd402328f69e73f6e1e41b5f'],
+                 'multiple_parents':[parent,stale],
+                 'merge_parent_substitution':[stale,parent]}.get(case,[parent])
+        return (' '.join(parents)+'\n').encode()
+    if args[:4]==['git','diff','--raw','--no-abbrev']:
+        names=list(expected)
+        if case=='extra_path':names.append('unauthorized.txt')
+        if case=='missing_path':names.pop()
+        if case=='duplicate_path':names.append(names[0])
+        rows=[]
+        for n in names:
+            status=expected.get(n,'M');old='000000' if status=='A' else '100644';new='100755' if case=='wrong_mode' else '100644'
+            if case=='wrong_status':status='D'
+            rows.append(':'+old+' '+new+' '+'a'*40+' '+'b'*40+' '+status+'\0'+n+'\0')
+        return ''.join(rows).encode()
+    if args==['git','ls-files','-z']:
+        names=set(output(args).decode().rstrip('\0').split('\0'))|set(expected)
+        return ('\0'.join(sorted(names))+'\0').encode()
+    return output(args,**kwargs)
+def command(args,**kwargs):
+    if args[:2] in [['git','show'],['git','ls-files']]:return run(args,**kwargs)
+    if args[:3]==['git','diff','--exit-code']:
+        if case=='dirty':raise AssertionError('DIRTY_CANDIDATE')
+        return subprocess.CompletedProcess(args,0)
+    if args[:3]==['git','merge-base','--is-ancestor']:
+        seen.append(args[3]);assert args[4]==head
+        if case=='missing_ancestry':raise AssertionError('ANCESTRY_MISSING')
+        return run(args[:4]+[parent],**kwargs)
+    raise AssertionError('UNEXPECTED_MUTATING_COMMAND')
+def bytes_(p):
+    b=read(p);name=str(p.relative_to(root)) if p.is_relative_to(root) else ''
+    if name.endswith('/probe-source-inputs.json') and case in ['probe_mutation','roles_swapped']:return b+b' '
+    if name.endswith('/source-inputs.json'):
+        if case=='missing_material':d=json.loads(b);d.pop('components/statistical-levels/StatLevelsLab.tsx');return json.dumps(d).encode()
+        if case=='stale_material':d=json.loads(b);d['components/statistical-levels/StatLevelsLab.tsx']='0'*64;return json.dumps(d).encode()
+        if case=='duplicate_key':return b.rstrip()[:-1]+b',"x":"0" ,"x":"1"}'
+    if name.endswith('/probe-fixture.json') and case=='wrong_registration':return b.replace(b'c8454dc',b'0000000')
+    if name=='components/statistical-levels/StatLevelsLab.tsx' and case=='unbound_product':return b+b'changed'
+    return b
+def text_(p,*args,**kwargs):
+    s=text(p,*args,**kwargs)
+    if str(p).endswith('/scripts/probe-fixture-registry.mjs') and case=='probe_pin':return s.replace('d7a8470700b59ed501502e96cc10cba3de8f79824847ed72706f9942c8473621','0'*64)
+    if str(p).endswith('/scripts/cli.mjs') and case=='release_probe_role':return s.replace('source-inputs.json','probe-source-inputs.json')
+    if str(p).endswith('/scripts/probe-cli.mjs') and case=='probe_release_role':return s.replace('readRegisteredProbeInputManifest(target)','readCandidateManifest(target)')
+    return s
+with tempfile.TemporaryDirectory(prefix='sl-runtime-ci-model-') as out:
+    env={'CI_EVIDENCE':out,'CI_EVENT_SHA':head,'GITHUB_SHA':head,'GITHUB_EVENT_NAME':'push','GITHUB_REF':'refs/heads/vercel-deployment','GITHUB_RUN_ID':'1','GITHUB_RUN_ATTEMPT':'1'}
+    if case=='wrong_sha':env['GITHUB_SHA']='a'*40
+    if case=='mutable_ref':env['CI_EVENT_SHA']='refs/heads/vercel-deployment'
+    try:
+        with patch.dict(os.environ,env),patch('subprocess.check_output',git),patch('subprocess.run',command),patch.object(Path,'read_bytes',bytes_),patch.object(Path,'read_text',text_),contextlib.redirect_stdout(io.StringIO()):exec(compile(v['guard'],'current-runtime-ci','exec'),{})
+        subject=json.loads((Path(out)/'subject.json').read_text());assert subject['lineage']['runtime_parent_verified'] and subject['lineage']['implementation_parent_sha']==parent and subject['lineage']['implementation_parent_predecessor_sha']==stale and len(seen)==9
+        assert seen==[parent,stale,'578498f33b5bf7c70f5c43894d05f67aea409a00','d290691156b933ba62e5e8f6489dc870568126e0','f7e3fe8e3e3cd8bdea753873c31d78f146cdc923','c8454dc06bae4bfc2d6fbc90cf9ffa4f94bb63c1','e7872b9c0e5bb0be3e090fbe2c5b930d68dcbece','0c8fce262fce44650729883862ec948778ebea45','c60b17c6ddc5a08fcd402328f69e73f6e1e41b5f']
+        print(json.dumps({'accepted':True}))
+    except (AssertionError,subprocess.CalledProcessError) as e:print(json.dumps({'accepted':False,'error':str(e)}))
+`;
+for(const name of ['valid','wrong_parent','stale_parent','arbitrary_descendant','unrelated_ancestor','multiple_parents','merge_parent_substitution','extra_path','missing_path','duplicate_path','wrong_mode','wrong_status','dirty','missing_ancestry','probe_mutation','roles_swapped','missing_material','stale_material','duplicate_key','wrong_registration','unbound_product','probe_pin','release_probe_role','probe_release_role','wrong_sha','mutable_ref'])test('governed runtime successor: '+name,()=>{
+ const result=spawnSync('python3',['-c',runtimeGuardModel],{cwd:repositoryRoot,encoding:'utf8',timeout:60000,input:JSON.stringify({case:name,delta:runtimeExpectedDelta,guard:ciPython[0]})});
+ assert.equal(result.status,0,result.stderr);const value=JSON.parse(result.stdout);assert.equal(value.accepted,name==='valid',JSON.stringify(value));
+ if(['wrong_parent','stale_parent','arbitrary_descendant','unrelated_ancestor','multiple_parents','merge_parent_substitution'].includes(name))assert.equal(value.error,'WRONG_RUNTIME_IMPLEMENTATION_PARENT');
+});
+
+test('governed runtime successor: oracle detects stale and ancestry-only workflow guards',()=>{
+ const guard=ciPython[0];
+ const stale=guard.replace("implementation_parent='65aec8374a896bb7323dcd76af7263fb437610fa'","implementation_parent='94e8ef63bea09b1043bad217946736503b147731'");
+ assert.notEqual(stale,guard);
+ const assess=(source,name)=>{const result=spawnSync('python3',['-c',runtimeGuardModel],{cwd:repositoryRoot,encoding:'utf8',timeout:60000,input:JSON.stringify({case:name,delta:runtimeExpectedDelta,guard:source})});assert.equal(result.status,0,result.stderr);return JSON.parse(result.stdout);};
+ assert.equal(assess(stale,'valid').accepted,false,'actual required parent must expose a stale workflow constant');
+ const weak=guard.replace("assert parents==[implementation_parent], 'WRONG_RUNTIME_IMPLEMENTATION_PARENT'","assert implementation_parent in parents or len(parents)==1, 'WRONG_RUNTIME_IMPLEMENTATION_PARENT'");
+ assert.notEqual(weak,guard);
+ for(const name of ['stale_parent','arbitrary_descendant','multiple_parents','merge_parent_substitution'])assert.equal(assess(weak,name).accepted,true,'the negative oracle must detect a bypassed direct-parent assertion');
+});
+
+test('governed runtime successor: actual accounting SHA parity and separate review gate',()=>{
+ const model=String.raw`
+import ast,json,os,sys
+from unittest.mock import patch
+v=json.load(sys.stdin);tree=ast.parse(v['summary'])
+def assertion(message):
+    rows=[n for n in ast.walk(tree) if isinstance(n,ast.Assert) and isinstance(n.msg,ast.Constant) and n.msg.value==message]
+    assert len(rows)==1,message
+    return compile(ast.Module(body=rows,type_ignores=[]),'actual-ci-accounting-assertion','exec')
+before={'reviewed.ts':{'sha256':'a'*64,'mode':'100644'}}
+env={'CI_EVENT_SHA':'f'*40,'GITHUB_SHA':'f'*40,'GITHUB_RUN_ID':'1','GITHUB_RUN_ATTEMPT':'1'}
+subject={'head_sha':'f'*40,'run_id':'1','run_attempt':'1'}
+with patch.dict(os.environ,env):
+    for message in ['GOVERNED_BYTES_CHANGED','WRONG_SUBJECT_SHA','WRONG_SUMMARY_SHA','CROSS_RUN_SUBJECT']:
+        scope={'before':before,'after':before.copy(),'subject':subject.copy(),'os':os}
+        code=assertion(message);exec(code,scope)
+        if message=='GOVERNED_BYTES_CHANGED':scope['after']={'reviewed.ts':{'sha256':'b'*64,'mode':'100644'}}
+        elif message=='CROSS_RUN_SUBJECT':scope['subject']['run_attempt']='2'
+        else:scope['subject']['head_sha']='e'*40
+        try:exec(code,scope)
+        except AssertionError:pass
+        else:raise AssertionError('ACCOUNTING_BYPASS:'+message)
+rows=[n for n in ast.walk(tree) if isinstance(n,ast.Assign) and any(isinstance(t,ast.Subscript) and isinstance(t.slice,ast.Constant) and t.slice.value=='covered_obligations' for t in n.targets)]
+assert len(rows)==1
+scope={'summary':{},'subject':{'integration_push':True}};exec(compile(ast.Module(body=rows,type_ignores=[]),'actual-ci-obligations','exec'),scope)
+assert scope['summary']['covered_obligations']==['C%02d'%i for i in range(1,14)]
+print(json.dumps({'PASS':True,'obligations':13}))
+`;
+ const result=spawnSync('python3',['-c',model],{encoding:'utf8',input:JSON.stringify({summary:ciPython[2]})});
+ assert.equal(result.status,0,result.stderr);assert.equal(JSON.parse(result.stdout).obligations,13);
+ assert.match(ciText,/Review approval is a separate exact-tree pre-push gate, never inferred from ancestry/);
+ assert.doesNotMatch(ciPython[0],/['"](?:review_approved|independent_review_passed)['"]\s*:/);
+ assert.doesNotMatch(ciText,/continue-on-error:\s*true/);
+ assert.match(ciText,/CI_EVENT_SHA: \$\{\{ github\.sha \}\}/);
+});
+
+test('governed runtime successor: parent repair mandatory coverage fail closed',()=>{
+ const model=String.raw`
+import ast,json,re,sys
+v=json.load(sys.stdin);tree=ast.parse(v['summary'])
+rows=[n for n in ast.walk(tree) if isinstance(n,ast.For) and isinstance(n.target,ast.Name) and n.target.id=='case' and isinstance(n.iter,ast.List) and n.iter.elts and isinstance(n.iter.elts[0],ast.Constant) and n.iter.elts[0].value=='valid']
+assert len(rows)==1
+row=rows[0];names=ast.literal_eval(row.iter)
+assert len(names)==len(set(names))==29
+for required in ['stale_parent','arbitrary_descendant','multiple_parents','merge_parent_substitution']:
+    assert required in names
+code=compile(ast.Module(body=[row],type_ignores=[]),'actual-ci-parent-case-accounting','exec')
+lines=['ok '+str(i+1)+' - governed runtime successor: '+name for i,name in enumerate(names)]
+for text,accepted in [('\n'.join(lines),True),('\n'.join(lines[1:]),False),('\n'.join(lines+[lines[0]]),False),('\n'.join(lines).replace('ok 1 -','not ok 1 -'),False),('\n'.join([lines[0]+' # SKIP']+lines[1:]),False)]:
+    try:exec(code,{'text':text,'re':re})
+    except AssertionError:assert not accepted
+    else:assert accepted
+print(json.dumps({'PASS':True,'cases':29}))
+`;
+ const result=spawnSync('python3',['-c',model],{encoding:'utf8',input:JSON.stringify({summary:ciPython[2]})});assert.equal(result.status,0,result.stderr);
+});

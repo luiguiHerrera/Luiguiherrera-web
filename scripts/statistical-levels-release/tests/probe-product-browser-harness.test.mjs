@@ -139,7 +139,10 @@ test('probe harness preserves exact raw events.push expressions and original tim
   const shared = await parse(sharedURL), probe = await parse(probeURL);
   const expressions = (ast, name) => { const found = []; function visit(node) { if (ts.isCallExpression(node) && node.expression.getText(ast) === name) found.push(ts.createPrinter({ removeComments: true }).printNode(ts.EmitHint.Expression, node, ast)); ts.forEachChild(node, visit); } visit(ast); return found; };
   const rawProbe=expressions(probe,'events.push').map(x=>x.replace('...(requests.has(e.requestId) ? { request_evidence: requests.get(e.requestId).request_evidence } : {}), ',''));
-  const pushes=expressions(shared,'events.push');
+  const allPushes=expressions(shared,'events.push');
+  const unsupported="events.push({ kind: 'unsupported_runtime_transport', rsc: 'UNKNOWN', prefetch: 'UNKNOWN' })";
+  assert.equal(allPushes.filter(x=>x===unsupported).length,1);
+  const pushes=allPushes.filter(x=>x!==unsupported);
   assert.ok(pushes.includes('events.push({ ...raw, ...(identity ? { failure_evidence: identity } : {}) })'));
   // Missing identity is an ADOPT-only blocking observation. Preview keeps its
   // original event path; the optional collector is absent in that mode.
@@ -156,4 +159,13 @@ test('probe harness preserves exact raw events.push expressions and original tim
   // The unchanged policy function now receives the same arguments in explicit diagnostic stages.
   // Behavioral equivalence (including blocked requests) is covered by interception differential tests.
   assert.deepEqual(expressions(probe, 'headersForRequest'), ['headersForRequest(requestURL, requestHeaders, token, previous, target.origin)']);
+});
+
+for(const type of ['Network.webSocketCreated','Network.webTransportCreated','Network.directTCPSocketCreated','Network.directUDPSocketCreated'])test('unsupported native transport remains blocking: '+type,async()=>{
+ const out=await fs.mkdtemp(path.join(os.tmpdir(),'sl-unsupported-transport-'));
+ try{const fake=fakePlaywright({out}),loaded=await importHarness(sharedURL,fake),h=await loaded.createReadOnlyHarness(fixtureTarget,{get:async()=>'',clear(){}},out,false),page=await h.createPage();
+  const native={};Object.defineProperty(native,'url',{get(){throw Error('must not read unsupported payload');}});
+  fake.contexts[0].cdp.emit(type,native);await page.close();const result=await h.finish(true);
+  assert.equal(result.ledger.length,1);assert.equal(result.ledger[0].classification,'unclassified');assert.equal(result.ledger[0].event.rsc,'UNKNOWN');assert.equal(result.unclassified_failures.length,1);
+ }finally{await fs.rm(out,{recursive:true,force:true});}
 });

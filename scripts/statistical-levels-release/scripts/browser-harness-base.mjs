@@ -1,12 +1,14 @@
 import fs from 'node:fs/promises';
 import {writeFileSync, appendFileSync, readFileSync, existsSync} from 'node:fs';
 import path from 'node:path';
+import { randomUUID } from 'node:crypto';
 import { need, headersForRequest, protectedGet, publicProductionGet } from './release-core.mjs';
 import { account, irrelevantNativeLevels } from './network-accounting.mjs';
 import { createAdoptRequestEvidence, auditAdoptRequestEvidence } from './adopt-request-evidence.mjs';
 import { installCausalBridge } from './adopt-causal-bridge.mjs';
 import { transitions } from './probe-transition-receipts.mjs';
 import { assetTransitionReadinessExpression } from './qa/asset-transition-readiness.mjs';
+import { createRuntimeObserver } from './runtime-transition-receipts.mjs';
 
 export async function createReadOnlyHarness(target, tokenSource, out, production) {
   need(production ? tokenSource === undefined : typeof tokenSource?.get === 'function', 'QA_CREDENTIAL_MODE');
@@ -25,13 +27,17 @@ export async function createReadOnlyHarness(target, tokenSource, out, production
     const cdp = await context.newCDPSession(page), requests = new Map(), paused = new Map();
     const pending = new Set();
     const pageId = 'page-' + (++pageSequence); pageStates.set(context, pageId);
+    const runtime = adopt ? await createRuntimeObserver(browser,cdp,target.origin,pageId,randomUUID) : null;
+    let runtimeKind=null,runtimeTransition=null;
+    // Unsupported transport starts are retained as UNKNOWN, never silently zero.
+    for(const type of ['Network.webSocketCreated','Network.webTransportCreated','Network.directTCPSocketCreated','Network.directUDPSocketCreated'])cdp.on(type,()=>{runtime?.unsupported();events.push({kind:'unsupported_runtime_transport',rsc:'UNKNOWN',prefetch:'UNKNOWN'});});
     // Registration constants identify the native event without reading its payload.
     const onNative=(type,interpret)=>cdp.on(type,native=>adopt
       ? adopt.nativeIngress(pageId,type,native,events,safe=>interpret(safe)) : interpret(native));
     if (adopt) {
-      cdp.on('Debugger.scriptParsed', native => adopt.scriptParsed(pageId,native,events));
-      onNative('Page.frameNavigated', e => adopt.frameNavigated(pageId, e));
-      onNative('Network.loadingFinished', e => {if(!retainUnresolved('FINISHED',e))adopt.finished(pageId,e);});
+      cdp.on('Debugger.scriptParsed', native => {const observed=adopt.scriptParsed(pageId,native,events);void runtime.script(observed);});
+      onNative('Page.frameNavigated', e => {adopt.frameNavigated(pageId, e);runtime.navigate();});
+      onNative('Network.loadingFinished', e => {if(!retainUnresolved('FINISHED',e)){adopt.finished(pageId,e);runtime.terminal(e,'FINISHED');}});
     }
     // Gated separately by complete raw accounting; no event is thrown away.
     const errors = { console: [], exceptions: [], network: [], http: [] };
@@ -55,18 +61,21 @@ export async function createReadOnlyHarness(target, tokenSource, out, production
       if(retainUnresolved('REQUEST',e))return;
       const headers = Object.fromEntries(Object.entries(e.request.headers).map(([k, v]) => [k.toLowerCase(), v]));
       const signals = adopt ? adopt.classification(pageId,e) : null;
-      requests.set(e.requestId, { ...(adopt ? { request_evidence: adopt.request(pageId, e) } : {}), url: e.request.url, type: e.type,
+      const binding=adopt?.request(pageId,e);runtime?.request(e,binding);
+      requests.set(e.requestId, { ...(adopt ? { request_evidence: binding } : {}), url: e.request.url, type: e.type,
         rsc: signals?.rsc === 'UNKNOWN' ? 'UNKNOWN' : signals ? signals.rsc === 'YES' : headers.rsc === '1', prefetch: signals?.prefetch === 'UNKNOWN' ? 'UNKNOWN' : signals ? signals.prefetch === 'YES' : headers['next-router-prefetch'] === '1' || headers.purpose === 'prefetch' });
     });
     onNative('Network.loadingFailed', e => {
       if(retainUnresolved('FAILED',e))return;
       if(adopt?.failure(pageId,e,events.length)===false)return;
+      runtime?.terminal(e,'FAILED');
       events.push({ ...requests.get(e.requestId), kind: 'request_failure', canceled: e.canceled,
       error_code: e.errorText, type: e.type });
     });
     onNative('Network.responseReceived', e => {
       if(retainUnresolved('RESPONSE',e))return;
       if(adopt?.response(pageId,e,e.response.status>=400?events.length:undefined)===false)return;
+      runtime?.response(e);
       if (e.response.status >= 400) events.push({ kind: 'request_failure', url: e.response.url, status: e.response.status, type: e.type });
       if (adopt && e.response.status >= 400 && requests.has(e.requestId)) {
         const raw = events.at(-1), request = requests.get(e.requestId);
@@ -81,6 +90,7 @@ export async function createReadOnlyHarness(target, tokenSource, out, production
       return !!unresolved;
     }
     function recordException(native,raw) {
+      runtime?.exception();
       // page.url() fallback is also evaluated inside ingress; never retain a lazy
       // browser return value in the raw accounting ledger.
       if(adopt)need(raw.url==null||typeof raw.url==='string','NATIVE_SOURCE_TYPE_INVALID');
@@ -113,7 +123,7 @@ export async function createReadOnlyHarness(target, tokenSource, out, production
     }
     await Promise.all(['Page', 'Runtime', 'Network', 'Log'].map(domain => cdp.send(domain + '.enable')));
     if (!production) await cdp.send('Fetch.enable', { patterns: [{ urlPattern: '*', requestStage: 'Request' }] });
-    const causalBridge = adopt ? await installCausalBridge(cdp, pageId, adopt.registerAction, adopt.completeAction, adopt.beginAction) : null;
+    const causalBridge = adopt ? await installCausalBridge(cdp, pageId, adopt.registerAction, adopt.completeAction, async id=>{if(runtimeKind)await runtime.begin(runtimeKind,runtimeTransition,id);adopt.beginAction(id);}) : null;
     const send = (method, params = {}) => cdp.send(method, params);
     const evaluate = async expression => {
       const action = adopt?.action(pageId, 'EVALUATE', expression);
@@ -149,11 +159,14 @@ export async function createReadOnlyHarness(target, tokenSource, out, production
     };
     closePages.set(context,closePage);
     return { send, evaluate, click, key, errors, ...(adopt ? {
-      transitionStart: kind => adopt.start(pageId, kind),
+      transitionStart: kind => {runtimeKind=kind;runtimeTransition=adopt.start(pageId,kind);return runtimeTransition;},
       transitionComplete: async kind => {
         const spec = transitions[kind];
         const readiness = spec ? await evaluate(assetTransitionReadinessExpression({ ...spec.target_state, pickerTitle: spec.target_state.asset === 'SPY' ? 'SPDR S&P 500 ETF' : 'SPDR Gold Shares' })) : false;
-        adopt.complete(pageId, kind, readiness);
+        let proof;
+        try{proof=runtime.supported()?await runtime.complete(kind,readiness):null;}
+        catch{adopt.complete(pageId,kind,false,runtime.records().at(-1));runtimeKind=null;runtimeTransition=null;throw Error('RUNTIME_OBSERVER_INCOMPLETE');}
+        adopt.complete(pageId, kind, readiness,proof);runtimeKind=null;runtimeTransition=null;
       }
     } : {}), close: closePage };
   }

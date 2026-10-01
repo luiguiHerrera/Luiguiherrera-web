@@ -1,10 +1,11 @@
 // ADOPT companion to the existing request identities and strict T1–T4 receipts.
 // No request headers, cookies, query values, bodies, raw CDP IDs or stacks persist.
-import { createRequestInstanceCollector, validateRequestEvidence, startContextFingerprint } from './probe-request-instances.mjs';
+import { createRequestInstanceCollector, validateRequestEvidence, startContextFingerprint, destinationFingerprint } from './probe-request-instances.mjs';
 import { createTransitionCapture, transitions, requireReceiptData } from './probe-transition-receipts.mjs';
-import { actionControls, selectionExpression, newAction, initiatorScripts, classifyRequestSignals, classificationEvidence, causalDecision, scriptFingerprint, nativeIntentSignals, nativeNavigationProven, requestRole } from './adopt-causal-bridge.mjs';
+import { actionControls, listenerMarker, selectionExpression, newAction, initiatorScripts, classifyRequestSignals, classificationEvidence, causalDecision, scriptFingerprint, nativeIntentSignals, nativeNavigationProven, requestRole } from './adopt-causal-bridge.mjs';
 import { account, safeEvent, sourceURLObservation, validateFailureEvidence, networkEventTypes, unresolvedNetworkEvidence, nativeIngressTypes, ingressFailureEvidence, irrelevantNativeLevels } from './network-accounting.mjs';
 import { canonical, sha } from './release-core.mjs';
+import { runtimeFetchProven, runtimeExecutableMatches, validateRuntimeTransitionReceipt } from './runtime-transition-receipts.mjs';
 const equal = (a,b) => canonical(a).equals(canonical(b));
 const clone = x => JSON.parse(canonical(x));
 const unknown = 'UNKNOWN';
@@ -19,9 +20,168 @@ const journalKinds = new Set([
   'APPLICATION_EXCEPTION','EXCEPTION_DUPLICATE','NATIVE_DUPLICATE','NATIVE_INGRESS','NATIVE_SCRIPT_INGRESS',
 ]);
 const requestIdentity=r=>Object.fromEntries(['request_id','request_evidence','metadata','protocol_request_sha256','rsc_classification','prefetch_classification','classification_evidence','initiator_scripts','initiator','causal_parent','causal_relation','redirect_parent_id','transition_id','transition_type',...(r.native_intent?['native_intent']:[]),...(r.request_context_binding?['request_context_binding']:[])].map(k=>[k,r[k]]));
+// Closed outer-journal contracts. Optional claims are assertions, never authority.
+// All unlisted fields (including ownership aliases and nested metadata) are forbidden.
+const contract=(required,optional=[])=>Object.freeze({required:Object.freeze(['sequence','kind',...required]),optional:Object.freeze(optional)});
+const ingressFields=['page_id','native_event_type','native_event_received','identity_status','interpretation_status','conversion_sequences','accounting_indices','event_id'];
+const ingressOptional=['materialization_status','materialization_field','materialization_operation','original_sequence'];
+const networkFields=['request_id','page_id','page_lifecycle','timestamp'];
+const networkOptional=['native_ingress_id','transition_id','action_instance_id'];
+const unresolvedFields=['identity_reason','rsc','prefetch','resource_type','status','redirect_status','canceled','error_code','unresolved_evidence','accounting_index'];
+export const outerJournalOwnershipContracts=Object.freeze({
+ LISTENER_START:contract(['page_id']),LISTENER_DRAIN:contract(['page_id']),SOURCE_CLOSED:contract(['page_id']),LISTENER_STOP:contract(['page_id']),
+ ACCOUNTING_FREEZE:contract([]),PAGE_LIFECYCLE:contract(['page_id','value']),
+ TRANSITION_START:contract(['transition_id','page_id','transition_type'],['action_instance_id']),
+ TRANSITION_COMPLETE:contract(['transition_id','page_id','transition_type'],['action_instance_id']),
+ ACTION_COMPILED:contract(['action_instance_id','transition_id','page_id','script_sha256'],['tested_action_id']),
+ ACTION_START:contract(['action_instance_id','transition_id','page_id'],['tested_action_id']),
+ ACTION_DISPATCHED:contract(['action_instance_id','dispatch_ack','event_seen','listener_calls'],['page_id','transition_id','tested_action_id']),
+ REQUEST:contract([...networkFields,'request_identity_sha256','rsc','prefetch','classification_evidence','transition_id'],['native_ingress_id','action_instance_id']),
+ // Older independently captured journals omitted this transport annotation.
+ // Absence remains valid; a present, resolved type must agree with the request.
+ RESPONSE:contract([...networkFields,'status'],[...networkOptional,'resource_type']),
+ FAILED:contract([...networkFields,'canceled','error_code'],[...networkOptional,'resource_type']),
+ FINISHED:contract(networkFields,networkOptional),
+ REDIRECTED:contract([...networkFields,'status'],networkOptional),
+ APPLICATION_EXCEPTION:contract(['page_id','page_lifecycle','failure_evidence','source_observation','safe_event'],['native_ingress_id','transition_id']),
+ EXCEPTION_DUPLICATE:contract(['page_id','page_lifecycle','failure_id','native_event_id','native_event_type','original_sequence','source_observation','safe_event'],['native_ingress_id','transition_id']),
+ NATIVE_DUPLICATE:contract(['page_id','page_lifecycle','original_sequence'],['native_ingress_id','related_request_id','native_event_type','timestamp','status','resource_type','canceled','error_code','unresolved_event_id','identity_basis','unresolved_evidence','transition_id','action_instance_id']),
+ NATIVE_INGRESS:contract(ingressFields,[...ingressOptional,'irrelevant_native_level','failure_evidence']),
+ NATIVE_SCRIPT_INGRESS:contract(ingressFields,[...ingressOptional,'script']),
+});
+
+// Replay the complete raw journal without receipt ownership, normalized tuples,
+// or caller consistency flags. Return issues only; never sanitize evidence.
+export function auditOuterJournalOwnership(evidence){
+ const issues=[],check=(ok,code)=>{if(!ok)issues.push(code);};
+ const fields=(v,required,optional=[])=>{
+  const valid=v&&typeof v==='object'&&!Array.isArray(v);
+  check(valid&&required.every(k=>Object.hasOwn(v,k)),'OWNERSHIP_REQUIRED_FIELD_MISSING');
+  if(valid)check(Object.keys(v).every(k=>required.includes(k)||optional.includes(k)),'OWNERSHIP_UNKNOWN_FIELD');
+ };
+ try{
+  requireReceiptData(evidence);
+  const index=(rows,key)=>{const out=new Map();for(const row of rows){check(!out.has(row[key]),'OWNERSHIP_AMBIGUOUS_REFERENCE');out.set(row[key],row);}return out;};
+  const actions=index(evidence.actions,'action_instance_id'),transitionsById=index(evidence.transitions,'transition_id'),requests=index(evidence.requests,'request_id'),journal=index(evidence.journal,'sequence');
+  const ingresses=index(evidence.journal.filter(e=>['NATIVE_INGRESS','NATIVE_SCRIPT_INGRESS'].includes(e.kind)),'event_id');
+  const listeners=new Set(),active=new Map();
+  const agree=(value,canonicalValue)=>check(canonicalValue!==undefined&&equal(value,canonicalValue),'OWNERSHIP_CLAIM_CONTRADICTION');
+  const actionTuple=a=>{
+   check(!!a,'OWNERSHIP_REFERENCE_UNRESOLVED');if(!a)return {};
+   fields(a,['action_instance_id','transition_id','kind','tested_action_id','page_id','script_sha256','source_sha256','source_url_sha256','dispatch_ack','event_seen','listener_calls']);
+   const control=actionControls[a.kind];
+   agree(a.source_sha256,control?sha(control.type==='CLICK'?listenerMarker:selectionExpression(a.kind)):undefined);
+   const t=transitionsById.get(a.transition_id);check(!!t,'OWNERSHIP_REFERENCE_UNRESOLVED');
+   if(t){agree(a.page_id,t.page_id);agree(a.action_instance_id,t.action_instance_id);agree(a.kind,t.kind);agree(a.tested_action_id,transitions[t.kind]?.action_id);}
+   return {page_id:t?.page_id,transition_id:t?.transition_id,action_instance_id:t?.action_instance_id,tested_action_id:transitions[t?.kind]?.action_id,script_sha256:a.script_sha256};
+  };
+  const requestTuple=r=>{
+   check(!!r,'OWNERSHIP_REFERENCE_UNRESOLVED');if(!r)return {};
+   fields(r,['request_id','request_evidence','metadata','protocol_request_sha256','rsc','prefetch','classification_evidence','rsc_classification','prefetch_classification','initiator_scripts','initiator','causal_parent','causal_relation','redirect_parent_id','transition_id','transition_type','causality_status','terminal_state','event_sequences','accounting_indices','action_instance_id','action_ancestry','consumer'],['native_intent','request_context_binding','request_role']);
+   fields(r.metadata,['origin','path_sha256','query_keys','method','type']);
+   fields(r.classification_evidence,['rsc','prefetch']);fields(r.initiator_scripts,['complete','scripts']);
+   fields(r.initiator,['type','frames','parent_protocol_sha256']);
+   for(const frame of r.initiator.frames)fields(frame,['script_sha256','line','column']);
+   if(r.request_context_binding)fields(r.request_context_binding,['source','action_instance_id','observed_context_sha256']);
+   if(r.native_intent){
+    fields(r.native_intent,['base','header_compatible','frames','complete','script_sequence','script'],['runtime_header_compatible']);
+    fields(r.native_intent.base,['rsc','prefetch']);
+    for(const frame of r.native_intent.frames)fields(frame,['script_sha256','line','column']);
+    if(r.native_intent.script)fields(r.native_intent.script,['script_sha256','code_sha256','length','start_line','start_column','default_context','live_edit']);
+   }
+   const b=validateRequestEvidence(r.request_evidence),decision=causalDecision(r,evidence.actions,evidence.requests);
+   if(r.request_context_binding){const cb=r.request_context_binding;
+    if(cb.source==='NATIVE_ACTION_ANCESTRY')agree(cb.action_instance_id,decision.action_instance_id);
+    else {agree(cb.source,'OBSERVED_CONTEXT');agree(cb.action_instance_id,unknown);}
+   }
+   if(r.native_intent){const w=r.native_intent;
+    if(w.script===null)agree(w.script_sequence,null);
+    else {const observed=journal.get(w.script_sequence);check(observed?.kind==='NATIVE_SCRIPT_INGRESS'&&observed.sequence<r.event_sequences[0]&&observed.interpretation_status==='INTERPRETED','OWNERSHIP_REFERENCE_UNRESOLVED');agree(observed?.page_id,b.page_id);agree(w.script,observed?.script);}
+   }
+   agree(r.request_id,b.request_instance_id);agree(r.transition_id,b.active_transition_id??unknown);agree(r.action_instance_id,decision.action_instance_id);
+   const tuple={request_id:b.request_instance_id,page_id:b.page_id,transition_id:b.active_transition_id??unknown,action_instance_id:decision.action_instance_id};
+   if(tuple.transition_id!==unknown){const t=transitionsById.get(tuple.transition_id);check(!!t,'OWNERSHIP_REFERENCE_UNRESOLVED');if(t){agree(tuple.page_id,t.page_id);agree(r.transition_type,t.kind);}}
+   if(tuple.action_instance_id!==unknown){const a=actionTuple(actions.get(tuple.action_instance_id));agree(tuple.page_id,a.page_id);agree(tuple.transition_id,a.transition_id);}
+   return tuple;
+  };
+  for(const t of transitionsById.values()){
+   fields(t,['transition_id','page_id','kind','context','action_instance_id','completion'],['runtime_proof']);fields(t.context,['suite_id','test_id','action_id']);
+   if(t.completion)fields(t.completion,['readiness','metric','product_failure']);
+   if(t.runtime_proof)fields(t.runtime_proof,['receipt','source','census']);
+  }
+  for(const a of actions.values())actionTuple(a);
+  for(const r of requests.values())requestTuple(r);
+  for(const [i,e]of evidence.journal.entries()){
+   agree(e.sequence,i+1);
+   const c=outerJournalOwnershipContracts[e.kind];check(!!c,'OWNERSHIP_UNKNOWN_EVENT');if(!c)continue;
+   // Unresolved native observations have a distinct emitted schema, and always
+   // block. They cannot borrow optional fields from the resolved contracts.
+   const unresolved=Object.hasOwn(networkEventTypes,e.kind)&&e.request_id===unknown;
+   if(unresolved)fields(e,[...networkFields,...unresolvedFields],['native_ingress_id']);
+   else fields(e,c.required,c.optional);
+   let tuple={};
+   if(e.kind==='LISTENER_START'){check(/^page-[1-9][0-9]*$/.test(e.page_id)&&!listeners.has(e.page_id),'OWNERSHIP_SOURCE_INVALID');listeners.add(e.page_id);}
+   if(e.kind!=='ACCOUNTING_FREEZE'&&e.kind!=='ACTION_DISPATCHED')check(listeners.has(e.page_id),'OWNERSHIP_SOURCE_UNRESOLVED');
+   if(e.kind.startsWith('ACTION_'))tuple=actionTuple(actions.get(e.action_instance_id));
+   else if(e.kind.startsWith('TRANSITION_')){
+    const t=transitionsById.get(e.transition_id);check(!!t,'OWNERSHIP_REFERENCE_UNRESOLVED');
+    tuple={page_id:t?.page_id,transition_id:t?.transition_id,action_instance_id:t?.action_instance_id,transition_type:t?.kind};
+    if(t?.action_instance_id!==unknown){const a=actionTuple(actions.get(t?.action_instance_id));agree(t?.page_id,a.page_id);agree(t?.transition_id,a.transition_id);}
+   }else if(Object.hasOwn(networkEventTypes,e.kind)&&e.request_id!==unknown){
+    const request=requests.get(e.request_id);tuple=requestTuple(request);
+    if(e.resource_type!==undefined&&e.resource_type!==unknown)agree(e.resource_type,request?.metadata.type);
+    if(e.kind==='REQUEST')for(const k of ['request_identity_sha256','rsc','prefetch','classification_evidence','transition_id'])check(Object.hasOwn(e,k),'OWNERSHIP_REQUIRED_FIELD_MISSING');
+    // Resolved observations must not smuggle an unresolved binding or identity.
+    for(const k of unresolvedFields.filter(k=>!['rsc','prefetch','resource_type','status','canceled','error_code'].includes(k)))check(!Object.hasOwn(e,k),'OWNERSHIP_CONFLICTING_REFERENCE');
+   }else if(Object.hasOwn(networkEventTypes,e.kind)){
+    check(false,'OWNERSHIP_REFERENCE_UNRESOLVED');
+    if(e.unresolved_evidence)agree(e.unresolved_evidence,unresolvedNetworkEvidence(e));
+   }else if(e.kind==='NATIVE_DUPLICATE'){
+    const original=journal.get(e.original_sequence);check(original&&original.sequence<e.sequence,'OWNERSHIP_REFERENCE_UNRESOLVED');
+    tuple=original?.request_id&&original.request_id!==unknown?requestTuple(requests.get(original.request_id)):{page_id:original?.page_id};
+    if(e.related_request_id!==undefined)agree(e.related_request_id,tuple.request_id);
+    if(e.native_event_type!==undefined)agree(e.native_event_type,original?.kind);
+    for(const k of ['timestamp','status','resource_type','canceled','error_code'])if(Object.hasOwn(e,k))agree(e[k],original?.[k]);
+    if(!e.unresolved_evidence)check(e.related_request_id!==undefined&&e.native_event_type!==undefined&&e.timestamp!==undefined,'OWNERSHIP_REQUIRED_FIELD_MISSING');
+    if(e.unresolved_evidence){fields(e,['sequence','kind','page_id','page_lifecycle','original_sequence','unresolved_event_id','identity_basis','unresolved_evidence'],['native_ingress_id']);agree(e.identity_basis,'SAME_NATIVE_OBJECT');}
+    else for(const k of ['identity_basis','unresolved_event_id'])check(!Object.hasOwn(e,k),'OWNERSHIP_CONFLICTING_REFERENCE');
+    if(e.unresolved_evidence){agree(e.unresolved_evidence,original?.unresolved_evidence);agree(e.unresolved_event_id,original?.unresolved_evidence?.event_id);}
+   }else if(e.kind==='APPLICATION_EXCEPTION'||e.kind==='EXCEPTION_DUPLICATE'){
+    const original=e.kind==='APPLICATION_EXCEPTION'?e:journal.get(e.original_sequence);
+    check(original?.kind==='APPLICATION_EXCEPTION','OWNERSHIP_REFERENCE_UNRESOLVED');
+    const f=validateFailureEvidence(original?.failure_evidence);
+    tuple={page_id:original?.page_id,transition_id:e.kind==='APPLICATION_EXCEPTION'?(active.get(e.page_id)??unknown):f.observed_transition_id};
+    if(e.kind==='APPLICATION_EXCEPTION'){
+     agree(f.page_id,tuple.page_id);agree(f.observed_transition_id,tuple.transition_id);
+     if(f.related_request_id!==unknown){const r=requests.get(f.related_request_id),q=requestTuple(r);agree(f.page_id,q.page_id);agree(f.parent_protocol_sha256,r?.protocol_request_sha256);check(r?.event_sequences[0]<e.sequence,'OWNERSHIP_REFERENCE_UNRESOLVED');}
+    }else {check(original.sequence<e.sequence,'OWNERSHIP_REFERENCE_UNRESOLVED');agree(e.failure_id,f.failure_id);agree(e.native_event_id,f.native_event_id);agree(e.native_event_type,f.native_event_type);}
+    fields(e.source_observation,['raw_sha256','raw_type','raw_shape']);
+    fields(e.safe_event,['kind','origin','path','type','rsc','prefetch','canceled','error_code','status','source'],['failure_evidence','source_url_evidence']);
+    if(e.safe_event?.failure_evidence)agree(e.safe_event.failure_evidence,f);
+    if(e.safe_event?.source_url_evidence)fields(e.safe_event.source_url_evidence,['raw_sha256','raw_type','raw_shape','base_identity','normalization_status','normalization_failure']);
+   }else tuple={page_id:e.page_id};
+   for(const k of ['page_id','transition_id','action_instance_id','tested_action_id','request_id','transition_type','script_sha256'])if(Object.hasOwn(e,k))agree(e[k],tuple[k]);
+   if(e.native_ingress_id!==undefined){
+    const ingress=ingresses.get(e.native_ingress_id);check(ingress?.kind==='NATIVE_INGRESS'&&ingress.sequence<e.sequence&&ingress.conversion_sequences.includes(e.sequence),'OWNERSHIP_REFERENCE_UNRESOLVED');agree(tuple.page_id,ingress?.page_id);
+   }
+   if(e.kind==='NATIVE_INGRESS'||e.kind==='NATIVE_SCRIPT_INGRESS'){
+    agree(e.event_id,(e.kind==='NATIVE_INGRESS'?'native-ingress-':'native-script-')+sha(e.page_id+':'+e.sequence));
+    if(e.original_sequence!==undefined){const original=journal.get(e.original_sequence);check(original&&original.sequence<e.sequence&&original.kind===e.kind,'OWNERSHIP_REFERENCE_UNRESOLVED');agree(e.page_id,original?.page_id);agree(e.native_event_type,original?.native_event_type);}
+    for(const s of e.conversion_sequences){const converted=journal.get(s);check(converted&&s>e.sequence&&converted.native_ingress_id===e.event_id,'OWNERSHIP_CONFLICTING_REFERENCE');agree(e.page_id,converted?.page_id);}
+    if(e.script)fields(e.script,['script_sha256','code_sha256','length','start_line','start_column','default_context','live_edit']);
+    if(e.failure_evidence)agree(e.failure_evidence,ingressFailureEvidence(e));
+   }
+   if(e.classification_evidence)fields(e.classification_evidence,['rsc','prefetch']);
+   if(e.kind==='TRANSITION_START')active.set(e.page_id,e.transition_id);
+   if(e.kind==='TRANSITION_COMPLETE')active.delete(e.page_id);
+  }
+ }catch{issues.push('OWNERSHIP_EVIDENCE_INVALID');}
+ return {status:issues.length?'FAIL':'PASS',issues:[...new Set(issues)]};
+}
 function intentEvidence(signals,type,witness) {
   const e=classificationEvidence(signals,type);
   if(signals.prefetch==='NO'&&nativeNavigationProven(witness)&&witness.header_compatible)e.prefetch='NATIVE_NEXT_NAVIGATION';
+  if(signals.prefetch==='NO'&&runtimeFetchProven(witness,type))e.prefetch='EXACT_EXPLICIT_ASSET_FETCH';
   return e;
 }
 function initiator(value) {
@@ -118,6 +278,7 @@ export function createAdoptRequestEvidence(origin, persistIngress = () => {}) {
   // sink, but does not expand the frozen shared network/accounting vocabulary.
   // A conversion failure is a retained unclassified ledger occurrence.
   function scriptParsed(p,native,events) {
+    let observed;
     const e=record('NATIVE_SCRIPT_INGRESS',{page_id:p,native_event_type:'Debugger.scriptParsed',native_event_received:true,
       identity_status:unknown,interpretation_status:'NOT_YET_INTERPRETED',conversion_sequences:[],accounting_indices:[]});
     e.event_id='native-script-'+sha(p+':'+e.sequence);
@@ -133,6 +294,7 @@ export function createAdoptRequestEvidence(origin, persistIngress = () => {}) {
       }
       e.materialization_status='MATERIALIZING';
       const s=materializeNativeEvent('Debugger.scriptParsed',native);
+      observed=s;
       e.materialization_status='MATERIALIZED';
       if(typeof s.scriptId!=='string'||!s.scriptId||typeof s.hash!=='string'||!/^[a-f0-9]{64}$/.test(s.hash))throw new Error('SCRIPT_IDENTITY_INVALID');
       e.script={script_sha256:scriptFingerprint(p,s.scriptId),code_sha256:s.hash,length:s.length??null,
@@ -143,6 +305,7 @@ export function createAdoptRequestEvidence(origin, persistIngress = () => {}) {
       e.interpretation_status='INTERPRETED';
     }catch{if(e.materialization_status==='MATERIALIZING')e.materialization_status='FAILED';fail();}
     finally{try{persistIngress(clone(e));}catch{fail();issues.push('INGRESS_DURABILITY_FAILED');}}
+    return e.interpretation_status==='INTERPRETED'?observed:undefined;
   }
   function intent(p,native) {
     // Only an inert projection may be used, including when called by the harness.
@@ -154,7 +317,8 @@ export function createAdoptRequestEvidence(origin, persistIngress = () => {}) {
     const headers=Object.entries(e.request.headers??{}).map(([k,v])=>[k.toLowerCase(),v]);
     const compatible=base.rsc==='YES'&&e.type==='Fetch'&&headers.every(([k,v])=>
       k==='next-router-prefetch'?v==='0':!['purpose','sec-purpose'].includes(k));
-    const witness={base,header_compatible:compatible,frames,complete,script_sequence:script?.sequence??null,script:script?.script??null};
+    const runtime_header_compatible=headers.every(([k])=>!['rsc','next-router-prefetch','purpose','sec-purpose'].includes(k));
+    const witness={base,header_compatible:compatible,runtime_header_compatible,frames,complete,script_sequence:script?.sequence??null,script:script?.script??null};
     return {signals:nativeIntentSignals(base,e.type,witness),witness};
   }
 
@@ -351,11 +515,11 @@ export function createAdoptRequestEvidence(origin, persistIngress = () => {}) {
     if(active.has(p))issues.push('DUPLICATE_TRANSITION');
     registry.push(t);active.set(p,t);record('TRANSITION_START',{transition_id:t.transition_id,page_id:p,transition_type:kind});return id;
   }
-  function complete(p,kind,readiness) {
+  function complete(p,kind,readiness,runtimeProof) {
     capture.complete(p,kind,{metric:true,readiness,productFailure},lifecycle(p));
     const t=active.get(p);
     if(!t||t.kind!==kind)issues.push('UNMAPPED_TRANSITION');
-    else t.completion={readiness:readiness===true,metric:true,product_failure:productFailure};
+    else {t.completion={readiness:readiness===true,metric:true,product_failure:productFailure};if(runtimeProof)t.runtime_proof=clone(runtimeProof);}
     record('TRANSITION_COMPLETE',{transition_id:t?.transition_id??unknown,page_id:p,transition_type:kind});active.delete(p);
   }
   function pageLifecycle(p,value) {
@@ -464,11 +628,139 @@ export function auditNativeIngressJournal(envelopes,snapshots) {
 }
 
 // Independently replayable: never repairs or normalizes evidence supplied to it.
+// Deliberately reconstruct from all retained material events, independently of
+// receipt validation or claimed counts. No filtering by a claimed consumer ID.
+// Independently enumerate the entire observer-owned source, never selected IDs
+// or receipt counts. This implementation does not call receipt reconstruction.
+export function auditRuntimeRawCensus(proof,transition){
+ const issues=[],check=(v,c)=>{if(!v)issues.push(c);};let raw_accounting;
+ try{
+  const {receipt:r,source}=proof,events=source.events,t2=transition.kind==='T2';
+  // Independent exact reconstruction of the native transport census. Never
+  // call the receipt census validator or accept a normalized ownership summary.
+  const trace=proof.census,network=events.filter(e=>e.kind==='NETWORK_START');
+  check(equal(Object.keys(trace).sort(),['completion','ended','requests','started']),'AUDIT_TRACE_FIELDS_INVALID');
+  check(equal(trace.completion,{dataLossOccurred:false})&&trace.started===true&&trace.ended===true,'AUDIT_TRACE_INCOMPLETE');
+  const projected=network.map(n=>({identity:n.identity,method:n.method,destination:n.destination,timestamp:Math.round(n.timestamp*1e6)}));
+  check(new Set(trace.requests.map(t=>t.identity)).size===trace.requests.length&&trace.requests.length===projected.length,'AUDIT_TRACE_CARDINALITY_INVALID');
+  for(const t of trace.requests){const owners=projected.filter(n=>n.identity===t.identity);check(owners.length===1&&equal(t,owners[0]),'AUDIT_TRACE_OWNERSHIP_CONTRADICTION');}
+  const layout=t2?'LISTENER_START TRANSITION_START ACTION_DISPATCH FETCH_ISSUED NETWORK_START NETWORK_FINISHED PAYLOAD_VALIDATED HISTORY_COMMIT PAYLOAD_CONSUMED STATE_COMMIT RENDER_COMMIT TRANSITION_COMPLETE LISTENER_DRAIN SOURCE_CLOSED FREEZE':'LISTENER_START TRANSITION_START ACTION_DISPATCH HISTORY_COMMIT STATE_COMMIT RENDER_COMMIT TRANSITION_COMPLETE LISTENER_DRAIN SOURCE_CLOSED FREEZE';
+  const order=layout.split(' '),sets=new Map();for(const e of events){if(!sets.has(e.kind))sets.set(e.kind,[]);sets.get(e.kind).push(e);}
+  const q=r.requests?.[0];
+  const allowed={LISTENER_START:'',LISTENER_DRAIN:'',SOURCE_CLOSED:'',FREEZE:'',TRANSITION_START:'action_instance_id transition_id',TRANSITION_COMPLETE:'action_instance_id transition_id',ACTION_DISPATCH:'action_instance_id transition_id',FETCH_ISSUED:'code_sha256 column intent_identity line',NETWORK_START:'destination identity intent_identity method request_instance_id timestamp',NETWORK_FINISHED:'identity request_instance_id',NETWORK_FAILED:'identity request_instance_id',PAYLOAD_VALIDATED:'code_sha256 column intent_identity line object_identity observer payload_identity request_instance_id',PAYLOAD_CONSUMED:'consumer_identity context event_identity intent_identity object_identity observer payload_identity request_instance_id',HISTORY_COMMIT:'action_instance_id code_sha256 column identity line target transition_id'+(t2||(sets.get('HISTORY_COMMIT')??[]).some(e=>Object.hasOwn(e,'state_commit_identity'))?' state_commit_identity':''),STATE_COMMIT:'action_instance_id identity target transition_id'+(t2?' consumer_identity request_instance_id':''),RENDER_COMMIT:'action_instance_id identity state_commit_identity target transition_id'};
+  const rows=[];
+  for(let i=0;i<events.length;i++){
+   const e=events[i];let owned=e.sequence===i+1&&e.kind===order[i]&&Object.hasOwn(allowed,e.kind);
+   if(owned)owned=equal(Object.keys(e).sort(),['kind','sequence',...allowed[e.kind].split(' ').filter(Boolean)].sort());
+   if(Object.hasOwn(e,'action_instance_id'))owned=owned&&e.action_instance_id===transition.action_instance_id;
+   if(Object.hasOwn(e,'transition_id'))owned=owned&&e.transition_id===transition.transition_id;
+   if(Object.hasOwn(e,'intent_identity'))owned=owned&&!!q&&e.intent_identity===q.intent_identity;
+   if(Object.hasOwn(e,'request_instance_id'))owned=owned&&!!q&&e.request_instance_id===q.request_instance_id;
+   if(Object.hasOwn(e,'payload_identity'))owned=owned&&!!q&&e.payload_identity===q.payload_identity;
+   if(e.kind==='PAYLOAD_CONSUMED')owned=owned&&equal(e.context,q?.consumer?.context);
+   rows.push({event_identity:sha(canonical({capture_id:source.capture_id,page_identity:source.page_identity,document_identity:source.document_identity,event:e})),event_type:e.kind,sequence:e.sequence,capture_id:source.capture_id,page_identity:source.page_identity,document_identity:source.document_identity,action_instance_id:e.action_instance_id??e.context?.action_instance_id??null,transition_id:e.transition_id??e.context?.transition_id??null,intent_identity:e.intent_identity??null,request_instance_id:e.request_instance_id??null,snapshot_identity:e.context?.snapshot_identity??null,ticker:e.context?.ticker??null,classification:owned?'OWNED_BY_GOVERNED_TRANSITION':'BLOCKING_FOREIGN_OR_AMBIGUOUS_EVENT',ownership:owned?'EXACT_ARCHITECTURE_BINDING':'UNRESOLVED',gate_relevance:Object.hasOwn(allowed,e.kind)?'GATE_RELEVANT':'UNKNOWN'});
+  }
+  const blocked=rows.reduce((n,e)=>n+(e.classification==='BLOCKING_FOREIGN_OR_AMBIGUOUS_EVENT'?1:0),0);
+  raw_accounting={raw_event_total:rows.length,owned_event_count:rows.length-blocked,explicit_non_gate_event_count:0,blocking_event_count:blocked,unaccounted_event_count:0,rows};
+  raw_accounting.census_digest=sha(canonical(raw_accounting));
+  check(events.length===order.length&&blocked===0,'AUDIT_RAW_EVENT_CLOSURE_BLOCKED');
+  check(sets.get('ACTION_DISPATCH')?.length===1,'AUDIT_ACTION_DISPATCH_CARDINALITY_INVALID');
+  check(source.closed===true&&source.lost_events===0&&source.exceptions.length===0&&source.failures.length===0&&source.pending.length===0,'AUDIT_RAW_OPTION_A_BLOCKED');
+  check(r.observation.start_sequence===2&&r.observation.action_dispatch_sequence===3&&r.observation.completion_sequence===order.length-3,'AUDIT_RAW_BOUNDARY_INVALID');
+  check(r.transition_id===transition.transition_id&&r.action_instance_id===transition.action_instance_id&&r.page_identity===transition.page_id&&r.kind===transition.kind,'AUDIT_RAW_OWNER_INVALID');
+ }catch{issues.push('AUDIT_RAW_CENSUS_INVALID');}
+ return {status:issues.length?'FAIL':'PASS',issues:[...new Set(issues)],raw_accounting};
+}
+
+export function auditRuntimeConsumerEvidence(proof,request,transition){
+ const issues=[],check=(v,c)=>{if(!v)issues.push(c);};
+ try{
+  const events=proof.source.events,receipt=proof.receipt;
+  const consumers=events.filter(e=>e.kind==='PAYLOAD_CONSUMED');
+  const states=events.filter(e=>e.kind==='STATE_COMMIT');
+  const renders=events.filter(e=>e.kind==='RENDER_COMMIT');
+  const histories=events.filter(e=>e.kind==='HISTORY_COMMIT');
+  check(consumers.length===1,'AUDIT_CONSUMER_CARDINALITY_INVALID');
+  check(states.length===1,'AUDIT_STATE_COMMIT_CARDINALITY_INVALID');
+  check(renders.length===1&&histories.length===1,'AUDIT_TERMINAL_CARDINALITY_INVALID');
+  check(receipt.requests.length===1,'AUDIT_T2_REQUEST_CARDINALITY_INVALID');
+  if(consumers.length===1&&states.length===1&&renders.length===1&&histories.length===1&&receipt.requests.length===1){
+   const event=consumers[0],state=states[0],render=renders[0],history=histories[0],q=receipt.requests[0],c=q.consumer;
+   check(!Object.hasOwn(receipt,'consumer_count')&&!Object.hasOwn(q,'consumer_count')&&!Object.hasOwn(c,'consumer_count'),'AUDIT_CONSUMER_COUNT_CLAIM_UNSUPPORTED');
+   const context={capture_id:request.request_evidence.capture_id,page_identity:transition.page_id,document_identity:request.request_evidence.document_instance_id,transition_id:transition.transition_id,action_instance_id:transition.action_instance_id,intent_identity:q.intent_identity,request_instance_id:request.request_id,payload_identity:q.payload_identity,snapshot_identity:receipt.snapshot_identity,ticker:transitions.T2.target_state.asset,phase:'STATE_COMMIT',state_commit_identity:state.identity,target_state:transitions.T2.target_state,event_identity:event.event_identity};
+   const identity=sha(canonical({schema:'statistical-levels.runtime-consumer.v1',...context}));
+   check(/^consumer:[a-f0-9-]{36}$/.test(event.event_identity),'AUDIT_CONSUMER_EVENT_IDENTITY_INVALID');
+   check(equal(event.context,context)&&equal(c.context,context)&&event.consumer_identity===identity&&c.identity===identity,'AUDIT_CONSUMER_BINDING_INVALID');
+   check(event.request_instance_id===request.request_id&&event.intent_identity===q.intent_identity&&event.payload_identity===q.payload_identity,'AUDIT_CONSUMER_REQUEST_BINDING_INVALID');
+   check(state.consumer_identity===identity&&state.request_instance_id===request.request_id&&state.identity===q.state_commit_identity&&state.identity===receipt.commit.state_commit_identity,'AUDIT_CONSUMER_STATE_BINDING_INVALID');
+   check(history.state_commit_identity===state.identity&&render.state_commit_identity===state.identity,'AUDIT_TERMINAL_STATE_BINDING_INVALID');
+   for(const terminal of [state,render,history])check(terminal.transition_id===transition.transition_id&&terminal.action_instance_id===transition.action_instance_id&&equal(terminal.target,transitions.T2.target_state),'AUDIT_TERMINAL_TARGET_INVALID');
+   check(c.consumption_sequence===event.sequence&&receipt.commit.state_sequence===state.sequence&&receipt.commit.render_sequence===render.sequence&&receipt.commit.history_sequence===history.sequence,'AUDIT_CONSUMER_SEQUENCE_INVALID');
+   check(c.current_intent===true&&event.sequence<state.sequence&&state.sequence<render.sequence,'AUDIT_CONSUMER_ORDER_INVALID');
+  }
+ }catch{issues.push('AUDIT_CONSUMER_EVIDENCE_INVALID');}
+ return {status:issues.length?'FAIL':'PASS',issues:[...new Set(issues)]};
+}
+
+// Independent implementation: do not call the receipt network reconstruction
+// or rely on validator PASS. Retain the entire terminal union before binding it
+// to native request ownership. Unknown/orphan events block; they are not adopted.
+export function auditRuntimeNetworkEvidence(proof,requests,transition){
+ const issues=[],check=(v,c)=>{if(!v)issues.push(c);};
+ try{
+  const {source,receipt:r}=proof,events=source.events;
+  check(events.every((e,i)=>e.sequence===i+1),'AUDIT_NETWORK_SEQUENCE_INVALID');
+  const starts=[],terminals=[],failed=[];
+  for(const e of events){
+   if(e.kind==='NETWORK_START')starts.push(e);
+   if(e.kind==='NETWORK_FINISHED'||e.kind==='NETWORK_FAILED')terminals.push(e);
+   if(e.kind==='NETWORK_FAILED')failed.push(e);
+  }
+  const pending=starts.filter(n=>terminals.every(t=>t.request_instance_id!==n.request_instance_id));
+  check(Array.isArray(source.failures)&&equal([...source.failures].sort(),failed.map(e=>e.request_instance_id).sort()),'AUDIT_NETWORK_FAILURE_SUMMARY_MISMATCH');
+  check(Array.isArray(source.pending)&&equal([...source.pending].sort(),pending.map(e=>e.request_instance_id).sort()),'AUDIT_NETWORK_PENDING_SUMMARY_MISMATCH');
+  check(new Set(starts.map(e=>e.request_instance_id)).size===starts.length,'AUDIT_NETWORK_START_CARDINALITY_INVALID');
+  check(new Set([...starts,...terminals].map(e=>e.identity)).size===starts.length+terminals.length,'AUDIT_NETWORK_EVENT_IDENTITY_DUPLICATE');
+  const count=transition.kind==='T2'?1:0;
+  check(starts.length===count&&requests.length===count&&r.requests.length===count,'AUDIT_NETWORK_REQUEST_COVERAGE_INVALID');
+  for(const terminal of terminals){
+   check(equal(Object.keys(terminal).sort(),['identity','kind','request_instance_id','sequence']),'AUDIT_NETWORK_TERMINAL_FIELDS_INVALID');
+   check(/^[a-f0-9]{64}$/.test(terminal.identity),'AUDIT_NETWORK_TERMINAL_IDENTITY_INVALID');
+   const owners=starts.filter(n=>n.request_instance_id===terminal.request_instance_id);
+   check(owners.length===1,'AUDIT_NETWORK_UNRESOLVED_TERMINAL');
+   check(owners.length===1&&terminal.sequence>owners[0].sequence&&terminal.sequence<r.observation.completion_sequence,'AUDIT_NETWORK_TERMINAL_SEQUENCE_INVALID');
+  }
+  for(const n of starts){
+   const native=requests.filter(q=>q.request_id===n.request_instance_id),claims=r.requests.filter(q=>q.request_instance_id===n.request_instance_id);
+   check(native.length===1&&claims.length===1,'AUDIT_NETWORK_REQUEST_IDENTITY_INVALID');
+   if(native.length!==1||claims.length!==1)continue;
+   const request=native[0],q=claims[0],b=request.request_evidence;
+   check(equal(Object.keys(n).sort(),['destination','identity','intent_identity','kind','method','request_instance_id','sequence','timestamp']),'AUDIT_NETWORK_START_FIELDS_INVALID');
+   check(n.identity===request.protocol_request_sha256&&n.method===b.method&&n.intent_identity===q.intent_identity,'AUDIT_NETWORK_START_BINDING_INVALID');
+   check(b.document_proven&&b.request_instance_id===request.request_id&&b.capture_id===r.capture_id&&b.page_id===transition.page_id&&b.document_instance_id===r.document_identity&&source.capture_id===b.capture_id&&source.page_identity===b.page_id&&source.document_identity===b.document_instance_id,'AUDIT_NETWORK_NATIVE_CONTEXT_INVALID');
+   check(request.action_instance_id===transition.action_instance_id&&request.transition_id===transition.transition_id&&q.action_instance_id===transition.action_instance_id&&q.transition_id===transition.transition_id&&q.page_identity===b.page_id&&q.document_identity===b.document_instance_id,'AUDIT_NETWORK_ACTION_INVALID');
+   const url=new URL('/api/statistical-levels/asset',request.metadata.origin);url.searchParams.set('asset',transitions.T2.target_state.asset);url.searchParams.set('snapshot',r.snapshot_identity);
+   check(q.snapshot_identity===r.snapshot_identity&&q.ticker===transitions.T2.target_state.asset&&equal(q.query,[['asset',q.ticker],['snapshot',r.snapshot_identity]])&&n.destination===sha(url.href)&&b.destination_sha256===destinationFingerprint(url.href,request.metadata.origin),'AUDIT_NETWORK_TARGET_INVALID');
+   const issued=events.filter(e=>e.kind==='FETCH_ISSUED');
+   check(issued.length===1&&issued[0].intent_identity===n.intent_identity&&issued[0].sequence>r.observation.action_dispatch_sequence&&issued[0].sequence<n.sequence,'AUDIT_NETWORK_START_SEQUENCE_INVALID');
+   const set=terminals.filter(e=>e.request_instance_id===n.request_instance_id);
+   const finished=set.filter(e=>e.kind==='NETWORK_FINISHED'),failures=set.filter(e=>e.kind==='NETWORK_FAILED');
+   check(set.length===1,'AUDIT_NETWORK_TERMINAL_CARDINALITY_INVALID');
+   check(finished.length===1&&failures.length===0,'AUDIT_NETWORK_EXACT_SUCCESS_REQUIRED');
+   check(set.length===1&&q.terminal===(set[0].kind==='NETWORK_FINISHED'?'FINISHED':'FAILED')&&q.response_terminal_identity===set[0].identity&&request.terminal_state===q.terminal,'AUDIT_NETWORK_TERMINAL_CLAIM_MISMATCH');
+   check(set.length===1&&set[0].sequence<q.consumer.validation_sequence&&set[0].sequence<r.commit.state_sequence,'AUDIT_NETWORK_TERMINAL_CONSUMPTION_ORDER');
+  }
+  check(pending.length===0&&failed.length===0,'AUDIT_NETWORK_INCOMPLETE');
+ }catch{issues.push('AUDIT_NETWORK_EVIDENCE_INVALID');}
+ return {status:issues.length?'FAIL':'PASS',issues:[...new Set(issues)]};
+}
+
 export function auditAdoptRequestEvidence(evidence,events,result,origin,expectedKinds=Object.keys(transitions)) {
   const issues=[];const check=(ok,code)=>{if(!ok)issues.push(code);};
   const unresolvedIdentityAccounting=[];
   try {
     requireReceiptData(evidence);requireReceiptData(events);requireReceiptData(result);
+    for(const issue of auditOuterJournalOwnership(evidence).issues)check(false,issue);
     check(evidence.schema_version==='statistical-levels.adopt-request-evidence.v2','SCHEMA_MISMATCH');
     check(evidence.capture_issues.length===0,'CAPTURE_FAILURE');
     const scriptRows=evidence.journal.filter(e=>e.kind==='NATIVE_SCRIPT_INGRESS'),scriptFailures=new Set();
@@ -738,8 +1030,39 @@ export function auditAdoptRequestEvidence(evidence,events,result,origin,expected
       if(!t.completion)issues.push('UNRESOLVED_PENDING_TRANSITION');
       check(actions.has(t.action_instance_id),'MISSING_CAUSAL_COVERAGE');
       const primary=evidence.requests.filter(r=>r.transition_id===t.transition_id&&r.causality_status==='PROVEN');
-      check(primary.length===1,'PRIMARY_REQUEST_CARDINALITY');
-      for(const r of primary){const b=r.request_evidence;check(b.document_proven&&b.consumer.kind==='transition'&&equal(b.consumer.target,spec.target_state)&&b.request_start_context_sha256===startContextFingerprint(spec)&&b.active_transition_context_sha256===startContextFingerprint(spec)&&r.metadata.origin===origin&&r.metadata.path_sha256===sha(spec.route),'PRIMARY_IDENTITY_MISMATCH');}
+      // A receipt cannot choose its own architecture. Native executable evidence
+      // preceding the action selects the exact reviewed mode; missing proof blocks.
+      const runtimeMode=scriptRows.some(e=>e.page_id===t.page_id&&e.sequence<starts[0]?.sequence&&e.interpretation_status==='INTERPRETED'&&runtimeExecutableMatches(e.script));
+      if(runtimeMode){
+        const proof=t.runtime_proof,rr=proof?.receipt;
+        const rawAudit=auditRuntimeRawCensus(proof,t);
+        for(const issue of rawAudit.issues)check(false,issue);
+        const receiptValidation=validateRuntimeTransitionReceipt(rr,proof?.source,proof?.census);
+        check(rawAudit.status==='PASS'&&receiptValidation.status==='PASS'&&equal(rawAudit.raw_accounting,receiptValidation.raw_accounting),'RUNTIME_RAW_CENSUS_PARITY');
+        const networkAudit=auditRuntimeNetworkEvidence(proof,evidence.requests.filter(r=>r.transition_id===t.transition_id),t);
+        for(const issue of networkAudit.issues)check(false,issue);
+        if(t.kind==='T2'){
+          const rawRequests=evidence.requests.filter(r=>r.transition_id===t.transition_id);
+          check(rawRequests.length===1,'AUDIT_T2_REQUEST_CARDINALITY_INVALID');
+          const consumerAudit=auditRuntimeConsumerEvidence(proof,rawRequests[0],t);
+          for(const issue of consumerAudit.issues)check(false,issue);
+        }
+        check(!!proof&&validateRuntimeTransitionReceipt(rr,proof.source,proof.census).status==='PASS','RUNTIME_TRANSITION_UNPROVEN');
+        check(rr?.transition_id===t.transition_id&&rr?.action_instance_id===t.action_instance_id&&rr?.page_identity===t.page_id&&rr?.kind===t.kind,'RUNTIME_TRANSITION_IDENTITY');
+        const owned=evidence.requests.filter(r=>r.transition_id===t.transition_id);
+        check(owned.length===(t.kind==='T2'?1:0)&&primary.length===(t.kind==='T2'?1:0),'RUNTIME_REQUEST_CARDINALITY');
+        if(t.kind==='T2'&&owned.length===1&&rr){
+          const r=owned[0],b=r.request_evidence,q=rr.requests?.[0];
+          const url=new URL('/api/statistical-levels/asset',origin);url.searchParams.set('asset','GLD');url.searchParams.set('snapshot',rr.snapshot_identity);
+          check(runtimeFetchProven(r.native_intent,r.metadata.type)&&b.document_proven&&b.capture_id===rr.capture_id&&b.document_instance_id===rr.document_identity&&b.destination_sha256===destinationFingerprint(url.href,origin)&&r.metadata.origin===origin&&r.metadata.path_sha256===sha(url.pathname)&&r.metadata.method==='GET'&&r.terminal_state==='FINISHED'&&r.action_instance_id===rr.action_instance_id&&q?.request_instance_id===r.request_id,'RUNTIME_EXPLICIT_REQUEST_BINDING');
+          const n=proof.source.events.filter(e=>e.kind==='NETWORK_START');
+          check(n.length===1&&n[0].identity===r.protocol_request_sha256&&n[0].destination===sha(url.href)&&n[0].request_instance_id===r.request_id,'RUNTIME_NATIVE_CENSUS_BINDING');
+        }
+      }else{
+        check(!t.runtime_proof,'UNSUPPORTED_RUNTIME_RECEIPT');
+        check(primary.length===1,'PRIMARY_REQUEST_CARDINALITY');
+        for(const r of primary){const b=r.request_evidence;check(b.document_proven&&b.consumer.kind==='transition'&&equal(b.consumer.target,spec.target_state)&&b.request_start_context_sha256===startContextFingerprint(spec)&&b.active_transition_context_sha256===startContextFingerprint(spec)&&r.metadata.origin===origin&&r.metadata.path_sha256===sha(spec.route),'PRIMARY_IDENTITY_MISMATCH');}
+      }
       for(const r of primary)if(r.terminal_state==='FAILED')check(evidence.transition_receipts.records.filter(p=>p.request_instance_id===r.request_id&&p.transition_id===t.transition_id).length===1,'MISSING_TERMINAL_RECEIPT');
       for(const r of primary)if(r.terminal_state==='FINISHED')check(evidence.journal.some(e=>e.request_id===r.request_id&&e.kind==='RESPONSE'&&e.status>=200&&e.status<300),'PRIMARY_RESPONSE_UNPROVEN');
       check(t.completion?.readiness===true&&t.completion.metric===true&&!t.completion.product_failure,'TRANSITION_COMPLETION_INVALID');

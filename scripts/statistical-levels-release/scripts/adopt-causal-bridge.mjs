@@ -2,6 +2,7 @@
 // No URL matching, request header injection, fetch replacement or timing attribution.
 import { randomUUID } from 'node:crypto';
 import { sha, need } from './release-core.mjs';
+import { runtimeFetchProven } from './runtime-transition-receipts.mjs';
 export const actionControls = Object.freeze({
   T1:{type:'CLICK',selector:'[data-window="3Y"]'},
   T2:{type:'CLICK',selector:'.sl-picker-group button[title="SPDR Gold Shares"]'},
@@ -31,6 +32,7 @@ export function nativeNavigationProven(witness) {
     navigationCode.frames.every(([line,column],i)=>frames[i].script_sha256===s.script_sha256&&frames[i].line===line&&frames[i].column===column));
 }
 export function nativeIntentSignals(base,type,witness) {
+  if(runtimeFetchProven(witness,type))return {rsc:'NO',prefetch:'NO'};
   if(!nativeNavigationProven(witness))return base;
   if(type!=='Fetch'||base.rsc!=='YES'||base.prefetch==='YES'||!witness.header_compatible)return {rsc:base.rsc,prefetch:'UNKNOWN'};
   return {rsc:'YES',prefetch:'NO'};
@@ -137,7 +139,7 @@ export async function installCausalBridge(cdp,pageId,register,complete,begin) {
     const armed=await cdp.send('Runtime.callFunctionOn',{objectId:bridge.result.objectId,functionDeclaration:'function(marker,selector){return this.arm(marker,selector);}',arguments:[{objectId:marker.result.objectId},{value:selector}],returnByValue:true});
     need(armed.result?.value===true&&!armed.exceptionDetails,'ACTION_BRIDGE_ARM_FAILED');
     let dispatched=false;
-    try {begin(action.action_instance_id);await dispatch();dispatched=true;}
+    try {await begin(action.action_instance_id);await dispatch();dispatched=true;}
     finally {
       const state=await cdp.send('Runtime.callFunctionOn',{objectId:bridge.result.objectId,functionDeclaration:'function(){return this.disarm();}',returnByValue:true});
       complete(action.action_instance_id,{dispatch_ack:dispatched,event_seen:state.result?.value?.event_seen===true,listener_calls:state.result?.value?.listener_calls??0});
@@ -148,7 +150,7 @@ export async function installCausalBridge(cdp,pageId,register,complete,begin) {
   async function evaluate(action,expression) {
     need(actionControls[action.kind]?.type==='EVALUATE'&&expression===selectionExpression(action.kind),'ACTION_CONTROL_MISMATCH');
     const {scriptId}=await compile(action,expression);
-    begin(action.action_instance_id);
+    await begin(action.action_instance_id);
     const result=await cdp.send('Runtime.runScript',{scriptId,returnByValue:true,awaitPromise:true});
     complete(action.action_instance_id,{dispatch_ack:!result.exceptionDetails,event_seen:null,listener_calls:null});
     return result;
@@ -172,7 +174,7 @@ export function causalDecision(request,actions,requests) {
     (control.type==='EVALUATE'||a.event_seen===true&&a.listener_calls>0);
   const proven=ancestry&&
     request.transition_id===a.transition_id&&request.transition_type===a.kind&&request.metadata.method==='GET'&&
-    request.rsc_classification==='YES'&&request.prefetch_classification==='NO'&&
+    (request.rsc_classification==='YES'||request.transition_type==='T2'&&runtimeFetchProven(request.native_intent,request.metadata.type)&&request.metadata.path_sha256===sha('/api/statistical-levels/asset'))&&request.prefetch_classification==='NO'&&
     request.initiator.type==='script'&&request.causal_relation==='CDP_SCRIPT_INITIATOR'&&
     request.causal_parent==='script:'+request.initiator_scripts.scripts[0]&&
     request.initiator.parent_protocol_sha256==='UNKNOWN'&&siblings.length===1;

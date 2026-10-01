@@ -12,7 +12,7 @@ const read = file => fs.readFile(new URL(file, root), 'utf8');
 const shared = {
   'scripts/release-core.mjs': 'c461b1af450c69007b4f5bfac9c21010ca475b843aec5fed3ff6fe6b8912dd70',
   'scripts/qa-runner.mjs': '4584b988912f702a3b79f8de19640dd8eb0c0ebf61e45d0330af6ae975c03262',
-  'scripts/browser-harness-base.mjs': '4c1953a99841b6234dd9a5e5f5fb98fcf721e377d6b95c4157fc690a345fac4b',
+  'scripts/browser-harness-base.mjs': 'HARNESS_SECURITY_REGIONS',
   'scripts/browser-harness.mjs': '2896a2c3f2886321eb47291a007fdf272ec95f4f4a593362d9a4a4ca6f04bf4c',
   'scripts/runtime-io.mjs': 'b114b3e246ae4bdbf1af1a3823218b65f53a18ca26719a6740b11538344a912e',
   'scripts/cli.mjs': 'c353aca844d0d69973d0bcd8abd9bf9539fd908245aca49d0caffcdb4a8c2407',
@@ -59,7 +59,7 @@ test('17: probe entry defers OIDC creation to protected-baseline gate and never 
 });
 
 test('18: requalified production target policy is pinned; ADOPT transport, validation and controller contracts remain frozen', async () => {
-  for (const [file, expected] of Object.entries(shared)) assert.equal(digest(file==='scripts/release-core.mjs'?withoutReceiptClass(await read(file)):await read(file)), expected, file);
+  for (const [file, expected] of Object.entries(shared)) { if(expected==='HARNESS_SECURITY_REGIONS')assertHarnessPreserved(await read(file));else assert.equal(digest(file==='scripts/release-core.mjs'?withoutReceiptClass(await read(file)):await read(file)), expected, file); }
 });
 
 test('19: release jobs retain the pinned diagnostic allowlist and frozen source checksum', async () => {
@@ -68,3 +68,64 @@ test('19: release jobs retain the pinned diagnostic allowlist and frozen source 
     .replace(/(EXPECTED_SOURCE_SUMS: )[a-f0-9]{64}/g, '$1<FROZEN_SOURCE_SUMS>');
   assert.equal(digest(release), 'dfa8a5bd21bd02cc03a3137b8de54d6108d2ca31dbedc094fe76250e3de6ba42');
 });
+
+// Independently frozen from parent 578498f, before authorized runtime wiring.
+// Pins cover credential/interception, ingress/errors, raw ledger and close/freeze.
+// New architecture behavior is covered by real receipt replay and mutations.
+function assertHarnessPreserved(source) {
+  const regions = [
+["    const context = await browser.newContext(", "    const pending =", "72e217e9a64c3ea3687064fc55660ed83074e65a474229365073ea3fe0a6e044"],
+  [
+    "  need(production ?",
+    "  const pages =",
+    "c74bfed5940d5acc468388ab6d791fed900bfd53de9be8f05e3e3989e218cc4d"
+  ],
+  [
+    "    if (!production) cdp.on('Fetch.requestPaused'",
+    "    onNative('Network.requestWillBeSent'",
+    "7b5aa8fd013377b4b8ec1cabe4b4f5524932f2f74b2abb6256e17480ee598da2"
+  ],
+  [
+    "    function retainUnresolved(",
+    "    function recordException(",
+    "34460bb9a52e20742e5bc017563c574db8db91fb1661ea4eec446a4750c3d6e8"
+  ],
+  [
+    "      // page.url() fallback",
+    "    onNative('Runtime.consoleAPICalled'",
+    "8d62d47ce44f90071b6a78ec1e0b390591c31a9ca4a83078af2e18c75ed014a2"
+  ],
+  [
+    "    onNative('Runtime.consoleAPICalled'",
+    "    const causalBridge =",
+    "8a5a2e4ff98d50b7827b809899a5c8edffeb5aacad7d7b416900a79ee7a66b6e"
+  ],
+  [
+    "    const closePage=async()=>{",
+    "    closePages.set(",
+    "0b104c70ea3c38d15166a78cf9de2c4abcb3c67ce812b6e9baef9f23dccaa10d"
+  ],
+  [
+    "    finish: async finalProductPassed => {",
+    "\n    } };",
+    "36bbab483fcbe1754137abc59c8f067b166ec25d4c2b6840d0f2dd300981fe2a"
+  ],
+  [
+    "      events.push({ ...requests.get(e.requestId), kind: 'request_failure'",
+    "    onNative('Network.responseReceived'",
+    "aa6cea3ff300f8b428ed09c8738f46c2e8b8f0f0350c6733977934dc094ea9e0"
+  ],
+  [
+    "      if (e.response.status >= 400) events.push",
+    "    // Conversion and journal/ledger insertion",
+    "128af595ab5d05b1658e4f960c79ac76b73b43c41f921aa3defb017ded8d4c50"
+  ]
+];
+  for (const [start,end,expected] of regions) {
+    const at=source.indexOf(start);assert.ok(at>=0,start);
+    assert.equal(source.indexOf(start,at+1),-1,'AMBIGUOUS_SECURITY_REGION');
+    const until=source.indexOf(end,at);assert.ok(until>at,end);
+    assert.equal(createHash('sha256').update(source.slice(at,until)).digest('hex'),expected,start);
+  }
+  assert.doesNotMatch(source,/process\.env\.(?:DEBUG_TOKEN|VERCEL_TOKEN)|aws-sdk|InvokeFunction|api\.vercel\.com/);
+}

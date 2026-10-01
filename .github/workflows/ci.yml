@@ -51,38 +51,42 @@ jobs:
           merge_anchor='e7872b9c0e5bb0be3e090fbe2c5b930d68dcbece'
           qualified_predecessor='c8454dc06bae4bfc2d6fbc90cf9ffa4f94bb63c1'
           repair_parent='f7e3fe8e3e3cd8bdea753873c31d78f146cdc923'
+          implementation_parent='65aec8374a896bb7323dcd76af7263fb437610fa'
+          implementation_parent_predecessor='94e8ef63bea09b1043bad217946736503b147731'
+          implementation_predecessor='578498f33b5bf7c70f5c43894d05f67aea409a00'
+          data_parent='d290691156b933ba62e5e8f6489dc870568126e0'
           repair_parent_parents=None
           predecessor_parents=None
           anchor_parents=None
           is_integration_push=os.environ['GITHUB_EVENT_NAME']=='push' and os.environ['GITHUB_REF']=='refs/heads/vercel-deployment'
           if is_integration_push:
-              assert parents==[repair_parent], 'WRONG_METADATA_REPAIR_PARENT'
+              assert parents==[implementation_parent], 'WRONG_RUNTIME_IMPLEMENTATION_PARENT'
+              assert git('show','-s','--format=%P',implementation_parent).decode().strip()==implementation_parent_predecessor, 'WRONG_IMPLEMENTATION_PARENT_PREDECESSOR'
+              assert git('show','-s','--format=%P',implementation_parent_predecessor).decode().strip()==implementation_predecessor, 'WRONG_IMPLEMENTATION_PREDECESSOR'
+              assert git('show','-s','--format=%P',implementation_predecessor).decode().strip()==data_parent, 'WRONG_DATA_PARENT'
+              assert git('show','-s','--format=%P',data_parent).decode().strip()==repair_parent, 'WRONG_CONTROL_PARENT'
               repair_parent_parents=git('show','-s','--format=%P',repair_parent).decode().strip().split()
               assert repair_parent_parents==[qualified_predecessor], 'WRONG_REGISTRATION_SUCCESSOR_PARENT'
               predecessor_parents=git('show','-s','--format=%P',qualified_predecessor).decode().strip().split()
               assert predecessor_parents==[merge_anchor], 'WRONG_QUALIFIED_PREDECESSOR_PARENT'
               anchor_parents=git('show','-s','--format=%P',merge_anchor).decode().strip().split()
               assert anchor_parents==[execution,production], 'WRONG_ORDERED_ANCHOR_PARENTS'
-              for parent in [repair_parent,qualified_predecessor,merge_anchor,execution,production]:
+              for parent in [implementation_parent,implementation_parent_predecessor,implementation_predecessor,data_parent,repair_parent,qualified_predecessor,merge_anchor,execution,production]:
                   subprocess.run(['git','merge-base','--is-ancestor',parent,head],check=True)
-              allowed={
-                  '.github/workflows/ci.yml','.github/workflows/statistical-levels-release.yml',
-                  'scripts/statistical-levels-release/scripts/probe-core.mjs',
-                  'scripts/statistical-levels-release/tests/probe-core.test.mjs',
-                  'scripts/statistical-levels-release/tests/probe-qa-http.test.mjs',
-                  'scripts/statistical-levels-release/tests/product-qa-observability-isolation.test.mjs',
-                  'scripts/statistical-levels-release/tests/probe-fixture-registry.test.mjs',
-                  'scripts/statistical-levels-release/source-manifest.json',
-                  'scripts/statistical-levels-release/SOURCE_SHA256SUMS',
-                  'scripts/statistical-levels-release/workflow-freeze.json'}
-              delta=git('diff','--raw','--no-abbrev','--no-renames','-z',repair_parent,'HEAD','--').decode().rstrip('\0').split('\0')
+              authorized=['.github/workflows/ci.yml', '.github/workflows/statistical-levels-release.yml', 'app/(es)/niveles-estadisticos/page.tsx', 'app/api/statistical-levels/asset/route.ts', 'app/en/statistical-levels/page.tsx', 'components/statistical-levels/StatLevelsLab.tsx', 'docs/statistical-levels-architecture-aware-transition-evidence.md', 'lib/reports/september-corrective-release.test.mts', 'lib/statistical-levels/get-statistical-levels-data.ts', 'lib/statistical-levels/runtime-snapshot.ts', 'package-lock.json', 'scripts/qa-statistical-levels-runtime.mjs', 'scripts/statistical-levels-release/SOURCE_SHA256SUMS', 'scripts/statistical-levels-release/probe-source-inputs.json', 'scripts/statistical-levels-release/scripts/adopt-causal-bridge.mjs', 'scripts/statistical-levels-release/scripts/adopt-request-evidence.mjs', 'scripts/statistical-levels-release/scripts/browser-harness-base.mjs', 'scripts/statistical-levels-release/scripts/cli.mjs', 'scripts/statistical-levels-release/scripts/preview-qa.mjs', 'scripts/statistical-levels-release/scripts/probe-cli.mjs', 'scripts/statistical-levels-release/scripts/probe-fixture-registry.mjs', 'scripts/statistical-levels-release/scripts/probe-qa.mjs', 'scripts/statistical-levels-release/scripts/probe-request-instances.mjs', 'scripts/statistical-levels-release/scripts/runtime-transition-receipts.mjs', 'scripts/statistical-levels-release/source-inputs.json', 'scripts/statistical-levels-release/source-manifest.json', 'scripts/statistical-levels-release/tests/adopt-causal-bridge.test.mjs', 'scripts/statistical-levels-release/tests/adopt-reconciliation.test.mjs', 'scripts/statistical-levels-release/tests/adopt-request-evidence.test.mjs', 'scripts/statistical-levels-release/tests/input-manifest-roles.test.mjs', 'scripts/statistical-levels-release/tests/preview-qa.test.mjs', 'scripts/statistical-levels-release/tests/probe-fixture-registry.test.mjs', 'scripts/statistical-levels-release/tests/probe-product-browser-harness.test.mjs', 'scripts/statistical-levels-release/tests/probe-qa-http.test.mjs', 'scripts/statistical-levels-release/tests/probe-redirect-integration.test.mjs', 'scripts/statistical-levels-release/tests/probe-request-instances.test.mjs', 'scripts/statistical-levels-release/tests/probe-transition-receipts.test.mjs', 'scripts/statistical-levels-release/tests/product-qa-observability-isolation.test.mjs', 'scripts/statistical-levels-release/tests/runtime-transition-receipts.test.mjs', 'scripts/statistical-levels-release/tests/statistical-levels-runtime.test.mjs', 'scripts/statistical-levels-release/workflow-freeze.json']
+              assert len(authorized)==41, 'AUTHORIZED_SCOPE_COUNT'
+              expected_delta={'scripts/statistical-levels-release/tests/probe-product-browser-harness.test.mjs': 'M', '.github/workflows/ci.yml': 'M', '.github/workflows/statistical-levels-release.yml': 'M', 'app/(es)/niveles-estadisticos/page.tsx': 'M', 'app/api/statistical-levels/asset/route.ts': 'A', 'app/en/statistical-levels/page.tsx': 'M', 'components/statistical-levels/StatLevelsLab.tsx': 'M', 'docs/statistical-levels-architecture-aware-transition-evidence.md': 'A', 'lib/reports/september-corrective-release.test.mts': 'M', 'lib/statistical-levels/runtime-snapshot.ts': 'A', 'scripts/qa-statistical-levels-runtime.mjs': 'A', 'scripts/statistical-levels-release/SOURCE_SHA256SUMS': 'M', 'scripts/statistical-levels-release/probe-source-inputs.json': 'A', 'scripts/statistical-levels-release/scripts/adopt-causal-bridge.mjs': 'M', 'scripts/statistical-levels-release/scripts/adopt-request-evidence.mjs': 'M', 'scripts/statistical-levels-release/scripts/browser-harness-base.mjs': 'M', 'scripts/statistical-levels-release/scripts/probe-cli.mjs': 'M', 'scripts/statistical-levels-release/scripts/probe-fixture-registry.mjs': 'M', 'scripts/statistical-levels-release/scripts/probe-qa.mjs': 'M', 'scripts/statistical-levels-release/scripts/runtime-transition-receipts.mjs': 'A', 'scripts/statistical-levels-release/source-inputs.json': 'M', 'scripts/statistical-levels-release/source-manifest.json': 'M', 'scripts/statistical-levels-release/tests/adopt-causal-bridge.test.mjs': 'M', 'scripts/statistical-levels-release/tests/input-manifest-roles.test.mjs': 'A', 'scripts/statistical-levels-release/tests/probe-fixture-registry.test.mjs': 'M', 'scripts/statistical-levels-release/tests/probe-qa-http.test.mjs': 'M', 'scripts/statistical-levels-release/tests/probe-redirect-integration.test.mjs': 'M', 'scripts/statistical-levels-release/tests/product-qa-observability-isolation.test.mjs': 'M', 'scripts/statistical-levels-release/tests/runtime-transition-receipts.test.mjs': 'A', 'scripts/statistical-levels-release/tests/statistical-levels-runtime.test.mjs': 'A', 'scripts/statistical-levels-release/workflow-freeze.json': 'M', 'package-lock.json': 'M'}
+              assert set(expected_delta)<=set(authorized), 'SUCCESSOR_DECLARED_SCOPE'
+              delta=git('diff','--raw','--no-abbrev','--no-renames','-z',implementation_parent,'HEAD','--').decode().rstrip('\0').split('\0')
               assert len(delta)%2==0, 'SUCCESSOR_DELTA_FORMAT'
               changed=[]
               for header,name in zip(delta[::2],delta[1::2]):
                   fields=header.split()
-                  assert len(fields)==5 and fields[0]==':100644' and fields[1]=='100644' and fields[4]=='M', 'SUCCESSOR_FILE_MODE_OR_STATUS'
+                  assert name in expected_delta, 'SUCCESSOR_CONTENT_SCOPE'
+                  expected_status=expected_delta[name]
+                  assert len(fields)==5 and fields[0]==(':000000' if expected_status=='A' else ':100644') and fields[1]=='100644' and fields[4]==expected_status, 'SUCCESSOR_FILE_MODE_OR_STATUS'
                   changed.append(name)
-              assert len(changed)==len(allowed) and set(changed)==allowed, 'SUCCESSOR_CONTENT_SCOPE'
+              assert len(changed)==len(expected_delta) and set(changed)==set(expected_delta), 'SUCCESSOR_CONTENT_SCOPE'
               def unique_json(data):
                   def pairs(items):
                       assert len(items)==len(dict(items)), 'DUPLICATE_SUCCESSOR_JSON_KEY'
@@ -95,19 +99,31 @@ jobs:
                   'project':'luiguiherrera-web','environment':'Preview'}, 'WRONG_SUCCESSOR_REGISTRATION'
               assert (base/'probe-fixture.json').read_bytes()==git('show',repair_parent+':scripts/statistical-levels-release/probe-fixture.json'), 'REPAIR_REGISTRATION_BYTES_CHANGED'
               input_path='scripts/statistical-levels-release/source-inputs.json'
-              input_bytes=(root/input_path).read_bytes()
-              assert input_bytes==git('show',qualified_predecessor+':'+input_path), 'SUCCESSOR_INPUT_INVENTORY_CHANGED'
-              assert input_bytes==git('show',repair_parent+':'+input_path), 'REPAIR_INPUT_INVENTORY_CHANGED'
-              inputs=unique_json(input_bytes)
-              assert len(inputs)==41, 'SUCCESSOR_INPUT_COUNT'
+              inputs=unique_json((root/input_path).read_bytes())
+              expected_inputs=['app/(es)/layout.tsx', 'app/(es)/niveles-estadisticos/page.tsx', 'app/api/statistical-levels/asset/route.ts', 'app/en/layout.tsx', 'app/en/statistical-levels/page.tsx', 'app/globals.css', 'components/brand/MarketLabMark.tsx', 'components/layout/Footer.tsx', 'components/layout/Header.tsx', 'components/layout/LanguageSwitcher.tsx', 'components/layout/PreserveReportLink.tsx', 'components/layout/SiteShell.tsx', 'components/seo/JsonLd.tsx', 'components/seo/RouteStructuredData.tsx', 'components/statistical-levels/AdvancedSeasonalityPanel.tsx', 'components/statistical-levels/AssetComparisonTable.tsx', 'components/statistical-levels/AssetSelector.tsx', 'components/statistical-levels/AssetStatCard.tsx', 'components/statistical-levels/CalendarExtremesPanel.tsx', 'components/statistical-levels/CorrelationMiniMatrix.tsx', 'components/statistical-levels/CurrentMonthSeasonality.tsx', 'components/statistical-levels/DailySeasonalityPanel.tsx', 'components/statistical-levels/DrawdownInspection.tsx', 'components/statistical-levels/FocusedAssetPanel.tsx', 'components/statistical-levels/HistoricalRange.tsx', 'components/statistical-levels/JpmSpxLevelsPanel.tsx', 'components/statistical-levels/KeyStatisticalLevelsPanel.tsx', 'components/statistical-levels/LabOverviewStrip.tsx', 'components/statistical-levels/MlFeaturesPanel.tsx', 'components/statistical-levels/MovementSummaryTable.tsx', 'components/statistical-levels/OpeningLocationPanel.tsx', 'components/statistical-levels/PercentileRangeBar.tsx', 'components/statistical-levels/PeriodExplorerTable.tsx', 'components/statistical-levels/PositioningScatter.tsx', 'components/statistical-levels/PresidentialCycleSeasonality.tsx', 'components/statistical-levels/ReturnHeatmap.tsx', 'components/statistical-levels/SeasonalityHeatmap.tsx', 'components/statistical-levels/SeasonalityMonthExplorer.tsx', 'components/statistical-levels/StatBandsChart.tsx', 'components/statistical-levels/StatLevelsLab.tsx', 'components/statistical-levels/StatisticalDisclosure.tsx', 'components/statistical-levels/UnderwaterDrawdownChart.tsx', 'components/statistical-levels/interaction-presentation.test.ts', 'components/statistical-levels/interaction-presentation.ts', 'components/statistical-levels/statistical-levels.css', 'components/ui/ExpandableInsightCard.tsx', 'components/ui/MetricHelpTooltip.tsx', 'components/ui/RiskPill.tsx', 'docs/statistical-levels-capability-ledger.json', 'lib/i18n/dictionaries/en.ts', 'lib/i18n/dictionaries/es.ts', 'lib/i18n/get-dictionary.ts', 'lib/i18n/language-pairs.ts', 'lib/i18n/locales.ts', 'lib/i18n/routes.ts', 'lib/market/jpm-spx-levels.ts', 'lib/research/td3-editorial.ts', 'lib/research/tom-decay/editorial.ts', 'lib/seo/site.ts', 'lib/seo/structured-data.ts', 'lib/statistical-levels/baseline-policy.mjs', 'lib/statistical-levels/defect-repairs.mjs', 'lib/statistical-levels/display.ts', 'lib/statistical-levels/get-statistical-levels-data.ts', 'lib/statistical-levels/interpretation.ts', 'lib/statistical-levels/runtime-snapshot.ts', 'lib/statistical-levels/types.ts', 'lib/trends/catalog.ts', 'next.config.ts', 'package-lock.json', 'package.json', 'postcss.config.js', 'proxy.ts', 'scripts/build-statistical-levels.mjs', 'scripts/statistical-levels-offline.mjs', 'tailwind.config.ts', 'tsconfig.json']
+              assert len(inputs)==77 and set(inputs)==set(expected_inputs), 'CURRENT_INPUT_INVENTORY'
               for name,digest in inputs.items():
-                  assert hashlib.sha256((root/name).read_bytes()).hexdigest()==digest, 'SUCCESSOR_PRODUCT_INPUT_CHANGED'
-                  assert hashlib.sha256(git('show',qualified_predecessor+':'+name)).hexdigest()==digest, 'REGISTERED_PREVIEW_INPUT_MISMATCH'
-                  assert hashlib.sha256(git('show',repair_parent+':'+name)).hexdigest()==digest, 'REPAIR_PARENT_INPUT_MISMATCH'
+                  assert re.fullmatch('[a-f0-9]{64}',digest), 'CURRENT_INPUT_HASH_FORMAT'
+                  p=root/name
+                  assert all(not q.is_symlink() for q in [p,*p.parents]), 'CURRENT_INPUT_SYMLINK'
+                  assert hashlib.sha256(p.read_bytes()).hexdigest()==digest, 'CURRENT_INPUT_HASH'
+              probe_path=base/'probe-source-inputs.json'
+              assert not probe_path.is_symlink(), 'PROBE_INPUT_SYMLINK'
+              probe_bytes=probe_path.read_bytes()
+              historical_pin='d7a8470700b59ed501502e96cc10cba3de8f79824847ed72706f9942c8473621'
+              assert hashlib.sha256(probe_bytes).hexdigest()==historical_pin, 'PROBE_INPUT_PIN'
+              historical=unique_json(probe_bytes);assert len(historical)==41, 'PROBE_INPUT_COUNT'
+              assert probe_bytes==git('show',qualified_predecessor+':'+input_path), 'PROBE_HISTORICAL_BYTES'
+              for name,digest in historical.items():
+                  assert hashlib.sha256(git('show',qualified_predecessor+':'+name)).hexdigest()==digest, 'PROBE_HISTORICAL_INPUT'
+              registry=(base/'scripts/probe-fixture-registry.mjs').read_text()
+              assert registry.count(historical_pin)==1, 'PROBE_INDEPENDENT_PIN'
+              assert "readRegisteredProbeInputManifest(target)" in (base/'scripts/probe-cli.mjs').read_text(), 'PROBE_ROLE'
+              assert "path.join(packageRoot, 'source-inputs.json')" in (base/'scripts/cli.mjs').read_text() and 'probe-source-inputs' not in (base/'scripts/cli.mjs').read_text(), 'RELEASE_ROLE'
               # Review approval is a separate exact-tree pre-push gate, never inferred from ancestry.
           # PR checks exercise their event SHA; they never certify the integration push.
           subject={'head_sha':head,'parents':parents,'event':os.environ['GITHUB_EVENT_NAME'],'ref':os.environ['GITHUB_REF'],'run_id':os.environ['GITHUB_RUN_ID'],'run_attempt':os.environ['GITHUB_RUN_ATTEMPT'],'integration_push':is_integration_push}
-          subject['lineage']={'repair_parent_sha':repair_parent,'repair_parent_parents':repair_parent_parents,'metadata_repair_parent_verified':is_integration_push,'qualified_predecessor_sha':qualified_predecessor,'qualified_predecessor_parents':predecessor_parents,'merge_anchor_sha':merge_anchor,'merge_anchor_parents':anchor_parents,'registration_successor_parent_verified':is_integration_push,'registration_content_verified':is_integration_push,'two_parent_anchor_verified':is_integration_push}
+          subject['lineage']={'implementation_parent_sha':implementation_parent,'implementation_parent_predecessor_sha':implementation_parent_predecessor,'runtime_parent_verified':is_integration_push,'repair_parent_sha':repair_parent,'repair_parent_parents':repair_parent_parents,'metadata_repair_parent_verified':is_integration_push,'qualified_predecessor_sha':qualified_predecessor,'qualified_predecessor_parents':predecessor_parents,'merge_anchor_sha':merge_anchor,'merge_anchor_parents':anchor_parents,'registration_successor_parent_verified':is_integration_push,'registration_content_verified':is_integration_push,'two_parent_anchor_verified':is_integration_push}
           paths=sorted(git('ls-files','-z').decode().rstrip('\0').split('\0'))
           files={p:{'mode':format((root/p).stat().st_mode,'o'),'sha256':hashlib.sha256((root/p).read_bytes()).hexdigest()} for p in paths}
           (out/'subject.json').write_text(json.dumps(subject,sort_keys=True)+'\n')
@@ -150,7 +166,7 @@ jobs:
           manifest=unique(base/'source-manifest.json')
           tracked=subprocess.check_output(['git','ls-files','-z','scripts/statistical-levels-release/']).decode().rstrip('\0').split('\0')
           expected={str(Path(p).relative_to('scripts/statistical-levels-release')) for p in tracked}-{'SOURCE_SHA256SUMS','source-manifest.json','workflow-freeze.json'}
-          assert set(manifest)==expected and len(manifest)==94, 'BUNDLE_INVENTORY'
+          assert set(manifest)==expected and len(manifest)==99, 'BUNDLE_INVENTORY'
           for name,digest in manifest.items():
               p=Path(name); assert not p.is_absolute() and '..' not in p.parts
               assert all(not parent.is_symlink() for parent in [base/p,*(base/p).parents])
@@ -158,8 +174,9 @@ jobs:
           assert (base/'source-manifest.json').read_text()==json.dumps(dict(sorted(manifest.items())),indent=2)+'\n'
           sums={**manifest,'source-manifest.json':sha((base/'source-manifest.json').read_bytes())}
           canonical=''.join(v+'  '+p+'\n' for p,v in sorted(sums.items()))
-          assert len(sums)==95 and (base/'SOURCE_SHA256SUMS').read_text()==canonical, 'SOURCE_SUMS'
-          inputs=unique(base/'source-inputs.json'); assert len(inputs)==41
+          assert len(sums)==100 and (base/'SOURCE_SHA256SUMS').read_text()==canonical, 'SOURCE_SUMS'
+          inputs=unique(base/'source-inputs.json'); assert len(inputs)==77
+          assert sha((base/'probe-source-inputs.json').read_bytes())=='d7a8470700b59ed501502e96cc10cba3de8f79824847ed72706f9942c8473621'
           for name,digest in inputs.items():
               p=Path(name); assert not p.is_absolute() and '..' not in p.parts
               assert all(not parent.is_symlink() for parent in [root/p,*(root/p).parents])
@@ -176,10 +193,42 @@ jobs:
               match=re.search(r"[\"']policy\.json[\"']:\s*[\"']([a-f0-9]{64})[\"']",(base/'tests'/name).read_text())
               assert match and match[1]==policy_hash, 'POLICY_HASH'
           preservation=unique(root/'docs/statistical-levels-execution-requalification-manifest.json')
-          for entry in preservation['statistical_files']+preservation['historical_files']:
-              assert entry['source_commit'] in ['0c8fce262fce44650729883862ec948778ebea45','c60b17c6ddc5a08fcd402328f69e73f6e1e41b5f']
+          preservation_path=root/'docs/statistical-levels-execution-requalification-manifest.json'
+          assert sha(preservation_path.read_bytes())=='5e74899a8b473be8fe9bd0973301f8cc3441fbf183172fb9d093b171599c62a5'
+          assert sha(json.dumps(preservation,separators=(',',':'),ensure_ascii=False).encode())=='03420db6796f9102d66fec33efe62559ef801b0fc1051d9dea88a4c47b08cd7b'
+          anchor_path=root/'docs/reports/segundo-informe-septiembre-2026/corrective-release/baseline-hashes.json'
+          assert sha(anchor_path.read_bytes())==preservation['historical_manifest_sha256']=='18960688b09fef4d87aa15259b2dcb7209a4d0dfc760896582b84b4c1ce0ef08'
+          anchor=unique(anchor_path)
+          corrected={'public/reports/manifest.json','public/reports/segundo-informe-septiembre-2026.html','public/reports/segundo-informe-septiembre-2026.md','public/reports/segundo-informe-septiembre-2026.pdf'}
+          assert len(preservation['statistical_files'])==82 and len(preservation['historical_files'])==57
+          entries=preservation['statistical_files']+preservation['historical_files']
+          assert len({e['path'] for e in entries})==139 and {e['path'] for e in entries}==set(anchor)
+          assert sum(e['path'] in corrected for e in preservation['historical_files'])==4
+          for entry in preservation['statistical_files']:
+              assert entry['source_commit']=='0c8fce262fce44650729883862ec948778ebea45'
+              original=subprocess.check_output(['git','show',entry['source_commit']+':'+entry['path']])
+              assert sha(original)==entry['sha256'], entry['path']
+          for entry in preservation['historical_files']:
+              assert entry['source_commit']=='c60b17c6ddc5a08fcd402328f69e73f6e1e41b5f'
+              assert anchor[entry['path']]==entry['historical_sha256']
+              assert (entry['sha256']!=entry['historical_sha256'])==(entry['path'] in corrected)
               original=subprocess.check_output(['git','show',entry['source_commit']+':'+entry['path']])
               assert sha(original)==entry['sha256']==sha((root/entry['path']).read_bytes()), entry['path']
+          active=unique(root/'lib/statistical-levels/generated-provenance.json')
+          assert active['SCHEMA_VERSION']=='statistical-levels.provenance.v1' and active['SOURCE_STATE']=='COMMITTED'
+          compact=lambda x:json.dumps(x,separators=(',',':'),ensure_ascii=False).encode()
+          assert sha(compact(active['SOURCE_BUNDLE']))==active['GENERATOR_SHA256']
+          assert sha(compact(active['CONFIG']))==active['CONFIG_SHA256']
+          assert active['BASELINE_ID']==active['CONFIG']['BASELINE_ID']
+          for item in active['SOURCE_BUNDLE']:
+              assert sha((root/item['file']).read_bytes())==item['SHA256']
+          snapshots=active['snapshots']
+          assert len(snapshots)==len({x['FILE'] for x in snapshots})==81
+          assert {'lib/statistical-levels/generated/'+e['FILE'] for e in snapshots}=={e['path'] for e in preservation['statistical_files'] if '/generated/' in e['path']}
+          for item in snapshots:
+              assert sha((root/'lib/statistical-levels/generated'/item['FILE']).read_bytes())==item['SNAPSHOT_SHA256']
+              for key in ['GENERATOR_COMMIT','GENERATOR_SHA256','CONFIG_SHA256','GENERATED_AT']: assert item[key]==active[key]
+              assert item['INPUTS'] and all(i['RAW_SOURCE_ID'].startswith(active['BASELINE_ID']+'/raw/') and re.fullmatch('[a-f0-9]{64}',i['RAW_SHA256']) and i['SNAPSHOT_CUTOFF']==active['CONFIG']['SNAPSHOT_CUTOFF'] for i in item['INPUTS'])
           print(json.dumps({'source_bundle':'PASS','source_sums':'PASS','workflow_pins':'PASS','freeze':'PASS','policy_hash':'PASS','preservation':'PASS'}))
           PYCODE
 
@@ -211,6 +260,7 @@ jobs:
           assert.ok(ready,'LOCAL_APPLICATION_NOT_READY');
           JS
           node --test --test-concurrency=2 --test-reporter=tap scripts/statistical-levels-release/tests/*.test.mjs | tee "$CI_EVIDENCE/release.tap"
+          node scripts/qa-statistical-levels-runtime.mjs "$SL_NEXT_LOCAL_ORIGIN" "$CI_EVIDENCE/runtime-product.json"
 
       - name: Run production correction and product contracts including synthetic storage failures
         shell: bash
@@ -231,7 +281,7 @@ jobs:
           'archived raw identity and final completed history are independently bound',
           'identical frozen archived bytes reproduce all 81 snapshots; sidecar corruption blocks validation',
           ' two complete regenerations from archived raw have identical 81-file and provenance manifests'.strip()}
-          for name,minimum in [('release',1964),('reports',31),('product',68)]:
+          for name,minimum in [('release',2141),('reports',56),('product',68)]:
               text=(out/(name+'.tap')).read_text()
               counts={key:int(re.search(r'^# '+key+r' (\d+)$',text,re.M)[1]) for key in ['tests','pass','fail','cancelled','skipped','todo']}
               assert counts['tests']>=minimum and counts['fail']==counts['cancelled']==counts['todo']==0, (name,counts)
@@ -241,6 +291,34 @@ jobs:
               assert len(skipped)==len(set(skipped)), 'DUPLICATE_SKIP'
               assert set(skipped)<=(allowed_product_skips if name=='product' else set()), (name,skipped)
               if name=='release':
+                  for case in ['valid', 'wrong_parent', 'stale_parent', 'arbitrary_descendant', 'unrelated_ancestor', 'multiple_parents', 'merge_parent_substitution', 'oracle detects stale and ancestry-only workflow guards', 'actual accounting SHA parity and separate review gate', 'parent repair mandatory coverage fail closed', 'extra_path', 'missing_path', 'duplicate_path', 'wrong_mode', 'wrong_status', 'dirty', 'missing_ancestry', 'probe_mutation', 'roles_swapped', 'missing_material', 'stale_material', 'duplicate_key', 'wrong_registration', 'unbound_product', 'probe_pin', 'release_probe_role', 'probe_release_role', 'wrong_sha', 'mutable_ref']:
+                      assert len(re.findall(r'^ok \d+ - governed runtime successor: '+case+r'$',text,re.M))==1, 'RUNTIME_SUCCESSOR_CASE_NOT_EXECUTED'
+                  architecture_cases=['LOCAL_STATE_WITH_ANY_NETWORK_REQUEST', 'LOCAL_STATE_WITH_PREFETCH', 'LOCAL_STATE_WITH_PENDING_REQUEST', 'LOCAL_STATE_WITH_FAILED_REQUEST', 'LOCAL_STATE_INCOMPLETE_NETWORK_OBSERVATION', 'LOCAL_STATE_WRONG_TARGET', 'LOCAL_STATE_WRONG_URL', 'LOCAL_STATE_MISSING_HISTORY_COMMIT', 'LOCAL_STATE_APPLICATION_EXCEPTION', 'LOCAL_STATE_PRODUCT_FAILURE', 'T2_ZERO_REQUESTS', 'T2_MULTIPLE_REQUESTS', 'T2_RSC_REQUEST', 'T2_PREFETCH_REQUEST', 'T2_WRONG_ENDPOINT', 'T2_WRONG_METHOD', 'T2_EXTRA_QUERY_KEY', 'T2_DUPLICATE_QUERY_KEY', 'T2_WRONG_TICKER', 'T2_WRONG_SNAPSHOT', 'T2_REDIRECT', 'T2_PENDING', 'T2_FAILURE', 'T2_HTTP_ERROR', 'T2_SCHEMA_FAILURE', 'T2_PAYLOAD_TICKER_MISMATCH', 'T2_PAYLOAD_SNAPSHOT_MISMATCH', 'T2_MISSING_CONSUMER_PROOF', 'T2_AMBIGUOUS_CONSUMER', 'T2_MISSING_STATE_COMMIT', 'T2_STALE_RESPONSE_COMMIT', 'T2_AUTO_RETRY', 'T2_APPLICATION_ABORT', 'T2_RENDER_TARGET_MISMATCH', 'T2_HISTORY_TARGET_MISMATCH', 'CROSS_TRANSITION_REQUEST', 'CROSS_DOCUMENT_REQUEST', 'CROSS_SNAPSHOT_CACHE_ENTRY', 'UNRESOLVED_REQUEST_IDENTITY', 'CONTRADICTORY_EVIDENCE']
+                  for case in architecture_cases:
+                      assert len(re.findall(r'^ok \d+ - Founder negative: '+case+r'$',text,re.M))==1, 'ARCHITECTURE_NEGATIVE_NOT_EXECUTED'
+                  # CLOSED_WORLD_COVERAGE_BEGIN
+                  closed_world_cases=['EXACT_SINGLE_GOVERNED_DISPATCH_ACCEPTED', 'ZERO_DISPATCH_REJECTED_IF_CURRENT_CONTRACT_REQUIRES_ONE', 'TWO_IDENTICAL_DISPATCH_IDS_CONFLICTING_FIELDS_REJECTED', 'TWO_DISTINCT_GOVERNED_DISPATCHES_REJECTED', 'GOVERNED_PLUS_FOREIGN_ACTION_DISPATCH_REJECTED', 'GOVERNED_PLUS_FOREIGN_TRANSITION_DISPATCH_REJECTED', 'GOVERNED_PLUS_FOREIGN_INTENT_DISPATCH_REJECTED', 'FOREIGN_DISPATCH_BEFORE_REQUEST_REJECTED', 'FOREIGN_DISPATCH_BETWEEN_REQUEST_AND_TERMINAL_REJECTED', 'FOREIGN_DISPATCH_AFTER_TERMINAL_BUT_INSIDE_BOUNDARY_REJECTED', 'OUT_OF_BOUNDARY_FOREIGN_DISPATCH_EXCLUDED_ONLY_WITH_PROOF', 'UNKNOWN_EVENT_TYPE_INSIDE_BOUNDARY_REJECTED', 'UNCLASSIFIED_KNOWN_EVENT_INSIDE_BOUNDARY_REJECTED', 'EXTRA_NETWORK_STARTED_FOR_FOREIGN_REQUEST_REJECTED_OR_EXCLUDED_BY_EXACT_OWNERSHIP', 'EXTRA_NETWORK_FINISHED_FOR_FOREIGN_REQUEST_REJECTED_OR_EXCLUDED_BY_EXACT_OWNERSHIP', 'EXTRA_NETWORK_FAILED_FOR_FOREIGN_REQUEST_REJECTED_OR_EXCLUDED_BY_EXACT_OWNERSHIP', 'EXTRA_PAYLOAD_CONSUMED_FOREIGN_REQUEST_REJECTED_OR_EXCLUDED', 'EXTRA_STATE_COMMIT_FOREIGN_TRANSITION_REJECTED_OR_EXCLUDED', 'EXTRA_APPLICATION_EXCEPTION_INSIDE_BOUNDARY_REJECTED', 'EXTRA_PREFETCH_FAILURE_INSIDE_BOUNDARY_REJECTED', 'EXTRA_PENDING_REQUEST_INSIDE_BOUNDARY_REJECTED', 'RAW_EVENT_TOTAL_ACCOUNTING_MISMATCH_REJECTED', 'RECEIPT_CENSUS_OMITS_EVENT_REJECTED', 'AUDIT_RECOMPUTED_CENSUS_DIFFERS_REJECTED', 'VALID_COMPLETE_T2_CHAIN_ACCEPTED']
+                  for case in closed_world_cases:
+                      assert len(re.findall(r'^ok \d+ - closed world: '+case+r'$',text,re.M))==1, 'CLOSED_WORLD_CASE_NOT_EXECUTED'
+                  taxonomy_cases=['LISTENER_START', 'TRANSITION_START', 'ACTION_DISPATCH', 'FETCH_ISSUED', 'NETWORK_START', 'NETWORK_FINISHED', 'NETWORK_FAILED', 'PAYLOAD_VALIDATED', 'HISTORY_COMMIT', 'PAYLOAD_CONSUMED', 'STATE_COMMIT', 'RENDER_COMMIT', 'TRANSITION_COMPLETE', 'LISTENER_DRAIN', 'SOURCE_CLOSED', 'FREEZE', 'ACCOUNTING_FREEZE', 'LISTENER_STOP', 'PAGE_LIFECYCLE', 'ACTION_COMPILED', 'ACTION_START', 'ACTION_DISPATCHED', 'REQUEST', 'RESPONSE', 'FAILED', 'FINISHED', 'REDIRECTED', 'APPLICATION_EXCEPTION', 'EXCEPTION_DUPLICATE', 'NATIVE_DUPLICATE', 'NATIVE_INGRESS', 'NATIVE_SCRIPT_INGRESS']
+                  for case in taxonomy_cases:
+                      assert len(re.findall(r'^ok \d+ - raw taxonomy adversarial: '+case+r'$',text,re.M))==1, 'RAW_TAXONOMY_CASE_NOT_EXECUTED'
+                  assert len(re.findall(r'^ok \d+ - MAJOR-04 exact foreign action and transition dispatch before fetch rejects in receipt and enclosing audit$',text,re.M))==1, 'MAJOR_04_REGRESSION_NOT_EXECUTED'
+                  # CLOSED_WORLD_COVERAGE_END
+                  # TERMINAL_COHERENCE_COVERAGE_BEGIN
+                  terminal_cases=['EXACT_ONE_FINISHED_ACCEPTED', 'EXACT_ONE_FAILED_REJECTED', 'ZERO_TERMINAL_COMPLETED_RECEIPT_REJECTED', 'FINISHED_PLUS_FAILED_REJECTED', 'FAILED_PLUS_FINISHED_REJECTED', 'TWO_DISTINCT_FINISHED_REJECTED', 'TWO_DISTINCT_FAILED_REJECTED', 'THREE_MIXED_TERMINALS_REJECTED', 'RECEIPT_FINISHED_RAW_FAILED_REJECTED', 'RECEIPT_FAILED_RAW_FINISHED_REJECTED', 'RECEIPT_FINISHED_RAW_FINISHED_PLUS_FAILED_REJECTED', 'RAW_FAILURE_SUMMARY_EMPTY_REJECTED', 'FAILURE_SUMMARY_EXTRA_RAW_NONE_REJECTED', 'FAILURE_SUMMARY_WRONG_REQUEST_REJECTED', 'FAILURE_SUMMARY_WRONG_COUNT_REJECTED', 'FAILURE_EVENT_WRONG_REQUEST_REJECTED', 'FAILURE_EVENT_WRONG_INTENT_REJECTED', 'TERMINAL_EVENT_WRONG_SEQUENCE_REJECTED', 'TERMINAL_BEFORE_START_REJECTED', 'DUPLICATE_TERMINAL_EVENT_ID_CONFLICTING_OUTCOME_REJECTED', 'DISTINCT_TERMINAL_IDS_SAME_OUTCOME_REJECTED', 'FINISHED_WITH_PENDING_MATCHING_REQUEST_REJECTED', 'FAILED_WITH_PENDING_MATCHING_REQUEST_REJECTED', 'EXACT_VALID_SUCCESS_FULL_CHAIN_ACCEPTED', 'DUPLICATE_TERMINAL_SEQUENCE_IDENTITIES_REJECTED', 'OUT_OF_ORDER_CONTRADICTORY_TERMINALS_REJECTED', 'SAME_IMMUTABLE_TERMINAL_REPLAY_REJECTED', 'FINISHED_EVENT_WRONG_REQUEST_REJECTED', 'FINISHED_EVENT_WRONG_INTENT_REJECTED', 'FINISHED_EVENT_WRONG_SNAPSHOT_REJECTED', 'FINISHED_EVENT_WRONG_TICKER_REJECTED', 'FAILURE_SUMMARY_WRONG_IDENTITY_TYPE_REJECTED', 'PENDING_RAW_WITH_MATCHING_SUMMARY_REJECTED', 'TERMINAL_REFERENCES_ANOTHER_REQUEST_SEQUENCE_REJECTED', 'TERMINAL_AFTER_COMPLETION_REJECTED', 'START_WRONG_INTENT_REJECTED', 'RECEIPT_WRONG_SNAPSHOT_REJECTED', 'RECEIPT_WRONG_ACTION_REJECTED', 'MISSING_TERMINAL_EVENT_IDENTITY_REJECTED', 'RECEIPT_WRONG_TERMINAL_EVENT_IDENTITY_REJECTED']
+                  for case in terminal_cases:
+                      assert len(re.findall(r'^ok \d+ - terminal coherence: '+case+r'$',text,re.M))==1, 'TERMINAL_COHERENCE_CASE_NOT_EXECUTED'
+                  assert len(re.findall(r'^ok \d+ - MAJOR-03 exact retained failure insertion rejects in receipt and enclosing audit$',text,re.M))==1, 'MAJOR_03_REGRESSION_NOT_EXECUTED'
+                  # TERMINAL_COHERENCE_COVERAGE_END
+                  # CONSUMER_UNIQUENESS_COVERAGE_BEGIN
+                  consumer_cases=['ZERO_CONSUMER_REJECTED', 'EXACT_ONE_CONSUMER_ACCEPTED', 'TWO_DISTINCT_CONSUMERS_SAME_REQUEST_REJECTED', 'TWO_DISTINCT_CONSUMERS_SAME_INTENT_REJECTED', 'TWO_DISTINCT_CONSUMERS_SAME_PAYLOAD_REJECTED', 'TWO_CONSUMERS_ALL_SEMANTIC_FIELDS_EQUAL_BUT_DISTINCT_EVENT_ID_REJECTED', 'CONSUMER_REQUEST_MISMATCH_REJECTED', 'CONSUMER_INTENT_MISMATCH_REJECTED', 'CONSUMER_PAYLOAD_MISMATCH_REJECTED', 'CONSUMER_TICKER_MISMATCH_REJECTED', 'CONSUMER_SNAPSHOT_MISMATCH_REJECTED', 'CONSUMER_TARGET_STATE_MISMATCH_REJECTED', 'RECEIPT_CLAIMS_ONE_RAW_HAS_TWO_REJECTED', 'RECEIPT_CLAIMS_TWO_RAW_HAS_ONE_REJECTED', 'DUPLICATE_CONSUMER_ID_WITH_CONFLICTING_FIELDS_REJECTED', 'SAME_CONSUMER_BOUND_TO_TWO_REQUESTS_REJECTED', 'SAME_REQUEST_BOUND_TO_TWO_STATE_COMMITS_REJECTED', 'CONSUMER_WITHOUT_STATE_COMMIT_REJECTED', 'STATE_COMMIT_WITHOUT_CONSUMER_REJECTED', 'EXACT_SINGLE_FULL_CHAIN_ACCEPTED']
+                  for case in consumer_cases:
+                      assert len(re.findall(r'^ok \d+ - consumer uniqueness: '+case+r'$',text,re.M))==1, 'CONSUMER_UNIQUENESS_CASE_NOT_EXECUTED'
+                  assert len(re.findall(r'^ok \d+ - MAJOR-02 exact original mutation rejects in receipt and enclosing audit$',text,re.M))==1, 'MAJOR_02_REGRESSION_NOT_EXECUTED'
+                  # CONSUMER_UNIQUENESS_COVERAGE_END
+                  for case in ['PROBE_MANIFEST_CHANGED','CURRENT_MANIFEST_USED_FOR_PROBE','PROBE_MANIFEST_USED_FOR_PROMOTE','current candidate passes real PROMOTE input verifier','locked Next application: architecture-aware T1–T4 proof and strict accounting']:
+                      assert len(re.findall(r'^ok \d+ - '+re.escape(case)+r'$',text,re.M))==1, 'RUNTIME_REQUIRED_CASE_NOT_EXECUTED'
                   for case in ['identity','valid','unrelated','sibling','stale','grandchild','multiple_parents','wrong_predecessor_parent','reversed_anchor','missing_ancestry','wrong_sha','mutable_ref','wrong_registration','extra_registration_field','wrong_origin','duplicate_registration_key','wrong_input_inventory','wrong_product_input','wrong_preview_input','unreviewed_path','changed_mode','missing_delta','dirty','pr_nonqualification','stale_run','stale_attempt','wrong_sums','wrong_workflow']:
                       assert len(re.findall(r'^ok \d+ - governed successor: '+case+r'$',text,re.M))==1, 'SUCCESSOR_GUARD_CASE_NOT_EXECUTED'
                   required_repair_cases=[
@@ -446,7 +524,7 @@ jobs:
                   for failure in ['identity','storage','partial','collision','readback','manifest','provenance','validation']:
                       assert len(re.findall(r'^ok \d+ - real adapter failure injection: '+failure+r'$',text,re.M))==1, 'STORAGE_CASE_NOT_EXECUTED'
               summary[name]={'counts':counts,'explicit_local_only_or_nonapplicable_skips':skipped}
-          assert len(list((root/'scripts/statistical-levels-release/tests').glob('*.test.mjs')))==34
+          assert len(list((root/'scripts/statistical-levels-release/tests').glob('*.test.mjs')))==37
           before=json.loads((out/'before.json').read_text())
           paths=sorted(subprocess.check_output(['git','ls-files','-z']).decode().rstrip('\0').split('\0'))
           assert paths==sorted(before)

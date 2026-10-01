@@ -35,12 +35,12 @@ const expected = {
   },
   "ADOPT evidence wiring is pinned; shared runner and transport unchanged": {
     "scripts/qa-runner.mjs": "4584b988912f702a3b79f8de19640dd8eb0c0ebf61e45d0330af6ae975c03262",
-    "scripts/browser-harness-base.mjs": "4c1953a99841b6234dd9a5e5f5fb98fcf721e377d6b95c4157fc690a345fac4b",
+    "scripts/browser-harness-base.mjs": "HARNESS_SECURITY_REGIONS",
     "scripts/release-core.mjs": "c461b1af450c69007b4f5bfac9c21010ca475b843aec5fed3ff6fe6b8912dd70"
   },
   "PROMOTE shared runner unchanged; ADOPT-only harness extension pinned": {
     "scripts/qa-runner.mjs": "4584b988912f702a3b79f8de19640dd8eb0c0ebf61e45d0330af6ae975c03262",
-    "scripts/browser-harness-base.mjs": "4c1953a99841b6234dd9a5e5f5fb98fcf721e377d6b95c4157fc690a345fac4b",
+    "scripts/browser-harness-base.mjs": "HARNESS_SECURITY_REGIONS",
     "scripts/release-core.mjs": "c461b1af450c69007b4f5bfac9c21010ca475b843aec5fed3ff6fe6b8912dd70"
   }
 };
@@ -52,7 +52,7 @@ for (const [name, files] of Object.entries(expected)) {
     }
     for (const [file, hash] of Object.entries(files)) {
       const bytes = await readFile(new URL('../' + file, import.meta.url));
-      assert.equal(createHash('sha256').update(file==='scripts/release-core.mjs'?withoutReceiptClass(bytes):bytes).digest('hex'), hash, file);
+      if(hash==='HARNESS_SECURITY_REGIONS')assertHarnessPreserved(bytes.toString('utf8'));else assert.equal(createHash('sha256').update(file==='scripts/release-core.mjs'?withoutReceiptClass(bytes):bytes).digest('hex'), hash, file);
     }
   });
 }
@@ -366,4 +366,85 @@ for (const [name, mutate] of Object.entries(preservationMutations)) test('produc
   assert.notEqual(changed, source);
   // Parse/check only: never evaluate, import or execute mutated source.
   assert.throws(() => assertProbePreservation(changed), /PROBE_CORE_(?:PARSE|INVENTORY|SECURITY|METADATA|TIMESTAMP)/);
+});
+
+// Independently frozen from parent 578498f, before authorized runtime wiring.
+// Pins cover credential/interception, ingress/errors, raw ledger and close/freeze.
+// New architecture behavior is covered by real receipt replay and mutations.
+function assertHarnessPreserved(source) {
+  const regions = [
+["    const context = await browser.newContext(", "    const pending =", "72e217e9a64c3ea3687064fc55660ed83074e65a474229365073ea3fe0a6e044"],
+  [
+    "  need(production ?",
+    "  const pages =",
+    "c74bfed5940d5acc468388ab6d791fed900bfd53de9be8f05e3e3989e218cc4d"
+  ],
+  [
+    "    if (!production) cdp.on('Fetch.requestPaused'",
+    "    onNative('Network.requestWillBeSent'",
+    "7b5aa8fd013377b4b8ec1cabe4b4f5524932f2f74b2abb6256e17480ee598da2"
+  ],
+  [
+    "    function retainUnresolved(",
+    "    function recordException(",
+    "34460bb9a52e20742e5bc017563c574db8db91fb1661ea4eec446a4750c3d6e8"
+  ],
+  [
+    "      // page.url() fallback",
+    "    onNative('Runtime.consoleAPICalled'",
+    "8d62d47ce44f90071b6a78ec1e0b390591c31a9ca4a83078af2e18c75ed014a2"
+  ],
+  [
+    "    onNative('Runtime.consoleAPICalled'",
+    "    const causalBridge =",
+    "8a5a2e4ff98d50b7827b809899a5c8edffeb5aacad7d7b416900a79ee7a66b6e"
+  ],
+  [
+    "    const closePage=async()=>{",
+    "    closePages.set(",
+    "0b104c70ea3c38d15166a78cf9de2c4abcb3c67ce812b6e9baef9f23dccaa10d"
+  ],
+  [
+    "    finish: async finalProductPassed => {",
+    "\n    } };",
+    "36bbab483fcbe1754137abc59c8f067b166ec25d4c2b6840d0f2dd300981fe2a"
+  ],
+  [
+    "      events.push({ ...requests.get(e.requestId), kind: 'request_failure'",
+    "    onNative('Network.responseReceived'",
+    "aa6cea3ff300f8b428ed09c8738f46c2e8b8f0f0350c6733977934dc094ea9e0"
+  ],
+  [
+    "      if (e.response.status >= 400) events.push",
+    "    // Conversion and journal/ledger insertion",
+    "128af595ab5d05b1658e4f960c79ac76b73b43c41f921aa3defb017ded8d4c50"
+  ]
+];
+  for (const [start,end,expected] of regions) {
+    const at=source.indexOf(start);assert.ok(at>=0,start);
+    assert.equal(source.indexOf(start,at+1),-1,'AMBIGUOUS_SECURITY_REGION');
+    const until=source.indexOf(end,at);assert.ok(until>at,end);
+    assert.equal(createHash('sha256').update(source.slice(at,until)).digest('hex'),expected,start);
+  }
+  assert.doesNotMatch(source,/process\.env\.(?:DEBUG_TOKEN|VERCEL_TOKEN)|aws-sdk|InvokeFunction|api\.vercel\.com/);
+}
+
+const harnessMutations = [
+ ['PRODUCTION_TOKEN_SOURCE_ALLOWED','production ? tokenSource === undefined','production ? true'],
+ ['PRODUCTION_FETCH_INTERCEPTION_ENABLED',"if (!production) cdp.on('Fetch.requestPaused'","if (true) cdp.on('Fetch.requestPaused'"],
+ ['DEBUG_ALLOWED','!process.env.DEBUG && !process.env.PWDEBUG','true'],
+ ['SERVICE_WORKER_ENABLED',"serviceWorkers: 'block'","serviceWorkers: 'allow'"],
+ ['FAILURE_LEDGER_DROPPED','events.push({ ...requests.get(e.requestId)', 'void ({ ...requests.get(e.requestId)'],
+ ['HTTP_ERROR_IGNORED','e.response.status >= 400','e.response.status > 999'],
+ ['APPLICATION_EXCEPTION_IGNORED','events.push({...raw','void ({...raw'],
+ ['UNRESOLVED_REQUEST_IGNORED','if(unresolved?.event)events.push(unresolved.event);','if(unresolved?.event)return false;'],
+ ['FREEZE_BEFORE_SOURCE_CLOSE','adopt?.pageLifecycle(pageId,\'CLOSING\');adopt?.listenerDrain(pageId);','adopt.freeze();'],
+ ['MISSING_DURABLE_EVIDENCE_WRITE',"writeFileSync(path.join(out,'adopt-request-evidence.json')","void (path.join(out,'adopt-request-evidence.json')"],
+ ['RECEIPT_ERASES_BLOCKING_EVENT','result = account(events, finalProductPassed, target.origin);','result = account([], true, target.origin);'],
+ ['PRODUCTION_INTERCEPTION_ENABLE',"if (!production) await cdp.send('Fetch.enable'","if (true) await cdp.send('Fetch.enable'"],
+];
+for (const [name,from,to] of harnessMutations) test('harness preservation mutation: '+name,()=>{
+ const source=readFileSync(new URL('../scripts/browser-harness-base.mjs',import.meta.url),'utf8');
+ assert.ok(source.includes(from),'mutation must reach actual source');
+ assert.throws(()=>assertHarnessPreserved(source.replace(from,to)));
 });

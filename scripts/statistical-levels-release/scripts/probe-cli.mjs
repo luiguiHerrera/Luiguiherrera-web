@@ -8,6 +8,7 @@ import { productQAObservabilityFiles } from './product-qa-observability.mjs';
 import { readProbeMetadataEvidence } from './probe-metadata-observability.mjs';
 import { requireProbeBrowserAuthority } from './probe-browser-authority.mjs';
 import { requireProtectedProbeHTTP, requireProbeCertificationHTTP, requireProbeQATokenBudget } from './probe-gate.mjs';
+import { readRegisteredProbeInputManifest } from './probe-fixture-registry.mjs';
 
 const root = path.join(process.env.RUNNER_TEMP ?? '', 'statistical-levels-identity-probe');
 const qaDirectory = path.join(root, 'qa');
@@ -56,7 +57,7 @@ try {
       await fs.appendFile(process.env.GITHUB_OUTPUT, 'candidate_sha=' + target.candidate_git_sha + '\n');
     } else if (mode === 'qa') {
       const target = await resolveProbeDeployment(frozen.target);
-      const inputs = JSON.parse(await fs.readFile(path.join(packageRoot, 'source-inputs.json'), 'utf8'));
+      const inputs = await readRegisteredProbeInputManifest(target);
       const { verifyProbeInputs, runProbeQA } = await import('./probe-qa.mjs');
       const verified = { ...target, ...await verifyProbeInputs(candidateRoot, inputs, target) };
       await save(stateFile, { run, target: verified, workflow_sha256: frozen.workflow_sha256 });

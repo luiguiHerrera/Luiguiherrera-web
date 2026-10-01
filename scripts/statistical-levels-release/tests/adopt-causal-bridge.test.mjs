@@ -212,7 +212,7 @@ test('native roles: proven RSC child stays distinct and cannot obtain a primary 
 // Uses the unchanged application and frozen UI actions as an independent local
 // producer. No classifier-generated headers, receipt fixtures or fetch patch.
 // The caller supplies an already built locked application on loopback only.
-test('locked Next application: T1–T4 native navigation proof and exact conditional accounting',{skip:!process.env.SL_NEXT_LOCAL_ORIGIN,timeout:600000},async()=>{
+test('locked Next application: architecture-aware T1–T4 proof and strict accounting',{skip:!process.env.SL_NEXT_LOCAL_ORIGIN,timeout:600000},async()=>{
  const origin=process.env.SL_NEXT_LOCAL_ORIGIN;
  assert.equal(new URL(origin).hostname,'127.0.0.1');
  const {createReadOnlyHarness}=await import('../scripts/browser-harness-base.mjs');
@@ -230,8 +230,12 @@ test('locked Next application: T1–T4 native navigation proof and exact conditi
  }finally{delete globalThis.__SL_RELEASE_QA__;process.argv=argv;await harness.finish(passed);}
  const evidence=JSON.parse(await fs.readFile(path.join(out,'adopt-request-evidence.json'),'utf8'));
  for(const kind of ['T1','T2','T3','T4']) {
-  const primaries=evidence.requests.filter(r=>r.transition_type===kind&&r.causality_status==='PROVEN');assert.equal(primaries.length,1);
-  assert.equal(primaries[0].classification_evidence.prefetch,'NATIVE_NEXT_NAVIGATION');assert.equal(primaries[0].request_role,'PRIMARY_APPLICATION');
+  const t=evidence.transitions.find(t=>t.kind===kind);assert.ok(t?.runtime_proof);
+  const {validateRuntimeTransitionReceipt}=await import('../scripts/runtime-transition-receipts.mjs');
+  assert.equal(validateRuntimeTransitionReceipt(t.runtime_proof.receipt,t.runtime_proof.source,t.runtime_proof.census).status,'PASS');
+  const primaries=evidence.requests.filter(r=>r.transition_type===kind&&r.causality_status==='PROVEN');assert.equal(primaries.length,kind==='T2'?1:0);
+  if(kind==='T2'){assert.equal(primaries[0].classification_evidence.prefetch,'EXACT_EXPLICIT_ASSET_FETCH');assert.equal(primaries[0].request_role,'PRIMARY_APPLICATION');assert.equal(primaries[0].terminal_state,'FINISHED');}
+  assert.equal(evidence.requests.filter(r=>r.transition_type===kind&&r.prefetch_classification==='YES').length,0);
  }
 });
 

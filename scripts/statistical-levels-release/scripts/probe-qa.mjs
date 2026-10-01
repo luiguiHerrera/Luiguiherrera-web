@@ -7,12 +7,16 @@ import { runProbeProductQA } from './probe-product-qa.mjs';
 import { validateProbeHttpEvidence } from './probe-http.mjs';
 import { runProtectedProbeQA, requireProbeCertificationHTTP } from './probe-gate.mjs';
 import { validateProbeTokenBudgetEvidence } from './probe-token-budget.mjs';
+import { requireRegisteredProbeInputManifest } from './probe-fixture-registry.mjs';
 
 export async function verifyProbeInputs(codeRoot, inputManifest, target) {
-  for (const [file, expected] of Object.entries(inputManifest)) {
+  const registeredInputs=requireRegisteredProbeInputManifest(inputManifest,target);
+  for (const [file, expected] of Object.entries(registeredInputs)) {
     need(!file.includes('..') && !path.isAbsolute(file), 'QA_INPUT_PATH');
     const stat = await fs.lstat(path.join(codeRoot, file));
     need(stat.isFile() && !stat.isSymbolicLink(), 'QA_INPUT_SYMLINK');
+    let checked=path.resolve(codeRoot);
+    for(const part of file.split('/')){checked=path.join(checked,part);need(!(await fs.lstat(checked)).isSymbolicLink(),'QA_INPUT_SYMLINK');}
     need(sha(await fs.readFile(path.join(codeRoot, file))) === expected, 'QA_INPUT_HASH');
   }
   const readData = async file => { const full = path.join(codeRoot, file); const stat = await fs.lstat(full); need(stat.isFile() && !stat.isSymbolicLink(), 'QA_DATA_SYMLINK'); return fs.readFile(full); };
