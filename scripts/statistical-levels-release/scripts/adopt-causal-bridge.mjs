@@ -15,14 +15,16 @@ export function selectionExpression(kind) {
   return `(() => { const el=document.querySelector(${JSON.stringify(c.selector)}); el.value=${JSON.stringify(c.value)};el.dispatchEvent(new Event('change',{bubbles:true}));})()`;
 }
 export const scriptFingerprint=(page,id)=>sha(page+':script:'+id);
-// Reviewed locked Next 16.3.6 production bytes. CDP scriptParsed.hash is the
+// Qualified exact published Production bytes (independently recovered source
+// ranges: wrapper 71938:71972, createFetch 18448:19300, navigation 16433:17775).
+// CDP scriptParsed.hash is the
 // SHA256 of executable source, not its URL/name. These exact adjacent native
 // frames are fetch wrapper -> createFetch -> fetchServerResponse. Full prefetch
 // uses createFetch directly and does NOT enter fetchServerResponse. A different
 // build/callsite remains UNKNOWN; do not infer intent from missing headers.
 export const navigationCode = Object.freeze({
-  sha256:'0b743564483f80db5a365086eff276584467f2631408c2dc19ef1f3314f43125',
-  length:159932,frames:Object.freeze([[1,34882],[0,18680],[0,16645]].map(Object.freeze))
+  sha256:'c733d1c58378a68c6a77af63def0340abedca47199e6c7e5cfeca622bb25e366',
+  length:160087,frames:Object.freeze([[1,35040],[0,18680],[0,16645]].map(Object.freeze))
 });
 export function nativeNavigationProven(witness) {
   const s=witness?.script,frames=witness?.frames;

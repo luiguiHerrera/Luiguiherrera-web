@@ -402,7 +402,7 @@ function assertHarnessPreserved(source) {
   [
     "    const closePage=async()=>{",
     "    closePages.set(",
-    "0b104c70ea3c38d15166a78cf9de2c4abcb3c67ce812b6e9baef9f23dccaa10d"
+    "187e24c80b708d932a4c8a3980ba79215623858171d97fbb7ef9114cc71f4850"
   ],
   [
     "    finish: async finalProductPassed => {",

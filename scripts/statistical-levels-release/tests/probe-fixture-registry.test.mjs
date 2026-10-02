@@ -240,6 +240,7 @@ def output(args,**kwargs):
     return value.decode() if kwargs.get('text') else value
 
 def run(args,**kwargs):
+    if args==['git','diff','--raw','--no-abbrev','--no-renames','-z','cb63f82d7e2e7cd9f6283f26d8bdb120da8c174c','9b860095e7f18c26393af1e028244c1bae9c1598','--']:return run(args,**kwargs)
     if args[:2] in [['git','show'],['git','ls-files']]: return original_run(args,**kwargs)
     if args[:3]==['git','diff','--exit-code']:
         if case=='dirty': raise subprocess.CalledProcessError(1,args)
@@ -724,6 +725,23 @@ const runtimeRepairExpectedDelta = {
   "scripts/statistical-levels-release/workflow-freeze.json": "M"
 };
 
+const g5HostedExpectedDelta = {
+  ".github/workflows/ci.yml": "M",
+  ".github/workflows/statistical-levels-release.yml": "M",
+  "scripts/statistical-levels-release/SOURCE_SHA256SUMS": "M",
+  "scripts/statistical-levels-release/scripts/adopt-causal-bridge.mjs": "M",
+  "scripts/statistical-levels-release/scripts/adopt-request-evidence.mjs": "M",
+  "scripts/statistical-levels-release/scripts/browser-harness-base.mjs": "M",
+  "scripts/statistical-levels-release/source-manifest.json": "M",
+  "scripts/statistical-levels-release/tests/adopt-causal-bridge.test.mjs": "M",
+  "scripts/statistical-levels-release/tests/adopt-validation.test.mjs": "M",
+  "scripts/statistical-levels-release/tests/probe-fixture-registry.test.mjs": "M",
+  "scripts/statistical-levels-release/tests/probe-product-browser-harness.test.mjs": "M",
+  "scripts/statistical-levels-release/tests/probe-qa-http.test.mjs": "M",
+  "scripts/statistical-levels-release/tests/probe-redirect-integration.test.mjs": "M",
+  "scripts/statistical-levels-release/tests/product-qa-observability-isolation.test.mjs": "M",
+  "scripts/statistical-levels-release/workflow-freeze.json": "M"
+};
 const runtimeGuardModel=String.raw`
 import json,sys,os,hashlib,subprocess,tempfile,contextlib,io
 from pathlib import Path
@@ -738,16 +756,110 @@ checkout=output(['git','rev-parse','HEAD']).decode().strip()
 assert head=='f'*40 and checkout!=head, 'WRONG_SYNTHETIC_FIXTURE_ROLE'
 assert output(['git','show','-s','--format=%P',repair_parent]).decode().strip()==parent, 'WRONG_IMPLEMENTATION_BASE'
 assert output(['git','rev-parse',repair_parent+'^{tree}']).decode().strip()=='5498cab4844ab8c7dc455c4f6347fa37e1624220', 'WRONG_REVIEWED_RUNTIME_TREE'
-if checkout!=repair_parent:
-    # A committed repair is admitted only as the exact immutable hosted event.
-    assert checkout==os.environ.get('GITHUB_SHA')==os.environ.get('CI_EVENT_SHA'), 'WRONG_IMPLEMENTATION_CHECKOUT'
-    assert os.environ.get('GITHUB_EVENT_NAME')=='push' and os.environ.get('GITHUB_REF')=='refs/heads/vercel-deployment', 'WRONG_REPAIR_EVENT'
-    assert output(['git','show','-s','--format=%P',checkout]).decode().strip()==repair_parent, 'WRONG_REPAIR_CHECKOUT_PARENT'
-    raw=output(['git','diff','--raw','--no-abbrev','--no-renames','-z',repair_parent,checkout,'--']).decode().rstrip('\0').split('\0')
+local_base='9b860095e7f18c26393af1e028244c1bae9c1598'
+prior_base='cb63f82d7e2e7cd9f6283f26d8bdb120da8c174c'
+snapshot_blobs={'lib/statistical-levels/generated-provenance.json': 'fca16c7da73622dd37bffa267de32043b9e20131', 'lib/statistical-levels/generated/assets/AIQ.json': '0d47d05a069ce5b4cceb60f08796f9b64e222494', 'lib/statistical-levels/generated/assets/BOTZ.json': 'cc27c6021f882ebe5d02e74d58cb2705fe08eff0', 'lib/statistical-levels/generated/assets/BTCUSD.json': '0a5f1be5d4789ba27866eb22f15d53a39d0c146a', 'lib/statistical-levels/generated/assets/CIBR.json': 'c842a9c73048cf24cc48286edfa04b33e05a14ef', 'lib/statistical-levels/generated/assets/DIA.json': '617c8398c4da52d0e475cb4bc2513d0014a7dda8', 'lib/statistical-levels/generated/assets/EEM.json': '0de743b968a4b53037f066ba5903cb662ccb35ea', 'lib/statistical-levels/generated/assets/EFA.json': '87e8b20cb7105f7b0836bf07132ad8a35b9f7c71', 'lib/statistical-levels/generated/assets/ETHUSD.json': '482211a8a84336fc643aaa58ae3231b5aac35563', 'lib/statistical-levels/generated/assets/EWJ.json': 'c5626f89e70b34036d7e79079d86a7800ad8c0c6', 'lib/statistical-levels/generated/assets/FINX.json': 'e3b0300b4bec0ac2f05b89ca3c79ca1754972f23', 'lib/statistical-levels/generated/assets/FXI.json': '708b0e928d75ebea6cfcdf60bf585ef2e920e3c8', 'lib/statistical-levels/generated/assets/GLD.json': '9d4565aae34a621a524fa68eb035abfec84b5fa4', 'lib/statistical-levels/generated/assets/HYG.json': '1b71ff9ad6ef2cab76670f5a56e77b63d2ad7679', 'lib/statistical-levels/generated/assets/IEF.json': 'dc0e96b354f39c6fddb0a95c971bf3dc7a2c22f7', 'lib/statistical-levels/generated/assets/ITA.json': '273a8abd7b1ab8d175862b85b04dbb92b6e1d335', 'lib/statistical-levels/generated/assets/IWM.json': 'b3aabfa92a91cb7ec91a5920bc72a5263f62993a', 'lib/statistical-levels/generated/assets/LQD.json': 'db8fa9c1e9e67522ac669a04f6a673c90da8335d', 'lib/statistical-levels/generated/assets/PAVE.json': '128a612451cb6f08289a53e5175bdb7f5a76c279', 'lib/statistical-levels/generated/assets/PHO.json': '3fe7859042d1aaf884ffa0cf1c83bd661944b06b', 'lib/statistical-levels/generated/assets/QQQ.json': '15ca2bf9d01ee8e5c53913701538b506b7637b13', 'lib/statistical-levels/generated/assets/RSP.json': 'd8e29d3c7300ef1e103a5f9be566febefee74cf3', 'lib/statistical-levels/generated/assets/SHY.json': '51dc44641c11d2031bbd8e9466b87150646e410d', 'lib/statistical-levels/generated/assets/SLV.json': 'f6214c7e7054edd615c78c133581620f817851c1', 'lib/statistical-levels/generated/assets/SMH.json': 'fcd597cacd5e2176a40d4f27ce17cebc6a957756', 'lib/statistical-levels/generated/assets/SPY.json': 'dfd1811fb3dedd1b6f7a6af36075cc66786a65c5', 'lib/statistical-levels/generated/assets/TLT.json': 'cd8699eeae498c4c1bc67605ab49afa49c474715', 'lib/statistical-levels/generated/assets/USO.json': '9bb86beb720ac3147fe1493b8783885376ac79a9', 'lib/statistical-levels/generated/assets/UUP.json': '4ed0491763ff5c970861b66288d19c660b7f2c69', 'lib/statistical-levels/generated/assets/VOO.json': '8eaed8bb6b74cfdf5b1dad110c57871b33cf61dc', 'lib/statistical-levels/generated/assets/XLB.json': 'e701a302c92fcfd95ab0cdffccbe214a2bb3006f', 'lib/statistical-levels/generated/assets/XLC.json': '6fa9aca46cc515792c1bc1e2756fae49391da91f', 'lib/statistical-levels/generated/assets/XLE.json': '9d99af339cc879beb2b44aec9f55d66c84f053be', 'lib/statistical-levels/generated/assets/XLF.json': 'f87cd5aa3688c9c754bcd163b7e6c264f9deeb63', 'lib/statistical-levels/generated/assets/XLI.json': '72aa923ae36775a6836ea758c627ed1fcb2950ac', 'lib/statistical-levels/generated/assets/XLK.json': 'd9e88b5c5884bec4918af4511e46e8e5e1cdabe3', 'lib/statistical-levels/generated/assets/XLP.json': '5cb50cd12565997b8601c3bd9772b0b6e73f2c6c', 'lib/statistical-levels/generated/assets/XLRE.json': 'a94164cfc3b4b40c8feb50afa93b5e5029bae7d4', 'lib/statistical-levels/generated/assets/XLU.json': '9a3b4ed791f316aa5c2524f5df007c82f7079f70', 'lib/statistical-levels/generated/assets/XLV.json': 'e742dc166c7c478f44cd19b1a4ea6ff7e5448876', 'lib/statistical-levels/generated/assets/XLY.json': 'ceaa08d8df31c75b30b40e4a6137e1916b4ddba7', 'lib/statistical-levels/generated/manifest.json': '33ea1ecae85c57ee10e2639a0aff5fc68c250d80', 'lib/statistical-levels/generated/seasonality/AIQ.json': '5472b79c5e7892924b00fa248e1d859d5be21f1c', 'lib/statistical-levels/generated/seasonality/BOTZ.json': '863b8fddb020b7d01be89cb5d2fefcd0e8f36b7e', 'lib/statistical-levels/generated/seasonality/BTCUSD.json': '66854be64659e0e2a983246b35e6ae86e8f5d123', 'lib/statistical-levels/generated/seasonality/CIBR.json': '1847c9132018117ecb50cd56179384fb2c0aea9f', 'lib/statistical-levels/generated/seasonality/DIA.json': '40fbb020952ef53b7fee8e6362c3d76170ba4781', 'lib/statistical-levels/generated/seasonality/EEM.json': '82d7eb386c81f1ed4e75d3f6339747f1e2701c0b', 'lib/statistical-levels/generated/seasonality/EFA.json': 'd28134900676c4f44c9f835efcd833105d6d217c', 'lib/statistical-levels/generated/seasonality/ETHUSD.json': '58a41e879d7045cf48b5800748c194b2966876ea', 'lib/statistical-levels/generated/seasonality/EWJ.json': '28eb9ecf5e4e75add9fabe322b9aa4b1d565b9a5', 'lib/statistical-levels/generated/seasonality/FINX.json': '42907556bba563cfe3d492618ee591c31889d048', 'lib/statistical-levels/generated/seasonality/FXI.json': '3d7e405d22bb3e8a6235ce391e1b92efe4e785e6', 'lib/statistical-levels/generated/seasonality/GLD.json': '17b65b790fb915cecc6ba000add574cac403b139', 'lib/statistical-levels/generated/seasonality/HYG.json': 'f24731678a65f9dc6c2073eb7d76ae1008005139', 'lib/statistical-levels/generated/seasonality/IEF.json': 'fe52ef4e328508202975912a3c772d96be07057d', 'lib/statistical-levels/generated/seasonality/ITA.json': 'dc285e4cc4a5a97ac600ee135fbb285541bf8322', 'lib/statistical-levels/generated/seasonality/IWM.json': '69fc20f3d96004d697628545c9bc06c7972e3787', 'lib/statistical-levels/generated/seasonality/LQD.json': 'cca112efbafc93a4b2215167ff6dd6c4c7d3cd59', 'lib/statistical-levels/generated/seasonality/PAVE.json': '4df36a275e6befcd2cd18185afb1d70be3870dc6', 'lib/statistical-levels/generated/seasonality/PHO.json': 'a79313ebd79c87d9376535b950a56fde6d1fea6e', 'lib/statistical-levels/generated/seasonality/QQQ.json': 'bf791e6cad2515c4836513e162880f04ecfb0ed7', 'lib/statistical-levels/generated/seasonality/RSP.json': 'd94a45f5e8bd08835e98950a639fa35360d13ca4', 'lib/statistical-levels/generated/seasonality/SHY.json': '52cbf96f0110c827168bc5956cd76e199d37bc6d', 'lib/statistical-levels/generated/seasonality/SLV.json': 'b7a77319684a38f2359d2e27c392574b00291259', 'lib/statistical-levels/generated/seasonality/SMH.json': '77219f5aab71ae34cf6b5e430c71119b8821c0f4', 'lib/statistical-levels/generated/seasonality/SPY.json': 'af7558f9f2a8393276c3f35c46ab094617e75bdb', 'lib/statistical-levels/generated/seasonality/TLT.json': '7f9bf19e61aa506a6b4e70f5a8081dc8c4960dea', 'lib/statistical-levels/generated/seasonality/USO.json': 'b664267c2fb43e318b5e8cd37fc2078b65b7524f', 'lib/statistical-levels/generated/seasonality/UUP.json': '890dc63fac55db1d0f31fb018cb984cc8e98f46d', 'lib/statistical-levels/generated/seasonality/VOO.json': '61876843e237f347a9f804ba9d67435451d84b4a', 'lib/statistical-levels/generated/seasonality/XLB.json': '1f746494ec831cc1fc740594121509bf38aafc56', 'lib/statistical-levels/generated/seasonality/XLC.json': '522b9b73804a60ce159a8c94715025f3a66c33af', 'lib/statistical-levels/generated/seasonality/XLE.json': '15272e6c7d113ab159caae54dfe59bec87a1106c', 'lib/statistical-levels/generated/seasonality/XLF.json': 'f6bc8697814874af69b6432fe3abcc4b10cf35a7', 'lib/statistical-levels/generated/seasonality/XLI.json': 'ed9fa02d40ee37b15c9d7fb1f51b406931c1204d', 'lib/statistical-levels/generated/seasonality/XLK.json': 'f7cd293aca7858c2094e8096bf0247c137634fc6', 'lib/statistical-levels/generated/seasonality/XLP.json': '446550c9924197482775f6d9aee7536f8d3e7416', 'lib/statistical-levels/generated/seasonality/XLRE.json': '012222273a50aa50cfaa938b74305466c0066907', 'lib/statistical-levels/generated/seasonality/XLU.json': '399a9a939f7b861467d6e9c0211de44961232f49', 'lib/statistical-levels/generated/seasonality/XLV.json': 'c4d61a896579d1f61148e530da13a9332b91be34', 'lib/statistical-levels/generated/seasonality/XLY.json': '3b1e3088dbdc9a9592ba0fe2c613f94a4a42f24c'}
+local_scope={
+ '.github/workflows/ci.yml',
+ '.github/workflows/statistical-levels-release.yml',
+ 'scripts/statistical-levels-release/SOURCE_SHA256SUMS',
+ 'scripts/statistical-levels-release/source-manifest.json',
+ 'scripts/statistical-levels-release/workflow-freeze.json',
+ 'scripts/statistical-levels-release/scripts/adopt-causal-bridge.mjs',
+ 'scripts/statistical-levels-release/scripts/adopt-request-evidence.mjs',
+ 'scripts/statistical-levels-release/scripts/browser-harness-base.mjs',
+ 'scripts/statistical-levels-release/tests/adopt-causal-bridge.test.mjs',
+ 'scripts/statistical-levels-release/tests/adopt-validation.test.mjs',
+ 'scripts/statistical-levels-release/tests/probe-fixture-registry.test.mjs',
+ 'scripts/statistical-levels-release/tests/probe-product-browser-harness.test.mjs',
+ 'scripts/statistical-levels-release/tests/probe-qa-http.test.mjs',
+ 'scripts/statistical-levels-release/tests/probe-redirect-integration.test.mjs',
+ 'scripts/statistical-levels-release/tests/product-qa-observability-isolation.test.mjs'}
+functional_pins={
+ 'scripts/statistical-levels-release/scripts/adopt-causal-bridge.mjs':'c383bdefe1f43997010d545cea81acc8deaf66eb7ab2acf610c972064d87edc2',
+ 'scripts/statistical-levels-release/scripts/adopt-request-evidence.mjs':'fb7b410d6df1fc7973ca5528254f6f8c4056cd93be055cba776b9da11660b697',
+ 'scripts/statistical-levels-release/scripts/browser-harness-base.mjs':'e92a7dea16f4847cdb381a018f3b421d20b1cadc607217828709967172b229c2',
+ 'scripts/statistical-levels-release/tests/adopt-causal-bridge.test.mjs':'ad99dd40d76371c207dd50f3be4dd39b88e2bb1a2f8518296f08ed4be72233f5',
+ 'scripts/statistical-levels-release/tests/adopt-validation.test.mjs':'32a73a79aac191a7d74ac1fbdf6ed168799acfee362266c28039ad69d0d8474d'}
+canonical=lambda x:(json.dumps(x,sort_keys=True,separators=(',',':'),ensure_ascii=True)+'\n').encode('ascii')
+sha256=lambda x:hashlib.sha256(x).hexdigest()
+def committed_successor(identity):
+    if identity==local_base:
+        assert output(['git','show','-s','--format=%P',identity]).decode().strip()==prior_base, 'WRONG_SNAPSHOT_PARENT'
+        assert output(['git','rev-parse',identity+'^{tree}']).decode().strip()=='2f6323a123273800d17f60ca9573785af3a2d22f', 'WRONG_SNAPSHOT_TREE'
+        raw=output(['git','diff','--raw','--no-abbrev','--no-renames','-z',prior_base,identity,'--']).decode().rstrip('\0').split('\0')
+        assert len(raw)==164 and len(set(raw[1::2]))==82 and set(raw[1::2])==set(snapshot_blobs), 'WRONG_SNAPSHOT_SCOPE'
+        for header,name in zip(raw[::2],raw[1::2]):
+            fields=header.split();assert len(fields)==5 and fields[0]==':100644' and fields[1]=='100644' and fields[4]=='M' and fields[3]==snapshot_blobs[name], 'WRONG_SNAPSHOT_BLOB_OR_MODE'
+        return
+    assert output(['git','show','-s','--format=%P',identity]).decode().strip()==repair_parent, 'WRONG_REPAIR_CHECKOUT_PARENT'
+    raw=output(['git','diff','--raw','--no-abbrev','--no-renames','-z',repair_parent,identity,'--']).decode().rstrip('\0').split('\0')
     assert len(raw)==12 and len(set(raw[1::2]))==6 and set(raw[1::2])==set(v['delta']), 'WRONG_REPAIR_CHECKOUT_SCOPE'
     for header in raw[::2]:
         fields=header.split()
         assert len(fields)==5 and fields[0]==':100644' and fields[1]=='100644' and fields[4]=='M', 'WRONG_REPAIR_CHECKOUT_MODE'
+def admit_checkout(identity,metadata,capture=None):
+    if identity==repair_parent:return 'HISTORICAL_IMPLEMENTATION'
+    local_hash=metadata.get('SL_LOCAL_QUALIFICATION_SUBJECT_SHA256')
+    if local_hash:
+        assert identity==local_base, 'WRONG_LOCAL_BASE'
+        assert not any(metadata.get(k) for k in ['GITHUB_SHA','CI_EVENT_SHA','GITHUB_EVENT_NAME','GITHUB_REF']), 'LOCAL_HOSTED_ROLE_CONFLICT'
+        committed_successor(identity)
+        assert capture and capture['collector_source_sha256']=='c7263bbecf183120b6aaa4037f5e202e13eefe354a4634268d1b8419348a0c64', 'LOCAL_COLLECTOR_UNBOUND'
+        assert sha256(canonical(capture['subject']))==capture['subject_sha256']==local_hash, 'LOCAL_SUBJECT_UNBOUND'
+        assert sha256(canonical(capture['delta']))==capture['delta_sha256'], 'LOCAL_DELTA_UNBOUND'
+        delta=capture['delta'];assert delta['parent']==local_base and not delta['unauthorized_path_hex'] and not delta['untracked_path_hex'], 'LOCAL_SCOPE_INVALID'
+        assert {bytes.fromhex(p).decode() for p in delta['changed_path_hex']}==local_scope, 'LOCAL_SCOPE_INVALID'
+        assert len(delta['tracked'])==15 and {bytes.fromhex(x['path_hex']).decode() for x in delta['tracked']}==local_scope, 'LOCAL_SCOPE_INVALID'
+        for x in delta['tracked']:assert x['status']=='M' and x['old_mode']==x['new_mode']=='100644' and not x['git_mode_changed'], 'LOCAL_MODE_INVALID'
+        records=capture['subject']['records'];names=[bytes.fromhex(x['path_hex']).decode() for x in records]
+        live_names=output(['git','ls-files','-z']).decode().rstrip('\0').split('\0')
+        assert len(names)==len(set(names)) and set(names)==set(live_names), 'LOCAL_INVENTORY_INVALID'
+        baseline={p.decode():header.split()[2].decode() for header,p in (entry.split(b'\t',1) for entry in output(['git','ls-tree','-r','-z',local_base]).split(b'\0') if entry)}
+        for x,name in zip(records,names):
+            file=root/name;assert x['tracked'] and x['exists'] and x['worktree_file_type']=='REGULAR_FILE' and not file.is_symlink(), 'LOCAL_FILE_INVALID'
+            content=read(file)
+            assert format(file.stat().st_mode&0o7777,'06o')==x['worktree_mode'] and sha256(content)==x['sha256'], 'LOCAL_BYTES_CHANGED'
+            if name in functional_pins:assert x['sha256']==functional_pins[name], 'LOCAL_FUNCTIONAL_DRIFT'
+            elif name not in local_scope:assert hashlib.sha1(b'blob '+str(len(content)).encode()+b'\0'+content).hexdigest()==baseline[name], 'LOCAL_UNAUTHORIZED_DRIFT'
+        return 'LOCAL_GOVERNED_SUBJECT'
+    # Hosted role uses actual event identities; local qualification never sets them.
+    assert identity==metadata.get('GITHUB_SHA')==metadata.get('CI_EVENT_SHA'), 'WRONG_IMPLEMENTATION_CHECKOUT'
+    assert metadata.get('GITHUB_EVENT_NAME')=='push' and metadata.get('GITHUB_REF')=='refs/heads/vercel-deployment', 'WRONG_REPAIR_EVENT'
+    if identity in [local_base,prior_base]:committed_successor(identity)
+    else:
+        assert output(['git','show','-s','--format=%P',identity]).decode().strip()==local_base, 'WRONG_G5_CHECKOUT_PARENT'
+        raw=output(['git','diff','--raw','--no-abbrev','--no-renames','-z',local_base,identity,'--']).decode().rstrip('\0').split('\0')
+        assert len(raw)==30 and len(set(raw[1::2]))==15 and set(raw[1::2])==local_scope, 'WRONG_G5_CHECKOUT_SCOPE'
+        for header in raw[::2]:
+            fields=header.split();assert len(fields)==5 and fields[0]==':100644' and fields[1]=='100644' and fields[4]=='M', 'WRONG_G5_CHECKOUT_MODE'
+    return 'HOSTED_PUSH_EVENT'
+bootstrap_metadata={k:os.environ.get(k) for k in ['SL_LOCAL_QUALIFICATION_SUBJECT_SHA256','GITHUB_SHA','CI_EVENT_SHA','GITHUB_EVENT_NAME','GITHUB_REF']}
+capture=json.loads((Path(os.environ['CI_EVIDENCE'])/'subject-before.json').read_text()) if bootstrap_metadata['SL_LOCAL_QUALIFICATION_SUBJECT_SHA256'] else None
+bootstrap_mode=admit_checkout(checkout,bootstrap_metadata,capture)
+# Admission regressions model input metadata explicitly, never impersonate a
+# hosted run via process environment. Actual local subject is admitted first.
+if v.get('admission_case'):
+    test_case=v['admission_case'];metadata=bootstrap_metadata.copy();subject=json.loads(json.dumps(capture));identity=checkout
+    if test_case=='historical':identity=repair_parent;metadata={}
+    elif test_case=='hosted':metadata={'GITHUB_SHA':local_base,'CI_EVENT_SHA':local_base,'GITHUB_EVENT_NAME':'push','GITHUB_REF':'refs/heads/vercel-deployment'}
+    elif test_case=='prior_hosted':identity=prior_base;metadata={'GITHUB_SHA':prior_base,'CI_EVENT_SHA':prior_base,'GITHUB_EVENT_NAME':'push','GITHUB_REF':'refs/heads/vercel-deployment'}
+    elif test_case=='wrong_local_base':identity='a'*40
+    elif test_case=='missing_local_binding':metadata={}
+    elif test_case=='wrong_subject_hash':metadata['SL_LOCAL_QUALIFICATION_SUBJECT_SHA256']='0'*64
+    elif test_case=='mixed_hosted_local':metadata['GITHUB_EVENT_NAME']='push'
+    elif test_case=='wrong_collector':subject['collector_source_sha256']='0'*64
+    elif test_case in ['extra_path','missing_path','wrong_mode','functional_drift','changed_bytes']:
+        if test_case=='extra_path':subject['delta']['changed_path_hex'].append(b'unauthorized.txt'.hex())
+        elif test_case=='missing_path':subject['delta']['changed_path_hex'].pop()
+        elif test_case=='wrong_mode':subject['delta']['tracked'][0]['new_mode']='100755'
+        else:
+            name=next(iter(functional_pins)) if test_case=='functional_drift' else 'README.md'
+            next(x for x in subject['subject']['records'] if bytes.fromhex(x['path_hex']).decode()==name)['sha256']='0'*64
+        subject['delta_sha256']=sha256(canonical(subject['delta']));subject['subject_sha256']=sha256(canonical(subject['subject']));metadata['SL_LOCAL_QUALIFICATION_SUBJECT_SHA256']=subject['subject_sha256']
+    try:print(json.dumps({'accepted':True,'mode':admit_checkout(identity,metadata,subject)}))
+    except AssertionError as error:print(json.dumps({'accepted':False,'error':str(error)}))
+    raise SystemExit(0)
 live=output(['git','ls-files','-z','scripts/statistical-levels-release/']).decode().rstrip('\0').split('\0')
 assert len(live)-3==99, 'LIVE_BUNDLE_COUNT'
 stale=output(['git','show','-s','--format=%P',parent]).decode().strip()
@@ -758,18 +870,18 @@ assert len(original)==64 and len(set(original[1::2]))==32 and set(original[1::2]
 for header,name in zip(original[::2],original[1::2]):
     fields=header.split();status=v['implementationDelta'][name]
     assert len(fields)==5 and fields[0]==(':000000' if status=='A' else ':100644') and fields[1]=='100644' and fields[4]==status, 'WRONG_IMPLEMENTATION_MODE'
-expected=v['delta'];seen=[]
+expected=v['g5Delta'];seen=[]
 def git(args,**kwargs):
     if args==['git','rev-parse','HEAD']: return (head+'\n').encode()
     if args==['git','show','-s','--format=%P','HEAD']:
         parents={'wrong_parent':['a'*40],'stale_parent':[stale],
                  'arbitrary_descendant':['b'*40],
                  'unrelated_ancestor':['c60b17c6ddc5a08fcd402328f69e73f6e1e41b5f'],
-                 'multiple_parents':[repair_parent,stale],
-                 'merge_parent_substitution':[stale,repair_parent]}.get(case,[repair_parent])
+                 'multiple_parents':[local_base,stale],
+                 'merge_parent_substitution':[stale,local_base]}.get(case,[local_base])
         return (' '.join(parents)+'\n').encode()
     if args[:4]==['git','diff','--raw','--no-abbrev']:
-        if args[-3:]==[parent,repair_parent,'--']:
+        if args[-3:] in [[parent,repair_parent,'--'],[repair_parent,prior_base,'--'],[prior_base,local_base,'--']]:
             return output(args,**kwargs)
         names=list(expected)
         if case=='extra_path':names.append('unauthorized.txt')
@@ -786,8 +898,10 @@ def git(args,**kwargs):
         return ('\0'.join(sorted(names))+'\0').encode()
     return output(args,**kwargs)
 def command(args,**kwargs):
-    if args==['git','rev-parse',repair_parent+'^{tree}']:return run(args,**kwargs)
+    if args in [['git','rev-parse',repair_parent+'^{tree}'],['git','rev-parse',prior_base+'^{tree}'],['git','rev-parse',local_base+'^{tree}']]:return run(args,**kwargs)
     if args==['git','diff','--raw','--no-abbrev','--no-renames','-z',parent,repair_parent,'--']:return run(args,**kwargs)
+    if args==['git','diff','--raw','--no-abbrev','--no-renames','-z','acfd5efed5984a7981e64a6953960c161fa11dc7','cb63f82d7e2e7cd9f6283f26d8bdb120da8c174c','--']:return run(args,**kwargs)
+    if args==['git','diff','--raw','--no-abbrev','--no-renames','-z','cb63f82d7e2e7cd9f6283f26d8bdb120da8c174c','9b860095e7f18c26393af1e028244c1bae9c1598','--']:return run(args,**kwargs)
     if args[:2] in [['git','show'],['git','ls-files']]:return run(args,**kwargs)
     if args[:3]==['git','diff','--exit-code']:
         if case=='dirty':raise AssertionError('DIRTY_CANDIDATE')
@@ -795,7 +909,7 @@ def command(args,**kwargs):
     if args[:3]==['git','merge-base','--is-ancestor']:
         seen.append(args[3]);assert args[4]==head
         if case=='missing_ancestry':raise AssertionError('ANCESTRY_MISSING')
-        return run(args[:4]+[repair_parent],**kwargs)
+        return run(args[:4]+[local_base],**kwargs)
     raise AssertionError('UNEXPECTED_MUTATING_COMMAND')
 def bytes_(p):
     b=read(p);name=str(p.relative_to(root)) if p.is_relative_to(root) else ''
@@ -814,29 +928,39 @@ def text_(p,*args,**kwargs):
     if str(p).endswith('/scripts/probe-cli.mjs') and case=='probe_release_role':return s.replace('readRegisteredProbeInputManifest(target)','readCandidateManifest(target)')
     return s
 with tempfile.TemporaryDirectory(prefix='sl-runtime-ci-model-') as out:
-    env={'CI_EVIDENCE':out,'CI_EVENT_SHA':head,'GITHUB_SHA':head,'GITHUB_EVENT_NAME':'push','GITHUB_REF':'refs/heads/vercel-deployment','GITHUB_RUN_ID':'1','GITHUB_RUN_ATTEMPT':'1'}
+    env={'CI_EVIDENCE':out,'CI_EVENT_SHA':head,'GITHUB_SHA':head,'GITHUB_EVENT_NAME':'push','GITHUB_REF':'refs/heads/vercel-deployment','GITHUB_RUN_ID':'1','GITHUB_RUN_ATTEMPT':'1','SL_LOCAL_QUALIFICATION_SUBJECT_SHA256':''}
     if case=='wrong_sha':env['GITHUB_SHA']='a'*40
     if case=='mutable_ref':env['CI_EVENT_SHA']='refs/heads/vercel-deployment'
+    if case=='missing_event':env['GITHUB_EVENT_NAME']=''
+    if case=='wrong_event':env['GITHUB_EVENT_NAME']='pull_request'
+    if case=='local_impersonation':env['SL_LOCAL_QUALIFICATION_SUBJECT_SHA256']='a'*64
     try:
         with patch.dict(os.environ,env),patch('subprocess.check_output',git),patch('subprocess.run',command),patch.object(Path,'read_bytes',bytes_),patch.object(Path,'read_text',text_),contextlib.redirect_stdout(io.StringIO()):exec(compile(v['guard'],'current-runtime-ci','exec'),{})
-        subject=json.loads((Path(out)/'subject.json').read_text());assert subject['lineage']['runtime_parent_verified'] and subject['lineage']['implementation_parent_sha']==parent and subject['lineage']['implementation_parent_predecessor_sha']==stale and subject['lineage']['runtime_repair_parent_sha']==repair_parent and subject['lineage']['runtime_repair_parent_verified'] and len(seen)==10
-        assert seen==[repair_parent,parent,stale,'578498f33b5bf7c70f5c43894d05f67aea409a00','d290691156b933ba62e5e8f6489dc870568126e0','f7e3fe8e3e3cd8bdea753873c31d78f146cdc923','c8454dc06bae4bfc2d6fbc90cf9ffa4f94bb63c1','e7872b9c0e5bb0be3e090fbe2c5b930d68dcbece','0c8fce262fce44650729883862ec948778ebea45','c60b17c6ddc5a08fcd402328f69e73f6e1e41b5f']
+        subject=json.loads((Path(out)/'subject.json').read_text());assert subject['lineage']['runtime_parent_verified'] and subject['lineage']['implementation_parent_sha']==parent and subject['lineage']['implementation_parent_predecessor_sha']==stale and subject['lineage']['runtime_repair_parent_sha']==repair_parent and subject['lineage']['runtime_repair_parent_verified'] and subject['lineage']['g5_parent_sha']==local_base and subject['lineage']['g5_parent_verified'] and len(seen)==12
+        assert seen==[local_base,prior_base,repair_parent,parent,stale,'578498f33b5bf7c70f5c43894d05f67aea409a00','d290691156b933ba62e5e8f6489dc870568126e0','f7e3fe8e3e3cd8bdea753873c31d78f146cdc923','c8454dc06bae4bfc2d6fbc90cf9ffa4f94bb63c1','e7872b9c0e5bb0be3e090fbe2c5b930d68dcbece','0c8fce262fce44650729883862ec948778ebea45','c60b17c6ddc5a08fcd402328f69e73f6e1e41b5f']
         print(json.dumps({'accepted':True}))
     except (AssertionError,subprocess.CalledProcessError) as e:print(json.dumps({'accepted':False,'error':str(e)}))
 `;
 for(const name of ['valid','wrong_parent','stale_parent','arbitrary_descendant','unrelated_ancestor','multiple_parents','merge_parent_substitution','extra_path','missing_path','duplicate_path','wrong_mode','wrong_status','dirty','missing_ancestry','probe_mutation','roles_swapped','missing_material','stale_material','duplicate_key','wrong_registration','unbound_product','probe_pin','release_probe_role','probe_release_role','wrong_sha','mutable_ref'])test('governed runtime successor: '+name,()=>{
- const result=spawnSync('python3',['-c',runtimeGuardModel],{cwd:repositoryRoot,encoding:'utf8',timeout:60000,input:JSON.stringify({case:name,delta:runtimeRepairExpectedDelta,implementationDelta:runtimeExpectedDelta,guard:ciPython[0]})});
+ const result=spawnSync('python3',['-c',runtimeGuardModel],{cwd:repositoryRoot,encoding:'utf8',timeout:60000,input:JSON.stringify({case:name,delta:runtimeRepairExpectedDelta,g5Delta:g5HostedExpectedDelta,implementationDelta:runtimeExpectedDelta,guard:ciPython[0]})});
  assert.equal(result.status,0,result.stderr);const value=JSON.parse(result.stdout);assert.equal(value.accepted,name==='valid',JSON.stringify(value));
  if(['wrong_parent','stale_parent','arbitrary_descendant','unrelated_ancestor','multiple_parents','merge_parent_substitution'].includes(name))assert.equal(value.error,'WRONG_RUNTIME_IMPLEMENTATION_PARENT');
+});
+
+for(const name of ['local','historical','hosted','prior_hosted','wrong_local_base','missing_local_binding','wrong_subject_hash','mixed_hosted_local','wrong_collector','extra_path','missing_path','wrong_mode','functional_drift','changed_bytes'])test('G5 fixture binding: checkout admission '+name,()=>{
+ const result=spawnSync('python3',['-c',runtimeGuardModel],{cwd:repositoryRoot,encoding:'utf8',timeout:60000,input:JSON.stringify({case:'valid',admission_case:name,delta:runtimeRepairExpectedDelta,g5Delta:g5HostedExpectedDelta,implementationDelta:runtimeExpectedDelta,guard:ciPython[0]})});
+ assert.equal(result.status,0,result.stderr);const value=JSON.parse(result.stdout);
+ assert.equal(value.accepted,['local','historical','hosted','prior_hosted'].includes(name),JSON.stringify(value));
+ if(value.accepted)assert.equal(value.mode,{local:'LOCAL_GOVERNED_SUBJECT',historical:'HISTORICAL_IMPLEMENTATION',hosted:'HOSTED_PUSH_EVENT',prior_hosted:'HOSTED_PUSH_EVENT'}[name]);
 });
 
 test('governed runtime successor: oracle detects stale and ancestry-only workflow guards',()=>{
  const guard=ciPython[0];
  const stale=guard.replace("implementation_parent='65aec8374a896bb7323dcd76af7263fb437610fa'","implementation_parent='94e8ef63bea09b1043bad217946736503b147731'");
  assert.notEqual(stale,guard);
- const assess=(source,name)=>{const result=spawnSync('python3',['-c',runtimeGuardModel],{cwd:repositoryRoot,encoding:'utf8',timeout:60000,input:JSON.stringify({case:name,delta:runtimeRepairExpectedDelta,implementationDelta:runtimeExpectedDelta,guard:source})});assert.equal(result.status,0,result.stderr);return JSON.parse(result.stdout);};
+ const assess=(source,name)=>{const result=spawnSync('python3',['-c',runtimeGuardModel],{cwd:repositoryRoot,encoding:'utf8',timeout:60000,input:JSON.stringify({case:name,delta:runtimeRepairExpectedDelta,g5Delta:g5HostedExpectedDelta,implementationDelta:runtimeExpectedDelta,guard:source})});assert.equal(result.status,0,result.stderr);return JSON.parse(result.stdout);};
  assert.equal(assess(stale,'valid').accepted,false,'actual required parent must expose a stale workflow constant');
- const weak=guard.replace("assert parents==[runtime_repair_parent], 'WRONG_RUNTIME_IMPLEMENTATION_PARENT'","assert runtime_repair_parent in parents or len(parents)==1, 'WRONG_RUNTIME_IMPLEMENTATION_PARENT'");
+ const weak=guard.replace("assert parents==[g5_parent], 'WRONG_RUNTIME_IMPLEMENTATION_PARENT'","assert g5_parent in parents or len(parents)==1, 'WRONG_RUNTIME_IMPLEMENTATION_PARENT'");
  assert.notEqual(weak,guard);
  for(const name of ['stale_parent','arbitrary_descendant','multiple_parents','merge_parent_substitution'])assert.equal(assess(weak,name).accepted,true,'the negative oracle must detect a bypassed direct-parent assertion');
 });
@@ -896,4 +1020,9 @@ for text,accepted in [('\n'.join(lines),True),('\n'.join(lines[1:]),False),('\n'
 print(json.dumps({'PASS':True,'cases':29}))
 `;
  const result=spawnSync('python3',['-c',model],{encoding:'utf8',input:JSON.stringify({summary:ciPython[2]})});assert.equal(result.status,0,result.stderr);
+});
+
+for(const name of ['valid','wrong_parent','arbitrary_descendant','extra_path','missing_path','duplicate_path','wrong_sha','missing_event','wrong_event','local_impersonation'])test('G5 hosted lineage: '+name,()=>{
+ const result=spawnSync('python3',['-c',runtimeGuardModel],{cwd:repositoryRoot,encoding:'utf8',timeout:60000,input:JSON.stringify({case:name,delta:runtimeRepairExpectedDelta,g5Delta:g5HostedExpectedDelta,implementationDelta:runtimeExpectedDelta,guard:ciPython[0]})});
+ assert.equal(result.status,0,result.stderr);const value=JSON.parse(result.stdout);assert.equal(value.accepted,name==='valid',JSON.stringify(value));
 });

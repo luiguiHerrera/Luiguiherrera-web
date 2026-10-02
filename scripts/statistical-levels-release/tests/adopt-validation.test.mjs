@@ -1,13 +1,14 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {createAdoptRequestEvidence,auditAdoptRequestEvidence} from '../scripts/adopt-request-evidence.mjs';
+import {createAdoptRequestEvidence,auditAdoptRequestEvidence,requestCausalOwnership} from '../scripts/adopt-request-evidence.mjs';
+import {drainNativeRequestLifecycle} from '../scripts/browser-harness-base.mjs';
 import {listenerMarker,scriptFingerprint,classifyRequestSignals} from '../scripts/adopt-causal-bridge.mjs';
 import {transitions} from '../scripts/probe-transition-receipts.mjs';
 import {account} from '../scripts/network-accounting.mjs';
 import {sha} from '../scripts/release-core.mjs';
 const origin='https://fixture.invalid',page='page-1';
 function close(c){c.pageLifecycle(page,'CLOSING');c.listenerDrain(page);c.sourceClosed(page);c.pageLifecycle(page,'CLOSED');c.freeze();}
-function make({mode='abort',bridge=true,headers={RSC:'1','Next-Router-Prefetch':'0'},extra=false,retry=false}={}){
+function make({mode='abort',bridge=true,headers={RSC:'1','Next-Router-Prefetch':'0'},extra=false,ambient=false,retry=false,duplicate=false}={}){
  const c=createAdoptRequestEvidence(origin),raw=[];c.listenerStart(page);c.pageLifecycle(page,'ACTIVE');c.observability.context(transitions.T1);c.start(page,'T1');
  let a;if(bridge){a=c.action(page,'CLICK','[data-window="3Y"]');c.registerAction({...a,script_sha256:scriptFingerprint(page,'explicit-action-script'),source_sha256:sha(listenerMarker),source_url_sha256:sha('https://sl-qa.invalid/action/'+a.action_instance_id)});c.beginAction(a.action_instance_id);}
  const req=(id,h= headers,script='explicit-action-script',parent)=>({requestId:id,frameId:'frame',loaderId:'document',documentURL:origin+'/niveles-estadisticos',type:'Fetch',request:{url:origin+'/niveles-estadisticos?asset=SPY&frequency=weekly&window=3Y',method:'GET',headers:h},initiator:{type:'script',...(parent?{requestId:parent}:{}),stack:{callFrames:[{scriptId:script,url:origin+'/app.js'}]}}});
@@ -19,12 +20,59 @@ function make({mode='abort',bridge=true,headers={RSC:'1','Next-Router-Prefetch':
  }
  const e=req('primary'),binding=start(e);terminal(e,binding,mode==='finished'?'FINISHED':mode==='pending'?'PENDING':'FAILED',mode==='timeout'?'net::ERR_TIMED_OUT':'net::ERR_ABORTED');
  if(retry){const next=req('retry',headers,'explicit-action-script','primary');const b=start(next);terminal(next,b);}
- if(extra){const e=req('prefetch',{RSC:'1','Next-Router-Prefetch':'1'});const b=start(e);terminal(e,b,'FINISHED');}
+ if(duplicate){const next=req('second-primary');const b=start(next);terminal(next,b,'FINISHED');}
+ if(extra){const e=req('prefetch',{RSC:'1','Next-Router-Prefetch':'1'},ambient?'background-prefetch':'explicit-action-script');const b=start(e);terminal(e,b,'FINISHED');}
  if(a)c.completeAction(a.action_instance_id,{dispatch_ack:true,event_seen:true,listener_calls:1});c.complete(page,'T1',true);close(c);
  const receipts=c.receipts(raw),result=account(raw,false,origin,c.admittedReceipts(receipts)),evidence=c.evidence(raw,result,receipts);
  return {c,raw,evidence,result,audit:()=>auditAdoptRequestEvidence(evidence,raw,result,origin,['T1'])};
 }
 function reindex(e){e.journal.forEach((x,i)=>x.sequence=i+1);for(const r of e.requests)r.event_sequences=e.journal.filter(x=>x.request_id===r.request_id).map(x=>x.sequence);}
+test('G5 evidence repair: ambient non-causal prefetch retains association without false action obligation',()=>{
+ const f=make({mode:'finished',extra:true,ambient:true}),r=f.evidence.requests[1];
+ assert.equal(r.transition_id,f.evidence.transitions[0].transition_id);assert.equal(r.action_ancestry,'UNKNOWN');
+ assert.equal(requestCausalOwnership(r,f.evidence.actions,f.evidence.requests),'AMBIENT_PREFETCH');
+ assert.deepEqual(f.audit(),{status:'PASS',issues:[]});assert.equal(f.evidence.transition_accounting[0].request_ids.length,2);
+ assert.equal(f.evidence.requests.filter(r=>r.causality_status==='PROVEN').length,1);
+});
+test('G5 evidence repair: genuinely causal prefetch still requires proven action coverage',()=>{
+ const f=make({mode:'finished',extra:true}),r=f.evidence.requests[1];
+ assert.equal(requestCausalOwnership(r,f.evidence.actions,f.evidence.requests),'PROVEN_ACTION');assert.equal(f.audit().status,'PASS');
+ r.action_ancestry='UNKNOWN';assert.ok(f.audit().issues.includes('MISSING_CAUSAL_COVERAGE'));assert.equal(f.audit().status,'FAIL');
+});
+test('G5 evidence repair: partial ambient ancestry is unresolved and remains fail-closed',()=>{
+ const f=make({mode:'finished',extra:true,ambient:true}),r=f.evidence.requests[1];r.initiator_scripts.complete=false;
+ assert.equal(requestCausalOwnership(r,f.evidence.actions,f.evidence.requests),'UNRESOLVED');
+ assert.ok(f.audit().issues.includes('MISSING_CAUSAL_COVERAGE'));assert.equal(f.audit().status,'FAIL');
+});
+test('G5 evidence repair: ambient child of action-bearing parent cannot evade causal coverage',()=>{
+ const f=make({mode:'finished',extra:true,ambient:true}),r=structuredClone(f.evidence.requests[1]);
+ r.causal_relation='CDP_INITIATOR_REQUEST';r.causal_parent=f.evidence.requests[0].request_id;
+ assert.equal(requestCausalOwnership(r,f.evidence.actions,[f.evidence.requests[0],r]),'UNRESOLVED');
+});
+for(const terminal of ['FINISHED','FAILED'])test('G5 evidence repair: native '+terminal+' resolves bounded lifecycle drain',async()=>{
+ const c=createAdoptRequestEvidence(origin);c.listenerStart(page);c.pageLifecycle(page,'ACTIVE');
+ const binding=c.request(page,{requestId:'pending-prefetch',frameId:'f',loaderId:'l',documentURL:origin+'/',type:'Prefetch',request:{url:origin+'/prefetch',method:'GET',headers:{RSC:'1','Next-Router-Prefetch':'1'}},initiator:{type:'script',stack:{callFrames:[{scriptId:'background',url:origin+'/app.js'}]}}});
+ assert.equal(c.pendingRequests(page).length,1);
+ const timer=setTimeout(()=>{if(terminal==='FINISHED'){c.response(page,{requestId:'pending-prefetch',response:{status:200}});c.finished(page,{requestId:'pending-prefetch'});}else c.failure(page,{requestId:'pending-prefetch',canceled:true,errorText:'net::ERR_ABORTED'},0);},10);
+ try {assert.deepEqual(await drainNativeRequestLifecycle(()=>c.pendingRequests(page),{timeoutMs:500,pollMs:5}),{terminal_coverage_complete:true,pending_request_ids:[]});}finally{clearTimeout(timer);}
+ close(c);const raw=terminal==='FAILED'?[{kind:'request_failure',request_evidence:binding,url:origin+'/prefetch',type:'Prefetch',rsc:true,prefetch:true,canceled:true,error_code:'net::ERR_ABORTED'}]:[];
+ const receipts=c.receipts(raw),result=account(raw,false,origin,c.admittedReceipts(receipts)),e=c.evidence(raw,result,receipts);
+ assert.equal(e.requests[0].terminal_state,terminal);assert.ok(e.journal.some(x=>x.kind===terminal));
+ assert.equal(auditAdoptRequestEvidence(e,raw,result,origin,[]).status,'PASS');
+ if(terminal==='FAILED')assert.equal(result.required_application_request_failures,1);
+});
+test('G5 evidence repair: lifecycle deadline and source closure never synthesize a terminal',async()=>{
+ const pending=['native-request'];const result=await drainNativeRequestLifecycle(()=>pending,{timeoutMs:10,pollMs:2});
+ assert.deepEqual(result,{terminal_coverage_complete:false,pending_request_ids:['native-request']});assert.deepEqual(pending,['native-request']);
+ const f=make({mode:'pending',headers:{RSC:'1','Next-Router-Prefetch':'1'}});
+ assert.equal(f.evidence.requests[0].terminal_state,'PENDING');assert.ok(f.audit().issues.includes('UNRESOLVED_PENDING_REQUEST'));
+});
+test('G5 evidence repair: primary cardinality preserves exactly one and rejects zero or multiple candidates',()=>{
+ assert.equal(make({mode:'finished'}).audit().status,'PASS');
+ for(const f of [make({mode:'finished',bridge:false}),make({mode:'finished',duplicate:true})]){
+  assert.equal(f.audit().status,'FAIL');assert.ok(f.audit().issues.includes('PRIMARY_REQUEST_CARDINALITY'));
+ }
+});
 test('coverage: primary and prefetched child retained with one strict primary receipt',()=>{const f=make({extra:true});assert.equal(f.audit().status,'PASS');assert.equal(f.evidence.requests.length,2);assert.equal(f.evidence.transition_accounting[0].request_ids.length,2);assert.equal(f.result.ledger.length,1);assert.equal(f.result.required_application_request_failures,0);});
 test('coverage: successful primary has positive action proof without fabricated abort receipt',()=>{const f=make({mode:'finished'});assert.equal(f.audit().status,'PASS');assert.equal(f.evidence.transition_receipts.records.length,0);});
 for(const mode of ['finished','abort'])test('coverage: missing bridge blocks '+mode,()=>assert.equal(make({mode,bridge:false}).audit().status,'FAIL'));

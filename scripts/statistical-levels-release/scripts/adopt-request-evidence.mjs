@@ -178,6 +178,26 @@ export function auditOuterJournalOwnership(evidence){
  }catch{issues.push('OWNERSHIP_EVIDENCE_INVALID');}
  return {status:issues.length?'FAIL':'PASS',issues:[...new Set(issues)]};
 }
+// transition_id records ambient association at request start. It alone cannot
+// establish action ownership. Only positively classified prefetch with complete
+// native ancestry, including every request parent, can prove ambient-only scope.
+// Missing, cyclic, partial or action-bearing ancestry keeps the coverage gate.
+export function requestCausalOwnership(request,actions,requests) {
+  const c=causalDecision(request,actions,requests);
+  if(c.action_ancestry==='PROVEN')return 'PROVEN_ACTION';
+  if(request.prefetch_classification!=='YES')return 'UNRESOLVED';
+  const seen=new Set();let r=request;
+  while(r) {
+    if(seen.has(r.request_id)||!r.initiator_scripts.complete||!r.initiator_scripts.scripts.length||
+      actions.some(a=>a.page_id===r.request_evidence.page_id&&r.initiator_scripts.scripts.includes(a.script_sha256)))return 'UNRESOLVED';
+    seen.add(r.request_id);
+    if(r.causal_relation==='CDP_SCRIPT_INITIATOR')return r.initiator.type==='script'&&
+      r.causal_parent==='script:'+r.initiator_scripts.scripts[0]?'AMBIENT_PREFETCH':'UNRESOLVED';
+    if(!['CDP_INITIATOR_REQUEST','REDIRECT'].includes(r.causal_relation))return 'UNRESOLVED';
+    r=requests.find(p=>p.request_id===r.causal_parent);
+  }
+  return 'UNRESOLVED';
+}
 function intentEvidence(signals,type,witness) {
   const e=classificationEvidence(signals,type);
   if(signals.prefetch==='NO'&&nativeNavigationProven(witness)&&witness.header_compatible)e.prefetch='NATIVE_NEXT_NAVIGATION';
@@ -599,7 +619,9 @@ export function createAdoptRequestEvidence(origin, persistIngress = () => {}) {
     event.safe_event=safeEvent(raw);
     return clone(binding);
   }
-  return {listenerStart,listenerDrain,sourceClosed,freeze,revision:()=>sequence,observability,nativeIngress,verifyIngress,unresolvedNative,scriptParsed,
+  return {listenerStart,listenerDrain,sourceClosed,freeze,revision:()=>sequence,
+    pendingRequests:p=>requests.filter(r=>r.request_evidence.page_id===p&&r.terminal_state==='PENDING').map(r=>r.request_id),
+    observability,nativeIngress,verifyIngress,unresolvedNative,scriptParsed,
     classification:(p,e)=>{if(!safeNativeEvents.has(e))throw new Error('UNMATERIALIZED_CLASSIFICATION_INPUT');return intent(p,e).signals;},
     request:protectedNative('Network.requestWillBeSent',request),
     response:protectedNative('Network.responseReceived',response),failure:protectedNative('Network.loadingFailed',failure),
@@ -978,7 +1000,8 @@ export function auditAdoptRequestEvidence(evidence,events,result,origin,expected
       if(relevant) {
         check(r.prefetch_classification!=='UNKNOWN'&&r.rsc_classification!=='UNKNOWN','UNKNOWN_REQUEST_CLASSIFICATION');
         check(r.causal_parent!==unknown,'UNMAPPED_CAUSAL_REQUEST');
-        if(r.transition_id!==unknown)check(r.action_ancestry==='PROVEN'&&actions.get(r.action_instance_id)?.transition_id===r.transition_id,'MISSING_CAUSAL_COVERAGE');
+        if(r.transition_id!==unknown&&requestCausalOwnership(r,evidence.actions,evidence.requests)!=='AMBIENT_PREFETCH')
+          check(r.action_ancestry==='PROVEN'&&actions.get(r.action_instance_id)?.transition_id===r.transition_id,'MISSING_CAUSAL_COVERAGE');
       }
       const c=causalDecision(r,evidence.actions,evidence.requests);
       if(r.request_context_binding) {

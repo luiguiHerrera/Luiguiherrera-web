@@ -10,6 +10,19 @@ import { transitions } from './probe-transition-receipts.mjs';
 import { assetTransitionReadinessExpression } from './qa/asset-transition-readiness.mjs';
 import { createRuntimeObserver } from './runtime-transition-receipts.mjs';
 
+// Wait only for genuine native loadingFinished/loadingFailed observations.
+// The deadline bounds capture, never manufactures a terminal state. Listeners
+// stay attached throughout this wait and subsequent context/session closure.
+export async function drainNativeRequestLifecycle(pendingRequestIds,{timeoutMs=5000,pollMs=25}={}) {
+  const deadline=performance.now()+timeoutMs;
+  let ids=pendingRequestIds();
+  while(ids.length&&performance.now()<deadline) {
+    await new Promise(resolve=>setTimeout(resolve,Math.min(pollMs,Math.max(0,deadline-performance.now()))));
+    ids=pendingRequestIds();
+  }
+  return {terminal_coverage_complete:ids.length===0,pending_request_ids:ids};
+}
+
 export async function createReadOnlyHarness(target, tokenSource, out, production) {
   need(production ? tokenSource === undefined : typeof tokenSource?.get === 'function', 'QA_CREDENTIAL_MODE');
   need(!process.env.DEBUG && !process.env.PWDEBUG, 'DEBUG_MODE_FORBIDDEN');
@@ -147,7 +160,11 @@ export async function createReadOnlyHarness(target, tokenSource, out, production
     };
     const closePage=async()=>{
       adopt?.pageLifecycle(pageId,'CLOSING');adopt?.listenerDrain(pageId);
-      await Promise.all([...pending]);await context.close();
+      await Promise.all([...pending]);
+      if(adopt)await drainNativeRequestLifecycle(()=>adopt.pendingRequests(pageId));
+      // Still-pending requests remain PENDING in the durable collector; native
+      // cancellation delivered during close is retained by the same listeners.
+      await context.close();
       if(adopt){
         // CDP close is ordered after the session's delivered protocol events.
         // A missing acknowledgement is an error, never a successful drain.

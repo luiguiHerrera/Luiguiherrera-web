@@ -158,8 +158,8 @@ test('prefetch causality: browser Sec-Purpose prefetch cannot be counted as a se
 // Literal independently authored CDP observations. Expected hashes/callsites are
 // not emitted by the classifier under test. The real application test below
 // separately requires the browser to produce the same native witness.
-const navigationScript={scriptId:'next',hash:'0b743564483f80db5a365086eff276584467f2631408c2dc19ef1f3314f43125',length:159932,startLine:0,startColumn:0,isLiveEdit:false,executionContextAuxData:{isDefault:true}};
-const navigationStack=()=>({callFrames:[{scriptId:'next',lineNumber:1,columnNumber:34882},{scriptId:'next',lineNumber:0,columnNumber:18680},{scriptId:'next',lineNumber:0,columnNumber:16645}],parent:{callFrames:[{scriptId:'marker',lineNumber:0,columnNumber:0}]}});
+const navigationScript={scriptId:'next',hash:'c733d1c58378a68c6a77af63def0340abedca47199e6c7e5cfeca622bb25e366',length:160087,startLine:0,startColumn:0,isLiveEdit:false,executionContextAuxData:{isDefault:true}};
+const navigationStack=()=>({callFrames:[{scriptId:'next',lineNumber:1,columnNumber:35040},{scriptId:'next',lineNumber:0,columnNumber:18680},{scriptId:'next',lineNumber:0,columnNumber:16645}],parent:{callFrames:[{scriptId:'marker',lineNumber:0,columnNumber:0}]}});
 function navigationFixture({script={},stack=navigationStack(),headers={RSC:'1'},count=1,abort=true,parent,expectedPrefetch='NO'}={}) {
  const f=setup();f.c.scriptParsed(page,{...navigationScript,...script},f.raw);
  for(let i=0;i<count;i++) {
@@ -168,6 +168,23 @@ function navigationFixture({script={},stack=navigationStack(),headers={RSC:'1'},
  }
  return {...f,...f.finish()};
 }
+test('G5 evidence repair: exact current Production witness independently classifies navigation',()=>{
+ const f=navigationFixture({abort:false});assert.deepEqual(f.audit(),{status:'PASS',issues:[]});
+ const r=f.evidence.requests[0];assert.equal(r.native_intent.script.code_sha256,'c733d1c58378a68c6a77af63def0340abedca47199e6c7e5cfeca622bb25e366');
+ assert.equal(r.native_intent.script.length,160087);assert.equal(r.native_intent.frames[0].column,35040);
+ assert.equal(r.prefetch_classification,'NO');assert.equal(r.causality_status,'PROVEN');
+});
+for(const [name,options]of Object.entries({
+ 'stale frozen witness':{script:{hash:'0b743564483f80db5a365086eff276584467f2631408c2dc19ef1f3314f43125',length:159932},stack:{...navigationStack(),callFrames:[{scriptId:'next',lineNumber:1,columnNumber:34882},...navigationStack().callFrames.slice(1)]}},
+ 'unsupported hash':{script:{hash:'f'.repeat(64)}},
+ 'changed length':{script:{length:160088}},
+ 'nearby callsite':{stack:{...navigationStack(),callFrames:[{scriptId:'next',lineNumber:1,columnNumber:35041},...navigationStack().callFrames.slice(1)]}},
+ 'prefetch callsite':{stack:{...navigationStack(),callFrames:[...navigationStack().callFrames.slice(0,2),{scriptId:'next',lineNumber:1,columnNumber:32717}]}}
+}))test('G5 evidence repair: '+name+' fails closed',()=>{
+ const f=navigationFixture({...options,abort:false});assert.equal(f.audit().status,'FAIL');
+ assert.equal(f.evidence.requests[0].prefetch_classification,'UNKNOWN');assert.equal(f.evidence.requests[0].causality_status,'UNKNOWN');
+ assert.ok(f.audit().issues.includes('UNKNOWN_REQUEST_CLASSIFICATION'));assert.ok(f.audit().issues.includes('PRIMARY_REQUEST_CARDINALITY'));
+});
 for(const abort of [false,true])test('native Next proof: exact independent completed primary '+(abort?'retained conditional abort':'success without receipt'),()=>{
  const f=navigationFixture({abort});assert.equal(f.audit().status,'PASS');const r=f.evidence.requests[0];
  assert.equal(r.prefetch_classification,'NO');assert.equal(r.classification_evidence.prefetch,'NATIVE_NEXT_NAVIGATION');assert.equal(r.request_role,'PRIMARY_APPLICATION');
