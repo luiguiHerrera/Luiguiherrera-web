@@ -334,7 +334,16 @@ with tempfile.TemporaryDirectory(prefix='sl-successor-guard-') as directory:
                 if case=='wrong_workflow' and name=='.github/workflows/statistical-levels-release.yml': value+=b'# invalid workflow identity\n'
                 return value
             def predecessor_text(path,*args,**kwargs): return predecessor_bytes(path).decode()
-            with patch.object(Path,'read_bytes',predecessor_bytes),patch.object(Path,'read_text',predecessor_text),contextlib.redirect_stdout(io.StringIO()):
+            def predecessor_inventory(args,**kwargs):
+                if args==['git','ls-files','-z','scripts/statistical-levels-release/']:
+                    # Inventory and bytes have the same immutable historical owner.
+                    inventory=original_output(['git','ls-tree','-r','--name-only','-z',direct,'--','scripts/statistical-levels-release/'])
+                    names=inventory.decode().rstrip('\0').split('\0')
+                    historical_count=len(names)-3
+                    assert historical_count==94, 'HISTORICAL_BUNDLE_COUNT'
+                    return inventory
+                return original_output(args,**kwargs)
+            with patch('subprocess.check_output',predecessor_inventory),patch.object(Path,'read_bytes',predecessor_bytes),patch.object(Path,'read_text',predecessor_text),contextlib.redirect_stdout(io.StringIO()):
                 exec(compile(payload['integrity'],'actual-ci-integrity','exec'),{})
         print(json.dumps({'accepted':True}))
     except (AssertionError,subprocess.CalledProcessError) as error:
@@ -706,19 +715,49 @@ const runtimeExpectedDelta={
   "package-lock.json": "M"
 };
 
+const runtimeRepairExpectedDelta = {
+  "scripts/statistical-levels-release/tests/probe-fixture-registry.test.mjs": "M",
+  ".github/workflows/ci.yml": "M",
+  "scripts/statistical-levels-release/source-manifest.json": "M",
+  "scripts/statistical-levels-release/SOURCE_SHA256SUMS": "M",
+  ".github/workflows/statistical-levels-release.yml": "M",
+  "scripts/statistical-levels-release/workflow-freeze.json": "M"
+};
+
 const runtimeGuardModel=String.raw`
 import json,sys,os,hashlib,subprocess,tempfile,contextlib,io
 from pathlib import Path
 from unittest.mock import patch
 v=json.load(sys.stdin);case=v['case'];root=Path.cwd();head='f'*40
 output=subprocess.check_output;run=subprocess.run;read=Path.read_bytes;text=Path.read_text
-# The actual candidate checkout supplies the next successor's direct parent.
-# Never take this value from the workflow constant: that masked the stale guard.
-parent=output(['git','rev-parse','HEAD']).decode().strip()
-assert parent=='65aec8374a896bb7323dcd76af7263fb437610fa', 'WRONG_IMPLEMENTATION_CHECKOUT'
+# Real checkout, fixed implementation base and synthetic event HEAD are distinct.
+# Expected identities are independent literals, never copied from the guard.
+parent='65aec8374a896bb7323dcd76af7263fb437610fa'
+repair_parent='acfd5efed5984a7981e64a6953960c161fa11dc7'
+checkout=output(['git','rev-parse','HEAD']).decode().strip()
+assert head=='f'*40 and checkout!=head, 'WRONG_SYNTHETIC_FIXTURE_ROLE'
+assert output(['git','show','-s','--format=%P',repair_parent]).decode().strip()==parent, 'WRONG_IMPLEMENTATION_BASE'
+assert output(['git','rev-parse',repair_parent+'^{tree}']).decode().strip()=='5498cab4844ab8c7dc455c4f6347fa37e1624220', 'WRONG_REVIEWED_RUNTIME_TREE'
+if checkout!=repair_parent:
+    # A committed repair is admitted only as the exact immutable hosted event.
+    assert checkout==os.environ.get('GITHUB_SHA')==os.environ.get('CI_EVENT_SHA'), 'WRONG_IMPLEMENTATION_CHECKOUT'
+    assert os.environ.get('GITHUB_EVENT_NAME')=='push' and os.environ.get('GITHUB_REF')=='refs/heads/vercel-deployment', 'WRONG_REPAIR_EVENT'
+    assert output(['git','show','-s','--format=%P',checkout]).decode().strip()==repair_parent, 'WRONG_REPAIR_CHECKOUT_PARENT'
+    raw=output(['git','diff','--raw','--no-abbrev','--no-renames','-z',repair_parent,checkout,'--']).decode().rstrip('\0').split('\0')
+    assert len(raw)==12 and len(set(raw[1::2]))==6 and set(raw[1::2])==set(v['delta']), 'WRONG_REPAIR_CHECKOUT_SCOPE'
+    for header in raw[::2]:
+        fields=header.split()
+        assert len(fields)==5 and fields[0]==':100644' and fields[1]=='100644' and fields[4]=='M', 'WRONG_REPAIR_CHECKOUT_MODE'
+live=output(['git','ls-files','-z','scripts/statistical-levels-release/']).decode().rstrip('\0').split('\0')
+assert len(live)-3==99, 'LIVE_BUNDLE_COUNT'
 stale=output(['git','show','-s','--format=%P',parent]).decode().strip()
 assert stale=='94e8ef63bea09b1043bad217946736503b147731'
 assert output(['git','show','-s','--format=%P',stale]).decode().strip()=='578498f33b5bf7c70f5c43894d05f67aea409a00', 'WRONG_IMPLEMENTATION_PREDECESSOR'
+original=output(['git','diff','--raw','--no-abbrev','--no-renames','-z',parent,repair_parent,'--']).decode().rstrip('\0').split('\0')
+assert len(original)==64 and len(set(original[1::2]))==32 and set(original[1::2])==set(v['implementationDelta']), 'WRONG_IMPLEMENTATION_SCOPE'
+for header,name in zip(original[::2],original[1::2]):
+    fields=header.split();status=v['implementationDelta'][name]
+    assert len(fields)==5 and fields[0]==(':000000' if status=='A' else ':100644') and fields[1]=='100644' and fields[4]==status, 'WRONG_IMPLEMENTATION_MODE'
 expected=v['delta'];seen=[]
 def git(args,**kwargs):
     if args==['git','rev-parse','HEAD']: return (head+'\n').encode()
@@ -726,10 +765,12 @@ def git(args,**kwargs):
         parents={'wrong_parent':['a'*40],'stale_parent':[stale],
                  'arbitrary_descendant':['b'*40],
                  'unrelated_ancestor':['c60b17c6ddc5a08fcd402328f69e73f6e1e41b5f'],
-                 'multiple_parents':[parent,stale],
-                 'merge_parent_substitution':[stale,parent]}.get(case,[parent])
+                 'multiple_parents':[repair_parent,stale],
+                 'merge_parent_substitution':[stale,repair_parent]}.get(case,[repair_parent])
         return (' '.join(parents)+'\n').encode()
     if args[:4]==['git','diff','--raw','--no-abbrev']:
+        if args[-3:]==[parent,repair_parent,'--']:
+            return output(args,**kwargs)
         names=list(expected)
         if case=='extra_path':names.append('unauthorized.txt')
         if case=='missing_path':names.pop()
@@ -745,6 +786,8 @@ def git(args,**kwargs):
         return ('\0'.join(sorted(names))+'\0').encode()
     return output(args,**kwargs)
 def command(args,**kwargs):
+    if args==['git','rev-parse',repair_parent+'^{tree}']:return run(args,**kwargs)
+    if args==['git','diff','--raw','--no-abbrev','--no-renames','-z',parent,repair_parent,'--']:return run(args,**kwargs)
     if args[:2] in [['git','show'],['git','ls-files']]:return run(args,**kwargs)
     if args[:3]==['git','diff','--exit-code']:
         if case=='dirty':raise AssertionError('DIRTY_CANDIDATE')
@@ -752,7 +795,7 @@ def command(args,**kwargs):
     if args[:3]==['git','merge-base','--is-ancestor']:
         seen.append(args[3]);assert args[4]==head
         if case=='missing_ancestry':raise AssertionError('ANCESTRY_MISSING')
-        return run(args[:4]+[parent],**kwargs)
+        return run(args[:4]+[repair_parent],**kwargs)
     raise AssertionError('UNEXPECTED_MUTATING_COMMAND')
 def bytes_(p):
     b=read(p);name=str(p.relative_to(root)) if p.is_relative_to(root) else ''
@@ -776,13 +819,13 @@ with tempfile.TemporaryDirectory(prefix='sl-runtime-ci-model-') as out:
     if case=='mutable_ref':env['CI_EVENT_SHA']='refs/heads/vercel-deployment'
     try:
         with patch.dict(os.environ,env),patch('subprocess.check_output',git),patch('subprocess.run',command),patch.object(Path,'read_bytes',bytes_),patch.object(Path,'read_text',text_),contextlib.redirect_stdout(io.StringIO()):exec(compile(v['guard'],'current-runtime-ci','exec'),{})
-        subject=json.loads((Path(out)/'subject.json').read_text());assert subject['lineage']['runtime_parent_verified'] and subject['lineage']['implementation_parent_sha']==parent and subject['lineage']['implementation_parent_predecessor_sha']==stale and len(seen)==9
-        assert seen==[parent,stale,'578498f33b5bf7c70f5c43894d05f67aea409a00','d290691156b933ba62e5e8f6489dc870568126e0','f7e3fe8e3e3cd8bdea753873c31d78f146cdc923','c8454dc06bae4bfc2d6fbc90cf9ffa4f94bb63c1','e7872b9c0e5bb0be3e090fbe2c5b930d68dcbece','0c8fce262fce44650729883862ec948778ebea45','c60b17c6ddc5a08fcd402328f69e73f6e1e41b5f']
+        subject=json.loads((Path(out)/'subject.json').read_text());assert subject['lineage']['runtime_parent_verified'] and subject['lineage']['implementation_parent_sha']==parent and subject['lineage']['implementation_parent_predecessor_sha']==stale and subject['lineage']['runtime_repair_parent_sha']==repair_parent and subject['lineage']['runtime_repair_parent_verified'] and len(seen)==10
+        assert seen==[repair_parent,parent,stale,'578498f33b5bf7c70f5c43894d05f67aea409a00','d290691156b933ba62e5e8f6489dc870568126e0','f7e3fe8e3e3cd8bdea753873c31d78f146cdc923','c8454dc06bae4bfc2d6fbc90cf9ffa4f94bb63c1','e7872b9c0e5bb0be3e090fbe2c5b930d68dcbece','0c8fce262fce44650729883862ec948778ebea45','c60b17c6ddc5a08fcd402328f69e73f6e1e41b5f']
         print(json.dumps({'accepted':True}))
     except (AssertionError,subprocess.CalledProcessError) as e:print(json.dumps({'accepted':False,'error':str(e)}))
 `;
 for(const name of ['valid','wrong_parent','stale_parent','arbitrary_descendant','unrelated_ancestor','multiple_parents','merge_parent_substitution','extra_path','missing_path','duplicate_path','wrong_mode','wrong_status','dirty','missing_ancestry','probe_mutation','roles_swapped','missing_material','stale_material','duplicate_key','wrong_registration','unbound_product','probe_pin','release_probe_role','probe_release_role','wrong_sha','mutable_ref'])test('governed runtime successor: '+name,()=>{
- const result=spawnSync('python3',['-c',runtimeGuardModel],{cwd:repositoryRoot,encoding:'utf8',timeout:60000,input:JSON.stringify({case:name,delta:runtimeExpectedDelta,guard:ciPython[0]})});
+ const result=spawnSync('python3',['-c',runtimeGuardModel],{cwd:repositoryRoot,encoding:'utf8',timeout:60000,input:JSON.stringify({case:name,delta:runtimeRepairExpectedDelta,implementationDelta:runtimeExpectedDelta,guard:ciPython[0]})});
  assert.equal(result.status,0,result.stderr);const value=JSON.parse(result.stdout);assert.equal(value.accepted,name==='valid',JSON.stringify(value));
  if(['wrong_parent','stale_parent','arbitrary_descendant','unrelated_ancestor','multiple_parents','merge_parent_substitution'].includes(name))assert.equal(value.error,'WRONG_RUNTIME_IMPLEMENTATION_PARENT');
 });
@@ -791,9 +834,9 @@ test('governed runtime successor: oracle detects stale and ancestry-only workflo
  const guard=ciPython[0];
  const stale=guard.replace("implementation_parent='65aec8374a896bb7323dcd76af7263fb437610fa'","implementation_parent='94e8ef63bea09b1043bad217946736503b147731'");
  assert.notEqual(stale,guard);
- const assess=(source,name)=>{const result=spawnSync('python3',['-c',runtimeGuardModel],{cwd:repositoryRoot,encoding:'utf8',timeout:60000,input:JSON.stringify({case:name,delta:runtimeExpectedDelta,guard:source})});assert.equal(result.status,0,result.stderr);return JSON.parse(result.stdout);};
+ const assess=(source,name)=>{const result=spawnSync('python3',['-c',runtimeGuardModel],{cwd:repositoryRoot,encoding:'utf8',timeout:60000,input:JSON.stringify({case:name,delta:runtimeRepairExpectedDelta,implementationDelta:runtimeExpectedDelta,guard:source})});assert.equal(result.status,0,result.stderr);return JSON.parse(result.stdout);};
  assert.equal(assess(stale,'valid').accepted,false,'actual required parent must expose a stale workflow constant');
- const weak=guard.replace("assert parents==[implementation_parent], 'WRONG_RUNTIME_IMPLEMENTATION_PARENT'","assert implementation_parent in parents or len(parents)==1, 'WRONG_RUNTIME_IMPLEMENTATION_PARENT'");
+ const weak=guard.replace("assert parents==[runtime_repair_parent], 'WRONG_RUNTIME_IMPLEMENTATION_PARENT'","assert runtime_repair_parent in parents or len(parents)==1, 'WRONG_RUNTIME_IMPLEMENTATION_PARENT'");
  assert.notEqual(weak,guard);
  for(const name of ['stale_parent','arbitrary_descendant','multiple_parents','merge_parent_substitution'])assert.equal(assess(weak,name).accepted,true,'the negative oracle must detect a bypassed direct-parent assertion');
 });

@@ -69,7 +69,7 @@
   "tests/probe-dom.test.mjs": "b5d451101247dbdfa139ea0009a4ca8b1f447301aa3783ea254d075c7dc11ecf",
   "tests/probe-evidence.test.mjs": "54af56c012ae1c7c49779d17bdc9676dae5cde88870dcfe7583c43e0802356ec",
   "tests/probe-fixture-html.mjs": "e275f4c117a2273480fc865e128ef7ce2fe1019058ef1d7d814aba5c834d427d",
-  "tests/probe-fixture-registry.test.mjs": "9b590c1c47eccf6f558ceefb48ea0d3d644f8d0af40b3911d9d8e6a89afc4b39",
+  "tests/probe-fixture-registry.test.mjs": "7abd2896ff2ffab9939d218336559a15cbe531c68b94169fd0ff0cb828fbfd86",
   "tests/probe-gate.test.mjs": "1ce70ee2a75ae7ec9ff357bcff559484973dda6455cd8d0ba16ca887f3e46a01",
   "tests/probe-http.test.mjs": "4999a86e8abb859cb221cc80e9fabde1082d4bc5846b462782ac97cca2ac2a64",
   "tests/probe-interception-harness.test.mjs": "02f7a90b38316f8b4541f5b00274776fd730a313d99c788b8205e1757b199848",

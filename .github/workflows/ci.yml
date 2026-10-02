@@ -51,6 +51,7 @@ jobs:
           merge_anchor='e7872b9c0e5bb0be3e090fbe2c5b930d68dcbece'
           qualified_predecessor='c8454dc06bae4bfc2d6fbc90cf9ffa4f94bb63c1'
           repair_parent='f7e3fe8e3e3cd8bdea753873c31d78f146cdc923'
+          runtime_repair_parent='acfd5efed5984a7981e64a6953960c161fa11dc7'
           implementation_parent='65aec8374a896bb7323dcd76af7263fb437610fa'
           implementation_parent_predecessor='94e8ef63bea09b1043bad217946736503b147731'
           implementation_predecessor='578498f33b5bf7c70f5c43894d05f67aea409a00'
@@ -60,7 +61,9 @@ jobs:
           anchor_parents=None
           is_integration_push=os.environ['GITHUB_EVENT_NAME']=='push' and os.environ['GITHUB_REF']=='refs/heads/vercel-deployment'
           if is_integration_push:
-              assert parents==[implementation_parent], 'WRONG_RUNTIME_IMPLEMENTATION_PARENT'
+              assert parents==[runtime_repair_parent], 'WRONG_RUNTIME_IMPLEMENTATION_PARENT'
+              assert git('show','-s','--format=%P',runtime_repair_parent).decode().strip()==implementation_parent, 'WRONG_RUNTIME_REPAIR_PARENT_PREDECESSOR'
+              assert git('rev-parse',runtime_repair_parent+'^{tree}').decode().strip()=='5498cab4844ab8c7dc455c4f6347fa37e1624220', 'WRONG_REVIEWED_RUNTIME_TREE'
               assert git('show','-s','--format=%P',implementation_parent).decode().strip()==implementation_parent_predecessor, 'WRONG_IMPLEMENTATION_PARENT_PREDECESSOR'
               assert git('show','-s','--format=%P',implementation_parent_predecessor).decode().strip()==implementation_predecessor, 'WRONG_IMPLEMENTATION_PREDECESSOR'
               assert git('show','-s','--format=%P',implementation_predecessor).decode().strip()==data_parent, 'WRONG_DATA_PARENT'
@@ -71,22 +74,26 @@ jobs:
               assert predecessor_parents==[merge_anchor], 'WRONG_QUALIFIED_PREDECESSOR_PARENT'
               anchor_parents=git('show','-s','--format=%P',merge_anchor).decode().strip().split()
               assert anchor_parents==[execution,production], 'WRONG_ORDERED_ANCHOR_PARENTS'
-              for parent in [implementation_parent,implementation_parent_predecessor,implementation_predecessor,data_parent,repair_parent,qualified_predecessor,merge_anchor,execution,production]:
+              for parent in [runtime_repair_parent,implementation_parent,implementation_parent_predecessor,implementation_predecessor,data_parent,repair_parent,qualified_predecessor,merge_anchor,execution,production]:
                   subprocess.run(['git','merge-base','--is-ancestor',parent,head],check=True)
               authorized=['.github/workflows/ci.yml', '.github/workflows/statistical-levels-release.yml', 'app/(es)/niveles-estadisticos/page.tsx', 'app/api/statistical-levels/asset/route.ts', 'app/en/statistical-levels/page.tsx', 'components/statistical-levels/StatLevelsLab.tsx', 'docs/statistical-levels-architecture-aware-transition-evidence.md', 'lib/reports/september-corrective-release.test.mts', 'lib/statistical-levels/get-statistical-levels-data.ts', 'lib/statistical-levels/runtime-snapshot.ts', 'package-lock.json', 'scripts/qa-statistical-levels-runtime.mjs', 'scripts/statistical-levels-release/SOURCE_SHA256SUMS', 'scripts/statistical-levels-release/probe-source-inputs.json', 'scripts/statistical-levels-release/scripts/adopt-causal-bridge.mjs', 'scripts/statistical-levels-release/scripts/adopt-request-evidence.mjs', 'scripts/statistical-levels-release/scripts/browser-harness-base.mjs', 'scripts/statistical-levels-release/scripts/cli.mjs', 'scripts/statistical-levels-release/scripts/preview-qa.mjs', 'scripts/statistical-levels-release/scripts/probe-cli.mjs', 'scripts/statistical-levels-release/scripts/probe-fixture-registry.mjs', 'scripts/statistical-levels-release/scripts/probe-qa.mjs', 'scripts/statistical-levels-release/scripts/probe-request-instances.mjs', 'scripts/statistical-levels-release/scripts/runtime-transition-receipts.mjs', 'scripts/statistical-levels-release/source-inputs.json', 'scripts/statistical-levels-release/source-manifest.json', 'scripts/statistical-levels-release/tests/adopt-causal-bridge.test.mjs', 'scripts/statistical-levels-release/tests/adopt-reconciliation.test.mjs', 'scripts/statistical-levels-release/tests/adopt-request-evidence.test.mjs', 'scripts/statistical-levels-release/tests/input-manifest-roles.test.mjs', 'scripts/statistical-levels-release/tests/preview-qa.test.mjs', 'scripts/statistical-levels-release/tests/probe-fixture-registry.test.mjs', 'scripts/statistical-levels-release/tests/probe-product-browser-harness.test.mjs', 'scripts/statistical-levels-release/tests/probe-qa-http.test.mjs', 'scripts/statistical-levels-release/tests/probe-redirect-integration.test.mjs', 'scripts/statistical-levels-release/tests/probe-request-instances.test.mjs', 'scripts/statistical-levels-release/tests/probe-transition-receipts.test.mjs', 'scripts/statistical-levels-release/tests/product-qa-observability-isolation.test.mjs', 'scripts/statistical-levels-release/tests/runtime-transition-receipts.test.mjs', 'scripts/statistical-levels-release/tests/statistical-levels-runtime.test.mjs', 'scripts/statistical-levels-release/workflow-freeze.json']
               assert len(authorized)==41, 'AUTHORIZED_SCOPE_COUNT'
               expected_delta={'scripts/statistical-levels-release/tests/probe-product-browser-harness.test.mjs': 'M', '.github/workflows/ci.yml': 'M', '.github/workflows/statistical-levels-release.yml': 'M', 'app/(es)/niveles-estadisticos/page.tsx': 'M', 'app/api/statistical-levels/asset/route.ts': 'A', 'app/en/statistical-levels/page.tsx': 'M', 'components/statistical-levels/StatLevelsLab.tsx': 'M', 'docs/statistical-levels-architecture-aware-transition-evidence.md': 'A', 'lib/reports/september-corrective-release.test.mts': 'M', 'lib/statistical-levels/runtime-snapshot.ts': 'A', 'scripts/qa-statistical-levels-runtime.mjs': 'A', 'scripts/statistical-levels-release/SOURCE_SHA256SUMS': 'M', 'scripts/statistical-levels-release/probe-source-inputs.json': 'A', 'scripts/statistical-levels-release/scripts/adopt-causal-bridge.mjs': 'M', 'scripts/statistical-levels-release/scripts/adopt-request-evidence.mjs': 'M', 'scripts/statistical-levels-release/scripts/browser-harness-base.mjs': 'M', 'scripts/statistical-levels-release/scripts/probe-cli.mjs': 'M', 'scripts/statistical-levels-release/scripts/probe-fixture-registry.mjs': 'M', 'scripts/statistical-levels-release/scripts/probe-qa.mjs': 'M', 'scripts/statistical-levels-release/scripts/runtime-transition-receipts.mjs': 'A', 'scripts/statistical-levels-release/source-inputs.json': 'M', 'scripts/statistical-levels-release/source-manifest.json': 'M', 'scripts/statistical-levels-release/tests/adopt-causal-bridge.test.mjs': 'M', 'scripts/statistical-levels-release/tests/input-manifest-roles.test.mjs': 'A', 'scripts/statistical-levels-release/tests/probe-fixture-registry.test.mjs': 'M', 'scripts/statistical-levels-release/tests/probe-qa-http.test.mjs': 'M', 'scripts/statistical-levels-release/tests/probe-redirect-integration.test.mjs': 'M', 'scripts/statistical-levels-release/tests/product-qa-observability-isolation.test.mjs': 'M', 'scripts/statistical-levels-release/tests/runtime-transition-receipts.test.mjs': 'A', 'scripts/statistical-levels-release/tests/statistical-levels-runtime.test.mjs': 'A', 'scripts/statistical-levels-release/workflow-freeze.json': 'M', 'package-lock.json': 'M'}
               assert set(expected_delta)<=set(authorized), 'SUCCESSOR_DECLARED_SCOPE'
-              delta=git('diff','--raw','--no-abbrev','--no-renames','-z',implementation_parent,'HEAD','--').decode().rstrip('\0').split('\0')
-              assert len(delta)%2==0, 'SUCCESSOR_DELTA_FORMAT'
-              changed=[]
-              for header,name in zip(delta[::2],delta[1::2]):
-                  fields=header.split()
-                  assert name in expected_delta, 'SUCCESSOR_CONTENT_SCOPE'
-                  expected_status=expected_delta[name]
-                  assert len(fields)==5 and fields[0]==(':000000' if expected_status=='A' else ':100644') and fields[1]=='100644' and fields[4]==expected_status, 'SUCCESSOR_FILE_MODE_OR_STATUS'
-                  changed.append(name)
-              assert len(changed)==len(expected_delta) and set(changed)==set(expected_delta), 'SUCCESSOR_CONTENT_SCOPE'
+              repair_delta={'scripts/statistical-levels-release/tests/probe-fixture-registry.test.mjs': 'M', '.github/workflows/ci.yml': 'M', 'scripts/statistical-levels-release/source-manifest.json': 'M', 'scripts/statistical-levels-release/SOURCE_SHA256SUMS': 'M', '.github/workflows/statistical-levels-release.yml': 'M', 'scripts/statistical-levels-release/workflow-freeze.json': 'M'}
+              assert len(repair_delta)==6 and set(repair_delta)<=set(authorized), 'REPAIR_DECLARED_SCOPE'
+              # Preserve the reviewed implementation delta; independently bind the new repair.
+              for diff_parent,diff_head,expected_delta in [(implementation_parent,runtime_repair_parent,expected_delta),(runtime_repair_parent,'HEAD',repair_delta)]:
+                  delta=git('diff','--raw','--no-abbrev','--no-renames','-z',diff_parent,diff_head,'--').decode().rstrip('\0').split('\0')
+                  assert len(delta)%2==0, 'SUCCESSOR_DELTA_FORMAT'
+                  changed=[]
+                  for header,name in zip(delta[::2],delta[1::2]):
+                      fields=header.split()
+                      assert name in expected_delta, 'SUCCESSOR_CONTENT_SCOPE'
+                      expected_status=expected_delta[name]
+                      assert len(fields)==5 and fields[0]==(':000000' if expected_status=='A' else ':100644') and fields[1]=='100644' and fields[4]==expected_status, 'SUCCESSOR_FILE_MODE_OR_STATUS'
+                      changed.append(name)
+                  assert len(changed)==len(expected_delta) and set(changed)==set(expected_delta), 'SUCCESSOR_CONTENT_SCOPE'
               def unique_json(data):
                   def pairs(items):
                       assert len(items)==len(dict(items)), 'DUPLICATE_SUCCESSOR_JSON_KEY'
@@ -123,7 +130,7 @@ jobs:
               # Review approval is a separate exact-tree pre-push gate, never inferred from ancestry.
           # PR checks exercise their event SHA; they never certify the integration push.
           subject={'head_sha':head,'parents':parents,'event':os.environ['GITHUB_EVENT_NAME'],'ref':os.environ['GITHUB_REF'],'run_id':os.environ['GITHUB_RUN_ID'],'run_attempt':os.environ['GITHUB_RUN_ATTEMPT'],'integration_push':is_integration_push}
-          subject['lineage']={'implementation_parent_sha':implementation_parent,'implementation_parent_predecessor_sha':implementation_parent_predecessor,'runtime_parent_verified':is_integration_push,'repair_parent_sha':repair_parent,'repair_parent_parents':repair_parent_parents,'metadata_repair_parent_verified':is_integration_push,'qualified_predecessor_sha':qualified_predecessor,'qualified_predecessor_parents':predecessor_parents,'merge_anchor_sha':merge_anchor,'merge_anchor_parents':anchor_parents,'registration_successor_parent_verified':is_integration_push,'registration_content_verified':is_integration_push,'two_parent_anchor_verified':is_integration_push}
+          subject['lineage']={'runtime_repair_parent_sha':runtime_repair_parent,'runtime_repair_parent_verified':is_integration_push,'implementation_parent_sha':implementation_parent,'implementation_parent_predecessor_sha':implementation_parent_predecessor,'runtime_parent_verified':is_integration_push,'repair_parent_sha':repair_parent,'repair_parent_parents':repair_parent_parents,'metadata_repair_parent_verified':is_integration_push,'qualified_predecessor_sha':qualified_predecessor,'qualified_predecessor_parents':predecessor_parents,'merge_anchor_sha':merge_anchor,'merge_anchor_parents':anchor_parents,'registration_successor_parent_verified':is_integration_push,'registration_content_verified':is_integration_push,'two_parent_anchor_verified':is_integration_push}
           paths=sorted(git('ls-files','-z').decode().rstrip('\0').split('\0'))
           files={p:{'mode':format((root/p).stat().st_mode,'o'),'sha256':hashlib.sha256((root/p).read_bytes()).hexdigest()} for p in paths}
           (out/'subject.json').write_text(json.dumps(subject,sort_keys=True)+'\n')
