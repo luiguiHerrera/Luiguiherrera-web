@@ -66,7 +66,7 @@ test('19: release jobs retain the pinned diagnostic allowlist and frozen source 
   const workflow = await fs.readFile(new URL('../../.github/workflows/statistical-levels-release.yml', root), 'utf8');
   const release = workflow.split('  identity-probe:\n')[0]
     .replace(/(EXPECTED_SOURCE_SUMS: )[a-f0-9]{64}/g, '$1<FROZEN_SOURCE_SUMS>');
-  assert.equal(digest(release), 'dfa8a5bd21bd02cc03a3137b8de54d6108d2ca31dbedc094fe76250e3de6ba42');
+  assert.equal(digest(release), 'fdc216beb4dabf61ab73884fbbacbdf4259bd640dac50d8ed45c60a973a99ab6');
 });
 
 // Independently frozen from parent 578498f, before authorized runtime wiring.
@@ -98,17 +98,17 @@ function assertHarnessPreserved(source) {
   [
     "    onNative('Runtime.consoleAPICalled'",
     "    const causalBridge =",
-    "8a5a2e4ff98d50b7827b809899a5c8edffeb5aacad7d7b416900a79ee7a66b6e"
+    "2e75e61dcf7a64d6fa0c921760c44bb14cc7951b224b6ac0243f64255b05f60e"
   ],
   [
     "    const closePage=async()=>{",
     "    closePages.set(",
-    "187e24c80b708d932a4c8a3980ba79215623858171d97fbb7ef9114cc71f4850"
+    "c81d22684550234ac5204107b81f6f27ee26a226a6618fe027ef4034724c1a35"
   ],
   [
     "    finish: async finalProductPassed => {",
     "\n    } };",
-    "36bbab483fcbe1754137abc59c8f067b166ec25d4c2b6840d0f2dd300981fe2a"
+    "a803b499842cdfbef72f0d5c7981b7cc5bc9e472cff5b804db992aead3771808"
   ],
   [
     "      events.push({ ...requests.get(e.requestId), kind: 'request_failure'",

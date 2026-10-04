@@ -274,3 +274,17 @@ test('positive causal request set: successful primary and explicit finished RSC 
  assert.deepEqual(v.evidence.requests.map(r=>r.request_role),['PRIMARY_APPLICATION','RSC_CHILD']);assert.equal(v.receipts.records.length,0);
  assert.equal(v.evidence.transition_accounting[0].request_ids.length,2);
 });
+
+// Independently frozen retained CDP chain; not generated from classifier constants.
+const prefetchCallerFrames=[[1,78764],[1,93935],[1,95211],[1,92319],[1,95653],[0,19325],[1,25947],[1,25036],[1,61110],[1,61771],[1,54598],[1,54833],[1,54867],[1,54141],[1,54937],[1,57083],[1,57571]];
+const prefetchLoaderFrames=[[0,10163],[0,10835],[0,5923],[0,6412]];
+function prefetchChainFixture(mutate=()=>{}){
+ const f=setup();const caller={...navigationScript,scriptId:'caller'},loader={...navigationScript,scriptId:'loader',hash:'c2575aae913acf6acc8a0b87b5b708bd4f9e0767bbb9a553d5f96209239551c0',length:10917};
+ const event={requestId:'prefetch',type:'Script',frameId:'f',loaderId:'l',documentURL:origin+'/',request:{url:origin+'/chunk.js',method:'GET',headers:{}},initiator:{type:'script',stack:{callFrames:[...prefetchLoaderFrames.map(([lineNumber,columnNumber])=>({scriptId:'loader',lineNumber,columnNumber})),...prefetchCallerFrames.map(([lineNumber,columnNumber])=>({scriptId:'caller',lineNumber,columnNumber}))]}}};
+ mutate({caller,loader,event});f.c.scriptParsed(page,loader,f.raw);f.c.scriptParsed(page,caller,f.raw);f.c.request(page,event);f.c.response(page,{requestId:event.requestId,response:{status:200}});f.c.finished(page,{requestId:event.requestId});return f.finish();
+}
+for(const id of ['request-1998','request-2000','request-2004','request-2006','request-2009','request-2011','request-2013','request-2015','request-2016','request-2019','request-2022','request-2025'])test('exact framework prefetch caller: retained '+id,()=>{
+ const f=prefetchChainFixture(({event})=>{event.requestId=id;});const r=f.evidence.requests[0];assert.equal(r.prefetch_classification,'YES');assert.equal(r.request_role,'PREFETCH');assert.equal(r.classification_evidence.prefetch,'EXACT_FRAMEWORK_PREFETCH_CALLER_CHAIN');assert.equal(r.action_ancestry,'UNKNOWN');assert.ok(!f.audit().issues.includes('MISSING_CAUSAL_COVERAGE'));assert.ok(!f.audit().issues.includes('UNKNOWN_REQUEST_CLASSIFICATION'));
+});
+for(const [name,mutate]of Object.entries({loader_only:({event})=>{event.initiator.stack.callFrames.splice(4);},wrong_caller:({caller})=>{caller.hash='0'.repeat(64);},wrong_loader:({loader})=>{loader.hash='0'.repeat(64);},incomplete:({event})=>{event.initiator.stack.parentId={id:'missing'};},scheduler:({event})=>{event.initiator.stack.callFrames[20].columnNumber++;},segment_cache:({event})=>{event.initiator.stack.callFrames[10].columnNumber++;},flight:({event})=>{event.initiator.stack.callFrames[4].columnNumber++;},action_owned:({event})=>{event.initiator.stack.parent={callFrames:[{scriptId:'marker',lineNumber:0,columnNumber:0}]};},ambiguous:({event})=>{event.initiator.stack.callFrames.push({...event.initiator.stack.callFrames[4]});}}))test('exact framework prefetch caller rejects '+name,()=>{const f=prefetchChainFixture(mutate);assert.equal(f.evidence.requests[0].prefetch_classification,'UNKNOWN');});
+test('exact framework prefetch caller: tampered authenticated higher executable fails replay',()=>{const f=prefetchChainFixture();f.evidence.requests[0].native_intent.caller.script.code_sha256='0'.repeat(64);assert.equal(f.audit().status,'FAIL');});

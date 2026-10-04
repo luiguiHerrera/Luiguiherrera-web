@@ -28,8 +28,12 @@ async function historicalRoot(t){
  const dir=await fs.mkdtemp(path.join(os.tmpdir(),'sl-historical-inputs-'));t.after(()=>fs.rm(dir,{recursive:true,force:true}));
  for(const p of new Set([...Object.keys(historical),...P.allowlist,'docs/statistical-levels-capability-ledger.json'])){await fs.mkdir(path.dirname(path.join(dir,p)),{recursive:true});await fs.writeFile(path.join(dir,p),historicalBlob(p));}return dir;
 }
+const priorCurrentMaterialPaths=Object.keys(JSON.parse(execFileSync('git',['show','e2f57918a495051c803fb60cd90bcd1c82e6d473:scripts/statistical-levels-release/source-inputs.json'],{cwd:root})));
+const currentMaterialBytes=await fs.readFile(new URL('source-inputs.json',closure),'utf8');
+const currentMaterialEntries=[...currentMaterialBytes.matchAll(/^  "([^"]+)": "([a-f0-9]{64})",?$/gm)].map(m=>[m[1],m[2]]);
+assert.equal(currentMaterialEntries.length,Object.keys(candidate).length,'duplicate or malformed material entry');
 test('historical Probe bytes are independently pinned exact 41 entries',async()=>{assert.equal(REGISTERED_PROBE_INPUT_SHA256,pin);assert.equal(digest(historicalBytes),pin);assert.equal(Object.keys(historical).length,41);assert.deepEqual(historicalBytes,historicalBlob('scripts/statistical-levels-release/source-inputs.json'));for(const [p,h]of Object.entries(historical)){assert.match(h,/^[a-f0-9]{64}$/);assert.equal(digest(historicalBlob(p)),h);}});
-test('current 77 material inputs retain all historical paths and hash actual candidate',async()=>{assert.equal(Object.keys(candidate).length,77);assert(Object.keys(historical).every(p=>Object.hasOwn(candidate,p)));for(const [p,h]of Object.entries(candidate))assert.equal(digest(await fs.readFile(path.join(root,p))),h,p);assert.notEqual(candidate['components/statistical-levels/StatLevelsLab.tsx'],historical['components/statistical-levels/StatLevelsLab.tsx']);});
+test('current 78 material inputs retain all historical paths and hash actual candidate',async()=>{assertCurrentMaterialInputs(currentMaterialEntries);assert(Object.keys(historical).every(p=>Object.hasOwn(candidate,p)));for(const [p,h]of Object.entries(candidate))assert.equal(digest(await fs.readFile(path.join(root,p))),h,p);assert.notEqual(candidate['components/statistical-levels/StatLevelsLab.tsx'],historical['components/statistical-levels/StatLevelsLab.tsx']);});
 const cases={
  PROBE_MANIFEST_CHANGED:b=>Buffer.concat([b,Buffer.from(' ')]),
  PROBE_MANIFEST_PATH_ADDED:b=>Buffer.from(JSON.stringify({...JSON.parse(b),'added.ts':'a'.repeat(64)})),
@@ -74,3 +78,9 @@ test('spread genuine handle loses issuance identity',async()=>{const h=await rea
 test('changing a returned handle cannot change its manifest role',async()=>{const h=await readRegisteredProbeInputManifest(target);assert(Object.isFrozen(h));assert.throws(()=>h.role='PROMOTE');assert.deepEqual(requireRegisteredProbeInputManifest(h,target),historical);});
 test('historical component symlink cannot satisfy the real Probe verifier',async t=>{const dir=await historicalRoot(t),h=await readRegisteredProbeInputManifest(target),p=path.join(dir,'components/statistical-levels/StatLevelsLab.tsx');await fs.rename(p,p+'.real');await fs.symlink(p+'.real',p);await assert.rejects(verifyProbeInputs(dir,h,target),{message:'QA_INPUT_SYMLINK'});});
 test('historical component parent symlink cannot satisfy the real Probe verifier',async t=>{const dir=await historicalRoot(t),h=await readRegisteredProbeInputManifest(target),p=path.join(dir,'components');await fs.rename(p,p+'.real');await fs.symlink(p+'.real',p);await assert.rejects(verifyProbeInputs(dir,h,target),{message:'QA_INPUT_SYMLINK'});});
+
+function assertCurrentMaterialInputs(entries){
+ assert.equal(entries.length,78);const names=entries.map(e=>e[0]);assert.equal(new Set(names).size,78);
+ assert.equal(priorCurrentMaterialPaths.length,77);assert.deepEqual([...names].sort(),[...priorCurrentMaterialPaths,'vendor/braces-3.0.3-sl-backport.tgz'].sort());
+ assert.equal(entries.find(e=>e[0]==='vendor/braces-3.0.3-sl-backport.tgz')[1],'4e9550f8c4b0e4cfff73bd0c55cabbae0277acff892eb499313776f5a3e44428');
+}

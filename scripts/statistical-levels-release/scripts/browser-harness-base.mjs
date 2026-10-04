@@ -2,7 +2,7 @@ import fs from 'node:fs/promises';
 import {writeFileSync, appendFileSync, readFileSync, existsSync} from 'node:fs';
 import path from 'node:path';
 import { randomUUID } from 'node:crypto';
-import { need, headersForRequest, protectedGet, publicProductionGet } from './release-core.mjs';
+import { sha, need, headersForRequest, protectedGet, publicProductionGet } from './release-core.mjs';
 import { account, irrelevantNativeLevels } from './network-accounting.mjs';
 import { createAdoptRequestEvidence, auditAdoptRequestEvidence } from './adopt-request-evidence.mjs';
 import { installCausalBridge } from './adopt-causal-bridge.mjs';
@@ -14,13 +14,14 @@ import { createRuntimeObserver } from './runtime-transition-receipts.mjs';
 // The deadline bounds capture, never manufactures a terminal state. Listeners
 // stay attached throughout this wait and subsequent context/session closure.
 export async function drainNativeRequestLifecycle(pendingRequestIds,{timeoutMs=5000,pollMs=25}={}) {
-  const deadline=performance.now()+timeoutMs;
+  const start=performance.now(),deadline=start+timeoutMs;
   let ids=pendingRequestIds();
+  const initial=[...ids];
   while(ids.length&&performance.now()<deadline) {
     await new Promise(resolve=>setTimeout(resolve,Math.min(pollMs,Math.max(0,deadline-performance.now()))));
     ids=pendingRequestIds();
   }
-  return {terminal_coverage_complete:ids.length===0,pending_request_ids:ids};
+  return {terminal_coverage_complete:ids.length===0,pending_request_ids:ids,diagnostics:{clock:"PERFORMANCE_MONOTONIC_MS",start_timestamp:start,deadline_timestamp:deadline,end_timestamp:performance.now(),exit_reason:ids.length===0?"EMPTY_PENDING_SET":"DEADLINE",pending_ids_at_start:initial,pending_ids_at_end:[...ids]}};
 }
 
 export async function createReadOnlyHarness(target, tokenSource, out, production) {
@@ -33,6 +34,7 @@ export async function createReadOnlyHarness(target, tokenSource, out, production
   const adopt = production ? createAdoptRequestEvidence(target.origin, envelope => {
     appendFileSync(path.join(out,'native-ingress.jsonl'),JSON.stringify(envelope)+'\n',{encoding:'utf8',flush:true});
   }) : null;
+  const lifecycle={schema:"statistical-levels.native-lifecycle-diagnostics.v1",clock:"PERFORMANCE_MONOTONIC_MS",pages:[],browser_close_timestamp:null,browser_closed_timestamp:null};
   const pageStates = new Map(), closePages = new Map(); let pageSequence = 0;
   async function createPage() {
     const context = await browser.newContext({ serviceWorkers: 'block', locale: 'en-US', timezoneId: 'UTC' });
@@ -40,13 +42,23 @@ export async function createReadOnlyHarness(target, tokenSource, out, production
     const cdp = await context.newCDPSession(page), requests = new Map(), paused = new Map();
     const pending = new Set();
     const pageId = 'page-' + (++pageSequence); pageStates.set(context, pageId);
+    const diagnostic={page_id:pageId,drain:null,requests:[],page_close_timestamp:null,page_closed_timestamp:null,source_close_timestamp:null};if(adopt)lifecycle.pages.push(diagnostic);
+    const diagnosticRequests=new Map();
+    function observeLifecycle(type,e){
+      if(!adopt||typeof e.requestId!=='string')return;
+      const id=sha(pageId+':'+e.requestId);let row=diagnosticRequests.get(id);
+      if(!row){row={request_id:id,request_start_timestamp:null,response_timestamp:null,loading_finished_timestamp:null,loading_failed_timestamp:null,native_terminal_callback_timestamp:null};diagnosticRequests.set(id,row);diagnostic.requests.push(row);}
+      const key={'Network.requestWillBeSent':'request_start_timestamp','Network.responseReceived':'response_timestamp','Network.loadingFinished':'loading_finished_timestamp','Network.loadingFailed':'loading_failed_timestamp'}[type];
+      if(key)row[key]=performance.now();
+      if(type==='Network.loadingFinished'||type==='Network.loadingFailed')row.native_terminal_callback_timestamp=performance.now();
+    }
     const runtime = adopt ? await createRuntimeObserver(browser,cdp,target.origin,pageId,randomUUID) : null;
     let runtimeKind=null,runtimeTransition=null;
     // Unsupported transport starts are retained as UNKNOWN, never silently zero.
     for(const type of ['Network.webSocketCreated','Network.webTransportCreated','Network.directTCPSocketCreated','Network.directUDPSocketCreated'])cdp.on(type,()=>{runtime?.unsupported();events.push({kind:'unsupported_runtime_transport',rsc:'UNKNOWN',prefetch:'UNKNOWN'});});
     // Registration constants identify the native event without reading its payload.
     const onNative=(type,interpret)=>cdp.on(type,native=>adopt
-      ? adopt.nativeIngress(pageId,type,native,events,safe=>interpret(safe)) : interpret(native));
+      ? adopt.nativeIngress(pageId,type,native,events,safe=>{observeLifecycle(type,safe);return interpret(safe);}) : interpret(native));
     if (adopt) {
       cdp.on('Debugger.scriptParsed', native => {const observed=adopt.scriptParsed(pageId,native,events);void runtime.script(observed);});
       onNative('Page.frameNavigated', e => {adopt.frameNavigated(pageId, e);runtime.navigate();});
@@ -75,6 +87,7 @@ export async function createReadOnlyHarness(target, tokenSource, out, production
       const headers = Object.fromEntries(Object.entries(e.request.headers).map(([k, v]) => [k.toLowerCase(), v]));
       const signals = adopt ? adopt.classification(pageId,e) : null;
       const binding=adopt?.request(pageId,e);runtime?.request(e,binding);
+      if(binding){const row=diagnosticRequests.get(sha(pageId+':'+e.requestId));if(row)row.request_id=binding.request_instance_id;}
       requests.set(e.requestId, { ...(adopt ? { request_evidence: binding } : {}), url: e.request.url, type: e.type,
         rsc: signals?.rsc === 'UNKNOWN' ? 'UNKNOWN' : signals ? signals.rsc === 'YES' : headers.rsc === '1', prefetch: signals?.prefetch === 'UNKNOWN' ? 'UNKNOWN' : signals ? signals.prefetch === 'YES' : headers['next-router-prefetch'] === '1' || headers.purpose === 'prefetch' });
     });
@@ -131,7 +144,7 @@ export async function createReadOnlyHarness(target, tokenSource, out, production
     });
     let resolveClosed;const sourceClosed = new Promise(resolve => {resolveClosed=resolve;});
     if(adopt) {
-      cdp.on('close',()=>{adopt.sourceClosed(pageId);resolveClosed();});
+      cdp.on('close',()=>{diagnostic.source_close_timestamp=performance.now();adopt.sourceClosed(pageId);resolveClosed();});
       adopt.listenerStart(pageId);adopt.pageLifecycle(pageId,'ACTIVE');
     }
     await Promise.all(['Page', 'Runtime', 'Network', 'Log'].map(domain => cdp.send(domain + '.enable')));
@@ -161,10 +174,12 @@ export async function createReadOnlyHarness(target, tokenSource, out, production
     const closePage=async()=>{
       adopt?.pageLifecycle(pageId,'CLOSING');adopt?.listenerDrain(pageId);
       await Promise.all([...pending]);
-      if(adopt)await drainNativeRequestLifecycle(()=>adopt.pendingRequests(pageId));
+      if(adopt){const drained=await drainNativeRequestLifecycle(()=>adopt.pendingRequests(pageId));diagnostic.drain=drained.diagnostics;}
       // Still-pending requests remain PENDING in the durable collector; native
       // cancellation delivered during close is retained by the same listeners.
+      if(adopt)diagnostic.page_close_timestamp=performance.now();
       await context.close();
+      if(adopt)diagnostic.page_closed_timestamp=performance.now();
       if(adopt){
         // CDP close is ordered after the session's delivered protocol events.
         // A missing acknowledgement is an error, never a successful drain.
@@ -202,7 +217,9 @@ export async function createReadOnlyHarness(target, tokenSource, out, production
         for (const context of pages) {
           await closePages.get(context)();
         }
+        lifecycle.browser_close_timestamp=performance.now();
         await browser.close();
+        lifecycle.browser_closed_timestamp=performance.now();
       } catch (error) { closeError = error; } finally { tokenSource?.clear(); }
       // All accepted native callbacks convert synchronously. After the closed
       // source acknowledgements, drain the already queued JavaScript turn before
@@ -213,6 +230,8 @@ export async function createReadOnlyHarness(target, tokenSource, out, production
         const snapshots=existsSync(ingressPath)?readFileSync(ingressPath,'utf8').trim().split('\n').filter(Boolean).map(line=>JSON.parse(line)):[];
         adopt.verifyIngress(snapshots);
       }catch {adopt.verifyIngress(null);}
+      for(const p of lifecycle.pages)for(const row of p.requests){row.request_present_at_drain_start=p.drain?.pending_ids_at_start.includes(row.request_id)??null;row.request_present_at_drain_end=p.drain?.pending_ids_at_end.includes(row.request_id)??null;}
+      writeFileSync(path.join(out,"native-lifecycle-diagnostics.json"),JSON.stringify(lifecycle,null,2)+"\n");
       adopt.freeze();
       const receipts = adopt.receipts(events);
       // Retain the full unmodified failure ledger even when receipt validation fails.

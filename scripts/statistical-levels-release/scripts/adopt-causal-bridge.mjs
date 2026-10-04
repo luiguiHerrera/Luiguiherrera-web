@@ -33,7 +33,23 @@ export function nativeNavigationProven(witness) {
     witness.complete===true&&Array.isArray(frames)&&frames.length>=3&&
     navigationCode.frames.every(([line,column],i)=>frames[i].script_sha256===s.script_sha256&&frames[i].line===line&&frames[i].column===column));
 }
+// Qualification is the complete retained native call chain, not loader identity.
+export const frameworkPrefetchCode = Object.freeze({
+  callerSha256:navigationCode.sha256,callerLength:navigationCode.length,
+  loaderSha256:'c2575aae913acf6acc8a0b87b5b708bd4f9e0767bbb9a553d5f96209239551c0',loaderLength:10917,
+  loaderFrames:Object.freeze([[0,10163],[0,10835],[0,5923],[0,6412]].map(Object.freeze)),
+  callerFrames:Object.freeze([[1,78764],[1,93935],[1,95211],[1,92319],[1,95653],[0,19325],[1,25947],[1,25036],[1,61110],[1,61771],[1,54598],[1,54833],[1,54867],[1,54141],[1,54937],[1,57083],[1,57571]].map(Object.freeze))
+});
+export function nativeFrameworkPrefetchProven(witness,type) {
+  const q=frameworkPrefetchCode,s=witness?.script,c=witness?.caller?.script,frames=witness?.frames;
+  const executable=(x,hash,length)=>x&&x.code_sha256===hash&&x.length===length&&x.default_context===true&&x.live_edit===false&&x.start_line===0&&x.start_column===0;
+  if(type!=='Script'||witness?.initiator_type!=='script'||witness?.action_owned!==false||witness?.complete!==true||witness?.runtime_header_compatible!==true||
+    !executable(s,q.loaderSha256,q.loaderLength)||!executable(c,q.callerSha256,q.callerLength)||s.script_sha256===c.script_sha256||!Array.isArray(frames)||frames.length!==21)return false;
+  return q.loaderFrames.every(([line,column],i)=>frames[i].script_sha256===s.script_sha256&&frames[i].line===line&&frames[i].column===column)&&
+    q.callerFrames.every(([line,column],i)=>frames[i+4].script_sha256===c.script_sha256&&frames[i+4].line===line&&frames[i+4].column===column);
+}
 export function nativeIntentSignals(base,type,witness) {
+  if(nativeFrameworkPrefetchProven(witness,type))return {rsc:base.rsc,prefetch:'YES'};
   if(runtimeFetchProven(witness,type))return {rsc:'NO',prefetch:'NO'};
   if(!nativeNavigationProven(witness))return base;
   if(type!=='Fetch'||base.rsc!=='YES'||base.prefetch==='YES'||!witness.header_compatible)return {rsc:base.rsc,prefetch:'UNKNOWN'};

@@ -68,12 +68,13 @@
   "lib/statistical-levels/types.ts": "49360299efb1bc8d2ec377d91b8d6a510e6f858a8ef21b5debafb90df96e02e8",
   "lib/trends/catalog.ts": "6bad52c9d8059675ce5bc840d5ee55142e58d652a6b621a5b6ea6acf7ed5c1cc",
   "next.config.ts": "e1df6cbb9a600330ca6ce03e187abf63bb6e21a2e4a7a33b08405d48e10761d9",
-  "package-lock.json": "55f3ba40dc1573ca34fa3bbb78134fbf61aec5ca4507f8e1176cc7fce8b0a2a6",
-  "package.json": "4531c0d5764f158932084924bb6fc3a3aa31b6543444941097a539951efd5bf9",
+  "package-lock.json": "29d7f8af70c03aaf8075e9d112eb724ba207784c25d2fa441e5804fcde5392c2",
+  "package.json": "41dcfbf40dd84712e49306497c37724109694f09ea81cc4e7a5e2cfc3f811daa",
   "postcss.config.js": "fa650b380adfabb151a0b352f7135e107e6352345f899060f1c5c231228f94bf",
   "proxy.ts": "389fb231a4249eaef2203257e62cd43725539ebce7d359da7e02eda5911d2de0",
   "scripts/build-statistical-levels.mjs": "d26a5d548a0a0925f9336dc76c52eb89e7fd89c5d094c38100da0ed79bffeb97",
   "scripts/statistical-levels-offline.mjs": "5a4193bc3937b36ff71f48a8277be9b7aa277091bff058545cd01034f5b335f1",
   "tailwind.config.ts": "e26b730b63e0399dddf8609ef5dbf42d986f2a5553afec1e767ed1eecf9718ee",
-  "tsconfig.json": "d970f681c83535ce5463b83e31a8a62978339c4cbb66a8222decb6ce535f6c07"
+  "tsconfig.json": "d970f681c83535ce5463b83e31a8a62978339c4cbb66a8222decb6ce535f6c07",
+  "vendor/braces-3.0.3-sl-backport.tgz": "4e9550f8c4b0e4cfff73bd0c55cabbae0277acff892eb499313776f5a3e44428"
 }

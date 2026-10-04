@@ -2,7 +2,7 @@
 // No request headers, cookies, query values, bodies, raw CDP IDs or stacks persist.
 import { createRequestInstanceCollector, validateRequestEvidence, startContextFingerprint, destinationFingerprint } from './probe-request-instances.mjs';
 import { createTransitionCapture, transitions, requireReceiptData } from './probe-transition-receipts.mjs';
-import { actionControls, listenerMarker, selectionExpression, newAction, initiatorScripts, classifyRequestSignals, classificationEvidence, causalDecision, scriptFingerprint, nativeIntentSignals, nativeNavigationProven, requestRole } from './adopt-causal-bridge.mjs';
+import { actionControls, listenerMarker, selectionExpression, newAction, initiatorScripts, classifyRequestSignals, classificationEvidence, causalDecision, scriptFingerprint, nativeIntentSignals, nativeNavigationProven, nativeFrameworkPrefetchProven, requestRole } from './adopt-causal-bridge.mjs';
 import { account, safeEvent, sourceURLObservation, validateFailureEvidence, networkEventTypes, unresolvedNetworkEvidence, nativeIngressTypes, ingressFailureEvidence, irrelevantNativeLevels } from './network-accounting.mjs';
 import { canonical, sha } from './release-core.mjs';
 import { runtimeFetchProven, runtimeExecutableMatches, validateRuntimeTransitionReceipt } from './runtime-transition-receipts.mjs';
@@ -50,6 +50,31 @@ export const outerJournalOwnershipContracts=Object.freeze({
  NATIVE_SCRIPT_INGRESS:contract(ingressFields,[...ingressOptional,'script']),
 });
 
+// Optional caller claims are one bundle. Presence requires independent proof;
+// falsy claims cannot turn a malformed bundle into an absent witness.
+function validateOwnershipBundle(w,request,evidence,check) {
+ const keys=['caller','initiator_type','action_owned'];
+ if(!keys.some(key=>Object.hasOwn(w,key)))return;
+ const object=value=>value!==null&&typeof value==='object'&&!Array.isArray(value);
+ const exact=(value,names)=>object(value)&&Object.keys(value).length===names.length&&names.every(key=>Object.hasOwn(value,key));
+ const complete=keys.every(key=>Object.hasOwn(w,key));
+ check(complete,'OWNERSHIP_BUNDLE_INCOMPLETE');
+ const callerValid=exact(w.caller,['sequence','script'])&&Number.isSafeInteger(w.caller.sequence)&&w.caller.sequence>0&&
+  exact(w.caller.script,['script_sha256','code_sha256','length','start_line','start_column','default_context','live_edit']);
+ check(callerValid,'OWNERSHIP_CALLER_INVALID');
+ check(typeof w.initiator_type==='string'&&['parser','script','preload','preflight','other','UNKNOWN'].includes(w.initiator_type),'OWNERSHIP_INITIATOR_TYPE_INVALID');
+ check(typeof w.action_owned==='boolean','OWNERSHIP_ACTION_OWNED_INVALID');
+ if(!complete||!callerValid)return;
+ const caller=evidence.journal.find(row=>row.sequence===w.caller.sequence);
+ const resolved=caller?.kind==='NATIVE_SCRIPT_INGRESS'&&caller.interpretation_status==='INTERPRETED'&&
+  caller.sequence<request.event_sequences[0]&&caller.page_id===request.request_evidence.page_id;
+ check(resolved,'OWNERSHIP_REFERENCE_UNRESOLVED');
+ check(resolved&&equal(caller.script,w.caller.script),'OWNERSHIP_CLAIM_CONTRADICTION');
+ check(w.frames[4]?.script_sha256===w.caller.script.script_sha256&&w.frames[4]?.script_sha256!==w.frames[0]?.script_sha256,'OWNERSHIP_CALLER_ANCESTRY_MISMATCH');
+ check(w.initiator_type===request.initiator.type,'OWNERSHIP_CLAIM_CONTRADICTION');
+ check(w.action_owned===evidence.actions.some(action=>action.page_id===request.request_evidence.page_id&&request.initiator_scripts.scripts.includes(action.script_sha256)),'OWNERSHIP_CLAIM_CONTRADICTION');
+}
+
 // Replay the complete raw journal without receipt ownership, normalized tuples,
 // or caller consistency flags. Return issues only; never sanitize evidence.
 export function auditOuterJournalOwnership(evidence){
@@ -84,7 +109,7 @@ export function auditOuterJournalOwnership(evidence){
    for(const frame of r.initiator.frames)fields(frame,['script_sha256','line','column']);
    if(r.request_context_binding)fields(r.request_context_binding,['source','action_instance_id','observed_context_sha256']);
    if(r.native_intent){
-    fields(r.native_intent,['base','header_compatible','frames','complete','script_sequence','script'],['runtime_header_compatible']);
+    fields(r.native_intent,['base','header_compatible','frames','complete','script_sequence','script'],['runtime_header_compatible','caller','initiator_type','action_owned']);
     fields(r.native_intent.base,['rsc','prefetch']);
     for(const frame of r.native_intent.frames)fields(frame,['script_sha256','line','column']);
     if(r.native_intent.script)fields(r.native_intent.script,['script_sha256','code_sha256','length','start_line','start_column','default_context','live_edit']);
@@ -98,6 +123,7 @@ export function auditOuterJournalOwnership(evidence){
     if(w.script===null)agree(w.script_sequence,null);
     else {const observed=journal.get(w.script_sequence);check(observed?.kind==='NATIVE_SCRIPT_INGRESS'&&observed.sequence<r.event_sequences[0]&&observed.interpretation_status==='INTERPRETED','OWNERSHIP_REFERENCE_UNRESOLVED');agree(observed?.page_id,b.page_id);agree(w.script,observed?.script);}
    }
+   if(r.native_intent)validateOwnershipBundle(r.native_intent,r,evidence,check);
    agree(r.request_id,b.request_instance_id);agree(r.transition_id,b.active_transition_id??unknown);agree(r.action_instance_id,decision.action_instance_id);
    const tuple={request_id:b.request_instance_id,page_id:b.page_id,transition_id:b.active_transition_id??unknown,action_instance_id:decision.action_instance_id};
    if(tuple.transition_id!==unknown){const t=transitionsById.get(tuple.transition_id);check(!!t,'OWNERSHIP_REFERENCE_UNRESOLVED');if(t){agree(tuple.page_id,t.page_id);agree(r.transition_type,t.kind);}}
@@ -202,6 +228,7 @@ function intentEvidence(signals,type,witness) {
   const e=classificationEvidence(signals,type);
   if(signals.prefetch==='NO'&&nativeNavigationProven(witness)&&witness.header_compatible)e.prefetch='NATIVE_NEXT_NAVIGATION';
   if(signals.prefetch==='NO'&&runtimeFetchProven(witness,type))e.prefetch='EXACT_EXPLICIT_ASSET_FETCH';
+  if(signals.prefetch==='YES'&&nativeFrameworkPrefetchProven(witness,type))e.prefetch='EXACT_FRAMEWORK_PREFETCH_CALLER_CHAIN';
   return e;
 }
 function initiator(value) {
@@ -338,7 +365,8 @@ export function createAdoptRequestEvidence(origin, persistIngress = () => {}) {
     const compatible=base.rsc==='YES'&&e.type==='Fetch'&&headers.every(([k,v])=>
       k==='next-router-prefetch'?v==='0':!['purpose','sec-purpose'].includes(k));
     const runtime_header_compatible=headers.every(([k])=>!['rsc','next-router-prefetch','purpose','sec-purpose'].includes(k));
-    const witness={base,header_compatible:compatible,runtime_header_compatible,frames,complete,script_sequence:script?.sequence??null,script:script?.script??null};
+    const caller=journal.findLast(x=>x.kind==='NATIVE_SCRIPT_INGRESS'&&x.page_id===p&&x.interpretation_status==='INTERPRETED'&&x.script?.script_sha256===frames[4]?.script_sha256);
+    const witness={base,header_compatible:compatible,runtime_header_compatible,frames,complete,script_sequence:script?.sequence??null,script:script?.script??null,...(caller&&frames[4]?.script_sha256!==frames[0]?.script_sha256?{caller:{sequence:caller.sequence,script:caller.script},initiator_type:e.initiator?.type??null,action_owned:actions.some(a=>a.page_id===p&&frames.some(f=>f.script_sha256===a.script_sha256))}:{})};
     return {signals:nativeIntentSignals(base,e.type,witness),witness};
   }
 
@@ -974,6 +1002,7 @@ export function auditAdoptRequestEvidence(evidence,events,result,origin,expected
         const script=scriptRows.find(x=>x.sequence===w.script_sequence);
         check(w.script===null?w.script_sequence===null:script?.page_id===r.request_evidence.page_id&&script.sequence<history[0]?.sequence&&script.interpretation_status==='INTERPRETED'&&equal(script.script,w.script),'NATIVE_INTENT_SCRIPT_MISMATCH');
         check(equal([...new Set(w.frames.map(f=>f.script_sha256))],r.initiator_scripts.scripts)&&w.complete===r.initiator_scripts.complete,'NATIVE_INTENT_ANCESTRY_MISMATCH');
+        validateOwnershipBundle(w,r,evidence,check);
         const signals=nativeIntentSignals(w.base,r.metadata.type,w);
         check(equal(signals,{rsc:r.rsc_classification,prefetch:r.prefetch_classification}),'NATIVE_INTENT_CLASSIFICATION_MISMATCH');
       }

@@ -160,7 +160,7 @@ test('probe harness preserves exact raw events.push expressions and original tim
     ...expressions(probe, 'setTimeout'), "setTimeout(() => reject(new Error('CDP_DRAIN_UNCONFIRMED')), 5000)"]);
   assert.deepEqual(expressions(shared, 'drainNativeRequestLifecycle'), ['drainNativeRequestLifecycle(() => adopt.pendingRequests(pageId))']);
   const sharedText=await fs.readFile(sharedURL,'utf8');
-  assert.match(sharedText,/if\(adopt\)await drainNativeRequestLifecycle\(\(\)=>adopt\.pendingRequests\(pageId\)\);/);
+  assert.match(sharedText,/if\(adopt\)\{const drained=await drainNativeRequestLifecycle\(\(\)=>adopt\.pendingRequests\(pageId\)\);diagnostic\.drain=drained\.diagnostics;\}/);
   assert.match(sharedText,/timeoutMs=5000,pollMs=25/);
   assert.match(sharedText,/while\(ids\.length&&performance\.now\(\)<deadline\)/);
   assert.match(sharedText,/terminal_coverage_complete:ids\.length===0,pending_request_ids:ids/);
@@ -172,13 +172,13 @@ test('probe harness preserves exact raw events.push expressions and original tim
 test('G5 fixture binding: ungated or unbounded native lifecycle wait fails closed',async()=>{
   const source=await fs.readFile(sharedURL,'utf8');
   const qualify=text=>{
-    assert.match(text,/if\(adopt\)await drainNativeRequestLifecycle\(\(\)=>adopt\.pendingRequests\(pageId\)\);/);
+    assert.match(text,/if\(adopt\)\{const drained=await drainNativeRequestLifecycle\(\(\)=>adopt\.pendingRequests\(pageId\)\);diagnostic\.drain=drained\.diagnostics;\}/);
     assert.match(text,/timeoutMs=5000,pollMs=25/);
     assert.match(text,/while\(ids\.length&&performance\.now\(\)<deadline\)/);
     assert.match(text,/terminal_coverage_complete:ids\.length===0,pending_request_ids:ids/);
   };
   qualify(source);
-  for(const [from,to]of [['if(adopt)await drainNativeRequestLifecycle','await drainNativeRequestLifecycle'],['timeoutMs=5000','timeoutMs=Infinity'],['ids.length&&performance.now()<deadline','ids.length'],['terminal_coverage_complete:ids.length===0','terminal_coverage_complete:true']]){
+  for(const [from,to]of [['if(adopt){const drained=await drainNativeRequestLifecycle','{const drained=await drainNativeRequestLifecycle'],['timeoutMs=5000','timeoutMs=Infinity'],['ids.length&&performance.now()<deadline','ids.length'],['terminal_coverage_complete:ids.length===0','terminal_coverage_complete:true']]){
     const mutated=source.replace(from,to);assert.notEqual(mutated,source);assert.throws(()=>qualify(mutated));
   }
 });
@@ -190,4 +190,8 @@ for(const type of ['Network.webSocketCreated','Network.webTransportCreated','Net
   fake.contexts[0].cdp.emit(type,native);await page.close();const result=await h.finish(true);
   assert.equal(result.ledger.length,1);assert.equal(result.ledger[0].classification,'unclassified');assert.equal(result.ledger[0].event.rsc,'UNKNOWN');assert.equal(result.unclassified_failures.length,1);
  }finally{await fs.rm(out,{recursive:true,force:true});}
+});
+
+test('native lifecycle sidecar remains isolated from terminal and raw accounting semantics',async()=>{
+ const source=await fs.readFile(sharedURL,'utf8');assert.match(source,/native-lifecycle-diagnostics\.json/);assert.match(source,/diagnostic\.source_close_timestamp=performance\.now/);assert.match(source,/lifecycle\.browser_close_timestamp=performance\.now/);assert.match(source,/diagnostic\.page_close_timestamp=performance\.now/);assert.match(source,/row\.request_id=binding\.request_instance_id/);assert.doesNotMatch(source,/diagnostic[^\n]*(?:token|request\.headers|request\.url|response\.body)/);
 });

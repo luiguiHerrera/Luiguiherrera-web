@@ -4,21 +4,26 @@ import fs from 'node:fs/promises';
 import os from 'node:os';
 import path from 'node:path';
 import { EventEmitter } from 'node:events';
-import { createAdoptRequestEvidence, auditAdoptRequestEvidence } from '../scripts/adopt-request-evidence.mjs';
+import { createAdoptRequestEvidence, auditAdoptRequestEvidence, auditOuterJournalOwnership } from '../scripts/adopt-request-evidence.mjs';
 import { transitions } from '../scripts/probe-transition-receipts.mjs';
 import { listenerMarker,scriptFingerprint } from '../scripts/adopt-causal-bridge.mjs';
-import { sha } from '../scripts/release-core.mjs';
+import { sha, canonical } from '../scripts/release-core.mjs';
 import { account } from '../scripts/network-accounting.mjs';
 const origin='https://www.luiguiherrera.com';
 const request=(id='r',headers={RSC:'1','Next-Router-Prefetch':'0'},kind='T1')=>({requestId:id,frameId:'private-frame',loaderId:'private-loader',documentURL:origin+'/niveles-estadisticos',timestamp:1,type:'Fetch',
   initiator:{type:'script',stack:{callFrames:[{scriptId:'marker',url:origin+'/code.js?token=secret-canary',lineNumber:1,columnNumber:2}]}},
   request:{method:'GET',url:origin+'/niveles-estadisticos?'+new URLSearchParams(transitions[kind].target_state),headers}});
-function fixture({transition=false,prefetch=false,pending=false,failed=false,bridge=true}={}) {
+function fixture({transition=false,prefetch=false,pending=false,failed=false,bridge=true,ownershipWitness=false}={}) {
   const c=createAdoptRequestEvidence(origin),events=[];
   c.listenerStart('page-1');c.pageLifecycle('page-1','ACTIVE');
   if(transition){c.observability.context(transitions.T1);c.start('page-1','T1');}
   let a;if(transition&&bridge){a=c.action('page-1','CLICK','[data-window="3Y"]');c.registerAction({...a,script_sha256:scriptFingerprint('page-1','marker'),source_sha256:sha(listenerMarker),source_url_sha256:sha('https://sl-qa.invalid/action/'+a.action_instance_id)});c.beginAction(a.action_instance_id);}
-  const e=request('r',prefetch?{RSC:'1','Next-Router-Prefetch':'1'}:{RSC:'1','Next-Router-Prefetch':'0'}),binding=c.request('page-1',e);
+  const e=request('r',prefetch?{RSC:'1','Next-Router-Prefetch':'1'}:{RSC:'1','Next-Router-Prefetch':'0'});
+  if(ownershipWitness){
+    for(const scriptId of ['marker','caller'])c.scriptParsed('page-1',{scriptId,hash:sha(scriptId),length:10,startLine:0,startColumn:0,isLiveEdit:false,executionContextAuxData:{isDefault:true}},events);
+    e.initiator.stack.callFrames=[...Array.from({length:4},()=>({...e.initiator.stack.callFrames[0]})),{...e.initiator.stack.callFrames[0],scriptId:'caller'}];
+  }
+  const binding=c.request('page-1',e);
   c.response('page-1',{requestId:'r',response:{status:200},timestamp:2});
   if(failed) {
     c.failure('page-1',{requestId:'r',timestamp:3,canceled:true,errorText:'net::ERR_ABORTED'},events.length);
@@ -145,6 +150,56 @@ test('durable evidence is narrowly allowlisted for ADOPT on success or failure',
   assert.match(step,/always\(\) && inputs.operation == 'ADOPT_EXISTING_PRODUCTION_BASELINE'/);
   assert.match(step,/name: statistical-levels-adopt-request-evidence/);
   assert.match(step,/path: \|/);
-  assert.deepEqual([...step.matchAll(/\$\{\{ runner.temp \}\}\/statistical-levels-candidate-qa\/([^\s]+)/g)].map(m=>m[1]),['adopt-request-evidence.json','native-ingress.jsonl']);
+  assertExactAdoptArtifacts([...step.matchAll(/\$\{\{ runner.temp \}\}\/statistical-levels-candidate-qa\/([^\s]+)/g)].map(m=>m[1]));
   assert.doesNotMatch(step,/\*|include-hidden-files: true|overwrite: true/);
+});
+
+function assertExactAdoptArtifacts(names){assert.deepEqual(names,['adopt-request-evidence.json','native-ingress.jsonl','native-lifecycle-diagnostics.json']);}
+
+// Recompute the consistency digest so malformed claims fail semantic validation,
+// rather than being masked by an unrelated stale request-identity digest.
+function ownershipMutation(f,mutate){
+ const r=f.evidence.requests[0];mutate(r.native_intent,r);
+ const keys=['request_id','request_evidence','metadata','protocol_request_sha256','rsc_classification','prefetch_classification','classification_evidence','initiator_scripts','initiator','causal_parent','causal_relation','redirect_parent_id','transition_id','transition_type','native_intent',...(r.request_context_binding?['request_context_binding']:[])];
+ f.evidence.journal.find(row=>row.kind==='REQUEST'&&row.request_id===r.request_id).request_identity_sha256=sha(canonical(Object.fromEntries(keys.map(key=>[key,r[key]]))));
+}
+function ownershipResult(f,status){
+ assert.equal(auditOuterJournalOwnership(f.evidence).status,status);
+ const full=f.audit();assert.equal(full.status,status);
+ if(status==='FAIL'){assert.ok(full.issues.some(issue=>issue.startsWith('OWNERSHIP_')));assert.ok(!full.issues.includes('REQUEST_OBSERVATION_MISMATCH'));}
+}
+const ownershipCases=[
+ ['no witness bundle absent',false,null,'PASS'],
+ ['no witness shaped caller',false,w=>Object.assign(w,{caller:{sequence:999999,script:{script_sha256:sha('caller'),code_sha256:sha('code'),length:10,start_line:0,start_column:0,default_context:true,live_edit:false}},initiator_type:'script',action_owned:false}),'FAIL'],
+ ['no witness malformed caller',false,w=>{w.caller=false;},'FAIL'],
+ ['no witness malformed initiator_type',false,w=>{w.initiator_type={unadjudicated:true};},'FAIL'],
+ ['no witness malformed action_owned',false,w=>{w.action_owned='NOT_A_BOOLEAN';},'FAIL'],
+ ['witness malformed caller',true,w=>{w.caller=false;},'FAIL'],
+ ['witness malformed initiator_type',true,w=>{w.initiator_type={unadjudicated:true};},'FAIL'],
+ ['witness malformed action_owned',true,w=>{w.action_owned='NOT_A_BOOLEAN';},'FAIL'],
+ ['unknown ownership field',true,w=>{w.unadjudicated=true;},'FAIL'],
+ ['wrong types and valid-type orphan claims',false,null,'FAIL'],
+ ['conflicting ownership binding',true,w=>{w.action_owned=!w.action_owned;},'FAIL'],
+];
+for(const [name,witness,mutate,status]of ownershipCases)test('G5 ownership fail-closed: '+name,()=>{
+ if(name==='wrong types and valid-type orphan claims'){
+  for(const claim of [{caller:null},{caller:0},{caller:''},{initiator_type:'script'},{action_owned:false},{caller:{sequence:1,script:{}},initiator_type:7,action_owned:'false'}]){
+   const f=fixture();ownershipResult(f,'PASS');ownershipMutation(f,w=>Object.assign(w,claim));ownershipResult(f,'FAIL');
+  }
+ }else{const f=fixture({ownershipWitness:witness});ownershipResult(f,'PASS');if(mutate)ownershipMutation(f,mutate);ownershipResult(f,status);}
+});
+for(const name of ['current authenticated valid control','Major04 valid baseline','Major05 valid baseline'])test('G5 ownership fail-closed: '+name,async()=>{
+ // The qualification captures fresh full-product evidence before release tests.
+ // Outside qualification the collector fixture still exercises an authenticated bundle.
+ if(!process.env.CI_EVIDENCE){ownershipResult(fixture({ownershipWitness:true}),'PASS');return;}
+ const dir=path.join(process.env.CI_EVIDENCE,'full-product');
+ const evidence=JSON.parse(await fs.readFile(path.join(dir,'adopt-request-evidence.json'),'utf8'));
+ const result=JSON.parse(await fs.readFile(path.join(dir,'network-accounting.json'),'utf8'));delete result.authFailures;
+ assert.equal(auditOuterJournalOwnership(evidence).status,'PASS');
+ assert.equal(auditAdoptRequestEvidence(evidence,[],result,'http://127.0.0.1:3697').status,'PASS');
+ if(name!=='current authenticated valid control'){
+  const {validateRuntimeTransitionReceipt}=await import('../scripts/runtime-transition-receipts.mjs');
+  const proof=evidence.transitions.find(t=>t.kind==='T2').runtime_proof;
+  assert.equal(validateRuntimeTransitionReceipt(proof.receipt,proof.source,proof.census).status,'PASS');
+ }
 });

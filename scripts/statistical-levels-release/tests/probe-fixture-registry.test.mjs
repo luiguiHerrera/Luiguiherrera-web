@@ -2,6 +2,9 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs/promises';
 import { spawnSync } from 'node:child_process';
+import { mkdirSync, mkdtempSync, readFileSync, writeFileSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { P, sha } from '../scripts/release-core.mjs';
 import { selectProbeTarget } from '../scripts/probe-core.mjs';
@@ -745,10 +748,31 @@ const priorG5HostedExpectedDelta = {
 const g5HostedExpectedDelta = {
   ".github/workflows/ci.yml": "M",
   ".github/workflows/statistical-levels-release.yml": "M",
+  "package-lock.json": "M",
+  "package.json": "M",
   "scripts/statistical-levels-release/SOURCE_SHA256SUMS": "M",
+  "scripts/statistical-levels-release/braces-patch-attestation.json": "A",
+  "scripts/statistical-levels-release/scripts/adopt-causal-bridge.mjs": "M",
+  "scripts/statistical-levels-release/scripts/adopt-request-evidence.mjs": "M",
+  "scripts/statistical-levels-release/scripts/browser-harness-base.mjs": "M",
+  "scripts/statistical-levels-release/scripts/verify-braces-patch-attestation.cjs": "A",
+  "scripts/statistical-levels-release/source-inputs.json": "M",
   "scripts/statistical-levels-release/source-manifest.json": "M",
+  "scripts/statistical-levels-release/tests/adopt-causal-bridge.test.mjs": "M",
+  "scripts/statistical-levels-release/tests/adopt-validation.test.mjs": "M",
+  "scripts/statistical-levels-release/tests/braces-patch-attestation.test.mjs": "A",
   "scripts/statistical-levels-release/tests/probe-fixture-registry.test.mjs": "M",
-  "scripts/statistical-levels-release/workflow-freeze.json": "M"
+  "scripts/statistical-levels-release/tests/probe-product-browser-harness.test.mjs": "M",
+  "scripts/statistical-levels-release/tests/probe-qa-http.test.mjs": "M",
+  "scripts/statistical-levels-release/tests/probe-redirect-integration.test.mjs": "M",
+  "scripts/statistical-levels-release/tests/product-qa-observability-isolation.test.mjs": "M",
+  "scripts/statistical-levels-release/vendor/braces/ghsa-vfj7-8cjw-p6xm-backport.patch": "A",
+  "scripts/statistical-levels-release/vendor/braces/ghsa-vfj7-8cjw-p6xm-upstream.patch": "A",
+  "scripts/statistical-levels-release/vendor/braces/npm-braces-3.0.3.tgz": "A",
+  "scripts/statistical-levels-release/workflow-freeze.json": "M",
+  "vendor/braces-3.0.3-sl-backport.tgz": "A",
+  "scripts/statistical-levels-release/tests/adopt-request-evidence.test.mjs": "M",
+  "scripts/statistical-levels-release/tests/input-manifest-roles.test.mjs": "M",
 };
 const runtimeGuardModel=String.raw`
 import json,sys,os,hashlib,subprocess,tempfile,contextlib,io
@@ -757,6 +781,38 @@ from pathlib import Path
 from unittest.mock import patch
 v=json.load(sys.stdin);case=v['case'];root=Path.cwd();head='f'*40
 output=subprocess.check_output;run=subprocess.run;read=Path.read_bytes;text=Path.read_text
+# Admission diagnostics are separate from verdict output and never alter dispatch.
+diag_path=v.get('_admission_diagnostic_path');diag_count=0;diag_size=0;command_sequence=0
+def diagnostic(phase,**fields):
+    global diag_count,diag_size
+    if not diag_path:return
+    try:
+        import time
+        row={'phase':phase,'timestamp_ms':time.time_ns()//1000000,'monotonic_ns':time.monotonic_ns(),**fields}
+        data=json.dumps(row,sort_keys=True,separators=(',',':'))+'\n'
+        if diag_count>=9999 or diag_size+len(data)>4193000:return
+        with open(diag_path,'a',encoding='ascii') as stream:stream.write(data)
+        diag_count+=1;diag_size+=len(data)
+    except Exception:pass
+def diagnostic_output(args,*options,**keywords):
+    global command_sequence
+    command_sequence+=1;seq=command_sequence
+    category='UNCLASSIFIED'
+    if args[:2]==['git','rev-parse']:category='COMMIT_TREE' if args[-1].endswith('^{tree}') else 'HEAD_IDENTITY'
+    elif args[:2]==['git','ls-files']:category='TRACKED_INVENTORY'
+    elif args[:2]==['git','ls-tree']:category='BASELINE_TREE'
+    elif args[:2]==['git','diff']:category='CANONICAL_RAW_DELTA' if '--raw' in args else 'CURRENT_WORKTREE_DELTA'
+    elif args[:2]==['git','show']:category='COMMIT_PARENT' if '--format=%P' in args else 'AUTHENTICATED_BASELINE_BLOB'
+    diagnostic('REAL_READ_ONLY_GIT_COMMAND_STARTED',sequence=seq,kind='GIT',argument_class=category)
+    try:result=original_output(args,*options,**keywords)
+    except subprocess.CalledProcessError as error:
+        diagnostic('REAL_READ_ONLY_GIT_COMMAND_COMPLETED',sequence=seq,kind='GIT',argument_class=category,exit_code=error.returncode);raise
+    diagnostic('REAL_READ_ONLY_GIT_COMMAND_COMPLETED',sequence=seq,kind='GIT',argument_class=category,exit_code=0)
+    return result
+if diag_path:
+    diagnostic('HARNESS_STARTED',pid=os.getpid())
+    diagnostic('REAL_READ_ONLY_GIT_PHASE_STARTED')
+    original_output=output;output=diagnostic_output
 # Real checkout, fixed implementation base and synthetic event HEAD are distinct.
 # Expected identities are independent literals, never copied from the guard.
 parent='65aec8374a896bb7323dcd76af7263fb437610fa'
@@ -816,7 +872,7 @@ def frozen_pre_bytes(name):
     assert sha256(content)==row['sha256'], 'FROZEN_PRE_BYTES_UNBOUND'
     return content
 def admit_checkout(identity,metadata,capture=None,phase='POST_REBUILD',byte_source='LIVE'):
-    assert byte_source in ['LIVE','FROZEN_PRE'], 'UNKNOWN_BYTE_SOURCE'
+    assert byte_source in ['LIVE','FROZEN_PRE','FROZEN_POST'], 'UNKNOWN_BYTE_SOURCE'
     assert byte_source!='FROZEN_PRE' or phase=='PRE_REBUILD', 'PHASE_BYTE_SOURCE_CONFLICT'
     if identity==repair_parent:return 'HISTORICAL_IMPLEMENTATION'
     local_hash=metadata.get('SL_LOCAL_QUALIFICATION_SUBJECT_SHA256')
@@ -833,12 +889,12 @@ def admit_checkout(identity,metadata,capture=None,phase='POST_REBUILD',byte_sour
         assert len(delta['tracked'])==len(required_scope) and {bytes.fromhex(x['path_hex']).decode() for x in delta['tracked']}==required_scope, 'LOCAL_SCOPE_INVALID'
         for x in delta['tracked']:assert x['status']=='M' and x['old_mode']==x['new_mode']=='100644' and not x['git_mode_changed'], 'LOCAL_MODE_INVALID'
         records=capture['subject']['records'];names=[bytes.fromhex(x['path_hex']).decode() for x in records]
-        live_names=output(['git','ls-files','-z']).decode().rstrip('\0').split('\0')
+        live_names=output(['git','ls-files','-z'] if byte_source=='LIVE' else ['git','ls-tree','-r','--name-only','-z',local_base]).decode().rstrip('\0').split('\0')
         assert len(names)==len(set(names)) and set(names)==set(live_names), 'LOCAL_INVENTORY_INVALID'
         baseline={p.decode():header.split()[2].decode() for header,p in (entry.split(b'\t',1) for entry in output(['git','ls-tree','-r','-z',local_base]).split(b'\0') if entry)}
         for x,name in zip(records,names):
             file=root/name;assert x['tracked'] and x['exists'] and x['worktree_file_type']=='REGULAR_FILE' and not file.is_symlink(), 'LOCAL_FILE_INVALID'
-            content=frozen_pre_bytes(name) if byte_source=='FROZEN_PRE' else read(file)
+            content=frozen_pre_bytes(name) if byte_source=='FROZEN_PRE' else output(['git','show',pre_publication_base+':'+name]) if byte_source=='FROZEN_POST' else read(file)
             assert format(file.stat().st_mode&0o7777,'06o')==x['worktree_mode'] and sha256(content)==x['sha256'], 'LOCAL_BYTES_CHANGED'
             if name in functional_pins:assert x['sha256']==functional_pins[name], 'LOCAL_FUNCTIONAL_DRIFT'
             elif name not in required_scope:assert hashlib.sha1(b'blob '+str(len(content)).encode()+b'\0'+content).hexdigest()==baseline[name], 'LOCAL_UNAUTHORIZED_DRIFT'
@@ -857,19 +913,42 @@ def admit_checkout(identity,metadata,capture=None,phase='POST_REBUILD',byte_sour
 bootstrap_metadata={k:os.environ.get(k) for k in ['SL_LOCAL_QUALIFICATION_SUBJECT_SHA256','GITHUB_SHA','CI_EVENT_SHA','GITHUB_EVENT_NAME','GITHUB_REF']}
 capture=json.loads((Path(os.environ['CI_EVIDENCE'])/'subject-before.json').read_text()) if bootstrap_metadata['SL_LOCAL_QUALIFICATION_SUBJECT_SHA256'] else None
 bootstrap_phase=os.environ.get('SL_G5_FIXTURE_PHASE','POST_REBUILD')
-if bootstrap_phase!='POST_REBUILD':
+if bootstrap_phase!='POST_REBUILD' and checkout!= '13c1771fea1d1bcb6bae41c6ba2fcdb76118f48c':
     authority=json.loads((Path(os.environ['CI_EVIDENCE'])/'phase-authority.json').read_text())
     assert authority=={'phase':'PRE_REBUILD','parent':local_base,'paths':sorted(pre_rebuild_scope),'source':'SL_RELEASE_CT_20261002_G5_PHASE_BOUND_FIXTURE_CONTINUE'}, 'PRE_REBUILD_PHASE_AUTHORITY_INVALID'
-bootstrap_mode=admit_checkout(checkout,bootstrap_metadata,capture,bootstrap_phase)
+pre_publication_base='e2f57918a495051c803fb60cd90bcd1c82e6d473'
+new_base='13c1771fea1d1bcb6bae41c6ba2fcdb76118f48c'
+new_scope=set(['.github/workflows/ci.yml', '.github/workflows/statistical-levels-release.yml', 'package-lock.json', 'package.json', 'scripts/statistical-levels-release/SOURCE_SHA256SUMS', 'scripts/statistical-levels-release/braces-patch-attestation.json', 'scripts/statistical-levels-release/scripts/adopt-causal-bridge.mjs', 'scripts/statistical-levels-release/scripts/adopt-request-evidence.mjs', 'scripts/statistical-levels-release/scripts/browser-harness-base.mjs', 'scripts/statistical-levels-release/scripts/verify-braces-patch-attestation.cjs', 'scripts/statistical-levels-release/source-inputs.json', 'scripts/statistical-levels-release/source-manifest.json', 'scripts/statistical-levels-release/tests/adopt-causal-bridge.test.mjs', 'scripts/statistical-levels-release/tests/adopt-request-evidence.test.mjs', 'scripts/statistical-levels-release/tests/adopt-validation.test.mjs', 'scripts/statistical-levels-release/tests/braces-patch-attestation.test.mjs', 'scripts/statistical-levels-release/tests/input-manifest-roles.test.mjs', 'scripts/statistical-levels-release/tests/probe-fixture-registry.test.mjs', 'scripts/statistical-levels-release/tests/probe-product-browser-harness.test.mjs', 'scripts/statistical-levels-release/tests/probe-qa-http.test.mjs', 'scripts/statistical-levels-release/tests/probe-redirect-integration.test.mjs', 'scripts/statistical-levels-release/tests/product-qa-observability-isolation.test.mjs', 'scripts/statistical-levels-release/vendor/braces/ghsa-vfj7-8cjw-p6xm-backport.patch', 'scripts/statistical-levels-release/vendor/braces/ghsa-vfj7-8cjw-p6xm-upstream.patch', 'scripts/statistical-levels-release/vendor/braces/npm-braces-3.0.3.tgz', 'scripts/statistical-levels-release/workflow-freeze.json', 'vendor/braces-3.0.3-sl-backport.tgz'])
+new_pre_scope=new_scope-{'scripts/statistical-levels-release/source-manifest.json','scripts/statistical-levels-release/SOURCE_SHA256SUMS','scripts/statistical-levels-release/workflow-freeze.json'}
+def admit_current_envelope():
+    if bootstrap_metadata['SL_LOCAL_QUALIFICATION_SUBJECT_SHA256']:
+        assert checkout==new_base and not any(bootstrap_metadata.get(k)for k in ['GITHUB_SHA','CI_EVENT_SHA','GITHUB_EVENT_NAME','GITHUB_REF']), 'LOCAL_HOSTED_ROLE_CONFLICT'
+        assert sha256(canonical(capture['subject']))==capture['subject_sha256']==bootstrap_metadata['SL_LOCAL_QUALIFICATION_SUBJECT_SHA256'], 'LOCAL_SUBJECT_UNBOUND'
+        assert capture['delta']['parent']==new_base and capture['collector_source_sha256']=='c7263bbecf183120b6aaa4037f5e202e13eefe354a4634268d1b8419348a0c64', 'LOCAL_COLLECTOR_UNBOUND'
+        required=new_pre_scope if bootstrap_phase=='PRE_REBUILD' else new_scope
+        assert bootstrap_phase in ['PRE_REBUILD','POST_REBUILD'], 'UNKNOWN_PHASE'
+        assert {bytes.fromhex(x).decode()for x in capture['delta']['changed_path_hex']}==required and not capture['delta']['unauthorized_path_hex'] and not capture['delta']['untracked_path_hex'], 'LOCAL_SCOPE_INVALID'
+        for row in capture['subject']['records']:
+            name=bytes.fromhex(row['path_hex']).decode();assert row['sha256']==sha256(read(root/name)), 'LOCAL_BYTES_CHANGED'
+        return 'LOCAL_GOVERNED_SUBJECT'
+    if checkout==new_base:
+        assert bootstrap_phase=='PRE_REBUILD' and not any(bootstrap_metadata.values()), 'LOCAL_SUBJECT_UNBOUND'
+        names=set(output(['git','diff','--name-only',new_base,'--']).decode().splitlines());assert names==new_pre_scope, 'LOCAL_SCOPE_INVALID'
+        return 'PRE_REBUILD_AUTHORIZED_ENVELOPE'
+    assert bootstrap_metadata.get('GITHUB_SHA')==bootstrap_metadata.get('CI_EVENT_SHA')==checkout and bootstrap_metadata.get('GITHUB_EVENT_NAME')=='push' and bootstrap_metadata.get('GITHUB_REF')=='refs/heads/vercel-deployment' and not bootstrap_metadata['SL_LOCAL_QUALIFICATION_SUBJECT_SHA256'], 'WRONG_IMPLEMENTATION_CHECKOUT'
+    assert output(['git','show','-s','--format=%P',checkout]).decode().strip()==new_base, 'WRONG_G5_CHECKOUT_PARENT'
+    assert set(output(['git','diff','--name-only',new_base,checkout,'--']).decode().splitlines())==new_scope, 'WRONG_G5_CHECKOUT_SCOPE'
+    return 'HOSTED_PUSH_EVENT'
+bootstrap_mode=admit_current_envelope()
 # Admission regressions model input metadata explicitly, never impersonate a
 # hosted run via process environment. Actual local subject is admitted first.
 def synthetic_local_capture(phase):
     if phase=='PRE_REBUILD':return json.loads(json.dumps(frozen_pre_capture))
-    names=output(['git','ls-files','-z']).decode().rstrip('\0').split('\0')
+    names=output(['git','ls-tree','-r','--name-only','-z',pre_publication_base]).decode().rstrip('\0').split('\0')
     records=[]
     for name in names:
         file=root/name
-        records.append({'path_hex':name.encode().hex(),'tracked':True,'exists':True,'worktree_file_type':'REGULAR_FILE','worktree_mode':format(file.stat().st_mode&0o7777,'06o'),'sha256':sha256(read(file))})
+        records.append({'path_hex':name.encode().hex(),'tracked':True,'exists':True,'worktree_file_type':'REGULAR_FILE','worktree_mode':format(file.stat().st_mode&0o7777,'06o'),'sha256':sha256(output(['git','show',pre_publication_base+':'+name]))})
     subject={'schema':'statistical-levels.local-qualification-subject.v2','records':records}
     tracked=[{'path_hex':name.encode().hex(),'status':'M','old_mode':'100644','new_mode':'100644','git_mode_changed':False} for name in sorted(phase_scope(phase))]
     delta={'schema':'statistical-levels.local-qualification-delta.v2','parent':local_base,'tracked':tracked,'untracked_path_hex':[],'changed_path_hex':[x['path_hex']for x in tracked],'unauthorized_path_hex':[]}
@@ -883,7 +962,7 @@ if v.get('phase_case'):
     elif mutation=='two_only':
         subject['delta']['changed_path_hex']=[x for x in subject['delta']['changed_path_hex'] if bytes.fromhex(x).decode() in pre_rebuild_scope];subject['delta']['tracked']=[x for x in subject['delta']['tracked']if bytes.fromhex(x['path_hex']).decode()in pre_rebuild_scope]
     subject['delta_sha256']=sha256(canonical(subject['delta']))
-    byte_source='LIVE' if mutation=='live_contamination' or phase=='POST_REBUILD' else 'FROZEN_PRE'
+    byte_source='LIVE' if mutation=='live_contamination' else 'FROZEN_POST' if phase=='POST_REBUILD' else 'FROZEN_PRE'
     try:print(json.dumps({'accepted':True,'mode':admit_checkout(local_base,metadata,subject,phase,byte_source)}))
     except AssertionError as error:print(json.dumps({'accepted':False,'error':str(error)}))
     raise SystemExit(0)
@@ -912,11 +991,13 @@ if v.get('admission_case'):
             name=next(iter(functional_pins)) if test_case=='functional_drift' else 'README.md'
             next(x for x in subject['subject']['records'] if bytes.fromhex(x['path_hex']).decode()==name)['sha256']='0'*64
         subject['delta_sha256']=sha256(canonical(subject['delta']));subject['subject_sha256']=sha256(canonical(subject['subject']));metadata['SL_LOCAL_QUALIFICATION_SUBJECT_SHA256']=subject['subject_sha256']
-    try:print(json.dumps({'accepted':True,'mode':admit_checkout(identity,metadata,subject,bootstrap_phase,'FROZEN_PRE' if bootstrap_phase=='PRE_REBUILD' else 'LIVE')}))
+    diagnostic('ADMISSION_STARTED')
+    try:print(json.dumps({'accepted':True,'mode':admit_checkout(identity,metadata,subject,bootstrap_phase,'FROZEN_PRE' if bootstrap_phase=='PRE_REBUILD' else 'FROZEN_POST')}))
     except AssertionError as error:print(json.dumps({'accepted':False,'error':str(error)}))
+    diagnostic('EXPECTED_VERDICT_REACHED')
     raise SystemExit(0)
 live=output(['git','ls-files','-z','scripts/statistical-levels-release/']).decode().rstrip('\0').split('\0')
-assert len(live)-3==99, 'LIVE_BUNDLE_COUNT'
+assert len(live)-3==105, 'LIVE_BUNDLE_COUNT'
 stale=output(['git','show','-s','--format=%P',parent]).decode().strip()
 assert stale=='94e8ef63bea09b1043bad217946736503b147731'
 assert output(['git','show','-s','--format=%P',stale]).decode().strip()=='578498f33b5bf7c70f5c43894d05f67aea409a00', 'WRONG_IMPLEMENTATION_PREDECESSOR'
@@ -929,17 +1010,36 @@ expected=v['g5Delta'];seen=[]
 def git(args,**kwargs):
     if args==['git','rev-parse','HEAD']: return (head+'\n').encode()
     if args==['git','show','-s','--format=%P','HEAD']:
-        parents={'wrong_parent':['a'*40],'stale_parent':[stale],
+        parents={'wrong_parent':['a'*40],'old_parent_as_current':[pre_publication_base],'unauthenticated_intermediate':['b'*40],'stale_parent':[stale],
                  'arbitrary_descendant':['b'*40],
                  'unrelated_ancestor':['c60b17c6ddc5a08fcd402328f69e73f6e1e41b5f'],
-                 'multiple_parents':[local_base,stale],
-                 'merge_parent_substitution':[stale,local_base]}.get(case,[local_base])
+                 'multiple_parents':[new_base,stale],
+                 'merge_parent_substitution':[stale,new_base]}.get(case,[new_base])
         return (' '.join(parents)+'\n').encode()
+    if args==['git','show','-s','--format=%P',new_base]:
+        return ('a'*40+'\n').encode() if case=='publication_wrong_predecessor' else output(args,**kwargs)
+    if args==['git','show','-s','--format=%P',pre_publication_base] and case=='wrong_historical_anchor':return ('a'*40+'\n').encode()
+    if args==['git','rev-parse',pre_publication_base+'^{tree}']:
+        return ('0'*40+'\n').encode() if case=='historical_tree_wrong' else output(args,**kwargs)
+    if args==['git','rev-parse',new_base+'^{tree}']:
+        return ('0'*40+'\n').encode() if case=='publication_wrong_tree' else output(args,**kwargs)
+    if args==['git','diff','--raw','--no-abbrev','--no-renames','-z',pre_publication_base,new_base,'--']:
+        raw=output(args,**kwargs).rstrip(b'\0').split(b'\0')
+        if case=='publication_missing_path':raw=raw[:-2]
+        elif case=='publication_extra_path':raw+=raw[:1]+[b'unauthorized.txt']
+        elif case=='publication_wrong_delta':
+            raw=[]
+            for name,status in expected.items():
+                raw.extend([(':'+('000000' if status=='A' else '100644')+' 100644 '+'a'*40+' '+'b'*40+' '+status).encode(),name.encode()])
+        elif case=='publication_changed_blob':
+            fields=raw[0].split();fields[3]=b'0'*40;raw[0]=b' '.join(fields)
+        return b'\0'.join(raw)+b'\0'
     if args[:4]==['git','diff','--raw','--no-abbrev']:
-        if args[-3:] in [[parent,repair_parent,'--'],[repair_parent,prior_base,'--'],[prior_base,snapshot_base,'--'],[snapshot_base,local_base,'--']]:
+        if args[-3:] in [[parent,repair_parent,'--'],[repair_parent,prior_base,'--'],[prior_base,snapshot_base,'--'],[snapshot_base,local_base,'--'],[local_base,pre_publication_base,'--']]:
             return output(args,**kwargs)
+        assert args==['git','diff','--raw','--no-abbrev','--no-renames','-z',new_base,'HEAD','--'], 'UNEXPECTED_RAW_DIFF_TRANSITION'
         names=list(expected)
-        if case=='extra_path':names.append('unauthorized.txt')
+        if case in ['extra_path','candidate_wrong_27_scope']:names.append('unauthorized.txt')
         if case=='missing_path':names.pop()
         if case=='duplicate_path':names.append(names[0])
         rows=[]
@@ -953,11 +1053,14 @@ def git(args,**kwargs):
         return ('\0'.join(sorted(names))+'\0').encode()
     return output(args,**kwargs)
 def command(args,**kwargs):
+    # Saved check_output uses subprocess.run internally; these reads stay real.
+    if args in [['git','rev-parse',pre_publication_base+'^{tree}'],['git','rev-parse',new_base+'^{tree}'],['git','diff','--raw','--no-abbrev','--no-renames','-z',pre_publication_base,new_base,'--']]:return run(args,**kwargs)
     if args in [['git','rev-parse',repair_parent+'^{tree}'],['git','rev-parse',prior_base+'^{tree}'],['git','rev-parse',local_base+'^{tree}'],['git','rev-parse',snapshot_base+'^{tree}']]:return run(args,**kwargs)
     if args==['git','diff','--raw','--no-abbrev','--no-renames','-z',parent,repair_parent,'--']:return run(args,**kwargs)
     if args==['git','diff','--raw','--no-abbrev','--no-renames','-z','acfd5efed5984a7981e64a6953960c161fa11dc7','cb63f82d7e2e7cd9f6283f26d8bdb120da8c174c','--']:return run(args,**kwargs)
     if args==['git','diff','--raw','--no-abbrev','--no-renames','-z','cb63f82d7e2e7cd9f6283f26d8bdb120da8c174c','9b860095e7f18c26393af1e028244c1bae9c1598','--']:return run(args,**kwargs)
     if args==['git','diff','--raw','--no-abbrev','--no-renames','-z','9b860095e7f18c26393af1e028244c1bae9c1598','26c13fcf4ddb279d3f5454cfbb71b2073820b430','--']:return run(args,**kwargs)
+    if args==['git','diff','--raw','--no-abbrev','--no-renames','-z',local_base,pre_publication_base,'--']:return run(args,**kwargs)
     if args[:2] in [['git','show'],['git','ls-files']]:return run(args,**kwargs)
     if args[:3]==['git','diff','--exit-code']:
         if case=='dirty':raise AssertionError('DIRTY_CANDIDATE')
@@ -965,7 +1068,7 @@ def command(args,**kwargs):
     if args[:3]==['git','merge-base','--is-ancestor']:
         seen.append(args[3]);assert args[4]==head
         if case=='missing_ancestry':raise AssertionError('ANCESTRY_MISSING')
-        return run(args[:4]+[local_base],**kwargs)
+        return run(args[:4]+[new_base],**kwargs)
     raise AssertionError('UNEXPECTED_MUTATING_COMMAND')
 def bytes_(p):
     b=read(p);name=str(p.relative_to(root)) if p.is_relative_to(root) else ''
@@ -992,9 +1095,18 @@ with tempfile.TemporaryDirectory(prefix='sl-runtime-ci-model-') as out:
     if case=='local_impersonation':env['SL_LOCAL_QUALIFICATION_SUBJECT_SHA256']='a'*64
     try:
         with patch.dict(os.environ,env),patch('subprocess.check_output',git),patch('subprocess.run',command),patch.object(Path,'read_bytes',bytes_),patch.object(Path,'read_text',text_),contextlib.redirect_stdout(io.StringIO()):exec(compile(v['guard'],'current-runtime-ci','exec'),{})
-        subject=json.loads((Path(out)/'subject.json').read_text());assert subject['lineage']['runtime_parent_verified'] and subject['lineage']['implementation_parent_sha']==parent and subject['lineage']['implementation_parent_predecessor_sha']==stale and subject['lineage']['runtime_repair_parent_sha']==repair_parent and subject['lineage']['runtime_repair_parent_verified'] and subject['lineage']['g5_parent_sha']==local_base and subject['lineage']['g5_parent_verified'] and len(seen)==13
-        assert seen==[local_base,snapshot_base,prior_base,repair_parent,parent,stale,'578498f33b5bf7c70f5c43894d05f67aea409a00','d290691156b933ba62e5e8f6489dc870568126e0','f7e3fe8e3e3cd8bdea753873c31d78f146cdc923','c8454dc06bae4bfc2d6fbc90cf9ffa4f94bb63c1','e7872b9c0e5bb0be3e090fbe2c5b930d68dcbece','0c8fce262fce44650729883862ec948778ebea45','c60b17c6ddc5a08fcd402328f69e73f6e1e41b5f']
-        print(json.dumps({'accepted':True}))
+        subject=json.loads((Path(out)/'subject.json').read_text());assert subject['lineage']['runtime_parent_verified'] and subject['lineage']['implementation_parent_sha']==parent and subject['lineage']['implementation_parent_predecessor_sha']==stale and subject['lineage']['runtime_repair_parent_sha']==repair_parent and subject['lineage']['runtime_repair_parent_verified'] and subject['lineage']['g5_parent_sha']==new_base and subject['lineage']['g5_parent_verified'] and len(seen)==15
+        assert seen==[new_base,pre_publication_base,local_base,snapshot_base,prior_base,repair_parent,parent,stale,'578498f33b5bf7c70f5c43894d05f67aea409a00','d290691156b933ba62e5e8f6489dc870568126e0','f7e3fe8e3e3cd8bdea753873c31d78f146cdc923','c8454dc06bae4bfc2d6fbc90cf9ffa4f94bb63c1','e7872b9c0e5bb0be3e090fbe2c5b930d68dcbece','0c8fce262fce44650729883862ec948778ebea45','c60b17c6ddc5a08fcd402328f69e73f6e1e41b5f']
+        if v.get('field_roundtrip'):subject=json.loads(json.dumps(subject,sort_keys=True))
+        mutation=v.get('publication_field_mutation')
+        if mutation=='serialized_delete':del subject['lineage']['pre_publication_parent_sha']
+        elif mutation=='serialized_wrong':subject['lineage']['pre_publication_parent_sha']='0'*40
+        elif mutation=='serialized_collision':subject['lineage']['pre_publication_parent_sha']=new_base
+        assert 'pre_publication_parent_sha' in subject['lineage'], 'MISSING_PRE_PUBLICATION_PARENT_SHA'
+        assert subject['lineage']['pre_publication_parent_sha']!=new_base, 'PRE_PUBLICATION_CURRENT_PARENT_COLLISION'
+        assert subject['lineage']['pre_publication_parent_sha']==pre_publication_base, 'WRONG_PRE_PUBLICATION_PARENT_SHA'
+        assert subject['lineage']['pre_publication_parent_sha']==pre_publication_base and subject['lineage']['publication_sha']==new_base and subject['lineage']['publication_verified']
+        print(json.dumps({'accepted':True,'historical_parent':pre_publication_base,'current_parent':new_base}))
     except (AssertionError,subprocess.CalledProcessError) as e:print(json.dumps({'accepted':False,'error':str(e)}))
 `;
 for(const name of ['valid','wrong_parent','stale_parent','arbitrary_descendant','unrelated_ancestor','multiple_parents','merge_parent_substitution','extra_path','missing_path','duplicate_path','wrong_mode','wrong_status','dirty','missing_ancestry','probe_mutation','roles_swapped','missing_material','stale_material','duplicate_key','wrong_registration','unbound_product','probe_pin','release_probe_role','probe_release_role','wrong_sha','mutable_ref'])test('governed runtime successor: '+name,()=>{
@@ -1005,12 +1117,28 @@ for(const name of ['valid','wrong_parent','stale_parent','arbitrary_descendant',
 
 for(const [phase,mutation] of [['PRE_REBUILD','valid'],['PRE_REBUILD','missing'],['PRE_REBUILD','extra'],['PRE_REBUILD','live_contamination'],['POST_REBUILD','valid'],['POST_REBUILD','missing'],['POST_REBUILD','extra'],['POST_REBUILD','two_only']])test('G5 fixture binding: phase '+phase+' '+mutation,()=>{
  const result=spawnSync('python3',['-c','import json,sys,io;payload=json.load(sys.stdin);source=payload.pop("_guard_model");sys.stdin=io.StringIO(json.dumps(payload));exec(compile(source,"frozen-runtime-fixture","exec"))'],{cwd:repositoryRoot,encoding:'utf8',timeout:60000,input:JSON.stringify({case:'valid',phase_case:[phase,mutation],delta:runtimeRepairExpectedDelta,_guard_model:runtimeGuardModel,g5Delta:g5HostedExpectedDelta,priorG5Delta:priorG5HostedExpectedDelta,implementationDelta:runtimeExpectedDelta,guard:ciPython[0]})});
- assert.equal(result.status,0,result.stderr);const value=JSON.parse(result.stdout);assert.equal(value.accepted,mutation==='valid',JSON.stringify(value));if(mutation!=='valid')assert.equal(value.error,mutation==='live_contamination'?'LOCAL_BYTES_CHANGED':'LOCAL_SCOPE_INVALID');
+ assert.equal(result.status,0,result.stderr);const value=JSON.parse(result.stdout);assert.equal(value.accepted,mutation==='valid',JSON.stringify(value));if(mutation!=='valid')assert.equal(value.error,mutation==='live_contamination'?'LOCAL_INVENTORY_INVALID':'LOCAL_SCOPE_INVALID');
 });
+
+function admissionDiagnosticLaunch(payload, options) {
+ const directory=process.env.SL_ADMISSION_DIAGNOSTIC_DIR || mkdtempSync(join(tmpdir(),'sl-admission-diagnostic-'));
+ mkdirSync(directory,{recursive:true});
+ const label=payload.admission_case+'-'+payload.synthetic_context;
+ const sidecar=join(directory,label+'.jsonl');
+ writeFileSync(sidecar,'');
+ const start=Date.now();
+ const result=spawnSync('python3',['-c','import json,sys,io;payload=json.load(sys.stdin);source=payload.pop("_guard_model");sys.stdin=io.StringIO(json.dumps(payload));exec(compile(source,"frozen-runtime-fixture","exec"))'],{...options,input:JSON.stringify({...payload,_admission_diagnostic_path:sidecar})});
+ let records=[];let diagnosticReadable=true;
+ try {const raw=readFileSync(sidecar);if(raw.length>4194304)throw Error('limit');records=raw.toString('ascii').trim().split('\n').filter(Boolean).map(line=>JSON.parse(line));} catch {diagnosticReadable=false;}
+ const summary={case_name:payload.admission_case,context:payload.synthetic_context,process_start_timestamp:start,process_end_timestamp:Date.now(),pid:result.pid||null,status:result.status,signal:result.signal||null,error_code:result.error?.code||null,timeout_occurred:result.error?.code==='ETIMEDOUT',diagnostic_readable:diagnosticReadable,record_count:records.length,descendant_process_state:'UNAVAILABLE_WITH_SYNCHRONOUS_LAUNCHER',verdict:null};
+ try {const verdict=JSON.parse(result.stdout);summary.verdict={accepted:verdict.accepted,mode:verdict.mode||null,error:verdict.error||null};}catch{}
+ try {writeFileSync(join(directory,label+'-summary.json'),JSON.stringify(summary,null,2)+'\n');}catch{}
+ return result;
+}
 
 for(const name of ['local','historical','hosted','prior_hosted','wrong_local_base','missing_local_binding','wrong_subject_hash','mixed_hosted_local','wrong_collector','extra_path','missing_path','wrong_mode','functional_drift','changed_bytes'])test('G5 fixture binding: checkout admission '+name,()=>{
  for(const processMode of ['clean_local','simulated_hosted']) {
- const result=spawnSync('python3',['-c','import json,sys,io;payload=json.load(sys.stdin);source=payload.pop("_guard_model");sys.stdin=io.StringIO(json.dumps(payload));exec(compile(source,"frozen-runtime-fixture","exec"))'],{cwd:repositoryRoot,env:process.env,encoding:'utf8',timeout:60000,input:JSON.stringify({case:'valid',admission_case:name,synthetic_context:processMode,delta:runtimeRepairExpectedDelta,_guard_model:runtimeGuardModel,g5Delta:g5HostedExpectedDelta,priorG5Delta:priorG5HostedExpectedDelta,implementationDelta:runtimeExpectedDelta,guard:ciPython[0]})});
+  const result=admissionDiagnosticLaunch({case:'valid',admission_case:name,synthetic_context:processMode,delta:runtimeRepairExpectedDelta,_guard_model:runtimeGuardModel,g5Delta:g5HostedExpectedDelta,priorG5Delta:priorG5HostedExpectedDelta,implementationDelta:runtimeExpectedDelta,guard:ciPython[0]},{cwd:repositoryRoot,env:process.env,encoding:'utf8',timeout:60000});
  assert.equal(result.status,0,result.stderr);const value=JSON.parse(result.stdout);
  assert.equal(value.accepted,['local','historical','hosted','prior_hosted'].includes(name),JSON.stringify(value));
  if(value.accepted)assert.equal(value.mode,{local:'LOCAL_GOVERNED_SUBJECT',historical:'HISTORICAL_IMPLEMENTATION',hosted:'HOSTED_PUSH_EVENT',prior_hosted:'HOSTED_PUSH_EVENT'}[name]);
@@ -1089,4 +1217,134 @@ print(json.dumps({'PASS':True,'cases':29}))
 for(const name of ['valid','wrong_parent','arbitrary_descendant','extra_path','missing_path','duplicate_path','wrong_sha','missing_event','wrong_event','local_impersonation'])test('G5 hosted lineage: '+name,()=>{
  const result=spawnSync('python3',['-c','import json,sys,io;payload=json.load(sys.stdin);source=payload.pop("_guard_model");sys.stdin=io.StringIO(json.dumps(payload));exec(compile(source,"frozen-runtime-fixture","exec"))'],{cwd:repositoryRoot,encoding:'utf8',timeout:60000,input:JSON.stringify({case:name,delta:runtimeRepairExpectedDelta,_guard_model:runtimeGuardModel,g5Delta:g5HostedExpectedDelta,priorG5Delta:priorG5HostedExpectedDelta,implementationDelta:runtimeExpectedDelta,guard:ciPython[0]})});
  assert.equal(result.status,0,result.stderr);const value=JSON.parse(result.stdout);assert.equal(value.accepted,name==='valid',JSON.stringify(value));
+});
+
+// Exact governed remote publication lineage: historical and current roles stay separate.
+const publicationExpectedErrors={"candidate_wrong_27_scope": "SUCCESSOR_CONTENT_SCOPE", "old_parent_as_current": "WRONG_RUNTIME_IMPLEMENTATION_PARENT", "publication_changed_blob": "WRONG_REMOTE_PUBLICATION_BLOB_OR_MODE", "publication_extra_path": "WRONG_REMOTE_PUBLICATION_SCOPE", "publication_missing_path": "WRONG_REMOTE_PUBLICATION_SCOPE", "publication_wrong_delta": "WRONG_REMOTE_PUBLICATION_SCOPE", "publication_wrong_predecessor": "WRONG_REMOTE_PUBLICATION_PARENT", "publication_wrong_tree": "WRONG_REMOTE_PUBLICATION_TREE", "unauthenticated_intermediate": "WRONG_RUNTIME_IMPLEMENTATION_PARENT", "wrong_historical_anchor": "WRONG_CURRENT_G5_PARENT"};
+for(const [name,accepted] of [["historical_anchor_historical_only", true], ["old_parent_as_current", false], ["current_remote_parent", true], ["publication_wrong_predecessor", false], ["publication_wrong_tree", false], ["publication_wrong_delta", false], ["publication_missing_path", false], ["publication_extra_path", false], ["publication_changed_blob", false], ["unauthenticated_intermediate", false], ["candidate_wrong_27_scope", false], ["exact_publication_and_candidate", true], ["historical_old_tuple_unchanged", true], ["wrong_historical_anchor", false]])test('G5 remote publication lineage: '+name,()=>{
+ const result=spawnSync('python3',['-c','import json,sys,io;payload=json.load(sys.stdin);source=payload.pop("_guard_model");sys.stdin=io.StringIO(json.dumps(payload));exec(compile(source,"frozen-runtime-fixture","exec"))'],{cwd:repositoryRoot,encoding:'utf8',timeout:60000,input:JSON.stringify({case:name,delta:runtimeRepairExpectedDelta,_guard_model:runtimeGuardModel,g5Delta:g5HostedExpectedDelta,priorG5Delta:priorG5HostedExpectedDelta,implementationDelta:runtimeExpectedDelta,guard:ciPython[0]})});
+ assert.equal(result.status,0,result.stderr);const value=JSON.parse(result.stdout);assert.equal(value.accepted,accepted,JSON.stringify(value));
+ if(!accepted)assert.equal(value.error,publicationExpectedErrors[name],JSON.stringify(value));
+ if(accepted){assert.equal(value.historical_parent,'e2f57918a495051c803fb60cd90bcd1c82e6d473');assert.equal(value.current_parent,'13c1771fea1d1bcb6bae41c6ba2fcdb76118f48c');assert.notEqual(value.historical_parent,value.current_parent);}
+
+ if(name==='historical_old_tuple_unchanged'){
+ const historicalTreeResult=spawnSync('python3',['-c','import json,sys,io;payload=json.load(sys.stdin);source=payload.pop("_guard_model");sys.stdin=io.StringIO(json.dumps(payload));exec(compile(source,"frozen-runtime-fixture","exec"))'],{cwd:repositoryRoot,encoding:'utf8',timeout:60000,input:JSON.stringify({case:'historical_tree_wrong',delta:runtimeRepairExpectedDelta,_guard_model:runtimeGuardModel,g5Delta:g5HostedExpectedDelta,priorG5Delta:priorG5HostedExpectedDelta,implementationDelta:runtimeExpectedDelta,guard:ciPython[0]})});
+  assert.equal(historicalTreeResult.status,0,historicalTreeResult.stderr);const historicalTreeValue=JSON.parse(historicalTreeResult.stdout);assert.equal(historicalTreeValue.accepted,false,JSON.stringify(historicalTreeValue));assert.equal(historicalTreeValue.error,'WRONG_CURRENT_G5_TREE',JSON.stringify(historicalTreeValue));
+ }
+});
+
+// Historical schemas and current publication fields have separate assertion contracts.
+const releaseLineageFieldCases=[
+  {
+    "CASE_NUMBER": 1,
+    "TEST_NAME": "G5 release lineage field: valid_publication_field_roundtrip",
+    "EXPECTED_VERDICT": "PASS",
+    "EXPECTED_REASON": null,
+    "ROUTE": "valid",
+    "CONTRACT": "Execute actual current guard, JSON-roundtrip its subject.json, verify pre_publication_parent_sha=e2f579..., publication_sha=g5_parent_sha=13c1771..., publication_verified=true.",
+    "STATUS": "DESIGNED_NOT_EXECUTED"
+  },
+  {
+    "CASE_NUMBER": 2,
+    "TEST_NAME": "G5 release lineage field: missing_pre_publication_parent",
+    "EXPECTED_VERDICT": "FAIL",
+    "EXPECTED_REASON": "MISSING_PRE_PUBLICATION_PARENT_SHA",
+    "ROUTE": "serialized_delete",
+    "CONTRACT": "After current guard serialization delete only lineage.pre_publication_parent_sha before the current-only assertion helper.",
+    "STATUS": "DESIGNED_NOT_EXECUTED"
+  },
+  {
+    "CASE_NUMBER": 3,
+    "TEST_NAME": "G5 release lineage field: wrong_pre_publication_parent",
+    "EXPECTED_VERDICT": "FAIL",
+    "EXPECTED_REASON": "WRONG_PRE_PUBLICATION_PARENT_SHA",
+    "ROUTE": "serialized_wrong",
+    "CONTRACT": "After serialization replace only that field with 40 zeros; preserve current parent and all remaining fields.",
+    "STATUS": "DESIGNED_NOT_EXECUTED"
+  },
+  {
+    "CASE_NUMBER": 4,
+    "TEST_NAME": "G5 release lineage field: pre_publication_parent_equals_current",
+    "EXPECTED_VERDICT": "FAIL",
+    "EXPECTED_REASON": "PRE_PUBLICATION_CURRENT_PARENT_COLLISION",
+    "ROUTE": "serialized_collision",
+    "CONTRACT": "After serialization substitute current publication SHA into pre_publication_parent_sha. Check collision before general wrong-value rejection.",
+    "STATUS": "DESIGNED_NOT_EXECUTED"
+  },
+  {
+    "CASE_NUMBER": 5,
+    "TEST_NAME": "G5 release lineage field: correct_historical_wrong_current",
+    "EXPECTED_VERDICT": "FAIL",
+    "EXPECTED_REASON": "WRONG_RUNTIME_IMPLEMENTATION_PARENT",
+    "ROUTE": "wrong_parent",
+    "CONTRACT": "Use existing runtimeGuardModel wrong_parent Git-parent route with exact historical binding unchanged.",
+    "STATUS": "DESIGNED_NOT_EXECUTED"
+  },
+  {
+    "CASE_NUMBER": 6,
+    "TEST_NAME": "G5 release lineage field: correct_parents_wrong_publication_tree",
+    "EXPECTED_VERDICT": "FAIL",
+    "EXPECTED_REASON": "WRONG_REMOTE_PUBLICATION_TREE",
+    "ROUTE": "publication_wrong_tree",
+    "CONTRACT": "Use existing publication_wrong_tree check_output route; do not mutate candidate tree.",
+    "STATUS": "DESIGNED_NOT_EXECUTED"
+  },
+  {
+    "CASE_NUMBER": 7,
+    "TEST_NAME": "G5 release lineage field: correct_parents_wrong_publication_scope",
+    "EXPECTED_VERDICT": "FAIL",
+    "EXPECTED_REASON": "WRONG_REMOTE_PUBLICATION_SCOPE",
+    "ROUTE": "publication_wrong_delta",
+    "CONTRACT": "Use existing publication_wrong_delta publication raw-diff route, substituting candidate27 for publication82.",
+    "STATUS": "DESIGNED_NOT_EXECUTED"
+  },
+  {
+    "CASE_NUMBER": 8,
+    "TEST_NAME": "G5 release lineage field: correct_parents_wrong_candidate_scope",
+    "EXPECTED_VERDICT": "FAIL",
+    "EXPECTED_REASON": "SUCCESSOR_CONTENT_SCOPE",
+    "ROUTE": "candidate_wrong_27_scope",
+    "CONTRACT": "Use existing candidate_wrong_27_scope candidate raw-diff route; publication82 stays exact.",
+    "STATUS": "DESIGNED_NOT_EXECUTED"
+  },
+  {
+    "CASE_NUMBER": 9,
+    "TEST_NAME": "G5 release lineage field: historical_record_without_publication_field",
+    "EXPECTED_VERDICT": "PASS",
+    "EXPECTED_REASON": null,
+    "ROUTE": "historical_valid",
+    "CONTRACT": "Execute immutable registration guard through restored successorModel; test-local assertion verifies no publication fields and retains all historical checks. Do not add current fields to historical record.",
+    "STATUS": "DESIGNED_NOT_EXECUTED"
+  },
+  {
+    "CASE_NUMBER": 10,
+    "TEST_NAME": "G5 release lineage field: exact_current_governed_successor",
+    "EXPECTED_VERDICT": "PASS",
+    "EXPECTED_REASON": null,
+    "ROUTE": "valid",
+    "CONTRACT": "Execute actual current guard through runtimeGuardModel valid route; exact publication82 plus candidate27, distinct parent/tree roles and ancestry checks all remain required.",
+    "STATUS": "DESIGNED_NOT_EXECUTED"
+  }
+];
+for(const row of releaseLineageFieldCases)test(row.TEST_NAME,()=>{
+ let source=runtimeGuardModel;
+ let payload={case:row.ROUTE,delta:runtimeRepairExpectedDelta,g5Delta:g5HostedExpectedDelta,priorG5Delta:priorG5HostedExpectedDelta,implementationDelta:runtimeExpectedDelta,guard:ciPython[0]};
+ if(row.ROUTE==='historical_valid'){
+  const historicalSuccess="        print(json.dumps({'accepted':True}))";
+  assert.equal(successorModel.split(historicalSuccess).length,2);
+  source=successorModel.replace(historicalSuccess,"        assert not ({'pre_publication_parent_sha','publication_sha','publication_tree','publication_verified','g5_parent_sha'} & set(subject['lineage'])), 'HISTORICAL_SCHEMA_CURRENT_FIELD_CONTAMINATION'\n"+historicalSuccess);
+  payload={case:'valid',guard:historicalPython[0],integrity:historicalPython[1],summary:historicalPython[2]};
+ }else if(['serialized_delete','serialized_wrong','serialized_collision'].includes(row.ROUTE)){
+  payload.case='valid';payload.publication_field_mutation=row.ROUTE;
+ }
+ if(row.CASE_NUMBER===1)payload.field_roundtrip=true;
+ const result=spawnSync('python3',['-c','import json,sys,io;payload=json.load(sys.stdin);source=payload.pop("_guard_model");sys.stdin=io.StringIO(json.dumps(payload));exec(compile(source,"release-lineage-field-regression","exec"))'],{cwd:repositoryRoot,encoding:'utf8',timeout:60000,input:JSON.stringify({...payload,_guard_model:source})});
+ assert.equal(result.status,0,result.stderr);
+ const value=JSON.parse(result.stdout);assert.equal(value.accepted,row.EXPECTED_VERDICT==='PASS',JSON.stringify(value));
+ if(row.EXPECTED_REASON)assert.equal(value.error,row.EXPECTED_REASON,JSON.stringify(value));
+ if(value.accepted&&row.ROUTE!=='historical_valid'){
+  assert.equal(value.historical_parent,'e2f57918a495051c803fb60cd90bcd1c82e6d473');
+  assert.equal(value.current_parent,'13c1771fea1d1bcb6bae41c6ba2fcdb76118f48c');
+  assert.notEqual(value.historical_parent,value.current_parent);
+ }
 });

@@ -397,17 +397,17 @@ function assertHarnessPreserved(source) {
   [
     "    onNative('Runtime.consoleAPICalled'",
     "    const causalBridge =",
-    "8a5a2e4ff98d50b7827b809899a5c8edffeb5aacad7d7b416900a79ee7a66b6e"
+    "2e75e61dcf7a64d6fa0c921760c44bb14cc7951b224b6ac0243f64255b05f60e"
   ],
   [
     "    const closePage=async()=>{",
     "    closePages.set(",
-    "187e24c80b708d932a4c8a3980ba79215623858171d97fbb7ef9114cc71f4850"
+    "c81d22684550234ac5204107b81f6f27ee26a226a6618fe027ef4034724c1a35"
   ],
   [
     "    finish: async finalProductPassed => {",
     "\n    } };",
-    "36bbab483fcbe1754137abc59c8f067b166ec25d4c2b6840d0f2dd300981fe2a"
+    "a803b499842cdfbef72f0d5c7981b7cc5bc9e472cff5b804db992aead3771808"
   ],
   [
     "      events.push({ ...requests.get(e.requestId), kind: 'request_failure'",

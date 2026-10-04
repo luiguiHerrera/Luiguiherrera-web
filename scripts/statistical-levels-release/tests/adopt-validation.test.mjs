@@ -54,7 +54,7 @@ for(const terminal of ['FINISHED','FAILED'])test('G5 evidence repair: native '+t
  const binding=c.request(page,{requestId:'pending-prefetch',frameId:'f',loaderId:'l',documentURL:origin+'/',type:'Prefetch',request:{url:origin+'/prefetch',method:'GET',headers:{RSC:'1','Next-Router-Prefetch':'1'}},initiator:{type:'script',stack:{callFrames:[{scriptId:'background',url:origin+'/app.js'}]}}});
  assert.equal(c.pendingRequests(page).length,1);
  const timer=setTimeout(()=>{if(terminal==='FINISHED'){c.response(page,{requestId:'pending-prefetch',response:{status:200}});c.finished(page,{requestId:'pending-prefetch'});}else c.failure(page,{requestId:'pending-prefetch',canceled:true,errorText:'net::ERR_ABORTED'},0);},10);
- try {assert.deepEqual(await drainNativeRequestLifecycle(()=>c.pendingRequests(page),{timeoutMs:500,pollMs:5}),{terminal_coverage_complete:true,pending_request_ids:[]});}finally{clearTimeout(timer);}
+ try {assert.deepEqual(((({terminal_coverage_complete,pending_request_ids})=>({terminal_coverage_complete,pending_request_ids}))(await drainNativeRequestLifecycle(()=>c.pendingRequests(page),{timeoutMs:500,pollMs:5}))),{terminal_coverage_complete:true,pending_request_ids:[]});}finally{clearTimeout(timer);}
  close(c);const raw=terminal==='FAILED'?[{kind:'request_failure',request_evidence:binding,url:origin+'/prefetch',type:'Prefetch',rsc:true,prefetch:true,canceled:true,error_code:'net::ERR_ABORTED'}]:[];
  const receipts=c.receipts(raw),result=account(raw,false,origin,c.admittedReceipts(receipts)),e=c.evidence(raw,result,receipts);
  assert.equal(e.requests[0].terminal_state,terminal);assert.ok(e.journal.some(x=>x.kind===terminal));
@@ -63,7 +63,7 @@ for(const terminal of ['FINISHED','FAILED'])test('G5 evidence repair: native '+t
 });
 test('G5 evidence repair: lifecycle deadline and source closure never synthesize a terminal',async()=>{
  const pending=['native-request'];const result=await drainNativeRequestLifecycle(()=>pending,{timeoutMs:10,pollMs:2});
- assert.deepEqual(result,{terminal_coverage_complete:false,pending_request_ids:['native-request']});assert.deepEqual(pending,['native-request']);
+ assert.deepEqual({terminal_coverage_complete:result.terminal_coverage_complete,pending_request_ids:result.pending_request_ids},{terminal_coverage_complete:false,pending_request_ids:['native-request']});assert.deepEqual(pending,['native-request']);
  const f=make({mode:'pending',headers:{RSC:'1','Next-Router-Prefetch':'1'}});
  assert.equal(f.evidence.requests[0].terminal_state,'PENDING');assert.ok(f.audit().issues.includes('UNRESOLVED_PENDING_REQUEST'));
 });
@@ -205,3 +205,9 @@ test('classification records the positive non-prefetch basis and rejects a missi
 test('browser Prefetch resource is positive evidence; contradiction with explicit non-prefetch blocks',()=>{assert.equal(classifyRequestSignals({},'Prefetch').prefetch,'YES');assert.equal(classifyRequestSignals({'Next-Router-Prefetch':'0'},'Prefetch').prefetch,'UNKNOWN');});
 
 test('late application exception increments evidence revision and rejects freeze',()=>{const f=make();const before=f.c.revision();f.c.exception(page);assert.ok(f.c.revision()>before);const e=f.c.evidence(f.raw,f.result,f.evidence.transition_receipts);assert.ok(e.capture_issues.includes('EVENT_AFTER_FREEZE'));assert.equal(auditAdoptRequestEvidence(e,f.raw,f.result,origin,['T1']).status,'FAIL');});
+
+test('lifecycle diagnostics: empty and deadline outcomes retain exact sets without resolving requests',async()=>{
+ const empty=await drainNativeRequestLifecycle(()=>[]);assert.equal(empty.diagnostics.exit_reason,'EMPTY_PENDING_SET');assert.equal(empty.diagnostics.deadline_timestamp,empty.diagnostics.start_timestamp+5000);assert.deepEqual(empty.diagnostics.pending_ids_at_start,[]);
+ const ids=['one','two'];const pending=await drainNativeRequestLifecycle(()=>ids,{timeoutMs:5,pollMs:1});assert.equal(pending.diagnostics.exit_reason,'DEADLINE');assert.deepEqual(pending.diagnostics.pending_ids_at_start,ids);assert.deepEqual(pending.diagnostics.pending_ids_at_end,ids);assert.equal(pending.terminal_coverage_complete,false);assert.ok(pending.diagnostics.end_timestamp>=pending.diagnostics.deadline_timestamp);
+ let current=['one','two'];setTimeout(()=>{current=['two'];},1);const terminal=await drainNativeRequestLifecycle(()=>current,{timeoutMs:5,pollMs:1});assert.deepEqual(terminal.diagnostics.pending_ids_at_start,['one','two']);assert.deepEqual(terminal.diagnostics.pending_ids_at_end,['two']);
+});
