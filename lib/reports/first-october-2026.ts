@@ -1,6 +1,7 @@
 import type { MarketReport } from './market-reports';
 import type { ReportQuantitativePanel } from './report-statistical-panels';
 import { LEVELS_DISCLAIMER } from './report-statistical-panels.ts';
+import closing from './snapshots/primer-informe-octubre-2026/market-close.json' with { type: 'json' };
 import statistics from './snapshots/primer-informe-octubre-2026/statistical.json' with { type: 'json' };
 
 // Frozen report data only: no live Statistical Levels loaders or generation.
@@ -20,6 +21,39 @@ function levels(ticker: keyof typeof statistics.assets): ReportQuantitativePanel
     range: { low: Math.min(current, ...marks.map(m => m.value)), high: Math.max(current, ...marks.map(m => m.value)), current, marks },
   }];
 }
+
+const pct = (value: number, unit = "%") => `${value < 0 ? "−" : value > 0 ? "+" : ""}${number(Math.abs(value))} ${unit}`;
+const relative = (ticker: "RSP" | "IWM" | "QQQ") => closing.returns[ticker].returnPct - closing.returns.SPY.returnPct;
+const sectorNames = { XLK: "Tecnología", XLE: "Energía", XLU: "Servicios públicos", XLI: "Industria", XLY: "Consumo discrecional", XLRE: "Inmobiliario", XLP: "Consumo básico", XLB: "Materiales", XLC: "Comunicación", XLF: "Finanzas", XLV: "Salud" };
+const sectorReturns = Object.entries(sectorNames).map(([ticker, name]) => ({ ticker, name, value: closing.returns[ticker as keyof typeof sectorNames].returnPct })).sort((a, b) => b.value - a.value);
+const closingPanels: ReportQuantitativePanel[] = [
+  {
+    title: "Amplitud al corte",
+    intro: "La divergencia sigue ahí. El índice aguanta mejor que el mercado equiponderado. Cierres ajustados del 25 de septiembre al 2 de octubre. [A1]",
+    headers: ["Referencia", "Semana", "Ventaja frente a SPY"],
+    rows: [
+      ["SPY · índice", pct(closing.returns.SPY.returnPct), "—"],
+      ["RSP · igual peso", pct(closing.returns.RSP.returnPct), pct(relative("RSP"), "pp")],
+      ["IWM · small caps", pct(closing.returns.IWM.returnPct), pct(relative("IWM"), "pp")],
+      ["QQQ · tecnología", pct(closing.returns.QQQ.returnPct), pct(relative("QQQ"), "pp")],
+    ],
+    notes: ["Diferencias de rentabilidades, no variaciones de los cocientes RSP/SPY, IWM/SPY o QQQ/SPY. IWM mejora apenas frente a SPY: falta continuidad para hablar de rotación. QQQ mantiene el liderazgo y la concentración.", "El deterioro desde Jackson Hole no tiene una lectura MA200 única comparable: las referencias del 30 %, 43 % y 48 % corresponden a cortes distintos. [A7]"],
+  },
+  {
+    title: "Condiciones de mercado",
+    intro: "SPY sigue por encima de su media larga. Eso sostiene la tendencia del índice; por sí solo no confirma la participación del resto del mercado.",
+    headers: ["SPY · cierre del 2 de octubre", "Valor"],
+    rows: [["Cierre", `${number(closing.completedDaily.close)} USD`], ["Media móvil de 200 sesiones", `${number(closing.completedDaily.ma200)} USD`], ["Distancia a MA200", pct(closing.completedDaily.distanceMa200Pct)]],
+    notes: ["Serie diaria completada de niveles propios, congelada al 2 de octubre. Distancia = (cierre / MA200 − 1) × 100. Comparación entre precio y media de la misma serie y fecha."],
+  },
+  {
+    title: "Rotación / sectores",
+    intro: `${sectorReturns.filter(item => item.value > 0).length} de 11 sectores subieron. Tecnología, energía y servicios públicos lideran; salud, finanzas y comunicación quedan atrás.`,
+    headers: ["Sector · ETF", "Semana"],
+    rows: sectorReturns.map(item => [`${item.name} · ${item.ticker}`, pct(item.value)]),
+    notes: ["Yahoo Finance, cierres ajustados del 25 de septiembre al 2 de octubre de 2026. Retorno = (cierre final / cierre inicial − 1) × 100. La participación mide estos 11 ETF, no el porcentaje de acciones del mercado. [A1]"],
+  },
+];
 
 export const firstOctober2026Report: MarketReport = {
   "id": "primer-informe-octubre-2026",
@@ -235,32 +269,6 @@ export const firstOctober2026Report: MarketReport = {
       "body": "Mi lectura para Q4 sigue siendo constructiva: quiero ver que participen más acciones sin que se caigan los líderes. Si ocurre, el mercado gana calidad. Si no, seguimos dependiendo demasiado de unas pocas compañías."
     },
     {
-      "title": "Qué cambió desde el segundo informe de septiembre",
-      "summary": "",
-      "body": "En el segundo informe de septiembre ya veíamos un índice resistente con deterioro interno. Ahora el mercado no está peor en todo; está más dividido. [C1]",
-      "showHeading": true
-    },
-    {
-      "title": "Amplitud",
-      "summary": "",
-      "body": "Amplitud. La divergencia es más persistente y puede seguirse desde Jackson Hole. Tecnología. QQQ conserva ventaja frente a SPY: sostiene al índice y mantiene la concentración."
-    },
-    {
-      "title": "Small caps y financiación",
-      "summary": "",
-      "body": "Small caps. IWM mejoró ligeramente frente a SPY durante la última semana. Todavía no alcanza para hablar de rotación: falta continuidad. Bonos / Fed. El riesgo inmediato de otra subida se redujo, pero los yields largos siguen elevados. El problema cambió de forma; no desapareció."
-    },
-    {
-      "title": "Sentimiento y activos",
-      "summary": "",
-      "body": "Sentimiento / flujos. El ánimo minorista está más deprimido que el posicionamiento institucional. Los flujos siguen positivos, pero pierden velocidad. Oro / cripto. Oro más vulnerable a corto plazo, constructivo a medio plazo; Bitcoin mejor alineado con liquidez global y acumulación selectiva; Ethereum necesita confirmar frente a BTC."
-    },
-    {
-      "title": "Resolución",
-      "summary": "",
-      "body": "La divergencia puede resolverse con recuperación de rezagados, ajuste de líderes, lateralidad o una combinación."
-    },
-    {
       "title": "Amplitud, sentimiento y flujos",
       "summary": "",
       "body": "El 51 % del Russell 3000 experimentó un drawdown máximo superior al 20 % desde junio: no significa que siga hoy un 20 % abajo. Las lecturas sobre MA200 tienen cortes distintos; no hay un porcentaje único comparable. [A7–A8]",
@@ -283,6 +291,44 @@ export const firstOctober2026Report: MarketReport = {
       "showHeading": true
     }
   ],
+  "marketClose": {
+    title: "Lecturas de mercado al cierre",
+    subtitle: "Estado del mercado al cierre del 2 de octubre de 2026.",
+    comparison: [
+    {
+      "title": "Qué cambió desde el segundo informe de septiembre",
+      "summary": "",
+      "body": "En el segundo informe de septiembre ya veíamos un índice resistente con deterioro interno. Ahora esa divergencia es más persistente. [C1]",
+      "showHeading": true
+    },
+    {
+      "title": "Amplitud",
+      "summary": "",
+      "body": "Amplitud. La divergencia es más persistente y puede seguirse desde Jackson Hole. Tecnología. QQQ conserva ventaja frente a SPY: sostiene al índice y mantiene la concentración."
+    },
+    {
+      "title": "Small caps y financiación",
+      "summary": "",
+      "body": "Small caps. IWM mejoró ligeramente frente a SPY durante la última semana. Todavía no alcanza para hablar de rotación: falta continuidad. Bonos / Fed. El riesgo inmediato de otra subida se redujo, pero los yields largos siguen elevados. El problema cambió de forma; no desapareció."
+    },
+    {
+      "title": "Sentimiento y activos",
+      "summary": "",
+      "body": "Sentimiento / flujos. El ánimo minorista está más deprimido que el posicionamiento institucional. Los flujos siguen positivos, pero pierden velocidad. Oro / cripto. Oro más vulnerable a corto plazo, constructivo a medio plazo; Bitcoin mejor alineado con liquidez global y acumulación selectiva; Ethereum necesita confirmar frente a BTC."
+    },
+    {
+      "title": "Resolución",
+      "summary": "",
+      "body": "El mercado no está peor en todo; está más dividido. La divergencia puede resolverse con recuperación de rezagados, ajuste de líderes, lateralidad o una combinación."
+    }
+    ],
+    signals: [
+      { title: "Qué impulsa", body: "Liderazgo tecnológico; expectativas de beneficios; CapEx de IA; estacionalidad favorable de Q4." },
+      { title: "Qué frena", body: "Amplitud débil; yields largos elevados; concentración; menor impulso de flujos." },
+      { title: "Qué vigilo", body: "Recuperación de rezagados; RSP/SPY e IWM/SPY; continuidad del liderazgo; condiciones financieras." },
+    ],
+    quantitativePanels: closingPanels,
+  },
   "assetReadings": [
     {
       "id": "sp500",

@@ -111,3 +111,28 @@ test('editorial watchlist validates all three fields and rejects missing reading
     }
   }
 });
+
+
+test('closing readings survive all exports and reject a missing metric or comparison', () => {
+  const section = october.sections.find(s => s.kind === 'market-close')!;
+  assert(section);
+  for (const ext of ['html', 'md']) {
+    const text = fs.readFileSync(`public/reports/${october.id}.${ext}`, 'utf8');
+    validateText(text, october, [section]);
+    // Source links split the heading in both exports. Remove its actual heading
+    // block, including the link, rather than attempting a plain-text replacement.
+    const headingPattern = ext === 'html'
+      ? /<h3>Qué cambió desde el [\s\S]*?<\/h3>/g
+      : /^### Qué cambió desde el [^\r\n]+$/gm;
+    const headings = text.match(headingPattern) ?? [];
+    assert.equal(headings.length, 1, `${ext}: expected one comparison heading`);
+    for (const missing of [headings[0], 'RSP · igual peso', '717,04 USD']) {
+      const mutated = text.replaceAll(missing, '');
+      assert.notEqual(mutated, text, `${ext}: negative fixture must change`);
+      assert.equal(mutated.includes(missing), false, `${ext}: target must be absent`);
+      assert.throws(() => validateText(mutated, october, [section]));
+    }
+  }
+  const pdf = inspectPdf(`public/reports/${october.id}.pdf`);
+  for (const needle of substantiveNeedles(section, october)) assertPdfContains(pdf, needle, 'market-close');
+});

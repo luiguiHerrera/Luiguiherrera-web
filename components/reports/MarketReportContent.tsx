@@ -1,4 +1,5 @@
 import { ReportLink as Link, ReportAnchor, ReportParagraph, ReportText, ReportSourcePolicy } from "@/components/reports/ReportSourcePolicy";
+import { ReportSection } from "@/components/reports/ReportSection";
 import { ReportQuantitativePanels } from "@/components/reports/ReportQuantitativePanels";
 
 import { EditorialByline } from "@/components/editorial/EditorialByline";
@@ -173,6 +174,23 @@ export function MarketReportContent({
           ))}
         </div>}
       </section>
+
+      {report.marketClose ? (
+        <section id="lecturas-mercado-cierre" className="grid scroll-mt-24 gap-6 border-y border-line py-8 md:py-10 lg:grid-cols-[0.34fr_1fr]">
+          <div>
+            <ReportParagraph className="text-xs font-semibold uppercase text-petrol">Mercado al cierre</ReportParagraph>
+            <h2 className="mt-2 text-2xl font-semibold leading-tight text-ink md:text-3xl">{report.marketClose.title}</h2>
+            <ReportParagraph className="mt-3 text-sm leading-6 text-muted">{report.marketClose.subtitle}</ReportParagraph>
+          </div>
+          <div className="grid gap-5">
+            <ReportSection eyebrow="Comparación editorial" title={report.marketClose.comparison[0].title} headingLevel={3}>
+              <div className="grid gap-3">{report.marketClose.comparison.map(block => <ReportParagraph key={block.title} className="text-sm leading-7 text-muted md:text-base">{block.body}</ReportParagraph>)}</div>
+            </ReportSection>
+            <div className="grid gap-3 md:grid-cols-3">{report.marketClose.signals.map(signal => <article key={signal.title} className="border border-line bg-panel p-4"><h3 className="text-sm font-semibold text-ink">{signal.title}</h3><ReportParagraph className="mt-2 text-sm leading-6 text-muted">{signal.body}</ReportParagraph></article>)}</div>
+            <ReportQuantitativePanels panels={report.marketClose.quantitativePanels} asset="Mercado al cierre" />
+          </div>
+        </section>
+      ) : null}
 
       {automaticReadings ? (
         <AutomaticMarketReadings mode="historical" snapshot={automaticReadings} layout={report.presentation?.marketReadingsLayout} />

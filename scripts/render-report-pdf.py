@@ -856,6 +856,15 @@ def add_section(story, section, styles, root, published_at, description, force_b
             story.append(p(item["body"], styles["body"]))
         if presentation.get("openingLine"):
             story.append(p(presentation["openingLine"], styles["body"]))
+    elif kind == "market-close":
+        readings = section["readings"]
+        story.append(p(readings["subtitle"], styles["small"]))
+        story.append(p(readings["comparison"][0]["title"], styles["h2"]))
+        for item in readings["comparison"]:
+            story.append(p(item["body"], styles["body"]))
+        for item in readings["signals"]:
+            story.append(PDF["KeepTogether"]([p(item["title"], styles["h3"]), p(item["body"], styles["body"])]))
+        add_quantitative_panels(story, readings["quantitativePanels"], styles)
     elif kind == "asset-readings":
         for item in section["items"]:
             add_asset_reading(

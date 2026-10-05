@@ -1,0 +1,134 @@
+{
+  "source": "Yahoo Finance; cierres ajustados",
+  "start": "2026-09-25",
+  "end": "2026-10-02",
+  "formula": "(adjustedCloseEnd / adjustedCloseStart - 1) * 100",
+  "relativeFormula": "returnPct(asset) - returnPct(SPY), percentage points",
+  "returns": {
+    "SPY": {
+      "start": 771.3499755859375,
+      "end": 769.6400146484375,
+      "returnPct": -0.22168418897026143
+    },
+    "QQQ": {
+      "start": 744.5,
+      "end": 749.5800170898438,
+      "returnPct": 0.6823394344988243
+    },
+    "IWM": {
+      "start": 281.9700012207031,
+      "end": 281.5199890136719,
+      "returnPct": -0.15959577440262107
+    },
+    "GLD": {
+      "start": 393.4100036621094,
+      "end": 380.1400146484375,
+      "returnPct": -3.3730685265108695
+    },
+    "RSP": {
+      "start": 211.11000061035156,
+      "end": 209.72999572753906,
+      "returnPct": -0.6536899620210757
+    },
+    "XLK": {
+      "start": 196.27000427246094,
+      "end": 199.80999755859375,
+      "returnPct": 1.8036343858323978
+    },
+    "XLF": {
+      "start": 54.84000015258789,
+      "end": 53.4900016784668,
+      "returnPct": -2.461703994100717
+    },
+    "XLV": {
+      "start": 170.6999969482422,
+      "end": 166.17999267578125,
+      "returnPct": -2.6479228783064634
+    },
+    "XLE": {
+      "start": 62.040000915527344,
+      "end": 62.81999969482422,
+      "returnPct": 1.2572513987530565
+    },
+    "XLY": {
+      "start": 110.55999755859375,
+      "end": 110.04000091552734,
+      "returnPct": -0.4703298250262944
+    },
+    "XLP": {
+      "start": 82.05999755859375,
+      "end": 80.52999877929688,
+      "returnPct": -1.8644879658988533
+    },
+    "XLI": {
+      "start": 170.42999267578125,
+      "end": 169.9499969482422,
+      "returnPct": -0.28163806147206705
+    },
+    "XLB": {
+      "start": 49.79999923706055,
+      "end": 48.86000061035156,
+      "returnPct": -1.8875474721080865
+    },
+    "XLU": {
+      "start": 39.5099983215332,
+      "end": 39.83000183105469,
+      "returnPct": 0.8099304558742082
+    },
+    "XLRE": {
+      "start": 41.560001373291016,
+      "end": 40.810001373291016,
+      "returnPct": -1.8046197671254038
+    },
+    "XLC": {
+      "start": 112.95999908447266,
+      "end": 110.31999969482422,
+      "returnPct": -2.33710996020301
+    }
+  },
+  "urls": {
+    "SPY": "https://query1.finance.yahoo.com/v8/finance/chart/SPY?period1=1790294400&period2=1790985600&interval=1d&events=history&includeAdjustedClose=true",
+    "QQQ": "https://query1.finance.yahoo.com/v8/finance/chart/QQQ?period1=1790294400&period2=1790985600&interval=1d&events=history&includeAdjustedClose=true",
+    "IWM": "https://query1.finance.yahoo.com/v8/finance/chart/IWM?period1=1790294400&period2=1790985600&interval=1d&events=history&includeAdjustedClose=true",
+    "GLD": "https://query1.finance.yahoo.com/v8/finance/chart/GLD?period1=1790294400&period2=1790985600&interval=1d&events=history&includeAdjustedClose=true",
+    "RSP": "https://query1.finance.yahoo.com/v8/finance/chart/RSP?period1=1790294400&period2=1790985600&interval=1d&events=history&includeAdjustedClose=true",
+    "XLK": "https://query1.finance.yahoo.com/v8/finance/chart/XLK?period1=1790294400&period2=1790985600&interval=1d&events=history&includeAdjustedClose=true",
+    "XLF": "https://query1.finance.yahoo.com/v8/finance/chart/XLF?period1=1790294400&period2=1790985600&interval=1d&events=history&includeAdjustedClose=true",
+    "XLV": "https://query1.finance.yahoo.com/v8/finance/chart/XLV?period1=1790294400&period2=1790985600&interval=1d&events=history&includeAdjustedClose=true",
+    "XLE": "https://query1.finance.yahoo.com/v8/finance/chart/XLE?period1=1790294400&period2=1790985600&interval=1d&events=history&includeAdjustedClose=true",
+    "XLY": "https://query1.finance.yahoo.com/v8/finance/chart/XLY?period1=1790294400&period2=1790985600&interval=1d&events=history&includeAdjustedClose=true",
+    "XLP": "https://query1.finance.yahoo.com/v8/finance/chart/XLP?period1=1790294400&period2=1790985600&interval=1d&events=history&includeAdjustedClose=true",
+    "XLI": "https://query1.finance.yahoo.com/v8/finance/chart/XLI?period1=1790294400&period2=1790985600&interval=1d&events=history&includeAdjustedClose=true",
+    "XLB": "https://query1.finance.yahoo.com/v8/finance/chart/XLB?period1=1790294400&period2=1790985600&interval=1d&events=history&includeAdjustedClose=true",
+    "XLU": "https://query1.finance.yahoo.com/v8/finance/chart/XLU?period1=1790294400&period2=1790985600&interval=1d&events=history&includeAdjustedClose=true",
+    "XLRE": "https://query1.finance.yahoo.com/v8/finance/chart/XLRE?period1=1790294400&period2=1790985600&interval=1d&events=history&includeAdjustedClose=true",
+    "XLC": "https://query1.finance.yahoo.com/v8/finance/chart/XLC?period1=1790294400&period2=1790985600&interval=1d&events=history&includeAdjustedClose=true"
+  },
+  "rawHashes": {
+    "RSP": "2ab34944c227d6272cd06223f7b38861e2670b978058478b42720d52b4cabdf4",
+    "XLK": "5a52420448e41607ebd257edd7ff26467332b891d000cff172e44b69e32688a2",
+    "XLF": "4c64e32be4b468248576c9fc493148879baae9dfade6b5f2fce820fd26b9dacd",
+    "XLV": "aee3e54360423fe7f06a71b747392c471094c27648a842802b6b1b6a8e84f0da",
+    "XLE": "8bbdd24c212756507f68ffd1fa910646a286ea02986165f1cf75fa7ba901f60e",
+    "XLY": "eb14fea2b170ff04774ddef9e18de1202de02766418646dd39f8635f66ad1ca4",
+    "XLP": "79af82e410ac38287a26ce407bf8c9f01cce79508e63fd9c161a8128b12baba0",
+    "XLI": "7e529bfaaf6f2423d74ae400ef37412c92c99bb14a1c187cff91c7b43492804d",
+    "XLB": "ab9c60cacd2bef63a7eb2cb284e4e2e29a44b7ae171237a2a4f2ed4fa0952e67",
+    "XLU": "fa5a7217545d47d8e6fa52155e421c31213831c2e4d0c0c9d21cb0881973a277",
+    "XLRE": "4a49f69aae5a36ff72911280b855c661e5d1e63416f4f098feb016d43880dfc0",
+    "XLC": "efc442e5885a8a9386bac3fc974d03731dae7af36ca268e97e24db2813448c10"
+  },
+  "completedDaily": {
+    "sourceCommit": "13c1771fea1d1bcb6bae41c6ba2fcdb76118f48c",
+    "sourceTree": "4fe4b4f615a98aee41cbac014a50c074f1fa4a81",
+    "sourcePath": "lib/statistical-levels/generated/assets/SPY.json",
+    "baselineId": "20261003T133327627Z-46174256-7f86-4b1b-8426-59aa0ed97105",
+    "lastCompletedObservation": {
+      "daily": "2026-10-02"
+    },
+    "ticker": "SPY",
+    "close": 769.64,
+    "ma200": 717.04,
+    "distanceMa200Pct": 7.335713488787232
+  }
+}

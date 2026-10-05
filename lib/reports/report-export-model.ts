@@ -52,6 +52,12 @@ export type ReportExportSection =
       items: MarketReportSectionBlock[];
     }
   | {
+      id: "market-close";
+      title: string;
+      kind: "market-close";
+      readings: NonNullable<MarketReport["marketClose"]>;
+    }
+  | {
       id: "asset-follow-up";
       title: string;
       kind: "asset-readings";
@@ -228,6 +234,10 @@ function reportSections(
       items: report.whatHappened,
     },
   ];
+
+  if (report.marketClose) {
+    sections.push({ id: "market-close", title: report.marketClose.title, kind: "market-close", readings: report.marketClose });
+  }
 
   if (snapshot) {
     sections.push({

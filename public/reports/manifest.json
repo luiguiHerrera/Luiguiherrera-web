@@ -226,8 +226,8 @@
         "html": {
           "mimeType": "text/html; charset=utf-8",
           "path": "/reports/primer-informe-octubre-2026.html",
-          "sha256": "a462f520923ae5aa982cab9b868372d7e3c4dc83976c897c5b44aed15f978b4f",
-          "size": 61810
+          "sha256": "dee6f805eefa04dd3819006bdbb5241d01ccd6bc188d3c441d94993c9ff7d974",
+          "size": 65839
         },
         "ics": {
           "mimeType": "text/calendar; charset=utf-8",
@@ -238,20 +238,20 @@
         "markdown": {
           "mimeType": "text/markdown; charset=utf-8",
           "path": "/reports/primer-informe-octubre-2026.md",
-          "sha256": "1983b6f1541520511ba9b304fac2e1b0e110a8f47f72581a96b8a353e93b92b9",
-          "size": 32589
+          "sha256": "7cc23fd7b4d81843a901790e62182cf27c69f25feeefee80262b178cb035e579",
+          "size": 35288
         },
         "pdf": {
           "mimeType": "application/pdf",
           "path": "/reports/primer-informe-octubre-2026.pdf",
-          "sha256": "62e6ea9498da7cf74803e8d927ef414003f4196d56f5cf4547bd59252a18f6f2",
-          "size": 60478
+          "sha256": "6a7742587bdbd506c774514417c79430f03d59b40eaac5eec96c556571e94da8",
+          "size": 65505
         }
       },
       "id": "primer-informe-octubre-2026",
       "modifiedAt": "2026-10-05",
       "publishedAt": "2026-10-05",
-      "sourceHash": "7f5701324c8b30ad5fc0b125a0bbb12c541ef4c0a9f5b51e1920c67f893c80c9"
+      "sourceHash": "291e1e3585aba369b2c734d844ac3571aa4af55efc4b5afa511ab735fcdb7c83"
     }
   ],
   "schemaVersion": "1.0.0"

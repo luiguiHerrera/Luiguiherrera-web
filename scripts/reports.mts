@@ -456,6 +456,9 @@ function renderSectionHtml(section: ReportExportSection, model: ReportExportMode
         )
         .join("");
       break;
+    case "market-close":
+      body = `<p class="historical-note">${esc(section.readings.subtitle)}</p><article class="card"><h3>${esc(section.readings.comparison[0].title)}</h3>${section.readings.comparison.map(item => `<p>${esc(item.body)}</p>`).join("")}</article><div class="grid">${section.readings.signals.map(item => `<article class="card"><h3>${esc(item.title)}</h3><p>${esc(item.body)}</p></article>`).join("")}</div>${quantitativeHtml(section.readings.quantitativePanels)}`;
+      break;
     case "asset-readings":
       body = section.items
         .map(
@@ -790,6 +793,8 @@ function renderSectionMarkdown(section: ReportExportSection, model: ReportExport
       return `${heading}\n\n${section.items
         .map((item) => `### ${item.title}\n\n**${item.summary}**\n\n${item.body}`)
         .join("\n\n")}`;
+    case "market-close":
+      return `${heading}\n\n${section.readings.subtitle}\n\n### ${section.readings.comparison[0].title}\n\n${section.readings.comparison.map(item => item.body).join("\n\n")}\n\n${section.readings.signals.map(item => `### ${item.title}\n\n${item.body}`).join("\n\n")}${quantitativeMarkdown(section.readings.quantitativePanels)}`;
     case "asset-readings":
       return `${heading}\n\n${section.items
         .map(
@@ -1278,6 +1283,12 @@ export function substantiveNeedles(section: ReportExportSection, model: ReportEx
     case "context":
       for (const item of section.items) values.push(...(model.presentation?.contextStyle === "prose" ? [...(item.showHeading ? [item.title] : []), item.body] : [item.title, item.summary, item.body]));
       if (model.presentation?.openingLine) values.push(model.presentation.openingLine);
+      break;
+    case "market-close":
+      values.push(section.readings.subtitle, section.readings.comparison[0].title);
+      for (const item of section.readings.comparison) values.push(item.body);
+      for (const item of section.readings.signals) values.push(item.title, item.body);
+      for (const panel of section.readings.quantitativePanels) values.push(panel.title, panel.intro, ...panel.headers, ...panel.rows.flat(), ...panel.notes);
       break;
     case "asset-readings":
       for (const item of section.items) {

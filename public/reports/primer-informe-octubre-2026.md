@@ -24,18 +24,6 @@ La Fed tiene más margen para pausar en octubre, pero los rendimientos largos si
 
 Mi lectura para Q4 sigue siendo constructiva: quiero ver que participen más acciones sin que se caigan los líderes. Si ocurre, el mercado gana calidad. Si no, seguimos dependiendo demasiado de unas pocas compañías.
 
-### Qué cambió desde el [segundo informe de septiembre](https://www.luiguiherrera.com/informes/segundo-informe-septiembre-2026)
-
-En el [segundo informe de septiembre](https://www.luiguiherrera.com/informes/segundo-informe-septiembre-2026) ya veíamos un índice resistente con deterioro interno. Ahora el mercado no está peor en todo; está más dividido. [[C1]](https://www.luiguiherrera.com/informes/segundo-informe-septiembre-2026)
-
-Amplitud. La divergencia es más persistente y puede seguirse desde Jackson Hole. Tecnología. QQQ conserva ventaja frente a SPY: sostiene al índice y mantiene la concentración.
-
-Small caps. IWM mejoró ligeramente frente a SPY durante la última semana. Todavía no alcanza para hablar de rotación: falta continuidad. Bonos / Fed. El riesgo inmediato de otra subida se redujo, pero los yields largos siguen elevados. El problema cambió de forma; no desapareció.
-
-Sentimiento / flujos. El ánimo minorista está más deprimido que el posicionamiento institucional. Los flujos siguen positivos, pero pierden velocidad. Oro / cripto. Oro más vulnerable a corto plazo, constructivo a medio plazo; Bitcoin mejor alineado con liquidez global y acumulación selectiva; Ethereum necesita confirmar frente a BTC.
-
-La divergencia puede resolverse con recuperación de rezagados, ajuste de líderes, lateralidad o una combinación.
-
 ### Amplitud, sentimiento y flujos
 
 El 51 % del Russell 3000 experimentó un drawdown máximo superior al 20 % desde junio: no significa que siga hoy un 20 % abajo. Las lecturas sobre MA200 tienen cortes distintos; no hay un porcentaje único comparable. [A7–A8]
@@ -49,6 +37,81 @@ Los ETF reciben 3.276 millones de dólares diarios de media en septiembre frente
 Octubre apunta a pausa en 3,75–4,00 %, no a recorte: FedWatch asigna 77,9 % a ese rango y 22,1 % a 4,00–4,25 %; este último es el rango modal de diciembre. El empleo suma 29.000 nóminas, con paro del 4,2 % y revisiones de −60.000 en julio y agosto. El Treasury a diez años rebotó intradía hacia 5,28 % tras el dato. Importan el nivel y la velocidad de los yields. [A6; A12; B1; B3]
 
 El calendario ayuda; la amplitud debe confirmar.
+
+## Lecturas de mercado al cierre
+
+Estado del mercado al cierre del 2 de octubre de 2026.
+
+### Qué cambió desde el [segundo informe de septiembre](https://www.luiguiherrera.com/informes/segundo-informe-septiembre-2026)
+
+En el [segundo informe de septiembre](https://www.luiguiherrera.com/informes/segundo-informe-septiembre-2026) ya veíamos un índice resistente con deterioro interno. Ahora esa divergencia es más persistente. [[C1]](https://www.luiguiherrera.com/informes/segundo-informe-septiembre-2026)
+
+Amplitud. La divergencia es más persistente y puede seguirse desde Jackson Hole. Tecnología. QQQ conserva ventaja frente a SPY: sostiene al índice y mantiene la concentración.
+
+Small caps. IWM mejoró ligeramente frente a SPY durante la última semana. Todavía no alcanza para hablar de rotación: falta continuidad. Bonos / Fed. El riesgo inmediato de otra subida se redujo, pero los yields largos siguen elevados. El problema cambió de forma; no desapareció.
+
+Sentimiento / flujos. El ánimo minorista está más deprimido que el posicionamiento institucional. Los flujos siguen positivos, pero pierden velocidad. Oro / cripto. Oro más vulnerable a corto plazo, constructivo a medio plazo; Bitcoin mejor alineado con liquidez global y acumulación selectiva; Ethereum necesita confirmar frente a BTC.
+
+El mercado no está peor en todo; está más dividido. La divergencia puede resolverse con recuperación de rezagados, ajuste de líderes, lateralidad o una combinación.
+
+### Qué impulsa
+
+Liderazgo tecnológico; expectativas de beneficios; CapEx de IA; estacionalidad favorable de Q4.
+
+### Qué frena
+
+Amplitud débil; yields largos elevados; concentración; menor impulso de flujos.
+
+### Qué vigilo
+
+Recuperación de rezagados; RSP/SPY e IWM/SPY; continuidad del liderazgo; condiciones financieras.
+
+#### Amplitud al corte
+
+La divergencia sigue ahí. El índice aguanta mejor que el mercado equiponderado. Cierres ajustados del 25 de septiembre al 2 de octubre. [[A1]](https://finance.yahoo.com/quote/SPY/history/)
+
+| Referencia | Semana | Ventaja frente a SPY |
+| --- | --- | --- |
+| SPY · índice | −0,22 % | — |
+| RSP · igual peso | −0,65 % | −0,43 pp |
+| IWM · small caps | −0,16 % | +0,06 pp |
+| QQQ · tecnología | +0,68 % | +0,90 pp |
+
+Diferencias de rentabilidades, no variaciones de los cocientes RSP/SPY, IWM/SPY o QQQ/SPY. IWM mejora apenas frente a SPY: falta continuidad para hablar de rotación. QQQ mantiene el liderazgo y la concentración.
+
+El deterioro desde Jackson Hole no tiene una lectura MA200 única comparable: las referencias del 30 %, 43 % y 48 % corresponden a cortes distintos. [A7]
+
+#### Condiciones de mercado
+
+SPY sigue por encima de su media larga. Eso sostiene la tendencia del índice; por sí solo no confirma la participación del resto del mercado.
+
+| SPY · cierre del 2 de octubre | Valor |
+| --- | --- |
+| Cierre | 769,64 USD |
+| Media móvil de 200 sesiones | 717,04 USD |
+| Distancia a MA200 | +7,34 % |
+
+Serie diaria completada de niveles propios, congelada al 2 de octubre. Distancia = (cierre / MA200 − 1) × 100. Comparación entre precio y media de la misma serie y fecha.
+
+#### Rotación / sectores
+
+3 de 11 sectores subieron. Tecnología, energía y servicios públicos lideran; salud, finanzas y comunicación quedan atrás.
+
+| Sector · ETF | Semana |
+| --- | --- |
+| Tecnología · XLK | +1,80 % |
+| Energía · XLE | +1,26 % |
+| Servicios públicos · XLU | +0,81 % |
+| Industria · XLI | −0,28 % |
+| Consumo discrecional · XLY | −0,47 % |
+| Inmobiliario · XLRE | −1,80 % |
+| Consumo básico · XLP | −1,86 % |
+| Materiales · XLB | −1,89 % |
+| Comunicación · XLC | −2,34 % |
+| Finanzas · XLF | −2,46 % |
+| Salud · XLV | −2,65 % |
+
+[Yahoo Finance](https://finance.yahoo.com/quote/SPY/history/), cierres ajustados del 25 de septiembre al 2 de octubre de 2026. Retorno = (cierre final / cierre inicial − 1) × 100. La participación mide estos 11 ETF, no el porcentaje de acciones del mercado. [[A1]](https://finance.yahoo.com/quote/SPY/history/)
 
 ## Lectura por activo
 

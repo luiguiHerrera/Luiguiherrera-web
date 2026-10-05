@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import fs from 'node:fs';
+import { buildReportExportModel } from './report-export-model.ts';
 import { firstOctober2026Report as report } from './first-october-2026.ts';
 import { secondSeptember2026Report } from './second-september-2026.ts';
 import { activeMarketReport, getAdjacentReports, getMarketReportBySlug, marketReports, reportMetadataTitle } from './market-reports.ts';
@@ -75,7 +76,8 @@ test('checklist satisfies the production prose exporter contract', () => {
 test('editorial voice, comparison and independent weekly returns', () => {
   const text = JSON.stringify(report);
   assert(!/\bCDI\b|\bCBI\b|Club de Inversionistas|USD[\s/.-]*COP|Felipe Campos|el autor|el editor|material aportado|material recibido|publicación recibida|interpretación atribuida/i.test(text));
-  assert(report.whatHappened.some(b => b.showHeading && b.title === 'Qué cambió desde el segundo informe de septiembre'));
+  assert(report.marketClose?.comparison.some(b => b.showHeading && b.title === 'Qué cambió desde el segundo informe de septiembre'));
+  assert(!report.whatHappened.some(b => b.title === 'Qué cambió desde el segundo informe de septiembre'));
   assert(report.presentation?.sourceLinks?.some(s => s.href === 'https://www.luiguiherrera.com/informes/segundo-informe-septiembre-2026'));
   const prices = JSON.parse(fs.readFileSync('lib/reports/snapshots/primer-informe-octubre-2026/weekly-returns.json', 'utf8'));
   assert.equal(prices.start, '2026-09-25');
@@ -97,4 +99,45 @@ test('three-field watchlist removes redundant content and supplies tracking for 
     assert(item.href && item.linkLabel);
     assert(item.href === '/dashboard' || item.href.startsWith('https://'));
   }
+});
+
+
+test('market close restores the historical section position without duplicating the comparison', () => {
+  const close = report.marketClose!;
+  assert.equal(close.title, 'Lecturas de mercado al cierre');
+  assert.equal(close.subtitle, 'Estado del mercado al cierre del 2 de octubre de 2026.');
+  assert.deepEqual(close.signals.map(s => s.title), ['Qué impulsa', 'Qué frena', 'Qué vigilo']);
+  assert.deepEqual(close.quantitativePanels.map(p => p.title), ['Amplitud al corte', 'Condiciones de mercado', 'Rotación / sectores']);
+  const sections = buildReportExportModel(report).sections;
+  const ids = sections.map(s => s.id);
+  assert.equal(ids.indexOf('market-close'), ids.indexOf('context-general') + 1);
+  assert.equal(ids.indexOf('asset-follow-up'), ids.indexOf('market-close') + 1);
+  assert(!JSON.stringify(report.whatHappened).includes(close.comparison[0].title));
+  assert.equal(close.comparison.filter(b => b.title === 'Qué cambió desde el segundo informe de septiembre').length, 1);
+  assert(!/currentMark|2026-10-03|VIX|GARCH|EWMA|fragilityScore|averageCorrelation/i.test(JSON.stringify(close)));
+});
+
+test('closing readings use reproducible same-window prices and a completed daily MA200 snapshot', () => {
+  const data = JSON.parse(fs.readFileSync('lib/reports/snapshots/primer-informe-octubre-2026/market-close.json', 'utf8'));
+  assert.equal(data.start, '2026-09-25'); assert.equal(data.end, '2026-10-02');
+  for (const [ticker, raw] of Object.entries(data.returns)) {
+    const row = raw as { start: number; end: number; returnPct: number };
+    assert(row.start > 0 && row.end > 0);
+    assert.equal(row.returnPct, (row.end / row.start - 1) * 100);
+    assert(data.urls[ticker].includes('period1=1790294400&period2=1790985600'));
+  }
+  const daily = data.completedDaily;
+  assert.equal(daily.sourceCommit, snapshot.authorityCommit);
+  assert.equal(daily.baselineId, snapshot.baselineId);
+  assert.equal(daily.lastCompletedObservation.daily, '2026-10-02');
+  assert.equal(daily.close, snapshot.assets.SPY.levels.lastClose);
+  assert.equal(daily.ma200, 717.04);
+  assert.equal(daily.distanceMa200Pct, (daily.close / daily.ma200 - 1) * 100);
+  assert(!JSON.stringify(data).includes('currentMark'));
+  const panels = report.marketClose!.quantitativePanels;
+  assert.equal(panels[0].rows[1][2], '−0,43 pp');
+  assert.equal(panels[0].rows[2][2], '+0,06 pp');
+  assert.equal(panels[0].rows[3][2], '+0,90 pp');
+  assert.equal(panels[2].rows.length, 11);
+  assert(panels[2].intro.startsWith('3 de 11'));
 });

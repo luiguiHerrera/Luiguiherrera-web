@@ -221,6 +221,14 @@ export type MarketReport = {
     text: string;
   };
   whatHappened: MarketReportSectionBlock[];
+  /** Frozen, selectively available closing readings; no live metric loader. */
+  marketClose?: {
+    title: string;
+    subtitle: string;
+    comparison: MarketReportSectionBlock[];
+    signals: { title: string; body: string }[];
+    quantitativePanels: ReportQuantitativePanel[];
+  };
   assetReadings: MarketReportAssetReading[];
   calendar: MarketReportCalendarItem[];
   /** Optional: las ediciones con rutas probables no duplican los escenarios. */
