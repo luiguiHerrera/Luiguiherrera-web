@@ -1,0 +1,272 @@
+{
+  "asOf": "2026-10-02",
+  "baselineId": "20261003T133327627Z-46174256-7f86-4b1b-8426-59aa0ed97105",
+  "authorityCommit": "13c1771fea1d1bcb6bae41c6ba2fcdb76118f48c",
+  "authorityTree": "4fe4b4f615a98aee41cbac014a50c074f1fa4a81",
+  "assets": {
+    "SPY": {
+      "ticker": "SPY",
+      "asOf": "2026-10-02",
+      "periodStart": "2026-09-28",
+      "provider": "Yahoo Finance · autoridad Statistical Levels persistida",
+      "closeConvention": "Cierre regular ajustado del proveedor, congelado en la autoridad.",
+      "levels": {
+        "available": true,
+        "statusNote": "Calculado con 1757 periodos completados.",
+        "periods": 1757,
+        "currentOpen": 768.35,
+        "lastClose": 769.64,
+        "avgHigherExtension": 0.0157,
+        "stdHigherExtension": 0.0152,
+        "avgLowerExtension": 0.0168,
+        "stdLowerExtension": 0.0193,
+        "levels": {
+          "WSHE": 792.1,
+          "WAHE": 780.41,
+          "WALE": 755.48,
+          "WSLE": 740.66
+        },
+        "distances": {
+          "WSHE": -0.0284,
+          "WAHE": -0.0138,
+          "WALE": 0.0187,
+          "WSLE": 0.0391
+        },
+        "location": "Dentro del rango por semana medio"
+      },
+      "provenance": {
+        "baselineId": "20261003T133327627Z-46174256-7f86-4b1b-8426-59aa0ed97105",
+        "artifactSha256": "b9a381769aa30b4cb460eb774d0f9d42d4bf3c86fe40c1ff33964fccc10e4fbe",
+        "rawSha256": "03cec9c34e575fc11feaefbff64250198c3a5dc4ea80cc6d79b61a48920e3b77",
+        "lastCompletedObservation": {
+          "daily": "2026-10-02",
+          "weekly": "2026-09-25",
+          "monthly": "2026-09-30"
+        },
+        "closePath": "frequencies.daily.recentPeriods[period=2026-10-02].close",
+        "levelsPath": "keyStatisticalLevels.weekly",
+        "distancePrecision": "Precio del 2 de octubre / nivel publicado − 1, redondeado a cuatro decimales; sin reestimar bandas."
+      }
+    },
+    "GLD": {
+      "ticker": "GLD",
+      "asOf": "2026-10-02",
+      "periodStart": "2026-09-28",
+      "provider": "Yahoo Finance · autoridad Statistical Levels persistida",
+      "closeConvention": "Cierre regular ajustado del proveedor, congelado en la autoridad.",
+      "levels": {
+        "available": true,
+        "statusNote": "Calculado con 1141 periodos completados.",
+        "periods": 1141,
+        "currentOpen": 379.76,
+        "lastClose": 380.14,
+        "avgHigherExtension": 0.0162,
+        "stdHigherExtension": 0.0152,
+        "avgLowerExtension": 0.016,
+        "stdLowerExtension": 0.0178,
+        "levels": {
+          "WSHE": 391.68,
+          "WAHE": 385.9,
+          "WALE": 373.67,
+          "WSLE": 366.93
+        },
+        "distances": {
+          "WSHE": -0.0295,
+          "WAHE": -0.0149,
+          "WALE": 0.0173,
+          "WSLE": 0.036
+        },
+        "location": "Dentro del rango por semana medio"
+      },
+      "provenance": {
+        "baselineId": "20261003T133327627Z-46174256-7f86-4b1b-8426-59aa0ed97105",
+        "artifactSha256": "befba227aa432bb527e0a285ba09da815b89995987760a1d285aa411c6bd6b89",
+        "rawSha256": "e3862e3f2fda25034bfef060452c5bb0405864e7bf48afed04712b064240d553",
+        "lastCompletedObservation": {
+          "daily": "2026-10-02",
+          "weekly": "2026-09-25",
+          "monthly": "2026-09-30"
+        },
+        "closePath": "frequencies.daily.recentPeriods[period=2026-10-02].close",
+        "levelsPath": "keyStatisticalLevels.weekly",
+        "distancePrecision": "Precio del 2 de octubre / nivel publicado − 1, redondeado a cuatro decimales; sin reestimar bandas."
+      }
+    },
+    "FXI": {
+      "ticker": "FXI",
+      "asOf": "2026-10-02",
+      "periodStart": "2026-09-28",
+      "provider": "Yahoo Finance · autoridad Statistical Levels persistida",
+      "closeConvention": "Cierre regular ajustado del proveedor, congelado en la autoridad.",
+      "levels": {
+        "available": true,
+        "statusNote": "Calculado con 1147 periodos completados.",
+        "periods": 1147,
+        "currentOpen": 34.2,
+        "lastClose": 33.19,
+        "avgHigherExtension": 0.0243,
+        "stdHigherExtension": 0.0256,
+        "avgLowerExtension": 0.026,
+        "stdLowerExtension": 0.0289,
+        "levels": {
+          "WSHE": 35.91,
+          "WAHE": 35.03,
+          "WALE": 33.31,
+          "WSLE": 32.32
+        },
+        "distances": {
+          "WSHE": -0.0757,
+          "WAHE": -0.0525,
+          "WALE": -0.0036,
+          "WSLE": 0.0269
+        },
+        "location": "Cerca de extensión por semana baja"
+      },
+      "provenance": {
+        "baselineId": "20261003T133327627Z-46174256-7f86-4b1b-8426-59aa0ed97105",
+        "artifactSha256": "616b73c027ec8ec9cfb0c0766e7a0a3232c1a7ea1b5b91392ca59abe2a4acc28",
+        "rawSha256": "e240e8231677cb8ac271f36f63347dcc44038c85ff3c9f62b8eda102d37233ef",
+        "lastCompletedObservation": {
+          "daily": "2026-10-02",
+          "weekly": "2026-09-25",
+          "monthly": "2026-09-30"
+        },
+        "closePath": "frequencies.daily.recentPeriods[period=2026-10-02].close",
+        "levelsPath": "keyStatisticalLevels.weekly",
+        "distancePrecision": "Precio del 2 de octubre / nivel publicado − 1, redondeado a cuatro decimales; sin reestimar bandas."
+      }
+    },
+    "EWJ": {
+      "ticker": "EWJ",
+      "asOf": "2026-10-02",
+      "periodStart": "2026-09-28",
+      "provider": "Yahoo Finance · autoridad Statistical Levels persistida",
+      "closeConvention": "Cierre regular ajustado del proveedor, congelado en la autoridad.",
+      "levels": {
+        "available": true,
+        "statusNote": "Calculado con 1593 periodos completados.",
+        "periods": 1593,
+        "currentOpen": 97.02,
+        "lastClose": 98.92,
+        "avgHigherExtension": 0.0181,
+        "stdHigherExtension": 0.0186,
+        "avgLowerExtension": 0.0188,
+        "stdLowerExtension": 0.0199,
+        "levels": {
+          "WSHE": 100.58,
+          "WAHE": 98.77,
+          "WALE": 95.19,
+          "WSLE": 93.26
+        },
+        "distances": {
+          "WSHE": -0.0165,
+          "WAHE": 0.0015,
+          "WALE": 0.0392,
+          "WSLE": 0.0607
+        },
+        "location": "Cerca de extensión por semana alta"
+      },
+      "provenance": {
+        "baselineId": "20261003T133327627Z-46174256-7f86-4b1b-8426-59aa0ed97105",
+        "artifactSha256": "1d8b0dafbbcb63b7436296811c06c57adedd48e088ba35edbd285882385f8fbc",
+        "rawSha256": "2d27874c1462c4abdea158f5ead95b31616aed975f39cbe27fbe9e9e36b3b577",
+        "lastCompletedObservation": {
+          "daily": "2026-10-02",
+          "weekly": "2026-09-25",
+          "monthly": "2026-09-30"
+        },
+        "closePath": "frequencies.daily.recentPeriods[period=2026-10-02].close",
+        "levelsPath": "keyStatisticalLevels.weekly",
+        "distancePrecision": "Precio del 2 de octubre / nivel publicado − 1, redondeado a cuatro decimales; sin reestimar bandas."
+      }
+    },
+    "BTCUSD": {
+      "ticker": "BTCUSD",
+      "asOf": "2026-10-02",
+      "periodStart": "2026-09-28",
+      "provider": "Yahoo Finance · autoridad Statistical Levels persistida",
+      "closeConvention": "Cierre diario UTC del 2 de octubre; semana de lunes a domingo, aún incompleta al corte.",
+      "levels": {
+        "available": true,
+        "statusNote": "Calculado con 628 periodos completados.",
+        "periods": 628,
+        "currentOpen": 84454.12,
+        "lastClose": 84497.21,
+        "avgHigherExtension": 0.0707,
+        "stdHigherExtension": 0.0771,
+        "avgLowerExtension": 0.0681,
+        "stdLowerExtension": 0.0945,
+        "levels": {
+          "WSHE": 96938.45,
+          "WAHE": 90423.48,
+          "WALE": 78700.29,
+          "WSLE": 70719.44
+        },
+        "distances": {
+          "WSHE": -0.1283,
+          "WAHE": -0.0655,
+          "WALE": 0.0737,
+          "WSLE": 0.1948
+        },
+        "location": "Dentro del rango por semana medio"
+      },
+      "provenance": {
+        "baselineId": "20261003T133327627Z-46174256-7f86-4b1b-8426-59aa0ed97105",
+        "artifactSha256": "86bfd55532b143dbf1c7afed4a28eef69553ac2dafc789544627d4e4ace76a1a",
+        "rawSha256": "359207048077b6731a6e4cc6afc5c43d93be38c1e36a760eb9a9f38f50d1218d",
+        "lastCompletedObservation": {
+          "daily": "2026-10-02",
+          "weekly": "2026-09-27",
+          "monthly": "2026-09-30"
+        },
+        "closePath": "frequencies.daily.recentPeriods[period=2026-10-02].close",
+        "levelsPath": "keyStatisticalLevels.weekly",
+        "distancePrecision": "Precio del 2 de octubre / nivel publicado − 1, redondeado a cuatro decimales; sin reestimar bandas."
+      }
+    },
+    "ETHUSD": {
+      "ticker": "ETHUSD",
+      "asOf": "2026-10-02",
+      "periodStart": "2026-09-28",
+      "provider": "Yahoo Finance · autoridad Statistical Levels persistida",
+      "closeConvention": "Cierre diario UTC del 2 de octubre; semana de lunes a domingo, aún incompleta al corte.",
+      "levels": {
+        "available": true,
+        "statusNote": "Calculado con 464 periodos completados.",
+        "periods": 464,
+        "currentOpen": 2687,
+        "lastClose": 2668.15,
+        "avgHigherExtension": 0.0867,
+        "stdHigherExtension": 0.092,
+        "avgLowerExtension": 0.0983,
+        "stdLowerExtension": 0.1294,
+        "levels": {
+          "WSHE": 3167,
+          "WAHE": 2919.91,
+          "WALE": 2422.92,
+          "WSLE": 2075.34
+        },
+        "distances": {
+          "WSHE": -0.1575,
+          "WAHE": -0.0862,
+          "WALE": 0.1012,
+          "WSLE": 0.2856
+        },
+        "location": "Dentro del rango por semana medio"
+      },
+      "provenance": {
+        "baselineId": "20261003T133327627Z-46174256-7f86-4b1b-8426-59aa0ed97105",
+        "artifactSha256": "4e521e681df700e456f674935674eba2433d5860d2b0706d654691bfcbea77a0",
+        "rawSha256": "ad224b33f8a0a631c315b2486e1738587a4f5625a99054cdb2471fbcab13651f",
+        "lastCompletedObservation": {
+          "daily": "2026-10-02",
+          "weekly": "2026-09-27",
+          "monthly": "2026-09-30"
+        },
+        "closePath": "frequencies.daily.recentPeriods[period=2026-10-02].close",
+        "levelsPath": "keyStatisticalLevels.weekly",
+        "distancePrecision": "Precio del 2 de octubre / nivel publicado − 1, redondeado a cuatro decimales; sin reestimar bandas."
+      }
+    }
+  }
+}

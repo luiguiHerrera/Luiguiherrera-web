@@ -22,11 +22,11 @@ const stats = json('statistical.json');
 const evidence = JSON.parse(gunzipSync(fs.readFileSync(`${base}/authority-evidence.json.gz`)).toString());
 const sha = (bytes: Buffer) => createHash('sha256').update(bytes).digest('hex');
 
-test('approved edition is current, publicly registered and backed by its frozen snapshot', () => {
+test('approved edition is archived, publicly registered and backed by its frozen snapshot', () => {
   assert.equal(report.status, 'actual');
-  assert.equal(activeMarketReport.id, report.id);
+  assert.equal(activeMarketReport, marketReports[marketReports.length - 1]);
   assert.equal(marketReports.filter(r => r.status === 'actual').length, 1);
-  assert.equal(getMarketReportBySlug(report.id), report);
+  assert.deepEqual(getMarketReportBySlug(report.id), { ...report, status: 'archivado' });
   assert.equal(getMarketReportBySlug('primer-informe-septiembre-2026')?.status, 'archivado');
   assert.equal(getHistoricalAutomaticReadings(report.id), snapshot);
   assert.equal(report.publishedAt, '2026-09-21');

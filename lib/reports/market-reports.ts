@@ -1,3 +1,4 @@
+import { firstOctober2026Report } from "./first-october-2026.ts";
 import { secondSeptember2026Report } from "./second-september-2026.ts";
 import { firstSeptember2026Report } from "./first-september-2026.ts";
 import type { ReportQuantitativePanel } from "./report-statistical-panels";
@@ -2102,7 +2103,8 @@ export const marketReports: MarketReport[] = [
       "Este informe organiza información pública, datos de mercado y análisis de terceros con fines exclusivamente educativos e informativos. No constituye asesoría financiera personalizada, recomendación de inversión ni instrucción para comprar, vender o mantener activos. Las rutas descritas son escenarios condicionales, no predicciones. Posicionamiento, estacionalidad, análisis técnico, flujos y movimientos implícitos de opciones pueden ayudar a interpretar el contexto, pero no garantizan resultados futuros. Las lecturas automáticas de este informe están congeladas al cierre del 14 de agosto de 2026 para preservar la fotografía histórica con la que fue publicado. El Dashboard continúa actualizándose con los datos más recientes disponibles y puede mostrar valores distintos.",
   },
   { ...firstSeptember2026Report, status: "archivado" },
-  secondSeptember2026Report,
+  { ...secondSeptember2026Report, status: "archivado" },
+  firstOctober2026Report,
 ];
 
 export const activeMarketReport = marketReports.find((report) => report.status === "actual") ?? marketReports[0];

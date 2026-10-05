@@ -143,7 +143,7 @@ for(const [ticker,n] of Object.entries({SPY:8,GLD:5,FXI:5,EWJ:7,BTCUSD:2,ETHUSD:
 }
 
 test('canonical content, asset order, future confirmed calendar and historical implied moves',()=>{
-  assert.equal(activeMarketReport.id,'segundo-informe-septiembre-2026');
+  assert.equal(activeMarketReport, marketReports[marketReports.length - 1]);
   assert.equal(report.status,'archivado');
   assert.equal(marketReports.filter(r=>r.status==='actual').length,1);
   assert.equal(report.editorialCutoffAt,'2026-09-06');

@@ -1,0 +1,101 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Luigui Herrera//Market Reports//ES
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+X-WR-CALNAME:Primer informe de octubre de 2026
+BEGIN:VEVENT
+UID:primer-informe-octubre-2026-ism-de-servicios@luigui-herrera
+DTSTAMP:20261005T000000Z
+DTSTART:20261005T140000Z
+SUMMARY:Primer informe de octubre de 2026: ISM de servicios
+DESCRIPTION:5 de octubre. Fecha y hora confirmadas por fuente primaria. 10:
+ 00 ET / 16:00 CEST. Actividad\, empleo y precios [B7] Fuente de fecha/hora
+ : B7 (https://www.ismworld.org/supply-management-news-and-reports/reports/
+ ism-pmi-reports/services/august/).
+URL:https://www.ismworld.org/supply-management-news-and-reports/reports/ism
+ -pmi-reports/services/august/
+END:VEVENT
+BEGIN:VEVENT
+UID:primer-informe-octubre-2026-comercio-internacional@luigui-herrera
+DTSTAMP:20261005T000000Z
+DTSTART:20261006T123000Z
+SUMMARY:Primer informe de octubre de 2026: Comercio internacional
+DESCRIPTION:6 de octubre. Fecha y hora confirmadas por fuente primaria. 08:
+ 30 ET / 14:30 CEST. Demanda y sector exterior [B8] Fuente de fecha/hora: B
+ 8 (https://www.bea.gov/news/schedule).
+URL:https://www.bea.gov/news/schedule
+END:VEVENT
+BEGIN:VEVENT
+UID:primer-informe-octubre-2026-actas-del-fomc@luigui-herrera
+DTSTAMP:20261005T000000Z
+DTSTART:20261007T180000Z
+SUMMARY:Primer informe de octubre de 2026: Actas del FOMC
+DESCRIPTION:7 de octubre. Fecha y hora confirmadas por fuente primaria. 14:
+ 00 ET / 20:00 CEST. Argumentos de la decisión de septiembre [B9] Fuente d
+ e fecha/hora: B9 (https://www.federalreserve.gov/newsevents/2026-october.h
+ tm).
+URL:https://www.federalreserve.gov/newsevents/2026-october.htm
+END:VEVENT
+BEGIN:VEVENT
+UID:primer-informe-octubre-2026-solicitudes-de-desempleo@luigui-herrera
+DTSTAMP:20261005T000000Z
+DTSTART;VALUE=DATE:20261008
+DTEND;VALUE=DATE:20261009
+SUMMARY:Primer informe de octubre de 2026: Solicitudes de desempleo
+DESCRIPTION:8 de octubre. Fecha prevista editorial no confirmada · hora po
+ r confirmar. Hora por confirmar (ET). Seguimiento laboral\; agenda aportad
+ a [A9] Página consultada para seguimiento (no confirma el evento): A9.
+URL:https://www.luiguiherrera.com/informes/primer-informe-octubre-2026
+END:VEVENT
+BEGIN:VEVENT
+UID:primer-informe-octubre-2026-michigan-preliminar@luigui-herrera
+DTSTAMP:20261005T000000Z
+DTSTART:20261009T140000Z
+SUMMARY:Primer informe de octubre de 2026: Michigan preliminar
+DESCRIPTION:9 de octubre. Fecha y hora confirmadas por fuente primaria. 10:
+ 00 ET / 16:00 CEST. Sentimiento y expectativas de inflación [B2] Fuente d
+ e fecha/hora: B2 (https://www.sca.isr.umich.edu/).
+URL:https://www.sca.isr.umich.edu/
+END:VEVENT
+BEGIN:VEVENT
+UID:primer-informe-octubre-2026-cpi@luigui-herrera
+DTSTAMP:20261005T000000Z
+DTSTART:20261014T123000Z
+SUMMARY:Primer informe de octubre de 2026: CPI
+DESCRIPTION:14 de octubre. Fecha y hora confirmadas por fuente primaria. 08
+ :30 ET / 14:30 CEST. Inflación antes del FOMC [B10] Fuente de fecha/hora:
+  B10 (https://www.bls.gov/schedule/2026/10_sched.htm).
+URL:https://www.bls.gov/schedule/2026/10_sched.htm
+END:VEVENT
+BEGIN:VEVENT
+UID:primer-informe-octubre-2026-ppi@luigui-herrera
+DTSTAMP:20261005T000000Z
+DTSTART:20261015T123000Z
+SUMMARY:Primer informe de octubre de 2026: PPI
+DESCRIPTION:15 de octubre. Fecha y hora confirmadas por fuente primaria. 08
+ :30 ET / 14:30 CEST. Presiones de precios en producción [B10] Fuente de f
+ echa/hora: B10 (https://www.bls.gov/schedule/2026/10_sched.htm).
+URL:https://www.bls.gov/schedule/2026/10_sched.htm
+END:VEVENT
+BEGIN:VEVENT
+UID:primer-informe-octubre-2026-decision-del-fomc@luigui-herrera
+DTSTAMP:20261005T000000Z
+DTSTART:20261028T180000Z
+SUMMARY:Primer informe de octubre de 2026: Decisión del FOMC
+DESCRIPTION:28 de octubre. Fecha y hora confirmadas por fuente primaria. 14
+ :00 ET / 19:00 CET. Pausa frente a nueva subida [B9] Fuente de fecha/hora:
+  B9 (https://www.federalreserve.gov/newsevents/2026-october.htm).
+URL:https://www.federalreserve.gov/newsevents/2026-october.htm
+END:VEVENT
+BEGIN:VEVENT
+UID:primer-informe-octubre-2026-pib-de-q3-y-pce@luigui-herrera
+DTSTAMP:20261005T000000Z
+DTSTART:20261029T123000Z
+SUMMARY:Primer informe de octubre de 2026: PIB de Q3 y PCE
+DESCRIPTION:29 de octubre. Fecha y hora confirmadas por fuente primaria. 08
+ :30 ET / 13:30 CET. Crecimiento e inflación [B8] Fuente de fecha/hora: B8
+  (https://www.bea.gov/news/schedule).
+URL:https://www.bea.gov/news/schedule
+END:VEVENT
+END:VCALENDAR

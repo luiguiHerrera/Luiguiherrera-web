@@ -6,6 +6,7 @@ import { createHash } from "node:crypto";
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
+import { pathToFileURL } from "node:url";
 import {
   buildAllReportExportModels,
   buildReportExportModel,
@@ -46,7 +47,8 @@ const root = process.cwd();
 const reportsDir = path.join(root, "public", "reports");
 const llmsPath = path.join(root, "public", "llms.txt");
 const pdfScript = path.join(root, "scripts", "render-report-pdf.py");
-const command = process.argv[2] ?? "generate";
+const isEntrypoint = process.argv[1] && pathToFileURL(path.resolve(process.argv[1])).href === import.meta.url;
+const command = isEntrypoint ? process.argv[2] ?? "generate" : undefined;
 const models = buildAllReportExportModels();
 const llmsSectionHeading = "## Reports and machine-readable files";
 const forbiddenHistoricalPhrases = ["dato vigente", "nivel actual", "lectura actual", "datos de hoy"];
@@ -1063,7 +1065,7 @@ function renderIcs(model: ReportExportModel) {
   return `${lines.map(foldIcsLine).join("\r\n")}\r\n`;
 }
 
-function findPdfPython() {
+export function findPdfPython() {
   const candidates = [
     process.env.REPORTS_PYTHON,
     path.join(
@@ -1224,6 +1226,8 @@ function normalizedText(value: string) {
     .replace(/&#39;|&apos;/g, "'")
     .replace(/<\/?a\b[^>]*>/g, "")
     .replace(/<[^>]+>/g, " ")
+    .replace(/&gt;/g, ">")
+    .replace(/&lt;/g, "<")
     .replace(/[\u2011\u2012\u2013\u2014\u2212]/g, "-")
     .replace(/\u2192/g, "->")
     .replace(/»/g, "≈")
@@ -1233,7 +1237,7 @@ function normalizedText(value: string) {
     .toLocaleLowerCase("es");
 }
 
-function assertContains(haystack: string, needle: string, label: string) {
+export function assertContains(haystack: string, needle: string, label: string) {
   const normalizedHaystack = normalizedText(haystack);
   const normalizedNeedle = normalizedText(needle);
   assert(
@@ -1242,7 +1246,17 @@ function assertContains(haystack: string, needle: string, label: string) {
   );
 }
 
-function substantiveNeedles(section: ReportExportSection, model: ReportExportModel) {
+// Exported HTML uses flat section wrappers. Scope source requirements to their
+// own section so a citation elsewhere cannot satisfy the sources contract.
+export function assertHtmlSectionContains(html: string, sectionId: string, needle: string, label: string) {
+  const start = html.indexOf(`<section id="${sectionId}" data-section="${sectionId}">`);
+  assert(start >= 0, `${label}: falta sección ${sectionId}.`);
+  const end = html.indexOf("</section>", start);
+  assert(end >= 0, `${label}: sección ${sectionId} incompleta.`);
+  assertContains(html.slice(start, end), needle, label);
+}
+
+export function substantiveNeedles(section: ReportExportSection, model: ReportExportModel) {
   const values: string[] = [section.title];
   switch (section.kind) {
     case "narrative":
@@ -1366,6 +1380,17 @@ function substantiveNeedles(section: ReportExportSection, model: ReportExportMod
       for (const item of [...(section.routes.engines ?? []), ...section.routes.scenarios]) values.push(item.title, item.body);
       break;
     case "watchlist":
+      if (model.presentation?.contextStyle === "prose") {
+        // The compact editorial layout publishes these fields, not the dashboard's
+        // currentReading/whyItMatters fields. Quantitative panels above retain full
+        // validation of their headers and cells, including confirmation conditions.
+        const first = section.items[0];
+        values.push(first.statusLabel ?? "", first.asOf ?? "", first.source ?? "",
+          "Qué mira", "Qué cambiaría la lectura");
+        for (const item of section.items) values.push(item.name, item.whatLooksAt,
+          item.whatWouldChange ?? item.whyItMatters);
+        break;
+      }
       for (const item of section.items) {
         values.push(
           item.name,
@@ -1388,14 +1413,31 @@ function substantiveNeedles(section: ReportExportSection, model: ReportExportMod
   return values.filter(Boolean);
 }
 
-function inspectPdf(pdfPath: string) {
-  return JSON.parse(runPdfPython(["inspect", pdfPath], true)) as {
+export function inspectPdf(pdfPath: string) {
+  const inspection = JSON.parse(runPdfPython(["inspect", pdfPath], true)) as {
     pages: number;
     metadata: { title: string; author: string; subject: string };
     pageTextLengths: number[];
     blankPages: number[];
     text: string;
   };
+  // Geometric extraction can interleave adjacent cells before a wrapped cell ends.
+  // The content stream preserves ReportLab's cell order; require the entire phrase
+  // in one extraction, never an unordered collection of tokens.
+  const contentOrder = spawnSync(findPdfPython(), ["-c",
+    "import json, sys; from pypdf import PdfReader; print(json.dumps('\\n\\n'.join(page.extract_text() or '' for page in PdfReader(sys.argv[1]).pages)))",
+    pdfPath,
+  ], { encoding: "utf8" });
+  assert.equal(contentOrder.status, 0, `PDF content-order extraction failed: ${contentOrder.stderr}`);
+  return { ...inspection, contentOrderText: JSON.parse(contentOrder.stdout) as string };
+}
+
+export function assertPdfContains(pdf: { text: string; contentOrderText: string }, needle: string, label: string) {
+  const normalizedNeedle = normalizedText(needle);
+  assert(
+    [pdf.text, pdf.contentOrderText].some(text => normalizedText(text).includes(normalizedNeedle)),
+    `${label}: falta "${needle.slice(0, 120)}".`,
+  );
 }
 
 function validateIcs(model: ReportExportModel, value: string) {
@@ -1490,15 +1532,16 @@ function validateRepository() {
     ]) {
       assertContains(html, value, `${model.id} HTML`);
       assertContains(markdown, value, `${model.id} Markdown`);
-      assertContains(pdf.text, value, `${model.id} PDF`);
+      assertPdfContains(pdf, value, `${model.id} PDF`);
     }
 
     for (const section of model.sections) {
       assert(html.includes(`data-section="${section.id}"`), `${model.id}: falta ${section.id} en HTML.`);
       for (const value of substantiveNeedles(section, model)) {
-        assertContains(html, value, `${model.id} HTML/${section.id}`);
+        if (section.kind === "sources") assertHtmlSectionContains(html, section.id, value, `${model.id} HTML/${section.id}`);
+        else assertContains(html, value, `${model.id} HTML/${section.id}`);
         assertContains(markdown, value, `${model.id} Markdown/${section.id}`);
-        assertContains(pdf.text, value, `${model.id} PDF/${section.id}`);
+        assertPdfContains(pdf, value, `${model.id} PDF/${section.id}`);
       }
       if (section.kind === "figures") {
         for (const figure of section.items) {
@@ -1604,7 +1647,7 @@ if (command === "candidate") {
   for (const section of model.sections) for (const value of substantiveNeedles(section, model)) {
     assertContains(html, value, 'Candidate HTML');
     assertContains(markdown, value, 'Candidate Markdown');
-    assertContains(pdf.text, value, 'Candidate PDF');
+    assertPdfContains(pdf, value, 'Candidate PDF');
   }
   validateIcs(model, ics);
   console.log(`Private candidate verified: HTML, Markdown, PDF (${pdf.pages} pages), ICS. ${output}`);
@@ -1619,6 +1662,6 @@ if (command === "candidate") {
   validateRepository();
 } else if (command === "check") {
   checkForDrift();
-} else {
+} else if (command) {
   throw new Error(`Unknown reports command: ${command}`);
 }
