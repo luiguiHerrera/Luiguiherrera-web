@@ -25,8 +25,9 @@ test('six primary assets, conditional financial distinctions and all six editori
   assert.deepEqual(report.assetReadings.slice(0, 6).map(a => a.asset), ['S&P 500 · SPY', 'Oro · GLD', 'China · FXI', 'Japón · EWJ', 'Bitcoin · BTC', 'Ethereum · ETH']);
   assert(!report.assetReadings.some(a => a.asset.includes('QQQ')));
   assert.match(report.assetReadings[4].story, /acumulación selectiva.*algunos grandes tenedores/);
-  assert.match(report.assetReadings[1].changed, /no un precio de GLD, un objetivo garantizado/);
-  assert.match(report.assetReadings[5].changed, /no demuestra acumulación en Ethereum/);
+  assert.match(report.assetReadings[1].changed, /33 toneladas/);
+  assert.match(report.assetReadings[5].changed, /no hereda automáticamente/);
+  assert.match(report.assetReadings[1].story, /No lo tomo como soporte garantizado ni señal automática de compra/);
   const text = JSON.stringify(report);
   assert.match(text, /Small caps frente a large caps/);
   for (const ticker of ['NVDA','AVGO','TSM','AMAT','ANET','MSFT','AMZN','GOOGL','DDOG','NET','PLTR']) assert(text.includes(ticker));
@@ -67,5 +68,33 @@ test('checklist satisfies the production prose exporter contract', () => {
     assert.equal(row.statusLabel, 'Seguimiento condicional');
     assert.equal(row.asOf, report.editorialCutoffAt);
     assert.match(row.source!, /2 de octubre de 2026/);
+  }
+});
+
+
+test('editorial voice, comparison and independent weekly returns', () => {
+  const text = JSON.stringify(report);
+  assert(!/\bCDI\b|\bCBI\b|Club de Inversionistas|USD[\s/.-]*COP|Felipe Campos|el autor|el editor|material aportado|material recibido|publicación recibida|interpretación atribuida/i.test(text));
+  assert(report.whatHappened.some(b => b.showHeading && b.title === 'Qué cambió desde el segundo informe de septiembre'));
+  assert(report.presentation?.sourceLinks?.some(s => s.href === 'https://www.luiguiherrera.com/informes/segundo-informe-septiembre-2026'));
+  const prices = JSON.parse(fs.readFileSync('lib/reports/snapshots/primer-informe-octubre-2026/weekly-returns.json', 'utf8'));
+  assert.equal(prices.start, '2026-09-25');
+  assert.equal(prices.end, '2026-10-02');
+  for (const [ticker, raw] of Object.entries(prices.returns)) {
+    const row = raw as { start: number; end: number; returnPct: number };
+    assert(row.start > 0 && row.end > 0);
+    assert.equal(row.returnPct, (row.end / row.start - 1) * 100);
+    assert(prices.urls[ticker].startsWith('https://query1.finance.yahoo.com/v8/finance/chart/'));
+  }
+});
+
+test('three-field watchlist removes redundant content and supplies tracking for every card', () => {
+  assert.equal(report.presentation?.watchlistStyle, 'three-fields');
+  for (const item of report.watchlist) {
+    assert.equal(item.whatLooksAt, '');
+    assert(item.whyItMatters && item.currentReading && item.whatWouldChange);
+    assert.notEqual(item.whyItMatters, item.name);
+    assert(item.href && item.linkLabel);
+    assert(item.href === '/dashboard' || item.href.startsWith('https://'));
   }
 });

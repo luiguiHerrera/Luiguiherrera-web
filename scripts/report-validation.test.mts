@@ -30,7 +30,7 @@ test('TEST_WATCHLIST_STRUCTURED_POSITIVE', () => {
 
 test('TEST_WATCHLIST_MISSING_VALUE_NEGATIVE', () => {
   for (const missing of ['Qué daría confirmación', 'Mejora persistente de RSP/SPY, IWM/SPY y sectores',
-    'Debilitaría la lectura: Deterioro conjunto de participación y líderes']) {
+    'Recuperación persistente de rezagados mejora la lectura.']) {
     assert.throws(() => validateText(html.replaceAll(missing, ''), october, checklistSections), error => error instanceof Error && error.message.includes(missing));
   }
 });
@@ -93,4 +93,21 @@ test('A3_OUTSIDE_SECTION_NEGATIVE', () => {
   const match = html.match(/<li>A3\. Carson[^<]+<\/li>/)!;
   assert(match);
   assert.throws(() => validateSources(match[0] + html.replace(match[0], '')), /A3\. Carson/);
+});
+
+
+test('editorial watchlist validates all three fields and rejects missing readings or tracking', () => {
+  const sections = october.sections.filter(section => section.kind === 'watchlist');
+  validateText(html, october, sections);
+  const section = sections[0];
+  assert.equal(section.kind, 'watchlist');
+  if (section.kind !== 'watchlist') throw new Error('Missing checklist');
+  for (const label of ['Qué quiero ver', 'Cómo lo leo hoy', 'Qué me haría cambiar']) {
+    assert.throws(() => validateText(html.replaceAll(label, ''), october, sections));
+  }
+  for (const item of section.items) {
+    for (const value of [item.whyItMatters, item.currentReading!, item.whatWouldChange!, item.linkLabel!]) {
+      assert.throws(() => validateText(html.replaceAll(value, ''), october, sections));
+    }
+  }
 });

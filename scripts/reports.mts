@@ -446,7 +446,7 @@ function renderSectionHtml(section: ReportExportSection, model: ReportExportMode
       break;
     case "context":
       if (model.presentation?.contextStyle === "prose") {
-        body = section.items.map(item=>`<p>${esc(item.body)}</p>`).join('') + `<p class="historical-note">${esc(model.presentation.openingLine ?? '')}</p>`;
+        body = section.items.map(item=>`${item.showHeading ? `<h3>${esc(item.title)}</h3>` : ""}<p>${esc(item.body)}</p>`).join('') + `<p class="historical-note">${esc(model.presentation.openingLine ?? '')}</p>`;
         break;
       }
       body = section.items
@@ -515,6 +515,10 @@ function renderSectionHtml(section: ReportExportSection, model: ReportExportMode
       body = `${model.presentation?.contextStyle === "prose" ? "" : `<p class="historical-note">${esc(section.routes.note)}</p>`}${section.routes.engines?.length ? `<h3>Motores</h3><div class="grid">${section.routes.engines.map((item) => `<article class="card"><h4>${esc(item.title)}</h4><p>${esc(item.body)}</p></article>`).join("")}</div>` : ""}<h3>Escenarios</h3><div class="grid">${section.routes.scenarios.map((item) => `<article class="card"><h4>${esc(item.title)}</h4><p>${esc(item.body)}</p></article>`).join("")}</div>${model.presentation?.contextStyle === "prose" ? `<p class="historical-note">${esc(section.routes.note)}</p>` : ""}`;
       break;
     case "watchlist":
+      if (model.presentation?.watchlistStyle === "three-fields") {
+        body = section.items.map(item => `<article class="watch"><h3>${esc(item.name)}</h3>${htmlTable(["Campo", "Contenido"], [["Qué quiero ver", item.whyItMatters], ["Cómo lo leo hoy", item.currentReading!], ["Qué me haría cambiar", item.whatWouldChange!]])}<p><a href="${esc(absoluteUrl(item.href!))}">${esc(item.linkLabel!)}</a></p></article>`).join("");
+        break;
+      }
       if (model.presentation?.contextStyle === "prose") {
         const first = section.items[0];
         // Later editorial references remain visible beside the frozen compact checklist.
@@ -782,7 +786,7 @@ function renderSectionMarkdown(section: ReportExportSection, model: ReportExport
           : ""
       }`;
     case "context":
-      if (model.presentation?.contextStyle === "prose") return `${heading}\n\n${section.items.map(item=>item.body).join('\n\n')}\n\n${model.presentation.openingLine}`;
+      if (model.presentation?.contextStyle === "prose") return `${heading}\n\n${section.items.map(item=>`${item.showHeading ? `### ${item.title}\n\n` : ''}${item.body}`).join('\n\n')}\n\n${model.presentation.openingLine}`;
       return `${heading}\n\n${section.items
         .map((item) => `### ${item.title}\n\n**${item.summary}**\n\n${item.body}`)
         .join("\n\n")}`;
@@ -838,6 +842,9 @@ ${section.scenarios.length ? `### Escenarios\n\n${section.scenarios.map((item) =
     case "probable-routes":
       return `${heading}\n\n${model.presentation?.contextStyle === "prose" ? "" : `${section.routes.note}\n\n`}${section.routes.engines?.length ? `### Motores\n\n${section.routes.engines.map((item) => `#### ${item.title}\n\n${item.body}`).join("\n\n")}\n\n` : ""}### Escenarios\n\n${section.routes.scenarios.map((item) => `#### ${item.title}\n\n${item.body}`).join("\n\n")}${model.presentation?.contextStyle === "prose" ? `\n\n${section.routes.note}` : ""}`;
     case "watchlist":
+      if (model.presentation?.watchlistStyle === "three-fields") {
+        return `${heading}\n\n${section.items.map(item => `### ${item.name}\n\n- **Qué quiero ver:** ${item.whyItMatters}\n- **Cómo lo leo hoy:** ${item.currentReading}\n- **Qué me haría cambiar:** ${item.whatWouldChange}\n\n[${item.linkLabel}](${absoluteUrl(item.href!)})`).join("\n\n")}`;
+      }
       if (model.presentation?.contextStyle === "prose") {
         const first = section.items[0];
         const revisedReferences = section.items.filter(item => item.asOf && item.asOf > (model.editorialCutoffAt ?? model.publishedAt) && item.href && item.linkLabel);
@@ -1269,7 +1276,7 @@ export function substantiveNeedles(section: ReportExportSection, model: ReportEx
       }
       break;
     case "context":
-      for (const item of section.items) values.push(...(model.presentation?.contextStyle === "prose" ? [item.body] : [item.title, item.summary, item.body]));
+      for (const item of section.items) values.push(...(model.presentation?.contextStyle === "prose" ? [...(item.showHeading ? [item.title] : []), item.body] : [item.title, item.summary, item.body]));
       if (model.presentation?.openingLine) values.push(model.presentation.openingLine);
       break;
     case "asset-readings":
@@ -1380,6 +1387,11 @@ export function substantiveNeedles(section: ReportExportSection, model: ReportEx
       for (const item of [...(section.routes.engines ?? []), ...section.routes.scenarios]) values.push(item.title, item.body);
       break;
     case "watchlist":
+      if (model.presentation?.watchlistStyle === "three-fields") {
+        values.push("Qué quiero ver", "Cómo lo leo hoy", "Qué me haría cambiar");
+        for (const item of section.items) values.push(item.name, item.whyItMatters, item.currentReading!, item.whatWouldChange!, item.linkLabel!);
+        break;
+      }
       if (model.presentation?.contextStyle === "prose") {
         // The compact editorial layout publishes these fields, not the dashboard's
         // currentReading/whyItMatters fields. Quantitative panels above retain full

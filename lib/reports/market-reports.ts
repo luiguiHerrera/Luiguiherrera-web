@@ -4,6 +4,8 @@ import { firstSeptember2026Report } from "./first-september-2026.ts";
 import type { ReportQuantitativePanel } from "./report-statistical-panels";
 
 export type MarketReportSectionBlock = {
+  /** Show a subsection heading within an otherwise continuous prose context. */
+  showHeading?: boolean;
   title: string;
   summary: string;
   body: string;
@@ -142,7 +144,7 @@ export type MarketReportPresentation = {
   marketReadingsLayout?: "vix-flows";
   linksOpenNewTab?: boolean;
   sourceLinks?: import("./report-source-links").ReportSourceLink[];
-  watchlistStyle?: "dashboard";
+  watchlistStyle?: "dashboard" | "three-fields";
   /** Títulos canónicos por sección cuando la edición usa un orden editorial propio. */
   sectionTitles?: {
     assetReadings?: string;

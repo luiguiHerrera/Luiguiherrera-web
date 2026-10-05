@@ -848,6 +848,8 @@ def add_section(story, section, styles, root, published_at, description, force_b
             story.append(p(factor["text"], styles["body"]))
     elif kind == "context":
         for item in section["items"]:
+            if item.get("showHeading") and presentation.get("contextStyle") == "prose":
+                story.append(p(item["title"], styles["h2"]))
             if presentation.get("contextStyle") != "prose":
                 story.append(p(item["title"], styles["h2"]))
                 story.append(p(item["summary"], styles["small"]))
@@ -945,6 +947,22 @@ def add_section(story, section, styles, root, published_at, description, force_b
         if closing_note:
             story.append(p(section["routes"]["note"], styles["body"]))
     elif kind == "watchlist":
+        if presentation.get("watchlistStyle") == "three-fields":
+            for item in section["items"]:
+                href = item["href"]
+                if href.startswith("/"):
+                    href = "https://www.luiguiherrera.com" + href
+                story.append(PDF["KeepTogether"]([
+                    p(item["name"], styles["h3"]),
+                    info_table([
+                        ("Qué quiero ver", item["whyItMatters"]),
+                        ("Cómo lo leo hoy", item["currentReading"]),
+                        ("Qué me haría cambiar", item["whatWouldChange"]),
+                    ], styles),
+                    PDF["Paragraph"](f'<link href="{html.escape(href, quote=True)}">{paragraph_text(item["linkLabel"])}</link>', styles["small"]),
+                    PDF["Spacer"](1, 7),
+                ]))
+            return
         if presentation.get("contextStyle") == "prose":
             first = section["items"][0]
             story.append(p(f"{first['statusLabel']} · {first['asOf']}. {first['source']}", styles["small"]))

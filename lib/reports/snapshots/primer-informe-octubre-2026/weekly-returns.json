@@ -1,0 +1,76 @@
+{
+  "source": "Yahoo Finance chart API, adjusted close",
+  "start": "2026-09-25",
+  "end": "2026-10-02",
+  "formula": "(adjustedCloseEnd / adjustedCloseStart - 1) * 100",
+  "returns": {
+    "SPY": {
+      "start": 771.3499755859375,
+      "end": 769.6400146484375,
+      "returnPct": -0.22168418897026143
+    },
+    "QQQ": {
+      "start": 744.5,
+      "end": 749.5800170898438,
+      "returnPct": 0.6823394344988243
+    },
+    "IWM": {
+      "start": 281.9700012207031,
+      "end": 281.5199890136719,
+      "returnPct": -0.15959577440262107
+    },
+    "GLD": {
+      "start": 393.4100036621094,
+      "end": 380.1400146484375,
+      "returnPct": -3.3730685265108695
+    },
+    "NVDA": {
+      "start": 225.07000732421875,
+      "end": 233.9499969482422,
+      "returnPct": 3.9454344581913103
+    },
+    "AVGO": {
+      "start": 352.80999755859375,
+      "end": 355.1400146484375,
+      "returnPct": 0.6604169683306127
+    },
+    "AMZN": {
+      "start": 249.6699981689453,
+      "end": 251.52000427246094,
+      "returnPct": 0.7409805411476622
+    },
+    "MSFT": {
+      "start": 516.1699829101562,
+      "end": 517.530029296875,
+      "returnPct": 0.26348808178477956
+    },
+    "GOOGL": {
+      "start": 343.9200134277344,
+      "end": 343.5,
+      "returnPct": -0.12212532313785607
+    },
+    "AAPL": {
+      "start": 341.07000732421875,
+      "end": 333.69000244140625,
+      "returnPct": -2.163780081605682
+    },
+    "META": {
+      "start": 751.6599731445312,
+      "end": 728.0800170898438,
+      "returnPct": -3.13705091359886
+    }
+  },
+  "urls": {
+    "SPY": "https://query1.finance.yahoo.com/v8/finance/chart/SPY?period1=1790294400&period2=1790985600&interval=1d&events=history&includeAdjustedClose=true",
+    "QQQ": "https://query1.finance.yahoo.com/v8/finance/chart/QQQ?period1=1790294400&period2=1790985600&interval=1d&events=history&includeAdjustedClose=true",
+    "IWM": "https://query1.finance.yahoo.com/v8/finance/chart/IWM?period1=1790294400&period2=1790985600&interval=1d&events=history&includeAdjustedClose=true",
+    "GLD": "https://query1.finance.yahoo.com/v8/finance/chart/GLD?period1=1790294400&period2=1790985600&interval=1d&events=history&includeAdjustedClose=true",
+    "NVDA": "https://query1.finance.yahoo.com/v8/finance/chart/NVDA?period1=1790294400&period2=1790985600&interval=1d&events=history&includeAdjustedClose=true",
+    "AVGO": "https://query1.finance.yahoo.com/v8/finance/chart/AVGO?period1=1790294400&period2=1790985600&interval=1d&events=history&includeAdjustedClose=true",
+    "AMZN": "https://query1.finance.yahoo.com/v8/finance/chart/AMZN?period1=1790294400&period2=1790985600&interval=1d&events=history&includeAdjustedClose=true",
+    "MSFT": "https://query1.finance.yahoo.com/v8/finance/chart/MSFT?period1=1790294400&period2=1790985600&interval=1d&events=history&includeAdjustedClose=true",
+    "GOOGL": "https://query1.finance.yahoo.com/v8/finance/chart/GOOGL?period1=1790294400&period2=1790985600&interval=1d&events=history&includeAdjustedClose=true",
+    "AAPL": "https://query1.finance.yahoo.com/v8/finance/chart/AAPL?period1=1790294400&period2=1790985600&interval=1d&events=history&includeAdjustedClose=true",
+    "META": "https://query1.finance.yahoo.com/v8/finance/chart/META?period1=1790294400&period2=1790985600&interval=1d&events=history&includeAdjustedClose=true"
+  }
+}

@@ -162,7 +162,10 @@ export function MarketReportContent({
           <h2 className="mt-2 text-2xl font-semibold leading-tight text-ink md:text-3xl">{contextTitle}</h2>
         </div>
         {report.presentation?.contextStyle === "prose" ? <div className="grid gap-4">
-          {report.whatHappened.map(block => <ReportParagraph key={block.title} className="text-sm leading-7 text-muted md:text-base">{block.body}</ReportParagraph>)}
+          {report.whatHappened.map(block => <div key={block.title}>
+            {block.showHeading ? <h3 className="mb-3 mt-4 text-xl font-semibold leading-tight text-ink">{block.title}</h3> : null}
+            <ReportParagraph className="text-sm leading-7 text-muted md:text-base">{block.body}</ReportParagraph>
+          </div>)}
           <ReportParagraph className="border-l-2 border-brass pl-4 text-base font-medium leading-7 text-ink">{report.presentation.openingLine}</ReportParagraph>
         </div> : <div className="grid gap-3 md:grid-cols-2">
           {report.whatHappened.map((block) => (
@@ -521,10 +524,10 @@ function WatchControlItem({ compact = false, item, report }: { compact?: boolean
       </summary>
       <div className="border-t border-line px-4 pb-4 pt-3">
         <div className="grid gap-4 text-sm leading-6 text-muted md:grid-cols-2">
-          <ReadingColumn title="Qué mira" body={item.whatLooksAt} />
-          <ReadingColumn title="Por qué importa" body={item.whyItMatters} />
-          <ReadingColumn title="Lectura al publicar" body={currentReading} />
-          <ReadingColumn title="Qué cambiaría" body={whatWouldChange} />
+          {report.presentation?.watchlistStyle !== "three-fields" ? <ReadingColumn title="Qué mira" body={item.whatLooksAt} /> : null}
+          <ReadingColumn title={report.presentation?.watchlistStyle === "three-fields" ? "Qué quiero ver" : "Por qué importa"} body={item.whyItMatters} />
+          <ReadingColumn title={report.presentation?.watchlistStyle === "three-fields" ? "Cómo lo leo hoy" : "Lectura al publicar"} body={currentReading} />
+          <ReadingColumn title={report.presentation?.watchlistStyle === "three-fields" ? "Qué me haría cambiar" : "Qué cambiaría"} body={whatWouldChange} />
         </div>
         <div className="mt-4 border-t border-line pt-3 text-xs leading-5 text-muted">
           <ReportParagraph>
