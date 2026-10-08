@@ -1,0 +1,235 @@
+{
+  "version": "regime-v2-parameters/1.0.0-p8",
+  "builder_ready": true,
+  "production_validated": false,
+  "implicit_defaults_allowed": false,
+  "selected_candidate": "C03",
+  "parameters_total": 9,
+  "parameters_resolved": 9,
+  "parameters_unresolved": 0,
+  "scalar_thresholds_total": 13,
+  "scalar_thresholds": {
+    "k_weak": 3,
+    "k_broad": 8,
+    "leadership_gap": 1.0,
+    "v_watch": 20.0,
+    "v_adverse": 25.0,
+    "v_stress": 35.0,
+    "jump_1": 10.0,
+    "jump_5": 20.0,
+    "curve_flat": 2.0,
+    "curve_adverse": 5.0,
+    "rho_floor": 0.4,
+    "rho_high": 0.65,
+    "delta_rising": 0.1
+  },
+  "parameters": [
+    {
+      "id": "PRICE_BASIS",
+      "status": "RESOLVED",
+      "classification": "SOURCE_DEFINED",
+      "value": {
+        "contract_ref": "price-series-contract.json"
+      },
+      "domain": "Explicit single basis per price panel, currency, adjustment/vintage and corporate-action policy; no mixing unadjusted and adjusted prices.",
+      "blocking_builder": false,
+      "unit": "Contract policy",
+      "justification": "Explicit verified family semantics/availability envelope or conservative structural freshness; no fixed source publication lag invented.",
+      "decision_author": "P8 Prototyper under the user-authorized gate-closure scope",
+      "bound_at": "2026-09-08T14:44:50.924966+00:00",
+      "evidence": [
+        "price-series-contract.json",
+        "contract-check-results.json"
+      ],
+      "legacy_seed_status": "Candidate provenance only, never evidence of V2 validity."
+    },
+    {
+      "id": "PARTICIPATION_BANDS",
+      "status": "RESOLVED",
+      "classification": "EMPIRICALLY_QUALIFIED",
+      "value": {
+        "k_weak": 3,
+        "k_broad": 8
+      },
+      "domain": "Integer 0 <= k_weak < k_broad <= 11; k_broad-k_weak >= 2.",
+      "blocking_builder": false,
+      "unit": "Integer sector counts / percentage points or relative percent / dimensionless correlation, as identified by the feature contract.",
+      "justification": "Require stronger level/momentum for shock; no return optimization. Selected by frozen TRAIN-only lexicographic rule, all six candidates pass raw invariants; R2 empirical qualification only.",
+      "decision_author": "P8 Prototyper under the user-authorized gate-closure scope",
+      "bound_at": "2026-09-08T14:44:50.924966+00:00",
+      "evidence": [
+        "protocol-freeze.json",
+        "F3-training-selection.json",
+        "qualification-results.json",
+        "raw-check-results.json"
+      ],
+      "legacy_seed_status": "Candidate provenance only, never evidence of V2 validity."
+    },
+    {
+      "id": "LEADERSHIP_GAP",
+      "status": "RESOLVED",
+      "classification": "EMPIRICALLY_QUALIFIED",
+      "value": {
+        "leadership_gap": 1.0
+      },
+      "domain": "gap > 0, in percentage points of 21-session return.",
+      "blocking_builder": false,
+      "unit": "Integer sector counts / percentage points or relative percent / dimensionless correlation, as identified by the feature contract.",
+      "justification": "Require stronger level/momentum for shock; no return optimization. Selected by frozen TRAIN-only lexicographic rule, all six candidates pass raw invariants; R2 empirical qualification only.",
+      "decision_author": "P8 Prototyper under the user-authorized gate-closure scope",
+      "bound_at": "2026-09-08T14:44:50.924966+00:00",
+      "evidence": [
+        "protocol-freeze.json",
+        "F3-training-selection.json",
+        "qualification-results.json",
+        "raw-check-results.json"
+      ],
+      "legacy_seed_status": "Candidate provenance only, never evidence of V2 validity."
+    },
+    {
+      "id": "VOLATILITY_BANDS",
+      "status": "RESOLVED",
+      "classification": "EMPIRICALLY_QUALIFIED",
+      "value": {
+        "v_watch": 20.0,
+        "v_adverse": 25.0,
+        "v_stress": 35.0
+      },
+      "domain": "0 < v_watch < v_adverse < v_stress, in VIX points.",
+      "blocking_builder": false,
+      "unit": "Integer sector counts / percentage points or relative percent / dimensionless correlation, as identified by the feature contract.",
+      "justification": "Require stronger level/momentum for shock; no return optimization. Selected by frozen TRAIN-only lexicographic rule, all six candidates pass raw invariants; R2 empirical qualification only.",
+      "decision_author": "P8 Prototyper under the user-authorized gate-closure scope",
+      "bound_at": "2026-09-08T14:44:50.924966+00:00",
+      "evidence": [
+        "protocol-freeze.json",
+        "F3-training-selection.json",
+        "qualification-results.json",
+        "raw-check-results.json"
+      ],
+      "legacy_seed_status": "Candidate provenance only, never evidence of V2 validity."
+    },
+    {
+      "id": "VOLATILITY_MOMENTUM",
+      "status": "RESOLVED",
+      "classification": "EMPIRICALLY_QUALIFIED",
+      "value": {
+        "jump_1": 10.0,
+        "jump_5": 20.0
+      },
+      "domain": "jump_1 > 0; jump_5 > 0, relative percent, not VIX points.",
+      "blocking_builder": false,
+      "unit": "Integer sector counts / percentage points or relative percent / dimensionless correlation, as identified by the feature contract.",
+      "justification": "Require stronger level/momentum for shock; no return optimization. Selected by frozen TRAIN-only lexicographic rule, all six candidates pass raw invariants; R2 empirical qualification only.",
+      "decision_author": "P8 Prototyper under the user-authorized gate-closure scope",
+      "bound_at": "2026-09-08T14:44:50.924966+00:00",
+      "evidence": [
+        "protocol-freeze.json",
+        "F3-training-selection.json",
+        "qualification-results.json",
+        "raw-check-results.json"
+      ],
+      "legacy_seed_status": "Candidate provenance only, never evidence of V2 validity."
+    },
+    {
+      "id": "CURVE_BANDS",
+      "status": "RESOLVED",
+      "classification": "EMPIRICALLY_QUALIFIED",
+      "value": {
+        "curve_flat": 2.0,
+        "curve_adverse": 5.0
+      },
+      "domain": "0 <= curve_flat < curve_adverse, in percent of VX1.",
+      "blocking_builder": false,
+      "unit": "Integer sector counts / percentage points or relative percent / dimensionless correlation, as identified by the feature contract.",
+      "justification": "Require stronger level/momentum for shock; no return optimization. Selected by frozen TRAIN-only lexicographic rule, all six candidates pass raw invariants; R2 empirical qualification only.",
+      "decision_author": "P8 Prototyper under the user-authorized gate-closure scope",
+      "bound_at": "2026-09-08T14:44:50.924966+00:00",
+      "evidence": [
+        "protocol-freeze.json",
+        "F3-training-selection.json",
+        "qualification-results.json",
+        "raw-check-results.json"
+      ],
+      "legacy_seed_status": "Candidate provenance only, never evidence of V2 validity."
+    },
+    {
+      "id": "CORRELATION_BANDS",
+      "status": "RESOLVED",
+      "classification": "EMPIRICALLY_QUALIFIED",
+      "value": {
+        "rho_floor": 0.4,
+        "rho_high": 0.65,
+        "delta_rising": 0.1
+      },
+      "domain": "0 <= rho_floor < rho_high < 1; delta_rising > 0; nested 21/63-window RISING must have a realizable PSD witness.",
+      "blocking_builder": false,
+      "unit": "Integer sector counts / percentage points or relative percent / dimensionless correlation, as identified by the feature contract.",
+      "justification": "Require stronger level/momentum for shock; no return optimization. Selected by frozen TRAIN-only lexicographic rule, all six candidates pass raw invariants; R2 empirical qualification only.",
+      "decision_author": "P8 Prototyper under the user-authorized gate-closure scope",
+      "bound_at": "2026-09-08T14:44:50.924966+00:00",
+      "evidence": [
+        "protocol-freeze.json",
+        "F3-training-selection.json",
+        "qualification-results.json",
+        "raw-check-results.json"
+      ],
+      "legacy_seed_status": "Candidate provenance only, never evidence of V2 validity."
+    },
+    {
+      "id": "FRESHNESS_POLICY",
+      "status": "RESOLVED",
+      "classification": "STRUCTURAL",
+      "value": {
+        "contract_ref": "freshness-policy.json"
+      },
+      "domain": "Versioned source calendars, zones, publication SLAs, decision instants and cross-source date compatibility.",
+      "blocking_builder": false,
+      "unit": "Contract policy",
+      "justification": "Explicit verified family semantics/availability envelope or conservative structural freshness; no fixed source publication lag invented.",
+      "decision_author": "P8 Prototyper under the user-authorized gate-closure scope",
+      "bound_at": "2026-09-08T14:44:50.924966+00:00",
+      "evidence": [
+        "freshness-policy.json",
+        "contract-check-results.json"
+      ],
+      "legacy_seed_status": "Candidate provenance only, never evidence of V2 validity."
+    },
+    {
+      "id": "SOURCE_AVAILABILITY",
+      "status": "RESOLVED",
+      "classification": "SOURCE_DEFINED",
+      "value": {
+        "contract_ref": "temporal-availability-contract.json"
+      },
+      "domain": "Verified publication or first-observed upper bound for each exact source vintage and all raw inputs.",
+      "blocking_builder": false,
+      "unit": "Contract policy",
+      "justification": "Explicit verified family semantics/availability envelope or conservative structural freshness; no fixed source publication lag invented.",
+      "decision_author": "P8 Prototyper under the user-authorized gate-closure scope",
+      "bound_at": "2026-09-08T14:44:50.924966+00:00",
+      "evidence": [
+        "temporal-availability-contract.json",
+        "contract-check-results.json"
+      ],
+      "legacy_seed_status": "Candidate provenance only, never evidence of V2 validity."
+    }
+  ],
+  "parked_parameters": [
+    "HYSTERESIS",
+    "CURVATURE_HISTORY_WINDOW",
+    "MARKET_CONCENTRATION_HOLDINGS",
+    "PFL_COMPATIBILITY",
+    "CROSS_ASSET_CORE_EXTENSIONS"
+  ],
+  "evidence_sha256": {
+    "selection-protocol.json": "1baf279a4399277fd55342adbc920f3f14bec11d190e06c62650f9745f9c3a2c",
+    "F3-training-selection.json": "5fc60bcab1b8b8110db0472b167a78f8713ad26dbe24a251fa889e26aa1eb4be",
+    "qualification-results.json": "0a2bb097af1eca3476fb4a03eb261d3ac4a953f7b49a36fcaf1143578a420fd3",
+    "raw-check-results.json": "d6a8119cf7bb774c9b673155a20c1b8a0f483a787f725e0abf2f3c08a9a1b688",
+    "price-series-contract.json": "cbccf03ae9e261eb6a240804ec57bc1e4ecd7f01a1a7dbd59c1e7b5a84fade59",
+    "temporal-availability-contract.json": "0ba4661ac39c4f2be50a8a17104c0c504db0d4159cf850b60d865d8a98e492d9",
+    "freshness-policy.json": "870d75029e89f4b8b9baad212186fc3b759636088f0cd9a101511763e0158740"
+  },
+  "qualification_order_caveat": "Numerical eligibility/selections were sealed before executing raw invariant witnesses. Final binding occurs only now, after all six candidates pass every raw invariant. Thus the admissible candidate set is unchanged. No failed candidate was reselected using validation/test."
+}

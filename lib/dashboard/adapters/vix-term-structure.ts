@@ -1,3 +1,4 @@
+import { readObservedResponse } from "@/lib/regime-engine-v2/operations/pipeline-capture";
 import type { VixTermStructureClassification, VixTermStructureData, VixTermStructurePoint } from "@/lib/dashboard/types";
 
 export type CboeSettlementRow = {
@@ -211,7 +212,7 @@ async function fetchSettlementCsv(date: string) {
     next: { revalidate: 21600 },
     signal: AbortSignal.timeout(REQUEST_TIMEOUT_MS),
   });
-  const text = await response.text();
+  const text = await readObservedResponse(response, { sourceId: "VX_OFFICIAL", sourceVersion: "cboe-cfe-daily-csv/1.0.0", sourceUrl: url });
 
   return {
     status: response.status,

@@ -1,0 +1,95 @@
+{
+  "version": "regime-v2-parameters/UNBOUND",
+  "default_values_allowed": false,
+  "builder_ready": false,
+  "parameters": [
+    {
+      "id": "PRICE_BASIS",
+      "status": "PARAMETER_REQUIRES_VALIDATION",
+      "blocking_builder": true,
+      "value": null,
+      "domain": "Explicit single basis per price panel, currency, adjustment/vintage and corporate-action policy; no mixing unadjusted and adjusted prices.",
+      "existing_precedent_not_approval": "Dashboard declares close; the parser prefers adjusted if supplied. Statistical data may alias close as adjustedClose.",
+      "resolution_evidence": "Compare the same dated instruments across candidate conventions; identify corporate actions and revisions. Record approved source contract and material differences before binding."
+    },
+    {
+      "id": "PARTICIPATION_BANDS",
+      "status": "PARAMETER_REQUIRES_VALIDATION",
+      "blocking_builder": true,
+      "value": null,
+      "domain": "Integer 0 <= k_weak < k_broad <= 11; k_broad-k_weak >= 2.",
+      "existing_precedent_not_approval": "No V2 breadth bands exist in HEAD.",
+      "resolution_evidence": "Review distributions and stability of positive-sector counts on aligned training history; preserve an interior MIXED range; demonstrate all participation states from coherent panels on held-out data."
+    },
+    {
+      "id": "LEADERSHIP_GAP",
+      "status": "PARAMETER_REQUIRES_VALIDATION",
+      "blocking_builder": true,
+      "value": null,
+      "domain": "gap > 0, in percentage points of 21-session return.",
+      "existing_precedent_not_approval": "V1 compares the top two of three group means using gap=1; V2 compares non-defensive leadership versus defensive.",
+      "resolution_evidence": "Validate the new economic comparison and sensitivity to gap with the same group universe. Do not inherit 1 without evidence."
+    },
+    {
+      "id": "VOLATILITY_BANDS",
+      "status": "PARAMETER_REQUIRES_VALIDATION",
+      "blocking_builder": true,
+      "value": null,
+      "domain": "0 < v_watch < v_adverse < v_stress, in VIX points.",
+      "existing_precedent_not_approval": "V1 levels include 12,16,20,25,30,40; these are descriptive module bands, not V2 validation.",
+      "resolution_evidence": "Validate state coverage, shock identification and parameter sensitivity jointly with momentum and the VX curve, on temporal holdouts."
+    },
+    {
+      "id": "VOLATILITY_MOMENTUM",
+      "status": "PARAMETER_REQUIRES_VALIDATION",
+      "blocking_builder": true,
+      "value": null,
+      "domain": "jump_1 > 0; jump_5 > 0, relative percent, not VIX points.",
+      "existing_precedent_not_approval": "V1 rising_fast uses 1D >= 8 percent OR 5D >= 15 percent.",
+      "resolution_evidence": "Validate joint shock/false-trigger behavior with VOLATILITY_BANDS and CURVE_BANDS. Recompute from full point-in-time histories."
+    },
+    {
+      "id": "CURVE_BANDS",
+      "status": "PARAMETER_REQUIRES_VALIDATION",
+      "blocking_builder": true,
+      "value": null,
+      "domain": "0 <= curve_flat < curve_adverse, in percent of VX1.",
+      "existing_precedent_not_approval": "Legacy flat band [-2,+2], outer slope boundaries +/-5.",
+      "resolution_evidence": "Validate expiry/roll effects and level/curve disagreement; use actual monthly contract identities and settlement dates, never continuous synthetic VX slots without provenance."
+    },
+    {
+      "id": "CORRELATION_BANDS",
+      "status": "PARAMETER_REQUIRES_VALIDATION",
+      "blocking_builder": true,
+      "value": null,
+      "domain": "0 <= rho_floor < rho_high < 1; delta_rising > 0; nested 21/63-window RISING must have a realizable PSD witness.",
+      "existing_precedent_not_approval": "Legacy fragility uses rho21 >= .65 as one score term; there is no validated V2 rising band.",
+      "resolution_evidence": "Use dated aligned returns and all 55 pairs. Demonstrate LOW/RISING/HIGH jointly with participation and leadership; compare level-only and level-plus-spread in ablation."
+    },
+    {
+      "id": "FRESHNESS_POLICY",
+      "status": "PARAMETER_REQUIRES_VALIDATION",
+      "blocking_builder": true,
+      "value": null,
+      "domain": "Versioned source calendars, zones, publication SLAs, decision instants and cross-source date compatibility.",
+      "existing_precedent_not_approval": "TTL: 24h sector/VIX/BTC/GLD, 6h VX; legacy BTC stale >4 calendar days, GLD >5 days.",
+      "resolution_evidence": "Validate expected publication behavior including weekends, holidays and failures. TTL and legacy staleness thresholds cannot substitute for this contract."
+    },
+    {
+      "id": "SOURCE_AVAILABILITY",
+      "status": "PARAMETER_REQUIRES_VALIDATION",
+      "blocking_builder": true,
+      "value": null,
+      "domain": "Verified publication or first-observed upper bound for each exact source vintage and all raw inputs.",
+      "existing_precedent_not_approval": "No per-observation available_at in Dashboard; September snapshot observed on 2026-09-06 for data through 2026-09-04.",
+      "resolution_evidence": "Supply immutable captures/vintages with raw hashes and eligibility audit. A reconstruction using latest revised data does not satisfy point-in-time. Bind conservative capture-time availability where earlier publication is unproven."
+    }
+  ],
+  "parked_parameters": [
+    "HYSTERESIS",
+    "CURVATURE_HISTORY_WINDOW",
+    "MARKET_CONCENTRATION_HOLDINGS",
+    "PFL_COMPATIBILITY",
+    "CROSS_ASSET_CORE_EXTENSIONS"
+  ]
+}

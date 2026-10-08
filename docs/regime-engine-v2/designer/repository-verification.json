@@ -1,0 +1,184 @@
+{
+  "status": "PASS",
+  "completed_at": "2026-09-08T20:37:39.278624+00:00",
+  "required_checks": {
+    "canonical_report_pass": true,
+    "all_frozen_input_bytes_preserved": true,
+    "final_UI_sources_match_last_tested_sources": true,
+    "typecheck_before_and_after_build": true,
+    "build": true,
+    "lint_errors_zero": true,
+    "lint_warnings_identical_to_Maintainer": true,
+    "production_HTTP_10_cases": true,
+    "Next_versions_consistent": true,
+    "dependency_manifests_preserved": true
+  },
+  "canonical_tests": {
+    "breakdown": {
+      "existing_node": {
+        "passed": 302,
+        "total": 302
+      },
+      "maintainer_operations": {
+        "passed": 78,
+        "total": 78
+      },
+      "designer_presentation": {
+        "passed": 59,
+        "total": 59
+      },
+      "existing_python": {
+        "passed": 7,
+        "total": 7
+      },
+      "sweeper_attacks": {
+        "passed": 110,
+        "total": 110
+      },
+      "offline_groweer_challengers": {
+        "passed": 36,
+        "total": 36
+      }
+    },
+    "passed": 592,
+    "total": 592,
+    "note": "Golden 464 and history 1930 are reported separately; reports/editorial are successful commands, not invented test counts. Offline challenger checks do not imply canonical adoption."
+  },
+  "p8_golden": {
+    "passed": 464,
+    "total": 464,
+    "fixed_C03_cases": 84
+  },
+  "historical_R2": {
+    "passed": 1930,
+    "total": 1930,
+    "accepted_sweeper_outputs_equal": true,
+    "point_in_time_OOS": false
+  },
+  "sweeper_attacks": {
+    "passed": 110,
+    "total": 110,
+    "raw_crossed_space": 576
+  },
+  "commands": [
+    {
+      "command": "npx tsc --noEmit --incremental false",
+      "phase": "before build",
+      "exit_code": 0,
+      "log": "typecheck-before-build.log"
+    },
+    {
+      "command": "npx eslint . --format json --output-file docs/regime-engine-v2/designer/lint.json",
+      "exit_code": 0,
+      "log": "lint.log"
+    },
+    {
+      "command": "npm run build",
+      "exit_code": 0,
+      "log": "build.log"
+    },
+    {
+      "command": "npx tsc --noEmit --incremental false",
+      "phase": "after build",
+      "exit_code": 0,
+      "log": "typecheck-after-build.log"
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 python3 docs/regime-engine-v2/designer/verify-production-preview.py",
+      "exit_code": 0,
+      "log": "production-preview-guard.log"
+    }
+  ],
+  "lint": {
+    "errors": 0,
+    "warnings": 18,
+    "baseline_warnings": 18,
+    "new_warnings": 0,
+    "warning_signatures_identical": true
+  },
+  "next_versions": {
+    "declared": "16.3.1",
+    "locked": "16.3.1",
+    "installed": "16.3.1"
+  },
+  "new_runtime_dependencies": 0,
+  "preservation": {
+    "frozen_files": 1014,
+    "canonical_and_operations_files": 21,
+    "all_prior_stage_artifacts": 474,
+    "final_differences": [],
+    "only_authorized_existing_edit": "app/(es)/dashboard/page.tsx",
+    "generated_file_audit": {
+      "path": "next-env.d.ts",
+      "accepted_sha256": "1862ac4bbbc5192d4bf562161df66ea547ed3e67173100656ab606ae9797db2b",
+      "after_build_sha256": "1862ac4bbbc5192d4bf562161df66ea547ed3e67173100656ab606ae9797db2b",
+      "restored_if_needed": false,
+      "final_sha256": "1862ac4bbbc5192d4bf562161df66ea547ed3e67173100656ab606ae9797db2b"
+    }
+  },
+  "production_HTTP": {
+    "preview_404": 8,
+    "public_V1_200": 2,
+    "fixtures_visible": false,
+    "server": "127.0.0.1:3107",
+    "server_stopped_after_QA": true,
+    "stop_signal": "SIGINT",
+    "server_exit_code": 130
+  },
+  "artifacts": [
+    {
+      "path": "docs/regime-engine-v2/designer/canonical-verification.json",
+      "sha256": "93a7f00045556ab45f5c85f9155c0917525bb6216f6c4157ef5c17b3d3a2f846"
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/typecheck-before-build.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/typecheck-after-build.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/lint.json",
+      "sha256": "122ba26b67f915e59e14b1aecfc4c2cfc78eb0ba965edcbcb5584a01c1c926e2"
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/lint.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/build.log",
+      "sha256": "bbf033e5722f5f0958cc93a35d63985592083210df5df7cbe9356778526527a1"
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/generated-file-audit.json",
+      "sha256": "87a812ad6dc35533f34156d540aa41eadcc44c486ac0190848f2d11f7f9c952d"
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/production-preview-guard.json",
+      "sha256": "5dfeddfdbf231894b35d7796df78ee91480a8cb18a0e76b94191fa2ee778da4a"
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/production-preview-guard.log",
+      "sha256": "5dfeddfdbf231894b35d7796df78ee91480a8cb18a0e76b94191fa2ee778da4a"
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/production-server.log",
+      "sha256": "3a62c926f62973e36339b92d22e34af8e87cea9e180ee4144a1ae0f41d71d3c3"
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/preview-guard-tests.log",
+      "sha256": "bb11efcdcd7766aebc641913ad0cc63121204be7aa310b2d3cb2138a023a0c19"
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/verification-findings.json",
+      "sha256": "efedf0fe3e33cc0d9d69f8d586a972688460418b39916f8a9d9289276a6d9260"
+    }
+  ],
+  "current_git_HEAD": "636cb73fb0fe4d2b28ad96cb7185f8c07d8f895b",
+  "current_git_branch": "codex/primer-informe-septiembre-2026",
+  "production_cutover": false,
+  "deployment": false,
+  "commit_created_by_verifier": false,
+  "push_performed_by_verifier": false
+}

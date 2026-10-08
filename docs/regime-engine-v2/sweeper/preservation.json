@@ -1,0 +1,32 @@
+{
+  "status": "PASS",
+  "original_files_verified": 819,
+  "original_files_changed": [],
+  "P8_files_verified": 289,
+  "P8_changed": [],
+  "Builder_input_files": 24,
+  "Builder_files_repaired": [
+    "lib/regime-engine-v2/contract.ts",
+    "lib/regime-engine-v2/core.ts",
+    "lib/regime-engine-v2/engine.ts",
+    "lib/regime-engine-v2/features.ts",
+    "lib/regime-engine-v2/normalize.ts",
+    "lib/regime-engine-v2/shadow.ts",
+    "lib/regime-engine-v2/temporal.ts",
+    "lib/regime-engine-v2/types.ts",
+    "scripts/regime-v2-conformance.mts"
+  ],
+  "Builder_delivery_documents_unchanged": true,
+  "V1_files_unchanged": true,
+  "public_imports_of_v2": [],
+  "HEAD": "636cb73fb0fe4d2b28ad96cb7185f8c07d8f895b",
+  "TREE": "9f84c28f1b40c86cf574d5c8fb6f8022b9c091d9",
+  "commit_push_deploy_performed": false,
+  "next_env_restored": {
+    "build_exit_code": 0,
+    "next_env_changed_by_build": true,
+    "original_bytes_restored": true,
+    "restored_sha256": "1862ac4bbbc5192d4bf562161df66ea547ed3e67173100656ab606ae9797db2b",
+    "note": "Restored only the generated build side effect from verified Sweeper entry bytes."
+  }
+}

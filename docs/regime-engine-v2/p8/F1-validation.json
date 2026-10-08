@@ -1,0 +1,1736 @@
+{
+  "training_selection_sha256": "8bc9aa082e1040de173dbccce7a9099629f81a6f7a5012864cc09f517b9fcae0",
+  "selected_id_unchanged": "C03",
+  "comparisons": [
+    {
+      "id": "C00",
+      "metrics": {
+        "decisions": 251,
+        "complete": 251,
+        "missing": 0,
+        "occupancy": {
+          "RISK_ON_BROAD": 8,
+          "RISK_ON_SELECTIVE": 5,
+          "TRANSITION": 94,
+          "DEFENSIVE": 96,
+          "STRESS": 48
+        },
+        "occupancy_fraction_of_classifiable": {
+          "RISK_ON_BROAD": 0.03187250996015936,
+          "RISK_ON_SELECTIVE": 0.0199203187250996,
+          "TRANSITION": 0.3745019920318725,
+          "DEFENSIVE": 0.38247011952191234,
+          "STRESS": 0.19123505976095617
+        },
+        "max_single_regime_occupancy": 0.38247011952191234,
+        "adjacent_eligible_pairs": 250,
+        "transitions": 59,
+        "turnover": 0.236,
+        "flip_flop_count": 28,
+        "flip_flop_per_adjacent_pair": 0.112,
+        "median_run_sessions": 2.0,
+        "runs": 60,
+        "censored_runs": 2,
+        "median_run_by_state": {
+          "RISK_ON_BROAD": 1.0,
+          "RISK_ON_SELECTIVE": 1.0,
+          "TRANSITION": 2.0,
+          "DEFENSIVE": 2,
+          "STRESS": 3
+        },
+        "historically_observed": [
+          "RISK_ON_BROAD",
+          "RISK_ON_SELECTIVE",
+          "TRANSITION",
+          "DEFENSIVE",
+          "STRESS"
+        ],
+        "historically_absent_not_raw_unreachable": [],
+        "pillar_occupancy": {
+          "participation": {
+            "MIXED": 132,
+            "ADVERSE": 72,
+            "FAVORABLE": 47
+          },
+          "leadership": {
+            "ADVERSE": 58,
+            "MIXED": 40,
+            "FAVORABLE": 153
+          },
+          "equity": {
+            "ADVERSE": 69,
+            "MIXED": 142,
+            "FAVORABLE": 40
+          },
+          "volatility": {
+            "BENIGN": 21,
+            "WATCH": 99,
+            "ADVERSE": 83,
+            "STRESS": 48
+          },
+          "fragility": {
+            "LOW": 116,
+            "HIGH": 135
+          }
+        }
+      },
+      "sensitivity": {
+        "median_disagreement": 0.0,
+        "worst_disagreement": 0.17928286852589642,
+        "perturbations": [
+          {
+            "parameter": "k_weak",
+            "direction": -1,
+            "value": 2,
+            "comparison_decisions": 251,
+            "changed_regime_count": 0,
+            "disagreement": 0.0
+          },
+          {
+            "parameter": "k_weak",
+            "direction": 1,
+            "value": 4,
+            "comparison_decisions": 251,
+            "changed_regime_count": 1,
+            "disagreement": 0.00398406374501992
+          },
+          {
+            "parameter": "k_broad",
+            "direction": -1,
+            "value": 7,
+            "comparison_decisions": 251,
+            "changed_regime_count": 2,
+            "disagreement": 0.00796812749003984
+          },
+          {
+            "parameter": "k_broad",
+            "direction": 1,
+            "value": 9,
+            "comparison_decisions": 251,
+            "changed_regime_count": 3,
+            "disagreement": 0.01195219123505976
+          },
+          {
+            "parameter": "leadership_gap",
+            "direction": -1,
+            "value": 0.9,
+            "comparison_decisions": 251,
+            "changed_regime_count": 2,
+            "disagreement": 0.00796812749003984
+          },
+          {
+            "parameter": "leadership_gap",
+            "direction": 1,
+            "value": 1.1,
+            "comparison_decisions": 251,
+            "changed_regime_count": 0,
+            "disagreement": 0.0
+          },
+          {
+            "parameter": "v_watch",
+            "direction": -1,
+            "value": 18.0,
+            "comparison_decisions": 251,
+            "changed_regime_count": 13,
+            "disagreement": 0.05179282868525897
+          },
+          {
+            "parameter": "v_watch",
+            "direction": 1,
+            "value": 22.0,
+            "comparison_decisions": 251,
+            "changed_regime_count": 24,
+            "disagreement": 0.09561752988047809
+          },
+          {
+            "parameter": "v_adverse",
+            "direction": -1,
+            "value": 22.5,
+            "comparison_decisions": 251,
+            "changed_regime_count": 19,
+            "disagreement": 0.07569721115537849
+          },
+          {
+            "parameter": "v_adverse",
+            "direction": 1,
+            "value": 27.500000000000004,
+            "comparison_decisions": 251,
+            "changed_regime_count": 28,
+            "disagreement": 0.11155378486055777
+          },
+          {
+            "parameter": "v_stress",
+            "direction": -1,
+            "value": 27.0,
+            "comparison_decisions": 251,
+            "changed_regime_count": 45,
+            "disagreement": 0.17928286852589642
+          },
+          {
+            "parameter": "v_stress",
+            "direction": 1,
+            "value": 33.0,
+            "comparison_decisions": 251,
+            "changed_regime_count": 39,
+            "disagreement": 0.1553784860557769
+          },
+          {
+            "parameter": "jump_1",
+            "direction": -1,
+            "value": 7.2,
+            "comparison_decisions": 251,
+            "changed_regime_count": 0,
+            "disagreement": 0.0
+          },
+          {
+            "parameter": "jump_1",
+            "direction": 1,
+            "value": 8.8,
+            "comparison_decisions": 251,
+            "changed_regime_count": 0,
+            "disagreement": 0.0
+          },
+          {
+            "parameter": "jump_5",
+            "direction": -1,
+            "value": 13.5,
+            "comparison_decisions": 251,
+            "changed_regime_count": 0,
+            "disagreement": 0.0
+          },
+          {
+            "parameter": "jump_5",
+            "direction": 1,
+            "value": 16.5,
+            "comparison_decisions": 251,
+            "changed_regime_count": 0,
+            "disagreement": 0.0
+          },
+          {
+            "parameter": "curve_flat",
+            "direction": -1,
+            "value": 1.8,
+            "comparison_decisions": 251,
+            "changed_regime_count": 0,
+            "disagreement": 0.0
+          },
+          {
+            "parameter": "curve_flat",
+            "direction": 1,
+            "value": 2.2,
+            "comparison_decisions": 251,
+            "changed_regime_count": 0,
+            "disagreement": 0.0
+          },
+          {
+            "parameter": "curve_adverse",
+            "direction": -1,
+            "value": 4.5,
+            "comparison_decisions": 251,
+            "changed_regime_count": 0,
+            "disagreement": 0.0
+          },
+          {
+            "parameter": "curve_adverse",
+            "direction": 1,
+            "value": 5.5,
+            "comparison_decisions": 251,
+            "changed_regime_count": 0,
+            "disagreement": 0.0
+          },
+          {
+            "parameter": "rho_floor",
+            "direction": -1,
+            "value": 0.36000000000000004,
+            "comparison_decisions": 251,
+            "changed_regime_count": 0,
+            "disagreement": 0.0
+          },
+          {
+            "parameter": "rho_floor",
+            "direction": 1,
+            "value": 0.44000000000000006,
+            "comparison_decisions": 251,
+            "changed_regime_count": 0,
+            "disagreement": 0.0
+          },
+          {
+            "parameter": "rho_high",
+            "direction": -1,
+            "value": 0.5850000000000001,
+            "comparison_decisions": 251,
+            "changed_regime_count": 2,
+            "disagreement": 0.00796812749003984
+          },
+          {
+            "parameter": "rho_high",
+            "direction": 1,
+            "value": 0.7150000000000001,
+            "comparison_decisions": 251,
+            "changed_regime_count": 13,
+            "disagreement": 0.05179282868525897
+          },
+          {
+            "parameter": "delta_rising",
+            "direction": -1,
+            "value": 0.09000000000000001,
+            "comparison_decisions": 251,
+            "changed_regime_count": 0,
+            "disagreement": 0.0
+          },
+          {
+            "parameter": "delta_rising",
+            "direction": 1,
+            "value": 0.11000000000000001,
+            "comparison_decisions": 251,
+            "changed_regime_count": 0,
+            "disagreement": 0.0
+          }
+        ]
+      },
+      "failures": []
+    },
+    {
+      "id": "C01",
+      "metrics": {
+        "decisions": 251,
+        "complete": 251,
+        "missing": 0,
+        "occupancy": {
+          "RISK_ON_BROAD": 7,
+          "RISK_ON_SELECTIVE": 6,
+          "TRANSITION": 92,
+          "DEFENSIVE": 98,
+          "STRESS": 48
+        },
+        "occupancy_fraction_of_classifiable": {
+          "RISK_ON_BROAD": 0.027888446215139442,
+          "RISK_ON_SELECTIVE": 0.02390438247011952,
+          "TRANSITION": 0.3665338645418327,
+          "DEFENSIVE": 0.3904382470119522,
+          "STRESS": 0.19123505976095617
+        },
+        "max_single_regime_occupancy": 0.3904382470119522,
+        "adjacent_eligible_pairs": 250,
+        "transitions": 57,
+        "turnover": 0.228,
+        "flip_flop_count": 26,
+        "flip_flop_per_adjacent_pair": 0.104,
+        "median_run_sessions": 2.0,
+        "runs": 58,
+        "censored_runs": 2,
+        "median_run_by_state": {
+          "RISK_ON_BROAD": 1,
+          "RISK_ON_SELECTIVE": 1,
+          "TRANSITION": 2,
+          "DEFENSIVE": 2.5,
+          "STRESS": 3
+        },
+        "historically_observed": [
+          "RISK_ON_BROAD",
+          "RISK_ON_SELECTIVE",
+          "TRANSITION",
+          "DEFENSIVE",
+          "STRESS"
+        ],
+        "historically_absent_not_raw_unreachable": [],
+        "pillar_occupancy": {
+          "participation": {
+            "MIXED": 157,
+            "ADVERSE": 54,
+            "FAVORABLE": 40
+          },
+          "leadership": {
+            "ADVERSE": 58,
+            "MIXED": 40,
+            "FAVORABLE": 153
+          },
+          "equity": {
+            "ADVERSE": 68,
+            "MIXED": 148,
+            "FAVORABLE": 35
+          },
+          "volatility": {
+            "BENIGN": 21,
+            "WATCH": 99,
+            "ADVERSE": 83,
+            "STRESS": 48
+          },
+          "fragility": {
+            "LOW": 116,
+            "HIGH": 135
+          }
+        }
+      },
+      "sensitivity": {
+        "median_disagreement": 0.0,
+        "worst_disagreement": 0.17928286852589642,
+        "perturbations": [
+          {
+            "parameter": "k_weak",
+            "direction": -1,
+            "value": 1,
+            "comparison_decisions": 251,
+            "changed_regime_count": 0,
+            "disagreement": 0.0
+          },
+          {
+            "parameter": "k_weak",
+            "direction": 1,
+            "value": 3,
+            "comparison_decisions": 251,
+            "changed_regime_count": 0,
+            "disagreement": 0.0
+          },
+          {
+            "parameter": "k_broad",
+            "direction": -1,
+            "value": 8,
+            "comparison_decisions": 251,
+            "changed_regime_count": 3,
+            "disagreement": 0.01195219123505976
+          },
+          {
+            "parameter": "k_broad",
+            "direction": 1,
+            "value": 10,
+            "comparison_decisions": 251,
+            "changed_regime_count": 0,
+            "disagreement": 0.0
+          },
+          {
+            "parameter": "leadership_gap",
+            "direction": -1,
+            "value": 0.9,
+            "comparison_decisions": 251,
+            "changed_regime_count": 2,
+            "disagreement": 0.00796812749003984
+          },
+          {
+            "parameter": "leadership_gap",
+            "direction": 1,
+            "value": 1.1,
+            "comparison_decisions": 251,
+            "changed_regime_count": 0,
+            "disagreement": 0.0
+          },
+          {
+            "parameter": "v_watch",
+            "direction": -1,
+            "value": 18.0,
+            "comparison_decisions": 251,
+            "changed_regime_count": 13,
+            "disagreement": 0.05179282868525897
+          },
+          {
+            "parameter": "v_watch",
+            "direction": 1,
+            "value": 22.0,
+            "comparison_decisions": 251,
+            "changed_regime_count": 25,
+            "disagreement": 0.099601593625498
+          },
+          {
+            "parameter": "v_adverse",
+            "direction": -1,
+            "value": 22.5,
+            "comparison_decisions": 251,
+            "changed_regime_count": 18,
+            "disagreement": 0.07171314741035857
+          },
+          {
+            "parameter": "v_adverse",
+            "direction": 1,
+            "value": 27.500000000000004,
+            "comparison_decisions": 251,
+            "changed_regime_count": 28,
+            "disagreement": 0.11155378486055777
+          },
+          {
+            "parameter": "v_stress",
+            "direction": -1,
+            "value": 27.0,
+            "comparison_decisions": 251,
+            "changed_regime_count": 45,
+            "disagreement": 0.17928286852589642
+          },
+          {
+            "parameter": "v_stress",
+            "direction": 1,
+            "value": 33.0,
+            "comparison_decisions": 251,
+            "changed_regime_count": 39,
+            "disagreement": 0.1553784860557769
+          },
+          {
+            "parameter": "jump_1",
+            "direction": -1,
+            "value": 7.2,
+            "comparison_decisions": 251,
+            "changed_regime_count": 0,
+            "disagreement": 0.0
+          },
+          {
+            "parameter": "jump_1",
+            "direction": 1,
+            "value": 8.8,
+            "comparison_decisions": 251,
+            "changed_regime_count": 0,
+            "disagreement": 0.0
+          },
+          {
+            "parameter": "jump_5",
+            "direction": -1,
+            "value": 13.5,
+            "comparison_decisions": 251,
+            "changed_regime_count": 0,
+            "disagreement": 0.0
+          },
+          {
+            "parameter": "jump_5",
+            "direction": 1,
+            "value": 16.5,
+            "comparison_decisions": 251,
+            "changed_regime_count": 0,
+            "disagreement": 0.0
+          },
+          {
+            "parameter": "curve_flat",
+            "direction": -1,
+            "value": 1.8,
+            "comparison_decisions": 251,
+            "changed_regime_count": 0,
+            "disagreement": 0.0
+          },
+          {
+            "parameter": "curve_flat",
+            "direction": 1,
+            "value": 2.2,
+            "comparison_decisions": 251,
+            "changed_regime_count": 0,
+            "disagreement": 0.0
+          },
+          {
+            "parameter": "curve_adverse",
+            "direction": -1,
+            "value": 4.5,
+            "comparison_decisions": 251,
+            "changed_regime_count": 0,
+            "disagreement": 0.0
+          },
+          {
+            "parameter": "curve_adverse",
+            "direction": 1,
+            "value": 5.5,
+            "comparison_decisions": 251,
+            "changed_regime_count": 0,
+            "disagreement": 0.0
+          },
+          {
+            "parameter": "rho_floor",
+            "direction": -1,
+            "value": 0.36000000000000004,
+            "comparison_decisions": 251,
+            "changed_regime_count": 0,
+            "disagreement": 0.0
+          },
+          {
+            "parameter": "rho_floor",
+            "direction": 1,
+            "value": 0.44000000000000006,
+            "comparison_decisions": 251,
+            "changed_regime_count": 0,
+            "disagreement": 0.0
+          },
+          {
+            "parameter": "rho_high",
+            "direction": -1,
+            "value": 0.5850000000000001,
+            "comparison_decisions": 251,
+            "changed_regime_count": 2,
+            "disagreement": 0.00796812749003984
+          },
+          {
+            "parameter": "rho_high",
+            "direction": 1,
+            "value": 0.7150000000000001,
+            "comparison_decisions": 251,
+            "changed_regime_count": 13,
+            "disagreement": 0.05179282868525897
+          },
+          {
+            "parameter": "delta_rising",
+            "direction": -1,
+            "value": 0.09000000000000001,
+            "comparison_decisions": 251,
+            "changed_regime_count": 0,
+            "disagreement": 0.0
+          },
+          {
+            "parameter": "delta_rising",
+            "direction": 1,
+            "value": 0.11000000000000001,
+            "comparison_decisions": 251,
+            "changed_regime_count": 0,
+            "disagreement": 0.0
+          }
+        ]
+      },
+      "failures": []
+    },
+    {
+      "id": "C02",
+      "metrics": {
+        "decisions": 251,
+        "complete": 251,
+        "missing": 0,
+        "occupancy": {
+          "RISK_ON_BROAD": 8,
+          "RISK_ON_SELECTIVE": 5,
+          "TRANSITION": 92,
+          "DEFENSIVE": 98,
+          "STRESS": 48
+        },
+        "occupancy_fraction_of_classifiable": {
+          "RISK_ON_BROAD": 0.03187250996015936,
+          "RISK_ON_SELECTIVE": 0.0199203187250996,
+          "TRANSITION": 0.3665338645418327,
+          "DEFENSIVE": 0.3904382470119522,
+          "STRESS": 0.19123505976095617
+        },
+        "max_single_regime_occupancy": 0.3904382470119522,
+        "adjacent_eligible_pairs": 250,
+        "transitions": 61,
+        "turnover": 0.244,
+        "flip_flop_count": 29,
+        "flip_flop_per_adjacent_pair": 0.116,
+        "median_run_sessions": 2.0,
+        "runs": 62,
+        "censored_runs": 2,
+        "median_run_by_state": {
+          "RISK_ON_BROAD": 1.0,
+          "RISK_ON_SELECTIVE": 1.0,
+          "TRANSITION": 2,
+          "DEFENSIVE": 2.0,
+          "STRESS": 3
+        },
+        "historically_observed": [
+          "RISK_ON_BROAD",
+          "RISK_ON_SELECTIVE",
+          "TRANSITION",
+          "DEFENSIVE",
+          "STRESS"
+        ],
+        "historically_absent_not_raw_unreachable": [],
+        "pillar_occupancy": {
+          "participation": {
+            "MIXED": 132,
+            "ADVERSE": 72,
+            "FAVORABLE": 47
+          },
+          "leadership": {
+            "ADVERSE": 61,
+            "MIXED": 31,
+            "FAVORABLE": 159
+          },
+          "equity": {
+            "ADVERSE": 68,
+            "MIXED": 141,
+            "FAVORABLE": 42
+          },
+          "volatility": {
+            "BENIGN": 21,
+            "WATCH": 99,
+            "ADVERSE": 83,
+            "STRESS": 48
+          },
+          "fragility": {
+            "LOW": 116,
+            "HIGH": 135
+          }
+        }
+      },
+      "sensitivity": {
+        "median_disagreement": 0.0,
+        "worst_disagreement": 0.17928286852589642,
+        "perturbations": [
+          {
+            "parameter": "k_weak",
+            "direction": -1,
+            "value": 2,
+            "comparison_decisions": 251,
+            "changed_regime_count": 0,
+            "disagreement": 0.0
+          },
+          {
+            "parameter": "k_weak",
+            "direction": 1,
+            "value": 4,
+            "comparison_decisions": 251,
+            "changed_regime_count": 1,
+            "disagreement": 0.00398406374501992
+          },
+          {
+            "parameter": "k_broad",
+            "direction": -1,
+            "value": 7,
+            "comparison_decisions": 251,
+            "changed_regime_count": 3,
+            "disagreement": 0.01195219123505976
+          },
+          {
+            "parameter": "k_broad",
+            "direction": 1,
+            "value": 9,
+            "comparison_decisions": 251,
+            "changed_regime_count": 3,
+            "disagreement": 0.01195219123505976
+          },
+          {
+            "parameter": "leadership_gap",
+            "direction": -1,
+            "value": 0.675,
+            "comparison_decisions": 251,
+            "changed_regime_count": 1,
+            "disagreement": 0.00398406374501992
+          },
+          {
+            "parameter": "leadership_gap",
+            "direction": 1,
+            "value": 0.8250000000000001,
+            "comparison_decisions": 251,
+            "changed_regime_count": 0,
+            "disagreement": 0.0
+          },
+          {
+            "parameter": "v_watch",
+            "direction": -1,
+            "value": 18.0,
+            "comparison_decisions": 251,
+            "changed_regime_count": 13,
+            "disagreement": 0.05179282868525897
+          },
+          {
+            "parameter": "v_watch",
+            "direction": 1,
+            "value": 22.0,
+            "comparison_decisions": 251,
+            "changed_regime_count": 24,
+            "disagreement": 0.09561752988047809
+          },
+          {
+            "parameter": "v_adverse",
+            "direction": -1,
+            "value": 22.5,
+            "comparison_decisions": 251,
+            "changed_regime_count": 19,
+            "disagreement": 0.07569721115537849
+          },
+          {
+            "parameter": "v_adverse",
+            "direction": 1,
+            "value": 27.500000000000004,
+            "comparison_decisions": 251,
+            "changed_regime_count": 29,
+            "disagreement": 0.11553784860557768
+          },
+          {
+            "parameter": "v_stress",
+            "direction": -1,
+            "value": 27.0,
+            "comparison_decisions": 251,
+            "changed_regime_count": 45,
+            "disagreement": 0.17928286852589642
+          },
+          {
+            "parameter": "v_stress",
+            "direction": 1,
+            "value": 33.0,
+            "comparison_decisions": 251,
+            "changed_regime_count": 39,
+            "disagreement": 0.1553784860557769
+          },
+          {
+            "parameter": "jump_1",
+            "direction": -1,
+            "value": 7.2,
+            "comparison_decisions": 251,
+            "changed_regime_count": 0,
+            "disagreement": 0.0
+          },
+          {
+            "parameter": "jump_1",
+            "direction": 1,
+            "value": 8.8,
+            "comparison_decisions": 251,
+            "changed_regime_count": 0,
+            "disagreement": 0.0
+          },
+          {
+            "parameter": "jump_5",
+            "direction": -1,
+            "value": 13.5,
+            "comparison_decisions": 251,
+            "changed_regime_count": 0,
+            "disagreement": 0.0
+          },
+          {
+            "parameter": "jump_5",
+            "direction": 1,
+            "value": 16.5,
+            "comparison_decisions": 251,
+            "changed_regime_count": 0,
+            "disagreement": 0.0
+          },
+          {
+            "parameter": "curve_flat",
+            "direction": -1,
+            "value": 1.8,
+            "comparison_decisions": 251,
+            "changed_regime_count": 0,
+            "disagreement": 0.0
+          },
+          {
+            "parameter": "curve_flat",
+            "direction": 1,
+            "value": 2.2,
+            "comparison_decisions": 251,
+            "changed_regime_count": 0,
+            "disagreement": 0.0
+          },
+          {
+            "parameter": "curve_adverse",
+            "direction": -1,
+            "value": 4.5,
+            "comparison_decisions": 251,
+            "changed_regime_count": 0,
+            "disagreement": 0.0
+          },
+          {
+            "parameter": "curve_adverse",
+            "direction": 1,
+            "value": 5.5,
+            "comparison_decisions": 251,
+            "changed_regime_count": 0,
+            "disagreement": 0.0
+          },
+          {
+            "parameter": "rho_floor",
+            "direction": -1,
+            "value": 0.36000000000000004,
+            "comparison_decisions": 251,
+            "changed_regime_count": 0,
+            "disagreement": 0.0
+          },
+          {
+            "parameter": "rho_floor",
+            "direction": 1,
+            "value": 0.44000000000000006,
+            "comparison_decisions": 251,
+            "changed_regime_count": 0,
+            "disagreement": 0.0
+          },
+          {
+            "parameter": "rho_high",
+            "direction": -1,
+            "value": 0.5850000000000001,
+            "comparison_decisions": 251,
+            "changed_regime_count": 2,
+            "disagreement": 0.00796812749003984
+          },
+          {
+            "parameter": "rho_high",
+            "direction": 1,
+            "value": 0.7150000000000001,
+            "comparison_decisions": 251,
+            "changed_regime_count": 13,
+            "disagreement": 0.05179282868525897
+          },
+          {
+            "parameter": "delta_rising",
+            "direction": -1,
+            "value": 0.09000000000000001,
+            "comparison_decisions": 251,
+            "changed_regime_count": 0,
+            "disagreement": 0.0
+          },
+          {
+            "parameter": "delta_rising",
+            "direction": 1,
+            "value": 0.11000000000000001,
+            "comparison_decisions": 251,
+            "changed_regime_count": 0,
+            "disagreement": 0.0
+          }
+        ]
+      },
+      "failures": []
+    },
+    {
+      "id": "C03",
+      "metrics": {
+        "decisions": 251,
+        "complete": 251,
+        "missing": 0,
+        "occupancy": {
+          "RISK_ON_BROAD": 8,
+          "RISK_ON_SELECTIVE": 6,
+          "TRANSITION": 103,
+          "DEFENSIVE": 132,
+          "STRESS": 2
+        },
+        "occupancy_fraction_of_classifiable": {
+          "RISK_ON_BROAD": 0.03187250996015936,
+          "RISK_ON_SELECTIVE": 0.02390438247011952,
+          "TRANSITION": 0.4103585657370518,
+          "DEFENSIVE": 0.5258964143426295,
+          "STRESS": 0.00796812749003984
+        },
+        "max_single_regime_occupancy": 0.5258964143426295,
+        "adjacent_eligible_pairs": 250,
+        "transitions": 38,
+        "turnover": 0.152,
+        "flip_flop_count": 18,
+        "flip_flop_per_adjacent_pair": 0.072,
+        "median_run_sessions": 2,
+        "runs": 39,
+        "censored_runs": 2,
+        "median_run_by_state": {
+          "RISK_ON_BROAD": 1.0,
+          "RISK_ON_SELECTIVE": 1,
+          "TRANSITION": 2,
+          "DEFENSIVE": 7.0,
+          "STRESS": 2
+        },
+        "historically_observed": [
+          "RISK_ON_BROAD",
+          "RISK_ON_SELECTIVE",
+          "TRANSITION",
+          "DEFENSIVE",
+          "STRESS"
+        ],
+        "historically_absent_not_raw_unreachable": [],
+        "pillar_occupancy": {
+          "participation": {
+            "MIXED": 132,
+            "ADVERSE": 72,
+            "FAVORABLE": 47
+          },
+          "leadership": {
+            "ADVERSE": 58,
+            "MIXED": 40,
+            "FAVORABLE": 153
+          },
+          "equity": {
+            "ADVERSE": 69,
+            "MIXED": 142,
+            "FAVORABLE": 40
+          },
+          "volatility": {
+            "BENIGN": 22,
+            "WATCH": 98,
+            "ADVERSE": 129,
+            "STRESS": 2
+          },
+          "fragility": {
+            "LOW": 116,
+            "HIGH": 135
+          }
+        }
+      },
+      "sensitivity": {
+        "median_disagreement": 0.00398406374501992,
+        "worst_disagreement": 0.11155378486055777,
+        "perturbations": [
+          {
+            "parameter": "k_weak",
+            "direction": -1,
+            "value": 2,
+            "comparison_decisions": 251,
+            "changed_regime_count": 2,
+            "disagreement": 0.00796812749003984
+          },
+          {
+            "parameter": "k_weak",
+            "direction": 1,
+            "value": 4,
+            "comparison_decisions": 251,
+            "changed_regime_count": 1,
+            "disagreement": 0.00398406374501992
+          },
+          {
+            "parameter": "k_broad",
+            "direction": -1,
+            "value": 7,
+            "comparison_decisions": 251,
+            "changed_regime_count": 2,
+            "disagreement": 0.00796812749003984
+          },
+          {
+            "parameter": "k_broad",
+            "direction": 1,
+            "value": 9,
+            "comparison_decisions": 251,
+            "changed_regime_count": 3,
+            "disagreement": 0.01195219123505976
+          },
+          {
+            "parameter": "leadership_gap",
+            "direction": -1,
+            "value": 0.9,
+            "comparison_decisions": 251,
+            "changed_regime_count": 2,
+            "disagreement": 0.00796812749003984
+          },
+          {
+            "parameter": "leadership_gap",
+            "direction": 1,
+            "value": 1.1,
+            "comparison_decisions": 251,
+            "changed_regime_count": 0,
+            "disagreement": 0.0
+          },
+          {
+            "parameter": "v_watch",
+            "direction": -1,
+            "value": 18.0,
+            "comparison_decisions": 251,
+            "changed_regime_count": 14,
+            "disagreement": 0.055776892430278883
+          },
+          {
+            "parameter": "v_watch",
+            "direction": 1,
+            "value": 22.0,
+            "comparison_decisions": 251,
+            "changed_regime_count": 25,
+            "disagreement": 0.099601593625498
+          },
+          {
+            "parameter": "v_adverse",
+            "direction": -1,
+            "value": 22.5,
+            "comparison_decisions": 251,
+            "changed_regime_count": 19,
+            "disagreement": 0.07569721115537849
+          },
+          {
+            "parameter": "v_adverse",
+            "direction": 1,
+            "value": 27.500000000000004,
+            "comparison_decisions": 251,
+            "changed_regime_count": 28,
+            "disagreement": 0.11155378486055777
+          },
+          {
+            "parameter": "v_stress",
+            "direction": -1,
+            "value": 31.5,
+            "comparison_decisions": 251,
+            "changed_regime_count": 25,
+            "disagreement": 0.099601593625498
+          },
+          {
+            "parameter": "v_stress",
+            "direction": 1,
+            "value": 38.5,
+            "comparison_decisions": 251,
+            "changed_regime_count": 1,
+            "disagreement": 0.00398406374501992
+          },
+          {
+            "parameter": "jump_1",
+            "direction": -1,
+            "value": 9.0,
+            "comparison_decisions": 251,
+            "changed_regime_count": 0,
+            "disagreement": 0.0
+          },
+          {
+            "parameter": "jump_1",
+            "direction": 1,
+            "value": 11.0,
+            "comparison_decisions": 251,
+            "changed_regime_count": 0,
+            "disagreement": 0.0
+          },
+          {
+            "parameter": "jump_5",
+            "direction": -1,
+            "value": 18.0,
+            "comparison_decisions": 251,
+            "changed_regime_count": 0,
+            "disagreement": 0.0
+          },
+          {
+            "parameter": "jump_5",
+            "direction": 1,
+            "value": 22.0,
+            "comparison_decisions": 251,
+            "changed_regime_count": 0,
+            "disagreement": 0.0
+          },
+          {
+            "parameter": "curve_flat",
+            "direction": -1,
+            "value": 1.8,
+            "comparison_decisions": 251,
+            "changed_regime_count": 0,
+            "disagreement": 0.0
+          },
+          {
+            "parameter": "curve_flat",
+            "direction": 1,
+            "value": 2.2,
+            "comparison_decisions": 251,
+            "changed_regime_count": 0,
+            "disagreement": 0.0
+          },
+          {
+            "parameter": "curve_adverse",
+            "direction": -1,
+            "value": 4.5,
+            "comparison_decisions": 251,
+            "changed_regime_count": 1,
+            "disagreement": 0.00398406374501992
+          },
+          {
+            "parameter": "curve_adverse",
+            "direction": 1,
+            "value": 5.5,
+            "comparison_decisions": 251,
+            "changed_regime_count": 0,
+            "disagreement": 0.0
+          },
+          {
+            "parameter": "rho_floor",
+            "direction": -1,
+            "value": 0.36000000000000004,
+            "comparison_decisions": 251,
+            "changed_regime_count": 0,
+            "disagreement": 0.0
+          },
+          {
+            "parameter": "rho_floor",
+            "direction": 1,
+            "value": 0.44000000000000006,
+            "comparison_decisions": 251,
+            "changed_regime_count": 0,
+            "disagreement": 0.0
+          },
+          {
+            "parameter": "rho_high",
+            "direction": -1,
+            "value": 0.5850000000000001,
+            "comparison_decisions": 251,
+            "changed_regime_count": 2,
+            "disagreement": 0.00796812749003984
+          },
+          {
+            "parameter": "rho_high",
+            "direction": 1,
+            "value": 0.7150000000000001,
+            "comparison_decisions": 251,
+            "changed_regime_count": 14,
+            "disagreement": 0.055776892430278883
+          },
+          {
+            "parameter": "delta_rising",
+            "direction": -1,
+            "value": 0.09000000000000001,
+            "comparison_decisions": 251,
+            "changed_regime_count": 0,
+            "disagreement": 0.0
+          },
+          {
+            "parameter": "delta_rising",
+            "direction": 1,
+            "value": 0.11000000000000001,
+            "comparison_decisions": 251,
+            "changed_regime_count": 0,
+            "disagreement": 0.0
+          }
+        ]
+      },
+      "failures": []
+    },
+    {
+      "id": "C04",
+      "metrics": {
+        "decisions": 251,
+        "complete": 251,
+        "missing": 0,
+        "occupancy": {
+          "RISK_ON_BROAD": 8,
+          "RISK_ON_SELECTIVE": 5,
+          "TRANSITION": 103,
+          "DEFENSIVE": 87,
+          "STRESS": 48
+        },
+        "occupancy_fraction_of_classifiable": {
+          "RISK_ON_BROAD": 0.03187250996015936,
+          "RISK_ON_SELECTIVE": 0.0199203187250996,
+          "TRANSITION": 0.4103585657370518,
+          "DEFENSIVE": 0.3466135458167331,
+          "STRESS": 0.19123505976095617
+        },
+        "max_single_regime_occupancy": 0.4103585657370518,
+        "adjacent_eligible_pairs": 250,
+        "transitions": 54,
+        "turnover": 0.216,
+        "flip_flop_count": 25,
+        "flip_flop_per_adjacent_pair": 0.1,
+        "median_run_sessions": 2,
+        "runs": 55,
+        "censored_runs": 2,
+        "median_run_by_state": {
+          "RISK_ON_BROAD": 1.0,
+          "RISK_ON_SELECTIVE": 1.0,
+          "TRANSITION": 2.5,
+          "DEFENSIVE": 2.5,
+          "STRESS": 3
+        },
+        "historically_observed": [
+          "RISK_ON_BROAD",
+          "RISK_ON_SELECTIVE",
+          "TRANSITION",
+          "DEFENSIVE",
+          "STRESS"
+        ],
+        "historically_absent_not_raw_unreachable": [],
+        "pillar_occupancy": {
+          "participation": {
+            "MIXED": 132,
+            "ADVERSE": 72,
+            "FAVORABLE": 47
+          },
+          "leadership": {
+            "ADVERSE": 58,
+            "MIXED": 40,
+            "FAVORABLE": 153
+          },
+          "equity": {
+            "ADVERSE": 69,
+            "MIXED": 142,
+            "FAVORABLE": 40
+          },
+          "volatility": {
+            "BENIGN": 21,
+            "WATCH": 99,
+            "ADVERSE": 83,
+            "STRESS": 48
+          },
+          "fragility": {
+            "LOW": 133,
+            "RISING": 1,
+            "HIGH": 117
+          }
+        }
+      },
+      "sensitivity": {
+        "median_disagreement": 0.0,
+        "worst_disagreement": 0.17928286852589642,
+        "perturbations": [
+          {
+            "parameter": "k_weak",
+            "direction": -1,
+            "value": 2,
+            "comparison_decisions": 251,
+            "changed_regime_count": 0,
+            "disagreement": 0.0
+          },
+          {
+            "parameter": "k_weak",
+            "direction": 1,
+            "value": 4,
+            "comparison_decisions": 251,
+            "changed_regime_count": 1,
+            "disagreement": 0.00398406374501992
+          },
+          {
+            "parameter": "k_broad",
+            "direction": -1,
+            "value": 7,
+            "comparison_decisions": 251,
+            "changed_regime_count": 2,
+            "disagreement": 0.00796812749003984
+          },
+          {
+            "parameter": "k_broad",
+            "direction": 1,
+            "value": 9,
+            "comparison_decisions": 251,
+            "changed_regime_count": 3,
+            "disagreement": 0.01195219123505976
+          },
+          {
+            "parameter": "leadership_gap",
+            "direction": -1,
+            "value": 0.9,
+            "comparison_decisions": 251,
+            "changed_regime_count": 2,
+            "disagreement": 0.00796812749003984
+          },
+          {
+            "parameter": "leadership_gap",
+            "direction": 1,
+            "value": 1.1,
+            "comparison_decisions": 251,
+            "changed_regime_count": 0,
+            "disagreement": 0.0
+          },
+          {
+            "parameter": "v_watch",
+            "direction": -1,
+            "value": 18.0,
+            "comparison_decisions": 251,
+            "changed_regime_count": 13,
+            "disagreement": 0.05179282868525897
+          },
+          {
+            "parameter": "v_watch",
+            "direction": 1,
+            "value": 22.0,
+            "comparison_decisions": 251,
+            "changed_regime_count": 24,
+            "disagreement": 0.09561752988047809
+          },
+          {
+            "parameter": "v_adverse",
+            "direction": -1,
+            "value": 22.5,
+            "comparison_decisions": 251,
+            "changed_regime_count": 12,
+            "disagreement": 0.04780876494023904
+          },
+          {
+            "parameter": "v_adverse",
+            "direction": 1,
+            "value": 27.500000000000004,
+            "comparison_decisions": 251,
+            "changed_regime_count": 19,
+            "disagreement": 0.07569721115537849
+          },
+          {
+            "parameter": "v_stress",
+            "direction": -1,
+            "value": 27.0,
+            "comparison_decisions": 251,
+            "changed_regime_count": 45,
+            "disagreement": 0.17928286852589642
+          },
+          {
+            "parameter": "v_stress",
+            "direction": 1,
+            "value": 33.0,
+            "comparison_decisions": 251,
+            "changed_regime_count": 39,
+            "disagreement": 0.1553784860557769
+          },
+          {
+            "parameter": "jump_1",
+            "direction": -1,
+            "value": 7.2,
+            "comparison_decisions": 251,
+            "changed_regime_count": 0,
+            "disagreement": 0.0
+          },
+          {
+            "parameter": "jump_1",
+            "direction": 1,
+            "value": 8.8,
+            "comparison_decisions": 251,
+            "changed_regime_count": 0,
+            "disagreement": 0.0
+          },
+          {
+            "parameter": "jump_5",
+            "direction": -1,
+            "value": 13.5,
+            "comparison_decisions": 251,
+            "changed_regime_count": 0,
+            "disagreement": 0.0
+          },
+          {
+            "parameter": "jump_5",
+            "direction": 1,
+            "value": 16.5,
+            "comparison_decisions": 251,
+            "changed_regime_count": 0,
+            "disagreement": 0.0
+          },
+          {
+            "parameter": "curve_flat",
+            "direction": -1,
+            "value": 1.8,
+            "comparison_decisions": 251,
+            "changed_regime_count": 0,
+            "disagreement": 0.0
+          },
+          {
+            "parameter": "curve_flat",
+            "direction": 1,
+            "value": 2.2,
+            "comparison_decisions": 251,
+            "changed_regime_count": 0,
+            "disagreement": 0.0
+          },
+          {
+            "parameter": "curve_adverse",
+            "direction": -1,
+            "value": 4.5,
+            "comparison_decisions": 251,
+            "changed_regime_count": 0,
+            "disagreement": 0.0
+          },
+          {
+            "parameter": "curve_adverse",
+            "direction": 1,
+            "value": 5.5,
+            "comparison_decisions": 251,
+            "changed_regime_count": 0,
+            "disagreement": 0.0
+          },
+          {
+            "parameter": "rho_floor",
+            "direction": -1,
+            "value": 0.45,
+            "comparison_decisions": 251,
+            "changed_regime_count": 0,
+            "disagreement": 0.0
+          },
+          {
+            "parameter": "rho_floor",
+            "direction": 1,
+            "value": 0.55,
+            "comparison_decisions": 251,
+            "changed_regime_count": 0,
+            "disagreement": 0.0
+          },
+          {
+            "parameter": "rho_high",
+            "direction": -1,
+            "value": 0.63,
+            "comparison_decisions": 251,
+            "changed_regime_count": 10,
+            "disagreement": 0.0398406374501992
+          },
+          {
+            "parameter": "rho_high",
+            "direction": 1,
+            "value": 0.77,
+            "comparison_decisions": 251,
+            "changed_regime_count": 29,
+            "disagreement": 0.11553784860557768
+          },
+          {
+            "parameter": "delta_rising",
+            "direction": -1,
+            "value": 0.09000000000000001,
+            "comparison_decisions": 251,
+            "changed_regime_count": 0,
+            "disagreement": 0.0
+          },
+          {
+            "parameter": "delta_rising",
+            "direction": 1,
+            "value": 0.11000000000000001,
+            "comparison_decisions": 251,
+            "changed_regime_count": 0,
+            "disagreement": 0.0
+          }
+        ]
+      },
+      "failures": []
+    },
+    {
+      "id": "C05",
+      "metrics": {
+        "decisions": 251,
+        "complete": 251,
+        "missing": 0,
+        "occupancy": {
+          "RISK_ON_BROAD": 8,
+          "RISK_ON_SELECTIVE": 5,
+          "TRANSITION": 94,
+          "DEFENSIVE": 96,
+          "STRESS": 48
+        },
+        "occupancy_fraction_of_classifiable": {
+          "RISK_ON_BROAD": 0.03187250996015936,
+          "RISK_ON_SELECTIVE": 0.0199203187250996,
+          "TRANSITION": 0.3745019920318725,
+          "DEFENSIVE": 0.38247011952191234,
+          "STRESS": 0.19123505976095617
+        },
+        "max_single_regime_occupancy": 0.38247011952191234,
+        "adjacent_eligible_pairs": 250,
+        "transitions": 59,
+        "turnover": 0.236,
+        "flip_flop_count": 28,
+        "flip_flop_per_adjacent_pair": 0.112,
+        "median_run_sessions": 2.0,
+        "runs": 60,
+        "censored_runs": 2,
+        "median_run_by_state": {
+          "RISK_ON_BROAD": 1.0,
+          "RISK_ON_SELECTIVE": 1.0,
+          "TRANSITION": 2.0,
+          "DEFENSIVE": 2,
+          "STRESS": 3
+        },
+        "historically_observed": [
+          "RISK_ON_BROAD",
+          "RISK_ON_SELECTIVE",
+          "TRANSITION",
+          "DEFENSIVE",
+          "STRESS"
+        ],
+        "historically_absent_not_raw_unreachable": [],
+        "pillar_occupancy": {
+          "participation": {
+            "MIXED": 132,
+            "ADVERSE": 72,
+            "FAVORABLE": 47
+          },
+          "leadership": {
+            "ADVERSE": 58,
+            "MIXED": 40,
+            "FAVORABLE": 153
+          },
+          "equity": {
+            "ADVERSE": 69,
+            "MIXED": 142,
+            "FAVORABLE": 40
+          },
+          "volatility": {
+            "BENIGN": 21,
+            "WATCH": 99,
+            "ADVERSE": 83,
+            "STRESS": 48
+          },
+          "fragility": {
+            "LOW": 116,
+            "HIGH": 135
+          }
+        }
+      },
+      "sensitivity": {
+        "median_disagreement": 0.0,
+        "worst_disagreement": 0.17928286852589642,
+        "perturbations": [
+          {
+            "parameter": "k_weak",
+            "direction": -1,
+            "value": 2,
+            "comparison_decisions": 251,
+            "changed_regime_count": 0,
+            "disagreement": 0.0
+          },
+          {
+            "parameter": "k_weak",
+            "direction": 1,
+            "value": 4,
+            "comparison_decisions": 251,
+            "changed_regime_count": 1,
+            "disagreement": 0.00398406374501992
+          },
+          {
+            "parameter": "k_broad",
+            "direction": -1,
+            "value": 7,
+            "comparison_decisions": 251,
+            "changed_regime_count": 2,
+            "disagreement": 0.00796812749003984
+          },
+          {
+            "parameter": "k_broad",
+            "direction": 1,
+            "value": 9,
+            "comparison_decisions": 251,
+            "changed_regime_count": 3,
+            "disagreement": 0.01195219123505976
+          },
+          {
+            "parameter": "leadership_gap",
+            "direction": -1,
+            "value": 0.9,
+            "comparison_decisions": 251,
+            "changed_regime_count": 2,
+            "disagreement": 0.00796812749003984
+          },
+          {
+            "parameter": "leadership_gap",
+            "direction": 1,
+            "value": 1.1,
+            "comparison_decisions": 251,
+            "changed_regime_count": 0,
+            "disagreement": 0.0
+          },
+          {
+            "parameter": "v_watch",
+            "direction": -1,
+            "value": 18.0,
+            "comparison_decisions": 251,
+            "changed_regime_count": 13,
+            "disagreement": 0.05179282868525897
+          },
+          {
+            "parameter": "v_watch",
+            "direction": 1,
+            "value": 22.0,
+            "comparison_decisions": 251,
+            "changed_regime_count": 24,
+            "disagreement": 0.09561752988047809
+          },
+          {
+            "parameter": "v_adverse",
+            "direction": -1,
+            "value": 22.5,
+            "comparison_decisions": 251,
+            "changed_regime_count": 19,
+            "disagreement": 0.07569721115537849
+          },
+          {
+            "parameter": "v_adverse",
+            "direction": 1,
+            "value": 27.500000000000004,
+            "comparison_decisions": 251,
+            "changed_regime_count": 28,
+            "disagreement": 0.11155378486055777
+          },
+          {
+            "parameter": "v_stress",
+            "direction": -1,
+            "value": 27.0,
+            "comparison_decisions": 251,
+            "changed_regime_count": 45,
+            "disagreement": 0.17928286852589642
+          },
+          {
+            "parameter": "v_stress",
+            "direction": 1,
+            "value": 33.0,
+            "comparison_decisions": 251,
+            "changed_regime_count": 37,
+            "disagreement": 0.14741035856573706
+          },
+          {
+            "parameter": "jump_1",
+            "direction": -1,
+            "value": 7.2,
+            "comparison_decisions": 251,
+            "changed_regime_count": 0,
+            "disagreement": 0.0
+          },
+          {
+            "parameter": "jump_1",
+            "direction": 1,
+            "value": 8.8,
+            "comparison_decisions": 251,
+            "changed_regime_count": 0,
+            "disagreement": 0.0
+          },
+          {
+            "parameter": "jump_5",
+            "direction": -1,
+            "value": 13.5,
+            "comparison_decisions": 251,
+            "changed_regime_count": 0,
+            "disagreement": 0.0
+          },
+          {
+            "parameter": "jump_5",
+            "direction": 1,
+            "value": 16.5,
+            "comparison_decisions": 251,
+            "changed_regime_count": 0,
+            "disagreement": 0.0
+          },
+          {
+            "parameter": "curve_flat",
+            "direction": -1,
+            "value": 0.9,
+            "comparison_decisions": 251,
+            "changed_regime_count": 0,
+            "disagreement": 0.0
+          },
+          {
+            "parameter": "curve_flat",
+            "direction": 1,
+            "value": 1.1,
+            "comparison_decisions": 251,
+            "changed_regime_count": 0,
+            "disagreement": 0.0
+          },
+          {
+            "parameter": "curve_adverse",
+            "direction": -1,
+            "value": 2.7,
+            "comparison_decisions": 251,
+            "changed_regime_count": 0,
+            "disagreement": 0.0
+          },
+          {
+            "parameter": "curve_adverse",
+            "direction": 1,
+            "value": 3.3000000000000003,
+            "comparison_decisions": 251,
+            "changed_regime_count": 0,
+            "disagreement": 0.0
+          },
+          {
+            "parameter": "rho_floor",
+            "direction": -1,
+            "value": 0.36000000000000004,
+            "comparison_decisions": 251,
+            "changed_regime_count": 0,
+            "disagreement": 0.0
+          },
+          {
+            "parameter": "rho_floor",
+            "direction": 1,
+            "value": 0.44000000000000006,
+            "comparison_decisions": 251,
+            "changed_regime_count": 0,
+            "disagreement": 0.0
+          },
+          {
+            "parameter": "rho_high",
+            "direction": -1,
+            "value": 0.5850000000000001,
+            "comparison_decisions": 251,
+            "changed_regime_count": 2,
+            "disagreement": 0.00796812749003984
+          },
+          {
+            "parameter": "rho_high",
+            "direction": 1,
+            "value": 0.7150000000000001,
+            "comparison_decisions": 251,
+            "changed_regime_count": 13,
+            "disagreement": 0.05179282868525897
+          },
+          {
+            "parameter": "delta_rising",
+            "direction": -1,
+            "value": 0.09000000000000001,
+            "comparison_decisions": 251,
+            "changed_regime_count": 0,
+            "disagreement": 0.0
+          },
+          {
+            "parameter": "delta_rising",
+            "direction": 1,
+            "value": 0.11000000000000001,
+            "comparison_decisions": 251,
+            "changed_regime_count": 0,
+            "disagreement": 0.0
+          }
+        ]
+      },
+      "failures": []
+    }
+  ],
+  "sealed_at": "2026-09-08T14:19:17.042864+00:00"
+}

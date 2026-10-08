@@ -1,0 +1,83 @@
+{
+  "schemaVersion": 1,
+  "status": "PORTABLE_POLICY_PACKAGE_FROZEN",
+  "recordedAt": "2026-09-10T09:39:40.835Z",
+  "requiredRuntimeInputs": [
+    "test-policies.py",
+    "accepted-probe/bucket-policy.json",
+    "accepted-probe/create-bucket.json",
+    "accepted-probe/encryption.json",
+    "accepted-probe/manifest.json",
+    "accepted-probe/matrix.json",
+    "accepted-probe/public-access-block.json",
+    "accepted-probe/trust-policy.json",
+    "accepted-probe/versioning.json",
+    "accepted-probe/writer-policy.json",
+    "policies/combined-bucket.json",
+    "policies/shadow-trust.json",
+    "policies/shadow-writer.json"
+  ],
+  "filesSha256": {
+    "test-policies.py": "b8202c93b667f7c339ddcc91edd0d6bee6acc11a6a4b8bc3d8447356f8fa5729",
+    "accepted-probe/bucket-policy.json": "23bf40aabcd8adba05beb9e5352bd1e50aa31335bff27c16e288f8d067ebf68b",
+    "accepted-probe/create-bucket.json": "937273a03875e0e62433f78260ebbd11df659dcb7d05562a556df36e784238f4",
+    "accepted-probe/encryption.json": "a9c6b7c21e5d7afccb1a97d12c9972f5f0432c4ebb5345ebf5041794bc1b342a",
+    "accepted-probe/manifest.json": "383d7df87f92526ecaada718027f33e058ba44b34184aadba88d18ad29248b1d",
+    "accepted-probe/matrix.json": "c0bcd03655f6c8573a64ce9a5ed56cd2a253acd77813f932a1797350124a3fd4",
+    "accepted-probe/public-access-block.json": "cb83e29507ea5301a4f6a4e8cb4111eb4bd72c14608f0685e1a66d27d9cc4386",
+    "accepted-probe/trust-policy.json": "f5b9e5f5476c3e282327a01b4759d473c96e0843f42becb901783d76212822dc",
+    "accepted-probe/versioning.json": "8aaf6c5639d887a190955cf718b92595e07b57aa6021134f0c2084e61ce2926e",
+    "accepted-probe/writer-policy.json": "eb1240ff80099a181f0a5bc3af7aebe4b9320add2c21d988253d94cb1cb380d0",
+    "policies/combined-bucket.json": "4bddc4a3f74b2b4612dedd2a89ac18572b70abf33100f9de21c1416efdb1464c",
+    "policies/shadow-trust.json": "f5b9e5f5476c3e282327a01b4759d473c96e0843f42becb901783d76212822dc",
+    "policies/shadow-writer.json": "5e6796304465ea4912efda67d412fc5ad1f945cdb67e9d1a985130b09c91f04b"
+  },
+  "defaultCommand": [
+    "python3",
+    "test-policies.py"
+  ],
+  "defaultWritesFiles": false,
+  "networkRequired": false,
+  "awsCredentialsRequired": false,
+  "testMethods": 18,
+  "authorizationRows": 195,
+  "frozenProbeRows": 63,
+  "probeNamespaceCrossProductComparisons": 80,
+  "finalOfflineReport": "policy-matrix-final.json",
+  "supersededOfflineReportExcluded": "policy-matrix.json",
+  "safeEvidenceCandidates": [
+    "policy-matrix-final.json",
+    "portable-policy-tests.json",
+    "baseline-readback.json",
+    "apply-readback.json",
+    "iam-identity-simulation.json",
+    "README.md"
+  ],
+  "externalAdministrativeHelpersExcluded": [
+    "baseline-readback.py",
+    "simulate-identity-readonly.py",
+    "simulate-identity-readonly.executed-v1.py",
+    "apply-shadow-role.py"
+  ],
+  "externalRawAuditDirectoriesExcluded": [
+    "baseline/",
+    "apply/",
+    "identity-simulation/",
+    "identity-simulation-retry1/"
+  ],
+  "originalProbeStatementsRetained": 4,
+  "productionDenyStatementsAdded": 2,
+  "probeIdentityChanged": false,
+  "newRoleName": "RegimeV2ShadowWriter",
+  "newInlinePolicyName": "RegimeV2ShadowWriterProductionOnly",
+  "adminReadback": {
+    "status": "PASS",
+    "completedAt": "2026-09-10T09:35:25.001208+00:00",
+    "source": "apply-readback.json",
+    "sha256": "d2e7a809970086bad88ef703b888007cb9367de16ddefed47a68f8ce8517c4d5",
+    "mutationsByRoot": 3,
+    "mutationsByPolicyAuthor": 0
+  },
+  "shadowWriterOidcLive": "NOT_RUN",
+  "remoteProductionPrefixCanary": "NOT_RUN"
+}

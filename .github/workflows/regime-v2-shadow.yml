@@ -1,0 +1,134 @@
+name: Regime V2 shadow observation
+
+on:
+  schedule:
+    - cron: "30 8 * * 2-6"
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: "Preflight only by default; canary requires separate Control Tower authorization"
+        type: choice
+        options: [preflight, canary]
+        default: preflight
+        required: true
+      confirm_canary:
+        description: "For an authorized canary, enter RUN_ONE_SHADOW_OBSERVATION"
+        type: string
+        default: ""
+        required: false
+
+permissions: {}
+
+concurrency:
+  group: regime-v2-shadow
+  cancel-in-progress: false
+
+jobs:
+  gate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    permissions: {}
+    outputs:
+      execute: ${{ steps.select.outputs.execute }}
+      mode: ${{ steps.select.outputs.mode }}
+    steps:
+      - name: Select the authorized execution mode
+        id: select
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          JOB_ENABLED: ${{ vars.V2_SHADOW_JOB_ENABLED || 'OFF' }}
+          MANUAL_MODE: ${{ inputs.mode || 'preflight' }}
+          CANARY_CONFIRMATION: ${{ inputs.confirm_canary }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [[ "$EVENT_NAME" == schedule ]]; then
+            if [[ "$JOB_ENABLED" != ON ]]; then
+              printf 'execute=false\nmode=off\n' >> "$GITHUB_OUTPUT"
+              printf 'Shadow schedule OFF: no OIDC, storage or market access.\n' >> "$GITHUB_STEP_SUMMARY"
+              exit 0
+            fi
+            mode=schedule
+          elif [[ "$EVENT_NAME" == workflow_dispatch && "$MANUAL_MODE" == preflight ]]; then
+            mode=preflight
+          elif [[ "$EVENT_NAME" == workflow_dispatch && "$MANUAL_MODE" == canary && "$CANARY_CONFIRMATION" == RUN_ONE_SHADOW_OBSERVATION ]]; then
+            mode=canary
+          else
+            printf 'Invalid execution mode or missing explicit canary confirmation.\n' >&2
+            exit 2
+          fi
+          printf 'execute=true\nmode=%s\n' "$mode" >> "$GITHUB_OUTPUT"
+
+  shadow:
+    needs: gate
+    if: ${{ needs.gate.outputs.execute == 'true' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    permissions:
+      contents: read
+      id-token: write
+    env:
+      V2_SHADOW_JOB_ENABLED: ${{ vars.V2_SHADOW_JOB_ENABLED || 'OFF' }}
+      AWS_REGION: ${{ vars.AWS_REGION }}
+      S3_BUCKET: ${{ vars.S3_BUCKET }}
+      SHADOW_ROLE_ARN: ${{ vars.SHADOW_ROLE_ARN }}
+      AWS_EC2_METADATA_DISABLED: "true"
+      AWS_PAGER: ""
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
+        with:
+          node-version: "22"
+          cache: npm
+      - name: Validate required nonsecret configuration
+        shell: bash
+        run: |
+          set -euo pipefail
+          [[ "$AWS_REGION" == us-east-1 && "$S3_BUCKET" == lh-regime-v2-shadow-732159826922-us-east-1 && "$SHADOW_ROLE_ARN" == arn:aws:iam::732159826922:role/RegimeV2ShadowWriter ]] || { printf 'Configuration must match the approved region, bucket and ShadowWriter role.\n' >&2; exit 2; }
+      - run: npm ci
+      - name: Obtain temporary shadow writer credentials
+        uses: aws-actions/configure-aws-credentials@cbe3b392738ccf3f987d68400dafcf4b0624a56c
+        with:
+          role-to-assume: ${{ vars.SHADOW_ROLE_ARN }}
+          aws-region: ${{ vars.AWS_REGION }}
+          role-session-name: regime-v2-shadow-${{ github.run_id }}-${{ github.run_attempt }}
+          unset-current-credentials: true
+          mask-aws-account-id: true
+          use-existing-credentials: false
+          output-credentials: false
+          disable-retry: true
+          action-timeout-s: 90
+          audience: sts.amazonaws.com
+          role-duration-seconds: 1800
+          allowed-account-ids: "732159826922"
+      - name: Run preflight or one prospective shadow attempt
+        id: observation
+        timeout-minutes: 20
+        env:
+          EXECUTION_MODE: ${{ needs.gate.outputs.mode }}
+          CANARY_CONFIRMATION: ${{ inputs.confirm_canary }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          args=(--mode "$EXECUTION_MODE" --storage s3 --diagnostics-dir "$RUNNER_TEMP/regime-v2-attempt")
+          if [[ "$EXECUTION_MODE" == canary ]]; then
+            args+=(--confirm-canary "$CANARY_CONFIRMATION")
+          fi
+          node --experimental-strip-types scripts/regime-v2-run-shadow.mts "${args[@]}"
+      - name: Ensure terminal attempt evidence
+        if: ${{ always() }}
+        env:
+          SHADOW_STEP_OUTCOME: ${{ steps.observation.outcome }}
+        run: node scripts/regime-v2-terminal-fallback.mjs "$RUNNER_TEMP/regime-v2-attempt"
+      - name: Retain temporary attempt diagnostics
+        if: ${{ always() }}
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
+        with:
+          name: regime-v2-attempt-${{ github.run_id }}-${{ github.run_attempt }}
+          path: |
+            ${{ runner.temp }}/regime-v2-attempt/terminal.json
+            ${{ runner.temp }}/regime-v2-attempt/terminal-fallback-failure.json
+          retention-days: 30
+          if-no-files-found: error

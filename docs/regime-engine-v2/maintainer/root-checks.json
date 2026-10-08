@@ -1,0 +1,296 @@
+{
+  "status": "PASS",
+  "completedAt": "2026-09-08T19:17:51.218204+00:00",
+  "commands": [
+    {
+      "name": "typecheck-before-build",
+      "command": [
+        "npx",
+        "tsc",
+        "--noEmit",
+        "--incremental",
+        "false"
+      ],
+      "exitCode": 0,
+      "elapsedSeconds": 3.207934792,
+      "log": "typecheck-before-build.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "lint",
+      "command": [
+        "npx",
+        "eslint",
+        ".",
+        "--format",
+        "json",
+        "--output-file",
+        "docs/regime-engine-v2/maintainer/lint.json"
+      ],
+      "exitCode": 0,
+      "elapsedSeconds": 5.783011583,
+      "log": "lint.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "build",
+      "command": [
+        "npm",
+        "run",
+        "build"
+      ],
+      "exitCode": 0,
+      "log": "build.log",
+      "sha256": "bcccf6595096af3a43986840c88ad347baaf73713d990111020e8bd452f2a46b"
+    },
+    {
+      "name": "typecheck-after-build",
+      "command": [
+        "npx",
+        "tsc",
+        "--noEmit",
+        "--incremental",
+        "false"
+      ],
+      "exitCode": 0,
+      "log": "typecheck-after-build.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "prospective-exact-replay-final",
+      "command": [
+        "node",
+        "--disable-warning=MODULE_TYPELESS_PACKAGE_JSON",
+        "scripts/regime-v2-replay.mts",
+        "--snapshot",
+        "/private/tmp/regime-v2-maintainer-prospective/snapshots/b3d4f8fe108e9cd9aa297c05d9a05359bcc27cd81d9aeebb537d8d9ae947af99.json"
+      ],
+      "exitCode": 0,
+      "log": "prospective-replay-final.log",
+      "sha256": "112e10ba5c0ec6794e020f45ea4958e83d01c9d2aa09a3d3d53c216c00751e4a"
+    },
+    {
+      "name": "final-lint-after-benchmark-script-edits",
+      "command": [
+        "npx",
+        "eslint",
+        ".",
+        "--format",
+        "json",
+        "--output-file",
+        "docs/regime-engine-v2/maintainer/lint.json"
+      ],
+      "exitCode": 0,
+      "log": "lint.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "lint": {
+    "errors": 0,
+    "warnings": 18,
+    "newWarnings": 0,
+    "exactPositionMatch": false,
+    "baselineDiagnosticsMatchAfterInsertionLineMapping": true,
+    "relocatedExistingDiagnostics": [
+      {
+        "before": [
+          "/Users/quantlab/Developer/web/Luiguiherrera-web/scripts/build-statistical-levels.mjs",
+          "@typescript-eslint/no-unused-vars",
+          959,
+          "'key' is assigned a value but never used.",
+          1
+        ],
+        "after": [
+          "/Users/quantlab/Developer/web/Luiguiherrera-web/scripts/build-statistical-levels.mjs",
+          "@typescript-eslint/no-unused-vars",
+          975,
+          "'key' is assigned a value but never used.",
+          1
+        ],
+        "reason": "16 inserted acquisition-tap lines above the unchanged unused variable"
+      },
+      {
+        "before": [
+          "/Users/quantlab/Developer/web/Luiguiherrera-web/scripts/build-statistical-levels.mjs",
+          "@typescript-eslint/no-unused-vars",
+          1062,
+          "'yahooSymbol' is assigned a value but never used.",
+          1
+        ],
+        "after": [
+          "/Users/quantlab/Developer/web/Luiguiherrera-web/scripts/build-statistical-levels.mjs",
+          "@typescript-eslint/no-unused-vars",
+          1078,
+          "'yahooSymbol' is assigned a value but never used.",
+          1
+        ],
+        "reason": "16 inserted acquisition-tap lines above the unchanged unused variable"
+      }
+    ],
+    "messages": [
+      [
+        "/Users/quantlab/Developer/web/Luiguiherrera-web/app/(es)/page.tsx",
+        "@typescript-eslint/no-unused-vars",
+        175,
+        "'SectorMiniChart' is defined but never used.",
+        1
+      ],
+      [
+        "/Users/quantlab/Developer/web/Luiguiherrera-web/app/(es)/page.tsx",
+        "@typescript-eslint/no-unused-vars",
+        237,
+        "'VixMiniPanel' is defined but never used.",
+        1
+      ],
+      [
+        "/Users/quantlab/Developer/web/Luiguiherrera-web/app/(es)/page.tsx",
+        "@typescript-eslint/no-unused-vars",
+        272,
+        "'BtcFlowsMiniPanel' is defined but never used.",
+        1
+      ],
+      [
+        "/Users/quantlab/Developer/web/Luiguiherrera-web/app/(es)/page.tsx",
+        "@typescript-eslint/no-unused-vars",
+        309,
+        "'StatisticalLevelsMiniPanel' is defined but never used.",
+        1
+      ],
+      [
+        "/Users/quantlab/Developer/web/Luiguiherrera-web/app/en/page.tsx",
+        "@typescript-eslint/no-unused-vars",
+        177,
+        "'SectorMiniChart' is defined but never used.",
+        1
+      ],
+      [
+        "/Users/quantlab/Developer/web/Luiguiherrera-web/app/en/page.tsx",
+        "@typescript-eslint/no-unused-vars",
+        239,
+        "'VixMiniPanel' is defined but never used.",
+        1
+      ],
+      [
+        "/Users/quantlab/Developer/web/Luiguiherrera-web/app/en/page.tsx",
+        "@typescript-eslint/no-unused-vars",
+        274,
+        "'BtcFlowsMiniPanel' is defined but never used.",
+        1
+      ],
+      [
+        "/Users/quantlab/Developer/web/Luiguiherrera-web/app/en/page.tsx",
+        "@typescript-eslint/no-unused-vars",
+        311,
+        "'StatisticalLevelsMiniPanel' is defined but never used.",
+        1
+      ],
+      [
+        "/Users/quantlab/Developer/web/Luiguiherrera-web/components/dashboard/BtcEtfFlowsModule.tsx",
+        "@typescript-eslint/no-unused-vars",
+        42,
+        "'severityClass' is defined but never used.",
+        1
+      ],
+      [
+        "/Users/quantlab/Developer/web/Luiguiherrera-web/components/dashboard/VixModule.tsx",
+        "@typescript-eslint/no-unused-vars",
+        30,
+        "'severityClass' is defined but never used.",
+        1
+      ],
+      [
+        "/Users/quantlab/Developer/web/Luiguiherrera-web/components/statistical-levels/PeriodExplorerTable.tsx",
+        "react-hooks/exhaustive-deps",
+        97,
+        "The 'rows' logical expression could make the dependencies of useMemo Hook (at line 112) change on every render. To fix this, wrap the initialization of 'rows' in its own useMemo() Hook.",
+        1
+      ],
+      [
+        "/Users/quantlab/Developer/web/Luiguiherrera-web/components/statistical-levels/PeriodExplorerTable.tsx",
+        "react-hooks/exhaustive-deps",
+        97,
+        "The 'rows' logical expression could make the dependencies of useMemo Hook (at line 98) change on every render. To fix this, wrap the initialization of 'rows' in its own useMemo() Hook.",
+        1
+      ],
+      [
+        "/Users/quantlab/Developer/web/Luiguiherrera-web/lib/dashboard/adapters/eth-etf-flows.ts",
+        "@typescript-eslint/no-unused-vars",
+        336,
+        "'_reason' is defined but never used.",
+        1
+      ],
+      [
+        "/Users/quantlab/Developer/web/Luiguiherrera-web/lib/dashboard/adapters/sector-etfs.ts",
+        "@typescript-eslint/no-unused-vars",
+        87,
+        "'reason' is defined but never used.",
+        1
+      ],
+      [
+        "/Users/quantlab/Developer/web/Luiguiherrera-web/scripts/build-statistical-levels.mjs",
+        "@typescript-eslint/no-unused-vars",
+        98,
+        "'yahooSymbol' is defined but never used.",
+        1
+      ],
+      [
+        "/Users/quantlab/Developer/web/Luiguiherrera-web/scripts/build-statistical-levels.mjs",
+        "@typescript-eslint/no-unused-vars",
+        975,
+        "'key' is assigned a value but never used.",
+        1
+      ],
+      [
+        "/Users/quantlab/Developer/web/Luiguiherrera-web/scripts/build-statistical-levels.mjs",
+        "@typescript-eslint/no-unused-vars",
+        1078,
+        "'yahooSymbol' is assigned a value but never used.",
+        1
+      ],
+      [
+        "/Users/quantlab/Developer/web/Luiguiherrera-web/scripts/build-td3-performance.mjs",
+        "@typescript-eslint/no-unused-vars",
+        173,
+        "'error' is defined but never used.",
+        1
+      ]
+    ],
+    "lintJsonSha256": "1fb951b05d70f8589fb57f1ccbb03341d807099b336193defc58b586a0c1e5ee"
+  },
+  "buildSideEffects": {
+    "nextEnvChangedInFinalBuild": false,
+    "nextEnvOriginalSha256": "1862ac4bbbc5192d4bf562161df66ea547ed3e67173100656ab606ae9797db2b",
+    "nextEnvFinalSha256": "1862ac4bbbc5192d4bf562161df66ea547ed3e67173100656ab606ae9797db2b",
+    "postBuildTypecheck": "PASS",
+    "restoration": "No restoration needed with reconciled Next16.3.1. Earlier build-generated artifact was separately restored without resetting user files."
+  },
+  "publicPreservation": {
+    "protectedPublicFiles": 258,
+    "allHashesUnchanged": true,
+    "routesES_ENReportsMetadataUnchanged": true,
+    "actualV1AggregatorEquivalenceTest": "lib/regime-engine-v2/operations/public-preservation.test.ts",
+    "newPublicAPI": false
+  },
+  "nextInstalled": "16.3.1",
+  "prospectiveFinalReplay": {
+    "status": "MATCH",
+    "snapshotId": "b3d4f8fe108e9cd9aa297c05d9a05359bcc27cd81d9aeebb537d8d9ae947af99",
+    "engineVersion": "regime-v2/1.0.0-builder",
+    "parameterSet": "C03",
+    "regime": null,
+    "systemState": "INCOMPLETE",
+    "replayClass": "UNKNOWN",
+    "outputHash": "c27b779717f94752634714551e7bec3235127163aa247c5025545b747036f5cb"
+  },
+  "sourceHashes": {
+    "lib/regime-engine-v2/operations/dashboard-shadow.test.ts": "45ef6cffea6040ef8fe8c70473873f2351ab29e46b084460264bd0c3032e4e97",
+    "lib/regime-engine-v2/operations/dashboard-shadow.ts": "10819d5cfc7f737f148da8e56d6cf89ef32c4623342d2495bc384c66a99b06a4",
+    "lib/regime-engine-v2/operations/normalizer-preservation.test.mjs": "b592e0084f433c3ff3756bc2ce574b566027f281ea34aef14f8122c5788f2b61",
+    "lib/regime-engine-v2/operations/pipeline-capture.ts": "988fd161c688043be58d4a466e959809beeb4ba0c2878c86d5afade3e4ded3b4",
+    "lib/regime-engine-v2/operations/public-preservation.test.ts": "fb3731a8d8b216b98636e1b6764c7ba15ec6678f77a9c0197c39a8ecb48cb580",
+    "lib/regime-engine-v2/operations/snapshot.test.ts": "526b5c024976fd95c23eae74bf038516cf804ad55ace6040e238727185c9aa20",
+    "lib/regime-engine-v2/operations/snapshot.ts": "9e88b4f317e45d0930f55a9a1dc1140cf14da45338240c929cf1c67a8fde5b05",
+    "lib/regime-engine-v2/operations/source-input.test.ts": "b55514744a93adb9e6dbe50cb29a98d5fd6f4fea158f0244721c71674a7c6714",
+    "lib/regime-engine-v2/operations/source-input.ts": "093a41e1aa6dda588b86f65286b451893e0418fffb4d88b0f27d58d1545259ab"
+  }
+}

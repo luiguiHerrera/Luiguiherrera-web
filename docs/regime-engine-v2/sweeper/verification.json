@@ -1,0 +1,331 @@
+{
+  "status": "PASS",
+  "commands": [
+    {
+      "name": "full-tests",
+      "command": [
+        "node",
+        "--disable-warning=MODULE_TYPELESS_PACKAGE_JSON",
+        "--import",
+        "./scripts/trends-test-register.mjs",
+        "--experimental-test-module-mocks",
+        "--test",
+        "lib/dashboard/adapters/vix-term-structure.test.ts",
+        "lib/personal-finance/budget/budget-plan-export.test.ts",
+        "lib/personal-finance/budget/projection-calculations.test.ts",
+        "lib/personal-finance/budget/projection-presentation.test.ts",
+        "lib/personal-finance/budget/target-calculations.test.ts",
+        "lib/portfolio-fragility/analysis-view.test.ts",
+        "lib/portfolio-fragility/conformance.test.ts",
+        "lib/portfolio-fragility/engine.test.ts",
+        "lib/portfolio-fragility/format.test.ts",
+        "lib/portfolio-fragility/input-session.test.ts",
+        "lib/regime-engine-v2/engine.test.ts",
+        "lib/reports/first-september-2026.test.mts",
+        "lib/reports/weekly-review.test.mts",
+        "lib/research/tom-decay/chart-geometry.test.ts",
+        "lib/research/tom-decay/freeze.test.ts",
+        "lib/research/tom-decay/parse.test.ts",
+        "lib/trends/capital/normalize.test.ts",
+        "lib/trends/capital/pipeline.test.ts",
+        "lib/trends/capital/public-capital.test.tsx",
+        "lib/trends/trends.test.tsx"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 3.904946208
+    },
+    {
+      "name": "python-tests",
+      "command": [
+        "python3",
+        "scripts/test-capital-xml.py"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 0.07320083399999999
+    },
+    {
+      "name": "adversarial",
+      "command": [
+        "node",
+        "--disable-warning=MODULE_TYPELESS_PACKAGE_JSON",
+        "docs/regime-engine-v2/sweeper/adversarial.mjs",
+        "/Users/quantlab/Developer/web/Luiguiherrera-web/docs/regime-engine-v2/sweeper/adversarial-results.json"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 19.2596305
+    },
+    {
+      "name": "conformance",
+      "command": [
+        "node",
+        "--disable-warning=MODULE_TYPELESS_PACKAGE_JSON",
+        "scripts/regime-v2-conformance.mts",
+        "--output-dir",
+        "/Users/quantlab/Developer/web/Luiguiherrera-web/docs/regime-engine-v2/sweeper"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 33.461424792
+    },
+    {
+      "name": "lint",
+      "command": [
+        "npx",
+        "eslint",
+        ".",
+        "--format",
+        "json",
+        "--output-file",
+        "/Users/quantlab/Developer/web/Luiguiherrera-web/docs/regime-engine-v2/sweeper/lint.json"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 6.298047334
+    },
+    {
+      "name": "editorial",
+      "command": [
+        "npm",
+        "run",
+        "validate:editorial"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 0.17237087499999948
+    },
+    {
+      "name": "reports-validate",
+      "command": [
+        "npm",
+        "run",
+        "reports:validate"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 4.919979875
+    },
+    {
+      "name": "reports-check",
+      "command": [
+        "npm",
+        "run",
+        "reports:check"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 0.4402833340000001
+    },
+    {
+      "name": "contract-audit",
+      "command": [
+        "node",
+        "--disable-warning=MODULE_TYPELESS_PACKAGE_JSON",
+        "docs/regime-engine-v2/sweeper/verify-contracts.mjs"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 0.2019559579999992
+    }
+  ],
+  "typecheck": {
+    "command": [
+      "npx",
+      "tsc",
+      "--noEmit",
+      "--incremental",
+      "false"
+    ],
+    "exit_code": 0,
+    "scope": "after final build and byte restoration of next-env.d.ts"
+  },
+  "build": {
+    "command": [
+      "npm",
+      "run",
+      "build"
+    ],
+    "exit_code": 0,
+    "log_sha256": "66bea03271f668601ffdc95007672a1ac78a9cf88eae606a9c4fa7ebb811f26d",
+    "execution": "Approved local build outside sandbox; no deployment",
+    "intermediate_failure": "A TypeScript narrowing error in the new boundary was corrected. Original failed attempt logs retained."
+  },
+  "tests": {
+    "node": {
+      "passed": 302,
+      "total": 302,
+      "V2": 48,
+      "existing_V1_and_other": 254
+    },
+    "python": {
+      "passed": 7,
+      "total": 7
+    },
+    "sweeper": {
+      "passed": 110,
+      "total": 110,
+      "raw_cross_products": 576
+    },
+    "total_passed": 419,
+    "total": 419,
+    "count_note": "Golden/historical conformance and 320 conceptual-table states are reported separately, not added to this test count."
+  },
+  "lint": {
+    "errors": 0,
+    "warnings": 18,
+    "new_warnings": 0,
+    "exact_match_to_builder_baseline": true,
+    "messages": [
+      [
+        "/Users/quantlab/Developer/web/Luiguiherrera-web/app/(es)/page.tsx",
+        "@typescript-eslint/no-unused-vars",
+        175,
+        "'SectorMiniChart' is defined but never used.",
+        1
+      ],
+      [
+        "/Users/quantlab/Developer/web/Luiguiherrera-web/app/(es)/page.tsx",
+        "@typescript-eslint/no-unused-vars",
+        237,
+        "'VixMiniPanel' is defined but never used.",
+        1
+      ],
+      [
+        "/Users/quantlab/Developer/web/Luiguiherrera-web/app/(es)/page.tsx",
+        "@typescript-eslint/no-unused-vars",
+        272,
+        "'BtcFlowsMiniPanel' is defined but never used.",
+        1
+      ],
+      [
+        "/Users/quantlab/Developer/web/Luiguiherrera-web/app/(es)/page.tsx",
+        "@typescript-eslint/no-unused-vars",
+        309,
+        "'StatisticalLevelsMiniPanel' is defined but never used.",
+        1
+      ],
+      [
+        "/Users/quantlab/Developer/web/Luiguiherrera-web/app/en/page.tsx",
+        "@typescript-eslint/no-unused-vars",
+        177,
+        "'SectorMiniChart' is defined but never used.",
+        1
+      ],
+      [
+        "/Users/quantlab/Developer/web/Luiguiherrera-web/app/en/page.tsx",
+        "@typescript-eslint/no-unused-vars",
+        239,
+        "'VixMiniPanel' is defined but never used.",
+        1
+      ],
+      [
+        "/Users/quantlab/Developer/web/Luiguiherrera-web/app/en/page.tsx",
+        "@typescript-eslint/no-unused-vars",
+        274,
+        "'BtcFlowsMiniPanel' is defined but never used.",
+        1
+      ],
+      [
+        "/Users/quantlab/Developer/web/Luiguiherrera-web/app/en/page.tsx",
+        "@typescript-eslint/no-unused-vars",
+        311,
+        "'StatisticalLevelsMiniPanel' is defined but never used.",
+        1
+      ],
+      [
+        "/Users/quantlab/Developer/web/Luiguiherrera-web/components/dashboard/BtcEtfFlowsModule.tsx",
+        "@typescript-eslint/no-unused-vars",
+        42,
+        "'severityClass' is defined but never used.",
+        1
+      ],
+      [
+        "/Users/quantlab/Developer/web/Luiguiherrera-web/components/dashboard/VixModule.tsx",
+        "@typescript-eslint/no-unused-vars",
+        30,
+        "'severityClass' is defined but never used.",
+        1
+      ],
+      [
+        "/Users/quantlab/Developer/web/Luiguiherrera-web/components/statistical-levels/PeriodExplorerTable.tsx",
+        "react-hooks/exhaustive-deps",
+        97,
+        "The 'rows' logical expression could make the dependencies of useMemo Hook (at line 98) change on every render. To fix this, wrap the initialization of 'rows' in its own useMemo() Hook.",
+        1
+      ],
+      [
+        "/Users/quantlab/Developer/web/Luiguiherrera-web/components/statistical-levels/PeriodExplorerTable.tsx",
+        "react-hooks/exhaustive-deps",
+        97,
+        "The 'rows' logical expression could make the dependencies of useMemo Hook (at line 112) change on every render. To fix this, wrap the initialization of 'rows' in its own useMemo() Hook.",
+        1
+      ],
+      [
+        "/Users/quantlab/Developer/web/Luiguiherrera-web/lib/dashboard/adapters/eth-etf-flows.ts",
+        "@typescript-eslint/no-unused-vars",
+        336,
+        "'_reason' is defined but never used.",
+        1
+      ],
+      [
+        "/Users/quantlab/Developer/web/Luiguiherrera-web/lib/dashboard/adapters/sector-etfs.ts",
+        "@typescript-eslint/no-unused-vars",
+        87,
+        "'reason' is defined but never used.",
+        1
+      ],
+      [
+        "/Users/quantlab/Developer/web/Luiguiherrera-web/scripts/build-statistical-levels.mjs",
+        "@typescript-eslint/no-unused-vars",
+        98,
+        "'yahooSymbol' is defined but never used.",
+        1
+      ],
+      [
+        "/Users/quantlab/Developer/web/Luiguiherrera-web/scripts/build-statistical-levels.mjs",
+        "@typescript-eslint/no-unused-vars",
+        959,
+        "'key' is assigned a value but never used.",
+        1
+      ],
+      [
+        "/Users/quantlab/Developer/web/Luiguiherrera-web/scripts/build-statistical-levels.mjs",
+        "@typescript-eslint/no-unused-vars",
+        1062,
+        "'yahooSymbol' is assigned a value but never used.",
+        1
+      ],
+      [
+        "/Users/quantlab/Developer/web/Luiguiherrera-web/scripts/build-td3-performance.mjs",
+        "@typescript-eslint/no-unused-vars",
+        173,
+        "'error' is defined but never used.",
+        1
+      ]
+    ]
+  },
+  "environment": {
+    "declared_next": "16.3.1",
+    "installed_next": "16.2.7",
+    "dependency_manifest_unchanged": true,
+    "lock_unchanged": true,
+    "disposition": "DEFER_MAINTAINER"
+  },
+  "oracle": {
+    "P8_files_verified": 289,
+    "P8_changed": 0,
+    "golden_expected": "P8/raw-check-results.json generated before Builder; no production decision helper used for expected",
+    "golden_scope": "464 internal numeric kernel fixtures, including six frozen parameter candidates; public service always C03",
+    "historical_actual": "TypeScript normalizes preserved Yahoo adjclose, Cboe CSV and CFE Settle raw payloads; catalog uses frozen selected native records",
+    "historical_expected": "Frozen P8 historical features expanded by unchanged Python reference_model.classify_features",
+    "historical_scope": "RAW_TO_OUTPUT",
+    "limitations": [
+      "R2 only, not PIT OOS",
+      "Catalog selection is a preserved P8 source-evidence projection; separately verify against raw catalog",
+      "One self-confirming wiring unit test is not independent acceptance"
+    ]
+  },
+  "self_confirming_test_scope": "One unchanged wiring unit compares public pillars to its own internal dependency. It is not counted as independent methodological evidence. Both headline conformance results use frozen independent P8 expected values.",
+  "final_recorded_at": "2026-09-08T16:33:42.346191+00:00",
+  "frozen_builder_replay": {
+    "passed": 76,
+    "total": 110,
+    "failed": 34,
+    "repaired_candidate_passed": 110,
+    "evidence": "frozen-builder-replay.json",
+    "note": "Same final harness run against archived original Builder, retaining original failures."
+  }
+}

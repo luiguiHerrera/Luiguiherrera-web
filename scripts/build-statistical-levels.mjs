@@ -329,7 +329,23 @@ async function fetchText(url, accept = "text/csv,text/plain,*/*") {
         "Accept-Language": "en-US,en;q=0.9",
       },
     });
-    const text = await response.text();
+    let text;
+    if (process.env.V2_SHADOW === "ON" && process.env.V2_SHADOW_DIR && new URL(url).hostname === "query1.finance.yahoo.com") {
+      const startedAt = new Date().toISOString();
+      const bytes = new Uint8Array(await response.arrayBuffer());
+      const completedAt = new Date().toISOString();
+      text = new TextDecoder().decode(bytes);
+      try {
+        const { externalDirectory } = await import("../lib/regime-engine-v2/operations/dashboard-shadow.ts");
+        const { persistBatchObservation } = await import("../lib/regime-engine-v2/operations/pipeline-capture.ts");
+        const directory = await externalDirectory(process.env.V2_SHADOW_DIR, process.cwd());
+        if (response.ok) await persistBatchObservation({ sourceId: "EQUITY_ADJUSTED", sourceVersion: "yahoo-chart-adjclose/1.0.0", sourceUrl: url }, bytes, startedAt, completedAt, path.join(directory, "captures"));
+      } catch (error) {
+        console.warn("[regime-v2:batch-capture]", error instanceof Error ? error.message : "CAPTURE_FAILED");
+      }
+    } else {
+      text = await response.text();
+    }
     return { url, status: response.status, contentType: response.headers.get("content-type") ?? "unknown", body: text };
   } finally {
     clearTimeout(timeout);

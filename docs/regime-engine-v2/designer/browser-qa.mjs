@@ -1,0 +1,3 @@
+// Retired historical browser QA; original source remains in RC0.
+console.error("RETIRED_WORKSPACE_VERIFIER\ndocs/regime-engine-v2/designer/browser-qa.mjs is a retired historical workspace browser QA entrypoint.\nNo browser QA, evidence reads, or historical resealing were performed.\nOriginal source: git show f5fc7ecfd9e1f323d0ad3a43eccec1dbc500be1c:docs/regime-engine-v2/designer/browser-qa.mjs\nRun the portable candidate verifier explicitly from CHECKOUT:\npython3 docs/regime-engine-v2/release-candidate/run-verification.py --root CHECKOUT --output-dir AUDIT --profile candidate --gates all\nHistorical browser QA results remain preserved; the candidate command does not rerun browser QA.");
+process.exit(2);

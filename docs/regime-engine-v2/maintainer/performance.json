@@ -1,0 +1,2483 @@
+{
+  "schemaVersion": "regime-v2-maintainer-performance/1.0.0",
+  "measuredAt": "2026-09-08T19:14:09.644Z",
+  "status": "MEASURED",
+  "environment": {
+    "node": "v26.5.0",
+    "platform": "darwin",
+    "architecture": "arm64",
+    "cpus": 18,
+    "next": "16.3.1"
+  },
+  "method": {
+    "command": "node --expose-gc --disable-warning=MODULE_TYPELESS_PACKAGE_JSON docs/regime-engine-v2/maintainer/performance.mjs",
+    "v1": "Frozen representative callback carrying the actual published September 4 V1 reading. It returns one existing object; no fetch, V1 recalculation, rendering, or network latency is simulated.",
+    "v2": "Actual withDashboardShadow and canonical evaluateRegime; accepted Sweeper normalized fixture parsed once per process; real external-directory snapshot/checkpoint filesystem work.",
+    "sameCut": "Repeated identical cut/vintage. Measures existing immutable-file duplicate writes/reads as currently implemented.",
+    "uniqueCaptureMetadata": "Identical accepted input/asOf with distinct benchmark capture sequence metadata. Exercises new immutable snapshot writes rather than EEXIST duplicate verification; no invented market inputs, vintages, closed sessions, or prospective evidence.",
+    "cold": "Fresh Node process per observation, five OFF/ON pairs. Includes module import, fixture read/parse, wrapper, process startup/exit; firstCallMs separately excludes imports/setup.",
+    "clock": "performance.now; subprocesses sequential; five untimed warmups; explicit GC outside timed calls every 20 observations.",
+    "counters": "Instrumented fetch, JSON.parse and fs/promises operations; wrappers restored after each worker. Injected loadInput executes zero input parsing; total JSON parses include engine/snapshot serialization and checkpoint reading.",
+    "storage": "All snapshots written under OS temporary directory outside repository, then removed after byte/count measurement.",
+    "interpretation": "Absolute sidecar increment applies to this fixture and machine. Relative percentage against a trivial frozen callback is not whole-dashboard latency regression. Bundle FETCH/CAPTURE/VALIDATE/NORMALIZE time is excluded from injected input path and must not be claimed zero.",
+    "sla": "No repository SLA exists; none introduced."
+  },
+  "fixtures": {
+    "input": "docs/regime-engine-v2/sweeper/shadow-input-r2.json",
+    "v1": "lib/reports/snapshots/primer-informe-septiembre-2026/automatic.json"
+  },
+  "codeHashesBefore": {
+    "lib/regime-engine-v2/operations/dashboard-shadow.ts": "10819d5cfc7f737f148da8e56d6cf89ef32c4623342d2495bc384c66a99b06a4",
+    "lib/regime-engine-v2/operations/pipeline-capture.ts": "988fd161c688043be58d4a466e959809beeb4ba0c2878c86d5afade3e4ded3b4",
+    "lib/regime-engine-v2/operations/source-input.ts": "093a41e1aa6dda588b86f65286b451893e0418fffb4d88b0f27d58d1545259ab",
+    "lib/regime-engine-v2/operations/snapshot.ts": "9e88b4f317e45d0930f55a9a1dc1140cf14da45338240c929cf1c67a8fde5b05"
+  },
+  "codeHashesAfter": {
+    "lib/regime-engine-v2/operations/dashboard-shadow.ts": "10819d5cfc7f737f148da8e56d6cf89ef32c4623342d2495bc384c66a99b06a4",
+    "lib/regime-engine-v2/operations/pipeline-capture.ts": "988fd161c688043be58d4a466e959809beeb4ba0c2878c86d5afade3e4ded3b4",
+    "lib/regime-engine-v2/operations/source-input.ts": "093a41e1aa6dda588b86f65286b451893e0418fffb4d88b0f27d58d1545259ab",
+    "lib/regime-engine-v2/operations/snapshot.ts": "9e88b4f317e45d0930f55a9a1dc1140cf14da45338240c929cf1c67a8fde5b05"
+  },
+  "codeStableDuringMeasurement": true,
+  "warm": {
+    "off": {
+      "enabled": false,
+      "scenario": "same-cut",
+      "fixtureBytes": 223524,
+      "v1RepresentativeBytes": 4838,
+      "fixtureParsesBeforeTiming": 2,
+      "inputFixtureHash": "92ecdd1830516ec96dd9293fc87b9ee7c6add71376e6997de4fede42d4d90a66",
+      "v1FixtureHash": "945692213bc501f8ade3a2ea2da008d7f279b32376099d38baf4a36d8082f879",
+      "importMs": 42.580665999999994,
+      "firstCallMs": 0.09458399999999756,
+      "firstElapsedMs": 0.11983399999999733,
+      "workerElapsedMs": 54.73454099999999,
+      "warmupCalls": 5,
+      "timing": {
+        "n": 120,
+        "minMs": 0.00020799999998644125,
+        "medianMs": 0.0002704999999991742,
+        "meanMs": 0.00046354166666482397,
+        "p95Ms": 0.0018749999999982947,
+        "maxMs": 0.003416999999998893
+      },
+      "rawSamplesMs": [
+        0.0030000000000001137,
+        0.0010000000000047748,
+        0.0005409999999983484,
+        0.001125000000001819,
+        0.0014579999999995152,
+        0.0006660000000096034,
+        0.00033299999999769625,
+        0.0003339999999951715,
+        0.0003750000000053433,
+        0.0003750000000053433,
+        0.0003750000000053433,
+        0.00033400000000938235,
+        0.0003339999999951715,
+        0.00033299999999769625,
+        0.0002920000000017353,
+        0.0002920000000017353,
+        0.00033299999999769625,
+        0.0003749999999911324,
+        0.0002920000000017353,
+        0.0002920000000017353,
+        0.002333000000007246,
+        0.0005000000000023874,
+        0.0003749999999911324,
+        0.00029199999998752446,
+        0.00033299999999769625,
+        0.0002910000000042601,
+        0.00033299999999769625,
+        0.0002920000000017353,
+        0.00029199999998752446,
+        0.00029199999998752446,
+        0.0003750000000053433,
+        0.003416999999998893,
+        0.002041999999988775,
+        0.00025000000000829914,
+        0.0002499999999940883,
+        0.00025000000000829914,
+        0.0002499999999940883,
+        0.0002920000000017353,
+        0.0002920000000017353,
+        0.0002920000000017353,
+        0.0030410000000102855,
+        0.0005419999999958236,
+        0.0003749999999911324,
+        0.0002920000000017353,
+        0.0002499999999940883,
+        0.0002920000000017353,
+        0.0002920000000017353,
+        0.0002499999999940883,
+        0.0002499999999940883,
+        0.0015410000000031232,
+        0.0003749999999911324,
+        0.0003339999999951715,
+        0.0002909999999900492,
+        0.0002499999999940883,
+        0.00025000000000829914,
+        0.00025000000000829914,
+        0.0002499999999940883,
+        0.0002080000000006521,
+        0.0002080000000006521,
+        0.00020899999999812735,
+        0.0024999999999977263,
+        0.0005419999999958236,
+        0.00041699999999877946,
+        0.0002499999999940883,
+        0.0004579999999947404,
+        0.0003750000000053433,
+        0.0002910000000042601,
+        0.00033299999999769625,
+        0.0002499999999940883,
+        0.0002499999999940883,
+        0.0002080000000006521,
+        0.0002080000000006521,
+        0.0002499999999940883,
+        0.00020899999999812735,
+        0.00020899999999812735,
+        0.00020899999999812735,
+        0.0002499999999940883,
+        0.0002499999999940883,
+        0.0002499999999940883,
+        0.00020899999999812735,
+        0.0018749999999982947,
+        0.0005839999999892598,
+        0.0003749999999911324,
+        0.0002909999999900492,
+        0.0002499999999940883,
+        0.00025000000000829914,
+        0.0002499999999940883,
+        0.0002499999999940883,
+        0.0002499999999940883,
+        0.00020799999998644125,
+        0.0002499999999940883,
+        0.0002080000000006521,
+        0.0002080000000006521,
+        0.0002080000000006521,
+        0.0002499999999940883,
+        0.00020899999999812735,
+        0.0002499999999940883,
+        0.00025000000000829914,
+        0.0002499999999940883,
+        0.0002080000000006521,
+        0.001082999999994172,
+        0.0004160000000013042,
+        0.0002499999999940883,
+        0.0002909999999900492,
+        0.0002080000000006521,
+        0.00020899999999812735,
+        0.0002080000000006521,
+        0.00025000000000829914,
+        0.00020899999999812735,
+        0.00020799999998644125,
+        0.0002080000000006521,
+        0.0002080000000006521,
+        0.0002499999999940883,
+        0.0002080000000006521,
+        0.0002080000000006521,
+        0.00020899999999812735,
+        0.0002080000000006521,
+        0.0002499999999940883,
+        0.0002499999999940883,
+        0.0002499999999940883
+      ],
+      "firstCallCounters": {
+        "v1Calls": 1,
+        "inputLoads": 0,
+        "bundleFileReads": 0,
+        "networkFetches": 0,
+        "inputJsonParses": 0,
+        "allRuntimeJsonParses": 0,
+        "filesystem": {},
+        "readBytes": 0,
+        "writeBytes": 0,
+        "diagnostics": {}
+      },
+      "counters": {
+        "v1Calls": 120,
+        "inputLoads": 0,
+        "bundleFileReads": 0,
+        "networkFetches": 0,
+        "inputJsonParses": 0,
+        "allRuntimeJsonParses": 0,
+        "filesystem": {},
+        "readBytes": 0,
+        "writeBytes": 0,
+        "diagnostics": {}
+      },
+      "perCallCounters": {
+        "inputLoads": 0,
+        "networkFetches": 0,
+        "inputJsonParses": 0,
+        "bundleFileReads": 0,
+        "allRuntimeJsonParses": 0,
+        "filesystem": {},
+        "readBytes": 0,
+        "writeBytes": 0
+      },
+      "memory": {
+        "gcAvailable": true,
+        "before": {
+          "heapUsedBytes": 9803336,
+          "rssBytes": 99237888,
+          "externalBytes": 6657055,
+          "arrayBuffersBytes": 367347
+        },
+        "after": {
+          "heapUsedBytes": 9849792,
+          "rssBytes": 101826560,
+          "externalBytes": 6591523,
+          "arrayBuffersBytes": 367347
+        },
+        "afterMinusBefore": {
+          "heapUsedBytes": 46456,
+          "rssBytes": 2588672,
+          "externalBytes": -65532,
+          "arrayBuffersBytes": 0
+        },
+        "observedHighWater": {
+          "heapUsedBytes": 9907560,
+          "rssBytes": 101826560,
+          "externalBytes": 6657055,
+          "arrayBuffersBytes": 367347
+        },
+        "checkpoints": [
+          {
+            "completed": 20,
+            "heapUsedBytes": 9811416,
+            "rssBytes": 101040128,
+            "externalBytes": 6591523,
+            "arrayBuffersBytes": 367347
+          },
+          {
+            "completed": 40,
+            "heapUsedBytes": 9813744,
+            "rssBytes": 101662720,
+            "externalBytes": 6591523,
+            "arrayBuffersBytes": 367347
+          },
+          {
+            "completed": 60,
+            "heapUsedBytes": 9823360,
+            "rssBytes": 101810176,
+            "externalBytes": 6591523,
+            "arrayBuffersBytes": 367347
+          },
+          {
+            "completed": 80,
+            "heapUsedBytes": 9849304,
+            "rssBytes": 101826560,
+            "externalBytes": 6591523,
+            "arrayBuffersBytes": 367347
+          },
+          {
+            "completed": 100,
+            "heapUsedBytes": 9849912,
+            "rssBytes": 101826560,
+            "externalBytes": 6591523,
+            "arrayBuffersBytes": 367347
+          },
+          {
+            "completed": 120,
+            "heapUsedBytes": 9850056,
+            "rssBytes": 101826560,
+            "externalBytes": 6591523,
+            "arrayBuffersBytes": 367347
+          }
+        ]
+      },
+      "storage": {
+        "directory": "/var/folders/dk/54wtdzv133nb6403dxn6d6z40000gn/T/regime-maintainer-performance-PFsx4B",
+        "outsideRepository": true,
+        "immutableSnapshots": 0,
+        "persistedBytes": 0,
+        "scope": "Disposable offline benchmark R2 artifacts; not live prospective evidence",
+        "removedAfterMeasurement": true
+      },
+      "processElapsedMs": 92.762208
+    },
+    "on": {
+      "enabled": true,
+      "scenario": "same-cut",
+      "fixtureBytes": 223524,
+      "v1RepresentativeBytes": 4838,
+      "fixtureParsesBeforeTiming": 2,
+      "inputFixtureHash": "92ecdd1830516ec96dd9293fc87b9ee7c6add71376e6997de4fede42d4d90a66",
+      "v1FixtureHash": "945692213bc501f8ade3a2ea2da008d7f279b32376099d38baf4a36d8082f879",
+      "importMs": 42.436542,
+      "firstCallMs": 40.26112500000001,
+      "firstElapsedMs": 40.294667000000004,
+      "workerElapsedMs": 3304.369584,
+      "warmupCalls": 5,
+      "timing": {
+        "n": 120,
+        "minMs": 24.483333999999786,
+        "medianMs": 25.010062500000004,
+        "meanMs": 25.59909580000001,
+        "p95Ms": 28.454207999999994,
+        "maxMs": 32.354416000000015
+      },
+      "rawSamplesMs": [
+        28.972249999999974,
+        27.69220899999999,
+        28.454207999999994,
+        26.576915999999983,
+        25.89587499999999,
+        25.93912499999999,
+        24.968209,
+        32.354416000000015,
+        26.620333000000016,
+        26.02358300000003,
+        25.940624999999955,
+        26.068292000000042,
+        25.938375000000065,
+        24.92141700000002,
+        26.08741699999996,
+        27.923874999999953,
+        26.01400000000001,
+        25.894750000000045,
+        26.016166,
+        26.17016600000011,
+        27.648665999999935,
+        24.915457999999944,
+        25.040665999999987,
+        24.931332999999995,
+        24.971000000000004,
+        25.00604199999998,
+        24.961124999999925,
+        25.985416999999984,
+        24.93237499999998,
+        25.053166000000033,
+        26.129374999999982,
+        25.826125000000047,
+        26.915042000000085,
+        24.975167000000056,
+        25.055875000000015,
+        24.99324999999999,
+        24.8771670000001,
+        25.111457999999857,
+        24.947458000000097,
+        24.984916999999996,
+        28.678915999999845,
+        25.847541999999976,
+        25.953333000000157,
+        24.988584000000174,
+        24.97587499999986,
+        26.44316600000002,
+        24.483333999999786,
+        25.07441700000004,
+        24.89995799999997,
+        24.977707999999893,
+        31.998000000000047,
+        25.17258300000003,
+        24.92170800000008,
+        24.95183300000008,
+        24.969082999999955,
+        24.911790999999994,
+        25.10504200000014,
+        24.976374999999962,
+        24.992500000000064,
+        24.866792000000032,
+        27.71679200000017,
+        26.019791999999825,
+        25.003124999999955,
+        25.906124999999975,
+        25.084124999999858,
+        24.937708000000157,
+        24.994875000000093,
+        24.94358299999999,
+        25.15300000000002,
+        24.94545799999969,
+        24.954041999999845,
+        24.88562499999989,
+        25.01995799999986,
+        25.014333999999963,
+        24.965584000000035,
+        25.016583000000082,
+        24.909791999999925,
+        25.06341599999996,
+        24.96295800000007,
+        24.991250000000036,
+        28.629417000000103,
+        25.89300000000003,
+        24.99558300000035,
+        24.967291999999816,
+        24.98458299999993,
+        24.96875,
+        24.958124999999654,
+        25.11962500000027,
+        26.379249999999956,
+        24.54495799999995,
+        24.904167000000143,
+        24.957416000000194,
+        25.022292000000107,
+        24.96954199999982,
+        24.948125000000346,
+        25.016208000000006,
+        25.00237500000003,
+        24.94458399999985,
+        25.07975000000033,
+        24.974417000000358,
+        28.59237499999972,
+        25.94683299999997,
+        25.97024999999985,
+        25.973917000000256,
+        25.969208000000435,
+        24.997499999999945,
+        24.948083000000224,
+        25.054999999999836,
+        24.98366699999997,
+        25.004750000000058,
+        24.942417000000205,
+        24.987084000000323,
+        25.093207999999777,
+        24.99474999999984,
+        24.834249999999884,
+        25.03383299999996,
+        24.99420800000007,
+        24.93100000000004,
+        25.014083000000028,
+        24.955667000000176
+      ],
+      "firstCallCounters": {
+        "v1Calls": 1,
+        "inputLoads": 1,
+        "bundleFileReads": 0,
+        "networkFetches": 0,
+        "inputJsonParses": 0,
+        "allRuntimeJsonParses": 6,
+        "filesystem": {
+          "realpath": 7,
+          "mkdir": 2,
+          "readFile": 1,
+          "open": 1,
+          "FileHandle.writeFile": 1,
+          "FileHandle.sync": 1,
+          "FileHandle.close": 1,
+          "link": 1,
+          "unlink": 1,
+          "writeFile": 1,
+          "rename": 1
+        },
+        "readBytes": 0,
+        "writeBytes": 190342,
+        "diagnostics": {
+          "COMPLETE": 1
+        }
+      },
+      "counters": {
+        "v1Calls": 120,
+        "inputLoads": 120,
+        "bundleFileReads": 0,
+        "networkFetches": 0,
+        "inputJsonParses": 0,
+        "allRuntimeJsonParses": 960,
+        "filesystem": {
+          "realpath": 720,
+          "mkdir": 240,
+          "readFile": 120,
+          "open": 360,
+          "FileHandle.stat": 240,
+          "FileHandle.read": 480,
+          "FileHandle.close": 360,
+          "FileHandle.writeFile": 120,
+          "FileHandle.sync": 120,
+          "link": 120,
+          "unlink": 120
+        },
+        "readBytes": 45684240,
+        "writeBytes": 22843200,
+        "diagnostics": {
+          "COMPLETE": 120
+        }
+      },
+      "perCallCounters": {
+        "inputLoads": 1,
+        "networkFetches": 0,
+        "inputJsonParses": 0,
+        "bundleFileReads": 0,
+        "allRuntimeJsonParses": 8,
+        "filesystem": {
+          "realpath": 6,
+          "mkdir": 2,
+          "readFile": 1,
+          "open": 3,
+          "FileHandle.stat": 2,
+          "FileHandle.read": 4,
+          "FileHandle.close": 3,
+          "FileHandle.writeFile": 1,
+          "FileHandle.sync": 1,
+          "link": 1,
+          "unlink": 1
+        },
+        "readBytes": 380702,
+        "writeBytes": 190360
+      },
+      "memory": {
+        "gcAvailable": true,
+        "before": {
+          "heapUsedBytes": 10428376,
+          "rssBytes": 130301952,
+          "externalBytes": 6979036,
+          "arrayBuffersBytes": 367347
+        },
+        "after": {
+          "heapUsedBytes": 10829904,
+          "rssBytes": 187318272,
+          "externalBytes": 6593571,
+          "arrayBuffersBytes": 367347
+        },
+        "afterMinusBefore": {
+          "heapUsedBytes": 401528,
+          "rssBytes": 57016320,
+          "externalBytes": -385465,
+          "arrayBuffersBytes": 0
+        },
+        "observedHighWater": {
+          "heapUsedBytes": 32614992,
+          "rssBytes": 190889984,
+          "externalBytes": 6979036,
+          "arrayBuffersBytes": 752020
+        },
+        "checkpoints": [
+          {
+            "completed": 20,
+            "heapUsedBytes": 10638120,
+            "rssBytes": 185942016,
+            "externalBytes": 6977412,
+            "arrayBuffersBytes": 367347
+          },
+          {
+            "completed": 40,
+            "heapUsedBytes": 10769016,
+            "rssBytes": 187154432,
+            "externalBytes": 6976996,
+            "arrayBuffersBytes": 367347
+          },
+          {
+            "completed": 60,
+            "heapUsedBytes": 10810584,
+            "rssBytes": 187252736,
+            "externalBytes": 6976996,
+            "arrayBuffersBytes": 367347
+          },
+          {
+            "completed": 80,
+            "heapUsedBytes": 10827064,
+            "rssBytes": 187252736,
+            "externalBytes": 6976996,
+            "arrayBuffersBytes": 367347
+          },
+          {
+            "completed": 100,
+            "heapUsedBytes": 10841680,
+            "rssBytes": 187301888,
+            "externalBytes": 6976996,
+            "arrayBuffersBytes": 367347
+          },
+          {
+            "completed": 120,
+            "heapUsedBytes": 10844600,
+            "rssBytes": 187318272,
+            "externalBytes": 6976996,
+            "arrayBuffersBytes": 367347
+          }
+        ]
+      },
+      "storage": {
+        "directory": "/var/folders/dk/54wtdzv133nb6403dxn6d6z40000gn/T/regime-maintainer-performance-HcHUio",
+        "outsideRepository": true,
+        "immutableSnapshots": 2,
+        "persistedBytes": 380637,
+        "scope": "Disposable offline benchmark R2 artifacts; not live prospective evidence",
+        "removedAfterMeasurement": true
+      },
+      "processElapsedMs": 3345.065667
+    },
+    "uniqueCaptureMetadataOn": {
+      "enabled": true,
+      "scenario": "unique-capture-metadata",
+      "fixtureBytes": 223524,
+      "v1RepresentativeBytes": 4838,
+      "fixtureParsesBeforeTiming": 2,
+      "inputFixtureHash": "92ecdd1830516ec96dd9293fc87b9ee7c6add71376e6997de4fede42d4d90a66",
+      "v1FixtureHash": "945692213bc501f8ade3a2ea2da008d7f279b32376099d38baf4a36d8082f879",
+      "importMs": 42.049334,
+      "firstCallMs": 39.208167,
+      "firstElapsedMs": 39.237667,
+      "workerElapsedMs": 3314.157792,
+      "warmupCalls": 5,
+      "timing": {
+        "n": 120,
+        "minMs": 24.394582999999784,
+        "medianMs": 25.149458500000037,
+        "meanMs": 25.681709683333324,
+        "p95Ms": 28.61229100000014,
+        "maxMs": 31.89604099999997
+      },
+      "rawSamplesMs": [
+        29.559333000000038,
+        27.866083000000003,
+        28.97679199999999,
+        25.953791000000024,
+        26.012207999999987,
+        25.938375000000008,
+        25.149167000000034,
+        25.863374999999962,
+        25.987167,
+        25.00004100000001,
+        24.88133399999998,
+        25.003166999999962,
+        25.003791999999976,
+        24.86245800000006,
+        25.14975000000004,
+        25.96154200000001,
+        27.952499999999986,
+        25.979208000000085,
+        26.005250000000046,
+        25.829834000000005,
+        27.56791700000008,
+        24.964665999999966,
+        25.088540999999964,
+        24.906749999999988,
+        24.99158299999999,
+        24.861541999999986,
+        25.280250000000024,
+        24.82741699999997,
+        24.874167000000057,
+        25.04875000000004,
+        24.950415999999905,
+        25.205834000000095,
+        24.810042000000067,
+        24.913042000000132,
+        25.031750000000102,
+        25.01541599999996,
+        24.955416999999898,
+        25.058333000000175,
+        24.936333000000104,
+        25.02062500000011,
+        28.56862500000011,
+        26.024000000000115,
+        26.070584000000053,
+        28.914790999999923,
+        24.95179200000007,
+        27.02883399999996,
+        24.958041999999978,
+        25.007666999999856,
+        24.94470799999999,
+        24.87999999999988,
+        25.01783300000011,
+        25.36958400000003,
+        25.71787499999982,
+        25.05529200000001,
+        24.760707999999795,
+        26.03687500000001,
+        26.007499999999936,
+        25.064041999999972,
+        25.04904099999999,
+        24.903500000000122,
+        28.61229100000014,
+        24.9047079999998,
+        26.09791599999994,
+        26.083499999999958,
+        25.826833999999963,
+        25.017541000000165,
+        25.044333999999935,
+        29.95570799999996,
+        24.95879100000002,
+        25.345582999999806,
+        24.9245420000002,
+        25.614500000000135,
+        24.927124999999705,
+        24.394582999999784,
+        24.77220800000032,
+        24.919374999999945,
+        25.20349999999962,
+        24.916207999999642,
+        24.95575000000008,
+        24.93399999999974,
+        28.683500000000095,
+        31.89604099999997,
+        25.941874999999982,
+        26.137916000000132,
+        26.023709000000053,
+        25.88145799999984,
+        25.23324999999977,
+        25.801542000000154,
+        24.90945799999963,
+        25.019874999999956,
+        26.226834000000053,
+        25.718832999999904,
+        24.789999999999964,
+        25.15454200000022,
+        25.204583999999613,
+        25.86700000000019,
+        24.937207999999828,
+        25.001458000000184,
+        25.415915999999925,
+        24.453999999999724,
+        27.596082999999908,
+        26.103749999999764,
+        24.93679199999997,
+        26.17245899999989,
+        25.764458999999988,
+        25.91112499999963,
+        25.018082999999933,
+        26.231708000000253,
+        26.145375000000058,
+        25.78491699999995,
+        24.94037500000013,
+        24.956541000000016,
+        25.747125000000324,
+        25.20999999999958,
+        26.045665999999983,
+        24.82016700000031,
+        25.065291000000343,
+        25.054499999999734,
+        26.01308300000028,
+        25.004415999999765
+      ],
+      "firstCallCounters": {
+        "v1Calls": 1,
+        "inputLoads": 1,
+        "bundleFileReads": 0,
+        "networkFetches": 0,
+        "inputJsonParses": 0,
+        "allRuntimeJsonParses": 6,
+        "filesystem": {
+          "realpath": 7,
+          "mkdir": 2,
+          "readFile": 1,
+          "open": 1,
+          "FileHandle.writeFile": 1,
+          "FileHandle.sync": 1,
+          "FileHandle.close": 1,
+          "link": 1,
+          "unlink": 1,
+          "writeFile": 1,
+          "rename": 1
+        },
+        "readBytes": 0,
+        "writeBytes": 190371,
+        "diagnostics": {
+          "COMPLETE": 1
+        }
+      },
+      "counters": {
+        "v1Calls": 120,
+        "inputLoads": 120,
+        "bundleFileReads": 0,
+        "networkFetches": 0,
+        "inputJsonParses": 0,
+        "allRuntimeJsonParses": 960,
+        "filesystem": {
+          "realpath": 720,
+          "mkdir": 240,
+          "readFile": 120,
+          "open": 240,
+          "FileHandle.stat": 120,
+          "FileHandle.read": 240,
+          "FileHandle.close": 240,
+          "FileHandle.writeFile": 120,
+          "FileHandle.sync": 120,
+          "link": 120,
+          "unlink": 120
+        },
+        "readBytes": 22844520,
+        "writeBytes": 22846822,
+        "diagnostics": {
+          "COMPLETE": 120
+        }
+      },
+      "perCallCounters": {
+        "inputLoads": 1,
+        "networkFetches": 0,
+        "inputJsonParses": 0,
+        "bundleFileReads": 0,
+        "allRuntimeJsonParses": 8,
+        "filesystem": {
+          "realpath": 6,
+          "mkdir": 2,
+          "readFile": 1,
+          "open": 2,
+          "FileHandle.stat": 1,
+          "FileHandle.read": 2,
+          "FileHandle.close": 2,
+          "FileHandle.writeFile": 1,
+          "FileHandle.sync": 1,
+          "link": 1,
+          "unlink": 1
+        },
+        "readBytes": 190371,
+        "writeBytes": 190390.18333333332
+      },
+      "memory": {
+        "gcAvailable": true,
+        "before": {
+          "heapUsedBytes": 10415488,
+          "rssBytes": 129777664,
+          "externalBytes": 6978386,
+          "arrayBuffersBytes": 367347
+        },
+        "after": {
+          "heapUsedBytes": 10810952,
+          "rssBytes": 186269696,
+          "externalBytes": 6593571,
+          "arrayBuffersBytes": 367347
+        },
+        "afterMinusBefore": {
+          "heapUsedBytes": 395464,
+          "rssBytes": 56492032,
+          "externalBytes": -384815,
+          "arrayBuffersBytes": 0
+        },
+        "observedHighWater": {
+          "heapUsedBytes": 33263480,
+          "rssBytes": 189808640,
+          "externalBytes": 6978386,
+          "arrayBuffersBytes": 752078
+        },
+        "checkpoints": [
+          {
+            "completed": 20,
+            "heapUsedBytes": 10627336,
+            "rssBytes": 185008128,
+            "externalBytes": 6977471,
+            "arrayBuffersBytes": 367347
+          },
+          {
+            "completed": 40,
+            "heapUsedBytes": 10752128,
+            "rssBytes": 186073088,
+            "externalBytes": 6785833,
+            "arrayBuffersBytes": 367347
+          },
+          {
+            "completed": 60,
+            "heapUsedBytes": 10791176,
+            "rssBytes": 186171392,
+            "externalBytes": 6785833,
+            "arrayBuffersBytes": 367347
+          },
+          {
+            "completed": 80,
+            "heapUsedBytes": 10806992,
+            "rssBytes": 186171392,
+            "externalBytes": 6785833,
+            "arrayBuffersBytes": 367347
+          },
+          {
+            "completed": 100,
+            "heapUsedBytes": 10822752,
+            "rssBytes": 186236928,
+            "externalBytes": 6785834,
+            "arrayBuffersBytes": 367347
+          },
+          {
+            "completed": 120,
+            "heapUsedBytes": 10826136,
+            "rssBytes": 186269696,
+            "externalBytes": 6785834,
+            "arrayBuffersBytes": 367347
+          }
+        ]
+      },
+      "storage": {
+        "directory": "/var/folders/dk/54wtdzv133nb6403dxn6d6z40000gn/T/regime-maintainer-performance-CFKFef",
+        "outsideRepository": true,
+        "immutableSnapshots": 126,
+        "persistedBytes": 23989073,
+        "scope": "Disposable offline benchmark R2 artifacts; not live prospective evidence",
+        "removedAfterMeasurement": true
+      },
+      "processElapsedMs": 3362.506042
+    }
+  },
+  "rawBundlePath": {
+    "emptyBundleOn": {
+      "enabled": true,
+      "scenario": "empty-bundle",
+      "fixtureBytes": 223524,
+      "v1RepresentativeBytes": 4838,
+      "fixtureParsesBeforeTiming": 2,
+      "inputFixtureHash": "92ecdd1830516ec96dd9293fc87b9ee7c6add71376e6997de4fede42d4d90a66",
+      "v1FixtureHash": "945692213bc501f8ade3a2ea2da008d7f279b32376099d38baf4a36d8082f879",
+      "importMs": 41.990416999999994,
+      "firstCallMs": 15.299999999999997,
+      "firstElapsedMs": 15.334625000000003,
+      "workerElapsedMs": 857.30825,
+      "warmupCalls": 5,
+      "timing": {
+        "n": 120,
+        "minMs": 5.221292000000062,
+        "medianMs": 5.986708499999963,
+        "meanMs": 6.211286141666671,
+        "p95Ms": 6.938249999999925,
+        "maxMs": 11.994041000000038
+      },
+      "rawSamplesMs": [
+        7.536417,
+        6.884749999999997,
+        5.966542000000004,
+        5.935084000000018,
+        6.0798750000000155,
+        5.9480000000000075,
+        5.931250000000006,
+        6.032332999999994,
+        5.965209000000016,
+        5.919499999999999,
+        6.033417000000014,
+        5.874791000000016,
+        6.053332999999981,
+        6.015959000000009,
+        5.923584000000005,
+        6.123000000000019,
+        5.935458000000011,
+        5.960499999999996,
+        6.01724999999999,
+        5.950457999999998,
+        6.785499999999985,
+        6.200582999999995,
+        5.794124999999951,
+        5.878708000000017,
+        6.069542000000013,
+        5.969082999999955,
+        5.994458000000009,
+        6.783375000000035,
+        6.264165999999989,
+        5.856832999999995,
+        6.0694160000000466,
+        5.938791999999978,
+        5.949624999999969,
+        5.962166999999965,
+        6.056749999999965,
+        5.959499999999991,
+        6.0322909999999865,
+        5.938458999999966,
+        5.9775000000000205,
+        6.030207999999959,
+        6.912417000000005,
+        5.924041999999986,
+        5.90300000000002,
+        6.071458000000007,
+        5.972750000000019,
+        6.009749999999997,
+        5.978749999999991,
+        5.9061249999999745,
+        6.009374999999977,
+        6.052416999999991,
+        5.881958999999995,
+        6.07404200000002,
+        5.922542000000021,
+        6.010041000000001,
+        6.09091699999999,
+        5.89224999999999,
+        6.073542000000032,
+        5.967917,
+        6.01724999999999,
+        5.904416999999967,
+        7.135374999999954,
+        6.927292000000023,
+        5.880917000000011,
+        6.082583,
+        5.941209000000072,
+        6.046583000000055,
+        5.95474999999999,
+        5.923125000000027,
+        5.896792000000005,
+        6.0462909999999965,
+        5.980792000000065,
+        5.943125000000009,
+        6.021542000000068,
+        6.101125000000025,
+        6.71266700000001,
+        6.189625000000092,
+        5.960333000000105,
+        6.119833000000085,
+        5.969208000000094,
+        5.93079200000011,
+        6.938249999999925,
+        5.975292000000081,
+        6.115167000000042,
+        10.847582999999986,
+        6.070500000000038,
+        5.9061249999999745,
+        5.976999999999975,
+        6.0434999999999945,
+        5.965958999999998,
+        5.9489580000000615,
+        6.078750000000014,
+        6.07970899999998,
+        11.805625000000077,
+        6.003749999999968,
+        5.996332999999936,
+        5.967750000000024,
+        6.14083299999993,
+        5.879707999999937,
+        6.0200419999999895,
+        5.924167000000011,
+        7.078374999999937,
+        5.855874999999969,
+        6.052625000000035,
+        5.972292000000039,
+        6.1283750000000055,
+        5.773374999999987,
+        6.10837499999991,
+        5.945791000000099,
+        5.938249999999925,
+        5.988499999999931,
+        5.960333999999989,
+        6.0514160000000174,
+        11.994041000000038,
+        5.920083000000091,
+        6.842416999999955,
+        5.221292000000062,
+        5.984916999999996,
+        5.937124999999924,
+        6.006750000000011,
+        5.97241699999995
+      ],
+      "firstCallCounters": {
+        "v1Calls": 1,
+        "inputLoads": 0,
+        "bundleFileReads": 1,
+        "networkFetches": 0,
+        "inputJsonParses": 1,
+        "allRuntimeJsonParses": 9,
+        "filesystem": {
+          "realpath": 7,
+          "mkdir": 3,
+          "stat": 1,
+          "readFile": 2,
+          "writeFile": 2,
+          "open": 1,
+          "FileHandle.writeFile": 1,
+          "FileHandle.sync": 1,
+          "FileHandle.close": 1,
+          "link": 1,
+          "unlink": 1,
+          "rename": 1
+        },
+        "readBytes": 90,
+        "writeBytes": 25559,
+        "diagnostics": {
+          "INCOMPLETE": 1
+        }
+      },
+      "counters": {
+        "v1Calls": 120,
+        "inputLoads": 0,
+        "bundleFileReads": 120,
+        "networkFetches": 0,
+        "inputJsonParses": 0,
+        "allRuntimeJsonParses": 840,
+        "filesystem": {
+          "realpath": 720,
+          "mkdir": 360,
+          "stat": 120,
+          "readFile": 360,
+          "writeFile": 120,
+          "open": 360,
+          "FileHandle.stat": 240,
+          "FileHandle.read": 480,
+          "FileHandle.close": 360,
+          "FileHandle.writeFile": 120,
+          "FileHandle.sync": 120,
+          "link": 120,
+          "unlink": 120
+        },
+        "readBytes": 6133800,
+        "writeBytes": 3055920,
+        "diagnostics": {
+          "INCOMPLETE": 120
+        }
+      },
+      "perCallCounters": {
+        "inputLoads": 0,
+        "networkFetches": 0,
+        "inputJsonParses": 0,
+        "bundleFileReads": 1,
+        "allRuntimeJsonParses": 7,
+        "filesystem": {
+          "realpath": 6,
+          "mkdir": 3,
+          "stat": 1,
+          "readFile": 3,
+          "writeFile": 1,
+          "open": 3,
+          "FileHandle.stat": 2,
+          "FileHandle.read": 4,
+          "FileHandle.close": 3,
+          "FileHandle.writeFile": 1,
+          "FileHandle.sync": 1,
+          "link": 1,
+          "unlink": 1
+        },
+        "readBytes": 51115,
+        "writeBytes": 25466
+      },
+      "memory": {
+        "gcAvailable": true,
+        "before": {
+          "heapUsedBytes": 10308224,
+          "rssBytes": 112017408,
+          "externalBytes": 6754022,
+          "arrayBuffersBytes": 367347
+        },
+        "after": {
+          "heapUsedBytes": 10673760,
+          "rssBytes": 121012224,
+          "externalBytes": 6593571,
+          "arrayBuffersBytes": 367347
+        },
+        "afterMinusBefore": {
+          "heapUsedBytes": 365536,
+          "rssBytes": 8994816,
+          "externalBytes": -160451,
+          "arrayBuffersBytes": 0
+        },
+        "observedHighWater": {
+          "heapUsedBytes": 17286288,
+          "rssBytes": 121012224,
+          "externalBytes": 7277102,
+          "arrayBuffersBytes": 1050878
+        },
+        "checkpoints": [
+          {
+            "completed": 20,
+            "heapUsedBytes": 10553504,
+            "rssBytes": 112361472,
+            "externalBytes": 7277102,
+            "arrayBuffersBytes": 367347
+          },
+          {
+            "completed": 40,
+            "heapUsedBytes": 10590320,
+            "rssBytes": 120815616,
+            "externalBytes": 6942137,
+            "arrayBuffersBytes": 367347
+          },
+          {
+            "completed": 60,
+            "heapUsedBytes": 10635296,
+            "rssBytes": 120881152,
+            "externalBytes": 6818350,
+            "arrayBuffersBytes": 367347
+          },
+          {
+            "completed": 80,
+            "heapUsedBytes": 10670104,
+            "rssBytes": 120930304,
+            "externalBytes": 6818350,
+            "arrayBuffersBytes": 367347
+          },
+          {
+            "completed": 100,
+            "heapUsedBytes": 10682704,
+            "rssBytes": 120963072,
+            "externalBytes": 6818350,
+            "arrayBuffersBytes": 367347
+          },
+          {
+            "completed": 120,
+            "heapUsedBytes": 10686712,
+            "rssBytes": 121012224,
+            "externalBytes": 6818350,
+            "arrayBuffersBytes": 367347
+          }
+        ]
+      },
+      "storage": {
+        "directory": "/var/folders/dk/54wtdzv133nb6403dxn6d6z40000gn/T/regime-maintainer-performance-0Ddhn7",
+        "outsideRepository": true,
+        "immutableSnapshots": 2,
+        "persistedBytes": 50870,
+        "scope": "Disposable offline benchmark R2 artifacts; not live prospective evidence",
+        "removedAfterMeasurement": true
+      },
+      "processElapsedMs": 897.2465830000001
+    },
+    "meaning": "Actual filesystem read/content retention/hash/JSON parse/prepareSourceInput/default loader path using an explicit empty R2 bundle. It correctly returns INCOMPLETE/UNKNOWN_CALENDAR. Measures cache and degradation path only; not a full-source normalization latency claim."
+  },
+  "cold": {
+    "pairedRuns": [
+      {
+        "off": {
+          "enabled": false,
+          "scenario": "same-cut",
+          "fixtureBytes": 223524,
+          "v1RepresentativeBytes": 4838,
+          "fixtureParsesBeforeTiming": 2,
+          "inputFixtureHash": "92ecdd1830516ec96dd9293fc87b9ee7c6add71376e6997de4fede42d4d90a66",
+          "v1FixtureHash": "945692213bc501f8ade3a2ea2da008d7f279b32376099d38baf4a36d8082f879",
+          "importMs": 42.017875000000004,
+          "firstCallMs": 0.10112499999999613,
+          "firstElapsedMs": 0.13554099999998925,
+          "workerElapsedMs": 47.021292,
+          "warmupCalls": 0,
+          "timing": {
+            "n": 1,
+            "minMs": 0.0040000000000048885,
+            "medianMs": 0.0040000000000048885,
+            "meanMs": 0.0040000000000048885,
+            "p95Ms": 0.0040000000000048885,
+            "maxMs": 0.0040000000000048885
+          },
+          "rawSamplesMs": [
+            0.0040000000000048885
+          ],
+          "firstCallCounters": {
+            "v1Calls": 1,
+            "inputLoads": 0,
+            "bundleFileReads": 0,
+            "networkFetches": 0,
+            "inputJsonParses": 0,
+            "allRuntimeJsonParses": 0,
+            "filesystem": {},
+            "readBytes": 0,
+            "writeBytes": 0,
+            "diagnostics": {}
+          },
+          "counters": {
+            "v1Calls": 1,
+            "inputLoads": 0,
+            "bundleFileReads": 0,
+            "networkFetches": 0,
+            "inputJsonParses": 0,
+            "allRuntimeJsonParses": 0,
+            "filesystem": {},
+            "readBytes": 0,
+            "writeBytes": 0,
+            "diagnostics": {}
+          },
+          "perCallCounters": {
+            "inputLoads": 0,
+            "networkFetches": 0,
+            "inputJsonParses": 0,
+            "bundleFileReads": 0,
+            "allRuntimeJsonParses": 0,
+            "filesystem": {},
+            "readBytes": 0,
+            "writeBytes": 0
+          },
+          "memory": {
+            "gcAvailable": true,
+            "before": {
+              "heapUsedBytes": 9803656,
+              "rssBytes": 99483648,
+              "externalBytes": 6657055,
+              "arrayBuffersBytes": 367347
+            },
+            "after": {
+              "heapUsedBytes": 9801136,
+              "rssBytes": 100941824,
+              "externalBytes": 6591523,
+              "arrayBuffersBytes": 367347
+            },
+            "afterMinusBefore": {
+              "heapUsedBytes": -2520,
+              "rssBytes": 1458176,
+              "externalBytes": -65532,
+              "arrayBuffersBytes": 0
+            },
+            "observedHighWater": {
+              "heapUsedBytes": 9812864,
+              "rssBytes": 99532800,
+              "externalBytes": 6657055,
+              "arrayBuffersBytes": 367347
+            },
+            "checkpoints": []
+          },
+          "storage": {
+            "directory": "/var/folders/dk/54wtdzv133nb6403dxn6d6z40000gn/T/regime-maintainer-performance-yoHOWt",
+            "outsideRepository": true,
+            "immutableSnapshots": 0,
+            "persistedBytes": 0,
+            "scope": "Disposable offline benchmark R2 artifacts; not live prospective evidence",
+            "removedAfterMeasurement": true
+          },
+          "processElapsedMs": 86.2030420000001
+        },
+        "on": {
+          "enabled": true,
+          "scenario": "same-cut",
+          "fixtureBytes": 223524,
+          "v1RepresentativeBytes": 4838,
+          "fixtureParsesBeforeTiming": 2,
+          "inputFixtureHash": "92ecdd1830516ec96dd9293fc87b9ee7c6add71376e6997de4fede42d4d90a66",
+          "v1FixtureHash": "945692213bc501f8ade3a2ea2da008d7f279b32376099d38baf4a36d8082f879",
+          "importMs": 41.942875,
+          "firstCallMs": 40.623417,
+          "firstElapsedMs": 40.660375,
+          "workerElapsedMs": 119.25241600000001,
+          "warmupCalls": 0,
+          "timing": {
+            "n": 1,
+            "minMs": 32.50604200000001,
+            "medianMs": 32.50604200000001,
+            "meanMs": 32.50604200000001,
+            "p95Ms": 32.50604200000001,
+            "maxMs": 32.50604200000001
+          },
+          "rawSamplesMs": [
+            32.50604200000001
+          ],
+          "firstCallCounters": {
+            "v1Calls": 1,
+            "inputLoads": 1,
+            "bundleFileReads": 0,
+            "networkFetches": 0,
+            "inputJsonParses": 0,
+            "allRuntimeJsonParses": 6,
+            "filesystem": {
+              "realpath": 7,
+              "mkdir": 2,
+              "readFile": 1,
+              "open": 1,
+              "FileHandle.writeFile": 1,
+              "FileHandle.sync": 1,
+              "FileHandle.close": 1,
+              "link": 1,
+              "unlink": 1,
+              "writeFile": 1,
+              "rename": 1
+            },
+            "readBytes": 0,
+            "writeBytes": 190342,
+            "diagnostics": {
+              "COMPLETE": 1
+            }
+          },
+          "counters": {
+            "v1Calls": 1,
+            "inputLoads": 1,
+            "bundleFileReads": 0,
+            "networkFetches": 0,
+            "inputJsonParses": 0,
+            "allRuntimeJsonParses": 8,
+            "filesystem": {
+              "realpath": 6,
+              "mkdir": 2,
+              "readFile": 1,
+              "open": 2,
+              "FileHandle.stat": 1,
+              "FileHandle.read": 2,
+              "FileHandle.close": 2,
+              "FileHandle.writeFile": 1,
+              "FileHandle.sync": 1,
+              "link": 1,
+              "unlink": 1
+            },
+            "readBytes": 190342,
+            "writeBytes": 190360,
+            "diagnostics": {
+              "COMPLETE": 1
+            }
+          },
+          "perCallCounters": {
+            "inputLoads": 1,
+            "networkFetches": 0,
+            "inputJsonParses": 0,
+            "bundleFileReads": 0,
+            "allRuntimeJsonParses": 8,
+            "filesystem": {
+              "realpath": 6,
+              "mkdir": 2,
+              "readFile": 1,
+              "open": 2,
+              "FileHandle.stat": 1,
+              "FileHandle.read": 2,
+              "FileHandle.close": 2,
+              "FileHandle.writeFile": 1,
+              "FileHandle.sync": 1,
+              "link": 1,
+              "unlink": 1
+            },
+            "readBytes": 190342,
+            "writeBytes": 190360
+          },
+          "memory": {
+            "gcAvailable": true,
+            "before": {
+              "heapUsedBytes": 10181792,
+              "rssBytes": 117538816,
+              "externalBytes": 6786304,
+              "arrayBuffersBytes": 367347
+            },
+            "after": {
+              "heapUsedBytes": 10244400,
+              "rssBytes": 118276096,
+              "externalBytes": 6786011,
+              "arrayBuffersBytes": 367347
+            },
+            "afterMinusBefore": {
+              "heapUsedBytes": 62608,
+              "rssBytes": 737280,
+              "externalBytes": -293,
+              "arrayBuffersBytes": 0
+            },
+            "observedHighWater": {
+              "heapUsedBytes": 15141968,
+              "rssBytes": 118767616,
+              "externalBytes": 6786304,
+              "arrayBuffersBytes": 559787
+            },
+            "checkpoints": []
+          },
+          "storage": {
+            "directory": "/var/folders/dk/54wtdzv133nb6403dxn6d6z40000gn/T/regime-maintainer-performance-qg8keC",
+            "outsideRepository": true,
+            "immutableSnapshots": 2,
+            "persistedBytes": 380637,
+            "scope": "Disposable offline benchmark R2 artifacts; not live prospective evidence",
+            "removedAfterMeasurement": true
+          },
+          "processElapsedMs": 159.3280420000001
+        }
+      },
+      {
+        "off": {
+          "enabled": false,
+          "scenario": "same-cut",
+          "fixtureBytes": 223524,
+          "v1RepresentativeBytes": 4838,
+          "fixtureParsesBeforeTiming": 2,
+          "inputFixtureHash": "92ecdd1830516ec96dd9293fc87b9ee7c6add71376e6997de4fede42d4d90a66",
+          "v1FixtureHash": "945692213bc501f8ade3a2ea2da008d7f279b32376099d38baf4a36d8082f879",
+          "importMs": 42.032,
+          "firstCallMs": 0.09975000000000023,
+          "firstElapsedMs": 0.12958399999999415,
+          "workerElapsedMs": 46.99879200000001,
+          "warmupCalls": 0,
+          "timing": {
+            "n": 1,
+            "minMs": 0.005749999999991928,
+            "medianMs": 0.005749999999991928,
+            "meanMs": 0.005749999999991928,
+            "p95Ms": 0.005749999999991928,
+            "maxMs": 0.005749999999991928
+          },
+          "rawSamplesMs": [
+            0.005749999999991928
+          ],
+          "firstCallCounters": {
+            "v1Calls": 1,
+            "inputLoads": 0,
+            "bundleFileReads": 0,
+            "networkFetches": 0,
+            "inputJsonParses": 0,
+            "allRuntimeJsonParses": 0,
+            "filesystem": {},
+            "readBytes": 0,
+            "writeBytes": 0,
+            "diagnostics": {}
+          },
+          "counters": {
+            "v1Calls": 1,
+            "inputLoads": 0,
+            "bundleFileReads": 0,
+            "networkFetches": 0,
+            "inputJsonParses": 0,
+            "allRuntimeJsonParses": 0,
+            "filesystem": {},
+            "readBytes": 0,
+            "writeBytes": 0,
+            "diagnostics": {}
+          },
+          "perCallCounters": {
+            "inputLoads": 0,
+            "networkFetches": 0,
+            "inputJsonParses": 0,
+            "bundleFileReads": 0,
+            "allRuntimeJsonParses": 0,
+            "filesystem": {},
+            "readBytes": 0,
+            "writeBytes": 0
+          },
+          "memory": {
+            "gcAvailable": true,
+            "before": {
+              "heapUsedBytes": 9802864,
+              "rssBytes": 99991552,
+              "externalBytes": 6657055,
+              "arrayBuffersBytes": 367347
+            },
+            "after": {
+              "heapUsedBytes": 9801016,
+              "rssBytes": 101138432,
+              "externalBytes": 6591523,
+              "arrayBuffersBytes": 367347
+            },
+            "afterMinusBefore": {
+              "heapUsedBytes": -1848,
+              "rssBytes": 1146880,
+              "externalBytes": -65532,
+              "arrayBuffersBytes": 0
+            },
+            "observedHighWater": {
+              "heapUsedBytes": 9812072,
+              "rssBytes": 100040704,
+              "externalBytes": 6657055,
+              "arrayBuffersBytes": 367347
+            },
+            "checkpoints": []
+          },
+          "storage": {
+            "directory": "/var/folders/dk/54wtdzv133nb6403dxn6d6z40000gn/T/regime-maintainer-performance-vc3A2R",
+            "outsideRepository": true,
+            "immutableSnapshots": 0,
+            "persistedBytes": 0,
+            "scope": "Disposable offline benchmark R2 artifacts; not live prospective evidence",
+            "removedAfterMeasurement": true
+          },
+          "processElapsedMs": 86.06866699999955
+        },
+        "on": {
+          "enabled": true,
+          "scenario": "same-cut",
+          "fixtureBytes": 223524,
+          "v1RepresentativeBytes": 4838,
+          "fixtureParsesBeforeTiming": 2,
+          "inputFixtureHash": "92ecdd1830516ec96dd9293fc87b9ee7c6add71376e6997de4fede42d4d90a66",
+          "v1FixtureHash": "945692213bc501f8ade3a2ea2da008d7f279b32376099d38baf4a36d8082f879",
+          "importMs": 42.406959,
+          "firstCallMs": 40.79175000000001,
+          "firstElapsedMs": 40.823666999999986,
+          "workerElapsedMs": 120.09966599999998,
+          "warmupCalls": 0,
+          "timing": {
+            "n": 1,
+            "minMs": 32.268332999999984,
+            "medianMs": 32.268332999999984,
+            "meanMs": 32.268332999999984,
+            "p95Ms": 32.268332999999984,
+            "maxMs": 32.268332999999984
+          },
+          "rawSamplesMs": [
+            32.268332999999984
+          ],
+          "firstCallCounters": {
+            "v1Calls": 1,
+            "inputLoads": 1,
+            "bundleFileReads": 0,
+            "networkFetches": 0,
+            "inputJsonParses": 0,
+            "allRuntimeJsonParses": 6,
+            "filesystem": {
+              "realpath": 7,
+              "mkdir": 2,
+              "readFile": 1,
+              "open": 1,
+              "FileHandle.writeFile": 1,
+              "FileHandle.sync": 1,
+              "FileHandle.close": 1,
+              "link": 1,
+              "unlink": 1,
+              "writeFile": 1,
+              "rename": 1
+            },
+            "readBytes": 0,
+            "writeBytes": 190342,
+            "diagnostics": {
+              "COMPLETE": 1
+            }
+          },
+          "counters": {
+            "v1Calls": 1,
+            "inputLoads": 1,
+            "bundleFileReads": 0,
+            "networkFetches": 0,
+            "inputJsonParses": 0,
+            "allRuntimeJsonParses": 8,
+            "filesystem": {
+              "realpath": 6,
+              "mkdir": 2,
+              "readFile": 1,
+              "open": 2,
+              "FileHandle.stat": 1,
+              "FileHandle.read": 2,
+              "FileHandle.close": 2,
+              "FileHandle.writeFile": 1,
+              "FileHandle.sync": 1,
+              "link": 1,
+              "unlink": 1
+            },
+            "readBytes": 190342,
+            "writeBytes": 190360,
+            "diagnostics": {
+              "COMPLETE": 1
+            }
+          },
+          "perCallCounters": {
+            "inputLoads": 1,
+            "networkFetches": 0,
+            "inputJsonParses": 0,
+            "bundleFileReads": 0,
+            "allRuntimeJsonParses": 8,
+            "filesystem": {
+              "realpath": 6,
+              "mkdir": 2,
+              "readFile": 1,
+              "open": 2,
+              "FileHandle.stat": 1,
+              "FileHandle.read": 2,
+              "FileHandle.close": 2,
+              "FileHandle.writeFile": 1,
+              "FileHandle.sync": 1,
+              "link": 1,
+              "unlink": 1
+            },
+            "readBytes": 190342,
+            "writeBytes": 190360
+          },
+          "memory": {
+            "gcAvailable": true,
+            "before": {
+              "heapUsedBytes": 10182336,
+              "rssBytes": 118046720,
+              "externalBytes": 6786304,
+              "arrayBuffersBytes": 367347
+            },
+            "after": {
+              "heapUsedBytes": 10245144,
+              "rssBytes": 118652928,
+              "externalBytes": 6786011,
+              "arrayBuffersBytes": 367347
+            },
+            "afterMinusBefore": {
+              "heapUsedBytes": 62808,
+              "rssBytes": 606208,
+              "externalBytes": -293,
+              "arrayBuffersBytes": 0
+            },
+            "observedHighWater": {
+              "heapUsedBytes": 15122640,
+              "rssBytes": 119209984,
+              "externalBytes": 6786304,
+              "arrayBuffersBytes": 559787
+            },
+            "checkpoints": []
+          },
+          "storage": {
+            "directory": "/var/folders/dk/54wtdzv133nb6403dxn6d6z40000gn/T/regime-maintainer-performance-Ajdxbt",
+            "outsideRepository": true,
+            "immutableSnapshots": 2,
+            "persistedBytes": 380637,
+            "scope": "Disposable offline benchmark R2 artifacts; not live prospective evidence",
+            "removedAfterMeasurement": true
+          },
+          "processElapsedMs": 161.66754200000014
+        }
+      },
+      {
+        "off": {
+          "enabled": false,
+          "scenario": "same-cut",
+          "fixtureBytes": 223524,
+          "v1RepresentativeBytes": 4838,
+          "fixtureParsesBeforeTiming": 2,
+          "inputFixtureHash": "92ecdd1830516ec96dd9293fc87b9ee7c6add71376e6997de4fede42d4d90a66",
+          "v1FixtureHash": "945692213bc501f8ade3a2ea2da008d7f279b32376099d38baf4a36d8082f879",
+          "importMs": 45.676666999999995,
+          "firstCallMs": 0.10795799999999645,
+          "firstElapsedMs": 0.1435419999999965,
+          "workerElapsedMs": 51.140665999999996,
+          "warmupCalls": 0,
+          "timing": {
+            "n": 1,
+            "minMs": 0.004084000000005972,
+            "medianMs": 0.004084000000005972,
+            "meanMs": 0.004084000000005972,
+            "p95Ms": 0.004084000000005972,
+            "maxMs": 0.004084000000005972
+          },
+          "rawSamplesMs": [
+            0.004084000000005972
+          ],
+          "firstCallCounters": {
+            "v1Calls": 1,
+            "inputLoads": 0,
+            "bundleFileReads": 0,
+            "networkFetches": 0,
+            "inputJsonParses": 0,
+            "allRuntimeJsonParses": 0,
+            "filesystem": {},
+            "readBytes": 0,
+            "writeBytes": 0,
+            "diagnostics": {}
+          },
+          "counters": {
+            "v1Calls": 1,
+            "inputLoads": 0,
+            "bundleFileReads": 0,
+            "networkFetches": 0,
+            "inputJsonParses": 0,
+            "allRuntimeJsonParses": 0,
+            "filesystem": {},
+            "readBytes": 0,
+            "writeBytes": 0,
+            "diagnostics": {}
+          },
+          "perCallCounters": {
+            "inputLoads": 0,
+            "networkFetches": 0,
+            "inputJsonParses": 0,
+            "bundleFileReads": 0,
+            "allRuntimeJsonParses": 0,
+            "filesystem": {},
+            "readBytes": 0,
+            "writeBytes": 0
+          },
+          "memory": {
+            "gcAvailable": true,
+            "before": {
+              "heapUsedBytes": 9802024,
+              "rssBytes": 100712448,
+              "externalBytes": 6657055,
+              "arrayBuffersBytes": 367347
+            },
+            "after": {
+              "heapUsedBytes": 9801072,
+              "rssBytes": 102023168,
+              "externalBytes": 6591523,
+              "arrayBuffersBytes": 367347
+            },
+            "afterMinusBefore": {
+              "heapUsedBytes": -952,
+              "rssBytes": 1310720,
+              "externalBytes": -65532,
+              "arrayBuffersBytes": 0
+            },
+            "observedHighWater": {
+              "heapUsedBytes": 9811232,
+              "rssBytes": 100712448,
+              "externalBytes": 6657055,
+              "arrayBuffersBytes": 367347
+            },
+            "checkpoints": []
+          },
+          "storage": {
+            "directory": "/var/folders/dk/54wtdzv133nb6403dxn6d6z40000gn/T/regime-maintainer-performance-2PABvF",
+            "outsideRepository": true,
+            "immutableSnapshots": 0,
+            "persistedBytes": 0,
+            "scope": "Disposable offline benchmark R2 artifacts; not live prospective evidence",
+            "removedAfterMeasurement": true
+          },
+          "processElapsedMs": 90.40733300000011
+        },
+        "on": {
+          "enabled": true,
+          "scenario": "same-cut",
+          "fixtureBytes": 223524,
+          "v1RepresentativeBytes": 4838,
+          "fixtureParsesBeforeTiming": 2,
+          "inputFixtureHash": "92ecdd1830516ec96dd9293fc87b9ee7c6add71376e6997de4fede42d4d90a66",
+          "v1FixtureHash": "945692213bc501f8ade3a2ea2da008d7f279b32376099d38baf4a36d8082f879",
+          "importMs": 43.108124999999994,
+          "firstCallMs": 40.259833,
+          "firstElapsedMs": 40.297875000000005,
+          "workerElapsedMs": 118.381,
+          "warmupCalls": 0,
+          "timing": {
+            "n": 1,
+            "minMs": 30.982457999999994,
+            "medianMs": 30.982457999999994,
+            "meanMs": 30.982457999999994,
+            "p95Ms": 30.982457999999994,
+            "maxMs": 30.982457999999994
+          },
+          "rawSamplesMs": [
+            30.982457999999994
+          ],
+          "firstCallCounters": {
+            "v1Calls": 1,
+            "inputLoads": 1,
+            "bundleFileReads": 0,
+            "networkFetches": 0,
+            "inputJsonParses": 0,
+            "allRuntimeJsonParses": 6,
+            "filesystem": {
+              "realpath": 7,
+              "mkdir": 2,
+              "readFile": 1,
+              "open": 1,
+              "FileHandle.writeFile": 1,
+              "FileHandle.sync": 1,
+              "FileHandle.close": 1,
+              "link": 1,
+              "unlink": 1,
+              "writeFile": 1,
+              "rename": 1
+            },
+            "readBytes": 0,
+            "writeBytes": 190342,
+            "diagnostics": {
+              "COMPLETE": 1
+            }
+          },
+          "counters": {
+            "v1Calls": 1,
+            "inputLoads": 1,
+            "bundleFileReads": 0,
+            "networkFetches": 0,
+            "inputJsonParses": 0,
+            "allRuntimeJsonParses": 8,
+            "filesystem": {
+              "realpath": 6,
+              "mkdir": 2,
+              "readFile": 1,
+              "open": 2,
+              "FileHandle.stat": 1,
+              "FileHandle.read": 2,
+              "FileHandle.close": 2,
+              "FileHandle.writeFile": 1,
+              "FileHandle.sync": 1,
+              "link": 1,
+              "unlink": 1
+            },
+            "readBytes": 190342,
+            "writeBytes": 190360,
+            "diagnostics": {
+              "COMPLETE": 1
+            }
+          },
+          "perCallCounters": {
+            "inputLoads": 1,
+            "networkFetches": 0,
+            "inputJsonParses": 0,
+            "bundleFileReads": 0,
+            "allRuntimeJsonParses": 8,
+            "filesystem": {
+              "realpath": 6,
+              "mkdir": 2,
+              "readFile": 1,
+              "open": 2,
+              "FileHandle.stat": 1,
+              "FileHandle.read": 2,
+              "FileHandle.close": 2,
+              "FileHandle.writeFile": 1,
+              "FileHandle.sync": 1,
+              "link": 1,
+              "unlink": 1
+            },
+            "readBytes": 190342,
+            "writeBytes": 190360
+          },
+          "memory": {
+            "gcAvailable": true,
+            "before": {
+              "heapUsedBytes": 10181624,
+              "rssBytes": 117374976,
+              "externalBytes": 6786304,
+              "arrayBuffersBytes": 367347
+            },
+            "after": {
+              "heapUsedBytes": 10243848,
+              "rssBytes": 117833728,
+              "externalBytes": 6786011,
+              "arrayBuffersBytes": 367347
+            },
+            "afterMinusBefore": {
+              "heapUsedBytes": 62224,
+              "rssBytes": 458752,
+              "externalBytes": -293,
+              "arrayBuffersBytes": 0
+            },
+            "observedHighWater": {
+              "heapUsedBytes": 15395376,
+              "rssBytes": 118521856,
+              "externalBytes": 6786304,
+              "arrayBuffersBytes": 559787
+            },
+            "checkpoints": []
+          },
+          "storage": {
+            "directory": "/var/folders/dk/54wtdzv133nb6403dxn6d6z40000gn/T/regime-maintainer-performance-79GTcy",
+            "outsideRepository": true,
+            "immutableSnapshots": 2,
+            "persistedBytes": 380637,
+            "scope": "Disposable offline benchmark R2 artifacts; not live prospective evidence",
+            "removedAfterMeasurement": true
+          },
+          "processElapsedMs": 161.76741700000002
+        }
+      },
+      {
+        "off": {
+          "enabled": false,
+          "scenario": "same-cut",
+          "fixtureBytes": 223524,
+          "v1RepresentativeBytes": 4838,
+          "fixtureParsesBeforeTiming": 2,
+          "inputFixtureHash": "92ecdd1830516ec96dd9293fc87b9ee7c6add71376e6997de4fede42d4d90a66",
+          "v1FixtureHash": "945692213bc501f8ade3a2ea2da008d7f279b32376099d38baf4a36d8082f879",
+          "importMs": 42.573166,
+          "firstCallMs": 0.10279199999999378,
+          "firstElapsedMs": 0.14262500000000955,
+          "workerElapsedMs": 47.418708,
+          "warmupCalls": 0,
+          "timing": {
+            "n": 1,
+            "minMs": 0.004750000000001364,
+            "medianMs": 0.004750000000001364,
+            "meanMs": 0.004750000000001364,
+            "p95Ms": 0.004750000000001364,
+            "maxMs": 0.004750000000001364
+          },
+          "rawSamplesMs": [
+            0.004750000000001364
+          ],
+          "firstCallCounters": {
+            "v1Calls": 1,
+            "inputLoads": 0,
+            "bundleFileReads": 0,
+            "networkFetches": 0,
+            "inputJsonParses": 0,
+            "allRuntimeJsonParses": 0,
+            "filesystem": {},
+            "readBytes": 0,
+            "writeBytes": 0,
+            "diagnostics": {}
+          },
+          "counters": {
+            "v1Calls": 1,
+            "inputLoads": 0,
+            "bundleFileReads": 0,
+            "networkFetches": 0,
+            "inputJsonParses": 0,
+            "allRuntimeJsonParses": 0,
+            "filesystem": {},
+            "readBytes": 0,
+            "writeBytes": 0,
+            "diagnostics": {}
+          },
+          "perCallCounters": {
+            "inputLoads": 0,
+            "networkFetches": 0,
+            "inputJsonParses": 0,
+            "bundleFileReads": 0,
+            "allRuntimeJsonParses": 0,
+            "filesystem": {},
+            "readBytes": 0,
+            "writeBytes": 0
+          },
+          "memory": {
+            "gcAvailable": true,
+            "before": {
+              "heapUsedBytes": 9803168,
+              "rssBytes": 99729408,
+              "externalBytes": 6657055,
+              "arrayBuffersBytes": 367347
+            },
+            "after": {
+              "heapUsedBytes": 9801064,
+              "rssBytes": 100958208,
+              "externalBytes": 6591523,
+              "arrayBuffersBytes": 367347
+            },
+            "afterMinusBefore": {
+              "heapUsedBytes": -2104,
+              "rssBytes": 1228800,
+              "externalBytes": -65532,
+              "arrayBuffersBytes": 0
+            },
+            "observedHighWater": {
+              "heapUsedBytes": 9812376,
+              "rssBytes": 99778560,
+              "externalBytes": 6657055,
+              "arrayBuffersBytes": 367347
+            },
+            "checkpoints": []
+          },
+          "storage": {
+            "directory": "/var/folders/dk/54wtdzv133nb6403dxn6d6z40000gn/T/regime-maintainer-performance-7U1sla",
+            "outsideRepository": true,
+            "immutableSnapshots": 0,
+            "persistedBytes": 0,
+            "scope": "Disposable offline benchmark R2 artifacts; not live prospective evidence",
+            "removedAfterMeasurement": true
+          },
+          "processElapsedMs": 87.24575000000004
+        },
+        "on": {
+          "enabled": true,
+          "scenario": "same-cut",
+          "fixtureBytes": 223524,
+          "v1RepresentativeBytes": 4838,
+          "fixtureParsesBeforeTiming": 2,
+          "inputFixtureHash": "92ecdd1830516ec96dd9293fc87b9ee7c6add71376e6997de4fede42d4d90a66",
+          "v1FixtureHash": "945692213bc501f8ade3a2ea2da008d7f279b32376099d38baf4a36d8082f879",
+          "importMs": 42.88029200000001,
+          "firstCallMs": 39.53425,
+          "firstElapsedMs": 39.561666,
+          "workerElapsedMs": 117.559167,
+          "warmupCalls": 0,
+          "timing": {
+            "n": 1,
+            "minMs": 31.388166999999996,
+            "medianMs": 31.388166999999996,
+            "meanMs": 31.388166999999996,
+            "p95Ms": 31.388166999999996,
+            "maxMs": 31.388166999999996
+          },
+          "rawSamplesMs": [
+            31.388166999999996
+          ],
+          "firstCallCounters": {
+            "v1Calls": 1,
+            "inputLoads": 1,
+            "bundleFileReads": 0,
+            "networkFetches": 0,
+            "inputJsonParses": 0,
+            "allRuntimeJsonParses": 6,
+            "filesystem": {
+              "realpath": 7,
+              "mkdir": 2,
+              "readFile": 1,
+              "open": 1,
+              "FileHandle.writeFile": 1,
+              "FileHandle.sync": 1,
+              "FileHandle.close": 1,
+              "link": 1,
+              "unlink": 1,
+              "writeFile": 1,
+              "rename": 1
+            },
+            "readBytes": 0,
+            "writeBytes": 190342,
+            "diagnostics": {
+              "COMPLETE": 1
+            }
+          },
+          "counters": {
+            "v1Calls": 1,
+            "inputLoads": 1,
+            "bundleFileReads": 0,
+            "networkFetches": 0,
+            "inputJsonParses": 0,
+            "allRuntimeJsonParses": 8,
+            "filesystem": {
+              "realpath": 6,
+              "mkdir": 2,
+              "readFile": 1,
+              "open": 2,
+              "FileHandle.stat": 1,
+              "FileHandle.read": 2,
+              "FileHandle.close": 2,
+              "FileHandle.writeFile": 1,
+              "FileHandle.sync": 1,
+              "link": 1,
+              "unlink": 1
+            },
+            "readBytes": 190342,
+            "writeBytes": 190360,
+            "diagnostics": {
+              "COMPLETE": 1
+            }
+          },
+          "perCallCounters": {
+            "inputLoads": 1,
+            "networkFetches": 0,
+            "inputJsonParses": 0,
+            "bundleFileReads": 0,
+            "allRuntimeJsonParses": 8,
+            "filesystem": {
+              "realpath": 6,
+              "mkdir": 2,
+              "readFile": 1,
+              "open": 2,
+              "FileHandle.stat": 1,
+              "FileHandle.read": 2,
+              "FileHandle.close": 2,
+              "FileHandle.writeFile": 1,
+              "FileHandle.sync": 1,
+              "link": 1,
+              "unlink": 1
+            },
+            "readBytes": 190342,
+            "writeBytes": 190360
+          },
+          "memory": {
+            "gcAvailable": true,
+            "before": {
+              "heapUsedBytes": 10182480,
+              "rssBytes": 117882880,
+              "externalBytes": 6786304,
+              "arrayBuffersBytes": 367347
+            },
+            "after": {
+              "heapUsedBytes": 10243168,
+              "rssBytes": 118521856,
+              "externalBytes": 6786011,
+              "arrayBuffersBytes": 367347
+            },
+            "afterMinusBefore": {
+              "heapUsedBytes": 60688,
+              "rssBytes": 638976,
+              "externalBytes": -293,
+              "arrayBuffersBytes": 0
+            },
+            "observedHighWater": {
+              "heapUsedBytes": 15120704,
+              "rssBytes": 119046144,
+              "externalBytes": 6786304,
+              "arrayBuffersBytes": 559787
+            },
+            "checkpoints": []
+          },
+          "storage": {
+            "directory": "/var/folders/dk/54wtdzv133nb6403dxn6d6z40000gn/T/regime-maintainer-performance-HakKtk",
+            "outsideRepository": true,
+            "immutableSnapshots": 2,
+            "persistedBytes": 380637,
+            "scope": "Disposable offline benchmark R2 artifacts; not live prospective evidence",
+            "removedAfterMeasurement": true
+          },
+          "processElapsedMs": 156.94545800000014
+        }
+      },
+      {
+        "off": {
+          "enabled": false,
+          "scenario": "same-cut",
+          "fixtureBytes": 223524,
+          "v1RepresentativeBytes": 4838,
+          "fixtureParsesBeforeTiming": 2,
+          "inputFixtureHash": "92ecdd1830516ec96dd9293fc87b9ee7c6add71376e6997de4fede42d4d90a66",
+          "v1FixtureHash": "945692213bc501f8ade3a2ea2da008d7f279b32376099d38baf4a36d8082f879",
+          "importMs": 43.81887499999999,
+          "firstCallMs": 0.09629200000000537,
+          "firstElapsedMs": 0.12362500000000409,
+          "workerElapsedMs": 48.576209,
+          "warmupCalls": 0,
+          "timing": {
+            "n": 1,
+            "minMs": 0.005207999999996105,
+            "medianMs": 0.005207999999996105,
+            "meanMs": 0.005207999999996105,
+            "p95Ms": 0.005207999999996105,
+            "maxMs": 0.005207999999996105
+          },
+          "rawSamplesMs": [
+            0.005207999999996105
+          ],
+          "firstCallCounters": {
+            "v1Calls": 1,
+            "inputLoads": 0,
+            "bundleFileReads": 0,
+            "networkFetches": 0,
+            "inputJsonParses": 0,
+            "allRuntimeJsonParses": 0,
+            "filesystem": {},
+            "readBytes": 0,
+            "writeBytes": 0,
+            "diagnostics": {}
+          },
+          "counters": {
+            "v1Calls": 1,
+            "inputLoads": 0,
+            "bundleFileReads": 0,
+            "networkFetches": 0,
+            "inputJsonParses": 0,
+            "allRuntimeJsonParses": 0,
+            "filesystem": {},
+            "readBytes": 0,
+            "writeBytes": 0,
+            "diagnostics": {}
+          },
+          "perCallCounters": {
+            "inputLoads": 0,
+            "networkFetches": 0,
+            "inputJsonParses": 0,
+            "bundleFileReads": 0,
+            "allRuntimeJsonParses": 0,
+            "filesystem": {},
+            "readBytes": 0,
+            "writeBytes": 0
+          },
+          "memory": {
+            "gcAvailable": true,
+            "before": {
+              "heapUsedBytes": 9802640,
+              "rssBytes": 100106240,
+              "externalBytes": 6657055,
+              "arrayBuffersBytes": 367347
+            },
+            "after": {
+              "heapUsedBytes": 9800952,
+              "rssBytes": 101318656,
+              "externalBytes": 6591523,
+              "arrayBuffersBytes": 367347
+            },
+            "afterMinusBefore": {
+              "heapUsedBytes": -1688,
+              "rssBytes": 1212416,
+              "externalBytes": -65532,
+              "arrayBuffersBytes": 0
+            },
+            "observedHighWater": {
+              "heapUsedBytes": 9811848,
+              "rssBytes": 100155392,
+              "externalBytes": 6657055,
+              "arrayBuffersBytes": 367347
+            },
+            "checkpoints": []
+          },
+          "storage": {
+            "directory": "/var/folders/dk/54wtdzv133nb6403dxn6d6z40000gn/T/regime-maintainer-performance-QYYLMm",
+            "outsideRepository": true,
+            "immutableSnapshots": 0,
+            "persistedBytes": 0,
+            "scope": "Disposable offline benchmark R2 artifacts; not live prospective evidence",
+            "removedAfterMeasurement": true
+          },
+          "processElapsedMs": 88.32466599999952
+        },
+        "on": {
+          "enabled": true,
+          "scenario": "same-cut",
+          "fixtureBytes": 223524,
+          "v1RepresentativeBytes": 4838,
+          "fixtureParsesBeforeTiming": 2,
+          "inputFixtureHash": "92ecdd1830516ec96dd9293fc87b9ee7c6add71376e6997de4fede42d4d90a66",
+          "v1FixtureHash": "945692213bc501f8ade3a2ea2da008d7f279b32376099d38baf4a36d8082f879",
+          "importMs": 40.204958000000005,
+          "firstCallMs": 39.84008300000001,
+          "firstElapsedMs": 39.870166999999995,
+          "workerElapsedMs": 115.41345799999999,
+          "warmupCalls": 0,
+          "timing": {
+            "n": 1,
+            "minMs": 31.467749999999995,
+            "medianMs": 31.467749999999995,
+            "meanMs": 31.467749999999995,
+            "p95Ms": 31.467749999999995,
+            "maxMs": 31.467749999999995
+          },
+          "rawSamplesMs": [
+            31.467749999999995
+          ],
+          "firstCallCounters": {
+            "v1Calls": 1,
+            "inputLoads": 1,
+            "bundleFileReads": 0,
+            "networkFetches": 0,
+            "inputJsonParses": 0,
+            "allRuntimeJsonParses": 6,
+            "filesystem": {
+              "realpath": 7,
+              "mkdir": 2,
+              "readFile": 1,
+              "open": 1,
+              "FileHandle.writeFile": 1,
+              "FileHandle.sync": 1,
+              "FileHandle.close": 1,
+              "link": 1,
+              "unlink": 1,
+              "writeFile": 1,
+              "rename": 1
+            },
+            "readBytes": 0,
+            "writeBytes": 190342,
+            "diagnostics": {
+              "COMPLETE": 1
+            }
+          },
+          "counters": {
+            "v1Calls": 1,
+            "inputLoads": 1,
+            "bundleFileReads": 0,
+            "networkFetches": 0,
+            "inputJsonParses": 0,
+            "allRuntimeJsonParses": 8,
+            "filesystem": {
+              "realpath": 6,
+              "mkdir": 2,
+              "readFile": 1,
+              "open": 2,
+              "FileHandle.stat": 1,
+              "FileHandle.read": 2,
+              "FileHandle.close": 2,
+              "FileHandle.writeFile": 1,
+              "FileHandle.sync": 1,
+              "link": 1,
+              "unlink": 1
+            },
+            "readBytes": 190342,
+            "writeBytes": 190360,
+            "diagnostics": {
+              "COMPLETE": 1
+            }
+          },
+          "perCallCounters": {
+            "inputLoads": 1,
+            "networkFetches": 0,
+            "inputJsonParses": 0,
+            "bundleFileReads": 0,
+            "allRuntimeJsonParses": 8,
+            "filesystem": {
+              "realpath": 6,
+              "mkdir": 2,
+              "readFile": 1,
+              "open": 2,
+              "FileHandle.stat": 1,
+              "FileHandle.read": 2,
+              "FileHandle.close": 2,
+              "FileHandle.writeFile": 1,
+              "FileHandle.sync": 1,
+              "link": 1,
+              "unlink": 1
+            },
+            "readBytes": 190342,
+            "writeBytes": 190360
+          },
+          "memory": {
+            "gcAvailable": true,
+            "before": {
+              "heapUsedBytes": 10182168,
+              "rssBytes": 117882880,
+              "externalBytes": 6786304,
+              "arrayBuffersBytes": 367347
+            },
+            "after": {
+              "heapUsedBytes": 10244216,
+              "rssBytes": 118571008,
+              "externalBytes": 6786011,
+              "arrayBuffersBytes": 367347
+            },
+            "afterMinusBefore": {
+              "heapUsedBytes": 62048,
+              "rssBytes": 688128,
+              "externalBytes": -293,
+              "arrayBuffersBytes": 0
+            },
+            "observedHighWater": {
+              "heapUsedBytes": 15087000,
+              "rssBytes": 119095296,
+              "externalBytes": 6786304,
+              "arrayBuffersBytes": 559787
+            },
+            "checkpoints": []
+          },
+          "storage": {
+            "directory": "/var/folders/dk/54wtdzv133nb6403dxn6d6z40000gn/T/regime-maintainer-performance-RgfKEW",
+            "outsideRepository": true,
+            "immutableSnapshots": 2,
+            "persistedBytes": 380637,
+            "scope": "Disposable offline benchmark R2 artifacts; not live prospective evidence",
+            "removedAfterMeasurement": true
+          },
+          "processElapsedMs": 155.27420799999982
+        }
+      }
+    ],
+    "offProcess": {
+      "n": 5,
+      "minMs": 86.06866699999955,
+      "medianMs": 87.24575000000004,
+      "meanMs": 87.64989159999986,
+      "p95Ms": 88.32466599999952,
+      "maxMs": 90.40733300000011
+    },
+    "onProcess": {
+      "n": 5,
+      "minMs": 155.27420799999982,
+      "medianMs": 159.3280420000001,
+      "meanMs": 158.99653340000003,
+      "p95Ms": 161.66754200000014,
+      "maxMs": 161.76741700000002
+    },
+    "offFirstCall": {
+      "n": 5,
+      "minMs": 0.09629200000000537,
+      "medianMs": 0.10112499999999613,
+      "meanMs": 0.1015833999999984,
+      "p95Ms": 0.10279199999999378,
+      "maxMs": 0.10795799999999645
+    },
+    "onFirstCall": {
+      "n": 5,
+      "minMs": 39.53425,
+      "medianMs": 40.259833,
+      "meanMs": 40.2098666,
+      "p95Ms": 40.623417,
+      "maxMs": 40.79175000000001
+    }
+  },
+  "summary": {
+    "baselineMedianMs": 0.0002704999999991742,
+    "shadowMedianMs": 25.010062500000004,
+    "absoluteIncrementMs": 25.009792000000004,
+    "ratio": 92458.6414050882,
+    "relativeIncrementPercent": 9245764.14050882,
+    "uniqueCaptureMetadataShadowMedianMs": 25.149458500000037,
+    "additionalNetworkFetches": 0,
+    "additionalInputJsonParses": 0,
+    "additionalAllRuntimeJsonParses": 8,
+    "additionalInputLoads": 1,
+    "methodologyChanged": false,
+    "publicReturnReferencePreserved": true,
+    "verdict": "PASS",
+    "costClassification": "EXPECTED_MEASURED_SHADOW_COST; no SLA or complete Dashboard latency claim",
+    "assessment": [
+      "OFF returned the exact V1 object with no sidecar filesystem, network, input load or JSON parse.",
+      "Complete-input ON scenarios performed canonical evaluation and durable external snapshot operations for every measured call; empty source bundle correctly recorded INCOMPLETE.",
+      "Same-cut and distinct-capture workloads remain bounded by input/checkpoint size, with no historical directory scan.",
+      "The absolute increment is reported; a trivial frozen baseline makes the percentage unsuitable as an application latency claim."
+    ]
+  },
+  "limitations": [
+    "No live market provider or production server traffic measured.",
+    "Complete canonical normalized input benchmark excludes raw source bundle validation/normalization and capture taps; separate empty-bundle scenario covers actual default loading/cache/INCOMPLETE path.",
+    "Finite 120-call measurements can detect observed heap trend, not prove absence of all future leaks.",
+    "Cold measurements include fixtures/module loading in both OFF and ON; deployed bundler/import lifecycle can differ.",
+    "The existing checkpoint does not scan snapshot directory; retained disk history still needs operational retention/archival policy."
+  ],
+  "readOnlyCostAndHygieneAudit": {
+    "btcStreakRepair": {
+      "file": "lib/regime-engine-v2/features.ts",
+      "sha256": "65e81d8d5446d92e8c28601d0eed23627264265566c8f86c015a7f872f9d4275",
+      "acceptedSweeperSha256": "65e81d8d5446d92e8c28601d0eed23627264265566c8f86c015a7f872f9d4275",
+      "preserved": true,
+      "algorithm": "Build one indexRows Map, then one backwards session walk; no per-step full-history index construction. Frozen Sweeper algorithm unchanged."
+    },
+    "cache": "One immutable normalized vintage keyed by raw bundle hash, engine, C03, contract/schema/preparation versions and normalizer implementation hash; one prepared cut keyed by vintage and exact asOf. Every changed cut re-resolves calendars and VX; no stale TTL or unbounded global map.",
+    "checkpoint": "Read only latest.txt and one immutable previous snapshot. No history-directory scan participates in timed operations. Publication queue bounded at eight.",
+    "sourceEconomy": "Existing CFE fetch response tap and Yahoo batch response tap observe existing bytes; no substituting FRED VIX, unadjusted close, or VX Close for Settle. Normalized-fixture benchmark observed zero network calls.",
+    "publicSurface": "Read-only rg search found no regime-v2/regime-engine-v2 import or route in app/. Integration wrappers return the original V1 object.",
+    "costs": [
+      "ON awaits full sidecar evaluation and snapshot persistence; measured milliseconds are added to callback completion.",
+      "Snapshot input/output hashing and serialization allocate transient memory; GC checkpoints and RSS show the actual measured footprint.",
+      "Snapshot disk storage grows with immutable publication history; operational archival/retention is separate from the bounded in-memory checkpoint.",
+      "Raw bundle read/retention/hash and first-time normalization are outside the injected-input measurement. Vintage caching reuses raw normalization across cuts; every cut still re-resolves calendars and VX."
+    ],
+    "note": "Review of current operations source and frozen canonical feature hash; full Sweeper attacks and integration regressions are recorded by Maintainer verification.json."
+  },
+  "scope": "ISOLATED_NORMALIZED_INPUT_SIDECAR; use authoritativeFullPipelineBenchmark for actual V1/full-ingestion headline values",
+  "authoritativeFullPipelineBenchmark": {
+    "path": "docs/regime-engine-v2/maintainer/performance-pipeline.json",
+    "sha256": "408ed11dd0f61172afb503501da068bdddb8afb2e8fb0dbbc21fc5cccae5a7e9",
+    "summary": {
+      "baselineMedianMs": 0.3792500000000132,
+      "shadowMedianMs": 51.86679200000003,
+      "sameCutBestCaseShadowMedianMs": 50.79556250000002,
+      "absoluteIncrementMs": 51.48754200000002,
+      "relativeIncrementPercent": 13576.148187211134,
+      "ratio": 136.76148187211135,
+      "additionalFetchAttempts": 0,
+      "liveNetworkFetches": 0,
+      "publicV1OutputHashPreserved": true,
+      "fullRawNormalizationComplete": true,
+      "canonicalRegimePillarsFeaturesMatchSweeper": true,
+      "headlineScenario": "ACTUAL_V1_FALLBACK_VS_FULL_RAW_SHADOW_DISTINCT_CUT",
+      "materialCostReview": "See repairComparison and performanceGate; original material historical-reprocessing/RSS cost is preserved in the before artifact.",
+      "verdict": "PASS",
+      "performanceVerdict": "PASS"
+    },
+    "performanceGate": "PASS",
+    "role": "AUTHORITATIVE: actual legacy V1 fallback versus full raw-source shadow with distinct asOf cuts; no live-provider latency or SLA claim."
+  }
+}

@@ -1,0 +1,403 @@
+--- builder/lib/regime-engine-v2/contract.ts
++++ sweeper/lib/regime-engine-v2/contract.ts
+@@ -9,3 +9,6 @@
+ export const GROUPS = {growth:["XLK","XLY","XLC"],cyclical:["XLF","XLE","XLI","XLB"],defensive:["XLV","XLP","XLU","XLRE"]} as const;
+ export const TICKERS = [...GROUPS.growth,...GROUPS.cyclical,...GROUPS.defensive];
+ export const INITIAL_OPTIONALS = ["vix_percentile","btc_daily","btc_rolling_5","gld_shares_change_5"] as const;
++// Runtime immutability is required as well as TypeScript readonly declarations.
++for (const members of Object.values(GROUPS)) Object.freeze(members);
++Object.freeze(GROUPS); Object.freeze(TICKERS); Object.freeze(INITIAL_OPTIONALS);
+--- builder/lib/regime-engine-v2/core.ts
++++ sweeper/lib/regime-engine-v2/core.ts
+@@ -10,7 +10,8 @@
+   const contracts = (packet.contracts ?? []).filter(row => /^VX\/[FGHJKMNQUVXZ]\d$/.test(row.symbol) && validDate(row.expirationDate) && row.expirationDate > raw.targetSession).sort((a, b) => a.expirationDate.localeCompare(b.expirationDate));
+   const expected = packet.expectedContracts ?? [];
+   if (contracts.length < 2 || expected.length < 2 || new Set(contracts.map(r => r.expirationDate)).size !== contracts.length || contracts.slice(0, 2).some((r, i) => r.symbol !== expected[i].symbol || r.expirationDate !== expected[i].expirationDate)) return null;
+-  return contracts;
++  // Preserve maturity slots even when a later diagnostic contract is ineligible.
++  return contracts.map(row => admissible({ ...row, observationDate: packet.observationDate }, packet, raw) ? row : { ...row, settlement: null });
+ }
+ export function extractCore(raw: CoreInput): { features: CoreFeatures; missingReasons: string[] } {
+   const f: CoreFeatures = { positive_5: null, positive_21: null, leadership_gap: null, rho21: null, rho63: null, corr_spread: null, vix: null, jump_1: null, jump_5: null, slope: null, realized_vol_21: null };
+--- builder/lib/regime-engine-v2/engine.ts
++++ sweeper/lib/regime-engine-v2/engine.ts
+@@ -3,7 +3,9 @@
+ import { buildEvidence } from "./features.ts";
+ import { canonical, freeze, hash } from "./math.ts";
+ import { admissible, instant, resolveCalendar, temporalEligible, validDate, weakest } from "./temporal.ts";
+-import type { CoreInput, EngineInput, Packet, ReplayClass, Temporal, VxPacket } from "./types.ts";
++import type { CoreInput, Packet, ReplayClass, Temporal, VxPacket } from "./types.ts";
++import { assertEngineInput } from "./boundary.ts";
++export { RegimeInputError } from "./boundary.ts";
+ freeze(REGISTRY); freeze(CONTRACT_HASHES);
+ function sourceProblem(packet: Temporal | undefined, source: string, asOf: string, mode: ReplayClass): string | null {
+   if (!packet) return "MISSING_SOURCE";
+@@ -19,7 +21,8 @@
+   return packet ? { ...packet, rows: [...packet.rows].sort((a, b) => canonical(a).localeCompare(canonical(b), "en")) } : null;
+ }
+ /** Public production entry: pure, server-side, C03 only, with no fetch or wall clock. */
+-export function evaluateRegime(input: EngineInput) {
++export function evaluateRegime(input: unknown) {
++  assertEngineInput(input);
+   const calendars = Object.fromEntries((["equity", "vix", "vx", "btc", "gld"] as const).map(key => [key, resolveCalendar(input.calendars[key], input.asOf, input.mode)]));
+   const target = calendars.equity.target ?? "";
+   const sourceStatus: Record<string, { status: string; observationDate: string | null; sourcePublishedAt: string | null; availableAt: string | null; capturedAt: string | null; availabilityCertainty: string; replayClass: ReplayClass; sourceId: string | null; sourceVersion: string | null; vintageHash: string | null; rows: number; rejectedObservations: { date: string | null; reason: string }[] }> = {};
+@@ -29,7 +32,8 @@
+     const rows = packet && "rows" in packet ? packet.rows : [];
+     const rowDates = rows.map(row => row.observationDate ?? row.date).filter((date): date is string => validDate(date) && date <= target).sort();
+     const latest = packet?.observationDate ?? rowDates.at(-1) ?? null;
+-    const problem = calendar.reason ?? (calendar.target !== target ? "INCOMPATIBLE_SOURCE_SESSION" : null) ?? sourceProblem(packet, source, input.asOf, input.mode) ?? (latest !== target ? "STALE_OR_WRONG_SESSION" : null);
++    const nativeContractProblem = packet && "rows" in packet && ((source === "BTC_NATIVE" && (packet.seriesType !== "REPORTED_ETF_NET_FLOW" || packet.currency !== "USD_MILLIONS")) || (source === "GLD_NATIVE" && (packet.seriesType !== "FUND_SHARES_NAV_AUM" || (packet.currency !== undefined && packet.currency !== "USD")))) ? "INVALID_NATIVE_SERIES_OR_UNIT" : null;
++    const problem = calendar.reason ?? (calendar.target !== target ? "INCOMPATIBLE_SOURCE_SESSION" : null) ?? sourceProblem(packet, source, input.asOf, input.mode) ?? nativeContractProblem ?? (latest !== target ? "STALE_OR_WRONG_SESSION" : null);
+     const rejectedObservations = rows.filter(row => !admissible(row, packet ?? {}, raw)).map(row => ({ date: row.observationDate ?? row.date ?? null, reason: (row.observationDate ?? row.date ?? "") > target ? "FUTURE_OBSERVATION" : "INVALID_OR_TEMPORALLY_INELIGIBLE" }));
+     sourceStatus[key] = { status: problem ?? "AVAILABLE", observationDate: latest, sourcePublishedAt: packet?.sourcePublishedAt ?? null, availableAt: packet?.availableAt ?? null, capturedAt: packet?.capturedAt ?? null, availabilityCertainty: packet?.availabilityCertainty ?? "UNKNOWN", replayClass: packet?.replayClass ?? "UNKNOWN", sourceId: packet?.sourceId ?? null, sourceVersion: packet?.sourceVersion ?? null, vintageHash: packet?.vintageHash ?? null, rows: rows.length, rejectedObservations };
+     return problem;
+@@ -56,7 +60,7 @@
+   const optionals = [...new Set(input.optionalFeatures ?? INITIAL_OPTIONALS)].sort();
+   const optionalProblems = optionals.filter(id => { const feature = evidence.find(e => e.featureId === id); return !feature || feature.status !== "AVAILABLE" || feature.reasons.length > 0; });
+   const dataQuality = core.systemState === "INCOMPLETE" ? "INSUFFICIENT" : optionalProblems.length ? "PARTIAL" : "COMPLETE";
+-  const normalizedIdentity = { mode: input.mode, asOf: input.asOf, calendars: Object.fromEntries(Object.entries(input.calendars).sort().map(([k, c]) => [k, { ...c, sessions: [...c.sessions].sort((a, b) => a.session.localeCompare(b.session)) }])), equity: Object.fromEntries(Object.entries(input.equity).sort().map(([t, p]) => [t, orderedPacket(p)])), vix: orderedPacket(input.vix), vx: input.vx ? { ...input.vx, contracts: [...input.vx.contracts].sort((a, b) => a.expirationDate.localeCompare(b.expirationDate)) } : null, btc: orderedPacket(input.btc), gld: orderedPacket(input.gld), optionals };
++  const normalizedIdentity = { mode: input.mode, asOf: input.asOf, calendars: Object.fromEntries(Object.entries(input.calendars).sort().map(([k, c]) => [k, c ? { ...c, sessions: [...c.sessions].sort((a, b) => a.session.localeCompare(b.session)) } : null])), equity: Object.fromEntries(Object.entries(input.equity).sort().map(([t, p]) => [t, orderedPacket(p)])), vix: orderedPacket(input.vix), vx: input.vx ? { ...input.vx, contracts: [...input.vx.contracts].sort((a, b) => a.expirationDate.localeCompare(b.expirationDate)) } : null, btc: orderedPacket(input.btc), gld: orderedPacket(input.gld), optionals };
+   return freeze({ engineVersion: ENGINE_VERSION, architecture: "EVIDENCE_STATE_ENGINE" as const, parameterSet: "C03" as const, versions: CONTRACT_HASHES,
+     asOf: input.asOf, observationDate: target || null, regime: core.regime, systemState: core.systemState, pillarStates: core.pillarStates, evidence,
+     concordance: core.concordance, uncertainty: core.uncertainty, plausibleRegimes: core.plausibleRegimes, dataQuality, sourceStatus, replayClass,
+--- builder/lib/regime-engine-v2/features.ts
++++ sweeper/lib/regime-engine-v2/features.ts
+@@ -1,7 +1,7 @@
+ import { GROUPS, PRICE_BASIS, REGISTRY, TICKERS } from "./contract.ts";
+ import { averageCorrelation, correlation, finite, mean, positive, variance } from "./math.ts";
+ import { monthlyContracts } from "./core.ts";
+-import { admissible, windowRows, windowValues } from "./temporal.ts";
++import { admissible, indexRows, windowRows, windowValues } from "./temporal.ts";
+ import type { CoreFeatures, CoreInput, FeatureEvidence, Packet, ReplayClass, Row } from "./types.ts";
+ export function buildEvidence(raw: CoreInput, f: CoreFeatures, btc: Packet | undefined, gld: Packet | undefined, replay: ReplayClass, contexts: { vix?: CoreInput; btc?: CoreInput; gld?: CoreInput } = {}): FeatureEvidence[] {
+   const values = new Map<string, unknown>(), reasons = new Map<string, string[]>();
+@@ -23,7 +23,7 @@
+   const vixPopulation = prefix.length ? windowValues(raw.vix, { ...vc, expectedSessions: prefix }, prefix.length, "value") : null;
+   set("vix_percentile", vixPopulation ? 100 * vixPopulation.filter(v => v <= vixPopulation[vixPopulation.length - 1]).length / vixPopulation.length : null, vixPopulation ? [] : ["DECLARED_PREFIX_UNAVAILABLE"]);
+   const contracts = monthlyContracts(raw.vx, raw);
+-  set("vx_contracts", contracts && positive(contracts[0].settlement) && positive(contracts[1].settlement) ? contracts : null);
++  set("vx_contracts", contracts && positive(contracts[0].settlement) && positive(contracts[1].settlement) ? structuredClone(contracts) : null);
+   for (const [n, suffix] of [[1, "12"], [2, "13"]] as const) {
+     const a = contracts?.[0]?.settlement, b = contracts?.[n]?.settlement;
+     set(`vx_spread_${suffix}`, positive(a) && positive(b) ? b - a : null);
+@@ -64,9 +64,9 @@
+   }
+   if (daily && finite(daily.total)) {
+     const sign = Math.sign(daily.total); let length = 0, censored = false;
++    const streakRows = indexRows(btc, bc, bc.expectedSessions);
+     for (let i = bc.expectedSessions.length - 1; i >= 0; i--) {
+-      const context = { ...bc, expectedSessions: bc.expectedSessions.slice(0, i + 1), targetSession: bc.expectedSessions[i] };
+-      const row = windowRows(btc, context, 1)?.[0];
++      const row = streakRows.get(bc.expectedSessions[i]);
+       if (!row || !finite(row.total)) { censored = true; break; }
+       if (Math.sign(row.total) !== sign || sign === 0) break;
+       length++; if (i === 0) censored = true;
+--- builder/lib/regime-engine-v2/normalize.ts
++++ sweeper/lib/regime-engine-v2/normalize.ts
+@@ -1,10 +1,13 @@
+ import { PRICE_BASIS } from "./contract.ts";
+ import { bytesHash, finite, positive } from "./math.ts";
+-import { validDate, weakest } from "./temporal.ts";
++import { instant, validDate, weakest } from "./temporal.ts";
+ import type { ContractIdentity, Packet, Row, Temporal, VxPacket } from "./types.ts";
+ const record = (x: unknown): Record<string, unknown> => x !== null && typeof x === "object" && !Array.isArray(x) ? x as Record<string, unknown> : {};
+ const array = (x: unknown): unknown[] => Array.isArray(x) ? x : [];
+ const text = (x: unknown): string => typeof x === "string" ? x : "";
++function bindSource(metadata: Temporal, sourceId: string): Temporal {
++  return { ...metadata, sourceId: metadata.sourceId ?? sourceId, status: metadata.sourceId !== undefined && metadata.sourceId !== sourceId ? "SOURCE_ID_MISMATCH" : metadata.status ?? "AVAILABLE" };
++}
+ export function parseNumericCell(value: unknown): number | null {
+   if (finite(value)) return value;
+   if (typeof value !== "string") return null;
+@@ -30,12 +33,14 @@
+   return rows.filter(r => r.length === headers.length).map(r => Object.fromEntries(headers.map((h, i) => [h, r[i]])));
+ }
+ export function normalizeYahoo(bytes: string, metadata: Temporal, expectedTicker: string): Packet {
++  metadata = bindSource(metadata, "EQUITY_ADJUSTED");
+   const payload = record(parseJson(bytes)), chart = record(payload.chart), result = record(array(chart.result)[0]);
+   const meta = record(result.meta), indicators = record(result.indicators), adjusted = array(record(array(indicators.adjclose)[0]).adjclose);
+   const zone = text(meta.exchangeTimezoneName);
+   let validZone = true; try { if (!zone) throw Error(); new Intl.DateTimeFormat("en", { timeZone: zone }); } catch { validZone = false; }
+-  const packet: Packet = { ...metadata, vintageHash: bytesHash(bytes), sourceId: "EQUITY_ADJUSTED", sourceField: "chart.result[0].indicators.adjclose[0].adjclose", seriesType: "ETF_ADJUSTED_PRICE", priceBasis: PRICE_BASIS, currency: text(meta.currency), rows: [], status: metadata.status ?? "AVAILABLE" };
++  const packet: Packet = { ...metadata, vintageHash: bytesHash(bytes), sourceField: "chart.result[0].indicators.adjclose[0].adjclose", seriesType: "ETF_ADJUSTED_PRICE", priceBasis: PRICE_BASIS, currency: text(meta.currency), rows: [], status: metadata.status ?? "AVAILABLE" };
+   if (chart.error || !validZone || meta.symbol !== expectedTicker || meta.currency !== "USD") return { ...packet, status: "INVALID" };
++  if (adjusted.length !== array(result.timestamp).length) packet.status = "MISALIGNED_ADJCLOSE_ARRAY";
+   for (const [index, timestamp] of array(result.timestamp).entries()) {
+     if (!finite(timestamp)) continue;
+     const instant = new Date(timestamp * 1000);
+@@ -50,39 +55,58 @@
+   return packet;
+ }
+ export function normalizeVixCsv(bytes: string, metadata: Temporal): Packet {
++  metadata = bindSource(metadata, "VIX_OFFICIAL");
+   const rows = csvRows(bytes).map(row => {
+     const parts = /^([0-9]{1,2})\/([0-9]{1,2})\/(\d{4})$/.exec(row.DATE ?? "");
+     const date = parts ? `${parts[3]}-${parts[1].padStart(2, "0")}-${parts[2].padStart(2, "0")}` : "";
+     const value = parseNumericCell(row.CLOSE);
+     return { ...dated(date), value: positive(value) ? value : null };
+   }).filter(r => validDate(r.observationDate));
+-  return { ...metadata, sourceId: "VIX_OFFICIAL", sourceField: "DATE,CLOSE", vintageHash: bytesHash(bytes), seriesType: "OFFICIAL_VIX_INDEX", rows, declaredStart: rows.map(r => r.observationDate!).sort()[0], status: metadata.status ?? "AVAILABLE" };
++  return { ...metadata, sourceField: "DATE,CLOSE", vintageHash: bytesHash(bytes), seriesType: "OFFICIAL_VIX_INDEX", rows, declaredStart: rows.map(r => r.observationDate!).sort()[0], status: metadata.status ?? "AVAILABLE" };
+ }
+ export type MonthlyHistory = { identity: ContractIdentity; metadata: Temporal; rows: Row[] };
+ export function normalizeVxHistory(bytes: string, identity: ContractIdentity, metadata: Temporal): MonthlyHistory {
+-  const rows = csvRows(bytes).map(row => ({ ...dated(row["Trade Date"]), settlement: parseNumericCell(row.Settle) })).filter(row => validDate(row.observationDate));
+-  return { identity, metadata: { ...metadata, sourceId: "VX_OFFICIAL", vintageHash: bytesHash(bytes) }, rows };
++  const month = Number(identity.expirationDate.slice(5, 7));
++  const code = "FGHJKMNQUVXZ"[month - 1], name = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"][month - 1];
++  const expected = `${code} (${name} ${identity.expirationDate.slice(0, 4)})`;
++  const validIdentity = validDate(identity.expirationDate) && identity.symbol === `VX/${code}${identity.expirationDate.slice(3, 4)}`;
++  const rows = csvRows(bytes).map(row => ({ ...dated(row["Trade Date"]), settlement: parseNumericCell(row.Settle), status: validIdentity && row.Futures?.trim() === expected ? "AVAILABLE" : "CONTRACT_IDENTITY_MISMATCH" })).filter(row => validDate(row.observationDate));
++  return { identity: { ...identity }, metadata: { ...bindSource(metadata, "VX_OFFICIAL"), vintageHash: bytesHash(bytes) }, rows };
+ }
+ export function normalizeMonthlyCatalog(payload: unknown): ContractIdentity[] {
+   const entries = Array.isArray(payload) ? payload : Object.values(record(payload)).flatMap(array);
+   return entries.map(record).filter(row => row.duration_type === "M" && row.futures_root === "VX" && validDate(row.expire_date)).map(row => ({ symbol: "VX/" + text(row.product_display).split("/").at(-1), expirationDate: text(row.expire_date) })).filter(row => /^VX\/[FGHJKMNQUVXZ]\d$/.test(row.symbol)).sort((a, b) => a.expirationDate.localeCompare(b.expirationDate));
+ }
+ export function assembleVx(date: string, catalog: ContractIdentity[], catalogMetadata: Temporal, histories: MonthlyHistory[]): VxPacket {
+-  const expected = catalog.filter(r => r.expirationDate > date).slice(0, 9);
+-  const contributing = expected.slice(0, 2).map(identity => histories.find(h => h.identity.expirationDate === identity.expirationDate && h.identity.symbol === identity.symbol));
+-  const ancestry = [catalogMetadata, ...contributing.map(h => h?.metadata ?? {})];
+-  const known = ancestry.every(m => m.availableAt && ["EXACT", "CONSERVATIVE_BOUND"].includes(m.availabilityCertainty ?? "UNKNOWN"));
++  const expected = catalog.filter(r => /^VX\/[FGHJKMNQUVXZ]\d$/.test(r.symbol) && validDate(r.expirationDate) && r.expirationDate > date).sort((a, b) => a.expirationDate.localeCompare(b.expirationDate)).slice(0, 9);
++  const catalogParent = bindSource(catalogMetadata, "VX_OFFICIAL");
++  const latest = (parents: Temporal[], field: "availableAt" | "capturedAt" | "observationEndAt" | "sourcePublishedAt") => {
++    const values = parents.map(p => p[field]);
++    return values.every(v => instant(v) !== null) ? values.reduce((a, b) => instant(a)! >= instant(b)! ? a : b)! : null;
++  };
++  const lineage = (parents: Temporal[]): Temporal => {
++    const availableAt = latest(parents, "availableAt");
++    return { sourceId: "VX_OFFICIAL", sourceVersion: catalogMetadata.sourceVersion, vintageHash: bytesHash(JSON.stringify(parents.map(m => m.vintageHash))),
++      availableAt, capturedAt: latest(parents, "capturedAt"), sourcePublishedAt: latest(parents, "sourcePublishedAt"),
++      availabilityCertainty: availableAt !== null && parents.every(m => ["EXACT", "CONSERVATIVE_BOUND"].includes(m.availabilityCertainty ?? "UNKNOWN")) ? "CONSERVATIVE_BOUND" : "UNKNOWN",
++      replayClass: weakest(parents.map(m => m.replayClass)), availabilityEvidence: parents.every(m => !!m.availabilityEvidence) ? parents.map(m => m.availabilityEvidence).join(";") : undefined,
++      status: parents.some(m => m.status && m.status !== "AVAILABLE") ? "INVALID_PARENT" : "AVAILABLE" };
++  };
+   const contracts = expected.map(identity => {
+-    const history = histories.find(h => h.identity.symbol === identity.symbol && h.identity.expirationDate === identity.expirationDate);
++    const matches = histories.filter(h => h.identity.symbol === identity.symbol && h.identity.expirationDate === identity.expirationDate);
++    const history = matches.length === 1 ? matches[0] : undefined;
+     const rows = history?.rows.filter(r => r.observationDate === date) ?? [];
+     const value = rows.length === 1 ? rows[0].settlement : null;
+-    return { ...identity, settlement: positive(value) ? value : null };
++    const parent = bindSource(history?.metadata ?? {}, "VX_OFFICIAL");
++    const row = rows.length === 1 ? { ...parent, ...rows[0] } : { ...parent, status: "MISSING_OR_DUPLICATE_CONTRACT_ROW" };
++    const provenanceConflict = rows[0]?.sourceId !== undefined && rows[0].sourceId !== parent.sourceId;
++    const ancestry = lineage([catalogParent, parent, row]);
++    return { ...identity, ...dated(date), ...ancestry, observationEndAt: row.observationEndAt ?? date + "T23:59:59.999999Z",
++      status: provenanceConflict ? "SOURCE_ID_MISMATCH" : ancestry.status, settlement: positive(value) ? value : null };
+   });
+-  return { ...dated(date), sourceId: "VX_OFFICIAL", sourceVersion: catalogMetadata.sourceVersion, vintageHash: bytesHash(JSON.stringify(ancestry.map(m => m.vintageHash))),
+-    capturedAt: known ? ancestry.map(m => m.capturedAt).filter((v): v is string => !!v).sort().at(-1) : null,
+-    availableAt: known ? ancestry.map(m => m.availableAt!).sort().at(-1) : null, availabilityCertainty: known ? "CONSERVATIVE_BOUND" : "UNKNOWN",
+-    replayClass: weakest(ancestry.map(m => m.replayClass)), availabilityEvidence: ancestry.every(m => !!m.availabilityEvidence) ? ancestry.map(m => m.availabilityEvidence).join(";") : undefined,
+-    status: new Set(expected.map(r => r.expirationDate)).size !== expected.length || ancestry.some(m => m.status && m.status !== "AVAILABLE") ? "INVALID" : "AVAILABLE",
++  const coreLineage = lineage([catalogParent, ...contracts.slice(0, 2)]);
++  return { ...dated(date), ...coreLineage,
++    status: new Set(expected.map(r => r.expirationDate)).size !== expected.length ? "DUPLICATE_CONTRACT_EXPIRATION" : coreLineage.status,
+     seriesType: "OFFICIAL_MONTHLY_VX_SETTLEMENT", expectedContracts: expected, contracts };
+ }
+ function flowDate(value: unknown): string {
+@@ -93,6 +117,7 @@
+   return `${match[3]}-${String(months.indexOf(match[2]) + 1).padStart(2, "0")}-${match[1].padStart(2, "0")}`;
+ }
+ export function normalizeBtcTable(payload: unknown, metadata: Temporal): Packet {
++  metadata = bindSource(metadata, "BTC_NATIVE");
+   const p = record(payload), columns = array(p.columns).map(text), expectedFunds = columns.filter(c => c !== "Date" && c !== "Total");
+   const rows = array(p.rows).map(array).map(cells => {
+     const date = flowDate(cells[columns.indexOf("Date")]);
+@@ -102,10 +127,11 @@
+     const sum = allObserved ? Object.values(funds).reduce<number>((s, v) => s + v!, 0) : null;
+     return { ...dated(date), total: reported ?? sum, reportedTotal: reported, totalDerived: reported === null && sum !== null, reconciliationDifference: reported !== null && sum !== null ? reported - sum : null, funds, coverage: allObserved ? "COMPLETE" : "PARTIAL" };
+   }).filter(r => validDate(r.observationDate));
+-  return { ...metadata, sourceId: "BTC_NATIVE", sourceField: "columns,rows", vintageHash: bytesHash(JSON.stringify(payload)), seriesType: "REPORTED_ETF_NET_FLOW", currency: "USD_MILLIONS", expectedFunds, rows, status: !columns.includes("Date") || !columns.includes("Total") || new Set(columns).size !== columns.length ? "INVALID" : metadata.status ?? "AVAILABLE" };
++  return { ...metadata, sourceField: "columns,rows", vintageHash: bytesHash(JSON.stringify(payload)), seriesType: "REPORTED_ETF_NET_FLOW", currency: "USD_MILLIONS", expectedFunds, rows, status: !columns.includes("Date") || !columns.includes("Total") || new Set(columns).size !== columns.length ? "INVALID" : metadata.status ?? "AVAILABLE" };
+ }
+ export function normalizeGldRows(payload: unknown, metadata: Temporal, unitEventDates: string[] = []): Packet {
++  metadata = bindSource(metadata, "GLD_NATIVE");
+   // Accept dated parsed native fund rows only, never oneDay/twentyDay presentation scalars.
+   const rows = array(payload).map(record).map(row => ({ ...dated(text(row.date)), shares: parseNumericCell(row["shares outstanding"] ?? row.sharesOutstanding), nav: parseNumericCell(row.nav), aum: parseNumericCell(row["total net assets"] ?? row.totalNetAssets) })).filter(r => validDate(r.observationDate));
+-  return { ...metadata, sourceId: "GLD_NATIVE", sourceField: "date,nav,shares outstanding,total net assets", vintageHash: bytesHash(JSON.stringify(payload)), seriesType: "FUND_SHARES_NAV_AUM", rows, unitEventDates, status: Array.isArray(payload) ? metadata.status ?? "AVAILABLE" : "INVALID" };
++  return { ...metadata, sourceField: "date,nav,shares outstanding,total net assets", vintageHash: bytesHash(JSON.stringify(payload)), seriesType: "FUND_SHARES_NAV_AUM", rows, unitEventDates: [...unitEventDates], status: Array.isArray(payload) ? metadata.status ?? "AVAILABLE" : "INVALID" };
+ }
+--- builder/lib/regime-engine-v2/shadow.ts
++++ sweeper/lib/regime-engine-v2/shadow.ts
+@@ -11,10 +11,11 @@
+   const sessions = current.diagnostics.calendarStatus.equity.sessions;
+   const adjacent = !!previous && previous.observationDate === sessions.at(-2) && previous.engineVersion === current.engineVersion && previous.parameterSet === current.parameterSet && JSON.stringify(previous.versions) === JSON.stringify(current.versions);
+   const same = adjacent && current.regime !== null && current.regime === previous?.regime;
++  const validDuration = previousDurationSessions !== undefined && Number.isSafeInteger(previousDurationSessions) && previousDurationSessions >= 1 && previousDurationSessions < Number.MAX_SAFE_INTEGER;
+   return { observationDate: current.observationDate, asOf: current.asOf, inputHash: current.diagnostics.inputHash, replayClass: current.replayClass,
+     regimeTransition: adjacent && previous?.regime !== current.regime ? { from: previous?.regime, to: current.regime } : null,
+     pillarTransitions: Object.entries(current.pillarStates).filter(([k, v]) => adjacent && previous?.pillarStates[k as keyof typeof current.pillarStates] !== v).map(([pillar, to]) => ({ pillar, from: previous?.pillarStates[pillar as keyof typeof current.pillarStates], to })),
+-    durationSessions: current.regime === null ? null : same ? (previousDurationSessions !== undefined && Number.isInteger(previousDurationSessions) && previousDurationSessions >= 1 ? previousDurationSessions + 1 : 2) : 1,
+-    durationCensored: current.regime === null || !adjacent || previous?.regime === null || (same && (previousDurationSessions === undefined || previousDurationCensored)), dataQualityChange: adjacent && previous?.dataQuality !== current.dataQuality ? { from: previous?.dataQuality, to: current.dataQuality } : null,
++    durationSessions: current.regime === null ? null : same ? (validDuration ? previousDurationSessions + 1 : 2) : 1,
++    durationCensored: current.regime === null || !adjacent || previous?.regime === null || (same && (!validDuration || previousDurationCensored)), dataQualityChange: adjacent && previous?.dataQuality !== current.dataQuality ? { from: previous?.dataQuality, to: current.dataQuality } : null,
+     reasonCode: current.diagnostics.ruleId, missingReasons: current.diagnostics.missingReasons, dependencyContributions: current.diagnostics.dependencyContributions };
+ }
+--- builder/lib/regime-engine-v2/temporal.ts
++++ sweeper/lib/regime-engine-v2/temporal.ts
+@@ -13,30 +13,39 @@
+ export function temporalEligible(meta: Temporal, asOf: string, mode: Mode, requireEnd = true) {
+   const cut = instant(asOf);
+   if (cut === null || (meta.status && meta.status !== "AVAILABLE")) return false;
++  if (meta.replayClass !== undefined && !["R0", "R1", "R2"].includes(meta.replayClass)) return false;
+   if (mode === "R2") return true;
+   if (!["R0", "R1", "SYNTHETIC"].includes(mode)) return false;
+-  if (meta.replayClass === "R2" || meta.replayClass === "UNKNOWN") return false;
++  if (meta.replayClass === "R2") return false;
+   if (mode === "R0" && meta.replayClass === "R1") return false;
+   if (meta.replayClass === "R1" && !meta.availabilityEvidence) return false;
++  if ((mode === "R0" || meta.replayClass === "R0") && meta.capturedAt !== undefined && (instant(meta.capturedAt) === null || instant(meta.capturedAt)! > cut)) return false;
+   const available = instant(meta.availableAt), end = instant(meta.observationEndAt);
+   return ["EXACT", "CONSERVATIVE_BOUND"].includes(meta.availabilityCertainty ?? "UNKNOWN") && available !== null && available <= cut && (!requireEnd || (end !== null && end <= cut));
+ }
+ export function admissible(row: Row, packet: Temporal, raw: CoreInput) {
+   const date = row.observationDate ?? row.date;
+-  return validDate(date) && date <= raw.targetSession && temporalEligible({ ...packet, ...row }, raw.asOf, raw.mode);
++  const sameSource = row.sourceId === undefined || packet.sourceId === undefined || row.sourceId === packet.sourceId;
++  return sameSource && validDate(date) && date <= raw.targetSession && temporalEligible(packet, raw.asOf, raw.mode, false) && temporalEligible({ ...packet, ...row }, raw.asOf, raw.mode);
+ }
+ export function windowRows(packet: Packet | undefined, raw: CoreInput, count: number): Row[] | null {
+   if (!packet || !Array.isArray(packet.rows) || (packet.status && packet.status !== "AVAILABLE")) return null;
+   const wanted = raw.expectedSessions.slice(-count);
+   if (wanted.length !== count) return null;
+-  const dates = new Set(wanted), rows = new Map<string, Row>();
++  const rows = indexRows(packet, raw, wanted);
++  const selected = wanted.map(date => rows.get(date));
++  return selected.every((row): row is Row => row !== undefined && row !== null) ? selected : null;
++}
++/** One pass for callers that inspect many adjacent windows (for example streaks). */
++export function indexRows(packet: Packet | undefined, raw: CoreInput, wanted: string[]): Map<string, Row | null> {
++  const dates = new Set(wanted), rows = new Map<string, Row | null>();
++  if (!packet || (packet.status && packet.status !== "AVAILABLE")) return rows;
+   for (const row of packet.rows) {
+     const date = row.observationDate ?? row.date;
+     if (!date || !dates.has(date) || !admissible(row, packet, raw)) continue;
+-    if (rows.has(date) && canonical(rows.get(date)) !== canonical(row)) return null;
+-    rows.set(date, row);
++    rows.set(date, rows.has(date) && canonical(rows.get(date)) !== canonical(row) ? null : row);
+   }
+-  return rows.size === count ? wanted.map(date => rows.get(date)!) : null;
++  return rows;
+ }
+ export function windowValues(packet: Packet | undefined, raw: CoreInput, count: number, field: string, basis?: string): number[] | null {
+   if (basis && (packet?.priceBasis !== basis || packet?.currency !== "USD")) return null;
+@@ -59,5 +68,5 @@
+ }
+ export function weakest(classes: (ReplayClass | undefined)[]): ReplayClass {
+   const order: ReplayClass[] = ["R0", "R1", "R2", "UNKNOWN"];
+-  return order[Math.max(0, ...classes.map(c => order.indexOf(c ?? "UNKNOWN")))];
++  return order[Math.max(0, ...classes.map(c => { const rank = order.indexOf(c ?? "UNKNOWN"); return rank < 0 ? 3 : rank; }))];
+ }
+--- builder/lib/regime-engine-v2/types.ts
++++ sweeper/lib/regime-engine-v2/types.ts
+@@ -22,7 +22,7 @@
+ };
+ export type ContractIdentity = { symbol: string; expirationDate: string };
+ export type VxPacket = Temporal & {
+-  seriesType?: string; contracts: (ContractIdentity & { settlement: unknown })[];
++  seriesType?: string; contracts: (ContractIdentity & Temporal & { settlement: unknown })[];
+   expectedContracts: ContractIdentity[];
+ };
+ export type Calendar = Temporal & {
+--- builder/scripts/regime-v2-conformance.mts
++++ sweeper/scripts/regime-v2-conformance.mts
+@@ -13,7 +13,10 @@
+ import type { Calendar, CoreInput, CoreFeatures, EngineInput, NumericParameters, Packet, Temporal } from "../lib/regime-engine-v2/types.ts";
+ const root = fileURLToPath(new URL("../", import.meta.url));
+ const p8 = path.join(root, "docs/regime-engine-v2/p8");
+-const builder = path.join(root, "docs/regime-engine-v2/builder");
++// Audit reruns preserve the original Builder delivery bytes by choosing a destination.
++const outputFlag = process.argv.indexOf("--output-dir");
++if (outputFlag >= 0 && !process.argv[outputFlag + 1]) throw new Error("--output-dir requires a directory");
++const builder = outputFlag >= 0 ? path.resolve(process.argv[outputFlag + 1]) : path.join(root, "docs/regime-engine-v2/builder");
+ const json = (name: string) => JSON.parse(readFileSync(path.join(p8, name), "utf8"));
+ const metadataKeys: Record<string, string> = { as_of: "asOf", target_session: "targetSession", expected_sessions: "expectedSessions", price_basis: "priceBasis", series_type: "seriesType", observation_date: "observationDate", observation_end_at: "observationEndAt", available_at: "availableAt", captured_at: "capturedAt", source_published_at: "sourcePublishedAt", availability_certainty: "availabilityCertainty", expiration_date: "expirationDate", expected_contracts: "expectedContracts" };
+ export function fromP8(value: unknown): unknown {
+--- /dev/null
++++ sweeper/lib/regime-engine-v2/boundary.ts
+@@ -0,0 +1,81 @@
++import type { EngineInput } from "./types.ts";
++
++/** A governed failure for malformed envelopes, distinct from unavailable data. */
++export class RegimeInputError extends Error {
++  readonly code = "INVALID_REGIME_INPUT";
++  readonly inputPath: string;
++  constructor(inputPath: string, detail: string) {
++    super(`${inputPath}: ${detail}`); this.name = "RegimeInputError"; this.inputPath = inputPath;
++  }
++}
++const fail = (path: string, detail: string): never => { throw new RegimeInputError(path, detail); };
++function object(value: unknown, path: string): asserts value is Record<string, unknown> {
++  if (!value || typeof value !== "object" || Array.isArray(value)) fail(path, "expected an object");
++}
++function list(value: unknown, path: string): asserts value is unknown[] {
++  if (!Array.isArray(value)) fail(path, "expected an array");
++}
++function string(value: unknown, path: string): asserts value is string {
++  if (typeof value !== "string") fail(path, "expected a string");
++}
++function temporal(value: Record<string, unknown>, path: string) {
++  for (const key of ["replayClass", "availabilityCertainty", "observationEndCertainty"]) {
++    const allowed = key === "replayClass" ? ["R0", "R1", "R2", "UNKNOWN"] : ["EXACT", "CONSERVATIVE_BOUND", "UNKNOWN"];
++    if (value[key] !== undefined && !allowed.includes(value[key] as string)) fail(`${path}.${key}`, "unrecognized enum");
++  }
++  for (const key of ["observationDate", "date", "observationEndAt", "sourcePublishedAt", "availableAt", "capturedAt", "sourceId", "sourceVersion", "vintageHash", "status", "availabilityEvidence"]) {
++    if (value[key] !== undefined && value[key] !== null) string(value[key], `${path}.${key}`);
++  }
++}
++/** Only plain data crosses this boundary. Nonfinite numeric cells remain missing
++ * data for the numerical layer; accessors, cycles and executable values do not. */
++export function assertEngineInput(value: unknown): asserts value is EngineInput {
++  const active = new WeakSet<object>();
++  function data(node: unknown, path: string, depth: number) {
++    if (depth > 128) fail(path, "excessive nesting");
++    if (node === null || node === undefined || ["string", "number", "boolean"].includes(typeof node)) return;
++    if (typeof node !== "object") fail(path, "unsupported data type");
++    const obj = node as object, proto = Object.getPrototypeOf(obj);
++    if (Array.isArray(obj) ? proto !== Array.prototype : proto !== Object.prototype && proto !== null) fail(path, "expected plain data");
++    if (active.has(obj)) fail(path, "cyclic data");
++    active.add(obj);
++    const descriptors = Object.getOwnPropertyDescriptors(obj);
++    for (const key of Reflect.ownKeys(descriptors)) {
++      if (typeof key !== "string") return fail(path, "symbol properties are not plain data");
++      const descriptor = descriptors[key];
++      if (descriptor.get || descriptor.set) fail(`${path}.${key}`, "accessor is not data");
++      data(descriptor.value, `${path}.${key}`, depth + 1);
++    }
++    active.delete(obj);
++  }
++  data(value, "input", 0); object(value, "input");
++  if (!["R0", "R1", "R2", "UNKNOWN"].includes(value.mode as string)) fail("input.mode", "unrecognized replay mode");
++  string(value.asOf, "input.asOf"); object(value.equity, "input.equity"); object(value.calendars, "input.calendars");
++  function packet(packet: unknown, path: string) {
++    if (packet === undefined) return;
++    object(packet, path); temporal(packet, path); list(packet.rows, `${path}.rows`);
++    for (const key of ["seriesType", "priceBasis", "currency", "sourceField", "declaredStart"]) if (packet[key] !== undefined) string(packet[key], `${path}.${key}`);
++    for (const row of packet.rows) { object(row, `${path}.rows[]`); temporal(row, `${path}.rows[]`); }
++    for (const key of ["expectedFunds", "unitEventDates"]) if (packet[key] !== undefined) {
++      list(packet[key], `${path}.${key}`); for (const v of packet[key]) string(v, `${path}.${key}[]`);
++    }
++  }
++  for (const [ticker, p] of Object.entries(value.equity)) packet(p, `input.equity.${ticker}`);
++  for (const key of ["vix", "btc", "gld"]) packet(value[key], `input.${key}`);
++  for (const [key, cal] of Object.entries(value.calendars)) {
++    if (cal === undefined) continue;
++    object(cal, `input.calendars.${key}`); temporal(cal, `input.calendars.${key}`); list(cal.sessions, `input.calendars.${key}.sessions`);
++    for (const field of ["id", "version", "timezone", "coverageStart", "coverageEnd"]) if (cal[field] !== undefined) string(cal[field], `input.calendars.${key}.${field}`);
++    if (!["OFFICIAL", "R2_OBSERVED_PROXY", "SYNTHETIC"].includes(cal.kind as string)) fail(`input.calendars.${key}.kind`, "unrecognized calendar kind");
++    if (typeof cal.completeIntervalCoverage !== "boolean") fail(`input.calendars.${key}.completeIntervalCoverage`, "expected a boolean");
++    for (const row of cal.sessions) { object(row, "calendar.session"); string(row.session, "calendar.session.date"); string(row.closedAt, "calendar.session.closedAt"); }
++  }
++  if (value.vx !== undefined) {
++    object(value.vx, "input.vx"); temporal(value.vx, "input.vx");
++    for (const key of ["contracts", "expectedContracts"]) {
++      list(value.vx[key], `input.vx.${key}`);
++      for (const c of value.vx[key]) { object(c, `input.vx.${key}[]`); string(c.symbol, "contract.symbol"); string(c.expirationDate, "contract.expirationDate"); temporal(c, "contract"); }
++    }
++  }
++  if (value.optionalFeatures !== undefined) { list(value.optionalFeatures, "input.optionalFeatures"); for (const id of value.optionalFeatures) string(id, "input.optionalFeatures[]"); }
++}

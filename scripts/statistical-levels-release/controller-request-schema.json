@@ -1,0 +1,143 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "operation",
+    "candidate_git_sha",
+    "candidate_deployment_id",
+    "authority_run_id",
+    "sealed_manifest_sha256",
+    "qa_attestation_id",
+    "qa_attestation_hash",
+    "workflow_run_id",
+    "workflow_execution_sha",
+    "qa_attestation"
+  ],
+  "properties": {
+    "operation": {
+      "enum": [
+        "ADOPT_EXISTING_PRODUCTION_BASELINE",
+        "PROMOTE_EXACT_STATISTICAL_LEVELS_CANDIDATE"
+      ]
+    },
+    "candidate_git_sha": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{40}$",
+      "description": "Existing Production SHA for adoption; future data candidate SHA for promotion. Never the workflow execution identity."
+    },
+    "candidate_deployment_id": {
+      "type": "string",
+      "pattern": "^dpl_[A-Za-z0-9]{10,80}$",
+      "description": "Existing Production deployment for adoption; exact Preview deployment for promotion."
+    },
+    "authority_run_id": {
+      "type": "string",
+      "pattern": "^\\d{8}T\\d{9}Z-[a-f0-9-]{36}$"
+    },
+    "sealed_manifest_sha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "expected_previous_production_sha": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{40}$"
+    },
+    "expected_previous_production_deployment": {
+      "type": "string",
+      "pattern": "^dpl_[A-Za-z0-9]{10,80}$"
+    },
+    "qa_attestation_id": {
+      "type": "string",
+      "pattern": "^[1-9][0-9]{0,19}$"
+    },
+    "qa_attestation_hash": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "production_qa_attestation_id": {
+      "type": "string",
+      "pattern": "^[1-9][0-9]{0,19}$"
+    },
+    "production_qa_attestation_hash": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "previous_publication_date": {
+      "type": "string",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+      "format": "date"
+    },
+    "workflow_run_id": {
+      "type": "string",
+      "pattern": "^[1-9][0-9]{0,19}$"
+    },
+    "workflow_execution_sha": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{40}$"
+    },
+    "qa_attestation": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 59999,
+      "description": "Canonical JSON encoding of qa-attestation.schema.json, authenticated by a server-owned completed digest-marker job in the independently verified workflow run."
+    }
+  },
+  "dependentRequired": {
+    "production_qa_attestation_id": [
+      "production_qa_attestation_hash"
+    ],
+    "production_qa_attestation_hash": [
+      "production_qa_attestation_id"
+    ]
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "operation": {
+            "const": "PROMOTE_EXACT_STATISTICAL_LEVELS_CANDIDATE"
+          }
+        }
+      },
+      "then": {
+        "required": [
+          "expected_previous_production_sha",
+          "expected_previous_production_deployment",
+          "previous_publication_date"
+        ]
+      },
+      "else": {
+        "not": {
+          "anyOf": [
+            {
+              "required": [
+                "expected_previous_production_sha"
+              ]
+            },
+            {
+              "required": [
+                "expected_previous_production_deployment"
+              ]
+            },
+            {
+              "required": [
+                "previous_publication_date"
+              ]
+            },
+            {
+              "required": [
+                "production_qa_attestation_id"
+              ]
+            },
+            {
+              "required": [
+                "production_qa_attestation_hash"
+              ]
+            }
+          ]
+        }
+      }
+    }
+  ]
+}

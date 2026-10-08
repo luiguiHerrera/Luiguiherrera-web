@@ -1,0 +1,26 @@
+{
+  "version": "p8-freshness/1.0.0",
+  "classification": "STRUCTURAL",
+  "binding": "ZERO_SESSION_CARRY_WITH_EXPLICIT_CALENDARS",
+  "core_carry_sessions": 0,
+  "decision_clock": "Caller as_of. Resolve latest expected closed equity session from a versioned market calendar covering the requested interval; every core VIX/VX observation must match it. A closed-equity day does not excuse a missing corresponding VIX/VX daily observation.",
+  "source_calendars": {
+    "equity": "NYSE Arca core market calendar, America/New_York; holiday/early-close/DST aware.",
+    "vix": "Cboe index daily publication/session calendar, separately versioned; do not assume equity close equals VIX publication.",
+    "vx": "CFE settlement calendar and monthly expiry catalog, separately versioned; do not assume equity/VIX clock.",
+    "BTC_NATIVE": "Versioned expected US fund-report sessions; actual publication bound required, no 24h TTL inference.",
+    "GLD_NATIVE": "Versioned State Street fund valuation sessions; actual publication bound required, no five-calendar-day grace."
+  },
+  "calendar_availability": "Calendar/catalog versions are required input ancestors: preserve provenance, coverage and actual known-at/capture bound. R0/R1 reject calendar versions unavailable at as_of. A partial example schedule cannot claim complete interval coverage.",
+  "unavailable_calendar": "UNKNOWN_CALENDAR -> dependent core unavailable; no weekday-only production fallback. A missing/expired calendar version is a defined unavailable input, not an unbound threshold.",
+  "availability_gate": "Before source capture/publication bound, report NOT_YET_AVAILABLE/UNKNOWN even if observation_date matches. Unknown release SLA is allowed and cannot imply known availability.",
+  "stale_gate": "After a new expected closed decision session, earlier values are STALE until current dated eligible input arrives. Weekends/holidays do not count as missing sessions. Never silently retreat target to latest available common observation.",
+  "satellites": "Preserve age, coverage and unavailable reasons independently; any freshness failure has zero effect on core regime/concordance/uncertainty.",
+  "calibration": "Structural anti-staleness policy, no fitted TTL or empirical lag. Conservative temporary incompleteness is intentional.",
+  "research_calendar": "P8 R2 history uses observed SPY session dates as an explicitly labeled proxy. It cannot establish PIT exchange-calendar knowledge or detect a date missing simultaneously from the source calendar and all prices.",
+  "evidence": [
+    "contract-check-results.json",
+    "raw-check-results.json",
+    "https://www.nyse.com/trade/hours-calendars"
+  ]
+}

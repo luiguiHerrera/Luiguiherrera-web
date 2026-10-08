@@ -1,0 +1,131 @@
+import {withoutReceiptClass} from './semantic-closure-compat.mjs';
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import fs from 'node:fs/promises';
+import { createHash } from 'node:crypto';
+import { createRequire } from 'node:module';
+const ts = createRequire(import.meta.url)('typescript');
+
+const root = new URL('../', import.meta.url);
+const digest = value => createHash('sha256').update(value).digest('hex');
+const read = file => fs.readFile(new URL(file, root), 'utf8');
+const shared = {
+  'scripts/release-core.mjs': 'c461b1af450c69007b4f5bfac9c21010ca475b843aec5fed3ff6fe6b8912dd70',
+  'scripts/qa-runner.mjs': '70ffd3c5796f2a432a83347109000a20c326d7d49efee59285a403ab932a69df',
+  'scripts/browser-harness-base.mjs': 'HARNESS_SECURITY_REGIONS',
+  'scripts/browser-harness.mjs': '2896a2c3f2886321eb47291a007fdf272ec95f4f4a593362d9a4a4ca6f04bf4c',
+  'scripts/runtime-io.mjs': 'b114b3e246ae4bdbf1af1a3823218b65f53a18ca26719a6740b11538344a912e',
+  'scripts/cli.mjs': 'c353aca844d0d69973d0bcd8abd9bf9539fd908245aca49d0caffcdb4a8c2407',
+  'scripts/invoke.mjs': '95902e9029354124eba014dab478324f2318caf3a7a5ddf26732211d5819d113',
+  'policy.json': 'e8865e7b7c392147f111a4f558434d536cbdfbb648d463053a74701b2bb98e9a',
+  'controller-request-schema.json': 'd44337f72a9970d9db8e5d24ec1c400b4a5a4db9d4e3110b054727e6c9a224d3',
+  'controller-qa-schema.json': '3fece1fd42493bc6210c1ea901459f50c85fc2deb24d177e0dadf51b35a063d8',
+};
+
+test('16: proven OIDC V3 validator and runtime identity boundary remain exact frozen bytes', async () => {
+  assert.equal(digest(await read('scripts/probe-oidc.mjs')), '951606ee7fa3aa2442f3201af904afeb6afa0745475d72bbff24545f7ca603ab');
+  // Metadata may change in this shared file; the six complete identity functions remain frozen.
+  const expected = {
+    "execution": "dcf5155b8c863ecb2e85bd0c11ae2571e38c2cb80c444a59bcd9155a5f8fe946",
+    "oidcEvidencePath": "bb555c80eccc7c57b2e296e3e253dcfc1ed400bb662f2833e0f0b9a55d676683",
+    "recordProbeOIDCEvidence": "c4949f1cf64903088dbf7fb3052676421feebd289e106dabc55b5a98e72cd501",
+    "readProbeOIDCEvidence": "b119e4387f56327293d7fa25505e21d3cdbb1944e34f91e8fa08f740778a257b",
+    "probeOIDC": "84bbf429a8cdc79ea69ee2e7efb127c7d5acec27085b8bcba387efefca55dd93",
+    "readProbeRoleIdentity": "9e736e9695492f48167207cb75c03183737a236d7cd21c4ca3875b6805e65e63"
+  };
+  const ast = ts.createSourceFile('probe-runtime.mjs', await read('scripts/probe-runtime.mjs'), ts.ScriptTarget.Latest, true, ts.ScriptKind.JS);
+  const observed = {};
+  for (const node of ast.statements) {
+    const name = node.name?.text ?? (ts.isVariableStatement(node) && node.declarationList.declarations.length === 1 ? node.declarationList.declarations[0].name.text : null);
+    if (Object.hasOwn(expected, name)) observed[name] = digest(node.getText(ast));
+  }
+  assert.deepEqual(observed, expected);
+});
+
+test('17: probe entry defers OIDC creation to protected-baseline gate and never imports controller invocation', async () => {
+  const cli = await read('scripts/probe-cli.mjs');
+  assert.doesNotMatch(cli, /oidcLease/);
+  assert.match(cli, /requestOIDCToken: \(\) => probeOIDC\(P\.vercel_audience\)/);
+  assert.ok(cli.indexOf('requireProtectedProbeHTTP(await readOptional') < cli.indexOf("if (mode === 'aws-preflight')"));
+  assert.match(cli, /httpPreflight: await readOptional\(path.join\(qaDirectory, 'http-preflight.json'\)\)/);
+  for (const file of ['scripts/probe-cli.mjs', 'scripts/probe-http.mjs', 'scripts/probe-qa.mjs']) {
+    assert.doesNotMatch(await read(file), /import[^\n]*(?:invoke|runtime-io|child_process|aws-sdk)|InvokeFunction|GetSecretValue|PutObject|api\.vercel\.com/);
+  }
+  const workflow = await fs.readFile(new URL('../../.github/workflows/statistical-levels-release.yml', root), 'utf8');
+  const probe = workflow.split('  identity-probe:\n')[1];
+  assert.match(probe, /if: inputs.operation == 'PROBE_IDENTITY'/);
+  assert.match(probe, /"Effect":"Deny","NotAction":"sts:GetCallerIdentity","Resource":"\*"/);
+  assert.doesNotMatch(probe, /invoke\.mjs|environment:|contents: write|secrets:/);
+});
+
+test('18: requalified production target policy is pinned; ADOPT transport, validation and controller contracts remain frozen', async () => {
+  for (const [file, expected] of Object.entries(shared)) { if(expected==='HARNESS_SECURITY_REGIONS')assertHarnessPreserved(await read(file));else assert.equal(digest(file==='scripts/release-core.mjs'?withoutReceiptClass(await read(file)):await read(file)), expected, file); }
+});
+
+test('19: release jobs retain the pinned diagnostic allowlist and frozen source checksum', async () => {
+  const workflow = await fs.readFile(new URL('../../.github/workflows/statistical-levels-release.yml', root), 'utf8');
+  const release = workflow.split('  identity-probe:\n')[0]
+    .replace(/(EXPECTED_SOURCE_SUMS: )[a-f0-9]{64}/g, '$1<FROZEN_SOURCE_SUMS>');
+  assert.equal(digest(release), 'fdc216beb4dabf61ab73884fbbacbdf4259bd640dac50d8ed45c60a973a99ab6');
+});
+
+// Independently frozen from parent 578498f, before authorized runtime wiring.
+// Pins cover credential/interception, ingress/errors, raw ledger and close/freeze.
+// New architecture behavior is covered by real receipt replay and mutations.
+function assertHarnessPreserved(source) {
+  const regions = [
+["    const context = await browser.newContext(", "    const pending =", "72e217e9a64c3ea3687064fc55660ed83074e65a474229365073ea3fe0a6e044"],
+  [
+    "  need(production ?",
+    "  const pages =",
+    "c74bfed5940d5acc468388ab6d791fed900bfd53de9be8f05e3e3989e218cc4d"
+  ],
+  [
+    "    if (!production) cdp.on('Fetch.requestPaused'",
+    "    onNative('Network.requestWillBeSent'",
+    "7b5aa8fd013377b4b8ec1cabe4b4f5524932f2f74b2abb6256e17480ee598da2"
+  ],
+  [
+    "    function retainUnresolved(",
+    "    function recordException(",
+    "34460bb9a52e20742e5bc017563c574db8db91fb1661ea4eec446a4750c3d6e8"
+  ],
+  [
+    "      // page.url() fallback",
+    "    onNative('Runtime.consoleAPICalled'",
+    "8d62d47ce44f90071b6a78ec1e0b390591c31a9ca4a83078af2e18c75ed014a2"
+  ],
+  [
+    "    onNative('Runtime.consoleAPICalled'",
+    "    const causalBridge =",
+    "2e75e61dcf7a64d6fa0c921760c44bb14cc7951b224b6ac0243f64255b05f60e"
+  ],
+  [
+    "    const closePage=async()=>{",
+    "    closePages.set(",
+    "c81d22684550234ac5204107b81f6f27ee26a226a6618fe027ef4034724c1a35"
+  ],
+  [
+    "    finish: async finalProductPassed => {",
+    "\n    } };",
+    "a803b499842cdfbef72f0d5c7981b7cc5bc9e472cff5b804db992aead3771808"
+  ],
+  [
+    "      events.push({ ...requests.get(e.requestId), kind: 'request_failure'",
+    "    onNative('Network.responseReceived'",
+    "aa6cea3ff300f8b428ed09c8738f46c2e8b8f0f0350c6733977934dc094ea9e0"
+  ],
+  [
+    "      if (e.response.status >= 400) events.push",
+    "    // Conversion and journal/ledger insertion",
+    "128af595ab5d05b1658e4f960c79ac76b73b43c41f921aa3defb017ded8d4c50"
+  ]
+];
+  for (const [start,end,expected] of regions) {
+    const at=source.indexOf(start);assert.ok(at>=0,start);
+    assert.equal(source.indexOf(start,at+1),-1,'AMBIGUOUS_SECURITY_REGION');
+    const until=source.indexOf(end,at);assert.ok(until>at,end);
+    assert.equal(createHash('sha256').update(source.slice(at,until)).digest('hex'),expected,start);
+  }
+  assert.doesNotMatch(source,/process\.env\.(?:DEBUG_TOKEN|VERCEL_TOKEN)|aws-sdk|InvokeFunction|api\.vercel\.com/);
+}

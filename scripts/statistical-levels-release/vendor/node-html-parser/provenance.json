@@ -1,0 +1,11 @@
+{
+  "source": "next@16.3.1/dist/compiled/node-html-parser",
+  "purpose": "Offline structural parsing for PROBE_IDENTITY HTTP fixture binding only",
+  "source_package_lock": "Exact immutable fixture package-lock.json pins next16.3.1 integrity",
+  "source_bytes_sha256": "8c6facd042a250d26ae32a2739b6c86a8e383cca92311320804cd87e2a65ae39",
+  "license_sha256": "ea75e9321945b7f0bc4644da1e404ad76ce55e9bc05cae3b2f5f2d973aede83b",
+  "modifications": ".js renamed .cjs; only documented three-rule generated-code ESLint header prepended; upstream body byte-identical",
+  "lint_header": "/* eslint-disable @typescript-eslint/no-unused-expressions, @typescript-eslint/no-unused-vars, @typescript-eslint/no-this-alias -- Unmodified pinned upstream compiled parser body; see provenance.json. */\n",
+  "upstream_body_sha256": "8c6facd042a250d26ae32a2739b6c86a8e383cca92311320804cd87e2a65ae39",
+  "vendored_file_sha256": "a89c8668261f970f72a9b72ec5d940c450c3221b6d42c1a482c1c0c4637a3533"
+}

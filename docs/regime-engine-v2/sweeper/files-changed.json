@@ -1,0 +1,469 @@
+{
+  "status": "PASS",
+  "recorded_at": "2026-09-08T16:33:42.476503+00:00",
+  "files_count": 57,
+  "modified_builder_files": 9,
+  "new_files": 48,
+  "original_819_modified": 0,
+  "scope": "All retained Sweeper changes against frozen entry. Self hash is excluded; input-manifest.json and builder-input.tar.gz preserve the original 24 Builder files.",
+  "payload_hash_encoding": "SHA256 of compact UTF-8 JSON with sorted repository-path keys, excluding this manifest",
+  "candidate_payload_sha256": "1d9b25291446518f52f7fa3fc09102aa84e5f7bd4c1da08bd834cc686c99e2df",
+  "files": [
+    {
+      "repository_path": "docs/regime-engine-v2/sweeper/README.md",
+      "path": "/Users/quantlab/Developer/web/Luiguiherrera-web/docs/regime-engine-v2/sweeper/README.md",
+      "change": "ADDED",
+      "before_sha256": null,
+      "sha256": "1d9ea6dd7aed3c985fd36d2cbf6df112f2fd9894ea0e721c23b6942e6a4f7236",
+      "purpose": "Sweeper evidence and reproducible checks"
+    },
+    {
+      "repository_path": "docs/regime-engine-v2/sweeper/adversarial-results.json",
+      "path": "/Users/quantlab/Developer/web/Luiguiherrera-web/docs/regime-engine-v2/sweeper/adversarial-results.json",
+      "change": "ADDED",
+      "before_sha256": null,
+      "sha256": "d06279fb91976b57792d9e0343de47003353e59773c22801d4368edae388fbbd",
+      "purpose": "Sweeper evidence and reproducible checks"
+    },
+    {
+      "repository_path": "docs/regime-engine-v2/sweeper/adversarial.log",
+      "path": "/Users/quantlab/Developer/web/Luiguiherrera-web/docs/regime-engine-v2/sweeper/adversarial.log",
+      "change": "ADDED",
+      "before_sha256": null,
+      "sha256": "d3c1a19321c4efaafe49ba41263b371c242e3ab59898fbe9a9e778c96712e3cf",
+      "purpose": "Sweeper evidence and reproducible checks"
+    },
+    {
+      "repository_path": "docs/regime-engine-v2/sweeper/adversarial.mjs",
+      "path": "/Users/quantlab/Developer/web/Luiguiherrera-web/docs/regime-engine-v2/sweeper/adversarial.mjs",
+      "change": "ADDED",
+      "before_sha256": null,
+      "sha256": "b4fd7fbb18a930031dd2fb84582ce1f29c113afcb93e121b0354a0f450046a38",
+      "purpose": "Sweeper evidence and reproducible checks"
+    },
+    {
+      "repository_path": "docs/regime-engine-v2/sweeper/build-side-effect.json",
+      "path": "/Users/quantlab/Developer/web/Luiguiherrera-web/docs/regime-engine-v2/sweeper/build-side-effect.json",
+      "change": "ADDED",
+      "before_sha256": null,
+      "sha256": "5590ca1ec5543aedd0c48164fd0f815fc63a5ebad058d587af02ed7b387106c1",
+      "purpose": "Sweeper evidence and reproducible checks"
+    },
+    {
+      "repository_path": "docs/regime-engine-v2/sweeper/build-typing-attempt.log",
+      "path": "/Users/quantlab/Developer/web/Luiguiherrera-web/docs/regime-engine-v2/sweeper/build-typing-attempt.log",
+      "change": "ADDED",
+      "before_sha256": null,
+      "sha256": "5e6f4e8eb327e5a36b4dbf824af019d0fc6ba4f055bc5bae230eb52b247434d3",
+      "purpose": "Sweeper evidence and reproducible checks"
+    },
+    {
+      "repository_path": "docs/regime-engine-v2/sweeper/build.log",
+      "path": "/Users/quantlab/Developer/web/Luiguiherrera-web/docs/regime-engine-v2/sweeper/build.log",
+      "change": "ADDED",
+      "before_sha256": null,
+      "sha256": "66bea03271f668601ffdc95007672a1ac78a9cf88eae606a9c4fa7ebb811f26d",
+      "purpose": "Sweeper evidence and reproducible checks"
+    },
+    {
+      "repository_path": "docs/regime-engine-v2/sweeper/builder-input.tar.gz",
+      "path": "/Users/quantlab/Developer/web/Luiguiherrera-web/docs/regime-engine-v2/sweeper/builder-input.tar.gz",
+      "change": "ADDED",
+      "before_sha256": null,
+      "sha256": "f05d1f01bb33104faf65aa329f88545577e2ecce3efa4731762ee1ea5059e57e",
+      "purpose": "Sweeper evidence and reproducible checks"
+    },
+    {
+      "repository_path": "docs/regime-engine-v2/sweeper/conformance.json",
+      "path": "/Users/quantlab/Developer/web/Luiguiherrera-web/docs/regime-engine-v2/sweeper/conformance.json",
+      "change": "ADDED",
+      "before_sha256": null,
+      "sha256": "0ae86699a5a32f7d58bf3e604400cf875fd04900d6e5cf404b7a4be2a379cf06",
+      "purpose": "Sweeper evidence and reproducible checks"
+    },
+    {
+      "repository_path": "docs/regime-engine-v2/sweeper/conformance.log",
+      "path": "/Users/quantlab/Developer/web/Luiguiherrera-web/docs/regime-engine-v2/sweeper/conformance.log",
+      "change": "ADDED",
+      "before_sha256": null,
+      "sha256": "0ae86699a5a32f7d58bf3e604400cf875fd04900d6e5cf404b7a4be2a379cf06",
+      "purpose": "Sweeper evidence and reproducible checks"
+    },
+    {
+      "repository_path": "docs/regime-engine-v2/sweeper/contract-audit.json",
+      "path": "/Users/quantlab/Developer/web/Luiguiherrera-web/docs/regime-engine-v2/sweeper/contract-audit.json",
+      "change": "ADDED",
+      "before_sha256": null,
+      "sha256": "6679b0282159713bdd436ca1228ddad14a5494da29941056016bd8e305479b32",
+      "purpose": "Sweeper evidence and reproducible checks"
+    },
+    {
+      "repository_path": "docs/regime-engine-v2/sweeper/contract-audit.log",
+      "path": "/Users/quantlab/Developer/web/Luiguiherrera-web/docs/regime-engine-v2/sweeper/contract-audit.log",
+      "change": "ADDED",
+      "before_sha256": null,
+      "sha256": "6679b0282159713bdd436ca1228ddad14a5494da29941056016bd8e305479b32",
+      "purpose": "Sweeper evidence and reproducible checks"
+    },
+    {
+      "repository_path": "docs/regime-engine-v2/sweeper/delivery.json",
+      "path": "/Users/quantlab/Developer/web/Luiguiherrera-web/docs/regime-engine-v2/sweeper/delivery.json",
+      "change": "ADDED",
+      "before_sha256": null,
+      "sha256": "b74276e6e48f19939478da6aeea0559468df5accd58f4d8c45c0b065ed44293d",
+      "purpose": "Sweeper evidence and reproducible checks"
+    },
+    {
+      "repository_path": "docs/regime-engine-v2/sweeper/editorial.log",
+      "path": "/Users/quantlab/Developer/web/Luiguiherrera-web/docs/regime-engine-v2/sweeper/editorial.log",
+      "change": "ADDED",
+      "before_sha256": null,
+      "sha256": "7d4f85ccc8a0544b81b0d60fac223b80184e1bd1faaa7822e4bb1b5a2963524f",
+      "purpose": "Sweeper evidence and reproducible checks"
+    },
+    {
+      "repository_path": "docs/regime-engine-v2/sweeper/files-changed.json",
+      "path": "/Users/quantlab/Developer/web/Luiguiherrera-web/docs/regime-engine-v2/sweeper/files-changed.json",
+      "change": "ADDED",
+      "before_sha256": null,
+      "sha256": null,
+      "purpose": "Sweeper evidence and reproducible checks"
+    },
+    {
+      "repository_path": "docs/regime-engine-v2/sweeper/findings.json",
+      "path": "/Users/quantlab/Developer/web/Luiguiherrera-web/docs/regime-engine-v2/sweeper/findings.json",
+      "change": "ADDED",
+      "before_sha256": null,
+      "sha256": "c2300af9103e4fbeac019000a4e4e4493e345523f1248b990e0e8bca62752445",
+      "purpose": "Sweeper evidence and reproducible checks"
+    },
+    {
+      "repository_path": "docs/regime-engine-v2/sweeper/findings.md",
+      "path": "/Users/quantlab/Developer/web/Luiguiherrera-web/docs/regime-engine-v2/sweeper/findings.md",
+      "change": "ADDED",
+      "before_sha256": null,
+      "sha256": "f7614c8d35e607808384cc378494e78b27a5e586a7ed532882b336b0ae8b93a8",
+      "purpose": "Sweeper evidence and reproducible checks"
+    },
+    {
+      "repository_path": "docs/regime-engine-v2/sweeper/frozen-builder-replay.json",
+      "path": "/Users/quantlab/Developer/web/Luiguiherrera-web/docs/regime-engine-v2/sweeper/frozen-builder-replay.json",
+      "change": "ADDED",
+      "before_sha256": null,
+      "sha256": "a35d8b353f9d14d74f3b165bdb79e4260917e672ebd4fc7b308c176335d72cd3",
+      "purpose": "Sweeper evidence and reproducible checks"
+    },
+    {
+      "repository_path": "docs/regime-engine-v2/sweeper/frozen-builder-replay.log",
+      "path": "/Users/quantlab/Developer/web/Luiguiherrera-web/docs/regime-engine-v2/sweeper/frozen-builder-replay.log",
+      "change": "ADDED",
+      "before_sha256": null,
+      "sha256": "c00e73de2bbf43e809f6a21ce9ade1e5fbfb298124689473dbdcb6379567547b",
+      "purpose": "Sweeper evidence and reproducible checks"
+    },
+    {
+      "repository_path": "docs/regime-engine-v2/sweeper/full-tests-command.json",
+      "path": "/Users/quantlab/Developer/web/Luiguiherrera-web/docs/regime-engine-v2/sweeper/full-tests-command.json",
+      "change": "ADDED",
+      "before_sha256": null,
+      "sha256": "6b4071d36262b46b52e2942e0e656bfcc8a020a1ad45ae1e18f589149bfaa947",
+      "purpose": "Sweeper evidence and reproducible checks"
+    },
+    {
+      "repository_path": "docs/regime-engine-v2/sweeper/full-tests.log",
+      "path": "/Users/quantlab/Developer/web/Luiguiherrera-web/docs/regime-engine-v2/sweeper/full-tests.log",
+      "change": "ADDED",
+      "before_sha256": null,
+      "sha256": "6838144afc148f88d43f75a6ca7200f007860dce381804c45729fdf5f4ce6a8e",
+      "purpose": "Sweeper evidence and reproducible checks"
+    },
+    {
+      "repository_path": "docs/regime-engine-v2/sweeper/historical-r2-output.json",
+      "path": "/Users/quantlab/Developer/web/Luiguiherrera-web/docs/regime-engine-v2/sweeper/historical-r2-output.json",
+      "change": "ADDED",
+      "before_sha256": null,
+      "sha256": "018d6fc103ca9bfe1e0e43418d79446f530796c00a3728a57cf2b289298d2a5f",
+      "purpose": "Sweeper evidence and reproducible checks"
+    },
+    {
+      "repository_path": "docs/regime-engine-v2/sweeper/implementation.patch",
+      "path": "/Users/quantlab/Developer/web/Luiguiherrera-web/docs/regime-engine-v2/sweeper/implementation.patch",
+      "change": "ADDED",
+      "before_sha256": null,
+      "sha256": "a0d6e75f8b9d12c5837b153eedf77db451e757db01b0bdaf8ba255a05ba7c8d3",
+      "purpose": "Sweeper evidence and reproducible checks"
+    },
+    {
+      "repository_path": "docs/regime-engine-v2/sweeper/input-manifest.json",
+      "path": "/Users/quantlab/Developer/web/Luiguiherrera-web/docs/regime-engine-v2/sweeper/input-manifest.json",
+      "change": "ADDED",
+      "before_sha256": null,
+      "sha256": "cf49175da97da7a2cf3a3cf215f3415ff7c91d6fd281c306baba4ed9b846c2d4",
+      "purpose": "Sweeper evidence and reproducible checks"
+    },
+    {
+      "repository_path": "docs/regime-engine-v2/sweeper/lint.json",
+      "path": "/Users/quantlab/Developer/web/Luiguiherrera-web/docs/regime-engine-v2/sweeper/lint.json",
+      "change": "ADDED",
+      "before_sha256": null,
+      "sha256": "3fc0f099a5882f3df36c36f0c2b340a7a9b073c66b4b352583c52bf1c32ff1b2",
+      "purpose": "Sweeper evidence and reproducible checks"
+    },
+    {
+      "repository_path": "docs/regime-engine-v2/sweeper/lint.log",
+      "path": "/Users/quantlab/Developer/web/Luiguiherrera-web/docs/regime-engine-v2/sweeper/lint.log",
+      "change": "ADDED",
+      "before_sha256": null,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "purpose": "Sweeper evidence and reproducible checks"
+    },
+    {
+      "repository_path": "docs/regime-engine-v2/sweeper/preservation.json",
+      "path": "/Users/quantlab/Developer/web/Luiguiherrera-web/docs/regime-engine-v2/sweeper/preservation.json",
+      "change": "ADDED",
+      "before_sha256": null,
+      "sha256": "43d6ac3af738ee4b548502b1acb7a783d210f8ce4bf48e11d6a8a923ef889c2f",
+      "purpose": "Sweeper evidence and reproducible checks"
+    },
+    {
+      "repository_path": "docs/regime-engine-v2/sweeper/python-tests.log",
+      "path": "/Users/quantlab/Developer/web/Luiguiherrera-web/docs/regime-engine-v2/sweeper/python-tests.log",
+      "change": "ADDED",
+      "before_sha256": null,
+      "sha256": "86c967a00f06ad033ecab8fdfd48f0dfe4f7c54ecd2a5af426df39e10af79aa8",
+      "purpose": "Sweeper evidence and reproducible checks"
+    },
+    {
+      "repository_path": "docs/regime-engine-v2/sweeper/read-only-attacks-v2.json",
+      "path": "/Users/quantlab/Developer/web/Luiguiherrera-web/docs/regime-engine-v2/sweeper/read-only-attacks-v2.json",
+      "change": "ADDED",
+      "before_sha256": null,
+      "sha256": "358c91c23c121219601d03faa9629ec47a0a267101ca4f54b5a0307214d50578",
+      "purpose": "Sweeper evidence and reproducible checks"
+    },
+    {
+      "repository_path": "docs/regime-engine-v2/sweeper/read-only-attacks.json",
+      "path": "/Users/quantlab/Developer/web/Luiguiherrera-web/docs/regime-engine-v2/sweeper/read-only-attacks.json",
+      "change": "ADDED",
+      "before_sha256": null,
+      "sha256": "f86bd6335609f14a2f7a52142707abd1a05c6ff45ef6ea97d34f8c4fcbca590e",
+      "purpose": "Sweeper evidence and reproducible checks"
+    },
+    {
+      "repository_path": "docs/regime-engine-v2/sweeper/read-only-audit.json",
+      "path": "/Users/quantlab/Developer/web/Luiguiherrera-web/docs/regime-engine-v2/sweeper/read-only-audit.json",
+      "change": "ADDED",
+      "before_sha256": null,
+      "sha256": "fc472a859d11d6049db539c3e961322df6b9d94953a109153a465db0404deed1",
+      "purpose": "Sweeper evidence and reproducible checks"
+    },
+    {
+      "repository_path": "docs/regime-engine-v2/sweeper/read-only-boundary-addendum.json",
+      "path": "/Users/quantlab/Developer/web/Luiguiherrera-web/docs/regime-engine-v2/sweeper/read-only-boundary-addendum.json",
+      "change": "ADDED",
+      "before_sha256": null,
+      "sha256": "947f082205fc91a84af3a71d725617a9602f7fba7e9e080e87bad22e54a2368d",
+      "purpose": "Sweeper evidence and reproducible checks"
+    },
+    {
+      "repository_path": "docs/regime-engine-v2/sweeper/read-only-performance.json",
+      "path": "/Users/quantlab/Developer/web/Luiguiherrera-web/docs/regime-engine-v2/sweeper/read-only-performance.json",
+      "change": "ADDED",
+      "before_sha256": null,
+      "sha256": "730258595fa005a90ee189c71a6dd9b31245d3d7b5df3c97de2cfcd2f2066cf1",
+      "purpose": "Sweeper evidence and reproducible checks"
+    },
+    {
+      "repository_path": "docs/regime-engine-v2/sweeper/read-only-r1-addendum.json",
+      "path": "/Users/quantlab/Developer/web/Luiguiherrera-web/docs/regime-engine-v2/sweeper/read-only-r1-addendum.json",
+      "change": "ADDED",
+      "before_sha256": null,
+      "sha256": "1ace1aa72b3be2d19a4954e870d266fcb8ac33a0cd7fadf2c8c7e5977654a40f",
+      "purpose": "Sweeper evidence and reproducible checks"
+    },
+    {
+      "repository_path": "docs/regime-engine-v2/sweeper/read-only-shared-state.json",
+      "path": "/Users/quantlab/Developer/web/Luiguiherrera-web/docs/regime-engine-v2/sweeper/read-only-shared-state.json",
+      "change": "ADDED",
+      "before_sha256": null,
+      "sha256": "c136a0f81d3e431715d38698601444df5392e16dc6b711f459715b7e02d53079",
+      "purpose": "Sweeper evidence and reproducible checks"
+    },
+    {
+      "repository_path": "docs/regime-engine-v2/sweeper/repair-check-1.json",
+      "path": "/Users/quantlab/Developer/web/Luiguiherrera-web/docs/regime-engine-v2/sweeper/repair-check-1.json",
+      "change": "ADDED",
+      "before_sha256": null,
+      "sha256": "7946c44ab77397937dba29a8c8fdad9690707160fd8fde7127ce236100f8ce9f",
+      "purpose": "Sweeper evidence and reproducible checks"
+    },
+    {
+      "repository_path": "docs/regime-engine-v2/sweeper/reports-check.log",
+      "path": "/Users/quantlab/Developer/web/Luiguiherrera-web/docs/regime-engine-v2/sweeper/reports-check.log",
+      "change": "ADDED",
+      "before_sha256": null,
+      "sha256": "b81d3c1a89f1730de7441ac54fa6fb19dcba8f4f9bfedee63a2abb49315cc7ab",
+      "purpose": "Sweeper evidence and reproducible checks"
+    },
+    {
+      "repository_path": "docs/regime-engine-v2/sweeper/reports-validate.log",
+      "path": "/Users/quantlab/Developer/web/Luiguiherrera-web/docs/regime-engine-v2/sweeper/reports-validate.log",
+      "change": "ADDED",
+      "before_sha256": null,
+      "sha256": "17a8278ec97176ddc182bfa8257e3eed789000b7f6428e57c0d238786eff1136",
+      "purpose": "Sweeper evidence and reproducible checks"
+    },
+    {
+      "repository_path": "docs/regime-engine-v2/sweeper/run-verification.py",
+      "path": "/Users/quantlab/Developer/web/Luiguiherrera-web/docs/regime-engine-v2/sweeper/run-verification.py",
+      "change": "ADDED",
+      "before_sha256": null,
+      "sha256": "7a1966e267abea8188d51ef9383190af8e71010bca7feb64518e3181df9232fe",
+      "purpose": "Sweeper evidence and reproducible checks"
+    },
+    {
+      "repository_path": "docs/regime-engine-v2/sweeper/shadow-input-r2.json",
+      "path": "/Users/quantlab/Developer/web/Luiguiherrera-web/docs/regime-engine-v2/sweeper/shadow-input-r2.json",
+      "change": "ADDED",
+      "before_sha256": null,
+      "sha256": "92ecdd1830516ec96dd9293fc87b9ee7c6add71376e6997de4fede42d4d90a66",
+      "purpose": "Sweeper evidence and reproducible checks"
+    },
+    {
+      "repository_path": "docs/regime-engine-v2/sweeper/static-search.txt",
+      "path": "/Users/quantlab/Developer/web/Luiguiherrera-web/docs/regime-engine-v2/sweeper/static-search.txt",
+      "change": "ADDED",
+      "before_sha256": null,
+      "sha256": "f7c3c776915ddc670d5ad4e8d8b14eecccabd61974cafc6e25184b12f35d7a9a",
+      "purpose": "Sweeper evidence and reproducible checks"
+    },
+    {
+      "repository_path": "docs/regime-engine-v2/sweeper/status.txt",
+      "path": "/Users/quantlab/Developer/web/Luiguiherrera-web/docs/regime-engine-v2/sweeper/status.txt",
+      "change": "ADDED",
+      "before_sha256": null,
+      "sha256": "1a55f1a8c7d9061e8185dd529e97861dfcc3e0bb4f4d2303553e76a20134e705",
+      "purpose": "Sweeper evidence and reproducible checks"
+    },
+    {
+      "repository_path": "docs/regime-engine-v2/sweeper/typecheck-typing-attempt.log",
+      "path": "/Users/quantlab/Developer/web/Luiguiherrera-web/docs/regime-engine-v2/sweeper/typecheck-typing-attempt.log",
+      "change": "ADDED",
+      "before_sha256": null,
+      "sha256": "19b473565eb293f1c88f7ed343027f711d3d746598c0fefc108797e67993a2a4",
+      "purpose": "Sweeper evidence and reproducible checks"
+    },
+    {
+      "repository_path": "docs/regime-engine-v2/sweeper/typecheck.log",
+      "path": "/Users/quantlab/Developer/web/Luiguiherrera-web/docs/regime-engine-v2/sweeper/typecheck.log",
+      "change": "ADDED",
+      "before_sha256": null,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "purpose": "Sweeper evidence and reproducible checks"
+    },
+    {
+      "repository_path": "docs/regime-engine-v2/sweeper/verification-commands.json",
+      "path": "/Users/quantlab/Developer/web/Luiguiherrera-web/docs/regime-engine-v2/sweeper/verification-commands.json",
+      "change": "ADDED",
+      "before_sha256": null,
+      "sha256": "65281035741ebf07831ec5cf55ac9e3b4a2f73d029fa885291304aefb156c9f6",
+      "purpose": "Sweeper evidence and reproducible checks"
+    },
+    {
+      "repository_path": "docs/regime-engine-v2/sweeper/verification.json",
+      "path": "/Users/quantlab/Developer/web/Luiguiherrera-web/docs/regime-engine-v2/sweeper/verification.json",
+      "change": "ADDED",
+      "before_sha256": null,
+      "sha256": "377127ffb5c8e80ed3b7985d1ccfaf27a82f778f1bb2e12f4192c25d18866c7d",
+      "purpose": "Sweeper evidence and reproducible checks"
+    },
+    {
+      "repository_path": "docs/regime-engine-v2/sweeper/verify-contracts.mjs",
+      "path": "/Users/quantlab/Developer/web/Luiguiherrera-web/docs/regime-engine-v2/sweeper/verify-contracts.mjs",
+      "change": "ADDED",
+      "before_sha256": null,
+      "sha256": "b1e52d44964038fd9ffdfa07c372ad4ffcd599df24f3b3cb9cfa1f73588a2573",
+      "purpose": "Sweeper evidence and reproducible checks"
+    },
+    {
+      "repository_path": "lib/regime-engine-v2/boundary.ts",
+      "path": "/Users/quantlab/Developer/web/Luiguiherrera-web/lib/regime-engine-v2/boundary.ts",
+      "change": "ADDED",
+      "before_sha256": null,
+      "sha256": "ffc2026243a1fb9ba4f28a6ffebfdf822d8576e666e0a5572528d6b0d94a9661",
+      "purpose": "Typed runtime input boundary"
+    },
+    {
+      "repository_path": "lib/regime-engine-v2/contract.ts",
+      "path": "/Users/quantlab/Developer/web/Luiguiherrera-web/lib/regime-engine-v2/contract.ts",
+      "change": "MODIFIED",
+      "before_sha256": "a51570431b79ec7703e3270a88a9288bb43b581e5f5d762b391038814f405e29",
+      "sha256": "2df8e1f2be112aef642ecdea53cc479777719d863a3451c53c1e1cbb8c90b563",
+      "purpose": "Narrow implementation repair / audit output routing"
+    },
+    {
+      "repository_path": "lib/regime-engine-v2/core.ts",
+      "path": "/Users/quantlab/Developer/web/Luiguiherrera-web/lib/regime-engine-v2/core.ts",
+      "change": "MODIFIED",
+      "before_sha256": "664720faa860f27d3648e495b32bc0e14faf25a45ea2c0b2c53d4dc248f36a81",
+      "sha256": "5cdd57bd05403f38271946fb39fa59e479f25fcf60c35fb09c2941856e6010a1",
+      "purpose": "Narrow implementation repair / audit output routing"
+    },
+    {
+      "repository_path": "lib/regime-engine-v2/engine.ts",
+      "path": "/Users/quantlab/Developer/web/Luiguiherrera-web/lib/regime-engine-v2/engine.ts",
+      "change": "MODIFIED",
+      "before_sha256": "81fbd9cb6be197fd22212fc0129de07fa3bbd872ec1a9deefdc4904b4bc6aa94",
+      "sha256": "f73691bbf9e2821645f048124266320c6bb4daea81b9b31a70a428dee2f0a39a",
+      "purpose": "Narrow implementation repair / audit output routing"
+    },
+    {
+      "repository_path": "lib/regime-engine-v2/features.ts",
+      "path": "/Users/quantlab/Developer/web/Luiguiherrera-web/lib/regime-engine-v2/features.ts",
+      "change": "MODIFIED",
+      "before_sha256": "009b38ed0635f906e35e8f2fb77c01656bed3c2489b19c00f162f349e7213488",
+      "sha256": "65e81d8d5446d92e8c28601d0eed23627264265566c8f86c015a7f872f9d4275",
+      "purpose": "Narrow implementation repair / audit output routing"
+    },
+    {
+      "repository_path": "lib/regime-engine-v2/normalize.ts",
+      "path": "/Users/quantlab/Developer/web/Luiguiherrera-web/lib/regime-engine-v2/normalize.ts",
+      "change": "MODIFIED",
+      "before_sha256": "a9ff8c6dc985aefc3a04b2c5d62a87e54664819bdbd95d84afc9fb91333b623e",
+      "sha256": "6d3aec5ab1853bfe5f19ca6b58117a253f51c349ee72ed4aba54d2d12ffcd49c",
+      "purpose": "Narrow implementation repair / audit output routing"
+    },
+    {
+      "repository_path": "lib/regime-engine-v2/shadow.ts",
+      "path": "/Users/quantlab/Developer/web/Luiguiherrera-web/lib/regime-engine-v2/shadow.ts",
+      "change": "MODIFIED",
+      "before_sha256": "769ad64283b247ed841483dff07dbd6da81c1106875f015494fd245bff9d42b2",
+      "sha256": "2bb904315c6292390956efb9d89e69af2467d23863e3f713fcb8362ec89accce",
+      "purpose": "Narrow implementation repair / audit output routing"
+    },
+    {
+      "repository_path": "lib/regime-engine-v2/temporal.ts",
+      "path": "/Users/quantlab/Developer/web/Luiguiherrera-web/lib/regime-engine-v2/temporal.ts",
+      "change": "MODIFIED",
+      "before_sha256": "2805c3beaecd9ff031991384e92fda4f9a87004b65da55721b6ccbc40aa70a75",
+      "sha256": "4ec57a14f9ed658d0587aa6d2a9b9f42426c6b54022adf301cc65bf51a3495fb",
+      "purpose": "Narrow implementation repair / audit output routing"
+    },
+    {
+      "repository_path": "lib/regime-engine-v2/types.ts",
+      "path": "/Users/quantlab/Developer/web/Luiguiherrera-web/lib/regime-engine-v2/types.ts",
+      "change": "MODIFIED",
+      "before_sha256": "434840358739974a277817fbcea60dcdcf8ff01c08815f026b301a51cf849622",
+      "sha256": "1dcd4ce2f9ebd1763c9f1b28ce08bdcfd4f1ea9c8b92874b481731b1563e2aeb",
+      "purpose": "Narrow implementation repair / audit output routing"
+    },
+    {
+      "repository_path": "scripts/regime-v2-conformance.mts",
+      "path": "/Users/quantlab/Developer/web/Luiguiherrera-web/scripts/regime-v2-conformance.mts",
+      "change": "MODIFIED",
+      "before_sha256": "355358d9132d9f0d441c33cd368f0556375a6bdb7b1c2e7cb8d0ed911816ac82",
+      "sha256": "72a4e07ec6935eee95f75642e7bccfa5b95e3f2387583b24d2abfea548e65ba4",
+      "purpose": "Narrow implementation repair / audit output routing"
+    }
+  ]
+}

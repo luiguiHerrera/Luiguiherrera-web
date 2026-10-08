@@ -1,0 +1,121 @@
+[
+  {
+    "name": "full-tests",
+    "command": [
+      "node",
+      "--disable-warning=MODULE_TYPELESS_PACKAGE_JSON",
+      "--import",
+      "./scripts/trends-test-register.mjs",
+      "--experimental-test-module-mocks",
+      "--test",
+      "lib/dashboard/adapters/vix-term-structure.test.ts",
+      "lib/personal-finance/budget/budget-plan-export.test.ts",
+      "lib/personal-finance/budget/projection-calculations.test.ts",
+      "lib/personal-finance/budget/projection-presentation.test.ts",
+      "lib/personal-finance/budget/target-calculations.test.ts",
+      "lib/portfolio-fragility/analysis-view.test.ts",
+      "lib/portfolio-fragility/conformance.test.ts",
+      "lib/portfolio-fragility/engine.test.ts",
+      "lib/portfolio-fragility/format.test.ts",
+      "lib/portfolio-fragility/input-session.test.ts",
+      "lib/regime-engine-v2/engine.test.ts",
+      "lib/reports/first-september-2026.test.mts",
+      "lib/reports/weekly-review.test.mts",
+      "lib/research/tom-decay/chart-geometry.test.ts",
+      "lib/research/tom-decay/freeze.test.ts",
+      "lib/research/tom-decay/parse.test.ts",
+      "lib/trends/capital/normalize.test.ts",
+      "lib/trends/capital/pipeline.test.ts",
+      "lib/trends/capital/public-capital.test.tsx",
+      "lib/trends/trends.test.tsx"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 3.904946208
+  },
+  {
+    "name": "python-tests",
+    "command": [
+      "python3",
+      "scripts/test-capital-xml.py"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 0.07320083399999999
+  },
+  {
+    "name": "adversarial",
+    "command": [
+      "node",
+      "--disable-warning=MODULE_TYPELESS_PACKAGE_JSON",
+      "docs/regime-engine-v2/sweeper/adversarial.mjs",
+      "/Users/quantlab/Developer/web/Luiguiherrera-web/docs/regime-engine-v2/sweeper/adversarial-results.json"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 19.2596305
+  },
+  {
+    "name": "conformance",
+    "command": [
+      "node",
+      "--disable-warning=MODULE_TYPELESS_PACKAGE_JSON",
+      "scripts/regime-v2-conformance.mts",
+      "--output-dir",
+      "/Users/quantlab/Developer/web/Luiguiherrera-web/docs/regime-engine-v2/sweeper"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 33.461424792
+  },
+  {
+    "name": "lint",
+    "command": [
+      "npx",
+      "eslint",
+      ".",
+      "--format",
+      "json",
+      "--output-file",
+      "/Users/quantlab/Developer/web/Luiguiherrera-web/docs/regime-engine-v2/sweeper/lint.json"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 6.298047334
+  },
+  {
+    "name": "editorial",
+    "command": [
+      "npm",
+      "run",
+      "validate:editorial"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 0.17237087499999948
+  },
+  {
+    "name": "reports-validate",
+    "command": [
+      "npm",
+      "run",
+      "reports:validate"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 4.919979875
+  },
+  {
+    "name": "reports-check",
+    "command": [
+      "npm",
+      "run",
+      "reports:check"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 0.4402833340000001
+  },
+  {
+    "name": "contract-audit",
+    "command": [
+      "node",
+      "--disable-warning=MODULE_TYPELESS_PACKAGE_JSON",
+      "docs/regime-engine-v2/sweeper/verify-contracts.mjs"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 0.2019559579999992
+  }
+]

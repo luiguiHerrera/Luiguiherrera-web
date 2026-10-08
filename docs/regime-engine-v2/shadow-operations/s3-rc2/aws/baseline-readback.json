@@ -1,0 +1,173 @@
+{
+  "actualReadRequests": 15,
+  "actualWriteRequests": 0,
+  "awsCliPath": "/Users/quantlab/.local/bin/aws",
+  "bucket": "lh-regime-v2-shadow-732159826922-us-east-1",
+  "checkedAt": "2026-09-10T09:27:08.412Z",
+  "credentialsLogged": false,
+  "dispatchPerformedByThisAudit": false,
+  "operations": [
+    {
+      "mutation": false,
+      "operation": "get-caller-identity",
+      "service": "sts"
+    },
+    {
+      "mutation": false,
+      "operation": "get-open-id-connect-provider",
+      "service": "iam"
+    },
+    {
+      "mutation": false,
+      "operation": "get-bucket-location",
+      "service": "s3api"
+    },
+    {
+      "mutation": false,
+      "operation": "get-bucket-versioning",
+      "service": "s3api"
+    },
+    {
+      "mutation": false,
+      "operation": "get-public-access-block",
+      "service": "s3api"
+    },
+    {
+      "mutation": false,
+      "operation": "get-bucket-encryption",
+      "service": "s3api"
+    },
+    {
+      "mutation": false,
+      "operation": "get-bucket-ownership-controls",
+      "service": "s3api"
+    },
+    {
+      "mutation": false,
+      "operation": "get-object-lock-configuration",
+      "service": "s3api"
+    },
+    {
+      "mutation": false,
+      "operation": "get-bucket-lifecycle-configuration",
+      "service": "s3api"
+    },
+    {
+      "mutation": false,
+      "operation": "get-bucket-policy",
+      "service": "s3api"
+    },
+    {
+      "mutation": false,
+      "operation": "get-role",
+      "service": "iam"
+    },
+    {
+      "mutation": false,
+      "operation": "list-role-policies",
+      "service": "iam"
+    },
+    {
+      "mutation": false,
+      "operation": "list-attached-role-policies",
+      "service": "iam"
+    },
+    {
+      "mutation": false,
+      "operation": "get-role-policy",
+      "service": "iam"
+    },
+    {
+      "mutation": false,
+      "operation": "get-role",
+      "service": "iam"
+    }
+  ],
+  "originalAdminSourceSha256": "45d85f8328ec5dee304562c6a1bb88dc22fe03d2538756c1b38b9781c44cc206",
+  "policyComparisons": [
+    {
+      "expectedCanonicalSha256": "b453784792f0aa89337b76c26998de6c4df1197c2aa5e7c8b6ea6d33313c4635",
+      "input": "bucket-policy.json",
+      "inputBytesSha256": "23bf40aabcd8adba05beb9e5352bd1e50aa31335bff27c16e288f8d067ebf68b",
+      "observedCanonicalSha256": "b453784792f0aa89337b76c26998de6c4df1197c2aa5e7c8b6ea6d33313c4635",
+      "parsedEquality": true
+    },
+    {
+      "expectedCanonicalSha256": "2d81719dd61b32cf4b509c2b801f70b756d795a40fbcbb86fd0574eca67749a9",
+      "input": "trust-policy.json",
+      "inputBytesSha256": "f5b9e5f5476c3e282327a01b4759d473c96e0843f42becb901783d76212822dc",
+      "observedCanonicalSha256": "2d81719dd61b32cf4b509c2b801f70b756d795a40fbcbb86fd0574eca67749a9",
+      "parsedEquality": true
+    },
+    {
+      "expectedCanonicalSha256": "b184b2bf21737e4b0567c0b196cf5229ac7d8dc3e68a99a05488de37c028bf87",
+      "input": "writer-policy.json",
+      "inputBytesSha256": "eb1240ff80099a181f0a5bc3af7aebe4b9320add2c21d988253d94cb1cb380d0",
+      "observedCanonicalSha256": "b184b2bf21737e4b0567c0b196cf5229ac7d8dc3e68a99a05488de37c028bf87",
+      "parsedEquality": true
+    }
+  ],
+  "preexistingIssuerConfigurationMatchesOriginal": true,
+  "probeExecutedByThisAudit": false,
+  "profile": "lh-founder-provisioning",
+  "propagation": {
+    "earliestProbeDispatchAt": "2026-09-09T17:37:19.411Z",
+    "elapsedSecondsAtReadback": 57889.001324,
+    "minimumWaitSeconds": 900,
+    "required900SecondsElapsed": true,
+    "rule": "Actual successful response completion is the conservative start of the recommended propagation interval",
+    "source": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/versioning-workflows.html",
+    "versioningEnabledResponseCompletedAt": "2026-09-09T17:22:19.411Z"
+  },
+  "providerComparedFields": [
+    "Url",
+    "ClientIDList",
+    "ThumbprintList",
+    "CreateDate"
+  ],
+  "providerEvidenceSha256": "37d4652bd402ddba7e31c08beb25dc8ada9dd33a0e5eb08b866d738619c14c19",
+  "readbackConfiguration": {
+    "accountVerified": true,
+    "bucket": "lh-regime-v2-shadow-732159826922-us-east-1",
+    "bucketConfigurationMatches": true,
+    "callerArn": "arn:aws:iam::732159826922:root",
+    "existingOidcProviderArn": "arn:aws:iam::732159826922:oidc-provider/token.actions.githubusercontent.com",
+    "lifecycleExpiration": "NONE",
+    "newKmsKeys": 0,
+    "objectLock": "OFF",
+    "oidcProviderPreexisting": true,
+    "policySha256": {
+      "bucket-policy.json": "23bf40aabcd8adba05beb9e5352bd1e50aa31335bff27c16e288f8d067ebf68b",
+      "create-bucket.json": "937273a03875e0e62433f78260ebbd11df659dcb7d05562a556df36e784238f4",
+      "encryption.json": "a9c6b7c21e5d7afccb1a97d12c9972f5f0432c4ebb5345ebf5041794bc1b342a",
+      "public-access-block.json": "cb83e29507ea5301a4f6a4e8cb4111eb4bd72c14608f0685e1a66d27d9cc4386",
+      "trust-policy.json": "f5b9e5f5476c3e282327a01b4759d473c96e0843f42becb901783d76212822dc",
+      "versioning.json": "8aaf6c5639d887a190955cf718b92595e07b57aa6021134f0c2084e61ce2926e",
+      "writer-policy.json": "eb1240ff80099a181f0a5bc3af7aebe4b9320add2c21d988253d94cb1cb380d0"
+    },
+    "probe": "NOT_EXECUTED",
+    "probeOnlyIamMatches": true,
+    "productionPrefixPermission": false,
+    "propagation": {
+      "earliestProbeDispatchAt": "2026-09-09T17:37:19.411Z",
+      "minimumWaitSeconds": 900,
+      "rule": "Actual successful response completion is the conservative start of the recommended propagation interval",
+      "source": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/versioning-workflows.html",
+      "versioningEnabledResponseCompletedAt": "2026-09-09T17:22:19.411Z"
+    },
+    "region": "us-east-1",
+    "roleArn": "arn:aws:iam::732159826922:role/RegimeV2S3Probe",
+    "schemaVersion": 1,
+    "status": "PASS_ADMIN_READBACK_ONLY",
+    "verifiedAt": "2026-09-10T09:27:07.808Z"
+  },
+  "region": "us-east-1",
+  "roleArn": "arn:aws:iam::732159826922:role/RegimeV2S3Probe",
+  "schemaVersion": 1,
+  "scopeNote": "Historical first-probe results are unchanged. This fresh audit performs only administrative reads and does not itself run any probe.",
+  "shadowRoleAbsenceCode": "NoSuchEntity",
+  "shadowRoleAbsent": true,
+  "status": "PASS_FRESH_PROBE_BASELINE_SHADOW_ROLE_ABSENT",
+  "targetResourceScope": "One exact existing bucket and probe role; only get-role for the exact proposed ShadowWriter name; no account-wide inventory claim",
+  "wrapperSha256": "826cd49f44d4c6193b2f96017f213aeb7d760bbaff7369451be28004cd15912f"
+}

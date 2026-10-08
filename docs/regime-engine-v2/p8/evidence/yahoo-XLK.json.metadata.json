@@ -1,0 +1,16 @@
+{
+  "url": "https://query1.finance.yahoo.com/v8/finance/chart/XLK?period1=1514764800&period2=1788566400&interval=1d&events=div%2Csplits&includeAdjustedClose=true",
+  "status": "CAPTURED",
+  "http_status": 200,
+  "capture_started_at": "2026-09-08T14:09:00.611225+00:00",
+  "captured_at": "2026-09-08T14:09:01.016056+00:00",
+  "available_at": "2026-09-08T14:09:01.016056+00:00",
+  "availability_certainty": "CONSERVATIVE_BOUND",
+  "source_published_at": null,
+  "historical_replay_class": "R2",
+  "raw_sha256": "08a10599fa315fd64a4a36923f1fbe2e0349a9fb82cffa91c89ac077e0e1c2a6",
+  "raw_bytes": 240838,
+  "file": "yahoo-XLK.json.gz",
+  "http_date_not_publication": "Tue, 08 Sep 2026 14:09:00 GMT",
+  "last_modified_not_vintage_guarantee": null
+}

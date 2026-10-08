@@ -1,0 +1,16 @@
+{
+  "url": "https://www-api.cboe.com/us/futures/market_statistics/historical_data/product/list/VX/",
+  "status": "CAPTURED",
+  "http_status": 200,
+  "capture_started_at": "2026-09-08T14:08:44.716655+00:00",
+  "captured_at": "2026-09-08T14:08:45.957703+00:00",
+  "available_at": "2026-09-08T14:08:45.957703+00:00",
+  "availability_certainty": "CONSERVATIVE_BOUND",
+  "source_published_at": null,
+  "historical_replay_class": "R2",
+  "raw_sha256": "6af5672f2c9f9f48138a4bfb8035cda7856b620f2e9e07c87ba69236b4b1ed47",
+  "raw_bytes": 137084,
+  "file": "cfe-contract-index.json.gz",
+  "http_date_not_publication": "Tue, 08 Sep 2026 14:08:45 GMT",
+  "last_modified_not_vintage_guarantee": "Tue, 08 Sep 2026 14:08:45 GMT"
+}

@@ -1,0 +1,102 @@
+{
+  "scope": "R2_RESEARCH_QUALIFICATION_NOT_STRICT_PIT_OOS",
+  "protocol_sha256": "1baf279a4399277fd55342adbc920f3f14bec11d190e06c62650f9745f9c3a2c",
+  "folds": [
+    {
+      "fold": {
+        "id": "F1",
+        "train": [
+          "2019-01-01",
+          "2021-12-31"
+        ],
+        "validation": [
+          "2022-01-01",
+          "2022-12-31"
+        ],
+        "test": [
+          "2023-01-01",
+          "2023-12-31"
+        ]
+      },
+      "train_complete": 757,
+      "selected_id": "C03",
+      "eligible_candidates": [
+        "C00",
+        "C01",
+        "C02",
+        "C03",
+        "C04",
+        "C05"
+      ],
+      "validation_failures_selected": [],
+      "test_failures_selected": [],
+      "test_status": "EVALUATED_ONCE_AFTER_SEALS",
+      "training_selection_sha256": "8bc9aa082e1040de173dbccce7a9099629f81a6f7a5012864cc09f517b9fcae0",
+      "validation_sha256": "508abcc4dffc2cf74624cc0a9c3e61953ba31ec2d26fee95f62ff6eb1e59634b"
+    },
+    {
+      "fold": {
+        "id": "F2",
+        "train": [
+          "2019-01-01",
+          "2022-12-31"
+        ],
+        "validation": [
+          "2023-01-01",
+          "2023-12-31"
+        ],
+        "test": [
+          "2024-01-01",
+          "2024-12-31"
+        ]
+      },
+      "train_complete": 1008,
+      "selected_id": "C03",
+      "eligible_candidates": [
+        "C00",
+        "C01",
+        "C02",
+        "C03",
+        "C04",
+        "C05"
+      ],
+      "validation_failures_selected": [],
+      "test_failures_selected": [],
+      "test_status": "EVALUATED_ONCE_AFTER_SEALS",
+      "training_selection_sha256": "c12afea00da6294867cb1b9b93a17a9d202a0c3fabb0fdd1a65db2025b52ab15",
+      "validation_sha256": "d6d438a52d563fea1bfe5670ecba315a20814846d8428bff0cb28c02f68026f6"
+    },
+    {
+      "fold": {
+        "id": "F3",
+        "train": [
+          "2019-01-01",
+          "2023-12-31"
+        ],
+        "validation": [
+          "2024-01-01",
+          "2024-12-31"
+        ],
+        "test": [
+          "2025-01-01",
+          "2026-09-04"
+        ]
+      },
+      "train_complete": 1258,
+      "selected_id": "C03",
+      "eligible_candidates": [
+        "C00",
+        "C01",
+        "C02",
+        "C03",
+        "C04",
+        "C05"
+      ],
+      "validation_failures_selected": [],
+      "test_failures_selected": [],
+      "test_status": "EVALUATED_ONCE_AFTER_SEALS",
+      "training_selection_sha256": "5fc60bcab1b8b8110db0472b167a78f8713ad26dbe24a251fa889e26aa1eb4be",
+      "validation_sha256": "47cf062ace0a1b1c32a641adfceb8038c1ddb7aaf93ad13947847330e7e28132"
+    }
+  ]
+}

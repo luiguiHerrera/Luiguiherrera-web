@@ -1,0 +1,53 @@
+(node:23275) ExperimentalWarning: Module mocking is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:23275) DeprecationWarning: mock.module(): options.namedExports is deprecated. Use options.exports instead.
+✔ es places its development guard before the only dynamic preview import (0.395416ms)
+✔ es refuses production before resolving the preview module or query (0.313125ms)
+✔ es refuses test before resolving the preview module or query (0.045625ms)
+✖ es permits the local development surface with explicit query unchanged (0.237958ms)
+✔ en places its development guard before the only dynamic preview import (0.075583ms)
+✔ en refuses production before resolving the preview module or query (0.052458ms)
+✔ en refuses test before resolving the preview module or query (0.043208ms)
+✖ en permits the local development surface with explicit query unchanged (0.13975ms)
+ℹ tests 8
+ℹ suites 0
+ℹ pass 6
+ℹ fail 2
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 156.765917
+
+✖ failing tests:
+
+test at lib/dashboard/regime-v2-preview.test.mjs:53:3
+✖ es permits the local development surface with explicit query unchanged (0.237958ms)
+  TypeError [ERR_UNKNOWN_FILE_EXTENSION]: Unknown file extension ".tsx" for /Users/quantlab/Developer/web/Luiguiherrera-web/components/dashboard/RegimeV2Preview.tsx
+      at Object.getFileProtocolModuleFormat [as file:] (node:internal/modules/esm/get_format:243:9)
+      at defaultGetFormat (node:internal/modules/esm/get_format:283:36)
+      at defaultLoadSync (node:internal/modules/esm/load:161:16)
+      at #loadAndMaybeBlockOnLoaderThread (node:internal/modules/esm/loader:809:12)
+      at nextStep (node:internal/modules/customization_hooks:189:26)
+      at load (file:///Users/quantlab/Developer/web/Luiguiherrera-web/scripts/trends-test-register.mjs:23:12)
+      at nextStep (node:internal/modules/customization_hooks:189:26)
+      at load (file:///Users/quantlab/Developer/web/Luiguiherrera-web/lib/dashboard/regime-v2-preview.test.mjs:20:12)
+      at nextStep (node:internal/modules/customization_hooks:189:26)
+      at load (node:internal/test_runner/mock/loader:55:20) {
+    code: 'ERR_UNKNOWN_FILE_EXTENSION'
+  }
+
+test at lib/dashboard/regime-v2-preview.test.mjs:53:3
+✖ en permits the local development surface with explicit query unchanged (0.13975ms)
+  TypeError [ERR_UNKNOWN_FILE_EXTENSION]: Unknown file extension ".tsx" for /Users/quantlab/Developer/web/Luiguiherrera-web/components/dashboard/RegimeV2Preview.tsx
+      at Object.getFileProtocolModuleFormat [as file:] (node:internal/modules/esm/get_format:243:9)
+      at defaultGetFormat (node:internal/modules/esm/get_format:283:36)
+      at defaultLoadSync (node:internal/modules/esm/load:161:16)
+      at #loadAndMaybeBlockOnLoaderThread (node:internal/modules/esm/loader:809:12)
+      at nextStep (node:internal/modules/customization_hooks:189:26)
+      at load (file:///Users/quantlab/Developer/web/Luiguiherrera-web/scripts/trends-test-register.mjs:23:12)
+      at nextStep (node:internal/modules/customization_hooks:189:26)
+      at load (file:///Users/quantlab/Developer/web/Luiguiherrera-web/lib/dashboard/regime-v2-preview.test.mjs:20:12)
+      at nextStep (node:internal/modules/customization_hooks:189:26)
+      at load (node:internal/test_runner/mock/loader:55:20) {
+    code: 'ERR_UNKNOWN_FILE_EXTENSION'
+  }

@@ -1,0 +1,70 @@
+{
+  "schemaVersion": 1,
+  "status": "PASS_IN_UNCOMMITTED_REPAIR_DELTA",
+  "recordedAt": "2026-09-09T11:17:31.761273+00:00",
+  "rc0Commit": "f5fc7ecfd9e1f323d0ad3a43eccec1dbc500be1c",
+  "unresolvedPortabilityBlockers": [],
+  "findings": [
+    {
+      "id": "SR-A5-001",
+      "originalClassification": "VERIFICATION_PORTABILITY",
+      "status": "RESOLVED_IN_UNCOMMITTED_DELTA",
+      "rc0Status": "FAIL_UNCHANGED",
+      "productCodeDefect": false,
+      "methodologyDefect": false,
+      "repairs": [
+        "Ten obsolete workspace/sealing/browser entrypoints now exit 2 before evidence I/O, with explicit migration; original bodies remain only in RC0 Git.",
+        "Candidate-only runner removes worktree branches and excluded unrelated test commands.",
+        "The serialized-command retry route is removed; resume-failed is rejected before I/O.",
+        "Lint uses committed parent diagnostics/hash and Git blobs instead of external derived files or the old absolute checkout.",
+        "Nonempty audit outputs are rejected, preventing prior logs or reports from becoming implicit inputs."
+      ],
+      "coveragePreserved": {
+        "canonicalTests": 487,
+        "golden": 464,
+        "historicalR2": 1930,
+        "attacks": 110,
+        "portabilityRegressions": 32
+      },
+      "proof": [
+        "retired-entrypoints.json",
+        "test-portability.py",
+        "pristine-verification.json"
+      ],
+      "activationEffect": "No shadow/live readiness authorization; current task stops at the verified repair delta."
+    },
+    {
+      "id": "PORT-HARNESS-001",
+      "classification": "AUDIT_INSTRUMENTATION",
+      "status": "CLOSED",
+      "description": "The first 32-case portability run passed 28 cases; four Node tombstone probes failed before executing their target because fs.Utf8Stream is getter-only in Node 26.",
+      "repair": "Replace configurable function descriptors with Object.defineProperty; replace writable descriptors directly; explicitly fail for any unpatchable function API. No denied API is silently skipped.",
+      "firstAttempt": {
+        "result": "28/32",
+        "artifact": "local/portability-tests.json",
+        "sha256": "2070c11e90d65b9feafa72e2c749794bf86819f8e4a9a2fa4896117053f8ebbf"
+      },
+      "finalAttempt": {
+        "result": "32/32",
+        "artifact": "local/portability-tests-retry1.json",
+        "sha256": "88081bab9862ef48c7d79e2f4cdfc832dad55512f21e1ef291a661a1324c7add",
+        "harnessSha256": "5ba08e2d5bc88c9a11fb7ad5278fc30a5ede50e6e40fe9e552fec25b8dc1cf86"
+      },
+      "candidateCodeChangedForThisFinding": false,
+      "canonicalChecksRepeated": false,
+      "originalEvidencePreserved": true
+    },
+    {
+      "id": "PORT-MEASUREMENT-001",
+      "classification": "MEASUREMENT_LIMITATION",
+      "status": "RECORDED",
+      "description": "Read guards are Node/Python instrumentation, not a kernel sandbox. The network counter measures observed Node HTTP request attempts; arbitrary native I/O is outside that coverage.",
+      "observedExternalNodeHttpAttempts": 12,
+      "nativeInclusiveGlobalRequestCount": "UNKNOWN",
+      "explicitV2CaptureFetches": 0,
+      "providerDataUsedAsV2Capture": false,
+      "evidence": "pristine-verification.json",
+      "blocksThisPortabilityRepair": false
+    }
+  ]
+}

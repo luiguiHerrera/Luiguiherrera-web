@@ -1,0 +1,109 @@
+{
+  "rc0Commit": "f5fc7ecfd9e1f323d0ad3a43eccec1dbc500be1c",
+  "rc0Tree": "05242fadab2cb190effeaea2ea4100e9eb4fbf9d",
+  "trackedRepairFiles": [
+    {
+      "path": "docs/regime-engine-v2/designer/README.md",
+      "rc0Sha256": "778a0463b4e728c7d32f39a7164b3e25f84518685c62e5bdcb8e2d826579513b",
+      "repairedSha256": "c075e8f7b2a5b7cfef0817a6a93d09d541dbce6b916ebe8d87e1a8f9c92ec1f0"
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/accessibility-qa.mjs",
+      "rc0Sha256": "0a097a8efe301bc6479904515b0d250d897668d269ce06cff03ffac6eb3bf18b",
+      "repairedSha256": "b69cc3070b010cf2545e8e0ce8d542298fd005d585cbcb32d7596c3cc6beb50c"
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/browser-qa.mjs",
+      "rc0Sha256": "9aa1a21625c83c91ad53b6c6d86b8fd66b5d2773ac68ada78d2bfec71dc22ab2",
+      "repairedSha256": "b99749f2018ca22b1866b3dc3a6d5eaec94bd4a6d81ad3e7dacb055606c09795"
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/run-verification.py",
+      "rc0Sha256": "4effed4a10baaa6879ed69a76ddbd78b4fbe298e4bb907845e88fcddd2790292",
+      "repairedSha256": "6e86f18c727bd532ba0e1cb0ebd334cda766e00715c001bf997a86f881a5f5d9"
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/seal-review.py",
+      "rc0Sha256": "5d2cd8ab93a76a09170132c9666c6bc045c959c039ad01c49de80ec63bb798f1",
+      "repairedSha256": "e1d4d451448dad61bb588963fd133c1bb3f36d67d1c904f49bc1cda64d94c08b"
+    },
+    {
+      "path": "docs/regime-engine-v2/groweer/README.md",
+      "rc0Sha256": "22994ffebf9970731c2b7649ac4014702567dee2897a67d622e27b45a8949174",
+      "repairedSha256": "3fd62893aa6bdbade6ad59670275d80f849b33cbbe6b63da13a8926d4ff07e27"
+    },
+    {
+      "path": "docs/regime-engine-v2/groweer/close-verification.py",
+      "rc0Sha256": "cda9f7fa1481079572e3a1b3bce035be614b4897a43d4c49c4cf63739c7b01be",
+      "repairedSha256": "dd5e21be3a2d805691436262bad7e4ec6b6336b06eaecd7dd2dfecb48bcb5591"
+    },
+    {
+      "path": "docs/regime-engine-v2/groweer/run-canonical-verification.py",
+      "rc0Sha256": "8f9f8840f04e37edfb1889bbb64b5297b4c7cc25f92d00647e98bb94553ea055",
+      "repairedSha256": "bde8a50c03ed875895ab3d6d2040519a882400a6ee2dc1ff35e3d1d014b5110a"
+    },
+    {
+      "path": "docs/regime-engine-v2/groweer/seal-manifest.py",
+      "rc0Sha256": "2a714609143072177933f46a1fdfd46a1ca8a859d4ec9a4a0dc759bd2a78f50c",
+      "repairedSha256": "6328975724291eb73cd03e1a4e9a90fbaa8cc1d8056ce14777b6a8e209313d6f"
+    },
+    {
+      "path": "docs/regime-engine-v2/maintainer/README.md",
+      "rc0Sha256": "027134e7e963c5eec074e0be8d83dec0db89976a5d4e0c98b82863d121715894",
+      "repairedSha256": "43e601e16e99bf7890916b82b0d7d1b71a15457e40e938ff2db8f6beab435dfe"
+    },
+    {
+      "path": "docs/regime-engine-v2/maintainer/close-verification.py",
+      "rc0Sha256": "f69e52a7ffcbed5bb74d69d5d48ff74017d373344d3cad96052022db36c3628f",
+      "repairedSha256": "c4c4debbe213e59e6b15a21956d72d81956430b5f2ad9ddb76d88898fc55cb91"
+    },
+    {
+      "path": "docs/regime-engine-v2/maintainer/run-verification.py",
+      "rc0Sha256": "0defad3077544fb21b6e40b8da273ece660e897cb78462dcfe599c3ef4f80404",
+      "repairedSha256": "b4281ddf0a88d0e1868b9e0fc3ba49835083366048112b81d4769a61d64e83c3"
+    },
+    {
+      "path": "docs/regime-engine-v2/maintainer/runbook.md",
+      "rc0Sha256": "16dd805b38bf4c22fc290359a2d3144a35c433d00c7acbd92744e2a3f588626e",
+      "repairedSha256": "12b962724d793a739bf3c67074545062784d5c1c7bf1d47e11586c94595f3a1b"
+    },
+    {
+      "path": "docs/regime-engine-v2/release-candidate/README.md",
+      "rc0Sha256": "20725ae14fe30a4a20346195d45c4f61c1b8db3ea8a8ed4dcf6c5f094192e86a",
+      "repairedSha256": "10c75aa47ca724dc7b296ef0912d735a18cb8fa868bf3c0f37c85d89bb9f0d6b"
+    },
+    {
+      "path": "docs/regime-engine-v2/release-candidate/run-verification.py",
+      "rc0Sha256": "27dfa25811fd63f853739adf4fd34782f4ad4fc57ca5ae216c8c6ee8b6381de6",
+      "repairedSha256": "9fbdf8b5e58d09591473dc69a8b80bf8be754f0a87fd7d10531b9a64ca140bd9"
+    },
+    {
+      "path": "docs/regime-engine-v2/release-candidate/verification-guide.md",
+      "rc0Sha256": "53da8ca6505467013f8d8704d8a055647cd5d804dd71de562987b49560704669",
+      "repairedSha256": "e3c9cded9e5f9dc99197bcce1f3d083653aefd3de2cf3ac307ab7d5f5af19f68"
+    },
+    {
+      "path": "docs/regime-engine-v2/sweeper/README.md",
+      "rc0Sha256": "1d9ea6dd7aed3c985fd36d2cbf6df112f2fd9894ea0e721c23b6942e6a4f7236",
+      "repairedSha256": "cb42f7c5c8e58858c63657d99c8258572e30b5dfeaee969a0a835146e3a958a6"
+    },
+    {
+      "path": "docs/regime-engine-v2/sweeper/run-verification.py",
+      "rc0Sha256": "7a1966e267abea8188d51ef9383190af8e71010bca7feb64518e3181df9232fe",
+      "repairedSha256": "c4d70a8d703ee5fa79ab4f3011a45315e16b590765ec34f25ab3823db10f8069"
+    }
+  ],
+  "newVerificationHarness": "docs/regime-engine-v2/rc-portability-repair/test-portability.py",
+  "productCodeDelta": 0,
+  "methodologyChanged": false,
+  "commitCreated": false,
+  "newVerificationHarnessSha256": "5ba08e2d5bc88c9a11fb7ad5278fc30a5ede50e6e40fe9e552fec25b8dc1cf86",
+  "trackedRepairFilesCount": 18,
+  "verificationExecutableFilesModified": 11,
+  "documentationFilesModified": 7,
+  "newVerificationExecutableFiles": 1,
+  "deltaSha256": "2c95457cf955071206805318914e163834258e12a1b2d2515b8b7bc93d27df05",
+  "initialVerificationHarnessSha256": "9b45eaacbc319068b1c8f900999d55b418e9096013dca2920945cc44a8722840",
+  "canonicalTrackedDeltaSha256": "af6458e55b32a95bbc5f8f70a7431956c4c2060872f1a20799d3488a85f672c5",
+  "harnessRepair": "Node 26 getter-only configurable fs.Utf8Stream is overridden with Object.defineProperty in the deny guard; immutable nonreplaceable functions fail explicitly. Only the regression harness changed after the first 28/32 attempt. The same 18 tracked repair source files passed canonical checks."
+}

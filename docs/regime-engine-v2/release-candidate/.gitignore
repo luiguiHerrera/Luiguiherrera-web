@@ -1,0 +1,10 @@
+# Local audit inputs, transient execution logs, and post-commit attestations.
+# The portable inventory, verdicts, and content hashes are committed separately.
+/local/
+/input-state.json
+/input-tracked.diff
+/local-paths.json
+/hygiene-scan.py
+/precommit-worktree/
+/precommit-worktree-run.log
+/parent-head-lint.log

@@ -1,0 +1,151 @@
+{
+  "status": "PASS",
+  "started_at": "2026-09-08T18:05:26.518015+00:00",
+  "completed_at": "2026-09-08T18:05:58.790281+00:00",
+  "scope": "Accepted canonical engine and V1 regression tests; no analysis-challenger tests counted here.",
+  "input_manifest_sha256": "a08f7116d1e6dc0631f884a4b817bfb5594006367ccf0c16336e8e9efc6474e2",
+  "environment": {
+    "PYTHONDONTWRITEBYTECODE": "1",
+    "network_dataset_fetches": 0
+  },
+  "commands": [
+    {
+      "name": "sweeper-attacks",
+      "command": [
+        "node",
+        "--disable-warning=MODULE_TYPELESS_PACKAGE_JSON",
+        "docs/regime-engine-v2/sweeper/adversarial.mjs",
+        "/Users/quantlab/Developer/web/Luiguiherrera-web/docs/regime-engine-v2/groweer/sweeper-attacks.json"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 18.615602875,
+      "log": "docs/regime-engine-v2/groweer/canonical-sweeper-attacks.log",
+      "log_sha256": "d3c1a19321c4efaafe49ba41263b371c242e3ab59898fbe9a9e778c96712e3cf"
+    },
+    {
+      "name": "conformance",
+      "command": [
+        "node",
+        "--disable-warning=MODULE_TYPELESS_PACKAGE_JSON",
+        "scripts/regime-v2-conformance.mts",
+        "--output-dir",
+        "/Users/quantlab/Developer/web/Luiguiherrera-web/docs/regime-engine-v2/groweer/verification-conformance"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 32.20143175,
+      "log": "docs/regime-engine-v2/groweer/canonical-conformance.log",
+      "log_sha256": "0ae86699a5a32f7d58bf3e604400cf875fd04900d6e5cf404b7a4be2a379cf06"
+    },
+    {
+      "name": "node-tests",
+      "command": [
+        "node",
+        "--disable-warning=MODULE_TYPELESS_PACKAGE_JSON",
+        "--import",
+        "./scripts/trends-test-register.mjs",
+        "--experimental-test-module-mocks",
+        "--test",
+        "lib/dashboard/adapters/vix-term-structure.test.ts",
+        "lib/personal-finance/budget/budget-plan-export.test.ts",
+        "lib/personal-finance/budget/projection-calculations.test.ts",
+        "lib/personal-finance/budget/projection-presentation.test.ts",
+        "lib/personal-finance/budget/target-calculations.test.ts",
+        "lib/portfolio-fragility/analysis-view.test.ts",
+        "lib/portfolio-fragility/conformance.test.ts",
+        "lib/portfolio-fragility/engine.test.ts",
+        "lib/portfolio-fragility/format.test.ts",
+        "lib/portfolio-fragility/input-session.test.ts",
+        "lib/regime-engine-v2/engine.test.ts",
+        "lib/reports/first-september-2026.test.mts",
+        "lib/reports/weekly-review.test.mts",
+        "lib/research/tom-decay/chart-geometry.test.ts",
+        "lib/research/tom-decay/freeze.test.ts",
+        "lib/research/tom-decay/parse.test.ts",
+        "lib/trends/capital/normalize.test.ts",
+        "lib/trends/capital/pipeline.test.ts",
+        "lib/trends/capital/public-capital.test.tsx",
+        "lib/trends/trends.test.tsx"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 3.671731125,
+      "log": "docs/regime-engine-v2/groweer/canonical-node-tests.log",
+      "log_sha256": "e98a52343fab9904a9d3b2fa0eefc3a709aaf8c22acd56576665bf79025a1970"
+    },
+    {
+      "name": "python-tests",
+      "command": [
+        "python3",
+        "scripts/test-capital-xml.py"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 0.065016542,
+      "log": "docs/regime-engine-v2/groweer/canonical-python-tests.log",
+      "log_sha256": "9ec9e3c52e7908b746c625587944c7e1eb71f90fc834fbb4527d510523684dd2"
+    }
+  ],
+  "required_checks": {
+    "sweeper_attacks_110": true,
+    "p8_golden_464": true,
+    "historical_R2_1930": true,
+    "public_C03_historical_1930": true,
+    "node_302": true,
+    "python_7": true,
+    "historical_outputs_equal_accepted_sweeper": true,
+    "all_frozen_891_files_preserved": true,
+    "all_commands_exit_zero": true
+  },
+  "sweeper_attacks": {
+    "passed": 110,
+    "total": 110,
+    "raw_crossed_space": 576
+  },
+  "p8_golden": {
+    "passed": 464,
+    "total": 464,
+    "fixed_C03_cases": 84
+  },
+  "historical_R2": {
+    "passed": 1930,
+    "total": 1930,
+    "scope": "RAW_TO_OUTPUT",
+    "accepted_sweeper_outputs_equal": true,
+    "point_in_time_OOS": false
+  },
+  "node_tests": {
+    "tests": 302,
+    "pass": 302,
+    "fail": 0,
+    "cancelled": 0,
+    "skipped": 0,
+    "todo": 0
+  },
+  "python_tests": {
+    "passed": 7,
+    "total": 7
+  },
+  "tests_accounting": {
+    "node_plus_python": {
+      "passed": 309,
+      "total": 309
+    },
+    "including_sweeper_attacks": {
+      "passed": 419,
+      "total": 419
+    },
+    "golden_and_historical": "Separately reported conformance cases; not added again to tests total."
+  },
+  "preservation": {
+    "expected_files": 891,
+    "before_differences": [],
+    "after_differences": []
+  },
+  "canonical_engine_modified": false,
+  "V1_preserved": true,
+  "public_UI_changed": false,
+  "production_cutover": false,
+  "separate_root_verification": [
+    "typecheck",
+    "build",
+    "lint"
+  ]
+}

@@ -1,0 +1,197 @@
+{
+  "status": "PASS",
+  "sealed_at": "2026-09-08T20:42:03.007876+00:00",
+  "final_status": {
+    "STATE": "REGIME_ENGINE_V2_DESIGN_COMPLETE",
+    "INPUT_STATE": "REGIME_ENGINE_V2_MAINTENANCE_READY",
+    "ARCHITECTURE": "EVIDENCE_STATE_ENGINE",
+    "ARCHITECTURE_CHANGED": "NO",
+    "CANONICAL_PARAMETER_SET": "C03",
+    "CANONICAL_PARAMETERS_CHANGED": "NO",
+    "V2_VISUAL_CANDIDATE": "ACCEPT",
+    "VISIBLE_SCORE_V2": "NONE",
+    "VISIBLE_CONFIDENCE_PERCENT_V2": "NONE",
+    "VISIBLE_UNCALIBRATED_PROBABILITY": "NONE",
+    "PRIMARY_SECONDARY_DIMENSION": "CONCORDANCE",
+    "CONCORDANCE_PRESENTATION": "PASS",
+    "UNCERTAINTY_PRESENTATION": "PASS",
+    "DATA_QUALITY_PRESENTATION": "PASS",
+    "RISK_ON_BROAD_STATE": "PASS",
+    "RISK_ON_SELECTIVE_STATE": "PASS",
+    "TRANSITION_STATE": "PASS",
+    "DEFENSIVE_STATE": "PASS",
+    "STRESS_STATE": "PASS",
+    "INCOMPLETE_STATE": "PASS",
+    "20_SECOND_READ": "PASS",
+    "PROGRESSIVE_DISCLOSURE": "PASS",
+    "EVIDENCE_ACCESS": "PASS",
+    "METHODOLOGY_ACCESS": "PASS",
+    "DESKTOP_ES": "PASS",
+    "DESKTOP_EN": "PASS",
+    "MOBILE_ES": "PASS",
+    "MOBILE_EN": "PASS",
+    "ACCESSIBILITY": "PASS",
+    "PREVIEW_OFF_REGRESSION": "PASS",
+    "PUBLIC_DEFAULT": "V1",
+    "PUBLIC_PRODUCTION_CHANGED": "NO",
+    "V1_ROLLBACK_VISUAL": "PASS",
+    "NEW_RUNTIME_DEPENDENCIES": 0,
+    "P8_GOLDEN_CASES": "464/464",
+    "HISTORICAL_R2_CONFORMANCE": "1930/1930",
+    "SWEEPER_ATTACKS": "110/110",
+    "V1_TESTS": "PASS",
+    "V2_TESTS": "PASS",
+    "TYPECHECK": "PASS",
+    "BUILD": "PASS",
+    "LINT_ERRORS": 0,
+    "NEW_LINT_WARNINGS": 0,
+    "COMMIT_CREATED": "NO",
+    "PUSH_PERFORMED": "NO",
+    "DEPLOYMENT_PERFORMED": "NO",
+    "PRODUCTION_CUTOVER": "NO",
+    "FINDINGS_TOTAL": 7,
+    "UNRESOLVED_DESIGN_FINDINGS": [],
+    "RELEASE_CANDIDATE": "YES"
+  },
+  "FALSE_PRECISION": "NONE",
+  "visual_cases": 24,
+  "expanded_accessibility_cases": 28,
+  "fixtures": 12,
+  "accounted_tests": {
+    "breakdown": {
+      "existing_node": {
+        "passed": 302,
+        "total": 302
+      },
+      "maintainer_operations": {
+        "passed": 78,
+        "total": 78
+      },
+      "designer_presentation": {
+        "passed": 59,
+        "total": 59
+      },
+      "existing_python": {
+        "passed": 7,
+        "total": 7
+      },
+      "sweeper_attacks": {
+        "passed": 110,
+        "total": 110
+      },
+      "offline_groweer_challengers": {
+        "passed": 36,
+        "total": 36
+      }
+    },
+    "passed": 592,
+    "total": 592,
+    "note": "Golden 464 and history 1930 are reported separately; reports/editorial are successful commands, not invented test counts. Offline challenger checks do not imply canonical adoption."
+  },
+  "preservation": {
+    "input_files": 1015,
+    "unchanged_input_files": 1014,
+    "canonical_and_operations_files": 21,
+    "prior_stage_artifacts_preserved": 474,
+    "only_existing_edit": [
+      {
+        "path": "app/(es)/dashboard/page.tsx",
+        "before_sha256": "0540948ce61ce6703e8a043276a030b9b7dfb24ffcab7eadc17ab84810dd0b5a",
+        "after_sha256": "52fb6a294696c7fa5490debaa3c162e62f4253a5f1e4ca38b6637a3138c1bf21"
+      }
+    ],
+    "V1_exact_SSR_ES_EN": "PASS",
+    "base_branch_head_tree_unchanged": true
+  },
+  "public_policy": {
+    "shadow_default": "OFF",
+    "public_authority": "V1",
+    "preview": "development only; explicit query opt-in; production guard before imports",
+    "production_404_checks": 8,
+    "public_V1_200_checks": 2,
+    "local_QA_servers_stopped": true
+  },
+  "limitations": {
+    "20_SECOND_READ": "Design review heuristic based on hierarchy and approximately 60–118 words, not a human timed comprehension study. Mobile vertical scrolling not timed.",
+    "ACCESSIBILITY": "Local Chromium DOM, keyboard, contrast, reflow and grayscale review; no comprehensive certification, screen-reader study or physical-device claim.",
+    "LIVE_COMPLETE_V2_CAPTURE": "NO",
+    "HISTORICAL_REPLAY": "R2_ONLY",
+    "POINT_IN_TIME_OOS": "NO",
+    "PERFORMANCE": "Local React SSR and finite memory measurements; not production latency or an SLA.",
+    "RELEASE_CANDIDATE": "Visual candidate for Control Tower only; deployment and cutover remain unauthorized."
+  },
+  "evidence": [
+    {
+      "path": "docs/regime-engine-v2/designer/input-manifest.json",
+      "sha256": "5265205fdb49c4ab5845ee17f91802848890da2df29375781a869b831e4d9b4d"
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/canonical-verification.json",
+      "sha256": "93a7f00045556ab45f5c85f9155c0917525bb6216f6c4157ef5c17b3d3a2f846"
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/finalroot-checks.json",
+      "sha256": "6811a1453200411b1795a5b5818c05d5a7ba9adbffe0e30f40a138ab86a4844c"
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/repository-verification.json",
+      "sha256": "92b45268bbf3fcb527768140a9d0be9ae17d2055d06a85d6b56d5dcefa6f88d9"
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/copy-contract.json",
+      "sha256": "e9a76e7ef4751a1ed559497f3df940cc5a359ac068d7e57165d9e45e2036d17a"
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/fixture-matrix.json",
+      "sha256": "4aec9e788bbc06fd834b1c2a05dee6a76bd0ccd9e228f7cb24eaa47bda493a0e"
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/visual-regression.json",
+      "sha256": "30a03b844043c88b2da7d7ce185c459241097b5972a5b2b5fa6e01505c249d14"
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/accessibility-qa.json",
+      "sha256": "cc9b771020af03795f66446603889d9aee86a3c9bc9468b025125534abe0e20a"
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/v1-render-proof.json",
+      "sha256": "a23eb4e811f509998756fcb87b8b5255615464b504444e3c381e81d580a4a5ef"
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/performance.json",
+      "sha256": "86203069e7c623f396fdb8d26334ceef2ec7e4e3e5abc61f56d9ead01c98b2ea"
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/production-preview-guard.json",
+      "sha256": "5dfeddfdbf231894b35d7796df78ee91480a8cb18a0e76b94191fa2ee778da4a"
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/findings.json",
+      "sha256": "806afbf87a01af05554a0b9b363723384e2984b2cf9b67390d4d3de0ff285075"
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/state-review.md",
+      "sha256": "11da430c7cfdb7f2b95fec157826a27c37923b60268d2e373f922b0594025b49"
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/responsive-review.md",
+      "sha256": "57167328d5f7bfd92746b06a2cae021d73e32bc12e2ecc114e8978020184c73f"
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/accessibility-review.md",
+      "sha256": "b4943a5202106635dcbac3fb4084b52b26176704b02f59567e61891a1f0d2a63"
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/design-rationale.md",
+      "sha256": "c72a1a5002bccb3d04c102037f504c128e5f7c0a3bd78a1b7e46d0c38a951b66"
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/cutover-plan.md",
+      "sha256": "1a8bb995c5147f3fd93cb5599e3064cd6d0021a37d37924034fce055b27d342a"
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/qa-scripts-lint.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ]
+}

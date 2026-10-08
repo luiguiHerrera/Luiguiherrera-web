@@ -1,0 +1,88 @@
+{
+  "schemaVersion": "regime-v2-maintainer-dependency-audit/1.0.0",
+  "recordedAt": "2026-09-08T18:31:29.438898+00:00",
+  "scope": "Maintainer section 32 Case A: restore exact lockfile installation; no dependency declaration edits",
+  "before": {
+    "nextDeclared": "16.3.1",
+    "nextLocked": "16.3.1",
+    "nextLockRoot": "16.3.1",
+    "nextInstalled": "16.2.7",
+    "node": "v26.5.0",
+    "npm": "11.17.0",
+    "npmLsNextExitCode": 1,
+    "npmLsNextProblem": "ELSPROBLEMS: next@16.2.7 invalid against root 16.3.1",
+    "hashes": {
+      "package.json": "5be2ad1a8ad280c33dbc1ac32c8ec8433a819cd3f288670beb4794038802b195",
+      "package-lock.json": "2822d77531ad59e18f7ceb4d7fce71df7fdc875cb32ecce29d5a6bb06dd2d268",
+      "node_modules/next/package.json": "218ae2136eec324106210b3f7e6248e0c2f5673ffd4827b2fbb778d79ff52842"
+    }
+  },
+  "registryPreflight": {
+    "registry": "https://registry.npmjs.org",
+    "version": "16.3.1",
+    "result": "AVAILABLE",
+    "sandboxAttempt": "ENOTFOUND",
+    "approvedNetworkRetry": "PASS"
+  },
+  "procedure": {
+    "repositoryProcedureSource": ".github/workflows/ci.yml:25 and .github/workflows/update-statistical-levels.yml:31",
+    "command": "npm ci --no-audit --no-fund --cache=/private/tmp/regime-maintainer-npm-cache --fetch-retries=0 --fetch-timeout=20000",
+    "stagingDirectory": "/private/tmp/regime-maintainer-install-fyfxpn51",
+    "reason": "Run npm ci with exact unchanged manifests in an isolated directory; retain usable installed tree until reproducible installation succeeds. No root lifecycle scripts exist.",
+    "localDependencyReferences": [],
+    "installationExitCode": 0,
+    "installedPackageCount": 489,
+    "previousInstallationBackup": "/private/tmp/regime-maintainer-install-fyfxpn51/previous-node_modules-16.2.7",
+    "swapMethod": "Two same-filesystem renames; rollback old tree on second-rename exception.",
+    "swappedAt": "2026-09-08T18:32:48.787664+00:00",
+    "installLog": "docs/regime-engine-v2/maintainer/dependency-install.log",
+    "scriptPolicy": "Existing npm allow-scripts policy preserved. fsevents@2.3.3 install and unrs-resolver@1.12.2 postinstall reported pending approval; no allowScripts edits. Next CLI, ESLint CLI and unrs-resolver native module load passed."
+  },
+  "status": "RESOLVED",
+  "newDependencies": 0,
+  "after": {
+    "nextDeclared": "16.3.1",
+    "nextLockRoot": "16.3.1",
+    "nextLocked": "16.3.1",
+    "nextInstalled": "16.3.1",
+    "npmLsNextExitCode": 0,
+    "npmLsNext": {
+      "version": "0.1.0",
+      "name": "herramientas-inversionistas",
+      "dependencies": {
+        "next": {
+          "version": "16.3.1",
+          "resolved": "https://registry.npmjs.org/next/-/next-16.3.1.tgz",
+          "overridden": false
+        }
+      }
+    },
+    "hashes": {
+      "package.json": "5be2ad1a8ad280c33dbc1ac32c8ec8433a819cd3f288670beb4794038802b195",
+      "package-lock.json": "2822d77531ad59e18f7ceb4d7fce71df7fdc875cb32ecce29d5a6bb06dd2d268",
+      "node_modules/next/package.json": "dc243091ba95352bbc300be22c6561d24a19a1c0bd2c2cc85d2c5168767ea7b9"
+    }
+  },
+  "declarationsUnchanged": true,
+  "completedAt": "2026-09-08T18:33:13.324282+00:00",
+  "newRuntimeDependencies": 0,
+  "methodologyImpact": "NO",
+  "fullVerification": "Root Maintainer verification runs after reconciliation; see verification.json.",
+  "findings": [
+    {
+      "finding_id": "M-DEPENDENCY-NEXT-001",
+      "severity": "MEDIUM",
+      "component": "local installation / Next.js",
+      "description": "Preexisting node_modules/next 16.2.7 contradicted both declared and locked Next 16.3.1.",
+      "evidence": [
+        "before.nextDeclared",
+        "before.nextLocked",
+        "before.nextInstalled",
+        "before.npmLsNextProblem"
+      ],
+      "repair": "Rebuilt node_modules with npm ci from exact frozen package.json/package-lock.json bytes, then replaced installed tree.",
+      "methodology_impact": "NO",
+      "status": "CLOSED"
+    }
+  ]
+}

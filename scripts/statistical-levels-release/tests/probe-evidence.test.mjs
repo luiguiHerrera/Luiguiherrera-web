@@ -1,0 +1,1032 @@
+import {createRequestInstanceCollector} from '../scripts/probe-request-instances.mjs';
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import fs from 'node:fs/promises';
+import os from 'node:os';
+import path from 'node:path';
+import { P, canonical, productGates, sha } from '../scripts/release-core.mjs';
+import { account } from '../scripts/network-accounting.mjs';
+import { createInterceptionObservability, INTERCEPTION_EVIDENCE_SCHEMA } from '../scripts/probe-interception-observability.mjs';
+import { signedFixture } from './probe-oidc-fixture.mjs';
+import { attestProbe } from '../scripts/probe-core.mjs';
+import { createProbeHttpSession } from '../scripts/probe-http.mjs';
+import { createProbeTokenBudget } from '../scripts/probe-token-budget.mjs';
+import { runProtectedProbeQA } from '../scripts/probe-gate.mjs';
+import { buildProbeEvidence, probeEvidenceFiles, readInterceptionEvidenceFile, sanitizeProbeAccounting, writeProbeEvidence } from '../scripts/probe-evidence.mjs';
+import { recordProbeMetadataGateFailure, readProbeMetadataEvidence } from '../scripts/probe-metadata-observability.mjs';
+import { createProductQAObservability, productQAObservabilityFiles } from '../scripts/product-qa-observability.mjs';
+
+const origin = 'https://luiguiherrera-fixture-luigui-herrera-s-projects.vercel.app';
+const decode = files => Object.fromEntries(Object.entries(files).map(([name, bytes]) => [name, JSON.parse(bytes)]));
+let httpFixture = null, certificationFixture = null, budgetFixture = null;
+function validSSR(route = '/niveles-estadisticos') {
+  const h1 = route === '/en/statistical-levels' ? 'Where is this asset relative to its own history?' : '¿Dónde está este activo frente a su propia historia?';
+  return '<html><body><div class="sl-page"><header class="sl-heading"><h1>' + h1 + '</h1></header><div id="sl-controls" class="sl-controls"></div></div></body></html>';
+}
+function browserAuthority(target) {
+  return { schema_version: 'statistical-levels.probe-browser-authority.v1',
+    fixture: { origin: target.origin, deployment_id: target.deployment_id, candidate_git_sha: target.candidate_git_sha,
+      authority_run_id: target.authority_run_id, sealed_manifest_sha256: target.sealed_manifest_sha256 },
+    result: 'PASS', error_code: null, routes: ['/niveles-estadisticos', '/en/statistical-levels'].map(path => ({ path,
+      route_identity_exact_match: true, open_guide_action: 'CLICKED', guide_open: true, sl_authority_dom_present: true, authority_field_structured: true,
+      browser_authority_run_id_exact_match: true, result: 'PASS', error_code: null })) };
+}
+function fixture(events = []) {
+  const context = { run: { id: '12345', attempt: '2', execution_sha: 'b'.repeat(40) }, workflow_sha256: 'c'.repeat(64),
+    target: { operation: 'PROBE_IDENTITY', phase: 'preview', candidate_git_sha: 'a'.repeat(40),
+      deployment_id: 'dpl_abcdefghij1234567890', origin, authority_run_id: P.baseline.authority_run_id,
+      sealed_manifest_sha256: P.baseline.sealed_manifest_sha256, github_deployment_id: 101, status_id: 202,
+      status_sha256: 'd'.repeat(64), commit_status_id: 303, commit_status_sha256: 'e'.repeat(64) } };
+  const accounting = { ...account(events, true, origin), authFailures: [] };
+  const productReport = { result: 'PASS', gates: Object.fromEntries(productGates.map(k => [k, 'PASS'])),
+    snapshot_count: 81, provenance_coverage: 100, capability_ids: P.capabilities,
+    routes: ['/niveles-estadisticos', '/en/statistical-levels'], viewports: [[1440, 900], [390, 844]],
+    application_console_errors: 0, required_application_request_failures: 0, broken_assets: 0, hydration_errors: 0, overflow: 0,
+    raw_platform_events: accounting.raw_platform_events, raw_rsc_events: accounting.raw_rsc_events,
+    unclassified_failures: [], expected_values: 'PASS' };
+  const attestation = attestProbe(productReport, context.run, context.target, context.workflow_sha256, '2026-09-10T08:00:00Z');
+  const awsProof = { result: 'PASS', assumed_role: 'LuiguiHerreraStatisticalLevelsReleaseInvoker', account_match: true,
+    session_match: true, workflow_run_id: context.run.id, workflow_run_attempt: context.run.attempt, workflow_execution_sha: context.run.execution_sha };
+  return { context, outcomes: { resolve: 'success', qa: 'success', aws_assume: 'success', aws_identity: 'success' },
+    productReport, accounting, awsProof, attestation, httpPreflight: structuredClone(httpFixture),
+    certificationHttp: structuredClone(certificationFixture), tokenBudget: structuredClone(budgetFixture), browserAuthority: browserAuthority(context.target),
+    oidcEvidence: [signedFixture().evidence, signedFixture(P.aws_audience).evidence] };
+}
+function failedQA(events = []) {
+  const value = fixture();
+  return { ...value, outcomes: { resolve: 'success', qa: 'failure', aws_assume: 'skipped', aws_identity: 'skipped' },
+    oidcEvidence: [signedFixture().evidence], accounting: { ...account(events, false, origin), authFailures: [] }, httpPreflight: null, certificationHttp: null, tokenBudget: null, browserAuthority: null, productReport: null, awsProof: null, attestation: null };
+}
+function blank(outcomes) {
+  const value = fixture();
+  return { context: { ...value.context, target: null }, outcomes, oidcEvidence: [], productReport: null, accounting: null, awsProof: null, attestation: null };
+}
+
+// Exercise the real bounded preflight producer with an in-memory transport.
+// These current probe evidence fixtures are unrelated to historical data oracles.
+const seedTarget = fixture().context.target;
+let seedRequests = 0;
+const session = createProbeHttpSession({ target: seedTarget, tokenSource: { get: async () => 'synthetic-unit-credential' },
+  transport: async url => seedRequests++ === 0 ? new Response('', { status: 302, headers: { location: 'https://vercel.com/login' } }) : new Response(validSSR(new URL(url).pathname), { status: 200, headers: { 'content-type': 'text/html' } }),
+  onEvidence: value => { httpFixture = value; } });
+await session.get(origin + '/niveles-estadisticos');
+certificationFixture = structuredClone(httpFixture);
+const seedBudget = createProbeTokenBudget({ origin, assertProtected: () => true,
+  requestOIDCToken: async () => ['unit', Buffer.from(JSON.stringify({ exp: Math.floor(Date.now() / 1000) + 600 })).toString('base64url'), 'unit'].join('.'),
+  onEvidence: value => { budgetFixture = value; } });
+await seedBudget.certificationTokenSource.get();
+await seedBudget.markCertified();
+await session.get(origin + '/en/statistical-levels');
+
+test('evidence has exactly ten canonical JSON files; manifest covers other nine exact bytes', () => {
+  const files = buildProbeEvidence(fixture()), json = decode(files);
+  assert.deepEqual(Object.keys(files).sort(), [...probeEvidenceFiles].sort());
+  assert.equal(json['probe-summary.json'].result, 'PASS');
+  assert.equal(json['probe-summary.json'].production_release_target, false);
+  assert.equal(json['trusted-sources-qa.json'].http_access_through_trusted_source, 'PASS');
+  assert.equal(json['aws-oidc-summary.json'].result, 'PASS');
+  const manifest = json['evidence-sha256.json'];
+  assert.deepEqual(Object.keys(manifest.files).sort(), probeEvidenceFiles.filter(x => x !== 'evidence-sha256.json').sort());
+  for (const [name, entry] of Object.entries(manifest.files)) {
+    assert.equal(entry.sha256, sha(files[name])); assert.equal(entry.bytes, files[name].length);
+    assert.ok(files[name].equals(canonical(JSON.parse(files[name]))));
+  }
+});
+
+test('full ledger preserves duplicates while header-only canceled RSC remain required failures', () => {
+  const rsc = { kind: 'request_failure', url: origin + '/niveles-estadisticos?_rsc=private', type: 'Fetch',
+    canceled: true, rsc: true, prefetch: true, error_code: 'net::ERR_ABORTED' };
+  const platform = { kind: 'console_error', url: 'https://vercel.live/_next-live/feedback/session?secret=hidden', source: 'Runtime.consoleAPICalled' };
+  const value = fixture([rsc, rsc, platform]), json = decode(buildProbeEvidence(value));
+  const saved = json['application-network-summary.json'].accounting;
+  assert.equal(saved.ledger.length, 3); assert.equal(saved.raw_rsc_events.length, 0);assert.equal(saved.required_application_request_failures,2);
+  assert.deepEqual(saved.raw_rsc_events, value.accounting.raw_rsc_events);
+  assert.deepEqual(saved.raw_platform_events, value.accounting.raw_platform_events);
+  assert.deepEqual(saved.ledger, value.accounting.ledger);
+  assert.equal(json['probe-summary.json'].result, 'FAIL');
+});
+
+test('failed preflight emits FAIL plus NOT_RUN downstream without assuming any identity', () => {
+  const json = decode(buildProbeEvidence(blank({ resolve: 'failure', qa: 'skipped', aws_assume: 'skipped', aws_identity: 'skipped' })));
+  assert.equal(json['probe-summary.json'].result, 'FAIL');
+  assert.equal(json['probe-summary.json'].target, null);
+  assert.equal(json['trusted-sources-qa.json'].result, 'NOT_RUN');
+  assert.equal(json['aws-oidc-summary.json'].result, 'NOT_RUN');
+});
+
+test('all skipped is NOT_RUN, never PASS', () => {
+  const json = decode(buildProbeEvidence(blank({ resolve: 'skipped', qa: 'skipped', aws_assume: 'skipped', aws_identity: 'skipped' })));
+  assert.equal(json['probe-summary.json'].result, 'NOT_RUN');
+});
+
+test('generic QA step failure cannot turn valid local report into PASS', () => {
+  const input = fixture(); input.outcomes.qa = 'failure'; input.outcomes.aws_assume = input.outcomes.aws_identity = 'skipped'; input.awsProof = null;
+  const json = decode(buildProbeEvidence(input));
+  assert.equal(json['probe-summary.json'].result, 'FAIL'); assert.equal(json['trusted-sources-qa.json'].result, 'FAIL');
+  assert.equal(json['qa-attestation.json'].result, 'FAIL');
+});
+
+test('cancelled QA remains FAIL while skipped AWS remains NOT_RUN', () => {
+  const input = failedQA(); input.outcomes.qa = 'cancelled';
+  const json = decode(buildProbeEvidence(input));
+  assert.equal(json['trusted-sources-qa.json'].result, 'FAIL'); assert.equal(json['aws-oidc-summary.json'].result, 'NOT_RUN');
+});
+
+test('partial resolved target retains verified Preview and full failing network ledger', () => {
+  const input = failedQA([{ kind: 'request_failure', url: origin + '/niveles-estadisticos', type: 'Document', status: 500 }]);
+  delete input.context.target.authority_run_id; delete input.context.target.sealed_manifest_sha256;
+  const json = decode(buildProbeEvidence(input));
+  assert.equal(json['probe-summary.json'].target.origin, origin);
+  assert.equal(json['application-network-summary.json'].accounting.ledger.length, 1);
+  assert.equal(json['application-network-summary.json'].accounting.required_application_request_failures, 1);
+});
+
+for (const field of ['productReport', 'accounting', 'attestation', 'awsProof', 'httpPreflight', 'certificationHttp', 'tokenBudget', 'browserAuthority']) {
+  test(`successful step with missing ${field} evidence fails closed`, () => {
+    const input = fixture(); input[field] = null;
+    assert.equal(decode(buildProbeEvidence(input))['probe-summary.json'].result, 'FAIL');
+  });
+}
+
+test('AWS action success is recorded separately from failed caller identity proof', () => {
+  const input = fixture(); input.outcomes.aws_identity = 'failure'; input.awsProof = null;
+  const json = decode(buildProbeEvidence(input));
+  assert.equal(json['aws-oidc-summary.json'].assume_role_with_web_identity, 'PASS');
+  assert.equal(json['aws-oidc-summary.json'].result, 'FAIL'); assert.equal(json['probe-summary.json'].result, 'FAIL');
+});
+
+test('AWS success without passing QA is never an overall PASS', () => {
+  const input = fixture(); input.outcomes.qa = 'failure';
+  const summary = decode(buildProbeEvidence(input))['probe-summary.json'];
+  assert.equal(summary.result, 'FAIL'); assert.ok(summary.evidence_issues.includes('AWS_WITHOUT_PASSING_QA'));
+});
+
+test('foreign origins are hashed without suppressing required application failures', () => {
+  const input = failedQA([{ kind: 'request_failure', url: 'https://unrelated.example/asset?X-Amz-Credential=sensitive', type: 'Script', status: 403 }]);
+  const json = decode(buildProbeEvidence(input)), saved = json['application-network-summary.json'].accounting;
+  assert.equal(saved.ledger.length, 1); assert.equal(saved.required_application_request_failures, 1);
+  assert.equal(saved.ledger[0].event.origin, 'sha256:' + sha('https://unrelated.example'));
+  assert.equal(saved.ledger[0].event.path, sha('/asset'));
+  assert.ok(!JSON.stringify(json).includes('unrelated.example')); assert.ok(!JSON.stringify(json).includes('X-Amz-Credential'));
+});
+
+test('unclassified event ledger and its original event hash remain visible and FAIL', () => {
+  const input = failedQA([{ kind: 'unknown', url: origin + '/unexpected', type: 'Other' }]);
+  const json = decode(buildProbeEvidence(input)), saved = json['application-network-summary.json'].accounting;
+  assert.equal(saved.ledger.length, 1); assert.equal(saved.ledger[0].classification, 'unclassified');
+  assert.equal(saved.unclassified_failures.length, 1); assert.equal(json['probe-summary.json'].result, 'FAIL');
+});
+
+test('unknown accounting fields are not leaked and leave a rejected-source digest', () => {
+  const input = fixture(), marker = 'sensitive' + '-test-only-header-value';
+  input.accounting.Authorization = marker;
+  const json = decode(buildProbeEvidence(input));
+  assert.equal(json['probe-summary.json'].result, 'FAIL'); assert.equal(json['application-network-summary.json'].accounting, null);
+  assert.equal(json['application-network-summary.json'].rejected_accounting_sha256, sha(canonical(input.accounting)));
+  assert.ok(!JSON.stringify(json).includes(marker));
+});
+
+test('attestation extra JWT/header fields are rejected rather than copied', () => {
+  const input = fixture(), token = ['eyJ', Buffer.from('test-only-header').toString('base64url'), '.payload.signature'].join('');
+  input.attestation.headers = { Authorization: token };
+  const json = decode(buildProbeEvidence(input));
+  assert.equal(json['probe-summary.json'].result, 'FAIL'); assert.equal(json['qa-attestation.json'].attestation, null);
+  assert.ok(!JSON.stringify(json).includes(token));
+});
+
+test('product report arbitrary fields are rejected without leaking them', () => {
+  const input = fixture(); input.productReport.cookie = 'private' + '-cookie-marker';
+  const json = decode(buildProbeEvidence(input));
+  assert.equal(json['probe-summary.json'].result, 'FAIL'); assert.equal(json['trusted-sources-qa.json'].product_report, null);
+  assert.ok(!JSON.stringify(json).includes('private-cookie-marker'));
+});
+
+test('AWS proof cannot contain full account, ARN, credentials or additional fields', () => {
+  const input = fixture(); input.awsProof.Account = P.account_id;
+  const json = decode(buildProbeEvidence(input));
+  assert.equal(json['probe-summary.json'].result, 'FAIL'); assert.equal(json['aws-oidc-summary.json'].identity, null);
+  assert.ok(!JSON.stringify(json).includes(P.account_id));
+});
+
+for (const mutation of [
+  value => { value.awsProof.assumed_role = 'another-role'; },
+  value => { value.awsProof.workflow_run_id = '9'; },
+  value => { value.awsProof.workflow_execution_sha = 'f'.repeat(40); },
+  value => { value.attestation.product_report_sha256 = '0'.repeat(64); },
+  value => { value.context.target.origin += '?credential=forbidden'; },
+  value => { value.context.target.candidate_git_sha = [value.context.target.candidate_git_sha]; },
+  value => { value.accounting.required_application_request_failures = 0.5; },
+  value => { value.accounting.raw_rsc_events = [{ sha256: 'a'.repeat(64), count: 1, classification: 'rsc_non_application' }]; },
+  value => { value.outcomes.qa = 'unknown'; },
+]) {
+  test('malformed or mismatched evidence fails closed: ' + mutation.toString(), () => {
+    const input = fixture(); mutation(input);
+    assert.equal(decode(buildProbeEvidence(input))['probe-summary.json'].result, 'FAIL');
+  });
+}
+
+test('forged canceled RSC classification cannot conceal a required request', () => {
+  const accounting = account([{ kind: 'request_failure', url: origin + '/x', type: 'Fetch', canceled: true, rsc: true, prefetch: false, error_code: 'net::ERR_ABORTED' }], true, origin);
+  accounting.ledger[0].classification = 'rsc_non_application';
+  assert.throws(() => sanitizeProbeAccounting(accounting, origin), /EVIDENCE_EVENT_CLASSIFICATION/);
+});
+
+test('credential scoping failures remain counted and prevent successful QA', () => {
+  const input = fixture(); input.accounting.authFailures.push('CREDENTIAL_SCOPE_OR_REDIRECT_REJECTED');
+  const json = decode(buildProbeEvidence(input));
+  assert.equal(json['probe-summary.json'].result, 'FAIL');
+  assert.equal(json['application-network-summary.json'].accounting.authFailures.length, 1);
+});
+
+test('unsafe signed event URLs are never emitted', () => {
+  const input = failedQA([{ kind: 'exception', url: origin + '/x' }]);
+  input.accounting.ledger[0].event.origin = origin + '?token=sensitive-marker';
+  const json = decode(buildProbeEvidence(input));
+  assert.equal(json['probe-summary.json'].result, 'FAIL'); assert.ok(!JSON.stringify(json).includes('sensitive-marker'));
+});
+
+test('raw event paths, embedded credentials and unknown context fields are never copied', () => {
+  const input = failedQA([{ kind: 'exception', url: origin + '/x' }]);
+  input.accounting.ledger[0].event.path = '/x?access_token=private-path-marker';
+  input.context.extra = 'private-context-marker';
+  const json = decode(buildProbeEvidence(input));
+  assert.equal(json['probe-summary.json'].result, 'FAIL');
+  assert.ok(!JSON.stringify(json).includes('private-path-marker'));
+  assert.ok(!JSON.stringify(json).includes('private-context-marker'));
+});
+
+test('skipped steps cannot reuse stale successful evidence', () => {
+  const input = fixture(); input.outcomes.qa = 'skipped';
+  const json = decode(buildProbeEvidence(input));
+  assert.equal(json['probe-summary.json'].result, 'FAIL');
+  assert.ok(json['probe-summary.json'].evidence_issues.includes('UNEXPECTED_QA_EVIDENCE'));
+});
+
+test('writer emits only the ten allowlisted files and refuses a raw/screenshot directory', async () => {
+  const root = await fs.mkdtemp(path.join(os.tmpdir(), 'probe-evidence-unit-'));
+  try {
+    const out = path.join(root, 'evidence'); await writeProbeEvidence(out, fixture());
+    assert.deepEqual((await fs.readdir(out)).sort(), [...probeEvidenceFiles].sort());
+    assert.deepEqual(await fs.readdir(root), ['evidence']);
+    for (const file of await fs.readdir(out)) assert.equal((await fs.stat(path.join(out, file))).mode & 0o777, 0o600);
+    await assert.rejects(writeProbeEvidence(out, fixture()), /EVIDENCE_DESTINATION_NOT_EMPTY_OR_UNSAFE/);
+    const raw = path.join(root, 'raw'); await fs.mkdir(raw); await fs.writeFile(path.join(raw, 'screenshot.png'), 'private');
+    await assert.rejects(writeProbeEvidence(raw, fixture()), /EVIDENCE_DESTINATION_NOT_EMPTY_OR_UNSAFE/);
+  } finally { await fs.rm(root, { recursive: true, force: true }); }
+});
+
+test('writer rejects symlink destination without modifying the linked directory', async () => {
+  const root = await fs.mkdtemp(path.join(os.tmpdir(), 'probe-evidence-unit-'));
+  try {
+    const target = path.join(root, 'target'), link = path.join(root, 'link'); await fs.mkdir(target); await fs.symlink(target, link);
+    await assert.rejects(writeProbeEvidence(link, fixture()), /EVIDENCE_DESTINATION_NOT_EMPTY_OR_UNSAFE/);
+    assert.deepEqual(await fs.readdir(target), []);
+  } finally { await fs.rm(root, { recursive: true, force: true }); }
+});
+
+test('pure evidence module contains no invocation, transport, SDK, or cloud subprocess import', async () => {
+  const source = await fs.readFile(new URL('../scripts/probe-evidence.mjs', import.meta.url), 'utf8');
+  assert.doesNotMatch(source, /import[^\n]*(?:invoke|runtime-io|child_process|aws-sdk)|\bfetch\(|InvokeFunction|GetSecretValue|PutObject/);
+});
+
+for (const [claim, code] of [['environment', 'UNEXPECTED_GITHUB_ENVIRONMENT_CLAIM'],
+  ['job_workflow_ref', 'JOB_WORKFLOW_REF_MISMATCH'], ['job_workflow_sha', 'JOB_WORKFLOW_SHA_MISMATCH']]) {
+  test('signed ' + claim + ' rejection is precise, safe and certifies no HTTP attempt', () => {
+    const marker = 'untrusted-claim-marker';
+    const { token, evidence } = signedFixture(P.vercel_audience, { [claim]: marker });
+    const input = { ...failedQA(), accounting: null, oidcEvidence: [evidence] };
+    const json = decode(buildProbeEvidence(input)), trusted = json['trusted-sources-qa.json'];
+    assert.equal(json['probe-summary.json'].result, 'FAIL');
+    assert.deepEqual(json['probe-summary.json'].evidence_issues, ['MISSING_TOKEN_BUDGET']);
+    assert.deepEqual(json['probe-summary.json'].failed_oidc_gates, [{ audience_kind: 'VERCEL', error_code: code }]);
+    assert.equal(trusted.http_access_through_trusted_source, 'NOT_ATTEMPTED');
+    assert.equal(trusted.oidc_claim_evidence[0].claims[claim + '_present'], true);
+    assert.equal(trusted.oidc_claim_evidence[0].error_code, code);
+    assert.equal(json['aws-oidc-summary.json'].result, 'NOT_RUN');
+    assert.ok(!JSON.stringify(json).includes(token)); assert.ok(!JSON.stringify(json).includes(marker));
+  });
+}
+
+test('token refresh failure after valid initial token never claims HTTP was not attempted', () => {
+  const input = { ...failedQA(), accounting: null,
+    oidcEvidence: [signedFixture().evidence, signedFixture(P.vercel_audience, { environment: 'unexpected' }).evidence] };
+  const json = decode(buildProbeEvidence(input));
+  assert.equal(json['trusted-sources-qa.json'].http_access_through_trusted_source, 'NOT_CERTIFIED');
+  assert.equal(json['trusted-sources-qa.json'].oidc_validation_result, 'FAIL');
+  assert.equal(json['probe-summary.json'].result, 'FAIL');
+});
+
+for (const bad of [undefined, [], [signedFixture().evidence], [signedFixture(P.aws_audience).evidence],
+  [signedFixture().evidence, signedFixture(P.aws_audience, { sub: 'wrong' }).evidence]]) {
+  test('successful steps require complete passing diagnostics for both audiences: ' + String(bad?.length), () => {
+    const input = fixture(); input.oidcEvidence = bad;
+    assert.equal(decode(buildProbeEvidence(input))['probe-summary.json'].result, 'FAIL');
+  });
+}
+
+for (const mutate of [value => { value.token = 'private-token-marker'; },
+  value => { value.claims.environment_value_or_expected_classification = 'private-token-marker'; },
+  value => { value.claims.environment_present = true; }, value => { value.error_code = 'private-token-marker'; }]) {
+  test('OIDC diagnostic schema rejects arbitrary values without reflecting them: ' + mutate.toString(), () => {
+    const input = fixture(); mutate(input.oidcEvidence[0]);
+    const json = decode(buildProbeEvidence(input));
+    assert.equal(json['probe-summary.json'].result, 'FAIL');
+    assert.ok(json['probe-summary.json'].evidence_issues.includes('INVALID_OIDC_EVIDENCE'));
+    assert.ok(!JSON.stringify(json).includes('private-token-marker'));
+  });
+}
+
+test('no diagnostics or HTTP ledger means access not certified, never a Vercel denial', () => {
+  const json = decode(buildProbeEvidence({ ...failedQA(), accounting: null, oidcEvidence: [] }));
+  assert.equal(json['trusted-sources-qa.json'].http_access_through_trusted_source, 'NOT_CERTIFIED');
+  assert.equal(json['trusted-sources-qa.json'].oidc_validation_result, 'NOT_RUN');
+});
+
+test('failed AWS preflight remains FAIL when assumption and caller identity are skipped', () => {
+  const input = fixture(); input.outcomes.aws_assume = input.outcomes.aws_identity = 'skipped'; input.awsProof = null;
+  input.oidcEvidence[1] = signedFixture(P.aws_audience, { environment: 'unexpected' }).evidence;
+  const json = decode(buildProbeEvidence(input));
+  assert.equal(json['trusted-sources-qa.json'].result, 'PASS');
+  assert.equal(json['aws-oidc-summary.json'].oidc_validation_result, 'FAIL');
+  assert.equal(json['aws-oidc-summary.json'].assume_role_with_web_identity, 'NOT_RUN');
+  assert.equal(json['probe-summary.json'].result, 'FAIL');
+});
+
+
+test('redirect diagnostic wrapper preserves exact V3 direct-job metadata for both audiences', () => {
+  const input = fixture(), json = decode(buildProbeEvidence(input));
+  assert.equal(json['probe-summary.json'].schema_version, 'statistical-levels.identity-probe-summary.v3');
+  for (const name of ['trusted-sources-qa.json', 'aws-oidc-summary.json']) {
+    assert.ok(json[name].schema_version.endsWith(name === 'trusted-sources-qa.json' ? '.v7' : '.v3'));
+    assert.equal(json[name].oidc_claim_evidence[0].schema_version, 'statistical-levels.probe-oidc-evidence.v3');
+    const c = json[name].oidc_claim_evidence[0].claims;
+    assert.equal(c.job_workflow_ref_value, P.workflow_ref);
+    assert.equal(c.runtime_job_workflow_ref, P.workflow_ref);
+    assert.equal(c.job_workflow_ref_match, true);
+    assert.equal(c.job_workflow_sha_value, input.context.run.execution_sha);
+    assert.equal(c.runtime_job_workflow_sha, input.context.run.execution_sha);
+    assert.equal(c.job_workflow_sha_match, true);
+    assert.equal(c.runtime_job_workflow_repository, P.repository);
+    assert.equal(c.runtime_job_workflow_file_path, P.workflow_path);
+    for (const field of ['runtime_job_equals_caller_ref', 'runtime_job_equals_caller_sha', 'runtime_job_equals_caller_repository']) assert.equal(c[field], true);
+  }
+});
+
+test('otherwise valid workflow identity evidence cannot be attached to a different execution SHA', () => {
+  const input = fixture(); input.context.run.execution_sha = '9'.repeat(40);
+  const json = decode(buildProbeEvidence(input));
+  assert.equal(json['probe-summary.json'].result, 'FAIL');
+  assert.ok(json['probe-summary.json'].evidence_issues.includes('OIDC_EXECUTION_CONTEXT_MISMATCH'));
+});
+
+test('HTTP preflight survives canonical journal serialization and fixture-bound finalization', () => {
+  const input = fixture(); input.httpPreflight = JSON.parse(canonical(input.httpPreflight));
+  const json = decode(buildProbeEvidence(input));
+  assert.equal(json['probe-summary.json'].result, 'PASS');
+  assert.deepEqual(json['trusted-sources-qa.json'].http_preflight, input.httpPreflight);
+});
+
+test('one passing language preflight cannot certify both product routes', () => {
+  const input = fixture(); input.httpPreflight.routes.pop(); input.httpPreflight.token_source_get_count = 1; input.httpPreflight.trusted_http_request_count = 1;
+  const json = decode(buildProbeEvidence(input));
+  assert.equal(json['trusted-sources-qa.json'].http_access_through_trusted_source, 'PASS');
+  assert.equal(json['probe-summary.json'].result, 'FAIL');
+  assert.ok(json['probe-summary.json'].evidence_issues.includes('MISSING_QA_EVIDENCE'));
+});
+
+test('HTTP success without passing OIDC diagnostics cannot establish trusted access', () => {
+  const input = fixture(); input.oidcEvidence = [];
+  const json = decode(buildProbeEvidence(input));
+  assert.equal(json['probe-summary.json'].result, 'FAIL');
+  assert.equal(json['trusted-sources-qa.json'].http_access_through_trusted_source, 'NOT_CERTIFIED');
+  assert.ok(json['probe-summary.json'].evidence_issues.includes('HTTP_WITHOUT_PASSING_OIDC'));
+});
+
+for (const mutation of [
+  value => { value.fixture.candidate_git_sha = '9'.repeat(40); },
+  value => { value.fixture.deployment_id = 'dpl_AnotherFixture012345'; },
+  value => { value.fixture.authority_run_id = value.fixture.authority_run_id.replace(/^2026/, '2025'); },
+  value => { value.routes[0].hops[0].http_status_exact = 307; },
+  value => { value.cross_origin_oidc_forward = true; },
+  value => { value.max_redirects = 3; },
+]) {
+  test('altered HTTP identity or redirect decision is rejected by artifact finalization: ' + mutation.toString(), () => {
+    const input = fixture(); mutation(input.httpPreflight);
+    const json = decode(buildProbeEvidence(input));
+    assert.equal(json['probe-summary.json'].result, 'FAIL');
+    assert.equal(json['trusted-sources-qa.json'].http_preflight, null);
+    assert.ok(json['probe-summary.json'].evidence_issues.includes('INVALID_HTTP_PREFLIGHT'));
+  });
+}
+
+test('raw extra HTTP headers and inherited serializers cannot enter the artifact', () => {
+  const input = fixture();
+  Object.defineProperty(input.httpPreflight, 'toJSON', { value: () => ({ stolen: 'private-http-marker' }) });
+  const json = decode(buildProbeEvidence(input));
+  assert.equal(json['probe-summary.json'].result, 'FAIL');
+  assert.equal(json['trusted-sources-qa.json'].http_preflight, null);
+  assert.ok(!JSON.stringify(json).includes('private-http-marker'));
+  const other = fixture(); other.httpPreflight.routes[0].hops[0].headers['set-cookie'] = 'private-cookie-marker';
+  const otherJSON = decode(buildProbeEvidence(other));
+  assert.equal(otherJSON['probe-summary.json'].result, 'FAIL');
+  assert.ok(!JSON.stringify(otherJSON).includes('private-cookie-marker'));
+});
+
+test('matching protection redirects retain exact safe diagnostics in the ten-file failure artifact', async () => {
+  const input = failedQA(); let latest, calls = 0;
+  const token = signedFixture().token;
+  const probe = createProbeHttpSession({ target: input.context.target, tokenSource: { get: async () => token },
+    transport: async (_url, options) => {
+      calls++;
+      assert.equal(options.redirect, 'manual');
+      assert.equal(options.headers['x-vercel-trusted-oidc-idp-token'], calls === 1 ? undefined : token);
+      return new Response(null, { status: 302, headers: { location: 'https://vercel.com/login?token=private-query-marker#private-fragment-marker',
+        server: 'Vercel', 'set-cookie': 'private-cookie-marker' } });
+    }, onEvidence: value => { latest = value; } });
+  await assert.rejects(probe.get(origin + '/niveles-estadisticos'), /BLOCKED_TRUSTED_SOURCES_LIVE_CONFIRMED/);
+  assert.equal(calls, 2);
+  input.httpPreflight = JSON.parse(canonical(latest));
+  const denialBudget = createProbeTokenBudget({ origin, assertProtected: () => true,
+    requestOIDCToken: async () => ['unit', Buffer.from(JSON.stringify({ exp: Math.floor(Date.now() / 1000) + 600 })).toString('base64url'), 'unit'].join('.'),
+    onEvidence: value => { input.tokenBudget = value; } });
+  await denialBudget.certificationTokenSource.get();
+  const json = decode(buildProbeEvidence(input));
+  const saved = json['trusted-sources-qa.json'];
+  assert.equal(saved.http_access_through_trusted_source, 'FAIL');
+  assert.equal(saved.http_preflight.error_code, 'BLOCKED_TRUSTED_SOURCES_LIVE_CONFIRMED');
+  assert.equal(saved.http_preflight.anonymous.http_status_exact, 302);
+  assert.equal(saved.http_preflight.routes[0].hops[0].http_status_exact, 302);
+  assert.equal(saved.http_preflight.routes[0].hops[0].location.host, 'vercel.com');
+  assert.equal(saved.http_preflight.routes[0].hops[0].location.path, '/login');
+  assert.equal(saved.http_preflight.routes[0].hops[0].location.query_present, true);
+  for (const marker of [token, 'private-query-marker', 'private-fragment-marker', 'private-cookie-marker']) assert.ok(!JSON.stringify(json).includes(marker));
+  assert.equal(json['aws-oidc-summary.json'].result, 'NOT_RUN');
+});
+
+async function baselineStoppedFixture(kind) {
+  const input = failedQA(); input.oidcEvidence = []; input.accounting = null; let latest, tokenCalls = 0;
+  const body = validSSR();
+  const probe = createProbeHttpSession({ target: input.context.target,
+    tokenSource: { get: async () => { tokenCalls++; throw new Error('must not request a credential'); } },
+    transport: async () => new Response(kind === 'PUBLIC' ? body : '', { status: kind === 'PUBLIC' ? 200 : 503, headers: { 'content-type': 'text/html' } }),
+    onEvidence: value => { latest = value; } });
+  await assert.rejects(probe.establishAnonymousBaseline()); assert.equal(tokenCalls, 0);
+  input.httpPreflight = JSON.parse(canonical(latest));
+  input.tokenBudget = createProbeTokenBudget({ origin, assertProtected: () => false, requestOIDCToken: async () => { throw new Error('UNREACHABLE'); }, onEvidence: async () => {} }).evidence();
+  return input;
+}
+for (const kind of ['PUBLIC', 'AMBIGUOUS']) {
+  test('20 evidence records ' + kind + ' baseline and no OIDC/trusted/QA/AWS attempt', async () => {
+    const input = await baselineStoppedFixture(kind), json = decode(buildProbeEvidence(input));
+    const trusted = json['trusted-sources-qa.json'];
+    assert.equal(trusted.schema_version, 'statistical-levels.identity-probe-trusted-sources.v7');
+    assert.equal(trusted.anonymous_protection_baseline, kind);
+    assert.equal(trusted.anonymous_http_status, kind === 'PUBLIC' ? 200 : 503);
+    assert.equal(trusted.vercel_oidc_token_requested, false); assert.equal(trusted.trusted_request_attempted, false);
+    assert.equal(trusted.oidc_validation_result, 'NOT_RUN'); assert.equal(trusted.http_access_through_trusted_source, 'NOT_RUN');
+    assert.equal(trusted.trusted_sources_access, 'NOT_RUN'); assert.equal(trusted.trusted_sources_live_certified, false);
+    assert.equal(trusted.baseline_stop_reason, kind === 'PUBLIC' ? 'BLOCKED_PREVIEW_NOT_DEMONSTRABLY_PROTECTED' : 'BLOCKED_ANONYMOUS_PROTECTION_BASELINE_AMBIGUOUS');
+    assert.equal(trusted.preview_qa_result, 'NOT_RUN');
+    assert.equal(trusted.product_report, null); assert.equal(json['qa-attestation.json'].attestation, null);
+    assert.equal(json['aws-oidc-summary.json'].result, 'NOT_RUN');
+    assert.ok(!json['probe-summary.json'].evidence_issues.includes('HTTP_WITHOUT_PASSING_OIDC'));
+  });
+  test(kind + ' evidence rejects forged successful OIDC/QA/AWS outcomes', async () => {
+    const stopped = await baselineStoppedFixture(kind), input = fixture(); input.httpPreflight = stopped.httpPreflight;
+    const json = decode(buildProbeEvidence(input)); assert.equal(json['probe-summary.json'].result, 'FAIL');
+    for (const issue of ['OIDC_WITHOUT_PROTECTED_BASELINE', 'QA_WITHOUT_PROTECTED_BASELINE', 'AWS_WITHOUT_PROTECTED_BASELINE']) assert.ok(json['probe-summary.json'].evidence_issues.includes(issue), issue);
+    assert.equal(json['trusted-sources-qa.json'].trusted_sources_live_certified, false);
+    assert.equal(json['trusted-sources-qa.json'].trusted_sources_access, 'NOT_RUN');
+    assert.equal(json['aws-oidc-summary.json'].result, 'FAIL'); // Proof cannot override the failed protection/QA prerequisites.
+  });
+  for (const mutate of [x => { x.anonymous_protection_baseline = 'PROTECTED'; }, x => { x.vercel_oidc_token_requested = true; },
+    x => { x.trusted_request_attempted = true; }, x => { x.trusted_sources_live_certified = true; }]) {
+    test(kind + ' cannot be relabeled as protected/token/trusted/live in sanitized evidence: ' + mutate.toString(), async () => {
+      const input = await baselineStoppedFixture(kind); mutate(input.httpPreflight);
+      const json = decode(buildProbeEvidence(input)); assert.equal(json['probe-summary.json'].result, 'FAIL');
+      assert.equal(json['trusted-sources-qa.json'].http_preflight, null); assert.equal(json['trusted-sources-qa.json'].trusted_sources_live_certified, false);
+      assert.ok(json['probe-summary.json'].evidence_issues.includes('INVALID_HTTP_PREFLIGHT'));
+    });
+  }
+}
+test('20 protected success evidence independently certifies exact affirmative baseline', () => {
+  const json = decode(buildProbeEvidence(fixture())), trusted = json['trusted-sources-qa.json'];
+  assert.equal(trusted.anonymous_protection_baseline, 'PROTECTED'); assert.equal(trusted.vercel_oidc_token_requested, true);
+  assert.equal(trusted.trusted_request_attempted, true); assert.equal(trusted.trusted_sources_access, 'PASS'); assert.equal(trusted.trusted_sources_live_certified, true);
+});
+
+async function lifecycleEvidence(mode) {
+  const input = fixture();
+  let now = 1800000000000, requests = 0, httpCalls = 0, failure = null;
+  const realNow = Date.now; Date.now = () => now;
+
+  try {
+    await runProtectedProbeQA({ target: input.context.target,
+      requestOIDCToken: async () => {
+        requests++;
+        if (mode === 'refresh-identity-failure' && requests === 2) throw new Error('OIDC_IDENTITY_FAILURE');
+        return ['unit', Buffer.from(JSON.stringify({ exp: Math.floor(now / 1000) + 600 })).toString('base64url'), 'unit'].join('.');
+      },
+      onEvidence: value => { input.httpPreflight = value; },
+      onTokenEvidence: value => { input.tokenBudget = value; },
+      onCertificationEvidence: value => { input.certificationHttp = value; },
+      transport: async url => {
+        httpCalls++;
+        if (httpCalls === 1) return new Response('', { status: 302, headers: { location: 'https://vercel.com/login' } });
+        if (mode === 'EN-failure' && httpCalls === 3) return new Response('', { status: 503 });
+        if (mode === 'QA-cache-failure' && httpCalls === 4) return new Response('', { status: 307, headers: { location: 'https://unrelated.example/metodologia' } });
+        return new Response(validSSR(new URL(url).pathname), { status: 200, headers: { 'content-type': 'text/html' } });
+      },
+      runQA: async ({ tokenSource }) => {
+        if (mode !== 'no-refresh') { now += 575000; await tokenSource.get(); }
+        if (mode === 'budget-exhausted') { now += 575000; await tokenSource.get(); }
+        return input.productReport;
+      }
+    });
+  } catch (e) { failure = e.message; } finally { Date.now = realNow; }
+  input.oidcEvidence = [signedFixture().evidence];
+  if (requests === 2) input.oidcEvidence.push(mode === 'refresh-identity-failure' ? signedFixture(P.vercel_audience, { environment: 'unexpected' }).evidence : signedFixture().evidence);
+  if (failure) {
+    input.outcomes.qa = 'failure'; input.outcomes.aws_assume = input.outcomes.aws_identity = 'skipped';
+    input.productReport = input.accounting = input.attestation = input.awsProof = input.browserAuthority = null;
+  } else input.oidcEvidence.push(signedFixture(P.aws_audience).evidence);
+  return { input, requests, failure };
+}
+for (const mode of ['no-refresh', 'one-refresh']) test('phase artifact counters and AWS separation: ' + mode, async () => {
+  const { input, requests, failure } = await lifecycleEvidence(mode); assert.equal(failure, null);
+  const result = decode(buildProbeEvidence(input)), qa = result['trusted-sources-qa.json'];
+  assert.equal(result['probe-summary.json'].result, 'PASS');
+  assert.equal(qa.vercel_certification_oidc_token_request_count, 1);
+  assert.equal(qa.vercel_post_certification_qa_refresh_count, mode === 'one-refresh' ? 1 : 0);
+  assert.equal(qa.vercel_total_oidc_token_request_count, requests);
+  assert.equal(qa.trusted_sources_certified_before_qa_refresh, true);
+  assert.equal(qa.certification_http.routes.length, 1); assert.equal(qa.trusted_sources_live_certified, true);
+  assert.equal(result['aws-oidc-summary.json'].oidc_claim_evidence.length, 1);
+});
+for (const mode of ['refresh-identity-failure', 'budget-exhausted', 'EN-failure']) test('recorded certification survives later QA failure: ' + mode, async () => {
+  const { input, failure } = await lifecycleEvidence(mode); assert.ok(failure);
+  const result = decode(buildProbeEvidence(input)), qa = result['trusted-sources-qa.json'];
+  assert.equal(result['probe-summary.json'].result, 'FAIL');
+  assert.equal(qa.trusted_sources_access, 'PASS'); assert.equal(qa.trusted_sources_live_certified, true);
+  assert.equal(qa.result, 'FAIL'); assert.equal(result['aws-oidc-summary.json'].result, 'NOT_RUN');
+  assert.equal(qa.vercel_certification_oidc_token_request_count, 1); assert.ok(qa.vercel_total_oidc_token_request_count <= 2);
+  if (mode === 'budget-exhausted') assert.equal(qa.token_budget_stop_reason, 'BLOCKED_QA_OIDC_REFRESH_BUDGET_EXCEEDED');
+});
+test('post-certification QA-cache transport failure retains safe ten-file evidence with certification PASS and AWS NOT_RUN', async () => {
+  const { input, requests, failure } = await lifecycleEvidence('QA-cache-failure');
+  assert.equal(failure, 'PROBE_QA_HTTP_REDIRECT'); assert.equal(requests, 1);
+  const result = decode(buildProbeEvidence(input)), qa = result['trusted-sources-qa.json'];
+  assert.equal(Object.keys(result).length, 10); assert.equal(result['probe-summary.json'].result, 'FAIL');
+  assert.equal(qa.trusted_sources_access, 'PASS'); assert.equal(qa.trusted_sources_live_certified, true);
+  assert.equal(qa.http_application_fixture_binding, 'PASS'); assert.equal(qa.http_preflight.routes.length, 2);
+  assert.equal(qa.certification_http.routes.length, 1); assert.equal(qa.preview_product_qa, 'NOT_RUN');
+  assert.equal(result['aws-oidc-summary.json'].result, 'NOT_RUN');
+  assert.doesNotMatch(JSON.stringify(result), /unrelated\.example|local\.synthetic\.lease/);
+});
+for (const mutate of [
+  x => { x.tokenBudget.vercel_certification_oidc_token_request_count = 2; },
+  x => { x.tokenBudget.vercel_post_certification_qa_refresh_count = 2; },
+  x => { x.tokenBudget.origin = 'https://luiguiherrera-otherfixture-luigui-herrera-s-projects.vercel.app'; },
+  x => { x.tokenBudget.certification_recorded = false; },
+  x => { x.certificationHttp.routes[0].path = '/en/statistical-levels'; },
+  x => { x.certificationHttp.anonymous_protection_baseline = 'PUBLIC'; },
+  x => { x.oidcEvidence.push(signedFixture().evidence, signedFixture().evidence); }
+]) test('forged phase budget or certification receipt cannot certify QA/AWS: ' + mutate.toString(), () => {
+  const input = fixture(); mutate(input); const result = decode(buildProbeEvidence(input));
+  assert.equal(result['probe-summary.json'].result, 'FAIL'); assert.equal(result['qa-attestation.json'].result, 'FAIL');
+  assert.equal(result['aws-oidc-summary.json'].result, 'FAIL');
+});
+test('a valid budget from certification intermediate state cannot authorize QA/AWS', () => {
+  const input = fixture();
+  Object.assign(input.tokenBudget, { phase: 'CERTIFICATION', certification_recorded: false, trusted_sources_certified_before_qa_refresh: false });
+  const result = decode(buildProbeEvidence(input));
+  assert.equal(result['probe-summary.json'].result, 'FAIL'); assert.equal(result['aws-oidc-summary.json'].result, 'FAIL');
+});
+
+// Three independent layers: protection acceptance, initial DOM binding, then browser authority/product QA.
+async function httpLayerFailure(html, status = 200) {
+  const input = failedQA(); input.accounting = null;
+  let requests = 0;
+  await assert.rejects(runProtectedProbeQA({ target: input.context.target,
+    requestOIDCToken: async () => ['unit', Buffer.from(JSON.stringify({ exp: Math.floor(Date.now() / 1000) + 600 })).toString('base64url'), 'unit'].join('.'),
+    onEvidence: value => { input.httpPreflight = value; },
+    onTokenEvidence: value => { input.tokenBudget = value; },
+    onCertificationEvidence: value => { input.certificationHttp = value; },
+    transport: async () => requests++ === 0 ? new Response('', { status: 302, headers: { location: 'https://vercel.com/login' } }) :
+      new Response(html, { status, headers: status === 302 ? { location: 'https://vercel.com/login' } : { 'content-type': 'text/html' } }),
+    runQA: async () => { assert.fail('browser QA must not run after failed HTTP binding'); }
+  }));
+  return input;
+}
+for (const [name, html] of [
+  ['generic unrelated HTML', '<html><body><h1>Unrelated</h1></body></html>'],
+  ['marker names only in comments', '<html><body><!-- <div class="sl-page"><header class="sl-heading"><h1>¿Dónde está este activo frente a su propia historia?</h1></header><div id="sl-controls" class="sl-controls"></div></div> --></body></html>'],
+  ['marker names only in script string', '<html><body><script>const stale = \'<div id="sl-controls" class="sl-controls"></div>\';</script></body></html>'],
+]) test('layer 2 failure preserves validated layer 1 and cannot reach layer 3/AWS: ' + name, async () => {
+  const input = await httpLayerFailure(html), json = decode(buildProbeEvidence(input)), trusted = json['trusted-sources-qa.json'];
+  assert.equal(trusted.vercel_protection_oidc_accepted, true);
+  assert.equal(trusted.trusted_sources_access, 'PASS'); assert.equal(trusted.trusted_sources_live_certified, true);
+  assert.equal(trusted.http_application_fixture_binding, 'FAIL');
+  assert.equal(trusted.browser_authority_run_id_exact_match, 'NOT_RUN'); assert.equal(trusted.preview_product_qa, 'NOT_RUN');
+  assert.equal(trusted.browser_authority, null); assert.equal(trusted.certification_http, null);
+  assert.equal(trusted.vercel_certification_oidc_token_request_count, 1); assert.equal(trusted.vercel_post_certification_qa_refresh_count, 0);
+  assert.equal(json['aws-oidc-summary.json'].result, 'NOT_RUN');
+});
+
+test('protection denial remains layer 1 FAIL rather than false HTTP application success', async () => {
+  const json = decode(buildProbeEvidence(await httpLayerFailure('', 302))), trusted = json['trusted-sources-qa.json'];
+  assert.equal(trusted.vercel_protection_oidc_accepted, false); assert.equal(trusted.trusted_sources_access, 'FAIL');
+  assert.equal(trusted.http_application_fixture_binding, 'FAIL'); assert.equal(trusted.browser_authority_run_id_exact_match, 'NOT_RUN');
+});
+
+test('valid SSR with no sl-authority separately records browser-mounted exact authority', () => {
+  const json = decode(buildProbeEvidence(fixture())), trusted = json['trusted-sources-qa.json'];
+  assert.equal(trusted.vercel_protection_oidc_accepted, true); assert.equal(trusted.http_application_fixture_binding, 'PASS');
+  assert.equal(trusted.sl_controls_dom_present, true); assert.equal(trusted.second_ssr_marker_match, true);
+  assert.equal(trusted.http_sl_authority_dom_present, false); assert.equal(trusted.sl_authority_dom_present, true);
+  assert.equal(trusted.browser_authority_run_id_exact_match, 'PASS'); assert.equal(trusted.preview_product_qa, 'PASS');
+  assert.equal(json['probe-summary.json'].result, 'PASS');
+});
+
+function failedBrowserAuthority(input, error = 'BROWSER_AUTHORITY_MISMATCH') {
+  input.outcomes.qa = 'failure'; input.outcomes.aws_assume = input.outcomes.aws_identity = 'skipped';
+  input.attestation = input.awsProof = null; input.oidcEvidence = [signedFixture().evidence];
+  input.browserAuthority.result = 'FAIL'; input.browserAuthority.error_code = error;
+  const route = input.browserAuthority.routes[1]; route.result = 'FAIL'; route.error_code = error;
+  route.browser_authority_run_id_exact_match = false;
+  if (error === 'BROWSER_AUTHORITY_DOM') { route.sl_authority_dom_present = false; route.authority_field_structured = false; }
+  return input;
+}
+for (const error of ['BROWSER_AUTHORITY_MISMATCH', 'BROWSER_AUTHORITY_DOM']) test('browser authority rejection preserves both earlier layers: ' + error, () => {
+  const input = failedBrowserAuthority(fixture(), error), json = decode(buildProbeEvidence(input)), trusted = json['trusted-sources-qa.json'];
+  assert.equal(trusted.vercel_protection_oidc_accepted, true); assert.equal(trusted.trusted_sources_access, 'PASS');
+  assert.equal(trusted.http_application_fixture_binding, 'PASS'); assert.equal(trusted.certification_http.routes.length, 1);
+  assert.equal(trusted.browser_authority_run_id_exact_match, 'FAIL'); assert.equal(trusted.preview_product_qa, 'FAIL');
+  assert.equal(trusted.browser_authority.error_code, error); assert.equal(json['aws-oidc-summary.json'].result, 'NOT_RUN');
+});
+
+test('malformed browser proof cannot leak its values or rewrite earlier layer facts', () => {
+  const input = fixture(); input.browserAuthority.observed_raw_html = 'private-browser-evidence-marker';
+  const json = decode(buildProbeEvidence(input)), trusted = json['trusted-sources-qa.json'];
+  assert.equal(trusted.vercel_protection_oidc_accepted, true); assert.equal(trusted.http_application_fixture_binding, 'PASS');
+  assert.equal(trusted.browser_authority, null); assert.equal(json['probe-summary.json'].result, 'FAIL');
+  assert.ok(json['probe-summary.json'].evidence_issues.includes('INVALID_BROWSER_AUTHORITY'));
+  assert.ok(!JSON.stringify(json).includes('private-browser-evidence-marker'));
+});
+for (const mutate of [
+  x => { x.fixture.origin = 'https://luiguiherrera-otherfixture-luigui-herrera-s-projects.vercel.app'; },
+  x => { x.fixture.candidate_git_sha = 'f'.repeat(40); },
+  x => { x.fixture.deployment_id = 'dpl_AnotherFixture012345'; },
+  x => { x.fixture.authority_run_id += '-different'; },
+  x => { x.fixture.sealed_manifest_sha256 = 'f'.repeat(64); },
+  x => { x.routes[0].browser_authority_run_id_exact_match = false; },
+  x => { x.routes[0].route_identity_exact_match = false; },
+  x => { x.routes[0].guide_open = false; },
+  x => { x.routes.pop(); },
+]) test('forged or foreign browser proof cannot authorize QA/AWS: ' + mutate.toString(), () => {
+  const input = fixture(); mutate(input.browserAuthority);
+  const json = decode(buildProbeEvidence(input)), trusted = json['trusted-sources-qa.json'];
+  assert.equal(json['probe-summary.json'].result, 'FAIL'); assert.equal(json['aws-oidc-summary.json'].result, 'FAIL');
+  assert.equal(trusted.vercel_protection_oidc_accepted, true); assert.equal(trusted.http_application_fixture_binding, 'PASS');
+  assert.equal(trusted.browser_authority_run_id_exact_match, 'FAIL');
+});
+
+test('the CLI requires exact browser authority before attestation and again before AWS', async () => {
+  const source = await fs.readFile(new URL('../scripts/probe-cli.mjs', import.meta.url), 'utf8');
+  const first = source.indexOf("requireProbeBrowserAuthority(await readOptional(path.join(qaDirectory, 'browser-authority.json')), verified)");
+  const attestation = source.indexOf("await save(path.join(root, 'qa-attestation.json'), attestProbe");
+  const next = source.indexOf("requireProbeBrowserAuthority(await readOptional(path.join(qaDirectory, 'browser-authority.json')), context.target)");
+  const aws = source.indexOf("if (mode === 'aws-preflight') await probeOIDC(P.aws_audience)");
+  assert.ok(first > 0 && first < attestation); assert.ok(next > attestation && next < aws);
+});
+
+
+// Evidence-only extension: legacy result bytes stay independent of observability availability.
+test('observability retains the exact first assertion through finalizer and canonical ten-file publication', async () => {
+  const dir = await fs.mkdtemp(path.join(os.tmpdir(), 'sl-observation-artifact-'));
+  try {
+    const rsc = { kind: 'request_failure', url: origin + '/niveles-estadisticos?_rsc=discarded-query-value',
+      type: 'Fetch', canceled: true, rsc: true, prefetch: true, error_code: 'net::ERR_ABORTED' };
+    const platform = { kind: 'request_failure', url: 'https://vercel.live/_next-live/feedback/session', type: 'Script' };
+    const input = failedQA([rsc, platform]);
+    const observer = createProductQAObservability({ out: path.join(dir, 'qa'), origin });
+    observer.context({ suite_id: 'qa-statistical-levels.mjs', test_id: 'keyboard-order', test_name: 'keyboard order',
+      assertion_id: 'focus-window', action_id: 'Tab', route: '/niveles-estadisticos',
+      source_file: 'scripts/statistical-levels-release/scripts/qa/qa-statistical-levels.mjs', source_line: 147 });
+    observer.recordEvent(rsc);
+    const first = new assert.AssertionError({ actual: false, expected: true, operator: 'strictEqual', message: 'keyboard order must reach 3Y' });
+    assert.equal(observer.captureFailure(first), first);
+    observer.recordEvent(platform);
+    observer.captureFailure(new Error('PRODUCT_SUITE_FAILED'));
+    observer.finish(input.accounting);
+    const productObservability = observer.evidence();
+    const original = buildProbeEvidence(input), changed = buildProbeEvidence({ ...input, productObservability });
+    for (const name of ['probe-summary.json', 'trusted-sources-qa.json', 'application-network-summary.json', 'aws-oidc-summary.json', 'qa-attestation.json']) assert.deepEqual(changed[name], original[name], name);
+    const decoded = decode(changed);
+    for (const name of productQAObservabilityFiles) assert.equal(decoded[name].capture_status, 'RECORDED');
+    const captured = decoded['first-product-failure.json'].evidence.failure;
+    assert.equal(captured.message, first.message); assert.equal(captured.expected, true); assert.equal(captured.actual, false);
+    assert.equal(captured.assertion_id, 'focus-window');
+    assert.equal(decoded['probe-summary.json'].result, 'FAIL');
+    const published = path.join(dir, 'artifact');
+    await writeProbeEvidence(published, { ...input, productObservability });
+    assert.deepEqual((await fs.readdir(published)).sort(), [...probeEvidenceFiles].sort());
+    const combined = Object.values(changed).map(bytes => bytes.toString()).join('');
+    assert.ok(!combined.includes('discarded-query-value'));
+  } finally { await fs.rm(dir, { recursive: true, force: true }); }
+});
+
+test('unavailable or hostile observation cannot rewrite legacy PASS/FAIL or expose unsafe fields', () => {
+  const input = fixture(), baseline = buildProbeEvidence(input);
+  for (const observation of [null, { firstFailure: { token: 'must-never-export-this-input' }, timeline: null, phaseSummary: null }]) {
+    const value = buildProbeEvidence({ ...input, productObservability: observation });
+    for (const name of ['probe-summary.json', 'trusted-sources-qa.json', 'application-network-summary.json', 'aws-oidc-summary.json', 'qa-attestation.json']) assert.deepEqual(value[name], baseline[name], name);
+    for (const name of productQAObservabilityFiles) {
+      const file = JSON.parse(value[name]);
+      assert.equal(file.capture_status, observation === null ? 'NOT_AVAILABLE' : 'REJECTED');
+      assert.equal(file.evidence, null);
+      assert.ok(!value[name].toString().includes('must-never-export-this-input'));
+    }
+  }
+});
+
+test('cleanup abort before classifier still preserves valid pending first-failure evidence', async () => {
+  const dir = await fs.mkdtemp(path.join(os.tmpdir(), 'sl-observation-cleanup-'));
+  try {
+    const observer = createProductQAObservability({ out: dir, origin });
+    observer.context({ suite_id: 'qa-statistical-levels.mjs', test_id: 'cleanup-fixture', action_id: 'assertion' });
+    const first = new assert.AssertionError({ actual: 0, expected: 1, operator: 'strictEqual', message: 'first failure survives close abort' });
+    observer.captureFailure(first);
+    observer.lifecycle('BROWSER_CLOSE_ABORTED'); observer.flush();
+    const input = failedQA(); input.accounting = null;
+    const files = decode(buildProbeEvidence({ ...input, productObservability: observer.evidence() }));
+    assert.equal(files['first-product-failure.json'].capture_status, 'RECORDED');
+    assert.equal(files['first-product-failure.json'].evidence.failure.message, first.message);
+    assert.equal(files['product-qa-phase-summary.json'].evidence.classifier_alignment, 'PENDING');
+    assert.equal(files['probe-summary.json'].result, 'FAIL');
+  } finally { await fs.rm(dir, { recursive: true, force: true }); }
+});
+
+
+test('metadata evidence status never changes the eight existing evidence payloads or product outcomes', async () => {
+  const directory = await fs.mkdtemp(path.join(os.tmpdir(), 'probe-metadata-evidence-'));
+  try {
+    const env = { RUNNER_TEMP: directory };
+    recordProbeMetadataGateFailure('PROBE_PUBLIC_METADATA_UNAVAILABLE', env);
+    const metadata = readProbeMetadataEvidence(env);
+    assert.equal(metadata.request_count, 0);
+    assert.equal(metadata.gate_failures[0].attempted, false);
+    for (const source of [fixture(), failedQA(), blank({ resolve: 'failure', qa: 'skipped', aws_assume: 'skipped', aws_identity: 'skipped' })]) {
+      const before = buildProbeEvidence(source);
+      const cases = [
+        [undefined, 'NOT_AVAILABLE'], [null, 'NOT_AVAILABLE'], [metadata, 'RECORDED'],
+        [{ ...metadata, cookie: 'metadata-secret-canary' }, 'REJECTED'],
+        [{ metadata_read_error: true }, 'REJECTED'],
+      ];
+      let getterCalled = false;
+      const accessor = Object.defineProperty({}, 'events', { enumerable: true, get() { getterCalled = true; return 'metadata-secret-canary'; } });
+      cases.push([accessor, 'REJECTED']);
+      for (const [value, status] of cases) {
+        const after = buildProbeEvidence({ ...source, metadataResolution: value });
+        const original = probeEvidenceFiles.filter(name => !['metadata-resolution.json', 'evidence-sha256.json'].includes(name));
+        assert.equal(original.length, 8);
+        for (const name of original) assert.deepEqual(after[name], before[name], name + ' must remain byte identical');
+        const wrapper = JSON.parse(after['metadata-resolution.json']);
+        assert.equal(wrapper.capture_status, status);
+        assert.equal(wrapper.error_code, status === 'REJECTED' ? 'INVALID_METADATA_EVIDENCE' : null);
+        for (const bytes of Object.values(after)) assert.ok(!bytes.includes('metadata-secret-canary'));
+      }
+      assert.equal(getterCalled, false);
+    }
+  } finally { await fs.rm(directory, { recursive: true, force: true }); }
+});
+
+
+test('legacy absent interception witness preserves exact evidence while an empty new witness remains PASS', () => {
+  const legacy = fixture();
+  const files = buildProbeEvidence(legacy);
+  assert.deepEqual(buildProbeEvidence({ ...legacy, interceptionFailures: { present: false } }), files);
+  const input = { ...legacy, interceptionFailures: { present: true, value: { schema_version: INTERCEPTION_EVIDENCE_SCHEMA, records: [], capture_issues: [] } } };
+  const json = decode(buildProbeEvidence(input));
+  assert.equal(json['probe-summary.json'].result, 'PASS');
+  assert.deepEqual(json['application-network-summary.json'].interception_failures, {
+    capture_status: 'RECORDED', error_code: null, evidence: input.interceptionFailures.value,
+  });
+  assert.equal(Object.keys(json).length, 10);
+});
+
+test('explicit null interception input is invalid rather than legacy property omission', () => {
+  const input = fixture(); input.interceptionFailures = null;
+  const json = decode(buildProbeEvidence(input));
+  assert.equal(json['probe-summary.json'].result, 'FAIL');
+  assert.equal(json['trusted-sources-qa.json'].result, 'FAIL');
+  assert.ok(json['probe-summary.json'].evidence_issues.includes('INVALID_INTERCEPTION_EVIDENCE'));
+  assert.deepEqual(json['application-network-summary.json'].interception_failures, {
+    capture_status: 'REJECTED', error_code: 'INVALID_INTERCEPTION_EVIDENCE', evidence: null,
+  });
+});
+
+test('CLI reads the interception sidecar with the same presence-aware reader used by boundary tests', async () => {
+  const source = await fs.readFile(new URL('../scripts/probe-cli.mjs', import.meta.url), 'utf8');
+  assert.match(source, /import\s+\{[^}]*\breadInterceptionEvidenceFile\b[^}]*\}\s+from '\.\/probe-evidence\.mjs'/);
+  assert.match(source, /interceptionFailures:\s*await readInterceptionEvidenceFile\(path\.join\(qaDirectory, 'interception-failures\.json'\)\)/);
+  assert.doesNotMatch(source, /readOptional\([^\n]*interception-failures\.json/);
+});
+
+test('interception sidecar reaches ten-file artifact with individual causes and matching manifest hashes', async t => {
+  const directory = await fs.mkdtemp(path.join(os.tmpdir(), 'sl-probe-interception-evidence-'));
+  t.after(() => fs.rm(directory, { recursive: true, force: true }));
+  const observer = createInterceptionObservability(directory);
+  for (const [failureStage, error] of [['HEADER_SCOPE_VALIDATION', new Error('CROSS_ORIGIN_REDIRECT')], ['FAIL_REQUEST_FALLBACK', new Error('unit-private-fallback-secret')]]) observer.record({
+    failureStage, error, pageId: 'page-1', pageLifecycle: 'CLOSING', requestSequence: 1, origin,
+    previous: 'https://other.example/private?key=unit-private-query-secret',
+    event: { redirectedRequestId: 'unsafe-private-id', resourceType: 'Fetch', request: { url: origin + '/levels?key=unit-private-query-secret', method: 'GET', headers: { Authorization: 'unit-private-header-secret' } } },
+  });
+  const input = fixture(); input.accounting.authFailures.push('CREDENTIAL_SCOPE_OR_REDIRECT_REJECTED');
+  input.interceptionFailures = { present: true, value: observer.flush() };
+  const files = buildProbeEvidence(input), json = decode(files), details = json['application-network-summary.json'].interception_failures;
+  assert.equal(details.capture_status, 'RECORDED'); assert.equal(details.evidence.records.length, 2);
+  assert.deepEqual(details.evidence.records.map(record => record.safe_error_code), ['CROSS_ORIGIN_REDIRECT', 'FAIL_REQUEST_ERROR']);
+  assert.equal(json['probe-summary.json'].result, 'FAIL'); assert.equal(json['trusted-sources-qa.json'].preview_product_qa, 'FAIL');
+  assert.equal(json['application-network-summary.json'].accounting.authFailures.length, 1);
+  assert.equal(Object.keys(files).length, 10);
+  for (const [name, entry] of Object.entries(json['evidence-sha256.json'].files)) assert.equal(entry.sha256, sha(files[name]));
+  const bytes = Buffer.concat(Object.values(files)).toString();
+  for (const marker of ['unit-private-fallback-secret', 'unit-private-query-secret', 'unit-private-header-secret', 'unsafe-private-id']) assert.ok(!bytes.includes(marker));
+});
+
+test('late primary details cannot turn zero auth count into PASS; original count cannot vanish behind incomplete details', async t => {
+  const directory = await fs.mkdtemp(path.join(os.tmpdir(), 'sl-probe-interception-count-'));
+  t.after(() => fs.rm(directory, { recursive: true, force: true }));
+  const observer = createInterceptionObservability(directory);
+  observer.record({ failureStage: 'REQUEST_CONTINUATION', error: new Error('private-CDP-message'), pageId: 'page-1',
+    pageLifecycle: 'CLOSED', requestSequence: 1, origin, previous: null,
+    event: { resourceType: 'Fetch', request: { url: origin + '/levels', method: 'GET' } } });
+  const input = fixture(); input.interceptionFailures = { present: true, value: observer.flush() };
+  let json = decode(buildProbeEvidence(input));
+  assert.equal(json['probe-summary.json'].result, 'FAIL');
+  assert.equal(json['application-network-summary.json'].interception_failures.capture_status, 'RECORDED');
+  input.accounting.authFailures = ['CREDENTIAL_SCOPE_OR_REDIRECT_REJECTED', 'CREDENTIAL_SCOPE_OR_REDIRECT_REJECTED'];
+  json = decode(buildProbeEvidence(input));
+  assert.equal(json['probe-summary.json'].result, 'FAIL');
+  assert.equal(json['application-network-summary.json'].interception_failures.capture_status, 'INCOMPLETE');
+  assert.equal(json['application-network-summary.json'].interception_failures.evidence.records.length, 1);
+  assert.equal(json['application-network-summary.json'].interception_failures.error_code, 'INTERCEPTION_AUTH_FAILURE_COUNT_MISMATCH');
+  assert.equal(json['application-network-summary.json'].accounting.authFailures.length, 2);
+  assert.ok(json['probe-summary.json'].evidence_issues.includes('INTERCEPTION_AUTH_FAILURE_COUNT_MISMATCH'));
+});
+
+for (const interceptionFailures of [
+  { present: true, capture_read_error: true },
+  { present: true, value: { schema_version: INTERCEPTION_EVIDENCE_SCHEMA, records: [], capture_issues: ['PERSISTENCE_WRITE_FAILED'] } },
+  { present: true, value: { schema_version: INTERCEPTION_EVIDENCE_SCHEMA, records: [], capture_issues: [], unsafe: 'must-not-appear-interception' } },
+]) test('malformed or incomplete interception capture cannot authorize PASS or persist rejected content', () => {
+  const input = fixture(); input.interceptionFailures = interceptionFailures;
+  const files = buildProbeEvidence(input), json = decode(files);
+  assert.equal(json['probe-summary.json'].result, 'FAIL');
+  assert.ok(!Buffer.concat(Object.values(files)).toString().includes('must-not-appear-interception'));
+});
+
+test('interception validation never invokes input getters or toJSON while rejecting', () => {
+  let calls = 0;
+  const bomb = () => { calls++; throw new Error('private-getter-error'); };
+  const input = fixture();
+  input.interceptionFailures = { present: true, value: { schema_version: INTERCEPTION_EVIDENCE_SCHEMA, records: [], capture_issues: [] } };
+  Object.defineProperty(input.interceptionFailures.value, 'records', { get: bomb });
+  Object.defineProperty(input.interceptionFailures.value, 'toJSON', { value: bomb });
+  const files = buildProbeEvidence(input), json = decode(files);
+  assert.equal(calls, 0); assert.equal(json['probe-summary.json'].result, 'FAIL');
+  assert.ok(!Buffer.concat(Object.values(files)).toString().includes('private-getter-error'));
+});
+
+const emptyInterceptionWitness = { schema_version: INTERCEPTION_EVIDENCE_SCHEMA, records: [], capture_issues: [] };
+const nonemptyInterceptionWitness = { ...emptyInterceptionWitness, records: [{
+  failure_stage: 'TOKEN_ACQUISITION', safe_error_code: 'TOKEN_SOURCE_ERROR',
+  continuation_failure_class: 'NOT_APPLICABLE', page_id: 'page-1',
+  page_lifecycle: 'CLOSED', request_sequence: 1, resource_type: 'Fetch', method: 'GET',
+  destination_origin_class: 'EXACT_PREVIEW', redirected_from_origin_class: 'NONE', same_origin_target: true,
+  redirect_present: false, path_sha256: sha('/levels'), rsc: false, prefetch: false,
+}] };
+const emptyInterceptionBytes = JSON.stringify(emptyInterceptionWitness) + '\n';
+const nonemptyInterceptionBytes = JSON.stringify(nonemptyInterceptionWitness) + '\n';
+
+for (const scenario of [
+  { id: 'CASE_1_FILE_ABSENT', result: 'PASS', absent: true },
+  { id: 'CASE_2_PRESENT_NULL', bytes: 'null\n', result: 'FAIL', status: 'REJECTED' },
+  { id: 'CASE_3_PRESENT_CORRUPT_JSON', bytes: '{"private-boundary-secret":', result: 'FAIL', status: 'REJECTED', readError: true },
+  { id: 'CASE_4_PRESENT_EMPTY_OBJECT', bytes: '{}\n', result: 'FAIL', status: 'REJECTED' },
+  { id: 'CASE_5_PRESENT_EMPTY_ARRAY', bytes: '[]\n', result: 'FAIL', status: 'REJECTED' },
+  { id: 'CASE_6_PRESENT_VALID_EMPTY_WITNESS', bytes: emptyInterceptionBytes, result: 'PASS', status: 'RECORDED' },
+  { id: 'CASE_7_PRESENT_VALID_NONEMPTY_WITNESS', bytes: nonemptyInterceptionBytes, result: 'FAIL', status: 'RECORDED' },
+  { id: 'AUTH0_ABSENT', authCount: 0, result: 'PASS', absent: true },
+  { id: 'AUTH0_NULL', authCount: 0, bytes: 'null\n', result: 'FAIL', status: 'REJECTED' },
+  { id: 'AUTH1_ABSENT', authCount: 1, result: 'FAIL', absent: true },
+  { id: 'AUTH1_NULL', authCount: 1, bytes: 'null\n', result: 'FAIL', status: 'REJECTED' },
+  { id: 'AUTH1_VALID_MATCHING', authCount: 1, bytes: nonemptyInterceptionBytes, result: 'FAIL', status: 'RECORDED' },
+  { id: 'AUTH1_VALID_MISMATCHING', authCount: 1, bytes: emptyInterceptionBytes, result: 'FAIL', status: 'INCOMPLETE' },
+  { id: 'PRESENT_TRUE', bytes: 'true\n', result: 'FAIL', status: 'REJECTED' },
+  { id: 'PRESENT_FALSE', bytes: 'false\n', result: 'FAIL', status: 'REJECTED' },
+  { id: 'PRESENT_NUMBER', bytes: '0\n', result: 'FAIL', status: 'REJECTED' },
+  { id: 'PRESENT_STRING', bytes: '"private-boundary-secret"\n', result: 'FAIL', status: 'REJECTED' },
+  { id: 'READ_ERROR_NOT_ENOENT', directory: true, result: 'FAIL', status: 'REJECTED', readError: true },
+]) test('interception filesystem boundary: ' + scenario.id, async t => {
+  const directory = await fs.mkdtemp(path.join(os.tmpdir(), 'sl-interception-boundary-'));
+  t.after(() => fs.rm(directory, { recursive: true, force: true }));
+  const file = path.join(directory, 'interception-failures.json');
+  if (scenario.directory) await fs.mkdir(file);
+  else if (!scenario.absent) await fs.writeFile(file, scenario.bytes);
+
+  const input = fixture(), legacyFiles = buildProbeEvidence(input);
+  assert.equal(decode(legacyFiles)['probe-summary.json'].result, 'PASS');
+  input.accounting.authFailures = Array(scenario.authCount ?? 0).fill('CREDENTIAL_SCOPE_OR_REDIRECT_REJECTED');
+  input.interceptionFailures = await readInterceptionEvidenceFile(file);
+  assert.deepEqual(input.interceptionFailures, scenario.absent ? { present: false } : scenario.readError ?
+    { present: true, capture_read_error: true } : { present: true, value: JSON.parse(scenario.bytes) });
+
+  const files = buildProbeEvidence(input), artifact = path.join(directory, 'artifact');
+  const summary = await writeProbeEvidence(artifact, input);
+  const published = Object.fromEntries(await Promise.all(probeEvidenceFiles.map(async name => [name, await fs.readFile(path.join(artifact, name))])));
+  assert.deepEqual(published, files);
+  const json = decode(published), network = json['application-network-summary.json'];
+  assert.equal(summary.result, scenario.result);
+  assert.equal(json['probe-summary.json'].result, scenario.result);
+  assert.equal(json['trusted-sources-qa.json'].result, scenario.result);
+  assert.equal(json['trusted-sources-qa.json'].preview_product_qa, scenario.result);
+  assert.equal(json['qa-attestation.json'].result, scenario.result);
+  assert.equal(network.result, scenario.result);
+  assert.equal(network.accounting.authFailures.length, scenario.authCount ?? 0);
+
+  if (scenario.absent) {
+    assert.equal(Object.hasOwn(network, 'interception_failures'), false);
+    assert.equal(summary.evidence_issues.includes('INVALID_INTERCEPTION_EVIDENCE'), false);
+    if (!scenario.authCount) assert.deepEqual(published, legacyFiles);
+  } else {
+    assert.equal(network.interception_failures.capture_status, scenario.status);
+    const error = scenario.status === 'REJECTED' ? 'INVALID_INTERCEPTION_EVIDENCE' :
+      scenario.status === 'INCOMPLETE' ? 'INTERCEPTION_AUTH_FAILURE_COUNT_MISMATCH' : null;
+    assert.equal(network.interception_failures.error_code, error);
+    assert.deepEqual(network.interception_failures.evidence, scenario.status === 'REJECTED' ? null : JSON.parse(scenario.bytes));
+    if (error) assert.ok(summary.evidence_issues.includes(error));
+    else assert.equal(summary.evidence_issues.includes('INVALID_INTERCEPTION_EVIDENCE'), false);
+  }
+  assert.equal(Object.keys(published).length, 10);
+  for (const [name, entry] of Object.entries(json['evidence-sha256.json'].files)) {
+    assert.equal(entry.sha256, sha(published[name])); assert.equal(entry.bytes, published[name].length);
+  }
+  assert.ok(!Buffer.concat(Object.values(published)).toString().includes('private-boundary-secret'));
+});
+
+// Continuation failures remain fail-closed without any lifecycle exemption.
+function canceledPrefetchInput() {
+  const input = fixture([{kind:'request_failure',url:origin+'/en/dashboard',type:'XHR',canceled:true,rsc:true,prefetch:true,error_code:'net::ERR_ABORTED'}]), pathHash = sha('/en/dashboard');
+  const shared = { page_id:'page-9',page_lifecycle:'ACTIVE',request_sequence:801,resource_type:'XHR',method:'GET',destination_origin_class:'EXACT_PREVIEW',redirected_from_origin_class:'NONE',same_origin_target:true,redirect_present:false,path_sha256:pathHash,rsc:true,prefetch:true,continuation_failure_class:'REQUEST_NO_LONGER_INTERCEPTABLE' };
+  input.interceptionFailures = {present:true,value:{schema_version:INTERCEPTION_EVIDENCE_SCHEMA,capture_issues:[],records:[
+    {...shared,failure_stage:'REQUEST_CONTINUATION',safe_error_code:'CONTINUE_REQUEST_ERROR'},
+    {...shared,failure_stage:'FAIL_REQUEST_FALLBACK',safe_error_code:'FAIL_REQUEST_ERROR'}]}};
+  return input;
+}
+test('new accounting retains a separate finite transport gate even without credential failures',()=>{
+ const input=fixture();input.accounting.transportFailures=['INTERCEPTION_TRANSPORT_FAILURE'];
+ const json=decode(buildProbeEvidence(input));assert.equal(json['probe-summary.json'].result,'FAIL');
+ assert.equal(json['application-network-summary.json'].accounting.authFailures.length,0);
+ assert.deepEqual(json['application-network-summary.json'].accounting.transportFailures,['INTERCEPTION_TRANSPORT_FAILURE']);
+});
+for(const malformed of [null,{},['CREDENTIAL_SCOPE_FAILURE'],['UNKNOWN'],42]) test('present-invalid transport evidence is rejected: '+JSON.stringify(malformed),()=>{
+ const input=fixture();input.accounting.transportFailures=malformed;
+ const json=decode(buildProbeEvidence(input));assert.equal(json['probe-summary.json'].result,'FAIL');assert.ok(json['probe-summary.json'].evidence_issues.includes('INVALID_NETWORK_ACCOUNTING'));
+});
+test('stage counters cannot relabel a known continuation as credentials or erase an unproved transport failure',()=>{
+ for(const variant of ['credential-label','missing-transport']){
+  const input=canceledPrefetchInput();
+  input.accounting.transportFailures=[];
+  if(variant==='credential-label')input.accounting.authFailures=['CREDENTIAL_SCOPE_OR_REDIRECT_REJECTED'];
+  const json=decode(buildProbeEvidence(input));assert.equal(json['probe-summary.json'].result,'FAIL');assert.ok(json['probe-summary.json'].evidence_issues.includes('INTERCEPTION_STAGE_COUNT_MISMATCH'));
+ }
+});
+for (const location of ['field', 'entry', 'sparse']) test('transport evidence rejects accessors and holes without invoking them: '+location,()=>{
+ const input=fixture();let calls=0;input.accounting.transportFailures=[];
+ if(location==='field')Object.defineProperty(input.accounting,'transportFailures',{get(){calls++;throw new Error('getter');},enumerable:true});
+ else if(location==='entry')Object.defineProperty(input.accounting.transportFailures,'0',{get(){calls++;throw new Error('getter');},enumerable:true});
+ else input.accounting.transportFailures.length=1;
+ assert.equal(decode(buildProbeEvidence(input))['probe-summary.json'].result,'FAIL');assert.equal(calls,0);
+});
+
+import {createTransitionCapture,transitions,transitionSchema} from '../scripts/probe-transition-receipts.mjs';
+import {safeEvent} from '../scripts/network-accounting.mjs';
+function completedTransitionInput(){
+ const input=fixture(),spec=transitions.T1,c=createTransitionCapture(origin),url=origin+spec.route+'?asset=SPY&frequency=weekly&window=3Y';
+ const id=c.start('page-1','T1',spec,'ACTIVE'),request={requestId:'memory-id',frameId:'frame',loaderId:'loader',documentURL:origin+spec.route,request:{url,method:'GET',headers:{RSC:'1'}},type:'Fetch'},binding=createRequestInstanceCollector(origin).request('page-1',request,spec,id);c.request('page-1','memory-id',request,'ACTIVE',binding);c.response('page-1','memory-id',200,'ACTIVE');
+ const raw={request_evidence:binding,kind:'request_failure',url,type:'Fetch',rsc:true,prefetch:false,canceled:true,error_code:'net::ERR_ABORTED'};
+ c.failure('page-1','memory-id',{canceled:true,errorText:'net::ERR_ABORTED'},0,'ACTIVE');c.complete('page-1','T1',{metric:true,readiness:true},'ACTIVE');
+ input.accounting={...account([raw],false,origin,c.evidence([safeEvent(raw)])),authFailures:[]};input.productReport.raw_rsc_events=input.accounting.raw_rsc_events;
+ input.attestation=attestProbe(input.productReport,input.context.run,input.context.target,input.context.workflow_sha256,'2026-09-10T08:00:00Z');return input;
+}
+test('transition receipt reaches exact ten-file artifact with independently checked event index and digest',()=>{const input=completedTransitionInput(),out=decode(buildProbeEvidence(input));assert.equal(out['probe-summary.json'].result,'PASS');assert.equal(out['application-network-summary.json'].accounting.transition_receipts.records.length,1);});
+for(const mutate of [i=>delete i.accounting.transition_receipts,i=>i.accounting.transition_receipts.records[0].event_index=9,i=>i.accounting.transition_receipts.records[0].metric_pass=false,i=>i.accounting.transition_receipts.records.push({...i.accounting.transition_receipts.records[0]}),i=>i.accounting.transition_receipts=null])test('missing, false, ambiguous or malformed completion evidence cannot authorize artifact PASS',()=>{const input=completedTransitionInput();mutate(input);assert.equal(decode(buildProbeEvidence(input))['probe-summary.json'].result,'FAIL');});
+test('new accounting cannot reuse historical header-only exemption',()=>{const input=canceledPrefetchInput();input.accounting.transition_receipts={schema_version:transitionSchema,records:[],capture_issues:[]};input.accounting.ledger[0].classification='rsc_non_application';assert.equal(decode(buildProbeEvidence(input))['probe-summary.json'].result,'FAIL');});
+test('receipt getter is rejected by artifact construction without execution',()=>{const input=completedTransitionInput();let calls=0;Object.defineProperty(input.accounting.transition_receipts.records[0],'metric_pass',{get(){calls++;return true;}});assert.equal(decode(buildProbeEvidence(input))['probe-summary.json'].result,'FAIL');assert.equal(calls,0);});
+test('omitting the new receipt field cannot revive the historical prefetch-header exemption',()=>{
+ const raw={kind:'request_failure',url:origin+'/niveles-estadisticos',type:'Fetch',canceled:true,rsc:true,prefetch:true,error_code:'net::ERR_ABORTED'};
+ const a=account([raw],true,origin);a.ledger[0].classification='rsc_non_application';a.required_application_request_failures=0;a.raw_rsc_events=[{sha256:sha(canonical(a.ledger[0].event)),count:1,classification:'rsc_non_application'}];
+ assert.throws(()=>sanitizeProbeAccounting(a,origin),/EVIDENCE_EVENT_CLASSIFICATION/);
+});

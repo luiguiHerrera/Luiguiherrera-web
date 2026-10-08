@@ -1,0 +1,201 @@
+{
+  "status": "PASS",
+  "scope": "Designer findings only; earlier stage findings remain untouched.",
+  "total": 7,
+  "unresolved": [],
+  "findings": [
+    {
+      "finding_id": "D-COPY-ALIGNMENT-001",
+      "severity": "LOW",
+      "component": "transition watch copy",
+      "description": "The initial draft implied participation and leadership were not currently aligned in every TRANSITION scenario.",
+      "originalEvidence": "Si participación y liderazgo pasan a confirmar la misma dirección.",
+      "observedFixture": "transition-watch has favorable participation and leadership with WATCH volatility; the original phrasing therefore implied an absent condition.",
+      "repair": "Si cambia la combinación de participación y liderazgo. / Whether the participation and leadership combination changes.",
+      "engine_impact": "NONE",
+      "public_default_impact": "NONE",
+      "status": "CLOSED",
+      "verification": "A regression test verifies that transition-watch has favorable participation and leadership, and that ES/EN watch copy does not imply they have yet to confirm the same direction.",
+      "evidence": {
+        "original_excerpt": "Si participación y liderazgo pasan a confirmar la misma dirección.",
+        "fixture": "transition-watch has favorable participation and leadership with WATCH volatility; the original phrasing therefore implied an absent condition.",
+        "contract": {
+          "path": "docs/regime-engine-v2/designer/copy-contract.json",
+          "sha256": "e9a76e7ef4751a1ed559497f3df940cc5a359ac068d7e57165d9e45e2036d17a"
+        }
+      }
+    },
+    {
+      "finding_id": "D-COPY-STRESS-002",
+      "severity": "LOW",
+      "component": "STRESS hero section labels",
+      "description": "The original English headings WHAT SUPPORTS IT / WHAT HOLDS IT BACK could reverse the perceived role of the evidence when the regime title was STRESS: favorable equity observations appeared to support STRESS, while its actual VIX trigger appeared to hold STRESS back.",
+      "evidence": {
+        "original_labels_en": [
+          "What supports it",
+          "What holds it back"
+        ],
+        "original_labels_es": [
+          "Qué impulsa",
+          "Qué frena"
+        ],
+        "observed_trigger": "The VIX level activates STRESS.",
+        "original_screenshots": [
+          {
+            "path": "docs/regime-engine-v2/designer/screenshots/initial/desktop-en-stress-before-labels.png",
+            "sha256": "a65eafc258b70cec6695ce0873df8349d0da4d71a80422e4373ab844f5218676"
+          },
+          {
+            "path": "docs/regime-engine-v2/designer/screenshots/initial/mobile-en-stress-before-labels.png",
+            "sha256": "9befd0becb72b3681297d0147c4f7aac504ad467e82d9a07d69757de4720203c"
+          }
+        ],
+        "repaired_screenshots": [
+          {
+            "path": "docs/regime-engine-v2/designer/screenshots/desktop-es-stress-absolute.png",
+            "sha256": "5d60b9b865db413b661ce6ad3feb32d4bf2243d092b1bc2825ef6e379b107cfa"
+          },
+          {
+            "path": "docs/regime-engine-v2/designer/screenshots/desktop-en-stress-absolute.png",
+            "sha256": "24eaf0cb2ab00c2701e51c5f9bccc9567187499c7eada8389d8aeb806a277ee5"
+          },
+          {
+            "path": "docs/regime-engine-v2/designer/screenshots/mobile-es-stress-absolute.png",
+            "sha256": "c257f198e3f98d5b871d2f7083277d90765352a789b60897dd9458d0cd98e803"
+          },
+          {
+            "path": "docs/regime-engine-v2/designer/screenshots/mobile-en-stress-absolute.png",
+            "sha256": "4594114b482feafb2364171350e743e2c3e000d202160e1630ccfc87ef465e78"
+          }
+        ]
+      },
+      "repair": {
+        "condition": "state === STRESS",
+        "labels_es": [
+          "Evidencia favorable",
+          "Evidencia adversa"
+        ],
+        "labels_en": [
+          "Favorable evidence",
+          "Adverse evidence"
+        ],
+        "claimsChanged": false,
+        "selectionChanged": false,
+        "outputChanged": false
+      },
+      "engine_impact": "NONE",
+      "public_default_impact": "NONE",
+      "status": "CLOSED",
+      "verification": "25/25 presentation tests PASS, including both absolute and joint STRESS in ES/EN. Final regenerated desktop ES/EN, mobile ES/EN and grayscale STRESS screenshots inspected directly: favorable/adverse headings are visible, original claims unchanged, real VIX trigger remains explicit. Browser matrix24/24 PASS."
+    },
+    {
+      "finding_id": "D-QA-GUARD-001",
+      "severity": "LOW",
+      "component": "lib/dashboard/regime-v2-preview.test.mjs",
+      "description": "The first guard harness could not resolve next/navigation under Node and counted mocked component invocations as if they were imports. Returning a React element never invokes that component, so the original counter could not establish that fixture loading was gated.",
+      "evidence": {
+        "original_failure": "preview-tests.log preserves ERR_MODULE_NOT_FOUND for next/navigation; preview-guard-tests-initial.log preserves the first resolver repair failing on module mocking of a TSX target.",
+        "original_counter_excerpt": "namedExports: { RegimeV2Preview(props) { previewImports++; return props; } }; assert.equal(previewImports, 0);",
+        "logs": [
+          {
+            "path": "docs/regime-engine-v2/designer/preview-tests.log",
+            "sha256": "1484e60ae8fe204042c123bfd046a8741e8ea7f5ba28ae8913b79ce5945b71a4"
+          },
+          {
+            "path": "docs/regime-engine-v2/designer/preview-guard-tests-initial.log",
+            "sha256": "143c2138d12d76f6ad703b63ba0d732f1255b3121c40147057c8bd6ecf3c5721"
+          },
+          {
+            "path": "docs/regime-engine-v2/designer/preview-guard-tests.log",
+            "sha256": "bb11efcdcd7766aebc641913ad0cc63121204be7aa310b2d3cb2138a023a0c19"
+          }
+        ]
+      },
+      "repair": "Use the existing test loader with a bounded local resolve/load hook for Next notFound and the preview component. Count actual preview specifier resolutions, assert no resolution or query read in production/test, and assert both route sources place their sole dynamic import after the development guard. ES/EN development props remain unchanged.",
+      "validation": "8/8 guard tests pass; included in the full Designer suite. Production HTTP behavior is checked separately after build.",
+      "engine_impact": "NONE",
+      "public_default_impact": "NONE",
+      "status": "CLOSED"
+    },
+    {
+      "finding_id": "D-RENDER-ICU-001",
+      "severity": "MEDIUM",
+      "component": "components/dashboard/RegimeV2Surface.tsx",
+      "description": "The source timestamp renderer allocated a new Intl.DateTimeFormat for every displayed timestamp. Repeated complete SSR runs produced a 2.41 GB resident-memory footprint despite a small JavaScript heap.",
+      "evidence": {
+        "beforeMetrics": "docs/regime-engine-v2/designer/performance-before-formatter-reuse.json",
+        "beforeSource": "docs/regime-engine-v2/designer/RegimeV2Surface.before-formatter-reuse.tsx.txt",
+        "beforeSourceSha256": "e82ef1286515d7d1e5be1dff511b190ad9657f2859ff05edf0aa825f2e9f6f40",
+        "beforeFinalRssBytes": 2416476160,
+        "beforeFinalHeapUsedBytes": 24367728,
+        "afterMetrics": "docs/regime-engine-v2/designer/performance.json",
+        "afterFinalRssBytes": 294109184,
+        "afterFinalHeapUsedBytes": 24377304,
+        "afterLast1000RenderRssDeltaBytes": 688128,
+        "afterLast1000RenderHeapDeltaBytes": 50016,
+        "exactMarkupRegression": "lib/dashboard/regime-v2-render.test.mjs: two locale cases compare prior source with the repaired component across all 12 deterministic outputs.",
+        "testEvidence": "docs/regime-engine-v2/designer/render-tests.log"
+      },
+      "repair": "Reuse one module-scope Intl.DateTimeFormat per supported locale (exactly ES and EN), preserving options, UTC timezone and rendered strings.",
+      "engine_impact": "NONE",
+      "public_default_impact": "NONE",
+      "status": "CLOSED",
+      "validationLimits": "RSS reduction and exact SSR equality support the repair. The finite benchmark does not establish a production SLA or prove absence of every possible leak."
+    },
+    {
+      "finding_id": "D-COPY-UNCERTAINTY-003",
+      "severity": "LOW",
+      "component": "RegimeV2Surface uncertainty plausible-state label",
+      "description": "The draft described expansion of mixed states only, which was narrower than the accepted intermediate-state expansion including WATCH and RISING.",
+      "evidence": {
+        "path": "docs/regime-engine-v2/designer/uncertainty-label-original.txt",
+        "sha256": "0e02631c10d9b578eb4e1f5650004a4b5cc9c06a811077049d5c86f85ba91141"
+      },
+      "repair": "Use estados intermedios / intermediate states. Preserve the engine uncertainty value and plausible-regime list.",
+      "validation": "Final source, ES/EN evidence screenshots and uncertainty presentation tests reviewed; frozen engine unchanged.",
+      "engine_impact": "NONE",
+      "public_default_impact": "NONE",
+      "status": "CLOSED"
+    },
+    {
+      "finding_id": "D-QA-CAPTURE-001",
+      "severity": "LOW",
+      "component": "Designer browser screenshot harness",
+      "description": "Element auto-scroll allowed the shared sticky header to overlap deep evidence in captured images; page clips without fullPage also cut mobile captures at viewport height. These were capture defects, not runtime component truncation.",
+      "evidence": [
+        {
+          "path": "docs/regime-engine-v2/designer/screenshots/initial/mobile-en-evidence-before-framing.png",
+          "sha256": "a29b76b7754cbd0988c5bee4fdb9afa082d68639abdc42f7e6c97bb36d582a1e"
+        },
+        {
+          "path": "docs/regime-engine-v2/designer/screenshots/initial/mobile-en-stress-before-labels.png",
+          "sha256": "9befd0becb72b3681297d0147c4f7aac504ad467e82d9a07d69757de4720203c"
+        },
+        {
+          "path": "docs/regime-engine-v2/designer/browser-qa-initial.json",
+          "sha256": "9cf92198081f7f8ff70e73bc2458a7b39d60fec6949ad8f74a0bf1c55ed11eb7"
+        }
+      ],
+      "repair": "Capture from scroll zero with explicit element bounds and fullPage:true. Hide only the Next development-tool overlay during capture. Do not modify product content or PNG pixels.",
+      "validation": "Final24cases PASS; full mobile surfaces and deep evidence re-inspected. V1 current and preview-off screenshots remain pixel-identical in four locale/viewport pairs.",
+      "engine_impact": "NONE",
+      "public_default_impact": "NONE",
+      "status": "CLOSED"
+    },
+    {
+      "finding_id": "D-QA-GENERATED-001",
+      "severity": "LOW",
+      "component": "Next development server generated workspace files",
+      "description": "Starting the installed Next development server created AGENTS.md and CLAUDE.md, absent from the frozen candidate, outside the intended Designer file scope.",
+      "evidence": {
+        "path": "docs/regime-engine-v2/designer/dev-generated-side-effects.json",
+        "sha256": "37d3478f9abc0f9ce1115693b608dc3e3fbfcc05b4afa66937340252c1abdfce"
+      },
+      "repair": "Read the generated guidance and relevant installed Next docs, archive exact generated bytes and hashes, and restore only these generated files to their original absent state.",
+      "validation": "Both paths absent at final seal. All other accepted inputs, including next-env.d.ts, remain at their frozen hashes.",
+      "engine_impact": "NONE",
+      "public_default_impact": "NONE",
+      "status": "CLOSED"
+    }
+  ]
+}

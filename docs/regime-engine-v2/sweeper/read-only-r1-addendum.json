@@ -1,0 +1,11 @@
+{
+  "finding_id": "S04",
+  "phase": "READ_ONLY_REPLAY_OF_FROZEN_BUILDER",
+  "inputMode": "R1",
+  "parentClass": "R0",
+  "parentCapture": "2030-01-01T00:00:00Z",
+  "asOf": "2026-09-04T23:59:59.999999Z",
+  "originalRegime": "RISK_ON_SELECTIVE",
+  "expectedRegime": null,
+  "methodology": "R0 parent availability is not relaxed merely by requesting R1; an actual R1 reconstruction requires its explicit proof."
+}

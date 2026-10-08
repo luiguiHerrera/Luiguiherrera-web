@@ -1,0 +1,2406 @@
+{
+  "schemaVersion": 1,
+  "repair": "RC_PORTABILITY_REPAIR",
+  "findingId": "SR-A5-001",
+  "status": "RETIRED_ENTRYPOINTS_PASS_PENDING_PORTABLE_CANDIDATE_REPRODUCTION",
+  "rc0": {
+    "commit": "f5fc7ecfd9e1f323d0ad3a43eccec1dbc500be1c",
+    "tree": "05242fadab2cb190effeaea2ea4100e9eb4fbf9d",
+    "immutable": true
+  },
+  "scope": "Ten obsolete workspace verification/sealing/browser-QA routes and five migration notices. Product, methodology and operational runtime behavior are outside this change.",
+  "diagnosticMarker": "RETIRED_WORKSPACE_VERIFIER",
+  "canonicalCommand": "python3 docs/regime-engine-v2/release-candidate/run-verification.py --root CHECKOUT --output-dir AUDIT --profile candidate --gates all",
+  "canonicalGuide": "docs/regime-engine-v2/release-candidate/verification-guide.md",
+  "originalSourcePolicy": "Original executable sources remain retrievable from immutable RC0 Git objects by path and SHA-256. No duplicate executable archive is added.",
+  "retirementSemantics": {
+    "exitCode": 2,
+    "stderrDiagnostic": true,
+    "silentSuccess": false,
+    "filesystemReadBeforeDiagnostic": false,
+    "filesystemWrite": false,
+    "thirdPartyImports": false,
+    "runtimeHelperDependencies": [],
+    "rerunsOrResealsHistoricalPass": false,
+    "automaticallyRunsCanonicalCommand": false
+  },
+  "entrypointCount": 10,
+  "entrypoints": [
+    {
+      "path": "docs/regime-engine-v2/sweeper/run-verification.py",
+      "status": "RETIRED",
+      "exitCode": 2,
+      "rc0Source": {
+        "commit": "f5fc7ecfd9e1f323d0ad3a43eccec1dbc500be1c",
+        "sha256": "7a1966e267abea8188d51ef9383190af8e71010bca7feb64518e3181df9232fe",
+        "bytes": 1679,
+        "retrieveCommand": "git show f5fc7ecfd9e1f323d0ad3a43eccec1dbc500be1c:docs/regime-engine-v2/sweeper/run-verification.py"
+      },
+      "reason": "The workspace-wide test command requires excluded unrelated tests and an uncommitted XML test script; the runner writes frozen Sweeper evidence.",
+      "rc0SourceEvidence": [
+        {
+          "line": 10,
+          "text": "full = json.loads((ROOT/'docs/regime-engine-v2/builder/full-test-command.json').read_text())['command']"
+        },
+        {
+          "line": 13,
+          "text": " 'python-tests':['python3','scripts/test-capital-xml.py'],"
+        }
+      ],
+      "replacementSha256": "c4d70a8d703ee5fa79ab4f3011a45315e16b590765ec34f25ab3823db10f8069",
+      "replacementBytes": 686,
+      "runtimeImports": [
+        "sys"
+      ],
+      "runtimeFilesystemAccess": false,
+      "delegatesToAnotherVerifier": false,
+      "recalculatesHistoricalVerdict": false,
+      "class": "HISTORICAL_WORKSPACE_VERIFICATION_OR_SEAL"
+    },
+    {
+      "path": "docs/regime-engine-v2/groweer/run-canonical-verification.py",
+      "status": "RETIRED",
+      "exitCode": 2,
+      "rc0Source": {
+        "commit": "f5fc7ecfd9e1f323d0ad3a43eccec1dbc500be1c",
+        "sha256": "8f9f8840f04e37edfb1889bbb64b5297b4c7cc25f92d00647e98bb94553ea055",
+        "bytes": 7421,
+        "retrieveCommand": "git show f5fc7ecfd9e1f323d0ad3a43eccec1dbc500be1c:docs/regime-engine-v2/groweer/run-canonical-verification.py"
+      },
+      "reason": "The workspace-wide test command requires excluded unrelated tests and an uncommitted XML test script; the runner writes frozen Groweer evidence.",
+      "rc0SourceEvidence": [
+        {
+          "line": 67,
+          "text": "    full_command = read(ROOT / \"docs/regime-engine-v2/builder/full-test-command.json\")[\"command\"]"
+        },
+        {
+          "line": 72,
+          "text": "        \"python-tests\": [\"python3\", \"scripts/test-capital-xml.py\"],"
+        }
+      ],
+      "replacementSha256": "bde8a50c03ed875895ab3d6d2040519a882400a6ee2dc1ff35e3d1d014b5110a",
+      "replacementBytes": 706,
+      "runtimeImports": [
+        "sys"
+      ],
+      "runtimeFilesystemAccess": false,
+      "delegatesToAnotherVerifier": false,
+      "recalculatesHistoricalVerdict": false,
+      "class": "HISTORICAL_WORKSPACE_VERIFICATION_OR_SEAL"
+    },
+    {
+      "path": "docs/regime-engine-v2/groweer/close-verification.py",
+      "status": "RETIRED",
+      "exitCode": 2,
+      "rc0Source": {
+        "commit": "f5fc7ecfd9e1f323d0ad3a43eccec1dbc500be1c",
+        "sha256": "cda9f7fa1481079572e3a1b3bce035be614b4897a43d4c49c4cf63739c7b01be",
+        "bytes": 10195,
+        "retrieveCommand": "git show f5fc7ecfd9e1f323d0ad3a43eccec1dbc500be1c:docs/regime-engine-v2/groweer/close-verification.py"
+      },
+      "reason": "The historical closure reads excluded local lint/build/typecheck/challenger and command logs before resealing historical verdicts.",
+      "rc0SourceEvidence": [
+        {
+          "line": 36,
+          "text": "        assert c['exit_code']==0 and sha(ROOT/c['log'])==c['log_sha256']"
+        },
+        {
+          "line": 72,
+          "text": "    lint=read('lint.json')"
+        },
+        {
+          "line": 77,
+          "text": "    log=(BASE/'challenger-tests.log').read_text()"
+        },
+        {
+          "line": 79,
+          "text": "    assert (BASE/'typecheck-before-build.log').read_text()=='' and (BASE/'typecheck-after-build.log').read_text()==''"
+        },
+        {
+          "line": 80,
+          "text": "    build=(BASE/'build.log').read_text();assert 'Compiled successfully' in build and 'Route (app)' in build"
+        }
+      ],
+      "replacementSha256": "dd5e21be3a2d805691436262bad7e4ec6b6336b06eaecd7dd2dfecb48bcb5591",
+      "replacementBytes": 690,
+      "runtimeImports": [
+        "sys"
+      ],
+      "runtimeFilesystemAccess": false,
+      "delegatesToAnotherVerifier": false,
+      "recalculatesHistoricalVerdict": false,
+      "class": "HISTORICAL_WORKSPACE_VERIFICATION_OR_SEAL"
+    },
+    {
+      "path": "docs/regime-engine-v2/groweer/seal-manifest.py",
+      "status": "RETIRED",
+      "exitCode": 2,
+      "rc0Source": {
+        "commit": "f5fc7ecfd9e1f323d0ad3a43eccec1dbc500be1c",
+        "sha256": "2a714609143072177933f46a1fdfd46a1ca8a859d4ec9a4a0dc759bd2a78f50c",
+        "bytes": 1889,
+        "retrieveCommand": "git show f5fc7ecfd9e1f323d0ad3a43eccec1dbc500be1c:docs/regime-engine-v2/groweer/seal-manifest.py"
+      },
+      "reason": "The historical sealer re-applies the original 891-file worktree manifest, including excluded inputs and versions superseded by later accepted stages, then rewrites the Groweer seal.",
+      "rc0SourceEvidence": [
+        {
+          "line": 10,
+          "text": "entry=json.loads((BASE/'input-manifest.json').read_text())"
+        },
+        {
+          "line": 11,
+          "text": "differences=[p for p,h in entry['files'].items() if not (ROOT/p).is_file() or sha(ROOT/p)!=h]"
+        },
+        {
+          "line": 12,
+          "text": "assert not differences,differences"
+        }
+      ],
+      "replacementSha256": "6328975724291eb73cd03e1a4e9a90fbaa8cc1d8056ce14777b6a8e209313d6f",
+      "replacementBytes": 680,
+      "runtimeImports": [
+        "sys"
+      ],
+      "runtimeFilesystemAccess": false,
+      "delegatesToAnotherVerifier": false,
+      "recalculatesHistoricalVerdict": false,
+      "class": "HISTORICAL_WORKSPACE_VERIFICATION_OR_SEAL"
+    },
+    {
+      "path": "docs/regime-engine-v2/maintainer/run-verification.py",
+      "status": "RETIRED",
+      "exitCode": 2,
+      "rc0Source": {
+        "commit": "f5fc7ecfd9e1f323d0ad3a43eccec1dbc500be1c",
+        "sha256": "0defad3077544fb21b6e40b8da273ece660e897cb78462dcfe599c3ef4f80404",
+        "bytes": 13841,
+        "retrieveCommand": "git show f5fc7ecfd9e1f323d0ad3a43eccec1dbc500be1c:docs/regime-engine-v2/maintainer/run-verification.py"
+      },
+      "reason": "The workspace-wide test command requires excluded unrelated tests and an uncommitted XML test script; the runner writes frozen Maintainer evidence.",
+      "rc0SourceEvidence": [
+        {
+          "line": 129,
+          "text": "        \"node-tests\": read(ROOT / \"docs/regime-engine-v2/builder/full-test-command.json\")[\"command\"],"
+        },
+        {
+          "line": 131,
+          "text": "        \"python-tests\": [\"python3\", \"scripts/test-capital-xml.py\"],"
+        }
+      ],
+      "replacementSha256": "b4281ddf0a88d0e1868b9e0fc3ba49835083366048112b81d4769a61d64e83c3",
+      "replacementBytes": 692,
+      "runtimeImports": [
+        "sys"
+      ],
+      "runtimeFilesystemAccess": false,
+      "delegatesToAnotherVerifier": false,
+      "recalculatesHistoricalVerdict": false,
+      "class": "HISTORICAL_WORKSPACE_VERIFICATION_OR_SEAL"
+    },
+    {
+      "path": "docs/regime-engine-v2/maintainer/close-verification.py",
+      "status": "RETIRED",
+      "exitCode": 2,
+      "rc0Source": {
+        "commit": "f5fc7ecfd9e1f323d0ad3a43eccec1dbc500be1c",
+        "sha256": "f69e52a7ffcbed5bb74d69d5d48ff74017d373344d3cad96052022db36c3628f",
+        "bytes": 13069,
+        "retrieveCommand": "git show f5fc7ecfd9e1f323d0ad3a43eccec1dbc500be1c:docs/regime-engine-v2/maintainer/close-verification.py"
+      },
+      "reason": "The closure requires the original workspace input hashes, dirty package declaration versions and pre-RC Git identity, then rewrites historical acceptance artifacts.",
+      "rc0SourceEvidence": [
+        {
+          "line": 28,
+          "text": "    initial = read(\"input-manifest.json\")"
+        },
+        {
+          "line": 44,
+          "text": "    assert dependency[\"status\"] == \"RESOLVED\" and dependency[\"declarationsUnchanged\"]"
+        },
+        {
+          "line": 45,
+          "text": "    for name in [\"package.json\", \"package-lock.json\"]:"
+        },
+        {
+          "line": 46,
+          "text": "        assert digest(ROOT / name) == initial[\"all_input_files\"][name]"
+        },
+        {
+          "line": 48,
+          "text": "    actual_head = subprocess.check_output([\"git\", \"rev-parse\", \"HEAD\"], cwd=ROOT, text=True).strip()"
+        },
+        {
+          "line": 49,
+          "text": "    assert actual_head == initial[\"BASE_HEAD\"]"
+        }
+      ],
+      "replacementSha256": "c4c4debbe213e59e6b15a21956d72d81956430b5f2ad9ddb76d88898fc55cb91",
+      "replacementBytes": 696,
+      "runtimeImports": [
+        "sys"
+      ],
+      "runtimeFilesystemAccess": false,
+      "delegatesToAnotherVerifier": false,
+      "recalculatesHistoricalVerdict": false,
+      "class": "HISTORICAL_WORKSPACE_VERIFICATION_OR_SEAL"
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/run-verification.py",
+      "status": "RETIRED",
+      "exitCode": 2,
+      "rc0Source": {
+        "commit": "f5fc7ecfd9e1f323d0ad3a43eccec1dbc500be1c",
+        "sha256": "4effed4a10baaa6879ed69a76ddbd78b4fbe298e4bb907845e88fcddd2790292",
+        "bytes": 16641,
+        "retrieveCommand": "git show f5fc7ecfd9e1f323d0ad3a43eccec1dbc500be1c:docs/regime-engine-v2/designer/run-verification.py"
+      },
+      "reason": "The workspace-wide test command requires excluded unrelated tests and an uncommitted XML test script; refresh mode also requires excluded command logs. The runner writes frozen Designer evidence.",
+      "rc0SourceEvidence": [
+        {
+          "line": 123,
+          "text": "        \"node-tests\": read(ROOT / \"docs/regime-engine-v2/builder/full-test-command.json\")[\"command\"],"
+        },
+        {
+          "line": 127,
+          "text": "        \"python-tests\": [\"python3\", \"scripts/test-capital-xml.py\"],"
+        },
+        {
+          "line": 224,
+          "text": "        if digest(ROOT / command[\"log\"]) != command[\"log_sha256\"]:"
+        },
+        {
+          "line": 225,
+          "text": "            raise RuntimeError(\"Prior command evidence changed: \" + command[\"log\"])"
+        }
+      ],
+      "replacementSha256": "6e86f18c727bd532ba0e1cb0ebd334cda766e00715c001bf997a86f881a5f5d9",
+      "replacementBytes": 688,
+      "runtimeImports": [
+        "sys"
+      ],
+      "runtimeFilesystemAccess": false,
+      "delegatesToAnotherVerifier": false,
+      "recalculatesHistoricalVerdict": false,
+      "class": "HISTORICAL_WORKSPACE_VERIFICATION_OR_SEAL"
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/seal-review.py",
+      "status": "RETIRED",
+      "exitCode": 2,
+      "rc0Source": {
+        "commit": "f5fc7ecfd9e1f323d0ad3a43eccec1dbc500be1c",
+        "sha256": "5d2cd8ab93a76a09170132c9666c6bc045c959c039ad01c49de80ec63bb798f1",
+        "bytes": 12592,
+        "retrieveCommand": "git show f5fc7ecfd9e1f323d0ad3a43eccec1dbc500be1c:docs/regime-engine-v2/designer/seal-review.py"
+      },
+      "reason": "The sealer requires the historical worktree and Git identity, excluded command logs and qa-scripts-lint.log, then rewrites historical acceptance artifacts.",
+      "rc0SourceEvidence": [
+        {
+          "line": 33,
+          "text": "manifest = read('input-manifest.json')"
+        },
+        {
+          "line": 35,
+          "text": "differences = [{'path': p, 'before_sha256': h, 'after_sha256': sha(ROOT / p) if (ROOT / p).is_file() else None}"
+        },
+        {
+          "line": 36,
+          "text": "               for p, h in manifest['all_input_files'].items()"
+        },
+        {
+          "line": 37,
+          "text": "               if not (ROOT / p).is_file() or sha(ROOT / p) != h]"
+        },
+        {
+          "line": 38,
+          "text": "assert {x['path'] for x in differences} == allowed, differences"
+        },
+        {
+          "line": 39,
+          "text": "assert git('rev-parse', 'HEAD') == manifest['BASE_HEAD']"
+        },
+        {
+          "line": 40,
+          "text": "assert git('rev-parse', 'HEAD^{tree}') == manifest['BASE_TREE']"
+        },
+        {
+          "line": 60,
+          "text": "for item in canonical['commands']:"
+        },
+        {
+          "line": 61,
+          "text": "    assert item['exit_code'] == 0 and sha(ROOT / item['log']) == item['log_sha256'], item['log']"
+        },
+        {
+          "line": 71,
+          "text": "assert not (OUT / 'qa-scripts-lint.log').read_text().strip()"
+        }
+      ],
+      "replacementSha256": "e1d4d451448dad61bb588963fd133c1bb3f36d67d1c904f49bc1cda64d94c08b",
+      "replacementBytes": 678,
+      "runtimeImports": [
+        "sys"
+      ],
+      "runtimeFilesystemAccess": false,
+      "delegatesToAnotherVerifier": false,
+      "recalculatesHistoricalVerdict": false,
+      "class": "HISTORICAL_WORKSPACE_VERIFICATION_OR_SEAL"
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/browser-qa.mjs",
+      "class": "HISTORICAL_BROWSER_QA",
+      "status": "RETIRED",
+      "exitCode": 2,
+      "rc0Source": {
+        "commit": "f5fc7ecfd9e1f323d0ad3a43eccec1dbc500be1c",
+        "sha256": "9aa1a21625c83c91ad53b6c6d86b8fd66b5d2773ac68ada78d2bfec71dc22ab2",
+        "bytes": 7337,
+        "retrieveCommand": "git show f5fc7ecfd9e1f323d0ad3a43eccec1dbc500be1c:docs/regime-engine-v2/designer/browser-qa.mjs"
+      },
+      "reason": "The default Playwright fallback is an absolute original-user runtime path outside the committed candidate. These scripts also rewrite frozen historical browser QA and screenshots. Explicit retirement preserves historical evidence without claiming fresh browser QA or adding a dependency.",
+      "rc0SourceEvidence": [
+        {
+          "line": 6,
+          "text": "const { chromium } = require(process.env.DESIGNER_PLAYWRIGHT_PATH ?? '/Users/quantlab/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/node_modules/playwright');"
+        },
+        {
+          "line": 10,
+          "text": "await fs.mkdir(screenshots, { recursive: true });"
+        },
+        {
+          "line": 13,
+          "text": "const browser = await chromium.launch({ headless: true });"
+        },
+        {
+          "line": 79,
+          "text": "await fs.writeFile(path.join(destination, smoke ? 'browser-qa-initial.json' : 'visual-regression.json'), JSON.stringify(report, null, 2) + '\\n');"
+        }
+      ],
+      "replacementSha256": "b99749f2018ca22b1866b3dc3a6d5eaec94bd4a6d81ad3e7dacb055606c09795",
+      "replacementBytes": 715,
+      "runtimeImports": [],
+      "runtimeFilesystemAccess": false,
+      "delegatesToAnotherVerifier": false,
+      "recalculatesHistoricalVerdict": false
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/accessibility-qa.mjs",
+      "class": "HISTORICAL_BROWSER_QA",
+      "status": "RETIRED",
+      "exitCode": 2,
+      "rc0Source": {
+        "commit": "f5fc7ecfd9e1f323d0ad3a43eccec1dbc500be1c",
+        "sha256": "0a097a8efe301bc6479904515b0d250d897668d269ce06cff03ffac6eb3bf18b",
+        "bytes": 10309,
+        "retrieveCommand": "git show f5fc7ecfd9e1f323d0ad3a43eccec1dbc500be1c:docs/regime-engine-v2/designer/accessibility-qa.mjs"
+      },
+      "reason": "The default Playwright fallback is an absolute original-user runtime path outside the committed candidate. These scripts also rewrite frozen historical browser QA and screenshots. Explicit retirement preserves historical evidence without claiming fresh browser QA or adding a dependency.",
+      "rc0SourceEvidence": [
+        {
+          "line": 6,
+          "text": "const { chromium } = require(process.env.DESIGNER_PLAYWRIGHT_PATH ?? '/Users/quantlab/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/node_modules/playwright');"
+        },
+        {
+          "line": 11,
+          "text": "const browser = await chromium.launch({ headless: true });"
+        },
+        {
+          "line": 106,
+          "text": "await fs.writeFile(path.join(out, 'accessibility-qa.json'), JSON.stringify(report, null, 2) + '\\n');"
+        }
+      ],
+      "replacementSha256": "b69cc3070b010cf2545e8e0ce8d542298fd005d585cbcb32d7596c3cc6beb50c",
+      "replacementBytes": 727,
+      "runtimeImports": [],
+      "runtimeFilesystemAccess": false,
+      "delegatesToAnotherVerifier": false,
+      "recalculatesHistoricalVerdict": false
+    }
+  ],
+  "migrationDocumentCount": 5,
+  "migrationDocuments": [
+    {
+      "path": "docs/regime-engine-v2/sweeper/README.md",
+      "change": "TOP_OF_FILE_MIGRATION_NOTICE_ONLY",
+      "rc0Sha256": "1d9ea6dd7aed3c985fd36d2cbf6df112f2fd9894ea0e721c23b6942e6a4f7236",
+      "replacementSha256": "cb42f7c5c8e58858c63657d99c8258572e30b5dfeaee969a0a835146e3a958a6",
+      "retiredEntrypointsNamed": [
+        "run-verification.py"
+      ],
+      "historicalBodyPreserved": true,
+      "operationalToolsRetired": false
+    },
+    {
+      "path": "docs/regime-engine-v2/groweer/README.md",
+      "change": "TOP_OF_FILE_MIGRATION_NOTICE_ONLY",
+      "rc0Sha256": "22994ffebf9970731c2b7649ac4014702567dee2897a67d622e27b45a8949174",
+      "replacementSha256": "3fd62893aa6bdbade6ad59670275d80f849b33cbbe6b63da13a8926d4ff07e27",
+      "retiredEntrypointsNamed": [
+        "run-canonical-verification.py",
+        "close-verification.py",
+        "seal-manifest.py"
+      ],
+      "historicalBodyPreserved": true,
+      "operationalToolsRetired": false
+    },
+    {
+      "path": "docs/regime-engine-v2/maintainer/README.md",
+      "change": "TOP_OF_FILE_MIGRATION_NOTICE_ONLY",
+      "rc0Sha256": "027134e7e963c5eec074e0be8d83dec0db89976a5d4e0c98b82863d121715894",
+      "replacementSha256": "43e601e16e99bf7890916b82b0d7d1b71a15457e40e938ff2db8f6beab435dfe",
+      "retiredEntrypointsNamed": [
+        "run-verification.py",
+        "close-verification.py"
+      ],
+      "historicalBodyPreserved": true,
+      "operationalToolsRetired": false
+    },
+    {
+      "path": "docs/regime-engine-v2/maintainer/runbook.md",
+      "change": "TOP_OF_FILE_MIGRATION_NOTICE_ONLY",
+      "rc0Sha256": "16dd805b38bf4c22fc290359a2d3144a35c433d00c7acbd92744e2a3f588626e",
+      "replacementSha256": "12b962724d793a739bf3c67074545062784d5c1c7bf1d47e11586c94595f3a1b",
+      "retiredEntrypointsNamed": [
+        "run-verification.py",
+        "close-verification.py"
+      ],
+      "historicalBodyPreserved": true,
+      "operationalToolsRetired": false
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/README.md",
+      "change": "TOP_OF_FILE_MIGRATION_NOTICE_ONLY",
+      "rc0Sha256": "778a0463b4e728c7d32f39a7164b3e25f84518685c62e5bdcb8e2d826579513b",
+      "replacementSha256": "c075e8f7b2a5b7cfef0817a6a93d09d541dbce6b916ebe8d87e1a8f9c92ec1f0",
+      "retiredEntrypointsNamed": [
+        "run-verification.py",
+        "seal-review.py",
+        "browser-qa.mjs",
+        "accessibility-qa.mjs"
+      ],
+      "historicalBodyPreserved": true,
+      "operationalToolsRetired": false
+    }
+  ],
+  "testCountMigration": {
+    "historicalDesignerWorkspace": 592,
+    "portableCandidate": 487,
+    "candidateAccounting": {
+      "baseline": 204,
+      "operations": 78,
+      "designer": 59,
+      "groweer": 36,
+      "attacks": 110
+    },
+    "goldenReportedSeparately": 464,
+    "historicalR2ReportedSeparately": 1930,
+    "historicalResultsRecalculated": false,
+    "explanation": "The historical Designer workspace count included excluded unrelated tests. The portable candidate command explicitly verifies committed candidate tests. Old stage counts remain historical evidence; retirement produces no PASS and contributes no tests to either count."
+  },
+  "verification": {
+    "status": "PASS",
+    "localDirectInvocations": 20,
+    "pythonAdditionalGuardedInvocations": 8,
+    "staticMinimalStatementChecks": 10,
+    "arbitraryEmptyWorkingDirectory": true,
+    "invalidLegacyArgumentsCannotTriggerWork": true,
+    "noFilesCreatedInProbeWorkingDirectory": true,
+    "runtimeChecks": [
+      {
+        "path": "docs/regime-engine-v2/sweeper/run-verification.py",
+        "staticMinimalStatementStructure": "PASS",
+        "checks": [
+          {
+            "arguments": [],
+            "exitCode": 2,
+            "stdoutEmpty": true,
+            "diagnosticPresent": true,
+            "rc0ReferencePresent": true,
+            "canonicalCommandPresent": true,
+            "stderrSha256": "85b8c893da85aa376edabcba1d23e0d09785a0bdc322e602b5e2613e2b3c6dfc"
+          },
+          {
+            "arguments": [
+              "--refresh-hash",
+              "--output-dir",
+              "/nonexistent/retired-verifier-probe"
+            ],
+            "exitCode": 2,
+            "stdoutEmpty": true,
+            "diagnosticPresent": true,
+            "rc0ReferencePresent": true,
+            "canonicalCommandPresent": true,
+            "stderrSha256": "85b8c893da85aa376edabcba1d23e0d09785a0bdc322e602b5e2613e2b3c6dfc"
+          },
+          {
+            "mode": "PYTHON_AUDIT_HOOK_DENY_FILESYSTEM_PROCESS_NETWORK",
+            "exitCode": 2,
+            "forbiddenEvents": 0,
+            "diagnosticPresent": true
+          }
+        ]
+      },
+      {
+        "path": "docs/regime-engine-v2/groweer/run-canonical-verification.py",
+        "staticMinimalStatementStructure": "PASS",
+        "checks": [
+          {
+            "arguments": [],
+            "exitCode": 2,
+            "stdoutEmpty": true,
+            "diagnosticPresent": true,
+            "rc0ReferencePresent": true,
+            "canonicalCommandPresent": true,
+            "stderrSha256": "5fff7cf7a23bf4ff1c64edf2375de862eaa6008145e026b185780fd256ebd6d5"
+          },
+          {
+            "arguments": [
+              "--refresh-hash",
+              "--output-dir",
+              "/nonexistent/retired-verifier-probe"
+            ],
+            "exitCode": 2,
+            "stdoutEmpty": true,
+            "diagnosticPresent": true,
+            "rc0ReferencePresent": true,
+            "canonicalCommandPresent": true,
+            "stderrSha256": "5fff7cf7a23bf4ff1c64edf2375de862eaa6008145e026b185780fd256ebd6d5"
+          },
+          {
+            "mode": "PYTHON_AUDIT_HOOK_DENY_FILESYSTEM_PROCESS_NETWORK",
+            "exitCode": 2,
+            "forbiddenEvents": 0,
+            "diagnosticPresent": true
+          }
+        ]
+      },
+      {
+        "path": "docs/regime-engine-v2/groweer/close-verification.py",
+        "staticMinimalStatementStructure": "PASS",
+        "checks": [
+          {
+            "arguments": [],
+            "exitCode": 2,
+            "stdoutEmpty": true,
+            "diagnosticPresent": true,
+            "rc0ReferencePresent": true,
+            "canonicalCommandPresent": true,
+            "stderrSha256": "19e2bbe18050ae8eb163b1f38227a62fa66ec8b95420080f637c207895c23609"
+          },
+          {
+            "arguments": [
+              "--refresh-hash",
+              "--output-dir",
+              "/nonexistent/retired-verifier-probe"
+            ],
+            "exitCode": 2,
+            "stdoutEmpty": true,
+            "diagnosticPresent": true,
+            "rc0ReferencePresent": true,
+            "canonicalCommandPresent": true,
+            "stderrSha256": "19e2bbe18050ae8eb163b1f38227a62fa66ec8b95420080f637c207895c23609"
+          },
+          {
+            "mode": "PYTHON_AUDIT_HOOK_DENY_FILESYSTEM_PROCESS_NETWORK",
+            "exitCode": 2,
+            "forbiddenEvents": 0,
+            "diagnosticPresent": true
+          }
+        ]
+      },
+      {
+        "path": "docs/regime-engine-v2/groweer/seal-manifest.py",
+        "staticMinimalStatementStructure": "PASS",
+        "checks": [
+          {
+            "arguments": [],
+            "exitCode": 2,
+            "stdoutEmpty": true,
+            "diagnosticPresent": true,
+            "rc0ReferencePresent": true,
+            "canonicalCommandPresent": true,
+            "stderrSha256": "6882fbaedbd25260b4a4f9938d83d0ff1e219fe485ee0de918ba2f4175a4e40e"
+          },
+          {
+            "arguments": [
+              "--refresh-hash",
+              "--output-dir",
+              "/nonexistent/retired-verifier-probe"
+            ],
+            "exitCode": 2,
+            "stdoutEmpty": true,
+            "diagnosticPresent": true,
+            "rc0ReferencePresent": true,
+            "canonicalCommandPresent": true,
+            "stderrSha256": "6882fbaedbd25260b4a4f9938d83d0ff1e219fe485ee0de918ba2f4175a4e40e"
+          },
+          {
+            "mode": "PYTHON_AUDIT_HOOK_DENY_FILESYSTEM_PROCESS_NETWORK",
+            "exitCode": 2,
+            "forbiddenEvents": 0,
+            "diagnosticPresent": true
+          }
+        ]
+      },
+      {
+        "path": "docs/regime-engine-v2/maintainer/run-verification.py",
+        "staticMinimalStatementStructure": "PASS",
+        "checks": [
+          {
+            "arguments": [],
+            "exitCode": 2,
+            "stdoutEmpty": true,
+            "diagnosticPresent": true,
+            "rc0ReferencePresent": true,
+            "canonicalCommandPresent": true,
+            "stderrSha256": "9d27548c7887cc1bf5196a907c22b2c9799ef505624fac4276984a3c644302b9"
+          },
+          {
+            "arguments": [
+              "--refresh-hash",
+              "--output-dir",
+              "/nonexistent/retired-verifier-probe"
+            ],
+            "exitCode": 2,
+            "stdoutEmpty": true,
+            "diagnosticPresent": true,
+            "rc0ReferencePresent": true,
+            "canonicalCommandPresent": true,
+            "stderrSha256": "9d27548c7887cc1bf5196a907c22b2c9799ef505624fac4276984a3c644302b9"
+          },
+          {
+            "mode": "PYTHON_AUDIT_HOOK_DENY_FILESYSTEM_PROCESS_NETWORK",
+            "exitCode": 2,
+            "forbiddenEvents": 0,
+            "diagnosticPresent": true
+          }
+        ]
+      },
+      {
+        "path": "docs/regime-engine-v2/maintainer/close-verification.py",
+        "staticMinimalStatementStructure": "PASS",
+        "checks": [
+          {
+            "arguments": [],
+            "exitCode": 2,
+            "stdoutEmpty": true,
+            "diagnosticPresent": true,
+            "rc0ReferencePresent": true,
+            "canonicalCommandPresent": true,
+            "stderrSha256": "da1e3e61faed9b2d703d63c19f29e5ee1a3d26cd8745c82a6d555e19c77f44d8"
+          },
+          {
+            "arguments": [
+              "--refresh-hash",
+              "--output-dir",
+              "/nonexistent/retired-verifier-probe"
+            ],
+            "exitCode": 2,
+            "stdoutEmpty": true,
+            "diagnosticPresent": true,
+            "rc0ReferencePresent": true,
+            "canonicalCommandPresent": true,
+            "stderrSha256": "da1e3e61faed9b2d703d63c19f29e5ee1a3d26cd8745c82a6d555e19c77f44d8"
+          },
+          {
+            "mode": "PYTHON_AUDIT_HOOK_DENY_FILESYSTEM_PROCESS_NETWORK",
+            "exitCode": 2,
+            "forbiddenEvents": 0,
+            "diagnosticPresent": true
+          }
+        ]
+      },
+      {
+        "path": "docs/regime-engine-v2/designer/run-verification.py",
+        "staticMinimalStatementStructure": "PASS",
+        "checks": [
+          {
+            "arguments": [],
+            "exitCode": 2,
+            "stdoutEmpty": true,
+            "diagnosticPresent": true,
+            "rc0ReferencePresent": true,
+            "canonicalCommandPresent": true,
+            "stderrSha256": "643e714c6be9e4e27b800a93097d83cc0992fa1463a2334f555e2df7a38dc39c"
+          },
+          {
+            "arguments": [
+              "--refresh-hash",
+              "--output-dir",
+              "/nonexistent/retired-verifier-probe"
+            ],
+            "exitCode": 2,
+            "stdoutEmpty": true,
+            "diagnosticPresent": true,
+            "rc0ReferencePresent": true,
+            "canonicalCommandPresent": true,
+            "stderrSha256": "643e714c6be9e4e27b800a93097d83cc0992fa1463a2334f555e2df7a38dc39c"
+          },
+          {
+            "mode": "PYTHON_AUDIT_HOOK_DENY_FILESYSTEM_PROCESS_NETWORK",
+            "exitCode": 2,
+            "forbiddenEvents": 0,
+            "diagnosticPresent": true
+          }
+        ]
+      },
+      {
+        "path": "docs/regime-engine-v2/designer/seal-review.py",
+        "staticMinimalStatementStructure": "PASS",
+        "checks": [
+          {
+            "arguments": [],
+            "exitCode": 2,
+            "stdoutEmpty": true,
+            "diagnosticPresent": true,
+            "rc0ReferencePresent": true,
+            "canonicalCommandPresent": true,
+            "stderrSha256": "05671d2eee2498b38147f7261df80d62dbfa85a5db46d49751db7c334defb9c9"
+          },
+          {
+            "arguments": [
+              "--refresh-hash",
+              "--output-dir",
+              "/nonexistent/retired-verifier-probe"
+            ],
+            "exitCode": 2,
+            "stdoutEmpty": true,
+            "diagnosticPresent": true,
+            "rc0ReferencePresent": true,
+            "canonicalCommandPresent": true,
+            "stderrSha256": "05671d2eee2498b38147f7261df80d62dbfa85a5db46d49751db7c334defb9c9"
+          },
+          {
+            "mode": "PYTHON_AUDIT_HOOK_DENY_FILESYSTEM_PROCESS_NETWORK",
+            "exitCode": 2,
+            "forbiddenEvents": 0,
+            "diagnosticPresent": true
+          }
+        ]
+      },
+      {
+        "path": "docs/regime-engine-v2/designer/browser-qa.mjs",
+        "staticMinimalStatementStructure": "PASS",
+        "checks": [
+          {
+            "arguments": [],
+            "exitCode": 2,
+            "stdoutEmpty": true,
+            "diagnosticPresent": true,
+            "rc0ReferencePresent": true,
+            "canonicalCommandPresent": true,
+            "stderrSha256": "ec18729473b5ad441a5efdafeaf20233e5cd60f99cfce882d220ecc77efb31f9"
+          },
+          {
+            "arguments": [
+              "--refresh-hash",
+              "--output-dir",
+              "/nonexistent/retired-verifier-probe"
+            ],
+            "exitCode": 2,
+            "stdoutEmpty": true,
+            "diagnosticPresent": true,
+            "rc0ReferencePresent": true,
+            "canonicalCommandPresent": true,
+            "stderrSha256": "ec18729473b5ad441a5efdafeaf20233e5cd60f99cfce882d220ecc77efb31f9"
+          }
+        ]
+      },
+      {
+        "path": "docs/regime-engine-v2/designer/accessibility-qa.mjs",
+        "staticMinimalStatementStructure": "PASS",
+        "checks": [
+          {
+            "arguments": [],
+            "exitCode": 2,
+            "stdoutEmpty": true,
+            "diagnosticPresent": true,
+            "rc0ReferencePresent": true,
+            "canonicalCommandPresent": true,
+            "stderrSha256": "2d1675c6d77040c4bf6d42da0598d949c9ecbef2389cb25c7687dd36818eeaa5"
+          },
+          {
+            "arguments": [
+              "--refresh-hash",
+              "--output-dir",
+              "/nonexistent/retired-verifier-probe"
+            ],
+            "exitCode": 2,
+            "stdoutEmpty": true,
+            "diagnosticPresent": true,
+            "rc0ReferencePresent": true,
+            "canonicalCommandPresent": true,
+            "stderrSha256": "2d1675c6d77040c4bf6d42da0598d949c9ecbef2389cb25c7687dd36818eeaa5"
+          }
+        ]
+      }
+    ],
+    "guardLimitations": "Python audit hooks cover the named filesystem, process and socket events after source has been supplied as an argument. Ten static minimal-statement checks and twenty independent direct invocations supplement this; broader Node guards and portable candidate reproduction are recorded separately by the repair verifier.",
+    "historicalJsonPreservation": {
+      "status": "PASS",
+      "count": 305,
+      "referenceCommit": "f5fc7ecfd9e1f323d0ad3a43eccec1dbc500be1c",
+      "inventorySha256": "26e9ef488513a79eafa3cb9d8ccfa552a1c917f3f9ebdf40111040bf80b28d4b",
+      "pathsAndHashes": [
+        {
+          "path": "docs/regime-engine-v2/builder/baseline.json",
+          "sha256": "9114b7e57a93f7ade10ca021337fef4a4487e9ef7f63ccbefb747ec55724117b"
+        },
+        {
+          "path": "docs/regime-engine-v2/builder/conformance.json",
+          "sha256": "0ae86699a5a32f7d58bf3e604400cf875fd04900d6e5cf404b7a4be2a379cf06"
+        },
+        {
+          "path": "docs/regime-engine-v2/builder/delivery.json",
+          "sha256": "57b47d93b7cb3965ab7371999a6080f406c0b6bafd3ba0cdf6a85658085f6662"
+        },
+        {
+          "path": "docs/regime-engine-v2/builder/files-changed.json",
+          "sha256": "04dbac9e2842943170e811dde07551ebaf13dbd58b9314f441dd88d3af231ba1"
+        },
+        {
+          "path": "docs/regime-engine-v2/builder/full-test-command.json",
+          "sha256": "65081130367e92b1c8823c62ae98857348093fd0f9b4364327aa93750b4a35ea"
+        },
+        {
+          "path": "docs/regime-engine-v2/builder/historical-r2-output.json",
+          "sha256": "baeaa34545fd43109b9f94f6cfe4771858c00a3333a4e2d600213f5792f6cf3a"
+        },
+        {
+          "path": "docs/regime-engine-v2/builder/preservation.json",
+          "sha256": "a2fef06f441f4514fb2f735cb3f8d23ab044221c94b407a8397f2c719145fca7"
+        },
+        {
+          "path": "docs/regime-engine-v2/builder/shadow-example.json",
+          "sha256": "2e8b356831ff88246370e00b6caf88100551cbf7afca242511196ef498750432"
+        },
+        {
+          "path": "docs/regime-engine-v2/builder/shadow-input-r2.json",
+          "sha256": "b45459953f4cae0ad0ff24e376ad749aaac71132301e790050b5fafdd02c71c9"
+        },
+        {
+          "path": "docs/regime-engine-v2/builder/verification.json",
+          "sha256": "793d6cdaa7f373d282e4e4b623afd0c26ce011f4cdfd7fbcc3497dc7b734c214"
+        },
+        {
+          "path": "docs/regime-engine-v2/decision-table.json",
+          "sha256": "0dae14cb724e1772231ab0158e3112ca4ebb1d5350ba45044b592b8d051bbe51"
+        },
+        {
+          "path": "docs/regime-engine-v2/dependency-map.json",
+          "sha256": "1b6dbc306804ca2d34929ccb8cb034a1a0ae31cc3e6509ebd5c38ff5437cb8d5"
+        },
+        {
+          "path": "docs/regime-engine-v2/designer/accessibility-qa.json",
+          "sha256": "cc9b771020af03795f66446603889d9aee86a3c9bc9468b025125534abe0e20a"
+        },
+        {
+          "path": "docs/regime-engine-v2/designer/browser-qa-initial.json",
+          "sha256": "9cf92198081f7f8ff70e73bc2458a7b39d60fec6949ad8f74a0bf1c55ed11eb7"
+        },
+        {
+          "path": "docs/regime-engine-v2/designer/canonical-verification-before-20260908T203308241307Z.json",
+          "sha256": "a0d7eac05f1887a1d1675a5586c06ab83b2ff6b6ebef269a687c4405152ae811"
+        },
+        {
+          "path": "docs/regime-engine-v2/designer/canonical-verification.json",
+          "sha256": "93a7f00045556ab45f5c85f9155c0917525bb6216f6c4157ef5c17b3d3a2f846"
+        },
+        {
+          "path": "docs/regime-engine-v2/designer/copy-contract.json",
+          "sha256": "e9a76e7ef4751a1ed559497f3df940cc5a359ac068d7e57165d9e45e2036d17a"
+        },
+        {
+          "path": "docs/regime-engine-v2/designer/dev-generated-side-effects.json",
+          "sha256": "37d3478f9abc0f9ce1115693b608dc3e3fbfcc05b4afa66937340252c1abdfce"
+        },
+        {
+          "path": "docs/regime-engine-v2/designer/files-changed.json",
+          "sha256": "1eb00fe6d00137908f4dd3c6769c996c9e37cc5ed7bc1f9c16088e8d53f91111"
+        },
+        {
+          "path": "docs/regime-engine-v2/designer/finalroot-checks.json",
+          "sha256": "6811a1453200411b1795a5b5818c05d5a7ba9adbffe0e30f40a138ab86a4844c"
+        },
+        {
+          "path": "docs/regime-engine-v2/designer/findings.json",
+          "sha256": "806afbf87a01af05554a0b9b363723384e2984b2cf9b67390d4d3de0ff285075"
+        },
+        {
+          "path": "docs/regime-engine-v2/designer/fixture-matrix.json",
+          "sha256": "4aec9e788bbc06fd834b1c2a05dee6a76bd0ccd9e228f7cb24eaa47bda493a0e"
+        },
+        {
+          "path": "docs/regime-engine-v2/designer/fixtures/broad-complete.json",
+          "sha256": "a4d33bcec41d2f6a20107495963080a1a6896ca8c346008e40204899d2ee3bb9"
+        },
+        {
+          "path": "docs/regime-engine-v2/designer/fixtures/defensive-complete.json",
+          "sha256": "356f1f76419ee8f8780da4f8fdfa41ff88b778db06493fe52ab3e61cc91a2c7c"
+        },
+        {
+          "path": "docs/regime-engine-v2/designer/fixtures/incomplete-missing-core.json",
+          "sha256": "1be049a46b71deddd941d044139fd64cd58222ade5094000ae728d0848e9db0a"
+        },
+        {
+          "path": "docs/regime-engine-v2/designer/fixtures/incomplete-stale.json",
+          "sha256": "585db0dea40191b622777e7ae2d3fc9deb06bff7a48366fd7d317781e122e74c"
+        },
+        {
+          "path": "docs/regime-engine-v2/designer/fixtures/incomplete-unknown-calendar.json",
+          "sha256": "12c71ff670221cc4184a98ab4cbee91241832558c54c507d3dcb9bbb0d3a0c01"
+        },
+        {
+          "path": "docs/regime-engine-v2/designer/fixtures/incomplete-with-shock.json",
+          "sha256": "483232eefbd249d8bc8a50b1f282a478546ddb3e7866d78ccde37a4fc7b6279d"
+        },
+        {
+          "path": "docs/regime-engine-v2/designer/fixtures/selective-partial.json",
+          "sha256": "6c2c6218add0f101b505cc2b666614a2bdc233b122c60628962af09bfc1989b9"
+        },
+        {
+          "path": "docs/regime-engine-v2/designer/fixtures/stress-absolute.json",
+          "sha256": "1d09e274525916ee381f145c77b8cafc5c858b171fddd5b2daa2fc61202fa29c"
+        },
+        {
+          "path": "docs/regime-engine-v2/designer/fixtures/stress-joint.json",
+          "sha256": "c729a8f43156d8a8bca1afa871b7380ccdfe453a61799f9d8df1bf7760afc117"
+        },
+        {
+          "path": "docs/regime-engine-v2/designer/fixtures/transition-conflict.json",
+          "sha256": "950c8aa11fd9c8bc66814479c77f7ed3641ada8b415a25111a71ce206082f853"
+        },
+        {
+          "path": "docs/regime-engine-v2/designer/fixtures/transition-fragility.json",
+          "sha256": "8b4d97ed825cc025668a1034ff5184393227969a8a7e75d8cc0c0c0ab4c27348"
+        },
+        {
+          "path": "docs/regime-engine-v2/designer/fixtures/transition-watch.json",
+          "sha256": "5407f6a4edfcea04f5afef36f3734a6c71ab4a751cf62108ea279eabdb4aef87"
+        },
+        {
+          "path": "docs/regime-engine-v2/designer/generated-file-audit.json",
+          "sha256": "87a812ad6dc35533f34156d540aa41eadcc44c486ac0190848f2d11f7f9c952d"
+        },
+        {
+          "path": "docs/regime-engine-v2/designer/input-manifest.json",
+          "sha256": "5265205fdb49c4ab5845ee17f91802848890da2df29375781a869b831e4d9b4d"
+        },
+        {
+          "path": "docs/regime-engine-v2/designer/performance-before-formatter-reuse.json",
+          "sha256": "dc458dfd9fe079364abf42e39bea70f4773652f86acab1ed679e9749773f0a5d"
+        },
+        {
+          "path": "docs/regime-engine-v2/designer/performance.json",
+          "sha256": "86203069e7c623f396fdb8d26334ceef2ec7e4e3e5abc61f56d9ead01c98b2ea"
+        },
+        {
+          "path": "docs/regime-engine-v2/designer/production-preview-guard.json",
+          "sha256": "5dfeddfdbf231894b35d7796df78ee91480a8cb18a0e76b94191fa2ee778da4a"
+        },
+        {
+          "path": "docs/regime-engine-v2/designer/render-finding.json",
+          "sha256": "795a585c626a1484843b9f804af0a949c417f17a08db666509320200e88abbac"
+        },
+        {
+          "path": "docs/regime-engine-v2/designer/repository-verification.json",
+          "sha256": "92b45268bbf3fcb527768140a9d0be9ae17d2055d06a85d6b56d5dcefa6f88d9"
+        },
+        {
+          "path": "docs/regime-engine-v2/designer/sweeper-attacks.json",
+          "sha256": "d06279fb91976b57792d9e0343de47003353e59773c22801d4368edae388fbbd"
+        },
+        {
+          "path": "docs/regime-engine-v2/designer/v1-reference.json",
+          "sha256": "e8d1aa1edf47289e098b4dbbe02703f1b68f8e772cde3bccfed2b3a7b8a6868b"
+        },
+        {
+          "path": "docs/regime-engine-v2/designer/v1-render-proof.json",
+          "sha256": "a23eb4e811f509998756fcb87b8b5255615464b504444e3c381e81d580a4a5ef"
+        },
+        {
+          "path": "docs/regime-engine-v2/designer/verification-findings.json",
+          "sha256": "efedf0fe3e33cc0d9d69f8d586a972688460418b39916f8a9d9289276a6d9260"
+        },
+        {
+          "path": "docs/regime-engine-v2/designer/verification.json",
+          "sha256": "6aacc61319b7086228415e84453362f1c532458120fe656c34ad42ec02fc2533"
+        },
+        {
+          "path": "docs/regime-engine-v2/designer/visual-regression.json",
+          "sha256": "30a03b844043c88b2da7d7ce185c459241097b5972a5b2b5fa6e01505c249d14"
+        },
+        {
+          "path": "docs/regime-engine-v2/feature-registry.json",
+          "sha256": "f7270f43ebf78775d7be5a5bd566fc9885a7f500f3cd1d601d5c68f31c9c3539"
+        },
+        {
+          "path": "docs/regime-engine-v2/groweer/ablation.json",
+          "sha256": "cd0cc6e40e19195f56630938173bfb0e7163e799436f0f38bf441625ab3a1189"
+        },
+        {
+          "path": "docs/regime-engine-v2/groweer/analysis-input-audit.json",
+          "sha256": "52729c6c75358ed23cf931684de85d0134760bef4972d4d8628f2c5a27ee452f"
+        },
+        {
+          "path": "docs/regime-engine-v2/groweer/analysis-input.json.gz",
+          "sha256": "1e6d25319a90b89ac762434fb5e92f650f4dc0c10ab719c06734bb295c1c61bc"
+        },
+        {
+          "path": "docs/regime-engine-v2/groweer/analysis-protocol.json",
+          "sha256": "82a816ff496ed0a581e6b4ab45c571a7903dbd8f1ba921f04e7e088af2d7a583"
+        },
+        {
+          "path": "docs/regime-engine-v2/groweer/baseline-characterization.json",
+          "sha256": "15cde8250040b1eb970bd2eb39a53cffd2c2bf4acba73a3cda23e628176aa183"
+        },
+        {
+          "path": "docs/regime-engine-v2/groweer/benchmarks.json",
+          "sha256": "dff7c6309d47f5ec23e9aafe7339e490da6fd71c144051f277eb2b7efc11445d"
+        },
+        {
+          "path": "docs/regime-engine-v2/groweer/canonical-verification.json",
+          "sha256": "5e9c06c310d3345f767d4ea0747fcb172f7fb1926d2e569d759fd21e0b79fa3e"
+        },
+        {
+          "path": "docs/regime-engine-v2/groweer/challenger-catalog.json",
+          "sha256": "6fa667d546227e4549a81df6166447faaf6c4d5c8b6ef3c61ac10fdc52cfb7d2"
+        },
+        {
+          "path": "docs/regime-engine-v2/groweer/complexity-matrix.json",
+          "sha256": "eecf16acdcec47e526787a42ac02277ff968d3cd2cfa705c48914f6b7bd18108"
+        },
+        {
+          "path": "docs/regime-engine-v2/groweer/cross-asset-audit.json",
+          "sha256": "c311c49126d958193996d4afb05aee66b455fc1edb82da1f84d43f6407b8560e"
+        },
+        {
+          "path": "docs/regime-engine-v2/groweer/data-quality-audit.json",
+          "sha256": "324533807583a3fe11f63a137c2e077d70069d32a82855a90ada3c1f1f9e3fe7"
+        },
+        {
+          "path": "docs/regime-engine-v2/groweer/dimension-value.json",
+          "sha256": "519bbe76d639badbd787de965fe99f55f031e40b947a2ca4d31104679bfcb727"
+        },
+        {
+          "path": "docs/regime-engine-v2/groweer/experiment-outputs.json.gz",
+          "sha256": "15e1e50c3cc5980a89738d9d7084ecde76b8f57922352f04f1cacd2edafff195"
+        },
+        {
+          "path": "docs/regime-engine-v2/groweer/files-changed.json",
+          "sha256": "2e018220dd8313f98b83235a8be12cc4f6ae9c30cb1255fcac08b0d28e4136cc"
+        },
+        {
+          "path": "docs/regime-engine-v2/groweer/growth-findings.json",
+          "sha256": "41416cdcbb7bab17604d5d03db0e77076d216cd8071977ac2029b1aa7ab527c4"
+        },
+        {
+          "path": "docs/regime-engine-v2/groweer/hysteresis-challenger.json",
+          "sha256": "b8ec9886d2bab9e319b0efc38430e159cbfa7e40ee1d48385aec25e8ebd46b95"
+        },
+        {
+          "path": "docs/regime-engine-v2/groweer/input-manifest.json",
+          "sha256": "a08f7116d1e6dc0631f884a4b817bfb5594006367ccf0c16336e8e9efc6474e2"
+        },
+        {
+          "path": "docs/regime-engine-v2/groweer/persistence-challenger.json",
+          "sha256": "5c32b24d1baca62f17073a096eba7951046aeacdd613f0b7f6bf3fec79650934"
+        },
+        {
+          "path": "docs/regime-engine-v2/groweer/pfl-compatibility.json",
+          "sha256": "39d6419093d92025ef7d0ab9907b6b2ac3f0e8fa26679394629376e9d5d283f2"
+        },
+        {
+          "path": "docs/regime-engine-v2/groweer/prospective-validation-design.json",
+          "sha256": "b8eb34647478afcfa0fdd44236fffe37bf6b2802a94be3df4de77c2dcf0e7372"
+        },
+        {
+          "path": "docs/regime-engine-v2/groweer/redundancy-analysis.json",
+          "sha256": "7dce57a35981b8b71fbe1d576eda0faff03860cf8ceaf06a450981a79b0c3b96"
+        },
+        {
+          "path": "docs/regime-engine-v2/groweer/satellite-review.json",
+          "sha256": "faa095b9d4ffef8ac639b4598d3e61988e5208a82866996fdc430003f62f5795"
+        },
+        {
+          "path": "docs/regime-engine-v2/groweer/stress-forensics.json",
+          "sha256": "ae67581900be90535278869434de6bb490100cc35b13650c8ddc0fabf60e715c"
+        },
+        {
+          "path": "docs/regime-engine-v2/groweer/sweeper-attacks.json",
+          "sha256": "d06279fb91976b57792d9e0343de47003353e59773c22801d4368edae388fbbd"
+        },
+        {
+          "path": "docs/regime-engine-v2/groweer/threshold-sensitivity.json",
+          "sha256": "d9b097b3569f5f832643435f9b723286dc2ee1d69e75995d215307e1a71e6ed4"
+        },
+        {
+          "path": "docs/regime-engine-v2/groweer/transition-forensics.json",
+          "sha256": "2ead6b8a52d8b7f8d0af719401b0218aacdf78b3e00ac688b6fe8fc8374f3558"
+        },
+        {
+          "path": "docs/regime-engine-v2/groweer/v1-benchmark-inventory.json",
+          "sha256": "671d1cbbc1cd07f88865830b8bb69817040bb75df19f8de0ec1ea88b2ea2cf05"
+        },
+        {
+          "path": "docs/regime-engine-v2/groweer/verification.json",
+          "sha256": "689adee924433e27d4800a5c5caac5f126f23180546563e4ec4dc84afe04d012"
+        },
+        {
+          "path": "docs/regime-engine-v2/maintainer/calendar-audit.json",
+          "sha256": "078b927ed9ecc40306841e28f5a208e592e5b93978e707735847fc6a118010e7"
+        },
+        {
+          "path": "docs/regime-engine-v2/maintainer/canonical-verification.json",
+          "sha256": "6d7b9dc71fb2d1f06173b551af84369a05a1946b7e87ac56fc3ea8f7e9069f7f"
+        },
+        {
+          "path": "docs/regime-engine-v2/maintainer/dependency-audit.json",
+          "sha256": "dd48ce3456e591c1c5621bc7f3078c4dab1bd3d2f04dd23c6b071fe22c48c877"
+        },
+        {
+          "path": "docs/regime-engine-v2/maintainer/files-changed.json",
+          "sha256": "e78dc365b8808a63deed46315a7ddb7c9e6541f263329baa5ab35bbb1be2e9dd"
+        },
+        {
+          "path": "docs/regime-engine-v2/maintainer/findings.json",
+          "sha256": "730b7d8e18e1ec11570ef3fa917a5dc29f30c1639e9d4dbc50c1effdc755b4ad"
+        },
+        {
+          "path": "docs/regime-engine-v2/maintainer/input-manifest.json",
+          "sha256": "4c89595a993e400ce41728d465693195d8758b9847e15c08ebb1cbfc6bfeff0e"
+        },
+        {
+          "path": "docs/regime-engine-v2/maintainer/performance-pipeline-before.json",
+          "sha256": "7755cec12a01ce47799c01ba0f9d9a1c0e4ff1e1ae6b13ae865e0cab3a418bb8"
+        },
+        {
+          "path": "docs/regime-engine-v2/maintainer/performance-pipeline.json",
+          "sha256": "408ed11dd0f61172afb503501da068bdddb8afb2e8fb0dbbc21fc5cccae5a7e9"
+        },
+        {
+          "path": "docs/regime-engine-v2/maintainer/performance.json",
+          "sha256": "66fa7d41caffca79217e23018e5f5a977fb284eeee256527a732b8f8f748882f"
+        },
+        {
+          "path": "docs/regime-engine-v2/maintainer/prospective-smoke.json",
+          "sha256": "842439dc7356801608226c2ee610d4c4144c79278e0e1b8451a744a76d271fc9"
+        },
+        {
+          "path": "docs/regime-engine-v2/maintainer/root-checks-prebuild.json",
+          "sha256": "f185df025aed90ccacfbff52c6a51a6dff1c8d5e13bc329375619fff163b5820"
+        },
+        {
+          "path": "docs/regime-engine-v2/maintainer/root-checks.json",
+          "sha256": "e449da90825e57a8be2e00110d3a434c2d29ac016d64dbbd9a67742cef678c66"
+        },
+        {
+          "path": "docs/regime-engine-v2/maintainer/snapshot-contract.json",
+          "sha256": "916558233cd9928cdb268d67fb5f1e6483e04d73d007f33187b5c0191c0dda35"
+        },
+        {
+          "path": "docs/regime-engine-v2/maintainer/source-boundary-audit.json",
+          "sha256": "f9c61188601c1b8c15a1770935e2c096bea0251e7184cdc7c0c426693eb9b472"
+        },
+        {
+          "path": "docs/regime-engine-v2/maintainer/sweeper-attacks.json",
+          "sha256": "d06279fb91976b57792d9e0343de47003353e59773c22801d4368edae388fbbd"
+        },
+        {
+          "path": "docs/regime-engine-v2/maintainer/verification.json",
+          "sha256": "9938e5b789b0001f5113515fc5ebbc72ad7704202ae93178a030ba8af8027705"
+        },
+        {
+          "path": "docs/regime-engine-v2/p8/F1-test.json",
+          "sha256": "23667dd81976fe0021639b7dc8860bda2b28216609d72da897e03ae672cf189c"
+        },
+        {
+          "path": "docs/regime-engine-v2/p8/F1-training-selection.json",
+          "sha256": "8bc9aa082e1040de173dbccce7a9099629f81a6f7a5012864cc09f517b9fcae0"
+        },
+        {
+          "path": "docs/regime-engine-v2/p8/F1-validation.json",
+          "sha256": "508abcc4dffc2cf74624cc0a9c3e61953ba31ec2d26fee95f62ff6eb1e59634b"
+        },
+        {
+          "path": "docs/regime-engine-v2/p8/F2-test.json",
+          "sha256": "f958ad26f5d39d40d0ed94a23f1482aedd487b82838b72765b56f2f48ed98464"
+        },
+        {
+          "path": "docs/regime-engine-v2/p8/F2-training-selection.json",
+          "sha256": "c12afea00da6294867cb1b9b93a17a9d202a0c3fabb0fdd1a65db2025b52ab15"
+        },
+        {
+          "path": "docs/regime-engine-v2/p8/F2-validation.json",
+          "sha256": "d6d438a52d563fea1bfe5670ecba315a20814846d8428bff0cb28c02f68026f6"
+        },
+        {
+          "path": "docs/regime-engine-v2/p8/F3-test.json",
+          "sha256": "a1d9d2247fc77f44d82aa209b5b14d2138e8b5a0ff920b519af358881621f7ed"
+        },
+        {
+          "path": "docs/regime-engine-v2/p8/F3-training-selection.json",
+          "sha256": "5fc60bcab1b8b8110db0472b167a78f8713ad26dbe24a251fa889e26aa1eb4be"
+        },
+        {
+          "path": "docs/regime-engine-v2/p8/F3-validation.json",
+          "sha256": "47cf062ace0a1b1c32a641adfceb8038c1ddb7aaf93ad13947847330e7e28132"
+        },
+        {
+          "path": "docs/regime-engine-v2/p8/acquisition.json",
+          "sha256": "f539300ade6853d7a67998c443c0f2171af23aef7aad27e45074c5f51c3bb776"
+        },
+        {
+          "path": "docs/regime-engine-v2/p8/artifact-manifest.json",
+          "sha256": "08df83bb272e91aaf01113cb485ab29bee60bf6d55b50d4afa1077950d0ec1ba"
+        },
+        {
+          "path": "docs/regime-engine-v2/p8/compatibility-checks.json",
+          "sha256": "9d0b74798079e2a4e1e7bf552f0415dd3687417659e059685290fba97f3c1c1e"
+        },
+        {
+          "path": "docs/regime-engine-v2/p8/contract-check-results.json",
+          "sha256": "4e7baafcd4374245b9dc31f356b78b1f9295203210819fba661990e6cc41dd70"
+        },
+        {
+          "path": "docs/regime-engine-v2/p8/evidence/cfe-contract-index.json.gz",
+          "sha256": "4554707ccfbbad0489880eff8a94c3c59ea5c189d5eafedf017baa1da38c4e93"
+        },
+        {
+          "path": "docs/regime-engine-v2/p8/evidence/cfe-contract-index.json.metadata.json",
+          "sha256": "a51c9c1b055e055c863b11d23746b0d6dc318e1b24e97618365e004985899aef"
+        },
+        {
+          "path": "docs/regime-engine-v2/p8/evidence/selected-contracts.json",
+          "sha256": "957a13ed819011ddbd20eb525e6194adaff97f57049064bdfa50c989c5312c7f"
+        },
+        {
+          "path": "docs/regime-engine-v2/p8/evidence/vix-history.csv.metadata.json",
+          "sha256": "867ee028b672de66e5ef73d3be7ba59cdd4fec93edc4100e192ddce6b36d65e2"
+        },
+        {
+          "path": "docs/regime-engine-v2/p8/evidence/vx-2018-01-17.csv.metadata.json",
+          "sha256": "f5793fb3c83b2ce6b9e02eac88b80eabaa8d1a587894e64a03abe677d21e0163"
+        },
+        {
+          "path": "docs/regime-engine-v2/p8/evidence/vx-2018-02-14.csv.metadata.json",
+          "sha256": "d5febd4bac278bea5820dfcd7c28d3c5d9743b5c8394771bb2cc34832d5adb10"
+        },
+        {
+          "path": "docs/regime-engine-v2/p8/evidence/vx-2018-03-21.csv.metadata.json",
+          "sha256": "2342e0cffbf2c8801b576a2d6b1cbfaad56375218e2bb1c43b730b634ed95fff"
+        },
+        {
+          "path": "docs/regime-engine-v2/p8/evidence/vx-2018-04-18.csv.metadata.json",
+          "sha256": "467ca22ba6ffa5bb4eac18cbf2cc6e5831065bc35ed4d224e5688d7056b74dbd"
+        },
+        {
+          "path": "docs/regime-engine-v2/p8/evidence/vx-2018-05-16.csv.metadata.json",
+          "sha256": "209c268f14716c1e8448d7728d3772cceebe9a6b5f41fa7d78510637d56440a7"
+        },
+        {
+          "path": "docs/regime-engine-v2/p8/evidence/vx-2018-06-20.csv.metadata.json",
+          "sha256": "87680f3bc6d8eab10f3c7c1dfdffbb1e161ff69f44cdb40984dab52e059c5d5a"
+        },
+        {
+          "path": "docs/regime-engine-v2/p8/evidence/vx-2018-07-18.csv.metadata.json",
+          "sha256": "d86af1d8f16d09b85beca324441d7ecef5f00d31063c07a1fa09cc15196276ed"
+        },
+        {
+          "path": "docs/regime-engine-v2/p8/evidence/vx-2018-08-22.csv.metadata.json",
+          "sha256": "6c4005c8bce9cf86661fc17e84543247d762d616c2eff094e95f5368731b06cc"
+        },
+        {
+          "path": "docs/regime-engine-v2/p8/evidence/vx-2018-09-19.csv.metadata.json",
+          "sha256": "6b8c517329ca6d1a4ca03b5ead6c24b2666f35e66b4388ff337fb40774c6bda2"
+        },
+        {
+          "path": "docs/regime-engine-v2/p8/evidence/vx-2018-10-17.csv.metadata.json",
+          "sha256": "bc0667cfe09a5083c8c0cd691e72fc18227956b6af1d7e3bd6f4e5895c85e368"
+        },
+        {
+          "path": "docs/regime-engine-v2/p8/evidence/vx-2018-11-21.csv.metadata.json",
+          "sha256": "724ed9950b6dcce7c03214e22b8b10285de18d7e690e088aa133f72cfb45388e"
+        },
+        {
+          "path": "docs/regime-engine-v2/p8/evidence/vx-2018-12-19.csv.metadata.json",
+          "sha256": "b145298c8ea381842131bed7103c51637cc513f404f76a743a4036baf60ac324"
+        },
+        {
+          "path": "docs/regime-engine-v2/p8/evidence/vx-2019-01-16.csv.metadata.json",
+          "sha256": "29fcd88d34fdf6ced33c4668d6e3ab6d79612e13978a26236aa877b4d1db6072"
+        },
+        {
+          "path": "docs/regime-engine-v2/p8/evidence/vx-2019-02-13.csv.metadata.json",
+          "sha256": "829e7d6abbb8f045bf96ef79439b66c417cfce6d9d2fbe15a0dc9af5b595320c"
+        },
+        {
+          "path": "docs/regime-engine-v2/p8/evidence/vx-2019-03-19.csv.metadata.json",
+          "sha256": "e8ab95574e289281dcefc921d7ac2f0778112c67346b3b8f492fa71208ad72ea"
+        },
+        {
+          "path": "docs/regime-engine-v2/p8/evidence/vx-2019-04-17.csv.metadata.json",
+          "sha256": "f0144d382509de7db453b6dc7b018f2f5bcc57953e256a82412f1d0e5fb50e2b"
+        },
+        {
+          "path": "docs/regime-engine-v2/p8/evidence/vx-2019-05-22.csv.metadata.json",
+          "sha256": "e2418043b08623748c244a22377fea37784ea47dbec6a7469c01565d581c3950"
+        },
+        {
+          "path": "docs/regime-engine-v2/p8/evidence/vx-2019-06-19.csv.metadata.json",
+          "sha256": "1c8343524d6e94e4f2c662e89a9fff4dffb7dafa05eebee5a8f06d1ede59cbfd"
+        },
+        {
+          "path": "docs/regime-engine-v2/p8/evidence/vx-2019-07-17.csv.metadata.json",
+          "sha256": "7ff5f68d2b2a18ccdebdd6dcbc5ff6c47617e9dc8f663b5c2a881cd6838c8973"
+        },
+        {
+          "path": "docs/regime-engine-v2/p8/evidence/vx-2019-08-21.csv.metadata.json",
+          "sha256": "98541005c2ac09b0cdeaa7f371aedb8024a77764a2708c4774e3ebaf6c60765f"
+        },
+        {
+          "path": "docs/regime-engine-v2/p8/evidence/vx-2019-09-18.csv.metadata.json",
+          "sha256": "c3ef47f58476d396a98a1cbade838cb255eda4b360003ef70079753771ae8a37"
+        },
+        {
+          "path": "docs/regime-engine-v2/p8/evidence/vx-2019-10-16.csv.metadata.json",
+          "sha256": "e5d6dc6b9c05bcb1b96a075e0b03652e697d44d8bfb44e640108607c0aed3c59"
+        },
+        {
+          "path": "docs/regime-engine-v2/p8/evidence/vx-2019-11-20.csv.metadata.json",
+          "sha256": "1286eb0d52a281d05165a743ae346311f179b830afdc8c56897c1531bc38390f"
+        },
+        {
+          "path": "docs/regime-engine-v2/p8/evidence/vx-2019-12-18.csv.metadata.json",
+          "sha256": "eace7abfd4869c04cd3b1ce73b1793c9eafef4a1631a2b1c782110eba7715733"
+        },
+        {
+          "path": "docs/regime-engine-v2/p8/evidence/vx-2020-01-22.csv.metadata.json",
+          "sha256": "0680759ad6fc599689ffa00b3cf958158f8725fa60c109371e5944528b84c991"
+        },
+        {
+          "path": "docs/regime-engine-v2/p8/evidence/vx-2020-02-19.csv.metadata.json",
+          "sha256": "bc8ba084bfc5b2e2757a107098062a29576f8136904c11ff70365f8f2888b415"
+        },
+        {
+          "path": "docs/regime-engine-v2/p8/evidence/vx-2020-03-18.csv.metadata.json",
+          "sha256": "d266a1fcdd33b44e467723cd9586964c8b3c5ae0cad969db6cca0ece01150e54"
+        },
+        {
+          "path": "docs/regime-engine-v2/p8/evidence/vx-2020-04-15.csv.metadata.json",
+          "sha256": "61f1cf9f2975321537934fffce5707a9053758d47ad2751d514a13b39ff719c1"
+        },
+        {
+          "path": "docs/regime-engine-v2/p8/evidence/vx-2020-05-20.csv.metadata.json",
+          "sha256": "f0333073abc3832a8b4958187bef798ed869eee11fa6dbad78c4a47f61d08503"
+        },
+        {
+          "path": "docs/regime-engine-v2/p8/evidence/vx-2020-06-17.csv.metadata.json",
+          "sha256": "81ff2729b6e6496ff7d56a27309575eb2a2cd977af22f7d5d1d055558b8540b9"
+        },
+        {
+          "path": "docs/regime-engine-v2/p8/evidence/vx-2020-07-22.csv.metadata.json",
+          "sha256": "9daf9ca9350388c08be572ce10eadf9d6bc18155c3e8386603e0d4b96d989b05"
+        },
+        {
+          "path": "docs/regime-engine-v2/p8/evidence/vx-2020-08-19.csv.metadata.json",
+          "sha256": "4690c3a9f86c1b8dab6b785824c532ae1ae84cd8d11014883d141307b7815a6e"
+        },
+        {
+          "path": "docs/regime-engine-v2/p8/evidence/vx-2020-09-16.csv.metadata.json",
+          "sha256": "66dd19c1732ec23ec1b00c7250b6bc0cc202e085d256225bd661df3ba80f1a6a"
+        },
+        {
+          "path": "docs/regime-engine-v2/p8/evidence/vx-2020-10-21.csv.metadata.json",
+          "sha256": "f45015669f3a332ca017d2f7d75e30b8d6658591bd03f17dd9c1faaf5b265d45"
+        },
+        {
+          "path": "docs/regime-engine-v2/p8/evidence/vx-2020-11-18.csv.metadata.json",
+          "sha256": "ecbbfdf01eed5b5f7ef85231901ae323c4108e7cd0f05b56348b9a21d3e81e3a"
+        },
+        {
+          "path": "docs/regime-engine-v2/p8/evidence/vx-2020-12-16.csv.metadata.json",
+          "sha256": "5ad15a8c4e5dcef74c625e22b4b49bc7f2db1ec7d18aa256365584976efa33cb"
+        },
+        {
+          "path": "docs/regime-engine-v2/p8/evidence/vx-2021-01-20.csv.metadata.json",
+          "sha256": "89534b3ea3b8a9c24f482492c4df8ec990307810a531ee4b712fd79699c26702"
+        },
+        {
+          "path": "docs/regime-engine-v2/p8/evidence/vx-2021-02-17.csv.metadata.json",
+          "sha256": "ea855d6256b4386172edf0ca37813986ce72f025f850f42eca8fbe44b6755547"
+        },
+        {
+          "path": "docs/regime-engine-v2/p8/evidence/vx-2021-03-17.csv.metadata.json",
+          "sha256": "f2a344577e3bfb1b64d2f92ed521bcd9cb4480f2a0a4b94d73b4d3656bf650ea"
+        },
+        {
+          "path": "docs/regime-engine-v2/p8/evidence/vx-2021-04-21.csv.metadata.json",
+          "sha256": "248623ebd9268d30ba9ce7ba317a6e35c17aec58054136a31d895f7714816929"
+        },
+        {
+          "path": "docs/regime-engine-v2/p8/evidence/vx-2021-05-19.csv.metadata.json",
+          "sha256": "9665e06d95f28f127d78f28faf1c20afac6149315fbed2c10a3daafd7464b7e4"
+        },
+        {
+          "path": "docs/regime-engine-v2/p8/evidence/vx-2021-06-16.csv.metadata.json",
+          "sha256": "28bdbbf643f84c1d9a08b1b4beee32cf30e085af08ddbfe405bd5b26a2150bd5"
+        },
+        {
+          "path": "docs/regime-engine-v2/p8/evidence/vx-2021-07-21.csv.metadata.json",
+          "sha256": "3abff9454f6d72f2cda507b46fee3ee34038bdac9b4f906250805344dc028e12"
+        },
+        {
+          "path": "docs/regime-engine-v2/p8/evidence/vx-2021-08-18.csv.metadata.json",
+          "sha256": "29850048d54391287ae6e79ad157452a1d5f354eb219160dc31062af81b27de2"
+        },
+        {
+          "path": "docs/regime-engine-v2/p8/evidence/vx-2021-09-15.csv.metadata.json",
+          "sha256": "9c9292cc643151f2fceec5273f210c6a0dc23a0452b9fd2f6ee19a36ac029761"
+        },
+        {
+          "path": "docs/regime-engine-v2/p8/evidence/vx-2021-10-20.csv.metadata.json",
+          "sha256": "b9b361283cc69089abdb7d3a82585b7497fb48032b39d46e742a683d19a79afb"
+        },
+        {
+          "path": "docs/regime-engine-v2/p8/evidence/vx-2021-11-17.csv.metadata.json",
+          "sha256": "97bc2f6e8d2e7843a21095628848b66717e687b9c2c95684e646b11e0c3b285a"
+        },
+        {
+          "path": "docs/regime-engine-v2/p8/evidence/vx-2021-12-22.csv.metadata.json",
+          "sha256": "a951558d544168b2dd11eab576be6a64d5b8738750f9344ab2a14d9086c94cd8"
+        },
+        {
+          "path": "docs/regime-engine-v2/p8/evidence/vx-2022-01-19.csv.metadata.json",
+          "sha256": "6fd19f88f4d74b484c9bb5ba344c416aea471690584c77dc0003834b8c915fe7"
+        },
+        {
+          "path": "docs/regime-engine-v2/p8/evidence/vx-2022-02-16.csv.metadata.json",
+          "sha256": "3bde9742e092585d8dc62bf11ad692032ef557c530196583ef68c7205e95927d"
+        },
+        {
+          "path": "docs/regime-engine-v2/p8/evidence/vx-2022-03-15.csv.metadata.json",
+          "sha256": "757f551c8db948ee6c459cfea67ace243c1f5634e2c83af3ce08b6a95b9a15a4"
+        },
+        {
+          "path": "docs/regime-engine-v2/p8/evidence/vx-2022-04-20.csv.metadata.json",
+          "sha256": "09ab9b0717de8ff9beec45e91cf33bdc149ae03997092f78d9de429ae9db9646"
+        },
+        {
+          "path": "docs/regime-engine-v2/p8/evidence/vx-2022-05-18.csv.metadata.json",
+          "sha256": "dd162c0e01875d23b19f922dc40b699779530cbcf015f247791132bb0b829ba7"
+        },
+        {
+          "path": "docs/regime-engine-v2/p8/evidence/vx-2022-06-15.csv.metadata.json",
+          "sha256": "277b8c4ad518ea83a7f56f0874a8cf92480312cf9c5b279e091de387682a4578"
+        },
+        {
+          "path": "docs/regime-engine-v2/p8/evidence/vx-2022-07-20.csv.metadata.json",
+          "sha256": "02ef058a4f56ae434da9dac4d1d0ca935912e889d4a8170ff0afac772fc49466"
+        },
+        {
+          "path": "docs/regime-engine-v2/p8/evidence/vx-2022-08-17.csv.metadata.json",
+          "sha256": "8e9fb8cfd3701ac9740b6d046844252acfe7ddf4225b81718dfa9f3a64a5cde4"
+        },
+        {
+          "path": "docs/regime-engine-v2/p8/evidence/vx-2022-09-21.csv.metadata.json",
+          "sha256": "c3df0baba58136d42b43ea2bcdbc193930333df0e565923f9164f4b3c9256a82"
+        },
+        {
+          "path": "docs/regime-engine-v2/p8/evidence/vx-2022-10-19.csv.metadata.json",
+          "sha256": "921b016a518601841cbc1c28c3831e32166deaa9b07fff7e5f337b508cc51ecd"
+        },
+        {
+          "path": "docs/regime-engine-v2/p8/evidence/vx-2022-11-16.csv.metadata.json",
+          "sha256": "0fe891b021eaf663deea69a1f8286c67377d7f747dc775a46c9a914e43795238"
+        },
+        {
+          "path": "docs/regime-engine-v2/p8/evidence/vx-2022-12-21.csv.metadata.json",
+          "sha256": "a1f2cfbb49d2d1dc5cb7c28222a63ef7151f37dd831d0c366e19b548d7a5a57e"
+        },
+        {
+          "path": "docs/regime-engine-v2/p8/evidence/vx-2023-01-18.csv.metadata.json",
+          "sha256": "2b62dcb72cd2331f41edd1bfa5de75c2bb0349a361b6db997612bb803dc19e26"
+        },
+        {
+          "path": "docs/regime-engine-v2/p8/evidence/vx-2023-02-15.csv.metadata.json",
+          "sha256": "262750f3829ce1d1909a47fce77a62f36190e44d88fd3004a6ec6da1735b0337"
+        },
+        {
+          "path": "docs/regime-engine-v2/p8/evidence/vx-2023-03-22.csv.metadata.json",
+          "sha256": "e53bbec29ea8f6501a75b07230889bd57797f7f880960ef70d53355bd82fb269"
+        },
+        {
+          "path": "docs/regime-engine-v2/p8/evidence/vx-2023-04-19.csv.metadata.json",
+          "sha256": "1ccc9591658404923bcf6005526b55caef196c53e1c094208f1529ffd3978b42"
+        },
+        {
+          "path": "docs/regime-engine-v2/p8/evidence/vx-2023-05-17.csv.metadata.json",
+          "sha256": "9d48680eb062cee65c700a873b4b10df0c8682cd74f51592c7cd53e3cb4ad7d9"
+        },
+        {
+          "path": "docs/regime-engine-v2/p8/evidence/vx-2023-06-21.csv.metadata.json",
+          "sha256": "0e332ccd7f4d360fdf1c0071ec374a160db385de023ec0c7651eea678f560ef1"
+        },
+        {
+          "path": "docs/regime-engine-v2/p8/evidence/vx-2023-07-19.csv.metadata.json",
+          "sha256": "cfd23bf0c894dca40bc86a7e1608bba7ae460f0765afcf00a25504de647dad2d"
+        },
+        {
+          "path": "docs/regime-engine-v2/p8/evidence/vx-2023-08-16.csv.metadata.json",
+          "sha256": "49ad7f44319558e68bd36d993011f01fccdee753f18d41f2e52cbe3e63c206aa"
+        },
+        {
+          "path": "docs/regime-engine-v2/p8/evidence/vx-2023-09-20.csv.metadata.json",
+          "sha256": "c8bb25a211af36cdc4b704f2c185d9ed08f7a6a8b842c34b9e53678bc78bd56e"
+        },
+        {
+          "path": "docs/regime-engine-v2/p8/evidence/vx-2023-10-18.csv.metadata.json",
+          "sha256": "c86a88e1fb599709308e6d43bda86cb97f22bf5350ba5e7c63f27e0601281b59"
+        },
+        {
+          "path": "docs/regime-engine-v2/p8/evidence/vx-2023-11-15.csv.metadata.json",
+          "sha256": "fd713b9927aac8e77774f5601e6dcf9e1054c93e0df27751a62e281cf3f1f4f5"
+        },
+        {
+          "path": "docs/regime-engine-v2/p8/evidence/vx-2023-12-20.csv.metadata.json",
+          "sha256": "06328ac22aff79876c83a126a7a1fb8c32236bd3384e5a51d18c5dde1923b35d"
+        },
+        {
+          "path": "docs/regime-engine-v2/p8/evidence/vx-2024-01-17.csv.metadata.json",
+          "sha256": "8e7fc042d8a24271252f6663bcbe3d939d87956cbbf894a9572c6bf5f0e7350d"
+        },
+        {
+          "path": "docs/regime-engine-v2/p8/evidence/vx-2024-02-14.csv.metadata.json",
+          "sha256": "621b3ada52db353d40b35f948f328f0583531a34aeb4593c39c097f15b5642d4"
+        },
+        {
+          "path": "docs/regime-engine-v2/p8/evidence/vx-2024-03-20.csv.metadata.json",
+          "sha256": "6a5f7bbedbd2b35d4f9f42b4c98735fb2996217dad36a837e701d7a21afaf678"
+        },
+        {
+          "path": "docs/regime-engine-v2/p8/evidence/vx-2024-04-17.csv.metadata.json",
+          "sha256": "0324caeaccfc6e69582a8c3b698e65293fbee3e76d99db7c6030c3f6d65966b7"
+        },
+        {
+          "path": "docs/regime-engine-v2/p8/evidence/vx-2024-05-22.csv.metadata.json",
+          "sha256": "bbe64b802e719a4639a96ffc071dcdb9b06836be899c368180c461260e5d9b0d"
+        },
+        {
+          "path": "docs/regime-engine-v2/p8/evidence/vx-2024-06-18.csv.metadata.json",
+          "sha256": "ebb1b3379098b0123b4e12e7725e9027da81763dcbe305994906a006557a30bb"
+        },
+        {
+          "path": "docs/regime-engine-v2/p8/evidence/vx-2024-07-17.csv.metadata.json",
+          "sha256": "8395e54f40501277d345dfa2ca208cd148c1058ca11873eca75ab61b57b0f038"
+        },
+        {
+          "path": "docs/regime-engine-v2/p8/evidence/vx-2024-08-21.csv.metadata.json",
+          "sha256": "e8587ca0bb7524cf3071532728f7df33c34b065c25745e5e7a745847296c92f5"
+        },
+        {
+          "path": "docs/regime-engine-v2/p8/evidence/vx-2024-09-18.csv.metadata.json",
+          "sha256": "6fa6bcee50fed6c9c1fb18f756332524f3a8a6398c0a6341efa60b9bcf50a659"
+        },
+        {
+          "path": "docs/regime-engine-v2/p8/evidence/vx-2024-10-16.csv.metadata.json",
+          "sha256": "6827e0a5f62ae5f8a2d4998a92f8aeedeb38ddbda7a6ef1e249899cb643e5864"
+        },
+        {
+          "path": "docs/regime-engine-v2/p8/evidence/vx-2024-11-20.csv.metadata.json",
+          "sha256": "cbde05a8fc566f57e78e528b5e39f2b7c45d98eec98bcca336f9340536e442f3"
+        },
+        {
+          "path": "docs/regime-engine-v2/p8/evidence/vx-2024-12-18.csv.metadata.json",
+          "sha256": "0170a3400225be36aac69c4da667118b1e535cf3485c861187a7eee413cb58ac"
+        },
+        {
+          "path": "docs/regime-engine-v2/p8/evidence/vx-2025-01-22.csv.metadata.json",
+          "sha256": "3cc8c52461a928dca71fed16e7077138499187e24a2b83ae8a1a0230dd8ef517"
+        },
+        {
+          "path": "docs/regime-engine-v2/p8/evidence/vx-2025-02-19.csv.metadata.json",
+          "sha256": "43d8d84839a597fe02618a85d4522b43b90a1371d72c6244eebe857296c8d33e"
+        },
+        {
+          "path": "docs/regime-engine-v2/p8/evidence/vx-2025-03-18.csv.metadata.json",
+          "sha256": "b143af40672db6d27e76f8ba54a39b21366a8c470d307159cb52bf7e3c5fe915"
+        },
+        {
+          "path": "docs/regime-engine-v2/p8/evidence/vx-2025-04-16.csv.metadata.json",
+          "sha256": "677d3e9a56ec48c0e5cdbb3451a8680c2fd856376668f5569f481c68aff5f4f5"
+        },
+        {
+          "path": "docs/regime-engine-v2/p8/evidence/vx-2025-05-21.csv.metadata.json",
+          "sha256": "0d1d9c091668bd5a175b6f13fdbdb7d1e436f6caa9452f2a8d2db9e26bf1e60f"
+        },
+        {
+          "path": "docs/regime-engine-v2/p8/evidence/vx-2025-06-18.csv.metadata.json",
+          "sha256": "f9fb952b6614747111880dc3da9ec01bfbaa1c961fde2c9d99565d70249cf37a"
+        },
+        {
+          "path": "docs/regime-engine-v2/p8/evidence/vx-2025-07-16.csv.metadata.json",
+          "sha256": "030936839061fedd8eec2493436fb39f86dfe837ab105bd9a215fce240cbf13f"
+        },
+        {
+          "path": "docs/regime-engine-v2/p8/evidence/vx-2025-08-20.csv.metadata.json",
+          "sha256": "09144b70a88ed44ca4fa9043bd2a44818ad48b07efd4b728b4f0df045fa9a392"
+        },
+        {
+          "path": "docs/regime-engine-v2/p8/evidence/vx-2025-09-17.csv.metadata.json",
+          "sha256": "81920cd6099d924d93b693b6f5e8d0c8749246555c672d3897037a703f284398"
+        },
+        {
+          "path": "docs/regime-engine-v2/p8/evidence/vx-2025-10-22.csv.metadata.json",
+          "sha256": "20542044a78f96f44dc510c1008149a01643b236f7f27b532b7feabd1f475c25"
+        },
+        {
+          "path": "docs/regime-engine-v2/p8/evidence/vx-2025-11-19.csv.metadata.json",
+          "sha256": "29bb5c29d9ba0f55781f6756e1f0ea6d0a834b13a42ac01d4989adb491ddbff7"
+        },
+        {
+          "path": "docs/regime-engine-v2/p8/evidence/vx-2025-12-17.csv.metadata.json",
+          "sha256": "47d12f487ace735e39dd312139b50840a3a1df398b49c327d4f4cc6a3ef24146"
+        },
+        {
+          "path": "docs/regime-engine-v2/p8/evidence/vx-2026-01-21.csv.metadata.json",
+          "sha256": "0eb03e64eb2f0b478bd4ada6f621411dde99f9f81850ec2242fb0697847ff08f"
+        },
+        {
+          "path": "docs/regime-engine-v2/p8/evidence/vx-2026-02-18.csv.metadata.json",
+          "sha256": "51faa85602e1d86bfd62b8a17fd379390446f23ec89514ccb986aa588a964798"
+        },
+        {
+          "path": "docs/regime-engine-v2/p8/evidence/vx-2026-03-18.csv.metadata.json",
+          "sha256": "5e018b0c1300a30999ac33700536c2860dae9c621d530acf074d2d00739b2df4"
+        },
+        {
+          "path": "docs/regime-engine-v2/p8/evidence/vx-2026-04-15.csv.metadata.json",
+          "sha256": "7bc9444b8433701f3ece384067d5bab8aacf14f0725440e3b6a6c644413863c7"
+        },
+        {
+          "path": "docs/regime-engine-v2/p8/evidence/vx-2026-05-19.csv.metadata.json",
+          "sha256": "33cc3a782b456ce1e5001f00f01755331b7b64560a91c26d089bb4cf52cbcc50"
+        },
+        {
+          "path": "docs/regime-engine-v2/p8/evidence/vx-2026-06-17.csv.metadata.json",
+          "sha256": "24f66d9e2efbddf0b98a047d120ccb4978e6ea852dc47e072c0c60797dc40c01"
+        },
+        {
+          "path": "docs/regime-engine-v2/p8/evidence/vx-2026-07-22.csv.metadata.json",
+          "sha256": "74ef5b940bfacdacdcbb080a993c5591968faca15106db7a27031724af13046c"
+        },
+        {
+          "path": "docs/regime-engine-v2/p8/evidence/vx-2026-08-19.csv.metadata.json",
+          "sha256": "a748fbcba07b2e50dfeb01694fd848093d7ee620f778328a2aa07d39138a3dd2"
+        },
+        {
+          "path": "docs/regime-engine-v2/p8/evidence/vx-2026-09-16.csv.metadata.json",
+          "sha256": "cdcb1f07d8846795074fd8c13b077c34605bae13213a434653d248a99f524e37"
+        },
+        {
+          "path": "docs/regime-engine-v2/p8/evidence/vx-2026-10-21.csv.metadata.json",
+          "sha256": "9556ce60efa4128021366ad6298d4d03dc25e28144c88e21cf0328a2707ad0bd"
+        },
+        {
+          "path": "docs/regime-engine-v2/p8/evidence/vx-2026-11-18.csv.metadata.json",
+          "sha256": "78a4c854c04c172867a7a6c7cb6ae4e78a93d1f558e7e7bad009e3fdca53d925"
+        },
+        {
+          "path": "docs/regime-engine-v2/p8/evidence/vx-2026-12-16.csv.metadata.json",
+          "sha256": "a432a00247c60c504211c19228d3caa1835d22f07749d9d25935cfb0d68a65fd"
+        },
+        {
+          "path": "docs/regime-engine-v2/p8/evidence/yahoo-IWM.json.gz",
+          "sha256": "b6eda4496f5af027d70f16600cfe14deb99cc112ed2f04d82c7fde8eb7009ca8"
+        },
+        {
+          "path": "docs/regime-engine-v2/p8/evidence/yahoo-IWM.json.metadata.json",
+          "sha256": "2ffe9568e113a529cc2e5262c20adc1360f1aa732d0a3e5185f2a973cf82115f"
+        },
+        {
+          "path": "docs/regime-engine-v2/p8/evidence/yahoo-RSP.json.gz",
+          "sha256": "2b0901cf8f576dce5f199c9c92e2ecd0d6c4a05fe40b642268c5fc95b62738c1"
+        },
+        {
+          "path": "docs/regime-engine-v2/p8/evidence/yahoo-RSP.json.metadata.json",
+          "sha256": "d069fd84b8e3af11e40f5deb0a24e08c570b3fe8728edde77d7bab8256e9a2b0"
+        },
+        {
+          "path": "docs/regime-engine-v2/p8/evidence/yahoo-SPY.json.gz",
+          "sha256": "28ffbd5e2a822c1a22d5606322ea7d826e487a17316026ccf13761841f0dacc6"
+        },
+        {
+          "path": "docs/regime-engine-v2/p8/evidence/yahoo-SPY.json.metadata.json",
+          "sha256": "ca0ee7bb51400f44b3dff58a6b8d72bd36611b0b5cc099d40f06cddbedaecef9"
+        },
+        {
+          "path": "docs/regime-engine-v2/p8/evidence/yahoo-XLB.json.gz",
+          "sha256": "c3d77522e1ba016fc70a3b62fb273d0a82eecf77164871dbfb0b5be6fea2eadf"
+        },
+        {
+          "path": "docs/regime-engine-v2/p8/evidence/yahoo-XLB.json.metadata.json",
+          "sha256": "c660887b03cdc249e4af538e9ab6103242bb5fd1ad5c8e906b7fee95597cdf17"
+        },
+        {
+          "path": "docs/regime-engine-v2/p8/evidence/yahoo-XLC.json.gz",
+          "sha256": "61eae51839be043308fd037b207746f7ce9e1be1f697cd27f95edb7540f3a168"
+        },
+        {
+          "path": "docs/regime-engine-v2/p8/evidence/yahoo-XLC.json.metadata.json",
+          "sha256": "87145fb833db0f9973d8db14a39c80e69e0732a7f642789f3826c516faf1fafb"
+        },
+        {
+          "path": "docs/regime-engine-v2/p8/evidence/yahoo-XLE.json.gz",
+          "sha256": "5bf9b9ff34f03c07e8f0973dfb687bd61cc1392dcaf2dc00ae075c161792ccbd"
+        },
+        {
+          "path": "docs/regime-engine-v2/p8/evidence/yahoo-XLE.json.metadata.json",
+          "sha256": "7fd438bc6ce61c6fac5ec790816ed2376fbac954a5d0024b9f8440c1a905f78d"
+        },
+        {
+          "path": "docs/regime-engine-v2/p8/evidence/yahoo-XLF.json.gz",
+          "sha256": "46d0430a4947677747fcc6c2dd6eb56fe474b7b0ef647d8443dcefb0f1975c86"
+        },
+        {
+          "path": "docs/regime-engine-v2/p8/evidence/yahoo-XLF.json.metadata.json",
+          "sha256": "c1722c5f0ceff4913f4d8f5062e4bdd229056f73910bda8c81a84e10646fc27a"
+        },
+        {
+          "path": "docs/regime-engine-v2/p8/evidence/yahoo-XLI.json.gz",
+          "sha256": "8c48409c7daa5cd2ce191153f7db2fef7d0047912721ad7e79b9b299227df672"
+        },
+        {
+          "path": "docs/regime-engine-v2/p8/evidence/yahoo-XLI.json.metadata.json",
+          "sha256": "6d2d0f450fc7616dc107092c21775b361ad6760c07165236e0345204af96dcd8"
+        },
+        {
+          "path": "docs/regime-engine-v2/p8/evidence/yahoo-XLK.json.gz",
+          "sha256": "2293bc4bacd795d867f8ee48e31767f2b69184eb874a710fa2eb3c9cff221f1d"
+        },
+        {
+          "path": "docs/regime-engine-v2/p8/evidence/yahoo-XLK.json.metadata.json",
+          "sha256": "e9bf306e0565edb1b8cb0f942156de607657aad550a518024d735fffc071dcde"
+        },
+        {
+          "path": "docs/regime-engine-v2/p8/evidence/yahoo-XLP.json.gz",
+          "sha256": "0cb7b149a7f2cc12f8f26865713e790f9ba0c90fcbba236fede64c50b5451e59"
+        },
+        {
+          "path": "docs/regime-engine-v2/p8/evidence/yahoo-XLP.json.metadata.json",
+          "sha256": "636749c7464a646f945fbb4b6178875d606edb09bba1d194647733d7b07eb57d"
+        },
+        {
+          "path": "docs/regime-engine-v2/p8/evidence/yahoo-XLRE.json.gz",
+          "sha256": "8ea331730d5e4c4a0b75abdad241813811aa7b9b7c2f936d6fd5c6a6d6d7c75f"
+        },
+        {
+          "path": "docs/regime-engine-v2/p8/evidence/yahoo-XLRE.json.metadata.json",
+          "sha256": "5cb5cdb372a253f0b4fbdab7dd3e47e4e5c462bf4ce1958ac4a7188138d5d0fe"
+        },
+        {
+          "path": "docs/regime-engine-v2/p8/evidence/yahoo-XLU.json.gz",
+          "sha256": "8e413f1b92d38f3f37c3b77e0d606c40b179a9e269a581f4a31dab36845c2f65"
+        },
+        {
+          "path": "docs/regime-engine-v2/p8/evidence/yahoo-XLU.json.metadata.json",
+          "sha256": "b7451df7ccaa5cf28dff9c8080f6c19d364ee968abce13f4f991b803d628dfc5"
+        },
+        {
+          "path": "docs/regime-engine-v2/p8/evidence/yahoo-XLV.json.gz",
+          "sha256": "c835612138753048c09d6e8a7854ff977e5182b58b3ccbed1cde4d819a3e621a"
+        },
+        {
+          "path": "docs/regime-engine-v2/p8/evidence/yahoo-XLV.json.metadata.json",
+          "sha256": "6ff007ec547348c2a2cabb287496a37f7dba01a79cd2d75a129769fcafdfb1a0"
+        },
+        {
+          "path": "docs/regime-engine-v2/p8/evidence/yahoo-XLY.json.gz",
+          "sha256": "dd833a8dd66cdff15f3b8f5bcd4be5060050f12cc90c408fdaf194b71c3821d9"
+        },
+        {
+          "path": "docs/regime-engine-v2/p8/evidence/yahoo-XLY.json.metadata.json",
+          "sha256": "8f0c1542e1b9bc583de1c0cdbf41853bde8ce016479bb762167be5fad1819344"
+        },
+        {
+          "path": "docs/regime-engine-v2/p8/feature-minimization.json",
+          "sha256": "9bd87022c74960c2cea3ad7c59f51533fd61ecce73c8a69a545027a71de18bad"
+        },
+        {
+          "path": "docs/regime-engine-v2/p8/feature-registry-qualified.json",
+          "sha256": "8ac0a0de2ffcab341920073181c1fa05da066696db6185ccdbca7ef4006ae47b"
+        },
+        {
+          "path": "docs/regime-engine-v2/p8/freshness-policy.json",
+          "sha256": "870d75029e89f4b8b9baad212186fc3b759636088f0cd9a101511763e0158740"
+        },
+        {
+          "path": "docs/regime-engine-v2/p8/gate-result.json",
+          "sha256": "c0a5305446eede0ddf2a9ef5a1abb0c6b570a627e0fa04239c72725ff6a11123"
+        },
+        {
+          "path": "docs/regime-engine-v2/p8/historical-audit.json",
+          "sha256": "f362079c5664c6f396f83772058afdc02f9d190dace9e5e82ebd6746388194d6"
+        },
+        {
+          "path": "docs/regime-engine-v2/p8/historical-features-r2.json",
+          "sha256": "e1dee0e0549c1e07cbadda9c19a18ca2df5f284868cf80c5340c095580cf2276"
+        },
+        {
+          "path": "docs/regime-engine-v2/p8/historical-witnesses.json",
+          "sha256": "298e93f3341fd93f41484fea9576f34279ecd2e791404881f40ab3e35a1a7f6a"
+        },
+        {
+          "path": "docs/regime-engine-v2/p8/package-check-results.json",
+          "sha256": "12834dc975ec91e42d8f9942669a3c821f027da662264176abbd30e8d8b37aac"
+        },
+        {
+          "path": "docs/regime-engine-v2/p8/parameter-manifest.json",
+          "sha256": "5d6398426fcbfa1650695bbf3d971127e9076403c2832876b7f188e360836732"
+        },
+        {
+          "path": "docs/regime-engine-v2/p8/preservation.json",
+          "sha256": "70f4d69ee9b4bfb720c43e45172aad54179ae481be9a10d5dd45a79310a83c5b"
+        },
+        {
+          "path": "docs/regime-engine-v2/p8/price-series-contract.json",
+          "sha256": "cbccf03ae9e261eb6a240804ec57bc1e4ecd7f01a1a7dbd59c1e7b5a84fade59"
+        },
+        {
+          "path": "docs/regime-engine-v2/p8/protocol-freeze.json",
+          "sha256": "872e2f23c0af562b0c742f57b5f96979fc9fe2bcaad5a04b321d0292ac999081"
+        },
+        {
+          "path": "docs/regime-engine-v2/p8/qualification-results.json",
+          "sha256": "0a2bb097af1eca3476fb4a03eb261d3ac4a953f7b49a36fcaf1143578a420fd3"
+        },
+        {
+          "path": "docs/regime-engine-v2/p8/raw-check-results.json",
+          "sha256": "d6a8119cf7bb774c9b673155a20c1b8a0f483a787f725e0abf2f3c08a9a1b688"
+        },
+        {
+          "path": "docs/regime-engine-v2/p8/raw-fixtures.json.gz",
+          "sha256": "f7800738b0fe961a52e6d4119a9c71cb89860f938e2d24df2b66b84719fcd0d8"
+        },
+        {
+          "path": "docs/regime-engine-v2/p8/selection-protocol.json",
+          "sha256": "1baf279a4399277fd55342adbc920f3f14bec11d190e06c62650f9745f9c3a2c"
+        },
+        {
+          "path": "docs/regime-engine-v2/p8/source-data-audit.json",
+          "sha256": "1209aff38360e826170b2622053603fae6c6335c325fa1cc21360d72fcb8e95c"
+        },
+        {
+          "path": "docs/regime-engine-v2/p8/temporal-availability-contract.json",
+          "sha256": "0ba4661ac39c4f2be50a8a17104c0c504db0d4159cf850b60d865d8a98e492d9"
+        },
+        {
+          "path": "docs/regime-engine-v2/parameters.json",
+          "sha256": "53bbfcd4396fd91c958a1cd5d38d75b82fdb63b21f5d26f17ad0460bde2b5bce"
+        },
+        {
+          "path": "docs/regime-engine-v2/preservation.json",
+          "sha256": "4dbd8f436ccafae5c8b192f38d6f7cb53ce67b9410d74a8e6ed8d43a044e98cc"
+        },
+        {
+          "path": "docs/regime-engine-v2/release-candidate/critical-manifest.json",
+          "sha256": "0e92f7fbd6eeef22848196d3127c6bad53d933cce5eb706396dccd73f22ef4fa"
+        },
+        {
+          "path": "docs/regime-engine-v2/release-candidate/design-regression.json",
+          "sha256": "376fee004a3dd840ce61699667f958cb5c0ea9b68172bd50a6b361c60901417c"
+        },
+        {
+          "path": "docs/regime-engine-v2/release-candidate/evidence-audit.json",
+          "sha256": "6cb66e7f7a62e77af3ccbbdb0ac1958e78d309f8f20e3cadf0844b998109921d"
+        },
+        {
+          "path": "docs/regime-engine-v2/release-candidate/hygiene-scan.json",
+          "sha256": "5415d0a404eb00ed1a11e7476da902d29fe225a0b1c5379009aa58c35eacecc9"
+        },
+        {
+          "path": "docs/regime-engine-v2/release-candidate/input-inventory.json",
+          "sha256": "5763cbf228046295fc7b718b931a4d8c7dbfa138435fe4f60ddd487aa2f7e683"
+        },
+        {
+          "path": "docs/regime-engine-v2/release-candidate/intentional-diff-inventory.json",
+          "sha256": "23711cc6d8b41666ceab3c2d6c3f40060729ba0a0e702b52e52bb27809b4a729"
+        },
+        {
+          "path": "docs/regime-engine-v2/release-candidate/parent-head-lint.json",
+          "sha256": "de5f2e7a7d15693be950c88425f3f9c2deb00c7a56a477a9aa02749156f83ed1"
+        },
+        {
+          "path": "docs/regime-engine-v2/release-candidate/parent-lint-baseline.json",
+          "sha256": "731159557fe23aea23d0ac690a440816829970dcf626f1615ac36b11130e9503"
+        },
+        {
+          "path": "docs/regime-engine-v2/release-candidate/precommit-verification.json",
+          "sha256": "1392377bb5c0dfe8eac0d7ab66fc10c6a484dc5e904c177ee159f49b25aa07dd"
+        },
+        {
+          "path": "docs/regime-engine-v2/release-candidate/release-manifest.json",
+          "sha256": "6c6718b096cba20c248e753260663534d6427cd171a5796a3dc22b41c5641a52"
+        },
+        {
+          "path": "docs/regime-engine-v2/release-candidate/shadow-default-audit.json",
+          "sha256": "bdbf19e83d5453455418d8459c7fd8654c6b29df92229f7a973ad0982dba42d7"
+        },
+        {
+          "path": "docs/regime-engine-v2/release-candidate/source-audit.json",
+          "sha256": "50cf37d23b7fc9830acd994ee6bc42fe806f2576916803f25b80b0d76a4f2001"
+        },
+        {
+          "path": "docs/regime-engine-v2/release-candidate/staged-review.json",
+          "sha256": "d4b30da8afaf1b2fd6bb9021f28eefd8434696b5659fe6b5412cb8d335db7737"
+        },
+        {
+          "path": "docs/regime-engine-v2/release-candidate/verification-environment-finding.json",
+          "sha256": "b8296d8f44dcb6614ed47a8d7ed614306369938b8385a7961522796e5583961d"
+        },
+        {
+          "path": "docs/regime-engine-v2/run-context.json",
+          "sha256": "d0cabaa55237f540a545009839aacdc9401136a78fcaf5f5ac594c24616bc357"
+        },
+        {
+          "path": "docs/regime-engine-v2/source-ledger.json",
+          "sha256": "7f8b97faf17b4a56893298ca2263a2fa9f53b5442dcd569250f4801a6565ef9a"
+        },
+        {
+          "path": "docs/regime-engine-v2/sweeper/adversarial-results.json",
+          "sha256": "d06279fb91976b57792d9e0343de47003353e59773c22801d4368edae388fbbd"
+        },
+        {
+          "path": "docs/regime-engine-v2/sweeper/build-side-effect.json",
+          "sha256": "5590ca1ec5543aedd0c48164fd0f815fc63a5ebad058d587af02ed7b387106c1"
+        },
+        {
+          "path": "docs/regime-engine-v2/sweeper/conformance.json",
+          "sha256": "0ae86699a5a32f7d58bf3e604400cf875fd04900d6e5cf404b7a4be2a379cf06"
+        },
+        {
+          "path": "docs/regime-engine-v2/sweeper/contract-audit.json",
+          "sha256": "6679b0282159713bdd436ca1228ddad14a5494da29941056016bd8e305479b32"
+        },
+        {
+          "path": "docs/regime-engine-v2/sweeper/delivery.json",
+          "sha256": "b74276e6e48f19939478da6aeea0559468df5accd58f4d8c45c0b065ed44293d"
+        },
+        {
+          "path": "docs/regime-engine-v2/sweeper/files-changed.json",
+          "sha256": "fe43d2ef58299aefe5d772bb26fb1035d90e1297c4f220876b4f52ab169559d8"
+        },
+        {
+          "path": "docs/regime-engine-v2/sweeper/findings.json",
+          "sha256": "c2300af9103e4fbeac019000a4e4e4493e345523f1248b990e0e8bca62752445"
+        },
+        {
+          "path": "docs/regime-engine-v2/sweeper/frozen-builder-replay.json",
+          "sha256": "a35d8b353f9d14d74f3b165bdb79e4260917e672ebd4fc7b308c176335d72cd3"
+        },
+        {
+          "path": "docs/regime-engine-v2/sweeper/full-tests-command.json",
+          "sha256": "6b4071d36262b46b52e2942e0e656bfcc8a020a1ad45ae1e18f589149bfaa947"
+        },
+        {
+          "path": "docs/regime-engine-v2/sweeper/historical-r2-output.json",
+          "sha256": "018d6fc103ca9bfe1e0e43418d79446f530796c00a3728a57cf2b289298d2a5f"
+        },
+        {
+          "path": "docs/regime-engine-v2/sweeper/input-manifest.json",
+          "sha256": "cf49175da97da7a2cf3a3cf215f3415ff7c91d6fd281c306baba4ed9b846c2d4"
+        },
+        {
+          "path": "docs/regime-engine-v2/sweeper/preservation.json",
+          "sha256": "43d6ac3af738ee4b548502b1acb7a783d210f8ce4bf48e11d6a8a923ef889c2f"
+        },
+        {
+          "path": "docs/regime-engine-v2/sweeper/read-only-attacks-v2.json",
+          "sha256": "358c91c23c121219601d03faa9629ec47a0a267101ca4f54b5a0307214d50578"
+        },
+        {
+          "path": "docs/regime-engine-v2/sweeper/read-only-attacks.json",
+          "sha256": "f86bd6335609f14a2f7a52142707abd1a05c6ff45ef6ea97d34f8c4fcbca590e"
+        },
+        {
+          "path": "docs/regime-engine-v2/sweeper/read-only-audit.json",
+          "sha256": "fc472a859d11d6049db539c3e961322df6b9d94953a109153a465db0404deed1"
+        },
+        {
+          "path": "docs/regime-engine-v2/sweeper/read-only-boundary-addendum.json",
+          "sha256": "947f082205fc91a84af3a71d725617a9602f7fba7e9e080e87bad22e54a2368d"
+        },
+        {
+          "path": "docs/regime-engine-v2/sweeper/read-only-performance.json",
+          "sha256": "730258595fa005a90ee189c71a6dd9b31245d3d7b5df3c97de2cfcd2f2066cf1"
+        },
+        {
+          "path": "docs/regime-engine-v2/sweeper/read-only-r1-addendum.json",
+          "sha256": "1ace1aa72b3be2d19a4954e870d266fcb8ac33a0cd7fadf2c8c7e5977654a40f"
+        },
+        {
+          "path": "docs/regime-engine-v2/sweeper/read-only-shared-state.json",
+          "sha256": "c136a0f81d3e431715d38698601444df5392e16dc6b711f459715b7e02d53079"
+        },
+        {
+          "path": "docs/regime-engine-v2/sweeper/repair-check-1.json",
+          "sha256": "7946c44ab77397937dba29a8c8fdad9690707160fd8fde7127ce236100f8ce9f"
+        },
+        {
+          "path": "docs/regime-engine-v2/sweeper/shadow-input-r2.json",
+          "sha256": "92ecdd1830516ec96dd9293fc87b9ee7c6add71376e6997de4fede42d4d90a66"
+        },
+        {
+          "path": "docs/regime-engine-v2/sweeper/verification-commands.json",
+          "sha256": "65281035741ebf07831ec5cf55ac9e3b4a2f73d029fa885291304aefb156c9f6"
+        },
+        {
+          "path": "docs/regime-engine-v2/sweeper/verification.json",
+          "sha256": "377127ffb5c8e80ed3b7985d1ccfaf27a82f778f1bb2e12f4192c25d18866c7d"
+        },
+        {
+          "path": "docs/regime-engine-v2/validation.json",
+          "sha256": "ad34f283732e1d4b02d4f1e553e8a5936aa4cbf634a09dc9114e01358a1df7b0"
+        }
+      ]
+    },
+    "migrationNoticesOnly": "PASS"
+  },
+  "classes": {
+    "HISTORICAL_WORKSPACE_VERIFICATION_OR_SEAL": 8,
+    "HISTORICAL_BROWSER_QA": 2
+  },
+  "historicalBrowserQA": {
+    "visualCases": 24,
+    "accessibilityCases": 28,
+    "newBrowserExecution": false,
+    "newPlaywrightDependency": false,
+    "candidateDesignerTests": 59,
+    "committedFixturesCheckedByCandidate": true,
+    "resultsPreservedAsHistorical": true
+  },
+  "executableInventory": {
+    "referenceCommit": "f5fc7ecfd9e1f323d0ad3a43eccec1dbc500be1c",
+    "count": 58,
+    "coverage": "Committed .py/.mjs/.mts/.cjs/.js/.sh files under docs/regime-engine-v2 and scripts; static source and referenced-input review. This is not a claim that every historical generator was safely rerun.",
+    "items": [
+      {
+        "path": "docs/regime-engine-v2/designer/accessibility-qa.mjs",
+        "rc0Sha256": "0a097a8efe301bc6479904515b0d250d897668d269ce06cff03ffac6eb3bf18b",
+        "decision": "RETIRED_IN_THIS_REPAIR"
+      },
+      {
+        "path": "docs/regime-engine-v2/designer/browser-qa.mjs",
+        "rc0Sha256": "9aa1a21625c83c91ad53b6c6d86b8fd66b5d2773ac68ada78d2bfec71dc22ab2",
+        "decision": "RETIRED_IN_THIS_REPAIR"
+      },
+      {
+        "path": "docs/regime-engine-v2/designer/run-verification.py",
+        "rc0Sha256": "4effed4a10baaa6879ed69a76ddbd78b4fbe298e4bb907845e88fcddd2790292",
+        "decision": "RETIRED_IN_THIS_REPAIR"
+      },
+      {
+        "path": "docs/regime-engine-v2/designer/seal-review.py",
+        "rc0Sha256": "5d2cd8ab93a76a09170132c9666c6bc045c959c039ad01c49de80ec63bb798f1",
+        "decision": "RETIRED_IN_THIS_REPAIR"
+      },
+      {
+        "path": "docs/regime-engine-v2/designer/verify-production-preview.py",
+        "rc0Sha256": "dff7ba0ad267acb5b7a3c6a5f581f6849d2dd7062709b12aca36e3852a681724",
+        "decision": "NO_ADDITIONAL_CONCRETE_HIDDEN_LOCAL_INPUT_FOUND_IN_STATIC_REVIEW"
+      },
+      {
+        "path": "docs/regime-engine-v2/groweer/analyze-experiments.py",
+        "rc0Sha256": "324b3a68e31b4c53fbab0a7ba734a1fdc8828af15d2994becaab818cdf3b03d4",
+        "decision": "NO_ADDITIONAL_CONCRETE_HIDDEN_LOCAL_INPUT_FOUND_IN_STATIC_REVIEW"
+      },
+      {
+        "path": "docs/regime-engine-v2/groweer/audit-cross-asset-pfl.py",
+        "rc0Sha256": "c6865f30168f160e90cb5602c2be03dc741323b4cd2e7cb27d084a1813a8d7da",
+        "decision": "NO_ADDITIONAL_CONCRETE_HIDDEN_LOCAL_INPUT_FOUND_IN_STATIC_REVIEW"
+      },
+      {
+        "path": "docs/regime-engine-v2/groweer/audit-pfl-components.mjs",
+        "rc0Sha256": "e60318d5f6c86a08d34f097405eaad88b4e4111af526b3b4890cdcd5efdd305c",
+        "decision": "NO_ADDITIONAL_CONCRETE_HIDDEN_LOCAL_INPUT_FOUND_IN_STATIC_REVIEW"
+      },
+      {
+        "path": "docs/regime-engine-v2/groweer/challengers.mjs",
+        "rc0Sha256": "4771f2e49802f92f34d41e45db9c289dd00927d08f929b004e2d6b3ea57e6a65",
+        "decision": "NO_ADDITIONAL_CONCRETE_HIDDEN_LOCAL_INPUT_FOUND_IN_STATIC_REVIEW"
+      },
+      {
+        "path": "docs/regime-engine-v2/groweer/challengers.test.mjs",
+        "rc0Sha256": "f668823c432c9cff49f25ae2c6aeb4a445617461373817105e2845395975d161",
+        "decision": "NO_ADDITIONAL_CONCRETE_HIDDEN_LOCAL_INPUT_FOUND_IN_STATIC_REVIEW"
+      },
+      {
+        "path": "docs/regime-engine-v2/groweer/close-verification.py",
+        "rc0Sha256": "cda9f7fa1481079572e3a1b3bce035be614b4897a43d4c49c4cf63739c7b01be",
+        "decision": "RETIRED_IN_THIS_REPAIR"
+      },
+      {
+        "path": "docs/regime-engine-v2/groweer/experiment-vectors.mjs",
+        "rc0Sha256": "25af62114c1618a5b60485c25352e6ec7df64ea7b451d7111a82aa1083cb15b3",
+        "decision": "NO_ADDITIONAL_CONCRETE_HIDDEN_LOCAL_INPUT_FOUND_IN_STATIC_REVIEW"
+      },
+      {
+        "path": "docs/regime-engine-v2/groweer/finalize-analysis.py",
+        "rc0Sha256": "29172a77e7d4f4a960ac554d7d37dbc98badff3f43f9906b2a42fae9923620f0",
+        "decision": "NO_ADDITIONAL_CONCRETE_HIDDEN_LOCAL_INPUT_FOUND_IN_STATIC_REVIEW"
+      },
+      {
+        "path": "docs/regime-engine-v2/groweer/forensic_analysis.py",
+        "rc0Sha256": "28c29d5df5f12145b2ddc51fdd6ba645823bb9f84a1c19a78d294fa068cfdc01",
+        "decision": "NO_ADDITIONAL_CONCRETE_HIDDEN_LOCAL_INPUT_FOUND_IN_STATIC_REVIEW"
+      },
+      {
+        "path": "docs/regime-engine-v2/groweer/native-audit.mjs",
+        "rc0Sha256": "910657d3eb12ff0e67016dbb712098cdd09d4417255849a4d7b6bd608179c16d",
+        "decision": "NO_ADDITIONAL_CONCRETE_HIDDEN_LOCAL_INPUT_FOUND_IN_STATIC_REVIEW"
+      },
+      {
+        "path": "docs/regime-engine-v2/groweer/replay-analysis-input.mjs",
+        "rc0Sha256": "99e6f0a8544e9a3e29b6025d7c3e95fdf88c2217fef6e87c7a62ae784b7ced3e",
+        "decision": "NO_ADDITIONAL_CONCRETE_HIDDEN_LOCAL_INPUT_FOUND_IN_STATIC_REVIEW"
+      },
+      {
+        "path": "docs/regime-engine-v2/groweer/run-canonical-verification.py",
+        "rc0Sha256": "8f9f8840f04e37edfb1889bbb64b5297b4c7cc25f92d00647e98bb94553ea055",
+        "decision": "RETIRED_IN_THIS_REPAIR"
+      },
+      {
+        "path": "docs/regime-engine-v2/groweer/seal-manifest.py",
+        "rc0Sha256": "2a714609143072177933f46a1fdfd46a1ca8a859d4ec9a4a0dc759bd2a78f50c",
+        "decision": "RETIRED_IN_THIS_REPAIR"
+      },
+      {
+        "path": "docs/regime-engine-v2/groweer/temporal-challengers.py",
+        "rc0Sha256": "f0728a0acead89bdf25ad7d74b1e94cdfd1f283b62c2c2d930d9da285549f46f",
+        "decision": "NO_ADDITIONAL_CONCRETE_HIDDEN_LOCAL_INPUT_FOUND_IN_STATIC_REVIEW"
+      },
+      {
+        "path": "docs/regime-engine-v2/maintainer/close-verification.py",
+        "rc0Sha256": "f69e52a7ffcbed5bb74d69d5d48ff74017d373344d3cad96052022db36c3628f",
+        "decision": "RETIRED_IN_THIS_REPAIR"
+      },
+      {
+        "path": "docs/regime-engine-v2/maintainer/performance-pipeline.mjs",
+        "rc0Sha256": "43b76f536909010ebac9153f0226fd399466773ff459669f3d249834efb03412",
+        "decision": "NO_ADDITIONAL_CONCRETE_HIDDEN_LOCAL_INPUT_FOUND_IN_STATIC_REVIEW"
+      },
+      {
+        "path": "docs/regime-engine-v2/maintainer/performance.mjs",
+        "rc0Sha256": "bb3bdfa7de3e4dfa1e5e9c1f7369e5d47df143e14bb0dfbad28b4852aa66c168",
+        "decision": "NO_ADDITIONAL_CONCRETE_HIDDEN_LOCAL_INPUT_FOUND_IN_STATIC_REVIEW"
+      },
+      {
+        "path": "docs/regime-engine-v2/maintainer/run-verification.py",
+        "rc0Sha256": "0defad3077544fb21b6e40b8da273ece660e897cb78462dcfe599c3ef4f80404",
+        "decision": "RETIRED_IN_THIS_REPAIR"
+      },
+      {
+        "path": "docs/regime-engine-v2/p8/build_contracts.py",
+        "rc0Sha256": "4969dc34e401e9105bc3e5fde735cf48fc7fad092eb9c9691d6d56c28709f062",
+        "decision": "NO_ADDITIONAL_CONCRETE_HIDDEN_LOCAL_INPUT_FOUND_IN_STATIC_REVIEW"
+      },
+      {
+        "path": "docs/regime-engine-v2/p8/check_package.py",
+        "rc0Sha256": "9463c8183837261040df1ef1d3caba2fe8e10d3b172194bc09a13f8793c2ae45",
+        "decision": "NO_ADDITIONAL_CONCRETE_HIDDEN_LOCAL_INPUT_FOUND_IN_STATIC_REVIEW"
+      },
+      {
+        "path": "docs/regime-engine-v2/p8/collect-evidence.py",
+        "rc0Sha256": "da07cf7109220f3dd07a25b0af0f5f693f0b65e76da9623f5b6a91957702c4e3",
+        "decision": "NO_ADDITIONAL_CONCRETE_HIDDEN_LOCAL_INPUT_FOUND_IN_STATIC_REVIEW"
+      },
+      {
+        "path": "docs/regime-engine-v2/p8/contract_checks.py",
+        "rc0Sha256": "94404a70fe57acb5c2f79240d7664806b6f12430f1bca7d14d65e8dbb3c9b4fd",
+        "decision": "NO_ADDITIONAL_CONCRETE_HIDDEN_LOCAL_INPUT_FOUND_IN_STATIC_REVIEW"
+      },
+      {
+        "path": "docs/regime-engine-v2/p8/historical_audit.py",
+        "rc0Sha256": "b4df20551912ea59ce4efc2166ed8dd02bbe04bf9fe81a7414e948eb85b70ff6",
+        "decision": "NO_ADDITIONAL_CONCRETE_HIDDEN_LOCAL_INPUT_FOUND_IN_STATIC_REVIEW"
+      },
+      {
+        "path": "docs/regime-engine-v2/p8/historical_data.py",
+        "rc0Sha256": "74bc232e15a115408351d321ee9bbe036829bd2849bbadd3d39cff522e101577",
+        "decision": "NO_ADDITIONAL_CONCRETE_HIDDEN_LOCAL_INPUT_FOUND_IN_STATIC_REVIEW"
+      },
+      {
+        "path": "docs/regime-engine-v2/p8/qualify.py",
+        "rc0Sha256": "45e04a01f9a2f0c2f2a3d6db432c98918d05e0bc5c262ff79406155def078d0e",
+        "decision": "NO_ADDITIONAL_CONCRETE_HIDDEN_LOCAL_INPUT_FOUND_IN_STATIC_REVIEW"
+      },
+      {
+        "path": "docs/regime-engine-v2/p8/raw_checks.py",
+        "rc0Sha256": "3609feb15fd4a1bad8b02a8331f22c134e7c5c58ae8a13bc0e21bd5a2665bb93",
+        "decision": "NO_ADDITIONAL_CONCRETE_HIDDEN_LOCAL_INPUT_FOUND_IN_STATIC_REVIEW"
+      },
+      {
+        "path": "docs/regime-engine-v2/p8/reference_model.py",
+        "rc0Sha256": "e1cac5d6d7dd5812273c43e1d853dd71daf812d7e2589ed329daddf66430ed58",
+        "decision": "NO_ADDITIONAL_CONCRETE_HIDDEN_LOCAL_INPUT_FOUND_IN_STATIC_REVIEW"
+      },
+      {
+        "path": "docs/regime-engine-v2/prototype-check.mjs",
+        "rc0Sha256": "9db99c9cbd3b6bd29032502dbab390fdc0d8784c0591d0fe531f78e9bedaaf0e",
+        "decision": "HISTORICAL_INITIAL_STAGE_HASH_GATE_ALL_INPUTS_COMMITTED"
+      },
+      {
+        "path": "docs/regime-engine-v2/release-candidate/run-verification.py",
+        "rc0Sha256": "27dfa25811fd63f853739adf4fd34782f4ad4fc57ca5ae216c8c6ee8b6381de6",
+        "decision": "ACTIVE_CANONICAL_RUNNER_REPAIRED_SEPARATELY_REMOVE_WORKTREE_PROFILE"
+      },
+      {
+        "path": "docs/regime-engine-v2/release-candidate/verify-production-http.py",
+        "rc0Sha256": "3e89c0a9ae96a3392cdc7b9621a3eb16c7bc25e483666620455a44b006d194f5",
+        "decision": "NO_ADDITIONAL_CONCRETE_HIDDEN_LOCAL_INPUT_FOUND_IN_STATIC_REVIEW"
+      },
+      {
+        "path": "docs/regime-engine-v2/sweeper/adversarial.mjs",
+        "rc0Sha256": "b4fd7fbb18a930031dd2fb84582ce1f29c113afcb93e121b0354a0f450046a38",
+        "decision": "NO_ADDITIONAL_CONCRETE_HIDDEN_LOCAL_INPUT_FOUND_IN_STATIC_REVIEW"
+      },
+      {
+        "path": "docs/regime-engine-v2/sweeper/run-verification.py",
+        "rc0Sha256": "7a1966e267abea8188d51ef9383190af8e71010bca7feb64518e3181df9232fe",
+        "decision": "RETIRED_IN_THIS_REPAIR"
+      },
+      {
+        "path": "docs/regime-engine-v2/sweeper/verify-contracts.mjs",
+        "rc0Sha256": "b1e52d44964038fd9ffdfa07c372ad4ffcd599df24f3b3cb9cfa1f73588a2573",
+        "decision": "NO_ADDITIONAL_CONCRETE_HIDDEN_LOCAL_INPUT_FOUND_IN_STATIC_REVIEW"
+      },
+      {
+        "path": "scripts/build-statistical-levels.mjs",
+        "rc0Sha256": "de9da118da379ccb12618adee258364b730935da36055b9822ca201f869095dd",
+        "decision": "NO_ADDITIONAL_CONCRETE_HIDDEN_LOCAL_INPUT_FOUND_IN_STATIC_REVIEW"
+      },
+      {
+        "path": "scripts/build-td3-performance.mjs",
+        "rc0Sha256": "a1c717b840010d9d634b244dcff210ec59dc7e21f7065a3a8d75af09e3039783",
+        "decision": "UNRELATED_TD3_GENERATOR_WITH_OPTIONAL_ABSOLUTE_CSV_INPUTS_UNCHANGED"
+      },
+      {
+        "path": "scripts/build-tom-decay-data.mjs",
+        "rc0Sha256": "8d3e768cdb58720173d88bf6decff4cd22a2f3232cc2bc0aadce9ef7cb43af14",
+        "decision": "NO_ADDITIONAL_CONCRETE_HIDDEN_LOCAL_INPUT_FOUND_IN_STATIC_REVIEW"
+      },
+      {
+        "path": "scripts/capture-september-prices.mjs",
+        "rc0Sha256": "15296e4edf0a297ed191e4ff41d23028bd4ff6333f969e1955f98129572d011e",
+        "decision": "NO_ADDITIONAL_CONCRETE_HIDDEN_LOCAL_INPUT_FOUND_IN_STATIC_REVIEW"
+      },
+      {
+        "path": "scripts/regime-v2-conformance.mts",
+        "rc0Sha256": "72a4e07ec6935eee95f75642e7bccfa5b95e3f2387583b24d2abfea548e65ba4",
+        "decision": "NO_ADDITIONAL_CONCRETE_HIDDEN_LOCAL_INPUT_FOUND_IN_STATIC_REVIEW"
+      },
+      {
+        "path": "scripts/regime-v2-design-fixtures.mts",
+        "rc0Sha256": "e8f60059586dc55f294796ddef59084c4b17d3b643cc45c3d84889f27bc68d9b",
+        "decision": "NO_ADDITIONAL_CONCRETE_HIDDEN_LOCAL_INPUT_FOUND_IN_STATIC_REVIEW"
+      },
+      {
+        "path": "scripts/regime-v2-design-render.mjs",
+        "rc0Sha256": "e9bc9e4ea50a899cff1b70896ded1ac83d3d006654828eb9898c8e64bab50fb1",
+        "decision": "NO_ADDITIONAL_CONCRETE_HIDDEN_LOCAL_INPUT_FOUND_IN_STATIC_REVIEW"
+      },
+      {
+        "path": "scripts/regime-v2-observe.mts",
+        "rc0Sha256": "143542e05f10c717cd2628cdb330de01c3b9e3f21961f52c1ee0b7262dbadcff",
+        "decision": "NO_ADDITIONAL_CONCRETE_HIDDEN_LOCAL_INPUT_FOUND_IN_STATIC_REVIEW"
+      },
+      {
+        "path": "scripts/regime-v2-prepare-bundle.mts",
+        "rc0Sha256": "a5591688b042c20e07fa4a9a33b80be4005925c6c769ea523628a585b5884543",
+        "decision": "NO_ADDITIONAL_CONCRETE_HIDDEN_LOCAL_INPUT_FOUND_IN_STATIC_REVIEW"
+      },
+      {
+        "path": "scripts/regime-v2-replay.mts",
+        "rc0Sha256": "42f6fc5197252d7a81565720f117cec4f8fb6939d4b1db5c26c1d1eed6ea3016",
+        "decision": "NO_ADDITIONAL_CONCRETE_HIDDEN_LOCAL_INPUT_FOUND_IN_STATIC_REVIEW"
+      },
+      {
+        "path": "scripts/regime-v2-shadow.mts",
+        "rc0Sha256": "0c13eed54ddd624d6e7568bf125a34ebd54bf74c9ac13f605341190a04d0ad0e",
+        "decision": "NO_ADDITIONAL_CONCRETE_HIDDEN_LOCAL_INPUT_FOUND_IN_STATIC_REVIEW"
+      },
+      {
+        "path": "scripts/render-report-pdf.py",
+        "rc0Sha256": "88a3d22a57d0f1912cb3f9099d835c5d06f169820824fe0660d0ecf3291763a0",
+        "decision": "NO_ADDITIONAL_CONCRETE_HIDDEN_LOCAL_INPUT_FOUND_IN_STATIC_REVIEW"
+      },
+      {
+        "path": "scripts/report-node-register.mjs",
+        "rc0Sha256": "39dcf1475f6eb6fb0506736f92c4fa7afe55da3742041b283ac4a9db6e2cabf7",
+        "decision": "NO_ADDITIONAL_CONCRETE_HIDDEN_LOCAL_INPUT_FOUND_IN_STATIC_REVIEW"
+      },
+      {
+        "path": "scripts/report-statistical-snapshot.mjs",
+        "rc0Sha256": "344e246dcd8ca8e1c5a895eaac64e43c4ffbecf33699bf93edb95f8adae3bd7d",
+        "decision": "NO_ADDITIONAL_CONCRETE_HIDDEN_LOCAL_INPUT_FOUND_IN_STATIC_REVIEW"
+      },
+      {
+        "path": "scripts/report-weekly-review.mjs",
+        "rc0Sha256": "89871ad5a497031ad890e3a5041e3ce5abb2e4a0a881b64595608f927a7342dd",
+        "decision": "NO_ADDITIONAL_CONCRETE_HIDDEN_LOCAL_INPUT_FOUND_IN_STATIC_REVIEW"
+      },
+      {
+        "path": "scripts/reports.mts",
+        "rc0Sha256": "274aa92a52565714a24db236c0173e8ac7aabe1939c2cb7427b81ab95545d6ac",
+        "decision": "NO_ADDITIONAL_CONCRETE_HIDDEN_LOCAL_INPUT_FOUND_IN_STATIC_REVIEW"
+      },
+      {
+        "path": "scripts/trends-test-register.mjs",
+        "rc0Sha256": "d4c01f7e587436e5738ed7fdacc9fcdc4b3dd67bea378b6c2bb41864f7c56059",
+        "decision": "NO_ADDITIONAL_CONCRETE_HIDDEN_LOCAL_INPUT_FOUND_IN_STATIC_REVIEW"
+      },
+      {
+        "path": "scripts/validate-budget-target.mts",
+        "rc0Sha256": "9468b4897dfac9e92e48cb4d0100c94526fd313911716dc6fdc0d69c74b287f5",
+        "decision": "NO_ADDITIONAL_CONCRETE_HIDDEN_LOCAL_INPUT_FOUND_IN_STATIC_REVIEW"
+      },
+      {
+        "path": "scripts/validate-editorial.mts",
+        "rc0Sha256": "8c0195990959c0f84aee243c3f7f2ee75643f39a67cb2500d660b6cc4778d7a0",
+        "decision": "NO_ADDITIONAL_CONCRETE_HIDDEN_LOCAL_INPUT_FOUND_IN_STATIC_REVIEW"
+      },
+      {
+        "path": "scripts/validate-seo.mts",
+        "rc0Sha256": "fd3869ca04121ceb5d664cbc1e58e9856e05bd07b7999538eca7c2bfd30cc0a3",
+        "decision": "NO_ADDITIONAL_CONCRETE_HIDDEN_LOCAL_INPUT_FOUND_IN_STATIC_REVIEW"
+      }
+    ],
+    "additionalConcreteObservations": [
+      {
+        "path": "scripts/build-td3-performance.mjs",
+        "lines": [
+          9,
+          16,
+          172,
+          173,
+          174,
+          175,
+          176
+        ],
+        "finding": "Two original-user absolute TD3 CSV inputs. Missing files are caught and recorded unavailable; no Regime or candidate verifier path imports this standalone TD3 generator.",
+        "disposition": "OUTSIDE_REGIME_REPAIR_SCOPE_UNCHANGED",
+        "executed": false
+      },
+      {
+        "path": "docs/regime-engine-v2/prototype-check.mjs",
+        "lines": [
+          237
+        ],
+        "finding": "Initial-stage source-ledger hash checks are historical and differ from later accepted RC0 bytes for four ledger entries (three distinct paths); every referenced path exists in RC0. This is a stale stage expectation, not an excluded-input dependency.",
+        "disposition": "HISTORICAL_ONLY_NOT_RUN_BY_CANDIDATE",
+        "executed": false
+      }
+    ],
+    "nonExecutionReason": "Legacy generators and historical sealing routes can overwrite accepted evidence. Only the explicit retired replacements were invoked. No excluded logs or unrelated tests were copied."
+  }
+}
