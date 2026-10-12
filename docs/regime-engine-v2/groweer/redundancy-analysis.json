@@ -1,0 +1,234 @@
+{
+  "version": "groweer-analysis/1.0.0",
+  "replay_class": "R2",
+  "point_in_time_oos_claim": false,
+  "canonical_engine_modified": false,
+  "protocol_sha256": "82a816ff496ed0a581e6b4ab45c571a7903dbd8f1ba921f04e7e088af2d7a583",
+  "caveat": "Post-selection descriptions on already inspected data. Agreement with C03 is not independent correctness or predictive utility.",
+  "status": "PASS",
+  "pairs": {
+    "participation_vs_leadership": {
+      "a": "participation",
+      "b": "leadership",
+      "a_changed": 452,
+      "b_changed": 649,
+      "both_changed": 406,
+      "a_only": 46,
+      "b_only": 243,
+      "classification": "MODERATE_INCREMENTAL",
+      "reason": "Breadth and relative group leadership encode different equity structure; removing either loses the selective branch.452/649 changed sessions include46/243 disjoint effects. This is structural contribution within the same equity family; independent economic utility remains unestablished."
+    },
+    "volatility_level_vs_momentum": {
+      "a": "vix_level",
+      "b": "volatility_momentum",
+      "a_changed": 413,
+      "b_changed": 46,
+      "both_changed": 12,
+      "a_only": 401,
+      "b_only": 34,
+      "classification": "MODERATE_INCREMENTAL",
+      "reason": "Fast moves occur below VIX20 on93 sessions, while VIX>=25 persists without fast momentum on248. Removing both momentum horizons removes12 contractual STRESS sessions and changes34 additional non-overlapping outcomes. These are distinct level/change semantics within one volatility family, not a new vote."
+    },
+    "correlation_level_vs_deterioration": {
+      "a": "correlation_level",
+      "b": "correlation_deterioration",
+      "a_changed": 142,
+      "b_changed": 32,
+      "both_changed": 0,
+      "a_only": 142,
+      "b_only": 32,
+      "classification": "WEAK_INCREMENTAL",
+      "reason": "Removing correlation deterioration changes32/1930 decisions; removing correlation level changes142, with no overlap in changed decisions. High correlation appears without high delta240 times and high delta below high correlation125 times. Deterioration is structurally distinct but has little direct adjudication effect; no evidence supports removal or a new independent family."
+    }
+  },
+  "classification_policy": "STRONG/MODERATE require identifiable non-redundant structure and consistent semantic role. WEAK denotes little direct adjudication contribution. No categorical claim of economic utility follows from disagreement. INDETERMINATE when independent utility cannot be measured.",
+  "participation_leadership_cross_tab": {
+    "FAVORABLE": {
+      "FAVORABLE": 382,
+      "MIXED": 92,
+      "ADVERSE": 55
+    },
+    "MIXED": {
+      "FAVORABLE": 772,
+      "MIXED": 190,
+      "ADVERSE": 208
+    },
+    "ADVERSE": {
+      "FAVORABLE": 114,
+      "MIXED": 36,
+      "ADVERSE": 81
+    }
+  },
+  "conditional_volatility_triggers": {
+    "fast_without_vix_watch": 93,
+    "high_level_without_fast": 248
+  },
+  "correlation_condition_cross_tab": {
+    "HIGH": {
+      "RISING_DELTA": 125,
+      "OTHER": 240
+    },
+    "BELOW_HIGH": {
+      "RISING_DELTA": 125,
+      "OTHER": 1440
+    }
+  },
+  "condition_assessment": {
+    "positive_5": {
+      "classification": "MODERATE_INCREMENTAL",
+      "regimes_changed": 272,
+      "stress_not_retained": 0,
+      "pillar_states_changed": {
+        "participation": 682,
+        "leadership": 0,
+        "volatility": 0,
+        "fragility": 0,
+        "equity": 413
+      },
+      "economic_utility": "INDETERMINATE",
+      "action": "RETAIN_CANONICAL; no independent utility or safe-removal conclusion follows from structural contribution"
+    },
+    "positive_21": {
+      "classification": "MODERATE_INCREMENTAL",
+      "regimes_changed": 181,
+      "stress_not_retained": 0,
+      "pillar_states_changed": {
+        "participation": 530,
+        "leadership": 0,
+        "volatility": 0,
+        "fragility": 0,
+        "equity": 307
+      },
+      "economic_utility": "INDETERMINATE",
+      "action": "RETAIN_CANONICAL; no independent utility or safe-removal conclusion follows from structural contribution"
+    },
+    "leadership_gap": {
+      "classification": "MODERATE_INCREMENTAL",
+      "regimes_changed": 649,
+      "stress_not_retained": 0,
+      "pillar_states_changed": {
+        "participation": 0,
+        "leadership": 1930,
+        "volatility": 0,
+        "fragility": 0,
+        "equity": 469
+      },
+      "economic_utility": "INDETERMINATE",
+      "action": "RETAIN_CANONICAL; no independent utility or safe-removal conclusion follows from structural contribution"
+    },
+    "vix_level": {
+      "classification": "MODERATE_INCREMENTAL",
+      "regimes_changed": 413,
+      "stress_not_retained": 71,
+      "pillar_states_changed": {
+        "participation": 0,
+        "leadership": 0,
+        "volatility": 577,
+        "fragility": 0,
+        "equity": 0
+      },
+      "economic_utility": "INDETERMINATE",
+      "action": "RETAIN_CANONICAL; no independent utility or safe-removal conclusion follows from structural contribution"
+    },
+    "jump_1": {
+      "classification": "WEAK_INCREMENTAL",
+      "regimes_changed": 18,
+      "stress_not_retained": 3,
+      "pillar_states_changed": {
+        "participation": 0,
+        "leadership": 0,
+        "volatility": 32,
+        "fragility": 0,
+        "equity": 0
+      },
+      "economic_utility": "INDETERMINATE",
+      "action": "RETAIN_CANONICAL; no independent utility or safe-removal conclusion follows from structural contribution"
+    },
+    "jump_5": {
+      "classification": "WEAK_INCREMENTAL",
+      "regimes_changed": 14,
+      "stress_not_retained": 4,
+      "pillar_states_changed": {
+        "participation": 0,
+        "leadership": 0,
+        "volatility": 25,
+        "fragility": 0,
+        "equity": 0
+      },
+      "economic_utility": "INDETERMINATE",
+      "action": "RETAIN_CANONICAL; no independent utility or safe-removal conclusion follows from structural contribution"
+    },
+    "vx_slope": {
+      "classification": "MODERATE_INCREMENTAL",
+      "regimes_changed": 54,
+      "stress_not_retained": 12,
+      "pillar_states_changed": {
+        "participation": 0,
+        "leadership": 0,
+        "volatility": 106,
+        "fragility": 0,
+        "equity": 0
+      },
+      "economic_utility": "INDETERMINATE",
+      "action": "RETAIN_CANONICAL; no independent utility or safe-removal conclusion follows from structural contribution"
+    },
+    "correlation_level": {
+      "classification": "MODERATE_INCREMENTAL",
+      "regimes_changed": 142,
+      "stress_not_retained": 0,
+      "pillar_states_changed": {
+        "participation": 0,
+        "leadership": 0,
+        "volatility": 0,
+        "fragility": 365,
+        "equity": 0
+      },
+      "economic_utility": "INDETERMINATE",
+      "action": "RETAIN_CANONICAL; no independent utility or safe-removal conclusion follows from structural contribution"
+    },
+    "correlation_deterioration": {
+      "classification": "WEAK_INCREMENTAL",
+      "regimes_changed": 32,
+      "stress_not_retained": 0,
+      "pillar_states_changed": {
+        "participation": 0,
+        "leadership": 0,
+        "volatility": 0,
+        "fragility": 125,
+        "equity": 0
+      },
+      "economic_utility": "INDETERMINATE",
+      "action": "RETAIN_CANONICAL; no independent utility or safe-removal conclusion follows from structural contribution"
+    },
+    "participation": {
+      "classification": "MODERATE_INCREMENTAL",
+      "regimes_changed": 452,
+      "stress_not_retained": 0,
+      "pillar_states_changed": {
+        "participation": 1930,
+        "leadership": 0,
+        "volatility": 0,
+        "fragility": 0,
+        "equity": 977
+      },
+      "economic_utility": "INDETERMINATE",
+      "action": "RETAIN_CANONICAL; no independent utility or safe-removal conclusion follows from structural contribution"
+    },
+    "volatility_momentum": {
+      "classification": "MODERATE_INCREMENTAL",
+      "regimes_changed": 46,
+      "stress_not_retained": 12,
+      "pillar_states_changed": {
+        "participation": 0,
+        "leadership": 0,
+        "volatility": 74,
+        "fragility": 0,
+        "equity": 0
+      },
+      "economic_utility": "INDETERMINATE",
+      "action": "RETAIN_CANONICAL; no independent utility or safe-removal conclusion follows from structural contribution"
+    }
+  },
+  "classifications_are_post_result_interpretation": true,
+  "minimum_sufficient_engine": "C03 unchanged is the smallest currently justified complete product contract. No tested reduction establishes preservation of practically all valuable information because utility is not independently labelled. This is a conservative delivery decision, not proof of unique mathematical minimality."
+}

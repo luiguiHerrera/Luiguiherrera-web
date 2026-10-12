@@ -1,0 +1,2152 @@
+{
+  "schemaVersion": 1,
+  "scope": "OFFLINE_EXACT_POLICY_PACKAGE_AND_SYNTHETIC_SERVICE_MODEL",
+  "status": "PASS",
+  "testMethods": 18,
+  "failures": 0,
+  "errors": 0,
+  "authorizationRows": 195,
+  "frozenProbeRows": 63,
+  "probeNamespaceCrossProductComparisons": 80,
+  "cases": [
+    {
+      "name": "probe regression: required bucket metadata GetBucketVersioning",
+      "role": "arn:aws:iam::732159826922:role/RegimeV2S3Probe",
+      "action": "s3:GetBucketVersioning",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1",
+      "context": {
+        "aws:SecureTransport": true
+      },
+      "expected": "ALLOW_REQUEST",
+      "observed": "ALLOW_REQUEST"
+    },
+    {
+      "name": "probe regression: other bucket metadata excluded GetBucketVersioning",
+      "role": "arn:aws:iam::732159826922:role/RegimeV2S3Probe",
+      "action": "s3:GetBucketVersioning",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1-other",
+      "context": {
+        "aws:SecureTransport": true
+      },
+      "expected": "IMPLICIT_DENY",
+      "observed": "IMPLICIT_DENY"
+    },
+    {
+      "name": "probe regression: required bucket metadata GetBucketPublicAccessBlock",
+      "role": "arn:aws:iam::732159826922:role/RegimeV2S3Probe",
+      "action": "s3:GetBucketPublicAccessBlock",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1",
+      "context": {
+        "aws:SecureTransport": true
+      },
+      "expected": "ALLOW_REQUEST",
+      "observed": "ALLOW_REQUEST"
+    },
+    {
+      "name": "probe regression: other bucket metadata excluded GetBucketPublicAccessBlock",
+      "role": "arn:aws:iam::732159826922:role/RegimeV2S3Probe",
+      "action": "s3:GetBucketPublicAccessBlock",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1-other",
+      "context": {
+        "aws:SecureTransport": true
+      },
+      "expected": "IMPLICIT_DENY",
+      "observed": "IMPLICIT_DENY"
+    },
+    {
+      "name": "probe regression: required bucket metadata GetEncryptionConfiguration",
+      "role": "arn:aws:iam::732159826922:role/RegimeV2S3Probe",
+      "action": "s3:GetEncryptionConfiguration",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1",
+      "context": {
+        "aws:SecureTransport": true
+      },
+      "expected": "ALLOW_REQUEST",
+      "observed": "ALLOW_REQUEST"
+    },
+    {
+      "name": "probe regression: other bucket metadata excluded GetEncryptionConfiguration",
+      "role": "arn:aws:iam::732159826922:role/RegimeV2S3Probe",
+      "action": "s3:GetEncryptionConfiguration",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1-other",
+      "context": {
+        "aws:SecureTransport": true
+      },
+      "expected": "IMPLICIT_DENY",
+      "observed": "IMPLICIT_DENY"
+    },
+    {
+      "name": "probe regression: immutable.json create with star",
+      "role": "arn:aws:iam::732159826922:role/RegimeV2S3Probe",
+      "action": "s3:PutObject",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/regime-v2/_probe/123456-1/immutable.json",
+      "context": {
+        "aws:SecureTransport": true,
+        "s3:if-none-match": "*"
+      },
+      "expected": "ALLOW_REQUEST",
+      "observed": "ALLOW_REQUEST"
+    },
+    {
+      "name": "probe regression: immutable.json no header",
+      "role": "arn:aws:iam::732159826922:role/RegimeV2S3Probe",
+      "action": "s3:PutObject",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/regime-v2/_probe/123456-1/immutable.json",
+      "context": {
+        "aws:SecureTransport": true
+      },
+      "expected": "EXPLICIT_DENY",
+      "observed": "EXPLICIT_DENY"
+    },
+    {
+      "name": "probe regression: immutable.json CAS cannot mutate immutable key",
+      "role": "arn:aws:iam::732159826922:role/RegimeV2S3Probe",
+      "action": "s3:PutObject",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/regime-v2/_probe/123456-1/immutable.json",
+      "context": {
+        "aws:SecureTransport": true,
+        "s3:if-match": "etag"
+      },
+      "expected": "EXPLICIT_DENY",
+      "observed": "EXPLICIT_DENY"
+    },
+    {
+      "name": "probe regression: immutable.json invalid create conditional value",
+      "role": "arn:aws:iam::732159826922:role/RegimeV2S3Probe",
+      "action": "s3:PutObject",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/regime-v2/_probe/123456-1/immutable.json",
+      "context": {
+        "aws:SecureTransport": true,
+        "s3:if-none-match": "not-star"
+      },
+      "expected": "EXPLICIT_DENY",
+      "observed": "EXPLICIT_DENY"
+    },
+    {
+      "name": "probe regression: delete-sentinel.json create with star",
+      "role": "arn:aws:iam::732159826922:role/RegimeV2S3Probe",
+      "action": "s3:PutObject",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/regime-v2/_probe/123456-1/delete-sentinel.json",
+      "context": {
+        "aws:SecureTransport": true,
+        "s3:if-none-match": "*"
+      },
+      "expected": "ALLOW_REQUEST",
+      "observed": "ALLOW_REQUEST"
+    },
+    {
+      "name": "probe regression: delete-sentinel.json no header",
+      "role": "arn:aws:iam::732159826922:role/RegimeV2S3Probe",
+      "action": "s3:PutObject",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/regime-v2/_probe/123456-1/delete-sentinel.json",
+      "context": {
+        "aws:SecureTransport": true
+      },
+      "expected": "EXPLICIT_DENY",
+      "observed": "EXPLICIT_DENY"
+    },
+    {
+      "name": "probe regression: delete-sentinel.json CAS cannot mutate immutable key",
+      "role": "arn:aws:iam::732159826922:role/RegimeV2S3Probe",
+      "action": "s3:PutObject",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/regime-v2/_probe/123456-1/delete-sentinel.json",
+      "context": {
+        "aws:SecureTransport": true,
+        "s3:if-match": "etag"
+      },
+      "expected": "EXPLICIT_DENY",
+      "observed": "EXPLICIT_DENY"
+    },
+    {
+      "name": "probe regression: delete-sentinel.json invalid create conditional value",
+      "role": "arn:aws:iam::732159826922:role/RegimeV2S3Probe",
+      "action": "s3:PutObject",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/regime-v2/_probe/123456-1/delete-sentinel.json",
+      "context": {
+        "aws:SecureTransport": true,
+        "s3:if-none-match": "not-star"
+      },
+      "expected": "EXPLICIT_DENY",
+      "observed": "EXPLICIT_DENY"
+    },
+    {
+      "name": "probe regression: unconditional.json create with star",
+      "role": "arn:aws:iam::732159826922:role/RegimeV2S3Probe",
+      "action": "s3:PutObject",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/regime-v2/_probe/123456-1/unconditional.json",
+      "context": {
+        "aws:SecureTransport": true,
+        "s3:if-none-match": "*"
+      },
+      "expected": "ALLOW_REQUEST",
+      "observed": "ALLOW_REQUEST"
+    },
+    {
+      "name": "probe regression: unconditional.json no header",
+      "role": "arn:aws:iam::732159826922:role/RegimeV2S3Probe",
+      "action": "s3:PutObject",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/regime-v2/_probe/123456-1/unconditional.json",
+      "context": {
+        "aws:SecureTransport": true
+      },
+      "expected": "EXPLICIT_DENY",
+      "observed": "EXPLICIT_DENY"
+    },
+    {
+      "name": "probe regression: unconditional.json CAS cannot mutate immutable key",
+      "role": "arn:aws:iam::732159826922:role/RegimeV2S3Probe",
+      "action": "s3:PutObject",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/regime-v2/_probe/123456-1/unconditional.json",
+      "context": {
+        "aws:SecureTransport": true,
+        "s3:if-match": "etag"
+      },
+      "expected": "EXPLICIT_DENY",
+      "observed": "EXPLICIT_DENY"
+    },
+    {
+      "name": "probe regression: unconditional.json invalid create conditional value",
+      "role": "arn:aws:iam::732159826922:role/RegimeV2S3Probe",
+      "action": "s3:PutObject",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/regime-v2/_probe/123456-1/unconditional.json",
+      "context": {
+        "aws:SecureTransport": true,
+        "s3:if-none-match": "not-star"
+      },
+      "expected": "EXPLICIT_DENY",
+      "observed": "EXPLICIT_DENY"
+    },
+    {
+      "name": "probe regression: future-object.json create with star",
+      "role": "arn:aws:iam::732159826922:role/RegimeV2S3Probe",
+      "action": "s3:PutObject",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/regime-v2/_probe/123456-1/future-object.json",
+      "context": {
+        "aws:SecureTransport": true,
+        "s3:if-none-match": "*"
+      },
+      "expected": "ALLOW_REQUEST",
+      "observed": "ALLOW_REQUEST"
+    },
+    {
+      "name": "probe regression: future-object.json no header",
+      "role": "arn:aws:iam::732159826922:role/RegimeV2S3Probe",
+      "action": "s3:PutObject",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/regime-v2/_probe/123456-1/future-object.json",
+      "context": {
+        "aws:SecureTransport": true
+      },
+      "expected": "EXPLICIT_DENY",
+      "observed": "EXPLICIT_DENY"
+    },
+    {
+      "name": "probe regression: future-object.json CAS cannot mutate immutable key",
+      "role": "arn:aws:iam::732159826922:role/RegimeV2S3Probe",
+      "action": "s3:PutObject",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/regime-v2/_probe/123456-1/future-object.json",
+      "context": {
+        "aws:SecureTransport": true,
+        "s3:if-match": "etag"
+      },
+      "expected": "EXPLICIT_DENY",
+      "observed": "EXPLICIT_DENY"
+    },
+    {
+      "name": "probe regression: future-object.json invalid create conditional value",
+      "role": "arn:aws:iam::732159826922:role/RegimeV2S3Probe",
+      "action": "s3:PutObject",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/regime-v2/_probe/123456-1/future-object.json",
+      "context": {
+        "aws:SecureTransport": true,
+        "s3:if-none-match": "not-star"
+      },
+      "expected": "EXPLICIT_DENY",
+      "observed": "EXPLICIT_DENY"
+    },
+    {
+      "name": "probe regression: nested/other.json create with star",
+      "role": "arn:aws:iam::732159826922:role/RegimeV2S3Probe",
+      "action": "s3:PutObject",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/regime-v2/_probe/123456-1/nested/other.json",
+      "context": {
+        "aws:SecureTransport": true,
+        "s3:if-none-match": "*"
+      },
+      "expected": "ALLOW_REQUEST",
+      "observed": "ALLOW_REQUEST"
+    },
+    {
+      "name": "probe regression: nested/other.json no header",
+      "role": "arn:aws:iam::732159826922:role/RegimeV2S3Probe",
+      "action": "s3:PutObject",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/regime-v2/_probe/123456-1/nested/other.json",
+      "context": {
+        "aws:SecureTransport": true
+      },
+      "expected": "EXPLICIT_DENY",
+      "observed": "EXPLICIT_DENY"
+    },
+    {
+      "name": "probe regression: nested/other.json CAS cannot mutate immutable key",
+      "role": "arn:aws:iam::732159826922:role/RegimeV2S3Probe",
+      "action": "s3:PutObject",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/regime-v2/_probe/123456-1/nested/other.json",
+      "context": {
+        "aws:SecureTransport": true,
+        "s3:if-match": "etag"
+      },
+      "expected": "EXPLICIT_DENY",
+      "observed": "EXPLICIT_DENY"
+    },
+    {
+      "name": "probe regression: nested/other.json invalid create conditional value",
+      "role": "arn:aws:iam::732159826922:role/RegimeV2S3Probe",
+      "action": "s3:PutObject",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/regime-v2/_probe/123456-1/nested/other.json",
+      "context": {
+        "aws:SecureTransport": true,
+        "s3:if-none-match": "not-star"
+      },
+      "expected": "EXPLICIT_DENY",
+      "observed": "EXPLICIT_DENY"
+    },
+    {
+      "name": "probe regression: latest initial create",
+      "role": "arn:aws:iam::732159826922:role/RegimeV2S3Probe",
+      "action": "s3:PutObject",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/regime-v2/_probe/123456-1/latest.json",
+      "context": {
+        "aws:SecureTransport": true,
+        "s3:if-none-match": "*"
+      },
+      "expected": "ALLOW_REQUEST",
+      "observed": "ALLOW_REQUEST"
+    },
+    {
+      "name": "probe regression: latest CAS current or stale ETag admitted for S3 evaluation",
+      "role": "arn:aws:iam::732159826922:role/RegimeV2S3Probe",
+      "action": "s3:PutObject",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/regime-v2/_probe/123456-1/latest.json",
+      "context": {
+        "aws:SecureTransport": true,
+        "s3:if-match": "service-must-compare"
+      },
+      "expected": "ALLOW_REQUEST",
+      "observed": "ALLOW_REQUEST"
+    },
+    {
+      "name": "probe regression: latest unconditional rejected",
+      "role": "arn:aws:iam::732159826922:role/RegimeV2S3Probe",
+      "action": "s3:PutObject",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/regime-v2/_probe/123456-1/latest.json",
+      "context": {
+        "aws:SecureTransport": true
+      },
+      "expected": "EXPLICIT_DENY",
+      "observed": "EXPLICIT_DENY"
+    },
+    {
+      "name": "probe regression: read known object",
+      "role": "arn:aws:iam::732159826922:role/RegimeV2S3Probe",
+      "action": "s3:GetObject",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/regime-v2/_probe/123456-1/immutable.json",
+      "context": {
+        "aws:SecureTransport": true
+      },
+      "expected": "ALLOW_REQUEST",
+      "observed": "ALLOW_REQUEST"
+    },
+    {
+      "name": "probe regression: delete forbidden DeleteObject",
+      "role": "arn:aws:iam::732159826922:role/RegimeV2S3Probe",
+      "action": "s3:DeleteObject",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/regime-v2/_probe/123456-1/delete-sentinel.json",
+      "context": {
+        "aws:SecureTransport": true
+      },
+      "expected": "EXPLICIT_DENY",
+      "observed": "EXPLICIT_DENY"
+    },
+    {
+      "name": "probe regression: delete forbidden DeleteObjectVersion",
+      "role": "arn:aws:iam::732159826922:role/RegimeV2S3Probe",
+      "action": "s3:DeleteObjectVersion",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/regime-v2/_probe/123456-1/delete-sentinel.json",
+      "context": {
+        "aws:SecureTransport": true
+      },
+      "expected": "EXPLICIT_DENY",
+      "observed": "EXPLICIT_DENY"
+    },
+    {
+      "name": "probe regression: non-probe read excluded regime-v2/observations/a.json",
+      "role": "arn:aws:iam::732159826922:role/RegimeV2S3Probe",
+      "action": "s3:GetObject",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/regime-v2/observations/a.json",
+      "context": {
+        "aws:SecureTransport": true
+      },
+      "expected": "IMPLICIT_DENY",
+      "observed": "IMPLICIT_DENY"
+    },
+    {
+      "name": "probe regression: non-probe conditional write excluded regime-v2/observations/a.json",
+      "role": "arn:aws:iam::732159826922:role/RegimeV2S3Probe",
+      "action": "s3:PutObject",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/regime-v2/observations/a.json",
+      "context": {
+        "aws:SecureTransport": true,
+        "s3:if-none-match": "*"
+      },
+      "expected": "IMPLICIT_DENY",
+      "observed": "IMPLICIT_DENY"
+    },
+    {
+      "name": "probe regression: non-probe read excluded regime-v2/runs/a.json",
+      "role": "arn:aws:iam::732159826922:role/RegimeV2S3Probe",
+      "action": "s3:GetObject",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/regime-v2/runs/a.json",
+      "context": {
+        "aws:SecureTransport": true
+      },
+      "expected": "IMPLICIT_DENY",
+      "observed": "IMPLICIT_DENY"
+    },
+    {
+      "name": "probe regression: non-probe conditional write excluded regime-v2/runs/a.json",
+      "role": "arn:aws:iam::732159826922:role/RegimeV2S3Probe",
+      "action": "s3:PutObject",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/regime-v2/runs/a.json",
+      "context": {
+        "aws:SecureTransport": true,
+        "s3:if-none-match": "*"
+      },
+      "expected": "IMPLICIT_DENY",
+      "observed": "IMPLICIT_DENY"
+    },
+    {
+      "name": "probe regression: non-probe read excluded regime-v2/indexes/a.json",
+      "role": "arn:aws:iam::732159826922:role/RegimeV2S3Probe",
+      "action": "s3:GetObject",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/regime-v2/indexes/a.json",
+      "context": {
+        "aws:SecureTransport": true
+      },
+      "expected": "IMPLICIT_DENY",
+      "observed": "IMPLICIT_DENY"
+    },
+    {
+      "name": "probe regression: non-probe conditional write excluded regime-v2/indexes/a.json",
+      "role": "arn:aws:iam::732159826922:role/RegimeV2S3Probe",
+      "action": "s3:PutObject",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/regime-v2/indexes/a.json",
+      "context": {
+        "aws:SecureTransport": true,
+        "s3:if-none-match": "*"
+      },
+      "expected": "IMPLICIT_DENY",
+      "observed": "IMPLICIT_DENY"
+    },
+    {
+      "name": "probe regression: non-probe read excluded regime-v2/_probe-other/a.json",
+      "role": "arn:aws:iam::732159826922:role/RegimeV2S3Probe",
+      "action": "s3:GetObject",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/regime-v2/_probe-other/a.json",
+      "context": {
+        "aws:SecureTransport": true
+      },
+      "expected": "IMPLICIT_DENY",
+      "observed": "IMPLICIT_DENY"
+    },
+    {
+      "name": "probe regression: non-probe conditional write excluded regime-v2/_probe-other/a.json",
+      "role": "arn:aws:iam::732159826922:role/RegimeV2S3Probe",
+      "action": "s3:PutObject",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/regime-v2/_probe-other/a.json",
+      "context": {
+        "aws:SecureTransport": true,
+        "s3:if-none-match": "*"
+      },
+      "expected": "IMPLICIT_DENY",
+      "observed": "IMPLICIT_DENY"
+    },
+    {
+      "name": "probe regression: non-probe read excluded statistical-levels/a.json",
+      "role": "arn:aws:iam::732159826922:role/RegimeV2S3Probe",
+      "action": "s3:GetObject",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/statistical-levels/a.json",
+      "context": {
+        "aws:SecureTransport": true
+      },
+      "expected": "IMPLICIT_DENY",
+      "observed": "IMPLICIT_DENY"
+    },
+    {
+      "name": "probe regression: non-probe conditional write excluded statistical-levels/a.json",
+      "role": "arn:aws:iam::732159826922:role/RegimeV2S3Probe",
+      "action": "s3:PutObject",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/statistical-levels/a.json",
+      "context": {
+        "aws:SecureTransport": true,
+        "s3:if-none-match": "*"
+      },
+      "expected": "IMPLICIT_DENY",
+      "observed": "IMPLICIT_DENY"
+    },
+    {
+      "name": "probe regression: unneeded/admin bucket action excluded ListBucket",
+      "role": "arn:aws:iam::732159826922:role/RegimeV2S3Probe",
+      "action": "s3:ListBucket",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1",
+      "context": {
+        "aws:SecureTransport": true
+      },
+      "expected": "IMPLICIT_DENY",
+      "observed": "IMPLICIT_DENY"
+    },
+    {
+      "name": "probe regression: unneeded/admin bucket action excluded ListBucketVersions",
+      "role": "arn:aws:iam::732159826922:role/RegimeV2S3Probe",
+      "action": "s3:ListBucketVersions",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1",
+      "context": {
+        "aws:SecureTransport": true
+      },
+      "expected": "IMPLICIT_DENY",
+      "observed": "IMPLICIT_DENY"
+    },
+    {
+      "name": "probe regression: unneeded/admin bucket action excluded ListBucketMultipartUploads",
+      "role": "arn:aws:iam::732159826922:role/RegimeV2S3Probe",
+      "action": "s3:ListBucketMultipartUploads",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1",
+      "context": {
+        "aws:SecureTransport": true
+      },
+      "expected": "IMPLICIT_DENY",
+      "observed": "IMPLICIT_DENY"
+    },
+    {
+      "name": "probe regression: unneeded/admin bucket action excluded GetBucketLocation",
+      "role": "arn:aws:iam::732159826922:role/RegimeV2S3Probe",
+      "action": "s3:GetBucketLocation",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1",
+      "context": {
+        "aws:SecureTransport": true
+      },
+      "expected": "IMPLICIT_DENY",
+      "observed": "IMPLICIT_DENY"
+    },
+    {
+      "name": "probe regression: unneeded/admin bucket action excluded GetBucketPolicy",
+      "role": "arn:aws:iam::732159826922:role/RegimeV2S3Probe",
+      "action": "s3:GetBucketPolicy",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1",
+      "context": {
+        "aws:SecureTransport": true
+      },
+      "expected": "IMPLICIT_DENY",
+      "observed": "IMPLICIT_DENY"
+    },
+    {
+      "name": "probe regression: unneeded/admin bucket action excluded GetBucketObjectLockConfiguration",
+      "role": "arn:aws:iam::732159826922:role/RegimeV2S3Probe",
+      "action": "s3:GetBucketObjectLockConfiguration",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1",
+      "context": {
+        "aws:SecureTransport": true
+      },
+      "expected": "IMPLICIT_DENY",
+      "observed": "IMPLICIT_DENY"
+    },
+    {
+      "name": "probe regression: unneeded/admin bucket action excluded GetLifecycleConfiguration",
+      "role": "arn:aws:iam::732159826922:role/RegimeV2S3Probe",
+      "action": "s3:GetLifecycleConfiguration",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1",
+      "context": {
+        "aws:SecureTransport": true
+      },
+      "expected": "IMPLICIT_DENY",
+      "observed": "IMPLICIT_DENY"
+    },
+    {
+      "name": "probe regression: unneeded/admin bucket action excluded PutBucketPolicy",
+      "role": "arn:aws:iam::732159826922:role/RegimeV2S3Probe",
+      "action": "s3:PutBucketPolicy",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1",
+      "context": {
+        "aws:SecureTransport": true
+      },
+      "expected": "IMPLICIT_DENY",
+      "observed": "IMPLICIT_DENY"
+    },
+    {
+      "name": "probe regression: unneeded/admin bucket action excluded PutBucketAcl",
+      "role": "arn:aws:iam::732159826922:role/RegimeV2S3Probe",
+      "action": "s3:PutBucketAcl",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1",
+      "context": {
+        "aws:SecureTransport": true
+      },
+      "expected": "IMPLICIT_DENY",
+      "observed": "IMPLICIT_DENY"
+    },
+    {
+      "name": "probe regression: unneeded/admin bucket action excluded PutBucketVersioning",
+      "role": "arn:aws:iam::732159826922:role/RegimeV2S3Probe",
+      "action": "s3:PutBucketVersioning",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1",
+      "context": {
+        "aws:SecureTransport": true
+      },
+      "expected": "IMPLICIT_DENY",
+      "observed": "IMPLICIT_DENY"
+    },
+    {
+      "name": "probe regression: unneeded/admin bucket action excluded PutBucketPublicAccessBlock",
+      "role": "arn:aws:iam::732159826922:role/RegimeV2S3Probe",
+      "action": "s3:PutBucketPublicAccessBlock",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1",
+      "context": {
+        "aws:SecureTransport": true
+      },
+      "expected": "IMPLICIT_DENY",
+      "observed": "IMPLICIT_DENY"
+    },
+    {
+      "name": "probe regression: unneeded/admin bucket action excluded PutLifecycleConfiguration",
+      "role": "arn:aws:iam::732159826922:role/RegimeV2S3Probe",
+      "action": "s3:PutLifecycleConfiguration",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1",
+      "context": {
+        "aws:SecureTransport": true
+      },
+      "expected": "IMPLICIT_DENY",
+      "observed": "IMPLICIT_DENY"
+    },
+    {
+      "name": "probe regression: unneeded/admin bucket action excluded DeleteBucket",
+      "role": "arn:aws:iam::732159826922:role/RegimeV2S3Probe",
+      "action": "s3:DeleteBucket",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1",
+      "context": {
+        "aws:SecureTransport": true
+      },
+      "expected": "IMPLICIT_DENY",
+      "observed": "IMPLICIT_DENY"
+    },
+    {
+      "name": "probe regression: unneeded object action excluded GetObjectVersion",
+      "role": "arn:aws:iam::732159826922:role/RegimeV2S3Probe",
+      "action": "s3:GetObjectVersion",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/regime-v2/_probe/123456-1/immutable.json",
+      "context": {
+        "aws:SecureTransport": true
+      },
+      "expected": "IMPLICIT_DENY",
+      "observed": "IMPLICIT_DENY"
+    },
+    {
+      "name": "probe regression: unneeded object action excluded PutObjectAcl",
+      "role": "arn:aws:iam::732159826922:role/RegimeV2S3Probe",
+      "action": "s3:PutObjectAcl",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/regime-v2/_probe/123456-1/immutable.json",
+      "context": {
+        "aws:SecureTransport": true
+      },
+      "expected": "IMPLICIT_DENY",
+      "observed": "IMPLICIT_DENY"
+    },
+    {
+      "name": "probe regression: unneeded object action excluded PutObjectTagging",
+      "role": "arn:aws:iam::732159826922:role/RegimeV2S3Probe",
+      "action": "s3:PutObjectTagging",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/regime-v2/_probe/123456-1/immutable.json",
+      "context": {
+        "aws:SecureTransport": true
+      },
+      "expected": "IMPLICIT_DENY",
+      "observed": "IMPLICIT_DENY"
+    },
+    {
+      "name": "probe regression: unneeded object action excluded PutObjectRetention",
+      "role": "arn:aws:iam::732159826922:role/RegimeV2S3Probe",
+      "action": "s3:PutObjectRetention",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/regime-v2/_probe/123456-1/immutable.json",
+      "context": {
+        "aws:SecureTransport": true
+      },
+      "expected": "IMPLICIT_DENY",
+      "observed": "IMPLICIT_DENY"
+    },
+    {
+      "name": "probe regression: unneeded object action excluded PutObjectLegalHold",
+      "role": "arn:aws:iam::732159826922:role/RegimeV2S3Probe",
+      "action": "s3:PutObjectLegalHold",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/regime-v2/_probe/123456-1/immutable.json",
+      "context": {
+        "aws:SecureTransport": true
+      },
+      "expected": "IMPLICIT_DENY",
+      "observed": "IMPLICIT_DENY"
+    },
+    {
+      "name": "probe regression: HTTPS mandatory s3:GetObject",
+      "role": "arn:aws:iam::732159826922:role/RegimeV2S3Probe",
+      "action": "s3:GetObject",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/regime-v2/_probe/123456-1/immutable.json",
+      "context": {
+        "aws:SecureTransport": false
+      },
+      "expected": "EXPLICIT_DENY",
+      "observed": "EXPLICIT_DENY"
+    },
+    {
+      "name": "probe regression: HTTPS mandatory s3:PutObject",
+      "role": "arn:aws:iam::732159826922:role/RegimeV2S3Probe",
+      "action": "s3:PutObject",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/regime-v2/_probe/123456-1/latest.json",
+      "context": {
+        "aws:SecureTransport": false,
+        "s3:if-match": "etag"
+      },
+      "expected": "EXPLICIT_DENY",
+      "observed": "EXPLICIT_DENY"
+    },
+    {
+      "name": "probe regression: HTTPS mandatory s3:GetBucketVersioning",
+      "role": "arn:aws:iam::732159826922:role/RegimeV2S3Probe",
+      "action": "s3:GetBucketVersioning",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1",
+      "context": {
+        "aws:SecureTransport": false
+      },
+      "expected": "EXPLICIT_DENY",
+      "observed": "EXPLICIT_DENY"
+    },
+    {
+      "name": "immutable create arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/regime-v2/observations/record.json",
+      "role": "arn:aws:iam::732159826922:role/RegimeV2ShadowWriter",
+      "action": "s3:PutObject",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/regime-v2/observations/record.json",
+      "context": {
+        "s3:if-none-match": "*"
+      },
+      "expected": "ALLOW_REQUEST",
+      "observed": "ALLOW_REQUEST"
+    },
+    {
+      "name": "immutable missing condition arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/regime-v2/observations/record.json",
+      "role": "arn:aws:iam::732159826922:role/RegimeV2ShadowWriter",
+      "action": "s3:PutObject",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/regime-v2/observations/record.json",
+      "context": {},
+      "expected": "EXPLICIT_DENY",
+      "observed": "EXPLICIT_DENY"
+    },
+    {
+      "name": "immutable CAS rejected arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/regime-v2/observations/record.json",
+      "role": "arn:aws:iam::732159826922:role/RegimeV2ShadowWriter",
+      "action": "s3:PutObject",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/regime-v2/observations/record.json",
+      "context": {
+        "s3:if-match": "etag"
+      },
+      "expected": "EXPLICIT_DENY",
+      "observed": "EXPLICIT_DENY"
+    },
+    {
+      "name": "immutable wrong create value arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/regime-v2/observations/record.json",
+      "role": "arn:aws:iam::732159826922:role/RegimeV2ShadowWriter",
+      "action": "s3:PutObject",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/regime-v2/observations/record.json",
+      "context": {
+        "s3:if-none-match": "not-star"
+      },
+      "expected": "EXPLICIT_DENY",
+      "observed": "EXPLICIT_DENY"
+    },
+    {
+      "name": "immutable wrong create plus CAS arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/regime-v2/observations/record.json",
+      "role": "arn:aws:iam::732159826922:role/RegimeV2ShadowWriter",
+      "action": "s3:PutObject",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/regime-v2/observations/record.json",
+      "context": {
+        "s3:if-none-match": "not-star",
+        "s3:if-match": "etag"
+      },
+      "expected": "EXPLICIT_DENY",
+      "observed": "EXPLICIT_DENY"
+    },
+    {
+      "name": "immutable null create header arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/regime-v2/observations/record.json",
+      "role": "arn:aws:iam::732159826922:role/RegimeV2ShadowWriter",
+      "action": "s3:PutObject",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/regime-v2/observations/record.json",
+      "context": {
+        "s3:if-none-match": null
+      },
+      "expected": "EXPLICIT_DENY",
+      "observed": "EXPLICIT_DENY"
+    },
+    {
+      "name": "read immutable arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/regime-v2/observations/record.json",
+      "role": "arn:aws:iam::732159826922:role/RegimeV2ShadowWriter",
+      "action": "s3:GetObject",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/regime-v2/observations/record.json",
+      "context": {},
+      "expected": "ALLOW_REQUEST",
+      "observed": "ALLOW_REQUEST"
+    },
+    {
+      "name": "immutable create arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/regime-v2/observations/nested/session-or-capture.json",
+      "role": "arn:aws:iam::732159826922:role/RegimeV2ShadowWriter",
+      "action": "s3:PutObject",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/regime-v2/observations/nested/session-or-capture.json",
+      "context": {
+        "s3:if-none-match": "*"
+      },
+      "expected": "ALLOW_REQUEST",
+      "observed": "ALLOW_REQUEST"
+    },
+    {
+      "name": "immutable missing condition arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/regime-v2/observations/nested/session-or-capture.json",
+      "role": "arn:aws:iam::732159826922:role/RegimeV2ShadowWriter",
+      "action": "s3:PutObject",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/regime-v2/observations/nested/session-or-capture.json",
+      "context": {},
+      "expected": "EXPLICIT_DENY",
+      "observed": "EXPLICIT_DENY"
+    },
+    {
+      "name": "immutable CAS rejected arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/regime-v2/observations/nested/session-or-capture.json",
+      "role": "arn:aws:iam::732159826922:role/RegimeV2ShadowWriter",
+      "action": "s3:PutObject",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/regime-v2/observations/nested/session-or-capture.json",
+      "context": {
+        "s3:if-match": "etag"
+      },
+      "expected": "EXPLICIT_DENY",
+      "observed": "EXPLICIT_DENY"
+    },
+    {
+      "name": "immutable wrong create value arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/regime-v2/observations/nested/session-or-capture.json",
+      "role": "arn:aws:iam::732159826922:role/RegimeV2ShadowWriter",
+      "action": "s3:PutObject",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/regime-v2/observations/nested/session-or-capture.json",
+      "context": {
+        "s3:if-none-match": "not-star"
+      },
+      "expected": "EXPLICIT_DENY",
+      "observed": "EXPLICIT_DENY"
+    },
+    {
+      "name": "immutable wrong create plus CAS arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/regime-v2/observations/nested/session-or-capture.json",
+      "role": "arn:aws:iam::732159826922:role/RegimeV2ShadowWriter",
+      "action": "s3:PutObject",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/regime-v2/observations/nested/session-or-capture.json",
+      "context": {
+        "s3:if-none-match": "not-star",
+        "s3:if-match": "etag"
+      },
+      "expected": "EXPLICIT_DENY",
+      "observed": "EXPLICIT_DENY"
+    },
+    {
+      "name": "immutable null create header arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/regime-v2/observations/nested/session-or-capture.json",
+      "role": "arn:aws:iam::732159826922:role/RegimeV2ShadowWriter",
+      "action": "s3:PutObject",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/regime-v2/observations/nested/session-or-capture.json",
+      "context": {
+        "s3:if-none-match": null
+      },
+      "expected": "EXPLICIT_DENY",
+      "observed": "EXPLICIT_DENY"
+    },
+    {
+      "name": "read immutable arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/regime-v2/observations/nested/session-or-capture.json",
+      "role": "arn:aws:iam::732159826922:role/RegimeV2ShadowWriter",
+      "action": "s3:GetObject",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/regime-v2/observations/nested/session-or-capture.json",
+      "context": {},
+      "expected": "ALLOW_REQUEST",
+      "observed": "ALLOW_REQUEST"
+    },
+    {
+      "name": "immutable create arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/regime-v2/runs/record.json",
+      "role": "arn:aws:iam::732159826922:role/RegimeV2ShadowWriter",
+      "action": "s3:PutObject",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/regime-v2/runs/record.json",
+      "context": {
+        "s3:if-none-match": "*"
+      },
+      "expected": "ALLOW_REQUEST",
+      "observed": "ALLOW_REQUEST"
+    },
+    {
+      "name": "immutable missing condition arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/regime-v2/runs/record.json",
+      "role": "arn:aws:iam::732159826922:role/RegimeV2ShadowWriter",
+      "action": "s3:PutObject",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/regime-v2/runs/record.json",
+      "context": {},
+      "expected": "EXPLICIT_DENY",
+      "observed": "EXPLICIT_DENY"
+    },
+    {
+      "name": "immutable CAS rejected arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/regime-v2/runs/record.json",
+      "role": "arn:aws:iam::732159826922:role/RegimeV2ShadowWriter",
+      "action": "s3:PutObject",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/regime-v2/runs/record.json",
+      "context": {
+        "s3:if-match": "etag"
+      },
+      "expected": "EXPLICIT_DENY",
+      "observed": "EXPLICIT_DENY"
+    },
+    {
+      "name": "immutable wrong create value arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/regime-v2/runs/record.json",
+      "role": "arn:aws:iam::732159826922:role/RegimeV2ShadowWriter",
+      "action": "s3:PutObject",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/regime-v2/runs/record.json",
+      "context": {
+        "s3:if-none-match": "not-star"
+      },
+      "expected": "EXPLICIT_DENY",
+      "observed": "EXPLICIT_DENY"
+    },
+    {
+      "name": "immutable wrong create plus CAS arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/regime-v2/runs/record.json",
+      "role": "arn:aws:iam::732159826922:role/RegimeV2ShadowWriter",
+      "action": "s3:PutObject",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/regime-v2/runs/record.json",
+      "context": {
+        "s3:if-none-match": "not-star",
+        "s3:if-match": "etag"
+      },
+      "expected": "EXPLICIT_DENY",
+      "observed": "EXPLICIT_DENY"
+    },
+    {
+      "name": "immutable null create header arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/regime-v2/runs/record.json",
+      "role": "arn:aws:iam::732159826922:role/RegimeV2ShadowWriter",
+      "action": "s3:PutObject",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/regime-v2/runs/record.json",
+      "context": {
+        "s3:if-none-match": null
+      },
+      "expected": "EXPLICIT_DENY",
+      "observed": "EXPLICIT_DENY"
+    },
+    {
+      "name": "read immutable arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/regime-v2/runs/record.json",
+      "role": "arn:aws:iam::732159826922:role/RegimeV2ShadowWriter",
+      "action": "s3:GetObject",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/regime-v2/runs/record.json",
+      "context": {},
+      "expected": "ALLOW_REQUEST",
+      "observed": "ALLOW_REQUEST"
+    },
+    {
+      "name": "immutable create arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/regime-v2/runs/nested/session-or-capture.json",
+      "role": "arn:aws:iam::732159826922:role/RegimeV2ShadowWriter",
+      "action": "s3:PutObject",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/regime-v2/runs/nested/session-or-capture.json",
+      "context": {
+        "s3:if-none-match": "*"
+      },
+      "expected": "ALLOW_REQUEST",
+      "observed": "ALLOW_REQUEST"
+    },
+    {
+      "name": "immutable missing condition arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/regime-v2/runs/nested/session-or-capture.json",
+      "role": "arn:aws:iam::732159826922:role/RegimeV2ShadowWriter",
+      "action": "s3:PutObject",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/regime-v2/runs/nested/session-or-capture.json",
+      "context": {},
+      "expected": "EXPLICIT_DENY",
+      "observed": "EXPLICIT_DENY"
+    },
+    {
+      "name": "immutable CAS rejected arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/regime-v2/runs/nested/session-or-capture.json",
+      "role": "arn:aws:iam::732159826922:role/RegimeV2ShadowWriter",
+      "action": "s3:PutObject",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/regime-v2/runs/nested/session-or-capture.json",
+      "context": {
+        "s3:if-match": "etag"
+      },
+      "expected": "EXPLICIT_DENY",
+      "observed": "EXPLICIT_DENY"
+    },
+    {
+      "name": "immutable wrong create value arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/regime-v2/runs/nested/session-or-capture.json",
+      "role": "arn:aws:iam::732159826922:role/RegimeV2ShadowWriter",
+      "action": "s3:PutObject",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/regime-v2/runs/nested/session-or-capture.json",
+      "context": {
+        "s3:if-none-match": "not-star"
+      },
+      "expected": "EXPLICIT_DENY",
+      "observed": "EXPLICIT_DENY"
+    },
+    {
+      "name": "immutable wrong create plus CAS arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/regime-v2/runs/nested/session-or-capture.json",
+      "role": "arn:aws:iam::732159826922:role/RegimeV2ShadowWriter",
+      "action": "s3:PutObject",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/regime-v2/runs/nested/session-or-capture.json",
+      "context": {
+        "s3:if-none-match": "not-star",
+        "s3:if-match": "etag"
+      },
+      "expected": "EXPLICIT_DENY",
+      "observed": "EXPLICIT_DENY"
+    },
+    {
+      "name": "immutable null create header arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/regime-v2/runs/nested/session-or-capture.json",
+      "role": "arn:aws:iam::732159826922:role/RegimeV2ShadowWriter",
+      "action": "s3:PutObject",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/regime-v2/runs/nested/session-or-capture.json",
+      "context": {
+        "s3:if-none-match": null
+      },
+      "expected": "EXPLICIT_DENY",
+      "observed": "EXPLICIT_DENY"
+    },
+    {
+      "name": "read immutable arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/regime-v2/runs/nested/session-or-capture.json",
+      "role": "arn:aws:iam::732159826922:role/RegimeV2ShadowWriter",
+      "action": "s3:GetObject",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/regime-v2/runs/nested/session-or-capture.json",
+      "context": {},
+      "expected": "ALLOW_REQUEST",
+      "observed": "ALLOW_REQUEST"
+    },
+    {
+      "name": "latest first create",
+      "role": "arn:aws:iam::732159826922:role/RegimeV2ShadowWriter",
+      "action": "s3:PutObject",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/regime-v2/indexes/latest.json",
+      "context": {
+        "s3:if-none-match": "*"
+      },
+      "expected": "ALLOW_REQUEST",
+      "observed": "ALLOW_REQUEST"
+    },
+    {
+      "name": "latest CAS current ETag authorization",
+      "role": "arn:aws:iam::732159826922:role/RegimeV2ShadowWriter",
+      "action": "s3:PutObject",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/regime-v2/indexes/latest.json",
+      "context": {
+        "s3:if-match": "current"
+      },
+      "expected": "ALLOW_REQUEST",
+      "observed": "ALLOW_REQUEST"
+    },
+    {
+      "name": "latest CAS stale ETag admitted to S3 condition evaluation",
+      "role": "arn:aws:iam::732159826922:role/RegimeV2ShadowWriter",
+      "action": "s3:PutObject",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/regime-v2/indexes/latest.json",
+      "context": {
+        "s3:if-match": "stale"
+      },
+      "expected": "ALLOW_REQUEST",
+      "observed": "ALLOW_REQUEST"
+    },
+    {
+      "name": "latest missing condition",
+      "role": "arn:aws:iam::732159826922:role/RegimeV2ShadowWriter",
+      "action": "s3:PutObject",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/regime-v2/indexes/latest.json",
+      "context": {},
+      "expected": "EXPLICIT_DENY",
+      "observed": "EXPLICIT_DENY"
+    },
+    {
+      "name": "latest both headers null",
+      "role": "arn:aws:iam::732159826922:role/RegimeV2ShadowWriter",
+      "action": "s3:PutObject",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/regime-v2/indexes/latest.json",
+      "context": {
+        "s3:if-match": null,
+        "s3:if-none-match": null
+      },
+      "expected": "EXPLICIT_DENY",
+      "observed": "EXPLICIT_DENY"
+    },
+    {
+      "name": "read latest",
+      "role": "arn:aws:iam::732159826922:role/RegimeV2ShadowWriter",
+      "action": "s3:GetObject",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/regime-v2/indexes/latest.json",
+      "context": {},
+      "expected": "ALLOW_REQUEST",
+      "observed": "ALLOW_REQUEST"
+    },
+    {
+      "name": "shadow namespace denied s3:GetObject arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/regime-v2/_probe/123456-1/immutable.json",
+      "role": "arn:aws:iam::732159826922:role/RegimeV2ShadowWriter",
+      "action": "s3:GetObject",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/regime-v2/_probe/123456-1/immutable.json",
+      "context": {
+        "s3:if-none-match": "*"
+      },
+      "expected": "IMPLICIT_DENY",
+      "observed": "IMPLICIT_DENY"
+    },
+    {
+      "name": "shadow namespace denied s3:PutObject arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/regime-v2/_probe/123456-1/immutable.json",
+      "role": "arn:aws:iam::732159826922:role/RegimeV2ShadowWriter",
+      "action": "s3:PutObject",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/regime-v2/_probe/123456-1/immutable.json",
+      "context": {
+        "s3:if-none-match": "*"
+      },
+      "expected": "IMPLICIT_DENY",
+      "observed": "IMPLICIT_DENY"
+    },
+    {
+      "name": "shadow namespace denied s3:GetObject arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/regime-v2/_probe/123456-1/latest.json",
+      "role": "arn:aws:iam::732159826922:role/RegimeV2ShadowWriter",
+      "action": "s3:GetObject",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/regime-v2/_probe/123456-1/latest.json",
+      "context": {
+        "s3:if-none-match": "*"
+      },
+      "expected": "IMPLICIT_DENY",
+      "observed": "IMPLICIT_DENY"
+    },
+    {
+      "name": "shadow namespace denied s3:PutObject arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/regime-v2/_probe/123456-1/latest.json",
+      "role": "arn:aws:iam::732159826922:role/RegimeV2ShadowWriter",
+      "action": "s3:PutObject",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/regime-v2/_probe/123456-1/latest.json",
+      "context": {
+        "s3:if-none-match": "*"
+      },
+      "expected": "IMPLICIT_DENY",
+      "observed": "IMPLICIT_DENY"
+    },
+    {
+      "name": "shadow namespace denied s3:GetObject arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/regime-v2/_probe/",
+      "role": "arn:aws:iam::732159826922:role/RegimeV2ShadowWriter",
+      "action": "s3:GetObject",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/regime-v2/_probe/",
+      "context": {
+        "s3:if-none-match": "*"
+      },
+      "expected": "IMPLICIT_DENY",
+      "observed": "IMPLICIT_DENY"
+    },
+    {
+      "name": "shadow namespace denied s3:PutObject arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/regime-v2/_probe/",
+      "role": "arn:aws:iam::732159826922:role/RegimeV2ShadowWriter",
+      "action": "s3:PutObject",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/regime-v2/_probe/",
+      "context": {
+        "s3:if-none-match": "*"
+      },
+      "expected": "IMPLICIT_DENY",
+      "observed": "IMPLICIT_DENY"
+    },
+    {
+      "name": "shadow namespace denied s3:GetObject arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/regime-v2/observations-escape/a.json",
+      "role": "arn:aws:iam::732159826922:role/RegimeV2ShadowWriter",
+      "action": "s3:GetObject",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/regime-v2/observations-escape/a.json",
+      "context": {
+        "s3:if-none-match": "*"
+      },
+      "expected": "IMPLICIT_DENY",
+      "observed": "IMPLICIT_DENY"
+    },
+    {
+      "name": "shadow namespace denied s3:PutObject arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/regime-v2/observations-escape/a.json",
+      "role": "arn:aws:iam::732159826922:role/RegimeV2ShadowWriter",
+      "action": "s3:PutObject",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/regime-v2/observations-escape/a.json",
+      "context": {
+        "s3:if-none-match": "*"
+      },
+      "expected": "IMPLICIT_DENY",
+      "observed": "IMPLICIT_DENY"
+    },
+    {
+      "name": "shadow namespace denied s3:GetObject arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/regime-v2/runs-escape/a.json",
+      "role": "arn:aws:iam::732159826922:role/RegimeV2ShadowWriter",
+      "action": "s3:GetObject",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/regime-v2/runs-escape/a.json",
+      "context": {
+        "s3:if-none-match": "*"
+      },
+      "expected": "IMPLICIT_DENY",
+      "observed": "IMPLICIT_DENY"
+    },
+    {
+      "name": "shadow namespace denied s3:PutObject arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/regime-v2/runs-escape/a.json",
+      "role": "arn:aws:iam::732159826922:role/RegimeV2ShadowWriter",
+      "action": "s3:PutObject",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/regime-v2/runs-escape/a.json",
+      "context": {
+        "s3:if-none-match": "*"
+      },
+      "expected": "IMPLICIT_DENY",
+      "observed": "IMPLICIT_DENY"
+    },
+    {
+      "name": "shadow namespace denied s3:GetObject arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/regime-v2/indexes/other.json",
+      "role": "arn:aws:iam::732159826922:role/RegimeV2ShadowWriter",
+      "action": "s3:GetObject",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/regime-v2/indexes/other.json",
+      "context": {
+        "s3:if-none-match": "*"
+      },
+      "expected": "IMPLICIT_DENY",
+      "observed": "IMPLICIT_DENY"
+    },
+    {
+      "name": "shadow namespace denied s3:PutObject arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/regime-v2/indexes/other.json",
+      "role": "arn:aws:iam::732159826922:role/RegimeV2ShadowWriter",
+      "action": "s3:PutObject",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/regime-v2/indexes/other.json",
+      "context": {
+        "s3:if-none-match": "*"
+      },
+      "expected": "IMPLICIT_DENY",
+      "observed": "IMPLICIT_DENY"
+    },
+    {
+      "name": "shadow namespace denied s3:GetObject arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/regime-v2/indexes/latest.json/child",
+      "role": "arn:aws:iam::732159826922:role/RegimeV2ShadowWriter",
+      "action": "s3:GetObject",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/regime-v2/indexes/latest.json/child",
+      "context": {
+        "s3:if-none-match": "*"
+      },
+      "expected": "IMPLICIT_DENY",
+      "observed": "IMPLICIT_DENY"
+    },
+    {
+      "name": "shadow namespace denied s3:PutObject arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/regime-v2/indexes/latest.json/child",
+      "role": "arn:aws:iam::732159826922:role/RegimeV2ShadowWriter",
+      "action": "s3:PutObject",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/regime-v2/indexes/latest.json/child",
+      "context": {
+        "s3:if-none-match": "*"
+      },
+      "expected": "IMPLICIT_DENY",
+      "observed": "IMPLICIT_DENY"
+    },
+    {
+      "name": "shadow namespace denied s3:GetObject arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/regime-v2/indexes/Latest.json",
+      "role": "arn:aws:iam::732159826922:role/RegimeV2ShadowWriter",
+      "action": "s3:GetObject",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/regime-v2/indexes/Latest.json",
+      "context": {
+        "s3:if-none-match": "*"
+      },
+      "expected": "IMPLICIT_DENY",
+      "observed": "IMPLICIT_DENY"
+    },
+    {
+      "name": "shadow namespace denied s3:PutObject arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/regime-v2/indexes/Latest.json",
+      "role": "arn:aws:iam::732159826922:role/RegimeV2ShadowWriter",
+      "action": "s3:PutObject",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/regime-v2/indexes/Latest.json",
+      "context": {
+        "s3:if-none-match": "*"
+      },
+      "expected": "IMPLICIT_DENY",
+      "observed": "IMPLICIT_DENY"
+    },
+    {
+      "name": "shadow namespace denied s3:GetObject arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/sessions/a.json",
+      "role": "arn:aws:iam::732159826922:role/RegimeV2ShadowWriter",
+      "action": "s3:GetObject",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/sessions/a.json",
+      "context": {
+        "s3:if-none-match": "*"
+      },
+      "expected": "IMPLICIT_DENY",
+      "observed": "IMPLICIT_DENY"
+    },
+    {
+      "name": "shadow namespace denied s3:PutObject arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/sessions/a.json",
+      "role": "arn:aws:iam::732159826922:role/RegimeV2ShadowWriter",
+      "action": "s3:PutObject",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/sessions/a.json",
+      "context": {
+        "s3:if-none-match": "*"
+      },
+      "expected": "IMPLICIT_DENY",
+      "observed": "IMPLICIT_DENY"
+    },
+    {
+      "name": "shadow namespace denied s3:GetObject arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/captures/a.json",
+      "role": "arn:aws:iam::732159826922:role/RegimeV2ShadowWriter",
+      "action": "s3:GetObject",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/captures/a.json",
+      "context": {
+        "s3:if-none-match": "*"
+      },
+      "expected": "IMPLICIT_DENY",
+      "observed": "IMPLICIT_DENY"
+    },
+    {
+      "name": "shadow namespace denied s3:PutObject arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/captures/a.json",
+      "role": "arn:aws:iam::732159826922:role/RegimeV2ShadowWriter",
+      "action": "s3:PutObject",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/captures/a.json",
+      "context": {
+        "s3:if-none-match": "*"
+      },
+      "expected": "IMPLICIT_DENY",
+      "observed": "IMPLICIT_DENY"
+    },
+    {
+      "name": "shadow namespace denied s3:GetObject arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/failures/a.json",
+      "role": "arn:aws:iam::732159826922:role/RegimeV2ShadowWriter",
+      "action": "s3:GetObject",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/failures/a.json",
+      "context": {
+        "s3:if-none-match": "*"
+      },
+      "expected": "IMPLICIT_DENY",
+      "observed": "IMPLICIT_DENY"
+    },
+    {
+      "name": "shadow namespace denied s3:PutObject arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/failures/a.json",
+      "role": "arn:aws:iam::732159826922:role/RegimeV2ShadowWriter",
+      "action": "s3:PutObject",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/failures/a.json",
+      "context": {
+        "s3:if-none-match": "*"
+      },
+      "expected": "IMPLICIT_DENY",
+      "observed": "IMPLICIT_DENY"
+    },
+    {
+      "name": "shadow namespace denied s3:GetObject arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1-other/regime-v2/observations/a.json",
+      "role": "arn:aws:iam::732159826922:role/RegimeV2ShadowWriter",
+      "action": "s3:GetObject",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1-other/regime-v2/observations/a.json",
+      "context": {
+        "s3:if-none-match": "*"
+      },
+      "expected": "IMPLICIT_DENY",
+      "observed": "IMPLICIT_DENY"
+    },
+    {
+      "name": "shadow namespace denied s3:PutObject arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1-other/regime-v2/observations/a.json",
+      "role": "arn:aws:iam::732159826922:role/RegimeV2ShadowWriter",
+      "action": "s3:PutObject",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1-other/regime-v2/observations/a.json",
+      "context": {
+        "s3:if-none-match": "*"
+      },
+      "expected": "IMPLICIT_DENY",
+      "observed": "IMPLICIT_DENY"
+    },
+    {
+      "name": "shadow metadata allowed s3:GetBucketVersioning",
+      "role": "arn:aws:iam::732159826922:role/RegimeV2ShadowWriter",
+      "action": "s3:GetBucketVersioning",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1",
+      "context": {},
+      "expected": "ALLOW_REQUEST",
+      "observed": "ALLOW_REQUEST"
+    },
+    {
+      "name": "shadow other bucket metadata denied s3:GetBucketVersioning",
+      "role": "arn:aws:iam::732159826922:role/RegimeV2ShadowWriter",
+      "action": "s3:GetBucketVersioning",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1-other",
+      "context": {},
+      "expected": "IMPLICIT_DENY",
+      "observed": "IMPLICIT_DENY"
+    },
+    {
+      "name": "shadow metadata allowed s3:GetEncryptionConfiguration",
+      "role": "arn:aws:iam::732159826922:role/RegimeV2ShadowWriter",
+      "action": "s3:GetEncryptionConfiguration",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1",
+      "context": {},
+      "expected": "ALLOW_REQUEST",
+      "observed": "ALLOW_REQUEST"
+    },
+    {
+      "name": "shadow other bucket metadata denied s3:GetEncryptionConfiguration",
+      "role": "arn:aws:iam::732159826922:role/RegimeV2ShadowWriter",
+      "action": "s3:GetEncryptionConfiguration",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1-other",
+      "context": {},
+      "expected": "IMPLICIT_DENY",
+      "observed": "IMPLICIT_DENY"
+    },
+    {
+      "name": "shadow metadata allowed s3:GetBucketPublicAccessBlock",
+      "role": "arn:aws:iam::732159826922:role/RegimeV2ShadowWriter",
+      "action": "s3:GetBucketPublicAccessBlock",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1",
+      "context": {},
+      "expected": "ALLOW_REQUEST",
+      "observed": "ALLOW_REQUEST"
+    },
+    {
+      "name": "shadow other bucket metadata denied s3:GetBucketPublicAccessBlock",
+      "role": "arn:aws:iam::732159826922:role/RegimeV2ShadowWriter",
+      "action": "s3:GetBucketPublicAccessBlock",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1-other",
+      "context": {},
+      "expected": "IMPLICIT_DENY",
+      "observed": "IMPLICIT_DENY"
+    },
+    {
+      "name": "bounded exact JSON list regime-v2/observations/a.json",
+      "role": "arn:aws:iam::732159826922:role/RegimeV2ShadowWriter",
+      "action": "s3:ListBucket",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1",
+      "context": {
+        "s3:prefix": "regime-v2/observations/a.json",
+        "s3:max-keys": "1"
+      },
+      "expected": "ALLOW_REQUEST",
+      "observed": "ALLOW_REQUEST"
+    },
+    {
+      "name": "probe role gets no new bounded list regime-v2/observations/a.json",
+      "role": "arn:aws:iam::732159826922:role/RegimeV2S3Probe",
+      "action": "s3:ListBucket",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1",
+      "context": {
+        "s3:prefix": "regime-v2/observations/a.json",
+        "s3:max-keys": "1"
+      },
+      "expected": "IMPLICIT_DENY",
+      "observed": "IMPLICIT_DENY"
+    },
+    {
+      "name": "bounded list invalid/missing max-keys regime-v2/observations/a.json None",
+      "role": "arn:aws:iam::732159826922:role/RegimeV2ShadowWriter",
+      "action": "s3:ListBucket",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1",
+      "context": {
+        "s3:prefix": "regime-v2/observations/a.json"
+      },
+      "expected": "IMPLICIT_DENY",
+      "observed": "IMPLICIT_DENY"
+    },
+    {
+      "name": "bounded list invalid/missing max-keys regime-v2/observations/a.json 2",
+      "role": "arn:aws:iam::732159826922:role/RegimeV2ShadowWriter",
+      "action": "s3:ListBucket",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1",
+      "context": {
+        "s3:prefix": "regime-v2/observations/a.json",
+        "s3:max-keys": "2"
+      },
+      "expected": "IMPLICIT_DENY",
+      "observed": "IMPLICIT_DENY"
+    },
+    {
+      "name": "bounded list invalid/missing max-keys regime-v2/observations/a.json 1000",
+      "role": "arn:aws:iam::732159826922:role/RegimeV2ShadowWriter",
+      "action": "s3:ListBucket",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1",
+      "context": {
+        "s3:prefix": "regime-v2/observations/a.json",
+        "s3:max-keys": "1000"
+      },
+      "expected": "IMPLICIT_DENY",
+      "observed": "IMPLICIT_DENY"
+    },
+    {
+      "name": "bounded list invalid/missing max-keys regime-v2/observations/a.json not-a-number",
+      "role": "arn:aws:iam::732159826922:role/RegimeV2ShadowWriter",
+      "action": "s3:ListBucket",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1",
+      "context": {
+        "s3:prefix": "regime-v2/observations/a.json",
+        "s3:max-keys": "not-a-number"
+      },
+      "expected": "IMPLICIT_DENY",
+      "observed": "IMPLICIT_DENY"
+    },
+    {
+      "name": "bounded exact JSON list regime-v2/observations/nested/session.json",
+      "role": "arn:aws:iam::732159826922:role/RegimeV2ShadowWriter",
+      "action": "s3:ListBucket",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1",
+      "context": {
+        "s3:prefix": "regime-v2/observations/nested/session.json",
+        "s3:max-keys": "1"
+      },
+      "expected": "ALLOW_REQUEST",
+      "observed": "ALLOW_REQUEST"
+    },
+    {
+      "name": "probe role gets no new bounded list regime-v2/observations/nested/session.json",
+      "role": "arn:aws:iam::732159826922:role/RegimeV2S3Probe",
+      "action": "s3:ListBucket",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1",
+      "context": {
+        "s3:prefix": "regime-v2/observations/nested/session.json",
+        "s3:max-keys": "1"
+      },
+      "expected": "IMPLICIT_DENY",
+      "observed": "IMPLICIT_DENY"
+    },
+    {
+      "name": "bounded list invalid/missing max-keys regime-v2/observations/nested/session.json None",
+      "role": "arn:aws:iam::732159826922:role/RegimeV2ShadowWriter",
+      "action": "s3:ListBucket",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1",
+      "context": {
+        "s3:prefix": "regime-v2/observations/nested/session.json"
+      },
+      "expected": "IMPLICIT_DENY",
+      "observed": "IMPLICIT_DENY"
+    },
+    {
+      "name": "bounded list invalid/missing max-keys regime-v2/observations/nested/session.json 2",
+      "role": "arn:aws:iam::732159826922:role/RegimeV2ShadowWriter",
+      "action": "s3:ListBucket",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1",
+      "context": {
+        "s3:prefix": "regime-v2/observations/nested/session.json",
+        "s3:max-keys": "2"
+      },
+      "expected": "IMPLICIT_DENY",
+      "observed": "IMPLICIT_DENY"
+    },
+    {
+      "name": "bounded list invalid/missing max-keys regime-v2/observations/nested/session.json 1000",
+      "role": "arn:aws:iam::732159826922:role/RegimeV2ShadowWriter",
+      "action": "s3:ListBucket",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1",
+      "context": {
+        "s3:prefix": "regime-v2/observations/nested/session.json",
+        "s3:max-keys": "1000"
+      },
+      "expected": "IMPLICIT_DENY",
+      "observed": "IMPLICIT_DENY"
+    },
+    {
+      "name": "bounded list invalid/missing max-keys regime-v2/observations/nested/session.json not-a-number",
+      "role": "arn:aws:iam::732159826922:role/RegimeV2ShadowWriter",
+      "action": "s3:ListBucket",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1",
+      "context": {
+        "s3:prefix": "regime-v2/observations/nested/session.json",
+        "s3:max-keys": "not-a-number"
+      },
+      "expected": "IMPLICIT_DENY",
+      "observed": "IMPLICIT_DENY"
+    },
+    {
+      "name": "bounded exact JSON list regime-v2/runs/a.json",
+      "role": "arn:aws:iam::732159826922:role/RegimeV2ShadowWriter",
+      "action": "s3:ListBucket",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1",
+      "context": {
+        "s3:prefix": "regime-v2/runs/a.json",
+        "s3:max-keys": "1"
+      },
+      "expected": "ALLOW_REQUEST",
+      "observed": "ALLOW_REQUEST"
+    },
+    {
+      "name": "probe role gets no new bounded list regime-v2/runs/a.json",
+      "role": "arn:aws:iam::732159826922:role/RegimeV2S3Probe",
+      "action": "s3:ListBucket",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1",
+      "context": {
+        "s3:prefix": "regime-v2/runs/a.json",
+        "s3:max-keys": "1"
+      },
+      "expected": "IMPLICIT_DENY",
+      "observed": "IMPLICIT_DENY"
+    },
+    {
+      "name": "bounded list invalid/missing max-keys regime-v2/runs/a.json None",
+      "role": "arn:aws:iam::732159826922:role/RegimeV2ShadowWriter",
+      "action": "s3:ListBucket",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1",
+      "context": {
+        "s3:prefix": "regime-v2/runs/a.json"
+      },
+      "expected": "IMPLICIT_DENY",
+      "observed": "IMPLICIT_DENY"
+    },
+    {
+      "name": "bounded list invalid/missing max-keys regime-v2/runs/a.json 2",
+      "role": "arn:aws:iam::732159826922:role/RegimeV2ShadowWriter",
+      "action": "s3:ListBucket",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1",
+      "context": {
+        "s3:prefix": "regime-v2/runs/a.json",
+        "s3:max-keys": "2"
+      },
+      "expected": "IMPLICIT_DENY",
+      "observed": "IMPLICIT_DENY"
+    },
+    {
+      "name": "bounded list invalid/missing max-keys regime-v2/runs/a.json 1000",
+      "role": "arn:aws:iam::732159826922:role/RegimeV2ShadowWriter",
+      "action": "s3:ListBucket",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1",
+      "context": {
+        "s3:prefix": "regime-v2/runs/a.json",
+        "s3:max-keys": "1000"
+      },
+      "expected": "IMPLICIT_DENY",
+      "observed": "IMPLICIT_DENY"
+    },
+    {
+      "name": "bounded list invalid/missing max-keys regime-v2/runs/a.json not-a-number",
+      "role": "arn:aws:iam::732159826922:role/RegimeV2ShadowWriter",
+      "action": "s3:ListBucket",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1",
+      "context": {
+        "s3:prefix": "regime-v2/runs/a.json",
+        "s3:max-keys": "not-a-number"
+      },
+      "expected": "IMPLICIT_DENY",
+      "observed": "IMPLICIT_DENY"
+    },
+    {
+      "name": "bounded exact JSON list regime-v2/indexes/latest.json",
+      "role": "arn:aws:iam::732159826922:role/RegimeV2ShadowWriter",
+      "action": "s3:ListBucket",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1",
+      "context": {
+        "s3:prefix": "regime-v2/indexes/latest.json",
+        "s3:max-keys": "1"
+      },
+      "expected": "ALLOW_REQUEST",
+      "observed": "ALLOW_REQUEST"
+    },
+    {
+      "name": "probe role gets no new bounded list regime-v2/indexes/latest.json",
+      "role": "arn:aws:iam::732159826922:role/RegimeV2S3Probe",
+      "action": "s3:ListBucket",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1",
+      "context": {
+        "s3:prefix": "regime-v2/indexes/latest.json",
+        "s3:max-keys": "1"
+      },
+      "expected": "IMPLICIT_DENY",
+      "observed": "IMPLICIT_DENY"
+    },
+    {
+      "name": "bounded list invalid/missing max-keys regime-v2/indexes/latest.json None",
+      "role": "arn:aws:iam::732159826922:role/RegimeV2ShadowWriter",
+      "action": "s3:ListBucket",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1",
+      "context": {
+        "s3:prefix": "regime-v2/indexes/latest.json"
+      },
+      "expected": "IMPLICIT_DENY",
+      "observed": "IMPLICIT_DENY"
+    },
+    {
+      "name": "bounded list invalid/missing max-keys regime-v2/indexes/latest.json 2",
+      "role": "arn:aws:iam::732159826922:role/RegimeV2ShadowWriter",
+      "action": "s3:ListBucket",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1",
+      "context": {
+        "s3:prefix": "regime-v2/indexes/latest.json",
+        "s3:max-keys": "2"
+      },
+      "expected": "IMPLICIT_DENY",
+      "observed": "IMPLICIT_DENY"
+    },
+    {
+      "name": "bounded list invalid/missing max-keys regime-v2/indexes/latest.json 1000",
+      "role": "arn:aws:iam::732159826922:role/RegimeV2ShadowWriter",
+      "action": "s3:ListBucket",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1",
+      "context": {
+        "s3:prefix": "regime-v2/indexes/latest.json",
+        "s3:max-keys": "1000"
+      },
+      "expected": "IMPLICIT_DENY",
+      "observed": "IMPLICIT_DENY"
+    },
+    {
+      "name": "bounded list invalid/missing max-keys regime-v2/indexes/latest.json not-a-number",
+      "role": "arn:aws:iam::732159826922:role/RegimeV2ShadowWriter",
+      "action": "s3:ListBucket",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1",
+      "context": {
+        "s3:prefix": "regime-v2/indexes/latest.json",
+        "s3:max-keys": "not-a-number"
+      },
+      "expected": "IMPLICIT_DENY",
+      "observed": "IMPLICIT_DENY"
+    },
+    {
+      "name": "unscoped or other list denied ",
+      "role": "arn:aws:iam::732159826922:role/RegimeV2ShadowWriter",
+      "action": "s3:ListBucket",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1",
+      "context": {
+        "s3:max-keys": "1",
+        "s3:prefix": ""
+      },
+      "expected": "IMPLICIT_DENY",
+      "observed": "IMPLICIT_DENY"
+    },
+    {
+      "name": "unscoped or other list denied regime-v2/",
+      "role": "arn:aws:iam::732159826922:role/RegimeV2ShadowWriter",
+      "action": "s3:ListBucket",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1",
+      "context": {
+        "s3:max-keys": "1",
+        "s3:prefix": "regime-v2/"
+      },
+      "expected": "IMPLICIT_DENY",
+      "observed": "IMPLICIT_DENY"
+    },
+    {
+      "name": "unscoped or other list denied regime-v2/observations/",
+      "role": "arn:aws:iam::732159826922:role/RegimeV2ShadowWriter",
+      "action": "s3:ListBucket",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1",
+      "context": {
+        "s3:max-keys": "1",
+        "s3:prefix": "regime-v2/observations/"
+      },
+      "expected": "IMPLICIT_DENY",
+      "observed": "IMPLICIT_DENY"
+    },
+    {
+      "name": "unscoped or other list denied regime-v2/runs/",
+      "role": "arn:aws:iam::732159826922:role/RegimeV2ShadowWriter",
+      "action": "s3:ListBucket",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1",
+      "context": {
+        "s3:max-keys": "1",
+        "s3:prefix": "regime-v2/runs/"
+      },
+      "expected": "IMPLICIT_DENY",
+      "observed": "IMPLICIT_DENY"
+    },
+    {
+      "name": "unscoped or other list denied regime-v2/_probe/a.json",
+      "role": "arn:aws:iam::732159826922:role/RegimeV2ShadowWriter",
+      "action": "s3:ListBucket",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1",
+      "context": {
+        "s3:max-keys": "1",
+        "s3:prefix": "regime-v2/_probe/a.json"
+      },
+      "expected": "IMPLICIT_DENY",
+      "observed": "IMPLICIT_DENY"
+    },
+    {
+      "name": "unscoped or other list denied regime-v2/indexes/other.json",
+      "role": "arn:aws:iam::732159826922:role/RegimeV2ShadowWriter",
+      "action": "s3:ListBucket",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1",
+      "context": {
+        "s3:max-keys": "1",
+        "s3:prefix": "regime-v2/indexes/other.json"
+      },
+      "expected": "IMPLICIT_DENY",
+      "observed": "IMPLICIT_DENY"
+    },
+    {
+      "name": "unscoped or other list denied regime-v2/observations/a.txt",
+      "role": "arn:aws:iam::732159826922:role/RegimeV2ShadowWriter",
+      "action": "s3:ListBucket",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1",
+      "context": {
+        "s3:max-keys": "1",
+        "s3:prefix": "regime-v2/observations/a.txt"
+      },
+      "expected": "IMPLICIT_DENY",
+      "observed": "IMPLICIT_DENY"
+    },
+    {
+      "name": "unscoped or other list denied other/a.json",
+      "role": "arn:aws:iam::732159826922:role/RegimeV2ShadowWriter",
+      "action": "s3:ListBucket",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1",
+      "context": {
+        "s3:max-keys": "1",
+        "s3:prefix": "other/a.json"
+      },
+      "expected": "IMPLICIT_DENY",
+      "observed": "IMPLICIT_DENY"
+    },
+    {
+      "name": "unscoped or other list denied None",
+      "role": "arn:aws:iam::732159826922:role/RegimeV2ShadowWriter",
+      "action": "s3:ListBucket",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1",
+      "context": {
+        "s3:max-keys": "1"
+      },
+      "expected": "IMPLICIT_DENY",
+      "observed": "IMPLICIT_DENY"
+    },
+    {
+      "name": "bounded list another bucket denied",
+      "role": "arn:aws:iam::732159826922:role/RegimeV2ShadowWriter",
+      "action": "s3:ListBucket",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1-other",
+      "context": {
+        "s3:prefix": "regime-v2/observations/a.json",
+        "s3:max-keys": "1"
+      },
+      "expected": "IMPLICIT_DENY",
+      "observed": "IMPLICIT_DENY"
+    },
+    {
+      "name": "bounded list HTTPS required",
+      "role": "arn:aws:iam::732159826922:role/RegimeV2ShadowWriter",
+      "action": "s3:ListBucket",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1",
+      "context": {
+        "s3:prefix": "regime-v2/observations/a.json",
+        "s3:max-keys": "1",
+        "aws:SecureTransport": false
+      },
+      "expected": "EXPLICIT_DENY",
+      "observed": "EXPLICIT_DENY"
+    },
+    {
+      "name": "shadow bucket admin or unused denied ListBucket",
+      "role": "arn:aws:iam::732159826922:role/RegimeV2ShadowWriter",
+      "action": "s3:ListBucket",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1",
+      "context": {},
+      "expected": "IMPLICIT_DENY",
+      "observed": "IMPLICIT_DENY"
+    },
+    {
+      "name": "shadow bucket admin or unused denied ListBucketVersions",
+      "role": "arn:aws:iam::732159826922:role/RegimeV2ShadowWriter",
+      "action": "s3:ListBucketVersions",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1",
+      "context": {},
+      "expected": "IMPLICIT_DENY",
+      "observed": "IMPLICIT_DENY"
+    },
+    {
+      "name": "shadow bucket admin or unused denied ListBucketMultipartUploads",
+      "role": "arn:aws:iam::732159826922:role/RegimeV2ShadowWriter",
+      "action": "s3:ListBucketMultipartUploads",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1",
+      "context": {},
+      "expected": "IMPLICIT_DENY",
+      "observed": "IMPLICIT_DENY"
+    },
+    {
+      "name": "shadow bucket admin or unused denied GetBucketLocation",
+      "role": "arn:aws:iam::732159826922:role/RegimeV2ShadowWriter",
+      "action": "s3:GetBucketLocation",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1",
+      "context": {},
+      "expected": "IMPLICIT_DENY",
+      "observed": "IMPLICIT_DENY"
+    },
+    {
+      "name": "shadow bucket admin or unused denied GetBucketPolicy",
+      "role": "arn:aws:iam::732159826922:role/RegimeV2ShadowWriter",
+      "action": "s3:GetBucketPolicy",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1",
+      "context": {},
+      "expected": "IMPLICIT_DENY",
+      "observed": "IMPLICIT_DENY"
+    },
+    {
+      "name": "shadow bucket admin or unused denied GetBucketObjectLockConfiguration",
+      "role": "arn:aws:iam::732159826922:role/RegimeV2ShadowWriter",
+      "action": "s3:GetBucketObjectLockConfiguration",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1",
+      "context": {},
+      "expected": "IMPLICIT_DENY",
+      "observed": "IMPLICIT_DENY"
+    },
+    {
+      "name": "shadow bucket admin or unused denied GetLifecycleConfiguration",
+      "role": "arn:aws:iam::732159826922:role/RegimeV2ShadowWriter",
+      "action": "s3:GetLifecycleConfiguration",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1",
+      "context": {},
+      "expected": "IMPLICIT_DENY",
+      "observed": "IMPLICIT_DENY"
+    },
+    {
+      "name": "shadow bucket admin or unused denied PutBucketPolicy",
+      "role": "arn:aws:iam::732159826922:role/RegimeV2ShadowWriter",
+      "action": "s3:PutBucketPolicy",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1",
+      "context": {},
+      "expected": "IMPLICIT_DENY",
+      "observed": "IMPLICIT_DENY"
+    },
+    {
+      "name": "shadow bucket admin or unused denied PutBucketAcl",
+      "role": "arn:aws:iam::732159826922:role/RegimeV2ShadowWriter",
+      "action": "s3:PutBucketAcl",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1",
+      "context": {},
+      "expected": "IMPLICIT_DENY",
+      "observed": "IMPLICIT_DENY"
+    },
+    {
+      "name": "shadow bucket admin or unused denied PutBucketVersioning",
+      "role": "arn:aws:iam::732159826922:role/RegimeV2ShadowWriter",
+      "action": "s3:PutBucketVersioning",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1",
+      "context": {},
+      "expected": "IMPLICIT_DENY",
+      "observed": "IMPLICIT_DENY"
+    },
+    {
+      "name": "shadow bucket admin or unused denied PutBucketPublicAccessBlock",
+      "role": "arn:aws:iam::732159826922:role/RegimeV2ShadowWriter",
+      "action": "s3:PutBucketPublicAccessBlock",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1",
+      "context": {},
+      "expected": "IMPLICIT_DENY",
+      "observed": "IMPLICIT_DENY"
+    },
+    {
+      "name": "shadow bucket admin or unused denied PutEncryptionConfiguration",
+      "role": "arn:aws:iam::732159826922:role/RegimeV2ShadowWriter",
+      "action": "s3:PutEncryptionConfiguration",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1",
+      "context": {},
+      "expected": "IMPLICIT_DENY",
+      "observed": "IMPLICIT_DENY"
+    },
+    {
+      "name": "shadow bucket admin or unused denied PutLifecycleConfiguration",
+      "role": "arn:aws:iam::732159826922:role/RegimeV2ShadowWriter",
+      "action": "s3:PutLifecycleConfiguration",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1",
+      "context": {},
+      "expected": "IMPLICIT_DENY",
+      "observed": "IMPLICIT_DENY"
+    },
+    {
+      "name": "shadow bucket admin or unused denied DeleteBucket",
+      "role": "arn:aws:iam::732159826922:role/RegimeV2ShadowWriter",
+      "action": "s3:DeleteBucket",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1",
+      "context": {},
+      "expected": "IMPLICIT_DENY",
+      "observed": "IMPLICIT_DENY"
+    },
+    {
+      "name": "shadow unused object action denied GetObjectVersion",
+      "role": "arn:aws:iam::732159826922:role/RegimeV2ShadowWriter",
+      "action": "s3:GetObjectVersion",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/regime-v2/observations/a.json",
+      "context": {},
+      "expected": "IMPLICIT_DENY",
+      "observed": "IMPLICIT_DENY"
+    },
+    {
+      "name": "shadow unused object action denied PutObjectAcl",
+      "role": "arn:aws:iam::732159826922:role/RegimeV2ShadowWriter",
+      "action": "s3:PutObjectAcl",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/regime-v2/observations/a.json",
+      "context": {},
+      "expected": "IMPLICIT_DENY",
+      "observed": "IMPLICIT_DENY"
+    },
+    {
+      "name": "shadow unused object action denied PutObjectTagging",
+      "role": "arn:aws:iam::732159826922:role/RegimeV2ShadowWriter",
+      "action": "s3:PutObjectTagging",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/regime-v2/observations/a.json",
+      "context": {},
+      "expected": "IMPLICIT_DENY",
+      "observed": "IMPLICIT_DENY"
+    },
+    {
+      "name": "shadow unused object action denied PutObjectRetention",
+      "role": "arn:aws:iam::732159826922:role/RegimeV2ShadowWriter",
+      "action": "s3:PutObjectRetention",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/regime-v2/observations/a.json",
+      "context": {},
+      "expected": "IMPLICIT_DENY",
+      "observed": "IMPLICIT_DENY"
+    },
+    {
+      "name": "shadow unused object action denied PutObjectLegalHold",
+      "role": "arn:aws:iam::732159826922:role/RegimeV2ShadowWriter",
+      "action": "s3:PutObjectLegalHold",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/regime-v2/observations/a.json",
+      "context": {},
+      "expected": "IMPLICIT_DENY",
+      "observed": "IMPLICIT_DENY"
+    },
+    {
+      "name": "shadow delete anywhere denied DeleteObject arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/regime-v2/observations/a.json",
+      "role": "arn:aws:iam::732159826922:role/RegimeV2ShadowWriter",
+      "action": "s3:DeleteObject",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/regime-v2/observations/a.json",
+      "context": {},
+      "expected": "EXPLICIT_DENY",
+      "observed": "EXPLICIT_DENY"
+    },
+    {
+      "name": "shadow delete anywhere denied DeleteObject arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/regime-v2/runs/a.json",
+      "role": "arn:aws:iam::732159826922:role/RegimeV2ShadowWriter",
+      "action": "s3:DeleteObject",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/regime-v2/runs/a.json",
+      "context": {},
+      "expected": "EXPLICIT_DENY",
+      "observed": "EXPLICIT_DENY"
+    },
+    {
+      "name": "shadow delete anywhere denied DeleteObject arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/regime-v2/indexes/latest.json",
+      "role": "arn:aws:iam::732159826922:role/RegimeV2ShadowWriter",
+      "action": "s3:DeleteObject",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/regime-v2/indexes/latest.json",
+      "context": {},
+      "expected": "EXPLICIT_DENY",
+      "observed": "EXPLICIT_DENY"
+    },
+    {
+      "name": "shadow delete anywhere denied DeleteObject arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/regime-v2/_probe/123456-1/a.json",
+      "role": "arn:aws:iam::732159826922:role/RegimeV2ShadowWriter",
+      "action": "s3:DeleteObject",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/regime-v2/_probe/123456-1/a.json",
+      "context": {},
+      "expected": "EXPLICIT_DENY",
+      "observed": "EXPLICIT_DENY"
+    },
+    {
+      "name": "shadow delete anywhere denied DeleteObject arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1-other/a.json",
+      "role": "arn:aws:iam::732159826922:role/RegimeV2ShadowWriter",
+      "action": "s3:DeleteObject",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1-other/a.json",
+      "context": {},
+      "expected": "EXPLICIT_DENY",
+      "observed": "EXPLICIT_DENY"
+    },
+    {
+      "name": "shadow delete anywhere denied DeleteObjectVersion arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/regime-v2/observations/a.json",
+      "role": "arn:aws:iam::732159826922:role/RegimeV2ShadowWriter",
+      "action": "s3:DeleteObjectVersion",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/regime-v2/observations/a.json",
+      "context": {},
+      "expected": "EXPLICIT_DENY",
+      "observed": "EXPLICIT_DENY"
+    },
+    {
+      "name": "shadow delete anywhere denied DeleteObjectVersion arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/regime-v2/runs/a.json",
+      "role": "arn:aws:iam::732159826922:role/RegimeV2ShadowWriter",
+      "action": "s3:DeleteObjectVersion",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/regime-v2/runs/a.json",
+      "context": {},
+      "expected": "EXPLICIT_DENY",
+      "observed": "EXPLICIT_DENY"
+    },
+    {
+      "name": "shadow delete anywhere denied DeleteObjectVersion arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/regime-v2/indexes/latest.json",
+      "role": "arn:aws:iam::732159826922:role/RegimeV2ShadowWriter",
+      "action": "s3:DeleteObjectVersion",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/regime-v2/indexes/latest.json",
+      "context": {},
+      "expected": "EXPLICIT_DENY",
+      "observed": "EXPLICIT_DENY"
+    },
+    {
+      "name": "shadow delete anywhere denied DeleteObjectVersion arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/regime-v2/_probe/123456-1/a.json",
+      "role": "arn:aws:iam::732159826922:role/RegimeV2ShadowWriter",
+      "action": "s3:DeleteObjectVersion",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/regime-v2/_probe/123456-1/a.json",
+      "context": {},
+      "expected": "EXPLICIT_DENY",
+      "observed": "EXPLICIT_DENY"
+    },
+    {
+      "name": "shadow delete anywhere denied DeleteObjectVersion arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1-other/a.json",
+      "role": "arn:aws:iam::732159826922:role/RegimeV2ShadowWriter",
+      "action": "s3:DeleteObjectVersion",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1-other/a.json",
+      "context": {},
+      "expected": "EXPLICIT_DENY",
+      "observed": "EXPLICIT_DENY"
+    },
+    {
+      "name": "shadow HTTPS required s3:GetObject",
+      "role": "arn:aws:iam::732159826922:role/RegimeV2ShadowWriter",
+      "action": "s3:GetObject",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/regime-v2/observations/a.json",
+      "context": {
+        "aws:SecureTransport": false
+      },
+      "expected": "EXPLICIT_DENY",
+      "observed": "EXPLICIT_DENY"
+    },
+    {
+      "name": "shadow HTTPS required s3:PutObject",
+      "role": "arn:aws:iam::732159826922:role/RegimeV2ShadowWriter",
+      "action": "s3:PutObject",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/regime-v2/observations/a.json",
+      "context": {
+        "aws:SecureTransport": false,
+        "s3:if-none-match": "*"
+      },
+      "expected": "EXPLICIT_DENY",
+      "observed": "EXPLICIT_DENY"
+    },
+    {
+      "name": "shadow HTTPS required s3:PutObject",
+      "role": "arn:aws:iam::732159826922:role/RegimeV2ShadowWriter",
+      "action": "s3:PutObject",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/regime-v2/indexes/latest.json",
+      "context": {
+        "aws:SecureTransport": false,
+        "s3:if-match": "current"
+      },
+      "expected": "EXPLICIT_DENY",
+      "observed": "EXPLICIT_DENY"
+    },
+    {
+      "name": "shadow HTTPS required s3:GetBucketVersioning",
+      "role": "arn:aws:iam::732159826922:role/RegimeV2ShadowWriter",
+      "action": "s3:GetBucketVersioning",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1",
+      "context": {
+        "aws:SecureTransport": false
+      },
+      "expected": "EXPLICIT_DENY",
+      "observed": "EXPLICIT_DENY"
+    }
+  ],
+  "filesSha256": {
+    "accepted-probe/bucket-policy.json": "23bf40aabcd8adba05beb9e5352bd1e50aa31335bff27c16e288f8d067ebf68b",
+    "accepted-probe/create-bucket.json": "937273a03875e0e62433f78260ebbd11df659dcb7d05562a556df36e784238f4",
+    "accepted-probe/encryption.json": "a9c6b7c21e5d7afccb1a97d12c9972f5f0432c4ebb5345ebf5041794bc1b342a",
+    "accepted-probe/manifest.json": "383d7df87f92526ecaada718027f33e058ba44b34184aadba88d18ad29248b1d",
+    "accepted-probe/matrix.json": "c0bcd03655f6c8573a64ce9a5ed56cd2a253acd77813f932a1797350124a3fd4",
+    "accepted-probe/public-access-block.json": "cb83e29507ea5301a4f6a4e8cb4111eb4bd72c14608f0685e1a66d27d9cc4386",
+    "accepted-probe/trust-policy.json": "f5b9e5f5476c3e282327a01b4759d473c96e0843f42becb901783d76212822dc",
+    "accepted-probe/versioning.json": "8aaf6c5639d887a190955cf718b92595e07b57aa6021134f0c2084e61ce2926e",
+    "accepted-probe/writer-policy.json": "eb1240ff80099a181f0a5bc3af7aebe4b9320add2c21d988253d94cb1cb380d0",
+    "policies/combined-bucket.json": "4bddc4a3f74b2b4612dedd2a89ac18572b70abf33100f9de21c1416efdb1464c",
+    "policies/shadow-trust.json": "f5b9e5f5476c3e282327a01b4759d473c96e0843f42becb901783d76212822dc",
+    "policies/shadow-writer.json": "5e6796304465ea4912efda67d412fc5ad1f945cdb67e9d1a985130b09c91f04b"
+  },
+  "awsRequests": 0,
+  "awsMutations": 0,
+  "shadowWriterOidcLive": "NOT_RUN",
+  "remoteProductionPrefixCanary": "NOT_RUN",
+  "limitations": [
+    "Authorization matching uses the canonical role identity and only the operators in these files.",
+    "An IAM-authorized duplicate create or stale ETag request is rejected by S3 preconditions; the stateful tests here are synthetic.",
+    "AWS IAM role simulation does not support resource-based policies; identity-only simulation is not proof of bucket conditions."
+  ]
+}

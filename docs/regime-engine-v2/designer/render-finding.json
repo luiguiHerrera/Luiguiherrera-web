@@ -1,0 +1,25 @@
+{
+  "finding_id": "D-RENDER-ICU-001",
+  "severity": "MEDIUM",
+  "component": "components/dashboard/RegimeV2Surface.tsx",
+  "description": "The source timestamp renderer allocated a new Intl.DateTimeFormat for every displayed timestamp. Repeated complete SSR runs produced a 2.41 GB resident-memory footprint despite a small JavaScript heap.",
+  "evidence": {
+    "beforeMetrics": "docs/regime-engine-v2/designer/performance-before-formatter-reuse.json",
+    "beforeSource": "docs/regime-engine-v2/designer/RegimeV2Surface.before-formatter-reuse.tsx.txt",
+    "beforeSourceSha256": "e82ef1286515d7d1e5be1dff511b190ad9657f2859ff05edf0aa825f2e9f6f40",
+    "beforeFinalRssBytes": 2416476160,
+    "beforeFinalHeapUsedBytes": 24367728,
+    "afterMetrics": "docs/regime-engine-v2/designer/performance.json",
+    "afterFinalRssBytes": 294109184,
+    "afterFinalHeapUsedBytes": 24377304,
+    "afterLast1000RenderRssDeltaBytes": 688128,
+    "afterLast1000RenderHeapDeltaBytes": 50016,
+    "exactMarkupRegression": "lib/dashboard/regime-v2-render.test.mjs: two locale cases compare prior source with the repaired component across all 12 deterministic outputs.",
+    "testEvidence": "docs/regime-engine-v2/designer/render-tests.log"
+  },
+  "repair": "Reuse one module-scope Intl.DateTimeFormat per supported locale (exactly ES and EN), preserving options, UTC timezone and rendered strings.",
+  "engine_impact": "NONE",
+  "public_default_impact": "NONE",
+  "status": "CLOSED",
+  "validationLimits": "RSS reduction and exact SSR equality support the repair. The finite benchmark does not establish a production SLA or prove absence of every possible leak."
+}

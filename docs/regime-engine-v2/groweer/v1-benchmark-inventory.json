@@ -1,0 +1,289 @@
+{
+  "version": "groweer-v1-inventory/1.0.0",
+  "benchmark": "B0_V1",
+  "status": "LIMITED_ACTUAL_OBSERVATIONS",
+  "sourceFile": {
+    "path": "lib/reports/historical-automatic-readings.ts",
+    "field": "four exported HistoricalAutomaticReadingsSnapshot objects and historicalSnapshots map",
+    "sha256": "13db87cb17f43165fb4a6b10c7b0bb140ad5665150ac7f8736d1af679d80da72"
+  },
+  "observedSnapshots": 4,
+  "exactDateOverlapWith1930V2": 3,
+  "matchedSourceCutoffPITPairs": 0,
+  "observedContinuousV1SessionPairs": 0,
+  "historyReconstructed": false,
+  "inventedV1Rows": 0,
+  "scoreAsTruth": false,
+  "v1ScoreMethodology": "Existing V1 composite uses rotation 45%, VIX 40%, BTC flows 15%; retained score/confidence are archival output only and are never imported into V2 or a benchmark target.",
+  "comparableTurnover": null,
+  "comparableDurations": null,
+  "comparableFlipFlops": null,
+  "occupancy": {
+    "scope": "Only four sparse publication snapshots; not historical session occupancy",
+    "labels": {
+      "Cautela": 1,
+      "Risk-on selectivo": 3
+    }
+  },
+  "limitations": [
+    "No historical daily V1 regime archive was found in the authoritative preserved report inputs; four sparse published observations cannot estimate turnover, persistence, stress recall or superiority.",
+    "July 18 is not an observed SPY session; its source records are not silently mapped to July 17.",
+    "Date overlap alone does not establish common availability cutoffs. August and September captures are later; September VIX is explicitly FRED September 3 versus V2 official Cboe September 4.",
+    "V1 taxonomy/score/confidence and core weights differ. No numeric or cardinal mapping turns V1 into regime truth.",
+    "Comments reference an immutable historical deployment for July; that external evidence hash was not newly fetched or validated here. Local retained file bytes are independently hashed."
+  ],
+  "rows": [
+    {
+      "reportId": "segundo-informe-julio-2026",
+      "date": "2026-07-18",
+      "label": "Cautela",
+      "regimeRecord": {
+        "label": "Cautela",
+        "score": 36,
+        "confidence": 58,
+        "bias": "cautious",
+        "interpretation": "El mercado muestra deterioro en varias lecturas, pero aún no hay confirmación suficiente para clasificarlo como estrés. Ponderación actual: rotación sectorial 45%, VIX 40%, BTC ETF flows 15% y FedWatch 0% mientras esté pendiente.",
+        "support": [
+          "Rotación: Rotación mixta; no domina una lectura defensiva extrema.",
+          "BTC ETF flows: Flujos mixtos aportan lectura neutral."
+        ],
+        "caution": [
+          "Rotación: Defensivos lideran mientras growth/cíclicos quedan débiles.",
+          "Volatilidad: Vigilancia: zona de vigilancia.",
+          "Momentum VIX: VIX subiendo rápido; aumenta la cautela."
+        ],
+        "watch": [
+          "Curva VIX: Contango moderado.",
+          "Flujos BTC ETF: Flujos mixtos.",
+          "La lectura sugiere una rotación mixta. No implica dirección futura del mercado."
+        ]
+      },
+      "sourceVersion": "immutable Vercel deployment commit ce32ff886f04d0a1fd36f9f73a0492a5718d2d23; retained TS comment",
+      "capturedAt": null,
+      "sourceEvidenceSha256Claim": "d653ca10148456dcdf565c62aee0956e6005c92e84e5c00737c0aa575b3b9e70",
+      "sources": [
+        {
+          "path": "lib/reports/historical-automatic-readings.ts",
+          "field": "secondJuly2026AutomaticReadings",
+          "sha256": "13db87cb17f43165fb4a6b10c7b0bb140ad5665150ac7f8736d1af679d80da72"
+        }
+      ],
+      "exactDatePairedToV2": false,
+      "v2RegimeOnExactDate": null,
+      "pairingStatus": "UNPAIRED_NON_SESSION_DATE_NO_AUTOMATIC_PREVIOUS_DAY_SUBSTITUTION",
+      "sourceDates": {
+        "vix": null,
+        "btc": null,
+        "gld": "2026-07-17"
+      },
+      "actualNarrative": {
+        "support": [
+          "Rotación: Rotación mixta; no domina una lectura defensiva extrema.",
+          "BTC ETF flows: Flujos mixtos aportan lectura neutral."
+        ],
+        "caution": [
+          "Rotación: Defensivos lideran mientras growth/cíclicos quedan débiles.",
+          "Volatilidad: Vigilancia: zona de vigilancia.",
+          "Momentum VIX: VIX subiendo rápido; aumenta la cautela."
+        ],
+        "watch": [
+          "Curva VIX: Contango moderado.",
+          "Flujos BTC ETF: Flujos mixtos.",
+          "La lectura sugiere una rotación mixta. No implica dirección futura del mercado."
+        ]
+      },
+      "scoreUsedAsObjective": false,
+      "confidenceUsedAsProbability": false
+    },
+    {
+      "reportId": "primer-informe-agosto-2026",
+      "date": "2026-07-31",
+      "label": "Risk-on selectivo",
+      "regimeRecord": {
+        "label": "Risk-on selectivo",
+        "score": 70,
+        "confidence": 62,
+        "bias": "Favorable",
+        "interpretation": "Lectura compuesta de volatilidad, rotación y flujos. Ponderación actual: rotación sectorial 45%, VIX 40% y BTC ETF flows 15%.",
+        "support": [
+          "SPY, QQQ y DIA conservaron retorno semanal positivo.",
+          "La curva del VIX cerró en fuerte contango al 31 de julio."
+        ],
+        "caution": [
+          "La dispersión sectorial semanal alcanzó 7,65 puntos porcentuales.",
+          "IWM quedó rezagado y seis sectores cerraron en negativo."
+        ],
+        "watch": [
+          "BTC ETF: +329 M USD en el último día disponible y -261 M USD en cinco días.",
+          "GLD: presión neutral al 31 de julio, con -0.23 % en participaciones durante cinco sesiones."
+        ]
+      },
+      "sourceVersion": "published dashboard snapshot retained in TS; comments identify capture on 2026-08-03 for 2026-07-31 cutoff",
+      "capturedAt": "2026-08-03",
+      "sourceEvidenceSha256Claim": null,
+      "sources": [
+        {
+          "path": "lib/reports/historical-automatic-readings.ts",
+          "field": "firstAugust2026AutomaticReadings",
+          "sha256": "13db87cb17f43165fb4a6b10c7b0bb140ad5665150ac7f8736d1af679d80da72"
+        }
+      ],
+      "exactDatePairedToV2": true,
+      "v2RegimeOnExactDate": "RISK_ON_SELECTIVE",
+      "pairingStatus": "DATE_OVERLAP_ONLY_NOT_IDENTICAL_CUTOFF_OR_SOURCE_BASIS",
+      "sourceDates": {
+        "vix": null,
+        "btc": null,
+        "gld": "2026-07-31"
+      },
+      "actualNarrative": {
+        "support": [
+          "SPY, QQQ y DIA conservaron retorno semanal positivo.",
+          "La curva del VIX cerró en fuerte contango al 31 de julio."
+        ],
+        "caution": [
+          "La dispersión sectorial semanal alcanzó 7,65 puntos porcentuales.",
+          "IWM quedó rezagado y seis sectores cerraron en negativo."
+        ],
+        "watch": [
+          "BTC ETF: +329 M USD en el último día disponible y -261 M USD en cinco días.",
+          "GLD: presión neutral al 31 de julio, con -0.23 % en participaciones durante cinco sesiones."
+        ]
+      },
+      "scoreUsedAsObjective": false,
+      "confidenceUsedAsProbability": false
+    },
+    {
+      "reportId": "segundo-informe-agosto-2026",
+      "date": "2026-08-14",
+      "label": "Risk-on selectivo",
+      "regimeRecord": {
+        "label": "Risk-on selectivo",
+        "score": 61,
+        "confidence": 66,
+        "bias": "Favorable",
+        "interpretation": "Lectura compuesta de volatilidad, rotación y flujos. Ponderación actual: rotación sectorial 45%, VIX 40% y BTC ETF flows 15%.",
+        "support": [
+          "Sectores: 9 de 11 cerraron la semana en positivo y 8 de 11 quedaron sobre su media larga.",
+          "Curva del VIX: fuerte contango, con VX2 - VX1 en +2,36 puntos al corte.",
+          "Radar cuantitativo: fragilidad 20/100 y correlación promedio de 0,11."
+        ],
+        "caution": [
+          "La dispersión sectorial semanal alcanzó 9,1 puntos porcentuales.",
+          "La amplitud relativa siguió negativa: RSP/SPY -1,1 pp e IWM/SPY -1,7 pp.",
+          "BTC ETF: -123 M USD en el último día disponible y -229 M USD en cinco sesiones."
+        ],
+        "watch": [
+          "VIX en 17,8, clasificado como normal alto y con momentum estable (percentil 42).",
+          "GLD: entrada neta probable, con +0,59 % en participaciones durante cinco sesiones.",
+          "QQQ/SPY aparecía como pendiente en el dashboard al corte."
+        ]
+      },
+      "sourceVersion": "published historical automatic reading retained in TS; source comments identify 2026-08-14 cutoff and 2026-08-16 capture",
+      "capturedAt": "2026-08-16",
+      "sourceEvidenceSha256Claim": null,
+      "sources": [
+        {
+          "path": "lib/reports/historical-automatic-readings.ts",
+          "field": "secondAugust2026AutomaticReadings",
+          "sha256": "13db87cb17f43165fb4a6b10c7b0bb140ad5665150ac7f8736d1af679d80da72"
+        }
+      ],
+      "exactDatePairedToV2": true,
+      "v2RegimeOnExactDate": "RISK_ON_BROAD",
+      "pairingStatus": "DATE_OVERLAP_ONLY_NOT_IDENTICAL_CUTOFF_OR_SOURCE_BASIS",
+      "sourceDates": {
+        "vix": null,
+        "btc": null,
+        "gld": "2026-08-14"
+      },
+      "actualNarrative": {
+        "support": [
+          "Sectores: 9 de 11 cerraron la semana en positivo y 8 de 11 quedaron sobre su media larga.",
+          "Curva del VIX: fuerte contango, con VX2 - VX1 en +2,36 puntos al corte.",
+          "Radar cuantitativo: fragilidad 20/100 y correlación promedio de 0,11."
+        ],
+        "caution": [
+          "La dispersión sectorial semanal alcanzó 9,1 puntos porcentuales.",
+          "La amplitud relativa siguió negativa: RSP/SPY -1,1 pp e IWM/SPY -1,7 pp.",
+          "BTC ETF: -123 M USD en el último día disponible y -229 M USD en cinco sesiones."
+        ],
+        "watch": [
+          "VIX en 17,8, clasificado como normal alto y con momentum estable (percentil 42).",
+          "GLD: entrada neta probable, con +0,59 % en participaciones durante cinco sesiones.",
+          "QQQ/SPY aparecía como pendiente en el dashboard al corte."
+        ]
+      },
+      "scoreUsedAsObjective": false,
+      "confidenceUsedAsProbability": false
+    },
+    {
+      "reportId": "primer-informe-septiembre-2026",
+      "date": "2026-09-04",
+      "label": "Risk-on selectivo",
+      "regimeRecord": {
+        "label": "Risk-on selectivo",
+        "score": 74,
+        "confidence": 88,
+        "bias": "Favorable",
+        "interpretation": "Lectura compuesta de volatilidad, rotación y flujos. Ponderación actual: rotación sectorial 45%, VIX 40% y BTC ETF flows 15%.",
+        "support": [
+          "Rotación: Sectores growth/cíclicos lideran y defensivos quedan rezagados.",
+          "Volatilidad: Normal bajo: presión de volatilidad contenida.",
+          "BTC ETF flows: Entradas sostenidas favorecen apetito por riesgo cripto/institucional.",
+          "Racha BTC ETF: Racha de 3 días de entradas"
+        ],
+        "caution": [
+          "Dispersión sectorial: Dispersión 1W de 4.2%; reduce la confianza del régimen."
+        ],
+        "watch": [
+          "La confianza corresponde al modelo compuesto; no mide probabilidad de subida.",
+          "BTC: acumulado de cinco sesiones completas del 31 de agosto al 4 de septiembre, según Farside."
+        ]
+      },
+      "sourceVersion": "immutable September report automatic.json; capture recorded in integrity.json",
+      "capturedAt": "2026-09-06",
+      "sourceEvidenceSha256Claim": null,
+      "sources": [
+        {
+          "path": "lib/reports/snapshots/primer-informe-septiembre-2026/automatic.json",
+          "field": "dataDate, regime, vix.asOf, btcEtfFlows.asOf, gldFlowPressure.asOf",
+          "sha256": "945692213bc501f8ade3a2ea2da008d7f279b32376099d38baf4a36d8082f879"
+        },
+        {
+          "path": "lib/reports/snapshots/primer-informe-septiembre-2026/integrity.json",
+          "field": "capturedAt, files",
+          "sha256": "3e90386bfde2f76206449d8d84d342d28569609f7609578f746bcdcb0520b7cb"
+        }
+      ],
+      "exactDatePairedToV2": true,
+      "v2RegimeOnExactDate": "RISK_ON_SELECTIVE",
+      "pairingStatus": "DATE_OVERLAP_ONLY_NOT_IDENTICAL_CUTOFF_OR_SOURCE_BASIS",
+      "sourceDates": {
+        "vix": "2026-09-03",
+        "btc": "2026-09-04",
+        "gld": "2026-09-04"
+      },
+      "actualNarrative": {
+        "support": [
+          "Rotación: Sectores growth/cíclicos lideran y defensivos quedan rezagados.",
+          "Volatilidad: Normal bajo: presión de volatilidad contenida.",
+          "BTC ETF flows: Entradas sostenidas favorecen apetito por riesgo cripto/institucional.",
+          "Racha BTC ETF: Racha de 3 días de entradas"
+        ],
+        "caution": [
+          "Dispersión sectorial: Dispersión 1W de 4.2%; reduce la confianza del régimen."
+        ],
+        "watch": [
+          "La confianza corresponde al modelo compuesto; no mide probabilidad de subida.",
+          "BTC: acumulado de cinco sesiones completas del 31 de agosto al 4 de septiembre, según Farside."
+        ]
+      },
+      "scoreUsedAsObjective": false,
+      "confidenceUsedAsProbability": false
+    }
+  ],
+  "v1Preserved": true,
+  "sourceFilesVerifiedAgainstSeptemberIntegrity": 3,
+  "canonicalEngineModified": false
+}

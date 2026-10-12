@@ -1,0 +1,622 @@
+{
+  "version": "groweer-native-quality/1.0.0",
+  "value": "PASS",
+  "semanticsChanged": false,
+  "actualHistorical1930DefaultCounts": {
+    "COMPLETE": 0,
+    "PARTIAL": 1930,
+    "INSUFFICIENT": 0
+  },
+  "actualNative25DefaultCounts": {
+    "COMPLETE": 0,
+    "PARTIAL": 25,
+    "INSUFFICIENT": 0
+  },
+  "cases": [
+    {
+      "id": "Q01_FROZEN_DEFAULT_LAST_DATE",
+      "kind": "PRESERVED_CANONICAL_INPUT",
+      "date": "2026-09-04",
+      "expected": "PARTIAL",
+      "observed": "PARTIAL",
+      "profile": [
+        "btc_daily",
+        "btc_rolling_5",
+        "gld_shares_change_5",
+        "vix_percentile"
+      ],
+      "regime": "RISK_ON_SELECTIVE",
+      "systemState": "COMPLETE",
+      "replayClass": "R2",
+      "sourceStatuses": {
+        "XLK": "AVAILABLE",
+        "XLY": "AVAILABLE",
+        "XLC": "AVAILABLE",
+        "XLF": "AVAILABLE",
+        "XLE": "AVAILABLE",
+        "XLI": "AVAILABLE",
+        "XLB": "AVAILABLE",
+        "XLV": "AVAILABLE",
+        "XLP": "AVAILABLE",
+        "XLU": "AVAILABLE",
+        "XLRE": "AVAILABLE",
+        "SPY": "MISSING_SOURCE",
+        "RSP": "MISSING_SOURCE",
+        "IWM": "MISSING_SOURCE",
+        "VIX": "AVAILABLE",
+        "VX": "AVAILABLE",
+        "BTC": "UNKNOWN_CALENDAR",
+        "GLD": "UNKNOWN_CALENDAR"
+      },
+      "optionalProblems": [
+        "btc_daily",
+        "btc_rolling_5",
+        "gld_shares_change_5",
+        "vix_percentile"
+      ],
+      "coreMissingReasons": [],
+      "evidence": {
+        "btc_daily": {
+          "featureId": "btc_daily",
+          "role": "SATELLITE",
+          "family": "btc_flows",
+          "unit": "USD millions",
+          "value": null,
+          "status": "UNAVAILABLE",
+          "reasons": [
+            "INPUT_OR_WINDOW_UNAVAILABLE"
+          ],
+          "parents": [
+            "raw_btc_rows"
+          ],
+          "replayClass": "UNKNOWN"
+        },
+        "btc_rolling_5": {
+          "featureId": "btc_rolling_5",
+          "role": "SATELLITE",
+          "family": "btc_flows",
+          "unit": "USD millions",
+          "value": null,
+          "status": "UNAVAILABLE",
+          "reasons": [
+            "INPUT_OR_WINDOW_UNAVAILABLE"
+          ],
+          "parents": [
+            "raw_btc_rows"
+          ],
+          "replayClass": "UNKNOWN"
+        },
+        "gld_shares_change_5": {
+          "featureId": "gld_shares_change_5",
+          "role": "SATELLITE",
+          "family": "gld_pressure",
+          "unit": "shares and fraction",
+          "value": null,
+          "status": "UNAVAILABLE",
+          "reasons": [
+            "GLD_WINDOW_UNAVAILABLE"
+          ],
+          "parents": [
+            "raw_gld_rows"
+          ],
+          "replayClass": "UNKNOWN"
+        },
+        "vix_percentile": {
+          "featureId": "vix_percentile",
+          "role": "DIAGNOSTIC",
+          "family": "vix_spot",
+          "unit": "percentile rank",
+          "value": null,
+          "status": "UNAVAILABLE",
+          "reasons": [
+            "DECLARED_PREFIX_UNAVAILABLE"
+          ],
+          "parents": [
+            "raw_vix_history"
+          ],
+          "replayClass": "R2"
+        }
+      },
+      "coreInputSha256": "618555807f38f2a458e7dc783857b26ffe025c1967ffbbaeb4a874ad90a9d740",
+      "notes": "Actual accepted default input has complete core and absent satellite sources; vix percentile also lacks declared prefix."
+    },
+    {
+      "id": "Q02_ACTUAL_NATIVE_DEFAULT_LAST_DATE",
+      "kind": "ACTUAL_NATIVE_R2_EXTENSION",
+      "date": "2026-09-04",
+      "expected": "PARTIAL",
+      "observed": "PARTIAL",
+      "profile": [
+        "btc_daily",
+        "btc_rolling_5",
+        "gld_shares_change_5",
+        "vix_percentile"
+      ],
+      "regime": "RISK_ON_SELECTIVE",
+      "systemState": "COMPLETE",
+      "replayClass": "R2",
+      "sourceStatuses": {
+        "XLK": "AVAILABLE",
+        "XLY": "AVAILABLE",
+        "XLC": "AVAILABLE",
+        "XLF": "AVAILABLE",
+        "XLE": "AVAILABLE",
+        "XLI": "AVAILABLE",
+        "XLB": "AVAILABLE",
+        "XLV": "AVAILABLE",
+        "XLP": "AVAILABLE",
+        "XLU": "AVAILABLE",
+        "XLRE": "AVAILABLE",
+        "SPY": "MISSING_SOURCE",
+        "RSP": "MISSING_SOURCE",
+        "IWM": "MISSING_SOURCE",
+        "VIX": "AVAILABLE",
+        "VX": "AVAILABLE",
+        "BTC": "AVAILABLE",
+        "GLD": "AVAILABLE"
+      },
+      "optionalProblems": [
+        "gld_shares_change_5",
+        "vix_percentile"
+      ],
+      "coreMissingReasons": [],
+      "evidence": {
+        "btc_daily": {
+          "featureId": "btc_daily",
+          "role": "SATELLITE",
+          "family": "btc_flows",
+          "unit": "USD millions",
+          "value": 174.6,
+          "status": "AVAILABLE",
+          "reasons": [],
+          "parents": [
+            "raw_btc_rows"
+          ],
+          "replayClass": "R2"
+        },
+        "btc_rolling_5": {
+          "featureId": "btc_rolling_5",
+          "role": "SATELLITE",
+          "family": "btc_flows",
+          "unit": "USD millions",
+          "value": 986.6999999999999,
+          "status": "AVAILABLE",
+          "reasons": [],
+          "parents": [
+            "raw_btc_rows"
+          ],
+          "replayClass": "R2"
+        },
+        "gld_shares_change_5": {
+          "featureId": "gld_shares_change_5",
+          "role": "SATELLITE",
+          "family": "gld_pressure",
+          "unit": "shares and fraction",
+          "value": {
+            "delta": 3400000,
+            "fraction": 0.0093074185600876
+          },
+          "status": "AVAILABLE",
+          "reasons": [
+            "COHERENCE_AUDIT_PARTIAL"
+          ],
+          "parents": [
+            "raw_gld_rows"
+          ],
+          "replayClass": "R2"
+        },
+        "vix_percentile": {
+          "featureId": "vix_percentile",
+          "role": "DIAGNOSTIC",
+          "family": "vix_spot",
+          "unit": "percentile rank",
+          "value": null,
+          "status": "UNAVAILABLE",
+          "reasons": [
+            "DECLARED_PREFIX_UNAVAILABLE"
+          ],
+          "parents": [
+            "raw_vix_history"
+          ],
+          "replayClass": "R2"
+        }
+      },
+      "coreInputSha256": "618555807f38f2a458e7dc783857b26ffe025c1967ffbbaeb4a874ad90a9d740",
+      "notes": "All actual native satellite values are retained; 20-row GLD coherence audit remains partial and VIX percentile prefix remains unavailable."
+    },
+    {
+      "id": "Q03_ACTUAL_BTC_FULL_PROFILE",
+      "kind": "EXISTING_PUBLIC_OPTIONAL_PROFILE_WITH_ACTUAL_DATA",
+      "date": "2026-09-04",
+      "expected": "COMPLETE",
+      "observed": "COMPLETE",
+      "profile": [
+        "btc_daily",
+        "btc_rolling_5"
+      ],
+      "regime": "RISK_ON_SELECTIVE",
+      "systemState": "COMPLETE",
+      "replayClass": "R2",
+      "sourceStatuses": {
+        "XLK": "AVAILABLE",
+        "XLY": "AVAILABLE",
+        "XLC": "AVAILABLE",
+        "XLF": "AVAILABLE",
+        "XLE": "AVAILABLE",
+        "XLI": "AVAILABLE",
+        "XLB": "AVAILABLE",
+        "XLV": "AVAILABLE",
+        "XLP": "AVAILABLE",
+        "XLU": "AVAILABLE",
+        "XLRE": "AVAILABLE",
+        "SPY": "MISSING_SOURCE",
+        "RSP": "MISSING_SOURCE",
+        "IWM": "MISSING_SOURCE",
+        "VIX": "AVAILABLE",
+        "VX": "AVAILABLE",
+        "BTC": "AVAILABLE",
+        "GLD": "AVAILABLE"
+      },
+      "optionalProblems": [],
+      "coreMissingReasons": [],
+      "evidence": {
+        "btc_daily": {
+          "featureId": "btc_daily",
+          "role": "SATELLITE",
+          "family": "btc_flows",
+          "unit": "USD millions",
+          "value": 174.6,
+          "status": "AVAILABLE",
+          "reasons": [],
+          "parents": [
+            "raw_btc_rows"
+          ],
+          "replayClass": "R2"
+        },
+        "btc_rolling_5": {
+          "featureId": "btc_rolling_5",
+          "role": "SATELLITE",
+          "family": "btc_flows",
+          "unit": "USD millions",
+          "value": 986.6999999999999,
+          "status": "AVAILABLE",
+          "reasons": [],
+          "parents": [
+            "raw_btc_rows"
+          ],
+          "replayClass": "R2"
+        }
+      },
+      "coreInputSha256": "618555807f38f2a458e7dc783857b26ffe025c1967ffbbaeb4a874ad90a9d740",
+      "notes": "Existing API accepts an explicit optional profile. All this profile’s actual native observations are complete. This does not claim the initial four-feature profile is complete or recommend altering it."
+    },
+    {
+      "id": "Q04_ACTUAL_BTC_PARTIAL_FUND_COVERAGE",
+      "kind": "ACTUAL_NATIVE_MISSING_CELL",
+      "date": "2026-08-07",
+      "expected": "PARTIAL",
+      "observed": "PARTIAL",
+      "profile": [
+        "btc_daily",
+        "btc_rolling_5"
+      ],
+      "regime": "RISK_ON_BROAD",
+      "systemState": "COMPLETE",
+      "replayClass": "R2",
+      "sourceStatuses": {
+        "XLK": "AVAILABLE",
+        "XLY": "AVAILABLE",
+        "XLC": "AVAILABLE",
+        "XLF": "AVAILABLE",
+        "XLE": "AVAILABLE",
+        "XLI": "AVAILABLE",
+        "XLB": "AVAILABLE",
+        "XLV": "AVAILABLE",
+        "XLP": "AVAILABLE",
+        "XLU": "AVAILABLE",
+        "XLRE": "AVAILABLE",
+        "SPY": "MISSING_SOURCE",
+        "RSP": "MISSING_SOURCE",
+        "IWM": "MISSING_SOURCE",
+        "VIX": "AVAILABLE",
+        "VX": "AVAILABLE",
+        "BTC": "AVAILABLE",
+        "GLD": "STALE_OR_WRONG_SESSION"
+      },
+      "optionalProblems": [
+        "btc_daily"
+      ],
+      "coreMissingReasons": [],
+      "evidence": {
+        "btc_daily": {
+          "featureId": "btc_daily",
+          "role": "SATELLITE",
+          "family": "btc_flows",
+          "unit": "USD millions",
+          "value": 101.7,
+          "status": "AVAILABLE",
+          "reasons": [
+            "PARTIAL_FUND_COVERAGE"
+          ],
+          "parents": [
+            "raw_btc_rows"
+          ],
+          "replayClass": "R2"
+        },
+        "btc_rolling_5": {
+          "featureId": "btc_rolling_5",
+          "role": "SATELLITE",
+          "family": "btc_flows",
+          "unit": "USD millions",
+          "value": 865.3000000000001,
+          "status": "AVAILABLE",
+          "reasons": [],
+          "parents": [
+            "raw_btc_rows"
+          ],
+          "replayClass": "R2"
+        }
+      },
+      "coreInputSha256": "1a45e993b0722760286a31958e5169382a8de62c517799dcb2e6afe6582d1081",
+      "notes": "Farside EZBC dash remains missing while the reported total is still available. Same explicit profile as Q03; PARTIAL is meaningful without changing a regime."
+    },
+    {
+      "id": "Q05_ACTUAL_BTC_WINDOW_START",
+      "kind": "ACTUAL_PRESERVED_COVERAGE_EDGE",
+      "date": "2026-08-03",
+      "expected": "PARTIAL",
+      "observed": "PARTIAL",
+      "profile": [
+        "btc_daily",
+        "btc_rolling_5"
+      ],
+      "regime": "RISK_ON_SELECTIVE",
+      "systemState": "COMPLETE",
+      "replayClass": "R2",
+      "sourceStatuses": {
+        "XLK": "AVAILABLE",
+        "XLY": "AVAILABLE",
+        "XLC": "AVAILABLE",
+        "XLF": "AVAILABLE",
+        "XLE": "AVAILABLE",
+        "XLI": "AVAILABLE",
+        "XLB": "AVAILABLE",
+        "XLV": "AVAILABLE",
+        "XLP": "AVAILABLE",
+        "XLU": "AVAILABLE",
+        "XLRE": "AVAILABLE",
+        "SPY": "MISSING_SOURCE",
+        "RSP": "MISSING_SOURCE",
+        "IWM": "MISSING_SOURCE",
+        "VIX": "AVAILABLE",
+        "VX": "AVAILABLE",
+        "BTC": "AVAILABLE",
+        "GLD": "STALE_OR_WRONG_SESSION"
+      },
+      "optionalProblems": [
+        "btc_rolling_5"
+      ],
+      "coreMissingReasons": [],
+      "evidence": {
+        "btc_daily": {
+          "featureId": "btc_daily",
+          "role": "SATELLITE",
+          "family": "btc_flows",
+          "unit": "USD millions",
+          "value": 170.1,
+          "status": "AVAILABLE",
+          "reasons": [],
+          "parents": [
+            "raw_btc_rows"
+          ],
+          "replayClass": "R2"
+        },
+        "btc_rolling_5": {
+          "featureId": "btc_rolling_5",
+          "role": "SATELLITE",
+          "family": "btc_flows",
+          "unit": "USD millions",
+          "value": null,
+          "status": "UNAVAILABLE",
+          "reasons": [
+            "INPUT_OR_WINDOW_UNAVAILABLE"
+          ],
+          "parents": [
+            "raw_btc_rows"
+          ],
+          "replayClass": "R2"
+        }
+      },
+      "coreInputSha256": "b522dfc857ca52535e4228daa2dbb514174c483718d6cf15801a46a4b1c2b379",
+      "notes": "Actual first retained table row gives daily total but not five consecutive totals. Earlier table rows were not invented."
+    },
+    {
+      "id": "Q06_ACTUAL_GLD_COHERENCE_WINDOW",
+      "kind": "ACTUAL_NATIVE_WINDOW_LIMIT",
+      "date": "2026-09-04",
+      "expected": "PARTIAL",
+      "observed": "PARTIAL",
+      "profile": [
+        "gld_shares_change_5"
+      ],
+      "regime": "RISK_ON_SELECTIVE",
+      "systemState": "COMPLETE",
+      "replayClass": "R2",
+      "sourceStatuses": {
+        "XLK": "AVAILABLE",
+        "XLY": "AVAILABLE",
+        "XLC": "AVAILABLE",
+        "XLF": "AVAILABLE",
+        "XLE": "AVAILABLE",
+        "XLI": "AVAILABLE",
+        "XLB": "AVAILABLE",
+        "XLV": "AVAILABLE",
+        "XLP": "AVAILABLE",
+        "XLU": "AVAILABLE",
+        "XLRE": "AVAILABLE",
+        "SPY": "MISSING_SOURCE",
+        "RSP": "MISSING_SOURCE",
+        "IWM": "MISSING_SOURCE",
+        "VIX": "AVAILABLE",
+        "VX": "AVAILABLE",
+        "BTC": "AVAILABLE",
+        "GLD": "AVAILABLE"
+      },
+      "optionalProblems": [
+        "gld_shares_change_5"
+      ],
+      "coreMissingReasons": [],
+      "evidence": {
+        "gld_shares_change_5": {
+          "featureId": "gld_shares_change_5",
+          "role": "SATELLITE",
+          "family": "gld_pressure",
+          "unit": "shares and fraction",
+          "value": {
+            "delta": 3400000,
+            "fraction": 0.0093074185600876
+          },
+          "status": "AVAILABLE",
+          "reasons": [
+            "COHERENCE_AUDIT_PARTIAL"
+          ],
+          "parents": [
+            "raw_gld_rows"
+          ],
+          "replayClass": "R2"
+        }
+      },
+      "coreInputSha256": "618555807f38f2a458e7dc783857b26ffe025c1967ffbbaeb4a874ad90a9d740",
+      "notes": "Five-session difference has six actual native rows, while the frozen 21-row coherence audit reports COHERENCE_AUDIT_PARTIAL."
+    },
+    {
+      "id": "Q07_ACTUAL_CORE_COVERAGE_EDGE",
+      "kind": "ACTUAL_P8_SOURCE_COVERAGE_EDGE_OUTSIDE_1930_BASELINE",
+      "date": "2018-06-19",
+      "expected": "INSUFFICIENT",
+      "observed": "INSUFFICIENT",
+      "profile": [
+        "btc_daily",
+        "btc_rolling_5",
+        "gld_shares_change_5",
+        "vix_percentile"
+      ],
+      "regime": null,
+      "systemState": "INCOMPLETE",
+      "replayClass": "R2",
+      "sourceStatuses": {
+        "XLK": "AVAILABLE",
+        "XLY": "AVAILABLE",
+        "XLC": "AVAILABLE",
+        "XLF": "AVAILABLE",
+        "XLE": "AVAILABLE",
+        "XLI": "AVAILABLE",
+        "XLB": "AVAILABLE",
+        "XLV": "AVAILABLE",
+        "XLP": "AVAILABLE",
+        "XLU": "AVAILABLE",
+        "XLRE": "AVAILABLE",
+        "SPY": "MISSING_SOURCE",
+        "RSP": "MISSING_SOURCE",
+        "IWM": "MISSING_SOURCE",
+        "VIX": "AVAILABLE",
+        "VX": "AVAILABLE",
+        "BTC": "UNKNOWN_CALENDAR",
+        "GLD": "UNKNOWN_CALENDAR"
+      },
+      "optionalProblems": [
+        "btc_daily",
+        "btc_rolling_5",
+        "gld_shares_change_5",
+        "vix_percentile"
+      ],
+      "coreMissingReasons": [
+        "EQUITY_22_CLOSES_UNAVAILABLE",
+        "EQUITY_64_CLOSES_UNAVAILABLE"
+      ],
+      "evidence": {
+        "btc_daily": {
+          "featureId": "btc_daily",
+          "role": "SATELLITE",
+          "family": "btc_flows",
+          "unit": "USD millions",
+          "value": null,
+          "status": "UNAVAILABLE",
+          "reasons": [
+            "INPUT_OR_WINDOW_UNAVAILABLE"
+          ],
+          "parents": [
+            "raw_btc_rows"
+          ],
+          "replayClass": "UNKNOWN"
+        },
+        "btc_rolling_5": {
+          "featureId": "btc_rolling_5",
+          "role": "SATELLITE",
+          "family": "btc_flows",
+          "unit": "USD millions",
+          "value": null,
+          "status": "UNAVAILABLE",
+          "reasons": [
+            "INPUT_OR_WINDOW_UNAVAILABLE"
+          ],
+          "parents": [
+            "raw_btc_rows"
+          ],
+          "replayClass": "UNKNOWN"
+        },
+        "gld_shares_change_5": {
+          "featureId": "gld_shares_change_5",
+          "role": "SATELLITE",
+          "family": "gld_pressure",
+          "unit": "shares and fraction",
+          "value": null,
+          "status": "UNAVAILABLE",
+          "reasons": [
+            "GLD_WINDOW_UNAVAILABLE"
+          ],
+          "parents": [
+            "raw_gld_rows"
+          ],
+          "replayClass": "UNKNOWN"
+        },
+        "vix_percentile": {
+          "featureId": "vix_percentile",
+          "role": "DIAGNOSTIC",
+          "family": "vix_spot",
+          "unit": "percentile rank",
+          "value": null,
+          "status": "UNAVAILABLE",
+          "reasons": [
+            "DECLARED_PREFIX_UNAVAILABLE"
+          ],
+          "parents": [
+            "raw_vix_history"
+          ],
+          "replayClass": "R2"
+        }
+      },
+      "coreInputSha256": "c74ebde320c1fac4359811e33e3d6b88d9d6f579cf509e8756fbf12220db946f",
+      "notes": "The preserved Yahoo XLC series starts on this date. A single observed XLC close cannot supply the frozen 22/64-row core windows. No price was removed or invented; this is a source-history warmup example, not an added benchmark period."
+    }
+  ],
+  "verifiedCases": 7,
+  "distinction": "COMPLETE is quality relative to the active optional profile, not a count of every registry field. PARTIAL leaves an available core regime intact while optional evidence is absent or qualified; INSUFFICIENT means a frozen core input/window is unavailable.",
+  "initialDefaultCompleteObserved": false,
+  "initialDefaultCompleteLimitation": "The preserved satellite sample contains only 20 GLD rows and the accepted six-row VIX input omits its declared percentile prefix. Do not fabricate a twenty-first GLD row to manufacture a COMPLETE default example.",
+  "initialDefaultCompleteContractuallyImpossible": false,
+  "feasibilityBasis": "The frozen implementation requires an available reason-free value for each of four initial optionals. Twenty-one coherent native GLD rows, five complete BTC rows and a complete declared VIX percentile prefix would satisfy these finite requirements; this is a contract deduction, not an observed prospective event.",
+  "prospectivePartialConditions": [
+    "Complete core before native satellite sources become available: zero carry keeps optional values absent",
+    "Reported BTC total available while at least one named fund is unreported: actual Q04 analogue",
+    "A newly retained source does not yet cover its required rolling window: actual Q05 analogue",
+    "GLD six-row five-session value exists before a complete 21-row coherence audit: actual Q06 analogue",
+    "An optional source calendar/availability contract cannot be established while core calendars remain valid"
+  ],
+  "prospectiveFrequency": null,
+  "prospectiveFrequencyReason": "No R0 shadow sequence or actual publication/availability timestamps were collected here. R2 quality frequencies are coverage diagnostics, not live-service reliability estimates.",
+  "replayClass": "R2",
+  "pointInTimeOosClaim": false,
+  "noSyntheticRows": true,
+  "canonicalEngineModified": false
+}

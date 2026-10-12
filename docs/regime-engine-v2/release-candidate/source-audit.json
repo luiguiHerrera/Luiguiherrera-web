@@ -1,0 +1,2563 @@
+{
+  "schemaVersion": "regime-v2-release-candidate-source-audit/1.0.0",
+  "status": "AUDITED",
+  "scope": "Intentional source selection and dependency closure only; release test/build/HTTP gates and the final commit identity are recorded separately.",
+  "baseHead": "636cb73fb0fe4d2b28ad96cb7185f8c07d8f895b",
+  "architecture": "EVIDENCE_STATE_ENGINE",
+  "canonicalParameterSet": "C03",
+  "sourceEditsPerformedByAudit": false,
+  "stagingPerformedByAudit": false,
+  "shadowActivatedByAudit": false,
+  "reviewMethod": [
+    "Read all 34 tracked diffs and classify each whole-file change.",
+    "Inspect accepted new Regime production, test and CLI source and their filesystem/dynamic-import dependencies.",
+    "Parse static imports, exports and literal dynamic imports using TypeScript 5.6.3; traverse the exact candidate overlay: six intentional tracked files and 41 new source files from the worktree, all other tracked modules from HEAD.",
+    "Review computed preview fixture paths, local test-generated data modules, Python oracle invocation and accepted test adapters separately."
+  ],
+  "summary": {
+    "trackedChangedFiles": 34,
+    "intentionalTrackedFiles": 6,
+    "unrelatedTrackedFiles": 28,
+    "newIntentionalSourceFiles": 41,
+    "sourceFilesToInclude": 47,
+    "mixedFilesRequiringPartialStaging": 0,
+    "staticTraversedFiles": 84,
+    "staticImportEdges": 232,
+    "unresolvedLocalImports": 0,
+    "newNpmDependencies": 0
+  },
+  "intentionalTrackedPaths": [
+    ".env.example",
+    "app/(es)/dashboard/page.tsx",
+    "lib/dashboard/adapters/vix-term-structure.ts",
+    "lib/dashboard/get-dashboard-data.ts",
+    "lib/dashboard/get-home-dashboard-preview-data.ts",
+    "scripts/build-statistical-levels.mjs"
+  ],
+  "intentionalNewSourcePaths": [
+    "app/(es)/internal/regime-v2/page.tsx",
+    "app/en/internal/regime-v2/page.tsx",
+    "components/dashboard/DashboardRegimeV1.tsx",
+    "components/dashboard/RegimeV2Disclosure.tsx",
+    "components/dashboard/RegimeV2Preview.tsx",
+    "components/dashboard/RegimeV2Surface.tsx",
+    "components/dashboard/regime-v2.module.css",
+    "lib/dashboard/regime-v2-presentation.test.ts",
+    "lib/dashboard/regime-v2-presentation.ts",
+    "lib/dashboard/regime-v2-preview.test.mjs",
+    "lib/dashboard/regime-v2-render.test.mjs",
+    "lib/regime-engine-v2/boundary.ts",
+    "lib/regime-engine-v2/capture.ts",
+    "lib/regime-engine-v2/contract.ts",
+    "lib/regime-engine-v2/core.ts",
+    "lib/regime-engine-v2/engine.test.ts",
+    "lib/regime-engine-v2/engine.ts",
+    "lib/regime-engine-v2/features.ts",
+    "lib/regime-engine-v2/math.ts",
+    "lib/regime-engine-v2/normalize.ts",
+    "lib/regime-engine-v2/operations/dashboard-shadow.test.ts",
+    "lib/regime-engine-v2/operations/dashboard-shadow.ts",
+    "lib/regime-engine-v2/operations/normalizer-preservation.test.mjs",
+    "lib/regime-engine-v2/operations/pipeline-capture.ts",
+    "lib/regime-engine-v2/operations/public-preservation.test.ts",
+    "lib/regime-engine-v2/operations/snapshot.test.ts",
+    "lib/regime-engine-v2/operations/snapshot.ts",
+    "lib/regime-engine-v2/operations/source-input.test.ts",
+    "lib/regime-engine-v2/operations/source-input.ts",
+    "lib/regime-engine-v2/shadow.ts",
+    "lib/regime-engine-v2/temporal.ts",
+    "lib/regime-engine-v2/types.ts",
+    "scripts/regime-v2-conformance.mts",
+    "scripts/regime-v2-design-fixtures.mts",
+    "scripts/regime-v2-design-fixtures.test.ts",
+    "scripts/regime-v2-design-render.mjs",
+    "scripts/regime-v2-observe.mts",
+    "scripts/regime-v2-prepare-bundle.mts",
+    "scripts/regime-v2-replay.mts",
+    "scripts/regime-v2-shadow.mts",
+    "scripts/trends-test-register.mjs"
+  ],
+  "mixedFiles": [],
+  "trackedDiffReview": [
+    {
+      "path": ".env.example",
+      "category": "CONFIG",
+      "decision": "INCLUDE_WHOLE_FILE",
+      "mixedChange": false,
+      "reason": "Adds documented V2_SHADOW=OFF and empty private runtime path variables; no enabled flag or concrete private path.",
+      "headSha256": "e5413f862b71342a74e20b1e6a355513448e042c47faacb3c4fd2f72b948aa15",
+      "worktreeSha256": "a9e65067ab4e2aa5e7fa2b40888d1472b9bf3825069c6087f5347232c2d46a55",
+      "diffSha256": "1fcafab659487f7c3525937755eb8ae22710e1b8229cbc6546e01bb204951f7b"
+    },
+    {
+      "path": "app/(es)/dashboard/page.tsx",
+      "category": "PRODUCTION_CODE",
+      "decision": "INCLUDE_WHOLE_FILE",
+      "mixedChange": false,
+      "reason": "Designer extracts the existing public V1 top area into DashboardRegimeV1 without introducing V2 into the public route.",
+      "headSha256": "0540948ce61ce6703e8a043276a030b9b7dfb24ffcab7eadc17ab84810dd0b5a",
+      "worktreeSha256": "52fb6a294696c7fa5490debaa3c162e62f4253a5f1e4ca38b6637a3138c1bf21",
+      "diffSha256": "2a01a9686433339f176549cd6301ff2925cc330af37fec16ab327cd7aa363762"
+    },
+    {
+      "path": "app/(es)/tendencias/page.tsx",
+      "category": "UNRELATED",
+      "decision": "EXCLUDE_WHOLE_FILE",
+      "mixedChange": false,
+      "reason": "Trends catalog, explorer, content or route work with no Regime V2 responsibility.",
+      "headSha256": "f7269ced601810a77a43aa59e7af3e52636a53220bd0d91ee1e05f5c60d29190",
+      "worktreeSha256": "da46beeb2fbfb9c4d5e87be792d540f2e6222be6ecf43ffd1e88b65482929fee",
+      "diffSha256": "d3e2d7da50d2ba3cc4ebbddb0a69a03686a5a63f4ae054545aa733ec1c2182a4"
+    },
+    {
+      "path": "app/en/trends/page.tsx",
+      "category": "UNRELATED",
+      "decision": "EXCLUDE_WHOLE_FILE",
+      "mixedChange": false,
+      "reason": "Trends catalog, explorer, content or route work with no Regime V2 responsibility.",
+      "headSha256": "c80af54269c66ed2779c8b62cff464d246be80aa162305fd503600eea22db951",
+      "worktreeSha256": "dbdc5ce16cabaf85d81f678f91767bd9ad7eff27b2800955311889019c0ac21d",
+      "diffSha256": "47be4c179b670b0a1d290a13701f59aef1c97f71e6769252c75bb2a0b23d3394"
+    },
+    {
+      "path": "components/budget/BudgetProjection.tsx",
+      "category": "UNRELATED",
+      "decision": "EXCLUDE_WHOLE_FILE",
+      "mixedChange": false,
+      "reason": "Budget export/download or observations work; unrelated to Regime V2.",
+      "headSha256": "444e43f081cddb047c90d255088b86c695b06222ddca036ec7aa988188308549",
+      "worktreeSha256": "8edebd595fbfd459b21161e4076d5cd91e1df629d2bf7d7ad787a689d72948e1",
+      "diffSha256": "3fdc7033fbb3aaf8170bd9da30bc8107854bb655243ffbf9ec1d84b031e49b28"
+    },
+    {
+      "path": "components/portfolio-fragility/PortfolioFragilityLab.tsx",
+      "category": "UNRELATED",
+      "decision": "EXCLUDE_WHOLE_FILE",
+      "mixedChange": false,
+      "reason": "Portfolio Fragility Lab input-session, demo or presentation work. The frozen Regime registry does not activate portfolio-specific features.",
+      "headSha256": "4c35ab949c9f5f7270c45b738a8bdac8500e6aa95c29ca636f42201e6a44a3ec",
+      "worktreeSha256": "064fa41c0e36e36d79024e20b6fe2578299fbb899531519c7a251e6c5b97bdd9",
+      "diffSha256": "9cab0be3c6b3c426fa4bd2021098fe6931a65810f28c6c1b57fa5041682f2b7e"
+    },
+    {
+      "path": "components/research/tom-decay/GhostAlphaNarrative.tsx",
+      "category": "UNRELATED",
+      "decision": "EXCLUDE_WHOLE_FILE",
+      "mixedChange": false,
+      "reason": "Turn-of-month research narrative, charts, tooltips or verification copy. RegimeComparisonChart is a TOM research component, not Regime Engine V2.",
+      "headSha256": "605f6290a94f4e5c69fed5427f91177bf7872a17e056e165354a19d5bfaa4dc7",
+      "worktreeSha256": "b45548953fbdd888c6953a542988b7b2d03544533fdb181bc45e2ca4d3c95565",
+      "diffSha256": "edf65c89a0b4a173d57c938ef122372bcda7b8a3946f2f5ce84c219ce589e1a3"
+    },
+    {
+      "path": "components/research/tom-decay/RegimeComparisonChart.tsx",
+      "category": "UNRELATED",
+      "decision": "EXCLUDE_WHOLE_FILE",
+      "mixedChange": false,
+      "reason": "Turn-of-month research narrative, charts, tooltips or verification copy. RegimeComparisonChart is a TOM research component, not Regime Engine V2.",
+      "headSha256": "29114afab196fd3893ba21480698741f7e86aaced410946c4eb444a7ddcbd17e",
+      "worktreeSha256": "5acc0c41149c8c19164bb2db688a42e3df04f1fa670b9086569f3e79d90beb36",
+      "diffSha256": "3384e1ee2ce22929670ed648d65ea1750f6598f536dc6634dbfda4cf96dcd5f8"
+    },
+    {
+      "path": "components/research/tom-decay/RollingPremiumChart.tsx",
+      "category": "UNRELATED",
+      "decision": "EXCLUDE_WHOLE_FILE",
+      "mixedChange": false,
+      "reason": "Turn-of-month research narrative, charts, tooltips or verification copy. RegimeComparisonChart is a TOM research component, not Regime Engine V2.",
+      "headSha256": "81a0578b202c507998ea7852339471db9530ff62967420c328178c96b409c768",
+      "worktreeSha256": "6975c9cbf173b8eb2b714f65a797dff6a0b560774b81aab70046d62ad148a6d9",
+      "diffSha256": "453cf6dd0de2946b1384445b19e0e506f5fe0aaaf65f6c88c57f934f1981d0c7"
+    },
+    {
+      "path": "components/research/tom-decay/TomDecayResearchPage.tsx",
+      "category": "UNRELATED",
+      "decision": "EXCLUDE_WHOLE_FILE",
+      "mixedChange": false,
+      "reason": "Turn-of-month research narrative, charts, tooltips or verification copy. RegimeComparisonChart is a TOM research component, not Regime Engine V2.",
+      "headSha256": "aff45407f904265f3e82a09c3e494e3991b8f92b136d922cda85fd712000b710",
+      "worktreeSha256": "1e6455be77dc12a4a5117872773bd455b432a3d954c3c148b0d7b6a63b901512",
+      "diffSha256": "908e2b4ed0e7569aa8d4a39fa155b6499ab1027e7ca4ce092943680eccaffe03"
+    },
+    {
+      "path": "components/research/tom-decay/TomDecaySection.tsx",
+      "category": "UNRELATED",
+      "decision": "EXCLUDE_WHOLE_FILE",
+      "mixedChange": false,
+      "reason": "Turn-of-month research narrative, charts, tooltips or verification copy. RegimeComparisonChart is a TOM research component, not Regime Engine V2.",
+      "headSha256": "db82518681dae547a45944476d97147d09084a834de76129afbf26aea08f8bf4",
+      "worktreeSha256": "eb851693e6ce05a7576486823b911ba32ec5685a13a57cb81eac50766e1e9cf4",
+      "diffSha256": "e6e5891311c0c55f8414fd79ae05fd9051a616cdcb70612e6f3356d1f830c10a"
+    },
+    {
+      "path": "components/research/tom-decay/VerificationKit.tsx",
+      "category": "UNRELATED",
+      "decision": "EXCLUDE_WHOLE_FILE",
+      "mixedChange": false,
+      "reason": "Turn-of-month research narrative, charts, tooltips or verification copy. RegimeComparisonChart is a TOM research component, not Regime Engine V2.",
+      "headSha256": "c57ca09082f9711eeefa104a8a0ef93273151917873d6d15d03f616ecb2d8627",
+      "worktreeSha256": "9727bbf4eaab937809ca0e8896a4d097b0656ad68425af8199cb1658cb548ab6",
+      "diffSha256": "f93062a3450f48d7e03f47ea9843d159c2c865ad06915d1a353b72e5bc54e8f3"
+    },
+    {
+      "path": "components/seo/RouteStructuredData.tsx",
+      "category": "UNRELATED",
+      "decision": "EXCLUDE_WHOLE_FILE",
+      "mixedChange": false,
+      "reason": "Removes/reworks Trends-specific structured data entries only.",
+      "headSha256": "e0d94d8972f461daea967fa754a73c255beeeae30f4d6a59e156a99a473e4198",
+      "worktreeSha256": "84adb9d65056d7f808eab5fea980da91bddcb6f6f4b8b61f536cf5611383f6cc",
+      "diffSha256": "d471036157161ea139caa7edaa94bee38212c6d6a9c5253412688c2f8d802530"
+    },
+    {
+      "path": "components/trends/TrendsExplorer.tsx",
+      "category": "UNRELATED",
+      "decision": "EXCLUDE_WHOLE_FILE",
+      "mixedChange": false,
+      "reason": "Trends catalog, explorer, content or route work with no Regime V2 responsibility.",
+      "headSha256": "ec10d35d5c24ffcf39a69bafb651cbfe5815cf55fdb162ca5d0b0981c3aeb96b",
+      "worktreeSha256": "eb4acfb5d3431fe6f257eaa65a1fbbde2d5a4d8e9fab1012584d6a0589893af0",
+      "diffSha256": "713ba4e7022c0c8585ba71621e851381f81a6a888236bbaff3b76d7aa4b48f76"
+    },
+    {
+      "path": "lib/analytics/trackEvent.ts",
+      "category": "UNRELATED",
+      "decision": "EXCLUDE_WHOLE_FILE",
+      "mixedChange": false,
+      "reason": "Adds Trends analytics events only. Shared candidate imports use the unchanged HEAD implementation.",
+      "headSha256": "92c584f5beeff4439badbd3542a7b52ea3c08a12abe4b87d85829d8ec1ed4c08",
+      "worktreeSha256": "f4abfda650ba0eea756756e80b0c81e68282901bf9984fb439a002983e4199b9",
+      "diffSha256": "de5f7679dfd7b81346719e30e930f5565ed60b0e145c0933661d89bb5d784ddf"
+    },
+    {
+      "path": "lib/dashboard/adapters/vix-term-structure.ts",
+      "category": "PRODUCTION_CODE",
+      "decision": "INCLUDE_WHOLE_FILE",
+      "mixedChange": false,
+      "reason": "Maintainer observation tap consumes the existing Cboe response; OFF path keeps Response.text behavior and original V1 values.",
+      "headSha256": "ba07816f22643708100be86f149c0463676a5fe5ca963a0ae0cef14f0d562fb7",
+      "worktreeSha256": "16a048d247eb124f190fbfb8a356f1cc4f0f0a1fa27af63c702a96ffe2fbac05",
+      "diffSha256": "654e8448f6c395fa9132b4b7e9a8154dbef7384526d65cd22ec997c19ad8f888"
+    },
+    {
+      "path": "lib/dashboard/get-dashboard-data.ts",
+      "category": "PRODUCTION_CODE",
+      "decision": "INCLUDE_WHOLE_FILE",
+      "mixedChange": false,
+      "reason": "Maintainer wraps the unchanged V1 loader with withDashboardShadow; V1 remains the only returned authority.",
+      "headSha256": "323896dde7f13c42fbac800057d9f1165db4e0b46ec7d0191857b0c23811eec3",
+      "worktreeSha256": "ecb2df82c5e185b7d22b4be16f7b3c22b045f736c72a3624d0fb15dfd9456740",
+      "diffSha256": "c1f80e3fec46304e7903514db4a1f78bedc1908444e3a9214189bee4cbefda3e"
+    },
+    {
+      "path": "lib/dashboard/get-home-dashboard-preview-data.ts",
+      "category": "PRODUCTION_CODE",
+      "decision": "INCLUDE_WHOLE_FILE",
+      "mixedChange": false,
+      "reason": "Maintainer wraps the unchanged V1 home-preview loader with the same OFF-by-default contained observer.",
+      "headSha256": "9cd838452d83cea319a3676d10290d2069592e97fb55b68e67a55c2246da38fc",
+      "worktreeSha256": "117b9e2fd3d0acbbb181c3705d6739a8e3bcaebde05742804a761785a9f9b3ba",
+      "diffSha256": "cb6cc1ad4d0426221124bfaacefdffcc6b943675212f37456fc03430d5091545"
+    },
+    {
+      "path": "lib/i18n/language-pairs.ts",
+      "category": "UNRELATED",
+      "decision": "EXCLUDE_WHOLE_FILE",
+      "mixedChange": false,
+      "reason": "Adds Trends catalog locale pairs only. Internal Regime V2 previews supply their own explicit locale links; HEAD version closes shared dependencies.",
+      "headSha256": "6cf04751a9fc919de0d5e42dec0ce80bc45d43a02af0c14870a6eb76c2daabff",
+      "worktreeSha256": "593f67f7e70886ebaefad3732cb413039f440f7a1163c85efd63ab24f8f43740",
+      "diffSha256": "4079ecebc1874a5c8ede74e2d0c75a59c952edc24912624c8fdaf5e89d850deb"
+    },
+    {
+      "path": "lib/portfolio-fragility/analysis-view.test.ts",
+      "category": "UNRELATED",
+      "decision": "EXCLUDE_WHOLE_FILE",
+      "mixedChange": false,
+      "reason": "Portfolio Fragility Lab input-session, demo or presentation work. The frozen Regime registry does not activate portfolio-specific features.",
+      "headSha256": "fc416c22658a119c38567a69aa81bb829c91d800470010b28df5ca8756fbd11e",
+      "worktreeSha256": "9f200ee7d97309cab3029c7638194994c76737e47d37c2b269986a4cadcc2f9c",
+      "diffSha256": "754e7df599bdce0f76450143d63ab8d2a22a2a0dd013fbd34d6efad88440f128"
+    },
+    {
+      "path": "lib/portfolio-fragility/analysis-view.ts",
+      "category": "UNRELATED",
+      "decision": "EXCLUDE_WHOLE_FILE",
+      "mixedChange": false,
+      "reason": "Portfolio Fragility Lab input-session, demo or presentation work. The frozen Regime registry does not activate portfolio-specific features.",
+      "headSha256": "09262e9e5e15ef611127594b3214430ee987448fb78b80a5d38a8db72898e0f8",
+      "worktreeSha256": "f35f9b20d69d5b29e44d5e848b1265233803a8f2d5823e5255b5f46c13dc16d6",
+      "diffSha256": "2a29bf67f7b32b4b430f9ed20d5d48f37608a15ea2a4830905ff72c1e889db07"
+    },
+    {
+      "path": "lib/portfolio-fragility/demo-data.ts",
+      "category": "UNRELATED",
+      "decision": "EXCLUDE_WHOLE_FILE",
+      "mixedChange": false,
+      "reason": "Portfolio Fragility Lab input-session, demo or presentation work. The frozen Regime registry does not activate portfolio-specific features.",
+      "headSha256": "3b6690b63b0901128367ec3ad847d680189f259f3e226e197591678ad7d1c618",
+      "worktreeSha256": "83c4dcf5df8ced66be3bf831d31f2a8cf52f2e503c810a342aa5abc30b0ee709",
+      "diffSha256": "6f1fc36c148033d1f7d7223dd07d245dac179873821c972144285175292d30e4"
+    },
+    {
+      "path": "lib/portfolio-fragility/engine.test.ts",
+      "category": "UNRELATED",
+      "decision": "EXCLUDE_WHOLE_FILE",
+      "mixedChange": false,
+      "reason": "Portfolio Fragility Lab input-session, demo or presentation work. The frozen Regime registry does not activate portfolio-specific features.",
+      "headSha256": "0d55a7c2d41370576181b860aa95023d4eab0373ec0313a5185d25a4c797ca83",
+      "worktreeSha256": "2577503620c3e1f060579082a45f2c441e433b956bc74cf48276054f0d304071",
+      "diffSha256": "1e78b8c7994467c6d3c0da4ce84beae1ccdd15e1991913d0d6e24f1322003937"
+    },
+    {
+      "path": "lib/portfolio-fragility/format.test.ts",
+      "category": "UNRELATED",
+      "decision": "EXCLUDE_WHOLE_FILE",
+      "mixedChange": false,
+      "reason": "Portfolio Fragility Lab input-session, demo or presentation work. The frozen Regime registry does not activate portfolio-specific features.",
+      "headSha256": "a08826d68335d3bcb3c12c225fc9d01a853e929d29f211940e07431d5db4b8c3",
+      "worktreeSha256": "cd4a28d41c8ccd41abb1099a87139cf030a7dced80168b265bcab44e97950523",
+      "diffSha256": "c548affc791e844a1accfc0cb81773c9c30e0a5c5f7f60f9a44ec68a43e47501"
+    },
+    {
+      "path": "lib/portfolio-fragility/format.ts",
+      "category": "UNRELATED",
+      "decision": "EXCLUDE_WHOLE_FILE",
+      "mixedChange": false,
+      "reason": "Portfolio Fragility Lab input-session, demo or presentation work. The frozen Regime registry does not activate portfolio-specific features.",
+      "headSha256": "89956c0a39cb8083b4f2f204e741fda31d8699184ee7586e18c077ab34f164bc",
+      "worktreeSha256": "6378323f7bf95765a3c55325ce5403ddce5cc0220023ea9193258b02aee57580",
+      "diffSha256": "e4ef14fc19a713c64cf31d4577781a2f8ac4fb2dafbe68c76fc476093866e58b"
+    },
+    {
+      "path": "lib/research/tom-decay/content-en.ts",
+      "category": "UNRELATED",
+      "decision": "EXCLUDE_WHOLE_FILE",
+      "mixedChange": false,
+      "reason": "Turn-of-month research narrative, charts, tooltips or verification copy. RegimeComparisonChart is a TOM research component, not Regime Engine V2.",
+      "headSha256": "4625cd4ccb0e18edc4049555e795bb9b200bd2e7436c36beaeeb24a92542e84a",
+      "worktreeSha256": "ca1add063ba64690bc69fc907511a8d30f285587155717c4764a75d89064c841",
+      "diffSha256": "0375bbbbb96d67226c974a53131abd5b6f61cdd2a6521a2d095048d3ac538ff7"
+    },
+    {
+      "path": "lib/research/tom-decay/content-es.ts",
+      "category": "UNRELATED",
+      "decision": "EXCLUDE_WHOLE_FILE",
+      "mixedChange": false,
+      "reason": "Turn-of-month research narrative, charts, tooltips or verification copy. RegimeComparisonChart is a TOM research component, not Regime Engine V2.",
+      "headSha256": "34d70493fba8fc785982e6641b484d0867bd6a4c8acb90d399927d19353a3e45",
+      "worktreeSha256": "5ad1b812a4f90fda206b0f9995293fb43296707900b7e71e672b76367347d0cd",
+      "diffSha256": "37fc1298e284108761503006f7d99fca0152dff69f53f215212947b833e4f8b7"
+    },
+    {
+      "path": "lib/research/tom-decay/content-types.ts",
+      "category": "UNRELATED",
+      "decision": "EXCLUDE_WHOLE_FILE",
+      "mixedChange": false,
+      "reason": "Turn-of-month research narrative, charts, tooltips or verification copy. RegimeComparisonChart is a TOM research component, not Regime Engine V2.",
+      "headSha256": "384c422efb52620015956a51bb78df378ee59f2a3aecd4ceb99a4530445c97e5",
+      "worktreeSha256": "089e5d9d27ce56ec7d338c07335f74a1037f9afeddcf732638a253ba0456668b",
+      "diffSha256": "9d31645e33696b60da8d3ddded6413af82140a33e8b4784841b2d5f4ccf3d59f"
+    },
+    {
+      "path": "lib/seo/site.ts",
+      "category": "UNRELATED",
+      "decision": "EXCLUDE_WHOLE_FILE",
+      "mixedChange": false,
+      "reason": "Adds Trends detail/methodology SEO from the new catalog. Regime preview metadata is route-local and noindex; HEAD version closes shared dependencies.",
+      "headSha256": "46b7df58e35ada7fd925883d82fe4012e18efab03b3d90a0e281f78a685861a4",
+      "worktreeSha256": "54e0fa0b8ef405c49fe10d5fb58f090eed870368c310fbcfa4f100c7fac4f3ac",
+      "diffSha256": "1ed628ffc483302a42602f91c0ed29a6f6ff3f71925b70df7a0f3a2d083e92ee"
+    },
+    {
+      "path": "lib/trends/trends-content.ts",
+      "category": "UNRELATED",
+      "decision": "EXCLUDE_WHOLE_FILE",
+      "mixedChange": false,
+      "reason": "Trends catalog, explorer, content or route work with no Regime V2 responsibility.",
+      "headSha256": "4b74d594d5079f144e3fba15a0803b5499c3808d6a2e4be2499a852c2304daaf",
+      "worktreeSha256": "800db292ed6068a77da67c945180eaf38b78311b6b2160109dd30a8cc3e66368",
+      "diffSha256": "8c0b23009c3d33dca59f7d3aa45898a82569db16ca9434c4eb49ac0e742ae665"
+    },
+    {
+      "path": "package-lock.json",
+      "category": "UNRELATED",
+      "decision": "EXCLUDE_WHOLE_FILE",
+      "mixedChange": false,
+      "reason": "Only adds pdf-lib and its transitive packages for Budget export. Candidate dependency closure uses existing HEAD packages.",
+      "headSha256": "2f00b7744899cf2f7c19d412bcb3580f6d69f8da8796afd2a2280da153f5f78c",
+      "worktreeSha256": "2822d77531ad59e18f7ceb4d7fce71df7fdc875cb32ecce29d5a6bb06dd2d268",
+      "diffSha256": "90e670df4208a521f61abca421b12e0902b9ff93e3737cb98da8d93bfb5173d8"
+    },
+    {
+      "path": "package.json",
+      "category": "UNRELATED",
+      "decision": "EXCLUDE_WHOLE_FILE",
+      "mixedChange": false,
+      "reason": "Only adds Trends 13F scripts and Budget pdf-lib; Next 16.3.1 already exists in HEAD. Exclude the entire change.",
+      "headSha256": "d8946507e07db79b0b2a8cd8b146da50d82eb2621cbeda4ab1aba621a4e05920",
+      "worktreeSha256": "5be2ad1a8ad280c33dbc1ac32c8ec8433a819cd3f288670beb4794038802b195",
+      "diffSha256": "79b56c18a7dd6a20a9d6a3253b6dddb7b1644f04652f9de1ddd15c588afeaf82"
+    },
+    {
+      "path": "scripts/build-statistical-levels.mjs",
+      "category": "SCRIPT",
+      "decision": "INCLUDE_WHOLE_FILE",
+      "mixedChange": false,
+      "reason": "Maintainer captures exact bytes only on the explicit ON private batch path; the existing provider request and V1 parse remain authoritative.",
+      "headSha256": "e8c5c25cb84a6d6cee9c0b1fa6195b37e59ea22a75e9c988379adcc2163a9494",
+      "worktreeSha256": "de9da118da379ccb12618adee258364b730935da36055b9822ca201f869095dd",
+      "diffSha256": "fdc09d755719cd6bc64d30697f52144ddec65a3392b3af3309d426f58c623dee"
+    },
+    {
+      "path": "scripts/validate-seo.mts",
+      "category": "UNRELATED",
+      "decision": "EXCLUDE_WHOLE_FILE",
+      "mixedChange": false,
+      "reason": "Adds Trends catalog and route validation only.",
+      "headSha256": "fd3869ca04121ceb5d664cbc1e58e9856e05bd07b7999538eca7c2bfd30cc0a3",
+      "worktreeSha256": "127b69706bc1b76632f7c1f27a40b46c7cd11b8c02f483fdb8fb8dab66cd1533",
+      "diffSha256": "b7ee786df3e1f8f9fd30572a6c73f7b6c6efaff97935ad80c9212e731036e3f9"
+    }
+  ],
+  "newSourceReview": [
+    {
+      "path": "app/(es)/internal/regime-v2/page.tsx",
+      "category": "PRODUCTION_CODE",
+      "decision": "INCLUDE_WHOLE_FILE",
+      "reason": "Designer internal development-only preview route; non-development requests call notFound before importing preview content.",
+      "bytes": 606,
+      "sha256": "8b384ba8f0df24e9ffdefd0bff0ec2fef2049791e718d72ce87e38a6fe2be6c0"
+    },
+    {
+      "path": "app/en/internal/regime-v2/page.tsx",
+      "category": "PRODUCTION_CODE",
+      "decision": "INCLUDE_WHOLE_FILE",
+      "reason": "Designer internal development-only preview route; non-development requests call notFound before importing preview content.",
+      "bytes": 606,
+      "sha256": "55a267714f6a71421927d84ded97d4ed478571b274ca612c041967018508a1b1"
+    },
+    {
+      "path": "components/dashboard/DashboardRegimeV1.tsx",
+      "category": "PRODUCTION_CODE",
+      "decision": "INCLUDE_WHOLE_FILE",
+      "reason": "Accepted Designer V1 extraction or isolated Regime V2 surface, disclosure, preview and responsive style implementation.",
+      "bytes": 8427,
+      "sha256": "92d7ef8bc01d4725d740ddea73cf83086743a93eb5d8271aba8872c83b0982cc"
+    },
+    {
+      "path": "components/dashboard/RegimeV2Disclosure.tsx",
+      "category": "PRODUCTION_CODE",
+      "decision": "INCLUDE_WHOLE_FILE",
+      "reason": "Accepted Designer V1 extraction or isolated Regime V2 surface, disclosure, preview and responsive style implementation.",
+      "bytes": 1811,
+      "sha256": "120e7dff5f4f0fe787268be436fdae9f4caf7239b7d6a58d480c7516dc652014"
+    },
+    {
+      "path": "components/dashboard/RegimeV2Preview.tsx",
+      "category": "PRODUCTION_CODE",
+      "decision": "INCLUDE_WHOLE_FILE",
+      "reason": "Accepted Designer V1 extraction or isolated Regime V2 surface, disclosure, preview and responsive style implementation.",
+      "bytes": 6416,
+      "sha256": "37dd9680ee7318c42fe0e22390f53fda59b8b9dbb0359fbdf1c5c3ce30908627"
+    },
+    {
+      "path": "components/dashboard/RegimeV2Surface.tsx",
+      "category": "PRODUCTION_CODE",
+      "decision": "INCLUDE_WHOLE_FILE",
+      "reason": "Accepted Designer V1 extraction or isolated Regime V2 surface, disclosure, preview and responsive style implementation.",
+      "bytes": 10242,
+      "sha256": "add309968305efc955c03dbf0ee3eda8dbfc04418c7bf30fbf7e40bf21c50487"
+    },
+    {
+      "path": "components/dashboard/regime-v2.module.css",
+      "category": "PRODUCTION_CODE",
+      "decision": "INCLUDE_WHOLE_FILE",
+      "reason": "Accepted Designer V1 extraction or isolated Regime V2 surface, disclosure, preview and responsive style implementation.",
+      "bytes": 13542,
+      "sha256": "8a0811d1e0f15d7db26397a5ee0cfe64ca50ff687479816ecb4903294e90ce09"
+    },
+    {
+      "path": "lib/dashboard/regime-v2-presentation.test.ts",
+      "category": "TEST",
+      "decision": "INCLUDE_WHOLE_FILE",
+      "reason": "Accepted Regime regression, preservation, presentation or fixture test. Test inputs and shared adapters are included in the dependency review.",
+      "bytes": 11361,
+      "sha256": "e1859c119f0ed8ae842af930c9af2cf574479c1843cfc29179d05842973013e1"
+    },
+    {
+      "path": "lib/dashboard/regime-v2-presentation.ts",
+      "category": "PRODUCTION_CODE",
+      "decision": "INCLUDE_WHOLE_FILE",
+      "reason": "Accepted deterministic ES/EN presentation of exact RegimeOutput, with evidence attribution and no adjudication or parameter changes.",
+      "bytes": 30183,
+      "sha256": "a3ea4c767b46bc51f20be07a06b0a4a91457607f9221c0cfd80dffbfa4a73f53"
+    },
+    {
+      "path": "lib/dashboard/regime-v2-preview.test.mjs",
+      "category": "TEST",
+      "decision": "INCLUDE_WHOLE_FILE",
+      "reason": "Accepted Regime regression, preservation, presentation or fixture test. Test inputs and shared adapters are included in the dependency review.",
+      "bytes": 3194,
+      "sha256": "6a22ed85c34d82c90e962c6ff285e2a38ca6e77189a77e033a2c549b3fcbd04d"
+    },
+    {
+      "path": "lib/dashboard/regime-v2-render.test.mjs",
+      "category": "TEST",
+      "decision": "INCLUDE_WHOLE_FILE",
+      "reason": "Accepted Regime regression, preservation, presentation or fixture test. Test inputs and shared adapters are included in the dependency review.",
+      "bytes": 4252,
+      "sha256": "2a0e24fd385357da35465b3f6ef0b25cc5b2e99f57b1c23fea6615cafff2c678"
+    },
+    {
+      "path": "lib/regime-engine-v2/boundary.ts",
+      "category": "PRODUCTION_CODE",
+      "decision": "INCLUDE_WHOLE_FILE",
+      "reason": "Accepted Builder/Sweeper/Maintainer C03 implementation; read and retained without edits in this freeze phase.",
+      "bytes": 5555,
+      "sha256": "ffc2026243a1fb9ba4f28a6ffebfdf822d8576e666e0a5572528d6b0d94a9661"
+    },
+    {
+      "path": "lib/regime-engine-v2/capture.ts",
+      "category": "PRODUCTION_CODE",
+      "decision": "INCLUDE_WHOLE_FILE",
+      "reason": "Accepted Builder/Sweeper/Maintainer C03 implementation; read and retained without edits in this freeze phase.",
+      "bytes": 3231,
+      "sha256": "e0a2c38710f988843cc5a804cdbb9adbc65f97e7074fcdd0afe412637e6bb813"
+    },
+    {
+      "path": "lib/regime-engine-v2/contract.ts",
+      "category": "PRODUCTION_CODE",
+      "decision": "INCLUDE_WHOLE_FILE",
+      "reason": "Accepted Builder/Sweeper/Maintainer C03 implementation; read and retained without edits in this freeze phase.",
+      "bytes": 14989,
+      "sha256": "2df8e1f2be112aef642ecdea53cc479777719d863a3451c53c1e1cbb8c90b563"
+    },
+    {
+      "path": "lib/regime-engine-v2/core.ts",
+      "category": "PRODUCTION_CODE",
+      "decision": "INCLUDE_WHOLE_FILE",
+      "reason": "Accepted Builder/Sweeper/Maintainer C03 implementation; read and retained without edits in this freeze phase.",
+      "bytes": 8842,
+      "sha256": "5cdd57bd05403f38271946fb39fa59e479f25fcf60c35fb09c2941856e6010a1"
+    },
+    {
+      "path": "lib/regime-engine-v2/engine.test.ts",
+      "category": "TEST",
+      "decision": "INCLUDE_WHOLE_FILE",
+      "reason": "Accepted Regime regression, preservation, presentation or fixture test. Test inputs and shared adapters are included in the dependency review.",
+      "bytes": 20126,
+      "sha256": "d1d1a5632179d0f7f3f807805ce4b4151fd7b69f0f2c6ababa99fda266df22eb"
+    },
+    {
+      "path": "lib/regime-engine-v2/engine.ts",
+      "category": "PRODUCTION_CODE",
+      "decision": "INCLUDE_WHOLE_FILE",
+      "reason": "Accepted Builder/Sweeper/Maintainer C03 implementation; read and retained without edits in this freeze phase.",
+      "bytes": 8511,
+      "sha256": "f73691bbf9e2821645f048124266320c6bb4daea81b9b31a70a428dee2f0a39a"
+    },
+    {
+      "path": "lib/regime-engine-v2/features.ts",
+      "category": "PRODUCTION_CODE",
+      "decision": "INCLUDE_WHOLE_FILE",
+      "reason": "Accepted Builder/Sweeper/Maintainer C03 implementation; read and retained without edits in this freeze phase.",
+      "bytes": 9193,
+      "sha256": "65e81d8d5446d92e8c28601d0eed23627264265566c8f86c015a7f872f9d4275"
+    },
+    {
+      "path": "lib/regime-engine-v2/math.ts",
+      "category": "PRODUCTION_CODE",
+      "decision": "INCLUDE_WHOLE_FILE",
+      "reason": "Accepted Builder/Sweeper/Maintainer C03 implementation; read and retained without edits in this freeze phase.",
+      "bytes": 2369,
+      "sha256": "82af814a436b6cd5877f34b93fef7535827f355f7bf9225d70e8349c15fa9138"
+    },
+    {
+      "path": "lib/regime-engine-v2/normalize.ts",
+      "category": "PRODUCTION_CODE",
+      "decision": "INCLUDE_WHOLE_FILE",
+      "reason": "Accepted Builder/Sweeper/Maintainer C03 implementation; read and retained without edits in this freeze phase.",
+      "bytes": 12171,
+      "sha256": "da2963f02e32ed2a01f317992e2259c6bc4a5abd972c433c3d9974b5cc9ac037"
+    },
+    {
+      "path": "lib/regime-engine-v2/operations/dashboard-shadow.test.ts",
+      "category": "TEST",
+      "decision": "INCLUDE_WHOLE_FILE",
+      "reason": "Accepted Regime regression, preservation, presentation or fixture test. Test inputs and shared adapters are included in the dependency review.",
+      "bytes": 10269,
+      "sha256": "45ef6cffea6040ef8fe8c70473873f2351ab29e46b084460264bd0c3032e4e97"
+    },
+    {
+      "path": "lib/regime-engine-v2/operations/dashboard-shadow.ts",
+      "category": "PRODUCTION_CODE",
+      "decision": "INCLUDE_WHOLE_FILE",
+      "reason": "Accepted Maintainer private source boundary, exact snapshots or contained OFF-by-default shadow operations; outside the canonical adjudication kernel.",
+      "bytes": 10954,
+      "sha256": "10819d5cfc7f737f148da8e56d6cf89ef32c4623342d2495bc384c66a99b06a4"
+    },
+    {
+      "path": "lib/regime-engine-v2/operations/normalizer-preservation.test.mjs",
+      "category": "TEST",
+      "decision": "INCLUDE_WHOLE_FILE",
+      "reason": "Accepted Regime regression, preservation, presentation or fixture test. Test inputs and shared adapters are included in the dependency review.",
+      "bytes": 5855,
+      "sha256": "b592e0084f433c3ff3756bc2ce574b566027f281ea34aef14f8122c5788f2b61"
+    },
+    {
+      "path": "lib/regime-engine-v2/operations/pipeline-capture.ts",
+      "category": "PRODUCTION_CODE",
+      "decision": "INCLUDE_WHOLE_FILE",
+      "reason": "Accepted Maintainer private source boundary, exact snapshots or contained OFF-by-default shadow operations; outside the canonical adjudication kernel.",
+      "bytes": 2940,
+      "sha256": "988fd161c688043be58d4a466e959809beeb4ba0c2878c86d5afade3e4ded3b4"
+    },
+    {
+      "path": "lib/regime-engine-v2/operations/public-preservation.test.ts",
+      "category": "TEST",
+      "decision": "INCLUDE_WHOLE_FILE",
+      "reason": "Accepted Regime regression, preservation, presentation or fixture test. Test inputs and shared adapters are included in the dependency review.",
+      "bytes": 2892,
+      "sha256": "fb3731a8d8b216b98636e1b6764c7ba15ec6678f77a9c0197c39a8ecb48cb580"
+    },
+    {
+      "path": "lib/regime-engine-v2/operations/snapshot.test.ts",
+      "category": "TEST",
+      "decision": "INCLUDE_WHOLE_FILE",
+      "reason": "Accepted Regime regression, preservation, presentation or fixture test. Test inputs and shared adapters are included in the dependency review.",
+      "bytes": 14714,
+      "sha256": "526b5c024976fd95c23eae74bf038516cf804ad55ace6040e238727185c9aa20"
+    },
+    {
+      "path": "lib/regime-engine-v2/operations/snapshot.ts",
+      "category": "PRODUCTION_CODE",
+      "decision": "INCLUDE_WHOLE_FILE",
+      "reason": "Accepted Maintainer private source boundary, exact snapshots or contained OFF-by-default shadow operations; outside the canonical adjudication kernel.",
+      "bytes": 21229,
+      "sha256": "9e88b4f317e45d0930f55a9a1dc1140cf14da45338240c929cf1c67a8fde5b05"
+    },
+    {
+      "path": "lib/regime-engine-v2/operations/source-input.test.ts",
+      "category": "TEST",
+      "decision": "INCLUDE_WHOLE_FILE",
+      "reason": "Accepted Regime regression, preservation, presentation or fixture test. Test inputs and shared adapters are included in the dependency review.",
+      "bytes": 22190,
+      "sha256": "b55514744a93adb9e6dbe50cb29a98d5fd6f4fea158f0244721c71674a7c6714"
+    },
+    {
+      "path": "lib/regime-engine-v2/operations/source-input.ts",
+      "category": "PRODUCTION_CODE",
+      "decision": "INCLUDE_WHOLE_FILE",
+      "reason": "Accepted Maintainer private source boundary, exact snapshots or contained OFF-by-default shadow operations; outside the canonical adjudication kernel.",
+      "bytes": 21631,
+      "sha256": "093a41e1aa6dda588b86f65286b451893e0418fffb4d88b0f27d58d1545259ab"
+    },
+    {
+      "path": "lib/regime-engine-v2/shadow.ts",
+      "category": "PRODUCTION_CODE",
+      "decision": "INCLUDE_WHOLE_FILE",
+      "reason": "Accepted Builder/Sweeper/Maintainer C03 implementation; read and retained without edits in this freeze phase.",
+      "bytes": 2647,
+      "sha256": "2bb904315c6292390956efb9d89e69af2467d23863e3f713fcb8362ec89accce"
+    },
+    {
+      "path": "lib/regime-engine-v2/temporal.ts",
+      "category": "PRODUCTION_CODE",
+      "decision": "INCLUDE_WHOLE_FILE",
+      "reason": "Accepted Builder/Sweeper/Maintainer C03 implementation; read and retained without edits in this freeze phase.",
+      "bytes": 5990,
+      "sha256": "4ec57a14f9ed658d0587aa6d2a9b9f42426c6b54022adf301cc65bf51a3495fb"
+    },
+    {
+      "path": "lib/regime-engine-v2/types.ts",
+      "category": "PRODUCTION_CODE",
+      "decision": "INCLUDE_WHOLE_FILE",
+      "reason": "Accepted Builder/Sweeper/Maintainer C03 implementation; read and retained without edits in this freeze phase.",
+      "bytes": 3325,
+      "sha256": "1dcd4ce2f9ebd1763c9f1b28ce08bdcfd4f1ea9c8b92874b481731b1563e2aeb"
+    },
+    {
+      "path": "scripts/regime-v2-conformance.mts",
+      "category": "SCRIPT",
+      "decision": "INCLUDE_WHOLE_FILE",
+      "reason": "Accepted Regime offline conformance/design reproduction or explicit private operational CLI; include implementation without running acquisition or rewriting historical output directories.",
+      "bytes": 10977,
+      "sha256": "72a4e07ec6935eee95f75642e7bccfa5b95e3f2387583b24d2abfea548e65ba4"
+    },
+    {
+      "path": "scripts/regime-v2-design-fixtures.mts",
+      "category": "SCRIPT",
+      "decision": "INCLUDE_WHOLE_FILE",
+      "reason": "Accepted Regime offline conformance/design reproduction or explicit private operational CLI; include implementation without running acquisition or rewriting historical output directories.",
+      "bytes": 11904,
+      "sha256": "e8f60059586dc55f294796ddef59084c4b17d3b643cc45c3d84889f27bc68d9b"
+    },
+    {
+      "path": "scripts/regime-v2-design-fixtures.test.ts",
+      "category": "TEST",
+      "decision": "INCLUDE_WHOLE_FILE",
+      "reason": "Accepted Regime regression, preservation, presentation or fixture test. Test inputs and shared adapters are included in the dependency review.",
+      "bytes": 5183,
+      "sha256": "aa0564c02ff0323ae9cc1a4e1ce1d22e2ef6c290c3f59cf737cc726d2fcaf6cc"
+    },
+    {
+      "path": "scripts/regime-v2-design-render.mjs",
+      "category": "SCRIPT",
+      "decision": "INCLUDE_WHOLE_FILE",
+      "reason": "Accepted Regime offline conformance/design reproduction or explicit private operational CLI; include implementation without running acquisition or rewriting historical output directories.",
+      "bytes": 19136,
+      "sha256": "e9bc9e4ea50a899cff1b70896ded1ac83d3d006654828eb9898c8e64bab50fb1"
+    },
+    {
+      "path": "scripts/regime-v2-observe.mts",
+      "category": "SCRIPT",
+      "decision": "INCLUDE_WHOLE_FILE",
+      "reason": "Accepted Regime offline conformance/design reproduction or explicit private operational CLI; include implementation without running acquisition or rewriting historical output directories.",
+      "bytes": 756,
+      "sha256": "143542e05f10c717cd2628cdb330de01c3b9e3f21961f52c1ee0b7262dbadcff"
+    },
+    {
+      "path": "scripts/regime-v2-prepare-bundle.mts",
+      "category": "SCRIPT",
+      "decision": "INCLUDE_WHOLE_FILE",
+      "reason": "Accepted Regime offline conformance/design reproduction or explicit private operational CLI; include implementation without running acquisition or rewriting historical output directories.",
+      "bytes": 3177,
+      "sha256": "a5591688b042c20e07fa4a9a33b80be4005925c6c769ea523628a585b5884543"
+    },
+    {
+      "path": "scripts/regime-v2-replay.mts",
+      "category": "SCRIPT",
+      "decision": "INCLUDE_WHOLE_FILE",
+      "reason": "Accepted Regime offline conformance/design reproduction or explicit private operational CLI; include implementation without running acquisition or rewriting historical output directories.",
+      "bytes": 811,
+      "sha256": "42f6fc5197252d7a81565720f117cec4f8fb6939d4b1db5c26c1d1eed6ea3016"
+    },
+    {
+      "path": "scripts/regime-v2-shadow.mts",
+      "category": "SCRIPT",
+      "decision": "INCLUDE_WHOLE_FILE",
+      "reason": "Accepted Regime offline conformance/design reproduction or explicit private operational CLI; include implementation without running acquisition or rewriting historical output directories.",
+      "bytes": 1815,
+      "sha256": "0c13eed54ddd624d6e7568bf125a34ebd54bf74c9ac13f605341190a04d0ad0e"
+    },
+    {
+      "path": "scripts/trends-test-register.mjs",
+      "category": "TEST_SHARED_SUPPORT",
+      "decision": "INCLUDE_WHOLE_FILE",
+      "reason": "Generic Node JSX/CSS/Next-link/JSON adapter required by accepted Regime preview and SSR tests. Reviewed contents contain no Trends imports/data, fetch, writes or new npm dependency; retain exact bytes to avoid changing frozen tests.",
+      "bytes": 1799,
+      "sha256": "d4c01f7e587436e5738ed7fdacc9fcdc4b3dd67bea378b6c2bb41864f7c56059"
+    }
+  ],
+  "excludedUntrackedSourceReview": [
+    {
+      "path": "app/(es)/tendencias/[slug]/page.tsx",
+      "category": "UNRELATED",
+      "decision": "EXCLUDE_WHOLE_FILE",
+      "reason": "Trends catalog, explorer, content or route work with no Regime V2 responsibility.",
+      "sha256": "e1494812a16cca8ba1564484259a505cc2452c6fd4ebb8b96afc7caab776dbb2"
+    },
+    {
+      "path": "app/(es)/tendencias/metodologia/page.tsx",
+      "category": "UNRELATED",
+      "decision": "EXCLUDE_WHOLE_FILE",
+      "reason": "Trends catalog, explorer, content or route work with no Regime V2 responsibility.",
+      "sha256": "9cdd40b00dc750a6fa21573ad4e8a7e43745870749c3c4fe4183b869ac39e660"
+    },
+    {
+      "path": "app/en/trends/[slug]/page.tsx",
+      "category": "UNRELATED",
+      "decision": "EXCLUDE_WHOLE_FILE",
+      "reason": "Trends catalog, explorer, content or route work with no Regime V2 responsibility.",
+      "sha256": "bce9aa71103d0453aba53fb6eccecf03c0143d48336d8f01f2ebae799b2181f4"
+    },
+    {
+      "path": "app/en/trends/methodology/page.tsx",
+      "category": "UNRELATED",
+      "decision": "EXCLUDE_WHOLE_FILE",
+      "reason": "Trends catalog, explorer, content or route work with no Regime V2 responsibility.",
+      "sha256": "358be50fef978ab92cb0369a8f62e8f1d07561344c49f5cfaab2457f7ac2dc07"
+    },
+    {
+      "path": "components/budget/BudgetPlanDownload.tsx",
+      "category": "UNRELATED",
+      "decision": "EXCLUDE_WHOLE_FILE",
+      "reason": "Budget export/download or observations work; unrelated to Regime V2.",
+      "sha256": "2761242da9b707b565a5693fc746754b50020d23d3c788a78db7dd8b8d996f39"
+    },
+    {
+      "path": "components/portfolio-fragility/copy.ts",
+      "category": "UNRELATED",
+      "decision": "EXCLUDE_WHOLE_FILE",
+      "reason": "Portfolio Fragility Lab input-session, demo or presentation work. The frozen Regime registry does not activate portfolio-specific features.",
+      "sha256": "734b249abb079bd14e681635e538a05504e87c3fef6a586ff34364efd885d844"
+    },
+    {
+      "path": "components/research/tom-decay/TermTooltip.tsx",
+      "category": "UNRELATED",
+      "decision": "EXCLUDE_WHOLE_FILE",
+      "reason": "Turn-of-month research narrative, charts, tooltips or verification copy. RegimeComparisonChart is a TOM research component, not Regime Engine V2.",
+      "sha256": "47a531c5357bc4b9e4c31e55a8fb3aaedabc85b6fa8735d93c013485491a28c9"
+    },
+    {
+      "path": "components/trends/CapitalDisclosureSection.tsx",
+      "category": "UNRELATED",
+      "decision": "EXCLUDE_WHOLE_FILE",
+      "reason": "Trends catalog, explorer, content or route work with no Regime V2 responsibility.",
+      "sha256": "19edddc196e96f91d7e9a51cf802011e824051ed07a74fcec92da69442777658"
+    },
+    {
+      "path": "components/trends/CapitalDisclosureTable.tsx",
+      "category": "UNRELATED",
+      "decision": "EXCLUDE_WHOLE_FILE",
+      "reason": "Trends catalog, explorer, content or route work with no Regime V2 responsibility.",
+      "sha256": "415b0820f95b7bedbe11ee431d548936558184250278d9165566c27179ba204f"
+    },
+    {
+      "path": "components/trends/TrendDetailPage.tsx",
+      "category": "UNRELATED",
+      "decision": "EXCLUDE_WHOLE_FILE",
+      "reason": "Trends catalog, explorer, content or route work with no Regime V2 responsibility.",
+      "sha256": "737bf85b96d0d1862476e7a7615ca37fcd9e373f6da40641ef98d944f346e440"
+    },
+    {
+      "path": "components/trends/TrendRadar.tsx",
+      "category": "UNRELATED",
+      "decision": "EXCLUDE_WHOLE_FILE",
+      "reason": "Trends catalog, explorer, content or route work with no Regime V2 responsibility.",
+      "sha256": "5c680c283e3fdce8d30f11e399fdcc3744d8a252b070a714eae0f3f1cbd512d5"
+    },
+    {
+      "path": "components/trends/TrendsAnalytics.tsx",
+      "category": "UNRELATED",
+      "decision": "EXCLUDE_WHOLE_FILE",
+      "reason": "Trends catalog, explorer, content or route work with no Regime V2 responsibility.",
+      "sha256": "37b55ff4f9df210e37f817f1a01833d17f970eb63fd74fd08983fa3f33121bc2"
+    },
+    {
+      "path": "components/trends/TrendsMethodologyPage.tsx",
+      "category": "UNRELATED",
+      "decision": "EXCLUDE_WHOLE_FILE",
+      "reason": "Trends catalog, explorer, content or route work with no Regime V2 responsibility.",
+      "sha256": "27b817eafc3d4a42dcbae855d01ee3c5beb93282c288ec86804f7a07cc9ea81c"
+    },
+    {
+      "path": "components/trends/trends.module.css",
+      "category": "UNRELATED",
+      "decision": "EXCLUDE_WHOLE_FILE",
+      "reason": "Trends catalog, explorer, content or route work with no Regime V2 responsibility.",
+      "sha256": "23d9310ce3c47d90a0a7d44f1d2bd4767b12df74b682f5a6eb7881b93443283d"
+    },
+    {
+      "path": "lib/personal-finance/budget/budget-plan-export.test.ts",
+      "category": "UNRELATED",
+      "decision": "EXCLUDE_WHOLE_FILE",
+      "reason": "Budget export/download or observations work; unrelated to Regime V2.",
+      "sha256": "da20883facc7c32cc0f7857a8a21aebed56bbea148087372cb8f7a1594bd3ab7"
+    },
+    {
+      "path": "lib/personal-finance/budget/budget-plan-export.ts",
+      "category": "UNRELATED",
+      "decision": "EXCLUDE_WHOLE_FILE",
+      "reason": "Budget export/download or observations work; unrelated to Regime V2.",
+      "sha256": "39ab0cecceebab3a18d1c932d0c6f7b4ede0c5219815ca952173618e6e8a2b2a"
+    },
+    {
+      "path": "lib/portfolio-fragility/holdings-input.ts",
+      "category": "UNRELATED",
+      "decision": "EXCLUDE_WHOLE_FILE",
+      "reason": "Portfolio Fragility Lab input-session, demo or presentation work. The frozen Regime registry does not activate portfolio-specific features.",
+      "sha256": "fb2505bcff945a6793f346acee5cee0e6d6f62563f50d32a7a785c3d9a91c048"
+    },
+    {
+      "path": "lib/portfolio-fragility/input-session.test.ts",
+      "category": "UNRELATED",
+      "decision": "EXCLUDE_WHOLE_FILE",
+      "reason": "Portfolio Fragility Lab input-session, demo or presentation work. The frozen Regime registry does not activate portfolio-specific features.",
+      "sha256": "e820f4bfd98972dad8e86ab28252c71ab11e22479bf4493e74d3a4ffeeb2a497"
+    },
+    {
+      "path": "lib/portfolio-fragility/session.ts",
+      "category": "UNRELATED",
+      "decision": "EXCLUDE_WHOLE_FILE",
+      "reason": "Portfolio Fragility Lab input-session, demo or presentation work. The frozen Regime registry does not activate portfolio-specific features.",
+      "sha256": "e7cd1b5ccc74e4630579edc7c51127b6d2975b96698a9d7db9a6b10c623ac398"
+    },
+    {
+      "path": "lib/trends/capital/audit.ts",
+      "category": "UNRELATED",
+      "decision": "EXCLUDE_WHOLE_FILE",
+      "reason": "Trends catalog, explorer, content or route work with no Regime V2 responsibility.",
+      "sha256": "4a6139aeb872ea30d68400e83c7df4cba060e0f7e14246165e7f39da8e245a5e"
+    },
+    {
+      "path": "lib/trends/capital/copy.ts",
+      "category": "UNRELATED",
+      "decision": "EXCLUDE_WHOLE_FILE",
+      "reason": "Trends catalog, explorer, content or route work with no Regime V2 responsibility.",
+      "sha256": "0736e4574a34bea0aa1c957335e744204d9ab3f8c6c694786782ed03de284e2a"
+    },
+    {
+      "path": "lib/trends/capital/get-capital-data.ts",
+      "category": "UNRELATED",
+      "decision": "EXCLUDE_WHOLE_FILE",
+      "reason": "Trends catalog, explorer, content or route work with no Regime V2 responsibility.",
+      "sha256": "e6d18c3399741abc5b038e794a560b41831bc4ebc3aae045e569cf9263d36340"
+    },
+    {
+      "path": "lib/trends/capital/normalize.test.ts",
+      "category": "UNRELATED",
+      "decision": "EXCLUDE_WHOLE_FILE",
+      "reason": "Trends catalog, explorer, content or route work with no Regime V2 responsibility.",
+      "sha256": "d7f75371a6ae84415f57f485c36864acb8bc3217e0630d376ae8232b1cb9438c"
+    },
+    {
+      "path": "lib/trends/capital/normalize.ts",
+      "category": "UNRELATED",
+      "decision": "EXCLUDE_WHOLE_FILE",
+      "reason": "Trends catalog, explorer, content or route work with no Regime V2 responsibility.",
+      "sha256": "ed09bcebd97df5f64424054fb341e85587aede50f8a4abacc3fc1e8a6b3311dc"
+    },
+    {
+      "path": "lib/trends/capital/pipeline.test.ts",
+      "category": "UNRELATED",
+      "decision": "EXCLUDE_WHOLE_FILE",
+      "reason": "Trends catalog, explorer, content or route work with no Regime V2 responsibility.",
+      "sha256": "4f188a1f05c90f9a5acf2bb15c2b7a4c7946d8a327e7637b53361f8e21eb9a06"
+    },
+    {
+      "path": "lib/trends/capital/positions.ts",
+      "category": "UNRELATED",
+      "decision": "EXCLUDE_WHOLE_FILE",
+      "reason": "Trends catalog, explorer, content or route work with no Regime V2 responsibility.",
+      "sha256": "70fc249d18be19090c491ade0f98990016539892d4ee294ecee89ed0f9e3b2ff"
+    },
+    {
+      "path": "lib/trends/capital/public-capital.test.tsx",
+      "category": "UNRELATED",
+      "decision": "EXCLUDE_WHOLE_FILE",
+      "reason": "Trends catalog, explorer, content or route work with no Regime V2 responsibility.",
+      "sha256": "34ea0740aa785358b125ef47c0ce9b0156756b2bab33ad60f0cea2446064094c"
+    },
+    {
+      "path": "lib/trends/capital/public-capital.ts",
+      "category": "UNRELATED",
+      "decision": "EXCLUDE_WHOLE_FILE",
+      "reason": "Trends catalog, explorer, content or route work with no Regime V2 responsibility.",
+      "sha256": "a0e87250571f79b6ea06d37c87c4e9900c1a9cba97b006ae627784ffb02d674e"
+    },
+    {
+      "path": "lib/trends/capital/public-contract.ts",
+      "category": "UNRELATED",
+      "decision": "EXCLUDE_WHOLE_FILE",
+      "reason": "Trends catalog, explorer, content or route work with no Regime V2 responsibility.",
+      "sha256": "14b7448b5f4fc1ddb72ae824c5cb1772e7eb0a11526d0bacbc20177ab63b9835"
+    },
+    {
+      "path": "lib/trends/capital/types.ts",
+      "category": "UNRELATED",
+      "decision": "EXCLUDE_WHOLE_FILE",
+      "reason": "Trends catalog, explorer, content or route work with no Regime V2 responsibility.",
+      "sha256": "552268edd6bf12aa3d694d617e56c6337acacbc92e6741a3e3a9e33fb538a13e"
+    },
+    {
+      "path": "lib/trends/catalog.ts",
+      "category": "UNRELATED",
+      "decision": "EXCLUDE_WHOLE_FILE",
+      "reason": "Trends catalog, explorer, content or route work with no Regime V2 responsibility.",
+      "sha256": "6bad52c9d8059675ce5bc840d5ee55142e58d652a6b621a5b6ea6acf7ed5c1cc"
+    },
+    {
+      "path": "lib/trends/copy.ts",
+      "category": "UNRELATED",
+      "decision": "EXCLUDE_WHOLE_FILE",
+      "reason": "Trends catalog, explorer, content or route work with no Regime V2 responsibility.",
+      "sha256": "8c36c535b028ed08e7390d61f25248f915ffec08f7730143fe02dd2acb759baf"
+    },
+    {
+      "path": "lib/trends/detail-copy.ts",
+      "category": "UNRELATED",
+      "decision": "EXCLUDE_WHOLE_FILE",
+      "reason": "Trends catalog, explorer, content or route work with no Regime V2 responsibility.",
+      "sha256": "fbace977dc89b4e247cd6185fceaf46eebba009ebc3554b091997ace6a4c3bed"
+    },
+    {
+      "path": "lib/trends/details.ts",
+      "category": "UNRELATED",
+      "decision": "EXCLUDE_WHOLE_FILE",
+      "reason": "Trends catalog, explorer, content or route work with no Regime V2 responsibility.",
+      "sha256": "266dccb6a2f4273642cea224e5b500d8070f061a9731d1cebe8b199b7831fe21"
+    },
+    {
+      "path": "lib/trends/evidence.ts",
+      "category": "UNRELATED",
+      "decision": "EXCLUDE_WHOLE_FILE",
+      "reason": "Trends catalog, explorer, content or route work with no Regime V2 responsibility.",
+      "sha256": "a0faa3b112f348f593e740aa0b6cbfbeb4aeac11def0a1b829dbeceee38d5594"
+    },
+    {
+      "path": "lib/trends/methodology-copy.ts",
+      "category": "UNRELATED",
+      "decision": "EXCLUDE_WHOLE_FILE",
+      "reason": "Trends catalog, explorer, content or route work with no Regime V2 responsibility.",
+      "sha256": "adbcc5fc74746410a943a0ca683aaac4ad1a450680a838802c5c3c8f536bcaf1"
+    },
+    {
+      "path": "lib/trends/trends.test.tsx",
+      "category": "UNRELATED",
+      "decision": "EXCLUDE_WHOLE_FILE",
+      "reason": "Trends catalog, explorer, content or route work with no Regime V2 responsibility.",
+      "sha256": "862cfdf5a85d21aae8ee49f64db5a0eb956da0a6fd656aa9ee21d9cdeded2f4c"
+    },
+    {
+      "path": "scripts/build-capital-disclosures.mts",
+      "category": "UNRELATED",
+      "decision": "EXCLUDE_WHOLE_FILE",
+      "reason": "Trends capital-disclosure acquisition, construction or validation tooling; not imported by the candidate graph.",
+      "sha256": "323e1c85a3052de06d1d9a550fa33014be8af4bd51ac29a95296b1c13871bb54"
+    },
+    {
+      "path": "scripts/fetch-capital-disclosures.py",
+      "category": "UNRELATED",
+      "decision": "EXCLUDE_WHOLE_FILE",
+      "reason": "Trends capital-disclosure acquisition, construction or validation tooling; not imported by the candidate graph.",
+      "sha256": "4a84e9ada5bf7044af419161d364f6c5f939a452ba6527306d365c1f8b04447d"
+    },
+    {
+      "path": "scripts/test-capital-xml.py",
+      "category": "UNRELATED",
+      "decision": "EXCLUDE_WHOLE_FILE",
+      "reason": "Trends capital-disclosure acquisition, construction or validation tooling; not imported by the candidate graph.",
+      "sha256": "e1f819ec41cefbb7f50cdd273644265333afc9fac63d2b0a36c9848d86c2690b"
+    },
+    {
+      "path": "scripts/validate-trends-http.mts",
+      "category": "UNRELATED",
+      "decision": "EXCLUDE_WHOLE_FILE",
+      "reason": "Trends capital-disclosure acquisition, construction or validation tooling; not imported by the candidate graph.",
+      "sha256": "5dad9962d872ec1b84b79a8f61db961798ff06556481e1275f3f928b0898fefe"
+    },
+    {
+      "path": "scripts/verify-capital-evidence.py",
+      "category": "UNRELATED",
+      "decision": "EXCLUDE_WHOLE_FILE",
+      "reason": "Trends capital-disclosure acquisition, construction or validation tooling; not imported by the candidate graph.",
+      "sha256": "34985acc4d67c0aaebb83436eea1838870ca21c9175bea0533d66ec5f6b42622"
+    }
+  ],
+  "packageDecision": {
+    "packageJson": "EXCLUDE_WHOLE_FILE",
+    "packageLockJson": "EXCLUDE_WHOLE_FILE",
+    "nextAlreadyDeclaredAndLockedAtHead": "16.3.1",
+    "reason": "The working-tree delta adds only Trends 13F scripts and Budget pdf-lib packages. Regime V2 requires none of those additions.",
+    "headPackageJsonSha256": "d8946507e07db79b0b2a8cd8b146da50d82eb2621cbeda4ab1aba621a4e05920",
+    "headPackageLockSha256": "2f00b7744899cf2f7c19d412bcb3580f6d69f8da8796afd2a2280da153f5f78c"
+  },
+  "sharedTestAdapterDecision": {
+    "path": "scripts/trends-test-register.mjs",
+    "decision": "INCLUDE_EXACT_EXISTING_BYTES_AS_TEST_SHARED_SUPPORT",
+    "directConsumers": [
+      "lib/dashboard/regime-v2-preview.test.mjs",
+      "scripts/regime-v2-design-render.mjs"
+    ],
+    "reason": "Its filename predates this release scope, but its implementation is a generic Node test adapter and directly closes accepted Regime test dependencies. Including the existing helper preserves frozen tests; no replacement harness or package edits are needed.",
+    "trendsSpecificImports": [],
+    "newRuntimeDependency": false,
+    "productionEntrypoint": false
+  },
+  "dependencyClosure": {
+    "status": "PASS_STATIC_AND_MANUAL_CLOSURE",
+    "overlayRule": "Use candidate bytes for listed intentional paths; use HEAD bytes for every other tracked module.",
+    "excludedDirtySharedModulesRequiredAtHead": [
+      "lib/analytics/trackEvent.ts",
+      "lib/i18n/language-pairs.ts",
+      "lib/seo/site.ts"
+    ],
+    "unresolvedLocalImports": [],
+    "packages": [
+      {
+        "name": "exceljs",
+        "headDeclaredVersion": "^4.4.0",
+        "headLockedVersion": "4.4.0",
+        "newPackageRequired": false
+      },
+      {
+        "name": "next",
+        "headDeclaredVersion": "16.3.1",
+        "headLockedVersion": "16.3.1",
+        "newPackageRequired": false
+      },
+      {
+        "name": "react",
+        "headDeclaredVersion": "19.0.0",
+        "headLockedVersion": "19.0.0",
+        "newPackageRequired": false
+      },
+      {
+        "name": "react-dom",
+        "headDeclaredVersion": "19.0.0",
+        "headLockedVersion": "19.0.0",
+        "newPackageRequired": false
+      },
+      {
+        "name": "server-only",
+        "headDeclaredVersion": null,
+        "headLockedVersion": null,
+        "newPackageRequired": false,
+        "reason": "Existing Next.js server-only marker used by unchanged HEAD modules; handled by Next.js and stubbed by the accepted Node test adapter. Not a new standalone package request."
+      },
+      {
+        "name": "typescript",
+        "headDeclaredVersion": "5.6.3",
+        "headLockedVersion": "5.6.3",
+        "newPackageRequired": false
+      }
+    ],
+    "files": [
+      {
+        "path": "app/(es)/dashboard/page.tsx",
+        "source": "CANDIDATE_WORKTREE",
+        "sha256": "52fb6a294696c7fa5490debaa3c162e62f4253a5f1e4ca38b6637a3138c1bf21"
+      },
+      {
+        "path": "app/(es)/internal/regime-v2/page.tsx",
+        "source": "CANDIDATE_WORKTREE",
+        "sha256": "8b384ba8f0df24e9ffdefd0bff0ec2fef2049791e718d72ce87e38a6fe2be6c0"
+      },
+      {
+        "path": "app/en/internal/regime-v2/page.tsx",
+        "source": "CANDIDATE_WORKTREE",
+        "sha256": "55a267714f6a71421927d84ded97d4ed478571b274ca612c041967018508a1b1"
+      },
+      {
+        "path": "components/dashboard/BtcEtfFlowsModule.tsx",
+        "source": "UNCHANGED_HEAD",
+        "sha256": "f1affc9749eb1441bb46760973f30fa7ddb7091b9ccce2f7fa9e195022750e98"
+      },
+      {
+        "path": "components/dashboard/DashboardModule.tsx",
+        "source": "UNCHANGED_HEAD",
+        "sha256": "88841ee5c6c995e1ddf53a099e77b86f9e243b2119503b25062e5394d2b130c2"
+      },
+      {
+        "path": "components/dashboard/DashboardRegimeV1.tsx",
+        "source": "CANDIDATE_WORKTREE",
+        "sha256": "92d7ef8bc01d4725d740ddea73cf83086743a93eb5d8271aba8872c83b0982cc"
+      },
+      {
+        "path": "components/dashboard/GldFlowPressureModule.tsx",
+        "source": "UNCHANGED_HEAD",
+        "sha256": "6d32020e4b603a142562c80ee253984abe31e3b5b1ab8b1e4ebd4d083831e2d9"
+      },
+      {
+        "path": "components/dashboard/QuantRiskPanel.tsx",
+        "source": "UNCHANGED_HEAD",
+        "sha256": "9e991de103e6acf10805d034f9c0f85360638c74f4fae226b15b5b477c2427da"
+      },
+      {
+        "path": "components/dashboard/RegimeBadge.tsx",
+        "source": "UNCHANGED_HEAD",
+        "sha256": "73b96811347ecb8bcc92f80c6c4067b367ce69383fe1d417c2ea2496f464a086"
+      },
+      {
+        "path": "components/dashboard/RegimeV2Disclosure.tsx",
+        "source": "CANDIDATE_WORKTREE",
+        "sha256": "120e7dff5f4f0fe787268be436fdae9f4caf7239b7d6a58d480c7516dc652014"
+      },
+      {
+        "path": "components/dashboard/RegimeV2Preview.tsx",
+        "source": "CANDIDATE_WORKTREE",
+        "sha256": "37dd9680ee7318c42fe0e22390f53fda59b8b9dbb0359fbdf1c5c3ce30908627"
+      },
+      {
+        "path": "components/dashboard/RegimeV2Surface.tsx",
+        "source": "CANDIDATE_WORKTREE",
+        "sha256": "add309968305efc955c03dbf0ee3eda8dbfc04418c7bf30fbf7e40bf21c50487"
+      },
+      {
+        "path": "components/dashboard/SectorDetailPanel.tsx",
+        "source": "UNCHANGED_HEAD",
+        "sha256": "8c6c0e8664d123e7d871bad02ac7dc7054cfadaeaf71f9dc08ffb861012f8fd1"
+      },
+      {
+        "path": "components/dashboard/SectorRotationChart.tsx",
+        "source": "UNCHANGED_HEAD",
+        "sha256": "cd7a5cee20fee045d5741623ad5cad18ec1d3942636cec11c84d04a9aefa2198"
+      },
+      {
+        "path": "components/dashboard/VixModule.tsx",
+        "source": "UNCHANGED_HEAD",
+        "sha256": "c3665a47ff001285d83bf32a0ef0200bedc6ac4dc1180f49772ced40eb7c7bd1"
+      },
+      {
+        "path": "components/dashboard/VixTermStructureModule.tsx",
+        "source": "UNCHANGED_HEAD",
+        "sha256": "493e0c90b3f2774dd2ca269495a5d3bc9c0469ce1a8a0d4c48a49484f01549ed"
+      },
+      {
+        "path": "components/dashboard/regime-v2.module.css",
+        "source": "CANDIDATE_WORKTREE",
+        "sha256": "8a0811d1e0f15d7db26397a5ee0cfe64ca50ff687479816ecb4903294e90ce09"
+      },
+      {
+        "path": "components/seo/ReadingCard.tsx",
+        "source": "UNCHANGED_HEAD",
+        "sha256": "cb4fb35b5a38ecdc244323203ed2df500cf315a19b9b64f3a1251fa5d3545d57"
+      },
+      {
+        "path": "components/ui/DisclaimerBox.tsx",
+        "source": "UNCHANGED_HEAD",
+        "sha256": "c787afa3f3a295a653ad27f782b244b5e795f9c176c2a45669b94d43e3244b9f"
+      },
+      {
+        "path": "components/ui/ExpandableInsightCard.tsx",
+        "source": "UNCHANGED_HEAD",
+        "sha256": "4ae4135663fb83047e598344c83cbf9c0d7d586c6bc8cbac56afe907344d2594"
+      },
+      {
+        "path": "components/ui/InstitutionalHero.tsx",
+        "source": "UNCHANGED_HEAD",
+        "sha256": "2cd005ea7600b4ec0b3dd18250e3dbe0301f629c2e5531a9c8da4015f6d3159d"
+      },
+      {
+        "path": "components/ui/MetricCard.tsx",
+        "source": "UNCHANGED_HEAD",
+        "sha256": "0dd361b13a478fd8f68d254f43dc85a46e03979aec1e0796a89804153493cde1"
+      },
+      {
+        "path": "components/ui/QuantAnnotation.tsx",
+        "source": "UNCHANGED_HEAD",
+        "sha256": "f9a826ec67c05739b22f8fb436b499bc47a82a5eda5b619a7091f6866fd1dbf4"
+      },
+      {
+        "path": "components/ui/RiskPill.tsx",
+        "source": "UNCHANGED_HEAD",
+        "sha256": "b059b4445a356d36bcc4b13b587a2478b6eda933958eb9040384e0bdce229a68"
+      },
+      {
+        "path": "lib/analytics/trackEvent.ts",
+        "source": "UNCHANGED_HEAD",
+        "sha256": "92c584f5beeff4439badbd3542a7b52ea3c08a12abe4b87d85829d8ec1ed4c08"
+      },
+      {
+        "path": "lib/dashboard/adapters/btc-etf-flows.ts",
+        "source": "UNCHANGED_HEAD",
+        "sha256": "c0eb5cc5be1106b52795ada4ad892a9e9117c11fc9b4519b74c46a88ce8d06a4"
+      },
+      {
+        "path": "lib/dashboard/adapters/gld-flow-pressure.ts",
+        "source": "UNCHANGED_HEAD",
+        "sha256": "83437696f04142521b763b8cfd46398b9b7937ae762788d62995c3bdc6d51c69"
+      },
+      {
+        "path": "lib/dashboard/adapters/radar.ts",
+        "source": "UNCHANGED_HEAD",
+        "sha256": "1f51dc29bcc2efbba898c5981cf47beb863416cb7c4fadcdf18ec3e955947487"
+      },
+      {
+        "path": "lib/dashboard/adapters/sector-etfs.ts",
+        "source": "UNCHANGED_HEAD",
+        "sha256": "6f0463e34f2179337186b0f612a9932846c81d27b6f04c84b112aec79d17a423"
+      },
+      {
+        "path": "lib/dashboard/adapters/vix-term-structure.ts",
+        "source": "CANDIDATE_WORKTREE",
+        "sha256": "16a048d247eb124f190fbfb8a356f1cc4f0f0a1fa27af63c702a96ffe2fbac05"
+      },
+      {
+        "path": "lib/dashboard/adapters/vix.ts",
+        "source": "UNCHANGED_HEAD",
+        "sha256": "7b805ec460545d9e97d2ff9bdcd671ae200abef9b9c0552378d4b4228fca7c6e"
+      },
+      {
+        "path": "lib/dashboard/get-dashboard-data.ts",
+        "source": "CANDIDATE_WORKTREE",
+        "sha256": "ecb2df82c5e185b7d22b4be16f7b3c22b045f736c72a3624d0fb15dfd9456740"
+      },
+      {
+        "path": "lib/dashboard/get-home-dashboard-preview-data.ts",
+        "source": "CANDIDATE_WORKTREE",
+        "sha256": "117b9e2fd3d0acbbb181c3705d6739a8e3bcaebde05742804a761785a9f9b3ba"
+      },
+      {
+        "path": "lib/dashboard/manual-data.ts",
+        "source": "UNCHANGED_HEAD",
+        "sha256": "075300cd4d55b1c0d3e92651f5f1c34ed469cb033d8bf4e42f73d0363af40887"
+      },
+      {
+        "path": "lib/dashboard/math.ts",
+        "source": "UNCHANGED_HEAD",
+        "sha256": "2361f6f0fcd93fcc0c8a9334ddc542a0d34f95fcb15d3a51a7c6a326da6d4209"
+      },
+      {
+        "path": "lib/dashboard/regime-scoring.ts",
+        "source": "UNCHANGED_HEAD",
+        "sha256": "4513411deacf42d80bfbd2d8739c3b3c0e1f4cbf2eab91a66ba35ed01ca53f87"
+      },
+      {
+        "path": "lib/dashboard/regime-v2-presentation.test.ts",
+        "source": "CANDIDATE_WORKTREE",
+        "sha256": "e1859c119f0ed8ae842af930c9af2cf574479c1843cfc29179d05842973013e1"
+      },
+      {
+        "path": "lib/dashboard/regime-v2-presentation.ts",
+        "source": "CANDIDATE_WORKTREE",
+        "sha256": "a3ea4c767b46bc51f20be07a06b0a4a91457607f9221c0cfd80dffbfa4a73f53"
+      },
+      {
+        "path": "lib/dashboard/regime-v2-preview.test.mjs",
+        "source": "CANDIDATE_WORKTREE",
+        "sha256": "6a22ed85c34d82c90e962c6ff285e2a38ca6e77189a77e033a2c549b3fcbd04d"
+      },
+      {
+        "path": "lib/dashboard/regime-v2-render.test.mjs",
+        "source": "CANDIDATE_WORKTREE",
+        "sha256": "2a0e24fd385357da35465b3f6ef0b25cc5b2e99f57b1c23fea6615cafff2c678"
+      },
+      {
+        "path": "lib/dashboard/risk-models.ts",
+        "source": "UNCHANGED_HEAD",
+        "sha256": "e2d0fcdcbc10df8ed8f655a3b97bed3bc92a2570ef401594951dcb0962713b49"
+      },
+      {
+        "path": "lib/dashboard/status.ts",
+        "source": "UNCHANGED_HEAD",
+        "sha256": "c7359a2d18b832f6708645a23698360a09afe2c35328790cd872e9a070231f7d"
+      },
+      {
+        "path": "lib/dashboard/translate-dashboard-copy.ts",
+        "source": "UNCHANGED_HEAD",
+        "sha256": "6f4f11fe7e94ef7536d43e4078cde2f75d8fe05132137d723a355a5f1606dbc1"
+      },
+      {
+        "path": "lib/dashboard/types.ts",
+        "source": "UNCHANGED_HEAD",
+        "sha256": "50140d7a3f3c15ae0ee494ff45615855a26bfc5cf19b5e4efd93cb7ca7983d0f"
+      },
+      {
+        "path": "lib/i18n/language-pairs.ts",
+        "source": "UNCHANGED_HEAD",
+        "sha256": "6cf04751a9fc919de0d5e42dec0ce80bc45d43a02af0c14870a6eb76c2daabff"
+      },
+      {
+        "path": "lib/i18n/locales.ts",
+        "source": "UNCHANGED_HEAD",
+        "sha256": "00b91521f37c072002ab8af3a6289dab438d0fd2bb7da9f9b7dcad10ebc5af5c"
+      },
+      {
+        "path": "lib/market/options-proxies.ts",
+        "source": "UNCHANGED_HEAD",
+        "sha256": "3d87fc832307fa9ecc9f617737f77672d2ebe64139df740d98a47e97fc69d1a0"
+      },
+      {
+        "path": "lib/regime-engine-v2/boundary.ts",
+        "source": "CANDIDATE_WORKTREE",
+        "sha256": "ffc2026243a1fb9ba4f28a6ffebfdf822d8576e666e0a5572528d6b0d94a9661"
+      },
+      {
+        "path": "lib/regime-engine-v2/capture.ts",
+        "source": "CANDIDATE_WORKTREE",
+        "sha256": "e0a2c38710f988843cc5a804cdbb9adbc65f97e7074fcdd0afe412637e6bb813"
+      },
+      {
+        "path": "lib/regime-engine-v2/contract.ts",
+        "source": "CANDIDATE_WORKTREE",
+        "sha256": "2df8e1f2be112aef642ecdea53cc479777719d863a3451c53c1e1cbb8c90b563"
+      },
+      {
+        "path": "lib/regime-engine-v2/core.ts",
+        "source": "CANDIDATE_WORKTREE",
+        "sha256": "5cdd57bd05403f38271946fb39fa59e479f25fcf60c35fb09c2941856e6010a1"
+      },
+      {
+        "path": "lib/regime-engine-v2/engine.test.ts",
+        "source": "CANDIDATE_WORKTREE",
+        "sha256": "d1d1a5632179d0f7f3f807805ce4b4151fd7b69f0f2c6ababa99fda266df22eb"
+      },
+      {
+        "path": "lib/regime-engine-v2/engine.ts",
+        "source": "CANDIDATE_WORKTREE",
+        "sha256": "f73691bbf9e2821645f048124266320c6bb4daea81b9b31a70a428dee2f0a39a"
+      },
+      {
+        "path": "lib/regime-engine-v2/features.ts",
+        "source": "CANDIDATE_WORKTREE",
+        "sha256": "65e81d8d5446d92e8c28601d0eed23627264265566c8f86c015a7f872f9d4275"
+      },
+      {
+        "path": "lib/regime-engine-v2/math.ts",
+        "source": "CANDIDATE_WORKTREE",
+        "sha256": "82af814a436b6cd5877f34b93fef7535827f355f7bf9225d70e8349c15fa9138"
+      },
+      {
+        "path": "lib/regime-engine-v2/normalize.ts",
+        "source": "CANDIDATE_WORKTREE",
+        "sha256": "da2963f02e32ed2a01f317992e2259c6bc4a5abd972c433c3d9974b5cc9ac037"
+      },
+      {
+        "path": "lib/regime-engine-v2/operations/dashboard-shadow.test.ts",
+        "source": "CANDIDATE_WORKTREE",
+        "sha256": "45ef6cffea6040ef8fe8c70473873f2351ab29e46b084460264bd0c3032e4e97"
+      },
+      {
+        "path": "lib/regime-engine-v2/operations/dashboard-shadow.ts",
+        "source": "CANDIDATE_WORKTREE",
+        "sha256": "10819d5cfc7f737f148da8e56d6cf89ef32c4623342d2495bc384c66a99b06a4"
+      },
+      {
+        "path": "lib/regime-engine-v2/operations/normalizer-preservation.test.mjs",
+        "source": "CANDIDATE_WORKTREE",
+        "sha256": "b592e0084f433c3ff3756bc2ce574b566027f281ea34aef14f8122c5788f2b61"
+      },
+      {
+        "path": "lib/regime-engine-v2/operations/pipeline-capture.ts",
+        "source": "CANDIDATE_WORKTREE",
+        "sha256": "988fd161c688043be58d4a466e959809beeb4ba0c2878c86d5afade3e4ded3b4"
+      },
+      {
+        "path": "lib/regime-engine-v2/operations/public-preservation.test.ts",
+        "source": "CANDIDATE_WORKTREE",
+        "sha256": "fb3731a8d8b216b98636e1b6764c7ba15ec6678f77a9c0197c39a8ecb48cb580"
+      },
+      {
+        "path": "lib/regime-engine-v2/operations/snapshot.test.ts",
+        "source": "CANDIDATE_WORKTREE",
+        "sha256": "526b5c024976fd95c23eae74bf038516cf804ad55ace6040e238727185c9aa20"
+      },
+      {
+        "path": "lib/regime-engine-v2/operations/snapshot.ts",
+        "source": "CANDIDATE_WORKTREE",
+        "sha256": "9e88b4f317e45d0930f55a9a1dc1140cf14da45338240c929cf1c67a8fde5b05"
+      },
+      {
+        "path": "lib/regime-engine-v2/operations/source-input.test.ts",
+        "source": "CANDIDATE_WORKTREE",
+        "sha256": "b55514744a93adb9e6dbe50cb29a98d5fd6f4fea158f0244721c71674a7c6714"
+      },
+      {
+        "path": "lib/regime-engine-v2/operations/source-input.ts",
+        "source": "CANDIDATE_WORKTREE",
+        "sha256": "093a41e1aa6dda588b86f65286b451893e0418fffb4d88b0f27d58d1545259ab"
+      },
+      {
+        "path": "lib/regime-engine-v2/shadow.ts",
+        "source": "CANDIDATE_WORKTREE",
+        "sha256": "2bb904315c6292390956efb9d89e69af2467d23863e3f713fcb8362ec89accce"
+      },
+      {
+        "path": "lib/regime-engine-v2/temporal.ts",
+        "source": "CANDIDATE_WORKTREE",
+        "sha256": "4ec57a14f9ed658d0587aa6d2a9b9f42426c6b54022adf301cc65bf51a3495fb"
+      },
+      {
+        "path": "lib/regime-engine-v2/types.ts",
+        "source": "CANDIDATE_WORKTREE",
+        "sha256": "1dcd4ce2f9ebd1763c9f1b28ce08bdcfd4f1ea9c8b92874b481731b1563e2aeb"
+      },
+      {
+        "path": "lib/reports/build-weekly-report-data.ts",
+        "source": "UNCHANGED_HEAD",
+        "sha256": "efa256ae879124adf09c17aa0df0d4a2260d204770d7c6641dcf77f6d2ebd4a1"
+      },
+      {
+        "path": "lib/seo/site.ts",
+        "source": "UNCHANGED_HEAD",
+        "sha256": "46b7df58e35ada7fd925883d82fe4012e18efab03b3d90a0e281f78a685861a4"
+      },
+      {
+        "path": "lib/statistical-levels/display.ts",
+        "source": "UNCHANGED_HEAD",
+        "sha256": "6c44fa9a3b9d522055d993582e308d31ae4266244f65928fbc4ef68a04234ee9"
+      },
+      {
+        "path": "lib/statistical-levels/get-statistical-levels-data.ts",
+        "source": "UNCHANGED_HEAD",
+        "sha256": "ffc5c2ce32782cff30ad4259912b793bc99c365d94b66cb2a6975ef5d4784f00"
+      },
+      {
+        "path": "lib/statistical-levels/types.ts",
+        "source": "UNCHANGED_HEAD",
+        "sha256": "26937c4669a02f0377dbef51a6a0b0d727729b636b9751b7f1a8d8780f528598"
+      },
+      {
+        "path": "scripts/build-statistical-levels.mjs",
+        "source": "CANDIDATE_WORKTREE",
+        "sha256": "de9da118da379ccb12618adee258364b730935da36055b9822ca201f869095dd"
+      },
+      {
+        "path": "scripts/regime-v2-conformance.mts",
+        "source": "CANDIDATE_WORKTREE",
+        "sha256": "72a4e07ec6935eee95f75642e7bccfa5b95e3f2387583b24d2abfea548e65ba4"
+      },
+      {
+        "path": "scripts/regime-v2-design-fixtures.mts",
+        "source": "CANDIDATE_WORKTREE",
+        "sha256": "e8f60059586dc55f294796ddef59084c4b17d3b643cc45c3d84889f27bc68d9b"
+      },
+      {
+        "path": "scripts/regime-v2-design-fixtures.test.ts",
+        "source": "CANDIDATE_WORKTREE",
+        "sha256": "aa0564c02ff0323ae9cc1a4e1ce1d22e2ef6c290c3f59cf737cc726d2fcaf6cc"
+      },
+      {
+        "path": "scripts/regime-v2-design-render.mjs",
+        "source": "CANDIDATE_WORKTREE",
+        "sha256": "e9bc9e4ea50a899cff1b70896ded1ac83d3d006654828eb9898c8e64bab50fb1"
+      },
+      {
+        "path": "scripts/regime-v2-observe.mts",
+        "source": "CANDIDATE_WORKTREE",
+        "sha256": "143542e05f10c717cd2628cdb330de01c3b9e3f21961f52c1ee0b7262dbadcff"
+      },
+      {
+        "path": "scripts/regime-v2-prepare-bundle.mts",
+        "source": "CANDIDATE_WORKTREE",
+        "sha256": "a5591688b042c20e07fa4a9a33b80be4005925c6c769ea523628a585b5884543"
+      },
+      {
+        "path": "scripts/regime-v2-replay.mts",
+        "source": "CANDIDATE_WORKTREE",
+        "sha256": "42f6fc5197252d7a81565720f117cec4f8fb6939d4b1db5c26c1d1eed6ea3016"
+      },
+      {
+        "path": "scripts/regime-v2-shadow.mts",
+        "source": "CANDIDATE_WORKTREE",
+        "sha256": "0c13eed54ddd624d6e7568bf125a34ebd54bf74c9ac13f605341190a04d0ad0e"
+      },
+      {
+        "path": "scripts/report-node-register.mjs",
+        "source": "UNCHANGED_HEAD",
+        "sha256": "39dcf1475f6eb6fb0506736f92c4fa7afe55da3742041b283ac4a9db6e2cabf7"
+      },
+      {
+        "path": "scripts/trends-test-register.mjs",
+        "source": "CANDIDATE_WORKTREE",
+        "sha256": "d4c01f7e587436e5738ed7fdacc9fcdc4b3dd67bea378b6c2bb41864f7c56059"
+      }
+    ],
+    "importEdges": [
+      {
+        "from": "app/(es)/dashboard/page.tsx",
+        "to": "components/dashboard/DashboardRegimeV1.tsx"
+      },
+      {
+        "from": "app/(es)/dashboard/page.tsx",
+        "to": "components/dashboard/BtcEtfFlowsModule.tsx"
+      },
+      {
+        "from": "app/(es)/dashboard/page.tsx",
+        "to": "components/dashboard/DashboardModule.tsx"
+      },
+      {
+        "from": "app/(es)/dashboard/page.tsx",
+        "to": "components/dashboard/GldFlowPressureModule.tsx"
+      },
+      {
+        "from": "app/(es)/dashboard/page.tsx",
+        "to": "components/dashboard/QuantRiskPanel.tsx"
+      },
+      {
+        "from": "app/(es)/dashboard/page.tsx",
+        "to": "components/dashboard/SectorRotationChart.tsx"
+      },
+      {
+        "from": "app/(es)/dashboard/page.tsx",
+        "to": "components/dashboard/VixModule.tsx"
+      },
+      {
+        "from": "app/(es)/dashboard/page.tsx",
+        "to": "components/dashboard/VixTermStructureModule.tsx"
+      },
+      {
+        "from": "app/(es)/dashboard/page.tsx",
+        "to": "components/ui/DisclaimerBox.tsx"
+      },
+      {
+        "from": "app/(es)/dashboard/page.tsx",
+        "to": "components/seo/ReadingCard.tsx"
+      },
+      {
+        "from": "app/(es)/dashboard/page.tsx",
+        "to": "lib/dashboard/get-dashboard-data.ts"
+      },
+      {
+        "from": "app/(es)/dashboard/page.tsx",
+        "to": "lib/seo/site.ts"
+      },
+      {
+        "from": "app/(es)/dashboard/page.tsx",
+        "to": "lib/reports/build-weekly-report-data.ts"
+      },
+      {
+        "from": "lib/dashboard/adapters/vix-term-structure.ts",
+        "to": "lib/regime-engine-v2/operations/pipeline-capture.ts"
+      },
+      {
+        "from": "lib/dashboard/adapters/vix-term-structure.ts",
+        "to": "lib/dashboard/types.ts"
+      },
+      {
+        "from": "lib/dashboard/get-dashboard-data.ts",
+        "to": "lib/regime-engine-v2/operations/dashboard-shadow.ts"
+      },
+      {
+        "from": "lib/dashboard/get-dashboard-data.ts",
+        "to": "lib/dashboard/adapters/btc-etf-flows.ts"
+      },
+      {
+        "from": "lib/dashboard/get-dashboard-data.ts",
+        "to": "lib/dashboard/adapters/gld-flow-pressure.ts"
+      },
+      {
+        "from": "lib/dashboard/get-dashboard-data.ts",
+        "to": "lib/dashboard/adapters/radar.ts"
+      },
+      {
+        "from": "lib/dashboard/get-dashboard-data.ts",
+        "to": "lib/dashboard/adapters/sector-etfs.ts"
+      },
+      {
+        "from": "lib/dashboard/get-dashboard-data.ts",
+        "to": "lib/dashboard/adapters/vix.ts"
+      },
+      {
+        "from": "lib/dashboard/get-dashboard-data.ts",
+        "to": "lib/dashboard/adapters/vix-term-structure.ts"
+      },
+      {
+        "from": "lib/dashboard/get-dashboard-data.ts",
+        "to": "lib/dashboard/regime-scoring.ts"
+      },
+      {
+        "from": "lib/dashboard/get-dashboard-data.ts",
+        "to": "lib/dashboard/types.ts"
+      },
+      {
+        "from": "lib/dashboard/get-home-dashboard-preview-data.ts",
+        "to": "lib/regime-engine-v2/operations/dashboard-shadow.ts"
+      },
+      {
+        "from": "lib/dashboard/get-home-dashboard-preview-data.ts",
+        "to": "lib/dashboard/adapters/btc-etf-flows.ts"
+      },
+      {
+        "from": "lib/dashboard/get-home-dashboard-preview-data.ts",
+        "to": "lib/dashboard/adapters/sector-etfs.ts"
+      },
+      {
+        "from": "lib/dashboard/get-home-dashboard-preview-data.ts",
+        "to": "lib/dashboard/adapters/vix.ts"
+      },
+      {
+        "from": "lib/dashboard/get-home-dashboard-preview-data.ts",
+        "to": "lib/dashboard/regime-scoring.ts"
+      },
+      {
+        "from": "lib/dashboard/get-home-dashboard-preview-data.ts",
+        "to": "lib/dashboard/types.ts"
+      },
+      {
+        "from": "scripts/build-statistical-levels.mjs",
+        "to": "lib/regime-engine-v2/operations/dashboard-shadow.ts"
+      },
+      {
+        "from": "scripts/build-statistical-levels.mjs",
+        "to": "lib/regime-engine-v2/operations/pipeline-capture.ts"
+      },
+      {
+        "from": "app/(es)/internal/regime-v2/page.tsx",
+        "to": "components/dashboard/RegimeV2Preview.tsx"
+      },
+      {
+        "from": "app/en/internal/regime-v2/page.tsx",
+        "to": "components/dashboard/RegimeV2Preview.tsx"
+      },
+      {
+        "from": "components/dashboard/DashboardRegimeV1.tsx",
+        "to": "components/dashboard/RegimeBadge.tsx"
+      },
+      {
+        "from": "components/dashboard/DashboardRegimeV1.tsx",
+        "to": "components/ui/ExpandableInsightCard.tsx"
+      },
+      {
+        "from": "components/dashboard/DashboardRegimeV1.tsx",
+        "to": "components/ui/MetricCard.tsx"
+      },
+      {
+        "from": "components/dashboard/DashboardRegimeV1.tsx",
+        "to": "components/ui/InstitutionalHero.tsx"
+      },
+      {
+        "from": "components/dashboard/DashboardRegimeV1.tsx",
+        "to": "components/ui/QuantAnnotation.tsx"
+      },
+      {
+        "from": "components/dashboard/DashboardRegimeV1.tsx",
+        "to": "lib/dashboard/status.ts"
+      },
+      {
+        "from": "components/dashboard/DashboardRegimeV1.tsx",
+        "to": "lib/dashboard/translate-dashboard-copy.ts"
+      },
+      {
+        "from": "components/dashboard/DashboardRegimeV1.tsx",
+        "to": "lib/dashboard/types.ts"
+      },
+      {
+        "from": "components/dashboard/RegimeV2Preview.tsx",
+        "to": "lib/regime-engine-v2/engine.ts"
+      },
+      {
+        "from": "components/dashboard/RegimeV2Preview.tsx",
+        "to": "lib/dashboard/types.ts"
+      },
+      {
+        "from": "components/dashboard/RegimeV2Preview.tsx",
+        "to": "lib/dashboard/regime-v2-presentation.ts"
+      },
+      {
+        "from": "components/dashboard/RegimeV2Preview.tsx",
+        "to": "components/dashboard/DashboardRegimeV1.tsx"
+      },
+      {
+        "from": "components/dashboard/RegimeV2Preview.tsx",
+        "to": "components/dashboard/RegimeV2Surface.tsx"
+      },
+      {
+        "from": "components/dashboard/RegimeV2Preview.tsx",
+        "to": "components/dashboard/regime-v2.module.css"
+      },
+      {
+        "from": "components/dashboard/RegimeV2Surface.tsx",
+        "to": "lib/dashboard/regime-v2-presentation.ts"
+      },
+      {
+        "from": "components/dashboard/RegimeV2Surface.tsx",
+        "to": "components/dashboard/RegimeV2Disclosure.tsx"
+      },
+      {
+        "from": "components/dashboard/RegimeV2Surface.tsx",
+        "to": "components/dashboard/regime-v2.module.css"
+      },
+      {
+        "from": "lib/dashboard/regime-v2-presentation.test.ts",
+        "to": "lib/regime-engine-v2/contract.ts"
+      },
+      {
+        "from": "lib/dashboard/regime-v2-presentation.test.ts",
+        "to": "lib/regime-engine-v2/engine.ts"
+      },
+      {
+        "from": "lib/dashboard/regime-v2-presentation.test.ts",
+        "to": "lib/dashboard/regime-v2-presentation.ts"
+      },
+      {
+        "from": "lib/dashboard/regime-v2-presentation.ts",
+        "to": "lib/regime-engine-v2/contract.ts"
+      },
+      {
+        "from": "lib/dashboard/regime-v2-presentation.ts",
+        "to": "lib/regime-engine-v2/engine.ts"
+      },
+      {
+        "from": "lib/dashboard/regime-v2-presentation.ts",
+        "to": "lib/regime-engine-v2/types.ts"
+      },
+      {
+        "from": "lib/dashboard/regime-v2-preview.test.mjs",
+        "to": "scripts/trends-test-register.mjs"
+      },
+      {
+        "from": "lib/dashboard/regime-v2-render.test.mjs",
+        "to": "scripts/regime-v2-design-render.mjs"
+      },
+      {
+        "from": "lib/dashboard/regime-v2-render.test.mjs",
+        "to": "components/dashboard/DashboardRegimeV1.tsx"
+      },
+      {
+        "from": "lib/dashboard/regime-v2-render.test.mjs",
+        "to": "components/dashboard/RegimeV2Surface.tsx"
+      },
+      {
+        "from": "lib/dashboard/regime-v2-render.test.mjs",
+        "to": "lib/dashboard/regime-v2-presentation.ts"
+      },
+      {
+        "from": "lib/regime-engine-v2/boundary.ts",
+        "to": "lib/regime-engine-v2/types.ts"
+      },
+      {
+        "from": "lib/regime-engine-v2/capture.ts",
+        "to": "lib/regime-engine-v2/math.ts"
+      },
+      {
+        "from": "lib/regime-engine-v2/capture.ts",
+        "to": "lib/regime-engine-v2/temporal.ts"
+      },
+      {
+        "from": "lib/regime-engine-v2/capture.ts",
+        "to": "lib/regime-engine-v2/types.ts"
+      },
+      {
+        "from": "lib/regime-engine-v2/core.ts",
+        "to": "lib/regime-engine-v2/contract.ts"
+      },
+      {
+        "from": "lib/regime-engine-v2/core.ts",
+        "to": "lib/regime-engine-v2/math.ts"
+      },
+      {
+        "from": "lib/regime-engine-v2/core.ts",
+        "to": "lib/regime-engine-v2/temporal.ts"
+      },
+      {
+        "from": "lib/regime-engine-v2/core.ts",
+        "to": "lib/regime-engine-v2/types.ts"
+      },
+      {
+        "from": "lib/regime-engine-v2/engine.test.ts",
+        "to": "scripts/regime-v2-conformance.mts"
+      },
+      {
+        "from": "lib/regime-engine-v2/engine.test.ts",
+        "to": "lib/regime-engine-v2/contract.ts"
+      },
+      {
+        "from": "lib/regime-engine-v2/engine.test.ts",
+        "to": "lib/regime-engine-v2/core.ts"
+      },
+      {
+        "from": "lib/regime-engine-v2/engine.test.ts",
+        "to": "lib/regime-engine-v2/engine.ts"
+      },
+      {
+        "from": "lib/regime-engine-v2/engine.test.ts",
+        "to": "lib/regime-engine-v2/math.ts"
+      },
+      {
+        "from": "lib/regime-engine-v2/engine.test.ts",
+        "to": "lib/regime-engine-v2/normalize.ts"
+      },
+      {
+        "from": "lib/regime-engine-v2/engine.test.ts",
+        "to": "lib/regime-engine-v2/temporal.ts"
+      },
+      {
+        "from": "lib/regime-engine-v2/engine.test.ts",
+        "to": "lib/regime-engine-v2/capture.ts"
+      },
+      {
+        "from": "lib/regime-engine-v2/engine.test.ts",
+        "to": "lib/regime-engine-v2/shadow.ts"
+      },
+      {
+        "from": "lib/regime-engine-v2/engine.test.ts",
+        "to": "lib/regime-engine-v2/types.ts"
+      },
+      {
+        "from": "lib/regime-engine-v2/engine.ts",
+        "to": "lib/regime-engine-v2/contract.ts"
+      },
+      {
+        "from": "lib/regime-engine-v2/engine.ts",
+        "to": "lib/regime-engine-v2/core.ts"
+      },
+      {
+        "from": "lib/regime-engine-v2/engine.ts",
+        "to": "lib/regime-engine-v2/features.ts"
+      },
+      {
+        "from": "lib/regime-engine-v2/engine.ts",
+        "to": "lib/regime-engine-v2/math.ts"
+      },
+      {
+        "from": "lib/regime-engine-v2/engine.ts",
+        "to": "lib/regime-engine-v2/temporal.ts"
+      },
+      {
+        "from": "lib/regime-engine-v2/engine.ts",
+        "to": "lib/regime-engine-v2/types.ts"
+      },
+      {
+        "from": "lib/regime-engine-v2/engine.ts",
+        "to": "lib/regime-engine-v2/boundary.ts"
+      },
+      {
+        "from": "lib/regime-engine-v2/features.ts",
+        "to": "lib/regime-engine-v2/contract.ts"
+      },
+      {
+        "from": "lib/regime-engine-v2/features.ts",
+        "to": "lib/regime-engine-v2/math.ts"
+      },
+      {
+        "from": "lib/regime-engine-v2/features.ts",
+        "to": "lib/regime-engine-v2/core.ts"
+      },
+      {
+        "from": "lib/regime-engine-v2/features.ts",
+        "to": "lib/regime-engine-v2/temporal.ts"
+      },
+      {
+        "from": "lib/regime-engine-v2/features.ts",
+        "to": "lib/regime-engine-v2/types.ts"
+      },
+      {
+        "from": "lib/regime-engine-v2/math.ts",
+        "to": "lib/regime-engine-v2/contract.ts"
+      },
+      {
+        "from": "lib/regime-engine-v2/normalize.ts",
+        "to": "lib/regime-engine-v2/contract.ts"
+      },
+      {
+        "from": "lib/regime-engine-v2/normalize.ts",
+        "to": "lib/regime-engine-v2/math.ts"
+      },
+      {
+        "from": "lib/regime-engine-v2/normalize.ts",
+        "to": "lib/regime-engine-v2/temporal.ts"
+      },
+      {
+        "from": "lib/regime-engine-v2/normalize.ts",
+        "to": "lib/regime-engine-v2/types.ts"
+      },
+      {
+        "from": "lib/regime-engine-v2/operations/dashboard-shadow.test.ts",
+        "to": "lib/regime-engine-v2/types.ts"
+      },
+      {
+        "from": "lib/regime-engine-v2/operations/dashboard-shadow.test.ts",
+        "to": "lib/regime-engine-v2/engine.ts"
+      },
+      {
+        "from": "lib/regime-engine-v2/operations/dashboard-shadow.test.ts",
+        "to": "lib/regime-engine-v2/math.ts"
+      },
+      {
+        "from": "lib/regime-engine-v2/operations/dashboard-shadow.test.ts",
+        "to": "lib/regime-engine-v2/operations/dashboard-shadow.ts"
+      },
+      {
+        "from": "lib/regime-engine-v2/operations/dashboard-shadow.test.ts",
+        "to": "lib/regime-engine-v2/operations/snapshot.ts"
+      },
+      {
+        "from": "lib/regime-engine-v2/operations/dashboard-shadow.test.ts",
+        "to": "lib/regime-engine-v2/operations/pipeline-capture.ts"
+      },
+      {
+        "from": "lib/regime-engine-v2/operations/dashboard-shadow.ts",
+        "to": "lib/regime-engine-v2/types.ts"
+      },
+      {
+        "from": "lib/regime-engine-v2/operations/dashboard-shadow.ts",
+        "to": "lib/regime-engine-v2/engine.ts"
+      },
+      {
+        "from": "lib/regime-engine-v2/operations/dashboard-shadow.ts",
+        "to": "lib/regime-engine-v2/math.ts"
+      },
+      {
+        "from": "lib/regime-engine-v2/operations/dashboard-shadow.ts",
+        "to": "lib/regime-engine-v2/temporal.ts"
+      },
+      {
+        "from": "lib/regime-engine-v2/operations/dashboard-shadow.ts",
+        "to": "lib/regime-engine-v2/contract.ts"
+      },
+      {
+        "from": "lib/regime-engine-v2/operations/dashboard-shadow.ts",
+        "to": "lib/regime-engine-v2/capture.ts"
+      },
+      {
+        "from": "lib/regime-engine-v2/operations/dashboard-shadow.ts",
+        "to": "lib/regime-engine-v2/operations/pipeline-capture.ts"
+      },
+      {
+        "from": "lib/regime-engine-v2/operations/dashboard-shadow.ts",
+        "to": "lib/regime-engine-v2/operations/source-input.ts"
+      },
+      {
+        "from": "lib/regime-engine-v2/operations/dashboard-shadow.ts",
+        "to": "lib/regime-engine-v2/operations/snapshot.ts"
+      },
+      {
+        "from": "lib/regime-engine-v2/operations/normalizer-preservation.test.mjs",
+        "to": "lib/regime-engine-v2/contract.ts"
+      },
+      {
+        "from": "lib/regime-engine-v2/operations/normalizer-preservation.test.mjs",
+        "to": "lib/regime-engine-v2/normalize.ts"
+      },
+      {
+        "from": "lib/regime-engine-v2/operations/pipeline-capture.ts",
+        "to": "lib/regime-engine-v2/capture.ts"
+      },
+      {
+        "from": "lib/regime-engine-v2/operations/pipeline-capture.ts",
+        "to": "lib/regime-engine-v2/math.ts"
+      },
+      {
+        "from": "lib/regime-engine-v2/operations/public-preservation.test.ts",
+        "to": "lib/regime-engine-v2/math.ts"
+      },
+      {
+        "from": "lib/regime-engine-v2/operations/snapshot.test.ts",
+        "to": "scripts/regime-v2-conformance.mts"
+      },
+      {
+        "from": "lib/regime-engine-v2/operations/snapshot.test.ts",
+        "to": "lib/regime-engine-v2/contract.ts"
+      },
+      {
+        "from": "lib/regime-engine-v2/operations/snapshot.test.ts",
+        "to": "lib/regime-engine-v2/engine.ts"
+      },
+      {
+        "from": "lib/regime-engine-v2/operations/snapshot.test.ts",
+        "to": "lib/regime-engine-v2/math.ts"
+      },
+      {
+        "from": "lib/regime-engine-v2/operations/snapshot.test.ts",
+        "to": "lib/regime-engine-v2/types.ts"
+      },
+      {
+        "from": "lib/regime-engine-v2/operations/snapshot.test.ts",
+        "to": "lib/regime-engine-v2/operations/snapshot.ts"
+      },
+      {
+        "from": "lib/regime-engine-v2/operations/snapshot.ts",
+        "to": "lib/regime-engine-v2/contract.ts"
+      },
+      {
+        "from": "lib/regime-engine-v2/operations/snapshot.ts",
+        "to": "lib/regime-engine-v2/engine.ts"
+      },
+      {
+        "from": "lib/regime-engine-v2/operations/snapshot.ts",
+        "to": "lib/regime-engine-v2/math.ts"
+      },
+      {
+        "from": "lib/regime-engine-v2/operations/snapshot.ts",
+        "to": "lib/regime-engine-v2/temporal.ts"
+      },
+      {
+        "from": "lib/regime-engine-v2/operations/snapshot.ts",
+        "to": "lib/regime-engine-v2/types.ts"
+      },
+      {
+        "from": "lib/regime-engine-v2/operations/source-input.test.ts",
+        "to": "lib/regime-engine-v2/capture.ts"
+      },
+      {
+        "from": "lib/regime-engine-v2/operations/source-input.test.ts",
+        "to": "lib/regime-engine-v2/engine.ts"
+      },
+      {
+        "from": "lib/regime-engine-v2/operations/source-input.test.ts",
+        "to": "lib/regime-engine-v2/contract.ts"
+      },
+      {
+        "from": "lib/regime-engine-v2/operations/source-input.test.ts",
+        "to": "lib/regime-engine-v2/math.ts"
+      },
+      {
+        "from": "lib/regime-engine-v2/operations/source-input.test.ts",
+        "to": "lib/regime-engine-v2/temporal.ts"
+      },
+      {
+        "from": "lib/regime-engine-v2/operations/source-input.test.ts",
+        "to": "lib/regime-engine-v2/types.ts"
+      },
+      {
+        "from": "lib/regime-engine-v2/operations/source-input.test.ts",
+        "to": "lib/regime-engine-v2/operations/source-input.ts"
+      },
+      {
+        "from": "lib/regime-engine-v2/operations/source-input.test.ts",
+        "to": "lib/regime-engine-v2/operations/snapshot.ts"
+      },
+      {
+        "from": "lib/regime-engine-v2/operations/source-input.test.ts",
+        "to": "lib/regime-engine-v2/operations/dashboard-shadow.ts"
+      },
+      {
+        "from": "lib/regime-engine-v2/operations/source-input.ts",
+        "to": "lib/regime-engine-v2/boundary.ts"
+      },
+      {
+        "from": "lib/regime-engine-v2/operations/source-input.ts",
+        "to": "lib/regime-engine-v2/capture.ts"
+      },
+      {
+        "from": "lib/regime-engine-v2/operations/source-input.ts",
+        "to": "lib/regime-engine-v2/contract.ts"
+      },
+      {
+        "from": "lib/regime-engine-v2/operations/source-input.ts",
+        "to": "lib/regime-engine-v2/math.ts"
+      },
+      {
+        "from": "lib/regime-engine-v2/operations/source-input.ts",
+        "to": "lib/regime-engine-v2/normalize.ts"
+      },
+      {
+        "from": "lib/regime-engine-v2/operations/source-input.ts",
+        "to": "lib/regime-engine-v2/temporal.ts"
+      },
+      {
+        "from": "lib/regime-engine-v2/operations/source-input.ts",
+        "to": "lib/regime-engine-v2/types.ts"
+      },
+      {
+        "from": "lib/regime-engine-v2/shadow.ts",
+        "to": "lib/regime-engine-v2/engine.ts"
+      },
+      {
+        "from": "lib/regime-engine-v2/shadow.ts",
+        "to": "lib/regime-engine-v2/types.ts"
+      },
+      {
+        "from": "lib/regime-engine-v2/temporal.ts",
+        "to": "lib/regime-engine-v2/types.ts"
+      },
+      {
+        "from": "lib/regime-engine-v2/temporal.ts",
+        "to": "lib/regime-engine-v2/math.ts"
+      },
+      {
+        "from": "scripts/regime-v2-conformance.mts",
+        "to": "lib/regime-engine-v2/contract.ts"
+      },
+      {
+        "from": "scripts/regime-v2-conformance.mts",
+        "to": "lib/regime-engine-v2/core.ts"
+      },
+      {
+        "from": "scripts/regime-v2-conformance.mts",
+        "to": "lib/regime-engine-v2/engine.ts"
+      },
+      {
+        "from": "scripts/regime-v2-conformance.mts",
+        "to": "lib/regime-engine-v2/math.ts"
+      },
+      {
+        "from": "scripts/regime-v2-conformance.mts",
+        "to": "lib/regime-engine-v2/normalize.ts"
+      },
+      {
+        "from": "scripts/regime-v2-conformance.mts",
+        "to": "lib/regime-engine-v2/types.ts"
+      },
+      {
+        "from": "scripts/regime-v2-design-fixtures.mts",
+        "to": "scripts/regime-v2-conformance.mts"
+      },
+      {
+        "from": "scripts/regime-v2-design-fixtures.mts",
+        "to": "lib/regime-engine-v2/contract.ts"
+      },
+      {
+        "from": "scripts/regime-v2-design-fixtures.mts",
+        "to": "lib/regime-engine-v2/engine.ts"
+      },
+      {
+        "from": "scripts/regime-v2-design-fixtures.mts",
+        "to": "lib/regime-engine-v2/math.ts"
+      },
+      {
+        "from": "scripts/regime-v2-design-fixtures.mts",
+        "to": "lib/regime-engine-v2/normalize.ts"
+      },
+      {
+        "from": "scripts/regime-v2-design-fixtures.mts",
+        "to": "lib/regime-engine-v2/types.ts"
+      },
+      {
+        "from": "scripts/regime-v2-design-fixtures.test.ts",
+        "to": "scripts/regime-v2-design-fixtures.mts"
+      },
+      {
+        "from": "scripts/regime-v2-design-fixtures.test.ts",
+        "to": "lib/regime-engine-v2/contract.ts"
+      },
+      {
+        "from": "scripts/regime-v2-design-fixtures.test.ts",
+        "to": "lib/regime-engine-v2/engine.ts"
+      },
+      {
+        "from": "scripts/regime-v2-design-fixtures.test.ts",
+        "to": "lib/regime-engine-v2/math.ts"
+      },
+      {
+        "from": "scripts/regime-v2-design-render.mjs",
+        "to": "scripts/trends-test-register.mjs"
+      },
+      {
+        "from": "scripts/regime-v2-design-render.mjs",
+        "to": "lib/dashboard/get-dashboard-data.ts"
+      },
+      {
+        "from": "scripts/regime-v2-design-render.mjs",
+        "to": "components/dashboard/DashboardRegimeV1.tsx"
+      },
+      {
+        "from": "scripts/regime-v2-design-render.mjs",
+        "to": "components/dashboard/RegimeV2Surface.tsx"
+      },
+      {
+        "from": "scripts/regime-v2-design-render.mjs",
+        "to": "lib/dashboard/regime-v2-presentation.ts"
+      },
+      {
+        "from": "scripts/regime-v2-observe.mts",
+        "to": "lib/dashboard/get-dashboard-data.ts"
+      },
+      {
+        "from": "scripts/regime-v2-prepare-bundle.mts",
+        "to": "lib/regime-engine-v2/capture.ts"
+      },
+      {
+        "from": "scripts/regime-v2-prepare-bundle.mts",
+        "to": "lib/regime-engine-v2/math.ts"
+      },
+      {
+        "from": "scripts/regime-v2-prepare-bundle.mts",
+        "to": "lib/regime-engine-v2/operations/dashboard-shadow.ts"
+      },
+      {
+        "from": "scripts/regime-v2-prepare-bundle.mts",
+        "to": "lib/regime-engine-v2/operations/source-input.ts"
+      },
+      {
+        "from": "scripts/regime-v2-replay.mts",
+        "to": "lib/regime-engine-v2/operations/snapshot.ts"
+      },
+      {
+        "from": "scripts/regime-v2-shadow.mts",
+        "to": "lib/regime-engine-v2/engine.ts"
+      },
+      {
+        "from": "scripts/regime-v2-shadow.mts",
+        "to": "lib/regime-engine-v2/shadow.ts"
+      },
+      {
+        "from": "scripts/regime-v2-shadow.mts",
+        "to": "lib/regime-engine-v2/types.ts"
+      },
+      {
+        "from": "scripts/trends-test-register.mjs",
+        "to": "scripts/report-node-register.mjs"
+      },
+      {
+        "from": "components/dashboard/BtcEtfFlowsModule.tsx",
+        "to": "lib/dashboard/status.ts"
+      },
+      {
+        "from": "components/dashboard/BtcEtfFlowsModule.tsx",
+        "to": "components/ui/ExpandableInsightCard.tsx"
+      },
+      {
+        "from": "components/dashboard/BtcEtfFlowsModule.tsx",
+        "to": "lib/dashboard/translate-dashboard-copy.ts"
+      },
+      {
+        "from": "components/dashboard/BtcEtfFlowsModule.tsx",
+        "to": "lib/dashboard/types.ts"
+      },
+      {
+        "from": "components/dashboard/DashboardModule.tsx",
+        "to": "components/ui/RiskPill.tsx"
+      },
+      {
+        "from": "components/dashboard/DashboardModule.tsx",
+        "to": "lib/analytics/trackEvent.ts"
+      },
+      {
+        "from": "components/dashboard/DashboardModule.tsx",
+        "to": "lib/dashboard/status.ts"
+      },
+      {
+        "from": "components/dashboard/DashboardModule.tsx",
+        "to": "lib/dashboard/translate-dashboard-copy.ts"
+      },
+      {
+        "from": "components/dashboard/DashboardModule.tsx",
+        "to": "lib/dashboard/types.ts"
+      },
+      {
+        "from": "components/dashboard/GldFlowPressureModule.tsx",
+        "to": "components/ui/ExpandableInsightCard.tsx"
+      },
+      {
+        "from": "components/dashboard/GldFlowPressureModule.tsx",
+        "to": "lib/dashboard/types.ts"
+      },
+      {
+        "from": "components/dashboard/QuantRiskPanel.tsx",
+        "to": "lib/dashboard/status.ts"
+      },
+      {
+        "from": "components/dashboard/QuantRiskPanel.tsx",
+        "to": "lib/dashboard/translate-dashboard-copy.ts"
+      },
+      {
+        "from": "components/dashboard/QuantRiskPanel.tsx",
+        "to": "lib/dashboard/types.ts"
+      },
+      {
+        "from": "components/dashboard/SectorRotationChart.tsx",
+        "to": "components/dashboard/SectorDetailPanel.tsx"
+      },
+      {
+        "from": "components/dashboard/SectorRotationChart.tsx",
+        "to": "components/ui/ExpandableInsightCard.tsx"
+      },
+      {
+        "from": "components/dashboard/SectorRotationChart.tsx",
+        "to": "lib/dashboard/status.ts"
+      },
+      {
+        "from": "components/dashboard/SectorRotationChart.tsx",
+        "to": "lib/dashboard/translate-dashboard-copy.ts"
+      },
+      {
+        "from": "components/dashboard/SectorRotationChart.tsx",
+        "to": "lib/dashboard/types.ts"
+      },
+      {
+        "from": "components/dashboard/VixModule.tsx",
+        "to": "lib/dashboard/status.ts"
+      },
+      {
+        "from": "components/dashboard/VixModule.tsx",
+        "to": "components/ui/ExpandableInsightCard.tsx"
+      },
+      {
+        "from": "components/dashboard/VixModule.tsx",
+        "to": "lib/dashboard/translate-dashboard-copy.ts"
+      },
+      {
+        "from": "components/dashboard/VixModule.tsx",
+        "to": "lib/dashboard/types.ts"
+      },
+      {
+        "from": "components/dashboard/VixTermStructureModule.tsx",
+        "to": "components/ui/ExpandableInsightCard.tsx"
+      },
+      {
+        "from": "components/dashboard/VixTermStructureModule.tsx",
+        "to": "lib/dashboard/translate-dashboard-copy.ts"
+      },
+      {
+        "from": "components/dashboard/VixTermStructureModule.tsx",
+        "to": "lib/dashboard/types.ts"
+      },
+      {
+        "from": "lib/seo/site.ts",
+        "to": "lib/i18n/language-pairs.ts"
+      },
+      {
+        "from": "lib/reports/build-weekly-report-data.ts",
+        "to": "lib/dashboard/get-dashboard-data.ts"
+      },
+      {
+        "from": "lib/reports/build-weekly-report-data.ts",
+        "to": "lib/market/options-proxies.ts"
+      },
+      {
+        "from": "lib/reports/build-weekly-report-data.ts",
+        "to": "lib/statistical-levels/get-statistical-levels-data.ts"
+      },
+      {
+        "from": "lib/reports/build-weekly-report-data.ts",
+        "to": "lib/statistical-levels/types.ts"
+      },
+      {
+        "from": "lib/dashboard/types.ts",
+        "to": "lib/analytics/trackEvent.ts"
+      },
+      {
+        "from": "lib/dashboard/adapters/btc-etf-flows.ts",
+        "to": "lib/dashboard/manual-data.ts"
+      },
+      {
+        "from": "lib/dashboard/adapters/btc-etf-flows.ts",
+        "to": "lib/dashboard/types.ts"
+      },
+      {
+        "from": "lib/dashboard/adapters/gld-flow-pressure.ts",
+        "to": "lib/dashboard/types.ts"
+      },
+      {
+        "from": "lib/dashboard/adapters/radar.ts",
+        "to": "lib/dashboard/manual-data.ts"
+      },
+      {
+        "from": "lib/dashboard/adapters/radar.ts",
+        "to": "lib/dashboard/types.ts"
+      },
+      {
+        "from": "lib/dashboard/adapters/sector-etfs.ts",
+        "to": "lib/dashboard/manual-data.ts"
+      },
+      {
+        "from": "lib/dashboard/adapters/sector-etfs.ts",
+        "to": "lib/dashboard/risk-models.ts"
+      },
+      {
+        "from": "lib/dashboard/adapters/sector-etfs.ts",
+        "to": "lib/dashboard/types.ts"
+      },
+      {
+        "from": "lib/dashboard/adapters/vix.ts",
+        "to": "lib/dashboard/manual-data.ts"
+      },
+      {
+        "from": "lib/dashboard/adapters/vix.ts",
+        "to": "lib/dashboard/types.ts"
+      },
+      {
+        "from": "lib/dashboard/regime-scoring.ts",
+        "to": "lib/dashboard/types.ts"
+      },
+      {
+        "from": "components/ui/ExpandableInsightCard.tsx",
+        "to": "lib/i18n/locales.ts"
+      },
+      {
+        "from": "lib/dashboard/status.ts",
+        "to": "lib/dashboard/types.ts"
+      },
+      {
+        "from": "lib/dashboard/translate-dashboard-copy.ts",
+        "to": "lib/dashboard/types.ts"
+      },
+      {
+        "from": "components/dashboard/SectorDetailPanel.tsx",
+        "to": "lib/dashboard/types.ts"
+      },
+      {
+        "from": "components/dashboard/SectorDetailPanel.tsx",
+        "to": "lib/dashboard/translate-dashboard-copy.ts"
+      },
+      {
+        "from": "lib/statistical-levels/get-statistical-levels-data.ts",
+        "to": "lib/statistical-levels/display.ts"
+      },
+      {
+        "from": "lib/statistical-levels/get-statistical-levels-data.ts",
+        "to": "lib/statistical-levels/types.ts"
+      },
+      {
+        "from": "lib/dashboard/manual-data.ts",
+        "to": "lib/dashboard/types.ts"
+      },
+      {
+        "from": "lib/dashboard/risk-models.ts",
+        "to": "lib/dashboard/math.ts"
+      },
+      {
+        "from": "lib/dashboard/risk-models.ts",
+        "to": "lib/dashboard/types.ts"
+      }
+    ],
+    "manualRuntimeAndTestInputs": [
+      {
+        "paths": [
+          "docs/regime-engine-v2/designer/v1-reference.json",
+          "docs/regime-engine-v2/designer/fixtures/*.json"
+        ],
+        "consumers": [
+          "components/dashboard/RegimeV2Preview.tsx",
+          "lib/dashboard/regime-v2-presentation.test.ts",
+          "lib/dashboard/regime-v2-render.test.mjs"
+        ],
+        "role": "Development preview and tests only; 12 whitelisted DESIGN_TEST fixtures. No runtime snapshot directory is consumed."
+      },
+      {
+        "paths": [
+          "docs/regime-engine-v2/designer/fixture-matrix.json",
+          "docs/regime-engine-v2/designer/v1-original-page.tsx.txt",
+          "docs/regime-engine-v2/designer/RegimeV2Surface.before-formatter-reuse.tsx.txt",
+          "docs/regime-engine-v2/designer/input-manifest.json"
+        ],
+        "consumers": [
+          "scripts/regime-v2-design-render.mjs",
+          "scripts/regime-v2-design-fixtures.test.ts"
+        ],
+        "role": "Read-only accepted fixture and literal-source preservation inputs. Dynamic data modules are produced only from those local frozen source fixtures."
+      },
+      {
+        "paths": [
+          "docs/regime-engine-v2/p8/raw-fixtures.json.gz",
+          "docs/regime-engine-v2/p8/raw-check-results.json",
+          "docs/regime-engine-v2/p8/parameter-manifest.json",
+          "docs/regime-engine-v2/p8/price-series-contract.json",
+          "docs/regime-engine-v2/p8/temporal-availability-contract.json",
+          "docs/regime-engine-v2/p8/freshness-policy.json",
+          "docs/regime-engine-v2/p8/feature-registry-qualified.json",
+          "docs/regime-engine-v2/p8/historical-features-r2.json",
+          "docs/regime-engine-v2/p8/reference_model.py",
+          "docs/regime-engine-v2/p8/evidence/"
+        ],
+        "consumers": [
+          "scripts/regime-v2-conformance.mts",
+          "scripts/regime-v2-design-fixtures.mts",
+          "lib/regime-engine-v2/engine.test.ts",
+          "lib/regime-engine-v2/operations/normalizer-preservation.test.mjs",
+          "lib/regime-engine-v2/operations/snapshot.test.ts"
+        ],
+        "role": "Offline P8/golden/history source, Python oracle and captured evidence references; provenance inventory is handled separately by release documentation audit."
+      },
+      {
+        "paths": [
+          "docs/regime-engine-v2/maintainer/input-manifest.json",
+          "docs/regime-engine-v2/sweeper/shadow-input-r2.json"
+        ],
+        "consumers": [
+          "lib/regime-engine-v2/operations/public-preservation.test.ts",
+          "lib/regime-engine-v2/operations/normalizer-preservation.test.mjs",
+          "lib/regime-engine-v2/operations/dashboard-shadow.test.ts"
+        ],
+        "role": "Accepted original source hashes and frozen R2 test input. Private runtime capture bundles and logs are not release inputs."
+      },
+      {
+        "paths": [
+          "scripts/report-node-register.mjs"
+        ],
+        "consumers": [
+          "scripts/trends-test-register.mjs",
+          "scripts/regime-v2-observe.mts"
+        ],
+        "role": "Unchanged HEAD module alias resolver. JSX helper also generates a React import relative to import.meta.url; React is already a HEAD dependency."
+      }
+    ],
+    "limitations": [
+      "Static closure is not a substitute for testing/building the exact candidate tree.",
+      "The existing dirty worktree includes unrelated shared modules and new routes; validating it alone would not prove the selected commit.",
+      "Docs/evidence inclusion, runtime-data exclusion and secret/path hygiene are separate inventory decisions.",
+      "Operational CLIs are included but acquisition and shadow activation are not authorized for this freeze."
+    ]
+  },
+  "preservation": {
+    "acceptedSourceChangedDuringAudit": [],
+    "historicalStagesEditedByAudit": false,
+    "parameterChanges": false,
+    "methodologyChanges": false,
+    "publicCutover": false,
+    "deployment": false,
+    "pointInTimeOosClaim": false,
+    "liveCompleteCaptureClaim": false
+  },
+  "executionNotes": [
+    "Run conformance with --output-dir pointing to a new release verification directory; its default Builder directory must not be rewritten.",
+    "Use design fixtures --check; do not regenerate accepted Designer files during freeze.",
+    "The design renderer default benchmark writes Designer performance output, so use accepted test exports or a release-only output harness for fresh results.",
+    "Validate the isolated selected candidate with unchanged HEAD packages and unchanged HEAD versions of shared unrelated files."
+  ]
+}

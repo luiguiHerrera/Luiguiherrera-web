@@ -1,0 +1,479 @@
+{
+  "schemaVersion": "regime-v2-release-precommit-verification/1.0.0",
+  "status": "PASS",
+  "verifiedAt": "2026-09-08T21:16:45.051415+00:00",
+  "scope": "Exact staged candidate source and tests with unrelated pending work excluded; the separate full-worktree run retains the accepted broader accounting. Additional release review metadata may be staged afterward without changing verified engine/UI/fixtures.",
+  "staged_tree_at_snapshot": "19be9a6217ba3d3458f6f55bc2fc2ce096814557",
+  "parent_commit": "636cb73fb0fe4d2b28ad96cb7185f8c07d8f895b",
+  "temporary_checkout": "/private/tmp/regime-v2-release-candidate-ookq9243",
+  "ARCHITECTURE": "EVIDENCE_STATE_ENGINE",
+  "CANONICAL_PARAMETER_SET": "C03",
+  "P8_GOLDEN_CASES": "464/464",
+  "HISTORICAL_R2_CONFORMANCE": "1930/1930",
+  "SWEEPER_ATTACKS": "110/110",
+  "V1_TESTS": "PASS",
+  "V2_TESTS": "PASS",
+  "REPORT_TESTS": "PASS",
+  "REPORTS_VALIDATE": "PASS",
+  "REPORTS_CHECK": "PASS",
+  "EDITORIAL": "PASS",
+  "TYPECHECK": "PASS",
+  "BUILD": "PASS",
+  "LINT_ERRORS": 0,
+  "LINT_WARNINGS": 18,
+  "NEW_LINT_WARNINGS": 0,
+  "candidate_tests": {
+    "breakdown": {
+      "baseline_node": {
+        "passed": 204,
+        "total": 204
+      },
+      "maintainer_operations": {
+        "passed": 78,
+        "total": 78
+      },
+      "designer": {
+        "passed": 59,
+        "total": 59
+      },
+      "offline_challengers": {
+        "passed": 36,
+        "total": 36
+      },
+      "sweeper_attacks": {
+        "passed": 110,
+        "total": 110
+      }
+    },
+    "passed": 487,
+    "total": 487,
+    "note": "Golden/history are separate. Candidate excludes pending unrelated tests absent from HEAD; offline challengers do not enter canonical methodology."
+  },
+  "full_worktree_tests": {
+    "breakdown": {
+      "baseline_node": {
+        "passed": 302,
+        "total": 302
+      },
+      "maintainer_operations": {
+        "passed": 78,
+        "total": 78
+      },
+      "designer": {
+        "passed": 59,
+        "total": 59
+      },
+      "offline_challengers": {
+        "passed": 36,
+        "total": 36
+      },
+      "sweeper_attacks": {
+        "passed": 110,
+        "total": 110
+      },
+      "worktree_only_python": {
+        "total": 7,
+        "passed": 7
+      }
+    },
+    "passed": 592,
+    "total": 592,
+    "note": "Golden/history are separate. Candidate excludes pending unrelated tests absent from HEAD; offline challengers do not enter canonical methodology."
+  },
+  "test_scope_difference": "Candidate baseline+engine has 204 cases and no unrelated XML suite; worktree baseline has 302 and 7 XML cases. Both run Maintainer78, Designer59, Groweer36 offline and Sweeper110. The release does not import pending unrelated tests merely to preserve the worktree count.",
+  "historical_output_byte_equality": {
+    "candidate_equals_accepted_and_worktree": true,
+    "sha256": "018d6fc103ca9bfe1e0e43418d79446f530796c00a3728a57cf2b289298d2a5f"
+  },
+  "preservation": {
+    "accepted_source_differences": [],
+    "critical_source_files": 47,
+    "critical_source_hash": "3195122f1eac957609ec71930b67146a23c02115acba8b32e983921a899cb4ea",
+    "critical_source_hashes": {
+      ".env.example": "a9e65067ab4e2aa5e7fa2b40888d1472b9bf3825069c6087f5347232c2d46a55",
+      "app/(es)/dashboard/page.tsx": "52fb6a294696c7fa5490debaa3c162e62f4253a5f1e4ca38b6637a3138c1bf21",
+      "app/(es)/internal/regime-v2/page.tsx": "8b384ba8f0df24e9ffdefd0bff0ec2fef2049791e718d72ce87e38a6fe2be6c0",
+      "app/en/internal/regime-v2/page.tsx": "55a267714f6a71421927d84ded97d4ed478571b274ca612c041967018508a1b1",
+      "components/dashboard/DashboardRegimeV1.tsx": "92d7ef8bc01d4725d740ddea73cf83086743a93eb5d8271aba8872c83b0982cc",
+      "components/dashboard/RegimeV2Disclosure.tsx": "120e7dff5f4f0fe787268be436fdae9f4caf7239b7d6a58d480c7516dc652014",
+      "components/dashboard/RegimeV2Preview.tsx": "37dd9680ee7318c42fe0e22390f53fda59b8b9dbb0359fbdf1c5c3ce30908627",
+      "components/dashboard/RegimeV2Surface.tsx": "add309968305efc955c03dbf0ee3eda8dbfc04418c7bf30fbf7e40bf21c50487",
+      "components/dashboard/regime-v2.module.css": "8a0811d1e0f15d7db26397a5ee0cfe64ca50ff687479816ecb4903294e90ce09",
+      "lib/dashboard/adapters/vix-term-structure.ts": "16a048d247eb124f190fbfb8a356f1cc4f0f0a1fa27af63c702a96ffe2fbac05",
+      "lib/dashboard/get-dashboard-data.ts": "ecb2df82c5e185b7d22b4be16f7b3c22b045f736c72a3624d0fb15dfd9456740",
+      "lib/dashboard/get-home-dashboard-preview-data.ts": "117b9e2fd3d0acbbb181c3705d6739a8e3bcaebde05742804a761785a9f9b3ba",
+      "lib/dashboard/regime-v2-presentation.test.ts": "e1859c119f0ed8ae842af930c9af2cf574479c1843cfc29179d05842973013e1",
+      "lib/dashboard/regime-v2-presentation.ts": "a3ea4c767b46bc51f20be07a06b0a4a91457607f9221c0cfd80dffbfa4a73f53",
+      "lib/dashboard/regime-v2-preview.test.mjs": "6a22ed85c34d82c90e962c6ff285e2a38ca6e77189a77e033a2c549b3fcbd04d",
+      "lib/dashboard/regime-v2-render.test.mjs": "2a0e24fd385357da35465b3f6ef0b25cc5b2e99f57b1c23fea6615cafff2c678",
+      "lib/regime-engine-v2/boundary.ts": "ffc2026243a1fb9ba4f28a6ffebfdf822d8576e666e0a5572528d6b0d94a9661",
+      "lib/regime-engine-v2/capture.ts": "e0a2c38710f988843cc5a804cdbb9adbc65f97e7074fcdd0afe412637e6bb813",
+      "lib/regime-engine-v2/contract.ts": "2df8e1f2be112aef642ecdea53cc479777719d863a3451c53c1e1cbb8c90b563",
+      "lib/regime-engine-v2/core.ts": "5cdd57bd05403f38271946fb39fa59e479f25fcf60c35fb09c2941856e6010a1",
+      "lib/regime-engine-v2/engine.test.ts": "d1d1a5632179d0f7f3f807805ce4b4151fd7b69f0f2c6ababa99fda266df22eb",
+      "lib/regime-engine-v2/engine.ts": "f73691bbf9e2821645f048124266320c6bb4daea81b9b31a70a428dee2f0a39a",
+      "lib/regime-engine-v2/features.ts": "65e81d8d5446d92e8c28601d0eed23627264265566c8f86c015a7f872f9d4275",
+      "lib/regime-engine-v2/math.ts": "82af814a436b6cd5877f34b93fef7535827f355f7bf9225d70e8349c15fa9138",
+      "lib/regime-engine-v2/normalize.ts": "da2963f02e32ed2a01f317992e2259c6bc4a5abd972c433c3d9974b5cc9ac037",
+      "lib/regime-engine-v2/operations/dashboard-shadow.test.ts": "45ef6cffea6040ef8fe8c70473873f2351ab29e46b084460264bd0c3032e4e97",
+      "lib/regime-engine-v2/operations/dashboard-shadow.ts": "10819d5cfc7f737f148da8e56d6cf89ef32c4623342d2495bc384c66a99b06a4",
+      "lib/regime-engine-v2/operations/normalizer-preservation.test.mjs": "b592e0084f433c3ff3756bc2ce574b566027f281ea34aef14f8122c5788f2b61",
+      "lib/regime-engine-v2/operations/pipeline-capture.ts": "988fd161c688043be58d4a466e959809beeb4ba0c2878c86d5afade3e4ded3b4",
+      "lib/regime-engine-v2/operations/public-preservation.test.ts": "fb3731a8d8b216b98636e1b6764c7ba15ec6678f77a9c0197c39a8ecb48cb580",
+      "lib/regime-engine-v2/operations/snapshot.test.ts": "526b5c024976fd95c23eae74bf038516cf804ad55ace6040e238727185c9aa20",
+      "lib/regime-engine-v2/operations/snapshot.ts": "9e88b4f317e45d0930f55a9a1dc1140cf14da45338240c929cf1c67a8fde5b05",
+      "lib/regime-engine-v2/operations/source-input.test.ts": "b55514744a93adb9e6dbe50cb29a98d5fd6f4fea158f0244721c71674a7c6714",
+      "lib/regime-engine-v2/operations/source-input.ts": "093a41e1aa6dda588b86f65286b451893e0418fffb4d88b0f27d58d1545259ab",
+      "lib/regime-engine-v2/shadow.ts": "2bb904315c6292390956efb9d89e69af2467d23863e3f713fcb8362ec89accce",
+      "lib/regime-engine-v2/temporal.ts": "4ec57a14f9ed658d0587aa6d2a9b9f42426c6b54022adf301cc65bf51a3495fb",
+      "lib/regime-engine-v2/types.ts": "1dcd4ce2f9ebd1763c9f1b28ce08bdcfd4f1ea9c8b92874b481731b1563e2aeb",
+      "scripts/build-statistical-levels.mjs": "de9da118da379ccb12618adee258364b730935da36055b9822ca201f869095dd",
+      "scripts/regime-v2-conformance.mts": "72a4e07ec6935eee95f75642e7bccfa5b95e3f2387583b24d2abfea548e65ba4",
+      "scripts/regime-v2-design-fixtures.mts": "e8f60059586dc55f294796ddef59084c4b17d3b643cc45c3d84889f27bc68d9b",
+      "scripts/regime-v2-design-fixtures.test.ts": "aa0564c02ff0323ae9cc1a4e1ce1d22e2ef6c290c3f59cf737cc726d2fcaf6cc",
+      "scripts/regime-v2-design-render.mjs": "e9bc9e4ea50a899cff1b70896ded1ac83d3d006654828eb9898c8e64bab50fb1",
+      "scripts/regime-v2-observe.mts": "143542e05f10c717cd2628cdb330de01c3b9e3f21961f52c1ee0b7262dbadcff",
+      "scripts/regime-v2-prepare-bundle.mts": "a5591688b042c20e07fa4a9a33b80be4005925c6c769ea523628a585b5884543",
+      "scripts/regime-v2-replay.mts": "42f6fc5197252d7a81565720f117cec4f8fb6939d4b1db5c26c1d1eed6ea3016",
+      "scripts/regime-v2-shadow.mts": "0c13eed54ddd624d6e7568bf125a34ebd54bf74c9ac13f605341190a04d0ad0e",
+      "scripts/trends-test-register.mjs": "d4c01f7e587436e5738ed7fdacc9fcdc4b3dd67bea378b6c2bb41864f7c56059"
+    },
+    "prior_stage_files_observed": 532,
+    "prior_stage_hash_before": "cbab512d628b43ea1bc9106a26cd4b778f7df5c1ff09fc411b31b145a137bd8c",
+    "prior_stage_hash_after": "cbab512d628b43ea1bc9106a26cd4b778f7df5c1ff09fc411b31b145a137bd8c"
+  },
+  "next_versions": {
+    "declared": "16.3.1",
+    "locked": "16.3.1",
+    "installed": "16.3.1"
+  },
+  "lint": {
+    "errors": 0,
+    "warnings": 18,
+    "new_warnings": 0,
+    "new_warning_details": [],
+    "moved_existing_warnings": [
+      {
+        "path": "scripts/build-statistical-levels.mjs",
+        "rule": "@typescript-eslint/no-unused-vars",
+        "message": "'key' is assigned a value but never used.",
+        "unchanged_source_fragment": "for (const [key, value] of Object.entries(config.movingAverages)) {",
+        "parent_positions": [
+          {
+            "line": 959,
+            "column": 15
+          }
+        ],
+        "candidate_position": {
+          "line": 975,
+          "column": 15
+        }
+      },
+      {
+        "path": "scripts/build-statistical-levels.mjs",
+        "rule": "@typescript-eslint/no-unused-vars",
+        "message": "'yahooSymbol' is assigned a value but never used.",
+        "unchanged_source_fragment": "const { yahooSymbol, ...catalogAsset } = asset;",
+        "parent_positions": [
+          {
+            "line": 1062,
+            "column": 11
+          }
+        ],
+        "candidate_position": {
+          "line": 1078,
+          "column": 11
+        }
+      }
+    ],
+    "baseline_warnings": 18,
+    "baseline_lint_file": "/Users/quantlab/Developer/web/Luiguiherrera-web/docs/regime-engine-v2/release-candidate/parent-head-lint.json",
+    "baseline_lint_sha256": "de5f2e7a7d15693be950c88425f3f9c2deb00c7a56a477a9aa02749156f83ed1",
+    "baseline_root": "/private/tmp/regime-v2-release-parent-9a161_by",
+    "note": "Warning identity is checkout-relative path, rule, message and exact trimmed source line, with multiplicity. Unchanged statements displaced by inserted code remain existing warnings; original/candidate positions are retained."
+  },
+  "PUBLIC_DEFAULT": "V1",
+  "V2_SHADOW_DEFAULT": "OFF",
+  "PUBLIC_V2_FIXTURE_ROUTE": "NOT_EXPOSED",
+  "production_http": {
+    "passed": 10,
+    "total": 10,
+    "preview_404": 8,
+    "public_V1_200": 2,
+    "server": "127.0.0.1:3107",
+    "server_stopped": true,
+    "stop_signal": "SIGINT",
+    "stop_exit_code": 130,
+    "routes": [
+      {
+        "path": "/internal/regime-v2",
+        "http_status": 404,
+        "expected_http_status": 404,
+        "elapsed_ms": 52.114416999999996,
+        "body_bytes": 8956,
+        "body_sha256": "4a521ac12124a87677af004057be321e511007a51c9917072b9c3f505af9a279",
+        "preview_marker_absent": true,
+        "v2_primary_surface_absent": true,
+        "fixture_banner_absent": true,
+        "design_test_marker_absent": true,
+        "passed": true
+      },
+      {
+        "path": "/internal/regime-v2?preview=v1",
+        "http_status": 404,
+        "expected_http_status": 404,
+        "elapsed_ms": 6.5033750000000055,
+        "body_bytes": 9007,
+        "body_sha256": "107a2c42118d99031b63bed91b622e35486272978bcf38a5dfb3ef28aa6dd980",
+        "preview_marker_absent": true,
+        "v2_primary_surface_absent": true,
+        "fixture_banner_absent": true,
+        "design_test_marker_absent": true,
+        "passed": true
+      },
+      {
+        "path": "/internal/regime-v2?preview=v2&fixture=broad-complete",
+        "http_status": 404,
+        "expected_http_status": 404,
+        "elapsed_ms": 6.594917000000006,
+        "body_bytes": 9115,
+        "body_sha256": "95d3d94f87d20f1a08591eee93ee846033ce457306c6cd6d1b48ea286346c1cb",
+        "preview_marker_absent": true,
+        "v2_primary_surface_absent": true,
+        "fixture_banner_absent": true,
+        "design_test_marker_absent": true,
+        "passed": true
+      },
+      {
+        "path": "/internal/regime-v2?preview=v2&fixture=stress-absolute",
+        "http_status": 404,
+        "expected_http_status": 404,
+        "elapsed_ms": 6.86912499999999,
+        "body_bytes": 9118,
+        "body_sha256": "04472f8097c711ebcc591b87a47409f998e885eab9e51def51479d40d4f71470",
+        "preview_marker_absent": true,
+        "v2_primary_surface_absent": true,
+        "fixture_banner_absent": true,
+        "design_test_marker_absent": true,
+        "passed": true
+      },
+      {
+        "path": "/en/internal/regime-v2",
+        "http_status": 404,
+        "expected_http_status": 404,
+        "elapsed_ms": 4.850207999999995,
+        "body_bytes": 7947,
+        "body_sha256": "773499d6ebb21cfaf6e508cabe45e361e32df462481157ce274a059ff3292658",
+        "preview_marker_absent": true,
+        "v2_primary_surface_absent": true,
+        "fixture_banner_absent": true,
+        "design_test_marker_absent": true,
+        "passed": true
+      },
+      {
+        "path": "/en/internal/regime-v2?preview=v1",
+        "http_status": 404,
+        "expected_http_status": 404,
+        "elapsed_ms": 3.365541999999999,
+        "body_bytes": 7998,
+        "body_sha256": "f634e925f4460630c5dc87996a00ee0b0256a300f7b4dfeb873912544cc84094",
+        "preview_marker_absent": true,
+        "v2_primary_surface_absent": true,
+        "fixture_banner_absent": true,
+        "design_test_marker_absent": true,
+        "passed": true
+      },
+      {
+        "path": "/en/internal/regime-v2?preview=v2&fixture=broad-complete",
+        "http_status": 404,
+        "expected_http_status": 404,
+        "elapsed_ms": 3.404958999999999,
+        "body_bytes": 8093,
+        "body_sha256": "f33827b72ca916bd70568c0769d3f96b64ce904330a3c3fd0a7ba8814263b5a1",
+        "preview_marker_absent": true,
+        "v2_primary_surface_absent": true,
+        "fixture_banner_absent": true,
+        "design_test_marker_absent": true,
+        "passed": true
+      },
+      {
+        "path": "/en/internal/regime-v2?preview=v2&fixture=stress-absolute",
+        "http_status": 404,
+        "expected_http_status": 404,
+        "elapsed_ms": 2.625374999999999,
+        "body_bytes": 8096,
+        "body_sha256": "092d04271535d0b96121c205a55bba9784ac6af8cb808b8b9d6ea9d0e2003c2f",
+        "preview_marker_absent": true,
+        "v2_primary_surface_absent": true,
+        "fixture_banner_absent": true,
+        "design_test_marker_absent": true,
+        "passed": true
+      },
+      {
+        "path": "/dashboard",
+        "http_status": 200,
+        "expected_http_status": 200,
+        "elapsed_ms": 3.9595000000000184,
+        "body_bytes": 168947,
+        "body_sha256": "42396c701d63c7cf2f09b36f724d51292d64cf548d4e91223604818968847938",
+        "preview_marker_absent": true,
+        "v2_primary_surface_absent": true,
+        "fixture_banner_absent": true,
+        "design_test_marker_absent": true,
+        "V1_score_label_present": true,
+        "V1_confidence_label_present": true,
+        "passed": true
+      },
+      {
+        "path": "/en/dashboard",
+        "http_status": 200,
+        "expected_http_status": 200,
+        "elapsed_ms": 2.7606669999999944,
+        "body_bytes": 166868,
+        "body_sha256": "47c5cc4c5335d22a95648aac82265595211767cf5302bfaa35b0024d79a59044",
+        "preview_marker_absent": true,
+        "v2_primary_surface_absent": true,
+        "fixture_banner_absent": true,
+        "design_test_marker_absent": true,
+        "V1_score_label_present": true,
+        "V1_confidence_label_present": true,
+        "passed": true
+      }
+    ]
+  },
+  "known_release_blockers": {
+    "LIVE_COMPLETE_V2_CAPTURE": "NO",
+    "OFFICIAL_CALENDAR_CONFIGURED": "NO",
+    "SHADOW_ACTIVE": "NO",
+    "HISTORICAL_REPLAY_CLASS": "R2",
+    "POINT_IN_TIME_OOS_CLAIM": "NO"
+  },
+  "verification_setup_finding": {
+    "path": "docs/regime-engine-v2/release-candidate/verification-environment-finding.json",
+    "sha256": "b8296d8f44dcb6614ed47a8d7ed614306369938b8385a7961522796e5583961d"
+  },
+  "retained_local_evidence": {
+    "policy": "Detailed logs and generated conformance outputs are retained locally and excluded from Git; this versioned summary preserves command outcomes, counts, hashes, failures and repairs.",
+    "artifacts": [
+      {
+        "path": "docs/regime-engine-v2/release-candidate/local/precommit-candidate/verification.json",
+        "sha256": "5cf7fe5f5d7a733d00b646b4852f3dca3ad20216d729baa12c872bf31f19ff12"
+      },
+      {
+        "path": "docs/regime-engine-v2/release-candidate/local/precommit-candidate/production-preview-guard.json",
+        "sha256": "775dad94bd88d597e3c9fd76e1774e2ba2b13112adba8b2ba452da3a19f586ee"
+      },
+      {
+        "path": "docs/regime-engine-v2/release-candidate/precommit-worktree/verification.json",
+        "sha256": "2d44182f2d196c1e5c67f2157db9f3a6798c2ec9fbda9164d58a90a34704d97d"
+      }
+    ],
+    "commands": [
+      {
+        "name": "conformance",
+        "exit_code": 0,
+        "log_sha256": "0ae86699a5a32f7d58bf3e604400cf875fd04900d6e5cf404b7a4be2a379cf06"
+      },
+      {
+        "name": "sweeper-attacks",
+        "exit_code": 0,
+        "log_sha256": "d3c1a19321c4efaafe49ba41263b371c242e3ab59898fbe9a9e778c96712e3cf"
+      },
+      {
+        "name": "baseline-node-tests",
+        "exit_code": 1,
+        "log_sha256": "3dbb8247a266909a6a6db8500085a28ed8f1637848d4fe57309bdf541be38101",
+        "superseded_by": "baseline-node-tests-retry-20260908T211310Z"
+      },
+      {
+        "name": "operations-tests",
+        "exit_code": 0,
+        "log_sha256": "0bf43a5805c3e2fa1e2f4671be78639dd53a3537e1b09ea5f2403746a29cc083"
+      },
+      {
+        "name": "designer-tests",
+        "exit_code": 0,
+        "log_sha256": "ecceef531c793ed4b7603ed4ca8c80c31996ae5a19f889c93674cb831aeaddc0"
+      },
+      {
+        "name": "designer-fixtures-check",
+        "exit_code": 0,
+        "log_sha256": "f3f3f46fba405195f28a22d1348378d4bcd4750da2a4483a365e307d1ff6d78e"
+      },
+      {
+        "name": "offline-challenger-tests",
+        "exit_code": 0,
+        "log_sha256": "425e328435cad9bc43584cfe4909d34baa058d18deb64d8d70dda040e5a68f0f"
+      },
+      {
+        "name": "reports-validate",
+        "exit_code": 0,
+        "log_sha256": "17a8278ec97176ddc182bfa8257e3eed789000b7f6428e57c0d238786eff1136"
+      },
+      {
+        "name": "reports-check",
+        "exit_code": 0,
+        "log_sha256": "b81d3c1a89f1730de7441ac54fa6fb19dcba8f4f9bfedee63a2abb49315cc7ab"
+      },
+      {
+        "name": "editorial",
+        "exit_code": 0,
+        "log_sha256": "7d4f85ccc8a0544b81b0d60fac223b80184e1bd1faaa7822e4bb1b5a2963524f"
+      },
+      {
+        "name": "typecheck",
+        "exit_code": 0,
+        "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "name": "lint",
+        "exit_code": 0,
+        "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "superseded_by": "lint-retry-20260908T211310Z"
+      },
+      {
+        "name": "build",
+        "exit_code": 1,
+        "log_sha256": "77eb3e5d71236e77a32cb764bd70fef77c83c22778e2328363f90d3dc37b8325",
+        "superseded_by": "build-retry-20260908T211310Z"
+      },
+      {
+        "name": "typecheck-after-build",
+        "exit_code": 0,
+        "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "superseded_by": "typecheck-after-build-retry-20260908T211310Z"
+      },
+      {
+        "name": "baseline-node-tests-retry-20260908T211310Z",
+        "exit_code": 0,
+        "log_sha256": "a92aa39edd826949e7c2cb16b70bd12515bd60ac536dbb275af7c79b8c43b962"
+      },
+      {
+        "name": "lint-retry-20260908T211310Z",
+        "exit_code": 0,
+        "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "name": "build-retry-20260908T211310Z",
+        "exit_code": 0,
+        "log_sha256": "42da22b8834d92474d8541eeb59f8be0064cab5d77368bdcdeb2fd26535d513a"
+      },
+      {
+        "name": "typecheck-after-build-retry-20260908T211310Z",
+        "exit_code": 0,
+        "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    ]
+  },
+  "portable_runner": {
+    "path": "docs/regime-engine-v2/release-candidate/run-verification.py",
+    "sha256": "27dfa25811fd63f853739adf4fd34782f4ad4fc57ca5ae216c8c6ee8b6381de6",
+    "snapshot_initial_runner_sha256": "ae566675cb14a2e184fb4231c9dd617ac48c56e21630293b6448c6de49bb0317",
+    "changed_only_to_repair_verification_accounting": true
+  },
+  "PUSH_PERFORMED": "NO",
+  "DEPLOYMENT_PERFORMED": "NO",
+  "PRODUCTION_CUTOVER": "NO",
+  "SHADOW_ACTIVATED": "NO",
+  "UNRESOLVED_RELEASE_FINDINGS": []
+}

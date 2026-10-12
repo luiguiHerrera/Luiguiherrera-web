@@ -1,0 +1,27 @@
+/** Static/spec integrity checks; this file does not produce expected engine decisions. */
+import assert from 'node:assert/strict';
+import {readFileSync,writeFileSync} from 'node:fs';
+import {gunzipSync} from 'node:zlib';
+import {createHash} from 'node:crypto';
+import {C03,CONTRACT_HASHES,DECISION_TABLE,GROUPS,TICKERS,INITIAL_OPTIONALS,REGISTRY} from '../../../lib/regime-engine-v2/contract.ts';
+import {evaluateRegime} from '../../../lib/regime-engine-v2/engine.ts';
+import {normalizeMonthlyCatalog} from '../../../lib/regime-engine-v2/normalize.ts';
+const dir=new URL('./',import.meta.url),p8=new URL('../p8/',dir),read=n=>JSON.parse(readFileSync(new URL(n,p8))),sha=b=>createHash('sha256').update(b).digest('hex');
+const frozen=read('artifact-manifest.json');for(const [p,h] of Object.entries(frozen.files))assert.equal(sha(readFileSync(new URL(p,p8))),h,p);
+for(const [p,h] of Object.entries(CONTRACT_HASHES))assert.equal(sha(readFileSync(new URL(p,p8))),h,p);
+assert.deepEqual(C03,read('parameter-manifest.json').scalar_thresholds);
+const table=JSON.parse(readFileSync(new URL('../decision-table.json',dir)));assert.deepEqual(DECISION_TABLE,table);
+const protocol=read('protocol-freeze.json');assert.equal(sha(readFileSync(new URL('selection-protocol.json',p8))),protocol.protocol_sha256);assert.equal(sha(readFileSync(new URL('../decision-table.json',dir))),protocol.unmodified_decision_table_sha256);
+for(const value of [C03,CONTRACT_HASHES,DECISION_TABLE,GROUPS,TICKERS,INITIAL_OPTIONALS,REGISTRY,...Object.values(GROUPS)])assert.ok(Object.isFrozen(value));
+assert.throws(()=>TICKERS.splice(0,1),TypeError);assert.throws(()=>GROUPS.growth.push('SPY'),TypeError);assert.throws(()=>INITIAL_OPTIONALS.push('other'),TypeError);
+const rawCatalog=JSON.parse(gunzipSync(readFileSync(new URL('evidence/cfe-contract-index.json.gz',p8))));const entries=Object.values(rawCatalog).flat();const selected=read('evidence/selected-contracts.json');for(const c of selected)assert.ok(entries.some(e=>JSON.stringify(e)===JSON.stringify(c)),'selected catalog row is exact source record');
+const rawIdentities=normalizeMonthlyCatalog(rawCatalog);for(const c of normalizeMonthlyCatalog(selected))assert.ok(rawIdentities.some(r=>r.symbol===c.symbol&&r.expirationDate===c.expirationDate));
+let conceptual=0;const selectedRules={};for(const p of ['FAVORABLE','MIXED','ADVERSE','UNAVAILABLE'])for(const l of ['FAVORABLE','MIXED','ADVERSE','UNAVAILABLE'])for(const v of ['BENIGN','WATCH','ADVERSE','STRESS','UNAVAILABLE'])for(const c of ['LOW','RISING','HIGH','UNAVAILABLE']){
+ const a=p==='UNAVAILABLE'||l==='UNAVAILABLE'?'UNAVAILABLE':p==='FAVORABLE'&&l==='FAVORABLE'?'FAVORABLE':(p==='ADVERSE'||l==='ADVERSE')&&p!=='FAVORABLE'&&l!=='FAVORABLE'?'ADVERSE':'MIXED';
+ const states={participation:p,leadership:l,volatility:v,fragility:c,equity:a};const rules=table.rules.filter(r=>Object.entries(r.when).every(([k,allowed])=>k==='any_unavailable'?allowed.some(k=>states[k]==='UNAVAILABLE'):allowed.includes(states[k])));assert.ok(rules.length);const r=rules[0];assert.ok(r.regime===null||table.regime_vocabulary.includes(r.regime));selectedRules[r.id]=(selectedRules[r.id]??0)+1;conceptual++;
+}
+assert.equal(conceptual,320);assert.deepEqual(Object.keys(selectedRules).sort(),table.rules.map(r=>r.id).sort());
+const attack=JSON.parse(readFileSync(new URL('adversarial-results.json',dir)));assert.equal(attack.status,'PASS');const reached=Object.fromEntries(['participation','leadership','equity','volatility','fragility'].map(k=>[k,[...new Set(attack.rawCrossedSpace.map(r=>r.states[k]))].sort()]));
+const hist=JSON.parse(readFileSync(new URL('historical-r2-output.json',dir)));const witnesses={'2019-01-02':'DEFENSIVE','2019-01-04':'TRANSITION','2019-01-30':'RISK_ON_BROAD','2019-02-25':'RISK_ON_SELECTIVE','2020-02-25':'STRESS'};for(const [d,r]of Object.entries(witnesses)){assert.equal(hist.find(h=>h.date===d).regime,r);assert.equal(hist.find(h=>h.date===d).replayClass,'R2');}
+const sample=JSON.parse(readFileSync(new URL('shadow-input-r2.json',dir)));const performanceResults=[];for(const n of [500,1000,2000]){const x=structuredClone(sample),end=Date.parse('2026-09-04T00:00:00Z'),dates=Array.from({length:n},(_,i)=>new Date(end-(n-i-1)*86400000).toISOString().slice(0,10));x.calendars.btc={...x.calendars.equity,coverageStart:dates[0],sessions:dates.map(session=>({session,closedAt:session+'T20:00:00Z'}))};x.btc={...x.vix,sourceId:'BTC_NATIVE',seriesType:'REPORTED_ETF_NET_FLOW',currency:'USD_MILLIONS',rows:dates.map(observationDate=>({observationDate,total:1}))};const start=performance.now();const r=evaluateRegime(x);const streak=r.evidence.find(e=>e.featureId==='btc_streak').value;assert.deepEqual(streak,{sign:1,length:n,censored:true});performanceResults.push({n,elapsedMs:performance.now()-start,streak});}
+const report={status:'PASS',p8FilesVerified:Object.keys(frozen.files).length,p8FilesChanged:0,selectedCatalogRowsVerified:selected.length,conceptualStates:conceptual,ruleCoverage:selectedRules,rawCrossedStates:attack.rawCrossedSpace.length,pillarStatesReached:reached,historicalWitnesses:witnesses,contractsRuntimeFrozen:true,performanceResults,performanceScope:'Full engine includes structural input validation and sorting; BTC streak itself now indexes once and traverses once. Timings are local observations, not a benchmark claim.'};writeFileSync(new URL('contract-audit.json',dir),JSON.stringify(report,null,2)+'\n');console.log(JSON.stringify(report,null,2));

@@ -1,0 +1,32 @@
+[
+  {
+    "name": "typecheck-before-build",
+    "command": [
+      "npx",
+      "tsc",
+      "--noEmit",
+      "--incremental",
+      "false"
+    ],
+    "exitCode": 0,
+    "elapsedSeconds": 3.207934792,
+    "log": "typecheck-before-build.log",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "name": "lint",
+    "command": [
+      "npx",
+      "eslint",
+      ".",
+      "--format",
+      "json",
+      "--output-file",
+      "docs/regime-engine-v2/maintainer/lint.json"
+    ],
+    "exitCode": 0,
+    "elapsedSeconds": 5.783011583,
+    "log": "lint.log",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  }
+]

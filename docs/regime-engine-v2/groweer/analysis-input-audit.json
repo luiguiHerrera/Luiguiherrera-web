@@ -1,0 +1,13 @@
+{
+  "status": "PASS",
+  "sessions": 1930,
+  "rawSourcesVerified": 122,
+  "featuresMatchP8": 1930,
+  "publicOutputsAndInputHashesMatchSweeper": 1930,
+  "canonicalEngineModified": false,
+  "replayClass": "R2",
+  "pointInTimeOos": false,
+  "analysisUncompressedSha256": "358586278e3521098cf48bd753de53f4539fa972bb1d429911dafd4feeaa3e64",
+  "analysisFileSha256": "1e6d25319a90b89ac762434fb5e92f650f4dc0c10ab719c06734bb295c1c61bc",
+  "protocolSha256": "82a816ff496ed0a581e6b4ab45c571a7903dbd8f1ba921f04e7e088af2d7a583"
+}

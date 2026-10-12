@@ -2,7 +2,7 @@
 // node scripts/qa-investor-entry.mjs http://127.0.0.1:3107 9337 /tmp/investor-evidence
 import assert from 'node:assert/strict';
 import fs from 'node:fs/promises';
-import path from 'node:path';
+import path from 'node:path'; import { waitForAssetTransition } from './statistical-levels-release/scripts/qa/asset-transition-readiness.mjs';
 
 const [base = 'http://127.0.0.1:3118', port = '9348', out = '/private/tmp/statistical-levels-redesign-evidence'] = process.argv.slice(2);
 await fs.mkdir(out, { recursive: true });
@@ -176,7 +176,7 @@ try{
   await c.click('[data-window="3Y"]');await sleep(650);await metricCheck(c,'SPY','weekly','3Y');
   assert.equal(await c.evaluate('new URLSearchParams(location.search).get("review")'),'1');
   await c.evaluate('history.back()');await sleep(650);await metricCheck(c,'SPY','weekly','5Y');
-  await open(c,'sl-asset-picker');await c.click('.sl-picker-group button[title="SPDR Gold Shares"]');await sleep(650);await metricCheck(c,'GLD','weekly','5Y');
+  await open(c,'sl-asset-picker');await c.click('.sl-picker-group button[title="SPDR Gold Shares"]');await waitForAssetTransition(c,{asset:'GLD',pickerTitle:'SPDR Gold Shares',frequency:'weekly',window:'5Y'});await metricCheck(c,'GLD','weekly','5Y');
   await open(c,'sl-options');await select(c,'#sl-options label:first-child select','daily');await sleep(650);await metricCheck(c,'GLD','daily','5Y');
   await select(c,'#sl-options label:nth-child(2) select','Full');await sleep(650);await metricCheck(c,'GLD','daily','Full');
   await open(c,'sl-quant');await open(c,'sl-assets');await audit(c,'navigation-preservation');

@@ -1,0 +1,1888 @@
+{
+  "scope": "G15-G16; existing capabilities and source-method audit only. No network datasets, new adapter, canonical source or feature integration.",
+  "canonical_C03": "UNCHANGED",
+  "CROSS_ASSET_CORE": "NONE",
+  "core_extension_evidence": "INDETERMINATE",
+  "snapshot_metadata": {
+    "generatedAt": "2026-08-15",
+    "snapshotGeneratedAt": "2026-08-15",
+    "source": "Datos públicos de mercado procesados en actualización estática · cálculos propios",
+    "sourceUrl": "https://stooq.com/"
+  },
+  "existing_provider_binding": "The manifest has a generic Stooq URL, but every inspected asset explicitly reports Yahoo fallback. Neither proves a row-level native price basis.",
+  "source_contract_gaps": [
+    "scripts/build-statistical-levels.mjs parseYahooChart uses adjusted[index] ?? close and normalizeRow uses adjustedClose ?? close; missing native adjustment can be silently replaced for this older independent product.",
+    "Saved compactSeries stores rounded closes and no raw Yahoo envelope, provider revision identity, currency proof or five-field temporal envelope.",
+    "Longer upstream periods and undated windowReturns summaries cannot reconstruct daily 2019-2026 observations. Weekly/monthly closes must not be expanded to daily.",
+    "Snapshot stops 2026-08-14; no forward-fill into the 15 later C03 sessions. These limitations do not alter or invalidate the separate accepted V2 native source contract."
+  ],
+  "inventory": [
+    {
+      "ticker": "HYG",
+      "path": "lib/statistical-levels/generated/assets/HYG.json",
+      "sha256": "c7203d9df30e3534511bbceb82124ecdc7a993e1dd7d696dffe4e9f2fc768eaa",
+      "status": "ok",
+      "source_note": "Datos públicos procesados vía Yahoo Finance fallback.",
+      "last_date": "2026-08-14",
+      "retained_series": {
+        "daily": {
+          "rows": 500,
+          "first": "2024-08-14",
+          "last": "2026-08-14",
+          "upstream_period_count_claim": 4866
+        },
+        "weekly": {
+          "rows": 520,
+          "first": "2016-09-02",
+          "last": "2026-08-14",
+          "upstream_period_count_claim": 1010
+        },
+        "monthly": {
+          "rows": 233,
+          "first": "2007-04-30",
+          "last": "2026-08-14",
+          "upstream_period_count_claim": 233
+        }
+      },
+      "same_date_c03_overlap": 500,
+      "missing_inside_daily_span_vs_p8_spy": [
+        "2026-07-21",
+        "2026-07-22"
+      ],
+      "not_in_p8_spy_calendar": [],
+      "baseline_sessions_after_snapshot": 15,
+      "precision": "Saved presentation closes rounded to two decimals; unavailable native raw price-basis proof."
+    },
+    {
+      "ticker": "LQD",
+      "path": "lib/statistical-levels/generated/assets/LQD.json",
+      "sha256": "23af459f03d9ff3323593a92960cc0695b6c1a454b91aa336fe9d215ca6e8cdc",
+      "status": "ok",
+      "source_note": "Datos públicos procesados vía Yahoo Finance fallback.",
+      "last_date": "2026-08-14",
+      "retained_series": {
+        "daily": {
+          "rows": 500,
+          "first": "2024-08-13",
+          "last": "2026-08-14",
+          "upstream_period_count_claim": 6047
+        },
+        "weekly": {
+          "rows": 520,
+          "first": "2016-09-02",
+          "last": "2026-08-14",
+          "upstream_period_count_claim": 1255
+        },
+        "monthly": {
+          "rows": 240,
+          "first": "2006-09-29",
+          "last": "2026-08-14",
+          "upstream_period_count_claim": 290
+        }
+      },
+      "same_date_c03_overlap": 500,
+      "missing_inside_daily_span_vs_p8_spy": [
+        "2026-07-21",
+        "2026-07-22",
+        "2026-07-31"
+      ],
+      "not_in_p8_spy_calendar": [],
+      "baseline_sessions_after_snapshot": 15,
+      "precision": "Saved presentation closes rounded to two decimals; unavailable native raw price-basis proof."
+    },
+    {
+      "ticker": "TLT",
+      "path": "lib/statistical-levels/generated/assets/TLT.json",
+      "sha256": "14a9d5a26e036a481496756153faa8ea61044318e8e7d96033f5ba4398df47b4",
+      "status": "ok",
+      "source_note": "Datos públicos procesados vía Yahoo Finance fallback.",
+      "last_date": "2026-08-14",
+      "retained_series": {
+        "daily": {
+          "rows": 500,
+          "first": "2024-08-16",
+          "last": "2026-08-14",
+          "upstream_period_count_claim": 6050
+        },
+        "weekly": {
+          "rows": 520,
+          "first": "2016-09-02",
+          "last": "2026-08-14",
+          "upstream_period_count_claim": 1255
+        },
+        "monthly": {
+          "rows": 240,
+          "first": "2006-09-29",
+          "last": "2026-08-14",
+          "upstream_period_count_claim": 290
+        }
+      },
+      "same_date_c03_overlap": 500,
+      "missing_inside_daily_span_vs_p8_spy": [],
+      "not_in_p8_spy_calendar": [],
+      "baseline_sessions_after_snapshot": 15,
+      "precision": "Saved presentation closes rounded to two decimals; unavailable native raw price-basis proof."
+    },
+    {
+      "ticker": "IEF",
+      "path": "lib/statistical-levels/generated/assets/IEF.json",
+      "sha256": "8bbb135af32ee94fb332c7847bf62a1a89bbcaed4e7b5a5ee3840d6c62557925",
+      "status": "ok",
+      "source_note": "Datos públicos procesados vía Yahoo Finance fallback.",
+      "last_date": "2026-08-14",
+      "retained_series": {
+        "daily": {
+          "rows": 500,
+          "first": "2024-08-15",
+          "last": "2026-08-14",
+          "upstream_period_count_claim": 6049
+        },
+        "weekly": {
+          "rows": 520,
+          "first": "2016-09-02",
+          "last": "2026-08-14",
+          "upstream_period_count_claim": 1255
+        },
+        "monthly": {
+          "rows": 240,
+          "first": "2006-09-29",
+          "last": "2026-08-14",
+          "upstream_period_count_claim": 290
+        }
+      },
+      "same_date_c03_overlap": 500,
+      "missing_inside_daily_span_vs_p8_spy": [
+        "2026-07-22"
+      ],
+      "not_in_p8_spy_calendar": [],
+      "baseline_sessions_after_snapshot": 15,
+      "precision": "Saved presentation closes rounded to two decimals; unavailable native raw price-basis proof."
+    },
+    {
+      "ticker": "SHY",
+      "path": "lib/statistical-levels/generated/assets/SHY.json",
+      "sha256": "1c1f15e10eda37d5b6802aeab261eaddc6788c84d273f218a8107990b9346049",
+      "status": "ok",
+      "source_note": "Datos públicos procesados vía Yahoo Finance fallback.",
+      "last_date": "2026-08-14",
+      "retained_series": {
+        "daily": {
+          "rows": 500,
+          "first": "2024-08-14",
+          "last": "2026-08-14",
+          "upstream_period_count_claim": 6048
+        },
+        "weekly": {
+          "rows": 520,
+          "first": "2016-09-02",
+          "last": "2026-08-14",
+          "upstream_period_count_claim": 1255
+        },
+        "monthly": {
+          "rows": 240,
+          "first": "2006-09-29",
+          "last": "2026-08-14",
+          "upstream_period_count_claim": 290
+        }
+      },
+      "same_date_c03_overlap": 500,
+      "missing_inside_daily_span_vs_p8_spy": [
+        "2026-07-21",
+        "2026-07-31"
+      ],
+      "not_in_p8_spy_calendar": [],
+      "baseline_sessions_after_snapshot": 15,
+      "precision": "Saved presentation closes rounded to two decimals; unavailable native raw price-basis proof."
+    },
+    {
+      "ticker": "UUP",
+      "path": "lib/statistical-levels/generated/assets/UUP.json",
+      "sha256": "7239687e72e1086d730fc34d4d9fedc0a90664c4652822cdffa3d618ce30ee32",
+      "status": "ok",
+      "source_note": "Datos públicos procesados vía Yahoo Finance fallback.",
+      "last_date": "2026-08-14",
+      "retained_series": {
+        "daily": {
+          "rows": 500,
+          "first": "2024-08-16",
+          "last": "2026-08-14",
+          "upstream_period_count_claim": 4896
+        },
+        "weekly": {
+          "rows": 520,
+          "first": "2016-09-02",
+          "last": "2026-08-14",
+          "upstream_period_count_claim": 1016
+        },
+        "monthly": {
+          "rows": 234,
+          "first": "2007-03-30",
+          "last": "2026-08-14",
+          "upstream_period_count_claim": 234
+        }
+      },
+      "same_date_c03_overlap": 500,
+      "missing_inside_daily_span_vs_p8_spy": [],
+      "not_in_p8_spy_calendar": [],
+      "baseline_sessions_after_snapshot": 15,
+      "precision": "Saved presentation closes rounded to two decimals; unavailable native raw price-basis proof."
+    },
+    {
+      "ticker": "USO",
+      "path": "lib/statistical-levels/generated/assets/USO.json",
+      "sha256": "1aaaf07c74987619e7a4dcbbb5a3639376d4d347b208fbcfd7c8922958a0d7a9",
+      "status": "ok",
+      "source_note": "Datos públicos procesados vía Yahoo Finance fallback.",
+      "last_date": "2026-08-14",
+      "retained_series": {
+        "daily": {
+          "rows": 500,
+          "first": "2024-08-16",
+          "last": "2026-08-14",
+          "upstream_period_count_claim": 5119
+        },
+        "weekly": {
+          "rows": 520,
+          "first": "2016-09-02",
+          "last": "2026-08-14",
+          "upstream_period_count_claim": 1062
+        },
+        "monthly": {
+          "rows": 240,
+          "first": "2006-09-29",
+          "last": "2026-08-14",
+          "upstream_period_count_claim": 245
+        }
+      },
+      "same_date_c03_overlap": 500,
+      "missing_inside_daily_span_vs_p8_spy": [],
+      "not_in_p8_spy_calendar": [],
+      "baseline_sessions_after_snapshot": 15,
+      "precision": "Saved presentation closes rounded to two decimals; unavailable native raw price-basis proof."
+    },
+    {
+      "ticker": "GLD",
+      "path": "lib/statistical-levels/generated/assets/GLD.json",
+      "sha256": "b456b2bc757d16655bdcaa5c16edb5c94b652b2a7ca7c7d372302d7b5db52984",
+      "status": "ok",
+      "source_note": "Datos públicos procesados vía Yahoo Finance fallback.",
+      "last_date": "2026-08-14",
+      "retained_series": {
+        "daily": {
+          "rows": 500,
+          "first": "2024-08-16",
+          "last": "2026-08-14",
+          "upstream_period_count_claim": 5468
+        },
+        "weekly": {
+          "rows": 520,
+          "first": "2016-09-02",
+          "last": "2026-08-14",
+          "upstream_period_count_claim": 1135
+        },
+        "monthly": {
+          "rows": 240,
+          "first": "2006-09-29",
+          "last": "2026-08-14",
+          "upstream_period_count_claim": 262
+        }
+      },
+      "same_date_c03_overlap": 500,
+      "missing_inside_daily_span_vs_p8_spy": [],
+      "not_in_p8_spy_calendar": [],
+      "baseline_sessions_after_snapshot": 15,
+      "precision": "Saved presentation closes rounded to two decimals; unavailable native raw price-basis proof."
+    },
+    {
+      "ticker": "SLV",
+      "path": "lib/statistical-levels/generated/assets/SLV.json",
+      "sha256": "28fb86d755173ed525f527bbf35a1864b3103979f3727dfe812d19853c28c82f",
+      "status": "ok",
+      "source_note": "Datos públicos procesados vía Yahoo Finance fallback.",
+      "last_date": "2026-08-14",
+      "retained_series": {
+        "daily": {
+          "rows": 500,
+          "first": "2024-08-16",
+          "last": "2026-08-14",
+          "upstream_period_count_claim": 5106
+        },
+        "weekly": {
+          "rows": 520,
+          "first": "2016-09-02",
+          "last": "2026-08-14",
+          "upstream_period_count_claim": 1060
+        },
+        "monthly": {
+          "rows": 240,
+          "first": "2006-09-29",
+          "last": "2026-08-14",
+          "upstream_period_count_claim": 245
+        }
+      },
+      "same_date_c03_overlap": 500,
+      "missing_inside_daily_span_vs_p8_spy": [],
+      "not_in_p8_spy_calendar": [],
+      "baseline_sessions_after_snapshot": 15,
+      "precision": "Saved presentation closes rounded to two decimals; unavailable native raw price-basis proof."
+    },
+    {
+      "ticker": "SPY",
+      "path": "lib/statistical-levels/generated/assets/SPY.json",
+      "sha256": "f4b6262ac82db91c280eb6d7997717b07df6ec88b70144eef25991f53056e2a6",
+      "status": "ok",
+      "source_note": "Datos públicos procesados vía Yahoo Finance fallback.",
+      "last_date": "2026-08-14",
+      "retained_series": {
+        "daily": {
+          "rows": 500,
+          "first": "2024-08-16",
+          "last": "2026-08-14",
+          "upstream_period_count_claim": 8443
+        },
+        "weekly": {
+          "rows": 520,
+          "first": "2016-09-02",
+          "last": "2026-08-14",
+          "upstream_period_count_claim": 1751
+        },
+        "monthly": {
+          "rows": 240,
+          "first": "2006-09-29",
+          "last": "2026-08-14",
+          "upstream_period_count_claim": 404
+        }
+      },
+      "same_date_c03_overlap": 500,
+      "missing_inside_daily_span_vs_p8_spy": [],
+      "not_in_p8_spy_calendar": [],
+      "baseline_sessions_after_snapshot": 15,
+      "precision": "Saved presentation closes rounded to two decimals; unavailable native raw price-basis proof."
+    }
+  ],
+  "candidates": [
+    {
+      "candidate_id": "CREDIT_ETF_PRICE_CONTEXT",
+      "family": "credit",
+      "symbols": [
+        "HYG",
+        "LQD"
+      ],
+      "source": {
+        "existing": "Statistical Levels retained Yahoo fallback snapshot",
+        "official_reference_ids": [
+          "HYG",
+          "LQD",
+          "YAHOO_TERMS"
+        ]
+      },
+      "historical_coverage": {
+        "local_retained_snapshots": [
+          {
+            "ticker": "HYG",
+            "path": "lib/statistical-levels/generated/assets/HYG.json",
+            "sha256": "c7203d9df30e3534511bbceb82124ecdc7a993e1dd7d696dffe4e9f2fc768eaa",
+            "status": "ok",
+            "source_note": "Datos públicos procesados vía Yahoo Finance fallback.",
+            "last_date": "2026-08-14",
+            "retained_series": {
+              "daily": {
+                "rows": 500,
+                "first": "2024-08-14",
+                "last": "2026-08-14",
+                "upstream_period_count_claim": 4866
+              },
+              "weekly": {
+                "rows": 520,
+                "first": "2016-09-02",
+                "last": "2026-08-14",
+                "upstream_period_count_claim": 1010
+              },
+              "monthly": {
+                "rows": 233,
+                "first": "2007-04-30",
+                "last": "2026-08-14",
+                "upstream_period_count_claim": 233
+              }
+            },
+            "same_date_c03_overlap": 500,
+            "missing_inside_daily_span_vs_p8_spy": [
+              "2026-07-21",
+              "2026-07-22"
+            ],
+            "not_in_p8_spy_calendar": [],
+            "baseline_sessions_after_snapshot": 15,
+            "precision": "Saved presentation closes rounded to two decimals; unavailable native raw price-basis proof."
+          },
+          {
+            "ticker": "LQD",
+            "path": "lib/statistical-levels/generated/assets/LQD.json",
+            "sha256": "23af459f03d9ff3323593a92960cc0695b6c1a454b91aa336fe9d215ca6e8cdc",
+            "status": "ok",
+            "source_note": "Datos públicos procesados vía Yahoo Finance fallback.",
+            "last_date": "2026-08-14",
+            "retained_series": {
+              "daily": {
+                "rows": 500,
+                "first": "2024-08-13",
+                "last": "2026-08-14",
+                "upstream_period_count_claim": 6047
+              },
+              "weekly": {
+                "rows": 520,
+                "first": "2016-09-02",
+                "last": "2026-08-14",
+                "upstream_period_count_claim": 1255
+              },
+              "monthly": {
+                "rows": 240,
+                "first": "2006-09-29",
+                "last": "2026-08-14",
+                "upstream_period_count_claim": 290
+              }
+            },
+            "same_date_c03_overlap": 500,
+            "missing_inside_daily_span_vs_p8_spy": [
+              "2026-07-21",
+              "2026-07-22",
+              "2026-07-31"
+            ],
+            "not_in_p8_spy_calendar": [],
+            "baseline_sessions_after_snapshot": 15,
+            "precision": "Saved presentation closes rounded to two decimals; unavailable native raw price-basis proof."
+          }
+        ],
+        "local_verified_native_raw_observations": 0,
+        "full_c03_1930_daily_conformance_possible": false,
+        "external_coverage": "Not acquired or claimed as local evidence."
+      },
+      "point_in_time_properties": {
+        "status": "UNBOUND",
+        "prospective_captures": 0,
+        "source_published_at": null,
+        "captured_at": null,
+        "available_at": null,
+        "note": "Snapshot generation date is not row publication or contemporaneous availability. External latest history does not supply a vintage guarantee."
+      },
+      "economic_meaning": "HY and IG fund-price context. Relative price is duration/credit/liquidity/fees/distribution exposure, not OAS.",
+      "dependency_with_existing_core": "Corporate credit has a distinct economic object but market stress overlaps the existing equity/VIX complex. Different tickers alone do not establish independence.",
+      "incremental_information": {
+        "classification": "INDETERMINATE",
+        "new_economic_object_possible": true,
+        "evidence": "See descriptive local return screen where available. Correlation differences do not establish incremental classification value or predictive superiority."
+      },
+      "maintenance_burden": "MEDIUM",
+      "new_obligations": [
+        "Versioned exact instrument and unit identity",
+        "Source permission and stable acquisition contract",
+        "Native price/spread proof and raw-byte retention",
+        "Release/availability calendar and no stale carry",
+        "Prospective dependent-family evaluation"
+      ],
+      "licensing_source_stability": "Source-specific rights and stable endpoints remain an adoption gate; consult referenced primary source notes. No access or redistribution rights inferred from being public.",
+      "potential_role_if_gates_pass": "DIAGNOSTIC",
+      "classification": "RESEARCH_ONLY",
+      "verdict": "PARK",
+      "canonical_integration": "NONE"
+    },
+    {
+      "candidate_id": "CREDIT_OAS",
+      "family": "credit",
+      "symbols": [],
+      "source": {
+        "existing": null,
+        "official_reference_ids": [
+          "FRED_ICE_HY_OAS",
+          "FRED_COPYRIGHT"
+        ]
+      },
+      "historical_coverage": {
+        "local_retained_snapshots": [],
+        "local_verified_native_raw_observations": 0,
+        "full_c03_1930_daily_conformance_possible": false,
+        "external_coverage": "FRED currently limits displayed OAS history to three years; no external observations acquired."
+      },
+      "point_in_time_properties": {
+        "status": "UNBOUND",
+        "prospective_captures": 0,
+        "source_published_at": null,
+        "captured_at": null,
+        "available_at": null,
+        "note": "Snapshot generation date is not row publication or contemporaneous availability. External latest history does not supply a vintage guarantee."
+      },
+      "economic_meaning": "An actual option-adjusted credit spread would be closer to compensation for corporate credit risk than ETF price ratios.",
+      "dependency_with_existing_core": "Potential new economic family; incremental context is unmeasured without a compatible history and point-in-time release contract.",
+      "incremental_information": {
+        "classification": "INDETERMINATE",
+        "new_economic_object_possible": true,
+        "evidence": "See descriptive local return screen where available. Correlation differences do not establish incremental classification value or predictive superiority."
+      },
+      "maintenance_burden": "HIGH",
+      "new_obligations": [
+        "Versioned exact instrument and unit identity",
+        "Source permission and stable acquisition contract",
+        "Native price/spread proof and raw-byte retention",
+        "Release/availability calendar and no stale carry",
+        "Prospective dependent-family evaluation"
+      ],
+      "licensing_source_stability": "Source-specific rights and stable endpoints remain an adoption gate; consult referenced primary source notes. No access or redistribution rights inferred from being public.",
+      "potential_role_if_gates_pass": "CORE_CANDIDATE",
+      "classification": "RESEARCH_ONLY",
+      "verdict": "PARK",
+      "canonical_integration": "NONE"
+    },
+    {
+      "candidate_id": "TREASURY_ETF_PRICE_CONTEXT",
+      "family": "rates",
+      "symbols": [
+        "TLT",
+        "IEF",
+        "SHY"
+      ],
+      "source": {
+        "existing": "Statistical Levels retained Yahoo fallback snapshot",
+        "official_reference_ids": [
+          "TLT",
+          "IEF",
+          "YAHOO_TERMS"
+        ]
+      },
+      "historical_coverage": {
+        "local_retained_snapshots": [
+          {
+            "ticker": "TLT",
+            "path": "lib/statistical-levels/generated/assets/TLT.json",
+            "sha256": "14a9d5a26e036a481496756153faa8ea61044318e8e7d96033f5ba4398df47b4",
+            "status": "ok",
+            "source_note": "Datos públicos procesados vía Yahoo Finance fallback.",
+            "last_date": "2026-08-14",
+            "retained_series": {
+              "daily": {
+                "rows": 500,
+                "first": "2024-08-16",
+                "last": "2026-08-14",
+                "upstream_period_count_claim": 6050
+              },
+              "weekly": {
+                "rows": 520,
+                "first": "2016-09-02",
+                "last": "2026-08-14",
+                "upstream_period_count_claim": 1255
+              },
+              "monthly": {
+                "rows": 240,
+                "first": "2006-09-29",
+                "last": "2026-08-14",
+                "upstream_period_count_claim": 290
+              }
+            },
+            "same_date_c03_overlap": 500,
+            "missing_inside_daily_span_vs_p8_spy": [],
+            "not_in_p8_spy_calendar": [],
+            "baseline_sessions_after_snapshot": 15,
+            "precision": "Saved presentation closes rounded to two decimals; unavailable native raw price-basis proof."
+          },
+          {
+            "ticker": "IEF",
+            "path": "lib/statistical-levels/generated/assets/IEF.json",
+            "sha256": "8bbb135af32ee94fb332c7847bf62a1a89bbcaed4e7b5a5ee3840d6c62557925",
+            "status": "ok",
+            "source_note": "Datos públicos procesados vía Yahoo Finance fallback.",
+            "last_date": "2026-08-14",
+            "retained_series": {
+              "daily": {
+                "rows": 500,
+                "first": "2024-08-15",
+                "last": "2026-08-14",
+                "upstream_period_count_claim": 6049
+              },
+              "weekly": {
+                "rows": 520,
+                "first": "2016-09-02",
+                "last": "2026-08-14",
+                "upstream_period_count_claim": 1255
+              },
+              "monthly": {
+                "rows": 240,
+                "first": "2006-09-29",
+                "last": "2026-08-14",
+                "upstream_period_count_claim": 290
+              }
+            },
+            "same_date_c03_overlap": 500,
+            "missing_inside_daily_span_vs_p8_spy": [
+              "2026-07-22"
+            ],
+            "not_in_p8_spy_calendar": [],
+            "baseline_sessions_after_snapshot": 15,
+            "precision": "Saved presentation closes rounded to two decimals; unavailable native raw price-basis proof."
+          },
+          {
+            "ticker": "SHY",
+            "path": "lib/statistical-levels/generated/assets/SHY.json",
+            "sha256": "1c1f15e10eda37d5b6802aeab261eaddc6788c84d273f218a8107990b9346049",
+            "status": "ok",
+            "source_note": "Datos públicos procesados vía Yahoo Finance fallback.",
+            "last_date": "2026-08-14",
+            "retained_series": {
+              "daily": {
+                "rows": 500,
+                "first": "2024-08-14",
+                "last": "2026-08-14",
+                "upstream_period_count_claim": 6048
+              },
+              "weekly": {
+                "rows": 520,
+                "first": "2016-09-02",
+                "last": "2026-08-14",
+                "upstream_period_count_claim": 1255
+              },
+              "monthly": {
+                "rows": 240,
+                "first": "2006-09-29",
+                "last": "2026-08-14",
+                "upstream_period_count_claim": 290
+              }
+            },
+            "same_date_c03_overlap": 500,
+            "missing_inside_daily_span_vs_p8_spy": [
+              "2026-07-21",
+              "2026-07-31"
+            ],
+            "not_in_p8_spy_calendar": [],
+            "baseline_sessions_after_snapshot": 15,
+            "precision": "Saved presentation closes rounded to two decimals; unavailable native raw price-basis proof."
+          }
+        ],
+        "local_verified_native_raw_observations": 0,
+        "full_c03_1930_daily_conformance_possible": false,
+        "external_coverage": "Not acquired or claimed as local evidence."
+      },
+      "point_in_time_properties": {
+        "status": "UNBOUND",
+        "prospective_captures": 0,
+        "source_published_at": null,
+        "captured_at": null,
+        "available_at": null,
+        "note": "Snapshot generation date is not row publication or contemporaneous availability. External latest history does not supply a vintage guarantee."
+      },
+      "economic_meaning": "Duration-sensitive Treasury fund-price context; TLT/IEF is not the 30Y-minus-10Y curve slope.",
+      "dependency_with_existing_core": "Rate shocks can differ from equity internals, but duration, distributions, and common risk episodes create dependence.",
+      "incremental_information": {
+        "classification": "INDETERMINATE",
+        "new_economic_object_possible": true,
+        "evidence": "See descriptive local return screen where available. Correlation differences do not establish incremental classification value or predictive superiority."
+      },
+      "maintenance_burden": "MEDIUM",
+      "new_obligations": [
+        "Versioned exact instrument and unit identity",
+        "Source permission and stable acquisition contract",
+        "Native price/spread proof and raw-byte retention",
+        "Release/availability calendar and no stale carry",
+        "Prospective dependent-family evaluation"
+      ],
+      "licensing_source_stability": "Source-specific rights and stable endpoints remain an adoption gate; consult referenced primary source notes. No access or redistribution rights inferred from being public.",
+      "potential_role_if_gates_pass": "DIAGNOSTIC",
+      "classification": "RESEARCH_ONLY",
+      "verdict": "PARK",
+      "canonical_integration": "NONE"
+    },
+    {
+      "candidate_id": "TREASURY_PAR_YIELDS",
+      "family": "rates",
+      "symbols": [],
+      "source": {
+        "existing": null,
+        "official_reference_ids": [
+          "TREASURY"
+        ]
+      },
+      "historical_coverage": {
+        "local_retained_snapshots": [],
+        "local_verified_native_raw_observations": 0,
+        "full_c03_1930_daily_conformance_possible": false,
+        "external_coverage": "Not acquired or claimed as local evidence."
+      },
+      "point_in_time_properties": {
+        "status": "UNBOUND",
+        "prospective_captures": 0,
+        "source_published_at": null,
+        "captured_at": null,
+        "available_at": null,
+        "note": "Snapshot generation date is not row publication or contemporaneous availability. External latest history does not supply a vintage guarantee."
+      },
+      "economic_meaning": "Official maturity-specific par yields and a named maturity slope would add a rate dimension after a separate economic definition.",
+      "dependency_with_existing_core": "Independent instrument family is plausible; useful classification direction is context-dependent and not demonstrated here.",
+      "incremental_information": {
+        "classification": "INDETERMINATE",
+        "new_economic_object_possible": true,
+        "evidence": "See descriptive local return screen where available. Correlation differences do not establish incremental classification value or predictive superiority."
+      },
+      "maintenance_burden": "MEDIUM",
+      "new_obligations": [
+        "Versioned exact instrument and unit identity",
+        "Source permission and stable acquisition contract",
+        "Native price/spread proof and raw-byte retention",
+        "Release/availability calendar and no stale carry",
+        "Prospective dependent-family evaluation"
+      ],
+      "licensing_source_stability": "Source-specific rights and stable endpoints remain an adoption gate; consult referenced primary source notes. No access or redistribution rights inferred from being public.",
+      "potential_role_if_gates_pass": "CORE_CANDIDATE",
+      "classification": "RESEARCH_ONLY",
+      "verdict": "PARK",
+      "canonical_integration": "NONE"
+    },
+    {
+      "candidate_id": "UUP_FUTURES_FUND_PRICE",
+      "family": "USD",
+      "symbols": [
+        "UUP"
+      ],
+      "source": {
+        "existing": "Statistical Levels retained Yahoo fallback snapshot",
+        "official_reference_ids": [
+          "UUP",
+          "YAHOO_TERMS"
+        ]
+      },
+      "historical_coverage": {
+        "local_retained_snapshots": [
+          {
+            "ticker": "UUP",
+            "path": "lib/statistical-levels/generated/assets/UUP.json",
+            "sha256": "7239687e72e1086d730fc34d4d9fedc0a90664c4652822cdffa3d618ce30ee32",
+            "status": "ok",
+            "source_note": "Datos públicos procesados vía Yahoo Finance fallback.",
+            "last_date": "2026-08-14",
+            "retained_series": {
+              "daily": {
+                "rows": 500,
+                "first": "2024-08-16",
+                "last": "2026-08-14",
+                "upstream_period_count_claim": 4896
+              },
+              "weekly": {
+                "rows": 520,
+                "first": "2016-09-02",
+                "last": "2026-08-14",
+                "upstream_period_count_claim": 1016
+              },
+              "monthly": {
+                "rows": 234,
+                "first": "2007-03-30",
+                "last": "2026-08-14",
+                "upstream_period_count_claim": 234
+              }
+            },
+            "same_date_c03_overlap": 500,
+            "missing_inside_daily_span_vs_p8_spy": [],
+            "not_in_p8_spy_calendar": [],
+            "baseline_sessions_after_snapshot": 15,
+            "precision": "Saved presentation closes rounded to two decimals; unavailable native raw price-basis proof."
+          }
+        ],
+        "local_verified_native_raw_observations": 0,
+        "full_c03_1930_daily_conformance_possible": false,
+        "external_coverage": "Not acquired or claimed as local evidence."
+      },
+      "point_in_time_properties": {
+        "status": "UNBOUND",
+        "prospective_captures": 0,
+        "source_published_at": null,
+        "captured_at": null,
+        "available_at": null,
+        "note": "Snapshot generation date is not row publication or contemporaneous availability. External latest history does not supply a vintage guarantee."
+      },
+      "economic_meaning": "Dollar futures fund price versus six currencies. No substitution for DXY or a broad trade-weighted dollar index.",
+      "dependency_with_existing_core": "Dollar strength can reflect growth or funding stress. Sign alone does not give a universal risk-state vote.",
+      "incremental_information": {
+        "classification": "INDETERMINATE",
+        "new_economic_object_possible": true,
+        "evidence": "See descriptive local return screen where available. Correlation differences do not establish incremental classification value or predictive superiority."
+      },
+      "maintenance_burden": "MEDIUM",
+      "new_obligations": [
+        "Versioned exact instrument and unit identity",
+        "Source permission and stable acquisition contract",
+        "Native price/spread proof and raw-byte retention",
+        "Release/availability calendar and no stale carry",
+        "Prospective dependent-family evaluation"
+      ],
+      "licensing_source_stability": "Source-specific rights and stable endpoints remain an adoption gate; consult referenced primary source notes. No access or redistribution rights inferred from being public.",
+      "potential_role_if_gates_pass": "DIAGNOSTIC",
+      "classification": "RESEARCH_ONLY",
+      "verdict": "PARK",
+      "canonical_integration": "NONE"
+    },
+    {
+      "candidate_id": "FED_BROAD_DOLLAR",
+      "family": "USD",
+      "symbols": [],
+      "source": {
+        "existing": null,
+        "official_reference_ids": [
+          "FED_BROAD_USD"
+        ]
+      },
+      "historical_coverage": {
+        "local_retained_snapshots": [],
+        "local_verified_native_raw_observations": 0,
+        "full_c03_1930_daily_conformance_possible": false,
+        "external_coverage": "Not acquired or claimed as local evidence."
+      },
+      "point_in_time_properties": {
+        "status": "UNBOUND",
+        "prospective_captures": 0,
+        "source_published_at": null,
+        "captured_at": null,
+        "available_at": null,
+        "note": "Snapshot generation date is not row publication or contemporaneous availability. External latest history does not supply a vintage guarantee."
+      },
+      "economic_meaning": "Broad nominal trade-weighted USD index, explicitly different from DXY. Public methodology provides a possible future source contract.",
+      "dependency_with_existing_core": "Potential contextual dimension; revised weights/history and release lags require vintage/capture controls.",
+      "incremental_information": {
+        "classification": "INDETERMINATE",
+        "new_economic_object_possible": true,
+        "evidence": "See descriptive local return screen where available. Correlation differences do not establish incremental classification value or predictive superiority."
+      },
+      "maintenance_burden": "MEDIUM",
+      "new_obligations": [
+        "Versioned exact instrument and unit identity",
+        "Source permission and stable acquisition contract",
+        "Native price/spread proof and raw-byte retention",
+        "Release/availability calendar and no stale carry",
+        "Prospective dependent-family evaluation"
+      ],
+      "licensing_source_stability": "Source-specific rights and stable endpoints remain an adoption gate; consult referenced primary source notes. No access or redistribution rights inferred from being public.",
+      "potential_role_if_gates_pass": "DIAGNOSTIC",
+      "classification": "RESEARCH_ONLY",
+      "verdict": "PARK",
+      "canonical_integration": "NONE"
+    },
+    {
+      "candidate_id": "USO_OIL_FUTURES_FUND_PRICE",
+      "family": "commodities",
+      "symbols": [
+        "USO"
+      ],
+      "source": {
+        "existing": "Statistical Levels retained Yahoo fallback snapshot",
+        "official_reference_ids": [
+          "USO",
+          "YAHOO_TERMS"
+        ]
+      },
+      "historical_coverage": {
+        "local_retained_snapshots": [
+          {
+            "ticker": "USO",
+            "path": "lib/statistical-levels/generated/assets/USO.json",
+            "sha256": "1aaaf07c74987619e7a4dcbbb5a3639376d4d347b208fbcfd7c8922958a0d7a9",
+            "status": "ok",
+            "source_note": "Datos públicos procesados vía Yahoo Finance fallback.",
+            "last_date": "2026-08-14",
+            "retained_series": {
+              "daily": {
+                "rows": 500,
+                "first": "2024-08-16",
+                "last": "2026-08-14",
+                "upstream_period_count_claim": 5119
+              },
+              "weekly": {
+                "rows": 520,
+                "first": "2016-09-02",
+                "last": "2026-08-14",
+                "upstream_period_count_claim": 1062
+              },
+              "monthly": {
+                "rows": 240,
+                "first": "2006-09-29",
+                "last": "2026-08-14",
+                "upstream_period_count_claim": 245
+              }
+            },
+            "same_date_c03_overlap": 500,
+            "missing_inside_daily_span_vs_p8_spy": [],
+            "not_in_p8_spy_calendar": [],
+            "baseline_sessions_after_snapshot": 15,
+            "precision": "Saved presentation closes rounded to two decimals; unavailable native raw price-basis proof."
+          }
+        ],
+        "local_verified_native_raw_observations": 0,
+        "full_c03_1930_daily_conformance_possible": false,
+        "external_coverage": "Not acquired or claimed as local evidence."
+      },
+      "point_in_time_properties": {
+        "status": "UNBOUND",
+        "prospective_captures": 0,
+        "source_published_at": null,
+        "captured_at": null,
+        "available_at": null,
+        "note": "Snapshot generation date is not row publication or contemporaneous availability. External latest history does not supply a vintage guarantee."
+      },
+      "economic_meaning": "Oil futures exposure with roll, collateral and fund-strategy effects; cannot label as WTI spot.",
+      "dependency_with_existing_core": "Overlaps energy-sector equity and USD/inflation context; supply versus demand shocks are ambiguous without an economic rule.",
+      "incremental_information": {
+        "classification": "INDETERMINATE",
+        "new_economic_object_possible": true,
+        "evidence": "See descriptive local return screen where available. Correlation differences do not establish incremental classification value or predictive superiority."
+      },
+      "maintenance_burden": "HIGH",
+      "new_obligations": [
+        "Versioned exact instrument and unit identity",
+        "Source permission and stable acquisition contract",
+        "Native price/spread proof and raw-byte retention",
+        "Release/availability calendar and no stale carry",
+        "Prospective dependent-family evaluation"
+      ],
+      "licensing_source_stability": "Source-specific rights and stable endpoints remain an adoption gate; consult referenced primary source notes. No access or redistribution rights inferred from being public.",
+      "potential_role_if_gates_pass": "DIAGNOSTIC",
+      "classification": "RESEARCH_ONLY",
+      "verdict": "PARK",
+      "canonical_integration": "NONE"
+    },
+    {
+      "candidate_id": "GLD_SLV_BULLION_TRUST_PRICE",
+      "family": "commodities",
+      "symbols": [
+        "GLD",
+        "SLV"
+      ],
+      "source": {
+        "existing": "Statistical Levels retained Yahoo fallback snapshot",
+        "official_reference_ids": [
+          "GLD",
+          "SLV",
+          "YAHOO_TERMS"
+        ]
+      },
+      "historical_coverage": {
+        "local_retained_snapshots": [
+          {
+            "ticker": "GLD",
+            "path": "lib/statistical-levels/generated/assets/GLD.json",
+            "sha256": "b456b2bc757d16655bdcaa5c16edb5c94b652b2a7ca7c7d372302d7b5db52984",
+            "status": "ok",
+            "source_note": "Datos públicos procesados vía Yahoo Finance fallback.",
+            "last_date": "2026-08-14",
+            "retained_series": {
+              "daily": {
+                "rows": 500,
+                "first": "2024-08-16",
+                "last": "2026-08-14",
+                "upstream_period_count_claim": 5468
+              },
+              "weekly": {
+                "rows": 520,
+                "first": "2016-09-02",
+                "last": "2026-08-14",
+                "upstream_period_count_claim": 1135
+              },
+              "monthly": {
+                "rows": 240,
+                "first": "2006-09-29",
+                "last": "2026-08-14",
+                "upstream_period_count_claim": 262
+              }
+            },
+            "same_date_c03_overlap": 500,
+            "missing_inside_daily_span_vs_p8_spy": [],
+            "not_in_p8_spy_calendar": [],
+            "baseline_sessions_after_snapshot": 15,
+            "precision": "Saved presentation closes rounded to two decimals; unavailable native raw price-basis proof."
+          },
+          {
+            "ticker": "SLV",
+            "path": "lib/statistical-levels/generated/assets/SLV.json",
+            "sha256": "28fb86d755173ed525f527bbf35a1864b3103979f3727dfe812d19853c28c82f",
+            "status": "ok",
+            "source_note": "Datos públicos procesados vía Yahoo Finance fallback.",
+            "last_date": "2026-08-14",
+            "retained_series": {
+              "daily": {
+                "rows": 500,
+                "first": "2024-08-16",
+                "last": "2026-08-14",
+                "upstream_period_count_claim": 5106
+              },
+              "weekly": {
+                "rows": 520,
+                "first": "2016-09-02",
+                "last": "2026-08-14",
+                "upstream_period_count_claim": 1060
+              },
+              "monthly": {
+                "rows": 240,
+                "first": "2006-09-29",
+                "last": "2026-08-14",
+                "upstream_period_count_claim": 245
+              }
+            },
+            "same_date_c03_overlap": 500,
+            "missing_inside_daily_span_vs_p8_spy": [],
+            "not_in_p8_spy_calendar": [],
+            "baseline_sessions_after_snapshot": 15,
+            "precision": "Saved presentation closes rounded to two decimals; unavailable native raw price-basis proof."
+          }
+        ],
+        "local_verified_native_raw_observations": 0,
+        "full_c03_1930_daily_conformance_possible": false,
+        "external_coverage": "Not acquired or claimed as local evidence."
+      },
+      "point_in_time_properties": {
+        "status": "UNBOUND",
+        "prospective_captures": 0,
+        "source_published_at": null,
+        "captured_at": null,
+        "available_at": null,
+        "note": "Snapshot generation date is not row publication or contemporaneous availability. External latest history does not supply a vintage guarantee."
+      },
+      "economic_meaning": "Listed gold/silver trust price context; separate from bullion spot units and from GLD share-count flow pressure.",
+      "dependency_with_existing_core": "Shared USD/rates/risk drivers and partial overlap with existing GLD satellite. Incremental core information is unestablished.",
+      "incremental_information": {
+        "classification": "INDETERMINATE",
+        "new_economic_object_possible": true,
+        "evidence": "See descriptive local return screen where available. Correlation differences do not establish incremental classification value or predictive superiority."
+      },
+      "maintenance_burden": "MEDIUM",
+      "new_obligations": [
+        "Versioned exact instrument and unit identity",
+        "Source permission and stable acquisition contract",
+        "Native price/spread proof and raw-byte retention",
+        "Release/availability calendar and no stale carry",
+        "Prospective dependent-family evaluation"
+      ],
+      "licensing_source_stability": "Source-specific rights and stable endpoints remain an adoption gate; consult referenced primary source notes. No access or redistribution rights inferred from being public.",
+      "potential_role_if_gates_pass": "SATELLITE",
+      "classification": "RESEARCH_ONLY",
+      "verdict": "PARK",
+      "canonical_integration": "NONE"
+    },
+    {
+      "candidate_id": "EIA_WTI_SPOT",
+      "family": "commodities",
+      "symbols": [],
+      "source": {
+        "existing": null,
+        "official_reference_ids": [
+          "EIA_SPOT"
+        ]
+      },
+      "historical_coverage": {
+        "local_retained_snapshots": [],
+        "local_verified_native_raw_observations": 0,
+        "full_c03_1930_daily_conformance_possible": false,
+        "external_coverage": "Not acquired or claimed as local evidence."
+      },
+      "point_in_time_properties": {
+        "status": "UNBOUND",
+        "prospective_captures": 0,
+        "source_published_at": null,
+        "captured_at": null,
+        "available_at": null,
+        "note": "Snapshot generation date is not row publication or contemporaneous availability. External latest history does not supply a vintage guarantee."
+      },
+      "economic_meaning": "Location-specific physical oil spot price, a separate candidate from USO futures-fund returns.",
+      "dependency_with_existing_core": "Could distinguish physical commodity context but adds release/calendar/source rights issues; no existing paired data.",
+      "incremental_information": {
+        "classification": "INDETERMINATE",
+        "new_economic_object_possible": true,
+        "evidence": "See descriptive local return screen where available. Correlation differences do not establish incremental classification value or predictive superiority."
+      },
+      "maintenance_burden": "MEDIUM",
+      "new_obligations": [
+        "Versioned exact instrument and unit identity",
+        "Source permission and stable acquisition contract",
+        "Native price/spread proof and raw-byte retention",
+        "Release/availability calendar and no stale carry",
+        "Prospective dependent-family evaluation"
+      ],
+      "licensing_source_stability": "Source-specific rights and stable endpoints remain an adoption gate; consult referenced primary source notes. No access or redistribution rights inferred from being public.",
+      "potential_role_if_gates_pass": "DIAGNOSTIC",
+      "classification": "RESEARCH_ONLY",
+      "verdict": "PARK",
+      "canonical_integration": "NONE"
+    }
+  ],
+  "dependence_screen": {
+    "method": "Pearson of same-date simple price-proxy returns over one and 21 observed SPY sessions, requiring every interior session; exact intersections, no interpolation. Coefficient describes dependence only.",
+    "eligibility": "Not V2-qualified: native adjustment and contemporaneous availability unproven. No hypothesis selection or canonical challenger adjudication uses these values.",
+    "results": [
+      {
+        "candidate": "HYG",
+        "status": "DESCRIPTIVE_UNQUALIFIED_SNAPSHOT_ONLY",
+        "horizons_sessions": {
+          "1": {
+            "observations": 496,
+            "first": "2024-08-19",
+            "last": "2026-08-14",
+            "pearson_with_same_horizon_spy_return": 0.8174933227590481,
+            "descriptive_candidate_return": {
+              "n": 496,
+              "min": -0.016400277970813115,
+              "median": 0.00037886006905296643,
+              "mean": 0.00027280129329898447,
+              "max": 0.026830312544598334
+            },
+            "by_year": {
+              "2024": {
+                "observations": 94,
+                "pearson_with_spy": 0.6266327303998532
+              },
+              "2025": {
+                "observations": 250,
+                "pearson_with_spy": 0.8590361387613729
+              },
+              "2026": {
+                "observations": 152,
+                "pearson_with_spy": 0.7940799894538867
+              }
+            }
+          },
+          "21": {
+            "observations": 460,
+            "first": "2024-09-17",
+            "last": "2026-07-20",
+            "pearson_with_same_horizon_spy_return": 0.760978837205153,
+            "descriptive_candidate_return": {
+              "n": 460,
+              "min": -0.03829261597584421,
+              "median": 0.0058263472025834595,
+              "mean": 0.005309548366470898,
+              "max": 0.042249540765861404
+            },
+            "by_year": {
+              "2024": {
+                "observations": 74,
+                "pearson_with_spy": 0.5207553414998856
+              },
+              "2025": {
+                "observations": 250,
+                "pearson_with_spy": 0.8489901440607028
+              },
+              "2026": {
+                "observations": 136,
+                "pearson_with_spy": 0.6922464935949959
+              }
+            }
+          }
+        }
+      },
+      {
+        "candidate": "LQD",
+        "status": "DESCRIPTIVE_UNQUALIFIED_SNAPSHOT_ONLY",
+        "horizons_sessions": {
+          "1": {
+            "observations": 494,
+            "first": "2024-08-19",
+            "last": "2026-08-14",
+            "pearson_with_same_horizon_spy_return": 0.3803450320277586,
+            "descriptive_candidate_return": {
+              "n": 494,
+              "min": -0.019546824856559453,
+              "median": 0.00014197341584709644,
+              "mean": 0.00010903881975349643,
+              "max": 0.016675037669512838
+            },
+            "by_year": {
+              "2024": {
+                "observations": 94,
+                "pearson_with_spy": 0.19890337538077243
+              },
+              "2025": {
+                "observations": 250,
+                "pearson_with_spy": 0.37132356103891967
+              },
+              "2026": {
+                "observations": 150,
+                "pearson_with_spy": 0.5580407012246821
+              }
+            }
+          },
+          "21": {
+            "observations": 460,
+            "first": "2024-09-17",
+            "last": "2026-07-20",
+            "pearson_with_same_horizon_spy_return": 0.30953335671541643,
+            "descriptive_candidate_return": {
+              "n": 460,
+              "min": -0.043338527463965715,
+              "median": 0.004522562416003462,
+              "mean": 0.002290223761711571,
+              "max": 0.029816513761467878
+            },
+            "by_year": {
+              "2024": {
+                "observations": 74,
+                "pearson_with_spy": 0.29528503520983057
+              },
+              "2025": {
+                "observations": 250,
+                "pearson_with_spy": 0.3526358132276489
+              },
+              "2026": {
+                "observations": 136,
+                "pearson_with_spy": 0.42505482220376634
+              }
+            }
+          }
+        }
+      },
+      {
+        "candidate": "TLT",
+        "status": "DESCRIPTIVE_UNQUALIFIED_SNAPSHOT_ONLY",
+        "horizons_sessions": {
+          "1": {
+            "observations": 499,
+            "first": "2024-08-19",
+            "last": "2026-08-14",
+            "pearson_with_same_horizon_spy_return": 0.1270258800780793,
+            "descriptive_candidate_return": {
+              "n": 499,
+              "min": -0.030181776609123134,
+              "median": 0.0,
+              "mean": -0.00014372864690479598,
+              "max": 0.02593832177862776
+            },
+            "by_year": {
+              "2024": {
+                "observations": 94,
+                "pearson_with_spy": -0.029582946538741803
+              },
+              "2025": {
+                "observations": 250,
+                "pearson_with_spy": 0.09923489975860815
+              },
+              "2026": {
+                "observations": 155,
+                "pearson_with_spy": 0.34347634907027547
+              }
+            }
+          },
+          "21": {
+            "observations": 479,
+            "first": "2024-09-17",
+            "last": "2026-08-14",
+            "pearson_with_same_horizon_spy_return": 0.015488895899918117,
+            "descriptive_candidate_return": {
+              "n": 479,
+              "min": -0.0850918216037414,
+              "median": -0.003209536909674515,
+              "mean": -0.0036332985908792215,
+              "max": 0.05487434745659825
+            },
+            "by_year": {
+              "2024": {
+                "observations": 74,
+                "pearson_with_spy": 0.1433712631529084
+              },
+              "2025": {
+                "observations": 250,
+                "pearson_with_spy": 0.02364777005157298
+              },
+              "2026": {
+                "observations": 155,
+                "pearson_with_spy": 0.05768591149223037
+              }
+            }
+          }
+        }
+      },
+      {
+        "candidate": "IEF",
+        "status": "DESCRIPTIVE_UNQUALIFIED_SNAPSHOT_ONLY",
+        "horizons_sessions": {
+          "1": {
+            "observations": 497,
+            "first": "2024-08-19",
+            "last": "2026-08-14",
+            "pearson_with_same_horizon_spy_return": 0.03725976292200253,
+            "descriptive_candidate_return": {
+              "n": 497,
+              "min": -0.011885290589902842,
+              "median": 0.00010642826734796884,
+              "mean": 8.364101178265192e-05,
+              "max": 0.011535926170072486
+            },
+            "by_year": {
+              "2024": {
+                "observations": 94,
+                "pearson_with_spy": -0.010664116937238989
+              },
+              "2025": {
+                "observations": 250,
+                "pearson_with_spy": -0.08721002308378474
+              },
+              "2026": {
+                "observations": 153,
+                "pearson_with_spy": 0.39961809889010347
+              }
+            }
+          },
+          "21": {
+            "observations": 461,
+            "first": "2024-09-17",
+            "last": "2026-07-21",
+            "pearson_with_same_horizon_spy_return": -0.08206239225199234,
+            "descriptive_candidate_return": {
+              "n": 461,
+              "min": -0.036818529443898185,
+              "median": 0.0023248090335437066,
+              "mean": 0.0014175004630921095,
+              "max": 0.029995437956204407
+            },
+            "by_year": {
+              "2024": {
+                "observations": 74,
+                "pearson_with_spy": 0.11153611826682765
+              },
+              "2025": {
+                "observations": 250,
+                "pearson_with_spy": -0.1712792811139208
+              },
+              "2026": {
+                "observations": 137,
+                "pearson_with_spy": 0.12106870121787282
+              }
+            }
+          }
+        }
+      },
+      {
+        "candidate": "SHY",
+        "status": "DESCRIPTIVE_UNQUALIFIED_SNAPSHOT_ONLY",
+        "horizons_sessions": {
+          "1": {
+            "observations": 495,
+            "first": "2024-08-19",
+            "last": "2026-08-14",
+            "pearson_with_same_horizon_spy_return": 0.01538550980034128,
+            "descriptive_candidate_return": {
+              "n": 495,
+              "min": -0.0033535405649426364,
+              "median": 0.0001258494840172819,
+              "mean": 0.00014270090633432787,
+              "max": 0.005026388539834281
+            },
+            "by_year": {
+              "2024": {
+                "observations": 94,
+                "pearson_with_spy": 0.012956643087756193
+              },
+              "2025": {
+                "observations": 250,
+                "pearson_with_spy": -0.14365169276747827
+              },
+              "2026": {
+                "observations": 151,
+                "pearson_with_spy": 0.38982683970340354
+              }
+            }
+          },
+          "21": {
+            "observations": 460,
+            "first": "2024-09-17",
+            "last": "2026-07-20",
+            "pearson_with_same_horizon_spy_return": -0.1711649631354019,
+            "descriptive_candidate_return": {
+              "n": 460,
+              "min": -0.007462686567164201,
+              "median": 0.0030856646312908964,
+              "mean": 0.0027164060891050703,
+              "max": 0.010811514914680131
+            },
+            "by_year": {
+              "2024": {
+                "observations": 74,
+                "pearson_with_spy": -0.08692154444182444
+              },
+              "2025": {
+                "observations": 250,
+                "pearson_with_spy": -0.4957660652444153
+              },
+              "2026": {
+                "observations": 136,
+                "pearson_with_spy": 0.31750861145038267
+              }
+            }
+          }
+        }
+      },
+      {
+        "candidate": "UUP",
+        "status": "DESCRIPTIVE_UNQUALIFIED_SNAPSHOT_ONLY",
+        "horizons_sessions": {
+          "1": {
+            "observations": 499,
+            "first": "2024-08-19",
+            "last": "2026-08-14",
+            "pearson_with_same_horizon_spy_return": -0.027155499907765765,
+            "descriptive_candidate_return": {
+              "n": 499,
+              "min": -0.02083333333333337,
+              "median": 0.0003707823507601571,
+              "mean": 0.00014358363262861605,
+              "max": 0.01635079895949465
+            },
+            "by_year": {
+              "2024": {
+                "observations": 94,
+                "pearson_with_spy": -0.11872306841772885
+              },
+              "2025": {
+                "observations": 250,
+                "pearson_with_spy": 0.1191276726388916
+              },
+              "2026": {
+                "observations": 155,
+                "pearson_with_spy": -0.39257091407781525
+              }
+            }
+          },
+          "21": {
+            "observations": 479,
+            "first": "2024-09-17",
+            "last": "2026-08-14",
+            "pearson_with_same_horizon_spy_return": 0.07062666406821379,
+            "descriptive_candidate_return": {
+              "n": 479,
+              "min": -0.04805242082271566,
+              "median": 0.0038664323374340004,
+              "mean": 0.0037571206467877857,
+              "max": 0.04552469135802473
+            },
+            "by_year": {
+              "2024": {
+                "observations": 74,
+                "pearson_with_spy": 0.020848492038322057
+              },
+              "2025": {
+                "observations": 250,
+                "pearson_with_spy": 0.28690291964195697
+              },
+              "2026": {
+                "observations": 155,
+                "pearson_with_spy": -0.5343419836977483
+              }
+            }
+          }
+        }
+      },
+      {
+        "candidate": "USO",
+        "status": "DESCRIPTIVE_UNQUALIFIED_SNAPSHOT_ONLY",
+        "horizons_sessions": {
+          "1": {
+            "observations": 499,
+            "first": "2024-08-19",
+            "last": "2026-08-14",
+            "pearson_with_same_horizon_spy_return": -0.0300507070281771,
+            "descriptive_candidate_return": {
+              "n": 499,
+              "min": -0.09776940903823883,
+              "median": 0.0007955449482897059,
+              "mean": 0.0013497896873415063,
+              "max": 0.12937389679161027
+            },
+            "by_year": {
+              "2024": {
+                "observations": 94,
+                "pearson_with_spy": -0.009786439256309147
+              },
+              "2025": {
+                "observations": 250,
+                "pearson_with_spy": 0.29904232681380577
+              },
+              "2026": {
+                "observations": 155,
+                "pearson_with_spy": -0.4473538382207641
+              }
+            }
+          },
+          "21": {
+            "observations": 479,
+            "first": "2024-09-17",
+            "last": "2026-08-14",
+            "pearson_with_same_horizon_spy_return": -0.07342948934954349,
+            "descriptive_candidate_return": {
+              "n": 479,
+              "min": -0.2591935254862986,
+              "median": 0.005166051660516535,
+              "mean": 0.03181837285642987,
+              "max": 0.6066288128878912
+            },
+            "by_year": {
+              "2024": {
+                "observations": 74,
+                "pearson_with_spy": 0.19580621878002127
+              },
+              "2025": {
+                "observations": 250,
+                "pearson_with_spy": 0.24962128025537728
+              },
+              "2026": {
+                "observations": 155,
+                "pearson_with_spy": -0.3255998363482208
+              }
+            }
+          }
+        }
+      },
+      {
+        "candidate": "GLD",
+        "status": "DESCRIPTIVE_UNQUALIFIED_SNAPSHOT_ONLY",
+        "horizons_sessions": {
+          "1": {
+            "observations": 499,
+            "first": "2024-08-19",
+            "last": "2026-08-14",
+            "pearson_with_same_horizon_spy_return": 0.16061509654942568,
+            "descriptive_candidate_return": {
+              "n": 499,
+              "min": -0.10274248840492028,
+              "median": 0.0017928936216449198,
+              "mean": 0.0012114736016471666,
+              "max": 0.0635871982768712
+            },
+            "by_year": {
+              "2024": {
+                "observations": 94,
+                "pearson_with_spy": 0.2328136302509892
+              },
+              "2025": {
+                "observations": 250,
+                "pearson_with_spy": 0.02715235891301484
+              },
+              "2026": {
+                "observations": 155,
+                "pearson_with_spy": 0.3659921044083753
+              }
+            }
+          },
+          "21": {
+            "observations": 479,
+            "first": "2024-09-17",
+            "last": "2026-08-14",
+            "pearson_with_same_horizon_spy_return": 0.023015532477836886,
+            "descriptive_candidate_return": {
+              "n": 479,
+              "min": -0.16030169547872342,
+              "median": 0.025829956199598936,
+              "mean": 0.023762829716535525,
+              "max": 0.24410436527847446
+            },
+            "by_year": {
+              "2024": {
+                "observations": 74,
+                "pearson_with_spy": 0.08532082020081194
+              },
+              "2025": {
+                "observations": 250,
+                "pearson_with_spy": -0.12142837812170512
+              },
+              "2026": {
+                "observations": 155,
+                "pearson_with_spy": 0.20836682216084826
+              }
+            }
+          }
+        }
+      },
+      {
+        "candidate": "SLV",
+        "status": "DESCRIPTIVE_UNQUALIFIED_SNAPSHOT_ONLY",
+        "horizons_sessions": {
+          "1": {
+            "observations": 499,
+            "first": "2024-08-19",
+            "last": "2026-08-14",
+            "pearson_with_same_horizon_spy_return": 0.2776997977546025,
+            "descriptive_candidate_return": {
+              "n": 499,
+              "min": -0.2854030501089324,
+              "median": 0.003366247755834717,
+              "mean": 0.0020681978568041996,
+              "max": 0.09046304814474104
+            },
+            "by_year": {
+              "2024": {
+                "observations": 94,
+                "pearson_with_spy": 0.3569296443351318
+              },
+              "2025": {
+                "observations": 250,
+                "pearson_with_spy": 0.2257835572405844
+              },
+              "2026": {
+                "observations": 155,
+                "pearson_with_spy": 0.4104520013737131
+              }
+            }
+          },
+          "21": {
+            "observations": 479,
+            "first": "2024-09-17",
+            "last": "2026-08-14",
+            "pearson_with_same_horizon_spy_return": 0.22518871740051769,
+            "descriptive_candidate_return": {
+              "n": 479,
+              "min": -0.26076923076923086,
+              "median": 0.02956298200514129,
+              "mean": 0.040218719060782476,
+              "max": 0.5993031358885015
+            },
+            "by_year": {
+              "2024": {
+                "observations": 74,
+                "pearson_with_spy": 0.20009895883593837
+              },
+              "2025": {
+                "observations": 250,
+                "pearson_with_spy": 0.23284889573763567
+              },
+              "2026": {
+                "observations": 155,
+                "pearson_with_spy": 0.2963311139715536
+              }
+            }
+          }
+        }
+      },
+      {
+        "candidate": "HYG_LQD_PRICE_RATIO",
+        "status": "DESCRIPTIVE_UNQUALIFIED_SNAPSHOT_ONLY",
+        "horizons_sessions": {
+          "1": {
+            "observations": 494,
+            "first": "2024-08-19",
+            "last": "2026-08-14",
+            "pearson_with_same_horizon_spy_return": 0.3233481926747444,
+            "descriptive_candidate_return": {
+              "n": 494,
+              "min": -0.013245167318138407,
+              "median": 0.00010459753922009707,
+              "mean": 0.00016698446321549793,
+              "max": 0.012292506799277403
+            },
+            "by_year": {
+              "2024": {
+                "observations": 94,
+                "pearson_with_spy": 0.21811814582783556
+              },
+              "2025": {
+                "observations": 250,
+                "pearson_with_spy": 0.42927856687075383
+              },
+              "2026": {
+                "observations": 150,
+                "pearson_with_spy": 0.048207818568374264
+              }
+            }
+          },
+          "21": {
+            "observations": 460,
+            "first": "2024-09-17",
+            "last": "2026-07-20",
+            "pearson_with_same_horizon_spy_return": 0.28799717204404884,
+            "descriptive_candidate_return": {
+              "n": 460,
+              "min": -0.03399901654713633,
+              "median": 0.0029063118137486743,
+              "mean": 0.0031301862411085984,
+              "max": 0.04058038934949315
+            },
+            "by_year": {
+              "2024": {
+                "observations": 74,
+                "pearson_with_spy": -0.0837404744816417
+              },
+              "2025": {
+                "observations": 250,
+                "pearson_with_spy": 0.3729967356223537
+              },
+              "2026": {
+                "observations": 136,
+                "pearson_with_spy": 0.1594135152249853
+              }
+            }
+          }
+        }
+      },
+      {
+        "candidate": "TLT_IEF_PRICE_RATIO",
+        "status": "DESCRIPTIVE_UNQUALIFIED_SNAPSHOT_ONLY",
+        "horizons_sessions": {
+          "1": {
+            "observations": 497,
+            "first": "2024-08-19",
+            "last": "2026-08-14",
+            "pearson_with_same_horizon_spy_return": 0.17862765611182566,
+            "descriptive_candidate_return": {
+              "n": 497,
+              "min": -0.02149537119552114,
+              "median": -0.0003514633460635075,
+              "mean": -0.00022705824469606507,
+              "max": 0.014921690087775552
+            },
+            "by_year": {
+              "2024": {
+                "observations": 94,
+                "pearson_with_spy": -0.04104469604192657
+              },
+              "2025": {
+                "observations": 250,
+                "pearson_with_spy": 0.22642656134939004
+              },
+              "2026": {
+                "observations": 153,
+                "pearson_with_spy": 0.23240836615393615
+              }
+            }
+          },
+          "21": {
+            "observations": 461,
+            "first": "2024-09-17",
+            "last": "2026-07-21",
+            "pearson_with_same_horizon_spy_return": 0.09321026947685247,
+            "descriptive_candidate_return": {
+              "n": 461,
+              "min": -0.056817172829552454,
+              "median": -0.0037910264128613314,
+              "mean": -0.004246188507829639,
+              "max": 0.033028768532804786
+            },
+            "by_year": {
+              "2024": {
+                "observations": 74,
+                "pearson_with_spy": 0.16338675936910457
+              },
+              "2025": {
+                "observations": 250,
+                "pearson_with_spy": 0.15535378907101824
+              },
+              "2026": {
+                "observations": 137,
+                "pearson_with_spy": -0.019635815257099988
+              }
+            }
+          }
+        }
+      }
+    ]
+  },
+  "rejected_semantic_substitutions": [
+    "HYG/LQD price ratio = credit spread",
+    "TLT/IEF ETF price ratio = Treasury yield-curve slope",
+    "UUP share price = DXY",
+    "USO price = WTI spot",
+    "GLD price return = GLD creation/redemption flow"
+  ],
+  "decision": "PARK cross-asset growth. Credit OAS and official Treasury yields are research priorities, not adoption-ready core proposals. Existing price snapshots can inform a separately sourced diagnostic after source gates close.",
+  "minimum_evidence_to_reopen": [
+    "Frozen source/unit/price/availability/calendar contract and permitted source use",
+    "Same-cutoff real history or prospective captures with full required feature windows",
+    "Distinct conflicting-context episodes where the candidate adds an explanation absent from equity/VIX",
+    "Registered simple offline comparison and complexity/failure-mode accounting; no return target"
+  ],
+  "official_sources": [
+    {
+      "id": "HYG",
+      "url": "https://www.ishares.com/us/products/239565/ishares-iboxx-high-yield-corporate-bond-etf",
+      "fact": "USD below-investment-grade corporate bond ETF; market price is a fund share price, not an option-adjusted spread.",
+      "checked_on": "2026-09-08",
+      "source_type": "OFFICIAL_PRIMARY"
+    },
+    {
+      "id": "LQD",
+      "url": "https://www.ishares.com/us/products/239566/ishares-iboxx-investment-grade-corporate-bond-etf",
+      "fact": "USD investment-grade corporate bond ETF. HYG/LQD ratios combine different portfolios and rate/credit exposures; a price ratio does not isolate a yield spread.",
+      "checked_on": "2026-09-08",
+      "source_type": "OFFICIAL_PRIMARY"
+    },
+    {
+      "id": "TLT",
+      "url": "https://www.ishares.com/us/products/239454/ishares-20-year-treasury-bond-etf",
+      "fact": "Treasury bond portfolio with remaining maturities above twenty years; its share price is not the 20Y or 30Y Treasury yield.",
+      "checked_on": "2026-09-08",
+      "source_type": "OFFICIAL_PRIMARY"
+    },
+    {
+      "id": "IEF",
+      "url": "https://www.ishares.com/us/products/239456/ishares-710-year-treasury-bond-etf",
+      "fact": "Treasury bond portfolio with remaining maturities from seven to ten years. An ETF price return is not a constant-maturity yield change.",
+      "checked_on": "2026-09-08",
+      "source_type": "OFFICIAL_PRIMARY"
+    },
+    {
+      "id": "UUP",
+      "url": "https://www.sec.gov/Archives/edgar/data/1371571/000119312526083557/uup-20251231.htm",
+      "fact": "UUP holds long DX futures tied to six USDX currencies. Fund price includes portfolio/collateral/expense and futures effects, so it cannot be relabeled spot DXY.",
+      "checked_on": "2026-09-08",
+      "source_type": "OFFICIAL_PRIMARY"
+    },
+    {
+      "id": "USO",
+      "url": "https://www.uscfinvestments.com/disclosures",
+      "fact": "USO uses oil futures and collateral; contango, backwardation and rolling can create substantial differences from spot oil. Its futures allocation changed around 2020 and transitioned again in 2023-2024.",
+      "checked_on": "2026-09-08",
+      "source_type": "OFFICIAL_PRIMARY"
+    },
+    {
+      "id": "GLD",
+      "url": "https://www.spdrgoldshares.com/usa/",
+      "fact": "Gold-backed trust shares are a distinct listed instrument; GLD share price is not a dollars-per-ounce spot quote or a creation/redemption flow.",
+      "checked_on": "2026-09-08",
+      "source_type": "OFFICIAL_PRIMARY"
+    },
+    {
+      "id": "SLV",
+      "url": "https://www.ishares.com/us/literature/annual-filings/slv-20251231.pdf",
+      "fact": "Silver trust shares represent bullion less trust costs. Silver per share declines as metal is sold to meet expenses.",
+      "checked_on": "2026-09-08",
+      "source_type": "OFFICIAL_PRIMARY"
+    },
+    {
+      "id": "FRED_ICE_HY_OAS",
+      "url": "https://fred.stlouisfed.org/series/BAMLH0A0HYM2",
+      "fact": "OAS relative to a spot Treasury curve; daily close, percent. Series notes announce only three years of observations from April 2026 and ICE restrictions on third-party publication/distribution. Longer history and rights cannot be assumed. Weekend month-end observations can occur; latest FRED values remain subject to revision.",
+      "checked_on": "2026-09-08",
+      "source_type": "OFFICIAL_PRIMARY"
+    },
+    {
+      "id": "FRED_COPYRIGHT",
+      "url": "https://fredhelp.stlouisfed.org/fred/graphs/share-my-fred-graph/cite/",
+      "fact": "FRED directs users to original providers for permission to share copyrighted data beyond personal noncommercial use. Public visibility is not a transferable data licence.",
+      "checked_on": "2026-09-08",
+      "source_type": "OFFICIAL_PRIMARY"
+    },
+    {
+      "id": "TREASURY",
+      "url": "https://home.treasury.gov/policy-issues/financing-the-government/interest-rate-statistics/treasury-yield-curve-methodology",
+      "fact": "Official par curve uses indicative bid quotations near 15:30 ET; this observation time is not an availability timestamp. Monotone-convex methodology replaced the older spline on 2021-12-06.",
+      "checked_on": "2026-09-08",
+      "source_type": "OFFICIAL_PRIMARY"
+    },
+    {
+      "id": "FED_BROAD_USD",
+      "url": "https://www.federalreserve.gov/releases/h10/h10_technical_qa.htm",
+      "fact": "Broad daily dollar indices have a goods-and-services trade-weight methodology, a January 2006 base, and historical revisions. They are a different definition from ICE USDX/DXY.",
+      "checked_on": "2026-09-08",
+      "source_type": "OFFICIAL_PRIMARY"
+    },
+    {
+      "id": "EIA_SPOT",
+      "url": "https://www.eia.gov/dnav/pet/pet_pri_spt_s1_d.htm",
+      "fact": "EIA publishes petroleum spot series with instrument/location definitions and source notes. Spot prices would require their own unit, observation and release-time contract; no series was fetched for this audit.",
+      "checked_on": "2026-09-08",
+      "source_type": "OFFICIAL_PRIMARY"
+    },
+    {
+      "id": "YAHOO_TERMS",
+      "url": "https://legal.yahoo.com/us/en/yahoo/terms/otos/index.html?.intl=us&.lang=en",
+      "fact": "Terms restrict automated collection without express prior permission. No documented source licence or permission covering a new prospective cross-asset feed was found in the inspected candidate files; this audit grants none.",
+      "checked_on": "2026-09-08",
+      "source_type": "OFFICIAL_PRIMARY"
+    }
+  ],
+  "reproduce": "python3 docs/regime-engine-v2/groweer/audit-cross-asset-pfl.py"
+}

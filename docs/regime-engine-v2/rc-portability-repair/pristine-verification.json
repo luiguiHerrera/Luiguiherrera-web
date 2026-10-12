@@ -1,0 +1,700 @@
+{
+  "schemaVersion": 1,
+  "recordedAt": "2026-09-09T11:19:38.467427+00:00",
+  "status": "PASS",
+  "verifiedConfiguration": "RC0_PLUS_UNCOMMITTED_PORTABILITY_REPAIR",
+  "PRISTINE_RC0_PLUS_REPAIR_VERIFICATION": "PASS",
+  "UNCHANGED_RC0_RECLASSIFIED_AS_PASS": false,
+  "RC0_COMMIT": "f5fc7ecfd9e1f323d0ad3a43eccec1dbc500be1c",
+  "RC0_TREE": "05242fadab2cb190effeaea2ea4100e9eb4fbf9d",
+  "RC0_IMMUTABLE": true,
+  "ARCHITECTURE": "EVIDENCE_STATE_ENGINE",
+  "CANONICAL_PARAMETER_SET": "C03",
+  "METHODOLOGY_CHANGED": "NO",
+  "PRODUCT_CODE_DELTA": 0,
+  "verdict": "Fresh RC0 checkout plus the explicit portability repair passes the unchanged canonical case/test sets and32 targeted portability tests. Ten historical workspace entrypoints fail closed before evidence I/O, the worktree/external-baseline/retry routes are rejected, and parent lint comparison uses committed metadata and committed Git source. The immutable RC0 and the prior Shadow Readiness failure record are not rewritten or reclassified.",
+  "configuration": {
+    "checkout": "/private/tmp/regime-v2-portability-pristine-p5aplnvi",
+    "base_head": "f5fc7ecfd9e1f323d0ad3a43eccec1dbc500be1c",
+    "base_tree": "05242fadab2cb190effeaea2ea4100e9eb4fbf9d",
+    "initial_git_status": "",
+    "independent_git_history": true,
+    "git_alternates": false,
+    "git_remotes": [],
+    "initial_committed_files": 1047,
+    "initial_node_modules_absent": true,
+    "initial_next_build_absent": true,
+    "tracked_repair_files": 18,
+    "modified_verification_entrypoints": 11,
+    "modified_documentation_files": 7,
+    "new_verification_test_harness_files": 1,
+    "canonical_tracked_delta_sha256": "af6458e55b32a95bbc5f8f70a7431956c4c2060872f1a20799d3488a85f672c5",
+    "final_delta_including_harness_sha256": "2c95457cf955071206805318914e163834258e12a1b2d2515b8b7bc93d27df05",
+    "canonical_invocation_identity": "RC0_PLUS_PORTABILITY_DELTA:bcfc23985e72dcbe3f86bd1b16d8a351e1e2483b9ba394b7b62feb5bee7e87b8",
+    "copied_original_delta_including_initial_harness_sha256": "bcfc23985e72dcbe3f86bd1b16d8a351e1e2483b9ba394b7b62feb5bee7e87b8",
+    "final_harness_sha256": "5ba08e2d5bc88c9a11fb7ad5278fc30a5ede50e6e40fe9e552fec25b8dc1cf86",
+    "repaired_tracked_hashes_match_after_checks": true,
+    "metadata_synced_after_checks": true,
+    "only_postcanonical_executable_change": "The new test harness received a Node26 property-descriptor compatibility fix, then all32 portability tests were rerun. The18 repaired tracked files and all product files remained unchanged.",
+    "final_git_status": " M docs/regime-engine-v2/designer/README.md\n M docs/regime-engine-v2/designer/accessibility-qa.mjs\n M docs/regime-engine-v2/designer/browser-qa.mjs\n M docs/regime-engine-v2/designer/run-verification.py\n M docs/regime-engine-v2/designer/seal-review.py\n M docs/regime-engine-v2/groweer/README.md\n M docs/regime-engine-v2/groweer/close-verification.py\n M docs/regime-engine-v2/groweer/run-canonical-verification.py\n M docs/regime-engine-v2/groweer/seal-manifest.py\n M docs/regime-engine-v2/maintainer/README.md\n M docs/regime-engine-v2/maintainer/close-verification.py\n M docs/regime-engine-v2/maintainer/run-verification.py\n M docs/regime-engine-v2/maintainer/runbook.md\n M docs/regime-engine-v2/release-candidate/README.md\n M docs/regime-engine-v2/release-candidate/run-verification.py\n M docs/regime-engine-v2/release-candidate/verification-guide.md\n M docs/regime-engine-v2/sweeper/README.md\n M docs/regime-engine-v2/sweeper/run-verification.py\n?? docs/regime-engine-v2/rc-portability-repair/\n",
+    "excluded_original_files_copied": false,
+    "user_worktree_cleaned": false
+  },
+  "dependencies": {
+    "status": "PASS",
+    "command": [
+      "npm",
+      "ci",
+      "--offline",
+      "--no-audit",
+      "--no-fund",
+      "--cache",
+      "/Users/quantlab/.npm",
+      "--logs-dir",
+      "/Users/quantlab/Developer/web/Luiguiherrera-web/docs/regime-engine-v2/rc-portability-repair/local/preparation/npm-logs"
+    ],
+    "npm_ci_exit_code": 0,
+    "npm_ci_elapsed_seconds": 2.566501416,
+    "source": "Exact RC0 manifests; npm ci --offline using integrity-addressed npm cache. No copied or symlinked installed node_modules.",
+    "installed_package_count": 485,
+    "installed_lock_version_integrity_resolved_mismatches": [],
+    "installed_package_external_symlinks": [],
+    "npm_ls_exit_code": 0,
+    "npm_ls_problems": [],
+    "package_sha256": "d8946507e07db79b0b2a8cd8b146da50d82eb2621cbeda4ab1aba621a4e05920",
+    "lock_sha256": "2f00b7744899cf2f7c19d412bcb3580f6d69f8da8796afd2a2280da153f5f78c",
+    "next_integrity": "sha512-hsAp0i7Rh+/dhe7DGIeN2YlpLM1DP4MNxti9EtDMtqcO612X81MvvEj388/oTce9U1EcEIOWDlGq0zRwrBKvuA==",
+    "node_version": "v26.5.0",
+    "npm_version": "11.17.0",
+    "next_versions": {
+      "declared": "16.3.1",
+      "locked": "16.3.1",
+      "installed": "16.3.1"
+    },
+    "npm_registry_fetches": 0,
+    "new_runtime_dependencies": 0,
+    "manifests_unchanged": true,
+    "npm_script_policy": "npm11 default policy skipped unapproved fsevents/unrs-resolver scripts. No allowScripts/config/manifest modification; native dependencies present and actual checks/build passed. Existing deprecation warnings retained in installation log."
+  },
+  "NEXT_DECLARED_VERSION": "16.3.1",
+  "NEXT_LOCKED_VERSION": "16.3.1",
+  "NEXT_INSTALLED_VERSION": "16.3.1",
+  "P8_GOLDEN_CASES": "464/464",
+  "HISTORICAL_R2_CONFORMANCE": "1930/1930",
+  "SWEEPER_ATTACKS": "110/110",
+  "V1_TESTS": "PASS",
+  "V2_TESTS": "PASS",
+  "TYPECHECK": "PASS",
+  "BUILD": "PASS",
+  "LINT_ERRORS": 0,
+  "LINT_WARNINGS": 18,
+  "NEW_LINT_WARNINGS": 0,
+  "PORTABILITY_TESTS": "32/32",
+  "canonical": {
+    "status": "PASS",
+    "profile": "candidate",
+    "gates": "all",
+    "output_absent_before_run": true,
+    "prior_output_reused": false,
+    "command": [
+      "python3",
+      "-B",
+      "/private/tmp/regime-v2-portability-pristine-p5aplnvi/docs/regime-engine-v2/release-candidate/run-verification.py",
+      "--root",
+      "/private/tmp/regime-v2-portability-pristine-p5aplnvi",
+      "--output-dir",
+      "/Users/quantlab/Developer/web/Luiguiherrera-web/docs/regime-engine-v2/rc-portability-repair/local/pristine-checks",
+      "--profile",
+      "candidate",
+      "--identity",
+      "RC0_PLUS_PORTABILITY_DELTA:bcfc23985e72dcbe3f86bd1b16d8a351e1e2483b9ba394b7b62feb5bee7e87b8",
+      "--gates",
+      "all"
+    ],
+    "checks": {
+      "commands_exit_zero": true,
+      "golden_464": true,
+      "historical_R2_1930": true,
+      "accepted_Sweeper_history_identical": true,
+      "sweeper_attacks_110": true,
+      "baseline_V1_and_engine_tests": true,
+      "Maintainer_operations_78": true,
+      "Designer_59": true,
+      "offline_Groweer_36": true,
+      "accepted_engine_design_shadow_unchanged": true,
+      "prior_stage_artifacts_not_rewritten": true,
+      "lint_errors_zero": true,
+      "new_lint_warnings_zero": true,
+      "Next_accepted_16_3_1": true
+    },
+    "tests": {
+      "breakdown": {
+        "baseline_node": {
+          "passed": 204,
+          "total": 204
+        },
+        "maintainer_operations": {
+          "passed": 78,
+          "total": 78
+        },
+        "designer": {
+          "passed": 59,
+          "total": 59
+        },
+        "offline_challengers": {
+          "passed": 36,
+          "total": 36
+        },
+        "sweeper_attacks": {
+          "passed": 110,
+          "total": 110
+        }
+      },
+      "passed": 487,
+      "total": 487,
+      "note": "Golden/history are separate. Candidate excludes pending unrelated tests absent from HEAD; offline challengers do not enter canonical methodology."
+    },
+    "golden": {
+      "passed": 464,
+      "total": 464
+    },
+    "historical_R2": {
+      "passed": 1930,
+      "total": 1930,
+      "accepted_history_equal": true,
+      "point_in_time_OOS": false
+    },
+    "sweeper_attacks": {
+      "passed": 110,
+      "total": 110
+    },
+    "reports_validate": "PASS",
+    "reports_check": "PASS",
+    "editorial": "PASS",
+    "lint": {
+      "errors": 0,
+      "warnings": 18,
+      "new_warnings": 0,
+      "new_warning_details": [],
+      "moved_existing_warnings": [
+        {
+          "path": "scripts/build-statistical-levels.mjs",
+          "rule": "@typescript-eslint/no-unused-vars",
+          "message": "'key' is assigned a value but never used.",
+          "unchanged_source_fragment": "for (const [key, value] of Object.entries(config.movingAverages)) {",
+          "parent_positions": [
+            {
+              "line": 959,
+              "column": 15
+            }
+          ],
+          "candidate_position": {
+            "line": 975,
+            "column": 15
+          }
+        },
+        {
+          "path": "scripts/build-statistical-levels.mjs",
+          "rule": "@typescript-eslint/no-unused-vars",
+          "message": "'yahooSymbol' is assigned a value but never used.",
+          "unchanged_source_fragment": "const { yahooSymbol, ...catalogAsset } = asset;",
+          "parent_positions": [
+            {
+              "line": 1062,
+              "column": 11
+            }
+          ],
+          "candidate_position": {
+            "line": 1078,
+            "column": 11
+          }
+        }
+      ],
+      "baseline_warnings": 18,
+      "baseline_lint_file": "/private/tmp/regime-v2-portability-pristine-p5aplnvi/docs/regime-engine-v2/release-candidate/parent-head-lint.json",
+      "baseline_lint_sha256": "de5f2e7a7d15693be950c88425f3f9c2deb00c7a56a477a9aa02749156f83ed1",
+      "baseline_commit": "636cb73fb0fe4d2b28ad96cb7185f8c07d8f895b",
+      "baseline_tree": "9f84c28f1b40c86cf574d5c8fb6f8022b9c091d9",
+      "baseline_source": "Committed diagnostics and Git parent blobs; no historical checkout or uncommitted baseline file is read.",
+      "note": "Warning identity is checkout-relative path, rule, message and exact trimmed source line, with multiplicity. Unchanged statements displaced by inserted code remain existing warnings; original/candidate positions are retained."
+    },
+    "runner_sha256": "9fbdf8b5e58d09591473dc69a8b80bf8be754f0a87fd7d10531b9a64ca140bd9",
+    "accepted_product_source_hash": "3195122f1eac957609ec71930b67146a23c02115acba8b32e983921a899cb4ea",
+    "accepted_product_source_files": 47,
+    "product_source_hash_equals_accepted_release": true,
+    "canonical_repeated_after_pass": false
+  },
+  "portability": {
+    "status": "PASS",
+    "tests": 32,
+    "passed": 32,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "retired_entrypoints": 10,
+    "retired_normal_and_legacy_invocations": 20,
+    "retired_invocation_result": "Explicit retirement diagnostic and exit2 before evidence/filesystem/child-process I/O; no output created.",
+    "removed_option_regressions": 4,
+    "nonempty_output_preserves_sentinel": 1,
+    "canonical_test_selection_equals_RC0_AST": 3,
+    "lint_regressions": 4,
+    "lint_regression_scope": "Accept18 existing warnings including2 displaced statements; reject extra/duplicate warnings; reject tampered baseline bytes before Git or historical reads.",
+    "lint_input": "Fresh JSON from this exact canonical run, passed explicitly to test harness.",
+    "new_test_harness_sha256": "5ba08e2d5bc88c9a11fb7ad5278fc30a5ede50e6e40fe9e552fec25b8dc1cf86",
+    "test_command": [
+      "python3",
+      "-B",
+      "/private/tmp/regime-v2-portability-pristine-p5aplnvi/docs/regime-engine-v2/rc-portability-repair/test-portability.py",
+      "--root",
+      "/private/tmp/regime-v2-portability-pristine-p5aplnvi",
+      "--lint-json",
+      "/Users/quantlab/Developer/web/Luiguiherrera-web/docs/regime-engine-v2/rc-portability-repair/local/pristine-checks/lint.json"
+    ],
+    "standalone_probe_isolation": "Python probes use -I and an in-process audit hook that denies I/O. Node probes replace filesystem/child-process APIs before executing only the short retirement stubs. Historical implementation bodies are never executed.",
+    "historical_verifier_bodies_executed": false,
+    "production_sources_modified_by_tests": 0
+  },
+  "verification_infrastructure_finding": {
+    "status": "CLOSED",
+    "classification": "TEST_HARNESS_NODE26_COMPATIBILITY",
+    "initial_result": {
+      "passed": 28,
+      "total": 32,
+      "failures": 4,
+      "errors": 0
+    },
+    "cause": "Node26 exposes fs.Utf8Stream as a configurable getter-only function. Generic assignment failed before the retired JS source could execute.",
+    "repair": "Property-descriptor-aware replacement preserves deny coverage and explicitly rejects non-replaceable APIs.",
+    "initial_harness_sha256": "9b45eaacbc319068b1c8f900999d55b418e9096013dca2920945cc44a8722840",
+    "final_harness_sha256": "5ba08e2d5bc88c9a11fb7ad5278fc30a5ede50e6e40fe9e552fec25b8dc1cf86",
+    "final_result": "32/32 PASS",
+    "canonical_or_product_failure": false,
+    "canonical_rebuild_required": false,
+    "initial_failed_evidence_preserved": true
+  },
+  "preservation": {
+    "critical_contract_source_and_tests_files": 54,
+    "critical_aggregate_sha256": "e0095fd3e4fdd630004b995da315ec80d4477491f25e8dcdc47c4e143b8e47b2",
+    "critical_differences": [],
+    "historical_committed_JSON_and_JSON_gz": 305,
+    "historical_plain_JSON": 287,
+    "historical_JSON_gz": 18,
+    "historical_selector": "Files committed in RC0 under docs/regime-engine-v2 ending .json or .json.gz; no excluded local file imported.",
+    "historical_differences": [],
+    "other_RC0_tracked_files_changed": 0,
+    "protected_original_paths": 193,
+    "original_excluded_absent_from_pristine": 165,
+    "dirty_tracked_files_present_only_as_RC0_versions": 28,
+    "original_193_files_preservation_owned_by_root": "The verification never copies, cleans or repairs these files; root independently seals their before/after hashes."
+  },
+  "local_evidence_dependency_attack": {
+    "status": "PASS",
+    "active_candidate_forbidden_access_attempts": 0,
+    "outer_guard_loads": 67,
+    "outer_guard_process_logs": 67,
+    "negative_controls": 11,
+    "negative_control_denials": 11,
+    "negative_controls_kept_separate": true,
+    "scope": "Candidate canonical execution plus focused retired-entrypoint/parser/lint regressions; the original worktree is denied except the explicitly authorized new repair evidence directory.",
+    "coverage": "Node fs reads/writes and module resolution, Python file/directory audit hooks; native/other child binaries are not a kernel sandbox.",
+    "ten_retired_entries_no_evidence_IO": "PASS",
+    "worktree_profile_rejected_before_output_IO": "PASS",
+    "old_external_baseline_flags_rejected_before_output_IO": "PASS",
+    "nonempty_output_rejected_before_checks": "PASS",
+    "excluded_file_imported_to_make_tests_pass": false,
+    "native_OS_sandbox_claim": false
+  },
+  "network": {
+    "scope": "Observed outbound Node HTTP attempts during canonical verification, including Next build, and targeted portability tests. undici and node:http diagnostics only; native non-Node networking is not covered. Not a universal wire-fetch count.",
+    "observed_attempts": 12,
+    "observed_external_attempts": 12,
+    "observed_loopback_attempts": 0,
+    "attempts_by_transport": {
+      "undici": 12
+    },
+    "external_by_host": {
+      "bitbo.io": 3,
+      "fred.stlouisfed.org": 3,
+      "www.cboe.com": 3,
+      "www-api.cboe.com": 2,
+      "www.ssga.com": 1
+    },
+    "safe_endpoint_counts": [
+      {
+        "transport": "undici",
+        "hostname": "bitbo.io",
+        "path": "/treasuries/etf-flows/",
+        "attempts": 3
+      },
+      {
+        "transport": "undici",
+        "hostname": "fred.stlouisfed.org",
+        "path": "/graph/fredgraph.csv",
+        "attempts": 3
+      },
+      {
+        "transport": "undici",
+        "hostname": "www-api.cboe.com",
+        "path": "/us/futures/market_statistics/settlement/csv/",
+        "attempts": 2
+      },
+      {
+        "transport": "undici",
+        "hostname": "www.cboe.com",
+        "path": "/markets/us/options/market-statistics/daily",
+        "attempts": 3
+      },
+      {
+        "transport": "undici",
+        "hostname": "www.ssga.com",
+        "path": "/library-content/products/fund-data/etfs/us/navhist-us-en-gld.xlsx",
+        "attempts": 1
+      }
+    ],
+    "undici_observed_response_headers": 12,
+    "undici_response_statuses": {
+      "200": 12
+    },
+    "undici_error_events": 0,
+    "counter_loads": 71,
+    "global_all_transport_fetch_count": "UNKNOWN",
+    "query_strings_headers_payloads_recorded": false,
+    "network_blocking_claim": false,
+    "deduplication_note": "Counts emitted outbound request-create events, so cache hits do not create attempts; redirects/retries create separate events when diagnostics emit them.",
+    "instrumentation_test": {
+      "status": "PASS",
+      "loopback_observed_attempts": 8,
+      "undici": 6,
+      "native_http": 2,
+      "redirect_attempts": 2,
+      "explicit_retry_attempts": 2,
+      "failed_connection": 1
+    },
+    "npm_registry_fetches": 0,
+    "intentional_V2_live_capture_fetches": 0,
+    "product_source_changed": false,
+    "portability_test_retry_added_requests": 0
+  },
+  "OBSERVED_OUTBOUND_NODE_HTTP_ATTEMPTS": 12,
+  "GLOBAL_ALL_TRANSPORT_FETCH_COUNT": "UNKNOWN",
+  "NPM_REGISTRY_FETCHES": 0,
+  "INTENTIONAL_V2_LIVE_CAPTURE_FETCHES": 0,
+  "network_interpretation": "The normal V1 adapters made12 observed outbound NodeHTTP attempts during the canonical/build workflow, all with observed status200. This is a scoped diagnostics measurement, not an exact count across native/non-Node transports. No live V2 readiness capture was attempted.",
+  "PUBLIC_DEFAULT": "V1",
+  "V2_SHADOW_DEFAULT": "OFF",
+  "V1_PUBLIC_AUTHORITY": "YES",
+  "HISTORICAL_REPLAY_CLASS": "R2",
+  "POINT_IN_TIME_OOS_CLAIM": "NO",
+  "SHADOW_ACTIVATION_READY": "NO",
+  "SHADOW_READINESS_PHASE_B_STARTED": "NO",
+  "COMMIT_CREATED": "NO",
+  "PUSH_PERFORMED": "NO",
+  "DEPLOYMENT_PERFORMED": "NO",
+  "SHADOW_ACTIVATED": "NO",
+  "PRODUCTION_CUTOVER": "NO",
+  "evidence": {
+    "initial_checkout": {
+      "path": "docs/regime-engine-v2/rc-portability-repair/local/preparation/initial.json",
+      "sha256": "2db30b2605df4aa6c6ceda922274098ff98ee1577a0d93c8e142ff10a6746b5a"
+    },
+    "initial_file_manifest": {
+      "path": "docs/regime-engine-v2/rc-portability-repair/local/preparation/pristine-initial-files.json",
+      "sha256": "f472770db2b6c88bb0c76a5cb4392d1caee9d74e3e1ef8b20120281fabddb990"
+    },
+    "dependency_preparation": {
+      "path": "docs/regime-engine-v2/rc-portability-repair/local/preparation/preparation.json",
+      "sha256": "c29c49707099ca6a3159b91accab9985cd6e7c8faefa10c065ee24efe242e7c2"
+    },
+    "npm_install_log": {
+      "path": "docs/regime-engine-v2/rc-portability-repair/local/preparation/npm-ci-offline.log",
+      "sha256": "42ce76462aa30e390852e217eaf0c23a2b259b73f549f996cdc6175782c6b29b"
+    },
+    "patched_checkout": {
+      "path": "docs/regime-engine-v2/rc-portability-repair/local/patched-checkout.json",
+      "sha256": "03c1d809fd9754fb86068d9a29c946272c27e052692bf5546b402d723ad3ed19"
+    },
+    "canonical_invocation": {
+      "path": "docs/regime-engine-v2/rc-portability-repair/local/canonical-invocation.json",
+      "sha256": "13f43ad07da1fff15edac47f6b7030b6c4adf6c55d0d9bb0c91a69e1fe223e2f"
+    },
+    "canonical_verification": {
+      "path": "docs/regime-engine-v2/rc-portability-repair/local/pristine-checks/verification.json",
+      "sha256": "114fd3b872ae9952a00851bd83785dc1191809c42944309fa159ff3d26e3f55a"
+    },
+    "first_portability_result": {
+      "path": "docs/regime-engine-v2/rc-portability-repair/local/portability-tests.json",
+      "sha256": "2070c11e90d65b9feafa72e2c749794bf86819f8e4a9a2fa4896117053f8ebbf"
+    },
+    "first_portability_log": {
+      "path": "docs/regime-engine-v2/rc-portability-repair/local/portability-tests.log",
+      "sha256": "5b8f527727e08f4ad45b98eeaaee45f7efe162e0456f073d92eabd58a4f09aaa"
+    },
+    "test_harness_repair": {
+      "path": "docs/regime-engine-v2/rc-portability-repair/local/test-harness-repair.json",
+      "sha256": "c458fd933e33f1e19d5703eba434b6596fefd29cfd5533360c30193344e96301"
+    },
+    "final_portability_result": {
+      "path": "docs/regime-engine-v2/rc-portability-repair/local/portability-tests-retry1.json",
+      "sha256": "88081bab9862ef48c7d79e2f4cdfc832dad55512f21e1ef291a661a1324c7add"
+    },
+    "final_portability_log": {
+      "path": "docs/regime-engine-v2/rc-portability-repair/local/portability-tests-retry1.log",
+      "sha256": "dea6b9f72170b79b2cef693d64085c1103f4ce39fbad01c8729e31f9f59b36d1"
+    },
+    "product_preservation": {
+      "path": "docs/regime-engine-v2/rc-portability-repair/local/product-preservation.json",
+      "sha256": "acb754e4a40b8158545b7d43e15d266c31fd76e002bf8814c4eb33f873bd0c08"
+    },
+    "guard_results": {
+      "path": "docs/regime-engine-v2/rc-portability-repair/local/guard-results.json",
+      "sha256": "5d5e26a1ba577def9dcede5ed0f68fd493577e1bca3a6edf2c8ee92442449b9a"
+    },
+    "guard_selftest": {
+      "path": "docs/regime-engine-v2/rc-portability-repair/local/file-access-guard-selftest.json",
+      "sha256": "1028e6d90018953a30f37406c8c6cfab7ddeac1e51866206d9601820c4c25790"
+    },
+    "network_counter_selftest": {
+      "path": "docs/regime-engine-v2/rc-portability-repair/local/network-counter-selftest.json",
+      "sha256": "34963ca4c7f9a6b0877219550f0985c7a68e66c7074245209ba9832a84e47ad7"
+    },
+    "network_observations": {
+      "path": "docs/regime-engine-v2/rc-portability-repair/local/network-observations.json",
+      "sha256": "2f0e649f4c0b0df74e2627ffb2f53f3b110cdf9d5fb39e389b16dc8a934c08f5"
+    },
+    "metadata_sync": {
+      "path": "docs/regime-engine-v2/rc-portability-repair/local/post-check-metadata-sync.json",
+      "sha256": "b16992418093413e5880fbef0d45cfdba7672d643fc37ac0732f6ec3fa69795d"
+    },
+    "canonical_commands": [
+      {
+        "name": "conformance",
+        "command": [
+          "node",
+          "--disable-warning=MODULE_TYPELESS_PACKAGE_JSON",
+          "scripts/regime-v2-conformance.mts",
+          "--output-dir",
+          "/Users/quantlab/Developer/web/Luiguiherrera-web/docs/regime-engine-v2/rc-portability-repair/local/pristine-checks/conformance"
+        ],
+        "exit_code": 0,
+        "log": {
+          "path": "docs/regime-engine-v2/rc-portability-repair/local/pristine-checks/conformance.log",
+          "sha256": "0ae86699a5a32f7d58bf3e604400cf875fd04900d6e5cf404b7a4be2a379cf06"
+        }
+      },
+      {
+        "name": "sweeper-attacks",
+        "command": [
+          "node",
+          "--disable-warning=MODULE_TYPELESS_PACKAGE_JSON",
+          "docs/regime-engine-v2/sweeper/adversarial.mjs",
+          "/Users/quantlab/Developer/web/Luiguiherrera-web/docs/regime-engine-v2/rc-portability-repair/local/pristine-checks/sweeper-attacks.json"
+        ],
+        "exit_code": 0,
+        "log": {
+          "path": "docs/regime-engine-v2/rc-portability-repair/local/pristine-checks/sweeper-attacks.log",
+          "sha256": "d3c1a19321c4efaafe49ba41263b371c242e3ab59898fbe9a9e778c96712e3cf"
+        }
+      },
+      {
+        "name": "baseline-node-tests",
+        "command": [
+          "node",
+          "--disable-warning=MODULE_TYPELESS_PACKAGE_JSON",
+          "--import",
+          "./scripts/trends-test-register.mjs",
+          "--experimental-test-module-mocks",
+          "--test",
+          "lib/dashboard/adapters/vix-term-structure.test.ts",
+          "lib/personal-finance/budget/projection-calculations.test.ts",
+          "lib/personal-finance/budget/projection-presentation.test.ts",
+          "lib/personal-finance/budget/target-calculations.test.ts",
+          "lib/portfolio-fragility/analysis-view.test.ts",
+          "lib/portfolio-fragility/conformance.test.ts",
+          "lib/portfolio-fragility/engine.test.ts",
+          "lib/portfolio-fragility/format.test.ts",
+          "lib/reports/first-september-2026.test.mts",
+          "lib/reports/weekly-review.test.mts",
+          "lib/research/tom-decay/chart-geometry.test.ts",
+          "lib/research/tom-decay/freeze.test.ts",
+          "lib/research/tom-decay/parse.test.ts",
+          "lib/regime-engine-v2/engine.test.ts"
+        ],
+        "exit_code": 0,
+        "log": {
+          "path": "docs/regime-engine-v2/rc-portability-repair/local/pristine-checks/baseline-node-tests.log",
+          "sha256": "0b30ec61cb27423d8fe6126630623212125fba903f8d5a7ec1fb80e13ccce136"
+        }
+      },
+      {
+        "name": "operations-tests",
+        "command": [
+          "node",
+          "--disable-warning=MODULE_TYPELESS_PACKAGE_JSON",
+          "--import",
+          "./scripts/trends-test-register.mjs",
+          "--experimental-test-module-mocks",
+          "--test",
+          "lib/regime-engine-v2/operations/dashboard-shadow.test.ts",
+          "lib/regime-engine-v2/operations/public-preservation.test.ts",
+          "lib/regime-engine-v2/operations/source-input.test.ts",
+          "lib/regime-engine-v2/operations/snapshot.test.ts",
+          "lib/regime-engine-v2/operations/normalizer-preservation.test.mjs"
+        ],
+        "exit_code": 0,
+        "log": {
+          "path": "docs/regime-engine-v2/rc-portability-repair/local/pristine-checks/operations-tests.log",
+          "sha256": "9fa7f675652fc2a67f66430687991f1432567571ba5966fcf2f1df1d1688616f"
+        }
+      },
+      {
+        "name": "designer-tests",
+        "command": [
+          "node",
+          "--disable-warning=MODULE_TYPELESS_PACKAGE_JSON",
+          "--import",
+          "./scripts/trends-test-register.mjs",
+          "--experimental-test-module-mocks",
+          "--test",
+          "lib/dashboard/regime-v2-presentation.test.ts",
+          "lib/dashboard/regime-v2-preview.test.mjs",
+          "lib/dashboard/regime-v2-render.test.mjs",
+          "scripts/regime-v2-design-fixtures.test.ts"
+        ],
+        "exit_code": 0,
+        "log": {
+          "path": "docs/regime-engine-v2/rc-portability-repair/local/pristine-checks/designer-tests.log",
+          "sha256": "48c2261c777a2778915c7fa1ff750f6546d1687b529563b0afb86858db68242f"
+        }
+      },
+      {
+        "name": "designer-fixtures-check",
+        "command": [
+          "node",
+          "--disable-warning=MODULE_TYPELESS_PACKAGE_JSON",
+          "scripts/regime-v2-design-fixtures.mts",
+          "--check"
+        ],
+        "exit_code": 0,
+        "log": {
+          "path": "docs/regime-engine-v2/rc-portability-repair/local/pristine-checks/designer-fixtures-check.log",
+          "sha256": "f3f3f46fba405195f28a22d1348378d4bcd4750da2a4483a365e307d1ff6d78e"
+        }
+      },
+      {
+        "name": "offline-challenger-tests",
+        "command": [
+          "node",
+          "--disable-warning=MODULE_TYPELESS_PACKAGE_JSON",
+          "--test",
+          "docs/regime-engine-v2/groweer/challengers.test.mjs"
+        ],
+        "exit_code": 0,
+        "log": {
+          "path": "docs/regime-engine-v2/rc-portability-repair/local/pristine-checks/offline-challenger-tests.log",
+          "sha256": "e147f458c1a900c9cbdde5757a0b7fa45c4b6fa10583e2502e476f3f880933a5"
+        }
+      },
+      {
+        "name": "reports-validate",
+        "command": [
+          "npm",
+          "run",
+          "reports:validate"
+        ],
+        "exit_code": 0,
+        "log": {
+          "path": "docs/regime-engine-v2/rc-portability-repair/local/pristine-checks/reports-validate.log",
+          "sha256": "17a8278ec97176ddc182bfa8257e3eed789000b7f6428e57c0d238786eff1136"
+        }
+      },
+      {
+        "name": "reports-check",
+        "command": [
+          "npm",
+          "run",
+          "reports:check"
+        ],
+        "exit_code": 0,
+        "log": {
+          "path": "docs/regime-engine-v2/rc-portability-repair/local/pristine-checks/reports-check.log",
+          "sha256": "b81d3c1a89f1730de7441ac54fa6fb19dcba8f4f9bfedee63a2abb49315cc7ab"
+        }
+      },
+      {
+        "name": "editorial",
+        "command": [
+          "npm",
+          "run",
+          "validate:editorial"
+        ],
+        "exit_code": 0,
+        "log": {
+          "path": "docs/regime-engine-v2/rc-portability-repair/local/pristine-checks/editorial.log",
+          "sha256": "7d4f85ccc8a0544b81b0d60fac223b80184e1bd1faaa7822e4bb1b5a2963524f"
+        }
+      },
+      {
+        "name": "typecheck",
+        "command": [
+          "npx",
+          "tsc",
+          "--noEmit",
+          "--incremental",
+          "false"
+        ],
+        "exit_code": 0,
+        "log": {
+          "path": "docs/regime-engine-v2/rc-portability-repair/local/pristine-checks/typecheck.log",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      },
+      {
+        "name": "lint",
+        "command": [
+          "npx",
+          "eslint",
+          ".",
+          "--format",
+          "json",
+          "--output-file",
+          "/Users/quantlab/Developer/web/Luiguiherrera-web/docs/regime-engine-v2/rc-portability-repair/local/pristine-checks/lint.json"
+        ],
+        "exit_code": 0,
+        "log": {
+          "path": "docs/regime-engine-v2/rc-portability-repair/local/pristine-checks/lint.log",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      },
+      {
+        "name": "build",
+        "command": [
+          "npm",
+          "run",
+          "build"
+        ],
+        "exit_code": 0,
+        "log": {
+          "path": "docs/regime-engine-v2/rc-portability-repair/local/pristine-checks/build.log",
+          "sha256": "2ef916f325ae06323bfa879ba7c64b8e848cc174a2a2bb71a2eb8111eeb90ab6"
+        }
+      },
+      {
+        "name": "typecheck-after-build",
+        "command": [
+          "npx",
+          "tsc",
+          "--noEmit",
+          "--incremental",
+          "false"
+        ],
+        "exit_code": 0,
+        "log": {
+          "path": "docs/regime-engine-v2/rc-portability-repair/local/pristine-checks/typecheck-after-build.log",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      }
+    ]
+  },
+  "UNRESOLVED_PORTABILITY_VERIFICATION_FINDINGS": [],
+  "next_action": "Return the verified, uncommitted portability repair to Control Tower. No additional checks, commit, shadow activation or deployment were performed."
+}

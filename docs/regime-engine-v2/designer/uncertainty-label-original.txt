@@ -1,0 +1,7 @@
+Original Designer draft label, preserved from the local copy review:
+"Estados plausibles en la expansión de estados mixtos"
+
+Location: RegimeV2Surface, paragraph listing view.uncertainty.plausibleRegimes.
+The label was too narrow: the accepted expansion also handles intermediate WATCH and RISING states, rather than only MIXED.
+The final label is "Estados plausibles en la expansión de estados intermedios".
+This is an excerpt of the draft UI label, not an altered canonical engine file or a reconstructed full source snapshot.

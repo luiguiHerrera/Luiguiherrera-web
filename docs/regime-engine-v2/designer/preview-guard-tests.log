@@ -1,0 +1,16 @@
+✔ es places its development guard before the only dynamic preview import (0.388166ms)
+✔ es refuses production before resolving the preview module or query (0.2945ms)
+✔ es refuses test before resolving the preview module or query (0.043791ms)
+✔ es permits the local development surface with explicit query unchanged (0.285333ms)
+✔ en places its development guard before the only dynamic preview import (0.084792ms)
+✔ en refuses production before resolving the preview module or query (0.053083ms)
+✔ en refuses test before resolving the preview module or query (0.04525ms)
+✔ en permits the local development surface with explicit query unchanged (0.052084ms)
+ℹ tests 8
+ℹ suites 0
+ℹ pass 8
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 150.218125

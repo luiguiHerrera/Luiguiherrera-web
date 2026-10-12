@@ -1,0 +1,28 @@
+{
+  "status": "DESIGN_ONLY_NOT_ACTIVATED",
+  "canonical_candidate": "Accepted Sweeper C03 unchanged",
+  "start_condition": "New Control Tower authorization; Maintainer/Designer/cutover not executed by Groweer",
+  "capture_contract": [
+    "Preserve raw response bytes and SHA, observation time, source publication/availability evidence, retrieval/ingestion time, asOf cutoff, source/schema/calendar/engine/parameter versions.",
+    "Log unavailable and revised observations; never relabel R2 as point-in-time. R0 admission only with actual preserved contemporaneous vintage evidence.",
+    "Shadow C03 and frozen H1/P1 on identical admitted observations; no product-route wiring or live trades."
+  ],
+  "evidence_stopping_conditions": {
+    "distinct_adjudicable_regime_transitions": 100,
+    "distinct_conflicting_family_episodes": 100,
+    "distinct_material_volatility_episodes": 60,
+    "stress_branch_coverage": "Both absolute-level and joint level/momentum/curve branches must have real admissible observations. Rare subtypes remain unresolved until observed; no calendar timeout converts absence to PASS.",
+    "rationale": "100 independent binary adjudications gives worst-case standard error0.5/sqrt(100)=0.05; a rough two-standard-error range is0.10. For60 independent zero-miss events, the one-sided95% binomial upper rate1-0.05**(1/60) is about4.87%. These are planning calculations, not performance guarantees. Serial dependence and clustered stress reduce effective evidence; count distinct episodes and report dependence/sensitivity instead of claiming these bounds blindly.",
+    "calendar_duration": "Report elapsed calendar span and variety of conditions; do not stop because an arbitrary number of months passed."
+  },
+  "adjudication": [
+    "Predefine contemporaneous semantic questions: broad versus selective participation, genuine level/change disagreement, stale held state, correct missingness. Do not judge by future PnL/returns.",
+    "Two independent reviews of raw evidence with candidate names hidden where feasible; record disagreement and rationale, no forced true-regime label.",
+    "For each H1 suppression, determine whether omitted information was useful; report all delays and stale risk-on labels, stress exits, first-admissible and missing/gap/version cases.",
+    "Measure P1 comprehension versus H1 retention in an separately authorized product study before any UI decision.",
+    "For satellites, record actual authorized narrative-block changes, comprehension and missingness; current sign proxies do not establish narrative utility."
+  ],
+  "promotion_gate": "No stress-entry delay or missing-data masking; demonstrated semantic benefit and acceptable independently adjudicated delay cost with all relevant failure modes. If unmet, retain C03 and park challengers. Require Control Tower approval for any methodology change.",
+  "cross_asset_reopening": "Admitted licensed data with fixed field basis and vintages, paired eligible dates, explicit economic role distinct from equity/implied-vol lineage, and ablation against C03 before proposing a new core family.",
+  "PFL_reopening": "Explicit portfolio/universe/weights and fixed minimum windows; same-family diagnostics only unless independent economic parents are demonstrated. Never import fragilityScore wholesale."
+}

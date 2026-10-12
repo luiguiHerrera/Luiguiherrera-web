@@ -1,0 +1,73 @@
+{
+  "schemaVersion": "regime-integration-provenance-closure/1.0.0",
+  "status": "PASS",
+  "finding": "RI-PROVENANCE-002",
+  "sourceRC2": "2271bee0a21aadd12ab2f45d080c58c94b696326",
+  "remoteBase": "7dae726917ded8f5828a8525d596b1ce02830196",
+  "actualDefectDomain": "Statistical Levels historical generator expectation, not a calendar materialization change",
+  "resolution": "HISTORICAL_GENERATOR_BLOB_BINDING_PLUS_SEPARATE_INTEGRATED_HOOK_EQUIVALENCE",
+  "calendar": {
+    "status": "PASS",
+    "payloadChanged": false,
+    "payloadSha256": "570adddeef6e6dfdfa313cafb3c98c7a6793e3a932b49387132a99deb17e396a",
+    "releaseIdentity": "9b1bc306a4d8e390a294ceafc68fb0695465b7c4e5d3d4709507e5d8df8a7cf0",
+    "contentIdentical": true,
+    "releaseIdsIdentical": true,
+    "coverageIdentical": true,
+    "semanticsIdentical": true
+  },
+  "generator": {
+    "status": "PASS",
+    "sourceRC2GeneratorHash": "de9da118da379ccb12618adee258364b730935da36055b9822ca201f869095dd",
+    "historicalRemoteGeneratorHash": "e298c952e02112757d09ccf089383dd4653e044b305cd4d45e5f624857b04f6c",
+    "integratedGeneratorHash": "d26a5d548a0a0925f9336dc76c52eb89e7fd89c5d094c38100da0ed79bffeb97",
+    "approvedHookHash": "f60dae5259e529454ab0e97e2228c9270cebcb527c89dc3be2c58ec16fdd466d",
+    "hookPreserved": true,
+    "allBytesOutsideHookEqualRemote": true,
+    "classification": "CASE_B_PASSIVE_TRANSPORT_CAPTURE_ADDITION_WITH_UNCHANGED_FORMULA_BYTES"
+  },
+  "historicalArtifact": {
+    "provenanceSha256": "59307d9ebf76a3cf3e2b5405407ef199cfbd90875433e4e27896e5f72469f58a",
+    "generatorCommit": "75a89d93c79752ca83cde0c9ef6bb221071dd4cd",
+    "generatorBundleHash": "7beebd2acf006cd38809539155a5460c612885831df3381d47236c4d71092226",
+    "historicalSourcesVerified": 4,
+    "publishedSnapshotsUnchanged": 81
+  },
+  "reproduction": {
+    "status": "PASS",
+    "historicalRaw": true,
+    "archiveManifestSha256": "4bc0abda230c9021b5421ac3637952e16a3abc6cea811c72de82291467254b16",
+    "archiveChecksumManifestSha256": "acbee6dd07e38eb5299c7c2af805efd2c677a41ba0ed7f8354a12b32f2f04704",
+    "rawAssets": 40,
+    "publishedSnapshotCases": 81,
+    "historicalGeneratorBundleHash": "7beebd2acf006cd38809539155a5460c612885831df3381d47236c4d71092226",
+    "integratedGeneratorBundleHash": "b3b13aad4448c11fb5a067ddae3522ebd0cbbf8da81aca26ca1810216a852d3b",
+    "publishedProvenanceRewritten": false,
+    "nodeVersion": "v26.5.0",
+    "publishedGenerationNodeVersion": "v22.23.2",
+    "networkAttempts": 0,
+    "providerFetches": 0
+  },
+  "regressions": {
+    "passed": 12,
+    "total": 12,
+    "failures": 0,
+    "eslintErrors": 0,
+    "eslintWarnings": 0
+  },
+  "historicalVerifiersRewritten": false,
+  "payloadOrOracleEdited": false,
+  "scriptFiles": {
+    "provenance-regressions.test.mjs": "1831af4a486cc77c682ffaa250096e629384409cf3f7b62d4b01007a494c4f2b",
+    "provenance-core.mjs": "53685a733a97d3ec57cf643a8acca62c97f037c5f2f268162f7e1e6ff02fb987",
+    "provenance-verify.mjs": "b1ab63a988fdbb3da070ad4548d6b6e1e92f2e5aa7b8b31ac217e8e8dd2864d7"
+  },
+  "evidence": {
+    "historicalReproductionSha256": "2b20a769c231ef98c936dc839ceadd53ab5c08b7df050498602d128db8b833b6",
+    "retrievalSha256": "a2c61362fc618018d4d8b14674ec12cf7e6efcbfb2bbf2d11e04da96c00ff2ac",
+    "retrievalReadRequests": 46,
+    "retrievalObjectVersionGets": 45,
+    "retrievalMutations": 0,
+    "retrievalOperator": "Root; independently sealed existing archive only; no provider or calendar acquisition"
+  }
+}

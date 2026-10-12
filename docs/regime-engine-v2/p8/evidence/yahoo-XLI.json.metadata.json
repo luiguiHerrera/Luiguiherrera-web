@@ -1,0 +1,16 @@
+{
+  "url": "https://query1.finance.yahoo.com/v8/finance/chart/XLI?period1=1514764800&period2=1788566400&interval=1d&events=div%2Csplits&includeAdjustedClose=true",
+  "status": "CAPTURED",
+  "http_status": 200,
+  "capture_started_at": "2026-09-08T14:09:00.998830+00:00",
+  "captured_at": "2026-09-08T14:09:01.238690+00:00",
+  "available_at": "2026-09-08T14:09:01.238690+00:00",
+  "availability_certainty": "CONSERVATIVE_BOUND",
+  "source_published_at": null,
+  "historical_replay_class": "R2",
+  "raw_sha256": "841af851ad2c59302fea1fc99b41d67ff124418633c92b20ffad5777e7e89fbb",
+  "raw_bytes": 240029,
+  "file": "yahoo-XLI.json.gz",
+  "http_date_not_publication": "Tue, 08 Sep 2026 14:09:01 GMT",
+  "last_modified_not_vintage_guarantee": null
+}

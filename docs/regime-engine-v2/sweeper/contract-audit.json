@@ -1,0 +1,88 @@
+{
+  "status": "PASS",
+  "p8FilesVerified": 289,
+  "p8FilesChanged": 0,
+  "selectedCatalogRowsVerified": 108,
+  "conceptualStates": 320,
+  "ruleCoverage": {
+    "R04": 1,
+    "R06": 55,
+    "R00": 212,
+    "R03": 6,
+    "R01": 27,
+    "R05": 1,
+    "R02": 18
+  },
+  "rawCrossedStates": 576,
+  "pillarStatesReached": {
+    "participation": [
+      "ADVERSE",
+      "FAVORABLE",
+      "MIXED",
+      "UNAVAILABLE"
+    ],
+    "leadership": [
+      "ADVERSE",
+      "FAVORABLE",
+      "MIXED",
+      "UNAVAILABLE"
+    ],
+    "equity": [
+      "ADVERSE",
+      "FAVORABLE",
+      "MIXED",
+      "UNAVAILABLE"
+    ],
+    "volatility": [
+      "ADVERSE",
+      "BENIGN",
+      "STRESS",
+      "UNAVAILABLE",
+      "WATCH"
+    ],
+    "fragility": [
+      "HIGH",
+      "LOW",
+      "RISING",
+      "UNAVAILABLE"
+    ]
+  },
+  "historicalWitnesses": {
+    "2019-01-02": "DEFENSIVE",
+    "2019-01-04": "TRANSITION",
+    "2019-01-30": "RISK_ON_BROAD",
+    "2019-02-25": "RISK_ON_SELECTIVE",
+    "2020-02-25": "STRESS"
+  },
+  "contractsRuntimeFrozen": true,
+  "performanceResults": [
+    {
+      "n": 500,
+      "elapsedMs": 30.598375000000004,
+      "streak": {
+        "sign": 1,
+        "length": 500,
+        "censored": true
+      }
+    },
+    {
+      "n": 1000,
+      "elapsedMs": 29.855208000000005,
+      "streak": {
+        "sign": 1,
+        "length": 1000,
+        "censored": true
+      }
+    },
+    {
+      "n": 2000,
+      "elapsedMs": 44.313208,
+      "streak": {
+        "sign": 1,
+        "length": 2000,
+        "censored": true
+      }
+    }
+  ],
+  "performanceScope": "Full engine includes structural input validation and sorting; BTC streak itself now indexes once and traverses once. Timings are local observations, not a benchmark claim."
+}

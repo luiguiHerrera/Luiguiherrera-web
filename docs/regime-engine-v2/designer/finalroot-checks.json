@@ -1,0 +1,95 @@
+{
+  "status": "PASS",
+  "completed_at": "2026-09-08T20:37:39.278624+00:00",
+  "TYPECHECK": "PASS",
+  "BUILD": "PASS",
+  "LINT_ERRORS": 0,
+  "LINT_WARNINGS": 18,
+  "BASELINE_LINT_WARNINGS": 18,
+  "NEW_LINT_WARNINGS": 0,
+  "P8_GOLDEN_CASES": "464/464",
+  "HISTORICAL_R2_CONFORMANCE": "1930/1930",
+  "SWEEPER_ATTACKS": "110/110",
+  "V1_TESTS": "PASS",
+  "V2_TESTS": "PASS",
+  "DESIGNER_TESTS": "59/59",
+  "ACCOUNTED_TESTS": "592/592",
+  "REPORTS_VALIDATE": "PASS",
+  "REPORTS_CHECK": "PASS",
+  "EDITORIAL": "PASS",
+  "CANONICAL_ENGINE_HASH_MATCH": "PASS",
+  "CANONICAL_ENGINE_FILES_PRESERVED": 21,
+  "FROZEN_INPUT_FILES_PRESERVED": 1014,
+  "PRIOR_STAGE_ARTIFACTS_PRESERVED": 474,
+  "PREVIEW_PRODUCTION_GUARD": "8/8 HTTP 404",
+  "PUBLIC_DASHBOARDS_V1": "2/2 HTTP 200; legacy score/confidence labels present, no V2/fixture markers",
+  "PUBLIC_DEFAULT": "V1",
+  "PRODUCTION_TEST_SERVER_STOPPED": true,
+  "PRODUCTION_TEST_SERVER": "127.0.0.1:3107",
+  "NEW_RUNTIME_DEPENDENCIES": 0,
+  "NEXT_DECLARED_VERSION": "16.3.1",
+  "NEXT_LOCKED_VERSION": "16.3.1",
+  "NEXT_INSTALLED_VERSION": "16.3.1",
+  "NEXT_ENV_INPUT_HASH_MATCH": "PASS",
+  "PACKAGE_FILES_INPUT_HASH_MATCH": "PASS",
+  "FINAL_UI_HASH_MATCHES_TESTED_SOURCE": "PASS",
+  "COMMIT_CREATED": false,
+  "PUSH_PERFORMED": false,
+  "DEPLOYMENT_PERFORMED": false,
+  "PRODUCTION_CUTOVER": false,
+  "repository_report": {
+    "path": "docs/regime-engine-v2/designer/repository-verification.json",
+    "sha256": "92b45268bbf3fcb527768140a9d0be9ae17d2055d06a85d6b56d5dcefa6f88d9"
+  },
+  "artifacts": [
+    {
+      "path": "docs/regime-engine-v2/designer/canonical-verification.json",
+      "sha256": "93a7f00045556ab45f5c85f9155c0917525bb6216f6c4157ef5c17b3d3a2f846"
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/typecheck-before-build.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/typecheck-after-build.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/lint.json",
+      "sha256": "122ba26b67f915e59e14b1aecfc4c2cfc78eb0ba965edcbcb5584a01c1c926e2"
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/lint.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/build.log",
+      "sha256": "bbf033e5722f5f0958cc93a35d63985592083210df5df7cbe9356778526527a1"
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/generated-file-audit.json",
+      "sha256": "87a812ad6dc35533f34156d540aa41eadcc44c486ac0190848f2d11f7f9c952d"
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/production-preview-guard.json",
+      "sha256": "5dfeddfdbf231894b35d7796df78ee91480a8cb18a0e76b94191fa2ee778da4a"
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/production-preview-guard.log",
+      "sha256": "5dfeddfdbf231894b35d7796df78ee91480a8cb18a0e76b94191fa2ee778da4a"
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/production-server.log",
+      "sha256": "3a62c926f62973e36339b92d22e34af8e87cea9e180ee4144a1ae0f41d71d3c3"
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/preview-guard-tests.log",
+      "sha256": "bb11efcdcd7766aebc641913ad0cc63121204be7aa310b2d3cb2138a023a0c19"
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/verification-findings.json",
+      "sha256": "efedf0fe3e33cc0d9d69f8d586a972688460418b39916f8a9d9289276a6d9260"
+    }
+  ],
+  "scope": "Root repository gates only. Visual, responsive, accessibility, copy, fixture state reviews and performance are separately aggregated by root. Production HTTP refers to the temporary local build server; it is stopped."
+}

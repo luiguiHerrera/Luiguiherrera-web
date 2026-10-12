@@ -1,0 +1,1216 @@
+{
+  "schemaVersion": 1,
+  "status": "PASS",
+  "recordedAt": "2026-09-09T11:21:25.407683+00:00",
+  "rc0Commit": "f5fc7ecfd9e1f323d0ad3a43eccec1dbc500be1c",
+  "rc0Tree": "05242fadab2cb190effeaea2ea4100e9eb4fbf9d",
+  "scope": "Only this authorized portability repair. Preexisting unrelated work and prior Shadow Readiness documents are retained and excluded from this delta.",
+  "existingFilesModified": [
+    {
+      "path": "docs/regime-engine-v2/designer/README.md",
+      "rc0Sha256": "778a0463b4e728c7d32f39a7164b3e25f84518685c62e5bdcb8e2d826579513b",
+      "repairedSha256": "c075e8f7b2a5b7cfef0817a6a93d09d541dbce6b916ebe8d87e1a8f9c92ec1f0"
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/accessibility-qa.mjs",
+      "rc0Sha256": "0a097a8efe301bc6479904515b0d250d897668d269ce06cff03ffac6eb3bf18b",
+      "repairedSha256": "b69cc3070b010cf2545e8e0ce8d542298fd005d585cbcb32d7596c3cc6beb50c"
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/browser-qa.mjs",
+      "rc0Sha256": "9aa1a21625c83c91ad53b6c6d86b8fd66b5d2773ac68ada78d2bfec71dc22ab2",
+      "repairedSha256": "b99749f2018ca22b1866b3dc3a6d5eaec94bd4a6d81ad3e7dacb055606c09795"
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/run-verification.py",
+      "rc0Sha256": "4effed4a10baaa6879ed69a76ddbd78b4fbe298e4bb907845e88fcddd2790292",
+      "repairedSha256": "6e86f18c727bd532ba0e1cb0ebd334cda766e00715c001bf997a86f881a5f5d9"
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/seal-review.py",
+      "rc0Sha256": "5d2cd8ab93a76a09170132c9666c6bc045c959c039ad01c49de80ec63bb798f1",
+      "repairedSha256": "e1d4d451448dad61bb588963fd133c1bb3f36d67d1c904f49bc1cda64d94c08b"
+    },
+    {
+      "path": "docs/regime-engine-v2/groweer/README.md",
+      "rc0Sha256": "22994ffebf9970731c2b7649ac4014702567dee2897a67d622e27b45a8949174",
+      "repairedSha256": "3fd62893aa6bdbade6ad59670275d80f849b33cbbe6b63da13a8926d4ff07e27"
+    },
+    {
+      "path": "docs/regime-engine-v2/groweer/close-verification.py",
+      "rc0Sha256": "cda9f7fa1481079572e3a1b3bce035be614b4897a43d4c49c4cf63739c7b01be",
+      "repairedSha256": "dd5e21be3a2d805691436262bad7e4ec6b6336b06eaecd7dd2dfecb48bcb5591"
+    },
+    {
+      "path": "docs/regime-engine-v2/groweer/run-canonical-verification.py",
+      "rc0Sha256": "8f9f8840f04e37edfb1889bbb64b5297b4c7cc25f92d00647e98bb94553ea055",
+      "repairedSha256": "bde8a50c03ed875895ab3d6d2040519a882400a6ee2dc1ff35e3d1d014b5110a"
+    },
+    {
+      "path": "docs/regime-engine-v2/groweer/seal-manifest.py",
+      "rc0Sha256": "2a714609143072177933f46a1fdfd46a1ca8a859d4ec9a4a0dc759bd2a78f50c",
+      "repairedSha256": "6328975724291eb73cd03e1a4e9a90fbaa8cc1d8056ce14777b6a8e209313d6f"
+    },
+    {
+      "path": "docs/regime-engine-v2/maintainer/README.md",
+      "rc0Sha256": "027134e7e963c5eec074e0be8d83dec0db89976a5d4e0c98b82863d121715894",
+      "repairedSha256": "43e601e16e99bf7890916b82b0d7d1b71a15457e40e938ff2db8f6beab435dfe"
+    },
+    {
+      "path": "docs/regime-engine-v2/maintainer/close-verification.py",
+      "rc0Sha256": "f69e52a7ffcbed5bb74d69d5d48ff74017d373344d3cad96052022db36c3628f",
+      "repairedSha256": "c4c4debbe213e59e6b15a21956d72d81956430b5f2ad9ddb76d88898fc55cb91"
+    },
+    {
+      "path": "docs/regime-engine-v2/maintainer/run-verification.py",
+      "rc0Sha256": "0defad3077544fb21b6e40b8da273ece660e897cb78462dcfe599c3ef4f80404",
+      "repairedSha256": "b4281ddf0a88d0e1868b9e0fc3ba49835083366048112b81d4769a61d64e83c3"
+    },
+    {
+      "path": "docs/regime-engine-v2/maintainer/runbook.md",
+      "rc0Sha256": "16dd805b38bf4c22fc290359a2d3144a35c433d00c7acbd92744e2a3f588626e",
+      "repairedSha256": "12b962724d793a739bf3c67074545062784d5c1c7bf1d47e11586c94595f3a1b"
+    },
+    {
+      "path": "docs/regime-engine-v2/release-candidate/README.md",
+      "rc0Sha256": "20725ae14fe30a4a20346195d45c4f61c1b8db3ea8a8ed4dcf6c5f094192e86a",
+      "repairedSha256": "10c75aa47ca724dc7b296ef0912d735a18cb8fa868bf3c0f37c85d89bb9f0d6b"
+    },
+    {
+      "path": "docs/regime-engine-v2/release-candidate/run-verification.py",
+      "rc0Sha256": "27dfa25811fd63f853739adf4fd34782f4ad4fc57ca5ae216c8c6ee8b6381de6",
+      "repairedSha256": "9fbdf8b5e58d09591473dc69a8b80bf8be754f0a87fd7d10531b9a64ca140bd9"
+    },
+    {
+      "path": "docs/regime-engine-v2/release-candidate/verification-guide.md",
+      "rc0Sha256": "53da8ca6505467013f8d8704d8a055647cd5d804dd71de562987b49560704669",
+      "repairedSha256": "e3c9cded9e5f9dc99197bcce1f3d083653aefd3de2cf3ac307ab7d5f5af19f68"
+    },
+    {
+      "path": "docs/regime-engine-v2/sweeper/README.md",
+      "rc0Sha256": "1d9ea6dd7aed3c985fd36d2cbf6df112f2fd9894ea0e721c23b6942e6a4f7236",
+      "repairedSha256": "cb42f7c5c8e58858c63657d99c8258572e30b5dfeaee969a0a835146e3a958a6"
+    },
+    {
+      "path": "docs/regime-engine-v2/sweeper/run-verification.py",
+      "rc0Sha256": "7a1966e267abea8188d51ef9383190af8e71010bca7feb64518e3181df9232fe",
+      "repairedSha256": "c4d70a8d703ee5fa79ab4f3011a45315e16b590765ec34f25ab3823db10f8069"
+    }
+  ],
+  "existingFileModificationCount": 18,
+  "verificationExecutableFilesModified": 11,
+  "existingDocumentationFilesModified": 7,
+  "newVerificationExecutableFiles": 1,
+  "productCodeFilesModified": 0,
+  "methodologyChanged": false,
+  "newRuntimeDependencies": 0,
+  "deletedFiles": [],
+  "priorInputFiles": 1212,
+  "priorInputFilesUnchanged": 1194,
+  "priorExcludedUserFilesPreserved": 177,
+  "priorShadowReadinessDocumentsPreserved": 16,
+  "criticalFilesPreserved": 54,
+  "criticalAggregateSha256": "e0095fd3e4fdd630004b995da315ec80d4477491f25e8dcdc47c4e143b8e47b2",
+  "committedHistoricalJsonAndJsonGzPreserved": 305,
+  "newReviewableFilesCountIncludingThisManifest": 11,
+  "newReviewableFiles": [
+    {
+      "path": "docs/regime-engine-v2/rc-portability-repair/.gitignore",
+      "sha256": "a7d8bdcefba82a95ebc021d87c629fdea21f13af953bf01e28b7cf8b0eeceb41",
+      "bytes": 7,
+      "classification": "DOCUMENTATION_OR_AUDIT_EVIDENCE"
+    },
+    {
+      "path": "docs/regime-engine-v2/rc-portability-repair/FINAL_STATUS.txt",
+      "sha256": "001091c057eca23e5781b6e03d78f15884c0185f625546b7e1215050ffcfcadc",
+      "bytes": 1160,
+      "classification": "DOCUMENTATION_OR_AUDIT_EVIDENCE"
+    },
+    {
+      "path": "docs/regime-engine-v2/rc-portability-repair/README.md",
+      "sha256": "a5c787710b4b0599d92b2621c5501c7fccf09de33df32aa8d38f1ca9effd267a",
+      "bytes": 4850,
+      "classification": "DOCUMENTATION_OR_AUDIT_EVIDENCE"
+    },
+    {
+      "path": "docs/regime-engine-v2/rc-portability-repair/findings.json",
+      "sha256": "9c5a1ea3e4abf506a2940577373a2c46bab92756b1f7c3257c795a196cfa135d",
+      "bytes": 3298,
+      "classification": "DOCUMENTATION_OR_AUDIT_EVIDENCE"
+    },
+    {
+      "path": "docs/regime-engine-v2/rc-portability-repair/input-manifest.json",
+      "sha256": "d934ea8f04e3ce0b575d94f9dc0345248587e91943c77628e8428852229a8f05",
+      "bytes": 244046,
+      "classification": "DOCUMENTATION_OR_AUDIT_EVIDENCE"
+    },
+    {
+      "path": "docs/regime-engine-v2/rc-portability-repair/pristine-verification.json",
+      "sha256": "861c6865386407a183f1f8f262abee53ff39ecde214776f0cb0f0046d52c29d0",
+      "bytes": 30228,
+      "classification": "DOCUMENTATION_OR_AUDIT_EVIDENCE"
+    },
+    {
+      "path": "docs/regime-engine-v2/rc-portability-repair/repair-delta.json",
+      "sha256": "65848f0d5e66d607f504187d2eedc73caefc884b05822fa05d78f810d7cd8b01",
+      "bytes": 5821,
+      "classification": "DOCUMENTATION_OR_AUDIT_EVIDENCE"
+    },
+    {
+      "path": "docs/regime-engine-v2/rc-portability-repair/retired-entrypoints.json",
+      "sha256": "75330d29c8d86a53419643e5ea1f5e4c93535cb226c806e07f26ace34cdb7720",
+      "bytes": 106801,
+      "classification": "DOCUMENTATION_OR_AUDIT_EVIDENCE"
+    },
+    {
+      "path": "docs/regime-engine-v2/rc-portability-repair/test-portability.py",
+      "sha256": "5ba08e2d5bc88c9a11fb7ad5278fc30a5ede50e6e40fe9e552fec25b8dc1cf86",
+      "bytes": 17114,
+      "classification": "VERIFICATION_TEST"
+    },
+    {
+      "path": "docs/regime-engine-v2/rc-portability-repair/verification.json",
+      "sha256": "ab07cff5371fefb63f6619659f729d9bee292d0931683cca961fc85f7700c3a6",
+      "bytes": 8299,
+      "classification": "DOCUMENTATION_OR_AUDIT_EVIDENCE"
+    },
+    {
+      "path": "docs/regime-engine-v2/rc-portability-repair/files-changed.json",
+      "sha256": null,
+      "bytes": null,
+      "classification": "SELF_MANIFEST"
+    }
+  ],
+  "selfHashPolicy": "This file is listed without its own hash/size to avoid recursion.",
+  "ignoredLocalAuditArtifacts": {
+    "count": 201,
+    "prefix": "docs/regime-engine-v2/rc-portability-repair/local/",
+    "files": [
+      {
+        "path": "docs/regime-engine-v2/rc-portability-repair/local/canonical-invocation.json",
+        "sha256": "13f43ad07da1fff15edac47f6b7030b6c4adf6c55d0d9bb0c91a69e1fe223e2f",
+        "bytes": 4084
+      },
+      {
+        "path": "docs/regime-engine-v2/rc-portability-repair/local/canonical-runner.log",
+        "sha256": "53ff6cec81cc7f2a75d897cb5adaded69baf8d4f749b1cced75521028557803b",
+        "bytes": 2225
+      },
+      {
+        "path": "docs/regime-engine-v2/rc-portability-repair/local/file-access-guard-config.json",
+        "sha256": "1f6b25956753e699f29e2033c0848a9d9d155f9d2b3bf6abf44cb0270fb05413",
+        "bytes": 11360
+      },
+      {
+        "path": "docs/regime-engine-v2/rc-portability-repair/local/file-access-guard-selftest-config.json",
+        "sha256": "d74d7f6026efbf048ee3ae29abdb9a676d0256cbd3a88fc1b9a6e75d9fd64ed6",
+        "bytes": 11369
+      },
+      {
+        "path": "docs/regime-engine-v2/rc-portability-repair/local/file-access-guard-selftest.json",
+        "sha256": "1028e6d90018953a30f37406c8c6cfab7ddeac1e51866206d9601820c4c25790",
+        "bytes": 573
+      },
+      {
+        "path": "docs/regime-engine-v2/rc-portability-repair/local/file-access-guard.mjs",
+        "sha256": "e9a254a0673e6fdd31c4361c6d7a801319cf3078189f3ba3d46a876d58599234",
+        "bytes": 4104
+      },
+      {
+        "path": "docs/regime-engine-v2/rc-portability-repair/local/guard-events/node-35182.jsonl",
+        "sha256": "3d44c81d5a82f970efd108b445504ee7defb314454a61f5647df1d4a75434669",
+        "bytes": 134
+      },
+      {
+        "path": "docs/regime-engine-v2/rc-portability-repair/local/guard-events/node-35183.jsonl",
+        "sha256": "29d4b3e787910c8511b8167cec8787eb2178ee4af9c506368ab663c053da379c",
+        "bytes": 134
+      },
+      {
+        "path": "docs/regime-engine-v2/rc-portability-repair/local/guard-events/node-35186.jsonl",
+        "sha256": "77c9c77ce77827fe8ca64fb1c66ed45c0ccd3dc4d162e688e16ae34dd39abebb",
+        "bytes": 134
+      },
+      {
+        "path": "docs/regime-engine-v2/rc-portability-repair/local/guard-events/node-35187.jsonl",
+        "sha256": "55ace30d2c4df63f4701f4483cc7a817e043e65ea75fa902615131f82c15cd0e",
+        "bytes": 134
+      },
+      {
+        "path": "docs/regime-engine-v2/rc-portability-repair/local/guard-events/node-35188.jsonl",
+        "sha256": "c271a132988c2c31644f9ede27b0394570745926c8813cbb15cb647228b651ac",
+        "bytes": 134
+      },
+      {
+        "path": "docs/regime-engine-v2/rc-portability-repair/local/guard-events/node-35189.jsonl",
+        "sha256": "1badd59d243106963d7771279721dab2bcbf37c4d4215ea78923e80cfc25c455",
+        "bytes": 134
+      },
+      {
+        "path": "docs/regime-engine-v2/rc-portability-repair/local/guard-events/node-35190.jsonl",
+        "sha256": "67c09a3d64849b264db9602f8405c6dea61dbdce214189b715bd25149a81cc8a",
+        "bytes": 134
+      },
+      {
+        "path": "docs/regime-engine-v2/rc-portability-repair/local/guard-events/node-35191.jsonl",
+        "sha256": "69fb143d4e032235e01acf87566b87125a3ee6e6c38c33fb98c82174fc84bba4",
+        "bytes": 134
+      },
+      {
+        "path": "docs/regime-engine-v2/rc-portability-repair/local/guard-events/node-35192.jsonl",
+        "sha256": "e8700274c9de4bbd3dfe2c6a815e90ba839394372110b9acdf3fa9507efef4f3",
+        "bytes": 134
+      },
+      {
+        "path": "docs/regime-engine-v2/rc-portability-repair/local/guard-events/node-35193.jsonl",
+        "sha256": "6cfb54fcbf2496d7f26085df4d0a7cf67c324193790ce3293b4dee09dc7b26f4",
+        "bytes": 134
+      },
+      {
+        "path": "docs/regime-engine-v2/rc-portability-repair/local/guard-events/node-35194.jsonl",
+        "sha256": "754665b395d238c196cb11f42df09812eb4acb22b47baa70274b9f991ff59d27",
+        "bytes": 134
+      },
+      {
+        "path": "docs/regime-engine-v2/rc-portability-repair/local/guard-events/node-35195.jsonl",
+        "sha256": "b689f3e864b90d7c34c36f41585ae4ea32f961e1b9202f04d5a00c7cb55d1932",
+        "bytes": 134
+      },
+      {
+        "path": "docs/regime-engine-v2/rc-portability-repair/local/guard-events/node-35196.jsonl",
+        "sha256": "50bb29c5f8df6c30e1c7a7a3661892f83a91e2706ee17fd9878a3afcda90c6b4",
+        "bytes": 134
+      },
+      {
+        "path": "docs/regime-engine-v2/rc-portability-repair/local/guard-events/node-35197.jsonl",
+        "sha256": "74d0d825d44e60bdcaae2fbf205cf6ec983234a43211d9ec816176df7e98786c",
+        "bytes": 134
+      },
+      {
+        "path": "docs/regime-engine-v2/rc-portability-repair/local/guard-events/node-35198.jsonl",
+        "sha256": "d6a03faff2dfc26a40de7c7f1c6a4a57ef23fe47e9e38eb7699147d037591426",
+        "bytes": 134
+      },
+      {
+        "path": "docs/regime-engine-v2/rc-portability-repair/local/guard-events/node-35199.jsonl",
+        "sha256": "454d1e9e3ceb7ad465a66d244e880e200133717502dd87e0779404678f0e7bc5",
+        "bytes": 134
+      },
+      {
+        "path": "docs/regime-engine-v2/rc-portability-repair/local/guard-events/node-35200.jsonl",
+        "sha256": "5b9f3fc876c28e67f2de2ba4428442ec6898006a14fefbb13a87c136f154be52",
+        "bytes": 134
+      },
+      {
+        "path": "docs/regime-engine-v2/rc-portability-repair/local/guard-events/node-35201.jsonl",
+        "sha256": "70f81cd132e746b8bf6aececfa262f54aad1d3ef293ab4f7ec4d8121efb7f421",
+        "bytes": 134
+      },
+      {
+        "path": "docs/regime-engine-v2/rc-portability-repair/local/guard-events/node-35202.jsonl",
+        "sha256": "c66ec00436c85f6d559c46151d28eb6e810792854026290c86df9046ca1b36cc",
+        "bytes": 134
+      },
+      {
+        "path": "docs/regime-engine-v2/rc-portability-repair/local/guard-events/node-35203.jsonl",
+        "sha256": "10d1b837a9eda953fb63a16a5cec59e853d8629edd10ce0888ecca5820ef8927",
+        "bytes": 134
+      },
+      {
+        "path": "docs/regime-engine-v2/rc-portability-repair/local/guard-events/node-35204.jsonl",
+        "sha256": "ef3c37a2546106a1fc82907c8bd58e445ba7ee6a7257f0a7012875f4bdf8e776",
+        "bytes": 134
+      },
+      {
+        "path": "docs/regime-engine-v2/rc-portability-repair/local/guard-events/node-35226.jsonl",
+        "sha256": "e25080ec5bf58af41a677b1a4adf1731fe6a792942c66cba28b90209af12cbe7",
+        "bytes": 134
+      },
+      {
+        "path": "docs/regime-engine-v2/rc-portability-repair/local/guard-events/node-35227.jsonl",
+        "sha256": "c86a85ae9a1053bd518c64e02eb149cda97f3640d40a475fdfde3384cb101c87",
+        "bytes": 134
+      },
+      {
+        "path": "docs/regime-engine-v2/rc-portability-repair/local/guard-events/node-35228.jsonl",
+        "sha256": "7b6866cadcb6f5a83f9de04f9c2a2c5f336b1af7f70245a299ec1071793b1eb7",
+        "bytes": 134
+      },
+      {
+        "path": "docs/regime-engine-v2/rc-portability-repair/local/guard-events/node-35229.jsonl",
+        "sha256": "f75edf72ff58504f947d5f8adf5ef97f50af73b7a2f24cc882aa363a5bce51dd",
+        "bytes": 134
+      },
+      {
+        "path": "docs/regime-engine-v2/rc-portability-repair/local/guard-events/node-35232.jsonl",
+        "sha256": "11dd81731dc143d9c50dd1862415f6728caff9f534583188c6fc5feb604a0c28",
+        "bytes": 134
+      },
+      {
+        "path": "docs/regime-engine-v2/rc-portability-repair/local/guard-events/node-35249.jsonl",
+        "sha256": "ac2fa1e9d7530217fc4a5e1edc9b1779eeac19c08d753e081a56d4ade2ce0dec",
+        "bytes": 134
+      },
+      {
+        "path": "docs/regime-engine-v2/rc-portability-repair/local/guard-events/node-35250.jsonl",
+        "sha256": "f40763c37cfa35baca2da90d57539cfb399c8e2b14a6d4f61438d98a9af1acb8",
+        "bytes": 134
+      },
+      {
+        "path": "docs/regime-engine-v2/rc-portability-repair/local/guard-events/node-35261.jsonl",
+        "sha256": "b98ba5481cd2c421709ffdf335f78a838fe8792218577f1435941420d5254a38",
+        "bytes": 134
+      },
+      {
+        "path": "docs/regime-engine-v2/rc-portability-repair/local/guard-events/node-35272.jsonl",
+        "sha256": "b2da63a8c36a4778556b8748ef4873f5e4229b34913efb8847b8d1383f24df4a",
+        "bytes": 134
+      },
+      {
+        "path": "docs/regime-engine-v2/rc-portability-repair/local/guard-events/node-35283.jsonl",
+        "sha256": "1ed98dde58bf4a9e4a03c40771dc0cd20fdef0041e5b066ca877677dcbfa35b4",
+        "bytes": 134
+      },
+      {
+        "path": "docs/regime-engine-v2/rc-portability-repair/local/guard-events/node-35287.jsonl",
+        "sha256": "187e1c343a0f33a8d5ca5e9c55ecd507ae54f6a43cd0d3a017ebab88d5a7b0ce",
+        "bytes": 134
+      },
+      {
+        "path": "docs/regime-engine-v2/rc-portability-repair/local/guard-events/node-35298.jsonl",
+        "sha256": "d80cb4deed256f0e8191ff45d20dee0520da0a462b5c96241a9fea6367436881",
+        "bytes": 134
+      },
+      {
+        "path": "docs/regime-engine-v2/rc-portability-repair/local/guard-events/node-35320.jsonl",
+        "sha256": "cef349f91172e6de897051d7e9fe25195dfa983e57d855a64be5cdcb040e6c92",
+        "bytes": 134
+      },
+      {
+        "path": "docs/regime-engine-v2/rc-portability-repair/local/guard-events/node-35334.jsonl",
+        "sha256": "6d3f9c7ebcaf920a680124c4fc80b8e78efce36adffea77ddbc1ab32568e0e1a",
+        "bytes": 134
+      },
+      {
+        "path": "docs/regime-engine-v2/rc-portability-repair/local/guard-events/node-35335.jsonl",
+        "sha256": "ef3607a9866197860c5c320c6bf538405f21c6ffc387a8ee350f593392683216",
+        "bytes": 134
+      },
+      {
+        "path": "docs/regime-engine-v2/rc-portability-repair/local/guard-events/node-35347.jsonl",
+        "sha256": "8f64fe290003216de64850f79439304f6634684f2100475d1fe89b35cd7c773f",
+        "bytes": 134
+      },
+      {
+        "path": "docs/regime-engine-v2/rc-portability-repair/local/guard-events/node-35351.jsonl",
+        "sha256": "170790be487b900f58701bf1693c9f780bfd7a0cf37770267500ab74187d4e17",
+        "bytes": 134
+      },
+      {
+        "path": "docs/regime-engine-v2/rc-portability-repair/local/guard-events/node-35362.jsonl",
+        "sha256": "b4fe6228efed9def19cadd86779f3b9a3f4d09bdc812fbdd5923ebe1c845f6ec",
+        "bytes": 134
+      },
+      {
+        "path": "docs/regime-engine-v2/rc-portability-repair/local/guard-events/node-35366.jsonl",
+        "sha256": "68c7e4cef1d0f1f4510feef03560476408ad9681b233d8d76515b4522c059f0c",
+        "bytes": 134
+      },
+      {
+        "path": "docs/regime-engine-v2/rc-portability-repair/local/guard-events/node-35367.jsonl",
+        "sha256": "6d45b314d5c2809c0f5bec954ffd6755bce42c9fa23c98f97f1dccf6e1529d48",
+        "bytes": 134
+      },
+      {
+        "path": "docs/regime-engine-v2/rc-portability-repair/local/guard-events/node-35410.jsonl",
+        "sha256": "7c6eb5c74138a17d3036cce8101e715167fe943fa951bc7a0791cb7312b83303",
+        "bytes": 134
+      },
+      {
+        "path": "docs/regime-engine-v2/rc-portability-repair/local/guard-events/node-35426.jsonl",
+        "sha256": "a97db216032b69daa07c96215bd44a29e668311ec1222e5aaea2b11147b112a9",
+        "bytes": 134
+      },
+      {
+        "path": "docs/regime-engine-v2/rc-portability-repair/local/guard-events/node-35553.jsonl",
+        "sha256": "876b2ccbcbd67bc69bac0017472ec5866efb14a1588f03f63c33b13f092bd846",
+        "bytes": 174
+      },
+      {
+        "path": "docs/regime-engine-v2/rc-portability-repair/local/guard-events/node-35554.jsonl",
+        "sha256": "72e35910699a998d8c5de0560bc2629f859b362c2c8e71c7a8099ce48a33ad4b",
+        "bytes": 174
+      },
+      {
+        "path": "docs/regime-engine-v2/rc-portability-repair/local/guard-events/node-35555.jsonl",
+        "sha256": "474d9e2d551fdbc35d0b8a038243752f1f64ff13d1c2a0b30f7a940a181531ca",
+        "bytes": 174
+      },
+      {
+        "path": "docs/regime-engine-v2/rc-portability-repair/local/guard-events/node-35556.jsonl",
+        "sha256": "d329a2ab12a9d6ba1bfc14667c8bf4406cbf301c1be6712c9b9bde50bfd73b23",
+        "bytes": 174
+      },
+      {
+        "path": "docs/regime-engine-v2/rc-portability-repair/local/guard-events/node-35809.jsonl",
+        "sha256": "0c12c9a910b5dbe06b8b87dbe25cf06415a22027a11c39d367562e3bee82335d",
+        "bytes": 174
+      },
+      {
+        "path": "docs/regime-engine-v2/rc-portability-repair/local/guard-events/node-35810.jsonl",
+        "sha256": "66910fa90de6836100088579a70a27ba53ed62483957647fc4c4f4575ebebbcb",
+        "bytes": 174
+      },
+      {
+        "path": "docs/regime-engine-v2/rc-portability-repair/local/guard-events/node-35811.jsonl",
+        "sha256": "f9f60514637ad2079d33415cf0d8654f13947288076ce33b18f0ec7544c26ef1",
+        "bytes": 174
+      },
+      {
+        "path": "docs/regime-engine-v2/rc-portability-repair/local/guard-events/node-35812.jsonl",
+        "sha256": "cd91d922cf7fac09e05c7ade0add16dbc137743e25cfb01b3bd3fac42dd88cbe",
+        "bytes": 174
+      },
+      {
+        "path": "docs/regime-engine-v2/rc-portability-repair/local/guard-events/python-35181.jsonl",
+        "sha256": "186168d7e82058b128a5c070bba1d0754a0342f4f1582a5b991785e27437c376",
+        "bytes": 148
+      },
+      {
+        "path": "docs/regime-engine-v2/rc-portability-repair/local/guard-events/python-35266.jsonl",
+        "sha256": "a50ef1302763384b5cae85f9ae75d79c4004b0219bc0f7eb9f0810cf03d45bc9",
+        "bytes": 148
+      },
+      {
+        "path": "docs/regime-engine-v2/rc-portability-repair/local/guard-events/python-35267.jsonl",
+        "sha256": "33dacbd247f65218f3499048e6f7e7106d8de1a893a72dd0aef11ecd62b143b5",
+        "bytes": 148
+      },
+      {
+        "path": "docs/regime-engine-v2/rc-portability-repair/local/guard-events/python-35268.jsonl",
+        "sha256": "79d6c3bfe46d9780d51bf5e5e5c44d492d999032d42295e1926cbaa0df972020",
+        "bytes": 148
+      },
+      {
+        "path": "docs/regime-engine-v2/rc-portability-repair/local/guard-events/python-35270.jsonl",
+        "sha256": "4dd5ce264d69bc5450ea1f136c76bcf0fa987b4a30f04a0d8dae319379b8ae9b",
+        "bytes": 148
+      },
+      {
+        "path": "docs/regime-engine-v2/rc-portability-repair/local/guard-events/python-35271.jsonl",
+        "sha256": "018a62976eb1b52e2a2e7fa115165fead585f4bc4d95471b7f74e0316b0ca421",
+        "bytes": 148
+      },
+      {
+        "path": "docs/regime-engine-v2/rc-portability-repair/local/guard-events/python-35284.jsonl",
+        "sha256": "ae356253d67c881c899a66a7202a96ae9db51b5dd93c142c3293659b4bb446f5",
+        "bytes": 148
+      },
+      {
+        "path": "docs/regime-engine-v2/rc-portability-repair/local/guard-events/python-35285.jsonl",
+        "sha256": "d750091475b5fdcd901d821e9dcd967c132f6a32fa925b03028d1f9533f9d37a",
+        "bytes": 148
+      },
+      {
+        "path": "docs/regime-engine-v2/rc-portability-repair/local/guard-events/python-35299.jsonl",
+        "sha256": "a16f5bd5eafa7a0b46d947b3a4c26c3fa75f8ec8fe3f08bd08c1775fc065017d",
+        "bytes": 148
+      },
+      {
+        "path": "docs/regime-engine-v2/rc-portability-repair/local/guard-events/python-35300.jsonl",
+        "sha256": "8bce6b873afcd1e55161a90053b041a37f6ff33c0331bbb17cafbf8c87753ea3",
+        "bytes": 148
+      },
+      {
+        "path": "docs/regime-engine-v2/rc-portability-repair/local/guard-events/python-35301.jsonl",
+        "sha256": "9b8c15557e4e7a2e18dc10f59799e74397754a697d7ad95306269dc960aa8d83",
+        "bytes": 148
+      },
+      {
+        "path": "docs/regime-engine-v2/rc-portability-repair/local/guard-events/python-35302.jsonl",
+        "sha256": "2d180a368fcb06687164478a46a3f224572f24d562f8ad1b94b567a0cdfe06f6",
+        "bytes": 148
+      },
+      {
+        "path": "docs/regime-engine-v2/rc-portability-repair/local/guard-events/python-35303.jsonl",
+        "sha256": "ad92e7ef7f496b9f7c74ebca253cc80465d6905ac653ffd552484c737948f17c",
+        "bytes": 148
+      },
+      {
+        "path": "docs/regime-engine-v2/rc-portability-repair/local/guard-events/python-35304.jsonl",
+        "sha256": "9833bdfc260af394436ecf734007e04d5e5d0afe2fd83c664ccb17ef4fcdafa7",
+        "bytes": 148
+      },
+      {
+        "path": "docs/regime-engine-v2/rc-portability-repair/local/guard-events/python-35501.jsonl",
+        "sha256": "869b1df6b05bc886889359b31bbe8a621a6323e65a8e37842e604e365afb93c2",
+        "bytes": 148
+      },
+      {
+        "path": "docs/regime-engine-v2/rc-portability-repair/local/guard-events/python-35757.jsonl",
+        "sha256": "c7a7a445566de4704c678520216ea0cc150f6de525ba6394e1401bc81074594c",
+        "bytes": 148
+      },
+      {
+        "path": "docs/regime-engine-v2/rc-portability-repair/local/guard-python/sitecustomize.py",
+        "sha256": "0176f31c323559f2d450334cdeca38526f1eb43aa095b56de73480421f2820ae",
+        "bytes": 2087
+      },
+      {
+        "path": "docs/regime-engine-v2/rc-portability-repair/local/guard-results.json",
+        "sha256": "5d5e26a1ba577def9dcede5ed0f68fd493577e1bca3a6edf2c8ee92442449b9a",
+        "bytes": 466
+      },
+      {
+        "path": "docs/regime-engine-v2/rc-portability-repair/local/guard-selftest-events/node-20337.jsonl",
+        "sha256": "9f43f8ba0c7968ebd9eac8866feb8f7de193eaedd3f233ab035f79d202cb8985",
+        "bytes": 1469
+      },
+      {
+        "path": "docs/regime-engine-v2/rc-portability-repair/local/guard-selftest-events/python-20338.jsonl",
+        "sha256": "022f2c9dd5ba2e621eb2a9c277df2db89560a3b3d9d7a2c4fab7f0ee9c53629f",
+        "bytes": 906
+      },
+      {
+        "path": "docs/regime-engine-v2/rc-portability-repair/local/network-counter-selftest.json",
+        "sha256": "34963ca4c7f9a6b0877219550f0985c7a68e66c7074245209ba9832a84e47ad7",
+        "bytes": 430
+      },
+      {
+        "path": "docs/regime-engine-v2/rc-portability-repair/local/network-counter-selftest.log",
+        "sha256": "a65cc7bae9fad753a3332e867edd73aca6d3a2962ec8f4ff9fe8fa8024f0ac64",
+        "bytes": 251
+      },
+      {
+        "path": "docs/regime-engine-v2/rc-portability-repair/local/network-counter-selftest.mjs",
+        "sha256": "bc7fa4708f6b99c2e4016c27e80930d793b5cd96e8f3638d82d1f5f30c35d492",
+        "bytes": 3032
+      },
+      {
+        "path": "docs/regime-engine-v2/rc-portability-repair/local/network-counter.mjs",
+        "sha256": "26b612082a28a9e90e5d2305797b9f826fd7f1c9531e89943fac7433db004a44",
+        "bytes": 2226
+      },
+      {
+        "path": "docs/regime-engine-v2/rc-portability-repair/local/network-events/node-35182.jsonl",
+        "sha256": "2f29852eda687e9c121e5767f756aec56e1b623545caecd62fe75e2967b5d390",
+        "bytes": 210
+      },
+      {
+        "path": "docs/regime-engine-v2/rc-portability-repair/local/network-events/node-35183.jsonl",
+        "sha256": "525370b61de26a647bc54ce6911404a679a64789d57b8633e336eaae3392a273",
+        "bytes": 210
+      },
+      {
+        "path": "docs/regime-engine-v2/rc-portability-repair/local/network-events/node-35186.jsonl",
+        "sha256": "4cb854c67bb320c49d8898bd803888848e1da52373fb17695315de1816b55672",
+        "bytes": 210
+      },
+      {
+        "path": "docs/regime-engine-v2/rc-portability-repair/local/network-events/node-35187.jsonl",
+        "sha256": "46fdcdd2c79389b11c925d312562560d122d28f2723c4dc07ea894a7a3b06e87",
+        "bytes": 210
+      },
+      {
+        "path": "docs/regime-engine-v2/rc-portability-repair/local/network-events/node-35188.jsonl",
+        "sha256": "57d822a39b2c61b986e9ab159d0d0cde70348d3b56fc4f54b635cb22dfd345c2",
+        "bytes": 210
+      },
+      {
+        "path": "docs/regime-engine-v2/rc-portability-repair/local/network-events/node-35189.jsonl",
+        "sha256": "fc2617208eda5d8372ab892ff1452db6184d5629f226a64fc43b29443bc5de97",
+        "bytes": 210
+      },
+      {
+        "path": "docs/regime-engine-v2/rc-portability-repair/local/network-events/node-35190.jsonl",
+        "sha256": "2f29fda194e339f43901f37b23b196b7773fd9dcf09048386f801c96f0ca2b26",
+        "bytes": 210
+      },
+      {
+        "path": "docs/regime-engine-v2/rc-portability-repair/local/network-events/node-35191.jsonl",
+        "sha256": "7b768bbee901b4fb55b719adf3f241b7bb9f8f30bcafdd2bd1ac9c59a1dae16b",
+        "bytes": 210
+      },
+      {
+        "path": "docs/regime-engine-v2/rc-portability-repair/local/network-events/node-35192.jsonl",
+        "sha256": "05835a21b5931906683186ab1127cea5ce059b376692e368929a7a23b20c0c6a",
+        "bytes": 210
+      },
+      {
+        "path": "docs/regime-engine-v2/rc-portability-repair/local/network-events/node-35193.jsonl",
+        "sha256": "b4f38893dbc08d4abf3ad3993cdc758af3d9ce5b1a700cd52bf9c17f92c37b90",
+        "bytes": 210
+      },
+      {
+        "path": "docs/regime-engine-v2/rc-portability-repair/local/network-events/node-35194.jsonl",
+        "sha256": "152e71641cce3c214bdb93cb54319d9effd42642ff2cfc4907ba73e65ae39c06",
+        "bytes": 210
+      },
+      {
+        "path": "docs/regime-engine-v2/rc-portability-repair/local/network-events/node-35195.jsonl",
+        "sha256": "215e55f29eeb86109c7df02dfbcdeb3626d1672049baa4bb6c3f02e6f4750f09",
+        "bytes": 210
+      },
+      {
+        "path": "docs/regime-engine-v2/rc-portability-repair/local/network-events/node-35196.jsonl",
+        "sha256": "ad557e85dede9926ce7f2237cf4ee82f52f2eca8ef46a5dc95151cb333dd53e8",
+        "bytes": 210
+      },
+      {
+        "path": "docs/regime-engine-v2/rc-portability-repair/local/network-events/node-35197.jsonl",
+        "sha256": "99399fe192560009ad244387151d1a286e17d6a4367b622c46b419851b71fbbf",
+        "bytes": 210
+      },
+      {
+        "path": "docs/regime-engine-v2/rc-portability-repair/local/network-events/node-35198.jsonl",
+        "sha256": "dc25c57ce877d5ac363cf395643202fbe76019a305c94b1498d82d6d2279fda4",
+        "bytes": 210
+      },
+      {
+        "path": "docs/regime-engine-v2/rc-portability-repair/local/network-events/node-35199.jsonl",
+        "sha256": "0b4b18788f72ab6a0621b0d678e522ed9feb07dd8289bf1eb19c9ea58dc05447",
+        "bytes": 210
+      },
+      {
+        "path": "docs/regime-engine-v2/rc-portability-repair/local/network-events/node-35200.jsonl",
+        "sha256": "686898308b44cfdb27bc1dddfd09794e8298eeee830e2db6e746e0cbf89c311a",
+        "bytes": 210
+      },
+      {
+        "path": "docs/regime-engine-v2/rc-portability-repair/local/network-events/node-35201.jsonl",
+        "sha256": "4b511bf3f2c64816f692b6d415e228a6f77361c46a38cbc1481f1387185c8f11",
+        "bytes": 210
+      },
+      {
+        "path": "docs/regime-engine-v2/rc-portability-repair/local/network-events/node-35202.jsonl",
+        "sha256": "1a8d6bfb8f6d2a30a7c218e0ffb2ea3b4e72444cfde32f83f170c684e3e8e14b",
+        "bytes": 210
+      },
+      {
+        "path": "docs/regime-engine-v2/rc-portability-repair/local/network-events/node-35203.jsonl",
+        "sha256": "1edb61f4fa25ad98734f40e2eff926ee8b35e23101bc9f815e1908ac49c3cef3",
+        "bytes": 210
+      },
+      {
+        "path": "docs/regime-engine-v2/rc-portability-repair/local/network-events/node-35204.jsonl",
+        "sha256": "5d1ad199f421ed641bb501776be354ff840c81d2566bf28ddc49541c901ae244",
+        "bytes": 210
+      },
+      {
+        "path": "docs/regime-engine-v2/rc-portability-repair/local/network-events/node-35226.jsonl",
+        "sha256": "7cf166758ab9adbc7f4f1d093bf6e142141220c13bd08075987fbb08916369f5",
+        "bytes": 210
+      },
+      {
+        "path": "docs/regime-engine-v2/rc-portability-repair/local/network-events/node-35227.jsonl",
+        "sha256": "7510b05837e484784fbd3b05e760203cac9e71d33d6ba58415aa7151c2d7c085",
+        "bytes": 210
+      },
+      {
+        "path": "docs/regime-engine-v2/rc-portability-repair/local/network-events/node-35228.jsonl",
+        "sha256": "003a5200e15a1333295a7dac4ce053aae5b42eac16f884e09f257d71f7de7942",
+        "bytes": 210
+      },
+      {
+        "path": "docs/regime-engine-v2/rc-portability-repair/local/network-events/node-35229.jsonl",
+        "sha256": "30d8d2c334ceeed279ba5664942cb48937be912d8d5a6f351dd7bb23e8bae2cb",
+        "bytes": 210
+      },
+      {
+        "path": "docs/regime-engine-v2/rc-portability-repair/local/network-events/node-35232.jsonl",
+        "sha256": "b35c15ddd204bb6c22db5c789e7ef34c1b5729f529094bec27ec4d26a3fecaa0",
+        "bytes": 210
+      },
+      {
+        "path": "docs/regime-engine-v2/rc-portability-repair/local/network-events/node-35249.jsonl",
+        "sha256": "2ebdde911bdd98f0a5539fb6e87004cb668f84f6b404363ff2d11a5c7931e5d6",
+        "bytes": 210
+      },
+      {
+        "path": "docs/regime-engine-v2/rc-portability-repair/local/network-events/node-35250.jsonl",
+        "sha256": "549b273ed46c2552ccd617cd381e3f7338b9b41340100802c9485e2a28c5d844",
+        "bytes": 210
+      },
+      {
+        "path": "docs/regime-engine-v2/rc-portability-repair/local/network-events/node-35261.jsonl",
+        "sha256": "0a1920ffc4c4c16c69743670cd3f342cc6787bc7dbdccacdb0a39389e9191e65",
+        "bytes": 210
+      },
+      {
+        "path": "docs/regime-engine-v2/rc-portability-repair/local/network-events/node-35272.jsonl",
+        "sha256": "16c09d815e91ebb161d0515dd2b25567289dd00a85a32d2d9a486ca3b80a5303",
+        "bytes": 210
+      },
+      {
+        "path": "docs/regime-engine-v2/rc-portability-repair/local/network-events/node-35283.jsonl",
+        "sha256": "ef541d86f5a46cad614d019765bdd8d1b5e27e0338c3c5fd62c961c7daecab41",
+        "bytes": 210
+      },
+      {
+        "path": "docs/regime-engine-v2/rc-portability-repair/local/network-events/node-35287.jsonl",
+        "sha256": "374475f37d1ebe1118402b3b31cd776c78398949aa9b3aa9a5ab36bbc08037b8",
+        "bytes": 210
+      },
+      {
+        "path": "docs/regime-engine-v2/rc-portability-repair/local/network-events/node-35298.jsonl",
+        "sha256": "24f8a147f71a83436b641b3ffa20dda2c8cbb2bad40fcf6241571c64ddb44ff3",
+        "bytes": 210
+      },
+      {
+        "path": "docs/regime-engine-v2/rc-portability-repair/local/network-events/node-35320.jsonl",
+        "sha256": "750263f1d54ef6c8a5ba5e829a24b6aa9a182d56b986eed43101515c8f0a4a85",
+        "bytes": 210
+      },
+      {
+        "path": "docs/regime-engine-v2/rc-portability-repair/local/network-events/node-35334.jsonl",
+        "sha256": "3862b91ba138b8f63b5506c6c576ff404683887dde608a34366167b043be8755",
+        "bytes": 210
+      },
+      {
+        "path": "docs/regime-engine-v2/rc-portability-repair/local/network-events/node-35335.jsonl",
+        "sha256": "dadb063c20b4f566f40acc7585f3eac022b03a2febe18892e2f927298e77416c",
+        "bytes": 210
+      },
+      {
+        "path": "docs/regime-engine-v2/rc-portability-repair/local/network-events/node-35347.jsonl",
+        "sha256": "b78696d2bf7d8239e6257cac164f269096dbbd38109f61a7105ff973435ab36b",
+        "bytes": 210
+      },
+      {
+        "path": "docs/regime-engine-v2/rc-portability-repair/local/network-events/node-35351.jsonl",
+        "sha256": "d301cb8475950c689e277e93fa30ca780833bf43484de7fc524aae024d933225",
+        "bytes": 210
+      },
+      {
+        "path": "docs/regime-engine-v2/rc-portability-repair/local/network-events/node-35362.jsonl",
+        "sha256": "08f21b211cd11c07185140a8cfdbc77d9a5161e9ca2e38ac9198108f99f91bdb",
+        "bytes": 420
+      },
+      {
+        "path": "docs/regime-engine-v2/rc-portability-repair/local/network-events/node-35364.jsonl",
+        "sha256": "a344aa6858891f950567cd96de5a2c2abc2a8a41b088be1fbc81122ae77a4db9",
+        "bytes": 210
+      },
+      {
+        "path": "docs/regime-engine-v2/rc-portability-repair/local/network-events/node-35365.jsonl",
+        "sha256": "5c83f27e55c974a1ff313e5a6fe3ea89846628c9ba1f6b260b12edaa12316315",
+        "bytes": 210
+      },
+      {
+        "path": "docs/regime-engine-v2/rc-portability-repair/local/network-events/node-35366.jsonl",
+        "sha256": "abc6db28e6097dc2f08ff9db9a5a07955124159a6c1933f4cae2abfbcd7cbdb0",
+        "bytes": 210
+      },
+      {
+        "path": "docs/regime-engine-v2/rc-portability-repair/local/network-events/node-35367.jsonl",
+        "sha256": "4267b77e11fc67d825f788273d6bcfcc9752102ed8f0b1ab56025ea015770d12",
+        "bytes": 210
+      },
+      {
+        "path": "docs/regime-engine-v2/rc-portability-repair/local/network-events/node-35378.jsonl",
+        "sha256": "6ae9b7b92e6879979f5bb5da0c1a017ddfa8055c093ab2a59b45ed0cf1bce0f7",
+        "bytes": 210
+      },
+      {
+        "path": "docs/regime-engine-v2/rc-portability-repair/local/network-events/node-35379.jsonl",
+        "sha256": "3bec2bc30ca2a52c24c919c94b8ac814d29ee170c48f19dc4ec27fc4432b29c9",
+        "bytes": 210
+      },
+      {
+        "path": "docs/regime-engine-v2/rc-portability-repair/local/network-events/node-35380.jsonl",
+        "sha256": "c8d2ceea1ec98ed8ac4475603cf30d3b5ff176956231ee3eef2dbb53cefcaee5",
+        "bytes": 210
+      },
+      {
+        "path": "docs/regime-engine-v2/rc-portability-repair/local/network-events/node-35381.jsonl",
+        "sha256": "1aa49be85f0bf60bb67e1ad735ebea1a24970baac869fe56d3a5a45a8529948e",
+        "bytes": 210
+      },
+      {
+        "path": "docs/regime-engine-v2/rc-portability-repair/local/network-events/node-35382.jsonl",
+        "sha256": "89f3fb54eaa965078d398f99baff59a7ce5d4fe9de056f3af040fcd219cd3486",
+        "bytes": 2496
+      },
+      {
+        "path": "docs/regime-engine-v2/rc-portability-repair/local/network-events/node-35383.jsonl",
+        "sha256": "bfdaef6777b43faa31e74bb2103aa507c280d241e50eb49dd79dbf07820f761c",
+        "bytes": 1315
+      },
+      {
+        "path": "docs/regime-engine-v2/rc-portability-repair/local/network-events/node-35384.jsonl",
+        "sha256": "bb3056731e0ce5e50c82a70d74f4a64d10740cd6cc44a09efaa9cab3bd2117ba",
+        "bytes": 1315
+      },
+      {
+        "path": "docs/regime-engine-v2/rc-portability-repair/local/network-events/node-35385.jsonl",
+        "sha256": "644a141159aadf81cfbc5ab5071e3804efab1da56d79af112b5c566b029d15cc",
+        "bytes": 210
+      },
+      {
+        "path": "docs/regime-engine-v2/rc-portability-repair/local/network-events/node-35386.jsonl",
+        "sha256": "f13271d3dbb9307c00b8abfc63f5314a8aba2d8657ba5df7d392acfdb68af16d",
+        "bytes": 210
+      },
+      {
+        "path": "docs/regime-engine-v2/rc-portability-repair/local/network-events/node-35387.jsonl",
+        "sha256": "fea69466a5f48f7d7a81dec13cc07c116702bf26af59771ca936dbfb09778d63",
+        "bytes": 210
+      },
+      {
+        "path": "docs/regime-engine-v2/rc-portability-repair/local/network-events/node-35388.jsonl",
+        "sha256": "7231a5e524e27249347888c39f12a2d4dca56b1339013fb7682c4facb833615b",
+        "bytes": 210
+      },
+      {
+        "path": "docs/regime-engine-v2/rc-portability-repair/local/network-events/node-35389.jsonl",
+        "sha256": "0f1c3c54822896482a3e8d598935e5adc12601399b30054e0d72e79181dffd75",
+        "bytes": 210
+      },
+      {
+        "path": "docs/regime-engine-v2/rc-portability-repair/local/network-events/node-35390.jsonl",
+        "sha256": "0d9f5fe8ec16abe4f98d5ebec1207295fe1e295bcfb5c51a73e98b4fbdaf4672",
+        "bytes": 210
+      },
+      {
+        "path": "docs/regime-engine-v2/rc-portability-repair/local/network-events/node-35391.jsonl",
+        "sha256": "7e1dde65b9228a05e7f77a9c728737d5700fcef9480bfb0dd8f63a0cf4cbfc4c",
+        "bytes": 210
+      },
+      {
+        "path": "docs/regime-engine-v2/rc-portability-repair/local/network-events/node-35392.jsonl",
+        "sha256": "83d90cd9b57a65735dd4d5fd3d0b75786c39945816a1bacaead1511c642d8ffe",
+        "bytes": 210
+      },
+      {
+        "path": "docs/regime-engine-v2/rc-portability-repair/local/network-events/node-35393.jsonl",
+        "sha256": "ac50dcea447e77f236aeda021bc3755a4106b0af1284ea7bd87f9c432f85791a",
+        "bytes": 210
+      },
+      {
+        "path": "docs/regime-engine-v2/rc-portability-repair/local/network-events/node-35394.jsonl",
+        "sha256": "1edc1467a5ca64c2538f1c971f78194259a385c92815034080b12437b48cd933",
+        "bytes": 210
+      },
+      {
+        "path": "docs/regime-engine-v2/rc-portability-repair/local/network-events/node-35410.jsonl",
+        "sha256": "2415d37a2d47d31a9d40658484baeabe8effc1d71f558e1af89d4613ff7f48a4",
+        "bytes": 210
+      },
+      {
+        "path": "docs/regime-engine-v2/rc-portability-repair/local/network-events/node-35426.jsonl",
+        "sha256": "d77dfab6f7998e13c0b823937ed8ac5fc7f45b54d29c6151ba8f193d86dac966",
+        "bytes": 210
+      },
+      {
+        "path": "docs/regime-engine-v2/rc-portability-repair/local/network-events/node-35553.jsonl",
+        "sha256": "16e8ce113f3a3295e46077a6a04682ebe900d4aafeee8b3dc9391fa408419a8b",
+        "bytes": 210
+      },
+      {
+        "path": "docs/regime-engine-v2/rc-portability-repair/local/network-events/node-35554.jsonl",
+        "sha256": "2af455ab1087173621fbf61db87508fd38d03989058c8eae87ee37ccbba7632a",
+        "bytes": 210
+      },
+      {
+        "path": "docs/regime-engine-v2/rc-portability-repair/local/network-events/node-35555.jsonl",
+        "sha256": "a2710080e93ad0ebf5c722c3d139939b8b11d930f0ed7f2fb3fe3fa5fb8d83f8",
+        "bytes": 210
+      },
+      {
+        "path": "docs/regime-engine-v2/rc-portability-repair/local/network-events/node-35556.jsonl",
+        "sha256": "c2c934f4b456689c275b2c0abab1ea48e4f3d878a2ca768b7e2e09beb86b14db",
+        "bytes": 210
+      },
+      {
+        "path": "docs/regime-engine-v2/rc-portability-repair/local/network-events/node-35809.jsonl",
+        "sha256": "0337b5915666b9dfc5c5e6e185c4314c356f8884afba02e5d88b7da3ee81b579",
+        "bytes": 210
+      },
+      {
+        "path": "docs/regime-engine-v2/rc-portability-repair/local/network-events/node-35810.jsonl",
+        "sha256": "89bbc69d0f3b0c09c92cebc6ef1fe0db8ebc529b5f59ab48fa1416f9593b7ea9",
+        "bytes": 210
+      },
+      {
+        "path": "docs/regime-engine-v2/rc-portability-repair/local/network-events/node-35811.jsonl",
+        "sha256": "8340fb9133c5032e26997978aa488b51421a18dd88c9575c667c6c3c962456fa",
+        "bytes": 210
+      },
+      {
+        "path": "docs/regime-engine-v2/rc-portability-repair/local/network-events/node-35812.jsonl",
+        "sha256": "55ed445f4c2e6fc1f7b90bb0fd22a3a9a75eaa0bdb19d709a269e0892a445873",
+        "bytes": 210
+      },
+      {
+        "path": "docs/regime-engine-v2/rc-portability-repair/local/network-observations.json",
+        "sha256": "2f0e649f4c0b0df74e2627ffb2f53f3b110cdf9d5fb39e389b16dc8a934c08f5",
+        "bytes": 2194
+      },
+      {
+        "path": "docs/regime-engine-v2/rc-portability-repair/local/network-selftest-events/node-11881.jsonl",
+        "sha256": "a44db25a88b7f996211a121138136ee1e0f59841b63a23414c3d035475550bac",
+        "bytes": 2724
+      },
+      {
+        "path": "docs/regime-engine-v2/rc-portability-repair/local/node-guard-selftest.log",
+        "sha256": "7b09f8453a8ff11f176571db60d1793b5d9b4ca0cc11f392ced0ae73a4e53c11",
+        "bytes": 52
+      },
+      {
+        "path": "docs/regime-engine-v2/rc-portability-repair/local/npm-logs/2026-09-09T11_11_08_439Z-debug-0.log",
+        "sha256": "07557ff79769668b043887ae4f96d51b58e5f32e12aa38d94b39854952ea16df",
+        "bytes": 1003
+      },
+      {
+        "path": "docs/regime-engine-v2/rc-portability-repair/local/npm-logs/2026-09-09T11_11_09_374Z-debug-0.log",
+        "sha256": "7f45df2a91f0fbd1d81415764043a8812727b716dc5a49f70572a6b236da5609",
+        "bytes": 997
+      },
+      {
+        "path": "docs/regime-engine-v2/rc-portability-repair/local/npm-logs/2026-09-09T11_11_09_840Z-debug-0.log",
+        "sha256": "8de2d1a3398bc0c960d48397261470e93eed116188db67cfcdfef50b0ead73c4",
+        "bytes": 1007
+      },
+      {
+        "path": "docs/regime-engine-v2/rc-portability-repair/local/npm-logs/2026-09-09T11_11_37_032Z-debug-0.log",
+        "sha256": "c28d0debd0172176db2abf334201b3c7dbf54545166130abb1c2151682239cf7",
+        "bytes": 1076
+      },
+      {
+        "path": "docs/regime-engine-v2/rc-portability-repair/local/npm-logs/2026-09-09T11_11_40_178Z-debug-0.log",
+        "sha256": "04caec09b12c2e0a120f93430e02982e1cc25dbef2313a2f247bd3487c8b6d22",
+        "bytes": 1336
+      },
+      {
+        "path": "docs/regime-engine-v2/rc-portability-repair/local/npm-logs/2026-09-09T11_11_46_304Z-debug-0.log",
+        "sha256": "8adee9db7396367ba4438c80cce01dd6822fe212a3f3a993718677e9ab59b0b3",
+        "bytes": 981
+      },
+      {
+        "path": "docs/regime-engine-v2/rc-portability-repair/local/npm-logs/2026-09-09T11_11_59_476Z-debug-0.log",
+        "sha256": "6c2e58003fec21ab77e5524ec30813adceed12ccbbdf3b21543ba9a296bd7744",
+        "bytes": 1076
+      },
+      {
+        "path": "docs/regime-engine-v2/rc-portability-repair/local/patched-checkout.json",
+        "sha256": "03c1d809fd9754fb86068d9a29c946272c27e052692bf5546b402d723ad3ed19",
+        "bytes": 7210
+      },
+      {
+        "path": "docs/regime-engine-v2/rc-portability-repair/local/portability-tests-retry1.json",
+        "sha256": "88081bab9862ef48c7d79e2f4cdfc832dad55512f21e1ef291a661a1324c7add",
+        "bytes": 1057
+      },
+      {
+        "path": "docs/regime-engine-v2/rc-portability-repair/local/portability-tests-retry1.log",
+        "sha256": "dea6b9f72170b79b2cef693d64085c1103f4ce39fbad01c8729e31f9f59b36d1",
+        "bytes": 2875
+      },
+      {
+        "path": "docs/regime-engine-v2/rc-portability-repair/local/portability-tests.json",
+        "sha256": "2070c11e90d65b9feafa72e2c749794bf86819f8e4a9a2fa4896117053f8ebbf",
+        "bytes": 962
+      },
+      {
+        "path": "docs/regime-engine-v2/rc-portability-repair/local/portability-tests.log",
+        "sha256": "5b8f527727e08f4ad45b98eeaaee45f7efe162e0456f073d92eabd58a4f09aaa",
+        "bytes": 8574
+      },
+      {
+        "path": "docs/regime-engine-v2/rc-portability-repair/local/post-check-metadata-sync.json",
+        "sha256": "b16992418093413e5880fbef0d45cfdba7672d643fc37ac0732f6ec3fa69795d",
+        "bytes": 569
+      },
+      {
+        "path": "docs/regime-engine-v2/rc-portability-repair/local/preparation/git-fsck.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0
+      },
+      {
+        "path": "docs/regime-engine-v2/rc-portability-repair/local/preparation/initial.json",
+        "sha256": "2db30b2605df4aa6c6ceda922274098ff98ee1577a0d93c8e142ff10a6746b5a",
+        "bytes": 1610
+      },
+      {
+        "path": "docs/regime-engine-v2/rc-portability-repair/local/preparation/npm-ci-offline.json",
+        "sha256": "0dc39925168d81d8d37df85edac7ee196085f662f33287c42d45d867e72e7cc4",
+        "bytes": 483
+      },
+      {
+        "path": "docs/regime-engine-v2/rc-portability-repair/local/preparation/npm-ci-offline.log",
+        "sha256": "42ce76462aa30e390852e217eaf0c23a2b259b73f549f996cdc6175782c6b29b",
+        "bytes": 1437
+      },
+      {
+        "path": "docs/regime-engine-v2/rc-portability-repair/local/preparation/npm-logs/2026-09-09T10_58_39_487Z-debug-0.log",
+        "sha256": "7b29e1e6cb684fab08c8a0dbc2619e441bd5b4f9889ae514138d59fcd022c7b2",
+        "bytes": 79197
+      },
+      {
+        "path": "docs/regime-engine-v2/rc-portability-repair/local/preparation/npm-logs/2026-09-09T10_59_31_728Z-debug-0.log",
+        "sha256": "a8868dbecf178400a9c2e06bac79a16ab3c78e25b58c58563992874391dd0440",
+        "bytes": 1234
+      },
+      {
+        "path": "docs/regime-engine-v2/rc-portability-repair/local/preparation/npm-ls.json",
+        "sha256": "19ca3c047053ba2f0f31dde76267b60c1e6f76b64d74025b7082e276c2741e14",
+        "bytes": 183836
+      },
+      {
+        "path": "docs/regime-engine-v2/rc-portability-repair/local/preparation/npm-ls.stderr.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0
+      },
+      {
+        "path": "docs/regime-engine-v2/rc-portability-repair/local/preparation/preparation.json",
+        "sha256": "c29c49707099ca6a3159b91accab9985cd6e7c8faefa10c065ee24efe242e7c2",
+        "bytes": 1028
+      },
+      {
+        "path": "docs/regime-engine-v2/rc-portability-repair/local/preparation/pristine-initial-files.json",
+        "sha256": "f472770db2b6c88bb0c76a5cb4392d1caee9d74e3e1ef8b20120281fabddb990",
+        "bytes": 129689
+      },
+      {
+        "path": "docs/regime-engine-v2/rc-portability-repair/local/preparation/rc0-source.tar",
+        "sha256": "02e6a259a9a9d9a4a003804f975febfd9cbb48c95480416870b81380de8d3001",
+        "bytes": 155269120
+      },
+      {
+        "path": "docs/regime-engine-v2/rc-portability-repair/local/pristine-checks/baseline-node-tests.log",
+        "sha256": "0b30ec61cb27423d8fe6126630623212125fba903f8d5a7ec1fb80e13ccce136",
+        "bytes": 17029
+      },
+      {
+        "path": "docs/regime-engine-v2/rc-portability-repair/local/pristine-checks/build.log",
+        "sha256": "2ef916f325ae06323bfa879ba7c64b8e848cc174a2a2bb71a2eb8111eeb90ab6",
+        "bytes": 11687
+      },
+      {
+        "path": "docs/regime-engine-v2/rc-portability-repair/local/pristine-checks/conformance/conformance.json",
+        "sha256": "0ae86699a5a32f7d58bf3e604400cf875fd04900d6e5cf404b7a4be2a379cf06",
+        "bytes": 1232
+      },
+      {
+        "path": "docs/regime-engine-v2/rc-portability-repair/local/pristine-checks/conformance/historical-r2-output.json",
+        "sha256": "018d6fc103ca9bfe1e0e43418d79446f530796c00a3728a57cf2b289298d2a5f",
+        "bytes": 772491
+      },
+      {
+        "path": "docs/regime-engine-v2/rc-portability-repair/local/pristine-checks/conformance/shadow-input-r2.json",
+        "sha256": "92ecdd1830516ec96dd9293fc87b9ee7c6add71376e6997de4fede42d4d90a66",
+        "bytes": 223524
+      },
+      {
+        "path": "docs/regime-engine-v2/rc-portability-repair/local/pristine-checks/conformance.log",
+        "sha256": "0ae86699a5a32f7d58bf3e604400cf875fd04900d6e5cf404b7a4be2a379cf06",
+        "bytes": 1232
+      },
+      {
+        "path": "docs/regime-engine-v2/rc-portability-repair/local/pristine-checks/designer-fixtures-check.log",
+        "sha256": "f3f3f46fba405195f28a22d1348378d4bcd4750da2a4483a365e307d1ff6d78e",
+        "bytes": 823
+      },
+      {
+        "path": "docs/regime-engine-v2/rc-portability-repair/local/pristine-checks/designer-tests.log",
+        "sha256": "48c2261c777a2778915c7fa1ff750f6546d1687b529563b0afb86858db68242f",
+        "bytes": 10632
+      },
+      {
+        "path": "docs/regime-engine-v2/rc-portability-repair/local/pristine-checks/editorial.log",
+        "sha256": "7d4f85ccc8a0544b81b0d60fac223b80184e1bd1faaa7822e4bb1b5a2963524f",
+        "bytes": 280
+      },
+      {
+        "path": "docs/regime-engine-v2/rc-portability-repair/local/pristine-checks/lint.json",
+        "sha256": "923dde23efe297e6882233b217b2faf67de1af24b88cf06a6ae586e6b6c89ab7",
+        "bytes": 289495
+      },
+      {
+        "path": "docs/regime-engine-v2/rc-portability-repair/local/pristine-checks/lint.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0
+      },
+      {
+        "path": "docs/regime-engine-v2/rc-portability-repair/local/pristine-checks/offline-challenger-tests.log",
+        "sha256": "e147f458c1a900c9cbdde5757a0b7fa45c4b6fa10583e2502e476f3f880933a5",
+        "bytes": 3345
+      },
+      {
+        "path": "docs/regime-engine-v2/rc-portability-repair/local/pristine-checks/operations-tests.log",
+        "sha256": "9fa7f675652fc2a67f66430687991f1432567571ba5966fcf2f1df1d1688616f",
+        "bytes": 30047
+      },
+      {
+        "path": "docs/regime-engine-v2/rc-portability-repair/local/pristine-checks/reports-check.log",
+        "sha256": "b81d3c1a89f1730de7441ac54fa6fb19dcba8f4f9bfedee63a2abb49315cc7ab",
+        "bytes": 226
+      },
+      {
+        "path": "docs/regime-engine-v2/rc-portability-repair/local/pristine-checks/reports-validate.log",
+        "sha256": "17a8278ec97176ddc182bfa8257e3eed789000b7f6428e57c0d238786eff1136",
+        "bytes": 243
+      },
+      {
+        "path": "docs/regime-engine-v2/rc-portability-repair/local/pristine-checks/sweeper-attacks.json",
+        "sha256": "d06279fb91976b57792d9e0343de47003353e59773c22801d4368edae388fbbd",
+        "bytes": 227871
+      },
+      {
+        "path": "docs/regime-engine-v2/rc-portability-repair/local/pristine-checks/sweeper-attacks.log",
+        "sha256": "d3c1a19321c4efaafe49ba41263b371c242e3ab59898fbe9a9e778c96712e3cf",
+        "bytes": 90
+      },
+      {
+        "path": "docs/regime-engine-v2/rc-portability-repair/local/pristine-checks/typecheck-after-build.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0
+      },
+      {
+        "path": "docs/regime-engine-v2/rc-portability-repair/local/pristine-checks/typecheck.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0
+      },
+      {
+        "path": "docs/regime-engine-v2/rc-portability-repair/local/pristine-checks/verification.json",
+        "sha256": "114fd3b872ae9952a00851bd83785dc1191809c42944309fa159ff3d26e3f55a",
+        "bytes": 20189
+      },
+      {
+        "path": "docs/regime-engine-v2/rc-portability-repair/local/product-preservation.json",
+        "sha256": "acb754e4a40b8158545b7d43e15d266c31fd76e002bf8814c4eb33f873bd0c08",
+        "bytes": 1727
+      },
+      {
+        "path": "docs/regime-engine-v2/rc-portability-repair/local/python-guard-selftest.log",
+        "sha256": "f60e752324599ad4d5ff86560ed51bb24263955e4a33418f201a141661f83a9a",
+        "bytes": 54
+      },
+      {
+        "path": "docs/regime-engine-v2/rc-portability-repair/local/test-harness-repair.json",
+        "sha256": "c458fd933e33f1e19d5703eba434b6596fefd29cfd5533360c30193344e96301",
+        "bytes": 875
+      }
+    ],
+    "containsV2RawLiveCapture": false,
+    "containsRuntimeProviderCacheCopy": false
+  },
+  "testedIdentity": {
+    "canonicalTrackedDeltaSha256": "af6458e55b32a95bbc5f8f70a7431956c4c2060872f1a20799d3488a85f672c5",
+    "finalDeltaIncludingRegressionHarnessSha256": "2c95457cf955071206805318914e163834258e12a1b2d2515b8b7bc93d27df05",
+    "canonicalTrackedSourceUnchangedAfterPass": true,
+    "finalHarnessTests": "32/32",
+    "documentsWithFinalResultsWrittenAfterChecks": true,
+    "doesNotClaimAnUnchangedRC0Pass": true
+  },
+  "git": {
+    "head": "f5fc7ecfd9e1f323d0ad3a43eccec1dbc500be1c",
+    "tree": "05242fadab2cb190effeaea2ea4100e9eb4fbf9d",
+    "stagedPaths": [],
+    "commitCreated": false,
+    "pushPerformed": false
+  },
+  "shadowActivated": false,
+  "deploymentPerformed": false,
+  "productionCutover": false
+}

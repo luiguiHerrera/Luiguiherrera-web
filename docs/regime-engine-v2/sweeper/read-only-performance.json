@@ -1,0 +1,29 @@
+[
+  {
+    "n": 500,
+    "elapsedMs": 20.451667,
+    "streak": {
+      "sign": 1,
+      "length": 500,
+      "censored": true
+    }
+  },
+  {
+    "n": 1000,
+    "elapsedMs": 32.10516700000001,
+    "streak": {
+      "sign": 1,
+      "length": 1000,
+      "censored": true
+    }
+  },
+  {
+    "n": 2000,
+    "elapsedMs": 65.76912499999999,
+    "streak": {
+      "sign": 1,
+      "length": 2000,
+      "censored": true
+    }
+  }
+]

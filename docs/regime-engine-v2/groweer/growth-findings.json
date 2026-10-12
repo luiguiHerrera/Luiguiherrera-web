@@ -1,0 +1,48 @@
+{
+  "status": "CLOSED",
+  "unresolved": [],
+  "findings": [
+    {
+      "id": "G-HARNESS-01",
+      "severity": "MEDIUM",
+      "issue": "Native benchmark labels initially compared directly with C03, overstating disagreements and dropping matrix rows.",
+      "repair": "Keep native persistence, compare B1-B3 on explicit common coarse namespace and union matrix labels.",
+      "verification": "Independent recomputation735/767/551 coarse disagreements and12/12/0 unmatched contractual stress observations.",
+      "status": "CLOSED"
+    },
+    {
+      "id": "G-HARNESS-02",
+      "severity": "MEDIUM",
+      "issue": "B2 null/omitted participation initially bypassed the explicit missing sentinel.",
+      "repair": "Require an admissible participation enum before classification.",
+      "verification": "challengers.test.mjs missing/undefined/invalid participation cases.",
+      "status": "CLOSED"
+    },
+    {
+      "id": "G-HARNESS-03",
+      "severity": "MEDIUM",
+      "issue": "B3 empty/single-family map could pass vacuous vote predicates.",
+      "repair": "Require both named eligible family descriptors before stress/vote rules.",
+      "verification": "challengers.test.mjs empty/partial/unavailable family cases.",
+      "status": "CLOSED"
+    },
+    {
+      "id": "G-HARNESS-04",
+      "severity": "LOW",
+      "issue": "P1 censored recovery duration initially mixed observed-session count and elapsed intervals.",
+      "repair": "Use final_index-start for elapsed and separately label observed_sessions.",
+      "verification": "Read-only review plus explicit censored duration accounting.",
+      "status": "CLOSED"
+    }
+  ],
+  "accepted_candidate_repairs_modified": 0,
+  "parked_research_limitations": [
+    "No daily comparable V1 historical archive",
+    "No fresh/PIT/OOS validation",
+    "No independent regime-noise truth or user-utility labels",
+    "Short BTC/GLD native windows; actual V2 narrative frequency unmeasurable",
+    "Cross-asset vintage/licensing/field-basis gaps",
+    "PFL same-family and portfolio-dependent;117 early windows below252 returns"
+  ],
+  "gate_policy": "These limitations prevent challenger promotion claims; they do not block stabilization of the accepted unchanged canonical candidate. Maintainer authorization remains NO."
+}

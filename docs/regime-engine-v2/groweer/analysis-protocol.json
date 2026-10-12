@@ -1,0 +1,140 @@
+{
+  "version": "groweer-analysis/1.0.0",
+  "registered_at": "2026-09-08T17:49:30.272808+00:00",
+  "scope": "Post-selection research on previously inspected R2 data; no fresh/unseen/OOS validation. Canonical C03, P8 and Sweeper files are immutable.",
+  "input_manifest_sha256": "a08f7116d1e6dc0631f884a4b817bfb5594006367ccf0c16336e8e9efc6474e2",
+  "periods": {
+    "ALL": [
+      "2019-01-02",
+      "2026-09-04"
+    ],
+    "F3_TRAIN": [
+      "2019-01-02",
+      "2023-12-29"
+    ],
+    "F3_VALIDATION": [
+      "2024-01-01",
+      "2024-12-31"
+    ],
+    "F3_TEST": [
+      "2025-01-01",
+      "2026-09-04"
+    ],
+    "annual": "calendar years, final year partial"
+  },
+  "metrics": {
+    "turnover": "changes / consecutive eligible session pairs; observed SPY calendar adjacency; gaps break pairs",
+    "runs": "contiguous eligible sessions; report left/right censored runs and both observed/all and uncensored duration summaries",
+    "flip_flop": "A-B-A where middle run lasts <= k sessions; k=1,2,3,5; event counted once per middle run, divided by adjacent eligible pairs; k=2 reproduces P8 headline",
+    "one_two_day_states": "counts of observed runs of length one/two, not fractions of unrelated calendar days",
+    "distance_to_threshold": "signed raw distance in native units for all atomic C03 comparisons, before and after each change",
+    "marginal": "descriptive only: changed continuous predicate within 5% of its threshold magnitude, integer predicate within one count, separately counted. This annotation is not a new runtime band.",
+    "speed": "elapsed eligible sessions between named qualitative pillar/economic conditions; no subtraction of ordinal labels",
+    "risk_context": "contemporaneous/trailing input distributions only, endogenous descriptors; not independent predictive utility"
+  },
+  "transition_forensics": {
+    "categories": [
+      "THRESHOLD_CROSS",
+      "MULTI_PILLAR_CHANGE",
+      "VOLATILITY_SHOCK",
+      "PARTICIPATION_CHANGE",
+      "CORRELATION_CHANGE",
+      "MISSING_DATA",
+      "JOINT_RULE"
+    ],
+    "multi_labels": true,
+    "shock": "contractually satisfied stress level or conjunction; describe one-session threshold reversal separately without claiming latent economic truth",
+    "causal_note": "Changes in predicates are observed contributors, not unique causal attribution. No oracle or external labels of true regimes exist."
+  },
+  "benchmarks": {
+    "B0_V1": "Only actual preserved V1 observations with source/version and date. Missing historical V1 stays missing; no invented full-history reconstruction or optimization target.",
+    "B1_VIX_ONLY": "v>=35 STRESS_VOL; >=25 ADVERSE_VOL; >=20 WATCH_VOL; otherwise CALM_VOL. A volatility namespace, not a claim of broad equity leadership.",
+    "B2_VIX_BREADTH": "Same absolute VIX thresholds; stress immediate; adverse VIX or WATCH plus adverse participation => DEFENSIVE; benign VIX plus favorable participation => RISK_ON; otherwise TRANSITION. Coarse namespace cannot identify broad/selective leadership.",
+    "B3_FAMILY_VOTE": "Two frozen lineage descriptors only. B STRESS overrides immediately; both ADVERSE => DEFENSIVE; both FAVORABLE => RISK_ON; mixed/opposed => TRANSITION. No cardinal sum.",
+    "B4_PREVIOUS": "Prior canonical state only at immediately adjacent eligible session; first row or previous incomplete -> unavailable.",
+    "B5_C03": "Actual accepted public production API outputs; verify against frozen P8 and Sweeper result per row.",
+    "pairing": "Same dates/cutoff/required eligibility per comparison; report native coverage plus paired baseline metrics. Coarse comparators use broad/selective collapsed RISK_ON for agreement, with lost internal distinctions reported separately."
+  },
+  "ablation": {
+    "atomic": [
+      "positive_5",
+      "positive_21",
+      "leadership_gap",
+      "vix_level",
+      "jump_1",
+      "jump_5",
+      "vx_slope",
+      "correlation_level",
+      "correlation_deterioration"
+    ],
+    "grouped": [
+      "participation",
+      "volatility_momentum"
+    ],
+    "mechanical": "Set omitted feature inputs to null in the unchanged canonical numeric classifier: report resulting INCOMPLETE honestly; not proof of incremental value.",
+    "reduced": "Separately named/versioned offline challengers with explicitly relaxed minimum feature sets; never routed to canonical runtime.",
+    "reduced_rules": {
+      "participation": "Remove both count predicates. Equity descriptor uses leadership; broad rule requires retained leadership, volatility and fragility. Selective is unreachable without participation.",
+      "leadership": "Equity descriptor uses participation; broad uses retained participation, volatility and fragility; selective unreachable.",
+      "single_participation_horizon": "Classify participation from the remaining count horizon.",
+      "volatility_level": "Remove all absolute-level clauses, including any stress clause requiring level. Inversion alone adverse; momentum or flatness watch. Stress is unreachable and reported.",
+      "volatility_momentum": "Drop joint stress clause when neither momentum remains; retain absolute stress, adverse level/inversion and watch level/flatness. A single omitted horizon leaves the other jump branch.",
+      "curve": "Drop joint stress and inversion/flatness branches; retain level stress/adverse/watch and momentum watch.",
+      "correlation_level": "Deterioration-only research C=RISING if spread>=0.10, else LOW; HIGH unreachable.",
+      "correlation_deterioration": "C=HIGH if rho21>=0.65, else LOW; RISING unreachable.",
+      "priority": "Retain R00->R01->R02->R03->R04->R05->R06 precedence for retained predicates; do not substitute missing observations with favorable/neutral."
+    }
+  },
+  "sensitivity": {
+    "candidate_count_max": 26,
+    "method": "One-at-a-time only; continuous thresholds +/-5%, integer breadth counts +/-1. Report all material thresholds and note inactive branches; no grid, selection or canonical edit.",
+    "evaluate": [
+      "disagreement",
+      "turnover",
+      "flip_flop",
+      "occupancy"
+    ],
+    "selection_target": "NONE"
+  },
+  "hysteresis": {
+    "gate_before_construction": "Finish baseline/transition/stress/ablation analysis first; construct only if actual short reversals and threshold crossings exist.",
+    "max_variants": 1,
+    "candidate": "H1: require one additional consecutive observation of the same new non-stress state; STRESS immediate; INCOMPLETE clears history immediately; no bridging gaps or versions.",
+    "rationale": "Smallest confirmation experiment; not an assertion that two sessions are economically correct.",
+    "adoption_gate": [
+      "no stress-entry delay",
+      "no masking missing inputs",
+      "independent evidence that suppressed changes are noise rather than legitimate context changes",
+      "prospective adjudication of retained misleading states and delay cost"
+    ],
+    "metrics": [
+      "turnover",
+      "flip_flops",
+      "state_duration",
+      "occupancy",
+      "entry_delay",
+      "stress_delay",
+      "withheld_runs",
+      "contradictory_hold_sessions",
+      "sensitivity"
+    ],
+    "no_truth_note": "R2 can measure delay relative to C03, not identify optimal latent regimes. Lower turnover alone cannot justify adoption."
+  },
+  "persistence": "Diagnostic-only challenger P1 reports observed regime/pillar duration and named deterioration/recovery events; no filtering, ordinal score or decision feedback.",
+  "growth_gate": [
+    "economic meaning",
+    "historical availability",
+    "PIT safety",
+    "non-redundancy",
+    "incremental information",
+    "maintainability"
+  ],
+  "verdict_policy": "Do not reward output changes as utility. Core additions forbidden this phase. C03 KEEP remains the default unless evidence supports a concrete proposal; indeterminate extensions parked. Complex models not explored.",
+  "forbidden_objectives": [
+    "future return",
+    "Sharpe",
+    "PnL",
+    "directional hit rate"
+  ],
+  "verification": "Run attacks, golden/history, existing tests, typecheck/build/lint without rewriting accepted Sweeper/P8/Builder evidence."
+}

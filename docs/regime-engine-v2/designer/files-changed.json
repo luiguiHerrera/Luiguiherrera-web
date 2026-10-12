@@ -1,0 +1,842 @@
+{
+  "status": "PASS",
+  "scope": "Delta against frozen Maintainer worktree input, not git HEAD; preexisting legitimate changes retained.",
+  "base_branch": "codex/primer-informe-septiembre-2026",
+  "base_head": "636cb73fb0fe4d2b28ad96cb7185f8c07d8f895b",
+  "base_tree": "9f84c28f1b40c86cf574d5c8fb6f8022b9c091d9",
+  "input_manifest": {
+    "path": "docs/regime-engine-v2/designer/input-manifest.json",
+    "sha256": "5265205fdb49c4ab5845ee17f91802848890da2df29375781a869b831e4d9b4d"
+  },
+  "modified_existing_files": [
+    {
+      "path": "app/(es)/dashboard/page.tsx",
+      "before_sha256": "0540948ce61ce6703e8a043276a030b9b7dfb24ffcab7eadc17ab84810dd0b5a",
+      "after_sha256": "52fb6a294696c7fa5490debaa3c162e62f4253a5f1e4ca38b6637a3138c1bf21"
+    }
+  ],
+  "deleted_input_files": [],
+  "added_file_count_including_this_manifest": 162,
+  "new_code_files": 14,
+  "self_hash_policy": "files-changed.json is listed but not hashed inside itself. All other new files have their exact final SHA-256.",
+  "added_files": [
+    {
+      "path": "app/(es)/internal/regime-v2/page.tsx",
+      "sha256": "8b384ba8f0df24e9ffdefd0bff0ec2fef2049791e718d72ce87e38a6fe2be6c0",
+      "bytes": 606
+    },
+    {
+      "path": "app/en/internal/regime-v2/page.tsx",
+      "sha256": "55a267714f6a71421927d84ded97d4ed478571b274ca612c041967018508a1b1",
+      "bytes": 606
+    },
+    {
+      "path": "components/dashboard/DashboardRegimeV1.tsx",
+      "sha256": "92d7ef8bc01d4725d740ddea73cf83086743a93eb5d8271aba8872c83b0982cc",
+      "bytes": 8427
+    },
+    {
+      "path": "components/dashboard/RegimeV2Disclosure.tsx",
+      "sha256": "120e7dff5f4f0fe787268be436fdae9f4caf7239b7d6a58d480c7516dc652014",
+      "bytes": 1811
+    },
+    {
+      "path": "components/dashboard/RegimeV2Preview.tsx",
+      "sha256": "37dd9680ee7318c42fe0e22390f53fda59b8b9dbb0359fbdf1c5c3ce30908627",
+      "bytes": 6416
+    },
+    {
+      "path": "components/dashboard/RegimeV2Surface.tsx",
+      "sha256": "add309968305efc955c03dbf0ee3eda8dbfc04418c7bf30fbf7e40bf21c50487",
+      "bytes": 10242
+    },
+    {
+      "path": "components/dashboard/regime-v2.module.css",
+      "sha256": "8a0811d1e0f15d7db26397a5ee0cfe64ca50ff687479816ecb4903294e90ce09",
+      "bytes": 13542
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/FINAL_STATUS.txt",
+      "sha256": "e640b08811c4a60e9a5bdf439954330ed3542c9958166e631b43457eab02363e",
+      "bytes": 1218
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/README.md",
+      "sha256": "778a0463b4e728c7d32f39a7164b3e25f84518685c62e5bdcb8e2d826579513b",
+      "bytes": 5418
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/RegimeV2Surface.before-formatter-reuse.tsx.txt",
+      "sha256": "e82ef1286515d7d1e5be1dff511b190ad9657f2859ff05edf0aa825f2e9f6f40",
+      "bytes": 9999
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/accessibility-qa.json",
+      "sha256": "cc9b771020af03795f66446603889d9aee86a3c9bc9468b025125534abe0e20a",
+      "bytes": 3231071
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/accessibility-qa.log",
+      "sha256": "33a393e20f11f4a555e1d846c71e40c44ac3acdaf3b9d657a03c5e0083828f49",
+      "bytes": 79
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/accessibility-qa.mjs",
+      "sha256": "0a097a8efe301bc6479904515b0d250d897668d269ce06cff03ffac6eb3bf18b",
+      "bytes": 10309
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/accessibility-review.md",
+      "sha256": "b4943a5202106635dcbac3fb4084b52b26176704b02f59567e61891a1f0d2a63",
+      "bytes": 3758
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/browser-qa-initial.json",
+      "sha256": "9cf92198081f7f8ff70e73bc2458a7b39d60fec6949ad8f74a0bf1c55ed11eb7",
+      "bytes": 5328
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/browser-qa.log",
+      "sha256": "6609b3e8973e8af87297f6f91380056f1a91634b7a3dbff91ec134b9702b20d9",
+      "bytes": 59
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/browser-qa.mjs",
+      "sha256": "9aa1a21625c83c91ad53b6c6d86b8fd66b5d2773ac68ada78d2bfec71dc22ab2",
+      "bytes": 7337
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/build.log",
+      "sha256": "bbf033e5722f5f0958cc93a35d63985592083210df5df7cbe9356778526527a1",
+      "bytes": 21677
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/canonical-challenger-tests.log",
+      "sha256": "5002437b25572733da8a020559514b659305c8c5fea00a3442ac5a9ef6ff9faa",
+      "bytes": 3355
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/canonical-conformance.log",
+      "sha256": "0ae86699a5a32f7d58bf3e604400cf875fd04900d6e5cf404b7a4be2a379cf06",
+      "bytes": 1232
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/canonical-designer-fixtures-check-20260908T203308241307Z.log",
+      "sha256": "f3f3f46fba405195f28a22d1348378d4bcd4750da2a4483a365e307d1ff6d78e",
+      "bytes": 823
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/canonical-designer-fixtures-check.log",
+      "sha256": "f3f3f46fba405195f28a22d1348378d4bcd4750da2a4483a365e307d1ff6d78e",
+      "bytes": 823
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/canonical-designer-tests-20260908T203308241307Z.log",
+      "sha256": "3ee0f6efc65e52d31a37e155d43f76b246ba1778c00de32674b28918a6fa25b8",
+      "bytes": 10639
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/canonical-designer-tests.log",
+      "sha256": "c31048f742650e31351148021650c032d33b2c3cdcd833f19f318146e2806ed6",
+      "bytes": 10351
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/canonical-editorial.log",
+      "sha256": "7d4f85ccc8a0544b81b0d60fac223b80184e1bd1faaa7822e4bb1b5a2963524f",
+      "bytes": 280
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/canonical-node-tests.log",
+      "sha256": "6fa64a622342c7643b0c8ab13a102c87673faaa9979941946c329a60727c689d",
+      "bytes": 25565
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/canonical-operations-tests.log",
+      "sha256": "7f3e6668b4443307d17b3569bea32d04c3010429be50c52f4dbacb9d47cfe93c",
+      "bytes": 30055
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/canonical-python-tests.log",
+      "sha256": "0d6653413f55f7cf64dbfab59b6b29c640ade8e63585414ab2a44a0892a5ed0a",
+      "bytes": 105
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/canonical-reports-check.log",
+      "sha256": "b81d3c1a89f1730de7441ac54fa6fb19dcba8f4f9bfedee63a2abb49315cc7ab",
+      "bytes": 226
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/canonical-reports-validate.log",
+      "sha256": "17a8278ec97176ddc182bfa8257e3eed789000b7f6428e57c0d238786eff1136",
+      "bytes": 243
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/canonical-sweeper-attacks.log",
+      "sha256": "d3c1a19321c4efaafe49ba41263b371c242e3ab59898fbe9a9e778c96712e3cf",
+      "bytes": 90
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/canonical-verification-before-20260908T203308241307Z.json",
+      "sha256": "a0d7eac05f1887a1d1675a5586c06ab83b2ff6b6ebef269a687c4405152ae811",
+      "bytes": 13877
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/canonical-verification.json",
+      "sha256": "93a7f00045556ab45f5c85f9155c0917525bb6216f6c4157ef5c17b3d3a2f846",
+      "bytes": 22483
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/copy-contract.json",
+      "sha256": "e9a76e7ef4751a1ed559497f3df940cc5a359ac068d7e57165d9e45e2036d17a",
+      "bytes": 98298
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/cutover-plan.md",
+      "sha256": "1a8bb995c5147f3fd93cb5599e3064cd6d0021a37d37924034fce055b27d342a",
+      "bytes": 4830
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/design-rationale.md",
+      "sha256": "c72a1a5002bccb3d04c102037f504c128e5f7c0a3bd78a1b7e46d0c38a951b66",
+      "bytes": 5432
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/dev-generated-side-effects.json",
+      "sha256": "37d3478f9abc0f9ce1115693b608dc3e3fbfcc05b4afa66937340252c1abdfce",
+      "bytes": 1206
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/dev-server.log",
+      "sha256": "cea2233086c1e8ba56925a5c662765b38b05bbe92ad89680a3b0331154f3e6c9",
+      "bytes": 24943
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/files-changed.json",
+      "sha256": null,
+      "bytes": null
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/finalroot-checks.json",
+      "sha256": "6811a1453200411b1795a5b5818c05d5a7ba9adbffe0e30f40a138ab86a4844c",
+      "bytes": 3770
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/findings.json",
+      "sha256": "806afbf87a01af05554a0b9b363723384e2984b2cf9b67390d4d3de0ff285075",
+      "bytes": 11612
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/fixture-matrix.json",
+      "sha256": "4aec9e788bbc06fd834b1c2a05dee6a76bd0ccd9e228f7cb24eaa47bda493a0e",
+      "bytes": 15957
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/fixture-tests.log",
+      "sha256": "fa16a27a812de40b4e520ae100c7d398766e06688527cb7483adc76cfcfd16ba",
+      "bytes": 1723
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/fixtures/broad-complete.json",
+      "sha256": "a4d33bcec41d2f6a20107495963080a1a6896ca8c346008e40204899d2ee3bb9",
+      "bytes": 28844
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/fixtures/defensive-complete.json",
+      "sha256": "356f1f76419ee8f8780da4f8fdfa41ff88b778db06493fe52ab3e61cc91a2c7c",
+      "bytes": 28906
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/fixtures/incomplete-missing-core.json",
+      "sha256": "1be049a46b71deddd941d044139fd64cd58222ade5094000ae728d0848e9db0a",
+      "bytes": 27549
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/fixtures/incomplete-stale.json",
+      "sha256": "585db0dea40191b622777e7ae2d3fc9deb06bff7a48366fd7d317781e122e74c",
+      "bytes": 28077
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/fixtures/incomplete-unknown-calendar.json",
+      "sha256": "12c71ff670221cc4184a98ab4cbee91241832558c54c507d3dcb9bbb0d3a0c01",
+      "bytes": 63913
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/fixtures/incomplete-with-shock.json",
+      "sha256": "483232eefbd249d8bc8a50b1f282a478546ddb3e7866d78ccde37a4fc7b6279d",
+      "bytes": 27689
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/fixtures/selective-partial.json",
+      "sha256": "6c2c6218add0f101b505cc2b666614a2bdc233b122c60628962af09bfc1989b9",
+      "bytes": 28732
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/fixtures/stress-absolute.json",
+      "sha256": "1d09e274525916ee381f145c77b8cafc5c858b171fddd5b2daa2fc61202fa29c",
+      "bytes": 28829
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/fixtures/stress-joint.json",
+      "sha256": "c729a8f43156d8a8bca1afa871b7380ccdfe453a61799f9d8df1bf7760afc117",
+      "bytes": 28718
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/fixtures/transition-conflict.json",
+      "sha256": "950c8aa11fd9c8bc66814479c77f7ed3641ada8b415a25111a71ce206082f853",
+      "bytes": 28730
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/fixtures/transition-fragility.json",
+      "sha256": "8b4d97ed825cc025668a1034ff5184393227969a8a7e75d8cc0c0c0ab4c27348",
+      "bytes": 28889
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/fixtures/transition-watch.json",
+      "sha256": "5407f6a4edfcea04f5afef36f3734a6c71ab4a751cf62108ea279eabdb4aef87",
+      "bytes": 28695
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/generated-file-audit.json",
+      "sha256": "87a812ad6dc35533f34156d540aa41eadcc44c486ac0190848f2d11f7f9c952d",
+      "bytes": 328
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/input-manifest.json",
+      "sha256": "5265205fdb49c4ab5845ee17f91802848890da2df29375781a869b831e4d9b4d",
+      "bytes": 131410
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/lint-initial.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/lint.json",
+      "sha256": "122ba26b67f915e59e14b1aecfc4c2cfc78eb0ba965edcbcb5584a01c1c926e2",
+      "bytes": 298079
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/lint.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/performance-before-formatter-reuse.json",
+      "sha256": "dc458dfd9fe079364abf42e39bea70f4773652f86acab1ed679e9749773f0a5d",
+      "bytes": 27127
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/performance.json",
+      "sha256": "86203069e7c623f396fdb8d26334ceef2ec7e4e3e5abc61f56d9ead01c98b2ea",
+      "bytes": 31093
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/performance.log",
+      "sha256": "a23b45af86c9ff15b0711e953f3efedd6fa6eecbe97433d020f3d7536fadf1e1",
+      "bytes": 1304
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/performance.md",
+      "sha256": "8aea30f75143ac63b7a25fb03928f71ee52c2eb3f64ff7b418310184d1805f25",
+      "bytes": 4073
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/presentation-tests.log",
+      "sha256": "930fa32cd5333ba8c8fb03ffae164c6d73b9b75ae133b5cf2bb3e3a67b33a297",
+      "bytes": 2583
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/preview-guard-tests-initial.log",
+      "sha256": "143c2138d12d76f6ad703b63ba0d732f1255b3121c40147057c8bd6ecf3c5721",
+      "bytes": 3437
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/preview-guard-tests.log",
+      "sha256": "bb11efcdcd7766aebc641913ad0cc63121204be7aa310b2d3cb2138a023a0c19",
+      "bytes": 788
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/preview-tests.log",
+      "sha256": "1484e60ae8fe204042c123bfd046a8741e8ea7f5ba28ae8913b79ce5945b71a4",
+      "bytes": 1597
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/production-preview-guard.json",
+      "sha256": "5dfeddfdbf231894b35d7796df78ee91480a8cb18a0e76b94191fa2ee778da4a",
+      "bytes": 5360
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/production-preview-guard.log",
+      "sha256": "5dfeddfdbf231894b35d7796df78ee91480a8cb18a0e76b94191fa2ee778da4a",
+      "bytes": 5360
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/production-server.log",
+      "sha256": "3a62c926f62973e36339b92d22e34af8e87cea9e180ee4144a1ae0f41d71d3c3",
+      "bytes": 152
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/qa-scripts-lint.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/render-finding.json",
+      "sha256": "795a585c626a1484843b9f804af0a949c417f17a08db666509320200e88abbac",
+      "bytes": 1646
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/render-tests.log",
+      "sha256": "6718dcd67934f7212f3a16031906f28b823da31e8272854c357f8fb893b2c1c3",
+      "bytes": 5884
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/repository-verification.json",
+      "sha256": "92b45268bbf3fcb527768140a9d0be9ae17d2055d06a85d6b56d5dcefa6f88d9",
+      "bytes": 5799
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/responsive-review.md",
+      "sha256": "57167328d5f7bfd92746b06a2cae021d73e32bc12e2ecc114e8978020184c73f",
+      "bytes": 6640
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/run-verification.py",
+      "sha256": "4effed4a10baaa6879ed69a76ddbd78b4fbe298e4bb907845e88fcddd2790292",
+      "bytes": 16641
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/screenshots/desktop-en-broad-complete.png",
+      "sha256": "515d7f2f9ec00f36a7d0b845fb81f45939f158261d5dbb5b553e9a8cd78a7b9e",
+      "bytes": 264046
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/screenshots/desktop-en-defensive-complete.png",
+      "sha256": "82dd790b0a60a49d6aea4b2384ec72a3db915ad979f8b74f36f58a1ee35e8c51",
+      "bytes": 262031
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/screenshots/desktop-en-evidence-open.png",
+      "sha256": "0027b1cbbd38c791e9f339378f91a4ec877fd7f996ac832dcfdd28fb3c651ff4",
+      "bytes": 212809
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/screenshots/desktop-en-incomplete-unknown-calendar.png",
+      "sha256": "a75a2f7e8a30e171d4218dca4044826482abc61f10783eadbc9ee6d8c1e91fb9",
+      "bytes": 85790
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/screenshots/desktop-en-long-copy.png",
+      "sha256": "7d026e5e397a6ca872c29982cc583abbb0252e48b7ea36e181727b9a5749ab40",
+      "bytes": 381502
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/screenshots/desktop-en-methodology-open.png",
+      "sha256": "e97eb88b68a9185fd5761d85e92b90bd10b5b5ee325e60ee265db9e0894137f7",
+      "bytes": 86219
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/screenshots/desktop-en-preview-off.png",
+      "sha256": "ea30880eabe8d564ddd1484c99ca0bd6de38c9dfc678b368caf42dd0946f7d19",
+      "bytes": 455819
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/screenshots/desktop-en-selective-partial.png",
+      "sha256": "6d8f6ca3ad12b8470e9e85c9ff39c70e65815befb71ca624c6704c4eae90c79c",
+      "bytes": 308314
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/screenshots/desktop-en-stress-absolute.png",
+      "sha256": "24eaf0cb2ab00c2701e51c5f9bccc9567187499c7eada8389d8aeb806a277ee5",
+      "bytes": 266383
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/screenshots/desktop-en-transition-conflict.png",
+      "sha256": "b17a9c36dde089470190313297d88de0f241843aa5ba263e8484e14f4b2edf83",
+      "bytes": 330988
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/screenshots/desktop-en-v1-current.png",
+      "sha256": "ea30880eabe8d564ddd1484c99ca0bd6de38c9dfc678b368caf42dd0946f7d19",
+      "bytes": 455819
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/screenshots/desktop-es-broad-complete.png",
+      "sha256": "fcfdab45f38d786bc4738096e737387338fd63b0c874f176d1a7031bf5b51de6",
+      "bytes": 264666
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/screenshots/desktop-es-defensive-complete.png",
+      "sha256": "8b931dc6958822332a387df1c8297a0b2c4ae9e48552cf6f0dfd8c8db8cba4b4",
+      "bytes": 276104
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/screenshots/desktop-es-evidence-open.png",
+      "sha256": "dc2e91bab20e2e463c67979326ee19417cad46a489b1dcad5812076af7415a74",
+      "bytes": 218078
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/screenshots/desktop-es-incomplete-unknown-calendar.png",
+      "sha256": "4de59fd194bb58250529fb63e33fd4f596072b84bdfd5f17c4686c8f2e138a04",
+      "bytes": 102357
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/screenshots/desktop-es-long-copy.png",
+      "sha256": "301340ec698396d0bb6c2cb86b6bd946b6aa3609be6d125ed272a5093b1a3547",
+      "bytes": 415285
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/screenshots/desktop-es-methodology-open.png",
+      "sha256": "de4d3580cfd573482969fb97cee2c8dc965677244ade812f387fd7142429b9e2",
+      "bytes": 160337
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/screenshots/desktop-es-preview-off.png",
+      "sha256": "3a8c21a8fbad13ae3549ef717b06737cfe019d4b7ea16c47e4e8e2715c5e1f62",
+      "bytes": 495458
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/screenshots/desktop-es-selective-partial.png",
+      "sha256": "333a6b1dbe74a9fa56e84dbeb7680ecea77333f1585810262464f765e8b3ea92",
+      "bytes": 323260
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/screenshots/desktop-es-stress-absolute.png",
+      "sha256": "5d60b9b865db413b661ce6ad3feb32d4bf2243d092b1bc2825ef6e379b107cfa",
+      "bytes": 278157
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/screenshots/desktop-es-transition-conflict.png",
+      "sha256": "09b33d503a1785366cc5ac91f83de86e4b7cbdba0d8aaeb8dbdaa98b71b1fad8",
+      "bytes": 333162
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/screenshots/desktop-es-v1-current.png",
+      "sha256": "3a8c21a8fbad13ae3549ef717b06737cfe019d4b7ea16c47e4e8e2715c5e1f62",
+      "bytes": 495458
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/screenshots/initial/desktop-en-selective-partial.png",
+      "sha256": "bb51534409ea78f3eb16da2b9ed03d7d3924434da7cf58f2408a3132f8e218ef",
+      "bytes": 308664
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/screenshots/initial/desktop-en-stress-before-labels.png",
+      "sha256": "a65eafc258b70cec6695ce0873df8349d0da4d71a80422e4373ab844f5218676",
+      "bytes": 266317
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/screenshots/initial/desktop-es-selective-partial.png",
+      "sha256": "3b3f4b1b008e564860a1fd5e746d2066060ce229a29e29b6ca3a3dfe85f348c0",
+      "bytes": 332084
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/screenshots/initial/mobile-en-evidence-before-framing.png",
+      "sha256": "a29b76b7754cbd0988c5bee4fdb9afa082d68639abdc42f7e6c97bb36d582a1e",
+      "bytes": 227780
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/screenshots/initial/mobile-en-selective-partial.png",
+      "sha256": "f7964ff28b6d926ed7f7ad63e52681c96587602c684d149631a33d11e8ae6f26",
+      "bytes": 226174
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/screenshots/initial/mobile-en-stress-before-labels.png",
+      "sha256": "9befd0becb72b3681297d0147c4f7aac504ad467e82d9a07d69757de4720203c",
+      "bytes": 140499
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/screenshots/initial/mobile-es-selective-partial.png",
+      "sha256": "a7eae42ac20bce4c61ee3eadc6e136df2bd58ef3e9223491050ff03240f493a6",
+      "bytes": 220633
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/screenshots/mobile-en-broad-complete.png",
+      "sha256": "fce1d31a159735d872d358d583f5a1dbe2785cfcfacd135632f143fabf2fd4da",
+      "bytes": 174487
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/screenshots/mobile-en-defensive-complete.png",
+      "sha256": "79c72c3727dfb4a56309c88a90334d1eca5535e10dec6c72be13f0347969c0cb",
+      "bytes": 173381
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/screenshots/mobile-en-evidence-open.png",
+      "sha256": "007ce6da4c31ae830a075b0cd7d23d0fd392fe6f0e7d1bf56436d059e934d9b9",
+      "bytes": 224727
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/screenshots/mobile-en-incomplete-unknown-calendar-grayscale.png",
+      "sha256": "282d00704082c752bf9f4292101e80b3fe55d9c354adb2727dd2fed568786b2f",
+      "bytes": 65220
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/screenshots/mobile-en-incomplete-unknown-calendar.png",
+      "sha256": "24d42b1c6daede6d3a7f87c3188b88fddbec1e0e8f8bdcdbb16f84d92872c8e9",
+      "bytes": 73950
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/screenshots/mobile-en-long-copy.png",
+      "sha256": "c3a86f67c61c3dee71e1cf3b4201c29699841974e98e1326fa0aebe0a946f1ab",
+      "bytes": 290108
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/screenshots/mobile-en-methodology-open.png",
+      "sha256": "e12c1b2f131d59ad53ae2d8ead2d6dae4a93a588aa9bdfc26d498cdbbd4b4b25",
+      "bytes": 109876
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/screenshots/mobile-en-preview-off.png",
+      "sha256": "db7e433e2afe145e88be6191d700f3a0cd39501a8008e608ddb24ca7b4a148ee",
+      "bytes": 200003
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/screenshots/mobile-en-selective-partial-grayscale.png",
+      "sha256": "3a9b4142fcd114c5dc48454b83886dfbf8b9cd52df9b3000ff70075beee32a3e",
+      "bytes": 130810
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/screenshots/mobile-en-selective-partial.png",
+      "sha256": "0a7192fc6dce1cea9bfd692a94212c15ba0241d7eda1d3d0aaa5f5139b0c8d59",
+      "bytes": 219857
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/screenshots/mobile-en-stress-absolute-grayscale.png",
+      "sha256": "0d5e2f2013be6801116bfc6f7d7af5b11bdd2e74930f13da3733fc34e98e1448",
+      "bytes": 118755
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/screenshots/mobile-en-stress-absolute.png",
+      "sha256": "4594114b482feafb2364171350e743e2c3e000d202160e1630ccfc87ef465e78",
+      "bytes": 200577
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/screenshots/mobile-en-transition-conflict.png",
+      "sha256": "c5b7dcf5495b1b543f649d78af588a4f4e093277dcd6f3170f324ebf9ac14071",
+      "bytes": 236780
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/screenshots/mobile-en-v1-current.png",
+      "sha256": "db7e433e2afe145e88be6191d700f3a0cd39501a8008e608ddb24ca7b4a148ee",
+      "bytes": 200003
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/screenshots/mobile-es-broad-complete.png",
+      "sha256": "078f466a99f124fd9b208f745d14cac074be1f11a8e0200b26eeee7943701728",
+      "bytes": 172104
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/screenshots/mobile-es-defensive-complete.png",
+      "sha256": "548e62508e836a7aee6aee529c074fb61cd85234614560c5dde4cc6281f4e163",
+      "bytes": 190424
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/screenshots/mobile-es-evidence-open.png",
+      "sha256": "ca0ba005f876acaed4d5107117ad2f7872d4751928cfd698827901c47812aa87",
+      "bytes": 228660
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/screenshots/mobile-es-incomplete-unknown-calendar-grayscale.png",
+      "sha256": "91beb534ca4ea14705884ccc2394e7f2e509d0e635233f6e412589790c96f87c",
+      "bytes": 67230
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/screenshots/mobile-es-incomplete-unknown-calendar.png",
+      "sha256": "0c982cf111bf1245f71667c927231a101fc36b77799b871f33ec94c58aee588d",
+      "bytes": 76588
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/screenshots/mobile-es-long-copy.png",
+      "sha256": "fb07ac5b7473382c7e13fe93bdb3462831176947b4703021c8e7ebef1f9cf07b",
+      "bytes": 308421
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/screenshots/mobile-es-methodology-open.png",
+      "sha256": "551bc31013705e910c3f4eee1231bf44acdd2cb2ef5641485ccdd4a9873169cc",
+      "bytes": 118451
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/screenshots/mobile-es-preview-off.png",
+      "sha256": "07c73a2b2fc42967a2602ae10669e6e65a05f40dbc8122ab243baaccec97bd65",
+      "bytes": 218494
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/screenshots/mobile-es-selective-partial-grayscale.png",
+      "sha256": "d8264db6b0cde22c4e97a1311bf3cf6818095d54cf7293db5c9202c8bd4a8afd",
+      "bytes": 120691
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/screenshots/mobile-es-selective-partial.png",
+      "sha256": "77c48ec7765853f8e5bbac7e8f0f595350d406ce391c97a2a03b5cba7b5d38c6",
+      "bytes": 213870
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/screenshots/mobile-es-stress-absolute-grayscale.png",
+      "sha256": "4e4439569c8f2512b4a0781cd6649f8733258d59e628b324d28925f1be997977",
+      "bytes": 120540
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/screenshots/mobile-es-stress-absolute.png",
+      "sha256": "c257f198e3f98d5b871d2f7083277d90765352a789b60897dd9458d0cd98e803",
+      "bytes": 201968
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/screenshots/mobile-es-transition-conflict.png",
+      "sha256": "e94a49f3be392ed3e2bcd11e2ec9427860a253f55ed7eed51cdbe6888e665081",
+      "bytes": 238649
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/screenshots/mobile-es-v1-current.png",
+      "sha256": "07c73a2b2fc42967a2602ae10669e6e65a05f40dbc8122ab243baaccec97bd65",
+      "bytes": 218494
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/seal-review.py",
+      "sha256": "5d2cd8ab93a76a09170132c9666c6bc045c959c039ad01c49de80ec63bb798f1",
+      "bytes": 12592
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/state-review.md",
+      "sha256": "11da430c7cfdb7f2b95fec157826a27c37923b60268d2e373f922b0594025b49",
+      "bytes": 8681
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/sweeper-attacks.json",
+      "sha256": "d06279fb91976b57792d9e0343de47003353e59773c22801d4368edae388fbbd",
+      "bytes": 227871
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/typecheck-after-build.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/typecheck-before-build.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/typecheck-initial.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/uncertainty-label-original.txt",
+      "sha256": "0e02631c10d9b578eb4e1f5650004a4b5cc9c06a811077049d5c86f85ba91141",
+      "bytes": 531
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/v1-original-page.tsx.txt",
+      "sha256": "0540948ce61ce6703e8a043276a030b9b7dfb24ffcab7eadc17ab84810dd0b5a",
+      "bytes": 18985
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/v1-reference.json",
+      "sha256": "e8d1aa1edf47289e098b4dbbe02703f1b68f8e772cde3bccfed2b3a7b8a6868b",
+      "bytes": 3187
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/v1-reference.log",
+      "sha256": "34d4d6f5a1d2d9a4b24d8ed43c269643297d0ddec937e30d0b16216e7ee1e178",
+      "bytes": 4964
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/v1-render-proof.json",
+      "sha256": "a23eb4e811f509998756fcb87b8b5255615464b504444e3c381e81d580a4a5ef",
+      "bytes": 1502
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/v1-render-proof.log",
+      "sha256": "a1ff67603aee13687ae0ec038fa4eb18ce3cebd68a7a6c7990062dd6a8dc49a2",
+      "bytes": 1319
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/verification-conformance/conformance.json",
+      "sha256": "0ae86699a5a32f7d58bf3e604400cf875fd04900d6e5cf404b7a4be2a379cf06",
+      "bytes": 1232
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/verification-conformance/historical-r2-output.json",
+      "sha256": "018d6fc103ca9bfe1e0e43418d79446f530796c00a3728a57cf2b289298d2a5f",
+      "bytes": 772491
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/verification-conformance/shadow-input-r2.json",
+      "sha256": "92ecdd1830516ec96dd9293fc87b9ee7c6add71376e6997de4fede42d4d90a66",
+      "bytes": 223524
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/verification-findings.json",
+      "sha256": "efedf0fe3e33cc0d9d69f8d586a972688460418b39916f8a9d9289276a6d9260",
+      "bytes": 2050
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/verification-refresh.log",
+      "sha256": "8ff741dbd4d46aa654fc19119ff42474264d4be6f4319be153ae1b31555d5118",
+      "bytes": 1685
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/verification-run.log",
+      "sha256": "958412b6da56ce1122a44d60faaf4f25e3fb271399b82464d94c3e3f6bc70b15",
+      "bytes": 2298
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/verification.json",
+      "sha256": "6aacc61319b7086228415e84453362f1c532458120fe656c34ad42ec02fc2533",
+      "bytes": 7185
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/verify-production-preview.py",
+      "sha256": "dff7ba0ad267acb5b7a3c6a5f581f6849d2dd7062709b12aca36e3852a681724",
+      "bytes": 3661
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/visual-regression.json",
+      "sha256": "30a03b844043c88b2da7d7ce185c459241097b5972a5b2b5fa6e01505c249d14",
+      "bytes": 25311
+    },
+    {
+      "path": "lib/dashboard/regime-v2-presentation.test.ts",
+      "sha256": "e1859c119f0ed8ae842af930c9af2cf574479c1843cfc29179d05842973013e1",
+      "bytes": 11361
+    },
+    {
+      "path": "lib/dashboard/regime-v2-presentation.ts",
+      "sha256": "a3ea4c767b46bc51f20be07a06b0a4a91457607f9221c0cfd80dffbfa4a73f53",
+      "bytes": 30183
+    },
+    {
+      "path": "lib/dashboard/regime-v2-preview.test.mjs",
+      "sha256": "6a22ed85c34d82c90e962c6ff285e2a38ca6e77189a77e033a2c549b3fcbd04d",
+      "bytes": 3194
+    },
+    {
+      "path": "lib/dashboard/regime-v2-render.test.mjs",
+      "sha256": "2a0e24fd385357da35465b3f6ef0b25cc5b2e99f57b1c23fea6615cafff2c678",
+      "bytes": 4252
+    },
+    {
+      "path": "scripts/regime-v2-design-fixtures.mts",
+      "sha256": "e8f60059586dc55f294796ddef59084c4b17d3b643cc45c3d84889f27bc68d9b",
+      "bytes": 11904
+    },
+    {
+      "path": "scripts/regime-v2-design-fixtures.test.ts",
+      "sha256": "aa0564c02ff0323ae9cc1a4e1ce1d22e2ef6c290c3f59cf737cc726d2fcaf6cc",
+      "bytes": 5183
+    },
+    {
+      "path": "scripts/regime-v2-design-render.mjs",
+      "sha256": "e9bc9e4ea50a899cff1b70896ded1ac83d3d006654828eb9898c8e64bab50fb1",
+      "bytes": 19136
+    }
+  ],
+  "preserved_input_files": 1014,
+  "engine_and_operations_files_preserved": 21,
+  "runtime_dependencies_added": 0,
+  "screenshots_under_public": false,
+  "commit_created": false,
+  "push_performed": false,
+  "deployment_performed": false,
+  "production_cutover": false
+}

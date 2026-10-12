@@ -1,0 +1,33 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "ReadThreeBucketSettingsOnly",
+      "Effect": "Allow",
+      "Action": [
+        "s3:GetBucketVersioning",
+        "s3:GetBucketPublicAccessBlock",
+        "s3:GetEncryptionConfiguration"
+      ],
+      "Resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1"
+    },
+    {
+      "Sid": "ProbeObjectsOnly",
+      "Effect": "Allow",
+      "Action": [
+        "s3:GetObject",
+        "s3:PutObject"
+      ],
+      "Resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/regime-v2/_probe/*"
+    },
+    {
+      "Sid": "NeverDeleteProbeObjectOrVersion",
+      "Effect": "Deny",
+      "Action": [
+        "s3:DeleteObject",
+        "s3:DeleteObjectVersion"
+      ],
+      "Resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/regime-v2/_probe/*"
+    }
+  ]
+}

@@ -1,0 +1,225 @@
+{
+  "status": "PASS",
+  "completed_at": "2026-09-08T18:18:17.523219+00:00",
+  "scope": "GROWEER only; all edits are new files under groweer; accepted candidate is byte-identical.",
+  "canonical_parameter_set": "C03",
+  "canonical_engine_modified": false,
+  "canonical_parameters_changed": false,
+  "architecture_changed": false,
+  "canonical_verification": "canonical-verification.json",
+  "P8_GOLDEN_CASES": {
+    "passed": 464,
+    "total": 464
+  },
+  "HISTORICAL_R2_CONFORMANCE": {
+    "passed": 1930,
+    "total": 1930
+  },
+  "SWEEPER_ATTACKS": {
+    "passed": 110,
+    "total": 110
+  },
+  "tests": {
+    "passed": 462,
+    "total": 462,
+    "breakdown": {
+      "existing_node": 302,
+      "existing_python": 7,
+      "sweeper_attacks": 110,
+      "offline_challenger_tests": 36,
+      "temporal_and_gap_invariants": 7
+    },
+    "counting_note": "Golden/history counted separately.32 native API/quality checks and1930 independent replay identity comparisons are also separate; not added to462 tests."
+  },
+  "native_additional_checks": {
+    "core_identity_cases": 25,
+    "data_quality_cases": 7,
+    "status": "PASS"
+  },
+  "typecheck": {
+    "before_build": {
+      "exit_code": 0,
+      "log": "typecheck-before-build.log"
+    },
+    "after_build_and_restore": {
+      "exit_code": 0,
+      "log": "typecheck-after-build.log"
+    }
+  },
+  "build": {
+    "status": "PASS",
+    "exit_code": 0,
+    "command": "npm run build",
+    "log": "build.log",
+    "deployed": false,
+    "next_env_build_side_effect": "Original bytes backed up before build, restored after, SHA verified against input manifest, followed by typecheck."
+  },
+  "lint": {
+    "errors": 0,
+    "warnings": 18,
+    "new_warnings": 0,
+    "exact_match_to_sweeper_baseline": true,
+    "messages": [
+      [
+        "/Users/quantlab/Developer/web/Luiguiherrera-web/app/(es)/page.tsx",
+        "@typescript-eslint/no-unused-vars",
+        175,
+        "'SectorMiniChart' is defined but never used.",
+        1
+      ],
+      [
+        "/Users/quantlab/Developer/web/Luiguiherrera-web/app/(es)/page.tsx",
+        "@typescript-eslint/no-unused-vars",
+        237,
+        "'VixMiniPanel' is defined but never used.",
+        1
+      ],
+      [
+        "/Users/quantlab/Developer/web/Luiguiherrera-web/app/(es)/page.tsx",
+        "@typescript-eslint/no-unused-vars",
+        272,
+        "'BtcFlowsMiniPanel' is defined but never used.",
+        1
+      ],
+      [
+        "/Users/quantlab/Developer/web/Luiguiherrera-web/app/(es)/page.tsx",
+        "@typescript-eslint/no-unused-vars",
+        309,
+        "'StatisticalLevelsMiniPanel' is defined but never used.",
+        1
+      ],
+      [
+        "/Users/quantlab/Developer/web/Luiguiherrera-web/app/en/page.tsx",
+        "@typescript-eslint/no-unused-vars",
+        177,
+        "'SectorMiniChart' is defined but never used.",
+        1
+      ],
+      [
+        "/Users/quantlab/Developer/web/Luiguiherrera-web/app/en/page.tsx",
+        "@typescript-eslint/no-unused-vars",
+        239,
+        "'VixMiniPanel' is defined but never used.",
+        1
+      ],
+      [
+        "/Users/quantlab/Developer/web/Luiguiherrera-web/app/en/page.tsx",
+        "@typescript-eslint/no-unused-vars",
+        274,
+        "'BtcFlowsMiniPanel' is defined but never used.",
+        1
+      ],
+      [
+        "/Users/quantlab/Developer/web/Luiguiherrera-web/app/en/page.tsx",
+        "@typescript-eslint/no-unused-vars",
+        311,
+        "'StatisticalLevelsMiniPanel' is defined but never used.",
+        1
+      ],
+      [
+        "/Users/quantlab/Developer/web/Luiguiherrera-web/components/dashboard/BtcEtfFlowsModule.tsx",
+        "@typescript-eslint/no-unused-vars",
+        42,
+        "'severityClass' is defined but never used.",
+        1
+      ],
+      [
+        "/Users/quantlab/Developer/web/Luiguiherrera-web/components/dashboard/VixModule.tsx",
+        "@typescript-eslint/no-unused-vars",
+        30,
+        "'severityClass' is defined but never used.",
+        1
+      ],
+      [
+        "/Users/quantlab/Developer/web/Luiguiherrera-web/components/statistical-levels/PeriodExplorerTable.tsx",
+        "react-hooks/exhaustive-deps",
+        97,
+        "The 'rows' logical expression could make the dependencies of useMemo Hook (at line 112) change on every render. To fix this, wrap the initialization of 'rows' in its own useMemo() Hook.",
+        1
+      ],
+      [
+        "/Users/quantlab/Developer/web/Luiguiherrera-web/components/statistical-levels/PeriodExplorerTable.tsx",
+        "react-hooks/exhaustive-deps",
+        97,
+        "The 'rows' logical expression could make the dependencies of useMemo Hook (at line 98) change on every render. To fix this, wrap the initialization of 'rows' in its own useMemo() Hook.",
+        1
+      ],
+      [
+        "/Users/quantlab/Developer/web/Luiguiherrera-web/lib/dashboard/adapters/eth-etf-flows.ts",
+        "@typescript-eslint/no-unused-vars",
+        336,
+        "'_reason' is defined but never used.",
+        1
+      ],
+      [
+        "/Users/quantlab/Developer/web/Luiguiherrera-web/lib/dashboard/adapters/sector-etfs.ts",
+        "@typescript-eslint/no-unused-vars",
+        87,
+        "'reason' is defined but never used.",
+        1
+      ],
+      [
+        "/Users/quantlab/Developer/web/Luiguiherrera-web/scripts/build-statistical-levels.mjs",
+        "@typescript-eslint/no-unused-vars",
+        98,
+        "'yahooSymbol' is defined but never used.",
+        1
+      ],
+      [
+        "/Users/quantlab/Developer/web/Luiguiherrera-web/scripts/build-statistical-levels.mjs",
+        "@typescript-eslint/no-unused-vars",
+        959,
+        "'key' is assigned a value but never used.",
+        1
+      ],
+      [
+        "/Users/quantlab/Developer/web/Luiguiherrera-web/scripts/build-statistical-levels.mjs",
+        "@typescript-eslint/no-unused-vars",
+        1062,
+        "'yahooSymbol' is assigned a value but never used.",
+        1
+      ],
+      [
+        "/Users/quantlab/Developer/web/Luiguiherrera-web/scripts/build-td3-performance.mjs",
+        "@typescript-eslint/no-unused-vars",
+        173,
+        "'error' is defined but never used.",
+        1
+      ]
+    ],
+    "log": "lint.json"
+  },
+  "preservation": {
+    "files_verified": 891,
+    "differences": [],
+    "new_files_outside_groweer": [],
+    "HEAD": "636cb73fb0fe4d2b28ad96cb7185f8c07d8f895b",
+    "TREE": "9f84c28f1b40c86cf574d5c8fb6f8022b9c091d9",
+    "protocol_sha256": "82a816ff496ed0a581e6b4ab45c571a7903dbd8f1ba921f04e7e088af2d7a583",
+    "sweeper_repairs_preserved": 11,
+    "V1_PRESERVED": "PASS",
+    "PUBLIC_UI_CHANGED": false,
+    "PRODUCTION_CUTOVER": false
+  },
+  "analysis_consistency": {
+    "baseline_independent_metrics_all_12_periods": "PASS",
+    "paired_namespace_metrics": "PASS",
+    "all_ablation_sensitivity_matrices_and_denominators": "PASS",
+    "H1_stress_and_gate_hashes": "PASS",
+    "P1_elapsed_duration_censoring": "PASS",
+    "required_deliverables": "PASS"
+  },
+  "limitations_preserved": [
+    "All historical evidence is R2 and previously inspected; no new holdout or PIT claim.",
+    "B0 V1 full historical comparison unavailable and explicitly reported.",
+    "Cross-asset/PFL and satellite/narrative utility questions remain research limits, not promoted claims.",
+    "Installed Next16.2.7 differs from declared16.3.1; preexisting Sweeper INFO, no dependency change."
+  ],
+  "unresolved_growth_findings": [],
+  "MAINTAINER_READY": true,
+  "MAINTAINER_AUTHORIZED": false,
+  "MAINTAINER_EXECUTED": false,
+  "DESIGNER_EXECUTED": false,
+  "commit_created": false,
+  "push_executed": false
+}

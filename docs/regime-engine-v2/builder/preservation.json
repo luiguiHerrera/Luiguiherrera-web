@@ -1,0 +1,19 @@
+{
+  "status": "PASS",
+  "baseline_file": "baseline.json",
+  "baseline_sha256": "9114b7e57a93f7ade10ca021337fef4a4487e9ef7f63ccbefb747ec55724117b",
+  "original_files_verified": 819,
+  "original_files_changed": [],
+  "original_files_missing": [],
+  "P8_BYTES_UNCHANGED": true,
+  "V1_BYTES_UNCHANGED": true,
+  "public_imports_of_v2": [],
+  "base_head": "636cb73fb0fe4d2b28ad96cb7185f8c07d8f895b",
+  "final_head": "636cb73fb0fe4d2b28ad96cb7185f8c07d8f895b",
+  "base_tree": "9f84c28f1b40c86cf574d5c8fb6f8022b9c091d9",
+  "final_tree": "9f84c28f1b40c86cf574d5c8fb6f8022b9c091d9",
+  "tree_scope": "Commit tree; candidate is new uncommitted files recorded in files-changed.json",
+  "next_env_restored_from_verified_original": true,
+  "public_ui_changed": false,
+  "production_cutover": false
+}

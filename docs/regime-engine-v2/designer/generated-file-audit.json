@@ -1,0 +1,7 @@
+{
+  "path": "next-env.d.ts",
+  "accepted_sha256": "1862ac4bbbc5192d4bf562161df66ea547ed3e67173100656ab606ae9797db2b",
+  "after_build_sha256": "1862ac4bbbc5192d4bf562161df66ea547ed3e67173100656ab606ae9797db2b",
+  "restored_if_needed": false,
+  "final_sha256": "1862ac4bbbc5192d4bf562161df66ea547ed3e67173100656ab606ae9797db2b"
+}

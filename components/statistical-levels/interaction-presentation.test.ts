@@ -1,4 +1,4 @@
-import assert from 'node:assert/strict';
+import assert from 'node:assert/strict'; import { weeklyReturnDisplay } from '../../scripts/statistical-levels-release/scripts/qa/weekly-return-display-contract.mjs';
 import test from 'node:test';
 import { readFileSync } from 'node:fs';
 import { createRequire } from 'node:module';
@@ -51,7 +51,7 @@ test('both locales preserve each weekly return, win rate, N and limited-sample w
       const cell = seasonality.windows['5Y'].weekly.general.find((c: { month: number; weekOfMonth: number }) => c.month === month && c.weekOfMonth === week);
       const article = html.match(new RegExp(`<article[^>]*data-week="${week}"[\\s\\S]*?</article>`))![0];
       const n = cell?.sampleSize ?? 0;
-      const value = n && cell.averageReturn !== null ? `${cell.averageReturn > 0 ? '+' : ''}${(cell.averageReturn * 100).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}%` : 'n/d';
+      const value = n && cell.averageReturn !== null ? weeklyReturnDisplay(cell.averageReturn) : 'n/d';
       assert.ok(article.includes(value));
       assert.ok(article.includes(n && cell.winRate !== null ? `${(cell.winRate * 100).toFixed(0)}%` : 'n/d'));
       assert.ok(article.includes(`N ${n}`));

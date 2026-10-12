@@ -1,0 +1,529 @@
+{
+  "evidence": {
+    "schema_version": "statistical-levels.adopt-request-evidence.v2",
+    "execution_source_sha": "UNKNOWN",
+    "hosted_run_id": "UNKNOWN",
+    "hosted_run_attempt": "UNKNOWN",
+    "requests": [
+      {
+        "accounting_indices": [],
+        "causal_parent": "UNKNOWN",
+        "causal_relation": "UNKNOWN",
+        "causality_status": "UNKNOWN",
+        "classification_evidence": {
+          "prefetch": "UNKNOWN",
+          "rsc": "NON_RSC_SIGNAL"
+        },
+        "event_sequences": [
+          3,
+          4,
+          5
+        ],
+        "initiator": {
+          "frames": [],
+          "parent_protocol_sha256": "UNKNOWN",
+          "type": "other"
+        },
+        "initiator_scripts": {
+          "complete": true,
+          "scripts": []
+        },
+        "metadata": {
+          "method": "GET",
+          "origin": "http://127.0.0.1:61349",
+          "path_sha256": "8b3d8f2aadeaaf65575f5065decf06ae405f37cc0e643819c13bfa53fe068365",
+          "query_keys": [],
+          "type": "Document"
+        },
+        "prefetch": "UNKNOWN",
+        "prefetch_classification": "UNKNOWN",
+        "protocol_request_sha256": "c7af8272a81552451f7a5cef0f6a2224c430d631d891bc3eaba9437261845938",
+        "redirect_parent_id": "UNKNOWN",
+        "request_evidence": {
+          "active_transition_context_sha256": null,
+          "active_transition_id": null,
+          "capture_id": "capture-d7db33e9-c419-4e0a-89c9-101188b01d9d",
+          "consumer": {
+            "kind": "unknown"
+          },
+          "destination_sha256": "d5fba8bbbac4c98da7041b48b0ac32ccfbc385ad0b95d775b4ecec5cc2aa29cc",
+          "document_instance_id": "document-1",
+          "document_path_sha256": "8b3d8f2aadeaaf65575f5065decf06ae405f37cc0e643819c13bfa53fe068365",
+          "document_proven": true,
+          "method": "GET",
+          "network_request_ordinal": 1,
+          "page_id": "page-1",
+          "request_instance_id": "capture-d7db33e9-c419-4e0a-89c9-101188b01d9d:page-1:document-1:request-1",
+          "request_start_context_sha256": "dbb8b7f7d28998bc74a23318e55a4689567dcd4850701754610a0a97c445552a"
+        },
+        "request_id": "capture-d7db33e9-c419-4e0a-89c9-101188b01d9d:page-1:document-1:request-1",
+        "rsc": false,
+        "rsc_classification": "NO",
+        "terminal_state": "FINISHED",
+        "transition_id": "UNKNOWN",
+        "transition_type": "UNKNOWN",
+        "action_instance_id": "UNKNOWN",
+        "action_ancestry": "UNKNOWN",
+        "consumer": "UNKNOWN"
+      },
+      {
+        "accounting_indices": [
+          0
+        ],
+        "causal_parent": "script:b567cb40e2ccf4bfa22a63ec446f9cdfbe944f07890f32b4636f08bc0eb2db5a",
+        "causal_relation": "CDP_SCRIPT_INITIATOR",
+        "causality_status": "PROVEN",
+        "classification_evidence": {
+          "prefetch": "EXPLICIT_ROUTER_NON_PREFETCH",
+          "rsc": "RSC_SIGNAL"
+        },
+        "event_sequences": [
+          9,
+          10,
+          12
+        ],
+        "initiator": {
+          "frames": [
+            {
+              "column": 137,
+              "line": 0,
+              "script_sha256": "889201deeeb606b7251b7dce472fb2462f01851ca83badc7068f78d2b0470023"
+            },
+            {
+              "column": 87,
+              "line": 0,
+              "script_sha256": "8b3d22a5d22b94a8f81b54d52b1e19fe970862bcb9af51f068df9f03914bbdf6"
+            },
+            {
+              "column": 43,
+              "line": 12,
+              "script_sha256": "23759997b3c59884dc4c0ff5320d6301b0e7f63bf0f6483a7b54d7d43bc5ccd1"
+            }
+          ],
+          "parent_protocol_sha256": "UNKNOWN",
+          "type": "script"
+        },
+        "initiator_scripts": {
+          "complete": true,
+          "scripts": [
+            "b567cb40e2ccf4bfa22a63ec446f9cdfbe944f07890f32b4636f08bc0eb2db5a",
+            "9fb5fc4cc3124b9c0f19027beaa0d330372fc25384d3a6aadb07052aadc049c9",
+            "ab9ac5ce5c8723f6c99f26d40bcbe67260f66d8773481b8cf1afadd9f06c99b7"
+          ]
+        },
+        "metadata": {
+          "method": "GET",
+          "origin": "http://127.0.0.1:61349",
+          "path_sha256": "8b3d8f2aadeaaf65575f5065decf06ae405f37cc0e643819c13bfa53fe068365",
+          "query_keys": [
+            "asset",
+            "frequency",
+            "window"
+          ],
+          "type": "Fetch"
+        },
+        "prefetch": false,
+        "prefetch_classification": "NO",
+        "protocol_request_sha256": "0956ebe74ba80794d57515b330b80816dec8dfed2e862ab9a3fbdd760e230974",
+        "redirect_parent_id": "UNKNOWN",
+        "request_evidence": {
+          "active_transition_context_sha256": "6145abbf3df08f7f4fba9f6bcccdd88be11a21465f0dfc22f321ec815df302a0",
+          "active_transition_id": "transition-1",
+          "capture_id": "capture-d7db33e9-c419-4e0a-89c9-101188b01d9d",
+          "consumer": {
+            "kind": "transition",
+            "target": {
+              "asset": "SPY",
+              "frequency": "weekly",
+              "window": "3Y"
+            }
+          },
+          "destination_sha256": "f8a1638e1ba769e734fb30511df81d16257a1793756eb815fe0dd23c42966f36",
+          "document_instance_id": "document-1",
+          "document_path_sha256": "8b3d8f2aadeaaf65575f5065decf06ae405f37cc0e643819c13bfa53fe068365",
+          "document_proven": true,
+          "method": "GET",
+          "network_request_ordinal": 2,
+          "page_id": "page-1",
+          "request_instance_id": "capture-d7db33e9-c419-4e0a-89c9-101188b01d9d:page-1:document-1:request-2",
+          "request_start_context_sha256": "6145abbf3df08f7f4fba9f6bcccdd88be11a21465f0dfc22f321ec815df302a0"
+        },
+        "request_id": "capture-d7db33e9-c419-4e0a-89c9-101188b01d9d:page-1:document-1:request-2",
+        "rsc": true,
+        "rsc_classification": "YES",
+        "terminal_state": "FAILED",
+        "transition_id": "transition-1",
+        "transition_type": "T1",
+        "action_instance_id": "action-abda4118-2a98-4d2c-aa28-42ead4d705bc",
+        "action_ancestry": "PROVEN",
+        "consumer": "TESTED_ACTION"
+      }
+    ],
+    "actions": [
+      {
+        "action_instance_id": "action-abda4118-2a98-4d2c-aa28-42ead4d705bc",
+        "dispatch_ack": true,
+        "event_seen": true,
+        "kind": "T1",
+        "listener_calls": 1,
+        "page_id": "page-1",
+        "script_sha256": "9fb5fc4cc3124b9c0f19027beaa0d330372fc25384d3a6aadb07052aadc049c9",
+        "source_sha256": "dfebdefc88cf12b103b293bd0b28e979b1a2e0493d8533b6a4e126c378068fa4",
+        "source_url_sha256": "8b3d22a5d22b94a8f81b54d52b1e19fe970862bcb9af51f068df9f03914bbdf6",
+        "tested_action_id": "sl-main:L132:C9:c-click",
+        "transition_id": "transition-1"
+      }
+    ],
+    "transitions": [
+      {
+        "action_instance_id": "action-abda4118-2a98-4d2c-aa28-42ead4d705bc",
+        "completion": {
+          "metric": true,
+          "product_failure": false,
+          "readiness": true
+        },
+        "context": {
+          "action_id": "sl-main:L132:C9:c-click",
+          "suite_id": "sl-main",
+          "test_id": "sl-main:L132"
+        },
+        "kind": "T1",
+        "page_id": "page-1",
+        "transition_id": "transition-1"
+      }
+    ],
+    "journal": [
+      {
+        "kind": "LISTENER_START",
+        "page_id": "page-1",
+        "sequence": 1
+      },
+      {
+        "kind": "PAGE_LIFECYCLE",
+        "page_id": "page-1",
+        "sequence": 2,
+        "value": "ACTIVE"
+      },
+      {
+        "classification_evidence": {
+          "prefetch": "UNKNOWN",
+          "rsc": "NON_RSC_SIGNAL"
+        },
+        "kind": "REQUEST",
+        "page_id": "page-1",
+        "page_lifecycle": "ACTIVE",
+        "prefetch": "UNKNOWN",
+        "request_id": "capture-d7db33e9-c419-4e0a-89c9-101188b01d9d:page-1:document-1:request-1",
+        "request_identity_sha256": "e15c34a2620632a68ca8ccf60fc6d16ae0f19b4e35f1789c539c6a6b4ea5ecfd",
+        "rsc": false,
+        "sequence": 3,
+        "timestamp": 202384.481571,
+        "transition_id": "UNKNOWN"
+      },
+      {
+        "kind": "RESPONSE",
+        "page_id": "page-1",
+        "page_lifecycle": "ACTIVE",
+        "request_id": "capture-d7db33e9-c419-4e0a-89c9-101188b01d9d:page-1:document-1:request-1",
+        "sequence": 4,
+        "status": 200,
+        "timestamp": 202384.485794
+      },
+      {
+        "kind": "FINISHED",
+        "page_id": "page-1",
+        "page_lifecycle": "ACTIVE",
+        "request_id": "capture-d7db33e9-c419-4e0a-89c9-101188b01d9d:page-1:document-1:request-1",
+        "sequence": 5,
+        "timestamp": 202384.485664
+      },
+      {
+        "kind": "TRANSITION_START",
+        "page_id": "page-1",
+        "sequence": 6,
+        "transition_id": "transition-1",
+        "transition_type": "T1"
+      },
+      {
+        "action_instance_id": "action-abda4118-2a98-4d2c-aa28-42ead4d705bc",
+        "kind": "ACTION_COMPILED",
+        "page_id": "page-1",
+        "script_sha256": "9fb5fc4cc3124b9c0f19027beaa0d330372fc25384d3a6aadb07052aadc049c9",
+        "sequence": 7,
+        "transition_id": "transition-1"
+      },
+      {
+        "action_instance_id": "action-abda4118-2a98-4d2c-aa28-42ead4d705bc",
+        "kind": "ACTION_START",
+        "page_id": "page-1",
+        "sequence": 8,
+        "transition_id": "transition-1"
+      },
+      {
+        "classification_evidence": {
+          "prefetch": "EXPLICIT_ROUTER_NON_PREFETCH",
+          "rsc": "RSC_SIGNAL"
+        },
+        "kind": "REQUEST",
+        "page_id": "page-1",
+        "page_lifecycle": "ACTIVE",
+        "prefetch": false,
+        "request_id": "capture-d7db33e9-c419-4e0a-89c9-101188b01d9d:page-1:document-1:request-2",
+        "request_identity_sha256": "68a4fd3b53191c158d8b4950ffa861e38b0cd39ecdfbc7bf82c6e811a33e5bc4",
+        "rsc": true,
+        "sequence": 9,
+        "timestamp": 202384.519127,
+        "transition_id": "transition-1"
+      },
+      {
+        "kind": "RESPONSE",
+        "page_id": "page-1",
+        "page_lifecycle": "ACTIVE",
+        "request_id": "capture-d7db33e9-c419-4e0a-89c9-101188b01d9d:page-1:document-1:request-2",
+        "sequence": 10,
+        "status": 200,
+        "timestamp": 202384.524127
+      },
+      {
+        "action_instance_id": "action-abda4118-2a98-4d2c-aa28-42ead4d705bc",
+        "dispatch_ack": true,
+        "event_seen": true,
+        "kind": "ACTION_DISPATCHED",
+        "listener_calls": 1,
+        "sequence": 11
+      },
+      {
+        "canceled": true,
+        "error_code": "net::ERR_ABORTED",
+        "kind": "FAILED",
+        "page_id": "page-1",
+        "page_lifecycle": "ACTIVE",
+        "request_id": "capture-d7db33e9-c419-4e0a-89c9-101188b01d9d:page-1:document-1:request-2",
+        "sequence": 12,
+        "timestamp": 202384.625089
+      },
+      {
+        "kind": "TRANSITION_COMPLETE",
+        "page_id": "page-1",
+        "sequence": 13,
+        "transition_id": "transition-1",
+        "transition_type": "T1"
+      },
+      {
+        "kind": "PAGE_LIFECYCLE",
+        "page_id": "page-1",
+        "sequence": 14,
+        "value": "CLOSING"
+      },
+      {
+        "kind": "LISTENER_DRAIN",
+        "page_id": "page-1",
+        "sequence": 15
+      },
+      {
+        "kind": "SOURCE_CLOSED",
+        "page_id": "page-1",
+        "sequence": 16
+      },
+      {
+        "kind": "PAGE_LIFECYCLE",
+        "page_id": "page-1",
+        "sequence": 17,
+        "value": "CLOSED"
+      },
+      {
+        "kind": "ACCOUNTING_FREEZE",
+        "sequence": 18
+      },
+      {
+        "kind": "LISTENER_STOP",
+        "page_id": "page-1",
+        "sequence": 19
+      }
+    ],
+    "transition_accounting": [
+      {
+        "transition_id": "transition-1",
+        "request_ids": [
+          "capture-d7db33e9-c419-4e0a-89c9-101188b01d9d:page-1:document-1:request-2"
+        ],
+        "receipt_ids": [
+          "b410212c79c60350815c5d2bb602cc4eefa60c06a8f9c39a39f80b45cccf5708"
+        ],
+        "state": "COMPLETED"
+      }
+    ],
+    "transition_receipts": {
+      "schema_version": "statistical-levels.probe-transition-receipts.v2",
+      "records": [
+        {
+          "kind": "T1",
+          "suite_id": "sl-main",
+          "test_id": "sl-main:L132",
+          "action_id": "sl-main:L132:C9:c-click",
+          "from_state": {
+            "asset": "SPY",
+            "frequency": "weekly",
+            "window": "5Y"
+          },
+          "target_state": {
+            "asset": "SPY",
+            "frequency": "weekly",
+            "window": "3Y"
+          },
+          "route": "/niveles-estadisticos",
+          "transition_id": "transition-1",
+          "page_id": "page-1",
+          "request_start_context_sha256": "6145abbf3df08f7f4fba9f6bcccdd88be11a21465f0dfc22f321ec815df302a0",
+          "request_instance_id": "capture-d7db33e9-c419-4e0a-89c9-101188b01d9d:page-1:document-1:request-2",
+          "request_sequence": 2,
+          "request_count": 1,
+          "event_index": 0,
+          "raw_event_sha256": "328056e276c35ed91657491cd13480d0b033835b7e396af904876b259db803c8",
+          "request_target": {
+            "asset": "SPY",
+            "frequency": "weekly",
+            "window": "3Y"
+          },
+          "same_origin": true,
+          "method": "GET",
+          "rsc": true,
+          "prefetch": false,
+          "start_sequence": 2,
+          "response_sequence": 3,
+          "abort_sequence": 4,
+          "completion_sequence": 5,
+          "response_status": 200,
+          "canceled": true,
+          "error_code": "net::ERR_ABORTED",
+          "page_active": true,
+          "readiness_pass": true,
+          "metric_pass": true,
+          "application_exception": false,
+          "product_failure": false,
+          "conflicting_identity": false
+        }
+      ],
+      "capture_issues": []
+    },
+    "receipt_decisions": [
+      {
+        "receipt_id": "b410212c79c60350815c5d2bb602cc4eefa60c06a8f9c39a39f80b45cccf5708",
+        "event_index": 0,
+        "decision": "APPLIED"
+      }
+    ],
+    "ledger_sha256": "2a3b6dc878790f74874740db6cbf96e7173b769ebb3d3f19b0424ce9e861057e",
+    "capture_issues": []
+  },
+  "result": {
+    "raw_platform_events": [],
+    "raw_rsc_events": [
+      {
+        "sha256": "328056e276c35ed91657491cd13480d0b033835b7e396af904876b259db803c8",
+        "count": 1,
+        "classification": "rsc_transition_completed_non_application"
+      }
+    ],
+    "application_console_errors": 0,
+    "required_application_request_failures": 0,
+    "hydration_errors": 0,
+    "unclassified_failures": [],
+    "ledger": [
+      {
+        "event": {
+          "request_evidence": {
+            "active_transition_context_sha256": "6145abbf3df08f7f4fba9f6bcccdd88be11a21465f0dfc22f321ec815df302a0",
+            "active_transition_id": "transition-1",
+            "capture_id": "capture-d7db33e9-c419-4e0a-89c9-101188b01d9d",
+            "consumer": {
+              "kind": "transition",
+              "target": {
+                "asset": "SPY",
+                "frequency": "weekly",
+                "window": "3Y"
+              }
+            },
+            "destination_sha256": "f8a1638e1ba769e734fb30511df81d16257a1793756eb815fe0dd23c42966f36",
+            "document_instance_id": "document-1",
+            "document_path_sha256": "8b3d8f2aadeaaf65575f5065decf06ae405f37cc0e643819c13bfa53fe068365",
+            "document_proven": true,
+            "method": "GET",
+            "network_request_ordinal": 2,
+            "page_id": "page-1",
+            "request_instance_id": "capture-d7db33e9-c419-4e0a-89c9-101188b01d9d:page-1:document-1:request-2",
+            "request_start_context_sha256": "6145abbf3df08f7f4fba9f6bcccdd88be11a21465f0dfc22f321ec815df302a0"
+          },
+          "kind": "request_failure",
+          "origin": "http://127.0.0.1:61349",
+          "path": "8b3d8f2aadeaaf65575f5065decf06ae405f37cc0e643819c13bfa53fe068365",
+          "type": "Fetch",
+          "status": 0,
+          "canceled": true,
+          "rsc": true,
+          "prefetch": false,
+          "error_code": "net::ERR_ABORTED",
+          "source": ""
+        },
+        "classification": "rsc_transition_completed_non_application"
+      }
+    ],
+    "transition_receipts": {
+      "capture_issues": [],
+      "records": [
+        {
+          "abort_sequence": 4,
+          "action_id": "sl-main:L132:C9:c-click",
+          "application_exception": false,
+          "canceled": true,
+          "completion_sequence": 5,
+          "conflicting_identity": false,
+          "error_code": "net::ERR_ABORTED",
+          "event_index": 0,
+          "from_state": {
+            "asset": "SPY",
+            "frequency": "weekly",
+            "window": "5Y"
+          },
+          "kind": "T1",
+          "method": "GET",
+          "metric_pass": true,
+          "page_active": true,
+          "page_id": "page-1",
+          "prefetch": false,
+          "product_failure": false,
+          "raw_event_sha256": "328056e276c35ed91657491cd13480d0b033835b7e396af904876b259db803c8",
+          "readiness_pass": true,
+          "request_count": 1,
+          "request_instance_id": "capture-d7db33e9-c419-4e0a-89c9-101188b01d9d:page-1:document-1:request-2",
+          "request_sequence": 2,
+          "request_start_context_sha256": "6145abbf3df08f7f4fba9f6bcccdd88be11a21465f0dfc22f321ec815df302a0",
+          "request_target": {
+            "asset": "SPY",
+            "frequency": "weekly",
+            "window": "3Y"
+          },
+          "response_sequence": 3,
+          "response_status": 200,
+          "route": "/niveles-estadisticos",
+          "rsc": true,
+          "same_origin": true,
+          "start_sequence": 2,
+          "suite_id": "sl-main",
+          "target_state": {
+            "asset": "SPY",
+            "frequency": "weekly",
+            "window": "3Y"
+          },
+          "test_id": "sl-main:L132",
+          "transition_id": "transition-1"
+        }
+      ],
+      "schema_version": "statistical-levels.probe-transition-receipts.v2"
+    }
+  },
+  "validation": {
+    "status": "PASS",
+    "issues": []
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "status": "PASS",
+  "recordedAt": "2026-09-08T21:00:40.101968+00:00",
+  "identity": {
+    "commit": "636cb73fb0fe4d2b28ad96cb7185f8c07d8f895b",
+    "tree": "9f84c28f1b40c86cf574d5c8fb6f8022b9c091d9",
+    "source": "git archive HEAD prepared by root before staging",
+    "root": "/private/tmp/regime-v2-release-parent-9a161_by",
+    "git_directory_present": false,
+    "local_env_present": false
+  },
+  "dependency_environment": {
+    "node_modules_symlink": true,
+    "node_modules_resolved": "/Users/quantlab/Developer/web/Luiguiherrera-web/node_modules",
+    "baseline_declared_next": "16.3.1",
+    "installed_next": "16.3.1",
+    "installed_eslint": "9.39.5",
+    "note": "Use the same accepted installed lint/runtime environment for parent and candidate comparison; no dependencies installed or updated."
+  },
+  "command": [
+    "npx",
+    "eslint",
+    ".",
+    "--format",
+    "json",
+    "--output-file",
+    "/Users/quantlab/Developer/web/Luiguiherrera-web/docs/regime-engine-v2/release-candidate/parent-head-lint.json"
+  ],
+  "exit_code": 0,
+  "errors": 0,
+  "warnings": 18,
+  "package_sha256": "d8946507e07db79b0b2a8cd8b146da50d82eb2621cbeda4ab1aba621a4e05920",
+  "lock_sha256": "2f00b7744899cf2f7c19d412bcb3580f6d69f8da8796afd2a2280da153f5f78c",
+  "lint_output_sha256": "de5f2e7a7d15693be950c88425f3f9c2deb00c7a56a477a9aa02749156f83ed1",
+  "lint_log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+}

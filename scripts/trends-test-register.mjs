@@ -1,19 +1,11 @@
 // JSX/CSS/Next link adapter for Node's native test runner, without a new SDK.
+import './report-node-register.mjs';
 import { registerHooks } from 'node:module';
 import { readFileSync, existsSync } from 'node:fs';
-import { fileURLToPath, pathToFileURL } from 'node:url';
-import path from 'node:path';
 import ts from 'typescript';
-const root = fileURLToPath(new URL('../', import.meta.url));
 registerHooks({
   resolve(specifier, context, nextResolve) {
     if (specifier === 'server-only' || specifier === 'next/link' || specifier.endsWith('.module.css')) return { url: `trends-test:${specifier}`, shortCircuit: true };
-    if (specifier.startsWith('@/')) {
-      const target = path.join(root, specifier.slice(2));
-      for (const extension of ['', '.ts', '.tsx']) {
-        if (existsSync(target + extension)) return nextResolve(pathToFileURL(target + extension).href, context);
-      }
-    }
     if (specifier.startsWith(".") && context.parentURL) {
       for (const extension of [".ts", ".tsx"]) {
         const url = new URL(specifier + extension, context.parentURL);

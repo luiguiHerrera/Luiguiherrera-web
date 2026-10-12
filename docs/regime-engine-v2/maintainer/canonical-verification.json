@@ -1,0 +1,344 @@
+{
+  "status": "PASS",
+  "started_at": "2026-09-08T19:09:45.531691+00:00",
+  "completed_at": "2026-09-08T19:10:18.684124+00:00",
+  "scope": "Frozen C03 conformance plus existing V1/report and new isolated Maintainer operational regressions. Groweer tests run solely as offline research checks.",
+  "commands": [
+    {
+      "name": "conformance",
+      "command": [
+        "node",
+        "--disable-warning=MODULE_TYPELESS_PACKAGE_JSON",
+        "scripts/regime-v2-conformance.mts",
+        "--output-dir",
+        "/Users/quantlab/Developer/web/Luiguiherrera-web/docs/regime-engine-v2/maintainer/verification-conformance"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 33.044361833,
+      "log": "docs/regime-engine-v2/maintainer/canonical-conformance.log",
+      "log_sha256": "0ae86699a5a32f7d58bf3e604400cf875fd04900d6e5cf404b7a4be2a379cf06"
+    },
+    {
+      "name": "sweeper-attacks",
+      "command": [
+        "node",
+        "--disable-warning=MODULE_TYPELESS_PACKAGE_JSON",
+        "docs/regime-engine-v2/sweeper/adversarial.mjs",
+        "/Users/quantlab/Developer/web/Luiguiherrera-web/docs/regime-engine-v2/maintainer/sweeper-attacks.json"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 19.419327625,
+      "log": "docs/regime-engine-v2/maintainer/canonical-sweeper-attacks.log",
+      "log_sha256": "d3c1a19321c4efaafe49ba41263b371c242e3ab59898fbe9a9e778c96712e3cf"
+    },
+    {
+      "name": "node-tests",
+      "command": [
+        "node",
+        "--disable-warning=MODULE_TYPELESS_PACKAGE_JSON",
+        "--import",
+        "./scripts/trends-test-register.mjs",
+        "--experimental-test-module-mocks",
+        "--test",
+        "lib/dashboard/adapters/vix-term-structure.test.ts",
+        "lib/personal-finance/budget/budget-plan-export.test.ts",
+        "lib/personal-finance/budget/projection-calculations.test.ts",
+        "lib/personal-finance/budget/projection-presentation.test.ts",
+        "lib/personal-finance/budget/target-calculations.test.ts",
+        "lib/portfolio-fragility/analysis-view.test.ts",
+        "lib/portfolio-fragility/conformance.test.ts",
+        "lib/portfolio-fragility/engine.test.ts",
+        "lib/portfolio-fragility/format.test.ts",
+        "lib/portfolio-fragility/input-session.test.ts",
+        "lib/regime-engine-v2/engine.test.ts",
+        "lib/reports/first-september-2026.test.mts",
+        "lib/reports/weekly-review.test.mts",
+        "lib/research/tom-decay/chart-geometry.test.ts",
+        "lib/research/tom-decay/freeze.test.ts",
+        "lib/research/tom-decay/parse.test.ts",
+        "lib/trends/capital/normalize.test.ts",
+        "lib/trends/capital/pipeline.test.ts",
+        "lib/trends/capital/public-capital.test.tsx",
+        "lib/trends/trends.test.tsx"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 4.021092916,
+      "log": "docs/regime-engine-v2/maintainer/canonical-node-tests.log",
+      "log_sha256": "9927ddc9e3ae4e0afd3f420d0771fb31795f3dddc822ad0aa26ba605383c286d"
+    },
+    {
+      "name": "operations-tests",
+      "command": [
+        "node",
+        "--disable-warning=MODULE_TYPELESS_PACKAGE_JSON",
+        "--import",
+        "./scripts/trends-test-register.mjs",
+        "--experimental-test-module-mocks",
+        "--test",
+        "lib/regime-engine-v2/operations/dashboard-shadow.test.ts",
+        "lib/regime-engine-v2/operations/public-preservation.test.ts",
+        "lib/regime-engine-v2/operations/source-input.test.ts",
+        "lib/regime-engine-v2/operations/snapshot.test.ts",
+        "lib/regime-engine-v2/operations/normalizer-preservation.test.mjs"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 1.788382,
+      "log": "docs/regime-engine-v2/maintainer/canonical-operations-tests.log",
+      "log_sha256": "4a2012ee5160e26511f774efabb52546c47cd6f1136b8c819dd55ff7a7a3b3a1"
+    },
+    {
+      "name": "python-tests",
+      "command": [
+        "python3",
+        "scripts/test-capital-xml.py"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 0.064685208,
+      "log": "docs/regime-engine-v2/maintainer/canonical-python-tests.log",
+      "log_sha256": "e586fc0f3bb2a05f4c80f07d1b4c6171e830592f6c7aaf70d4af3b0aa3ebd072"
+    },
+    {
+      "name": "challenger-tests",
+      "command": [
+        "node",
+        "--disable-warning=MODULE_TYPELESS_PACKAGE_JSON",
+        "--test",
+        "docs/regime-engine-v2/groweer/challengers.test.mjs"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 0.10463912500000006,
+      "log": "docs/regime-engine-v2/maintainer/canonical-challenger-tests.log",
+      "log_sha256": "c7587cdfa3d0b4809dd194fbbd98560550f6c95cc35d70f78837735337597e72"
+    },
+    {
+      "name": "reports-validate",
+      "command": [
+        "npm",
+        "run",
+        "reports:validate"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 5.103794958,
+      "log": "docs/regime-engine-v2/maintainer/canonical-reports-validate.log",
+      "log_sha256": "17a8278ec97176ddc182bfa8257e3eed789000b7f6428e57c0d238786eff1136"
+    },
+    {
+      "name": "reports-check",
+      "command": [
+        "npm",
+        "run",
+        "reports:check"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 0.45199579099999987,
+      "log": "docs/regime-engine-v2/maintainer/canonical-reports-check.log",
+      "log_sha256": "b81d3c1a89f1730de7441ac54fa6fb19dcba8f4f9bfedee63a2abb49315cc7ab"
+    },
+    {
+      "name": "editorial",
+      "command": [
+        "npm",
+        "run",
+        "validate:editorial"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 0.15783604200000045,
+      "log": "docs/regime-engine-v2/maintainer/canonical-editorial.log",
+      "log_sha256": "7d4f85ccc8a0544b81b0d60fac223b80184e1bd1faaa7822e4bb1b5a2963524f"
+    }
+  ],
+  "required_checks": {
+    "all_commands_exit_zero": true,
+    "golden_464": true,
+    "historical_R2_1930": true,
+    "public_C03_history_1930": true,
+    "accepted_sweeper_history_identical": true,
+    "sweeper_attacks_110": true,
+    "existing_node_302": true,
+    "operations_all_pass": true,
+    "operations_sources_stable_during_final_pass": true,
+    "python_7": true,
+    "offline_groweer_challengers_36": true,
+    "canonical_decision_and_other_core_files_preserved": true,
+    "normalizer_only_approved_formatter_hoist": true,
+    "all_sweeper_repairs_preserved": true,
+    "all_prior_stage_artifacts_preserved": true,
+    "all_other_input_files_preserved": true
+  },
+  "p8_golden": {
+    "passed": 464,
+    "total": 464,
+    "fixed_C03_cases": 84
+  },
+  "historical_R2": {
+    "passed": 1930,
+    "total": 1930,
+    "accepted_sweeper_outputs_equal": true,
+    "point_in_time_OOS": false
+  },
+  "sweeper_attacks": {
+    "passed": 110,
+    "total": 110,
+    "raw_crossed_space": 576
+  },
+  "node_tests": {
+    "tests": 302,
+    "pass": 302,
+    "fail": 0,
+    "cancelled": 0,
+    "skipped": 0,
+    "todo": 0
+  },
+  "operations_tests": {
+    "tests": 78,
+    "pass": 78,
+    "fail": 0,
+    "cancelled": 0,
+    "skipped": 0,
+    "todo": 0
+  },
+  "python_tests": {
+    "passed": 7,
+    "total": 7
+  },
+  "offline_challenger_tests": {
+    "tests": 36,
+    "pass": 36,
+    "fail": 0,
+    "cancelled": 0,
+    "skipped": 0,
+    "todo": 0
+  },
+  "tests_accounting": {
+    "breakdown": {
+      "existing_node": {
+        "passed": 302,
+        "total": 302
+      },
+      "maintainer_operations": {
+        "passed": 78,
+        "total": 78
+      },
+      "existing_python": {
+        "passed": 7,
+        "total": 7
+      },
+      "sweeper_attacks": {
+        "passed": 110,
+        "total": 110
+      },
+      "offline_groweer_challengers": {
+        "passed": 36,
+        "total": 36
+      }
+    },
+    "passed": 533,
+    "total": 533,
+    "note": "Golden464 and history1930 reported separately; reports/editorial commands not invented as test counts. Offline challenger tests do not imply canonical adoption."
+  },
+  "preservation": {
+    "input_manifest_sha256": "4c89595a993e400ce41728d465693195d8758b9847e15c08ebb1cbfc6bfeff0e",
+    "sweeper_candidate_expected": 891,
+    "sweeper_candidate_observed_at_input": 891,
+    "groweer_files_preserved": 59,
+    "canonical_core_files": 11,
+    "prior_artifacts": 421,
+    "protected_input_files": 944,
+    "before_differences": [],
+    "after_differences": [],
+    "allowed_existing_edits": [
+      ".env.example",
+      "lib/dashboard/adapters/vix-term-structure.ts",
+      "lib/dashboard/get-dashboard-data.ts",
+      "lib/dashboard/get-home-dashboard-preview-data.ts",
+      "lib/regime-engine-v2/normalize.ts",
+      "scripts/build-statistical-levels.mjs"
+    ],
+    "actual_allowed_existing_edits": [
+      {
+        "path": "lib/dashboard/adapters/vix-term-structure.ts",
+        "expected": "ba07816f22643708100be86f149c0463676a5fe5ca963a0ae0cef14f0d562fb7",
+        "observed": "16a048d247eb124f190fbfb8a356f1cc4f0f0a1fa27af63c702a96ffe2fbac05"
+      },
+      {
+        "path": "lib/dashboard/get-dashboard-data.ts",
+        "expected": "323896dde7f13c42fbac800057d9f1165db4e0b46ec7d0191857b0c23811eec3",
+        "observed": "ecb2df82c5e185b7d22b4be16f7b3c22b045f736c72a3624d0fb15dfd9456740"
+      },
+      {
+        "path": "scripts/build-statistical-levels.mjs",
+        "expected": "e8c5c25cb84a6d6cee9c0b1fa6195b37e59ea22a75e9c988379adcc2163a9494",
+        "observed": "de9da118da379ccb12618adee258364b730935da36055b9822ca201f869095dd"
+      },
+      {
+        "path": "lib/regime-engine-v2/normalize.ts",
+        "expected": "6d3aec5ab1853bfe5f19ca6b58117a253f51c349ee72ed4aba54d2d12ffcd49c",
+        "observed": "da2963f02e32ed2a01f317992e2259c6bc4a5abd972c433c3d9974b5cc9ac037"
+      },
+      {
+        "path": "lib/dashboard/get-home-dashboard-preview-data.ts",
+        "expected": "9cd838452d83cea319a3676d10290d2069592e97fb55b68e67a55c2246da38fc",
+        "observed": "117b9e2fd3d0acbbb181c3705d6739a8e3bcaebde05742804a761785a9f9b3ba"
+      },
+      {
+        "path": ".env.example",
+        "expected": "e5413f862b71342a74e20b1e6a355513448e042c47faacb3c4fd2f72b948aa15",
+        "observed": "a9e65067ab4e2aa5e7fa2b40888d1472b9bf3825069c6087f5347232c2d46a55"
+      }
+    ]
+  },
+  "operations_final_source_hashes": {
+    "lib/regime-engine-v2/operations/dashboard-shadow.test.ts": "45ef6cffea6040ef8fe8c70473873f2351ab29e46b084460264bd0c3032e4e97",
+    "lib/regime-engine-v2/operations/dashboard-shadow.ts": "10819d5cfc7f737f148da8e56d6cf89ef32c4623342d2495bc384c66a99b06a4",
+    "lib/regime-engine-v2/operations/normalizer-preservation.test.mjs": "b592e0084f433c3ff3756bc2ce574b566027f281ea34aef14f8122c5788f2b61",
+    "lib/regime-engine-v2/operations/pipeline-capture.ts": "988fd161c688043be58d4a466e959809beeb4ba0c2878c86d5afade3e4ded3b4",
+    "lib/regime-engine-v2/operations/public-preservation.test.ts": "fb3731a8d8b216b98636e1b6764c7ba15ec6678f77a9c0197c39a8ecb48cb580",
+    "lib/regime-engine-v2/operations/snapshot.test.ts": "526b5c024976fd95c23eae74bf038516cf804ad55ace6040e238727185c9aa20",
+    "lib/regime-engine-v2/operations/snapshot.ts": "9e88b4f317e45d0930f55a9a1dc1140cf14da45338240c929cf1c67a8fde5b05",
+    "lib/regime-engine-v2/operations/source-input.test.ts": "b55514744a93adb9e6dbe50cb29a98d5fd6f4fea158f0244721c71674a7c6714",
+    "lib/regime-engine-v2/operations/source-input.ts": "093a41e1aa6dda588b86f65286b451893e0418fffb4d88b0f27d58d1545259ab"
+  },
+  "operations_rerun_after_detected_source_edits": false,
+  "normalizer_performance_repair": {
+    "before_checks": {
+      "status": "PASS",
+      "path": "lib/regime-engine-v2/normalize.ts",
+      "allowed_change": "Reuse one identical Intl.DateTimeFormat instance per normalizeYahoo call, instead of allocating identical instances per valid row",
+      "methodology_impact": "NO",
+      "input_sha256": "6d3aec5ab1853bfe5f19ca6b58117a253f51c349ee72ed4aba54d2d12ffcd49c",
+      "current_sha256": "da2963f02e32ed2a01f317992e2259c6bc4a5abd972c433c3d9974b5cc9ac037",
+      "reverse_transformation_sha256": "6d3aec5ab1853bfe5f19ca6b58117a253f51c349ee72ed4aba54d2d12ffcd49c",
+      "all_other_normalizer_bytes_restored_exactly": true
+    },
+    "after_checks": {
+      "status": "PASS",
+      "path": "lib/regime-engine-v2/normalize.ts",
+      "allowed_change": "Reuse one identical Intl.DateTimeFormat instance per normalizeYahoo call, instead of allocating identical instances per valid row",
+      "methodology_impact": "NO",
+      "input_sha256": "6d3aec5ab1853bfe5f19ca6b58117a253f51c349ee72ed4aba54d2d12ffcd49c",
+      "current_sha256": "da2963f02e32ed2a01f317992e2259c6bc4a5abd972c433c3d9974b5cc9ac037",
+      "reverse_transformation_sha256": "6d3aec5ab1853bfe5f19ca6b58117a253f51c349ee72ed4aba54d2d12ffcd49c",
+      "all_other_normalizer_bytes_restored_exactly": true
+    },
+    "equivalence_test": "lib/regime-engine-v2/operations/normalizer-preservation.test.mjs",
+    "preserved_features_sha256": "65e81d8d5446d92e8c28601d0eed23627264265566c8f86c015a7f872f9d4275",
+    "scope": "Mechanical allocation hoist only; source field, temporal, missing, alignment and all remaining normalizer bytes unchanged"
+  },
+  "environment": {
+    "PYTHONDONTWRITEBYTECODE": "1",
+    "V2_SHADOW": "OFF unless explicit isolated test override",
+    "runtime_datasets_written_to_git": false
+  },
+  "canonical_decision_engine_modified": false,
+  "canonical_methodology_modified": false,
+  "normalization_implementation_mechanically_optimized": true,
+  "public_UI_changed": false,
+  "production_cutover": false,
+  "separate_root_verification": [
+    "typecheck",
+    "lint",
+    "build",
+    "performance",
+    "dependency environment"
+  ]
+}

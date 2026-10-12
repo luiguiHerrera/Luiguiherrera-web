@@ -1,0 +1,3364 @@
+{
+  "schemaVersion": "release-hygiene-sweep/1.0.0",
+  "status": "PASS",
+  "scope": "All Regime-related source/evidence in frozen real diff; compressed archives decompressed read-only; PNGs separately reviewed as synthetic QA screenshots. Includes some evidence later excluded from staging.",
+  "files_selected": 669,
+  "text_or_archive_members_scanned": 635,
+  "decoded_bytes_scanned": 107874698,
+  "credential_candidates": [],
+  "local_path_inventory": [
+    {
+      "path": "docs/regime-engine-v2/builder/delivery.json",
+      "occurrences": 24,
+      "classification": "Review provenance, local test command or operational example; require intentional-path review, not a credential finding."
+    },
+    {
+      "path": "docs/regime-engine-v2/builder/files-changed.json",
+      "occurrences": 24,
+      "classification": "Review provenance, local test command or operational example; require intentional-path review, not a credential finding."
+    },
+    {
+      "path": "docs/regime-engine-v2/builder/verification.json",
+      "occurrences": 18,
+      "classification": "Review provenance, local test command or operational example; require intentional-path review, not a credential finding."
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/accessibility-qa.mjs",
+      "occurrences": 1,
+      "classification": "Review provenance, local test command or operational example; require intentional-path review, not a credential finding."
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/browser-qa.mjs",
+      "occurrences": 1,
+      "classification": "Review provenance, local test command or operational example; require intentional-path review, not a credential finding."
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/canonical-verification-before-20260908T203308241307Z.json",
+      "occurrences": 2,
+      "classification": "Review provenance, local test command or operational example; require intentional-path review, not a credential finding."
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/canonical-verification.json",
+      "occurrences": 2,
+      "classification": "Review provenance, local test command or operational example; require intentional-path review, not a credential finding."
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/lint.json",
+      "occurrences": 382,
+      "classification": "Review provenance, local test command or operational example; require intentional-path review, not a credential finding."
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/preview-guard-tests-initial.log",
+      "occurrences": 6,
+      "classification": "Review provenance, local test command or operational example; require intentional-path review, not a credential finding."
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/preview-tests.log",
+      "occurrences": 5,
+      "classification": "Review provenance, local test command or operational example; require intentional-path review, not a credential finding."
+    },
+    {
+      "path": "docs/regime-engine-v2/groweer/canonical-verification.json",
+      "occurrences": 2,
+      "classification": "Review provenance, local test command or operational example; require intentional-path review, not a credential finding."
+    },
+    {
+      "path": "docs/regime-engine-v2/groweer/lint.json",
+      "occurrences": 353,
+      "classification": "Review provenance, local test command or operational example; require intentional-path review, not a credential finding."
+    },
+    {
+      "path": "docs/regime-engine-v2/groweer/verification.json",
+      "occurrences": 18,
+      "classification": "Review provenance, local test command or operational example; require intentional-path review, not a credential finding."
+    },
+    {
+      "path": "docs/regime-engine-v2/maintainer/bundle-cli-smoke.log",
+      "occurrences": 1,
+      "classification": "Review provenance, local test command or operational example; require intentional-path review, not a credential finding."
+    },
+    {
+      "path": "docs/regime-engine-v2/maintainer/canonical-verification.json",
+      "occurrences": 2,
+      "classification": "Review provenance, local test command or operational example; require intentional-path review, not a credential finding."
+    },
+    {
+      "path": "docs/regime-engine-v2/maintainer/dependency-audit.json",
+      "occurrences": 3,
+      "classification": "Review provenance, local test command or operational example; require intentional-path review, not a credential finding."
+    },
+    {
+      "path": "docs/regime-engine-v2/maintainer/lint.json",
+      "occurrences": 367,
+      "classification": "Review provenance, local test command or operational example; require intentional-path review, not a credential finding."
+    },
+    {
+      "path": "docs/regime-engine-v2/maintainer/prospective-capture.md",
+      "occurrences": 1,
+      "classification": "Review provenance, local test command or operational example; require intentional-path review, not a credential finding."
+    },
+    {
+      "path": "docs/regime-engine-v2/maintainer/prospective-smoke.json",
+      "occurrences": 1,
+      "classification": "Review provenance, local test command or operational example; require intentional-path review, not a credential finding."
+    },
+    {
+      "path": "docs/regime-engine-v2/maintainer/prospective-smoke.log",
+      "occurrences": 1,
+      "classification": "Review provenance, local test command or operational example; require intentional-path review, not a credential finding."
+    },
+    {
+      "path": "docs/regime-engine-v2/maintainer/root-checks.json",
+      "occurrences": 23,
+      "classification": "Review provenance, local test command or operational example; require intentional-path review, not a credential finding."
+    },
+    {
+      "path": "docs/regime-engine-v2/maintainer/runbook.md",
+      "occurrences": 1,
+      "classification": "Review provenance, local test command or operational example; require intentional-path review, not a credential finding."
+    },
+    {
+      "path": "docs/regime-engine-v2/maintainer/verification.json",
+      "occurrences": 23,
+      "classification": "Review provenance, local test command or operational example; require intentional-path review, not a credential finding."
+    },
+    {
+      "path": "docs/regime-engine-v2/source-audit.md",
+      "occurrences": 1,
+      "classification": "Review provenance, local test command or operational example; require intentional-path review, not a credential finding."
+    },
+    {
+      "path": "docs/regime-engine-v2/sweeper/README.md",
+      "occurrences": 7,
+      "classification": "Review provenance, local test command or operational example; require intentional-path review, not a credential finding."
+    },
+    {
+      "path": "docs/regime-engine-v2/sweeper/builder-input.tar.gz::docs/regime-engine-v2/builder/delivery.json",
+      "occurrences": 24,
+      "classification": "Review provenance, local test command or operational example; require intentional-path review, not a credential finding."
+    },
+    {
+      "path": "docs/regime-engine-v2/sweeper/builder-input.tar.gz::docs/regime-engine-v2/builder/files-changed.json",
+      "occurrences": 24,
+      "classification": "Review provenance, local test command or operational example; require intentional-path review, not a credential finding."
+    },
+    {
+      "path": "docs/regime-engine-v2/sweeper/builder-input.tar.gz::docs/regime-engine-v2/builder/verification.json",
+      "occurrences": 18,
+      "classification": "Review provenance, local test command or operational example; require intentional-path review, not a credential finding."
+    },
+    {
+      "path": "docs/regime-engine-v2/sweeper/files-changed.json",
+      "occurrences": 57,
+      "classification": "Review provenance, local test command or operational example; require intentional-path review, not a credential finding."
+    },
+    {
+      "path": "docs/regime-engine-v2/sweeper/findings.md",
+      "occurrences": 1,
+      "classification": "Review provenance, local test command or operational example; require intentional-path review, not a credential finding."
+    },
+    {
+      "path": "docs/regime-engine-v2/sweeper/lint.json",
+      "occurrences": 347,
+      "classification": "Review provenance, local test command or operational example; require intentional-path review, not a credential finding."
+    },
+    {
+      "path": "docs/regime-engine-v2/sweeper/read-only-attacks-v2.json",
+      "occurrences": 230,
+      "classification": "Review provenance, local test command or operational example; require intentional-path review, not a credential finding."
+    },
+    {
+      "path": "docs/regime-engine-v2/sweeper/read-only-attacks.json",
+      "occurrences": 220,
+      "classification": "Review provenance, local test command or operational example; require intentional-path review, not a credential finding."
+    },
+    {
+      "path": "docs/regime-engine-v2/sweeper/verification-commands.json",
+      "occurrences": 3,
+      "classification": "Review provenance, local test command or operational example; require intentional-path review, not a credential finding."
+    },
+    {
+      "path": "docs/regime-engine-v2/sweeper/verification.json",
+      "occurrences": 21,
+      "classification": "Review provenance, local test command or operational example; require intentional-path review, not a credential finding."
+    }
+  ],
+  "content_hashes": [
+    {
+      "path": ".env.example",
+      "decoded_bytes": 362,
+      "sha256": "a9e65067ab4e2aa5e7fa2b40888d1472b9bf3825069c6087f5347232c2d46a55"
+    },
+    {
+      "path": "app/(es)/dashboard/page.tsx",
+      "decoded_bytes": 13318,
+      "sha256": "52fb6a294696c7fa5490debaa3c162e62f4253a5f1e4ca38b6637a3138c1bf21"
+    },
+    {
+      "path": "app/(es)/internal/regime-v2/page.tsx",
+      "decoded_bytes": 606,
+      "sha256": "8b384ba8f0df24e9ffdefd0bff0ec2fef2049791e718d72ce87e38a6fe2be6c0"
+    },
+    {
+      "path": "app/en/internal/regime-v2/page.tsx",
+      "decoded_bytes": 606,
+      "sha256": "55a267714f6a71421927d84ded97d4ed478571b274ca612c041967018508a1b1"
+    },
+    {
+      "path": "components/dashboard/DashboardRegimeV1.tsx",
+      "decoded_bytes": 8427,
+      "sha256": "92d7ef8bc01d4725d740ddea73cf83086743a93eb5d8271aba8872c83b0982cc"
+    },
+    {
+      "path": "components/dashboard/RegimeV2Disclosure.tsx",
+      "decoded_bytes": 1811,
+      "sha256": "120e7dff5f4f0fe787268be436fdae9f4caf7239b7d6a58d480c7516dc652014"
+    },
+    {
+      "path": "components/dashboard/RegimeV2Preview.tsx",
+      "decoded_bytes": 6416,
+      "sha256": "37dd9680ee7318c42fe0e22390f53fda59b8b9dbb0359fbdf1c5c3ce30908627"
+    },
+    {
+      "path": "components/dashboard/RegimeV2Surface.tsx",
+      "decoded_bytes": 10242,
+      "sha256": "add309968305efc955c03dbf0ee3eda8dbfc04418c7bf30fbf7e40bf21c50487"
+    },
+    {
+      "path": "components/dashboard/regime-v2.module.css",
+      "decoded_bytes": 13542,
+      "sha256": "8a0811d1e0f15d7db26397a5ee0cfe64ca50ff687479816ecb4903294e90ce09"
+    },
+    {
+      "path": "docs/regime-engine-v2/README.md",
+      "decoded_bytes": 1705,
+      "sha256": "4144a269ba73bb89a118605f611f0c98d648c3e91d20f8d766ca5ea872a810b8"
+    },
+    {
+      "path": "docs/regime-engine-v2/acceptance-contract.md",
+      "decoded_bytes": 11006,
+      "sha256": "8bc8ef33808efed039b2063b1eef8c0c6b9b9cd2e4ebfec73a2e4468fa67b70a"
+    },
+    {
+      "path": "docs/regime-engine-v2/builder/README.md",
+      "decoded_bytes": 11581,
+      "sha256": "83341d491fd360620997cb20cc76336da24c0ed7d0e904b17ed52d107b90f2b7"
+    },
+    {
+      "path": "docs/regime-engine-v2/builder/baseline.json",
+      "decoded_bytes": 103353,
+      "sha256": "9114b7e57a93f7ade10ca021337fef4a4487e9ef7f63ccbefb747ec55724117b"
+    },
+    {
+      "path": "docs/regime-engine-v2/builder/conformance.json",
+      "decoded_bytes": 1232,
+      "sha256": "0ae86699a5a32f7d58bf3e604400cf875fd04900d6e5cf404b7a4be2a379cf06"
+    },
+    {
+      "path": "docs/regime-engine-v2/builder/delivery.json",
+      "decoded_bytes": 3941,
+      "sha256": "57b47d93b7cb3965ab7371999a6080f406c0b6bafd3ba0cdf6a85658085f6662"
+    },
+    {
+      "path": "docs/regime-engine-v2/builder/files-changed.json",
+      "decoded_bytes": 9217,
+      "sha256": "04dbac9e2842943170e811dde07551ebaf13dbd58b9314f441dd88d3af231ba1"
+    },
+    {
+      "path": "docs/regime-engine-v2/builder/full-test-command.json",
+      "decoded_bytes": 1288,
+      "sha256": "65081130367e92b1c8823c62ae98857348093fd0f9b4364327aa93750b4a35ea"
+    },
+    {
+      "path": "docs/regime-engine-v2/builder/historical-r2-output.json",
+      "decoded_bytes": 772491,
+      "sha256": "baeaa34545fd43109b9f94f6cfe4771858c00a3333a4e2d600213f5792f6cf3a"
+    },
+    {
+      "path": "docs/regime-engine-v2/builder/preservation.json",
+      "decoded_bytes": 785,
+      "sha256": "a2fef06f441f4514fb2f735cb3f8d23ab044221c94b407a8397f2c719145fca7"
+    },
+    {
+      "path": "docs/regime-engine-v2/builder/shadow-example.json",
+      "decoded_bytes": 48794,
+      "sha256": "2e8b356831ff88246370e00b6caf88100551cbf7afca242511196ef498750432"
+    },
+    {
+      "path": "docs/regime-engine-v2/builder/shadow-input-r2.json",
+      "decoded_bytes": 221112,
+      "sha256": "b45459953f4cae0ad0ff24e376ad749aaac71132301e790050b5fafdd02c71c9"
+    },
+    {
+      "path": "docs/regime-engine-v2/builder/verification.json",
+      "decoded_bytes": 8687,
+      "sha256": "793d6cdaa7f373d282e4e4b623afd0c26ce011f4cdfd7fbcc3497dc7b734c214"
+    },
+    {
+      "path": "docs/regime-engine-v2/decision-table.json",
+      "decoded_bytes": 3546,
+      "sha256": "0dae14cb724e1772231ab0158e3112ca4ebb1d5350ba45044b592b8d051bbe51"
+    },
+    {
+      "path": "docs/regime-engine-v2/dependency-map.json",
+      "decoded_bytes": 10399,
+      "sha256": "1b6dbc306804ca2d34929ccb8cb034a1a0ae31cc3e6509ebd5c38ff5437cb8d5"
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/FINAL_STATUS.txt",
+      "decoded_bytes": 1218,
+      "sha256": "e640b08811c4a60e9a5bdf439954330ed3542c9958166e631b43457eab02363e"
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/README.md",
+      "decoded_bytes": 5418,
+      "sha256": "778a0463b4e728c7d32f39a7164b3e25f84518685c62e5bdcb8e2d826579513b"
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/RegimeV2Surface.before-formatter-reuse.tsx.txt",
+      "decoded_bytes": 9999,
+      "sha256": "e82ef1286515d7d1e5be1dff511b190ad9657f2859ff05edf0aa825f2e9f6f40"
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/accessibility-qa.json",
+      "decoded_bytes": 3231071,
+      "sha256": "cc9b771020af03795f66446603889d9aee86a3c9bc9468b025125534abe0e20a"
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/accessibility-qa.log",
+      "decoded_bytes": 79,
+      "sha256": "33a393e20f11f4a555e1d846c71e40c44ac3acdaf3b9d657a03c5e0083828f49"
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/accessibility-qa.mjs",
+      "decoded_bytes": 10309,
+      "sha256": "0a097a8efe301bc6479904515b0d250d897668d269ce06cff03ffac6eb3bf18b"
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/accessibility-review.md",
+      "decoded_bytes": 3758,
+      "sha256": "b4943a5202106635dcbac3fb4084b52b26176704b02f59567e61891a1f0d2a63"
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/browser-qa-initial.json",
+      "decoded_bytes": 5328,
+      "sha256": "9cf92198081f7f8ff70e73bc2458a7b39d60fec6949ad8f74a0bf1c55ed11eb7"
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/browser-qa.log",
+      "decoded_bytes": 59,
+      "sha256": "6609b3e8973e8af87297f6f91380056f1a91634b7a3dbff91ec134b9702b20d9"
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/browser-qa.mjs",
+      "decoded_bytes": 7337,
+      "sha256": "9aa1a21625c83c91ad53b6c6d86b8fd66b5d2773ac68ada78d2bfec71dc22ab2"
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/build.log",
+      "decoded_bytes": 21677,
+      "sha256": "bbf033e5722f5f0958cc93a35d63985592083210df5df7cbe9356778526527a1"
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/canonical-challenger-tests.log",
+      "decoded_bytes": 3355,
+      "sha256": "5002437b25572733da8a020559514b659305c8c5fea00a3442ac5a9ef6ff9faa"
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/canonical-conformance.log",
+      "decoded_bytes": 1232,
+      "sha256": "0ae86699a5a32f7d58bf3e604400cf875fd04900d6e5cf404b7a4be2a379cf06"
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/canonical-designer-fixtures-check-20260908T203308241307Z.log",
+      "decoded_bytes": 823,
+      "sha256": "f3f3f46fba405195f28a22d1348378d4bcd4750da2a4483a365e307d1ff6d78e"
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/canonical-designer-fixtures-check.log",
+      "decoded_bytes": 823,
+      "sha256": "f3f3f46fba405195f28a22d1348378d4bcd4750da2a4483a365e307d1ff6d78e"
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/canonical-designer-tests-20260908T203308241307Z.log",
+      "decoded_bytes": 10639,
+      "sha256": "3ee0f6efc65e52d31a37e155d43f76b246ba1778c00de32674b28918a6fa25b8"
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/canonical-designer-tests.log",
+      "decoded_bytes": 10351,
+      "sha256": "c31048f742650e31351148021650c032d33b2c3cdcd833f19f318146e2806ed6"
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/canonical-editorial.log",
+      "decoded_bytes": 280,
+      "sha256": "7d4f85ccc8a0544b81b0d60fac223b80184e1bd1faaa7822e4bb1b5a2963524f"
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/canonical-node-tests.log",
+      "decoded_bytes": 25565,
+      "sha256": "6fa64a622342c7643b0c8ab13a102c87673faaa9979941946c329a60727c689d"
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/canonical-operations-tests.log",
+      "decoded_bytes": 30055,
+      "sha256": "7f3e6668b4443307d17b3569bea32d04c3010429be50c52f4dbacb9d47cfe93c"
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/canonical-python-tests.log",
+      "decoded_bytes": 105,
+      "sha256": "0d6653413f55f7cf64dbfab59b6b29c640ade8e63585414ab2a44a0892a5ed0a"
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/canonical-reports-check.log",
+      "decoded_bytes": 226,
+      "sha256": "b81d3c1a89f1730de7441ac54fa6fb19dcba8f4f9bfedee63a2abb49315cc7ab"
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/canonical-reports-validate.log",
+      "decoded_bytes": 243,
+      "sha256": "17a8278ec97176ddc182bfa8257e3eed789000b7f6428e57c0d238786eff1136"
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/canonical-sweeper-attacks.log",
+      "decoded_bytes": 90,
+      "sha256": "d3c1a19321c4efaafe49ba41263b371c242e3ab59898fbe9a9e778c96712e3cf"
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/canonical-verification-before-20260908T203308241307Z.json",
+      "decoded_bytes": 13877,
+      "sha256": "a0d7eac05f1887a1d1675a5586c06ab83b2ff6b6ebef269a687c4405152ae811"
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/canonical-verification.json",
+      "decoded_bytes": 22483,
+      "sha256": "93a7f00045556ab45f5c85f9155c0917525bb6216f6c4157ef5c17b3d3a2f846"
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/copy-contract.json",
+      "decoded_bytes": 98298,
+      "sha256": "e9a76e7ef4751a1ed559497f3df940cc5a359ac068d7e57165d9e45e2036d17a"
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/cutover-plan.md",
+      "decoded_bytes": 4830,
+      "sha256": "1a8bb995c5147f3fd93cb5599e3064cd6d0021a37d37924034fce055b27d342a"
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/design-rationale.md",
+      "decoded_bytes": 5432,
+      "sha256": "c72a1a5002bccb3d04c102037f504c128e5f7c0a3bd78a1b7e46d0c38a951b66"
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/dev-generated-side-effects.json",
+      "decoded_bytes": 1206,
+      "sha256": "37d3478f9abc0f9ce1115693b608dc3e3fbfcc05b4afa66937340252c1abdfce"
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/dev-server.log",
+      "decoded_bytes": 24943,
+      "sha256": "cea2233086c1e8ba56925a5c662765b38b05bbe92ad89680a3b0331154f3e6c9"
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/files-changed.json",
+      "decoded_bytes": 33174,
+      "sha256": "1eb00fe6d00137908f4dd3c6769c996c9e37cc5ed7bc1f9c16088e8d53f91111"
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/finalroot-checks.json",
+      "decoded_bytes": 3770,
+      "sha256": "6811a1453200411b1795a5b5818c05d5a7ba9adbffe0e30f40a138ab86a4844c"
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/findings.json",
+      "decoded_bytes": 11612,
+      "sha256": "806afbf87a01af05554a0b9b363723384e2984b2cf9b67390d4d3de0ff285075"
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/fixture-matrix.json",
+      "decoded_bytes": 15957,
+      "sha256": "4aec9e788bbc06fd834b1c2a05dee6a76bd0ccd9e228f7cb24eaa47bda493a0e"
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/fixture-tests.log",
+      "decoded_bytes": 1723,
+      "sha256": "fa16a27a812de40b4e520ae100c7d398766e06688527cb7483adc76cfcfd16ba"
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/fixtures/broad-complete.json",
+      "decoded_bytes": 28844,
+      "sha256": "a4d33bcec41d2f6a20107495963080a1a6896ca8c346008e40204899d2ee3bb9"
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/fixtures/defensive-complete.json",
+      "decoded_bytes": 28906,
+      "sha256": "356f1f76419ee8f8780da4f8fdfa41ff88b778db06493fe52ab3e61cc91a2c7c"
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/fixtures/incomplete-missing-core.json",
+      "decoded_bytes": 27549,
+      "sha256": "1be049a46b71deddd941d044139fd64cd58222ade5094000ae728d0848e9db0a"
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/fixtures/incomplete-stale.json",
+      "decoded_bytes": 28077,
+      "sha256": "585db0dea40191b622777e7ae2d3fc9deb06bff7a48366fd7d317781e122e74c"
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/fixtures/incomplete-unknown-calendar.json",
+      "decoded_bytes": 63913,
+      "sha256": "12c71ff670221cc4184a98ab4cbee91241832558c54c507d3dcb9bbb0d3a0c01"
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/fixtures/incomplete-with-shock.json",
+      "decoded_bytes": 27689,
+      "sha256": "483232eefbd249d8bc8a50b1f282a478546ddb3e7866d78ccde37a4fc7b6279d"
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/fixtures/selective-partial.json",
+      "decoded_bytes": 28732,
+      "sha256": "6c2c6218add0f101b505cc2b666614a2bdc233b122c60628962af09bfc1989b9"
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/fixtures/stress-absolute.json",
+      "decoded_bytes": 28829,
+      "sha256": "1d09e274525916ee381f145c77b8cafc5c858b171fddd5b2daa2fc61202fa29c"
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/fixtures/stress-joint.json",
+      "decoded_bytes": 28718,
+      "sha256": "c729a8f43156d8a8bca1afa871b7380ccdfe453a61799f9d8df1bf7760afc117"
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/fixtures/transition-conflict.json",
+      "decoded_bytes": 28730,
+      "sha256": "950c8aa11fd9c8bc66814479c77f7ed3641ada8b415a25111a71ce206082f853"
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/fixtures/transition-fragility.json",
+      "decoded_bytes": 28889,
+      "sha256": "8b4d97ed825cc025668a1034ff5184393227969a8a7e75d8cc0c0c0ab4c27348"
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/fixtures/transition-watch.json",
+      "decoded_bytes": 28695,
+      "sha256": "5407f6a4edfcea04f5afef36f3734a6c71ab4a751cf62108ea279eabdb4aef87"
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/generated-file-audit.json",
+      "decoded_bytes": 328,
+      "sha256": "87a812ad6dc35533f34156d540aa41eadcc44c486ac0190848f2d11f7f9c952d"
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/input-manifest.json",
+      "decoded_bytes": 131410,
+      "sha256": "5265205fdb49c4ab5845ee17f91802848890da2df29375781a869b831e4d9b4d"
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/lint-initial.log",
+      "decoded_bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/lint.json",
+      "decoded_bytes": 298079,
+      "sha256": "122ba26b67f915e59e14b1aecfc4c2cfc78eb0ba965edcbcb5584a01c1c926e2"
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/lint.log",
+      "decoded_bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/performance-before-formatter-reuse.json",
+      "decoded_bytes": 27127,
+      "sha256": "dc458dfd9fe079364abf42e39bea70f4773652f86acab1ed679e9749773f0a5d"
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/performance.json",
+      "decoded_bytes": 31093,
+      "sha256": "86203069e7c623f396fdb8d26334ceef2ec7e4e3e5abc61f56d9ead01c98b2ea"
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/performance.log",
+      "decoded_bytes": 1304,
+      "sha256": "a23b45af86c9ff15b0711e953f3efedd6fa6eecbe97433d020f3d7536fadf1e1"
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/performance.md",
+      "decoded_bytes": 4073,
+      "sha256": "8aea30f75143ac63b7a25fb03928f71ee52c2eb3f64ff7b418310184d1805f25"
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/presentation-tests.log",
+      "decoded_bytes": 2583,
+      "sha256": "930fa32cd5333ba8c8fb03ffae164c6d73b9b75ae133b5cf2bb3e3a67b33a297"
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/preview-guard-tests-initial.log",
+      "decoded_bytes": 3437,
+      "sha256": "143c2138d12d76f6ad703b63ba0d732f1255b3121c40147057c8bd6ecf3c5721"
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/preview-guard-tests.log",
+      "decoded_bytes": 788,
+      "sha256": "bb11efcdcd7766aebc641913ad0cc63121204be7aa310b2d3cb2138a023a0c19"
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/preview-tests.log",
+      "decoded_bytes": 1597,
+      "sha256": "1484e60ae8fe204042c123bfd046a8741e8ea7f5ba28ae8913b79ce5945b71a4"
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/production-preview-guard.json",
+      "decoded_bytes": 5360,
+      "sha256": "5dfeddfdbf231894b35d7796df78ee91480a8cb18a0e76b94191fa2ee778da4a"
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/production-preview-guard.log",
+      "decoded_bytes": 5360,
+      "sha256": "5dfeddfdbf231894b35d7796df78ee91480a8cb18a0e76b94191fa2ee778da4a"
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/production-server.log",
+      "decoded_bytes": 152,
+      "sha256": "3a62c926f62973e36339b92d22e34af8e87cea9e180ee4144a1ae0f41d71d3c3"
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/qa-scripts-lint.log",
+      "decoded_bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/render-finding.json",
+      "decoded_bytes": 1646,
+      "sha256": "795a585c626a1484843b9f804af0a949c417f17a08db666509320200e88abbac"
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/render-tests.log",
+      "decoded_bytes": 5884,
+      "sha256": "6718dcd67934f7212f3a16031906f28b823da31e8272854c357f8fb893b2c1c3"
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/repository-verification.json",
+      "decoded_bytes": 5799,
+      "sha256": "92b45268bbf3fcb527768140a9d0be9ae17d2055d06a85d6b56d5dcefa6f88d9"
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/responsive-review.md",
+      "decoded_bytes": 6640,
+      "sha256": "57167328d5f7bfd92746b06a2cae021d73e32bc12e2ecc114e8978020184c73f"
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/run-verification.py",
+      "decoded_bytes": 16641,
+      "sha256": "4effed4a10baaa6879ed69a76ddbd78b4fbe298e4bb907845e88fcddd2790292"
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/seal-review.py",
+      "decoded_bytes": 12592,
+      "sha256": "5d2cd8ab93a76a09170132c9666c6bc045c959c039ad01c49de80ec63bb798f1"
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/state-review.md",
+      "decoded_bytes": 8681,
+      "sha256": "11da430c7cfdb7f2b95fec157826a27c37923b60268d2e373f922b0594025b49"
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/sweeper-attacks.json",
+      "decoded_bytes": 227871,
+      "sha256": "d06279fb91976b57792d9e0343de47003353e59773c22801d4368edae388fbbd"
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/typecheck-after-build.log",
+      "decoded_bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/typecheck-before-build.log",
+      "decoded_bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/typecheck-initial.log",
+      "decoded_bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/uncertainty-label-original.txt",
+      "decoded_bytes": 531,
+      "sha256": "0e02631c10d9b578eb4e1f5650004a4b5cc9c06a811077049d5c86f85ba91141"
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/v1-original-page.tsx.txt",
+      "decoded_bytes": 18985,
+      "sha256": "0540948ce61ce6703e8a043276a030b9b7dfb24ffcab7eadc17ab84810dd0b5a"
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/v1-reference.json",
+      "decoded_bytes": 3187,
+      "sha256": "e8d1aa1edf47289e098b4dbbe02703f1b68f8e772cde3bccfed2b3a7b8a6868b"
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/v1-reference.log",
+      "decoded_bytes": 4964,
+      "sha256": "34d4d6f5a1d2d9a4b24d8ed43c269643297d0ddec937e30d0b16216e7ee1e178"
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/v1-render-proof.json",
+      "decoded_bytes": 1502,
+      "sha256": "a23eb4e811f509998756fcb87b8b5255615464b504444e3c381e81d580a4a5ef"
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/v1-render-proof.log",
+      "decoded_bytes": 1319,
+      "sha256": "a1ff67603aee13687ae0ec038fa4eb18ce3cebd68a7a6c7990062dd6a8dc49a2"
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/verification-conformance/conformance.json",
+      "decoded_bytes": 1232,
+      "sha256": "0ae86699a5a32f7d58bf3e604400cf875fd04900d6e5cf404b7a4be2a379cf06"
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/verification-conformance/historical-r2-output.json",
+      "decoded_bytes": 772491,
+      "sha256": "018d6fc103ca9bfe1e0e43418d79446f530796c00a3728a57cf2b289298d2a5f"
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/verification-conformance/shadow-input-r2.json",
+      "decoded_bytes": 223524,
+      "sha256": "92ecdd1830516ec96dd9293fc87b9ee7c6add71376e6997de4fede42d4d90a66"
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/verification-findings.json",
+      "decoded_bytes": 2050,
+      "sha256": "efedf0fe3e33cc0d9d69f8d586a972688460418b39916f8a9d9289276a6d9260"
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/verification-refresh.log",
+      "decoded_bytes": 1685,
+      "sha256": "8ff741dbd4d46aa654fc19119ff42474264d4be6f4319be153ae1b31555d5118"
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/verification-run.log",
+      "decoded_bytes": 2298,
+      "sha256": "958412b6da56ce1122a44d60faaf4f25e3fb271399b82464d94c3e3f6bc70b15"
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/verification.json",
+      "decoded_bytes": 7185,
+      "sha256": "6aacc61319b7086228415e84453362f1c532458120fe656c34ad42ec02fc2533"
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/verify-production-preview.py",
+      "decoded_bytes": 3661,
+      "sha256": "dff7ba0ad267acb5b7a3c6a5f581f6849d2dd7062709b12aca36e3852a681724"
+    },
+    {
+      "path": "docs/regime-engine-v2/designer/visual-regression.json",
+      "decoded_bytes": 25311,
+      "sha256": "30a03b844043c88b2da7d7ce185c459241097b5972a5b2b5fa6e01505c249d14"
+    },
+    {
+      "path": "docs/regime-engine-v2/feature-registry.json",
+      "decoded_bytes": 95110,
+      "sha256": "f7270f43ebf78775d7be5a5bd566fc9885a7f500f3cd1d601d5c68f31c9c3539"
+    },
+    {
+      "path": "docs/regime-engine-v2/groweer/README.md",
+      "decoded_bytes": 6415,
+      "sha256": "22994ffebf9970731c2b7649ac4014702567dee2897a67d622e27b45a8949174"
+    },
+    {
+      "path": "docs/regime-engine-v2/groweer/ablation.json",
+      "decoded_bytes": 1099591,
+      "sha256": "cd0cc6e40e19195f56630938173bfb0e7163e799436f0f38bf441625ab3a1189"
+    },
+    {
+      "path": "docs/regime-engine-v2/groweer/analysis-input-audit.json",
+      "decoded_bytes": 516,
+      "sha256": "52729c6c75358ed23cf931684de85d0134760bef4972d4d8628f2c5a27ee452f"
+    },
+    {
+      "path": "docs/regime-engine-v2/groweer/analysis-input.json.gz::decompressed",
+      "decoded_bytes": 3258124,
+      "sha256": "358586278e3521098cf48bd753de53f4539fa972bb1d429911dafd4feeaa3e64"
+    },
+    {
+      "path": "docs/regime-engine-v2/groweer/analysis-protocol.json",
+      "decoded_bytes": 8133,
+      "sha256": "82a816ff496ed0a581e6b4ab45c571a7903dbd8f1ba921f04e7e088af2d7a583"
+    },
+    {
+      "path": "docs/regime-engine-v2/groweer/analyze-experiments.py",
+      "decoded_bytes": 15283,
+      "sha256": "324b3a68e31b4c53fbab0a7ba734a1fdc8828af15d2994becaab818cdf3b03d4"
+    },
+    {
+      "path": "docs/regime-engine-v2/groweer/audit-cross-asset-pfl.py",
+      "decoded_bytes": 28975,
+      "sha256": "c6865f30168f160e90cb5602c2be03dc741323b4cd2e7cb27d084a1813a8d7da"
+    },
+    {
+      "path": "docs/regime-engine-v2/groweer/audit-pfl-components.mjs",
+      "decoded_bytes": 6826,
+      "sha256": "e60318d5f6c86a08d34f097405eaad88b4e4111af526b3b4890cdcd5efdd305c"
+    },
+    {
+      "path": "docs/regime-engine-v2/groweer/baseline-characterization.json",
+      "decoded_bytes": 1375697,
+      "sha256": "15cde8250040b1eb970bd2eb39a53cffd2c2bf4acba73a3cda23e628176aa183"
+    },
+    {
+      "path": "docs/regime-engine-v2/groweer/benchmarks.json",
+      "decoded_bytes": 776224,
+      "sha256": "dff7c6309d47f5ec23e9aafe7339e490da6fd71c144051f277eb2b7efc11445d"
+    },
+    {
+      "path": "docs/regime-engine-v2/groweer/build.log",
+      "decoded_bytes": 21684,
+      "sha256": "70e24bd6ac7dfbb58da166cf55dcf7adf10a812aa42c0b548ad2a700744817c8"
+    },
+    {
+      "path": "docs/regime-engine-v2/groweer/canonical-conformance.log",
+      "decoded_bytes": 1232,
+      "sha256": "0ae86699a5a32f7d58bf3e604400cf875fd04900d6e5cf404b7a4be2a379cf06"
+    },
+    {
+      "path": "docs/regime-engine-v2/groweer/canonical-node-tests.log",
+      "decoded_bytes": 25549,
+      "sha256": "e98a52343fab9904a9d3b2fa0eefc3a709aaf8c22acd56576665bf79025a1970"
+    },
+    {
+      "path": "docs/regime-engine-v2/groweer/canonical-python-tests.log",
+      "decoded_bytes": 105,
+      "sha256": "9ec9e3c52e7908b746c625587944c7e1eb71f90fc834fbb4527d510523684dd2"
+    },
+    {
+      "path": "docs/regime-engine-v2/groweer/canonical-sweeper-attacks.log",
+      "decoded_bytes": 90,
+      "sha256": "d3c1a19321c4efaafe49ba41263b371c242e3ab59898fbe9a9e778c96712e3cf"
+    },
+    {
+      "path": "docs/regime-engine-v2/groweer/canonical-verification.json",
+      "decoded_bytes": 4924,
+      "sha256": "5e9c06c310d3345f767d4ea0747fcb172f7fb1926d2e569d759fd21e0b79fa3e"
+    },
+    {
+      "path": "docs/regime-engine-v2/groweer/challenger-catalog.json",
+      "decoded_bytes": 4304,
+      "sha256": "6fa667d546227e4549a81df6166447faaf6c4d5c8b6ef3c61ac10fdc52cfb7d2"
+    },
+    {
+      "path": "docs/regime-engine-v2/groweer/challenger-tests.log",
+      "decoded_bytes": 3357,
+      "sha256": "9e792666229a0824909af86725ce4d23cc762a99c710d34f37f242c648c89191"
+    },
+    {
+      "path": "docs/regime-engine-v2/groweer/challengers.mjs",
+      "decoded_bytes": 4527,
+      "sha256": "4771f2e49802f92f34d41e45db9c289dd00927d08f929b004e2d6b3ea57e6a65"
+    },
+    {
+      "path": "docs/regime-engine-v2/groweer/challengers.test.mjs",
+      "decoded_bytes": 11001,
+      "sha256": "f668823c432c9cff49f25ae2c6aeb4a445617461373817105e2845395975d161"
+    },
+    {
+      "path": "docs/regime-engine-v2/groweer/close-verification.py",
+      "decoded_bytes": 10195,
+      "sha256": "cda9f7fa1481079572e3a1b3bce035be614b4897a43d4c49c4cf63739c7b01be"
+    },
+    {
+      "path": "docs/regime-engine-v2/groweer/complexity-matrix.json",
+      "decoded_bytes": 8023,
+      "sha256": "eecf16acdcec47e526787a42ac02277ff968d3cd2cfa705c48914f6b7bd18108"
+    },
+    {
+      "path": "docs/regime-engine-v2/groweer/cross-asset-audit.json",
+      "decoded_bytes": 74224,
+      "sha256": "c311c49126d958193996d4afb05aee66b455fc1edb82da1f84d43f6407b8560e"
+    },
+    {
+      "path": "docs/regime-engine-v2/groweer/cross-asset-pfl-notes.md",
+      "decoded_bytes": 3459,
+      "sha256": "e4c596242c96d4dd810423c1b0f165f79966a57794b3f6c69cfc4577d39eff1c"
+    },
+    {
+      "path": "docs/regime-engine-v2/groweer/data-quality-audit.json",
+      "decoded_bytes": 19529,
+      "sha256": "324533807583a3fe11f63a137c2e077d70069d32a82855a90ada3c1f1f9e3fe7"
+    },
+    {
+      "path": "docs/regime-engine-v2/groweer/dimension-value.json",
+      "decoded_bytes": 98380,
+      "sha256": "519bbe76d639badbd787de965fe99f55f031e40b947a2ca4d31104679bfcb727"
+    },
+    {
+      "path": "docs/regime-engine-v2/groweer/experiment-outputs.json.gz::decompressed",
+      "decoded_bytes": 33183168,
+      "sha256": "f7de9a4de414507e0b0f9ccbf5a6db3681f04c979b145a411ce0c3a16b91bea9"
+    },
+    {
+      "path": "docs/regime-engine-v2/groweer/experiment-vectors.mjs",
+      "decoded_bytes": 2321,
+      "sha256": "25af62114c1618a5b60485c25352e6ec7df64ea7b451d7111a82aa1083cb15b3"
+    },
+    {
+      "path": "docs/regime-engine-v2/groweer/files-changed.json",
+      "decoded_bytes": 8490,
+      "sha256": "2e018220dd8313f98b83235a8be12cc4f6ae9c30cb1255fcac08b0d28e4136cc"
+    },
+    {
+      "path": "docs/regime-engine-v2/groweer/finalize-analysis.py",
+      "decoded_bytes": 17399,
+      "sha256": "29172a77e7d4f4a960ac554d7d37dbc98badff3f43f9906b2a42fae9923620f0"
+    },
+    {
+      "path": "docs/regime-engine-v2/groweer/forensic_analysis.py",
+      "decoded_bytes": 31940,
+      "sha256": "28c29d5df5f12145b2ddc51fdd6ba645823bb9f84a1c19a78d294fa068cfdc01"
+    },
+    {
+      "path": "docs/regime-engine-v2/groweer/growth-findings.json",
+      "decoded_bytes": 2286,
+      "sha256": "41416cdcbb7bab17604d5d03db0e77076d216cd8071977ac2029b1aa7ab527c4"
+    },
+    {
+      "path": "docs/regime-engine-v2/groweer/handoff-status.txt",
+      "decoded_bytes": 1126,
+      "sha256": "18deaa13b0910caf20223a1469c39a722d01c3407f95fbb54472bc995fb769bf"
+    },
+    {
+      "path": "docs/regime-engine-v2/groweer/hysteresis-challenger.json",
+      "decoded_bytes": 5471760,
+      "sha256": "b8ec9886d2bab9e319b0efc38430e159cbfa7e40ee1d48385aec25e8ebd46b95"
+    },
+    {
+      "path": "docs/regime-engine-v2/groweer/input-manifest.json",
+      "decoded_bytes": 112384,
+      "sha256": "a08f7116d1e6dc0631f884a4b817bfb5594006367ccf0c16336e8e9efc6474e2"
+    },
+    {
+      "path": "docs/regime-engine-v2/groweer/lint.json",
+      "decoded_bytes": 289187,
+      "sha256": "7531f85a81cda01bf0d7254d64db15d303960093f90fa9f127ff451be61d9dc8"
+    },
+    {
+      "path": "docs/regime-engine-v2/groweer/lint.log",
+      "decoded_bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "docs/regime-engine-v2/groweer/native-audit.mjs",
+      "decoded_bytes": 26388,
+      "sha256": "910657d3eb12ff0e67016dbb712098cdd09d4417255849a4d7b6bd608179c16d"
+    },
+    {
+      "path": "docs/regime-engine-v2/groweer/persistence-challenger.json",
+      "decoded_bytes": 1233176,
+      "sha256": "5c32b24d1baca62f17073a096eba7951046aeacdd613f0b7f6bf3fec79650934"
+    },
+    {
+      "path": "docs/regime-engine-v2/groweer/pfl-compatibility.json",
+      "decoded_bytes": 1070932,
+      "sha256": "39d6419093d92025ef7d0ab9907b6b2ac3f0e8fa26679394629376e9d5d283f2"
+    },
+    {
+      "path": "docs/regime-engine-v2/groweer/prospective-validation-design.json",
+      "decoded_bytes": 3319,
+      "sha256": "b8eb34647478afcfa0fdd44236fffe37bf6b2802a94be3df4de77c2dcf0e7372"
+    },
+    {
+      "path": "docs/regime-engine-v2/groweer/recommendation.md",
+      "decoded_bytes": 10766,
+      "sha256": "4e541554ff4692be270d50389b8ccbb4d21717416d952397517452a26b04d7bc"
+    },
+    {
+      "path": "docs/regime-engine-v2/groweer/redundancy-analysis.json",
+      "decoded_bytes": 8749,
+      "sha256": "7dce57a35981b8b71fbe1d576eda0faff03860cf8ceaf06a450981a79b0c3b96"
+    },
+    {
+      "path": "docs/regime-engine-v2/groweer/replay-analysis-input.mjs",
+      "decoded_bytes": 5132,
+      "sha256": "99e6f0a8544e9a3e29b6025d7c3e95fdf88c2217fef6e87c7a62ae784b7ced3e"
+    },
+    {
+      "path": "docs/regime-engine-v2/groweer/run-canonical-verification.py",
+      "decoded_bytes": 7421,
+      "sha256": "8f9f8840f04e37edfb1889bbb64b5297b4c7cc25f92d00647e98bb94553ea055"
+    },
+    {
+      "path": "docs/regime-engine-v2/groweer/satellite-review.json",
+      "decoded_bytes": 166860,
+      "sha256": "faa095b9d4ffef8ac639b4598d3e61988e5208a82866996fdc430003f62f5795"
+    },
+    {
+      "path": "docs/regime-engine-v2/groweer/seal-manifest.py",
+      "decoded_bytes": 1889,
+      "sha256": "2a714609143072177933f46a1fdfd46a1ca8a859d4ec9a4a0dc759bd2a78f50c"
+    },
+    {
+      "path": "docs/regime-engine-v2/groweer/stress-forensics.json",
+      "decoded_bytes": 496068,
+      "sha256": "ae67581900be90535278869434de6bb490100cc35b13650c8ddc0fabf60e715c"
+    },
+    {
+      "path": "docs/regime-engine-v2/groweer/sweeper-attacks.json",
+      "decoded_bytes": 227871,
+      "sha256": "d06279fb91976b57792d9e0343de47003353e59773c22801d4368edae388fbbd"
+    },
+    {
+      "path": "docs/regime-engine-v2/groweer/temporal-challengers.py",
+      "decoded_bytes": 7962,
+      "sha256": "f0728a0acead89bdf25ad7d74b1e94cdfd1f283b62c2c2d930d9da285549f46f"
+    },
+    {
+      "path": "docs/regime-engine-v2/groweer/threshold-sensitivity.json",
+      "decoded_bytes": 2448447,
+      "sha256": "d9b097b3569f5f832643435f9b723286dc2ee1d69e75995d215307e1a71e6ed4"
+    },
+    {
+      "path": "docs/regime-engine-v2/groweer/transition-forensics.json",
+      "decoded_bytes": 6448863,
+      "sha256": "2ead6b8a52d8b7f8d0af719401b0218aacdf78b3e00ac688b6fe8fc8374f3558"
+    },
+    {
+      "path": "docs/regime-engine-v2/groweer/typecheck-after-build.log",
+      "decoded_bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "docs/regime-engine-v2/groweer/typecheck-before-build.log",
+      "decoded_bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "docs/regime-engine-v2/groweer/v1-benchmark-inventory.json",
+      "decoded_bytes": 13172,
+      "sha256": "671d1cbbc1cd07f88865830b8bb69817040bb75df19f8de0ec1ea88b2ea2cf05"
+    },
+    {
+      "path": "docs/regime-engine-v2/groweer/verification-conformance/conformance.json",
+      "decoded_bytes": 1232,
+      "sha256": "0ae86699a5a32f7d58bf3e604400cf875fd04900d6e5cf404b7a4be2a379cf06"
+    },
+    {
+      "path": "docs/regime-engine-v2/groweer/verification-conformance/historical-r2-output.json",
+      "decoded_bytes": 772491,
+      "sha256": "018d6fc103ca9bfe1e0e43418d79446f530796c00a3728a57cf2b289298d2a5f"
+    },
+    {
+      "path": "docs/regime-engine-v2/groweer/verification-conformance/shadow-input-r2.json",
+      "decoded_bytes": 223524,
+      "sha256": "92ecdd1830516ec96dd9293fc87b9ee7c6add71376e6997de4fede42d4d90a66"
+    },
+    {
+      "path": "docs/regime-engine-v2/groweer/verification.json",
+      "decoded_bytes": 7597,
+      "sha256": "689adee924433e27d4800a5c5caac5f126f23180546563e4ec4dc84afe04d012"
+    },
+    {
+      "path": "docs/regime-engine-v2/maintainer/README.md",
+      "decoded_bytes": 4632,
+      "sha256": "027134e7e963c5eec074e0be8d83dec0db89976a5d4e0c98b82863d121715894"
+    },
+    {
+      "path": "docs/regime-engine-v2/maintainer/build.log",
+      "decoded_bytes": 21621,
+      "sha256": "bcccf6595096af3a43986840c88ad347baaf73713d990111020e8bd452f2a46b"
+    },
+    {
+      "path": "docs/regime-engine-v2/maintainer/bundle-cli-smoke.log",
+      "decoded_bytes": 872,
+      "sha256": "f37e7820f93fbad7cd1e3980be591b9007c07da4057e5caebdf5025a8a991bb2"
+    },
+    {
+      "path": "docs/regime-engine-v2/maintainer/calendar-audit.json",
+      "decoded_bytes": 5075,
+      "sha256": "078b927ed9ecc40306841e28f5a208e592e5b93978e707735847fc6a118010e7"
+    },
+    {
+      "path": "docs/regime-engine-v2/maintainer/canonical-challenger-tests.log",
+      "decoded_bytes": 3344,
+      "sha256": "c7587cdfa3d0b4809dd194fbbd98560550f6c95cc35d70f78837735337597e72"
+    },
+    {
+      "path": "docs/regime-engine-v2/maintainer/canonical-conformance.log",
+      "decoded_bytes": 1232,
+      "sha256": "0ae86699a5a32f7d58bf3e604400cf875fd04900d6e5cf404b7a4be2a379cf06"
+    },
+    {
+      "path": "docs/regime-engine-v2/maintainer/canonical-editorial.log",
+      "decoded_bytes": 280,
+      "sha256": "7d4f85ccc8a0544b81b0d60fac223b80184e1bd1faaa7822e4bb1b5a2963524f"
+    },
+    {
+      "path": "docs/regime-engine-v2/maintainer/canonical-node-tests.log",
+      "decoded_bytes": 25566,
+      "sha256": "9927ddc9e3ae4e0afd3f420d0771fb31795f3dddc822ad0aa26ba605383c286d"
+    },
+    {
+      "path": "docs/regime-engine-v2/maintainer/canonical-operations-tests.log",
+      "decoded_bytes": 30056,
+      "sha256": "4a2012ee5160e26511f774efabb52546c47cd6f1136b8c819dd55ff7a7a3b3a1"
+    },
+    {
+      "path": "docs/regime-engine-v2/maintainer/canonical-python-tests.log",
+      "decoded_bytes": 105,
+      "sha256": "e586fc0f3bb2a05f4c80f07d1b4c6171e830592f6c7aaf70d4af3b0aa3ebd072"
+    },
+    {
+      "path": "docs/regime-engine-v2/maintainer/canonical-reports-check.log",
+      "decoded_bytes": 226,
+      "sha256": "b81d3c1a89f1730de7441ac54fa6fb19dcba8f4f9bfedee63a2abb49315cc7ab"
+    },
+    {
+      "path": "docs/regime-engine-v2/maintainer/canonical-reports-validate.log",
+      "decoded_bytes": 243,
+      "sha256": "17a8278ec97176ddc182bfa8257e3eed789000b7f6428e57c0d238786eff1136"
+    },
+    {
+      "path": "docs/regime-engine-v2/maintainer/canonical-sweeper-attacks.log",
+      "decoded_bytes": 90,
+      "sha256": "d3c1a19321c4efaafe49ba41263b371c242e3ab59898fbe9a9e778c96712e3cf"
+    },
+    {
+      "path": "docs/regime-engine-v2/maintainer/canonical-verification.json",
+      "decoded_bytes": 13488,
+      "sha256": "6d7b9dc71fb2d1f06173b551af84369a05a1946b7e87ac56fc3ea8f7e9069f7f"
+    },
+    {
+      "path": "docs/regime-engine-v2/maintainer/close-verification.py",
+      "decoded_bytes": 13069,
+      "sha256": "f69e52a7ffcbed5bb74d69d5d48ff74017d373344d3cad96052022db36c3628f"
+    },
+    {
+      "path": "docs/regime-engine-v2/maintainer/dependency-audit.json",
+      "decoded_bytes": 3953,
+      "sha256": "dd48ce3456e591c1c5621bc7f3078c4dab1bd3d2f04dd23c6b071fe22c48c877"
+    },
+    {
+      "path": "docs/regime-engine-v2/maintainer/dependency-install.log",
+      "decoded_bytes": 1437,
+      "sha256": "a5bf222a42bdc982b19ee159a4a14e9bbff58eae6c05421600510d8f3b6ee4c8"
+    },
+    {
+      "path": "docs/regime-engine-v2/maintainer/failure-matrix.md",
+      "decoded_bytes": 2932,
+      "sha256": "ab0e524052175b7313819eb1e89ec7aa327ccf41a03eb1c7bd0a9091b43b9c4a"
+    },
+    {
+      "path": "docs/regime-engine-v2/maintainer/files-changed.json",
+      "decoded_bytes": 10471,
+      "sha256": "e78dc365b8808a63deed46315a7ddb7c9e6541f263329baa5ab35bbb1be2e9dd"
+    },
+    {
+      "path": "docs/regime-engine-v2/maintainer/findings.json",
+      "decoded_bytes": 5957,
+      "sha256": "730b7d8e18e1ec11570ef3fa917a5dc29f30c1639e9d4dbc50c1effdc755b4ad"
+    },
+    {
+      "path": "docs/regime-engine-v2/maintainer/handoff-status.txt",
+      "decoded_bytes": 1380,
+      "sha256": "f03829a7e4f05f04aa510304672de70022a040c4a5ee329f39f2f8087925d41a"
+    },
+    {
+      "path": "docs/regime-engine-v2/maintainer/input-manifest.json",
+      "decoded_bytes": 236999,
+      "sha256": "4c89595a993e400ce41728d465693195d8758b9847e15c08ebb1cbfc6bfeff0e"
+    },
+    {
+      "path": "docs/regime-engine-v2/maintainer/integration-map.md",
+      "decoded_bytes": 6212,
+      "sha256": "96e715113345365cf19ef246b60b7442e4b341cbe60dbbf53ac70fd77d68f572"
+    },
+    {
+      "path": "docs/regime-engine-v2/maintainer/integration-tests.log",
+      "decoded_bytes": 1610,
+      "sha256": "3a68f8368469226f65f48b245fe31d83556211b34d697bc8e5afd904f4598066"
+    },
+    {
+      "path": "docs/regime-engine-v2/maintainer/lint.json",
+      "decoded_bytes": 294098,
+      "sha256": "1fb951b05d70f8589fb57f1ccbb03341d807099b336193defc58b586a0c1e5ee"
+    },
+    {
+      "path": "docs/regime-engine-v2/maintainer/lint.log",
+      "decoded_bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "docs/regime-engine-v2/maintainer/performance-pipeline-before.json",
+      "decoded_bytes": 63604,
+      "sha256": "7755cec12a01ce47799c01ba0f9d9a1c0e4ff1e1ae6b13ae865e0cab3a418bb8"
+    },
+    {
+      "path": "docs/regime-engine-v2/maintainer/performance-pipeline.json",
+      "decoded_bytes": 66677,
+      "sha256": "408ed11dd0f61172afb503501da068bdddb8afb2e8fb0dbbc21fc5cccae5a7e9"
+    },
+    {
+      "path": "docs/regime-engine-v2/maintainer/performance-pipeline.log",
+      "decoded_bytes": 1565,
+      "sha256": "c9dbd5d48aba211ab60620680849b921b6288c2c5208812009b5fb66bc6d2552"
+    },
+    {
+      "path": "docs/regime-engine-v2/maintainer/performance-pipeline.mjs",
+      "decoded_bytes": 21753,
+      "sha256": "43b76f536909010ebac9153f0226fd399466773ff459669f3d249834efb03412"
+    },
+    {
+      "path": "docs/regime-engine-v2/maintainer/performance.json",
+      "decoded_bytes": 82402,
+      "sha256": "66fa7d41caffca79217e23018e5f5a977fb284eeee256527a732b8f8f748882f"
+    },
+    {
+      "path": "docs/regime-engine-v2/maintainer/performance.log",
+      "decoded_bytes": 1249,
+      "sha256": "1a0fe7807cd5a6c8cec1b1f978cffaae5f672499bdf17197d4100bdaaed26cb6"
+    },
+    {
+      "path": "docs/regime-engine-v2/maintainer/performance.mjs",
+      "decoded_bytes": 18048,
+      "sha256": "bb3bdfa7de3e4dfa1e5e9c1f7369e5d47df143e14bb0dfbad28b4852aa66c168"
+    },
+    {
+      "path": "docs/regime-engine-v2/maintainer/prospective-capture.md",
+      "decoded_bytes": 8403,
+      "sha256": "af02889416bbb13df5c27f13e85f8e791fcce8ea477fa29b0b842016d2f10689"
+    },
+    {
+      "path": "docs/regime-engine-v2/maintainer/prospective-replay-final.log",
+      "decoded_bytes": 307,
+      "sha256": "112e10ba5c0ec6794e020f45ea4958e83d01c9d2aa09a3d3d53c216c00751e4a"
+    },
+    {
+      "path": "docs/regime-engine-v2/maintainer/prospective-replay.log",
+      "decoded_bytes": 307,
+      "sha256": "112e10ba5c0ec6794e020f45ea4958e83d01c9d2aa09a3d3d53c216c00751e4a"
+    },
+    {
+      "path": "docs/regime-engine-v2/maintainer/prospective-smoke.json",
+      "decoded_bytes": 5780,
+      "sha256": "842439dc7356801608226c2ee610d4c4144c79278e0e1b8451a744a76d271fc9"
+    },
+    {
+      "path": "docs/regime-engine-v2/maintainer/prospective-smoke.log",
+      "decoded_bytes": 2307,
+      "sha256": "4ea64841f57ca25542de1e48dcdff73bd5551eee93179f5d35a73715fd2c926d"
+    },
+    {
+      "path": "docs/regime-engine-v2/maintainer/rollback.md",
+      "decoded_bytes": 1697,
+      "sha256": "5a7bd68738f98e2e53730bac37099282ef2cdd528db3cb7d8fe26e4843bd66d0"
+    },
+    {
+      "path": "docs/regime-engine-v2/maintainer/root-checks-prebuild.json",
+      "decoded_bytes": 688,
+      "sha256": "f185df025aed90ccacfbff52c6a51a6dff1c8d5e13bc329375619fff163b5820"
+    },
+    {
+      "path": "docs/regime-engine-v2/maintainer/root-checks.json",
+      "decoded_bytes": 10605,
+      "sha256": "e449da90825e57a8be2e00110d3a434c2d29ac016d64dbbd9a67742cef678c66"
+    },
+    {
+      "path": "docs/regime-engine-v2/maintainer/run-verification.py",
+      "decoded_bytes": 13841,
+      "sha256": "0defad3077544fb21b6e40b8da273ece660e897cb78462dcfe599c3ef4f80404"
+    },
+    {
+      "path": "docs/regime-engine-v2/maintainer/runbook.md",
+      "decoded_bytes": 10876,
+      "sha256": "16dd805b38bf4c22fc290359a2d3144a35c433d00c7acbd92744e2a3f588626e"
+    },
+    {
+      "path": "docs/regime-engine-v2/maintainer/snapshot-contract.json",
+      "decoded_bytes": 8927,
+      "sha256": "916558233cd9928cdb268d67fb5f1e6483e04d73d007f33187b5c0191c0dda35"
+    },
+    {
+      "path": "docs/regime-engine-v2/maintainer/source-boundary-audit.json",
+      "decoded_bytes": 16113,
+      "sha256": "f9c61188601c1b8c15a1770935e2c096bea0251e7184cdc7c0c426693eb9b472"
+    },
+    {
+      "path": "docs/regime-engine-v2/maintainer/sweeper-attacks.json",
+      "decoded_bytes": 227871,
+      "sha256": "d06279fb91976b57792d9e0343de47003353e59773c22801d4368edae388fbbd"
+    },
+    {
+      "path": "docs/regime-engine-v2/maintainer/typecheck-after-build.log",
+      "decoded_bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "docs/regime-engine-v2/maintainer/typecheck-before-build.log",
+      "decoded_bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "docs/regime-engine-v2/maintainer/verification-conformance/conformance.json",
+      "decoded_bytes": 1232,
+      "sha256": "0ae86699a5a32f7d58bf3e604400cf875fd04900d6e5cf404b7a4be2a379cf06"
+    },
+    {
+      "path": "docs/regime-engine-v2/maintainer/verification-conformance/historical-r2-output.json",
+      "decoded_bytes": 772491,
+      "sha256": "018d6fc103ca9bfe1e0e43418d79446f530796c00a3728a57cf2b289298d2a5f"
+    },
+    {
+      "path": "docs/regime-engine-v2/maintainer/verification-conformance/shadow-input-r2.json",
+      "decoded_bytes": 223524,
+      "sha256": "92ecdd1830516ec96dd9293fc87b9ee7c6add71376e6997de4fede42d4d90a66"
+    },
+    {
+      "path": "docs/regime-engine-v2/maintainer/verification-run.log",
+      "decoded_bytes": 1913,
+      "sha256": "4a0dded00b333a6ce665c1376709b286a51d1b49652232121ee7c525e8ae0de0"
+    },
+    {
+      "path": "docs/regime-engine-v2/maintainer/verification.json",
+      "decoded_bytes": 18980,
+      "sha256": "9938e5b789b0001f5113515fc5ebbc72ad7704202ae93178a030ba8af8027705"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/F1-test.json",
+      "decoded_bytes": 9944,
+      "sha256": "23667dd81976fe0021639b7dc8860bda2b28216609d72da897e03ae672cf189c"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/F1-training-selection.json",
+      "decoded_bytes": 52704,
+      "sha256": "8bc9aa082e1040de173dbccce7a9099629f81a6f7a5012864cc09f517b9fcae0"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/F1-validation.json",
+      "decoded_bytes": 50581,
+      "sha256": "508abcc4dffc2cf74624cc0a9c3e61953ba31ec2d26fee95f62ff6eb1e59634b"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/F2-test.json",
+      "decoded_bytes": 10272,
+      "sha256": "f958ad26f5d39d40d0ed94a23f1482aedd487b82838b72765b56f2f48ed98464"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/F2-training-selection.json",
+      "decoded_bytes": 52903,
+      "sha256": "c12afea00da6294867cb1b9b93a17a9d202a0c3fabb0fdd1a65db2025b52ab15"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/F2-validation.json",
+      "decoded_bytes": 49223,
+      "sha256": "d6d438a52d563fea1bfe5670ecba315a20814846d8428bff0cb28c02f68026f6"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/F3-test.json",
+      "decoded_bytes": 12182,
+      "sha256": "a1d9d2247fc77f44d82aa209b5b14d2138e8b5a0ff920b519af358881621f7ed"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/F3-training-selection.json",
+      "decoded_bytes": 53024,
+      "sha256": "5fc60bcab1b8b8110db0472b167a78f8713ad26dbe24a251fa889e26aa1eb4be"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/F3-validation.json",
+      "decoded_bytes": 50753,
+      "sha256": "47cf062ace0a1b1c32a641adfceb8038c1ddb7aaf93ad13947847330e7e28132"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/README.md",
+      "decoded_bytes": 15879,
+      "sha256": "52787262be230441491bcdbd7de363ee5c3e94286a91b5f72df7379e2b965eeb"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/acquisition.json",
+      "decoded_bytes": 97278,
+      "sha256": "f539300ade6853d7a67998c443c0f2171af23aef7aad27e45074c5f51c3bb776"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/artifact-manifest.json",
+      "decoded_bytes": 31495,
+      "sha256": "08df83bb272e91aaf01113cb485ab29bee60bf6d55b50d4afa1077950d0ec1ba"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/build_contracts.py",
+      "decoded_bytes": 25224,
+      "sha256": "4969dc34e401e9105bc3e5fde735cf48fc7fad092eb9c9691d6d56c28709f062"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/check_package.py",
+      "decoded_bytes": 7709,
+      "sha256": "9463c8183837261040df1ef1d3caba2fe8e10d3b172194bc09a13f8793c2ae45"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/collect-evidence.py",
+      "decoded_bytes": 5594,
+      "sha256": "da07cf7109220f3dd07a25b0af0f5f693f0b65e76da9623f5b6a91957702c4e3"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/compatibility-checks.json",
+      "decoded_bytes": 1039,
+      "sha256": "9d0b74798079e2a4e1e7bf552f0415dd3687417659e059685290fba97f3c1c1e"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/contract-check-results.json",
+      "decoded_bytes": 5422,
+      "sha256": "4e7baafcd4374245b9dc31f356b78b1f9295203210819fba661990e6cc41dd70"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/contract_checks.py",
+      "decoded_bytes": 6584,
+      "sha256": "94404a70fe57acb5c2f79240d7664806b6f12430f1bca7d14d65e8dbb3c9b4fd"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/cfe-contract-index.json.gz::decompressed",
+      "decoded_bytes": 137084,
+      "sha256": "6af5672f2c9f9f48138a4bfb8035cda7856b620f2e9e07c87ba69236b4b1ed47"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/cfe-contract-index.json.metadata.json",
+      "decoded_bytes": 716,
+      "sha256": "a51c9c1b055e055c863b11d23746b0d6dc318e1b24e97618365e004985899aef"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/selected-contracts.json",
+      "decoded_bytes": 26787,
+      "sha256": "957a13ed819011ddbd20eb525e6194adaff97f57049064bdfa50c989c5312c7f"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vix-history.csv.gz::decompressed",
+      "decoded_bytes": 472360,
+      "sha256": "5f6a4197e929ee7a1eb999db2938c7f6049114c9fd29eb5d80e356dabe43d658"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vix-history.csv.metadata.json",
+      "decoded_bytes": 693,
+      "sha256": "867ee028b672de66e5ef73d3be7ba59cdd4fec93edc4100e192ddce6b36d65e2"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2018-01-17.csv.gz::decompressed",
+      "decoded_bytes": 16031,
+      "sha256": "7825a246b640f7f5e541e4c1d507fc6b21bae78f544718afb70eda7320db2286"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2018-01-17.csv.metadata.json",
+      "decoded_bytes": 714,
+      "sha256": "f5793fb3c83b2ce6b9e02eac88b80eabaa8d1a587894e64a03abe677d21e0163"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2018-02-14.csv.gz::decompressed",
+      "decoded_bytes": 16059,
+      "sha256": "a5b46f776331c120318c8a97304b51f72102531ad751d02d73a64ba613f9ec3e"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2018-02-14.csv.metadata.json",
+      "decoded_bytes": 714,
+      "sha256": "d5febd4bac278bea5820dfcd7c28d3c5d9743b5c8394771bb2cc34832d5adb10"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2018-03-21.csv.gz::decompressed",
+      "decoded_bytes": 16117,
+      "sha256": "7c78a94b9f9c7403467f5236093412a798969c4bdc2e72e7ba577942cbf1a38e"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2018-03-21.csv.metadata.json",
+      "decoded_bytes": 714,
+      "sha256": "2342e0cffbf2c8801b576a2d6b1cbfaad56375218e2bb1c43b730b634ed95fff"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2018-04-18.csv.gz::decompressed",
+      "decoded_bytes": 16016,
+      "sha256": "3920a20b460e45826d871e7473cbb8ed4569a05e77cc2521bbbd1c5a2b350d67"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2018-04-18.csv.metadata.json",
+      "decoded_bytes": 714,
+      "sha256": "467ca22ba6ffa5bb4eac18cbf2cc6e5831065bc35ed4d224e5688d7056b74dbd"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2018-05-16.csv.gz::decompressed",
+      "decoded_bytes": 16053,
+      "sha256": "32804f6248e71c6e014729e3979480cc581f6e4b1221f4ce93d867bd4ccf790b"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2018-05-16.csv.metadata.json",
+      "decoded_bytes": 714,
+      "sha256": "209c268f14716c1e8448d7728d3772cceebe9a6b5f41fa7d78510637d56440a7"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2018-06-20.csv.gz::decompressed",
+      "decoded_bytes": 16073,
+      "sha256": "6c5ca228bdd8bce9d72703720c77b7ca80462b073829a53a890ff768a46114b1"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2018-06-20.csv.metadata.json",
+      "decoded_bytes": 714,
+      "sha256": "87680f3bc6d8eab10f3c7c1dfdffbb1e161ff69f44cdb40984dab52e059c5d5a"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2018-07-18.csv.gz::decompressed",
+      "decoded_bytes": 15967,
+      "sha256": "042fa86dce5f555489e6201bfac79394d94af53b83bff4f2386b63123b7028ea"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2018-07-18.csv.metadata.json",
+      "decoded_bytes": 714,
+      "sha256": "d86af1d8f16d09b85beca324441d7ecef5f00d31063c07a1fa09cc15196276ed"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2018-08-22.csv.gz::decompressed",
+      "decoded_bytes": 16404,
+      "sha256": "35ed1ae5658e1d3574427c4f1f6ba2effb4dd6d9d8c1450a31deba8f982cf27b"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2018-08-22.csv.metadata.json",
+      "decoded_bytes": 714,
+      "sha256": "6c4005c8bce9cf86661fc17e84543247d762d616c2eff094e95f5368731b06cc"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2018-09-19.csv.gz::decompressed",
+      "decoded_bytes": 16000,
+      "sha256": "95e63535525b24056476129ce86927156fa43c2f192be7ce3573becb56306c81"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2018-09-19.csv.metadata.json",
+      "decoded_bytes": 714,
+      "sha256": "6b8c517329ca6d1a4ca03b5ead6c24b2666f35e66b4388ff337fb40774c6bda2"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2018-10-17.csv.gz::decompressed",
+      "decoded_bytes": 16227,
+      "sha256": "11fa3df6f434e331800fa23abaef7dc4ac9270199433bf93638c945a2a3dda24"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2018-10-17.csv.metadata.json",
+      "decoded_bytes": 714,
+      "sha256": "bc0667cfe09a5083c8c0cd691e72fc18227956b6af1d7e3bd6f4e5895c85e368"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2018-11-21.csv.gz::decompressed",
+      "decoded_bytes": 16690,
+      "sha256": "bf6d078b02a7d7b16d4359d43cd0e10f9e5c9d1257c8f03ca67f33a4793ff113"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2018-11-21.csv.metadata.json",
+      "decoded_bytes": 714,
+      "sha256": "724ed9950b6dcce7c03214e22b8b10285de18d7e690e088aa133f72cfb45388e"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2018-12-19.csv.gz::decompressed",
+      "decoded_bytes": 16228,
+      "sha256": "b95cf1efd7df610ae76a19ff4c816c62e7bd808d147b36d52fc55d06beef7e6b"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2018-12-19.csv.metadata.json",
+      "decoded_bytes": 714,
+      "sha256": "b145298c8ea381842131bed7103c51637cc513f404f76a743a4036baf60ac324"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2019-01-16.csv.gz::decompressed",
+      "decoded_bytes": 16072,
+      "sha256": "02acfe3646e1816cca399ce9bbbb8a1b02c9410ec1277760448f264f1d96ffe1"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2019-01-16.csv.metadata.json",
+      "decoded_bytes": 714,
+      "sha256": "29fcd88d34fdf6ced33c4668d6e3ab6d79612e13978a26236aa877b4d1db6072"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2019-02-13.csv.gz::decompressed",
+      "decoded_bytes": 16019,
+      "sha256": "9f0b9f1ddcfd30c54db9a74a24d5bcb109133074f4c1ce7b60f9532c783f28da"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2019-02-13.csv.metadata.json",
+      "decoded_bytes": 714,
+      "sha256": "829e7d6abbb8f045bf96ef79439b66c417cfce6d9d2fbe15a0dc9af5b595320c"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2019-03-19.csv.gz::decompressed",
+      "decoded_bytes": 15966,
+      "sha256": "2f86c6a1d6eed44390b8134bff68e186d2a1ae34469deaea1e594eb97ebe91a6"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2019-03-19.csv.metadata.json",
+      "decoded_bytes": 714,
+      "sha256": "e8ab95574e289281dcefc921d7ac2f0778112c67346b3b8f492fa71208ad72ea"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2019-04-17.csv.gz::decompressed",
+      "decoded_bytes": 16193,
+      "sha256": "15b9c792ba9b9d37b9f7b6a930dbad9715f1f83789757b8c9134b16362b1febc"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2019-04-17.csv.metadata.json",
+      "decoded_bytes": 714,
+      "sha256": "f0144d382509de7db453b6dc7b018f2f5bcc57953e256a82412f1d0e5fb50e2b"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2019-05-22.csv.gz::decompressed",
+      "decoded_bytes": 16103,
+      "sha256": "0f364af221b4de67fc0c95105e8edafba1b634f60237b8b07c33b0d769fa364c"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2019-05-22.csv.metadata.json",
+      "decoded_bytes": 714,
+      "sha256": "e2418043b08623748c244a22377fea37784ea47dbec6a7469c01565d581c3950"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2019-06-19.csv.gz::decompressed",
+      "decoded_bytes": 16127,
+      "sha256": "a0a122738217db57d59481294dd3c2206555d508a1f6f2ea88b7a64324b9162b"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2019-06-19.csv.metadata.json",
+      "decoded_bytes": 714,
+      "sha256": "1c8343524d6e94e4f2c662e89a9fff4dffb7dafa05eebee5a8f06d1ede59cbfd"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2019-07-17.csv.gz::decompressed",
+      "decoded_bytes": 15952,
+      "sha256": "ea2adcccd6dded6cac7139a9191b991f74b33a12fa3328bdae628f47f818ecfd"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2019-07-17.csv.metadata.json",
+      "decoded_bytes": 714,
+      "sha256": "7ff5f68d2b2a18ccdebdd6dcbc5ff6c47617e9dc8f663b5c2a881cd6838c8973"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2019-08-21.csv.gz::decompressed",
+      "decoded_bytes": 16100,
+      "sha256": "d8865c5f71d723b1081460b4979384d5ae8edbf5faa4d078dff1db9ab07a3a4f"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2019-08-21.csv.metadata.json",
+      "decoded_bytes": 714,
+      "sha256": "98541005c2ac09b0cdeaa7f371aedb8024a77764a2708c4774e3ebaf6c60765f"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2019-09-18.csv.gz::decompressed",
+      "decoded_bytes": 15998,
+      "sha256": "8fbdffbd379c70d7c1b754b2ca9ea97d01bb916aea84c6b5f7984379f57cc350"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2019-09-18.csv.metadata.json",
+      "decoded_bytes": 714,
+      "sha256": "c3ef47f58476d396a98a1cbade838cb255eda4b360003ef70079753771ae8a37"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2019-10-16.csv.gz::decompressed",
+      "decoded_bytes": 16120,
+      "sha256": "24ed3fffe793a77e50312c268ccc09fd402b76b3650afcc579b994f1cd0cc9f5"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2019-10-16.csv.metadata.json",
+      "decoded_bytes": 714,
+      "sha256": "e5d6dc6b9c05bcb1b96a075e0b03652e697d44d8bfb44e640108607c0aed3c59"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2019-11-20.csv.gz::decompressed",
+      "decoded_bytes": 16690,
+      "sha256": "4f65b9d64aece0ce838779ab8be34af3f6383d4af7d95f2905769e34cced2a38"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2019-11-20.csv.metadata.json",
+      "decoded_bytes": 714,
+      "sha256": "1286eb0d52a281d05165a743ae346311f179b830afdc8c56897c1531bc38390f"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2019-12-18.csv.gz::decompressed",
+      "decoded_bytes": 16291,
+      "sha256": "426d90a4d696bb9592e022b311be766a6c6ac808c71a68f4e66712b4a6ef6f32"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2019-12-18.csv.metadata.json",
+      "decoded_bytes": 714,
+      "sha256": "eace7abfd4869c04cd3b1ce73b1793c9eafef4a1631a2b1c782110eba7715733"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2020-01-22.csv.gz::decompressed",
+      "decoded_bytes": 16432,
+      "sha256": "88dd32dd13b10c67427b6e2d9a3350d2bc663974aed3f89c87b22ab2cd287eb4"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2020-01-22.csv.metadata.json",
+      "decoded_bytes": 714,
+      "sha256": "0680759ad6fc599689ffa00b3cf958158f8725fa60c109371e5944528b84c991"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2020-02-19.csv.gz::decompressed",
+      "decoded_bytes": 15898,
+      "sha256": "4282f32fadf5e45e889072f373af2077769e0e6ab11b16c5a74dc6dce5c8b749"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2020-02-19.csv.metadata.json",
+      "decoded_bytes": 714,
+      "sha256": "bc8ba084bfc5b2e2757a107098062a29576f8136904c11ff70365f8f2888b415"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2020-03-18.csv.gz::decompressed",
+      "decoded_bytes": 15992,
+      "sha256": "b0754a52316241f15d66f41706d3569f20cdfe1703bbd4cd7f87146cf57beb50"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2020-03-18.csv.metadata.json",
+      "decoded_bytes": 714,
+      "sha256": "d266a1fcdd33b44e467723cd9586964c8b3c5ae0cad969db6cca0ece01150e54"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2020-04-15.csv.gz::decompressed",
+      "decoded_bytes": 16010,
+      "sha256": "abcfd156b05a0c8b8b75811e5bf17f1cf1dbfdac0d408231bc48d133e57934ca"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2020-04-15.csv.metadata.json",
+      "decoded_bytes": 714,
+      "sha256": "61f1cf9f2975321537934fffce5707a9053758d47ad2751d514a13b39ff719c1"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2020-05-20.csv.gz::decompressed",
+      "decoded_bytes": 16008,
+      "sha256": "0dce9099b417b8af888244d993b2f77fe8cc0cef77c4473b9ca66dc727a80cef"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2020-05-20.csv.metadata.json",
+      "decoded_bytes": 714,
+      "sha256": "f0333073abc3832a8b4958187bef798ed869eee11fa6dbad78c4a47f61d08503"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2020-06-17.csv.gz::decompressed",
+      "decoded_bytes": 15951,
+      "sha256": "5d66bb8cbdd182c0fad4e984fa60ffbde7122388dc218fb91bb10a02faa82d1a"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2020-06-17.csv.metadata.json",
+      "decoded_bytes": 714,
+      "sha256": "81ff2729b6e6496ff7d56a27309575eb2a2cd977af22f7d5d1d055558b8540b9"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2020-07-22.csv.gz::decompressed",
+      "decoded_bytes": 16200,
+      "sha256": "c5f58ca4a7c62f4b205646064e3038d34751e47ab4bb14aaa9e96be59521a407"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2020-07-22.csv.metadata.json",
+      "decoded_bytes": 714,
+      "sha256": "9daf9ca9350388c08be572ce10eadf9d6bc18155c3e8386603e0d4b96d989b05"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2020-08-19.csv.gz::decompressed",
+      "decoded_bytes": 15756,
+      "sha256": "7fa02eb5311f0012391223e6aa7d0b1d7ea2a0992e86bf66366dd5408eeef67e"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2020-08-19.csv.metadata.json",
+      "decoded_bytes": 714,
+      "sha256": "4690c3a9f86c1b8dab6b785824c532ae1ae84cd8d11014883d141307b7815a6e"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2020-09-16.csv.gz::decompressed",
+      "decoded_bytes": 16535,
+      "sha256": "bb0fd4d378b682148f1999323e35227a71a4b8a18e95deba5980267bf3c65cf4"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2020-09-16.csv.metadata.json",
+      "decoded_bytes": 714,
+      "sha256": "66dd19c1732ec23ec1b00c7250b6bc0cc202e085d256225bd661df3ba80f1a6a"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2020-10-21.csv.gz::decompressed",
+      "decoded_bytes": 18645,
+      "sha256": "f623bf53dbbb3fccc011dcb4f0df19c8726b91ae6b0f9ccfd9ba31e2ca2ee414"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2020-10-21.csv.metadata.json",
+      "decoded_bytes": 714,
+      "sha256": "f45015669f3a332ca017d2f7d75e30b8d6658591bd03f17dd9c1faaf5b265d45"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2020-11-18.csv.gz::decompressed",
+      "decoded_bytes": 20181,
+      "sha256": "b4e461566167f08151ab6a44268a61c964c1d828c6ea3e41928996e328dcd02c"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2020-11-18.csv.metadata.json",
+      "decoded_bytes": 714,
+      "sha256": "ecbbfdf01eed5b5f7ef85231901ae323c4108e7cd0f05b56348b9a21d3e81e3a"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2020-12-16.csv.gz::decompressed",
+      "decoded_bytes": 15678,
+      "sha256": "bbb2ec67e0c3993a1c78ba6f77123c52709ff1c142604042eb70d048a71a99fd"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2020-12-16.csv.metadata.json",
+      "decoded_bytes": 714,
+      "sha256": "5ad15a8c4e5dcef74c625e22b4b49bc7f2db1ec7d18aa256365584976efa33cb"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2021-01-20.csv.gz::decompressed",
+      "decoded_bytes": 15810,
+      "sha256": "53a84f66db60c505ed1ce0eb8deb0e8c8b013b0488fb02c5671edb80db3379a1"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2021-01-20.csv.metadata.json",
+      "decoded_bytes": 714,
+      "sha256": "89534b3ea3b8a9c24f482492c4df8ec990307810a531ee4b712fd79699c26702"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2021-02-17.csv.gz::decompressed",
+      "decoded_bytes": 15347,
+      "sha256": "ed9f4381dead986af6f25f11923c40a1f1997a44f916f417bff36c30df4c8b3c"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2021-02-17.csv.metadata.json",
+      "decoded_bytes": 714,
+      "sha256": "ea855d6256b4386172edf0ca37813986ce72f025f850f42eca8fbe44b6755547"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2021-03-17.csv.gz::decompressed",
+      "decoded_bytes": 15494,
+      "sha256": "ee3ba3bd455cad5772198f3f04d3d3e7179779319cf74d22fe90b23f40a21ff7"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2021-03-17.csv.metadata.json",
+      "decoded_bytes": 714,
+      "sha256": "f2a344577e3bfb1b64d2f92ed521bcd9cb4480f2a0a4b94d73b4d3656bf650ea"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2021-04-21.csv.gz::decompressed",
+      "decoded_bytes": 15492,
+      "sha256": "0d707904eafaa6ea39c727a5e843eeb6b692577c63b7ae14835227dd90643029"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2021-04-21.csv.metadata.json",
+      "decoded_bytes": 714,
+      "sha256": "248623ebd9268d30ba9ce7ba317a6e35c17aec58054136a31d895f7714816929"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2021-05-19.csv.gz::decompressed",
+      "decoded_bytes": 15602,
+      "sha256": "6ed8f065f27edf49e137829ce247b2e2533e11640ded0f6a79535583772a4b3b"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2021-05-19.csv.metadata.json",
+      "decoded_bytes": 714,
+      "sha256": "9665e06d95f28f127d78f28faf1c20afac6149315fbed2c10a3daafd7464b7e4"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2021-06-16.csv.gz::decompressed",
+      "decoded_bytes": 15551,
+      "sha256": "b87dac062797b9da171f294d5cd2bcfd2d1513d6b7816ddbba2c7737347b658c"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2021-06-16.csv.metadata.json",
+      "decoded_bytes": 714,
+      "sha256": "28bdbbf643f84c1d9a08b1b4beee32cf30e085af08ddbfe405bd5b26a2150bd5"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2021-07-21.csv.gz::decompressed",
+      "decoded_bytes": 15500,
+      "sha256": "95fd3d2330eedfdbfa0d65b90c0916c309b43b70e54bd43f1ad91a8f2ea008e9"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2021-07-21.csv.metadata.json",
+      "decoded_bytes": 714,
+      "sha256": "3abff9454f6d72f2cda507b46fee3ee34038bdac9b4f906250805344dc028e12"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2021-08-18.csv.gz::decompressed",
+      "decoded_bytes": 15519,
+      "sha256": "fc1cda584f8e667ef85470b84edbe42fb877573652becb51ebbd91ff8b900dab"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2021-08-18.csv.metadata.json",
+      "decoded_bytes": 714,
+      "sha256": "29850048d54391287ae6e79ad157452a1d5f354eb219160dc31062af81b27de2"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2021-09-15.csv.gz::decompressed",
+      "decoded_bytes": 15468,
+      "sha256": "c73076114fc912535a6f27f2ceb418f7cf32e08e4f536a4e146de8be48ef9526"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2021-09-15.csv.metadata.json",
+      "decoded_bytes": 714,
+      "sha256": "9c9292cc643151f2fceec5273f210c6a0dc23a0452b9fd2f6ee19a36ac029761"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2021-10-20.csv.gz::decompressed",
+      "decoded_bytes": 15839,
+      "sha256": "88fb7fe945081fb68984cdb45bee72790526b5bcaf543c54cc8d4b5a790a3e92"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2021-10-20.csv.metadata.json",
+      "decoded_bytes": 714,
+      "sha256": "b9b361283cc69089abdb7d3a82585b7497fb48032b39d46e742a683d19a79afb"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2021-11-17.csv.gz::decompressed",
+      "decoded_bytes": 15985,
+      "sha256": "a9e3cf02243b17308013f772bb572cea159d084399bbb74eaccf7acc0751e34e"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2021-11-17.csv.metadata.json",
+      "decoded_bytes": 714,
+      "sha256": "97bc2f6e8d2e7843a21095628848b66717e687b9c2c95684e646b11e0c3b285a"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2021-12-22.csv.gz::decompressed",
+      "decoded_bytes": 16373,
+      "sha256": "e929a9ce4fbde81983feb0029503af903a3170ee09c7422ff51669ca75de9f6e"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2021-12-22.csv.metadata.json",
+      "decoded_bytes": 714,
+      "sha256": "a951558d544168b2dd11eab576be6a64d5b8738750f9344ab2a14d9086c94cd8"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2022-01-19.csv.gz::decompressed",
+      "decoded_bytes": 15805,
+      "sha256": "41737f15dd52ec81ff903457215a0bcd6ba2870b3ef8dd0ca771b91403efff58"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2022-01-19.csv.metadata.json",
+      "decoded_bytes": 714,
+      "sha256": "6fd19f88f4d74b484c9bb5ba344c416aea471690584c77dc0003834b8c915fe7"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2022-02-16.csv.gz::decompressed",
+      "decoded_bytes": 15814,
+      "sha256": "2f43ba33437708a03914d4140b690321059816328b4f24e631ae6f70a89ebc44"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2022-02-16.csv.metadata.json",
+      "decoded_bytes": 714,
+      "sha256": "3bde9742e092585d8dc62bf11ad692032ef557c530196583ef68c7205e95927d"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2022-03-15.csv.gz::decompressed",
+      "decoded_bytes": 15712,
+      "sha256": "b0df778b923c87d120da4bfd4f85d89a304e2bef0f7d3b40f951183e5a1d80b4"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2022-03-15.csv.metadata.json",
+      "decoded_bytes": 714,
+      "sha256": "757f551c8db948ee6c459cfea67ace243c1f5634e2c83af3ce08b6a95b9a15a4"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2022-04-20.csv.gz::decompressed",
+      "decoded_bytes": 15790,
+      "sha256": "988293cd474dcb1e7b8d01279826ab426aab4186db8802cc9c8f6bea9febf97e"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2022-04-20.csv.metadata.json",
+      "decoded_bytes": 714,
+      "sha256": "09ab9b0717de8ff9beec45e91cf33bdc149ae03997092f78d9de429ae9db9646"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2022-05-18.csv.gz::decompressed",
+      "decoded_bytes": 15871,
+      "sha256": "af283c8213f8e95b60395ca243e3d8fc42b7854a8bb5b504bd8815bf1086379b"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2022-05-18.csv.metadata.json",
+      "decoded_bytes": 714,
+      "sha256": "dd162c0e01875d23b19f922dc40b699779530cbcf015f247791132bb0b829ba7"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2022-06-15.csv.gz::decompressed",
+      "decoded_bytes": 15844,
+      "sha256": "9eadf959920fdb4317fae7f1f8ecca8265ab950d8f450c188d6e750fa6552b87"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2022-06-15.csv.metadata.json",
+      "decoded_bytes": 714,
+      "sha256": "277b8c4ad518ea83a7f56f0874a8cf92480312cf9c5b279e091de387682a4578"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2022-07-20.csv.gz::decompressed",
+      "decoded_bytes": 15654,
+      "sha256": "feedfacfa508083eb0820e83f82c5cb354a2eef1d83ec4e18dcef64b53ffffdf"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2022-07-20.csv.metadata.json",
+      "decoded_bytes": 714,
+      "sha256": "02ef058a4f56ae434da9dac4d1d0ca935912e889d4a8170ff0afac772fc49466"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2022-08-17.csv.gz::decompressed",
+      "decoded_bytes": 15727,
+      "sha256": "5000aa4012119373978c50575ce39441a8f8dcad06ab98c340bb2a71dc01053c"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2022-08-17.csv.metadata.json",
+      "decoded_bytes": 714,
+      "sha256": "8e9fb8cfd3701ac9740b6d046844252acfe7ddf4225b81718dfa9f3a64a5cde4"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2022-09-21.csv.gz::decompressed",
+      "decoded_bytes": 15819,
+      "sha256": "a74598b17c5e92b068ee46ee38aefdfe8423d62153bee7d879ff4eddc2fbb626"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2022-09-21.csv.metadata.json",
+      "decoded_bytes": 714,
+      "sha256": "c3df0baba58136d42b43ea2bcdbc193930333df0e565923f9164f4b3c9256a82"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2022-10-19.csv.gz::decompressed",
+      "decoded_bytes": 15850,
+      "sha256": "270abe0333366e5395d88d6e56da51fa403962f03229d119a8208ece339c778d"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2022-10-19.csv.metadata.json",
+      "decoded_bytes": 714,
+      "sha256": "921b016a518601841cbc1c28c3831e32166deaa9b07fff7e5f337b508cc51ecd"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2022-11-16.csv.gz::decompressed",
+      "decoded_bytes": 15880,
+      "sha256": "bb433441c5a2d77f060a86265337d397e56ddfcfa191d2f3dc5f7b474a298379"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2022-11-16.csv.metadata.json",
+      "decoded_bytes": 714,
+      "sha256": "0fe891b021eaf663deea69a1f8286c67377d7f747dc775a46c9a914e43795238"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2022-12-21.csv.gz::decompressed",
+      "decoded_bytes": 16360,
+      "sha256": "4bd0da312422aaa889cbb73bc6643eef556efb2e2599509540fb064657caaf8b"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2022-12-21.csv.metadata.json",
+      "decoded_bytes": 714,
+      "sha256": "a1f2cfbb49d2d1dc5cb7c28222a63ef7151f37dd831d0c366e19b548d7a5a57e"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2023-01-18.csv.gz::decompressed",
+      "decoded_bytes": 15684,
+      "sha256": "8c279882f4e81636eae5bf9e99573015ca18edb52384b9b3f6819715cf510561"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2023-01-18.csv.metadata.json",
+      "decoded_bytes": 714,
+      "sha256": "2b62dcb72cd2331f41edd1bfa5de75c2bb0349a361b6db997612bb803dc19e26"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2023-02-15.csv.gz::decompressed",
+      "decoded_bytes": 15700,
+      "sha256": "9f804c61ba0a51fad872dae5568792a75a2ab21daf5a5972603465898d071d55"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2023-02-15.csv.metadata.json",
+      "decoded_bytes": 714,
+      "sha256": "262750f3829ce1d1909a47fce77a62f36190e44d88fd3004a6ec6da1735b0337"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2023-03-22.csv.gz::decompressed",
+      "decoded_bytes": 16045,
+      "sha256": "3d35c3f0b0cef53f7808bd7faccf5245869c1972571c58b0727216c646a3571b"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2023-03-22.csv.metadata.json",
+      "decoded_bytes": 714,
+      "sha256": "e53bbec29ea8f6501a75b07230889bd57797f7f880960ef70d53355bd82fb269"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2023-04-19.csv.gz::decompressed",
+      "decoded_bytes": 15776,
+      "sha256": "700fc43046fc215e5ae2828cf5983bd4a545f4c2d74be987669da6f666fc49b9"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2023-04-19.csv.metadata.json",
+      "decoded_bytes": 714,
+      "sha256": "1ccc9591658404923bcf6005526b55caef196c53e1c094208f1529ffd3978b42"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2023-05-17.csv.gz::decompressed",
+      "decoded_bytes": 15773,
+      "sha256": "432cef2e4402d5fc9dc9f0f1540a58099196540987eca39e6ced49eb7fdd10df"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2023-05-17.csv.metadata.json",
+      "decoded_bytes": 714,
+      "sha256": "9d48680eb062cee65c700a873b4b10df0c8682cd74f51592c7cd53e3cb4ad7d9"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2023-06-21.csv.gz::decompressed",
+      "decoded_bytes": 15699,
+      "sha256": "4391c7a0c323e417d2f31685b2a0a0ad6afab79f80689abb128ad54ba8e549ae"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2023-06-21.csv.metadata.json",
+      "decoded_bytes": 714,
+      "sha256": "0e332ccd7f4d360fdf1c0071ec374a160db385de023ec0c7651eea678f560ef1"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2023-07-19.csv.gz::decompressed",
+      "decoded_bytes": 15610,
+      "sha256": "5fbcb598942050a24edba2194a29384b95ee77feb379cfc5e8779463d70785e8"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2023-07-19.csv.metadata.json",
+      "decoded_bytes": 714,
+      "sha256": "cfd23bf0c894dca40bc86a7e1608bba7ae460f0765afcf00a25504de647dad2d"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2023-08-16.csv.gz::decompressed",
+      "decoded_bytes": 15686,
+      "sha256": "96e7efc1d13016754a4bd56f53f371f68598c66459409e2293dfe27b8ab02292"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2023-08-16.csv.metadata.json",
+      "decoded_bytes": 714,
+      "sha256": "49ad7f44319558e68bd36d993011f01fccdee753f18d41f2e52cbe3e63c206aa"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2023-09-20.csv.gz::decompressed",
+      "decoded_bytes": 15697,
+      "sha256": "c6b98a1d7be7f1048fdd7db2286de25c54144dd0e6147503156d96602786f55e"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2023-09-20.csv.metadata.json",
+      "decoded_bytes": 714,
+      "sha256": "c8bb25a211af36cdc4b704f2c185d9ed08f7a6a8b842c34b9e53678bc78bd56e"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2023-10-18.csv.gz::decompressed",
+      "decoded_bytes": 15926,
+      "sha256": "6596d7594ed67016c51191e066c0a8728eda9e8c7ddbdfecf895bb693b859ffa"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2023-10-18.csv.metadata.json",
+      "decoded_bytes": 714,
+      "sha256": "c86a88e1fb599709308e6d43bda86cb97f22bf5350ba5e7c63f27e0601281b59"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2023-11-15.csv.gz::decompressed",
+      "decoded_bytes": 15950,
+      "sha256": "3af9d807e0c29efd2d799d34c7be02d2847b4ffd44d27f92d945bc1f711420b2"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2023-11-15.csv.metadata.json",
+      "decoded_bytes": 714,
+      "sha256": "fd713b9927aac8e77774f5601e6dcf9e1054c93e0df27751a62e281cf3f1f4f5"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2023-12-20.csv.gz::decompressed",
+      "decoded_bytes": 15988,
+      "sha256": "3203a21bb069021befc6365499b06045db1cfb7d7ffbee2897e7b2c923e1c772"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2023-12-20.csv.metadata.json",
+      "decoded_bytes": 714,
+      "sha256": "06328ac22aff79876c83a126a7a1fb8c32236bd3384e5a51d18c5dde1923b35d"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2024-01-17.csv.gz::decompressed",
+      "decoded_bytes": 15792,
+      "sha256": "c33e7eacdcbc80f3a52bd021019e41f9a22d92754a0c2c224f3d2a2f4db4b069"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2024-01-17.csv.metadata.json",
+      "decoded_bytes": 714,
+      "sha256": "8e7fc042d8a24271252f6663bcbe3d939d87956cbbf894a9572c6bf5f0e7350d"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2024-02-14.csv.gz::decompressed",
+      "decoded_bytes": 15705,
+      "sha256": "df87152acdc324ac6f7878833173fb393177b2054fba519c936bbd0c6605c944"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2024-02-14.csv.metadata.json",
+      "decoded_bytes": 714,
+      "sha256": "621b3ada52db353d40b35f948f328f0583531a34aeb4593c39c097f15b5642d4"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2024-03-20.csv.gz::decompressed",
+      "decoded_bytes": 15814,
+      "sha256": "d40ceba875932194c2ae69e7416755bd51d9a5eddc33d0f51cd2bed76ebd8277"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2024-03-20.csv.metadata.json",
+      "decoded_bytes": 714,
+      "sha256": "6a5f7bbedbd2b35d4f9f42b4c98735fb2996217dad36a837e701d7a21afaf678"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2024-04-17.csv.gz::decompressed",
+      "decoded_bytes": 15812,
+      "sha256": "60c15395c50f5451ee2f5df1d6827bb7e4a9025854f78f2581991ebde8b828f3"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2024-04-17.csv.metadata.json",
+      "decoded_bytes": 714,
+      "sha256": "0324caeaccfc6e69582a8c3b698e65293fbee3e76d99db7c6030c3f6d65966b7"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2024-05-22.csv.gz::decompressed",
+      "decoded_bytes": 16289,
+      "sha256": "e8440ac8098644e41d1a1aeba7cc026252a0616fd063766e98c15a1d4ba65e60"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2024-05-22.csv.metadata.json",
+      "decoded_bytes": 714,
+      "sha256": "bbe64b802e719a4639a96ffc071dcdb9b06836be899c368180c461260e5d9b0d"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2024-06-18.csv.gz::decompressed",
+      "decoded_bytes": 15727,
+      "sha256": "b4573e89dc71fed7b7c8edd67dee89eec915c06d45a6c151a081449e07555d52"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2024-06-18.csv.metadata.json",
+      "decoded_bytes": 714,
+      "sha256": "ebb1b3379098b0123b4e12e7725e9027da81763dcbe305994906a006557a30bb"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2024-07-17.csv.gz::decompressed",
+      "decoded_bytes": 15660,
+      "sha256": "0c17e6acd5dbdf555d9739f81858ba3bb71082553e5c4b52d2de5b8f106f4164"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2024-07-17.csv.metadata.json",
+      "decoded_bytes": 714,
+      "sha256": "8395e54f40501277d345dfa2ca208cd148c1058ca11873eca75ab61b57b0f038"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2024-08-21.csv.gz::decompressed",
+      "decoded_bytes": 16063,
+      "sha256": "7dda0ad59d4c66f9bfe50b473349e710447188c80347dc103483c9511f5a8900"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2024-08-21.csv.metadata.json",
+      "decoded_bytes": 714,
+      "sha256": "e8587ca0bb7524cf3071532728f7df33c34b065c25745e5e7a745847296c92f5"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2024-09-18.csv.gz::decompressed",
+      "decoded_bytes": 15691,
+      "sha256": "d607740411fdf401a1a6eda8a6fceb9f130f285bb04efb85fb275794bcc2afe6"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2024-09-18.csv.metadata.json",
+      "decoded_bytes": 714,
+      "sha256": "6fa6bcee50fed6c9c1fb18f756332524f3a8a6398c0a6341efa60b9bcf50a659"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2024-10-16.csv.gz::decompressed",
+      "decoded_bytes": 15935,
+      "sha256": "9a30d119303106c1a971aee8e3a718a8a65b98aa9a444b6f3665988fe3d8c667"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2024-10-16.csv.metadata.json",
+      "decoded_bytes": 714,
+      "sha256": "6827e0a5f62ae5f8a2d4998a92f8aeedeb38ddbda7a6ef1e249899cb643e5864"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2024-11-20.csv.gz::decompressed",
+      "decoded_bytes": 16348,
+      "sha256": "18068d634bfce677ce8904d013b5c52e2f8c949c88b77768a4c49bca6ad9c3b7"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2024-11-20.csv.metadata.json",
+      "decoded_bytes": 714,
+      "sha256": "cbde05a8fc566f57e78e528b5e39f2b7c45d98eec98bcca336f9340536e442f3"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2024-12-18.csv.gz::decompressed",
+      "decoded_bytes": 15868,
+      "sha256": "d67e4ced59a4e85e30c381d4a1578e16fce47c28ee8b16e1df885beddd4c907a"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2024-12-18.csv.metadata.json",
+      "decoded_bytes": 714,
+      "sha256": "0170a3400225be36aac69c4da667118b1e535cf3485c861187a7eee413cb58ac"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2025-01-22.csv.gz::decompressed",
+      "decoded_bytes": 16056,
+      "sha256": "d2c75bbfaef1bebf310fa08b2b1bc014853856d5abb7c653fa854624174a7494"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2025-01-22.csv.metadata.json",
+      "decoded_bytes": 714,
+      "sha256": "3cc8c52461a928dca71fed16e7077138499187e24a2b83ae8a1a0230dd8ef517"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2025-02-19.csv.gz::decompressed",
+      "decoded_bytes": 15583,
+      "sha256": "ad6b0d7108076e6e8f7b93f183fe246f8f7ef6a559e76d71f67b8f56d53bc654"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2025-02-19.csv.metadata.json",
+      "decoded_bytes": 714,
+      "sha256": "43d8d84839a597fe02618a85d4522b43b90a1371d72c6244eebe857296c8d33e"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2025-03-18.csv.gz::decompressed",
+      "decoded_bytes": 15658,
+      "sha256": "faf37215efaccc8e64a66b7e3691fe8cf1075ac5708d76cb8e1dadb33c2b2ec6"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2025-03-18.csv.metadata.json",
+      "decoded_bytes": 714,
+      "sha256": "b143af40672db6d27e76f8ba54a39b21366a8c470d307159cb52bf7e3c5fe915"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2025-04-16.csv.gz::decompressed",
+      "decoded_bytes": 15872,
+      "sha256": "b0e29d9f0714be57568f7774947f46f06f5dc14c3ff963be08aeec29ccb08322"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2025-04-16.csv.metadata.json",
+      "decoded_bytes": 714,
+      "sha256": "677d3e9a56ec48c0e5cdbb3451a8680c2fd856376668f5569f481c68aff5f4f5"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2025-05-21.csv.gz::decompressed",
+      "decoded_bytes": 15869,
+      "sha256": "5fdb6b068b3d263d60cf42003582d6fc19e667964037bec10bad3cf2cc0821d9"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2025-05-21.csv.metadata.json",
+      "decoded_bytes": 714,
+      "sha256": "0d1d9c091668bd5a175b6f13fdbdb7d1e436f6caa9452f2a8d2db9e26bf1e60f"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2025-06-18.csv.gz::decompressed",
+      "decoded_bytes": 15810,
+      "sha256": "a43f1037452b6ec8273601cbe5dc43d5821b2c49be79d9f0ce9458cd06fe317e"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2025-06-18.csv.metadata.json",
+      "decoded_bytes": 714,
+      "sha256": "f9fb952b6614747111880dc3da9ec01bfbaa1c961fde2c9d99565d70249cf37a"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2025-07-16.csv.gz::decompressed",
+      "decoded_bytes": 15631,
+      "sha256": "ae0cc06f810f8d84cfe7de674439062ca1264e42dcecdf8c1b94c3da7ef90c47"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2025-07-16.csv.metadata.json",
+      "decoded_bytes": 714,
+      "sha256": "030936839061fedd8eec2493436fb39f86dfe837ab105bd9a215fce240cbf13f"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2025-08-20.csv.gz::decompressed",
+      "decoded_bytes": 15727,
+      "sha256": "5ff06fc719856ac1b43560515a8e8154cbf90915a69033b315464b5f3f6a98e8"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2025-08-20.csv.metadata.json",
+      "decoded_bytes": 714,
+      "sha256": "09144b70a88ed44ca4fa9043bd2a44818ad48b07efd4b728b4f0df045fa9a392"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2025-09-17.csv.gz::decompressed",
+      "decoded_bytes": 15689,
+      "sha256": "d4efe5445722462c1949c673e5d575b797be2d259148b61b30fb1baec29516cd"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2025-09-17.csv.metadata.json",
+      "decoded_bytes": 714,
+      "sha256": "81920cd6099d924d93b693b6f5e8d0c8749246555c672d3897037a703f284398"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2025-10-22.csv.gz::decompressed",
+      "decoded_bytes": 15919,
+      "sha256": "12089242dbacf614f0e4ebebe42d5b4b967afb252c0553216a1175599bd6dc36"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2025-10-22.csv.metadata.json",
+      "decoded_bytes": 714,
+      "sha256": "20542044a78f96f44dc510c1008149a01643b236f7f27b532b7feabd1f475c25"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2025-11-19.csv.gz::decompressed",
+      "decoded_bytes": 16019,
+      "sha256": "ddc4b95e078d0f7df0bcb63d559f64dc8e5f0653a8193372b4b1da164b4d9464"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2025-11-19.csv.metadata.json",
+      "decoded_bytes": 714,
+      "sha256": "29bb5c29d9ba0f55781f6756e1f0ea6d0a834b13a42ac01d4989adb491ddbff7"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2025-12-17.csv.gz::decompressed",
+      "decoded_bytes": 15944,
+      "sha256": "0567a34df3a617ea4a540c82def1e80108efbd8c74d87e49b5fab90e1c617b08"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2025-12-17.csv.metadata.json",
+      "decoded_bytes": 714,
+      "sha256": "47d12f487ace735e39dd312139b50840a3a1df398b49c327d4f4cc6a3ef24146"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2026-01-21.csv.gz::decompressed",
+      "decoded_bytes": 16101,
+      "sha256": "0b1403f9c4a541b7526ceef9718ec86ca7805b54ea72a075653d560970c9b266"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2026-01-21.csv.metadata.json",
+      "decoded_bytes": 714,
+      "sha256": "0eb03e64eb2f0b478bd4ada6f621411dde99f9f81850ec2242fb0697847ff08f"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2026-02-18.csv.gz::decompressed",
+      "decoded_bytes": 15606,
+      "sha256": "212b9932dfd0296984c2c6ed4534eb88bbc9068f0aa49f0f16fd513dc578c4e8"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2026-02-18.csv.metadata.json",
+      "decoded_bytes": 714,
+      "sha256": "51faa85602e1d86bfd62b8a17fd379390446f23ec89514ccb986aa588a964798"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2026-03-18.csv.gz::decompressed",
+      "decoded_bytes": 15780,
+      "sha256": "2be0f20e3164571c36ab6d13766c24545f1436ce35c1a329a52f2f05250fbbb4"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2026-03-18.csv.metadata.json",
+      "decoded_bytes": 714,
+      "sha256": "5e018b0c1300a30999ac33700536c2860dae9c621d530acf074d2d00739b2df4"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2026-04-15.csv.gz::decompressed",
+      "decoded_bytes": 15795,
+      "sha256": "a22c1d90792a90d697a164ad8dcf988ff6655424a8e5d9f25a6400d441b86509"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2026-04-15.csv.metadata.json",
+      "decoded_bytes": 714,
+      "sha256": "7bc9444b8433701f3ece384067d5bab8aacf14f0725440e3b6a6c644413863c7"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2026-05-19.csv.gz::decompressed",
+      "decoded_bytes": 15784,
+      "sha256": "17d7de93dcaf63db1ae4e30032d98f50dc0c56f5dca6f1f64a750e8364e0d0c1"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2026-05-19.csv.metadata.json",
+      "decoded_bytes": 714,
+      "sha256": "33cc3a782b456ce1e5001f00f01755331b7b64560a91c26d089bb4cf52cbcc50"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2026-06-17.csv.gz::decompressed",
+      "decoded_bytes": 15819,
+      "sha256": "c661d08dbed936be0df4cf4c23d7a66d4c1d0d9277547f78fdd5ee4febacaaf0"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2026-06-17.csv.metadata.json",
+      "decoded_bytes": 714,
+      "sha256": "24f66d9e2efbddf0b98a047d120ccb4978e6ea852dc47e072c0c60797dc40c01"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2026-07-22.csv.gz::decompressed",
+      "decoded_bytes": 15674,
+      "sha256": "7231559f0504e73b081f085c4d348b2aab30129aaee6ec1e9f11bad5a962af4e"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2026-07-22.csv.metadata.json",
+      "decoded_bytes": 714,
+      "sha256": "74ef5b940bfacdacdcbb080a993c5591968faca15106db7a27031724af13046c"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2026-08-19.csv.gz::decompressed",
+      "decoded_bytes": 15680,
+      "sha256": "714558fad23a2f0482efa3f949dfcfb4b2d74af019a0cf27c92b787ad6166948"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2026-08-19.csv.metadata.json",
+      "decoded_bytes": 714,
+      "sha256": "a748fbcba07b2e50dfeb01694fd848093d7ee620f778328a2aa07d39138a3dd2"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2026-09-16.csv.gz::decompressed",
+      "decoded_bytes": 15076,
+      "sha256": "31f7fccf29dd86b97347810f085975d3b1646fb14f07a9ee31e76d50f9c137f7"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2026-09-16.csv.metadata.json",
+      "decoded_bytes": 714,
+      "sha256": "cdcb1f07d8846795074fd8c13b077c34605bae13213a434653d248a99f524e37"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2026-10-21.csv.gz::decompressed",
+      "decoded_bytes": 13144,
+      "sha256": "91b9fe683c2fdbf7062a9e23c46379ed5349bfa48b0cd660c8287e8bcd04f31e"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2026-10-21.csv.metadata.json",
+      "decoded_bytes": 714,
+      "sha256": "9556ce60efa4128021366ad6298d4d03dc25e28144c88e21cf0328a2707ad0bd"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2026-11-18.csv.gz::decompressed",
+      "decoded_bytes": 11444,
+      "sha256": "add224d77518b91d69ab00366848d7dbbf33ca8c5759db567b729283ccc26fb8"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2026-11-18.csv.metadata.json",
+      "decoded_bytes": 714,
+      "sha256": "78a4c854c04c172867a7a6c7cb6ae4e78a93d1f558e7e7bad009e3fdca53d925"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2026-12-16.csv.gz::decompressed",
+      "decoded_bytes": 9744,
+      "sha256": "8996d61ffd28b45d8865dc45e429d63ebcc680ed37ecb61d0d90bf6c8907ab08"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2026-12-16.csv.metadata.json",
+      "decoded_bytes": 713,
+      "sha256": "a432a00247c60c504211c19228d3caa1835d22f07749d9d25935cfb0d68a65fd"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/yahoo-IWM.json.gz::decompressed",
+      "decoded_bytes": 244627,
+      "sha256": "72cb2d042be51ec64e7d0b0b47fea486537faca1af8661812df7cf6d606ae5d2"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/yahoo-IWM.json.metadata.json",
+      "decoded_bytes": 743,
+      "sha256": "2ffe9568e113a529cc2e5262c20adc1360f1aa732d0a3e5185f2a973cf82115f"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/yahoo-RSP.json.gz::decompressed",
+      "decoded_bytes": 241754,
+      "sha256": "38fd97ee6e4c0510f805cb534e8e1f1a635284922a4f14970c5e8ffb94139b07"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/yahoo-RSP.json.metadata.json",
+      "decoded_bytes": 743,
+      "sha256": "d069fd84b8e3af11e40f5deb0a24e08c570b3fe8728edde77d7bab8256e9a2b0"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/yahoo-SPY.json.gz::decompressed",
+      "decoded_bytes": 238831,
+      "sha256": "9e5422b97898c0479d4d2c87d489f59b33bf48f8157fabfb982ab2b8679f5310"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/yahoo-SPY.json.metadata.json",
+      "decoded_bytes": 743,
+      "sha256": "ca0ee7bb51400f44b3dff58a6b8d72bd36611b0b5cc099d40f06cddbedaecef9"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/yahoo-XLB.json.gz::decompressed",
+      "decoded_bytes": 241922,
+      "sha256": "f21f49170520d896b2204db6aba5c604148a4b04c3584183706c353f8f78d280"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/yahoo-XLB.json.metadata.json",
+      "decoded_bytes": 743,
+      "sha256": "c660887b03cdc249e4af538e9ab6103242bb5fd1ad5c8e906b7fee95597cdf17"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/yahoo-XLC.json.gz::decompressed",
+      "decoded_bytes": 226197,
+      "sha256": "d407c24e740b4d20fe19824a76320e2bd6081f86395c3c75c64b9e26ca4fa84a"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/yahoo-XLC.json.metadata.json",
+      "decoded_bytes": 743,
+      "sha256": "87145fb833db0f9973d8db14a39c80e69e0732a7f642789f3826c516faf1fafb"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/yahoo-XLE.json.gz::decompressed",
+      "decoded_bytes": 242615,
+      "sha256": "f7d14c7ae8020ee755e9856b41111061d660cdbb7c479777cedaace6dfee97e3"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/yahoo-XLE.json.metadata.json",
+      "decoded_bytes": 743,
+      "sha256": "7fd438bc6ce61c6fac5ec790816ed2376fbac954a5d0024b9f8440c1a905f78d"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/yahoo-XLF.json.gz::decompressed",
+      "decoded_bytes": 242896,
+      "sha256": "beebebe4f4c9eb599408a979a4b828f7032e8674aaed9b956b99c48f0920a337"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/yahoo-XLF.json.metadata.json",
+      "decoded_bytes": 743,
+      "sha256": "c1722c5f0ceff4913f4d8f5062e4bdd229056f73910bda8c81a84e10646fc27a"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/yahoo-XLI.json.gz::decompressed",
+      "decoded_bytes": 240029,
+      "sha256": "841af851ad2c59302fea1fc99b41d67ff124418633c92b20ffad5777e7e89fbb"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/yahoo-XLI.json.metadata.json",
+      "decoded_bytes": 743,
+      "sha256": "6d2d0f450fc7616dc107092c21775b361ad6760c07165236e0345204af96dcd8"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/yahoo-XLK.json.gz::decompressed",
+      "decoded_bytes": 240838,
+      "sha256": "08a10599fa315fd64a4a36923f1fbe2e0349a9fb82cffa91c89ac077e0e1c2a6"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/yahoo-XLK.json.metadata.json",
+      "decoded_bytes": 743,
+      "sha256": "e9bf306e0565edb1b8cb0f942156de607657aad550a518024d735fffc071dcde"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/yahoo-XLP.json.gz::decompressed",
+      "decoded_bytes": 237037,
+      "sha256": "e69b1cdfe161cbdeb9d5e321823dc7ef1bdb173ea66c02467e3bc90938de8ed9"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/yahoo-XLP.json.metadata.json",
+      "decoded_bytes": 743,
+      "sha256": "636749c7464a646f945fbb4b6178875d606edb09bba1d194647733d7b07eb57d"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/yahoo-XLRE.json.gz::decompressed",
+      "decoded_bytes": 240250,
+      "sha256": "fd7564d4858015f9120d77927943a568e1c27b03ad379329b60f8d26e011bf91"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/yahoo-XLRE.json.metadata.json",
+      "decoded_bytes": 745,
+      "sha256": "5cb5cdb372a253f0b4fbdab7dd3e47e4e5c462bf4ce1958ac4a7188138d5d0fe"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/yahoo-XLU.json.gz::decompressed",
+      "decoded_bytes": 242782,
+      "sha256": "882db2c4e157bb17a7a398543e4791afcc32b5fe08a01de613eed9ff341e301e"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/yahoo-XLU.json.metadata.json",
+      "decoded_bytes": 743,
+      "sha256": "b7451df7ccaa5cf28dff9c8080f6c19d364ee968abce13f4f991b803d628dfc5"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/yahoo-XLV.json.gz::decompressed",
+      "decoded_bytes": 241911,
+      "sha256": "07110d28b37afd7f2930ff7d2c2de9337ed65b9917f69f57c85ba56379250499"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/yahoo-XLV.json.metadata.json",
+      "decoded_bytes": 743,
+      "sha256": "6ff007ec547348c2a2cabb287496a37f7dba01a79cd2d75a129769fcafdfb1a0"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/yahoo-XLY.json.gz::decompressed",
+      "decoded_bytes": 239042,
+      "sha256": "31a842266f5be063e5bcbb9487f67acbe957b88e74852473eb879cc63e2e543e"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/yahoo-XLY.json.metadata.json",
+      "decoded_bytes": 743,
+      "sha256": "8f0c1542e1b9bc583de1c0cdbf41853bde8ce016479bb762167be5fad1819344"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/feature-minimization.json",
+      "decoded_bytes": 23726,
+      "sha256": "9bd87022c74960c2cea3ad7c59f51533fd61ecce73c8a69a545027a71de18bad"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/feature-registry-qualified.json",
+      "decoded_bytes": 343711,
+      "sha256": "8ac0a0de2ffcab341920073181c1fa05da066696db6185ccdbca7ef4006ae47b"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/freshness-policy.json",
+      "decoded_bytes": 2680,
+      "sha256": "870d75029e89f4b8b9baad212186fc3b759636088f0cd9a101511763e0158740"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/gate-result.json",
+      "decoded_bytes": 1712,
+      "sha256": "c0a5305446eede0ddf2a9ef5a1abb0c6b570a627e0fa04239c72725ff6a11123"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/historical-audit.json",
+      "decoded_bytes": 8663,
+      "sha256": "f362079c5664c6f396f83772058afdc02f9d190dace9e5e82ebd6746388194d6"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/historical-features-r2.json",
+      "decoded_bytes": 2975802,
+      "sha256": "e1dee0e0549c1e07cbadda9c19a18ca2df5f284868cf80c5340c095580cf2276"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/historical-witnesses.json",
+      "decoded_bytes": 1964801,
+      "sha256": "298e93f3341fd93f41484fea9576f34279ecd2e791404881f40ab3e35a1a7f6a"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/historical_audit.py",
+      "decoded_bytes": 5510,
+      "sha256": "b4df20551912ea59ce4efc2166ed8dd02bbe04bf9fe81a7414e948eb85b70ff6"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/historical_data.py",
+      "decoded_bytes": 7907,
+      "sha256": "74bc232e15a115408351d321ee9bbe036829bd2849bbadd3d39cff522e101577"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/p7-readme-at-entry.md",
+      "decoded_bytes": 4971,
+      "sha256": "4764302dc27984a46106afb04927e8c6aca72c10104e3f3f91d2b68136055887"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/package-check-results.json",
+      "decoded_bytes": 4444,
+      "sha256": "12834dc975ec91e42d8f9942669a3c821f027da662264176abbd30e8d8b37aac"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/parameter-manifest.json",
+      "decoded_bytes": 11018,
+      "sha256": "5d6398426fcbfa1650695bbf3d971127e9076403c2832876b7f188e360836732"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/preservation.json",
+      "decoded_bytes": 123314,
+      "sha256": "70f4d69ee9b4bfb720c43e45172aad54179ae481be9a10d5dd45a79310a83c5b"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/price-series-contract.json",
+      "decoded_bytes": 124812,
+      "sha256": "cbccf03ae9e261eb6a240804ec57bc1e4ecd7f01a1a7dbd59c1e7b5a84fade59"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/protocol-freeze.json",
+      "decoded_bytes": 299,
+      "sha256": "872e2f23c0af562b0c742f57b5f96979fc9fe2bcaad5a04b321d0292ac999081"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/qualification-results.json",
+      "decoded_bytes": 2582,
+      "sha256": "0a2bb097af1eca3476fb4a03eb261d3ac4a953f7b49a36fcaf1143578a420fd3"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/qualify.py",
+      "decoded_bytes": 11048,
+      "sha256": "45e04a01f9a2f0c2f2a3d6db432c98918d05e0bc5c262ff79406155def078d0e"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/raw-check-results.json",
+      "decoded_bytes": 1025024,
+      "sha256": "d6a8119cf7bb774c9b673155a20c1b8a0f483a787f725e0abf2f3c08a9a1b688"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/raw-fixtures.json.gz::decompressed",
+      "decoded_bytes": 21495083,
+      "sha256": "08fd66ad30bbbcd66a25b0952c539cd255c0a86abc1bea51d27e2bcade253b7d"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/raw_checks.py",
+      "decoded_bytes": 14899,
+      "sha256": "3609feb15fd4a1bad8b02a8331f22c134e7c5c58ae8a13bc0e21bd5a2665bb93"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/reference_model.py",
+      "decoded_bytes": 12181,
+      "sha256": "e1cac5d6d7dd5812273c43e1d853dd71daf812d7e2589ed329daddf66430ed58"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/selection-protocol.json",
+      "decoded_bytes": 7722,
+      "sha256": "1baf279a4399277fd55342adbc920f3f14bec11d190e06c62650f9745f9c3a2c"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/source-data-audit.json",
+      "decoded_bytes": 15845,
+      "sha256": "1209aff38360e826170b2622053603fae6c6335c325fa1cc21360d72fcb8e95c"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/temporal-availability-contract.json",
+      "decoded_bytes": 210041,
+      "sha256": "0ba4661ac39c4f2be50a8a17104c0c504db0d4159cf850b60d865d8a98e492d9"
+    },
+    {
+      "path": "docs/regime-engine-v2/parameters.json",
+      "decoded_bytes": 5467,
+      "sha256": "53bbfcd4396fd91c958a1cd5d38d75b82fdb63b21f5d26f17ad0460bde2b5bce"
+    },
+    {
+      "path": "docs/regime-engine-v2/preservation.json",
+      "decoded_bytes": 61548,
+      "sha256": "4dbd8f436ccafae5c8b192f38d6f7cb53ce67b9410d74a8e6ed8d43a044e98cc"
+    },
+    {
+      "path": "docs/regime-engine-v2/prototype-check.mjs",
+      "decoded_bytes": 15709,
+      "sha256": "9db99c9cbd3b6bd29032502dbab390fdc0d8784c0591d0fe531f78e9bedaaf0e"
+    },
+    {
+      "path": "docs/regime-engine-v2/run-context.json",
+      "decoded_bytes": 3434,
+      "sha256": "d0cabaa55237f540a545009839aacdc9401136a78fcaf5f5ac594c24616bc357"
+    },
+    {
+      "path": "docs/regime-engine-v2/source-audit.md",
+      "decoded_bytes": 9923,
+      "sha256": "ac3bbe0a37ee01ea601c4a4a4ebc9545a30e2e72f24d38c90f4f5a1c38d6a796"
+    },
+    {
+      "path": "docs/regime-engine-v2/source-ledger.json",
+      "decoded_bytes": 5197,
+      "sha256": "7f8b97faf17b4a56893298ca2263a2fa9f53b5442dcd569250f4801a6565ef9a"
+    },
+    {
+      "path": "docs/regime-engine-v2/specification.md",
+      "decoded_bytes": 25760,
+      "sha256": "41603bc93934fb12c397759bf509dcc1b4a1f477f22168680169bc7c8a5dbf70"
+    },
+    {
+      "path": "docs/regime-engine-v2/sweeper/README.md",
+      "decoded_bytes": 8309,
+      "sha256": "1d9ea6dd7aed3c985fd36d2cbf6df112f2fd9894ea0e721c23b6942e6a4f7236"
+    },
+    {
+      "path": "docs/regime-engine-v2/sweeper/adversarial-results.json",
+      "decoded_bytes": 227871,
+      "sha256": "d06279fb91976b57792d9e0343de47003353e59773c22801d4368edae388fbbd"
+    },
+    {
+      "path": "docs/regime-engine-v2/sweeper/adversarial.log",
+      "decoded_bytes": 90,
+      "sha256": "d3c1a19321c4efaafe49ba41263b371c242e3ab59898fbe9a9e778c96712e3cf"
+    },
+    {
+      "path": "docs/regime-engine-v2/sweeper/adversarial.mjs",
+      "decoded_bytes": 18393,
+      "sha256": "b4fd7fbb18a930031dd2fb84582ce1f29c113afcb93e121b0354a0f450046a38"
+    },
+    {
+      "path": "docs/regime-engine-v2/sweeper/build-side-effect.json",
+      "decoded_bytes": 282,
+      "sha256": "5590ca1ec5543aedd0c48164fd0f815fc63a5ebad058d587af02ed7b387106c1"
+    },
+    {
+      "path": "docs/regime-engine-v2/sweeper/build-typing-attempt.log",
+      "decoded_bytes": 1082,
+      "sha256": "5e6f4e8eb327e5a36b4dbf824af019d0fc6ba4f055bc5bae230eb52b247434d3"
+    },
+    {
+      "path": "docs/regime-engine-v2/sweeper/build.log",
+      "decoded_bytes": 21686,
+      "sha256": "66bea03271f668601ffdc95007672a1ac78a9cf88eae606a9c4fa7ebb811f26d"
+    },
+    {
+      "path": "docs/regime-engine-v2/sweeper/builder-input.tar.gz::docs/regime-engine-v2/builder/README.md",
+      "decoded_bytes": 11581,
+      "sha256": "83341d491fd360620997cb20cc76336da24c0ed7d0e904b17ed52d107b90f2b7"
+    },
+    {
+      "path": "docs/regime-engine-v2/sweeper/builder-input.tar.gz::docs/regime-engine-v2/builder/baseline.json",
+      "decoded_bytes": 103353,
+      "sha256": "9114b7e57a93f7ade10ca021337fef4a4487e9ef7f63ccbefb747ec55724117b"
+    },
+    {
+      "path": "docs/regime-engine-v2/sweeper/builder-input.tar.gz::docs/regime-engine-v2/builder/conformance.json",
+      "decoded_bytes": 1232,
+      "sha256": "0ae86699a5a32f7d58bf3e604400cf875fd04900d6e5cf404b7a4be2a379cf06"
+    },
+    {
+      "path": "docs/regime-engine-v2/sweeper/builder-input.tar.gz::docs/regime-engine-v2/builder/delivery.json",
+      "decoded_bytes": 3941,
+      "sha256": "57b47d93b7cb3965ab7371999a6080f406c0b6bafd3ba0cdf6a85658085f6662"
+    },
+    {
+      "path": "docs/regime-engine-v2/sweeper/builder-input.tar.gz::docs/regime-engine-v2/builder/files-changed.json",
+      "decoded_bytes": 9217,
+      "sha256": "04dbac9e2842943170e811dde07551ebaf13dbd58b9314f441dd88d3af231ba1"
+    },
+    {
+      "path": "docs/regime-engine-v2/sweeper/builder-input.tar.gz::docs/regime-engine-v2/builder/full-test-command.json",
+      "decoded_bytes": 1288,
+      "sha256": "65081130367e92b1c8823c62ae98857348093fd0f9b4364327aa93750b4a35ea"
+    },
+    {
+      "path": "docs/regime-engine-v2/sweeper/builder-input.tar.gz::docs/regime-engine-v2/builder/historical-r2-output.json",
+      "decoded_bytes": 772491,
+      "sha256": "baeaa34545fd43109b9f94f6cfe4771858c00a3333a4e2d600213f5792f6cf3a"
+    },
+    {
+      "path": "docs/regime-engine-v2/sweeper/builder-input.tar.gz::docs/regime-engine-v2/builder/preservation.json",
+      "decoded_bytes": 785,
+      "sha256": "a2fef06f441f4514fb2f735cb3f8d23ab044221c94b407a8397f2c719145fca7"
+    },
+    {
+      "path": "docs/regime-engine-v2/sweeper/builder-input.tar.gz::docs/regime-engine-v2/builder/shadow-example.json",
+      "decoded_bytes": 48794,
+      "sha256": "2e8b356831ff88246370e00b6caf88100551cbf7afca242511196ef498750432"
+    },
+    {
+      "path": "docs/regime-engine-v2/sweeper/builder-input.tar.gz::docs/regime-engine-v2/builder/shadow-input-r2.json",
+      "decoded_bytes": 221112,
+      "sha256": "b45459953f4cae0ad0ff24e376ad749aaac71132301e790050b5fafdd02c71c9"
+    },
+    {
+      "path": "docs/regime-engine-v2/sweeper/builder-input.tar.gz::docs/regime-engine-v2/builder/verification.json",
+      "decoded_bytes": 8687,
+      "sha256": "793d6cdaa7f373d282e4e4b623afd0c26ce011f4cdfd7fbcc3497dc7b734c214"
+    },
+    {
+      "path": "docs/regime-engine-v2/sweeper/builder-input.tar.gz::lib/regime-engine-v2/capture.ts",
+      "decoded_bytes": 3231,
+      "sha256": "e0a2c38710f988843cc5a804cdbb9adbc65f97e7074fcdd0afe412637e6bb813"
+    },
+    {
+      "path": "docs/regime-engine-v2/sweeper/builder-input.tar.gz::lib/regime-engine-v2/contract.ts",
+      "decoded_bytes": 14758,
+      "sha256": "a51570431b79ec7703e3270a88a9288bb43b581e5f5d762b391038814f405e29"
+    },
+    {
+      "path": "docs/regime-engine-v2/sweeper/builder-input.tar.gz::lib/regime-engine-v2/core.ts",
+      "decoded_bytes": 8634,
+      "sha256": "664720faa860f27d3648e495b32bc0e14faf25a45ea2c0b2c53d4dc248f36a81"
+    },
+    {
+      "path": "docs/regime-engine-v2/sweeper/builder-input.tar.gz::lib/regime-engine-v2/engine.test.ts",
+      "decoded_bytes": 20126,
+      "sha256": "d1d1a5632179d0f7f3f807805ce4b4151fd7b69f0f2c6ababa99fda266df22eb"
+    },
+    {
+      "path": "docs/regime-engine-v2/sweeper/builder-input.tar.gz::lib/regime-engine-v2/engine.ts",
+      "decoded_bytes": 7998,
+      "sha256": "81fbd9cb6be197fd22212fc0129de07fa3bbd872ec1a9deefdc4904b4bc6aa94"
+    },
+    {
+      "path": "docs/regime-engine-v2/sweeper/builder-input.tar.gz::lib/regime-engine-v2/features.ts",
+      "decoded_bytes": 9222,
+      "sha256": "009b38ed0635f906e35e8f2fb77c01656bed3c2489b19c00f162f349e7213488"
+    },
+    {
+      "path": "docs/regime-engine-v2/sweeper/builder-input.tar.gz::lib/regime-engine-v2/math.ts",
+      "decoded_bytes": 2369,
+      "sha256": "82af814a436b6cd5877f34b93fef7535827f355f7bf9225d70e8349c15fa9138"
+    },
+    {
+      "path": "docs/regime-engine-v2/sweeper/builder-input.tar.gz::lib/regime-engine-v2/normalize.ts",
+      "decoded_bytes": 10032,
+      "sha256": "a9ff8c6dc985aefc3a04b2c5d62a87e54664819bdbd95d84afc9fb91333b623e"
+    },
+    {
+      "path": "docs/regime-engine-v2/sweeper/builder-input.tar.gz::lib/regime-engine-v2/shadow.ts",
+      "decoded_bytes": 2574,
+      "sha256": "769ad64283b247ed841483dff07dbd6da81c1106875f015494fd245bff9d42b2"
+    },
+    {
+      "path": "docs/regime-engine-v2/sweeper/builder-input.tar.gz::lib/regime-engine-v2/temporal.ts",
+      "decoded_bytes": 5098,
+      "sha256": "2805c3beaecd9ff031991384e92fda4f9a87004b65da55721b6ccbc40aa70a75"
+    },
+    {
+      "path": "docs/regime-engine-v2/sweeper/builder-input.tar.gz::lib/regime-engine-v2/types.ts",
+      "decoded_bytes": 3314,
+      "sha256": "434840358739974a277817fbcea60dcdcf8ff01c08815f026b301a51cf849622"
+    },
+    {
+      "path": "docs/regime-engine-v2/sweeper/builder-input.tar.gz::scripts/regime-v2-conformance.mts",
+      "decoded_bytes": 10661,
+      "sha256": "355358d9132d9f0d441c33cd368f0556375a6bdb7b1c2e7cb8d0ed911816ac82"
+    },
+    {
+      "path": "docs/regime-engine-v2/sweeper/builder-input.tar.gz::scripts/regime-v2-shadow.mts",
+      "decoded_bytes": 1815,
+      "sha256": "0c13eed54ddd624d6e7568bf125a34ebd54bf74c9ac13f605341190a04d0ad0e"
+    },
+    {
+      "path": "docs/regime-engine-v2/sweeper/conformance.json",
+      "decoded_bytes": 1232,
+      "sha256": "0ae86699a5a32f7d58bf3e604400cf875fd04900d6e5cf404b7a4be2a379cf06"
+    },
+    {
+      "path": "docs/regime-engine-v2/sweeper/conformance.log",
+      "decoded_bytes": 1232,
+      "sha256": "0ae86699a5a32f7d58bf3e604400cf875fd04900d6e5cf404b7a4be2a379cf06"
+    },
+    {
+      "path": "docs/regime-engine-v2/sweeper/contract-audit.json",
+      "decoded_bytes": 1750,
+      "sha256": "6679b0282159713bdd436ca1228ddad14a5494da29941056016bd8e305479b32"
+    },
+    {
+      "path": "docs/regime-engine-v2/sweeper/contract-audit.log",
+      "decoded_bytes": 1750,
+      "sha256": "6679b0282159713bdd436ca1228ddad14a5494da29941056016bd8e305479b32"
+    },
+    {
+      "path": "docs/regime-engine-v2/sweeper/delivery.json",
+      "decoded_bytes": 1823,
+      "sha256": "b74276e6e48f19939478da6aeea0559468df5accd58f4d8c45c0b065ed44293d"
+    },
+    {
+      "path": "docs/regime-engine-v2/sweeper/editorial.log",
+      "decoded_bytes": 280,
+      "sha256": "7d4f85ccc8a0544b81b0d60fac223b80184e1bd1faaa7822e4bb1b5a2963524f"
+    },
+    {
+      "path": "docs/regime-engine-v2/sweeper/files-changed.json",
+      "decoded_bytes": 23836,
+      "sha256": "fe43d2ef58299aefe5d772bb26fb1035d90e1297c4f220876b4f52ab169559d8"
+    },
+    {
+      "path": "docs/regime-engine-v2/sweeper/findings.json",
+      "decoded_bytes": 11001,
+      "sha256": "c2300af9103e4fbeac019000a4e4e4493e345523f1248b990e0e8bca62752445"
+    },
+    {
+      "path": "docs/regime-engine-v2/sweeper/findings.md",
+      "decoded_bytes": 5084,
+      "sha256": "f7614c8d35e607808384cc378494e78b27a5e586a7ed532882b336b0ae8b93a8"
+    },
+    {
+      "path": "docs/regime-engine-v2/sweeper/frozen-builder-replay.json",
+      "decoded_bytes": 283695,
+      "sha256": "a35d8b353f9d14d74f3b165bdb79e4260917e672ebd4fc7b308c176335d72cd3"
+    },
+    {
+      "path": "docs/regime-engine-v2/sweeper/frozen-builder-replay.log",
+      "decoded_bytes": 12108,
+      "sha256": "c00e73de2bbf43e809f6a21ce9ade1e5fbfb298124689473dbdcb6379567547b"
+    },
+    {
+      "path": "docs/regime-engine-v2/sweeper/full-tests-command.json",
+      "decoded_bytes": 1270,
+      "sha256": "6b4071d36262b46b52e2942e0e656bfcc8a020a1ad45ae1e18f589149bfaa947"
+    },
+    {
+      "path": "docs/regime-engine-v2/sweeper/full-tests.log",
+      "decoded_bytes": 25573,
+      "sha256": "6838144afc148f88d43f75a6ca7200f007860dce381804c45729fdf5f4ce6a8e"
+    },
+    {
+      "path": "docs/regime-engine-v2/sweeper/historical-r2-output.json",
+      "decoded_bytes": 772491,
+      "sha256": "018d6fc103ca9bfe1e0e43418d79446f530796c00a3728a57cf2b289298d2a5f"
+    },
+    {
+      "path": "docs/regime-engine-v2/sweeper/implementation.patch",
+      "decoded_bytes": 37188,
+      "sha256": "a0d6e75f8b9d12c5837b153eedf77db451e757db01b0bdaf8ba255a05ba7c8d3"
+    },
+    {
+      "path": "docs/regime-engine-v2/sweeper/input-manifest.json",
+      "decoded_bytes": 106624,
+      "sha256": "cf49175da97da7a2cf3a3cf215f3415ff7c91d6fd281c306baba4ed9b846c2d4"
+    },
+    {
+      "path": "docs/regime-engine-v2/sweeper/lint.json",
+      "decoded_bytes": 287535,
+      "sha256": "3fc0f099a5882f3df36c36f0c2b340a7a9b073c66b4b352583c52bf1c32ff1b2"
+    },
+    {
+      "path": "docs/regime-engine-v2/sweeper/lint.log",
+      "decoded_bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "docs/regime-engine-v2/sweeper/preservation.json",
+      "decoded_bytes": 1126,
+      "sha256": "43d6ac3af738ee4b548502b1acb7a783d210f8ce4bf48e11d6a8a923ef889c2f"
+    },
+    {
+      "path": "docs/regime-engine-v2/sweeper/python-tests.log",
+      "decoded_bytes": 105,
+      "sha256": "86c967a00f06ad033ecab8fdfd48f0dfe4f7c54ecd2a5af426df39e10af79aa8"
+    },
+    {
+      "path": "docs/regime-engine-v2/sweeper/read-only-attacks-v2.json",
+      "decoded_bytes": 194952,
+      "sha256": "358c91c23c121219601d03faa9629ec47a0a267101ca4f54b5a0307214d50578"
+    },
+    {
+      "path": "docs/regime-engine-v2/sweeper/read-only-attacks.json",
+      "decoded_bytes": 194408,
+      "sha256": "f86bd6335609f14a2f7a52142707abd1a05c6ff45ef6ea97d34f8c4fcbca590e"
+    },
+    {
+      "path": "docs/regime-engine-v2/sweeper/read-only-audit.json",
+      "decoded_bytes": 9552,
+      "sha256": "fc472a859d11d6049db539c3e961322df6b9d94953a109153a465db0404deed1"
+    },
+    {
+      "path": "docs/regime-engine-v2/sweeper/read-only-boundary-addendum.json",
+      "decoded_bytes": 1714,
+      "sha256": "947f082205fc91a84af3a71d725617a9602f7fba7e9e080e87bad22e54a2368d"
+    },
+    {
+      "path": "docs/regime-engine-v2/sweeper/read-only-performance.json",
+      "decoded_bytes": 425,
+      "sha256": "730258595fa005a90ee189c71a6dd9b31245d3d7b5df3c97de2cfcd2f2066cf1"
+    },
+    {
+      "path": "docs/regime-engine-v2/sweeper/read-only-r1-addendum.json",
+      "decoded_bytes": 410,
+      "sha256": "1ace1aa72b3be2d19a4954e870d266fcb8ac33a0cd7fadf2c8c7e5977654a40f"
+    },
+    {
+      "path": "docs/regime-engine-v2/sweeper/read-only-shared-state.json",
+      "decoded_bytes": 731,
+      "sha256": "c136a0f81d3e431715d38698601444df5392e16dc6b711f459715b7e02d53079"
+    },
+    {
+      "path": "docs/regime-engine-v2/sweeper/repair-check-1.json",
+      "decoded_bytes": 153851,
+      "sha256": "7946c44ab77397937dba29a8c8fdad9690707160fd8fde7127ce236100f8ce9f"
+    },
+    {
+      "path": "docs/regime-engine-v2/sweeper/reports-check.log",
+      "decoded_bytes": 226,
+      "sha256": "b81d3c1a89f1730de7441ac54fa6fb19dcba8f4f9bfedee63a2abb49315cc7ab"
+    },
+    {
+      "path": "docs/regime-engine-v2/sweeper/reports-validate.log",
+      "decoded_bytes": 243,
+      "sha256": "17a8278ec97176ddc182bfa8257e3eed789000b7f6428e57c0d238786eff1136"
+    },
+    {
+      "path": "docs/regime-engine-v2/sweeper/run-verification.py",
+      "decoded_bytes": 1679,
+      "sha256": "7a1966e267abea8188d51ef9383190af8e71010bca7feb64518e3181df9232fe"
+    },
+    {
+      "path": "docs/regime-engine-v2/sweeper/shadow-input-r2.json",
+      "decoded_bytes": 223524,
+      "sha256": "92ecdd1830516ec96dd9293fc87b9ee7c6add71376e6997de4fede42d4d90a66"
+    },
+    {
+      "path": "docs/regime-engine-v2/sweeper/static-search.txt",
+      "decoded_bytes": 33336,
+      "sha256": "f7c3c776915ddc670d5ad4e8d8b14eecccabd61974cafc6e25184b12f35d7a9a"
+    },
+    {
+      "path": "docs/regime-engine-v2/sweeper/status.txt",
+      "decoded_bytes": 1382,
+      "sha256": "1a55f1a8c7d9061e8185dd529e97861dfcc3e0bb4f4d2303553e76a20134e705"
+    },
+    {
+      "path": "docs/regime-engine-v2/sweeper/typecheck-typing-attempt.log",
+      "decoded_bytes": 456,
+      "sha256": "19b473565eb293f1c88f7ed343027f711d3d746598c0fefc108797e67993a2a4"
+    },
+    {
+      "path": "docs/regime-engine-v2/sweeper/typecheck.log",
+      "decoded_bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "docs/regime-engine-v2/sweeper/verification-commands.json",
+      "decoded_bytes": 3292,
+      "sha256": "65281035741ebf07831ec5cf55ac9e3b4a2f73d029fa885291304aefb156c9f6"
+    },
+    {
+      "path": "docs/regime-engine-v2/sweeper/verification.json",
+      "decoded_bytes": 10860,
+      "sha256": "377127ffb5c8e80ed3b7985d1ccfaf27a82f778f1bb2e12f4192c25d18866c7d"
+    },
+    {
+      "path": "docs/regime-engine-v2/sweeper/verify-contracts.mjs",
+      "decoded_bytes": 5471,
+      "sha256": "b1e52d44964038fd9ffdfa07c372ad4ffcd599df24f3b3cb9cfa1f73588a2573"
+    },
+    {
+      "path": "docs/regime-engine-v2/validation.json",
+      "decoded_bytes": 4320,
+      "sha256": "ad34f283732e1d4b02d4f1e553e8a5936aa4cbf634a09dc9114e01358a1df7b0"
+    },
+    {
+      "path": "lib/dashboard/adapters/vix-term-structure.ts",
+      "decoded_bytes": 11303,
+      "sha256": "16a048d247eb124f190fbfb8a356f1cc4f0f0a1fa27af63c702a96ffe2fbac05"
+    },
+    {
+      "path": "lib/dashboard/get-dashboard-data.ts",
+      "decoded_bytes": 1545,
+      "sha256": "ecb2df82c5e185b7d22b4be16f7b3c22b045f736c72a3624d0fb15dfd9456740"
+    },
+    {
+      "path": "lib/dashboard/get-home-dashboard-preview-data.ts",
+      "decoded_bytes": 1266,
+      "sha256": "117b9e2fd3d0acbbb181c3705d6739a8e3bcaebde05742804a761785a9f9b3ba"
+    },
+    {
+      "path": "lib/dashboard/regime-v2-presentation.test.ts",
+      "decoded_bytes": 11361,
+      "sha256": "e1859c119f0ed8ae842af930c9af2cf574479c1843cfc29179d05842973013e1"
+    },
+    {
+      "path": "lib/dashboard/regime-v2-presentation.ts",
+      "decoded_bytes": 30183,
+      "sha256": "a3ea4c767b46bc51f20be07a06b0a4a91457607f9221c0cfd80dffbfa4a73f53"
+    },
+    {
+      "path": "lib/dashboard/regime-v2-preview.test.mjs",
+      "decoded_bytes": 3194,
+      "sha256": "6a22ed85c34d82c90e962c6ff285e2a38ca6e77189a77e033a2c549b3fcbd04d"
+    },
+    {
+      "path": "lib/dashboard/regime-v2-render.test.mjs",
+      "decoded_bytes": 4252,
+      "sha256": "2a0e24fd385357da35465b3f6ef0b25cc5b2e99f57b1c23fea6615cafff2c678"
+    },
+    {
+      "path": "lib/regime-engine-v2/boundary.ts",
+      "decoded_bytes": 5555,
+      "sha256": "ffc2026243a1fb9ba4f28a6ffebfdf822d8576e666e0a5572528d6b0d94a9661"
+    },
+    {
+      "path": "lib/regime-engine-v2/capture.ts",
+      "decoded_bytes": 3231,
+      "sha256": "e0a2c38710f988843cc5a804cdbb9adbc65f97e7074fcdd0afe412637e6bb813"
+    },
+    {
+      "path": "lib/regime-engine-v2/contract.ts",
+      "decoded_bytes": 14989,
+      "sha256": "2df8e1f2be112aef642ecdea53cc479777719d863a3451c53c1e1cbb8c90b563"
+    },
+    {
+      "path": "lib/regime-engine-v2/core.ts",
+      "decoded_bytes": 8842,
+      "sha256": "5cdd57bd05403f38271946fb39fa59e479f25fcf60c35fb09c2941856e6010a1"
+    },
+    {
+      "path": "lib/regime-engine-v2/engine.test.ts",
+      "decoded_bytes": 20126,
+      "sha256": "d1d1a5632179d0f7f3f807805ce4b4151fd7b69f0f2c6ababa99fda266df22eb"
+    },
+    {
+      "path": "lib/regime-engine-v2/engine.ts",
+      "decoded_bytes": 8511,
+      "sha256": "f73691bbf9e2821645f048124266320c6bb4daea81b9b31a70a428dee2f0a39a"
+    },
+    {
+      "path": "lib/regime-engine-v2/features.ts",
+      "decoded_bytes": 9193,
+      "sha256": "65e81d8d5446d92e8c28601d0eed23627264265566c8f86c015a7f872f9d4275"
+    },
+    {
+      "path": "lib/regime-engine-v2/math.ts",
+      "decoded_bytes": 2369,
+      "sha256": "82af814a436b6cd5877f34b93fef7535827f355f7bf9225d70e8349c15fa9138"
+    },
+    {
+      "path": "lib/regime-engine-v2/normalize.ts",
+      "decoded_bytes": 12171,
+      "sha256": "da2963f02e32ed2a01f317992e2259c6bc4a5abd972c433c3d9974b5cc9ac037"
+    },
+    {
+      "path": "lib/regime-engine-v2/operations/dashboard-shadow.test.ts",
+      "decoded_bytes": 10269,
+      "sha256": "45ef6cffea6040ef8fe8c70473873f2351ab29e46b084460264bd0c3032e4e97"
+    },
+    {
+      "path": "lib/regime-engine-v2/operations/dashboard-shadow.ts",
+      "decoded_bytes": 10954,
+      "sha256": "10819d5cfc7f737f148da8e56d6cf89ef32c4623342d2495bc384c66a99b06a4"
+    },
+    {
+      "path": "lib/regime-engine-v2/operations/normalizer-preservation.test.mjs",
+      "decoded_bytes": 5855,
+      "sha256": "b592e0084f433c3ff3756bc2ce574b566027f281ea34aef14f8122c5788f2b61"
+    },
+    {
+      "path": "lib/regime-engine-v2/operations/pipeline-capture.ts",
+      "decoded_bytes": 2940,
+      "sha256": "988fd161c688043be58d4a466e959809beeb4ba0c2878c86d5afade3e4ded3b4"
+    },
+    {
+      "path": "lib/regime-engine-v2/operations/public-preservation.test.ts",
+      "decoded_bytes": 2892,
+      "sha256": "fb3731a8d8b216b98636e1b6764c7ba15ec6678f77a9c0197c39a8ecb48cb580"
+    },
+    {
+      "path": "lib/regime-engine-v2/operations/snapshot.test.ts",
+      "decoded_bytes": 14714,
+      "sha256": "526b5c024976fd95c23eae74bf038516cf804ad55ace6040e238727185c9aa20"
+    },
+    {
+      "path": "lib/regime-engine-v2/operations/snapshot.ts",
+      "decoded_bytes": 21229,
+      "sha256": "9e88b4f317e45d0930f55a9a1dc1140cf14da45338240c929cf1c67a8fde5b05"
+    },
+    {
+      "path": "lib/regime-engine-v2/operations/source-input.test.ts",
+      "decoded_bytes": 22190,
+      "sha256": "b55514744a93adb9e6dbe50cb29a98d5fd6f4fea158f0244721c71674a7c6714"
+    },
+    {
+      "path": "lib/regime-engine-v2/operations/source-input.ts",
+      "decoded_bytes": 21631,
+      "sha256": "093a41e1aa6dda588b86f65286b451893e0418fffb4d88b0f27d58d1545259ab"
+    },
+    {
+      "path": "lib/regime-engine-v2/shadow.ts",
+      "decoded_bytes": 2647,
+      "sha256": "2bb904315c6292390956efb9d89e69af2467d23863e3f713fcb8362ec89accce"
+    },
+    {
+      "path": "lib/regime-engine-v2/temporal.ts",
+      "decoded_bytes": 5990,
+      "sha256": "4ec57a14f9ed658d0587aa6d2a9b9f42426c6b54022adf301cc65bf51a3495fb"
+    },
+    {
+      "path": "lib/regime-engine-v2/types.ts",
+      "decoded_bytes": 3325,
+      "sha256": "1dcd4ce2f9ebd1763c9f1b28ce08bdcfd4f1ea9c8b92874b481731b1563e2aeb"
+    },
+    {
+      "path": "scripts/build-statistical-levels.mjs",
+      "decoded_bytes": 53515,
+      "sha256": "de9da118da379ccb12618adee258364b730935da36055b9822ca201f869095dd"
+    },
+    {
+      "path": "scripts/regime-v2-conformance.mts",
+      "decoded_bytes": 10977,
+      "sha256": "72a4e07ec6935eee95f75642e7bccfa5b95e3f2387583b24d2abfea548e65ba4"
+    },
+    {
+      "path": "scripts/regime-v2-design-fixtures.mts",
+      "decoded_bytes": 11904,
+      "sha256": "e8f60059586dc55f294796ddef59084c4b17d3b643cc45c3d84889f27bc68d9b"
+    },
+    {
+      "path": "scripts/regime-v2-design-fixtures.test.ts",
+      "decoded_bytes": 5183,
+      "sha256": "aa0564c02ff0323ae9cc1a4e1ce1d22e2ef6c290c3f59cf737cc726d2fcaf6cc"
+    },
+    {
+      "path": "scripts/regime-v2-design-render.mjs",
+      "decoded_bytes": 19136,
+      "sha256": "e9bc9e4ea50a899cff1b70896ded1ac83d3d006654828eb9898c8e64bab50fb1"
+    },
+    {
+      "path": "scripts/regime-v2-observe.mts",
+      "decoded_bytes": 756,
+      "sha256": "143542e05f10c717cd2628cdb330de01c3b9e3f21961f52c1ee0b7262dbadcff"
+    },
+    {
+      "path": "scripts/regime-v2-prepare-bundle.mts",
+      "decoded_bytes": 3177,
+      "sha256": "a5591688b042c20e07fa4a9a33b80be4005925c6c769ea523628a585b5884543"
+    },
+    {
+      "path": "scripts/regime-v2-replay.mts",
+      "decoded_bytes": 811,
+      "sha256": "42f6fc5197252d7a81565720f117cec4f8fb6939d4b1db5c26c1d1eed6ea3016"
+    },
+    {
+      "path": "scripts/regime-v2-shadow.mts",
+      "decoded_bytes": 1815,
+      "sha256": "0c13eed54ddd624d6e7568bf125a34ebd54bf74c9ac13f605341190a04d0ad0e"
+    },
+    {
+      "path": "scripts/trends-test-register.mjs",
+      "decoded_bytes": 1799,
+      "sha256": "d4c01f7e587436e5738ed7fdacc9fcdc4b3dd67bea378b6c2bb41864f7c56059"
+    }
+  ],
+  "limitations": "Pattern scan plus intentional inventory/source review; no claim of mathematically proving absence of every secret. Ignored credentials and caches are not copied or staged."
+}

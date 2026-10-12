@@ -1,0 +1,68 @@
+{
+  "regimeSummary": {
+    "current": "Neutral / mixto",
+    "bias": "neutral",
+    "confidence": 50,
+    "regimeScore": 48,
+    "sourceName": "Rotación sectorial, VIX y BTC ETF flows",
+    "lastUpdated": "Última actualización disponible por módulo",
+    "updateFrequency": "Diaria / según disponibilidad de cada fuente",
+    "dataStatus": "automated",
+    "reliabilityNote": "Este régimen no anticipa el mercado. Organiza lecturas de volatilidad, rotación y flujos para leer el contexto.",
+    "dataQualityNote": "La confianza se ajusta según la disponibilidad y calidad de rotación sectorial, VIX y BTC ETF flows.",
+    "interpretation": "Lectura compuesta de volatilidad, rotación y flujos. Ponderación actual: rotación sectorial 45%, VIX 40% y BTC ETF flows 15%.",
+    "whatItDoesNotMean": "No es una recomendación de inversión, no elige activos y no anticipa retornos futuros.",
+    "riskSupportSignals": [
+      {
+        "label": "Rotación",
+        "detail": "Rotación mixta; no domina una lectura defensiva extrema."
+      },
+      {
+        "label": "Volatilidad",
+        "detail": "Normal alto: presión de volatilidad contenida."
+      },
+      {
+        "label": "BTC ETF flows",
+        "detail": "Flujos mixtos aportan lectura neutral."
+      },
+      {
+        "label": "Racha BTC ETF",
+        "detail": "Racha de 3 días de entradas"
+      }
+    ],
+    "cautionSignals": [
+      {
+        "label": "Rotación",
+        "detail": "Defensivos lideran mientras growth/cíclicos quedan débiles."
+      },
+      {
+        "label": "Volatilidad",
+        "detail": "Normal alto: zona de vigilancia."
+      }
+    ]
+  },
+  "provenance": {
+    "kind": "DESIGN_TEST_V1_REFERENCE",
+    "source": "actual getDashboardData() and unchanged V1 adapters/scorer",
+    "mode": "CONTROLLED_UNAVAILABLE_HTTP_PROVIDERS",
+    "fixedClock": "2026-09-04T22:00:00.000Z",
+    "live": false,
+    "httpResponse": 404,
+    "controlledFetches": 20,
+    "actualNetworkFetches": 0,
+    "shadow": "OFF",
+    "configuredApiKeys": false,
+    "apiKeysChangedOnlyWithinThisProcess": true,
+    "dataLimitations": "Existing repository data and actual V1 unavailable-provider fallback rules; this is a reproducible comparison reference, not a live reading.",
+    "regimeSummarySha256": "21615d3d53f049cf7729fd73213c8da8ce5d8edb4cf25a12869f5ebdc69cd5af",
+    "sourceHashes": {
+      "lib/dashboard/get-dashboard-data.ts": "ecb2df82c5e185b7d22b4be16f7b3c22b045f736c72a3624d0fb15dfd9456740",
+      "lib/dashboard/regime-scoring.ts": "4513411deacf42d80bfbd2d8739c3b3c0e1f4cbf2eab91a66ba35ed01ca53f87",
+      "lib/dashboard/adapters/sector-etfs.ts": "6f0463e34f2179337186b0f612a9932846c81d27b6f04c84b112aec79d17a423",
+      "lib/dashboard/adapters/btc-etf-flows.ts": "c0eb5cc5be1106b52795ada4ad892a9e9117c11fc9b4519b74c46a88ce8d06a4",
+      "lib/dashboard/adapters/vix.ts": "7b805ec460545d9e97d2ff9bdcd671ae200abef9b9c0552378d4b4228fca7c6e",
+      "lib/dashboard/adapters/vix-term-structure.ts": "16a048d247eb124f190fbfb8a356f1cc4f0f0a1fa27af63c702a96ffe2fbac05",
+      "lib/dashboard/adapters/gld-flow-pressure.ts": "83437696f04142521b763b8cfd46398b9b7937ae762788d62995c3bdc6d51c69"
+    }
+  }
+}

@@ -1,0 +1,228 @@
+{
+  "status": "PASS",
+  "checks": [
+    {
+      "id": "weekend",
+      "input": {
+        "date": "2026-09-04",
+        "as_of": "2026-09-06T22:00:00Z",
+        "available_at": "2026-09-04T23:00:00Z"
+      },
+      "expected": "FRESH",
+      "actual": "FRESH",
+      "pass": true
+    },
+    {
+      "id": "labor-day",
+      "input": {
+        "date": "2026-09-04",
+        "as_of": "2026-09-07T22:00:00Z",
+        "available_at": "2026-09-04T23:00:00Z"
+      },
+      "expected": "FRESH",
+      "actual": "FRESH",
+      "pass": true
+    },
+    {
+      "id": "next-session-missing",
+      "input": {
+        "date": "2026-09-04",
+        "as_of": "2026-09-08T22:00:00Z",
+        "available_at": "2026-09-04T23:00:00Z"
+      },
+      "expected": "STALE_OR_WRONG_SESSION",
+      "actual": "STALE_OR_WRONG_SESSION",
+      "pass": true
+    },
+    {
+      "id": "good-friday",
+      "input": {
+        "date": "2026-04-02",
+        "as_of": "2026-04-03T22:00:00Z",
+        "available_at": "2026-04-02T23:00:00Z"
+      },
+      "expected": "FRESH",
+      "actual": "FRESH",
+      "pass": true
+    },
+    {
+      "id": "publication-later",
+      "input": {
+        "date": "2026-04-06",
+        "as_of": "2026-04-06T22:00:00Z",
+        "available_at": "2026-04-07T01:00:00Z"
+      },
+      "expected": "NOT_YET_AVAILABLE",
+      "actual": "NOT_YET_AVAILABLE",
+      "pass": true
+    },
+    {
+      "id": "before-dst-close",
+      "input": {
+        "date": "2026-03-06",
+        "as_of": "2026-03-09T19:59:59Z",
+        "available_at": "2026-03-06T23:00:00Z"
+      },
+      "expected": "FRESH",
+      "actual": "FRESH",
+      "pass": true
+    },
+    {
+      "id": "after-dst-close",
+      "input": {
+        "date": "2026-03-06",
+        "as_of": "2026-03-09T20:00:00Z",
+        "available_at": "2026-03-06T23:00:00Z"
+      },
+      "expected": "STALE_OR_WRONG_SESSION",
+      "actual": "STALE_OR_WRONG_SESSION",
+      "pass": true
+    },
+    {
+      "id": "early-close",
+      "input": {
+        "date": "2026-11-27",
+        "as_of": "2026-11-27T18:30:00Z",
+        "available_at": "2026-11-27T18:20:00Z"
+      },
+      "expected": "FRESH",
+      "actual": "FRESH",
+      "pass": true
+    },
+    {
+      "id": "calendar-missing",
+      "expected": "UNKNOWN_CALENDAR",
+      "actual": "UNKNOWN_CALENDAR",
+      "pass": true
+    },
+    {
+      "id": "publication-unknown",
+      "expected": "UNKNOWN_AVAILABILITY",
+      "actual": "UNKNOWN_AVAILABILITY",
+      "pass": true
+    },
+    {
+      "id": "calendar-outside-covered-cases",
+      "expected": "UNKNOWN_CALENDAR",
+      "actual": "UNKNOWN_CALENDAR",
+      "pass": true
+    },
+    {
+      "id": "calendar-version-known-later",
+      "expected": "UNKNOWN_CALENDAR",
+      "actual": "UNKNOWN_CALENDAR",
+      "pass": true
+    },
+    {
+      "id": "native-flow--",
+      "expected": null,
+      "actual": null,
+      "pass": true
+    },
+    {
+      "id": "native-flow-0.0",
+      "expected": 0.0,
+      "actual": 0.0,
+      "pass": true
+    },
+    {
+      "id": "native-flow-(14.7)",
+      "expected": -14.7,
+      "actual": -14.7,
+      "pass": true
+    },
+    {
+      "id": "native-flow-1,000.5",
+      "expected": 1000.5,
+      "actual": 1000.5,
+      "pass": true
+    },
+    {
+      "id": "native-flow-NaN",
+      "expected": null,
+      "actual": null,
+      "pass": true
+    },
+    {
+      "id": "native-gld-units",
+      "expected": {
+        "delta_shares": 5,
+        "fraction": 0.05,
+        "pressure_proxy_usd": 1500.0
+      },
+      "actual": {
+        "delta_shares": 5,
+        "fraction": 0.05,
+        "pressure_proxy_usd": 1500.0
+      },
+      "pass": true
+    },
+    {
+      "id": "gld-insufficient-20",
+      "expected": null,
+      "actual": null,
+      "pass": true
+    },
+    {
+      "id": "gld-unit-event",
+      "expected": null,
+      "actual": null,
+      "pass": true
+    },
+    {
+      "id": "gld-missing-nav",
+      "expected": null,
+      "actual": null,
+      "pass": true
+    }
+  ],
+  "calendar_fixture": {
+    "version": "NYSE_SELECTED_2026_CASES/v1",
+    "mode": "SYNTHETIC_CONTRACT_CASES",
+    "available_at": "2026-01-01T00:00:00Z",
+    "availability_note": "Hypothetical known-at input for a synthetic test; not evidence of when this NYSE calendar was actually captured/published.",
+    "complete_interval_coverage": false,
+    "covered_query_dates": [
+      "2026-09-06",
+      "2026-09-07",
+      "2026-09-08",
+      "2026-04-03",
+      "2026-04-06",
+      "2026-03-09",
+      "2026-11-27"
+    ],
+    "coverage_end": "2026-11-27",
+    "sessions": [
+      {
+        "session": "2026-03-06",
+        "closed_by": "2026-03-06T21:00:00+00:00"
+      },
+      {
+        "session": "2026-03-09",
+        "closed_by": "2026-03-09T20:00:00+00:00"
+      },
+      {
+        "session": "2026-04-02",
+        "closed_by": "2026-04-02T20:00:00+00:00"
+      },
+      {
+        "session": "2026-04-06",
+        "closed_by": "2026-04-06T20:00:00+00:00"
+      },
+      {
+        "session": "2026-09-04",
+        "closed_by": "2026-09-04T20:00:00+00:00"
+      },
+      {
+        "session": "2026-09-08",
+        "closed_by": "2026-09-08T20:00:00+00:00"
+      },
+      {
+        "session": "2026-11-27",
+        "closed_by": "2026-11-27T18:00:00+00:00"
+      }
+    ]
+  },
+  "calendar_source": "https://www.nyse.com/trade/hours-calendars",
+  "scope": "Selected calendar cases, not a complete production calendar; other source calendars remain distinct."
+}

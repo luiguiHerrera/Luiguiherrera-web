@@ -1,0 +1,572 @@
+{
+  "schemaVersion": 1,
+  "status": "PASS_REAL_IAM_IDENTITY_SIMULATION_ONLY",
+  "completedAt": "2026-09-10T09:38:45.482Z",
+  "roleArn": "arn:aws:iam::732159826922:role/RegimeV2ShadowWriter",
+  "liveInlinePolicyExact": true,
+  "policySha256": "5e6796304465ea4912efda67d412fc5ad1f945cdb67e9d1a985130b09c91f04b",
+  "readRequests": 15,
+  "simulationRequests": 14,
+  "caseCount": 42,
+  "cases": [
+    {
+      "batch": "intended production reads/writes; identity-only unconditional admission",
+      "action": "s3:GetObject",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/regime-v2/observations/a.json",
+      "context": [],
+      "expected": "allowed",
+      "observed": "allowed",
+      "missingContext": []
+    },
+    {
+      "batch": "intended production reads/writes; identity-only unconditional admission",
+      "action": "s3:GetObject",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/regime-v2/runs/a.json",
+      "context": [],
+      "expected": "allowed",
+      "observed": "allowed",
+      "missingContext": []
+    },
+    {
+      "batch": "intended production reads/writes; identity-only unconditional admission",
+      "action": "s3:GetObject",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/regime-v2/indexes/latest.json",
+      "context": [],
+      "expected": "allowed",
+      "observed": "allowed",
+      "missingContext": []
+    },
+    {
+      "batch": "intended production reads/writes; identity-only unconditional admission",
+      "action": "s3:PutObject",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/regime-v2/observations/a.json",
+      "context": [],
+      "expected": "allowed",
+      "observed": "allowed",
+      "missingContext": []
+    },
+    {
+      "batch": "intended production reads/writes; identity-only unconditional admission",
+      "action": "s3:PutObject",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/regime-v2/runs/a.json",
+      "context": [],
+      "expected": "allowed",
+      "observed": "allowed",
+      "missingContext": []
+    },
+    {
+      "batch": "intended production reads/writes; identity-only unconditional admission",
+      "action": "s3:PutObject",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/regime-v2/indexes/latest.json",
+      "context": [],
+      "expected": "allowed",
+      "observed": "allowed",
+      "missingContext": []
+    },
+    {
+      "batch": "probe and other index/bucket excluded",
+      "action": "s3:GetObject",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/regime-v2/_probe/a.json",
+      "context": [],
+      "expected": "implicitDeny",
+      "observed": "implicitDeny",
+      "missingContext": [
+        "s3:prefix",
+        "s3:max-keys"
+      ]
+    },
+    {
+      "batch": "probe and other index/bucket excluded",
+      "action": "s3:GetObject",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/regime-v2/indexes/other.json",
+      "context": [],
+      "expected": "implicitDeny",
+      "observed": "implicitDeny",
+      "missingContext": [
+        "s3:prefix",
+        "s3:max-keys"
+      ]
+    },
+    {
+      "batch": "probe and other index/bucket excluded",
+      "action": "s3:GetObject",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1-other/regime-v2/observations/a.json",
+      "context": [],
+      "expected": "implicitDeny",
+      "observed": "implicitDeny",
+      "missingContext": [
+        "s3:prefix",
+        "s3:max-keys"
+      ]
+    },
+    {
+      "batch": "probe and other index/bucket excluded",
+      "action": "s3:PutObject",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/regime-v2/_probe/a.json",
+      "context": [],
+      "expected": "implicitDeny",
+      "observed": "implicitDeny",
+      "missingContext": [
+        "s3:prefix",
+        "s3:max-keys"
+      ]
+    },
+    {
+      "batch": "probe and other index/bucket excluded",
+      "action": "s3:PutObject",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/regime-v2/indexes/other.json",
+      "context": [],
+      "expected": "implicitDeny",
+      "observed": "implicitDeny",
+      "missingContext": [
+        "s3:prefix",
+        "s3:max-keys"
+      ]
+    },
+    {
+      "batch": "probe and other index/bucket excluded",
+      "action": "s3:PutObject",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1-other/regime-v2/observations/a.json",
+      "context": [],
+      "expected": "implicitDeny",
+      "observed": "implicitDeny",
+      "missingContext": [
+        "s3:prefix",
+        "s3:max-keys"
+      ]
+    },
+    {
+      "batch": "delete forbidden everywhere",
+      "action": "s3:DeleteObject",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/regime-v2/observations/a.json",
+      "context": [],
+      "expected": "explicitDeny",
+      "observed": "explicitDeny",
+      "missingContext": []
+    },
+    {
+      "batch": "delete forbidden everywhere",
+      "action": "s3:DeleteObject",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/regime-v2/runs/a.json",
+      "context": [],
+      "expected": "explicitDeny",
+      "observed": "explicitDeny",
+      "missingContext": []
+    },
+    {
+      "batch": "delete forbidden everywhere",
+      "action": "s3:DeleteObject",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/regime-v2/indexes/latest.json",
+      "context": [],
+      "expected": "explicitDeny",
+      "observed": "explicitDeny",
+      "missingContext": []
+    },
+    {
+      "batch": "delete forbidden everywhere",
+      "action": "s3:DeleteObject",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/regime-v2/_probe/a.json",
+      "context": [],
+      "expected": "explicitDeny",
+      "observed": "explicitDeny",
+      "missingContext": []
+    },
+    {
+      "batch": "delete forbidden everywhere",
+      "action": "s3:DeleteObject",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1-other/a.json",
+      "context": [],
+      "expected": "explicitDeny",
+      "observed": "explicitDeny",
+      "missingContext": []
+    },
+    {
+      "batch": "delete forbidden everywhere",
+      "action": "s3:DeleteObjectVersion",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/regime-v2/observations/a.json",
+      "context": [],
+      "expected": "explicitDeny",
+      "observed": "explicitDeny",
+      "missingContext": []
+    },
+    {
+      "batch": "delete forbidden everywhere",
+      "action": "s3:DeleteObjectVersion",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/regime-v2/runs/a.json",
+      "context": [],
+      "expected": "explicitDeny",
+      "observed": "explicitDeny",
+      "missingContext": []
+    },
+    {
+      "batch": "delete forbidden everywhere",
+      "action": "s3:DeleteObjectVersion",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/regime-v2/indexes/latest.json",
+      "context": [],
+      "expected": "explicitDeny",
+      "observed": "explicitDeny",
+      "missingContext": []
+    },
+    {
+      "batch": "delete forbidden everywhere",
+      "action": "s3:DeleteObjectVersion",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1/regime-v2/_probe/a.json",
+      "context": [],
+      "expected": "explicitDeny",
+      "observed": "explicitDeny",
+      "missingContext": []
+    },
+    {
+      "batch": "delete forbidden everywhere",
+      "action": "s3:DeleteObjectVersion",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1-other/a.json",
+      "context": [],
+      "expected": "explicitDeny",
+      "observed": "explicitDeny",
+      "missingContext": []
+    },
+    {
+      "batch": "three required metadata reads",
+      "action": "s3:GetBucketVersioning",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1",
+      "context": [],
+      "expected": "allowed",
+      "observed": "allowed",
+      "missingContext": []
+    },
+    {
+      "batch": "three required metadata reads",
+      "action": "s3:GetBucketPublicAccessBlock",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1",
+      "context": [],
+      "expected": "allowed",
+      "observed": "allowed",
+      "missingContext": []
+    },
+    {
+      "batch": "three required metadata reads",
+      "action": "s3:GetEncryptionConfiguration",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1",
+      "context": [],
+      "expected": "allowed",
+      "observed": "allowed",
+      "missingContext": []
+    },
+    {
+      "batch": "bucket administration and unbounded listing forbidden",
+      "action": "s3:ListBucket",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1",
+      "context": [],
+      "expected": "implicitDeny",
+      "observed": "implicitDeny",
+      "missingContext": [
+        "s3:prefix",
+        "s3:max-keys"
+      ]
+    },
+    {
+      "batch": "bucket administration and unbounded listing forbidden",
+      "action": "s3:PutBucketPolicy",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1",
+      "context": [],
+      "expected": "implicitDeny",
+      "observed": "implicitDeny",
+      "missingContext": [
+        "s3:prefix",
+        "s3:max-keys"
+      ]
+    },
+    {
+      "batch": "bucket administration and unbounded listing forbidden",
+      "action": "s3:PutBucketVersioning",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1",
+      "context": [],
+      "expected": "implicitDeny",
+      "observed": "implicitDeny",
+      "missingContext": [
+        "s3:prefix",
+        "s3:max-keys"
+      ]
+    },
+    {
+      "batch": "bucket administration and unbounded listing forbidden",
+      "action": "s3:PutBucketPublicAccessBlock",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1",
+      "context": [],
+      "expected": "implicitDeny",
+      "observed": "implicitDeny",
+      "missingContext": [
+        "s3:prefix",
+        "s3:max-keys"
+      ]
+    },
+    {
+      "batch": "bucket administration and unbounded listing forbidden",
+      "action": "s3:PutEncryptionConfiguration",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1",
+      "context": [],
+      "expected": "implicitDeny",
+      "observed": "implicitDeny",
+      "missingContext": [
+        "s3:prefix",
+        "s3:max-keys"
+      ]
+    },
+    {
+      "batch": "bucket administration and unbounded listing forbidden",
+      "action": "s3:DeleteBucket",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1",
+      "context": [],
+      "expected": "implicitDeny",
+      "observed": "implicitDeny",
+      "missingContext": [
+        "s3:prefix",
+        "s3:max-keys"
+      ]
+    },
+    {
+      "batch": "bucket administration and unbounded listing forbidden",
+      "action": "s3:ListBucketVersions",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1",
+      "context": [],
+      "expected": "implicitDeny",
+      "observed": "implicitDeny",
+      "missingContext": [
+        "s3:prefix",
+        "s3:max-keys"
+      ]
+    },
+    {
+      "batch": "bucket administration and unbounded listing forbidden",
+      "action": "s3:GetBucketPolicy",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1",
+      "context": [],
+      "expected": "implicitDeny",
+      "observed": "implicitDeny",
+      "missingContext": [
+        "s3:prefix",
+        "s3:max-keys"
+      ]
+    },
+    {
+      "batch": "bounded JSON list regime-v2/observations/a.json",
+      "action": "s3:ListBucket",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1",
+      "context": [
+        {
+          "ContextKeyName": "s3:prefix",
+          "ContextKeyValues": [
+            "regime-v2/observations/a.json"
+          ],
+          "ContextKeyType": "string"
+        },
+        {
+          "ContextKeyName": "s3:max-keys",
+          "ContextKeyValues": [
+            "1"
+          ],
+          "ContextKeyType": "numeric"
+        }
+      ],
+      "expected": "allowed",
+      "observed": "allowed",
+      "missingContext": []
+    },
+    {
+      "batch": "bounded JSON list regime-v2/runs/a.json",
+      "action": "s3:ListBucket",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1",
+      "context": [
+        {
+          "ContextKeyName": "s3:prefix",
+          "ContextKeyValues": [
+            "regime-v2/runs/a.json"
+          ],
+          "ContextKeyType": "string"
+        },
+        {
+          "ContextKeyName": "s3:max-keys",
+          "ContextKeyValues": [
+            "1"
+          ],
+          "ContextKeyType": "numeric"
+        }
+      ],
+      "expected": "allowed",
+      "observed": "allowed",
+      "missingContext": []
+    },
+    {
+      "batch": "bounded JSON list regime-v2/indexes/latest.json",
+      "action": "s3:ListBucket",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1",
+      "context": [
+        {
+          "ContextKeyName": "s3:prefix",
+          "ContextKeyValues": [
+            "regime-v2/indexes/latest.json"
+          ],
+          "ContextKeyType": "string"
+        },
+        {
+          "ContextKeyName": "s3:max-keys",
+          "ContextKeyValues": [
+            "1"
+          ],
+          "ContextKeyType": "numeric"
+        }
+      ],
+      "expected": "allowed",
+      "observed": "allowed",
+      "missingContext": []
+    },
+    {
+      "batch": "list namespace denied regime-v2/",
+      "action": "s3:ListBucket",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1",
+      "context": [
+        {
+          "ContextKeyName": "s3:prefix",
+          "ContextKeyValues": [
+            "regime-v2/"
+          ],
+          "ContextKeyType": "string"
+        },
+        {
+          "ContextKeyName": "s3:max-keys",
+          "ContextKeyValues": [
+            "1"
+          ],
+          "ContextKeyType": "numeric"
+        }
+      ],
+      "expected": "implicitDeny",
+      "observed": "implicitDeny",
+      "missingContext": []
+    },
+    {
+      "batch": "list namespace denied regime-v2/_probe/a.json",
+      "action": "s3:ListBucket",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1",
+      "context": [
+        {
+          "ContextKeyName": "s3:prefix",
+          "ContextKeyValues": [
+            "regime-v2/_probe/a.json"
+          ],
+          "ContextKeyType": "string"
+        },
+        {
+          "ContextKeyName": "s3:max-keys",
+          "ContextKeyValues": [
+            "1"
+          ],
+          "ContextKeyType": "numeric"
+        }
+      ],
+      "expected": "implicitDeny",
+      "observed": "implicitDeny",
+      "missingContext": []
+    },
+    {
+      "batch": "list namespace denied regime-v2/indexes/other.json",
+      "action": "s3:ListBucket",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1",
+      "context": [
+        {
+          "ContextKeyName": "s3:prefix",
+          "ContextKeyValues": [
+            "regime-v2/indexes/other.json"
+          ],
+          "ContextKeyType": "string"
+        },
+        {
+          "ContextKeyName": "s3:max-keys",
+          "ContextKeyValues": [
+            "1"
+          ],
+          "ContextKeyType": "numeric"
+        }
+      ],
+      "expected": "implicitDeny",
+      "observed": "implicitDeny",
+      "missingContext": []
+    },
+    {
+      "batch": "list max-keys too large",
+      "action": "s3:ListBucket",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1",
+      "context": [
+        {
+          "ContextKeyName": "s3:prefix",
+          "ContextKeyValues": [
+            "regime-v2/observations/a.json"
+          ],
+          "ContextKeyType": "string"
+        },
+        {
+          "ContextKeyName": "s3:max-keys",
+          "ContextKeyValues": [
+            "2"
+          ],
+          "ContextKeyType": "numeric"
+        }
+      ],
+      "expected": "implicitDeny",
+      "observed": "implicitDeny",
+      "missingContext": []
+    },
+    {
+      "batch": "list max-keys absent",
+      "action": "s3:ListBucket",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1",
+      "context": [
+        {
+          "ContextKeyName": "s3:prefix",
+          "ContextKeyValues": [
+            "regime-v2/observations/a.json"
+          ],
+          "ContextKeyType": "string"
+        }
+      ],
+      "expected": "implicitDeny",
+      "observed": "implicitDeny",
+      "missingContext": [
+        "s3:max-keys"
+      ]
+    },
+    {
+      "batch": "list prefix absent",
+      "action": "s3:ListBucket",
+      "resource": "arn:aws:s3:::lh-regime-v2-shadow-732159826922-us-east-1",
+      "context": [
+        {
+          "ContextKeyName": "s3:max-keys",
+          "ContextKeyValues": [
+            "1"
+          ],
+          "ContextKeyType": "numeric"
+        }
+      ],
+      "expected": "implicitDeny",
+      "observed": "implicitDeny",
+      "missingContext": [
+        "s3:prefix"
+      ]
+    }
+  ],
+  "mutationRequests": 0,
+  "s3Requests": 0,
+  "oidcAssumptions": 0,
+  "credentialsLogged": false,
+  "bucketPolicyIncluded": false,
+  "unconditionalIdentityPutAllowedAsExpected": true,
+  "shadowWriterOidcLive": "NOT_RUN",
+  "remoteProductionPrefixCanary": "NOT_RUN",
+  "limitations": [
+    "This uses the actual role identity policy; IAM does not include its S3 bucket policy in role simulation.",
+    "Unconditional PutObject is allowed at the identity layer and denied by the actual bucket policy, independently verified by readback and offline tests.",
+    "No request to the production S3 prefixes or OIDC assumption was made."
+  ],
+  "source": "https://docs.aws.amazon.com/cli/latest/reference/iam/simulate-principal-policy.html"
+}
