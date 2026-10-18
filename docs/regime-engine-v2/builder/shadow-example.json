@@ -1,0 +1,1698 @@
+{
+  "scope": "INTERNAL_SHADOW_ONLY",
+  "productionCutover": false,
+  "publicAuthority": "V1",
+  "v1": {
+    "dataDate": "2026-09-04",
+    "displayTitle": "Lecturas de mercado al cierre",
+    "closingLabel": "Estado del mercado al cierre del 4 de septiembre de 2026",
+    "sourceNote": "Captura inmutable al 04/09/2026. Rotación, radar, futuros VX, GLD y BTC ETF flows corresponden al 4 de septiembre. VIX spot conserva la última observación disponible de FRED: 3 de septiembre. Cada fuente mantiene su propia fecha; no se incorporan datos posteriores al corte.",
+    "regime": {
+      "label": "Risk-on selectivo",
+      "score": 74,
+      "confidence": 88,
+      "bias": "Favorable",
+      "interpretation": "Lectura compuesta de volatilidad, rotación y flujos. Ponderación actual: rotación sectorial 45%, VIX 40% y BTC ETF flows 15%.",
+      "support": [
+        "Rotación: Sectores growth/cíclicos lideran y defensivos quedan rezagados.",
+        "Volatilidad: Normal bajo: presión de volatilidad contenida.",
+        "BTC ETF flows: Entradas sostenidas favorecen apetito por riesgo cripto/institucional.",
+        "Racha BTC ETF: Racha de 3 días de entradas"
+      ],
+      "caution": [
+        "Dispersión sectorial: Dispersión 1W de 4.2%; reduce la confianza del régimen."
+      ],
+      "watch": [
+        "La confianza corresponde al modelo compuesto; no mide probabilidad de subida.",
+        "BTC: acumulado de cinco sesiones completas del 31 de agosto al 4 de septiembre, según Farside."
+      ]
+    },
+    "indices": null,
+    "sectors": {
+      "positiveCount": 4,
+      "totalCount": 11,
+      "negativeCount": 6,
+      "dispersion1w": 4.163949128446765,
+      "leaders": [
+        {
+          "ticker": "XLE",
+          "name": "Energía",
+          "return1w": 2.2016592214422426
+        },
+        {
+          "ticker": "XLK",
+          "name": "Tecnología",
+          "return1w": 0.8562658193763895
+        },
+        {
+          "ticker": "XLU",
+          "name": "Utilities",
+          "return1w": 0.8190966534051158
+        }
+      ],
+      "laggards": [
+        {
+          "ticker": "XLY",
+          "name": "Consumo discrecional",
+          "return1w": -1.9622899070045219
+        },
+        {
+          "ticker": "XLB",
+          "name": "Materiales",
+          "return1w": -1.3915005641218503
+        },
+        {
+          "ticker": "XLRE",
+          "name": "Real Estate",
+          "return1w": -1.236510791366896
+        }
+      ],
+      "reading": "La lectura sugiere una rotación cíclica. No implica dirección futura del mercado."
+    },
+    "breadth": {
+      "rspVsSpy1wPp": -0.5900000000000001,
+      "iwmVsSpy1wPp": 0.3,
+      "qqqVsSpy1wPp": -0.10000000000000005,
+      "sectorsOverLongAverage": 8,
+      "sectorsOverLongAverageTotal": 11,
+      "reading": "Diferencias de retorno de cinco sesiones en puntos porcentuales; precios ajustados. La media larga es la media diaria de 200 sesiones."
+    },
+    "quantRadar": {
+      "fragilityScore": 20,
+      "fragilityLabel": "Baja",
+      "ewmaVolAnnualized": 7.3880977901044265,
+      "garchVolForecast": 7.666790501902986,
+      "averageCorrelation21d": 0.1453745726616991,
+      "sectorDispersion1w": 4.163949128446765
+    },
+    "vix": {
+      "asOf": "2026-09-03",
+      "level": 14.32,
+      "stateLabel": "Normal bajo",
+      "status": "Normal bajo",
+      "momentum": "Estable",
+      "curve": "Fuerte contango",
+      "curveText": "Los contratos más largos cotizan por encima del vencimiento cercano. Es una estructura habitual en entornos de volatilidad más ordenada.",
+      "change1d": -0.879999999999999,
+      "percentileLabel": "27.2"
+    },
+    "vixTermStructure": {
+      "classification": "Fuerte contango",
+      "vx2MinusVx1": 1.871500000000001,
+      "slopeVx1Vx2Pct": 11.504957920685577,
+      "vx3MinusVx1": 2.501899999999999,
+      "points": [
+        {
+          "label": "VX1",
+          "symbol": "VX/U6",
+          "contract": "sept de 2026",
+          "expirationDate": "2026-09-16",
+          "value": 16.2669
+        },
+        {
+          "label": "VX2",
+          "symbol": "VX/V6",
+          "contract": "oct de 2026",
+          "expirationDate": "2026-10-21",
+          "value": 18.1384
+        },
+        {
+          "label": "VX3",
+          "symbol": "VX/X6",
+          "contract": "nov de 2026",
+          "expirationDate": "2026-11-18",
+          "value": 18.7688
+        },
+        {
+          "label": "VX4",
+          "symbol": "VX/Z6",
+          "contract": "dic de 2026",
+          "expirationDate": "2026-12-16",
+          "value": 18.975
+        },
+        {
+          "label": "VX5",
+          "symbol": "VX/F7",
+          "contract": "ene de 2027",
+          "expirationDate": "2027-01-20",
+          "value": 19.9997
+        },
+        {
+          "label": "VX6",
+          "symbol": "VX/G7",
+          "contract": "feb de 2027",
+          "expirationDate": "2027-02-17",
+          "value": 20.4603
+        },
+        {
+          "label": "VX7",
+          "symbol": "VX/H7",
+          "contract": "mar de 2027",
+          "expirationDate": "2027-03-17",
+          "value": 20.7295
+        },
+        {
+          "label": "VX8",
+          "symbol": "VX/J7",
+          "contract": "abr de 2027",
+          "expirationDate": "2027-04-21",
+          "value": 21.0267
+        },
+        {
+          "label": "VX9",
+          "symbol": "VX/K7",
+          "contract": "may de 2027",
+          "expirationDate": "2027-05-18",
+          "value": 21.15
+        }
+      ]
+    },
+    "btcEtfFlows": {
+      "asOf": "2026-09-04",
+      "lastDayUsdMillions": 174.6,
+      "rolling5dUsdMillions": 986.7,
+      "streakLabel": "Racha de 3 días de entradas",
+      "reading": "Entradas sostenidas. Los ETFs spot de Bitcoin muestran demanda neta positiva en la ventana reciente. Último dato: 04/09/2026. Rolling 5D: sesiones completas del 31/08 al 04/09. Fuente: Farside Investors."
+    },
+    "gldFlowPressure": {
+      "asOf": "2026-09-04",
+      "sharesChange1dPct": -0.13542795232936078,
+      "sharesChange5dPct": 0.9307418560087599,
+      "sharesChange20dPct": 3.393157599551318,
+      "label": "Entrada neta probable",
+      "summary": "GLD muestra entrada neta probable a 5 sesiones, usando cambios en participaciones como proxy de presión de flujos.",
+      "sourceNote": "Cálculo propio con datos diarios de NAV, participaciones y activos netos publicados por State Street. No representa flujos oficiales reportados por el fondo."
+    },
+    "statisticalAssets": null
+  },
+  "v2": {
+    "engineVersion": "regime-v2/1.0.0-builder",
+    "architecture": "EVIDENCE_STATE_ENGINE",
+    "parameterSet": "C03",
+    "versions": {
+      "parameter-manifest.json": "5d6398426fcbfa1650695bbf3d971127e9076403c2832876b7f188e360836732",
+      "price-series-contract.json": "cbccf03ae9e261eb6a240804ec57bc1e4ecd7f01a1a7dbd59c1e7b5a84fade59",
+      "temporal-availability-contract.json": "0ba4661ac39c4f2be50a8a17104c0c504db0d4159cf850b60d865d8a98e492d9",
+      "freshness-policy.json": "870d75029e89f4b8b9baad212186fc3b759636088f0cd9a101511763e0158740",
+      "feature-registry-qualified.json": "8ac0a0de2ffcab341920073181c1fa05da066696db6185ccdbca7ef4006ae47b"
+    },
+    "asOf": "2026-09-04T23:59:59.999999Z",
+    "observationDate": "2026-09-04",
+    "regime": "RISK_ON_SELECTIVE",
+    "systemState": "COMPLETE",
+    "pillarStates": {
+      "participation": "MIXED",
+      "leadership": "FAVORABLE",
+      "volatility": "BENIGN",
+      "fragility": "LOW",
+      "equity": "MIXED"
+    },
+    "evidence": [
+      {
+        "featureId": "eq_returns_5",
+        "role": "DIAGNOSTIC",
+        "family": "participation",
+        "unit": "percent",
+        "value": {
+          "XLK": 0.8562638359554953,
+          "XLY": -1.9622860168317935,
+          "XLC": -0.8496319166499289,
+          "XLF": 0,
+          "XLE": 2.2016548288114945,
+          "XLI": -1.0556594352663096,
+          "XLB": -1.391503712335962,
+          "XLV": 0.16942818411320726,
+          "XLP": -1.0181335848548523,
+          "XLU": 0.8191020186471221,
+          "XLRE": -1.2365090888508012
+        },
+        "status": "AVAILABLE",
+        "reasons": [],
+        "parents": [
+          "raw_sector_prices"
+        ],
+        "replayClass": "R2"
+      },
+      {
+        "featureId": "eq_returns_21",
+        "role": "DIAGNOSTIC",
+        "family": "participation",
+        "unit": "percent",
+        "value": {
+          "XLK": 1.0521755403746225,
+          "XLY": -2.7010964040873664,
+          "XLC": 0.7645246193451527,
+          "XLF": 0.5016382873916703,
+          "XLE": 10.144425252167832,
+          "XLI": -5.136388025830929,
+          "XLB": 0.5175397110218638,
+          "XLV": 4.2566130312566175,
+          "XLP": -0.6227220955188351,
+          "XLU": -0.6915611564635271,
+          "XLRE": -1.9638496789686766
+        },
+        "status": "AVAILABLE",
+        "reasons": [],
+        "parents": [
+          "raw_sector_prices"
+        ],
+        "replayClass": "R2"
+      },
+      {
+        "featureId": "eq_returns_63",
+        "role": "DIAGNOSTIC",
+        "family": "participation",
+        "unit": "percent",
+        "value": {
+          "XLK": 3.995181183501062,
+          "XLY": 0.24288868079114234,
+          "XLC": 0.5833686272551653,
+          "XLF": 11.479013153888307,
+          "XLE": 11.881370840178395,
+          "XLI": 0.8733697700650023,
+          "XLB": 3.9622294912564193,
+          "XLV": 12.545673503823718,
+          "XLP": 2.0695891812442913,
+          "XLU": -2.2433158225634187,
+          "XLRE": -0.861403195080046
+        },
+        "status": "AVAILABLE",
+        "reasons": [],
+        "parents": [
+          "raw_sector_prices"
+        ],
+        "replayClass": "R2"
+      },
+      {
+        "featureId": "eq_positive_5",
+        "role": "CORE_DECISION",
+        "family": "participation",
+        "unit": "count of 11",
+        "value": 4,
+        "status": "AVAILABLE",
+        "reasons": [],
+        "parents": [
+          "eq_returns_5"
+        ],
+        "replayClass": "R2"
+      },
+      {
+        "featureId": "eq_positive_21",
+        "role": "CORE_DECISION",
+        "family": "participation",
+        "unit": "count of 11",
+        "value": 6,
+        "status": "AVAILABLE",
+        "reasons": [],
+        "parents": [
+          "eq_returns_21"
+        ],
+        "replayClass": "R2"
+      },
+      {
+        "featureId": "eq_above_ma200",
+        "role": "DIAGNOSTIC",
+        "family": "participation",
+        "unit": "count of 11",
+        "value": null,
+        "status": "UNAVAILABLE",
+        "reasons": [
+          "INPUT_OR_WINDOW_UNAVAILABLE"
+        ],
+        "parents": [
+          "raw_statistical_prices"
+        ],
+        "replayClass": "R2"
+      },
+      {
+        "featureId": "eq_rsp_spy_21",
+        "role": "DIAGNOSTIC",
+        "family": "participation",
+        "unit": "percent",
+        "value": null,
+        "status": "UNAVAILABLE",
+        "reasons": [
+          "INPUT_OR_WINDOW_UNAVAILABLE"
+        ],
+        "parents": [
+          "raw_statistical_prices"
+        ],
+        "replayClass": "R2"
+      },
+      {
+        "featureId": "eq_iwm_spy_21",
+        "role": "DIAGNOSTIC",
+        "family": "participation",
+        "unit": "percent",
+        "value": null,
+        "status": "UNAVAILABLE",
+        "reasons": [
+          "INPUT_OR_WINDOW_UNAVAILABLE"
+        ],
+        "parents": [
+          "raw_statistical_prices"
+        ],
+        "replayClass": "R2"
+      },
+      {
+        "featureId": "eq_growth_21",
+        "role": "DIAGNOSTIC",
+        "family": "leadership",
+        "unit": "percent",
+        "value": -0.29479874812253043,
+        "status": "AVAILABLE",
+        "reasons": [],
+        "parents": [
+          "eq_returns_21"
+        ],
+        "replayClass": "R2"
+      },
+      {
+        "featureId": "eq_cyclical_21",
+        "role": "DIAGNOSTIC",
+        "family": "leadership",
+        "unit": "percent",
+        "value": 1.5068038061876095,
+        "status": "AVAILABLE",
+        "reasons": [],
+        "parents": [
+          "eq_returns_21"
+        ],
+        "replayClass": "R2"
+      },
+      {
+        "featureId": "eq_defensive_21",
+        "role": "DIAGNOSTIC",
+        "family": "leadership",
+        "unit": "percent",
+        "value": 0.2446200250763947,
+        "status": "AVAILABLE",
+        "reasons": [],
+        "parents": [
+          "eq_returns_21"
+        ],
+        "replayClass": "R2"
+      },
+      {
+        "featureId": "eq_leadership_gap",
+        "role": "CORE_DECISION",
+        "family": "leadership",
+        "unit": "percentage points",
+        "value": 1.2621837811112147,
+        "status": "AVAILABLE",
+        "reasons": [],
+        "parents": [
+          "eq_growth_21",
+          "eq_cyclical_21",
+          "eq_defensive_21"
+        ],
+        "replayClass": "R2"
+      },
+      {
+        "featureId": "eq_legacy_leadership",
+        "role": "PRESENTATION_ONLY",
+        "family": "leadership",
+        "unit": "categorical",
+        "value": null,
+        "status": "EXCLUDED",
+        "reasons": [
+          "EXCLUDED_FROM_V2"
+        ],
+        "parents": [
+          "eq_growth_21",
+          "eq_cyclical_21",
+          "eq_defensive_21"
+        ],
+        "replayClass": "UNKNOWN"
+      },
+      {
+        "featureId": "eq_dispersion_5",
+        "role": "DIAGNOSTIC",
+        "family": "leadership",
+        "unit": "percentage points",
+        "value": 4.163940845643288,
+        "status": "AVAILABLE",
+        "reasons": [],
+        "parents": [
+          "eq_returns_5"
+        ],
+        "replayClass": "R2"
+      },
+      {
+        "featureId": "eq_dispersion_21",
+        "role": "DIAGNOSTIC",
+        "family": "leadership",
+        "unit": "percentage points",
+        "value": 15.28081327799876,
+        "status": "AVAILABLE",
+        "reasons": [],
+        "parents": [
+          "eq_returns_21"
+        ],
+        "replayClass": "R2"
+      },
+      {
+        "featureId": "eq_leadership_persistence",
+        "role": "RESEARCH_ONLY",
+        "family": "leadership",
+        "unit": "sessions and UTC instants",
+        "value": null,
+        "status": "PARKED",
+        "reasons": [
+          "RESEARCH_NOT_ACTIVATED"
+        ],
+        "parents": [
+          "raw_regime_archive"
+        ],
+        "replayClass": "UNKNOWN"
+      },
+      {
+        "featureId": "eq_holdings_concentration",
+        "role": "RESEARCH_ONLY",
+        "family": "leadership",
+        "unit": "UNBOUND",
+        "value": null,
+        "status": "PARKED",
+        "reasons": [
+          "RESEARCH_NOT_ACTIVATED"
+        ],
+        "parents": [
+          "raw_market_holdings"
+        ],
+        "replayClass": "UNKNOWN"
+      },
+      {
+        "featureId": "vix_level",
+        "role": "CORE_DECISION",
+        "family": "vix_spot",
+        "unit": "VIX points",
+        "value": 14.53,
+        "status": "AVAILABLE",
+        "reasons": [],
+        "parents": [
+          "raw_vix_history"
+        ],
+        "replayClass": "R2"
+      },
+      {
+        "featureId": "vix_change_points_1",
+        "role": "DIAGNOSTIC",
+        "family": "vix_spot",
+        "unit": "VIX points",
+        "value": 0.20999999999999908,
+        "status": "AVAILABLE",
+        "reasons": [],
+        "parents": [
+          "raw_vix_history"
+        ],
+        "replayClass": "R2"
+      },
+      {
+        "featureId": "vix_change_points_5",
+        "role": "DIAGNOSTIC",
+        "family": "vix_spot",
+        "unit": "VIX points",
+        "value": 0.09999999999999964,
+        "status": "AVAILABLE",
+        "reasons": [],
+        "parents": [
+          "raw_vix_history"
+        ],
+        "replayClass": "R2"
+      },
+      {
+        "featureId": "vix_change_points_21",
+        "role": "DIAGNOSTIC",
+        "family": "vix_spot",
+        "unit": "VIX points",
+        "value": null,
+        "status": "UNAVAILABLE",
+        "reasons": [
+          "INPUT_OR_WINDOW_UNAVAILABLE"
+        ],
+        "parents": [
+          "raw_vix_history"
+        ],
+        "replayClass": "R2"
+      },
+      {
+        "featureId": "vix_momentum_1",
+        "role": "CORE_DECISION",
+        "family": "vix_spot",
+        "unit": "percent",
+        "value": 1.4664804469273651,
+        "status": "AVAILABLE",
+        "reasons": [],
+        "parents": [
+          "raw_vix_history"
+        ],
+        "replayClass": "R2"
+      },
+      {
+        "featureId": "vix_momentum_5",
+        "role": "CORE_DECISION",
+        "family": "vix_spot",
+        "unit": "percent",
+        "value": 0.6930006930006893,
+        "status": "AVAILABLE",
+        "reasons": [],
+        "parents": [
+          "raw_vix_history"
+        ],
+        "replayClass": "R2"
+      },
+      {
+        "featureId": "vix_percentile",
+        "role": "DIAGNOSTIC",
+        "family": "vix_spot",
+        "unit": "percentile rank",
+        "value": null,
+        "status": "UNAVAILABLE",
+        "reasons": [
+          "DECLARED_PREFIX_UNAVAILABLE"
+        ],
+        "parents": [
+          "raw_vix_history"
+        ],
+        "replayClass": "R2"
+      },
+      {
+        "featureId": "vix_legacy_composite",
+        "role": "PRESENTATION_ONLY",
+        "family": "vix_spot",
+        "unit": "categorical",
+        "value": null,
+        "status": "EXCLUDED",
+        "reasons": [
+          "EXCLUDED_FROM_V2"
+        ],
+        "parents": [
+          "vix_level",
+          "vix_percentile",
+          "vix_momentum_1",
+          "vix_momentum_5"
+        ],
+        "replayClass": "UNKNOWN"
+      },
+      {
+        "featureId": "vx_contracts",
+        "role": "DIAGNOSTIC",
+        "family": "vix_curve",
+        "unit": "VIX futures points",
+        "value": [
+          {
+            "symbol": "VX/U6",
+            "expirationDate": "2026-09-16",
+            "settlement": 16.2669
+          },
+          {
+            "symbol": "VX/V6",
+            "expirationDate": "2026-10-21",
+            "settlement": 18.1384
+          },
+          {
+            "symbol": "VX/X6",
+            "expirationDate": "2026-11-18",
+            "settlement": 18.7688
+          },
+          {
+            "symbol": "VX/Z6",
+            "expirationDate": "2026-12-16",
+            "settlement": 18.975
+          }
+        ],
+        "status": "AVAILABLE",
+        "reasons": [],
+        "parents": [
+          "raw_vx_settlements"
+        ],
+        "replayClass": "R2"
+      },
+      {
+        "featureId": "vx_spread_12",
+        "role": "DIAGNOSTIC",
+        "family": "vix_curve",
+        "unit": "points",
+        "value": 1.871500000000001,
+        "status": "AVAILABLE",
+        "reasons": [],
+        "parents": [
+          "vx_contracts"
+        ],
+        "replayClass": "R2"
+      },
+      {
+        "featureId": "vx_slope_12",
+        "role": "CORE_DECISION",
+        "family": "vix_curve",
+        "unit": "percent",
+        "value": 11.504957920685577,
+        "status": "AVAILABLE",
+        "reasons": [],
+        "parents": [
+          "vx_contracts"
+        ],
+        "replayClass": "R2"
+      },
+      {
+        "featureId": "vx_spread_13",
+        "role": "DIAGNOSTIC",
+        "family": "vix_curve",
+        "unit": "points",
+        "value": 2.501899999999999,
+        "status": "AVAILABLE",
+        "reasons": [],
+        "parents": [
+          "vx_contracts"
+        ],
+        "replayClass": "R2"
+      },
+      {
+        "featureId": "vx_slope_13",
+        "role": "DIAGNOSTIC",
+        "family": "vix_curve",
+        "unit": "percent",
+        "value": 15.38031216765332,
+        "status": "AVAILABLE",
+        "reasons": [],
+        "parents": [
+          "vx_contracts"
+        ],
+        "replayClass": "R2"
+      },
+      {
+        "featureId": "vx_curvature",
+        "role": "RESEARCH_ONLY",
+        "family": "vix_curve",
+        "unit": "points per day squared",
+        "value": null,
+        "status": "PARKED",
+        "reasons": [
+          "RESEARCH_NOT_ACTIVATED"
+        ],
+        "parents": [
+          "vx_contracts"
+        ],
+        "replayClass": "UNKNOWN"
+      },
+      {
+        "featureId": "corr_mean_21",
+        "role": "CORE_DECISION",
+        "family": "co_movement",
+        "unit": "correlation [-1,1]",
+        "value": 0.1453741491803044,
+        "status": "AVAILABLE",
+        "reasons": [],
+        "parents": [
+          "raw_sector_prices"
+        ],
+        "replayClass": "R2"
+      },
+      {
+        "featureId": "corr_mean_63",
+        "role": "DIAGNOSTIC",
+        "family": "co_movement",
+        "unit": "correlation [-1,1]",
+        "value": 0.13684176954936528,
+        "status": "AVAILABLE",
+        "reasons": [],
+        "parents": [
+          "raw_sector_prices"
+        ],
+        "replayClass": "R2"
+      },
+      {
+        "featureId": "corr_window_spread",
+        "role": "CORE_DECISION",
+        "family": "co_movement",
+        "unit": "correlation difference",
+        "value": 0.008532379630939113,
+        "status": "AVAILABLE",
+        "reasons": [],
+        "parents": [
+          "corr_mean_21",
+          "corr_mean_63"
+        ],
+        "replayClass": "R2"
+      },
+      {
+        "featureId": "corr_change_21",
+        "role": "DIAGNOSTIC",
+        "family": "co_movement",
+        "unit": "correlation difference",
+        "value": 0.029606534547714655,
+        "status": "AVAILABLE",
+        "reasons": [],
+        "parents": [
+          "raw_sector_prices"
+        ],
+        "replayClass": "R2"
+      },
+      {
+        "featureId": "corr_defensive_growth_21",
+        "role": "DIAGNOSTIC",
+        "family": "co_movement",
+        "unit": "correlation [-1,1]",
+        "value": 0.3501445243960568,
+        "status": "AVAILABLE",
+        "reasons": [],
+        "parents": [
+          "raw_sector_prices"
+        ],
+        "replayClass": "R2"
+      },
+      {
+        "featureId": "realized_ewma",
+        "role": "DIAGNOSTIC",
+        "family": "realized_risk",
+        "unit": "annualized percent",
+        "value": null,
+        "status": "UNAVAILABLE",
+        "reasons": [
+          "INPUT_OR_WINDOW_UNAVAILABLE"
+        ],
+        "parents": [
+          "raw_sector_prices"
+        ],
+        "replayClass": "R2"
+      },
+      {
+        "featureId": "realized_ewma_change",
+        "role": "DIAGNOSTIC",
+        "family": "realized_risk",
+        "unit": "percentage points",
+        "value": null,
+        "status": "UNAVAILABLE",
+        "reasons": [
+          "INPUT_OR_WINDOW_UNAVAILABLE"
+        ],
+        "parents": [
+          "realized_ewma",
+          "raw_sector_prices"
+        ],
+        "replayClass": "R2"
+      },
+      {
+        "featureId": "realized_garch",
+        "role": "RESEARCH_ONLY",
+        "family": "realized_risk",
+        "unit": "annualized percent",
+        "value": null,
+        "status": "PARKED",
+        "reasons": [
+          "RESEARCH_NOT_ACTIVATED"
+        ],
+        "parents": [
+          "raw_sector_prices",
+          "realized_ewma"
+        ],
+        "replayClass": "UNKNOWN"
+      },
+      {
+        "featureId": "legacy_fragility_score",
+        "role": "PRESENTATION_ONLY",
+        "family": "co_movement",
+        "unit": "legacy score",
+        "value": null,
+        "status": "EXCLUDED",
+        "reasons": [
+          "EXCLUDED_FROM_V2"
+        ],
+        "parents": [
+          "realized_ewma",
+          "realized_garch",
+          "corr_mean_21",
+          "eq_dispersion_5",
+          "eq_dispersion_21",
+          "eq_legacy_leadership"
+        ],
+        "replayClass": "UNKNOWN"
+      },
+      {
+        "featureId": "pfl_concentration",
+        "role": "RESEARCH_ONLY",
+        "family": "portfolio_specific",
+        "unit": "portfolio-specific",
+        "value": null,
+        "status": "PARKED",
+        "reasons": [
+          "RESEARCH_NOT_ACTIVATED"
+        ],
+        "parents": [
+          "raw_portfolio_holdings"
+        ],
+        "replayClass": "UNKNOWN"
+      },
+      {
+        "featureId": "pfl_covariance",
+        "role": "RESEARCH_ONLY",
+        "family": "portfolio_specific",
+        "unit": "portfolio-specific",
+        "value": null,
+        "status": "PARKED",
+        "reasons": [
+          "RESEARCH_NOT_ACTIVATED"
+        ],
+        "parents": [
+          "raw_portfolio_history",
+          "raw_portfolio_holdings"
+        ],
+        "replayClass": "UNKNOWN"
+      },
+      {
+        "featureId": "pfl_stress",
+        "role": "RESEARCH_ONLY",
+        "family": "portfolio_specific",
+        "unit": "portfolio-specific",
+        "value": null,
+        "status": "PARKED",
+        "reasons": [
+          "RESEARCH_NOT_ACTIVATED"
+        ],
+        "parents": [
+          "raw_portfolio_history",
+          "raw_portfolio_holdings"
+        ],
+        "replayClass": "UNKNOWN"
+      },
+      {
+        "featureId": "btc_daily",
+        "role": "SATELLITE",
+        "family": "btc_flows",
+        "unit": "USD millions",
+        "value": null,
+        "status": "UNAVAILABLE",
+        "reasons": [
+          "INPUT_OR_WINDOW_UNAVAILABLE"
+        ],
+        "parents": [
+          "raw_btc_rows"
+        ],
+        "replayClass": "UNKNOWN"
+      },
+      {
+        "featureId": "btc_rolling_5",
+        "role": "SATELLITE",
+        "family": "btc_flows",
+        "unit": "USD millions",
+        "value": null,
+        "status": "UNAVAILABLE",
+        "reasons": [
+          "INPUT_OR_WINDOW_UNAVAILABLE"
+        ],
+        "parents": [
+          "raw_btc_rows"
+        ],
+        "replayClass": "UNKNOWN"
+      },
+      {
+        "featureId": "btc_rolling_10",
+        "role": "SATELLITE",
+        "family": "btc_flows",
+        "unit": "USD millions",
+        "value": null,
+        "status": "UNAVAILABLE",
+        "reasons": [
+          "INPUT_OR_WINDOW_UNAVAILABLE"
+        ],
+        "parents": [
+          "raw_btc_rows"
+        ],
+        "replayClass": "UNKNOWN"
+      },
+      {
+        "featureId": "btc_rolling_20",
+        "role": "SATELLITE",
+        "family": "btc_flows",
+        "unit": "USD millions",
+        "value": null,
+        "status": "UNAVAILABLE",
+        "reasons": [
+          "INPUT_OR_WINDOW_UNAVAILABLE"
+        ],
+        "parents": [
+          "raw_btc_rows"
+        ],
+        "replayClass": "UNKNOWN"
+      },
+      {
+        "featureId": "btc_streak",
+        "role": "SATELLITE",
+        "family": "btc_flows",
+        "unit": "sessions + direction + censored",
+        "value": null,
+        "status": "UNAVAILABLE",
+        "reasons": [
+          "INPUT_OR_WINDOW_UNAVAILABLE"
+        ],
+        "parents": [
+          "raw_btc_rows"
+        ],
+        "replayClass": "UNKNOWN"
+      },
+      {
+        "featureId": "btc_breadth",
+        "role": "SATELLITE",
+        "family": "btc_flows",
+        "unit": "counts by status",
+        "value": null,
+        "status": "UNAVAILABLE",
+        "reasons": [
+          "INPUT_OR_WINDOW_UNAVAILABLE"
+        ],
+        "parents": [
+          "raw_btc_rows"
+        ],
+        "replayClass": "UNKNOWN"
+      },
+      {
+        "featureId": "btc_legacy_severity",
+        "role": "PRESENTATION_ONLY",
+        "family": "btc_flows",
+        "unit": "categorical",
+        "value": null,
+        "status": "EXCLUDED",
+        "reasons": [
+          "EXCLUDED_FROM_V2"
+        ],
+        "parents": [
+          "btc_daily",
+          "btc_rolling_5",
+          "btc_rolling_20",
+          "btc_breadth",
+          "btc_streak"
+        ],
+        "replayClass": "UNKNOWN"
+      },
+      {
+        "featureId": "btc_cumulative",
+        "role": "SATELLITE",
+        "family": "btc_flows",
+        "unit": "USD millions",
+        "value": null,
+        "status": "UNAVAILABLE",
+        "reasons": [
+          "INPUT_OR_WINDOW_UNAVAILABLE"
+        ],
+        "parents": [
+          "raw_btc_rows"
+        ],
+        "replayClass": "UNKNOWN"
+      },
+      {
+        "featureId": "gld_fund_data",
+        "role": "SATELLITE",
+        "family": "gld_pressure",
+        "unit": "shares / USD per share / USD",
+        "value": null,
+        "status": "UNAVAILABLE",
+        "reasons": [
+          "COHERENCE_AUDIT_PARTIAL"
+        ],
+        "parents": [
+          "raw_gld_rows"
+        ],
+        "replayClass": "UNKNOWN"
+      },
+      {
+        "featureId": "gld_shares_change_1",
+        "role": "SATELLITE",
+        "family": "gld_pressure",
+        "unit": "shares and fraction",
+        "value": null,
+        "status": "UNAVAILABLE",
+        "reasons": [
+          "GLD_WINDOW_UNAVAILABLE"
+        ],
+        "parents": [
+          "raw_gld_rows"
+        ],
+        "replayClass": "UNKNOWN"
+      },
+      {
+        "featureId": "gld_pressure_usd_1",
+        "role": "SATELLITE",
+        "family": "gld_pressure",
+        "unit": "USD",
+        "value": null,
+        "status": "UNAVAILABLE",
+        "reasons": [
+          "PARENT_UNAVAILABLE"
+        ],
+        "parents": [
+          "gld_shares_change_1",
+          "gld_fund_data"
+        ],
+        "replayClass": "UNKNOWN"
+      },
+      {
+        "featureId": "gld_shares_change_5",
+        "role": "SATELLITE",
+        "family": "gld_pressure",
+        "unit": "shares and fraction",
+        "value": null,
+        "status": "UNAVAILABLE",
+        "reasons": [
+          "GLD_WINDOW_UNAVAILABLE"
+        ],
+        "parents": [
+          "raw_gld_rows"
+        ],
+        "replayClass": "UNKNOWN"
+      },
+      {
+        "featureId": "gld_pressure_usd_5",
+        "role": "SATELLITE",
+        "family": "gld_pressure",
+        "unit": "USD",
+        "value": null,
+        "status": "UNAVAILABLE",
+        "reasons": [
+          "PARENT_UNAVAILABLE"
+        ],
+        "parents": [
+          "gld_shares_change_5",
+          "gld_fund_data"
+        ],
+        "replayClass": "UNKNOWN"
+      },
+      {
+        "featureId": "gld_shares_change_20",
+        "role": "SATELLITE",
+        "family": "gld_pressure",
+        "unit": "shares and fraction",
+        "value": null,
+        "status": "UNAVAILABLE",
+        "reasons": [
+          "GLD_WINDOW_UNAVAILABLE"
+        ],
+        "parents": [
+          "raw_gld_rows"
+        ],
+        "replayClass": "UNKNOWN"
+      },
+      {
+        "featureId": "gld_pressure_usd_20",
+        "role": "SATELLITE",
+        "family": "gld_pressure",
+        "unit": "USD",
+        "value": null,
+        "status": "UNAVAILABLE",
+        "reasons": [
+          "PARENT_UNAVAILABLE"
+        ],
+        "parents": [
+          "gld_shares_change_20",
+          "gld_fund_data"
+        ],
+        "replayClass": "UNKNOWN"
+      },
+      {
+        "featureId": "gld_legacy_state",
+        "role": "PRESENTATION_ONLY",
+        "family": "gld_pressure",
+        "unit": "categorical",
+        "value": null,
+        "status": "EXCLUDED",
+        "reasons": [
+          "EXCLUDED_FROM_V2"
+        ],
+        "parents": [
+          "gld_shares_change_5",
+          "gld_shares_change_20"
+        ],
+        "replayClass": "UNKNOWN"
+      }
+    ],
+    "concordance": "MEDIUM",
+    "uncertainty": "HIGH",
+    "plausibleRegimes": [
+      "RISK_ON_BROAD",
+      "RISK_ON_SELECTIVE",
+      "TRANSITION"
+    ],
+    "dataQuality": "PARTIAL",
+    "sourceStatus": {
+      "XLK": {
+        "status": "AVAILABLE",
+        "observationDate": "2026-09-04",
+        "sourcePublishedAt": null,
+        "availableAt": "2026-09-08T14:09:01.016056+00:00",
+        "capturedAt": "2026-09-08T14:09:01.016056+00:00",
+        "availabilityCertainty": "CONSERVATIVE_BOUND",
+        "replayClass": "R2",
+        "sourceId": "EQUITY_ADJUSTED",
+        "sourceVersion": "p8-source-contract/1.0.0",
+        "vintageHash": "08a10599fa315fd64a4a36923f1fbe2e0349a9fb82cffa91c89ac077e0e1c2a6",
+        "rows": 64,
+        "rejectedObservations": []
+      },
+      "XLY": {
+        "status": "AVAILABLE",
+        "observationDate": "2026-09-04",
+        "sourcePublishedAt": null,
+        "availableAt": "2026-09-08T14:09:00.903862+00:00",
+        "capturedAt": "2026-09-08T14:09:00.903862+00:00",
+        "availabilityCertainty": "CONSERVATIVE_BOUND",
+        "replayClass": "R2",
+        "sourceId": "EQUITY_ADJUSTED",
+        "sourceVersion": "p8-source-contract/1.0.0",
+        "vintageHash": "31a842266f5be063e5bcbb9487f67acbe957b88e74852473eb879cc63e2e543e",
+        "rows": 64,
+        "rejectedObservations": []
+      },
+      "XLC": {
+        "status": "AVAILABLE",
+        "observationDate": "2026-09-04",
+        "sourcePublishedAt": null,
+        "availableAt": "2026-09-08T14:09:00.986964+00:00",
+        "capturedAt": "2026-09-08T14:09:00.986964+00:00",
+        "availabilityCertainty": "CONSERVATIVE_BOUND",
+        "replayClass": "R2",
+        "sourceId": "EQUITY_ADJUSTED",
+        "sourceVersion": "p8-source-contract/1.0.0",
+        "vintageHash": "d407c24e740b4d20fe19824a76320e2bd6081f86395c3c75c64b9e26ca4fa84a",
+        "rows": 64,
+        "rejectedObservations": []
+      },
+      "XLF": {
+        "status": "AVAILABLE",
+        "observationDate": "2026-09-04",
+        "sourcePublishedAt": null,
+        "availableAt": "2026-09-08T14:09:01.274816+00:00",
+        "capturedAt": "2026-09-08T14:09:01.274816+00:00",
+        "availabilityCertainty": "CONSERVATIVE_BOUND",
+        "replayClass": "R2",
+        "sourceId": "EQUITY_ADJUSTED",
+        "sourceVersion": "p8-source-contract/1.0.0",
+        "vintageHash": "beebebe4f4c9eb599408a979a4b828f7032e8674aaed9b956b99c48f0920a337",
+        "rows": 64,
+        "rejectedObservations": []
+      },
+      "XLE": {
+        "status": "AVAILABLE",
+        "observationDate": "2026-09-04",
+        "sourcePublishedAt": null,
+        "availableAt": "2026-09-08T14:09:01.243446+00:00",
+        "capturedAt": "2026-09-08T14:09:01.243446+00:00",
+        "availabilityCertainty": "CONSERVATIVE_BOUND",
+        "replayClass": "R2",
+        "sourceId": "EQUITY_ADJUSTED",
+        "sourceVersion": "p8-source-contract/1.0.0",
+        "vintageHash": "f7d14c7ae8020ee755e9856b41111061d660cdbb7c479777cedaace6dfee97e3",
+        "rows": 64,
+        "rejectedObservations": []
+      },
+      "XLI": {
+        "status": "AVAILABLE",
+        "observationDate": "2026-09-04",
+        "sourcePublishedAt": null,
+        "availableAt": "2026-09-08T14:09:01.238690+00:00",
+        "capturedAt": "2026-09-08T14:09:01.238690+00:00",
+        "availabilityCertainty": "CONSERVATIVE_BOUND",
+        "replayClass": "R2",
+        "sourceId": "EQUITY_ADJUSTED",
+        "sourceVersion": "p8-source-contract/1.0.0",
+        "vintageHash": "841af851ad2c59302fea1fc99b41d67ff124418633c92b20ffad5777e7e89fbb",
+        "rows": 64,
+        "rejectedObservations": []
+      },
+      "XLB": {
+        "status": "AVAILABLE",
+        "observationDate": "2026-09-04",
+        "sourcePublishedAt": null,
+        "availableAt": "2026-09-08T14:09:01.370860+00:00",
+        "capturedAt": "2026-09-08T14:09:01.370860+00:00",
+        "availabilityCertainty": "CONSERVATIVE_BOUND",
+        "replayClass": "R2",
+        "sourceId": "EQUITY_ADJUSTED",
+        "sourceVersion": "p8-source-contract/1.0.0",
+        "vintageHash": "f21f49170520d896b2204db6aba5c604148a4b04c3584183706c353f8f78d280",
+        "rows": 64,
+        "rejectedObservations": []
+      },
+      "XLV": {
+        "status": "AVAILABLE",
+        "observationDate": "2026-09-04",
+        "sourcePublishedAt": null,
+        "availableAt": "2026-09-08T14:09:01.850969+00:00",
+        "capturedAt": "2026-09-08T14:09:01.850969+00:00",
+        "availabilityCertainty": "CONSERVATIVE_BOUND",
+        "replayClass": "R2",
+        "sourceId": "EQUITY_ADJUSTED",
+        "sourceVersion": "p8-source-contract/1.0.0",
+        "vintageHash": "07110d28b37afd7f2930ff7d2c2de9337ed65b9917f69f57c85ba56379250499",
+        "rows": 64,
+        "rejectedObservations": []
+      },
+      "XLP": {
+        "status": "AVAILABLE",
+        "observationDate": "2026-09-04",
+        "sourcePublishedAt": null,
+        "availableAt": "2026-09-08T14:09:01.469840+00:00",
+        "capturedAt": "2026-09-08T14:09:01.469840+00:00",
+        "availabilityCertainty": "CONSERVATIVE_BOUND",
+        "replayClass": "R2",
+        "sourceId": "EQUITY_ADJUSTED",
+        "sourceVersion": "p8-source-contract/1.0.0",
+        "vintageHash": "e69b1cdfe161cbdeb9d5e321823dc7ef1bdb173ea66c02467e3bc90938de8ed9",
+        "rows": 64,
+        "rejectedObservations": []
+      },
+      "XLU": {
+        "status": "AVAILABLE",
+        "observationDate": "2026-09-04",
+        "sourcePublishedAt": null,
+        "availableAt": "2026-09-08T14:09:01.656224+00:00",
+        "capturedAt": "2026-09-08T14:09:01.656224+00:00",
+        "availabilityCertainty": "CONSERVATIVE_BOUND",
+        "replayClass": "R2",
+        "sourceId": "EQUITY_ADJUSTED",
+        "sourceVersion": "p8-source-contract/1.0.0",
+        "vintageHash": "882db2c4e157bb17a7a398543e4791afcc32b5fe08a01de613eed9ff341e301e",
+        "rows": 64,
+        "rejectedObservations": []
+      },
+      "XLRE": {
+        "status": "AVAILABLE",
+        "observationDate": "2026-09-04",
+        "sourcePublishedAt": null,
+        "availableAt": "2026-09-08T14:09:01.695023+00:00",
+        "capturedAt": "2026-09-08T14:09:01.695023+00:00",
+        "availabilityCertainty": "CONSERVATIVE_BOUND",
+        "replayClass": "R2",
+        "sourceId": "EQUITY_ADJUSTED",
+        "sourceVersion": "p8-source-contract/1.0.0",
+        "vintageHash": "fd7564d4858015f9120d77927943a568e1c27b03ad379329b60f8d26e011bf91",
+        "rows": 64,
+        "rejectedObservations": []
+      },
+      "SPY": {
+        "status": "MISSING_SOURCE",
+        "observationDate": null,
+        "sourcePublishedAt": null,
+        "availableAt": null,
+        "capturedAt": null,
+        "availabilityCertainty": "UNKNOWN",
+        "replayClass": "UNKNOWN",
+        "sourceId": null,
+        "sourceVersion": null,
+        "vintageHash": null,
+        "rows": 0,
+        "rejectedObservations": []
+      },
+      "RSP": {
+        "status": "MISSING_SOURCE",
+        "observationDate": null,
+        "sourcePublishedAt": null,
+        "availableAt": null,
+        "capturedAt": null,
+        "availabilityCertainty": "UNKNOWN",
+        "replayClass": "UNKNOWN",
+        "sourceId": null,
+        "sourceVersion": null,
+        "vintageHash": null,
+        "rows": 0,
+        "rejectedObservations": []
+      },
+      "IWM": {
+        "status": "MISSING_SOURCE",
+        "observationDate": null,
+        "sourcePublishedAt": null,
+        "availableAt": null,
+        "capturedAt": null,
+        "availabilityCertainty": "UNKNOWN",
+        "replayClass": "UNKNOWN",
+        "sourceId": null,
+        "sourceVersion": null,
+        "vintageHash": null,
+        "rows": 0,
+        "rejectedObservations": []
+      },
+      "VIX": {
+        "status": "AVAILABLE",
+        "observationDate": "2026-09-04",
+        "sourcePublishedAt": null,
+        "availableAt": "2026-09-08T14:09:00.768566+00:00",
+        "capturedAt": "2026-09-08T14:09:00.768566+00:00",
+        "availabilityCertainty": "CONSERVATIVE_BOUND",
+        "replayClass": "R2",
+        "sourceId": "VIX_OFFICIAL",
+        "sourceVersion": "p8-source-contract/1.0.0",
+        "vintageHash": "5f6a4197e929ee7a1eb999db2938c7f6049114c9fd29eb5d80e356dabe43d658",
+        "rows": 6,
+        "rejectedObservations": []
+      },
+      "VX": {
+        "status": "AVAILABLE",
+        "observationDate": "2026-09-04",
+        "sourcePublishedAt": null,
+        "availableAt": "2026-09-08T14:09:00.609828+00:00",
+        "capturedAt": "2026-09-08T14:09:00.609828+00:00",
+        "availabilityCertainty": "CONSERVATIVE_BOUND",
+        "replayClass": "R2",
+        "sourceId": "VX_OFFICIAL",
+        "sourceVersion": "p8-source-contract/1.0.0",
+        "vintageHash": "a4f12c4b9f36c65c95a550182ca508e20e3d11c37017ebe42cb54021d14b420c",
+        "rows": 0,
+        "rejectedObservations": []
+      },
+      "BTC": {
+        "status": "UNKNOWN_CALENDAR",
+        "observationDate": null,
+        "sourcePublishedAt": null,
+        "availableAt": null,
+        "capturedAt": null,
+        "availabilityCertainty": "UNKNOWN",
+        "replayClass": "UNKNOWN",
+        "sourceId": null,
+        "sourceVersion": null,
+        "vintageHash": null,
+        "rows": 0,
+        "rejectedObservations": []
+      },
+      "GLD": {
+        "status": "UNKNOWN_CALENDAR",
+        "observationDate": null,
+        "sourcePublishedAt": null,
+        "availableAt": null,
+        "capturedAt": null,
+        "availabilityCertainty": "UNKNOWN",
+        "replayClass": "UNKNOWN",
+        "sourceId": null,
+        "sourceVersion": null,
+        "vintageHash": null,
+        "rows": 0,
+        "rejectedObservations": []
+      }
+    },
+    "replayClass": "R2",
+    "diagnostics": {
+      "ruleId": "R05",
+      "coreFeatures": {
+        "positive_5": 4,
+        "positive_21": 6,
+        "leadership_gap": 1.2621837811112147,
+        "rho21": 0.1453741491803044,
+        "rho63": 0.13684176954936528,
+        "corr_spread": 0.008532379630939113,
+        "vix": 14.53,
+        "jump_1": 1.4664804469273651,
+        "jump_5": 0.6930006930006893,
+        "slope": 11.504957920685577,
+        "realized_vol_21": 6.907002619174174,
+        "returns_5": {
+          "XLK": 0.8562638359554953,
+          "XLY": -1.9622860168317935,
+          "XLC": -0.8496319166499289,
+          "XLF": 0,
+          "XLE": 2.2016548288114945,
+          "XLI": -1.0556594352663096,
+          "XLB": -1.391503712335962,
+          "XLV": 0.16942818411320726,
+          "XLP": -1.0181335848548523,
+          "XLU": 0.8191020186471221,
+          "XLRE": -1.2365090888508012
+        },
+        "returns_21": {
+          "XLK": 1.0521755403746225,
+          "XLY": -2.7010964040873664,
+          "XLC": 0.7645246193451527,
+          "XLF": 0.5016382873916703,
+          "XLE": 10.144425252167832,
+          "XLI": -5.136388025830929,
+          "XLB": 0.5175397110218638,
+          "XLV": 4.2566130312566175,
+          "XLP": -0.6227220955188351,
+          "XLU": -0.6915611564635271,
+          "XLRE": -1.9638496789686766
+        },
+        "group_returns_21": {
+          "growth": -0.29479874812253043,
+          "cyclical": 1.5068038061876095,
+          "defensive": 0.2446200250763947
+        }
+      },
+      "missingReasons": [],
+      "optionalProblems": [
+        "btc_daily",
+        "btc_rolling_5",
+        "gld_shares_change_5",
+        "vix_percentile"
+      ],
+      "profile": [
+        "btc_daily",
+        "btc_rolling_5",
+        "gld_shares_change_5",
+        "vix_percentile"
+      ],
+      "dependencyContributions": {
+        "equity_price_complex": "MIXED",
+        "implied_volatility_complex": "FAVORABLE"
+      },
+      "coreFamilyCount": 2,
+      "independenceClaim": "ECONOMIC_LINEAGE_ONLY_NOT_STATISTICAL_INDEPENDENCE",
+      "calendarStatus": {
+        "equity": {
+          "target": "2026-09-04",
+          "sessions": [
+            "2026-06-05",
+            "2026-06-08",
+            "2026-06-09",
+            "2026-06-10",
+            "2026-06-11",
+            "2026-06-12",
+            "2026-06-15",
+            "2026-06-16",
+            "2026-06-17",
+            "2026-06-18",
+            "2026-06-22",
+            "2026-06-23",
+            "2026-06-24",
+            "2026-06-25",
+            "2026-06-26",
+            "2026-06-29",
+            "2026-06-30",
+            "2026-07-01",
+            "2026-07-02",
+            "2026-07-06",
+            "2026-07-07",
+            "2026-07-08",
+            "2026-07-09",
+            "2026-07-10",
+            "2026-07-13",
+            "2026-07-14",
+            "2026-07-15",
+            "2026-07-16",
+            "2026-07-17",
+            "2026-07-20",
+            "2026-07-21",
+            "2026-07-22",
+            "2026-07-23",
+            "2026-07-24",
+            "2026-07-27",
+            "2026-07-28",
+            "2026-07-29",
+            "2026-07-30",
+            "2026-07-31",
+            "2026-08-03",
+            "2026-08-04",
+            "2026-08-05",
+            "2026-08-06",
+            "2026-08-07",
+            "2026-08-10",
+            "2026-08-11",
+            "2026-08-12",
+            "2026-08-13",
+            "2026-08-14",
+            "2026-08-17",
+            "2026-08-18",
+            "2026-08-19",
+            "2026-08-20",
+            "2026-08-21",
+            "2026-08-24",
+            "2026-08-25",
+            "2026-08-26",
+            "2026-08-27",
+            "2026-08-28",
+            "2026-08-31",
+            "2026-09-01",
+            "2026-09-02",
+            "2026-09-03",
+            "2026-09-04"
+          ],
+          "reason": null
+        },
+        "vix": {
+          "target": "2026-09-04",
+          "sessions": [
+            "2026-06-05",
+            "2026-06-08",
+            "2026-06-09",
+            "2026-06-10",
+            "2026-06-11",
+            "2026-06-12",
+            "2026-06-15",
+            "2026-06-16",
+            "2026-06-17",
+            "2026-06-18",
+            "2026-06-22",
+            "2026-06-23",
+            "2026-06-24",
+            "2026-06-25",
+            "2026-06-26",
+            "2026-06-29",
+            "2026-06-30",
+            "2026-07-01",
+            "2026-07-02",
+            "2026-07-06",
+            "2026-07-07",
+            "2026-07-08",
+            "2026-07-09",
+            "2026-07-10",
+            "2026-07-13",
+            "2026-07-14",
+            "2026-07-15",
+            "2026-07-16",
+            "2026-07-17",
+            "2026-07-20",
+            "2026-07-21",
+            "2026-07-22",
+            "2026-07-23",
+            "2026-07-24",
+            "2026-07-27",
+            "2026-07-28",
+            "2026-07-29",
+            "2026-07-30",
+            "2026-07-31",
+            "2026-08-03",
+            "2026-08-04",
+            "2026-08-05",
+            "2026-08-06",
+            "2026-08-07",
+            "2026-08-10",
+            "2026-08-11",
+            "2026-08-12",
+            "2026-08-13",
+            "2026-08-14",
+            "2026-08-17",
+            "2026-08-18",
+            "2026-08-19",
+            "2026-08-20",
+            "2026-08-21",
+            "2026-08-24",
+            "2026-08-25",
+            "2026-08-26",
+            "2026-08-27",
+            "2026-08-28",
+            "2026-08-31",
+            "2026-09-01",
+            "2026-09-02",
+            "2026-09-03",
+            "2026-09-04"
+          ],
+          "reason": null
+        },
+        "vx": {
+          "target": "2026-09-04",
+          "sessions": [
+            "2026-06-05",
+            "2026-06-08",
+            "2026-06-09",
+            "2026-06-10",
+            "2026-06-11",
+            "2026-06-12",
+            "2026-06-15",
+            "2026-06-16",
+            "2026-06-17",
+            "2026-06-18",
+            "2026-06-22",
+            "2026-06-23",
+            "2026-06-24",
+            "2026-06-25",
+            "2026-06-26",
+            "2026-06-29",
+            "2026-06-30",
+            "2026-07-01",
+            "2026-07-02",
+            "2026-07-06",
+            "2026-07-07",
+            "2026-07-08",
+            "2026-07-09",
+            "2026-07-10",
+            "2026-07-13",
+            "2026-07-14",
+            "2026-07-15",
+            "2026-07-16",
+            "2026-07-17",
+            "2026-07-20",
+            "2026-07-21",
+            "2026-07-22",
+            "2026-07-23",
+            "2026-07-24",
+            "2026-07-27",
+            "2026-07-28",
+            "2026-07-29",
+            "2026-07-30",
+            "2026-07-31",
+            "2026-08-03",
+            "2026-08-04",
+            "2026-08-05",
+            "2026-08-06",
+            "2026-08-07",
+            "2026-08-10",
+            "2026-08-11",
+            "2026-08-12",
+            "2026-08-13",
+            "2026-08-14",
+            "2026-08-17",
+            "2026-08-18",
+            "2026-08-19",
+            "2026-08-20",
+            "2026-08-21",
+            "2026-08-24",
+            "2026-08-25",
+            "2026-08-26",
+            "2026-08-27",
+            "2026-08-28",
+            "2026-08-31",
+            "2026-09-01",
+            "2026-09-02",
+            "2026-09-03",
+            "2026-09-04"
+          ],
+          "reason": null
+        },
+        "btc": {
+          "target": null,
+          "sessions": [],
+          "reason": "UNKNOWN_CALENDAR"
+        },
+        "gld": {
+          "target": null,
+          "sessions": [],
+          "reason": "UNKNOWN_CALENDAR"
+        }
+      },
+      "inputHash": "f4459cfd3e65b1552555de7b15eebd605e85b91a627d2f664021e6924d8ed956",
+      "pointInTimeOosClaim": false
+    }
+  },
+  "observation": {
+    "observationDate": "2026-09-04",
+    "asOf": "2026-09-04T23:59:59.999999Z",
+    "inputHash": "f4459cfd3e65b1552555de7b15eebd605e85b91a627d2f664021e6924d8ed956",
+    "replayClass": "R2",
+    "regimeTransition": null,
+    "pillarTransitions": [],
+    "durationSessions": 1,
+    "durationCensored": true,
+    "dataQualityChange": null,
+    "reasonCode": "R05",
+    "missingReasons": [],
+    "dependencyContributions": {
+      "equity_price_complex": "MIXED",
+      "implied_volatility_complex": "FAVORABLE"
+    }
+  }
+}

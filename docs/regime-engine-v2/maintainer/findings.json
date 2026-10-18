@@ -1,0 +1,105 @@
+{
+  "schemaVersion": "regime-v2-maintainer-findings/1.0.0",
+  "findings": [
+    {
+      "finding_id": "M-DEPENDENCY-NEXT-001",
+      "severity": "MEDIUM",
+      "component": "local installation / Next.js",
+      "description": "Preexisting node_modules/next 16.2.7 contradicted both declared and locked Next 16.3.1.",
+      "evidence": [
+        "before.nextDeclared",
+        "before.nextLocked",
+        "before.nextInstalled",
+        "before.npmLsNextProblem"
+      ],
+      "repair": "Rebuilt node_modules with npm ci from exact frozen package.json/package-lock.json bytes, then replaced installed tree.",
+      "methodology_impact": "NO",
+      "status": "CLOSED"
+    },
+    {
+      "finding_id": "M-SOURCE-01",
+      "severity": "MEDIUM",
+      "component": "prospective normalization",
+      "description": "Passing fresh packet-level capture metadata to a whole historical payload would label earlier rows R0.",
+      "evidence": "Regression tests distinguish current selected row R0 and older retained rows R2.",
+      "repair": "Per-row closed-session eligibility, upstream R2 preservation and weakest-parent aggregation in new source boundary.",
+      "methodology_impact": "NO",
+      "status": "CLOSED"
+    },
+    {
+      "finding_id": "M-SOURCE-02",
+      "severity": "LOW",
+      "component": "operational VX normalization",
+      "description": "Frozen assembler's fallback observation end is date-only UTC day-end; a source with evidenced earlier settlement close would remain unavailable before day-end unless parent end is propagated.",
+      "evidence": "Complete synthetic R0 pipeline test initially showed only VX_NEAR_CONTRACTS_UNAVAILABLE, then passed after explicit max-near-parent observation end propagation.",
+      "repair": "New loader propagates the latest near-parent evidenced end using the source-specific calendar. No assembler/core/oracle modification.",
+      "methodology_impact": "NO",
+      "status": "CLOSED"
+    },
+    {
+      "finding_id": "M-OBS-001",
+      "severity": "MEDIUM",
+      "component": "diagnostic checkpoint",
+      "description": "Repeated observations of one unchanged session could reset accumulated diagnostic ages and candidate counts.",
+      "evidence": [
+        "lib/regime-engine-v2/operations/snapshot.test.ts",
+        "canonical-operations-tests.log"
+      ],
+      "repair": "Preserve the checkpoint for SAME_SESSION_REOBSERVED without double counting; censor actual revisions, gaps, failures and version changes.",
+      "methodology_impact": "NO",
+      "status": "CLOSED"
+    },
+    {
+      "finding_id": "M-ISO-001",
+      "severity": "MEDIUM",
+      "component": "shadow resource isolation",
+      "description": "A blocked private source read could retain the public V1 request indefinitely.",
+      "evidence": [
+        "lib/regime-engine-v2/operations/dashboard-shadow.test.ts",
+        "failure-matrix.md"
+      ],
+      "repair": "Bound asynchronous sidecar waiting to 2000 ms and active sidecars/publications to eight; retain V1 result/error identity and emit timeout diagnostics. This is not a freshness TTL and cannot interrupt synchronous JavaScript.",
+      "methodology_impact": "NO",
+      "status": "CLOSED"
+    },
+    {
+      "finding_id": "M-CAPTURE-001",
+      "severity": "MEDIUM",
+      "component": "raw input retention",
+      "description": "A mutable active bundle alone would lose the exact source envelope used by an earlier snapshot.",
+      "evidence": [
+        "lib/regime-engine-v2/operations/dashboard-shadow.test.ts",
+        "prospective-capture.md"
+      ],
+      "repair": "Archive exact original bundle bytes outside Git under their SHA before parsing; reject corruption and preserve every vintage reference.",
+      "methodology_impact": "NO",
+      "status": "CLOSED"
+    },
+    {
+      "finding_id": "M-PERF-01",
+      "severity": "HIGH",
+      "component": "source normalization and cache",
+      "description": "The complete 33,474-row raw bundle recreated Intl date formatters per Yahoo row and repeated normalization for every changed asOf; the initial benchmark observed approximately 560 ms per cut and 1.21 GB RSS.",
+      "evidence": [
+        "performance-pipeline-before.json",
+        "performance-pipeline.json",
+        "canonical-verification.json"
+      ],
+      "repair": "Reuse an identical per-call date formatter and one immutable normalized vintage keyed by bytes/contracts. Resolve calendars, VX and a distinct normalized input again for every asOf; evaluate unchanged C03. Verify the mechanical normalizer inverse and full original-output equality.",
+      "methodology_impact": "NO",
+      "status": "CLOSED"
+    }
+  ],
+  "total": 7,
+  "unresolved": [],
+  "methodologyImpact": "NO",
+  "operationalLimitations": [
+    "Default OFF. No deployment configuration, scheduler, Designer or production cutover was enabled.",
+    "Five real CFE response captures prove local acquisition/retention and honest INCOMPLETE/UNKNOWN degradation. No real official calendar or complete prospective source bundle was configured; complete R0 replay tests are synthetic.",
+    "The local smoke archive is temporary, not a configured durable deployment store. Runtime requires private storage with a single writer and an operator retention policy.",
+    "Capture-time bounds do not prove provider publication. R2 history stays R2; no R1 certification or PIT OOS claim.",
+    "Performance measurements use controlled unavailable V1 providers and preserved full R2 source bytes on this host. They exclude live provider latency, rendering and deployment load; no SLA is invented.",
+    "The sidecar wait deadline cannot preempt synchronous code, and a process shutdown can interrupt outstanding I/O. Logs may be the only evidence when storage itself fails.",
+    "The 100/100/60 event counts and both STRESS branches require future governed evidence/adjudication. Diagnostic counts do not change C03 or authorize automatic promotion."
+  ]
+}

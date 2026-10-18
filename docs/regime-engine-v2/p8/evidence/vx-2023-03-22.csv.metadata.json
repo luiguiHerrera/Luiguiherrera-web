@@ -1,0 +1,16 @@
+{
+  "url": "https://cdn.cboe.com/data/us/futures/market_statistics/historical_data/VX/VX_2023-03-22.csv",
+  "status": "CAPTURED",
+  "http_status": 200,
+  "capture_started_at": "2026-09-08T14:08:54.490620+00:00",
+  "captured_at": "2026-09-08T14:08:54.952597+00:00",
+  "available_at": "2026-09-08T14:08:54.952597+00:00",
+  "availability_certainty": "CONSERVATIVE_BOUND",
+  "source_published_at": null,
+  "historical_replay_class": "R2",
+  "raw_sha256": "3d35c3f0b0cef53f7808bd7faccf5245869c1972571c58b0727216c646a3571b",
+  "raw_bytes": 16045,
+  "file": "vx-2023-03-22.csv.gz",
+  "http_date_not_publication": "Tue, 08 Sep 2026 14:08:55 GMT",
+  "last_modified_not_vintage_guarantee": "Wed, 03 Dec 2025 19:36:45 GMT"
+}

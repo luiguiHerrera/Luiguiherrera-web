@@ -1,0 +1,5816 @@
+{
+  "version": "groweer-native-audit/1.0.0",
+  "scope": "Actual preserved parsed native rows; R2 only; no source fetch, no invented historical rows or publication timestamps. Small local sample cannot establish economic utility or noise frequency generally.",
+  "sourceEvidence": {
+    "btc": {
+      "path": "lib/reports/snapshots/primer-informe-septiembre-2026/btc-source.json",
+      "field": "columns, rows[][], retrievedAt, retrievalMethod",
+      "sha256": "228a63f829b28af82d891ac7d5d046799eba358910e5b528470e50c85575ef23",
+      "source": "Farside Investors",
+      "url": "https://farside.co.uk/bitcoin-etf-flow-all-data/",
+      "retrievalDate": "2026-09-06",
+      "retrievalMethod": "Public table extracted by web reader; direct HTTP capture returned 403. These are parsed public data rows, not an original HTML response.",
+      "nativePacketHash": "160e888bab5f6621cbd3a1c2c3a120e0115d6b6cd090d8fe32a81db4f8d52894",
+      "sourceVersion": "p8-source-contract/1.0.0",
+      "preservedRows": 25,
+      "first": "2026-08-03",
+      "last": "2026-09-04",
+      "currency": "USD_MILLIONS",
+      "expectedFunds": [
+        "IBIT",
+        "FBTC",
+        "BITB",
+        "ARKB",
+        "BTCO",
+        "EZBC",
+        "BRRR",
+        "HODL",
+        "BTCW",
+        "MSBT",
+        "GBTC",
+        "BTC"
+      ],
+      "totalFundCells": 300,
+      "observedZeroCells": 157,
+      "missingFundCells": 1,
+      "partialFundRows": [
+        "2026-08-07"
+      ],
+      "missingTotalRows": [],
+      "derivedTotalRows": [],
+      "reconciliableCompleteFundRows": 24,
+      "maxAbsReconciliationDifference": 1.1368683772161603e-13,
+      "reconciliationNote": "Observed totals match complete-fund sums up to floating-point arithmetic. The partial-fund row is not reconciliable from observed funds; reported total remains available and its missing cell is not zero."
+    },
+    "gld": {
+      "path": "lib/reports/snapshots/primer-informe-septiembre-2026/dashboard-evidence.json",
+      "field": "gldFlowPressure.history[].date/nav/sharesOutstanding/totalNetAssets",
+      "sha256": "e86698edf44aaa0aa67e1d7124b10c89ab128b1787585c08fa6e1df5ebfee524",
+      "source": "State Street / SPDR Gold Shares",
+      "url": "https://www.ssga.com/library-content/products/fund-data/etfs/us/navhist-us-en-gld.xlsx",
+      "captureDate": "2026-09-06",
+      "originalWorkbookBytesPreserved": false,
+      "nativePacketHash": "8fa1e4ef7902d081c8df4208cd9567dbcdf128c6b289c0cf6153129c8f59112b",
+      "sourceVersion": "p8-source-contract/1.0.0",
+      "preservedRows": 20,
+      "first": "2026-08-10",
+      "last": "2026-09-04",
+      "missingNativeCells": 0,
+      "maxRelativeNavSharesAumDifference": 1.1332266830110993e-9,
+      "availableOneSessionChanges": 19,
+      "availableFiveSessionChanges": 15,
+      "availableTwentySessionChanges": 0,
+      "requiredForTwentySessionDeltaAndCoherenceAudit": 21,
+      "presentationTwentyDayScalarExcluded": 12100000
+    }
+  },
+  "calendar": {
+    "definition": "Existing observed SPY R2 dates as explicitly labeled source-session proxy, no official prospective calendar claim.",
+    "sessionGapsWithinNativeCoverage": {
+      "btc": [],
+      "gld": []
+    }
+  },
+  "temporal": {
+    "replayClass": "R2",
+    "pointInTimeOosClaim": false,
+    "exactCaptureTimeKnown": false,
+    "sourcePublishedAt": null,
+    "availableAt": null,
+    "currentSourceAvailabilityClaim": false,
+    "retrospectiveDatesAreNotAvailabilityTimes": true
+  },
+  "btc": {
+    "verdict": "KEEP",
+    "valueClass": "CONTEXTUAL_ONLY",
+    "evidence": {
+      "daily": {
+        "counts": {
+          "positive": 19,
+          "negative": 6,
+          "zero": 0,
+          "missing": 0
+        },
+        "eligiblePairs": 24,
+        "signChanges": 8,
+        "signChangeRate": 0.3333333333333333,
+        "medianObservedSignRun": 1,
+        "observedRuns": [
+          {
+            "start": "2026-08-03",
+            "end": "2026-08-07",
+            "sign": 1,
+            "sessions": 5,
+            "leftCensored": true,
+            "rightCensored": false
+          },
+          {
+            "start": "2026-08-10",
+            "end": "2026-08-10",
+            "sign": -1,
+            "sessions": 1,
+            "leftCensored": false,
+            "rightCensored": false
+          },
+          {
+            "start": "2026-08-11",
+            "end": "2026-08-11",
+            "sign": 1,
+            "sessions": 1,
+            "leftCensored": false,
+            "rightCensored": false
+          },
+          {
+            "start": "2026-08-12",
+            "end": "2026-08-14",
+            "sign": -1,
+            "sessions": 3,
+            "leftCensored": false,
+            "rightCensored": false
+          },
+          {
+            "start": "2026-08-17",
+            "end": "2026-08-27",
+            "sign": 1,
+            "sessions": 9,
+            "leftCensored": false,
+            "rightCensored": false
+          },
+          {
+            "start": "2026-08-28",
+            "end": "2026-08-28",
+            "sign": -1,
+            "sessions": 1,
+            "leftCensored": false,
+            "rightCensored": false
+          },
+          {
+            "start": "2026-08-31",
+            "end": "2026-08-31",
+            "sign": 1,
+            "sessions": 1,
+            "leftCensored": false,
+            "rightCensored": false
+          },
+          {
+            "start": "2026-09-01",
+            "end": "2026-09-01",
+            "sign": -1,
+            "sessions": 1,
+            "leftCensored": false,
+            "rightCensored": false
+          },
+          {
+            "start": "2026-09-02",
+            "end": "2026-09-04",
+            "sign": 1,
+            "sessions": 3,
+            "leftCensored": false,
+            "rightCensored": true
+          }
+        ],
+        "changes": [
+          {
+            "date": "2026-08-10",
+            "from": 1,
+            "to": -1
+          },
+          {
+            "date": "2026-08-11",
+            "from": -1,
+            "to": 1
+          },
+          {
+            "date": "2026-08-12",
+            "from": 1,
+            "to": -1
+          },
+          {
+            "date": "2026-08-17",
+            "from": -1,
+            "to": 1
+          },
+          {
+            "date": "2026-08-28",
+            "from": 1,
+            "to": -1
+          },
+          {
+            "date": "2026-08-31",
+            "from": -1,
+            "to": 1
+          },
+          {
+            "date": "2026-09-01",
+            "from": 1,
+            "to": -1
+          },
+          {
+            "date": "2026-09-02",
+            "from": -1,
+            "to": 1
+          }
+        ],
+        "rows": [
+          {
+            "date": "2026-08-03",
+            "value": 170.1,
+            "sign": 1
+          },
+          {
+            "date": "2026-08-04",
+            "value": 211.5,
+            "sign": 1
+          },
+          {
+            "date": "2026-08-05",
+            "value": 244.4,
+            "sign": 1
+          },
+          {
+            "date": "2026-08-06",
+            "value": 137.6,
+            "sign": 1
+          },
+          {
+            "date": "2026-08-07",
+            "value": 101.7,
+            "sign": 1
+          },
+          {
+            "date": "2026-08-10",
+            "value": -144.6,
+            "sign": -1
+          },
+          {
+            "date": "2026-08-11",
+            "value": 7.8,
+            "sign": 1
+          },
+          {
+            "date": "2026-08-12",
+            "value": -61.1,
+            "sign": -1
+          },
+          {
+            "date": "2026-08-13",
+            "value": -131.1,
+            "sign": -1
+          },
+          {
+            "date": "2026-08-14",
+            "value": -56.2,
+            "sign": -1
+          },
+          {
+            "date": "2026-08-17",
+            "value": 297.5,
+            "sign": 1
+          },
+          {
+            "date": "2026-08-18",
+            "value": 189.3,
+            "sign": 1
+          },
+          {
+            "date": "2026-08-19",
+            "value": 517.2,
+            "sign": 1
+          },
+          {
+            "date": "2026-08-20",
+            "value": 606.3,
+            "sign": 1
+          },
+          {
+            "date": "2026-08-21",
+            "value": 307.5,
+            "sign": 1
+          },
+          {
+            "date": "2026-08-24",
+            "value": 337.6,
+            "sign": 1
+          },
+          {
+            "date": "2026-08-25",
+            "value": 314.3,
+            "sign": 1
+          },
+          {
+            "date": "2026-08-26",
+            "value": 232.2,
+            "sign": 1
+          },
+          {
+            "date": "2026-08-27",
+            "value": 242.3,
+            "sign": 1
+          },
+          {
+            "date": "2026-08-28",
+            "value": -201.9,
+            "sign": -1
+          },
+          {
+            "date": "2026-08-31",
+            "value": 216.7,
+            "sign": 1
+          },
+          {
+            "date": "2026-09-01",
+            "value": -236.5,
+            "sign": -1
+          },
+          {
+            "date": "2026-09-02",
+            "value": 101.1,
+            "sign": 1
+          },
+          {
+            "date": "2026-09-03",
+            "value": 730.8,
+            "sign": 1
+          },
+          {
+            "date": "2026-09-04",
+            "value": 174.6,
+            "sign": 1
+          }
+        ]
+      },
+      "rolling5": {
+        "counts": {
+          "positive": 19,
+          "negative": 2,
+          "zero": 0,
+          "missing": 4
+        },
+        "eligiblePairs": 20,
+        "signChanges": 2,
+        "signChangeRate": 0.1,
+        "medianObservedSignRun": 4,
+        "observedRuns": [
+          {
+            "start": "2026-08-07",
+            "end": "2026-08-12",
+            "sign": 1,
+            "sessions": 4,
+            "leftCensored": true,
+            "rightCensored": false
+          },
+          {
+            "start": "2026-08-13",
+            "end": "2026-08-14",
+            "sign": -1,
+            "sessions": 2,
+            "leftCensored": false,
+            "rightCensored": false
+          },
+          {
+            "start": "2026-08-17",
+            "end": "2026-09-04",
+            "sign": 1,
+            "sessions": 15,
+            "leftCensored": false,
+            "rightCensored": true
+          }
+        ],
+        "changes": [
+          {
+            "date": "2026-08-13",
+            "from": 1,
+            "to": -1
+          },
+          {
+            "date": "2026-08-17",
+            "from": -1,
+            "to": 1
+          }
+        ],
+        "rows": [
+          {
+            "date": "2026-08-03",
+            "value": null,
+            "sign": null
+          },
+          {
+            "date": "2026-08-04",
+            "value": null,
+            "sign": null
+          },
+          {
+            "date": "2026-08-05",
+            "value": null,
+            "sign": null
+          },
+          {
+            "date": "2026-08-06",
+            "value": null,
+            "sign": null
+          },
+          {
+            "date": "2026-08-07",
+            "value": 865.3000000000001,
+            "sign": 1
+          },
+          {
+            "date": "2026-08-10",
+            "value": 550.6,
+            "sign": 1
+          },
+          {
+            "date": "2026-08-11",
+            "value": 346.90000000000003,
+            "sign": 1
+          },
+          {
+            "date": "2026-08-12",
+            "value": 41.40000000000001,
+            "sign": 1
+          },
+          {
+            "date": "2026-08-13",
+            "value": -227.29999999999998,
+            "sign": -1
+          },
+          {
+            "date": "2026-08-14",
+            "value": -385.2,
+            "sign": -1
+          },
+          {
+            "date": "2026-08-17",
+            "value": 56.89999999999998,
+            "sign": 1
+          },
+          {
+            "date": "2026-08-18",
+            "value": 238.40000000000003,
+            "sign": 1
+          },
+          {
+            "date": "2026-08-19",
+            "value": 816.7,
+            "sign": 1
+          },
+          {
+            "date": "2026-08-20",
+            "value": 1554.1,
+            "sign": 1
+          },
+          {
+            "date": "2026-08-21",
+            "value": 1917.8,
+            "sign": 1
+          },
+          {
+            "date": "2026-08-24",
+            "value": 1957.9,
+            "sign": 1
+          },
+          {
+            "date": "2026-08-25",
+            "value": 2082.9,
+            "sign": 1
+          },
+          {
+            "date": "2026-08-26",
+            "value": 1797.9,
+            "sign": 1
+          },
+          {
+            "date": "2026-08-27",
+            "value": 1433.9,
+            "sign": 1
+          },
+          {
+            "date": "2026-08-28",
+            "value": 924.5000000000001,
+            "sign": 1
+          },
+          {
+            "date": "2026-08-31",
+            "value": 803.5999999999999,
+            "sign": 1
+          },
+          {
+            "date": "2026-09-01",
+            "value": 252.8,
+            "sign": 1
+          },
+          {
+            "date": "2026-09-02",
+            "value": 121.70000000000002,
+            "sign": 1
+          },
+          {
+            "date": "2026-09-03",
+            "value": 610.1999999999999,
+            "sign": 1
+          },
+          {
+            "date": "2026-09-04",
+            "value": 986.6999999999999,
+            "sign": 1
+          }
+        ]
+      },
+      "rolling20": {
+        "counts": {
+          "positive": 6,
+          "negative": 0,
+          "zero": 0,
+          "missing": 19
+        },
+        "eligiblePairs": 5,
+        "signChanges": 0,
+        "signChangeRate": 0,
+        "medianObservedSignRun": 6,
+        "observedRuns": [
+          {
+            "start": "2026-08-28",
+            "end": "2026-09-04",
+            "sign": 1,
+            "sessions": 6,
+            "leftCensored": true,
+            "rightCensored": true
+          }
+        ],
+        "changes": [],
+        "rows": [
+          {
+            "date": "2026-08-03",
+            "value": null,
+            "sign": null
+          },
+          {
+            "date": "2026-08-04",
+            "value": null,
+            "sign": null
+          },
+          {
+            "date": "2026-08-05",
+            "value": null,
+            "sign": null
+          },
+          {
+            "date": "2026-08-06",
+            "value": null,
+            "sign": null
+          },
+          {
+            "date": "2026-08-07",
+            "value": null,
+            "sign": null
+          },
+          {
+            "date": "2026-08-10",
+            "value": null,
+            "sign": null
+          },
+          {
+            "date": "2026-08-11",
+            "value": null,
+            "sign": null
+          },
+          {
+            "date": "2026-08-12",
+            "value": null,
+            "sign": null
+          },
+          {
+            "date": "2026-08-13",
+            "value": null,
+            "sign": null
+          },
+          {
+            "date": "2026-08-14",
+            "value": null,
+            "sign": null
+          },
+          {
+            "date": "2026-08-17",
+            "value": null,
+            "sign": null
+          },
+          {
+            "date": "2026-08-18",
+            "value": null,
+            "sign": null
+          },
+          {
+            "date": "2026-08-19",
+            "value": null,
+            "sign": null
+          },
+          {
+            "date": "2026-08-20",
+            "value": null,
+            "sign": null
+          },
+          {
+            "date": "2026-08-21",
+            "value": null,
+            "sign": null
+          },
+          {
+            "date": "2026-08-24",
+            "value": null,
+            "sign": null
+          },
+          {
+            "date": "2026-08-25",
+            "value": null,
+            "sign": null
+          },
+          {
+            "date": "2026-08-26",
+            "value": null,
+            "sign": null
+          },
+          {
+            "date": "2026-08-27",
+            "value": null,
+            "sign": null
+          },
+          {
+            "date": "2026-08-28",
+            "value": 3322.3999999999996,
+            "sign": 1
+          },
+          {
+            "date": "2026-08-31",
+            "value": 3369,
+            "sign": 1
+          },
+          {
+            "date": "2026-09-01",
+            "value": 2921,
+            "sign": 1
+          },
+          {
+            "date": "2026-09-02",
+            "value": 2777.7,
+            "sign": 1
+          },
+          {
+            "date": "2026-09-03",
+            "value": 3370.8999999999996,
+            "sign": 1
+          },
+          {
+            "date": "2026-09-04",
+            "value": 3443.7999999999997,
+            "sign": 1
+          }
+        ]
+      },
+      "dailyVersusRolling5": {
+        "pairs": 21,
+        "oppositeNonzeroSigns": 4,
+        "zeroVersusNonzero": 0,
+        "examples": [
+          {
+            "date": "2026-08-10",
+            "first": -1,
+            "second": 1
+          },
+          {
+            "date": "2026-08-12",
+            "first": -1,
+            "second": 1
+          },
+          {
+            "date": "2026-08-28",
+            "first": -1,
+            "second": 1
+          },
+          {
+            "date": "2026-09-01",
+            "first": -1,
+            "second": 1
+          }
+        ]
+      },
+      "dailyContextVersusCore": {
+        "signChanges": 8,
+        "whileRegimeUnchanged": 6,
+        "observations": [
+          {
+            "date": "2026-08-10",
+            "from": 1,
+            "to": -1,
+            "priorRegime": "RISK_ON_BROAD",
+            "regime": "RISK_ON_BROAD",
+            "regimeUnchanged": true
+          },
+          {
+            "date": "2026-08-11",
+            "from": -1,
+            "to": 1,
+            "priorRegime": "RISK_ON_BROAD",
+            "regime": "RISK_ON_SELECTIVE",
+            "regimeUnchanged": false
+          },
+          {
+            "date": "2026-08-12",
+            "from": 1,
+            "to": -1,
+            "priorRegime": "RISK_ON_SELECTIVE",
+            "regime": "RISK_ON_SELECTIVE",
+            "regimeUnchanged": true
+          },
+          {
+            "date": "2026-08-17",
+            "from": -1,
+            "to": 1,
+            "priorRegime": "RISK_ON_BROAD",
+            "regime": "RISK_ON_SELECTIVE",
+            "regimeUnchanged": false
+          },
+          {
+            "date": "2026-08-28",
+            "from": 1,
+            "to": -1,
+            "priorRegime": "RISK_ON_SELECTIVE",
+            "regime": "RISK_ON_SELECTIVE",
+            "regimeUnchanged": true
+          },
+          {
+            "date": "2026-08-31",
+            "from": -1,
+            "to": 1,
+            "priorRegime": "RISK_ON_SELECTIVE",
+            "regime": "RISK_ON_SELECTIVE",
+            "regimeUnchanged": true
+          },
+          {
+            "date": "2026-09-01",
+            "from": 1,
+            "to": -1,
+            "priorRegime": "RISK_ON_SELECTIVE",
+            "regime": "RISK_ON_SELECTIVE",
+            "regimeUnchanged": true
+          },
+          {
+            "date": "2026-09-02",
+            "from": -1,
+            "to": 1,
+            "priorRegime": "RISK_ON_SELECTIVE",
+            "regime": "RISK_ON_SELECTIVE",
+            "regimeUnchanged": true
+          }
+        ],
+        "inference": "Instrument-specific context can change while core regime is stable; descriptive distinction alone is not economic utility or statistical independence."
+      },
+      "fiveSessionContextVersusCore": {
+        "signChanges": 2,
+        "whileRegimeUnchanged": 0,
+        "observations": [
+          {
+            "date": "2026-08-13",
+            "from": 1,
+            "to": -1,
+            "priorRegime": "RISK_ON_SELECTIVE",
+            "regime": "RISK_ON_BROAD",
+            "regimeUnchanged": false
+          },
+          {
+            "date": "2026-08-17",
+            "from": -1,
+            "to": 1,
+            "priorRegime": "RISK_ON_BROAD",
+            "regime": "RISK_ON_SELECTIVE",
+            "regimeUnchanged": false
+          }
+        ],
+        "inference": "Instrument-specific context can change while core regime is stable; descriptive distinction alone is not economic utility or statistical independence."
+      }
+    },
+    "rationale": "Reported subscriptions/redemptions provide a distinct instrument-specific demand context. Retain optional zero-vote evidence and missing-fund flags. This 25-session sample does not justify removal, promotion to market core, or a predictive claim.",
+    "maintenance": [
+      "Preserve native nulls and expected fund-universe version",
+      "Capture source bytes/parsed extraction and actual availability time prospectively",
+      "Do not splice vendors or backfill sessions"
+    ]
+  },
+  "gld": {
+    "verdict": "KEEP",
+    "valueClass": "CONTEXTUAL_ONLY",
+    "evidence": {
+      "deltaShares1": {
+        "counts": {
+          "positive": 11,
+          "negative": 7,
+          "zero": 1,
+          "missing": 6
+        },
+        "eligiblePairs": 18,
+        "signChanges": 10,
+        "signChangeRate": 0.5555555555555556,
+        "medianObservedSignRun": 2,
+        "observedRuns": [
+          {
+            "start": "2026-08-11",
+            "end": "2026-08-12",
+            "sign": 1,
+            "sessions": 2,
+            "leftCensored": true,
+            "rightCensored": false
+          },
+          {
+            "start": "2026-08-13",
+            "end": "2026-08-13",
+            "sign": -1,
+            "sessions": 1,
+            "leftCensored": false,
+            "rightCensored": false
+          },
+          {
+            "start": "2026-08-14",
+            "end": "2026-08-17",
+            "sign": 1,
+            "sessions": 2,
+            "leftCensored": false,
+            "rightCensored": false
+          },
+          {
+            "start": "2026-08-18",
+            "end": "2026-08-18",
+            "sign": -1,
+            "sessions": 1,
+            "leftCensored": false,
+            "rightCensored": false
+          },
+          {
+            "start": "2026-08-19",
+            "end": "2026-08-24",
+            "sign": 1,
+            "sessions": 4,
+            "leftCensored": false,
+            "rightCensored": false
+          },
+          {
+            "start": "2026-08-25",
+            "end": "2026-08-26",
+            "sign": -1,
+            "sessions": 2,
+            "leftCensored": false,
+            "rightCensored": false
+          },
+          {
+            "start": "2026-08-27",
+            "end": "2026-08-27",
+            "sign": 1,
+            "sessions": 1,
+            "leftCensored": false,
+            "rightCensored": false
+          },
+          {
+            "start": "2026-08-28",
+            "end": "2026-08-28",
+            "sign": -1,
+            "sessions": 1,
+            "leftCensored": false,
+            "rightCensored": false
+          },
+          {
+            "start": "2026-08-31",
+            "end": "2026-08-31",
+            "sign": 0,
+            "sessions": 1,
+            "leftCensored": false,
+            "rightCensored": false
+          },
+          {
+            "start": "2026-09-01",
+            "end": "2026-09-02",
+            "sign": 1,
+            "sessions": 2,
+            "leftCensored": false,
+            "rightCensored": false
+          },
+          {
+            "start": "2026-09-03",
+            "end": "2026-09-04",
+            "sign": -1,
+            "sessions": 2,
+            "leftCensored": false,
+            "rightCensored": true
+          }
+        ],
+        "changes": [
+          {
+            "date": "2026-08-13",
+            "from": 1,
+            "to": -1
+          },
+          {
+            "date": "2026-08-14",
+            "from": -1,
+            "to": 1
+          },
+          {
+            "date": "2026-08-18",
+            "from": 1,
+            "to": -1
+          },
+          {
+            "date": "2026-08-19",
+            "from": -1,
+            "to": 1
+          },
+          {
+            "date": "2026-08-25",
+            "from": 1,
+            "to": -1
+          },
+          {
+            "date": "2026-08-27",
+            "from": -1,
+            "to": 1
+          },
+          {
+            "date": "2026-08-28",
+            "from": 1,
+            "to": -1
+          },
+          {
+            "date": "2026-08-31",
+            "from": -1,
+            "to": 0
+          },
+          {
+            "date": "2026-09-01",
+            "from": 0,
+            "to": 1
+          },
+          {
+            "date": "2026-09-03",
+            "from": 1,
+            "to": -1
+          }
+        ],
+        "rows": [
+          {
+            "date": "2026-08-03",
+            "value": null,
+            "sign": null
+          },
+          {
+            "date": "2026-08-04",
+            "value": null,
+            "sign": null
+          },
+          {
+            "date": "2026-08-05",
+            "value": null,
+            "sign": null
+          },
+          {
+            "date": "2026-08-06",
+            "value": null,
+            "sign": null
+          },
+          {
+            "date": "2026-08-07",
+            "value": null,
+            "sign": null
+          },
+          {
+            "date": "2026-08-10",
+            "value": null,
+            "sign": null
+          },
+          {
+            "date": "2026-08-11",
+            "value": 600000,
+            "sign": 1
+          },
+          {
+            "date": "2026-08-12",
+            "value": 1100000,
+            "sign": 1
+          },
+          {
+            "date": "2026-08-13",
+            "value": -900000,
+            "sign": -1
+          },
+          {
+            "date": "2026-08-14",
+            "value": 100000,
+            "sign": 1
+          },
+          {
+            "date": "2026-08-17",
+            "value": 2500000,
+            "sign": 1
+          },
+          {
+            "date": "2026-08-18",
+            "value": -1900000,
+            "sign": -1
+          },
+          {
+            "date": "2026-08-19",
+            "value": 3300000,
+            "sign": 1
+          },
+          {
+            "date": "2026-08-20",
+            "value": 1500000,
+            "sign": 1
+          },
+          {
+            "date": "2026-08-21",
+            "value": 2900000,
+            "sign": 1
+          },
+          {
+            "date": "2026-08-24",
+            "value": 800000,
+            "sign": 1
+          },
+          {
+            "date": "2026-08-25",
+            "value": -400000,
+            "sign": -1
+          },
+          {
+            "date": "2026-08-26",
+            "value": -1000000,
+            "sign": -1
+          },
+          {
+            "date": "2026-08-27",
+            "value": 400000,
+            "sign": 1
+          },
+          {
+            "date": "2026-08-28",
+            "value": -1500000,
+            "sign": -1
+          },
+          {
+            "date": "2026-08-31",
+            "value": 0,
+            "sign": 0
+          },
+          {
+            "date": "2026-09-01",
+            "value": 1500000,
+            "sign": 1
+          },
+          {
+            "date": "2026-09-02",
+            "value": 3500000,
+            "sign": 1
+          },
+          {
+            "date": "2026-09-03",
+            "value": -1100000,
+            "sign": -1
+          },
+          {
+            "date": "2026-09-04",
+            "value": -500000,
+            "sign": -1
+          }
+        ]
+      },
+      "deltaShares5": {
+        "counts": {
+          "positive": 12,
+          "negative": 3,
+          "zero": 0,
+          "missing": 10
+        },
+        "eligiblePairs": 14,
+        "signChanges": 2,
+        "signChangeRate": 0.14285714285714285,
+        "medianObservedSignRun": 3,
+        "observedRuns": [
+          {
+            "start": "2026-08-17",
+            "end": "2026-08-27",
+            "sign": 1,
+            "sessions": 9,
+            "leftCensored": true,
+            "rightCensored": false
+          },
+          {
+            "start": "2026-08-28",
+            "end": "2026-09-01",
+            "sign": -1,
+            "sessions": 3,
+            "leftCensored": false,
+            "rightCensored": false
+          },
+          {
+            "start": "2026-09-02",
+            "end": "2026-09-04",
+            "sign": 1,
+            "sessions": 3,
+            "leftCensored": false,
+            "rightCensored": true
+          }
+        ],
+        "changes": [
+          {
+            "date": "2026-08-28",
+            "from": 1,
+            "to": -1
+          },
+          {
+            "date": "2026-09-02",
+            "from": -1,
+            "to": 1
+          }
+        ],
+        "rows": [
+          {
+            "date": "2026-08-03",
+            "value": null,
+            "sign": null
+          },
+          {
+            "date": "2026-08-04",
+            "value": null,
+            "sign": null
+          },
+          {
+            "date": "2026-08-05",
+            "value": null,
+            "sign": null
+          },
+          {
+            "date": "2026-08-06",
+            "value": null,
+            "sign": null
+          },
+          {
+            "date": "2026-08-07",
+            "value": null,
+            "sign": null
+          },
+          {
+            "date": "2026-08-10",
+            "value": null,
+            "sign": null
+          },
+          {
+            "date": "2026-08-11",
+            "value": null,
+            "sign": null
+          },
+          {
+            "date": "2026-08-12",
+            "value": null,
+            "sign": null
+          },
+          {
+            "date": "2026-08-13",
+            "value": null,
+            "sign": null
+          },
+          {
+            "date": "2026-08-14",
+            "value": null,
+            "sign": null
+          },
+          {
+            "date": "2026-08-17",
+            "value": 3400000,
+            "sign": 1
+          },
+          {
+            "date": "2026-08-18",
+            "value": 900000,
+            "sign": 1
+          },
+          {
+            "date": "2026-08-19",
+            "value": 3100000,
+            "sign": 1
+          },
+          {
+            "date": "2026-08-20",
+            "value": 5500000,
+            "sign": 1
+          },
+          {
+            "date": "2026-08-21",
+            "value": 8300000,
+            "sign": 1
+          },
+          {
+            "date": "2026-08-24",
+            "value": 6600000,
+            "sign": 1
+          },
+          {
+            "date": "2026-08-25",
+            "value": 8100000,
+            "sign": 1
+          },
+          {
+            "date": "2026-08-26",
+            "value": 3800000,
+            "sign": 1
+          },
+          {
+            "date": "2026-08-27",
+            "value": 2700000,
+            "sign": 1
+          },
+          {
+            "date": "2026-08-28",
+            "value": -1700000,
+            "sign": -1
+          },
+          {
+            "date": "2026-08-31",
+            "value": -2500000,
+            "sign": -1
+          },
+          {
+            "date": "2026-09-01",
+            "value": -600000,
+            "sign": -1
+          },
+          {
+            "date": "2026-09-02",
+            "value": 3900000,
+            "sign": 1
+          },
+          {
+            "date": "2026-09-03",
+            "value": 2400000,
+            "sign": 1
+          },
+          {
+            "date": "2026-09-04",
+            "value": 3400000,
+            "sign": 1
+          }
+        ]
+      },
+      "dailyVersusFiveSession": {
+        "pairs": 15,
+        "oppositeNonzeroSigns": 6,
+        "zeroVersusNonzero": 1,
+        "examples": [
+          {
+            "date": "2026-08-18",
+            "first": -1,
+            "second": 1
+          },
+          {
+            "date": "2026-08-25",
+            "first": -1,
+            "second": 1
+          },
+          {
+            "date": "2026-08-26",
+            "first": -1,
+            "second": 1
+          },
+          {
+            "date": "2026-08-31",
+            "first": 0,
+            "second": -1
+          },
+          {
+            "date": "2026-09-01",
+            "first": 1,
+            "second": -1
+          },
+          {
+            "date": "2026-09-03",
+            "first": -1,
+            "second": 1
+          },
+          {
+            "date": "2026-09-04",
+            "first": -1,
+            "second": 1
+          }
+        ]
+      },
+      "dailyContextVersusCore": {
+        "signChanges": 10,
+        "whileRegimeUnchanged": 8,
+        "observations": [
+          {
+            "date": "2026-08-13",
+            "from": 1,
+            "to": -1,
+            "priorRegime": "RISK_ON_SELECTIVE",
+            "regime": "RISK_ON_BROAD",
+            "regimeUnchanged": false
+          },
+          {
+            "date": "2026-08-14",
+            "from": -1,
+            "to": 1,
+            "priorRegime": "RISK_ON_BROAD",
+            "regime": "RISK_ON_BROAD",
+            "regimeUnchanged": true
+          },
+          {
+            "date": "2026-08-18",
+            "from": 1,
+            "to": -1,
+            "priorRegime": "RISK_ON_SELECTIVE",
+            "regime": "RISK_ON_SELECTIVE",
+            "regimeUnchanged": true
+          },
+          {
+            "date": "2026-08-19",
+            "from": -1,
+            "to": 1,
+            "priorRegime": "RISK_ON_SELECTIVE",
+            "regime": "RISK_ON_SELECTIVE",
+            "regimeUnchanged": true
+          },
+          {
+            "date": "2026-08-25",
+            "from": 1,
+            "to": -1,
+            "priorRegime": "RISK_ON_BROAD",
+            "regime": "RISK_ON_SELECTIVE",
+            "regimeUnchanged": false
+          },
+          {
+            "date": "2026-08-27",
+            "from": -1,
+            "to": 1,
+            "priorRegime": "RISK_ON_SELECTIVE",
+            "regime": "RISK_ON_SELECTIVE",
+            "regimeUnchanged": true
+          },
+          {
+            "date": "2026-08-28",
+            "from": 1,
+            "to": -1,
+            "priorRegime": "RISK_ON_SELECTIVE",
+            "regime": "RISK_ON_SELECTIVE",
+            "regimeUnchanged": true
+          },
+          {
+            "date": "2026-08-31",
+            "from": -1,
+            "to": 0,
+            "priorRegime": "RISK_ON_SELECTIVE",
+            "regime": "RISK_ON_SELECTIVE",
+            "regimeUnchanged": true
+          },
+          {
+            "date": "2026-09-01",
+            "from": 0,
+            "to": 1,
+            "priorRegime": "RISK_ON_SELECTIVE",
+            "regime": "RISK_ON_SELECTIVE",
+            "regimeUnchanged": true
+          },
+          {
+            "date": "2026-09-03",
+            "from": 1,
+            "to": -1,
+            "priorRegime": "RISK_ON_SELECTIVE",
+            "regime": "RISK_ON_SELECTIVE",
+            "regimeUnchanged": true
+          }
+        ],
+        "inference": "Instrument-specific context can change while core regime is stable; descriptive distinction alone is not economic utility or statistical independence."
+      },
+      "fiveSessionContextVersusCore": {
+        "signChanges": 2,
+        "whileRegimeUnchanged": 2,
+        "observations": [
+          {
+            "date": "2026-08-28",
+            "from": 1,
+            "to": -1,
+            "priorRegime": "RISK_ON_SELECTIVE",
+            "regime": "RISK_ON_SELECTIVE",
+            "regimeUnchanged": true
+          },
+          {
+            "date": "2026-09-02",
+            "from": -1,
+            "to": 1,
+            "priorRegime": "RISK_ON_SELECTIVE",
+            "regime": "RISK_ON_SELECTIVE",
+            "regimeUnchanged": true
+          }
+        ],
+        "inference": "Instrument-specific context can change while core regime is stable; descriptive distinction alone is not economic utility or statistical independence."
+      }
+    },
+    "rationale": "Native share changes differ economically from gold price/AUM changes and are useful named fund-pressure context. Keep the available 1/5-session evidence with the existing partial-coherence warning. Twenty retained rows cannot supply a 20-session delta. Inflow to gold is not intrinsically risk-on.",
+    "maintenance": [
+      "Retain at least 21 native dated rows before claiming a full 20-session change/coherence audit",
+      "Preserve shares/NAV/AUM units and dated unit-event handling",
+      "Prospective capture requires official calendar and actual availability provenance"
+    ],
+    "reportedFundFlowClaim": false
+  },
+  "narrativeValue": {
+    "measurement": "Potential descriptive refresh opportunities from raw sign changes only. No new thresholds, confidence, headline rules or UI implementation.",
+    "actualV2NarrativeAssignmentsAvailable": false,
+    "impulseBrakeWatchFrequency": null,
+    "unavailableReason": "The accepted API emits evidence; it does not define a mapping of BTC/GLD signs into Qué impulsa / Qué frena / Qué vigilar. No observed V2 narrative sequence exists.",
+    "btcDailySignRefreshOpportunities": 8,
+    "btcFiveSessionSignRefreshOpportunities": 2,
+    "gldOneSessionSignRefreshOpportunities": 10,
+    "gldFiveSessionSignRefreshOpportunities": 2,
+    "caveat": "These are descriptive changes of sign, not counts of useful headline changes or noise; frequency denominators and missing-window handling are above. Gold-pressure signs must not be converted into equity-regime direction."
+  },
+  "coreIsolation": {
+    "publicApi": "evaluateRegime",
+    "dates": 25,
+    "originalCoreBytesUnchanged": 25,
+    "exactAcceptedCoreInputHashes": 25,
+    "decisionFieldsUnchanged": 25,
+    "satelliteCoreVotes": 0
+  },
+  "observations": [
+    {
+      "date": "2026-08-03",
+      "coreInputSha256": "b522dfc857ca52535e4228daa2dbb514174c483718d6cf15801a46a4b1c2b379",
+      "acceptedCoreInputHash": "3989896c549cf3485cc6f329433518578eb3c5c17725308185ee8a19e9bc13d2",
+      "coreDecisionUnchanged": true,
+      "regime": "RISK_ON_SELECTIVE",
+      "defaultDataQuality": "PARTIAL",
+      "optionalProblems": [
+        "btc_rolling_5",
+        "gld_shares_change_5",
+        "vix_percentile"
+      ],
+      "evidence": {
+        "btc_daily": {
+          "featureId": "btc_daily",
+          "role": "SATELLITE",
+          "family": "btc_flows",
+          "unit": "USD millions",
+          "value": 170.1,
+          "status": "AVAILABLE",
+          "reasons": [],
+          "parents": [
+            "raw_btc_rows"
+          ],
+          "replayClass": "R2"
+        },
+        "btc_rolling_5": {
+          "featureId": "btc_rolling_5",
+          "role": "SATELLITE",
+          "family": "btc_flows",
+          "unit": "USD millions",
+          "value": null,
+          "status": "UNAVAILABLE",
+          "reasons": [
+            "INPUT_OR_WINDOW_UNAVAILABLE"
+          ],
+          "parents": [
+            "raw_btc_rows"
+          ],
+          "replayClass": "R2"
+        },
+        "btc_rolling_20": {
+          "featureId": "btc_rolling_20",
+          "role": "SATELLITE",
+          "family": "btc_flows",
+          "unit": "USD millions",
+          "value": null,
+          "status": "UNAVAILABLE",
+          "reasons": [
+            "INPUT_OR_WINDOW_UNAVAILABLE"
+          ],
+          "parents": [
+            "raw_btc_rows"
+          ],
+          "replayClass": "R2"
+        },
+        "btc_breadth": {
+          "featureId": "btc_breadth",
+          "role": "SATELLITE",
+          "family": "btc_flows",
+          "unit": "counts by status",
+          "value": {
+            "positive": 7,
+            "negative": 0,
+            "zero": 5,
+            "missing": 0
+          },
+          "status": "AVAILABLE",
+          "reasons": [],
+          "parents": [
+            "raw_btc_rows"
+          ],
+          "replayClass": "R2"
+        },
+        "btc_streak": {
+          "featureId": "btc_streak",
+          "role": "SATELLITE",
+          "family": "btc_flows",
+          "unit": "sessions + direction + censored",
+          "value": {
+            "sign": 1,
+            "length": 1,
+            "censored": true
+          },
+          "status": "AVAILABLE",
+          "reasons": [],
+          "parents": [
+            "raw_btc_rows"
+          ],
+          "replayClass": "R2"
+        },
+        "gld_shares_change_1": {
+          "featureId": "gld_shares_change_1",
+          "role": "SATELLITE",
+          "family": "gld_pressure",
+          "unit": "shares and fraction",
+          "value": null,
+          "status": "UNAVAILABLE",
+          "reasons": [
+            "GLD_WINDOW_UNAVAILABLE"
+          ],
+          "parents": [
+            "raw_gld_rows"
+          ],
+          "replayClass": "R2"
+        },
+        "gld_shares_change_5": {
+          "featureId": "gld_shares_change_5",
+          "role": "SATELLITE",
+          "family": "gld_pressure",
+          "unit": "shares and fraction",
+          "value": null,
+          "status": "UNAVAILABLE",
+          "reasons": [
+            "GLD_WINDOW_UNAVAILABLE"
+          ],
+          "parents": [
+            "raw_gld_rows"
+          ],
+          "replayClass": "R2"
+        },
+        "gld_shares_change_20": {
+          "featureId": "gld_shares_change_20",
+          "role": "SATELLITE",
+          "family": "gld_pressure",
+          "unit": "shares and fraction",
+          "value": null,
+          "status": "UNAVAILABLE",
+          "reasons": [
+            "GLD_WINDOW_UNAVAILABLE"
+          ],
+          "parents": [
+            "raw_gld_rows"
+          ],
+          "replayClass": "R2"
+        },
+        "gld_pressure_usd_5": {
+          "featureId": "gld_pressure_usd_5",
+          "role": "SATELLITE",
+          "family": "gld_pressure",
+          "unit": "USD",
+          "value": null,
+          "status": "UNAVAILABLE",
+          "reasons": [
+            "PARENT_UNAVAILABLE"
+          ],
+          "parents": [
+            "gld_shares_change_5",
+            "gld_fund_data"
+          ],
+          "replayClass": "R2"
+        }
+      }
+    },
+    {
+      "date": "2026-08-04",
+      "coreInputSha256": "d1185d270b0276af34e875c88a9132a665b80a3ee0f55976a48edcb34768ad36",
+      "acceptedCoreInputHash": "faecb6b9c7009f224863ac992b4259c5d855ea8248bdbb23358624af4b3246f0",
+      "coreDecisionUnchanged": true,
+      "regime": "RISK_ON_SELECTIVE",
+      "defaultDataQuality": "PARTIAL",
+      "optionalProblems": [
+        "btc_rolling_5",
+        "gld_shares_change_5",
+        "vix_percentile"
+      ],
+      "evidence": {
+        "btc_daily": {
+          "featureId": "btc_daily",
+          "role": "SATELLITE",
+          "family": "btc_flows",
+          "unit": "USD millions",
+          "value": 211.5,
+          "status": "AVAILABLE",
+          "reasons": [],
+          "parents": [
+            "raw_btc_rows"
+          ],
+          "replayClass": "R2"
+        },
+        "btc_rolling_5": {
+          "featureId": "btc_rolling_5",
+          "role": "SATELLITE",
+          "family": "btc_flows",
+          "unit": "USD millions",
+          "value": null,
+          "status": "UNAVAILABLE",
+          "reasons": [
+            "INPUT_OR_WINDOW_UNAVAILABLE"
+          ],
+          "parents": [
+            "raw_btc_rows"
+          ],
+          "replayClass": "R2"
+        },
+        "btc_rolling_20": {
+          "featureId": "btc_rolling_20",
+          "role": "SATELLITE",
+          "family": "btc_flows",
+          "unit": "USD millions",
+          "value": null,
+          "status": "UNAVAILABLE",
+          "reasons": [
+            "INPUT_OR_WINDOW_UNAVAILABLE"
+          ],
+          "parents": [
+            "raw_btc_rows"
+          ],
+          "replayClass": "R2"
+        },
+        "btc_breadth": {
+          "featureId": "btc_breadth",
+          "role": "SATELLITE",
+          "family": "btc_flows",
+          "unit": "counts by status",
+          "value": {
+            "positive": 5,
+            "negative": 0,
+            "zero": 7,
+            "missing": 0
+          },
+          "status": "AVAILABLE",
+          "reasons": [],
+          "parents": [
+            "raw_btc_rows"
+          ],
+          "replayClass": "R2"
+        },
+        "btc_streak": {
+          "featureId": "btc_streak",
+          "role": "SATELLITE",
+          "family": "btc_flows",
+          "unit": "sessions + direction + censored",
+          "value": {
+            "sign": 1,
+            "length": 2,
+            "censored": true
+          },
+          "status": "AVAILABLE",
+          "reasons": [],
+          "parents": [
+            "raw_btc_rows"
+          ],
+          "replayClass": "R2"
+        },
+        "gld_shares_change_1": {
+          "featureId": "gld_shares_change_1",
+          "role": "SATELLITE",
+          "family": "gld_pressure",
+          "unit": "shares and fraction",
+          "value": null,
+          "status": "UNAVAILABLE",
+          "reasons": [
+            "GLD_WINDOW_UNAVAILABLE"
+          ],
+          "parents": [
+            "raw_gld_rows"
+          ],
+          "replayClass": "R2"
+        },
+        "gld_shares_change_5": {
+          "featureId": "gld_shares_change_5",
+          "role": "SATELLITE",
+          "family": "gld_pressure",
+          "unit": "shares and fraction",
+          "value": null,
+          "status": "UNAVAILABLE",
+          "reasons": [
+            "GLD_WINDOW_UNAVAILABLE"
+          ],
+          "parents": [
+            "raw_gld_rows"
+          ],
+          "replayClass": "R2"
+        },
+        "gld_shares_change_20": {
+          "featureId": "gld_shares_change_20",
+          "role": "SATELLITE",
+          "family": "gld_pressure",
+          "unit": "shares and fraction",
+          "value": null,
+          "status": "UNAVAILABLE",
+          "reasons": [
+            "GLD_WINDOW_UNAVAILABLE"
+          ],
+          "parents": [
+            "raw_gld_rows"
+          ],
+          "replayClass": "R2"
+        },
+        "gld_pressure_usd_5": {
+          "featureId": "gld_pressure_usd_5",
+          "role": "SATELLITE",
+          "family": "gld_pressure",
+          "unit": "USD",
+          "value": null,
+          "status": "UNAVAILABLE",
+          "reasons": [
+            "PARENT_UNAVAILABLE"
+          ],
+          "parents": [
+            "gld_shares_change_5",
+            "gld_fund_data"
+          ],
+          "replayClass": "R2"
+        }
+      }
+    },
+    {
+      "date": "2026-08-05",
+      "coreInputSha256": "e4112f56cacdf70f9325be903a2eb8f5cccf99bf1afed06b588b60b0f5a3600c",
+      "acceptedCoreInputHash": "6c351e8e99e8d6936160c5d2b89a09edf3a42b4fff873a372eac7711fba263f1",
+      "coreDecisionUnchanged": true,
+      "regime": "RISK_ON_SELECTIVE",
+      "defaultDataQuality": "PARTIAL",
+      "optionalProblems": [
+        "btc_rolling_5",
+        "gld_shares_change_5",
+        "vix_percentile"
+      ],
+      "evidence": {
+        "btc_daily": {
+          "featureId": "btc_daily",
+          "role": "SATELLITE",
+          "family": "btc_flows",
+          "unit": "USD millions",
+          "value": 244.4,
+          "status": "AVAILABLE",
+          "reasons": [],
+          "parents": [
+            "raw_btc_rows"
+          ],
+          "replayClass": "R2"
+        },
+        "btc_rolling_5": {
+          "featureId": "btc_rolling_5",
+          "role": "SATELLITE",
+          "family": "btc_flows",
+          "unit": "USD millions",
+          "value": null,
+          "status": "UNAVAILABLE",
+          "reasons": [
+            "INPUT_OR_WINDOW_UNAVAILABLE"
+          ],
+          "parents": [
+            "raw_btc_rows"
+          ],
+          "replayClass": "R2"
+        },
+        "btc_rolling_20": {
+          "featureId": "btc_rolling_20",
+          "role": "SATELLITE",
+          "family": "btc_flows",
+          "unit": "USD millions",
+          "value": null,
+          "status": "UNAVAILABLE",
+          "reasons": [
+            "INPUT_OR_WINDOW_UNAVAILABLE"
+          ],
+          "parents": [
+            "raw_btc_rows"
+          ],
+          "replayClass": "R2"
+        },
+        "btc_breadth": {
+          "featureId": "btc_breadth",
+          "role": "SATELLITE",
+          "family": "btc_flows",
+          "unit": "counts by status",
+          "value": {
+            "positive": 5,
+            "negative": 1,
+            "zero": 6,
+            "missing": 0
+          },
+          "status": "AVAILABLE",
+          "reasons": [],
+          "parents": [
+            "raw_btc_rows"
+          ],
+          "replayClass": "R2"
+        },
+        "btc_streak": {
+          "featureId": "btc_streak",
+          "role": "SATELLITE",
+          "family": "btc_flows",
+          "unit": "sessions + direction + censored",
+          "value": {
+            "sign": 1,
+            "length": 3,
+            "censored": true
+          },
+          "status": "AVAILABLE",
+          "reasons": [],
+          "parents": [
+            "raw_btc_rows"
+          ],
+          "replayClass": "R2"
+        },
+        "gld_shares_change_1": {
+          "featureId": "gld_shares_change_1",
+          "role": "SATELLITE",
+          "family": "gld_pressure",
+          "unit": "shares and fraction",
+          "value": null,
+          "status": "UNAVAILABLE",
+          "reasons": [
+            "GLD_WINDOW_UNAVAILABLE"
+          ],
+          "parents": [
+            "raw_gld_rows"
+          ],
+          "replayClass": "R2"
+        },
+        "gld_shares_change_5": {
+          "featureId": "gld_shares_change_5",
+          "role": "SATELLITE",
+          "family": "gld_pressure",
+          "unit": "shares and fraction",
+          "value": null,
+          "status": "UNAVAILABLE",
+          "reasons": [
+            "GLD_WINDOW_UNAVAILABLE"
+          ],
+          "parents": [
+            "raw_gld_rows"
+          ],
+          "replayClass": "R2"
+        },
+        "gld_shares_change_20": {
+          "featureId": "gld_shares_change_20",
+          "role": "SATELLITE",
+          "family": "gld_pressure",
+          "unit": "shares and fraction",
+          "value": null,
+          "status": "UNAVAILABLE",
+          "reasons": [
+            "GLD_WINDOW_UNAVAILABLE"
+          ],
+          "parents": [
+            "raw_gld_rows"
+          ],
+          "replayClass": "R2"
+        },
+        "gld_pressure_usd_5": {
+          "featureId": "gld_pressure_usd_5",
+          "role": "SATELLITE",
+          "family": "gld_pressure",
+          "unit": "USD",
+          "value": null,
+          "status": "UNAVAILABLE",
+          "reasons": [
+            "PARENT_UNAVAILABLE"
+          ],
+          "parents": [
+            "gld_shares_change_5",
+            "gld_fund_data"
+          ],
+          "replayClass": "R2"
+        }
+      }
+    },
+    {
+      "date": "2026-08-06",
+      "coreInputSha256": "cba1ad87fdb962c98e290f060bdf27b8891cf3b73e2da973c8728cfe874bdb22",
+      "acceptedCoreInputHash": "870400eb81d7cb0e605af9472555dd49a6ef00da12101f33b1f839f5484dd43f",
+      "coreDecisionUnchanged": true,
+      "regime": "RISK_ON_SELECTIVE",
+      "defaultDataQuality": "PARTIAL",
+      "optionalProblems": [
+        "btc_rolling_5",
+        "gld_shares_change_5",
+        "vix_percentile"
+      ],
+      "evidence": {
+        "btc_daily": {
+          "featureId": "btc_daily",
+          "role": "SATELLITE",
+          "family": "btc_flows",
+          "unit": "USD millions",
+          "value": 137.6,
+          "status": "AVAILABLE",
+          "reasons": [],
+          "parents": [
+            "raw_btc_rows"
+          ],
+          "replayClass": "R2"
+        },
+        "btc_rolling_5": {
+          "featureId": "btc_rolling_5",
+          "role": "SATELLITE",
+          "family": "btc_flows",
+          "unit": "USD millions",
+          "value": null,
+          "status": "UNAVAILABLE",
+          "reasons": [
+            "INPUT_OR_WINDOW_UNAVAILABLE"
+          ],
+          "parents": [
+            "raw_btc_rows"
+          ],
+          "replayClass": "R2"
+        },
+        "btc_rolling_20": {
+          "featureId": "btc_rolling_20",
+          "role": "SATELLITE",
+          "family": "btc_flows",
+          "unit": "USD millions",
+          "value": null,
+          "status": "UNAVAILABLE",
+          "reasons": [
+            "INPUT_OR_WINDOW_UNAVAILABLE"
+          ],
+          "parents": [
+            "raw_btc_rows"
+          ],
+          "replayClass": "R2"
+        },
+        "btc_breadth": {
+          "featureId": "btc_breadth",
+          "role": "SATELLITE",
+          "family": "btc_flows",
+          "unit": "counts by status",
+          "value": {
+            "positive": 6,
+            "negative": 1,
+            "zero": 5,
+            "missing": 0
+          },
+          "status": "AVAILABLE",
+          "reasons": [],
+          "parents": [
+            "raw_btc_rows"
+          ],
+          "replayClass": "R2"
+        },
+        "btc_streak": {
+          "featureId": "btc_streak",
+          "role": "SATELLITE",
+          "family": "btc_flows",
+          "unit": "sessions + direction + censored",
+          "value": {
+            "sign": 1,
+            "length": 4,
+            "censored": true
+          },
+          "status": "AVAILABLE",
+          "reasons": [],
+          "parents": [
+            "raw_btc_rows"
+          ],
+          "replayClass": "R2"
+        },
+        "gld_shares_change_1": {
+          "featureId": "gld_shares_change_1",
+          "role": "SATELLITE",
+          "family": "gld_pressure",
+          "unit": "shares and fraction",
+          "value": null,
+          "status": "UNAVAILABLE",
+          "reasons": [
+            "GLD_WINDOW_UNAVAILABLE"
+          ],
+          "parents": [
+            "raw_gld_rows"
+          ],
+          "replayClass": "R2"
+        },
+        "gld_shares_change_5": {
+          "featureId": "gld_shares_change_5",
+          "role": "SATELLITE",
+          "family": "gld_pressure",
+          "unit": "shares and fraction",
+          "value": null,
+          "status": "UNAVAILABLE",
+          "reasons": [
+            "GLD_WINDOW_UNAVAILABLE"
+          ],
+          "parents": [
+            "raw_gld_rows"
+          ],
+          "replayClass": "R2"
+        },
+        "gld_shares_change_20": {
+          "featureId": "gld_shares_change_20",
+          "role": "SATELLITE",
+          "family": "gld_pressure",
+          "unit": "shares and fraction",
+          "value": null,
+          "status": "UNAVAILABLE",
+          "reasons": [
+            "GLD_WINDOW_UNAVAILABLE"
+          ],
+          "parents": [
+            "raw_gld_rows"
+          ],
+          "replayClass": "R2"
+        },
+        "gld_pressure_usd_5": {
+          "featureId": "gld_pressure_usd_5",
+          "role": "SATELLITE",
+          "family": "gld_pressure",
+          "unit": "USD",
+          "value": null,
+          "status": "UNAVAILABLE",
+          "reasons": [
+            "PARENT_UNAVAILABLE"
+          ],
+          "parents": [
+            "gld_shares_change_5",
+            "gld_fund_data"
+          ],
+          "replayClass": "R2"
+        }
+      }
+    },
+    {
+      "date": "2026-08-07",
+      "coreInputSha256": "1a45e993b0722760286a31958e5169382a8de62c517799dcb2e6afe6582d1081",
+      "acceptedCoreInputHash": "bdd6a131ced51fc718208ba0db55f386b2cdf731a56a6e808b71efa46e18ce0b",
+      "coreDecisionUnchanged": true,
+      "regime": "RISK_ON_BROAD",
+      "defaultDataQuality": "PARTIAL",
+      "optionalProblems": [
+        "btc_daily",
+        "gld_shares_change_5",
+        "vix_percentile"
+      ],
+      "evidence": {
+        "btc_daily": {
+          "featureId": "btc_daily",
+          "role": "SATELLITE",
+          "family": "btc_flows",
+          "unit": "USD millions",
+          "value": 101.7,
+          "status": "AVAILABLE",
+          "reasons": [
+            "PARTIAL_FUND_COVERAGE"
+          ],
+          "parents": [
+            "raw_btc_rows"
+          ],
+          "replayClass": "R2"
+        },
+        "btc_rolling_5": {
+          "featureId": "btc_rolling_5",
+          "role": "SATELLITE",
+          "family": "btc_flows",
+          "unit": "USD millions",
+          "value": 865.3000000000001,
+          "status": "AVAILABLE",
+          "reasons": [],
+          "parents": [
+            "raw_btc_rows"
+          ],
+          "replayClass": "R2"
+        },
+        "btc_rolling_20": {
+          "featureId": "btc_rolling_20",
+          "role": "SATELLITE",
+          "family": "btc_flows",
+          "unit": "USD millions",
+          "value": null,
+          "status": "UNAVAILABLE",
+          "reasons": [
+            "INPUT_OR_WINDOW_UNAVAILABLE"
+          ],
+          "parents": [
+            "raw_btc_rows"
+          ],
+          "replayClass": "R2"
+        },
+        "btc_breadth": {
+          "featureId": "btc_breadth",
+          "role": "SATELLITE",
+          "family": "btc_flows",
+          "unit": "counts by status",
+          "value": {
+            "positive": 4,
+            "negative": 2,
+            "zero": 5,
+            "missing": 1
+          },
+          "status": "AVAILABLE",
+          "reasons": [
+            "PARTIAL_FUND_COVERAGE"
+          ],
+          "parents": [
+            "raw_btc_rows"
+          ],
+          "replayClass": "R2"
+        },
+        "btc_streak": {
+          "featureId": "btc_streak",
+          "role": "SATELLITE",
+          "family": "btc_flows",
+          "unit": "sessions + direction + censored",
+          "value": {
+            "sign": 1,
+            "length": 5,
+            "censored": true
+          },
+          "status": "AVAILABLE",
+          "reasons": [],
+          "parents": [
+            "raw_btc_rows"
+          ],
+          "replayClass": "R2"
+        },
+        "gld_shares_change_1": {
+          "featureId": "gld_shares_change_1",
+          "role": "SATELLITE",
+          "family": "gld_pressure",
+          "unit": "shares and fraction",
+          "value": null,
+          "status": "UNAVAILABLE",
+          "reasons": [
+            "GLD_WINDOW_UNAVAILABLE"
+          ],
+          "parents": [
+            "raw_gld_rows"
+          ],
+          "replayClass": "R2"
+        },
+        "gld_shares_change_5": {
+          "featureId": "gld_shares_change_5",
+          "role": "SATELLITE",
+          "family": "gld_pressure",
+          "unit": "shares and fraction",
+          "value": null,
+          "status": "UNAVAILABLE",
+          "reasons": [
+            "GLD_WINDOW_UNAVAILABLE"
+          ],
+          "parents": [
+            "raw_gld_rows"
+          ],
+          "replayClass": "R2"
+        },
+        "gld_shares_change_20": {
+          "featureId": "gld_shares_change_20",
+          "role": "SATELLITE",
+          "family": "gld_pressure",
+          "unit": "shares and fraction",
+          "value": null,
+          "status": "UNAVAILABLE",
+          "reasons": [
+            "GLD_WINDOW_UNAVAILABLE"
+          ],
+          "parents": [
+            "raw_gld_rows"
+          ],
+          "replayClass": "R2"
+        },
+        "gld_pressure_usd_5": {
+          "featureId": "gld_pressure_usd_5",
+          "role": "SATELLITE",
+          "family": "gld_pressure",
+          "unit": "USD",
+          "value": null,
+          "status": "UNAVAILABLE",
+          "reasons": [
+            "PARENT_UNAVAILABLE"
+          ],
+          "parents": [
+            "gld_shares_change_5",
+            "gld_fund_data"
+          ],
+          "replayClass": "R2"
+        }
+      }
+    },
+    {
+      "date": "2026-08-10",
+      "coreInputSha256": "8b32a4a42d92d95cc1a9c0b98a36b4e093d30e2cb6d3a1e174d0ccbeb3e892cc",
+      "acceptedCoreInputHash": "00c21009f1da76c7fd513b23f2a57895f92917d0c4e943cf5ced54115362b295",
+      "coreDecisionUnchanged": true,
+      "regime": "RISK_ON_BROAD",
+      "defaultDataQuality": "PARTIAL",
+      "optionalProblems": [
+        "gld_shares_change_5",
+        "vix_percentile"
+      ],
+      "evidence": {
+        "btc_daily": {
+          "featureId": "btc_daily",
+          "role": "SATELLITE",
+          "family": "btc_flows",
+          "unit": "USD millions",
+          "value": -144.6,
+          "status": "AVAILABLE",
+          "reasons": [],
+          "parents": [
+            "raw_btc_rows"
+          ],
+          "replayClass": "R2"
+        },
+        "btc_rolling_5": {
+          "featureId": "btc_rolling_5",
+          "role": "SATELLITE",
+          "family": "btc_flows",
+          "unit": "USD millions",
+          "value": 550.6,
+          "status": "AVAILABLE",
+          "reasons": [],
+          "parents": [
+            "raw_btc_rows"
+          ],
+          "replayClass": "R2"
+        },
+        "btc_rolling_20": {
+          "featureId": "btc_rolling_20",
+          "role": "SATELLITE",
+          "family": "btc_flows",
+          "unit": "USD millions",
+          "value": null,
+          "status": "UNAVAILABLE",
+          "reasons": [
+            "INPUT_OR_WINDOW_UNAVAILABLE"
+          ],
+          "parents": [
+            "raw_btc_rows"
+          ],
+          "replayClass": "R2"
+        },
+        "btc_breadth": {
+          "featureId": "btc_breadth",
+          "role": "SATELLITE",
+          "family": "btc_flows",
+          "unit": "counts by status",
+          "value": {
+            "positive": 1,
+            "negative": 5,
+            "zero": 6,
+            "missing": 0
+          },
+          "status": "AVAILABLE",
+          "reasons": [],
+          "parents": [
+            "raw_btc_rows"
+          ],
+          "replayClass": "R2"
+        },
+        "btc_streak": {
+          "featureId": "btc_streak",
+          "role": "SATELLITE",
+          "family": "btc_flows",
+          "unit": "sessions + direction + censored",
+          "value": {
+            "sign": -1,
+            "length": 1,
+            "censored": false
+          },
+          "status": "AVAILABLE",
+          "reasons": [],
+          "parents": [
+            "raw_btc_rows"
+          ],
+          "replayClass": "R2"
+        },
+        "gld_shares_change_1": {
+          "featureId": "gld_shares_change_1",
+          "role": "SATELLITE",
+          "family": "gld_pressure",
+          "unit": "shares and fraction",
+          "value": null,
+          "status": "UNAVAILABLE",
+          "reasons": [
+            "GLD_WINDOW_UNAVAILABLE"
+          ],
+          "parents": [
+            "raw_gld_rows"
+          ],
+          "replayClass": "R2"
+        },
+        "gld_shares_change_5": {
+          "featureId": "gld_shares_change_5",
+          "role": "SATELLITE",
+          "family": "gld_pressure",
+          "unit": "shares and fraction",
+          "value": null,
+          "status": "UNAVAILABLE",
+          "reasons": [
+            "GLD_WINDOW_UNAVAILABLE"
+          ],
+          "parents": [
+            "raw_gld_rows"
+          ],
+          "replayClass": "R2"
+        },
+        "gld_shares_change_20": {
+          "featureId": "gld_shares_change_20",
+          "role": "SATELLITE",
+          "family": "gld_pressure",
+          "unit": "shares and fraction",
+          "value": null,
+          "status": "UNAVAILABLE",
+          "reasons": [
+            "GLD_WINDOW_UNAVAILABLE"
+          ],
+          "parents": [
+            "raw_gld_rows"
+          ],
+          "replayClass": "R2"
+        },
+        "gld_pressure_usd_5": {
+          "featureId": "gld_pressure_usd_5",
+          "role": "SATELLITE",
+          "family": "gld_pressure",
+          "unit": "USD",
+          "value": null,
+          "status": "UNAVAILABLE",
+          "reasons": [
+            "PARENT_UNAVAILABLE"
+          ],
+          "parents": [
+            "gld_shares_change_5",
+            "gld_fund_data"
+          ],
+          "replayClass": "R2"
+        }
+      }
+    },
+    {
+      "date": "2026-08-11",
+      "coreInputSha256": "4979de2868f69efcfc11da1c8cebff96a212c13aa3438d6d5c20bb3d95972527",
+      "acceptedCoreInputHash": "e3b115827d50a0fac945852cd2a23de10c8f5899f1b855881b4d533062a83f21",
+      "coreDecisionUnchanged": true,
+      "regime": "RISK_ON_SELECTIVE",
+      "defaultDataQuality": "PARTIAL",
+      "optionalProblems": [
+        "gld_shares_change_5",
+        "vix_percentile"
+      ],
+      "evidence": {
+        "btc_daily": {
+          "featureId": "btc_daily",
+          "role": "SATELLITE",
+          "family": "btc_flows",
+          "unit": "USD millions",
+          "value": 7.8,
+          "status": "AVAILABLE",
+          "reasons": [],
+          "parents": [
+            "raw_btc_rows"
+          ],
+          "replayClass": "R2"
+        },
+        "btc_rolling_5": {
+          "featureId": "btc_rolling_5",
+          "role": "SATELLITE",
+          "family": "btc_flows",
+          "unit": "USD millions",
+          "value": 346.90000000000003,
+          "status": "AVAILABLE",
+          "reasons": [],
+          "parents": [
+            "raw_btc_rows"
+          ],
+          "replayClass": "R2"
+        },
+        "btc_rolling_20": {
+          "featureId": "btc_rolling_20",
+          "role": "SATELLITE",
+          "family": "btc_flows",
+          "unit": "USD millions",
+          "value": null,
+          "status": "UNAVAILABLE",
+          "reasons": [
+            "INPUT_OR_WINDOW_UNAVAILABLE"
+          ],
+          "parents": [
+            "raw_btc_rows"
+          ],
+          "replayClass": "R2"
+        },
+        "btc_breadth": {
+          "featureId": "btc_breadth",
+          "role": "SATELLITE",
+          "family": "btc_flows",
+          "unit": "counts by status",
+          "value": {
+            "positive": 1,
+            "negative": 4,
+            "zero": 7,
+            "missing": 0
+          },
+          "status": "AVAILABLE",
+          "reasons": [],
+          "parents": [
+            "raw_btc_rows"
+          ],
+          "replayClass": "R2"
+        },
+        "btc_streak": {
+          "featureId": "btc_streak",
+          "role": "SATELLITE",
+          "family": "btc_flows",
+          "unit": "sessions + direction + censored",
+          "value": {
+            "sign": 1,
+            "length": 1,
+            "censored": false
+          },
+          "status": "AVAILABLE",
+          "reasons": [],
+          "parents": [
+            "raw_btc_rows"
+          ],
+          "replayClass": "R2"
+        },
+        "gld_shares_change_1": {
+          "featureId": "gld_shares_change_1",
+          "role": "SATELLITE",
+          "family": "gld_pressure",
+          "unit": "shares and fraction",
+          "value": {
+            "delta": 600000,
+            "fraction": 0.0016769144773616546
+          },
+          "status": "AVAILABLE",
+          "reasons": [
+            "COHERENCE_AUDIT_PARTIAL"
+          ],
+          "parents": [
+            "raw_gld_rows"
+          ],
+          "replayClass": "R2"
+        },
+        "gld_shares_change_5": {
+          "featureId": "gld_shares_change_5",
+          "role": "SATELLITE",
+          "family": "gld_pressure",
+          "unit": "shares and fraction",
+          "value": null,
+          "status": "UNAVAILABLE",
+          "reasons": [
+            "GLD_WINDOW_UNAVAILABLE"
+          ],
+          "parents": [
+            "raw_gld_rows"
+          ],
+          "replayClass": "R2"
+        },
+        "gld_shares_change_20": {
+          "featureId": "gld_shares_change_20",
+          "role": "SATELLITE",
+          "family": "gld_pressure",
+          "unit": "shares and fraction",
+          "value": null,
+          "status": "UNAVAILABLE",
+          "reasons": [
+            "GLD_WINDOW_UNAVAILABLE"
+          ],
+          "parents": [
+            "raw_gld_rows"
+          ],
+          "replayClass": "R2"
+        },
+        "gld_pressure_usd_5": {
+          "featureId": "gld_pressure_usd_5",
+          "role": "SATELLITE",
+          "family": "gld_pressure",
+          "unit": "USD",
+          "value": null,
+          "status": "UNAVAILABLE",
+          "reasons": [
+            "PARENT_UNAVAILABLE"
+          ],
+          "parents": [
+            "gld_shares_change_5",
+            "gld_fund_data"
+          ],
+          "replayClass": "R2"
+        }
+      }
+    },
+    {
+      "date": "2026-08-12",
+      "coreInputSha256": "b7067481236bf2cca2591e6eadaee6a460b4ab126a5c659d1bb31e8bc92820ce",
+      "acceptedCoreInputHash": "efa2c1ac79960b53fa0f8709cc049b81e99d886697f4793384f14fdf41309e82",
+      "coreDecisionUnchanged": true,
+      "regime": "RISK_ON_SELECTIVE",
+      "defaultDataQuality": "PARTIAL",
+      "optionalProblems": [
+        "gld_shares_change_5",
+        "vix_percentile"
+      ],
+      "evidence": {
+        "btc_daily": {
+          "featureId": "btc_daily",
+          "role": "SATELLITE",
+          "family": "btc_flows",
+          "unit": "USD millions",
+          "value": -61.1,
+          "status": "AVAILABLE",
+          "reasons": [],
+          "parents": [
+            "raw_btc_rows"
+          ],
+          "replayClass": "R2"
+        },
+        "btc_rolling_5": {
+          "featureId": "btc_rolling_5",
+          "role": "SATELLITE",
+          "family": "btc_flows",
+          "unit": "USD millions",
+          "value": 41.40000000000001,
+          "status": "AVAILABLE",
+          "reasons": [],
+          "parents": [
+            "raw_btc_rows"
+          ],
+          "replayClass": "R2"
+        },
+        "btc_rolling_20": {
+          "featureId": "btc_rolling_20",
+          "role": "SATELLITE",
+          "family": "btc_flows",
+          "unit": "USD millions",
+          "value": null,
+          "status": "UNAVAILABLE",
+          "reasons": [
+            "INPUT_OR_WINDOW_UNAVAILABLE"
+          ],
+          "parents": [
+            "raw_btc_rows"
+          ],
+          "replayClass": "R2"
+        },
+        "btc_breadth": {
+          "featureId": "btc_breadth",
+          "role": "SATELLITE",
+          "family": "btc_flows",
+          "unit": "counts by status",
+          "value": {
+            "positive": 0,
+            "negative": 2,
+            "zero": 10,
+            "missing": 0
+          },
+          "status": "AVAILABLE",
+          "reasons": [],
+          "parents": [
+            "raw_btc_rows"
+          ],
+          "replayClass": "R2"
+        },
+        "btc_streak": {
+          "featureId": "btc_streak",
+          "role": "SATELLITE",
+          "family": "btc_flows",
+          "unit": "sessions + direction + censored",
+          "value": {
+            "sign": -1,
+            "length": 1,
+            "censored": false
+          },
+          "status": "AVAILABLE",
+          "reasons": [],
+          "parents": [
+            "raw_btc_rows"
+          ],
+          "replayClass": "R2"
+        },
+        "gld_shares_change_1": {
+          "featureId": "gld_shares_change_1",
+          "role": "SATELLITE",
+          "family": "gld_pressure",
+          "unit": "shares and fraction",
+          "value": {
+            "delta": 1100000,
+            "fraction": 0.0030691964285714285
+          },
+          "status": "AVAILABLE",
+          "reasons": [
+            "COHERENCE_AUDIT_PARTIAL"
+          ],
+          "parents": [
+            "raw_gld_rows"
+          ],
+          "replayClass": "R2"
+        },
+        "gld_shares_change_5": {
+          "featureId": "gld_shares_change_5",
+          "role": "SATELLITE",
+          "family": "gld_pressure",
+          "unit": "shares and fraction",
+          "value": null,
+          "status": "UNAVAILABLE",
+          "reasons": [
+            "GLD_WINDOW_UNAVAILABLE"
+          ],
+          "parents": [
+            "raw_gld_rows"
+          ],
+          "replayClass": "R2"
+        },
+        "gld_shares_change_20": {
+          "featureId": "gld_shares_change_20",
+          "role": "SATELLITE",
+          "family": "gld_pressure",
+          "unit": "shares and fraction",
+          "value": null,
+          "status": "UNAVAILABLE",
+          "reasons": [
+            "GLD_WINDOW_UNAVAILABLE"
+          ],
+          "parents": [
+            "raw_gld_rows"
+          ],
+          "replayClass": "R2"
+        },
+        "gld_pressure_usd_5": {
+          "featureId": "gld_pressure_usd_5",
+          "role": "SATELLITE",
+          "family": "gld_pressure",
+          "unit": "USD",
+          "value": null,
+          "status": "UNAVAILABLE",
+          "reasons": [
+            "PARENT_UNAVAILABLE"
+          ],
+          "parents": [
+            "gld_shares_change_5",
+            "gld_fund_data"
+          ],
+          "replayClass": "R2"
+        }
+      }
+    },
+    {
+      "date": "2026-08-13",
+      "coreInputSha256": "668eb6f6ad5fd3d8947032d4866f09e77e04ff66e6f908224f7b81b8f200e316",
+      "acceptedCoreInputHash": "5884c97888c48fb023ff75dbbcca472d24d53b4c4235b244e60d753cb7ad36c2",
+      "coreDecisionUnchanged": true,
+      "regime": "RISK_ON_BROAD",
+      "defaultDataQuality": "PARTIAL",
+      "optionalProblems": [
+        "gld_shares_change_5",
+        "vix_percentile"
+      ],
+      "evidence": {
+        "btc_daily": {
+          "featureId": "btc_daily",
+          "role": "SATELLITE",
+          "family": "btc_flows",
+          "unit": "USD millions",
+          "value": -131.1,
+          "status": "AVAILABLE",
+          "reasons": [],
+          "parents": [
+            "raw_btc_rows"
+          ],
+          "replayClass": "R2"
+        },
+        "btc_rolling_5": {
+          "featureId": "btc_rolling_5",
+          "role": "SATELLITE",
+          "family": "btc_flows",
+          "unit": "USD millions",
+          "value": -227.29999999999998,
+          "status": "AVAILABLE",
+          "reasons": [],
+          "parents": [
+            "raw_btc_rows"
+          ],
+          "replayClass": "R2"
+        },
+        "btc_rolling_20": {
+          "featureId": "btc_rolling_20",
+          "role": "SATELLITE",
+          "family": "btc_flows",
+          "unit": "USD millions",
+          "value": null,
+          "status": "UNAVAILABLE",
+          "reasons": [
+            "INPUT_OR_WINDOW_UNAVAILABLE"
+          ],
+          "parents": [
+            "raw_btc_rows"
+          ],
+          "replayClass": "R2"
+        },
+        "btc_breadth": {
+          "featureId": "btc_breadth",
+          "role": "SATELLITE",
+          "family": "btc_flows",
+          "unit": "counts by status",
+          "value": {
+            "positive": 2,
+            "negative": 7,
+            "zero": 3,
+            "missing": 0
+          },
+          "status": "AVAILABLE",
+          "reasons": [],
+          "parents": [
+            "raw_btc_rows"
+          ],
+          "replayClass": "R2"
+        },
+        "btc_streak": {
+          "featureId": "btc_streak",
+          "role": "SATELLITE",
+          "family": "btc_flows",
+          "unit": "sessions + direction + censored",
+          "value": {
+            "sign": -1,
+            "length": 2,
+            "censored": false
+          },
+          "status": "AVAILABLE",
+          "reasons": [],
+          "parents": [
+            "raw_btc_rows"
+          ],
+          "replayClass": "R2"
+        },
+        "gld_shares_change_1": {
+          "featureId": "gld_shares_change_1",
+          "role": "SATELLITE",
+          "family": "gld_pressure",
+          "unit": "shares and fraction",
+          "value": {
+            "delta": -900000,
+            "fraction": -0.0025034770514603616
+          },
+          "status": "AVAILABLE",
+          "reasons": [
+            "COHERENCE_AUDIT_PARTIAL"
+          ],
+          "parents": [
+            "raw_gld_rows"
+          ],
+          "replayClass": "R2"
+        },
+        "gld_shares_change_5": {
+          "featureId": "gld_shares_change_5",
+          "role": "SATELLITE",
+          "family": "gld_pressure",
+          "unit": "shares and fraction",
+          "value": null,
+          "status": "UNAVAILABLE",
+          "reasons": [
+            "GLD_WINDOW_UNAVAILABLE"
+          ],
+          "parents": [
+            "raw_gld_rows"
+          ],
+          "replayClass": "R2"
+        },
+        "gld_shares_change_20": {
+          "featureId": "gld_shares_change_20",
+          "role": "SATELLITE",
+          "family": "gld_pressure",
+          "unit": "shares and fraction",
+          "value": null,
+          "status": "UNAVAILABLE",
+          "reasons": [
+            "GLD_WINDOW_UNAVAILABLE"
+          ],
+          "parents": [
+            "raw_gld_rows"
+          ],
+          "replayClass": "R2"
+        },
+        "gld_pressure_usd_5": {
+          "featureId": "gld_pressure_usd_5",
+          "role": "SATELLITE",
+          "family": "gld_pressure",
+          "unit": "USD",
+          "value": null,
+          "status": "UNAVAILABLE",
+          "reasons": [
+            "PARENT_UNAVAILABLE"
+          ],
+          "parents": [
+            "gld_shares_change_5",
+            "gld_fund_data"
+          ],
+          "replayClass": "R2"
+        }
+      }
+    },
+    {
+      "date": "2026-08-14",
+      "coreInputSha256": "1d1ad4937cc11940cef9abc8e502786cf2220dcf7d3b5cfae9a720445671cd4e",
+      "acceptedCoreInputHash": "377e431069cc1adf5deed3c8021769cdd8910dfbe80bf3fe072d571f58e1376e",
+      "coreDecisionUnchanged": true,
+      "regime": "RISK_ON_BROAD",
+      "defaultDataQuality": "PARTIAL",
+      "optionalProblems": [
+        "gld_shares_change_5",
+        "vix_percentile"
+      ],
+      "evidence": {
+        "btc_daily": {
+          "featureId": "btc_daily",
+          "role": "SATELLITE",
+          "family": "btc_flows",
+          "unit": "USD millions",
+          "value": -56.2,
+          "status": "AVAILABLE",
+          "reasons": [],
+          "parents": [
+            "raw_btc_rows"
+          ],
+          "replayClass": "R2"
+        },
+        "btc_rolling_5": {
+          "featureId": "btc_rolling_5",
+          "role": "SATELLITE",
+          "family": "btc_flows",
+          "unit": "USD millions",
+          "value": -385.2,
+          "status": "AVAILABLE",
+          "reasons": [],
+          "parents": [
+            "raw_btc_rows"
+          ],
+          "replayClass": "R2"
+        },
+        "btc_rolling_20": {
+          "featureId": "btc_rolling_20",
+          "role": "SATELLITE",
+          "family": "btc_flows",
+          "unit": "USD millions",
+          "value": null,
+          "status": "UNAVAILABLE",
+          "reasons": [
+            "INPUT_OR_WINDOW_UNAVAILABLE"
+          ],
+          "parents": [
+            "raw_btc_rows"
+          ],
+          "replayClass": "R2"
+        },
+        "btc_breadth": {
+          "featureId": "btc_breadth",
+          "role": "SATELLITE",
+          "family": "btc_flows",
+          "unit": "counts by status",
+          "value": {
+            "positive": 1,
+            "negative": 2,
+            "zero": 9,
+            "missing": 0
+          },
+          "status": "AVAILABLE",
+          "reasons": [],
+          "parents": [
+            "raw_btc_rows"
+          ],
+          "replayClass": "R2"
+        },
+        "btc_streak": {
+          "featureId": "btc_streak",
+          "role": "SATELLITE",
+          "family": "btc_flows",
+          "unit": "sessions + direction + censored",
+          "value": {
+            "sign": -1,
+            "length": 3,
+            "censored": false
+          },
+          "status": "AVAILABLE",
+          "reasons": [],
+          "parents": [
+            "raw_btc_rows"
+          ],
+          "replayClass": "R2"
+        },
+        "gld_shares_change_1": {
+          "featureId": "gld_shares_change_1",
+          "role": "SATELLITE",
+          "family": "gld_pressure",
+          "unit": "shares and fraction",
+          "value": {
+            "delta": 100000,
+            "fraction": 0.0002788622420524261
+          },
+          "status": "AVAILABLE",
+          "reasons": [
+            "COHERENCE_AUDIT_PARTIAL"
+          ],
+          "parents": [
+            "raw_gld_rows"
+          ],
+          "replayClass": "R2"
+        },
+        "gld_shares_change_5": {
+          "featureId": "gld_shares_change_5",
+          "role": "SATELLITE",
+          "family": "gld_pressure",
+          "unit": "shares and fraction",
+          "value": null,
+          "status": "UNAVAILABLE",
+          "reasons": [
+            "GLD_WINDOW_UNAVAILABLE"
+          ],
+          "parents": [
+            "raw_gld_rows"
+          ],
+          "replayClass": "R2"
+        },
+        "gld_shares_change_20": {
+          "featureId": "gld_shares_change_20",
+          "role": "SATELLITE",
+          "family": "gld_pressure",
+          "unit": "shares and fraction",
+          "value": null,
+          "status": "UNAVAILABLE",
+          "reasons": [
+            "GLD_WINDOW_UNAVAILABLE"
+          ],
+          "parents": [
+            "raw_gld_rows"
+          ],
+          "replayClass": "R2"
+        },
+        "gld_pressure_usd_5": {
+          "featureId": "gld_pressure_usd_5",
+          "role": "SATELLITE",
+          "family": "gld_pressure",
+          "unit": "USD",
+          "value": null,
+          "status": "UNAVAILABLE",
+          "reasons": [
+            "PARENT_UNAVAILABLE"
+          ],
+          "parents": [
+            "gld_shares_change_5",
+            "gld_fund_data"
+          ],
+          "replayClass": "R2"
+        }
+      }
+    },
+    {
+      "date": "2026-08-17",
+      "coreInputSha256": "134e0a6e5aa904c0491bde9fb5e79a84b469a30f66dfd3712502b215798c2695",
+      "acceptedCoreInputHash": "4a9dfaaf84e826c94d3fa73ed1748753a8534b39bf9fe5d7cdaadfb7f48bf789",
+      "coreDecisionUnchanged": true,
+      "regime": "RISK_ON_SELECTIVE",
+      "defaultDataQuality": "PARTIAL",
+      "optionalProblems": [
+        "gld_shares_change_5",
+        "vix_percentile"
+      ],
+      "evidence": {
+        "btc_daily": {
+          "featureId": "btc_daily",
+          "role": "SATELLITE",
+          "family": "btc_flows",
+          "unit": "USD millions",
+          "value": 297.5,
+          "status": "AVAILABLE",
+          "reasons": [],
+          "parents": [
+            "raw_btc_rows"
+          ],
+          "replayClass": "R2"
+        },
+        "btc_rolling_5": {
+          "featureId": "btc_rolling_5",
+          "role": "SATELLITE",
+          "family": "btc_flows",
+          "unit": "USD millions",
+          "value": 56.89999999999998,
+          "status": "AVAILABLE",
+          "reasons": [],
+          "parents": [
+            "raw_btc_rows"
+          ],
+          "replayClass": "R2"
+        },
+        "btc_rolling_20": {
+          "featureId": "btc_rolling_20",
+          "role": "SATELLITE",
+          "family": "btc_flows",
+          "unit": "USD millions",
+          "value": null,
+          "status": "UNAVAILABLE",
+          "reasons": [
+            "INPUT_OR_WINDOW_UNAVAILABLE"
+          ],
+          "parents": [
+            "raw_btc_rows"
+          ],
+          "replayClass": "R2"
+        },
+        "btc_breadth": {
+          "featureId": "btc_breadth",
+          "role": "SATELLITE",
+          "family": "btc_flows",
+          "unit": "counts by status",
+          "value": {
+            "positive": 4,
+            "negative": 0,
+            "zero": 8,
+            "missing": 0
+          },
+          "status": "AVAILABLE",
+          "reasons": [],
+          "parents": [
+            "raw_btc_rows"
+          ],
+          "replayClass": "R2"
+        },
+        "btc_streak": {
+          "featureId": "btc_streak",
+          "role": "SATELLITE",
+          "family": "btc_flows",
+          "unit": "sessions + direction + censored",
+          "value": {
+            "sign": 1,
+            "length": 1,
+            "censored": false
+          },
+          "status": "AVAILABLE",
+          "reasons": [],
+          "parents": [
+            "raw_btc_rows"
+          ],
+          "replayClass": "R2"
+        },
+        "gld_shares_change_1": {
+          "featureId": "gld_shares_change_1",
+          "role": "SATELLITE",
+          "family": "gld_pressure",
+          "unit": "shares and fraction",
+          "value": {
+            "delta": 2500000,
+            "fraction": 0.006969612489545581
+          },
+          "status": "AVAILABLE",
+          "reasons": [
+            "COHERENCE_AUDIT_PARTIAL"
+          ],
+          "parents": [
+            "raw_gld_rows"
+          ],
+          "replayClass": "R2"
+        },
+        "gld_shares_change_5": {
+          "featureId": "gld_shares_change_5",
+          "role": "SATELLITE",
+          "family": "gld_pressure",
+          "unit": "shares and fraction",
+          "value": {
+            "delta": 3400000,
+            "fraction": 0.009502515371716043
+          },
+          "status": "AVAILABLE",
+          "reasons": [
+            "COHERENCE_AUDIT_PARTIAL"
+          ],
+          "parents": [
+            "raw_gld_rows"
+          ],
+          "replayClass": "R2"
+        },
+        "gld_shares_change_20": {
+          "featureId": "gld_shares_change_20",
+          "role": "SATELLITE",
+          "family": "gld_pressure",
+          "unit": "shares and fraction",
+          "value": null,
+          "status": "UNAVAILABLE",
+          "reasons": [
+            "GLD_WINDOW_UNAVAILABLE"
+          ],
+          "parents": [
+            "raw_gld_rows"
+          ],
+          "replayClass": "R2"
+        },
+        "gld_pressure_usd_5": {
+          "featureId": "gld_pressure_usd_5",
+          "role": "SATELLITE",
+          "family": "gld_pressure",
+          "unit": "USD",
+          "value": 1374005694.8,
+          "status": "AVAILABLE",
+          "reasons": [
+            "COHERENCE_AUDIT_PARTIAL"
+          ],
+          "parents": [
+            "gld_shares_change_5",
+            "gld_fund_data"
+          ],
+          "replayClass": "R2"
+        }
+      }
+    },
+    {
+      "date": "2026-08-18",
+      "coreInputSha256": "720c98886387f9f0b9c39e2f353072378d66ebb57a69eb62a858d16282096192",
+      "acceptedCoreInputHash": "6d7945e94b669b2e74a4a2681ead8e9619d24598138a3ac216b59a17216bfd56",
+      "coreDecisionUnchanged": true,
+      "regime": "RISK_ON_SELECTIVE",
+      "defaultDataQuality": "PARTIAL",
+      "optionalProblems": [
+        "gld_shares_change_5",
+        "vix_percentile"
+      ],
+      "evidence": {
+        "btc_daily": {
+          "featureId": "btc_daily",
+          "role": "SATELLITE",
+          "family": "btc_flows",
+          "unit": "USD millions",
+          "value": 189.3,
+          "status": "AVAILABLE",
+          "reasons": [],
+          "parents": [
+            "raw_btc_rows"
+          ],
+          "replayClass": "R2"
+        },
+        "btc_rolling_5": {
+          "featureId": "btc_rolling_5",
+          "role": "SATELLITE",
+          "family": "btc_flows",
+          "unit": "USD millions",
+          "value": 238.40000000000003,
+          "status": "AVAILABLE",
+          "reasons": [],
+          "parents": [
+            "raw_btc_rows"
+          ],
+          "replayClass": "R2"
+        },
+        "btc_rolling_20": {
+          "featureId": "btc_rolling_20",
+          "role": "SATELLITE",
+          "family": "btc_flows",
+          "unit": "USD millions",
+          "value": null,
+          "status": "UNAVAILABLE",
+          "reasons": [
+            "INPUT_OR_WINDOW_UNAVAILABLE"
+          ],
+          "parents": [
+            "raw_btc_rows"
+          ],
+          "replayClass": "R2"
+        },
+        "btc_breadth": {
+          "featureId": "btc_breadth",
+          "role": "SATELLITE",
+          "family": "btc_flows",
+          "unit": "counts by status",
+          "value": {
+            "positive": 5,
+            "negative": 1,
+            "zero": 6,
+            "missing": 0
+          },
+          "status": "AVAILABLE",
+          "reasons": [],
+          "parents": [
+            "raw_btc_rows"
+          ],
+          "replayClass": "R2"
+        },
+        "btc_streak": {
+          "featureId": "btc_streak",
+          "role": "SATELLITE",
+          "family": "btc_flows",
+          "unit": "sessions + direction + censored",
+          "value": {
+            "sign": 1,
+            "length": 2,
+            "censored": false
+          },
+          "status": "AVAILABLE",
+          "reasons": [],
+          "parents": [
+            "raw_btc_rows"
+          ],
+          "replayClass": "R2"
+        },
+        "gld_shares_change_1": {
+          "featureId": "gld_shares_change_1",
+          "role": "SATELLITE",
+          "family": "gld_pressure",
+          "unit": "shares and fraction",
+          "value": {
+            "delta": -1900000,
+            "fraction": -0.005260243632336656
+          },
+          "status": "AVAILABLE",
+          "reasons": [
+            "COHERENCE_AUDIT_PARTIAL"
+          ],
+          "parents": [
+            "raw_gld_rows"
+          ],
+          "replayClass": "R2"
+        },
+        "gld_shares_change_5": {
+          "featureId": "gld_shares_change_5",
+          "role": "SATELLITE",
+          "family": "gld_pressure",
+          "unit": "shares and fraction",
+          "value": {
+            "delta": 900000,
+            "fraction": 0.0025111607142857145
+          },
+          "status": "AVAILABLE",
+          "reasons": [
+            "COHERENCE_AUDIT_PARTIAL"
+          ],
+          "parents": [
+            "raw_gld_rows"
+          ],
+          "replayClass": "R2"
+        },
+        "gld_shares_change_20": {
+          "featureId": "gld_shares_change_20",
+          "role": "SATELLITE",
+          "family": "gld_pressure",
+          "unit": "shares and fraction",
+          "value": null,
+          "status": "UNAVAILABLE",
+          "reasons": [
+            "GLD_WINDOW_UNAVAILABLE"
+          ],
+          "parents": [
+            "raw_gld_rows"
+          ],
+          "replayClass": "R2"
+        },
+        "gld_pressure_usd_5": {
+          "featureId": "gld_pressure_usd_5",
+          "role": "SATELLITE",
+          "family": "gld_pressure",
+          "unit": "USD",
+          "value": 363513502.8,
+          "status": "AVAILABLE",
+          "reasons": [
+            "COHERENCE_AUDIT_PARTIAL"
+          ],
+          "parents": [
+            "gld_shares_change_5",
+            "gld_fund_data"
+          ],
+          "replayClass": "R2"
+        }
+      }
+    },
+    {
+      "date": "2026-08-19",
+      "coreInputSha256": "a3c3db632c55778ba97e08f923aaf62ca1bbb17da9ee2e49fdc948403772b771",
+      "acceptedCoreInputHash": "6f1c5e623c90f49fadbc6ddece42c4e9b3c55c754103920fa87db447b4d4039d",
+      "coreDecisionUnchanged": true,
+      "regime": "RISK_ON_SELECTIVE",
+      "defaultDataQuality": "PARTIAL",
+      "optionalProblems": [
+        "gld_shares_change_5",
+        "vix_percentile"
+      ],
+      "evidence": {
+        "btc_daily": {
+          "featureId": "btc_daily",
+          "role": "SATELLITE",
+          "family": "btc_flows",
+          "unit": "USD millions",
+          "value": 517.2,
+          "status": "AVAILABLE",
+          "reasons": [],
+          "parents": [
+            "raw_btc_rows"
+          ],
+          "replayClass": "R2"
+        },
+        "btc_rolling_5": {
+          "featureId": "btc_rolling_5",
+          "role": "SATELLITE",
+          "family": "btc_flows",
+          "unit": "USD millions",
+          "value": 816.7,
+          "status": "AVAILABLE",
+          "reasons": [],
+          "parents": [
+            "raw_btc_rows"
+          ],
+          "replayClass": "R2"
+        },
+        "btc_rolling_20": {
+          "featureId": "btc_rolling_20",
+          "role": "SATELLITE",
+          "family": "btc_flows",
+          "unit": "USD millions",
+          "value": null,
+          "status": "UNAVAILABLE",
+          "reasons": [
+            "INPUT_OR_WINDOW_UNAVAILABLE"
+          ],
+          "parents": [
+            "raw_btc_rows"
+          ],
+          "replayClass": "R2"
+        },
+        "btc_breadth": {
+          "featureId": "btc_breadth",
+          "role": "SATELLITE",
+          "family": "btc_flows",
+          "unit": "counts by status",
+          "value": {
+            "positive": 8,
+            "negative": 0,
+            "zero": 4,
+            "missing": 0
+          },
+          "status": "AVAILABLE",
+          "reasons": [],
+          "parents": [
+            "raw_btc_rows"
+          ],
+          "replayClass": "R2"
+        },
+        "btc_streak": {
+          "featureId": "btc_streak",
+          "role": "SATELLITE",
+          "family": "btc_flows",
+          "unit": "sessions + direction + censored",
+          "value": {
+            "sign": 1,
+            "length": 3,
+            "censored": false
+          },
+          "status": "AVAILABLE",
+          "reasons": [],
+          "parents": [
+            "raw_btc_rows"
+          ],
+          "replayClass": "R2"
+        },
+        "gld_shares_change_1": {
+          "featureId": "gld_shares_change_1",
+          "role": "SATELLITE",
+          "family": "gld_pressure",
+          "unit": "shares and fraction",
+          "value": {
+            "delta": 3300000,
+            "fraction": 0.009184525466184246
+          },
+          "status": "AVAILABLE",
+          "reasons": [
+            "COHERENCE_AUDIT_PARTIAL"
+          ],
+          "parents": [
+            "raw_gld_rows"
+          ],
+          "replayClass": "R2"
+        },
+        "gld_shares_change_5": {
+          "featureId": "gld_shares_change_5",
+          "role": "SATELLITE",
+          "family": "gld_pressure",
+          "unit": "shares and fraction",
+          "value": {
+            "delta": 3100000,
+            "fraction": 0.008623087621696801
+          },
+          "status": "AVAILABLE",
+          "reasons": [
+            "COHERENCE_AUDIT_PARTIAL"
+          ],
+          "parents": [
+            "raw_gld_rows"
+          ],
+          "replayClass": "R2"
+        },
+        "gld_shares_change_20": {
+          "featureId": "gld_shares_change_20",
+          "role": "SATELLITE",
+          "family": "gld_pressure",
+          "unit": "shares and fraction",
+          "value": null,
+          "status": "UNAVAILABLE",
+          "reasons": [
+            "GLD_WINDOW_UNAVAILABLE"
+          ],
+          "parents": [
+            "raw_gld_rows"
+          ],
+          "replayClass": "R2"
+        },
+        "gld_pressure_usd_5": {
+          "featureId": "gld_pressure_usd_5",
+          "role": "SATELLITE",
+          "family": "gld_pressure",
+          "unit": "USD",
+          "value": 1268355653.5,
+          "status": "AVAILABLE",
+          "reasons": [
+            "COHERENCE_AUDIT_PARTIAL"
+          ],
+          "parents": [
+            "gld_shares_change_5",
+            "gld_fund_data"
+          ],
+          "replayClass": "R2"
+        }
+      }
+    },
+    {
+      "date": "2026-08-20",
+      "coreInputSha256": "8a68634b409df036c8f864a923984350bc3cce5390241da71aa8b6d6ef8f80ae",
+      "acceptedCoreInputHash": "a6420396a6330106f26bb2c9534355d564341d0e561a5e868990157b9ed97f26",
+      "coreDecisionUnchanged": true,
+      "regime": "RISK_ON_SELECTIVE",
+      "defaultDataQuality": "PARTIAL",
+      "optionalProblems": [
+        "gld_shares_change_5",
+        "vix_percentile"
+      ],
+      "evidence": {
+        "btc_daily": {
+          "featureId": "btc_daily",
+          "role": "SATELLITE",
+          "family": "btc_flows",
+          "unit": "USD millions",
+          "value": 606.3,
+          "status": "AVAILABLE",
+          "reasons": [],
+          "parents": [
+            "raw_btc_rows"
+          ],
+          "replayClass": "R2"
+        },
+        "btc_rolling_5": {
+          "featureId": "btc_rolling_5",
+          "role": "SATELLITE",
+          "family": "btc_flows",
+          "unit": "USD millions",
+          "value": 1554.1,
+          "status": "AVAILABLE",
+          "reasons": [],
+          "parents": [
+            "raw_btc_rows"
+          ],
+          "replayClass": "R2"
+        },
+        "btc_rolling_20": {
+          "featureId": "btc_rolling_20",
+          "role": "SATELLITE",
+          "family": "btc_flows",
+          "unit": "USD millions",
+          "value": null,
+          "status": "UNAVAILABLE",
+          "reasons": [
+            "INPUT_OR_WINDOW_UNAVAILABLE"
+          ],
+          "parents": [
+            "raw_btc_rows"
+          ],
+          "replayClass": "R2"
+        },
+        "btc_breadth": {
+          "featureId": "btc_breadth",
+          "role": "SATELLITE",
+          "family": "btc_flows",
+          "unit": "counts by status",
+          "value": {
+            "positive": 5,
+            "negative": 1,
+            "zero": 6,
+            "missing": 0
+          },
+          "status": "AVAILABLE",
+          "reasons": [],
+          "parents": [
+            "raw_btc_rows"
+          ],
+          "replayClass": "R2"
+        },
+        "btc_streak": {
+          "featureId": "btc_streak",
+          "role": "SATELLITE",
+          "family": "btc_flows",
+          "unit": "sessions + direction + censored",
+          "value": {
+            "sign": 1,
+            "length": 4,
+            "censored": false
+          },
+          "status": "AVAILABLE",
+          "reasons": [],
+          "parents": [
+            "raw_btc_rows"
+          ],
+          "replayClass": "R2"
+        },
+        "gld_shares_change_1": {
+          "featureId": "gld_shares_change_1",
+          "role": "SATELLITE",
+          "family": "gld_pressure",
+          "unit": "shares and fraction",
+          "value": {
+            "delta": 1500000,
+            "fraction": 0.004136789851075565
+          },
+          "status": "AVAILABLE",
+          "reasons": [
+            "COHERENCE_AUDIT_PARTIAL"
+          ],
+          "parents": [
+            "raw_gld_rows"
+          ],
+          "replayClass": "R2"
+        },
+        "gld_shares_change_5": {
+          "featureId": "gld_shares_change_5",
+          "role": "SATELLITE",
+          "family": "gld_pressure",
+          "unit": "shares and fraction",
+          "value": {
+            "delta": 5500000,
+            "fraction": 0.015337423312883436
+          },
+          "status": "AVAILABLE",
+          "reasons": [
+            "COHERENCE_AUDIT_PARTIAL"
+          ],
+          "parents": [
+            "raw_gld_rows"
+          ],
+          "replayClass": "R2"
+        },
+        "gld_shares_change_20": {
+          "featureId": "gld_shares_change_20",
+          "role": "SATELLITE",
+          "family": "gld_pressure",
+          "unit": "shares and fraction",
+          "value": null,
+          "status": "UNAVAILABLE",
+          "reasons": [
+            "GLD_WINDOW_UNAVAILABLE"
+          ],
+          "parents": [
+            "raw_gld_rows"
+          ],
+          "replayClass": "R2"
+        },
+        "gld_pressure_usd_5": {
+          "featureId": "gld_pressure_usd_5",
+          "role": "SATELLITE",
+          "family": "gld_pressure",
+          "unit": "USD",
+          "value": 2261510399.5,
+          "status": "AVAILABLE",
+          "reasons": [
+            "COHERENCE_AUDIT_PARTIAL"
+          ],
+          "parents": [
+            "gld_shares_change_5",
+            "gld_fund_data"
+          ],
+          "replayClass": "R2"
+        }
+      }
+    },
+    {
+      "date": "2026-08-21",
+      "coreInputSha256": "2b414e46a380f10b97574487bfc3f5ea6c74c2afed2461728536402f548f5f65",
+      "acceptedCoreInputHash": "6e7c23c889652c302a4575cefc391249239fb4887e2522bbeac418487f4f0b98",
+      "coreDecisionUnchanged": true,
+      "regime": "RISK_ON_SELECTIVE",
+      "defaultDataQuality": "PARTIAL",
+      "optionalProblems": [
+        "gld_shares_change_5",
+        "vix_percentile"
+      ],
+      "evidence": {
+        "btc_daily": {
+          "featureId": "btc_daily",
+          "role": "SATELLITE",
+          "family": "btc_flows",
+          "unit": "USD millions",
+          "value": 307.5,
+          "status": "AVAILABLE",
+          "reasons": [],
+          "parents": [
+            "raw_btc_rows"
+          ],
+          "replayClass": "R2"
+        },
+        "btc_rolling_5": {
+          "featureId": "btc_rolling_5",
+          "role": "SATELLITE",
+          "family": "btc_flows",
+          "unit": "USD millions",
+          "value": 1917.8,
+          "status": "AVAILABLE",
+          "reasons": [],
+          "parents": [
+            "raw_btc_rows"
+          ],
+          "replayClass": "R2"
+        },
+        "btc_rolling_20": {
+          "featureId": "btc_rolling_20",
+          "role": "SATELLITE",
+          "family": "btc_flows",
+          "unit": "USD millions",
+          "value": null,
+          "status": "UNAVAILABLE",
+          "reasons": [
+            "INPUT_OR_WINDOW_UNAVAILABLE"
+          ],
+          "parents": [
+            "raw_btc_rows"
+          ],
+          "replayClass": "R2"
+        },
+        "btc_breadth": {
+          "featureId": "btc_breadth",
+          "role": "SATELLITE",
+          "family": "btc_flows",
+          "unit": "counts by status",
+          "value": {
+            "positive": 7,
+            "negative": 0,
+            "zero": 5,
+            "missing": 0
+          },
+          "status": "AVAILABLE",
+          "reasons": [],
+          "parents": [
+            "raw_btc_rows"
+          ],
+          "replayClass": "R2"
+        },
+        "btc_streak": {
+          "featureId": "btc_streak",
+          "role": "SATELLITE",
+          "family": "btc_flows",
+          "unit": "sessions + direction + censored",
+          "value": {
+            "sign": 1,
+            "length": 5,
+            "censored": false
+          },
+          "status": "AVAILABLE",
+          "reasons": [],
+          "parents": [
+            "raw_btc_rows"
+          ],
+          "replayClass": "R2"
+        },
+        "gld_shares_change_1": {
+          "featureId": "gld_shares_change_1",
+          "role": "SATELLITE",
+          "family": "gld_pressure",
+          "unit": "shares and fraction",
+          "value": {
+            "delta": 2900000,
+            "fraction": 0.007964844822850866
+          },
+          "status": "AVAILABLE",
+          "reasons": [
+            "COHERENCE_AUDIT_PARTIAL"
+          ],
+          "parents": [
+            "raw_gld_rows"
+          ],
+          "replayClass": "R2"
+        },
+        "gld_shares_change_5": {
+          "featureId": "gld_shares_change_5",
+          "role": "SATELLITE",
+          "family": "gld_pressure",
+          "unit": "shares and fraction",
+          "value": {
+            "delta": 8300000,
+            "fraction": 0.02313911346529133
+          },
+          "status": "AVAILABLE",
+          "reasons": [
+            "COHERENCE_AUDIT_PARTIAL"
+          ],
+          "parents": [
+            "raw_gld_rows"
+          ],
+          "replayClass": "R2"
+        },
+        "gld_shares_change_20": {
+          "featureId": "gld_shares_change_20",
+          "role": "SATELLITE",
+          "family": "gld_pressure",
+          "unit": "shares and fraction",
+          "value": null,
+          "status": "UNAVAILABLE",
+          "reasons": [
+            "GLD_WINDOW_UNAVAILABLE"
+          ],
+          "parents": [
+            "raw_gld_rows"
+          ],
+          "replayClass": "R2"
+        },
+        "gld_pressure_usd_5": {
+          "featureId": "gld_pressure_usd_5",
+          "role": "SATELLITE",
+          "family": "gld_pressure",
+          "unit": "USD",
+          "value": 3488284027.2000003,
+          "status": "AVAILABLE",
+          "reasons": [
+            "COHERENCE_AUDIT_PARTIAL"
+          ],
+          "parents": [
+            "gld_shares_change_5",
+            "gld_fund_data"
+          ],
+          "replayClass": "R2"
+        }
+      }
+    },
+    {
+      "date": "2026-08-24",
+      "coreInputSha256": "0be09f6f8a7e6eec51aa31523116118b7a11c1fc0828f28f6a7b6dff8022d5e3",
+      "acceptedCoreInputHash": "7777e64df5d2b2eb76a6e4ca237281955d47971b840ef28c678bd8853068c8ba",
+      "coreDecisionUnchanged": true,
+      "regime": "RISK_ON_BROAD",
+      "defaultDataQuality": "PARTIAL",
+      "optionalProblems": [
+        "gld_shares_change_5",
+        "vix_percentile"
+      ],
+      "evidence": {
+        "btc_daily": {
+          "featureId": "btc_daily",
+          "role": "SATELLITE",
+          "family": "btc_flows",
+          "unit": "USD millions",
+          "value": 337.6,
+          "status": "AVAILABLE",
+          "reasons": [],
+          "parents": [
+            "raw_btc_rows"
+          ],
+          "replayClass": "R2"
+        },
+        "btc_rolling_5": {
+          "featureId": "btc_rolling_5",
+          "role": "SATELLITE",
+          "family": "btc_flows",
+          "unit": "USD millions",
+          "value": 1957.9,
+          "status": "AVAILABLE",
+          "reasons": [],
+          "parents": [
+            "raw_btc_rows"
+          ],
+          "replayClass": "R2"
+        },
+        "btc_rolling_20": {
+          "featureId": "btc_rolling_20",
+          "role": "SATELLITE",
+          "family": "btc_flows",
+          "unit": "USD millions",
+          "value": null,
+          "status": "UNAVAILABLE",
+          "reasons": [
+            "INPUT_OR_WINDOW_UNAVAILABLE"
+          ],
+          "parents": [
+            "raw_btc_rows"
+          ],
+          "replayClass": "R2"
+        },
+        "btc_breadth": {
+          "featureId": "btc_breadth",
+          "role": "SATELLITE",
+          "family": "btc_flows",
+          "unit": "counts by status",
+          "value": {
+            "positive": 6,
+            "negative": 0,
+            "zero": 6,
+            "missing": 0
+          },
+          "status": "AVAILABLE",
+          "reasons": [],
+          "parents": [
+            "raw_btc_rows"
+          ],
+          "replayClass": "R2"
+        },
+        "btc_streak": {
+          "featureId": "btc_streak",
+          "role": "SATELLITE",
+          "family": "btc_flows",
+          "unit": "sessions + direction + censored",
+          "value": {
+            "sign": 1,
+            "length": 6,
+            "censored": false
+          },
+          "status": "AVAILABLE",
+          "reasons": [],
+          "parents": [
+            "raw_btc_rows"
+          ],
+          "replayClass": "R2"
+        },
+        "gld_shares_change_1": {
+          "featureId": "gld_shares_change_1",
+          "role": "SATELLITE",
+          "family": "gld_pressure",
+          "unit": "shares and fraction",
+          "value": {
+            "delta": 800000,
+            "fraction": 0.0021798365122615805
+          },
+          "status": "AVAILABLE",
+          "reasons": [
+            "COHERENCE_AUDIT_PARTIAL"
+          ],
+          "parents": [
+            "raw_gld_rows"
+          ],
+          "replayClass": "R2"
+        },
+        "gld_shares_change_5": {
+          "featureId": "gld_shares_change_5",
+          "role": "SATELLITE",
+          "family": "gld_pressure",
+          "unit": "shares and fraction",
+          "value": {
+            "delta": 6600000,
+            "fraction": 0.018272425249169437
+          },
+          "status": "AVAILABLE",
+          "reasons": [
+            "COHERENCE_AUDIT_PARTIAL"
+          ],
+          "parents": [
+            "raw_gld_rows"
+          ],
+          "replayClass": "R2"
+        },
+        "gld_shares_change_20": {
+          "featureId": "gld_shares_change_20",
+          "role": "SATELLITE",
+          "family": "gld_pressure",
+          "unit": "shares and fraction",
+          "value": null,
+          "status": "UNAVAILABLE",
+          "reasons": [
+            "GLD_WINDOW_UNAVAILABLE"
+          ],
+          "parents": [
+            "raw_gld_rows"
+          ],
+          "replayClass": "R2"
+        },
+        "gld_pressure_usd_5": {
+          "featureId": "gld_pressure_usd_5",
+          "role": "SATELLITE",
+          "family": "gld_pressure",
+          "unit": "USD",
+          "value": 2823132219.6,
+          "status": "AVAILABLE",
+          "reasons": [
+            "COHERENCE_AUDIT_PARTIAL"
+          ],
+          "parents": [
+            "gld_shares_change_5",
+            "gld_fund_data"
+          ],
+          "replayClass": "R2"
+        }
+      }
+    },
+    {
+      "date": "2026-08-25",
+      "coreInputSha256": "4f19ff8629363cd4ee51291b2491da42fcbd2f6f9a28abc6ee76b5c1c73a583f",
+      "acceptedCoreInputHash": "154e3ca04f5ae28d655fdc99a7f935441815d14ed318cadb35c98d97e1cca9b0",
+      "coreDecisionUnchanged": true,
+      "regime": "RISK_ON_SELECTIVE",
+      "defaultDataQuality": "PARTIAL",
+      "optionalProblems": [
+        "gld_shares_change_5",
+        "vix_percentile"
+      ],
+      "evidence": {
+        "btc_daily": {
+          "featureId": "btc_daily",
+          "role": "SATELLITE",
+          "family": "btc_flows",
+          "unit": "USD millions",
+          "value": 314.3,
+          "status": "AVAILABLE",
+          "reasons": [],
+          "parents": [
+            "raw_btc_rows"
+          ],
+          "replayClass": "R2"
+        },
+        "btc_rolling_5": {
+          "featureId": "btc_rolling_5",
+          "role": "SATELLITE",
+          "family": "btc_flows",
+          "unit": "USD millions",
+          "value": 2082.9,
+          "status": "AVAILABLE",
+          "reasons": [],
+          "parents": [
+            "raw_btc_rows"
+          ],
+          "replayClass": "R2"
+        },
+        "btc_rolling_20": {
+          "featureId": "btc_rolling_20",
+          "role": "SATELLITE",
+          "family": "btc_flows",
+          "unit": "USD millions",
+          "value": null,
+          "status": "UNAVAILABLE",
+          "reasons": [
+            "INPUT_OR_WINDOW_UNAVAILABLE"
+          ],
+          "parents": [
+            "raw_btc_rows"
+          ],
+          "replayClass": "R2"
+        },
+        "btc_breadth": {
+          "featureId": "btc_breadth",
+          "role": "SATELLITE",
+          "family": "btc_flows",
+          "unit": "counts by status",
+          "value": {
+            "positive": 5,
+            "negative": 0,
+            "zero": 7,
+            "missing": 0
+          },
+          "status": "AVAILABLE",
+          "reasons": [],
+          "parents": [
+            "raw_btc_rows"
+          ],
+          "replayClass": "R2"
+        },
+        "btc_streak": {
+          "featureId": "btc_streak",
+          "role": "SATELLITE",
+          "family": "btc_flows",
+          "unit": "sessions + direction + censored",
+          "value": {
+            "sign": 1,
+            "length": 7,
+            "censored": false
+          },
+          "status": "AVAILABLE",
+          "reasons": [],
+          "parents": [
+            "raw_btc_rows"
+          ],
+          "replayClass": "R2"
+        },
+        "gld_shares_change_1": {
+          "featureId": "gld_shares_change_1",
+          "role": "SATELLITE",
+          "family": "gld_pressure",
+          "unit": "shares and fraction",
+          "value": {
+            "delta": -400000,
+            "fraction": -0.001087547580206634
+          },
+          "status": "AVAILABLE",
+          "reasons": [
+            "COHERENCE_AUDIT_PARTIAL"
+          ],
+          "parents": [
+            "raw_gld_rows"
+          ],
+          "replayClass": "R2"
+        },
+        "gld_shares_change_5": {
+          "featureId": "gld_shares_change_5",
+          "role": "SATELLITE",
+          "family": "gld_pressure",
+          "unit": "shares and fraction",
+          "value": {
+            "delta": 8100000,
+            "fraction": 0.022543835235179516
+          },
+          "status": "AVAILABLE",
+          "reasons": [
+            "COHERENCE_AUDIT_PARTIAL"
+          ],
+          "parents": [
+            "raw_gld_rows"
+          ],
+          "replayClass": "R2"
+        },
+        "gld_shares_change_20": {
+          "featureId": "gld_shares_change_20",
+          "role": "SATELLITE",
+          "family": "gld_pressure",
+          "unit": "shares and fraction",
+          "value": null,
+          "status": "UNAVAILABLE",
+          "reasons": [
+            "GLD_WINDOW_UNAVAILABLE"
+          ],
+          "parents": [
+            "raw_gld_rows"
+          ],
+          "replayClass": "R2"
+        },
+        "gld_pressure_usd_5": {
+          "featureId": "gld_pressure_usd_5",
+          "role": "SATELLITE",
+          "family": "gld_pressure",
+          "unit": "USD",
+          "value": 3428861163.3,
+          "status": "AVAILABLE",
+          "reasons": [
+            "COHERENCE_AUDIT_PARTIAL"
+          ],
+          "parents": [
+            "gld_shares_change_5",
+            "gld_fund_data"
+          ],
+          "replayClass": "R2"
+        }
+      }
+    },
+    {
+      "date": "2026-08-26",
+      "coreInputSha256": "601d148d9d6b6ba90d59c2e5d2dfbe5bc516be38a6ca89ab1af16f56f8d6d255",
+      "acceptedCoreInputHash": "dbcd839983e267b4886422f57fb26a9192e2cd0637b3035e1e91c9f9a388fef5",
+      "coreDecisionUnchanged": true,
+      "regime": "RISK_ON_SELECTIVE",
+      "defaultDataQuality": "PARTIAL",
+      "optionalProblems": [
+        "gld_shares_change_5",
+        "vix_percentile"
+      ],
+      "evidence": {
+        "btc_daily": {
+          "featureId": "btc_daily",
+          "role": "SATELLITE",
+          "family": "btc_flows",
+          "unit": "USD millions",
+          "value": 232.2,
+          "status": "AVAILABLE",
+          "reasons": [],
+          "parents": [
+            "raw_btc_rows"
+          ],
+          "replayClass": "R2"
+        },
+        "btc_rolling_5": {
+          "featureId": "btc_rolling_5",
+          "role": "SATELLITE",
+          "family": "btc_flows",
+          "unit": "USD millions",
+          "value": 1797.9,
+          "status": "AVAILABLE",
+          "reasons": [],
+          "parents": [
+            "raw_btc_rows"
+          ],
+          "replayClass": "R2"
+        },
+        "btc_rolling_20": {
+          "featureId": "btc_rolling_20",
+          "role": "SATELLITE",
+          "family": "btc_flows",
+          "unit": "USD millions",
+          "value": null,
+          "status": "UNAVAILABLE",
+          "reasons": [
+            "INPUT_OR_WINDOW_UNAVAILABLE"
+          ],
+          "parents": [
+            "raw_btc_rows"
+          ],
+          "replayClass": "R2"
+        },
+        "btc_breadth": {
+          "featureId": "btc_breadth",
+          "role": "SATELLITE",
+          "family": "btc_flows",
+          "unit": "counts by status",
+          "value": {
+            "positive": 5,
+            "negative": 1,
+            "zero": 6,
+            "missing": 0
+          },
+          "status": "AVAILABLE",
+          "reasons": [],
+          "parents": [
+            "raw_btc_rows"
+          ],
+          "replayClass": "R2"
+        },
+        "btc_streak": {
+          "featureId": "btc_streak",
+          "role": "SATELLITE",
+          "family": "btc_flows",
+          "unit": "sessions + direction + censored",
+          "value": {
+            "sign": 1,
+            "length": 8,
+            "censored": false
+          },
+          "status": "AVAILABLE",
+          "reasons": [],
+          "parents": [
+            "raw_btc_rows"
+          ],
+          "replayClass": "R2"
+        },
+        "gld_shares_change_1": {
+          "featureId": "gld_shares_change_1",
+          "role": "SATELLITE",
+          "family": "gld_pressure",
+          "unit": "shares and fraction",
+          "value": {
+            "delta": -1000000,
+            "fraction": -0.0027218290691344584
+          },
+          "status": "AVAILABLE",
+          "reasons": [
+            "COHERENCE_AUDIT_PARTIAL"
+          ],
+          "parents": [
+            "raw_gld_rows"
+          ],
+          "replayClass": "R2"
+        },
+        "gld_shares_change_5": {
+          "featureId": "gld_shares_change_5",
+          "role": "SATELLITE",
+          "family": "gld_pressure",
+          "unit": "shares and fraction",
+          "value": {
+            "delta": 3800000,
+            "fraction": 0.010479867622724766
+          },
+          "status": "AVAILABLE",
+          "reasons": [
+            "COHERENCE_AUDIT_PARTIAL"
+          ],
+          "parents": [
+            "raw_gld_rows"
+          ],
+          "replayClass": "R2"
+        },
+        "gld_shares_change_20": {
+          "featureId": "gld_shares_change_20",
+          "role": "SATELLITE",
+          "family": "gld_pressure",
+          "unit": "shares and fraction",
+          "value": null,
+          "status": "UNAVAILABLE",
+          "reasons": [
+            "GLD_WINDOW_UNAVAILABLE"
+          ],
+          "parents": [
+            "raw_gld_rows"
+          ],
+          "replayClass": "R2"
+        },
+        "gld_pressure_usd_5": {
+          "featureId": "gld_pressure_usd_5",
+          "role": "SATELLITE",
+          "family": "gld_pressure",
+          "unit": "USD",
+          "value": 1614179093.6,
+          "status": "AVAILABLE",
+          "reasons": [
+            "COHERENCE_AUDIT_PARTIAL"
+          ],
+          "parents": [
+            "gld_shares_change_5",
+            "gld_fund_data"
+          ],
+          "replayClass": "R2"
+        }
+      }
+    },
+    {
+      "date": "2026-08-27",
+      "coreInputSha256": "8314578494851b9bb6e42e3fab7eb4f7c793338c9d112f4e5dd7310e52dc2299",
+      "acceptedCoreInputHash": "fb5469d9eb1d51b62ea0016fa8be37af23922398775e6ba0673ff1e7d7ab6ae0",
+      "coreDecisionUnchanged": true,
+      "regime": "RISK_ON_SELECTIVE",
+      "defaultDataQuality": "PARTIAL",
+      "optionalProblems": [
+        "gld_shares_change_5",
+        "vix_percentile"
+      ],
+      "evidence": {
+        "btc_daily": {
+          "featureId": "btc_daily",
+          "role": "SATELLITE",
+          "family": "btc_flows",
+          "unit": "USD millions",
+          "value": 242.3,
+          "status": "AVAILABLE",
+          "reasons": [],
+          "parents": [
+            "raw_btc_rows"
+          ],
+          "replayClass": "R2"
+        },
+        "btc_rolling_5": {
+          "featureId": "btc_rolling_5",
+          "role": "SATELLITE",
+          "family": "btc_flows",
+          "unit": "USD millions",
+          "value": 1433.9,
+          "status": "AVAILABLE",
+          "reasons": [],
+          "parents": [
+            "raw_btc_rows"
+          ],
+          "replayClass": "R2"
+        },
+        "btc_rolling_20": {
+          "featureId": "btc_rolling_20",
+          "role": "SATELLITE",
+          "family": "btc_flows",
+          "unit": "USD millions",
+          "value": null,
+          "status": "UNAVAILABLE",
+          "reasons": [
+            "INPUT_OR_WINDOW_UNAVAILABLE"
+          ],
+          "parents": [
+            "raw_btc_rows"
+          ],
+          "replayClass": "R2"
+        },
+        "btc_breadth": {
+          "featureId": "btc_breadth",
+          "role": "SATELLITE",
+          "family": "btc_flows",
+          "unit": "counts by status",
+          "value": {
+            "positive": 6,
+            "negative": 2,
+            "zero": 4,
+            "missing": 0
+          },
+          "status": "AVAILABLE",
+          "reasons": [],
+          "parents": [
+            "raw_btc_rows"
+          ],
+          "replayClass": "R2"
+        },
+        "btc_streak": {
+          "featureId": "btc_streak",
+          "role": "SATELLITE",
+          "family": "btc_flows",
+          "unit": "sessions + direction + censored",
+          "value": {
+            "sign": 1,
+            "length": 9,
+            "censored": false
+          },
+          "status": "AVAILABLE",
+          "reasons": [],
+          "parents": [
+            "raw_btc_rows"
+          ],
+          "replayClass": "R2"
+        },
+        "gld_shares_change_1": {
+          "featureId": "gld_shares_change_1",
+          "role": "SATELLITE",
+          "family": "gld_pressure",
+          "unit": "shares and fraction",
+          "value": {
+            "delta": 400000,
+            "fraction": 0.001091703056768559
+          },
+          "status": "AVAILABLE",
+          "reasons": [
+            "COHERENCE_AUDIT_PARTIAL"
+          ],
+          "parents": [
+            "raw_gld_rows"
+          ],
+          "replayClass": "R2"
+        },
+        "gld_shares_change_5": {
+          "featureId": "gld_shares_change_5",
+          "role": "SATELLITE",
+          "family": "gld_pressure",
+          "unit": "shares and fraction",
+          "value": {
+            "delta": 2700000,
+            "fraction": 0.007415545179895633
+          },
+          "status": "AVAILABLE",
+          "reasons": [
+            "COHERENCE_AUDIT_PARTIAL"
+          ],
+          "parents": [
+            "raw_gld_rows"
+          ],
+          "replayClass": "R2"
+        },
+        "gld_shares_change_20": {
+          "featureId": "gld_shares_change_20",
+          "role": "SATELLITE",
+          "family": "gld_pressure",
+          "unit": "shares and fraction",
+          "value": null,
+          "status": "UNAVAILABLE",
+          "reasons": [
+            "GLD_WINDOW_UNAVAILABLE"
+          ],
+          "parents": [
+            "raw_gld_rows"
+          ],
+          "replayClass": "R2"
+        },
+        "gld_pressure_usd_5": {
+          "featureId": "gld_pressure_usd_5",
+          "role": "SATELLITE",
+          "family": "gld_pressure",
+          "unit": "USD",
+          "value": 1131410735.1000001,
+          "status": "AVAILABLE",
+          "reasons": [
+            "COHERENCE_AUDIT_PARTIAL"
+          ],
+          "parents": [
+            "gld_shares_change_5",
+            "gld_fund_data"
+          ],
+          "replayClass": "R2"
+        }
+      }
+    },
+    {
+      "date": "2026-08-28",
+      "coreInputSha256": "6a7292facfc0d16f262631706d57c1fa2020717701b99e8feeaabfa38e3cc833",
+      "acceptedCoreInputHash": "3787ed176b5bb9604d762befb6c255c5fc9574e7f850662a8d1c9ede268ec34b",
+      "coreDecisionUnchanged": true,
+      "regime": "RISK_ON_SELECTIVE",
+      "defaultDataQuality": "PARTIAL",
+      "optionalProblems": [
+        "gld_shares_change_5",
+        "vix_percentile"
+      ],
+      "evidence": {
+        "btc_daily": {
+          "featureId": "btc_daily",
+          "role": "SATELLITE",
+          "family": "btc_flows",
+          "unit": "USD millions",
+          "value": -201.9,
+          "status": "AVAILABLE",
+          "reasons": [],
+          "parents": [
+            "raw_btc_rows"
+          ],
+          "replayClass": "R2"
+        },
+        "btc_rolling_5": {
+          "featureId": "btc_rolling_5",
+          "role": "SATELLITE",
+          "family": "btc_flows",
+          "unit": "USD millions",
+          "value": 924.5000000000001,
+          "status": "AVAILABLE",
+          "reasons": [],
+          "parents": [
+            "raw_btc_rows"
+          ],
+          "replayClass": "R2"
+        },
+        "btc_rolling_20": {
+          "featureId": "btc_rolling_20",
+          "role": "SATELLITE",
+          "family": "btc_flows",
+          "unit": "USD millions",
+          "value": 3322.3999999999996,
+          "status": "AVAILABLE",
+          "reasons": [],
+          "parents": [
+            "raw_btc_rows"
+          ],
+          "replayClass": "R2"
+        },
+        "btc_breadth": {
+          "featureId": "btc_breadth",
+          "role": "SATELLITE",
+          "family": "btc_flows",
+          "unit": "counts by status",
+          "value": {
+            "positive": 1,
+            "negative": 4,
+            "zero": 7,
+            "missing": 0
+          },
+          "status": "AVAILABLE",
+          "reasons": [],
+          "parents": [
+            "raw_btc_rows"
+          ],
+          "replayClass": "R2"
+        },
+        "btc_streak": {
+          "featureId": "btc_streak",
+          "role": "SATELLITE",
+          "family": "btc_flows",
+          "unit": "sessions + direction + censored",
+          "value": {
+            "sign": -1,
+            "length": 1,
+            "censored": false
+          },
+          "status": "AVAILABLE",
+          "reasons": [],
+          "parents": [
+            "raw_btc_rows"
+          ],
+          "replayClass": "R2"
+        },
+        "gld_shares_change_1": {
+          "featureId": "gld_shares_change_1",
+          "role": "SATELLITE",
+          "family": "gld_pressure",
+          "unit": "shares and fraction",
+          "value": {
+            "delta": -1500000,
+            "fraction": -0.004089422028353326
+          },
+          "status": "AVAILABLE",
+          "reasons": [
+            "COHERENCE_AUDIT_PARTIAL"
+          ],
+          "parents": [
+            "raw_gld_rows"
+          ],
+          "replayClass": "R2"
+        },
+        "gld_shares_change_5": {
+          "featureId": "gld_shares_change_5",
+          "role": "SATELLITE",
+          "family": "gld_pressure",
+          "unit": "shares and fraction",
+          "value": {
+            "delta": -1700000,
+            "fraction": -0.004632152588555858
+          },
+          "status": "AVAILABLE",
+          "reasons": [
+            "COHERENCE_AUDIT_PARTIAL"
+          ],
+          "parents": [
+            "raw_gld_rows"
+          ],
+          "replayClass": "R2"
+        },
+        "gld_shares_change_20": {
+          "featureId": "gld_shares_change_20",
+          "role": "SATELLITE",
+          "family": "gld_pressure",
+          "unit": "shares and fraction",
+          "value": null,
+          "status": "UNAVAILABLE",
+          "reasons": [
+            "GLD_WINDOW_UNAVAILABLE"
+          ],
+          "parents": [
+            "raw_gld_rows"
+          ],
+          "replayClass": "R2"
+        },
+        "gld_pressure_usd_5": {
+          "featureId": "gld_pressure_usd_5",
+          "role": "SATELLITE",
+          "family": "gld_pressure",
+          "unit": "USD",
+          "value": -711394981.2,
+          "status": "AVAILABLE",
+          "reasons": [
+            "COHERENCE_AUDIT_PARTIAL"
+          ],
+          "parents": [
+            "gld_shares_change_5",
+            "gld_fund_data"
+          ],
+          "replayClass": "R2"
+        }
+      }
+    },
+    {
+      "date": "2026-08-31",
+      "coreInputSha256": "33052e3bb4a31c9ab849bc6d8df37ec6f7ecdf0cc60a9902b563ceafdf006f6b",
+      "acceptedCoreInputHash": "e27fa736a8bfb1d295e694729e924f181bb35bdd4ee2029fdc9bb5b9906effbc",
+      "coreDecisionUnchanged": true,
+      "regime": "RISK_ON_SELECTIVE",
+      "defaultDataQuality": "PARTIAL",
+      "optionalProblems": [
+        "gld_shares_change_5",
+        "vix_percentile"
+      ],
+      "evidence": {
+        "btc_daily": {
+          "featureId": "btc_daily",
+          "role": "SATELLITE",
+          "family": "btc_flows",
+          "unit": "USD millions",
+          "value": 216.7,
+          "status": "AVAILABLE",
+          "reasons": [],
+          "parents": [
+            "raw_btc_rows"
+          ],
+          "replayClass": "R2"
+        },
+        "btc_rolling_5": {
+          "featureId": "btc_rolling_5",
+          "role": "SATELLITE",
+          "family": "btc_flows",
+          "unit": "USD millions",
+          "value": 803.5999999999999,
+          "status": "AVAILABLE",
+          "reasons": [],
+          "parents": [
+            "raw_btc_rows"
+          ],
+          "replayClass": "R2"
+        },
+        "btc_rolling_20": {
+          "featureId": "btc_rolling_20",
+          "role": "SATELLITE",
+          "family": "btc_flows",
+          "unit": "USD millions",
+          "value": 3369,
+          "status": "AVAILABLE",
+          "reasons": [],
+          "parents": [
+            "raw_btc_rows"
+          ],
+          "replayClass": "R2"
+        },
+        "btc_breadth": {
+          "featureId": "btc_breadth",
+          "role": "SATELLITE",
+          "family": "btc_flows",
+          "unit": "counts by status",
+          "value": {
+            "positive": 5,
+            "negative": 1,
+            "zero": 6,
+            "missing": 0
+          },
+          "status": "AVAILABLE",
+          "reasons": [],
+          "parents": [
+            "raw_btc_rows"
+          ],
+          "replayClass": "R2"
+        },
+        "btc_streak": {
+          "featureId": "btc_streak",
+          "role": "SATELLITE",
+          "family": "btc_flows",
+          "unit": "sessions + direction + censored",
+          "value": {
+            "sign": 1,
+            "length": 1,
+            "censored": false
+          },
+          "status": "AVAILABLE",
+          "reasons": [],
+          "parents": [
+            "raw_btc_rows"
+          ],
+          "replayClass": "R2"
+        },
+        "gld_shares_change_1": {
+          "featureId": "gld_shares_change_1",
+          "role": "SATELLITE",
+          "family": "gld_pressure",
+          "unit": "shares and fraction",
+          "value": {
+            "delta": 0,
+            "fraction": 0
+          },
+          "status": "AVAILABLE",
+          "reasons": [
+            "COHERENCE_AUDIT_PARTIAL"
+          ],
+          "parents": [
+            "raw_gld_rows"
+          ],
+          "replayClass": "R2"
+        },
+        "gld_shares_change_5": {
+          "featureId": "gld_shares_change_5",
+          "role": "SATELLITE",
+          "family": "gld_pressure",
+          "unit": "shares and fraction",
+          "value": {
+            "delta": -2500000,
+            "fraction": -0.006797172376291463
+          },
+          "status": "AVAILABLE",
+          "reasons": [
+            "COHERENCE_AUDIT_PARTIAL"
+          ],
+          "parents": [
+            "raw_gld_rows"
+          ],
+          "replayClass": "R2"
+        },
+        "gld_shares_change_20": {
+          "featureId": "gld_shares_change_20",
+          "role": "SATELLITE",
+          "family": "gld_pressure",
+          "unit": "shares and fraction",
+          "value": null,
+          "status": "UNAVAILABLE",
+          "reasons": [
+            "GLD_WINDOW_UNAVAILABLE"
+          ],
+          "parents": [
+            "raw_gld_rows"
+          ],
+          "replayClass": "R2"
+        },
+        "gld_pressure_usd_5": {
+          "featureId": "gld_pressure_usd_5",
+          "role": "SATELLITE",
+          "family": "gld_pressure",
+          "unit": "USD",
+          "value": -1046134694.9999999,
+          "status": "AVAILABLE",
+          "reasons": [
+            "COHERENCE_AUDIT_PARTIAL"
+          ],
+          "parents": [
+            "gld_shares_change_5",
+            "gld_fund_data"
+          ],
+          "replayClass": "R2"
+        }
+      }
+    },
+    {
+      "date": "2026-09-01",
+      "coreInputSha256": "55a9583546c8f395e435fd20b4060ec3a011757e9d6a6917d04333c75e477017",
+      "acceptedCoreInputHash": "a830c8de721d3fb76a07b9d37740f0c1a37caa3345ea60f022618da9cac7f024",
+      "coreDecisionUnchanged": true,
+      "regime": "RISK_ON_SELECTIVE",
+      "defaultDataQuality": "PARTIAL",
+      "optionalProblems": [
+        "gld_shares_change_5",
+        "vix_percentile"
+      ],
+      "evidence": {
+        "btc_daily": {
+          "featureId": "btc_daily",
+          "role": "SATELLITE",
+          "family": "btc_flows",
+          "unit": "USD millions",
+          "value": -236.5,
+          "status": "AVAILABLE",
+          "reasons": [],
+          "parents": [
+            "raw_btc_rows"
+          ],
+          "replayClass": "R2"
+        },
+        "btc_rolling_5": {
+          "featureId": "btc_rolling_5",
+          "role": "SATELLITE",
+          "family": "btc_flows",
+          "unit": "USD millions",
+          "value": 252.8,
+          "status": "AVAILABLE",
+          "reasons": [],
+          "parents": [
+            "raw_btc_rows"
+          ],
+          "replayClass": "R2"
+        },
+        "btc_rolling_20": {
+          "featureId": "btc_rolling_20",
+          "role": "SATELLITE",
+          "family": "btc_flows",
+          "unit": "USD millions",
+          "value": 2921,
+          "status": "AVAILABLE",
+          "reasons": [],
+          "parents": [
+            "raw_btc_rows"
+          ],
+          "replayClass": "R2"
+        },
+        "btc_breadth": {
+          "featureId": "btc_breadth",
+          "role": "SATELLITE",
+          "family": "btc_flows",
+          "unit": "counts by status",
+          "value": {
+            "positive": 1,
+            "negative": 2,
+            "zero": 9,
+            "missing": 0
+          },
+          "status": "AVAILABLE",
+          "reasons": [],
+          "parents": [
+            "raw_btc_rows"
+          ],
+          "replayClass": "R2"
+        },
+        "btc_streak": {
+          "featureId": "btc_streak",
+          "role": "SATELLITE",
+          "family": "btc_flows",
+          "unit": "sessions + direction + censored",
+          "value": {
+            "sign": -1,
+            "length": 1,
+            "censored": false
+          },
+          "status": "AVAILABLE",
+          "reasons": [],
+          "parents": [
+            "raw_btc_rows"
+          ],
+          "replayClass": "R2"
+        },
+        "gld_shares_change_1": {
+          "featureId": "gld_shares_change_1",
+          "role": "SATELLITE",
+          "family": "gld_pressure",
+          "unit": "shares and fraction",
+          "value": {
+            "delta": 1500000,
+            "fraction": 0.004106214070626882
+          },
+          "status": "AVAILABLE",
+          "reasons": [
+            "COHERENCE_AUDIT_PARTIAL"
+          ],
+          "parents": [
+            "raw_gld_rows"
+          ],
+          "replayClass": "R2"
+        },
+        "gld_shares_change_5": {
+          "featureId": "gld_shares_change_5",
+          "role": "SATELLITE",
+          "family": "gld_pressure",
+          "unit": "shares and fraction",
+          "value": {
+            "delta": -600000,
+            "fraction": -0.001633097441480675
+          },
+          "status": "AVAILABLE",
+          "reasons": [
+            "COHERENCE_AUDIT_PARTIAL"
+          ],
+          "parents": [
+            "raw_gld_rows"
+          ],
+          "replayClass": "R2"
+        },
+        "gld_shares_change_20": {
+          "featureId": "gld_shares_change_20",
+          "role": "SATELLITE",
+          "family": "gld_pressure",
+          "unit": "shares and fraction",
+          "value": null,
+          "status": "UNAVAILABLE",
+          "reasons": [
+            "GLD_WINDOW_UNAVAILABLE"
+          ],
+          "parents": [
+            "raw_gld_rows"
+          ],
+          "replayClass": "R2"
+        },
+        "gld_pressure_usd_5": {
+          "featureId": "gld_pressure_usd_5",
+          "role": "SATELLITE",
+          "family": "gld_pressure",
+          "unit": "USD",
+          "value": -239532407.4,
+          "status": "AVAILABLE",
+          "reasons": [
+            "COHERENCE_AUDIT_PARTIAL"
+          ],
+          "parents": [
+            "gld_shares_change_5",
+            "gld_fund_data"
+          ],
+          "replayClass": "R2"
+        }
+      }
+    },
+    {
+      "date": "2026-09-02",
+      "coreInputSha256": "46e20ca0ff73fd0253c161d9ad3b232ccec7816a8d79ac08aa82958c5095b1da",
+      "acceptedCoreInputHash": "51bc47f980250f6939f0cabda3da0ab533c72182f835ab56c80779670ed07093",
+      "coreDecisionUnchanged": true,
+      "regime": "RISK_ON_SELECTIVE",
+      "defaultDataQuality": "PARTIAL",
+      "optionalProblems": [
+        "gld_shares_change_5",
+        "vix_percentile"
+      ],
+      "evidence": {
+        "btc_daily": {
+          "featureId": "btc_daily",
+          "role": "SATELLITE",
+          "family": "btc_flows",
+          "unit": "USD millions",
+          "value": 101.1,
+          "status": "AVAILABLE",
+          "reasons": [],
+          "parents": [
+            "raw_btc_rows"
+          ],
+          "replayClass": "R2"
+        },
+        "btc_rolling_5": {
+          "featureId": "btc_rolling_5",
+          "role": "SATELLITE",
+          "family": "btc_flows",
+          "unit": "USD millions",
+          "value": 121.70000000000002,
+          "status": "AVAILABLE",
+          "reasons": [],
+          "parents": [
+            "raw_btc_rows"
+          ],
+          "replayClass": "R2"
+        },
+        "btc_rolling_20": {
+          "featureId": "btc_rolling_20",
+          "role": "SATELLITE",
+          "family": "btc_flows",
+          "unit": "USD millions",
+          "value": 2777.7,
+          "status": "AVAILABLE",
+          "reasons": [],
+          "parents": [
+            "raw_btc_rows"
+          ],
+          "replayClass": "R2"
+        },
+        "btc_breadth": {
+          "featureId": "btc_breadth",
+          "role": "SATELLITE",
+          "family": "btc_flows",
+          "unit": "counts by status",
+          "value": {
+            "positive": 4,
+            "negative": 1,
+            "zero": 7,
+            "missing": 0
+          },
+          "status": "AVAILABLE",
+          "reasons": [],
+          "parents": [
+            "raw_btc_rows"
+          ],
+          "replayClass": "R2"
+        },
+        "btc_streak": {
+          "featureId": "btc_streak",
+          "role": "SATELLITE",
+          "family": "btc_flows",
+          "unit": "sessions + direction + censored",
+          "value": {
+            "sign": 1,
+            "length": 1,
+            "censored": false
+          },
+          "status": "AVAILABLE",
+          "reasons": [],
+          "parents": [
+            "raw_btc_rows"
+          ],
+          "replayClass": "R2"
+        },
+        "gld_shares_change_1": {
+          "featureId": "gld_shares_change_1",
+          "role": "SATELLITE",
+          "family": "gld_pressure",
+          "unit": "shares and fraction",
+          "value": {
+            "delta": 3500000,
+            "fraction": 0.009541984732824428
+          },
+          "status": "AVAILABLE",
+          "reasons": [
+            "COHERENCE_AUDIT_PARTIAL"
+          ],
+          "parents": [
+            "raw_gld_rows"
+          ],
+          "replayClass": "R2"
+        },
+        "gld_shares_change_5": {
+          "featureId": "gld_shares_change_5",
+          "role": "SATELLITE",
+          "family": "gld_pressure",
+          "unit": "shares and fraction",
+          "value": {
+            "delta": 3900000,
+            "fraction": 0.01064410480349345
+          },
+          "status": "AVAILABLE",
+          "reasons": [
+            "COHERENCE_AUDIT_PARTIAL"
+          ],
+          "parents": [
+            "raw_gld_rows"
+          ],
+          "replayClass": "R2"
+        },
+        "gld_shares_change_20": {
+          "featureId": "gld_shares_change_20",
+          "role": "SATELLITE",
+          "family": "gld_pressure",
+          "unit": "shares and fraction",
+          "value": null,
+          "status": "UNAVAILABLE",
+          "reasons": [
+            "GLD_WINDOW_UNAVAILABLE"
+          ],
+          "parents": [
+            "raw_gld_rows"
+          ],
+          "replayClass": "R2"
+        },
+        "gld_pressure_usd_5": {
+          "featureId": "gld_pressure_usd_5",
+          "role": "SATELLITE",
+          "family": "gld_pressure",
+          "unit": "USD",
+          "value": 1567355095.8,
+          "status": "AVAILABLE",
+          "reasons": [
+            "COHERENCE_AUDIT_PARTIAL"
+          ],
+          "parents": [
+            "gld_shares_change_5",
+            "gld_fund_data"
+          ],
+          "replayClass": "R2"
+        }
+      }
+    },
+    {
+      "date": "2026-09-03",
+      "coreInputSha256": "ad38ca321c86ac7842492aabe84609d2fa8b03edb58cec0e70acada58a0addf0",
+      "acceptedCoreInputHash": "e47d037ac80b1ee3506134ed24841443abc70d56b5137a35c35c5d5c17cd2e60",
+      "coreDecisionUnchanged": true,
+      "regime": "RISK_ON_SELECTIVE",
+      "defaultDataQuality": "PARTIAL",
+      "optionalProblems": [
+        "gld_shares_change_5",
+        "vix_percentile"
+      ],
+      "evidence": {
+        "btc_daily": {
+          "featureId": "btc_daily",
+          "role": "SATELLITE",
+          "family": "btc_flows",
+          "unit": "USD millions",
+          "value": 730.8,
+          "status": "AVAILABLE",
+          "reasons": [],
+          "parents": [
+            "raw_btc_rows"
+          ],
+          "replayClass": "R2"
+        },
+        "btc_rolling_5": {
+          "featureId": "btc_rolling_5",
+          "role": "SATELLITE",
+          "family": "btc_flows",
+          "unit": "USD millions",
+          "value": 610.1999999999999,
+          "status": "AVAILABLE",
+          "reasons": [],
+          "parents": [
+            "raw_btc_rows"
+          ],
+          "replayClass": "R2"
+        },
+        "btc_rolling_20": {
+          "featureId": "btc_rolling_20",
+          "role": "SATELLITE",
+          "family": "btc_flows",
+          "unit": "USD millions",
+          "value": 3370.8999999999996,
+          "status": "AVAILABLE",
+          "reasons": [],
+          "parents": [
+            "raw_btc_rows"
+          ],
+          "replayClass": "R2"
+        },
+        "btc_breadth": {
+          "featureId": "btc_breadth",
+          "role": "SATELLITE",
+          "family": "btc_flows",
+          "unit": "counts by status",
+          "value": {
+            "positive": 7,
+            "negative": 2,
+            "zero": 3,
+            "missing": 0
+          },
+          "status": "AVAILABLE",
+          "reasons": [],
+          "parents": [
+            "raw_btc_rows"
+          ],
+          "replayClass": "R2"
+        },
+        "btc_streak": {
+          "featureId": "btc_streak",
+          "role": "SATELLITE",
+          "family": "btc_flows",
+          "unit": "sessions + direction + censored",
+          "value": {
+            "sign": 1,
+            "length": 2,
+            "censored": false
+          },
+          "status": "AVAILABLE",
+          "reasons": [],
+          "parents": [
+            "raw_btc_rows"
+          ],
+          "replayClass": "R2"
+        },
+        "gld_shares_change_1": {
+          "featureId": "gld_shares_change_1",
+          "role": "SATELLITE",
+          "family": "gld_pressure",
+          "unit": "shares and fraction",
+          "value": {
+            "delta": -1100000,
+            "fraction": -0.002970564407237375
+          },
+          "status": "AVAILABLE",
+          "reasons": [
+            "COHERENCE_AUDIT_PARTIAL"
+          ],
+          "parents": [
+            "raw_gld_rows"
+          ],
+          "replayClass": "R2"
+        },
+        "gld_shares_change_5": {
+          "featureId": "gld_shares_change_5",
+          "role": "SATELLITE",
+          "family": "gld_pressure",
+          "unit": "shares and fraction",
+          "value": {
+            "delta": 2400000,
+            "fraction": 0.006543075245365322
+          },
+          "status": "AVAILABLE",
+          "reasons": [
+            "COHERENCE_AUDIT_PARTIAL"
+          ],
+          "parents": [
+            "raw_gld_rows"
+          ],
+          "replayClass": "R2"
+        },
+        "gld_shares_change_20": {
+          "featureId": "gld_shares_change_20",
+          "role": "SATELLITE",
+          "family": "gld_pressure",
+          "unit": "shares and fraction",
+          "value": null,
+          "status": "UNAVAILABLE",
+          "reasons": [
+            "GLD_WINDOW_UNAVAILABLE"
+          ],
+          "parents": [
+            "raw_gld_rows"
+          ],
+          "replayClass": "R2"
+        },
+        "gld_pressure_usd_5": {
+          "featureId": "gld_pressure_usd_5",
+          "role": "SATELLITE",
+          "family": "gld_pressure",
+          "unit": "USD",
+          "value": 983208408,
+          "status": "AVAILABLE",
+          "reasons": [
+            "COHERENCE_AUDIT_PARTIAL"
+          ],
+          "parents": [
+            "gld_shares_change_5",
+            "gld_fund_data"
+          ],
+          "replayClass": "R2"
+        }
+      }
+    },
+    {
+      "date": "2026-09-04",
+      "coreInputSha256": "618555807f38f2a458e7dc783857b26ffe025c1967ffbbaeb4a874ad90a9d740",
+      "acceptedCoreInputHash": "a1d545f2c9e2dfff5bdeb90aba3eed20b579fec21f82880c72872a2f4faf741b",
+      "coreDecisionUnchanged": true,
+      "regime": "RISK_ON_SELECTIVE",
+      "defaultDataQuality": "PARTIAL",
+      "optionalProblems": [
+        "gld_shares_change_5",
+        "vix_percentile"
+      ],
+      "evidence": {
+        "btc_daily": {
+          "featureId": "btc_daily",
+          "role": "SATELLITE",
+          "family": "btc_flows",
+          "unit": "USD millions",
+          "value": 174.6,
+          "status": "AVAILABLE",
+          "reasons": [],
+          "parents": [
+            "raw_btc_rows"
+          ],
+          "replayClass": "R2"
+        },
+        "btc_rolling_5": {
+          "featureId": "btc_rolling_5",
+          "role": "SATELLITE",
+          "family": "btc_flows",
+          "unit": "USD millions",
+          "value": 986.6999999999999,
+          "status": "AVAILABLE",
+          "reasons": [],
+          "parents": [
+            "raw_btc_rows"
+          ],
+          "replayClass": "R2"
+        },
+        "btc_rolling_20": {
+          "featureId": "btc_rolling_20",
+          "role": "SATELLITE",
+          "family": "btc_flows",
+          "unit": "USD millions",
+          "value": 3443.7999999999997,
+          "status": "AVAILABLE",
+          "reasons": [],
+          "parents": [
+            "raw_btc_rows"
+          ],
+          "replayClass": "R2"
+        },
+        "btc_breadth": {
+          "featureId": "btc_breadth",
+          "role": "SATELLITE",
+          "family": "btc_flows",
+          "unit": "counts by status",
+          "value": {
+            "positive": 2,
+            "negative": 0,
+            "zero": 10,
+            "missing": 0
+          },
+          "status": "AVAILABLE",
+          "reasons": [],
+          "parents": [
+            "raw_btc_rows"
+          ],
+          "replayClass": "R2"
+        },
+        "btc_streak": {
+          "featureId": "btc_streak",
+          "role": "SATELLITE",
+          "family": "btc_flows",
+          "unit": "sessions + direction + censored",
+          "value": {
+            "sign": 1,
+            "length": 3,
+            "censored": false
+          },
+          "status": "AVAILABLE",
+          "reasons": [],
+          "parents": [
+            "raw_btc_rows"
+          ],
+          "replayClass": "R2"
+        },
+        "gld_shares_change_1": {
+          "featureId": "gld_shares_change_1",
+          "role": "SATELLITE",
+          "family": "gld_pressure",
+          "unit": "shares and fraction",
+          "value": {
+            "delta": -500000,
+            "fraction": -0.0013542795232936078
+          },
+          "status": "AVAILABLE",
+          "reasons": [
+            "COHERENCE_AUDIT_PARTIAL"
+          ],
+          "parents": [
+            "raw_gld_rows"
+          ],
+          "replayClass": "R2"
+        },
+        "gld_shares_change_5": {
+          "featureId": "gld_shares_change_5",
+          "role": "SATELLITE",
+          "family": "gld_pressure",
+          "unit": "shares and fraction",
+          "value": {
+            "delta": 3400000,
+            "fraction": 0.0093074185600876
+          },
+          "status": "AVAILABLE",
+          "reasons": [
+            "COHERENCE_AUDIT_PARTIAL"
+          ],
+          "parents": [
+            "raw_gld_rows"
+          ],
+          "replayClass": "R2"
+        },
+        "gld_shares_change_20": {
+          "featureId": "gld_shares_change_20",
+          "role": "SATELLITE",
+          "family": "gld_pressure",
+          "unit": "shares and fraction",
+          "value": null,
+          "status": "UNAVAILABLE",
+          "reasons": [
+            "GLD_WINDOW_UNAVAILABLE"
+          ],
+          "parents": [
+            "raw_gld_rows"
+          ],
+          "replayClass": "R2"
+        },
+        "gld_pressure_usd_5": {
+          "featureId": "gld_pressure_usd_5",
+          "role": "SATELLITE",
+          "family": "gld_pressure",
+          "unit": "USD",
+          "value": 1376721795,
+          "status": "AVAILABLE",
+          "reasons": [
+            "COHERENCE_AUDIT_PARTIAL"
+          ],
+          "parents": [
+            "gld_shares_change_5",
+            "gld_fund_data"
+          ],
+          "replayClass": "R2"
+        }
+      }
+    }
+  ],
+  "canonicalEngineModified": false,
+  "publicUiChanged": false,
+  "rawCoreSources": [
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/yahoo-XLK.json.gz",
+      "rawSha256": "08a10599fa315fd64a4a36923f1fbe2e0349a9fb82cffa91c89ac077e0e1c2a6"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/yahoo-XLY.json.gz",
+      "rawSha256": "31a842266f5be063e5bcbb9487f67acbe957b88e74852473eb879cc63e2e543e"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/yahoo-XLC.json.gz",
+      "rawSha256": "d407c24e740b4d20fe19824a76320e2bd6081f86395c3c75c64b9e26ca4fa84a"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/yahoo-XLF.json.gz",
+      "rawSha256": "beebebe4f4c9eb599408a979a4b828f7032e8674aaed9b956b99c48f0920a337"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/yahoo-XLE.json.gz",
+      "rawSha256": "f7d14c7ae8020ee755e9856b41111061d660cdbb7c479777cedaace6dfee97e3"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/yahoo-XLI.json.gz",
+      "rawSha256": "841af851ad2c59302fea1fc99b41d67ff124418633c92b20ffad5777e7e89fbb"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/yahoo-XLB.json.gz",
+      "rawSha256": "f21f49170520d896b2204db6aba5c604148a4b04c3584183706c353f8f78d280"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/yahoo-XLV.json.gz",
+      "rawSha256": "07110d28b37afd7f2930ff7d2c2de9337ed65b9917f69f57c85ba56379250499"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/yahoo-XLP.json.gz",
+      "rawSha256": "e69b1cdfe161cbdeb9d5e321823dc7ef1bdb173ea66c02467e3bc90938de8ed9"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/yahoo-XLU.json.gz",
+      "rawSha256": "882db2c4e157bb17a7a398543e4791afcc32b5fe08a01de613eed9ff341e301e"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/yahoo-XLRE.json.gz",
+      "rawSha256": "fd7564d4858015f9120d77927943a568e1c27b03ad379329b60f8d26e011bf91"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/yahoo-SPY.json.gz",
+      "rawSha256": "9e5422b97898c0479d4d2c87d489f59b33bf48f8157fabfb982ab2b8679f5310"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vix-history.csv.gz",
+      "rawSha256": "5f6a4197e929ee7a1eb999db2938c7f6049114c9fd29eb5d80e356dabe43d658"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/cfe-contract-index.json.gz",
+      "rawSha256": "6af5672f2c9f9f48138a4bfb8035cda7856b620f2e9e07c87ba69236b4b1ed47"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2018-01-17.csv.gz",
+      "rawSha256": "7825a246b640f7f5e541e4c1d507fc6b21bae78f544718afb70eda7320db2286"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2018-02-14.csv.gz",
+      "rawSha256": "a5b46f776331c120318c8a97304b51f72102531ad751d02d73a64ba613f9ec3e"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2018-03-21.csv.gz",
+      "rawSha256": "7c78a94b9f9c7403467f5236093412a798969c4bdc2e72e7ba577942cbf1a38e"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2018-04-18.csv.gz",
+      "rawSha256": "3920a20b460e45826d871e7473cbb8ed4569a05e77cc2521bbbd1c5a2b350d67"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2018-05-16.csv.gz",
+      "rawSha256": "32804f6248e71c6e014729e3979480cc581f6e4b1221f4ce93d867bd4ccf790b"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2018-06-20.csv.gz",
+      "rawSha256": "6c5ca228bdd8bce9d72703720c77b7ca80462b073829a53a890ff768a46114b1"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2018-07-18.csv.gz",
+      "rawSha256": "042fa86dce5f555489e6201bfac79394d94af53b83bff4f2386b63123b7028ea"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2018-08-22.csv.gz",
+      "rawSha256": "35ed1ae5658e1d3574427c4f1f6ba2effb4dd6d9d8c1450a31deba8f982cf27b"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2018-09-19.csv.gz",
+      "rawSha256": "95e63535525b24056476129ce86927156fa43c2f192be7ce3573becb56306c81"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2018-10-17.csv.gz",
+      "rawSha256": "11fa3df6f434e331800fa23abaef7dc4ac9270199433bf93638c945a2a3dda24"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2018-11-21.csv.gz",
+      "rawSha256": "bf6d078b02a7d7b16d4359d43cd0e10f9e5c9d1257c8f03ca67f33a4793ff113"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2018-12-19.csv.gz",
+      "rawSha256": "b95cf1efd7df610ae76a19ff4c816c62e7bd808d147b36d52fc55d06beef7e6b"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2019-01-16.csv.gz",
+      "rawSha256": "02acfe3646e1816cca399ce9bbbb8a1b02c9410ec1277760448f264f1d96ffe1"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2019-02-13.csv.gz",
+      "rawSha256": "9f0b9f1ddcfd30c54db9a74a24d5bcb109133074f4c1ce7b60f9532c783f28da"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2019-03-19.csv.gz",
+      "rawSha256": "2f86c6a1d6eed44390b8134bff68e186d2a1ae34469deaea1e594eb97ebe91a6"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2019-04-17.csv.gz",
+      "rawSha256": "15b9c792ba9b9d37b9f7b6a930dbad9715f1f83789757b8c9134b16362b1febc"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2019-05-22.csv.gz",
+      "rawSha256": "0f364af221b4de67fc0c95105e8edafba1b634f60237b8b07c33b0d769fa364c"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2019-06-19.csv.gz",
+      "rawSha256": "a0a122738217db57d59481294dd3c2206555d508a1f6f2ea88b7a64324b9162b"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2019-07-17.csv.gz",
+      "rawSha256": "ea2adcccd6dded6cac7139a9191b991f74b33a12fa3328bdae628f47f818ecfd"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2019-08-21.csv.gz",
+      "rawSha256": "d8865c5f71d723b1081460b4979384d5ae8edbf5faa4d078dff1db9ab07a3a4f"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2019-09-18.csv.gz",
+      "rawSha256": "8fbdffbd379c70d7c1b754b2ca9ea97d01bb916aea84c6b5f7984379f57cc350"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2019-10-16.csv.gz",
+      "rawSha256": "24ed3fffe793a77e50312c268ccc09fd402b76b3650afcc579b994f1cd0cc9f5"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2019-11-20.csv.gz",
+      "rawSha256": "4f65b9d64aece0ce838779ab8be34af3f6383d4af7d95f2905769e34cced2a38"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2019-12-18.csv.gz",
+      "rawSha256": "426d90a4d696bb9592e022b311be766a6c6ac808c71a68f4e66712b4a6ef6f32"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2020-01-22.csv.gz",
+      "rawSha256": "88dd32dd13b10c67427b6e2d9a3350d2bc663974aed3f89c87b22ab2cd287eb4"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2020-02-19.csv.gz",
+      "rawSha256": "4282f32fadf5e45e889072f373af2077769e0e6ab11b16c5a74dc6dce5c8b749"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2020-03-18.csv.gz",
+      "rawSha256": "b0754a52316241f15d66f41706d3569f20cdfe1703bbd4cd7f87146cf57beb50"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2020-04-15.csv.gz",
+      "rawSha256": "abcfd156b05a0c8b8b75811e5bf17f1cf1dbfdac0d408231bc48d133e57934ca"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2020-05-20.csv.gz",
+      "rawSha256": "0dce9099b417b8af888244d993b2f77fe8cc0cef77c4473b9ca66dc727a80cef"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2020-06-17.csv.gz",
+      "rawSha256": "5d66bb8cbdd182c0fad4e984fa60ffbde7122388dc218fb91bb10a02faa82d1a"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2020-07-22.csv.gz",
+      "rawSha256": "c5f58ca4a7c62f4b205646064e3038d34751e47ab4bb14aaa9e96be59521a407"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2020-08-19.csv.gz",
+      "rawSha256": "7fa02eb5311f0012391223e6aa7d0b1d7ea2a0992e86bf66366dd5408eeef67e"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2020-09-16.csv.gz",
+      "rawSha256": "bb0fd4d378b682148f1999323e35227a71a4b8a18e95deba5980267bf3c65cf4"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2020-10-21.csv.gz",
+      "rawSha256": "f623bf53dbbb3fccc011dcb4f0df19c8726b91ae6b0f9ccfd9ba31e2ca2ee414"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2020-11-18.csv.gz",
+      "rawSha256": "b4e461566167f08151ab6a44268a61c964c1d828c6ea3e41928996e328dcd02c"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2020-12-16.csv.gz",
+      "rawSha256": "bbb2ec67e0c3993a1c78ba6f77123c52709ff1c142604042eb70d048a71a99fd"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2021-01-20.csv.gz",
+      "rawSha256": "53a84f66db60c505ed1ce0eb8deb0e8c8b013b0488fb02c5671edb80db3379a1"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2021-02-17.csv.gz",
+      "rawSha256": "ed9f4381dead986af6f25f11923c40a1f1997a44f916f417bff36c30df4c8b3c"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2021-03-17.csv.gz",
+      "rawSha256": "ee3ba3bd455cad5772198f3f04d3d3e7179779319cf74d22fe90b23f40a21ff7"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2021-04-21.csv.gz",
+      "rawSha256": "0d707904eafaa6ea39c727a5e843eeb6b692577c63b7ae14835227dd90643029"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2021-05-19.csv.gz",
+      "rawSha256": "6ed8f065f27edf49e137829ce247b2e2533e11640ded0f6a79535583772a4b3b"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2021-06-16.csv.gz",
+      "rawSha256": "b87dac062797b9da171f294d5cd2bcfd2d1513d6b7816ddbba2c7737347b658c"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2021-07-21.csv.gz",
+      "rawSha256": "95fd3d2330eedfdbfa0d65b90c0916c309b43b70e54bd43f1ad91a8f2ea008e9"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2021-08-18.csv.gz",
+      "rawSha256": "fc1cda584f8e667ef85470b84edbe42fb877573652becb51ebbd91ff8b900dab"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2021-09-15.csv.gz",
+      "rawSha256": "c73076114fc912535a6f27f2ceb418f7cf32e08e4f536a4e146de8be48ef9526"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2021-10-20.csv.gz",
+      "rawSha256": "88fb7fe945081fb68984cdb45bee72790526b5bcaf543c54cc8d4b5a790a3e92"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2021-11-17.csv.gz",
+      "rawSha256": "a9e3cf02243b17308013f772bb572cea159d084399bbb74eaccf7acc0751e34e"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2021-12-22.csv.gz",
+      "rawSha256": "e929a9ce4fbde81983feb0029503af903a3170ee09c7422ff51669ca75de9f6e"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2022-01-19.csv.gz",
+      "rawSha256": "41737f15dd52ec81ff903457215a0bcd6ba2870b3ef8dd0ca771b91403efff58"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2022-02-16.csv.gz",
+      "rawSha256": "2f43ba33437708a03914d4140b690321059816328b4f24e631ae6f70a89ebc44"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2022-03-15.csv.gz",
+      "rawSha256": "b0df778b923c87d120da4bfd4f85d89a304e2bef0f7d3b40f951183e5a1d80b4"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2022-04-20.csv.gz",
+      "rawSha256": "988293cd474dcb1e7b8d01279826ab426aab4186db8802cc9c8f6bea9febf97e"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2022-05-18.csv.gz",
+      "rawSha256": "af283c8213f8e95b60395ca243e3d8fc42b7854a8bb5b504bd8815bf1086379b"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2022-06-15.csv.gz",
+      "rawSha256": "9eadf959920fdb4317fae7f1f8ecca8265ab950d8f450c188d6e750fa6552b87"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2022-07-20.csv.gz",
+      "rawSha256": "feedfacfa508083eb0820e83f82c5cb354a2eef1d83ec4e18dcef64b53ffffdf"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2022-08-17.csv.gz",
+      "rawSha256": "5000aa4012119373978c50575ce39441a8f8dcad06ab98c340bb2a71dc01053c"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2022-09-21.csv.gz",
+      "rawSha256": "a74598b17c5e92b068ee46ee38aefdfe8423d62153bee7d879ff4eddc2fbb626"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2022-10-19.csv.gz",
+      "rawSha256": "270abe0333366e5395d88d6e56da51fa403962f03229d119a8208ece339c778d"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2022-11-16.csv.gz",
+      "rawSha256": "bb433441c5a2d77f060a86265337d397e56ddfcfa191d2f3dc5f7b474a298379"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2022-12-21.csv.gz",
+      "rawSha256": "4bd0da312422aaa889cbb73bc6643eef556efb2e2599509540fb064657caaf8b"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2023-01-18.csv.gz",
+      "rawSha256": "8c279882f4e81636eae5bf9e99573015ca18edb52384b9b3f6819715cf510561"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2023-02-15.csv.gz",
+      "rawSha256": "9f804c61ba0a51fad872dae5568792a75a2ab21daf5a5972603465898d071d55"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2023-03-22.csv.gz",
+      "rawSha256": "3d35c3f0b0cef53f7808bd7faccf5245869c1972571c58b0727216c646a3571b"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2023-04-19.csv.gz",
+      "rawSha256": "700fc43046fc215e5ae2828cf5983bd4a545f4c2d74be987669da6f666fc49b9"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2023-05-17.csv.gz",
+      "rawSha256": "432cef2e4402d5fc9dc9f0f1540a58099196540987eca39e6ced49eb7fdd10df"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2023-06-21.csv.gz",
+      "rawSha256": "4391c7a0c323e417d2f31685b2a0a0ad6afab79f80689abb128ad54ba8e549ae"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2023-07-19.csv.gz",
+      "rawSha256": "5fbcb598942050a24edba2194a29384b95ee77feb379cfc5e8779463d70785e8"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2023-08-16.csv.gz",
+      "rawSha256": "96e7efc1d13016754a4bd56f53f371f68598c66459409e2293dfe27b8ab02292"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2023-09-20.csv.gz",
+      "rawSha256": "c6b98a1d7be7f1048fdd7db2286de25c54144dd0e6147503156d96602786f55e"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2023-10-18.csv.gz",
+      "rawSha256": "6596d7594ed67016c51191e066c0a8728eda9e8c7ddbdfecf895bb693b859ffa"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2023-11-15.csv.gz",
+      "rawSha256": "3af9d807e0c29efd2d799d34c7be02d2847b4ffd44d27f92d945bc1f711420b2"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2023-12-20.csv.gz",
+      "rawSha256": "3203a21bb069021befc6365499b06045db1cfb7d7ffbee2897e7b2c923e1c772"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2024-01-17.csv.gz",
+      "rawSha256": "c33e7eacdcbc80f3a52bd021019e41f9a22d92754a0c2c224f3d2a2f4db4b069"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2024-02-14.csv.gz",
+      "rawSha256": "df87152acdc324ac6f7878833173fb393177b2054fba519c936bbd0c6605c944"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2024-03-20.csv.gz",
+      "rawSha256": "d40ceba875932194c2ae69e7416755bd51d9a5eddc33d0f51cd2bed76ebd8277"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2024-04-17.csv.gz",
+      "rawSha256": "60c15395c50f5451ee2f5df1d6827bb7e4a9025854f78f2581991ebde8b828f3"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2024-05-22.csv.gz",
+      "rawSha256": "e8440ac8098644e41d1a1aeba7cc026252a0616fd063766e98c15a1d4ba65e60"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2024-06-18.csv.gz",
+      "rawSha256": "b4573e89dc71fed7b7c8edd67dee89eec915c06d45a6c151a081449e07555d52"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2024-07-17.csv.gz",
+      "rawSha256": "0c17e6acd5dbdf555d9739f81858ba3bb71082553e5c4b52d2de5b8f106f4164"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2024-08-21.csv.gz",
+      "rawSha256": "7dda0ad59d4c66f9bfe50b473349e710447188c80347dc103483c9511f5a8900"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2024-09-18.csv.gz",
+      "rawSha256": "d607740411fdf401a1a6eda8a6fceb9f130f285bb04efb85fb275794bcc2afe6"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2024-10-16.csv.gz",
+      "rawSha256": "9a30d119303106c1a971aee8e3a718a8a65b98aa9a444b6f3665988fe3d8c667"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2024-11-20.csv.gz",
+      "rawSha256": "18068d634bfce677ce8904d013b5c52e2f8c949c88b77768a4c49bca6ad9c3b7"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2024-12-18.csv.gz",
+      "rawSha256": "d67e4ced59a4e85e30c381d4a1578e16fce47c28ee8b16e1df885beddd4c907a"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2025-01-22.csv.gz",
+      "rawSha256": "d2c75bbfaef1bebf310fa08b2b1bc014853856d5abb7c653fa854624174a7494"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2025-02-19.csv.gz",
+      "rawSha256": "ad6b0d7108076e6e8f7b93f183fe246f8f7ef6a559e76d71f67b8f56d53bc654"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2025-03-18.csv.gz",
+      "rawSha256": "faf37215efaccc8e64a66b7e3691fe8cf1075ac5708d76cb8e1dadb33c2b2ec6"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2025-04-16.csv.gz",
+      "rawSha256": "b0e29d9f0714be57568f7774947f46f06f5dc14c3ff963be08aeec29ccb08322"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2025-05-21.csv.gz",
+      "rawSha256": "5fdb6b068b3d263d60cf42003582d6fc19e667964037bec10bad3cf2cc0821d9"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2025-06-18.csv.gz",
+      "rawSha256": "a43f1037452b6ec8273601cbe5dc43d5821b2c49be79d9f0ce9458cd06fe317e"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2025-07-16.csv.gz",
+      "rawSha256": "ae0cc06f810f8d84cfe7de674439062ca1264e42dcecdf8c1b94c3da7ef90c47"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2025-08-20.csv.gz",
+      "rawSha256": "5ff06fc719856ac1b43560515a8e8154cbf90915a69033b315464b5f3f6a98e8"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2025-09-17.csv.gz",
+      "rawSha256": "d4efe5445722462c1949c673e5d575b797be2d259148b61b30fb1baec29516cd"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2025-10-22.csv.gz",
+      "rawSha256": "12089242dbacf614f0e4ebebe42d5b4b967afb252c0553216a1175599bd6dc36"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2025-11-19.csv.gz",
+      "rawSha256": "ddc4b95e078d0f7df0bcb63d559f64dc8e5f0653a8193372b4b1da164b4d9464"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2025-12-17.csv.gz",
+      "rawSha256": "0567a34df3a617ea4a540c82def1e80108efbd8c74d87e49b5fab90e1c617b08"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2026-01-21.csv.gz",
+      "rawSha256": "0b1403f9c4a541b7526ceef9718ec86ca7805b54ea72a075653d560970c9b266"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2026-02-18.csv.gz",
+      "rawSha256": "212b9932dfd0296984c2c6ed4534eb88bbc9068f0aa49f0f16fd513dc578c4e8"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2026-03-18.csv.gz",
+      "rawSha256": "2be0f20e3164571c36ab6d13766c24545f1436ce35c1a329a52f2f05250fbbb4"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2026-04-15.csv.gz",
+      "rawSha256": "a22c1d90792a90d697a164ad8dcf988ff6655424a8e5d9f25a6400d441b86509"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2026-05-19.csv.gz",
+      "rawSha256": "17d7de93dcaf63db1ae4e30032d98f50dc0c56f5dca6f1f64a750e8364e0d0c1"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2026-06-17.csv.gz",
+      "rawSha256": "c661d08dbed936be0df4cf4c23d7a66d4c1d0d9277547f78fdd5ee4febacaaf0"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2026-07-22.csv.gz",
+      "rawSha256": "7231559f0504e73b081f085c4d348b2aab30129aaee6ec1e9f11bad5a962af4e"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2026-08-19.csv.gz",
+      "rawSha256": "714558fad23a2f0482efa3f949dfcfb4b2d74af019a0cf27c92b787ad6166948"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2026-09-16.csv.gz",
+      "rawSha256": "31f7fccf29dd86b97347810f085975d3b1646fb14f07a9ee31e76d50f9c137f7"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2026-10-21.csv.gz",
+      "rawSha256": "91b9fe683c2fdbf7062a9e23c46379ed5349bfa48b0cd660c8287e8bcd04f31e"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2026-11-18.csv.gz",
+      "rawSha256": "add224d77518b91d69ab00366848d7dbbf33ca8c5759db567b729283ccc26fb8"
+    },
+    {
+      "path": "docs/regime-engine-v2/p8/evidence/vx-2026-12-16.csv.gz",
+      "rawSha256": "8996d61ffd28b45d8865dc45e429d63ebcc680ed37ecb61d0d90bf6c8907ab08"
+    }
+  ]
+}

@@ -1,0 +1,1964 @@
+{
+  "schemaVersion": "regime-v2-maintainer-performance-full-pipeline/1.0.0",
+  "measuredAt": "2026-09-08T19:01:39.595Z",
+  "status": "PASS",
+  "method": {
+    "command": "node --expose-gc --disable-warning=MODULE_TYPELESS_PACKAGE_JSON docs/regime-engine-v2/maintainer/performance-pipeline.mjs",
+    "v1": "Actual getDashboardData with original adapters, legacy buildRegimeSummary and existing no-key/fallback behavior. Every fetch receives a controlled 404 Response. No live network, response latency, API credentials or rendering measured.",
+    "v2": "Actual default source-file loader: full preserved provider bytes, capture validation, normalization, retention by content hash, exact-cut cache, canonical evaluateRegime, snapshot hashing/checkpoint/fsync.",
+    "temporal": "Accepted September 4 R2 asOf exactly preserved. Synthetic local representation of the accepted R2 observed proxy calendar is explicitly marked R2_IMPORT, never official or prospective.",
+    "rawSelection": "11 Yahoo adjusted-close histories, official Cboe VIX history, complete original CFE monthly catalog, original two nearest monthly VX histories. Explicit date selection after raw parsing; prices/raw hashes unchanged.",
+    "warm": "30 timed calls after first call and 3 untimed warmups for OFF/same-cut ON; 15 timed distinct-cut ON calls. Identical cut/vintage is a cache best case. Distinct overnight cuts differ by 1 ms and retain September 4 as the latest closed R2 proxy session; each must produce the same regime/pillars.",
+    "cold": "Five fresh-process OFF/ON pairs; firstCallMs includes initial full bundle parse/validation/normalization; processElapsedMs also includes module startup and a subsequent call.",
+    "counters": "Instrumented fetch attempts, JSON.parse, fs/promises and FileHandle operations. Raw files generated/persisted only outside Git; removed after measurement.",
+    "scope": "Offline whole legacy calculation plus complete V2 ingestion/snapshot benchmark. Controlled V1 source unavailability is a defined branch, not successful live-provider latency.",
+    "sla": "No new SLA; absolute and relative values measured on this host."
+  },
+  "environment": {
+    "node": "v26.5.0",
+    "platform": "darwin",
+    "architecture": "arm64",
+    "next": "16.3.1"
+  },
+  "bundle": {
+    "filename": "/var/folders/dk/54wtdzv133nb6403dxn6d6z40000gn/T/regime-maintainer-pipeline-input-hbldFM/full-r2-bundle.json",
+    "asOf": "2026-09-04T23:59:59.999999Z",
+    "sourceLedger": [
+      {
+        "name": "yahoo-XLK.json",
+        "sourceUrl": "https://query1.finance.yahoo.com/v8/finance/chart/XLK?period1=1514764800&period2=1788566400&interval=1d&events=div%2Csplits&includeAdjustedClose=true",
+        "rawHash": "08a10599fa315fd64a4a36923f1fbe2e0349a9fb82cffa91c89ac077e0e1c2a6",
+        "rawBytes": 240838,
+        "capturedAt": "2026-09-08T14:09:01.016056+00:00",
+        "origin": "R2_IMPORT"
+      },
+      {
+        "name": "yahoo-XLY.json",
+        "sourceUrl": "https://query1.finance.yahoo.com/v8/finance/chart/XLY?period1=1514764800&period2=1788566400&interval=1d&events=div%2Csplits&includeAdjustedClose=true",
+        "rawHash": "31a842266f5be063e5bcbb9487f67acbe957b88e74852473eb879cc63e2e543e",
+        "rawBytes": 239042,
+        "capturedAt": "2026-09-08T14:09:00.903862+00:00",
+        "origin": "R2_IMPORT"
+      },
+      {
+        "name": "yahoo-XLC.json",
+        "sourceUrl": "https://query1.finance.yahoo.com/v8/finance/chart/XLC?period1=1514764800&period2=1788566400&interval=1d&events=div%2Csplits&includeAdjustedClose=true",
+        "rawHash": "d407c24e740b4d20fe19824a76320e2bd6081f86395c3c75c64b9e26ca4fa84a",
+        "rawBytes": 226197,
+        "capturedAt": "2026-09-08T14:09:00.986964+00:00",
+        "origin": "R2_IMPORT"
+      },
+      {
+        "name": "yahoo-XLF.json",
+        "sourceUrl": "https://query1.finance.yahoo.com/v8/finance/chart/XLF?period1=1514764800&period2=1788566400&interval=1d&events=div%2Csplits&includeAdjustedClose=true",
+        "rawHash": "beebebe4f4c9eb599408a979a4b828f7032e8674aaed9b956b99c48f0920a337",
+        "rawBytes": 242896,
+        "capturedAt": "2026-09-08T14:09:01.274816+00:00",
+        "origin": "R2_IMPORT"
+      },
+      {
+        "name": "yahoo-XLE.json",
+        "sourceUrl": "https://query1.finance.yahoo.com/v8/finance/chart/XLE?period1=1514764800&period2=1788566400&interval=1d&events=div%2Csplits&includeAdjustedClose=true",
+        "rawHash": "f7d14c7ae8020ee755e9856b41111061d660cdbb7c479777cedaace6dfee97e3",
+        "rawBytes": 242615,
+        "capturedAt": "2026-09-08T14:09:01.243446+00:00",
+        "origin": "R2_IMPORT"
+      },
+      {
+        "name": "yahoo-XLI.json",
+        "sourceUrl": "https://query1.finance.yahoo.com/v8/finance/chart/XLI?period1=1514764800&period2=1788566400&interval=1d&events=div%2Csplits&includeAdjustedClose=true",
+        "rawHash": "841af851ad2c59302fea1fc99b41d67ff124418633c92b20ffad5777e7e89fbb",
+        "rawBytes": 240029,
+        "capturedAt": "2026-09-08T14:09:01.238690+00:00",
+        "origin": "R2_IMPORT"
+      },
+      {
+        "name": "yahoo-XLB.json",
+        "sourceUrl": "https://query1.finance.yahoo.com/v8/finance/chart/XLB?period1=1514764800&period2=1788566400&interval=1d&events=div%2Csplits&includeAdjustedClose=true",
+        "rawHash": "f21f49170520d896b2204db6aba5c604148a4b04c3584183706c353f8f78d280",
+        "rawBytes": 241922,
+        "capturedAt": "2026-09-08T14:09:01.370860+00:00",
+        "origin": "R2_IMPORT"
+      },
+      {
+        "name": "yahoo-XLV.json",
+        "sourceUrl": "https://query1.finance.yahoo.com/v8/finance/chart/XLV?period1=1514764800&period2=1788566400&interval=1d&events=div%2Csplits&includeAdjustedClose=true",
+        "rawHash": "07110d28b37afd7f2930ff7d2c2de9337ed65b9917f69f57c85ba56379250499",
+        "rawBytes": 241911,
+        "capturedAt": "2026-09-08T14:09:01.850969+00:00",
+        "origin": "R2_IMPORT"
+      },
+      {
+        "name": "yahoo-XLP.json",
+        "sourceUrl": "https://query1.finance.yahoo.com/v8/finance/chart/XLP?period1=1514764800&period2=1788566400&interval=1d&events=div%2Csplits&includeAdjustedClose=true",
+        "rawHash": "e69b1cdfe161cbdeb9d5e321823dc7ef1bdb173ea66c02467e3bc90938de8ed9",
+        "rawBytes": 237037,
+        "capturedAt": "2026-09-08T14:09:01.469840+00:00",
+        "origin": "R2_IMPORT"
+      },
+      {
+        "name": "yahoo-XLU.json",
+        "sourceUrl": "https://query1.finance.yahoo.com/v8/finance/chart/XLU?period1=1514764800&period2=1788566400&interval=1d&events=div%2Csplits&includeAdjustedClose=true",
+        "rawHash": "882db2c4e157bb17a7a398543e4791afcc32b5fe08a01de613eed9ff341e301e",
+        "rawBytes": 242782,
+        "capturedAt": "2026-09-08T14:09:01.656224+00:00",
+        "origin": "R2_IMPORT"
+      },
+      {
+        "name": "yahoo-XLRE.json",
+        "sourceUrl": "https://query1.finance.yahoo.com/v8/finance/chart/XLRE?period1=1514764800&period2=1788566400&interval=1d&events=div%2Csplits&includeAdjustedClose=true",
+        "rawHash": "fd7564d4858015f9120d77927943a568e1c27b03ad379329b60f8d26e011bf91",
+        "rawBytes": 240250,
+        "capturedAt": "2026-09-08T14:09:01.695023+00:00",
+        "origin": "R2_IMPORT"
+      },
+      {
+        "name": "vix-history.csv",
+        "sourceUrl": "https://cdn.cboe.com/api/global/us_indices/daily_prices/VIX_History.csv",
+        "rawHash": "5f6a4197e929ee7a1eb999db2938c7f6049114c9fd29eb5d80e356dabe43d658",
+        "rawBytes": 472360,
+        "capturedAt": "2026-09-08T14:09:00.768566+00:00",
+        "origin": "R2_IMPORT"
+      },
+      {
+        "name": "cfe-contract-index.json",
+        "sourceUrl": "https://www-api.cboe.com/us/futures/market_statistics/historical_data/product/list/VX/",
+        "rawHash": "6af5672f2c9f9f48138a4bfb8035cda7856b620f2e9e07c87ba69236b4b1ed47",
+        "rawBytes": 137084,
+        "capturedAt": "2026-09-08T14:08:45.957703+00:00",
+        "origin": "R2_IMPORT"
+      },
+      {
+        "name": "vx-2026-09-16.csv",
+        "sourceUrl": "https://cdn.cboe.com/data/us/futures/market_statistics/historical_data/VX/VX_2026-09-16.csv",
+        "rawHash": "31f7fccf29dd86b97347810f085975d3b1646fb14f07a9ee31e76d50f9c137f7",
+        "rawBytes": 15076,
+        "capturedAt": "2026-09-08T14:09:00.243109+00:00",
+        "origin": "R2_IMPORT"
+      },
+      {
+        "name": "vx-2026-10-21.csv",
+        "sourceUrl": "https://cdn.cboe.com/data/us/futures/market_statistics/historical_data/VX/VX_2026-10-21.csv",
+        "rawHash": "91b9fe683c2fdbf7062a9e23c46379ed5349bfa48b0cd660c8287e8bcd04f31e",
+        "rawBytes": 13144,
+        "capturedAt": "2026-09-08T14:09:00.609828+00:00",
+        "origin": "R2_IMPORT"
+      }
+    ],
+    "bundleBytes": 4424614,
+    "bundleHash": "de97c0527d105e20b46e5712b952c96b6dd07dda3247b469057cde4987e90774",
+    "captureCount": 15,
+    "normalizationCheck": {
+      "status": "PASS",
+      "normalizationMs": 575.617083,
+      "normalizedRowsVisited": 33474,
+      "sourceParseCount": 15,
+      "regime": "RISK_ON_SELECTIVE",
+      "pillarStates": {
+        "participation": "MIXED",
+        "leadership": "FAVORABLE",
+        "volatility": "BENIGN",
+        "fragility": "LOW",
+        "equity": "MIXED"
+      },
+      "ruleId": "R05",
+      "coreFeaturesMatchSweeper": true,
+      "replayClass": "R2",
+      "pointInTimeOosClaim": false
+    },
+    "calendarRepresentation": {
+      "kind": "R2_OBSERVED_PROXY",
+      "originalFixture": "docs/regime-engine-v2/sweeper/shadow-input-r2.json",
+      "representationCapturedAt": "2026-09-08T19:01:20.089Z",
+      "rawHash": "fefa5dd6abea087e6c1efb7d1a4fd125cb8404f1c592f11806f878a0591d0fc7",
+      "origin": "R2_IMPORT",
+      "officialCalendarClaim": false,
+      "providerCaptureClaim": false,
+      "benchmarkCoverageExtension": "coverageEnd extended only to 2026-09-05 for distinct overnight cuts; no trading session or close added, not an official calendar claim"
+    },
+    "selection": {
+      "equityTickers": [
+        "XLK",
+        "XLY",
+        "XLC",
+        "XLF",
+        "XLE",
+        "XLI",
+        "XLB",
+        "XLV",
+        "XLP",
+        "XLU",
+        "XLRE"
+      ],
+      "equityDates": 64,
+      "vixDates": 6,
+      "vxNearContracts": 2,
+      "vxDate": "2026-09-04",
+      "optionalThirdFourthVxNotRequiredByCore": true,
+      "BTC": "ABSENT_OPTIONAL",
+      "GLD": "ABSENT_OPTIONAL"
+    },
+    "temporaryBundleRemoved": true
+  },
+  "codeHashesBefore": {
+    "lib/regime-engine-v2/operations/dashboard-shadow.ts": "6e543aa3d9c7aa32ae17c2bebbb245fad2aa7c7c42ac616f7b089a3c97bacd41",
+    "lib/regime-engine-v2/operations/source-input.ts": "20a978d4fff2720c828432d5ae88d01f97da260ef5a6a74c7831d1e3acf35ab0",
+    "lib/regime-engine-v2/operations/snapshot.ts": "9e88b4f317e45d0930f55a9a1dc1140cf14da45338240c929cf1c67a8fde5b05",
+    "lib/regime-engine-v2/operations/pipeline-capture.ts": "988fd161c688043be58d4a466e959809beeb4ba0c2878c86d5afade3e4ded3b4",
+    "lib/dashboard/get-dashboard-data.ts": "ecb2df82c5e185b7d22b4be16f7b3c22b045f736c72a3624d0fb15dfd9456740",
+    "lib/dashboard/regime-scoring.ts": "4513411deacf42d80bfbd2d8739c3b3c0e1f4cbf2eab91a66ba35ed01ca53f87"
+  },
+  "codeHashesAfter": {
+    "lib/regime-engine-v2/operations/dashboard-shadow.ts": "6e543aa3d9c7aa32ae17c2bebbb245fad2aa7c7c42ac616f7b089a3c97bacd41",
+    "lib/regime-engine-v2/operations/source-input.ts": "20a978d4fff2720c828432d5ae88d01f97da260ef5a6a74c7831d1e3acf35ab0",
+    "lib/regime-engine-v2/operations/snapshot.ts": "9e88b4f317e45d0930f55a9a1dc1140cf14da45338240c929cf1c67a8fde5b05",
+    "lib/regime-engine-v2/operations/pipeline-capture.ts": "988fd161c688043be58d4a466e959809beeb4ba0c2878c86d5afade3e4ded3b4",
+    "lib/dashboard/get-dashboard-data.ts": "ecb2df82c5e185b7d22b4be16f7b3c22b045f736c72a3624d0fb15dfd9456740",
+    "lib/dashboard/regime-scoring.ts": "4513411deacf42d80bfbd2d8739c3b3c0e1f4cbf2eab91a66ba35ed01ca53f87"
+  },
+  "codeStable": true,
+  "warm": {
+    "off": {
+      "enabled": false,
+      "scenario": "same-cut",
+      "firstCallMs": 17.85283299999999,
+      "firstCallCounts": {
+        "fetchAttempts": 20,
+        "bundleReads": 0,
+        "bundleJsonParses": 0,
+        "allJsonParses": 1,
+        "readBytes": 0,
+        "writeBytes": 0,
+        "filesystem": {},
+        "diagnostics": {}
+      },
+      "timing": {
+        "n": 30,
+        "minMs": 0.260832999999991,
+        "medianMs": 0.3717295000000007,
+        "meanMs": 0.38747643333333315,
+        "p95Ms": 0.5030840000000012,
+        "maxMs": 0.7229580000000055
+      },
+      "rawSamplesMs": [
+        0.7229580000000055,
+        0.43645899999998505,
+        0.3725000000000023,
+        0.4070419999999899,
+        0.4130830000000003,
+        0.4285409999999956,
+        0.3703749999999957,
+        0.31620799999998894,
+        0.37095899999999915,
+        0.29362500000002,
+        0.477374999999995,
+        0.391791000000012,
+        0.341083000000026,
+        0.3752499999999941,
+        0.4425420000000031,
+        0.5030840000000012,
+        0.4047920000000147,
+        0.4514169999999922,
+        0.354834000000011,
+        0.3655420000000049,
+        0.5662079999999889,
+        0.4209589999999821,
+        0.3671669999999949,
+        0.3304170000000113,
+        0.3170829999999967,
+        0.32099999999999795,
+        0.272625000000005,
+        0.26400000000001,
+        0.26454099999997993,
+        0.260832999999991
+      ],
+      "counts": {
+        "fetchAttempts": 600,
+        "bundleReads": 0,
+        "bundleJsonParses": 0,
+        "allJsonParses": 0,
+        "readBytes": 0,
+        "writeBytes": 0,
+        "filesystem": {},
+        "diagnostics": {}
+      },
+      "perCall": {
+        "fetchAttempts": 20,
+        "bundleReads": 0,
+        "bundleJsonParses": 0,
+        "allJsonParses": 0,
+        "readBytes": 0,
+        "writeBytes": 0,
+        "filesystem": {}
+      },
+      "publicV1": {
+        "hash": "1571cc0d857c02d97639170415ea3e87028dc1ef258395fb2818c1dfb498e096",
+        "unchangedAcrossCalls": true,
+        "regime": "Neutral / mixto",
+        "score": 48,
+        "confidence": 50,
+        "serializedBytes": 106352
+      },
+      "v2": null,
+      "memory": {
+        "before": {
+          "heapUsedBytes": 17032008,
+          "rssBytes": 130662400,
+          "externalBytes": 10935671,
+          "arrayBuffersBytes": 182191
+        },
+        "warmBefore": {
+          "heapUsedBytes": 19397720,
+          "rssBytes": 136396800,
+          "externalBytes": 12340994,
+          "arrayBuffersBytes": 183123
+        },
+        "after": {
+          "heapUsedBytes": 19911632,
+          "rssBytes": 142049280,
+          "externalBytes": 12405810,
+          "arrayBuffersBytes": 248659
+        },
+        "afterMinusWarmBefore": {
+          "heapUsedBytes": 513912,
+          "rssBytes": 5652480,
+          "externalBytes": 64816,
+          "arrayBuffersBytes": 65536
+        },
+        "checkpoints": [
+          {
+            "calls": 10,
+            "heapUsedBytes": 19629272,
+            "rssBytes": 137003008,
+            "externalBytes": 12407610,
+            "arrayBuffersBytes": 248659
+          },
+          {
+            "calls": 20,
+            "heapUsedBytes": 19745248,
+            "rssBytes": 140460032,
+            "externalBytes": 12407610,
+            "arrayBuffersBytes": 248659
+          },
+          {
+            "calls": 30,
+            "heapUsedBytes": 19919128,
+            "rssBytes": 142049280,
+            "externalBytes": 12407610,
+            "arrayBuffersBytes": 248659
+          }
+        ]
+      },
+      "storage": {
+        "outsideRepository": true,
+        "immutableSnapshots": 0,
+        "storedSnapshotBytes": 0,
+        "removedAfterMeasurement": true
+      },
+      "processElapsedMs": 185.55958399999997
+    },
+    "on": {
+      "enabled": true,
+      "scenario": "same-cut",
+      "firstCallMs": 671.601792,
+      "firstCallCounts": {
+        "fetchAttempts": 20,
+        "bundleReads": 1,
+        "bundleJsonParses": 1,
+        "allJsonParses": 21,
+        "readBytes": 4424614,
+        "writeBytes": 4958627,
+        "filesystem": {
+          "realpath": 7,
+          "mkdir": 3,
+          "stat": 1,
+          "readFile": 2,
+          "writeFile": 2,
+          "open": 1,
+          "FileHandle.writeFile": 1,
+          "FileHandle.sync": 1,
+          "FileHandle.close": 1,
+          "link": 1,
+          "unlink": 1,
+          "rename": 1
+        },
+        "diagnostics": {
+          "COMPLETE": 1
+        }
+      },
+      "timing": {
+        "n": 30,
+        "minMs": 50.01954100000012,
+        "medianMs": 52.994416999999885,
+        "meanMs": 55.225709766666654,
+        "p95Ms": 67.97583299999997,
+        "maxMs": 71.55108299999984
+      },
+      "rawSamplesMs": [
+        55.20195799999999,
+        50.525916999999936,
+        50.01954100000012,
+        57.64625000000001,
+        57.305209000000104,
+        52.967959000000064,
+        50.66599999999994,
+        54.12579200000005,
+        58.18516700000009,
+        71.55108299999984,
+        57.862499999999955,
+        53.79145799999992,
+        53.000458999999864,
+        61.515750000000025,
+        52.85066699999993,
+        51.685249999999996,
+        52.09375,
+        50.518790999999965,
+        50.79179199999999,
+        51.969957999999906,
+        55.064124999999876,
+        52.82383299999992,
+        70.07141699999966,
+        53.64916600000015,
+        51.69941700000027,
+        52.786833000000115,
+        67.97583299999997,
+        53.54458399999976,
+        51.892459000000144,
+        52.988374999999905
+      ],
+      "counts": {
+        "fetchAttempts": 600,
+        "bundleReads": 30,
+        "bundleJsonParses": 0,
+        "allJsonParses": 240,
+        "readBytes": 297518160,
+        "writeBytes": 16020930,
+        "filesystem": {
+          "realpath": 180,
+          "mkdir": 90,
+          "stat": 30,
+          "readFile": 90,
+          "writeFile": 30,
+          "open": 90,
+          "FileHandle.stat": 60,
+          "FileHandle.read": 120,
+          "FileHandle.close": 90,
+          "FileHandle.writeFile": 30,
+          "FileHandle.sync": 30,
+          "link": 30,
+          "unlink": 30
+        },
+        "diagnostics": {
+          "COMPLETE": 30
+        }
+      },
+      "perCall": {
+        "fetchAttempts": 20,
+        "bundleReads": 1,
+        "bundleJsonParses": 0,
+        "allJsonParses": 8,
+        "readBytes": 9917272,
+        "writeBytes": 534031,
+        "filesystem": {
+          "realpath": 6,
+          "mkdir": 3,
+          "stat": 1,
+          "readFile": 3,
+          "writeFile": 1,
+          "open": 3,
+          "FileHandle.stat": 2,
+          "FileHandle.read": 4,
+          "FileHandle.close": 3,
+          "FileHandle.writeFile": 1,
+          "FileHandle.sync": 1,
+          "link": 1,
+          "unlink": 1
+        }
+      },
+      "publicV1": {
+        "hash": "1571cc0d857c02d97639170415ea3e87028dc1ef258395fb2818c1dfb498e096",
+        "unchangedAcrossCalls": true,
+        "regime": "Neutral / mixto",
+        "score": 48,
+        "confidence": 50,
+        "serializedBytes": 106352
+      },
+      "v2": {
+        "regime": "RISK_ON_SELECTIVE",
+        "pillars": {
+          "equity": "MIXED",
+          "fragility": "LOW",
+          "leadership": "FAVORABLE",
+          "participation": "MIXED",
+          "volatility": "BENIGN"
+        },
+        "systemState": "COMPLETE",
+        "replayClass": "R2",
+        "sourceParseCount": 15
+      },
+      "memory": {
+        "before": {
+          "heapUsedBytes": 16968248,
+          "rssBytes": 131629056,
+          "externalBytes": 10935671,
+          "arrayBuffersBytes": 182191
+        },
+        "warmBefore": {
+          "heapUsedBytes": 25143880,
+          "rssBytes": 752189440,
+          "externalBytes": 14014445,
+          "arrayBuffersBytes": 248659
+        },
+        "after": {
+          "heapUsedBytes": 19671312,
+          "rssBytes": 802979840,
+          "externalBytes": 12400901,
+          "arrayBuffersBytes": 248659
+        },
+        "afterMinusWarmBefore": {
+          "heapUsedBytes": -5472568,
+          "rssBytes": 50790400,
+          "externalBytes": -1613544,
+          "arrayBuffersBytes": 0
+        },
+        "checkpoints": [
+          {
+            "calls": 10,
+            "heapUsedBytes": 19590176,
+            "rssBytes": 789921792,
+            "externalBytes": 26747798,
+            "arrayBuffersBytes": 248659
+          },
+          {
+            "calls": 20,
+            "heapUsedBytes": 19633096,
+            "rssBytes": 790675456,
+            "externalBytes": 13471876,
+            "arrayBuffersBytes": 248659
+          },
+          {
+            "calls": 30,
+            "heapUsedBytes": 19683808,
+            "rssBytes": 802979840,
+            "externalBytes": 26748006,
+            "arrayBuffersBytes": 248659
+          }
+        ]
+      },
+      "storage": {
+        "outsideRepository": true,
+        "immutableSnapshots": 2,
+        "storedSnapshotBytes": 1067979,
+        "removedAfterMeasurement": true
+      },
+      "processElapsedMs": 2660.405
+    },
+    "distinctCutOn": {
+      "enabled": true,
+      "scenario": "distinct-cut",
+      "firstCallMs": 648.3737080000001,
+      "firstCallCounts": {
+        "fetchAttempts": 20,
+        "bundleReads": 1,
+        "bundleJsonParses": 1,
+        "allJsonParses": 21,
+        "readBytes": 4424614,
+        "writeBytes": 4958615,
+        "filesystem": {
+          "realpath": 7,
+          "mkdir": 3,
+          "stat": 1,
+          "readFile": 2,
+          "writeFile": 2,
+          "open": 1,
+          "FileHandle.writeFile": 1,
+          "FileHandle.sync": 1,
+          "FileHandle.close": 1,
+          "link": 1,
+          "unlink": 1,
+          "rename": 1
+        },
+        "diagnostics": {
+          "COMPLETE": 1
+        }
+      },
+      "timing": {
+        "n": 15,
+        "minMs": 545.7085419999994,
+        "medianMs": 560.1385000000009,
+        "meanMs": 557.8243888666665,
+        "p95Ms": 567.9128750000004,
+        "maxMs": 567.942583
+      },
+      "rawSamplesMs": [
+        548.4917919999998,
+        567.9128750000004,
+        566.6684159999995,
+        547.5540419999998,
+        547.1122079999996,
+        566.1340419999997,
+        562.8140000000003,
+        545.7085419999994,
+        550.5899589999999,
+        547.845875,
+        560.1385000000009,
+        567.942583,
+        566.4764159999995,
+        554.5004580000004,
+        567.4761249999992
+      ],
+      "counts": {
+        "fetchAttempts": 300,
+        "bundleReads": 15,
+        "bundleJsonParses": 0,
+        "allJsonParses": 315,
+        "readBytes": 140749680,
+        "writeBytes": 8011260,
+        "filesystem": {
+          "realpath": 90,
+          "mkdir": 45,
+          "stat": 15,
+          "readFile": 45,
+          "writeFile": 30,
+          "open": 30,
+          "FileHandle.stat": 15,
+          "FileHandle.read": 30,
+          "FileHandle.close": 30,
+          "FileHandle.writeFile": 15,
+          "FileHandle.sync": 15,
+          "link": 15,
+          "unlink": 15,
+          "rename": 15
+        },
+        "diagnostics": {
+          "COMPLETE": 15
+        }
+      },
+      "perCall": {
+        "fetchAttempts": 20,
+        "bundleReads": 1,
+        "bundleJsonParses": 0,
+        "allJsonParses": 21,
+        "readBytes": 9383312,
+        "writeBytes": 534084,
+        "filesystem": {
+          "realpath": 6,
+          "mkdir": 3,
+          "stat": 1,
+          "readFile": 3,
+          "writeFile": 2,
+          "open": 2,
+          "FileHandle.stat": 1,
+          "FileHandle.read": 2,
+          "FileHandle.close": 2,
+          "FileHandle.writeFile": 1,
+          "FileHandle.sync": 1,
+          "link": 1,
+          "unlink": 1,
+          "rename": 1
+        }
+      },
+      "publicV1": {
+        "hash": "1571cc0d857c02d97639170415ea3e87028dc1ef258395fb2818c1dfb498e096",
+        "unchangedAcrossCalls": true,
+        "regime": "Neutral / mixto",
+        "score": 48,
+        "confidence": 50,
+        "serializedBytes": 106352
+      },
+      "v2": {
+        "regime": "RISK_ON_SELECTIVE",
+        "pillars": {
+          "equity": "MIXED",
+          "fragility": "LOW",
+          "leadership": "FAVORABLE",
+          "participation": "MIXED",
+          "volatility": "BENIGN"
+        },
+        "systemState": "COMPLETE",
+        "replayClass": "R2",
+        "sourceParseCount": 15
+      },
+      "memory": {
+        "before": {
+          "heapUsedBytes": 16968560,
+          "rssBytes": 130678784,
+          "externalBytes": 10935671,
+          "arrayBuffersBytes": 182191
+        },
+        "warmBefore": {
+          "heapUsedBytes": 19330528,
+          "rssBytes": 1080901632,
+          "externalBytes": 28291048,
+          "arrayBuffersBytes": 248659
+        },
+        "after": {
+          "heapUsedBytes": 19787424,
+          "rssBytes": 1212088320,
+          "externalBytes": 13472957,
+          "arrayBuffersBytes": 248659
+        },
+        "afterMinusWarmBefore": {
+          "heapUsedBytes": 456896,
+          "rssBytes": 131186688,
+          "externalBytes": -14818091,
+          "arrayBuffersBytes": 0
+        },
+        "checkpoints": [
+          {
+            "calls": 10,
+            "heapUsedBytes": 19717576,
+            "rssBytes": 1219444736,
+            "externalBytes": 55035340,
+            "arrayBuffersBytes": 248659
+          }
+        ]
+      },
+      "storage": {
+        "outsideRepository": true,
+        "immutableSnapshots": 19,
+        "storedSnapshotBytes": 10146278,
+        "removedAfterMeasurement": true
+      },
+      "processElapsedMs": 10956.718625000001
+    }
+  },
+  "cold": {
+    "pairs": [
+      {
+        "off": {
+          "enabled": false,
+          "scenario": "same-cut",
+          "firstCallMs": 17.296667,
+          "firstCallCounts": {
+            "fetchAttempts": 20,
+            "bundleReads": 0,
+            "bundleJsonParses": 0,
+            "allJsonParses": 1,
+            "readBytes": 0,
+            "writeBytes": 0,
+            "filesystem": {},
+            "diagnostics": {}
+          },
+          "timing": {
+            "n": 1,
+            "minMs": 0.731250000000017,
+            "medianMs": 0.731250000000017,
+            "meanMs": 0.731250000000017,
+            "p95Ms": 0.731250000000017,
+            "maxMs": 0.731250000000017
+          },
+          "rawSamplesMs": [
+            0.731250000000017
+          ],
+          "counts": {
+            "fetchAttempts": 20,
+            "bundleReads": 0,
+            "bundleJsonParses": 0,
+            "allJsonParses": 0,
+            "readBytes": 0,
+            "writeBytes": 0,
+            "filesystem": {},
+            "diagnostics": {}
+          },
+          "perCall": {
+            "fetchAttempts": 20,
+            "bundleReads": 0,
+            "bundleJsonParses": 0,
+            "allJsonParses": 0,
+            "readBytes": 0,
+            "writeBytes": 0,
+            "filesystem": {}
+          },
+          "publicV1": {
+            "hash": "1571cc0d857c02d97639170415ea3e87028dc1ef258395fb2818c1dfb498e096",
+            "unchangedAcrossCalls": true,
+            "regime": "Neutral / mixto",
+            "score": 48,
+            "confidence": 50,
+            "serializedBytes": 106352
+          },
+          "v2": null,
+          "memory": {
+            "before": {
+              "heapUsedBytes": 16969488,
+              "rssBytes": 130187264,
+              "externalBytes": 10935671,
+              "arrayBuffersBytes": 182191
+            },
+            "warmBefore": {
+              "heapUsedBytes": 19255096,
+              "rssBytes": 135462912,
+              "externalBytes": 12340454,
+              "arrayBuffersBytes": 183123
+            },
+            "after": {
+              "heapUsedBytes": 19300680,
+              "rssBytes": 135593984,
+              "externalBytes": 12340454,
+              "arrayBuffersBytes": 183123
+            },
+            "afterMinusWarmBefore": {
+              "heapUsedBytes": 45584,
+              "rssBytes": 131072,
+              "externalBytes": 0,
+              "arrayBuffersBytes": 0
+            },
+            "checkpoints": []
+          },
+          "storage": {
+            "outsideRepository": true,
+            "immutableSnapshots": 0,
+            "storedSnapshotBytes": 0,
+            "removedAfterMeasurement": true
+          },
+          "processElapsedMs": 162.87720799999988
+        },
+        "on": {
+          "enabled": true,
+          "scenario": "same-cut",
+          "firstCallMs": 640.545208,
+          "firstCallCounts": {
+            "fetchAttempts": 20,
+            "bundleReads": 1,
+            "bundleJsonParses": 1,
+            "allJsonParses": 21,
+            "readBytes": 4424614,
+            "writeBytes": 4958627,
+            "filesystem": {
+              "realpath": 7,
+              "mkdir": 3,
+              "stat": 1,
+              "readFile": 2,
+              "writeFile": 2,
+              "open": 1,
+              "FileHandle.writeFile": 1,
+              "FileHandle.sync": 1,
+              "FileHandle.close": 1,
+              "link": 1,
+              "unlink": 1,
+              "rename": 1
+            },
+            "diagnostics": {
+              "COMPLETE": 1
+            }
+          },
+          "timing": {
+            "n": 1,
+            "minMs": 56.07895899999994,
+            "medianMs": 56.07895899999994,
+            "meanMs": 56.07895899999994,
+            "p95Ms": 56.07895899999994,
+            "maxMs": 56.07895899999994
+          },
+          "rawSamplesMs": [
+            56.07895899999994
+          ],
+          "counts": {
+            "fetchAttempts": 20,
+            "bundleReads": 1,
+            "bundleJsonParses": 0,
+            "allJsonParses": 8,
+            "readBytes": 9383241,
+            "writeBytes": 534031,
+            "filesystem": {
+              "realpath": 6,
+              "mkdir": 3,
+              "stat": 1,
+              "readFile": 3,
+              "writeFile": 1,
+              "open": 2,
+              "FileHandle.stat": 1,
+              "FileHandle.read": 2,
+              "FileHandle.close": 2,
+              "FileHandle.writeFile": 1,
+              "FileHandle.sync": 1,
+              "link": 1,
+              "unlink": 1
+            },
+            "diagnostics": {
+              "COMPLETE": 1
+            }
+          },
+          "perCall": {
+            "fetchAttempts": 20,
+            "bundleReads": 1,
+            "bundleJsonParses": 0,
+            "allJsonParses": 8,
+            "readBytes": 9383241,
+            "writeBytes": 534031,
+            "filesystem": {
+              "realpath": 6,
+              "mkdir": 3,
+              "stat": 1,
+              "readFile": 3,
+              "writeFile": 1,
+              "open": 2,
+              "FileHandle.stat": 1,
+              "FileHandle.read": 2,
+              "FileHandle.close": 2,
+              "FileHandle.writeFile": 1,
+              "FileHandle.sync": 1,
+              "link": 1,
+              "unlink": 1
+            }
+          },
+          "publicV1": {
+            "hash": "1571cc0d857c02d97639170415ea3e87028dc1ef258395fb2818c1dfb498e096",
+            "unchangedAcrossCalls": true,
+            "regime": "Neutral / mixto",
+            "score": 48,
+            "confidence": 50,
+            "serializedBytes": 106352
+          },
+          "v2": {
+            "regime": "RISK_ON_SELECTIVE",
+            "pillars": {
+              "equity": "MIXED",
+              "fragility": "LOW",
+              "leadership": "FAVORABLE",
+              "participation": "MIXED",
+              "volatility": "BENIGN"
+            },
+            "systemState": "COMPLETE",
+            "replayClass": "R2",
+            "sourceParseCount": 15
+          },
+          "memory": {
+            "before": {
+              "heapUsedBytes": 16968752,
+              "rssBytes": 130056192,
+              "externalBytes": 10935671,
+              "arrayBuffersBytes": 182191
+            },
+            "warmBefore": {
+              "heapUsedBytes": 24886032,
+              "rssBytes": 718667776,
+              "externalBytes": 12944510,
+              "arrayBuffersBytes": 248659
+            },
+            "after": {
+              "heapUsedBytes": 24993776,
+              "rssBytes": 748617728,
+              "externalBytes": 12943969,
+              "arrayBuffersBytes": 248659
+            },
+            "afterMinusWarmBefore": {
+              "heapUsedBytes": 107744,
+              "rssBytes": 29949952,
+              "externalBytes": -541,
+              "arrayBuffersBytes": 0
+            },
+            "checkpoints": []
+          },
+          "storage": {
+            "outsideRepository": true,
+            "immutableSnapshots": 2,
+            "storedSnapshotBytes": 1067979,
+            "removedAfterMeasurement": true
+          },
+          "processElapsedMs": 848.6684580000001
+        }
+      },
+      {
+        "off": {
+          "enabled": false,
+          "scenario": "same-cut",
+          "firstCallMs": 17.356207999999995,
+          "firstCallCounts": {
+            "fetchAttempts": 20,
+            "bundleReads": 0,
+            "bundleJsonParses": 0,
+            "allJsonParses": 1,
+            "readBytes": 0,
+            "writeBytes": 0,
+            "filesystem": {},
+            "diagnostics": {}
+          },
+          "timing": {
+            "n": 1,
+            "minMs": 0.760707999999994,
+            "medianMs": 0.760707999999994,
+            "meanMs": 0.760707999999994,
+            "p95Ms": 0.760707999999994,
+            "maxMs": 0.760707999999994
+          },
+          "rawSamplesMs": [
+            0.760707999999994
+          ],
+          "counts": {
+            "fetchAttempts": 20,
+            "bundleReads": 0,
+            "bundleJsonParses": 0,
+            "allJsonParses": 0,
+            "readBytes": 0,
+            "writeBytes": 0,
+            "filesystem": {},
+            "diagnostics": {}
+          },
+          "perCall": {
+            "fetchAttempts": 20,
+            "bundleReads": 0,
+            "bundleJsonParses": 0,
+            "allJsonParses": 0,
+            "readBytes": 0,
+            "writeBytes": 0,
+            "filesystem": {}
+          },
+          "publicV1": {
+            "hash": "1571cc0d857c02d97639170415ea3e87028dc1ef258395fb2818c1dfb498e096",
+            "unchangedAcrossCalls": true,
+            "regime": "Neutral / mixto",
+            "score": 48,
+            "confidence": 50,
+            "serializedBytes": 106352
+          },
+          "v2": null,
+          "memory": {
+            "before": {
+              "heapUsedBytes": 17031600,
+              "rssBytes": 130187264,
+              "externalBytes": 10935671,
+              "arrayBuffersBytes": 182191
+            },
+            "warmBefore": {
+              "heapUsedBytes": 19317296,
+              "rssBytes": 135593984,
+              "externalBytes": 12340454,
+              "arrayBuffersBytes": 183123
+            },
+            "after": {
+              "heapUsedBytes": 19361296,
+              "rssBytes": 135790592,
+              "externalBytes": 12340454,
+              "arrayBuffersBytes": 183123
+            },
+            "afterMinusWarmBefore": {
+              "heapUsedBytes": 44000,
+              "rssBytes": 196608,
+              "externalBytes": 0,
+              "arrayBuffersBytes": 0
+            },
+            "checkpoints": []
+          },
+          "storage": {
+            "outsideRepository": true,
+            "immutableSnapshots": 0,
+            "storedSnapshotBytes": 0,
+            "removedAfterMeasurement": true
+          },
+          "processElapsedMs": 161.35950000000048
+        },
+        "on": {
+          "enabled": true,
+          "scenario": "same-cut",
+          "firstCallMs": 641.476792,
+          "firstCallCounts": {
+            "fetchAttempts": 20,
+            "bundleReads": 1,
+            "bundleJsonParses": 1,
+            "allJsonParses": 21,
+            "readBytes": 4424614,
+            "writeBytes": 4958627,
+            "filesystem": {
+              "realpath": 7,
+              "mkdir": 3,
+              "stat": 1,
+              "readFile": 2,
+              "writeFile": 2,
+              "open": 1,
+              "FileHandle.writeFile": 1,
+              "FileHandle.sync": 1,
+              "FileHandle.close": 1,
+              "link": 1,
+              "unlink": 1,
+              "rename": 1
+            },
+            "diagnostics": {
+              "COMPLETE": 1
+            }
+          },
+          "timing": {
+            "n": 1,
+            "minMs": 56.44841599999995,
+            "medianMs": 56.44841599999995,
+            "meanMs": 56.44841599999995,
+            "p95Ms": 56.44841599999995,
+            "maxMs": 56.44841599999995
+          },
+          "rawSamplesMs": [
+            56.44841599999995
+          ],
+          "counts": {
+            "fetchAttempts": 20,
+            "bundleReads": 1,
+            "bundleJsonParses": 0,
+            "allJsonParses": 8,
+            "readBytes": 9383241,
+            "writeBytes": 534031,
+            "filesystem": {
+              "realpath": 6,
+              "mkdir": 3,
+              "stat": 1,
+              "readFile": 3,
+              "writeFile": 1,
+              "open": 2,
+              "FileHandle.stat": 1,
+              "FileHandle.read": 2,
+              "FileHandle.close": 2,
+              "FileHandle.writeFile": 1,
+              "FileHandle.sync": 1,
+              "link": 1,
+              "unlink": 1
+            },
+            "diagnostics": {
+              "COMPLETE": 1
+            }
+          },
+          "perCall": {
+            "fetchAttempts": 20,
+            "bundleReads": 1,
+            "bundleJsonParses": 0,
+            "allJsonParses": 8,
+            "readBytes": 9383241,
+            "writeBytes": 534031,
+            "filesystem": {
+              "realpath": 6,
+              "mkdir": 3,
+              "stat": 1,
+              "readFile": 3,
+              "writeFile": 1,
+              "open": 2,
+              "FileHandle.stat": 1,
+              "FileHandle.read": 2,
+              "FileHandle.close": 2,
+              "FileHandle.writeFile": 1,
+              "FileHandle.sync": 1,
+              "link": 1,
+              "unlink": 1
+            }
+          },
+          "publicV1": {
+            "hash": "1571cc0d857c02d97639170415ea3e87028dc1ef258395fb2818c1dfb498e096",
+            "unchangedAcrossCalls": true,
+            "regime": "Neutral / mixto",
+            "score": 48,
+            "confidence": 50,
+            "serializedBytes": 106352
+          },
+          "v2": {
+            "regime": "RISK_ON_SELECTIVE",
+            "pillars": {
+              "equity": "MIXED",
+              "fragility": "LOW",
+              "leadership": "FAVORABLE",
+              "participation": "MIXED",
+              "volatility": "BENIGN"
+            },
+            "systemState": "COMPLETE",
+            "replayClass": "R2",
+            "sourceParseCount": 15
+          },
+          "memory": {
+            "before": {
+              "heapUsedBytes": 17031768,
+              "rssBytes": 130285568,
+              "externalBytes": 10935671,
+              "arrayBuffersBytes": 182191
+            },
+            "warmBefore": {
+              "heapUsedBytes": 24953168,
+              "rssBytes": 916340736,
+              "externalBytes": 22851616,
+              "arrayBuffersBytes": 248659
+            },
+            "after": {
+              "heapUsedBytes": 25049192,
+              "rssBytes": 935772160,
+              "externalBytes": 12943761,
+              "arrayBuffersBytes": 248659
+            },
+            "afterMinusWarmBefore": {
+              "heapUsedBytes": 96024,
+              "rssBytes": 19431424,
+              "externalBytes": -9907855,
+              "arrayBuffersBytes": 0
+            },
+            "checkpoints": []
+          },
+          "storage": {
+            "outsideRepository": true,
+            "immutableSnapshots": 2,
+            "storedSnapshotBytes": 1067979,
+            "removedAfterMeasurement": true
+          },
+          "processElapsedMs": 855.8213749999995
+        }
+      },
+      {
+        "off": {
+          "enabled": false,
+          "scenario": "same-cut",
+          "firstCallMs": 17.470917000000014,
+          "firstCallCounts": {
+            "fetchAttempts": 20,
+            "bundleReads": 0,
+            "bundleJsonParses": 0,
+            "allJsonParses": 1,
+            "readBytes": 0,
+            "writeBytes": 0,
+            "filesystem": {},
+            "diagnostics": {}
+          },
+          "timing": {
+            "n": 1,
+            "minMs": 0.7858750000000043,
+            "medianMs": 0.7858750000000043,
+            "meanMs": 0.7858750000000043,
+            "p95Ms": 0.7858750000000043,
+            "maxMs": 0.7858750000000043
+          },
+          "rawSamplesMs": [
+            0.7858750000000043
+          ],
+          "counts": {
+            "fetchAttempts": 20,
+            "bundleReads": 0,
+            "bundleJsonParses": 0,
+            "allJsonParses": 0,
+            "readBytes": 0,
+            "writeBytes": 0,
+            "filesystem": {},
+            "diagnostics": {}
+          },
+          "perCall": {
+            "fetchAttempts": 20,
+            "bundleReads": 0,
+            "bundleJsonParses": 0,
+            "allJsonParses": 0,
+            "readBytes": 0,
+            "writeBytes": 0,
+            "filesystem": {}
+          },
+          "publicV1": {
+            "hash": "1571cc0d857c02d97639170415ea3e87028dc1ef258395fb2818c1dfb498e096",
+            "unchangedAcrossCalls": true,
+            "regime": "Neutral / mixto",
+            "score": 48,
+            "confidence": 50,
+            "serializedBytes": 106352
+          },
+          "v2": null,
+          "memory": {
+            "before": {
+              "heapUsedBytes": 17031968,
+              "rssBytes": 130154496,
+              "externalBytes": 10935671,
+              "arrayBuffersBytes": 182191
+            },
+            "warmBefore": {
+              "heapUsedBytes": 19319152,
+              "rssBytes": 135823360,
+              "externalBytes": 12340454,
+              "arrayBuffersBytes": 183123
+            },
+            "after": {
+              "heapUsedBytes": 19362112,
+              "rssBytes": 135938048,
+              "externalBytes": 12340454,
+              "arrayBuffersBytes": 183123
+            },
+            "afterMinusWarmBefore": {
+              "heapUsedBytes": 42960,
+              "rssBytes": 114688,
+              "externalBytes": 0,
+              "arrayBuffersBytes": 0
+            },
+            "checkpoints": []
+          },
+          "storage": {
+            "outsideRepository": true,
+            "immutableSnapshots": 0,
+            "storedSnapshotBytes": 0,
+            "removedAfterMeasurement": true
+          },
+          "processElapsedMs": 163.45866599999863
+        },
+        "on": {
+          "enabled": true,
+          "scenario": "same-cut",
+          "firstCallMs": 657.23175,
+          "firstCallCounts": {
+            "fetchAttempts": 20,
+            "bundleReads": 1,
+            "bundleJsonParses": 1,
+            "allJsonParses": 21,
+            "readBytes": 4424614,
+            "writeBytes": 4958627,
+            "filesystem": {
+              "realpath": 7,
+              "mkdir": 3,
+              "stat": 1,
+              "readFile": 2,
+              "writeFile": 2,
+              "open": 1,
+              "FileHandle.writeFile": 1,
+              "FileHandle.sync": 1,
+              "FileHandle.close": 1,
+              "link": 1,
+              "unlink": 1,
+              "rename": 1
+            },
+            "diagnostics": {
+              "COMPLETE": 1
+            }
+          },
+          "timing": {
+            "n": 1,
+            "minMs": 56.662874999999985,
+            "medianMs": 56.662874999999985,
+            "meanMs": 56.662874999999985,
+            "p95Ms": 56.662874999999985,
+            "maxMs": 56.662874999999985
+          },
+          "rawSamplesMs": [
+            56.662874999999985
+          ],
+          "counts": {
+            "fetchAttempts": 20,
+            "bundleReads": 1,
+            "bundleJsonParses": 0,
+            "allJsonParses": 8,
+            "readBytes": 9383241,
+            "writeBytes": 534031,
+            "filesystem": {
+              "realpath": 6,
+              "mkdir": 3,
+              "stat": 1,
+              "readFile": 3,
+              "writeFile": 1,
+              "open": 2,
+              "FileHandle.stat": 1,
+              "FileHandle.read": 2,
+              "FileHandle.close": 2,
+              "FileHandle.writeFile": 1,
+              "FileHandle.sync": 1,
+              "link": 1,
+              "unlink": 1
+            },
+            "diagnostics": {
+              "COMPLETE": 1
+            }
+          },
+          "perCall": {
+            "fetchAttempts": 20,
+            "bundleReads": 1,
+            "bundleJsonParses": 0,
+            "allJsonParses": 8,
+            "readBytes": 9383241,
+            "writeBytes": 534031,
+            "filesystem": {
+              "realpath": 6,
+              "mkdir": 3,
+              "stat": 1,
+              "readFile": 3,
+              "writeFile": 1,
+              "open": 2,
+              "FileHandle.stat": 1,
+              "FileHandle.read": 2,
+              "FileHandle.close": 2,
+              "FileHandle.writeFile": 1,
+              "FileHandle.sync": 1,
+              "link": 1,
+              "unlink": 1
+            }
+          },
+          "publicV1": {
+            "hash": "1571cc0d857c02d97639170415ea3e87028dc1ef258395fb2818c1dfb498e096",
+            "unchangedAcrossCalls": true,
+            "regime": "Neutral / mixto",
+            "score": 48,
+            "confidence": 50,
+            "serializedBytes": 106352
+          },
+          "v2": {
+            "regime": "RISK_ON_SELECTIVE",
+            "pillars": {
+              "equity": "MIXED",
+              "fragility": "LOW",
+              "leadership": "FAVORABLE",
+              "participation": "MIXED",
+              "volatility": "BENIGN"
+            },
+            "systemState": "COMPLETE",
+            "replayClass": "R2",
+            "sourceParseCount": 15
+          },
+          "memory": {
+            "before": {
+              "heapUsedBytes": 16967984,
+              "rssBytes": 130105344,
+              "externalBytes": 10935671,
+              "arrayBuffersBytes": 182191
+            },
+            "warmBefore": {
+              "heapUsedBytes": 24887840,
+              "rssBytes": 719306752,
+              "externalBytes": 12944510,
+              "arrayBuffersBytes": 248659
+            },
+            "after": {
+              "heapUsedBytes": 24997104,
+              "rssBytes": 749649920,
+              "externalBytes": 12943969,
+              "arrayBuffersBytes": 248659
+            },
+            "afterMinusWarmBefore": {
+              "heapUsedBytes": 109264,
+              "rssBytes": 30343168,
+              "externalBytes": -541,
+              "arrayBuffersBytes": 0
+            },
+            "checkpoints": []
+          },
+          "storage": {
+            "outsideRepository": true,
+            "immutableSnapshots": 2,
+            "storedSnapshotBytes": 1067979,
+            "removedAfterMeasurement": true
+          },
+          "processElapsedMs": 867.9398339999971
+        }
+      },
+      {
+        "off": {
+          "enabled": false,
+          "scenario": "same-cut",
+          "firstCallMs": 17.309458000000006,
+          "firstCallCounts": {
+            "fetchAttempts": 20,
+            "bundleReads": 0,
+            "bundleJsonParses": 0,
+            "allJsonParses": 1,
+            "readBytes": 0,
+            "writeBytes": 0,
+            "filesystem": {},
+            "diagnostics": {}
+          },
+          "timing": {
+            "n": 1,
+            "minMs": 0.7724159999999927,
+            "medianMs": 0.7724159999999927,
+            "meanMs": 0.7724159999999927,
+            "p95Ms": 0.7724159999999927,
+            "maxMs": 0.7724159999999927
+          },
+          "rawSamplesMs": [
+            0.7724159999999927
+          ],
+          "counts": {
+            "fetchAttempts": 20,
+            "bundleReads": 0,
+            "bundleJsonParses": 0,
+            "allJsonParses": 0,
+            "readBytes": 0,
+            "writeBytes": 0,
+            "filesystem": {},
+            "diagnostics": {}
+          },
+          "perCall": {
+            "fetchAttempts": 20,
+            "bundleReads": 0,
+            "bundleJsonParses": 0,
+            "allJsonParses": 0,
+            "readBytes": 0,
+            "writeBytes": 0,
+            "filesystem": {}
+          },
+          "publicV1": {
+            "hash": "1571cc0d857c02d97639170415ea3e87028dc1ef258395fb2818c1dfb498e096",
+            "unchangedAcrossCalls": true,
+            "regime": "Neutral / mixto",
+            "score": 48,
+            "confidence": 50,
+            "serializedBytes": 106352
+          },
+          "v2": null,
+          "memory": {
+            "before": {
+              "heapUsedBytes": 17033392,
+              "rssBytes": 129892352,
+              "externalBytes": 10935671,
+              "arrayBuffersBytes": 182191
+            },
+            "warmBefore": {
+              "heapUsedBytes": 19318624,
+              "rssBytes": 135331840,
+              "externalBytes": 12340454,
+              "arrayBuffersBytes": 183123
+            },
+            "after": {
+              "heapUsedBytes": 19362112,
+              "rssBytes": 135462912,
+              "externalBytes": 12340454,
+              "arrayBuffersBytes": 183123
+            },
+            "afterMinusWarmBefore": {
+              "heapUsedBytes": 43488,
+              "rssBytes": 131072,
+              "externalBytes": 0,
+              "arrayBuffersBytes": 0
+            },
+            "checkpoints": []
+          },
+          "storage": {
+            "outsideRepository": true,
+            "immutableSnapshots": 0,
+            "storedSnapshotBytes": 0,
+            "removedAfterMeasurement": true
+          },
+          "processElapsedMs": 164.9099580000002
+        },
+        "on": {
+          "enabled": true,
+          "scenario": "same-cut",
+          "firstCallMs": 633.547459,
+          "firstCallCounts": {
+            "fetchAttempts": 20,
+            "bundleReads": 1,
+            "bundleJsonParses": 1,
+            "allJsonParses": 21,
+            "readBytes": 4424614,
+            "writeBytes": 4958627,
+            "filesystem": {
+              "realpath": 7,
+              "mkdir": 3,
+              "stat": 1,
+              "readFile": 2,
+              "writeFile": 2,
+              "open": 1,
+              "FileHandle.writeFile": 1,
+              "FileHandle.sync": 1,
+              "FileHandle.close": 1,
+              "link": 1,
+              "unlink": 1,
+              "rename": 1
+            },
+            "diagnostics": {
+              "COMPLETE": 1
+            }
+          },
+          "timing": {
+            "n": 1,
+            "minMs": 55.976875000000064,
+            "medianMs": 55.976875000000064,
+            "meanMs": 55.976875000000064,
+            "p95Ms": 55.976875000000064,
+            "maxMs": 55.976875000000064
+          },
+          "rawSamplesMs": [
+            55.976875000000064
+          ],
+          "counts": {
+            "fetchAttempts": 20,
+            "bundleReads": 1,
+            "bundleJsonParses": 0,
+            "allJsonParses": 8,
+            "readBytes": 9383241,
+            "writeBytes": 534031,
+            "filesystem": {
+              "realpath": 6,
+              "mkdir": 3,
+              "stat": 1,
+              "readFile": 3,
+              "writeFile": 1,
+              "open": 2,
+              "FileHandle.stat": 1,
+              "FileHandle.read": 2,
+              "FileHandle.close": 2,
+              "FileHandle.writeFile": 1,
+              "FileHandle.sync": 1,
+              "link": 1,
+              "unlink": 1
+            },
+            "diagnostics": {
+              "COMPLETE": 1
+            }
+          },
+          "perCall": {
+            "fetchAttempts": 20,
+            "bundleReads": 1,
+            "bundleJsonParses": 0,
+            "allJsonParses": 8,
+            "readBytes": 9383241,
+            "writeBytes": 534031,
+            "filesystem": {
+              "realpath": 6,
+              "mkdir": 3,
+              "stat": 1,
+              "readFile": 3,
+              "writeFile": 1,
+              "open": 2,
+              "FileHandle.stat": 1,
+              "FileHandle.read": 2,
+              "FileHandle.close": 2,
+              "FileHandle.writeFile": 1,
+              "FileHandle.sync": 1,
+              "link": 1,
+              "unlink": 1
+            }
+          },
+          "publicV1": {
+            "hash": "1571cc0d857c02d97639170415ea3e87028dc1ef258395fb2818c1dfb498e096",
+            "unchangedAcrossCalls": true,
+            "regime": "Neutral / mixto",
+            "score": 48,
+            "confidence": 50,
+            "serializedBytes": 106352
+          },
+          "v2": {
+            "regime": "RISK_ON_SELECTIVE",
+            "pillars": {
+              "equity": "MIXED",
+              "fragility": "LOW",
+              "leadership": "FAVORABLE",
+              "participation": "MIXED",
+              "volatility": "BENIGN"
+            },
+            "systemState": "COMPLETE",
+            "replayClass": "R2",
+            "sourceParseCount": 15
+          },
+          "memory": {
+            "before": {
+              "heapUsedBytes": 17034120,
+              "rssBytes": 131006464,
+              "externalBytes": 10935671,
+              "arrayBuffersBytes": 182191
+            },
+            "warmBefore": {
+              "heapUsedBytes": 24963280,
+              "rssBytes": 710656000,
+              "externalBytes": 12944510,
+              "arrayBuffersBytes": 248659
+            },
+            "after": {
+              "heapUsedBytes": 25073376,
+              "rssBytes": 737411072,
+              "externalBytes": 12943969,
+              "arrayBuffersBytes": 248659
+            },
+            "afterMinusWarmBefore": {
+              "heapUsedBytes": 110096,
+              "rssBytes": 26755072,
+              "externalBytes": -541,
+              "arrayBuffersBytes": 0
+            },
+            "checkpoints": []
+          },
+          "storage": {
+            "outsideRepository": true,
+            "immutableSnapshots": 2,
+            "storedSnapshotBytes": 1067979,
+            "removedAfterMeasurement": true
+          },
+          "processElapsedMs": 843.4315840000017
+        }
+      },
+      {
+        "off": {
+          "enabled": false,
+          "scenario": "same-cut",
+          "firstCallMs": 17.364334,
+          "firstCallCounts": {
+            "fetchAttempts": 20,
+            "bundleReads": 0,
+            "bundleJsonParses": 0,
+            "allJsonParses": 1,
+            "readBytes": 0,
+            "writeBytes": 0,
+            "filesystem": {},
+            "diagnostics": {}
+          },
+          "timing": {
+            "n": 1,
+            "minMs": 0.7619170000000111,
+            "medianMs": 0.7619170000000111,
+            "meanMs": 0.7619170000000111,
+            "p95Ms": 0.7619170000000111,
+            "maxMs": 0.7619170000000111
+          },
+          "rawSamplesMs": [
+            0.7619170000000111
+          ],
+          "counts": {
+            "fetchAttempts": 20,
+            "bundleReads": 0,
+            "bundleJsonParses": 0,
+            "allJsonParses": 0,
+            "readBytes": 0,
+            "writeBytes": 0,
+            "filesystem": {},
+            "diagnostics": {}
+          },
+          "perCall": {
+            "fetchAttempts": 20,
+            "bundleReads": 0,
+            "bundleJsonParses": 0,
+            "allJsonParses": 0,
+            "readBytes": 0,
+            "writeBytes": 0,
+            "filesystem": {}
+          },
+          "publicV1": {
+            "hash": "1571cc0d857c02d97639170415ea3e87028dc1ef258395fb2818c1dfb498e096",
+            "unchangedAcrossCalls": true,
+            "regime": "Neutral / mixto",
+            "score": 48,
+            "confidence": 50,
+            "serializedBytes": 106352
+          },
+          "v2": null,
+          "memory": {
+            "before": {
+              "heapUsedBytes": 16968568,
+              "rssBytes": 130170880,
+              "externalBytes": 10935671,
+              "arrayBuffersBytes": 182191
+            },
+            "warmBefore": {
+              "heapUsedBytes": 19255392,
+              "rssBytes": 135610368,
+              "externalBytes": 12340454,
+              "arrayBuffersBytes": 183123
+            },
+            "after": {
+              "heapUsedBytes": 19297904,
+              "rssBytes": 135725056,
+              "externalBytes": 12340454,
+              "arrayBuffersBytes": 183123
+            },
+            "afterMinusWarmBefore": {
+              "heapUsedBytes": 42512,
+              "rssBytes": 114688,
+              "externalBytes": 0,
+              "arrayBuffersBytes": 0
+            },
+            "checkpoints": []
+          },
+          "storage": {
+            "outsideRepository": true,
+            "immutableSnapshots": 0,
+            "storedSnapshotBytes": 0,
+            "removedAfterMeasurement": true
+          },
+          "processElapsedMs": 162.27174999999988
+        },
+        "on": {
+          "enabled": true,
+          "scenario": "same-cut",
+          "firstCallMs": 631.292,
+          "firstCallCounts": {
+            "fetchAttempts": 20,
+            "bundleReads": 1,
+            "bundleJsonParses": 1,
+            "allJsonParses": 21,
+            "readBytes": 4424614,
+            "writeBytes": 4958627,
+            "filesystem": {
+              "realpath": 7,
+              "mkdir": 3,
+              "stat": 1,
+              "readFile": 2,
+              "writeFile": 2,
+              "open": 1,
+              "FileHandle.writeFile": 1,
+              "FileHandle.sync": 1,
+              "FileHandle.close": 1,
+              "link": 1,
+              "unlink": 1,
+              "rename": 1
+            },
+            "diagnostics": {
+              "COMPLETE": 1
+            }
+          },
+          "timing": {
+            "n": 1,
+            "minMs": 58.98133299999995,
+            "medianMs": 58.98133299999995,
+            "meanMs": 58.98133299999995,
+            "p95Ms": 58.98133299999995,
+            "maxMs": 58.98133299999995
+          },
+          "rawSamplesMs": [
+            58.98133299999995
+          ],
+          "counts": {
+            "fetchAttempts": 20,
+            "bundleReads": 1,
+            "bundleJsonParses": 0,
+            "allJsonParses": 8,
+            "readBytes": 9383241,
+            "writeBytes": 534031,
+            "filesystem": {
+              "realpath": 6,
+              "mkdir": 3,
+              "stat": 1,
+              "readFile": 3,
+              "writeFile": 1,
+              "open": 2,
+              "FileHandle.stat": 1,
+              "FileHandle.read": 2,
+              "FileHandle.close": 2,
+              "FileHandle.writeFile": 1,
+              "FileHandle.sync": 1,
+              "link": 1,
+              "unlink": 1
+            },
+            "diagnostics": {
+              "COMPLETE": 1
+            }
+          },
+          "perCall": {
+            "fetchAttempts": 20,
+            "bundleReads": 1,
+            "bundleJsonParses": 0,
+            "allJsonParses": 8,
+            "readBytes": 9383241,
+            "writeBytes": 534031,
+            "filesystem": {
+              "realpath": 6,
+              "mkdir": 3,
+              "stat": 1,
+              "readFile": 3,
+              "writeFile": 1,
+              "open": 2,
+              "FileHandle.stat": 1,
+              "FileHandle.read": 2,
+              "FileHandle.close": 2,
+              "FileHandle.writeFile": 1,
+              "FileHandle.sync": 1,
+              "link": 1,
+              "unlink": 1
+            }
+          },
+          "publicV1": {
+            "hash": "1571cc0d857c02d97639170415ea3e87028dc1ef258395fb2818c1dfb498e096",
+            "unchangedAcrossCalls": true,
+            "regime": "Neutral / mixto",
+            "score": 48,
+            "confidence": 50,
+            "serializedBytes": 106352
+          },
+          "v2": {
+            "regime": "RISK_ON_SELECTIVE",
+            "pillars": {
+              "equity": "MIXED",
+              "fragility": "LOW",
+              "leadership": "FAVORABLE",
+              "participation": "MIXED",
+              "volatility": "BENIGN"
+            },
+            "systemState": "COMPLETE",
+            "replayClass": "R2",
+            "sourceParseCount": 15
+          },
+          "memory": {
+            "before": {
+              "heapUsedBytes": 17033368,
+              "rssBytes": 130416640,
+              "externalBytes": 10935671,
+              "arrayBuffersBytes": 182191
+            },
+            "warmBefore": {
+              "heapUsedBytes": 24950784,
+              "rssBytes": 698105856,
+              "externalBytes": 12944718,
+              "arrayBuffersBytes": 248659
+            },
+            "after": {
+              "heapUsedBytes": 25052536,
+              "rssBytes": 730759168,
+              "externalBytes": 12943969,
+              "arrayBuffersBytes": 248659
+            },
+            "afterMinusWarmBefore": {
+              "heapUsedBytes": 101752,
+              "rssBytes": 32653312,
+              "externalBytes": -749,
+              "arrayBuffersBytes": 0
+            },
+            "checkpoints": []
+          },
+          "storage": {
+            "outsideRepository": true,
+            "immutableSnapshots": 2,
+            "storedSnapshotBytes": 1067979,
+            "removedAfterMeasurement": true
+          },
+          "processElapsedMs": 846.6494579999999
+        }
+      }
+    ],
+    "offFirstCall": {
+      "n": 5,
+      "minMs": 17.296667,
+      "medianMs": 17.356207999999995,
+      "meanMs": 17.3595168,
+      "p95Ms": 17.364334,
+      "maxMs": 17.470917000000014
+    },
+    "onFirstCall": {
+      "n": 5,
+      "minMs": 631.292,
+      "medianMs": 640.545208,
+      "meanMs": 640.8186417999999,
+      "p95Ms": 641.476792,
+      "maxMs": 657.23175
+    },
+    "offProcess": {
+      "n": 5,
+      "minMs": 161.35950000000048,
+      "medianMs": 162.87720799999988,
+      "meanMs": 162.9754163999998,
+      "p95Ms": 163.45866599999863,
+      "maxMs": 164.9099580000002
+    },
+    "onProcess": {
+      "n": 5,
+      "minMs": 843.4315840000017,
+      "medianMs": 848.6684580000001,
+      "meanMs": 852.5021417999997,
+      "p95Ms": 855.8213749999995,
+      "maxMs": 867.9398339999971
+    }
+  },
+  "summary": {
+    "baselineMedianMs": 0.3717295000000007,
+    "shadowMedianMs": 560.1385000000009,
+    "sameCutBestCaseShadowMedianMs": 52.994416999999885,
+    "absoluteIncrementMs": 559.7667705000009,
+    "relativeIncrementPercent": 150584.4358599465,
+    "ratio": 1506.844358599465,
+    "additionalFetchAttempts": 0,
+    "liveNetworkFetches": 0,
+    "publicV1OutputHashPreserved": true,
+    "fullRawNormalizationComplete": true,
+    "canonicalRegimePillarsFeaturesMatchSweeper": true,
+    "headlineScenario": "ACTUAL_V1_FALLBACK_VS_FULL_RAW_SHADOW_DISTINCT_CUT",
+    "materialCostReview": "Report measured first/distinct-cut normalization and RSS high-water; PASS denotes reproducible functional measurement, not a deployment SLA or waived cost review.",
+    "verdict": "PASS"
+  },
+  "limitations": [
+    "V1 providers deliberately unavailable via immediate 404; successful remote response latency and production traffic require deployment-environment measurement.",
+    "R2 cached bytes do not establish prospective/PIT performance or economic validity.",
+    "The two nearest VX contracts cover canonical requirements; higher-curve diagnostics and optional BTC/GLD remain unavailable.",
+    "Finite repeated/cold measurements do not prove arbitrary-size or long-lived-process behavior."
+  ],
+  "normalizerAtBaseline": {
+    "path": "lib/regime-engine-v2/normalize.ts",
+    "sha256": "6d3aec5ab1853bfe5f19ca6b58117a253f51c349ee72ed4aba54d2d12ffcd49c",
+    "matchesMaintainerInput": true
+  }
+}

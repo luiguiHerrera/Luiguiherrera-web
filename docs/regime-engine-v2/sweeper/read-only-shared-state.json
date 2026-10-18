@@ -1,0 +1,37 @@
+{
+  "exports": {
+    "C03": {
+      "frozen": true,
+      "childrenFrozen": true
+    },
+    "CONTRACT_HASHES": {
+      "frozen": true,
+      "childrenFrozen": true
+    },
+    "DECISION_TABLE": {
+      "frozen": true,
+      "childrenFrozen": true
+    },
+    "GROUPS": {
+      "frozen": false,
+      "childrenFrozen": false
+    },
+    "INITIAL_OPTIONALS": {
+      "frozen": false,
+      "childrenFrozen": true
+    },
+    "REGISTRY": {
+      "frozen": true,
+      "childrenFrozen": true
+    },
+    "TICKERS": {
+      "frozen": false,
+      "childrenFrozen": true
+    }
+  },
+  "beforeRegime": "RISK_ON_SELECTIVE",
+  "mutationFailure": {
+    "name": "TypeError",
+    "message": "Cannot read properties of undefined (reading '0')"
+  }
+}

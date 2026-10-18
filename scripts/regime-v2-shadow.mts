@@ -1,0 +1,20 @@
+/** Explicit local shadow invocation; no scheduler, provider fetch, or public route. */
+import { readFileSync, writeFileSync } from "node:fs";
+import { evaluateRegime } from "../lib/regime-engine-v2/engine.ts";
+import type { RegimeOutput } from "../lib/regime-engine-v2/engine.ts";
+import { observeTransition } from "../lib/regime-engine-v2/shadow.ts";
+import type { EngineInput } from "../lib/regime-engine-v2/types.ts";
+const args = process.argv.slice(2);
+const argument = (name: string) => { const i = args.indexOf(name); return i >= 0 ? args[i + 1] : undefined; };
+const input = argument("--input");
+if (!input) throw new Error("Usage: regime-v2-shadow.mts --input normalized-envelope.json [--v1 immutable-v1.json] [--previous v2-output.json] [--output shadow.json]");
+const v1Path = argument("--v1"), previousPath = argument("--previous");
+const v1: unknown = v1Path ? JSON.parse(readFileSync(v1Path, "utf8")) : null;
+const v2 = evaluateRegime(JSON.parse(readFileSync(input, "utf8")) as EngineInput);
+const saved = previousPath ? JSON.parse(readFileSync(previousPath, "utf8")) as RegimeOutput | { v2: RegimeOutput; observation?: { durationSessions: number | null; durationCensored: boolean } } : null;
+const previous = saved && "v2" in saved ? saved.v2 : saved;
+const duration = saved && "v2" in saved ? saved.observation?.durationSessions ?? undefined : undefined;
+const censored = saved && "v2" in saved ? saved.observation?.durationCensored ?? true : true;
+const result = { scope: "INTERNAL_SHADOW_ONLY", productionCutover: false, publicAuthority: "V1", v1, v2, observation: observeTransition(previous, v2, duration, censored) };
+const bytes = JSON.stringify(result, null, 2) + "\n", output = argument("--output");
+if (output) writeFileSync(output, bytes, { flag: "wx" }); else process.stdout.write(bytes);

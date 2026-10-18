@@ -1,0 +1,82 @@
+{
+  "finding_id": "RC-VERIFICATION-SETUP-001",
+  "severity": "LOW",
+  "component": "Temporary exact-candidate verification environment and lint comparator",
+  "status": "CLOSED",
+  "description": "The first isolated attempt had no Git history for two existing report preservation tests, and Turbopack rejected a node_modules symlink outside its filesystem root. The initial lint comparator also treated two unchanged warning statements shifted by the accepted 16-line capture wrapper as new warnings.",
+  "original_evidence": {
+    "report": {
+      "path": "docs/regime-engine-v2/release-candidate/local/precommit-candidate/verification-before-retry-20260908T211310Z.json",
+      "sha256": "fa243b389a6e448cb9ad27ac1b099a3074777fda7f02b0579b42353900af6b8c"
+    },
+    "failed_commands": [
+      {
+        "name": "baseline-node-tests",
+        "exit_code": 1,
+        "log_sha256": "3dbb8247a266909a6a6db8500085a28ed8f1637848d4fe57309bdf541be38101"
+      },
+      {
+        "name": "build",
+        "exit_code": 1,
+        "log_sha256": "77eb3e5d71236e77a32cb764bd70fef77c83c22778e2328363f90d3dc37b8325"
+      }
+    ],
+    "report_errors": [
+      "fatal: not a git repository (or any of the parent directories): .git",
+      "Symlink [project]/node_modules is invalid, it points out of the filesystem root"
+    ],
+    "initial_new_warning_count": 2
+  },
+  "repair": [
+    "Root attached local Git metadata with the parent commit and read-only alternate historical objects, without remotes.",
+    "Root replaced only the temporary node_modules symlink with an APFS clone of the same installed dependencies; no dependency install or update.",
+    "The checker now compares warning path, rule, message and exact source line with multiplicity. Source-identical displaced warnings retain their before/after positions."
+  ],
+  "unchanged_warning_evidence": [
+    {
+      "path": "scripts/build-statistical-levels.mjs",
+      "rule": "@typescript-eslint/no-unused-vars",
+      "message": "'key' is assigned a value but never used.",
+      "unchanged_source_fragment": "for (const [key, value] of Object.entries(config.movingAverages)) {",
+      "parent_positions": [
+        {
+          "line": 959,
+          "column": 15
+        }
+      ],
+      "candidate_position": {
+        "line": 975,
+        "column": 15
+      }
+    },
+    {
+      "path": "scripts/build-statistical-levels.mjs",
+      "rule": "@typescript-eslint/no-unused-vars",
+      "message": "'yahooSymbol' is assigned a value but never used.",
+      "unchanged_source_fragment": "const { yahooSymbol, ...catalogAsset } = asset;",
+      "parent_positions": [
+        {
+          "line": 1062,
+          "column": 11
+        }
+      ],
+      "candidate_position": {
+        "line": 1078,
+        "column": 11
+      }
+    }
+  ],
+  "validation": {
+    "exact_candidate_tests": "487/487",
+    "reports_tests": "PASS",
+    "build": "PASS",
+    "lint_errors": 0,
+    "warnings": 18,
+    "new_warnings": 0,
+    "production_http": "10/10 PASS"
+  },
+  "engine_impact": "NONE",
+  "source_test_oracle_changes": "NONE",
+  "public_default_impact": "NONE",
+  "local_initial_logs_retained": true
+}

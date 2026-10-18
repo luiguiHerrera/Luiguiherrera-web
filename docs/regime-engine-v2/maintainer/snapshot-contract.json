@@ -1,0 +1,107 @@
+{
+  "artifact": "REGIME_ENGINE_V2_MAINTAINER_SNAPSHOT_CONTRACT",
+  "schemaVersion": "regime-v2-shadow-snapshot/1.0.0",
+  "status": "INTERNAL_SHADOW_ONLY",
+  "implementation": "lib/regime-engine-v2/operations/snapshot.ts",
+  "tests": "lib/regime-engine-v2/operations/snapshot.test.ts",
+  "canonical_methodology_changed": false,
+  "public_authority": "EXISTING_V1",
+  "migration": {
+    "policy": "Separate internal envelope; no mutation or migration of V1 snapshots/readers",
+    "historical_snapshots_retroactively_extended": false,
+    "r2_reclassified": false,
+    "unknown_schema": "REJECT_EXPLICITLY",
+    "other_engine_version_replay": "REQUIRE_ORIGINAL_ENGINE_AND_CONTRACTS"
+  },
+  "identity": {
+    "snapshotId": "SHA256 of canonical full envelope excluding snapshotId",
+    "asOf": "Explicit valid instant shared by normalized input and V2 output; V1 result is captured at that cut by integration",
+    "schema": "regime-v2-shadow-snapshot/1.0.0",
+    "engine": "Existing ENGINE_VERSION; no parallel canonical engine version invented",
+    "parameters": "C03 plus SHA256 of exact C03 values and accepted parameter-manifest hash",
+    "features": "Accepted feature-registry-qualified.json hash",
+    "decision_table": "Existing DECISION_TABLE.version plus exact content hash",
+    "sources": "Accepted price/temporal/freshness contract hashes plus normalized sourceId/sourceVersion set and calendar id/version/kind/source identities",
+    "snapshot_key_dimensions": ["asOf", "normalized values", "all vintage hashes", "engine", "C03", "feature contract", "decision table", "source contracts", "schema", "V1 result", "previous checkpoint identity"]
+  },
+  "fields": {
+    "v1": ["regime", "score", "confidence", "version", "outputHash"],
+    "v2": "Complete unchanged evaluateRegime output, including all 59 evidence records, qualitative dimensions, pillars, rule, source statuses, reasons, dependency evidence and diagnostic input hash; null on calculation/source preparation failure",
+    "normalizedInput": "Exact JSON-safe EngineInput used for V2; null only when no accepted normalized input was available",
+    "error": "Explicit typed code/message for failure; no silently healthy fallback",
+    "sourceStatus": "Preserved operational source status; full engine source status also remains in v2",
+    "captureMetadata": "JSON provenance envelope supplied by integration, including pipeline capture references, source input ledger, origin and available raw/vintage identifiers",
+    "replayClass": "Actual frozen engine class; UNKNOWN without output",
+    "comparison": "V1 and V2 labels, literal equality if both exist, NON_EQUIVALENT_TAXONOMY, semanticallySame=null, v1IsTruthLabel=false",
+    "observation": "Bounded versioned incremental checkpoint and current observable facts, never an engine input"
+  },
+  "serialization": {
+    "format": "Canonical UTF-8 JSON with newline on disk",
+    "maximum_bytes": 16777216,
+    "deeply_immutable_return": true,
+    "caller_inputs_mutated_or_frozen": false,
+    "lossy_json_conversion": "REJECT_NON_JSON_SNAPSHOT; undefined, nonfinite, cyclic or other non-lossless data must not silently change exact replay",
+    "hash_authenticates_provider": false,
+    "hash_meaning": "Local content integrity and exact identity, not source authentication"
+  },
+  "persistence": {
+    "api": "persistSnapshot(directory, snapshot, {repositoryRoot})",
+    "location": "Absolute external runtime directory; repository root, public subtree and symlink aliases into the repository are rejected",
+    "layout": "<snapshotId>.json; bounded one-snapshot writes, no historical directory walk",
+    "publish": "Exclusive mode-0600 temporary file, write and fsync, atomic non-overwriting hard link, temporary cleanup",
+    "collision": "Same bytes are idempotent; different existing bytes fail without overwrite",
+    "read": "Size-bound read, schema/content/checkpoint identity validation, deep freeze",
+    "checkpoint_history": "Caller supplies at most one previously read immutable snapshot; envelope stores its id, not nested history",
+    "datasets_in_git": false,
+    "storage_trust": "Configured local operational filesystem; content hashes provide integrity but are not signatures or an external authentication system"
+  },
+  "replay": {
+    "api": "replaySnapshot(snapshot)",
+    "successful_snapshot": "Validate snapshot and original versions; evaluate exact normalizedInput; compare the entire output canonically, including engineVersion, C03, regime, pillars, concordance, uncertainty, dataQuality, evidence, source statuses, reason codes and diagnostics",
+    "failure_without_successful_output": "NOT_REPLAYABLE_FAILURE with original recorded failure; do not manufacture a successful historical result",
+    "mismatch": "Throw REPLAY_OUTPUT_MISMATCH; no expected-output rewrite"
+  },
+  "observability": {
+    "current": ["observationDate", "asOf", "previousSnapshotId", "previousRegime", "regimeChanged", "pillarChanges", "regimeAge", "pillarAges", "timeSinceLastTransitionSessions", "concordance", "uncertainty", "dataQuality", "reasonCodes", "missingReasons", "versionKey", "continuity"],
+    "age_unit": "Observed adjacent eligible equity sessions, not calendar days",
+    "duration_censoring": "A run already active at an epoch boundary is left censored; its true start and time since last transition are unknown",
+    "continuity": {
+      "ADJACENT": "Current authoritative equity calendar names previous observation as its immediately preceding session, both outputs complete, same engine/contracts/calendar versions/replay class/evidence basis, monotonic asOf",
+      "SAME_SESSION_REOBSERVED": "Same observation date and exact normalized input excluding asOf, with same complete output excluding asOf/inputHash; keep checkpoint and ages, no counter increment and regimeChanged=null",
+      "SAME_SESSION": "Changed same-session input or evidence is an explicit revision and begins a censored epoch",
+      "breaks": ["FIRST_OBSERVATION", "GAP", "OUT_OF_ORDER", "VERSION_CHANGE", "REPLAY_CLASS_CHANGE", "EVIDENCE_BASIS_CHANGE", "CURRENT_UNAVAILABLE", "PREVIOUS_UNAVAILABLE"],
+      "break_behavior": "No bridging, transition inference or age continuation; previous immutable epoch remains available for explicit offline aggregation"
+    },
+    "bounded_checkpoint": {
+      "runs_retained": "Current run and one last closed run",
+      "counters": ["complete observations", "transitions", "A-B-A reversals with B duration <=1/2/3/5 eligible sessions", "conflicting-pillar episode fragments", "material volatility episode fragments", "stress episode fragments", "absolute STRESS branch observations", "joint STRESS branch observations"],
+      "conflicting_pillars": "Existing concordance LOW: opposed resolved lineage evidence; no new score or vote",
+      "material_volatility_candidate": "Existing C03 volatility WATCH/ADVERSE/STRESS episode; an observational candidate requiring subsequent adjudication, not a newly calibrated materiality threshold",
+      "stress_branches": "Frozen C03 absolute VIX stress and joint adverse-VIX + momentum + inverted-curve predicates, with existing numeric tolerance; both may hold on one observation",
+      "epoch_boundary_fragments": "First already-active conflict/material/stress episodes are censored fragments. Candidate counts do not establish fully observed onset or independence",
+      "overflow": "Reject unsafe integer counters instead of silent saturation or rollover"
+    },
+    "evidence_plan": {
+      "targets": {"adjudicable_transitions": 100, "conflicting_pillar_episodes": 100, "material_volatility_episodes": 60, "stress_branches": "BOTH"},
+      "prospective_candidate_eligibility": "Output replayClass R0, input mode R0, and captureMetadata.origin PROSPECTIVE; the capture/normalization boundary remains responsible for supporting that claim",
+      "r2_counts": "Descriptive checkpoint only; all prospective-plan contribution fields zero",
+      "unverified_counts": "Descriptive checkpoint only; all prospective-plan contribution fields zero",
+      "adjudicated_transitions": 0,
+      "adjudication": "Observed transitions are candidates. No automated truth labeling or invented human adjudication. A governed later review must certify adjudicability and consolidate censored/disjoint epochs",
+      "statistical_guarantee": false,
+      "automatic_promotion": false,
+      "promotion_authority": "CONTROL_TOWER"
+    }
+  },
+  "invariants": [
+    "No H1 execution or hidden hysteresis",
+    "No persistence rule, smoothing or state hold",
+    "No V2 score, probability or confidence percent",
+    "No cross-asset or PFL core additions",
+    "BTC/GLD remain contextual satellites with zero votes",
+    "No fetch or filesystem writes inside canonical classifier",
+    "No public route/export is added by snapshot module",
+    "R2 is not PIT OOS and remains R2",
+    "Shadow is not production authority"
+  ]
+}

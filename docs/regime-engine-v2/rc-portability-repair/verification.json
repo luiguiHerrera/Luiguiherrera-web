@@ -1,0 +1,237 @@
+{
+  "schemaVersion": 1,
+  "status": "PASS_IN_UNCOMMITTED_REPAIR_DELTA",
+  "completedAt": "2026-09-09T11:17:31.761273+00:00",
+  "finalStatus": {
+    "STATE": "REGIME_ENGINE_V2_RC_PORTABILITY_REPAIR_COMPLETE",
+    "RC0_COMMIT": "f5fc7ecfd9e1f323d0ad3a43eccec1dbc500be1c",
+    "RC0_TREE": "05242fadab2cb190effeaea2ea4100e9eb4fbf9d",
+    "RC0_IMMUTABLE": "YES",
+    "RC0_PRODUCT_VALIDATION": "PASS",
+    "RC0_PRISTINE_PORTABILITY": "FAIL",
+    "BLOCKER": "SR-A5-001",
+    "BLOCKER_CLASS": "VERIFICATION_PORTABILITY",
+    "BLOCKER_STATUS": "RESOLVED_IN_UNCOMMITTED_DELTA",
+    "REPAIRED_CANDIDATE_PORTABILITY": "PASS",
+    "PRODUCT_CODE_DEFECT": "NO",
+    "METHODOLOGY_DEFECT": "NO",
+    "PRODUCT_CODE_DELTA": 0,
+    "METHODOLOGY_CHANGED": "NO",
+    "CANONICAL_PARAMETER_SET": "C03",
+    "RETIRED_ENTRYPOINTS": 10,
+    "VERIFICATION_EXECUTABLE_FILES_CHANGED": 12,
+    "PORTABILITY_REGRESSIONS": "32/32",
+    "CANONICAL_TESTS": "487/487",
+    "P8_GOLDEN_CASES": "464/464",
+    "HISTORICAL_R2_CONFORMANCE": "1930/1930",
+    "SWEEPER_ATTACKS": "110/110",
+    "NEXT_DECLARED_VERSION": "16.3.1",
+    "NEXT_LOCKED_VERSION": "16.3.1",
+    "NEXT_INSTALLED_VERSION": "16.3.1",
+    "V1_TESTS": "PASS",
+    "V2_TESTS": "PASS",
+    "TYPECHECK": "PASS",
+    "BUILD": "PASS",
+    "LINT_ERRORS": 0,
+    "NEW_LINT_WARNINGS": 0,
+    "PUBLIC_DEFAULT": "V1",
+    "V2_SHADOW_DEFAULT": "OFF",
+    "NEW_RUNTIME_DEPENDENCIES": 0,
+    "UNRESOLVED_PORTABILITY_BLOCKERS": [],
+    "REPAIR_ACCEPTANCE": "PENDING_CONTROL_TOWER",
+    "COMMIT_CREATED": "NO",
+    "PUSH_PERFORMED": "NO",
+    "DEPLOYMENT_PERFORMED": "NO",
+    "SHADOW_ACTIVATION": "BLOCKED",
+    "SHADOW_ACTIVATED": "NO",
+    "PRODUCTION_CUTOVER": "NO",
+    "SHADOW_ACTIVATION_READY": "NO"
+  },
+  "identityScope": {
+    "baseRc0Commit": "f5fc7ecfd9e1f323d0ad3a43eccec1dbc500be1c",
+    "baseRc0Tree": "05242fadab2cb190effeaea2ea4100e9eb4fbf9d",
+    "canonicalTrackedDeltaSha256": "af6458e55b32a95bbc5f8f70a7431956c4c2060872f1a20799d3488a85f672c5",
+    "finalDeltaIncludingRegressionHarnessSha256": "2c95457cf955071206805318914e163834258e12a1b2d2515b8b7bc93d27df05",
+    "uncommitted": true,
+    "rc0VerdictReclassified": false,
+    "newReleaseFreezeCreated": false
+  },
+  "canonicalVerification": {
+    "status": "PASS",
+    "profile": "candidate",
+    "sourceRoot": "/private/tmp/regime-v2-portability-pristine-p5aplnvi",
+    "checks": {
+      "commands_exit_zero": true,
+      "golden_464": true,
+      "historical_R2_1930": true,
+      "accepted_Sweeper_history_identical": true,
+      "sweeper_attacks_110": true,
+      "baseline_V1_and_engine_tests": true,
+      "Maintainer_operations_78": true,
+      "Designer_59": true,
+      "offline_Groweer_36": true,
+      "accepted_engine_design_shadow_unchanged": true,
+      "prior_stage_artifacts_not_rewritten": true,
+      "lint_errors_zero": true,
+      "new_lint_warnings_zero": true,
+      "Next_accepted_16_3_1": true
+    },
+    "tests": {
+      "breakdown": {
+        "baseline_node": {
+          "passed": 204,
+          "total": 204
+        },
+        "maintainer_operations": {
+          "passed": 78,
+          "total": 78
+        },
+        "designer": {
+          "passed": 59,
+          "total": 59
+        },
+        "offline_challengers": {
+          "passed": 36,
+          "total": 36
+        },
+        "sweeper_attacks": {
+          "passed": 110,
+          "total": 110
+        }
+      },
+      "passed": 487,
+      "total": 487,
+      "note": "Golden/history are separate. Candidate excludes pending unrelated tests absent from HEAD; offline challengers do not enter canonical methodology."
+    },
+    "golden": {
+      "passed": 464,
+      "total": 464
+    },
+    "historicalR2": {
+      "passed": 1930,
+      "total": 1930,
+      "accepted_history_equal": true,
+      "point_in_time_OOS": false
+    },
+    "attacks": {
+      "passed": 110,
+      "total": 110
+    },
+    "nextVersions": {
+      "declared": "16.3.1",
+      "locked": "16.3.1",
+      "installed": "16.3.1"
+    },
+    "lint": {
+      "errors": 0,
+      "warnings": 18,
+      "newWarnings": 0,
+      "baselineCommit": "636cb73fb0fe4d2b28ad96cb7185f8c07d8f895b",
+      "baselineTree": "9f84c28f1b40c86cf574d5c8fb6f8022b9c091d9",
+      "movedWarnings": [
+        {
+          "path": "scripts/build-statistical-levels.mjs",
+          "rule": "@typescript-eslint/no-unused-vars",
+          "message": "'key' is assigned a value but never used.",
+          "unchanged_source_fragment": "for (const [key, value] of Object.entries(config.movingAverages)) {",
+          "parent_positions": [
+            {
+              "line": 959,
+              "column": 15
+            }
+          ],
+          "candidate_position": {
+            "line": 975,
+            "column": 15
+          }
+        },
+        {
+          "path": "scripts/build-statistical-levels.mjs",
+          "rule": "@typescript-eslint/no-unused-vars",
+          "message": "'yahooSymbol' is assigned a value but never used.",
+          "unchanged_source_fragment": "const { yahooSymbol, ...catalogAsset } = asset;",
+          "parent_positions": [
+            {
+              "line": 1062,
+              "column": 11
+            }
+          ],
+          "candidate_position": {
+            "line": 1078,
+            "column": 11
+          }
+        }
+      ]
+    },
+    "rawReport": "local/pristine-checks/verification.json",
+    "rawReportSha256": "114fd3b872ae9952a00851bd83785dc1191809c42944309fa159ff3d26e3f55a"
+  },
+  "portabilityVerification": {
+    "status": "PASS",
+    "tests": 32,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "harnessSha256": "5ba08e2d5bc88c9a11fb7ad5278fc30a5ede50e6e40fe9e552fec25b8dc1cf86",
+    "firstAttemptPreserved": true,
+    "harnessRepair": "PORT-HARNESS-001",
+    "rawReport": "local/portability-tests-retry1.json",
+    "rawReportSha256": "88081bab9862ef48c7d79e2f4cdfc832dad55512f21e1ef291a661a1324c7add"
+  },
+  "scopeOfDependencyVerdict": "No excluded-worktree dependency in the supported Regime release verification, retired entrypoints, fixtures/runtime/preview closure reviewed and exercised. Explicit fresh outputs and lockfile-reproduced tool dependencies are declared inputs; no claim of universal portability for unrelated offline research pipelines.",
+  "preservation": {
+    "productCriticalFilesUnchanged": 54,
+    "canonicalSourceFilesUnchanged": 47,
+    "excludedUserFilesPreserved": 177,
+    "priorShadowReadinessDocumentsPreserved": 16,
+    "packageManifestsChanged": false,
+    "newRuntimeDependencies": 0
+  },
+  "independentReview": {
+    "status": "PASS",
+    "materialFindings": [],
+    "reviewed": "Canonical coverage, disabled legacy/retry routes, lint identity/multiplicity, historical evidence/RC0 versus repaired-delta semantics."
+  },
+  "evidenceReferences": [
+    "input-manifest.json",
+    "repair-delta.json",
+    "retired-entrypoints.json",
+    "pristine-verification.json",
+    "test-portability.py",
+    "findings.json",
+    "files-changed.json"
+  ],
+  "nextBoundary": "Return the verified uncommitted delta to Control Tower for acceptance/freeze. Do not continue to calendar/live acquisition or shadow activation in this repair task.",
+  "finalPreservationAudit": {
+    "checkedAt": "2026-09-09T11:19:46.492875+00:00",
+    "initialFiles": 1212,
+    "unchangedInitialFiles": 1194,
+    "intentionallyModifiedVerificationOrDocumentationFiles": 18,
+    "unexpectedChanges": [],
+    "prior177ExcludedFilesPreserved": true,
+    "prior16ShadowReadinessDocumentsPreserved": true,
+    "rc0HeadAndTreeUnchanged": true,
+    "stagedPaths": [],
+    "originalWorktreeCleaned": false,
+    "productCodeDelta": 0
+  },
+  "pristineVerificationSha256": "861c6865386407a183f1f8f262abee53ff39ecde214776f0cb0f0046d52c29d0",
+  "historicalCommittedArtifactsPreserved": {
+    "json": 287,
+    "jsonGz": 18,
+    "total": 305
+  },
+  "observedDependencyAttack": {
+    "status": "PASS",
+    "forbiddenReads": 0,
+    "negativeControls": 11,
+    "originalProtectedPaths": 193,
+    "scope": "Supported Regime verification and isolated candidate; native/other processes beyond the Node/Python guards are explicitly outside instrumentation coverage."
+  },
+  "network": {
+    "observedOutboundNodeHttpAttempts": 12,
+    "globalAllTransportCount": "UNKNOWN",
+    "npmRegistryFetches": 0,
+    "explicitV2LiveCaptureFetches": 0
+  }
+}

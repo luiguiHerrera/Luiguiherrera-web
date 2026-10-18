@@ -1,0 +1,15 @@
+{
+  "schemaVersion": 1,
+  "sourceManifestSha256": "cdf788d6b141df2e6f53b9fb4caa8c49cd3a4255f1980887b9c6b1077d003915",
+  "files": {
+    "trust-policy.json": "f5b9e5f5476c3e282327a01b4759d473c96e0843f42becb901783d76212822dc",
+    "writer-policy.json": "eb1240ff80099a181f0a5bc3af7aebe4b9320add2c21d988253d94cb1cb380d0",
+    "bucket-policy.json": "23bf40aabcd8adba05beb9e5352bd1e50aa31335bff27c16e288f8d067ebf68b",
+    "create-bucket.json": "937273a03875e0e62433f78260ebbd11df659dcb7d05562a556df36e784238f4",
+    "public-access-block.json": "cb83e29507ea5301a4f6a4e8cb4111eb4bd72c14608f0685e1a66d27d9cc4386",
+    "versioning.json": "8aaf6c5639d887a190955cf718b92595e07b57aa6021134f0c2084e61ce2926e",
+    "encryption.json": "a9c6b7c21e5d7afccb1a97d12c9972f5f0432c4ebb5345ebf5041794bc1b342a"
+  },
+  "copyBytesEqual": true,
+  "provenance": "Previously accepted administrative probe policy package; hashes are immutable reference inputs, independent of its original location."
+}

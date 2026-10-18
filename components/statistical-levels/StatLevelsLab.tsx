@@ -1,6 +1,6 @@
 "use client";
-import { useMemo, useState } from 'react';
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { useEffect, useMemo, useRef, useState } from 'react';
+import { loadStatisticalLevelsRuntimeAsset, selectionFromRuntimeUrl, type RuntimeSnapshot, type LoadedRuntimeAsset } from '@/lib/statistical-levels/runtime-snapshot';
 import { AdvancedSeasonalityPanel } from './AdvancedSeasonalityPanel';
 import { AssetSelector } from './AssetSelector';
 import { AssetStatCard } from './AssetStatCard';
@@ -36,8 +36,63 @@ type Props = {
   stale: boolean;
 };
 
-export function StatLevelsLab({ asset, locale = 'es', manifest, seasonality, selection, stale }: Props) {
-  const router = useRouter(), pathname = usePathname(), searchParams = useSearchParams();
+export function StatLevelsLab({ initial, snapshot, locale = 'es', stale }: {initial:Omit<Props,'locale'|'stale'>;snapshot:RuntimeSnapshot;locale?:'es'|'en';stale:boolean}) {
+  const [current,setCurrent]=useState(initial);
+  const currentRef=useRef(current);
+  const intent=useRef(0);
+  const alive=useRef(true);
+  const cache=useRef(new Map<string,{asset:AssetStatRecord;seasonality:DailySeasonalityData}>([[snapshot.id+':'+initial.asset.ticker,{asset:initial.asset,seasonality:initial.seasonality}]]));
+  const [loadState,setLoadState]=useState<'ready'|'loading'|'error'>('ready');
+  const [runtimeCommit,setRuntimeCommit]=useState<LoadedRuntimeAsset|null>(null);
+  const navigateRef=useRef<(next:Partial<Props['selection']>,history:boolean)=>void>(()=>{});
+  function navigate(next:Partial<Props['selection']>,history=true){
+    const selection={...currentRef.current.selection,...next};
+    if(!initial.manifest.catalog.some(x=>x.ticker===selection.asset)||!initial.manifest.frequencies.includes(selection.frequency)||!initial.manifest.windows.includes(selection.window)){setLoadState('error');return;}
+    const sequence=++intent.current;
+    function commit(data:{asset:AssetStatRecord;seasonality:DailySeasonalityData},consumed:LoadedRuntimeAsset|null){
+      if(!alive.current||sequence!==intent.current)return;
+      if(history){
+        const url=new URL(window.location.href);
+        url.searchParams.delete('symbol');
+        for(const [key,value] of Object.entries(selection))url.searchParams.set(key,value);
+        window.history.pushState(null,'',url.pathname+url.search+url.hash);
+      }
+      const committed={...currentRef.current,...data,selection};
+      currentRef.current=committed;
+      setRuntimeCommit(consumed);
+      setCurrent(committed);
+      setLoadState('ready');
+    }
+    // Local controls use the committed payload, independently of cache residency.
+    // This also cancels an older intent without aborting its outstanding request.
+    if(selection.asset===currentRef.current.asset.ticker){
+      commit({asset:currentRef.current.asset,seasonality:currentRef.current.seasonality},null);
+      return;
+    }
+    const key=snapshot.id+':'+selection.asset;
+    const hit=cache.current.get(key);
+    if(hit){commit(hit,null);return;}
+    setLoadState('loading');
+    void loadStatisticalLevelsRuntimeAsset(selection.asset,snapshot).then(result=>{
+      // Four same-snapshot retrieval entries, oldest validated completion first.
+      // Current/latest assets need no pin: committed state owns local transitions.
+      cache.current.delete(key);cache.current.set(key,{asset:result.asset,seasonality:result.seasonality});
+      while(cache.current.size>4)cache.current.delete(cache.current.keys().next().value!);
+      commit(result,result);
+    }).catch(()=>{if(alive.current&&sequence===intent.current)setLoadState('error');});
+  }
+  useEffect(()=>{navigateRef.current=navigate;});
+  useEffect(()=>{
+    alive.current=true;
+    const pop=()=>{try{navigateRef.current(selectionFromRuntimeUrl(new URL(window.location.href),initial.manifest),false);}catch{setLoadState('error');}};
+    window.addEventListener('popstate',pop);
+    return()=>{alive.current=false;window.removeEventListener('popstate',pop);};
+  },[initial.manifest]);
+  return <StatLevelsView {...current} locale={locale} stale={stale} navigate={navigate} loadState={loadState} runtimeCommit={runtimeCommit} />;
+}
+
+function StatLevelsView({ asset, locale = 'es', manifest, seasonality, selection, stale, navigate, loadState, runtimeCommit }: Props & {navigate:(next:Partial<Props['selection']>)=>void;loadState:'ready'|'loading'|'error';runtimeCommit:LoadedRuntimeAsset|null}) {
+  void runtimeCommit; // The committed data owner retains the exact consumed payload object.
   const [query, setQuery] = useState('');
   const { frequency, window } = selection;
   const en = locale === 'en';
@@ -46,16 +101,10 @@ export function StatLevelsLab({ asset, locale = 'es', manifest, seasonality, sel
   const ticker = displayStatTicker(asset.ticker);
   const sample = extensionSample(metric, frequency);
   const longMa = data.longMovingAverageKey;
-  function navigate(next: Partial<Props['selection']>) {
-    const params = new URLSearchParams(searchParams.toString());
-    params.delete('symbol');
-    params.set('asset', next.asset ?? selection.asset);
-    params.set('frequency', next.frequency ?? frequency);
-    params.set('window', next.window ?? window);
-    router.push(`${pathname}?${params.toString()}`, { scroll: false });
-  }
   return <div className="sl-page">
     <header className="sl-heading"><p className="sl-eyebrow">{en ? 'Statistical levels' : 'Niveles estadísticos'}</p><h1>{en ? 'Where is this asset relative to its own history?' : '¿Dónde está este activo frente a su propia historia?'}</h1></header>
+    {loadState === 'loading' ? <p role="status">{en ? 'Loading selected asset…' : 'Cargando el activo seleccionado…'}</p> : null}
+    {loadState === 'error' ? <p role="alert">{en ? 'The asset could not be loaded. The previous labeled data is retained. Reload to obtain the current snapshot.' : 'No se pudo cargar el activo. Se mantienen los datos anteriores con su etiqueta. Recarga para obtener el snapshot actual.'}</p> : null}
     <div id="sl-controls" className="sl-controls">
       <AssetSelector catalog={manifest.catalog} locale={locale} query={query} selected={[asset.ticker]} setQuery={setQuery} selectAsset={ticker => navigate({ asset: ticker })} />
       <div className="sl-period"><p className="sl-control-label">{en ? 'Period' : 'Periodo'}</p><div className="sl-period-buttons">{manifest.windows.filter(item => item !== 'Full').map(item => <button key={item} type="button" data-window={item} aria-pressed={window === item} onClick={() => navigate({ window: item })}>{windowName(item, locale)}</button>)}</div></div>

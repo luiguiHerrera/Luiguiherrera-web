@@ -1,0 +1,336 @@
+{
+  "bucketConfigurationUnchanged": true,
+  "completedAt": "2026-09-10T09:35:25.001208+00:00",
+  "inputManifest": {
+    "authorizedMutations": [
+      "iam:create-role RegimeV2ShadowWriter",
+      "iam:put-role-policy RegimeV2ShadowWriterProductionOnly",
+      "s3:put-bucket-policy existingbucket additive productionprefix denials"
+    ],
+    "review": "Root exact scope review +195 offline authorization rows +18 tests PASS",
+    "reviewedAt": "2026-09-10T09:34:53.929430+00:00",
+    "sha256": {
+      "accepted-probe/bucket-policy.json": "23bf40aabcd8adba05beb9e5352bd1e50aa31335bff27c16e288f8d067ebf68b",
+      "accepted-probe/create-bucket.json": "937273a03875e0e62433f78260ebbd11df659dcb7d05562a556df36e784238f4",
+      "accepted-probe/encryption.json": "a9c6b7c21e5d7afccb1a97d12c9972f5f0432c4ebb5345ebf5041794bc1b342a",
+      "accepted-probe/manifest.json": "383d7df87f92526ecaada718027f33e058ba44b34184aadba88d18ad29248b1d",
+      "accepted-probe/matrix.json": "c0bcd03655f6c8573a64ce9a5ed56cd2a253acd77813f932a1797350124a3fd4",
+      "accepted-probe/public-access-block.json": "cb83e29507ea5301a4f6a4e8cb4111eb4bd72c14608f0685e1a66d27d9cc4386",
+      "accepted-probe/trust-policy.json": "f5b9e5f5476c3e282327a01b4759d473c96e0843f42becb901783d76212822dc",
+      "accepted-probe/versioning.json": "8aaf6c5639d887a190955cf718b92595e07b57aa6021134f0c2084e61ce2926e",
+      "accepted-probe/writer-policy.json": "eb1240ff80099a181f0a5bc3af7aebe4b9320add2c21d988253d94cb1cb380d0",
+      "apply-shadow-role.py": "973380d7abfcec7ad9cefb53f36e5e79db4517b8772546c8c61992f921c78024",
+      "baseline-readback.json": "d99ba32e45cbc67267d10fcd6d9aae511a5517e8a7c8fb0d41ada96c4caaaa34",
+      "policies/combined-bucket.json": "4bddc4a3f74b2b4612dedd2a89ac18572b70abf33100f9de21c1416efdb1464c",
+      "policies/shadow-trust.json": "f5b9e5f5476c3e282327a01b4759d473c96e0843f42becb901783d76212822dc",
+      "policies/shadow-writer.json": "5e6796304465ea4912efda67d412fc5ad1f945cdb67e9d1a985130b09c91f04b",
+      "policy-matrix-final.json": "97210a5b0360501ee2a3aba3c8acbf95247a05eb73ee1e0d1e5e228e7a5cf1fc",
+      "test-policies.py": "b8202c93b667f7c339ddcc91edd0d6bee6acc11a6a4b8bc3d8447356f8fa5729"
+    }
+  },
+  "mutationRequests": 3,
+  "newBuckets": 0,
+  "newExternalServices": 0,
+  "newIamRoles": 1,
+  "newOidcProviders": 0,
+  "oidcProviderUnchanged": true,
+  "operations": [
+    {
+      "completedAt": "2026-09-10T09:35:02.467574+00:00",
+      "mutation": false,
+      "operation": "get-caller-identity",
+      "sequence": 1,
+      "service": "sts",
+      "startedAt": "2026-09-10T09:35:01.259867+00:00"
+    },
+    {
+      "completedAt": "2026-09-10T09:35:03.125027+00:00",
+      "mutation": false,
+      "operation": "get-role",
+      "sequence": 2,
+      "service": "iam",
+      "startedAt": "2026-09-10T09:35:02.467996+00:00"
+    },
+    {
+      "completedAt": "2026-09-10T09:35:03.795824+00:00",
+      "mutation": false,
+      "operation": "get-role",
+      "sequence": 3,
+      "service": "iam",
+      "startedAt": "2026-09-10T09:35:03.125551+00:00"
+    },
+    {
+      "completedAt": "2026-09-10T09:35:04.435325+00:00",
+      "mutation": false,
+      "operation": "get-role-policy",
+      "sequence": 4,
+      "service": "iam",
+      "startedAt": "2026-09-10T09:35:03.796190+00:00"
+    },
+    {
+      "completedAt": "2026-09-10T09:35:05.018123+00:00",
+      "mutation": false,
+      "operation": "list-role-policies",
+      "sequence": 5,
+      "service": "iam",
+      "startedAt": "2026-09-10T09:35:04.435682+00:00"
+    },
+    {
+      "completedAt": "2026-09-10T09:35:05.659711+00:00",
+      "mutation": false,
+      "operation": "list-attached-role-policies",
+      "sequence": 6,
+      "service": "iam",
+      "startedAt": "2026-09-10T09:35:05.018396+00:00"
+    },
+    {
+      "completedAt": "2026-09-10T09:35:06.329837+00:00",
+      "mutation": false,
+      "operation": "get-bucket-policy",
+      "sequence": 7,
+      "service": "s3api",
+      "startedAt": "2026-09-10T09:35:05.660097+00:00"
+    },
+    {
+      "completedAt": "2026-09-10T09:35:06.984432+00:00",
+      "mutation": true,
+      "operation": "create-role",
+      "sequence": 8,
+      "service": "iam",
+      "startedAt": "2026-09-10T09:35:06.330615+00:00"
+    },
+    {
+      "completedAt": "2026-09-10T09:35:07.638369+00:00",
+      "mutation": false,
+      "operation": "get-role",
+      "sequence": 9,
+      "service": "iam",
+      "startedAt": "2026-09-10T09:35:06.984913+00:00"
+    },
+    {
+      "completedAt": "2026-09-10T09:35:08.219771+00:00",
+      "mutation": false,
+      "operation": "get-role-policy",
+      "sequence": 10,
+      "service": "iam",
+      "startedAt": "2026-09-10T09:35:07.638815+00:00"
+    },
+    {
+      "completedAt": "2026-09-10T09:35:08.814809+00:00",
+      "mutation": false,
+      "operation": "list-role-policies",
+      "sequence": 11,
+      "service": "iam",
+      "startedAt": "2026-09-10T09:35:08.220214+00:00"
+    },
+    {
+      "completedAt": "2026-09-10T09:35:09.471957+00:00",
+      "mutation": false,
+      "operation": "list-attached-role-policies",
+      "sequence": 12,
+      "service": "iam",
+      "startedAt": "2026-09-10T09:35:08.815234+00:00"
+    },
+    {
+      "completedAt": "2026-09-10T09:35:10.106006+00:00",
+      "mutation": false,
+      "operation": "get-bucket-policy",
+      "sequence": 13,
+      "service": "s3api",
+      "startedAt": "2026-09-10T09:35:09.472402+00:00"
+    },
+    {
+      "completedAt": "2026-09-10T09:35:10.781283+00:00",
+      "mutation": true,
+      "operation": "put-role-policy",
+      "sequence": 14,
+      "service": "iam",
+      "startedAt": "2026-09-10T09:35:10.106744+00:00"
+    },
+    {
+      "completedAt": "2026-09-10T09:35:11.407493+00:00",
+      "mutation": false,
+      "operation": "get-role",
+      "sequence": 15,
+      "service": "iam",
+      "startedAt": "2026-09-10T09:35:10.781742+00:00"
+    },
+    {
+      "completedAt": "2026-09-10T09:35:12.067363+00:00",
+      "mutation": false,
+      "operation": "get-role-policy",
+      "sequence": 16,
+      "service": "iam",
+      "startedAt": "2026-09-10T09:35:11.407992+00:00"
+    },
+    {
+      "completedAt": "2026-09-10T09:35:12.747939+00:00",
+      "mutation": false,
+      "operation": "list-role-policies",
+      "sequence": 17,
+      "service": "iam",
+      "startedAt": "2026-09-10T09:35:12.067816+00:00"
+    },
+    {
+      "completedAt": "2026-09-10T09:35:13.346552+00:00",
+      "mutation": false,
+      "operation": "list-attached-role-policies",
+      "sequence": 18,
+      "service": "iam",
+      "startedAt": "2026-09-10T09:35:12.748391+00:00"
+    },
+    {
+      "completedAt": "2026-09-10T09:35:14.017955+00:00",
+      "mutation": false,
+      "operation": "get-bucket-policy",
+      "sequence": 19,
+      "service": "s3api",
+      "startedAt": "2026-09-10T09:35:13.346921+00:00"
+    },
+    {
+      "completedAt": "2026-09-10T09:35:14.757895+00:00",
+      "mutation": true,
+      "operation": "put-bucket-policy",
+      "sequence": 20,
+      "service": "s3api",
+      "startedAt": "2026-09-10T09:35:14.018669+00:00"
+    },
+    {
+      "completedAt": "2026-09-10T09:35:15.388297+00:00",
+      "mutation": false,
+      "operation": "get-role",
+      "sequence": 21,
+      "service": "iam",
+      "startedAt": "2026-09-10T09:35:14.758334+00:00"
+    },
+    {
+      "completedAt": "2026-09-10T09:35:16.011904+00:00",
+      "mutation": false,
+      "operation": "get-role-policy",
+      "sequence": 22,
+      "service": "iam",
+      "startedAt": "2026-09-10T09:35:15.388783+00:00"
+    },
+    {
+      "completedAt": "2026-09-10T09:35:16.625175+00:00",
+      "mutation": false,
+      "operation": "list-role-policies",
+      "sequence": 23,
+      "service": "iam",
+      "startedAt": "2026-09-10T09:35:16.012368+00:00"
+    },
+    {
+      "completedAt": "2026-09-10T09:35:17.223574+00:00",
+      "mutation": false,
+      "operation": "list-attached-role-policies",
+      "sequence": 24,
+      "service": "iam",
+      "startedAt": "2026-09-10T09:35:16.625622+00:00"
+    },
+    {
+      "completedAt": "2026-09-10T09:35:17.884099+00:00",
+      "mutation": false,
+      "operation": "get-bucket-policy",
+      "sequence": 25,
+      "service": "s3api",
+      "startedAt": "2026-09-10T09:35:17.224032+00:00"
+    },
+    {
+      "completedAt": "2026-09-10T09:35:18.500511+00:00",
+      "mutation": false,
+      "operation": "get-role",
+      "sequence": 26,
+      "service": "iam",
+      "startedAt": "2026-09-10T09:35:17.884852+00:00"
+    },
+    {
+      "completedAt": "2026-09-10T09:35:19.111543+00:00",
+      "mutation": false,
+      "operation": "get-role-policy",
+      "sequence": 27,
+      "service": "iam",
+      "startedAt": "2026-09-10T09:35:18.500972+00:00"
+    },
+    {
+      "completedAt": "2026-09-10T09:35:19.755793+00:00",
+      "mutation": false,
+      "operation": "list-role-policies",
+      "sequence": 28,
+      "service": "iam",
+      "startedAt": "2026-09-10T09:35:19.111968+00:00"
+    },
+    {
+      "completedAt": "2026-09-10T09:35:20.454424+00:00",
+      "mutation": false,
+      "operation": "list-attached-role-policies",
+      "sequence": 29,
+      "service": "iam",
+      "startedAt": "2026-09-10T09:35:19.756235+00:00"
+    },
+    {
+      "completedAt": "2026-09-10T09:35:21.113448+00:00",
+      "mutation": false,
+      "operation": "get-bucket-versioning",
+      "sequence": 30,
+      "service": "s3api",
+      "startedAt": "2026-09-10T09:35:20.454948+00:00"
+    },
+    {
+      "completedAt": "2026-09-10T09:35:21.781120+00:00",
+      "mutation": false,
+      "operation": "get-public-access-block",
+      "sequence": 31,
+      "service": "s3api",
+      "startedAt": "2026-09-10T09:35:21.113942+00:00"
+    },
+    {
+      "completedAt": "2026-09-10T09:35:22.441095+00:00",
+      "mutation": false,
+      "operation": "get-bucket-encryption",
+      "sequence": 32,
+      "service": "s3api",
+      "startedAt": "2026-09-10T09:35:21.781671+00:00"
+    },
+    {
+      "completedAt": "2026-09-10T09:35:23.096881+00:00",
+      "mutation": false,
+      "operation": "get-bucket-ownership-controls",
+      "sequence": 33,
+      "service": "s3api",
+      "startedAt": "2026-09-10T09:35:22.442057+00:00"
+    },
+    {
+      "completedAt": "2026-09-10T09:35:23.732461+00:00",
+      "mutation": false,
+      "operation": "get-object-lock-configuration",
+      "sequence": 34,
+      "service": "s3api",
+      "startedAt": "2026-09-10T09:35:23.097379+00:00"
+    },
+    {
+      "completedAt": "2026-09-10T09:35:24.382743+00:00",
+      "mutation": false,
+      "operation": "get-bucket-lifecycle-configuration",
+      "sequence": 35,
+      "service": "s3api",
+      "startedAt": "2026-09-10T09:35:23.732894+00:00"
+    },
+    {
+      "completedAt": "2026-09-10T09:35:25.000678+00:00",
+      "mutation": false,
+      "operation": "get-open-id-connect-provider",
+      "sequence": 36,
+      "service": "iam",
+      "startedAt": "2026-09-10T09:35:24.383202+00:00"
+    }
+  ],
+  "policyName": "RegimeV2ShadowWriterProductionOnly",
+  "probeSecurityRegression": "PASS",
+  "productionBucketPolicy": "PASS",
+  "productionPrefixObjectOperations": 0,
+  "readRequests": 33,
+  "roleArn": "arn:aws:iam::732159826922:role/RegimeV2ShadowWriter",
+  "roleName": "RegimeV2ShadowWriter",
+  "shadowWriterOidcLive": "NOT_RUN",
+  "status": "PASS"
+}

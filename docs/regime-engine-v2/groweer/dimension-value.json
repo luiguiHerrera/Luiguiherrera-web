@@ -1,0 +1,3991 @@
+{
+  "version": "groweer-analysis/1.0.0",
+  "replay_class": "R2",
+  "point_in_time_oos_claim": false,
+  "canonical_engine_modified": false,
+  "protocol_sha256": "82a816ff496ed0a581e6b4ab45c571a7903dbd8f1ba921f04e7e088af2d7a583",
+  "caveat": "Post-selection descriptions on already inspected data. Agreement with C03 is not independent correctness or predictive utility.",
+  "concordance": {
+    "periods": {
+      "ALL": {
+        "sessions": 1930,
+        "eligible_sessions": 1930,
+        "adjacent_pairs": 1929,
+        "changes": 379,
+        "turnover": 0.1964748574390876,
+        "occupancy": {
+          "HIGH": 488,
+          "MEDIUM": 1317,
+          "LOW": 125
+        },
+        "duration": {
+          "n": 380,
+          "min": 1,
+          "median": 2.0,
+          "mean": 5.078947368421052,
+          "max": 43
+        },
+        "uncensored_duration": {
+          "n": 378,
+          "min": 1,
+          "median": 2.0,
+          "mean": 5.076719576719577,
+          "max": 43
+        },
+        "censored_runs": 2,
+        "duration_distribution": {
+          "1": 143,
+          "2": 61,
+          "3": 27,
+          "4": 23,
+          "5": 25,
+          "6": 23,
+          "7": 10,
+          "8": 8,
+          "9": 9,
+          "10": 2,
+          "11": 4,
+          "12": 5,
+          "13": 4,
+          "14": 4,
+          "15": 5,
+          "16": 2,
+          "17": 1,
+          "19": 1,
+          "20": 5,
+          "21": 1,
+          "23": 4,
+          "24": 1,
+          "25": 1,
+          "28": 2,
+          "29": 1,
+          "32": 1,
+          "33": 1,
+          "34": 1,
+          "35": 2,
+          "37": 1,
+          "43": 2
+        },
+        "stress_duration": {
+          "n": 0,
+          "min": null,
+          "median": null,
+          "mean": null,
+          "max": null
+        },
+        "flip_flops": {
+          "1": {
+            "count": 132,
+            "per_adjacent_pair": 0.06842923794712286
+          },
+          "2": {
+            "count": 188,
+            "per_adjacent_pair": 0.09745982374287196
+          },
+          "3": {
+            "count": 211,
+            "per_adjacent_pair": 0.10938310005184033
+          },
+          "5": {
+            "count": 252,
+            "per_adjacent_pair": 0.13063763608087092
+          }
+        },
+        "transition_matrix": {
+          "DEFENSIVE": {
+            "DEFENSIVE": 0,
+            "HIGH": 0,
+            "LOW": 0,
+            "MEDIUM": 0,
+            "RISK_ON_BROAD": 0,
+            "RISK_ON_SELECTIVE": 0,
+            "STRESS": 0,
+            "TRANSITION": 0
+          },
+          "HIGH": {
+            "DEFENSIVE": 0,
+            "HIGH": 355,
+            "LOW": 0,
+            "MEDIUM": 133,
+            "RISK_ON_BROAD": 0,
+            "RISK_ON_SELECTIVE": 0,
+            "STRESS": 0,
+            "TRANSITION": 0
+          },
+          "LOW": {
+            "DEFENSIVE": 0,
+            "HIGH": 2,
+            "LOW": 67,
+            "MEDIUM": 56,
+            "RISK_ON_BROAD": 0,
+            "RISK_ON_SELECTIVE": 0,
+            "STRESS": 0,
+            "TRANSITION": 0
+          },
+          "MEDIUM": {
+            "DEFENSIVE": 0,
+            "HIGH": 130,
+            "LOW": 58,
+            "MEDIUM": 1128,
+            "RISK_ON_BROAD": 0,
+            "RISK_ON_SELECTIVE": 0,
+            "STRESS": 0,
+            "TRANSITION": 0
+          },
+          "RISK_ON_BROAD": {
+            "DEFENSIVE": 0,
+            "HIGH": 0,
+            "LOW": 0,
+            "MEDIUM": 0,
+            "RISK_ON_BROAD": 0,
+            "RISK_ON_SELECTIVE": 0,
+            "STRESS": 0,
+            "TRANSITION": 0
+          },
+          "RISK_ON_SELECTIVE": {
+            "DEFENSIVE": 0,
+            "HIGH": 0,
+            "LOW": 0,
+            "MEDIUM": 0,
+            "RISK_ON_BROAD": 0,
+            "RISK_ON_SELECTIVE": 0,
+            "STRESS": 0,
+            "TRANSITION": 0
+          },
+          "STRESS": {
+            "DEFENSIVE": 0,
+            "HIGH": 0,
+            "LOW": 0,
+            "MEDIUM": 0,
+            "RISK_ON_BROAD": 0,
+            "RISK_ON_SELECTIVE": 0,
+            "STRESS": 0,
+            "TRANSITION": 0
+          },
+          "TRANSITION": {
+            "DEFENSIVE": 0,
+            "HIGH": 0,
+            "LOW": 0,
+            "MEDIUM": 0,
+            "RISK_ON_BROAD": 0,
+            "RISK_ON_SELECTIVE": 0,
+            "STRESS": 0,
+            "TRANSITION": 0
+          }
+        }
+      },
+      "F3_TRAIN": {
+        "sessions": 1258,
+        "eligible_sessions": 1258,
+        "adjacent_pairs": 1257,
+        "changes": 242,
+        "turnover": 0.19252187748607796,
+        "occupancy": {
+          "HIGH": 353,
+          "MEDIUM": 819,
+          "LOW": 86
+        },
+        "duration": {
+          "n": 243,
+          "min": 1,
+          "median": 2,
+          "mean": 5.176954732510288,
+          "max": 43
+        },
+        "uncensored_duration": {
+          "n": 241,
+          "min": 1,
+          "median": 2,
+          "mean": 5.199170124481328,
+          "max": 43
+        },
+        "censored_runs": 2,
+        "duration_distribution": {
+          "1": 95,
+          "2": 35,
+          "3": 18,
+          "4": 17,
+          "5": 13,
+          "6": 17,
+          "7": 6,
+          "8": 6,
+          "9": 4,
+          "11": 3,
+          "12": 3,
+          "13": 2,
+          "14": 3,
+          "15": 3,
+          "16": 1,
+          "19": 1,
+          "20": 4,
+          "23": 2,
+          "24": 1,
+          "25": 1,
+          "29": 1,
+          "32": 1,
+          "33": 1,
+          "34": 1,
+          "35": 1,
+          "37": 1,
+          "43": 2
+        },
+        "stress_duration": {
+          "n": 0,
+          "min": null,
+          "median": null,
+          "mean": null,
+          "max": null
+        },
+        "flip_flops": {
+          "1": {
+            "count": 85,
+            "per_adjacent_pair": 0.06762132060461416
+          },
+          "2": {
+            "count": 117,
+            "per_adjacent_pair": 0.09307875894988067
+          },
+          "3": {
+            "count": 132,
+            "per_adjacent_pair": 0.10501193317422435
+          },
+          "5": {
+            "count": 157,
+            "per_adjacent_pair": 0.1249005568814638
+          }
+        },
+        "transition_matrix": {
+          "DEFENSIVE": {
+            "DEFENSIVE": 0,
+            "HIGH": 0,
+            "LOW": 0,
+            "MEDIUM": 0,
+            "RISK_ON_BROAD": 0,
+            "RISK_ON_SELECTIVE": 0,
+            "STRESS": 0,
+            "TRANSITION": 0
+          },
+          "HIGH": {
+            "DEFENSIVE": 0,
+            "HIGH": 272,
+            "LOW": 0,
+            "MEDIUM": 81,
+            "RISK_ON_BROAD": 0,
+            "RISK_ON_SELECTIVE": 0,
+            "STRESS": 0,
+            "TRANSITION": 0
+          },
+          "LOW": {
+            "DEFENSIVE": 0,
+            "HIGH": 1,
+            "LOW": 45,
+            "MEDIUM": 40,
+            "RISK_ON_BROAD": 0,
+            "RISK_ON_SELECTIVE": 0,
+            "STRESS": 0,
+            "TRANSITION": 0
+          },
+          "MEDIUM": {
+            "DEFENSIVE": 0,
+            "HIGH": 79,
+            "LOW": 41,
+            "MEDIUM": 698,
+            "RISK_ON_BROAD": 0,
+            "RISK_ON_SELECTIVE": 0,
+            "STRESS": 0,
+            "TRANSITION": 0
+          },
+          "RISK_ON_BROAD": {
+            "DEFENSIVE": 0,
+            "HIGH": 0,
+            "LOW": 0,
+            "MEDIUM": 0,
+            "RISK_ON_BROAD": 0,
+            "RISK_ON_SELECTIVE": 0,
+            "STRESS": 0,
+            "TRANSITION": 0
+          },
+          "RISK_ON_SELECTIVE": {
+            "DEFENSIVE": 0,
+            "HIGH": 0,
+            "LOW": 0,
+            "MEDIUM": 0,
+            "RISK_ON_BROAD": 0,
+            "RISK_ON_SELECTIVE": 0,
+            "STRESS": 0,
+            "TRANSITION": 0
+          },
+          "STRESS": {
+            "DEFENSIVE": 0,
+            "HIGH": 0,
+            "LOW": 0,
+            "MEDIUM": 0,
+            "RISK_ON_BROAD": 0,
+            "RISK_ON_SELECTIVE": 0,
+            "STRESS": 0,
+            "TRANSITION": 0
+          },
+          "TRANSITION": {
+            "DEFENSIVE": 0,
+            "HIGH": 0,
+            "LOW": 0,
+            "MEDIUM": 0,
+            "RISK_ON_BROAD": 0,
+            "RISK_ON_SELECTIVE": 0,
+            "STRESS": 0,
+            "TRANSITION": 0
+          }
+        }
+      },
+      "F3_VALIDATION": {
+        "sessions": 252,
+        "eligible_sessions": 252,
+        "adjacent_pairs": 251,
+        "changes": 43,
+        "turnover": 0.17131474103585656,
+        "occupancy": {
+          "LOW": 17,
+          "MEDIUM": 198,
+          "HIGH": 37
+        },
+        "duration": {
+          "n": 44,
+          "min": 1,
+          "median": 2.5,
+          "mean": 5.7272727272727275,
+          "max": 35
+        },
+        "uncensored_duration": {
+          "n": 42,
+          "min": 1,
+          "median": 2.5,
+          "mean": 5.476190476190476,
+          "max": 35
+        },
+        "censored_runs": 2,
+        "duration_distribution": {
+          "1": 14,
+          "2": 8,
+          "3": 4,
+          "4": 2,
+          "5": 4,
+          "6": 4,
+          "9": 1,
+          "12": 1,
+          "15": 1,
+          "16": 1,
+          "20": 1,
+          "23": 1,
+          "28": 1,
+          "35": 1
+        },
+        "stress_duration": {
+          "n": 0,
+          "min": null,
+          "median": null,
+          "mean": null,
+          "max": null
+        },
+        "flip_flops": {
+          "1": {
+            "count": 14,
+            "per_adjacent_pair": 0.055776892430278883
+          },
+          "2": {
+            "count": 21,
+            "per_adjacent_pair": 0.08366533864541832
+          },
+          "3": {
+            "count": 25,
+            "per_adjacent_pair": 0.099601593625498
+          },
+          "5": {
+            "count": 30,
+            "per_adjacent_pair": 0.11952191235059761
+          }
+        },
+        "transition_matrix": {
+          "DEFENSIVE": {
+            "DEFENSIVE": 0,
+            "HIGH": 0,
+            "LOW": 0,
+            "MEDIUM": 0,
+            "RISK_ON_BROAD": 0,
+            "RISK_ON_SELECTIVE": 0,
+            "STRESS": 0,
+            "TRANSITION": 0
+          },
+          "HIGH": {
+            "DEFENSIVE": 0,
+            "HIGH": 24,
+            "LOW": 0,
+            "MEDIUM": 13,
+            "RISK_ON_BROAD": 0,
+            "RISK_ON_SELECTIVE": 0,
+            "STRESS": 0,
+            "TRANSITION": 0
+          },
+          "LOW": {
+            "DEFENSIVE": 0,
+            "HIGH": 0,
+            "LOW": 8,
+            "MEDIUM": 9,
+            "RISK_ON_BROAD": 0,
+            "RISK_ON_SELECTIVE": 0,
+            "STRESS": 0,
+            "TRANSITION": 0
+          },
+          "MEDIUM": {
+            "DEFENSIVE": 0,
+            "HIGH": 13,
+            "LOW": 8,
+            "MEDIUM": 176,
+            "RISK_ON_BROAD": 0,
+            "RISK_ON_SELECTIVE": 0,
+            "STRESS": 0,
+            "TRANSITION": 0
+          },
+          "RISK_ON_BROAD": {
+            "DEFENSIVE": 0,
+            "HIGH": 0,
+            "LOW": 0,
+            "MEDIUM": 0,
+            "RISK_ON_BROAD": 0,
+            "RISK_ON_SELECTIVE": 0,
+            "STRESS": 0,
+            "TRANSITION": 0
+          },
+          "RISK_ON_SELECTIVE": {
+            "DEFENSIVE": 0,
+            "HIGH": 0,
+            "LOW": 0,
+            "MEDIUM": 0,
+            "RISK_ON_BROAD": 0,
+            "RISK_ON_SELECTIVE": 0,
+            "STRESS": 0,
+            "TRANSITION": 0
+          },
+          "STRESS": {
+            "DEFENSIVE": 0,
+            "HIGH": 0,
+            "LOW": 0,
+            "MEDIUM": 0,
+            "RISK_ON_BROAD": 0,
+            "RISK_ON_SELECTIVE": 0,
+            "STRESS": 0,
+            "TRANSITION": 0
+          },
+          "TRANSITION": {
+            "DEFENSIVE": 0,
+            "HIGH": 0,
+            "LOW": 0,
+            "MEDIUM": 0,
+            "RISK_ON_BROAD": 0,
+            "RISK_ON_SELECTIVE": 0,
+            "STRESS": 0,
+            "TRANSITION": 0
+          }
+        }
+      },
+      "F3_TEST": {
+        "sessions": 420,
+        "eligible_sessions": 420,
+        "adjacent_pairs": 419,
+        "changes": 93,
+        "turnover": 0.22195704057279236,
+        "occupancy": {
+          "MEDIUM": 300,
+          "LOW": 22,
+          "HIGH": 98
+        },
+        "duration": {
+          "n": 94,
+          "min": 1,
+          "median": 2.0,
+          "mean": 4.468085106382978,
+          "max": 23
+        },
+        "uncensored_duration": {
+          "n": 92,
+          "min": 1,
+          "median": 2.0,
+          "mean": 4.380434782608695,
+          "max": 23
+        },
+        "censored_runs": 2,
+        "duration_distribution": {
+          "1": 34,
+          "2": 18,
+          "3": 5,
+          "4": 4,
+          "5": 8,
+          "6": 2,
+          "7": 4,
+          "8": 3,
+          "9": 4,
+          "10": 2,
+          "11": 1,
+          "12": 1,
+          "13": 2,
+          "14": 1,
+          "15": 1,
+          "17": 1,
+          "20": 1,
+          "21": 1,
+          "23": 1
+        },
+        "stress_duration": {
+          "n": 0,
+          "min": null,
+          "median": null,
+          "mean": null,
+          "max": null
+        },
+        "flip_flops": {
+          "1": {
+            "count": 33,
+            "per_adjacent_pair": 0.07875894988066826
+          },
+          "2": {
+            "count": 49,
+            "per_adjacent_pair": 0.11694510739856802
+          },
+          "3": {
+            "count": 53,
+            "per_adjacent_pair": 0.12649164677804295
+          },
+          "5": {
+            "count": 64,
+            "per_adjacent_pair": 0.15274463007159905
+          }
+        },
+        "transition_matrix": {
+          "DEFENSIVE": {
+            "DEFENSIVE": 0,
+            "HIGH": 0,
+            "LOW": 0,
+            "MEDIUM": 0,
+            "RISK_ON_BROAD": 0,
+            "RISK_ON_SELECTIVE": 0,
+            "STRESS": 0,
+            "TRANSITION": 0
+          },
+          "HIGH": {
+            "DEFENSIVE": 0,
+            "HIGH": 59,
+            "LOW": 0,
+            "MEDIUM": 39,
+            "RISK_ON_BROAD": 0,
+            "RISK_ON_SELECTIVE": 0,
+            "STRESS": 0,
+            "TRANSITION": 0
+          },
+          "LOW": {
+            "DEFENSIVE": 0,
+            "HIGH": 1,
+            "LOW": 14,
+            "MEDIUM": 7,
+            "RISK_ON_BROAD": 0,
+            "RISK_ON_SELECTIVE": 0,
+            "STRESS": 0,
+            "TRANSITION": 0
+          },
+          "MEDIUM": {
+            "DEFENSIVE": 0,
+            "HIGH": 38,
+            "LOW": 8,
+            "MEDIUM": 253,
+            "RISK_ON_BROAD": 0,
+            "RISK_ON_SELECTIVE": 0,
+            "STRESS": 0,
+            "TRANSITION": 0
+          },
+          "RISK_ON_BROAD": {
+            "DEFENSIVE": 0,
+            "HIGH": 0,
+            "LOW": 0,
+            "MEDIUM": 0,
+            "RISK_ON_BROAD": 0,
+            "RISK_ON_SELECTIVE": 0,
+            "STRESS": 0,
+            "TRANSITION": 0
+          },
+          "RISK_ON_SELECTIVE": {
+            "DEFENSIVE": 0,
+            "HIGH": 0,
+            "LOW": 0,
+            "MEDIUM": 0,
+            "RISK_ON_BROAD": 0,
+            "RISK_ON_SELECTIVE": 0,
+            "STRESS": 0,
+            "TRANSITION": 0
+          },
+          "STRESS": {
+            "DEFENSIVE": 0,
+            "HIGH": 0,
+            "LOW": 0,
+            "MEDIUM": 0,
+            "RISK_ON_BROAD": 0,
+            "RISK_ON_SELECTIVE": 0,
+            "STRESS": 0,
+            "TRANSITION": 0
+          },
+          "TRANSITION": {
+            "DEFENSIVE": 0,
+            "HIGH": 0,
+            "LOW": 0,
+            "MEDIUM": 0,
+            "RISK_ON_BROAD": 0,
+            "RISK_ON_SELECTIVE": 0,
+            "STRESS": 0,
+            "TRANSITION": 0
+          }
+        }
+      },
+      "2019": {
+        "sessions": 252,
+        "eligible_sessions": 252,
+        "adjacent_pairs": 251,
+        "changes": 63,
+        "turnover": 0.250996015936255,
+        "occupancy": {
+          "HIGH": 56,
+          "MEDIUM": 154,
+          "LOW": 42
+        },
+        "duration": {
+          "n": 64,
+          "min": 1,
+          "median": 3.0,
+          "mean": 3.9375,
+          "max": 13
+        },
+        "uncensored_duration": {
+          "n": 62,
+          "min": 1,
+          "median": 3.0,
+          "mean": 4,
+          "max": 13
+        },
+        "censored_runs": 2,
+        "duration_distribution": {
+          "1": 19,
+          "2": 12,
+          "3": 6,
+          "4": 6,
+          "5": 4,
+          "6": 6,
+          "7": 2,
+          "8": 2,
+          "9": 1,
+          "11": 2,
+          "12": 2,
+          "13": 2
+        },
+        "stress_duration": {
+          "n": 0,
+          "min": null,
+          "median": null,
+          "mean": null,
+          "max": null
+        },
+        "flip_flops": {
+          "1": {
+            "count": 18,
+            "per_adjacent_pair": 0.07171314741035857
+          },
+          "2": {
+            "count": 27,
+            "per_adjacent_pair": 0.10756972111553785
+          },
+          "3": {
+            "count": 32,
+            "per_adjacent_pair": 0.12749003984063745
+          },
+          "5": {
+            "count": 40,
+            "per_adjacent_pair": 0.1593625498007968
+          }
+        },
+        "transition_matrix": {
+          "DEFENSIVE": {
+            "DEFENSIVE": 0,
+            "HIGH": 0,
+            "LOW": 0,
+            "MEDIUM": 0,
+            "RISK_ON_BROAD": 0,
+            "RISK_ON_SELECTIVE": 0,
+            "STRESS": 0,
+            "TRANSITION": 0
+          },
+          "HIGH": {
+            "DEFENSIVE": 0,
+            "HIGH": 37,
+            "LOW": 0,
+            "MEDIUM": 19,
+            "RISK_ON_BROAD": 0,
+            "RISK_ON_SELECTIVE": 0,
+            "STRESS": 0,
+            "TRANSITION": 0
+          },
+          "LOW": {
+            "DEFENSIVE": 0,
+            "HIGH": 0,
+            "LOW": 29,
+            "MEDIUM": 13,
+            "RISK_ON_BROAD": 0,
+            "RISK_ON_SELECTIVE": 0,
+            "STRESS": 0,
+            "TRANSITION": 0
+          },
+          "MEDIUM": {
+            "DEFENSIVE": 0,
+            "HIGH": 18,
+            "LOW": 13,
+            "MEDIUM": 122,
+            "RISK_ON_BROAD": 0,
+            "RISK_ON_SELECTIVE": 0,
+            "STRESS": 0,
+            "TRANSITION": 0
+          },
+          "RISK_ON_BROAD": {
+            "DEFENSIVE": 0,
+            "HIGH": 0,
+            "LOW": 0,
+            "MEDIUM": 0,
+            "RISK_ON_BROAD": 0,
+            "RISK_ON_SELECTIVE": 0,
+            "STRESS": 0,
+            "TRANSITION": 0
+          },
+          "RISK_ON_SELECTIVE": {
+            "DEFENSIVE": 0,
+            "HIGH": 0,
+            "LOW": 0,
+            "MEDIUM": 0,
+            "RISK_ON_BROAD": 0,
+            "RISK_ON_SELECTIVE": 0,
+            "STRESS": 0,
+            "TRANSITION": 0
+          },
+          "STRESS": {
+            "DEFENSIVE": 0,
+            "HIGH": 0,
+            "LOW": 0,
+            "MEDIUM": 0,
+            "RISK_ON_BROAD": 0,
+            "RISK_ON_SELECTIVE": 0,
+            "STRESS": 0,
+            "TRANSITION": 0
+          },
+          "TRANSITION": {
+            "DEFENSIVE": 0,
+            "HIGH": 0,
+            "LOW": 0,
+            "MEDIUM": 0,
+            "RISK_ON_BROAD": 0,
+            "RISK_ON_SELECTIVE": 0,
+            "STRESS": 0,
+            "TRANSITION": 0
+          }
+        }
+      },
+      "2020": {
+        "sessions": 253,
+        "eligible_sessions": 253,
+        "adjacent_pairs": 252,
+        "changes": 42,
+        "turnover": 0.16666666666666666,
+        "occupancy": {
+          "MEDIUM": 133,
+          "HIGH": 109,
+          "LOW": 11
+        },
+        "duration": {
+          "n": 43,
+          "min": 1,
+          "median": 3,
+          "mean": 5.883720930232558,
+          "max": 33
+        },
+        "uncensored_duration": {
+          "n": 41,
+          "min": 1,
+          "median": 2,
+          "mean": 5.878048780487805,
+          "max": 33
+        },
+        "censored_runs": 2,
+        "duration_distribution": {
+          "1": 15,
+          "2": 6,
+          "3": 2,
+          "4": 2,
+          "5": 5,
+          "6": 2,
+          "7": 2,
+          "8": 2,
+          "14": 1,
+          "15": 2,
+          "20": 1,
+          "23": 1,
+          "25": 1,
+          "33": 1
+        },
+        "stress_duration": {
+          "n": 0,
+          "min": null,
+          "median": null,
+          "mean": null,
+          "max": null
+        },
+        "flip_flops": {
+          "1": {
+            "count": 12,
+            "per_adjacent_pair": 0.047619047619047616
+          },
+          "2": {
+            "count": 17,
+            "per_adjacent_pair": 0.06746031746031746
+          },
+          "3": {
+            "count": 19,
+            "per_adjacent_pair": 0.07539682539682539
+          },
+          "5": {
+            "count": 25,
+            "per_adjacent_pair": 0.0992063492063492
+          }
+        },
+        "transition_matrix": {
+          "DEFENSIVE": {
+            "DEFENSIVE": 0,
+            "HIGH": 0,
+            "LOW": 0,
+            "MEDIUM": 0,
+            "RISK_ON_BROAD": 0,
+            "RISK_ON_SELECTIVE": 0,
+            "STRESS": 0,
+            "TRANSITION": 0
+          },
+          "HIGH": {
+            "DEFENSIVE": 0,
+            "HIGH": 95,
+            "LOW": 0,
+            "MEDIUM": 14,
+            "RISK_ON_BROAD": 0,
+            "RISK_ON_SELECTIVE": 0,
+            "STRESS": 0,
+            "TRANSITION": 0
+          },
+          "LOW": {
+            "DEFENSIVE": 0,
+            "HIGH": 0,
+            "LOW": 4,
+            "MEDIUM": 7,
+            "RISK_ON_BROAD": 0,
+            "RISK_ON_SELECTIVE": 0,
+            "STRESS": 0,
+            "TRANSITION": 0
+          },
+          "MEDIUM": {
+            "DEFENSIVE": 0,
+            "HIGH": 14,
+            "LOW": 7,
+            "MEDIUM": 111,
+            "RISK_ON_BROAD": 0,
+            "RISK_ON_SELECTIVE": 0,
+            "STRESS": 0,
+            "TRANSITION": 0
+          },
+          "RISK_ON_BROAD": {
+            "DEFENSIVE": 0,
+            "HIGH": 0,
+            "LOW": 0,
+            "MEDIUM": 0,
+            "RISK_ON_BROAD": 0,
+            "RISK_ON_SELECTIVE": 0,
+            "STRESS": 0,
+            "TRANSITION": 0
+          },
+          "RISK_ON_SELECTIVE": {
+            "DEFENSIVE": 0,
+            "HIGH": 0,
+            "LOW": 0,
+            "MEDIUM": 0,
+            "RISK_ON_BROAD": 0,
+            "RISK_ON_SELECTIVE": 0,
+            "STRESS": 0,
+            "TRANSITION": 0
+          },
+          "STRESS": {
+            "DEFENSIVE": 0,
+            "HIGH": 0,
+            "LOW": 0,
+            "MEDIUM": 0,
+            "RISK_ON_BROAD": 0,
+            "RISK_ON_SELECTIVE": 0,
+            "STRESS": 0,
+            "TRANSITION": 0
+          },
+          "TRANSITION": {
+            "DEFENSIVE": 0,
+            "HIGH": 0,
+            "LOW": 0,
+            "MEDIUM": 0,
+            "RISK_ON_BROAD": 0,
+            "RISK_ON_SELECTIVE": 0,
+            "STRESS": 0,
+            "TRANSITION": 0
+          }
+        }
+      },
+      "2021": {
+        "sessions": 252,
+        "eligible_sessions": 252,
+        "adjacent_pairs": 251,
+        "changes": 52,
+        "turnover": 0.20717131474103587,
+        "occupancy": {
+          "MEDIUM": 203,
+          "HIGH": 31,
+          "LOW": 18
+        },
+        "duration": {
+          "n": 53,
+          "min": 1,
+          "median": 1,
+          "mean": 4.754716981132075,
+          "max": 43
+        },
+        "uncensored_duration": {
+          "n": 51,
+          "min": 1,
+          "median": 1,
+          "mean": 4.352941176470588,
+          "max": 43
+        },
+        "censored_runs": 2,
+        "duration_distribution": {
+          "1": 27,
+          "2": 9,
+          "3": 1,
+          "4": 4,
+          "5": 3,
+          "6": 1,
+          "7": 1,
+          "8": 1,
+          "9": 1,
+          "15": 1,
+          "20": 1,
+          "28": 1,
+          "37": 1,
+          "43": 1
+        },
+        "stress_duration": {
+          "n": 0,
+          "min": null,
+          "median": null,
+          "mean": null,
+          "max": null
+        },
+        "flip_flops": {
+          "1": {
+            "count": 24,
+            "per_adjacent_pair": 0.09561752988047809
+          },
+          "2": {
+            "count": 32,
+            "per_adjacent_pair": 0.12749003984063745
+          },
+          "3": {
+            "count": 33,
+            "per_adjacent_pair": 0.13147410358565736
+          },
+          "5": {
+            "count": 38,
+            "per_adjacent_pair": 0.15139442231075698
+          }
+        },
+        "transition_matrix": {
+          "DEFENSIVE": {
+            "DEFENSIVE": 0,
+            "HIGH": 0,
+            "LOW": 0,
+            "MEDIUM": 0,
+            "RISK_ON_BROAD": 0,
+            "RISK_ON_SELECTIVE": 0,
+            "STRESS": 0,
+            "TRANSITION": 0
+          },
+          "HIGH": {
+            "DEFENSIVE": 0,
+            "HIGH": 15,
+            "LOW": 0,
+            "MEDIUM": 16,
+            "RISK_ON_BROAD": 0,
+            "RISK_ON_SELECTIVE": 0,
+            "STRESS": 0,
+            "TRANSITION": 0
+          },
+          "LOW": {
+            "DEFENSIVE": 0,
+            "HIGH": 0,
+            "LOW": 8,
+            "MEDIUM": 10,
+            "RISK_ON_BROAD": 0,
+            "RISK_ON_SELECTIVE": 0,
+            "STRESS": 0,
+            "TRANSITION": 0
+          },
+          "MEDIUM": {
+            "DEFENSIVE": 0,
+            "HIGH": 16,
+            "LOW": 10,
+            "MEDIUM": 176,
+            "RISK_ON_BROAD": 0,
+            "RISK_ON_SELECTIVE": 0,
+            "STRESS": 0,
+            "TRANSITION": 0
+          },
+          "RISK_ON_BROAD": {
+            "DEFENSIVE": 0,
+            "HIGH": 0,
+            "LOW": 0,
+            "MEDIUM": 0,
+            "RISK_ON_BROAD": 0,
+            "RISK_ON_SELECTIVE": 0,
+            "STRESS": 0,
+            "TRANSITION": 0
+          },
+          "RISK_ON_SELECTIVE": {
+            "DEFENSIVE": 0,
+            "HIGH": 0,
+            "LOW": 0,
+            "MEDIUM": 0,
+            "RISK_ON_BROAD": 0,
+            "RISK_ON_SELECTIVE": 0,
+            "STRESS": 0,
+            "TRANSITION": 0
+          },
+          "STRESS": {
+            "DEFENSIVE": 0,
+            "HIGH": 0,
+            "LOW": 0,
+            "MEDIUM": 0,
+            "RISK_ON_BROAD": 0,
+            "RISK_ON_SELECTIVE": 0,
+            "STRESS": 0,
+            "TRANSITION": 0
+          },
+          "TRANSITION": {
+            "DEFENSIVE": 0,
+            "HIGH": 0,
+            "LOW": 0,
+            "MEDIUM": 0,
+            "RISK_ON_BROAD": 0,
+            "RISK_ON_SELECTIVE": 0,
+            "STRESS": 0,
+            "TRANSITION": 0
+          }
+        }
+      },
+      "2022": {
+        "sessions": 251,
+        "eligible_sessions": 251,
+        "adjacent_pairs": 250,
+        "changes": 38,
+        "turnover": 0.152,
+        "occupancy": {
+          "LOW": 3,
+          "MEDIUM": 138,
+          "HIGH": 110
+        },
+        "duration": {
+          "n": 39,
+          "min": 1,
+          "median": 3,
+          "mean": 6.435897435897436,
+          "max": 43
+        },
+        "uncensored_duration": {
+          "n": 37,
+          "min": 1,
+          "median": 3,
+          "mean": 6.405405405405405,
+          "max": 43
+        },
+        "censored_runs": 2,
+        "duration_distribution": {
+          "1": 14,
+          "2": 5,
+          "3": 3,
+          "4": 2,
+          "5": 1,
+          "6": 4,
+          "7": 1,
+          "8": 1,
+          "12": 1,
+          "13": 1,
+          "14": 1,
+          "16": 1,
+          "19": 1,
+          "20": 1,
+          "29": 1,
+          "43": 1
+        },
+        "stress_duration": {
+          "n": 0,
+          "min": null,
+          "median": null,
+          "mean": null,
+          "max": null
+        },
+        "flip_flops": {
+          "1": {
+            "count": 11,
+            "per_adjacent_pair": 0.044
+          },
+          "2": {
+            "count": 16,
+            "per_adjacent_pair": 0.064
+          },
+          "3": {
+            "count": 18,
+            "per_adjacent_pair": 0.072
+          },
+          "5": {
+            "count": 21,
+            "per_adjacent_pair": 0.084
+          }
+        },
+        "transition_matrix": {
+          "DEFENSIVE": {
+            "DEFENSIVE": 0,
+            "HIGH": 0,
+            "LOW": 0,
+            "MEDIUM": 0,
+            "RISK_ON_BROAD": 0,
+            "RISK_ON_SELECTIVE": 0,
+            "STRESS": 0,
+            "TRANSITION": 0
+          },
+          "HIGH": {
+            "DEFENSIVE": 0,
+            "HIGH": 93,
+            "LOW": 0,
+            "MEDIUM": 17,
+            "RISK_ON_BROAD": 0,
+            "RISK_ON_SELECTIVE": 0,
+            "STRESS": 0,
+            "TRANSITION": 0
+          },
+          "LOW": {
+            "DEFENSIVE": 0,
+            "HIGH": 1,
+            "LOW": 0,
+            "MEDIUM": 2,
+            "RISK_ON_BROAD": 0,
+            "RISK_ON_SELECTIVE": 0,
+            "STRESS": 0,
+            "TRANSITION": 0
+          },
+          "MEDIUM": {
+            "DEFENSIVE": 0,
+            "HIGH": 16,
+            "LOW": 2,
+            "MEDIUM": 119,
+            "RISK_ON_BROAD": 0,
+            "RISK_ON_SELECTIVE": 0,
+            "STRESS": 0,
+            "TRANSITION": 0
+          },
+          "RISK_ON_BROAD": {
+            "DEFENSIVE": 0,
+            "HIGH": 0,
+            "LOW": 0,
+            "MEDIUM": 0,
+            "RISK_ON_BROAD": 0,
+            "RISK_ON_SELECTIVE": 0,
+            "STRESS": 0,
+            "TRANSITION": 0
+          },
+          "RISK_ON_SELECTIVE": {
+            "DEFENSIVE": 0,
+            "HIGH": 0,
+            "LOW": 0,
+            "MEDIUM": 0,
+            "RISK_ON_BROAD": 0,
+            "RISK_ON_SELECTIVE": 0,
+            "STRESS": 0,
+            "TRANSITION": 0
+          },
+          "STRESS": {
+            "DEFENSIVE": 0,
+            "HIGH": 0,
+            "LOW": 0,
+            "MEDIUM": 0,
+            "RISK_ON_BROAD": 0,
+            "RISK_ON_SELECTIVE": 0,
+            "STRESS": 0,
+            "TRANSITION": 0
+          },
+          "TRANSITION": {
+            "DEFENSIVE": 0,
+            "HIGH": 0,
+            "LOW": 0,
+            "MEDIUM": 0,
+            "RISK_ON_BROAD": 0,
+            "RISK_ON_SELECTIVE": 0,
+            "STRESS": 0,
+            "TRANSITION": 0
+          }
+        }
+      },
+      "2023": {
+        "sessions": 250,
+        "eligible_sessions": 250,
+        "adjacent_pairs": 249,
+        "changes": 46,
+        "turnover": 0.18473895582329317,
+        "occupancy": {
+          "MEDIUM": 191,
+          "LOW": 12,
+          "HIGH": 47
+        },
+        "duration": {
+          "n": 47,
+          "min": 1,
+          "median": 2,
+          "mean": 5.319148936170213,
+          "max": 34
+        },
+        "uncensored_duration": {
+          "n": 45,
+          "min": 1,
+          "median": 2,
+          "mean": 5.333333333333333,
+          "max": 34
+        },
+        "censored_runs": 2,
+        "duration_distribution": {
+          "1": 20,
+          "2": 4,
+          "3": 6,
+          "4": 3,
+          "5": 1,
+          "6": 4,
+          "7": 1,
+          "9": 2,
+          "11": 1,
+          "14": 1,
+          "23": 1,
+          "24": 1,
+          "32": 1,
+          "34": 1
+        },
+        "stress_duration": {
+          "n": 0,
+          "min": null,
+          "median": null,
+          "mean": null,
+          "max": null
+        },
+        "flip_flops": {
+          "1": {
+            "count": 19,
+            "per_adjacent_pair": 0.07630522088353414
+          },
+          "2": {
+            "count": 23,
+            "per_adjacent_pair": 0.09236947791164658
+          },
+          "3": {
+            "count": 28,
+            "per_adjacent_pair": 0.11244979919678715
+          },
+          "5": {
+            "count": 31,
+            "per_adjacent_pair": 0.12449799196787148
+          }
+        },
+        "transition_matrix": {
+          "DEFENSIVE": {
+            "DEFENSIVE": 0,
+            "HIGH": 0,
+            "LOW": 0,
+            "MEDIUM": 0,
+            "RISK_ON_BROAD": 0,
+            "RISK_ON_SELECTIVE": 0,
+            "STRESS": 0,
+            "TRANSITION": 0
+          },
+          "HIGH": {
+            "DEFENSIVE": 0,
+            "HIGH": 32,
+            "LOW": 0,
+            "MEDIUM": 15,
+            "RISK_ON_BROAD": 0,
+            "RISK_ON_SELECTIVE": 0,
+            "STRESS": 0,
+            "TRANSITION": 0
+          },
+          "LOW": {
+            "DEFENSIVE": 0,
+            "HIGH": 0,
+            "LOW": 4,
+            "MEDIUM": 8,
+            "RISK_ON_BROAD": 0,
+            "RISK_ON_SELECTIVE": 0,
+            "STRESS": 0,
+            "TRANSITION": 0
+          },
+          "MEDIUM": {
+            "DEFENSIVE": 0,
+            "HIGH": 15,
+            "LOW": 8,
+            "MEDIUM": 167,
+            "RISK_ON_BROAD": 0,
+            "RISK_ON_SELECTIVE": 0,
+            "STRESS": 0,
+            "TRANSITION": 0
+          },
+          "RISK_ON_BROAD": {
+            "DEFENSIVE": 0,
+            "HIGH": 0,
+            "LOW": 0,
+            "MEDIUM": 0,
+            "RISK_ON_BROAD": 0,
+            "RISK_ON_SELECTIVE": 0,
+            "STRESS": 0,
+            "TRANSITION": 0
+          },
+          "RISK_ON_SELECTIVE": {
+            "DEFENSIVE": 0,
+            "HIGH": 0,
+            "LOW": 0,
+            "MEDIUM": 0,
+            "RISK_ON_BROAD": 0,
+            "RISK_ON_SELECTIVE": 0,
+            "STRESS": 0,
+            "TRANSITION": 0
+          },
+          "STRESS": {
+            "DEFENSIVE": 0,
+            "HIGH": 0,
+            "LOW": 0,
+            "MEDIUM": 0,
+            "RISK_ON_BROAD": 0,
+            "RISK_ON_SELECTIVE": 0,
+            "STRESS": 0,
+            "TRANSITION": 0
+          },
+          "TRANSITION": {
+            "DEFENSIVE": 0,
+            "HIGH": 0,
+            "LOW": 0,
+            "MEDIUM": 0,
+            "RISK_ON_BROAD": 0,
+            "RISK_ON_SELECTIVE": 0,
+            "STRESS": 0,
+            "TRANSITION": 0
+          }
+        }
+      },
+      "2024": {
+        "sessions": 252,
+        "eligible_sessions": 252,
+        "adjacent_pairs": 251,
+        "changes": 43,
+        "turnover": 0.17131474103585656,
+        "occupancy": {
+          "LOW": 17,
+          "MEDIUM": 198,
+          "HIGH": 37
+        },
+        "duration": {
+          "n": 44,
+          "min": 1,
+          "median": 2.5,
+          "mean": 5.7272727272727275,
+          "max": 35
+        },
+        "uncensored_duration": {
+          "n": 42,
+          "min": 1,
+          "median": 2.5,
+          "mean": 5.476190476190476,
+          "max": 35
+        },
+        "censored_runs": 2,
+        "duration_distribution": {
+          "1": 14,
+          "2": 8,
+          "3": 4,
+          "4": 2,
+          "5": 4,
+          "6": 4,
+          "9": 1,
+          "12": 1,
+          "15": 1,
+          "16": 1,
+          "20": 1,
+          "23": 1,
+          "28": 1,
+          "35": 1
+        },
+        "stress_duration": {
+          "n": 0,
+          "min": null,
+          "median": null,
+          "mean": null,
+          "max": null
+        },
+        "flip_flops": {
+          "1": {
+            "count": 14,
+            "per_adjacent_pair": 0.055776892430278883
+          },
+          "2": {
+            "count": 21,
+            "per_adjacent_pair": 0.08366533864541832
+          },
+          "3": {
+            "count": 25,
+            "per_adjacent_pair": 0.099601593625498
+          },
+          "5": {
+            "count": 30,
+            "per_adjacent_pair": 0.11952191235059761
+          }
+        },
+        "transition_matrix": {
+          "DEFENSIVE": {
+            "DEFENSIVE": 0,
+            "HIGH": 0,
+            "LOW": 0,
+            "MEDIUM": 0,
+            "RISK_ON_BROAD": 0,
+            "RISK_ON_SELECTIVE": 0,
+            "STRESS": 0,
+            "TRANSITION": 0
+          },
+          "HIGH": {
+            "DEFENSIVE": 0,
+            "HIGH": 24,
+            "LOW": 0,
+            "MEDIUM": 13,
+            "RISK_ON_BROAD": 0,
+            "RISK_ON_SELECTIVE": 0,
+            "STRESS": 0,
+            "TRANSITION": 0
+          },
+          "LOW": {
+            "DEFENSIVE": 0,
+            "HIGH": 0,
+            "LOW": 8,
+            "MEDIUM": 9,
+            "RISK_ON_BROAD": 0,
+            "RISK_ON_SELECTIVE": 0,
+            "STRESS": 0,
+            "TRANSITION": 0
+          },
+          "MEDIUM": {
+            "DEFENSIVE": 0,
+            "HIGH": 13,
+            "LOW": 8,
+            "MEDIUM": 176,
+            "RISK_ON_BROAD": 0,
+            "RISK_ON_SELECTIVE": 0,
+            "STRESS": 0,
+            "TRANSITION": 0
+          },
+          "RISK_ON_BROAD": {
+            "DEFENSIVE": 0,
+            "HIGH": 0,
+            "LOW": 0,
+            "MEDIUM": 0,
+            "RISK_ON_BROAD": 0,
+            "RISK_ON_SELECTIVE": 0,
+            "STRESS": 0,
+            "TRANSITION": 0
+          },
+          "RISK_ON_SELECTIVE": {
+            "DEFENSIVE": 0,
+            "HIGH": 0,
+            "LOW": 0,
+            "MEDIUM": 0,
+            "RISK_ON_BROAD": 0,
+            "RISK_ON_SELECTIVE": 0,
+            "STRESS": 0,
+            "TRANSITION": 0
+          },
+          "STRESS": {
+            "DEFENSIVE": 0,
+            "HIGH": 0,
+            "LOW": 0,
+            "MEDIUM": 0,
+            "RISK_ON_BROAD": 0,
+            "RISK_ON_SELECTIVE": 0,
+            "STRESS": 0,
+            "TRANSITION": 0
+          },
+          "TRANSITION": {
+            "DEFENSIVE": 0,
+            "HIGH": 0,
+            "LOW": 0,
+            "MEDIUM": 0,
+            "RISK_ON_BROAD": 0,
+            "RISK_ON_SELECTIVE": 0,
+            "STRESS": 0,
+            "TRANSITION": 0
+          }
+        }
+      },
+      "2025": {
+        "sessions": 250,
+        "eligible_sessions": 250,
+        "adjacent_pairs": 249,
+        "changes": 61,
+        "turnover": 0.24497991967871485,
+        "occupancy": {
+          "MEDIUM": 163,
+          "LOW": 11,
+          "HIGH": 76
+        },
+        "duration": {
+          "n": 62,
+          "min": 1,
+          "median": 2.0,
+          "mean": 4.032258064516129,
+          "max": 17
+        },
+        "uncensored_duration": {
+          "n": 60,
+          "min": 1,
+          "median": 2.0,
+          "mean": 3.9833333333333334,
+          "max": 17
+        },
+        "censored_runs": 2,
+        "duration_distribution": {
+          "1": 25,
+          "2": 7,
+          "3": 6,
+          "4": 3,
+          "5": 5,
+          "6": 1,
+          "7": 4,
+          "8": 3,
+          "9": 2,
+          "10": 1,
+          "11": 1,
+          "13": 1,
+          "14": 1,
+          "15": 1,
+          "17": 1
+        },
+        "stress_duration": {
+          "n": 0,
+          "min": null,
+          "median": null,
+          "mean": null,
+          "max": null
+        },
+        "flip_flops": {
+          "1": {
+            "count": 24,
+            "per_adjacent_pair": 0.0963855421686747
+          },
+          "2": {
+            "count": 29,
+            "per_adjacent_pair": 0.11646586345381527
+          },
+          "3": {
+            "count": 33,
+            "per_adjacent_pair": 0.13253012048192772
+          },
+          "5": {
+            "count": 41,
+            "per_adjacent_pair": 0.1646586345381526
+          }
+        },
+        "transition_matrix": {
+          "DEFENSIVE": {
+            "DEFENSIVE": 0,
+            "HIGH": 0,
+            "LOW": 0,
+            "MEDIUM": 0,
+            "RISK_ON_BROAD": 0,
+            "RISK_ON_SELECTIVE": 0,
+            "STRESS": 0,
+            "TRANSITION": 0
+          },
+          "HIGH": {
+            "DEFENSIVE": 0,
+            "HIGH": 50,
+            "LOW": 0,
+            "MEDIUM": 26,
+            "RISK_ON_BROAD": 0,
+            "RISK_ON_SELECTIVE": 0,
+            "STRESS": 0,
+            "TRANSITION": 0
+          },
+          "LOW": {
+            "DEFENSIVE": 0,
+            "HIGH": 1,
+            "LOW": 6,
+            "MEDIUM": 4,
+            "RISK_ON_BROAD": 0,
+            "RISK_ON_SELECTIVE": 0,
+            "STRESS": 0,
+            "TRANSITION": 0
+          },
+          "MEDIUM": {
+            "DEFENSIVE": 0,
+            "HIGH": 25,
+            "LOW": 5,
+            "MEDIUM": 132,
+            "RISK_ON_BROAD": 0,
+            "RISK_ON_SELECTIVE": 0,
+            "STRESS": 0,
+            "TRANSITION": 0
+          },
+          "RISK_ON_BROAD": {
+            "DEFENSIVE": 0,
+            "HIGH": 0,
+            "LOW": 0,
+            "MEDIUM": 0,
+            "RISK_ON_BROAD": 0,
+            "RISK_ON_SELECTIVE": 0,
+            "STRESS": 0,
+            "TRANSITION": 0
+          },
+          "RISK_ON_SELECTIVE": {
+            "DEFENSIVE": 0,
+            "HIGH": 0,
+            "LOW": 0,
+            "MEDIUM": 0,
+            "RISK_ON_BROAD": 0,
+            "RISK_ON_SELECTIVE": 0,
+            "STRESS": 0,
+            "TRANSITION": 0
+          },
+          "STRESS": {
+            "DEFENSIVE": 0,
+            "HIGH": 0,
+            "LOW": 0,
+            "MEDIUM": 0,
+            "RISK_ON_BROAD": 0,
+            "RISK_ON_SELECTIVE": 0,
+            "STRESS": 0,
+            "TRANSITION": 0
+          },
+          "TRANSITION": {
+            "DEFENSIVE": 0,
+            "HIGH": 0,
+            "LOW": 0,
+            "MEDIUM": 0,
+            "RISK_ON_BROAD": 0,
+            "RISK_ON_SELECTIVE": 0,
+            "STRESS": 0,
+            "TRANSITION": 0
+          }
+        }
+      },
+      "2026": {
+        "sessions": 170,
+        "eligible_sessions": 170,
+        "adjacent_pairs": 169,
+        "changes": 32,
+        "turnover": 0.1893491124260355,
+        "occupancy": {
+          "MEDIUM": 137,
+          "HIGH": 22,
+          "LOW": 11
+        },
+        "duration": {
+          "n": 33,
+          "min": 1,
+          "median": 2,
+          "mean": 5.151515151515151,
+          "max": 23
+        },
+        "uncensored_duration": {
+          "n": 31,
+          "min": 1,
+          "median": 2,
+          "mean": 5.129032258064516,
+          "max": 23
+        },
+        "censored_runs": 2,
+        "duration_distribution": {
+          "1": 9,
+          "2": 12,
+          "4": 1,
+          "5": 2,
+          "6": 1,
+          "9": 2,
+          "10": 1,
+          "12": 1,
+          "13": 1,
+          "20": 1,
+          "21": 1,
+          "23": 1
+        },
+        "stress_duration": {
+          "n": 0,
+          "min": null,
+          "median": null,
+          "mean": null,
+          "max": null
+        },
+        "flip_flops": {
+          "1": {
+            "count": 9,
+            "per_adjacent_pair": 0.05325443786982249
+          },
+          "2": {
+            "count": 20,
+            "per_adjacent_pair": 0.11834319526627218
+          },
+          "3": {
+            "count": 20,
+            "per_adjacent_pair": 0.11834319526627218
+          },
+          "5": {
+            "count": 22,
+            "per_adjacent_pair": 0.1301775147928994
+          }
+        },
+        "transition_matrix": {
+          "DEFENSIVE": {
+            "DEFENSIVE": 0,
+            "HIGH": 0,
+            "LOW": 0,
+            "MEDIUM": 0,
+            "RISK_ON_BROAD": 0,
+            "RISK_ON_SELECTIVE": 0,
+            "STRESS": 0,
+            "TRANSITION": 0
+          },
+          "HIGH": {
+            "DEFENSIVE": 0,
+            "HIGH": 9,
+            "LOW": 0,
+            "MEDIUM": 13,
+            "RISK_ON_BROAD": 0,
+            "RISK_ON_SELECTIVE": 0,
+            "STRESS": 0,
+            "TRANSITION": 0
+          },
+          "LOW": {
+            "DEFENSIVE": 0,
+            "HIGH": 0,
+            "LOW": 8,
+            "MEDIUM": 3,
+            "RISK_ON_BROAD": 0,
+            "RISK_ON_SELECTIVE": 0,
+            "STRESS": 0,
+            "TRANSITION": 0
+          },
+          "MEDIUM": {
+            "DEFENSIVE": 0,
+            "HIGH": 13,
+            "LOW": 3,
+            "MEDIUM": 120,
+            "RISK_ON_BROAD": 0,
+            "RISK_ON_SELECTIVE": 0,
+            "STRESS": 0,
+            "TRANSITION": 0
+          },
+          "RISK_ON_BROAD": {
+            "DEFENSIVE": 0,
+            "HIGH": 0,
+            "LOW": 0,
+            "MEDIUM": 0,
+            "RISK_ON_BROAD": 0,
+            "RISK_ON_SELECTIVE": 0,
+            "STRESS": 0,
+            "TRANSITION": 0
+          },
+          "RISK_ON_SELECTIVE": {
+            "DEFENSIVE": 0,
+            "HIGH": 0,
+            "LOW": 0,
+            "MEDIUM": 0,
+            "RISK_ON_BROAD": 0,
+            "RISK_ON_SELECTIVE": 0,
+            "STRESS": 0,
+            "TRANSITION": 0
+          },
+          "STRESS": {
+            "DEFENSIVE": 0,
+            "HIGH": 0,
+            "LOW": 0,
+            "MEDIUM": 0,
+            "RISK_ON_BROAD": 0,
+            "RISK_ON_SELECTIVE": 0,
+            "STRESS": 0,
+            "TRANSITION": 0
+          },
+          "TRANSITION": {
+            "DEFENSIVE": 0,
+            "HIGH": 0,
+            "LOW": 0,
+            "MEDIUM": 0,
+            "RISK_ON_BROAD": 0,
+            "RISK_ON_SELECTIVE": 0,
+            "STRESS": 0,
+            "TRANSITION": 0
+          }
+        }
+      }
+    },
+    "category_context": {
+      "HIGH": {
+        "sessions": 488,
+        "arriving_regime_change_sessions": 135,
+        "arriving_change_fraction": 0.27720739219712526,
+        "opposed_family_sessions": 0,
+        "regime_occupancy": {
+          "DEFENSIVE": 178,
+          "RISK_ON_BROAD": 247,
+          "STRESS": 63
+        },
+        "plausible_regime_count": {
+          "1": 467,
+          "2": 21
+        }
+      },
+      "LOW": {
+        "sessions": 125,
+        "arriving_regime_change_sessions": 22,
+        "arriving_change_fraction": 0.176,
+        "opposed_family_sessions": 125,
+        "regime_occupancy": {
+          "TRANSITION": 125
+        },
+        "plausible_regime_count": {
+          "1": 125
+        }
+      },
+      "MEDIUM": {
+        "sessions": 1317,
+        "arriving_regime_change_sessions": 324,
+        "arriving_change_fraction": 0.2460136674259681,
+        "opposed_family_sessions": 0,
+        "regime_occupancy": {
+          "TRANSITION": 758,
+          "RISK_ON_SELECTIVE": 406,
+          "DEFENSIVE": 145,
+          "STRESS": 8
+        },
+        "plausible_regime_count": {
+          "2": 346,
+          "3": 699,
+          "4": 70,
+          "1": 202
+        }
+      }
+    },
+    "verdict": "PASS",
+    "interpretation": "All three categories occur: HIGH488/MEDIUM1317/LOW125. LOW identifies125 opposed-family observations, all TRANSITION; HIGH includes both favorable agreement and adverse/stress agreement. It adds a descriptive type of agreement, not direction, certainty, probability or predictive skill. MEDIUM dominance68.24% limits granularity; prospective user comprehension remains unmeasured."
+  },
+  "uncertainty": {
+    "periods": {
+      "ALL": {
+        "sessions": 1930,
+        "eligible_sessions": 1930,
+        "adjacent_pairs": 1929,
+        "changes": 548,
+        "turnover": 0.28408501814411613,
+        "occupancy": {
+          "LOW": 794,
+          "MEDIUM": 367,
+          "HIGH": 769
+        },
+        "duration": {
+          "n": 549,
+          "min": 1,
+          "median": 2,
+          "mean": 3.5154826958105647,
+          "max": 72
+        },
+        "uncensored_duration": {
+          "n": 547,
+          "min": 1,
+          "median": 2,
+          "mean": 3.5082266910420477,
+          "max": 72
+        },
+        "censored_runs": 2,
+        "duration_distribution": {
+          "1": 226,
+          "2": 107,
+          "3": 47,
+          "4": 35,
+          "5": 34,
+          "6": 26,
+          "7": 16,
+          "8": 14,
+          "9": 12,
+          "10": 7,
+          "11": 3,
+          "12": 2,
+          "13": 7,
+          "14": 1,
+          "15": 2,
+          "16": 1,
+          "19": 1,
+          "20": 2,
+          "21": 2,
+          "29": 1,
+          "33": 1,
+          "38": 1,
+          "72": 1
+        },
+        "stress_duration": {
+          "n": 0,
+          "min": null,
+          "median": null,
+          "mean": null,
+          "max": null
+        },
+        "flip_flops": {
+          "1": {
+            "count": 184,
+            "per_adjacent_pair": 0.09538621047174702
+          },
+          "2": {
+            "count": 259,
+            "per_adjacent_pair": 0.13426645930533956
+          },
+          "3": {
+            "count": 291,
+            "per_adjacent_pair": 0.15085536547433903
+          },
+          "5": {
+            "count": 337,
+            "per_adjacent_pair": 0.17470191809227578
+          }
+        },
+        "transition_matrix": {
+          "DEFENSIVE": {
+            "DEFENSIVE": 0,
+            "HIGH": 0,
+            "LOW": 0,
+            "MEDIUM": 0,
+            "RISK_ON_BROAD": 0,
+            "RISK_ON_SELECTIVE": 0,
+            "STRESS": 0,
+            "TRANSITION": 0
+          },
+          "HIGH": {
+            "DEFENSIVE": 0,
+            "HIGH": 578,
+            "LOW": 127,
+            "MEDIUM": 63,
+            "RISK_ON_BROAD": 0,
+            "RISK_ON_SELECTIVE": 0,
+            "STRESS": 0,
+            "TRANSITION": 0
+          },
+          "LOW": {
+            "DEFENSIVE": 0,
+            "HIGH": 137,
+            "LOW": 578,
+            "MEDIUM": 79,
+            "RISK_ON_BROAD": 0,
+            "RISK_ON_SELECTIVE": 0,
+            "STRESS": 0,
+            "TRANSITION": 0
+          },
+          "MEDIUM": {
+            "DEFENSIVE": 0,
+            "HIGH": 54,
+            "LOW": 88,
+            "MEDIUM": 225,
+            "RISK_ON_BROAD": 0,
+            "RISK_ON_SELECTIVE": 0,
+            "STRESS": 0,
+            "TRANSITION": 0
+          },
+          "RISK_ON_BROAD": {
+            "DEFENSIVE": 0,
+            "HIGH": 0,
+            "LOW": 0,
+            "MEDIUM": 0,
+            "RISK_ON_BROAD": 0,
+            "RISK_ON_SELECTIVE": 0,
+            "STRESS": 0,
+            "TRANSITION": 0
+          },
+          "RISK_ON_SELECTIVE": {
+            "DEFENSIVE": 0,
+            "HIGH": 0,
+            "LOW": 0,
+            "MEDIUM": 0,
+            "RISK_ON_BROAD": 0,
+            "RISK_ON_SELECTIVE": 0,
+            "STRESS": 0,
+            "TRANSITION": 0
+          },
+          "STRESS": {
+            "DEFENSIVE": 0,
+            "HIGH": 0,
+            "LOW": 0,
+            "MEDIUM": 0,
+            "RISK_ON_BROAD": 0,
+            "RISK_ON_SELECTIVE": 0,
+            "STRESS": 0,
+            "TRANSITION": 0
+          },
+          "TRANSITION": {
+            "DEFENSIVE": 0,
+            "HIGH": 0,
+            "LOW": 0,
+            "MEDIUM": 0,
+            "RISK_ON_BROAD": 0,
+            "RISK_ON_SELECTIVE": 0,
+            "STRESS": 0,
+            "TRANSITION": 0
+          }
+        }
+      },
+      "F3_TRAIN": {
+        "sessions": 1258,
+        "eligible_sessions": 1258,
+        "adjacent_pairs": 1257,
+        "changes": 343,
+        "turnover": 0.2728719172633254,
+        "occupancy": {
+          "LOW": 571,
+          "MEDIUM": 272,
+          "HIGH": 415
+        },
+        "duration": {
+          "n": 344,
+          "min": 1,
+          "median": 2.0,
+          "mean": 3.6569767441860463,
+          "max": 72
+        },
+        "uncensored_duration": {
+          "n": 342,
+          "min": 1,
+          "median": 2.0,
+          "mean": 3.6637426900584797,
+          "max": 72
+        },
+        "censored_runs": 2,
+        "duration_distribution": {
+          "1": 143,
+          "2": 66,
+          "3": 30,
+          "4": 23,
+          "5": 19,
+          "6": 14,
+          "7": 13,
+          "8": 7,
+          "9": 7,
+          "10": 6,
+          "11": 2,
+          "12": 1,
+          "13": 4,
+          "14": 1,
+          "19": 1,
+          "20": 2,
+          "21": 1,
+          "29": 1,
+          "33": 1,
+          "38": 1,
+          "72": 1
+        },
+        "stress_duration": {
+          "n": 0,
+          "min": null,
+          "median": null,
+          "mean": null,
+          "max": null
+        },
+        "flip_flops": {
+          "1": {
+            "count": 112,
+            "per_adjacent_pair": 0.08910103420843278
+          },
+          "2": {
+            "count": 161,
+            "per_adjacent_pair": 0.1280827366746221
+          },
+          "3": {
+            "count": 179,
+            "per_adjacent_pair": 0.1424025457438345
+          },
+          "5": {
+            "count": 206,
+            "per_adjacent_pair": 0.16388225934765313
+          }
+        },
+        "transition_matrix": {
+          "DEFENSIVE": {
+            "DEFENSIVE": 0,
+            "HIGH": 0,
+            "LOW": 0,
+            "MEDIUM": 0,
+            "RISK_ON_BROAD": 0,
+            "RISK_ON_SELECTIVE": 0,
+            "STRESS": 0,
+            "TRANSITION": 0
+          },
+          "HIGH": {
+            "DEFENSIVE": 0,
+            "HIGH": 306,
+            "LOW": 66,
+            "MEDIUM": 43,
+            "RISK_ON_BROAD": 0,
+            "RISK_ON_SELECTIVE": 0,
+            "STRESS": 0,
+            "TRANSITION": 0
+          },
+          "LOW": {
+            "DEFENSIVE": 0,
+            "HIGH": 74,
+            "LOW": 438,
+            "MEDIUM": 59,
+            "RISK_ON_BROAD": 0,
+            "RISK_ON_SELECTIVE": 0,
+            "STRESS": 0,
+            "TRANSITION": 0
+          },
+          "MEDIUM": {
+            "DEFENSIVE": 0,
+            "HIGH": 35,
+            "LOW": 66,
+            "MEDIUM": 170,
+            "RISK_ON_BROAD": 0,
+            "RISK_ON_SELECTIVE": 0,
+            "STRESS": 0,
+            "TRANSITION": 0
+          },
+          "RISK_ON_BROAD": {
+            "DEFENSIVE": 0,
+            "HIGH": 0,
+            "LOW": 0,
+            "MEDIUM": 0,
+            "RISK_ON_BROAD": 0,
+            "RISK_ON_SELECTIVE": 0,
+            "STRESS": 0,
+            "TRANSITION": 0
+          },
+          "RISK_ON_SELECTIVE": {
+            "DEFENSIVE": 0,
+            "HIGH": 0,
+            "LOW": 0,
+            "MEDIUM": 0,
+            "RISK_ON_BROAD": 0,
+            "RISK_ON_SELECTIVE": 0,
+            "STRESS": 0,
+            "TRANSITION": 0
+          },
+          "STRESS": {
+            "DEFENSIVE": 0,
+            "HIGH": 0,
+            "LOW": 0,
+            "MEDIUM": 0,
+            "RISK_ON_BROAD": 0,
+            "RISK_ON_SELECTIVE": 0,
+            "STRESS": 0,
+            "TRANSITION": 0
+          },
+          "TRANSITION": {
+            "DEFENSIVE": 0,
+            "HIGH": 0,
+            "LOW": 0,
+            "MEDIUM": 0,
+            "RISK_ON_BROAD": 0,
+            "RISK_ON_SELECTIVE": 0,
+            "STRESS": 0,
+            "TRANSITION": 0
+          }
+        }
+      },
+      "F3_VALIDATION": {
+        "sessions": 252,
+        "eligible_sessions": 252,
+        "adjacent_pairs": 251,
+        "changes": 78,
+        "turnover": 0.3107569721115538,
+        "occupancy": {
+          "LOW": 87,
+          "HIGH": 131,
+          "MEDIUM": 34
+        },
+        "duration": {
+          "n": 79,
+          "min": 1,
+          "median": 2,
+          "mean": 3.189873417721519,
+          "max": 16
+        },
+        "uncensored_duration": {
+          "n": 77,
+          "min": 1,
+          "median": 2,
+          "mean": 3.220779220779221,
+          "max": 16
+        },
+        "censored_runs": 2,
+        "duration_distribution": {
+          "1": 32,
+          "2": 15,
+          "3": 8,
+          "4": 7,
+          "5": 5,
+          "6": 4,
+          "8": 2,
+          "9": 2,
+          "11": 1,
+          "13": 1,
+          "15": 1,
+          "16": 1
+        },
+        "stress_duration": {
+          "n": 0,
+          "min": null,
+          "median": null,
+          "mean": null,
+          "max": null
+        },
+        "flip_flops": {
+          "1": {
+            "count": 29,
+            "per_adjacent_pair": 0.11553784860557768
+          },
+          "2": {
+            "count": 37,
+            "per_adjacent_pair": 0.14741035856573706
+          },
+          "3": {
+            "count": 42,
+            "per_adjacent_pair": 0.16733067729083664
+          },
+          "5": {
+            "count": 49,
+            "per_adjacent_pair": 0.1952191235059761
+          }
+        },
+        "transition_matrix": {
+          "DEFENSIVE": {
+            "DEFENSIVE": 0,
+            "HIGH": 0,
+            "LOW": 0,
+            "MEDIUM": 0,
+            "RISK_ON_BROAD": 0,
+            "RISK_ON_SELECTIVE": 0,
+            "STRESS": 0,
+            "TRANSITION": 0
+          },
+          "HIGH": {
+            "DEFENSIVE": 0,
+            "HIGH": 101,
+            "LOW": 22,
+            "MEDIUM": 8,
+            "RISK_ON_BROAD": 0,
+            "RISK_ON_SELECTIVE": 0,
+            "STRESS": 0,
+            "TRANSITION": 0
+          },
+          "LOW": {
+            "DEFENSIVE": 0,
+            "HIGH": 22,
+            "LOW": 55,
+            "MEDIUM": 9,
+            "RISK_ON_BROAD": 0,
+            "RISK_ON_SELECTIVE": 0,
+            "STRESS": 0,
+            "TRANSITION": 0
+          },
+          "MEDIUM": {
+            "DEFENSIVE": 0,
+            "HIGH": 8,
+            "LOW": 9,
+            "MEDIUM": 17,
+            "RISK_ON_BROAD": 0,
+            "RISK_ON_SELECTIVE": 0,
+            "STRESS": 0,
+            "TRANSITION": 0
+          },
+          "RISK_ON_BROAD": {
+            "DEFENSIVE": 0,
+            "HIGH": 0,
+            "LOW": 0,
+            "MEDIUM": 0,
+            "RISK_ON_BROAD": 0,
+            "RISK_ON_SELECTIVE": 0,
+            "STRESS": 0,
+            "TRANSITION": 0
+          },
+          "RISK_ON_SELECTIVE": {
+            "DEFENSIVE": 0,
+            "HIGH": 0,
+            "LOW": 0,
+            "MEDIUM": 0,
+            "RISK_ON_BROAD": 0,
+            "RISK_ON_SELECTIVE": 0,
+            "STRESS": 0,
+            "TRANSITION": 0
+          },
+          "STRESS": {
+            "DEFENSIVE": 0,
+            "HIGH": 0,
+            "LOW": 0,
+            "MEDIUM": 0,
+            "RISK_ON_BROAD": 0,
+            "RISK_ON_SELECTIVE": 0,
+            "STRESS": 0,
+            "TRANSITION": 0
+          },
+          "TRANSITION": {
+            "DEFENSIVE": 0,
+            "HIGH": 0,
+            "LOW": 0,
+            "MEDIUM": 0,
+            "RISK_ON_BROAD": 0,
+            "RISK_ON_SELECTIVE": 0,
+            "STRESS": 0,
+            "TRANSITION": 0
+          }
+        }
+      },
+      "F3_TEST": {
+        "sessions": 420,
+        "eligible_sessions": 420,
+        "adjacent_pairs": 419,
+        "changes": 125,
+        "turnover": 0.29832935560859186,
+        "occupancy": {
+          "MEDIUM": 61,
+          "LOW": 136,
+          "HIGH": 223
+        },
+        "duration": {
+          "n": 126,
+          "min": 1,
+          "median": 2.0,
+          "mean": 3.3333333333333335,
+          "max": 21
+        },
+        "uncensored_duration": {
+          "n": 124,
+          "min": 1,
+          "median": 2.0,
+          "mean": 3.306451612903226,
+          "max": 21
+        },
+        "censored_runs": 2,
+        "duration_distribution": {
+          "1": 51,
+          "2": 26,
+          "3": 9,
+          "4": 5,
+          "5": 10,
+          "6": 8,
+          "7": 3,
+          "8": 5,
+          "9": 3,
+          "10": 1,
+          "12": 1,
+          "13": 2,
+          "15": 1,
+          "21": 1
+        },
+        "stress_duration": {
+          "n": 0,
+          "min": null,
+          "median": null,
+          "mean": null,
+          "max": null
+        },
+        "flip_flops": {
+          "1": {
+            "count": 42,
+            "per_adjacent_pair": 0.10023866348448687
+          },
+          "2": {
+            "count": 60,
+            "per_adjacent_pair": 0.1431980906921241
+          },
+          "3": {
+            "count": 68,
+            "per_adjacent_pair": 0.162291169451074
+          },
+          "5": {
+            "count": 80,
+            "per_adjacent_pair": 0.1909307875894988
+          }
+        },
+        "transition_matrix": {
+          "DEFENSIVE": {
+            "DEFENSIVE": 0,
+            "HIGH": 0,
+            "LOW": 0,
+            "MEDIUM": 0,
+            "RISK_ON_BROAD": 0,
+            "RISK_ON_SELECTIVE": 0,
+            "STRESS": 0,
+            "TRANSITION": 0
+          },
+          "HIGH": {
+            "DEFENSIVE": 0,
+            "HIGH": 171,
+            "LOW": 39,
+            "MEDIUM": 12,
+            "RISK_ON_BROAD": 0,
+            "RISK_ON_SELECTIVE": 0,
+            "STRESS": 0,
+            "TRANSITION": 0
+          },
+          "LOW": {
+            "DEFENSIVE": 0,
+            "HIGH": 41,
+            "LOW": 85,
+            "MEDIUM": 10,
+            "RISK_ON_BROAD": 0,
+            "RISK_ON_SELECTIVE": 0,
+            "STRESS": 0,
+            "TRANSITION": 0
+          },
+          "MEDIUM": {
+            "DEFENSIVE": 0,
+            "HIGH": 11,
+            "LOW": 12,
+            "MEDIUM": 38,
+            "RISK_ON_BROAD": 0,
+            "RISK_ON_SELECTIVE": 0,
+            "STRESS": 0,
+            "TRANSITION": 0
+          },
+          "RISK_ON_BROAD": {
+            "DEFENSIVE": 0,
+            "HIGH": 0,
+            "LOW": 0,
+            "MEDIUM": 0,
+            "RISK_ON_BROAD": 0,
+            "RISK_ON_SELECTIVE": 0,
+            "STRESS": 0,
+            "TRANSITION": 0
+          },
+          "RISK_ON_SELECTIVE": {
+            "DEFENSIVE": 0,
+            "HIGH": 0,
+            "LOW": 0,
+            "MEDIUM": 0,
+            "RISK_ON_BROAD": 0,
+            "RISK_ON_SELECTIVE": 0,
+            "STRESS": 0,
+            "TRANSITION": 0
+          },
+          "STRESS": {
+            "DEFENSIVE": 0,
+            "HIGH": 0,
+            "LOW": 0,
+            "MEDIUM": 0,
+            "RISK_ON_BROAD": 0,
+            "RISK_ON_SELECTIVE": 0,
+            "STRESS": 0,
+            "TRANSITION": 0
+          },
+          "TRANSITION": {
+            "DEFENSIVE": 0,
+            "HIGH": 0,
+            "LOW": 0,
+            "MEDIUM": 0,
+            "RISK_ON_BROAD": 0,
+            "RISK_ON_SELECTIVE": 0,
+            "STRESS": 0,
+            "TRANSITION": 0
+          }
+        }
+      },
+      "2019": {
+        "sessions": 252,
+        "eligible_sessions": 252,
+        "adjacent_pairs": 251,
+        "changes": 71,
+        "turnover": 0.28286852589641437,
+        "occupancy": {
+          "LOW": 110,
+          "MEDIUM": 58,
+          "HIGH": 84
+        },
+        "duration": {
+          "n": 72,
+          "min": 1,
+          "median": 2.0,
+          "mean": 3.5,
+          "max": 13
+        },
+        "uncensored_duration": {
+          "n": 70,
+          "min": 1,
+          "median": 2.0,
+          "mean": 3.5428571428571427,
+          "max": 13
+        },
+        "censored_runs": 2,
+        "duration_distribution": {
+          "1": 27,
+          "2": 14,
+          "3": 6,
+          "4": 4,
+          "5": 5,
+          "6": 4,
+          "7": 2,
+          "8": 2,
+          "9": 2,
+          "10": 3,
+          "11": 1,
+          "12": 1,
+          "13": 1
+        },
+        "stress_duration": {
+          "n": 0,
+          "min": null,
+          "median": null,
+          "mean": null,
+          "max": null
+        },
+        "flip_flops": {
+          "1": {
+            "count": 20,
+            "per_adjacent_pair": 0.0796812749003984
+          },
+          "2": {
+            "count": 28,
+            "per_adjacent_pair": 0.11155378486055777
+          },
+          "3": {
+            "count": 30,
+            "per_adjacent_pair": 0.11952191235059761
+          },
+          "5": {
+            "count": 37,
+            "per_adjacent_pair": 0.14741035856573706
+          }
+        },
+        "transition_matrix": {
+          "DEFENSIVE": {
+            "DEFENSIVE": 0,
+            "HIGH": 0,
+            "LOW": 0,
+            "MEDIUM": 0,
+            "RISK_ON_BROAD": 0,
+            "RISK_ON_SELECTIVE": 0,
+            "STRESS": 0,
+            "TRANSITION": 0
+          },
+          "HIGH": {
+            "DEFENSIVE": 0,
+            "HIGH": 64,
+            "LOW": 14,
+            "MEDIUM": 5,
+            "RISK_ON_BROAD": 0,
+            "RISK_ON_SELECTIVE": 0,
+            "STRESS": 0,
+            "TRANSITION": 0
+          },
+          "LOW": {
+            "DEFENSIVE": 0,
+            "HIGH": 17,
+            "LOW": 78,
+            "MEDIUM": 15,
+            "RISK_ON_BROAD": 0,
+            "RISK_ON_SELECTIVE": 0,
+            "STRESS": 0,
+            "TRANSITION": 0
+          },
+          "MEDIUM": {
+            "DEFENSIVE": 0,
+            "HIGH": 3,
+            "LOW": 17,
+            "MEDIUM": 38,
+            "RISK_ON_BROAD": 0,
+            "RISK_ON_SELECTIVE": 0,
+            "STRESS": 0,
+            "TRANSITION": 0
+          },
+          "RISK_ON_BROAD": {
+            "DEFENSIVE": 0,
+            "HIGH": 0,
+            "LOW": 0,
+            "MEDIUM": 0,
+            "RISK_ON_BROAD": 0,
+            "RISK_ON_SELECTIVE": 0,
+            "STRESS": 0,
+            "TRANSITION": 0
+          },
+          "RISK_ON_SELECTIVE": {
+            "DEFENSIVE": 0,
+            "HIGH": 0,
+            "LOW": 0,
+            "MEDIUM": 0,
+            "RISK_ON_BROAD": 0,
+            "RISK_ON_SELECTIVE": 0,
+            "STRESS": 0,
+            "TRANSITION": 0
+          },
+          "STRESS": {
+            "DEFENSIVE": 0,
+            "HIGH": 0,
+            "LOW": 0,
+            "MEDIUM": 0,
+            "RISK_ON_BROAD": 0,
+            "RISK_ON_SELECTIVE": 0,
+            "STRESS": 0,
+            "TRANSITION": 0
+          },
+          "TRANSITION": {
+            "DEFENSIVE": 0,
+            "HIGH": 0,
+            "LOW": 0,
+            "MEDIUM": 0,
+            "RISK_ON_BROAD": 0,
+            "RISK_ON_SELECTIVE": 0,
+            "STRESS": 0,
+            "TRANSITION": 0
+          }
+        }
+      },
+      "2020": {
+        "sessions": 253,
+        "eligible_sessions": 253,
+        "adjacent_pairs": 252,
+        "changes": 49,
+        "turnover": 0.19444444444444445,
+        "occupancy": {
+          "HIGH": 49,
+          "LOW": 155,
+          "MEDIUM": 49
+        },
+        "duration": {
+          "n": 50,
+          "min": 1,
+          "median": 2.0,
+          "mean": 5.06,
+          "max": 72
+        },
+        "uncensored_duration": {
+          "n": 48,
+          "min": 1,
+          "median": 2.0,
+          "mean": 5.125,
+          "max": 72
+        },
+        "censored_runs": 2,
+        "duration_distribution": {
+          "1": 20,
+          "2": 7,
+          "3": 9,
+          "4": 3,
+          "5": 2,
+          "6": 1,
+          "7": 3,
+          "8": 1,
+          "13": 1,
+          "21": 1,
+          "29": 1,
+          "72": 1
+        },
+        "stress_duration": {
+          "n": 0,
+          "min": null,
+          "median": null,
+          "mean": null,
+          "max": null
+        },
+        "flip_flops": {
+          "1": {
+            "count": 16,
+            "per_adjacent_pair": 0.06349206349206349
+          },
+          "2": {
+            "count": 21,
+            "per_adjacent_pair": 0.08333333333333333
+          },
+          "3": {
+            "count": 28,
+            "per_adjacent_pair": 0.1111111111111111
+          },
+          "5": {
+            "count": 30,
+            "per_adjacent_pair": 0.11904761904761904
+          }
+        },
+        "transition_matrix": {
+          "DEFENSIVE": {
+            "DEFENSIVE": 0,
+            "HIGH": 0,
+            "LOW": 0,
+            "MEDIUM": 0,
+            "RISK_ON_BROAD": 0,
+            "RISK_ON_SELECTIVE": 0,
+            "STRESS": 0,
+            "TRANSITION": 0
+          },
+          "HIGH": {
+            "DEFENSIVE": 0,
+            "HIGH": 31,
+            "LOW": 3,
+            "MEDIUM": 15,
+            "RISK_ON_BROAD": 0,
+            "RISK_ON_SELECTIVE": 0,
+            "STRESS": 0,
+            "TRANSITION": 0
+          },
+          "LOW": {
+            "DEFENSIVE": 0,
+            "HIGH": 5,
+            "LOW": 144,
+            "MEDIUM": 6,
+            "RISK_ON_BROAD": 0,
+            "RISK_ON_SELECTIVE": 0,
+            "STRESS": 0,
+            "TRANSITION": 0
+          },
+          "MEDIUM": {
+            "DEFENSIVE": 0,
+            "HIGH": 12,
+            "LOW": 8,
+            "MEDIUM": 28,
+            "RISK_ON_BROAD": 0,
+            "RISK_ON_SELECTIVE": 0,
+            "STRESS": 0,
+            "TRANSITION": 0
+          },
+          "RISK_ON_BROAD": {
+            "DEFENSIVE": 0,
+            "HIGH": 0,
+            "LOW": 0,
+            "MEDIUM": 0,
+            "RISK_ON_BROAD": 0,
+            "RISK_ON_SELECTIVE": 0,
+            "STRESS": 0,
+            "TRANSITION": 0
+          },
+          "RISK_ON_SELECTIVE": {
+            "DEFENSIVE": 0,
+            "HIGH": 0,
+            "LOW": 0,
+            "MEDIUM": 0,
+            "RISK_ON_BROAD": 0,
+            "RISK_ON_SELECTIVE": 0,
+            "STRESS": 0,
+            "TRANSITION": 0
+          },
+          "STRESS": {
+            "DEFENSIVE": 0,
+            "HIGH": 0,
+            "LOW": 0,
+            "MEDIUM": 0,
+            "RISK_ON_BROAD": 0,
+            "RISK_ON_SELECTIVE": 0,
+            "STRESS": 0,
+            "TRANSITION": 0
+          },
+          "TRANSITION": {
+            "DEFENSIVE": 0,
+            "HIGH": 0,
+            "LOW": 0,
+            "MEDIUM": 0,
+            "RISK_ON_BROAD": 0,
+            "RISK_ON_SELECTIVE": 0,
+            "STRESS": 0,
+            "TRANSITION": 0
+          }
+        }
+      },
+      "2021": {
+        "sessions": 252,
+        "eligible_sessions": 252,
+        "adjacent_pairs": 251,
+        "changes": 96,
+        "turnover": 0.38247011952191234,
+        "occupancy": {
+          "LOW": 75,
+          "HIGH": 130,
+          "MEDIUM": 47
+        },
+        "duration": {
+          "n": 97,
+          "min": 1,
+          "median": 1,
+          "mean": 2.597938144329897,
+          "max": 33
+        },
+        "uncensored_duration": {
+          "n": 95,
+          "min": 1,
+          "median": 1,
+          "mean": 2.5473684210526315,
+          "max": 33
+        },
+        "censored_runs": 2,
+        "duration_distribution": {
+          "1": 50,
+          "2": 22,
+          "3": 5,
+          "4": 8,
+          "5": 3,
+          "6": 2,
+          "7": 2,
+          "8": 1,
+          "9": 1,
+          "10": 2,
+          "33": 1
+        },
+        "stress_duration": {
+          "n": 0,
+          "min": null,
+          "median": null,
+          "mean": null,
+          "max": null
+        },
+        "flip_flops": {
+          "1": {
+            "count": 36,
+            "per_adjacent_pair": 0.14342629482071714
+          },
+          "2": {
+            "count": 54,
+            "per_adjacent_pair": 0.2151394422310757
+          },
+          "3": {
+            "count": 55,
+            "per_adjacent_pair": 0.21912350597609562
+          },
+          "5": {
+            "count": 62,
+            "per_adjacent_pair": 0.24701195219123506
+          }
+        },
+        "transition_matrix": {
+          "DEFENSIVE": {
+            "DEFENSIVE": 0,
+            "HIGH": 0,
+            "LOW": 0,
+            "MEDIUM": 0,
+            "RISK_ON_BROAD": 0,
+            "RISK_ON_SELECTIVE": 0,
+            "STRESS": 0,
+            "TRANSITION": 0
+          },
+          "HIGH": {
+            "DEFENSIVE": 0,
+            "HIGH": 99,
+            "LOW": 18,
+            "MEDIUM": 13,
+            "RISK_ON_BROAD": 0,
+            "RISK_ON_SELECTIVE": 0,
+            "STRESS": 0,
+            "TRANSITION": 0
+          },
+          "LOW": {
+            "DEFENSIVE": 0,
+            "HIGH": 20,
+            "LOW": 38,
+            "MEDIUM": 16,
+            "RISK_ON_BROAD": 0,
+            "RISK_ON_SELECTIVE": 0,
+            "STRESS": 0,
+            "TRANSITION": 0
+          },
+          "MEDIUM": {
+            "DEFENSIVE": 0,
+            "HIGH": 11,
+            "LOW": 18,
+            "MEDIUM": 18,
+            "RISK_ON_BROAD": 0,
+            "RISK_ON_SELECTIVE": 0,
+            "STRESS": 0,
+            "TRANSITION": 0
+          },
+          "RISK_ON_BROAD": {
+            "DEFENSIVE": 0,
+            "HIGH": 0,
+            "LOW": 0,
+            "MEDIUM": 0,
+            "RISK_ON_BROAD": 0,
+            "RISK_ON_SELECTIVE": 0,
+            "STRESS": 0,
+            "TRANSITION": 0
+          },
+          "RISK_ON_SELECTIVE": {
+            "DEFENSIVE": 0,
+            "HIGH": 0,
+            "LOW": 0,
+            "MEDIUM": 0,
+            "RISK_ON_BROAD": 0,
+            "RISK_ON_SELECTIVE": 0,
+            "STRESS": 0,
+            "TRANSITION": 0
+          },
+          "STRESS": {
+            "DEFENSIVE": 0,
+            "HIGH": 0,
+            "LOW": 0,
+            "MEDIUM": 0,
+            "RISK_ON_BROAD": 0,
+            "RISK_ON_SELECTIVE": 0,
+            "STRESS": 0,
+            "TRANSITION": 0
+          },
+          "TRANSITION": {
+            "DEFENSIVE": 0,
+            "HIGH": 0,
+            "LOW": 0,
+            "MEDIUM": 0,
+            "RISK_ON_BROAD": 0,
+            "RISK_ON_SELECTIVE": 0,
+            "STRESS": 0,
+            "TRANSITION": 0
+          }
+        }
+      },
+      "2022": {
+        "sessions": 251,
+        "eligible_sessions": 251,
+        "adjacent_pairs": 250,
+        "changes": 46,
+        "turnover": 0.184,
+        "occupancy": {
+          "LOW": 132,
+          "HIGH": 30,
+          "MEDIUM": 89
+        },
+        "duration": {
+          "n": 47,
+          "min": 1,
+          "median": 2,
+          "mean": 5.340425531914893,
+          "max": 38
+        },
+        "uncensored_duration": {
+          "n": 45,
+          "min": 1,
+          "median": 2,
+          "mean": 5.266666666666667,
+          "max": 38
+        },
+        "censored_runs": 2,
+        "duration_distribution": {
+          "1": 13,
+          "2": 11,
+          "3": 3,
+          "4": 2,
+          "5": 3,
+          "6": 1,
+          "7": 3,
+          "8": 2,
+          "9": 3,
+          "10": 1,
+          "13": 1,
+          "14": 1,
+          "19": 1,
+          "20": 1,
+          "38": 1
+        },
+        "stress_duration": {
+          "n": 0,
+          "min": null,
+          "median": null,
+          "mean": null,
+          "max": null
+        },
+        "flip_flops": {
+          "1": {
+            "count": 12,
+            "per_adjacent_pair": 0.048
+          },
+          "2": {
+            "count": 20,
+            "per_adjacent_pair": 0.08
+          },
+          "3": {
+            "count": 23,
+            "per_adjacent_pair": 0.092
+          },
+          "5": {
+            "count": 26,
+            "per_adjacent_pair": 0.104
+          }
+        },
+        "transition_matrix": {
+          "DEFENSIVE": {
+            "DEFENSIVE": 0,
+            "HIGH": 0,
+            "LOW": 0,
+            "MEDIUM": 0,
+            "RISK_ON_BROAD": 0,
+            "RISK_ON_SELECTIVE": 0,
+            "STRESS": 0,
+            "TRANSITION": 0
+          },
+          "HIGH": {
+            "DEFENSIVE": 0,
+            "HIGH": 22,
+            "LOW": 4,
+            "MEDIUM": 4,
+            "RISK_ON_BROAD": 0,
+            "RISK_ON_SELECTIVE": 0,
+            "STRESS": 0,
+            "TRANSITION": 0
+          },
+          "LOW": {
+            "DEFENSIVE": 0,
+            "HIGH": 5,
+            "LOW": 112,
+            "MEDIUM": 15,
+            "RISK_ON_BROAD": 0,
+            "RISK_ON_SELECTIVE": 0,
+            "STRESS": 0,
+            "TRANSITION": 0
+          },
+          "MEDIUM": {
+            "DEFENSIVE": 0,
+            "HIGH": 3,
+            "LOW": 15,
+            "MEDIUM": 70,
+            "RISK_ON_BROAD": 0,
+            "RISK_ON_SELECTIVE": 0,
+            "STRESS": 0,
+            "TRANSITION": 0
+          },
+          "RISK_ON_BROAD": {
+            "DEFENSIVE": 0,
+            "HIGH": 0,
+            "LOW": 0,
+            "MEDIUM": 0,
+            "RISK_ON_BROAD": 0,
+            "RISK_ON_SELECTIVE": 0,
+            "STRESS": 0,
+            "TRANSITION": 0
+          },
+          "RISK_ON_SELECTIVE": {
+            "DEFENSIVE": 0,
+            "HIGH": 0,
+            "LOW": 0,
+            "MEDIUM": 0,
+            "RISK_ON_BROAD": 0,
+            "RISK_ON_SELECTIVE": 0,
+            "STRESS": 0,
+            "TRANSITION": 0
+          },
+          "STRESS": {
+            "DEFENSIVE": 0,
+            "HIGH": 0,
+            "LOW": 0,
+            "MEDIUM": 0,
+            "RISK_ON_BROAD": 0,
+            "RISK_ON_SELECTIVE": 0,
+            "STRESS": 0,
+            "TRANSITION": 0
+          },
+          "TRANSITION": {
+            "DEFENSIVE": 0,
+            "HIGH": 0,
+            "LOW": 0,
+            "MEDIUM": 0,
+            "RISK_ON_BROAD": 0,
+            "RISK_ON_SELECTIVE": 0,
+            "STRESS": 0,
+            "TRANSITION": 0
+          }
+        }
+      },
+      "2023": {
+        "sessions": 250,
+        "eligible_sessions": 250,
+        "adjacent_pairs": 249,
+        "changes": 80,
+        "turnover": 0.321285140562249,
+        "occupancy": {
+          "MEDIUM": 29,
+          "LOW": 99,
+          "HIGH": 122
+        },
+        "duration": {
+          "n": 81,
+          "min": 1,
+          "median": 2,
+          "mean": 3.0864197530864197,
+          "max": 13
+        },
+        "uncensored_duration": {
+          "n": 79,
+          "min": 1,
+          "median": 2,
+          "mean": 3.037974683544304,
+          "max": 13
+        },
+        "censored_runs": 2,
+        "duration_distribution": {
+          "1": 34,
+          "2": 13,
+          "3": 7,
+          "4": 6,
+          "5": 7,
+          "6": 6,
+          "7": 4,
+          "9": 1,
+          "11": 1,
+          "13": 2
+        },
+        "stress_duration": {
+          "n": 0,
+          "min": null,
+          "median": null,
+          "mean": null,
+          "max": null
+        },
+        "flip_flops": {
+          "1": {
+            "count": 28,
+            "per_adjacent_pair": 0.11244979919678715
+          },
+          "2": {
+            "count": 38,
+            "per_adjacent_pair": 0.15261044176706828
+          },
+          "3": {
+            "count": 43,
+            "per_adjacent_pair": 0.17269076305220885
+          },
+          "5": {
+            "count": 51,
+            "per_adjacent_pair": 0.20481927710843373
+          }
+        },
+        "transition_matrix": {
+          "DEFENSIVE": {
+            "DEFENSIVE": 0,
+            "HIGH": 0,
+            "LOW": 0,
+            "MEDIUM": 0,
+            "RISK_ON_BROAD": 0,
+            "RISK_ON_SELECTIVE": 0,
+            "STRESS": 0,
+            "TRANSITION": 0
+          },
+          "HIGH": {
+            "DEFENSIVE": 0,
+            "HIGH": 89,
+            "LOW": 27,
+            "MEDIUM": 6,
+            "RISK_ON_BROAD": 0,
+            "RISK_ON_SELECTIVE": 0,
+            "STRESS": 0,
+            "TRANSITION": 0
+          },
+          "LOW": {
+            "DEFENSIVE": 0,
+            "HIGH": 27,
+            "LOW": 65,
+            "MEDIUM": 7,
+            "RISK_ON_BROAD": 0,
+            "RISK_ON_SELECTIVE": 0,
+            "STRESS": 0,
+            "TRANSITION": 0
+          },
+          "MEDIUM": {
+            "DEFENSIVE": 0,
+            "HIGH": 6,
+            "LOW": 7,
+            "MEDIUM": 15,
+            "RISK_ON_BROAD": 0,
+            "RISK_ON_SELECTIVE": 0,
+            "STRESS": 0,
+            "TRANSITION": 0
+          },
+          "RISK_ON_BROAD": {
+            "DEFENSIVE": 0,
+            "HIGH": 0,
+            "LOW": 0,
+            "MEDIUM": 0,
+            "RISK_ON_BROAD": 0,
+            "RISK_ON_SELECTIVE": 0,
+            "STRESS": 0,
+            "TRANSITION": 0
+          },
+          "RISK_ON_SELECTIVE": {
+            "DEFENSIVE": 0,
+            "HIGH": 0,
+            "LOW": 0,
+            "MEDIUM": 0,
+            "RISK_ON_BROAD": 0,
+            "RISK_ON_SELECTIVE": 0,
+            "STRESS": 0,
+            "TRANSITION": 0
+          },
+          "STRESS": {
+            "DEFENSIVE": 0,
+            "HIGH": 0,
+            "LOW": 0,
+            "MEDIUM": 0,
+            "RISK_ON_BROAD": 0,
+            "RISK_ON_SELECTIVE": 0,
+            "STRESS": 0,
+            "TRANSITION": 0
+          },
+          "TRANSITION": {
+            "DEFENSIVE": 0,
+            "HIGH": 0,
+            "LOW": 0,
+            "MEDIUM": 0,
+            "RISK_ON_BROAD": 0,
+            "RISK_ON_SELECTIVE": 0,
+            "STRESS": 0,
+            "TRANSITION": 0
+          }
+        }
+      },
+      "2024": {
+        "sessions": 252,
+        "eligible_sessions": 252,
+        "adjacent_pairs": 251,
+        "changes": 78,
+        "turnover": 0.3107569721115538,
+        "occupancy": {
+          "LOW": 87,
+          "HIGH": 131,
+          "MEDIUM": 34
+        },
+        "duration": {
+          "n": 79,
+          "min": 1,
+          "median": 2,
+          "mean": 3.189873417721519,
+          "max": 16
+        },
+        "uncensored_duration": {
+          "n": 77,
+          "min": 1,
+          "median": 2,
+          "mean": 3.220779220779221,
+          "max": 16
+        },
+        "censored_runs": 2,
+        "duration_distribution": {
+          "1": 32,
+          "2": 15,
+          "3": 8,
+          "4": 7,
+          "5": 5,
+          "6": 4,
+          "8": 2,
+          "9": 2,
+          "11": 1,
+          "13": 1,
+          "15": 1,
+          "16": 1
+        },
+        "stress_duration": {
+          "n": 0,
+          "min": null,
+          "median": null,
+          "mean": null,
+          "max": null
+        },
+        "flip_flops": {
+          "1": {
+            "count": 29,
+            "per_adjacent_pair": 0.11553784860557768
+          },
+          "2": {
+            "count": 37,
+            "per_adjacent_pair": 0.14741035856573706
+          },
+          "3": {
+            "count": 42,
+            "per_adjacent_pair": 0.16733067729083664
+          },
+          "5": {
+            "count": 49,
+            "per_adjacent_pair": 0.1952191235059761
+          }
+        },
+        "transition_matrix": {
+          "DEFENSIVE": {
+            "DEFENSIVE": 0,
+            "HIGH": 0,
+            "LOW": 0,
+            "MEDIUM": 0,
+            "RISK_ON_BROAD": 0,
+            "RISK_ON_SELECTIVE": 0,
+            "STRESS": 0,
+            "TRANSITION": 0
+          },
+          "HIGH": {
+            "DEFENSIVE": 0,
+            "HIGH": 101,
+            "LOW": 22,
+            "MEDIUM": 8,
+            "RISK_ON_BROAD": 0,
+            "RISK_ON_SELECTIVE": 0,
+            "STRESS": 0,
+            "TRANSITION": 0
+          },
+          "LOW": {
+            "DEFENSIVE": 0,
+            "HIGH": 22,
+            "LOW": 55,
+            "MEDIUM": 9,
+            "RISK_ON_BROAD": 0,
+            "RISK_ON_SELECTIVE": 0,
+            "STRESS": 0,
+            "TRANSITION": 0
+          },
+          "MEDIUM": {
+            "DEFENSIVE": 0,
+            "HIGH": 8,
+            "LOW": 9,
+            "MEDIUM": 17,
+            "RISK_ON_BROAD": 0,
+            "RISK_ON_SELECTIVE": 0,
+            "STRESS": 0,
+            "TRANSITION": 0
+          },
+          "RISK_ON_BROAD": {
+            "DEFENSIVE": 0,
+            "HIGH": 0,
+            "LOW": 0,
+            "MEDIUM": 0,
+            "RISK_ON_BROAD": 0,
+            "RISK_ON_SELECTIVE": 0,
+            "STRESS": 0,
+            "TRANSITION": 0
+          },
+          "RISK_ON_SELECTIVE": {
+            "DEFENSIVE": 0,
+            "HIGH": 0,
+            "LOW": 0,
+            "MEDIUM": 0,
+            "RISK_ON_BROAD": 0,
+            "RISK_ON_SELECTIVE": 0,
+            "STRESS": 0,
+            "TRANSITION": 0
+          },
+          "STRESS": {
+            "DEFENSIVE": 0,
+            "HIGH": 0,
+            "LOW": 0,
+            "MEDIUM": 0,
+            "RISK_ON_BROAD": 0,
+            "RISK_ON_SELECTIVE": 0,
+            "STRESS": 0,
+            "TRANSITION": 0
+          },
+          "TRANSITION": {
+            "DEFENSIVE": 0,
+            "HIGH": 0,
+            "LOW": 0,
+            "MEDIUM": 0,
+            "RISK_ON_BROAD": 0,
+            "RISK_ON_SELECTIVE": 0,
+            "STRESS": 0,
+            "TRANSITION": 0
+          }
+        }
+      },
+      "2025": {
+        "sessions": 250,
+        "eligible_sessions": 250,
+        "adjacent_pairs": 249,
+        "changes": 76,
+        "turnover": 0.30522088353413657,
+        "occupancy": {
+          "MEDIUM": 51,
+          "LOW": 91,
+          "HIGH": 108
+        },
+        "duration": {
+          "n": 77,
+          "min": 1,
+          "median": 2,
+          "mean": 3.2467532467532467,
+          "max": 15
+        },
+        "uncensored_duration": {
+          "n": 75,
+          "min": 1,
+          "median": 2,
+          "mean": 3.28,
+          "max": 15
+        },
+        "censored_runs": 2,
+        "duration_distribution": {
+          "1": 33,
+          "2": 11,
+          "3": 7,
+          "4": 4,
+          "5": 7,
+          "6": 6,
+          "7": 2,
+          "8": 3,
+          "9": 1,
+          "12": 1,
+          "13": 1,
+          "15": 1
+        },
+        "stress_duration": {
+          "n": 0,
+          "min": null,
+          "median": null,
+          "mean": null,
+          "max": null
+        },
+        "flip_flops": {
+          "1": {
+            "count": 25,
+            "per_adjacent_pair": 0.10040160642570281
+          },
+          "2": {
+            "count": 32,
+            "per_adjacent_pair": 0.1285140562248996
+          },
+          "3": {
+            "count": 37,
+            "per_adjacent_pair": 0.14859437751004015
+          },
+          "5": {
+            "count": 46,
+            "per_adjacent_pair": 0.18473895582329317
+          }
+        },
+        "transition_matrix": {
+          "DEFENSIVE": {
+            "DEFENSIVE": 0,
+            "HIGH": 0,
+            "LOW": 0,
+            "MEDIUM": 0,
+            "RISK_ON_BROAD": 0,
+            "RISK_ON_SELECTIVE": 0,
+            "STRESS": 0,
+            "TRANSITION": 0
+          },
+          "HIGH": {
+            "DEFENSIVE": 0,
+            "HIGH": 78,
+            "LOW": 21,
+            "MEDIUM": 8,
+            "RISK_ON_BROAD": 0,
+            "RISK_ON_SELECTIVE": 0,
+            "STRESS": 0,
+            "TRANSITION": 0
+          },
+          "LOW": {
+            "DEFENSIVE": 0,
+            "HIGH": 22,
+            "LOW": 61,
+            "MEDIUM": 8,
+            "RISK_ON_BROAD": 0,
+            "RISK_ON_SELECTIVE": 0,
+            "STRESS": 0,
+            "TRANSITION": 0
+          },
+          "MEDIUM": {
+            "DEFENSIVE": 0,
+            "HIGH": 8,
+            "LOW": 9,
+            "MEDIUM": 34,
+            "RISK_ON_BROAD": 0,
+            "RISK_ON_SELECTIVE": 0,
+            "STRESS": 0,
+            "TRANSITION": 0
+          },
+          "RISK_ON_BROAD": {
+            "DEFENSIVE": 0,
+            "HIGH": 0,
+            "LOW": 0,
+            "MEDIUM": 0,
+            "RISK_ON_BROAD": 0,
+            "RISK_ON_SELECTIVE": 0,
+            "STRESS": 0,
+            "TRANSITION": 0
+          },
+          "RISK_ON_SELECTIVE": {
+            "DEFENSIVE": 0,
+            "HIGH": 0,
+            "LOW": 0,
+            "MEDIUM": 0,
+            "RISK_ON_BROAD": 0,
+            "RISK_ON_SELECTIVE": 0,
+            "STRESS": 0,
+            "TRANSITION": 0
+          },
+          "STRESS": {
+            "DEFENSIVE": 0,
+            "HIGH": 0,
+            "LOW": 0,
+            "MEDIUM": 0,
+            "RISK_ON_BROAD": 0,
+            "RISK_ON_SELECTIVE": 0,
+            "STRESS": 0,
+            "TRANSITION": 0
+          },
+          "TRANSITION": {
+            "DEFENSIVE": 0,
+            "HIGH": 0,
+            "LOW": 0,
+            "MEDIUM": 0,
+            "RISK_ON_BROAD": 0,
+            "RISK_ON_SELECTIVE": 0,
+            "STRESS": 0,
+            "TRANSITION": 0
+          }
+        }
+      },
+      "2026": {
+        "sessions": 170,
+        "eligible_sessions": 170,
+        "adjacent_pairs": 169,
+        "changes": 49,
+        "turnover": 0.28994082840236685,
+        "occupancy": {
+          "HIGH": 115,
+          "LOW": 45,
+          "MEDIUM": 10
+        },
+        "duration": {
+          "n": 50,
+          "min": 1,
+          "median": 2.0,
+          "mean": 3.4,
+          "max": 21
+        },
+        "uncensored_duration": {
+          "n": 48,
+          "min": 1,
+          "median": 2.0,
+          "mean": 3.3125,
+          "max": 21
+        },
+        "censored_runs": 2,
+        "duration_distribution": {
+          "1": 18,
+          "2": 16,
+          "3": 3,
+          "4": 1,
+          "5": 2,
+          "6": 2,
+          "7": 1,
+          "8": 2,
+          "9": 2,
+          "10": 1,
+          "13": 1,
+          "21": 1
+        },
+        "stress_duration": {
+          "n": 0,
+          "min": null,
+          "median": null,
+          "mean": null,
+          "max": null
+        },
+        "flip_flops": {
+          "1": {
+            "count": 17,
+            "per_adjacent_pair": 0.10059171597633136
+          },
+          "2": {
+            "count": 28,
+            "per_adjacent_pair": 0.16568047337278108
+          },
+          "3": {
+            "count": 31,
+            "per_adjacent_pair": 0.1834319526627219
+          },
+          "5": {
+            "count": 33,
+            "per_adjacent_pair": 0.1952662721893491
+          }
+        },
+        "transition_matrix": {
+          "DEFENSIVE": {
+            "DEFENSIVE": 0,
+            "HIGH": 0,
+            "LOW": 0,
+            "MEDIUM": 0,
+            "RISK_ON_BROAD": 0,
+            "RISK_ON_SELECTIVE": 0,
+            "STRESS": 0,
+            "TRANSITION": 0
+          },
+          "HIGH": {
+            "DEFENSIVE": 0,
+            "HIGH": 92,
+            "LOW": 18,
+            "MEDIUM": 4,
+            "RISK_ON_BROAD": 0,
+            "RISK_ON_SELECTIVE": 0,
+            "STRESS": 0,
+            "TRANSITION": 0
+          },
+          "LOW": {
+            "DEFENSIVE": 0,
+            "HIGH": 19,
+            "LOW": 24,
+            "MEDIUM": 2,
+            "RISK_ON_BROAD": 0,
+            "RISK_ON_SELECTIVE": 0,
+            "STRESS": 0,
+            "TRANSITION": 0
+          },
+          "MEDIUM": {
+            "DEFENSIVE": 0,
+            "HIGH": 3,
+            "LOW": 3,
+            "MEDIUM": 4,
+            "RISK_ON_BROAD": 0,
+            "RISK_ON_SELECTIVE": 0,
+            "STRESS": 0,
+            "TRANSITION": 0
+          },
+          "RISK_ON_BROAD": {
+            "DEFENSIVE": 0,
+            "HIGH": 0,
+            "LOW": 0,
+            "MEDIUM": 0,
+            "RISK_ON_BROAD": 0,
+            "RISK_ON_SELECTIVE": 0,
+            "STRESS": 0,
+            "TRANSITION": 0
+          },
+          "RISK_ON_SELECTIVE": {
+            "DEFENSIVE": 0,
+            "HIGH": 0,
+            "LOW": 0,
+            "MEDIUM": 0,
+            "RISK_ON_BROAD": 0,
+            "RISK_ON_SELECTIVE": 0,
+            "STRESS": 0,
+            "TRANSITION": 0
+          },
+          "STRESS": {
+            "DEFENSIVE": 0,
+            "HIGH": 0,
+            "LOW": 0,
+            "MEDIUM": 0,
+            "RISK_ON_BROAD": 0,
+            "RISK_ON_SELECTIVE": 0,
+            "STRESS": 0,
+            "TRANSITION": 0
+          },
+          "TRANSITION": {
+            "DEFENSIVE": 0,
+            "HIGH": 0,
+            "LOW": 0,
+            "MEDIUM": 0,
+            "RISK_ON_BROAD": 0,
+            "RISK_ON_SELECTIVE": 0,
+            "STRESS": 0,
+            "TRANSITION": 0
+          }
+        }
+      }
+    },
+    "category_context": {
+      "HIGH": {
+        "sessions": 769,
+        "arriving_regime_change_sessions": 231,
+        "arriving_change_fraction": 0.30039011703511054,
+        "opposed_family_sessions": 0,
+        "regime_occupancy": {
+          "TRANSITION": 363,
+          "RISK_ON_SELECTIVE": 406
+        },
+        "plausible_regime_count": {
+          "3": 699,
+          "4": 70
+        }
+      },
+      "LOW": {
+        "sessions": 794,
+        "arriving_regime_change_sessions": 170,
+        "arriving_change_fraction": 0.21437578814627994,
+        "opposed_family_sessions": 125,
+        "regime_occupancy": {
+          "DEFENSIVE": 184,
+          "TRANSITION": 292,
+          "RISK_ON_BROAD": 247,
+          "STRESS": 71
+        },
+        "plausible_regime_count": {
+          "1": 794
+        }
+      },
+      "MEDIUM": {
+        "sessions": 367,
+        "arriving_regime_change_sessions": 80,
+        "arriving_change_fraction": 0.21798365122615804,
+        "opposed_family_sessions": 0,
+        "regime_occupancy": {
+          "TRANSITION": 228,
+          "DEFENSIVE": 139
+        },
+        "plausible_regime_count": {
+          "2": 367
+        }
+      }
+    },
+    "verdict": "PASS",
+    "interpretation": "LOW794/MEDIUM367/HIGH769; only813/1930 observations follow the nominal inverse of concordance. All125 LOW-concordance observations have LOW uncertainty: conflicting families can still select one unambiguous regime. HIGH is conditional rule ambiguity, not market uncertainty or error probability. It changes28.41% of pairs; preserve qualitative context and assess presentation prospectively."
+  },
+  "cross_tab": {
+    "HIGH": {
+      "LOW": 467,
+      "MEDIUM": 21,
+      "HIGH": 0
+    },
+    "MEDIUM": {
+      "LOW": 202,
+      "MEDIUM": 346,
+      "HIGH": 769
+    },
+    "LOW": {
+      "LOW": 125,
+      "MEDIUM": 0,
+      "HIGH": 0
+    }
+  },
+  "data_quality": {
+    "verdict": "PASS",
+    "report": "data-quality-audit.json",
+    "default_replay_profile": {
+      "PARTIAL": 1930
+    }
+  },
+  "inverse_copy_test": {
+    "inverse_matches": 813,
+    "sessions": 1930,
+    "counterexamples": [
+      {
+        "date": "2019-01-11",
+        "regime": "TRANSITION",
+        "concordance": "LOW",
+        "uncertainty": "LOW",
+        "pillarStates": {
+          "participation": "MIXED",
+          "leadership": "FAVORABLE",
+          "volatility": "BENIGN",
+          "fragility": "HIGH",
+          "equity": "MIXED"
+        },
+        "dependencyUnits": {
+          "equity_price_complex": "ADVERSE",
+          "implied_volatility_complex": "FAVORABLE"
+        },
+        "plausibleRegimes": [
+          "TRANSITION"
+        ]
+      },
+      {
+        "date": "2019-01-28",
+        "regime": "TRANSITION",
+        "concordance": "MEDIUM",
+        "uncertainty": "HIGH",
+        "pillarStates": {
+          "participation": "MIXED",
+          "leadership": "FAVORABLE",
+          "volatility": "WATCH",
+          "fragility": "LOW",
+          "equity": "MIXED"
+        },
+        "dependencyUnits": {
+          "equity_price_complex": "MIXED",
+          "implied_volatility_complex": "MIXED"
+        },
+        "plausibleRegimes": [
+          "RISK_ON_BROAD",
+          "RISK_ON_SELECTIVE",
+          "TRANSITION"
+        ]
+      },
+      {
+        "date": "2019-02-07",
+        "regime": "TRANSITION",
+        "concordance": "MEDIUM",
+        "uncertainty": "HIGH",
+        "pillarStates": {
+          "participation": "MIXED",
+          "leadership": "MIXED",
+          "volatility": "WATCH",
+          "fragility": "LOW",
+          "equity": "MIXED"
+        },
+        "dependencyUnits": {
+          "equity_price_complex": "MIXED",
+          "implied_volatility_complex": "MIXED"
+        },
+        "plausibleRegimes": [
+          "RISK_ON_BROAD",
+          "RISK_ON_SELECTIVE",
+          "TRANSITION",
+          "DEFENSIVE"
+        ]
+      },
+      {
+        "date": "2019-02-08",
+        "regime": "TRANSITION",
+        "concordance": "LOW",
+        "uncertainty": "LOW",
+        "pillarStates": {
+          "participation": "MIXED",
+          "leadership": "ADVERSE",
+          "volatility": "BENIGN",
+          "fragility": "LOW",
+          "equity": "ADVERSE"
+        },
+        "dependencyUnits": {
+          "equity_price_complex": "ADVERSE",
+          "implied_volatility_complex": "FAVORABLE"
+        },
+        "plausibleRegimes": [
+          "TRANSITION"
+        ]
+      },
+      {
+        "date": "2019-02-11",
+        "regime": "TRANSITION",
+        "concordance": "LOW",
+        "uncertainty": "LOW",
+        "pillarStates": {
+          "participation": "MIXED",
+          "leadership": "ADVERSE",
+          "volatility": "BENIGN",
+          "fragility": "LOW",
+          "equity": "ADVERSE"
+        },
+        "dependencyUnits": {
+          "equity_price_complex": "ADVERSE",
+          "implied_volatility_complex": "FAVORABLE"
+        },
+        "plausibleRegimes": [
+          "TRANSITION"
+        ]
+      },
+      {
+        "date": "2019-02-25",
+        "regime": "RISK_ON_SELECTIVE",
+        "concordance": "MEDIUM",
+        "uncertainty": "HIGH",
+        "pillarStates": {
+          "participation": "MIXED",
+          "leadership": "FAVORABLE",
+          "volatility": "BENIGN",
+          "fragility": "LOW",
+          "equity": "MIXED"
+        },
+        "dependencyUnits": {
+          "equity_price_complex": "MIXED",
+          "implied_volatility_complex": "FAVORABLE"
+        },
+        "plausibleRegimes": [
+          "RISK_ON_BROAD",
+          "RISK_ON_SELECTIVE",
+          "TRANSITION"
+        ]
+      },
+      {
+        "date": "2019-02-26",
+        "regime": "TRANSITION",
+        "concordance": "MEDIUM",
+        "uncertainty": "HIGH",
+        "pillarStates": {
+          "participation": "MIXED",
+          "leadership": "MIXED",
+          "volatility": "BENIGN",
+          "fragility": "LOW",
+          "equity": "MIXED"
+        },
+        "dependencyUnits": {
+          "equity_price_complex": "MIXED",
+          "implied_volatility_complex": "FAVORABLE"
+        },
+        "plausibleRegimes": [
+          "RISK_ON_BROAD",
+          "RISK_ON_SELECTIVE",
+          "TRANSITION"
+        ]
+      },
+      {
+        "date": "2019-02-27",
+        "regime": "RISK_ON_SELECTIVE",
+        "concordance": "MEDIUM",
+        "uncertainty": "HIGH",
+        "pillarStates": {
+          "participation": "MIXED",
+          "leadership": "FAVORABLE",
+          "volatility": "BENIGN",
+          "fragility": "LOW",
+          "equity": "MIXED"
+        },
+        "dependencyUnits": {
+          "equity_price_complex": "MIXED",
+          "implied_volatility_complex": "FAVORABLE"
+        },
+        "plausibleRegimes": [
+          "RISK_ON_BROAD",
+          "RISK_ON_SELECTIVE",
+          "TRANSITION"
+        ]
+      },
+      {
+        "date": "2019-02-28",
+        "regime": "RISK_ON_SELECTIVE",
+        "concordance": "MEDIUM",
+        "uncertainty": "HIGH",
+        "pillarStates": {
+          "participation": "MIXED",
+          "leadership": "FAVORABLE",
+          "volatility": "BENIGN",
+          "fragility": "LOW",
+          "equity": "MIXED"
+        },
+        "dependencyUnits": {
+          "equity_price_complex": "MIXED",
+          "implied_volatility_complex": "FAVORABLE"
+        },
+        "plausibleRegimes": [
+          "RISK_ON_BROAD",
+          "RISK_ON_SELECTIVE",
+          "TRANSITION"
+        ]
+      },
+      {
+        "date": "2019-03-01",
+        "regime": "RISK_ON_SELECTIVE",
+        "concordance": "MEDIUM",
+        "uncertainty": "HIGH",
+        "pillarStates": {
+          "participation": "MIXED",
+          "leadership": "FAVORABLE",
+          "volatility": "BENIGN",
+          "fragility": "LOW",
+          "equity": "MIXED"
+        },
+        "dependencyUnits": {
+          "equity_price_complex": "MIXED",
+          "implied_volatility_complex": "FAVORABLE"
+        },
+        "plausibleRegimes": [
+          "RISK_ON_BROAD",
+          "RISK_ON_SELECTIVE",
+          "TRANSITION"
+        ]
+      }
+    ],
+    "note": "Failure of exact inverse identity demonstrates distinct state information; not proof of user utility."
+  },
+  "value_scope": "PASS means demonstrated distinct descriptive information with existing evidence; it does not certify user benefit or predictive validity."
+}

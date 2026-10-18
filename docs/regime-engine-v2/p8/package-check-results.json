@@ -1,0 +1,202 @@
+{
+  "status": "PASS",
+  "checks_passed": 37,
+  "checks_total": 37,
+  "checks": [
+    {
+      "id": "P8_ARTIFACT_BYTES",
+      "pass": true
+    },
+    {
+      "id": "FROZEN_PROTOCOL",
+      "pass": true
+    },
+    {
+      "id": "FROZEN_RULE_TABLE",
+      "pass": true
+    },
+    {
+      "id": "REGISTRY_59",
+      "pass": true
+    },
+    {
+      "id": "PRICE_CONTRACT_59",
+      "pass": true
+    },
+    {
+      "id": "TEMPORAL_CONTRACT_59",
+      "pass": true
+    },
+    {
+      "id": "REPLAY_COUNTS",
+      "pass": true
+    },
+    {
+      "id": "PIT_HONESTY",
+      "pass": true
+    },
+    {
+      "id": "MINIMIZATION",
+      "pass": true
+    },
+    {
+      "id": "PARAMETERS_9_RESOLVED",
+      "pass": true
+    },
+    {
+      "id": "PARAMETER_EVIDENCE_BYTES",
+      "pass": true
+    },
+    {
+      "id": "CANDIDATE_BINDING",
+      "pass": true
+    },
+    {
+      "id": "F1_TRAIN_ONLY_SELECTION",
+      "pass": true
+    },
+    {
+      "id": "F1_SEALS",
+      "pass": true
+    },
+    {
+      "id": "F1_UNCHANGED_SELECTION",
+      "pass": true
+    },
+    {
+      "id": "F2_TRAIN_ONLY_SELECTION",
+      "pass": true
+    },
+    {
+      "id": "F2_SEALS",
+      "pass": true
+    },
+    {
+      "id": "F2_UNCHANGED_SELECTION",
+      "pass": true
+    },
+    {
+      "id": "F3_TRAIN_ONLY_SELECTION",
+      "pass": true
+    },
+    {
+      "id": "F3_SEALS",
+      "pass": true
+    },
+    {
+      "id": "F3_UNCHANGED_SELECTION",
+      "pass": true
+    },
+    {
+      "id": "124_SOURCE_CAPTURES",
+      "pass": true
+    },
+    {
+      "id": "SOURCE_RAW_BYTES",
+      "pass": true
+    },
+    {
+      "id": "RAW_FIXTURE_HASH",
+      "pass": true
+    },
+    {
+      "id": "RAW_464_REPLAY",
+      "pass": true
+    },
+    {
+      "id": "ALL_CANDIDATE_PILLAR_STATES",
+      "pass": true
+    },
+    {
+      "id": "21_NATIVE_TEMPORAL_CHECKS",
+      "pass": true
+    },
+    {
+      "id": "HISTORICAL_FEATURES_UNCHANGED",
+      "pass": true
+    },
+    {
+      "id": "HISTORICAL_WITNESSES",
+      "pass": true
+    },
+    {
+      "id": "ONLY_AUTHORIZED_DOC_UPDATES",
+      "pass": true
+    },
+    {
+      "id": "V1_515_BYTES_UNCHANGED",
+      "pass": true
+    },
+    {
+      "id": "HEAD_UNCHANGED",
+      "pass": true
+    },
+    {
+      "id": "NO_NEW_PRODUCTION_FILES",
+      "pass": true
+    },
+    {
+      "id": "V1_EXISTING_TESTS_25",
+      "pass": true
+    },
+    {
+      "id": "P7_CONCEPTUAL_16",
+      "pass": true
+    },
+    {
+      "id": "BUILDER_GATE",
+      "pass": true
+    },
+    {
+      "id": "NO_PRODUCTION_CLAIM",
+      "pass": true
+    }
+  ],
+  "gate": {
+    "STATE": "REGIME_ENGINE_V2_PROTOTYPE_QUALIFIED",
+    "ARCHITECTURE": "EVIDENCE_STATE_ENGINE",
+    "ARCHITECTURE_CHANGED": "NO",
+    "gates": {
+      "PRICE_SERIES_CONTRACT": "PASS",
+      "TEMPORAL_AVAILABILITY_CONTRACT": "PASS",
+      "REPLAY_CLASSIFICATION": "PASS",
+      "PARAMETER_MANIFEST": "PASS",
+      "PARAMETER_VALIDATION_PROTOCOL": "PASS",
+      "RAW_INPUT_REACHABILITY": "PASS",
+      "MISSING_RAW_PATH": "PASS",
+      "DEPENDENCY_RAW_PATH": "PASS",
+      "SATELLITE_ISOLATION_RAW_PATH": "PASS"
+    },
+    "REPLAY_R0_FEATURES": 0,
+    "REPLAY_R1_FEATURES": 0,
+    "REPLAY_R2_FEATURES": 45,
+    "REPLAY_UNKNOWN_FEATURES": 14,
+    "PARAMETERS_TOTAL": 9,
+    "PARAMETERS_RESOLVED": 9,
+    "PARAMETERS_UNRESOLVED": 0,
+    "CONCEPTUAL_REACHABILITY": "PASS",
+    "FEATURES_TOTAL": 59,
+    "CORE_DECISION_FEATURES": 9,
+    "SATELLITE_FEATURES": 14,
+    "DIAGNOSTIC_FEATURES": 24,
+    "RESEARCH_ONLY_FEATURES": 7,
+    "PRESENTATION_ONLY_FEATURES": 5,
+    "RAW_FEATURES": 4,
+    "DERIVED_FEATURES": 55,
+    "V1_PRESERVED": "PASS",
+    "PRODUCTION_CODE_CHANGED": "NO",
+    "PRODUCTION_CUTOVER": "NO",
+    "UNRESOLVED_BLOCKERS": [],
+    "BUILDER_READY": "YES",
+    "BUILDER_EXECUTED": "NO",
+    "meaning": "Faithful implementability only. No production validation or cutover authorization.",
+    "replay_scope": "Historical coverage through 2026-09-04; R2 is retrospective research, not strict PIT OOS.",
+    "production_still_blocked_by": [
+      "Production implementation and actual-engine review not executed",
+      "No strict historical PIT/OOS evidence for this research dataset",
+      "V1/V2 shadow comparison, predeclared benchmarks/ablation, cache/replay/degradation and maintenance/UX acceptance still pending",
+      "No production cutover approval requested or granted"
+    ]
+  },
+  "scope": "P8 research contract and preserved artifacts, not production-engine qualification"
+}

@@ -1,0 +1,33 @@
+{
+  "findings": [
+    {
+      "finding_id": "D-QA-GUARD-001",
+      "severity": "LOW",
+      "component": "lib/dashboard/regime-v2-preview.test.mjs",
+      "description": "The first guard harness could not resolve next/navigation under Node and counted mocked component invocations as if they were imports. Returning a React element never invokes that component, so the original counter could not establish that fixture loading was gated.",
+      "evidence": {
+        "original_failure": "preview-tests.log preserves ERR_MODULE_NOT_FOUND for next/navigation; preview-guard-tests-initial.log preserves the first resolver repair failing on module mocking of a TSX target.",
+        "original_counter_excerpt": "namedExports: { RegimeV2Preview(props) { previewImports++; return props; } }; assert.equal(previewImports, 0);",
+        "logs": [
+          {
+            "path": "docs/regime-engine-v2/designer/preview-tests.log",
+            "sha256": "1484e60ae8fe204042c123bfd046a8741e8ea7f5ba28ae8913b79ce5945b71a4"
+          },
+          {
+            "path": "docs/regime-engine-v2/designer/preview-guard-tests-initial.log",
+            "sha256": "143c2138d12d76f6ad703b63ba0d732f1255b3121c40147057c8bd6ecf3c5721"
+          },
+          {
+            "path": "docs/regime-engine-v2/designer/preview-guard-tests.log",
+            "sha256": "bb11efcdcd7766aebc641913ad0cc63121204be7aa310b2d3cb2138a023a0c19"
+          }
+        ]
+      },
+      "repair": "Use the existing test loader with a bounded local resolve/load hook for Next notFound and the preview component. Count actual preview specifier resolutions, assert no resolution or query read in production/test, and assert both route sources place their sole dynamic import after the development guard. ES/EN development props remain unchanged.",
+      "validation": "8/8 guard tests pass; included in the full Designer suite. Production HTTP behavior is checked separately after build.",
+      "engine_impact": "NONE",
+      "public_default_impact": "NONE",
+      "status": "CLOSED"
+    }
+  ]
+}

@@ -1,0 +1,87 @@
+{
+  "schemaVersion": "regime-v2-maintainer-calendar-audit/1.0.0",
+  "disposition": "PASS",
+  "methodologyImpact": "NO",
+  "scope": "Operational calendar adapter and honest failure behavior; does not claim that real runtime official calendar packets are already installed.",
+  "operational": true,
+  "realProviderCalendarConfiguredByThisWork": false,
+  "monFriFallback": false,
+  "spyProxyUsedAsOfficial": false,
+  "implementation": "Existing frozen resolveCalendar validates complete declared coverage, version/source/hash/capture known-at, timezone and explicit session close instants. New source-input boundary binds the reviewed calendar normalization to exact authoritative raw capture identity.",
+  "packets": [
+    "equity NYSE Arca core session",
+    "Cboe VIX daily observation/publication session",
+    "CFE VX settlement session",
+    "BTC US fund reporting session",
+    "GLD State Street valuation session"
+  ],
+  "separation": "Each family requires its own governed packet. Equity close is not VIX publication; CFE settlement is not the equity clock. Release availability remains actual capture bound even with an exact observed session end.",
+  "officialSources": [
+    {
+      "title": "NYSE Holidays & Trading Hours",
+      "url": "https://www.nyse.com/trade/hours-calendars",
+      "checkedDate": "2026-09-08",
+      "supports": "NYSE Arca core-session hours, 2026 holidays and early closes. Published times are Eastern. The source lists November 27 and December 24, 2026 early closes at 13:00 ET.",
+      "notProof": "No parsed runtime packet or archived provider-publication timestamp was created from this browse."
+    },
+    {
+      "title": "Cboe Hours & Holidays — U.S. Futures",
+      "url": "https://www.cboe.com/about/hours/us-futures/",
+      "checkedDate": "2026-09-08",
+      "supports": "Separate CFE trading-hours specification in Central Time and a linked 2026 Futures Settlement Calendar.",
+      "notProof": "Trading-hours page is not a substitute for reviewing exact daily settlement schedule/holiday exceptions."
+    }
+  ],
+  "maintenanceWorkflow": [
+    "Fetch and preserve official raw calendar/settlement sources using existing authorized capture infrastructure outside Git.",
+    "Review the complete declared interval, including exceptions and source family. Materialize explicit session and timezone-aware closedAt instants, covering DST and early closes.",
+    "Attach id, version, sourceId, sourceVersion, timezone, coverageStart/End, completeIntervalCoverage, capturedAt/availableAt and raw vintage hash. Do not claim the version was known before it was captured.",
+    "Record transformVersion plus hash(calendar). Supply this CalendarPacket under the corresponding family in the external source bundle.",
+    "Replace an expiring packet only by adding a new version with new raw provenance. Existing snapshots retain their original packet for replay.",
+    "If a packet is absent, partial, out of coverage, malformed, from the future, or only an R2 observed-date proxy, let UNKNOWN_CALENDAR make the dependent core unavailable."
+  ],
+  "tests": [
+    {
+      "case": "DST",
+      "fixture": "Explicit synthetic March 6 21:00Z and March 9 20:00Z close instants.",
+      "result": "Before March 9 close resolves March 6; at exact close resolves March 9."
+    },
+    {
+      "case": "holiday",
+      "fixture": "Explicit synthetic November 25/27/30 schedule with November 26 absent.",
+      "result": "Holiday resolves previous closed session; no implied missing weekday."
+    },
+    {
+      "case": "early close",
+      "fixture": "Explicit synthetic November 27 18:00Z close.",
+      "result": "17:59:59Z resolves previous session; 18:00:00Z resolves November 27."
+    },
+    {
+      "case": "unknown",
+      "fixture": "No supplied calendar.",
+      "result": "UNKNOWN_CALENDAR and INCOMPLETE, no fallback."
+    },
+    {
+      "case": "unproved proxy",
+      "fixture": "R2_OBSERVED_PROXY with prospective mode.",
+      "result": "Rejected as UNKNOWN_CALENDAR."
+    },
+    {
+      "case": "future revision",
+      "fixture": "Calendar capture later than asOf.",
+      "result": "UNKNOWN_CALENDAR."
+    },
+    {
+      "case": "tampered normalization",
+      "fixture": "Changed close instant without updated normalization hash.",
+      "result": "SourceBundleError."
+    }
+  ],
+  "fixturePolicy": "All test schedule values and raw captures are synthetic OFFICIAL-format fixtures. They are never asserted to be captured exchange data or used as runtime official calendars.",
+  "knownLimitations": [
+    "No official global calendar fetcher or generic weekday algorithm is installed.",
+    "VIX, BTC and GLD publication availability cannot be inferred from exchange session clocks.",
+    "A reviewable hash proves exact normalization identity, not the correctness or authenticity of an operator's source transcription.",
+    "Strict R0 eligibility requires the relevant calendar version to have been available at each original capture; a later calendar revision cannot retroactively prove earlier capture-session mapping."
+  ]
+}

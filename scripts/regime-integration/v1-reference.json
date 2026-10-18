@@ -1,0 +1,604 @@
+{
+  "schemaVersion": "regime-v2-integration-v1-oracle/1.0.0",
+  "sourceCommit": "7dae726917ded8f5828a8525d596b1ce02830196",
+  "sourceRC2": "2271bee0a21aadd12ab2f45d080c58c94b696326",
+  "scope": "Independent remote renderer/scorer authority with synthetic or unavailable inputs. No market data or live output claim.",
+  "sourceHashes": {
+    "components/dashboard/IntegratedRegimeModule.tsx": "8228aeb319335003188201e0a840af6c58f4201e5869b60397f208a8b1047469",
+    "lib/dashboard/regime-scoring.ts": "b9822768cbda1954f571cc99d4b1c076ed931d21e568b1aaccc5c0857e33e2db",
+    "lib/dashboard/types.ts": "ab27e9621a1ac06119c5a6cb594111c4c5a86d80dcf3d761c49c8c8419d984b2",
+    "components/dashboard/DashboardRegimeV1.tsx@RC2": "92d7ef8bc01d4725d740ddea73cf83086743a93eb5d8271aba8872c83b0982cc"
+  },
+  "simulatedProviderRequests": 1,
+  "realNetworkRequests": 0,
+  "rows": [
+    {
+      "id": "normal",
+      "locale": "es",
+      "provenance": "Actual frozen remote scorer on synthetic qualified inputs",
+      "summary": {
+        "current": "Risk-on selectivo",
+        "bias": "favorable",
+        "confidence": 82,
+        "regimeScore": 76,
+        "sourceName": "Rotación sectorial, VIX y BTC ETF flows",
+        "lastUpdated": "Última actualización disponible por módulo",
+        "updateFrequency": "Diaria / según disponibilidad de cada fuente",
+        "dataStatus": "automated",
+        "reliabilityNote": "Este régimen no anticipa el mercado. Organiza lecturas de volatilidad, rotación y flujos para leer el contexto.",
+        "dataQualityNote": "La confianza se ajusta según la disponibilidad y calidad de rotación sectorial, VIX y BTC ETF flows.",
+        "interpretation": "Lectura compuesta de volatilidad, rotación y flujos. Ponderación actual: rotación sectorial 45%, VIX 40% y BTC ETF flows 15%.",
+        "whatItDoesNotMean": "No es una recomendación de inversión, no elige activos y no anticipa retornos futuros.",
+        "riskSupportSignals": [
+          {
+            "label": "Rotación",
+            "detail": "Sectores growth/cíclicos lideran y defensivos quedan rezagados."
+          },
+          {
+            "label": "Volatilidad",
+            "detail": "Normal bajo: presión de volatilidad contenida."
+          },
+          {
+            "label": "Momentum VIX",
+            "detail": "VIX bajando fuera de zona de estrés."
+          },
+          {
+            "label": "BTC ETF flows",
+            "detail": "Flujos mixtos aportan lectura neutral."
+          }
+        ],
+        "cautionSignals": []
+      },
+      "remoteValues": [
+        "Risk-on selectivo",
+        "Favorable",
+        "76/100",
+        "82%"
+      ],
+      "remoteHtmlSha256": "0e10533f252544c889a8bc73380876a38ac8457e5496db44e9a4e3bc573260bc",
+      "legacyHtmlSha256": "8956dfbe5829687da66459991b1b13e092a43edd79901c04c66cc19fff0e2f39",
+      "legacyMetrics": [
+        "Risk-on selectivo",
+        "Favorable",
+        "76/100",
+        "82%"
+      ],
+      "legacyMarkupMustRemainIdentical": true
+    },
+    {
+      "id": "normal",
+      "locale": "en",
+      "provenance": "Actual frozen remote scorer on synthetic qualified inputs",
+      "summary": {
+        "current": "Risk-on selectivo",
+        "bias": "favorable",
+        "confidence": 82,
+        "regimeScore": 76,
+        "sourceName": "Rotación sectorial, VIX y BTC ETF flows",
+        "lastUpdated": "Última actualización disponible por módulo",
+        "updateFrequency": "Diaria / según disponibilidad de cada fuente",
+        "dataStatus": "automated",
+        "reliabilityNote": "Este régimen no anticipa el mercado. Organiza lecturas de volatilidad, rotación y flujos para leer el contexto.",
+        "dataQualityNote": "La confianza se ajusta según la disponibilidad y calidad de rotación sectorial, VIX y BTC ETF flows.",
+        "interpretation": "Lectura compuesta de volatilidad, rotación y flujos. Ponderación actual: rotación sectorial 45%, VIX 40% y BTC ETF flows 15%.",
+        "whatItDoesNotMean": "No es una recomendación de inversión, no elige activos y no anticipa retornos futuros.",
+        "riskSupportSignals": [
+          {
+            "label": "Rotación",
+            "detail": "Sectores growth/cíclicos lideran y defensivos quedan rezagados."
+          },
+          {
+            "label": "Volatilidad",
+            "detail": "Normal bajo: presión de volatilidad contenida."
+          },
+          {
+            "label": "Momentum VIX",
+            "detail": "VIX bajando fuera de zona de estrés."
+          },
+          {
+            "label": "BTC ETF flows",
+            "detail": "Flujos mixtos aportan lectura neutral."
+          }
+        ],
+        "cautionSignals": []
+      },
+      "remoteValues": [
+        "Selective risk-on",
+        "Favorable",
+        "76/100",
+        "82%"
+      ],
+      "remoteHtmlSha256": "cc9fe46da67b69ad6723c4c0e6be8e922f03dde7ce253ea9eaf83552381a26c4",
+      "legacyHtmlSha256": "4e32a9d61eb424b30c740c027aa8275acdeb6dc8e796f1ed24c1c9986c4d29c8",
+      "legacyMetrics": [
+        "Selective risk-on",
+        "Favorable",
+        "76/100",
+        "82%"
+      ],
+      "legacyMarkupMustRemainIdentical": true
+    },
+    {
+      "id": "unavailable",
+      "locale": "es",
+      "provenance": "Actual frozen remote scorer with missing governed sector pillar",
+      "summary": {
+        "current": "Incompleto",
+        "bias": "unavailable",
+        "confidence": null,
+        "regimeScore": null,
+        "sourceName": "Rotación sectorial, VIX y BTC ETF flows",
+        "lastUpdated": "Pendiente de un snapshot sectorial real y completo",
+        "updateFrequency": "Diaria / según disponibilidad de cada fuente",
+        "dataStatus": "unavailable",
+        "reliabilityNote": "El score integrado requiere los tres pilares gobernados. Sin rotación sectorial real no se calcula un score parcial.",
+        "dataQualityNote": "Pesos preservados: rotación sectorial 45%, VIX 40% y BTC ETF flows 15%. Los pesos no se redistribuyen ni se renormalizan.",
+        "interpretation": "Lectura compuesta no disponible: falta el pilar gobernado de rotación sectorial. No se renormalizan los pesos restantes. Ponderación actual: rotación sectorial 45%, VIX 40% y BTC ETF flows 15%.",
+        "whatItDoesNotMean": "La ausencia del score no implica un régimen neutral, favorable o adverso.",
+        "riskSupportSignals": [],
+        "cautionSignals": [
+          {
+            "label": "Rotación",
+            "detail": "Pilar sectorial temporalmente no disponible; score y confianza quedan sin calcular."
+          }
+        ]
+      },
+      "remoteValues": [
+        "Incompleto",
+        "No disponible",
+        "No disponible",
+        "No disponible"
+      ],
+      "remoteHtmlSha256": "53a9e98251855f8fe0f1d1d60f42289482721ced13cc6dd818db9a7c75e407df",
+      "legacyHtmlSha256": "e59f2ae3c27cdc864571429c110b69ffd02a57c05832ed7e2adf244bee2ec5c9",
+      "legacyMetrics": [
+        "Incompleto",
+        "",
+        "null/100",
+        "null%"
+      ],
+      "legacyMarkupMustRemainIdentical": false
+    },
+    {
+      "id": "unavailable",
+      "locale": "en",
+      "provenance": "Actual frozen remote scorer with missing governed sector pillar",
+      "summary": {
+        "current": "Incompleto",
+        "bias": "unavailable",
+        "confidence": null,
+        "regimeScore": null,
+        "sourceName": "Rotación sectorial, VIX y BTC ETF flows",
+        "lastUpdated": "Pendiente de un snapshot sectorial real y completo",
+        "updateFrequency": "Diaria / según disponibilidad de cada fuente",
+        "dataStatus": "unavailable",
+        "reliabilityNote": "El score integrado requiere los tres pilares gobernados. Sin rotación sectorial real no se calcula un score parcial.",
+        "dataQualityNote": "Pesos preservados: rotación sectorial 45%, VIX 40% y BTC ETF flows 15%. Los pesos no se redistribuyen ni se renormalizan.",
+        "interpretation": "Lectura compuesta no disponible: falta el pilar gobernado de rotación sectorial. No se renormalizan los pesos restantes. Ponderación actual: rotación sectorial 45%, VIX 40% y BTC ETF flows 15%.",
+        "whatItDoesNotMean": "La ausencia del score no implica un régimen neutral, favorable o adverso.",
+        "riskSupportSignals": [],
+        "cautionSignals": [
+          {
+            "label": "Rotación",
+            "detail": "Pilar sectorial temporalmente no disponible; score y confianza quedan sin calcular."
+          }
+        ]
+      },
+      "remoteValues": [
+        "Incomplete",
+        "Unavailable",
+        "Unavailable",
+        "Unavailable"
+      ],
+      "remoteHtmlSha256": "93f6e936c64eaa5b8d940a625166e582515c2b1725598e0b98764b574f0bd24c",
+      "legacyHtmlSha256": "a2811cdcdeadb772c0813db04cad1a03de550469549c8cc9c7ffabea3d990642",
+      "legacyMetrics": [
+        "Incomplete",
+        "",
+        "null/100",
+        "null%"
+      ],
+      "legacyMarkupMustRemainIdentical": false
+    },
+    {
+      "id": "provider-error-fallback",
+      "locale": "es",
+      "provenance": "Actual remote sector adapter on injected HTTP503 then actual remote scorer",
+      "summary": {
+        "current": "Incompleto",
+        "bias": "unavailable",
+        "confidence": null,
+        "regimeScore": null,
+        "sourceName": "Rotación sectorial, VIX y BTC ETF flows",
+        "lastUpdated": "Pendiente de un snapshot sectorial real y completo",
+        "updateFrequency": "Diaria / según disponibilidad de cada fuente",
+        "dataStatus": "unavailable",
+        "reliabilityNote": "El score integrado requiere los tres pilares gobernados. Sin rotación sectorial real no se calcula un score parcial.",
+        "dataQualityNote": "Pesos preservados: rotación sectorial 45%, VIX 40% y BTC ETF flows 15%. Los pesos no se redistribuyen ni se renormalizan.",
+        "interpretation": "Lectura compuesta no disponible: falta el pilar gobernado de rotación sectorial. No se renormalizan los pesos restantes. Ponderación actual: rotación sectorial 45%, VIX 40% y BTC ETF flows 15%.",
+        "whatItDoesNotMean": "La ausencia del score no implica un régimen neutral, favorable o adverso.",
+        "riskSupportSignals": [],
+        "cautionSignals": [
+          {
+            "label": "Rotación",
+            "detail": "Pilar sectorial temporalmente no disponible; score y confianza quedan sin calcular."
+          }
+        ]
+      },
+      "remoteValues": [
+        "Incompleto",
+        "No disponible",
+        "No disponible",
+        "No disponible"
+      ],
+      "remoteHtmlSha256": "53a9e98251855f8fe0f1d1d60f42289482721ced13cc6dd818db9a7c75e407df",
+      "legacyHtmlSha256": "e59f2ae3c27cdc864571429c110b69ffd02a57c05832ed7e2adf244bee2ec5c9",
+      "legacyMetrics": [
+        "Incompleto",
+        "",
+        "null/100",
+        "null%"
+      ],
+      "legacyMarkupMustRemainIdentical": false
+    },
+    {
+      "id": "provider-error-fallback",
+      "locale": "en",
+      "provenance": "Actual remote sector adapter on injected HTTP503 then actual remote scorer",
+      "summary": {
+        "current": "Incompleto",
+        "bias": "unavailable",
+        "confidence": null,
+        "regimeScore": null,
+        "sourceName": "Rotación sectorial, VIX y BTC ETF flows",
+        "lastUpdated": "Pendiente de un snapshot sectorial real y completo",
+        "updateFrequency": "Diaria / según disponibilidad de cada fuente",
+        "dataStatus": "unavailable",
+        "reliabilityNote": "El score integrado requiere los tres pilares gobernados. Sin rotación sectorial real no se calcula un score parcial.",
+        "dataQualityNote": "Pesos preservados: rotación sectorial 45%, VIX 40% y BTC ETF flows 15%. Los pesos no se redistribuyen ni se renormalizan.",
+        "interpretation": "Lectura compuesta no disponible: falta el pilar gobernado de rotación sectorial. No se renormalizan los pesos restantes. Ponderación actual: rotación sectorial 45%, VIX 40% y BTC ETF flows 15%.",
+        "whatItDoesNotMean": "La ausencia del score no implica un régimen neutral, favorable o adverso.",
+        "riskSupportSignals": [],
+        "cautionSignals": [
+          {
+            "label": "Rotación",
+            "detail": "Pilar sectorial temporalmente no disponible; score y confianza quedan sin calcular."
+          }
+        ]
+      },
+      "remoteValues": [
+        "Incomplete",
+        "Unavailable",
+        "Unavailable",
+        "Unavailable"
+      ],
+      "remoteHtmlSha256": "93f6e936c64eaa5b8d940a625166e582515c2b1725598e0b98764b574f0bd24c",
+      "legacyHtmlSha256": "a2811cdcdeadb772c0813db04cad1a03de550469549c8cc9c7ffabea3d990642",
+      "legacyMetrics": [
+        "Incomplete",
+        "",
+        "null/100",
+        "null%"
+      ],
+      "legacyMarkupMustRemainIdentical": false
+    },
+    {
+      "id": "zero",
+      "locale": "es",
+      "provenance": "Explicit render-boundary zero fixture; not a market observation",
+      "summary": {
+        "current": "Risk-on selectivo",
+        "bias": "favorable",
+        "confidence": 0,
+        "regimeScore": 0,
+        "sourceName": "Rotación sectorial, VIX y BTC ETF flows",
+        "lastUpdated": "Última actualización disponible por módulo",
+        "updateFrequency": "Diaria / según disponibilidad de cada fuente",
+        "dataStatus": "automated",
+        "reliabilityNote": "Este régimen no anticipa el mercado. Organiza lecturas de volatilidad, rotación y flujos para leer el contexto.",
+        "dataQualityNote": "La confianza se ajusta según la disponibilidad y calidad de rotación sectorial, VIX y BTC ETF flows.",
+        "interpretation": "Lectura compuesta de volatilidad, rotación y flujos. Ponderación actual: rotación sectorial 45%, VIX 40% y BTC ETF flows 15%.",
+        "whatItDoesNotMean": "No es una recomendación de inversión, no elige activos y no anticipa retornos futuros.",
+        "riskSupportSignals": [
+          {
+            "label": "Rotación",
+            "detail": "Sectores growth/cíclicos lideran y defensivos quedan rezagados."
+          },
+          {
+            "label": "Volatilidad",
+            "detail": "Normal bajo: presión de volatilidad contenida."
+          },
+          {
+            "label": "Momentum VIX",
+            "detail": "VIX bajando fuera de zona de estrés."
+          },
+          {
+            "label": "BTC ETF flows",
+            "detail": "Flujos mixtos aportan lectura neutral."
+          }
+        ],
+        "cautionSignals": []
+      },
+      "remoteValues": [
+        "Risk-on selectivo",
+        "Favorable",
+        "0/100",
+        "0%"
+      ],
+      "remoteHtmlSha256": "d2b18d4a6755177299dfcc307ec94a16d7e583fb667e369d62231c50ef8f1798",
+      "legacyHtmlSha256": "e4fceaae31faaf578d09de98f1e124164366d8d9bcbaa6b232b5a02dee353e77",
+      "legacyMetrics": [
+        "Risk-on selectivo",
+        "Favorable",
+        "0/100",
+        "0%"
+      ],
+      "legacyMarkupMustRemainIdentical": true
+    },
+    {
+      "id": "zero",
+      "locale": "en",
+      "provenance": "Explicit render-boundary zero fixture; not a market observation",
+      "summary": {
+        "current": "Risk-on selectivo",
+        "bias": "favorable",
+        "confidence": 0,
+        "regimeScore": 0,
+        "sourceName": "Rotación sectorial, VIX y BTC ETF flows",
+        "lastUpdated": "Última actualización disponible por módulo",
+        "updateFrequency": "Diaria / según disponibilidad de cada fuente",
+        "dataStatus": "automated",
+        "reliabilityNote": "Este régimen no anticipa el mercado. Organiza lecturas de volatilidad, rotación y flujos para leer el contexto.",
+        "dataQualityNote": "La confianza se ajusta según la disponibilidad y calidad de rotación sectorial, VIX y BTC ETF flows.",
+        "interpretation": "Lectura compuesta de volatilidad, rotación y flujos. Ponderación actual: rotación sectorial 45%, VIX 40% y BTC ETF flows 15%.",
+        "whatItDoesNotMean": "No es una recomendación de inversión, no elige activos y no anticipa retornos futuros.",
+        "riskSupportSignals": [
+          {
+            "label": "Rotación",
+            "detail": "Sectores growth/cíclicos lideran y defensivos quedan rezagados."
+          },
+          {
+            "label": "Volatilidad",
+            "detail": "Normal bajo: presión de volatilidad contenida."
+          },
+          {
+            "label": "Momentum VIX",
+            "detail": "VIX bajando fuera de zona de estrés."
+          },
+          {
+            "label": "BTC ETF flows",
+            "detail": "Flujos mixtos aportan lectura neutral."
+          }
+        ],
+        "cautionSignals": []
+      },
+      "remoteValues": [
+        "Selective risk-on",
+        "Favorable",
+        "0/100",
+        "0%"
+      ],
+      "remoteHtmlSha256": "d11dacddb672916488cd2fc1bcbafd2bb179f24191b78917345316e6c2ae2540",
+      "legacyHtmlSha256": "d9862cc35232811fc3d70118cb9a263fd14758b1d0dc0e04ed27f8a6292342bc",
+      "legacyMetrics": [
+        "Selective risk-on",
+        "Favorable",
+        "0/100",
+        "0%"
+      ],
+      "legacyMarkupMustRemainIdentical": true
+    },
+    {
+      "id": "null-confidence",
+      "locale": "es",
+      "provenance": "Explicit independently nullable field fixture; not a market observation",
+      "summary": {
+        "current": "Risk-on selectivo",
+        "bias": "favorable",
+        "confidence": null,
+        "regimeScore": 0,
+        "sourceName": "Rotación sectorial, VIX y BTC ETF flows",
+        "lastUpdated": "Última actualización disponible por módulo",
+        "updateFrequency": "Diaria / según disponibilidad de cada fuente",
+        "dataStatus": "automated",
+        "reliabilityNote": "Este régimen no anticipa el mercado. Organiza lecturas de volatilidad, rotación y flujos para leer el contexto.",
+        "dataQualityNote": "La confianza se ajusta según la disponibilidad y calidad de rotación sectorial, VIX y BTC ETF flows.",
+        "interpretation": "Lectura compuesta de volatilidad, rotación y flujos. Ponderación actual: rotación sectorial 45%, VIX 40% y BTC ETF flows 15%.",
+        "whatItDoesNotMean": "No es una recomendación de inversión, no elige activos y no anticipa retornos futuros.",
+        "riskSupportSignals": [
+          {
+            "label": "Rotación",
+            "detail": "Sectores growth/cíclicos lideran y defensivos quedan rezagados."
+          },
+          {
+            "label": "Volatilidad",
+            "detail": "Normal bajo: presión de volatilidad contenida."
+          },
+          {
+            "label": "Momentum VIX",
+            "detail": "VIX bajando fuera de zona de estrés."
+          },
+          {
+            "label": "BTC ETF flows",
+            "detail": "Flujos mixtos aportan lectura neutral."
+          }
+        ],
+        "cautionSignals": []
+      },
+      "remoteValues": [
+        "Risk-on selectivo",
+        "Favorable",
+        "0/100",
+        "No disponible"
+      ],
+      "remoteHtmlSha256": "73c5ed3796949befa25ea51304947a9582e9a3b84fd4a5a9b5dbc7680549c93b",
+      "legacyHtmlSha256": "09dc8308ce00115ec6410e7bf07b70b52dff7560be24379e9c7faa85842e36c2",
+      "legacyMetrics": [
+        "Risk-on selectivo",
+        "Favorable",
+        "0/100",
+        "null%"
+      ],
+      "legacyMarkupMustRemainIdentical": false
+    },
+    {
+      "id": "null-confidence",
+      "locale": "en",
+      "provenance": "Explicit independently nullable field fixture; not a market observation",
+      "summary": {
+        "current": "Risk-on selectivo",
+        "bias": "favorable",
+        "confidence": null,
+        "regimeScore": 0,
+        "sourceName": "Rotación sectorial, VIX y BTC ETF flows",
+        "lastUpdated": "Última actualización disponible por módulo",
+        "updateFrequency": "Diaria / según disponibilidad de cada fuente",
+        "dataStatus": "automated",
+        "reliabilityNote": "Este régimen no anticipa el mercado. Organiza lecturas de volatilidad, rotación y flujos para leer el contexto.",
+        "dataQualityNote": "La confianza se ajusta según la disponibilidad y calidad de rotación sectorial, VIX y BTC ETF flows.",
+        "interpretation": "Lectura compuesta de volatilidad, rotación y flujos. Ponderación actual: rotación sectorial 45%, VIX 40% y BTC ETF flows 15%.",
+        "whatItDoesNotMean": "No es una recomendación de inversión, no elige activos y no anticipa retornos futuros.",
+        "riskSupportSignals": [
+          {
+            "label": "Rotación",
+            "detail": "Sectores growth/cíclicos lideran y defensivos quedan rezagados."
+          },
+          {
+            "label": "Volatilidad",
+            "detail": "Normal bajo: presión de volatilidad contenida."
+          },
+          {
+            "label": "Momentum VIX",
+            "detail": "VIX bajando fuera de zona de estrés."
+          },
+          {
+            "label": "BTC ETF flows",
+            "detail": "Flujos mixtos aportan lectura neutral."
+          }
+        ],
+        "cautionSignals": []
+      },
+      "remoteValues": [
+        "Selective risk-on",
+        "Favorable",
+        "0/100",
+        "Unavailable"
+      ],
+      "remoteHtmlSha256": "f79d3c75429045599750f080c004477e8861dd8e976ab247354d2ae5b7f52782",
+      "legacyHtmlSha256": "d0769d88f8dd4dfb73093adfae16938cc76c238331145f3ee24cd57b43b9b761",
+      "legacyMetrics": [
+        "Selective risk-on",
+        "Favorable",
+        "0/100",
+        "null%"
+      ],
+      "legacyMarkupMustRemainIdentical": false
+    },
+    {
+      "id": "null-score",
+      "locale": "es",
+      "provenance": "Explicit independently nullable field fixture; not a market observation",
+      "summary": {
+        "current": "Risk-on selectivo",
+        "bias": "favorable",
+        "confidence": 0,
+        "regimeScore": null,
+        "sourceName": "Rotación sectorial, VIX y BTC ETF flows",
+        "lastUpdated": "Última actualización disponible por módulo",
+        "updateFrequency": "Diaria / según disponibilidad de cada fuente",
+        "dataStatus": "automated",
+        "reliabilityNote": "Este régimen no anticipa el mercado. Organiza lecturas de volatilidad, rotación y flujos para leer el contexto.",
+        "dataQualityNote": "La confianza se ajusta según la disponibilidad y calidad de rotación sectorial, VIX y BTC ETF flows.",
+        "interpretation": "Lectura compuesta de volatilidad, rotación y flujos. Ponderación actual: rotación sectorial 45%, VIX 40% y BTC ETF flows 15%.",
+        "whatItDoesNotMean": "No es una recomendación de inversión, no elige activos y no anticipa retornos futuros.",
+        "riskSupportSignals": [
+          {
+            "label": "Rotación",
+            "detail": "Sectores growth/cíclicos lideran y defensivos quedan rezagados."
+          },
+          {
+            "label": "Volatilidad",
+            "detail": "Normal bajo: presión de volatilidad contenida."
+          },
+          {
+            "label": "Momentum VIX",
+            "detail": "VIX bajando fuera de zona de estrés."
+          },
+          {
+            "label": "BTC ETF flows",
+            "detail": "Flujos mixtos aportan lectura neutral."
+          }
+        ],
+        "cautionSignals": []
+      },
+      "remoteValues": [
+        "Risk-on selectivo",
+        "Favorable",
+        "No disponible",
+        "0%"
+      ],
+      "remoteHtmlSha256": "bde3e976967da254699138b7621e2d0352a0d331d14501d7e3faa339016207c5",
+      "legacyHtmlSha256": "da920e29119e08effbd83166562ab4bd1670ff81bb470a50777d315144c29f2e",
+      "legacyMetrics": [
+        "Risk-on selectivo",
+        "Favorable",
+        "null/100",
+        "0%"
+      ],
+      "legacyMarkupMustRemainIdentical": false
+    },
+    {
+      "id": "null-score",
+      "locale": "en",
+      "provenance": "Explicit independently nullable field fixture; not a market observation",
+      "summary": {
+        "current": "Risk-on selectivo",
+        "bias": "favorable",
+        "confidence": 0,
+        "regimeScore": null,
+        "sourceName": "Rotación sectorial, VIX y BTC ETF flows",
+        "lastUpdated": "Última actualización disponible por módulo",
+        "updateFrequency": "Diaria / según disponibilidad de cada fuente",
+        "dataStatus": "automated",
+        "reliabilityNote": "Este régimen no anticipa el mercado. Organiza lecturas de volatilidad, rotación y flujos para leer el contexto.",
+        "dataQualityNote": "La confianza se ajusta según la disponibilidad y calidad de rotación sectorial, VIX y BTC ETF flows.",
+        "interpretation": "Lectura compuesta de volatilidad, rotación y flujos. Ponderación actual: rotación sectorial 45%, VIX 40% y BTC ETF flows 15%.",
+        "whatItDoesNotMean": "No es una recomendación de inversión, no elige activos y no anticipa retornos futuros.",
+        "riskSupportSignals": [
+          {
+            "label": "Rotación",
+            "detail": "Sectores growth/cíclicos lideran y defensivos quedan rezagados."
+          },
+          {
+            "label": "Volatilidad",
+            "detail": "Normal bajo: presión de volatilidad contenida."
+          },
+          {
+            "label": "Momentum VIX",
+            "detail": "VIX bajando fuera de zona de estrés."
+          },
+          {
+            "label": "BTC ETF flows",
+            "detail": "Flujos mixtos aportan lectura neutral."
+          }
+        ],
+        "cautionSignals": []
+      },
+      "remoteValues": [
+        "Selective risk-on",
+        "Favorable",
+        "Unavailable",
+        "0%"
+      ],
+      "remoteHtmlSha256": "2d58030e38075547ff5fb7c8c6c3de1f20d62995c4b0d81bbd1dc382e56ee428",
+      "legacyHtmlSha256": "487143373a31fdf145ff4556d32ba525566eb83ffd2f23b7adc6f1db05c08570",
+      "legacyMetrics": [
+        "Selective risk-on",
+        "Favorable",
+        "null/100",
+        "0%"
+      ],
+      "legacyMarkupMustRemainIdentical": false
+    }
+  ]
+}
