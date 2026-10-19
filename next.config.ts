@@ -221,6 +221,42 @@ const nextConfig: NextConfig = {
         source: `/reports/segundo-informe-septiembre-2026${suffix}`,
         headers: [{ key: "X-Robots-Tag", value: "noindex, follow" }],
       })),
+      {
+        source: "/reports/primer-informe-octubre-2026.html",
+        headers: [
+          {
+            key: "Link",
+            value: '<https://www.luiguiherrera.com/informes/primer-informe-octubre-2026>; rel="canonical"',
+          },
+        ],
+      },
+      {
+        source: "/reports/primer-informe-octubre-2026.pdf",
+        headers: [
+          {
+            key: "Link",
+            value: '<https://www.luiguiherrera.com/informes/primer-informe-octubre-2026>; rel="canonical"',
+          },
+        ],
+      },
+      {
+        source: "/reports/primer-informe-octubre-2026.md",
+        headers: [
+          {
+            key: "X-Robots-Tag",
+            value: "noindex, follow",
+          },
+        ],
+      },
+      {
+        source: "/reports/primer-informe-octubre-2026-calendar.ics",
+        headers: [
+          {
+            key: "X-Robots-Tag",
+            value: "noindex, follow",
+          },
+        ],
+      },
     ];
   },
 };
