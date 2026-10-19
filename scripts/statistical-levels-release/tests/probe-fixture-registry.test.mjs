@@ -1000,7 +1000,7 @@ def admit_current_envelope():
     # The caller's new execution tree is admitted by the actual prospective CI
     # guard. Historical model cases below still execute their immutable programs.
     actual_parents=output(['git','show','-s','--format=%P',checkout]).decode().strip().split()
-    if actual_parents==['9aea3eb35580f24362edc206fc4454e658226d17','b1df2f5f1d375e923efc429b6a503c4125a6d522'] or actual_parents==['38d8e64202a5f6eec827971f031fcafc9e5f9231']:
+    if actual_parents==['9aea3eb35580f24362edc206fc4454e658226d17','b1df2f5f1d375e923efc429b6a503c4125a6d522'] or actual_parents==['38d8e64202a5f6eec827971f031fcafc9e5f9231'] or actual_parents==['60f1d6b4cb78809a42ae40f8e1a2259a0cafd9ae']:
         assert not bootstrap_metadata['SL_LOCAL_QUALIFICATION_SUBJECT_SHA256'], 'LOCAL_HOSTED_ROLE_CONFLICT'
         actual_ci=read(root/'.github/workflows/ci.yml')
         assert actual_ci==output(['git','show',checkout+':.github/workflows/ci.yml']), 'G5_CI_WORKTREE_DRIFT'

@@ -16,7 +16,7 @@ const shared = {
   'scripts/browser-harness.mjs': '2896a2c3f2886321eb47291a007fdf272ec95f4f4a593362d9a4a4ca6f04bf4c',
   'scripts/runtime-io.mjs': '0c37a3b444a32847f3b9af0de405313d79e765e7e65c33e3ed7e45c9c385d0ef',
   'scripts/cli.mjs': 'c353aca844d0d69973d0bcd8abd9bf9539fd908245aca49d0caffcdb4a8c2407',
-  'scripts/invoke.mjs': '12d11d3f033e4743e6bc5567bee56b75aaa435e958cf8cd8df9e61099b337cdf',
+  'scripts/invoke.mjs': '25132f92c007fef6ad503282c0e62c0248887bebec2bac0a76e26e737630de0b',
   'policy.json': '5ca0589ff83a934bfc445e5fb15d4f760974391367fd93c0120b1dfed1aade5b',
   'controller-request-schema.json': 'd44337f72a9970d9db8e5d24ec1c400b4a5a4db9d4e3110b054727e6c9a224d3',
   'controller-qa-schema.json': 'd9bbcbffbab05473a66d0ee4709dc30965195da160155c8b3905390aad9e8836',
@@ -66,7 +66,7 @@ test('19: release jobs retain the pinned diagnostic allowlist and frozen source 
   const workflow = await fs.readFile(new URL('../../.github/workflows/statistical-levels-release.yml', root), 'utf8');
   const release = workflow.split('  identity-probe:\n')[0]
     .replace(/(EXPECTED_SOURCE_SUMS: )[a-f0-9]{64}/g, '$1<FROZEN_SOURCE_SUMS>');
-  assert.equal(digest(release), '5124bd4a5878f0fe68d149be70d4ead8568c110c04c6cf736993a8ab0e9142d9');
+  assert.equal(digest(release), 'add625df91a3a04f452939b720f769aff69d85839ffc1d3e310a646a7b28b352');
 });
 
 // Independently frozen from parent 578498f, before authorized runtime wiring.

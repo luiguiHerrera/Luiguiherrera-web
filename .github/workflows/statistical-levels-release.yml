@@ -71,7 +71,7 @@ jobs:
       - name: Verify frozen helper bytes before executing any helper
         working-directory: scripts/statistical-levels-release
         env:
-          EXPECTED_SOURCE_SUMS: 152d9a25a0c8848ee80c60c27951488d2bb0c0628fcfc5cf79e86c98a35ff75e
+          EXPECTED_SOURCE_SUMS: 3736a85a4fad29a7f1429fbaf5fd385cefb7ec16f534c0cc4694463e974f1388
         run: |
           printf '%s  SOURCE_SHA256SUMS\n' "$EXPECTED_SOURCE_SUMS" | sha256sum --check --strict
           sha256sum --check --strict SOURCE_SHA256SUMS
@@ -166,7 +166,7 @@ jobs:
       - name: Verify frozen helper bytes before executing any helper
         working-directory: scripts/statistical-levels-release
         env:
-          EXPECTED_SOURCE_SUMS: 152d9a25a0c8848ee80c60c27951488d2bb0c0628fcfc5cf79e86c98a35ff75e
+          EXPECTED_SOURCE_SUMS: 3736a85a4fad29a7f1429fbaf5fd385cefb7ec16f534c0cc4694463e974f1388
         run: |
           printf '%s  SOURCE_SHA256SUMS\n' "$EXPECTED_SOURCE_SUMS" | sha256sum --check --strict
           sha256sum --check --strict SOURCE_SHA256SUMS
@@ -195,7 +195,18 @@ jobs:
           action-timeout-s: 60
           inline-session-policy: '{"Version":"2012-10-17","Statement":[{"Effect":"Allow","Action":"lambda:InvokeFunction","Resource":"arn:aws:lambda:eu-south-2:732159826922:function:statistical-levels-vercel-release-controller"}]}'
       - name: Invoke the exact controller once; no direct promotion or automatic retry
+        id: controller
         run: node scripts/statistical-levels-release/scripts/invoke.mjs
+      - name: Retain bounded controller failure diagnostics; never a G5 receipt
+        if: failure() && steps.controller.outcome == 'failure' && steps.controller.outputs.controller_failure_diagnostic_ready == 'true'
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+        with:
+          name: statistical-levels-controller-failure
+          path: ${{ runner.temp }}/statistical-levels-controller-failure.json
+          retention-days: 7
+          if-no-files-found: error
+          include-hidden-files: false
+          overwrite: false
       - name: Retain sanitized successful ADOPT invocation receipt for independent G6
         if: success() && inputs.operation == 'ADOPT_EXISTING_PRODUCTION_BASELINE'
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
@@ -229,7 +240,7 @@ jobs:
         id: source_integrity
         working-directory: scripts/statistical-levels-release
         env:
-          EXPECTED_SOURCE_SUMS: 152d9a25a0c8848ee80c60c27951488d2bb0c0628fcfc5cf79e86c98a35ff75e
+          EXPECTED_SOURCE_SUMS: 3736a85a4fad29a7f1429fbaf5fd385cefb7ec16f534c0cc4694463e974f1388
         run: |
           printf '%s  SOURCE_SHA256SUMS\n' "$EXPECTED_SOURCE_SUMS" | sha256sum --check --strict
           sha256sum --check --strict SOURCE_SHA256SUMS
@@ -288,7 +299,7 @@ jobs:
         if: always() && steps.source_integrity.outcome == 'success'
         working-directory: scripts/statistical-levels-release
         env:
-          EXPECTED_SOURCE_SUMS: 152d9a25a0c8848ee80c60c27951488d2bb0c0628fcfc5cf79e86c98a35ff75e
+          EXPECTED_SOURCE_SUMS: 3736a85a4fad29a7f1429fbaf5fd385cefb7ec16f534c0cc4694463e974f1388
           PROBE_RESOLVE_OUTCOME: ${{ steps.resolve.outcome }}
           PROBE_QA_OUTCOME: ${{ steps.qa.outcome }}
           PROBE_AWS_ASSUME_OUTCOME: ${{ steps.aws_assume.outcome }}

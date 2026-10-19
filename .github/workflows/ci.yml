@@ -117,7 +117,7 @@ jobs:
                       'preserved_first_parent_files':len(before)-sum(s=='M'for s in changed.values()),
                       'first_parent_files':len(before),'source_files':len(current),'delta':changed,
                       'out_of_scope_removals':0,'out_of_scope_modifications':0}
-          def verify_g5_execution(head, parents):
+          def verify_g5_oidc(head, parents):
               first='9aea3eb35580f24362edc206fc4454e658226d17'
               production='b1df2f5f1d375e923efc429b6a503c4125a6d522'
               anchor='38d8e64202a5f6eec827971f031fcafc9e5f9231'
@@ -149,6 +149,35 @@ jobs:
                   assert current[p][:2]==before[p][:2]==('100644','blob'), 'G5_OIDC_MODE'
               return {**baseline,'ordered_parents':parents,'oidc_parent':anchor,'oidc_delta':changed,
                       'oidc_preserved_files':len(before)-len(changed),'source_files':len(current)}
+          def verify_g5_execution(head, parents):
+              anchor='60f1d6b4cb78809a42ae40f8e1a2259a0cafd9ae'
+              if parents!=[anchor]:
+                  return verify_g5_oidc(head,parents)
+              assert not os.environ.get('SL_LOCAL_QUALIFICATION_SUBJECT_SHA256'), 'LOCAL_HOSTED_ROLE_CONFLICT'
+              raw=git('cat-file','commit',anchor)
+              assert hashlib.sha1(b'commit '+str(len(raw)).encode()+b'\0'+raw).hexdigest()==anchor, 'G5_DIAGNOSTIC_ANCHOR_OBJECT'
+              headers=raw.split(b'\n\n',1)[0].decode().splitlines()
+              assert [x[5:]for x in headers if x.startswith('tree ')]==['0399735d03221f7cde58db468d9faa3b6c77fba4'], 'G5_DIAGNOSTIC_ANCHOR_TREE'
+              assert [x[7:]for x in headers if x.startswith('parent ')]==['38d8e64202a5f6eec827971f031fcafc9e5f9231'], 'G5_DIAGNOSTIC_ANCHOR_PARENT'
+              prior=verify_g5_oidc(anchor,['38d8e64202a5f6eec827971f031fcafc9e5f9231'])
+              subprocess.run(['git','merge-base','--is-ancestor',anchor,head],check=True)
+              def inventory(ref):
+                  entries={}
+                  for row in git('ls-tree','-rz',ref).split(b'\0'):
+                      if not row:continue
+                      meta,name=row.split(b'\t',1); mode,kind,oid=meta.decode().split()
+                      assert name.decode() not in entries,'G5_DUPLICATE_PATH'
+                      entries[name.decode()]=(mode,kind,oid)
+                  return entries
+              before,current=inventory(anchor),inventory(head)
+              assert set(before)==set(current),'G5_DIAGNOSTIC_PATH_PRESERVATION'
+              changed={p:'M'for p in current if current[p]!=before[p]}
+              allowed={'.github/workflows/ci.yml': 'M', '.github/workflows/statistical-levels-release.yml': 'M', 'scripts/statistical-levels-release/SOURCE_SHA256SUMS': 'M', 'scripts/statistical-levels-release/scripts/invoke.mjs': 'M', 'scripts/statistical-levels-release/source-manifest.json': 'M', 'scripts/statistical-levels-release/tests/adopt-invocation-receipt.test.mjs': 'M', 'scripts/statistical-levels-release/tests/g5-execution-preservation.test.mjs': 'M', 'scripts/statistical-levels-release/tests/probe-fixture-registry.test.mjs': 'M', 'scripts/statistical-levels-release/tests/probe-redirect-integration.test.mjs': 'M', 'scripts/statistical-levels-release/workflow-freeze.json': 'M'}
+              assert changed==allowed,'G5_DIAGNOSTIC_EXACT_DELTA'
+              for p in changed:
+                  assert current[p][:2]==before[p][:2]==('100644','blob'),'G5_DIAGNOSTIC_MODE'
+              return {**prior,'ordered_parents':parents,'certification_parent':anchor,'certification_delta':changed,
+                      'certification_preserved_files':len(before)-len(changed),'source_files':len(current)}
           # G5_EXECUTION_PRESERVATION_END
           is_integration_push=os.environ['GITHUB_EVENT_NAME']=='push' and os.environ['GITHUB_REF']=='refs/heads/vercel-deployment'
           if is_integration_push:
@@ -699,6 +728,12 @@ jobs:
                   for case in ['valid', 'wrong_parent', 'extra_parent', 'regime_workflow_deleted', 'regime_source_modified', 'regime_evidence_modified', 'product_modified', 'data_modified', 'policy_modified', 'extra_file', 'mode_changed', 'missing_oidc_change', 'anchor_object_changed', 'missing_ancestry', 'local_impersonation']:
                       assert len(re.findall(r'^ok \d+ - G5 OIDC successor preservation: '+case+r'$',text,re.M))==1, 'G5_OIDC_PRESERVATION_CASE_NOT_EXECUTED'
                   # G5_OIDC_COVERAGE_END
+                  # G5_DIAGNOSTIC_COVERAGE_BEGIN
+                  required_diagnostic_cases=['G5 failure evidence: transport', 'G5 failure evidence: invalid_metadata', 'G5 failure evidence: null_metadata', 'G5 failure evidence: invocation_status', 'G5 failure evidence: function_error', 'G5 failure evidence: untrusted_function_error', 'G5 failure evidence: missing_response', 'G5 failure evidence: invalid_response', 'G5 failure evidence: null_response', 'G5 failure evidence: denied', 'G5 failure evidence: unknown_denial', 'G5 failure evidence: malformed_denial', 'G5 failure evidence: untrusted_state', 'G5 failure evidence: concurrent_main', 'G5 failure evidence: provider_fetch', 'G5 failure evidence: extra_success_field', 'G5 failure evidence: receipt_binding', 'G5 failure evidence: receipt_persistence', 'G5 failure evidence: missing_native', 'G5 failure evidence: native_version', 'G5 failure evidence: empty_function_error', 'G5 failure evidence: native missing_report', 'G5 failure evidence: native missing_end', 'G5 failure evidence: native duplicate_report', 'G5 failure evidence: native wrong_end', 'G5 failure evidence: native wrong_start', 'G5 failure evidence: native wrong_version', 'G5 failure evidence: native malformed_uuid', 'G5 failure evidence: native failed_status', 'G5 failure evidence: native unstructured_fake', 'G5 failure evidence: success BASELINE_ADOPTED', 'G5 failure evidence: success ALREADY_ADOPTED', 'G5 failure evidence: invalid request never invokes', 'G5 failure evidence: capture failure never retries invocation or creates receipt', 'G5 failure evidence: preexisting file never becomes upload eligible', 'G5 failure evidence: unavailable output channel cannot authorize upload', 'G5 failure evidence: exact failure-only artifact and no marker mutation', 'G5 diagnostic successor preservation: valid', 'G5 diagnostic successor preservation: wrong_parent', 'G5 diagnostic successor preservation: extra_parent', 'G5 diagnostic successor preservation: regime_workflow_deleted', 'G5 diagnostic successor preservation: regime_source_modified', 'G5 diagnostic successor preservation: regime_evidence_modified', 'G5 diagnostic successor preservation: product_modified', 'G5 diagnostic successor preservation: data_modified', 'G5 diagnostic successor preservation: policy_modified', 'G5 diagnostic successor preservation: extra_file', 'G5 diagnostic successor preservation: mode_changed', 'G5 diagnostic successor preservation: missing_diagnostic_change', 'G5 diagnostic successor preservation: anchor_object_changed', 'G5 diagnostic successor preservation: missing_ancestry', 'G5 diagnostic successor preservation: local_impersonation', 'G5 diagnostic mandatory coverage: valid', 'G5 diagnostic mandatory coverage: missing', 'G5 diagnostic mandatory coverage: duplicate', 'G5 diagnostic mandatory coverage: skipped']
+                  for diagnostic_case in required_diagnostic_cases:
+                      matching=[line for line in text.splitlines()if re.match(r"^ok [0-9]+ - "+re.escape(diagnostic_case)+r"(?: #.*)?$",line)]
+                      assert len(matching)==1 and "# SKIP"not in matching[0] and "# TODO"not in matching[0],"G5_DIAGNOSTIC_CASE_NOT_EXECUTED"
+                  # G5_DIAGNOSTIC_COVERAGE_END
                   for case in ['valid','reversed_parents','wrong_first_parent','missing_production_parent','extra_parent','regime_workflow_deleted','regime_source_modified','regime_evidence_modified','shared_file_modified','mode_changed','missing_release_change','extra_release_change','production_tree_mismatch','missing_ancestry','local_impersonation']:
                       assert len(re.findall(r'^ok \d+ - G5 execution preservation: '+case+r'$',text,re.M))==1, 'G5_PRESERVATION_CASE_NOT_EXECUTED'
                   for case in ['valid', 'wrong_parent', 'stale_parent', 'arbitrary_descendant', 'unrelated_ancestor', 'multiple_parents', 'merge_parent_substitution', 'oracle detects stale and ancestry-only workflow guards', 'actual accounting SHA parity and separate review gate', 'parent repair mandatory coverage fail closed', 'extra_path', 'missing_path', 'duplicate_path', 'wrong_mode', 'wrong_status', 'dirty', 'missing_ancestry', 'probe_mutation', 'roles_swapped', 'missing_material', 'stale_material', 'duplicate_key', 'wrong_registration', 'unbound_product', 'probe_pin', 'release_probe_role', 'probe_release_role', 'wrong_sha', 'mutable_ref']:
