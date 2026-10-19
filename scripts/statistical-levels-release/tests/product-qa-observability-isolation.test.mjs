@@ -29,9 +29,9 @@ const expected = {
     "scripts/probe-token-budget.mjs": "944a180e12e516417acf3f98b3e59ad402b33293b9141eaa830753d47c09860e"
   },
   "requalified production target policy pinned; PROBE authorization and controller exclusion unchanged": {
-    "policy.json": "e8865e7b7c392147f111a4f558434d536cbdfbb648d463053a74701b2bb98e9a",
+    "policy.json": "5ca0589ff83a934bfc445e5fb15d4f760974391367fd93c0120b1dfed1aade5b",
     "controller-request-schema.json": "d44337f72a9970d9db8e5d24ec1c400b4a5a4db9d4e3110b054727e6c9a224d3",
-    "controller-qa-schema.json": "3fece1fd42493bc6210c1ea901459f50c85fc2deb24d177e0dadf51b35a063d8"
+    "controller-qa-schema.json": "d9bbcbffbab05473a66d0ee4709dc30965195da160155c8b3905390aad9e8836"
   },
   "ADOPT evidence wiring is pinned; shared runner and transport unchanged": {
     "scripts/qa-runner.mjs": "70ffd3c5796f2a432a83347109000a20c326d7d49efee59285a403ab932a69df",
@@ -291,7 +291,7 @@ const preservationSemantics = {
     assert.throws(() => releaseContract.validateTarget(preservationTarget));
   },
   POLICY_BINDING() {
-    assert.equal(regionHash(readFileSync(new URL('../policy.json', import.meta.url))), 'e8865e7b7c392147f111a4f558434d536cbdfbb648d463053a74701b2bb98e9a');
+    assert.equal(regionHash(readFileSync(new URL('../policy.json', import.meta.url))), '5ca0589ff83a934bfc445e5fb15d4f760974391367fd93c0120b1dfed1aade5b');
     assert.equal(releaseContract.P.account_id, '732159826922');
     assert.equal(releaseContract.P.release_role_arn, 'arn:aws:iam::732159826922:role/LuiguiHerreraStatisticalLevelsReleaseInvoker');
     assert.equal(releaseContract.P.aws_audience, 'sts.amazonaws.com');
@@ -370,6 +370,8 @@ for (const [name, mutate] of Object.entries(preservationMutations)) test('produc
 
 // Independently frozen from parent 578498f, before authorized runtime wiring.
 // Pins cover credential/interception, ingress/errors, raw ledger and close/freeze.
+// The protected interceptor pin alone is prospectively rebound for CT-authorized
+// initial SL Preview Document toolbar isolation; all other region pins are unchanged.
 // New architecture behavior is covered by real receipt replay and mutations.
 function assertHarnessPreserved(source) {
   const regions = [
@@ -380,9 +382,9 @@ function assertHarnessPreserved(source) {
     "6600929f68fa60cf9424ea1bb6102e0a92153c4095839c7e45d5878bb293e004"
   ],
   [
-    "    if (!production) cdp.on('Fetch.requestPaused'",
+    "    if (!production || stagedTransport) cdp.on('Fetch.requestPaused'",
     "    onNative('Network.requestWillBeSent'",
-    "7b5aa8fd013377b4b8ec1cabe4b4f5524932f2f74b2abb6256e17480ee598da2"
+    "53a369be2a6d203484c544c502272b18e1ac79a07a025897e97f131b50e90eb3"
   ],
   [
     "    function retainUnresolved(",
@@ -397,7 +399,7 @@ function assertHarnessPreserved(source) {
   [
     "    onNative('Runtime.consoleAPICalled'",
     "    const causalBridge =",
-    "2e75e61dcf7a64d6fa0c921760c44bb14cc7951b224b6ac0243f64255b05f60e"
+    "509a3c74616418f00592bae8dc3b52bc69342ccbf46135b1797ce3d02e9bf4b7"
   ],
   [
     "    const closePage=async()=>{",
@@ -407,7 +409,7 @@ function assertHarnessPreserved(source) {
   [
     "    finish: async finalProductPassed => {",
     "\n    } };",
-    "a803b499842cdfbef72f0d5c7981b7cc5bc9e472cff5b804db992aead3771808"
+    "42f9d002ca7b8b381389692fe6c8cd9b85c5bb55c958a0cc694bf727a273d6ec"
   ],
   [
     "      events.push({ ...requests.get(e.requestId), kind: 'request_failure'",
@@ -431,7 +433,7 @@ function assertHarnessPreserved(source) {
 
 const harnessMutations = [
  ['PRODUCTION_TOKEN_SOURCE_ALLOWED','production ? tokenSource === undefined','production ? true'],
- ['PRODUCTION_FETCH_INTERCEPTION_ENABLED',"if (!production) cdp.on('Fetch.requestPaused'","if (true) cdp.on('Fetch.requestPaused'"],
+ ['PRODUCTION_FETCH_INTERCEPTION_ENABLED',"if (!production || stagedTransport) cdp.on('Fetch.requestPaused'","if (true) cdp.on('Fetch.requestPaused'"],
  ['DEBUG_ALLOWED','!process.env.DEBUG && !process.env.PWDEBUG','true'],
  ['SERVICE_WORKER_ENABLED',"serviceWorkers: 'block'","serviceWorkers: 'allow'"],
  ['FAILURE_LEDGER_DROPPED','events.push({ ...requests.get(e.requestId)', 'void ({ ...requests.get(e.requestId)'],
@@ -441,7 +443,7 @@ const harnessMutations = [
  ['FREEZE_BEFORE_SOURCE_CLOSE','adopt?.pageLifecycle(pageId,\'CLOSING\');adopt?.listenerDrain(pageId);','adopt.freeze();'],
  ['MISSING_DURABLE_EVIDENCE_WRITE',"writeFileSync(path.join(out,'adopt-request-evidence.json')","void (path.join(out,'adopt-request-evidence.json')"],
  ['RECEIPT_ERASES_BLOCKING_EVENT','result = account(events, finalProductPassed, target.origin);','result = account([], true, target.origin);'],
- ['PRODUCTION_INTERCEPTION_ENABLE',"if (!production) await cdp.send('Fetch.enable'","if (true) await cdp.send('Fetch.enable'"],
+ ['PRODUCTION_INTERCEPTION_ENABLE',"if (!production || stagedTransport) await cdp.send('Fetch.enable'","if (true) await cdp.send('Fetch.enable'"],
 ];
 for (const [name,from,to] of harnessMutations) test('harness preservation mutation: '+name,()=>{
  const source=readFileSync(new URL('../scripts/browser-harness-base.mjs',import.meta.url),'utf8');

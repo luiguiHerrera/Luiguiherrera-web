@@ -435,7 +435,7 @@ const preservationSemantics = {
     assert.throws(() => releaseContract.validateTarget(preservationTarget));
   },
   POLICY_BINDING() {
-    assert.equal(regionHash(readFileSync(new URL('../policy.json', import.meta.url))), 'e8865e7b7c392147f111a4f558434d536cbdfbb648d463053a74701b2bb98e9a');
+    assert.equal(regionHash(readFileSync(new URL('../policy.json', import.meta.url))), '5ca0589ff83a934bfc445e5fb15d4f760974391367fd93c0120b1dfed1aade5b');
     assert.equal(releaseContract.P.account_id, '732159826922');
     assert.equal(releaseContract.P.release_role_arn, 'arn:aws:iam::732159826922:role/LuiguiHerreraStatisticalLevelsReleaseInvoker');
     assert.equal(releaseContract.P.aws_audience, 'sts.amazonaws.com');
@@ -514,6 +514,8 @@ for (const [name, mutate] of Object.entries(preservationMutations)) test('probe 
 
 // Independently frozen from parent 578498f, before authorized runtime wiring.
 // Pins cover credential/interception, ingress/errors, raw ledger and close/freeze.
+// The protected interceptor pin alone is prospectively rebound for CT-authorized
+// initial SL Preview Document toolbar isolation; all other region pins are unchanged.
 // New architecture behavior is covered by real receipt replay and mutations.
 function assertHarnessPreserved(source) {
   const regions = [
@@ -524,9 +526,9 @@ function assertHarnessPreserved(source) {
     "6600929f68fa60cf9424ea1bb6102e0a92153c4095839c7e45d5878bb293e004"
   ],
   [
-    "    if (!production) cdp.on('Fetch.requestPaused'",
+    "    if (!production || stagedTransport) cdp.on('Fetch.requestPaused'",
     "    onNative('Network.requestWillBeSent'",
-    "7b5aa8fd013377b4b8ec1cabe4b4f5524932f2f74b2abb6256e17480ee598da2"
+    "53a369be2a6d203484c544c502272b18e1ac79a07a025897e97f131b50e90eb3"
   ],
   [
     "    function retainUnresolved(",
@@ -541,7 +543,7 @@ function assertHarnessPreserved(source) {
   [
     "    onNative('Runtime.consoleAPICalled'",
     "    const causalBridge =",
-    "2e75e61dcf7a64d6fa0c921760c44bb14cc7951b224b6ac0243f64255b05f60e"
+    "509a3c74616418f00592bae8dc3b52bc69342ccbf46135b1797ce3d02e9bf4b7"
   ],
   [
     "    const closePage=async()=>{",
@@ -551,7 +553,7 @@ function assertHarnessPreserved(source) {
   [
     "    finish: async finalProductPassed => {",
     "\n    } };",
-    "a803b499842cdfbef72f0d5c7981b7cc5bc9e472cff5b804db992aead3771808"
+    "42f9d002ca7b8b381389692fe6c8cd9b85c5bb55c958a0cc694bf727a273d6ec"
   ],
   [
     "      events.push({ ...requests.get(e.requestId), kind: 'request_failure'",

@@ -278,13 +278,68 @@ test('positive causal request set: successful primary and explicit finished RSC 
 // Independently frozen retained CDP chain; not generated from classifier constants.
 const prefetchCallerFrames=[[1,78764],[1,93935],[1,95211],[1,92319],[1,95653],[0,19325],[1,25947],[1,25036],[1,61110],[1,61771],[1,54598],[1,54833],[1,54867],[1,54141],[1,54937],[1,57083],[1,57571]];
 const prefetchLoaderFrames=[[0,10163],[0,10835],[0,5923],[0,6412]];
-function prefetchChainFixture(mutate=()=>{}){
- const f=setup();const caller={...navigationScript,scriptId:'caller'},loader={...navigationScript,scriptId:'loader',hash:'c2575aae913acf6acc8a0b87b5b708bd4f9e0767bbb9a553d5f96209239551c0',length:10917};
+function prefetchChainFixture(mutate=()=>{},abort=false){
+ const f=setup();const caller={...navigationScript,scriptId:'caller'},loader={...navigationScript,scriptId:'loader',hash:'55753ec8822b72212525ec74dac83c9ae5e979732194387e6094e7819623cf74',length:10917};
  const event={requestId:'prefetch',type:'Script',frameId:'f',loaderId:'l',documentURL:origin+'/',request:{url:origin+'/chunk.js',method:'GET',headers:{}},initiator:{type:'script',stack:{callFrames:[...prefetchLoaderFrames.map(([lineNumber,columnNumber])=>({scriptId:'loader',lineNumber,columnNumber})),...prefetchCallerFrames.map(([lineNumber,columnNumber])=>({scriptId:'caller',lineNumber,columnNumber}))]}}};
- mutate({caller,loader,event});f.c.scriptParsed(page,loader,f.raw);f.c.scriptParsed(page,caller,f.raw);f.c.request(page,event);f.c.response(page,{requestId:event.requestId,response:{status:200}});f.c.finished(page,{requestId:event.requestId});return f.finish();
+ mutate({caller,loader,event});f.c.scriptParsed(page,loader,f.raw);f.c.scriptParsed(page,caller,f.raw);const binding=f.c.request(page,event);f.c.response(page,{requestId:event.requestId,response:{status:200}});
+ if(abort){f.c.failure(page,{requestId:event.requestId,canceled:true,errorText:'net::ERR_ABORTED'},f.raw.length);f.raw.push({request_evidence:binding,kind:'request_failure',url:event.request.url,type:event.type,rsc:false,prefetch:true,canceled:true,error_code:'net::ERR_ABORTED'});}
+ else f.c.finished(page,{requestId:event.requestId});return f.finish();
 }
 for(const id of ['request-1998','request-2000','request-2004','request-2006','request-2009','request-2011','request-2013','request-2015','request-2016','request-2019','request-2022','request-2025'])test('exact framework prefetch caller: retained '+id,()=>{
  const f=prefetchChainFixture(({event})=>{event.requestId=id;});const r=f.evidence.requests[0];assert.equal(r.prefetch_classification,'YES');assert.equal(r.request_role,'PREFETCH');assert.equal(r.classification_evidence.prefetch,'EXACT_FRAMEWORK_PREFETCH_CALLER_CHAIN');assert.equal(r.action_ancestry,'UNKNOWN');assert.ok(!f.audit().issues.includes('MISSING_CAUSAL_COVERAGE'));assert.ok(!f.audit().issues.includes('UNKNOWN_REQUEST_CLASSIFICATION'));
 });
-for(const [name,mutate]of Object.entries({loader_only:({event})=>{event.initiator.stack.callFrames.splice(4);},wrong_caller:({caller})=>{caller.hash='0'.repeat(64);},wrong_loader:({loader})=>{loader.hash='0'.repeat(64);},incomplete:({event})=>{event.initiator.stack.parentId={id:'missing'};},scheduler:({event})=>{event.initiator.stack.callFrames[20].columnNumber++;},segment_cache:({event})=>{event.initiator.stack.callFrames[10].columnNumber++;},flight:({event})=>{event.initiator.stack.callFrames[4].columnNumber++;},action_owned:({event})=>{event.initiator.stack.parent={callFrames:[{scriptId:'marker',lineNumber:0,columnNumber:0}]};},ambiguous:({event})=>{event.initiator.stack.callFrames.push({...event.initiator.stack.callFrames[4]});}}))test('exact framework prefetch caller rejects '+name,()=>{const f=prefetchChainFixture(mutate);assert.equal(f.evidence.requests[0].prefetch_classification,'UNKNOWN');});
+for(const [name,mutate]of Object.entries({loader_only:({event})=>{event.initiator.stack.callFrames.splice(4);},wrong_caller:({caller})=>{caller.hash='0'.repeat(64);},wrong_loader:({loader})=>{loader.hash='0'.repeat(64);},superseded_production_loader:({loader})=>{loader.hash='c2575aae913acf6acc8a0b87b5b708bd4f9e0767bbb9a553d5f96209239551c0';},incomplete:({event})=>{event.initiator.stack.parentId={id:'missing'};},scheduler:({event})=>{event.initiator.stack.callFrames[20].columnNumber++;},segment_cache:({event})=>{event.initiator.stack.callFrames[10].columnNumber++;},flight:({event})=>{event.initiator.stack.callFrames[4].columnNumber++;},action_owned:({event})=>{event.initiator.stack.parent={callFrames:[{scriptId:'marker',lineNumber:0,columnNumber:0}]};},ambiguous:({event})=>{event.initiator.stack.callFrames.push({...event.initiator.stack.callFrames[4]});}}))test('exact framework prefetch caller rejects '+name,()=>{const f=prefetchChainFixture(mutate);assert.equal(f.evidence.requests[0].prefetch_classification,'UNKNOWN');});
 test('exact framework prefetch caller: tampered authenticated higher executable fails replay',()=>{const f=prefetchChainFixture();f.evidence.requests[0].native_intent.caller.script.code_sha256='0'.repeat(64);assert.equal(f.audit().status,'FAIL');});
+
+// Independently authenticated Production request2071, not generated by the
+// classifier: adjacent [1,54833] at full-stack positions15/16, exactly22 frames.
+function observedRecursiveFrame({event}) {
+ event.initiator.stack.callFrames.splice(16,0,{scriptId:'caller',lineNumber:1,columnNumber:54833});
+}
+test('frame22: exact native recursive variant recognized without changing 21-frame acceptance',()=>{
+ for(const mutate of [()=>{},observedRecursiveFrame]) {
+  const f=prefetchChainFixture(mutate),r=f.evidence.requests[0];
+  assert.equal(r.prefetch_classification,'YES');assert.equal(r.request_role,'PREFETCH');
+  assert.equal(r.terminal_state,'FINISHED');assert.equal(f.result.required_application_request_failures,0);
+  assert.ok(!f.audit().issues.includes('UNKNOWN_REQUEST_CLASSIFICATION'));
+  assert.ok(!f.audit().issues.includes('MISSING_CAUSAL_COVERAGE'));
+ }
+});
+for(const [name,mutate]of Object.entries({
+ 'repetition at different position':({event})=>{const f=event.initiator.stack.callFrames;f.splice(16,1);f.splice(10,0,{scriptId:'caller',lineNumber:1,columnNumber:54833});},
+ 'different repeated coordinate':({event})=>{event.initiator.stack.callFrames[16].columnNumber=54598;},
+ 'additional recursive frame':({event})=>{event.initiator.stack.callFrames.splice(16,0,{scriptId:'caller',lineNumber:1,columnNumber:54833});},
+ 'missing nonrecursive frame':({event})=>{event.initiator.stack.callFrames.splice(10,1);},
+ 'reordered frames':({event})=>{const f=event.initiator.stack.callFrames;[f[17],f[18]]=[f[18],f[17]];},
+ 'altered caller executable':({caller})=>{caller.hash='1'.repeat(64);},
+ 'altered loader executable':({loader})=>{loader.hash='2'.repeat(64);},
+ 'foreign script at repetition':({event})=>{event.initiator.stack.callFrames[16].scriptId='foreign-document-script';},
+ 'different caller runtime context':({caller})=>{caller.executionContextAuxData={isDefault:false};},
+ 'different loader runtime context':({loader})=>{loader.executionContextAuxData={isDefault:false};},
+ 'live edited caller':({caller})=>{caller.isLiveEdit=true;},
+ 'incomplete ancestry':({event})=>{event.initiator.stack.parentId={id:'unresolved'};},
+ 'non-script initiator':({event})=>{event.initiator.type='other';},
+ 'application action ownership':({event})=>{event.initiator.stack.parent={callFrames:[{scriptId:'marker',lineNumber:0,columnNumber:0}]};},
+ 'incompatible headers':({event})=>{event.request.headers={'Next-Router-Prefetch':'0'};}
+}))test('frame22 fails closed: '+name,()=>{
+ const f=prefetchChainFixture(v=>{observedRecursiveFrame(v);mutate(v);});
+ assert.notEqual(f.evidence.requests[0].classification_evidence.prefetch,'EXACT_FRAMEWORK_PREFETCH_CALLER_CHAIN');
+});
+for(const [name,mutate]of Object.entries({
+ 'different document':r=>{r.request_evidence.document_instance_id='document-999';},
+ 'different page':r=>{r.request_evidence.page_id='page-999';},
+ 'broken causal parent':r=>{r.causal_parent='script:'+'0'.repeat(64);},
+ 'broken native ancestry':r=>{r.initiator_scripts.scripts=['0'.repeat(64)];},
+}))test('frame22 independent native replay rejects '+name,()=>{
+ const f=prefetchChainFixture(observedRecursiveFrame);mutate(f.evidence.requests[0]);assert.equal(f.audit().status,'FAIL');
+});
+test('frame22 recognition never exempts a failed request',()=>{
+ const f=prefetchChainFixture(observedRecursiveFrame,true),r=f.evidence.requests[0];
+ assert.equal(r.prefetch_classification,'YES');assert.equal(r.terminal_state,'FAILED');
+ assert.equal(f.result.required_application_request_failures,1);assert.equal(f.result.ledger.length,1);assert.equal(f.receipts.records.length,0);
+});
+test('frame22 cannot disguise a required application failure as prefetch',()=>{
+ const f=prefetchChainFixture(v=>{observedRecursiveFrame(v);v.event.type='Fetch';v.event.request.headers={'Next-Router-Prefetch':'1'};},true);
+ assert.notEqual(f.evidence.requests[0].classification_evidence.prefetch,'EXACT_FRAMEWORK_PREFETCH_CALLER_CHAIN');
+ assert.equal(f.result.required_application_request_failures,1);assert.equal(f.receipts.records.length,0);
+});

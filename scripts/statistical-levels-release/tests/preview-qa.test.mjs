@@ -17,11 +17,13 @@ const promote = { operation: PROMOTE, phase: 'preview', candidate_git_sha: 'a'.r
   deployment_id: 'dpl_TestFutureCandidate123', expected_previous_production_sha: P.baseline.production_git_sha };
 
 test('requalified ADOPT binds current production separately from execution and rejects the superseded target', async t => {
-  assert.equal(adopt.candidate_git_sha, 'c60b17c6ddc5a08fcd402328f69e73f6e1e41b5f');
-  assert.equal(adopt.deployment_id, 'dpl_BBWPr52pL9JmHQwtAGKkNNSg9a8Q');
+  assert.equal(adopt.candidate_git_sha, 'b1df2f5f1d375e923efc429b6a503c4125a6d522');
+  assert.equal(adopt.deployment_id, 'dpl_FRxYeCpiJohL9UZmKfRTEpF6tT5U');
   assert.equal(adopt.authority_run_id, '20260908T125656658Z-a4743804-e5f1-495a-b34e-5948d5db4d2d');
   assert.equal(adopt.sealed_manifest_sha256, '129f45149f6a280f1681ce3903a304e18a07dbaa6894bcc8e9b94587dbdf26cb');
   for (const change of [
+    { candidate_git_sha: 'c60b17c6ddc5a08fcd402328f69e73f6e1e41b5f' },
+    { deployment_id: 'dpl_BBWPr52pL9JmHQwtAGKkNNSg9a8Q' },
     { candidate_git_sha: '4ee6adb006f360fea13837db5f7d45815f297b55' },
     { deployment_id: 'dpl_FwDTx8HZPNdPZDEiFKGxAVjxfcZ6' },
     { candidate_git_sha: '0c8fce262fce44650729883862ec948778ebea45' },
@@ -170,14 +172,14 @@ test('unknown operation cannot select either source authority', async () => {
 });
 
 // Independent target and policy oracles for the explicitly authorized two-field migration.
-const oldPolicyHash = '672c81cce8eb0e84869e111e4816a46716edf402f9a546caa06f3b33c8382aec';
-const newPolicyHash = 'e8865e7b7c392147f111a4f558434d536cbdfbb648d463053a74701b2bb98e9a';
+const oldPolicyHash = 'e8865e7b7c392147f111a4f558434d536cbdfbb648d463053a74701b2bb98e9a';
+const newPolicyHash = '5ca0589ff83a934bfc445e5fb15d4f760974391367fd93c0120b1dfed1aade5b';
 const policyBytes = await fs.readFile(new URL('../policy.json', import.meta.url), 'utf8');
 const digest = bytes => createHash('sha256').update(bytes).digest('hex');
 const currentTarget = {
   operation: 'ADOPT_EXISTING_PRODUCTION_BASELINE', phase: 'production',
-  candidate_git_sha: 'c60b17c6ddc5a08fcd402328f69e73f6e1e41b5f',
-  deployment_id: 'dpl_BBWPr52pL9JmHQwtAGKkNNSg9a8Q', origin: 'https://www.luiguiherrera.com',
+  candidate_git_sha: 'b1df2f5f1d375e923efc429b6a503c4125a6d522',
+  deployment_id: 'dpl_FRxYeCpiJohL9UZmKfRTEpF6tT5U', origin: 'https://www.luiguiherrera.com',
   authority_run_id: '20260908T125656658Z-a4743804-e5f1-495a-b34e-5948d5db4d2d',
   sealed_manifest_sha256: '129f45149f6a280f1681ce3903a304e18a07dbaa6894bcc8e9b94587dbdf26cb',
 };
@@ -193,8 +195,8 @@ test('policy migration changes exactly the production commit and deployment; eve
   assert.equal(parsed.baseline.production_deployment_id, currentTarget.deployment_id);
   let restored = policyBytes;
   for (const [field, previous] of [
-    ['production_git_sha', '4ee6adb006f360fea13837db5f7d45815f297b55'],
-    ['production_deployment_id', 'dpl_FwDTx8HZPNdPZDEiFKGxAVjxfcZ6'],
+    ['production_git_sha', 'c60b17c6ddc5a08fcd402328f69e73f6e1e41b5f'],
+    ['production_deployment_id', 'dpl_BBWPr52pL9JmHQwtAGKkNNSg9a8Q'],
   ]) {
     const token = `"${field}": "${parsed.baseline[field]}"`;
     assert.equal(restored.split(token).length, 2, field + ' occurs exactly once');

@@ -16,10 +16,10 @@ const shared = {
   'scripts/browser-harness.mjs': '2896a2c3f2886321eb47291a007fdf272ec95f4f4a593362d9a4a4ca6f04bf4c',
   'scripts/runtime-io.mjs': 'b114b3e246ae4bdbf1af1a3823218b65f53a18ca26719a6740b11538344a912e',
   'scripts/cli.mjs': 'c353aca844d0d69973d0bcd8abd9bf9539fd908245aca49d0caffcdb4a8c2407',
-  'scripts/invoke.mjs': '95902e9029354124eba014dab478324f2318caf3a7a5ddf26732211d5819d113',
-  'policy.json': 'e8865e7b7c392147f111a4f558434d536cbdfbb648d463053a74701b2bb98e9a',
+  'scripts/invoke.mjs': '12d11d3f033e4743e6bc5567bee56b75aaa435e958cf8cd8df9e61099b337cdf',
+  'policy.json': '5ca0589ff83a934bfc445e5fb15d4f760974391367fd93c0120b1dfed1aade5b',
   'controller-request-schema.json': 'd44337f72a9970d9db8e5d24ec1c400b4a5a4db9d4e3110b054727e6c9a224d3',
-  'controller-qa-schema.json': '3fece1fd42493bc6210c1ea901459f50c85fc2deb24d177e0dadf51b35a063d8',
+  'controller-qa-schema.json': 'd9bbcbffbab05473a66d0ee4709dc30965195da160155c8b3905390aad9e8836',
 };
 
 test('16: proven OIDC V3 validator and runtime identity boundary remain exact frozen bytes', async () => {
@@ -58,7 +58,7 @@ test('17: probe entry defers OIDC creation to protected-baseline gate and never 
   assert.doesNotMatch(probe, /invoke\.mjs|environment:|contents: write|secrets:/);
 });
 
-test('18: requalified production target policy is pinned; ADOPT transport, validation and controller contracts remain frozen', async () => {
+test('18: requalified production target policy is pinned; ADOPT single invocation with sanitized G6 receipt is pinned; validation remains frozen; approved controller schema is pinned', async () => {
   for (const [file, expected] of Object.entries(shared)) { if(expected==='HARNESS_SECURITY_REGIONS')assertHarnessPreserved(await read(file));else assert.equal(digest(file==='scripts/release-core.mjs'?withoutReceiptClass(await read(file)):await read(file)), expected, file); }
 });
 
@@ -66,11 +66,13 @@ test('19: release jobs retain the pinned diagnostic allowlist and frozen source 
   const workflow = await fs.readFile(new URL('../../.github/workflows/statistical-levels-release.yml', root), 'utf8');
   const release = workflow.split('  identity-probe:\n')[0]
     .replace(/(EXPECTED_SOURCE_SUMS: )[a-f0-9]{64}/g, '$1<FROZEN_SOURCE_SUMS>');
-  assert.equal(digest(release), 'fdc216beb4dabf61ab73884fbbacbdf4259bd640dac50d8ed45c60a973a99ab6');
+  assert.equal(digest(release), '9cb70d819d67ba0e337193941989c7224f1a59dc6ead7a17a31669322a38b853');
 });
 
 // Independently frozen from parent 578498f, before authorized runtime wiring.
 // Pins cover credential/interception, ingress/errors, raw ledger and close/freeze.
+// The protected interceptor pin alone is prospectively rebound for CT-authorized
+// initial SL Preview Document toolbar isolation; all other region pins are unchanged.
 // New architecture behavior is covered by real receipt replay and mutations.
 function assertHarnessPreserved(source) {
   const regions = [
@@ -81,9 +83,9 @@ function assertHarnessPreserved(source) {
     "6600929f68fa60cf9424ea1bb6102e0a92153c4095839c7e45d5878bb293e004"
   ],
   [
-    "    if (!production) cdp.on('Fetch.requestPaused'",
+    "    if (!production || stagedTransport) cdp.on('Fetch.requestPaused'",
     "    onNative('Network.requestWillBeSent'",
-    "7b5aa8fd013377b4b8ec1cabe4b4f5524932f2f74b2abb6256e17480ee598da2"
+    "53a369be2a6d203484c544c502272b18e1ac79a07a025897e97f131b50e90eb3"
   ],
   [
     "    function retainUnresolved(",
@@ -98,7 +100,7 @@ function assertHarnessPreserved(source) {
   [
     "    onNative('Runtime.consoleAPICalled'",
     "    const causalBridge =",
-    "2e75e61dcf7a64d6fa0c921760c44bb14cc7951b224b6ac0243f64255b05f60e"
+    "509a3c74616418f00592bae8dc3b52bc69342ccbf46135b1797ce3d02e9bf4b7"
   ],
   [
     "    const closePage=async()=>{",
@@ -108,7 +110,7 @@ function assertHarnessPreserved(source) {
   [
     "    finish: async finalProductPassed => {",
     "\n    } };",
-    "a803b499842cdfbef72f0d5c7981b7cc5bc9e472cff5b804db992aead3771808"
+    "42f9d002ca7b8b381389692fe6c8cd9b85c5bb55c958a0cc694bf727a273d6ec"
   ],
   [
     "      events.push({ ...requests.get(e.requestId), kind: 'request_failure'",

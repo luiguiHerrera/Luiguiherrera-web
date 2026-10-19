@@ -26,27 +26,51 @@ export const navigationCode = Object.freeze({
   sha256:'c733d1c58378a68c6a77af63def0340abedca47199e6c7e5cfeca622bb25e366',
   length:160087,frames:Object.freeze([[1,35040],[0,18680],[0,16645]].map(Object.freeze))
 });
+// Exact locally rebuilt d2f + approved two-layout-file patch. Native fetch
+// callsites are byte-identical; only the asset-token helper differs. Admission
+// evidence is retained outside the application tree in native-auth/.
+export const navigationCodes = Object.freeze([navigationCode,Object.freeze({
+  sha256:'f49cbdf865d2223a08a987458f247458a6e1ea007c9170e6717efafce80527c9',
+  length:160090,frames:Object.freeze([[1,35040],[0,18680],[0,16645]].map(Object.freeze))
+}),Object.freeze({
+  // Exact Next 16.3.8 executable reauthenticated by native-executable-authentication.json.
+  sha256:'1c942b1eb045ac9ccce9ee03f01f167d9a81254ef045554789d3763a77078b43',
+  length:160168,frames:Object.freeze([[1,34882],[0,18680],[0,16645]].map(Object.freeze))
+}),Object.freeze({
+  // Exact staged production Next16.3.8; authenticated native ES/EN T1-T4.
+  sha256:'7265a7e1c267b85ce8964d98ee792b3eff4a2f0dbdf793f55d10eb6272c0b797',
+  length:160165,frames:Object.freeze([[1,34882],[0,18680],[0,16645]].map(Object.freeze))
+})]);
 export function nativeNavigationProven(witness) {
   const s=witness?.script,frames=witness?.frames;
-  return !!(s&&s.code_sha256===navigationCode.sha256&&s.length===navigationCode.length&&
+  const code=navigationCodes.find(c=>s?.code_sha256===c.sha256&&s.length===c.length);
+  return !!(s&&code&&
     s.default_context===true&&s.live_edit===false&&s.start_line===0&&s.start_column===0&&
     witness.complete===true&&Array.isArray(frames)&&frames.length>=3&&
-    navigationCode.frames.every(([line,column],i)=>frames[i].script_sha256===s.script_sha256&&frames[i].line===line&&frames[i].column===column));
+    code.frames.every(([line,column],i)=>frames[i].script_sha256===s.script_sha256&&frames[i].line===line&&frames[i].column===column));
 }
 // Qualification is the complete retained native call chain, not loader identity.
 export const frameworkPrefetchCode = Object.freeze({
   callerSha256:navigationCode.sha256,callerLength:navigationCode.length,
-  loaderSha256:'c2575aae913acf6acc8a0b87b5b708bd4f9e0767bbb9a553d5f96209239551c0',loaderLength:10917,
+  loaderSha256:'55753ec8822b72212525ec74dac83c9ae5e979732194387e6094e7819623cf74',loaderLength:10917,
   loaderFrames:Object.freeze([[0,10163],[0,10835],[0,5923],[0,6412]].map(Object.freeze)),
   callerFrames:Object.freeze([[1,78764],[1,93935],[1,95211],[1,92319],[1,95653],[0,19325],[1,25947],[1,25036],[1,61110],[1,61771],[1,54598],[1,54833],[1,54867],[1,54141],[1,54937],[1,57083],[1,57571]].map(Object.freeze))
 });
+// CT-authorized exact observed variant: one real recursive call at full-stack
+// indices 15/16. This literal does not normalize, deduplicate or wildcard frames.
+// Recognition establishes prefetch intent only; FAILED remains subject to the
+// unchanged mandatory failure accounting and native receipt contracts.
+export const frameworkPrefetchRecursiveCallerFrames = Object.freeze(
+  [[1,78764],[1,93935],[1,95211],[1,92319],[1,95653],[0,19325],[1,25947],[1,25036],[1,61110],[1,61771],[1,54598],[1,54833],[1,54833],[1,54867],[1,54141],[1,54937],[1,57083],[1,57571]].map(Object.freeze)
+);
 export function nativeFrameworkPrefetchProven(witness,type) {
   const q=frameworkPrefetchCode,s=witness?.script,c=witness?.caller?.script,frames=witness?.frames;
   const executable=(x,hash,length)=>x&&x.code_sha256===hash&&x.length===length&&x.default_context===true&&x.live_edit===false&&x.start_line===0&&x.start_column===0;
   if(type!=='Script'||witness?.initiator_type!=='script'||witness?.action_owned!==false||witness?.complete!==true||witness?.runtime_header_compatible!==true||
-    !executable(s,q.loaderSha256,q.loaderLength)||!executable(c,q.callerSha256,q.callerLength)||s.script_sha256===c.script_sha256||!Array.isArray(frames)||frames.length!==21)return false;
+    !executable(s,q.loaderSha256,q.loaderLength)||!executable(c,q.callerSha256,q.callerLength)||s.script_sha256===c.script_sha256||!Array.isArray(frames)||![21,22].includes(frames.length))return false;
+  const callerFrames=frames.length===21?q.callerFrames:frameworkPrefetchRecursiveCallerFrames;
   return q.loaderFrames.every(([line,column],i)=>frames[i].script_sha256===s.script_sha256&&frames[i].line===line&&frames[i].column===column)&&
-    q.callerFrames.every(([line,column],i)=>frames[i+4].script_sha256===c.script_sha256&&frames[i+4].line===line&&frames[i+4].column===column);
+    callerFrames.every(([line,column],i)=>frames[i+4].script_sha256===c.script_sha256&&frames[i+4].line===line&&frames[i+4].column===column);
 }
 export function nativeIntentSignals(base,type,witness) {
   if(nativeFrameworkPrefetchProven(witness,type))return {rsc:base.rsc,prefetch:'YES'};

@@ -284,7 +284,8 @@
               "classification": {
                 "enum": [
                   "platform_non_application",
-                  "rsc_non_application"
+                  "rsc_non_application",
+                  "rsc_transition_completed_non_application"
                 ]
               }
             }

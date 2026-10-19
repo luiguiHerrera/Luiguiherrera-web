@@ -155,7 +155,12 @@ test('durable evidence is narrowly allowlisted for ADOPT on success or failure',
   assert.doesNotMatch(step,/\*|include-hidden-files: true|overwrite: true/);
 });
 
-function assertExactAdoptArtifacts(names){assert.deepEqual(names,['adopt-request-evidence.json','native-ingress.jsonl','native-lifecycle-diagnostics.json']);}
+function assertExactAdoptArtifacts(names){assert.deepEqual(names,['qa-attestation.json','product-report.json','adopt-request-evidence.json','native-ingress.jsonl','native-lifecycle-diagnostics.json']);}
+
+test('G6 durable artifact allowlist rejects missing QA, raw request, raw logs and wildcard capture',()=>{
+ const exact=['qa-attestation.json','product-report.json','adopt-request-evidence.json','native-ingress.jsonl','native-lifecycle-diagnostics.json'];
+ for(const names of [exact.slice(1),[...exact,'statistical-levels-release-request.json'],[...exact,'lambda-log-tail.txt'],['*']])assert.throws(()=>assertExactAdoptArtifacts(names));
+});
 
 // Recompute the consistency digest so malformed claims fail semantic validation,
 // rather than being masked by an unrelated stale request-identity digest.
@@ -208,4 +213,31 @@ test('shared full-product capture rejects unsafe invocation context',()=>{
  assert.equal(fullProductContext(env).origin,env.SL_NEXT_LOCAL_ORIGIN);
  for(const origin of ['http://example.com:3697','http://127.0.0.1:80','http://user@127.0.0.1:3697','http://127.0.0.1:3697/','https://127.0.0.1:3697'])assert.throws(()=>fullProductContext({...env,SL_NEXT_LOCAL_ORIGIN:origin}));
  for(const update of [{SL_FULL_PRODUCT_RUN_ID:''},{SL_FULL_PRODUCT_RUN_ATTEMPT:'0'},{SL_LOCAL_QUALIFICATION_SUBJECT_SHA256:'bad'},{GITHUB_SHA:'b'.repeat(40)}])assert.throws(()=>fullProductContext({...env,...update}));
+});
+
+// A destructive QA navigation must not outrun native request terminal capture.
+for(const method of ['Page.navigate','Page.setDocumentContent'])for(const terminal of ['FINISHED','FAILED'])test('native replacement barrier: '+method+' retains '+terminal,async()=>{
+ const out=await fs.mkdtemp(path.join(os.tmpdir(),'sl-replacement-barrier-'));
+ try {
+  const {h,cdp}=await fakeHarness(out,true),p=await h.createPage(),sent=[];
+  cdp.send=async(method)=>{sent.push(method);return {result:{value:true}};};
+  cdp.emit('Network.requestWillBeSent',request());
+  const replacement=p.send(method,{url:origin+'/next',frameId:'f',html:'fixture'});
+  await new Promise(r=>setTimeout(r,10));assert.equal(sent.includes(method),false);
+  cdp.emit('Network.responseReceived',{requestId:'r',response:{status:200},timestamp:2});
+  cdp.emit(terminal==='FINISHED'?'Network.loadingFinished':'Network.loadingFailed',{requestId:'r',timestamp:3,canceled:true,errorText:'net::ERR_ABORTED',type:'Fetch'});
+  await replacement;assert.equal(sent.filter(x=>x===method).length,1);await p.close();await assert.rejects(h.finish(true),/ADOPT_REQUEST_EVIDENCE_INVALID/);
+  const e=JSON.parse(await fs.readFile(path.join(out,'adopt-request-evidence.json'))),n=JSON.parse(await fs.readFile(path.join(out,'network-accounting.json')));
+  assert.equal(e.requests[0].terminal_state,terminal);if(terminal==='FAILED')assert.equal(n.required_application_request_failures,1);
+  const d=JSON.parse(await fs.readFile(path.join(out,'native-lifecycle-diagnostics.json'))).pages[0].replacement_drains[0];assert.equal(d.method,method);assert.equal(d.exit_reason,'EMPTY_PENDING_SET');assert.equal(d.pending_ids_at_start.length,1);assert.deepEqual(d.pending_ids_at_end,[]);
+ }finally{await fs.rm(out,{recursive:true,force:true});}
+});
+test('native replacement barrier: missing terminal blocks navigation and remains pending',async()=>{
+ const out=await fs.mkdtemp(path.join(os.tmpdir(),'sl-replacement-timeout-'));
+ try {
+  const {h,cdp}=await fakeHarness(out,true),p=await h.createPage(),sent=[];cdp.send=async(method)=>{sent.push(method);return {result:{value:true}};};cdp.emit('Network.requestWillBeSent',request());
+  await assert.rejects(p.send('Page.navigate',{url:origin+'/next'}),{message:'PAGE_REPLACEMENT_PENDING_REQUEST'});assert.equal(sent.includes('Page.navigate'),false);
+  await p.close();await assert.rejects(h.finish(true),/ADOPT_REQUEST_EVIDENCE_INVALID/);
+  const e=JSON.parse(await fs.readFile(path.join(out,'adopt-request-evidence.json')));assert.equal(e.requests[0].terminal_state,'PENDING');assert.ok(e.validation.issues.includes('UNRESOLVED_PENDING_REQUEST'));
+ }finally{await fs.rm(out,{recursive:true,force:true});}
 });

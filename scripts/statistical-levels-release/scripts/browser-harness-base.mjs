@@ -9,29 +9,38 @@ import { installCausalBridge } from './adopt-causal-bridge.mjs';
 import { transitions } from './probe-transition-receipts.mjs';
 import { assetTransitionReadinessExpression } from './qa/asset-transition-readiness.mjs';
 import { createRuntimeObserver } from './runtime-transition-receipts.mjs';
+import { probeBrowserHeaders } from './probe-toolbar-policy.mjs';
 
 // Wait only for genuine native loadingFinished/loadingFailed observations.
 // The deadline bounds capture, never manufactures a terminal state. Listeners
 // stay attached throughout this wait and subsequent context/session closure.
-export async function drainNativeRequestLifecycle(pendingRequestIds,{timeoutMs=5000,pollMs=25}={}) {
+export async function drainNativeRequestLifecycle(pendingRequestIds,{timeoutMs=5000,pollMs=25,quietMs=0,activityVersion=()=>0}={}) {
   const start=performance.now(),deadline=start+timeoutMs;
   let ids=pendingRequestIds();
   const initial=[...ids];
-  while(ids.length&&performance.now()<deadline) {
+  let activity=activityVersion(),emptySince=ids.length?null:start;
+  const complete=()=>ids.length===0 && emptySince!==null && performance.now()-emptySince>=quietMs;
+  while(!complete()&&performance.now()<deadline) {
     await new Promise(resolve=>setTimeout(resolve,Math.min(pollMs,Math.max(0,deadline-performance.now()))));
     ids=pendingRequestIds();
+    const nextActivity=activityVersion();
+    if(ids.length)emptySince=null;
+    else if(emptySince===null||nextActivity!==activity)emptySince=performance.now();
+    activity=nextActivity;
   }
-  return {terminal_coverage_complete:ids.length===0,pending_request_ids:ids,diagnostics:{clock:"PERFORMANCE_MONOTONIC_MS",start_timestamp:start,deadline_timestamp:deadline,end_timestamp:performance.now(),exit_reason:ids.length===0?"EMPTY_PENDING_SET":"DEADLINE",pending_ids_at_start:initial,pending_ids_at_end:[...ids]}};
+  const terminalComplete=complete();
+  return {terminal_coverage_complete:terminalComplete,pending_request_ids:ids,diagnostics:{clock:"PERFORMANCE_MONOTONIC_MS",start_timestamp:start,deadline_timestamp:deadline,end_timestamp:performance.now(),exit_reason:terminalComplete?"EMPTY_PENDING_SET":"DEADLINE",...(quietMs?{required_quiet_ms:quietMs,empty_since_timestamp:emptySince}:{}),pending_ids_at_start:initial,pending_ids_at_end:[...ids]}};
 }
 
-export async function createReadOnlyHarness(target, tokenSource, out, production) {
+export async function createReadOnlyHarness(target, tokenSource, out, production, nativeEvidence = production, stagedTransport) {
+  need(!stagedTransport || production && nativeEvidence && stagedTransport.origin === target.origin, 'STAGED_TRANSPORT_MODE');
   need(production ? tokenSource === undefined : typeof tokenSource?.get === 'function', 'QA_CREDENTIAL_MODE');
   need(!process.env.DEBUG && !process.env.PWDEBUG, 'DEBUG_MODE_FORBIDDEN');
   const { chromium } = await import('../qa-dependencies/node_modules/playwright/index.mjs');
   const browser = await chromium.launch({ headless: true,
     env: { PATH: process.env.PATH, HOME: (()=>{const h=path.join(path.dirname(out),'browser-home'); mkdirSync(h,{recursive:true,mode:0o700}); return h;})(), LANG: 'en_US.UTF-8', TZ: 'UTC' } });
   const pages = new Set(), events = [], authFailures = [];
-  const adopt = production ? createAdoptRequestEvidence(target.origin, envelope => {
+  const adopt = (production || nativeEvidence) ? createAdoptRequestEvidence(target.origin, envelope => {
     appendFileSync(path.join(out,'native-ingress.jsonl'),JSON.stringify(envelope)+'\n',{encoding:'utf8',flush:true});
   }) : null;
   const lifecycle={schema:"statistical-levels.native-lifecycle-diagnostics.v1",clock:"PERFORMANCE_MONOTONIC_MS",pages:[],browser_close_timestamp:null,browser_closed_timestamp:null};
@@ -42,10 +51,11 @@ export async function createReadOnlyHarness(target, tokenSource, out, production
     const cdp = await context.newCDPSession(page), requests = new Map(), paused = new Map();
     const pending = new Set();
     const pageId = 'page-' + (++pageSequence); pageStates.set(context, pageId);
-    const diagnostic={page_id:pageId,drain:null,requests:[],page_close_timestamp:null,page_closed_timestamp:null,source_close_timestamp:null};if(adopt)lifecycle.pages.push(diagnostic);
-    const diagnosticRequests=new Map();
+    const diagnostic={page_id:pageId,drain:null,replacement_drains:[],requests:[],page_close_timestamp:null,page_closed_timestamp:null,source_close_timestamp:null};if(adopt)lifecycle.pages.push(diagnostic);
+    const diagnosticRequests=new Map();let nativeActivityVersion=0;
     function observeLifecycle(type,e){
       if(!adopt||typeof e.requestId!=='string')return;
+      nativeActivityVersion++;
       const id=sha(pageId+':'+e.requestId);let row=diagnosticRequests.get(id);
       if(!row){row={request_id:id,request_start_timestamp:null,response_timestamp:null,loading_finished_timestamp:null,loading_failed_timestamp:null,native_terminal_callback_timestamp:null};diagnosticRequests.set(id,row);diagnostic.requests.push(row);}
       const key={'Network.requestWillBeSent':'request_start_timestamp','Network.responseReceived':'response_timestamp','Network.loadingFinished':'loading_finished_timestamp','Network.loadingFailed':'loading_failed_timestamp'}[type];
@@ -66,12 +76,20 @@ export async function createReadOnlyHarness(target, tokenSource, out, production
     }
     // Gated separately by complete raw accounting; no event is thrown away.
     const errors = { console: [], exceptions: [], network: [], http: [] };
-    if (!production) cdp.on('Fetch.requestPaused', event => {
+    if (!production || stagedTransport) cdp.on('Fetch.requestPaused', event => {
       const task = (async () => {
         try {
           const previous = event.redirectedRequestId ? paused.get(event.redirectedRequestId) : null;
           paused.set(event.requestId, event.request.url);
-          const headers = headersForRequest(event.request.url, event.request.headers, new URL(event.request.url).origin === target.origin ? await tokenSource.get() : undefined, previous, target.origin);
+          const destination = new URL(event.request.url);
+          const headers = stagedTransport ? stagedTransport.headersFor(event.request.url, event.request.headers, previous) : probeBrowserHeaders(headersForRequest(event.request.url, event.request.headers, destination.origin === target.origin ? await tokenSource.get() : undefined, previous, target.origin), {
+            url: event.request.url, origin: target.origin, production,
+            // Initial GET Documents for the two authorized SL routes only.
+            resourceType: !event.redirectedRequestId && event.request.method === 'GET' &&
+              ['/niveles-estadisticos', '/en/statistical-levels'].includes(destination.pathname) && !destination.searchParams.has('_rsc') &&
+              !Object.entries(event.request.headers).some(([name, value]) => ['rsc', 'next-router-prefetch'].includes(name.toLowerCase()) ||
+                ['purpose', 'sec-purpose'].includes(name.toLowerCase()) && /\bprefetch\b/i.test(value)) ? event.resourceType : undefined
+          });
           // CDP documents overrides as applying only to THIS request, not redirects.
           await cdp.send('Fetch.continueRequest', { requestId: event.requestId,
             headers: Object.entries(headers).map(([name, value]) => ({ name, value: String(value) })) });
@@ -148,9 +166,19 @@ export async function createReadOnlyHarness(target, tokenSource, out, production
       adopt.listenerStart(pageId);adopt.pageLifecycle(pageId,'ACTIVE');
     }
     await Promise.all(['Page', 'Runtime', 'Network', 'Log'].map(domain => cdp.send(domain + '.enable')));
-    if (!production) await cdp.send('Fetch.enable', { patterns: [{ urlPattern: '*', requestStage: 'Request' }] });
+    if (!production || stagedTransport) await cdp.send('Fetch.enable', { patterns: [{ urlPattern: '*', requestStage: 'Request' }] });
     const causalBridge = adopt ? await installCausalBridge(cdp, pageId, adopt.registerAction, adopt.completeAction, async id=>{if(runtimeKind)await runtime.begin(runtimeKind,runtimeTransition,id);adopt.beginAction(id);}) : null;
-    const send = (method, params = {}) => cdp.send(method, params);
+    const send = async (method, params = {}) => {
+      // The QA driver must not destroy a document while its observed native
+      // requests are still open. This only waits for real terminal callbacks;
+      // timeout and every recorded failure remain blocking evidence.
+      if(adopt && ['Page.navigate','Page.setDocumentContent'].includes(method)) {
+        const drained=await drainNativeRequestLifecycle(()=>adopt.pendingRequests(pageId),{quietMs:500,activityVersion:()=>nativeActivityVersion});
+        diagnostic.replacement_drains.push({method,...drained.diagnostics});
+        need(drained.terminal_coverage_complete,'PAGE_REPLACEMENT_PENDING_REQUEST');
+      }
+      return cdp.send(method, params);
+    };
     const evaluate = async expression => {
       const action = adopt?.action(pageId, 'EVALUATE', expression);
       const r = action ? await causalBridge.evaluate(action, expression) : await send('Runtime.evaluate', { expression, returnByValue: true, awaitPromise: true });
@@ -202,7 +230,7 @@ export async function createReadOnlyHarness(target, tokenSource, out, production
       }
     } : {}), close: closePage };
   }
-  return { createPage, ...(adopt ? { observability: adopt.observability } : {}), protectedGet: async url => production ? publicProductionGet(url) : protectedGet(url, await tokenSource.get(), target.origin),
+  return { createPage, ...(adopt ? { observability: adopt.observability } : {}), protectedGet: async url => stagedTransport ? stagedTransport.get(url) : production ? publicProductionGet(url) : protectedGet(url, await tokenSource.get(), target.origin),
     finish: async finalProductPassed => {
       if (!adopt) {
         for (const context of pages) await context.close();
@@ -220,7 +248,7 @@ export async function createReadOnlyHarness(target, tokenSource, out, production
         lifecycle.browser_close_timestamp=performance.now();
         await browser.close();
         lifecycle.browser_closed_timestamp=performance.now();
-      } catch (error) { closeError = error; } finally { tokenSource?.clear(); }
+      } catch (error) { closeError = error; } finally { tokenSource?.clear(); stagedTransport?.clear(); }
       // All accepted native callbacks convert synchronously. After the closed
       // source acknowledgements, drain the already queued JavaScript turn before
       // freezing. This is an event-loop barrier, not a network-idleness timeout.

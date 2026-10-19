@@ -71,7 +71,7 @@ jobs:
       - name: Verify frozen helper bytes before executing any helper
         working-directory: scripts/statistical-levels-release
         env:
-          EXPECTED_SOURCE_SUMS: 6129a85f0bca7039bdf3cd77eda6e80850c161520f7c4d833f0ef9e422f3d50b
+          EXPECTED_SOURCE_SUMS: e0a922639a9f1748281f7e4b6b431ee4be91036e306d70ae1913ca2b6b97f841
         run: |
           printf '%s  SOURCE_SHA256SUMS\n' "$EXPECTED_SOURCE_SUMS" | sha256sum --check --strict
           sha256sum --check --strict SOURCE_SHA256SUMS
@@ -116,6 +116,8 @@ jobs:
         with:
           name: statistical-levels-adopt-request-evidence
           path: |
+            ${{ runner.temp }}/statistical-levels-candidate-qa/qa-attestation.json
+            ${{ runner.temp }}/statistical-levels-candidate-qa/product-report.json
             ${{ runner.temp }}/statistical-levels-candidate-qa/adopt-request-evidence.json
             ${{ runner.temp }}/statistical-levels-candidate-qa/native-ingress.jsonl
             ${{ runner.temp }}/statistical-levels-candidate-qa/native-lifecycle-diagnostics.json
@@ -159,7 +161,7 @@ jobs:
       - name: Verify frozen helper bytes before executing any helper
         working-directory: scripts/statistical-levels-release
         env:
-          EXPECTED_SOURCE_SUMS: 6129a85f0bca7039bdf3cd77eda6e80850c161520f7c4d833f0ef9e422f3d50b
+          EXPECTED_SOURCE_SUMS: e0a922639a9f1748281f7e4b6b431ee4be91036e306d70ae1913ca2b6b97f841
         run: |
           printf '%s  SOURCE_SHA256SUMS\n' "$EXPECTED_SOURCE_SUMS" | sha256sum --check --strict
           sha256sum --check --strict SOURCE_SHA256SUMS
@@ -185,6 +187,16 @@ jobs:
           inline-session-policy: '{"Version":"2012-10-17","Statement":[{"Effect":"Allow","Action":"lambda:InvokeFunction","Resource":"arn:aws:lambda:eu-south-2:732159826922:function:statistical-levels-vercel-release-controller"}]}'
       - name: Invoke the exact controller once; no direct promotion or automatic retry
         run: node scripts/statistical-levels-release/scripts/invoke.mjs
+      - name: Retain sanitized successful ADOPT invocation receipt for independent G6
+        if: success() && inputs.operation == 'ADOPT_EXISTING_PRODUCTION_BASELINE'
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+        with:
+          name: statistical-levels-g5-invocation-receipt
+          path: ${{ runner.temp }}/statistical-levels-g5-invocation-receipt.json
+          retention-days: 90
+          if-no-files-found: error
+          include-hidden-files: false
+          overwrite: false
   identity-probe:
     name: Statistical Levels non-release identity probe
     if: inputs.operation == 'PROBE_IDENTITY' && github.repository == 'luiguiHerrera/Luiguiherrera-web' && github.ref == 'refs/heads/vercel-deployment'
@@ -208,7 +220,7 @@ jobs:
         id: source_integrity
         working-directory: scripts/statistical-levels-release
         env:
-          EXPECTED_SOURCE_SUMS: 6129a85f0bca7039bdf3cd77eda6e80850c161520f7c4d833f0ef9e422f3d50b
+          EXPECTED_SOURCE_SUMS: e0a922639a9f1748281f7e4b6b431ee4be91036e306d70ae1913ca2b6b97f841
         run: |
           printf '%s  SOURCE_SHA256SUMS\n' "$EXPECTED_SOURCE_SUMS" | sha256sum --check --strict
           sha256sum --check --strict SOURCE_SHA256SUMS
@@ -267,7 +279,7 @@ jobs:
         if: always() && steps.source_integrity.outcome == 'success'
         working-directory: scripts/statistical-levels-release
         env:
-          EXPECTED_SOURCE_SUMS: 6129a85f0bca7039bdf3cd77eda6e80850c161520f7c4d833f0ef9e422f3d50b
+          EXPECTED_SOURCE_SUMS: e0a922639a9f1748281f7e4b6b431ee4be91036e306d70ae1913ca2b6b97f841
           PROBE_RESOLVE_OUTCOME: ${{ steps.resolve.outcome }}
           PROBE_QA_OUTCOME: ${{ steps.qa.outcome }}
           PROBE_AWS_ASSUME_OUTCOME: ${{ steps.aws_assume.outcome }}

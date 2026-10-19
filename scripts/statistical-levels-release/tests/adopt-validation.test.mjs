@@ -211,3 +211,12 @@ test('lifecycle diagnostics: empty and deadline outcomes retain exact sets witho
  const ids=['one','two'];const pending=await drainNativeRequestLifecycle(()=>ids,{timeoutMs:5,pollMs:1});assert.equal(pending.diagnostics.exit_reason,'DEADLINE');assert.deepEqual(pending.diagnostics.pending_ids_at_start,ids);assert.deepEqual(pending.diagnostics.pending_ids_at_end,ids);assert.equal(pending.terminal_coverage_complete,false);assert.ok(pending.diagnostics.end_timestamp>=pending.diagnostics.deadline_timestamp);
  let current=['one','two'];setTimeout(()=>{current=['two'];},1);const terminal=await drainNativeRequestLifecycle(()=>current,{timeoutMs:5,pollMs:1});assert.deepEqual(terminal.diagnostics.pending_ids_at_start,['one','two']);assert.deepEqual(terminal.diagnostics.pending_ids_at_end,['two']);
 });
+
+test('native replacement stabilization observes a late real request before accepting an empty set',async()=>{
+ let pending=[],version=0;const timer=setTimeout(()=>{pending=['late'];version++;},5),terminal=setTimeout(()=>{pending=[];version++;},15);
+ try {const r=await drainNativeRequestLifecycle(()=>pending,{timeoutMs:100,pollMs:1,quietMs:20,activityVersion:()=>version});assert.equal(r.terminal_coverage_complete,true);assert.ok(r.diagnostics.end_timestamp-r.diagnostics.start_timestamp>=30);assert.equal(r.diagnostics.required_quiet_ms,20);}finally{clearTimeout(timer);clearTimeout(terminal);}
+});
+test('native replacement stabilization cannot accept an initially empty set after a late unresolved request',async()=>{
+ let pending=[],version=0;const timer=setTimeout(()=>{pending=['late'];version++;},5);
+ try {const r=await drainNativeRequestLifecycle(()=>pending,{timeoutMs:30,pollMs:1,quietMs:20,activityVersion:()=>version});assert.equal(r.terminal_coverage_complete,false);assert.deepEqual(r.pending_request_ids,['late']);assert.equal(r.diagnostics.exit_reason,'DEADLINE');}finally{clearTimeout(timer);}
+});

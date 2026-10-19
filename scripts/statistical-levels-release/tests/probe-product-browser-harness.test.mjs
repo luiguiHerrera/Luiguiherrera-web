@@ -158,12 +158,12 @@ test('probe harness preserves exact raw events.push expressions and original tim
   assert.deepEqual(expressions(shared, 'setTimeout'), [
     'setTimeout(resolve, Math.min(pollMs, Math.max(0, deadline - performance.now())))',
     ...expressions(probe, 'setTimeout'), "setTimeout(() => reject(new Error('CDP_DRAIN_UNCONFIRMED')), 5000)"]);
-  assert.deepEqual(expressions(shared, 'drainNativeRequestLifecycle'), ['drainNativeRequestLifecycle(() => adopt.pendingRequests(pageId))']);
+  assert.deepEqual(expressions(shared, 'drainNativeRequestLifecycle'), ['drainNativeRequestLifecycle(() => adopt.pendingRequests(pageId), { quietMs: 500, activityVersion: () => nativeActivityVersion })', 'drainNativeRequestLifecycle(() => adopt.pendingRequests(pageId))']);
   const sharedText=await fs.readFile(sharedURL,'utf8');
   assert.match(sharedText,/if\(adopt\)\{const drained=await drainNativeRequestLifecycle\(\(\)=>adopt\.pendingRequests\(pageId\)\);diagnostic\.drain=drained\.diagnostics;\}/);
   assert.match(sharedText,/timeoutMs=5000,pollMs=25/);
-  assert.match(sharedText,/while\(ids\.length&&performance\.now\(\)<deadline\)/);
-  assert.match(sharedText,/terminal_coverage_complete:ids\.length===0,pending_request_ids:ids/);
+  assert.match(sharedText,/while\(!complete\(\)&&performance\.now\(\)<deadline\)/);
+  assert.match(sharedText,/terminal_coverage_complete:terminalComplete,pending_request_ids:ids/);
   // The unchanged policy function now receives the same arguments in explicit diagnostic stages.
   // Behavioral equivalence (including blocked requests) is covered by interception differential tests.
   assert.deepEqual(expressions(probe, 'headersForRequest'), ['headersForRequest(requestURL, requestHeaders, token, previous, target.origin)']);
@@ -174,11 +174,16 @@ test('G5 fixture binding: ungated or unbounded native lifecycle wait fails close
   const qualify=text=>{
     assert.match(text,/if\(adopt\)\{const drained=await drainNativeRequestLifecycle\(\(\)=>adopt\.pendingRequests\(pageId\)\);diagnostic\.drain=drained\.diagnostics;\}/);
     assert.match(text,/timeoutMs=5000,pollMs=25/);
-    assert.match(text,/while\(ids\.length&&performance\.now\(\)<deadline\)/);
-    assert.match(text,/terminal_coverage_complete:ids\.length===0,pending_request_ids:ids/);
+    assert.match(text,/while\(!complete\(\)&&performance\.now\(\)<deadline\)/);
+    assert.match(text,/terminal_coverage_complete:terminalComplete,pending_request_ids:ids/);
+    assert.match(text,/const complete=\(\)=>ids\.length===0 && emptySince!==null && performance\.now\(\)-emptySince>=quietMs/);
+    assert.match(text,/if\(adopt && \['Page\.navigate','Page\.setDocumentContent'\]\.includes\(method\)\)/);
+    assert.match(text,/quietMs:500,activityVersion:\(\)=>nativeActivityVersion/);
+    assert.match(text,/need\(drained\.terminal_coverage_complete,'PAGE_REPLACEMENT_PENDING_REQUEST'\)/);
+
   };
   qualify(source);
-  for(const [from,to]of [['if(adopt){const drained=await drainNativeRequestLifecycle','{const drained=await drainNativeRequestLifecycle'],['timeoutMs=5000','timeoutMs=Infinity'],['ids.length&&performance.now()<deadline','ids.length'],['terminal_coverage_complete:ids.length===0','terminal_coverage_complete:true']]){
+  for(const [from,to]of [['if(adopt){const drained=await drainNativeRequestLifecycle','{const drained=await drainNativeRequestLifecycle'],['timeoutMs=5000','timeoutMs=Infinity'],['!complete()&&performance.now()<deadline','!complete()'],['terminal_coverage_complete:terminalComplete','terminal_coverage_complete:true'],['ids.length===0 && emptySince!==null','true && emptySince!==null'],['if(adopt &&','if(true &&'],['quietMs:500','quietMs:0'],["need(drained.terminal_coverage_complete,'PAGE_REPLACEMENT_PENDING_REQUEST')","need(true,'PAGE_REPLACEMENT_PENDING_REQUEST')"]]){
     const mutated=source.replace(from,to);assert.notEqual(mutated,source);assert.throws(()=>qualify(mutated));
   }
 });
