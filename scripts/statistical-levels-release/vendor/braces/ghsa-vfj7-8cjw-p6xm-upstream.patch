@@ -1,0 +1,350 @@
+From d0d575e55e74a4e0218e5248fafb79efc3e54ebb Mon Sep 17 00:00:00 2001
+From: Federico Sosa <fedesosa.uy@gmail.com>
+Date: Mon, 21 Sep 2026 11:47:05 +0200
+Subject: [PATCH] fix: limit nesting depth to prevent stack overflow
+
+---
+ .verb.md                 | 14 +++++++++++++-
+ README.md                | 12 ++++++++++++
+ lib/compile.js           | 12 +++++++++---
+ lib/constants.js         |  1 +
+ lib/expand.js            | 11 ++++++++---
+ lib/parse.js             | 13 +++++++++++++
+ lib/stringify.js         | 13 +++++++++----
+ test/braces.compile.js   |  7 +++++++
+ test/braces.expand.js    |  9 +++++++++
+ test/braces.parse.js     | 13 +++++++++++++
+ test/braces.stringify.js | 14 ++++++++++++++
+ 11 files changed, 108 insertions(+), 11 deletions(-)
+ create mode 100644 test/braces.stringify.js
+
+diff --git a/.verb.md b/.verb.md
+index 2ee6767..b09bef4 100644
+--- a/.verb.md
++++ b/.verb.md
+@@ -175,6 +175,18 @@ console.log(braces.expand('a{b}c'));
+ console.log(braces('a/{b,c}/d', { maxLength: 3 }));  //=> throws an error
+ ```
+ 
++### options.maxDepth
++
++**Type**: `Number`
++
++**Default**: `100`
++
++**Description**: Limit the nesting depth of braces and parentheses. Values greater than 100 are capped at 100 to prevent stack overflow in recursive AST processing.
++
++```js
++console.log(braces('{{a,b},c}', { maxDepth: 1 })); //=> throws an error
++```
++
+ ### options.expand
+ 
+ **Type**: `Boolean`
+@@ -537,4 +549,4 @@ Braces is more accurate, without sacrificing performance.
+ [minimatch]: https://github.com/isaacs/minimatch
+ [quantifiers]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp#quantifiers
+ [dos]: https://en.wikipedia.org/wiki/Denial-of-service_attack
+-[bug]: https://medium.com/node-security/minimatch-redos-vulnerability-590da24e6d3c#.jew0b6mpc
+\ No newline at end of file
++[bug]: https://medium.com/node-security/minimatch-redos-vulnerability-590da24e6d3c#.jew0b6mpc
+diff --git a/README.md b/README.md
+index 418f690..43cd84a 100644
+--- a/README.md
++++ b/README.md
+@@ -186,6 +186,18 @@ console.log(braces.expand('a{b}c'));
+ console.log(braces('a/{b,c}/d', { maxLength: 3 })); //=> throws an error
+ ```
+ 
++### options.maxDepth
++
++**Type**: `Number`
++
++**Default**: `100`
++
++**Description**: Limit the nesting depth of braces and parentheses. Values greater than 100 are capped at 100 to prevent stack overflow in recursive AST processing.
++
++```js
++console.log(braces('{{a,b},c}', { maxDepth: 1 })); //=> throws an error
++```
++
+ ### options.expand
+ 
+ **Type**: `Boolean`
+diff --git a/lib/compile.js b/lib/compile.js
+index dce69be..945a78b 100644
+--- a/lib/compile.js
++++ b/lib/compile.js
+@@ -2,9 +2,15 @@
+ 
+ const fill = require('fill-range');
+ const utils = require('./utils');
++const { MAX_DEPTH } = require('./constants');
+ 
+ const compile = (ast, options = {}) => {
+-  const walk = (node, parent = {}) => {
++  const maxDepth = Number.isFinite(options.maxDepth) ? Math.min(MAX_DEPTH, options.maxDepth) : MAX_DEPTH;
++
++  const walk = (node, parent = {}, depth = 0) => {
++    if (node.nodes && depth > maxDepth) {
++      throw new RangeError(`AST depth (${depth}), exceeds max depth (${maxDepth})`);
++    }
+     const invalidBlock = utils.isInvalidBrace(parent);
+     const invalidNode = node.invalid === true && options.escapeInvalid === true;
+     const invalid = invalidBlock === true || invalidNode === true;
+@@ -47,14 +53,14 @@ const compile = (ast, options = {}) => {
+ 
+     if (node.nodes) {
+       for (const child of node.nodes) {
+-        output += walk(child, node);
++        output += walk(child, node, child.nodes ? depth + 1 : depth);
+       }
+     }
+ 
+     return output;
+   };
+ 
+-  return walk(ast);
++  return walk(ast, {}, ast.type === 'root' ? 0 : 1);
+ };
+ 
+ module.exports = compile;
+diff --git a/lib/constants.js b/lib/constants.js
+index 2bb3b88..c237099 100644
+--- a/lib/constants.js
++++ b/lib/constants.js
+@@ -1,6 +1,7 @@
+ 'use strict';
+ 
+ module.exports = {
++  MAX_DEPTH: 100,
+   MAX_LENGTH: 10000,
+ 
+   // Digits
+diff --git a/lib/expand.js b/lib/expand.js
+index 35b2c41..80ea368 100644
+--- a/lib/expand.js
++++ b/lib/expand.js
+@@ -3,6 +3,7 @@
+ const fill = require('fill-range');
+ const stringify = require('./stringify');
+ const utils = require('./utils');
++const { MAX_DEPTH } = require('./constants');
+ 
+ const append = (queue = '', stash = '', enclose = false) => {
+   const result = [];
+@@ -32,8 +33,12 @@ const append = (queue = '', stash = '', enclose = false) => {
+ 
+ const expand = (ast, options = {}) => {
+   const rangeLimit = options.rangeLimit === undefined ? 1000 : options.rangeLimit;
++  const maxDepth = Number.isFinite(options.maxDepth) ? Math.min(MAX_DEPTH, options.maxDepth) : MAX_DEPTH;
+ 
+-  const walk = (node, parent = {}) => {
++  const walk = (node, parent = {}, depth = 0) => {
++    if (node.nodes && depth > maxDepth) {
++      throw new RangeError(`AST depth (${depth}), exceeds max depth (${maxDepth})`);
++    }
+     node.queue = [];
+ 
+     let p = parent;
+@@ -100,14 +105,14 @@ const expand = (ast, options = {}) => {
+       }
+ 
+       if (child.nodes) {
+-        walk(child, node);
++        walk(child, node, child.nodes ? depth + 1 : depth);
+       }
+     }
+ 
+     return queue;
+   };
+ 
+-  return utils.flatten(walk(ast));
++  return utils.flatten(walk(ast, {}, ast.type === 'root' ? 0 : 1));
+ };
+ 
+ module.exports = expand;
+diff --git a/lib/parse.js b/lib/parse.js
+index 4e57de6..b8183b6 100644
+--- a/lib/parse.js
++++ b/lib/parse.js
+@@ -7,6 +7,7 @@ const stringify = require('./stringify');
+  */
+ 
+ const {
++  MAX_DEPTH,
+   MAX_LENGTH,
+   CHAR_BACKSLASH, /* \ */
+   CHAR_BACKTICK, /* ` */
+@@ -35,6 +36,7 @@ const parse = (input, options = {}) => {
+ 
+   const opts = options || {};
+   const max = typeof opts.maxLength === 'number' ? Math.min(MAX_LENGTH, opts.maxLength) : MAX_LENGTH;
++  const maxDepth = Number.isFinite(opts.maxDepth) ? Math.min(MAX_DEPTH, opts.maxDepth) : MAX_DEPTH;
+   if (input.length > max) {
+     throw new SyntaxError(`Input length (${input.length}), exceeds max characters (${max})`);
+   }
+@@ -47,6 +49,7 @@ const parse = (input, options = {}) => {
+   const length = input.length;
+   let index = 0;
+   let depth = 0;
++  let nesting = 0;
+   let value;
+ 
+   /**
+@@ -143,6 +146,10 @@ const parse = (input, options = {}) => {
+      */
+ 
+     if (value === CHAR_LEFT_PARENTHESES) {
++      if (nesting >= maxDepth) {
++        throw new SyntaxError(`Input depth (${nesting + 1}), exceeds max depth (${maxDepth})`);
++      }
++      nesting++;
+       block = push({ type: 'paren', nodes: [] });
+       stack.push(block);
+       push({ type: 'text', value });
+@@ -156,6 +163,7 @@ const parse = (input, options = {}) => {
+       }
+       block = stack.pop();
+       push({ type: 'text', value });
++      nesting--;
+       block = stack[stack.length - 1];
+       continue;
+     }
+@@ -203,6 +211,10 @@ const parse = (input, options = {}) => {
+      */
+ 
+     if (value === CHAR_LEFT_CURLY_BRACE) {
++      if (nesting >= maxDepth) {
++        throw new SyntaxError(`Input depth (${nesting + 1}), exceeds max depth (${maxDepth})`);
++      }
++      nesting++;
+       depth++;
+ 
+       const dollar = prev.value && prev.value.slice(-1) === '$' || block.dollar === true;
+@@ -239,6 +251,7 @@ const parse = (input, options = {}) => {
+ 
+       push({ type, value });
+       depth--;
++      nesting--;
+ 
+       block = stack[stack.length - 1];
+       continue;
+diff --git a/lib/stringify.js b/lib/stringify.js
+index 8bcf872..4d8b196 100644
+--- a/lib/stringify.js
++++ b/lib/stringify.js
+@@ -1,9 +1,15 @@
+ 'use strict';
+ 
+ const utils = require('./utils');
++const { MAX_DEPTH } = require('./constants');
+ 
+ module.exports = (ast, options = {}) => {
+-  const stringify = (node, parent = {}) => {
++  const maxDepth = Number.isFinite(options.maxDepth) ? Math.min(MAX_DEPTH, options.maxDepth) : MAX_DEPTH;
++
++  const stringify = (node, parent = {}, depth = 0) => {
++    if (node.nodes && depth > maxDepth) {
++      throw new RangeError(`AST depth (${depth}), exceeds max depth (${maxDepth})`);
++    }
+     const invalidBlock = options.escapeInvalid && utils.isInvalidBrace(parent);
+     const invalidNode = node.invalid === true && options.escapeInvalid === true;
+     let output = '';
+@@ -21,12 +27,11 @@ module.exports = (ast, options = {}) => {
+ 
+     if (node.nodes) {
+       for (const child of node.nodes) {
+-        output += stringify(child);
++        output += stringify(child, node, child.nodes ? depth + 1 : depth);
+       }
+     }
+     return output;
+   };
+ 
+-  return stringify(ast);
++  return stringify(ast, {}, ast.type === 'root' ? 0 : 1);
+ };
+-
+diff --git a/test/braces.compile.js b/test/braces.compile.js
+index 04b42b1..86be634 100644
+--- a/test/braces.compile.js
++++ b/test/braces.compile.js
+@@ -10,6 +10,13 @@ describe('braces.compile()', () => {
+     it('should throw an error when invalid args are passed', () => {
+       assert.throws(() => compile());
+     });
++
++    it('should reject deeply nested ASTs', () => {
++      let ast = { type: 'text', value: 'a' };
++      for (let i = 0; i < 101; i++) ast = { type: 'brace', nodes: [ast] };
++      ast = { type: 'root', nodes: [ast] };
++      assert.throws(() => compile(ast), /exceeds max depth/);
++    });
+   });
+ 
+   describe('invalid characters', () => {
+diff --git a/test/braces.expand.js b/test/braces.expand.js
+index c95fbb8..7da2bd6 100644
+--- a/test/braces.expand.js
++++ b/test/braces.expand.js
+@@ -21,6 +21,15 @@ const equal = (input, expected = bash(input), options) => {
+ };
+ 
+ describe('unit tests from brace-expand', () => {
++  describe('errors', () => {
++    it('should reject deeply nested ASTs', () => {
++      let ast = { type: 'text', value: 'a' };
++      for (let i = 0; i < 101; i++) ast = { type: 'brace', nodes: [ast] };
++      ast = { type: 'root', nodes: [ast] };
++      assert.throws(() => expand(ast), /exceeds max depth/);
++    });
++  });
++
+   describe('extglobs', () => {
+     it('should split on commas when braces are inside extglobs', () => {
+       equal('*(a|{b|c,d})', ['*(a|b|c)', '*(a|d)']);
+diff --git a/test/braces.parse.js b/test/braces.parse.js
+index d5a7404..01a45cc 100644
+--- a/test/braces.parse.js
++++ b/test/braces.parse.js
+@@ -10,6 +10,19 @@ describe('braces.parse()', () => {
+       const MAX_LENGTH = 1024 * 64;
+       assert.throws(() => parse('.'.repeat(MAX_LENGTH + 2)));
+     });
++
++    it('should throw an error when nesting exceeds the maximum depth', () => {
++      assert.throws(
++        () => parse('{'.repeat(101) + 'a,b' + '}'.repeat(101)),
++        /exceeds max depth/
++      );
++      assert.throws(() => parse('('.repeat(101) + ')'.repeat(101)), /exceeds max depth/);
++    });
++
++    it('should support a lower maximum depth', () => {
++      assert.throws(() => parse('{{a,b},c}', { maxDepth: 1 }), /exceeds max depth/);
++      assert.doesNotThrow(() => parse('{{a,b},c}', { maxDepth: 2 }));
++    });
+   });
+ 
+   describe('valid', () => {
+diff --git a/test/braces.stringify.js b/test/braces.stringify.js
+new file mode 100644
+index 0000000..4b46227
+--- /dev/null
++++ b/test/braces.stringify.js
+@@ -0,0 +1,14 @@
++'use strict';
++
++require('mocha');
++const assert = require('assert').strict;
++const stringify = require('../lib/stringify');
++
++describe('braces.stringify()', () => {
++  it('should reject deeply nested ASTs', () => {
++    let ast = { type: 'text', value: 'a' };
++    for (let i = 0; i < 101; i++) ast = { type: 'brace', nodes: [ast] };
++    ast = { type: 'root', nodes: [ast] };
++    assert.throws(() => stringify(ast), /exceeds max depth/);
++  });
++});

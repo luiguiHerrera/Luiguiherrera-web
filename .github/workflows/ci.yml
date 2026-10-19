@@ -25,7 +25,10 @@ jobs:
         run: npm ci
 
       - name: Audit high and critical dependencies
-        run: npm audit --audit-level=high
+        run: node scripts/statistical-levels-release/scripts/verify-braces-patch-attestation.cjs
+
+      - name: Verify security backport controls
+        run: node --test scripts/statistical-levels-release/tests/braces-patch-attestation.test.mjs
 
       - name: Lint
         run: npm run lint
