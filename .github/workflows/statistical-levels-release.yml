@@ -71,7 +71,7 @@ jobs:
       - name: Verify frozen helper bytes before executing any helper
         working-directory: scripts/statistical-levels-release
         env:
-          EXPECTED_SOURCE_SUMS: e0a922639a9f1748281f7e4b6b431ee4be91036e306d70ae1913ca2b6b97f841
+          EXPECTED_SOURCE_SUMS: 152d9a25a0c8848ee80c60c27951488d2bb0c0628fcfc5cf79e86c98a35ff75e
         run: |
           printf '%s  SOURCE_SHA256SUMS\n' "$EXPECTED_SOURCE_SUMS" | sha256sum --check --strict
           sha256sum --check --strict SOURCE_SHA256SUMS
@@ -92,6 +92,11 @@ jobs:
           node scripts/statistical-levels-release/qa-dependencies/node_modules/playwright/cli.js install --with-deps chromium
       - name: Public Production or exact Preview QA with canonical non-secret attestation outputs
         id: qa
+        env:
+          SL_JOB_WORKFLOW_REF: ${{ job.workflow_ref }}
+          SL_JOB_WORKFLOW_SHA: ${{ job.workflow_sha }}
+          SL_JOB_WORKFLOW_REPOSITORY: ${{ job.workflow_repository }}
+          SL_JOB_WORKFLOW_FILE_PATH: ${{ job.workflow_file_path }}
         run: node scripts/statistical-levels-release/scripts/cli.mjs qa
       - name: Retain sanitized candidate QA failure diagnostics
         if: failure() && steps.qa.outcome == 'failure'
@@ -161,12 +166,16 @@ jobs:
       - name: Verify frozen helper bytes before executing any helper
         working-directory: scripts/statistical-levels-release
         env:
-          EXPECTED_SOURCE_SUMS: e0a922639a9f1748281f7e4b6b431ee4be91036e306d70ae1913ca2b6b97f841
+          EXPECTED_SOURCE_SUMS: 152d9a25a0c8848ee80c60c27951488d2bb0c0628fcfc5cf79e86c98a35ff75e
         run: |
           printf '%s  SOURCE_SHA256SUMS\n' "$EXPECTED_SOURCE_SUMS" | sha256sum --check --strict
           sha256sum --check --strict SOURCE_SHA256SUMS
       - name: Verify public completed QA jobs, ancestry and default AWS OIDC identity
         env:
+          SL_JOB_WORKFLOW_REF: ${{ job.workflow_ref }}
+          SL_JOB_WORKFLOW_SHA: ${{ job.workflow_sha }}
+          SL_JOB_WORKFLOW_REPOSITORY: ${{ job.workflow_repository }}
+          SL_JOB_WORKFLOW_FILE_PATH: ${{ job.workflow_file_path }}
           SL_QA_ENVELOPE: ${{ needs.candidate-qa.outputs.qa_envelope }}
           SL_QA_PAYLOAD_SHA256: ${{ needs.candidate-qa.outputs.qa_payload_sha256 }}
         run: node scripts/statistical-levels-release/scripts/cli.mjs prepare-invocation
@@ -220,7 +229,7 @@ jobs:
         id: source_integrity
         working-directory: scripts/statistical-levels-release
         env:
-          EXPECTED_SOURCE_SUMS: e0a922639a9f1748281f7e4b6b431ee4be91036e306d70ae1913ca2b6b97f841
+          EXPECTED_SOURCE_SUMS: 152d9a25a0c8848ee80c60c27951488d2bb0c0628fcfc5cf79e86c98a35ff75e
         run: |
           printf '%s  SOURCE_SHA256SUMS\n' "$EXPECTED_SOURCE_SUMS" | sha256sum --check --strict
           sha256sum --check --strict SOURCE_SHA256SUMS
@@ -279,7 +288,7 @@ jobs:
         if: always() && steps.source_integrity.outcome == 'success'
         working-directory: scripts/statistical-levels-release
         env:
-          EXPECTED_SOURCE_SUMS: e0a922639a9f1748281f7e4b6b431ee4be91036e306d70ae1913ca2b6b97f841
+          EXPECTED_SOURCE_SUMS: 152d9a25a0c8848ee80c60c27951488d2bb0c0628fcfc5cf79e86c98a35ff75e
           PROBE_RESOLVE_OUTCOME: ${{ steps.resolve.outcome }}
           PROBE_QA_OUTCOME: ${{ steps.qa.outcome }}
           PROBE_AWS_ASSUME_OUTCOME: ${{ steps.aws_assume.outcome }}

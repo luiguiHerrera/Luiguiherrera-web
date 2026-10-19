@@ -192,8 +192,8 @@ test('20 identical synthetic event classifier output is unchanged by cache popul
 });
 const frozen = {
   '21 metadata resolver and diagnostics unchanged': { 'probe-runtime.mjs': '4ae5cc4bbdb34b20366bcdace9043f4bcc2f0029bf9cc4385d6d7ab7e4cb899e' },
-  '23 ADOPT transport and runner unchanged': { 'release-core.mjs': 'c461b1af450c69007b4f5bfac9c21010ca475b843aec5fed3ff6fe6b8912dd70', 'qa-runner.mjs': '70ffd3c5796f2a432a83347109000a20c326d7d49efee59285a403ab932a69df' },
-  '24 PROMOTE transport unchanged and ADOPT-only harness extension pinned': { 'release-core.mjs': 'c461b1af450c69007b4f5bfac9c21010ca475b843aec5fed3ff6fe6b8912dd70', 'browser-harness-base.mjs': 'HARNESS_SECURITY_REGIONS' }
+  '23 ADOPT transport and runner unchanged': { 'release-core.mjs': 'a742b751bd6365b024ba4c84f605e4fd0584316dfd107114372d2bdda2427757', 'qa-runner.mjs': '70ffd3c5796f2a432a83347109000a20c326d7d49efee59285a403ab932a69df' },
+  '24 PROMOTE transport unchanged and ADOPT-only harness extension pinned': { 'release-core.mjs': 'a742b751bd6365b024ba4c84f605e4fd0584316dfd107114372d2bdda2427757', 'browser-harness-base.mjs': 'HARNESS_SECURITY_REGIONS' }
 };
 for (const [name, files] of Object.entries(frozen)) test(name, () => {
   for (const [file, expected] of Object.entries(files)) { if(expected==='HARNESS_SECURITY_REGIONS')assertHarnessPreserved(fs.readFileSync(new URL('../scripts/'+file,import.meta.url),'utf8'));else assert.equal(createHash('sha256').update(file==='release-core.mjs'?withoutReceiptClass(fs.readFileSync(new URL('../scripts/' + file, import.meta.url))):fs.readFileSync(new URL('../scripts/' + file, import.meta.url))).digest('hex'), expected, file); }

@@ -1,8 +1,10 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import { execFileSync } from 'node:child_process';
-import { P, need, canonical, sha, verifyOIDC, resolvePreview, validateRun, requestFor, validateControllerRequest,
+import { P, need, canonical, sha, resolvePreview, validateRun, requestFor, validateControllerRequest,
   validateRunMetadata, validateAncestry, validateAttestation, selectTarget, ADOPT, validateQAAge } from './release-core.mjs';
+
+import { evaluateProbeOIDC } from './probe-oidc.mjs';
 
 export const packageRoot = path.resolve(import.meta.dirname, '..');
 export const codeRoot = path.resolve(packageRoot, '../..');
@@ -64,7 +66,8 @@ export async function oidc(audience, env = process.env) {
   const token = (await res.json()).value;
   const keys = await fetch(P.issuer + '/.well-known/jwks', { redirect: 'error', signal: AbortSignal.timeout(30000) });
   need(keys.ok, 'OIDC_JWKS_FAILED');
-  verifyOIDC(token, await keys.json(), audience, env, Math.floor(Date.now() / 1000));
+  const evidence = evaluateProbeOIDC(token, await keys.json(), audience, env, Math.floor(Date.now() / 1000));
+  need(evidence.result === 'PASS', evidence.error_code);
   return token;
 }
 export async function deployment(target) {

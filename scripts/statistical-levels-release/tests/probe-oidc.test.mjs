@@ -3,6 +3,8 @@ import assert from 'node:assert/strict';
 import { generateKeyPairSync, sign } from 'node:crypto';
 import { P } from '../scripts/release-core.mjs';
 import { evaluateProbeOIDC, validateProbeOIDCEvidence } from '../scripts/probe-oidc.mjs';
+import { oidc as releaseOIDC } from '../scripts/runtime-io.mjs';
+import fs from 'node:fs/promises';
 
 // Synthetic signing keys exist only in process memory; no real JWT is requested.
 const pair = generateKeyPairSync('rsa', { modulusLength: 2048 });
@@ -295,3 +297,86 @@ for (const placement of ['outer-own', 'outer-prototype', 'claims-own', 'claims-p
     assert.deepEqual(validateProbeOIDCEvidence(safe), safe);
   });
 }
+
+// Exercise the real G5 token acquisition boundary with signed in-memory fixtures.
+// The qualified probe evaluator above remains the single identity verifier.
+const releaseCases = [
+  ['exact AWS direct job', P.aws_audience, () => {}, null],
+  ['exact Vercel direct job', P.vercel_audience, () => {}, null],
+  ...mismatches.map(([field, code]) => ['mismatch ' + field, P.aws_audience, x => { x.claims[field] = 'wrong'; }, code]),
+  ...['', null, false, 'Preview'].map(value => ['environment ' + JSON.stringify(value), P.aws_audience,
+    x => { x.claims.environment = value; }, 'UNEXPECTED_GITHUB_ENVIRONMENT_CLAIM']),
+  ...['job_workflow_ref', 'job_workflow_sha'].flatMap(field => [
+    ['missing ' + field, P.aws_audience, x => { delete x.claims[field]; }, 'MISSING_' + field.toUpperCase()],
+    ...['', null, false, {}, 1, '*'].map(value => ['malformed ' + field + ' ' + JSON.stringify(value), P.aws_audience,
+      x => { x.claims[field] = value; }, field.toUpperCase() + '_MISMATCH']),
+  ]),
+  ...[P.workflow_ref.replace('vercel-deployment', 'main'), P.workflow_ref.replace('statistical-levels-release.yml', 'reusable.yml'),
+    P.workflow_ref.replace(P.repository, 'alternate/repository'), P.workflow_ref.toUpperCase(), P.workflow_ref + '-suffix']
+    .map(value => ['alternate job ref ' + value, P.aws_audience, x => { x.claims.job_workflow_ref = value; }, 'JOB_WORKFLOW_REF_MISMATCH']),
+  ['wrong job SHA', P.aws_audience, x => { x.claims.job_workflow_sha = 'c'.repeat(40); }, 'JOB_WORKFLOW_SHA_MISMATCH'],
+  ...['REF', 'SHA', 'REPOSITORY', 'FILE_PATH'].map(field => ['missing native job ' + field, P.aws_audience,
+    x => { delete x.env['SL_JOB_WORKFLOW_' + field]; }, 'UNEXPECTED_REUSABLE_OR_ALTERNATE_JOB_WORKFLOW_IDENTITY']),
+  ['matching reusable delegation', P.aws_audience, x => {
+    x.claims.job_workflow_ref = x.env.SL_JOB_WORKFLOW_REF = P.workflow_ref.replace('statistical-levels-release.yml', 'reusable.yml');
+  }, 'UNEXPECTED_REUSABLE_OR_ALTERNATE_JOB_WORKFLOW_IDENTITY'],
+  ['expired', P.aws_audience, x => { x.claims.exp = now; }, 'OIDC_TIME'],
+  ['future issued', P.aws_audience, x => { x.claims.iat = now + 60; }, 'OIDC_TIME'],
+  ['future not-before', P.aws_audience, x => { x.claims.nbf = now + 60; }, 'OIDC_TIME'],
+  ['stale issued', P.aws_audience, x => { x.claims.iat = now - 601; }, 'OIDC_TIME'],
+  ['forged signature', P.aws_audience, x => { x.signingKey = generateKeyPairSync('rsa', { modulusLength: 2048 }).privateKey; }, 'OIDC_SIGNATURE'],
+  ['algorithm confusion', P.aws_audience, x => { x.header.alg = 'HS256'; }, 'OIDC_ALGORITHM'],
+  ['external key URL', P.aws_audience, x => { x.header.jku = 'https://untrusted.invalid/keys'; }, 'OIDC_ALGORITHM'],
+  ['duplicate key', P.aws_audience, x => { x.jwks = { keys: [publicJWK, publicJWK] }; }, 'OIDC_KEY'],
+  ['unknown key', P.aws_audience, x => { x.header.kid = 'unknown'; }, 'OIDC_KEY'],
+  ['malformed JWT', P.aws_audience, x => { x.raw = 'not-a-jwt'; }, 'OIDC_TOKEN_FORMAT'],
+  ['malformed signed claims', P.aws_audience, x => { x.claims = []; }, 'OIDC_CLAIMS_FORMAT'],
+];
+for (const [name, audience, mutate, expected] of releaseCases) {
+  test('G5 signed OIDC boundary: ' + name, async t => {
+    const x = { claims: claims(audience), env: { ...env,
+      ACTIONS_ID_TOKEN_REQUEST_URL: 'https://test.actions.githubusercontent.com/id-token',
+      ACTIONS_ID_TOKEN_REQUEST_TOKEN: 'synthetic-request-marker' }, header: { alg: 'RS256', kid: 'synthetic' }, jwks, signingKey: pair.privateKey };
+    mutate(x);
+    const signed = x.raw ?? token(x.claims, x.header, x.signingKey);
+    let calls = 0;
+    t.mock.method(Date, 'now', () => now * 1000);
+    t.mock.method(globalThis, 'fetch', async (url, options) => {
+      calls++; assert.equal(options.redirect, 'error');
+      if (calls === 1) {
+        assert.equal(new URL(url).origin, 'https://test.actions.githubusercontent.com');
+        assert.equal(new URL(url).searchParams.get('audience'), audience);
+        assert.equal(options.headers.Authorization, 'Bearer synthetic-request-marker');
+        return { ok: true, json: async () => ({ value: signed }) };
+      }
+      assert.equal(calls, 2); assert.equal(String(url), P.issuer + '/.well-known/jwks');
+      assert.equal(options.headers, undefined);
+      return { ok: true, json: async () => x.jwks };
+    });
+    if (expected) await assert.rejects(releaseOIDC(audience, x.env), error => {
+      assert.equal(error.message, expected);
+      assert.ok(!error.message.includes(signed));
+      assert.ok(!error.message.includes('synthetic-request-marker'));
+      return true;
+    });
+    else assert.equal(await releaseOIDC(audience, x.env), signed);
+    assert.equal(calls, 2);
+  });
+}
+
+test('G5 OIDC workflow uses native exact job context at both release token boundaries', async () => {
+  const workflow = await fs.readFile(new URL('../../../.github/workflows/statistical-levels-release.yml', import.meta.url), 'utf8');
+  for (const command of ['qa', 'prepare-invocation']) {
+    const step = workflow.split(/\n      - name: /).find(value => value.includes('run: node scripts/statistical-levels-release/scripts/cli.mjs ' + command));
+    assert.ok(step);
+    for (const [field, native] of [['REF', 'ref'], ['SHA', 'sha'], ['REPOSITORY', 'repository'], ['FILE_PATH', 'file_path']]) {
+      assert.equal(step.split('SL_JOB_WORKFLOW_' + field + ':').length, 2);
+      assert.ok(step.includes('SL_JOB_WORKFLOW_' + field + ': ${{ job.workflow_' + native + ' }}'));
+    }
+  }
+  const runtime = await fs.readFile(new URL('../scripts/runtime-io.mjs', import.meta.url), 'utf8');
+  assert.ok(runtime.includes("import { evaluateProbeOIDC } from './probe-oidc.mjs';"));
+  assert.ok(runtime.includes("need(evidence.result === 'PASS', evidence.error_code);"));
+  const core = await fs.readFile(new URL('../scripts/release-core.mjs', import.meta.url), 'utf8');
+  assert.ok(!core.includes('function verifyOIDC') && !core.includes('function validateOIDCClaims'));
+});

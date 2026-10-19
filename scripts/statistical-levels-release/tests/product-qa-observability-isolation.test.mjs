@@ -36,12 +36,12 @@ const expected = {
   "ADOPT evidence wiring is pinned; shared runner and transport unchanged": {
     "scripts/qa-runner.mjs": "70ffd3c5796f2a432a83347109000a20c326d7d49efee59285a403ab932a69df",
     "scripts/browser-harness-base.mjs": "HARNESS_SECURITY_REGIONS",
-    "scripts/release-core.mjs": "c461b1af450c69007b4f5bfac9c21010ca475b843aec5fed3ff6fe6b8912dd70"
+    "scripts/release-core.mjs": "a742b751bd6365b024ba4c84f605e4fd0584316dfd107114372d2bdda2427757"
   },
   "PROMOTE shared runner unchanged; ADOPT-only harness extension pinned": {
     "scripts/qa-runner.mjs": "70ffd3c5796f2a432a83347109000a20c326d7d49efee59285a403ab932a69df",
     "scripts/browser-harness-base.mjs": "HARNESS_SECURITY_REGIONS",
-    "scripts/release-core.mjs": "c461b1af450c69007b4f5bfac9c21010ca475b843aec5fed3ff6fe6b8912dd70"
+    "scripts/release-core.mjs": "a742b751bd6365b024ba4c84f605e4fd0584316dfd107114372d2bdda2427757"
   }
 };
 for (const [name, files] of Object.entries(expected)) {

@@ -10,11 +10,11 @@ const root = new URL('../', import.meta.url);
 const digest = value => createHash('sha256').update(value).digest('hex');
 const read = file => fs.readFile(new URL(file, root), 'utf8');
 const shared = {
-  'scripts/release-core.mjs': 'c461b1af450c69007b4f5bfac9c21010ca475b843aec5fed3ff6fe6b8912dd70',
+  'scripts/release-core.mjs': 'a742b751bd6365b024ba4c84f605e4fd0584316dfd107114372d2bdda2427757',
   'scripts/qa-runner.mjs': '70ffd3c5796f2a432a83347109000a20c326d7d49efee59285a403ab932a69df',
   'scripts/browser-harness-base.mjs': 'HARNESS_SECURITY_REGIONS',
   'scripts/browser-harness.mjs': '2896a2c3f2886321eb47291a007fdf272ec95f4f4a593362d9a4a4ca6f04bf4c',
-  'scripts/runtime-io.mjs': 'b114b3e246ae4bdbf1af1a3823218b65f53a18ca26719a6740b11538344a912e',
+  'scripts/runtime-io.mjs': '0c37a3b444a32847f3b9af0de405313d79e765e7e65c33e3ed7e45c9c385d0ef',
   'scripts/cli.mjs': 'c353aca844d0d69973d0bcd8abd9bf9539fd908245aca49d0caffcdb4a8c2407',
   'scripts/invoke.mjs': '12d11d3f033e4743e6bc5567bee56b75aaa435e958cf8cd8df9e61099b337cdf',
   'policy.json': '5ca0589ff83a934bfc445e5fb15d4f760974391367fd93c0120b1dfed1aade5b',
@@ -66,7 +66,7 @@ test('19: release jobs retain the pinned diagnostic allowlist and frozen source 
   const workflow = await fs.readFile(new URL('../../.github/workflows/statistical-levels-release.yml', root), 'utf8');
   const release = workflow.split('  identity-probe:\n')[0]
     .replace(/(EXPECTED_SOURCE_SUMS: )[a-f0-9]{64}/g, '$1<FROZEN_SOURCE_SUMS>');
-  assert.equal(digest(release), '9cb70d819d67ba0e337193941989c7224f1a59dc6ead7a17a31669322a38b853');
+  assert.equal(digest(release), '5124bd4a5878f0fe68d149be70d4ead8568c110c04c6cf736993a8ab0e9142d9');
 });
 
 // Independently frozen from parent 578498f, before authorized runtime wiring.

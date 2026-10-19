@@ -85,7 +85,7 @@ jobs:
           anchor_parents=None
           g5_parent_tree=None
           # G5_EXECUTION_PRESERVATION_BEGIN
-          def verify_g5_execution(head, parents):
+          def verify_g5_baseline(head, parents):
               first='9aea3eb35580f24362edc206fc4454e658226d17'
               production='b1df2f5f1d375e923efc429b6a503c4125a6d522'
               assert parents==[first,production], 'G5_ORDERED_PARENTS'
@@ -117,6 +117,38 @@ jobs:
                       'preserved_first_parent_files':len(before)-sum(s=='M'for s in changed.values()),
                       'first_parent_files':len(before),'source_files':len(current),'delta':changed,
                       'out_of_scope_removals':0,'out_of_scope_modifications':0}
+          def verify_g5_execution(head, parents):
+              first='9aea3eb35580f24362edc206fc4454e658226d17'
+              production='b1df2f5f1d375e923efc429b6a503c4125a6d522'
+              anchor='38d8e64202a5f6eec827971f031fcafc9e5f9231'
+              if parents==[first,production]:
+                  return verify_g5_baseline(head, parents)
+              assert parents==[anchor], 'G5_ORDERED_PARENTS'
+              assert not os.environ.get('SL_LOCAL_QUALIFICATION_SUBJECT_SHA256'), 'LOCAL_HOSTED_ROLE_CONFLICT'
+              raw=git('cat-file','commit',anchor)
+              assert hashlib.sha1(b'commit '+str(len(raw)).encode()+b'\0'+raw).hexdigest()==anchor, 'G5_OIDC_ANCHOR_OBJECT'
+              headers=raw.split(b'\n\n',1)[0].decode().splitlines()
+              assert [x[5:]for x in headers if x.startswith('tree ')]==['53f6c68e11945c4e4dbaebbd390abe5e2db0dc35'], 'G5_OIDC_ANCHOR_TREE'
+              assert [x[7:]for x in headers if x.startswith('parent ')]==[first,production], 'G5_OIDC_ANCHOR_PARENTS'
+              baseline=verify_g5_baseline(anchor,[first,production])
+              subprocess.run(['git','merge-base','--is-ancestor',anchor,head],check=True)
+              def inventory(ref):
+                  entries={}
+                  for row in git('ls-tree','-rz',ref).split(b'\0'):
+                      if not row: continue
+                      meta,name=row.split(b'\t',1); mode,kind,oid=meta.decode().split()
+                      assert name.decode() not in entries, 'G5_DUPLICATE_PATH'
+                      entries[name.decode()]=(mode,kind,oid)
+                  return entries
+              before,current=inventory(anchor),inventory(head)
+              assert set(before)==set(current), 'G5_OIDC_PATH_PRESERVATION'
+              changed={p:'M'for p in current if current[p]!=before[p]}
+              allowed={'.github/workflows/ci.yml': 'M', '.github/workflows/statistical-levels-release.yml': 'M', 'scripts/statistical-levels-release/SOURCE_SHA256SUMS': 'M', 'scripts/statistical-levels-release/scripts/release-core.mjs': 'M', 'scripts/statistical-levels-release/scripts/runtime-io.mjs': 'M', 'scripts/statistical-levels-release/source-manifest.json': 'M', 'scripts/statistical-levels-release/tests/g5-execution-preservation.test.mjs': 'M', 'scripts/statistical-levels-release/tests/probe-core.test.mjs': 'M', 'scripts/statistical-levels-release/tests/probe-fixture-registry.test.mjs': 'M', 'scripts/statistical-levels-release/tests/probe-oidc.test.mjs': 'M', 'scripts/statistical-levels-release/tests/probe-qa-http.test.mjs': 'M', 'scripts/statistical-levels-release/tests/probe-redirect-integration.test.mjs': 'M', 'scripts/statistical-levels-release/tests/product-qa-observability-isolation.test.mjs': 'M', 'scripts/statistical-levels-release/workflow-freeze.json': 'M'}
+              assert changed==allowed, 'G5_OIDC_EXACT_DELTA'
+              for p in changed:
+                  assert current[p][:2]==before[p][:2]==('100644','blob'), 'G5_OIDC_MODE'
+              return {**baseline,'ordered_parents':parents,'oidc_parent':anchor,'oidc_delta':changed,
+                      'oidc_preserved_files':len(before)-len(changed),'source_files':len(current)}
           # G5_EXECUTION_PRESERVATION_END
           is_integration_push=os.environ['GITHUB_EVENT_NAME']=='push' and os.environ['GITHUB_REF']=='refs/heads/vercel-deployment'
           if is_integration_push:
@@ -660,6 +692,13 @@ jobs:
               assert len(skipped)==len(set(skipped)), 'DUPLICATE_SKIP'
               assert set(skipped)<=(allowed_product_skips if name=='product' else set()), (name,skipped)
               if name=='release':
+                  # G5_OIDC_COVERAGE_BEGIN
+                  oidc_required=['G5 signed OIDC boundary: exact AWS direct job', 'G5 signed OIDC boundary: exact Vercel direct job', 'G5 signed OIDC boundary: mismatch iss', 'G5 signed OIDC boundary: mismatch aud', 'G5 signed OIDC boundary: mismatch sub', 'G5 signed OIDC boundary: mismatch repository', 'G5 signed OIDC boundary: mismatch repository_id', 'G5 signed OIDC boundary: mismatch repository_owner_id', 'G5 signed OIDC boundary: mismatch ref', 'G5 signed OIDC boundary: mismatch workflow_ref', 'G5 signed OIDC boundary: mismatch workflow_sha', 'G5 signed OIDC boundary: mismatch sha', 'G5 signed OIDC boundary: mismatch workflow', 'G5 signed OIDC boundary: mismatch event_name', 'G5 signed OIDC boundary: mismatch run_id', 'G5 signed OIDC boundary: mismatch run_attempt', 'G5 signed OIDC boundary: environment ""', 'G5 signed OIDC boundary: environment null', 'G5 signed OIDC boundary: environment false', 'G5 signed OIDC boundary: environment "Preview"', 'G5 signed OIDC boundary: missing job_workflow_ref', 'G5 signed OIDC boundary: malformed job_workflow_ref ""', 'G5 signed OIDC boundary: malformed job_workflow_ref null', 'G5 signed OIDC boundary: malformed job_workflow_ref false', 'G5 signed OIDC boundary: malformed job_workflow_ref {}', 'G5 signed OIDC boundary: malformed job_workflow_ref 1', 'G5 signed OIDC boundary: malformed job_workflow_ref "*"', 'G5 signed OIDC boundary: missing job_workflow_sha', 'G5 signed OIDC boundary: malformed job_workflow_sha ""', 'G5 signed OIDC boundary: malformed job_workflow_sha null', 'G5 signed OIDC boundary: malformed job_workflow_sha false', 'G5 signed OIDC boundary: malformed job_workflow_sha {}', 'G5 signed OIDC boundary: malformed job_workflow_sha 1', 'G5 signed OIDC boundary: malformed job_workflow_sha "*"', 'G5 signed OIDC boundary: alternate job ref luiguiHerrera/Luiguiherrera-web/.github/workflows/statistical-levels-release.yml@refs/heads/main', 'G5 signed OIDC boundary: alternate job ref luiguiHerrera/Luiguiherrera-web/.github/workflows/reusable.yml@refs/heads/vercel-deployment', 'G5 signed OIDC boundary: alternate job ref alternate/repository/.github/workflows/statistical-levels-release.yml@refs/heads/vercel-deployment', 'G5 signed OIDC boundary: alternate job ref LUIGUIHERRERA/LUIGUIHERRERA-WEB/.GITHUB/WORKFLOWS/STATISTICAL-LEVELS-RELEASE.YML@REFS/HEADS/VERCEL-DEPLOYMENT', 'G5 signed OIDC boundary: alternate job ref luiguiHerrera/Luiguiherrera-web/.github/workflows/statistical-levels-release.yml@refs/heads/vercel-deployment-suffix', 'G5 signed OIDC boundary: wrong job SHA', 'G5 signed OIDC boundary: missing native job REF', 'G5 signed OIDC boundary: missing native job SHA', 'G5 signed OIDC boundary: missing native job REPOSITORY', 'G5 signed OIDC boundary: missing native job FILE_PATH', 'G5 signed OIDC boundary: matching reusable delegation', 'G5 signed OIDC boundary: expired', 'G5 signed OIDC boundary: future issued', 'G5 signed OIDC boundary: future not-before', 'G5 signed OIDC boundary: stale issued', 'G5 signed OIDC boundary: forged signature', 'G5 signed OIDC boundary: algorithm confusion', 'G5 signed OIDC boundary: external key URL', 'G5 signed OIDC boundary: duplicate key', 'G5 signed OIDC boundary: unknown key', 'G5 signed OIDC boundary: malformed JWT', 'G5 signed OIDC boundary: malformed signed claims', 'G5 OIDC workflow uses native exact job context at both release token boundaries', 'G5 OIDC mandatory coverage: valid', 'G5 OIDC mandatory coverage: missing', 'G5 OIDC mandatory coverage: duplicate', 'G5 OIDC mandatory coverage: skipped']
+                  for oidc_case in oidc_required:
+                      assert len(re.findall(r'^ok \d+ - '+re.escape(oidc_case)+r'$',text,re.M))==1, 'G5_OIDC_CASE_NOT_EXECUTED'
+                  for case in ['valid', 'wrong_parent', 'extra_parent', 'regime_workflow_deleted', 'regime_source_modified', 'regime_evidence_modified', 'product_modified', 'data_modified', 'policy_modified', 'extra_file', 'mode_changed', 'missing_oidc_change', 'anchor_object_changed', 'missing_ancestry', 'local_impersonation']:
+                      assert len(re.findall(r'^ok \d+ - G5 OIDC successor preservation: '+case+r'$',text,re.M))==1, 'G5_OIDC_PRESERVATION_CASE_NOT_EXECUTED'
+                  # G5_OIDC_COVERAGE_END
                   for case in ['valid','reversed_parents','wrong_first_parent','missing_production_parent','extra_parent','regime_workflow_deleted','regime_source_modified','regime_evidence_modified','shared_file_modified','mode_changed','missing_release_change','extra_release_change','production_tree_mismatch','missing_ancestry','local_impersonation']:
                       assert len(re.findall(r'^ok \d+ - G5 execution preservation: '+case+r'$',text,re.M))==1, 'G5_PRESERVATION_CASE_NOT_EXECUTED'
                   for case in ['valid', 'wrong_parent', 'stale_parent', 'arbitrary_descendant', 'unrelated_ancestor', 'multiple_parents', 'merge_parent_substitution', 'oracle detects stale and ancestry-only workflow guards', 'actual accounting SHA parity and separate review gate', 'parent repair mandatory coverage fail closed', 'extra_path', 'missing_path', 'duplicate_path', 'wrong_mode', 'wrong_status', 'dirty', 'missing_ancestry', 'probe_mutation', 'roles_swapped', 'missing_material', 'stale_material', 'duplicate_key', 'wrong_registration', 'unbound_product', 'probe_pin', 'release_probe_role', 'probe_release_role', 'wrong_sha', 'mutable_ref']:

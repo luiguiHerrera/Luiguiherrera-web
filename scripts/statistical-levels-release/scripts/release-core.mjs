@@ -1,4 +1,4 @@
-import { createHash, createPublicKey, verify } from 'node:crypto';
+import { createHash } from 'node:crypto';
 import fs from 'node:fs/promises';
 
 export const P = JSON.parse(await fs.readFile(new URL('../policy.json', import.meta.url), 'utf8'));
@@ -72,31 +72,6 @@ export function validateRun(env, workflowBytes, frozen) {
   need(/^[1-9][0-9]{0,19}$/.test(env.GITHUB_RUN_ID ?? '') && /^[1-9][0-9]*$/.test(env.GITHUB_RUN_ATTEMPT ?? ''), 'RUN_ID');
   need(frozen.workflow_path === P.workflow_path && /^[a-f0-9]{64}$/.test(frozen.workflow_sha256), 'WORKFLOW_FREEZE');
   need(sha(workflowBytes) === frozen.workflow_sha256, 'WORKFLOW_SHA');
-}
-export function validateOIDCClaims(claims, audience, env, now) {
-  need([P.vercel_audience, P.aws_audience].includes(audience), 'OIDC_AUDIENCE');
-  const expected = { iss: P.issuer, aud: audience, repository: P.repository,
-    ref: 'refs/heads/' + P.branch, workflow_ref: P.workflow_ref, workflow: P.workflow_name, sha: env.GITHUB_SHA,
-    workflow_sha: env.GITHUB_SHA, run_id: env.GITHUB_RUN_ID, run_attempt: env.GITHUB_RUN_ATTEMPT,
-    event_name: 'workflow_dispatch', repository_id: P.repository_id, repository_owner_id: P.repository_owner_id };
-  need(!('environment' in claims) && !('job_workflow_ref' in claims), 'UNEXPECTED_ENVIRONMENT_OR_REUSABLE_IDENTITY');
-  for (const [key, value] of Object.entries(expected)) need(claims[key] === value, 'OIDC_' + key.toUpperCase());
-  need(Number.isInteger(claims.exp) && Number.isInteger(claims.iat) && Number.isInteger(claims.nbf) &&
-    claims.exp > now + 30 && claims.iat <= now + 30 && claims.nbf <= now + 30 && now - claims.iat <= 600, 'OIDC_TIME');
-  if (audience === P.aws_audience) need(claims.sub === P.aws_subject, 'AWS_DEFAULT_SUBJECT_MISMATCH');
-  return claims;
-}
-export function verifyOIDC(token, jwks, audience, env, now) {
-  need(typeof token === 'string' && token.length < 20000, 'OIDC_TOKEN_FORMAT');
-  const parts = token.split('.'); need(parts.length === 3, 'OIDC_TOKEN_FORMAT');
-  const header = JSON.parse(Buffer.from(parts[0], 'base64url').toString());
-  need(header.alg === 'RS256' && typeof header.kid === 'string' && !header.jku && !header.x5u && !header.crit, 'OIDC_ALGORITHM');
-  const matches = jwks.keys.filter(k => k.kid === header.kid && k.kty === 'RSA' && (!k.alg || k.alg === 'RS256') && (!k.use || k.use === 'sig'));
-  need(matches.length === 1, 'OIDC_KEY');
-  const key = createPublicKey({ key: matches[0], format: 'jwk' });
-  need(key.asymmetricKeyDetails.modulusLength >= 2048, 'OIDC_KEY_SIZE');
-  need(verify('RSA-SHA256', Buffer.from(parts[0] + '.' + parts[1]), key, Buffer.from(parts[2], 'base64url')), 'OIDC_SIGNATURE');
-  return validateOIDCClaims(JSON.parse(Buffer.from(parts[1], 'base64url')), audience, env, now);
 }
 export function resolvePreview(deployments, statusSets, commitStatuses, target) {
   need(target.operation === PROMOTE && SHA.test(target.candidate_git_sha) && DEPLOYMENT.test(target.deployment_id), 'PREVIEW_TARGET');

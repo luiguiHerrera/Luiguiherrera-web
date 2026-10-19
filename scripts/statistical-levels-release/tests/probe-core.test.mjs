@@ -1,10 +1,11 @@
+import { signedFixture } from './probe-oidc-fixture.mjs';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs/promises';
 import { PROBE, selectProbeTarget, validateProbeTarget, resolveProbePreview, attestProbe,
   validateProbeAttestation, validateProbeRoleIdentity } from '../scripts/probe-core.mjs';
 import { P, ADOPT, PROMOTE, canonical, sha, selectTarget, validateTarget, validateControllerRequest,
-  productGates, validateOIDCClaims, headersForRequest, protectedGet } from '../scripts/release-core.mjs';
+  productGates, headersForRequest, protectedGet } from '../scripts/release-core.mjs';
 
 // These are synthetic fixtures, never a release request or live identity.
 const run = { id: '500', attempt: '1', execution_sha: 'b'.repeat(40) };
@@ -373,15 +374,9 @@ for (const [name, mutate] of [
 });
 
 test('probe still requires exact Vercel and AWS OIDC audiences', () => {
-  const now = 1800000000, env = { GITHUB_SHA: run.execution_sha, GITHUB_RUN_ID: run.id, GITHUB_RUN_ATTEMPT: run.attempt };
-  const claims = audience => ({ iss: P.issuer, aud: audience, repository: P.repository,
-    ref: 'refs/heads/' + P.branch, workflow_ref: P.workflow_ref, workflow: P.workflow_name, sha: run.execution_sha,
-    workflow_sha: run.execution_sha, run_id: run.id, run_attempt: run.attempt, event_name: 'workflow_dispatch',
-    repository_id: P.repository_id, repository_owner_id: P.repository_owner_id,
-    exp: now + 300, iat: now, nbf: now, sub: P.aws_subject });
   for (const audience of [P.vercel_audience, P.aws_audience]) {
-    validateOIDCClaims(claims(audience), audience, env, now);
-    assert.throws(() => validateOIDCClaims({ ...claims(audience), aud: 'wrong' }, audience, env, now));
+    assert.equal(signedFixture(audience).evidence.result, 'PASS');
+    assert.equal(signedFixture(audience, { aud: 'wrong' }).evidence.error_code, 'OIDC_AUDIENCE_MISMATCH');
   }
 });
 test('probe protected GET refuses cross-origin redirect and never forwards its token', async () => {
