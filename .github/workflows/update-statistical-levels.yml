@@ -67,3 +67,15 @@ jobs:
 
       - name: Atomically commit validated snapshots and provenance, then push
         run: node scripts/statistical-levels-hosted.mjs publish
+
+      - name: Bind the published commit to exact-version S3 readback
+        run: node scripts/statistical-levels-ci/producer-receipt.mjs
+
+      - name: Upload metadata-only publication receipt
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+        with:
+          name: sl-published-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/statistical-levels-ci-receipt/artifact/publication-receipt.json
+          if-no-files-found: error
+          retention-days: 90
+          overwrite: false

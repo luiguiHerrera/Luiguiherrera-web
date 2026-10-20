@@ -3,17 +3,24 @@ name: CI
 on:
   push:
   pull_request:
+  workflow_run:
+    workflows: [Update statistical levels]
+    types: [completed]
+    branches: [vercel-deployment]
 
 permissions:
   contents: read
+  actions: read
 
 jobs:
   validate:
+    if: ${{ github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-latest
     timeout-minutes: 40
     env:
       NEXT_TELEMETRY_DISABLED: "1"
       CI_EVENT_SHA: ${{ github.sha }}
+      SL_CI_BOOTSTRAP_PAYLOAD_SHA256: "775521938439962eca0e3bc35f0d3303b2b1fafa0a3fc6a360b162b281f39c95"
 
     steps:
       - name: Checkout repository
@@ -31,11 +38,16 @@ jobs:
 
       - name: Bind qualification to event SHA and governed metadata-repair successor lineage
         shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
           set -euo pipefail
           export CI_EVIDENCE="${RUNNER_TEMP:?}/statistical-levels-ci"
           printf 'CI_EVIDENCE=%s\n' "$CI_EVIDENCE" >> "$GITHUB_ENV"
           mkdir -p "$CI_EVIDENCE"
+          if [[ "$GITHUB_REF" == refs/heads/vercel-deployment && "$GITHUB_EVENT_NAME" != pull_request ]]; then
+            python3 scripts/statistical-levels-ci/admission.py
+          fi
           python3 - <<'PYCODE'
           import hashlib,json,os,re,subprocess
           from pathlib import Path
@@ -180,9 +192,15 @@ jobs:
                       'certification_preserved_files':len(before)-len(changed),'source_files':len(current)}
           # G5_EXECUTION_PRESERVATION_END
           is_integration_push=os.environ['GITHUB_EVENT_NAME']=='push' and os.environ['GITHUB_REF']=='refs/heads/vercel-deployment'
-          if is_integration_push:
+          bounded=json.loads((out/'bounded-admission.json').read_text()) if (out/'bounded-admission.json').exists() else None
+          is_integration_qualified=is_integration_push or bounded is not None
+          if bounded is not None:
+              assert bounded['head_sha']==head and bounded['admission']=='PASS', 'BOUNDED_SUBJECT'
+              assert bounded['run_id']==os.environ['GITHUB_RUN_ID'] and bounded['run_attempt']==os.environ['GITHUB_RUN_ATTEMPT'], 'BOUNDED_RUN'
+          if is_integration_qualified:
               assert not os.environ.get('SL_LOCAL_QUALIFICATION_SUBJECT_SHA256'), 'LOCAL_HOSTED_ROLE_CONFLICT'
-              g5_integration=verify_g5_execution(head,parents)
+              historical_subject=bounded['historical_subject_sha'] if bounded else head
+              g5_integration=verify_g5_execution(historical_subject,git('show','-s','--format=%P',historical_subject).decode().strip().split())
               historical_head=g5_integration['execution_first_parent']
               assert git('show','-s','--format=%P',historical_head).decode().strip().split()==[production_parent,current_sl_parent], 'WRONG_RUNTIME_IMPLEMENTATION_PARENT'
               parent_commit=git('cat-file','commit',production_parent)
@@ -325,7 +343,7 @@ jobs:
                   fields=header.split();expected=current_sl_bindings[name]
                   assert len(fields)==5 and fields[0]==':100644' and fields[1]=='100644' and fields[2]==expected['old_oid'] and fields[3]==expected['new_oid'] and fields[4]=='M', 'CURRENT_SL_ADVANCE_BLOB_OR_MODE'
                   assert hashlib.sha256(git('show',current_sl_parent+':'+name)).hexdigest()==expected['sha256'], 'CURRENT_SL_ADVANCE_SOURCE_IDENTITY'
-                  assert hashlib.sha256((root/name).read_bytes()).hexdigest()==expected['sha256'], 'CURRENT_SL_ADVANCE_CANDIDATE_IDENTITY'
+                  assert hashlib.sha256(git('show',historical_subject+':'+name) if bounded else (root/name).read_bytes()).hexdigest()==expected['sha256'], 'CURRENT_SL_ADVANCE_CANDIDATE_IDENTITY'
               prior_adjacent_sl_bindings={'lib/statistical-levels/generated-provenance.json': {'old_oid': '80a9495ab62b1a34632d5db2497ec41b918c002c', 'new_oid': 'c2da604f8ef00536079c617adaf90ab88be9f5f5', 'sha256': 'ac0193ec41af1f1172d477a68d06138f4b7258678a5b0e217706b3584bdd9043'}, 'lib/statistical-levels/generated/assets/AIQ.json': {'old_oid': 'c5be465f2d081ceb1c7385371cddb389180a133a', 'new_oid': 'e957de1d44c00e755fa72ed38120f0941208c954', 'sha256': 'f1b65fa51fc679dedc33c07def245fa65fe22abe28f4f7810587b66826c542b8'}, 'lib/statistical-levels/generated/assets/BOTZ.json': {'old_oid': 'fbc0c2c6de0697fd9c5656f3fd63798613c50732', 'new_oid': '309431b0fee1f9fad915d2b275cff45fe0b1edaf', 'sha256': '4e4c95ccc1d1253d14414da9d5019c430401a9808aa283837f34da253aa67da0'}, 'lib/statistical-levels/generated/assets/BTCUSD.json': {'old_oid': 'e76f5799ce4d348a20a6b1428cf7796c9f991ce8', 'new_oid': 'a82bfc2be4f8b30551512db4e7a31567961a16e8', 'sha256': '727ae560e45eea4074b4da248b3b6b03d0566952836efa5a1a56699cb5232736'}, 'lib/statistical-levels/generated/assets/CIBR.json': {'old_oid': '92df3744b5fd6185dca4be5fb5ff7e39e9e4d27a', 'new_oid': '1166355d4b404cd6693c66cb0d349998182f004d', 'sha256': '19eff211835a82b858cfd8078521c256a4f103f224d22d86aa5430bf6536da51'}, 'lib/statistical-levels/generated/assets/DIA.json': {'old_oid': 'a85103238c48b7698fa57611d6bfd2ede16d29cf', 'new_oid': 'fb948a1fb0cb77f0462036c10a58a8c60540b503', 'sha256': '37d20d3558fecf63195c23277ad474e76b445400ad8606fb9ec59d4f03fb5f79'}, 'lib/statistical-levels/generated/assets/EEM.json': {'old_oid': 'ffc7189c16dd0a78f69fcb010ae1be77e48d4fe9', 'new_oid': '89ac1dcb75d684a1bbf89b9e6ce0fdaeb6e375cd', 'sha256': 'fbba732dfed36c67764ef491727b20e7d1b6b0b17bfecb36cee6c0f1906cf25d'}, 'lib/statistical-levels/generated/assets/EFA.json': {'old_oid': '3bd4d844edb581532cb9ad6c31ee11fb5cd5e142', 'new_oid': 'a795ddafb37cde2f2754038c5136e853a47243dc', 'sha256': 'a28d3e2f7afd9db468a0626e89c30ce33c47faec568e427bed7fa060d4bd5cbd'}, 'lib/statistical-levels/generated/assets/ETHUSD.json': {'old_oid': '12dba7d57a9a357601b39317d2f0cb7614532950', 'new_oid': '6f24861e4cab82f2542561628a84770a0660d43a', 'sha256': 'd2b0ec4dff3383076f5135525b1ec947982f5ee09145d476082a18add92372fa'}, 'lib/statistical-levels/generated/assets/EWJ.json': {'old_oid': '8a8e70fc2e3a91917d86814e0062a46a4f777737', 'new_oid': '99fcf92f66d29bded466854f79c4cf5f540b4a21', 'sha256': '84d7a4ccd52a2dab6ad7cffbaae89a31b5d9275a8fcb01c48025933b0843f6f6'}, 'lib/statistical-levels/generated/assets/FINX.json': {'old_oid': 'a115b03c8795a42e7603c928a1363488af37bd08', 'new_oid': 'aea614b7d1503eca12db0eaec0a45ed410500625', 'sha256': '7087e852ae4bccbf9b27f5d8f41e3f15f06e552c26db25a1f69ef7012fc649df'}, 'lib/statistical-levels/generated/assets/FXI.json': {'old_oid': '4f1ce9b91933d0bb7afbd3053ea1c27bccd4ec62', 'new_oid': 'd211205f47fefb65841c639236852ed6a8fd5a60', 'sha256': 'daada6bbe315c8ddefe672d011d90ddebf74227f898b975e67ec1d7267dc13d6'}, 'lib/statistical-levels/generated/assets/GLD.json': {'old_oid': 'fe0f32bb2fbe6f4f8c936419cb5146ad8ab21f8d', 'new_oid': 'fa1940ce65863277c44102035ff4e44e1e73fe1f', 'sha256': '9e4bb36a2cc4b5a8dc77d247842b93baf1e24ac8b1aca6d4e90fc96f8d3bc56b'}, 'lib/statistical-levels/generated/assets/HYG.json': {'old_oid': '4c00e5d763c5cae7ee1b0d8e312940b415cb80ef', 'new_oid': 'c47e7691284867ca9b8ebc8ad2c211bf71564730', 'sha256': 'a8c1a0fef76c09ce3ed170f3deb51d0ceee0a55b68aca87f8cb14f616368262e'}, 'lib/statistical-levels/generated/assets/IEF.json': {'old_oid': 'db8f53fe8cd921a717d1e3e4ad00d24f356ca627', 'new_oid': 'd0ae234350a5bd9cc9cb7d3c5001a1ff736419b1', 'sha256': '6bf4053f4e6d9d7f9b961cd974024c73e2345a616196a4d0003df225e6f7f859'}, 'lib/statistical-levels/generated/assets/ITA.json': {'old_oid': '5590e2ac200fc4abbea32d7263b6fbfc1ac21805', 'new_oid': '18ccf16c229e0d0f95b8b0a3425fdebd0beb22dd', 'sha256': '3ccae8ab93dd0e97fcf027eb3ca68962bde628423f05ecbe8aae896af451cbc4'}, 'lib/statistical-levels/generated/assets/IWM.json': {'old_oid': 'f33a9f44beb738923d03cc5fcf532b31c4ba378e', 'new_oid': 'ab9d936fa71ee889fd5e65e70727d77e1255ecd9', 'sha256': 'cd4084d7d2fc8dc6cdd5a96741b63dbeb6d40a624e390db551586140159cd1a7'}, 'lib/statistical-levels/generated/assets/LQD.json': {'old_oid': '2fadce8e5f7e4c6a6ae3463a2eb46468f702926c', 'new_oid': 'dc785b07be1e67e9394fbd7bc1ba12f54332cb8f', 'sha256': '2faad916930168affa5e41a3500c0527bc5bed45e7cd8126754de730c91f6558'}, 'lib/statistical-levels/generated/assets/PAVE.json': {'old_oid': '163ea761c904bf4dc2ae9d6701397fc3ea9e24e6', 'new_oid': '64f212b358d465eab4191144679fd308ccadc481', 'sha256': 'c6645d1b7cacf8d9d214d426695ba83856f910c23506c9c1afd3ef597bd6f667'}, 'lib/statistical-levels/generated/assets/PHO.json': {'old_oid': '05f10de9c141f83f0d3354c55374b9e82ce3801b', 'new_oid': '66c7f07faf3e0f1fe29e548942997b1f2d764c08', 'sha256': 'ccc7bd250a2e7a1f7e53dd1978ca94fc0dfe0cf6851852e91f5460ebe7e44fc3'}, 'lib/statistical-levels/generated/assets/QQQ.json': {'old_oid': '04117d94a7eedae736ce7c073b956ed63d253f4a', 'new_oid': 'efeab6e5ba8d78b716880c67321a1b36306662c3', 'sha256': '4a1df8407e09c80d70923507d7b02956d1416fa2d48db531be466372a8fe4ff5'}, 'lib/statistical-levels/generated/assets/RSP.json': {'old_oid': 'b0d58e5e98e4638771477407d0e5dfff6d078961', 'new_oid': 'e9cd27b03c453dcd448ab0f1da85bb6d1357fa98', 'sha256': '1b791c8362dc02fa1f0e519aa0856d565cc16f2e36a9e5c02c736421665123b2'}, 'lib/statistical-levels/generated/assets/SHY.json': {'old_oid': '3abc7e8a1d183a689a88081eb75755f844e74d8f', 'new_oid': 'bff5f4cf3e6f20f8761aa094b4b08361c1c641e7', 'sha256': '87b75383dce6795cea5533697d62b4751a504d4a91b7ba13514f1e0a9cb20961'}, 'lib/statistical-levels/generated/assets/SLV.json': {'old_oid': '2b6d7e473db56e218f1d4fd69cb31a2ae45908c0', 'new_oid': '0be7cd966f8ccaa628a9cee57e83a10037cbb19d', 'sha256': '7ffd978eaa92b566c68da9478896a4a5db23770974f033841e8210ebf1cfb1f4'}, 'lib/statistical-levels/generated/assets/SMH.json': {'old_oid': '5b72110c958c580a71cd60d0b2fdebbede3c7a28', 'new_oid': 'e052d2db67332f5678c25f9398eb8743cac9ec53', 'sha256': '953cbdb59097d4f3e7fdebcbd68e075d1c44eaccb71e2681f5bcd5b659c758e4'}, 'lib/statistical-levels/generated/assets/SPY.json': {'old_oid': 'da908cd6184b3890be4e2cda5a319b341a2bfb05', 'new_oid': '43963871e9efa91f02ff7ded99c8241a52f5fad8', 'sha256': '186186775cc379ad6eff36c56a0ec23f850bc2f82dee9096e4b46877d751222b'}, 'lib/statistical-levels/generated/assets/TLT.json': {'old_oid': '1dd5e0151df267a578a9fdd8844ead46205fb7b6', 'new_oid': '64300ec2a6d3d539060422026546e9adbbbff7c5', 'sha256': 'f6856bce5ef3734cf45701de372e556e150d44553a1e070f25fce6430fd13e95'}, 'lib/statistical-levels/generated/assets/USO.json': {'old_oid': '5f5d4b695a71e3e4144676f16d92fa888d23455a', 'new_oid': 'a77d13e6eafc1f0887c4197d6a6467a3127a95d3', 'sha256': '78b78c598bde4e7eb950a9f9230e8933d2201a54d610845e013c898687546697'}, 'lib/statistical-levels/generated/assets/UUP.json': {'old_oid': 'a9257c71e6ac3f98bf672732d94568dead0e9d17', 'new_oid': 'd6d0a304f143a21120a93af2a4f85f3c51032829', 'sha256': '248e87f6b1005909397183336e5358a003ace1b1d83b1b8f39faeed84d6a195d'}, 'lib/statistical-levels/generated/assets/VOO.json': {'old_oid': '1da4805fabcee3aa078881e83e32e7ed4e62e31b', 'new_oid': '4c846f12293385f1483d4f642bda134e6d3562a3', 'sha256': 'dc74b1bcad3a145e72720f2ae79a9342ae828996ebd49dc65d6302a585bfaa7f'}, 'lib/statistical-levels/generated/assets/XLB.json': {'old_oid': 'a109d1f16520c7fc7f0c766d8268213a17ef295f', 'new_oid': 'b4722f39c71444bb4630bf7aac25c5bd09595349', 'sha256': 'aa99714f7faf677f6a99674f30fd97fbb73a6ce0e9c146e795d7e829ab624aa3'}, 'lib/statistical-levels/generated/assets/XLC.json': {'old_oid': '8e1da4aa757a3ef67556b07971a23e60b5705270', 'new_oid': '435a97ac08a6ca9ab40107e470e6998513888bdf', 'sha256': '4078554f365442f237f10d56cbccb1208c0c62729a7b65e08458b97cc9d1616a'}, 'lib/statistical-levels/generated/assets/XLE.json': {'old_oid': '1db9474f42d1e20d34a04b2709e7d917b1a7276c', 'new_oid': 'e433b1bea387529935b14e58453515c81d4f4df5', 'sha256': '83c2b7d278dc710579a3377f330fd0ae5cbcb135b4651690c333f032ec2b10ad'}, 'lib/statistical-levels/generated/assets/XLF.json': {'old_oid': '7f3fde0cec9a4f464121bc06acc95358313906fb', 'new_oid': '28e98628a5d9abeacbc515a3e133599e0c9d617d', 'sha256': '5c461d52c527e9a6bba0aa7689ba1b644c79e97dfefba3b93d97bb63f3a03a93'}, 'lib/statistical-levels/generated/assets/XLI.json': {'old_oid': 'afe3d31287bda260e7435d6dff139d3b123c7064', 'new_oid': '3927cc3025a11e2a06e9f3b6111197ce83f16650', 'sha256': '6d4332cb67a33f9c2a28e4783bd06b4ba2200cc69ed903049d790ce246d73a31'}, 'lib/statistical-levels/generated/assets/XLK.json': {'old_oid': '5baaf09505ce926968fa40d020ba2a9e5ae72737', 'new_oid': 'dfb285546cc2bd5adaf584f68d0126cf8fbb2dcf', 'sha256': 'f961b43ff976620c9d4b3d317fd4e9fe465c0f09c34ece75a2a566e490a2c5ea'}, 'lib/statistical-levels/generated/assets/XLP.json': {'old_oid': '73e7c03ce3edca50aa73094ae1f6eb3f70828cb4', 'new_oid': '5cc7b4c3dd865a3c3df9c8016d3ac4bfd55a7334', 'sha256': '1456fc318995d1696b3fdc6132429b10780ce0cecbcdee139ead65fdfdd14d3c'}, 'lib/statistical-levels/generated/assets/XLRE.json': {'old_oid': 'f63039236191ffcdbfc44c0e6702bb2246fc0156', 'new_oid': '3831a1dee1cad3441a815ef499b6242eb548b4aa', 'sha256': '60e349138e621c3832c575d914ce79da488fe4913f4d56b0e88d433b010186bb'}, 'lib/statistical-levels/generated/assets/XLU.json': {'old_oid': '220ea8e38dcd41ced91439eac44953cca6c1f1b9', 'new_oid': '6702564e6ee9c4cc9e7c9c933a6db2c1e6e81103', 'sha256': '30e87cd84753e19dc1a460ee81533be60d3a2decc909663bffe267abf5066abb'}, 'lib/statistical-levels/generated/assets/XLV.json': {'old_oid': 'ae93e4ca31ceacc472e92baac33b1d83935916be', 'new_oid': '7717a1d84f5f00208dfeda9f6fdcd20a47097102', 'sha256': '3e55ae483323eaebbefd8226b6597a06791ca73a5c1a6362c61db2c4a2e4cc94'}, 'lib/statistical-levels/generated/assets/XLY.json': {'old_oid': 'c1004190f069441309b35338af22a283ceb38e48', 'new_oid': '4d53e44bee6cc26d6dd55391c8fef0177542e258', 'sha256': '2e86f1354204fb011c04f331f2de31635aa38a02e075198cb05efc0469e4791d'}, 'lib/statistical-levels/generated/manifest.json': {'old_oid': 'ed748225c737d4a35b9276360dcf31ae5a3bda9d', 'new_oid': '3fe8f40a26c43d6e219efb966cd3dee0441de51a', 'sha256': 'aa6ab7477643ccb59330642e3eaea4898a765dd1ff118294d614bd7401b38119'}, 'lib/statistical-levels/generated/seasonality/AIQ.json': {'old_oid': '2a7266a1342352ed6efb3d072da0ce5a8aefa6b2', 'new_oid': 'ab54a6ff2b0c67b3ba5d010aae3f0ec460814c1e', 'sha256': '1aa43775c15bbb7f7b0e4d1536ebbf3c5bf68d58e1162a340b68ece9557fd668'}, 'lib/statistical-levels/generated/seasonality/BOTZ.json': {'old_oid': '57bd75a1fb58c8fa98d4aa23ed9aaea0f352f722', 'new_oid': '98554391ba4f804d51f3dcf632ba5eb89eb1f969', 'sha256': '72cae053231bf6098dfe300ebacafb61993dca540937aa57b12c192d0a0290f0'}, 'lib/statistical-levels/generated/seasonality/BTCUSD.json': {'old_oid': '0a6a4d91572f336b66e85f32df6a9ae3dddd870e', 'new_oid': 'cc3c1fccda14004a66839c953236e30680fe6bb8', 'sha256': 'e34decb6523ccc7dcfa1342c729e2a5867bed6d449082cb571916a8a2608e5f1'}, 'lib/statistical-levels/generated/seasonality/CIBR.json': {'old_oid': '3b92848bde6d316340540111c32ab6b040f2732d', 'new_oid': '003d3e92c9981326b915dbdac209d023ba3464b1', 'sha256': '3ed08906411d82fd190c9adc88f583efb1cb3fbe36bdda3fc984f90f1017ad35'}, 'lib/statistical-levels/generated/seasonality/DIA.json': {'old_oid': '182274206c877c4a4659a715dcb7aba524ef6c21', 'new_oid': '3842023b2dcaf02308a52dd2b10327294bf722cc', 'sha256': 'ee48d73cbc0384d8078e0efe8c715b577888e8dd7a7ea85bcf345d166ee1e96b'}, 'lib/statistical-levels/generated/seasonality/EEM.json': {'old_oid': '35e8f1eff8a204431392c2f93cb77d9520fc5cb9', 'new_oid': '15e331e16e29b855d7fadcfe3047f7ee2ba1a004', 'sha256': 'c1a9580d0f4e27cdd33f50fa301ec38404ff6c1a9efc19d28cff0a5d89f0cc34'}, 'lib/statistical-levels/generated/seasonality/EFA.json': {'old_oid': '0a8cd2d9ced229a82344b36f8dcd52565de8dd1a', 'new_oid': '41cb4833694bc56cbe2a216e268239b1276b616c', 'sha256': 'e704efd29bb28080b86efa58b7d7ef8e89aceaa8ce83b443c76be0912f367747'}, 'lib/statistical-levels/generated/seasonality/ETHUSD.json': {'old_oid': '50325da0e1fae063cd6ff0f9d713338a659837b1', 'new_oid': 'c964413fd3c6d6d55dfd2fe1998ce1e10e6f18b4', 'sha256': '9d53d7a7e6c1e45e09739f517691af7b913ef960def8cf10e4d0ecd2faa71f2e'}, 'lib/statistical-levels/generated/seasonality/EWJ.json': {'old_oid': 'd3d9be228b2ebc8c428da9cf5f8c188d524ebc15', 'new_oid': '058728ecee89db5c6cdb174cddd24207236fe6a3', 'sha256': '61e9d47d2ba7bd92b13fd3c8cc712d96ec0d23b949a7eb9c3c72573c4d5c7646'}, 'lib/statistical-levels/generated/seasonality/FINX.json': {'old_oid': '116eed98b8d3202698c237cde145b05d0f7ed499', 'new_oid': '38959488cdd0ea1ce7450f828d22df56d3068f25', 'sha256': '10daf5993f66936296175e4ab142647aab62cc3c23f9c2c2caff4014bde0b6c3'}, 'lib/statistical-levels/generated/seasonality/FXI.json': {'old_oid': '0e23c1124375bbd5fd6ea065bbf164da33102796', 'new_oid': '671d7554cafd03f3e2479594c34db34da0c47ee1', 'sha256': 'f74732833cd55327c4940c3a2d48fb04130a91b1965fdf0577c34557a2aa9334'}, 'lib/statistical-levels/generated/seasonality/GLD.json': {'old_oid': 'ca26c3f63823ab5d303f38c241face7c44d8733c', 'new_oid': '2e29398e12ee6a38cfa90ba074936749431adb74', 'sha256': 'd567efbda8f3e6b0398a1c44573b96ae7c7609f3390c31574361622de4ab0afb'}, 'lib/statistical-levels/generated/seasonality/HYG.json': {'old_oid': '46b4dca0dde6ffc8ae6d2f023bee5ea7bc52bc27', 'new_oid': '94f0f7c0107254dc5b7abafed4000d1305cf00c7', 'sha256': '5a1a03914e87135c01620a0d0f9b06d231eca5dab69a95cef928c52dedb24de0'}, 'lib/statistical-levels/generated/seasonality/IEF.json': {'old_oid': '0eb7c9724ea36deb256d9c8cfcc7d8f58edb0f7d', 'new_oid': 'a3ecedab497597b6646ad49bde79e69507eeceb1', 'sha256': '192fc06d8a04a0d5164349a3d68a9ab32e4b7f946ad4905f5a7207f90a564620'}, 'lib/statistical-levels/generated/seasonality/ITA.json': {'old_oid': '183cbeeb3aac450d5fdbfdf8320f434422ad0664', 'new_oid': 'ce0cddba41917df26e50d84291346b51a9a73b2d', 'sha256': '947f7c36cb5419c9325028113c9fc3b99c953fae451aa56d3fae432c6f04ce3e'}, 'lib/statistical-levels/generated/seasonality/IWM.json': {'old_oid': '506a02528b00d7c366fbdc4ca29a1eb0ceb050b4', 'new_oid': '9e19a8ca5de1b9483135c20d0e7a9d8409d62be8', 'sha256': '33723c605051e590873a8c60563bd73b72f0fb70d475489d4e58ee822d6127b6'}, 'lib/statistical-levels/generated/seasonality/LQD.json': {'old_oid': '17268bebaa20f34ee2f01d04f23fc496d1c5188e', 'new_oid': 'b0dfbadbfd3e02cbdce08848226d66737509107e', 'sha256': '3be1c14d1585fc24dcd6b08f3b5058fc60e44a24870d5c98258b31939b17bcbb'}, 'lib/statistical-levels/generated/seasonality/PAVE.json': {'old_oid': '7c1aaae78fdbaefcbf635398b07b93637c1dffef', 'new_oid': 'a243945334ef3784daf04a074e3c521b04abb0b8', 'sha256': 'accf5c31e9af5b78fd143e09d71a146e7a469ef79207d58f493a21d0d4205883'}, 'lib/statistical-levels/generated/seasonality/PHO.json': {'old_oid': '49bafe97b4016ff8e1426e98607f45f41512a8bd', 'new_oid': 'bed95e64de3ddb7a1c78a20b971ed5b336dd2801', 'sha256': '1b272c35c8311bf54de639e6629d3da766780d9008a99cd4f7e0bd2b7624c267'}, 'lib/statistical-levels/generated/seasonality/QQQ.json': {'old_oid': 'b7bedbcfae3d683f464a1b32f3c57201e9fa1872', 'new_oid': '558e941210f9c8e7d0e2e5694d36b1034a9f27c4', 'sha256': 'd02be082026cf4604a4ff1d4adb525fe27a7d34577825da6680dc114def6c178'}, 'lib/statistical-levels/generated/seasonality/RSP.json': {'old_oid': '2152bfafa6f00e9f2988b4c2d4683c4fd92933c7', 'new_oid': '9b3ab8a0a27c9c111f1cf47e1295d3844bfca67c', 'sha256': '79953bcd1b9eef079ffce6808c39964c407bf544290123a52ff103649659a9ec'}, 'lib/statistical-levels/generated/seasonality/SHY.json': {'old_oid': '2d98ce4807407c96a752c5f0c9f03100ba1d1efe', 'new_oid': 'b1ca11244f8d8402e0afd23af3dd0582e1b7d5ba', 'sha256': '5102edeaf75e041b6cd2d89b14d8647c9e73e88bd7109c5dbdb2dda8242aec67'}, 'lib/statistical-levels/generated/seasonality/SLV.json': {'old_oid': 'f980b7d3966d4287cf372d7d914a1b659c5ab7a3', 'new_oid': 'b9bcdcf535520864f7a44a9f564944863f1c6fd6', 'sha256': 'be60c1a84918e5c4afd1db5a04999e763c166b96d1caa68fc5956ef5cfd3ca50'}, 'lib/statistical-levels/generated/seasonality/SMH.json': {'old_oid': 'daa7f400897b15bc5efeef318f388cf4aabd2950', 'new_oid': '224522aa909456b1ef78d8cfe00012f954941269', 'sha256': '56fd7179521277765f7614a3a866a3b77ab2c070ebaa2e79a21b3ec5ba9863b1'}, 'lib/statistical-levels/generated/seasonality/SPY.json': {'old_oid': 'fe7bd59d86b6f347b817c38f2b539d2fcb7b4024', 'new_oid': '6e24064d4f8b5064f0cefa38cf5ced610f8a6918', 'sha256': '457628d31160906f3473cb9f85374fe45e6168c0324789410dc46ab38998ee2a'}, 'lib/statistical-levels/generated/seasonality/TLT.json': {'old_oid': '3912c575b483a40e08fd49c17793d3916b855d0c', 'new_oid': '22479763734fd8d33bb2fc4c316182503c703a51', 'sha256': '3a1c408f56df791a752d649f9289da6d382727de575fe8a2248766fa23d3745a'}, 'lib/statistical-levels/generated/seasonality/USO.json': {'old_oid': 'cbca17b452777be4af973b8175bfb1e22ab35ca9', 'new_oid': '925435b0f6aee73b717dab50ef650e076e9c74ad', 'sha256': '9726cf99d592becd8d022a57b8a4203e44d4825ae0fd6bf56e7062ca45dd4dc9'}, 'lib/statistical-levels/generated/seasonality/UUP.json': {'old_oid': '540f5f9269d1912ae85f1311d33d6ca2c1f20037', 'new_oid': '97ea3423dd7ad2267b9217e28ffa090af111ee77', 'sha256': '4de2da15c73f83a646326b9473d9ead9ab648559c41e6fa3ff65d176cb8d0be9'}, 'lib/statistical-levels/generated/seasonality/VOO.json': {'old_oid': '1d8dc731dfec240c4cc6baee813f624508338cf5', 'new_oid': '9c9fbe231c7ace9a9d7462c17aa371b62ddf61b1', 'sha256': '941e00231477c21deb075e77cc14fc72864b923c1c3957521af0d4d49fb6bda2'}, 'lib/statistical-levels/generated/seasonality/XLB.json': {'old_oid': '4715c24b39451aa1ac800be4e8fb9c3b3e00c3cc', 'new_oid': '2f5bc1fe0a79a95838003baf309209b1d6d8877f', 'sha256': '8434bbe39a641548ae2031578e15b15c4e105f8be5f65f04c1aacb8b1319e704'}, 'lib/statistical-levels/generated/seasonality/XLC.json': {'old_oid': 'db2f6e80cb7568ad7fea6f6c2e76f0a169043f15', 'new_oid': 'fbc150093d6eacee0d63207b30251b082640f5ed', 'sha256': '0cd6f8030410d14640045bbcb04f44804d757f97c2cc9efd2bf5b91d86fc2f5d'}, 'lib/statistical-levels/generated/seasonality/XLE.json': {'old_oid': '24f1b864939a21c15fc88424a475ea5a18b5e242', 'new_oid': '80b1c65b8628b31120f311725e57148cf84b32cc', 'sha256': '8278863917c9c42ffd45292a616fde2d25c4f3de57d2a3e6b056e02988a1e82e'}, 'lib/statistical-levels/generated/seasonality/XLF.json': {'old_oid': '22de6fc2c17c92e41cddcd02c890501f00a11963', 'new_oid': 'caa71de32b38646b966325ad257f6875ea38d594', 'sha256': '51c2057c232261196f1cea9b128ba7aac8ce288d02e8a82cad6b2c896aa6ea69'}, 'lib/statistical-levels/generated/seasonality/XLI.json': {'old_oid': 'a6285aa15bda1c46c21112822e711592395c3bf3', 'new_oid': '10a68411955cfba194ab9f5064f338c6d4cd1e7b', 'sha256': '4c88fcd0db15cd28702cb3e3d2edd6aa9e7b05fd35b4a5805ad5f826e22c1e40'}, 'lib/statistical-levels/generated/seasonality/XLK.json': {'old_oid': '4942e51ce601c79a0ae0c3b0771211924bb8923b', 'new_oid': '65ca186a85920bdb4b706af461c6c8b87424434a', 'sha256': 'bf28d27642675ec06cc6509808e29991fc2152177f368b3bca0bacba16521a49'}, 'lib/statistical-levels/generated/seasonality/XLP.json': {'old_oid': '0338d5500e3896622288a4f06a6d42a71cae8fa0', 'new_oid': 'cd784c110260013d76bde29bdb6a8e997ed6a485', 'sha256': '3f1aebda955913f5ebd8501ec6ba5f0af20f7d4f70bfd111b66ee367a373c5fa'}, 'lib/statistical-levels/generated/seasonality/XLRE.json': {'old_oid': 'b9d4efd5eba475af0a2e4aceefeef8c89e07f2e7', 'new_oid': 'b3593111cf290bf0373a041981dbdf885fb25439', 'sha256': 'd860d47c65991109602ac69ef5dc9807643cb9cbd6398bf74802ded197f303f3'}, 'lib/statistical-levels/generated/seasonality/XLU.json': {'old_oid': '4f98f6adda75da8e4629d92b66f0b01e96f5b353', 'new_oid': '2f3f11088998e988f35c24a30126bb66c4ce2b16', 'sha256': 'b871151a8c53ad96da4dc7e87eda9245819186e8fa9089158b6d9f4615451ec4'}, 'lib/statistical-levels/generated/seasonality/XLV.json': {'old_oid': 'd9845b6fd75c2266f5ff524e633dd6033f03fd4c', 'new_oid': '1f7251e7bc9c193041c1b2f8274cddc0860fd083', 'sha256': '493c1708f2ed867828839ed4b07d5538b3985374293e27a3106175a1c09cb27f'}, 'lib/statistical-levels/generated/seasonality/XLY.json': {'old_oid': '094a3cb991e904771a4b98e0d1ca5cce99dcade0', 'new_oid': 'f2aed5338e73184ef90d1cd29f1b8f18be018e9c', 'sha256': '4da406146ecf4f0638f36f3c16034294faf187161970c81b285a2358c9ad1592'}}
               prior_adjacent_sl_raw=git('diff','--raw','--no-abbrev','--no-renames','-z',intermediate_sl_parent,previous_sl_parent,'--').decode().rstrip('\0').split('\0')
               assert len(prior_adjacent_sl_raw)==164 and len(set(prior_adjacent_sl_raw[1::2]))==82 and set(prior_adjacent_sl_raw[1::2])==set(prior_adjacent_sl_bindings), 'PRIOR_ADJACENT_SL_ADVANCE_SCOPE'
@@ -461,18 +479,18 @@ jobs:
               # Review approval is a separate exact-tree pre-push gate, never inferred from ancestry.
           # PR checks exercise their event SHA; they never certify the integration push.
           subject={'head_sha':head,'parents':parents,'event':os.environ['GITHUB_EVENT_NAME'],'ref':os.environ['GITHUB_REF'],'run_id':os.environ['GITHUB_RUN_ID'],'run_attempt':os.environ['GITHUB_RUN_ATTEMPT'],'integration_push':is_integration_push}
-          subject['lineage']={'pre_publication_parent_sha':pre_publication_parent,'pre_publication_parent_verified':is_integration_push,'publication_sha':current_implementation_parent,'publication_tree':'4fe4b4f615a98aee41cbac014a50c074f1fa4a81','publication_verified':is_integration_push,'g5_parent_sha':g5_parent,'g5_parent_tree':g5_parent_tree,'g5_parent_tree_verified':is_integration_push and g5_parent_tree is not None,'g5_parent_verified':is_integration_push,'runtime_repair_parent_sha':runtime_repair_parent,'runtime_repair_parent_verified':is_integration_push,'implementation_parent_sha':implementation_parent,'implementation_parent_predecessor_sha':implementation_parent_predecessor,'runtime_parent_verified':is_integration_push,'repair_parent_sha':repair_parent,'repair_parent_parents':repair_parent_parents,'metadata_repair_parent_verified':is_integration_push,'qualified_predecessor_sha':qualified_predecessor,'qualified_predecessor_parents':predecessor_parents,'merge_anchor_sha':merge_anchor,'merge_anchor_parents':anchor_parents,'registration_successor_parent_verified':is_integration_push,'registration_content_verified':is_integration_push,'two_parent_anchor_verified':is_integration_push}
+          subject['lineage']={'pre_publication_parent_sha':pre_publication_parent,'pre_publication_parent_verified':is_integration_qualified,'publication_sha':current_implementation_parent,'publication_tree':'4fe4b4f615a98aee41cbac014a50c074f1fa4a81','publication_verified':is_integration_qualified,'g5_parent_sha':g5_parent,'g5_parent_tree':g5_parent_tree,'g5_parent_tree_verified':is_integration_qualified and g5_parent_tree is not None,'g5_parent_verified':is_integration_qualified,'runtime_repair_parent_sha':runtime_repair_parent,'runtime_repair_parent_verified':is_integration_qualified,'implementation_parent_sha':implementation_parent,'implementation_parent_predecessor_sha':implementation_parent_predecessor,'runtime_parent_verified':is_integration_qualified,'repair_parent_sha':repair_parent,'repair_parent_parents':repair_parent_parents,'metadata_repair_parent_verified':is_integration_qualified,'qualified_predecessor_sha':qualified_predecessor,'qualified_predecessor_parents':predecessor_parents,'merge_anchor_sha':merge_anchor,'merge_anchor_parents':anchor_parents,'registration_successor_parent_verified':is_integration_qualified,'registration_content_verified':is_integration_qualified,'two_parent_anchor_verified':is_integration_qualified}
           subject['lineage']['lineage_schema']='statistical-levels.ordered-production-sl-parent-lineage.v1'
           subject['lineage']['actual_ordered_parents']=[production_parent,current_sl_parent]
           subject['lineage']['actual_parent_sha']=production_parent
           subject['lineage']['actual_parent_tree']=production_parent_tree
-          subject['lineage']['actual_parent_verified']=is_integration_push
+          subject['lineage']['actual_parent_verified']=is_integration_qualified
           subject['lineage']['sl_source_anchor_sha']=g5_parent
-          subject['lineage']['sl_source_history_verified']=is_integration_push
+          subject['lineage']['sl_source_history_verified']=is_integration_qualified
           subject['lineage']['g5_parent_role']='HISTORICAL_SL_SOURCE_ANCHOR'
           subject['lineage']['current_sl_parent_sha']=current_sl_parent
           subject['lineage']['current_sl_parent_tree']=current_sl_parent_tree
-          subject['lineage']['current_sl_parent_verified']=is_integration_push and current_sl_parent_tree is not None
+          subject['lineage']['current_sl_parent_verified']=is_integration_qualified and current_sl_parent_tree is not None
           subject['lineage']['current_sl_parent_role']='CURRENT_GENERATED_STATE_AND_EXACT_SECOND_PARENT'
           subject['lineage']['current_sl_predecessor_sha']=fourth_sl_parent
           subject['lineage']['intermediate_sl_parent_sha']=intermediate_sl_parent
@@ -489,7 +507,7 @@ jobs:
           subject['lineage']['fourth_sl_predecessor_sha']=third_sl_parent
           subject['lineage']['epoch_anchor_sha']=epoch_anchor
           subject['lineage']['epoch_anchor_tree']='281bc38177d962aada0ffae244653b133bc4fbcf'
-          subject['lineage']['epoch_anchor_verified']=is_integration_push
+          subject['lineage']['epoch_anchor_verified']=is_integration_qualified
           subject['lineage']['epoch_anchor_role']='PUBLISHED_INTEGRATION_COMMIT_AND_CURRENT_EPOCH_SOURCE_LINEAGE_ANCHOR'
           subject['lineage']['historical_sl_parent_sha']=historical_sl_parent
           subject['lineage']['historical_sl_parent_tree']=historical_sl_parent_tree
@@ -500,14 +518,24 @@ jobs:
           subject['lineage']['historical2_sl_predecessor_sha']=historical2_sl_predecessor
           subject['historical_lineage']=subject.pop('lineage')
           subject['lineage']={'lineage_schema':'statistical-levels.g5-preserved-execution.v1',
-              'actual_ordered_parents':parents,'integration_verified':is_integration_push,
-              'integration':g5_integration if is_integration_push else None}
+              'actual_ordered_parents':parents,'integration_verified':is_integration_qualified,
+              'integration_subject_sha':historical_subject if is_integration_qualified else None,
+              'integration':g5_integration if is_integration_qualified else None}
+          subject['integration_qualified']=is_integration_qualified
+          subject['bounded_admission']=bounded
           paths=sorted(git('ls-files','-z').decode().rstrip('\0').split('\0'))
           files={p:{'mode':format((root/p).stat().st_mode,'o'),'sha256':hashlib.sha256((root/p).read_bytes()).hexdigest()} for p in paths}
           (out/'subject.json').write_text(json.dumps(subject,sort_keys=True)+'\n')
           (out/'before.json').write_text(json.dumps(files,sort_keys=True)+'\n')
           print(json.dumps(subject))
           PYCODE
+
+      - name: Test bounded CI admission and producer readback
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m unittest discover -s scripts/statistical-levels-ci -p 'test_*.py' -v
+          node --test scripts/statistical-levels-ci/producer-receipt.test.mjs
 
       - name: Install dependencies
         run: npm ci
@@ -667,6 +695,12 @@ jobs:
           print(json.dumps({'records':len(records),'tracked':sum(record['tracked'] for record in records),'subject_sha256':handoff['subject_sha256']}))
           SUBJECTCODE
 
+      - name: Authenticate fresh native capture handoff
+        if: ${{ github.ref == 'refs/heads/vercel-deployment' && github.event_name != 'pull_request' }}
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: python3 scripts/statistical-levels-ci/admission.py capture
+
       - name: Run existing release, native proof, policy and security tests
         shell: bash
         run: |
@@ -689,7 +723,14 @@ jobs:
           JS
           node scripts/statistical-levels-release/scripts/capture-full-product.mjs --origin "$SL_NEXT_LOCAL_ORIGIN" --out "$CI_EVIDENCE/full-product"
           node scripts/statistical-levels-release/scripts/capture-full-product.mjs --verify
-          node --test --test-concurrency=2 --test-reporter=tap scripts/statistical-levels-release/tests/*.test.mjs | tee "$CI_EVIDENCE/release.tap"
+          if [[ -f "$CI_EVIDENCE/bounded-admission.json" ]]; then
+            python3 scripts/statistical-levels-ci/historical-tests.py
+            mapfile -t release_tests < <(find scripts/statistical-levels-release/tests -maxdepth 1 -name '*.test.mjs' ! -name 'probe-fixture-registry.test.mjs' ! -name 'g5-execution-preservation.test.mjs' | sort)
+            test "${#release_tests[@]}" -eq 39
+            node --test --test-concurrency=2 --test-reporter=tap "${release_tests[@]}" | tee "$CI_EVIDENCE/release.tap"
+          else
+            node --test --test-concurrency=2 --test-reporter=tap scripts/statistical-levels-release/tests/*.test.mjs | tee "$CI_EVIDENCE/release.tap"
+          fi
           node scripts/qa-statistical-levels-runtime.mjs "$SL_NEXT_LOCAL_ORIGIN" "$CI_EVIDENCE/runtime-product.json"
 
       - name: Run production correction and product contracts including synthetic storage failures
@@ -712,8 +753,35 @@ jobs:
           'identical frozen archived bytes reproduce all 81 snapshots; sidecar corruption blocks validation',
           ' two complete regenerations from archived raw have identical 81-file and provenance manifests'.strip()}
           for name,minimum in [('release',2141),('reports',56),('product',68)]:
-              text=(out/(name+'.tap')).read_text()
-              counts={key:int(re.search(r'^# '+key+r' (\d+)$',text,re.M)[1]) for key in ['tests','pass','fail','cancelled','skipped','todo']}
+              texts=[(out/(name+'.tap')).read_text()]
+              if name=='release' and (out/'bounded-admission.json').exists():
+                  historical=json.loads((out/'historical-test-subject.json').read_text())
+                  assert historical['test_source_sha']=='0004db585fb402c97d8470c31ea4e405f0905b7e' and historical['qualification_sha']==os.environ['GITHUB_SHA'], 'HISTORICAL_TEST_SUBJECT'
+                  assert historical['historical_caller_mode']=='ACTUAL_LOCAL_G5_CALLER_NOT_HOSTED' and historical['native_admission_of_new_sha'] is False, 'HISTORICAL_TEST_ROLE'
+                  historical_bytes=(out/'release-historical.tap').read_bytes()
+                  assert hashlib.sha256(historical_bytes).hexdigest()==historical['tap_sha256'] and historical['exit_code']==0, 'HISTORICAL_TEST_TAP'
+                  texts.append(historical_bytes.decode())
+                  summary['historical_test_subject']=historical
+              counters=[]
+              partitions=[]
+              for log in texts:
+                  assert len(re.findall(r'^TAP version 13$',log,re.M))==1 and log.startswith('TAP version 13\n'), 'TAP_HEADER'
+                  plans=re.findall(r'^1\.\.(\d+)$',log,re.M)
+                  assert len(plans)==1 and int(plans[0])>0, 'TAP_PLAN'
+                  cases=[int(n) for n in re.findall(r'^ok (\d+) - ',log,re.M)]
+                  assert cases==list(range(1,int(plans[0])+1)) and not re.search(r'^not ok ',log,re.M), 'TAP_INCOMPLETE_OR_DUPLICATE'
+                  counter={}
+                  for key in ['tests','pass','fail','cancelled','skipped','todo']:
+                      values=re.findall(r'^# '+key+r' (\d+)$',log,re.M)
+                      assert len(values)==1, 'DUPLICATE_OR_MISSING_TAP_COUNT'
+                      counter[key]=int(values[0])
+                  assert counter['fail']==counter['cancelled']==counter['todo']==0 and counter['tests']==counter['pass']+counter['skipped'], 'INVALID_TEST_PARTITION'
+                  counters.append(counter)
+                  source_sha=historical['test_source_sha'] if len(counters)==2 else os.environ['GITHUB_SHA']
+                  partitions.append({'test_source_sha':source_sha,'log_sha256':hashlib.sha256(log.encode()).hexdigest(),'counts':counter,
+                      'test_files':2 if len(counters)==2 else (39 if name=='release' and len(texts)==2 else (41 if name=='release' else (4 if name=='reports' else 5)))})
+              counts={key:sum(c[key] for c in counters) for key in counters[0]}
+              text='\n'.join(texts)
               assert counts['tests']>=minimum and counts['fail']==counts['cancelled']==counts['todo']==0, (name,counts)
               assert counts['tests']==counts['pass']+counts['skipped'], 'INCONSISTENT_TEST_ACCOUNTING'
               skipped=re.findall(r'^\s*ok \d+ - (.*?) # SKIP(?: .*)?$',text,re.M)
@@ -968,7 +1036,7 @@ jobs:
               if name=='product':
                   for failure in ['identity','storage','partial','collision','readback','manifest','provenance','validation']:
                       assert len(re.findall(r'^ok \d+ - real adapter failure injection: '+failure+r'$',text,re.M))==1, 'STORAGE_CASE_NOT_EXECUTED'
-              summary[name]={'counts':counts,'explicit_local_only_or_nonapplicable_skips':skipped}
+              summary[name]={'counts':counts,'partitions':partitions,'explicit_local_only_or_nonapplicable_skips':skipped}
           assert len(list((root/'scripts/statistical-levels-release/tests').glob('*.test.mjs')))==41
           before=json.loads((out/'before.json').read_text())
           paths=sorted(subprocess.check_output(['git','ls-files','-z']).decode().rstrip('\0').split('\0'))
@@ -981,9 +1049,15 @@ jobs:
           assert subject['event']==os.environ['GITHUB_EVENT_NAME'] and subject['ref']==os.environ['GITHUB_REF'], 'WRONG_SUBJECT_EVENT'
           assert subject['integration_push']==(os.environ['GITHUB_EVENT_NAME']=='push' and os.environ['GITHUB_REF']=='refs/heads/vercel-deployment'), 'WRONG_INTEGRATION_CLASS'
           assert subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip()==subject['head_sha']
+          assert (subject['bounded_admission'] is not None)==(os.environ['GITHUB_REF']=='refs/heads/vercel-deployment' and os.environ['GITHUB_EVENT_NAME']!='pull_request'), 'BOUNDED_ADMISSION_REQUIRED'
+          assert subject['integration_qualified']==(subject['integration_push'] or subject['bounded_admission'] is not None), 'QUALIFICATION_CLASS'
+          if subject['bounded_admission'] is not None:
+              bounded=json.loads((out/'bounded-admission.json').read_text())
+              assert subject['bounded_admission']==bounded and bounded['head_sha']==subject['head_sha'] and bounded['admission']=='PASS', 'BOUNDED_SUMMARY'
+              assert bounded['run_id']==subject['run_id'] and bounded['run_attempt']==subject['run_attempt'] and bounded['event']==subject['event'], 'BOUNDED_SUMMARY_RUN'
           summary['subject']=subject
-          summary['integration_qualification_complete']=subject['integration_push']
-          summary['covered_obligations']=['C%02d'%i for i in range(1,14) if i!=11 or subject['integration_push']]
+          summary['integration_qualification_complete']=subject['integration_qualified']
+          summary['covered_obligations']=['C%02d'%i for i in range(1,14) if i!=11 or subject['integration_qualified']]
           summary['lineage_tests_executed']=True
           summary['G5_execution_integration']=subject['lineage']
           summary['governed_metadata_repair_parent_verified']=subject['historical_lineage']['metadata_repair_parent_verified']
@@ -994,3 +1068,24 @@ jobs:
           (out/'qualification-summary.json').write_text(json.dumps(summary,indent=2)+'\n')
           print(json.dumps(summary,indent=2))
           PYCODE
+
+      - name: Revalidate exact branch and emit bounded qualification evidence
+        if: ${{ github.ref == 'refs/heads/vercel-deployment' && github.event_name != 'pull_request' }}
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: python3 scripts/statistical-levels-ci/admission.py final
+
+      - name: Retain exact CI qualification metadata
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+        with:
+          name: sl-ci-${{ github.run_id }}-${{ github.run_attempt }}
+          path: |
+            ${{ runner.temp }}/statistical-levels-ci/subject.json
+            ${{ runner.temp }}/statistical-levels-ci/qualification-summary.json
+            ${{ runner.temp }}/statistical-levels-ci/bounded-admission.json
+            ${{ runner.temp }}/statistical-levels-ci/bounded-terminal.json
+            ${{ runner.temp }}/statistical-levels-ci/capture-admission.json
+            ${{ runner.temp }}/statistical-levels-ci/historical-test-subject.json
+          if-no-files-found: error
+          retention-days: 90
+          overwrite: false

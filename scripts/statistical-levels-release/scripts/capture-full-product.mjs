@@ -1,4 +1,6 @@
 import fs from 'node:fs/promises';
+import { readFileSync, lstatSync, realpathSync } from 'node:fs';
+import { execFileSync } from 'node:child_process';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { parseArgs } from 'node:util';
@@ -162,6 +164,85 @@ const artifacts = [
   "seasonality-mobile.png",
   "tablet.png"
 ];
+// The reviewed CI admission step authenticates GitHub API/run/artifact and S3
+// readback before handing off to this credential-free browser process. This
+// digest is a same-job chain of custody, not a signature or a CI PASS.
+export function workflowRunCaptureAdmission(env, root = candidateRoot) {
+  const repo = 'luiguiHerrera/Luiguiherrera-web', repoId = 1263772150;
+  const ref = 'refs/heads/vercel-deployment', ci = '.github/workflows/ci.yml';
+  const producer = '.github/workflows/update-statistical-levels.yml';
+  const capture = 'scripts/statistical-levels-release/scripts/capture-full-product.mjs';
+  const admission = 'scripts/statistical-levels-ci/admission.py';
+  const provenance = 'lib/statistical-levels/generated-provenance.json';
+  need(env.GITHUB_ACTIONS === 'true' && env.RUNNER_ENVIRONMENT === 'github-hosted' &&
+    env.GITHUB_JOB === 'validate' && env.GITHUB_EVENT_NAME === 'workflow_run' &&
+    env.GITHUB_REPOSITORY === repo && env.GITHUB_REPOSITORY_ID === String(repoId) &&
+    env.GITHUB_REF === ref && env.GITHUB_WORKFLOW_SHA === env.GITHUB_SHA &&
+    env.GITHUB_WORKFLOW_REF === `${repo}/${ci}@${ref}`, 'CAPTURE_WORKFLOW_RUN_NATIVE');
+  need(/^[a-f0-9]{64}$/.test(env.SL_NATIVE_CAPTURE_ADMISSION_SHA256 || ''), 'CAPTURE_ADMISSION_MISSING');
+  function read(file, privateFile = false) {
+    need(typeof file === 'string' && path.isAbsolute(file) && path.resolve(file) === file &&
+      realpathSync(file) === file, 'CAPTURE_ADMISSION_PATH');
+    const st = lstatSync(file);
+    need(st.isFile() && !st.isSymbolicLink() && st.size > 0 && st.size <= 2_000_000 &&
+      (!privateFile || (st.mode & 0o777) === 0o600), 'CAPTURE_ADMISSION_FILE');
+    return readFileSync(file);
+  }
+  const bytes = read(path.join(env.CI_EVIDENCE, 'capture-admission.json'), true);
+  need(sha(bytes) === env.SL_NATIVE_CAPTURE_ADMISSION_SHA256, 'CAPTURE_ADMISSION_DIGEST');
+  const h = strictJson(bytes);
+  need(h.schema === 'statistical-levels.native-capture-admission.v1' &&
+    h.phase === 'FRESH_PRE_CAPTURE_API_AUTHENTICATION' && h.repository === repo &&
+    h.repository_id === repoId && h.ref === ref && h.workflow_id === 336203586 &&
+    h.workflow_path === ci && h.head_sha === env.GITHUB_SHA &&
+    h.head_sha === env.CI_EVENT_SHA && h.run_id === env.GITHUB_RUN_ID &&
+    h.run_attempt === env.GITHUB_RUN_ATTEMPT && h.event === 'workflow_run', 'CAPTURE_ADMISSION_NATIVE_BINDING');
+  const eventBytes = read(env.GITHUB_EVENT_PATH);
+  need(sha(eventBytes) === h.native_event_sha256, 'CAPTURE_ADMISSION_EVENT_DIGEST');
+  const event = strictJson(eventBytes), r = event.workflow_run;
+  need(event.repository?.id === repoId && event.repository?.full_name === repo &&
+    event.action === 'completed' && r?.id === h.producer_run_id &&
+    r.run_attempt === h.producer_attempt && r.workflow_id === 306145344 &&
+    r.path === producer && r.head_branch === 'vercel-deployment' &&
+    r.head_sha === h.source_sha && ['schedule', 'workflow_dispatch'].includes(r.event) &&
+    r.status === 'completed' && r.conclusion === 'success' &&
+    r.repository?.id === repoId && r.repository?.full_name === repo &&
+    r.head_repository?.id === repoId && r.head_repository?.full_name === repo,
+  'CAPTURE_ADMISSION_PRODUCER_EVENT');
+  const boundedBytes = read(path.join(env.CI_EVIDENCE, 'bounded-admission.json'));
+  need(sha(boundedBytes) === h.admission_sha256, 'CAPTURE_ADMISSION_RECORD_DIGEST');
+  const b = strictJson(boundedBytes), d = b.details;
+  need(b.schema === 'statistical-levels.bounded-ci-admission.v1' &&
+    b.admission === 'PASS' && b.mode === 'AUTHENTICATED_DATA_SUCCESSOR' &&
+    b.head_sha === h.head_sha && b.root_sha === h.root_sha && b.run_id === h.run_id &&
+    b.run_attempt === h.run_attempt && b.event === h.event &&
+    b.historical_subject_sha === '0004db585fb402c97d8470c31ea4e405f0905b7e' &&
+    b.historical_N === '20260908T125656658Z-a4743804-e5f1-495a-b34e-5948d5db4d2d' &&
+    b.certified_production === 'dpl_FRxYeCpiJohL9UZmKfRTEpF6tT5U' &&
+    b.release_authority_issued === false && b.independent_review_required === true &&
+    d?.source_sha === h.source_sha && d.producer_run_id === h.producer_run_id &&
+    d.producer_attempt === h.producer_attempt && d.parent_ci?.head_sha === h.source_sha &&
+    d.data?.files === 82 && d.data.snapshots === 81 &&
+    d.s3_evidence_class === 'AUTHENTICATED_PRODUCER_EXACT_VERSION_READBACK' &&
+    canonical(d.artifact).equals(canonical(h.artifact)), 'CAPTURE_ADMISSION_RECORD_BINDING');
+  const git = (...args) => execFileSync('git', args, {cwd: root, maxBuffer: 4_000_000});
+  need(realpathSync(root) === path.resolve(root) &&
+    git('rev-parse', 'HEAD').toString().trim() === h.head_sha &&
+    git('show', '-s', '--format=%P', 'HEAD').toString().trim() === h.source_sha &&
+    git('status', '--porcelain', '--untracked-files=no').length === 0, 'CAPTURE_ADMISSION_CHECKOUT');
+  need(canonical(Object.keys(h.source_sha256).sort()).equals(canonical([ci, admission, capture].sort())),
+    'CAPTURE_ADMISSION_SOURCE_SET');
+  for (const file of [ci, admission, capture]) {
+    need(sha(read(path.join(path.resolve(root), file))) === h.source_sha256[file] &&
+      sha(git('show', `${h.head_sha}:${file}`)) === h.source_sha256[file], 'CAPTURE_ADMISSION_SOURCE_BYTES');
+  }
+  const pBytes = read(path.join(path.resolve(root), provenance)), p = strictJson(pBytes);
+  need(sha(pBytes) === h.provenance_sha256 && p.GENERATOR_COMMIT === h.source_sha &&
+    p.SOURCE_STATE === 'COMMITTED' && p.BASELINE_ID === d.data.baseline &&
+    p.CONFIG.RAW_ARCHIVE_SEAL_SHA256 === d.data.seal_sha256 &&
+    p.CONFIG.RAW_ARCHIVE_SEAL_VERSION === d.data.seal_version, 'CAPTURE_ADMISSION_PROVENANCE');
+  return env.SL_NATIVE_CAPTURE_ADMISSION_SHA256;
+}
 export function fullProductContext(env = process.env) {
   const origin = env.SL_NEXT_LOCAL_ORIGIN;
   let url;
@@ -173,7 +254,7 @@ export function fullProductContext(env = process.env) {
   const out = path.join(env.CI_EVIDENCE, 'full-product');
   const local = env.SL_LOCAL_QUALIFICATION_SUBJECT_SHA256;
   const role = local ? 'local' : 'hosted';
-  let subject, run_id, run_attempt;
+  let subject, run_id, run_attempt, native_admission_sha256;
   if (local) {
     need(/^[a-f0-9]{64}$/.test(local) && !['GITHUB_SHA','CI_EVENT_SHA','GITHUB_EVENT_NAME','GITHUB_REF','GITHUB_RUN_ID','GITHUB_RUN_ATTEMPT'].some(k => env[k]), 'CAPTURE_LOCAL_CONTEXT_INVALID');
     subject = local; run_id = env.SL_FULL_PRODUCT_RUN_ID; run_attempt = env.SL_FULL_PRODUCT_RUN_ATTEMPT;
@@ -181,11 +262,13 @@ export function fullProductContext(env = process.env) {
   } else {
     subject = env.GITHUB_SHA; run_id = env.GITHUB_RUN_ID; run_attempt = env.GITHUB_RUN_ATTEMPT;
     need(typeof subject === 'string' && /^[a-f0-9]{40}$/.test(subject) && subject === env.CI_EVENT_SHA &&
-      env.GITHUB_EVENT_NAME === 'push' && env.GITHUB_REF === 'refs/heads/vercel-deployment', 'CAPTURE_HOSTED_CONTEXT_INVALID');
+      ['push', 'workflow_run'].includes(env.GITHUB_EVENT_NAME) && env.GITHUB_REF === 'refs/heads/vercel-deployment', 'CAPTURE_HOSTED_CONTEXT_INVALID');
     need(typeof run_id === 'string' && /^[1-9][0-9]*$/.test(run_id), 'CAPTURE_RUN_INVALID');
+    if (env.GITHUB_EVENT_NAME === 'workflow_run') native_admission_sha256 = workflowRunCaptureAdmission(env);
   }
   need(typeof run_attempt === 'string' && /^[1-9][0-9]*$/.test(run_attempt), 'CAPTURE_ATTEMPT_INVALID');
-  return { role, subject, run_id, run_attempt, origin, out };
+  return { role, subject, run_id, run_attempt, origin, out,
+    ...(native_admission_sha256 ? {native_admission_sha256} : {}) };
 }
 async function directory(p) {
   const stat = await fs.lstat(p);
