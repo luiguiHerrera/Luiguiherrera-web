@@ -251,7 +251,44 @@
       "id": "primer-informe-octubre-2026",
       "modifiedAt": "2026-10-05",
       "publishedAt": "2026-10-05",
-      "sourceHash": "291e1e3585aba369b2c734d844ac3571aa4af55efc4b5afa511ab735fcdb7c83"
+      "sourceHash": "5b4478bf86c6406e2ae42ddb17901450220c9bd9ae0b8780d24c743c4ef0119d"
+    },
+    {
+      "canonicalUrl": "https://www.luiguiherrera.com/informes/segundo-informe-octubre-2026",
+      "cutoffs": {
+        "automaticData": "2026-10-16",
+        "editorial": "2026-10-19"
+      },
+      "formats": {
+        "html": {
+          "mimeType": "text/html; charset=utf-8",
+          "path": "/reports/segundo-informe-octubre-2026.html",
+          "sha256": "d463dec8555a21144f1dd45ee1d45d8b4d812ee779b3ad505f0183a8fb45f5ab",
+          "size": 43980
+        },
+        "ics": {
+          "mimeType": "text/calendar; charset=utf-8",
+          "path": "/reports/segundo-informe-octubre-2026-calendar.ics",
+          "sha256": "b8ca742a3ef8958021a91c96f0b9fb54c054fb15a6d6b72749f9f50d773fd923",
+          "size": 2446
+        },
+        "markdown": {
+          "mimeType": "text/markdown; charset=utf-8",
+          "path": "/reports/segundo-informe-octubre-2026.md",
+          "sha256": "84d785fd227fef3a81e777c82fa53df442f07f7394b31bea92064003edf77b85",
+          "size": 33092
+        },
+        "pdf": {
+          "mimeType": "application/pdf",
+          "path": "/reports/segundo-informe-octubre-2026.pdf",
+          "sha256": "0ca850a7d7986fb7e501e970376d63eb86dcfb7271ac343f57aa5e8fb4171052",
+          "size": 65850
+        }
+      },
+      "id": "segundo-informe-octubre-2026",
+      "modifiedAt": "2026-10-21",
+      "publishedAt": "2026-10-21",
+      "sourceHash": "05e2048b69e1d2a76c3230bd6a933c9fa28ebdc93d79d3f005723da853c66851"
     }
   ],
   "schemaVersion": "1.0.0"
