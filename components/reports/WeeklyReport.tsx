@@ -1,6 +1,7 @@
 import { ReportSection } from "@/components/reports/ReportSection";
 import { ExpandableInsightCard } from "@/components/ui/ExpandableInsightCard";
 import { translateDashboardText, translateRegimeLabel } from "@/lib/dashboard/translate-dashboard-copy";
+import { hasVixObservation, vixTrendLabel } from "@/lib/dashboard/vix-presentation";
 import type { WeeklyReportData } from "@/lib/reports/build-weekly-report-data";
 import type { DailySeasonalityCell, PresidentialCyclePhase } from "@/lib/statistical-levels/types";
 
@@ -45,19 +46,6 @@ function formatNumber(value: number | null | undefined, digits = 1, locale: "es"
 function formatUsdMillions(value: number | null | undefined, locale: "es" | "en" = "es") {
   if (value === null || value === undefined) return locale === "en" ? "Pending" : "Pendiente";
   return `${value > 0 ? "+" : ""}${value.toFixed(0)} M USD`;
-}
-
-function vixTrendLabel(value: string | undefined, locale: "es" | "en") {
-  if (locale === "en") {
-    if (value === "rising_fast") return "Rising fast";
-    if (value === "rising") return "Rising";
-    if (value === "falling") return "Falling";
-    return "Stable";
-  }
-  if (value === "rising_fast") return "Subiendo rápido";
-  if (value === "rising") return "Subiendo";
-  if (value === "falling") return "Bajando";
-  return "Estable";
 }
 
 function structureLabel(distanceToMa200: number | null | undefined, locale: "es" | "en") {
@@ -216,6 +204,7 @@ export function WeeklyReport({ data, locale = "es" }: WeeklyReportProps) {
   const phases = locale === "en" ? englishPhaseLabels : phaseLabels;
   const months = locale === "en" ? englishMonthNames : monthNames;
   const t = (value: string | null | undefined) => locale === "en" ? translateDashboardText(value) : value ?? "";
+  const vixSpot = hasVixObservation(data.volatility.vix?.spot) ? data.volatility.vix.spot : null;
   const watchItems = limitItems([
     data.volatility.termStructure?.classification ? `${locale === "en" ? "VIX curve" : "Curva VIX"}: ${t(data.volatility.termStructure.classification)}` : "",
     data.flows.btcEtfFlows?.flows.readingLabel ? `${locale === "en" ? "BTC ETF flows" : "Flujos BTC ETF"}: ${t(data.flows.btcEtfFlows.flows.readingLabel)}` : "",
@@ -296,13 +285,13 @@ export function WeeklyReport({ data, locale = "es" }: WeeklyReportProps) {
       <div className="grid gap-5 lg:grid-cols-2">
         <ReportSection eyebrow="04" title={copy.volatility}>
           <div className="grid gap-2 sm:grid-cols-2">
-            <Metric label={locale === "en" ? "VIX · last close" : "VIX · último cierre"} value={formatNumber(data.volatility.vix?.spot.latestVix, 1, locale)} emphasis />
-            <Metric label={copy.vixMomentum} value={vixTrendLabel(data.volatility.vix?.spot.vixTrend, locale)} />
+            <Metric label={locale === "en" ? "VIX · last close" : "VIX · último cierre"} value={formatNumber(vixSpot?.latestVix, 1, locale)} emphasis />
+            <Metric label={copy.vixMomentum} value={vixTrendLabel(vixSpot, locale)} />
             <Metric label={copy.vixCurve} value={t(data.volatility.termStructure?.classification) || copy.pending} />
             <Metric label="M1/M2" value={data.volatility.termStructure?.m1m2SlopePct === null || data.volatility.termStructure?.m1m2SlopePct === undefined ? copy.pending : `${data.volatility.termStructure.m1m2SlopePct.toFixed(1)}%`} />
           </div>
           <p className="mt-4 text-sm leading-6 text-muted">
-            {t(data.volatility.termStructure?.interpretation) || t(data.volatility.vix?.spot.vixCompositeSubtext) || copy.pendingVol}
+            {t(data.volatility.termStructure?.interpretation) || t(vixSpot?.vixCompositeSubtext) || copy.pendingVol}
           </p>
         </ReportSection>
 

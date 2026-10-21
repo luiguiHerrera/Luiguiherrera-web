@@ -5,26 +5,19 @@ import type { CSSProperties } from "react";
 import { usePathname } from "next/navigation";
 import { DashboardModuleHeading, dashboardModuleEyebrowClassName } from "@/components/dashboard/DashboardPrimitives";
 import { translateDashboardText } from "@/lib/dashboard/translate-dashboard-copy";
-import type { VixDashboardData, VixHistoryPoint, VixSpotData } from "@/lib/dashboard/types";
+import { hasVixObservation, vixTrendLabel } from "@/lib/dashboard/vix-presentation";
+import type { VixDashboardData, VixHistoryPoint } from "@/lib/dashboard/types";
 
-type VixModuleProps = { data: VixDashboardData };
+type VixModuleProps = { data: VixDashboardData | null };
 type Locale = "es" | "en";
 
 function formatNumber(value: number | null, locale: Locale, digits = 1) {
-  return value === null ? locale === "en" ? "Unavailable" : "No disponible" : value.toFixed(digits);
+  return value === null || !Number.isFinite(value) ? locale === "en" ? "Unavailable" : "No disponible" : value.toFixed(digits);
 }
 
 function formatChange(value: number | null, locale: Locale) {
-  if (value === null) return locale === "en" ? "Unavailable" : "No disponible";
+  if (value === null || !Number.isFinite(value)) return locale === "en" ? "Unavailable" : "No disponible";
   return `${value > 0 ? "+" : ""}${value.toFixed(1)} pts`;
-}
-
-function trendLabel(trend: VixSpotData["vixTrend"], locale: Locale, available = true) {
-  if (!available) return locale === "en" ? "Unavailable" : "No disponible";
-  if (trend === "rising_fast") return locale === "en" ? "Rising fast" : "Subiendo rápido";
-  if (trend === "rising") return locale === "en" ? "Rising" : "Subiendo";
-  if (trend === "falling") return locale === "en" ? "Falling" : "Bajando";
-  return locale === "en" ? "Stable" : "Estable";
 }
 
 function formatSessionDate(value: string, locale: Locale) {
@@ -133,27 +126,28 @@ export function VixModule({ data }: VixModuleProps) {
   const t = (value: string | null | undefined) => locale === "en" ? translateDashboardText(value) : value ?? "";
   const [contextOpen, setContextOpen] = useState(false);
   const contextId = useId();
-  const spot = data.spot;
-  const available = spot.latestVix !== null;
-  const status = spot.dataStatus === "automated"
-    ? locale === "en" ? "Automated data" : "Datos automatizados"
-    : available
-      ? locale === "en" ? "Delayed data" : "Datos con retraso"
-      : locale === "en" ? "Temporarily unavailable" : "Datos temporalmente no disponibles";
-  const percentile = !available || spot.vixPercentile === null
-    ? !available ? locale === "en" ? "Unavailable" : "No disponible" : t(spot.vixPercentileLabel)
-    : `${t(spot.vixPercentileLabel)} · p${Math.round(spot.vixPercentile)}`;
+  const spot = data?.spot;
+  const available = hasVixObservation(spot);
+  const unavailable = locale === "en" ? "Unavailable" : "No disponible";
+  const status = !available
+    ? locale === "en" ? "Temporarily unavailable" : "Datos temporalmente no disponibles"
+    : spot.dataStatus === "automated"
+      ? locale === "en" ? "Automated data" : "Datos automatizados"
+      : locale === "en" ? "Delayed data" : "Datos con retraso";
+  const percentile = !available ? unavailable : spot.vixPercentile === null
+    ? t(spot.vixPercentileLabel)
+    : Number.isFinite(spot.vixPercentile) ? `${t(spot.vixPercentileLabel)} · p${Math.round(spot.vixPercentile)}` : unavailable;
   const metrics = [
-    [locale === "en" ? "VIX · last close" : "VIX · último cierre", formatNumber(spot.latestVix, locale, 2)],
-    [locale === "en" ? "Classification" : "Clasificación", available ? t(spot.vixCompositeLabel) : locale === "en" ? "Unavailable" : "No disponible"],
-    ["Momentum", trendLabel(spot.vixTrend, locale, available)],
+    [locale === "en" ? "VIX · last close" : "VIX · último cierre", formatNumber(available ? spot.latestVix : null, locale, 2)],
+    [locale === "en" ? "Classification" : "Clasificación", available ? t(spot.vixCompositeLabel) : unavailable],
+    ["Momentum", vixTrendLabel(spot, locale)],
     [locale === "en" ? "Percentile" : "Percentil", percentile],
   ];
   const detailMetrics = [
-    [locale === "en" ? "1D change" : "Cambio 1D", formatChange(spot.change1d, locale)],
-    [locale === "en" ? "5D change" : "Cambio 5D", formatChange(spot.change5d, locale)],
-    [locale === "en" ? "21D change" : "Cambio 21D", formatChange(spot.change21d, locale)],
-    [locale === "en" ? "Trend" : "Tendencia", trendLabel(spot.vixTrend, locale, available)],
+    [locale === "en" ? "1D change" : "Cambio 1D", formatChange(available ? spot.change1d : null, locale)],
+    [locale === "en" ? "5D change" : "Cambio 5D", formatChange(available ? spot.change5d : null, locale)],
+    [locale === "en" ? "21D change" : "Cambio 21D", formatChange(available ? spot.change21d : null, locale)],
+    [locale === "en" ? "Trend" : "Tendencia", vixTrendLabel(spot, locale)],
   ];
 
   return (
@@ -161,7 +155,7 @@ export function VixModule({ data }: VixModuleProps) {
       <div className="flex flex-wrap items-center justify-between gap-3">
         <p className={dashboardModuleEyebrowClassName}>{locale === "en" ? "Current level" : "Nivel actual"}</p>
         <span className="inline-flex items-center gap-2 text-[11px] font-normal text-muted/80" data-vix-spot-status>
-          <span className={`h-1 w-1 rounded-full ${spot.dataStatus === "automated" ? "bg-[#6f8f7b]/70" : "bg-brass/70"}`} aria-hidden="true" />
+          <span className={`h-1 w-1 rounded-full ${available && spot.dataStatus === "automated" ? "bg-[#6f8f7b]/70" : "bg-brass/70"}`} aria-hidden="true" />
           {status}
         </span>
       </div>
@@ -169,7 +163,7 @@ export function VixModule({ data }: VixModuleProps) {
       <div className="mt-3 flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
         <div className="max-w-3xl">
           <DashboardModuleHeading headingLevel="h3">{locale === "en" ? "Volatility pressure" : "Presión de volatilidad"}</DashboardModuleHeading>
-          <p className="mt-3 text-sm leading-6 text-muted md:text-base">{t(spot.vixCompositeSubtext)}</p>
+          <p className="mt-3 text-sm leading-6 text-muted md:text-base">{available ? t(spot.vixCompositeSubtext) : unavailable}</p>
         </div>
         <button
           type="button"
@@ -198,7 +192,7 @@ export function VixModule({ data }: VixModuleProps) {
           <div className="grid gap-5 xl:grid-cols-[0.42fr_0.58fr] xl:items-start">
             <div className="min-w-0">
               <p className="text-xs font-semibold uppercase tracking-[0.14em] text-brass">{locale === "en" ? "Analytical detail" : "Detalle analítico"}</p>
-              <p className="mt-3 text-sm leading-6 text-muted">{t(spot.vixDescription)} {available ? locale === "en" ? "The reading combines the absolute level, historical percentile, and recent momentum." : "La lectura combina nivel absoluto, percentil histórico y momentum reciente." : ""}</p>
+              <p className="mt-3 text-sm leading-6 text-muted">{available ? t(spot.vixDescription) : unavailable} {available ? locale === "en" ? "The reading combines the absolute level, historical percentile, and recent momentum." : "La lectura combina nivel absoluto, percentil histórico y momentum reciente." : ""}</p>
               <div className="mt-4 grid grid-cols-2 border-y border-line">
                 {detailMetrics.map(([label, value], index) => (
                   <div key={label} className={`px-3 py-3 ${index % 2 === 1 ? "border-l border-line" : "pl-0"} ${index >= 2 ? "border-t border-line" : ""}`}>
@@ -208,20 +202,20 @@ export function VixModule({ data }: VixModuleProps) {
                 ))}
               </div>
             </div>
-            <VixLineChart history={spot.history} locale={locale} />
+            <VixLineChart history={available ? spot.history : []} locale={locale} />
           </div>
 
           <div className="mt-4 grid gap-3 border-t border-line pt-4 text-sm leading-6 text-muted lg:grid-cols-2">
-            <div className="bg-panelSoft/35 px-4 py-3"><h4 className="text-sm font-semibold text-ink">{locale === "en" ? "Prudent interpretation" : "Interpretación prudente"}</h4><p className="mt-1.5">{t(spot.interpretation.how)}</p></div>
-            <div className="bg-panelSoft/35 px-4 py-3"><h4 className="text-sm font-semibold text-ink">{locale === "en" ? "What it does not mean" : "Qué NO significa"}</h4><p className="mt-1.5">{t(spot.interpretation.whatItDoesNotMean)}</p></div>
+            <div className="bg-panelSoft/35 px-4 py-3"><h4 className="text-sm font-semibold text-ink">{locale === "en" ? "Prudent interpretation" : "Interpretación prudente"}</h4><p className="mt-1.5">{available ? t(spot.interpretation.how) : unavailable}</p></div>
+            <div className="bg-panelSoft/35 px-4 py-3"><h4 className="text-sm font-semibold text-ink">{locale === "en" ? "What it does not mean" : "Qué NO significa"}</h4><p className="mt-1.5">{t(spot?.interpretation.whatItDoesNotMean)}</p></div>
           </div>
 
           <div className="mt-3 flex flex-wrap gap-x-8 gap-y-3 border-t border-line pt-3 text-xs text-muted">
-            <div><span className="font-semibold uppercase tracking-[0.12em] text-brass">{locale === "en" ? "Source" : "Fuente"}</span><a href={spot.sourceUrl} className="ml-2 font-medium text-ink underline-offset-4 hover:underline" target="_blank" rel="noreferrer">{spot.sourceName}</a></div>
-            <div><span className="font-semibold uppercase tracking-[0.12em] text-brass">{locale === "en" ? "Updated" : "Actualización"}</span><span className="ml-2 font-medium text-ink">{formatObservationUpdate(spot.lastObservationDate, spot.lastUpdated, locale)}</span></div>
-            <div><span className="font-semibold uppercase tracking-[0.12em] text-brass">{locale === "en" ? "Frequency" : "Frecuencia"}</span><span className="ml-2 font-medium text-ink">{t(spot.updateFrequency)}</span></div>
+            <div><span className="font-semibold uppercase tracking-[0.12em] text-brass">{locale === "en" ? "Source" : "Fuente"}</span><a href={spot?.sourceUrl} className="ml-2 font-medium text-ink underline-offset-4 hover:underline" target="_blank" rel="noreferrer">{spot?.sourceName}</a></div>
+            <div><span className="font-semibold uppercase tracking-[0.12em] text-brass">{locale === "en" ? "Updated" : "Actualización"}</span><span className="ml-2 font-medium text-ink">{available ? formatObservationUpdate(spot.lastObservationDate, spot.lastUpdated, locale) : unavailable}</span></div>
+            <div><span className="font-semibold uppercase tracking-[0.12em] text-brass">{locale === "en" ? "Frequency" : "Frecuencia"}</span><span className="ml-2 font-medium text-ink">{t(spot?.updateFrequency)}</span></div>
           </div>
-          <p className="mt-3 text-xs leading-5 text-muted">{t(spot.reliabilityNote)}</p>
+          <p className="mt-3 text-xs leading-5 text-muted">{t(spot?.reliabilityNote)}</p>
         </div>
       ) : null}
     </section>
