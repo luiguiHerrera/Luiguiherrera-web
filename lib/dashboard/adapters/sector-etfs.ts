@@ -6,6 +6,7 @@ import {
   parseAlphaVantagePrices,
   sanitizeProviderMessage,
   SECTOR_ETFS,
+  SECTOR_STALE_AFTER_MS,
   type AlphaVantageDailyResponse,
   type SectorEtfsResult,
   type SectorHistory,
@@ -109,16 +110,42 @@ export function createDailySectorCache(loader: () => Promise<SectorEtfsResult>, 
   };
 }
 
+export function assertUsableSectorRotation(rotation: SectorEtfsResult["rotation"], now = Date.now()) {
+  const sectors = rotation?.sectors ?? [];
+  const expected = new Set<string>(SECTOR_ETFS.map(({ symbol }) => symbol));
+  const actual = new Set(sectors.map(({ etfTicker }) => etfTicker));
+  const dates = new Set(sectors.map(({ lastUpdated }) => lastUpdated));
+  const date = sectors[0]?.lastUpdated ?? "";
+  const end = Date.parse(`${date}T23:59:59Z`);
+  if (rotation?.dataStatus !== "automated" || sectors.length !== expected.size ||
+      actual.size !== expected.size || [...actual].some(symbol => !expected.has(symbol)) ||
+      dates.size !== 1 || !/^\d{4}-\d{2}-\d{2}$/.test(date) || !Number.isFinite(end) ||
+      new Date(end).toISOString().slice(0, 10) !== date ||
+      end - now > 86_400_000 || now - end > SECTOR_STALE_AFTER_MS) {
+    throw new Error("Sector snapshot lacks complete, dated, fresh coverage; cache not updated");
+  }
+}
+
+export function requireCompleteSectorSnapshot(result: SectorEtfsResult, now = Date.now()) {
+  assertUsableSectorRotation(result.rotation, now);
+  if (result.module.dataStatus !== "automated" || result.quantRisk.dataStatus !== "automated") {
+    throw new Error("Sector snapshot is unavailable; cache not updated");
+  }
+  return result;
+}
+
 const getPersistentSectorSnapshot = unstable_cache(
-  () => loadSectorEtfsData(),
-  ["dashboard-sector-snapshot-v2"],
+  async () => requireCompleteSectorSnapshot(await loadSectorEtfsData()),
+  ["dashboard-sector-snapshot-v3-valid-only"],
   { revalidate: REVALIDATE_SECONDS, tags: ["dashboard-sector-snapshot"] },
 );
 
 const getDailySectorSnapshot = createDailySectorCache(getPersistentSectorSnapshot);
 
 export async function getSectorEtfsData(options?: SectorLoadOptions) {
-  return options ? loadSectorEtfsData(options) : getDailySectorSnapshot();
+  // Reject before either aggregate/page cache sees a normal unavailable return.
+  // Validate reads too: Next can serve a previous value when revalidation fails.
+  return options ? loadSectorEtfsData(options) : requireCompleteSectorSnapshot(await getDailySectorSnapshot());
 }
 
 export type { SectorEtfsResult } from "./sector-data-core.ts";

@@ -1,7 +1,7 @@
 import { unstable_cache } from "next/cache.js";
 
 import { getBtcEtfFlowsData } from "@/lib/dashboard/adapters/btc-etf-flows";
-import { getSectorEtfsData } from "@/lib/dashboard/adapters/sector-etfs";
+import { assertUsableSectorRotation, getSectorEtfsData } from "@/lib/dashboard/adapters/sector-etfs";
 import { getVixData } from "@/lib/dashboard/adapters/vix";
 import { getVixTermStructureData } from "@/lib/dashboard/adapters/vix-term-structure";
 import { buildRegimeSummary } from "@/lib/dashboard/regime-scoring";
@@ -34,8 +34,10 @@ const getCachedHomeDashboardPreviewData = unstable_cache(async (): Promise<HomeD
     vix,
     vixTermStructure,
   };
-}, ["home-dashboard-preview-data-v1"], { revalidate: 21600 });
+}, ["home-dashboard-preview-data-v2-valid-sector"], { revalidate: 21600 });
 
-export function getHomeDashboardPreviewData() {
-  return getCachedHomeDashboardPreviewData();
+export async function getHomeDashboardPreviewData() {
+  const snapshot = await getCachedHomeDashboardPreviewData();
+  assertUsableSectorRotation(snapshot.sectorRotation);
+  return snapshot;
 }
