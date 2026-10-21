@@ -1,3 +1,4 @@
+import { ReportEditorialSections } from './ReportEditorialSections';
 import { ReportLink as Link, ReportAnchor, ReportParagraph, ReportText, ReportSourcePolicy } from "@/components/reports/ReportSourcePolicy";
 import { ReportSection } from "@/components/reports/ReportSection";
 import { ReportQuantitativePanels } from "@/components/reports/ReportQuantitativePanels";
@@ -117,6 +118,7 @@ export function MarketReportContent({
           <ReportParagraph className="mt-4 text-base leading-7 text-muted">{report.subtitle}</ReportParagraph>
           {report.presentation?.prospectivePeriod ? <ReportParagraph className="mt-3 text-sm text-muted">Periodo prospectivo: {report.presentation.prospectivePeriod}</ReportParagraph> : null}
           <ReportExportLinks report={report} />
+          {report.approvedPdf ? <p className="mt-3 text-xs leading-5 text-muted">La página web es la edición principal. El PDF conserva el original editorial aprobado del 19 de octubre, incluidas sus notas de borrador. Los datos y el análisis no se han actualizado después del corte.</p> : null}
         </div>
         {hasHeadlineSummary ? (
           <div className="grid gap-6">
@@ -157,6 +159,7 @@ export function MarketReportContent({
         ) : null}
       </section>
 
+      {report.editorialSections ? <ReportEditorialSections sections={report.editorialSections} /> : <>
       <section id={report.presentation?.contextTitle ? "contexto-general" : "contexto-por-activo"} className="grid scroll-mt-24 gap-6 py-8 md:py-10 lg:grid-cols-[0.34fr_1fr]">
         <div>
           <ReportParagraph className="text-xs font-semibold uppercase text-petrol">Qué pasó</ReportParagraph>
@@ -375,6 +378,7 @@ export function MarketReportContent({
         </div>
       </section>
 
+      </>}
       <ReportNavigation nextReport={nextReport} previousReport={previousReport} />
     </article></ReportSourcePolicy>
   );

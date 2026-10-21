@@ -1,0 +1,63 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Luigui Herrera//Market Reports//ES
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+X-WR-CALNAME:Segundo informe de octubre de 2026
+BEGIN:VEVENT
+UID:segundo-informe-octubre-2026-resultados-de-netflix-tesla-meta-ibm-gm-y-
+ otras-companias@luigui-herrera
+DTSTAMP:20261021T000000Z
+DTSTART;VALUE=DATE:20261020
+DTEND;VALUE=DATE:20261023
+SUMMARY:Segundo informe de octubre de 2026: Resultados de Netflix\, Tesla\,
+  Meta\, IBM\, GM y otras compañías
+DESCRIPTION:20–23 de octubre. Beneficios reales\, previsiones\, inversió
+ n y márgenes
+URL:https://www.luiguiherrera.com/informes/segundo-informe-octubre-2026
+END:VEVENT
+BEGIN:VEVENT
+UID:segundo-informe-octubre-2026-pmi-preliminares-y-dato-final-de-michigan-
+ de-octubre@luigui-herrera
+DTSTAMP:20261021T000000Z
+DTSTART;VALUE=DATE:20261023
+DTEND;VALUE=DATE:20261024
+SUMMARY:Segundo informe de octubre de 2026: PMI preliminares y dato final d
+ e Michigan de octubre
+DESCRIPTION:23 de octubre. Actividad\, confianza e inflación esperada
+URL:https://www.luiguiherrera.com/informes/segundo-informe-octubre-2026
+END:VEVENT
+BEGIN:VEVENT
+UID:segundo-informe-octubre-2026-reunion-del-fomc@luigui-herrera
+DTSTAMP:20261021T000000Z
+DTSTART;VALUE=DATE:20261027
+DTEND;VALUE=DATE:20261028
+SUMMARY:Segundo informe de octubre de 2026: Reunión del FOMC
+DESCRIPTION:27–28 de octubre. Decisión de tipos y mensaje de la Fed
+URL:https://www.luiguiherrera.com/informes/segundo-informe-octubre-2026
+END:VEVENT
+BEGIN:VEVENT
+UID:segundo-informe-octubre-2026-pib-de-ee-uu-del-tercer-trimestre-y-pce-de
+ -septiembre@luigui-herrera
+DTSTAMP:20261021T000000Z
+DTSTART;VALUE=DATE:20261029
+DTEND;VALUE=DATE:20261030
+SUMMARY:Segundo informe de octubre de 2026: PIB de EE. UU. del tercer trime
+ stre y PCE de septiembre
+DESCRIPTION:29 de octubre. Crecimiento e inflación\; ambos datos llegan de
+ spués de la Fed
+URL:https://www.luiguiherrera.com/informes/segundo-informe-octubre-2026
+END:VEVENT
+BEGIN:VEVENT
+UID:segundo-informe-octubre-2026-elecciones-legislativas-en-ee-uu@luigui-he
+ rrera
+DTSTAMP:20261021T000000Z
+DTSTART;VALUE=DATE:20261103
+DTEND;VALUE=DATE:20261104
+SUMMARY:Segundo informe de octubre de 2026: Elecciones legislativas en EE. 
+ UU.
+DESCRIPTION:3 de noviembre. Riesgo político y posibles cambios de expectat
+ ivas fiscales
+URL:https://www.luiguiherrera.com/informes/segundo-informe-octubre-2026
+END:VEVENT
+END:VCALENDAR

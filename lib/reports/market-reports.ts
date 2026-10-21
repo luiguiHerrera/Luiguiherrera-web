@@ -1,3 +1,4 @@
+import { secondOctober2026Report } from './second-october-2026.ts';
 import { firstOctober2026Report } from "./first-october-2026.ts";
 import { secondSeptember2026Report } from "./second-september-2026.ts";
 import { firstSeptember2026Report } from "./first-september-2026.ts";
@@ -193,6 +194,8 @@ export type MarketReportWatchItem = {
 };
 
 export type MarketReport = {
+  editorialSections?: import("./report-editorial-sections").ReportEditorialSection[];
+  approvedPdf?: import("./report-editorial-sections").ApprovedReportPdf;
   id: string;
   monthKey: string;
   monthLabel: string;
@@ -2114,7 +2117,8 @@ export const marketReports: MarketReport[] = [
   },
   { ...firstSeptember2026Report, status: "archivado" },
   { ...secondSeptember2026Report, status: "archivado" },
-  firstOctober2026Report,
+  { ...firstOctober2026Report, status: "archivado" },
+  secondOctober2026Report,
 ];
 
 export const activeMarketReport = marketReports.find((report) => report.status === "actual") ?? marketReports[0];

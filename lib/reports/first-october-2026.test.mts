@@ -7,16 +7,17 @@ import { secondSeptember2026Report } from './second-september-2026.ts';
 import { activeMarketReport, getAdjacentReports, getMarketReportBySlug, marketReports, reportMetadataTitle } from './market-reports.ts';
 const snapshot = JSON.parse(fs.readFileSync('lib/reports/snapshots/primer-informe-octubre-2026/statistical.json', 'utf8'));
 
-test('October is current; September content and generated adjacency remain intact', () => {
+test('First October is archived; content and generated adjacency remain intact', () => {
   assert.equal(report.id, 'primer-informe-octubre-2026');
   assert.equal(report.title, 'Primer informe de octubre de 2026');
   assert.equal(report.subtitle, 'El calendario ayuda; la amplitud debe confirmar');
-  assert.equal(activeMarketReport, report);
+  assert.equal(activeMarketReport.id, 'segundo-informe-octubre-2026');
+  assert.deepEqual(getMarketReportBySlug(report.id), { ...report, status: 'archivado' });
   assert.equal(marketReports.filter(r => r.status === 'actual').length, 1);
   assert.deepEqual(getMarketReportBySlug(secondSeptember2026Report.id), { ...secondSeptember2026Report, status: 'archivado' });
   assert.equal(getAdjacentReports(report.id).previousReport?.id, secondSeptember2026Report.id);
-  assert.equal(getAdjacentReports(secondSeptember2026Report.id).nextReport, report);
-  assert.equal(getAdjacentReports(report.id).nextReport, null);
+  assert.deepEqual(getAdjacentReports(secondSeptember2026Report.id).nextReport, { ...report, status: 'archivado' });
+  assert.equal(getAdjacentReports(report.id).nextReport?.id, 'segundo-informe-octubre-2026');
   assert.equal(reportMetadataTitle(report), 'Primer informe de octubre de 2026');
   assert.equal(report.publishedAt, '2026-10-05');
   assert.equal(report.automaticDataCutoffAt, '2026-10-02');
