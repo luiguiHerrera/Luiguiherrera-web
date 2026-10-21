@@ -139,3 +139,35 @@ test("latest official observation date is exposed and context defaults collapsed
   assert.match(component, /Show context/);
   assert.match(component, /Hide context/);
 });
+
+// Synthetic transport fixtures; none is the response from the stopped deployment.
+for (const [name, csv, status, expectedStatus, expectedCount] of [
+  ["valid CSV", "observation_date,VIXCLS\n2026-10-12,14\n2026-10-13,15\n2026-10-14,16\n2026-10-15,17\n2026-10-16,18\n2026-10-19,19", 200, "automated", 6],
+  ["empty body", "", 200, "unavailable", 0],
+  ["header only", "observation_date,VIXCLS\n", 200, "unavailable", 0],
+  ["non CSV HTML", "<!doctype html><html><body>synthetic unavailable</body></html>", 200, "unavailable", 0],
+  ["non CSV JSON", '{"message":"synthetic unavailable"}', 200, "unavailable", 0],
+  ["insufficient history", "observation_date,VIXCLS\n2026-10-19,14\n2026-10-20,15", 200, "unavailable", 2],
+  ["invalid observations", "observation_date,VIXCLS\n2026-02-30,14\n2026-10-20,.\n2026-10-19,bad", 200, "unavailable", 0],
+  ["HTTP error", "synthetic HTTP failure", 503, "unavailable", 0],
+] as const) {
+  test(`synthetic VIX transport: ${name}`, async () => {
+    let requests = 0;
+    const data = await getVixData({ fetcher: async (input, init) => {
+      requests++;
+      assert.equal(String(input), "https://fred.stlouisfed.org/graph/fredgraph.csv?id=VIXCLS");
+      assert.equal((init as RequestInit & { next: { revalidate: number } }).next.revalidate, 86400);
+      return new Response(csv, { status });
+    } });
+    assert.equal(requests, 1);
+    assert.equal(parseFredCsv(csv).length, expectedCount);
+    assert.equal(data.spot.dataStatus, expectedStatus);
+    if (expectedStatus === "unavailable") {
+      for (const value of [data.spot.latestVix, data.spot.change1d, data.spot.change5d, data.spot.change21d, data.spot.vixPercentile]) assert.equal(value, null);
+      assert.deepEqual(data.spot.history, []);
+    } else {
+      assert.equal(data.spot.latestVix, 19);
+      assert.equal(data.spot.history.length, 6);
+    }
+  });
+}
