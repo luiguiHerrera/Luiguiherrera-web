@@ -30,7 +30,7 @@ A esto se suma un entorno macroeconómico exigente. El CPI de septiembre alcanz�
 
 ### Qué cambió desde el primer informe de octubre
 
-Lo primero es comparar ambos cortes. La tabla recoge medidas homogéneas del 2 y el 16 de octubre; las encuestas se presentan aparte porque siguen un calendario distinto.
+La tabla recoge medidas homogéneas del 2 y el 16 de octubre; las encuestas se presentan aparte porque siguen un calendario distinto.
 
 | Métrica | 02/10 | 16/10 |
 | --- | --- | --- |
@@ -44,11 +44,11 @@ Lo primero es comparar ambos cortes. La tabla recoge medidas homogéneas del 2 y
 | **Treasury estadounidense a 10 años** | 5,28 % | **5,09 %** |
 | **CNN Fear & Greed · capturas fechadas** | 31 · Miedo | **18 · Miedo extremo** |
 
-**La lectura principal.** El cambio más importante está en la amplitud: el porcentaje de acciones sobre su media de 20 días pasó del 26,44 % al 68,58 %, una recuperación de **42,14 puntos porcentuales**. A 50 días mejoró **20,47 pp** y a 200 días, **9,34 pp**. Esto último también importa: a largo plazo la participación apenas supera la mitad de los componentes, de modo que no daría por terminado el problema. [[M6]](https://www.investing.com/indices/s-p-500-stocks-above-20-day-average-historical-data)
+El cambio más importante está en la amplitud: el porcentaje de acciones sobre su media de 20 días pasó del 26,44 % al 68,58 %, una recuperación de **42,14 puntos porcentuales**. A 50 días mejoró **20,47 pp** y a 200 días, **9,34 pp**. Esto último también importa: a largo plazo la participación apenas supera la mitad de los componentes, de modo que no daría por terminado el problema. [[M6]](https://www.investing.com/indices/s-p-500-stocks-above-20-day-average-historical-data)
 
 La comparación sectorial utiliza dos ventanas de cinco sesiones completas: 25/09–02/10 y 09/10–16/10. En RSP, IWM y QQQ las cifras son **diferencias de rentabilidad semanal frente a SPY**, no cambios en el cociente de precios. El dato del 2 de octubre procede de la serie reproducible del informe anterior y el del 16 de octubre de cierres ordinarios de ChartExchange. Las medias de amplitud corresponden a una fuente externa y **no son cálculos del motor Statistical Levels**. El Fear & Greed procede de capturas fechadas, no de una serie sincronizada al segundo. [M1, M6–M8]
 
-También hay cambios en sentimiento y posicionamiento. Aquí conviene respetar la fecha real de cada observación:
+Las encuestas de sentimiento y posicionamiento conservan la fecha de cada observación.
 
 | Indicador | Referencia anterior | Dato más reciente | Variación o lectura |
 | --- | --- | --- | --- |
@@ -57,7 +57,7 @@ También hay cambios en sentimiento y posicionamiento. Aquí conviene respetar l
 | **Michigan · sentimiento consumidor** | 48,1 · septiembre | 46,3 · octubre preliminar | −1,8 puntos |
 | **BofA Bull & Bear** | 8,8 · informe anterior | 7,4 · mediados de octubre | Se desactiva su señal de venta; no es señal de compra |
 
-Hay un matiz que vale la pena destacar: **AAII muestra más pesimismo que el 7 de octubre, pero menos que el 30 de septiembre**. Entre el 7 y el 14, los bajistas pasaron del 39,0 % al 41,6 %. Tomar solamente una de esas comparaciones puede llevarnos a conclusiones opuestas. [M9–M11]
+**AAII muestra más pesimismo que el 7 de octubre, pero menos que el 30 de septiembre**. Entre el 7 y el 14, los bajistas pasaron del 39,0 % al 41,6 %. Tomar solamente una de esas comparaciones puede llevarnos a conclusiones opuestas. [M9–M11]
 
 ### Amplitud y rotación: una mejora real, pero incompleta
 
@@ -73,23 +73,23 @@ El dato macroeconómico más relevante fue la inflación de septiembre. El **CPI
 
 Las ventas minoristas nominales crecieron un **0,8 % mensual**. Es una señal de actividad, aunque no significa que el consumo real haya aumentado en la misma proporción. Mientras tanto, Michigan mostró una caída del sentimiento desde 48,1 hasta 46,3 y un aumento de las expectativas de inflación a un año del 4,6 % al 4,7 %. Por ahora, el gasto resiste mejor que la confianza. [M4, M9]
 
-Lo interesante es que, pese a esas presiones inflacionarias, el bono del Tesoro estadounidense a diez años pasó del **5,28 % al 5,09 %** entre el 2 y el 16 de octubre: una caída de **19 puntos básicos**. No atribuiría todo ese movimiento a una sola causa. Puede reflejar compras defensivas, cobertura de posiciones y cambios en expectativas. Pero los costes de financiación siguen siendo elevados para empresas con mucha deuda y para una parte de las pequeñas compañías. [[M5]](https://home.treasury.gov/resource-center/data-chart-center/interest-rates/TextView?field_tdr_date_value=2026&field_tdr_date_value_month=202610&type=daily_treasury_yield_curve)
+Pese a esas presiones inflacionarias, el bono del Tesoro estadounidense a diez años pasó del **5,28 % al 5,09 %** entre el 2 y el 16 de octubre: una caída de **19 puntos básicos**. No atribuiría todo ese movimiento a una sola causa. Puede reflejar compras defensivas, cobertura de posiciones y cambios en expectativas. Pero los costes de financiación siguen siendo elevados para empresas con mucha deuda y para una parte de las pequeñas compañías. [[M5]](https://home.treasury.gov/resource-center/data-chart-center/interest-rates/TextView?field_tdr_date_value=2026&field_tdr_date_value_month=202610&type=daily_treasury_yield_curve)
 
 ### Sentimiento y posicionamiento: miedo no es lo mismo que estar vendido
 
 El CNN Fear & Greed llegó a **18, territorio de miedo extremo**, al cierre de la captura del 16 de octubre. La encuesta AAII registraba un 41,6 % de bajistas. A la vez, el NAAIM de la captura del 15 de octubre estaba alrededor de **74,53**, lo que muestra que los gestores activos de esa muestra mantenían una exposición considerable a acciones. [A2, M10]
 
-¿Hay una contradicción? No necesariamente. Fear & Greed combina señales de mercado; AAII pregunta qué piensan los inversores encuestados; NAAIM recoge exposición declarada. Son tres termómetros distintos. **Que haya miedo extremo no significa que todos hayan vendido, ni convierte automáticamente la caída en una oportunidad de compra.**
+Fear & Greed combina señales de mercado; AAII pregunta qué piensan los inversores encuestados; NAAIM recoge exposición declarada. Son tres termómetros distintos. **Que haya miedo extremo no significa que todos hayan vendido, ni convierte automáticamente la caída en una oportunidad de compra.**
 
-También hay concentración. Según la encuesta de gestores de Bank of America reproducida en el material, la sobreponderación neta en tecnología llegó al **37 %**, desde el 30 % de septiembre. Consumo discrecional, en cambio, estaba fuertemente infraponderado. BofA Bull & Bear descendió hasta **7,4**: se apagó la señal de venta de ese modelo, pero el posicionamiento seguía lejos de ser defensivo. Son cifras y criterios de BofA, no señales calculadas por nosotros. [A3, M11]
+También hay concentración. Según las reproducciones de la encuesta de gestores de Bank of America, la sobreponderación neta en tecnología llegó al **37 %**, desde el 30 % de septiembre. Consumo discrecional, en cambio, estaba fuertemente infraponderado. BofA Bull & Bear descendió hasta **7,4**: se apagó la señal de venta de ese modelo, pero el posicionamiento seguía lejos de ser defensivo. Son cifras y criterios de BofA, no indicadores propios de este informe. [A3, M11]
 
 Los flujos confirman que no todo el capital estaba abandonando la bolsa. En la semana terminada el 14 de octubre, los fondos estadounidenses de acciones recibieron **13.010 millones de dólares netos**, aunque los fondos tecnológicos sufrieron salidas de **5.210 millones**. Los fondos de bonos estadounidenses captaron **6.450 millones**. En conjunto, esto encaja mejor con una **redistribución del riesgo** que con una huida general del mercado. [[M12]](https://www.reuters.com/business/us-equity-funds-draw-renewed-inflows-treasury-yields-ease-2026-10-16/)
 
 ### Inteligencia artificial: una buena industria no convierte a todas sus empresas en buenas inversiones
 
-La corrección tecnológica ha sido visible incluso en los nombres más conocidos. En la tabla semanal recibida, Broadcom (AVGO) perdió un 9,07 %, Tesla (TSLA) un 7,31 % y Nvidia (NVDA) un 6,61 %. Apple (AAPL) fue una excepción, con una subida del 2,03 %. Utilizo esas cifras como referencia del material aportado, sin confundir su ventana semanal con el retorno completo entre nuestros dos informes. Tampoco atribuyo cada movimiento a una única noticia. [A4]
+La corrección tecnológica ha sido visible incluso en los nombres más conocidos. En la muestra semanal, Broadcom (AVGO) perdió un 9,07 %, Tesla (TSLA) un 7,31 % y Nvidia (NVDA) un 6,61 %. Apple (AAPL) fue una excepción, con una subida del 2,03 %. Estas variaciones corresponden a esa ventana semanal, no al retorno completo entre los dos informes. Tampoco atribuyo cada movimiento a una única noticia. [A4]
 
-Sin embargo, **la caída de las acciones no demuestra que la demanda de IA se haya terminado**. La investigación de J.P. Morgan que revisamos presenta un escenario de fuerte inversión en centros de datos y restricciones de suministro de memorias HBM y DRAM. Eso podría seguir beneficiando a fabricantes concretos de chips y equipos. Pero sus estimaciones son proyecciones, no ingresos ya realizados ni garantías de rentabilidad. [A5]
+Sin embargo, **la caída de las acciones no demuestra que la demanda de IA se haya terminado**. El extracto de investigación de J.P. Morgan citado presenta un escenario de fuerte inversión en centros de datos y restricciones de suministro de memorias HBM y DRAM. Eso podría seguir beneficiando a fabricantes concretos de chips y equipos. Pero sus estimaciones son proyecciones, no ingresos ya realizados ni garantías de rentabilidad. [A5]
 
 Al otro lado está el crédito. CoreWeave sufrió presión bursátil y sus bonos llegaron a negociarse con rendimientos elevados de dos dígitos. Si el capital se encarece, una compañía que necesita refinanciar deuda no tiene el mismo margen de maniobra que un gran hiperescalador capaz de invertir con recursos propios. **La demanda puede ser sólida y, al mismo tiempo, ciertas estructuras de financiación pueden ser frágiles.** [[M13]](https://www.reuters.com/world/china/global-markets-global-markets-2026-10-16/)
 
@@ -97,7 +97,7 @@ Por eso, en *stock picking* quiero distinguir tres grupos: proveedores con contr
 
 ### Petróleo y energía: el riesgo que no conviene perder de vista
 
-Durante la semana, el Brent se acercó a los **110 dólares por barril** en medio de tensiones geopolíticas y dificultades de suministro. En una nota del 9 de octubre, J.P. Morgan llamó la atención sobre un problema particular: aunque exista petróleo disponible, la capacidad y utilización de la flota de petroleros puede encarecer su transporte. Es una explicación relevante, pero no demuestra por sí sola la causa de todos los movimientos de precio. [A6, M14]
+Durante la semana, el Brent se acercó a los **110 dólares por barril** en medio de tensiones geopolíticas y dificultades de suministro. El extracto de la nota de J.P. Morgan del 9 de octubre señala un problema particular: aunque exista petróleo disponible, la capacidad y utilización de la flota de petroleros puede encarecer su transporte. Es una explicación relevante, pero no demuestra por sí sola la causa de todos los movimientos de precio. [A6, M14]
 
 La subida del petróleo tiene ganadores y perdedores. Puede impulsar a las empresas energéticas y, al mismo tiempo, presionar inflación, consumo y márgenes de otras industrias. Que XLE vaya bien no significa necesariamente que el movimiento sea favorable para todo el mercado.
 
@@ -105,51 +105,51 @@ La subida del petróleo tiene ganadores y perdedores. Puede impulsar a las empre
 
 ### S&P 500 · SPY
 
-**Qué pasó.** SPY bajó de **769,64 a 763,25 dólares**, un **0,83 %** entre informes. Mientras tanto, RSP ganó un 2,08 % y QQQ perdió más del 5 %. Es una combinación poco habitual: mejora la participación interna sin que el índice principal consiga avanzar. [[M1]](https://chartexchange.com/symbol/nyse-spy/historical/)
+SPY bajó de **769,64 a 763,25 dólares**, un **0,83 %** entre informes. Mientras tanto, RSP ganó un 2,08 % y QQQ perdió más del 5 %. Es una combinación poco habitual: mejora la participación interna sin que el índice principal consiga avanzar. [[M1]](https://chartexchange.com/symbol/nyse-spy/historical/)
 
-**Cómo lo leo.** Una caída inferior al 1 % entre dos cierres no invalida una tendencia alcista, pero tampoco describe el ajuste que sufrieron varias grandes tecnológicas. El cuarto trimestre conserva un historial favorable; la prueba ahora es si la mejora de amplitud se sostiene durante la temporada de resultados.
+Una caída inferior al 1 % entre dos cierres no invalida una tendencia alcista, pero tampoco describe el ajuste que sufrieron varias grandes tecnológicas. El cuarto trimestre conserva un historial favorable; la prueba ahora es si la mejora de amplitud se sostiene durante la temporada de resultados.
 
-**Qué quiero ver.** Más componentes recuperando sus medias de 50 y 200 días, estabilidad en tecnología y una mejora de IWM frente a SPY. Si RSP, SPY y la amplitud empiezan a deteriorarse al mismo tiempo, mi lectura se volverá más defensiva.
+Más componentes recuperando sus medias de 50 y 200 días, estabilidad en tecnología y una mejora de IWM frente a SPY. Si RSP, SPY y la amplitud empiezan a deteriorarse al mismo tiempo, mi lectura se volverá más defensiva.
 
 ### Oro · GLD
 
-**Qué pasó.** GLD pasó de **380,14 a 382,01 dólares** (**+0,49 %**). Resistió mejor que QQQ, aunque esa variación todavía es pequeña para hablar de una entrada extraordinaria de capital defensivo. [[M1]](https://chartexchange.com/symbol/nyse-spy/historical/)
+GLD pasó de **380,14 a 382,01 dólares** (**+0,49 %**). Resistió mejor que QQQ, aunque esa variación todavía es pequeña para hablar de una entrada extraordinaria de capital defensivo. [[M1]](https://chartexchange.com/symbol/nyse-spy/historical/)
 
-**Cómo lo leo.** Sigo viendo argumentos estructurales para el oro, entre ellos la diversificación y la incertidumbre monetaria. Eso no lo hace inmune a las correcciones. A corto plazo pesan también el dólar, los tipos reales y las tomas de beneficios. Una coincidencia puntual entre la caída de las rentabilidades de los bonos y la subida del oro no demuestra una relación causal fija.
+Sigo viendo argumentos estructurales para el oro, entre ellos la diversificación y la incertidumbre monetaria. Eso no lo hace inmune a las correcciones. A corto plazo pesan también el dólar, los tipos reales y las tomas de beneficios. Una coincidencia puntual entre la caída de las rentabilidades de los bonos y la subida del oro no demuestra una relación causal fija.
 
-**Qué quiero ver.** Flujos y tenencias de los ETF de oro, comportamiento del dólar, rendimientos reales y capacidad del metal para resistir otras sesiones de presión. Sin confundir el precio del oro físico con niveles exactos del ETF GLD.
+Flujos y tenencias de los ETF de oro, comportamiento del dólar, rendimientos reales y capacidad del metal para resistir otras sesiones de presión. Sin confundir el precio del oro físico con niveles exactos del ETF GLD.
 
 ### China · FXI
 
-**Qué pasó.** FXI avanzó de **33,19 a 33,84 dólares** (**+1,96 %**), superando a SPY entre ambos cortes. [[M1]](https://chartexchange.com/symbol/nyse-spy/historical/)
+FXI avanzó de **33,19 a 33,84 dólares** (**+1,96 %**), superando a SPY entre ambos cortes. [[M1]](https://chartexchange.com/symbol/nyse-spy/historical/)
 
-**Cómo lo leo.** Es una mejora relativa que vale la pena seguir. Pero una subida de dos semanas no demuestra que las medidas de liquidez estén impulsando el consumo y los beneficios. Además, FXI reúne principalmente grandes compañías chinas cotizadas en Hong Kong: no representa toda la economía ni todo el mercado bursátil chino.
+Es una mejora relativa que vale la pena seguir. Pero una subida de dos semanas no demuestra que las medidas de liquidez estén impulsando el consumo y los beneficios. Además, FXI reúne principalmente grandes compañías chinas cotizadas en Hong Kong: no representa toda la economía ni todo el mercado bursátil chino.
 
-**Qué quiero ver.** Mejoras sostenidas de precio y resultados, señales de demanda interna, evolución del crédito y efectos medibles de la política económica. Sin esa confirmación, una subida de FXI no permite extrapolar una recuperación de toda la economía china.
+Mejoras sostenidas de precio y resultados, señales de demanda interna, evolución del crédito y efectos medibles de la política económica. Sin esa confirmación, una subida de FXI no permite extrapolar una recuperación de toda la economía china.
 
 ### Japón · EWJ
 
-**Qué pasó.** EWJ retrocedió de **98,92 a 94,88 dólares** (**−4,08 %**), una de las mayores caídas de los activos que seguimos. [[M1]](https://chartexchange.com/symbol/nyse-spy/historical/)
+EWJ retrocedió de **98,92 a 94,88 dólares** (**−4,08 %**), una de las mayores caídas de los activos que seguimos. [[M1]](https://chartexchange.com/symbol/nyse-spy/historical/)
 
-**Cómo lo leo.** Japón está expuesto al ciclo industrial y tecnológico global, a sus propios tipos de interés y al comportamiento del yen. EWJ cotiza en dólares, por lo que no equivale a medir exclusivamente el Nikkei en moneda local.
+Japón está expuesto al ciclo industrial y tecnológico global, a sus propios tipos de interés y al comportamiento del yen. EWJ cotiza en dólares, por lo que no equivale a medir exclusivamente el Nikkei en moneda local.
 
-**Qué quiero ver.** Bolsa japonesa, yen, política del Banco de Japón y resultados de exportadores y semiconductores. Una recuperación convincente tendría que ir más allá de un movimiento favorable de divisa.
+Bolsa japonesa, yen, política del Banco de Japón y resultados de exportadores y semiconductores. Una recuperación convincente tendría que ir más allá de un movimiento favorable de divisa.
 
 ### Bitcoin · BTC
 
-**Qué pasó.** Con cierres diarios UTC de CoinGecko, BTC pasó aproximadamente de **84.506 a 81.524 dólares**, un **−3,53 %** entre el 2 y el 16 de octubre. Este corte horario no coincide exactamente con el cierre de Wall Street. [[M15]](https://www.coingecko.com/en/coins/bitcoin/historical_data)
+Con cierres diarios UTC de CoinGecko, BTC pasó aproximadamente de **84.506 a 81.524 dólares**, un **−3,53 %** entre el 2 y el 16 de octubre. Este corte horario no coincide exactamente con el cierre de Wall Street. [[M15]](https://www.coingecko.com/en/coins/bitcoin/historical_data)
 
-**Cómo lo leo.** La caída acompaña a un periodo complicado para tecnología, pero no demuestra una correlación permanente. En el informe anterior habíamos hablado de acumulación selectiva. No doy esa hipótesis por confirmada ni por invalidada sin revisar nuevas cohortes de direcciones, flujos ETF y demanda al contado.
+La caída acompaña a un periodo complicado para tecnología, pero no demuestra una correlación permanente. El informe anterior planteaba una acumulación selectiva. No doy esa hipótesis por confirmada ni por invalidada sin revisar nuevas cohortes de direcciones, flujos ETF y demanda al contado.
 
-**Qué quiero ver.** Compras spot, flujos ETF de cinco sesiones y recuperación del precio con demanda más amplia. No publicaría una zona de compra precisa sin niveles estadísticos propios actualizados.
+Compras spot, flujos ETF de cinco sesiones y recuperación del precio con demanda más amplia. No publicaría una zona de compra precisa sin niveles estadísticos propios actualizados.
 
 ### Ethereum · ETH
 
-**Qué pasó.** ETH pasó de aproximadamente **2.667,95 a 2.420,56 dólares** (**−9,27 %**). Cayó bastante más que Bitcoin y ETH/BTC retrocedió alrededor de un **5,95 %** entre cortes, según las mismas series UTC. [[M15]](https://www.coingecko.com/en/coins/bitcoin/historical_data)
+ETH pasó de aproximadamente **2.667,95 a 2.420,56 dólares** (**−9,27 %**). Cayó bastante más que Bitcoin y ETH/BTC retrocedió alrededor de un **5,95 %** entre cortes, según las mismas series UTC. [[M15]](https://www.coingecko.com/en/coins/bitcoin/historical_data)
 
-**Cómo lo leo.** Es una muestra de debilidad relativa. Si Ethereum rebota frente al dólar, pero sigue perdiendo terreno frente a Bitcoin, todavía faltaría una confirmación importante. Su volatilidad obliga a ser especialmente cuidadosos con las conclusiones.
+Es una muestra de debilidad relativa. Si Ethereum rebota frente al dólar, pero sigue perdiendo terreno frente a Bitcoin, todavía faltaría una confirmación importante. Su volatilidad obliga a ser especialmente cuidadosos con las conclusiones.
 
-**Qué quiero ver.** Mejora sostenida de ETH/BTC, actividad económica de la red, flujos de inversión y volumen al contado. El precio por sí solo no basta.
+Mejora sostenida de ETH/BTC, actividad económica de la red, flujos de inversión y volumen al contado. El precio por sí solo no basta.
 
 ### Stock picking · Tecnología e IA
 
@@ -157,19 +157,19 @@ La corrección ha aumentado las diferencias entre compañías que antes parecía
 
 **Aquí quiero concentrar el análisis en la calidad del negocio:** pedidos que se conviertan en ingresos, márgenes sostenibles, generación de caja, compromisos contractuales reales y capacidad de financiar el crecimiento sin depender de condiciones de crédito excepcionalmente favorables.
 
-Michael Hartnett, según el material de BofA recibido, prefiere algunas áreas muy infraponderadas —como consumo discrecional— y contempla oportunidades en pequeñas compañías e inmobiliarias si bajan los rendimientos. Es una tesis interesante, pero todavía condicional. La caída de IWM recuerda que una oportunidad por valoración no equivale a una recuperación confirmada. [A3]
+En las reproducciones del análisis de BofA, Michael Hartnett prefiere algunas áreas muy infraponderadas —como consumo discrecional— y contempla oportunidades en pequeñas compañías e inmobiliarias si bajan los rendimientos. Es una tesis interesante, pero todavía condicional. La caída de IWM recuerda que una oportunidad por valoración no equivale a una recuperación confirmada. [A3]
 
 ## Estacionalidad y próximos acontecimientos
 
-En el primer informe revisamos por qué octubre y el cuarto trimestre suelen tener un comportamiento históricamente favorable. No voy a repetir aquellas cifras como si fueran una señal nueva. También recibimos estudios de Carson sobre los años de elecciones legislativas de mitad de mandato: muestran correcciones importantes y fuertes rentabilidades posteriores desde mínimos históricos. El detalle es que esos mínimos se identifican *después* de producirse. **No podemos usar esa estadística para asegurar que el mínimo de 2026 ya quedó atrás.** [A7]
+El primer informe recogía el comportamiento históricamente favorable de octubre y del cuarto trimestre. No voy a repetir aquellas cifras como si fueran una señal nueva. Los estudios de Carson sobre los años de elecciones legislativas de mitad de mandato muestran correcciones importantes y fuertes rentabilidades posteriores desde mínimos históricos. El detalle es que esos mínimos se identifican *después* de producirse. **No podemos usar esa estadística para asegurar que el mínimo de 2026 ya quedó atrás.** [A7]
 
 ### Halloween: una pauta interesante, no una operación automática
 
-Revisé la tabla recibida para la ventana entre finales de octubre y principios de noviembre. Con los **33 años de 1993 a 2025**, el resultado es de **24 años positivos y 9 negativos**, una tasa de acierto del **72,7 %** y una rentabilidad media simple del **+1,67 %**. La otra infografía mostraba **76,7 %**, pero terminaba en 2022 y solo incluía 30 años (23 positivos de 30). Ambas cifras son compatibles una vez aclarada la muestra. [A8]
+Entre 1993 y 2025, la ventana entre finales de octubre y principios de noviembre registró **24 años positivos y 9 negativos**, una tasa de acierto del **72,7 %** y una rentabilidad media simple del **+1,67 %**. En la muestra de 1993–2022, el porcentaje de años positivos fue del **76,7 %** —**23 de 30**—. Son resultados de periodos distintos, no dos estimaciones para la misma muestra. [A8]
 
 La prueba de consistencia está en la muestra más reciente: entre **2016 y 2025**, solo **6 de 10 años** fueron positivos y el retorno medio cae al **+0,50 %**. Además, si quitamos 1997 y 2008, dos resultados extraordinarios, la media de los 33 años baja aproximadamente al **+1,07 %**. No es una prueba de que la pauta haya desaparecido, pero sí de que su ventaja histórica depende de la muestra elegida.
 
-Los cálculos se basan en los rendimientos redondeados de la tabla aportada. No hemos auditado de manera independiente precios, dividendos, costes, fechas exactas ni el proceso por el cual se eligió esta ventana de negociación. Además, la operación propuesta del **27 de octubre al 4 de noviembre** cruza la reunión de la Fed y las elecciones estadounidenses. Por eso la mantengo como **referencia estadística, no como una invitación a operar SPY u opciones**.
+Los cálculos se basan en rendimientos redondeados. Los precios, dividendos, costes, fechas exactas y la selección de la ventana no cuentan con una verificación independiente. Además, la ventana del **27 de octubre al 4 de noviembre** cruza la reunión de la Fed y las elecciones estadounidenses. Por eso la mantengo como **referencia estadística, no como una invitación a operar SPY u opciones**.
 
 ### Calendario que seguimos
 
@@ -213,17 +213,17 @@ El riesgo sería que las dudas sobre valoraciones y deuda de IA se propaguen a o
 | **Ethereum · ETH** | Mejora sostenida frente a BTC y actividad de red | Rebote en dólares sin fortaleza relativa |
 | **Stock picking** | Crecimiento rentable, margen y caja por acción | Mucha narrativa y poco retorno del capital |
 
-**Mi conclusión:** el mercado muestra una mejora interna que hace dos semanas no estaba presente, pero eso no significa que el riesgo haya desaparecido. Lo decisivo no será un rebote aislado ni una pauta estacional: será comprobar si la participación se sostiene y si los resultados justifican las valoraciones actuales. **Mientras esas condiciones no se confirmen, mantengo la lectura constructiva con selectividad y sin adelantar conclusiones.**
+El mercado muestra una mejora interna que hace dos semanas no estaba presente, pero eso no significa que el riesgo haya desaparecido. Lo decisivo no será un rebote aislado ni una pauta estacional: será comprobar si la participación se sostiene y si los resultados justifican las valoraciones actuales. **Mientras esas condiciones no se confirmen, mantengo la lectura constructiva con selectividad y sin adelantar conclusiones.**
 
 ## Fuentes y metodología
 
 **Datos de mercado y cálculos propios.** Los porcentajes de ETF entre el 02/10 y el 16/10 proceden de cierres ordinarios de ChartExchange: retorno = (cierre 16/10 ÷ cierre 02/10 − 1) × 100. La comparación sectorial usa cierres del 25/09 y 02/10 para la semana anterior, y del 09/10 y 16/10 para la actual. Las diferencias entre retornos son puntos porcentuales; un indicador de amplitud expresa porcentajes de componentes, no retorno del índice. BTC y ETH utilizan CoinGecko UTC, por lo que sus cortes horarios no son simultáneos al cierre bursátil estadounidense.
 
-**Alcance de Statistical Levels.** Esta edición **no incorpora ni reutiliza como actuales** bandas WSLE/WALE/WAHE/WSHE, precio de apertura estadística, muestra histórica, estacionalidad propia, fragilidad, score o EWMA del 2/10. Para publicar esos valores es imprescindible un snapshot cerrado al 16/10, con autoridad y procedencia conciliadas; no se debe regenerar ni modificar el sistema activo desde esta edición. Las métricas de amplitud externas no se renombran como mediciones propias de Statistical Levels.
+**Alcance de Statistical Levels.** Esta edición **no incorpora ni reutiliza como actuales** bandas WSLE/WALE/WAHE/WSHE, precio de apertura estadística, muestra histórica, estacionalidad propia, fragilidad, score o EWMA del 2/10. No hay evidencia suficiente al 16/10, con procedencia conciliada, para presentar esas métricas como vigentes. Las métricas de amplitud externas no se renombran como mediciones propias de Statistical Levels.
 
-**Material aportado y atribuido.** [A1] Ryan Detrick, gráficos de amplitud del 15/10; [A2] capturas CNN Fear & Greed y NAAIM, 15–16/10; [A3] reproducciones de BofA Global Fund Manager Survey y comentario de Michael Hartnett; [A4] tabla de megacaps y resumen CDI, semana de 12–16/10; [A5] extracto de J.P. Morgan sobre memoria/almacenamiento e inversión en IA; [A6] J.P. Morgan, *Oil Flash Note*, 09/10/2026; [A7] Carson Research/FactSet, ciclo *midterm*; [A8] estudio y tabla aportada de Halloween, 1993–2025. Las reproducciones no sustituyen originales verificados y no se autorizan aquí para redistribución gráfica pública.
+**Estudios y reproducciones citados.** [A1] Ryan Detrick, gráficos de amplitud del 15/10; [A2] capturas CNN Fear & Greed y NAAIM, 15–16/10; [A3] reproducciones de BofA Global Fund Manager Survey y comentario de Michael Hartnett; [A4] tabla de megacaps y resumen de mercado, semana de 12–16/10; [A5] extracto de J.P. Morgan sobre memoria/almacenamiento e inversión en IA; [A6] J.P. Morgan, *Oil Flash Note*, 09/10/2026; [A7] Carson Research/FactSet, ciclo *midterm*; [A8] estudio y tabla de rendimientos de Halloween, 1993–2025. Las reproducciones y los extractos citados no acreditan la verificación independiente de los documentos originales. La cita bibliográfica no implica permiso para redistribuir sus gráficos.
 
-**Fuentes públicas verificadas:**
+**Referencias públicas:**
 
 - [[M1]](https://chartexchange.com/symbol/nyse-spy/historical/) Cierres históricos ETF: [SPY](https://chartexchange.com/symbol/nyse-spy/historical/), [QQQ](https://chartexchange.com/symbol/nasdaq-qqq/historical/), [RSP](https://chartexchange.com/symbol/nyse-rsp/historical/), [IWM](https://chartexchange.com/symbol/nyse-iwm/historical/), [GLD](https://chartexchange.com/symbol/nyse-gld/historical/), [FXI](https://chartexchange.com/symbol/nyse-fxi/historical/), [EWJ](https://chartexchange.com/symbol/nyse-ewj/historical/), y los once ETF de sector por ticker en el mismo servicio.
 
@@ -239,7 +239,7 @@ El riesgo sería que las dudas sobre valoraciones y deuda de IA se propaguen a o
 
 - [[M7]](https://www.luiguiherrera.com/informes/primer-informe-octubre-2026) [Primer informe de octubre, publicado 05/10](https://www.luiguiherrera.com/informes/primer-informe-octubre-2026), referencia anterior de sectores, AAII y lectura editorial.
 
-- [[M8]](https://www.cnn.com/markets/fear-and-greed) [CNN Fear & Greed](https://www.cnn.com/markets/fear-and-greed), captura aportada con 18 el 16/10; fuente dinámica, no constituye serie archivada verificable por hora.
+- [[M8]](https://www.cnn.com/markets/fear-and-greed) [CNN Fear & Greed](https://www.cnn.com/markets/fear-and-greed), captura con valor 18 fechada el 16/10; fuente dinámica, no constituye serie archivada verificable por hora.
 
 - [[M9]](https://www.sca.isr.umich.edu/) [Michigan — encuesta preliminar de octubre](https://www.sca.isr.umich.edu/).
 

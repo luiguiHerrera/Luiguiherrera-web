@@ -226,6 +226,23 @@ def p(value, style):
     return PDF["Paragraph"](source_linked_text(value), style)
 
 
+def editorial_paragraph(value, style):
+    # Same limited inline vocabulary as ReportEditorialInline; no HTML input.
+    parts = re.split(r"(\*\*[^*]+\*\*|\[[^\]]+\]\(https?://[^)]+\)|\*[^*]+\*)", value)
+    output = []
+    for part in parts:
+        link = re.fullmatch(r"\[([^\]]+)\]\((https?://[^)]+)\)", part)
+        if part.startswith("**") and part.endswith("**"):
+            output.append("<b>" + source_linked_text(part[2:-2]) + "</b>")
+        elif part.startswith("*") and part.endswith("*"):
+            output.append("<i>" + source_linked_text(part[1:-1]) + "</i>")
+        elif link:
+            output.append(f'<link href="{html.escape(link[2], quote=True)}">{paragraph_text(link[1])}</link>')
+        else:
+            output.append(source_linked_text(part))
+    return PDF["Paragraph"]("".join(output), style)
+
+
 def bullet(value, styles):
     return PDF["Paragraph"](
         f"&#8226;&nbsp; {source_linked_text(value)}",
@@ -256,13 +273,13 @@ def info_table(rows, styles, widths=None):
     return table
 
 
-def data_table(headers, rows, styles, widths=None):
+def data_table(headers, rows, styles, widths=None, cell_renderer=p):
     Table = PDF["Table"]
     TableStyle = PDF["TableStyle"]
     colors = PDF["colors"]
     header_style = PDF["ParagraphStyle"]("table_header", parent=styles["small"], textColor=colors.white)
-    data = [[p(value, header_style) for value in headers]]
-    data.extend([[p(value, styles["small"]) for value in row] for row in rows])
+    data = [[cell_renderer(value, header_style) for value in headers]]
+    data.extend([[cell_renderer(value, styles["small"]) for value in row] for row in rows])
     table = Table(data, colWidths=widths, repeatRows=1, hAlign="LEFT")
     table.setStyle(
         TableStyle(
@@ -829,7 +846,17 @@ def add_section(story, section, styles, root, published_at, description, force_b
     )
     story.append(p(section["title"], styles["h1"]))
 
-    if kind == "narrative":
+    if kind == "editorial":
+        for block in section["blocks"]:
+            if block["kind"] == "table":
+                story.append(data_table(block["headers"], block["rows"], styles,
+                    [167 * PDF["mm"] / len(block["headers"])] * len(block["headers"]),
+                    cell_renderer=editorial_paragraph))
+                story.append(PDF["Spacer"](1, 7))
+            else:
+                style = "h2" if block["kind"] == "heading" else "small" if block["kind"] == "source" else "body"
+                story.append(editorial_paragraph(block["text"], styles[style]))
+    elif kind == "narrative":
         story.append(p(section["body"], styles["body"]))
     elif kind == "summary":
         for item in section["items"]:
@@ -1115,7 +1142,8 @@ def generate_pdf(model_path, output_path, root):
             styles,
         ),
         PDF["Spacer"](1, 10),
-        p(model["sections"][-1]["disclaimer"], styles["disclaimer"]),
+        *([p(model["sections"][-1]["disclaimer"], styles["disclaimer"])]
+          if model["sections"][-1].get("disclaimer") else []),
     ]
 
     for index, section in enumerate(model["sections"]):

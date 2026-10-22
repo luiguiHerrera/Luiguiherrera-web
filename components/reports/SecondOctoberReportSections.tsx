@@ -17,18 +17,8 @@ const sectors = [
   { ticker: "XLK", name: "Tecnología", value: -7.70, label: "−7,70 %" },
 ];
 
-function copy(text: string) {
-  return text
-    .replace(/^\*\*Mi conclusión:\*\* el /, "El ")
-    .replace(/^\*\*(?:La lectura principal\.|Mi conclusión:)\*\* /, "")
-    .replace(/^Hay un matiz que vale la pena destacar: /, "")
-    .replace(/^Lo interesante es que, pese a/, "Pese a")
-    .replace(/^¿Hay una contradicción\? No necesariamente\. /, "")
-    .replace("tabla de megacaps y resumen CDI", "tabla de megacaps y resumen de mercado");
-}
-
 function Text({ text }: { text: string }) {
-  return <p className="text-sm leading-7 text-muted"><ReportEditorialInline text={copy(text)} /></p>;
+  return <p className="text-sm leading-7 text-muted"><ReportEditorialInline text={text} /></p>;
 }
 
 function Paragraphs({ blocks }: { blocks: ReportEditorialBlock[] }) {
@@ -92,7 +82,7 @@ function Halloween({ blocks }: { blocks: ReportEditorialBlock[] }) {
   return <section className="border border-line bg-panel p-4 md:p-5" aria-labelledby="halloween-octubre">
     <p className="text-xs font-semibold uppercase tracking-[0.14em] text-brass">Estacionalidad</p>
     <h3 id="halloween-octubre" className="mt-2 text-xl font-semibold text-ink">Halloween: alcance y límites de la pauta</h3>
-    <p className="mt-2 text-sm leading-6 text-muted">Ventana entre finales de octubre y principios de noviembre · estudio aportado [A8].</p>
+    <p className="mt-2 text-sm leading-6 text-muted">Ventana entre finales de octubre y principios de noviembre · estudio histórico [A8].</p>
     <figure className="mt-5 grid gap-4">
       {[{ period: "1993–2025", positive: 24, total: 33, otherLabel: "negativos", mean: "+1,67 %" }, { period: "2016–2025", positive: 6, total: 10, otherLabel: "no positivos", mean: "+0,50 %" }].map(sample => <div key={sample.period} className="border border-line bg-panelSoft p-4">
         <div className="flex flex-wrap items-center justify-between gap-2"><h4 className="font-semibold text-ink">{sample.period}</h4><span className="text-sm text-muted">Media simple <strong className="tabular-nums text-petrol">{sample.mean}</strong></span></div>
@@ -150,7 +140,7 @@ export function SecondOctoberReportSections({ report }: { report: MarketReport }
       </aside>
       <Table block={tables[0]} caption="Mercado al cierre: comparación del 2 y el 16 de octubre de 2026" />
       {report.marketClose?.quantitativePanels?.length ? <ReportQuantitativePanels panels={report.marketClose.quantitativePanels} asset="Mercado al cierre" /> : null}
-      <Detail title="Amplitud y comparabilidad de los cortes"><Paragraphs blocks={comparison.blocks.filter(block => block.kind === "paragraph" && !block.text.startsWith("Lo primero") && !block.text.startsWith("También hay") && !block.text.startsWith("Hay un matiz"))} /></Detail>
+      <Detail title="Amplitud y comparabilidad de los cortes"><Paragraphs blocks={comparison.blocks.filter(block => block.kind === "paragraph" && !block.text.startsWith("La tabla recoge") && !block.text.startsWith("Las encuestas de sentimiento") && !block.text.startsWith("**AAII muestra"))} /></Detail>
       <Rotation blocks={rotation.blocks} />
       <section id="macro-octubre" className="grid scroll-mt-24 gap-4">
         <h3 className="text-xl font-semibold text-ink">Inflación, bonos y energía</h3>
@@ -170,7 +160,7 @@ export function SecondOctoberReportSections({ report }: { report: MarketReport }
           ["Fondos tecnológicos", "−5.210"],
           ["Fondos de bonos de EE. UU.", "+6.450"],
         ].map(([label, value]) => <article key={label} className="border border-line bg-panelSoft p-4"><h4 className="text-xs font-semibold text-petrol">{label}</h4><p className="mt-3 text-xl font-semibold tabular-nums text-ink">{value} <span className="text-xs font-normal text-muted">M USD</span></p><p className="mt-2 text-xs leading-5 text-muted">Flujo neto · semana terminada el 14/10. <ReportEditorialInline text="[M12]" /></p></article>)}</div>
-        <Detail title="Encuestas, exposición y flujos: qué mide cada uno"><Paragraphs blocks={comparison.blocks.filter(block => block.kind === "paragraph" && block.text.startsWith("Hay un matiz"))} /><Paragraphs blocks={sentiment.blocks} /></Detail>
+        <Detail title="Encuestas, exposición y flujos: qué mide cada uno"><Paragraphs blocks={comparison.blocks.filter(block => block.kind === "paragraph" && block.text.startsWith("**AAII muestra"))} /><Paragraphs blocks={sentiment.blocks} /></Detail>
       </section>
     </Section>
 
@@ -181,7 +171,7 @@ export function SecondOctoberReportSections({ report }: { report: MarketReport }
         <div className="grid gap-5 border-t border-line p-5">
           {group.blocks.map((block, position) => block.kind === "paragraph" ? <section key={position} className={position === 2 ? "border-l-2 border-brass bg-panelSoft p-4" : ""}>
             <h4 className="mb-2 text-xs font-semibold uppercase tracking-[0.1em] text-petrol">{["Evolución", "Contexto", "Seguimiento"][position]}</h4>
-            <Text text={block.text.replace(/^\*\*(?:Qué pasó\.|Cómo lo leo\.|Qué quiero ver\.)\*\* /, "")} />
+            <Text text={block.text} />
           </section> : null)}
           {report.assetReadings[index].quantitativePanels?.length ? <ReportQuantitativePanels panels={report.assetReadings[index].quantitativePanels!} asset={report.assetReadings[index].asset} /> : null}
           {index === 6 ? <Detail title="Empresas, bancos y analistas · BofA y J.P. Morgan"><Paragraphs blocks={technology.blocks} /></Detail> : null}
@@ -227,7 +217,7 @@ export function SecondOctoberReportSections({ report }: { report: MarketReport }
     <Section section={sources} title="Fuentes y metodología">
       <Detail title="Cortes, unidades y método de cálculo" open><Paragraphs blocks={sources.blocks.slice(0, 1)} /></Detail>
       <Detail title="Cobertura de niveles y métricas estadísticas"><Paragraphs blocks={sources.blocks.slice(1, 2)} /></Detail>
-      <Detail title="Bancos, analistas y material atribuido [A1–A8]"><Paragraphs blocks={sources.blocks.slice(2, 3)} /></Detail>
+      <Detail title="Bancos, analistas y estudios citados [A1–A8]"><Paragraphs blocks={sources.blocks.slice(2, 3)} /></Detail>
       <div className="grid gap-4 sm:grid-cols-2">{sourceGroups.map(group => <section key={group.title} className="border border-line bg-panel p-4"><h3 className="mb-3 text-base font-semibold text-ink">{group.title}</h3><ul className="grid gap-4">{sourceBlocks.filter(block => group.ids.some(id => block.text.startsWith(`[M${id}]`))).map(block => <li key={block.text} className="break-words text-xs leading-6 text-muted"><ReportEditorialInline text={block.text} /></li>)}</ul></section>)}</div>
       <Detail title="Limitaciones"><Paragraphs blocks={sources.blocks.slice(-2, -1)} /></Detail>
       <div className="border-t border-line pt-4"><Paragraphs blocks={sources.blocks.slice(-1)} /></div>
