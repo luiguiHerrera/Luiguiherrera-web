@@ -4,7 +4,7 @@ import { ReportSection } from "./ReportSection";
 import { ReportQuantitativePanels } from "./ReportQuantitativePanels";
 import type { ReportEditorialBlock, ReportEditorialSection } from "@/lib/reports/report-editorial-sections";
 
-function Inline({ text }: { text: string }): ReactNode {
+export function ReportEditorialInline({ text }: { text: string }): ReactNode {
   return text.split(/(\*\*[^*]+\*\*|\[[^\]]+\]\(https?:\/\/[^)]+\)|\*[^*]+\*)/g).map((part, i) => {
     if (part.startsWith("**") && part.endsWith("**")) return <strong key={i}><ReportText>{part.slice(2, -2)}</ReportText></strong>;
     if (part.startsWith("*") && part.endsWith("*")) return <em key={i}><ReportText>{part.slice(1, -1)}</ReportText></em>;
@@ -15,7 +15,7 @@ function Inline({ text }: { text: string }): ReactNode {
 }
 const plain = (text: string) => text.replace(/\*\*/g, "").replace(/\*/g, "");
 
-function groups(section: ReportEditorialSection) {
+export function groupEditorialBlocks(section: ReportEditorialSection) {
   const result: Array<{ title?: string; blocks: ReportEditorialBlock[] }> = [];
   for (const block of section.blocks) {
     if (block.kind === "heading") result.push({ title: block.text, blocks: [] });
@@ -29,7 +29,7 @@ function groups(section: ReportEditorialSection) {
 function Blocks({ blocks, title }: { blocks: ReportEditorialBlock[]; title: string }) {
   return <div className="grid min-w-0 gap-4">{blocks.map((block, index) => block.kind === "table"
     ? <ReportQuantitativePanels key={index} asset={title} panels={[{ title: "Datos de esta edición", intro: "", headers: block.headers.map(plain), rows: block.rows.map(row => row.map(plain)), notes: [] }]} />
-    : <ReportParagraph key={index} className={block.kind === "source" ? "break-words text-xs leading-6 text-muted" : "text-sm leading-7 text-muted md:text-base"}><Inline text={block.text} /></ReportParagraph>
+    : <ReportParagraph key={index} className={block.kind === "source" ? "break-words text-xs leading-6 text-muted" : "text-sm leading-7 text-muted md:text-base"}><ReportEditorialInline text={block.text} /></ReportParagraph>
   )}</div>;
 }
 export function ReportEditorialSections({ sections }: { sections: ReportEditorialSection[] }) {
@@ -42,7 +42,7 @@ export function ReportEditorialSections({ sections }: { sections: ReportEditoria
         <ReportParagraph className="text-xs font-semibold uppercase text-petrol">{section.eyebrow}</ReportParagraph>
         <h2 className="mt-2 text-2xl font-semibold leading-tight text-ink md:text-3xl">{section.title}</h2>
       </div>
-      <div className="grid min-w-0 gap-5">{groups(section).map((group, index) => {
+      <div className="grid min-w-0 gap-5">{groupEditorialBlocks(section).map((group, index) => {
         const title = group.title ?? section.title;
         const body = <Blocks blocks={group.blocks} title={title} />;
         if (!group.title) return <div key={index}>{body}</div>;

@@ -1,0 +1,89 @@
+{
+  "base": "16ef4c4843f6b811155a00d7e468f6d2e901c766",
+  "scope": "Presentación nativa del segundo informe de octubre; modelo editorial y descargas conservados byte a byte.",
+  "marketCutoff": "2026-10-16",
+  "editorialCutoff": "2026-10-19",
+  "publishedAt": "2026-10-22",
+  "authority": [
+    {
+      "path": "docs/reports/segundo-informe-octubre-2026/approved.md",
+      "sha256": "378efba156f633aa54bef5f4a8fafebab0635072d446e2cbc6db0ba21b0d4ab4"
+    },
+    {
+      "path": "docs/reports/segundo-informe-octubre-2026/approved.html",
+      "sha256": "2036ad78f5102745a9b203299e933d7675494545a33034c9a08edf87999a48e0"
+    },
+    {
+      "path": "docs/reports/segundo-informe-octubre-2026/approved.pdf",
+      "sha256": "0ca850a7d7986fb7e501e970376d63eb86dcfb7271ac343f57aa5e8fb4171052"
+    }
+  ],
+  "visualReference": "segundo-informe-septiembre-2026",
+  "recovered": [
+    {
+      "section": "Rotación",
+      "source": "approved.md, Amplitud y rotación [M1]",
+      "window": "2026-10-09/2026-10-16",
+      "coverage": "Solo los cuatro sectores con cifras expresas: XLP +5,02 %, XLE +4,86 %, XLV +3,45 %, XLK −7,70 %. Total de sectores positivos 7/11; no se reconstruyen los otros siete."
+    },
+    {
+      "section": "Macro y flujos",
+      "source": "approved.md [M2–M5, M12]",
+      "coverage": "CPI/PPI de septiembre; Treasury 16/10 y variación desde 02/10; flujos de fondos en millones USD, semana terminada el 14/10."
+    },
+    {
+      "section": "Activos, bancos y analistas",
+      "source": "approved.md [A1–A7, M1, M13–M15]",
+      "coverage": "Se conservan atribuciones y limitaciones. Empresas/IA se presentan una vez, dentro de Stock picking."
+    },
+    {
+      "section": "Halloween",
+      "source": "approved.md [A8]",
+      "coverage": "Resúmenes 1993–2025 y 2016–2025; conteos positivos y complemento (9 negativos expresos en 1993–2025; 4 no positivos, sin inferir si hubo ceros, en 2016–2025) y medias. No son series anuales ni una auditoría independiente. No se reutilizan imágenes de terceros."
+    },
+    {
+      "section": "Calendario",
+      "source": "second-october-2026.ts calendar y approved.md [M16]",
+      "coverage": "Cinco eventos, incluidos 3/11 y rangos multidiarios. Fechas editoriales no confirmadas, horas pendientes; sin actualización. Categorías y factores tomados del texto de cada evento."
+    }
+  ],
+  "omittedWithoutAuthority": [
+    {
+      "fields": [
+        "EWMA al 16/10",
+        "GARCH al 16/10"
+      ],
+      "reason": "No hay snapshot conciliado al corte entre los materiales aprobados conservados. No se utilizan métricas del 02/10 ni posteriores al 16/10."
+    },
+    {
+      "fields": [
+        "WSLE",
+        "WALE",
+        "WAHE",
+        "WSHE",
+        "apertura estadística",
+        "muestra histórica por activo",
+        "estacionalidad cuantitativa cumplida frente a esperada por activo"
+      ],
+      "reason": "No recuperables con autoridad suficiente al corte. Se mantienen los slots opcionales existentes quantitativePanels, sin valores sustitutivos. Se conserva la expectativa cualitativa de Q4 y su contraste editorial, sin afirmar que se cumplió."
+    }
+  ],
+  "presentationOnlyEdits": [
+    "Retirada de la nota redundante del hero y dos introducciones a tablas.",
+    "Retirada de prefijos La lectura principal y Mi conclusión; subtítulos por activo Evolución/Contexto/Seguimiento.",
+    "Resumen CDI se presenta como resumen de mercado; no se muestra el identificador interno.",
+    "Mismos párrafos sustantivos, cifras y fuentes; contexto auxiliar en details, tablas de control y calendario reemplazadas por tarjetas y calendario nativo."
+  ],
+  "preserved": [
+    "Modelos editoriales, fechas, metadata y URLs",
+    "MD/HTML/PDF originales y cuatro descargas actuales",
+    "27 exports históricos y manifiesto",
+    "Statistical Levels, correcciones VIX/régimen/sectorial, proveedores, dependencias y workflows"
+  ],
+  "verification": [
+    "HTML real de componentes y conservación de párrafos/celdas",
+    "Render histórico idéntico al base para segundo septiembre y primer octubre",
+    "Interacciones locales de teclado, hover, deep links y descargas; escritorio/móvil",
+    "Transporte externo bloqueado; sin build ni publicación"
+  ]
+}
