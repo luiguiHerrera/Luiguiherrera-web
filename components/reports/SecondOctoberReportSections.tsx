@@ -210,10 +210,17 @@ export function SecondOctoberReportSections({ report }: { report: MarketReport }
     </Section>
 
     <Section section={watch} title="Lista de control" note="Señales que confirmarían la lectura y condiciones que obligarían a revisarla.">
-      <div className="grid gap-3 md:grid-cols-2">{report.watchlist.map((item, index) => <article key={item.key} className="flex flex-col border border-line bg-panel p-4">
-        <h3 className="text-base font-semibold text-ink">{item.name}</h3><dl className="mt-4 grid flex-1 gap-3 text-sm leading-6"><div><dt className="text-xs font-semibold uppercase text-petrol">Señal a seguir</dt><dd className="mt-1 text-muted">{item.whatLooksAt}</dd></div><div className="border-l-2 border-brass pl-3"><dt className="text-xs font-semibold uppercase text-brass">Qué cambiaría la lectura</dt><dd className="mt-1 text-muted">{item.whatWouldChange}</dd></div></dl>
-        <a href={`#${["rotacion-octubre", "macro-octubre"].includes(watchTargets[index]) ? watchTargets[index] : `octubre-${watchTargets[index]}`}`} className="mt-4 w-fit border-b border-petrol/30 py-1 text-xs font-semibold text-petrol" aria-label={`Ver contexto de ${item.name}`}>Ver contexto ↑</a>
-      </article>)}</div>
+      <div className="grid items-start gap-3 md:grid-cols-2">{report.watchlist.map((item, index) => <details key={item.key} className="group min-w-0 border border-line bg-panel open:border-petrol/45">
+        <summary className="grid min-h-24 cursor-pointer list-none grid-cols-[minmax(0,1fr)_auto] items-start gap-x-3 gap-y-2 p-4 marker:hidden">
+          <h3 className="text-base font-semibold text-ink">{item.name}</h3>
+          <span className="row-span-2 self-center text-xs font-semibold uppercase text-brass"><span className="details-open-label">Abrir</span><span className="details-close-label">Cerrar</span></span>
+          <span className="w-fit border border-brass/40 bg-white/70 px-2 py-1 text-[10px] font-semibold uppercase text-brass">Seguimiento condicional</span>
+        </summary>
+        <div className="border-t border-line p-4">
+        <dl className="grid gap-3 text-sm leading-6"><div><dt className="text-xs font-semibold uppercase text-petrol">Señal a seguir</dt><dd className="mt-1 text-muted">{item.whatLooksAt}</dd></div><div className="border-l-2 border-brass pl-3"><dt className="text-xs font-semibold uppercase text-brass">Qué cambiaría la lectura</dt><dd className="mt-1 text-muted">{item.whatWouldChange}</dd></div></dl>
+        <a href={`#${["rotacion-octubre", "macro-octubre"].includes(watchTargets[index]) ? watchTargets[index] : `octubre-${watchTargets[index]}`}`} className="mt-4 inline-flex min-h-10 w-fit items-center border-b border-petrol/30 py-1 text-xs font-semibold text-petrol" aria-label={`Ver contexto de ${item.name}`}>Ver contexto ↑</a>
+        </div>
+      </details>)}</div>
       <div className="border-l-2 border-brass pl-4"><Paragraphs blocks={watch.blocks} /></div>
     </Section>
 

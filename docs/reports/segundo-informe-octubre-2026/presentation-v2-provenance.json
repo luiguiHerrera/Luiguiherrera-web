@@ -85,5 +85,42 @@
     "Render histórico idéntico al base para segundo septiembre y primer octubre",
     "Interacciones locales de teclado, hover, deep links y descargas; escritorio/móvil",
     "Transporte externo bloqueado; sin build ni publicación"
-  ]
+  ],
+  "heroAndWatchlistCorrection": {
+    "parent": "ab7691a4bfed31819ceedb058fa70a40a3a7b158",
+    "scope": "Únicamente cabecera y once desplegables de seguimiento del segundo informe de octubre.",
+    "hero": {
+      "editionIdentifier": "Segundo informe de octubre de 2026",
+      "visibleH1From": "subtitle editorial existente",
+      "visibleH1": "La amplitud mejora, pero los líderes empiezan a fallar",
+      "introductionFrom": "summary aprobado existente, sin duplicar el titular",
+      "unchanged": [
+        "title de catálogo",
+        "slug",
+        "canonical",
+        "metadatos editoriales",
+        "autor",
+        "fechas",
+        "descargas",
+        "originales y exports"
+      ]
+    },
+    "watchlist": {
+      "count": 11,
+      "initialState": "closed",
+      "pattern": "details/summary nativos; dos columnas en escritorio y una en móvil",
+      "summary": [
+        "nombre existente",
+        "Seguimiento condicional",
+        "Abrir/Cerrar según estado"
+      ],
+      "body": [
+        "Señal a seguir: texto existente",
+        "Qué cambiaría la lectura: texto existente",
+        "Ver contexto: destino existente, fuera de summary"
+      ],
+      "preserved": "Orden, textos, destinos, anclas y mecanismo existente ReportAssetAnchors."
+    },
+    "unchangedPresentation": "Las demás áreas V2 se conservan; no se añaden datos ni placeholders."
+  }
 }
