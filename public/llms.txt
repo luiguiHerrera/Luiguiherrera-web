@@ -106,7 +106,7 @@ This section is a complementary discovery aid, not an official indexing protocol
 ### Segundo informe de octubre de 2026
 - Primary canonical editorial URL: https://www.luiguiherrera.com/informes/segundo-informe-octubre-2026
 - Description: La amplitud mejoró, mientras varias de las mayores compañías tecnológicas retrocedieron con fuerza. Hay rotación, pero no una recuperación generalizada.
-- Published: 2026-10-21
+- Published: 2026-10-22
 - Markdown auxiliary machine-readable representation: https://www.luiguiherrera.com/reports/segundo-informe-octubre-2026.md
 - PDF human-readable download: https://www.luiguiherrera.com/reports/segundo-informe-octubre-2026.pdf
 - Secondary downloadable HTML representation: https://www.luiguiherrera.com/reports/segundo-informe-octubre-2026.html

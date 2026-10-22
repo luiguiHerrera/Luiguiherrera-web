@@ -4,8 +4,8 @@ La amplitud mejora, pero los líderes empiezan a fallar
 
 - Edición: Segundo informe de octubre de 2026
 - Autor: Luigui Herrera
-- Publicación: 2026-10-21
-- Actualización: 2026-10-21
+- Publicación: 2026-10-22
+- Actualización: 2026-10-22
 - Corte editorial: 2026-10-19
 - Corte de datos de mercado: 2026-10-16
 - URL editorial primaria: https://www.luiguiherrera.com/informes/segundo-informe-octubre-2026

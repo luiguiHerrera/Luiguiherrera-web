@@ -45,7 +45,9 @@ test('native report has seven supported sections, four tables and no fabricated 
  assert(!shared.includes('approved.html'));
 });
 test('publication date is distinct from unchanged editorial and market cutoffs',()=>{
- assert.equal(report.publishedAt,'2026-10-21');
+ assert.equal(report.publishedAt,'2026-10-22');
+ assert.equal(report.modifiedAt,'2026-10-22');
+ assert.equal(report.publishedLabel,'22 de octubre de 2026');
  assert.equal(report.editorialCutoffAt,'2026-10-19');
  assert.equal(report.automaticDataCutoffAt,'2026-10-16');
  const model=buildReportExportModel(report);
