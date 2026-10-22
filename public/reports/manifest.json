@@ -263,8 +263,8 @@
         "html": {
           "mimeType": "text/html; charset=utf-8",
           "path": "/reports/segundo-informe-octubre-2026.html",
-          "sha256": "dad7072468b6349b7115ae4ec6cf404830eae38c0aab3e0021ebd1749bba9ee6",
-          "size": 42977
+          "sha256": "1df157f979857989eb4eb060f0d5c514064f0426bace27326e5ee6d4d2b44ece",
+          "size": 42916
         },
         "ics": {
           "mimeType": "text/calendar; charset=utf-8",
@@ -275,20 +275,20 @@
         "markdown": {
           "mimeType": "text/markdown; charset=utf-8",
           "path": "/reports/segundo-informe-octubre-2026.md",
-          "sha256": "cc0a0bd7ae072337edb7daed8cbac8a3dd469bf9695f44d8b19d4c574463f63b",
-          "size": 32349
+          "sha256": "aacbdd513e6da2132e95860c07b2c8b99eb70415364ccc535a1aec8a31f99c21",
+          "size": 32288
         },
         "pdf": {
           "mimeType": "application/pdf",
           "path": "/reports/segundo-informe-octubre-2026.pdf",
-          "sha256": "b143efbe17d849094783d5326c6ae1545b2f58e11810d8def33be6d0a1305211",
-          "size": 43986
+          "sha256": "daa91bce5e505300e3b54635617ca62a0ba03ac1c05207eaa52d33253ebe5771",
+          "size": 43972
         }
       },
       "id": "segundo-informe-octubre-2026",
       "modifiedAt": "2026-10-22",
       "publishedAt": "2026-10-22",
-      "sourceHash": "451b88624ce5a47a6487f8f8adc589589fed5d4ce310b3468ee0513164a60ed1"
+      "sourceHash": "5fb4c963e490b11f6b428ebbe5baef8bcc452fc6c331c4db6f85a0aae59fbb56"
     }
   ],
   "schemaVersion": "1.0.0"

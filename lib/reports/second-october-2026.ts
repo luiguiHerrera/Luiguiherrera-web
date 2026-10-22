@@ -28,7 +28,7 @@ export const secondOctober2026Report: MarketReport = {
       "badge": "Seguimiento",
       "story": "SPY bajó de 769,64 a 763,25 dólares, un 0,83 % entre informes. Mientras tanto, RSP ganó un 2,08 % y QQQ perdió más del 5 %. Es una combinación poco habitual: mejora la participación interna sin que el índice principal consiga avanzar. [M1]",
       "changed": "Una caída inferior al 1 % entre dos cierres no invalida una tendencia alcista, pero tampoco describe el ajuste que sufrieron varias grandes tecnológicas. El cuarto trimestre conserva un historial favorable; la prueba ahora es si la mejora de amplitud se sostiene durante la temporada de resultados.",
-      "expected": "Más componentes recuperando sus medias de 50 y 200 días, estabilidad en tecnología y una mejora de IWM frente a SPY. Si RSP, SPY y la amplitud empiezan a deteriorarse al mismo tiempo, mi lectura se volverá más defensiva."
+      "expected": "Más componentes recuperando sus medias de 50 y 200 días, estabilidad en tecnología y una mejora de IWM frente a SPY. Si RSP, SPY y la amplitud empiezan a deteriorarse al mismo tiempo, adoptaré una postura más defensiva."
     },
     {
       "asset": "Oro · GLD",
@@ -462,7 +462,7 @@ export const secondOctober2026Report: MarketReport = {
         },
         {
           "kind": "paragraph",
-          "text": "Ryan Detrick destacó que el 15 de octubre subieron 378 componentes del S&P 500 y que nueve de las once sesiones anteriores tuvieron más acciones al alza que a la baja. Son datos que respaldan la mejora de participación, pero corresponden a su propia fecha. No corresponde presentarlos como si fueran el recuento del cierre del viernes 16. [A1]"
+          "text": "Ryan Detrick destacó que el 15 de octubre subieron 378 componentes del S&P 500 y que nueve de las once sesiones anteriores tuvieron más acciones al alza que a la baja. Estos datos respaldan la mejora de participación del 15 de octubre; no describen el cierre del viernes 16. [A1]"
         },
         {
           "kind": "heading",
@@ -553,7 +553,7 @@ export const secondOctober2026Report: MarketReport = {
         },
         {
           "kind": "paragraph",
-          "text": "Más componentes recuperando sus medias de 50 y 200 días, estabilidad en tecnología y una mejora de IWM frente a SPY. Si RSP, SPY y la amplitud empiezan a deteriorarse al mismo tiempo, mi lectura se volverá más defensiva."
+          "text": "Más componentes recuperando sus medias de 50 y 200 días, estabilidad en tecnología y una mejora de IWM frente a SPY. Si RSP, SPY y la amplitud empiezan a deteriorarse al mismo tiempo, adoptaré una postura más defensiva."
         },
         {
           "kind": "heading",
@@ -660,7 +660,7 @@ export const secondOctober2026Report: MarketReport = {
       "blocks": [
         {
           "kind": "paragraph",
-          "text": "El primer informe recogía el comportamiento históricamente favorable de octubre y del cuarto trimestre. No voy a repetir aquellas cifras como si fueran una señal nueva. Los estudios de Carson sobre los años de elecciones legislativas de mitad de mandato muestran correcciones importantes y fuertes rentabilidades posteriores desde mínimos históricos. El detalle es que esos mínimos se identifican *después* de producirse. **No podemos usar esa estadística para asegurar que el mínimo de 2026 ya quedó atrás.** [A7]"
+          "text": "El primer informe recogía el comportamiento históricamente favorable de octubre y del cuarto trimestre. Ese antecedente aporta contexto, pero no constituye una señal nueva. Los estudios de Carson sobre los años de elecciones legislativas de mitad de mandato muestran correcciones importantes y fuertes rentabilidades posteriores desde mínimos históricos. El detalle es que esos mínimos se identifican *después* de producirse. **No podemos usar esa estadística para asegurar que el mínimo de 2026 ya quedó atrás.** [A7]"
         },
         {
           "kind": "heading",
@@ -841,7 +841,7 @@ export const secondOctober2026Report: MarketReport = {
         },
         {
           "kind": "paragraph",
-          "text": "**Alcance de Statistical Levels.** Esta edición **no incorpora ni reutiliza como actuales** bandas WSLE/WALE/WAHE/WSHE, precio de apertura estadística, muestra histórica, estacionalidad propia, fragilidad, score o EWMA del 2/10. No hay evidencia suficiente al 16/10, con procedencia conciliada, para presentar esas métricas como vigentes. Las métricas de amplitud externas no se renombran como mediciones propias de Statistical Levels."
+          "text": "**Alcance de Statistical Levels.** Esta edición **no incorpora ni reutiliza como actuales** bandas WSLE/WALE/WAHE/WSHE, precio de apertura estadística, muestra histórica, estacionalidad propia, fragilidad, score o EWMA del 2/10. No hay evidencia suficiente al 16/10, con procedencia conciliada, para presentar esas métricas como vigentes. Las métricas de amplitud de este informe proceden de fuentes externas, no de Statistical Levels."
         },
         {
           "kind": "paragraph",

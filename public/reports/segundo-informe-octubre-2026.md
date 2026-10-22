@@ -65,7 +65,7 @@ En la última ventana de cinco sesiones, **7 de los 11 ETF sectoriales** acabaro
 
 Este comportamiento tiene dos caras. Que RSP recupere terreno frente a SPY indica una participación menos concentrada en las compañías de mayor capitalización. Sin embargo, **IWM todavía no confirma esa recuperación**. RSP representa grandes empresas equiponderadas; IWM sigue a las pequeñas. No son equivalentes, y sus resultados de octubre lo dejan claro.
 
-Ryan Detrick destacó que el 15 de octubre subieron 378 componentes del S&P 500 y que nueve de las once sesiones anteriores tuvieron más acciones al alza que a la baja. Son datos que respaldan la mejora de participación, pero corresponden a su propia fecha. No corresponde presentarlos como si fueran el recuento del cierre del viernes 16. [A1]
+Ryan Detrick destacó que el 15 de octubre subieron 378 componentes del S&P 500 y que nueve de las once sesiones anteriores tuvieron más acciones al alza que a la baja. Estos datos respaldan la mejora de participación del 15 de octubre; no describen el cierre del viernes 16. [A1]
 
 ### Inflación, bonos y financiación: presiones que debemos distinguir
 
@@ -109,7 +109,7 @@ SPY bajó de **769,64 a 763,25 dólares**, un **0,83 %** entre informes. Mientra
 
 Una caída inferior al 1 % entre dos cierres no invalida una tendencia alcista, pero tampoco describe el ajuste que sufrieron varias grandes tecnológicas. El cuarto trimestre conserva un historial favorable; la prueba ahora es si la mejora de amplitud se sostiene durante la temporada de resultados.
 
-Más componentes recuperando sus medias de 50 y 200 días, estabilidad en tecnología y una mejora de IWM frente a SPY. Si RSP, SPY y la amplitud empiezan a deteriorarse al mismo tiempo, mi lectura se volverá más defensiva.
+Más componentes recuperando sus medias de 50 y 200 días, estabilidad en tecnología y una mejora de IWM frente a SPY. Si RSP, SPY y la amplitud empiezan a deteriorarse al mismo tiempo, adoptaré una postura más defensiva.
 
 ### Oro · GLD
 
@@ -161,7 +161,7 @@ En las reproducciones del análisis de BofA, Michael Hartnett prefiere algunas �
 
 ## Estacionalidad y próximos acontecimientos
 
-El primer informe recogía el comportamiento históricamente favorable de octubre y del cuarto trimestre. No voy a repetir aquellas cifras como si fueran una señal nueva. Los estudios de Carson sobre los años de elecciones legislativas de mitad de mandato muestran correcciones importantes y fuertes rentabilidades posteriores desde mínimos históricos. El detalle es que esos mínimos se identifican *después* de producirse. **No podemos usar esa estadística para asegurar que el mínimo de 2026 ya quedó atrás.** [A7]
+El primer informe recogía el comportamiento históricamente favorable de octubre y del cuarto trimestre. Ese antecedente aporta contexto, pero no constituye una señal nueva. Los estudios de Carson sobre los años de elecciones legislativas de mitad de mandato muestran correcciones importantes y fuertes rentabilidades posteriores desde mínimos históricos. El detalle es que esos mínimos se identifican *después* de producirse. **No podemos usar esa estadística para asegurar que el mínimo de 2026 ya quedó atrás.** [A7]
 
 ### Halloween: una pauta interesante, no una operación automática
 
@@ -219,7 +219,7 @@ El mercado muestra una mejora interna que hace dos semanas no estaba presente, p
 
 **Datos de mercado y cálculos propios.** Los porcentajes de ETF entre el 02/10 y el 16/10 proceden de cierres ordinarios de ChartExchange: retorno = (cierre 16/10 ÷ cierre 02/10 − 1) × 100. La comparación sectorial usa cierres del 25/09 y 02/10 para la semana anterior, y del 09/10 y 16/10 para la actual. Las diferencias entre retornos son puntos porcentuales; un indicador de amplitud expresa porcentajes de componentes, no retorno del índice. BTC y ETH utilizan CoinGecko UTC, por lo que sus cortes horarios no son simultáneos al cierre bursátil estadounidense.
 
-**Alcance de Statistical Levels.** Esta edición **no incorpora ni reutiliza como actuales** bandas WSLE/WALE/WAHE/WSHE, precio de apertura estadística, muestra histórica, estacionalidad propia, fragilidad, score o EWMA del 2/10. No hay evidencia suficiente al 16/10, con procedencia conciliada, para presentar esas métricas como vigentes. Las métricas de amplitud externas no se renombran como mediciones propias de Statistical Levels.
+**Alcance de Statistical Levels.** Esta edición **no incorpora ni reutiliza como actuales** bandas WSLE/WALE/WAHE/WSHE, precio de apertura estadística, muestra histórica, estacionalidad propia, fragilidad, score o EWMA del 2/10. No hay evidencia suficiente al 16/10, con procedencia conciliada, para presentar esas métricas como vigentes. Las métricas de amplitud de este informe proceden de fuentes externas, no de Statistical Levels.
 
 **Estudios y reproducciones citados.** [A1] Ryan Detrick, gráficos de amplitud del 15/10; [A2] capturas CNN Fear & Greed y NAAIM, 15–16/10; [A3] reproducciones de BofA Global Fund Manager Survey y comentario de Michael Hartnett; [A4] tabla de megacaps y resumen de mercado, semana de 12–16/10; [A5] extracto de J.P. Morgan sobre memoria/almacenamiento e inversión en IA; [A6] J.P. Morgan, *Oil Flash Note*, 09/10/2026; [A7] Carson Research/FactSet, ciclo *midterm*; [A8] estudio y tabla de rendimientos de Halloween, 1993–2025. Las reproducciones y los extractos citados no acreditan la verificación independiente de los documentos originales. La cita bibliográfica no implica permiso para redistribuir sus gráficos.
 

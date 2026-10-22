@@ -39,3 +39,16 @@ test('calendar wording and event dates remain byte-identical; archived downloads
   assert.equal(historical.length, 27);
   for (const file of historical) assert.deepEqual(fs.readFileSync(file), execFileSync('git', ['show', `${base}:${file}`], { maxBuffer: 20 * 1024 * 1024 }), file);
 });
+
+
+test('four final substitutions are present in each export and previous variants are absent', () => {
+  const revision = JSON.parse(fs.readFileSync('docs/reports/segundo-informe-octubre-2026/public-voice-revision.json', 'utf8'));
+  for (const { before, after } of revision.finalAdjustments.substitutions) {
+    for (const [format, text] of Object.entries({ html, md })) {
+      assertContains(text, after, format);
+      assert.throws(() => assertContains(text, before, format));
+    }
+    assertPdfContains(pdf, after, 'Final PDF');
+    assert.throws(() => assertPdfContains(pdf, before, 'Obsolete PDF wording'));
+  }
+});

@@ -696,5 +696,115 @@
     "originals": "MD, HTML and PDF retained at their approved paths with identical bytes",
     "statisticalLevels": "All tracked files outside the explicit edit allowlist have identical SHA-256 hashes, including SL and availability corrections.",
     "generatorAndValidators": "Existing generator extended only for existing editorial blocks; scripts/reports.mts and scripts/report-validation.test.mts unchanged."
+  },
+  "finalAdjustments": {
+    "baseCommit": "6378bfe4a0192a4ab8dee0517351664368313ef2",
+    "baseTree": "37b1b36348e76b443da061cfa2f9ca6a059c72c2",
+    "scope": "Cuatro sustituciones literales autorizadas; cinco apariciones contando la copia editorial de SPY. Ningún otro cambio editorial, analítico, de fecha o de presentación.",
+    "substitutions": [
+      {
+        "before": "Si RSP, SPY y la amplitud empiezan a deteriorarse al mismo tiempo, mi lectura se volverá más defensiva.",
+        "after": "Si RSP, SPY y la amplitud empiezan a deteriorarse al mismo tiempo, adoptaré una postura más defensiva.",
+        "expectedOccurrences": 2
+      },
+      {
+        "before": "Son datos que respaldan la mejora de participación, pero corresponden a su propia fecha. No corresponde presentarlos como si fueran el recuento del cierre del viernes 16.",
+        "after": "Estos datos respaldan la mejora de participación del 15 de octubre; no describen el cierre del viernes 16.",
+        "expectedOccurrences": 1
+      },
+      {
+        "before": "No voy a repetir aquellas cifras como si fueran una señal nueva.",
+        "after": "Ese antecedente aporta contexto, pero no constituye una señal nueva.",
+        "expectedOccurrences": 1
+      },
+      {
+        "before": "Las métricas de amplitud externas no se renombran como mediciones propias de Statistical Levels.",
+        "after": "Las métricas de amplitud de este informe proceden de fuentes externas, no de Statistical Levels.",
+        "expectedOccurrences": 1
+      }
+    ],
+    "observationDateClarification": "La segunda sustitución vuelve a nombrar el 15 de octubre que ya figura al comienzo del mismo párrafo; no añade una observación ni cambia su fecha.",
+    "publicDerivatives": [
+      {
+        "path": "public/reports/segundo-informe-octubre-2026-calendar.ics",
+        "previousSha256": "c245308633f3f6d924f94622628f630ab507b8b6682531002f6e82ce3543ba1a",
+        "sha256": "c245308633f3f6d924f94622628f630ab507b8b6682531002f6e82ce3543ba1a",
+        "size": 2446,
+        "changed": false
+      },
+      {
+        "path": "public/reports/segundo-informe-octubre-2026.html",
+        "previousSha256": "dad7072468b6349b7115ae4ec6cf404830eae38c0aab3e0021ebd1749bba9ee6",
+        "sha256": "1df157f979857989eb4eb060f0d5c514064f0426bace27326e5ee6d4d2b44ece",
+        "size": 42916,
+        "changed": true
+      },
+      {
+        "path": "public/reports/segundo-informe-octubre-2026.md",
+        "previousSha256": "cc0a0bd7ae072337edb7daed8cbac8a3dd469bf9695f44d8b19d4c574463f63b",
+        "sha256": "aacbdd513e6da2132e95860c07b2c8b99eb70415364ccc535a1aec8a31f99c21",
+        "size": 32288,
+        "changed": true
+      },
+      {
+        "path": "public/reports/segundo-informe-octubre-2026.pdf",
+        "previousSha256": "b143efbe17d849094783d5326c6ae1545b2f58e11810d8def33be6d0a1305211",
+        "sha256": "daa91bce5e505300e3b54635617ca62a0ba03ac1c05207eaa52d33253ebe5771",
+        "size": 43972,
+        "changed": true
+      }
+    ],
+    "verification": {
+      "affectedTests": 20,
+      "passed": 20,
+      "failed": 0,
+      "typescript": "PASS",
+      "exportsValidation": "PASS: 8 reports, 31 artifacts and synchronized llms.txt",
+      "nativeConsumer": "Real MarketReportContent via existing React static renderer; four new phrases present and old variants absent, including initially closed details. V2 structure and historical report HTML unchanged.",
+      "textExtraction": "Native HTML, public HTML, Markdown and PDF: all four replacements present; prior variants absent.",
+      "pdfInspection": {
+        "pages": 8,
+        "changedAndInspected": [
+          3,
+          4,
+          6,
+          8
+        ],
+        "unchangedContentStreams": [
+          1,
+          2,
+          5,
+          7
+        ],
+        "clippingOrOverflow": false
+      },
+      "analysisInvariant": "Only the four exact authorized substitutions; SPY repeated in two source fields. Ryan Detrick date 15/10 reiterated as requested, with original figures and [A1] preserved. All other report values identical to the parent.",
+      "coverage": "Affected checks only; no claim of global suite PASS. Prior functional suite and prior transport investigation not repeated."
+    },
+    "transport": {
+      "nodeBlockedAttempts": 0,
+      "pythonBlockedAttempts": 0,
+      "completedExternalDataCalls": 0,
+      "scope": "This commission only. Documentary GitHub write is separate. No provider consultation."
+    },
+    "preservation": {
+      "unchangedTrackedFiles": 695,
+      "originalsApprovedMdHtmlPdf": "byte-identical",
+      "historicalExports": 27,
+      "calendarIcs": "byte-identical",
+      "generatorsAndValidators": "byte-identical; only affected test assertions were updated/added",
+      "statisticalLevelsAndAvailabilityFixes": "byte-identical",
+      "publicationDate": "2026-10-22",
+      "editorialCutoff": "2026-10-19",
+      "marketCutoff": "2026-10-16"
+    },
+    "status": {
+      "publicVoice": "FINAL_LOCAL_READY",
+      "publication": "NOT_AUTHORIZED_FOR_NEW_SHA",
+      "push": "NOT_EXECUTED",
+      "siteBuild": "NOT_EXECUTED",
+      "deploy": "NOT_EXECUTED",
+      "merge": "NOT_EXECUTED"
+    }
   }
 }

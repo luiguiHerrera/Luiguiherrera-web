@@ -28,7 +28,12 @@ test('approved originals stay archived byte-for-byte; every public source edit i
  }
  assert.deepEqual(expected.approvedPdf, revision.archivedPdf);
  delete expected.approvedPdf;
- assert.deepEqual(report, expected, 'No unrecorded editorial, analytical or metadata changes');
+ let finalSource = JSON.stringify(expected);
+ for (const change of revision.finalAdjustments.substitutions) {
+  assert.equal(finalSource.split(change.before).length - 1, change.expectedOccurrences);
+  finalSource = finalSource.replaceAll(change.before, change.after);
+ }
+ assert.deepEqual(report, JSON.parse(finalSource), 'No unrecorded editorial, analytical or metadata changes');
 });
 
 test('figures, citations, tables, calendar, follow-up and author positions are preserved', () => {
@@ -86,4 +91,21 @@ test('publication date is distinct from unchanged editorial and market cutoffs',
  assert.equal(model.events.length,5);
  assert(model.sections.every(s=>s.kind==='editorial'));
  assert.equal(model.approvedPdf,undefined);
+});
+
+
+test('four final substitutions are the only changes from the exact authorized base', () => {
+ const source = execFileSync('git', ['show', '6378bfe4a0192a4ab8dee0517351664368313ef2:lib/reports/second-october-2026.ts'], { encoding: 'utf8' });
+ let expected = source.slice(source.indexOf('= {') + 2, source.lastIndexOf(';'));
+ const edits = revision.finalAdjustments.substitutions;
+ assert.equal(edits.length, 4);
+ assert.deepEqual(edits.map((edit: { expectedOccurrences: number }) => edit.expectedOccurrences), [2, 1, 1, 1]);
+ for (const edit of edits) {
+  assert.equal(expected.split(edit.before).length - 1, edit.expectedOccurrences);
+  expected = expected.replaceAll(edit.before, edit.after);
+ }
+ assert.deepEqual(report, JSON.parse(expected), 'No other text, numbers, citations, dates, calendar or presentation changes');
+ const ryan = report.editorialSections!.flatMap(s => s.blocks).find(b => 'text' in b && b.text.startsWith('Ryan Detrick'))!;
+ assert('text' in ryan);
+ assert.equal(ryan.text, 'Ryan Detrick destacó que el 15 de octubre subieron 378 componentes del S&P 500 y que nueve de las once sesiones anteriores tuvieron más acciones al alza que a la baja. Estos datos respaldan la mejora de participación del 15 de octubre; no describen el cierre del viernes 16. [A1]');
 });
