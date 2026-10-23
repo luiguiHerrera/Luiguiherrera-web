@@ -199,7 +199,10 @@ export const runtimeExecutables=Object.freeze([runtimeExecutable,Object.freeze({
  // Cache-invariant repair: native source bytes, exact breakpoints and four call
  // frames independently checked against the locked production build. Validator
  // semantics are unchanged; old witnesses remain for historical receipt replay.
- Object.freeze({sha256:'aef45e0837c44391b35af6083b0fa20f0c970b9456eedcad22ca852302aed82d',length:128439,fetch:1995,before_fetch:1989,validated:2218,commit:127222,frames:Object.freeze([1995,127437,100804,23054]),intent:'a',url:'t',payload:'m',alive:'p'})]);
+ Object.freeze({sha256:'aef45e0837c44391b35af6083b0fa20f0c970b9456eedcad22ca852302aed82d',length:128439,fetch:1995,before_fetch:1989,validated:2218,commit:127222,frames:Object.freeze([1995,127437,100804,23054]),intent:'a',url:'t',payload:'m',alive:'p'}),
+ // Locked Next16.4.2 security build: exact native executable and UTF-16
+ // callsites. The observer, consumer proof and all acceptance gates stay exact.
+ Object.freeze({sha256:'fe5d020ad6784addf0f7f5f51f681defaf21bd8ed660f852d147af1fec571479',length:128406,fetch:1995,before_fetch:1989,validated:2218,commit:127189,frames:Object.freeze([1995,127404,100797,23054]),intent:'a',url:'t',payload:'m',alive:'p'})]);
 export function runtimeExecutableMatches(s){return !!s&&runtimeExecutables.some(w=>s.code_sha256===w.sha256&&s.length===w.length)&&s.default_context===true&&s.live_edit===false&&s.start_line===0&&s.start_column===0;}
 export function runtimeFetchProven(w,type){const executable=runtimeExecutables.find(e=>e.sha256===w?.script?.code_sha256);return type==='Fetch'&&runtimeExecutableMatches(w?.script)&&w.complete===true&&w.runtime_header_compatible===true&&w.base?.rsc==='NO'&&w.base.prefetch!=='YES'&&Array.isArray(w.frames)&&w.frames.length>=4&&executable.frames.every((column,i)=>w.frames[i].script_sha256===w.script.script_sha256&&w.frames[i].line===0&&w.frames[i].column===column);}
 

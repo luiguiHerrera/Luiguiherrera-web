@@ -262,7 +262,7 @@ def security_payload_hash(git, sha):
     return digest(json.dumps(rows, sort_keys=True, separators=(',', ':')).encode())
 
 
-def bootstrap(git, head):
+def security_bootstrap(git, head):
     # The failed CI at SECURITY_BASE is never treated as a qualification PASS.
     # Preserve the original paths verbatim; only one exact security child gains
     # a new bootstrap route, followed solely by existing 82-file data successors.
@@ -299,6 +299,76 @@ def bootstrap(git, head):
     return cursor, chain
 
 
+CAPTURE_RECOVERY_BASE = 'ed65a28d2574518f5b94b3d6c2f025dce0f75c3e'
+CAPTURE_RECOVERY_IDENTITY = 'Codex <codex@openai.com> 1792781446 +0000'
+CAPTURE_RECOVERY_MESSAGE = 'Qualify exact native capture recovery and historical reuse'
+# Deliberately closed until the causally required source delta is frozen.
+CAPTURE_RECOVERY_FILES = frozenset({
+    '.github/workflows/ci.yml',
+    '.github/workflows/statistical-levels-release.yml',
+    'scripts/statistical-levels-ci/admission.py',
+    'scripts/statistical-levels-ci/historical-tests.py',
+    'scripts/statistical-levels-ci/test_capture_recovery_admission.py',
+    'scripts/statistical-levels-ci/test_capture_recovery_diagnostics.py',
+    'scripts/statistical-levels-ci/test_security_admission.py',
+    'scripts/statistical-levels-release/SOURCE_SHA256SUMS',
+    'scripts/statistical-levels-release/scripts/capture-full-product.mjs',
+    'scripts/statistical-levels-release/scripts/runtime-transition-receipts.mjs',
+    'scripts/statistical-levels-release/source-manifest.json',
+    'scripts/statistical-levels-release/tests/statistical-levels-runtime.test.mjs',
+    'scripts/statistical-levels-release/workflow-freeze.json',
+})
+CAPTURE_RECOVERY_PIN = rb'(      SL_CI_CAPTURE_RECOVERY_PAYLOAD_SHA256: ")[a-f0-9]{64}("\n)'
+
+
+def capture_recovery_payload_hash(git, sha):
+    need(bool(CAPTURE_RECOVERY_FILES), 'CAPTURE_RECOVERY_DELTA_PENDING')
+    rows = []
+    for name in sorted(CAPTURE_RECOVERY_FILES):
+        data = git.blob(sha, name)
+        if name == CI:
+            need(len(re.findall(CAPTURE_RECOVERY_PIN, data)) == 1, 'CAPTURE_RECOVERY_PIN_FIELD')
+            data = re.sub(CAPTURE_RECOVERY_PIN, lambda m: m[1] + b'0' * 64 + m[2], data)
+        rows.append({'path': name, 'mode': '100644', 'sha256': digest(data)})
+    return digest(json.dumps(rows, sort_keys=True, separators=(',', ':')).encode())
+
+
+def bootstrap(git, head):
+    # Native failure at the base never qualifies a new data or code subject.
+    if head == CAPTURE_RECOVERY_BASE or subprocess.run(
+            ['git', 'merge-base', '--is-ancestor', CAPTURE_RECOVERY_BASE, head], cwd=git.root,
+            stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL).returncode != 0:
+        return security_bootstrap(git, head)
+    data_paths = paths(git)
+    chain, cursor = [], head
+    for _ in range(4096):
+        parents = git.parents(cursor)
+        need(len(parents) == 1, 'CAPTURE_RECOVERY_ORDERED_SINGLE_PARENT')
+        if parents == [CAPTURE_RECOVERY_BASE]:
+            break
+        delta(git, parents[0], cursor, data_paths)
+        chain.append(cursor)
+        cursor = parents[0]
+    else:
+        raise ValueError('CAPTURE_RECOVERY_LINEAGE_BOUND')
+    before, child = git.tree(CAPTURE_RECOVERY_BASE), git.tree(cursor)
+    changed = {p for p in before.keys() | child.keys() if before.get(p) != child.get(p)}
+    if changed == data_paths:
+        return security_bootstrap(git, head)
+    security_bootstrap(git, CAPTURE_RECOVERY_BASE)
+    need(bool(CAPTURE_RECOVERY_FILES), 'CAPTURE_RECOVERY_DELTA_PENDING')
+    delta(git, CAPTURE_RECOVERY_BASE, cursor, CAPTURE_RECOVERY_FILES)
+    expected = ('tree ' + git.text('rev-parse', cursor + '^{tree}') + '\nparent ' + CAPTURE_RECOVERY_BASE +
+        '\nauthor ' + CAPTURE_RECOVERY_IDENTITY + '\ncommitter ' + CAPTURE_RECOVERY_IDENTITY +
+        '\n\n' + CAPTURE_RECOVERY_MESSAGE + '\n').encode()
+    need(git('cat-file', 'commit', cursor) == expected, 'CAPTURE_RECOVERY_COMMIT_HEADER')
+    pin = re.findall(rb'      SL_CI_CAPTURE_RECOVERY_PAYLOAD_SHA256: "([a-f0-9]{64})"\n', git.blob(cursor, CI))
+    need(len(pin) == 1 and pin[0].decode() == capture_recovery_payload_hash(git, cursor), 'CAPTURE_RECOVERY_PAYLOAD')
+    current = git.tree(head)
+    need(set(current) == set(child) and all(current[p] == child[p] for p in current if p not in data_paths), 'CAPTURE_RECOVERY_SUCCESSOR_CODE_CHANGED')
+    return cursor, chain
+
+
 def reconciled_report_hashes(git, head):
     """Current report bytes only from the exact reconciled, qualified lineage.
 
@@ -315,6 +385,10 @@ def reconciled_report_hashes(git, head):
         for name in SECURITY_REPORT_FILES:
             need(name in result, 'SECURITY_REPORT_PATH')
             result[name] = digest(git.blob(root, name))
+    elif git.parents(root) == [CAPTURE_RECOVERY_BASE]:
+        for name in SECURITY_REPORT_FILES:
+            need(name in result and git.tree(root)[name] == git.tree(CAPTURE_RECOVERY_BASE)[name], 'CAPTURE_RECOVERY_REPORT_BYTES')
+            result[name] = digest(git.blob(CAPTURE_RECOVERY_BASE, name))
     return result
 
 
@@ -604,15 +678,22 @@ def admit(git, api, env, event):
     if not chain:
         daily_root = git.parents(root) == [RECONCILED]
         security_root = git.parents(root) == [SECURITY_BASE]
-        expected_before = SECURITY_BASE if security_root else REMOTE_BEFORE_RECONCILIATION if daily_root else BASE
+        capture_root = git.parents(root) == [CAPTURE_RECOVERY_BASE]
+        expected_before = CAPTURE_RECOVERY_BASE if capture_root else SECURITY_BASE if security_root else REMOTE_BEFORE_RECONCILIATION if daily_root else BASE
         need(env['GITHUB_EVENT_NAME'] == 'push' and event['before'] == expected_before and event['after'] == head and event['ref'] == 'refs/heads/' + BRANCH and not event['forced'] and not event['deleted'] and not event['created'], 'BOOTSTRAP_EVENT')
-        if daily_root or security_root:
+        if daily_root or security_root or capture_root:
             recent_bytes = git.blob(root, CURRENT_DATA_EVIDENCE)
             need(digest(recent_bytes) == CURRENT_DATA_EVIDENCE_SHA256, 'CURRENT_DATA_EVIDENCE_PIN')
             recent = unique_json(recent_bytes)
             need(recent['published_sha'] == REMOTE_BEFORE_RECONCILIATION and recent['producer_run_id'] == 39791362129 and recent['producer_attempt'] == 1, 'CURRENT_DATA_EVIDENCE_IDENTITY')
             validate_data(git, recent['published_sha'], recent['source_sha'], recent['metadata_objects'])
-            if security_root:
+            if capture_root:
+                mode, details = 'EXACT_CAPTURE_RECOVERY_BOOTSTRAP', {'capture_recovery_base': CAPTURE_RECOVERY_BASE,
+                    'remote_before': expected_before, 'base_hosted_ci': 'FAILED_NOT_REUSED', 'failed_run_id': 40003775664,
+                    'data_head': REMOTE_BEFORE_RECONCILIATION, 'historical_qualification_reused': True,
+                    'new_hosted_qualification_required': True, 'report_source': REPORT_PARENT,
+                    'report_test_only_successor': sorted(SECURITY_REPORT_FILES)}
+            elif security_root:
                 mode, details = 'EXACT_SECURITY_REPAIR_BOOTSTRAP', {'security_base': SECURITY_BASE, 'remote_before': expected_before,
                     'security_base_hosted_ci': 'FAILED_NOT_REUSED', 'failed_run_id': 39963404183,
                     'data_head': REMOTE_BEFORE_RECONCILIATION, 'historical_qualification_reused': True,

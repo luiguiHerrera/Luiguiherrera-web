@@ -118,3 +118,21 @@ test('cache repair executable has exact separately witnessed native callsites',(
 for(const [name,mutate]of [
  ['unknown executable',w=>w.script.code_sha256='0'.repeat(64)],['wrong length',w=>w.script.length++],['live edit',w=>w.script.live_edit=true],['nondefault context',w=>w.script.default_context=false],['old navigation frame',w=>w.frames[1].column=127323],['different frame source',w=>w.frames[1].script_sha256='2'.repeat(64)],['incomplete stack',w=>w.complete=false],['RSC traffic',w=>w.base.rsc='YES'],['prefetch traffic',w=>w.base.prefetch='YES'],
 ])test('cache repair executable rejects '+name,()=>{const w=repairedWitness();mutate(w);assert.equal(runtimeFetchProven(w,'Fetch'),false);});
+
+const securityHash='fe5d020ad6784addf0f7f5f51f681defaf21bd8ed660f852d147af1fec571479';
+const securityWitness=()=>({script:{code_sha256:securityHash,script_sha256:'1'.repeat(64),length:128406,default_context:true,live_edit:false,start_line:0,start_column:0},complete:true,runtime_header_compatible:true,base:{rsc:'NO',prefetch:'NO'},frames:[1995,127404,100797,23054].map(column=>({script_sha256:'1'.repeat(64),line:0,column}))});
+test('security build executable uses exact separately observed native coordinates',()=>{
+ const w=runtimeExecutables.find(x=>x.sha256===securityHash);assert.ok(w);
+ assert.deepEqual([w.before_fetch,w.validated,w.commit],[1989,2218,127189]);
+ assert.deepEqual([w.intent,w.url,w.payload,w.alive],['a','t','m','p']);
+ assert.ok(runtimeExecutableMatches(securityWitness().script));assert.ok(runtimeFetchProven(securityWitness(),'Fetch'));
+});
+for(const [name,mutate]of [
+ ['unknown hash',w=>w.script.code_sha256='0'.repeat(64)],['UTF8 byte length instead of native units',w=>w.script.length=128797],
+ ['changed native length',w=>w.script.length++],['live edit',w=>w.script.live_edit=true],['nondefault context',w=>w.script.default_context=false],
+ ['nonzero start line',w=>w.script.start_line=1],['nonzero start column',w=>w.script.start_column=1],
+ ['old build frame',w=>w.frames[1].column=127437],['different frame source',w=>w.frames[2].script_sha256='2'.repeat(64)],
+ ['missing frame',w=>w.frames.pop()],['incomplete stack',w=>w.complete=false],['incompatible headers',w=>w.runtime_header_compatible=false],
+ ['RSC traffic',w=>w.base.rsc='YES'],['prefetch traffic',w=>w.base.prefetch='YES'],
+])test('security build witness rejects '+name,()=>{const w=securityWitness();mutate(w);assert.equal(runtimeFetchProven(w,'Fetch'),false);});
+test('security build witness cannot reclassify a non-Fetch resource',()=>assert.equal(runtimeFetchProven(securityWitness(),'Script'),false));

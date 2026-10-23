@@ -9,7 +9,28 @@ import os
 from pathlib import Path
 import subprocess
 import tempfile
-from admission import Git, OLD, need, digest, bootstrap
+from admission import Git, OLD, need, digest, bootstrap, CAPTURE_RECOVERY_BASE, CAPTURE_RECOVERY_FILES
+
+
+SECURITY_REUSE_ADDITIONS = {'package.json', 'package-lock.json',
+    'scripts/statistical-levels-release/source-inputs.json',
+    'scripts/statistical-levels-release/scripts/verify-braces-patch-attestation.cjs',
+    'scripts/statistical-levels-release/tests/braces-patch-attestation.test.mjs'}
+# Exact reviewed OLD-to-recovery scope, populated only after causal repair bytes
+# are frozen. No changed-file discovery can grant an exclusion from reuse.
+CAPTURE_RECOVERY_HISTORY_FILES = frozenset({
+    'package-lock.json',
+    'package.json',
+    'scripts/statistical-levels-release/SOURCE_SHA256SUMS',
+    'scripts/statistical-levels-release/scripts/capture-full-product.mjs',
+    'scripts/statistical-levels-release/scripts/runtime-transition-receipts.mjs',
+    'scripts/statistical-levels-release/scripts/verify-braces-patch-attestation.cjs',
+    'scripts/statistical-levels-release/source-inputs.json',
+    'scripts/statistical-levels-release/source-manifest.json',
+    'scripts/statistical-levels-release/tests/braces-patch-attestation.test.mjs',
+    'scripts/statistical-levels-release/tests/statistical-levels-runtime.test.mjs',
+    'scripts/statistical-levels-release/workflow-freeze.json',
+})
 
 
 def reuse_scope(git, head):
@@ -20,6 +41,21 @@ def reuse_scope(git, head):
     scope = {p for p in a if p.startswith('scripts/statistical-levels-release/')} | {'package.json', 'package-lock.json'}
     changed = {'scripts/statistical-levels-release/' + p for p in [
         'scripts/capture-full-product.mjs', 'source-manifest.json', 'SOURCE_SHA256SUMS', 'workflow-freeze.json']}
+    if root == CAPTURE_RECOVERY_BASE or git.parents(root) == [CAPTURE_RECOVERY_BASE]:
+        security_changed = changed | SECURITY_REUSE_ADDITIONS
+        anchor = git.tree(CAPTURE_RECOVERY_BASE)
+        need(len(security_changed) == 9 and {p for p in scope if a[p] != anchor.get(p)} == security_changed,
+             'SECURITY_HISTORICAL_ANCHOR_SCOPE')
+        changed = security_changed
+        if root != CAPTURE_RECOVERY_BASE:
+            need(bool(CAPTURE_RECOVERY_HISTORY_FILES), 'CAPTURE_RECOVERY_HISTORY_PENDING')
+            need(CAPTURE_RECOVERY_HISTORY_FILES == security_changed | (CAPTURE_RECOVERY_FILES & scope),
+                 'CAPTURE_RECOVERY_HISTORY_CLOSED_DELTA')
+            changed = CAPTURE_RECOVERY_HISTORY_FILES
+        preserved = security_changed - (CAPTURE_RECOVERY_FILES if root != CAPTURE_RECOVERY_BASE else set())
+        need(all(a[p][0] == anchor[p][0] == '100644' and b.get(p) == anchor[p] for p in preserved),
+             'SECURITY_HISTORICAL_BYTES_CHANGED')
+        need(all(a[p][0] == b.get(p, (None,))[0] == '100644' for p in changed), 'CAPTURE_RECOVERY_HISTORY_MODE')
     need(len(scope) == 115 and {p for p in scope if a[p] != b.get(p)} == changed, 'HISTORICAL_BYTES_CHANGED')
     need(all(b[p] == git.tree(root)[p] for p in changed), 'CAPTURE_SUCCESSOR_BYTES_CHANGED')
     return scope - changed, {p: {'old_sha256': digest(git.blob(OLD, p)), 'current_sha256': digest(git.blob(head, p))}

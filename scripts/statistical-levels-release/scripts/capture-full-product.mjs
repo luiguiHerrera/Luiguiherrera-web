@@ -63,9 +63,33 @@ function safeError(error) {
 }
 export function captureFailureDiagnostic(error, context = null, phase = 'CLI') {
   return {result:'FULL_PRODUCT_CAPTURE_FAILED', phase:error.failurePhase || phase,
-    primary_exception:safeError(error.primaryException || error), cleanup_exception:safeError(error.cleanupException),
+    primary_exception:safeError(Object.hasOwn(error, 'primaryException') ? error.primaryException : error), cleanup_exception:safeError(error.cleanupException),
     subject_sha:context?.subject ?? null, run_id:context?.run_id ?? null, run_attempt:context?.run_attempt ?? null,
     origin:context?.origin ?? null, evidence_directory:context?.out ?? null, exit_code:1};
+}
+
+// Failure-only diagnostics: code inventories and byte commitments, never raw
+// URLs, request headers, source payloads or an alternate acceptance decision.
+export async function captureEvidenceDiagnostic(out) {
+  const files = {}, values = {};
+  for (const name of ['adopt-request-evidence.json', 'network-accounting.json', 'native-lifecycle-diagnostics.json']) {
+    try {
+      const file = path.join(out, name), st = await fs.lstat(file);
+      if (!st.isFile() || st.isSymbolicLink() || st.size > 32_000_000) throw Error('DIAGNOSTIC_FILE_INVALID');
+      const bytes = await fs.readFile(file);
+      values[name] = strictJson(bytes);
+      files[name] = {status:'RETAINED', sha256:sha(bytes), bytes:bytes.length};
+    } catch { files[name] = {status:'UNAVAILABLE'}; }
+  }
+  const evidence = values['adopt-request-evidence.json'];
+  const codes = value => Array.isArray(value) ? [...new Set(value.map(code =>
+    typeof code === 'string' && /^[A-Z][A-Z0-9_]{0,127}$/.test(code) ? code : 'REDACTED_INVALID_ISSUE'))].slice(0,128) : null;
+  return {schema:'statistical-levels.capture-failure-evidence.v1', files,
+    validation_status:['PASS','FAIL'].includes(evidence?.validation?.status) ? evidence.validation.status : 'UNAVAILABLE',
+    validation_issues:codes(evidence?.validation?.issues), capture_issues:codes(evidence?.capture_issues),
+    request_count:Array.isArray(evidence?.requests) ? evidence.requests.length : null,
+    journal_count:Array.isArray(evidence?.journal) ? evidence.journal.length : null,
+    diagnostic_only:true};
 }
 
 const schema = 'statistical-levels.full-product-capture.v1';
@@ -395,6 +419,7 @@ export async function captureFullProduct({ origin, out }, env = process.env) {
   } catch (error) {
     const diagnostic = captureFailureDiagnostic(error, context, phase);
     if (owned) {
+      diagnostic.evidence = await captureEvidenceDiagnostic(context.out);
       try { await fs.writeFile(path.join(context.out, 'capture-failure.json'), JSON.stringify(diagnostic, null, 2)+'\n', {flag:'wx',mode:0o600}); }
       catch (retentionError) { diagnostic.retention_exception = safeError(retentionError); }
     }
