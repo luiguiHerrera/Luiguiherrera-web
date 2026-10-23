@@ -1,0 +1,226 @@
+{
+  "schema": "statistical-levels.exact-report-reconciliation.v1",
+  "merge": "c89be06fe0f374d6394c115c2223707c0d57314c",
+  "tree": "0b9482694252c608db51c285751ef932441bf201",
+  "parents": [
+    "e68811777dd31051a3d5587539361a88447a7463",
+    "502d192f8d3d2536e29e27e36a87cc4b24030efc"
+  ],
+  "delta": {
+    "components/dashboard/VixModule.tsx": {
+      "mode": "100644",
+      "git_blob": "cd36e6bf1c1cffaa888a9f265eaf51e931c774b3",
+      "sha256": "b11bbfaa3b9ffd932c283488e7f2d29e57d5a0bed05019807fc4b241c944d38e"
+    },
+    "components/home/HomeDashboardPreview.tsx": {
+      "mode": "100644",
+      "git_blob": "c6b11b91cd2b0419e7bd18a2f450ac7c425187fa",
+      "sha256": "0f2b7808a1f9b2f3edf414398a1353e1f97eae4c1ff576ee3f37105ffa4b0e3c"
+    },
+    "components/reports/MarketReportContent.tsx": {
+      "mode": "100644",
+      "git_blob": "b534705d9d6c3a0360a17e8a140533b1837cb9e9",
+      "sha256": "c3dae212be228b05211f4976feba01e2c5e041d286a8c47a929482e9dc424d83"
+    },
+    "components/reports/ReportEditorialSections.tsx": {
+      "mode": "100644",
+      "git_blob": "b9151cc9ed691261c75c1d101cc7cd4d5b8b7029",
+      "sha256": "e1830efeaeca44d9ee8f5d8e31df8682503ead84ceddbfb94815f4a5611554d1"
+    },
+    "components/reports/SecondOctoberReportSections.tsx": {
+      "mode": "100644",
+      "git_blob": "2baafce2dd070b4338a5316f9b1682691e7fb052",
+      "sha256": "0deaa9057837f21219e63bd14e911255688aac240cafeb460948f224c517e248"
+    },
+    "components/reports/WeeklyReport.tsx": {
+      "mode": "100644",
+      "git_blob": "e0558e36b5ce2706082d351f52adbd82a5139d9b",
+      "sha256": "f4db02bd181f1a5530d45a6d1b63a2bdbf662f2dde6c62eefeb35da2779526a5"
+    },
+    "docs/reports/segundo-informe-octubre-2026/RELEASE_GATE.md": {
+      "mode": "100644",
+      "git_blob": "705c285a9c7ae32fd0165144dfbdc557e4161f1e",
+      "sha256": "f8042ac5d0034ff3df0b7e76835c9b4613e3c71fc72df61170d3e9328c65e0cf"
+    },
+    "docs/reports/segundo-informe-octubre-2026/approved.html": {
+      "mode": "100644",
+      "git_blob": "f9634a6c372d5decf4b3c78cbc41693ee532e073",
+      "sha256": "2036ad78f5102745a9b203299e933d7675494545a33034c9a08edf87999a48e0"
+    },
+    "docs/reports/segundo-informe-octubre-2026/approved.md": {
+      "mode": "100644",
+      "git_blob": "09e23d256a93c28ba9ceda0cf866875fc9cc0989",
+      "sha256": "378efba156f633aa54bef5f4a8fafebab0635072d446e2cbc6db0ba21b0d4ab4"
+    },
+    "docs/reports/segundo-informe-octubre-2026/approved.pdf": {
+      "mode": "100644",
+      "git_blob": "3210897d094ec57dee570553819e0afcfaa0590c",
+      "sha256": "0ca850a7d7986fb7e501e970376d63eb86dcfb7271ac343f57aa5e8fb4171052"
+    },
+    "docs/reports/segundo-informe-octubre-2026/presentation-v2-provenance.json": {
+      "mode": "100644",
+      "git_blob": "ba1a904a6f65bf20fe93cdd3d33636a00d604cd0",
+      "sha256": "7ecac3441b59edf8f8fe6fc1f120733510ff5108f10d2d6b13e3ec83013c48e5"
+    },
+    "docs/reports/segundo-informe-octubre-2026/public-voice-revision.json": {
+      "mode": "100644",
+      "git_blob": "e6232ec42708c864ed7b29b04676f57761880beb",
+      "sha256": "34add11c181160146a67eb61c2b153cfcb59ee3fb3b51405bc386c771e942928"
+    },
+    "lib/dashboard/adapters/sector-etfs.ts": {
+      "mode": "100644",
+      "git_blob": "0b932e195b32e39d5dbd80ed34e00e7b5ea690bf",
+      "sha256": "11df9799e9ad592920aed8d8ae4bada9ca3a6bdc281ea45437eca6cd90b50e71"
+    },
+    "lib/dashboard/adapters/vix.test.ts": {
+      "mode": "100644",
+      "git_blob": "e39275fd7af0973a461e3034391399c5551e0290",
+      "sha256": "2043c2be788e9123f1b8e0a5ff3fc6f76f2177849283d3d1405df3e0d931499e"
+    },
+    "lib/dashboard/get-home-dashboard-preview-data.ts": {
+      "mode": "100644",
+      "git_blob": "e8e48ee50faf92a24355463c9f3976cec82a1df0",
+      "sha256": "2dfc34b6c73cbb90ad74e09484595d75b1480cee747bd3e1f6f28b08541492f6"
+    },
+    "lib/dashboard/regime-scoring-consumers.test.mjs": {
+      "mode": "100644",
+      "git_blob": "9c5d3d00a334e3615a254aedf2a99ab03eba329f",
+      "sha256": "2e44c88adacb7c5c3c6a4c3a969c2b1dd940daf1a5d1090a391ab3162aeebb48"
+    },
+    "lib/dashboard/regime-scoring.test.ts": {
+      "mode": "100644",
+      "git_blob": "180a3f95317a6bfa8d4193f4e84a23b83e149b0a",
+      "sha256": "eda9c59fc32d9708ac4ddce7c3d3292c5cc04cba176b7aed79be67e1d75432cd"
+    },
+    "lib/dashboard/regime-scoring.ts": {
+      "mode": "100644",
+      "git_blob": "7011a09c5d5e771e546a4ed3cff05867254de980",
+      "sha256": "ca6f0b5da7a6e3b190bb777d946cea2fd7f765d7d56488bef864bd6d7b585c93"
+    },
+    "lib/dashboard/sector-failure-handling.test.mjs": {
+      "mode": "100644",
+      "git_blob": "f8115349caf2ca6259255feba23cbabf2bf11244",
+      "sha256": "c2f5f4c8e7deac5a1922a84c136e7ce0263e40bd7e7a632241d0ed9293ed644c"
+    },
+    "lib/dashboard/translate-dashboard-copy.test.ts": {
+      "mode": "100644",
+      "git_blob": "d872fab66593efcce34861183e383cda70ef22b9",
+      "sha256": "4742c88beef37e451fa529ee7a6167f5e519167386fc5fbed096738548daeb6b"
+    },
+    "lib/dashboard/translate-dashboard-copy.ts": {
+      "mode": "100644",
+      "git_blob": "c130c26ddb934f17bc84bb016bead9096926b778",
+      "sha256": "2d441191cf0683fceb8f963a5536786f348d5f91130c71b7ecc22da521bf9384"
+    },
+    "lib/dashboard/vix-presentation.test.mjs": {
+      "mode": "100644",
+      "git_blob": "74c72ed69ac83a966004919a28f9cb6a29fe91c6",
+      "sha256": "6277d4edb809552b08e9d646bc5ff376446ba5f45d38eb0efdd36448f9917ee4"
+    },
+    "lib/dashboard/vix-presentation.ts": {
+      "mode": "100644",
+      "git_blob": "975b15af995ce7008c4f5b3c46d0eeb2bb33e514",
+      "sha256": "925a3ad267be8e41596442cba6c8e88bbf9b0907761952d2ed6c5fae6c6a853c"
+    },
+    "lib/reports/first-october-2026.test.mts": {
+      "mode": "100644",
+      "git_blob": "e15c1a84c582483d608542f7f87fe091f03125f2",
+      "sha256": "2d2f8c670cb123f7d56f003cf7f1404a3a7e9ad91bd54a23a9b49122f32d5ec6"
+    },
+    "lib/reports/market-reports.ts": {
+      "mode": "100644",
+      "git_blob": "5460bc278216070cdd7ad24de8cbbf1eb53e39a5",
+      "sha256": "690725cd3431687e944b64bb95d2effcb7f068fc4a995067733c7d356edbe144"
+    },
+    "lib/reports/report-editorial-sections.ts": {
+      "mode": "100644",
+      "git_blob": "3b4ad5db09c7351735b651c618dff8444fce4152",
+      "sha256": "5f93f76651813e6a0097cc22ec219dfd4dc7fc085c0054282c1c1ecf9ad21560"
+    },
+    "lib/reports/report-export-model.ts": {
+      "mode": "100644",
+      "git_blob": "7e58b57500e4f73a993c971da5f6e79dc69c3b57",
+      "sha256": "fe1df8fb5a5b060b09dd3c66291de41965b642f3ed8fe228d7afdefae12ae89d"
+    },
+    "lib/reports/second-october-2026.test.mts": {
+      "mode": "100644",
+      "git_blob": "36aed383fe43f272016f65768a9fd3c5da6eb923",
+      "sha256": "82da45f5e8bc5a9f057a938eab7911802313e0db18e00387264d31c3afe1f54c"
+    },
+    "lib/reports/second-october-2026.ts": {
+      "mode": "100644",
+      "git_blob": "9040c5383cb8ee23869401504521329e8ab7ea9b",
+      "sha256": "47e3f7e58a100c3ab72e813fbd6217490c6e4bbbd61f485b6aeb5230beea25f7"
+    },
+    "lib/reports/second-october-presentation.test.mjs": {
+      "mode": "100644",
+      "git_blob": "ce2751f3e9401da8fb2dd91ca1d440b8c54ed4fe",
+      "sha256": "e45cca3c299f2b3cc60546f0ecf8337be7543393c5a41069bb074aad3f21e3e1"
+    },
+    "lib/reports/second-october-public-exports.test.mts": {
+      "mode": "100644",
+      "git_blob": "acdd7af915aac821bb5838f3164032c089204035",
+      "sha256": "f6362c52395b0a23cb1741b50407b931814ee490ec4adea5a006c44f818fc9b9"
+    },
+    "next.config.ts": {
+      "mode": "100644",
+      "git_blob": "bd80c707a5d7766197acd412d806da40c11a7964",
+      "sha256": "3be48adf59474117cb9aa8f83fc875241456f5bc4305a68fcc1509954f8fa369"
+    },
+    "public/llms.txt": {
+      "mode": "100644",
+      "git_blob": "bb750accda71e4cc7c362dd08ccb87febe55259d",
+      "sha256": "04507bd39cedfcfb2185d11ca15eb9302305d1a42c2f299d3eeef46e440ec0ad"
+    },
+    "public/reports/manifest.json": {
+      "mode": "100644",
+      "git_blob": "e0707c95ab560ab4614fee8103a352ecc9fd8571",
+      "sha256": "3800d2c6252eb78b49a5dd16802d057c880da20539a5afe30777611b5bbc7a37"
+    },
+    "public/reports/segundo-informe-octubre-2026-calendar.ics": {
+      "mode": "100644",
+      "git_blob": "2abe1fe123bc8779811257dfba9a8796a118d391",
+      "sha256": "c245308633f3f6d924f94622628f630ab507b8b6682531002f6e82ce3543ba1a"
+    },
+    "public/reports/segundo-informe-octubre-2026.html": {
+      "mode": "100644",
+      "git_blob": "d10d2d181d52b23d5b27403deffaceede033ec13",
+      "sha256": "1df157f979857989eb4eb060f0d5c514064f0426bace27326e5ee6d4d2b44ece"
+    },
+    "public/reports/segundo-informe-octubre-2026.md": {
+      "mode": "100644",
+      "git_blob": "4285e4c890c056ef34f2865fb8364307c6cf7c76",
+      "sha256": "aacbdd513e6da2132e95860c07b2c8b99eb70415364ccc535a1aec8a31f99c21"
+    },
+    "public/reports/segundo-informe-octubre-2026.pdf": {
+      "mode": "100644",
+      "git_blob": "9c3b9e2b7bc3dc0f1fcbe855a27025dd0755c39e",
+      "sha256": "daa91bce5e505300e3b54635617ca62a0ba03ac1c05207eaa52d33253ebe5771"
+    },
+    "scripts/render-report-pdf.py": {
+      "mode": "100644",
+      "git_blob": "8e0656b79f83eada957ddbd94c445e45af8174bf",
+      "sha256": "4c7b373e037e5524a4a6e5003cb1472f744195a9730961ccf9e41ecaa735a0ca"
+    },
+    "scripts/report-validation.test.mts": {
+      "mode": "100644",
+      "git_blob": "9e96d1ab2e1c9d5ac17b56521486da1a67fbd301",
+      "sha256": "23287f8a2df08a52678fd6c1366deb0af2ef55e5cbe637d7f0fabc2dd5be8672"
+    },
+    "scripts/reports.mts": {
+      "mode": "100644",
+      "git_blob": "6f3b3dc9b76d56f59436ff95acb27b6d06c283a1",
+      "sha256": "2d737a66c3f66174559cc3fd2529ced74a8ec51812497d2b6b3f6a333cc35aea"
+    },
+    "scripts/validate-editorial.mts": {
+      "mode": "100644",
+      "git_blob": "71f069d0d47b3fb3f2fd0981ad3d50b987be57e2",
+      "sha256": "4bc1f05d9644eae0c8774a95d9935b55cdd065923e56242dd55e851ba23f470a"
+    }
+  },
+  "production_deployment": "dpl_HEpWH9bpjNMMLTC9Fv7HAvtMuqUn",
+  "production_sha": "502d192f8d3d2536e29e27e36a87cc4b24030efc",
+  "source_report_tree": "045df9d42f8af1ea2dd793c19a2863ff546d3e67",
+  "historical_N_preserved": true,
+  "no_publication_authority": true
+}

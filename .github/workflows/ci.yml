@@ -14,12 +14,14 @@ permissions:
 
 jobs:
   validate:
-    if: ${{ github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success' }}
+    # An unchanged producer SHA is a no-op, never a new qualification PASS.
+    if: ${{ github.event_name != 'workflow_run' || (github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.head_sha != github.sha) }}
     runs-on: ubuntu-latest
     timeout-minutes: 40
     env:
       NEXT_TELEMETRY_DISABLED: "1"
       CI_EVENT_SHA: ${{ github.sha }}
+      SL_CI_DAILY_PAYLOAD_SHA256: "d821fea53d972bc7f6cf32994c1a971876476a72c3de2811f9dac701102658e7"
       SL_CI_BOOTSTRAP_PAYLOAD_SHA256: "775521938439962eca0e3bc35f0d3303b2b1fafa0a3fc6a360b162b281f39c95"
 
     steps:
@@ -223,9 +225,14 @@ jobs:
                   assert [x[7:]for x in headers if x.startswith('parent ')]==record['parents'], 'REPORT_PARENT_CHAIN'
                   assert [x[5:]for x in headers if x.startswith('tree ')]==[record['tree']], 'REPORT_COMMIT_TREE'
                   subprocess.run(['git','merge-base','--is-ancestor',record['commit'],head],check=True)
+              import sys
+              sys.path.insert(0,str(root/'scripts/statistical-levels-ci'))
+              from admission import Git,reconciled_report_hashes
+              current_report_hashes=reconciled_report_hashes(Git(root),head)
               for name,record in report_generation['reports'].items():
                   assert hashlib.sha256(git('show',production_parent+':'+name)).hexdigest()==record['sha256'], 'REPORT_SOURCE_IDENTITY'
-                  assert hashlib.sha256((root/name).read_bytes()).hexdigest()==record['sha256'], 'REPORT_CURRENT_IDENTITY'
+                  expected_current=current_report_hashes.get(name,record['sha256'])
+                  assert hashlib.sha256((root/name).read_bytes()).hexdigest()==expected_current, 'REPORT_CURRENT_IDENTITY'
               epoch_commit=git('cat-file','commit',epoch_anchor)
               assert hashlib.sha256(epoch_commit).hexdigest()=='4dfd2bdf1077aa1e0622cd7465ca7dc60d82fb76d15549aa72a305ff163935c8', 'EPOCH_ANCHOR_RAW_IDENTITY'
               assert hashlib.sha1(b'commit '+str(len(epoch_commit)).encode()+b'\0'+epoch_commit).hexdigest()==epoch_anchor, 'EPOCH_ANCHOR_OBJECT_IDENTITY'
@@ -535,7 +542,7 @@ jobs:
         run: |
           set -euo pipefail
           python3 -m unittest discover -s scripts/statistical-levels-ci -p 'test_*.py' -v
-          node --test scripts/statistical-levels-ci/producer-receipt.test.mjs
+          node --test scripts/statistical-levels-ci/producer-receipt.test.mjs scripts/statistical-levels-daily.test.mjs
 
       - name: Install dependencies
         run: npm ci
@@ -563,6 +570,10 @@ jobs:
           import hashlib,json,re,subprocess
           from pathlib import Path
           root=Path.cwd(); base=root/'scripts/statistical-levels-release'
+          import sys
+          sys.path.insert(0,str(root/'scripts/statistical-levels-ci'))
+          from admission import Git,reconciled_report_hashes
+          current_report_hashes=reconciled_report_hashes(Git(root),subprocess.check_output(['git','rev-parse','HEAD']).decode().strip())
           sha=lambda data:hashlib.sha256(data).hexdigest()
           def unique(p):
               def pairs(items):
@@ -615,7 +626,7 @@ jobs:
               assert sha(source)==entry['sha256']
               assert hashlib.sha1(b'blob '+str(len(source)).encode()+b'\0'+source).hexdigest()==entry['oid']
               assert subprocess.check_output(['git','ls-tree',production_generation['production_commit'],'--',name]).decode().split('\t')[0]==entry['mode']+' blob '+entry['oid']
-              assert sha((root/name).read_bytes())==entry['sha256']
+              assert sha((root/name).read_bytes())==current_report_hashes.get(name,entry['sha256'])
           preservation=unique(root/'docs/statistical-levels-execution-requalification-manifest.json')
           preservation_path=root/'docs/statistical-levels-execution-requalification-manifest.json'
           assert sha(preservation_path.read_bytes())=='5e74899a8b473be8fe9bd0973301f8cc3441fbf183172fb9d093b171599c62a5'
@@ -639,7 +650,7 @@ jobs:
               original=subprocess.check_output(['git','show',entry['source_commit']+':'+entry['path']])
               assert sha(original)==entry['sha256'], entry['path']
               expected_current=report_ledger[entry['path']]['sha256'] if entry['path']=='public/reports/manifest.json' else entry['sha256']
-              assert sha((root/entry['path']).read_bytes())==expected_current, entry['path']
+              assert sha((root/entry['path']).read_bytes())==current_report_hashes.get(entry['path'],expected_current), entry['path']
           assert {e['path']for e in preservation['historical_files']} & set(report_ledger)=={'public/reports/manifest.json'}
           active=unique(root/'lib/statistical-levels/generated-provenance.json')
           assert active['SCHEMA_VERSION']=='statistical-levels.provenance.v1' and active['SOURCE_STATE']=='COMMITTED'

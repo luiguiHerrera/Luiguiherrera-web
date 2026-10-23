@@ -63,19 +63,43 @@ jobs:
           action-timeout-s: 120
 
       - name: Archive, verify, seal, reread and generate a validated candidate
+        id: prepare
         run: node scripts/statistical-levels-hosted.mjs prepare
 
       - name: Atomically commit validated snapshots and provenance, then push
+        if: steps.prepare.outputs.mode == 'PREPARED'
         run: node scripts/statistical-levels-hosted.mjs publish
 
       - name: Bind the published commit to exact-version S3 readback
+        if: steps.prepare.outputs.mode == 'PREPARED'
         run: node scripts/statistical-levels-ci/producer-receipt.mjs
 
       - name: Upload metadata-only publication receipt
+        if: steps.prepare.outputs.mode == 'PREPARED'
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
         with:
           name: sl-published-${{ github.run_id }}-${{ github.run_attempt }}
           path: ${{ runner.temp }}/statistical-levels-ci-receipt/artifact/publication-receipt.json
           if-no-files-found: error
+          retention-days: 90
+          overwrite: false
+
+      - name: Retain authenticated daily admission outcome without qualification claims
+        if: always() && steps.prepare.outcome == 'success'
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+        with:
+          name: sl-daily-outcome-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/statistical-levels-authority/daily-artifact/daily-outcome.json
+          if-no-files-found: error
+          retention-days: 90
+          overwrite: false
+
+      - name: Retain bounded updater failure diagnostics
+        if: failure()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+        with:
+          name: sl-updater-failure-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/statistical-levels-authority/failure-artifact/*.json
+          if-no-files-found: warn
           retention-days: 90
           overwrite: false

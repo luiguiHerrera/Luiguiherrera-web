@@ -6,6 +6,7 @@ import { setTimeout as pause } from 'node:timers/promises';
 import { createEngine, generateSnapshots, verifyArchive, configPath, projectRoot } from './statistical-levels-offline.mjs';
 import { S3Store, runtimeConfig, newRunId, hash, jsonBytes, requireValue, assertNoSecrets } from './statistical-levels-storage.mjs';
 import { runPrefix, sealArchive, readSealedArchive } from './statistical-levels-archive.mjs';
+import { admitDaily, stateBucket } from './statistical-levels-daily.mjs';
 
 const read = file => JSON.parse(fs.readFileSync(file, 'utf8'));
 const source = () => fs.readFileSync(path.join(projectRoot, 'scripts/build-statistical-levels.mjs'), 'utf8');
@@ -72,13 +73,16 @@ export function validateCandidate(output, config, archive) {
   return { SNAPSHOT_COUNT: files.length, PROVENANCE_COVERAGE: '100%', PROVENANCE_SIDECAR_VALID: true };
 }
 
-export async function prepareHosted({ store, storageConfig, directory, gitSha, assertRuntime, runId = newRunId(), fetcher = fetchRaw, generate = generateSnapshots, validate = validateCandidate }) {
+export async function prepareHosted({ store, storageConfig, directory, gitSha, assertRuntime, runId = newRunId(), fetcher = fetchRaw, generate = generateSnapshots, validate = validateCandidate, existingAuthority = null }) {
   assertRuntime();
   await store.identity(); // Before reservation and before any provider access.
   requireValue(/^[a-f0-9]{40}$/.test(gitSha), 'GENERATOR_COMMIT_REQUIRED');
   const e = createEngine(source(), new Date().toISOString()).engine;
+  if (existingAuthority) {
+    requireValue(existingAuthority.runId === runId && existingAuthority.prefix === runPrefix('raw-authority', runId), 'REUSE_ARCHIVE_SCOPE');
+  }
   const prefix = runPrefix('raw-authority', runId);
-  const authority = await sealArchive({ store, prefix, runId, expectedCount: 40,
+  const authority = existingAuthority ?? await sealArchive({ store, prefix, runId, expectedCount: 40,
     produce: async function* () {
       for (const asset of e.universe) {
         const response = await fetcher(asset);
@@ -107,6 +111,13 @@ export async function prepareHosted({ store, storageConfig, directory, gitSha, a
   return candidate;
 }
 
+export function preflightSource(git, gitSha) {
+  requireValue(/^[a-f0-9]{40}$/.test(gitSha), 'GENERATOR_COMMIT_REQUIRED');
+  requireValue(git(['rev-parse', 'HEAD']).trim() === gitSha, 'SOURCE_HEAD_CHANGED');
+  requireValue(git(['status', '--porcelain']).trim() === '', 'DIRTY_PUBLICATION_WORKTREE');
+  requireValue(git(['ls-remote', 'origin', 'refs/heads/vercel-deployment']).trim() === `${gitSha}\trefs/heads/vercel-deployment`, 'PREFETCH_REMOTE_ADVANCED');
+}
+
 export function publishCandidate(candidate, { git, install, validate = validateCandidate }) {
   validate(candidate.output, candidate.config, candidate.archive);
   requireValue(git(['rev-parse', 'HEAD']).trim() === candidate.gitSha, 'SOURCE_HEAD_CHANGED');
@@ -124,17 +135,58 @@ export function publishCandidate(candidate, { git, install, validate = validateC
 }
 
 if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
-  let store;
+  let store, state, phase = 'RUNTIME_PREFLIGHT';
   try {
     const storageConfig = runtimeConfig(process.env, true);
     const directory = path.join(process.env.RUNNER_TEMP, 'statistical-levels-authority');
     if (process.argv[2] === 'prepare') {
       fs.mkdirSync(directory, { mode: 0o700 }); // No reuse of another candidate.
+      phase = 'SOURCE_PREFLIGHT';
+      preflightSource(args => execFileSync('git', args, { cwd: projectRoot, encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'] }), process.env.GITHUB_SHA);
       store = new S3Store(storageConfig);
-      const candidate = await prepareHosted({ store, storageConfig, directory, gitSha: process.env.GITHUB_SHA, assertRuntime: () => runtimeConfig(process.env, true) });
-      const summary = JSON.stringify({ STATE: 'SEALED_ARCHIVE_AND_VALIDATED_CANDIDATE', ...candidate.validation });
-      assertNoSecrets(summary); console.log(summary);
+      state = new S3Store({ ...storageConfig, bucket: stateBucket });
+      phase = 'AWS_IDENTITY';
+      await store.identity();
+      const now = new Date().toISOString();
+      phase = 'DAILY_ADMISSION';
+      const gate = await admitDaily({ store, state,
+        context: { day: now.slice(0, 10), now, runId: newRunId(), gitSha: process.env.GITHUB_SHA,
+          producerRunId: process.env.GITHUB_RUN_ID, producerAttempt: process.env.GITHUB_RUN_ATTEMPT },
+        currentProvenance: read(path.join(projectRoot, 'lib/statistical-levels/generated-provenance.json')) });
+      const outcome = { schema: 'statistical-levels.daily-outcome.v1', repository: process.env.GITHUB_REPOSITORY,
+        repository_id: process.env.GITHUB_REPOSITORY_ID, branch: 'vercel-deployment',
+        source_sha: process.env.GITHUB_SHA, run_id: process.env.GITHUB_RUN_ID, run_attempt: process.env.GITHUB_RUN_ATTEMPT,
+        event: process.env.GITHUB_EVENT_NAME, observed_at: new Date().toISOString(), gate,
+        qualification: 'NOT_ISSUED', production_mutated: false, data_promoted: false };
+      if (gate.mode === 'GENERATED_NOOP') {
+        phase = 'GENERATED_NOOP_VERIFICATION';
+        const archive = path.join(directory, 'noop-archive');
+        await readSealedArchive(store, gate.authority, archive);
+        const config = read(path.join(projectRoot, 'lib/statistical-levels/generated-provenance.json')).CONFIG;
+        validateCandidate(path.join(projectRoot, 'lib/statistical-levels/generated'), config, archive);
+      }
+      if (gate.mode === 'PUBLISHED_NOOP' || gate.mode === 'GENERATED_NOOP') {
+        requireValue(execFileSync('git', ['ls-remote', 'origin', 'refs/heads/vercel-deployment'], { cwd: projectRoot, encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'] }).trim() === `${process.env.GITHUB_SHA}\trefs/heads/vercel-deployment`, 'DAILY_NOOP_REF_MOVED');
+        outcome.status = 'NOOP';
+      } else {
+        phase = 'ARCHIVE_AND_GENERATION';
+        const candidate = await prepareHosted({ store, storageConfig, directory, gitSha: process.env.GITHUB_SHA,
+          runId: gate.mode === 'FETCH_NEW' ? gate.runId : gate.authority.runId,
+          existingAuthority: gate.mode === 'REUSE_SEALED' ? gate.authority : null,
+          assertRuntime: () => runtimeConfig(process.env, true) });
+        requireValue(candidate.config.SNAPSHOT_CUTOFF.slice(0, 10) === gate.day, 'DAILY_ARCHIVE_DAY_CHANGED');
+        // The post-publication receipt consumes the same authenticated selection.
+        fs.writeFileSync(path.join(directory, 'daily-admission.json'), jsonBytes(gate), { flag: 'wx', mode: 0o600 });
+        outcome.status = 'PREPARED';
+      }
+      const text = JSON.stringify(outcome, null, 2) + '\n'; assertNoSecrets(text);
+      fs.mkdirSync(path.join(directory, 'daily-artifact'), { mode: 0o700 });
+      fs.writeFileSync(path.join(directory, 'daily-artifact/daily-outcome.json'), text, { flag: 'wx', mode: 0o600 });
+      requireValue(typeof process.env.GITHUB_OUTPUT === 'string', 'DAILY_OUTPUT_REQUIRED');
+      fs.appendFileSync(process.env.GITHUB_OUTPUT, `mode=${outcome.status}\n`);
+      console.log(JSON.stringify({ STATE: outcome.status, DAILY_MODE: gate.mode, QUALIFICATION: 'NOT_ISSUED' }));
     } else if (process.argv[2] === 'publish') {
+      phase = 'GIT_PUBLICATION';
       const candidate = read(path.join(directory, 'candidate.json'));
       publishCandidate(candidate, {
         git: args => execFileSync('git', args, { cwd: projectRoot, encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'] }),
@@ -146,7 +198,23 @@ if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) 
     } else throw new Error('UNKNOWN_HOSTED_MODE');
   } catch (error) {
     const code = /^[A-Z][A-Z0-9_]{0,100}$/.test(error.message) || ['AccessDenied', 'PreconditionFailed'].includes(error.message) ? error.message : 'UNCLASSIFIED_ERROR';
+    // Bounded phase/code diagnostics only. No exception text, raw data, headers,
+    // process environment or credentials are serialized. Persistence cannot mask
+    // the original failure or enable any retry.
+    try {
+      requireValue(path.isAbsolute(process.env.RUNNER_TEMP ?? ''), 'DIAGNOSTIC_TEMP');
+      const folder = path.join(process.env.RUNNER_TEMP, 'statistical-levels-authority', 'failure-artifact');
+      fs.mkdirSync(folder, { recursive: true, mode: 0o700 });
+      const metadata = { schema: 'statistical-levels.hosted-failure.v1', phase, code,
+        mode: ['prepare', 'publish'].includes(process.argv[2]) ? process.argv[2] : 'UNKNOWN',
+        run_id: /^[1-9][0-9]*$/.test(process.env.GITHUB_RUN_ID ?? '') ? process.env.GITHUB_RUN_ID : 'UNVERIFIED',
+        attempt: /^[1-9][0-9]*$/.test(process.env.GITHUB_RUN_ATTEMPT ?? '') ? process.env.GITHUB_RUN_ATTEMPT : 'UNVERIFIED',
+        source_sha: /^[a-f0-9]{40}$/.test(process.env.GITHUB_SHA ?? '') ? process.env.GITHUB_SHA : 'UNVERIFIED',
+        at: new Date().toISOString(), result: 'FAIL_CLOSED', recovery_or_retry_authorized: false };
+      const text = JSON.stringify(metadata, null, 2) + '\n'; assertNoSecrets(text);
+      fs.writeFileSync(path.join(folder, metadata.mode + '.json'), text, { flag: 'wx', mode: 0o600 });
+    } catch { console.error('HOSTED_FAILURE_DIAGNOSTIC_UNAVAILABLE'); }
     console.error('HOSTED_RAW_AUTHORITY_FAILED_CLOSED:' + code); process.exitCode = 1;
   }
-  finally { store?.close(); }
+  finally { store?.close(); state?.close(); }
 }

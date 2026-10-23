@@ -64,6 +64,20 @@ export class S3Store {
       return { bytes, version: metadata.VersionId };
     } finally { fs.rmSync(file, { force: true }); }
   }
+  // A missing GET may be AccessDenied without ListBucket. Only this complete,
+  // exact-key native listing can establish absence; 403/timeout never means absent.
+  async findExact(key) {
+    const result = this.cli('s3api', 'list-objects-v2', ['--bucket', this.config.bucket,
+      '--prefix', key, '--max-keys', '2', '--expected-bucket-owner', this.config.account]);
+    requireValue(result.IsTruncated === false && result.Name === this.config.bucket &&
+      result.Prefix === key && !result.NextContinuationToken, 'EXISTENCE_LIST_INCOMPLETE');
+    const rows = result.Contents ?? [];
+    requireValue(Array.isArray(rows) && rows.length <= 2 &&
+      rows.every(row => typeof row.Key === 'string' && row.Key.startsWith(key)), 'EXISTENCE_LIST_INVALID');
+    const exact = rows.filter(row => row.Key === key);
+    requireValue(exact.length <= 1, 'EXISTENCE_LIST_AMBIGUOUS');
+    return exact.length === 1;
+  }
   async retention(key, version) {
     return this.cli('s3api', 'get-object-retention', [...this.args(key), '--version-id', version]).Retention;
   }

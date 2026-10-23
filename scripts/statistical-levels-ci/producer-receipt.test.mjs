@@ -113,3 +113,21 @@ test('producer rechecks branch after all readbacks and never emits stale receipt
   assert.equal(f.calls.length, 45);
   assert.ok(!fs.existsSync(path.join(f.destination, 'artifact/publication-receipt.json')));
 });
+
+for (const mode of ['FETCH_NEW', 'REUSE_SEALED']) test(`daily ${mode} binds a separately reread selection without private raw export`, async t => {
+  const f = fixture(t), original = f.store.get;
+  f.candidate.config.SNAPSHOT_CUTOFF = '2026-10-20T17:04:00Z';
+  f.provenance.CONFIG = f.candidate.config;
+  const value = { schema: 'statistical-levels.daily-selection.v1', day: '2026-10-20', run_id: f.candidate.authority.runId,
+    source_sha: f.env.GITHUB_SHA, producer_run_id: mode === 'FETCH_NEW' ? '12345' : '12344', producer_attempt: '1', created_at: '2026-10-20T17:00:00Z' };
+  const bytes = Buffer.from(JSON.stringify(value, null, 2) + '\n');
+  f.dailyAdmission = { mode, day: value.day, selection: { key: 'statistical-levels/raw-authority/daily/2026-10-20/SELECTED.json', version: 'selection-version', sha256: hash(bytes), utf8: bytes.toString() } };
+  let selectionReads = 0;
+  f.store.get = async (key, version) => {
+    if (key === f.dailyAdmission.selection.key) { selectionReads++; assert.equal(version, 'selection-version'); return { bytes, version }; }
+    return original(key, version);
+  };
+  const receipt = await createReceipt(f);
+  assert.equal(f.calls.length, 45); assert.equal(selectionReads, 1);
+  assert.deepEqual(receipt.daily_admission, f.dailyAdmission);
+});

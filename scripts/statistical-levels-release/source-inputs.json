@@ -67,7 +67,7 @@
   "lib/statistical-levels/runtime-snapshot.ts": "3322ece63e89a8792bc1a66afb77913493410d3ba9995b7ff3aed4b3c84c8a6f",
   "lib/statistical-levels/types.ts": "49360299efb1bc8d2ec377d91b8d6a510e6f858a8ef21b5debafb90df96e02e8",
   "lib/trends/catalog.ts": "6bad52c9d8059675ce5bc840d5ee55142e58d652a6b621a5b6ea6acf7ed5c1cc",
-  "next.config.ts": "6b46db98ad2bf816280170964c9e2aaa96c4b354ac2ff3704798bc042824e07f",
+  "next.config.ts": "3be48adf59474117cb9aa8f83fc875241456f5bc4305a68fcc1509954f8fa369",
   "package-lock.json": "a1b1afb5f54c85bf0ed499e519cba848afaebb1e332850909b3b4b96a3a9c813",
   "package.json": "1c35f93472836e30097b04767eac2419b392d419ba32ab1cd6afa400a7ae0de5",
   "postcss.config.js": "fa650b380adfabb151a0b352f7135e107e6352345f899060f1c5c231228f94bf",

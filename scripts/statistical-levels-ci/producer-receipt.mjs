@@ -13,7 +13,7 @@ const shaPattern = /^[a-f0-9]{40}$/;
 
 // This is a post-publication readback. It cannot publish, mint credentials,
 // change S3, or export the private raw response bodies.
-export async function createReceipt({ env, git, store, candidate, destination, clock = () => new Date() }) {
+export async function createReceipt({ env, git, store, candidate, destination, clock = () => new Date(), dailyAdmission = null }) {
   requireValue(env.GITHUB_REPOSITORY === REPOSITORY && env.GITHUB_REPOSITORY_ID === REPOSITORY_ID, 'RECEIPT_REPOSITORY');
   requireValue(env.GITHUB_REF === 'refs/heads/vercel-deployment' && env.GITHUB_WORKFLOW === 'Update statistical levels', 'RECEIPT_WORKFLOW');
   requireValue(env.GITHUB_WORKFLOW_REF === `${REPOSITORY}/.github/workflows/update-statistical-levels.yml@refs/heads/vercel-deployment`, 'RECEIPT_WORKFLOW_REF');
@@ -48,6 +48,21 @@ export async function createReceipt({ env, git, store, candidate, destination, c
     const version = name === 'SEALED' ? authority.sealVersion : seal.OBJECTS[name].VERSION_ID;
     return [name, { utf8: bytes.toString('utf8'), sha256: hash(bytes), bytes: bytes.length, version }];
   }));
+  let daily = null;
+  if (dailyAdmission !== null) {
+    requireValue(['FETCH_NEW', 'REUSE_SEALED'].includes(dailyAdmission.mode), 'RECEIPT_DAILY_MODE');
+    const binding = dailyAdmission.selection;
+    requireValue(binding && binding.key === `statistical-levels/raw-authority/daily/${dailyAdmission.day}/SELECTED.json` &&
+      /^[a-f0-9]{64}$/.test(binding.sha256) && typeof binding.version === 'string', 'RECEIPT_DAILY_SELECTION');
+    const selected = await store.get(binding.key, binding.version);
+    requireValue(selected.version === binding.version && selected.bytes.toString('utf8') === binding.utf8 && hash(selected.bytes) === binding.sha256, 'RECEIPT_DAILY_READBACK');
+    const selection = JSON.parse(binding.utf8);
+    requireValue(selection.run_id === authority.runId && selection.source_sha === env.GITHUB_SHA &&
+      selection.day === dailyAdmission.day && candidate.config.SNAPSHOT_CUTOFF.slice(0, 10) === selection.day, 'RECEIPT_DAILY_BINDING');
+    if (dailyAdmission.mode === 'FETCH_NEW') requireValue(selection.producer_run_id === env.GITHUB_RUN_ID &&
+      selection.producer_attempt === env.GITHUB_RUN_ATTEMPT, 'RECEIPT_DAILY_CURRENT_RUN');
+    daily = { mode: dailyAdmission.mode, day: dailyAdmission.day, selection: binding };
+  }
   const tree = git(['rev-parse', `${published}^{tree}`]).trim();
   requireValue(shaPattern.test(tree), 'RECEIPT_TREE');
   // Recheck after the complete S3 read; stale evidence never gets uploaded.
@@ -69,6 +84,7 @@ export async function createReceipt({ env, git, store, candidate, destination, c
     },
     metadata_objects: metadata,
   };
+  if (daily) receipt.daily_admission = daily;
   const artifact = path.join(destination, 'artifact');
   fs.mkdirSync(artifact, { mode: 0o700 });
   const serialized = JSON.stringify(receipt, null, 2) + '\n';
@@ -87,6 +103,7 @@ if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) 
     store = new S3Store(config);
     const receipt = await createReceipt({
       env, store, candidate,
+      dailyAdmission: JSON.parse(fs.readFileSync(path.join(env.RUNNER_TEMP, 'statistical-levels-authority/daily-admission.json'), 'utf8')),
       destination: path.join(env.RUNNER_TEMP, 'statistical-levels-ci-receipt'),
       git: args => execFileSync('git', args, { encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'] }),
     });

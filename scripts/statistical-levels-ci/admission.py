@@ -134,7 +134,7 @@ def payload_hash(git, sha):
     return digest(json.dumps(rows, sort_keys=True, separators=(',', ':')).encode())
 
 
-def bootstrap(git, head):
+def historical_bootstrap(git, head):
     data_paths = paths(git)
     chain = []
     cursor = head
@@ -161,6 +161,92 @@ def bootstrap(git, head):
     need(git.parents(BASE) == [OLD], 'BASE_PARENT')
     delta(git, OLD, BASE, data_paths)
     return cursor, chain
+
+
+# Exact local successor proposal. Publishing it requires separate Founder authority.
+# The two-parent report reconciliation is accepted only by this immutable object.
+RECONCILED = 'c89be06fe0f374d6394c115c2223707c0d57314c'
+REMOTE_BEFORE_RECONCILIATION = 'e68811777dd31051a3d5587539361a88447a7463'
+REPORT_PARENT = '502d192f8d3d2536e29e27e36a87cc4b24030efc'
+RECONCILIATION_EVIDENCE = 'scripts/statistical-levels-ci/reconciliation-evidence.json'
+RECONCILIATION_EVIDENCE_SHA256 = '3b98461b3250a278e1ca86dcfa7578d44af979cbfdf07509f893d3679bbac50e'
+DAILY_BOOTSTRAP_IDENTITY = 'Codex <codex@openai.com> 1792758073 +0000'
+CURRENT_DATA_EVIDENCE = 'scripts/statistical-levels-ci/current-data-evidence.json'
+CURRENT_DATA_EVIDENCE_SHA256 = '3dcaf948423fcd5e4b35148fb159b901c7879e92d46b13c0f980734cf2860e6f'
+DAILY_BOOTSTRAP_MESSAGE = 'Qualify bounded daily durability and exact report reconciliation'
+DAILY_FILES = {CI, PRODUCER, CURRENT_DATA_EVIDENCE, '.github/workflows/statistical-levels-release.yml',
+    *('scripts/statistical-levels-release/' + n for n in ['source-inputs.json', 'source-manifest.json', 'SOURCE_SHA256SUMS', 'workflow-freeze.json']), 'scripts/statistical-levels-hosted.mjs',
+    'scripts/statistical-levels-storage.mjs', 'scripts/statistical-levels-daily.mjs',
+    'scripts/statistical-levels-daily.test.mjs', RECONCILIATION_EVIDENCE,
+    'scripts/statistical-levels-ci/test_daily_admission.py',
+    'scripts/statistical-levels-ci/producer-receipt.test.mjs',
+    'scripts/statistical-levels-ci/producer-receipt.mjs', 'scripts/statistical-levels-ci/admission.py'}
+DAILY_PIN = rb'(      SL_CI_DAILY_PAYLOAD_SHA256: ")[a-f0-9]{64}("\n)'
+
+
+def daily_payload_hash(git, sha):
+    rows = []
+    for p in sorted(DAILY_FILES):
+        data = git.blob(sha, p)
+        if p == CI:
+            need(len(re.findall(DAILY_PIN, data)) == 1, 'DAILY_BOOTSTRAP_PIN_FIELD')
+            data = re.sub(DAILY_PIN, lambda m: m[1] + b'0' * 64 + m[2], data)
+        rows.append({'path': p, 'mode': '100644', 'sha256': digest(data)})
+    return digest(json.dumps(rows, sort_keys=True, separators=(',', ':')).encode())
+
+
+def bootstrap(git, head):
+    # Preserve the entire old accepted lineage and predicate implementation.
+    if subprocess.run(['git', 'merge-base', '--is-ancestor', RECONCILED, head], cwd=git.root,
+                      stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL).returncode != 0:
+        return historical_bootstrap(git, head)
+    data_paths = paths(git)
+    chain, cursor = [], head
+    for _ in range(4096):
+        parents = git.parents(cursor)
+        need(len(parents) == 1, 'DAILY_ORDERED_SINGLE_PARENT')
+        if parents == [RECONCILED]:
+            break
+        delta(git, parents[0], cursor, data_paths)
+        chain.append(cursor); cursor = parents[0]
+    else:
+        raise ValueError('DAILY_LINEAGE_BOUND')
+    evidence_bytes = git.blob(cursor, RECONCILIATION_EVIDENCE)
+    need(digest(evidence_bytes) == RECONCILIATION_EVIDENCE_SHA256, 'EXACT_RECONCILIATION_EVIDENCE')
+    evidence = unique_json(evidence_bytes)
+    need(evidence['merge'] == RECONCILED and evidence['tree'] == '0b9482694252c608db51c285751ef932441bf201' and
+         evidence['parents'] == [REMOTE_BEFORE_RECONCILIATION, REPORT_PARENT], 'EXACT_RECONCILIATION_SCOPE')
+    need(git.parents(RECONCILED) == evidence['parents'] and git.text('rev-parse', RECONCILED + '^{tree}') == evidence['tree'], 'EXACT_RECONCILIATION_OBJECT')
+    historical_bootstrap(git, REMOTE_BEFORE_RECONCILIATION)
+    _, reconciled = delta(git, REMOTE_BEFORE_RECONCILIATION, RECONCILED, set(evidence['delta']))
+    need(len(evidence['delta']) == 42 and git.text('rev-parse', REPORT_PARENT + '^{tree}') == evidence['source_report_tree'], 'EXACT_REPORT_TREE')
+    report = git.tree(REPORT_PARENT)
+    for name, item in evidence['delta'].items():
+        need(reconciled[name] == report[name] == (item['mode'], item['git_blob']) and
+             digest(git.blob(RECONCILED, name)) == item['sha256'], 'REPORT_PRESERVATION')
+    delta(git, RECONCILED, cursor, DAILY_FILES)
+    expected = ('tree ' + git.text('rev-parse', cursor + '^{tree}') + '\nparent ' + RECONCILED +
+        '\nauthor ' + DAILY_BOOTSTRAP_IDENTITY + '\ncommitter ' + DAILY_BOOTSTRAP_IDENTITY + '\n\n' + DAILY_BOOTSTRAP_MESSAGE + '\n').encode()
+    need(git('cat-file', 'commit', cursor) == expected, 'DAILY_BOOTSTRAP_COMMIT_HEADER')
+    pin = re.findall(rb'      SL_CI_DAILY_PAYLOAD_SHA256: "([a-f0-9]{64})"\n', git.blob(cursor, CI))
+    need(len(pin) == 1 and pin[0].decode() == daily_payload_hash(git, cursor), 'DAILY_BOOTSTRAP_PAYLOAD')
+    current, start = git.tree(head), git.tree(cursor)
+    need(set(current) == set(start) and all(current[p] == start[p] for p in current if p not in data_paths), 'DAILY_SUCCESSOR_CODE_CHANGED')
+    return cursor, chain
+
+
+def reconciled_report_hashes(git, head):
+    """Current report bytes only from the exact reconciled, qualified lineage.
+
+    Historical report hashes are still authenticated by CI at their original
+    commits. This mapping cannot admit arbitrary current report changes.
+    """
+    if subprocess.run(['git', 'merge-base', '--is-ancestor', RECONCILED, head], cwd=git.root,
+                      stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL).returncode != 0:
+        return {}
+    root, _ = bootstrap(git, head)
+    evidence = unique_json(git.blob(root, RECONCILIATION_EVIDENCE))
+    return {p: v['sha256'] for p, v in evidence['delta'].items()}
 
 
 class API:
@@ -332,8 +418,10 @@ def validate_data(git, sha, parent, metadata):
     return {'baseline': baseline, 'seal_sha256': c['RAW_ARCHIVE_SEAL_SHA256'], 'seal_version': c['RAW_ARCHIVE_SEAL_VERSION'], 'snapshots': 81, 'files': 82}
 
 
-def bind_receipt(git, head, run, receipt):
+def bind_receipt(git, head, run, receipt, original_run=None):
     expected = {'schema', 'repository', 'repository_id', 'workflow_id', 'workflow_path', 'event', 'branch', 'run_id', 'run_attempt', 'source_sha', 'published_sha', 'published_tree', 'provenance_sha256', 'created_at', 's3', 'metadata_objects'}
+    if 'scripts/statistical-levels-daily.mjs' in git.tree(run['head_sha']):
+        expected.add('daily_admission')
     need(set(receipt) == expected, 'RECEIPT_FIELDS')
     for key, value in {'schema': 'statistical-levels.hosted-publication-receipt.v1', 'repository': REPO,
         'repository_id': REPO_ID, 'workflow_id': PRODUCER_ID, 'workflow_path': PRODUCER,
@@ -347,13 +435,40 @@ def bind_receipt(git, head, run, receipt):
     qualified = validate_data(git, head, run['head_sha'], receipt['metadata_objects'])
     provenance = unique_json(git.blob(head, PROVENANCE))
     need(provenance['BASELINE_ID'] != unique_json(git.blob(run['head_sha'], PROVENANCE))['BASELINE_ID'], 'BASELINE_REUSED')
-    need(instant(run['run_started_at']) <= instant(provenance['CONFIG']['SNAPSHOT_CUTOFF']) <= instant(receipt['created_at']), 'SNAPSHOT_RUN_TIME')
+    if 'daily_admission' in receipt:
+        validate_daily_selection(receipt, run, provenance, original_run)
+    else:
+        need(instant(run['run_started_at']) <= instant(provenance['CONFIG']['SNAPSHOT_CUTOFF']) <= instant(receipt['created_at']), 'SNAPSHOT_RUN_TIME')
     expected_s3 = {'bucket': BUCKET, 'region': REGION, 'prefix': 'statistical-levels/raw-authority/' + qualified['baseline'] + '/',
         'baseline': qualified['baseline'], 'seal_sha256': qualified['seal_sha256'], 'seal_version': qualified['seal_version'],
         'principal': 'arn:aws:sts::732159826922:assumed-role/LuiguiHerreraStatisticalLevelsRawAuthority/sl-raw-' + str(run['id']) + '-' + str(run['run_attempt']),
         'exact_version_read_count': 45, 'evidence_class': 'AUTHENTICATED_PRODUCER_EXACT_VERSION_READBACK'}
     need(receipt['s3'] == expected_s3, 'RECEIPT_S3')
     return qualified
+
+
+def validate_daily_selection(receipt, run, provenance, original_run=None):
+    d = receipt['daily_admission']
+    need(set(d) == {'mode', 'day', 'selection'} and d['mode'] in ['FETCH_NEW', 'REUSE_SEALED'], 'DAILY_RECEIPT_SCHEMA')
+    ref = d['selection']
+    need(set(ref) == {'key', 'version', 'sha256', 'utf8'} and ref['key'] == 'statistical-levels/raw-authority/daily/' + d['day'] + '/SELECTED.json', 'DAILY_SELECTION_REF')
+    need(type(ref['version']) is str and ref['version'] not in ['', 'null'] and digest(ref['utf8'].encode()) == ref['sha256'], 'DAILY_SELECTION_INTEGRITY')
+    selected = unique_json(ref['utf8'])
+    need(set(selected) == {'schema', 'day', 'run_id', 'source_sha', 'producer_run_id', 'producer_attempt', 'created_at'}, 'DAILY_SELECTION_SCHEMA')
+    need(selected['schema'] == 'statistical-levels.daily-selection.v1' and selected['day'] == d['day'] == provenance['CONFIG']['SNAPSHOT_CUTOFF'][:10], 'DAILY_SELECTION_DAY')
+    need(selected['run_id'] == provenance['BASELINE_ID'] and selected['source_sha'] == run['head_sha'] == provenance['GENERATOR_COMMIT'], 'DAILY_SELECTION_SOURCE')
+    need(instant(selected['created_at']) <= instant(provenance['CONFIG']['SNAPSHOT_CUTOFF']) <= instant(receipt['created_at']), 'DAILY_SELECTION_TIME')
+    if d['mode'] == 'FETCH_NEW':
+        need((selected['producer_run_id'], selected['producer_attempt']) == (str(run['id']), str(run['run_attempt'])), 'DAILY_SELECTION_RUN')
+        need(instant(run['run_started_at']) <= instant(selected['created_at']), 'DAILY_SELECTION_RUN_TIME')
+        need(original_run is None, 'DAILY_UNEXPECTED_ORIGINAL_RUN')
+    else:
+        need(original_run is not None, 'DAILY_REUSE_NATIVE_ORIGIN_REQUIRED')
+        run_identity(original_run, PRODUCER_ID, PRODUCER, run['head_sha'])
+        need((str(original_run['id']), str(original_run['run_attempt'])) == (selected['producer_run_id'], selected['producer_attempt']), 'DAILY_REUSE_ORIGINAL_RUN')
+        need(original_run['event'] in ['schedule', 'workflow_dispatch'] and original_run['status'] == 'completed' and original_run['conclusion'] in ['failure', 'cancelled', 'timed_out'], 'DAILY_REUSE_ORIGINAL_TERMINAL')
+        need(instant(original_run['run_started_at']) <= instant(selected['created_at']) <= instant(provenance['CONFIG']['SNAPSHOT_CUTOFF']) <= instant(original_run['updated_at']) <= instant(run['run_started_at']), 'DAILY_REUSE_NATIVE_TIME')
+        need((original_run['id'], original_run['run_attempt']) != (run['id'], run['run_attempt']), 'DAILY_REUSE_SAME_RUN')
 
 
 def commit_identity(api, head, run):
@@ -369,23 +484,30 @@ def commit_identity(api, head, run):
 def parent_ci(api, parent):
     listing = api.get('/actions/workflows/' + str(CI_ID) + '/runs?head_sha=' + parent + '&status=success&per_page=100')
     need(listing['total_count'] == len(listing['workflow_runs']), 'PARENT_CI_PAGINATION')
-    runs = listing['workflow_runs']
-    need(len(runs) == 1, 'PARENT_CI_AMBIGUOUS_OR_ABSENT')
-    r = runs[0]
-    run_identity(r, CI_ID, CI, parent)
-    need(r['event'] in ['push', 'workflow_run'] and r['status'] == 'completed' and r['conclusion'] == 'success', 'PARENT_CI_NOT_PASS')
-    jobs = api.get('/actions/runs/' + str(r['id']) + '/attempts/' + str(r['run_attempt']) + '/jobs?per_page=100')
-    need(jobs['total_count'] == len(jobs['jobs']) == 1, 'PARENT_JOB_SET')
-    job = jobs['jobs'][0]
-    need(job['name'] == 'validate' and job['status'] == 'completed' and job['conclusion'] == 'success', 'PARENT_JOB')
-    steps = {s['name']: s for s in job['steps']}
-    for name in ['Bind qualification to event SHA and governed metadata-repair successor lineage',
-                 'Test bounded CI admission and producer readback',
-                 'Authenticate fresh native capture handoff',
-                 'Run existing release, native proof, policy and security tests',
-                 'Reject missing or skipped mandatory coverage and candidate drift',
-                 'Revalidate exact branch and emit bounded qualification evidence']:
-        need(name in steps and steps[name]['status'] == 'completed' and steps[name]['conclusion'] == 'success', 'PARENT_MANDATORY_STEP')
+    qualified = []
+    for r in listing['workflow_runs']:
+        run_identity(r, CI_ID, CI, parent)
+        need(r['event'] in ['push', 'workflow_run'] and r['status'] == 'completed' and r['conclusion'] == 'success', 'PARENT_CI_NOT_PASS')
+        jobs = api.get('/actions/runs/' + str(r['id']) + '/attempts/' + str(r['run_attempt']) + '/jobs?per_page=100')
+        need(jobs['total_count'] == len(jobs['jobs']) == 1, 'PARENT_JOB_SET')
+        job = jobs['jobs'][0]
+        need(job['name'] == 'validate' and job['status'] == 'completed', 'PARENT_JOB')
+        if r['event'] == 'workflow_run' and job['conclusion'] == 'skipped':
+            # A native no-op CI run is not a qualification, despite GitHub's
+            # aggregate success label. It can never satisfy the parent gate.
+            continue
+        need(job['conclusion'] == 'success', 'PARENT_JOB')
+        steps = {s['name']: s for s in job['steps']}
+        for name in ['Bind qualification to event SHA and governed metadata-repair successor lineage',
+                     'Test bounded CI admission and producer readback',
+                     'Authenticate fresh native capture handoff',
+                     'Run existing release, native proof, policy and security tests',
+                     'Reject missing or skipped mandatory coverage and candidate drift',
+                     'Revalidate exact branch and emit bounded qualification evidence']:
+            need(name in steps and steps[name]['status'] == 'completed' and steps[name]['conclusion'] == 'success', 'PARENT_MANDATORY_STEP')
+        qualified.append(r)
+    need(len(qualified) == 1, 'PARENT_CI_AMBIGUOUS_OR_ABSENT')
+    r = qualified[0]
     return {'run_id': r['id'], 'run_attempt': r['run_attempt'], 'head_sha': parent}
 
 
@@ -411,15 +533,32 @@ def admit(git, api, env, event):
     need(evidence['head_sha'] == BASE and evidence['producer_run_id'] == 39432688384 and evidence['source_sha'] == OLD, 'BOOTSTRAP_DATA_IDENTITY')
     validate_data(git, BASE, OLD, evidence['metadata_objects'])
     if not chain:
-        need(env['GITHUB_EVENT_NAME'] == 'push' and event['before'] == BASE and event['after'] == head and event['ref'] == 'refs/heads/' + BRANCH and not event['forced'] and not event['deleted'] and not event['created'], 'BOOTSTRAP_EVENT')
-        mode, details = 'BOUNDED_CI_BOOTSTRAP', {'data_evidence': 'REUSED_INDEPENDENT_EXACT_VERSION_READBACK', 'data_head': BASE, 'hosted_ci_at_data_head': False, 'native_run_to_published_sha_receipt_at_data_head': False}
+        daily_root = git.parents(root) == [RECONCILED]
+        expected_before = REMOTE_BEFORE_RECONCILIATION if daily_root else BASE
+        need(env['GITHUB_EVENT_NAME'] == 'push' and event['before'] == expected_before and event['after'] == head and event['ref'] == 'refs/heads/' + BRANCH and not event['forced'] and not event['deleted'] and not event['created'], 'BOOTSTRAP_EVENT')
+        if daily_root:
+            recent_bytes = git.blob(root, CURRENT_DATA_EVIDENCE)
+            need(digest(recent_bytes) == CURRENT_DATA_EVIDENCE_SHA256, 'CURRENT_DATA_EVIDENCE_PIN')
+            recent = unique_json(recent_bytes)
+            need(recent['published_sha'] == REMOTE_BEFORE_RECONCILIATION and recent['producer_run_id'] == 39791362129 and recent['producer_attempt'] == 1, 'CURRENT_DATA_EVIDENCE_IDENTITY')
+            validate_data(git, recent['published_sha'], recent['source_sha'], recent['metadata_objects'])
+            mode, details = 'EXACT_RECONCILIATION_AND_DAILY_BOOTSTRAP', {'reconciled_parent': RECONCILED, 'remote_before': expected_before,
+                'report_source': REPORT_PARENT, 'report_preservation': 'EXACT_42_PATHS', 'historical_qualification_reused': True,
+                'new_hosted_qualification_required': True, 'external_IAM_activation_required': True}
+        else:
+            mode, details = 'BOUNDED_CI_BOOTSTRAP', {'data_evidence': 'REUSED_INDEPENDENT_EXACT_VERSION_READBACK', 'data_head': BASE, 'hosted_ci_at_data_head': False, 'native_run_to_published_sha_receipt_at_data_head': False}
     else:
         need(env['GITHUB_EVENT_NAME'] == 'workflow_run', 'DAILY_EVENT')
         run = producer_run(api, event)
         need(run['head_sha'] == git.parents(head)[0], 'SOURCE_IS_EXACT_PARENT')
         prior = parent_ci(api, run['head_sha'])
         receipt, artifact = receipt_artifact(api, run)
-        qualified = bind_receipt(git, head, run, receipt)
+        original_run = None
+        if receipt.get('daily_admission', {}).get('mode') == 'REUSE_SEALED':
+            selected = unique_json(receipt['daily_admission']['selection']['utf8'])
+            need(re.fullmatch('[1-9][0-9]*', selected['producer_run_id']) and re.fullmatch('[1-9][0-9]*', selected['producer_attempt']), 'DAILY_REUSE_NATIVE_ID')
+            original_run = api.get('/actions/runs/' + selected['producer_run_id'] + '/attempts/' + selected['producer_attempt'])
+        qualified = bind_receipt(git, head, run, receipt, original_run)
         commit_identity(api, head, run)
         mode, details = 'AUTHENTICATED_DATA_SUCCESSOR', {'producer_run_id': run['id'], 'producer_attempt': run['run_attempt'], 'source_sha': run['head_sha'], 'artifact': artifact, 'parent_ci': prior, 'data': qualified, 's3_evidence_class': receipt['s3']['evidence_class']}
     current_ref(api, head)
