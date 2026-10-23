@@ -397,7 +397,7 @@ def report_contract_payload_hash(git, sha):
     return digest(json.dumps(rows, sort_keys=True, separators=(',', ':')).encode())
 
 
-def bootstrap(git, head):
+def report_contract_bootstrap(git, head):
     # Only the exact reviewed test-contract successor can extend this failed CI.
     if head == REPORT_CONTRACT_BASE or subprocess.run(
             ['git', 'merge-base', '--is-ancestor', REPORT_CONTRACT_BASE, head], cwd=git.root,
@@ -432,6 +432,68 @@ def bootstrap(git, head):
     return cursor, chain
 
 
+DURABILITY_BASE = 'ac733586792587dd3584cb355e1fc3a799648f5e'
+DURABILITY_IDENTITY = 'Codex <codex@openai.com> 1792792447 +0000'
+DURABILITY_MESSAGE = 'Bound provider streaming and retain partial-run diagnostics'
+DURABILITY_FILES = frozenset({
+    '.github/workflows/ci.yml',
+    'scripts/statistical-levels-hosted.mjs',
+    'scripts/statistical-levels-provider-durability.test.mjs',
+    'scripts/statistical-levels-ci/admission.py',
+    'scripts/statistical-levels-ci/historical-tests.py',
+    'scripts/statistical-levels-ci/test_provider_durability_admission.py',
+})
+DURABILITY_PIN = rb'(      SL_CI_DURABILITY_PAYLOAD_SHA256: ")[a-f0-9]{64}("\n)'
+
+
+def durability_payload_hash(git, sha):
+    rows = []
+    for name in sorted(DURABILITY_FILES):
+        data = git.blob(sha, name)
+        if name == CI:
+            need(len(re.findall(DURABILITY_PIN, data)) == 1, 'DURABILITY_PIN_FIELD')
+            data = re.sub(DURABILITY_PIN, lambda m: m[1] + b'0' * 64 + m[2], data)
+        rows.append({'path': name, 'mode': '100644', 'sha256': digest(data)})
+    return digest(json.dumps(rows, sort_keys=True, separators=(',', ':')).encode())
+
+
+
+def bootstrap(git, head):
+    # Only this reviewed acquisition/diagnostics successor may extend the qualified source.
+    if head == DURABILITY_BASE or subprocess.run(
+            ['git', 'merge-base', '--is-ancestor', DURABILITY_BASE, head], cwd=git.root,
+            stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL).returncode != 0:
+        return report_contract_bootstrap(git, head)
+    data_paths = paths(git)
+    chain, cursor = [], head
+    for _ in range(4096):
+        parents = git.parents(cursor)
+        need(len(parents) == 1, 'DURABILITY_ORDERED_SINGLE_PARENT')
+        if parents == [DURABILITY_BASE]:
+            break
+        delta(git, parents[0], cursor, data_paths)
+        chain.append(cursor)
+        cursor = parents[0]
+    else:
+        raise ValueError('DURABILITY_LINEAGE_BOUND')
+    before, child = git.tree(DURABILITY_BASE), git.tree(cursor)
+    changed = {p for p in before.keys() | child.keys() if before.get(p) != child.get(p)}
+    if changed == data_paths:
+        return report_contract_bootstrap(git, head)
+    report_contract_bootstrap(git, DURABILITY_BASE)
+    delta(git, DURABILITY_BASE, cursor, DURABILITY_FILES)
+    expected = ('tree ' + git.text('rev-parse', cursor + '^{tree}') + '\nparent ' + DURABILITY_BASE +
+        '\nauthor ' + DURABILITY_IDENTITY + '\ncommitter ' + DURABILITY_IDENTITY +
+        '\n\n' + DURABILITY_MESSAGE + '\n').encode()
+    need(git('cat-file', 'commit', cursor) == expected, 'DURABILITY_COMMIT_HEADER')
+    pin = re.findall(rb'      SL_CI_DURABILITY_PAYLOAD_SHA256: "([a-f0-9]{64})"\n', git.blob(cursor, CI))
+    need(len(pin) == 1 and pin[0].decode() == durability_payload_hash(git, cursor), 'DURABILITY_PAYLOAD')
+    current = git.tree(head)
+    need(set(current) == set(child) and all(current[p] == child[p] for p in current if p not in data_paths), 'DURABILITY_SUCCESSOR_CODE_CHANGED')
+    return cursor, chain
+
+
+
 def reconciled_report_hashes(git, head):
     """Current report bytes only from the exact reconciled, qualified lineage.
 
@@ -442,6 +504,8 @@ def reconciled_report_hashes(git, head):
                       stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL).returncode != 0:
         return {}
     root, _ = bootstrap(git, head)
+    if git.parents(root) == [DURABILITY_BASE]:
+        return reconciled_report_hashes(git, DURABILITY_BASE)
     if git.parents(root) == [REPORT_CONTRACT_BASE]:
         result = reconciled_report_hashes(git, REPORT_CONTRACT_BASE)
         for name in REPORT_CONTRACT_TEST_FILES:
@@ -748,15 +812,22 @@ def admit(git, api, env, event):
         security_root = git.parents(root) == [SECURITY_BASE]
         capture_root = git.parents(root) == [CAPTURE_RECOVERY_BASE]
         report_root = git.parents(root) == [REPORT_CONTRACT_BASE]
-        expected_before = REPORT_CONTRACT_BASE if report_root else CAPTURE_RECOVERY_BASE if capture_root else SECURITY_BASE if security_root else REMOTE_BEFORE_RECONCILIATION if daily_root else BASE
+        durability_root = git.parents(root) == [DURABILITY_BASE]
+        expected_before = DURABILITY_BASE if durability_root else REPORT_CONTRACT_BASE if report_root else CAPTURE_RECOVERY_BASE if capture_root else SECURITY_BASE if security_root else REMOTE_BEFORE_RECONCILIATION if daily_root else BASE
         need(env['GITHUB_EVENT_NAME'] == 'push' and event['before'] == expected_before and event['after'] == head and event['ref'] == 'refs/heads/' + BRANCH and not event['forced'] and not event['deleted'] and not event['created'], 'BOOTSTRAP_EVENT')
-        if daily_root or security_root or capture_root or report_root:
+        if daily_root or security_root or capture_root or report_root or durability_root:
             recent_bytes = git.blob(root, CURRENT_DATA_EVIDENCE)
             need(digest(recent_bytes) == CURRENT_DATA_EVIDENCE_SHA256, 'CURRENT_DATA_EVIDENCE_PIN')
             recent = unique_json(recent_bytes)
             need(recent['published_sha'] == REMOTE_BEFORE_RECONCILIATION and recent['producer_run_id'] == 39791362129 and recent['producer_attempt'] == 1, 'CURRENT_DATA_EVIDENCE_IDENTITY')
             validate_data(git, recent['published_sha'], recent['source_sha'], recent['metadata_objects'])
-            if report_root:
+            if durability_root:
+                mode, details = 'EXACT_PROVIDER_DURABILITY_BOOTSTRAP', {'durability_base': DURABILITY_BASE,
+                    'remote_before': expected_before, 'base_hosted_ci': 'NOT_ATTRIBUTED_TO_NEW_SHA',
+                    'data_head': REMOTE_BEFORE_RECONCILIATION, 'historical_qualification_reused': True,
+                    'new_hosted_qualification_required': True, 'report_source': REPORT_PARENT,
+                    'provider_retries_added': False, 'reservation_recovery_authorized': False}
+            elif report_root:
                 mode, details = 'EXACT_REPORT_CONTRACT_BOOTSTRAP', {'report_contract_base': REPORT_CONTRACT_BASE,
                     'remote_before': expected_before, 'base_hosted_ci': 'FAILED_NOT_REUSED', 'failed_run_id': 40012647047,
                     'data_head': REMOTE_BEFORE_RECONCILIATION, 'historical_qualification_reused': True,

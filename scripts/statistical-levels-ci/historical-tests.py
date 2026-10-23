@@ -9,7 +9,7 @@ import os
 from pathlib import Path
 import subprocess
 import tempfile
-from admission import Git, OLD, need, digest, bootstrap, CAPTURE_RECOVERY_BASE, CAPTURE_RECOVERY_FILES, REPORT_CONTRACT_BASE
+from admission import Git, OLD, need, digest, bootstrap, CAPTURE_RECOVERY_BASE, CAPTURE_RECOVERY_FILES, REPORT_CONTRACT_BASE, DURABILITY_BASE
 
 
 SECURITY_REUSE_ADDITIONS = {'package.json', 'package-lock.json',
@@ -39,6 +39,10 @@ def reuse_scope(git, head):
     root, _ = bootstrap(git, head)
     a, b = git.tree(OLD), git.tree(head)
     scope = {p for p in a if p.startswith('scripts/statistical-levels-release/')} | {'package.json', 'package-lock.json'}
+    if git.parents(root) == [DURABILITY_BASE]:
+        anchor = git.tree(DURABILITY_BASE)
+        need(all(b.get(p) == anchor.get(p) for p in scope), 'DURABILITY_HISTORICAL_BYTES')
+        return reuse_scope(git, DURABILITY_BASE)
     if git.parents(root) == [REPORT_CONTRACT_BASE]:
         anchor = git.tree(REPORT_CONTRACT_BASE)
         need(all(b.get(p) == anchor.get(p) for p in scope), 'REPORT_CONTRACT_HISTORICAL_BYTES')
