@@ -104,7 +104,9 @@ class ExactSuccessorTests(unittest.TestCase):
         cls.directory = Path(cls.temp.name).resolve()
         cls.first = Fixture(cls.directory)
         f = cls.first
-        content = {p: (ROOT / p).read_bytes() for p in a.DAILY_FILES}
+        # Preserve the exact historical daily bootstrap subject. Current working
+        # tree dependency repairs belong to the separate security-root model.
+        content = {p: f.git.blob(a.SECURITY_BASE, p) for p in a.DAILY_FILES}
         content[a.CI] = re.sub(a.DAILY_PIN, lambda m: m[1] + b'0' * 64 + m[2], content[a.CI])
         rows = [{'path': p, 'mode': '100644', 'sha256': a.digest(content[p])} for p in sorted(content)]
         pin = a.digest(json.dumps(rows, sort_keys=True, separators=(',', ':')).encode())

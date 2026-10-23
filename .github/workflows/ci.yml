@@ -22,6 +22,7 @@ jobs:
       NEXT_TELEMETRY_DISABLED: "1"
       CI_EVENT_SHA: ${{ github.sha }}
       SL_CI_DAILY_PAYLOAD_SHA256: "d821fea53d972bc7f6cf32994c1a971876476a72c3de2811f9dac701102658e7"
+      SL_CI_SECURITY_PAYLOAD_SHA256: "bdb1d9fbf16b81dd1d9ed01ca915046d3181334425a0a85804b620c2fff0ddd7"
       SL_CI_BOOTSTRAP_PAYLOAD_SHA256: "775521938439962eca0e3bc35f0d3303b2b1fafa0a3fc6a360b162b281f39c95"
 
     steps:
@@ -548,7 +549,21 @@ jobs:
         run: npm ci
 
       - name: Audit high and critical dependencies
+        id: dependency_audit
         run: node scripts/statistical-levels-release/scripts/verify-braces-patch-attestation.cjs
+
+      - name: Retain failed dependency audit evidence
+        if: ${{ failure() && steps.dependency_audit.outcome == 'failure' }}
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+        with:
+          name: sl-ci-dependency-audit-${{ github.run_id }}-${{ github.run_attempt }}
+          path: |
+            ${{ runner.temp }}/statistical-levels-ci/braces-raw-npm-audit.json
+            ${{ runner.temp }}/statistical-levels-ci/braces-raw-npm-audit-exit.json
+            ${{ runner.temp }}/statistical-levels-ci/braces-patch-attestation-result.json
+          if-no-files-found: error
+          retention-days: 90
+          overwrite: false
 
       - name: Lint
         run: npm run lint

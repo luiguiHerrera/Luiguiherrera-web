@@ -82,11 +82,15 @@ function assessAudit(report) {
   for (const level of ['high', 'critical']) requireCondition(report.metadata.vulnerabilities[level] === entries.filter(([, v]) => v.severity === level).length, 'AUDIT_ACCOUNTING_MISMATCH');
   const isExact = source => source && source.name === TUPLE.PACKAGE && source.dependency === TUPLE.PACKAGE && source.url === 'https://github.com/advisories/' + TUPLE.ADVISORY && source.range === TUPLE.ADVISORY_RANGE && source.severity === 'high';
   const sources = [];
+  const severities = ['info', 'low', 'moderate', 'high', 'critical'];
   for (const [name, entry] of entries) {
-    requireCondition(entry.name === name && Array.isArray(entry.via), 'INVALID_AUDIT_ENTRY');
-    for (const via of entry.via) { requireCondition(typeof via === 'string' || (via && typeof via === 'object' && !Array.isArray(via)), 'INVALID_AUDIT_SOURCE'); if (typeof via === 'object' && ['high', 'critical'].includes(via.severity)) sources.push(via); }
+    requireCondition(entry.name === name && Array.isArray(entry.via) && severities.includes(entry.severity), 'INVALID_AUDIT_ENTRY');
+    for (const via of entry.via) { requireCondition(typeof via === 'string' || (via && typeof via === 'object' && !Array.isArray(via) && severities.includes(via.severity)), 'INVALID_AUDIT_SOURCE'); if (typeof via === 'object' && ['high', 'critical'].includes(via.severity)) sources.push(via); }
   }
-  requireCondition(sources.length === 1 && isExact(sources[0]), 'UNATTESTED_HIGH_CRITICAL_ADVISORY');
+  // Registry reports can omit an advisory without changing the installed bytes.
+  // verifyProject still authenticates the entire braces backport on both paths.
+  const clean = sources.length === 0 && highs.length === 0;
+  requireCondition(clean || (sources.length === 1 && isExact(sources[0])), 'UNATTESTED_HIGH_CRITICAL_ADVISORY');
   const roots = (name, seen = new Set()) => {
     requireCondition(!seen.has(name) && report.vulnerabilities[name], 'INVALID_AUDIT_DEPENDENCY_GRAPH');
     const next = new Set(seen); next.add(name);
@@ -96,7 +100,7 @@ function assessAudit(report) {
     const causes = roots(name).filter(v => ['high', 'critical'].includes(v.severity));
     requireCondition(causes.length > 0 && causes.every(isExact), 'UNATTESTED_HIGH_CRITICAL_ENTRY:' + name);
   }
-  return { raw_high: report.metadata.vulnerabilities.high, raw_critical: report.metadata.vulnerabilities.critical, solely_attested_advisory: TUPLE.ADVISORY };
+  return { raw_high: report.metadata.vulnerabilities.high, raw_critical: report.metadata.vulnerabilities.critical, solely_attested_advisory: clean ? null : TUPLE.ADVISORY };
 }
 function verifyProject(root, report) {
   let temporary;

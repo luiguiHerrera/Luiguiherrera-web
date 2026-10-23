@@ -6,7 +6,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { createRequire } from 'node:module';
 const require = createRequire(import.meta.url);
-const { securityCases, runSecurityCase, verifyProject, extract, dependencyPaths } = require('../scripts/verify-braces-patch-attestation.cjs');
+const { securityCases, runSecurityCase, verifyProject, extract, dependencyPaths, assessAudit } = require('../scripts/verify-braces-patch-attestation.cjs');
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../../..');
 const bundle = 'scripts/statistical-levels-release/';
 const installed = path.join(root, 'node_modules/braces');
@@ -88,3 +88,50 @@ for (const [name, mutate, accepted = false] of mutations) test('braces exact att
   const result = verifyProject(dir, report); assert.equal(result.verdict, accepted ? 'PASS_ATTESTED' : 'FAIL_CLOSED', JSON.stringify(result));
   if (accepted) assert.ok(dependencyPaths(dir).every(row => row.resolved === path.join(dir, 'node_modules/braces')));
 });
+
+const cleanAudit = () => ({ auditReportVersion: 2, vulnerabilities: {},
+  metadata: { vulnerabilities: { high: 0, critical: 0 } } });
+for (const [name, entrySeverity, sourceSeverity] of [
+  ['invalid entry severity', 'critical_typo', 'moderate'],
+  ['missing source severity', 'moderate', undefined],
+  ['invalid source severity', 'moderate', 'HIGH'],
+]) test('braces clean registry rejects ' + name, () => {
+  const report = cleanAudit();
+  report.vulnerabilities.unrelated = { name: 'unrelated', severity: entrySeverity,
+    via: [{ name: 'unrelated', dependency: 'unrelated', severity: sourceSeverity }] };
+  assert.throws(() => assessAudit(report), /INVALID_AUDIT_(ENTRY|SOURCE)/);
+});
+test('braces clean registry report still requires full patched bytes', t => {
+  const dir = fixture(t), report = cleanAudit();
+  const result = verifyProject(dir, report);
+  assert.equal(result.verdict, 'PASS_ATTESTED');
+  assert.equal(result.solely_attested_advisory, null);
+  assert.equal(result.security_cases, 57);
+  fs.appendFileSync(path.join(dir, 'node_modules/braces/lib/constants.js'), '\n// drift\n');
+  assert.equal(verifyProject(dir, report).verdict, 'FAIL_CLOSED');
+});
+test('braces clean registry report rejects unpatched package', t => {
+  const dir = fixture(t), base = vulnerableBase(t);
+  for (const name of fs.readdirSync(path.join(base, 'lib'))) fs.copyFileSync(path.join(base, 'lib', name), path.join(dir, 'node_modules/braces/lib', name));
+  assert.equal(verifyProject(dir, cleanAudit()).verdict, 'FAIL_CLOSED');
+});
+for (const severity of ['high', 'critical']) {
+  test('braces clean registry path rejects new ' + severity, () => {
+    const report = cleanAudit(); addSource(report, 'unrelated', severity);
+    assert.throws(() => assessAudit(report), /UNATTESTED_HIGH_CRITICAL/);
+  });
+  test('braces clean registry path rejects hidden ' + severity + ' source', () => {
+    const report = cleanAudit(); addSource(report, 'unrelated', severity);
+    report.vulnerabilities.unrelated.severity = 'moderate'; report.metadata.vulnerabilities[severity] = 0;
+    assert.throws(() => assessAudit(report), /UNATTESTED_HIGH_CRITICAL/);
+  });
+  test('braces clean registry path rejects unaccounted ' + severity, () => {
+    const report = cleanAudit(); report.metadata.vulnerabilities[severity] = 1;
+    assert.throws(() => assessAudit(report), /AUDIT_ACCOUNTING_MISMATCH/);
+  });
+  test('braces clean registry path rejects source-free ' + severity + ' entry', () => {
+    const report = cleanAudit(); report.vulnerabilities.unrelated = { name: 'unrelated', severity, via: [] };
+    report.metadata.vulnerabilities[severity] = 1;
+    assert.throws(() => assessAudit(report), /UNATTESTED_HIGH_CRITICAL/);
+  });
+}

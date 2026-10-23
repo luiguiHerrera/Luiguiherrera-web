@@ -195,7 +195,7 @@ def daily_payload_hash(git, sha):
     return digest(json.dumps(rows, sort_keys=True, separators=(',', ':')).encode())
 
 
-def bootstrap(git, head):
+def daily_bootstrap(git, head):
     # Preserve the entire old accepted lineage and predicate implementation.
     if subprocess.run(['git', 'merge-base', '--is-ancestor', RECONCILED, head], cwd=git.root,
                       stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL).returncode != 0:
@@ -235,6 +235,70 @@ def bootstrap(git, head):
     return cursor, chain
 
 
+SECURITY_BASE = '834cdf4c543a8334e36020817db088e6722c80d8'
+SECURITY_BOOTSTRAP_IDENTITY = 'Codex <codex@openai.com> 1792765709 +0000'
+SECURITY_BOOTSTRAP_MESSAGE = 'Qualify exact hosted CI security repair'
+SECURITY_REPORT_FILES = {'lib/dashboard/sector-failure-handling.test.mjs'}
+SECURITY_FILES = {CI, 'package.json', 'package-lock.json',
+    'scripts/statistical-levels-ci/admission.py',
+    'scripts/statistical-levels-ci/test_daily_admission.py',
+    'scripts/statistical-levels-ci/test_security_admission.py',
+    '.github/workflows/statistical-levels-release.yml',
+    *('scripts/statistical-levels-release/' + n for n in [
+        'source-inputs.json', 'source-manifest.json', 'SOURCE_SHA256SUMS', 'workflow-freeze.json',
+        'scripts/verify-braces-patch-attestation.cjs', 'tests/braces-patch-attestation.test.mjs']),
+    *SECURITY_REPORT_FILES}
+SECURITY_PIN = rb'(      SL_CI_SECURITY_PAYLOAD_SHA256: ")[a-f0-9]{64}("\n)'
+
+
+def security_payload_hash(git, sha):
+    rows = []
+    for name in sorted(SECURITY_FILES):
+        data = git.blob(sha, name)
+        if name == CI:
+            need(len(re.findall(SECURITY_PIN, data)) == 1, 'SECURITY_PIN_FIELD')
+            data = re.sub(SECURITY_PIN, lambda m: m[1] + b'0' * 64 + m[2], data)
+        rows.append({'path': name, 'mode': '100644', 'sha256': digest(data)})
+    return digest(json.dumps(rows, sort_keys=True, separators=(',', ':')).encode())
+
+
+def bootstrap(git, head):
+    # The failed CI at SECURITY_BASE is never treated as a qualification PASS.
+    # Preserve the original paths verbatim; only one exact security child gains
+    # a new bootstrap route, followed solely by existing 82-file data successors.
+    if head == SECURITY_BASE or subprocess.run(
+            ['git', 'merge-base', '--is-ancestor', SECURITY_BASE, head], cwd=git.root,
+            stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL).returncode != 0:
+        return daily_bootstrap(git, head)
+    data_paths = paths(git)
+    chain, cursor = [], head
+    for _ in range(4096):
+        parents = git.parents(cursor)
+        need(len(parents) == 1, 'SECURITY_ORDERED_SINGLE_PARENT')
+        if parents == [SECURITY_BASE]:
+            break
+        delta(git, parents[0], cursor, data_paths)
+        chain.append(cursor)
+        cursor = parents[0]
+    else:
+        raise ValueError('SECURITY_LINEAGE_BOUND')
+    before, child = git.tree(SECURITY_BASE), git.tree(cursor)
+    changed = {p for p in before.keys() | child.keys() if before.get(p) != child.get(p)}
+    if changed == data_paths:
+        return daily_bootstrap(git, head)
+    daily_bootstrap(git, SECURITY_BASE)
+    delta(git, SECURITY_BASE, cursor, SECURITY_FILES)
+    expected = ('tree ' + git.text('rev-parse', cursor + '^{tree}') + '\nparent ' + SECURITY_BASE +
+        '\nauthor ' + SECURITY_BOOTSTRAP_IDENTITY + '\ncommitter ' + SECURITY_BOOTSTRAP_IDENTITY +
+        '\n\n' + SECURITY_BOOTSTRAP_MESSAGE + '\n').encode()
+    need(git('cat-file', 'commit', cursor) == expected, 'SECURITY_BOOTSTRAP_COMMIT_HEADER')
+    pin = re.findall(rb'      SL_CI_SECURITY_PAYLOAD_SHA256: "([a-f0-9]{64})"\n', git.blob(cursor, CI))
+    need(len(pin) == 1 and pin[0].decode() == security_payload_hash(git, cursor), 'SECURITY_BOOTSTRAP_PAYLOAD')
+    current = git.tree(head)
+    need(set(current) == set(child) and all(current[p] == child[p] for p in current if p not in data_paths), 'SECURITY_SUCCESSOR_CODE_CHANGED')
+    return cursor, chain
+
+
 def reconciled_report_hashes(git, head):
     """Current report bytes only from the exact reconciled, qualified lineage.
 
@@ -246,7 +310,12 @@ def reconciled_report_hashes(git, head):
         return {}
     root, _ = bootstrap(git, head)
     evidence = unique_json(git.blob(root, RECONCILIATION_EVIDENCE))
-    return {p: v['sha256'] for p, v in evidence['delta'].items()}
+    result = {p: v['sha256'] for p, v in evidence['delta'].items()}
+    if git.parents(root) == [SECURITY_BASE]:
+        for name in SECURITY_REPORT_FILES:
+            need(name in result, 'SECURITY_REPORT_PATH')
+            result[name] = digest(git.blob(root, name))
+    return result
 
 
 class API:
@@ -534,17 +603,25 @@ def admit(git, api, env, event):
     validate_data(git, BASE, OLD, evidence['metadata_objects'])
     if not chain:
         daily_root = git.parents(root) == [RECONCILED]
-        expected_before = REMOTE_BEFORE_RECONCILIATION if daily_root else BASE
+        security_root = git.parents(root) == [SECURITY_BASE]
+        expected_before = SECURITY_BASE if security_root else REMOTE_BEFORE_RECONCILIATION if daily_root else BASE
         need(env['GITHUB_EVENT_NAME'] == 'push' and event['before'] == expected_before and event['after'] == head and event['ref'] == 'refs/heads/' + BRANCH and not event['forced'] and not event['deleted'] and not event['created'], 'BOOTSTRAP_EVENT')
-        if daily_root:
+        if daily_root or security_root:
             recent_bytes = git.blob(root, CURRENT_DATA_EVIDENCE)
             need(digest(recent_bytes) == CURRENT_DATA_EVIDENCE_SHA256, 'CURRENT_DATA_EVIDENCE_PIN')
             recent = unique_json(recent_bytes)
             need(recent['published_sha'] == REMOTE_BEFORE_RECONCILIATION and recent['producer_run_id'] == 39791362129 and recent['producer_attempt'] == 1, 'CURRENT_DATA_EVIDENCE_IDENTITY')
             validate_data(git, recent['published_sha'], recent['source_sha'], recent['metadata_objects'])
-            mode, details = 'EXACT_RECONCILIATION_AND_DAILY_BOOTSTRAP', {'reconciled_parent': RECONCILED, 'remote_before': expected_before,
-                'report_source': REPORT_PARENT, 'report_preservation': 'EXACT_42_PATHS', 'historical_qualification_reused': True,
-                'new_hosted_qualification_required': True, 'external_IAM_activation_required': True}
+            if security_root:
+                mode, details = 'EXACT_SECURITY_REPAIR_BOOTSTRAP', {'security_base': SECURITY_BASE, 'remote_before': expected_before,
+                    'security_base_hosted_ci': 'FAILED_NOT_REUSED', 'failed_run_id': 39963404183,
+                    'data_head': REMOTE_BEFORE_RECONCILIATION, 'historical_qualification_reused': True,
+                    'new_hosted_qualification_required': True, 'report_source': REPORT_PARENT,
+                    'report_test_only_successor': sorted(SECURITY_REPORT_FILES)}
+            else:
+                mode, details = 'EXACT_RECONCILIATION_AND_DAILY_BOOTSTRAP', {'reconciled_parent': RECONCILED, 'remote_before': expected_before,
+                    'report_source': REPORT_PARENT, 'report_preservation': 'EXACT_42_PATHS', 'historical_qualification_reused': True,
+                    'new_hosted_qualification_required': True, 'external_IAM_activation_required': True}
         else:
             mode, details = 'BOUNDED_CI_BOOTSTRAP', {'data_evidence': 'REUSED_INDEPENDENT_EXACT_VERSION_READBACK', 'data_head': BASE, 'hosted_ci_at_data_head': False, 'native_run_to_published_sha_receipt_at_data_head': False}
     else:
