@@ -21,16 +21,7 @@ function formatPercent(value: number) {
   return `${value.toFixed(1)}%`;
 }
 
-function sectorScore(data: SectorRotationData | null): PillarScore {
-  if (!data) {
-    return {
-      score: 50,
-      confidencePenalty: 18,
-      support: [],
-      caution: [{ label: "Rotación", detail: "Rotación sectorial no disponible; se reduce la confianza de la lectura compuesta." }],
-    };
-  }
-
+function sectorScore(data: SectorRotationData): PillarScore {
   const topFive = [...data.sectors].sort((a, b) => b.return1w - a.return1w).slice(0, 5);
   const bottomFive = [...data.sectors].sort((a, b) => a.return1w - b.return1w).slice(0, 5);
   const growthTop = topFive.filter((sector) => sector.group === "growth").length;
@@ -77,16 +68,7 @@ function sectorScore(data: SectorRotationData | null): PillarScore {
   };
 }
 
-function vixScore(data: VixDashboardData | null): PillarScore {
-  if (!data || data.spot.latestVix === null || data.spot.dataStatus !== "automated") {
-    return {
-      score: 50,
-      confidencePenalty: 18,
-      support: [],
-      caution: [{ label: "VIX", detail: "VIX no disponible o retrasado; se reduce la confianza de la lectura compuesta." }],
-    };
-  }
-
+function vixScore(data: VixDashboardData): PillarScore {
   const spot = data.spot;
   let score = 55;
   const support: RegimeSignal[] = [];
@@ -125,16 +107,7 @@ function vixScore(data: VixDashboardData | null): PillarScore {
   };
 }
 
-function btcScore(data: BtcEtfFlowsDashboardData | null): PillarScore {
-  if (!data || data.flows.dataStatus === "unavailable" || data.flows.sourceRole === "unavailable") {
-    return {
-      score: 50,
-      confidencePenalty: 15,
-      support: [],
-      caution: [{ label: "BTC ETF flows", detail: "Flujos BTC ETF no disponibles; se reduce la confianza." }],
-    };
-  }
-
+function btcScore(data: BtcEtfFlowsDashboardData): PillarScore {
   const flows = data.flows;
   let score = 50;
   const support: RegimeSignal[] = [];
@@ -207,10 +180,6 @@ function biasFromLabel(label: RegimeSummary["current"]): RegimeBias {
 function interpretationForLabel(label: RegimeSummary["current"]) {
   const weighting = "Ponderación actual: rotación sectorial 45%, VIX 40% y BTC ETF flows 15%.";
 
-  if (label === "Incompleto") {
-    return `Lectura compuesta no disponible: falta el pilar gobernado de rotación sectorial. No se renormalizan los pesos restantes. ${weighting}`;
-  }
-
   if (label === "Cautela") {
     return `El mercado muestra deterioro en varias lecturas, pero aún no hay confirmación suficiente para clasificarlo como estrés. ${weighting}`;
   }
@@ -219,6 +188,35 @@ function interpretationForLabel(label: RegimeSummary["current"]) {
   }
 
   return `Lectura compuesta de volatilidad, rotación y flujos. ${weighting}`;
+}
+
+// Validate the inputs used by the existing calculation, without imposing new
+// history windows. A real secondary BTC source and usable partial history count.
+function hasSectorPillar(data: SectorRotationData | null): data is SectorRotationData {
+  return data?.dataStatus === "automated"
+    && Array.isArray(data.sectors) && data.sectors.length > 0
+    && data.sectors.every((sector) => sector && Number.isFinite(sector.return1w)
+      && ["growth", "cyclical", "defensive"].includes(sector.group))
+    && Number.isFinite(data.metrics?.sectorDispersion1w)
+    && ["growth", "cíclica", "defensiva", "mixta"].includes(data.metrics?.reading);
+}
+
+function hasVixPillar(data: VixDashboardData | null): data is VixDashboardData {
+  const spot = data?.spot;
+  return !!spot && spot.dataStatus === "automated"
+    && spot.latestVix !== null && Number.isFinite(spot.latestVix) && spot.latestVix >= 0
+    && ["low", "normal", "watch", "elevated", "stress", "extreme"].includes(spot.vixSeverity)
+    && ["falling", "stable", "rising", "rising_fast"].includes(spot.vixTrend);
+}
+
+function hasBtcPillar(data: BtcEtfFlowsDashboardData | null): data is BtcEtfFlowsDashboardData {
+  const flows = data?.flows;
+  return !!flows && ["automated", "delayed"].includes(flows.dataStatus)
+    && ["primary", "fallback"].includes(flows.sourceRole) && flows.coverage !== "unavailable"
+    && Number.isInteger(flows.rowsParsed) && flows.rowsParsed > 0
+    && ["positive", "neutral", "negative"].includes(flows.readingSeverity)
+    && !!flows.flowStreak && ["inflow", "outflow", "none"].includes(flows.flowStreak.direction)
+    && Number.isInteger(flows.flowStreak.count) && flows.flowStreak.count >= 0;
 }
 
 export function buildRegimeSummary({
@@ -230,22 +228,29 @@ export function buildRegimeSummary({
   sectorRotation: SectorRotationData | null;
   vix: VixDashboardData | null;
 }): RegimeSummary {
-  if (!sectorRotation || sectorRotation.dataStatus !== "automated") {
+  const hasSector = hasSectorPillar(sectorRotation);
+  const hasVix = hasVixPillar(vix);
+  const hasBtc = hasBtcPillar(btcEtfFlows);
+  if (!hasSector || !hasVix || !hasBtc) {
+    const missing: RegimeSignal[] = [];
+    if (!hasSector) missing.push({ label: "Rotación", detail: "Pilar de rotación sectorial ausente o inválido." });
+    if (!hasVix) missing.push({ label: "VIX", detail: "Pilar VIX ausente o inválido." });
+    if (!hasBtc) missing.push({ label: "BTC ETF flows", detail: "Pilar BTC ETF flows ausente o inválido." });
     return {
       current: "Incompleto",
       bias: "unavailable",
       confidence: null,
       regimeScore: null,
       sourceName: "Rotación sectorial, VIX y BTC ETF flows",
-      lastUpdated: "Pendiente de un snapshot sectorial real y completo",
+      lastUpdated: "Pendiente de los pilares obligatorios ausentes o inválidos",
       updateFrequency: "Diaria / según disponibilidad de cada fuente",
       dataStatus: "unavailable",
-      reliabilityNote: "El score integrado requiere los tres pilares gobernados. Sin rotación sectorial real no se calcula un score parcial.",
+      reliabilityNote: "El score integrado requiere los tres pilares reales y válidos. No se calcula un score parcial.",
       dataQualityNote: "Pesos preservados: rotación sectorial 45%, VIX 40% y BTC ETF flows 15%. Los pesos no se redistribuyen ni se renormalizan.",
-      interpretation: interpretationForLabel("Incompleto"),
+      interpretation: `Lectura compuesta no disponible. ${missing.map((signal) => signal.detail).join(" ")} No se renormalizan los pesos restantes. Ponderación actual: rotación sectorial 45%, VIX 40% y BTC ETF flows 15%.`,
       whatItDoesNotMean: "La ausencia del score no implica un régimen neutral, favorable o adverso.",
       riskSupportSignals: [],
-      cautionSignals: [{ label: "Rotación", detail: "Pilar sectorial temporalmente no disponible; score y confianza quedan sin calcular." }],
+      cautionSignals: missing,
     };
   }
 

@@ -1,3 +1,5 @@
+import { ReportEditorialSections } from './ReportEditorialSections';
+import { SecondOctoberReportSections } from './SecondOctoberReportSections';
 import { ReportLink as Link, ReportAnchor, ReportParagraph, ReportText, ReportSourcePolicy } from "@/components/reports/ReportSourcePolicy";
 import { ReportSection } from "@/components/reports/ReportSection";
 import { ReportQuantitativePanels } from "@/components/reports/ReportQuantitativePanels";
@@ -63,6 +65,7 @@ export function MarketReportContent({
   report,
 }: MarketReportContentProps) {
   const calendar = getReportCalendar(report);
+  const isSecondOctober = report.id === "segundo-informe-octubre-2026";
   const hasCalendarDates = calendar.some((item) => item.dateStart);
   const sectionTitles = report.presentation?.sectionTitles;
   const calendarSectionLabel = sectionTitles?.calendar
@@ -105,7 +108,7 @@ export function MarketReportContent({
               {report.status === "borrador" ? "Candidato editorial · sin publicar" : report.status === "actual" ? "Informe actual" : "Archivado"}
             </span>
           </div>
-          <h1 className="mt-2 text-3xl font-semibold leading-tight text-ink md:text-5xl">{report.title}</h1>
+          <h1 className="mt-2 text-3xl font-semibold leading-tight text-ink md:text-5xl">{isSecondOctober ? report.subtitle : report.title}</h1>
           <EditorialByline
             automaticDataCutoffAt={report.automaticDataCutoffAt}
             editorialCutoffAt={report.editorialCutoffAt}
@@ -114,9 +117,10 @@ export function MarketReportContent({
             modifiedAt={report.modifiedAt}
             publishedAt={report.publishedAt}
           />
-          <ReportParagraph className="mt-4 text-base leading-7 text-muted">{report.subtitle}</ReportParagraph>
+          <ReportParagraph className="mt-4 text-base leading-7 text-muted">{isSecondOctober ? report.summary : report.subtitle}</ReportParagraph>
           {report.presentation?.prospectivePeriod ? <ReportParagraph className="mt-3 text-sm text-muted">Periodo prospectivo: {report.presentation.prospectivePeriod}</ReportParagraph> : null}
           <ReportExportLinks report={report} />
+          {report.approvedPdf && !isSecondOctober ? <p className="mt-3 text-xs leading-5 text-muted">La página web es la edición principal. El PDF conserva el original editorial aprobado del 19 de octubre, incluidas sus notas de borrador. Los datos y el análisis no se han actualizado después del corte.</p> : null}
         </div>
         {hasHeadlineSummary ? (
           <div className="grid gap-6">
@@ -157,6 +161,7 @@ export function MarketReportContent({
         ) : null}
       </section>
 
+      {isSecondOctober && report.editorialSections ? <SecondOctoberReportSections report={report} /> : report.editorialSections ? <ReportEditorialSections sections={report.editorialSections} /> : <>
       <section id={report.presentation?.contextTitle ? "contexto-general" : "contexto-por-activo"} className="grid scroll-mt-24 gap-6 py-8 md:py-10 lg:grid-cols-[0.34fr_1fr]">
         <div>
           <ReportParagraph className="text-xs font-semibold uppercase text-petrol">Qué pasó</ReportParagraph>
@@ -375,6 +380,7 @@ export function MarketReportContent({
         </div>
       </section>
 
+      </>}
       <ReportNavigation nextReport={nextReport} previousReport={previousReport} />
     </article></ReportSourcePolicy>
   );

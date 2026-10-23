@@ -430,9 +430,20 @@ function quantitativeMarkdown(panels: ReportQuantitativePanel[] = []) {
   return panels.map(panel=>`\n\n#### ${panel.title}\n\n${panel.intro}\n\n${panel.rows.length ? [panel.headers, panel.headers.map(()=> '---'), ...panel.rows].map(row=>'| '+row.map(cell=>cell.replace(/\|/g,'\\|')).join(' | ')+' |').join('\n') : ''}\n\n${panel.notes.join('\n\n')}`).join('');
 }
 
+function editorialPlain(value: string) {
+  return value.replace(/\*\*/g, "").replace(/\*/g, "").replace(/\[([^\]]+)\]\((https?:\/\/[^)]+)\)/g, "$1");
+}
+function editorialInlineHtml(value: string) {
+  return esc(value).replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>").replace(/\*([^*]+)\*/g, "<em>$1</em>").replace(/\[([^\]]+)\]\((https?:\/\/[^)]+)\)/g, '<a href="$2">$1</a>');
+}
 function renderSectionHtml(section: ReportExportSection, model: ReportExportModel) {
   let body = "";
   switch (section.kind) {
+    case "editorial":
+      body = section.blocks.map(block => block.kind === "table"
+        ? htmlTable(block.headers.map(editorialPlain), block.rows.map(row => row.map(editorialPlain)))
+        : block.kind === "heading" ? `<h3>${editorialInlineHtml(block.text)}</h3>` : `<p>${editorialInlineHtml(block.text)}</p>`).join("\n");
+      break;
     case "narrative":
       body = `<p class="lead">${esc(section.body)}</p>`;
       break;
@@ -778,6 +789,10 @@ ${snapshot.statisticalAssets
 function renderSectionMarkdown(section: ReportExportSection, model: ReportExportModel) {
   const heading = `## ${section.title}`;
   switch (section.kind) {
+    case "editorial":
+      return `${heading}\n\n` + section.blocks.map(block => block.kind === "table"
+        ? [block.headers, block.headers.map(()=>"---"), ...block.rows].map(row=>"| "+row.join(" | ")+" |").join("\n")
+        : block.kind === "heading" ? `### ${block.text}` : block.kind === "source" ? `- ${block.text}` : block.text).join("\n\n");
     case "narrative":
       return `${heading}\n\n${section.body}`;
     case "summary":
@@ -1191,7 +1206,14 @@ function generateInto(outputDir: string, inputLlms: string) {
       }
       const modelPath = path.join(tempDir, `${model.id}.json`);
       fs.writeFileSync(modelPath, stableStringify(model, 2), "utf8");
-      runPdfPython(["generate", modelPath, path.join(outputDir, `${model.id}.pdf`), root]);
+      if (model.approvedPdf) {
+        const approved = fs.readFileSync(path.join(root, model.approvedPdf.path));
+        assert.equal(approved.length, model.approvedPdf.size);
+        assert.equal(sha256(approved), model.approvedPdf.sha256);
+        fs.writeFileSync(path.join(outputDir, `${model.id}.pdf`), approved);
+      } else {
+        runPdfPython(["generate", modelPath, path.join(outputDir, `${model.id}.pdf`), root]);
+      }
     }
 
     const manifest: ReportsManifest = {
@@ -1232,11 +1254,13 @@ function generateInto(outputDir: string, inputLlms: string) {
 function normalizedText(value: string) {
   return value
     .replace(/!?\[((?:[^\[\]]|\[[^\]]*\])*)\]\([^\s)]+\)/g, "$1")
+    .replace(/\*\*/g, "").replace(/\*/g, "")
     .replace(/&nbsp;/g, " ")
     .replace(/&amp;/g, "&")
     .replace(/&quot;/g, '"')
     .replace(/&#39;|&apos;/g, "'")
-    .replace(/<\/?a\b[^>]*>/g, "")
+    // Inline markup does not add whitespace before punctuation or inside words.
+    .replace(/<\/?(?:a|strong|em|b|i|span)\b[^>]*>/g, "")
     .replace(/<[^>]+>/g, " ")
     .replace(/&gt;/g, ">")
     .replace(/&lt;/g, "<")
@@ -1271,6 +1295,9 @@ export function assertHtmlSectionContains(html: string, sectionId: string, needl
 export function substantiveNeedles(section: ReportExportSection, model: ReportExportModel) {
   const values: string[] = [section.title];
   switch (section.kind) {
+    case "editorial":
+      for (const block of section.blocks) values.push(...(block.kind === "table" ? [...block.headers, ...block.rows.flat()].map(editorialPlain) : [editorialPlain(block.text)]));
+      break;
     case "narrative":
       values.push(section.body);
       break;
@@ -1445,20 +1472,27 @@ export function inspectPdf(pdfPath: string) {
     text: string;
   };
   // Geometric extraction can interleave adjacent cells before a wrapped cell ends.
-  // The content stream preserves ReportLab's cell order; require the entire phrase
-  // in one extraction, never an unordered collection of tokens.
+  // Content-stream extraction preserves cell order. pdfplumber's text flow
+  // also handles kerning that pypdf can mistake for spaces (for example T esla).
+  // Require the entire phrase in one extraction, never merged fragments.
   const contentOrder = spawnSync(findPdfPython(), ["-c",
-    "import json, sys; from pypdf import PdfReader; print(json.dumps('\\n\\n'.join(page.extract_text() or '' for page in PdfReader(sys.argv[1]).pages)))",
+    "import json, sys, pdfplumber; from pypdf import PdfReader; pdf = pdfplumber.open(sys.argv[1]); print(json.dumps({'contentOrderText': '\\n\\n'.join(page.extract_text() or '' for page in PdfReader(sys.argv[1]).pages), 'textFlowText': '\\n\\n'.join(page.extract_text(use_text_flow=True) or '' for page in pdf.pages)})); pdf.close()",
     pdfPath,
   ], { encoding: "utf8" });
   assert.equal(contentOrder.status, 0, `PDF content-order extraction failed: ${contentOrder.stderr}`);
-  return { ...inspection, contentOrderText: JSON.parse(contentOrder.stdout) as string };
+  return { ...inspection, ...JSON.parse(contentOrder.stdout) as { contentOrderText: string; textFlowText: string } };
 }
 
-export function assertPdfContains(pdf: { text: string; contentOrderText: string }, needle: string, label: string) {
+export function assertPdfContains(pdf: { text: string; contentOrderText: string; textFlowText?: string }, needle: string, label: string) {
   const normalizedNeedle = normalizedText(needle);
+  // PDF layout engines can insert a Unicode discretionary hyphen at a line
+  // wrap. Rejoin only that word boundary; preserve ordinary hyphens and keep
+  // requiring the full, ordered phrase in one independent extraction.
+  const normalizePdfText = (text: string) => normalizedText(text
+    .replace(/(\p{L})[\u00ad\u2010][ \t]*\r?\n[ \t]*(?=\p{L})/gu, "$1")
+    .replace(/(\p{L})\/[ \t]*\r?\n[ \t]*(?=\p{L})/gu, "$1/"));
   assert(
-    [pdf.text, pdf.contentOrderText].some(text => normalizedText(text).includes(normalizedNeedle)),
+    [pdf.text, pdf.contentOrderText, pdf.textFlowText ?? ""].some(text => normalizePdfText(text).includes(normalizedNeedle)),
     `${label}: falta "${needle.slice(0, 120)}".`,
   );
 }
@@ -1536,9 +1570,17 @@ function validateRepository() {
     assert(html.includes(`<link rel="canonical" href="${model.canonicalUrl}">`));
     assert.equal((markdown.match(/^# /gm) ?? []).length, 1, `${model.id}: Markdown debe tener un H1.`);
     assertContains(markdown, model.canonicalUrl, `${model.id} Markdown`);
+    if (model.approvedPdf) {
+      const bytes = fs.readFileSync(pdfPath);
+      assert.equal(bytes.length, model.approvedPdf.size, `${model.id}: tamaño PDF aprobado`);
+      assert.equal(sha256(bytes), model.approvedPdf.sha256, `${model.id}: identidad PDF aprobado`);
+      assert.equal(pdf.pages, model.approvedPdf.pages, `${model.id}: páginas PDF aprobado`);
+      for (const value of [model.title, model.subtitle, model.author]) assertPdfContains(pdf, value, `${model.id}: PDF aprobado`);
+    } else {
     assert.equal(pdf.metadata.title, model.title, `${model.id}: Title PDF incorrecto.`);
     assert.equal(pdf.metadata.author, REPORT_EXPORT_AUTHOR, `${model.id}: Author PDF incorrecto.`);
     assert.equal(pdf.metadata.subject, model.description, `${model.id}: Subject PDF incorrecto.`);
+    }
     assert(pdf.pages > 0, `${model.id}: PDF sin páginas.`);
     assert.deepEqual(pdf.blankPages, [], `${model.id}: PDF contiene páginas vacías.`);
 
@@ -1555,7 +1597,7 @@ function validateRepository() {
     ]) {
       assertContains(html, value, `${model.id} HTML`);
       assertContains(markdown, value, `${model.id} Markdown`);
-      assertPdfContains(pdf, value, `${model.id} PDF`);
+      if (!model.approvedPdf) assertPdfContains(pdf, value, `${model.id} PDF`);
     }
 
     for (const section of model.sections) {
@@ -1564,7 +1606,7 @@ function validateRepository() {
         if (section.kind === "sources") assertHtmlSectionContains(html, section.id, value, `${model.id} HTML/${section.id}`);
         else assertContains(html, value, `${model.id} HTML/${section.id}`);
         assertContains(markdown, value, `${model.id} Markdown/${section.id}`);
-        assertPdfContains(pdf, value, `${model.id} PDF/${section.id}`);
+        assertPdfContains(pdf, model.approvedPdf ? value.replace("Esta edición no incorpora", "Este borrador no incorpora") : value, `${model.id} PDF/${section.id}`);
       }
       if (section.kind === "figures") {
         for (const figure of section.items) {

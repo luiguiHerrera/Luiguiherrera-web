@@ -72,3 +72,15 @@ test("translates the three verified dynamic English defects and preserves Favora
   );
   assert.equal(translateDashboardText("Favorable"), "Favorable");
 });
+
+
+test("translates all incomplete-regime explanation fields", () => {
+  const cases = [
+    ["Pendiente de los pilares obligatorios ausentes o inválidos", "Waiting for the missing or invalid required pillars"],
+    ["El score integrado requiere los tres pilares reales y válidos. No se calcula un score parcial.", "The integrated score requires all three real, valid pillars. No partial score is calculated."],
+    ["Pesos preservados: rotación sectorial 45%, VIX 40% y BTC ETF flows 15%. Los pesos no se redistribuyen ni se renormalizan.", "Weights preserved: sector rotation 45%, VIX 40%, and BTC ETF flows 15%. Weights are neither redistributed nor renormalized."],
+    ["La ausencia del score no implica un régimen neutral, favorable o adverso.", "The absence of a score does not imply a neutral, favorable, or adverse regime."],
+    ["Lectura compuesta no disponible. Pilar VIX ausente o inválido. No se renormalizan los pesos restantes.", "Composite read unavailable. VIX pillar missing or invalid. Remaining weights are not renormalized."],
+  ];
+  for (const [source, expected] of cases) assert.equal(translateDashboardText(source), expected);
+});

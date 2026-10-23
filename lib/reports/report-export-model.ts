@@ -32,6 +32,7 @@ export type ReportExportEvent = {
 };
 
 export type ReportExportSection =
+  | { id: string; title: string; kind: "editorial"; blocks: import("./report-editorial-sections").ReportEditorialBlock[] }
   | {
       id: "thesis";
       title: "Tesis principal";
@@ -107,6 +108,7 @@ export type ReportExportSection =
     };
 
 export type ReportExportModel = {
+  approvedPdf?: import("./report-editorial-sections").ApprovedReportPdf;
   schemaVersion: typeof REPORT_EXPORT_SCHEMA_VERSION;
   id: string;
   canonicalUrl: string;
@@ -210,6 +212,7 @@ function reportSections(
   report: MarketReport,
   snapshot: HistoricalAutomaticReadingsSnapshot | null,
 ): ReportExportSection[] {
+  if (report.editorialSections) return report.editorialSections.map(section => ({ id: section.id, title: section.title, kind: "editorial" as const, blocks: section.blocks }));
   const figures = figuresFor(report);
   const sectionTitles = report.presentation?.sectionTitles;
   const sections: ReportExportSection[] = [
@@ -301,6 +304,7 @@ export function buildReportExportModel(
   const events = structuredEvents(report, canonicalUrl);
 
   return {
+    ...(report.approvedPdf ? { approvedPdf: report.approvedPdf } : {}),
     schemaVersion: REPORT_EXPORT_SCHEMA_VERSION,
     id: report.id,
     canonicalUrl,

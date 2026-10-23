@@ -5,6 +5,7 @@ import {
   type HomePreviewLocale,
 } from "@/lib/dashboard/home-preview-format";
 import { translateBiasLabel, translateDashboardText, translateRegimeLabel } from "@/lib/dashboard/translate-dashboard-copy";
+import { hasVixObservation } from "@/lib/dashboard/vix-presentation";
 import type { RegimeSummary, SectorRotationData, VixDashboardData, VixTermStructureData, VixTermStructurePoint } from "@/lib/dashboard/types";
 
 type Locale = HomePreviewLocale;
@@ -165,8 +166,8 @@ export function HomeDashboardPreview({
   }[regimeSummary.bias];
   const rotationReading = sectorRotation?.metrics.reading;
   const rotationDescription = rotationReading ? t.rotationDescriptions[rotationReading] : t.unavailable;
-  const spot = vix?.spot;
-  const volatilityDescription = spot ? t.volatilityDescriptions[spot.vixSeverity] : t.unavailable;
+  const spot = hasVixObservation(vix?.spot) ? vix.spot : null;
+  const volatilityDescription = spot ? t.volatilityDescriptions[spot.vixSeverity] ?? t.unavailable : t.unavailable;
   const curve = buildCurve(vixTermStructure?.points ?? []);
   const firstPoint = curve.points[0];
   const lastPoint = curve.points.at(-1);
@@ -246,7 +247,7 @@ export function HomeDashboardPreview({
                   <div>
                     <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-brass">{t.volatility}</p>
                     <h3 className="mt-2 text-xl font-semibold tabular-nums text-ink">
-                      {spot?.latestVix === null || spot?.latestVix === undefined ? "—" : formatHomePreviewNumber(spot.latestVix, locale)}
+                      {spot ? formatHomePreviewNumber(spot.latestVix, locale) : t.unavailable}
                       <span className="ml-2 text-sm font-medium text-muted">VIX</span>
                     </h3>
                   </div>

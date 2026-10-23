@@ -20,6 +20,39 @@ const validateText = (text: string, model = october, sections = model.sections) 
 
 const checklistSections = october.sections.filter(section => section.kind === 'watchlist' || section.kind === 'asset-readings');
 
+test('HTML inline emphasis keeps punctuation and full text without merging block boundaries', () => {
+  const html = '<p>Mejoró <strong>20,47 pp</strong> y <em>9,34 pp</em>.</p>';
+  const phrase = 'Mejoró 20,47 pp y 9,34 pp.';
+  assertContains(html, phrase, 'inline emphasis');
+  assert.throws(() => assertContains(html.replace('20,47', ''), phrase, 'missing metric'), /falta/);
+  assert.throws(() => assertContains('<p>20</p><p>47</p>', '2047', 'block boundary'), /falta/);
+});
+
+test('PDF Unicode line-wrap hyphens preserve complete ordered words without hiding omissions', () => {
+  const phrase = 'La amplitud aporta una señal relevante, pero no alcanza';
+  for (const hyphen of ['\u2010', '\u00ad']) {
+    const text = `La amplitud aporta una señal relevan${hyphen}\nte, pero no alcanza`;
+    assertPdfContains({ text, contentOrderText: '' }, phrase, 'wrapped word');
+    assertPdfContains({ text: '', contentOrderText: text }, phrase, 'content-order wrapped word');
+    assert.throws(() => assertPdfContains({ text: text.replace('te,', 't,'), contentOrderText: '' }, phrase, 'missing letter'), /falta/);
+    assert.throws(() => assertPdfContains({ text: text.replace('aporta ', ''), contentOrderText: '' }, phrase, 'missing word'), /falta/);
+  }
+  assert.throws(() => assertPdfContains({ text: 'riesgo-\npaís', contentOrderText: '' }, 'riesgopaís', 'hard hyphen'), /falta/);
+  assert.throws(() => assertPdfContains({ text: 'relevan\u2010te', contentOrderText: '' }, 'relevante', 'no wrap'), /falta/);
+  assertPdfContains({ text: 'WSLE/WALE/WAHE/\nWSHE', contentOrderText: '' }, 'WSLE/WALE/WAHE/WSHE', 'wrapped slash');
+  assertPdfContains({ text: 'precio /\nnivel', contentOrderText: '' }, 'precio / nivel', 'spaced division');
+  assert.throws(() => assertPdfContains({ text: 'WSLE/WALE/\nWSHE', contentOrderText: '' }, 'WSLE/WALE/WAHE/WSHE', 'missing band'), /falta/);
+});
+
+test('PDF table text flow preserves kerning and wrapped cells without combining extractor fragments', () => {
+  const pdf = inspectPdf('docs/reports/segundo-informe-octubre-2026/approved.pdf');
+  const phrase = 'Resultados de Netflix, Tesla, Meta, IBM, GM y otras compañías';
+  assertContains(pdf.textFlowText, phrase, 'table text flow');
+  assertPdfContains(pdf, phrase, 'complete table cell');
+  assert.throws(() => assertPdfContains({ text: 'Resultados de Netflix,', contentOrderText: 'Tesla, Meta, IBM,', textFlowText: 'GM y otras compañías' }, phrase, 'separate fragments'), /falta/);
+  assert.throws(() => assertPdfContains({ text: '', contentOrderText: '', textFlowText: pdf.textFlowText.replace('Tesla,', '') }, phrase, 'missing company'), /falta/);
+});
+
 test('TEST_WATCHLIST_STRUCTURED_POSITIVE', () => {
   validateText(html, october, checklistSections);
   validateText(fs.readFileSync(`public/reports/${october.id}.md`, 'utf8'), october, checklistSections);
