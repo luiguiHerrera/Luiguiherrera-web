@@ -9,7 +9,7 @@ import os
 from pathlib import Path
 import subprocess
 import tempfile
-from admission import Git, OLD, need, digest, bootstrap, CAPTURE_RECOVERY_BASE, CAPTURE_RECOVERY_FILES, REPORT_CONTRACT_BASE, DURABILITY_BASE
+from admission import Git, OLD, need, digest, bootstrap, CAPTURE_RECOVERY_BASE, CAPTURE_RECOVERY_FILES, REPORT_CONTRACT_BASE, DURABILITY_BASE, ZOD_BASE, ZOD_FILES
 
 
 SECURITY_REUSE_ADDITIONS = {'package.json', 'package-lock.json',
@@ -39,6 +39,17 @@ def reuse_scope(git, head):
     root, _ = bootstrap(git, head)
     a, b = git.tree(OLD), git.tree(head)
     scope = {p for p in a if p.startswith('scripts/statistical-levels-release/')} | {'package.json', 'package-lock.json'}
+    if git.parents(root) == [ZOD_BASE]:
+        reused, changed = reuse_scope(git, ZOD_BASE)
+        anchor = git.tree(ZOD_BASE)
+        affected = ZOD_FILES & scope
+        need(affected <= set(changed) and len(affected) == 5, 'ZOD_HISTORICAL_EXCLUSIONS')
+        need(all(b.get(p) == anchor.get(p) for p in scope - affected), 'ZOD_HISTORICAL_BYTES')
+        need(all(b.get(p) == git.tree(root).get(p) and b[p][0] == '100644' for p in affected),
+             'ZOD_SUCCESSOR_HISTORICAL_BYTES')
+        need(len(reused) == 104 and len(changed) == 11, 'ZOD_HISTORICAL_SCOPE')
+        return reused, {p: {**v, 'current_sha256': digest(git.blob(head, p))}
+                        for p, v in changed.items()}
     if git.parents(root) == [DURABILITY_BASE]:
         anchor = git.tree(DURABILITY_BASE)
         need(all(b.get(p) == anchor.get(p) for p in scope), 'DURABILITY_HISTORICAL_BYTES')

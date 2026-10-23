@@ -25,7 +25,7 @@ class ProviderDurabilityTests(unittest.TestCase):
         cls.temp = tempfile.TemporaryDirectory(prefix='sl-provider-durability-model-')
         cls.directory = Path(cls.temp.name).resolve()
         f = cls.first = Fixture(cls.directory)
-        cls.content = {p: (ROOT / p).read_bytes() for p in a.DURABILITY_FILES}
+        cls.content = {p: f.git.blob(a.ZOD_BASE, p) for p in a.DURABILITY_FILES}
         cls.content[a.CI] = re.sub(a.DURABILITY_PIN, lambda m: m[1] + b'0' * 64 + m[2], cls.content[a.CI])
         rows = [{'path': p, 'mode': '100644', 'sha256': a.digest(cls.content[p])} for p in sorted(cls.content)]
         pin = a.digest(json.dumps(rows, sort_keys=True, separators=(',', ':')).encode())

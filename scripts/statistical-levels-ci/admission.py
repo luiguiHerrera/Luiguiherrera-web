@@ -458,7 +458,7 @@ def durability_payload_hash(git, sha):
 
 
 
-def bootstrap(git, head):
+def durability_bootstrap(git, head):
     # Only this reviewed acquisition/diagnostics successor may extend the qualified source.
     if head == DURABILITY_BASE or subprocess.run(
             ['git', 'merge-base', '--is-ancestor', DURABILITY_BASE, head], cwd=git.root,
@@ -494,6 +494,73 @@ def bootstrap(git, head):
 
 
 
+ZOD_BASE = '6640c152f2a0cb478e19b2071c59a7bd99d487ca'
+ZOD_IDENTITY = 'Codex <codex@openai.com> 1792795230 +0000'
+ZOD_MESSAGE = 'Repair Zod audit gate with exact dependency successor'
+ZOD_FILES = frozenset({
+    '.github/workflows/ci.yml',
+    '.github/workflows/statistical-levels-release.yml',
+    'package-lock.json',
+    'scripts/statistical-levels-ci/admission.py',
+    'scripts/statistical-levels-ci/historical-tests.py',
+    'scripts/statistical-levels-ci/test_provider_durability_admission.py',
+    'scripts/statistical-levels-ci/test_zod_security_admission.py',
+    'scripts/statistical-levels-release/SOURCE_SHA256SUMS',
+    'scripts/statistical-levels-release/source-inputs.json',
+    'scripts/statistical-levels-release/source-manifest.json',
+    'scripts/statistical-levels-release/workflow-freeze.json',
+})
+ZOD_PIN = rb'(      SL_CI_ZOD_PAYLOAD_SHA256: ")[a-f0-9]{64}("\n)'
+
+
+def zod_payload_hash(git, sha):
+    rows = []
+    for name in sorted(ZOD_FILES):
+        data = git.blob(sha, name)
+        if name == CI:
+            need(len(re.findall(ZOD_PIN, data)) == 1, 'ZOD_PIN_FIELD')
+            data = re.sub(ZOD_PIN, lambda m: m[1] + b'0' * 64 + m[2], data)
+        rows.append({'path': name, 'mode': '100644', 'sha256': digest(data)})
+    return digest(json.dumps(rows, sort_keys=True, separators=(',', ':')).encode())
+
+
+
+def bootstrap(git, head):
+    # Exact security repair only. The failed parent is never attributed a CI PASS.
+    if head == ZOD_BASE or subprocess.run(
+            ['git', 'merge-base', '--is-ancestor', ZOD_BASE, head], cwd=git.root,
+            stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL).returncode != 0:
+        return durability_bootstrap(git, head)
+    data_paths = paths(git)
+    chain, cursor = [], head
+    for _ in range(4096):
+        parents = git.parents(cursor)
+        need(len(parents) == 1, 'ZOD_ORDERED_SINGLE_PARENT')
+        if parents == [ZOD_BASE]:
+            break
+        delta(git, parents[0], cursor, data_paths)
+        chain.append(cursor)
+        cursor = parents[0]
+    else:
+        raise ValueError('ZOD_LINEAGE_BOUND')
+    before, child = git.tree(ZOD_BASE), git.tree(cursor)
+    changed = {p for p in before.keys() | child.keys() if before.get(p) != child.get(p)}
+    if changed == data_paths:
+        return durability_bootstrap(git, head)
+    durability_bootstrap(git, ZOD_BASE)
+    delta(git, ZOD_BASE, cursor, ZOD_FILES)
+    expected = ('tree ' + git.text('rev-parse', cursor + '^{tree}') + '\nparent ' + ZOD_BASE +
+        '\nauthor ' + ZOD_IDENTITY + '\ncommitter ' + ZOD_IDENTITY +
+        '\n\n' + ZOD_MESSAGE + '\n').encode()
+    need(git('cat-file', 'commit', cursor) == expected, 'ZOD_COMMIT_HEADER')
+    pin = re.findall(rb'      SL_CI_ZOD_PAYLOAD_SHA256: "([a-f0-9]{64})"\n', git.blob(cursor, CI))
+    need(len(pin) == 1 and pin[0].decode() == zod_payload_hash(git, cursor), 'ZOD_PAYLOAD')
+    current = git.tree(head)
+    need(set(current) == set(child) and all(current[p] == child[p] for p in current if p not in data_paths), 'ZOD_SUCCESSOR_CODE_CHANGED')
+    return cursor, chain
+
+
+
 def reconciled_report_hashes(git, head):
     """Current report bytes only from the exact reconciled, qualified lineage.
 
@@ -504,6 +571,8 @@ def reconciled_report_hashes(git, head):
                       stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL).returncode != 0:
         return {}
     root, _ = bootstrap(git, head)
+    if git.parents(root) == [ZOD_BASE]:
+        return reconciled_report_hashes(git, ZOD_BASE)
     if git.parents(root) == [DURABILITY_BASE]:
         return reconciled_report_hashes(git, DURABILITY_BASE)
     if git.parents(root) == [REPORT_CONTRACT_BASE]:
@@ -813,15 +882,23 @@ def admit(git, api, env, event):
         capture_root = git.parents(root) == [CAPTURE_RECOVERY_BASE]
         report_root = git.parents(root) == [REPORT_CONTRACT_BASE]
         durability_root = git.parents(root) == [DURABILITY_BASE]
-        expected_before = DURABILITY_BASE if durability_root else REPORT_CONTRACT_BASE if report_root else CAPTURE_RECOVERY_BASE if capture_root else SECURITY_BASE if security_root else REMOTE_BEFORE_RECONCILIATION if daily_root else BASE
+        zod_root = git.parents(root) == [ZOD_BASE]
+        expected_before = ZOD_BASE if zod_root else DURABILITY_BASE if durability_root else REPORT_CONTRACT_BASE if report_root else CAPTURE_RECOVERY_BASE if capture_root else SECURITY_BASE if security_root else REMOTE_BEFORE_RECONCILIATION if daily_root else BASE
         need(env['GITHUB_EVENT_NAME'] == 'push' and event['before'] == expected_before and event['after'] == head and event['ref'] == 'refs/heads/' + BRANCH and not event['forced'] and not event['deleted'] and not event['created'], 'BOOTSTRAP_EVENT')
-        if daily_root or security_root or capture_root or report_root or durability_root:
+        if daily_root or security_root or capture_root or report_root or durability_root or zod_root:
             recent_bytes = git.blob(root, CURRENT_DATA_EVIDENCE)
             need(digest(recent_bytes) == CURRENT_DATA_EVIDENCE_SHA256, 'CURRENT_DATA_EVIDENCE_PIN')
             recent = unique_json(recent_bytes)
             need(recent['published_sha'] == REMOTE_BEFORE_RECONCILIATION and recent['producer_run_id'] == 39791362129 and recent['producer_attempt'] == 1, 'CURRENT_DATA_EVIDENCE_IDENTITY')
             validate_data(git, recent['published_sha'], recent['source_sha'], recent['metadata_objects'])
-            if durability_root:
+            if zod_root:
+                mode, details = 'EXACT_ZOD_SECURITY_BOOTSTRAP', {'zod_base': ZOD_BASE,
+                    'remote_before': expected_before, 'base_hosted_ci': 'FAILED_NOT_REUSED',
+                    'failed_run_id': 40033193844, 'data_head': REMOTE_BEFORE_RECONCILIATION,
+                    'historical_qualification_reused': True, 'new_hosted_qualification_required': True,
+                    'report_source': REPORT_PARENT, 'dependency': 'zod@4.6.6',
+                    'audit_exception_added': False}
+            elif durability_root:
                 mode, details = 'EXACT_PROVIDER_DURABILITY_BOOTSTRAP', {'durability_base': DURABILITY_BASE,
                     'remote_before': expected_before, 'base_hosted_ci': 'NOT_ATTRIBUTED_TO_NEW_SHA',
                     'data_head': REMOTE_BEFORE_RECONCILIATION, 'historical_qualification_reused': True,
