@@ -4,6 +4,7 @@ import { readFileSync } from 'node:fs';
 import { gunzipSync } from 'node:zlib';
 import { createHash } from 'node:crypto';
 import { execFileSync } from 'node:child_process';
+import { stripTypeScriptTypes } from 'node:module';
 import { marketReports, activeMarketReport, getMarketReportBySlug } from './market-reports.ts';
 import { firstSeptember2026AutomaticReadings, getHistoricalAutomaticReadings } from './historical-automatic-readings.ts';
 import { buildReportExportModel } from './report-export-model.ts';
@@ -16,6 +17,25 @@ const stats=json(base+'/statistical.json');
 const { universe } = createReportStatisticalEngine('2026-09-04');
 const evidence=JSON.parse(gunzipSync(readFileSync(base+'/prices-evidence.json.gz')).toString());
 const report=getMarketReportBySlug(id)!;
+const historicalCommit='e196b40969688e844737e9c163dcfd13e2213b8d';
+const digest=(bytes:string|Buffer)=>createHash('sha256').update(bytes).digest('hex');
+const historicalBytes=(file:string)=>execFileSync('git',['show',`${historicalCommit}:${file}`],{maxBuffer:32*1024*1024});
+function historicalScoringSource(bytes=historicalBytes('lib/dashboard/regime-scoring.ts')) {
+  assert.equal(digest(bytes),'b9822768cbda1954f571cc99d4b1c076ed931d21e568b1aaccc5c0857e33e2db');
+  return stripTypeScriptTypes(bytes.toString(),{mode:'strip'});
+}
+// Replay only the authenticated publication-era engine on its original evidence.
+// This is not a fallback or a provider repair for the current Dashboard.
+const {buildRegimeSummary:buildHistoricalRegimeSummary}=await import(`data:text/javascript;base64,${Buffer.from(historicalScoringSource()).toString('base64')}`);
+function verifyHistoricalSnapshot(read=(file:string)=>readFileSync(file)) {
+  const integrity=historicalBytes(base+'/integrity.json');
+  assert.equal(digest(integrity),'3e90386bfde2f76206449d8d84d342d28569609f7609578f746bcdcb0520b7cb');
+  assert.deepEqual(read(base+'/integrity.json'),integrity);
+  for (const [file,hash] of Object.entries(JSON.parse(integrity.toString()).files)) {
+    assert.equal(digest(historicalBytes(base+'/'+file)),hash,file);
+    assert.equal(digest(read(base+'/'+file)),hash,file);
+  }
+}
 
 // Exercise the actual live orchestrator used by /dashboard with post-publication provider data.
 // Only test providers are mocked; report lookup/export and scoring are production code.
@@ -83,18 +103,19 @@ test('September presentation corrects rotation wording without changing the froz
   const exported=JSON.stringify(buildReportExportModel(report));
   assert(exported.includes(wording));
   assert(!exported.includes(captured.regime.support[0]));
-  // The shared Dashboard model must still produce its original captured signal.
-  const liveModel=buildRegimeSummary(json(base+'/dashboard-evidence.json'));
-  assert(JSON.stringify(liveModel).includes('Sectores growth/cíclicos lideran y defensivos quedan rezagados.'));
+  // The historical signal belongs to the publication-era engine, not a claim
+  // that today's stricter engine accepts a legacy provider schema.
+  const historicalModel=buildHistoricalRegimeSummary(json(base+'/dashboard-evidence.json'));
+  assert(JSON.stringify(historicalModel).includes('Sectores growth/cíclicos lideran y defensivos quedan rezagados.'));
 });
 
 test('snapshot integrity and automated readings agree with the saved provider evidence',()=>{
-  for (const [file, hash] of Object.entries(json(base+'/integrity.json').files)) {
-    assert.equal(createHash('sha256').update(readFileSync(base+'/'+file)).digest('hex'), hash, file);
-  }
+  verifyHistoricalSnapshot();
   const providers = json(base+'/dashboard-evidence.json');
   const snapshot = firstSeptember2026AutomaticReadings;
-  const regime = buildRegimeSummary(providers);
+  const regime = buildHistoricalRegimeSummary(providers);
+  assert.equal(snapshot.regime.score,74);
+  assert.equal(snapshot.regime.confidence,88);
   assert.equal(snapshot.regime.score, regime.regimeScore);
   assert.equal(snapshot.regime.confidence, regime.confidence);
   assert.equal(snapshot.regime.label, regime.current);
@@ -111,6 +132,36 @@ test('snapshot integrity and automated readings agree with the saved provider ev
   const total = (row:string[])=>Number(row.at(-1)!.replace('(', '-').replace(')', ''));
   assert(Math.abs(rows.reduce((sum,row)=>sum+total(row),0)-snapshot.btcEtfFlows!.rolling5dUsdMillions)<0.001);
   assert.equal(total(rows.at(-1)!),snapshot.btcEtfFlows?.lastDayUsdMillions);
+});
+
+test('current scoring fails closed on unchanged historical evidence without manufacturing provider provenance',()=>{
+  const bytes=readFileSync(base+'/dashboard-evidence.json');
+  const providers=JSON.parse(bytes.toString());
+  assert(!Object.hasOwn(providers.btcEtfFlows.flows,'sourceRole'));
+  assert(!Object.hasOwn(providers.btcEtfFlows.flows,'coverage'));
+  // sourceRole is the rejecting guard; coverage absence alone is not claimed
+  // to reject, since the current guard only excludes coverage=unavailable.
+  const current=buildRegimeSummary(providers);
+  assert.equal(current.current,'Incompleto');
+  assert.equal(current.bias,'unavailable');
+  assert.equal(current.dataStatus,'unavailable');
+  assert.equal(current.regimeScore,null);
+  assert.equal(current.confidence,null);
+  assert.deepEqual(current.riskSupportSignals,[]);
+  assert.deepEqual(current.cautionSignals.map(s=>s.label),['BTC ETF flows']);
+  assert.match(current.interpretation,/No se renormalizan los pesos restantes/);
+  assert.deepEqual(providers,JSON.parse(bytes.toString()));
+  assert.deepEqual(readFileSync(base+'/dashboard-evidence.json'),bytes);
+  assert.equal(firstSeptember2026AutomaticReadings.regime.score,74);
+  assert.equal(firstSeptember2026AutomaticReadings.regime.confidence,88);
+});
+
+test('historical replay rejects substituted engine and altered snapshot authority',()=>{
+  assert.throws(()=>historicalScoringSource(readFileSync('lib/dashboard/regime-scoring.ts')));
+  assert.throws(()=>historicalScoringSource(Buffer.concat([historicalBytes('lib/dashboard/regime-scoring.ts'),Buffer.from('\n')])));
+  for (const file of ['integrity.json','automatic.json','dashboard-evidence.json']) {
+    assert.throws(()=>verifyHistoricalSnapshot(path=>path===base+'/'+file?Buffer.concat([readFileSync(path),Buffer.from('\n')]):readFileSync(path)));
+  }
 });
 
 for(const [ticker,n] of Object.entries({SPY:8,GLD:5,FXI:5,EWJ:7,BTCUSD:2,ETHUSD:2})){

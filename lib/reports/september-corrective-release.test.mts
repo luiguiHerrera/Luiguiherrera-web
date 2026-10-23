@@ -88,7 +88,77 @@ const readProduction = (commit: string, file: string) => {
   assert(Object.hasOwn(currentProduction.reports, file));
   return execFileSync('git',['show',`${commit}:${file}`],{maxBuffer:32*1024*1024});
 };
-function verifyCurrentProduction(read = readCurrent, productionRead = readProduction, generation = currentProduction) {
+// The original seven-report ledger above remains an immutable historical subject.
+// This distinct, already-published generation is authenticated by its Git object.
+const editorialProduction = {
+  commit:'502d192f8d3d2536e29e27e36a87cc4b24030efc',
+  tree:'045df9d42f8af1ea2dd793c19a2863ff546d3e67',
+  parent:'6378bfe4a0192a4ab8dee0517351664368313ef2',
+  rawCommitSha256:'d431266d43fa1b179d212665f9e289bc87f1c88d78ee73ce749bc3e9993eae98',
+  manifestSha256:'3800d2c6252eb78b49a5dd16802d057c880da20539a5afe30777611b5bbc7a37',
+};
+const reportTestSuccessor = {
+  'lib/reports/first-september-2026.test.mts':'d3bb21c2169ae2b8e01a9e8caea19b732e78177990782bbb41836e8b43cf6270',
+};
+const readEditorial = (file:string) => {
+  assert(Object.hasOwn(currentProduction.reports,file) || /^public\/reports\/[a-z0-9-]+\.(html|md|pdf|ics)$/.test(file));
+  return execFileSync('git',['show',`${editorialProduction.commit}:${file}`],{maxBuffer:32*1024*1024});
+};
+function verifyEditorialProduction(read=readCurrent, publishedRead=readEditorial, authority=editorialProduction, testSuccessor=reportTestSuccessor) {
+  assert.deepEqual(authority,editorialProduction);
+  assert.deepEqual(testSuccessor,reportTestSuccessor);
+  const raw=execFileSync('git',['cat-file','commit',authority.commit]);
+  assert.equal(digest(raw),authority.rawCommitSha256);
+  assert.equal(createHash('sha1').update(Buffer.concat([Buffer.from(`commit ${raw.length}\0`),raw])).digest('hex'),authority.commit);
+  const headers=raw.toString().split('\n\n',1)[0].split('\n');
+  assert.deepEqual(headers.filter(s=>s.startsWith('tree ')),[`tree ${authority.tree}`]);
+  assert.deepEqual(headers.filter(s=>s.startsWith('parent ')),[`parent ${authority.parent}`]);
+  execFileSync('git',['merge-base','--is-ancestor',currentProduction.production_commit,authority.commit]);
+  const authenticatedPublished=(file:string)=>{
+    const bytes=publishedRead(file);
+    const oid=createHash('sha1').update(Buffer.concat([Buffer.from(`blob ${bytes.length}\0`),bytes])).digest('hex');
+    assert.equal(execFileSync('git',['ls-tree',authority.commit,'--',file]).toString().split('\t')[0],`100644 blob ${oid}`,file);
+    return bytes;
+  };
+  const manifestPath='public/reports/manifest.json';
+  const oldBytes=readProduction(currentProduction.production_commit,manifestPath);
+  assert.equal(digest(oldBytes),currentProduction.reports[manifestPath].sha256);
+  const bytes=authenticatedPublished(manifestPath);
+  assert.equal(digest(bytes),authority.manifestSha256);
+  assert.deepEqual(read(manifestPath),bytes);
+  const previous=JSON.parse(oldBytes.toString()),published=JSON.parse(bytes.toString());
+  assert.equal(published.schemaVersion,previous.schemaVersion);
+  assert.equal(previous.reports.length,7);
+  assert.equal(published.reports.length,8);
+  assert.deepEqual(published.reports.map((r:{id:string})=>r.id),[...previous.reports.map((r:{id:string})=>r.id),'segundo-informe-octubre-2026']);
+  for (let i=0;i<7;i++) {
+    const before=previous.reports[i],after=published.reports[i];
+    if (before.id==='primer-informe-octubre-2026') {
+      assert.notEqual(after.sourceHash,before.sourceHash);
+      assert.deepEqual({...after,sourceHash:before.sourceHash},before);
+    } else assert.deepEqual(after,before);
+  }
+  let historicalExports=0,totalExports=0;
+  for (const entry of published.reports) for (const format of Object.values(entry.formats) as {path:string;sha256:string;size:number}[]) {
+    assert(/^\/reports\/[a-z0-9-]+\.(html|md|pdf|ics)$/.test(format.path));
+    const file='public'+format.path,original=authenticatedPublished(file);
+    assert.equal(digest(original),format.sha256,file);
+    assert.equal(original.length,format.size,file);
+    assert.deepEqual(read(file),original,file);
+    if (entry.id!=='segundo-informe-octubre-2026') historicalExports++;
+    totalExports++;
+  }
+  assert.equal(historicalExports,27);
+  assert.equal(totalExports,31);
+  for (const file of Object.keys(currentProduction.reports)) {
+    // Only this reviewed test-code successor differs from the editorial source.
+    // Its publication-era bytes remain authenticated separately below.
+    const original=authenticatedPublished(file);
+    const expected=Object.hasOwn(testSuccessor,file)?testSuccessor[file as keyof typeof testSuccessor]:digest(original);
+    assert.equal(digest(read(file)),expected,file);
+  }
+}
+function verifyCurrentProduction(read = readCurrent, productionRead = readProduction, generation = currentProduction, publishedRead=readEditorial, authority=editorialProduction, testSuccessor=reportTestSuccessor) {
   assert.equal(digest(JSON.stringify(generation)), currentProductionDigest);
   for (const entry of generation.commits) {
     const raw=execFileSync('git',['cat-file','commit',entry.commit]);
@@ -107,8 +177,8 @@ function verifyCurrentProduction(read = readCurrent, productionRead = readProduc
     assert.equal(digest(bytes),entry.sha256,file);
     assert.equal(createHash('sha1').update(Buffer.concat([Buffer.from(`blob ${bytes.length}\0`),bytes])).digest('hex'),entry.oid,file);
     assert.equal(execFileSync('git',['ls-tree',generation.production_commit,'--',file]).toString().split('\t')[0],`${entry.mode} blob ${entry.oid}`,file);
-    assert.equal(digest(read(file)),entry.sha256,file);
   }
+  verifyEditorialProduction(read,publishedRead,authority,testSuccessor);
 }
 
 const correctedExports = new Set([
@@ -154,7 +224,7 @@ function verifyPreservation(value: Preservation, read = readCurrent, historicalR
     // c60 contains the approved post-correction bytes; the independently pinned
     // baseline retains the earlier identity for exactly the four corrected exports.
     assert.equal(digest(historicalRead(entry.source_commit,entry.path)),entry.sha256,entry.path);
-    const expectedCurrent=entry.path==='public/reports/manifest.json' ? generation.reports['public/reports/manifest.json'].sha256 : entry.sha256;
+    const expectedCurrent=entry.path==='public/reports/manifest.json' ? editorialProduction.manifestSha256 : entry.sha256;
     assert.equal(digest(read(entry.path)),expectedCurrent,entry.path);
   }
   assert.deepEqual(value.historical_files.filter(e=>Object.hasOwn(generation.reports,e.path)).map(e=>e.path),['public/reports/manifest.json']);
@@ -164,6 +234,31 @@ function verifyPreservation(value: Preservation, read = readCurrent, historicalR
 test('composed execution preserves production reports and the approved execution data without rewriting historical evidence', () => {
   verifyPreservation(preservation);
 });
+
+for (const kind of ['WRONG_COMMIT','WRONG_TREE','WRONG_PARENT','WRONG_COMMIT_HASH','WRONG_MANIFEST_HASH','EXTRA_TEST_OVERRIDE','WRONG_TEST_OVERRIDE','OLD_MANIFEST_AS_CURRENT','MUTATED_PUBLISHED_MANIFEST','CURRENT_EXPORT_CORRUPTION','PUBLISHED_EXPORT_CORRUPTION','OTHER_REPORT_CODE_CORRUPTION','BOTH_CODE_COPIES_CORRUPTED','TEST_SUCCESSOR_CORRUPTION'] as const) {
+  test(`published editorial generation rejects ${kind}`,()=>{
+    const authority=structuredClone(editorialProduction),overrides:Record<string,string>={...reportTestSuccessor};
+    let current=readCurrent,published=readEditorial;
+    const corrupt=(b:Buffer)=>Buffer.concat([b,Buffer.from('\n')]);
+    switch(kind) {
+      case 'WRONG_COMMIT':authority.commit=currentProduction.production_commit;break;
+      case 'WRONG_TREE':authority.tree=currentProduction.production_tree;break;
+      case 'WRONG_PARENT':authority.parent='0'.repeat(40);break;
+      case 'WRONG_COMMIT_HASH':authority.rawCommitSha256='0'.repeat(64);break;
+      case 'WRONG_MANIFEST_HASH':authority.manifestSha256=currentProduction.reports['public/reports/manifest.json'].sha256;break;
+      case 'EXTRA_TEST_OVERRIDE':overrides['lib/reports/first-october-2026.test.mts']=digest(readCurrent('lib/reports/first-october-2026.test.mts'));break;
+      case 'WRONG_TEST_OVERRIDE':overrides['lib/reports/first-september-2026.test.mts']='0'.repeat(64);break;
+      case 'OLD_MANIFEST_AS_CURRENT':current=p=>p==='public/reports/manifest.json'?readProduction(currentProduction.production_commit,p):readCurrent(p);break;
+      case 'MUTATED_PUBLISHED_MANIFEST':published=p=>p==='public/reports/manifest.json'?corrupt(readEditorial(p)):readEditorial(p);break;
+      case 'CURRENT_EXPORT_CORRUPTION':current=p=>p==='public/reports/segundo-informe-octubre-2026.pdf'?corrupt(readCurrent(p)):readCurrent(p);break;
+      case 'PUBLISHED_EXPORT_CORRUPTION':published=p=>p==='public/reports/primer-informe-octubre-2026.pdf'?corrupt(readEditorial(p)):readEditorial(p);break;
+      case 'OTHER_REPORT_CODE_CORRUPTION':current=p=>p==='lib/reports/report-export-model.ts'?corrupt(readCurrent(p)):readCurrent(p);break;
+      case 'BOTH_CODE_COPIES_CORRUPTED':current=p=>p==='lib/reports/report-export-model.ts'?corrupt(readCurrent(p)):readCurrent(p);published=p=>p==='lib/reports/report-export-model.ts'?corrupt(readEditorial(p)):readEditorial(p);break;
+      case 'TEST_SUCCESSOR_CORRUPTION':current=p=>p==='lib/reports/first-september-2026.test.mts'?corrupt(readCurrent(p)):readCurrent(p);break;
+    }
+    assert.throws(()=>verifyEditorialProduction(current,published,authority,overrides as typeof reportTestSuccessor));
+  });
+}
 
 const correctedNegatives = [
   'CORRECTED_EXPORT_SET_MISSING_ENTRY','CORRECTED_EXPORT_SET_EXTRA_ENTRY',
