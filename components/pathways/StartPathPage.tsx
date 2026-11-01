@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { Playfair_Display } from "next/font/google";
+import localFont from "next/font/local";
 import { PersonalFinanceGuidedRoute } from "@/components/pathways/PersonalFinanceGuidedRoute";
 import { PersonalFinanceHeroCta } from "@/components/pathways/PersonalFinanceHeroCta";
 import heroStyles from "@/components/pathways/PersonalFinanceHero.module.css";
@@ -16,8 +16,10 @@ type StartPathPageProps = {
 const focusClasses =
   "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-petrol focus-visible:ring-offset-2 focus-visible:ring-offset-paper";
 
-const playfairDisplay = Playfair_Display({
-  subsets: ["latin"],
+const playfairDisplay = localFont({
+  src: "../../public/fonts/playfair-display-500.ttf",
+  adjustFontFallback: false,
+  fallback: ["Personal Finance Display Fallback"],
   weight: "500",
   style: "normal",
   display: "swap",

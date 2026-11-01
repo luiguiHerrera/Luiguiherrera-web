@@ -14,8 +14,11 @@ test('current production Statistical Levels admits later values without moving t
   const snapshotRoot = 'lib/reports/snapshots/primer-informe-septiembre-2026/';
   const reportStatistics = JSON.parse(readFileSync(snapshotRoot + 'statistical.json', 'utf8'));
   const generatedRoot = path.resolve('lib/statistical-levels/generated');
+  // The historical baseline is pinned to the authentic production commit that
+  // introduced this test. Daily generation must not move its September inputs.
+  const fixtureRoot = path.resolve('lib/reports/fixtures/september-production-2026-09-06');
   const fixtures = new Map(['manifest.json', 'assets/BTCUSD.json', 'seasonality/BTCUSD.json'].map(file => [
-    path.join(generatedRoot, file), JSON.parse(readFileSync(path.join(generatedRoot, file), 'utf8')),
+    path.join(generatedRoot, file), JSON.parse(readFileSync(path.join(fixtureRoot, file), 'utf8')),
   ]));
   const originalReadFile = realFs.readFile;
   // Only the file-input boundary is replaced. The real production page loader,

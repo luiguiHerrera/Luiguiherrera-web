@@ -1,0 +1,28 @@
+{
+  "source_commit": "e196b40969688e844737e9c163dcfd13e2213b8d",
+  "source_tree": "8e97bdaec318d66dde9e1542f25bc216c1dd056e",
+  "reason": "Authentic production inputs at introduction of this isolation test; no edited values or regenerated historical results",
+  "files": [
+    {
+      "fixture_path": "manifest.json",
+      "source_path": "lib/statistical-levels/generated/manifest.json",
+      "git_blob": "a0b8b8b38cc02b5b439058481f2731c40a1276d5",
+      "sha256": "206563329a2ca344a253efaf40108da1aa5fca9bade0360483a41080e066847e",
+      "bytes": 846300
+    },
+    {
+      "fixture_path": "assets/BTCUSD.json",
+      "source_path": "lib/statistical-levels/generated/assets/BTCUSD.json",
+      "git_blob": "adb25077a3f4a7ddc5da25d22e13a0778404e790",
+      "sha256": "65183b997cc0a726214c2e79a4f52c2f35b9371ea0da316e625f7a81335d91a9",
+      "bytes": 459554
+    },
+    {
+      "fixture_path": "seasonality/BTCUSD.json",
+      "source_path": "lib/statistical-levels/generated/seasonality/BTCUSD.json",
+      "git_blob": "84f084aec230902f9ec6d9c5107acc246dbb4f25",
+      "sha256": "a57a2d4e0e2272af479fa1c35c0564925b3d68027ac04280f864c8948b0b0981",
+      "bytes": 1735858
+    }
+  ]
+}
