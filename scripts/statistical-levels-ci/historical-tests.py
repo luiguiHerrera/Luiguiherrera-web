@@ -9,7 +9,7 @@ import os
 from pathlib import Path
 import subprocess
 import tempfile
-from admission import Git, OLD, need, digest, bootstrap, CAPTURE_RECOVERY_BASE, CAPTURE_RECOVERY_FILES, REPORT_CONTRACT_BASE, DURABILITY_BASE, ZOD_BASE, ZOD_FILES
+from admission import Git, OLD, need, digest, bootstrap, CAPTURE_RECOVERY_BASE, CAPTURE_RECOVERY_FILES, REPORT_CONTRACT_BASE, DURABILITY_BASE, ZOD_BASE, ZOD_FILES, lineage_entry, lineage_registry
 
 
 SECURITY_REUSE_ADDITIONS = {'package.json', 'package-lock.json',
@@ -39,6 +39,15 @@ def reuse_scope(git, head):
     root, _ = bootstrap(git, head)
     a, b = git.tree(OLD), git.tree(head)
     scope = {p for p in a if p.startswith('scripts/statistical-levels-release/')} | {'package.json', 'package-lock.json'}
+    if lineage_entry(git, root) is not None:
+        # Lineage transitions: the release package is frozen except the exact rebind files of each pinned transition.
+        registry = lineage_registry(git, root)
+        reused, changed = reuse_scope(git, registry[0]['parent'])
+        anchor = git.tree(registry[0]['parent'])
+        affected = set().union(*(set(entry['rebind']['files']) for entry in registry)) & (scope | {p for p in b if p.startswith('scripts/statistical-levels-release/')})
+        need(all(b.get(p) == anchor.get(p) for p in scope - affected), 'LINEAGE_HISTORICAL_BYTES')
+        need(all(b.get(p) == git.tree(root).get(p) and b[p][0] == '100644' for p in affected), 'LINEAGE_SUCCESSOR_HISTORICAL_BYTES')
+        return reused - affected, {**changed, **{p: {'old_sha256': digest(git.blob(OLD, p)) if p in a else None, 'current_sha256': digest(git.blob(head, p))} for p in sorted(affected)}}
     if git.parents(root) == [ZOD_BASE]:
         reused, changed = reuse_scope(git, ZOD_BASE)
         anchor = git.tree(ZOD_BASE)

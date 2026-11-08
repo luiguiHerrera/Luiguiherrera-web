@@ -24,6 +24,21 @@ async function registry(t,change=async()=>{}){
  for(const p of ['scripts/probe-fixture-registry.mjs','scripts/release-core.mjs','probe-source-inputs.json','probe-fixture.json','source-manifest.json','policy.json','source-inputs.json'])await fs.copyFile(new URL(p,closure),path.join(dir,p));
  await change(dir);return import(pathToFileURL(path.join(dir,'scripts/probe-fixture-registry.mjs')).href);
 }
+async function futureRoot(t){
+ // Current checkout as a FUTURE data candidate: once the adopted baseline equals the checkout's own snapshot, the live
+ // producer's next run carries BASELINE_ID > P.baseline.authority_run_id; model exactly that next authority day, self-consistently.
+ const dir=await fs.mkdtemp(path.join(os.tmpdir(),'sl-future-inputs-'));t.after(()=>fs.rm(dir,{recursive:true,force:true}));
+ for(const p of new Set([...Object.keys(candidate),...P.allowlist,'docs/statistical-levels-capability-ledger.json'])){await fs.mkdir(path.dirname(path.join(dir,p)),{recursive:true});await fs.copyFile(path.join(root,p),path.join(dir,p));}
+ const provenancePath=path.join(dir,'lib/statistical-levels/generated-provenance.json'),provenance=JSON.parse(await fs.readFile(provenancePath,'utf8'));
+ const baseDay=P.baseline.authority_run_id.slice(0,8),next=new Date(Date.UTC(+baseDay.slice(0,4),+baseDay.slice(4,6)-1,+baseDay.slice(6,8)+1));
+ const nextId=next.toISOString().slice(0,10).replaceAll('-','')+provenance.BASELINE_ID.slice(8),cutoff=next.toISOString().slice(0,10)+'T16:00:00.000Z';
+ provenance.BASELINE_ID=nextId;provenance.CONFIG.BASELINE_ID=nextId;provenance.CONFIG.RAW_ARCHIVE_RELATIVE_PATH='statistical-levels/raw-authority/'+nextId+'/';
+ provenance.CONFIG.SNAPSHOT_CUTOFF=cutoff;provenance.CONFIG.GENERATED_AT=cutoff;provenance.GENERATED_AT=cutoff;provenance.CONFIG_SHA256=digest(JSON.stringify(provenance.CONFIG));
+ for(const entry of provenance.snapshots){for(const key of ['CONFIG_SHA256','GENERATED_AT'])entry[key]=provenance[key];for(const input of entry.INPUTS){input.RAW_SOURCE_ID=nextId+'/raw/'+path.basename(input.RAW_SOURCE_ID);input.SNAPSHOT_CUTOFF=cutoff;}}
+ const manifestPath=path.join(dir,'lib/statistical-levels/generated/manifest.json'),manifest=JSON.parse(await fs.readFile(manifestPath,'utf8'));manifest.baseline.id=nextId;
+ const manifestBytes=JSON.stringify(manifest);await fs.writeFile(manifestPath,manifestBytes);provenance.snapshots.find(x=>x.FILE==='manifest.json').SNAPSHOT_SHA256=digest(manifestBytes);
+ await fs.writeFile(provenancePath,JSON.stringify(provenance));return dir;
+}
 async function historicalRoot(t){
  const dir=await fs.mkdtemp(path.join(os.tmpdir(),'sl-historical-inputs-'));t.after(()=>fs.rm(dir,{recursive:true,force:true}));
  for(const p of new Set([...Object.keys(historical),...P.allowlist,'docs/statistical-levels-capability-ledger.json'])){await fs.mkdir(path.dirname(path.join(dir,p)),{recursive:true});await fs.writeFile(path.join(dir,p),historicalBlob(p));}return dir;
@@ -58,7 +73,7 @@ test('forged role handle cannot authorize Probe',async()=>{assert.throws(()=>req
 test('serialized genuine role handle cannot authorize Probe',async()=>{const h=await readRegisteredProbeInputManifest(target);assert.throws(()=>requireRegisteredProbeInputManifest(JSON.parse(JSON.stringify(h)),target));});
 for(const operation of ['ADOPT','PROMOTE','UNKNOWN'])test('Probe manifest handle rejects operation '+operation,async()=>{const h=await readRegisteredProbeInputManifest(target);assert.throws(()=>requireRegisteredProbeInputManifest(h,{...target,operation}));});
 test('historical registered candidate passes real Probe verifier; future model cannot borrow historical pins',async t=>{const h=await readRegisteredProbeInputManifest(target),dir=await historicalRoot(t);await verifyProbeInputs(dir,h,target);await fs.writeFile(path.join(dir,'components/statistical-levels/StatLevelsLab.tsx'),await fs.readFile(path.join(root,'components/statistical-levels/StatLevelsLab.tsx')));await assert.rejects(verifyProbeInputs(dir,h,target),{message:'QA_INPUT_HASH'});});
-test('current candidate passes real PROMOTE input verifier',async()=>{await verifyInputs(root,candidate,release);});
+test('current candidate passes real PROMOTE input verifier',async t=>{await verifyInputs(await futureRoot(t),candidate,release);});
 test('historical candidate cannot qualify with future manifest',async t=>{const dir=await historicalRoot(t);await assert.rejects(verifyInputs(dir,candidate,release));});
 test('PROBE_MANIFEST_USED_FOR_PROMOTE',async()=>{const h=await readRegisteredProbeInputManifest(target);await assert.rejects(verifyInputs(root,h,release));await assert.rejects(verifyInputs(root,historical,release),{message:'QA_INPUT_HASH'});});
 test('release fixed current manifest path remains independent of historical Probe routing',async()=>{const cli=await fs.readFile(new URL('scripts/cli.mjs',closure),'utf8'),probe=await fs.readFile(new URL('scripts/probe-cli.mjs',closure),'utf8');assert.match(cli,/source-inputs\.json/);assert.doesNotMatch(cli,/probe-source-inputs|readRegisteredProbeInputManifest/);assert.match(probe,/readRegisteredProbeInputManifest\(target\)/);assert.doesNotMatch(probe,/readJSON\('source-inputs\.json'\)/);});

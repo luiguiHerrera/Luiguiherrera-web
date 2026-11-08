@@ -25,7 +25,12 @@ class ZodSecurityTests(unittest.TestCase):
         cls.temp = tempfile.TemporaryDirectory(prefix='sl-zod-security-model-')
         cls.directory = Path(cls.temp.name).resolve()
         f = cls.first = Fixture(cls.directory)
-        cls.content = {p: (ROOT / p).read_bytes() for p in a.ZOD_FILES}
+        # The Zod epoch is historical once the lineage epoch exists: model its exact root from the real Zod root
+        # object (the current checkout's bytes of ZOD_FILES legitimately differ after a lineage rebind).
+        checkout = a.Git(ROOT)
+        lineage_root, _ = a.bootstrap(checkout, checkout.text('rev-parse', 'HEAD'))
+        zod_root, _ = a.zod_bootstrap(checkout, a.lineage_registry(checkout, lineage_root)[0]['parent'])
+        cls.content = {p: a.Git(ROOT).blob(zod_root, p) for p in a.ZOD_FILES}
         cls.content[a.CI] = re.sub(a.ZOD_PIN, lambda m: m[1] + b'0' * 64 + m[2], cls.content[a.CI])
         rows = [{'path': p, 'mode': '100644', 'sha256': a.digest(cls.content[p])} for p in sorted(cls.content)]
         pin = a.digest(json.dumps(rows, sort_keys=True, separators=(',', ':')).encode())

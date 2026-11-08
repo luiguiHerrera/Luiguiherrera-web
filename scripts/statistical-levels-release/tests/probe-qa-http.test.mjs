@@ -435,7 +435,7 @@ const preservationSemantics = {
     assert.throws(() => releaseContract.validateTarget(preservationTarget));
   },
   POLICY_BINDING() {
-    assert.equal(regionHash(readFileSync(new URL('../policy.json', import.meta.url))), '5ca0589ff83a934bfc445e5fb15d4f760974391367fd93c0120b1dfed1aade5b');
+    assert.equal(regionHash(readFileSync(new URL('../policy.json', import.meta.url))), 'd9cf2b483bfea536ca6afdf160ed534e42a96bf175f5b7dd658b0d020b6d40f2');
     assert.equal(releaseContract.P.account_id, '732159826922');
     assert.equal(releaseContract.P.release_role_arn, 'arn:aws:iam::732159826922:role/LuiguiHerreraStatisticalLevelsReleaseInvoker');
     assert.equal(releaseContract.P.aws_audience, 'sts.amazonaws.com');

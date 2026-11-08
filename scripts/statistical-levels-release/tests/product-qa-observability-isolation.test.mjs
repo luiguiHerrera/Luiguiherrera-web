@@ -29,7 +29,7 @@ const expected = {
     "scripts/probe-token-budget.mjs": "944a180e12e516417acf3f98b3e59ad402b33293b9141eaa830753d47c09860e"
   },
   "requalified production target policy pinned; PROBE authorization and controller exclusion unchanged": {
-    "policy.json": "5ca0589ff83a934bfc445e5fb15d4f760974391367fd93c0120b1dfed1aade5b",
+    "policy.json": "d9cf2b483bfea536ca6afdf160ed534e42a96bf175f5b7dd658b0d020b6d40f2",
     "controller-request-schema.json": "d44337f72a9970d9db8e5d24ec1c400b4a5a4db9d4e3110b054727e6c9a224d3",
     "controller-qa-schema.json": "d9bbcbffbab05473a66d0ee4709dc30965195da160155c8b3905390aad9e8836"
   },
@@ -291,7 +291,7 @@ const preservationSemantics = {
     assert.throws(() => releaseContract.validateTarget(preservationTarget));
   },
   POLICY_BINDING() {
-    assert.equal(regionHash(readFileSync(new URL('../policy.json', import.meta.url))), '5ca0589ff83a934bfc445e5fb15d4f760974391367fd93c0120b1dfed1aade5b');
+    assert.equal(regionHash(readFileSync(new URL('../policy.json', import.meta.url))), 'd9cf2b483bfea536ca6afdf160ed534e42a96bf175f5b7dd658b0d020b6d40f2');
     assert.equal(releaseContract.P.account_id, '732159826922');
     assert.equal(releaseContract.P.release_role_arn, 'arn:aws:iam::732159826922:role/LuiguiHerreraStatisticalLevelsReleaseInvoker');
     assert.equal(releaseContract.P.aws_audience, 'sts.amazonaws.com');

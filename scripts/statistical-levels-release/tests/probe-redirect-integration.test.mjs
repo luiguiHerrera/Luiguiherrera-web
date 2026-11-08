@@ -17,7 +17,7 @@ const shared = {
   'scripts/runtime-io.mjs': '0c37a3b444a32847f3b9af0de405313d79e765e7e65c33e3ed7e45c9c385d0ef',
   'scripts/cli.mjs': 'c353aca844d0d69973d0bcd8abd9bf9539fd908245aca49d0caffcdb4a8c2407',
   'scripts/invoke.mjs': '25132f92c007fef6ad503282c0e62c0248887bebec2bac0a76e26e737630de0b',
-  'policy.json': '5ca0589ff83a934bfc445e5fb15d4f760974391367fd93c0120b1dfed1aade5b',
+  'policy.json': 'd9cf2b483bfea536ca6afdf160ed534e42a96bf175f5b7dd658b0d020b6d40f2',
   'controller-request-schema.json': 'd44337f72a9970d9db8e5d24ec1c400b4a5a4db9d4e3110b054727e6c9a224d3',
   'controller-qa-schema.json': 'd9bbcbffbab05473a66d0ee4709dc30965195da160155c8b3905390aad9e8836',
 };

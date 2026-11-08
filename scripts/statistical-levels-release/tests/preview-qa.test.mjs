@@ -15,12 +15,15 @@ const ledgerPath = 'docs/statistical-levels-capability-ledger.json';
 const adopt = selectTarget({ operation: ADOPT });
 const promote = { operation: PROMOTE, phase: 'preview', candidate_git_sha: 'a'.repeat(40),
   deployment_id: 'dpl_TestFutureCandidate123', expected_previous_production_sha: P.baseline.production_git_sha };
+// Independent oracle of the explicitly authorized target: the reviewed migration fixture, not policy.json itself.
+const migration = JSON.parse(await fs.readFile(new URL('../../statistical-levels-ci/policy-migration.json', import.meta.url), 'utf8'));
+const oracle = migration.current_target;
 
 test('requalified ADOPT binds current production separately from execution and rejects the superseded target', async t => {
-  assert.equal(adopt.candidate_git_sha, 'b1df2f5f1d375e923efc429b6a503c4125a6d522');
-  assert.equal(adopt.deployment_id, 'dpl_FRxYeCpiJohL9UZmKfRTEpF6tT5U');
-  assert.equal(adopt.authority_run_id, '20260908T125656658Z-a4743804-e5f1-495a-b34e-5948d5db4d2d');
-  assert.equal(adopt.sealed_manifest_sha256, '129f45149f6a280f1681ce3903a304e18a07dbaa6894bcc8e9b94587dbdf26cb');
+  assert.equal(adopt.candidate_git_sha, oracle.candidate_git_sha);
+  assert.equal(adopt.deployment_id, oracle.deployment_id);
+  assert.equal(adopt.authority_run_id, oracle.authority_run_id);
+  assert.equal(adopt.sealed_manifest_sha256, oracle.sealed_manifest_sha256);
   for (const change of [
     { candidate_git_sha: 'c60b17c6ddc5a08fcd402328f69e73f6e1e41b5f' },
     { deployment_id: 'dpl_BBWPr52pL9JmHQwtAGKkNNSg9a8Q' },
@@ -69,6 +72,31 @@ async function fixture(t, operation = ADOPT) {
     provenance.snapshots.find(x => x.FILE === 'manifest.json').SNAPSHOT_SHA256 = sha(bytes);
     const originalPin = P.baseline.provenance_sha256;
     t.after(() => { P.baseline.provenance_sha256 = originalPin; });
+  } else {
+    // Future data candidate model: the checkout's own snapshot is the adopted baseline, so the candidate carries the
+    // next authority day (the producer always publishes BASELINE_ID > P.baseline.authority_run_id). Self-consistent only.
+    const baseDay = P.baseline.authority_run_id.slice(0, 8);
+    const next = new Date(Date.UTC(+baseDay.slice(0, 4), +baseDay.slice(4, 6) - 1, +baseDay.slice(6, 8) + 1));
+    const nextId = next.toISOString().slice(0, 10).replaceAll('-', '') + provenance.BASELINE_ID.slice(8);
+    const cutoff = next.toISOString().slice(0, 10) + 'T16:00:00.000Z';
+    provenance.BASELINE_ID = nextId;
+    provenance.CONFIG.BASELINE_ID = nextId;
+    provenance.CONFIG.RAW_ARCHIVE_RELATIVE_PATH = 'statistical-levels/raw-authority/' + nextId + '/';
+    provenance.CONFIG.SNAPSHOT_CUTOFF = cutoff;
+    provenance.CONFIG.GENERATED_AT = cutoff;
+    provenance.GENERATED_AT = cutoff;
+    provenance.CONFIG_SHA256 = sha(JSON.stringify(provenance.CONFIG));
+    for (const entry of provenance.snapshots) {
+      for (const key of ['CONFIG_SHA256', 'GENERATED_AT']) entry[key] = provenance[key];
+      for (const input of entry.INPUTS) {
+        input.RAW_SOURCE_ID = nextId + '/raw/' + path.basename(input.RAW_SOURCE_ID);
+        input.SNAPSHOT_CUTOFF = cutoff;
+      }
+    }
+    const name = 'lib/statistical-levels/generated/manifest.json';
+    const data = JSON.parse(await fs.readFile(path.join(dir, name)));data.baseline.id = nextId;
+    const bytes = JSON.stringify(data);await write(dir, name, bytes);
+    provenance.snapshots.find(x => x.FILE === 'manifest.json').SNAPSHOT_SHA256 = sha(bytes);
   }
   async function save(authenticate = false) {
     const bytes = JSON.stringify(provenance);await write(dir, provenancePath, bytes);
@@ -171,36 +199,37 @@ test('unknown operation cannot select either source authority', async () => {
   await assert.rejects(verifyInputs('/nonexistent-checkout', {}, { ...adopt, operation: 'OTHER' }), { message: 'OPERATION_REQUIRED' });
 });
 
-// Independent target and policy oracles for the explicitly authorized two-field migration.
-const oldPolicyHash = 'e8865e7b7c392147f111a4f558434d536cbdfbb648d463053a74701b2bb98e9a';
-const newPolicyHash = '5ca0589ff83a934bfc445e5fb15d4f760974391367fd93c0120b1dfed1aade5b';
+// Independent target and policy oracles for the explicitly authorized migration (reviewed fixture, not policy.json).
+const oldPolicyHash = migration.previous_policy_sha256;
+const newPolicyHash = migration.current_policy_sha256;
 const policyBytes = await fs.readFile(new URL('../policy.json', import.meta.url), 'utf8');
 const digest = bytes => createHash('sha256').update(bytes).digest('hex');
 const currentTarget = {
   operation: 'ADOPT_EXISTING_PRODUCTION_BASELINE', phase: 'production',
-  candidate_git_sha: 'b1df2f5f1d375e923efc429b6a503c4125a6d522',
-  deployment_id: 'dpl_FRxYeCpiJohL9UZmKfRTEpF6tT5U', origin: 'https://www.luiguiherrera.com',
-  authority_run_id: '20260908T125656658Z-a4743804-e5f1-495a-b34e-5948d5db4d2d',
-  sealed_manifest_sha256: '129f45149f6a280f1681ce3903a304e18a07dbaa6894bcc8e9b94587dbdf26cb',
+  candidate_git_sha: oracle.candidate_git_sha,
+  deployment_id: oracle.deployment_id, origin: 'https://www.luiguiherrera.com',
+  authority_run_id: oracle.authority_run_id,
+  sealed_manifest_sha256: oracle.sealed_manifest_sha256,
 };
 
 function assertPolicyContract(bytes, expected = newPolicyHash) {
   assert.equal(digest(bytes), expected, 'explicit target policy contract');
 }
 
-test('policy migration changes exactly the production commit and deployment; every other policy byte remains frozen', () => {
+test('policy migration changes exactly the authorized baseline and authority fields; every other policy byte remains frozen', () => {
   assertPolicyContract(policyBytes);
   const parsed = JSON.parse(policyBytes);
   assert.equal(parsed.baseline.production_git_sha, currentTarget.candidate_git_sha);
   assert.equal(parsed.baseline.production_deployment_id, currentTarget.deployment_id);
+  assert.deepEqual(Object.keys(migration.previous_values).sort(), ['authority', 'baseline']);
   let restored = policyBytes;
-  for (const [field, previous] of [
-    ['production_git_sha', 'c60b17c6ddc5a08fcd402328f69e73f6e1e41b5f'],
-    ['production_deployment_id', 'dpl_BBWPr52pL9JmHQwtAGKkNNSg9a8Q'],
-  ]) {
-    const token = `"${field}": "${parsed.baseline[field]}"`;
-    assert.equal(restored.split(token).length, 2, field + ' occurs exactly once');
-    restored = restored.replace(token, `"${field}": "${previous}"`);
+  for (const [section, fields] of Object.entries(migration.previous_values)) {
+    for (const [field, previous] of Object.entries(fields)) {
+      assert.notEqual(parsed[section][field], previous, section + '.' + field + ' must actually change');
+      const token = `"${field}": ${JSON.stringify(parsed[section][field])}`;
+      assert.equal(restored.split(token).length, 2, section + '.' + field + ' occurs exactly once');
+      restored = restored.replace(token, `"${field}": ${JSON.stringify(previous)}`);
+    }
   }
   assertPolicyContract(restored, oldPolicyHash);
   assert.throws(() => assertPolicyContract(policyBytes, oldPolicyHash), { code: 'ERR_ASSERTION' });

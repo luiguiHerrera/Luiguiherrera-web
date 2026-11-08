@@ -525,7 +525,7 @@ def zod_payload_hash(git, sha):
 
 
 
-def bootstrap(git, head):
+def zod_bootstrap(git, head):
     # Exact security repair only. The failed parent is never attributed a CI PASS.
     if head == ZOD_BASE or subprocess.run(
             ['git', 'merge-base', '--is-ancestor', ZOD_BASE, head], cwd=git.root,
@@ -561,6 +561,171 @@ def bootstrap(git, head):
 
 
 
+# ---- Lineage transition epoch (P7-B, November 2026). Repeatable, exact, data-pinned transitions. ----
+# A transition is one editorial commit E (Production base) followed by one rebind commit R (release-policy
+# rebind). Every byte of both is pinned in the registry carried by R: E by sha, tree, parent, header and
+# per-path blob/sha256 delta; R by parent, header, exact file set and the self-excluding payload pin in CI.
+# After R only exact 82-path data successors are admitted. Later transitions append a registry entry; the
+# previous rebind is pinned by sha and its registry must be the exact prefix. Code files may change only in
+# the first transition of this epoch (reviewed once); later rebinds are restricted to data/pin files.
+LINEAGE_REGISTRY = 'scripts/statistical-levels-ci/lineage-transitions.json'
+LINEAGE_SCHEMA = 'statistical-levels.lineage-transition.v1'
+LINEAGE_PIN = rb'(      SL_CI_LINEAGE_PAYLOAD_SHA256: ")[a-f0-9]{64}("\n)'
+LINEAGE_PIN_LINE = rb'      SL_CI_LINEAGE_PAYLOAD_SHA256: "[a-f0-9]{64}"\n'
+# The first transition's parent is pinned in its registry entry (sealed by the rebind payload pin, like every
+# epoch root's own constants) and must be admitted by the previous (Zod) epoch: any qualified data head may be the
+# base, so the daily producer advancing the branch never requires a code change of this epoch. Bases admitted only by
+# earlier epochs (ZOD_BASE itself, pre-Zod heads) are refused (LINEAGE_FIRST_PARENT_EPOCH).
+LINEAGE_REBIND_FILES = frozenset({
+    CI, LINEAGE_REGISTRY,
+    '.github/workflows/statistical-levels-release.yml',
+    'scripts/statistical-levels-release/policy.json',
+    'scripts/statistical-levels-release/source-inputs.json',
+    'scripts/statistical-levels-release/source-manifest.json',
+    'scripts/statistical-levels-release/SOURCE_SHA256SUMS',
+    'scripts/statistical-levels-release/workflow-freeze.json',
+    'scripts/statistical-levels-ci/policy-migration.json',
+    'scripts/statistical-levels-release/tests/probe-qa-http.test.mjs',
+    'scripts/statistical-levels-release/tests/probe-redirect-integration.test.mjs',
+    'scripts/statistical-levels-release/tests/product-qa-observability-isolation.test.mjs',
+})
+LINEAGE_EPOCH_FILES = LINEAGE_REBIND_FILES | frozenset({
+    'scripts/statistical-levels-ci/admission.py',
+    'scripts/statistical-levels-ci/historical-tests.py',
+    'scripts/statistical-levels-ci/test_lineage_admission.py',
+    'scripts/statistical-levels-release/tests/preview-qa.test.mjs',
+    'scripts/statistical-levels-release/tests/input-manifest-roles.test.mjs',
+    'scripts/statistical-levels-ci/test_zod_security_admission.py',
+})
+# An editorial transition may never touch Statistical Levels data, the generator bundle, the producer,
+# the release package, the CI contracts or the dependency lock.
+LINEAGE_EDITORIAL_FORBIDDEN_PREFIXES = (DATA, 'scripts/statistical-levels-release/', 'scripts/statistical-levels-ci/', '.github/workflows/')
+LINEAGE_EDITORIAL_FORBIDDEN_FILES = frozenset({PROVENANCE, PRODUCER, CI, 'package.json', 'package-lock.json',
+    'scripts/build-statistical-levels.mjs', 'scripts/statistical-levels-offline.mjs',
+    'lib/statistical-levels/baseline-policy.mjs', 'lib/statistical-levels/defect-repairs.mjs',
+    'scripts/statistical-levels-hosted.mjs', 'scripts/statistical-levels-storage.mjs', 'scripts/statistical-levels-daily.mjs',
+    'docs/statistical-levels-capability-ledger.json'})
+
+
+def lineage_registry(git, sha):
+    if LINEAGE_REGISTRY not in git.tree(sha):
+        return None
+    registry = unique_json(git.blob(sha, LINEAGE_REGISTRY))
+    need(isinstance(registry, list) and registry, 'LINEAGE_REGISTRY')
+    for index, entry in enumerate(registry, 1):
+        need(set(entry) == {'schema', 'index', 'parent', 'editorial', 'rebind', 'previous_rebind'} and entry['schema'] == LINEAGE_SCHEMA and entry['index'] == index, 'LINEAGE_REGISTRY_ENTRY')
+        need(set(entry['editorial']) == {'sha', 'tree', 'author', 'committer', 'message', 'delta'} and set(entry['rebind']) == {'author', 'committer', 'message', 'files'}, 'LINEAGE_REGISTRY_ENTRY')
+        need(re.fullmatch('[a-f0-9]{40}', entry['parent']) and re.fullmatch('[a-f0-9]{40}', entry['editorial']['sha']) and re.fullmatch('[a-f0-9]{40}', entry['editorial']['tree']), 'LINEAGE_REGISTRY_SHA')
+        need((entry['previous_rebind'] is None) == (index == 1) and (index == 1 or re.fullmatch('[a-f0-9]{40}', entry['previous_rebind'])), 'LINEAGE_REGISTRY_PREVIOUS')
+    return registry
+
+
+def lineage_header(git, sha, tree, parent, author, committer, message, code):
+    expected = ('tree ' + tree + '\nparent ' + parent + '\nauthor ' + author + '\ncommitter ' + committer + '\n\n' + message + '\n').encode()
+    need(git('cat-file', 'commit', sha) == expected, code)
+
+
+def validate_lineage_editorial(git, entry):
+    e = entry['editorial']
+    sha = e['sha']
+    need(git.parents(sha) == [entry['parent']], 'LINEAGE_EDITORIAL_PARENT')
+    need(git.text('rev-parse', sha + '^{tree}') == e['tree'], 'LINEAGE_EDITORIAL_TREE')
+    lineage_header(git, sha, e['tree'], entry['parent'], e['author'], e['committer'], e['message'], 'LINEAGE_EDITORIAL_HEADER')
+    need(e['delta'] and all(set(item) == {'status', 'mode', 'git_blob', 'sha256'} for item in e['delta'].values()), 'LINEAGE_EDITORIAL_DELTA_SCHEMA')
+    for p in e['delta']:
+        need(not p.startswith(LINEAGE_EDITORIAL_FORBIDDEN_PREFIXES) and p not in LINEAGE_EDITORIAL_FORBIDDEN_FILES, 'LINEAGE_EDITORIAL_SCOPE')
+    before, after = delta(git, entry['parent'], sha, set(e['delta']))
+    for p, item in e['delta'].items():
+        if item['status'] == 'D':
+            need(p in before and p not in after and item['git_blob'] is None and item['sha256'] is None, 'LINEAGE_EDITORIAL_BLOB')
+        else:
+            need(item['status'] == ('A' if p not in before else 'M') and item['mode'] == '100644', 'LINEAGE_EDITORIAL_BLOB')
+            need(after[p] == ('100644', item['git_blob']) and digest(git.blob(sha, p)) == item['sha256'], 'LINEAGE_EDITORIAL_BLOB')
+
+
+def lineage_payload_hash(git, sha, files):
+    rows = []
+    for name in sorted(files):
+        data = git.blob(sha, name)
+        if name == CI:
+            need(len(re.findall(LINEAGE_PIN, data)) == 1, 'LINEAGE_PIN_FIELD')
+            data = re.sub(LINEAGE_PIN, lambda m: m[1] + b'0' * 64 + m[2], data)
+        rows.append({'path': name, 'mode': '100644', 'sha256': digest(data)})
+    return digest(json.dumps(rows, sort_keys=True, separators=(',', ':')).encode())
+
+
+def validate_lineage_rebind(git, root, entry):
+    r = entry['rebind']
+    editorial = entry['editorial']['sha']
+    need(git.parents(root) == [editorial], 'LINEAGE_REBIND_PARENT')
+    files = frozenset(r['files'])
+    need(sorted(files) == r['files'] and len(files) == len(r['files']), 'LINEAGE_REBIND_FILES')
+    allowed = LINEAGE_EPOCH_FILES if entry['index'] == 1 else LINEAGE_REBIND_FILES
+    need(files <= allowed and {CI, LINEAGE_REGISTRY, 'scripts/statistical-levels-release/policy.json'} <= files, 'LINEAGE_REBIND_SCOPE')
+    delta(git, editorial, root, files)
+    lineage_header(git, root, git.text('rev-parse', root + '^{tree}'), editorial, r['author'], r['committer'], r['message'], 'LINEAGE_REBIND_HEADER')
+    # The CI workflow may differ from the editorial commit's only by the single lineage pin line.
+    need(re.sub(LINEAGE_PIN_LINE, b'', git.blob(root, CI)) == re.sub(LINEAGE_PIN_LINE, b'', git.blob(editorial, CI)), 'LINEAGE_CI_SCOPE')
+    pin = re.findall(rb'      SL_CI_LINEAGE_PAYLOAD_SHA256: "([a-f0-9]{64})"\n', git.blob(root, CI))
+    need(len(pin) == 1 and pin[0].decode() == lineage_payload_hash(git, root, files), 'LINEAGE_PAYLOAD')
+    # The rebind must bind exactly the pinned editorial commit (not merely change the allowed files).
+    policy = unique_json(git.blob(root, 'scripts/statistical-levels-release/policy.json'))
+    migration = unique_json(git.blob(root, 'scripts/statistical-levels-ci/policy-migration.json'))
+    need(policy['baseline']['production_git_sha'] == editorial and migration['editorial_sha'] == editorial and migration['transition_index'] == entry['index'] and migration['current_policy_sha256'] == digest(git.blob(root, 'scripts/statistical-levels-release/policy.json')), 'LINEAGE_REBIND_POLICY')
+
+
+def lineage_entry(git, root):
+    """The registry entry describing `root` when `root` is a lineage rebind commit, else None."""
+    registry = lineage_registry(git, root)
+    if registry is None:
+        return None
+    entry = registry[-1]
+    return entry if git.parents(root) == [entry['editorial']['sha']] else None
+
+
+def bootstrap(git, head):
+    # Exact lineage transitions only. The editorial commit alone is never admitted; its CI failure is never reused.
+    if LINEAGE_REGISTRY not in git.tree(head):
+        return zod_bootstrap(git, head)  # pre-epoch lineages keep their exact behaviour and error codes
+    data_paths = paths(git)
+    chain, cursor = [], head
+    for _ in range(4096):
+        parents = git.parents(cursor)
+        need(len(parents) == 1, 'LINEAGE_ORDERED_SINGLE_PARENT')
+        a, b = git.tree(parents[0]), git.tree(cursor)
+        changed = {p for p in a.keys() | b.keys() if a.get(p) != b.get(p)}
+        if changed != data_paths:
+            break
+        for p in changed:
+            need(b.get(p, (None,))[0] == '100644' and (p not in a or a[p][0] == '100644'), 'DELTA_MODE')
+        chain.append(cursor)
+        cursor = parents[0]
+    else:
+        raise ValueError('LINEAGE_BOUND')
+    registry = lineage_registry(git, cursor)
+    need(registry is not None, 'LINEAGE_REGISTRY')  # the registry is a frozen non-data path: every lineage ancestor below the head carries it
+    entry = registry[-1]
+    if git.parents(cursor) != [entry['editorial']['sha']]:
+        delta(git, git.parents(cursor)[0], cursor, data_paths)  # a malformed data successor is EXACT_DELTA, as before
+        raise ValueError('LINEAGE_REBIND_PARENT')
+    validate_lineage_editorial(git, entry)
+    validate_lineage_rebind(git, cursor, entry)
+    if entry['index'] == 1:
+        # The pinned base must be admitted by the Zod epoch itself (its root or an exact data successor of it): zod_bootstrap
+        # delegates older heads to earlier epochs, so the returned root's parent is checked explicitly.
+        zod_root, _ = zod_bootstrap(git, entry['parent'])
+        need(git.parents(zod_root) == [ZOD_BASE], 'LINEAGE_FIRST_PARENT_EPOCH')
+    else:
+        previous_root, _ = bootstrap(git, entry['parent'])
+        need(previous_root == entry['previous_rebind'], 'LINEAGE_PREVIOUS_REBIND')
+        need(lineage_registry(git, previous_root) == registry[:-1], 'LINEAGE_REGISTRY_CHAIN')
+        for name in LINEAGE_EPOCH_FILES - LINEAGE_REBIND_FILES:
+            need(git.tree(cursor).get(name) == git.tree(previous_root).get(name), 'LINEAGE_CODE_FROZEN')
+    current, start = git.tree(head), git.tree(cursor)
+    need(set(current) == set(start) and all(current[p] == start[p] for p in current if p not in data_paths), 'LINEAGE_SUCCESSOR_CODE_CHANGED')
+    return cursor, chain
+
+
 def reconciled_report_hashes(git, head):
     """Current report bytes only from the exact reconciled, qualified lineage.
 
@@ -571,6 +736,16 @@ def reconciled_report_hashes(git, head):
                       stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL).returncode != 0:
         return {}
     root, _ = bootstrap(git, head)
+    if lineage_entry(git, root) is not None:
+        registry = lineage_registry(git, root)
+        result = reconciled_report_hashes(git, registry[0]['parent'])
+        for entry in registry:
+            for name, item in entry['editorial']['delta'].items():
+                if item['status'] == 'D':
+                    result.pop(name, None)
+                else:
+                    result[name] = item['sha256']
+        return result
     if git.parents(root) == [ZOD_BASE]:
         return reconciled_report_hashes(git, ZOD_BASE)
     if git.parents(root) == [DURABILITY_BASE]:
@@ -883,15 +1058,25 @@ def admit(git, api, env, event):
         report_root = git.parents(root) == [REPORT_CONTRACT_BASE]
         durability_root = git.parents(root) == [DURABILITY_BASE]
         zod_root = git.parents(root) == [ZOD_BASE]
-        expected_before = ZOD_BASE if zod_root else DURABILITY_BASE if durability_root else REPORT_CONTRACT_BASE if report_root else CAPTURE_RECOVERY_BASE if capture_root else SECURITY_BASE if security_root else REMOTE_BEFORE_RECONCILIATION if daily_root else BASE
+        lineage = lineage_entry(git, root)
+        lineage_root = lineage is not None
+        expected_before = lineage['editorial']['sha'] if lineage_root else ZOD_BASE if zod_root else DURABILITY_BASE if durability_root else REPORT_CONTRACT_BASE if report_root else CAPTURE_RECOVERY_BASE if capture_root else SECURITY_BASE if security_root else REMOTE_BEFORE_RECONCILIATION if daily_root else BASE
         need(env['GITHUB_EVENT_NAME'] == 'push' and event['before'] == expected_before and event['after'] == head and event['ref'] == 'refs/heads/' + BRANCH and not event['forced'] and not event['deleted'] and not event['created'], 'BOOTSTRAP_EVENT')
-        if daily_root or security_root or capture_root or report_root or durability_root or zod_root:
+        if daily_root or security_root or capture_root or report_root or durability_root or zod_root or lineage_root:
             recent_bytes = git.blob(root, CURRENT_DATA_EVIDENCE)
             need(digest(recent_bytes) == CURRENT_DATA_EVIDENCE_SHA256, 'CURRENT_DATA_EVIDENCE_PIN')
             recent = unique_json(recent_bytes)
             need(recent['published_sha'] == REMOTE_BEFORE_RECONCILIATION and recent['producer_run_id'] == 39791362129 and recent['producer_attempt'] == 1, 'CURRENT_DATA_EVIDENCE_IDENTITY')
             validate_data(git, recent['published_sha'], recent['source_sha'], recent['metadata_objects'])
-            if zod_root:
+            if lineage_root:
+                mode, details = 'EXACT_LINEAGE_TRANSITION_BOOTSTRAP', {'transition_index': lineage['index'],
+                    'editorial_sha': lineage['editorial']['sha'], 'editorial_tree': lineage['editorial']['tree'],
+                    'editorial_parent': lineage['parent'], 'remote_before': expected_before,
+                    'editorial_hosted_ci': 'FAILED_NOT_REUSED', 'data_head': REMOTE_BEFORE_RECONCILIATION,
+                    'historical_qualification_reused': True, 'new_hosted_qualification_required': True,
+                    'report_source': REPORT_PARENT, 'production_base': lineage['editorial']['sha'],
+                    'controller_policy_rebind_required': True, 'release_authority_issued': False}
+            elif zod_root:
                 mode, details = 'EXACT_ZOD_SECURITY_BOOTSTRAP', {'zod_base': ZOD_BASE,
                     'remote_before': expected_before, 'base_hosted_ci': 'FAILED_NOT_REUSED',
                     'failed_run_id': 40033193844, 'data_head': REMOTE_BEFORE_RECONCILIATION,

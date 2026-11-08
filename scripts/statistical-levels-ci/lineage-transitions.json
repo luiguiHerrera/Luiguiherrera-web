@@ -1,0 +1,312 @@
+[
+ {
+  "schema": "statistical-levels.lineage-transition.v1",
+  "index": 1,
+  "parent": "fadd7dcde0153daa123f5ae470f98131e2839709",
+  "editorial": {
+   "sha": "8ce104066fe968026d24e0f006744f88e338585a",
+   "tree": "9eb2e639eb1289429b4f24647184ee38ae9dcec7",
+   "author": "Luigui Herrera <lsantiagohc@gmail.com> 1794135600 +0100",
+   "committer": "Luigui Herrera <lsantiagohc@gmail.com> 1794135600 +0100",
+   "message": "Rebase November production on the 7 November Statistical Levels snapshot\n\nTree 9eb2e639: web code and reports of Production (023c6468, dpl_HGNZc2v9) with the 82 Statistical Levels paths of fadd7dcd. Fast-forward of vercel-deployment; no content outside those two sources.",
+   "delta": {
+    "app/(es)/informes/[slug]/page.tsx": {
+     "status": "M",
+     "mode": "100644",
+     "git_blob": "03342b8318c13646062f3db8c6aaefdc83544137",
+     "sha256": "274c79ac6e47a241015a6a60c055801e4c1fe82e4f0aa872c029c1321911d2c1"
+    },
+    "app/(es)/informes/page.tsx": {
+     "status": "M",
+     "mode": "100644",
+     "git_blob": "ca749d1a408b0e77b0c97a2c2a5c1d1cdc1c14ce",
+     "sha256": "5e6c29b1ba4a48da0e8d077220e2bb102e34e700c2ec5c231502960c27794e19"
+    },
+    "components/editorial/EditorialByline.tsx": {
+     "status": "M",
+     "mode": "100644",
+     "git_blob": "ce0fdb604c886eb2dadbffa73b63d4b436c23310",
+     "sha256": "201ae0dfbb44e57ea2fc7d0ed043e934263e0bbdfd5ed4284565a58063e64f8a"
+    },
+    "components/pathways/PersonalFinanceHero.module.css": {
+     "status": "M",
+     "mode": "100644",
+     "git_blob": "19b09dedf5bed76874b287d63105e932626cdc09",
+     "sha256": "b15f25c2417b51ac8c200b75e882e350e66ee8b9ce0a819f1bafacbb2e909c0a"
+    },
+    "components/pathways/StartPathPage.tsx": {
+     "status": "M",
+     "mode": "100644",
+     "git_blob": "8e1b192f1d84b0548df4b33a13de43d050b91d2b",
+     "sha256": "23e434cdf010f8165abf3001febd33eda8531d2a402ac1e5d029041f5a99b1b7"
+    },
+    "components/reports/MarketReportContent.tsx": {
+     "status": "M",
+     "mode": "100644",
+     "git_blob": "c233b3547cc81c03a61d382e3c1d17340e9fa31e",
+     "sha256": "dc0c625150b9a4008d6c2ef1923cf3e1c381bd078485baed7b5350b1567b4e94"
+    },
+    "components/reports/NovemberReportSections.tsx": {
+     "status": "A",
+     "mode": "100644",
+     "git_blob": "e50c54203682ee7d7517f305aa6003882b0329f9",
+     "sha256": "e110a0f2a348fa7ad6b517ecc5d7963ced0aa12bb95aa152fa6bae83868870ea"
+    },
+    "components/reports/ReportEditorialSections.tsx": {
+     "status": "M",
+     "mode": "100644",
+     "git_blob": "9d760ce60147c437c5472118c1f586a52401185a",
+     "sha256": "ff287556525fd81668f8034cb1ce332f11bdd44a364ea88d61a530b64fa35f56"
+    },
+    "docs/reports/primer-informe-noviembre-2026/RELEASE_GATE.md": {
+     "status": "A",
+     "mode": "100644",
+     "git_blob": "8d078e21f2a13690222e1ea97a3ddd55afd88355",
+     "sha256": "60e10468d24aed491a7f23abf258c86695c46591f09b93da79574d8f6261ff3f"
+    },
+    "docs/reports/primer-informe-noviembre-2026/calendar-evidence.json": {
+     "status": "A",
+     "mode": "100644",
+     "git_blob": "8224936ed38fdc74022bda80b331c4e6aa043847",
+     "sha256": "563a6333837c423e21de8e44539c6172c77e02e5cfaf4095c44a55f6b602ca28"
+    },
+    "docs/reports/primer-informe-noviembre-2026/editorial-delta.json": {
+     "status": "A",
+     "mode": "100644",
+     "git_blob": "b5ada3af5204bbb28ab7ef6e0a83d47b05a10708",
+     "sha256": "5d6336de5eff868ec26731d9f0264c566c454a36fb8eb27bc2b33629dff294bc"
+    },
+    "docs/reports/primer-informe-noviembre-2026/external-verification.json": {
+     "status": "A",
+     "mode": "100644",
+     "git_blob": "82dc71258297b4fd88c289792a07cad79eccdd23",
+     "sha256": "ffa9260914660057908ab562af298c8d0fa5d294703a0e87b1c427cf05df8a8d"
+    },
+    "docs/reports/primer-informe-noviembre-2026/hosted-ci-gate-check.json": {
+     "status": "A",
+     "mode": "100644",
+     "git_blob": "d59aec2ab7b249beb75b18128498952ccf38cc9b",
+     "sha256": "8c089c98a6125e0a873e38949039f7e122437e8107a01d1d9171103cfc0b91ca"
+    },
+    "docs/reports/primer-informe-noviembre-2026/link-audit.json": {
+     "status": "A",
+     "mode": "100644",
+     "git_blob": "0b46e5c0168f915b1313538fafb3be13ce45bc00",
+     "sha256": "65da17bc7634d8bcb330d86963dd08f3fae8bda382dfc094ca9e58cd2c8aa0bc"
+    },
+    "docs/reports/primer-informe-noviembre-2026/preservation.json": {
+     "status": "A",
+     "mode": "100644",
+     "git_blob": "6a3dd06391f99db01c65127b3612357fb3a2a714",
+     "sha256": "26a9bf4b8f687a35ec60ec9f4a0869845d26f364bb8c45a9f5cc4fbc17e0bd33"
+    },
+    "docs/reports/primer-informe-noviembre-2026/primer-informe-noviembre-2026-revisado-por-autor.md": {
+     "status": "A",
+     "mode": "100644",
+     "git_blob": "4eb6823e22674b53f2ed335ff732d2835713468f",
+     "sha256": "285004f51d28c28d8189501efd45b6bf73b7a4b919e2ea305efaa6f309562884"
+    },
+    "docs/reports/primer-informe-noviembre-2026/publication.json": {
+     "status": "A",
+     "mode": "100644",
+     "git_blob": "e57065060a82f55da0a3488d07a21af14ff60b43",
+     "sha256": "3f308d968021ed413cd4147bedc42b06b7fd2d76bc95f6cc91ba2169eeabcf1a"
+    },
+    "docs/reports/primer-informe-noviembre-2026/source-audit.json": {
+     "status": "A",
+     "mode": "100644",
+     "git_blob": "4e3893fa59280f6ff992fe9d554de797fdd5dd2b",
+     "sha256": "8023c6ae20fb351b955615ee9f32371b0e330f02028f1f457f6e79db53296457"
+    },
+    "lib/reports/first-november-2026.test.mts": {
+     "status": "A",
+     "mode": "100644",
+     "git_blob": "dd3e74acd57f76650f1e3d95ea373908803af947",
+     "sha256": "66d9a04731d110b2ca2e0cdb45c282b55af71bd486c683976c75e47d8212c30a"
+    },
+    "lib/reports/first-november-2026.ts": {
+     "status": "A",
+     "mode": "100644",
+     "git_blob": "daa68b835b929d2a0f5634949e772cae9e562a2e",
+     "sha256": "a180d15afa36c4c5ec3bd6fb3ecb62ef6edc0c0cf885a1421df44d2d08ec9a2a"
+    },
+    "lib/reports/first-october-2026.test.mts": {
+     "status": "M",
+     "mode": "100644",
+     "git_blob": "ede3aa1f9955eaa6d5b80ec0f0f1653f1039caea",
+     "sha256": "803d34848acdf8ee5c1decc9e82b4808dd0784019c836a4a395a085b1bf1d1eb"
+    },
+    "lib/reports/fixtures/september-production-2026-09-06/assets/BTCUSD.json": {
+     "status": "A",
+     "mode": "100644",
+     "git_blob": "adb25077a3f4a7ddc5da25d22e13a0778404e790",
+     "sha256": "65183b997cc0a726214c2e79a4f52c2f35b9371ea0da316e625f7a81335d91a9"
+    },
+    "lib/reports/fixtures/september-production-2026-09-06/manifest.json": {
+     "status": "A",
+     "mode": "100644",
+     "git_blob": "a0b8b8b38cc02b5b439058481f2731c40a1276d5",
+     "sha256": "206563329a2ca344a253efaf40108da1aa5fca9bade0360483a41080e066847e"
+    },
+    "lib/reports/fixtures/september-production-2026-09-06/provenance.json": {
+     "status": "A",
+     "mode": "100644",
+     "git_blob": "3e301a47fe9aa8c005d238be6402c1b041b12bc6",
+     "sha256": "b5b73f481e95a2991d256685f80be976e045c84b62c544d007f9cd910d2af8e5"
+    },
+    "lib/reports/fixtures/september-production-2026-09-06/seasonality/BTCUSD.json": {
+     "status": "A",
+     "mode": "100644",
+     "git_blob": "84f084aec230902f9ec6d9c5107acc246dbb4f25",
+     "sha256": "a57a2d4e0e2272af479fa1c35c0564925b3d68027ac04280f864c8948b0b0981"
+    },
+    "lib/reports/market-reports.ts": {
+     "status": "M",
+     "mode": "100644",
+     "git_blob": "868f6fa4432ddbffeb43f5baa2545d4a1a370617",
+     "sha256": "ddfa0e300784b33c03024ad8086221d96b49db025e1b65c31c90e641d497d376"
+    },
+    "lib/reports/report-editorial-sections.ts": {
+     "status": "M",
+     "mode": "100644",
+     "git_blob": "c6525254a645b2fbf9afaded3725304db98f44bb",
+     "sha256": "c2335ca70e08a7823db9aeed42347e5fa0a3efb70c05164465a7b1d741c5d0cc"
+    },
+    "lib/reports/report-export-model.ts": {
+     "status": "M",
+     "mode": "100644",
+     "git_blob": "41c533be8cbe8e83b3f4c1dd3d21e38b89ba5877",
+     "sha256": "78c4ad48aa21b1c7de60ff6266231022672ad09593a7b96c2ad542f3ead36901"
+    },
+    "lib/reports/second-october-2026.test.mts": {
+     "status": "M",
+     "mode": "100644",
+     "git_blob": "531a76faa3e097d816b9aae301b6e5586f96b36c",
+     "sha256": "a5fc40781c7556f7b2c75ddb0198495c9c799aff45e3b19aa7d2b081f6e2e1df"
+    },
+    "lib/reports/second-october-presentation.test.mjs": {
+     "status": "M",
+     "mode": "100644",
+     "git_blob": "6d0e8bb86cb3776b384bf6d3938134ef3e7f68db",
+     "sha256": "94758d66c3e8ab286398fe9d6fefee69e3ca91f59ccb9ff83b297e2885d84a27"
+    },
+    "lib/reports/september-corrective-release.test.mts": {
+     "status": "M",
+     "mode": "100644",
+     "git_blob": "c6852273fea6317f744de5f162600b46498e6bbf",
+     "sha256": "0cf12ac0618e165665c2c11e5a41a51734e2b40d659461c3b8897405e4333b86"
+    },
+    "lib/reports/september-current-production-isolation.test.mts": {
+     "status": "M",
+     "mode": "100644",
+     "git_blob": "d86e7f2ae2e05c64ac6f25e080e4d12abcb1be00",
+     "sha256": "c76f75d366fbf064e2be04561a2f196acf13dc940d20646dbdbe277ec6fb7438"
+    },
+    "next.config.ts": {
+     "status": "M",
+     "mode": "100644",
+     "git_blob": "d1f89b6a9352c53ce5e7bb64ad7a5e9ee3cb3782",
+     "sha256": "7f317865a6bd32150a9a6fd4b292340faaf78040c137595ff360e66c813f5108"
+    },
+    "public/llms.txt": {
+     "status": "M",
+     "mode": "100644",
+     "git_blob": "fc4d16a254d3f4cc7015b067c995878ca996cbd6",
+     "sha256": "53de4cae89596fd21f4a16637cf859525cded22b4996121f169e9572a5485a6c"
+    },
+    "public/reports/manifest.json": {
+     "status": "M",
+     "mode": "100644",
+     "git_blob": "1eb154e6a0c411b609adbe37d541149cbbde4107",
+     "sha256": "49cd77a5a438f98b6bf08f00d7f50dd562482bae3c59f83ed1c1d585ff76b50e"
+    },
+    "public/reports/primer-informe-noviembre-2026-calendar.ics": {
+     "status": "A",
+     "mode": "100644",
+     "git_blob": "56a552da248d6a8da0004671ed222541b3e8b153",
+     "sha256": "81eb7d8a48382574cb78f756681533e6c404080b9423a3091bf1acf58addfeb1"
+    },
+    "public/reports/primer-informe-noviembre-2026.html": {
+     "status": "A",
+     "mode": "100644",
+     "git_blob": "49e4caa9f5fef371178e5faf32b2fe288186e617",
+     "sha256": "edf33e873723ebf5a0fe4ad4240a58c6fcd5dac91c8d7417a9453aea1f8c3e13"
+    },
+    "public/reports/primer-informe-noviembre-2026.md": {
+     "status": "A",
+     "mode": "100644",
+     "git_blob": "dd1b2b08ed32fd183f43e282265909ceab544150",
+     "sha256": "0835932300f865756407e503d4a6f09b6eb013e8b3c2a7e7fd5fa82c84412e56"
+    },
+    "public/reports/primer-informe-noviembre-2026.pdf": {
+     "status": "A",
+     "mode": "100644",
+     "git_blob": "2f8666e57688809c5526a26504e68e9a01c76f9e",
+     "sha256": "6e30ff636b048c59006de8c1d36e9b2f1f2d0487cd47205904d65a2304cdce95"
+    },
+    "scripts/build-first-november-report.mts": {
+     "status": "A",
+     "mode": "100644",
+     "git_blob": "5ee096ab54aeb35e4f5685f01557acd8957da2e9",
+     "sha256": "245c438e4bc5bc1068539bef2a972dd9727b67cea3e964e737770969d61d020c"
+    },
+    "scripts/check-november-links.py": {
+     "status": "A",
+     "mode": "100644",
+     "git_blob": "4e4a256500a3d45996e1775fc0c4988235d6a9a4",
+     "sha256": "a258ab5b386f4bc180b7d81fbd79dc44f838b7e67d48b0411f41fe5044ddfbaa"
+    },
+    "scripts/qa-first-november.mjs": {
+     "status": "A",
+     "mode": "100644",
+     "git_blob": "c6cd9455fd3ef6b781214304f43a3b9caa1c7850",
+     "sha256": "8d05301e7bacaae249b12ff818b757e5558b2ed7f4e9b8e16bb48fb3528da292"
+    },
+    "scripts/render-report-pdf.py": {
+     "status": "M",
+     "mode": "100644",
+     "git_blob": "f967557e0f49541edd1531fef682bd8d81f762c5",
+     "sha256": "9c976ac299130d907981b0aa5caf62c80c0924819498702ab9fb632cb8323f69"
+    },
+    "scripts/reports.mts": {
+     "status": "M",
+     "mode": "100644",
+     "git_blob": "d7ad0be7a57612b6d090eab3a04506a3c1915067",
+     "sha256": "5f1b50088ff04d0ffe27f88ad2caf8faa0d75d3fbcc5d3613691a227e1dcc46f"
+    },
+    "scripts/validate-editorial.mts": {
+     "status": "M",
+     "mode": "100644",
+     "git_blob": "84310b552851a5c2546d220d4c00ecb7bd344b91",
+     "sha256": "bb27b1ed2c63728dd4fd75151d9f8a229dfca3fc3329245dfa9216aafd5acfe5"
+    }
+   }
+  },
+  "rebind": {
+   "author": "Luigui Herrera <lsantiagohc@gmail.com> 1794180600 +0100",
+   "committer": "Luigui Herrera <lsantiagohc@gmail.com> 1794180600 +0100",
+   "message": "Bind Statistical Levels release policy and CI lineage to the November production base\n\nFirst lineage transition: editorial base X (tree 9eb2e639) pinned in scripts/statistical-levels-ci/lineage-transitions.json; release policy rebind (policy.json, source-inputs.json, source-manifest.json, SOURCE_SHA256SUMS, EXPECTED_SOURCE_SUMS x4, workflow-freeze.json); lineage admission epoch (admission.py, historical-tests.py, test_lineage_admission.py); preview-qa and input-manifest-roles future-candidate fixtures; CI payload pin. No data, generator, producer or dependency bytes change.",
+   "files": [
+    ".github/workflows/ci.yml",
+    ".github/workflows/statistical-levels-release.yml",
+    "scripts/statistical-levels-ci/admission.py",
+    "scripts/statistical-levels-ci/historical-tests.py",
+    "scripts/statistical-levels-ci/lineage-transitions.json",
+    "scripts/statistical-levels-ci/policy-migration.json",
+    "scripts/statistical-levels-ci/test_lineage_admission.py",
+    "scripts/statistical-levels-ci/test_zod_security_admission.py",
+    "scripts/statistical-levels-release/SOURCE_SHA256SUMS",
+    "scripts/statistical-levels-release/policy.json",
+    "scripts/statistical-levels-release/source-inputs.json",
+    "scripts/statistical-levels-release/source-manifest.json",
+    "scripts/statistical-levels-release/tests/input-manifest-roles.test.mjs",
+    "scripts/statistical-levels-release/tests/preview-qa.test.mjs",
+    "scripts/statistical-levels-release/tests/probe-qa-http.test.mjs",
+    "scripts/statistical-levels-release/tests/probe-redirect-integration.test.mjs",
+    "scripts/statistical-levels-release/tests/product-qa-observability-isolation.test.mjs",
+    "scripts/statistical-levels-release/workflow-freeze.json"
+   ]
+  },
+  "previous_rebind": null
+ }
+]
