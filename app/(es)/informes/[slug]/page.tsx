@@ -28,7 +28,7 @@ export async function generateMetadata({ params }: ReportPageProps): Promise<Met
   if (!report) return {};
   const canonical = reportHref(report);
 
-  return buildSeoMetadata({
+  const metadata = buildSeoMetadata({
     pathname: canonical,
     language: "es",
     title: reportMetadataTitle(report),
@@ -36,6 +36,7 @@ export async function generateMetadata({ params }: ReportPageProps): Promise<Met
     socialTitle: report.title,
     type: "article",
   });
+  return report.publishedAt ? metadata : { ...metadata, robots: { index: false, follow: false } };
 }
 
 export default async function MarketReportPage({ params }: ReportPageProps) {
@@ -72,7 +73,7 @@ export default async function MarketReportPage({ params }: ReportPageProps) {
             headline: report.title,
             description: report.summary,
             url: canonical,
-            datePublished: report.publishedAt,
+            datePublished: report.publishedAt ?? undefined,
             dateModified: report.modifiedAt,
             mainEntityOfPage: canonical,
             about: (report.executiveSummary ?? report.assetReadings).map((item) =>

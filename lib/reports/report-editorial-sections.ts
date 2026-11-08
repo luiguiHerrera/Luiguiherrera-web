@@ -1,5 +1,6 @@
 export type ReportEditorialBlock =
-  | { kind: "paragraph" | "heading" | "source"; text: string }
+  | { kind: "paragraph" | "source"; text: string }
+  | { kind: "heading"; text: string; level?: 3 | 4 }
   | { kind: "table"; headers: string[]; rows: string[][] };
 export type ReportEditorialSection = {
   id: string;

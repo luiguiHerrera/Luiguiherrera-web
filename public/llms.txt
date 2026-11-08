@@ -112,6 +112,15 @@ This section is a complementary discovery aid, not an official indexing protocol
 - Secondary downloadable HTML representation: https://www.luiguiherrera.com/reports/segundo-informe-octubre-2026.html
 - Structured calendar events: https://www.luiguiherrera.com/reports/segundo-informe-octubre-2026-calendar.ics
 
+### Primer informe de noviembre de 2026
+- Primary canonical editorial URL: https://www.luiguiherrera.com/informes/primer-informe-noviembre-2026
+- Description: Beneficios, rotación sectorial, rentabilidad de la IA y expectativas de resultados. Lectura al cierre del 30 de octubre de 2026.
+- Published: 2026-11-03
+- Markdown auxiliary machine-readable representation: https://www.luiguiherrera.com/reports/primer-informe-noviembre-2026.md
+- PDF human-readable download: https://www.luiguiherrera.com/reports/primer-informe-noviembre-2026.pdf
+- Secondary downloadable HTML representation: https://www.luiguiherrera.com/reports/primer-informe-noviembre-2026.html
+- Structured calendar events: https://www.luiguiherrera.com/reports/primer-informe-noviembre-2026-calendar.ics
+
 ## Source and method notes
 - Dashboard methodology: https://www.luiguiherrera.com/metodologia
 - TD3 research: https://www.luiguiherrera.com/investigacion/td3

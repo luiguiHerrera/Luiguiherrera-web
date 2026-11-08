@@ -59,11 +59,12 @@ test('public editorial source contains no preparation dialogue or rejected label
  assert.equal(report.approvedPdf, undefined, 'Public PDF must be generated from revised content, not copied from archived original');
 });
 test('one current report; first October historical content stays unchanged',()=>{
- assert.equal(activeMarketReport.id,report.id);
+ assert.equal(activeMarketReport.id,'primer-informe-noviembre-2026');
+ assert.deepEqual(getMarketReportBySlug(report.id), {...report,status:'archivado'});
  assert.equal(marketReports.filter(r=>r.status==='actual').length,1);
  assert.deepEqual(getMarketReportBySlug(firstOctober2026Report.id),{...firstOctober2026Report,status:'archivado'});
  assert.equal(getAdjacentReports(report.id).previousReport?.id,firstOctober2026Report.id);
- assert.equal(getAdjacentReports(report.id).nextReport,null);
+ assert.equal(getAdjacentReports(report.id).nextReport?.id,'primer-informe-noviembre-2026');
 });
 test('native report has seven supported sections, four tables and no fabricated SL state',()=>{
  assert.equal(report.editorialSections!.length,7);

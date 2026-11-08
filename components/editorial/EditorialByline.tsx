@@ -2,15 +2,17 @@ import { formatEditorialDate, type EditorialLocale } from "@/lib/editorial/dates
 
 type EditorialBylineProps = {
   automaticDataCutoffAt?: string;
+  marketCutoffLabel?: string;
   editorialCutoffAt?: string;
   locale: EditorialLocale;
   linksOpenNewTab?: boolean;
   modifiedAt: string;
-  publishedAt: string;
+  publishedAt: string | null;
 };
 
 export function EditorialByline({
   linksOpenNewTab,
+  marketCutoffLabel,
   automaticDataCutoffAt,
   editorialCutoffAt,
   locale,
@@ -29,7 +31,7 @@ export function EditorialByline({
       </p>
       <p>
         {isSpanish ? "Publicado" : "Published"}:{" "}
-        <time dateTime={publishedAt}>{formatEditorialDate(publishedAt, locale)}</time>
+        {publishedAt ? <time dateTime={publishedAt}>{formatEditorialDate(publishedAt, locale)}</time> : <span>{isSpanish ? "Pendiente de publicación" : "Pending publication"}</span>}
       </p>
       <p>
         {isSpanish ? "Actualizado" : "Updated"}:{" "}
@@ -43,7 +45,7 @@ export function EditorialByline({
       ) : null}
       {automaticDataCutoffAt ? (
         <p>
-          {isSpanish ? "Datos automáticos con corte a" : "Automatic data through"}:{" "}
+          {marketCutoffLabel ?? (isSpanish ? "Datos automáticos con corte a" : "Automatic data through")}:{" "}
           <time dateTime={automaticDataCutoffAt}>{formatEditorialDate(automaticDataCutoffAt, locale)}</time>
         </p>
       ) : null}

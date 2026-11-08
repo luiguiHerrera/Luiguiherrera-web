@@ -1,0 +1,136 @@
+{
+  "canonicalBase": "665e062cb70fbcf3fd67317560bc33e1b9dc83fa",
+  "remoteObservedHead": "2e32a28647837ad8b56eb7768c011ea237de1df5",
+  "remoteIsParentOfCanonical": true,
+  "historicalExports": {
+    "public/reports/primer-informe-agosto-2026-calendar.ics": {
+      "sha256": "ed1baaf8b53afadff4fafb66a7bd25be2ece90e79abfbdf883ed338bdcc88638",
+      "size": 15025
+    },
+    "public/reports/primer-informe-agosto-2026.html": {
+      "sha256": "620198a7530bd8c2a5984d313819fe43202c75ae7ac2dd4648a79edfe807d575",
+      "size": 79455
+    },
+    "public/reports/primer-informe-agosto-2026.md": {
+      "sha256": "0c466c8f068b368d44ccd9f8cccf64a1bf9bf2be1f882e81cec59f2a1e370e29",
+      "size": 49316
+    },
+    "public/reports/primer-informe-agosto-2026.pdf": {
+      "sha256": "d95e214bc8f4942697f313c0c86594809fff73d29e748fae6253bedaf22b61ac",
+      "size": 56119
+    },
+    "public/reports/primer-informe-julio-2026-calendar.ics": {
+      "sha256": "9058f4f61f339423bd077458bb18d8334ee384dd162d148abae448ec048dd798",
+      "size": 2645
+    },
+    "public/reports/primer-informe-julio-2026.html": {
+      "sha256": "751932790e2408ad5974ed817868bd23619ae41c6e1373dd7a23cd9ca379195e",
+      "size": 29363
+    },
+    "public/reports/primer-informe-julio-2026.md": {
+      "sha256": "c9fa1cd7379123b3cf8f79614e3dea5fa56840532d1d0c30007f62cb9a0c5bb1",
+      "size": 18037
+    },
+    "public/reports/primer-informe-julio-2026.pdf": {
+      "sha256": "de6c10ce5f4f924a63fdd18cc1617b8ae2b5e319098ceca88311a87af16dddc2",
+      "size": 22798
+    },
+    "public/reports/primer-informe-octubre-2026-calendar.ics": {
+      "sha256": "22c4cefad777c15aa9dafa6bc6f1bc91fdfdc2b97afbe1838279f8ce74f0ca50",
+      "size": 4531
+    },
+    "public/reports/primer-informe-octubre-2026.html": {
+      "sha256": "dee6f805eefa04dd3819006bdbb5241d01ccd6bc188d3c441d94993c9ff7d974",
+      "size": 65839
+    },
+    "public/reports/primer-informe-octubre-2026.md": {
+      "sha256": "7cc23fd7b4d81843a901790e62182cf27c69f25feeefee80262b178cb035e579",
+      "size": 35288
+    },
+    "public/reports/primer-informe-octubre-2026.pdf": {
+      "sha256": "6a7742587bdbd506c774514417c79430f03d59b40eaac5eec96c556571e94da8",
+      "size": 65505
+    },
+    "public/reports/primer-informe-septiembre-2026-calendar.ics": {
+      "sha256": "f1833ee2993538948a9e18795ebbc50177fcb0cb26b88d032ad23b4198b53c32",
+      "size": 9147
+    },
+    "public/reports/primer-informe-septiembre-2026.html": {
+      "sha256": "4cb16b7cdfc2d73dfc2223618f8dccf5572913e9c43aa95a7a0652d95f437ca6",
+      "size": 81069
+    },
+    "public/reports/primer-informe-septiembre-2026.md": {
+      "sha256": "f6e2d8a3ac7efe7b0c9f7a7ad09daf8377d0a25cdbe43483def98d56ca7082d9",
+      "size": 49141
+    },
+    "public/reports/primer-informe-septiembre-2026.pdf": {
+      "sha256": "8b06507ce41819de9d6ab2bfc9b550b063afb5782c5238c29f61cd1854199dd5",
+      "size": 68094
+    },
+    "public/reports/segundo-informe-agosto-2026-calendar.ics": {
+      "sha256": "eb5ead8cac703763d8c0461172cbfded7518691ccc77f9fe0b3f72e980dc77b3",
+      "size": 4462
+    },
+    "public/reports/segundo-informe-agosto-2026.html": {
+      "sha256": "383edb037d4e697e7083754ad5f01f3275cdd896ea105a0de578d567ccd23886",
+      "size": 70790
+    },
+    "public/reports/segundo-informe-agosto-2026.md": {
+      "sha256": "5a267530dcb66c963c6a383a50d3635a1e94ce6037853cd2dde608c05feb56a6",
+      "size": 46261
+    },
+    "public/reports/segundo-informe-agosto-2026.pdf": {
+      "sha256": "1f8a40e7f3aff392575ac09c7087642d22d3e4b2082581d031a7a7a90ec043ae",
+      "size": 54097
+    },
+    "public/reports/segundo-informe-julio-2026.html": {
+      "sha256": "4335b6a4c338be7fa00b13ebb279ae27c5e4139aba5ba13ac816a12cb1c81140",
+      "size": 51135
+    },
+    "public/reports/segundo-informe-julio-2026.md": {
+      "sha256": "2a756eef362b74d1a78749ef318206f9794580a71e51d13e303c40f3f0be1403",
+      "size": 35553
+    },
+    "public/reports/segundo-informe-julio-2026.pdf": {
+      "sha256": "ca106189e0684ec8a355fcf61e5f6502b83215d3422354e084baa3d359cc6ec2",
+      "size": 1442969
+    },
+    "public/reports/segundo-informe-octubre-2026-calendar.ics": {
+      "sha256": "c245308633f3f6d924f94622628f630ab507b8b6682531002f6e82ce3543ba1a",
+      "size": 2446
+    },
+    "public/reports/segundo-informe-octubre-2026.html": {
+      "sha256": "1df157f979857989eb4eb060f0d5c514064f0426bace27326e5ee6d4d2b44ece",
+      "size": 42916
+    },
+    "public/reports/segundo-informe-octubre-2026.md": {
+      "sha256": "aacbdd513e6da2132e95860c07b2c8b99eb70415364ccc535a1aec8a31f99c21",
+      "size": 32288
+    },
+    "public/reports/segundo-informe-octubre-2026.pdf": {
+      "sha256": "daa91bce5e505300e3b54635617ca62a0ba03ac1c05207eaa52d33253ebe5771",
+      "size": 43972
+    },
+    "public/reports/segundo-informe-septiembre-2026-calendar.ics": {
+      "sha256": "131d121f758c04dce31e20bb470f84a1bb9aea81abdf68813e6b2205843f29a2",
+      "size": 2353
+    },
+    "public/reports/segundo-informe-septiembre-2026.html": {
+      "sha256": "d5a9ecce3a12985de4495298a142876882834ac02ac08209ea7ac4aca94db7dd",
+      "size": 93464
+    },
+    "public/reports/segundo-informe-septiembre-2026.md": {
+      "sha256": "414e73cc3eb43b0788d8c5cdf901acb24eba106cad7ac9e1fa38377cfae6e5c1",
+      "size": 56012
+    },
+    "public/reports/segundo-informe-septiembre-2026.pdf": {
+      "sha256": "3b642597734d934b2f0e9d86ca23533302e4de63052b7d1e6adf5dd92818df6f",
+      "size": 117376
+    }
+  },
+  "historicalExportCount": 31,
+  "protectedChanges": [],
+  "production": "UNCHANGED",
+  "p7b": "PAUSED",
+  "A2.2": "NOT_EXECUTED"
+}

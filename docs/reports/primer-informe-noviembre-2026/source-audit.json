@@ -1,0 +1,393 @@
+{
+  "reviewer": "independent_review",
+  "checkedOn": "2026-11-03",
+  "sourceSha256": "285004f51d28c28d8189501efd45b6bf73b7a4b919e2ea305efaa6f309562884",
+  "editorialCutoff": "2026-11-01",
+  "marketCutoff": "2026-10-30",
+  "upcomingEarnings": [
+    {
+      "ticker": "PLTR",
+      "authorDate": "2026-11-02",
+      "authorSession": "AMC",
+      "primaryDate": "2026-11-02",
+      "announcementDate": "2026-10-12",
+      "primaryUrl": "https://investors.palantir.com/news-details/2026/Palantir-Announces-Date-of-Third-Quarter-2026-Earnings-Release-and-Webcast/",
+      "dateConfirmationAtCutoff": "confirmed",
+      "impliedMovePct": 13.25,
+      "providerSnapshot": "2026-10-30",
+      "note": "Date and after-close release explicitly confirmed.",
+      "providerUrl": "https://earningsmoves.com/t/PLTR/",
+      "impliedMoveVerified": true,
+      "matchesAuthorDateAtCutoff": true
+    },
+    {
+      "ticker": "ANET",
+      "authorDate": "2026-11-03",
+      "authorSession": "AMC",
+      "primaryDate": "2026-11-03",
+      "announcementDate": "2026-10-06",
+      "primaryUrl": "https://www.arista.com/en/company/news/press-release/24817-pr-20261006",
+      "dateConfirmationAtCutoff": "confirmed",
+      "impliedMovePct": 10.52,
+      "providerSnapshot": "2026-10-30",
+      "note": "Date and after-close release explicitly confirmed.",
+      "providerUrl": "https://earningsmoves.com/t/ANET/",
+      "impliedMoveVerified": true,
+      "matchesAuthorDateAtCutoff": true
+    },
+    {
+      "ticker": "CPNG",
+      "authorDate": "2026-11-03",
+      "authorSession": "AMC",
+      "primaryDate": "2026-11-03",
+      "announcementDate": "2026-10-20",
+      "primaryUrl": "https://ir.aboutcoupang.com/overview/default.aspx",
+      "dateConfirmationAtCutoff": "confirmed",
+      "impliedMovePct": 10.09,
+      "providerSnapshot": "2026-10-30",
+      "note": "Issuer search index confirms date; issued Business Wire release mirrored by Stockwatch confirms AMC. Direct Business Wire open inaccessible.",
+      "providerUrl": "https://earningsmoves.com/t/CPNG/",
+      "impliedMoveVerified": true,
+      "matchesAuthorDateAtCutoff": true
+    },
+    {
+      "ticker": "DUOL",
+      "authorDate": "2026-11-03",
+      "authorSession": "AMC",
+      "primaryDate": "2026-11-03",
+      "announcementDate": "2026-10-08",
+      "primaryUrl": "https://investors.duolingo.com/news-releases/news-release-details/duolingo-announce-third-quarter-2026-results-tuesday-november-3",
+      "dateConfirmationAtCutoff": "confirmed",
+      "impliedMovePct": 12.82,
+      "providerSnapshot": "2026-10-30",
+      "note": "Date and after-close release confirmed. Provider flags wide options spread.",
+      "providerUrl": "https://earningsmoves.com/t/DUOL/",
+      "impliedMoveVerified": true,
+      "matchesAuthorDateAtCutoff": true
+    },
+    {
+      "ticker": "UBER",
+      "authorDate": "2026-11-04",
+      "authorSession": "BMO",
+      "primaryDate": "2026-11-04",
+      "announcementDate": "2026-10-05",
+      "primaryUrl": "https://investor.uber.com/news-events/news/press-release-details/2026/Uber-Announces-Date-of-Third-Quarter-2026-Results-Conference-Call/default.aspx",
+      "dateConfirmationAtCutoff": "confirmed",
+      "impliedMovePct": 8.08,
+      "providerSnapshot": "2026-10-30",
+      "note": "Issuer confirms 08:00 ET call, not a specific results-release timestamp. Keep ICS all-day.",
+      "providerUrl": "https://earningsmoves.com/t/UBER/",
+      "impliedMoveVerified": true,
+      "matchesAuthorDateAtCutoff": true
+    },
+    {
+      "ticker": "CELH",
+      "authorDate": "2026-11-05",
+      "authorSession": "BMO",
+      "primaryDate": "2026-11-05",
+      "announcementDate": "2026-10-29",
+      "primaryUrl": "https://ir.celsiusholdingsinc.com/news/news-details/2026/Celsius-Holdings-to-Release-Third-Quarter-Results-on-Thursday-Nov--5-2026/default.aspx",
+      "dateConfirmationAtCutoff": "confirmed",
+      "impliedMovePct": 12.06,
+      "providerSnapshot": "2026-10-30",
+      "note": "Date and before-open release explicitly confirmed; 08:00 ET belongs to call.",
+      "providerUrl": "https://earningsmoves.com/t/CELH/",
+      "impliedMoveVerified": true,
+      "matchesAuthorDateAtCutoff": true
+    },
+    {
+      "ticker": "NET",
+      "authorDate": "2026-11-05",
+      "authorSession": "AMC",
+      "primaryDate": "2026-11-05",
+      "announcementDate": "2026-10-13",
+      "primaryUrl": "https://www.cloudflare.net/news/news-details/2026/Cloudflare-Announces-Date-of-Third-Quarter-2026-Financial-Results/default.aspx",
+      "dateConfirmationAtCutoff": "confirmed",
+      "impliedMovePct": 15.32,
+      "providerSnapshot": "2026-10-30",
+      "note": "Date and after-close release explicitly confirmed.",
+      "providerUrl": "https://earningsmoves.com/t/NET/",
+      "impliedMoveVerified": true,
+      "matchesAuthorDateAtCutoff": true
+    },
+    {
+      "ticker": "LFMD",
+      "authorDate": "2026-11-09",
+      "authorSession": "BMO",
+      "primaryDate": "2026-11-09",
+      "announcementDate": "2026-10-20",
+      "primaryUrl": "https://www.globenewswire.com/news-release/2026/10/20/3384946/6480/en/lifemd-to-report-third-quarter-2026-financial-results-on-november-9.html",
+      "dateConfirmationAtCutoff": "confirmed",
+      "impliedMovePct": 21.97,
+      "providerSnapshot": "2026-10-29",
+      "note": "Issuer-authored wire confirms BMO. 21.97 is provider snapshot 29/10, not 30/10; source says mainly 30/10 so preserve value and record exception. 30/10 provider value 22.92 must not replace it.",
+      "providerUrl": "https://earningsmoves.com/t/LFMD/",
+      "impliedMoveVerified": true,
+      "matchesAuthorDateAtCutoff": true
+    },
+    {
+      "ticker": "HIMS",
+      "authorDate": "2026-11-09",
+      "authorSession": "AMC",
+      "primaryDate": "2026-11-09",
+      "announcementDate": "2026-10-12",
+      "primaryUrl": "https://investors.hims.com/overview/",
+      "dateConfirmationAtCutoff": "confirmed",
+      "impliedMovePct": 16.86,
+      "providerSnapshot": "2026-10-30",
+      "note": "Issuer search index confirms date; issued Business Wire release mirrored by Stockwatch confirms AMC. Direct Business Wire open inaccessible.",
+      "providerUrl": "https://earningsmoves.com/t/HIMS/",
+      "impliedMoveVerified": true,
+      "matchesAuthorDateAtCutoff": true
+    },
+    {
+      "ticker": "ODD",
+      "authorDate": "2026-11-11",
+      "authorSession": "BMO",
+      "primaryDate": "2026-11-11",
+      "announcementDate": "2026-10-28",
+      "primaryUrl": "https://investors.oddity.com/news-releases/news-release-details/oddity-announce-third-quarter-2026-financial-results-november-11",
+      "dateConfirmationAtCutoff": "confirmed",
+      "impliedMovePct": 20.07,
+      "providerSnapshot": "2026-10-30",
+      "note": "Date and before-open release explicitly confirmed. Provider flags wide spread.",
+      "providerUrl": "https://earningsmoves.com/t/ODD/",
+      "impliedMoveVerified": true,
+      "matchesAuthorDateAtCutoff": true
+    },
+    {
+      "ticker": "HUMA",
+      "authorDate": "2026-11-11",
+      "authorSession": "estimated",
+      "primaryDate": "2026-11-10",
+      "announcementDate": "2026-11-02",
+      "primaryUrl": "https://investors.humacyte.com/news-releases/news-release-details/humacyte-announce-2026-third-quarter-financial-results-and",
+      "dateConfirmationAtCutoff": "editorial-unconfirmed",
+      "impliedMovePct": 42.92,
+      "providerSnapshot": "2026-10-30",
+      "note": "Primary announcement is AFTER editorial cutoff and differs from historical estimate. Keep 11/11 estimated in frozen edition; never claim primary-confirmed. Provider labels 30/10 snapshot with 29/10 quote time, zero bid and indicative-only quality.",
+      "providerUrl": "https://earningsmoves.com/t/HUMA/",
+      "impliedMoveVerified": true,
+      "matchesAuthorDateAtCutoff": null
+    },
+    {
+      "ticker": "NU",
+      "authorDate": "2026-11-12",
+      "authorSession": "estimated",
+      "primaryDate": null,
+      "announcementDate": null,
+      "primaryUrl": null,
+      "dateConfirmationAtCutoff": "editorial-unconfirmed",
+      "impliedMovePct": 8.47,
+      "providerSnapshot": "2026-10-30",
+      "note": "Provider gives 12/11 time not confirmed; no primary issuer date confirmation found in bounded search.",
+      "providerUrl": "https://earningsmoves.com/t/NU/",
+      "impliedMoveVerified": true,
+      "matchesAuthorDateAtCutoff": null
+    },
+    {
+      "ticker": "CRT",
+      "authorDate": "2026-11-12",
+      "authorSession": "estimated",
+      "primaryDate": null,
+      "announcementDate": null,
+      "primaryUrl": null,
+      "dateConfirmationAtCutoff": "editorial-unconfirmed",
+      "impliedMovePct": null,
+      "providerSnapshot": "2026-10-30",
+      "note": "Unusual Whales gives expected 12/11 and no implied move; no primary confirmation found.",
+      "providerUrl": "https://unusualwhales.com/stock/CRT/earnings",
+      "impliedMoveVerified": true,
+      "matchesAuthorDateAtCutoff": null
+    }
+  ],
+  "publishedEarnings": [
+    {
+      "ticker": "IBKR",
+      "authorDate": "2026-10-15",
+      "impliedMovePct": 3.84,
+      "actualMovePct": -3.88,
+      "providerUrl": "https://unusualwhales.com/stock/IBKR/earnings",
+      "providerValuesMatch": true
+    },
+    {
+      "ticker": "GE",
+      "authorDate": "2026-10-20",
+      "impliedMovePct": 4.84,
+      "actualMovePct": -3.67,
+      "providerUrl": "https://unusualwhales.com/stock/GE/earnings",
+      "providerValuesMatch": true
+    },
+    {
+      "ticker": "NFLX",
+      "authorDate": "2026-10-20",
+      "impliedMovePct": 7.95,
+      "actualMovePct": -5.31,
+      "providerUrl": "https://unusualwhales.com/stock/NFLX/earnings",
+      "providerValuesMatch": true
+    },
+    {
+      "ticker": "MEDP",
+      "authorDate": "2026-10-21",
+      "impliedMovePct": 12.07,
+      "actualMovePct": -1.29,
+      "providerUrl": "https://unusualwhales.com/stock/MEDP/earnings",
+      "providerValuesMatch": true
+    },
+    {
+      "ticker": "FIX",
+      "authorDate": "2026-10-22",
+      "impliedMovePct": 14.06,
+      "actualMovePct": -9.26,
+      "providerUrl": "https://unusualwhales.com/stock/FIX/earnings",
+      "providerValuesMatch": true
+    },
+    {
+      "ticker": "CLS",
+      "authorDate": "2026-10-26",
+      "impliedMovePct": 13.23,
+      "actualMovePct": 12.12,
+      "providerUrl": "https://earningsmoves.com/t/CLS/",
+      "providerValuesMatch": true
+    },
+    {
+      "ticker": "HYMC",
+      "authorDate": "2026-10-27",
+      "impliedMovePct": 17.23,
+      "actualMovePct": 9.81,
+      "providerUrl": "https://earningsmoves.com/t/HYMC/",
+      "providerValuesMatch": false,
+      "providerActualMovePct": 13.32,
+      "explanation": "Provider UNK timing uses 26-to-28 close. Author explicitly uses BMO 26-to-27 first session: 16.90 / 15.39 - 1 = 9.811566%; matches Stock Analysis. Issuer date confirmed; wire timestamp verification pending.",
+      "priceUrl": "https://stockanalysis.com/stocks/hymc/history/",
+      "primaryUrl": "https://hycroftmining.com/press-releases/hycroft-reports-q3-2026-results-and-maintains-strong-balance-sheet/"
+    },
+    {
+      "ticker": "GOOGL",
+      "authorDate": "2026-10-28",
+      "impliedMovePct": 6.28,
+      "actualMovePct": -12.64,
+      "providerUrl": "https://earningsmoves.com/t/GOOGL/",
+      "providerValuesMatch": true
+    },
+    {
+      "ticker": "KGC",
+      "authorDate": "2026-10-28",
+      "impliedMovePct": 4.49,
+      "actualMovePct": -6.0,
+      "providerUrl": "https://earningsmoves.com/t/KGC/",
+      "providerValuesMatch": true
+    },
+    {
+      "ticker": "COIN",
+      "authorDate": "2026-10-29",
+      "impliedMovePct": 7.4,
+      "actualMovePct": -10.62,
+      "providerUrl": "https://earningsmoves.com/t/COIN/",
+      "providerValuesMatch": true
+    },
+    {
+      "ticker": "CCJ",
+      "authorDate": "2026-10-30",
+      "impliedMovePct": 5.04,
+      "actualMovePct": -7.88,
+      "providerUrl": "https://earningsmoves.com/t/CCJ/",
+      "providerValuesMatch": true
+    }
+  ],
+  "arithmetic": [
+    {
+      "asset": "SPY",
+      "previous": 763.25,
+      "current": 755.72,
+      "authorPct": -0.99,
+      "calculatedPct": -0.9865705863085439,
+      "roundingMatches": true
+    },
+    {
+      "asset": "GLD",
+      "previous": 382.01,
+      "current": 355.78,
+      "authorPct": -6.87,
+      "calculatedPct": -6.866312400198948,
+      "roundingMatches": true
+    },
+    {
+      "asset": "FXI",
+      "previous": 33.84,
+      "current": 33.08,
+      "authorPct": -2.25,
+      "calculatedPct": -2.2458628841607764,
+      "roundingMatches": true
+    },
+    {
+      "asset": "EWJ",
+      "previous": 94.88,
+      "current": 92.91,
+      "authorPct": -2.08,
+      "calculatedPct": -2.0763069139966284,
+      "roundingMatches": true
+    },
+    {
+      "asset": "BTC/USD",
+      "previous": 81587.4,
+      "current": 77320.1,
+      "authorPct": -5.23,
+      "calculatedPct": -5.23034194005445,
+      "roundingMatches": true
+    },
+    {
+      "asset": "ETH/USD",
+      "previous": 2423.29,
+      "current": 2245.58,
+      "authorPct": -7.33,
+      "calculatedPct": -7.333418616839094,
+      "roundingMatches": true
+    },
+    {
+      "asset": "QQQ",
+      "previous": 709.8,
+      "current": 690.49,
+      "authorPct": -2.72,
+      "calculatedPct": -2.7204846435615604,
+      "roundingMatches": true
+    },
+    {
+      "asset": "RSP",
+      "previous": 214.09,
+      "current": 218.31,
+      "authorPct": 1.97,
+      "calculatedPct": 1.9711336353869902,
+      "roundingMatches": true
+    },
+    {
+      "asset": "IWM",
+      "previous": 270.44,
+      "current": 279.33,
+      "authorPct": 3.29,
+      "calculatedPct": 3.287235616033124,
+      "roundingMatches": true
+    }
+  ],
+  "earningsCounts": {
+    "total": 11,
+    "negative": 9,
+    "positive": 2,
+    "negativeBeyondImplied": 5,
+    "shareAllCompaniesPct": 45.5
+  },
+  "sectorChecks": {
+    "positive": 9,
+    "total": 11,
+    "spreadPp": 8.440000000000001
+  },
+  "icsContract": {
+    "allDayForNoClockTime": true,
+    "dtendExclusive": true,
+    "crlfRequired": true,
+    "utf8FoldAt75Octets": true,
+    "unconfirmedDatesMustNotClaimPrimaryConfirmation": true,
+    "noSilentPostCutoffUpdates": true
+  },
+  "stage": "external-audit-in-progress"
+}

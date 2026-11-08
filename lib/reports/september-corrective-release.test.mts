@@ -104,6 +104,33 @@ const readEditorial = (file:string) => {
   assert(Object.hasOwn(currentProduction.reports,file) || /^public\/reports\/[a-z0-9-]+\.(html|md|pdf|ics)$/.test(file));
   return execFileSync('git',['show',`${editorialProduction.commit}:${file}`],{maxBuffer:32*1024*1024});
 };
+// November is an explicit editorial successor. The original Git authority,
+// historical bytes and negative controls below remain unchanged. Only these
+// reviewed shared report files may differ; live historical exports are still read.
+const novemberSharedSuccessor: Record<string, string> = {
+  "components/reports/MarketReportContent.tsx": "dc0c625150b9a4008d6c2ef1923cf3e1c381bd078485baed7b5350b1567b4e94",
+  "lib/reports/first-october-2026.test.mts": "803d34848acdf8ee5c1decc9e82b4808dd0784019c836a4a395a085b1bf1d1eb",
+  "lib/reports/market-reports.ts": "ddfa0e300784b33c03024ad8086221d96b49db025e1b65c31c90e641d497d376",
+  "lib/reports/report-export-model.ts": "78c4ad48aa21b1c7de60ff6266231022672ad09593a7b96c2ad542f3ead36901",
+  "public/llms.txt": "53de4cae89596fd21f4a16637cf859525cded22b4996121f169e9572a5485a6c",
+  "scripts/render-report-pdf.py": "9c976ac299130d907981b0aa5caf62c80c0924819498702ab9fb632cb8323f69",
+  "scripts/reports.mts": "5f1b50088ff04d0ffe27f88ad2caf8faa0d75d3fbcc5d3613691a227e1dcc46f"
+};
+const novemberManifestSha256 = '49cd77a5a438f98b6bf08f00d7f50dd562482bae3c59f83ed1c1d585ff76b50e';
+function verifyNovemberManifest(current: Buffer, october: Buffer) {
+  assert.equal(digest(current), novemberManifestSha256);
+  const now=JSON.parse(current.toString()), before=JSON.parse(october.toString());
+  assert.equal(now.reports.length,9);
+  assert.equal(now.schemaVersion,before.schemaVersion);
+  assert.equal(now.reports[8].id,'primer-informe-noviembre-2026');
+  for (let i=0;i<8;i++) {
+    const a=now.reports[i], b=before.reports[i];
+    if (b.id==='segundo-informe-octubre-2026') {
+      assert.notEqual(a.sourceHash,b.sourceHash);
+      assert.deepEqual({...a,sourceHash:b.sourceHash},b);
+    } else assert.deepEqual(a,b);
+  }
+}
 function verifyEditorialProduction(read=readCurrent, publishedRead=readEditorial, authority=editorialProduction, testSuccessor=reportTestSuccessor) {
   assert.deepEqual(authority,editorialProduction);
   assert.deepEqual(testSuccessor,reportTestSuccessor);
@@ -125,7 +152,7 @@ function verifyEditorialProduction(read=readCurrent, publishedRead=readEditorial
   assert.equal(digest(oldBytes),currentProduction.reports[manifestPath].sha256);
   const bytes=authenticatedPublished(manifestPath);
   assert.equal(digest(bytes),authority.manifestSha256);
-  assert.deepEqual(read(manifestPath),bytes);
+  verifyNovemberManifest(read(manifestPath),bytes);
   const previous=JSON.parse(oldBytes.toString()),published=JSON.parse(bytes.toString());
   assert.equal(published.schemaVersion,previous.schemaVersion);
   assert.equal(previous.reports.length,7);
@@ -154,7 +181,7 @@ function verifyEditorialProduction(read=readCurrent, publishedRead=readEditorial
     // Only this reviewed test-code successor differs from the editorial source.
     // Its publication-era bytes remain authenticated separately below.
     const original=authenticatedPublished(file);
-    const expected=Object.hasOwn(testSuccessor,file)?testSuccessor[file as keyof typeof testSuccessor]:digest(original);
+    const expected=file==='public/reports/manifest.json' ? novemberManifestSha256 : novemberSharedSuccessor[file] ?? (Object.hasOwn(testSuccessor,file)?testSuccessor[file as keyof typeof testSuccessor]:digest(original));
     assert.equal(digest(read(file)),expected,file);
   }
 }
@@ -224,7 +251,7 @@ function verifyPreservation(value: Preservation, read = readCurrent, historicalR
     // c60 contains the approved post-correction bytes; the independently pinned
     // baseline retains the earlier identity for exactly the four corrected exports.
     assert.equal(digest(historicalRead(entry.source_commit,entry.path)),entry.sha256,entry.path);
-    const expectedCurrent=entry.path==='public/reports/manifest.json' ? editorialProduction.manifestSha256 : entry.sha256;
+    const expectedCurrent=entry.path==='public/reports/manifest.json' ? novemberManifestSha256 : entry.sha256;
     assert.equal(digest(read(entry.path)),expectedCurrent,entry.path);
   }
   assert.deepEqual(value.historical_files.filter(e=>Object.hasOwn(generation.reports,e.path)).map(e=>e.path),['public/reports/manifest.json']);
@@ -380,4 +407,8 @@ for (const name of currentProductionNegatives) test(`current production authorit
     case 'WRONG_CURRENT_BLOB':current=p=>p==='public/reports/manifest.json'?corrupt(readCurrent(p)):readCurrent(p);break;
   }
   assert.throws(()=>verifyPreservation(preservation,current,readHistorical,readCurrent(auditRoot+'baseline-hashes.json'),preservationBytes,correctedExports,production,generation));
+});
+
+for (const file of Object.keys(novemberSharedSuccessor)) test(`November shared successor rejects corruption: ${file}`,()=>{
+  assert.throws(()=>verifyEditorialProduction(p=>p===file ? Buffer.concat([readCurrent(p),Buffer.from('corrupt')]) : readCurrent(p)));
 });

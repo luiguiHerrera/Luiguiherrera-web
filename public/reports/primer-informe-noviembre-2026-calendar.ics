@@ -1,0 +1,350 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Luigui Herrera//Market Reports//ES
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+X-WR-CALNAME:Primer informe de noviembre de 2026
+BEGIN:VEVENT
+UID:primer-informe-noviembre-2026-banco-de-japon-publicacion-de-perspectiva
+ s-economicas-ampliadas@luigui-herrera
+DTSTAMP:20261103T000000Z
+DTSTART;VALUE=DATE:20261102
+DTEND;VALUE=DATE:20261103
+SUMMARY:Primer informe de noviembre de 2026: Banco de Japón: publicación 
+ de perspectivas económicas ampliadas
+DESCRIPTION:2 de noviembre. Fecha confirmada · hora por confirmar. Hora po
+ r confirmar (zona horaria por confirmar). Yen\, inflación y tasas japones
+ as Fuente de fecha/hora: Banco de Japón · calendario oficial (https://ww
+ w.boj.or.jp/en/about/calendar/index.htm).
+URL:https://www.luiguiherrera.com/informes/primer-informe-noviembre-2026
+END:VEVENT
+BEGIN:VEVENT
+UID:primer-informe-noviembre-2026-resultados-de-pltr@luigui-herrera
+DTSTAMP:20261103T000000Z
+DTSTART;VALUE=DATE:20261102
+DTEND;VALUE=DATE:20261103
+SUMMARY:Primer informe de noviembre de 2026: Resultados de PLTR
+DESCRIPTION:02/11 · AMC. Fecha confirmada · hora por confirmar. Hora por 
+ confirmar (zona horaria por confirmar). Calendario al corte editorial del 
+ 01/11. 02/11 · AMC. Implied move al corte: ±13\,25 %. Cotización válid
+ a. Fuente de fecha/hora: PLTR · anuncio del emisor 2026-10-12 (https://in
+ vestors.palantir.com/news-details/2026/Palantir-Announces-Date-of-Third-Qu
+ arter-2026-Earnings-Release-and-Webcast/).
+URL:https://www.luiguiherrera.com/informes/primer-informe-noviembre-2026
+END:VEVENT
+BEGIN:VEVENT
+UID:primer-informe-noviembre-2026-elecciones-de-medio-mandato-en-ee-uu@luig
+ ui-herrera
+DTSTAMP:20261103T000000Z
+DTSTART;VALUE=DATE:20261103
+DTEND;VALUE=DATE:20261104
+SUMMARY:Primer informe de noviembre de 2026: Elecciones de medio mandato en
+  EE. UU.
+DESCRIPTION:3 de noviembre. Fecha confirmada · hora por confirmar. Hora po
+ r confirmar (zona horaria por confirmar). Incertidumbre fiscal\, regulator
+ ia y reacción de mercados Fuente de fecha/hora: Federal Election Commissi
+ on · elecciones generales (https://www.fec.gov/introduction-campaign-fina
+ nce/election-results-and-voting-information/).
+URL:https://www.luiguiherrera.com/informes/primer-informe-noviembre-2026
+END:VEVENT
+BEGIN:VEVENT
+UID:primer-informe-noviembre-2026-jolts-ofertas-de-empleo-de-septiembre@lui
+ gui-herrera
+DTSTAMP:20261103T000000Z
+DTSTART;VALUE=DATE:20261103
+DTEND;VALUE=DATE:20261104
+SUMMARY:Primer informe de noviembre de 2026: JOLTS: ofertas de empleo de se
+ ptiembre
+DESCRIPTION:3 de noviembre. Fecha confirmada · hora por confirmar. Hora po
+ r confirmar (zona horaria por confirmar). Mercado laboral y expectativas d
+ e tipos Fuente de fecha/hora: BLS · calendario oficial de noviembre 2026 
+ (https://www.bls.gov/schedule/2026/11_sched_list.htm).
+URL:https://www.luiguiherrera.com/informes/primer-informe-noviembre-2026
+END:VEVENT
+BEGIN:VEVENT
+UID:primer-informe-noviembre-2026-resultados-de-anet@luigui-herrera
+DTSTAMP:20261103T000000Z
+DTSTART;VALUE=DATE:20261103
+DTEND;VALUE=DATE:20261104
+SUMMARY:Primer informe de noviembre de 2026: Resultados de ANET
+DESCRIPTION:03/11 · AMC. Fecha confirmada · hora por confirmar. Hora por 
+ confirmar (zona horaria por confirmar). Calendario al corte editorial del 
+ 01/11. 03/11 · AMC. Implied move al corte: ±10\,52 %. Cotización válid
+ a. Fuente de fecha/hora: ANET · anuncio del emisor 2026-10-06 (https://ww
+ w.arista.com/en/company/news/press-release/24817-pr-20261006).
+URL:https://www.luiguiherrera.com/informes/primer-informe-noviembre-2026
+END:VEVENT
+BEGIN:VEVENT
+UID:primer-informe-noviembre-2026-resultados-de-cpng@luigui-herrera
+DTSTAMP:20261103T000000Z
+DTSTART;VALUE=DATE:20261103
+DTEND;VALUE=DATE:20261104
+SUMMARY:Primer informe de noviembre de 2026: Resultados de CPNG
+DESCRIPTION:03/11 · AMC. Fecha confirmada · hora por confirmar. Hora por 
+ confirmar (zona horaria por confirmar). Calendario al corte editorial del 
+ 01/11. 03/11 · AMC. Implied move al corte: ±10\,09 %. Cotización válid
+ a. Fuente de fecha/hora: CPNG · anuncio del emisor 2026-10-20 (https://ir
+ .aboutcoupang.com/overview/default.aspx).
+URL:https://www.luiguiherrera.com/informes/primer-informe-noviembre-2026
+END:VEVENT
+BEGIN:VEVENT
+UID:primer-informe-noviembre-2026-resultados-de-duol@luigui-herrera
+DTSTAMP:20261103T000000Z
+DTSTART;VALUE=DATE:20261103
+DTEND;VALUE=DATE:20261104
+SUMMARY:Primer informe de noviembre de 2026: Resultados de DUOL
+DESCRIPTION:03/11 · AMC. Fecha confirmada · hora por confirmar. Hora por 
+ confirmar (zona horaria por confirmar). Calendario al corte editorial del 
+ 01/11. 03/11 · AMC. Implied move al corte: ±12\,82 %. Opciones poco líq
+ uidas. Fuente de fecha/hora: DUOL · anuncio del emisor 2026-10-08 (https:
+ //investors.duolingo.com/news-releases/news-release-details/duolingo-annou
+ nce-third-quarter-2026-results-tuesday-november-3).
+URL:https://www.luiguiherrera.com/informes/primer-informe-noviembre-2026
+END:VEVENT
+BEGIN:VEVENT
+UID:primer-informe-noviembre-2026-comercio-exterior-de-ee-uu@luigui-herrera
+DTSTAMP:20261103T000000Z
+DTSTART;VALUE=DATE:20261104
+DTEND;VALUE=DATE:20261105
+SUMMARY:Primer informe de noviembre de 2026: Comercio exterior de EE. UU.
+DESCRIPTION:4 de noviembre. Fecha confirmada · hora por confirmar. Hora po
+ r confirmar (zona horaria por confirmar). Crecimiento\, dólar y demanda e
+ xterior Fuente de fecha/hora: BEA · calendario oficial (https://www.bea.g
+ ov/news/schedule).
+URL:https://www.luiguiherrera.com/informes/primer-informe-noviembre-2026
+END:VEVENT
+BEGIN:VEVENT
+UID:primer-informe-noviembre-2026-resultados-de-uber@luigui-herrera
+DTSTAMP:20261103T000000Z
+DTSTART;VALUE=DATE:20261104
+DTEND;VALUE=DATE:20261105
+SUMMARY:Primer informe de noviembre de 2026: Resultados de UBER
+DESCRIPTION:04/11 · BMO. Fecha confirmada · hora por confirmar. Hora por 
+ confirmar (zona horaria por confirmar). Calendario al corte editorial del 
+ 01/11. 04/11 · BMO. Implied move al corte: ±8\,08 %. Cotización válida
+ . Fuente de fecha/hora: UBER · anuncio del emisor 2026-10-05 (https://inv
+ estor.uber.com/news-events/news/press-release-details/2026/Uber-Announces-
+ Date-of-Third-Quarter-2026-Results-Conference-Call/default.aspx).
+URL:https://www.luiguiherrera.com/informes/primer-informe-noviembre-2026
+END:VEVENT
+BEGIN:VEVENT
+UID:primer-informe-noviembre-2026-productividad-y-costes-laborales-del-terc
+ er-trimestre@luigui-herrera
+DTSTAMP:20261103T000000Z
+DTSTART;VALUE=DATE:20261105
+DTEND;VALUE=DATE:20261106
+SUMMARY:Primer informe de noviembre de 2026: Productividad y costes laboral
+ es del tercer trimestre
+DESCRIPTION:5 de noviembre. Fecha confirmada · hora por confirmar. Hora po
+ r confirmar (zona horaria por confirmar). Productividad\, salarios y márg
+ enes Fuente de fecha/hora: BLS · calendario oficial de noviembre 2026 (ht
+ tps://www.bls.gov/schedule/2026/11_sched_list.htm).
+URL:https://www.luiguiherrera.com/informes/primer-informe-noviembre-2026
+END:VEVENT
+BEGIN:VEVENT
+UID:primer-informe-noviembre-2026-resultados-de-celh@luigui-herrera
+DTSTAMP:20261103T000000Z
+DTSTART;VALUE=DATE:20261105
+DTEND;VALUE=DATE:20261106
+SUMMARY:Primer informe de noviembre de 2026: Resultados de CELH
+DESCRIPTION:05/11 · BMO. Fecha confirmada · hora por confirmar. Hora por 
+ confirmar (zona horaria por confirmar). Calendario al corte editorial del 
+ 01/11. 05/11 · BMO. Implied move al corte: ±12\,06 %. Fecha confirmada. 
+ Fuente de fecha/hora: CELH · anuncio del emisor 2026-10-29 (https://ir.ce
+ lsiusholdingsinc.com/news/news-details/2026/Celsius-Holdings-to-Release-Th
+ ird-Quarter-Results-on-Thursday-Nov--5-2026/default.aspx).
+URL:https://www.luiguiherrera.com/informes/primer-informe-noviembre-2026
+END:VEVENT
+BEGIN:VEVENT
+UID:primer-informe-noviembre-2026-resultados-de-net@luigui-herrera
+DTSTAMP:20261103T000000Z
+DTSTART;VALUE=DATE:20261105
+DTEND;VALUE=DATE:20261106
+SUMMARY:Primer informe de noviembre de 2026: Resultados de NET
+DESCRIPTION:05/11 · AMC. Fecha confirmada · hora por confirmar. Hora por 
+ confirmar (zona horaria por confirmar). Calendario al corte editorial del 
+ 01/11. 05/11 · AMC. Implied move al corte: ±15\,32 %. Cotización válid
+ a. Fuente de fecha/hora: NET · anuncio del emisor 2026-10-13 (https://www
+ .cloudflare.net/news/news-details/2026/Cloudflare-Announces-Date-of-Third-
+ Quarter-2026-Financial-Results/default.aspx).
+URL:https://www.luiguiherrera.com/informes/primer-informe-noviembre-2026
+END:VEVENT
+BEGIN:VEVENT
+UID:primer-informe-noviembre-2026-informe-de-empleo-estadounidense-de-octub
+ re@luigui-herrera
+DTSTAMP:20261103T000000Z
+DTSTART;VALUE=DATE:20261106
+DTEND;VALUE=DATE:20261107
+SUMMARY:Primer informe de noviembre de 2026: Informe de empleo estadouniden
+ se de octubre
+DESCRIPTION:6 de noviembre. Fecha confirmada · hora por confirmar. Hora po
+ r confirmar (zona horaria por confirmar). Rendimientos\, dólar\, renta va
+ riable y oro Fuente de fecha/hora: BLS · calendario oficial de noviembre 
+ 2026 (https://www.bls.gov/schedule/2026/11_sched_list.htm).
+URL:https://www.luiguiherrera.com/informes/primer-informe-noviembre-2026
+END:VEVENT
+BEGIN:VEVENT
+UID:primer-informe-noviembre-2026-resultados-de-hims@luigui-herrera
+DTSTAMP:20261103T000000Z
+DTSTART;VALUE=DATE:20261109
+DTEND;VALUE=DATE:20261110
+SUMMARY:Primer informe de noviembre de 2026: Resultados de HIMS
+DESCRIPTION:09/11 · AMC. Fecha confirmada · hora por confirmar. Hora por 
+ confirmar (zona horaria por confirmar). Calendario al corte editorial del 
+ 01/11. 09/11 · AMC. Implied move al corte: ±16\,86 %. Cotización válid
+ a. Fuente de fecha/hora: HIMS · anuncio del emisor 2026-10-12 (https://in
+ vestors.hims.com/overview/).
+URL:https://www.luiguiherrera.com/informes/primer-informe-noviembre-2026
+END:VEVENT
+BEGIN:VEVENT
+UID:primer-informe-noviembre-2026-resultados-de-lfmd@luigui-herrera
+DTSTAMP:20261103T000000Z
+DTSTART;VALUE=DATE:20261109
+DTEND;VALUE=DATE:20261110
+SUMMARY:Primer informe de noviembre de 2026: Resultados de LFMD
+DESCRIPTION:09/11 · BMO. Fecha confirmada · hora por confirmar. Hora por 
+ confirmar (zona horaria por confirmar). Calendario al corte editorial del 
+ 01/11. 09/11 · BMO. Implied move al corte: ±21\,97 %. Liquidez reducida\
+ ; vencimiento distante. Fuente de fecha/hora: LFMD · anuncio del emisor 2
+ 026-10-20 (https://www.globenewswire.com/news-release/2026/10/20/3384946/6
+ 480/en/lifemd-to-report-third-quarter-2026-financial-results-on-november-9
+ .html).
+URL:https://www.luiguiherrera.com/informes/primer-informe-noviembre-2026
+END:VEVENT
+BEGIN:VEVENT
+UID:primer-informe-noviembre-2026-banco-de-japon-resumen-de-opiniones@luigu
+ i-herrera
+DTSTAMP:20261103T000000Z
+DTSTART;VALUE=DATE:20261110
+DTEND;VALUE=DATE:20261111
+SUMMARY:Primer informe de noviembre de 2026: Banco de Japón: resumen de op
+ iniones
+DESCRIPTION:10 de noviembre. Fecha confirmada · hora por confirmar. Hora p
+ or confirmar (zona horaria por confirmar). Normalización monetaria y yen 
+ Fuente de fecha/hora: Banco de Japón · calendario oficial (https://www.b
+ oj.or.jp/en/about/calendar/index.htm).
+URL:https://www.luiguiherrera.com/informes/primer-informe-noviembre-2026
+END:VEVENT
+BEGIN:VEVENT
+UID:primer-informe-noviembre-2026-ipc-estadounidense-de-octubre@luigui-herr
+ era
+DTSTAMP:20261103T000000Z
+DTSTART;VALUE=DATE:20261110
+DTEND;VALUE=DATE:20261111
+SUMMARY:Primer informe de noviembre de 2026: IPC estadounidense de octubre
+DESCRIPTION:10 de noviembre. Fecha confirmada · hora por confirmar. Hora p
+ or confirmar (zona horaria por confirmar). Inflación\, expectativas Fed y
+  tasas reales Fuente de fecha/hora: BLS · calendario oficial de noviembre
+  2026 (https://www.bls.gov/schedule/2026/11_sched_list.htm).
+URL:https://www.luiguiherrera.com/informes/primer-informe-noviembre-2026
+END:VEVENT
+BEGIN:VEVENT
+UID:primer-informe-noviembre-2026-resultados-de-huma@luigui-herrera
+DTSTAMP:20261103T000000Z
+DTSTART;VALUE=DATE:20261111
+DTEND;VALUE=DATE:20261112
+SUMMARY:Primer informe de noviembre de 2026: Resultados de HUMA
+DESCRIPTION:11/11 · estimada. Fecha prevista editorial no confirmada · ho
+ ra por confirmar. Hora por confirmar (zona horaria por confirmar). Calenda
+ rio al corte editorial del 01/11. 11/11 · estimada. Implied move al corte
+ : ±42\,92 %*. Estimación de baja fiabilidad. Página consultada para seg
+ uimiento (no confirma el evento): Calendario y observación de opciones de
+  la edición revisada (https://earningsmoves.com/t/HUMA/).
+URL:https://www.luiguiherrera.com/informes/primer-informe-noviembre-2026
+END:VEVENT
+BEGIN:VEVENT
+UID:primer-informe-noviembre-2026-resultados-de-odd@luigui-herrera
+DTSTAMP:20261103T000000Z
+DTSTART;VALUE=DATE:20261111
+DTEND;VALUE=DATE:20261112
+SUMMARY:Primer informe de noviembre de 2026: Resultados de ODD
+DESCRIPTION:11/11 · BMO. Fecha confirmada · hora por confirmar. Hora por 
+ confirmar (zona horaria por confirmar). Calendario al corte editorial del 
+ 01/11. 11/11 · BMO. Implied move al corte: ±20\,07 %. Opciones poco líq
+ uidas. Fuente de fecha/hora: ODD · anuncio del emisor 2026-10-28 (https:/
+ /investors.oddity.com/news-releases/news-release-details/oddity-announce-t
+ hird-quarter-2026-financial-results-november-11).
+URL:https://www.luiguiherrera.com/informes/primer-informe-noviembre-2026
+END:VEVENT
+BEGIN:VEVENT
+UID:primer-informe-noviembre-2026-precios-corporativos-japoneses@luigui-her
+ rera
+DTSTAMP:20261103T000000Z
+DTSTART;VALUE=DATE:20261112
+DTEND;VALUE=DATE:20261113
+SUMMARY:Primer informe de noviembre de 2026: Precios corporativos japoneses
+DESCRIPTION:12 de noviembre. Fecha confirmada · hora por confirmar. Hora p
+ or confirmar (zona horaria por confirmar). Presiones inflacionarias y cost
+ es empresariales Fuente de fecha/hora: Banco de Japón · calendario ofici
+ al (https://www.boj.or.jp/en/about/calendar/index.htm).
+URL:https://www.luiguiherrera.com/informes/primer-informe-noviembre-2026
+END:VEVENT
+BEGIN:VEVENT
+UID:primer-informe-noviembre-2026-resultados-de-crt@luigui-herrera
+DTSTAMP:20261103T000000Z
+DTSTART;VALUE=DATE:20261112
+DTEND;VALUE=DATE:20261113
+SUMMARY:Primer informe de noviembre de 2026: Resultados de CRT
+DESCRIPTION:12/11 · estimada. Fecha prevista editorial no confirmada · ho
+ ra por confirmar. Hora por confirmar (zona horaria por confirmar). Calenda
+ rio al corte editorial del 01/11. 12/11 · estimada. Implied move al corte
+ : N/D. Sin estimación verificable. Página consultada para seguimiento (n
+ o confirma el evento): Calendario y observación de opciones de la edició
+ n revisada (https://unusualwhales.com/stock/CRT/earnings).
+URL:https://www.luiguiherrera.com/informes/primer-informe-noviembre-2026
+END:VEVENT
+BEGIN:VEVENT
+UID:primer-informe-noviembre-2026-resultados-de-nu@luigui-herrera
+DTSTAMP:20261103T000000Z
+DTSTART;VALUE=DATE:20261112
+DTEND;VALUE=DATE:20261113
+SUMMARY:Primer informe de noviembre de 2026: Resultados de NU
+DESCRIPTION:12/11 · estimada. Fecha prevista editorial no confirmada · ho
+ ra por confirmar. Hora por confirmar (zona horaria por confirmar). Calenda
+ rio al corte editorial del 01/11. 12/11 · estimada. Implied move al corte
+ : ±8\,47 %. Fecha por confirmar. Página consultada para seguimiento (no 
+ confirma el evento): Calendario y observación de opciones de la edición 
+ revisada (https://earningsmoves.com/t/NU/).
+URL:https://www.luiguiherrera.com/informes/primer-informe-noviembre-2026
+END:VEVENT
+BEGIN:VEVENT
+UID:primer-informe-noviembre-2026-ipp-estadounidense-de-octubre@luigui-herr
+ era
+DTSTAMP:20261103T000000Z
+DTSTART;VALUE=DATE:20261113
+DTEND;VALUE=DATE:20261114
+SUMMARY:Primer informe de noviembre de 2026: IPP estadounidense de octubre
+DESCRIPTION:13 de noviembre. Fecha confirmada · hora por confirmar. Hora p
+ or confirmar (zona horaria por confirmar). Inflación de producción y má
+ rgenes Fuente de fecha/hora: BLS · calendario oficial de noviembre 2026 (
+ https://www.bls.gov/schedule/2026/11_sched_list.htm).
+URL:https://www.luiguiherrera.com/informes/primer-informe-noviembre-2026
+END:VEVENT
+BEGIN:VEVENT
+UID:primer-informe-noviembre-2026-minutas-del-fomc-de-octubre@luigui-herrer
+ a
+DTSTAMP:20261103T000000Z
+DTSTART;VALUE=DATE:20261118
+DTEND;VALUE=DATE:20261119
+SUMMARY:Primer informe de noviembre de 2026: Minutas del FOMC de octubre
+DESCRIPTION:18 de noviembre. Fecha prevista editorial no confirmada · hora
+  por confirmar. Hora por confirmar (zona horaria por confirmar). Comunicac
+ iones de la Reserva Federal. Página consultada para seguimiento (no confi
+ rma el evento): Reserva Federal · calendario FOMC\; fecha inferida de la 
+ regla de tres semanas (https://www.federalreserve.gov/monetarypolicy/fomcc
+ alendars.htm).
+URL:https://www.luiguiherrera.com/informes/primer-informe-noviembre-2026
+END:VEVENT
+BEGIN:VEVENT
+UID:primer-informe-noviembre-2026-reunion-del-fomc@luigui-herrera
+DTSTAMP:20261103T000000Z
+DTSTART;VALUE=DATE:20261208
+DTEND;VALUE=DATE:20261210
+SUMMARY:Primer informe de noviembre de 2026: Reunión del FOMC
+DESCRIPTION:8 y 9 de diciembre. Fecha confirmada · hora por confirmar. Hor
+ a por confirmar (zona horaria por confirmar). Siguiente reunión ordinaria
+  de decisión de tipos. Fuente de fecha/hora: Reserva Federal · calendari
+ o FOMC (https://www.federalreserve.gov/monetarypolicy/fomccalendars.htm).
+URL:https://www.luiguiherrera.com/informes/primer-informe-noviembre-2026
+END:VEVENT
+END:VCALENDAR

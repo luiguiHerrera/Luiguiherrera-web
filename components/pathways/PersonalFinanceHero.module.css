@@ -1,3 +1,13 @@
+/* Preserve the original Next.js 16.4.2 Playfair Display fallback metrics. */
+@font-face {
+  font-family: "Personal Finance Display Fallback";
+  src: local("Times New Roman");
+  ascent-override: 97.25%;
+  descent-override: 22.56%;
+  line-gap-override: 0%;
+  size-adjust: 111.26%;
+}
+
 .imageField {
   -webkit-mask-image: none;
   mask-image: none;

@@ -11,7 +11,7 @@ test('First October is archived; content and generated adjacency remain intact',
   assert.equal(report.id, 'primer-informe-octubre-2026');
   assert.equal(report.title, 'Primer informe de octubre de 2026');
   assert.equal(report.subtitle, 'El calendario ayuda; la amplitud debe confirmar');
-  assert.equal(activeMarketReport.id, 'segundo-informe-octubre-2026');
+  assert.equal(activeMarketReport.id, 'primer-informe-noviembre-2026');
   assert.deepEqual(getMarketReportBySlug(report.id), { ...report, status: 'archivado' });
   assert.equal(marketReports.filter(r => r.status === 'actual').length, 1);
   assert.deepEqual(getMarketReportBySlug(secondSeptember2026Report.id), { ...secondSeptember2026Report, status: 'archivado' });

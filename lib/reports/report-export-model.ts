@@ -117,7 +117,7 @@ export type ReportExportModel = {
   subtitle: string;
   description: string;
   author: typeof REPORT_EXPORT_AUTHOR;
-  publishedAt: string;
+  publishedAt: string | null;
   modifiedAt: string;
   publishedLabel: string;
   editorialCutoffAt?: string;

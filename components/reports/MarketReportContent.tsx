@@ -1,5 +1,6 @@
 import { ReportEditorialSections } from './ReportEditorialSections';
 import { SecondOctoberReportSections } from './SecondOctoberReportSections';
+import { NovemberReportSections } from './NovemberReportSections';
 import { ReportLink as Link, ReportAnchor, ReportParagraph, ReportText, ReportSourcePolicy } from "@/components/reports/ReportSourcePolicy";
 import { ReportSection } from "@/components/reports/ReportSection";
 import { ReportQuantitativePanels } from "@/components/reports/ReportQuantitativePanels";
@@ -105,11 +106,12 @@ export function MarketReportContent({
           <div className="flex flex-wrap items-center gap-2">
             <ReportParagraph className="text-xs font-semibold uppercase text-petrol">{reportDisplayName(report)}</ReportParagraph>
             <span className="border border-brass/40 bg-white/70 px-2 py-1 text-[10px] font-semibold uppercase text-brass">
-              {report.status === "borrador" ? "Candidato editorial · sin publicar" : report.status === "actual" ? "Informe actual" : "Archivado"}
+              {report.status === "borrador" || !report.publishedAt ? "Candidato editorial · sin publicar" : report.status === "actual" ? "Informe actual" : "Archivado"}
             </span>
           </div>
           <h1 className="mt-2 text-3xl font-semibold leading-tight text-ink md:text-5xl">{isSecondOctober ? report.subtitle : report.title}</h1>
           <EditorialByline
+            marketCutoffLabel={report.presentation?.editorialLayout === "november-2026" ? "Corte de mercado" : undefined}
             automaticDataCutoffAt={report.automaticDataCutoffAt}
             editorialCutoffAt={report.editorialCutoffAt}
             linksOpenNewTab={report.presentation?.linksOpenNewTab}
@@ -161,7 +163,7 @@ export function MarketReportContent({
         ) : null}
       </section>
 
-      {isSecondOctober && report.editorialSections ? <SecondOctoberReportSections report={report} /> : report.editorialSections ? <ReportEditorialSections sections={report.editorialSections} /> : <>
+      {report.presentation?.editorialLayout === 'november-2026' ? <NovemberReportSections report={report} /> : isSecondOctober && report.editorialSections ? <SecondOctoberReportSections report={report} /> : report.editorialSections ? <ReportEditorialSections sections={report.editorialSections} /> : <>
       <section id={report.presentation?.contextTitle ? "contexto-general" : "contexto-por-activo"} className="grid scroll-mt-24 gap-6 py-8 md:py-10 lg:grid-cols-[0.34fr_1fr]">
         <div>
           <ReportParagraph className="text-xs font-semibold uppercase text-petrol">Qué pasó</ReportParagraph>

@@ -1,0 +1,134 @@
+{
+  "PLTR": {
+    "date": "2026-11-02",
+    "sourceLabel": "PLTR · anuncio del emisor 2026-10-12",
+    "sourceHref": "https://investors.palantir.com/news-details/2026/Palantir-Announces-Date-of-Third-Quarter-2026-Earnings-Release-and-Webcast/",
+    "confirmed": true
+  },
+  "ANET": {
+    "date": "2026-11-03",
+    "sourceLabel": "ANET · anuncio del emisor 2026-10-06",
+    "sourceHref": "https://www.arista.com/en/company/news/press-release/24817-pr-20261006",
+    "confirmed": true
+  },
+  "CPNG": {
+    "date": "2026-11-03",
+    "sourceLabel": "CPNG · anuncio del emisor 2026-10-20",
+    "sourceHref": "https://ir.aboutcoupang.com/overview/default.aspx",
+    "confirmed": true
+  },
+  "DUOL": {
+    "date": "2026-11-03",
+    "sourceLabel": "DUOL · anuncio del emisor 2026-10-08",
+    "sourceHref": "https://investors.duolingo.com/news-releases/news-release-details/duolingo-announce-third-quarter-2026-results-tuesday-november-3",
+    "confirmed": true
+  },
+  "UBER": {
+    "date": "2026-11-04",
+    "sourceLabel": "UBER · anuncio del emisor 2026-10-05",
+    "sourceHref": "https://investor.uber.com/news-events/news/press-release-details/2026/Uber-Announces-Date-of-Third-Quarter-2026-Results-Conference-Call/default.aspx",
+    "confirmed": true
+  },
+  "CELH": {
+    "date": "2026-11-05",
+    "sourceLabel": "CELH · anuncio del emisor 2026-10-29",
+    "sourceHref": "https://ir.celsiusholdingsinc.com/news/news-details/2026/Celsius-Holdings-to-Release-Third-Quarter-Results-on-Thursday-Nov--5-2026/default.aspx",
+    "confirmed": true
+  },
+  "NET": {
+    "date": "2026-11-05",
+    "sourceLabel": "NET · anuncio del emisor 2026-10-13",
+    "sourceHref": "https://www.cloudflare.net/news/news-details/2026/Cloudflare-Announces-Date-of-Third-Quarter-2026-Financial-Results/default.aspx",
+    "confirmed": true
+  },
+  "LFMD": {
+    "date": "2026-11-09",
+    "sourceLabel": "LFMD · anuncio del emisor 2026-10-20",
+    "sourceHref": "https://www.globenewswire.com/news-release/2026/10/20/3384946/6480/en/lifemd-to-report-third-quarter-2026-financial-results-on-november-9.html",
+    "confirmed": true
+  },
+  "HIMS": {
+    "date": "2026-11-09",
+    "sourceLabel": "HIMS · anuncio del emisor 2026-10-12",
+    "sourceHref": "https://investors.hims.com/overview/",
+    "confirmed": true
+  },
+  "ODD": {
+    "date": "2026-11-11",
+    "sourceLabel": "ODD · anuncio del emisor 2026-10-28",
+    "sourceHref": "https://investors.oddity.com/news-releases/news-release-details/oddity-announce-third-quarter-2026-financial-results-november-11",
+    "confirmed": true
+  },
+  "JOLTS: ofertas de empleo de septiembre": {
+    "date": "2026-11-03",
+    "sourceLabel": "BLS · calendario oficial de noviembre 2026",
+    "sourceHref": "https://www.bls.gov/schedule/2026/11_sched_list.htm",
+    "confirmed": true
+  },
+  "Productividad y costes laborales del tercer trimestre": {
+    "date": "2026-11-05",
+    "sourceLabel": "BLS · calendario oficial de noviembre 2026",
+    "sourceHref": "https://www.bls.gov/schedule/2026/11_sched_list.htm",
+    "confirmed": true
+  },
+  "Informe de empleo estadounidense de octubre": {
+    "date": "2026-11-06",
+    "sourceLabel": "BLS · calendario oficial de noviembre 2026",
+    "sourceHref": "https://www.bls.gov/schedule/2026/11_sched_list.htm",
+    "confirmed": true
+  },
+  "IPC estadounidense de octubre": {
+    "date": "2026-11-10",
+    "sourceLabel": "BLS · calendario oficial de noviembre 2026",
+    "sourceHref": "https://www.bls.gov/schedule/2026/11_sched_list.htm",
+    "confirmed": true
+  },
+  "IPP estadounidense de octubre": {
+    "date": "2026-11-13",
+    "sourceLabel": "BLS · calendario oficial de noviembre 2026",
+    "sourceHref": "https://www.bls.gov/schedule/2026/11_sched_list.htm",
+    "confirmed": true
+  },
+  "Comercio exterior de EE. UU.": {
+    "date": "2026-11-04",
+    "sourceLabel": "BEA · calendario oficial",
+    "sourceHref": "https://www.bea.gov/news/schedule",
+    "confirmed": true
+  },
+  "Banco de Japón: publicación de perspectivas económicas ampliadas": {
+    "date": "2026-11-02",
+    "sourceLabel": "Banco de Japón · calendario oficial",
+    "sourceHref": "https://www.boj.or.jp/en/about/calendar/index.htm",
+    "confirmed": true
+  },
+  "Banco de Japón: resumen de opiniones": {
+    "date": "2026-11-10",
+    "sourceLabel": "Banco de Japón · calendario oficial",
+    "sourceHref": "https://www.boj.or.jp/en/about/calendar/index.htm",
+    "confirmed": true
+  },
+  "Precios corporativos japoneses": {
+    "date": "2026-11-12",
+    "sourceLabel": "Banco de Japón · calendario oficial",
+    "sourceHref": "https://www.boj.or.jp/en/about/calendar/index.htm",
+    "confirmed": true
+  },
+  "Elecciones de medio mandato en EE. UU.": {
+    "date": "2026-11-03",
+    "sourceLabel": "Federal Election Commission · elecciones generales",
+    "sourceHref": "https://www.fec.gov/introduction-campaign-finance/election-results-and-voting-information/",
+    "confirmed": true
+  },
+  "Reunión del FOMC": {
+    "date": "2026-12-08",
+    "sourceLabel": "Reserva Federal · calendario FOMC",
+    "sourceHref": "https://www.federalreserve.gov/monetarypolicy/fomccalendars.htm",
+    "confirmed": true
+  },
+  "Minutas del FOMC de octubre": {
+    "date": "2026-11-18",
+    "sourceLabel": "Reserva Federal · calendario FOMC; fecha inferida de la regla de tres semanas",
+    "sourceHref": "https://www.federalreserve.gov/monetarypolicy/fomccalendars.htm",
+    "confirmed": false
+  }
+}

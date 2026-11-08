@@ -1,0 +1,370 @@
+{
+  "checkedOn": "2026-11-03",
+  "method": "GET; redirects followed; no content substitution",
+  "links": [
+    {
+      "url": "https://earningsmoves.com/",
+      "status": 200,
+      "finalUrl": "https://earningsmoves.com/",
+      "bodyPrefixSha256": "788517daf8db7f62ad4fcd7ef624e5f7d961897a70ef1c8a94d1752227620828",
+      "result": "PASS"
+    },
+    {
+      "url": "https://earningsmoves.com/t/ANET/",
+      "status": 200,
+      "finalUrl": "https://earningsmoves.com/t/ANET/",
+      "bodyPrefixSha256": "8c8ecffc7ce7dd022a1add81a6785827bd34e7ce9869a9a761522cb400b9f59b",
+      "result": "PASS"
+    },
+    {
+      "url": "https://earningsmoves.com/t/CCJ/",
+      "status": 200,
+      "finalUrl": "https://earningsmoves.com/t/CCJ/",
+      "bodyPrefixSha256": "463e4580be3fd84e2f89698a421679834dbe34d518637baab52eae2f5d0532ad",
+      "result": "PASS"
+    },
+    {
+      "url": "https://earningsmoves.com/t/CELH/",
+      "status": 200,
+      "finalUrl": "https://earningsmoves.com/t/CELH/",
+      "bodyPrefixSha256": "92abdb2562ae320b90065fc5914bf1554c01c97b280f522ff49d95155ac32a9e",
+      "result": "PASS"
+    },
+    {
+      "url": "https://earningsmoves.com/t/CLS/",
+      "status": 200,
+      "finalUrl": "https://earningsmoves.com/t/CLS/",
+      "bodyPrefixSha256": "1c6d391f4716c9f724ed9bdcca4cfa7905a918fcf6dffa980ae4bdd795c8740d",
+      "result": "PASS"
+    },
+    {
+      "url": "https://earningsmoves.com/t/COIN/",
+      "status": 200,
+      "finalUrl": "https://earningsmoves.com/t/COIN/",
+      "bodyPrefixSha256": "71c2256c0e3d3ea14a39a07e70c9b108d71ff1beb3be14ab6d5050465aadfd82",
+      "result": "PASS"
+    },
+    {
+      "url": "https://earningsmoves.com/t/CPNG/",
+      "status": 200,
+      "finalUrl": "https://earningsmoves.com/t/CPNG/",
+      "bodyPrefixSha256": "3e0211c2193488325266b3fc6bb0ad9c90bef687647a141490bc699009de04bb",
+      "result": "PASS"
+    },
+    {
+      "url": "https://earningsmoves.com/t/DUOL/",
+      "status": 200,
+      "finalUrl": "https://earningsmoves.com/t/DUOL/",
+      "bodyPrefixSha256": "261c396f6f18cddeabd1b94f3d5f63a6ee668881ea53cdff28cf55f2bb85ac25",
+      "result": "PASS"
+    },
+    {
+      "url": "https://earningsmoves.com/t/GOOGL/",
+      "status": 200,
+      "finalUrl": "https://earningsmoves.com/t/GOOGL/",
+      "bodyPrefixSha256": "dbbe4d6c5bc63d4c97279dafcb20cf1ee1de542888f5c9d24e2734b53b353885",
+      "result": "PASS"
+    },
+    {
+      "url": "https://earningsmoves.com/t/HIMS/",
+      "status": 200,
+      "finalUrl": "https://earningsmoves.com/t/HIMS/",
+      "bodyPrefixSha256": "1085a8a0a3f0bdc91f7c11c43334173fad86d61fbc0d5ec03c4c8e08285b778d",
+      "result": "PASS"
+    },
+    {
+      "url": "https://earningsmoves.com/t/HUMA/",
+      "status": 200,
+      "finalUrl": "https://earningsmoves.com/t/HUMA/",
+      "bodyPrefixSha256": "87f3ec7ef00c8b9fe483ac49e4642c8cd00449db0991096b859d6e68b08c4e02",
+      "result": "PASS"
+    },
+    {
+      "url": "https://earningsmoves.com/t/HYMC/",
+      "status": 200,
+      "finalUrl": "https://earningsmoves.com/t/HYMC/",
+      "bodyPrefixSha256": "f39abc52e4dbac384f3727ac6b622e98b3fc13bba7afbacdff3317e3d87117cd",
+      "result": "PASS"
+    },
+    {
+      "url": "https://earningsmoves.com/t/KGC/",
+      "status": 200,
+      "finalUrl": "https://earningsmoves.com/t/KGC/",
+      "bodyPrefixSha256": "a5f7e47bb06b9e7bf0624a340edc00b77ba18abd754894462d8149897e90f422",
+      "result": "PASS"
+    },
+    {
+      "url": "https://earningsmoves.com/t/LFMD/",
+      "status": 200,
+      "finalUrl": "https://earningsmoves.com/t/LFMD/",
+      "bodyPrefixSha256": "65ed7b62a32f45e1f705235404c6c46922949d1bede43b1412abf8d80cf26510",
+      "result": "PASS"
+    },
+    {
+      "url": "https://earningsmoves.com/t/NET/",
+      "status": 200,
+      "finalUrl": "https://earningsmoves.com/t/NET/",
+      "bodyPrefixSha256": "a154d9f21a386a3ed5d84e66dcff95ddb49b88d4cb44436d07da09da5dae39f2",
+      "result": "PASS"
+    },
+    {
+      "url": "https://earningsmoves.com/t/NU/",
+      "status": 200,
+      "finalUrl": "https://earningsmoves.com/t/NU/",
+      "bodyPrefixSha256": "55b2e1e023aa8d80ef9ea3087dfb250856fb4de36fcc55ba1e1cde492afd44b9",
+      "result": "PASS"
+    },
+    {
+      "url": "https://earningsmoves.com/t/ODD/",
+      "status": 200,
+      "finalUrl": "https://earningsmoves.com/t/ODD/",
+      "bodyPrefixSha256": "3510f3bfadaf6d584fd78181799b44e02701ad92b49010fdaa92034af0316746",
+      "result": "PASS"
+    },
+    {
+      "url": "https://earningsmoves.com/t/PLTR/",
+      "status": 200,
+      "finalUrl": "https://earningsmoves.com/t/PLTR/",
+      "bodyPrefixSha256": "ec329709f108f94b04983246642ddd14ff450892bce38a65002121c21bd8321e",
+      "result": "PASS"
+    },
+    {
+      "url": "https://earningsmoves.com/t/UBER/",
+      "status": 200,
+      "finalUrl": "https://earningsmoves.com/t/UBER/",
+      "bodyPrefixSha256": "ddd624813357ceebe035b3f58b909b42b6130fdc11b397868f184d29af444112",
+      "result": "PASS"
+    },
+    {
+      "url": "https://farside.co.uk/",
+      "status": 403,
+      "finalUrl": "https://farside.co.uk/",
+      "result": "ACCESS_LIMITED"
+    },
+    {
+      "url": "https://fred.stlouisfed.org/series/DGS10",
+      "status": null,
+      "error": "[Errno 60] Operation timed out",
+      "result": "UNRESOLVED"
+    },
+    {
+      "url": "https://global.nomura-am.co.jp/",
+      "status": 200,
+      "finalUrl": "https://global.nomura-am.co.jp/",
+      "bodyPrefixSha256": "3317ad7420ca291d98c207cc17cfc736e5a1d8d16c7d6ae5872add656d820f27",
+      "result": "PASS"
+    },
+    {
+      "url": "https://home.treasury.gov/resource-center/data-chart-center/interest-rates/TextView?field_tdr_date_value_month=202610&type=daily_treasury_yield_curve",
+      "status": 200,
+      "finalUrl": "https://home.treasury.gov/resource-center/data-chart-center/interest-rates/TextView?field_tdr_date_value_month=202610&type=daily_treasury_yield_curve",
+      "bodyPrefixSha256": "fb2a113b14cbb3eaf59503107b2df7d60e98c00ae2144bb2ebf893f90755dce5",
+      "result": "PASS"
+    },
+    {
+      "url": "https://insight.factset.com/",
+      "status": 200,
+      "finalUrl": "https://insight.factset.com/",
+      "bodyPrefixSha256": "c47220110ade539504e8911f7d7b919d6a0c9bf2e78854784e49555064339331",
+      "result": "PASS"
+    },
+    {
+      "url": "https://mufgresearch.com/",
+      "status": 200,
+      "finalUrl": "https://mufgresearch.com/",
+      "bodyPrefixSha256": "47b4fe71dd72a59ba69c07c1509c7baf307d848e420ff2ec4e106ec4ba5a1d62",
+      "result": "PASS"
+    },
+    {
+      "url": "https://stockanalysis.com/",
+      "status": 200,
+      "finalUrl": "https://stockanalysis.com/",
+      "bodyPrefixSha256": "7f7dd8ca86a8d28ff5373282a75a5dedf4893c4b3b286a2e4f493b1c2de4c5d1",
+      "result": "PASS"
+    },
+    {
+      "url": "https://unusualwhales.com/",
+      "status": 200,
+      "finalUrl": "https://unusualwhales.com/",
+      "bodyPrefixSha256": "d93ea201577b094f3e1c9e7c15f4d7e7fcac8167fa94f90eab0518865662f56c",
+      "result": "PASS"
+    },
+    {
+      "url": "https://unusualwhales.com/earnings",
+      "status": 200,
+      "finalUrl": "https://unusualwhales.com/earnings",
+      "bodyPrefixSha256": "109726f226d35b0c2b50a2a44d47590754029d3b0c96d13ec810aa6076453411",
+      "result": "PASS"
+    },
+    {
+      "url": "https://unusualwhales.com/stock/CRT/earnings",
+      "status": 200,
+      "finalUrl": "https://unusualwhales.com/stock/CRT/earnings",
+      "bodyPrefixSha256": "c34122d57e0e45581fd5c486cf1f1cc38d8343be6cd1fd0c37b37db8c5646412",
+      "result": "PASS"
+    },
+    {
+      "url": "https://unusualwhales.com/stock/FIX/earnings",
+      "status": 200,
+      "finalUrl": "https://unusualwhales.com/stock/FIX/earnings",
+      "bodyPrefixSha256": "e98255b36e8ba4d9b67fc1e40c5f1856329d0bae612b5622c476fd3ef9c0188b",
+      "result": "PASS"
+    },
+    {
+      "url": "https://unusualwhales.com/stock/GE/earnings",
+      "status": 200,
+      "finalUrl": "https://unusualwhales.com/stock/GE/earnings",
+      "bodyPrefixSha256": "ffa8421ec9faf5dfd211dde9b6826e0d861f62269f77223ea4c81107e8ff6e92",
+      "result": "PASS"
+    },
+    {
+      "url": "https://unusualwhales.com/stock/IBKR/earnings",
+      "status": 200,
+      "finalUrl": "https://unusualwhales.com/stock/IBKR/earnings",
+      "bodyPrefixSha256": "bc990b0f6219ea7c5776b7fb756b543a8acb435b3add719d2c8f65034378f850",
+      "result": "PASS"
+    },
+    {
+      "url": "https://unusualwhales.com/stock/MEDP/earnings",
+      "status": 200,
+      "finalUrl": "https://unusualwhales.com/stock/MEDP/earnings",
+      "bodyPrefixSha256": "1726e4636ad7521925d25663cc6ee28f1957dd403ec841bc32179231598f60de",
+      "result": "PASS"
+    },
+    {
+      "url": "https://unusualwhales.com/stock/NFLX/earnings",
+      "status": 200,
+      "finalUrl": "https://unusualwhales.com/stock/NFLX/earnings",
+      "bodyPrefixSha256": "b5264c41fc03eb3eeda9a1f430fcd1c28e491dbae076ccf031378f0c914378d6",
+      "result": "PASS"
+    },
+    {
+      "url": "https://www.bea.gov/",
+      "status": 200,
+      "finalUrl": "https://www.bea.gov/",
+      "bodyPrefixSha256": "f08b25d225618214ee63847101f735c0ab6095f735bd79f8f8790e488ee8e21c",
+      "result": "PASS"
+    },
+    {
+      "url": "https://www.bea.gov/news/schedule",
+      "status": 200,
+      "finalUrl": "https://www.bea.gov/news/schedule",
+      "bodyPrefixSha256": "5b23005aa20afe8086ae25bffe0259285844d928c54ccc763a01f0fa2dd94645",
+      "result": "PASS"
+    },
+    {
+      "url": "https://www.bls.gov/",
+      "status": 403,
+      "finalUrl": "https://www.bls.gov/",
+      "result": "ACCESS_LIMITED"
+    },
+    {
+      "url": "https://www.bls.gov/schedule/2026/11_sched_list.htm",
+      "status": 403,
+      "finalUrl": "https://www.bls.gov/schedule/2026/11_sched_list.htm",
+      "result": "ACCESS_LIMITED"
+    },
+    {
+      "url": "https://www.boj.or.jp/en/",
+      "status": 200,
+      "finalUrl": "https://www.boj.or.jp/en/",
+      "bodyPrefixSha256": "4b32ee9071298b6bb7fd6f16278048159147363fb75875adcd69733422dbbf10",
+      "result": "PASS"
+    },
+    {
+      "url": "https://www.boj.or.jp/en/about/calendar/index.htm",
+      "status": 200,
+      "finalUrl": "https://www.boj.or.jp/en/about/calendar/index.htm",
+      "bodyPrefixSha256": "d91a97cca4b2db427a410dbabdf25eb92a69b4aad4305fe7741e3fe97a63fd93",
+      "result": "PASS"
+    },
+    {
+      "url": "https://www.cboe.com/",
+      "status": 200,
+      "finalUrl": "https://www.cboe.com/",
+      "bodyPrefixSha256": "6de23e5a750c491d35375d3268d095d1cb5f7c16ee2b9134044ea00e3d2a5b23",
+      "result": "PASS"
+    },
+    {
+      "url": "https://www.fec.gov/",
+      "status": 200,
+      "finalUrl": "https://www.fec.gov/",
+      "bodyPrefixSha256": "570e9e048e67f3aca1ceb296647dc4b4a9f455da432aebac83d3d3e99b5b515b",
+      "result": "PASS"
+    },
+    {
+      "url": "https://www.federalreserve.gov/",
+      "status": 200,
+      "finalUrl": "https://www.federalreserve.gov/",
+      "bodyPrefixSha256": "30c9f06e30cd86d8c4386ccd34bd6a1d2582e3c63777c5b415f0f0bc190afe88",
+      "result": "PASS"
+    },
+    {
+      "url": "https://www.federalreserve.gov/monetarypolicy/fomccalendars.htm",
+      "status": 200,
+      "finalUrl": "https://www.federalreserve.gov/monetarypolicy/fomccalendars.htm",
+      "bodyPrefixSha256": "b2267d97d5880cae81a6271d74b892e649cfce9c6ab18549e295f1bba5cf5be5",
+      "result": "PASS"
+    },
+    {
+      "url": "https://www.franklintempleton.com/",
+      "status": 200,
+      "finalUrl": "https://www.franklintempleton.com/",
+      "bodyPrefixSha256": "dbf7a00d3f17bd8765482637cdf0babebd73f49d0661e4d9df71ba4554369313",
+      "result": "PASS"
+    },
+    {
+      "url": "https://www.gold.org/",
+      "status": 200,
+      "finalUrl": "https://www.gold.org/",
+      "bodyPrefixSha256": "cba5d33415262f681aa1e3a4f40974532b21fa4719295a26c6ea7c284a7e156b",
+      "result": "PASS"
+    },
+    {
+      "url": "https://www.hkex.com.hk/",
+      "status": 200,
+      "finalUrl": "https://www.hkex.com.hk/?sc_lang=en",
+      "bodyPrefixSha256": "6f8b65f37fc28210c71b78583673ac20cf671b223b60c876240e396611b67792",
+      "result": "PASS"
+    },
+    {
+      "url": "https://www.luiguiherrera.com/",
+      "status": 200,
+      "finalUrl": "https://www.luiguiherrera.com/",
+      "bodyPrefixSha256": "e926adbe8d16c15116ee06c3b2c9be5eaa51f6dc5f5e07ebc7dadfb89f15599b",
+      "result": "PASS"
+    },
+    {
+      "url": "https://www.sc.com/",
+      "status": 200,
+      "finalUrl": "https://www.sc.com/",
+      "bodyPrefixSha256": "36c3abeb259fb4b572cbddf7f322de4e5b7a102a5558f18a8671f3d496e2d058",
+      "result": "PASS"
+    },
+    {
+      "url": "https://www.ssga.com/us/en/individual/etfs/spdr-gold-shares-gld",
+      "status": 200,
+      "finalUrl": "https://www.ssga.com/us/en/individual/etfs/spdr-gold-shares-gld",
+      "bodyPrefixSha256": "dc84408516d2cce1392074779a7e067201d83fc4a3bd8491d2113ed705715659",
+      "result": "PASS"
+    },
+    {
+      "url": "https://www.stats.gov.cn/english/",
+      "status": 200,
+      "finalUrl": "https://www.stats.gov.cn/english/",
+      "bodyPrefixSha256": "d79eb8f096521b1ed8c7f0e1bdbb86d123109e756fc0990ef62a6ad98c6b9dd7",
+      "result": "PASS"
+    }
+  ],
+  "fallbackVerification": {
+    "checkedOn": "2026-11-03",
+    "method": "web.open, independent of direct HTTP audit",
+    "resolvedUrls": [
+      "https://fred.stlouisfed.org/series/DGS10",
+      "https://farside.co.uk/",
+      "https://www.bls.gov/",
+      "https://www.bls.gov/schedule/2026/11_sched_list.htm"
+    ],
+    "result": "All four pages resolved with substantive publisher content. Original direct HTTP results retained."
+  }
+}

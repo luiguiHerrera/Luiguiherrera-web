@@ -28,7 +28,7 @@ type ArtifactManifestEntry = {
 type ReportManifestEntry = {
   id: string;
   canonicalUrl: string;
-  publishedAt: string;
+  publishedAt: string | null;
   modifiedAt: string;
   cutoffs: {
     editorial: string | null;
@@ -101,11 +101,11 @@ function formatUsdMillions(value: number) {
 function renderMetadataHtml(model: ReportExportModel) {
   const rows = [
     ["Autor", model.author],
-    ["Publicación", model.publishedAt],
+    ["Publicación", model.publishedAt ?? "Pendiente de publicación"],
     ["Actualización", model.modifiedAt],
     ["Corte editorial", model.editorialCutoffAt ?? "No aplica"],
     ["Corte de datos de mercado", model.automaticDataCutoffAt ?? "No aplica"],
-    [model.status === "borrador" ? "URL prevista · sin publicar" : "URL editorial primaria", `<a href="${model.canonicalUrl}">${model.canonicalUrl}</a>`],
+    [(model.status === "borrador" || !model.publishedAt) ? "URL prevista · sin publicar" : "URL editorial primaria", `<a href="${model.canonicalUrl}">${model.canonicalUrl}</a>`],
   ];
   return `<dl class="metadata">${rows
     .map(([label, value]) => `<div><dt>${label}</dt><dd>${value}</dd></div>`)
@@ -358,8 +358,8 @@ function calendarTimeLabel(item: Extract<ReportExportSection, { kind: "calendar-
 }
 
 function renderMonthlyCalendarHtml(items: Extract<ReportExportSection, { kind: "calendar-scenarios" }>["calendar"], model: ReportExportModel) {
-  const year = model.presentation?.year ?? Number(model.publishedAt.slice(0, 4));
-  const month = model.presentation?.month ?? Number(model.publishedAt.slice(5, 7));
+  const year = model.presentation?.year ?? Number((model.publishedAt ?? model.modifiedAt).slice(0, 4));
+  const month = model.presentation?.month ?? Number((model.publishedAt ?? model.modifiedAt).slice(5, 7));
   const title = model.presentation?.localizedTitle ?? new Intl.DateTimeFormat(model.presentation?.locale ?? "es-ES", { month: "long", year: "numeric", timeZone: "UTC" }).format(new Date(Date.UTC(year, month - 1, 1)));
   const days = getMonthGrid(year, month, model.presentation);
   return `<div class="month-calendar" aria-label="Calendario de ${esc(title)}">
@@ -441,8 +441,10 @@ function renderSectionHtml(section: ReportExportSection, model: ReportExportMode
   switch (section.kind) {
     case "editorial":
       body = section.blocks.map(block => block.kind === "table"
-        ? htmlTable(block.headers.map(editorialPlain), block.rows.map(row => row.map(editorialPlain)))
-        : block.kind === "heading" ? `<h3>${editorialInlineHtml(block.text)}</h3>` : `<p>${editorialInlineHtml(block.text)}</p>`).join("\n");
+        ? model.presentation?.editorialLayout === "november-2026"
+          ? `<div class="table-wrap"><table><thead><tr>${block.headers.map(cell => `<th scope="col">${editorialInlineHtml(cell)}</th>`).join("")}</tr></thead><tbody>${block.rows.map(row => `<tr${row.at(-1) === "Rojo fuerte" ? ' style="background:#fbe2de"' : row.at(-1) === "Rojo suave" ? ' style="background:#fff2f0"' : row.at(-1) === "Verde suave" ? ' style="background:#e6f1eb"' : ""}>${row.map((cell, index) => index === 0 ? `<th scope="row">${editorialInlineHtml(cell)}</th>` : `<td>${editorialInlineHtml(cell)}</td>`).join("")}</tr>`).join("")}</tbody></table></div>`
+          : htmlTable(block.headers.map(editorialPlain), block.rows.map(row => row.map(editorialPlain)))
+        : block.kind === "heading" ? `<h${block.level ?? 3}>${editorialInlineHtml(block.text)}</h${block.level ?? 3}>` : `<p>${editorialInlineHtml(block.text)}</p>`).join("\n");
       break;
     case "narrative":
       body = `<p class="lead">${esc(section.body)}</p>`;
@@ -536,7 +538,7 @@ function renderSectionHtml(section: ReportExportSection, model: ReportExportMode
       if (model.presentation?.contextStyle === "prose") {
         const first = section.items[0];
         // Later editorial references remain visible beside the frozen compact checklist.
-        const revisedReferences = section.items.filter(item => item.asOf && item.asOf > (model.editorialCutoffAt ?? model.publishedAt) && item.href && item.linkLabel);
+        const revisedReferences = section.items.filter(item => item.asOf && item.asOf > (model.editorialCutoffAt ?? model.publishedAt ?? model.modifiedAt) && item.href && item.linkLabel);
         body = `<p>${esc(first.statusLabel)} · ${esc(first.asOf)}. ${esc(first.source)}</p>${htmlTable(["Factor", "Qué mira", "Qué cambiaría la lectura"], section.items.map(item=>[item.name, item.whatLooksAt, item.whatWouldChange ?? item.whyItMatters]))}${section.items.filter(item => (item.href ?? item.reference?.href) && !revisedReferences.includes(item)).map(item => `<p><strong>${esc(item.name)}:</strong> <a href="${esc((item.href ?? item.reference!.href).startsWith("#") ? model.canonicalUrl + (item.href ?? item.reference!.href) : absoluteUrl(item.href ?? item.reference!.href))}">${esc(item.linkLabel ?? item.reference!.label)}</a></p>`).join("")}${revisedReferences.map(item => `<p><strong>${esc(item.name)}:</strong> <a href="${esc(item.href)}" target="_blank" rel="noopener noreferrer">${esc(item.linkLabel)} ↗</a><br>${esc(item.source)} · Actualización editorial: ${esc(item.asOf)}.</p>`).join("")}`;
         break;
       }
@@ -588,20 +590,20 @@ function renderHtml(model: ReportExportModel) {
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>${esc(model.editionName)} · ${esc(model.title)} | Luigui Herrera</title>
   <meta name="description" content="${esc(model.description)}">
-  <meta name="author" content="${model.author}">${model.status === "borrador" ? '\n  <meta name="robots" content="noindex, nofollow">' : ""}
-  <meta name="date" content="${model.publishedAt}">
+  <meta name="author" content="${model.author}">${(model.status === "borrador" || !model.publishedAt) ? '\n  <meta name="robots" content="noindex, nofollow">' : ""}
+  ${model.publishedAt ? `<meta name="date" content="${model.publishedAt}">` : ""}
   <link rel="canonical" href="${model.canonicalUrl}">
   <style>${reportCss(Boolean(model.presentation?.timelineStyle || model.presentation?.calendarStyle || model.presentation?.watchlistStyle))}</style>
 </head>
 <body>
   <main>
     <header class="cover">
-      <p class="eyebrow">${esc(model.editionName)}</p>${model.status === "borrador" ? '<p><strong>Candidato editorial · sin publicar</strong></p>' : ""}
+      <p class="eyebrow">${esc(model.editionName)}</p>${(model.status === "borrador" || !model.publishedAt) ? '<p><strong>Candidato editorial · sin publicar</strong></p>' : ""}
       <h1>${esc(model.title)}</h1>
       <p class="subtitle">${esc(model.subtitle)}</p>
       ${renderMetadataHtml(model)}
       ${model.presentation?.prospectivePeriod ? `<p>Periodo prospectivo: ${esc(model.presentation.prospectivePeriod)}</p>` : ""}
-      <p class="primary-url">${model.status === "borrador" ? "URL prevista · sin publicar" : "Página editorial primaria"}: <a href="${model.canonicalUrl}">${model.canonicalUrl}</a></p>
+      <p class="primary-url">${(model.status === "borrador" || !model.publishedAt) ? "URL prevista · sin publicar" : "Página editorial primaria"}: <a href="${model.canonicalUrl}">${model.canonicalUrl}</a></p>
     </header>
     ${model.sections.map((section) => renderSectionHtml(section, model)).join("\n")}
   </main>
@@ -792,7 +794,7 @@ function renderSectionMarkdown(section: ReportExportSection, model: ReportExport
     case "editorial":
       return `${heading}\n\n` + section.blocks.map(block => block.kind === "table"
         ? [block.headers, block.headers.map(()=>"---"), ...block.rows].map(row=>"| "+row.join(" | ")+" |").join("\n")
-        : block.kind === "heading" ? `### ${block.text}` : block.kind === "source" ? `- ${block.text}` : block.text).join("\n\n");
+        : block.kind === "heading" ? `${"#".repeat(block.level ?? 3)} ${block.text}` : block.kind === "source" ? `- ${block.text}` : block.text).join("\n\n");
     case "narrative":
       return `${heading}\n\n${section.body}`;
     case "summary":
@@ -867,7 +869,7 @@ ${section.scenarios.length ? `### Escenarios\n\n${section.scenarios.map((item) =
       }
       if (model.presentation?.contextStyle === "prose") {
         const first = section.items[0];
-        const revisedReferences = section.items.filter(item => item.asOf && item.asOf > (model.editorialCutoffAt ?? model.publishedAt) && item.href && item.linkLabel);
+        const revisedReferences = section.items.filter(item => item.asOf && item.asOf > (model.editorialCutoffAt ?? model.publishedAt ?? model.modifiedAt) && item.href && item.linkLabel);
         return `${heading}\n\n${first.statusLabel} · ${first.asOf}. ${first.source}\n\n| Factor | Qué mira | Qué cambiaría la lectura |\n|---|---|---|\n${section.items.map(item=>`| ${item.name} | ${item.whatLooksAt} | ${item.whatWouldChange} |`).join("\n")}${section.items.filter(item => (item.href ?? item.reference?.href) && !revisedReferences.includes(item)).map(item => `\n\n- **${item.name}:** [${item.linkLabel ?? item.reference!.label}](${(item.href ?? item.reference!.href).startsWith("#") ? model.canonicalUrl + (item.href ?? item.reference!.href) : absoluteUrl(item.href ?? item.reference!.href)}).`).join("")}${revisedReferences.map(item => `\n\n- **${item.name}:** [${item.linkLabel}](${item.href}). ${item.source} Actualización editorial: ${item.asOf}.`).join("")}`;
       }
       return `${heading}\n\n${section.items
@@ -906,10 +908,10 @@ ${section.disclaimer}`;
 
 function renderMarkdown(model: ReportExportModel) {
   const metadata = [
-    ...(model.status === "borrador" ? ["- Estado: Candidato editorial · sin publicar"] : []),
+    ...((model.status === "borrador" || !model.publishedAt) ? ["- Estado: Candidato editorial · sin publicar"] : []),
     `- Edición: ${model.editionName}`,
     `- Autor: ${model.author}`,
-    `- Publicación: ${model.publishedAt}`,
+    `- Publicación: ${model.publishedAt ?? "Pendiente de publicación"}`,
     `- Actualización: ${model.modifiedAt}`,
     `- Corte editorial: ${model.editorialCutoffAt ?? "No aplica"}`,
     `- Corte de datos de mercado: ${model.automaticDataCutoffAt ?? "No aplica"}`,
@@ -921,7 +923,7 @@ ${model.subtitle}
 
 ${metadata.join("\n")}
 
-${model.status === "borrador" ? "> Candidato privado. La URL editorial indicada es la prevista; esta edición no está publicada." : "> La página editorial indicada arriba es la representación primaria de este informe."}
+${(model.status === "borrador" || !model.publishedAt) ? "> Candidato privado. La URL editorial indicada es la prevista; esta edición no está publicada." : "> La página editorial indicada arriba es la representación primaria de este informe."}
 
 ${model.presentation?.prospectivePeriod ? `Periodo prospectivo: ${model.presentation.prospectivePeriod}\n\n` : ""}${model.sections.map((section) => renderSectionMarkdown(section, model)).join("\n\n")}
 `.replace(/[ \t]+$/gm, "");
@@ -1155,7 +1157,7 @@ function renderLlmsSection(current: string, manifest: ReportsManifest) {
       `### ${model.editionName}`,
       `- Primary canonical editorial URL: ${model.canonicalUrl}`,
       `- Description: ${model.description}`,
-      `- Published: ${model.publishedAt}`,
+      `- Published: ${model.publishedAt ?? "Pending approved deployment"}`,
       `- Markdown auxiliary machine-readable representation: ${REPORT_SITE_URL}${formats.markdown?.path}`,
       `- PDF human-readable download: ${REPORT_SITE_URL}${formats.pdf?.path}`,
       `- Secondary downloadable HTML representation: ${REPORT_SITE_URL}${formats.html?.path}`,
@@ -1521,7 +1523,9 @@ function validateIcs(model: ReportExportModel, value: string) {
       assert(event.includes(`DTSTART;VALUE=DATE:${icsDate(expected.startDate)}`));
       // Los artefactos archivados anteriores al calendario mensual guardan DTEND inclusivo y se
       // toleran tal cual; los modelos con calendario mensual ya resuelven el DTEND exclusivo.
-      const legacyInclusiveEnd = model.status === "archivado" && model.presentation?.calendarStyle !== "monthly";
+      const preservedOctober = model.id === "segundo-informe-octubre-2026" && model.status === "archivado";
+      if (preservedOctober) assert.equal(sha256(value), "c245308633f3f6d924f94622628f630ab507b8b6682531002f6e82ce3543ba1a", "Archived October ICS must remain byte-identical");
+      const legacyInclusiveEnd = model.status === "archivado" && model.presentation?.calendarStyle !== "monthly" && !preservedOctober;
       const expectedEnd = legacyInclusiveEnd
         ? addOneDay(expected.endDate ?? expected.startDate)
         : expected.endDate ?? addOneDay(expected.startDate);
@@ -1589,7 +1593,7 @@ function validateRepository() {
       model.title,
       model.subtitle,
       model.author,
-      model.publishedAt,
+      model.publishedAt ?? "Pendiente de publicación",
       model.modifiedAt,
       model.editorialCutoffAt ?? "No aplica",
       model.automaticDataCutoffAt ?? "No aplica",

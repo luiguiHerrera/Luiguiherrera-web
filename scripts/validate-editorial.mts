@@ -54,9 +54,12 @@ function dateTimeParts(value: Date, timeZone: string) {
 }
 
 for (const report of marketReports) {
-  assertIsoDate(report.publishedAt, `${report.id}.publishedAt`);
+  if (report.publishedAt === null) {
+    assert.equal(report.id, "primer-informe-noviembre-2026", "Only the authorized November candidate may await publication.");
+    assert.equal(report.publishedLabel, "Pendiente de publicación");
+  } else assertIsoDate(report.publishedAt, `${report.id}.publishedAt`);
   assertIsoDate(report.modifiedAt, `${report.id}.modifiedAt`);
-  assert(report.modifiedAt >= report.publishedAt, `${report.id}: modifiedAt precede a publishedAt.`);
+  assert(report.publishedAt === null || report.modifiedAt >= report.publishedAt, `${report.id}: modifiedAt precede a publishedAt.`);
 }
 
 assert.deepEqual(
@@ -99,7 +102,7 @@ assert.equal(
   1,
   "El archivo debe exponer un único informe marcado como Actual.",
 );
-assert.equal(marketReports.find((report) => report.status === "actual")?.id, "segundo-informe-octubre-2026");
+assert.equal(marketReports.find((report) => report.status === "actual")?.id, "primer-informe-noviembre-2026");
 assert.deepEqual(
   august.executiveSummary.map((item) => item.title),
   ["VOO", "GLD", "EWJ", "FXI", "BTC / ETH", "Stockpicking"],

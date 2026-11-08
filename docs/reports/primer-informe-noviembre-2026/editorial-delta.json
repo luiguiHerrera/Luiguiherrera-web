@@ -1,0 +1,31 @@
+{
+  "schema": "report.editorial-delta.v1",
+  "authorizedBy": "Founder · respuesta explícita del 2026-11-03",
+  "sourceSha256": "285004f51d28c28d8189501efd45b6bf73b7a4b919e2ea305efaa6f309562884",
+  "reason": "Corregir exclusivamente el rendimiento Treasury a 10 años del corte30/10;4,98% corresponde29/10.",
+  "primarySource": "https://home.treasury.gov/resource-center/data-chart-center/interest-rates/TextView?field_tdr_date_value_month=202610&type=daily_treasury_yield_curve",
+  "crossCheck": "https://fred.stlouisfed.org/series/DGS10",
+  "observations": {
+    "2026-10-16": 5.09,
+    "2026-10-29": 4.98,
+    "2026-10-30": 4.94
+  },
+  "changeBasisPoints": -15,
+  "substitutions": [
+    {
+      "before": "aproximadamente del **5,09 % al 4,98 %** entre nuestros cortes",
+      "after": "del **5,09 % al 4,94 %** entre nuestros cortes, una caída de **15 puntos básicos**",
+      "expectedOccurrences": 1
+    },
+    {
+      "before": "| Treasury estadounidense a 10 años | 5,09 % aprox. | **4,98 % aprox.** |",
+      "after": "| Treasury estadounidense a 10 años | 5,09 % | **4,94 %** |",
+      "expectedOccurrences": 1
+    },
+    {
+      "before": "- [U.S. Treasury](https://home.treasury.gov/) — rendimientos nominales y reales.",
+      "after": "- [U.S. Treasury](https://home.treasury.gov/resource-center/data-chart-center/interest-rates/TextView?field_tdr_date_value_month=202610&type=daily_treasury_yield_curve) — rendimientos nominales y reales. Para el Treasury a diez años se utiliza la serie Daily Treasury Par Yield Curve Rates, vencimiento constante a 10 años: 5,09 % el 16/10 y 4,94 % el 30/10; variación de −15 puntos básicos. Contraste: [FRED — DGS10](https://fred.stlouisfed.org/series/DGS10).",
+      "expectedOccurrences": 1
+    }
+  ]
+}

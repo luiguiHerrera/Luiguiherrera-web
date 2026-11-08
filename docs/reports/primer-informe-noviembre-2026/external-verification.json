@@ -1,0 +1,675 @@
+{
+  "checkedOn": "2026-11-03",
+  "verificationStage": "external-audit-complete-bounded",
+  "facts": [
+    {
+      "topic": "FactSet earnings season",
+      "status": "confirmed",
+      "publicationDate": "2026-10-30",
+      "url": "https://insight.factset.com/sp-500-earnings-season-update-october-30-2026",
+      "values": {
+        "reportedPct": 60,
+        "epsBeatPct": 82,
+        "aggregateEpsSurprisePct": 1.9,
+        "fiveYearAverageSurprisePct": 7.5,
+        "blendedEpsGrowthPct": 30.2,
+        "revenueGrowthPct": 13.4
+      }
+    },
+    {
+      "topic": "Fed decision",
+      "status": "confirmed",
+      "publicationDate": "2026-10-28",
+      "url": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20261028a.htm",
+      "values": {
+        "lowerPct": 3.75,
+        "upperPct": 4,
+        "for": 10,
+        "against": 2
+      }
+    },
+    {
+      "topic": "Bank of Japan October outlook",
+      "status": "confirmed",
+      "publicationDate": "2026-10-30",
+      "url": "https://www.boj.or.jp/en/mopo/outlook/gor2610a.pdf",
+      "values": {
+        "GDP2026Pct": 0.7,
+        "GDP2027Pct": 0.7,
+        "coreCPI2026Pct": 2.5,
+        "coreCPI2027Pct": 2.6
+      },
+      "note": "Bank's View released Oct30, before cutoff; full report released Nov2 is not used for cutoff facts."
+    },
+    {
+      "topic": "China PMI",
+      "status": "confirmed",
+      "publicationDate": "2026-10-31",
+      "url": "https://www.stats.gov.cn/sj/zxfbhjd/202610/t20261031_1965718.html",
+      "values": {
+        "SeptemberManufacturing": 50.1,
+        "OctoberManufacturing": 49.3,
+        "OctoberNewOrders": 49.4,
+        "OctoberComposite": 49.7
+      }
+    },
+    {
+      "topic": "Standard Chartered Japan",
+      "status": "confirmed",
+      "publicationDate": "2026-10",
+      "url": "https://www.sc.com/sg/market-outlook/investment-brief-japan-equities-oct-2026/",
+      "values": {
+        "stance": "Core Holding",
+        "eps12mPct": 16,
+        "forwardPE": 15,
+        "relativeExpectation": "in line with global equities over 6–12 months in USD"
+      }
+    },
+    {
+      "topic": "JPM Coin Ethereum",
+      "status": "confirmed-primary-index",
+      "publicationDate": "2026-10-19",
+      "url": "https://www.jpmorgan.com/payments/newsroom/jpm-coin-live-on-ethereum",
+      "values": {
+        "ethereumMainnet": true,
+        "previousPublicChain": "Base",
+        "kinexysCumulativeUSD": 4000000000000,
+        "kinexysDailyUSD": 7000000000
+      },
+      "note": "Primary search index retrieved full substantive release; direct open returns403. Kinexys totals apply to entire platform, not Ethereum token only."
+    },
+    {
+      "topic": "Binance incident coverage",
+      "status": "confirmed-primary",
+      "publicationDate": "2026-10-31",
+      "url": "https://www.binance.com/en/square/post/383334055914175",
+      "values": {
+        "coveredPct": 90
+      },
+      "note": "Coverage/replenishment from company/SAFU funds, distinct from law-enforcement recovery. Original source uses recovery or coverage, so no contradiction."
+    },
+    {
+      "topic": "VIX",
+      "status": "confirmed",
+      "observationDate": "2026-10-30",
+      "url": "https://fred.stlouisfed.org/series/VIXCLS",
+      "values": {
+        "close": 19.42
+      },
+      "note": "FRED attributes series to Cboe; previous cutoff19.99 verified via independent secondary history."
+    },
+    {
+      "topic": "Treasury 10yr",
+      "status": "resolved-by-authorized-correction",
+      "observationDate": "2026-10-30",
+      "url": "https://fred.stlouisfed.org/series/DGS10",
+      "authorValuePct": 4.98,
+      "officialValuePct": 4.94,
+      "previousDayOfficialValuePct": 4.98,
+      "secondaryCrossCheckUrl": "https://finance.yahoo.com/quote/%5ETNX/history/",
+      "secondaryCrossCheckValuePct": 4.929,
+      "note": "Author's approx4.98 at Oct30 matches DGS10 Oct29, not Oct30. Exact source series/time for author value is not stated. No silent correction made.",
+      "adjudication": "Narrow Founder-authorized correction reviewed: exactly3 substitution entries (paragraph, table, precise Treasury source/method). Original remains byte-identical. All format fragments reflect corrected model.",
+      "primaryUrl": "https://home.treasury.gov/resource-center/data-chart-center/interest-rates/TextView?field_tdr_date_value_month=202610&type=daily_treasury_yield_curve",
+      "primaryRowsVerified": {
+        "2026-10-16": 5.09,
+        "2026-10-29": 4.98,
+        "2026-10-30": 4.94
+      },
+      "correctedValuePct": 4.94
+    },
+    {
+      "topic": "Nomura overseas investor survey",
+      "status": "confirmed-primary-pdf-visual",
+      "publicationDate": "2026-10-30",
+      "url": "https://global.nomura-am.co.jp/latest-news/pdf/japan_insights_market_strategy261030_01.pdf",
+      "values": {
+        "positiveJapanEquitiesPct": 66,
+        "expectedYenAppreciationPct": 53
+      },
+      "note": "Figure1 page2 and Figure4 page4 rendered via Apple PDFKit and visually inspected. Latest survey Sep–Oct2026; varying respondents mean samples not strictly comparable over time."
+    }
+  ],
+  "sectorReturns": [
+    {
+      "ticker": "XLV",
+      "start": 179.28,
+      "end": 184.87,
+      "author": 3.12,
+      "calculated": 3.12,
+      "url": "https://stockanalysis.com/etf/xlv/history/"
+    },
+    {
+      "ticker": "XLB",
+      "start": 51.31,
+      "end": 52.74,
+      "author": 2.79,
+      "calculated": 2.79,
+      "url": "https://stockanalysis.com/etf/xlb/history/"
+    },
+    {
+      "ticker": "XLU",
+      "start": 42.56,
+      "end": 43.43,
+      "author": 2.04,
+      "calculated": 2.04,
+      "url": "https://stockanalysis.com/etf/xlu/history/"
+    },
+    {
+      "ticker": "XLY",
+      "start": 113.1,
+      "end": 115.38,
+      "author": 2.02,
+      "calculated": 2.02,
+      "url": "https://stockanalysis.com/etf/xly/history/"
+    },
+    {
+      "ticker": "XLI",
+      "start": 164.62,
+      "end": 167.4,
+      "author": 1.69,
+      "calculated": 1.69,
+      "url": "https://stockanalysis.com/etf/xli/history/"
+    },
+    {
+      "ticker": "XLRE",
+      "start": 42.57,
+      "end": 43.17,
+      "author": 1.41,
+      "calculated": 1.41,
+      "url": "https://stockanalysis.com/etf/xlre/history/"
+    },
+    {
+      "ticker": "XLP",
+      "start": 88.26,
+      "end": 89.42,
+      "author": 1.31,
+      "calculated": 1.31,
+      "url": "https://stockanalysis.com/etf/xlp/history/"
+    },
+    {
+      "ticker": "XLF",
+      "start": 55.9,
+      "end": 56.51,
+      "author": 1.09,
+      "calculated": 1.09,
+      "url": "https://stockanalysis.com/etf/xlf/history/"
+    },
+    {
+      "ticker": "XLE",
+      "start": 69.33,
+      "end": 70.02,
+      "author": 1,
+      "calculated": 1,
+      "url": "https://stockanalysis.com/etf/xle/history/"
+    },
+    {
+      "ticker": "XLK",
+      "start": 183.23,
+      "end": 179.51,
+      "author": -2.03,
+      "calculated": -2.03,
+      "url": "https://stockanalysis.com/etf/xlk/history/"
+    },
+    {
+      "ticker": "XLC",
+      "start": 105.51,
+      "end": 99.9,
+      "author": -5.32,
+      "calculated": -5.32,
+      "url": "https://stockanalysis.com/etf/xlc/history/"
+    }
+  ],
+  "weeklyRelativeReturns": [
+    {
+      "ticker": "RSP",
+      "start": 216.54,
+      "end": 218.31,
+      "benchmarkStart": 759.97,
+      "benchmarkEnd": 755.72,
+      "authorPp": 1.38,
+      "calculatedPp": 1.38,
+      "url": "https://stockanalysis.com/etf/rsp/history/"
+    },
+    {
+      "ticker": "IWM",
+      "start": 275.75,
+      "end": 279.33,
+      "benchmarkStart": 759.97,
+      "benchmarkEnd": 755.72,
+      "authorPp": 1.86,
+      "calculatedPp": 1.86,
+      "url": "https://stockanalysis.com/etf/iwm/history/"
+    },
+    {
+      "ticker": "QQQ",
+      "start": 704.4,
+      "end": 690.49,
+      "benchmarkStart": 759.97,
+      "benchmarkEnd": 755.72,
+      "authorPp": -1.42,
+      "calculatedPp": -1.42,
+      "url": "https://stockanalysis.com/etf/qqq/history/"
+    }
+  ],
+  "flows": [
+    {
+      "asset": "BTC",
+      "month": "Oct",
+      "rows": [
+        {
+          "date": "01 Oct 2026",
+          "total": 102.7
+        },
+        {
+          "date": "02 Oct 2026",
+          "total": 189.9
+        },
+        {
+          "date": "05 Oct 2026",
+          "total": -89.8
+        },
+        {
+          "date": "06 Oct 2026",
+          "total": 118.8
+        },
+        {
+          "date": "07 Oct 2026",
+          "total": -484.9
+        },
+        {
+          "date": "08 Oct 2026",
+          "total": -244.1
+        },
+        {
+          "date": "09 Oct 2026",
+          "total": 21.1
+        },
+        {
+          "date": "12 Oct 2026",
+          "total": -65.4
+        },
+        {
+          "date": "13 Oct 2026",
+          "total": 175.7
+        },
+        {
+          "date": "14 Oct 2026",
+          "total": -261.4
+        },
+        {
+          "date": "15 Oct 2026",
+          "total": 5.1
+        },
+        {
+          "date": "16 Oct 2026",
+          "total": -82.4
+        },
+        {
+          "date": "19 Oct 2026",
+          "total": 526.7
+        },
+        {
+          "date": "20 Oct 2026",
+          "total": 23.2
+        },
+        {
+          "date": "21 Oct 2026",
+          "total": 524.8
+        },
+        {
+          "date": "22 Oct 2026",
+          "total": -635.6
+        },
+        {
+          "date": "23 Oct 2026",
+          "total": -137.9
+        },
+        {
+          "date": "26 Oct 2026",
+          "total": 110.3
+        },
+        {
+          "date": "27 Oct 2026",
+          "total": 176
+        },
+        {
+          "date": "28 Oct 2026",
+          "total": 137.3
+        },
+        {
+          "date": "29 Oct 2026",
+          "total": 17.2
+        },
+        {
+          "date": "30 Oct 2026",
+          "total": -643.2
+        }
+      ],
+      "total": -515.9
+    },
+    {
+      "asset": "ETH",
+      "month": "Oct",
+      "rows": [
+        {
+          "date": "01 Oct 2026",
+          "total": -55.4
+        },
+        {
+          "date": "02 Oct 2026",
+          "total": -37.4
+        },
+        {
+          "date": "05 Oct 2026",
+          "total": -50.8
+        },
+        {
+          "date": "06 Oct 2026",
+          "total": -201.9
+        },
+        {
+          "date": "07 Oct 2026",
+          "total": -160.9
+        },
+        {
+          "date": "08 Oct 2026",
+          "total": -72.5
+        },
+        {
+          "date": "09 Oct 2026",
+          "total": -56.1
+        },
+        {
+          "date": "12 Oct 2026",
+          "total": -85.4
+        },
+        {
+          "date": "13 Oct 2026",
+          "total": 24.8
+        },
+        {
+          "date": "14 Oct 2026",
+          "total": -129.5
+        },
+        {
+          "date": "15 Oct 2026",
+          "total": -60.3
+        },
+        {
+          "date": "16 Oct 2026",
+          "total": -69.7
+        },
+        {
+          "date": "19 Oct 2026",
+          "total": -103.3
+        },
+        {
+          "date": "20 Oct 2026",
+          "total": -26.1
+        },
+        {
+          "date": "21 Oct 2026",
+          "total": 14.9
+        },
+        {
+          "date": "22 Oct 2026",
+          "total": -110.6
+        },
+        {
+          "date": "23 Oct 2026",
+          "total": 4.4
+        },
+        {
+          "date": "26 Oct 2026",
+          "total": -88.6
+        },
+        {
+          "date": "27 Oct 2026",
+          "total": -60.2
+        },
+        {
+          "date": "28 Oct 2026",
+          "total": -21.4
+        },
+        {
+          "date": "29 Oct 2026",
+          "total": -105.5
+        },
+        {
+          "date": "30 Oct 2026",
+          "total": -155.7
+        }
+      ],
+      "total": -1607.2
+    },
+    {
+      "asset": "BTC",
+      "month": "Sep",
+      "rows": [
+        {
+          "date": "01 Sep 2026",
+          "total": -236.5
+        },
+        {
+          "date": "02 Sep 2026",
+          "total": 101.1
+        },
+        {
+          "date": "03 Sep 2026",
+          "total": 730.8
+        },
+        {
+          "date": "04 Sep 2026",
+          "total": 174.6
+        },
+        {
+          "date": "08 Sep 2026",
+          "total": -46.6
+        },
+        {
+          "date": "09 Sep 2026",
+          "total": -120.2
+        },
+        {
+          "date": "10 Sep 2026",
+          "total": -282.7
+        },
+        {
+          "date": "11 Sep 2026",
+          "total": -13.2
+        },
+        {
+          "date": "14 Sep 2026",
+          "total": 159.9
+        },
+        {
+          "date": "15 Sep 2026",
+          "total": -450.4
+        },
+        {
+          "date": "16 Sep 2026",
+          "total": -295.9
+        },
+        {
+          "date": "17 Sep 2026",
+          "total": 159.5
+        },
+        {
+          "date": "18 Sep 2026",
+          "total": 433
+        },
+        {
+          "date": "21 Sep 2026",
+          "total": 999
+        },
+        {
+          "date": "22 Sep 2026",
+          "total": 714.7
+        },
+        {
+          "date": "23 Sep 2026",
+          "total": 346.9
+        },
+        {
+          "date": "24 Sep 2026",
+          "total": 190.7
+        },
+        {
+          "date": "25 Sep 2026",
+          "total": 134.5
+        },
+        {
+          "date": "28 Sep 2026",
+          "total": 31
+        },
+        {
+          "date": "29 Sep 2026",
+          "total": 66.2
+        },
+        {
+          "date": "30 Sep 2026",
+          "total": -148.7
+        }
+      ],
+      "total": 2647.7
+    }
+  ],
+  "flowSources": {
+    "BTC": "https://farside.co.uk/bitcoin-etf-flow-all-data/",
+    "ETH": "https://farside.co.uk/ethereum-etf-flow-all-data/"
+  },
+  "calendarPrimaryChecks": [
+    {
+      "events": [
+        "JOLTS Nov3",
+        "Productivity Nov5",
+        "Employment Nov6",
+        "CPI Nov10",
+        "PPI Nov13"
+      ],
+      "url": "https://www.bls.gov/schedule/2026/11_sched_list.htm",
+      "status": "confirmed"
+    },
+    {
+      "events": [
+        "Trade Nov4"
+      ],
+      "url": "https://www.bea.gov/news/schedule",
+      "status": "confirmed"
+    },
+    {
+      "events": [
+        "Outlook full report Nov2",
+        "Summary opinions Nov10",
+        "Corporate goods prices Nov12"
+      ],
+      "url": "https://www.boj.or.jp/en/about/calendar/index.htm",
+      "status": "confirmed"
+    },
+    {
+      "events": [
+        "Federal general election Nov3"
+      ],
+      "url": "https://www.fec.gov/introduction-campaign-finance/election-results-and-voting-information/",
+      "status": "confirmed"
+    },
+    {
+      "events": [
+        "No ordinary November FOMC",
+        "Dec8–9 FOMC"
+      ],
+      "url": "https://www.federalreserve.gov/monetarypolicy/fomccalendars.htm",
+      "status": "confirmed"
+    },
+    {
+      "events": [
+        "October FOMC minutes Nov18"
+      ],
+      "url": "https://www.federalreserve.gov/monetarypolicy/fomccalendars.htm",
+      "status": "inferred-from-official-rule",
+      "note": "Official page says minutes3weeks after decision; Oct28+21days=Nov18; not explicit November release line in retrieved calendar."
+    }
+  ],
+  "limitations": [
+    "BTC/ETH exact historical daily provider prices not independently retrieved: Yahoo history429; source does not identify provider timezone. All four author prices and rounded returns preserved, arithmetic verified.",
+    "Institutional chart-specific statistics remain author-attributed where exact title/date/URL unavailable: Goldman concentration/cloud/capex/FCF/valuation; BofA capex share/systematicflows/BullBear/year-to-date comparison; Duality valuations; Detrick breadth; EPB productivity; Morningstar CDS; Koyfin GLD flows; seasonality samples.",
+    "Citi targets reproduced by specialist coverage (CoinDesk Oct1), but underlying primary client note not retrieved; retain explicitly institutional estimate, not independently primary verified.",
+    "Coupang/HIMS announcement date verified issuer indexed overview; AMC detail from issuer-authored wire mirror because original BusinessWire inaccessible.",
+    "No source body was changed. This audit is bounded verification, not a claim that every underlying proprietary dataset was independently reproduced."
+  ],
+  "nonBlockingObservations": [
+    {
+      "id": "IR-02",
+      "finding": "HUMA11/11 remains estimated at cutoff; issuer Nov2 later announcesNov10. Preserve frozen source; separate dated followup recommended before live publication, no silent date replacement."
+    },
+    {
+      "id": "IR-03",
+      "finding": "LFMD21.97 derivesOct29 snapshot despite most valuesOct30. Source's mainly qualifier allows it; evidence explicitly records exception."
+    },
+    {
+      "id": "IR-04",
+      "finding": "HYMC+9.81 correct BMO first-session reaction; provider+13.32 uses different window. Preserve author calculation."
+    }
+  ],
+  "resolvedFindings": [
+    {
+      "id": "IR-01",
+      "severity": "editorial",
+      "finding": "Treasury30/10 value4.98 conflicts with DGS10 official4.94 and TNX4.929; source or exception requires author adjudication before claiming full editorial factual verification.",
+      "state": "resolved-pending-final-commit-recheck",
+      "resolution": "User-authorized editorial-delta.json exact3 replacements; Treasury primary rows verified."
+    }
+  ],
+  "blockers": [],
+  "originalSourceStillExact": true,
+  "provisionalCrossFormat": {
+    "fragmentsAndCells": 594,
+    "htmlMissing": 0,
+    "markdownMissing": 0,
+    "pdfMissing": 0,
+    "pdfPages": 17,
+    "pdfNormalization": "NFKC, whitespace, markdown emphasis/labels, en/em dash tohyphen, known running footer removed",
+    "candidateCommit": "not-final"
+  },
+  "publicationValidationScope": {
+    "decision": "PASS is appropriate for required editorial candidate controls only; no global suite pass",
+    "targeted": {
+      "tests": 100,
+      "pass": 100,
+      "fail": 0,
+      "log": "/private/tmp/ct-november-targeted.log"
+    },
+    "expanded": {
+      "tests": 157,
+      "pass": 155,
+      "fail": 2,
+      "log": "/private/tmp/ct-november-suite-final.log"
+    },
+    "baseline": {
+      "commit": "665e062cb70fbcf3fd67317560bc33e1b9dc83fa",
+      "tests": 11,
+      "pass": 9,
+      "fail": 2,
+      "log": "/private/tmp/ct-november-baseline-tests.log"
+    },
+    "failureEquivalence": "Same narrow-update actual hash754ad54ce2dad2c9137aab9bed0f51055d652c4d9570ea95fd51eba2d410f4c6 vs expected15e42dcd75e48a65a165b33fc59ef69f12338a72e91d8c09c462efb5830adcd4; generator comparison same actual/expected sizes. Both failing files unchanged."
+  },
+  "limitedTransportLinks": {
+    "independentWebReaderConfirmed": [
+      "https://farside.co.uk/",
+      "https://www.bls.gov/",
+      "https://www.bls.gov/schedule/2026/11_sched_list.htm",
+      "https://fred.stlouisfed.org/series/DGS10"
+    ],
+    "note": "Direct GET403/timeout records retained; all4 URLs return substantive publisher content through web reader. Not claimed direct GET200."
+  },
+  "provisionalPreservationRecheck": {
+    "historicalExports": 31,
+    "byteIdentical": true,
+    "manifestEntries": 9,
+    "manifestHashOrSizeMismatches": 0,
+    "protectedPathsChanged": [],
+    "note": "Current precommit diff read only; final commit check pending."
+  }
+}

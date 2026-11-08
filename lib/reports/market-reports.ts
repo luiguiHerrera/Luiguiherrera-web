@@ -1,4 +1,5 @@
 import { secondOctober2026Report } from './second-october-2026.ts';
+import { firstNovember2026Report } from './first-november-2026.ts';
 import { firstOctober2026Report } from "./first-october-2026.ts";
 import { secondSeptember2026Report } from "./second-september-2026.ts";
 import { firstSeptember2026Report } from "./first-september-2026.ts";
@@ -132,6 +133,7 @@ export type MarketReportStockpickingTheme = {
 };
 
 export type MarketReportPresentation = {
+  editorialLayout?: "november-2026";
   /** Preserve the approved print chapter boundary across publication states. */
   assetReadingsStartNewPage?: boolean;
   contextTitle?: string;
@@ -204,7 +206,8 @@ export type MarketReport = {
   subtitle: string;
   dateLabel: string;
   publishedLabel?: string;
-  publishedAt: string;
+  /** Null until an approved deployment date is assigned. Never use a market cutoff here. */
+  publishedAt: string | null;
   modifiedAt: string;
   editorialCutoffAt?: string;
   automaticDataCutoffAt?: string;
@@ -2118,7 +2121,8 @@ export const marketReports: MarketReport[] = [
   { ...firstSeptember2026Report, status: "archivado" },
   { ...secondSeptember2026Report, status: "archivado" },
   { ...firstOctober2026Report, status: "archivado" },
-  secondOctober2026Report,
+  { ...secondOctober2026Report, status: "archivado" },
+  firstNovember2026Report,
 ];
 
 export const activeMarketReport = marketReports.find((report) => report.status === "actual") ?? marketReports[0];

@@ -1,0 +1,14 @@
+[
+  {
+    "sha": "665e062cb70fbcf3fd67317560bc33e1b9dc83fa",
+    "status": "BLOCKED",
+    "error": "EXACT_DELTA",
+    "traceback": "Traceback (most recent call last):\n  File \"<stdin>\", line 7, in <module>\n  File \"/private/tmp/ct-web-november-20261103/scripts/statistical-levels-ci/admission.py\", line 573, in reconciled_report_hashes\n    root, _ = bootstrap(git, head)\n  File \"/private/tmp/ct-web-november-20261103/scripts/statistical-levels-ci/admission.py\", line 541, in bootstrap\n    delta(git, parents[0], cursor, data_paths)\n  File \"/private/tmp/ct-web-november-20261103/scripts/statistical-levels-ci/admission.py\", line 120, in delta\n    need(changed == expected, 'EXACT_DELTA')\n  File \"/private/tmp/ct-web-november-20261103/scripts/statistical-levels-ci/admission.py\", line 53, in need\n    raise ValueError(code)\nValueError: EXACT_DELTA\n"
+  },
+  {
+    "sha": "2df272ac46495aa3adb525fb4028d23e588cda65",
+    "status": "BLOCKED",
+    "error": "EXACT_DELTA",
+    "traceback": "Traceback (most recent call last):\n  File \"<stdin>\", line 7, in <module>\n  File \"/private/tmp/ct-web-november-20261103/scripts/statistical-levels-ci/admission.py\", line 573, in reconciled_report_hashes\n    root, _ = bootstrap(git, head)\n  File \"/private/tmp/ct-web-november-20261103/scripts/statistical-levels-ci/admission.py\", line 541, in bootstrap\n    delta(git, parents[0], cursor, data_paths)\n  File \"/private/tmp/ct-web-november-20261103/scripts/statistical-levels-ci/admission.py\", line 120, in delta\n    need(changed == expected, 'EXACT_DELTA')\n  File \"/private/tmp/ct-web-november-20261103/scripts/statistical-levels-ci/admission.py\", line 53, in need\n    raise ValueError(code)\nValueError: EXACT_DELTA\n"
+  }
+]

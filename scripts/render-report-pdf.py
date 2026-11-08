@@ -237,7 +237,7 @@ def editorial_paragraph(value, style):
         elif part.startswith("*") and part.endswith("*"):
             output.append("<i>" + source_linked_text(part[1:-1]) + "</i>")
         elif link:
-            output.append(f'<link href="{html.escape(link[2], quote=True)}">{paragraph_text(link[1])}</link>')
+            output.append(f'<link href="{html.escape(link[2], quote=True)}">{paragraph_text(link[1].replace("**", ""))}</link>')
         else:
             output.append(source_linked_text(part))
     return PDF["Paragraph"]("".join(output), style)
@@ -831,7 +831,7 @@ def add_figure(story, item, styles, root):
 def add_section(story, section, styles, root, published_at, description, force_break, model):
     kind = section["kind"]
     # Private previews start the asset chapter on a fresh page; published bytes stay stable.
-    force_break = force_break or ((model.get("status") == "borrador" or model.get("presentation", {}).get("assetReadingsStartNewPage")) and kind == "asset-readings")
+    force_break = force_break or (((model.get("status") == "borrador" or not model.get("publishedAt")) or model.get("presentation", {}).get("assetReadingsStartNewPage")) and kind == "asset-readings")
     presentation = model.get("presentation", {})
     enhanced_timeline = presentation.get("timelineStyle") == "progression"
     enhanced_calendar = presentation.get("calendarStyle") == "monthly"
@@ -847,15 +847,28 @@ def add_section(story, section, styles, root, published_at, description, force_b
     story.append(p(section["title"], styles["h1"]))
 
     if kind == "editorial":
+        editorial_styles = styles
+        if presentation.get("editorialLayout") == "november-2026" and section["id"] == "fuentes-y-aviso":
+            editorial_styles = {**styles, "body": PDF["ParagraphStyle"]("november_source_body", parent=styles["body"], spaceAfter=5)}
         for block in section["blocks"]:
             if block["kind"] == "table":
-                story.append(data_table(block["headers"], block["rows"], styles,
+                table = data_table(block["headers"], block["rows"], styles,
                     [167 * PDF["mm"] / len(block["headers"])] * len(block["headers"]),
-                    cell_renderer=editorial_paragraph))
+                    cell_renderer=editorial_paragraph)
+                if presentation.get("editorialLayout") == "november-2026":
+                    palette = {"Rojo fuerte": "#fbe2de", "Rojo suave": "#fff2f0", "Verde suave": "#e6f1eb"}
+                    table.setStyle(PDF["TableStyle"]([
+                        ("BACKGROUND", (0, i + 1), (-1, i + 1), PDF["colors"].HexColor(palette[row[-1]]))
+                        for i, row in enumerate(block["rows"]) if row[-1] in palette
+                    ]))
+                story.append(table)
                 story.append(PDF["Spacer"](1, 7))
             else:
                 style = "h2" if block["kind"] == "heading" else "small" if block["kind"] == "source" else "body"
-                story.append(editorial_paragraph(block["text"], styles[style]))
+                paragraph = editorial_paragraph(block["text"], editorial_styles[style])
+                if presentation.get("editorialLayout") == "november-2026" and (block["kind"] == "heading" or re.fullmatch(r"\*\*[^*]+\*\*", block["text"])):
+                    paragraph.keepWithNext = True
+                story.append(paragraph)
     elif kind == "narrative":
         story.append(p(section["body"], styles["body"]))
     elif kind == "summary":
@@ -1126,18 +1139,18 @@ def generate_pdf(model_path, output_path, root):
     story = [
         PDF["Spacer"](1, 35 * mm),
         p(model["editionName"].upper(), styles["edition"]),
-        *([p("Candidato editorial · sin publicar", styles["h2"])] if model.get("status") == "borrador" else []),
+        *([p("Candidato editorial · sin publicar", styles["h2"])] if (model.get("status") == "borrador" or not model.get("publishedAt")) else []),
         p(model["title"], styles["title"]),
         p(model["subtitle"], styles["subtitle"]),
         info_table(
             [
                 ("Autor", model["author"]),
-                ("Publicación", model["publishedAt"]),
+                ("Publicación", model["publishedAt"] or "Pendiente de publicación"),
                 ("Actualización", model["modifiedAt"]),
                 ("Corte editorial", model.get("editorialCutoffAt", "No aplica")),
                 ("Corte de datos de mercado", model.get("automaticDataCutoffAt", "No aplica")),
                 *([("Periodo prospectivo", model["presentation"]["prospectivePeriod"])] if model.get("presentation", {}).get("prospectivePeriod") else []),
-                ("URL prevista · sin publicar" if model.get("status") == "borrador" else "URL editorial primaria", model["canonicalUrl"]),
+                ("URL prevista · sin publicar" if (model.get("status") == "borrador" or not model.get("publishedAt")) else "URL editorial primaria", model["canonicalUrl"]),
             ],
             styles,
         ),
