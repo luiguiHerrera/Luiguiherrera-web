@@ -29,6 +29,7 @@ jobs:
       SL_CI_DURABILITY_PAYLOAD_SHA256: "ba91204d59625ca01b113965b9bc1fb5c41450b7e4a32ae068cdfb65404ae81b"
       SL_CI_BOOTSTRAP_PAYLOAD_SHA256: "775521938439962eca0e3bc35f0d3303b2b1fafa0a3fc6a360b162b281f39c95"
       SL_CI_LINEAGE_PAYLOAD_SHA256: "671b71c95ef3019f886a6fc6dfab7c551ab1e9c96e52b266c1f096e2966201be"
+      SL_CI_R1_REPAIR_PAYLOAD_SHA256: "2bec9239840ec032d4e2ff9b07d0f63a23ce2d6a97791624f086bd1bfc17387b"
 
     steps:
       - name: Checkout repository
@@ -547,7 +548,25 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          python3 -m unittest discover -s scripts/statistical-levels-ci -p 'test_*.py' -v
+          ci_python_status=0
+          ci_zod_status=0
+          python3 - <<'PYTESTS' || ci_python_status=$?
+          import unittest
+
+          def cases(suite):
+              for case in suite:
+                  if isinstance(case, unittest.TestSuite):
+                      yield from cases(case)
+                  else:
+                      yield case
+
+          suite = unittest.TestLoader().discover('scripts/statistical-levels-ci', pattern='test_*.py')
+          selected = [case for case in cases(suite) if case.__class__.__module__ not in ('test_zod_security_admission', 'test_ci_recovery_admission')]
+          result = unittest.TextTestRunner(verbosity=2).run(unittest.TestSuite(selected))
+          raise SystemExit(0 if result.wasSuccessful() else 1)
+          PYTESTS
+          PYTHONPATH=scripts/statistical-levels-ci python3 -m unittest test_zod_security_admission test_ci_recovery_admission -v || ci_zod_status=$?
+          if (( ci_python_status != 0 || ci_zod_status != 0 )); then exit 1; fi
           node --test scripts/statistical-levels-ci/producer-receipt.test.mjs scripts/statistical-levels-daily.test.mjs scripts/statistical-levels-provider-durability.test.mjs
 
       - name: Install dependencies

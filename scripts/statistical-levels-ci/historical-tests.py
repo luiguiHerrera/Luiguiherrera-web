@@ -9,7 +9,7 @@ import os
 from pathlib import Path
 import subprocess
 import tempfile
-from admission import Git, OLD, need, digest, bootstrap, CAPTURE_RECOVERY_BASE, CAPTURE_RECOVERY_FILES, REPORT_CONTRACT_BASE, DURABILITY_BASE, ZOD_BASE, ZOD_FILES, lineage_entry, lineage_registry
+from admission import Git, OLD, need, digest, bootstrap, CAPTURE_RECOVERY_BASE, CAPTURE_RECOVERY_FILES, REPORT_CONTRACT_BASE, DURABILITY_BASE, ZOD_BASE, ZOD_FILES, lineage_entry, lineage_registry, CI_REPAIR_BASE
 
 
 SECURITY_REUSE_ADDITIONS = {'package.json', 'package-lock.json',
@@ -37,6 +37,10 @@ def reuse_scope(git, head):
     # The old 261 cases retain OLD as their actual subject. Changed native
     # capture bytes are qualified by the new differential tests and live capture.
     root, _ = bootstrap(git, head)
+    if git.parents(root) == [CI_REPAIR_BASE]:
+        # bootstrap froze every release/dependency byte at this exact parent.
+        # Reuse remains about OLD, never a hosted qualification of R1 or this repair.
+        return reuse_scope(git, CI_REPAIR_BASE)
     a, b = git.tree(OLD), git.tree(head)
     scope = {p for p in a if p.startswith('scripts/statistical-levels-release/')} | {'package.json', 'package-lock.json'}
     if lineage_entry(git, root) is not None:

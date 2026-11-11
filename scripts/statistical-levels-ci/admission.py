@@ -683,6 +683,46 @@ def lineage_entry(git, root):
     return entry if git.parents(root) == [entry['editorial']['sha']] else None
 
 
+# One reviewed repair of the failed R1 CI, not a repeatable transition API.
+# The existing lineage registry and 82 data files remain byte-for-byte intact.
+CI_REPAIR_BASE = '50cd6ae7724804cc7a819f18f8732a6b733c290c'
+CI_REPAIR_R1 = '83d304321a2937713942d908c811d40c15e59847'
+CI_REPAIR_IDENTITY = 'Codex <codex@openai.com> 1794433524 +0000'
+CI_REPAIR_MESSAGE = 'Recover R1 CI with an exact one-time admission and isolated Zod tests'
+CI_REPAIR_FILES = frozenset({CI, 'scripts/statistical-levels-ci/admission.py',
+    'scripts/statistical-levels-ci/historical-tests.py',
+    'scripts/statistical-levels-ci/test_lineage_admission.py',
+    'scripts/statistical-levels-ci/test_ci_recovery_admission.py'})
+CI_REPAIR_PIN = rb'(      SL_CI_R1_REPAIR_PAYLOAD_SHA256: ")[a-f0-9]{64}("\n)'
+CI_REPAIR_PIN_LINE = rb'      SL_CI_R1_REPAIR_PAYLOAD_SHA256: "[a-f0-9]{64}"\n'
+# Exact parent workflow with only the reviewed test command split, before adding the repair pin.
+CI_REPAIR_WORKFLOW_SHA256 = '63b4410a59a0e66c8debdf3af6e57185a0fc6632b90ecf7cf34c7df16fdadeca'
+
+
+def ci_repair_payload_hash(git, sha):
+    rows = []
+    for name in sorted(CI_REPAIR_FILES):
+        data = git.blob(sha, name)
+        if name == CI:
+            need(len(re.findall(CI_REPAIR_PIN, data)) == 1, 'CI_REPAIR_PIN_FIELD')
+            data = re.sub(CI_REPAIR_PIN, lambda m: m[1] + b'0' * 64 + m[2], data)
+        rows.append({'path': name, 'mode': '100644', 'sha256': digest(data)})
+    return digest(json.dumps(rows, sort_keys=True, separators=(',', ':')).encode())
+
+
+def validate_ci_repair(git, root):
+    need(git.parents(root) == [CI_REPAIR_BASE], 'CI_REPAIR_PARENT')
+    need(git.parents(CI_REPAIR_BASE) == ['b6f77209710bbfd3cd46ad1587f43ddabe96d33e'] and
+         bootstrap(git, CI_REPAIR_BASE) == (CI_REPAIR_R1, [CI_REPAIR_BASE, 'b6f77209710bbfd3cd46ad1587f43ddabe96d33e']), 'CI_REPAIR_EXISTING_LINEAGE')
+    delta(git, CI_REPAIR_BASE, root, CI_REPAIR_FILES)
+    lineage_header(git, root, git.text('rev-parse', root + '^{tree}'), CI_REPAIR_BASE,
+                   CI_REPAIR_IDENTITY, CI_REPAIR_IDENTITY, CI_REPAIR_MESSAGE, 'CI_REPAIR_HEADER')
+    workflow = git.blob(root, CI)
+    need(digest(re.sub(CI_REPAIR_PIN_LINE, b'', workflow)) == CI_REPAIR_WORKFLOW_SHA256, 'CI_REPAIR_WORKFLOW_SCOPE')
+    pin = re.findall(rb'      SL_CI_R1_REPAIR_PAYLOAD_SHA256: "([a-f0-9]{64})"\n', workflow)
+    need(len(pin) == 1 and pin[0].decode() == ci_repair_payload_hash(git, root), 'CI_REPAIR_PAYLOAD')
+
+
 def bootstrap(git, head):
     # Exact lineage transitions only. The editorial commit alone is never admitted; its CI failure is never reused.
     if LINEAGE_REGISTRY not in git.tree(head):
@@ -702,6 +742,11 @@ def bootstrap(git, head):
         cursor = parents[0]
     else:
         raise ValueError('LINEAGE_BOUND')
+    if git.parents(cursor) == [CI_REPAIR_BASE]:
+        validate_ci_repair(git, cursor)
+        current, start = git.tree(head), git.tree(cursor)
+        need(set(current) == set(start) and all(current[p] == start[p] for p in current if p not in data_paths), 'CI_REPAIR_SUCCESSOR_CODE_CHANGED')
+        return cursor, chain
     registry = lineage_registry(git, cursor)
     need(registry is not None, 'LINEAGE_REGISTRY')  # the registry is a frozen non-data path: every lineage ancestor below the head carries it
     entry = registry[-1]
@@ -717,6 +762,7 @@ def bootstrap(git, head):
         need(git.parents(zod_root) == [ZOD_BASE], 'LINEAGE_FIRST_PARENT_EPOCH')
     else:
         previous_root, _ = bootstrap(git, entry['parent'])
+        need(git.parents(previous_root) != [CI_REPAIR_BASE], 'CI_REPAIR_DATA_SUCCESSORS_ONLY')
         need(previous_root == entry['previous_rebind'], 'LINEAGE_PREVIOUS_REBIND')
         need(lineage_registry(git, previous_root) == registry[:-1], 'LINEAGE_REGISTRY_CHAIN')
         for name in LINEAGE_EPOCH_FILES - LINEAGE_REBIND_FILES:
@@ -736,6 +782,8 @@ def reconciled_report_hashes(git, head):
                       stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL).returncode != 0:
         return {}
     root, _ = bootstrap(git, head)
+    if git.parents(root) == [CI_REPAIR_BASE]:
+        return reconciled_report_hashes(git, CI_REPAIR_BASE)
     if lineage_entry(git, root) is not None:
         registry = lineage_registry(git, root)
         result = reconciled_report_hashes(git, registry[0]['parent'])
@@ -1052,6 +1100,7 @@ def admit(git, api, env, event):
     need(evidence['head_sha'] == BASE and evidence['producer_run_id'] == 39432688384 and evidence['source_sha'] == OLD, 'BOOTSTRAP_DATA_IDENTITY')
     validate_data(git, BASE, OLD, evidence['metadata_objects'])
     if not chain:
+        repair_root = git.parents(root) == [CI_REPAIR_BASE]
         daily_root = git.parents(root) == [RECONCILED]
         security_root = git.parents(root) == [SECURITY_BASE]
         capture_root = git.parents(root) == [CAPTURE_RECOVERY_BASE]
@@ -1060,15 +1109,24 @@ def admit(git, api, env, event):
         zod_root = git.parents(root) == [ZOD_BASE]
         lineage = lineage_entry(git, root)
         lineage_root = lineage is not None
-        expected_before = lineage['editorial']['sha'] if lineage_root else ZOD_BASE if zod_root else DURABILITY_BASE if durability_root else REPORT_CONTRACT_BASE if report_root else CAPTURE_RECOVERY_BASE if capture_root else SECURITY_BASE if security_root else REMOTE_BEFORE_RECONCILIATION if daily_root else BASE
+        expected_before = CI_REPAIR_BASE if repair_root else lineage['editorial']['sha'] if lineage_root else ZOD_BASE if zod_root else DURABILITY_BASE if durability_root else REPORT_CONTRACT_BASE if report_root else CAPTURE_RECOVERY_BASE if capture_root else SECURITY_BASE if security_root else REMOTE_BEFORE_RECONCILIATION if daily_root else BASE
         need(env['GITHUB_EVENT_NAME'] == 'push' and event['before'] == expected_before and event['after'] == head and event['ref'] == 'refs/heads/' + BRANCH and not event['forced'] and not event['deleted'] and not event['created'], 'BOOTSTRAP_EVENT')
-        if daily_root or security_root or capture_root or report_root or durability_root or zod_root or lineage_root:
+        if repair_root or daily_root or security_root or capture_root or report_root or durability_root or zod_root or lineage_root:
             recent_bytes = git.blob(root, CURRENT_DATA_EVIDENCE)
             need(digest(recent_bytes) == CURRENT_DATA_EVIDENCE_SHA256, 'CURRENT_DATA_EVIDENCE_PIN')
             recent = unique_json(recent_bytes)
             need(recent['published_sha'] == REMOTE_BEFORE_RECONCILIATION and recent['producer_run_id'] == 39791362129 and recent['producer_attempt'] == 1, 'CURRENT_DATA_EVIDENCE_IDENTITY')
             validate_data(git, recent['published_sha'], recent['source_sha'], recent['metadata_objects'])
-            if lineage_root:
+            if repair_root:
+                mode, details = 'EXACT_R1_CI_REPAIR_BOOTSTRAP', {
+                    'remote_before': CI_REPAIR_BASE, 'r1_sha': CI_REPAIR_R1,
+                    'r1_hosted_ci': 'FAILED_NOT_REUSED', 'failed_run_id': 42536568040,
+                    'failed_attempts': [1, 2, 3], 'parent_hosted_ci': 'NOT_REUSED',
+                    'candidate_hosted_ci': 'REQUIRED_NOT_YET_CERTIFIED',
+                    'data_head': CI_REPAIR_BASE, 'data_preservation': 'EXACT_82_PATHS',
+                    'historical_subject_unchanged': True, 'new_hosted_qualification_required': True,
+                    'daily_successors_require_exact_parent_ci': True, 'release_authority_issued': False}
+            elif lineage_root:
                 mode, details = 'EXACT_LINEAGE_TRANSITION_BOOTSTRAP', {'transition_index': lineage['index'],
                     'editorial_sha': lineage['editorial']['sha'], 'editorial_tree': lineage['editorial']['tree'],
                     'editorial_parent': lineage['parent'], 'remote_before': expected_before,
