@@ -17,7 +17,7 @@ jobs:
     # An unchanged producer SHA is a no-op, never a new qualification PASS.
     if: ${{ github.event_name != 'workflow_run' || (github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.head_sha != github.sha) }}
     runs-on: ubuntu-latest
-    timeout-minutes: 40
+    timeout-minutes: 90
     env:
       NEXT_TELEMETRY_DISABLED: "1"
       CI_EVENT_SHA: ${{ github.sha }}
@@ -32,6 +32,7 @@ jobs:
       SL_CI_R1_REPAIR_PAYLOAD_SHA256: "2bec9239840ec032d4e2ff9b07d0f63a23ce2d6a97791624f086bd1bfc17387b"
       SL_CI_PUBLICATION_CLOSURE_SHA256: "71d731bce3bd0a572cf7596c8d1fb7263ad3c7e91e9a6cabd35e8834c6ad2816"
       SL_CI_PUBLICATION_REPAIR_SHA256: "59be4e518b279aab39482ddf2d21346b64b56ae451b10c5b1fc3716376a4fe2c"
+      SL_CI_RUNTIME_RECOVERY_SHA256: "13edb93a4f5c2df114e63399165fde97fc76e9a63b40ac4f2148347f714a4387"
 
     steps:
       - name: Checkout repository
@@ -552,7 +553,8 @@ jobs:
           set -euo pipefail
           ci_python_status=0
           ci_zod_status=0
-          python3 - <<'PYTESTS' || ci_python_status=$?
+          printf 'Python main start UTC=%s SHA=%s run=%s attempt=%s\n' "$(date -u +%FT%TZ)" "$GITHUB_SHA" "$GITHUB_RUN_ID" "$GITHUB_RUN_ATTEMPT"
+          python3 -u - <<'PYTESTS' 2>&1 | tee "$CI_EVIDENCE/python-main.log" || ci_python_status=$?
           import unittest
 
           def cases(suite):
@@ -564,12 +566,36 @@ jobs:
 
           suite = unittest.TestLoader().discover('scripts/statistical-levels-ci', pattern='test_*.py')
           selected = [case for case in cases(suite) if case.__class__.__module__ not in ('test_zod_security_admission', 'test_ci_recovery_admission')]
+          if len(selected) != 145:
+              raise SystemExit("PYTHON_MAIN_INVENTORY")
           result = unittest.TextTestRunner(verbosity=2).run(unittest.TestSuite(selected))
-          raise SystemExit(0 if result.wasSuccessful() else 1)
+          raise SystemExit(0 if result.wasSuccessful() and result.testsRun == 145 and not result.skipped else 1)
           PYTESTS
-          PYTHONPATH=scripts/statistical-levels-ci python3 -m unittest test_zod_security_admission test_ci_recovery_admission -v || ci_zod_status=$?
+          printf 'Python main exit=%s UTC=%s\n' "$ci_python_status" "$(date -u +%FT%TZ)"
+          PYTHONPATH=scripts/statistical-levels-ci python3 -u -m unittest test_zod_security_admission test_ci_recovery_admission -v 2>&1 | tee "$CI_EVIDENCE/python-zod.log" || ci_zod_status=$?
+          printf 'Python zod exit=%s UTC=%s\n' "$ci_zod_status" "$(date -u +%FT%TZ)"
           if (( ci_python_status != 0 || ci_zod_status != 0 )); then exit 1; fi
+          python3 - <<'PYCOUNTS'
+          import os,re
+          from pathlib import Path
+          for name,count in [('python-main.log',145),('python-zod.log',23)]:
+              text=(Path(os.environ['CI_EVIDENCE'])/name).read_text()
+              assert re.findall(r'^Ran (\d+) tests? in .+$',text,re.M)==[str(count)], 'PYTHON_INCOMPLETE_COUNT'
+              assert text.rstrip().endswith('\nOK') and not re.search(r'^FAILED|^OK \(',text,re.M), 'PYTHON_NOT_FULL_PASS'
+          PYCOUNTS
           node --test scripts/statistical-levels-ci/producer-receipt.test.mjs scripts/statistical-levels-daily.test.mjs scripts/statistical-levels-provider-durability.test.mjs
+
+      - name: Retain Python diagnostic output (not qualification)
+        if: ${{ always() }}
+        timeout-minutes: 2
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+        with:
+          name: sl-ci-python-diagnostic-${{ github.sha }}-${{ github.run_id }}-${{ github.run_attempt }}
+          path: |
+            ${{ runner.temp }}/statistical-levels-ci/python-main.log
+            ${{ runner.temp }}/statistical-levels-ci/python-zod.log
+          if-no-files-found: error
+          retention-days: 14
 
       - name: Install dependencies
         run: npm ci

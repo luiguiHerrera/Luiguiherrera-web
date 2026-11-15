@@ -803,6 +803,43 @@ def validate_publication_ci_repair(git, root):
     need(len(pin) == 1 and pin[0].decode() == publication_ci_repair_payload(git, root), 'PUBLICATION_CI_REPAIR_PAYLOAD')
 
 
+# One bounded runtime recovery from the unqualified ee6cce commit. No failed CI is reused.
+RUNTIME_CI_BASE = 'ee6cce7360de20ff66bdf7c4343b79579f6502fe'
+RUNTIME_CI_IDENTITY = 'Codex <codex@openai.com> 1794781980 +0000'
+RUNTIME_CI_MESSAGE = 'Bound CI runtime recovery and retain Python diagnostic evidence'
+RUNTIME_CI_FILES = frozenset({CI, 'scripts/statistical-levels-ci/admission.py',
+    'scripts/statistical-levels-ci/historical-tests.py', 'scripts/statistical-levels-ci/test_ci_runtime_recovery.py',
+    'scripts/statistical-levels-ci/test_publication_ci_repair.py', 'scripts/statistical-levels-ci/test_publication_closure.py',
+    'scripts/statistical-levels-ci/test_lineage_admission.py', 'scripts/statistical-levels-ci/test_ci_recovery_admission.py'})
+RUNTIME_CI_PIN = rb'(      SL_CI_RUNTIME_RECOVERY_SHA256: ")[a-f0-9]{64}("\n)'
+RUNTIME_CI_WORKFLOW_SHA256 = '2b5af8e3351081e8adf3b872a6da41cc7601d72283d7cfad0f116ed228db8775'
+
+
+def runtime_ci_workflow(data):
+    need(len(re.findall(RUNTIME_CI_PIN, data)) == 1, 'RUNTIME_CI_PIN_FIELD')
+    return re.sub(RUNTIME_CI_PIN, lambda m: m[1] + b'0' * 64 + m[2], data)
+
+
+def runtime_ci_payload(git, sha):
+    rows = []
+    for name in sorted(RUNTIME_CI_FILES):
+        data = git.blob(sha, name)
+        rows.append({'path': name, 'mode': '100644', 'sha256': digest(runtime_ci_workflow(data) if name == CI else data)})
+    return digest(json.dumps(rows, sort_keys=True, separators=(',', ':')).encode())
+
+
+def validate_runtime_ci(git, root):
+    need(git.parents(root) == [RUNTIME_CI_BASE], 'RUNTIME_CI_PARENT')
+    need(bootstrap(git, RUNTIME_CI_BASE) == (RUNTIME_CI_BASE, []), 'RUNTIME_CI_LINEAGE')
+    delta(git, RUNTIME_CI_BASE, root, RUNTIME_CI_FILES)
+    lineage_header(git, root, git.text('rev-parse', root + '^{tree}'), RUNTIME_CI_BASE,
+        RUNTIME_CI_IDENTITY, RUNTIME_CI_IDENTITY, RUNTIME_CI_MESSAGE, 'RUNTIME_CI_HEADER')
+    workflow = git.blob(root, CI)
+    need(digest(runtime_ci_workflow(workflow)) == RUNTIME_CI_WORKFLOW_SHA256, 'RUNTIME_CI_WORKFLOW_SCOPE')
+    pin = re.findall(rb'      SL_CI_RUNTIME_RECOVERY_SHA256: "([a-f0-9]{64})"\n', workflow)
+    need(len(pin) == 1 and pin[0].decode() == runtime_ci_payload(git, root), 'RUNTIME_CI_PAYLOAD')
+
+
 def bootstrap(git, head):
     # Exact lineage transitions only. The editorial commit alone is never admitted; its CI failure is never reused.
     if LINEAGE_REGISTRY not in git.tree(head):
@@ -822,6 +859,11 @@ def bootstrap(git, head):
         cursor = parents[0]
     else:
         raise ValueError('LINEAGE_BOUND')
+    if git.parents(cursor) == [RUNTIME_CI_BASE]:
+        validate_runtime_ci(git, cursor)
+        current, start = git.tree(head), git.tree(cursor)
+        need(set(current) == set(start) and all(current[p] == start[p] for p in current if p not in data_paths), 'RUNTIME_CI_SUCCESSOR_CODE_CHANGED')
+        return cursor, chain
     if git.parents(cursor) == [PUBLICATION_CI_REPAIR_BASE]:
         validate_publication_ci_repair(git, cursor)
         current, start = git.tree(head), git.tree(cursor)
@@ -852,6 +894,7 @@ def bootstrap(git, head):
         need(git.parents(zod_root) == [ZOD_BASE], 'LINEAGE_FIRST_PARENT_EPOCH')
     else:
         previous_root, _ = bootstrap(git, entry['parent'])
+        need(git.parents(previous_root) != [RUNTIME_CI_BASE], 'RUNTIME_CI_DATA_SUCCESSORS_ONLY')
         need(git.parents(previous_root) != [PUBLICATION_CI_REPAIR_BASE], 'PUBLICATION_CI_REPAIR_DATA_SUCCESSORS_ONLY')
         need(git.parents(previous_root) != [PUBLICATION_CLOSURE_BASE], 'PUBLICATION_DATA_SUCCESSORS_ONLY')
         need(git.parents(previous_root) != [CI_REPAIR_BASE], 'CI_REPAIR_DATA_SUCCESSORS_ONLY')
@@ -874,6 +917,8 @@ def reconciled_report_hashes(git, head):
                       stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL).returncode != 0:
         return {}
     root, _ = bootstrap(git, head)
+    if git.parents(root) == [RUNTIME_CI_BASE]:
+        return reconciled_report_hashes(git, RUNTIME_CI_BASE)
     if git.parents(root) == [PUBLICATION_CI_REPAIR_BASE]:
         return reconciled_report_hashes(git, PUBLICATION_CI_REPAIR_BASE)
     if git.parents(root) == [PUBLICATION_CLOSURE_BASE]:
@@ -1196,6 +1241,7 @@ def admit(git, api, env, event):
     need(evidence['head_sha'] == BASE and evidence['producer_run_id'] == 39432688384 and evidence['source_sha'] == OLD, 'BOOTSTRAP_DATA_IDENTITY')
     validate_data(git, BASE, OLD, evidence['metadata_objects'])
     if not chain:
+        runtime_root = git.parents(root) == [RUNTIME_CI_BASE]
         publication_ci_repair_root = git.parents(root) == [PUBLICATION_CI_REPAIR_BASE]
         closure_root = git.parents(root) == [PUBLICATION_CLOSURE_BASE]
         repair_root = git.parents(root) == [CI_REPAIR_BASE]
@@ -1207,15 +1253,22 @@ def admit(git, api, env, event):
         zod_root = git.parents(root) == [ZOD_BASE]
         lineage = lineage_entry(git, root)
         lineage_root = lineage is not None
-        expected_before = PUBLICATION_CI_REPAIR_BASE if publication_ci_repair_root else PUBLICATION_CLOSURE_BASE if closure_root else CI_REPAIR_BASE if repair_root else lineage['editorial']['sha'] if lineage_root else ZOD_BASE if zod_root else DURABILITY_BASE if durability_root else REPORT_CONTRACT_BASE if report_root else CAPTURE_RECOVERY_BASE if capture_root else SECURITY_BASE if security_root else REMOTE_BEFORE_RECONCILIATION if daily_root else BASE
+        expected_before = RUNTIME_CI_BASE if runtime_root else PUBLICATION_CI_REPAIR_BASE if publication_ci_repair_root else PUBLICATION_CLOSURE_BASE if closure_root else CI_REPAIR_BASE if repair_root else lineage['editorial']['sha'] if lineage_root else ZOD_BASE if zod_root else DURABILITY_BASE if durability_root else REPORT_CONTRACT_BASE if report_root else CAPTURE_RECOVERY_BASE if capture_root else SECURITY_BASE if security_root else REMOTE_BEFORE_RECONCILIATION if daily_root else BASE
         need(env['GITHUB_EVENT_NAME'] == 'push' and event['before'] == expected_before and event['after'] == head and event['ref'] == 'refs/heads/' + BRANCH and not event['forced'] and not event['deleted'] and not event['created'], 'BOOTSTRAP_EVENT')
-        if publication_ci_repair_root or closure_root or repair_root or daily_root or security_root or capture_root or report_root or durability_root or zod_root or lineage_root:
+        if runtime_root or publication_ci_repair_root or closure_root or repair_root or daily_root or security_root or capture_root or report_root or durability_root or zod_root or lineage_root:
             recent_bytes = git.blob(root, CURRENT_DATA_EVIDENCE)
             need(digest(recent_bytes) == CURRENT_DATA_EVIDENCE_SHA256, 'CURRENT_DATA_EVIDENCE_PIN')
             recent = unique_json(recent_bytes)
             need(recent['published_sha'] == REMOTE_BEFORE_RECONCILIATION and recent['producer_run_id'] == 39791362129 and recent['producer_attempt'] == 1, 'CURRENT_DATA_EVIDENCE_IDENTITY')
             validate_data(git, recent['published_sha'], recent['source_sha'], recent['metadata_objects'])
-            if publication_ci_repair_root:
+            if runtime_root:
+                mode, details = 'EXACT_CI_RUNTIME_RECOVERY_BOOTSTRAP', {
+                    'remote_before': RUNTIME_CI_BASE, 'unqualified_run_id': 43760999722, 'unqualified_attempts': [1, 2],
+                    'parent_hosted_ci': 'NOT_QUALIFIED_NOT_REUSED', 'candidate_hosted_ci': 'REQUIRED_NOT_YET_CERTIFIED',
+                    'new_hosted_qualification_required': True, 'daily_successors_require_exact_parent_ci': True,
+                    'data_preservation': 'EXACT_82_PATHS', 'historical_subject_unchanged': True,
+                    'release_authority_issued': False}
+            elif publication_ci_repair_root:
                 mode, details = 'EXACT_PUBLICATION_CI_REPAIR_BOOTSTRAP', {
                     'remote_before': PUBLICATION_CI_REPAIR_BASE, 'failed_run_id': 43753556930,
                     'parent_hosted_ci': 'FAILED_NOT_REUSED', 'candidate_hosted_ci': 'REQUIRED_NOT_YET_CERTIFIED',

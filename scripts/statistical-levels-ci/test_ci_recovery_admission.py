@@ -34,6 +34,8 @@ class CIRecoveryTests(unittest.TestCase):
         f.git = a.Git(f.repo)
         f.env = lineage.identity_env({**os.environ, 'GIT_INDEX_FILE': str(directory / 'index')}, a.CI_REPAIR_IDENTITY)
         cls.root, _ = a.bootstrap(f.git, a.Git(ROOT).text('rev-parse', 'HEAD'))
+        if f.git.parents(cls.root) == [a.RUNTIME_CI_BASE]:
+            cls.root = a.RUNTIME_CI_BASE
         if f.git.parents(cls.root) == [a.PUBLICATION_CI_REPAIR_BASE]:
             cls.root = a.PUBLICATION_CI_REPAIR_BASE
         if f.git.parents(cls.root) == [a.PUBLICATION_CLOSURE_BASE]:
