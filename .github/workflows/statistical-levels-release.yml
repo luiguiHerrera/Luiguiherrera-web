@@ -1,6 +1,10 @@
 # Identity-critical bootstrap. No release target is selected until an explicit fixed operation passes all gates.
 name: Statistical Levels controlled release
 on:
+  workflow_run:
+    workflows: [CI]
+    types: [completed]
+    branches: [vercel-deployment]
   workflow_dispatch:
     inputs:
       operation:
@@ -30,6 +34,10 @@ on:
         default: ''
       previous_publication_date:
         description: Certified previous daily marker date UTC; leave empty for baseline adoption
+        type: string
+        default: ''
+      resume_production_deployment_id:
+        description: Existing Production deployment to observe and certify only; never create another build
         type: string
         default: ''
       probe_git_sha:
@@ -71,7 +79,7 @@ jobs:
       - name: Verify frozen helper bytes before executing any helper
         working-directory: scripts/statistical-levels-release
         env:
-          EXPECTED_SOURCE_SUMS: a835a3535f48af7cd5b17d620dc358c648af198a8ef52879b620c0a70ec4d8a2
+          EXPECTED_SOURCE_SUMS: 35f147acfccf992a81229fdd974db16135622005157feb1317bc4867c680396e
         run: |
           printf '%s  SOURCE_SHA256SUMS\n' "$EXPECTED_SOURCE_SUMS" | sha256sum --check --strict
           sha256sum --check --strict SOURCE_SHA256SUMS
@@ -145,6 +153,8 @@ jobs:
         run: |
           [[ "$QA_SHA256" =~ ^[a-f0-9]{64}$ ]]
   invoke-controller:
+    outputs:
+      production_stage: ${{ steps.controller.outputs.production_stage }}
     name: Statistical Levels release controller
     needs: [candidate-qa, seal-qa]
     if: (inputs.operation == 'ADOPT_EXISTING_PRODUCTION_BASELINE' || inputs.operation == 'PROMOTE_EXACT_STATISTICAL_LEVELS_CANDIDATE') && needs.candidate-qa.result == 'success' && needs.seal-qa.result == 'success' && github.repository == 'luiguiHerrera/Luiguiherrera-web' && github.ref == 'refs/heads/vercel-deployment'
@@ -166,7 +176,7 @@ jobs:
       - name: Verify frozen helper bytes before executing any helper
         working-directory: scripts/statistical-levels-release
         env:
-          EXPECTED_SOURCE_SUMS: a835a3535f48af7cd5b17d620dc358c648af198a8ef52879b620c0a70ec4d8a2
+          EXPECTED_SOURCE_SUMS: 35f147acfccf992a81229fdd974db16135622005157feb1317bc4867c680396e
         run: |
           printf '%s  SOURCE_SHA256SUMS\n' "$EXPECTED_SOURCE_SUMS" | sha256sum --check --strict
           sha256sum --check --strict SOURCE_SHA256SUMS
@@ -196,6 +206,8 @@ jobs:
           inline-session-policy: '{"Version":"2012-10-17","Statement":[{"Effect":"Allow","Action":"lambda:InvokeFunction","Resource":"arn:aws:lambda:eu-south-2:732159826922:function:statistical-levels-vercel-release-controller"}]}'
       - name: Invoke the exact controller once; no direct promotion or automatic retry
         id: controller
+        env:
+          SL_RELEASE_STAGE: start
         run: node scripts/statistical-levels-release/scripts/invoke.mjs
       - name: Retain bounded controller failure diagnostics; never a G5 receipt
         if: failure() && steps.controller.outcome == 'failure' && steps.controller.outputs.controller_failure_diagnostic_ready == 'true'
@@ -217,6 +229,247 @@ jobs:
           if-no-files-found: error
           include-hidden-files: false
           overwrite: false
+  production-qa:
+    name: Statistical Levels exact Production QA
+    needs: [candidate-qa, invoke-controller]
+    if: inputs.operation == 'PROMOTE_EXACT_STATISTICAL_LEVELS_CANDIDATE' && needs.invoke-controller.result == 'success'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 40
+    permissions:
+      contents: read
+      id-token: write
+      checks: write
+    outputs:
+      production_stage: ${{ steps.observe.outputs.production_stage }}
+      production_envelope: ${{ steps.production.outputs.production_envelope }}
+      production_check_id: ${{ steps.production.outputs.production_check_id }}
+      production_payload_sha256: ${{ steps.production.outputs.production_payload_sha256 }}
+    steps:
+      - name: Check out execution source B
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+          fetch-depth: 1
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38
+        with:
+          node-version: '22.23.2'
+          package-manager-cache: false
+      - name: Verify frozen helper bytes before executing any helper
+        working-directory: scripts/statistical-levels-release
+        env:
+          EXPECTED_SOURCE_SUMS: 35f147acfccf992a81229fdd974db16135622005157feb1317bc4867c680396e
+        run: |
+          printf '%s  SOURCE_SHA256SUMS\n' "$EXPECTED_SOURCE_SUMS" | sha256sum --check --strict
+          sha256sum --check --strict SOURCE_SHA256SUMS
+      - name: Independently verify execution identity and selected target ancestry
+        id: identity
+        run: node scripts/statistical-levels-release/scripts/cli.mjs preflight
+      - name: Check out verified Production baseline or explicitly selected future candidate
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+        with:
+          ref: ${{ steps.identity.outputs.candidate_sha }}
+          path: .release-candidate
+          persist-credentials: false
+          fetch-depth: 1
+      - name: Install locked QA dependencies without lifecycle scripts
+        run: |
+          npm ci --prefix .release-candidate --ignore-scripts --no-audit --no-fund --userconfig=/dev/null --registry=https://registry.npmjs.org
+          npm ci --prefix scripts/statistical-levels-release/qa-dependencies --ignore-scripts --no-audit --no-fund --userconfig=/dev/null --registry=https://registry.npmjs.org
+          node scripts/statistical-levels-release/qa-dependencies/node_modules/playwright/cli.js install --with-deps chromium
+      - name: Prepare exact read-only continuation request
+        env:
+          SL_JOB_WORKFLOW_REF: ${{ job.workflow_ref }}
+          SL_JOB_WORKFLOW_SHA: ${{ job.workflow_sha }}
+          SL_JOB_WORKFLOW_REPOSITORY: ${{ job.workflow_repository }}
+          SL_JOB_WORKFLOW_FILE_PATH: ${{ job.workflow_file_path }}
+          SL_QA_ENVELOPE: ${{ needs.candidate-qa.outputs.qa_envelope }}
+          SL_QA_PAYLOAD_SHA256: ${{ needs.candidate-qa.outputs.qa_payload_sha256 }}
+        run: node scripts/statistical-levels-release/scripts/cli.mjs prepare-invocation
+      - name: Assume only dedicated Lambda invoker
+        uses: aws-actions/configure-aws-credentials@cbe3b392738ccf3f987d68400dafcf4b0624a56c
+        with:
+          aws-region: eu-south-2
+          role-to-assume: arn:aws:iam::732159826922:role/LuiguiHerreraStatisticalLevelsReleaseInvoker
+          audience: sts.amazonaws.com
+          allowed-account-ids: '732159826922'
+          role-session-name: sl-release-${{ github.run_id }}
+          role-duration-seconds: 1800
+          unset-current-credentials: true
+          use-existing-credentials: false
+          output-credentials: false
+          disable-retry: true
+          action-timeout-s: 60
+          inline-session-policy: '{"Version":"2012-10-17","Statement":[{"Effect":"Allow","Action":"lambda:InvokeFunction","Resource":"arn:aws:lambda:eu-south-2:732159826922:function:statistical-levels-vercel-release-controller"}]}'
+      - name: Observe only the registered Production build; never rebuild
+        id: observe
+        env:
+          SL_RELEASE_STAGE: observe
+          SL_PRODUCTION_STAGE: ${{ needs.invoke-controller.outputs.production_stage }}
+        run: node scripts/statistical-levels-release/scripts/invoke.mjs
+      - name: Run public Production QA and seal its real Check
+        id: production
+        env:
+          GH_TOKEN: ${{ github.token }}
+          SL_PRODUCTION_STAGE: ${{ steps.observe.outputs.production_stage }}
+          SL_JOB_WORKFLOW_REF: ${{ job.workflow_ref }}
+          SL_JOB_WORKFLOW_SHA: ${{ job.workflow_sha }}
+          SL_JOB_WORKFLOW_REPOSITORY: ${{ job.workflow_repository }}
+          SL_JOB_WORKFLOW_FILE_PATH: ${{ job.workflow_file_path }}
+          SL_QA_ENVELOPE: ${{ needs.candidate-qa.outputs.qa_envelope }}
+          SL_QA_PAYLOAD_SHA256: ${{ needs.candidate-qa.outputs.qa_payload_sha256 }}
+        run: node scripts/statistical-levels-release/scripts/cli.mjs production-qa
+      - name: Retain exact Production QA evidence even on failure
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+        with:
+          name: statistical-levels-production-qa
+          path: |
+            ${{ runner.temp }}/statistical-levels-production-qa/*.json
+            ${{ runner.temp }}/statistical-levels-production-qa/*.jsonl
+            ${{ runner.temp }}/statistical-levels-controller-response.json
+          retention-days: 90
+          if-no-files-found: warn
+          overwrite: false
+  seal-production-qa:
+    name: statistical-levels-production-qa-sha256-${{ needs.production-qa.outputs.production_payload_sha256 }}
+    needs: production-qa
+    if: inputs.operation == 'PROMOTE_EXACT_STATISTICAL_LEVELS_CANDIDATE' && needs.production-qa.result == 'success'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 2
+    permissions: {}
+    steps:
+      - name: Bind actual successful Production QA to its digest
+        env:
+          HASH: ${{ needs.production-qa.outputs.production_payload_sha256 }}
+        run: '[[ "$HASH" =~ ^[a-f0-9]{64}$ ]]'
+  certify-production:
+    name: Statistical Levels publication certification
+    needs: [candidate-qa, production-qa, seal-production-qa]
+    if: inputs.operation == 'PROMOTE_EXACT_STATISTICAL_LEVELS_CANDIDATE' && needs.production-qa.result == 'success' && needs.seal-production-qa.result == 'success'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    permissions:
+      contents: read
+      id-token: write
+      checks: write
+    outputs:
+      publication_state: ${{ steps.certify.outputs.publication_state }}
+      marker_sha256: ${{ steps.certify.outputs.marker_sha256 }}
+    steps:
+      - name: Check out execution source B
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+          fetch-depth: 1
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38
+        with:
+          node-version: '22.23.2'
+          package-manager-cache: false
+      - name: Verify frozen helper bytes before executing any helper
+        working-directory: scripts/statistical-levels-release
+        env:
+          EXPECTED_SOURCE_SUMS: 35f147acfccf992a81229fdd974db16135622005157feb1317bc4867c680396e
+        run: |
+          printf '%s  SOURCE_SHA256SUMS\n' "$EXPECTED_SOURCE_SUMS" | sha256sum --check --strict
+          sha256sum --check --strict SOURCE_SHA256SUMS
+      - name: Bind completed Production Check to the original promotion
+        env:
+          SL_JOB_WORKFLOW_REF: ${{ job.workflow_ref }}
+          SL_JOB_WORKFLOW_SHA: ${{ job.workflow_sha }}
+          SL_JOB_WORKFLOW_REPOSITORY: ${{ job.workflow_repository }}
+          SL_JOB_WORKFLOW_FILE_PATH: ${{ job.workflow_file_path }}
+          SL_QA_ENVELOPE: ${{ needs.candidate-qa.outputs.qa_envelope }}
+          SL_QA_PAYLOAD_SHA256: ${{ needs.candidate-qa.outputs.qa_payload_sha256 }}
+          SL_PRODUCTION_STAGE: ${{ needs.production-qa.outputs.production_stage }}
+          SL_PRODUCTION_ENVELOPE: ${{ needs.production-qa.outputs.production_envelope }}
+          SL_PRODUCTION_CHECK_ID: ${{ needs.production-qa.outputs.production_check_id }}
+        run: node scripts/statistical-levels-release/scripts/cli.mjs prepare-certification
+      - name: Assume only dedicated Lambda invoker
+        uses: aws-actions/configure-aws-credentials@cbe3b392738ccf3f987d68400dafcf4b0624a56c
+        with:
+          aws-region: eu-south-2
+          role-to-assume: arn:aws:iam::732159826922:role/LuiguiHerreraStatisticalLevelsReleaseInvoker
+          audience: sts.amazonaws.com
+          allowed-account-ids: '732159826922'
+          role-session-name: sl-release-${{ github.run_id }}
+          role-duration-seconds: 1800
+          unset-current-credentials: true
+          use-existing-credentials: false
+          output-credentials: false
+          disable-retry: true
+          action-timeout-s: 60
+          inline-session-policy: '{"Version":"2012-10-17","Statement":[{"Effect":"Allow","Action":"lambda:InvokeFunction","Resource":"arn:aws:lambda:eu-south-2:732159826922:function:statistical-levels-vercel-release-controller"}]}'
+      - name: Certify existing Production once; no new promotion
+        id: certify
+        env:
+          SL_RELEASE_STAGE: certify
+        run: node scripts/statistical-levels-release/scripts/invoke.mjs
+      - name: Publish exact PUBLISHED receipt Check
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: node scripts/statistical-levels-release/scripts/cli.mjs seal-publication
+      - name: Retain publication or failure receipt
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+        with:
+          name: statistical-levels-published-receipt
+          path: |
+            ${{ runner.temp }}/statistical-levels-published-receipt.json
+            ${{ runner.temp }}/statistical-levels-controller-response.json
+            ${{ runner.temp }}/statistical-levels-controller-failure.json
+          retention-days: 90
+          if-no-files-found: warn
+          overwrite: false
+  publication-result:
+    name: statistical-levels-published-sha256-${{ needs.certify-production.outputs.marker_sha256 }}
+    needs: [invoke-controller, production-qa, certify-production]
+    if: always() && inputs.operation == 'PROMOTE_EXACT_STATISTICAL_LEVELS_CANDIDATE'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 2
+    permissions: {}
+    steps:
+      - name: Refuse every incomplete or uncertified publication
+        env:
+          INVOCATION: ${{ needs.invoke-controller.result }}
+          PRODUCTION_QA: ${{ needs.production-qa.result }}
+          CERTIFICATION: ${{ needs.certify-production.result }}
+          STATE: ${{ needs.certify-production.outputs.publication_state }}
+        run: |
+          [[ "$INVOCATION" == success && "$PRODUCTION_QA" == success && "$CERTIFICATION" == success && "$STATE" == PUBLISHED ]]
+  daily-dispatch:
+    name: Disabled until Founder activation after first PUBLISHED
+    if: github.event_name == 'workflow_run' && github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.workflow_id == 336203586 && vars.SL_DAILY_PUBLICATION == 'APPROVED_AFTER_FIRST_PUBLISHED' && vars.SL_FIRST_PUBLISHED_CHECK_ID != ''
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    permissions:
+      contents: read
+      actions: write
+    steps:
+      - name: Check out execution source B
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+          fetch-depth: 1
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38
+        with:
+          node-version: '22.23.2'
+          package-manager-cache: false
+      - name: Verify frozen helper bytes before executing any helper
+        working-directory: scripts/statistical-levels-release
+        env:
+          EXPECTED_SOURCE_SUMS: 35f147acfccf992a81229fdd974db16135622005157feb1317bc4867c680396e
+        run: |
+          printf '%s  SOURCE_SHA256SUMS\n' "$EXPECTED_SOURCE_SUMS" | sha256sum --check --strict
+          sha256sum --check --strict SOURCE_SHA256SUMS
+      - name: Dispatch one exact certified daily candidate
+        env:
+          GH_TOKEN: ${{ github.token }}
+          SL_DAILY_PUBLICATION: ${{ vars.SL_DAILY_PUBLICATION }}
+          SL_FIRST_PUBLISHED_CHECK_ID: ${{ vars.SL_FIRST_PUBLISHED_CHECK_ID }}
+        run: node scripts/statistical-levels-release/scripts/cli.mjs daily-dispatch
   identity-probe:
     name: Statistical Levels non-release identity probe
     if: inputs.operation == 'PROBE_IDENTITY' && github.repository == 'luiguiHerrera/Luiguiherrera-web' && github.ref == 'refs/heads/vercel-deployment'
@@ -240,7 +493,7 @@ jobs:
         id: source_integrity
         working-directory: scripts/statistical-levels-release
         env:
-          EXPECTED_SOURCE_SUMS: a835a3535f48af7cd5b17d620dc358c648af198a8ef52879b620c0a70ec4d8a2
+          EXPECTED_SOURCE_SUMS: 35f147acfccf992a81229fdd974db16135622005157feb1317bc4867c680396e
         run: |
           printf '%s  SOURCE_SHA256SUMS\n' "$EXPECTED_SOURCE_SUMS" | sha256sum --check --strict
           sha256sum --check --strict SOURCE_SHA256SUMS
@@ -299,7 +552,7 @@ jobs:
         if: always() && steps.source_integrity.outcome == 'success'
         working-directory: scripts/statistical-levels-release
         env:
-          EXPECTED_SOURCE_SUMS: a835a3535f48af7cd5b17d620dc358c648af198a8ef52879b620c0a70ec4d8a2
+          EXPECTED_SOURCE_SUMS: 35f147acfccf992a81229fdd974db16135622005157feb1317bc4867c680396e
           PROBE_RESOLVE_OUTCOME: ${{ steps.resolve.outcome }}
           PROBE_QA_OUTCOME: ${{ steps.qa.outcome }}
           PROBE_AWS_ASSUME_OUTCOME: ${{ steps.aws_assume.outcome }}

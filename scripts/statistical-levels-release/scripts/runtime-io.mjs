@@ -2,7 +2,7 @@ import fs from 'node:fs/promises';
 import path from 'node:path';
 import { execFileSync } from 'node:child_process';
 import { P, need, canonical, sha, resolvePreview, validateRun, requestFor, validateControllerRequest,
-  validateRunMetadata, validateAncestry, validateAttestation, selectTarget, ADOPT, validateQAAge } from './release-core.mjs';
+  validateRunMetadata, validateAncestry, validateAttestation, selectTarget, ADOPT, PROMOTE, validateQAAge, productionTarget, certificationRequest } from './release-core.mjs';
 
 import { evaluateProbeOIDC } from './probe-oidc.mjs';
 
@@ -12,7 +12,7 @@ export const candidateRoot = path.join(codeRoot, '.release-candidate');
 export const execution = (env = process.env) => ({ id: env.GITHUB_RUN_ID, attempt: env.GITHUB_RUN_ATTEMPT, execution_sha: env.GITHUB_SHA });
 export function git(...args) { return execFileSync('git', args, { cwd: codeRoot, stdio: ['ignore', 'pipe', 'pipe'] }); }
 export async function github(relative) {
-  need([/^\/actions\/runs\/[1-9][0-9]*(?:\/attempts\/[1-9][0-9]*\/jobs\?per_page=100)?$/, /^\/git\/ref\/heads\/vercel-deployment$/, /^\/compare\/[a-f0-9]{40}\.\.\.[a-f0-9]{40}\?per_page=1$/, /^\/deployments\?sha=[a-f0-9]{40}&per_page=100$/, /^\/deployments\/[1-9][0-9]*\/statuses\?per_page=100$/, /^\/commits\/[a-f0-9]{40}\/statuses\?per_page=100$/].some(pattern => pattern.test(relative)), 'GITHUB_PATH');
+  need([/^\/check-runs\/[1-9][0-9]*$/, /^\/commits\/[a-f0-9]{40}\/check-runs\?check_name=statistical-levels-published&per_page=100$/, /^\/commits\/[a-f0-9]{40}$/, /^\/actions\/runs\/[1-9][0-9]*(?:\/attempts\/[1-9][0-9]*\/jobs\?per_page=100)?$/, /^\/git\/ref\/heads\/vercel-deployment$/, /^\/compare\/[a-f0-9]{40}\.\.\.[a-f0-9]{40}\?per_page=1$/, /^\/deployments\?sha=[a-f0-9]{40}&per_page=100$/, /^\/deployments\/[1-9][0-9]*\/statuses\?per_page=100$/, /^\/commits\/[a-f0-9]{40}\/statuses\?per_page=100$/].some(pattern => pattern.test(relative)), 'GITHUB_PATH');
   const response = await fetch('https://api.github.com/repos/' + P.repository + relative, {
     method: 'GET', redirect: 'error', signal: AbortSignal.timeout(30000),
     headers: { Accept: 'application/vnd.github+json', 'X-GitHub-Api-Version': '2022-11-28' } });
@@ -99,9 +99,112 @@ export async function prepareInvocation(env = process.env) {
   const jobs = await github('/actions/runs/' + run.id + '/attempts/' + run.attempt + '/jobs?per_page=100');
   const request = requestFor(envelope, jobs, run, frozen.workflow_sha256, frozen.target);
   await oidc(P.aws_audience, env); // Validate actual default subject before assuming the dedicated role.
+  if (frozen.target.resume_production_deployment_id) request.observe_production_deployment_id = frozen.target.resume_production_deployment_id;
+  validateControllerRequest(request);
   return request;
 }
 export async function writeRequest(request, destination) {
   validateControllerRequest(request);
   await fs.writeFile(destination, canonical(request), { mode: 0o600 });
+}
+
+export async function githubWrite(endpoint, body, env = process.env) {
+  need(endpoint === '/check-runs' || endpoint === '/actions/workflows/353998515/dispatches', 'GITHUB_WRITE_ENDPOINT');
+  need(typeof env.GH_TOKEN === 'string' && env.GH_TOKEN.length > 0, 'GITHUB_JOB_TOKEN_REQUIRED');
+  // No retries: an ambiguous mutation requires inspection of its existing result.
+  const response = await fetch('https://api.github.com/repos/' + P.repository + endpoint, {
+    method:'POST', redirect:'error', signal:AbortSignal.timeout(30000),
+    headers:{Accept:'application/vnd.github+json','X-GitHub-Api-Version':'2022-11-28',
+      Authorization:'Bearer ' + env.GH_TOKEN,'Content-Type':'application/json'},body:canonical(body)});
+  need(response.status === (endpoint === '/check-runs' ? 201 : 204), 'GITHUB_WRITE_NOT_CONFIRMED_NO_RETRY');
+  return response.status === 204 ? null : response.json();
+}
+
+export async function createEvidenceCheck(name, payload, env = process.env) {
+  need(['statistical-levels-production-qa','statistical-levels-published'].includes(name), 'EVIDENCE_CHECK_NAME');
+  const text=canonical(payload).toString(); need(text.length < 60000, 'EVIDENCE_CHECK_SIZE');
+  const check = await githubWrite('/check-runs',{name,head_sha:env.GITHUB_SHA,external_id:env.GITHUB_RUN_ID,
+    status:'completed',conclusion:'success',completed_at:new Date().toISOString(),
+    output:{title:name,summary:'Exact controlled release evidence; see canonical payload.',text}},env);
+  need(check.app?.slug === 'github-actions' && check.name === name && check.head_sha === env.GITHUB_SHA &&
+    check.external_id === env.GITHUB_RUN_ID && check.conclusion === 'success' && check.output?.text === text, 'EVIDENCE_CHECK_READBACK');
+  return check;
+}
+
+export async function runProductionQA(env = process.env) {
+  const frozen=await assertWorkflow(env), run=execution(env);
+  const observed=JSON.parse(env.SL_PRODUCTION_STAGE);
+  const inputManifest=JSON.parse(await fs.readFile(path.join(packageRoot,'source-inputs.json'),'utf8'));
+  const {verifyInputs,runCandidateQA}=await import('./preview-qa.mjs');
+  const authority=await verifyInputs(candidateRoot,inputManifest,frozen.target);
+  const target=productionTarget(frozen.target,authority,observed);
+  const out=path.join(env.RUNNER_TEMP,'statistical-levels-production-qa');
+  const report=await runCandidateQA({target,out,codeRoot:candidateRoot,inputManifest});
+  const {attest}=await import('./release-core.mjs');
+  const envelope=attest(report,run,target,frozen.workflow_sha256,new Date().toISOString());
+  need(Date.parse(envelope.timestamp) >= observed.ready_at_ms, 'QA_BEFORE_PRODUCTION_READY');
+  await fs.writeFile(path.join(out,'qa-attestation.json'),canonical(envelope),{mode:0o600});
+  const check=await createEvidenceCheck('statistical-levels-production-qa',envelope.controller_payload,env);
+  await fs.appendFile(env.GITHUB_OUTPUT,'production_envelope='+canonical(envelope).toString()+'\nproduction_check_id='+check.id+'\nproduction_payload_sha256='+envelope.controller_payload_sha256+'\n');
+}
+
+export async function prepareCertification(env = process.env) {
+  const frozen=await assertWorkflow(env), preview=await prepareInvocation(env);
+  delete preview.observe_production_deployment_id;
+  need(/^[1-9][0-9]*$/.test(env.SL_PRODUCTION_CHECK_ID ?? ''), 'PRODUCTION_CHECK_ID');
+  return certificationRequest(preview,JSON.parse(env.SL_PRODUCTION_ENVELOPE),
+    await github('/check-runs/'+env.SL_PRODUCTION_CHECK_ID),execution(env),frozen.workflow_sha256,JSON.parse(env.SL_PRODUCTION_STAGE));
+}
+
+export async function sealPublication(env = process.env) {
+  const frozen=await assertWorkflow(env);
+  const receipt=JSON.parse(await fs.readFile(path.join(env.RUNNER_TEMP,'statistical-levels-published-receipt.json'),'utf8'));
+  need(receipt.state === 'PUBLISHED' && receipt.execution_sha === env.GITHUB_SHA && receipt.id === env.GITHUB_RUN_ID &&
+    receipt.workflow_sha256 === frozen.workflow_sha256 && receipt.candidate_git_sha === frozen.target.candidate_git_sha &&
+    /^[a-f0-9]{64}$/.test(receipt.marker_sha256), 'PUBLICATION_RECEIPT_BINDING');
+  await createEvidenceCheck('statistical-levels-published',receipt,env);
+}
+
+export async function dispatchCertifiedDaily(env = process.env) {
+  const {validateDailyCI,publishedCheck}=await import('./release-core.mjs');
+  need(env.SL_DAILY_PUBLICATION === 'APPROVED_AFTER_FIRST_PUBLISHED' && /^[1-9][0-9]*$/.test(env.SL_FIRST_PUBLISHED_CHECK_ID ?? ''), 'DAILY_PUBLICATION_DISABLED');
+  need(env.GITHUB_EVENT_NAME === 'workflow_run' && env.GITHUB_REF === 'refs/heads/'+P.branch && env.GITHUB_REPOSITORY === P.repository, 'DAILY_TRIGGER');
+  const event=JSON.parse(await fs.readFile(env.GITHUB_EVENT_PATH,'utf8'));
+  need(event.action === 'completed' && event.workflow_run?.workflow_id === 336203586 && event.workflow_run.head_sha === env.GITHUB_SHA, 'DAILY_EVENT_SHA');
+  const frozen=JSON.parse(await fs.readFile(path.join(packageRoot,'workflow-freeze.json'),'utf8'));
+  need(sha(git('show',env.GITHUB_SHA+':'+P.workflow_path)) === frozen.workflow_sha256, 'DAILY_WORKFLOW_FREEZE');
+  const ci=await github('/actions/runs/'+event.workflow_run.id);
+  validateDailyCI(ci,await github('/actions/runs/'+ci.id+'/attempts/'+ci.run_attempt+'/jobs?per_page=100'),env.GITHUB_SHA);
+  const proof=await github('/check-runs/'+env.SL_FIRST_PUBLISHED_CHECK_ID);
+  const first=await verifiedPublished(proof,frozen.workflow_sha256);
+  validateAncestry(await github('/compare/'+first.candidate_git_sha+'...'+env.GITHUB_SHA+'?per_page=1'),env.GITHUB_SHA,first.candidate_git_sha);
+  const commit=await github('/commits/'+env.GITHUB_SHA);
+  need(commit.sha === env.GITHUB_SHA && commit.parents.length === 1, 'DAILY_SINGLE_PARENT');
+  const parent=commit.parents[0].sha;
+  const checks=await github('/commits/'+parent+'/check-runs?check_name=statistical-levels-published&per_page=100');
+  need(checks.total_count === checks.check_runs.length && checks.total_count === 1, 'DAILY_PREDECESSOR_CERTIFICATE');
+  const previous=await verifiedPublished(checks.check_runs[0],frozen.workflow_sha256);
+  const statuses=await github('/commits/'+env.GITHUB_SHA+'/statuses?per_page=100');
+  need(Array.isArray(statuses) && statuses.length < 100, 'DAILY_PREVIEW_STATUS');
+  const status=statuses.filter(s=>s.context === 'Vercel').sort((a,b)=>b.id-a.id)[0];
+  need(status?.state === 'success' && status.target_url?.startsWith(P.vercel_details_base_url), 'DAILY_PREVIEW_NOT_READY');
+  const inputs={operation:PROMOTE,candidate_git_sha:env.GITHUB_SHA,
+    candidate_deployment_id:'dpl_'+status.target_url.slice(P.vercel_details_base_url.length),
+    expected_previous_production_sha:previous.candidate_git_sha,
+    expected_previous_production_deployment:previous.production_deployment_id,previous_publication_date:previous.publication_date};
+  await deployment(selectTarget(inputs)); // Existing full GitHub/Vercel Preview binding.
+  need((await github('/git/ref/heads/'+P.branch)).object.sha === env.GITHUB_SHA, 'DAILY_REF_MOVED');
+  await githubWrite('/actions/workflows/353998515/dispatches',{ref:P.branch,inputs},env);
+  process.stdout.write('DAILY_DISPATCH_ACCEPTED_UNCERTIFIED\n');
+}
+
+async function verifiedPublished(check, workflowHash) {
+  const {publishedCheck}=await import('./release-core.mjs');
+  need(/^[1-9][0-9]*$/.test(check.external_id ?? ''), 'PUBLISHED_RUN_ID');
+  const run=await github('/actions/runs/'+check.external_id);
+  need(/^[a-f0-9]{40}$/.test(run.head_sha), 'PUBLISHED_RUN_SHA');
+  const response=await fetch('https://raw.githubusercontent.com/'+P.repository+'/'+run.head_sha+'/'+P.workflow_path,
+    {redirect:'error',signal:AbortSignal.timeout(30000)});
+  need(response.ok && sha(Buffer.from(await response.arrayBuffer())) === workflowHash, 'PUBLISHED_WORKFLOW_BYTES');
+  return publishedCheck(check,run,workflowHash,await github('/actions/runs/'+run.id+'/attempts/'+run.run_attempt+'/jobs?per_page=100'));
 }

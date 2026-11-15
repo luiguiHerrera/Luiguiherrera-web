@@ -207,6 +207,8 @@ class LineageTransitionTests(unittest.TestCase):
         git = f.git
         head = a.Git(ROOT).text('rev-parse', 'HEAD')
         cls.root, _ = a.bootstrap(git, head)
+        if git.parents(cls.root) == [a.PUBLICATION_CLOSURE_BASE]:
+            cls.root = a.PUBLICATION_RECOVERY_ROOT
         if git.parents(cls.root) == [a.CI_REPAIR_BASE]:
             cls.root = a.CI_REPAIR_R1  # These unchanged models retain their historical lineage subject.
         cls.registry = a.lineage_registry(git, cls.root)

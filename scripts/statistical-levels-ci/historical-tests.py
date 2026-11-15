@@ -9,7 +9,7 @@ import os
 from pathlib import Path
 import subprocess
 import tempfile
-from admission import Git, OLD, need, digest, bootstrap, CAPTURE_RECOVERY_BASE, CAPTURE_RECOVERY_FILES, REPORT_CONTRACT_BASE, DURABILITY_BASE, ZOD_BASE, ZOD_FILES, lineage_entry, lineage_registry, CI_REPAIR_BASE
+from admission import Git, OLD, need, digest, bootstrap, CAPTURE_RECOVERY_BASE, CAPTURE_RECOVERY_FILES, REPORT_CONTRACT_BASE, DURABILITY_BASE, ZOD_BASE, ZOD_FILES, lineage_entry, lineage_registry, CI_REPAIR_BASE, PUBLICATION_CLOSURE_BASE, PUBLICATION_CLOSURE_FILES
 
 
 SECURITY_REUSE_ADDITIONS = {'package.json', 'package-lock.json',
@@ -37,6 +37,14 @@ def reuse_scope(git, head):
     # The old 261 cases retain OLD as their actual subject. Changed native
     # capture bytes are qualified by the new differential tests and live capture.
     root, _ = bootstrap(git, head)
+    if git.parents(root) == [PUBLICATION_CLOSURE_BASE]:
+        reused, changed = reuse_scope(git,PUBLICATION_CLOSURE_BASE)
+        affected = {p for p in PUBLICATION_CLOSURE_FILES if p.startswith('scripts/statistical-levels-release/')}
+        # Only the exact reviewed closure may add these exclusions. OLD remains
+        # the subject; changed code is exercised by native closure tests/QA.
+        before, after = git.tree(OLD), git.tree(root)
+        return reused - affected, {**changed, **{p:{'old_sha256':digest(git.blob(OLD,p)) if p in before else None,
+            'current_sha256':digest(git.blob(root,p))} for p in sorted(affected)}}
     if git.parents(root) == [CI_REPAIR_BASE]:
         # bootstrap froze every release/dependency byte at this exact parent.
         # Reuse remains about OLD, never a hosted qualification of R1 or this repair.

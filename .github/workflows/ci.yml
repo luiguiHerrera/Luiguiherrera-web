@@ -30,6 +30,7 @@ jobs:
       SL_CI_BOOTSTRAP_PAYLOAD_SHA256: "775521938439962eca0e3bc35f0d3303b2b1fafa0a3fc6a360b162b281f39c95"
       SL_CI_LINEAGE_PAYLOAD_SHA256: "671b71c95ef3019f886a6fc6dfab7c551ab1e9c96e52b266c1f096e2966201be"
       SL_CI_R1_REPAIR_PAYLOAD_SHA256: "2bec9239840ec032d4e2ff9b07d0f63a23ce2d6a97791624f086bd1bfc17387b"
+      SL_CI_PUBLICATION_CLOSURE_SHA256: "71d731bce3bd0a572cf7596c8d1fb7263ad3c7e91e9a6cabd35e8834c6ad2816"
 
     steps:
       - name: Checkout repository
@@ -622,7 +623,7 @@ jobs:
           manifest=unique(base/'source-manifest.json')
           tracked=subprocess.check_output(['git','ls-files','-z','scripts/statistical-levels-release/']).decode().rstrip('\0').split('\0')
           expected={str(Path(p).relative_to('scripts/statistical-levels-release')) for p in tracked}-{'SOURCE_SHA256SUMS','source-manifest.json','workflow-freeze.json'}
-          assert set(manifest)==expected and len(manifest)==110, 'BUNDLE_INVENTORY'
+          assert set(manifest)==expected and len(manifest)==111, 'BUNDLE_INVENTORY'
           for name,digest in manifest.items():
               p=Path(name); assert not p.is_absolute() and '..' not in p.parts
               assert all(not parent.is_symlink() for parent in [base/p,*(base/p).parents])
@@ -630,7 +631,7 @@ jobs:
           assert (base/'source-manifest.json').read_text()==json.dumps(dict(sorted(manifest.items())),indent=2)+'\n'
           sums={**manifest,'source-manifest.json':sha((base/'source-manifest.json').read_bytes())}
           canonical=''.join(v+'  '+p+'\n' for p,v in sorted(sums.items()))
-          assert len(sums)==111 and (base/'SOURCE_SHA256SUMS').read_text()==canonical, 'SOURCE_SUMS'
+          assert len(sums)==112 and (base/'SOURCE_SHA256SUMS').read_text()==canonical, 'SOURCE_SUMS'
           inputs=unique(base/'source-inputs.json'); assert len(inputs)==78
           assert sha((base/'probe-source-inputs.json').read_bytes())=='d7a8470700b59ed501502e96cc10cba3de8f79824847ed72706f9942c8473621'
           for name,digest in inputs.items():
@@ -639,7 +640,7 @@ jobs:
               assert sha((root/p).read_bytes())==digest, name
           workflow=(root/'.github/workflows/statistical-levels-release.yml').read_bytes()
           pins=re.findall(rb'EXPECTED_SOURCE_SUMS: ([a-f0-9]{64})',workflow)
-          assert len(pins)==4 and all(p.decode()==sha(canonical.encode()) for p in pins), 'WORKFLOW_PINS'
+          assert len(pins)==7 and all(p.decode()==sha(canonical.encode()) for p in pins), 'WORKFLOW_PINS'
           frozen=unique(base/'workflow-freeze.json')
           assert frozen['workflow_path']=='.github/workflows/statistical-levels-release.yml'
           assert frozen['workflow_sha256']==sha(workflow) and frozen['source_sums_sha256']==sha(canonical.encode()), 'FREEZE_PARITY'
@@ -776,7 +777,7 @@ jobs:
           if [[ -f "$CI_EVIDENCE/bounded-admission.json" ]]; then
             python3 scripts/statistical-levels-ci/historical-tests.py
             mapfile -t release_tests < <(find scripts/statistical-levels-release/tests -maxdepth 1 -name '*.test.mjs' ! -name 'probe-fixture-registry.test.mjs' ! -name 'g5-execution-preservation.test.mjs' | sort)
-            test "${#release_tests[@]}" -eq 39
+            test "${#release_tests[@]}" -eq 40
             node --test --test-concurrency=2 --test-reporter=tap "${release_tests[@]}" | tee "$CI_EVIDENCE/release.tap"
           else
             node --test --test-concurrency=2 --test-reporter=tap scripts/statistical-levels-release/tests/*.test.mjs | tee "$CI_EVIDENCE/release.tap"
@@ -829,7 +830,7 @@ jobs:
                   counters.append(counter)
                   source_sha=historical['test_source_sha'] if len(counters)==2 else os.environ['GITHUB_SHA']
                   partitions.append({'test_source_sha':source_sha,'log_sha256':hashlib.sha256(log.encode()).hexdigest(),'counts':counter,
-                      'test_files':2 if len(counters)==2 else (39 if name=='release' and len(texts)==2 else (41 if name=='release' else (4 if name=='reports' else 5)))})
+                      'test_files':2 if len(counters)==2 else (40 if name=='release' and len(texts)==2 else (42 if name=='release' else (4 if name=='reports' else 5)))})
               counts={key:sum(c[key] for c in counters) for key in counters[0]}
               text='\n'.join(texts)
               assert counts['tests']>=minimum and counts['fail']==counts['cancelled']==counts['todo']==0, (name,counts)
@@ -1087,7 +1088,7 @@ jobs:
                   for failure in ['identity','storage','partial','collision','readback','manifest','provenance','validation']:
                       assert len(re.findall(r'^ok \d+ - real adapter failure injection: '+failure+r'$',text,re.M))==1, 'STORAGE_CASE_NOT_EXECUTED'
               summary[name]={'counts':counts,'partitions':partitions,'explicit_local_only_or_nonapplicable_skips':skipped}
-          assert len(list((root/'scripts/statistical-levels-release/tests').glob('*.test.mjs')))==41
+          assert len(list((root/'scripts/statistical-levels-release/tests').glob('*.test.mjs')))==42
           before=json.loads((out/'before.json').read_text())
           paths=sorted(subprocess.check_output(['git','ls-files','-z']).decode().rstrip('\0').split('\0'))
           assert paths==sorted(before)

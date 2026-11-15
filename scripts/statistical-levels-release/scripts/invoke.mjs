@@ -2,7 +2,7 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import { execFileSync } from 'node:child_process';
-import { ADOPT, P, need, sha, canonical, validateControllerRequest, controllerOutcome } from './release-core.mjs';
+import { ADOPT, P, need, sha, canonical, validateControllerRequest, controllerOutcome, PROMOTE, promotionStage, publicationReceipt } from './release-core.mjs';
 import { adoptInvocationReceipt, nativeInvocationIdentity } from './adopt-invocation-receipt.mjs';
 // Failure diagnostics are not a G5 receipt and cannot authorize acceptance or retry.
 // Exact constants from deployed controller f223db... (decoded 8859882a...).
@@ -194,13 +194,21 @@ async function retainFailure(error) {
 try {
   const requestFile = path.join(process.env.RUNNER_TEMP, 'statistical-levels-release-request.json');
   const request = JSON.parse(await fs.readFile(requestFile, 'utf8'));
+  const releaseStage = process.env.SL_RELEASE_STAGE;
+  if (releaseStage === 'observe') {
+    const observed = JSON.parse(process.env.SL_PRODUCTION_STAGE); promotionStage(observed);
+    request.observe_production_deployment_id = observed.production_deployment_id;
+    await fs.writeFile(requestFile,canonical(request),{mode:0o600});
+  }
   validateControllerRequest(request);
+  if (request.operation === PROMOTE) need(['start','observe','certify'].includes(releaseStage) && (releaseStage === 'certify') === !!request.production_qa_attestation_id, 'INVOCATION_PHASE');
   need(process.env.AWS_REGION === 'eu-south-2' && process.env.AWS_SESSION_TOKEN, 'AWS_SESSION_REQUIRED');
   const output = path.join(process.env.RUNNER_TEMP, 'statistical-levels-controller-response.json');
   invocationStartedAt = new Date().toISOString();
   stage = 'AWS_TRANSPORT';
   invocationAttempted = true;
-  const metadataBytes = execFileSync('aws', ['lambda', 'invoke', '--function-name', P.lambda_arn,
+  for (let observation = 0; observation < (releaseStage === 'observe' ? 20 : 1); observation++) {
+    const metadataBytes = execFileSync('aws', ['lambda', 'invoke', '--function-name', P.lambda_arn,
     '--region', 'eu-south-2', '--invocation-type', 'RequestResponse', ...(request.operation === ADOPT ? ['--log-type', 'Tail'] : []), '--cli-binary-format', 'raw-in-base64-out',
     '--payload', 'fileb://' + requestFile, '--cli-read-timeout', '930', '--no-cli-pager', output],
     { encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'], timeout: 950000,
@@ -214,8 +222,26 @@ try {
   responseHash = sha(responseBytes);
   stage = 'RESPONSE_PARSE';
   response = JSON.parse(responseBytes);
+
+    if (releaseStage !== 'observe') break;
+    promotionStage(response,request.observe_production_deployment_id);
+    if (response.state === 'PROMOTED_NOT_CERTIFIED' && Number.isSafeInteger(response.ready_at_ms)) break;
+    need(observation < 19, 'PRODUCTION_BUILD_OBSERVATION_TIMEOUT');
+    await new Promise(resolve => setTimeout(resolve,15000));
+  }
   stage = 'CONTROLLER_RESULT';
-  const outcome = controllerOutcome(request.operation, response);
+  let outcome;
+  if (request.operation === PROMOTE && releaseStage !== 'certify') {
+    promotionStage(response,request.observe_production_deployment_id);
+    await fs.appendFile(process.env.GITHUB_OUTPUT,'production_stage='+canonical(response).toString()+'\n');
+    outcome = {exitCode:0,stdout:'PROMOTION_STAGE_RECORDED_UNCERTIFIED: final PUBLISHED gate remains mandatory.\n'};
+  } else outcome = controllerOutcome(request.operation, response);
+  if (request.operation === PROMOTE && releaseStage === 'certify') {
+    need(response.state === 'PUBLISHED', 'PUBLICATION_NOT_CERTIFIED');
+    const receipt=publicationReceipt(request,response,{id:process.env.GITHUB_RUN_ID,attempt:process.env.GITHUB_RUN_ATTEMPT,execution_sha:process.env.GITHUB_SHA},sha(await fs.readFile(P.workflow_path)));
+    await fs.writeFile(path.join(process.env.RUNNER_TEMP,'statistical-levels-published-receipt.json'),canonical(receipt),{flag:'wx',mode:0o600});
+    await fs.appendFile(process.env.GITHUB_OUTPUT,'publication_state=PUBLISHED\nmarker_sha256='+response.marker_sha256+'\n');
+  }
   if (request.operation === ADOPT) {
     stage = 'INVOCATION_RECEIPT';
     const receipt = adoptInvocationReceipt({ request, response, metadata, environment: process.env,

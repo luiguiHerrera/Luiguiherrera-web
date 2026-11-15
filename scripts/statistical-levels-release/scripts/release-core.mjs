@@ -22,9 +22,10 @@ export const PROMOTE = 'PROMOTE_EXACT_STATISTICAL_LEVELS_CANDIDATE';
 const SHA = /^[a-f0-9]{40}$/, HASH = /^[a-f0-9]{64}$/, DEPLOYMENT = /^dpl_[a-zA-Z0-9]{10,80}$/;
 const futureInputs = ['candidate_git_sha', 'candidate_deployment_id', 'expected_previous_production_sha', 'expected_previous_production_deployment', 'previous_publication_date'];
 export function selectTarget(inputs) {
-  need(inputs && !Array.isArray(inputs) && Object.keys(inputs).every(k => ['operation', ...futureInputs].includes(k)), 'DISPATCH_INPUT_FIELDS');
+  need(inputs && !Array.isArray(inputs) && Object.keys(inputs).every(k => ['operation', ...futureInputs, 'resume_production_deployment_id'].includes(k)), 'DISPATCH_INPUT_FIELDS');
   need([ADOPT, PROMOTE].includes(inputs.operation), 'OPERATION_REQUIRED');
   for (const value of Object.values(inputs)) need(typeof value === 'string', 'DISPATCH_INPUT_TYPE');
+  if (inputs.resume_production_deployment_id) need(inputs.operation === PROMOTE && DEPLOYMENT.test(inputs.resume_production_deployment_id), 'RESUME_DEPLOYMENT');
   if (inputs.operation === ADOPT) {
     need(futureInputs.every(k => !inputs[k]), 'ADOPTION_FUTURE_INPUT_FORBIDDEN');
     return { operation: ADOPT, phase: 'production', candidate_git_sha: P.baseline.production_git_sha,
@@ -39,7 +40,7 @@ export function selectTarget(inputs) {
   return { operation: PROMOTE, phase: 'preview', candidate_git_sha: inputs.candidate_git_sha, deployment_id: inputs.candidate_deployment_id,
     expected_previous_production_sha: inputs.expected_previous_production_sha,
     expected_previous_production_deployment: inputs.expected_previous_production_deployment,
-    previous_publication_date: inputs.previous_publication_date };
+    previous_publication_date: inputs.previous_publication_date, ...(inputs.resume_production_deployment_id ? { resume_production_deployment_id: inputs.resume_production_deployment_id } : {}) };
 }
 export function verifiedOrigin(value, phase = 'preview') {
   const url = new URL(value);
@@ -51,7 +52,7 @@ export function verifiedOrigin(value, phase = 'preview') {
 }
 export function validateTarget(target) {
   need([ADOPT, PROMOTE].includes(target.operation) && SHA.test(target.candidate_git_sha) && DEPLOYMENT.test(target.deployment_id), 'ATTESTATION_CANDIDATE');
-  need(target.phase === (target.operation === ADOPT ? 'production' : 'preview'), 'ATTESTATION_PHASE');
+  need(target.operation === ADOPT ? target.phase === 'production' : ['preview','production'].includes(target.phase), 'ATTESTATION_PHASE');
   verifiedOrigin(target.origin, target.phase);
   need(typeof target.authority_run_id === 'string' && /^\d{8}T\d{9}Z-[a-f0-9-]{36}$/.test(target.authority_run_id) && HASH.test(target.sealed_manifest_sha256), 'AUTHORITY_IDENTITY');
   if (target.operation === ADOPT) {
@@ -223,12 +224,16 @@ export function validateControllerRequest(request) {
     'qa_attestation_id', 'qa_attestation_hash', 'workflow_run_id', 'workflow_execution_sha', 'qa_attestation'];
   need([ADOPT, PROMOTE].includes(request.operation), 'REQUEST_OPERATION');
   if (request.operation === PROMOTE) keys.push('expected_previous_production_sha', 'expected_previous_production_deployment', 'previous_publication_date');
+  const cert = ['production_qa_attestation_id','production_qa_attestation_hash'];
+  if (cert.some(k => Object.hasOwn(request,k))) { need(request.operation === PROMOTE && cert.every(k => Object.hasOwn(request,k)) && !Object.hasOwn(request,'observe_production_deployment_id'), 'CERTIFICATE_FIELDS'); keys.push(...cert); need(/^[1-9][0-9]{0,19}$/.test(request.production_qa_attestation_id) && HASH.test(request.production_qa_attestation_hash), 'CERTIFICATE_ID'); }
+  if (Object.hasOwn(request,'observe_production_deployment_id')) { need(request.operation === PROMOTE && DEPLOYMENT.test(request.observe_production_deployment_id), 'OBSERVE_DEPLOYMENT'); keys.push('observe_production_deployment_id'); }
   exactKeys(request, keys);
   need(Object.values(request).every(v => typeof v === 'string'), 'REQUEST_STRING_FIELDS');
   for (const key of ['candidate_git_sha', 'workflow_execution_sha']) need(SHA.test(request[key]), 'REQUEST_SHA');
   for (const key of ['sealed_manifest_sha256', 'qa_attestation_hash']) need(HASH.test(request[key]), 'REQUEST_HASH');
   need(/^[1-9][0-9]{0,19}$/.test(request.workflow_run_id) && /^[1-9][0-9]{0,19}$/.test(request.qa_attestation_id) && request.qa_attestation.length < 60000, 'INLINE_QA_SCHEMA');
   const inline = JSON.parse(request.qa_attestation);
+  need(inline.phase === (request.operation === ADOPT ? 'production' : 'preview'), 'INLINE_QA_PHASE');
   need(canonical(inline).toString() === request.qa_attestation && sha(canonical(inline)) === request.qa_attestation_hash, 'INLINE_QA_HASH');
   exactKeys(inline, ['candidate_git_sha','deployment_id','authority_run_id','sealed_manifest_sha256','project_id','test_version','phase','result','snapshot_count','provenance_coverage','capability_ids','timestamp','defects','interactions','expected_values','routes','viewports','application_console_errors','hydration_errors','required_application_request_failures','broken_assets','overflow','raw_platform_events','raw_rsc_events','unclassified_failures','origin','public_authority_run_id'], 'INLINE_QA_FIELDS');
   const target = { operation: request.operation, phase: inline.phase, candidate_git_sha: request.candidate_git_sha,
@@ -283,10 +288,98 @@ export function controllerOutcome(operation, response) {
     need(['BASELINE_ADOPTED', 'ALREADY_ADOPTED'].includes(response.state) && response.vercel_write === false && HASH.test(response.marker_sha256), 'ADOPTION_RESPONSE_INVALID');
     return { exitCode: 0, stdout: response.state + ': existing Production certified; no Vercel write.\n', stderr: '' };
   }
+  if (response.state === 'PUBLISHED') {
+    exactKeys(response, ['state','production_deployment_id','marker_sha256','provider_fetch'], 'PUBLICATION_RESPONSE_FIELDS');
+    need(DEPLOYMENT.test(response.production_deployment_id) && HASH.test(response.marker_sha256), 'PUBLICATION_RESPONSE_INVALID');
+    return { exitCode: 0, stdout: 'PUBLISHED: exact Production certified and marker recorded.\n', stderr: '' };
+  }
   // A future promotion cannot be mistaken for baseline adoption or publication certification.
   if (response.state === 'PROMOTED_NOT_CERTIFIED') {
     need(DEPLOYMENT.test(response.production_deployment_id), 'PROMOTION_RESPONSE_INVALID');
     return { exitCode: 1, stdout: 'PROMOTED_NOT_CERTIFIED: separate production QA and approval required.\n', stderr: '' };
   }
   return { exitCode: 1, stdout: '', stderr: 'CONTROLLER_REQUIRES_FOUNDER_REVIEW\n' };
+}
+
+// An accepted build is deliberately not a publication certificate. The final
+// workflow gate requires PUBLISHED after independent public production QA.
+export function promotionStage(response, expectedId) {
+  need(response?.provider_fetch === false && ['PRODUCTION_BUILD_PENDING','PROMOTED_NOT_CERTIFIED'].includes(response.state), 'PROMOTION_STAGE_UNCONFIRMED');
+  need(DEPLOYMENT.test(response.production_deployment_id) && (!expectedId || expectedId === response.production_deployment_id), 'PRODUCTION_DEPLOYMENT_CHANGED');
+  need(Object.keys(response).every(k => ['state','production_deployment_id','provider_fetch','ready_at_ms'].includes(k)), 'PROMOTION_STAGE_FIELDS');
+  if (response.ready_at_ms !== undefined) need(response.state === 'PROMOTED_NOT_CERTIFIED' && Number.isSafeInteger(response.ready_at_ms) && response.ready_at_ms > 0, 'PRODUCTION_READY_TIME');
+  return response;
+}
+
+export function productionTarget(selection, authority, observed) {
+  promotionStage(observed);
+  need(selection.operation === PROMOTE && observed.state === 'PROMOTED_NOT_CERTIFIED' && Number.isSafeInteger(observed.ready_at_ms), 'PRODUCTION_NOT_READY');
+  const target = { ...selection, phase:'production', origin:P.production_origin,
+    deployment_id:observed.production_deployment_id, authority_run_id:authority.authority_run_id,
+    sealed_manifest_sha256:authority.sealed_manifest_sha256 };
+  validateTarget(target);
+  return target;
+}
+
+export function certificationRequest(preview, envelope, check, run, workflowHash, observed) {
+  validateControllerRequest(preview);
+  need(preview.operation === PROMOTE && !preview.production_qa_attestation_id && !preview.observe_production_deployment_id, 'CERTIFICATION_REQUEST_PHASE');
+  const target = productionTarget({operation:PROMOTE,candidate_git_sha:preview.candidate_git_sha,
+    expected_previous_production_sha:preview.expected_previous_production_sha}, preview, observed);
+  validateAttestation(envelope,run,target,workflowHash);
+  need(Date.parse(envelope.timestamp) >= observed.ready_at_ms, 'QA_BEFORE_PRODUCTION_READY');
+  validateQAAge(envelope.timestamp, PROMOTE);
+  need(check?.app?.slug === 'github-actions' && check.name === 'statistical-levels-production-qa' &&
+    check.status === 'completed' && check.conclusion === 'success' && check.head_sha === run.execution_sha &&
+    check.external_id === run.id && Date.parse(check.completed_at) >= Date.parse(envelope.timestamp), 'PRODUCTION_CHECK_IDENTITY');
+  need(check.output?.text === canonical(envelope.controller_payload).toString(), 'PRODUCTION_CHECK_BYTES');
+  const request = {...preview, production_qa_attestation_id:String(check.id), production_qa_attestation_hash:envelope.controller_payload_sha256};
+  validateControllerRequest(request);
+  return request;
+}
+
+export function publicationReceipt(request, response, run, workflowHash) {
+  validateControllerRequest(request);
+  need(request.operation === PROMOTE && request.production_qa_attestation_id && response.state === 'PUBLISHED', 'PUBLICATION_NOT_CERTIFIED');
+  need(controllerOutcome(PROMOTE,response).exitCode === 0, 'PUBLICATION_NOT_CERTIFIED');
+  return {schema:'statistical-levels.published-receipt.v1',...run,workflow_sha256:workflowHash,
+    candidate_git_sha:request.candidate_git_sha,preview_deployment_id:request.candidate_deployment_id,
+    production_deployment_id:response.production_deployment_id,authority_run_id:request.authority_run_id,
+    sealed_manifest_sha256:request.sealed_manifest_sha256,publication_date:request.authority_run_id.slice(0,8).replace(/^(\d{4})(\d{2})(\d{2})$/,'$1-$2-$3'),
+    production_qa_attestation_id:request.production_qa_attestation_id,
+    production_qa_attestation_hash:request.production_qa_attestation_hash,marker_sha256:response.marker_sha256,state:'PUBLISHED'};
+}
+
+export function validateDailyCI(run, jobs, sha) {
+  for (const repo of [run.repository,run.head_repository]) need(repo?.full_name === P.repository &&
+    String(repo.id) === P.repository_id && String(repo.owner?.id) === P.repository_owner_id && repo.private === false, 'DAILY_CI_REPOSITORY');
+  need(run.workflow_id === 336203586 && run.path === '.github/workflows/ci.yml' && run.head_sha === sha &&
+    run.head_branch === P.branch && run.event === 'workflow_run' && run.status === 'completed' && run.conclusion === 'success', 'DAILY_CI_IDENTITY');
+  need(jobs.total_count === 1 && jobs.jobs?.length === 1, 'DAILY_CI_JOB_SET');
+  const job=jobs.jobs[0];
+  need(job.name === 'validate' && job.status === 'completed' && job.conclusion === 'success', 'DAILY_CI_NOOP_OR_FAILED');
+  for (const name of ['Bind qualification to event SHA and governed metadata-repair successor lineage',
+    'Test bounded CI admission and producer readback','Authenticate fresh native capture handoff',
+    'Run existing release, native proof, policy and security tests','Reject missing or skipped mandatory coverage and candidate drift',
+    'Revalidate exact branch and emit bounded qualification evidence']) {
+    const steps=job.steps.filter(s=>s.name === name);
+    need(steps.length === 1 && steps[0].status === 'completed' && steps[0].conclusion === 'success', 'DAILY_CI_MANDATORY_STEP');
+  }
+}
+
+export function publishedCheck(check, run, workflowHash, jobs) {
+  validateRunMetadata(run,{id:String(run.id),attempt:String(run.run_attempt),execution_sha:run.head_sha});
+  need(run.status === 'completed' && run.conclusion === 'success', 'PUBLICATION_RUN_NOT_SUCCESS');
+  need(check.app?.slug === 'github-actions' && check.name === 'statistical-levels-published' && check.status === 'completed' &&
+    check.conclusion === 'success' && check.external_id === String(run.id) && check.head_sha === run.head_sha, 'PUBLISHED_CHECK_IDENTITY');
+  const r=JSON.parse(check.output.text);
+  need(r.schema === 'statistical-levels.published-receipt.v1' && r.state === 'PUBLISHED' && r.execution_sha === run.head_sha &&
+    r.id === String(run.id) && r.attempt === String(run.run_attempt) && r.workflow_sha256 === workflowHash &&
+    SHA.test(r.candidate_git_sha) && DEPLOYMENT.test(r.production_deployment_id) && HASH.test(r.marker_sha256) &&
+    HASH.test(r.production_qa_attestation_hash) && /^[1-9][0-9]*$/.test(r.production_qa_attestation_id), 'PUBLISHED_RECEIPT_INVALID');
+  need(canonical(r).toString() === check.output.text, 'PUBLISHED_RECEIPT_NOT_CANONICAL');
+  need(jobs?.total_count === jobs?.jobs?.length && jobs.total_count <= 100, 'PUBLISHED_JOBS_INCOMPLETE');
+  const gate=jobs.jobs.filter(j=>j.name === 'statistical-levels-published-sha256-'+r.marker_sha256);
+  need(gate.length === 1 && String(gate[0].run_id) === String(run.id) && gate[0].run_attempt === run.run_attempt && gate[0].head_sha === run.head_sha && gate[0].status === 'completed' && gate[0].conclusion === 'success', 'PUBLISHED_SERVER_DIGEST');
+  return r;
 }
