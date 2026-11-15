@@ -766,6 +766,43 @@ def validate_publication_closure(git, root):
     need(len(pin) == 1 and pin[0].decode() == publication_closure_payload(git,root), 'PUBLICATION_PAYLOAD')
 
 
+# One CI-only repair of 5c53fa63, whose hosted run failed four contract tests.
+# No publication code, historical subject, data or future code transition is admitted.
+PUBLICATION_CI_REPAIR_BASE = '5c53fa63577c39e8b656b563865cbefd4cd8b524'
+PUBLICATION_CI_REPAIR_IDENTITY = 'Codex <codex@openai.com> 1794778800 +0000'
+PUBLICATION_CI_REPAIR_MESSAGE = 'Repair exact publication CI inventory and historical models'
+PUBLICATION_CI_REPAIR_FILES = frozenset({CI,
+    'scripts/statistical-levels-ci/admission.py', 'scripts/statistical-levels-ci/historical-tests.py',
+    'scripts/statistical-levels-ci/test_admission.py', 'scripts/statistical-levels-ci/test_report_contract_admission.py',
+    'scripts/statistical-levels-ci/test_lineage_admission.py', 'scripts/statistical-levels-ci/test_ci_recovery_admission.py',
+    'scripts/statistical-levels-ci/test_publication_closure.py', 'scripts/statistical-levels-ci/test_publication_ci_repair.py'})
+PUBLICATION_CI_REPAIR_PIN = rb'(      SL_CI_PUBLICATION_REPAIR_SHA256: ")[a-f0-9]{64}("\n)'
+PUBLICATION_CI_REPAIR_PIN_LINE = rb'      SL_CI_PUBLICATION_REPAIR_SHA256: "[a-f0-9]{64}"\n'
+
+
+def publication_ci_repair_payload(git, sha):
+    rows = []
+    for name in sorted(PUBLICATION_CI_REPAIR_FILES):
+        data = git.blob(sha, name)
+        if name == CI:
+            need(len(re.findall(PUBLICATION_CI_REPAIR_PIN, data)) == 1, 'PUBLICATION_CI_REPAIR_PIN_FIELD')
+            data = re.sub(PUBLICATION_CI_REPAIR_PIN, lambda m: m[1] + b'0' * 64 + m[2], data)
+        rows.append({'path': name, 'mode': '100644', 'sha256': digest(data)})
+    return digest(json.dumps(rows, sort_keys=True, separators=(',', ':')).encode())
+
+
+def validate_publication_ci_repair(git, root):
+    need(git.parents(root) == [PUBLICATION_CI_REPAIR_BASE], 'PUBLICATION_CI_REPAIR_PARENT')
+    need(bootstrap(git, PUBLICATION_CI_REPAIR_BASE) == (PUBLICATION_CI_REPAIR_BASE, []), 'PUBLICATION_CI_REPAIR_LINEAGE')
+    delta(git, PUBLICATION_CI_REPAIR_BASE, root, PUBLICATION_CI_REPAIR_FILES)
+    lineage_header(git, root, git.text('rev-parse', root + '^{tree}'), PUBLICATION_CI_REPAIR_BASE,
+        PUBLICATION_CI_REPAIR_IDENTITY, PUBLICATION_CI_REPAIR_IDENTITY, PUBLICATION_CI_REPAIR_MESSAGE, 'PUBLICATION_CI_REPAIR_HEADER')
+    workflow = git.blob(root, CI)
+    need(re.sub(PUBLICATION_CI_REPAIR_PIN_LINE, b'', workflow) == git.blob(PUBLICATION_CI_REPAIR_BASE, CI), 'PUBLICATION_CI_REPAIR_WORKFLOW_SCOPE')
+    pin = re.findall(rb'      SL_CI_PUBLICATION_REPAIR_SHA256: "([a-f0-9]{64})"\n', workflow)
+    need(len(pin) == 1 and pin[0].decode() == publication_ci_repair_payload(git, root), 'PUBLICATION_CI_REPAIR_PAYLOAD')
+
+
 def bootstrap(git, head):
     # Exact lineage transitions only. The editorial commit alone is never admitted; its CI failure is never reused.
     if LINEAGE_REGISTRY not in git.tree(head):
@@ -785,6 +822,11 @@ def bootstrap(git, head):
         cursor = parents[0]
     else:
         raise ValueError('LINEAGE_BOUND')
+    if git.parents(cursor) == [PUBLICATION_CI_REPAIR_BASE]:
+        validate_publication_ci_repair(git, cursor)
+        current, start = git.tree(head), git.tree(cursor)
+        need(set(current) == set(start) and all(current[p] == start[p] for p in current if p not in data_paths), 'PUBLICATION_CI_REPAIR_SUCCESSOR_CODE_CHANGED')
+        return cursor, chain
     if git.parents(cursor) == [PUBLICATION_CLOSURE_BASE]:
         validate_publication_closure(git,cursor)
         current, start = git.tree(head), git.tree(cursor)
@@ -810,6 +852,7 @@ def bootstrap(git, head):
         need(git.parents(zod_root) == [ZOD_BASE], 'LINEAGE_FIRST_PARENT_EPOCH')
     else:
         previous_root, _ = bootstrap(git, entry['parent'])
+        need(git.parents(previous_root) != [PUBLICATION_CI_REPAIR_BASE], 'PUBLICATION_CI_REPAIR_DATA_SUCCESSORS_ONLY')
         need(git.parents(previous_root) != [PUBLICATION_CLOSURE_BASE], 'PUBLICATION_DATA_SUCCESSORS_ONLY')
         need(git.parents(previous_root) != [CI_REPAIR_BASE], 'CI_REPAIR_DATA_SUCCESSORS_ONLY')
         need(previous_root == entry['previous_rebind'], 'LINEAGE_PREVIOUS_REBIND')
@@ -831,6 +874,8 @@ def reconciled_report_hashes(git, head):
                       stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL).returncode != 0:
         return {}
     root, _ = bootstrap(git, head)
+    if git.parents(root) == [PUBLICATION_CI_REPAIR_BASE]:
+        return reconciled_report_hashes(git, PUBLICATION_CI_REPAIR_BASE)
     if git.parents(root) == [PUBLICATION_CLOSURE_BASE]:
         return reconciled_report_hashes(git,PUBLICATION_CLOSURE_BASE)
     if git.parents(root) == [CI_REPAIR_BASE]:
@@ -1151,6 +1196,7 @@ def admit(git, api, env, event):
     need(evidence['head_sha'] == BASE and evidence['producer_run_id'] == 39432688384 and evidence['source_sha'] == OLD, 'BOOTSTRAP_DATA_IDENTITY')
     validate_data(git, BASE, OLD, evidence['metadata_objects'])
     if not chain:
+        publication_ci_repair_root = git.parents(root) == [PUBLICATION_CI_REPAIR_BASE]
         closure_root = git.parents(root) == [PUBLICATION_CLOSURE_BASE]
         repair_root = git.parents(root) == [CI_REPAIR_BASE]
         daily_root = git.parents(root) == [RECONCILED]
@@ -1161,15 +1207,22 @@ def admit(git, api, env, event):
         zod_root = git.parents(root) == [ZOD_BASE]
         lineage = lineage_entry(git, root)
         lineage_root = lineage is not None
-        expected_before = PUBLICATION_CLOSURE_BASE if closure_root else CI_REPAIR_BASE if repair_root else lineage['editorial']['sha'] if lineage_root else ZOD_BASE if zod_root else DURABILITY_BASE if durability_root else REPORT_CONTRACT_BASE if report_root else CAPTURE_RECOVERY_BASE if capture_root else SECURITY_BASE if security_root else REMOTE_BEFORE_RECONCILIATION if daily_root else BASE
+        expected_before = PUBLICATION_CI_REPAIR_BASE if publication_ci_repair_root else PUBLICATION_CLOSURE_BASE if closure_root else CI_REPAIR_BASE if repair_root else lineage['editorial']['sha'] if lineage_root else ZOD_BASE if zod_root else DURABILITY_BASE if durability_root else REPORT_CONTRACT_BASE if report_root else CAPTURE_RECOVERY_BASE if capture_root else SECURITY_BASE if security_root else REMOTE_BEFORE_RECONCILIATION if daily_root else BASE
         need(env['GITHUB_EVENT_NAME'] == 'push' and event['before'] == expected_before and event['after'] == head and event['ref'] == 'refs/heads/' + BRANCH and not event['forced'] and not event['deleted'] and not event['created'], 'BOOTSTRAP_EVENT')
-        if closure_root or repair_root or daily_root or security_root or capture_root or report_root or durability_root or zod_root or lineage_root:
+        if publication_ci_repair_root or closure_root or repair_root or daily_root or security_root or capture_root or report_root or durability_root or zod_root or lineage_root:
             recent_bytes = git.blob(root, CURRENT_DATA_EVIDENCE)
             need(digest(recent_bytes) == CURRENT_DATA_EVIDENCE_SHA256, 'CURRENT_DATA_EVIDENCE_PIN')
             recent = unique_json(recent_bytes)
             need(recent['published_sha'] == REMOTE_BEFORE_RECONCILIATION and recent['producer_run_id'] == 39791362129 and recent['producer_attempt'] == 1, 'CURRENT_DATA_EVIDENCE_IDENTITY')
             validate_data(git, recent['published_sha'], recent['source_sha'], recent['metadata_objects'])
-            if closure_root:
+            if publication_ci_repair_root:
+                mode, details = 'EXACT_PUBLICATION_CI_REPAIR_BOOTSTRAP', {
+                    'remote_before': PUBLICATION_CI_REPAIR_BASE, 'failed_run_id': 43753556930,
+                    'parent_hosted_ci': 'FAILED_NOT_REUSED', 'candidate_hosted_ci': 'REQUIRED_NOT_YET_CERTIFIED',
+                    'new_hosted_qualification_required': True, 'daily_successors_require_exact_parent_ci': True,
+                    'data_preservation': 'EXACT_82_PATHS', 'historical_subject_unchanged': True,
+                    'release_authority_issued': False}
+            elif closure_root:
                 prior = parent_ci(api,PUBLICATION_CLOSURE_BASE)
                 mode, details = 'EXACT_PUBLICATION_CLOSURE_BOOTSTRAP', {
                     'remote_before':PUBLICATION_CLOSURE_BASE,'certified_recovery_root':PUBLICATION_RECOVERY_ROOT,

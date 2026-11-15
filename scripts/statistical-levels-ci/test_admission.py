@@ -412,7 +412,7 @@ class WorkflowStructureTests(unittest.TestCase):
         self.assertNotIn('workflow_dispatch:', text)
         for command in ['npm ci', 'npm run lint', 'npm run build', 'capture-full-product.mjs --verify', 'qa-statistical-levels-runtime.mjs', 'scripts/statistical-levels-release/tests/*.test.mjs']:
             self.assertIn(command, text)
-        self.assertIn('"${#release_tests[@]}" -eq 39', text)
+        self.assertIn('"${#release_tests[@]}" -eq 40', text)
         self.assertIn('historical-tests.py', text)
         self.assertIn('DUPLICATE_OR_MISSING_TAP_COUNT', text)
         self.assertIn('BOUNDED_SUMMARY_RUN', text)
@@ -533,7 +533,7 @@ def build_accounting_tests(workflow):
         def test_actual_original_tap_streams_remain_distinct(self):
             result = self.actual_tap_loop([self.tap(nested=True), self.tap()])
             self.assertEqual([x['tests'] for x in result['counters']], [3, 2])
-            self.assertEqual([x['test_files'] for x in result['partitions']], [39, 2])
+            self.assertEqual([x['test_files'] for x in result['partitions']], [40, 2])
             self.assertEqual([x['test_source_sha'] for x in result['partitions']],
                 [self.env['GITHUB_SHA'], '0004db585fb402c97d8470c31ea4e405f0905b7e'])
             self.assertEqual([x['log_sha256'] for x in result['partitions']],
