@@ -26,6 +26,8 @@ class PublicationClosureTests(unittest.TestCase):
         f.git = a.Git(f.repo)
         f.env = identity_env({**os.environ,'GIT_INDEX_FILE':str(Path(cls.tmp.name)/'index')},a.PUBLICATION_CLOSURE_IDENTITY)
         cls.root, _ = a.bootstrap(f.git,a.Git(ROOT).text('rev-parse','HEAD'))
+        if f.git.parents(cls.root) == [a.MEMORY_CI_BASE]:
+            cls.root = a.MEMORY_CI_BASE  # Keep the real historical test subject.
         if f.git.parents(cls.root) == [a.RUNTIME_CI_BASE]:
             cls.root = a.RUNTIME_CI_BASE
         if f.git.parents(cls.root) == [a.PUBLICATION_CI_REPAIR_BASE]:

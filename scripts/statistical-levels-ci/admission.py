@@ -840,6 +840,50 @@ def validate_runtime_ci(git, root):
     need(len(pin) == 1 and pin[0].decode() == runtime_ci_payload(git, root), 'RUNTIME_CI_PAYLOAD')
 
 
+# One reviewed memory fix, anchored to the exact unqualified runtime root.
+# The validated workflow/helper bytes are immutable. This self-excluding seal
+# binds all admission glue; it is not an API for resealing later code changes.
+MEMORY_CI_BASE = 'a6354355742d8b359c8cbcd5c339d6abaf5ee691'
+MEMORY_CI_IDENTITY = 'Codex <codex@openai.com> 1794843363 +0000'
+MEMORY_CI_MESSAGE = 'Admit exact CI memory cleanup without widening historical contracts'
+MEMORY_CI_HELPER = 'scripts/statistical-levels-ci/class_cache_cleanup.py'
+MEMORY_CI_FILES = frozenset({CI, MEMORY_CI_HELPER,
+    'scripts/statistical-levels-ci/admission.py', 'scripts/statistical-levels-ci/historical-tests.py',
+    'scripts/statistical-levels-ci/test_ci_runtime_recovery.py',
+    'scripts/statistical-levels-ci/test_publication_ci_repair.py',
+    'scripts/statistical-levels-ci/test_publication_closure.py',
+    'scripts/statistical-levels-ci/test_lineage_admission.py',
+    'scripts/statistical-levels-ci/test_ci_recovery_admission.py',
+    'scripts/statistical-levels-ci/memory_admission_tests.py'})
+MEMORY_CI_WORKFLOW_SHA256 = 'bf3886887b75318605a65f885993ad7c017664d5494268761742eef1c45b42fb'
+MEMORY_CI_HELPER_SHA256 = '781547403be306890bb4c5afa4e0f47d44dc6c3b606ef4129ff0c1c16e4c52d9'
+MEMORY_CI_PAYLOAD_SHA256 = '5adae8e15c06c861a81d99f0ce4d8eec3ec10ef954639a8668fcd0813a8482ee'
+MEMORY_CI_PIN = rb"(?m)^(MEMORY_CI_PAYLOAD_SHA256 = ')([a-f0-9]{64})('\n)"
+
+
+def memory_ci_payload(git, sha):
+    rows = []
+    for name in sorted(MEMORY_CI_FILES):
+        data = git.blob(sha, name)
+        if name == 'scripts/statistical-levels-ci/admission.py':
+            pin = re.findall(MEMORY_CI_PIN, data)
+            need(len(pin) == 1 and pin[0][1].decode() == MEMORY_CI_PAYLOAD_SHA256, 'MEMORY_CI_PIN')
+            data = re.sub(MEMORY_CI_PIN, lambda m: m[1] + b'0' * 64 + m[3], data)
+        rows.append({'path': name, 'mode': '100644', 'sha256': digest(data)})
+    return digest(json.dumps(rows, sort_keys=True, separators=(',', ':')).encode())
+
+
+def validate_memory_ci(git, root):
+    need(git.parents(root) == [MEMORY_CI_BASE], 'MEMORY_CI_PARENT')
+    need(bootstrap(git, MEMORY_CI_BASE) == (MEMORY_CI_BASE, []), 'MEMORY_CI_LINEAGE')
+    delta(git, MEMORY_CI_BASE, root, MEMORY_CI_FILES)
+    lineage_header(git, root, git.text('rev-parse', root + '^{tree}'), MEMORY_CI_BASE,
+        MEMORY_CI_IDENTITY, MEMORY_CI_IDENTITY, MEMORY_CI_MESSAGE, 'MEMORY_CI_HEADER')
+    need(digest(git.blob(root, CI)) == MEMORY_CI_WORKFLOW_SHA256, 'MEMORY_CI_WORKFLOW_SCOPE')
+    need(digest(git.blob(root, MEMORY_CI_HELPER)) == MEMORY_CI_HELPER_SHA256, 'MEMORY_CI_HELPER_SCOPE')
+    need(memory_ci_payload(git, root) == MEMORY_CI_PAYLOAD_SHA256, 'MEMORY_CI_PAYLOAD')
+
+
 def bootstrap(git, head):
     # Exact lineage transitions only. The editorial commit alone is never admitted; its CI failure is never reused.
     if LINEAGE_REGISTRY not in git.tree(head):
@@ -859,6 +903,11 @@ def bootstrap(git, head):
         cursor = parents[0]
     else:
         raise ValueError('LINEAGE_BOUND')
+    if git.parents(cursor) == [MEMORY_CI_BASE]:
+        validate_memory_ci(git, cursor)
+        current, start = git.tree(head), git.tree(cursor)
+        need(set(current) == set(start) and all(current[p] == start[p] for p in current if p not in data_paths), 'MEMORY_CI_SUCCESSOR_CODE_CHANGED')
+        return cursor, chain
     if git.parents(cursor) == [RUNTIME_CI_BASE]:
         validate_runtime_ci(git, cursor)
         current, start = git.tree(head), git.tree(cursor)
@@ -894,6 +943,7 @@ def bootstrap(git, head):
         need(git.parents(zod_root) == [ZOD_BASE], 'LINEAGE_FIRST_PARENT_EPOCH')
     else:
         previous_root, _ = bootstrap(git, entry['parent'])
+        need(git.parents(previous_root) != [MEMORY_CI_BASE], 'MEMORY_CI_DATA_SUCCESSORS_ONLY')
         need(git.parents(previous_root) != [RUNTIME_CI_BASE], 'RUNTIME_CI_DATA_SUCCESSORS_ONLY')
         need(git.parents(previous_root) != [PUBLICATION_CI_REPAIR_BASE], 'PUBLICATION_CI_REPAIR_DATA_SUCCESSORS_ONLY')
         need(git.parents(previous_root) != [PUBLICATION_CLOSURE_BASE], 'PUBLICATION_DATA_SUCCESSORS_ONLY')
@@ -917,6 +967,8 @@ def reconciled_report_hashes(git, head):
                       stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL).returncode != 0:
         return {}
     root, _ = bootstrap(git, head)
+    if git.parents(root) == [MEMORY_CI_BASE]:
+        return reconciled_report_hashes(git, MEMORY_CI_BASE)
     if git.parents(root) == [RUNTIME_CI_BASE]:
         return reconciled_report_hashes(git, RUNTIME_CI_BASE)
     if git.parents(root) == [PUBLICATION_CI_REPAIR_BASE]:
@@ -1241,6 +1293,7 @@ def admit(git, api, env, event):
     need(evidence['head_sha'] == BASE and evidence['producer_run_id'] == 39432688384 and evidence['source_sha'] == OLD, 'BOOTSTRAP_DATA_IDENTITY')
     validate_data(git, BASE, OLD, evidence['metadata_objects'])
     if not chain:
+        memory_root = git.parents(root) == [MEMORY_CI_BASE]
         runtime_root = git.parents(root) == [RUNTIME_CI_BASE]
         publication_ci_repair_root = git.parents(root) == [PUBLICATION_CI_REPAIR_BASE]
         closure_root = git.parents(root) == [PUBLICATION_CLOSURE_BASE]
@@ -1253,15 +1306,22 @@ def admit(git, api, env, event):
         zod_root = git.parents(root) == [ZOD_BASE]
         lineage = lineage_entry(git, root)
         lineage_root = lineage is not None
-        expected_before = RUNTIME_CI_BASE if runtime_root else PUBLICATION_CI_REPAIR_BASE if publication_ci_repair_root else PUBLICATION_CLOSURE_BASE if closure_root else CI_REPAIR_BASE if repair_root else lineage['editorial']['sha'] if lineage_root else ZOD_BASE if zod_root else DURABILITY_BASE if durability_root else REPORT_CONTRACT_BASE if report_root else CAPTURE_RECOVERY_BASE if capture_root else SECURITY_BASE if security_root else REMOTE_BEFORE_RECONCILIATION if daily_root else BASE
+        expected_before = MEMORY_CI_BASE if memory_root else RUNTIME_CI_BASE if runtime_root else PUBLICATION_CI_REPAIR_BASE if publication_ci_repair_root else PUBLICATION_CLOSURE_BASE if closure_root else CI_REPAIR_BASE if repair_root else lineage['editorial']['sha'] if lineage_root else ZOD_BASE if zod_root else DURABILITY_BASE if durability_root else REPORT_CONTRACT_BASE if report_root else CAPTURE_RECOVERY_BASE if capture_root else SECURITY_BASE if security_root else REMOTE_BEFORE_RECONCILIATION if daily_root else BASE
         need(env['GITHUB_EVENT_NAME'] == 'push' and event['before'] == expected_before and event['after'] == head and event['ref'] == 'refs/heads/' + BRANCH and not event['forced'] and not event['deleted'] and not event['created'], 'BOOTSTRAP_EVENT')
-        if runtime_root or publication_ci_repair_root or closure_root or repair_root or daily_root or security_root or capture_root or report_root or durability_root or zod_root or lineage_root:
+        if memory_root or runtime_root or publication_ci_repair_root or closure_root or repair_root or daily_root or security_root or capture_root or report_root or durability_root or zod_root or lineage_root:
             recent_bytes = git.blob(root, CURRENT_DATA_EVIDENCE)
             need(digest(recent_bytes) == CURRENT_DATA_EVIDENCE_SHA256, 'CURRENT_DATA_EVIDENCE_PIN')
             recent = unique_json(recent_bytes)
             need(recent['published_sha'] == REMOTE_BEFORE_RECONCILIATION and recent['producer_run_id'] == 39791362129 and recent['producer_attempt'] == 1, 'CURRENT_DATA_EVIDENCE_IDENTITY')
             validate_data(git, recent['published_sha'], recent['source_sha'], recent['metadata_objects'])
-            if runtime_root:
+            if memory_root:
+                mode, details = 'EXACT_CI_MEMORY_RECOVERY_BOOTSTRAP', {
+                    'remote_before': MEMORY_CI_BASE, 'parent_hosted_ci': 'NOT_QUALIFIED_NOT_REUSED',
+                    'candidate_hosted_ci': 'REQUIRED_NOT_YET_CERTIFIED',
+                    'new_hosted_qualification_required': True, 'daily_successors_require_exact_parent_ci': True,
+                    'data_preservation': 'EXACT_82_PATHS', 'historical_subject_unchanged': True,
+                    'local_memory_measurement_is_hosted_qualification': False, 'release_authority_issued': False}
+            elif runtime_root:
                 mode, details = 'EXACT_CI_RUNTIME_RECOVERY_BOOTSTRAP', {
                     'remote_before': RUNTIME_CI_BASE, 'unqualified_run_id': 43760999722, 'unqualified_attempts': [1, 2],
                     'parent_hosted_ci': 'NOT_QUALIFIED_NOT_REUSED', 'candidate_hosted_ci': 'REQUIRED_NOT_YET_CERTIFIED',

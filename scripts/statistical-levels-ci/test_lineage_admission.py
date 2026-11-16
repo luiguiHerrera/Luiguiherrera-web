@@ -207,6 +207,8 @@ class LineageTransitionTests(unittest.TestCase):
         git = f.git
         head = a.Git(ROOT).text('rev-parse', 'HEAD')
         cls.root, _ = a.bootstrap(git, head)
+        if git.parents(cls.root) == [a.MEMORY_CI_BASE]:
+            cls.root = a.MEMORY_CI_BASE  # Keep the real historical test subject.
         if git.parents(cls.root) == [a.RUNTIME_CI_BASE]:
             cls.root = a.RUNTIME_CI_BASE
         if git.parents(cls.root) == [a.PUBLICATION_CI_REPAIR_BASE]:

@@ -568,11 +568,13 @@ jobs:
           selected = [case for case in cases(suite) if case.__class__.__module__ not in ('test_zod_security_admission', 'test_ci_recovery_admission')]
           if len(selected) != 145:
               raise SystemExit("PYTHON_MAIN_INVENTORY")
+          from class_cache_cleanup import register_class_cleanups
+          register_class_cleanups(selected)
           result = unittest.TextTestRunner(verbosity=2).run(unittest.TestSuite(selected))
           raise SystemExit(0 if result.wasSuccessful() and result.testsRun == 145 and not result.skipped else 1)
           PYTESTS
           printf 'Python main exit=%s UTC=%s\n' "$ci_python_status" "$(date -u +%FT%TZ)"
-          PYTHONPATH=scripts/statistical-levels-ci python3 -u -m unittest test_zod_security_admission test_ci_recovery_admission -v 2>&1 | tee "$CI_EVIDENCE/python-zod.log" || ci_zod_status=$?
+          PYTHONPATH=scripts/statistical-levels-ci python3 -u -m class_cache_cleanup test_zod_security_admission test_ci_recovery_admission -v 2>&1 | tee "$CI_EVIDENCE/python-zod.log" || ci_zod_status=$?
           printf 'Python zod exit=%s UTC=%s\n' "$ci_zod_status" "$(date -u +%FT%TZ)"
           if (( ci_python_status != 0 || ci_zod_status != 0 )); then exit 1; fi
           python3 - <<'PYCOUNTS'
