@@ -29,6 +29,42 @@ const nextConfig: NextConfig = {
   async headers() {
     return [
 {
+  "source": "/reports/segundo-informe-noviembre-2026.html",
+  "headers": [
+    {
+      "key": "Link",
+      "value": "<https://www.luiguiherrera.com/informes/segundo-informe-noviembre-2026>; rel=\"canonical\""
+    }
+  ]
+},
+{
+  "source": "/reports/segundo-informe-noviembre-2026.pdf",
+  "headers": [
+    {
+      "key": "Link",
+      "value": "<https://www.luiguiherrera.com/informes/segundo-informe-noviembre-2026>; rel=\"canonical\""
+    }
+  ]
+},
+{
+  "source": "/reports/segundo-informe-noviembre-2026.md",
+  "headers": [
+    {
+      "key": "X-Robots-Tag",
+      "value": "noindex, follow"
+    }
+  ]
+},
+{
+  "source": "/reports/segundo-informe-noviembre-2026-calendar.ics",
+  "headers": [
+    {
+      "key": "X-Robots-Tag",
+      "value": "noindex, follow"
+    }
+  ]
+},
+{
   "source": "/reports/primer-informe-noviembre-2026.html",
   "headers": [
     {

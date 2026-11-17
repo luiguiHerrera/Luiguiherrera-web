@@ -102,7 +102,8 @@ assert.equal(
   1,
   "El archivo debe exponer un único informe marcado como Actual.",
 );
-assert.equal(marketReports.find((report) => report.status === "actual")?.id, "primer-informe-noviembre-2026");
+assert.equal(marketReports.find((report) => report.status === "actual")?.id, "segundo-informe-noviembre-2026");
+assert.equal(marketReports.find((report) => report.id === "primer-informe-noviembre-2026")?.status, "archivado");
 assert.deepEqual(
   august.executiveSummary.map((item) => item.title),
   ["VOO", "GLD", "EWJ", "FXI", "BTC / ETH", "Stockpicking"],

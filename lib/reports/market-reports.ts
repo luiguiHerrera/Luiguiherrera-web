@@ -1,3 +1,4 @@
+import { secondNovember2026Report } from './second-november-2026.ts';
 import { secondOctober2026Report } from './second-october-2026.ts';
 import { firstNovember2026Report } from './first-november-2026.ts';
 import { firstOctober2026Report } from "./first-october-2026.ts";
@@ -2122,7 +2123,8 @@ export const marketReports: MarketReport[] = [
   { ...secondSeptember2026Report, status: "archivado" },
   { ...firstOctober2026Report, status: "archivado" },
   { ...secondOctober2026Report, status: "archivado" },
-  firstNovember2026Report,
+  { ...firstNovember2026Report, status: "archivado" },
+  secondNovember2026Report,
 ];
 
 export const activeMarketReport = marketReports.find((report) => report.status === "actual") ?? marketReports[0];
