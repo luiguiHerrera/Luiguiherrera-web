@@ -2,7 +2,7 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import { execFileSync } from 'node:child_process';
-import { ADOPT, P, need, sha, canonical, validateControllerRequest, controllerOutcome, PROMOTE, promotionStage, publicationReceipt } from './release-core.mjs';
+import { ADOPT, P, need, sha, canonical, validateControllerRequest, controllerOutcome, PROMOTE, promotionStage, publicationReceipt, TRANSITION, validateTransitionRequest } from './release-core.mjs';
 import { adoptInvocationReceipt, nativeInvocationIdentity } from './adopt-invocation-receipt.mjs';
 // Failure diagnostics are not a G5 receipt and cannot authorize acceptance or retry.
 // Exact constants from deployed controller f223db... (decoded 8859882a...).
@@ -200,7 +200,10 @@ try {
     request.observe_production_deployment_id = observed.production_deployment_id;
     await fs.writeFile(requestFile,canonical(request),{mode:0o600});
   }
-  validateControllerRequest(request);
+  if (request.operation === TRANSITION) {
+    validateTransitionRequest(request);
+    need(releaseStage === 'transition-'+request.phase,'TRANSITION_INVOCATION_PHASE');
+  } else validateControllerRequest(request);
   if (request.operation === PROMOTE) need(['start','observe','certify'].includes(releaseStage) && (releaseStage === 'certify') === !!request.production_qa_attestation_id, 'INVOCATION_PHASE');
   need(process.env.AWS_REGION === 'eu-south-2' && process.env.AWS_SESSION_TOKEN, 'AWS_SESSION_REQUIRED');
   const output = path.join(process.env.RUNNER_TEMP, 'statistical-levels-controller-response.json');
@@ -209,7 +212,7 @@ try {
   invocationAttempted = true;
   for (let observation = 0; observation < (releaseStage === 'observe' ? 20 : 1); observation++) {
     const metadataBytes = execFileSync('aws', ['lambda', 'invoke', '--function-name', P.lambda_arn,
-    '--region', 'eu-south-2', '--invocation-type', 'RequestResponse', ...(request.operation === ADOPT ? ['--log-type', 'Tail'] : []), '--cli-binary-format', 'raw-in-base64-out',
+    '--region', 'eu-south-2', '--invocation-type', 'RequestResponse', ...(request.operation === ADOPT ? ['--log-type', 'Tail'] : []), ...(request.operation === TRANSITION ? ['--log-type', 'Tail'] : []), '--cli-binary-format', 'raw-in-base64-out',
     '--payload', 'fileb://' + requestFile, '--cli-read-timeout', '930', '--no-cli-pager', output],
     { encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'], timeout: 950000,
       env: { ...process.env, AWS_MAX_ATTEMPTS: '1', AWS_PAGER: '' } });
@@ -231,7 +234,15 @@ try {
   }
   stage = 'CONTROLLER_RESULT';
   let outcome;
-  if (request.operation === PROMOTE && releaseStage !== 'certify') {
+  if (request.operation === TRANSITION) {
+    const prepared=request.phase==='prepare';
+    need(response.provider_fetch===false,'TRANSITION_RESPONSE');
+    need(prepared ? response.state==='TRANSITION_PREPARED_NOT_CERTIFIED' && /^[a-f0-9]{64}$/.test(response.intent_sha256) && response.qa_context?.schema==='sl.transition-qa-context.v1' : ['TRANSITION_CERTIFIED','ALREADY_CERTIFIED'].includes(response.state) && /^[a-f0-9]{64}$/.test(response.authority_head_sha256),'TRANSITION_NOT_CONFIRMED');
+    const proof={schema:'sl.transition-invocation-evidence.v1',request_sha256:sha(canonical(request)),response_sha256:sha(canonical(response)),response,native:nativeInvocationIdentity(metadata),execution:{id:process.env.GITHUB_RUN_ID,attempt:process.env.GITHUB_RUN_ATTEMPT,execution_sha:process.env.GITHUB_SHA,workflow_sha256:sha(await fs.readFile(P.workflow_path))},started_at:invocationStartedAt,completed_at:new Date().toISOString()};
+    await fs.writeFile(path.join(process.env.RUNNER_TEMP,'statistical-levels-transition-invocation.json'),canonical(proof),{flag:'wx',mode:0o600});
+    await fs.appendFile(process.env.GITHUB_OUTPUT,(prepared?'transition_context=':'transition_result=')+canonical(proof).toString()+'\n');
+    outcome={exitCode:0,stdout:prepared?'TRANSITION_PREPARED_NOT_CERTIFIED\n':response.state+'\n'};
+  } else if (request.operation === PROMOTE && releaseStage !== 'certify') {
     promotionStage(response,request.observe_production_deployment_id);
     await fs.appendFile(process.env.GITHUB_OUTPUT,'production_stage='+canonical(response).toString()+'\n');
     outcome = {exitCode:0,stdout:'PROMOTION_STAGE_RECORDED_UNCERTIFIED: final PUBLISHED gate remains mandatory.\n'};

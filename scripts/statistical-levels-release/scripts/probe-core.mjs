@@ -5,7 +5,7 @@ export const PROBE = 'PROBE_IDENTITY';
 const SHA = /^[a-f0-9]{40}$/, HASH = /^[a-f0-9]{64}$/, DEPLOYMENT = /^dpl_[a-zA-Z0-9]{10,80}$/;
 const RUN = /^[1-9][0-9]{0,19}$/;
 const matches = (pattern, value) => typeof value === 'string' && pattern.test(value);
-const releaseInputs = ['candidate_git_sha', 'candidate_deployment_id', 'expected_previous_production_sha',
+const releaseInputs = ['transition_request', 'candidate_git_sha', 'candidate_deployment_id', 'expected_previous_production_sha',
   'expected_previous_production_deployment', 'previous_publication_date'];
 const metadataKeys = ['github_deployment_id', 'status_id', 'status_sha256', 'commit_status_id', 'commit_status_sha256'];
 const targetKeys = ['operation', 'phase', 'candidate_git_sha', 'deployment_id', 'origin',

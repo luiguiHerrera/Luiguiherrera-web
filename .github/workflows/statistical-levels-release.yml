@@ -16,6 +16,7 @@ on:
           - ADOPT_EXISTING_PRODUCTION_BASELINE
           - PROMOTE_EXACT_STATISTICAL_LEVELS_CANDIDATE
           - PROBE_IDENTITY
+          - EXTRAORDINARY_EDITORIAL_AUTHORITY_TRANSITION
       candidate_git_sha:
         description: Future qualified data candidate SHA; leave empty for baseline adoption
         type: string
@@ -46,6 +47,10 @@ on:
         default: ''
       probe_deployment_id:
         description: Exact Preview deployment ID for PROBE_IDENTITY only
+        type: string
+        default: ''
+      transition_request:
+        description: Extraordinary operation only; JSON with direction, phase, authorization_sha256 and expected_head_sha256. No target or authority values.
         type: string
         default: ''
 permissions:
@@ -79,7 +84,7 @@ jobs:
       - name: Verify frozen helper bytes before executing any helper
         working-directory: scripts/statistical-levels-release
         env:
-          EXPECTED_SOURCE_SUMS: 35f147acfccf992a81229fdd974db16135622005157feb1317bc4867c680396e
+          EXPECTED_SOURCE_SUMS: 2fcc0e8e0b2295dfcd7fc733917a39bc9645ba9b23b6839195ab42425bfad090
         run: |
           printf '%s  SOURCE_SHA256SUMS\n' "$EXPECTED_SOURCE_SUMS" | sha256sum --check --strict
           sha256sum --check --strict SOURCE_SHA256SUMS
@@ -176,7 +181,7 @@ jobs:
       - name: Verify frozen helper bytes before executing any helper
         working-directory: scripts/statistical-levels-release
         env:
-          EXPECTED_SOURCE_SUMS: 35f147acfccf992a81229fdd974db16135622005157feb1317bc4867c680396e
+          EXPECTED_SOURCE_SUMS: 2fcc0e8e0b2295dfcd7fc733917a39bc9645ba9b23b6839195ab42425bfad090
         run: |
           printf '%s  SOURCE_SHA256SUMS\n' "$EXPECTED_SOURCE_SUMS" | sha256sum --check --strict
           sha256sum --check --strict SOURCE_SHA256SUMS
@@ -258,7 +263,7 @@ jobs:
       - name: Verify frozen helper bytes before executing any helper
         working-directory: scripts/statistical-levels-release
         env:
-          EXPECTED_SOURCE_SUMS: 35f147acfccf992a81229fdd974db16135622005157feb1317bc4867c680396e
+          EXPECTED_SOURCE_SUMS: 2fcc0e8e0b2295dfcd7fc733917a39bc9645ba9b23b6839195ab42425bfad090
         run: |
           printf '%s  SOURCE_SHA256SUMS\n' "$EXPECTED_SOURCE_SUMS" | sha256sum --check --strict
           sha256sum --check --strict SOURCE_SHA256SUMS
@@ -370,7 +375,7 @@ jobs:
       - name: Verify frozen helper bytes before executing any helper
         working-directory: scripts/statistical-levels-release
         env:
-          EXPECTED_SOURCE_SUMS: 35f147acfccf992a81229fdd974db16135622005157feb1317bc4867c680396e
+          EXPECTED_SOURCE_SUMS: 2fcc0e8e0b2295dfcd7fc733917a39bc9645ba9b23b6839195ab42425bfad090
         run: |
           printf '%s  SOURCE_SHA256SUMS\n' "$EXPECTED_SOURCE_SUMS" | sha256sum --check --strict
           sha256sum --check --strict SOURCE_SHA256SUMS
@@ -460,7 +465,7 @@ jobs:
       - name: Verify frozen helper bytes before executing any helper
         working-directory: scripts/statistical-levels-release
         env:
-          EXPECTED_SOURCE_SUMS: 35f147acfccf992a81229fdd974db16135622005157feb1317bc4867c680396e
+          EXPECTED_SOURCE_SUMS: 2fcc0e8e0b2295dfcd7fc733917a39bc9645ba9b23b6839195ab42425bfad090
         run: |
           printf '%s  SOURCE_SHA256SUMS\n' "$EXPECTED_SOURCE_SUMS" | sha256sum --check --strict
           sha256sum --check --strict SOURCE_SHA256SUMS
@@ -493,7 +498,7 @@ jobs:
         id: source_integrity
         working-directory: scripts/statistical-levels-release
         env:
-          EXPECTED_SOURCE_SUMS: 35f147acfccf992a81229fdd974db16135622005157feb1317bc4867c680396e
+          EXPECTED_SOURCE_SUMS: 2fcc0e8e0b2295dfcd7fc733917a39bc9645ba9b23b6839195ab42425bfad090
         run: |
           printf '%s  SOURCE_SHA256SUMS\n' "$EXPECTED_SOURCE_SUMS" | sha256sum --check --strict
           sha256sum --check --strict SOURCE_SHA256SUMS
@@ -552,7 +557,7 @@ jobs:
         if: always() && steps.source_integrity.outcome == 'success'
         working-directory: scripts/statistical-levels-release
         env:
-          EXPECTED_SOURCE_SUMS: 35f147acfccf992a81229fdd974db16135622005157feb1317bc4867c680396e
+          EXPECTED_SOURCE_SUMS: 2fcc0e8e0b2295dfcd7fc733917a39bc9645ba9b23b6839195ab42425bfad090
           PROBE_RESOLVE_OUTCOME: ${{ steps.resolve.outcome }}
           PROBE_QA_OUTCOME: ${{ steps.qa.outcome }}
           PROBE_AWS_ASSUME_OUTCOME: ${{ steps.aws_assume.outcome }}
@@ -578,6 +583,221 @@ jobs:
             ${{ runner.temp }}/statistical-levels-identity-probe/artifact/metadata-resolution.json
             ${{ runner.temp }}/statistical-levels-identity-probe/artifact/evidence-sha256.json
           retention-days: 7
+          if-no-files-found: error
+          include-hidden-files: false
+          overwrite: false
+
+  transition-prepare:
+    name: Statistical Levels extraordinary preparation
+    if: inputs.operation == 'EXTRAORDINARY_EDITORIAL_AUTHORITY_TRANSITION' && github.event_name == 'workflow_dispatch' && github.repository == 'luiguiHerrera/Luiguiherrera-web' && github.ref == 'refs/heads/vercel-deployment'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    permissions:
+      contents: read
+      id-token: write
+    outputs:
+      direction: ${{ steps.request.outputs.direction }}
+      requested_phase: ${{ steps.request.outputs.requested_phase }}
+      transition_context: ${{ steps.controller.outputs.transition_context }}
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+          fetch-depth: 1
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38
+        with:
+          node-version: '22.23.2'
+          package-manager-cache: false
+      - name: Verify frozen helper bytes before executing any helper
+        working-directory: scripts/statistical-levels-release
+        env:
+          EXPECTED_SOURCE_SUMS: 2fcc0e8e0b2295dfcd7fc733917a39bc9645ba9b23b6839195ab42425bfad090
+        run: |
+          printf '%s  SOURCE_SHA256SUMS\n' "$EXPECTED_SOURCE_SUMS" | sha256sum --check --strict
+          sha256sum --check --strict SOURCE_SHA256SUMS
+      - name: Validate exact workflow and bounded transition selection
+        id: request
+        env:
+          SL_JOB_WORKFLOW_REF: ${{ job.workflow_ref }}
+          SL_JOB_WORKFLOW_SHA: ${{ job.workflow_sha }}
+          SL_JOB_WORKFLOW_REPOSITORY: ${{ job.workflow_repository }}
+          SL_JOB_WORKFLOW_FILE_PATH: ${{ job.workflow_file_path }}
+        run: node scripts/statistical-levels-release/scripts/cli.mjs transition-prepare
+      - name: Assume only dedicated Lambda invoker
+        uses: aws-actions/configure-aws-credentials@cbe3b392738ccf3f987d68400dafcf4b0624a56c
+        with:
+          aws-region: eu-south-2
+          role-to-assume: arn:aws:iam::732159826922:role/LuiguiHerreraStatisticalLevelsReleaseInvoker
+          audience: sts.amazonaws.com
+          allowed-account-ids: '732159826922'
+          role-session-name: sl-release-${{ github.run_id }}
+          role-duration-seconds: 1800
+          unset-current-credentials: true
+          use-existing-credentials: false
+          output-credentials: false
+          disable-retry: true
+          action-timeout-s: 60
+          inline-session-policy: '{"Version":"2012-10-17","Statement":[{"Effect":"Allow","Action":"lambda:InvokeFunction","Resource":"arn:aws:lambda:eu-south-2:732159826922:function:statistical-levels-vercel-release-controller"}]}'
+      - name: Prepare or resume only the same immutable intent
+        id: controller
+        env:
+          SL_RELEASE_STAGE: transition-prepare
+        run: node scripts/statistical-levels-release/scripts/invoke.mjs
+      - name: Retain preparation evidence without claiming certification
+        if: success()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+        with:
+          name: statistical-levels-transition-preparation
+          path: ${{ runner.temp }}/statistical-levels-transition-invocation.json
+          retention-days: 90
+          if-no-files-found: error
+          include-hidden-files: false
+          overwrite: false
+  transition-qa:
+    name: Statistical Levels extraordinary ${{ needs.transition-prepare.outputs.direction }} QA
+    needs: transition-prepare
+    if: needs.transition-prepare.result == 'success' && needs.transition-prepare.outputs.requested_phase == 'certify'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 40
+    permissions:
+      contents: read
+      checks: write
+    outputs:
+      transition_envelope: ${{ steps.qa.outputs.transition_envelope }}
+      transition_check_id: ${{ steps.qa.outputs.transition_check_id }}
+      transition_seal_sha256: ${{ steps.qa.outputs.transition_seal_sha256 }}
+    env:
+      SL_TRANSITION_CONTEXT: ${{ needs.transition-prepare.outputs.transition_context }}
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+          fetch-depth: 1
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38
+        with:
+          node-version: '22.23.2'
+          package-manager-cache: false
+      - name: Verify frozen helper bytes before executing any helper
+        working-directory: scripts/statistical-levels-release
+        env:
+          EXPECTED_SOURCE_SUMS: 2fcc0e8e0b2295dfcd7fc733917a39bc9645ba9b23b6839195ab42425bfad090
+        run: |
+          printf '%s  SOURCE_SHA256SUMS\n' "$EXPECTED_SOURCE_SUMS" | sha256sum --check --strict
+          sha256sum --check --strict SOURCE_SHA256SUMS
+      - name: Derive QA target exclusively from verified controller response
+        id: target
+        run: node scripts/statistical-levels-release/scripts/cli.mjs transition-target
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+        with:
+          ref: ${{ steps.target.outputs.candidate_sha }}
+          path: .release-candidate
+          persist-credentials: false
+          fetch-depth: 1
+      - name: Install locked QA dependencies without lifecycle scripts
+        run: |
+          npm ci --prefix .release-candidate --ignore-scripts --no-audit --no-fund --userconfig=/dev/null --registry=https://registry.npmjs.org
+          npm ci --prefix scripts/statistical-levels-release/qa-dependencies --ignore-scripts --no-audit --no-fund --userconfig=/dev/null --registry=https://registry.npmjs.org
+          node scripts/statistical-levels-release/qa-dependencies/node_modules/playwright/cli.js install --with-deps chromium
+      - name: Produce fresh public QA for this exact intent and direction
+        id: qa
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: node scripts/statistical-levels-release/scripts/cli.mjs transition-qa
+      - name: Retain sanitized transition QA evidence
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+        with:
+          name: statistical-levels-transition-qa
+          path: |
+            ${{ runner.temp }}/statistical-levels-transition-qa/qa-envelope.json
+            ${{ runner.temp }}/statistical-levels-transition-qa/qa-binding.json
+            ${{ runner.temp }}/statistical-levels-transition-qa/product-report.json
+            ${{ runner.temp }}/statistical-levels-transition-qa/browser-report.json
+            ${{ runner.temp }}/statistical-levels-transition-qa/defect-browser-report.json
+            ${{ runner.temp }}/statistical-levels-transition-qa/interaction-browser-report.json
+            ${{ runner.temp }}/statistical-levels-transition-qa/native-ingress.jsonl
+            ${{ runner.temp }}/statistical-levels-transition-qa/native-lifecycle-diagnostics.json
+            ${{ runner.temp }}/statistical-levels-transition-qa/adopt-request-evidence.json
+          retention-days: 90
+          if-no-files-found: warn
+          include-hidden-files: false
+          overwrite: false
+  seal-transition-qa:
+    name: statistical-levels-transition-${{ needs.transition-prepare.outputs.direction }}-qa-sha256-${{ needs.transition-qa.outputs.transition_seal_sha256 }}
+    needs: [transition-prepare, transition-qa]
+    if: needs.transition-qa.result == 'success'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 2
+    permissions: {}
+    steps:
+      - name: Seal successful independent QA and intent binding
+        env:
+          HASH: ${{ needs.transition-qa.outputs.transition_seal_sha256 }}
+        run: '[[ "$HASH" =~ ^[a-f0-9]{64}$ ]]'
+  transition-certify:
+    name: Statistical Levels extraordinary certification
+    needs: [transition-prepare, transition-qa, seal-transition-qa]
+    if: needs.transition-qa.result == 'success' && needs.seal-transition-qa.result == 'success'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+          fetch-depth: 1
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38
+        with:
+          node-version: '22.23.2'
+          package-manager-cache: false
+      - name: Verify frozen helper bytes before executing any helper
+        working-directory: scripts/statistical-levels-release
+        env:
+          EXPECTED_SOURCE_SUMS: 2fcc0e8e0b2295dfcd7fc733917a39bc9645ba9b23b6839195ab42425bfad090
+        run: |
+          printf '%s  SOURCE_SHA256SUMS\n' "$EXPECTED_SOURCE_SUMS" | sha256sum --check --strict
+          sha256sum --check --strict SOURCE_SHA256SUMS
+      - name: Independently fetch and bind the completed Check and digest job
+        env:
+          SL_JOB_WORKFLOW_REF: ${{ job.workflow_ref }}
+          SL_JOB_WORKFLOW_SHA: ${{ job.workflow_sha }}
+          SL_JOB_WORKFLOW_REPOSITORY: ${{ job.workflow_repository }}
+          SL_JOB_WORKFLOW_FILE_PATH: ${{ job.workflow_file_path }}
+          SL_TRANSITION_CONTEXT: ${{ needs.transition-prepare.outputs.transition_context }}
+          SL_TRANSITION_ENVELOPE: ${{ needs.transition-qa.outputs.transition_envelope }}
+          SL_TRANSITION_CHECK_ID: ${{ needs.transition-qa.outputs.transition_check_id }}
+        run: node scripts/statistical-levels-release/scripts/cli.mjs transition-certify
+      - name: Assume only dedicated Lambda invoker
+        uses: aws-actions/configure-aws-credentials@cbe3b392738ccf3f987d68400dafcf4b0624a56c
+        with:
+          aws-region: eu-south-2
+          role-to-assume: arn:aws:iam::732159826922:role/LuiguiHerreraStatisticalLevelsReleaseInvoker
+          audience: sts.amazonaws.com
+          allowed-account-ids: '732159826922'
+          role-session-name: sl-release-${{ github.run_id }}
+          role-duration-seconds: 1800
+          unset-current-credentials: true
+          use-existing-credentials: false
+          output-credentials: false
+          disable-retry: true
+          action-timeout-s: 60
+          inline-session-policy: '{"Version":"2012-10-17","Statement":[{"Effect":"Allow","Action":"lambda:InvokeFunction","Resource":"arn:aws:lambda:eu-south-2:732159826922:function:statistical-levels-vercel-release-controller"}]}'
+      - name: Certify the exact transition once; never promote or retry automatically
+        env:
+          SL_RELEASE_STAGE: transition-certify
+        run: node scripts/statistical-levels-release/scripts/invoke.mjs
+      - name: Retain distinct authority-transition invocation evidence
+        if: success()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+        with:
+          name: statistical-levels-transition-certification
+          path: ${{ runner.temp }}/statistical-levels-transition-invocation.json
+          retention-days: 90
           if-no-files-found: error
           include-hidden-files: false
           overwrite: false

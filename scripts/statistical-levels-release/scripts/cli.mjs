@@ -5,6 +5,10 @@ import { assertWorkflow, deployment, oidc, emitAttestation, prepareInvocation, w
 
 try {
   const mode = process.argv[2];
+  if (['transition-prepare','transition-target','transition-qa','transition-certify'].includes(mode)) {
+    await (await import('./runtime-io.mjs')).runTransitionMode(mode);
+    process.exit(0);
+  }
   need(['preflight', 'qa', 'prepare-invocation', 'production-qa', 'prepare-certification', 'seal-publication', 'daily-dispatch'].includes(mode), 'MODE');
   const frozen = mode === 'daily-dispatch' ? null : await assertWorkflow();
   if (mode === 'daily-dispatch') {

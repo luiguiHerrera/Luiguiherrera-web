@@ -28,7 +28,7 @@ jobs:
       SL_CI_ZOD_PAYLOAD_SHA256: "a969cb3ee3f94133bd4c0ee9079e14a594060fca6c49bb92e1ac95ecc30c7680"
       SL_CI_DURABILITY_PAYLOAD_SHA256: "ba91204d59625ca01b113965b9bc1fb5c41450b7e4a32ae068cdfb65404ae81b"
       SL_CI_BOOTSTRAP_PAYLOAD_SHA256: "775521938439962eca0e3bc35f0d3303b2b1fafa0a3fc6a360b162b281f39c95"
-      SL_CI_LINEAGE_PAYLOAD_SHA256: "671b71c95ef3019f886a6fc6dfab7c551ab1e9c96e52b266c1f096e2966201be"
+      SL_CI_LINEAGE_PAYLOAD_SHA256: "5685516a5e2d6c059103a7e55597e2708c6a7b53fe7f7cb390966cb30423acb1"
       SL_CI_R1_REPAIR_PAYLOAD_SHA256: "2bec9239840ec032d4e2ff9b07d0f63a23ce2d6a97791624f086bd1bfc17387b"
       SL_CI_PUBLICATION_CLOSURE_SHA256: "71d731bce3bd0a572cf7596c8d1fb7263ad3c7e91e9a6cabd35e8834c6ad2816"
       SL_CI_PUBLICATION_REPAIR_SHA256: "59be4e518b279aab39482ddf2d21346b64b56ae451b10c5b1fc3716376a4fe2c"
@@ -669,7 +669,7 @@ jobs:
               assert sha((root/p).read_bytes())==digest, name
           workflow=(root/'.github/workflows/statistical-levels-release.yml').read_bytes()
           pins=re.findall(rb'EXPECTED_SOURCE_SUMS: ([a-f0-9]{64})',workflow)
-          assert len(pins)==7 and all(p.decode()==sha(canonical.encode()) for p in pins), 'WORKFLOW_PINS'
+          assert len(pins)==10 and all(p.decode()==sha(canonical.encode()) for p in pins), 'WORKFLOW_PINS'
           frozen=unique(base/'workflow-freeze.json')
           assert frozen['workflow_path']=='.github/workflows/statistical-levels-release.yml'
           assert frozen['workflow_sha256']==sha(workflow) and frozen['source_sums_sha256']==sha(canonical.encode()), 'FREEZE_PARITY'
@@ -819,6 +819,12 @@ jobs:
           set -euo pipefail
           node --import ./scripts/trends-test-register.mjs --experimental-test-module-mocks --experimental-strip-types --test --test-reporter=tap lib/reports/first-september-2026.test.mts lib/reports/second-september-2026.test.mts lib/reports/september-corrective-release.test.mts lib/reports/second-september-source-policy.test.mts | tee "$CI_EVIDENCE/reports.tap"
           node --experimental-strip-types --test --test-reporter=tap lib/statistical-levels/baseline.test.mjs lib/statistical-levels/contracts.test.ts lib/statistical-levels/defect-repairs.test.ts scripts/statistical-levels-storage.test.mjs components/statistical-levels/interaction-presentation.test.ts | tee "$CI_EVIDENCE/product.tap"
+
+      - name: Test extraordinary authority transition coverage
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -B scripts/statistical-levels-ci/authority-transition/run.py --out "$CI_EVIDENCE/authority-transition"
 
       - name: Reject missing or skipped mandatory coverage and candidate drift
         shell: bash

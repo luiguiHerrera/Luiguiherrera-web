@@ -22,7 +22,7 @@ export async function github(relative) {
 }
 // Preserve every legacy input value/error; strip only GitHub's known empty probe defaults.
 export function normalizeReleaseInputs(inputs) {
-  const keys = ['probe_git_sha', 'probe_deployment_id'];
+  const keys = ['probe_git_sha', 'probe_deployment_id', 'transition_request'];
   if (!inputs || typeof inputs !== 'object' || Array.isArray(inputs) || !keys.some(key => Object.hasOwn(inputs, key))) return inputs;
   const releaseInputs = { ...inputs };
   for (const key of keys) {
@@ -207,4 +207,106 @@ async function verifiedPublished(check, workflowHash) {
     {redirect:'error',signal:AbortSignal.timeout(30000)});
   need(response.ok && sha(Buffer.from(await response.arrayBuffer())) === workflowHash, 'PUBLISHED_WORKFLOW_BYTES');
   return publishedCheck(check,run,workflowHash,await github('/actions/runs/'+run.id+'/attempts/'+run.run_attempt+'/jobs?per_page=100'));
+}
+
+// The same controlled workflow and invoker are used. No caller target or
+// authority tuple is accepted for an extraordinary transition.
+export function validateTransitionCheckReadback(check, body) {
+  const object = value => value !== null && typeof value === 'object' && !Array.isArray(value);
+  const metadata = ['url','html_url','details_url','node_id','started_at','check_suite','pull_requests','deployment'];
+  const fields = ['name','head_sha','external_id','status','conclusion','completed_at'];
+  const valid = object(check) && Number.isSafeInteger(check.id) && check.id > 0 &&
+    object(check.app) && check.app.slug === 'github-actions' &&
+    Object.keys(check).every(key => ['id','app','output',...fields,...metadata].includes(key)) &&
+    fields.every(key => typeof check[key] === 'string' && check[key] === body[key]) &&
+    object(check.output) && ['title','summary','text'].every(key =>
+      typeof check.output[key] === 'string' && check.output[key] === body.output[key]) &&
+    Object.keys(check.output).every(key => ['title','summary','text','annotations_count','annotations_url'].includes(key)) &&
+    (!Object.hasOwn(check.output,'annotations_count') || Number.isSafeInteger(check.output.annotations_count) && check.output.annotations_count >= 0) &&
+    (!Object.hasOwn(check.output,'annotations_url') || check.output.annotations_url ===
+      'https://api.github.com/repos/'+P.repository+'/check-runs/'+check.id+'/annotations');
+  need(valid,'TRANSITION_CHECK_READBACK');
+  return check;
+}
+
+// GitHub returns Check timestamps at whole-second precision. Observe that instant
+// before submitting it; never postdate QA or relax its freshness comparisons.
+export async function transitionCheckTimestamp(qaTimestamp, clock, wait = ms => new Promise(resolve => setTimeout(resolve,ms))) {
+  const {transitionUTC}=await import('./release-core.mjs');
+  const earliest=Math.ceil(transitionUTC(qaTimestamp)/1000)*1000;
+  let observed=transitionUTC(clock());
+  if(observed<earliest){await wait(earliest-observed);observed=transitionUTC(clock());}
+  need(Math.floor(observed/1000)*1000>=earliest,'TRANSITION_CHECK_CLOCK');
+  return new Date(Math.floor(observed/1000)*1000).toISOString().replace('.000Z','Z');
+}
+
+export async function assertTransitionWorkflow(env = process.env) {
+  const core=await import('./release-core.mjs');
+  const frozen=JSON.parse(await fs.readFile(path.join(packageRoot,'workflow-freeze.json'),'utf8'));
+  need(/^[a-f0-9]{40}$/.test(env.GITHUB_SHA??''),'WORKFLOW_EXECUTION_SHA');
+  const bytes=git('show',env.GITHUB_SHA+':'+P.workflow_path);
+  validateRun(env,bytes,frozen);
+  need((await fs.readFile(path.join(codeRoot,P.workflow_path))).equals(bytes),'CHECKOUT_WORKFLOW_DRIFT');
+  const bundle=JSON.parse(await fs.readFile(path.join(packageRoot,'source-manifest.json'),'utf8'));
+  for(const [name,hash] of Object.entries(bundle)) {
+    need(!name.includes('..')&&!path.isAbsolute(name),'SOURCE_MANIFEST_PATH');
+    const full=path.join(packageRoot,name),stat=await fs.lstat(full);
+    need(stat.isFile()&&!stat.isSymbolicLink()&&sha(await fs.readFile(full))===hash,'SOURCE_BUNDLE_MISMATCH');
+  }
+  const event=JSON.parse(await fs.readFile(env.GITHUB_EVENT_PATH,'utf8'));
+  const selection=core.selectTransition(event.inputs??{}),run=execution(env);
+  validateRunMetadata(await github('/actions/runs/'+run.id),run);
+  need((await github('/git/ref/heads/'+P.branch)).object.sha===run.execution_sha,'WORKFLOW_BRANCH_DRIFT');
+  return {...frozen,selection,run};
+}
+export async function runTransitionMode(mode,env=process.env,ports={}) {
+  const core=await import('./release-core.mjs');
+  const frozen=await (ports.assertWorkflow??assertTransitionWorkflow)(env),{selection,run}=frozen;
+  const clock=ports.clock??(()=>new Date().toISOString());
+  const read=ports.github??github;
+  const output=async values=>fs.appendFile(env.GITHUB_OUTPUT,Object.entries(values).map(([k,v])=>k+'='+v+'\n').join(''));
+  const write=async request=>fs.writeFile(path.join(env.RUNNER_TEMP,'statistical-levels-release-request.json'),canonical(core.validateTransitionRequest(request)),{flag:'wx',mode:0o600});
+  if(mode==='transition-prepare') {
+    await (ports.oidc??oidc)(P.aws_audience,env);
+    await write(core.transitionPrepareRequest(selection));
+    await output({direction:selection.direction,requested_phase:selection.phase});
+    return;
+  }
+  need(['transition-target','transition-qa','transition-certify'].includes(mode),'TRANSITION_MODE');
+  need(selection.phase==='certify'&&typeof env.SL_TRANSITION_CONTEXT==='string'&&env.SL_TRANSITION_CONTEXT.length<60000,'TRANSITION_CONTEXT_ABSENT');
+  const proof=JSON.parse(env.SL_TRANSITION_CONTEXT);
+  const ctx=core.validateTransitionContext(proof,selection,run,frozen.workflow_sha256,Date.parse(clock()));
+  const jobs=await read('/actions/runs/'+run.id+'/attempts/'+run.attempt+'/jobs?per_page=100');
+  need(Array.isArray(jobs?.jobs)&&jobs.total_count===jobs.jobs.length&&jobs.total_count<=100,'TRANSITION_PREPARATION_JOBS');
+  const prepared=jobs.jobs.filter(j=>j.name==='Statistical Levels extraordinary preparation');
+  need(prepared.length===1&&String(prepared[0].run_id)===run.id&&String(prepared[0].run_attempt)===run.attempt&&prepared[0].head_sha===run.execution_sha&&prepared[0].head_branch===P.branch&&prepared[0].status==='completed'&&prepared[0].conclusion==='success'&&core.transitionUTC(prepared[0].completed_at)>=core.transitionUTC(proof.completed_at),'TRANSITION_PREPARATION_JOB');
+  need(canonical(ctx.active_binding).equals(canonical(ctx.intent.binding)),'TRANSITION_PUBLIC_TARGET_REQUIRED');
+  validateAncestry(await read('/compare/'+ctx.target.candidate_git_sha+'...'+run.execution_sha+'?per_page=1'),run.execution_sha,ctx.target.candidate_git_sha);
+  if(mode==='transition-target') {
+    await output({candidate_sha:ctx.target.candidate_git_sha});
+    return;
+  }
+  if(mode==='transition-qa') {
+    const inputManifest=JSON.parse(await fs.readFile(path.join(packageRoot,'source-inputs.json'),'utf8'));
+    const out=path.join(env.RUNNER_TEMP,'statistical-levels-transition-qa');
+    await fs.mkdir(out,{mode:0o700}); // Fresh directory; never reuse a prior QA artifact.
+    const started=clock();
+    const runQA=ports.runQA??(await import('./preview-qa.mjs')).runCandidateQA;
+    const report=await runQA({target:ctx.target,out,codeRoot:candidateRoot,inputManifest});
+    const envelope=core.attest(report,run,ctx.target,frozen.workflow_sha256,clock());
+    const body=core.transitionCheckBody(ctx,selection,envelope,run,started,await transitionCheckTimestamp(envelope.timestamp,clock));
+    // The independent QA job owns checks:write; the invoker jobs do not.
+    const check=await (ports.githubWrite??githubWrite)('/check-runs',body,env);
+    validateTransitionCheckReadback(check,body);
+    const binding=JSON.parse(body.output.summary);
+    const seal=sha(canonical({binding,payload:envelope.controller_payload}));
+    await fs.writeFile(path.join(out,'qa-envelope.json'),canonical(envelope),{flag:'wx',mode:0o600});
+    await fs.writeFile(path.join(out,'qa-binding.json'),canonical(binding),{flag:'wx',mode:0o600});
+    await output({transition_envelope:canonical(envelope).toString(),transition_check_id:String(check.id),transition_payload_sha256:envelope.controller_payload_sha256,transition_seal_sha256:seal});
+    return;
+  }
+  need(/^[1-9][0-9]{0,19}$/.test(env.SL_TRANSITION_CHECK_ID??'')&&typeof env.SL_TRANSITION_ENVELOPE==='string'&&env.SL_TRANSITION_ENVELOPE.length<60000,'TRANSITION_QA_REFERENCE');
+  const request=core.transitionCertificationRequest(ctx,selection,JSON.parse(env.SL_TRANSITION_ENVELOPE),await read('/check-runs/'+env.SL_TRANSITION_CHECK_ID),jobs,run,frozen.workflow_sha256,Date.parse(clock()));
+  await (ports.oidc??oidc)(P.aws_audience,env);
+  await write(request);
 }

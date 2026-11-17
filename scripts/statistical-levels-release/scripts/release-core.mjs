@@ -19,6 +19,7 @@ export function exactKeys(value, keys, code = 'UNEXPECTED_FIELD') {
 }
 export const ADOPT = 'ADOPT_EXISTING_PRODUCTION_BASELINE';
 export const PROMOTE = 'PROMOTE_EXACT_STATISTICAL_LEVELS_CANDIDATE';
+export const TRANSITION = 'EXTRAORDINARY_EDITORIAL_AUTHORITY_TRANSITION';
 const SHA = /^[a-f0-9]{40}$/, HASH = /^[a-f0-9]{64}$/, DEPLOYMENT = /^dpl_[a-zA-Z0-9]{10,80}$/;
 const futureInputs = ['candidate_git_sha', 'candidate_deployment_id', 'expected_previous_production_sha', 'expected_previous_production_deployment', 'previous_publication_date'];
 export function selectTarget(inputs) {
@@ -51,13 +52,15 @@ export function verifiedOrigin(value, phase = 'preview') {
   return url.origin;
 }
 export function validateTarget(target) {
-  need([ADOPT, PROMOTE].includes(target.operation) && SHA.test(target.candidate_git_sha) && DEPLOYMENT.test(target.deployment_id), 'ATTESTATION_CANDIDATE');
+  need([ADOPT, PROMOTE, TRANSITION].includes(target.operation) && SHA.test(target.candidate_git_sha) && DEPLOYMENT.test(target.deployment_id), 'ATTESTATION_CANDIDATE');
   need(target.operation === ADOPT ? target.phase === 'production' : ['preview','production'].includes(target.phase), 'ATTESTATION_PHASE');
   verifiedOrigin(target.origin, target.phase);
   need(typeof target.authority_run_id === 'string' && /^\d{8}T\d{9}Z-[a-f0-9-]{36}$/.test(target.authority_run_id) && HASH.test(target.sealed_manifest_sha256), 'AUTHORITY_IDENTITY');
   if (target.operation === ADOPT) {
     need(target.candidate_git_sha === P.baseline.production_git_sha && target.deployment_id === P.baseline.production_deployment_id &&
       target.authority_run_id === P.baseline.authority_run_id && target.sealed_manifest_sha256 === P.baseline.sealed_manifest_sha256, 'BASELINE_IDENTITY');
+  } else if (target.operation === TRANSITION) {
+    need(target.phase === 'production' && target.authority_run_id === P.baseline.authority_run_id && target.sealed_manifest_sha256 === P.baseline.sealed_manifest_sha256, 'TRANSITION_SNAPSHOT_IDENTITY');
   } else {
     need(target.authority_run_id.slice(0, 8) > P.baseline.authority_run_id.slice(0, 8), 'FUTURE_AUTHORITY_REQUIRED');
     need(target.candidate_git_sha !== P.baseline.production_git_sha && target.candidate_git_sha !== target.expected_previous_production_sha, 'NO_OP_RELEASE_FORBIDDEN');
@@ -74,21 +77,51 @@ export function validateRun(env, workflowBytes, frozen) {
   need(frozen.workflow_path === P.workflow_path && /^[a-f0-9]{64}$/.test(frozen.workflow_sha256), 'WORKFLOW_FREEZE');
   need(sha(workflowBytes) === frozen.workflow_sha256, 'WORKFLOW_SHA');
 }
+function previewTime(value) {
+  need(typeof value === 'string' && /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d{3})?Z$/.test(value) &&
+    Number.isFinite(Date.parse(value)) && new Date(value).toISOString() === (value.includes('.') ? value : value.replace('Z', '.000Z')),
+  'PREVIEW_TIMESTAMP');
+  return Date.parse(value);
+}
+function previewLatest(records, code, parentCreated) {
+  need(Array.isArray(records) && records.length < 100 && records.every(x => x && Number.isSafeInteger(x.id) && x.id > 0) &&
+    new Set(records.map(x => x.id)).size === records.length, code);
+  const ordered = [...records].sort((a, b) => a.id - b.id);
+  let previousCreated;
+  for (const record of ordered) {
+    const updated = previewTime(record.updated_at);
+    // Creation metadata is checked when supplied; updated_at remains mandatory.
+    // IDs select the latest record within its own stream, never across streams.
+    if (Object.hasOwn(record, 'created_at')) {
+      const created = previewTime(record.created_at);
+      need(created <= updated && (previousCreated === undefined || previousCreated <= created) &&
+        (parentCreated === undefined || parentCreated <= created), 'PREVIEW_TIMESTAMP');
+      previousCreated = created;
+    }
+    need(parentCreated === undefined || parentCreated <= updated, 'PREVIEW_TIMESTAMP');
+  }
+  return ordered.at(-1);
+}
 export function resolvePreview(deployments, statusSets, commitStatuses, target) {
   need(target.operation === PROMOTE && SHA.test(target.candidate_git_sha) && DEPLOYMENT.test(target.deployment_id), 'PREVIEW_TARGET');
   need(Array.isArray(deployments) && deployments.length < 100 && Array.isArray(commitStatuses) && commitStatuses.length < 100, 'DEPLOYMENT_METADATA_INCOMPLETE');
   const creator = x => x?.creator?.login === P.vercel_creator_login && x.creator.id === P.vercel_creator_id;
-  const commits = commitStatuses.filter(s => s.context === 'Vercel').sort((a, b) => b.id - a.id);
-  const commit = commits[0];
+  const commit = previewLatest(commitStatuses.filter(s => s.context === 'Vercel'), 'DEPLOYMENT_METADATA_INCOMPLETE');
   need(commit && creator(commit) && commit.state === 'success' &&
     commit.target_url === P.vercel_details_base_url + target.deployment_id.slice(4), 'VERCEL_ID_BINDING');
   const matches = [];
   for (const deployment of deployments) {
     if (!creator(deployment) || deployment.sha !== target.candidate_git_sha || deployment.environment !== 'Preview' || deployment.production_environment !== false) continue;
+    const parentCreated = Object.hasOwn(deployment, 'created_at') ? previewTime(deployment.created_at) : undefined;
+    if (Object.hasOwn(deployment, 'updated_at')) {
+      const updated = previewTime(deployment.updated_at);
+      need(parentCreated === undefined || parentCreated <= updated, 'PREVIEW_TIMESTAMP');
+    }
     const statuses = statusSets[String(deployment.id)];
-    need(Array.isArray(statuses) && statuses.length < 100, 'DEPLOYMENT_STATUS_INCOMPLETE');
-    const latest = [...statuses].sort((a, b) => b.id - a.id)[0];
-    if (!latest || !creator(latest) || latest.state !== 'success' || latest.environment !== 'Preview' || latest.updated_at !== commit.updated_at) continue;
+    const latest = previewLatest(statuses, 'DEPLOYMENT_STATUS_INCOMPLETE', parentCreated);
+    // Commit status and deployment status are independent publications. Identity
+    // links and unique resolution bind them; timestamp equality does not.
+    if (!latest || !creator(latest) || latest.state !== 'success' || latest.environment !== 'Preview') continue;
     need(latest.deployment_url === `https://api.github.com/repos/${P.repository}/deployments/${deployment.id}`, 'PREVIEW_STATUS');
     const origin = verifiedOrigin(latest.environment_url);
     need(latest.target_url === origin && latest.log_url === origin, 'DEPLOYMENT_URL_BINDING');
@@ -382,4 +415,90 @@ export function publishedCheck(check, run, workflowHash, jobs) {
   const gate=jobs.jobs.filter(j=>j.name === 'statistical-levels-published-sha256-'+r.marker_sha256);
   need(gate.length === 1 && String(gate[0].run_id) === String(run.id) && gate[0].run_attempt === run.run_attempt && gate[0].head_sha === run.head_sha && gate[0].status === 'completed' && gate[0].conclusion === 'success', 'PUBLISHED_SERVER_DIGEST');
   return r;
+}
+
+// Extraordinary authority linkage. These functions validate server context;
+// they never select a deployment, change traffic, or issue publication authority.
+export function transitionUTC(value) {
+  need(typeof value === 'string' && /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d{1,6})?Z$/.test(value), 'TRANSITION_TIMESTAMP');
+  const time = Date.parse(value);
+  need(Number.isFinite(time) && new Date(time).toISOString().slice(0,19) === value.slice(0,19), 'TRANSITION_TIMESTAMP');
+  return time;
+}
+export function validateTransitionRequest(request) {
+  const keys = ['operation','direction','phase','authorization_sha256','expected_head_sha256'];
+  need(request?.operation === TRANSITION && ['rebind','rollback'].includes(request.direction) && ['prepare','certify'].includes(request.phase), 'TRANSITION_OPERATION');
+  if (request.phase === 'certify') keys.push('production_qa_attestation_id','production_qa_attestation_hash');
+  exactKeys(request,keys,'TRANSITION_REQUEST_FIELDS');
+  need(Object.values(request).every(v=>typeof v==='string') && HASH.test(request.authorization_sha256) && HASH.test(request.expected_head_sha256), 'TRANSITION_REQUEST_IDENTITY');
+  if (request.phase === 'certify') need(/^[1-9][0-9]{0,19}$/.test(request.production_qa_attestation_id) && HASH.test(request.production_qa_attestation_hash), 'TRANSITION_QA_REFERENCE');
+  return request;
+}
+export function selectTransition(inputs) {
+  need(inputs?.operation === TRANSITION && typeof inputs.transition_request === 'string' && inputs.transition_request.length < 2048, 'TRANSITION_DISPATCH');
+  const empty = [...futureInputs,'resume_production_deployment_id','probe_git_sha','probe_deployment_id'];
+  need(Object.keys(inputs).every(k=>['operation','transition_request',...empty].includes(k)) && empty.every(k=>!Object.hasOwn(inputs,k)||inputs[k]===''), 'TRANSITION_CALLER_TARGET_FORBIDDEN');
+  const selection=JSON.parse(inputs.transition_request);
+  exactKeys(selection,['direction','phase','authorization_sha256','expected_head_sha256'],'TRANSITION_SELECTION_FIELDS');
+  need(['prepare','certify'].includes(selection.phase),'TRANSITION_PHASE');
+  validateTransitionRequest({operation:TRANSITION,...selection,phase:'prepare'});
+  return selection;
+}
+export function transitionPrepareRequest(selection) {
+  return validateTransitionRequest({operation:TRANSITION,...selection,phase:'prepare'});
+}
+export function validateTransitionContext(proof,selection,run,workflowHash,now=Date.now()) {
+  exactKeys(proof,['schema','request_sha256','response_sha256','response','native','execution','started_at','completed_at'],'TRANSITION_NATIVE_PROOF_FIELDS');
+  const request=transitionPrepareRequest(selection),response=proof.response;
+  need(proof.schema==='sl.transition-invocation-evidence.v1' && proof.request_sha256===sha(canonical(request)) && proof.response_sha256===sha(canonical(response)), 'TRANSITION_NATIVE_PROOF_BINDING');
+  need(canonical(proof.execution).equals(canonical({...run,workflow_sha256:workflowHash})), 'TRANSITION_NATIVE_EXECUTION');
+  exactKeys(proof.native,['status_code','executed_version','request_id'],'TRANSITION_NATIVE_FIELDS');
+  need(proof.native.status_code===200 && /^(?:\$LATEST|[1-9][0-9]*)$/.test(proof.native.executed_version) && /^[a-f0-9]{8}(?:-[a-f0-9]{4}){3}-[a-f0-9]{12}$/.test(proof.native.request_id), 'TRANSITION_NATIVE_IDENTITY');
+  need(transitionUTC(proof.started_at)<=transitionUTC(proof.completed_at) && transitionUTC(proof.completed_at)<=now && now-transitionUTC(proof.completed_at)<=900000,'TRANSITION_CONTEXT_FRESHNESS');
+  exactKeys(response,['state','intent_sha256','qa_context','provider_fetch'],'TRANSITION_PREPARATION_FIELDS');
+  need(response.state==='TRANSITION_PREPARED_NOT_CERTIFIED' && response.provider_fetch===false,'TRANSITION_NOT_PREPARED');
+  const ctx=response.qa_context,g=ctx.authorization,i=ctx.intent;
+  exactKeys(ctx,['schema','authorization','intent','active_binding','target','ready_at_ms','observed_at_utc'],'TRANSITION_CONTEXT_FIELDS');
+  need(ctx.schema==='sl.transition-qa-context.v1' && sha(canonical(g))===selection.authorization_sha256 && g.schema==='sl.editorial-authorization.v1', 'TRANSITION_SERVER_GRANT');
+  need(g.execution_sha===run.execution_sha && g.release_workflow_sha256===workflowHash && HASH.test(g.snapshot_manifest_sha256),'TRANSITION_EXECUTION_GRANT');
+  need(g.source?.sha==='8c770af7059b33a2e841f5afa4b87344db4aa177' && g.source.parent==='c4bb2047ed54fd3c1fdd40f6fddd99ec187b31ce' && g.source.tree==='c44eadb389e02ce6c0113526ac2ca3ba6ef33adc','TRANSITION_EDITORIAL_SOURCE');
+  need(sha(canonical(i))===response.intent_sha256 && i.schema==='sl.authority-intent.v1' && i.kind===selection.direction && i.authorization_sha256===selection.authorization_sha256 && i.previous_head_sha256===selection.expected_head_sha256 && i.baseline_marker_sha256===g.baseline_marker_sha256 && i.snapshot_manifest_sha256===g.snapshot_manifest_sha256, 'TRANSITION_INTENT_BINDING');
+  const target=selection.direction==='rebind'?{sha:g.source.sha,deployment:g.deployment}:{sha:P.baseline.production_git_sha,deployment:P.baseline.production_deployment_id};
+  const expected={operation:TRANSITION,phase:'production',candidate_git_sha:target.sha,deployment_id:target.deployment,authority_run_id:P.baseline.authority_run_id,sealed_manifest_sha256:P.baseline.sealed_manifest_sha256,origin:P.production_origin};
+  need(canonical(i.binding).equals(canonical(target)) && canonical(ctx.target).equals(canonical(expected)), 'TRANSITION_SERVER_TARGET');
+  validateTarget(ctx.target);
+  need(Number.isSafeInteger(ctx.ready_at_ms) && ctx.ready_at_ms<=transitionUTC(ctx.observed_at_utc) && transitionUTC(ctx.observed_at_utc)<=transitionUTC(proof.completed_at),'TRANSITION_READY_CONTEXT');
+  const window=g[selection.direction+'_window'];
+  need(Array.isArray(window)&&window.length===2&&transitionUTC(window[0])<=transitionUTC(i.prepared_at_utc)&&transitionUTC(i.prepared_at_utc)<=transitionUTC(window[1])&&now<=transitionUTC(window[1]),'TRANSITION_CONTEXT_WINDOW');
+  return ctx;
+}
+export function transitionQABinding(ctx,selection,envelope,run,startedAt) {
+  validateAttestation(envelope,run,ctx.target,ctx.authorization.release_workflow_sha256);
+  need(canonical(ctx.active_binding).equals(canonical(ctx.intent.binding)),'TRANSITION_PUBLIC_TARGET_REQUIRED');
+  need(transitionUTC(startedAt)>=Math.max(transitionUTC(ctx.intent.prepared_at_utc),ctx.ready_at_ms,transitionUTC(ctx.observed_at_utc)) && transitionUTC(startedAt)<=transitionUTC(envelope.timestamp),'TRANSITION_QA_FRESHNESS');
+  return {schema:'sl.transition-qa-binding.v1',direction:selection.direction,authorization_sha256:selection.authorization_sha256,previous_head_sha256:selection.expected_head_sha256,intent_sha256:sha(canonical(ctx.intent)),snapshot_manifest_sha256:ctx.authorization.snapshot_manifest_sha256,run_id:run.id,run_attempt:run.attempt,workflow_execution_sha:run.execution_sha,payload_sha256:envelope.controller_payload_sha256,qa_started_at_utc:startedAt};
+}
+export function transitionCheckBody(ctx,selection,envelope,run,startedAt,completedAt) {
+  const binding=transitionQABinding(ctx,selection,envelope,run,startedAt);
+  need(transitionUTC(completedAt)>=transitionUTC(envelope.timestamp),'TRANSITION_CHECK_TIME');
+  return {name:'statistical-levels-production-qa',head_sha:run.execution_sha,external_id:run.id,status:'completed',conclusion:'success',completed_at:completedAt,output:{title:'Statistical Levels extraordinary '+selection.direction+' QA',summary:canonical(binding).toString(),text:canonical(envelope.controller_payload).toString()}};
+}
+export function transitionCertificationRequest(ctx,selection,envelope,check,jobs,run,workflowHash,now=Date.now()) {
+  need(selection.phase==='certify','TRANSITION_CERTIFY_PHASE');
+  validateAttestation(envelope,run,ctx.target,workflowHash);
+  need(check?.output && typeof check.output.summary==='string' && check.output.summary.length<4096,'TRANSITION_QA_ABSENT');
+  const binding=JSON.parse(check.output.summary);
+  const expected=transitionQABinding(ctx,selection,envelope,run,binding.qa_started_at_utc);
+  need(canonical(binding).equals(canonical(expected))&&check.output.summary===canonical(expected).toString(),'TRANSITION_QA_BINDING');
+  need(check.name==='statistical-levels-production-qa'&&check.app?.slug==='github-actions'&&check.head_sha===run.execution_sha&&check.external_id===run.id&&check.status==='completed'&&check.conclusion==='success'&&check.output.text===canonical(envelope.controller_payload).toString(),'TRANSITION_QA_CHECK');
+  need(transitionUTC(envelope.timestamp)<=now&&now-transitionUTC(envelope.timestamp)<=900000&&transitionUTC(check.completed_at)>=transitionUTC(envelope.timestamp),'TRANSITION_QA_FRESHNESS');
+  need(Array.isArray(jobs?.jobs)&&Number.isInteger(jobs.total_count)&&jobs.total_count===jobs.jobs.length&&jobs.total_count>0&&jobs.total_count<=100,'TRANSITION_QA_JOBS_INCOMPLETE');
+  const prefix='statistical-levels-transition-'+selection.direction+'-qa-sha256-';
+  const qa=jobs.jobs.filter(j=>j.name==='Statistical Levels extraordinary '+selection.direction+' QA');
+  const seals=jobs.jobs.filter(j=>j.name?.startsWith(prefix));
+  need(qa.length===1&&seals.length===1&&qa[0].id!==seals[0].id,'TRANSITION_QA_JOB_UNIQUE');
+  need(seals[0].name===prefix+sha(canonical({binding,payload:envelope.controller_payload})),'TRANSITION_QA_JOB_DIGEST');
+  for(const j of [...qa,...seals])need(String(j.run_id)===run.id&&String(j.run_attempt)===run.attempt&&j.head_sha===run.execution_sha&&j.head_branch===P.branch&&j.status==='completed'&&j.conclusion==='success','TRANSITION_QA_JOB_IDENTITY');
+  need(transitionUTC(qa[0].started_at)<=transitionUTC(binding.qa_started_at_utc)&&transitionUTC(envelope.timestamp)<=transitionUTC(qa[0].completed_at)&&transitionUTC(qa[0].completed_at)<=transitionUTC(seals[0].started_at)&&transitionUTC(seals[0].started_at)<=transitionUTC(seals[0].completed_at)&&transitionUTC(seals[0].completed_at)<=now,'TRANSITION_QA_JOB_ORDER');
+  return validateTransitionRequest({operation:TRANSITION,...selection,production_qa_attestation_id:String(check.id),production_qa_attestation_hash:envelope.controller_payload_sha256});
 }

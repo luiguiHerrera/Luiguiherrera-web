@@ -570,6 +570,21 @@ def zod_bootstrap(git, head):
 # the first transition of this epoch (reviewed once); later rebinds are restricted to data/pin files.
 LINEAGE_REGISTRY = 'scripts/statistical-levels-ci/lineage-transitions.json'
 LINEAGE_SCHEMA = 'statistical-levels.lineage-transition.v1'
+# Exact local proposal only: no Git object, hosted CI, or deployment is created.
+EXTRAORDINARY_HISTORY_ROOT = 'ae09a44ffce5860f511c08061f9621934eadbe08'
+EXTRAORDINARY_EDITORIAL = {'sha': '8c770af7059b33a2e841f5afa4b87344db4aa177', 'tree': 'c44eadb389e02ce6c0113526ac2ca3ba6ef33adc', 'author': 'Codex <codex@openai.com> 1794939028 +0000', 'committer': 'Codex <codex@openai.com> 1794939028 +0000', 'message': 'Prepare extraordinary November editorial source with exact D_X snapshot', 'parent': 'c4bb2047ed54fd3c1fdd40f6fddd99ec187b31ce'}
+EXTRAORDINARY_EDITORIAL_PATHS = frozenset(['components/reports/NovemberReportSections.tsx', 'docs/reports/segundo-informe-noviembre-2026/segundo-informe-noviembre-2026.md', 'lib/reports/first-november-2026.test.mts', 'lib/reports/market-reports.ts', 'lib/reports/second-november-2026.test.mts', 'lib/reports/second-november-2026.ts', 'next.config.ts', 'public/llms.txt', 'public/reports/manifest.json', 'public/reports/segundo-informe-noviembre-2026-calendar.ics', 'public/reports/segundo-informe-noviembre-2026.html', 'public/reports/segundo-informe-noviembre-2026.md', 'public/reports/segundo-informe-noviembre-2026.pdf', 'scripts/build-second-november-report.mts', 'scripts/validate-editorial.mts'])
+EXTRAORDINARY_BASELINE = '8ce104066fe968026d24e0f006744f88e338585a'
+EXTRAORDINARY_CONTROL_FILES = frozenset(['scripts/statistical-levels-ci/admission.py', 'scripts/statistical-levels-release/scripts/cli.mjs', 'scripts/statistical-levels-release/scripts/invoke.mjs', 'scripts/statistical-levels-release/scripts/preview-qa.mjs', 'scripts/statistical-levels-release/scripts/probe-core.mjs', 'scripts/statistical-levels-release/scripts/release-core.mjs', 'scripts/statistical-levels-release/scripts/runtime-io.mjs'])
+
+# Closed supplemental inventory for this one extraordinary lineage only.
+EXTRAORDINARY_TEST_FILES = frozenset('scripts/statistical-levels-ci/authority-transition/' + name for name in ['check-readback-cases.mjs', 'controller.py', 'gate_cases.py', 'inputs-cases.mjs', 'inventory.json', 'legacy-selection.json', 'link_models.py', 'models.py', 'p4_cases.py', 'qa-producer-model.mjs', 'qa_cases.py', 'reference-controller.py', 'run.py', 'service-check.mjs', 'workflow-cases.mjs'])
+EXTRAORDINARY_HISTORICAL_FIXTURES = frozenset('scripts/statistical-levels-ci/' + name for name in ['test_ci_recovery_admission.py', 'test_ci_runtime_recovery.py', 'test_publication_ci_repair.py', 'test_publication_closure.py', 'test_lineage_admission.py'])
+EXTRAORDINARY_CI_TEST_STEP = b'      - name: Test extraordinary authority transition coverage\n        shell: bash\n        run: |\n          set -euo pipefail\n          python3 -B scripts/statistical-levels-ci/authority-transition/run.py --out "$CI_EVIDENCE/authority-transition"\n\n'
+
+def extraordinary_entry(entry):
+    return entry['editorial']['sha'] == EXTRAORDINARY_EDITORIAL['sha']
+
 LINEAGE_PIN = rb'(      SL_CI_LINEAGE_PAYLOAD_SHA256: ")[a-f0-9]{64}("\n)'
 LINEAGE_PIN_LINE = rb'      SL_CI_LINEAGE_PAYLOAD_SHA256: "[a-f0-9]{64}"\n'
 # The first transition's parent is pinned in its registry entry (sealed by the rebind payload pin, like every
@@ -632,8 +647,19 @@ def validate_lineage_editorial(git, entry):
     need(git.text('rev-parse', sha + '^{tree}') == e['tree'], 'LINEAGE_EDITORIAL_TREE')
     lineage_header(git, sha, e['tree'], entry['parent'], e['author'], e['committer'], e['message'], 'LINEAGE_EDITORIAL_HEADER')
     need(e['delta'] and all(set(item) == {'status', 'mode', 'git_blob', 'sha256'} for item in e['delta'].values()), 'LINEAGE_EDITORIAL_DELTA_SCHEMA')
+    exceptional = extraordinary_entry(entry)
+    if exceptional:
+        fixed = EXTRAORDINARY_EDITORIAL
+        need(entry['index'] == 2 and entry['parent'] == fixed['parent'] and entry['previous_rebind'] == EXTRAORDINARY_HISTORY_ROOT, 'EXTRAORDINARY_LINEAGE')
+        need(all(e[k] == fixed[k] for k in ['sha', 'tree', 'author', 'committer', 'message']), 'EXTRAORDINARY_IDENTITY')
+        preserved = paths(git)
+        need(len(preserved) == 82 and set(e['delta']) == preserved | EXTRAORDINARY_EDITORIAL_PATHS, 'EXTRAORDINARY_EXACT_SCOPE')
+        before_sl, after_sl = git.tree(EXTRAORDINARY_BASELINE), git.tree(sha)
+        for name in preserved:
+            need(after_sl.get(name) == before_sl.get(name) and git.blob(sha, name) == git.blob(EXTRAORDINARY_BASELINE, name), 'EXTRAORDINARY_SNAPSHOT_IDENTITY')
     for p in e['delta']:
-        need(not p.startswith(LINEAGE_EDITORIAL_FORBIDDEN_PREFIXES) and p not in LINEAGE_EDITORIAL_FORBIDDEN_FILES, 'LINEAGE_EDITORIAL_SCOPE')
+        if not exceptional or p not in paths(git):
+            need(not p.startswith(LINEAGE_EDITORIAL_FORBIDDEN_PREFIXES) and p not in LINEAGE_EDITORIAL_FORBIDDEN_FILES, 'LINEAGE_EDITORIAL_SCOPE')
     before, after = delta(git, entry['parent'], sha, set(e['delta']))
     for p, item in e['delta'].items():
         if item['status'] == 'D':
@@ -661,17 +687,41 @@ def validate_lineage_rebind(git, root, entry):
     files = frozenset(r['files'])
     need(sorted(files) == r['files'] and len(files) == len(r['files']), 'LINEAGE_REBIND_FILES')
     allowed = LINEAGE_EPOCH_FILES if entry['index'] == 1 else LINEAGE_REBIND_FILES
-    need(files <= allowed and {CI, LINEAGE_REGISTRY, 'scripts/statistical-levels-release/policy.json'} <= files, 'LINEAGE_REBIND_SCOPE')
+    exceptional = extraordinary_entry(entry)
+    mandatory = {CI, LINEAGE_REGISTRY, 'scripts/statistical-levels-release/policy.json'}
+    if exceptional:
+        allowed |= EXTRAORDINARY_CONTROL_FILES | EXTRAORDINARY_TEST_FILES | EXTRAORDINARY_HISTORICAL_FIXTURES
+        mandatory = {CI, LINEAGE_REGISTRY, 'scripts/statistical-levels-ci/admission.py'} | EXTRAORDINARY_TEST_FILES | EXTRAORDINARY_HISTORICAL_FIXTURES
+    need(files <= allowed and mandatory <= files, 'LINEAGE_REBIND_SCOPE')
     delta(git, editorial, root, files)
     lineage_header(git, root, git.text('rev-parse', root + '^{tree}'), editorial, r['author'], r['committer'], r['message'], 'LINEAGE_REBIND_HEADER')
-    # The CI workflow may differ from the editorial commit's only by the single lineage pin line.
-    need(re.sub(LINEAGE_PIN_LINE, b'', git.blob(root, CI)) == re.sub(LINEAGE_PIN_LINE, b'', git.blob(editorial, CI)), 'LINEAGE_CI_SCOPE')
+    # Ordinary lineage remains pin-only; this exception adds exactly one mandatory step.
+    ci_bytes = git.blob(root, CI)
+    if exceptional:
+        for name in EXTRAORDINARY_HISTORICAL_FIXTURES:
+            git_name = 'git' if name.endswith('/test_lineage_admission.py') else 'f.git'
+            anchor = f'        if {git_name}.parents(cls.root) == [a.MEMORY_CI_BASE]:\n'.encode()
+            selector = f"        if {git_name}.parents(cls.root) == [a.EXTRAORDINARY_EDITORIAL['sha']]:\n            cls.root = a.EXTRAORDINARY_HISTORY_ROOT\n".encode()
+            historical = git.blob(editorial, name)
+            need(historical.count(anchor) == 1 and git.blob(root, name) == historical.replace(anchor, selector + anchor, 1), 'EXTRAORDINARY_HISTORICAL_SELECTOR')
+        need(ci_bytes.count(EXTRAORDINARY_CI_TEST_STEP) == 1, 'EXTRAORDINARY_CI_TEST_STEP')
+        ci_bytes = ci_bytes.replace(EXTRAORDINARY_CI_TEST_STEP, b'', 1)
+        new_pins = b"assert len(pins)==10 and all(p.decode()==sha(canonical.encode()) for p in pins), 'WORKFLOW_PINS'"
+        need(ci_bytes.count(new_pins) == 1, 'EXTRAORDINARY_WORKFLOW_PINS')
+        ci_bytes = ci_bytes.replace(new_pins, new_pins.replace(b'==10', b'==7'), 1)
+    need(re.sub(LINEAGE_PIN_LINE, b'', ci_bytes) == re.sub(LINEAGE_PIN_LINE, b'', git.blob(editorial, CI)), 'LINEAGE_CI_SCOPE')
     pin = re.findall(rb'      SL_CI_LINEAGE_PAYLOAD_SHA256: "([a-f0-9]{64})"\n', git.blob(root, CI))
     need(len(pin) == 1 and pin[0].decode() == lineage_payload_hash(git, root, files), 'LINEAGE_PAYLOAD')
     # The rebind must bind exactly the pinned editorial commit (not merely change the allowed files).
     policy = unique_json(git.blob(root, 'scripts/statistical-levels-release/policy.json'))
     migration = unique_json(git.blob(root, 'scripts/statistical-levels-ci/policy-migration.json'))
-    need(policy['baseline']['production_git_sha'] == editorial and migration['editorial_sha'] == editorial and migration['transition_index'] == entry['index'] and migration['current_policy_sha256'] == digest(git.blob(root, 'scripts/statistical-levels-release/policy.json')), 'LINEAGE_REBIND_POLICY')
+    if exceptional:
+        policy_path = 'scripts/statistical-levels-release/policy.json'
+        need(git.blob(root, policy_path) == git.blob(entry['parent'], policy_path), 'EXTRAORDINARY_BASELINE_POLICY_CHANGED')
+        migration_path = 'scripts/statistical-levels-ci/policy-migration.json'
+        need(git.blob(root, migration_path) == git.blob(entry['parent'], migration_path), 'EXTRAORDINARY_BASELINE_MIGRATION_CHANGED')
+    else:
+        need(policy['baseline']['production_git_sha'] == editorial and migration['editorial_sha'] == editorial and migration['transition_index'] == entry['index'] and migration['current_policy_sha256'] == digest(git.blob(root, 'scripts/statistical-levels-release/policy.json')), 'LINEAGE_REBIND_POLICY')
 
 
 def lineage_entry(git, root):
@@ -942,15 +992,23 @@ def bootstrap(git, head):
         zod_root, _ = zod_bootstrap(git, entry['parent'])
         need(git.parents(zod_root) == [ZOD_BASE], 'LINEAGE_FIRST_PARENT_EPOCH')
     else:
-        previous_root, _ = bootstrap(git, entry['parent'])
-        need(git.parents(previous_root) != [MEMORY_CI_BASE], 'MEMORY_CI_DATA_SUCCESSORS_ONLY')
+        previous_root, previous_data_chain = bootstrap(git, entry['parent'])
+        if extraordinary_entry(entry):
+            need(previous_root == EXTRAORDINARY_HISTORY_ROOT and previous_data_chain == [EXTRAORDINARY_EDITORIAL['parent']] and git.parents(previous_root) == [MEMORY_CI_BASE], 'EXTRAORDINARY_ROOT')
+        else:
+            need(git.parents(previous_root) != [MEMORY_CI_BASE], 'MEMORY_CI_DATA_SUCCESSORS_ONLY')
+            previous_entry = lineage_entry(git, previous_root)
+            need(previous_entry is None or not extraordinary_entry(previous_entry), 'EXTRAORDINARY_DATA_SUCCESSORS_ONLY')
         need(git.parents(previous_root) != [RUNTIME_CI_BASE], 'RUNTIME_CI_DATA_SUCCESSORS_ONLY')
         need(git.parents(previous_root) != [PUBLICATION_CI_REPAIR_BASE], 'PUBLICATION_CI_REPAIR_DATA_SUCCESSORS_ONLY')
         need(git.parents(previous_root) != [PUBLICATION_CLOSURE_BASE], 'PUBLICATION_DATA_SUCCESSORS_ONLY')
         need(git.parents(previous_root) != [CI_REPAIR_BASE], 'CI_REPAIR_DATA_SUCCESSORS_ONLY')
         need(previous_root == entry['previous_rebind'], 'LINEAGE_PREVIOUS_REBIND')
         need(lineage_registry(git, previous_root) == registry[:-1], 'LINEAGE_REGISTRY_CHAIN')
-        for name in LINEAGE_EPOCH_FILES - LINEAGE_REBIND_FILES:
+        frozen = LINEAGE_EPOCH_FILES - LINEAGE_REBIND_FILES
+        if extraordinary_entry(entry):
+            frozen -= EXTRAORDINARY_CONTROL_FILES | EXTRAORDINARY_TEST_FILES | EXTRAORDINARY_HISTORICAL_FIXTURES
+        for name in frozen:
             need(git.tree(cursor).get(name) == git.tree(previous_root).get(name), 'LINEAGE_CODE_FROZEN')
     current, start = git.tree(head), git.tree(cursor)
     need(set(current) == set(start) and all(current[p] == start[p] for p in current if p not in data_paths), 'LINEAGE_SUCCESSOR_CODE_CHANGED')
@@ -982,6 +1040,8 @@ def reconciled_report_hashes(git, head):
         result = reconciled_report_hashes(git, registry[0]['parent'])
         for entry in registry:
             for name, item in entry['editorial']['delta'].items():
+                if extraordinary_entry(entry) and name in paths(git):
+                    continue
                 if item['status'] == 'D':
                     result.pop(name, None)
                 else:
@@ -1359,7 +1419,9 @@ def admit(git, api, env, event):
                     'editorial_hosted_ci': 'FAILED_NOT_REUSED', 'data_head': REMOTE_BEFORE_RECONCILIATION,
                     'historical_qualification_reused': True, 'new_hosted_qualification_required': True,
                     'report_source': REPORT_PARENT, 'production_base': lineage['editorial']['sha'],
-                    'controller_policy_rebind_required': True, 'release_authority_issued': False}
+                    'controller_policy_rebind_required': not extraordinary_entry(lineage), 'release_authority_issued': False}
+                if extraordinary_entry(lineage):
+                    details.update(production_base=EXTRAORDINARY_BASELINE, authority_transition_required=True, original_marker_preserved=True, editorial_hosted_ci='NOT_EXECUTED_NOT_REUSED')
             elif zod_root:
                 mode, details = 'EXACT_ZOD_SECURITY_BOOTSTRAP', {'zod_base': ZOD_BASE,
                     'remote_before': expected_before, 'base_hosted_ci': 'FAILED_NOT_REUSED',
