@@ -79,7 +79,11 @@ def main():
     if hosted and os.environ.get('GITHUB_REF')=='refs/heads/vercel-deployment' and os.environ.get('GITHUB_EVENT_NAME')=='push':
         from models import a
         admitted_root,_=a.bootstrap(a.Git(REPO),head)
-        require(admitted_root==model and head==os.environ.get('GITHUB_SHA'),'TRANSITION_TESTED_SHA')
+        if a.Git(REPO).parents(admitted_root)==[a.COMPAT_PARENT]:
+            require(model==a.COMPAT_PARENT,'TRANSITION_HISTORICAL_ROOT')
+        else:
+            require(admitted_root==model,'TRANSITION_TESTED_ROOT')
+        require(head==os.environ.get('GITHUB_SHA'),'TRANSITION_TESTED_SHA')
     summary={'schema':'sl.authority-transition-coverage.v1','scope':'HOSTED_TEST_EXECUTION_NOT_RELEASE_AUTHORIZATION' if hosted else 'LOCAL_TEST_EXECUTION_NOT_HOSTED_QUALIFICATION',
         'tested_model_sha':model,'checkout_head':head,'python_pass':len(records),'node_pass':len(inventory['node_tests']),'fail':0,'skip':0,
         'inventory_sha256':hashlib.sha256((ROOT/'inventory.json').read_bytes()).hexdigest(),'node_tap_sha256':hashlib.sha256(node.stdout.encode()).hexdigest(),

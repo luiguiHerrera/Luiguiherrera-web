@@ -37,6 +37,13 @@ def reuse_scope(git, head):
     # The old 261 cases retain OLD as their actual subject. Changed native
     # capture bytes are qualified by the new differential tests and live capture.
     root, _ = bootstrap(git, head)
+    from admission import COMPAT_PARENT,COMPAT_FILES
+    if git.parents(root) == [COMPAT_PARENT]:
+        reused,changed = reuse_scope(git,COMPAT_PARENT)
+        affected = {p for p in COMPAT_FILES if p.startswith('scripts/statistical-levels-release/')}
+        old = git.tree(OLD)
+        return reused - affected, {**changed, **{p:{'old_sha256':digest(git.blob(OLD,p)) if p in old else None,
+            'current_sha256':digest(git.blob(head,p))} for p in sorted(affected)}}
     if git.parents(root) == [MEMORY_CI_BASE]:
         return reuse_scope(git, MEMORY_CI_BASE)
     if git.parents(root) == [RUNTIME_CI_BASE]:
@@ -64,6 +71,17 @@ def reuse_scope(git, head):
         reused, changed = reuse_scope(git, registry[0]['parent'])
         anchor = git.tree(registry[0]['parent'])
         affected = set().union(*(set(entry['rebind']['files']) for entry in registry)) & (scope | {p for p in b if p.startswith('scripts/statistical-levels-release/')})
+        # Recover only the exact already-admitted 5c53 harness change. No inferred exclusions.
+        if registry[-1].get('previous_rebind') == 'ae09a44ffce5860f511c08061f9621934eadbe08':
+            from admission import validate_publication_closure, EXTRAORDINARY_HISTORY_ROOT
+            closure = '5c53fa63577c39e8b656b563865cbefd4cd8b524'
+            harness = 'scripts/statistical-levels-release/scripts/browser-harness.mjs'
+            validate_publication_closure(git, closure)
+            need(harness in PUBLICATION_CLOSURE_FILES and harness not in affected, 'LINEAGE_HARNESS_SCOPE')
+            need(a[harness] == anchor[harness] == ('100644','a3c935de07e059dcd2c3b6eca4e0a699270bc3ce'), 'LINEAGE_HARNESS_HISTORY')
+            need(b[harness] == git.tree(closure)[harness] == git.tree(EXTRAORDINARY_HISTORY_ROOT)[harness] == ('100644','29229c6f5f6d72b0308e9bf47e913171e10d08db'), 'LINEAGE_HARNESS_IDENTITY')
+            need(git.blob(head,harness) == git.blob(closure,harness) == git.blob(EXTRAORDINARY_HISTORY_ROOT,harness), 'LINEAGE_HARNESS_BYTES')
+            affected = affected | {harness}
         need(all(b.get(p) == anchor.get(p) for p in scope - affected), 'LINEAGE_HISTORICAL_BYTES')
         need(all(b.get(p) == git.tree(root).get(p) and b[p][0] == '100644' for p in affected), 'LINEAGE_SUCCESSOR_HISTORICAL_BYTES')
         return reused - affected, {**changed, **{p: {'old_sha256': digest(git.blob(OLD, p)) if p in a else None, 'current_sha256': digest(git.blob(head, p))} for p in sorted(affected)}}

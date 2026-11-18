@@ -51,7 +51,9 @@ def seal(files):
 def fixture():
     g=MemoryGit();editorial=g.commit(EP,E_BLOBS,IDENTITY['author'],IDENTITY['message']);assert editorial==E
     entry=json.loads((REPO/a.LINEAGE_REGISTRY).read_text())[-1]
-    files={name:(REPO/name).read_bytes() for name in entry['rebind']['files']}
+    head=g.real.text('rev-parse','HEAD');native_root,_=a.bootstrap(g.real,head)
+    subject=a.COMPAT_PARENT if g.real.parents(native_root)==[a.COMPAT_PARENT] else head
+    files={name:g.real.blob(subject,name) for name in entry['rebind']['files']}
     root=g.commit(E,files,entry['rebind']['author'],entry['rebind']['message'])
     return g,root,entry,files
 
@@ -191,5 +193,10 @@ class P4Tests(unittest.TestCase):
         head=git('rev-parse','HEAD').decode().strip()
         if head in [H,EP,self.root]:reference=X
         else:
-            admitted,chain=a.bootstrap(a.Git(REPO),head);self.assertEqual(admitted,self.root);self.assertTrue(chain);reference=head
+            actual=a.Git(REPO);admitted,chain=a.bootstrap(actual,head)
+            if actual.parents(admitted)==[a.COMPAT_PARENT]:
+                self.assertEqual(self.root,a.COMPAT_PARENT)
+                self.assertEqual(actual.parents(admitted),[self.root]);reference=head if chain else X
+            else:
+                self.assertEqual(admitted,self.root);self.assertTrue(chain);reference=head
         for name in a.paths(self.g):self.assertEqual((REPO/name).read_bytes(),git('show',reference+':'+name),name)

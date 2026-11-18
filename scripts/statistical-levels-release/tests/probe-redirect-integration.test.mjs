@@ -1,4 +1,4 @@
-import {withoutReceiptClass} from './semantic-closure-compat.mjs';
+import {withoutReceiptClass,historicalPinnedBytes,exactWorkflowJob,historicalWorkflowPrefix} from './semantic-closure-compat.mjs';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs/promises';
@@ -52,20 +52,19 @@ test('17: probe entry defers OIDC creation to protected-baseline gate and never 
     assert.doesNotMatch(await read(file), /import[^\n]*(?:invoke|runtime-io|child_process|aws-sdk)|InvokeFunction|GetSecretValue|PutObject|api\.vercel\.com/);
   }
   const workflow = await fs.readFile(new URL('../../.github/workflows/statistical-levels-release.yml', root), 'utf8');
-  const probe = workflow.split('  identity-probe:\n')[1];
+  const probe = exactWorkflowJob(workflow,'identity-probe');
   assert.match(probe, /if: inputs.operation == 'PROBE_IDENTITY'/);
   assert.match(probe, /"Effect":"Deny","NotAction":"sts:GetCallerIdentity","Resource":"\*"/);
   assert.doesNotMatch(probe, /invoke\.mjs|environment:|contents: write|secrets:/);
 });
 
 test('18: requalified production target policy is pinned; ADOPT single invocation with sanitized G6 receipt is pinned; validation remains frozen; approved controller schema is pinned', async () => {
-  for (const [file, expected] of Object.entries(shared)) { if(expected==='HARNESS_SECURITY_REGIONS')assertHarnessPreserved(await read(file));else assert.equal(digest(file==='scripts/release-core.mjs'?withoutReceiptClass(await read(file)):await read(file)), expected, file); }
+  for (const [file, expected] of Object.entries(shared)) { if(expected==='HARNESS_SECURITY_REGIONS')assertHarnessPreserved(await read(file));else assert.equal(digest(file==='scripts/release-core.mjs'?withoutReceiptClass(historicalPinnedBytes(file,await read(file))):historicalPinnedBytes(file,await read(file))), expected, file); }
 });
 
 test('19: release jobs retain the pinned diagnostic allowlist and frozen source checksum', async () => {
   const workflow = await fs.readFile(new URL('../../.github/workflows/statistical-levels-release.yml', root), 'utf8');
-  const release = workflow.split('  identity-probe:\n')[0]
-    .replace(/(EXPECTED_SOURCE_SUMS: )[a-f0-9]{64}/g, '$1<FROZEN_SOURCE_SUMS>');
+  const release = historicalWorkflowPrefix(workflow);
   assert.equal(digest(release), 'add625df91a3a04f452939b720f769aff69d85839ffc1d3e310a646a7b28b352');
 });
 

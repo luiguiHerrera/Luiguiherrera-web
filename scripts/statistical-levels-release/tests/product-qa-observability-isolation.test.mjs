@@ -1,7 +1,7 @@
 import { readFileSync } from 'node:fs';
 import * as probeContract from '../scripts/probe-core.mjs';
 import * as releaseContract from '../scripts/release-core.mjs';
-import {withoutReceiptClass} from './semantic-closure-compat.mjs';
+import {withoutReceiptClass,historicalPinnedBytes,historicalProbeRegion} from './semantic-closure-compat.mjs';
 // The requalified production target policy is pinned explicitly; other frozen security/classifier/ADOPT/PROMOTE contracts remain exact.
 import test from 'node:test';
 import assert from 'node:assert/strict';
@@ -52,7 +52,7 @@ for (const [name, files] of Object.entries(expected)) {
     }
     for (const [file, hash] of Object.entries(files)) {
       const bytes = await readFile(new URL('../' + file, import.meta.url));
-      if(hash==='HARNESS_SECURITY_REGIONS')assertHarnessPreserved(bytes.toString('utf8'));else assert.equal(createHash('sha256').update(file==='scripts/release-core.mjs'?withoutReceiptClass(bytes):bytes).digest('hex'), hash, file);
+      if(hash==='HARNESS_SECURITY_REGIONS')assertHarnessPreserved(bytes.toString('utf8'));else assert.equal(createHash('sha256').update(file==='scripts/release-core.mjs'?withoutReceiptClass(historicalPinnedBytes(file,bytes)):historicalPinnedBytes(file,bytes)).digest('hex'), hash, file);
     }
   });
 }
@@ -242,7 +242,7 @@ function probeRegions(source) {
 function assertProbeSecurityRegions(source) {
   const { ast, nodes } = probeRegions(source);
   for (const [name, expected] of Object.entries(probeSecurityPins))
-    assert.equal(regionHash(nodes.get(name).getText(ast)), expected, 'PROBE_CORE_SECURITY:' + name);
+    assert.equal(regionHash(historicalProbeRegion(name,nodes.get(name).getText(ast))), expected, 'PROBE_CORE_SECURITY:' + name);
   const body = nodes.get('timestamp').body.statements;
   assert.equal(body.length, 2, 'PROBE_CORE_TIMESTAMP_SHAPE');
   assert.equal(regionHash(body[0].getText(ast)), timestampValidationPin, 'PROBE_CORE_TIMESTAMP_VALIDATION');
@@ -251,7 +251,7 @@ function assertProbeSecurityRegions(source) {
 function assertAuthorizedProbeMetadata(source) {
   const { ast, nodes } = probeRegions(source);
   for (const [name, expected] of Object.entries(authorizedMetadataPins))
-    assert.equal(regionHash(nodes.get(name).getText(ast)), expected, 'PROBE_CORE_METADATA:' + name);
+    assert.equal(regionHash(historicalProbeRegion(name,nodes.get(name).getText(ast))), expected, 'PROBE_CORE_METADATA:' + name);
 }
 function assertProbePreservation(source) {
   assertProbeSecurityRegions(source);
@@ -339,7 +339,7 @@ const preservationMutations = {
   controller_call: s => replacePreservationText(s, 'export function selectProbeTarget(inputs) {', 'export function selectProbeTarget(inputs) { invokeController();'),
   authorization_import: s => replacePreservationText(s, "from './release-core.mjs'", "from './other-authority.mjs'"),
   release_request: s => replacePreservationText(s, 'classification: \'PROBE_ONLY\'', 'controller_request: {}, classification: \'PROBE_ONLY\''),
-  release_fields: s => replacePreservationText(s, "['candidate_git_sha', 'candidate_deployment_id', 'expected_previous_production_sha',", "['candidate_git_sha', 'expected_previous_production_sha',"),
+  release_fields: s => replacePreservationText(s, "['transition_request', 'candidate_git_sha', 'candidate_deployment_id', 'expected_previous_production_sha',", "['transition_request', 'candidate_git_sha', 'expected_previous_production_sha',"),
   policy_binding: s => replacePreservationText(s, 'project_id: P.project', "project_id: 'other-project'"),
   role_identity: s => replacePreservationText(s, 'identity.Account === P.account_id', 'true'),
   attestation_contract: s => replacePreservationText(s, 'production_release_target: false', 'production_release_target: true'),

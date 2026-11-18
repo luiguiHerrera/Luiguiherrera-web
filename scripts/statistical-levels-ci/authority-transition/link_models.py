@@ -2,10 +2,10 @@
 from models import *
 from pathlib import Path
 import subprocess,json
-WORKFLOW=(REPO/'.github/workflows/statistical-levels-release.yml').read_bytes()
-CI=(REPO/'.github/workflows/ci.yml').read_bytes()
 from p4_cases import fixture
 MODEL={'technical_model_sha':fixture()[1]}
+WORKFLOW=git('show',MODEL['technical_model_sha']+':.github/workflows/statistical-levels-release.yml')
+CI=git('show',MODEL['technical_model_sha']+':.github/workflows/ci.yml')
 def link_grant():
  g=grant();g.update(execution_sha=MODEL['technical_model_sha'],ci_workflow_sha256=c.digest(CI),release_workflow_sha256=c.digest(WORKFLOW));return g
 class LinkIO(ModelIO):

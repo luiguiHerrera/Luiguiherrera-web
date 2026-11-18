@@ -934,6 +934,62 @@ def validate_memory_ci(git, root):
     need(memory_ci_payload(git, root) == MEMORY_CI_PAYLOAD_SHA256, 'MEMORY_CI_PAYLOAD')
 
 
+# One exact technical child for historical compatibility, never a reusable repair category.
+COMPAT_PARENT = 'aec5be3b7207d1023effea78785291df815965b9'
+COMPAT_PARENT_TREE = 'cc6f7b615a917d9a5434deef33f916f27f9c12cd'
+COMPAT_IDENTITY = 'Codex <codex@openai.com> 1795027655 +0000'
+COMPAT_MESSAGE = 'Restore exact historical release and OLD compatibility'
+COMPAT_FILES = frozenset(['.github/workflows/statistical-levels-release.yml', 'scripts/statistical-levels-ci/admission.py', 'scripts/statistical-levels-ci/authority-transition/compat-cases.mjs', 'scripts/statistical-levels-ci/authority-transition/compat_cases.py', 'scripts/statistical-levels-ci/authority-transition/inventory.json', 'scripts/statistical-levels-ci/authority-transition/link_models.py', 'scripts/statistical-levels-ci/authority-transition/p4_cases.py', 'scripts/statistical-levels-ci/authority-transition/run.py', 'scripts/statistical-levels-ci/historical-tests.py', 'scripts/statistical-levels-ci/test_ci_recovery_admission.py', 'scripts/statistical-levels-ci/test_ci_runtime_recovery.py', 'scripts/statistical-levels-ci/test_lineage_admission.py', 'scripts/statistical-levels-ci/test_publication_ci_repair.py', 'scripts/statistical-levels-ci/test_publication_closure.py', 'scripts/statistical-levels-release/SOURCE_SHA256SUMS', 'scripts/statistical-levels-release/source-manifest.json', 'scripts/statistical-levels-release/tests/probe-qa-http.test.mjs', 'scripts/statistical-levels-release/tests/probe-redirect-integration.test.mjs', 'scripts/statistical-levels-release/tests/product-qa-observability-isolation.test.mjs', 'scripts/statistical-levels-release/tests/semantic-closure-compat.mjs', 'scripts/statistical-levels-release/workflow-freeze.json'])
+COMPAT_PAYLOAD_SHA256 = 'c32d797fd5259dbfc5b8cdd3ed5c987e1bc138a2ef2f96cb5baf3b3d89cc89af'
+COMPAT_PIN = rb"(?m)^(COMPAT_PAYLOAD_SHA256 = ')([a-f0-9]{64})('\n)"
+
+
+def compatibility_payload(git, root):
+    rows = []
+    for name in sorted(COMPAT_FILES):
+        data = git.blob(root, name)
+        if name == 'scripts/statistical-levels-ci/admission.py':
+            pins = re.findall(COMPAT_PIN, data)
+            need(len(pins) == 1 and pins[0][1].decode() == COMPAT_PAYLOAD_SHA256, 'COMPAT_PIN')
+            data = re.sub(COMPAT_PIN, lambda m: m[1] + b'0' * 64 + m[3], data)
+        elif name == 'scripts/statistical-levels-ci/authority-transition/inventory.json':
+            field = rb'("scripts/statistical-levels-ci/admission.py": ")[a-f0-9]{64}("[\n,])'
+            need(len(re.findall(field,data)) == 1, 'COMPAT_INVENTORY_PIN')
+            data = re.sub(field, lambda m: m[1] + b'0' * 64 + m[2], data)
+        rows.append({'path':name,'mode':'100644','sha256':digest(data)})
+    return digest(json.dumps(rows,sort_keys=True,separators=(',',':')).encode())
+
+
+def validate_compatibility(git, root):
+    need(git.parents(root) == [COMPAT_PARENT], 'COMPAT_PARENT')
+    need(git.text('rev-parse',COMPAT_PARENT+'^{tree}') == COMPAT_PARENT_TREE, 'COMPAT_PARENT_TREE')
+    need(bootstrap(git,COMPAT_PARENT) == (COMPAT_PARENT,[]), 'COMPAT_HISTORICAL_LINEAGE')
+    before,after = delta(git,COMPAT_PARENT,root,COMPAT_FILES)
+    lineage_header(git,root,git.text('rev-parse',root+'^{tree}'),COMPAT_PARENT,
+                   COMPAT_IDENTITY,COMPAT_IDENTITY,COMPAT_MESSAGE,'COMPAT_HEADER')
+    for name in paths(git):
+        need(after[name] == before[name] and git.blob(root,name) == git.blob(EXTRAORDINARY_BASELINE,name), 'COMPAT_SL_IDENTITY')
+    need(git.blob(root,CI) == git.blob(COMPAT_PARENT,CI), 'COMPAT_CI_UNCHANGED')
+    wf = '.github/workflows/statistical-levels-release.yml'
+    normalize = lambda data: re.sub(rb'(EXPECTED_SOURCE_SUMS: )[a-f0-9]{64}',lambda m:m[1]+b'0'*64,data)
+    need(normalize(git.blob(root,wf)) == normalize(git.blob(COMPAT_PARENT,wf)), 'COMPAT_WORKFLOW_SCOPE')
+    for name in EXTRAORDINARY_HISTORICAL_FIXTURES:
+        gn = 'git' if name.endswith('/test_lineage_admission.py') else 'f.git'
+        anchor = f"        if {gn}.parents(cls.root) == [a.EXTRAORDINARY_EDITORIAL['sha']]:\n".encode()
+        addition = f"        if {gn}.parents(cls.root) == [a.COMPAT_PARENT]:\n            cls.root = a.COMPAT_PARENT\n".encode()
+        prior = git.blob(COMPAT_PARENT,name)
+        need(prior.count(anchor) == 1 and git.blob(root,name) == prior.replace(anchor,addition+anchor,1), 'COMPAT_HISTORICAL_SELECTOR')
+    current = unique_json(git.blob(root,'scripts/statistical-levels-ci/authority-transition/inventory.json'))
+    previous = unique_json(git.blob(COMPAT_PARENT,'scripts/statistical-levels-ci/authority-transition/inventory.json'))
+    need(current['schema'] == previous['schema'], 'COMPAT_TEST_SCHEMA')
+    for key in ['python_tests','node_tests','python_modules','node_files']:
+        need(len(current[key]) == len(set(current[key])) and set(previous[key]) <= set(current[key]), 'COMPAT_TEST_INVENTORY')
+    need(set(previous['files']) <= set(current['files']), 'COMPAT_TEST_FILES')
+    for name,value in current['files'].items():
+        need(digest(git.blob(root,name)) == value, 'COMPAT_TEST_BYTES')
+    need(compatibility_payload(git,root) == COMPAT_PAYLOAD_SHA256, 'COMPAT_PAYLOAD')
+
+
 def bootstrap(git, head):
     # Exact lineage transitions only. The editorial commit alone is never admitted; its CI failure is never reused.
     if LINEAGE_REGISTRY not in git.tree(head):
@@ -953,6 +1009,11 @@ def bootstrap(git, head):
         cursor = parents[0]
     else:
         raise ValueError('LINEAGE_BOUND')
+    if git.parents(cursor) == [COMPAT_PARENT]:
+        validate_compatibility(git,cursor)
+        current,start = git.tree(head),git.tree(cursor)
+        need(set(current) == set(start) and all(current[p] == start[p] for p in current if p not in data_paths), 'COMPAT_SUCCESSOR_CODE_CHANGED')
+        return cursor,chain
     if git.parents(cursor) == [MEMORY_CI_BASE]:
         validate_memory_ci(git, cursor)
         current, start = git.tree(head), git.tree(cursor)
@@ -999,6 +1060,7 @@ def bootstrap(git, head):
             need(git.parents(previous_root) != [MEMORY_CI_BASE], 'MEMORY_CI_DATA_SUCCESSORS_ONLY')
             previous_entry = lineage_entry(git, previous_root)
             need(previous_entry is None or not extraordinary_entry(previous_entry), 'EXTRAORDINARY_DATA_SUCCESSORS_ONLY')
+        need(git.parents(previous_root) != [COMPAT_PARENT], 'COMPAT_DATA_SUCCESSORS_ONLY')
         need(git.parents(previous_root) != [RUNTIME_CI_BASE], 'RUNTIME_CI_DATA_SUCCESSORS_ONLY')
         need(git.parents(previous_root) != [PUBLICATION_CI_REPAIR_BASE], 'PUBLICATION_CI_REPAIR_DATA_SUCCESSORS_ONLY')
         need(git.parents(previous_root) != [PUBLICATION_CLOSURE_BASE], 'PUBLICATION_DATA_SUCCESSORS_ONLY')
@@ -1025,6 +1087,8 @@ def reconciled_report_hashes(git, head):
                       stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL).returncode != 0:
         return {}
     root, _ = bootstrap(git, head)
+    if git.parents(root) == [COMPAT_PARENT]:
+        return reconciled_report_hashes(git,COMPAT_PARENT)
     if git.parents(root) == [MEMORY_CI_BASE]:
         return reconciled_report_hashes(git, MEMORY_CI_BASE)
     if git.parents(root) == [RUNTIME_CI_BASE]:
@@ -1353,6 +1417,7 @@ def admit(git, api, env, event):
     need(evidence['head_sha'] == BASE and evidence['producer_run_id'] == 39432688384 and evidence['source_sha'] == OLD, 'BOOTSTRAP_DATA_IDENTITY')
     validate_data(git, BASE, OLD, evidence['metadata_objects'])
     if not chain:
+        compat_root = git.parents(root) == [COMPAT_PARENT]
         memory_root = git.parents(root) == [MEMORY_CI_BASE]
         runtime_root = git.parents(root) == [RUNTIME_CI_BASE]
         publication_ci_repair_root = git.parents(root) == [PUBLICATION_CI_REPAIR_BASE]
@@ -1366,15 +1431,23 @@ def admit(git, api, env, event):
         zod_root = git.parents(root) == [ZOD_BASE]
         lineage = lineage_entry(git, root)
         lineage_root = lineage is not None
-        expected_before = MEMORY_CI_BASE if memory_root else RUNTIME_CI_BASE if runtime_root else PUBLICATION_CI_REPAIR_BASE if publication_ci_repair_root else PUBLICATION_CLOSURE_BASE if closure_root else CI_REPAIR_BASE if repair_root else lineage['editorial']['sha'] if lineage_root else ZOD_BASE if zod_root else DURABILITY_BASE if durability_root else REPORT_CONTRACT_BASE if report_root else CAPTURE_RECOVERY_BASE if capture_root else SECURITY_BASE if security_root else REMOTE_BEFORE_RECONCILIATION if daily_root else BASE
+        expected_before = COMPAT_PARENT if compat_root else MEMORY_CI_BASE if memory_root else RUNTIME_CI_BASE if runtime_root else PUBLICATION_CI_REPAIR_BASE if publication_ci_repair_root else PUBLICATION_CLOSURE_BASE if closure_root else CI_REPAIR_BASE if repair_root else lineage['editorial']['sha'] if lineage_root else ZOD_BASE if zod_root else DURABILITY_BASE if durability_root else REPORT_CONTRACT_BASE if report_root else CAPTURE_RECOVERY_BASE if capture_root else SECURITY_BASE if security_root else REMOTE_BEFORE_RECONCILIATION if daily_root else BASE
         need(env['GITHUB_EVENT_NAME'] == 'push' and event['before'] == expected_before and event['after'] == head and event['ref'] == 'refs/heads/' + BRANCH and not event['forced'] and not event['deleted'] and not event['created'], 'BOOTSTRAP_EVENT')
-        if memory_root or runtime_root or publication_ci_repair_root or closure_root or repair_root or daily_root or security_root or capture_root or report_root or durability_root or zod_root or lineage_root:
+        if compat_root or memory_root or runtime_root or publication_ci_repair_root or closure_root or repair_root or daily_root or security_root or capture_root or report_root or durability_root or zod_root or lineage_root:
             recent_bytes = git.blob(root, CURRENT_DATA_EVIDENCE)
             need(digest(recent_bytes) == CURRENT_DATA_EVIDENCE_SHA256, 'CURRENT_DATA_EVIDENCE_PIN')
             recent = unique_json(recent_bytes)
             need(recent['published_sha'] == REMOTE_BEFORE_RECONCILIATION and recent['producer_run_id'] == 39791362129 and recent['producer_attempt'] == 1, 'CURRENT_DATA_EVIDENCE_IDENTITY')
             validate_data(git, recent['published_sha'], recent['source_sha'], recent['metadata_objects'])
-            if memory_root:
+            if compat_root:
+                mode,details = 'EXACT_HISTORICAL_COMPATIBILITY_SUCCESSOR', {
+                    'remote_before':COMPAT_PARENT,'parent_hosted_ci':'FAILED_NOT_REUSED',
+                    'failed_run_id':44196885302,'failed_attempt':1,
+                    'new_hosted_qualification_required':True,'daily_successors_require_exact_parent_ci':True,
+                    'data_preservation':'EXACT_82_PATHS','historical_subject_unchanged':True,
+                    'runtime_unchanged':True,'authority_protocol_unchanged':True,
+                    'technical_successor_reusable':False,'release_authority_issued':False}
+            elif memory_root:
                 mode, details = 'EXACT_CI_MEMORY_RECOVERY_BOOTSTRAP', {
                     'remote_before': MEMORY_CI_BASE, 'parent_hosted_ci': 'NOT_QUALIFIED_NOT_REUSED',
                     'candidate_hosted_ci': 'REQUIRED_NOT_YET_CERTIFIED',

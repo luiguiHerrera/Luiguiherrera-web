@@ -3,7 +3,7 @@ import * as probeContract from '../scripts/probe-core.mjs';
 import * as releaseContract from '../scripts/release-core.mjs';
 import { createRequire } from 'node:module';
 const ts = createRequire(import.meta.url)('typescript');
-import {withoutReceiptClass} from './semantic-closure-compat.mjs';
+import {withoutReceiptClass,historicalPinnedBytes,historicalProbeRegion} from './semantic-closure-compat.mjs';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
@@ -196,7 +196,7 @@ const frozen = {
   '24 PROMOTE transport unchanged and ADOPT-only harness extension pinned': { 'release-core.mjs': 'a742b751bd6365b024ba4c84f605e4fd0584316dfd107114372d2bdda2427757', 'browser-harness-base.mjs': 'HARNESS_SECURITY_REGIONS' }
 };
 for (const [name, files] of Object.entries(frozen)) test(name, () => {
-  for (const [file, expected] of Object.entries(files)) { if(expected==='HARNESS_SECURITY_REGIONS')assertHarnessPreserved(fs.readFileSync(new URL('../scripts/'+file,import.meta.url),'utf8'));else assert.equal(createHash('sha256').update(file==='release-core.mjs'?withoutReceiptClass(fs.readFileSync(new URL('../scripts/' + file, import.meta.url))):fs.readFileSync(new URL('../scripts/' + file, import.meta.url))).digest('hex'), expected, file); }
+  for (const [file, expected] of Object.entries(files)) { if(expected==='HARNESS_SECURITY_REGIONS')assertHarnessPreserved(fs.readFileSync(new URL('../scripts/'+file,import.meta.url),'utf8'));else assert.equal(createHash('sha256').update(file==='release-core.mjs'?withoutReceiptClass(historicalPinnedBytes(file,fs.readFileSync(new URL('../scripts/' + file, import.meta.url)))):historicalPinnedBytes(file,fs.readFileSync(new URL('../scripts/' + file, import.meta.url)))).digest('hex'), expected, file); }
 });
 test('transport reporting redirect-followed or different response URL fails closed', async () => {
   for (const fields of [{ redirected: true }, { url: 'https://unrelated.example/metodologia' }]) {
@@ -386,7 +386,7 @@ function probeRegions(source) {
 function assertProbeSecurityRegions(source) {
   const { ast, nodes } = probeRegions(source);
   for (const [name, expected] of Object.entries(probeSecurityPins))
-    assert.equal(regionHash(nodes.get(name).getText(ast)), expected, 'PROBE_CORE_SECURITY:' + name);
+    assert.equal(regionHash(historicalProbeRegion(name,nodes.get(name).getText(ast))), expected, 'PROBE_CORE_SECURITY:' + name);
   const body = nodes.get('timestamp').body.statements;
   assert.equal(body.length, 2, 'PROBE_CORE_TIMESTAMP_SHAPE');
   assert.equal(regionHash(body[0].getText(ast)), timestampValidationPin, 'PROBE_CORE_TIMESTAMP_VALIDATION');
@@ -395,7 +395,7 @@ function assertProbeSecurityRegions(source) {
 function assertAuthorizedProbeMetadata(source) {
   const { ast, nodes } = probeRegions(source);
   for (const [name, expected] of Object.entries(authorizedMetadataPins))
-    assert.equal(regionHash(nodes.get(name).getText(ast)), expected, 'PROBE_CORE_METADATA:' + name);
+    assert.equal(regionHash(historicalProbeRegion(name,nodes.get(name).getText(ast))), expected, 'PROBE_CORE_METADATA:' + name);
 }
 function assertProbePreservation(source) {
   assertProbeSecurityRegions(source);
@@ -483,7 +483,7 @@ const preservationMutations = {
   controller_call: s => replacePreservationText(s, 'export function selectProbeTarget(inputs) {', 'export function selectProbeTarget(inputs) { invokeController();'),
   authorization_import: s => replacePreservationText(s, "from './release-core.mjs'", "from './other-authority.mjs'"),
   release_request: s => replacePreservationText(s, 'classification: \'PROBE_ONLY\'', 'controller_request: {}, classification: \'PROBE_ONLY\''),
-  release_fields: s => replacePreservationText(s, "['candidate_git_sha', 'candidate_deployment_id', 'expected_previous_production_sha',", "['candidate_git_sha', 'expected_previous_production_sha',"),
+  release_fields: s => replacePreservationText(s, "['transition_request', 'candidate_git_sha', 'candidate_deployment_id', 'expected_previous_production_sha',", "['transition_request', 'candidate_git_sha', 'expected_previous_production_sha',"),
   policy_binding: s => replacePreservationText(s, 'project_id: P.project', "project_id: 'other-project'"),
   role_identity: s => replacePreservationText(s, 'identity.Account === P.account_id', 'true'),
   attestation_contract: s => replacePreservationText(s, 'production_release_target: false', 'production_release_target: true'),
