@@ -27,6 +27,8 @@ class CIRuntimeRecoveryTests(unittest.TestCase):
         f.git = a.Git(f.repo)
         f.env = identity_env({**os.environ, 'GIT_INDEX_FILE': str(Path(cls.tmp.name) / 'index')}, a.RUNTIME_CI_IDENTITY)
         cls.root, _ = a.bootstrap(f.git, a.Git(ROOT).text('rev-parse', 'HEAD'))
+        if f.git.parents(cls.root) == [a.NEXT_SECURITY_PARENT]:
+            cls.root = a.NEXT_SECURITY_PARENT
         if f.git.parents(cls.root) == [a.COMPAT_PARENT]:
             cls.root = a.COMPAT_PARENT
         if f.git.parents(cls.root) == [a.EXTRAORDINARY_EDITORIAL['sha']]:

@@ -38,6 +38,13 @@ def reuse_scope(git, head):
     # capture bytes are qualified by the new differential tests and live capture.
     root, _ = bootstrap(git, head)
     from admission import COMPAT_PARENT,COMPAT_FILES
+    from admission import NEXT_SECURITY_PARENT,NEXT_SECURITY_FILES
+    if git.parents(root) == [NEXT_SECURITY_PARENT]:
+        reused,changed = reuse_scope(git,NEXT_SECURITY_PARENT)
+        affected = {p for p in NEXT_SECURITY_FILES if p.startswith('scripts/statistical-levels-release/')} | {'package.json','package-lock.json'}
+        old = git.tree(OLD)
+        return reused - affected, {**changed, **{p:{'old_sha256':digest(git.blob(OLD,p)) if p in old else None,
+            'current_sha256':digest(git.blob(head,p))} for p in sorted(affected)}}
     if git.parents(root) == [COMPAT_PARENT]:
         reused,changed = reuse_scope(git,COMPAT_PARENT)
         affected = {p for p in COMPAT_FILES if p.startswith('scripts/statistical-levels-release/')}

@@ -207,6 +207,8 @@ class LineageTransitionTests(unittest.TestCase):
         git = f.git
         head = a.Git(ROOT).text('rev-parse', 'HEAD')
         cls.root, _ = a.bootstrap(git, head)
+        if git.parents(cls.root) == [a.NEXT_SECURITY_PARENT]:
+            cls.root = a.NEXT_SECURITY_PARENT
         if git.parents(cls.root) == [a.COMPAT_PARENT]:
             cls.root = a.COMPAT_PARENT
         if git.parents(cls.root) == [a.EXTRAORDINARY_EDITORIAL['sha']]:
