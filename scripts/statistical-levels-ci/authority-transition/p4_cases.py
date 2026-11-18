@@ -52,6 +52,7 @@ def fixture():
     g=MemoryGit();editorial=g.commit(EP,E_BLOBS,IDENTITY['author'],IDENTITY['message']);assert editorial==E
     entry=json.loads((REPO/a.LINEAGE_REGISTRY).read_text())[-1]
     head=g.real.text('rev-parse','HEAD');native_root,_=a.bootstrap(g.real,head)
+    if g.real.parents(native_root)==[a.TECHNICAL_CAPTURE_PARENT]:native_root=a.TECHNICAL_CAPTURE_PARENT
     if g.real.parents(native_root)==[a.NEXT_SECURITY_PARENT]:native_root=a.NEXT_SECURITY_PARENT
     subject=a.COMPAT_PARENT if g.real.parents(native_root)==[a.COMPAT_PARENT] else head
     files={name:g.real.blob(subject,name) for name in entry['rebind']['files']}
@@ -195,6 +196,7 @@ class P4Tests(unittest.TestCase):
         if head in [H,EP,self.root]:reference=X
         else:
             actual=a.Git(REPO);admitted,chain=a.bootstrap(actual,head)
+            if actual.parents(admitted)==[a.TECHNICAL_CAPTURE_PARENT]:admitted=a.TECHNICAL_CAPTURE_PARENT
             if actual.parents(admitted)==[a.NEXT_SECURITY_PARENT]:admitted=a.NEXT_SECURITY_PARENT
             if actual.parents(admitted)==[a.COMPAT_PARENT]:
                 self.assertEqual(self.root,a.COMPAT_PARENT)

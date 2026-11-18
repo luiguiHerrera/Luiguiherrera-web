@@ -79,6 +79,7 @@ def main():
     if hosted and os.environ.get('GITHUB_REF')=='refs/heads/vercel-deployment' and os.environ.get('GITHUB_EVENT_NAME')=='push':
         from models import a
         admitted_root,_=a.bootstrap(a.Git(REPO),head)
+        if a.Git(REPO).parents(admitted_root)==[a.TECHNICAL_CAPTURE_PARENT]:admitted_root=a.TECHNICAL_CAPTURE_PARENT
         if a.Git(REPO).parents(admitted_root)==[a.NEXT_SECURITY_PARENT]:admitted_root=a.NEXT_SECURITY_PARENT
         if a.Git(REPO).parents(admitted_root)==[a.COMPAT_PARENT]:
             require(model==a.COMPAT_PARENT,'TRANSITION_HISTORICAL_ROOT')

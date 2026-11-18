@@ -26,6 +26,8 @@ class PublicationClosureTests(unittest.TestCase):
         f.git = a.Git(f.repo)
         f.env = identity_env({**os.environ,'GIT_INDEX_FILE':str(Path(cls.tmp.name)/'index')},a.PUBLICATION_CLOSURE_IDENTITY)
         cls.root, _ = a.bootstrap(f.git,a.Git(ROOT).text('rev-parse','HEAD'))
+        if f.git.parents(cls.root) == [a.TECHNICAL_CAPTURE_PARENT]:
+            cls.root = a.TECHNICAL_CAPTURE_PARENT
         if f.git.parents(cls.root) == [a.NEXT_SECURITY_PARENT]:
             cls.root = a.NEXT_SECURITY_PARENT
         if f.git.parents(cls.root) == [a.COMPAT_PARENT]:

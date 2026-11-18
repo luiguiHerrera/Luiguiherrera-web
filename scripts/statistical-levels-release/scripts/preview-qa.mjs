@@ -13,6 +13,13 @@ export async function verifyInputs(codeRoot, inputManifest, target) {
     validateTarget(target);
     need(target.origin === P.production_origin, 'PRODUCTION_ORIGIN');
   }
+  return verifySnapshotInputs(codeRoot, inputManifest, {historical, preserved, validateAuthority: (authority, provenance) => {
+    if (!preserved) need(provenance.BASELINE_ID.slice(0, 8) > P.baseline.authority_run_id.slice(0, 8), 'FUTURE_AUTHORITY_REQUIRED');
+    if (target.origin) validateTarget({ ...target, ...authority });
+  }});
+}
+// File integrity only. Calling this function never supplies release authority.
+export async function verifySnapshotInputs(codeRoot, inputManifest, {historical = false, preserved = false, validateAuthority = () => {}} = {}) {
   if (!historical) {
     for (const [file, expected] of Object.entries(inputManifest)) {
       need(!file.includes('..') && !path.isAbsolute(file), 'QA_INPUT_PATH');
@@ -57,8 +64,7 @@ export async function verifyInputs(codeRoot, inputManifest, target) {
   need(Number.isFinite(Date.parse(config.SNAPSHOT_CUTOFF)), 'PROVENANCE_CUTOFF');
   const authority = { authority_run_id: provenance.BASELINE_ID, sealed_manifest_sha256: config.RAW_ARCHIVE_SEAL_SHA256 };
   // Source/component bytes stay pinned; all data hashes come from this candidate's sidecar.
-  if (!preserved) need(provenance.BASELINE_ID.slice(0, 8) > P.baseline.authority_run_id.slice(0, 8), 'FUTURE_AUTHORITY_REQUIRED');
-  if (target.origin) validateTarget({ ...target, ...authority });
+  validateAuthority(authority, provenance);
   need(provenance.snapshots.length === 81 && new Set(provenance.snapshots.map(x => x.FILE)).size === 81, 'SNAPSHOT_COVERAGE');
   const expectedPaths = P.allowlist.filter(x => x.startsWith('lib/statistical-levels/generated/')).sort();
   need(canonical(provenance.snapshots.map(x => 'lib/statistical-levels/generated/' + x.FILE).sort()).equals(canonical(expectedPaths)), 'SNAPSHOT_PATH_SET');

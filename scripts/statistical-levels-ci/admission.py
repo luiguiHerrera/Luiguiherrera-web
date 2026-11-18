@@ -1057,6 +1057,102 @@ def validate_next_security(git, root):
     need(next_security_payload(git,root) == NEXT_SECURITY_PAYLOAD_SHA256, 'NEXT_SECURITY_PAYLOAD')
 
 
+# A single capture-only child of U. No release operation or authorization.
+TECHNICAL_CAPTURE_PARENT = 'e66a44e90628154546d0190c69ba5030828d972a'
+TECHNICAL_CAPTURE_PARENT_TREE = 'b3fb77a393b23bbdf233fc180b0189976d86eea0'
+TECHNICAL_CAPTURE_IDENTITY = 'Codex <codex@openai.com> 1795038091 +0000'
+TECHNICAL_CAPTURE_MESSAGE = 'Separate exact extraordinary artifact capture from public certification'
+TECHNICAL_CAPTURE_FILES = frozenset(['.github/workflows/statistical-levels-release.yml', 'scripts/statistical-levels-ci/admission.py', 'scripts/statistical-levels-ci/authority-transition/capture-cases.mjs', 'scripts/statistical-levels-ci/authority-transition/capture_cases.py', 'scripts/statistical-levels-ci/authority-transition/compat_cases.py', 'scripts/statistical-levels-ci/authority-transition/inventory.json', 'scripts/statistical-levels-ci/authority-transition/next_security_cases.py', 'scripts/statistical-levels-ci/authority-transition/p4_cases.py', 'scripts/statistical-levels-ci/authority-transition/run.py', 'scripts/statistical-levels-ci/historical-tests.py', 'scripts/statistical-levels-ci/test_ci_recovery_admission.py', 'scripts/statistical-levels-ci/test_ci_runtime_recovery.py', 'scripts/statistical-levels-ci/test_lineage_admission.py', 'scripts/statistical-levels-ci/test_publication_ci_repair.py', 'scripts/statistical-levels-ci/test_publication_closure.py', 'scripts/statistical-levels-release/SOURCE_SHA256SUMS', 'scripts/statistical-levels-release/scripts/capture-full-product.mjs', 'scripts/statistical-levels-release/scripts/preview-qa.mjs', 'scripts/statistical-levels-release/source-manifest.json', 'scripts/statistical-levels-release/workflow-freeze.json'])
+TECHNICAL_CAPTURE_PAYLOAD_SHA256 = '739b0098eb16fa28f8e6baab79f12c095f2271afa7c73a63cbb59022735fd095'
+TECHNICAL_CAPTURE_PIN = rb"(?m)^(TECHNICAL_CAPTURE_PAYLOAD_SHA256 = ')([a-f0-9]{64})('\n)"
+
+
+def technical_capture_payload(git, root):
+    rows = []
+    for name in sorted(TECHNICAL_CAPTURE_FILES):
+        data = git.blob(root,name)
+        if name == 'scripts/statistical-levels-ci/admission.py':
+            pins = re.findall(TECHNICAL_CAPTURE_PIN,data)
+            need(len(pins) == 1 and pins[0][1].decode() == TECHNICAL_CAPTURE_PAYLOAD_SHA256, 'TECHNICAL_CAPTURE_PIN')
+            data = re.sub(TECHNICAL_CAPTURE_PIN,lambda m:m[1]+b'0'*64+m[3],data)
+        elif name == 'scripts/statistical-levels-ci/authority-transition/inventory.json':
+            field = rb'("scripts/statistical-levels-ci/admission.py": ")[a-f0-9]{64}("[\n,])'
+            need(len(re.findall(field,data)) == 1, 'TECHNICAL_CAPTURE_INVENTORY_PIN')
+            data = re.sub(field,lambda m:m[1]+b'0'*64+m[2],data)
+        rows.append({'path':name,'mode':'100644','sha256':digest(data)})
+    return digest(json.dumps(rows,sort_keys=True,separators=(',',':')).encode())
+
+
+def validate_technical_capture(git, root):
+    need(git.parents(root) == [TECHNICAL_CAPTURE_PARENT], 'TECHNICAL_CAPTURE_PARENT')
+    need(git.text('rev-parse',TECHNICAL_CAPTURE_PARENT+'^{tree}') == TECHNICAL_CAPTURE_PARENT_TREE, 'TECHNICAL_CAPTURE_PARENT_TREE')
+    need(bootstrap(git,TECHNICAL_CAPTURE_PARENT) == (TECHNICAL_CAPTURE_PARENT,[]), 'TECHNICAL_CAPTURE_ANCESTRY')
+    before,after = delta(git,TECHNICAL_CAPTURE_PARENT,root,TECHNICAL_CAPTURE_FILES)
+    lineage_header(git,root,git.text('rev-parse',root+'^{tree}'),TECHNICAL_CAPTURE_PARENT,
+                   TECHNICAL_CAPTURE_IDENTITY,TECHNICAL_CAPTURE_IDENTITY,TECHNICAL_CAPTURE_MESSAGE,'TECHNICAL_CAPTURE_HEADER')
+    for name in paths(git):
+        need(after[name] == before[name] and git.blob(root,name) == git.blob(EXTRAORDINARY_BASELINE,name), 'TECHNICAL_CAPTURE_SL_IDENTITY')
+    need(git.blob(root,CI) == git.blob(TECHNICAL_CAPTURE_PARENT,CI), 'TECHNICAL_CAPTURE_CI_UNCHANGED')
+    wf = '.github/workflows/statistical-levels-release.yml'
+    normalize = lambda data:re.sub(rb'(EXPECTED_SOURCE_SUMS: )[a-f0-9]{64}',lambda m:m[1]+b'0'*64,data)
+    need(normalize(git.blob(root,wf)) == normalize(git.blob(TECHNICAL_CAPTURE_PARENT,wf)), 'TECHNICAL_CAPTURE_WORKFLOW_SCOPE')
+    for name in EXTRAORDINARY_HISTORICAL_FIXTURES:
+        gn = 'git' if name.endswith('/test_lineage_admission.py') else 'f.git'
+        anchor = f'        if {gn}.parents(cls.root) == [a.NEXT_SECURITY_PARENT]:\n'.encode()
+        addition = f'        if {gn}.parents(cls.root) == [a.TECHNICAL_CAPTURE_PARENT]:\n            cls.root = a.TECHNICAL_CAPTURE_PARENT\n'.encode()
+        prior = git.blob(TECHNICAL_CAPTURE_PARENT,name)
+        need(prior.count(anchor) == 1 and git.blob(root,name) == prior.replace(anchor,addition+anchor,1), 'TECHNICAL_CAPTURE_HISTORICAL_SELECTOR')
+    inventory = 'scripts/statistical-levels-ci/authority-transition/inventory.json'
+    current,previous = (unique_json(git.blob(ref,inventory)) for ref in [root,TECHNICAL_CAPTURE_PARENT])
+    need(current['schema'] == previous['schema'], 'TECHNICAL_CAPTURE_TEST_SCHEMA')
+    for key in ['python_tests','node_tests','python_modules','node_files']:
+        need(len(current[key]) == len(set(current[key])) and set(previous[key]) <= set(current[key]), 'TECHNICAL_CAPTURE_TEST_INVENTORY')
+    need(set(previous['files']) <= set(current['files']), 'TECHNICAL_CAPTURE_TEST_FILES')
+    for name,value in current['files'].items():
+        need(digest(git.blob(root,name)) == value, 'TECHNICAL_CAPTURE_TEST_BYTES')
+    need(technical_capture_payload(git,root) == TECHNICAL_CAPTURE_PAYLOAD_SHA256, 'TECHNICAL_CAPTURE_PAYLOAD')
+
+
+def technical_capture_identity(git):
+    """Read-only, credential-free artifact facts; never a grant or public QA.
+
+    Selection is by actual Git ancestry, followed by the closed P4 seal. A data
+    child (even of this exact commit) must use the ordinary future-data capture.
+    """
+    import stat
+    head = git.text('rev-parse','HEAD')
+    if git.parents(head) != [TECHNICAL_CAPTURE_PARENT]:
+        return None
+    need(bootstrap(git,head) == (head,[]), 'TECHNICAL_CAPTURE_ROOT')
+    entries = git.tree(head)
+    tracked = git('ls-files','-z').split(b'\0')
+    need(set(p.decode() for p in tracked if p) == set(entries), 'TECHNICAL_CAPTURE_INDEX')
+    records = []
+    for raw in sorted(p for p in tracked if p):
+        name = raw.decode(); file = git.root / name
+        need(file.resolve() == file.absolute(), 'TECHNICAL_CAPTURE_SYMLINK')
+        info = file.lstat()
+        need(stat.S_ISREG(info.st_mode), 'TECHNICAL_CAPTURE_FILE_TYPE')
+        data = file.read_bytes()
+        blob = hashlib.sha1(b'blob '+str(len(data)).encode()+b'\0'+data).hexdigest()
+        mode = '100755' if info.st_mode & 0o111 else '100644'
+        need(entries[name] == (mode,blob), 'TECHNICAL_CAPTURE_CHECKOUT_BYTES')
+        records.append({'exists':True,'path_hex':raw.hex(),'sha256':digest(data),'tracked':True,
+                        'worktree_file_type':'REGULAR_FILE','worktree_mode':format(stat.S_IMODE(info.st_mode),'06o')})
+    subject = {'mode_encoding':'six-octal-digits-of-lstat-S_IMODE','path_encoding':'hex-of-exact-git-path-bytes',
+               'records':records,'schema':'statistical-levels.local-qualification-subject.v2',
+               'symlink_hash_rule':'sha256-of-link-text-bytes-without-following-target'}
+    snapshot = {p:digest(git.blob(head,p)) for p in sorted(paths(git))}
+    need(git.text('rev-parse','HEAD') == head, 'TECHNICAL_CAPTURE_HEAD_DRIFT')
+    return {'schema':'sl.technical-capture-identity.v1','scope':'ARTIFACT_ONLY_NOT_RELEASE_AUTHORIZATION',
+            'sha':head,'tree':git.text('rev-parse',head+'^{tree}'),'parent':TECHNICAL_CAPTURE_PARENT,
+            'baseline_git_sha':EXTRAORDINARY_BASELINE,'snapshot_files':len(snapshot),
+            'snapshot_manifest_sha256':digest(json.dumps(snapshot,sort_keys=True,separators=(',',':')).encode()),
+            'payload_sha256':TECHNICAL_CAPTURE_PAYLOAD_SHA256,
+            'local_subject_sha256':digest(json.dumps(subject,sort_keys=True,separators=(',',':')).encode()),
+            'release_authority_issued':False}
+
+
 def bootstrap(git, head):
     # Exact lineage transitions only. The editorial commit alone is never admitted; its CI failure is never reused.
     if LINEAGE_REGISTRY not in git.tree(head):
@@ -1076,6 +1172,11 @@ def bootstrap(git, head):
         cursor = parents[0]
     else:
         raise ValueError('LINEAGE_BOUND')
+    if git.parents(cursor) == [TECHNICAL_CAPTURE_PARENT]:
+        validate_technical_capture(git,cursor)
+        current,start = git.tree(head),git.tree(cursor)
+        need(set(current) == set(start) and all(current[p] == start[p] for p in current if p not in data_paths), 'TECHNICAL_CAPTURE_SUCCESSOR_CODE_CHANGED')
+        return cursor,chain
     if git.parents(cursor) == [NEXT_SECURITY_PARENT]:
         validate_next_security(git,cursor)
         current,start = git.tree(head),git.tree(cursor)
@@ -1132,6 +1233,7 @@ def bootstrap(git, head):
             need(git.parents(previous_root) != [MEMORY_CI_BASE], 'MEMORY_CI_DATA_SUCCESSORS_ONLY')
             previous_entry = lineage_entry(git, previous_root)
             need(previous_entry is None or not extraordinary_entry(previous_entry), 'EXTRAORDINARY_DATA_SUCCESSORS_ONLY')
+        need(git.parents(previous_root) != [TECHNICAL_CAPTURE_PARENT], 'TECHNICAL_CAPTURE_DATA_SUCCESSORS_ONLY')
         need(git.parents(previous_root) != [NEXT_SECURITY_PARENT], 'NEXT_SECURITY_DATA_SUCCESSORS_ONLY')
         need(git.parents(previous_root) != [COMPAT_PARENT], 'COMPAT_DATA_SUCCESSORS_ONLY')
         need(git.parents(previous_root) != [RUNTIME_CI_BASE], 'RUNTIME_CI_DATA_SUCCESSORS_ONLY')
@@ -1160,6 +1262,8 @@ def reconciled_report_hashes(git, head):
                       stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL).returncode != 0:
         return {}
     root, _ = bootstrap(git, head)
+    if git.parents(root) == [TECHNICAL_CAPTURE_PARENT]:
+        return reconciled_report_hashes(git,TECHNICAL_CAPTURE_PARENT)
     if git.parents(root) == [NEXT_SECURITY_PARENT]:
         return reconciled_report_hashes(git,NEXT_SECURITY_PARENT)
     if git.parents(root) == [COMPAT_PARENT]:
@@ -1492,6 +1596,7 @@ def admit(git, api, env, event):
     need(evidence['head_sha'] == BASE and evidence['producer_run_id'] == 39432688384 and evidence['source_sha'] == OLD, 'BOOTSTRAP_DATA_IDENTITY')
     validate_data(git, BASE, OLD, evidence['metadata_objects'])
     if not chain:
+        technical_capture_root = git.parents(root) == [TECHNICAL_CAPTURE_PARENT]
         next_security_root = git.parents(root) == [NEXT_SECURITY_PARENT]
         compat_root = git.parents(root) == [COMPAT_PARENT]
         memory_root = git.parents(root) == [MEMORY_CI_BASE]
@@ -1507,15 +1612,24 @@ def admit(git, api, env, event):
         zod_root = git.parents(root) == [ZOD_BASE]
         lineage = lineage_entry(git, root)
         lineage_root = lineage is not None
-        expected_before = COMPAT_PARENT if next_security_root or compat_root else MEMORY_CI_BASE if memory_root else RUNTIME_CI_BASE if runtime_root else PUBLICATION_CI_REPAIR_BASE if publication_ci_repair_root else PUBLICATION_CLOSURE_BASE if closure_root else CI_REPAIR_BASE if repair_root else lineage['editorial']['sha'] if lineage_root else ZOD_BASE if zod_root else DURABILITY_BASE if durability_root else REPORT_CONTRACT_BASE if report_root else CAPTURE_RECOVERY_BASE if capture_root else SECURITY_BASE if security_root else REMOTE_BEFORE_RECONCILIATION if daily_root else BASE
+        expected_before = COMPAT_PARENT if technical_capture_root or next_security_root or compat_root else MEMORY_CI_BASE if memory_root else RUNTIME_CI_BASE if runtime_root else PUBLICATION_CI_REPAIR_BASE if publication_ci_repair_root else PUBLICATION_CLOSURE_BASE if closure_root else CI_REPAIR_BASE if repair_root else lineage['editorial']['sha'] if lineage_root else ZOD_BASE if zod_root else DURABILITY_BASE if durability_root else REPORT_CONTRACT_BASE if report_root else CAPTURE_RECOVERY_BASE if capture_root else SECURITY_BASE if security_root else REMOTE_BEFORE_RECONCILIATION if daily_root else BASE
         need(env['GITHUB_EVENT_NAME'] == 'push' and event['before'] == expected_before and event['after'] == head and event['ref'] == 'refs/heads/' + BRANCH and not event['forced'] and not event['deleted'] and not event['created'], 'BOOTSTRAP_EVENT')
-        if next_security_root or compat_root or memory_root or runtime_root or publication_ci_repair_root or closure_root or repair_root or daily_root or security_root or capture_root or report_root or durability_root or zod_root or lineage_root:
+        if technical_capture_root or next_security_root or compat_root or memory_root or runtime_root or publication_ci_repair_root or closure_root or repair_root or daily_root or security_root or capture_root or report_root or durability_root or zod_root or lineage_root:
             recent_bytes = git.blob(root, CURRENT_DATA_EVIDENCE)
             need(digest(recent_bytes) == CURRENT_DATA_EVIDENCE_SHA256, 'CURRENT_DATA_EVIDENCE_PIN')
             recent = unique_json(recent_bytes)
             need(recent['published_sha'] == REMOTE_BEFORE_RECONCILIATION and recent['producer_run_id'] == 39791362129 and recent['producer_attempt'] == 1, 'CURRENT_DATA_EVIDENCE_IDENTITY')
             validate_data(git, recent['published_sha'], recent['source_sha'], recent['metadata_objects'])
-            if next_security_root:
+            if technical_capture_root:
+                mode,details = 'EXACT_TECHNICAL_CAPTURE_SUCCESSOR', {
+                    'remote_before':COMPAT_PARENT,'technical_parent':TECHNICAL_CAPTURE_PARENT,
+                    'intermediate_hosted_ci':'NOT_REQUIRED_NOT_REUSED','prior_head_hosted_ci':'FAILED_NOT_REUSED',
+                    'new_hosted_qualification_required':True,'daily_successors_require_exact_parent_ci':True,
+                    'native_update':{'before':COMPAT_PARENT,'after':head},
+                    'data_preservation':'EXACT_82_PATHS','capture_scope':'TECHNICAL_ARTIFACT_ONLY',
+                    'authority_protocol_unchanged':True,'technical_successor_reusable':False,
+                    'release_authority_issued':False}
+            elif next_security_root:
                 mode,details = 'EXACT_NEXT_SECURITY_SUCCESSOR', {
                     'remote_before':COMPAT_PARENT,'technical_parent':NEXT_SECURITY_PARENT,
                     'technical_parent_hosted_ci':'NOT_REQUIRED_NOT_REUSED','prior_head_hosted_ci':'FAILED_NOT_REUSED',

@@ -11,6 +11,7 @@ class NextSecurityTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.g=MemoryGit();cls.head=cls.g.real.text('rev-parse','HEAD');cls.root,_=a.bootstrap(cls.g,cls.head)
+        if cls.g.parents(cls.root)==[a.TECHNICAL_CAPTURE_PARENT]:cls.root=a.TECHNICAL_CAPTURE_PARENT
         cls.files={p:cls.g.blob(cls.root,p) for p in a.NEXT_SECURITY_FILES}
         assert cls.g.commit(a.NEXT_SECURITY_PARENT,cls.files,a.NEXT_SECURITY_IDENTITY,a.NEXT_SECURITY_MESSAGE)==cls.root
 

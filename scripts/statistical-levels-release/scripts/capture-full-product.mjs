@@ -30,6 +30,26 @@ function strictJson(bytes) {
   }
   return value;
 }
+// No caller-selected operation: the existing P4 verifier recognizes only its
+// single sealed child of U. This subprocess has no credentials or server calls.
+function technicalCaptureIdentity(root) {
+  const parents = execFileSync('git', ['--no-optional-locks', 'show', '-s', '--format=%P', 'HEAD'], {cwd:root}).toString().trim();
+  if (parents !== 'e66a44e90628154546d0190c69ba5030828d972a') return null;
+  const program = "import sys,json;from pathlib import Path;sys.path.insert(0,str(Path(sys.argv[1])/'scripts/statistical-levels-ci'));from admission import Git,technical_capture_identity;print(json.dumps(technical_capture_identity(Git(Path(sys.argv[1])))))";
+  return strictJson(execFileSync('python3', ['-I', '-B', '-c', program, root], {
+    cwd: root, maxBuffer: 2_000_000, env: {PATH:process.env.PATH, LANG:'C.UTF-8'}, stdio:['ignore','pipe','pipe']
+  }));
+}
+export function bindTechnicalCaptureContext(authority, context) {
+  const identity = authority.technical_capture;
+  if (identity) {
+    need(identity.scope === 'ARTIFACT_ONLY_NOT_RELEASE_AUTHORIZATION' && identity.release_authority_issued === false,
+      'CAPTURE_TECHNICAL_SCOPE');
+    need(context.role === 'hosted' ? context.subject === identity.sha :
+      context.role === 'local' && context.subject === identity.local_subject_sha256, 'CAPTURE_TECHNICAL_SUBJECT');
+  }
+  return authority;
+}
 export async function resolveCurrentAuthority(codeRoot = candidateRoot) {
   const root = path.resolve(codeRoot);
   need(await fs.realpath(root) === root, 'CAPTURE_AUTHORITY_ROOT_SYMLINK');
@@ -51,7 +71,16 @@ export async function resolveCurrentAuthority(codeRoot = candidateRoot) {
   need(typeof provenance.BASELINE_ID === 'string' && /^\d{8}T\d{9}Z-[a-f0-9]{8}(?:-[a-f0-9]{4}){3}-[a-f0-9]{12}$/.test(provenance.BASELINE_ID), 'CAPTURE_AUTHORITY_ID_INVALID');
   need(provenance.CONFIG?.BASELINE_ID === provenance.BASELINE_ID, 'CAPTURE_AUTHORITY_CONFLICT');
   for (const file of P.allowlist.filter(x => x.startsWith('lib/statistical-levels/generated/'))) strictJson(await read(file));
-  const authority = await verifyInputs(root, inputs, {operation:PROMOTE});
+  const identity = technicalCaptureIdentity(root);
+  const authority = identity ? await (await import('./preview-qa.mjs')).verifySnapshotInputs(root, inputs, {preserved:true}) :
+    await verifyInputs(root, inputs, {operation:PROMOTE});
+  if (identity) {
+    need(identity.schema === 'sl.technical-capture-identity.v1' && identity.snapshot_files === 82 &&
+      identity.baseline_git_sha === P.baseline.production_git_sha &&
+      authority.authority_run_id === P.baseline.authority_run_id &&
+      authority.sealed_manifest_sha256 === P.baseline.sealed_manifest_sha256, 'CAPTURE_BASELINE_IDENTITY');
+    authority.technical_capture = identity;
+  }
   need(authority.authority_run_id === provenance.BASELINE_ID && /^[a-f0-9]{64}$/.test(authority.sealed_manifest_sha256), 'CAPTURE_AUTHORITY_CONFLICT');
   return {...authority, provenance_sha256:sha(provenanceBytes)};
 }
@@ -352,7 +381,7 @@ export async function readFullProductEvidence(env = process.env) {
   need(binding.schema === schema && binding.complete === true &&
     /^[a-f0-9-]{36}$/.test(binding.capture_id) &&
     canonical(binding.context).equals(canonical(context)), 'CAPTURE_CONTEXT_MISMATCH');
-  need(canonical(binding.authority).equals(canonical(await resolveCurrentAuthority())), 'CAPTURE_AUTHORITY_BINDING_MISMATCH');
+  need(canonical(binding.authority).equals(canonical(bindTechnicalCaptureContext(await resolveCurrentAuthority(), context))), 'CAPTURE_AUTHORITY_BINDING_MISMATCH');
   need(binding.entrypoint_sha256 === sha(await fs.readFile(fileURLToPath(import.meta.url))) &&
     Number.isFinite(binding.started_at) && Number.isFinite(binding.completed_at) && binding.completed_at >= binding.started_at,
     'CAPTURE_COMPLETION_INVALID');
@@ -372,7 +401,7 @@ export async function captureFullProduct({ origin, out }, env = process.env) {
   await fs.mkdir(out, { mode: 0o700 }); // Exclusive: never delete/reuse a previous capture.
   owned = true;
   phase = 'AUTHORITY_VALIDATION';
-  const authority = await resolveCurrentAuthority();
+  const authority = bindTechnicalCaptureContext(await resolveCurrentAuthority(), context);
   const started_at = Date.now(), capture_id = randomUUID();
   const codeRoot = fileURLToPath(new URL('../../../', import.meta.url));
   phase = 'BROWSER_MODULE_IMPORT';
