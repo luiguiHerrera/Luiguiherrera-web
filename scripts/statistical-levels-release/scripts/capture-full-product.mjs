@@ -34,7 +34,7 @@ function strictJson(bytes) {
 // single sealed child of U. This subprocess has no credentials or server calls.
 function technicalCaptureIdentity(root) {
   const parents = execFileSync('git', ['--no-optional-locks', 'show', '-s', '--format=%P', 'HEAD'], {cwd:root}).toString().trim();
-  if (parents !== 'e66a44e90628154546d0190c69ba5030828d972a') return null;
+  if (parents !== 'e66a44e90628154546d0190c69ba5030828d972a' && parents !== 'bb54caa5084dbc8ed0833ca9dcbbe3c3218db84e') return null;
   const program = "import sys,json;from pathlib import Path;sys.path.insert(0,str(Path(sys.argv[1])/'scripts/statistical-levels-ci'));from admission import Git,technical_capture_identity;print(json.dumps(technical_capture_identity(Git(Path(sys.argv[1])))))";
   return strictJson(execFileSync('python3', ['-I', '-B', '-c', program, root], {
     cwd: root, maxBuffer: 2_000_000, env: {PATH:process.env.PATH, LANG:'C.UTF-8'}, stdio:['ignore','pipe','pipe']

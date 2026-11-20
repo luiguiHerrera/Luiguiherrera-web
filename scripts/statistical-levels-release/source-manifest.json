@@ -14,7 +14,7 @@
   "scripts/adopt-request-evidence.mjs": "462ad0bd02035d906ed9323c0d3e7801271f7cb56aaa9878ca2c448f1dade357",
   "scripts/browser-harness-base.mjs": "0d839a85f327100b61f97c26f88bbdf0250764b7f34be7c845d4dbdf31128c50",
   "scripts/browser-harness.mjs": "dc1d4bb7d45dc3a3daa253c5c0c4a74b1c764b110cfb4eb040ef38e6d3217589",
-  "scripts/capture-full-product.mjs": "8ac9cfcca796352c2302e3ea7158d50250cb2d8b52278b60f39f6ebe0e7448e7",
+  "scripts/capture-full-product.mjs": "4d712859391cd7eb02c836ab4e50e61cbd4d4b8df9f5cabecf9b0cf6b5e0e515",
   "scripts/cli.mjs": "5a6603152660040e42fdf7db8d7327487c39c1444acd0355aecbf1c562e8378e",
   "scripts/invoke.mjs": "08b17b6e45d598b69629771c1844ca88c3f10444cf9e5b224d568e907bea5b23",
   "scripts/network-accounting.mjs": "a9058dca108abf3920ce3cfe0260b800f1978bc6aa5d4c1d69c4e322584432ca",

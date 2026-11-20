@@ -14,6 +14,7 @@ class CompatibilityTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.g=MemoryGit();cls.head=cls.g.real.text('rev-parse','HEAD');cls.root,_=a.bootstrap(cls.g,cls.head)
+        if cls.g.parents(cls.root)==[a.CATALOG_PARENT]:cls.root=a.CATALOG_PARENT
         if cls.g.parents(cls.root)==[a.TECHNICAL_CAPTURE_PARENT]:cls.root=a.TECHNICAL_CAPTURE_PARENT
         if cls.g.parents(cls.root)==[a.NEXT_SECURITY_PARENT]:cls.root=a.NEXT_SECURITY_PARENT
         cls.files={p:cls.g.blob(cls.root,p) for p in a.COMPAT_FILES}

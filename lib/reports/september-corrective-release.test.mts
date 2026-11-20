@@ -117,6 +117,55 @@ const novemberSharedSuccessor: Record<string, string> = {
   "scripts/reports.mts": "5f1b50088ff04d0ffe27f88ad2caf8faa0d75d3fbcc5d3613691a227e1dcc46f"
 };
 const novemberManifestSha256 = '49cd77a5a438f98b6bf08f00d7f50dd562482bae3c59f83ed1c1d585ff76b50e';
+// These are immutable Git subjects, not evidence of a new public release.
+const novemberHistoricalCatalog = {
+  commit:'c4bb2047ed54fd3c1fdd40f6fddd99ec187b31ce',
+  tree:'d878568938014b697193a5468f9d07359146154c',
+  parent:'ae09a44ffce5860f511c08061f9621934eadbe08',
+  rawCommitSha256:'c96696f358940687a15fce600e483fecf52c2caeb59215b730eec54fb85385cf',
+};
+const extraordinaryCatalog = {
+  commit:'8c770af7059b33a2e841f5afa4b87344db4aa177',
+  tree:'c44eadb389e02ce6c0113526ac2ca3ba6ef33adc',
+  parent:novemberHistoricalCatalog.commit,
+  rawCommitSha256:'0f8bbb0060c55bcfec91dbaf21076b1eb7feac60f5a5b47b318076e5ca88894b',
+};
+const extraordinaryCurrentHashes: Record<string,string> = {
+  'public/reports/manifest.json':'aae472426f646b2343c0bbb1394a6a192d324bba3c07526d88368e65b7b3caaa',
+  'lib/reports/market-reports.ts':'7283dcd2ed1ca7a7d371cae65ddbaf2e2e093555aaf946a9959f548065f01203',
+  'public/llms.txt':'f1f8bdc4278fe73684e851b85c7c20c997392725f76c92fa21ec919f5bf2e7dd',
+};
+const historicalNovemberIds = [
+  'primer-informe-julio-2026','segundo-informe-julio-2026',
+  'primer-informe-agosto-2026','segundo-informe-agosto-2026',
+  'primer-informe-septiembre-2026','segundo-informe-septiembre-2026',
+  'primer-informe-octubre-2026','segundo-informe-octubre-2026',
+  'primer-informe-noviembre-2026',
+];
+// Only immutable, exact Git objects are cached; each consumer receives a copy.
+// Worktree reads and every assertion below still execute for each negative case.
+const catalogGitObjects = new Map<string,Buffer>();
+function catalogGitObject(args: string[]) {
+  const key=JSON.stringify(args);
+  if(!catalogGitObjects.has(key)) catalogGitObjects.set(key,execFileSync('git',args,{maxBuffer:32*1024*1024}));
+  return Buffer.from(catalogGitObjects.get(key)!);
+}
+function authenticatedCatalogReader(subject: typeof extraordinaryCatalog) {
+  assert([novemberHistoricalCatalog,extraordinaryCatalog].includes(subject));
+  const raw=catalogGitObject(['cat-file','commit',subject.commit]);
+  assert.equal(digest(raw),subject.rawCommitSha256);
+  assert.equal(createHash('sha1').update(Buffer.concat([Buffer.from(`commit ${raw.length}\0`),raw])).digest('hex'),subject.commit);
+  const headers=raw.toString().split('\n\n',1)[0].split('\n');
+  assert.deepEqual(headers.filter(s=>s.startsWith('tree ')),[`tree ${subject.tree}`]);
+  assert.deepEqual(headers.filter(s=>s.startsWith('parent ')),[`parent ${subject.parent}`]);
+  return (file:string)=>{
+    assert(Object.hasOwn(novemberSharedSuccessor,file) || file==='public/reports/manifest.json' || /^public\/reports\/[a-z0-9-]+\.(html|md|pdf|ics)$/.test(file));
+    const bytes=catalogGitObject(['show',`${subject.commit}:${file}`]);
+    const oid=createHash('sha1').update(Buffer.concat([Buffer.from(`blob ${bytes.length}\0`),bytes])).digest('hex');
+    assert.equal(catalogGitObject(['ls-tree',subject.commit,'--',file]).toString().split('\t')[0],`100644 blob ${oid}`,file);
+    return bytes;
+  };
+}
 function verifyNovemberManifest(current: Buffer, october: Buffer) {
   assert.equal(digest(current), novemberManifestSha256);
   const now=JSON.parse(current.toString()), before=JSON.parse(october.toString());
@@ -129,6 +178,43 @@ function verifyNovemberManifest(current: Buffer, october: Buffer) {
       assert.notEqual(a.sourceHash,b.sourceHash);
       assert.deepEqual({...a,sourceHash:b.sourceHash},b);
     } else assert.deepEqual(a,b);
+  }
+}
+function verifyCurrentNovemberCatalog(read=readCurrent, october=readEditorial('public/reports/manifest.json')) {
+  const historical=authenticatedCatalogReader(novemberHistoricalCatalog),candidate=authenticatedCatalogReader(extraordinaryCatalog);
+  const file='public/reports/manifest.json',nineBytes=historical(file),tenBytes=read(file);
+  // The nine-report contract and all original shared pins retain their subject.
+  verifyNovemberManifest(nineBytes,october);
+  const nine=JSON.parse(nineBytes.toString()),ten=JSON.parse(tenBytes.toString());
+  assert.deepEqual(nine.reports.map((r:{id:string})=>r.id),historicalNovemberIds);
+  for (const [name,hash] of Object.entries(novemberSharedSuccessor)) assert.equal(digest(historical(name)),hash,name);
+  assert.equal(digest(tenBytes),extraordinaryCurrentHashes[file],'CURRENT_CATALOG_PIN');
+  assert(tenBytes.equals(candidate(file)),'CURRENT_CATALOG_GIT_SUBJECT');
+  assert.equal(ten.schemaVersion,nine.schemaVersion);
+  assert.deepEqual(ten.reports.map((r:{id:string})=>r.id),[...historicalNovemberIds,'segundo-informe-noviembre-2026']);
+  assert.equal(new Set(ten.reports.map((r:{id:string})=>r.id)).size,10);
+  for(let i=0;i<9;i++) {
+    const before=nine.reports[i],after=ten.reports[i];
+    if(i===8) {
+      assert.equal(after.sourceHash,'d09c3ea251796f8260b020aa77ca2a883c723c23b3390278574d4c23ddb07bce');
+      assert.notEqual(after.sourceHash,before.sourceHash);
+      assert.deepEqual({...after,sourceHash:before.sourceHash},before);
+    } else assert.deepEqual(after,before);
+  }
+  let preserved=0,total=0;
+  const paths=new Set<string>();
+  for(const entry of ten.reports) for(const format of Object.values(entry.formats) as {path:string;sha256:string;size:number}[]) {
+    assert(/^\/reports\/[a-z0-9-]+\.(html|md|pdf|ics)$/.test(format.path));
+    assert(!paths.has(format.path));paths.add(format.path);
+    const name='public'+format.path,bytes=candidate(name);
+    assert.equal(digest(bytes),format.sha256,name);assert.equal(bytes.length,format.size,name);
+    assert(read(name).equals(bytes),name);
+    if(entry.id!=='segundo-informe-noviembre-2026') {assert(bytes.equals(historical(name)),name);preserved++;}
+    total++;
+  }
+  assert.equal(preserved,35);assert.equal(total,39);
+  for(const [name,hash] of Object.entries(extraordinaryCurrentHashes)) {
+    assert.equal(digest(candidate(name)),hash,name);assert.equal(digest(read(name)),hash,name);
   }
 }
 function verifyEditorialProduction(read=readCurrent, publishedRead=readEditorial, authority=editorialProduction, testSuccessor=reportTestSuccessor) {
@@ -152,7 +238,7 @@ function verifyEditorialProduction(read=readCurrent, publishedRead=readEditorial
   assert.equal(digest(oldBytes),currentProduction.reports[manifestPath].sha256);
   const bytes=authenticatedPublished(manifestPath);
   assert.equal(digest(bytes),authority.manifestSha256);
-  verifyNovemberManifest(read(manifestPath),bytes);
+  verifyCurrentNovemberCatalog(read,bytes);
   const previous=JSON.parse(oldBytes.toString()),published=JSON.parse(bytes.toString());
   assert.equal(published.schemaVersion,previous.schemaVersion);
   assert.equal(previous.reports.length,7);
@@ -181,7 +267,7 @@ function verifyEditorialProduction(read=readCurrent, publishedRead=readEditorial
     // Only this reviewed test-code successor differs from the editorial source.
     // Its publication-era bytes remain authenticated separately below.
     const original=authenticatedPublished(file);
-    const expected=file==='public/reports/manifest.json' ? novemberManifestSha256 : novemberSharedSuccessor[file] ?? (Object.hasOwn(testSuccessor,file)?testSuccessor[file as keyof typeof testSuccessor]:digest(original));
+    const expected=extraordinaryCurrentHashes[file] ?? novemberSharedSuccessor[file] ?? (Object.hasOwn(testSuccessor,file)?testSuccessor[file as keyof typeof testSuccessor]:digest(original));
     assert.equal(digest(read(file)),expected,file);
   }
 }
@@ -251,7 +337,7 @@ function verifyPreservation(value: Preservation, read = readCurrent, historicalR
     // c60 contains the approved post-correction bytes; the independently pinned
     // baseline retains the earlier identity for exactly the four corrected exports.
     assert.equal(digest(historicalRead(entry.source_commit,entry.path)),entry.sha256,entry.path);
-    const expectedCurrent=entry.path==='public/reports/manifest.json' ? novemberManifestSha256 : entry.sha256;
+    const expectedCurrent=entry.path==='public/reports/manifest.json' ? extraordinaryCurrentHashes[entry.path] : entry.sha256;
     assert.equal(digest(read(entry.path)),expectedCurrent,entry.path);
   }
   assert.deepEqual(value.historical_files.filter(e=>Object.hasOwn(generation.reports,e.path)).map(e=>e.path),['public/reports/manifest.json']);
@@ -411,4 +497,50 @@ for (const name of currentProductionNegatives) test(`current production authorit
 
 for (const file of Object.keys(novemberSharedSuccessor)) test(`November shared successor rejects corruption: ${file}`,()=>{
   assert.throws(()=>verifyEditorialProduction(p=>p===file ? Buffer.concat([readCurrent(p),Buffer.from('corrupt')]) : readCurrent(p)));
+});
+
+test('nine-report November history and exact ten-report editorial candidate remain distinct',()=>{
+  const historical=authenticatedCatalogReader(novemberHistoricalCatalog);
+  verifyNovemberManifest(historical('public/reports/manifest.json'),readEditorial('public/reports/manifest.json'));
+  verifyCurrentNovemberCatalog();
+  assert.throws(()=>verifyCurrentNovemberCatalog(p=>p==='public/reports/manifest.json'?historical(p):readCurrent(p)),/CURRENT_CATALOG_PIN/);
+  assert.throws(()=>verifyNovemberManifest(readCurrent('public/reports/manifest.json'),readEditorial('public/reports/manifest.json')));
+});
+test('pinned catalog Git fixtures cannot be overwritten by their consumers',()=>{
+  for(const subject of [novemberHistoricalCatalog,extraordinaryCatalog]) {
+    const read=authenticatedCatalogReader(subject),file='public/reports/manifest.json',original=read(file),copy=read(file);
+    copy.fill(0);assert.deepEqual(read(file),original);assert.notDeepEqual(copy,original);
+  }
+});
+for(const kind of ['MISSING','DUPLICATE','UNEXPECTED','ALTERED','ARCHIVE_HASH_ALTERED'] as const) test(`current ten-report catalogue rejects ${kind}`,()=>{
+  const file='public/reports/manifest.json',original=JSON.parse(readCurrent(file).toString());
+  // Exercise every entry, including the previously published nine.
+  for(let index=0;index<10;index++) {
+    const changed=structuredClone(original);
+    if(kind==='MISSING') changed.reports.splice(index,1);
+    if(kind==='DUPLICATE') changed.reports[(index+1)%10]=structuredClone(changed.reports[index]);
+    if(kind==='UNEXPECTED') changed.reports[index].id='unapproved-report';
+    if(kind==='ALTERED') changed.reports[index].canonicalUrl+='-altered';
+    if(kind==='ARCHIVE_HASH_ALTERED') changed.reports[index].sourceHash='0'.repeat(64);
+    assert.throws(()=>verifyCurrentNovemberCatalog(p=>p===file?Buffer.from(JSON.stringify(changed)):readCurrent(p)),/CURRENT_CATALOG_PIN/);
+  }
+});
+for(const kind of ['MISSING','DUPLICATE','UNEXPECTED','ALTERED'] as const) test(`historical nine-report catalogue still rejects ${kind}`,()=>{
+  const original=JSON.parse(authenticatedCatalogReader(novemberHistoricalCatalog)('public/reports/manifest.json').toString());
+  for(let index=0;index<9;index++) {
+    const changed=structuredClone(original);
+    if(kind==='MISSING') changed.reports.splice(index,1);
+    if(kind==='DUPLICATE') changed.reports[(index+1)%9]=structuredClone(changed.reports[index]);
+    if(kind==='UNEXPECTED') changed.reports[index].id='unapproved-report';
+    if(kind==='ALTERED') changed.reports[index].sourceHash='0'.repeat(64);
+    assert.throws(()=>verifyNovemberManifest(Buffer.from(JSON.stringify(changed)),readEditorial('public/reports/manifest.json')));
+  }
+});
+test('all 39 current report exports reject missing or altered bytes including the tenth report',()=>{
+  const manifest=JSON.parse(readCurrent('public/reports/manifest.json').toString());
+  for(const entry of manifest.reports) for(const format of Object.values(entry.formats) as {path:string}[]) {
+    const file='public'+format.path;
+    assert.throws(()=>verifyCurrentNovemberCatalog(p=>p===file?Buffer.alloc(0):readCurrent(p)));
+    assert.throws(()=>verifyCurrentNovemberCatalog(p=>p===file?Buffer.concat([readCurrent(p),Buffer.from('corrupt')]):readCurrent(p)));
+  }
 });

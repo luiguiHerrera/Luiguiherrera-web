@@ -39,6 +39,13 @@ def reuse_scope(git, head):
     root, _ = bootstrap(git, head)
     from admission import COMPAT_PARENT,COMPAT_FILES
     from admission import NEXT_SECURITY_PARENT,NEXT_SECURITY_FILES
+    from admission import CATALOG_PARENT,CATALOG_FILES
+    if git.parents(root) == [CATALOG_PARENT]:
+        reused,changed = reuse_scope(git,CATALOG_PARENT)
+        affected = {p for p in CATALOG_FILES if p.startswith('scripts/statistical-levels-release/')}
+        old = git.tree(OLD)
+        return reused - affected, {**changed, **{p:{'old_sha256':digest(git.blob(OLD,p)) if p in old else None,
+            'current_sha256':digest(git.blob(head,p))} for p in sorted(affected)}}
     from admission import TECHNICAL_CAPTURE_PARENT,TECHNICAL_CAPTURE_FILES
     if git.parents(root) == [TECHNICAL_CAPTURE_PARENT]:
         reused,changed = reuse_scope(git,TECHNICAL_CAPTURE_PARENT)
