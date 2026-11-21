@@ -8,18 +8,23 @@ import type { AssetStatRecord, DailySeasonalityData, StatisticalLevelsManifest }
 type Source = typeof bundledStatisticalLevels;
 type Selection = Parameters<typeof getStatisticalLevelsPageData>[0];
 type FileEntry = { FILE: string; SNAPSHOT_SHA256: string; SCHEMA_VERSION: string };
-type Run = {
-  workflow_id: number; event: string; conclusion: string; head_branch: string; head_sha: string;
-  repository: { id: number }; head_repository: { id: number };
-  head_commit: { id: string; message: string; timestamp: string };
+type ProducerRun = {
+  id: number; run_attempt: number; workflow_id: number; event: string; conclusion: string; head_branch: string; head_sha: string;
+  repository: { id: number }; head_repository: { id: number }; run_started_at: string; updated_at: string;
 };
+type Push = { actor: { id: number }; ref: string; activity_type: string; before: string; after: string; timestamp: string };
+type Publication = { revision: string; push: Push; run: ProducerRun };
+type ReceiptArtifact = { name: string; expired: boolean; digest: string; workflow_run: { id: number; head_sha: string }; };
 
 const repo = "luiguiHerrera/Luiguiherrera-web";
-const runsUrl = "https://api.github.com/repos/" + repo + "/actions/workflows/336203586/runs?event=workflow_run&branch=vercel-deployment&status=success&per_page=30";
-// Independently recovered from the hosted producer receipt for run 44942599945.
-const seed = "2c495e7472a3a9a3185f3a69ad4335d3a86b5613";
-const seedHash = "b429b84a2b6fdf217fee274dad009164fc4f565396aea1619093d4802a9b5250";
-const seedCutoff = "2026-11-21T19:49:49.829Z";
+const api = "https://api.github.com/repos/" + repo;
+const runsUrl = api + "/actions/workflows/306145344/runs?branch=vercel-deployment&status=success&per_page=50";
+const activityUrl = api + "/activity?ref=refs%2Fheads%2Fvercel-deployment&actor=github-actions%5Bbot%5D&activity_type=push&per_page=50";
+// Independently recovered from the hosted producer receipt for run 44139982306.
+// The November 21 release and every subsequent release go through live discovery.
+const seed = "c4bb2047ed54fd3c1fdd40f6fddd99ec187b31ce";
+const seedHash = "d996f9e9d03f45e1612b951c3db58789a8cebae0d813cc5251300c382c116826";
+const seedCutoff = "2026-11-17T17:47:55.286Z";
 const hashPattern = /^[a-f0-9]{64}$/;
 
 function liveDataEnabled() {
@@ -33,29 +38,47 @@ async function readText(url: string, revalidate: number) {
   return response.text();
 }
 
-async function verifiedRuns(): Promise<Run[]> {
-  const runs: Run[] = JSON.parse(await readText(runsUrl, 600)).workflow_runs;
-  // A successful workflow_run for a generated commit binds the updater receipt,
-  // the S3 readback and the exact generated tree. Editorial pushes are separate.
-  return runs.filter(r => r.workflow_id === 336203586 && r.event === "workflow_run" &&
-    r.conclusion === "success" && r.repository.id === 1263772150 && r.head_repository.id === 1263772150 &&
-    r.head_branch === "vercel-deployment" && /^[a-f0-9]{40}$/.test(r.head_sha) &&
-    r.head_commit?.id === r.head_sha && r.head_commit.message === "Update statistical levels snapshot with durable raw provenance")
-    .sort((a,b) => Date.parse(b.head_commit.timestamp) - Date.parse(a.head_commit.timestamp));
+async function publications(): Promise<Publication[]> {
+  const [runsText, pushesText] = await Promise.all([readText(runsUrl, 600), readText(activityUrl, 600)]);
+  const runs: ProducerRun[] = JSON.parse(runsText).workflow_runs;
+  const pushes: Push[] = JSON.parse(pushesText);
+  const successful = runs.filter(run => run.workflow_id === 306145344 && run.conclusion === "success" &&
+    ["schedule","workflow_dispatch"].includes(run.event) && run.head_branch === "vercel-deployment" &&
+    run.repository.id === 1263772150 && run.head_repository.id === 1263772150 && Number.isSafeInteger(run.id));
+  const releases: Publication[] = [];
+  for (const push of pushes) {
+    if (push.actor?.id !== 41898282 || push.ref !== "refs/heads/vercel-deployment" || push.activity_type !== "push" ||
+        !/^[a-f0-9]{40}$/.test(push.after)) continue;
+    const timestamp = Date.parse(push.timestamp);
+    const run = successful.find(r => r.head_sha === push.before && Date.parse(r.run_started_at) <= timestamp && timestamp <= Date.parse(r.updated_at));
+    if (run) releases.push({ revision: push.after, push, run });
+  }
+  return releases.sort((a,b) => Date.parse(b.push.timestamp) - Date.parse(a.push.timestamp));
+}
+
+async function verifyReceipt(publication: Publication) {
+  const { run } = publication;
+  const result = JSON.parse(await readText(api + "/actions/runs/" + run.id + "/artifacts", 86400));
+  const named = result.artifacts.filter((a: ReceiptArtifact) => a.name === "sl-published-" + run.id + "-" + run.run_attempt &&
+    !a.expired && a.workflow_run?.id === run.id && a.workflow_run.head_sha === run.head_sha && /^sha256:[a-f0-9]{64}$/.test(a.digest));
+  if (named.length !== 1) throw new Error("Missing successful producer readback receipt");
 }
 
 function checkHash(text: string, expected: string) {
   if (createHash("sha256").update(text).digest("hex") !== expected) throw new Error("Statistical Levels checksum mismatch");
 }
 
-async function hostedSource(revision: string) {
+async function hostedSource(revision: string, publication?: Publication) {
   const base = "https://raw.githubusercontent.com/" + repo + "/" + revision + "/lib/statistical-levels/generated";
-  const bytes = await readText(base + "-provenance.json", 86400);
+  const [bytes] = await Promise.all([readText(base + "-provenance.json", 86400), publication && verifyReceipt(publication)]);
   if (revision === seed) checkHash(bytes, seedHash);
   const meta = JSON.parse(bytes);
   if (meta.SCHEMA_VERSION !== "statistical-levels.provenance.v1" || meta.RAW_ARCHIVE_ACCESS_CLASS !== "PRIVATE_S3_DURABLE" ||
       meta.SOURCE_STATE !== "COMMITTED" || !hashPattern.test(meta.CONFIG?.RAW_ARCHIVE_SEAL_SHA256) ||
       !Number.isFinite(Date.parse(meta.GENERATED_AT)) || meta.snapshots?.length !== 81) throw new Error("Invalid production provenance");
+  if (publication && (meta.GENERATOR_COMMIT !== publication.push.before ||
+      Date.parse(meta.GENERATED_AT) > Date.parse(publication.push.timestamp) ||
+      meta.GENERATED_AT.slice(0, 10) !== publication.push.timestamp.slice(0, 10))) throw new Error("Snapshot does not belong to producer run");
   const hashes = new Map<string, string>();
   for (const entry of meta.snapshots as FileEntry[]) {
     if (!hashPattern.test(entry.SNAPSHOT_SHA256) || entry.SCHEMA_VERSION !== "statistical-levels.snapshot.v3" || hashes.has(entry.FILE)) {
@@ -96,16 +119,16 @@ async function bundledSource() {
 export async function loadPublishedPage(selection: Selection) {
   if (liveDataEnabled()) {
     // A corrupt or briefly unavailable release must not displace the last usable one.
-    let runs: Run[] = [];
+    let releases: Publication[] = [];
     try {
-      runs = await verifiedRuns();
+      releases = await publications();
     } catch { console.error("Statistical Levels release list unavailable."); }
-    const recent = runs.filter(run => Date.parse(run.head_commit.timestamp) > Date.parse(seedCutoff)).slice(0, 3);
-    for (const run of recent) {
+    const recent = releases.filter(entry => Date.parse(entry.push.timestamp) > Date.parse(seedCutoff)).slice(0, 3);
+    for (const entry of recent) {
       try {
-        const { source, snapshot, cutoff } = await hostedSource(run.head_sha);
+        const { source, snapshot, cutoff } = await hostedSource(entry.revision, entry);
         if (cutoff >= seedCutoff) return { data: await getStatisticalLevelsPageData(selection, source), snapshot };
-      } catch { console.error("Statistical Levels could not read verified release", run.head_sha); }
+      } catch { console.error("Statistical Levels could not read verified release", entry.revision); }
     }
     try {
       const { source, snapshot } = await hostedSource(seed);
@@ -118,9 +141,10 @@ export async function loadPublishedPage(selection: Selection) {
 
 export async function sourceForSnapshot(id: string, revision: string | null) {
   if (revision) {
-    if (!liveDataEnabled() ||
-        (revision !== seed && !(await verifiedRuns()).some(run => run.head_sha === revision))) return null;
-    const hosted = await hostedSource(revision);
+    if (!liveDataEnabled()) return null;
+    const entry = revision === seed ? undefined : (await publications()).find(p => p.revision === revision);
+    if (!entry && revision !== seed) return null;
+    const hosted = await hostedSource(revision, entry);
     return hosted.snapshot.id === id ? hosted : null;
   }
   const local = await bundledSource();

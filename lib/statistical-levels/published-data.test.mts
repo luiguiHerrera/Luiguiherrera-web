@@ -9,7 +9,7 @@ test('a new verified run updates the lab while prior tabs retain their file hash
   const root = 'lib/statistical-levels/generated';
   const first = 'a'.repeat(40), second = 'b'.repeat(40);
   const dates = { [first]: '2026-11-24T12:00:00.000Z', [second]: '2026-11-25T12:00:00.000Z' };
-  let revisions = [first], damaged = false;
+  let revisions = [first], damaged = false, missingReceipt = false, otherActor = false;
   const originals = new Map<string,string>();
   function original(name: string) {
     let text = originals.get(name);
@@ -25,6 +25,7 @@ test('a new verified run updates the lab while prior tabs retain their file hash
     if (name === 'provenance') {
       const meta = JSON.parse(readFileSync(root + '-provenance.json','utf8'));
       meta.GENERATED_AT = dates[revision];
+      meta.GENERATOR_COMMIT = "f".repeat(40);
       meta.snapshots.find((file: {FILE: string}) => file.FILE === 'manifest.json').SNAPSHOT_SHA256 = hash(manifestBytes);
       return JSON.stringify(meta);
     }
@@ -32,10 +33,20 @@ test('a new verified run updates the lab while prior tabs retain their file hash
     return original(name);
   }
   t.mock.method(globalThis, 'fetch', async (url: string) => {
-    if (url.startsWith('https://api.github.com/')) return Response.json({workflow_runs: revisions.map(head_sha => ({
-      event:'workflow_run', workflow_id:336203586, head_branch:'vercel-deployment', conclusion:'success',
-      head_sha, repository:{id:1263772150}, head_repository:{id:1263772150},
-      head_commit:{ id:head_sha, timestamp:dates[head_sha], message:'Update statistical levels snapshot with durable raw provenance' }
+    const before = "f".repeat(40);
+    const runId = (revision: string) => revision === first ? 10 : 20;
+    const pushed = (revision: string) => dates[revision].replace("12:00:00","12:01:00");
+    if (url.includes("/activity?")) return Response.json(revisions.map(after => ({
+      before, after, actor:{id:otherActor && after === second ? 1 : 41898282}, ref:"refs/heads/vercel-deployment", activity_type:"push", timestamp:pushed(after)
+    })));
+    if (url.includes("/artifacts")) {
+      const id = Number(url.split("/").at(-2));
+      return Response.json({artifacts:missingReceipt && id === 20 ? [] : [{name:"sl-published-"+id+"-1",expired:false,digest:"sha256:"+"a".repeat(64),workflow_run:{id,head_sha:before}}]});
+    }
+    if (url.includes("/workflows/306145344/")) return Response.json({workflow_runs: revisions.map(rev => ({
+      id:runId(rev), run_attempt:1, event:"schedule", workflow_id:306145344, head_branch:"vercel-deployment", conclusion:"success",
+      head_sha:before, repository:{id:1263772150}, head_repository:{id:1263772150},
+      run_started_at:dates[rev], updated_at:pushed(rev)
     }))});
     const match = /\/([ab]{40})\/lib\/statistical-levels\/generated(?:-provenance\.json|\/(.+))$/.exec(url);
     assert.ok(match); return new Response(fixture(match[1], match[2] || 'provenance'));
@@ -56,6 +67,12 @@ test('a new verified run updates the lab while prior tabs retain their file hash
   const payload = { schema:RUNTIME_SCHEMA, ticker:'QQQ', snapshot:old.snapshot.id, asset, seasonality };
   await validateRuntimeAsset(payload,'QQQ',old.snapshot);
   await assert.rejects(validateRuntimeAsset({...payload,asset:{...asset,lastClose:0}},'QQQ',old.snapshot));
+  missingReceipt = true;
+  assert.equal((await loadPublishedPage({})).snapshot.id, old.snapshot.id);
+  missingReceipt = false;
+  otherActor = true;
+  assert.equal((await loadPublishedPage({})).snapshot.id, old.snapshot.id);
+  otherActor = false;
   damaged = true;
   assert.equal((await loadPublishedPage({})).snapshot.id, old.snapshot.id);
 });
