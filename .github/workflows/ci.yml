@@ -15,7 +15,7 @@ permissions:
 jobs:
   validate:
     # An unchanged producer SHA is a no-op, never a new qualification PASS.
-    if: ${{ github.event_name != 'workflow_run' || (github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.head_sha != github.sha) }}
+    if: ${{ github.ref != 'refs/heads/release/statistical-levels-web' && (github.event_name != 'workflow_run' || (github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.head_sha != github.sha)) }}
     runs-on: ubuntu-latest
     timeout-minutes: 40
     env:

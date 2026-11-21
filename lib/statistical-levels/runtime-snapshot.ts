@@ -4,7 +4,7 @@ import { canonicalStatTicker } from './display';
 export const RUNTIME_SCHEMA = 'statistical-levels.runtime-asset.v1';
 export const SNAPSHOT_SCHEMA = 'statistical-levels.runtime-snapshot.v1';
 export type RuntimeSelection = {asset:string;frequency:StatisticalFrequency;window:StatisticalWindow};
-export type RuntimeSnapshot = {schema:typeof SNAPSHOT_SCHEMA;id:string;manifest_sha256:string;records:Record<string,{asset:string;seasonality:string}>};
+export type RuntimeSnapshot = {schema:typeof SNAPSHOT_SCHEMA;id:string;manifest_sha256:string;revision?:string;records:Record<string,{asset:string;seasonality:string}>};
 export type RuntimeAsset = {schema:typeof RUNTIME_SCHEMA;ticker:string;snapshot:string;asset:AssetStatRecord;seasonality:DailySeasonalityData};
 export type LoadedRuntimeAsset = RuntimeAsset & {intent_identity:string;payload_identity:string};
 const hashPattern=/^[a-f0-9]{64}$/;
@@ -21,6 +21,10 @@ export function runtimeCanonical(value:unknown):string {
 export async function runtimeDigest(value:unknown):Promise<string>{
   const bytes=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(runtimeCanonical(value)));
   return Array.from(new Uint8Array(bytes),x=>x.toString(16).padStart(2,'0')).join('');
+}
+async function generatedFileDigest(value:unknown):Promise<string>{
+  const hash=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(JSON.stringify(value)));
+  return Array.from(new Uint8Array(hash),byte=>byte.toString(16).padStart(2,'0')).join('');
 }
 let snapshotCache:{key:string;value:Promise<RuntimeSnapshot>}|undefined;
 export async function createRuntimeSnapshot(manifest:StatisticalLevelsManifest,readAsset:(ticker:string)=>Promise<AssetStatRecord>,readSeasonality:(ticker:string)=>Promise<DailySeasonalityData>):Promise<RuntimeSnapshot>{
@@ -48,7 +52,9 @@ export async function validateRuntimeAsset(value:unknown,ticker:string,snapshot:
   requireValue(hashPattern.test(snapshot.id)&&v.snapshot===snapshot.id,'RUNTIME_SNAPSHOT_MISMATCH');
   const expected=snapshot.records[ticker];
   requireValue(expected&&v.ticker===ticker&&v.asset?.ticker===ticker&&v.seasonality?.asset===ticker,'RUNTIME_TICKER');
-  requireValue(await runtimeDigest(v.asset)===expected.asset&&await runtimeDigest(v.seasonality)===expected.seasonality,'RUNTIME_PAYLOAD_DIGEST');
+  // Hosted provenance hashes the exact compact JSON emitted by the generator.
+  const digest = snapshot.revision ? generatedFileDigest : runtimeDigest;
+  requireValue(await digest(v.asset)===expected.asset&&await digest(v.seasonality)===expected.seasonality,'RUNTIME_PAYLOAD_DIGEST');
   return v;
 }
 export function parseRuntimeAssetQuery(url:URL,manifest:StatisticalLevelsManifest):{ticker:string;snapshot:string}{
@@ -64,6 +70,7 @@ export async function loadStatisticalLevelsRuntimeAsset(ticker:string,snapshot:R
   const intent_identity=crypto.randomUUID();
   const url=new URL('/api/statistical-levels/asset',window.location.origin);
   url.searchParams.set('asset',ticker);url.searchParams.set('snapshot',snapshot.id);
+  if(snapshot.revision)url.searchParams.set('revision',snapshot.revision);
   // The only application transport callsite. No retry, redirect, signal or abort.
   const response=await fetch(url,{method:'GET',redirect:'error',credentials:'same-origin'});
   requireValue(response.ok&&!response.redirected&&response.headers.get('content-type')?.split(';')[0]==='application/json','RUNTIME_HTTP');
