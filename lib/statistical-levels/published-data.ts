@@ -22,6 +22,10 @@ const seedHash = "b429b84a2b6fdf217fee274dad009164fc4f565396aea1619093d4802a9b52
 const seedCutoff = "2026-11-21T19:49:49.829Z";
 const hashPattern = /^[a-f0-9]{64}$/;
 
+function liveDataEnabled() {
+  return (process.env.STAT_LEVELS_LIVE_DATA ?? (process.env.VERCEL === "1" ? "true" : "false")) === "true";
+}
+
 async function readText(url: string, revalidate: number) {
   const response = await fetch(url, { headers: { "User-Agent": "Statistical-Levels-Web" },
     redirect: "error", signal: AbortSignal.timeout(8000), next: { revalidate } });
@@ -90,7 +94,7 @@ async function bundledSource() {
 }
 
 export async function loadPublishedPage(selection: Selection) {
-  if (process.env.STAT_LEVELS_LIVE_DATA === "true") {
+  if (liveDataEnabled()) {
     // A corrupt or briefly unavailable release must not displace the last usable one.
     let runs: Run[] = [];
     try {
@@ -114,7 +118,7 @@ export async function loadPublishedPage(selection: Selection) {
 
 export async function sourceForSnapshot(id: string, revision: string | null) {
   if (revision) {
-    if (process.env.STAT_LEVELS_LIVE_DATA !== "true" ||
+    if (!liveDataEnabled() ||
         (revision !== seed && !(await verifiedRuns()).some(run => run.head_sha === revision))) return null;
     const hosted = await hostedSource(revision);
     return hosted.snapshot.id === id ? hosted : null;
