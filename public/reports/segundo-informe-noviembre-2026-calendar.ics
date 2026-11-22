@@ -7,7 +7,7 @@ X-WR-CALNAME:Segundo informe de noviembre de 2026
 BEGIN:VEVENT
 UID:segundo-informe-noviembre-2026-resultados-de-nvidia-indice-de-precios-d
  e-importacion-exportacion-de-ee-uu@luigui-herrera
-DTSTAMP:20261122T000000Z
+DTSTAMP:20261123T000000Z
 DTSTART;VALUE=DATE:20261117
 DTEND;VALUE=DATE:20261118
 SUMMARY:Segundo informe de noviembre de 2026: Resultados de NVIDIA\; índic
@@ -19,7 +19,7 @@ END:VEVENT
 BEGIN:VEVENT
 UID:segundo-informe-noviembre-2026-minutas-de-la-reunion-de-la-fed-de-octub
  re@luigui-herrera
-DTSTAMP:20261122T000000Z
+DTSTAMP:20261123T000000Z
 DTSTART;VALUE=DATE:20261118
 DTEND;VALUE=DATE:20261119
 SUMMARY:Segundo informe de noviembre de 2026: Minutas de la reunión de la 
@@ -29,7 +29,7 @@ URL:https://www.luiguiherrera.com/informes/segundo-informe-noviembre-2026
 END:VEVENT
 BEGIN:VEVENT
 UID:segundo-informe-noviembre-2026-beige-book-de-la-fed@luigui-herrera
-DTSTAMP:20261122T000000Z
+DTSTAMP:20261123T000000Z
 DTSTART;VALUE=DATE:20261125
 DTEND;VALUE=DATE:20261126
 SUMMARY:Segundo informe de noviembre de 2026: Beige Book de la Fed
@@ -39,7 +39,7 @@ END:VEVENT
 BEGIN:VEVENT
 UID:segundo-informe-noviembre-2026-pib-estadounidense-3t-segunda-estimacion
  -beneficios-corporativos-y-pce-de-octubre@luigui-herrera
-DTSTAMP:20261122T000000Z
+DTSTAMP:20261123T000000Z
 DTSTART;VALUE=DATE:20261125
 DTEND;VALUE=DATE:20261126
 SUMMARY:Segundo informe de noviembre de 2026: PIB estadounidense 3T (segund
@@ -50,7 +50,7 @@ END:VEVENT
 BEGIN:VEVENT
 UID:segundo-informe-noviembre-2026-thanksgiving-mercado-estadounidense-cerr
  ado@luigui-herrera
-DTSTAMP:20261122T000000Z
+DTSTAMP:20261123T000000Z
 DTSTART;VALUE=DATE:20261126
 DTEND;VALUE=DATE:20261127
 SUMMARY:Segundo informe de noviembre de 2026: Thanksgiving\, mercado estado
@@ -61,7 +61,7 @@ END:VEVENT
 BEGIN:VEVENT
 UID:segundo-informe-noviembre-2026-sesion-bursatil-estadounidense-abreviada
  @luigui-herrera
-DTSTAMP:20261122T000000Z
+DTSTAMP:20261123T000000Z
 DTSTART;VALUE=DATE:20261127
 DTEND;VALUE=DATE:20261128
 SUMMARY:Segundo informe de noviembre de 2026: Sesión bursátil estadounide
@@ -71,7 +71,7 @@ URL:https://www.luiguiherrera.com/informes/segundo-informe-noviembre-2026
 END:VEVENT
 BEGIN:VEVENT
 UID:segundo-informe-noviembre-2026-reunion-de-la-fed@luigui-herrera
-DTSTAMP:20261122T000000Z
+DTSTAMP:20261123T000000Z
 DTSTART;VALUE=DATE:20261208
 DTEND;VALUE=DATE:20261210
 SUMMARY:Segundo informe de noviembre de 2026: Reunión de la Fed

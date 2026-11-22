@@ -2125,7 +2125,7 @@ export const marketReports: MarketReport[] = [
   { ...secondSeptember2026Report, status: "archivado" },
   { ...firstOctober2026Report, status: "archivado" },
   { ...secondOctober2026Report, status: "archivado" },
-  firstNovember2026Report,
+  { ...firstNovember2026Report, status: "archivado" },
   secondNovember2026Report,
 ];
 

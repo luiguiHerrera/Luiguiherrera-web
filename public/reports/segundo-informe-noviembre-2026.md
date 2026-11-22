@@ -2,16 +2,15 @@
 
 Edición del lunes 16 de noviembre de 2026
 
-- Estado: Candidato editorial · sin publicar
 - Edición: Segundo informe de noviembre de 2026
 - Autor: Luigui Herrera
-- Publicación: Pendiente de publicación
-- Actualización: 2026-11-22
+- Publicación: 2026-11-23
+- Actualización: 2026-11-23
 - Corte editorial: 2026-11-15
 - Corte de datos de mercado: 2026-11-13
 - URL editorial primaria: https://www.luiguiherrera.com/informes/segundo-informe-noviembre-2026
 
-> Candidato privado. La URL editorial indicada es la prevista; esta edición no está publicada.
+> La página editorial indicada arriba es la representación primaria de este informe.
 
 ## 1. Contexto general
 

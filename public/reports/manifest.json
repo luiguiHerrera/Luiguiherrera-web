@@ -325,7 +325,44 @@
       "id": "primer-informe-noviembre-2026",
       "modifiedAt": "2026-11-03",
       "publishedAt": "2026-11-03",
-      "sourceHash": "4577c2352ef2a58a6de8e51fbfa8fe436d2f558b47fcdc74199379e37de7367f"
+      "sourceHash": "d09c3ea251796f8260b020aa77ca2a883c723c23b3390278574d4c23ddb07bce"
+    },
+    {
+      "canonicalUrl": "https://www.luiguiherrera.com/informes/segundo-informe-noviembre-2026",
+      "cutoffs": {
+        "automaticData": "2026-11-13",
+        "editorial": "2026-11-15"
+      },
+      "formats": {
+        "html": {
+          "mimeType": "text/html; charset=utf-8",
+          "path": "/reports/segundo-informe-noviembre-2026.html",
+          "sha256": "6040586ee4e77edefdc150c1ee2cfce203645df12a57c631a7b629046fb4ac7d",
+          "size": 46008
+        },
+        "ics": {
+          "mimeType": "text/calendar; charset=utf-8",
+          "path": "/reports/segundo-informe-noviembre-2026-calendar.ics",
+          "sha256": "74069bc4b7777b0bdfb902b3b970f59f43d9b48e9d014a016565f3afdea734f8",
+          "size": 3326
+        },
+        "markdown": {
+          "mimeType": "text/markdown; charset=utf-8",
+          "path": "/reports/segundo-informe-noviembre-2026.md",
+          "sha256": "273d6176e06bd5a1c83ba7a85737499c81e7a495b11d788b5f3150fe776d8e85",
+          "size": 40617
+        },
+        "pdf": {
+          "mimeType": "application/pdf",
+          "path": "/reports/segundo-informe-noviembre-2026.pdf",
+          "sha256": "4ca37ec011e93cdc4672ce2f7e8f88038dc9dff9d9c66b9bc5132ca324b060ca",
+          "size": 1482039
+        }
+      },
+      "id": "segundo-informe-noviembre-2026",
+      "modifiedAt": "2026-11-23",
+      "publishedAt": "2026-11-23",
+      "sourceHash": "2b08ad4fc4ad8e14297b76ed9e7608509d2addccc629bb830e81823d7452f781"
     }
   ],
   "schemaVersion": "1.0.0"
