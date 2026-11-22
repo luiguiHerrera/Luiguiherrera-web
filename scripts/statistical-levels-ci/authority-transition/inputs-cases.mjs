@@ -7,13 +7,15 @@ import os from 'node:os';
 import {execFileSync} from 'node:child_process';
 import {verifyInputs} from '../../statistical-levels-release/scripts/preview-qa.mjs';
 import {P,TRANSITION,sha} from '../../statistical-levels-release/scripts/release-core.mjs';
-const manifest=JSON.parse(await fs.readFile(new URL('../../statistical-levels-release/source-inputs.json',import.meta.url)));
 const repository=path.resolve(import.meta.dirname,'../../..');
+const subject='ebd06d2f63682125cff9ed3a4434b335e57dbefe';
+const historicalBlob=name=>execFileSync('git',['show',subject+':'+name],{cwd:repository,maxBuffer:16*1024*1024});
+const manifest=JSON.parse(historicalBlob('scripts/statistical-levels-release/source-inputs.json'));
 // Immutable baseline fixture plus the frozen source inputs, portable across valid data successors.
 const editorial=await fs.mkdtemp(path.join(os.tmpdir(),'sl-editorial-input-model-'));
 after(()=>fs.rm(editorial,{recursive:true,force:true}));
 for(const name of new Set([...Object.keys(manifest),...P.allowlist])){
- const bytes=P.allowlist.includes(name)?execFileSync('git',['show',P.baseline.production_git_sha+':'+name],{cwd:repository,maxBuffer:16*1024*1024}):await fs.readFile(path.join(repository,name));
+ const bytes=P.allowlist.includes(name)?execFileSync('git',['show',P.baseline.production_git_sha+':'+name],{cwd:repository,maxBuffer:16*1024*1024}):historicalBlob(name);
  await fs.mkdir(path.dirname(path.join(editorial,name)),{recursive:true});await fs.writeFile(path.join(editorial,name),bytes,{flag:'wx'});
 }
 const expected={authority_run_id:P.baseline.authority_run_id,sealed_manifest_sha256:P.baseline.sealed_manifest_sha256};

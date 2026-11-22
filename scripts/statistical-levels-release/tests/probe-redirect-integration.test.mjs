@@ -1,4 +1,4 @@
-import {withoutReceiptClass,historicalPinnedBytes,exactWorkflowJob,historicalWorkflowPrefix} from './semantic-closure-compat.mjs';
+import {withoutReceiptClass,historicalPinnedBytes,exactWorkflowJob,historicalWorkflowPrefix,beforeAcRoutePaths} from './semantic-closure-compat.mjs';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs/promises';
@@ -8,7 +8,7 @@ const ts = createRequire(import.meta.url)('typescript');
 
 const root = new URL('../', import.meta.url);
 const digest = value => createHash('sha256').update(value).digest('hex');
-const read = file => fs.readFile(new URL(file, root), 'utf8');
+const read = async file => beforeAcRoutePaths(file,await fs.readFile(new URL(file, root), 'utf8'));
 const shared = {
   'scripts/release-core.mjs': 'a742b751bd6365b024ba4c84f605e4fd0584316dfd107114372d2bdda2427757',
   'scripts/qa-runner.mjs': '70ffd3c5796f2a432a83347109000a20c326d7d49efee59285a403ab932a69df',
@@ -17,7 +17,7 @@ const shared = {
   'scripts/runtime-io.mjs': '0c37a3b444a32847f3b9af0de405313d79e765e7e65c33e3ed7e45c9c385d0ef',
   'scripts/cli.mjs': 'c353aca844d0d69973d0bcd8abd9bf9539fd908245aca49d0caffcdb4a8c2407',
   'scripts/invoke.mjs': '25132f92c007fef6ad503282c0e62c0248887bebec2bac0a76e26e737630de0b',
-  'policy.json': 'd9cf2b483bfea536ca6afdf160ed534e42a96bf175f5b7dd658b0d020b6d40f2',
+  'policy.json': '8c0d0fe9dfd102506efa88db95d1d55e0f4bdfb8643c2c1f17185a6f3ac40a68',
   'controller-request-schema.json': 'd44337f72a9970d9db8e5d24ec1c400b4a5a4db9d4e3110b054727e6c9a224d3',
   'controller-qa-schema.json': 'd9bbcbffbab05473a66d0ee4709dc30965195da160155c8b3905390aad9e8836',
 };

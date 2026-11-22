@@ -1,7 +1,7 @@
 import { readFileSync } from 'node:fs';
 import * as probeContract from '../scripts/probe-core.mjs';
 import * as releaseContract from '../scripts/release-core.mjs';
-import {withoutReceiptClass,historicalPinnedBytes,historicalProbeRegion} from './semantic-closure-compat.mjs';
+import {withoutReceiptClass,historicalPinnedBytes,historicalProbeRegion,historicalPolicyBytes,beforeAcRoutePaths} from './semantic-closure-compat.mjs';
 // The requalified production target policy is pinned explicitly; other frozen security/classifier/ADOPT/PROMOTE contracts remain exact.
 import test from 'node:test';
 import assert from 'node:assert/strict';
@@ -29,7 +29,7 @@ const expected = {
     "scripts/probe-token-budget.mjs": "944a180e12e516417acf3f98b3e59ad402b33293b9141eaa830753d47c09860e"
   },
   "requalified production target policy pinned; PROBE authorization and controller exclusion unchanged": {
-    "policy.json": "d9cf2b483bfea536ca6afdf160ed534e42a96bf175f5b7dd658b0d020b6d40f2",
+    "policy.json": "8c0d0fe9dfd102506efa88db95d1d55e0f4bdfb8643c2c1f17185a6f3ac40a68",
     "controller-request-schema.json": "d44337f72a9970d9db8e5d24ec1c400b4a5a4db9d4e3110b054727e6c9a224d3",
     "controller-qa-schema.json": "d9bbcbffbab05473a66d0ee4709dc30965195da160155c8b3905390aad9e8836"
   },
@@ -51,7 +51,7 @@ for (const [name, files] of Object.entries(expected)) {
       assertProbeSecuritySemantics();
     }
     for (const [file, hash] of Object.entries(files)) {
-      const bytes = await readFile(new URL('../' + file, import.meta.url));
+      const bytes = beforeAcRoutePaths(file,await readFile(new URL('../' + file, import.meta.url)));
       if(hash==='HARNESS_SECURITY_REGIONS')assertHarnessPreserved(bytes.toString('utf8'));else assert.equal(createHash('sha256').update(file==='scripts/release-core.mjs'?withoutReceiptClass(historicalPinnedBytes(file,bytes)):historicalPinnedBytes(file,bytes)).digest('hex'), hash, file);
     }
   });
@@ -291,7 +291,7 @@ const preservationSemantics = {
     assert.throws(() => releaseContract.validateTarget(preservationTarget));
   },
   POLICY_BINDING() {
-    assert.equal(regionHash(readFileSync(new URL('../policy.json', import.meta.url))), 'd9cf2b483bfea536ca6afdf160ed534e42a96bf175f5b7dd658b0d020b6d40f2');
+    assert.equal(regionHash(historicalPolicyBytes(readFileSync(new URL('../policy.json', import.meta.url)))), 'd9cf2b483bfea536ca6afdf160ed534e42a96bf175f5b7dd658b0d020b6d40f2');
     assert.equal(releaseContract.P.account_id, '732159826922');
     assert.equal(releaseContract.P.release_role_arn, 'arn:aws:iam::732159826922:role/LuiguiHerreraStatisticalLevelsReleaseInvoker');
     assert.equal(releaseContract.P.aws_audience, 'sts.amazonaws.com');
@@ -446,7 +446,7 @@ const harnessMutations = [
  ['PRODUCTION_INTERCEPTION_ENABLE',"if (!production || stagedTransport) await cdp.send('Fetch.enable'","if (true) await cdp.send('Fetch.enable'"],
 ];
 for (const [name,from,to] of harnessMutations) test('harness preservation mutation: '+name,()=>{
- const source=readFileSync(new URL('../scripts/browser-harness-base.mjs',import.meta.url),'utf8');
+ const source=beforeAcRoutePaths('browser-harness-base.mjs',readFileSync(new URL('../scripts/browser-harness-base.mjs',import.meta.url),'utf8'));
  assert.ok(source.includes(from),'mutation must reach actual source');
  assert.throws(()=>assertHarnessPreserved(source.replace(from,to)));
 });

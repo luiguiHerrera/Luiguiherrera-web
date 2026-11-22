@@ -44,7 +44,7 @@ function originClass(value, origin) {
 function safeURL(value, origin) {
   try {
     const url = new URL(value, origin);
-    const known = ['/niveles-estadisticos', '/en/statistical-levels', '/metodologia', '/en/methodology'];
+    const known = ['/niveles-estadisticos', '/en/statistical-levels', '/analisiscuantitativo', '/en/quantitative-analysis', '/metodologia', '/en/methodology'];
     const pathname = known.includes(url.pathname) ? url.pathname : `sha256:${sha(url.pathname)}`;
     return { origin_class: originClass(url.origin, origin), path: pathname,
       query_key_names: [...new Set([...url.searchParams.keys()].map(key => /^[a-zA-Z_][a-zA-Z0-9_-]{0,39}$/.test(key) && !SENSITIVE_KEY.test(key) ? key : `sha256:${sha(key)}`))].sort() };
@@ -318,7 +318,7 @@ function validateRoute(value) {
   if (value === null) return;
   keys(value, ['origin_class', 'path', 'query_key_names']);
   need(['EXACT_PREVIEW', 'VERCEL_PLATFORM', 'OTHER_ORIGIN', 'UNKNOWN'].includes(value.origin_class));
-  need(value.path === null || ['/niveles-estadisticos', '/en/statistical-levels', '/metodologia', '/en/methodology'].includes(value.path) || /^sha256:[a-f0-9]{64}$/.test(value.path));
+  need(value.path === null || ['/niveles-estadisticos', '/en/statistical-levels', '/analisiscuantitativo', '/en/quantitative-analysis', '/metodologia', '/en/methodology'].includes(value.path) || /^sha256:[a-f0-9]{64}$/.test(value.path));
   need(Array.isArray(value.query_key_names) && value.query_key_names.every(key => typeof key === 'string' && (/^sha256:[a-f0-9]{64}$/.test(key) || (/^[a-zA-Z_][a-zA-Z0-9_-]{0,39}$/.test(key) && !SENSITIVE_KEY.test(key)))));
   need(canonical(value.query_key_names) === canonical([...new Set(value.query_key_names)].sort()));
 }

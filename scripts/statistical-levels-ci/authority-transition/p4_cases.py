@@ -52,6 +52,7 @@ def fixture():
     g=MemoryGit();editorial=g.commit(EP,E_BLOBS,IDENTITY['author'],IDENTITY['message']);assert editorial==E
     entry=json.loads((REPO/a.LINEAGE_REGISTRY).read_text())[-1]
     head=g.real.text('rev-parse','HEAD');native_root,_=a.bootstrap(g.real,head)
+    if g.real.parents(native_root)==[a.AC_PARENT]:native_root=a.bootstrap(g.real,a.AC_BASE)[0]
     if g.real.parents(native_root)==[a.CATALOG_PARENT]:native_root=a.CATALOG_PARENT
     if g.real.parents(native_root)==[a.TECHNICAL_CAPTURE_PARENT]:native_root=a.TECHNICAL_CAPTURE_PARENT
     if g.real.parents(native_root)==[a.NEXT_SECURITY_PARENT]:native_root=a.NEXT_SECURITY_PARENT
@@ -197,6 +198,13 @@ class P4Tests(unittest.TestCase):
         if head in [H,EP,self.root]:reference=X
         else:
             actual=a.Git(REPO);admitted,chain=a.bootstrap(actual,head)
+            if actual.parents(admitted)==[a.AC_PARENT]:
+                # AC's archive replay is checked by its own closed source root;
+                # it is never recast as a P4 native producer child.
+                self.assertEqual(a.bootstrap(actual,admitted),(admitted,[]))
+                reference=head if chain else a.AC_PARENT
+                for name in a.paths(self.g):self.assertEqual((REPO/name).read_bytes(),git('show',reference+':'+name),name)
+                return
             if actual.parents(admitted)==[a.CATALOG_PARENT]:admitted=a.CATALOG_PARENT
             if actual.parents(admitted)==[a.TECHNICAL_CAPTURE_PARENT]:admitted=a.TECHNICAL_CAPTURE_PARENT
             if actual.parents(admitted)==[a.NEXT_SECURITY_PARENT]:admitted=a.NEXT_SECURITY_PARENT

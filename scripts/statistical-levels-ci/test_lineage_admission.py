@@ -207,6 +207,8 @@ class LineageTransitionTests(unittest.TestCase):
         git = f.git
         head = a.Git(ROOT).text('rev-parse', 'HEAD')
         cls.root, _ = a.bootstrap(git, head)
+        if git.parents(cls.root) == [a.AC_PARENT]:
+            cls.root = a.bootstrap(git, a.AC_BASE)[0]
         if git.parents(cls.root) == [a.CATALOG_PARENT]:
             cls.root = a.CATALOG_PARENT
         if git.parents(cls.root) == [a.TECHNICAL_CAPTURE_PARENT]:

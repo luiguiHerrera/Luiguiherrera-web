@@ -14,6 +14,7 @@ class CompatibilityTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.g=MemoryGit();cls.head=cls.g.real.text('rev-parse','HEAD');cls.root,_=a.bootstrap(cls.g,cls.head)
+        if cls.g.parents(cls.root)==[a.AC_PARENT]:cls.root=a.bootstrap(cls.g,a.AC_BASE)[0]
         if cls.g.parents(cls.root)==[a.CATALOG_PARENT]:cls.root=a.CATALOG_PARENT
         if cls.g.parents(cls.root)==[a.TECHNICAL_CAPTURE_PARENT]:cls.root=a.TECHNICAL_CAPTURE_PARENT
         if cls.g.parents(cls.root)==[a.NEXT_SECURITY_PARENT]:cls.root=a.NEXT_SECURITY_PARENT

@@ -53,7 +53,7 @@ export async function verifySnapshotInputs(codeRoot, inputManifest, {historical 
       need(sha(await fs.readFile(full)) === SHA256, 'BASELINE_SOURCE_HASH');
     }
   } else {
-    need(canonical(provenance.SOURCE_BUNDLE).equals(canonical(P.source_bundle)), 'GENERATOR_SOURCE_BUNDLE');
+    need(canonical(provenance.SOURCE_BUNDLE).equals(canonical(preserved ? (P.baseline.source_bundle ?? P.source_bundle) : P.source_bundle)), 'GENERATOR_SOURCE_BUNDLE');
   }
   need(config.RAW_ARCHIVE_BUCKET === P.authority.RAW_ARCHIVE_BUCKET && config.RAW_ARCHIVE_REGION === P.authority.RAW_ARCHIVE_REGION &&
     config.RAW_ARCHIVE_ACCESS_CLASS === 'PRIVATE_S3_DURABLE' && config.SCHEMA_VERSION === P.authority.SCHEMA_VERSION &&
@@ -78,7 +78,7 @@ export async function verifySnapshotInputs(codeRoot, inputManifest, {historical 
   const manifest = JSON.parse(await readData('lib/statistical-levels/generated/manifest.json'));
   need(manifest.baseline.id === provenance.BASELINE_ID && manifest.catalog.length === 40, 'SNAPSHOT_MANIFEST_AUTHORITY');
   const ledgerFile = await fs.readFile(path.join(codeRoot, 'docs/statistical-levels-capability-ledger.json'));
-  need(sha(ledgerFile) === P.ledger_hash, 'CAPABILITY_LEDGER_HASH');
+  need(sha(ledgerFile) === ((historical || preserved) ? (P.baseline.ledger_hash ?? P.ledger_hash) : P.ledger_hash), 'CAPABILITY_LEDGER_HASH');
   need(canonical(JSON.parse(ledgerFile).capabilities.map(x => x.ID)).equals(canonical(P.capabilities)), 'CAPABILITY_LEDGER');
   return authority;
 }

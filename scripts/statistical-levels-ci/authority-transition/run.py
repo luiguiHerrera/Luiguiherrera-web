@@ -62,6 +62,11 @@ def main():
     socket.create_connection=forbidden;socket.socket.connect=forbidden
     suite=unittest.TestSuite(unittest.defaultTestLoader.loadTestsFromModule(importlib.import_module(name)) for name in inventory['python_modules'])
     validate_inventory([case.id() for case in flatten(suite)],inventory['python_tests'])
+    # Model Git uses a separately loaded admission module. Release its exact
+    # caches between classes rather than retaining every synthetic tree/blob.
+    from models import a
+    for cls in {type(case) for case in flatten(suite)}:
+        for method in (a.Git.blob,a.Git.tree,a.Git.parents):cls.addClassCleanup(method.cache_clear)
     buffer=io.StringIO();result=unittest.TextTestRunner(stream=buffer,verbosity=2,resultclass=Result).run(suite)
     (out/'python.log').write_text(buffer.getvalue());print(buffer.getvalue(),end='')
     records=[{'id':name,'status':state} for name,state in result.records.items()]
@@ -79,6 +84,7 @@ def main():
     if hosted and os.environ.get('GITHUB_REF')=='refs/heads/vercel-deployment' and os.environ.get('GITHUB_EVENT_NAME')=='push':
         from models import a
         admitted_root,_=a.bootstrap(a.Git(REPO),head)
+        if a.Git(REPO).parents(admitted_root)==[a.AC_PARENT]:admitted_root=a.bootstrap(a.Git(REPO),a.AC_BASE)[0]
         if a.Git(REPO).parents(admitted_root)==[a.CATALOG_PARENT]:admitted_root=a.CATALOG_PARENT
         if a.Git(REPO).parents(admitted_root)==[a.TECHNICAL_CAPTURE_PARENT]:admitted_root=a.TECHNICAL_CAPTURE_PARENT
         if a.Git(REPO).parents(admitted_root)==[a.NEXT_SECURITY_PARENT]:admitted_root=a.NEXT_SECURITY_PARENT

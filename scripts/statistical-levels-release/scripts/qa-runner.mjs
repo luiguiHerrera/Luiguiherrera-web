@@ -1,5 +1,6 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
+import { qaRoutesForTarget } from './qa-routes.mjs';
 import { P, need, canonical, productGates, validateProductReport } from './release-core.mjs';
 import { renderFixtures } from './render-fixtures.mjs';
 
@@ -7,15 +8,17 @@ export async function runReadOnlyQA({ target, tokenSource, out, codeRoot }, crea
   need(typeof target?.authority_run_id === 'string' && /^\d{8}T\d{9}Z-[a-f0-9]{8}(?:-[a-f0-9]{4}){3}-[a-f0-9]{12}$/.test(target.authority_run_id), 'SERVED_AUTHORITY_REQUIRED');
   await fs.mkdir(out, { recursive: true, mode: 0o700 });
   await renderFixtures(codeRoot, out);
+  const requestedRoutes = qaRoutesForTarget(target, P.source_bundle, P.baseline.source_bundle, P.baseline.authority_run_id);
   const harness = await createHarness(target, tokenSource, out);
   let productPassed = false, accounting, primaryException, cleanupException;
   let phase = 'SERVED_AUTHORITY_VALIDATION';
   const oldCwd = process.cwd(), oldArgv = process.argv;
   try {
     globalThis.__SL_RELEASE_QA__ = harness;
+    globalThis.__SL_QA_SCRIPT_ROUTES__ = {es:requestedRoutes[0],en:requestedRoutes[1]};
     process.chdir(codeRoot);
     process.argv = [process.execPath, 'frozen-candidate-qa', target.origin, '0', out];
-    for (const route of ['/niveles-estadisticos', '/en/statistical-levels']) {
+    for (const route of requestedRoutes) {
       const response = await harness.protectedGet(target.origin + route);
       const html = await response.text();
       need(html.includes(target.authority_run_id), 'SERVED_AUTHORITY_MISMATCH');
@@ -34,7 +37,7 @@ export async function runReadOnlyQA({ target, tokenSource, out, codeRoot }, crea
     need(canonical(coverage.map(x => x.id)).equals(canonical(P.capabilities)) && coverage.every(x => x.passed), 'BROWSER_CAPABILITY_LOSS');
     productPassed = true;
   } catch (error) { primaryException = error; error.failurePhase = phase; } finally {
-    delete globalThis.__SL_RELEASE_QA__; process.chdir(oldCwd); process.argv = oldArgv;
+    delete globalThis.__SL_RELEASE_QA__; delete globalThis.__SL_QA_SCRIPT_ROUTES__; process.chdir(oldCwd); process.argv = oldArgv;
     try { accounting = await harness.finish(productPassed); }
     catch (error) { cleanupException = error; }
     try { tokenSource?.clear(); } catch (error) { cleanupException ||= error; }
@@ -47,7 +50,7 @@ export async function runReadOnlyQA({ target, tokenSource, out, codeRoot }, crea
   }
   const report = { result: 'PASS', gates: Object.fromEntries(productGates.map(x => [x, 'PASS'])),
     snapshot_count: 81, provenance_coverage: 100, capability_ids: P.capabilities,
-    routes: ['/niveles-estadisticos', '/en/statistical-levels'], viewports: [[1440, 900], [390, 844]],
+    routes: requestedRoutes, viewports: [[1440, 900], [390, 844]],
     application_console_errors: accounting.application_console_errors,
     required_application_request_failures: accounting.required_application_request_failures,
     broken_assets: 0, hydration_errors: accounting.hydration_errors, overflow: 0,

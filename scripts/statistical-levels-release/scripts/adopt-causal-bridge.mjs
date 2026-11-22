@@ -10,9 +10,30 @@ export const actionControls = Object.freeze({
   T4:{type:'EVALUATE',selector:'#sl-options label:nth-child(2) select',value:'Full'}
 });
 export const listenerMarker = `(function(callback, receiver, event) { return typeof callback === 'function' ? Reflect.apply(callback, receiver, [event]) : Reflect.apply(callback.handleEvent, callback, [event]); })`;
-export function selectionExpression(kind) {
-  const c=actionControls[kind];
+export const acActionControls = Object.freeze({ ...actionControls,
+  T3:Object.freeze({type:'EVALUATE',selector:'#sl-frequency select',value:'daily'}),
+  T4:Object.freeze({type:'CLICK',selector:'[data-window="Full"]'})
+});
+export function selectionExpression(kind, ac = false) {
+  const c=(ac?acActionControls:actionControls)[kind];
   return `(() => { const el=document.querySelector(${JSON.stringify(c.selector)}); el.value=${JSON.stringify(c.value)};el.dispatchEvent(new Event('change',{bubbles:true}));})()`;
+}
+export function matchActionControl(kind,type,parameter) {
+  if(!['T1','T2','T3','T4'].includes(kind))return null;
+  for(const ac of [false,true]) {
+    const control=(ac?acActionControls:actionControls)[kind];
+    if(control?.type===type&&parameter===(type==='CLICK'?control.selector:selectionExpression(kind,ac)))return control;
+  }
+  return null;
+}
+export function actionSourceContract(action) {
+  if(!['T1','T2','T3','T4'].includes(action?.kind))return null;
+  for(const ac of [false,true]) {
+    const control=(ac?acActionControls:actionControls)[action?.kind];
+    const source=control?.type==='CLICK'?listenerMarker:control?selectionExpression(action.kind,ac):'';
+    if(control&&action.source_sha256===sha(source))return {control,source};
+  }
+  return null;
 }
 export const scriptFingerprint=(page,id)=>sha(page+':script:'+id);
 // Qualified exact published Production bytes (independently recovered source
@@ -172,7 +193,7 @@ export async function installCausalBridge(cdp,pageId,register,complete,begin) {
     register(record);return {scriptId:compiled.scriptId,record};
   }
   async function click(action,selector,dispatch) {
-    need(actionControls[action.kind]?.type==='CLICK'&&selector===actionControls[action.kind].selector,'ACTION_CONTROL_MISMATCH');
+    need(matchActionControl(action.kind,'CLICK',selector),'ACTION_CONTROL_MISMATCH');
     const {scriptId}=await compile(action,listenerMarker);
     const marker=await cdp.send('Runtime.runScript',{scriptId,returnByValue:false});
     need(marker.result?.objectId&&!marker.exceptionDetails,'ACTION_BRIDGE_MARKER_FAILED');
@@ -190,7 +211,7 @@ export async function installCausalBridge(cdp,pageId,register,complete,begin) {
     }
   }
   async function evaluate(action,expression) {
-    need(actionControls[action.kind]?.type==='EVALUATE'&&expression===selectionExpression(action.kind),'ACTION_CONTROL_MISMATCH');
+    need(matchActionControl(action.kind,'EVALUATE',expression),'ACTION_CONTROL_MISMATCH');
     const {scriptId}=await compile(action,expression);
     await begin(action.action_instance_id);
     const result=await cdp.send('Runtime.runScript',{scriptId,returnByValue:true,awaitPromise:true});
@@ -205,8 +226,8 @@ export function newAction(t) {
 export function causalDecision(request,actions,requests) {
   const matches=actions.filter(a=>a.page_id===request.request_evidence.page_id&&request.initiator_scripts.scripts.includes(a.script_sha256));
   if(matches.length!==1||!request.initiator_scripts.complete)return {status:'UNKNOWN',action_instance_id:'UNKNOWN',action_ancestry:'UNKNOWN'};
-  const a=matches[0],control=actionControls[a.kind];
-  const expectedSource=control?.type==='CLICK'?listenerMarker:control?selectionExpression(a.kind):'';
+  const a=matches[0],contract=actionSourceContract(a),control=contract?.control;
+  const expectedSource=contract?.source??'';
   const siblings=requests.filter(r=>r.initiator_scripts.scripts.includes(a.script_sha256)&&r.prefetch_classification!=='YES'&&
     !(r.causal_relation==='CDP_INITIATOR_REQUEST'&&r.prefetch_classification==='NO'&&r.rsc_classification==='YES'&&r.initiator_scripts.complete&&
       requests.some(p=>p.request_id===r.causal_parent&&p.event_sequences[0]<r.event_sequences[0]&&p.causal_relation==='CDP_SCRIPT_INITIATOR'&&

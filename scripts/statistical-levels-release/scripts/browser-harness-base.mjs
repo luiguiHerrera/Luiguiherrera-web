@@ -86,7 +86,7 @@ export async function createReadOnlyHarness(target, tokenSource, out, production
             url: event.request.url, origin: target.origin, production,
             // Initial GET Documents for the two authorized SL routes only.
             resourceType: !event.redirectedRequestId && event.request.method === 'GET' &&
-              ['/niveles-estadisticos', '/en/statistical-levels'].includes(destination.pathname) && !destination.searchParams.has('_rsc') &&
+              ['/niveles-estadisticos', '/en/statistical-levels', '/analisiscuantitativo', '/en/quantitative-analysis'].includes(destination.pathname) && !destination.searchParams.has('_rsc') &&
               !Object.entries(event.request.headers).some(([name, value]) => ['rsc', 'next-router-prefetch'].includes(name.toLowerCase()) ||
                 ['purpose', 'sec-purpose'].includes(name.toLowerCase()) && /\bprefetch\b/i.test(value)) ? event.resourceType : undefined
           });

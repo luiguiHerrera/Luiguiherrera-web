@@ -84,7 +84,7 @@ jobs:
       - name: Verify frozen helper bytes before executing any helper
         working-directory: scripts/statistical-levels-release
         env:
-          EXPECTED_SOURCE_SUMS: 7979e48a9d1f334e92b62a585344d5ddf96067363350e70af2fdd7e1edbe5e2c
+          EXPECTED_SOURCE_SUMS: e5785488dbc4feef5d1d1098520687bb2264e0221bd346786a8ca78acb9b6eab
         run: |
           printf '%s  SOURCE_SHA256SUMS\n' "$EXPECTED_SOURCE_SUMS" | sha256sum --check --strict
           sha256sum --check --strict SOURCE_SHA256SUMS
@@ -181,7 +181,7 @@ jobs:
       - name: Verify frozen helper bytes before executing any helper
         working-directory: scripts/statistical-levels-release
         env:
-          EXPECTED_SOURCE_SUMS: 7979e48a9d1f334e92b62a585344d5ddf96067363350e70af2fdd7e1edbe5e2c
+          EXPECTED_SOURCE_SUMS: e5785488dbc4feef5d1d1098520687bb2264e0221bd346786a8ca78acb9b6eab
         run: |
           printf '%s  SOURCE_SHA256SUMS\n' "$EXPECTED_SOURCE_SUMS" | sha256sum --check --strict
           sha256sum --check --strict SOURCE_SHA256SUMS
@@ -263,7 +263,7 @@ jobs:
       - name: Verify frozen helper bytes before executing any helper
         working-directory: scripts/statistical-levels-release
         env:
-          EXPECTED_SOURCE_SUMS: 7979e48a9d1f334e92b62a585344d5ddf96067363350e70af2fdd7e1edbe5e2c
+          EXPECTED_SOURCE_SUMS: e5785488dbc4feef5d1d1098520687bb2264e0221bd346786a8ca78acb9b6eab
         run: |
           printf '%s  SOURCE_SHA256SUMS\n' "$EXPECTED_SOURCE_SUMS" | sha256sum --check --strict
           sha256sum --check --strict SOURCE_SHA256SUMS
@@ -375,7 +375,7 @@ jobs:
       - name: Verify frozen helper bytes before executing any helper
         working-directory: scripts/statistical-levels-release
         env:
-          EXPECTED_SOURCE_SUMS: 7979e48a9d1f334e92b62a585344d5ddf96067363350e70af2fdd7e1edbe5e2c
+          EXPECTED_SOURCE_SUMS: e5785488dbc4feef5d1d1098520687bb2264e0221bd346786a8ca78acb9b6eab
         run: |
           printf '%s  SOURCE_SHA256SUMS\n' "$EXPECTED_SOURCE_SUMS" | sha256sum --check --strict
           sha256sum --check --strict SOURCE_SHA256SUMS
@@ -465,7 +465,7 @@ jobs:
       - name: Verify frozen helper bytes before executing any helper
         working-directory: scripts/statistical-levels-release
         env:
-          EXPECTED_SOURCE_SUMS: 7979e48a9d1f334e92b62a585344d5ddf96067363350e70af2fdd7e1edbe5e2c
+          EXPECTED_SOURCE_SUMS: e5785488dbc4feef5d1d1098520687bb2264e0221bd346786a8ca78acb9b6eab
         run: |
           printf '%s  SOURCE_SHA256SUMS\n' "$EXPECTED_SOURCE_SUMS" | sha256sum --check --strict
           sha256sum --check --strict SOURCE_SHA256SUMS
@@ -498,7 +498,7 @@ jobs:
         id: source_integrity
         working-directory: scripts/statistical-levels-release
         env:
-          EXPECTED_SOURCE_SUMS: 7979e48a9d1f334e92b62a585344d5ddf96067363350e70af2fdd7e1edbe5e2c
+          EXPECTED_SOURCE_SUMS: e5785488dbc4feef5d1d1098520687bb2264e0221bd346786a8ca78acb9b6eab
         run: |
           printf '%s  SOURCE_SHA256SUMS\n' "$EXPECTED_SOURCE_SUMS" | sha256sum --check --strict
           sha256sum --check --strict SOURCE_SHA256SUMS
@@ -557,7 +557,7 @@ jobs:
         if: always() && steps.source_integrity.outcome == 'success'
         working-directory: scripts/statistical-levels-release
         env:
-          EXPECTED_SOURCE_SUMS: 7979e48a9d1f334e92b62a585344d5ddf96067363350e70af2fdd7e1edbe5e2c
+          EXPECTED_SOURCE_SUMS: e5785488dbc4feef5d1d1098520687bb2264e0221bd346786a8ca78acb9b6eab
           PROBE_RESOLVE_OUTCOME: ${{ steps.resolve.outcome }}
           PROBE_QA_OUTCOME: ${{ steps.qa.outcome }}
           PROBE_AWS_ASSUME_OUTCOME: ${{ steps.aws_assume.outcome }}
@@ -612,7 +612,7 @@ jobs:
       - name: Verify frozen helper bytes before executing any helper
         working-directory: scripts/statistical-levels-release
         env:
-          EXPECTED_SOURCE_SUMS: 7979e48a9d1f334e92b62a585344d5ddf96067363350e70af2fdd7e1edbe5e2c
+          EXPECTED_SOURCE_SUMS: e5785488dbc4feef5d1d1098520687bb2264e0221bd346786a8ca78acb9b6eab
         run: |
           printf '%s  SOURCE_SHA256SUMS\n' "$EXPECTED_SOURCE_SUMS" | sha256sum --check --strict
           sha256sum --check --strict SOURCE_SHA256SUMS
@@ -682,7 +682,7 @@ jobs:
       - name: Verify frozen helper bytes before executing any helper
         working-directory: scripts/statistical-levels-release
         env:
-          EXPECTED_SOURCE_SUMS: 7979e48a9d1f334e92b62a585344d5ddf96067363350e70af2fdd7e1edbe5e2c
+          EXPECTED_SOURCE_SUMS: e5785488dbc4feef5d1d1098520687bb2264e0221bd346786a8ca78acb9b6eab
         run: |
           printf '%s  SOURCE_SHA256SUMS\n' "$EXPECTED_SOURCE_SUMS" | sha256sum --check --strict
           sha256sum --check --strict SOURCE_SHA256SUMS
@@ -758,7 +758,7 @@ jobs:
       - name: Verify frozen helper bytes before executing any helper
         working-directory: scripts/statistical-levels-release
         env:
-          EXPECTED_SOURCE_SUMS: 7979e48a9d1f334e92b62a585344d5ddf96067363350e70af2fdd7e1edbe5e2c
+          EXPECTED_SOURCE_SUMS: e5785488dbc4feef5d1d1098520687bb2264e0221bd346786a8ca78acb9b6eab
         run: |
           printf '%s  SOURCE_SHA256SUMS\n' "$EXPECTED_SOURCE_SUMS" | sha256sum --check --strict
           sha256sum --check --strict SOURCE_SHA256SUMS

@@ -2,7 +2,7 @@
 // No request headers, cookies, query values, bodies, raw CDP IDs or stacks persist.
 import { createRequestInstanceCollector, validateRequestEvidence, startContextFingerprint, destinationFingerprint } from './probe-request-instances.mjs';
 import { createTransitionCapture, transitions, requireReceiptData } from './probe-transition-receipts.mjs';
-import { actionControls, listenerMarker, selectionExpression, newAction, initiatorScripts, classifyRequestSignals, classificationEvidence, causalDecision, scriptFingerprint, nativeIntentSignals, nativeNavigationProven, nativeFrameworkPrefetchProven, requestRole } from './adopt-causal-bridge.mjs';
+import { matchActionControl, actionSourceContract, newAction, initiatorScripts, classifyRequestSignals, classificationEvidence, causalDecision, scriptFingerprint, nativeIntentSignals, nativeNavigationProven, nativeFrameworkPrefetchProven, requestRole } from './adopt-causal-bridge.mjs';
 import { account, safeEvent, sourceURLObservation, validateFailureEvidence, networkEventTypes, unresolvedNetworkEvidence, nativeIngressTypes, ingressFailureEvidence, irrelevantNativeLevels } from './network-accounting.mjs';
 import { canonical, sha } from './release-core.mjs';
 import { runtimeFetchProven, runtimeExecutableMatches, validateRuntimeTransitionReceipt } from './runtime-transition-receipts.mjs';
@@ -94,8 +94,8 @@ export function auditOuterJournalOwnership(evidence){
   const actionTuple=a=>{
    check(!!a,'OWNERSHIP_REFERENCE_UNRESOLVED');if(!a)return {};
    fields(a,['action_instance_id','transition_id','kind','tested_action_id','page_id','script_sha256','source_sha256','source_url_sha256','dispatch_ack','event_seen','listener_calls']);
-   const control=actionControls[a.kind];
-   agree(a.source_sha256,control?sha(control.type==='CLICK'?listenerMarker:selectionExpression(a.kind)):undefined);
+   const contract=actionSourceContract(a);
+   agree(a.source_sha256,contract?sha(contract.source):undefined);
    const t=transitionsById.get(a.transition_id);check(!!t,'OWNERSHIP_REFERENCE_UNRESOLVED');
    if(t){agree(a.page_id,t.page_id);agree(a.action_instance_id,t.action_instance_id);agree(a.kind,t.kind);agree(a.tested_action_id,transitions[t.kind]?.action_id);}
    return {page_id:t?.page_id,transition_id:t?.transition_id,action_instance_id:t?.action_instance_id,tested_action_id:transitions[t?.kind]?.action_id,script_sha256:a.script_sha256};
@@ -575,9 +575,8 @@ export function createAdoptRequestEvidence(origin, persistIngress = () => {}) {
     record('PAGE_LIFECYCLE',{page_id:p,value});
   }
   function action(p,type,parameter) {
-    const t=active.get(p),control=actionControls[t?.kind];
-    if(!t||!control||control.type!==type||t.action_instance_id!==unknown)return null;
-    if(parameter!==(type==='CLICK'?control.selector:selectionExpression(t.kind)))return null;
+    const t=active.get(p),control=matchActionControl(t?.kind,type,parameter);
+    if(!t||!control||t.action_instance_id!==unknown)return null;
     const a={...newAction(t),page_id:p};t.action_instance_id=a.action_instance_id;issued.set(a.action_instance_id,a);return clone(a);
   }
   function registerAction(a) {

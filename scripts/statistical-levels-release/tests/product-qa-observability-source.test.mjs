@@ -1,4 +1,4 @@
-import {withoutReceiptHooks} from './semantic-closure-compat.mjs';
+import {withoutReceiptHooks,beforeAcRoutePaths} from './semantic-closure-compat.mjs';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs/promises';
@@ -66,7 +66,7 @@ function stripObservers(source) {
 }
 const print = source => ts.createPrinter({ removeComments: true, newLine: ts.NewLineKind.LineFeed }).printFile(source);
 function collect(source, predicate) { const found = []; function visit(node) { if (predicate(node)) found.push(node); ts.forEachChild(node, visit); } visit(source); return found; }
-const sources = await Promise.all(names.map(async name => { const text = await fs.readFile(new URL('../scripts/qa/' + name, import.meta.url), 'utf8'); return { name, text, ast: parse(text, name) }; }));
+const sources = await Promise.all(names.map(async name => { const text = beforeAcRoutePaths('qa/'+name,await fs.readFile(new URL('../scripts/qa/' + name, import.meta.url), 'utf8')); return { name, text, ast: parse(text, name) }; }));
 const spyWait = "await waitForAssetTransition(c,{asset:'SPY',pickerTitle:'SPDR S&P 500 ETF',frequency:'weekly',window:'3Y'});";
 for (const { name, text, ast } of sources) {
   test(name + ': removing the qualified SPY wait and observers restores the exact frozen AST', () => {

@@ -1170,6 +1170,90 @@ def validate_catalog(git, root):
     need(catalog_payload(git,root) == CATALOG_PAYLOAD_SHA256, 'CATALOG_PAYLOAD')
 
 
+# One closed source release, distinct from the ordinary 82-file data producer.
+# The approved source and offline replay are immutable Git subjects. This root
+# qualifies their tests; it neither republishes a baseline nor issues authority.
+AC_BASE = '2c495e7472a3a9a3185f3a69ad4335d3a86b5613'
+AC_SOURCE = '919238949903ccc1cfc3093fefbdeb8d4d4ac16f'
+AC_PARENT = 'fd007159235c306b714789d60786a5733ab7d8f4'
+AC_IDENTITY = 'Codex <codex@openai.com> 1795356000 +0000'
+AC_MESSAGE = 'Qualify the approved quantitative analysis source and archived history'
+# Authenticated repository owner's GitHub API identity; its timestamp is assigned by GitHub.
+AC_GITHUB_AUTHOR_SHA256 = 'c277a70765dd8f0662f8161934d3a02e9120d9f0c93aa1019e61cc0f2ad2b97a'
+AC_FILES = frozenset([".github/workflows/ac-browser-qualification.yml",".github/workflows/ci.yml",".github/workflows/statistical-levels-release.yml","lib/reports/september-corrective-release.test.mts","scripts/qa-statistical-levels-runtime.mjs","scripts/statistical-levels-ci/admission.py","scripts/statistical-levels-ci/authority-transition/ac-cases.mjs","scripts/statistical-levels-ci/authority-transition/ac_cases.py","scripts/statistical-levels-ci/authority-transition/capture-cases.mjs","scripts/statistical-levels-ci/authority-transition/capture_cases.py","scripts/statistical-levels-ci/authority-transition/catalog_cases.py","scripts/statistical-levels-ci/authority-transition/compat-cases.mjs","scripts/statistical-levels-ci/authority-transition/compat_cases.py","scripts/statistical-levels-ci/authority-transition/inputs-cases.mjs","scripts/statistical-levels-ci/authority-transition/inventory.json","scripts/statistical-levels-ci/authority-transition/models.py","scripts/statistical-levels-ci/authority-transition/next_security_cases.py","scripts/statistical-levels-ci/authority-transition/p4_cases.py","scripts/statistical-levels-ci/authority-transition/run.py","scripts/statistical-levels-ci/historical-tests.py","scripts/statistical-levels-ci/test_ci_recovery_admission.py","scripts/statistical-levels-ci/test_ci_runtime_recovery.py","scripts/statistical-levels-ci/test_lineage_admission.py","scripts/statistical-levels-ci/test_publication_ci_repair.py","scripts/statistical-levels-ci/test_publication_closure.py","scripts/statistical-levels-release/SOURCE_SHA256SUMS","scripts/statistical-levels-release/policy.json","scripts/statistical-levels-release/scripts/adopt-causal-bridge.mjs","scripts/statistical-levels-release/scripts/adopt-request-evidence.mjs","scripts/statistical-levels-release/scripts/browser-harness-base.mjs","scripts/statistical-levels-release/scripts/capture-full-product.mjs","scripts/statistical-levels-release/scripts/preview-qa.mjs","scripts/statistical-levels-release/scripts/probe-qa.mjs","scripts/statistical-levels-release/scripts/product-qa-observability.mjs","scripts/statistical-levels-release/scripts/qa-routes.mjs","scripts/statistical-levels-release/scripts/qa-runner.mjs","scripts/statistical-levels-release/scripts/qa/asset-transition-readiness.mjs","scripts/statistical-levels-release/scripts/qa/qa-statistical-levels-defects.mjs","scripts/statistical-levels-release/scripts/qa/qa-statistical-levels-interaction-polish.mjs","scripts/statistical-levels-release/scripts/qa/qa-statistical-levels.mjs","scripts/statistical-levels-release/scripts/release-core.mjs","scripts/statistical-levels-release/scripts/runtime-transition-receipts.mjs","scripts/statistical-levels-release/source-inputs.json","scripts/statistical-levels-release/source-manifest.json","scripts/statistical-levels-release/tests/adopt-causal-bridge.test.mjs","scripts/statistical-levels-release/tests/asset-transition-readiness.test.mjs","scripts/statistical-levels-release/tests/input-manifest-roles.test.mjs","scripts/statistical-levels-release/tests/preview-qa.test.mjs","scripts/statistical-levels-release/tests/probe-qa-http.test.mjs","scripts/statistical-levels-release/tests/probe-redirect-integration.test.mjs","scripts/statistical-levels-release/tests/product-qa-observability-isolation.test.mjs","scripts/statistical-levels-release/tests/product-qa-observability-source.test.mjs","scripts/statistical-levels-release/tests/semantic-closure-compat.mjs","scripts/statistical-levels-release/workflow-freeze.json"])
+AC_PAYLOAD_SHA256 = '4af8ef0dfaf78f711024ea7c02e0c32137cc18568211017bcc4dceb16d5cb72a'
+AC_PIN = rb"(?m)^(AC_PAYLOAD_SHA256 = ')([a-f0-9]{64})('\n)"
+
+
+def ac_payload(git, root):
+    rows = []
+    for name in sorted(AC_FILES):
+        data = git.blob(root, name)
+        if name == 'scripts/statistical-levels-ci/admission.py':
+            pins = re.findall(AC_PIN, data)
+            need(len(pins) == 1 and pins[0][1].decode() == AC_PAYLOAD_SHA256, 'AC_PIN')
+            data = re.sub(AC_PIN, lambda m:m[1]+b'0'*64+m[3], data)
+        elif name == 'scripts/statistical-levels-ci/authority-transition/inventory.json':
+            field = rb'("scripts/statistical-levels-ci/admission.py": ")[a-f0-9]{64}("[\n,])'
+            need(len(re.findall(field, data)) == 1, 'AC_INVENTORY_PIN')
+            data = re.sub(field, lambda m:m[1]+b'0'*64+m[2], data)
+        rows.append({'path':name, 'mode':'100644', 'sha256':digest(data)})
+    return digest(json.dumps(rows, sort_keys=True, separators=(',', ':')).encode())
+
+
+def validate_ac(git, root):
+    need(git.parents(root) == [AC_PARENT], 'AC_PARENT')
+    need(git.parents(AC_PARENT) == [AC_SOURCE] and git.parents(AC_SOURCE) == [AC_BASE], 'AC_APPROVED_CHAIN')
+    before, after = delta(git, AC_PARENT, root, AC_FILES)
+    raw = git('cat-file','commit',root).decode()
+    headers = raw.split('\n\n',1)[0].splitlines()
+    need(len(headers) == 4 and headers[2].startswith('author ') and headers[3].startswith('committer '), 'AC_HEADER')
+    author, committer = headers[2][7:], headers[3][10:]
+    github_author = re.fullmatch(r'(.+) ([0-9]+) [+-][0-9]{4}', author)
+    need(author == committer and (author == AC_IDENTITY or
+         github_author and digest(github_author[1].encode()) == AC_GITHUB_AUTHOR_SHA256), 'AC_HEADER')
+    lineage_header(git, root, git.text('rev-parse', root+'^{tree}'), AC_PARENT,
+                   author, committer, AC_MESSAGE, 'AC_HEADER')
+    need(ac_payload(git, root) == AC_PAYLOAD_SHA256, 'AC_PAYLOAD')
+    historical_root, _ = bootstrap(git, AC_BASE)
+    need(git.parents(historical_root) == [CATALOG_PARENT], 'AC_HISTORICAL_ROOT')
+    need(all(before[name] == after[name] for name in paths(git)), 'AC_SNAPSHOT_PRESERVATION')
+    # This is an offline archive replay, never a forged native producer receipt.
+    original = unique_json(git.blob(AC_BASE, PROVENANCE))
+    replay = unique_json(git.blob(root, PROVENANCE))
+    need(replay['GENERATOR_COMMIT'] == AC_SOURCE and replay['SOURCE_STATE'] == 'COMMITTED', 'AC_REPLAY_GENERATOR')
+    for key in ['BASELINE_ID', 'RAW_ARCHIVE']:
+        if key in original:need(replay[key] == original[key], 'AC_REPLAY_ARCHIVE')
+    old_config, new_config = dict(original['CONFIG']), dict(replay['CONFIG'])
+    old_config.pop('GENERATOR_COMMIT');new_config.pop('GENERATOR_COMMIT')
+    need(old_config == new_config, 'AC_REPLAY_CONFIG')
+    for entry in replay['SOURCE_BUNDLE']:
+        need(digest(git.blob(AC_SOURCE, entry['file'])) == entry['SHA256'] == digest(git.blob(root, entry['file'])), 'AC_REPLAY_SOURCE')
+    for name in paths(git) - {PROVENANCE}:
+        if '/assets/' not in name:
+            need(git.blob(root, name) == git.blob(AC_BASE, name), 'AC_NON_ASSET_DATA')
+            continue
+        old, new = (unique_json(git.blob(ref, name)) for ref in [AC_BASE, root])
+        for frequency in new['frequencies'].values():frequency.pop('periodHistory', None)
+        need(new == old, 'AC_EXISTING_METRICS')
+    inventory = 'scripts/statistical-levels-ci/authority-transition/inventory.json'
+    current, previous = (unique_json(git.blob(ref, inventory)) for ref in [root, AC_PARENT])
+    need(current['schema'] == previous['schema'], 'AC_TEST_SCHEMA')
+    for key in ['python_tests', 'node_tests', 'python_modules', 'node_files']:
+        need(len(current[key]) == len(set(current[key])) and set(previous[key]) <= set(current[key]), 'AC_TEST_INVENTORY')
+    need(set(previous['files']) <= set(current['files']), 'AC_TEST_FILES')
+    for name, value in current['files'].items():
+        need(digest(git.blob(root, name)) == value, 'AC_TEST_BYTES')
+    policy_path = 'scripts/statistical-levels-release/policy.json'
+    policy, old_policy = (unique_json(git.blob(ref, policy_path)) for ref in [root, AC_PARENT])
+    baseline = dict(policy['baseline'])
+    need(baseline.pop('source_bundle') == old_policy['source_bundle'] and baseline.pop('ledger_hash') == old_policy['ledger_hash'], 'AC_BASELINE_PINS')
+    need(baseline == old_policy['baseline'], 'AC_PRODUCTION_BASELINE_UNCHANGED')
+    normalized = {**policy, 'baseline':baseline, 'source_bundle':old_policy['source_bundle'], 'ledger_hash':old_policy['ledger_hash']}
+    need(normalized == old_policy and policy['source_bundle'] == replay['SOURCE_BUNDLE'], 'AC_POLICY_SCOPE')
+    need(policy['ledger_hash'] == digest(git.blob(root, 'docs/statistical-levels-capability-ledger.json')), 'AC_LEDGER_PIN')
+
+
 def technical_capture_identity(git):
     """Read-only, credential-free artifact facts; never a grant or public QA.
 
@@ -1235,6 +1319,11 @@ def bootstrap(git, head):
         cursor = parents[0]
     else:
         raise ValueError('LINEAGE_BOUND')
+    if git.parents(cursor) == [AC_PARENT]:
+        validate_ac(git, cursor)
+        current, start = git.tree(head), git.tree(cursor)
+        need(set(current) == set(start) and all(current[p] == start[p] for p in current if p not in data_paths), 'AC_SUCCESSOR_CODE_CHANGED')
+        return cursor, chain
     if git.parents(cursor) == [CATALOG_PARENT]:
         validate_catalog(git,cursor)
         current,start = git.tree(head),git.tree(cursor)
@@ -1301,6 +1390,7 @@ def bootstrap(git, head):
             need(git.parents(previous_root) != [MEMORY_CI_BASE], 'MEMORY_CI_DATA_SUCCESSORS_ONLY')
             previous_entry = lineage_entry(git, previous_root)
             need(previous_entry is None or not extraordinary_entry(previous_entry), 'EXTRAORDINARY_DATA_SUCCESSORS_ONLY')
+        need(git.parents(previous_root) != [AC_PARENT], 'AC_DATA_SUCCESSORS_ONLY')
         need(git.parents(previous_root) != [CATALOG_PARENT], 'CATALOG_DATA_SUCCESSORS_ONLY')
         need(git.parents(previous_root) != [TECHNICAL_CAPTURE_PARENT], 'TECHNICAL_CAPTURE_DATA_SUCCESSORS_ONLY')
         need(git.parents(previous_root) != [NEXT_SECURITY_PARENT], 'NEXT_SECURITY_DATA_SUCCESSORS_ONLY')
@@ -1331,6 +1421,11 @@ def reconciled_report_hashes(git, head):
                       stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL).returncode != 0:
         return {}
     root, _ = bootstrap(git, head)
+    if git.parents(root) == [AC_PARENT]:
+        result = reconciled_report_hashes(git, AC_BASE)
+        for name in ['lib/statistical-levels/contracts.test.ts', 'lib/statistical-levels/interpretation.ts', 'lib/statistical-levels/types.ts']:
+            result[name] = digest(git.blob(AC_SOURCE, name))
+        return result
     if git.parents(root) == [CATALOG_PARENT]:
         result = reconciled_report_hashes(git,CATALOG_PARENT)
         result[CATALOG_TEST] = digest(git.blob(root,CATALOG_TEST))
@@ -1669,6 +1764,7 @@ def admit(git, api, env, event):
     need(evidence['head_sha'] == BASE and evidence['producer_run_id'] == 39432688384 and evidence['source_sha'] == OLD, 'BOOTSTRAP_DATA_IDENTITY')
     validate_data(git, BASE, OLD, evidence['metadata_objects'])
     if not chain:
+        ac_root = git.parents(root) == [AC_PARENT]
         catalog_root = git.parents(root) == [CATALOG_PARENT]
         technical_capture_root = git.parents(root) == [TECHNICAL_CAPTURE_PARENT]
         next_security_root = git.parents(root) == [NEXT_SECURITY_PARENT]
@@ -1686,15 +1782,25 @@ def admit(git, api, env, event):
         zod_root = git.parents(root) == [ZOD_BASE]
         lineage = lineage_entry(git, root)
         lineage_root = lineage is not None
-        expected_before = COMPAT_PARENT if catalog_root or technical_capture_root or next_security_root or compat_root else MEMORY_CI_BASE if memory_root else RUNTIME_CI_BASE if runtime_root else PUBLICATION_CI_REPAIR_BASE if publication_ci_repair_root else PUBLICATION_CLOSURE_BASE if closure_root else CI_REPAIR_BASE if repair_root else lineage['editorial']['sha'] if lineage_root else ZOD_BASE if zod_root else DURABILITY_BASE if durability_root else REPORT_CONTRACT_BASE if report_root else CAPTURE_RECOVERY_BASE if capture_root else SECURITY_BASE if security_root else REMOTE_BEFORE_RECONCILIATION if daily_root else BASE
+        expected_before = AC_BASE if ac_root else COMPAT_PARENT if catalog_root or technical_capture_root or next_security_root or compat_root else MEMORY_CI_BASE if memory_root else RUNTIME_CI_BASE if runtime_root else PUBLICATION_CI_REPAIR_BASE if publication_ci_repair_root else PUBLICATION_CLOSURE_BASE if closure_root else CI_REPAIR_BASE if repair_root else lineage['editorial']['sha'] if lineage_root else ZOD_BASE if zod_root else DURABILITY_BASE if durability_root else REPORT_CONTRACT_BASE if report_root else CAPTURE_RECOVERY_BASE if capture_root else SECURITY_BASE if security_root else REMOTE_BEFORE_RECONCILIATION if daily_root else BASE
         need(env['GITHUB_EVENT_NAME'] == 'push' and event['before'] == expected_before and event['after'] == head and event['ref'] == 'refs/heads/' + BRANCH and not event['forced'] and not event['deleted'] and not event['created'], 'BOOTSTRAP_EVENT')
-        if catalog_root or technical_capture_root or next_security_root or compat_root or memory_root or runtime_root or publication_ci_repair_root or closure_root or repair_root or daily_root or security_root or capture_root or report_root or durability_root or zod_root or lineage_root:
+        if ac_root or catalog_root or technical_capture_root or next_security_root or compat_root or memory_root or runtime_root or publication_ci_repair_root or closure_root or repair_root or daily_root or security_root or capture_root or report_root or durability_root or zod_root or lineage_root:
             recent_bytes = git.blob(root, CURRENT_DATA_EVIDENCE)
             need(digest(recent_bytes) == CURRENT_DATA_EVIDENCE_SHA256, 'CURRENT_DATA_EVIDENCE_PIN')
             recent = unique_json(recent_bytes)
             need(recent['published_sha'] == REMOTE_BEFORE_RECONCILIATION and recent['producer_run_id'] == 39791362129 and recent['producer_attempt'] == 1, 'CURRENT_DATA_EVIDENCE_IDENTITY')
             validate_data(git, recent['published_sha'], recent['source_sha'], recent['metadata_objects'])
-            if catalog_root:
+            if ac_root:
+                mode, details = 'EXACT_AC_SOURCE_RELEASE', {
+                    'native_update':{'before':AC_BASE, 'after':head},
+                    'source_commit':AC_SOURCE, 'archive_replay_commit':AC_PARENT,
+                    'archive_replay_is_native_producer_receipt':False,
+                    'new_hosted_qualification_required':True,
+                    'daily_successors_require_exact_parent_ci':True,
+                    'production_baseline_unchanged':True,
+                    'authority_transition_required':True,
+                    'release_authority_issued':False}
+            elif catalog_root:
                 mode,details = 'EXACT_CATALOG_CLOSURE_SUCCESSOR', {
                     'remote_before':COMPAT_PARENT,'technical_parent':CATALOG_PARENT,
                     'intermediate_hosted_ci':'NOT_REQUIRED_NOT_REUSED','prior_head_hosted_ci':'FAILED_NOT_REUSED',

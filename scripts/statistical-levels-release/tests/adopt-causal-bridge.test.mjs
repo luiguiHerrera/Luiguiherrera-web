@@ -237,14 +237,15 @@ test('locked Next application: architecture-aware T1–T4 proof and strict accou
  const {tmpdir}=await import('node:os');
  const out=process.env.SL_NEXT_LOCAL_EVIDENCE??await fs.mkdtemp(path.join(tmpdir(),'sl-native-next-'));
  await fs.mkdir(out,{recursive:true});await renderFixtures(process.cwd(),out);
- const harness=await createReadOnlyHarness({origin},undefined,out,true),argv=process.argv;
+ const harness=await createReadOnlyHarness({origin},undefined,out,true),argv=process.argv,previousRoutes=globalThis.__SL_QA_SCRIPT_ROUTES__;
+ globalThis.__SL_QA_SCRIPT_ROUTES__={es:'/analisiscuantitativo',en:'/en/quantitative-analysis'};
  globalThis.__SL_RELEASE_QA__={...harness,protectedGet:async url=>{assert.equal(new URL(url).origin,origin);return fetch(url,{redirect:'error'});}};
  process.argv=[process.execPath,'local-native-proof',origin,'0',out];let passed=false;
  try {
   await import('../scripts/qa/qa-statistical-levels.mjs');
   const report=JSON.parse(await fs.readFile(path.join(out,'browser-report.json'),'utf8'));
   assert.equal(report.PASS,true);passed=true;
- }finally{delete globalThis.__SL_RELEASE_QA__;process.argv=argv;await harness.finish(passed);}
+ }finally{delete globalThis.__SL_RELEASE_QA__;if(previousRoutes===undefined)delete globalThis.__SL_QA_SCRIPT_ROUTES__;else globalThis.__SL_QA_SCRIPT_ROUTES__=previousRoutes;process.argv=argv;await harness.finish(passed);}
  const evidence=JSON.parse(await fs.readFile(path.join(out,'adopt-request-evidence.json'),'utf8'));
  for(const kind of ['T1','T2','T3','T4']) {
   const t=evidence.transitions.find(t=>t.kind===kind);assert.ok(t?.runtime_proof);

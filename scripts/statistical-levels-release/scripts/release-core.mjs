@@ -165,7 +165,7 @@ export function validateProductReport(report) {
   for (const value of Object.values(report.gates)) need(value === 'PASS', 'PRODUCT_GATE_FAILURE');
   need(report.result === 'PASS' && report.snapshot_count === 81 && report.provenance_coverage === 100, 'DATA_COVERAGE');
   need(canonical(report.capability_ids).equals(canonical(P.capabilities)), 'CAPABILITY_LOSS');
-  need(canonical(report.routes).equals(canonical(['/niveles-estadisticos', '/en/statistical-levels'])) &&
+  need((canonical(report.routes).equals(canonical(['/niveles-estadisticos', '/en/statistical-levels'])) || canonical(report.routes).equals(canonical(['/analisiscuantitativo', '/en/quantitative-analysis']))) &&
     canonical(report.viewports).equals(canonical([[1440, 900], [390, 844]])), 'QA_COVERAGE');
   for (const key of ['application_console_errors', 'required_application_request_failures', 'broken_assets', 'hydration_errors', 'overflow'])
     need(Number.isInteger(report[key]) && report[key] === 0, 'QA_APPLICATION_ERRORS');

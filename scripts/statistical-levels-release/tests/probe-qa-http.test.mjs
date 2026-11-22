@@ -3,7 +3,8 @@ import * as probeContract from '../scripts/probe-core.mjs';
 import * as releaseContract from '../scripts/release-core.mjs';
 import { createRequire } from 'node:module';
 const ts = createRequire(import.meta.url)('typescript');
-import {withoutReceiptClass,historicalPinnedBytes,historicalProbeRegion} from './semantic-closure-compat.mjs';
+const readHistoricalSource=(url,encoding)=>beforeAcRoutePaths(String(url).split('/scripts/statistical-levels-release/scripts/')[1]??'',readFileSync(url,encoding));
+import {withoutReceiptClass,historicalPinnedBytes,historicalProbeRegion,historicalPolicyBytes,beforeAcRoutePaths} from './semantic-closure-compat.mjs';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
@@ -36,7 +37,7 @@ async function cache(options = {}) {
     transport: async (url, init) => { calls.push({ url, init }); return options.reply ? options.reply(url, init) : htmlResponse(); } });
   return { protectedGet, calls, tokens, close: () => { certified = false; } };
 }
-const productSource = fs.readFileSync(new URL('../scripts/qa/qa-statistical-levels.mjs', import.meta.url), 'utf8');
+const productSource = readHistoricalSource(new URL('../scripts/qa/qa-statistical-levels.mjs', import.meta.url), 'utf8');
 const loopStart = productSource.indexOf("  for(const route of ['/niveles-estadisticos','/en/statistical-levels','/metodologia','/en/methodology']){");
 const productRouteLoop = productSource.slice(loopStart, productSource.indexOf('  const ledger=', loopStart));
 async function productAssertions(protectedGet, observability) {
@@ -196,7 +197,7 @@ const frozen = {
   '24 PROMOTE transport unchanged and ADOPT-only harness extension pinned': { 'release-core.mjs': 'a742b751bd6365b024ba4c84f605e4fd0584316dfd107114372d2bdda2427757', 'browser-harness-base.mjs': 'HARNESS_SECURITY_REGIONS' }
 };
 for (const [name, files] of Object.entries(frozen)) test(name, () => {
-  for (const [file, expected] of Object.entries(files)) { if(expected==='HARNESS_SECURITY_REGIONS')assertHarnessPreserved(fs.readFileSync(new URL('../scripts/'+file,import.meta.url),'utf8'));else assert.equal(createHash('sha256').update(file==='release-core.mjs'?withoutReceiptClass(historicalPinnedBytes(file,fs.readFileSync(new URL('../scripts/' + file, import.meta.url)))):historicalPinnedBytes(file,fs.readFileSync(new URL('../scripts/' + file, import.meta.url)))).digest('hex'), expected, file); }
+  for (const [file, expected] of Object.entries(files)) { if(expected==='HARNESS_SECURITY_REGIONS')assertHarnessPreserved(readHistoricalSource(new URL('../scripts/'+file,import.meta.url),'utf8'));else assert.equal(createHash('sha256').update(file==='release-core.mjs'?withoutReceiptClass(historicalPinnedBytes(file,readHistoricalSource(new URL('../scripts/' + file, import.meta.url)))):historicalPinnedBytes(file,readHistoricalSource(new URL('../scripts/' + file, import.meta.url)))).digest('hex'), expected, file); }
 });
 test('transport reporting redirect-followed or different response URL fails closed', async () => {
   for (const fields of [{ redirected: true }, { url: 'https://unrelated.example/metodologia' }]) {
@@ -435,7 +436,7 @@ const preservationSemantics = {
     assert.throws(() => releaseContract.validateTarget(preservationTarget));
   },
   POLICY_BINDING() {
-    assert.equal(regionHash(readFileSync(new URL('../policy.json', import.meta.url))), 'd9cf2b483bfea536ca6afdf160ed534e42a96bf175f5b7dd658b0d020b6d40f2');
+    assert.equal(regionHash(historicalPolicyBytes(readFileSync(new URL('../policy.json', import.meta.url)))), 'd9cf2b483bfea536ca6afdf160ed534e42a96bf175f5b7dd658b0d020b6d40f2');
     assert.equal(releaseContract.P.account_id, '732159826922');
     assert.equal(releaseContract.P.release_role_arn, 'arn:aws:iam::732159826922:role/LuiguiHerreraStatisticalLevelsReleaseInvoker');
     assert.equal(releaseContract.P.aws_audience, 'sts.amazonaws.com');

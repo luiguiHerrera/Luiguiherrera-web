@@ -9,7 +9,7 @@ from compat_cases import history_module
 class CatalogClosureTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.g=MemoryGit();cls.root=cls.g.real.text('rev-parse','HEAD')
+        cls.g=MemoryGit();cls.root=a.bootstrap(cls.g,a.AC_BASE)[0]
         assert a.bootstrap(cls.g,cls.root)==(cls.root,[])
         cls.files={p:cls.g.blob(cls.root,p) for p in a.CATALOG_FILES}
         assert cls.g.commit(a.CATALOG_PARENT,cls.files,a.CATALOG_IDENTITY,a.CATALOG_MESSAGE)==cls.root

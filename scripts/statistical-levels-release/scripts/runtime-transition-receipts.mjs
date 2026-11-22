@@ -202,7 +202,10 @@ export const runtimeExecutables=Object.freeze([runtimeExecutable,Object.freeze({
  Object.freeze({sha256:'aef45e0837c44391b35af6083b0fa20f0c970b9456eedcad22ca852302aed82d',length:128439,fetch:1995,before_fetch:1989,validated:2218,commit:127222,frames:Object.freeze([1995,127437,100804,23054]),intent:'a',url:'t',payload:'m',alive:'p'}),
  // Locked Next16.4.2 security build: exact native executable and UTF-16
  // callsites. The observer, consumer proof and all acceptance gates stay exact.
- Object.freeze({sha256:'fe5d020ad6784addf0f7f5f51f681defaf21bd8ed660f852d147af1fec571479',length:128406,fetch:1995,before_fetch:1989,validated:2218,commit:127189,frames:Object.freeze([1995,127404,100797,23054]),intent:'a',url:'t',payload:'m',alive:'p'})]);
+ Object.freeze({sha256:'fe5d020ad6784addf0f7f5f51f681defaf21bd8ed660f852d147af1fec571479',length:128406,fetch:1995,before_fetch:1989,validated:2218,commit:127189,frames:Object.freeze([1995,127404,100797,23054]),intent:'a',url:'t',payload:'m',alive:'p'}),
+ // Exact approved AC / Next16.4.6 executable recovered from the immutable Preview.
+ // Native source digest, breakpoint locations and four frames remain mandatory.
+ Object.freeze({sha256:'49962c6499298c06762f7b00bc1cece34b8e2eacc44dae58d677be9df9847809',length:135210,fetch:1995,before_fetch:1989,validated:2218,commit:133993,frames:Object.freeze([1995,134208,107564,20819]),intent:'a',url:'t',payload:'m',alive:'p',response:'i',raw_json:'n',from:'c.current.selection',target:'i',current:'n===d.current'})]);
 export function runtimeExecutableMatches(s){return !!s&&runtimeExecutables.some(w=>s.code_sha256===w.sha256&&s.length===w.length)&&s.default_context===true&&s.live_edit===false&&s.start_line===0&&s.start_column===0;}
 export function runtimeFetchProven(w,type){const executable=runtimeExecutables.find(e=>e.sha256===w?.script?.code_sha256);return type==='Fetch'&&runtimeExecutableMatches(w?.script)&&w.complete===true&&w.runtime_header_compatible===true&&w.base?.rsc==='NO'&&w.base.prefetch!=='YES'&&Array.isArray(w.frames)&&w.frames.length>=4&&executable.frames.every((column,i)=>w.frames[i].script_sha256===w.script.script_sha256&&w.frames[i].line===0&&w.frames[i].column===column);}
 
@@ -267,13 +270,13 @@ export async function createRuntimeObserver(browser,cdp,origin,pageId,randomIden
     emit('FETCH_ISSUED',{intent_identity:active.intent,code_sha256:executable.sha256,line:0,column:f.location.columnNumber});
    }else if(kind==='validated'){
     need(active.receipt.kind==='T2'&&active.intent&&!active.payload,'RUNTIME_VALIDATION_CARDINALITY');
-    const v=await value(`({ticker:e,snapshot:s.id,intent:${executable.intent},parsed:r===i,status:n.status,redirected:n.redirected,path:new URL(n.url).pathname,origin:new URL(n.url).origin,content_type:n.headers.get("content-type"),payload_identity:${executable.payload}})`);
+    const v=await value(`({ticker:e,snapshot:s.id,intent:${executable.intent},parsed:r===${executable.raw_json??'i'},status:${executable.response??'n'}.status,redirected:${executable.response??'n'}.redirected,path:new URL(${executable.response??'n'}.url).pathname,origin:new URL(${executable.response??'n'}.url).origin,content_type:${executable.response??'n'}.headers.get("content-type"),payload_identity:${executable.payload}})`);
     need(v.intent===active.appIntent&&v.parsed===true&&v.ticker==='GLD'&&v.snapshot===active.receipt.snapshot_identity&&v.status>=200&&v.status<300&&!v.redirected&&v.origin===origin&&v.path==='/api/statistical-levels/asset'&&v.content_type?.split(';')[0]==='application/json'&&hash(v.payload_identity),'RUNTIME_VALIDATED_RESPONSE');
     active.payload=await value('r',false);active.objectIdentity=sha(opaque('object'));active.payloadIdentity=v.payload_identity;
     active.validation=emit('PAYLOAD_VALIDATED',{intent_identity:active.intent,object_identity:active.objectIdentity,payload_identity:v.payload_identity,observer:'DEBUGGER_EXACT_QUALIFIED_CALLSITE',code_sha256:executable.sha256,line:0,column:f.location.columnNumber});
    }else{
     need(!active.prepared,'RUNTIME_COMMIT_CARDINALITY');
-    const v=await value(`({from:d.current.selection,target:n,current:i===c.current,alive:${executable.alive}.current,native_history:a===true,url:[...new URL(location.href).searchParams].filter(([k])=>["asset","frequency","window"].includes(k)),ticker:e.asset.ticker})`);
+    const v=await value(`({from:${executable.from??'d.current.selection'},target:${executable.target??'n'},current:${executable.current??'i===c.current'},alive:${executable.alive}.current,native_history:a===true,url:[...new URL(location.href).searchParams].filter(([k])=>["asset","frequency","window"].includes(k)),ticker:e.asset.ticker})`);
     need(equal(v.from,active.receipt.from_state)&&equal(v.target,active.receipt.target_state)&&v.current===true&&v.alive===true&&v.native_history===true&&v.ticker===v.target.asset&&equal(v.url,[['asset',v.target.asset],['frequency',v.target.frequency],['window',v.target.window]]),'RUNTIME_COMMIT_TARGET');
     active.prepared=await value('t',false);
     active.stateIdentity=sha(canonical({action:active.receipt.action_instance_id,state:opaque('state'),target:active.receipt.target_state}));

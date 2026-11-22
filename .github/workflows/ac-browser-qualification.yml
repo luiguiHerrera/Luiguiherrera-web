@@ -1,0 +1,170 @@
+name: AC browser qualification
+on:
+  push:
+    branches: [codex/ac-browser-qualification-20261122]
+permissions:
+  contents: read
+concurrency:
+  group: ac-browser-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  product:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    env:
+      NEXT_TELEMETRY_DISABLED: "1"
+      CI_EVENT_SHA: ${{ github.sha }}
+      SL_NEXT_LOCAL_ORIGIN: http://127.0.0.1:31876
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v6
+        with:
+          node-version: "22.23.2"
+          cache: npm
+      - name: Bind read-only source tests to the exact closed candidate
+        run: |
+          export CI_EVIDENCE="$RUNNER_TEMP/ac-browser-qualification"
+          printf 'CI_EVIDENCE=%s\n' "$CI_EVIDENCE" >> "$GITHUB_ENV"
+          mkdir -p "$CI_EVIDENCE"
+          python3 -B - <<'PY'
+          import os,sys,json
+          from pathlib import Path
+          sys.path.insert(0,'scripts/statistical-levels-ci')
+          from admission import Git,bootstrap,need,REPO
+          git=Git();head=git.text('rev-parse','HEAD')
+          need(head==os.environ['GITHUB_SHA']==os.environ['CI_EVENT_SHA'],'SOURCE_TEST_SHA')
+          need(os.environ['GITHUB_REPOSITORY']==REPO and os.environ['GITHUB_REF']=='refs/heads/codex/ac-browser-qualification-20261122','SOURCE_TEST_REF')
+          root,chain=bootstrap(git,head)
+          need(root==head and not chain,'SOURCE_TEST_ROOT')
+          record={'scope':'SOURCE_PRODUCT_TESTS_NOT_NATIVE_ADMISSION','head_sha':head,'release_authority_issued':False}
+          (Path(os.environ['CI_EVIDENCE'])/'source-tests.json').write_text(json.dumps(record)+'\n')
+          print(json.dumps(record))
+          PY
+      - name: Install locked dependencies
+        id: dependencies
+        run: npm ci --ignore-scripts --no-audit --no-fund
+      - name: Verify report preservation and product contracts
+        id: product_contracts
+        shell: bash
+        run: |
+          set -euo pipefail
+          node --import ./scripts/trends-test-register.mjs --experimental-test-module-mocks --experimental-strip-types --test --test-reporter=tap lib/reports/first-september-2026.test.mts lib/reports/second-september-2026.test.mts lib/reports/september-corrective-release.test.mts lib/reports/second-september-source-policy.test.mts | tee "$CI_EVIDENCE/reports.tap"
+          node --experimental-strip-types --test --test-reporter=tap lib/statistical-levels/baseline.test.mjs lib/statistical-levels/contracts.test.ts lib/statistical-levels/defect-repairs.test.ts scripts/statistical-levels-storage.test.mjs components/statistical-levels/interaction-presentation.test.ts lib/statistical-levels/period-history.test.mjs | tee "$CI_EVIDENCE/product.tap"
+      - name: Verify authority transition contracts without publication authority
+        id: authority_contracts
+        run: python3 -B scripts/statistical-levels-ci/authority-transition/run.py --out "$CI_EVIDENCE/authority-transition"
+      - name: Build candidate
+        run: |
+          npm run build
+          node --input-type=module - <<'JS'
+          import fs from 'node:fs/promises';
+          import path from 'node:path';
+          import {createHash} from 'node:crypto';
+          import assert from 'node:assert/strict';
+          const matches=[];
+          async function visit(dir){for(const ent of await fs.readdir(dir,{withFileTypes:true})){const file=path.join(dir,ent.name);if(ent.isDirectory())await visit(file);else if(file.endsWith('.js')){const code=await fs.readFile(file,'utf8');if(code.includes('sl-unusual')&&code.includes('pushState'))matches.push({file,sha256:createHash('sha256').update(code).digest('hex'),length:code.length});}}}
+          await visit('.next/static');console.log('AC_RUNTIME_EXECUTABLE '+JSON.stringify(matches));
+          assert.equal(matches.length,1);assert.equal(matches[0].sha256,'49962c6499298c06762f7b00bc1cece34b8e2eacc44dae58d677be9df9847809');assert.equal(matches[0].length,135210);
+          JS
+      - name: Install locked browser
+        run: |
+          npm ci --prefix scripts/statistical-levels-release/qa-dependencies --ignore-scripts --no-audit --no-fund
+          node scripts/statistical-levels-release/qa-dependencies/node_modules/playwright/cli.js install --with-deps chromium
+      - name: Verify routes and read-only source roles
+        id: routes
+        shell: bash
+        run: |
+          set -euo pipefail
+          node --test --test-reporter=tap scripts/statistical-levels-ci/authority-transition/ac-cases.mjs | tee "$CI_EVIDENCE/route-contracts.tap"
+      - name: Capture full product without publication authority
+        id: capture
+        shell: bash
+        run: |
+          set -euo pipefail
+          export SL_NEXT_LOCAL_ORIGIN=http://127.0.0.1:31876
+          export SL_NEXT_LOCAL_EVIDENCE="$CI_EVIDENCE/native-next"
+          export SL_CAUSAL_TEST_EVIDENCE="$CI_EVIDENCE/native-fixtures"
+          node node_modules/next/dist/bin/next start -H 127.0.0.1 -p 31876 > "$CI_EVIDENCE/server.log" 2>&1 &
+          server_pid=$!
+          trap 'status=$?; trap - EXIT; kill "$server_pid"; wait "$server_pid" || test "$?" -eq 143; exit "$status"' EXIT
+          node --input-type=module - <<'JS'
+          import assert from 'node:assert/strict';
+          let ready=false;
+          for(let i=0;i<120;i++){
+            try{const r=await fetch(process.env.SL_NEXT_LOCAL_ORIGIN+'/analisiscuantitativo',{signal:AbortSignal.timeout(2000)});if(r.ok){ready=true;break;}}catch{}
+            await new Promise(resolve=>setTimeout(resolve,500));
+          }
+          assert.ok(ready,'SOURCE_APPLICATION_NOT_READY');
+          JS
+          node scripts/statistical-levels-release/scripts/capture-full-product.mjs --origin "$SL_NEXT_LOCAL_ORIGIN" --out "$CI_EVIDENCE/full-product"
+          node scripts/statistical-levels-release/scripts/capture-full-product.mjs --verify
+      - name: Print product diagnostics
+        if: ${{ always() }}
+        run: |
+          node --input-type=module - <<'JS'
+          import fs from 'node:fs/promises';
+          import path from 'node:path';
+          for(const name of ['first-product-failure.json','adopt-request-evidence.json','browser-report.json','defect-browser-report.json','interaction-browser-report.json']){
+            try{
+              const report=JSON.parse(await fs.readFile(path.join(process.env.CI_EVIDENCE,'full-product',name),'utf8'));
+              const evidence=name==='first-product-failure.json'?report:name==='adopt-request-evidence.json'?{validation:report.validation,transitions:report.transitions}:{PASS:report.PASS,failure:report.failure_details,errors:report.errors,cases:report.cases?.filter(x=>x.passed===false||x.PASS===false),coverage:report.coverage?.filter(x=>x.passed===false)};
+              console.log('PRODUCT_REPORT '+name+' '+JSON.stringify(evidence).slice(0,60000));
+            }catch(error){if(error.code!=='ENOENT')throw error;}
+          }
+          JS
+      - name: Run diagnostic release contracts
+        id: unit
+        shell: bash
+        run: |
+          set -euo pipefail
+          export SL_CAUSAL_BROWSER_TEST=1
+          export SL_NEXT_LOCAL_EVIDENCE="$CI_EVIDENCE/native-next"
+          export SL_CAUSAL_TEST_EVIDENCE="$CI_EVIDENCE/native-fixtures"
+          node node_modules/next/dist/bin/next start -H 127.0.0.1 -p 31876 > "$CI_EVIDENCE/server-contracts.log" 2>&1 &
+          server_pid=$!
+          trap 'status=$?; trap - EXIT; kill "$server_pid"; wait "$server_pid" || test "$?" -eq 143; exit "$status"' EXIT
+          node --input-type=module - <<'JS'
+          import assert from 'node:assert/strict';
+          let ready=false;
+          for(let i=0;i<120;i++){
+            try{const r=await fetch(process.env.SL_NEXT_LOCAL_ORIGIN+'/analisiscuantitativo',{signal:AbortSignal.timeout(2000)});if(r.ok){ready=true;break;}}catch{}
+            await new Promise(resolve=>setTimeout(resolve,500));
+          }
+          assert.ok(ready,'SOURCE_APPLICATION_NOT_READY');
+          JS
+          mapfile -t tests < <(find scripts/statistical-levels-release/tests -maxdepth 1 -name '*.test.mjs' ! -name 'probe-fixture-registry.test.mjs' ! -name 'g5-execution-preservation.test.mjs' | sort)
+          test "${#tests[@]}" -eq 40
+          node --test --test-concurrency=2 --test-reporter=tap "${tests[@]}" | tee "$CI_EVIDENCE/release-diagnostic.tap"
+          node scripts/qa-statistical-levels-runtime.mjs "$SL_NEXT_LOCAL_ORIGIN" "$CI_EVIDENCE/runtime-product.json"
+      - name: Require both diagnostic contracts and browser success
+        if: ${{ always() }}
+        env:
+          UNIT_RESULT: ${{ steps.unit.outcome }}
+          CAPTURE_RESULT: ${{ steps.capture.outcome }}
+          ROUTE_RESULT: ${{ steps.routes.outcome }}
+          PRODUCT_RESULT: ${{ steps.product_contracts.outcome }}
+          AUTHORITY_RESULT: ${{ steps.authority_contracts.outcome }}
+        run: |
+          test "$UNIT_RESULT" = success
+          test "$CAPTURE_RESULT" = success
+          test "$ROUTE_RESULT" = success
+          test "$PRODUCT_RESULT" = success
+          test "$AUTHORITY_RESULT" = success
+      - name: Retain bounded diagnostic evidence
+        if: ${{ always() }}
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+        with:
+          name: ac-browser-${{ github.sha }}-${{ github.run_id }}
+          path: |
+            ${{ runner.temp }}/ac-browser-qualification/*.json
+            ${{ runner.temp }}/ac-browser-qualification/*.log
+            ${{ runner.temp }}/ac-browser-qualification/*.tap
+            ${{ runner.temp }}/ac-browser-qualification/full-product/*.json
+            ${{ runner.temp }}/ac-browser-qualification/full-product/*.jsonl
+            ${{ runner.temp }}/ac-browser-qualification/authority-transition/*
+          retention-days: 1
+          if-no-files-found: error

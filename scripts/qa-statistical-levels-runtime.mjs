@@ -8,21 +8,21 @@ assert.ok(['127.0.0.1','localhost'].includes(new URL(origin).hostname),'LOCAL_IM
 const browser=await chromium.launch({headless:true}),results=[];
 const state=([asset,frequency,window])=>({asset,frequency,window});
 const url=(route,s)=>origin+route+'?'+new URLSearchParams(s);
-async function ready(page,s){await page.waitForFunction(s=>{const u=new URL(location.href);return Object.entries(s).every(([k,v])=>u.searchParams.get(k)===v)&&document.querySelector('#sl-options label:first-child select')?.value===s.frequency&&document.querySelector('#sl-options label:nth-child(2) select')?.value===s.window&&document.querySelector('#sl-interpretation')?.textContent.includes(s.asset);},s);}
-async function options(page){if(!await page.locator('#sl-options').evaluate(e=>e.open))await page.locator('#sl-options > summary').click();}
+async function ready(page,s){await page.waitForFunction(s=>{const u=new URL(location.href);return Object.entries(s).every(([k,v])=>u.searchParams.get(k)===v)&&document.querySelector('#sl-frequency select')?.value===s.frequency&&document.querySelector('.sl-period-buttons button[aria-pressed="true"]')?.dataset.window===s.window&&document.querySelector('#sl-interpretation')?.textContent.includes(s.asset);},s);}
+async function controls(page){assert.equal(await page.locator('#sl-frequency select').isVisible(),true);assert.equal(await page.locator('.sl-period-buttons button').count(),5);}
 async function asset(page,title){if(!await page.locator('#sl-asset-picker').evaluate(e=>e.open))await page.locator('#sl-asset-picker > summary').click();await page.locator('.sl-picker-group button[title="'+title+'"]').click();}
 try{
 for(const route of ['/niveles-estadisticos','/en/statistical-levels']){
  const context=await browser.newContext({serviceWorkers:'block'}),page=await context.newPage(),errors=[];page.on('pageerror',()=>errors.push('EXCEPTION'));
- const s=state(['SPY','weekly','5Y']);await page.goto(url(route,s));await ready(page,s);
+ const s=state(['SPY','weekly','5Y']);await page.goto(url(route,s));await ready(page,s);const canonical=route.startsWith('/en/')?'/en/quantitative-analysis':'/analisiscuantitativo';assert.equal(new URL(page.url()).pathname,canonical);await page.goto(url(canonical,s));await ready(page,s);
  await page.locator('[data-window="3Y"]').click();const t1=state(['SPY','weekly','3Y']);await ready(page,t1);await page.reload();await ready(page,t1);
  await page.goto(url(route,s));await ready(page,s);await asset(page,'SPDR Gold Shares');const t2=state(['GLD','weekly','5Y']);await ready(page,t2);await page.reload();await ready(page,t2);
- await options(page);await page.locator('#sl-options label:first-child select').selectOption('daily');const t3=state(['GLD','daily','5Y']);await ready(page,t3);await page.reload();await ready(page,t3);
- await options(page);await page.locator('#sl-options label:nth-child(2) select').selectOption('Full');const t4=state(['GLD','daily','Full']);await ready(page,t4);await page.reload();await ready(page,t4);
- await page.goto(url(route,s));await ready(page,s);await asset(page,'SPDR Gold Shares');await ready(page,t2);await options(page);await page.locator('#sl-options label:first-child select').selectOption('daily');await ready(page,t3);await page.locator('#sl-options label:nth-child(2) select').selectOption('Full');await ready(page,t4);
+ await controls(page);await page.locator('#sl-frequency select').selectOption('daily');const t3=state(['GLD','daily','5Y']);await ready(page,t3);await page.reload();await ready(page,t3);
+ await controls(page);await page.locator('[data-window="Full"]').click();const t4=state(['GLD','daily','Full']);await ready(page,t4);await page.reload();await ready(page,t4);
+ await page.goto(url(route,s));await ready(page,s);await asset(page,'SPDR Gold Shares');await ready(page,t2);await controls(page);await page.locator('#sl-frequency select').selectOption('daily');await ready(page,t3);await page.locator('[data-window="Full"]').click();await ready(page,t4);
  const historyRequests=[];page.on('request',r=>historyRequests.push(new URL(r.url()).pathname));await page.goBack();await ready(page,t3);await page.goBack();await ready(page,t2);await page.goForward();await ready(page,t3);assert.deepEqual(historyRequests,[]);assert.deepEqual(errors,[]);
  await context.close();
- const nojs=await browser.newContext({javaScriptEnabled:false,serviceWorkers:'block'}),np=await nojs.newPage();await np.goto(url(route,t4));assert.equal(await np.locator('#sl-options label:first-child select').inputValue(),'daily');assert.equal(await np.locator('#sl-options label:nth-child(2) select').inputValue(),'Full');assert.match(await np.locator('#sl-interpretation').textContent(),/GLD/);await nojs.close();
+ const nojs=await browser.newContext({javaScriptEnabled:false,serviceWorkers:'block'}),np=await nojs.newPage();await np.goto(url(route,t4));assert.equal(await np.locator('#sl-frequency select').inputValue(),'daily');assert.equal(await np.locator('[data-window="Full"]').getAttribute('aria-pressed'),'true');assert.match(await np.locator('#sl-interpretation').textContent(),/GLD/);await nojs.close();
  results.push({route,reload:['T1','T2','T3','T4'],history:'PASS',history_requests:0,no_js:'PASS'});
 }
 // Local fixture responses exercise visible failure without changing Production.
@@ -74,13 +74,13 @@ for(const count of [4,5,12]){
  const issued=events.filter(x=>x.event==='START'&&new URL(x.url).pathname==='/api/statistical-levels/asset');assert.equal(issued.length,count);
  const before=await page.evaluate(inspectOwner),start=events.length;
  await page.locator('[data-window="3Y"]').click();await ready(page,state(['SPY','weekly','3Y']));
- await options(page);await page.locator('#sl-options label:first-child select').selectOption('daily');await ready(page,state(['SPY','daily','3Y']));
- await page.locator('#sl-options label:nth-child(2) select').selectOption('Full');await ready(page,state(['SPY','daily','Full']));
+ await controls(page);await page.locator('#sl-frequency select').selectOption('daily');await ready(page,state(['SPY','daily','3Y']));
+ await page.locator('[data-window="Full"]').click();await ready(page,state(['SPY','daily','Full']));
  await page.goBack();await ready(page,state(['SPY','daily','3Y']));await page.goForward();await ready(page,state(['SPY','daily','Full']));
  assert.deepEqual(events.slice(start).filter(x=>x.event==='START'),[],'same-asset controls/history must not depend on cache residency');
  // At saturation, GLD was evicted as well: the normal T2 cold path remains one GET.
  let coldT2=null;
- if(count===12){await page.unroute('**/api/statistical-levels/asset?*');await page.locator('[data-window="5Y"]').click();await page.locator('#sl-options label:first-child select').selectOption('weekly');await ready(page,state(['SPY','weekly','5Y']));const offset=events.length;await chooseTicker(page,'GLD');await ready(page,state(['GLD','weekly','5Y']));const starts=events.slice(offset).filter(x=>x.event==='START');assert.equal(starts.length,1);assert.equal(new URL(starts[0].url).pathname,'/api/statistical-levels/asset');assert.equal(new URL(starts[0].url).searchParams.get('asset'),'GLD');assert.ok(!starts[0].headers.rsc&&!starts[0].headers['next-router-prefetch']);coldT2=1;}
+ if(count===12){await page.unroute('**/api/statistical-levels/asset?*');await page.locator('[data-window="5Y"]').click();await page.locator('#sl-frequency select').selectOption('weekly');await ready(page,state(['SPY','weekly','5Y']));const offset=events.length;await chooseTicker(page,'GLD');await ready(page,state(['GLD','weekly','5Y']));const starts=events.slice(offset).filter(x=>x.event==='START');assert.equal(starts.length,1);assert.equal(new URL(starts[0].url).pathname,'/api/statistical-levels/asset');assert.equal(new URL(starts[0].url).searchParams.get('asset'),'GLD');assert.ok(!starts[0].headers.rsc&&!starts[0].headers['next-router-prefetch']);coldT2=1;}
  results.push({cache_saturation:count,original_major_01:count===4?'PASS':undefined,current_cache_entry_absent:!before.cache.includes(before.snapshot+':SPY'),T1_requests:0,T3_requests:0,T4_requests:0,RSC:0,prefetch:0,same_asset_history_requests:0,stale_finished:count,failed:0,retries:0,aborts:0,cold_T2_requests:coldT2});
  await context.close();
 }

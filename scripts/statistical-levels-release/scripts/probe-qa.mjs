@@ -26,7 +26,7 @@ export async function verifyProbeInputs(codeRoot, inputManifest, target) {
   need(provenance.SCHEMA_VERSION === 'statistical-levels.provenance.v1' && provenance.SOURCE_STATE === 'COMMITTED' &&
     /^[a-f0-9]{40}$/.test(provenance.GENERATOR_COMMIT) && config.BASELINE_ID === provenance.BASELINE_ID, 'PROVENANCE_AUTHORITY');
   need(sha(JSON.stringify(config)) === provenance.CONFIG_SHA256 && sha(JSON.stringify(provenance.SOURCE_BUNDLE)) === provenance.GENERATOR_SHA256, 'PROVENANCE_SELF_HASH');
-  need(canonical(provenance.SOURCE_BUNDLE).equals(canonical(P.source_bundle)), 'GENERATOR_SOURCE_BUNDLE');
+  need(canonical(provenance.SOURCE_BUNDLE).equals(canonical(P.baseline.source_bundle ?? P.source_bundle)), 'GENERATOR_SOURCE_BUNDLE');
   need(config.RAW_ARCHIVE_BUCKET === P.authority.RAW_ARCHIVE_BUCKET && config.RAW_ARCHIVE_REGION === P.authority.RAW_ARCHIVE_REGION &&
     config.RAW_ARCHIVE_ACCESS_CLASS === 'PRIVATE_S3_DURABLE' && config.SCHEMA_VERSION === P.authority.SCHEMA_VERSION &&
     config.POLICY_VERSION === P.authority.POLICY_VERSION && config.SOURCE_STATE === 'COMMITTED' &&
@@ -50,7 +50,7 @@ export async function verifyProbeInputs(codeRoot, inputManifest, target) {
   const manifest = JSON.parse(await readData('lib/statistical-levels/generated/manifest.json'));
   need(manifest.baseline.id === provenance.BASELINE_ID && manifest.catalog.length === 40, 'SNAPSHOT_MANIFEST_AUTHORITY');
   const ledgerFile = await fs.readFile(path.join(codeRoot, 'docs/statistical-levels-capability-ledger.json'));
-  need(sha(ledgerFile) === P.ledger_hash, 'CAPABILITY_LEDGER_HASH');
+  need(sha(ledgerFile) === (P.baseline.ledger_hash ?? P.ledger_hash), 'CAPABILITY_LEDGER_HASH');
   need(canonical(JSON.parse(ledgerFile).capabilities.map(x => x.ID)).equals(canonical(P.capabilities)), 'CAPABILITY_LEDGER');
   return authority;
 }

@@ -10,6 +10,7 @@ class TechnicalCaptureTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.g=MemoryGit();cls.head=cls.g.real.text('rev-parse','HEAD');cls.root,_=a.bootstrap(cls.g,cls.head)
+        if cls.g.parents(cls.root)==[a.AC_PARENT]:cls.root=a.bootstrap(cls.g,a.AC_BASE)[0]
         if cls.g.parents(cls.root)==[a.CATALOG_PARENT]:cls.root=a.CATALOG_PARENT
         cls.files={p:cls.g.blob(cls.root,p) for p in a.TECHNICAL_CAPTURE_FILES}
         assert cls.g.commit(a.TECHNICAL_CAPTURE_PARENT,cls.files,a.TECHNICAL_CAPTURE_IDENTITY,a.TECHNICAL_CAPTURE_MESSAGE)==cls.root

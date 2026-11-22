@@ -1,8 +1,9 @@
-import {withoutReceiptHooks} from './semantic-closure-compat.mjs';
+import {withoutReceiptHooks,beforeAcRoutePaths} from './semantic-closure-compat.mjs';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import vm from 'node:vm';
-import { readFileSync } from 'node:fs';
+import { readFileSync as rawReadFileSync } from 'node:fs';
+const readFileSync=(url,encoding)=>beforeAcRoutePaths(String(url).split('/scripts/statistical-levels-release/scripts/')[1]??'',rawReadFileSync(url,encoding));
 import { createHash } from 'node:crypto';
 import { assetTransitionReadinessExpression, waitForAssetTransition } from '../scripts/qa/asset-transition-readiness.mjs';
 
@@ -20,6 +21,7 @@ class Element {
     for (const child of children) this.append(child);
   }
   append(child) { child.parentElement = this; this.children.push(child); return child; }
+  getAttribute(name) { return this.attributes[name] ?? null; }
   get tagName() { return this.tag.toUpperCase(); }
   get childElementCount() { return this.children.length; }
   get textContent() { return this.text + this.children.map(child => child.textContent).join(''); }
@@ -52,7 +54,7 @@ class Element {
   querySelector(selector) { return this.querySelectorAll(selector)[0] ?? null; }
 }
 const element = (tag, properties, children) => new Element(tag, properties, children);
-function fixture() {
+function fixture(customizeControls) {
   const document = element('document'), root = document.append(element('div', { className: 'sl-page' }));
   const picker = root.append(element('details', { id: 'sl-asset-picker' }));
   const summary = picker.append(element('summary'));
@@ -73,6 +75,7 @@ function fixture() {
   const list = panel.append(element('dl'));
   const metrics = ['arbitrary-percentile', 'arbitrary-z-score', 'arbitrary-sample'].map(text => list.append(element('div')).append(element('dd', { text })));
   document.documentElement = { lang: 'es' };
+  customizeControls?.({document,root,options,frequency,windowControl});
   const current = { tag: 3, child: null, sibling: null, return: null };
   current.stateNode = { current };
   const owner = { tag: 0, type: function StatisticalDataOwner() {}, memoizedProps: {
@@ -446,3 +449,30 @@ test('SPY readiness timeout propagates and prevents the old premature assertion'
   await assert.rejects(run({ click: async () => {} }, async () => { throw failure; }, async () => { reads++; }, {}), error => error === failure);
   assert.equal(reads, 0);
 });
+
+function acFixture(locale='es') {
+  let controls;
+  const state=fixture(({root,options})=>{
+    root.children=root.children.filter(node=>node!==options); options.isConnected=false;
+    const group=root.append(element('div',{id:'sl-controls'}));
+    const frequency=group.append(element('label',{id:'sl-frequency'})).append(element('select',{value:'weekly'}));
+    const buttons=['1Y','3Y','5Y','10Y','Full'].map(window=>group.append(element('button',{attributes:{'data-window':window,'aria-pressed':String(window==='5Y')}})));
+    controls={frequency,buttons,group};
+  });
+  state.location.pathname=locale==='en'?'/en/quantitative-analysis':'/analisiscuantitativo';
+  if(locale==='en'){state.document.documentElement.lang='en';state.owner.memoizedProps.locale='en';state.selectionIdentity.text='Weekly · 5Y · Completed history';state.regionContext.text='Weekly · 5Y';}
+  return Object.assign(state,controls);
+}
+for(const locale of ['es','en'])test('AC '+locale+' visible frequency and period buttons attest the same committed owner',()=>assert.equal(evaluate(acFixture(locale)),true));
+for(const [name,mutate]of [
+ ['stale frequency',s=>s.frequency.value='daily'],
+ ['wrong selected window',s=>{s.buttons[2].attributes['aria-pressed']='false';s.buttons[1].attributes['aria-pressed']='true';}],
+ ['two selected windows',s=>s.buttons[0].attributes['aria-pressed']='true'],
+ ['hidden frequency',s=>s.frequency.hidden=true],
+ ['hidden period button',s=>s.buttons[0].hidden=true],
+ ['missing period button',s=>s.buttons[0].attributes['data-window']=null],
+ ['mixed legacy controls',s=>{const legacy=s.root.append(element('details',{id:'sl-options'}));legacy.append(element('label')).append(element('select',{value:'weekly'}));legacy.append(element('label')).append(element('select',{value:'5Y'}));}],
+ ['uncommitted owner',s=>s.owner.memoizedProps.selection.window='3Y'],
+ ['stale metric text',s=>s.metrics[0].text='stale'],
+ ['new controls on legacy route',s=>s.location.pathname='/niveles-estadisticos'],
+])test('AC readiness rejects '+name,()=>{const state=acFixture();mutate(state);assert.equal(evaluate(state),false);});

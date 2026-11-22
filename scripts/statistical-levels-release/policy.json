@@ -99,7 +99,7 @@
   "source_bundle": [
     {
       "file": "scripts/build-statistical-levels.mjs",
-      "SHA256": "d26a5d548a0a0925f9336dc76c52eb89e7fd89c5d094c38100da0ed79bffeb97"
+      "SHA256": "6d14d4718f3512143622cf45a74a0f3239559eff4244b247bd4a58581bcc2989"
     },
     {
       "file": "scripts/statistical-levels-offline.mjs",
@@ -114,7 +114,7 @@
       "SHA256": "5fee525b1a7e453dc149b91a92b5eb427f55c7231b031aae9f04cbde932925d1"
     }
   ],
-  "ledger_hash": "1a26f1f84a29b9073a9abcc56d440398b4816999a6c569171c4084162b6b8a7e",
+  "ledger_hash": "daee83281e7fb838cd4ae58938c7eac21daa39af8cc2d4e37fa6ca0e7cdb8689",
   "capabilities": [
     "SL-CAP-001",
     "SL-CAP-002",
@@ -242,7 +242,26 @@
     "sealed_manifest_sha256": "1cee1c618b157189202da161edb55e24dbcfd08e945b275cb5fac15c14e02bf1",
     "main_sha_observed": "9fd1b9205e40a0e68e90e780892726353175c0ae",
     "publication_date_utc": "2026-11-07",
-    "provenance_sha256": "5c82ba4126fba9eea695fc6a28b27548f6010367e2bbce47ec5fab8e5417d375"
+    "provenance_sha256": "5c82ba4126fba9eea695fc6a28b27548f6010367e2bbce47ec5fab8e5417d375",
+    "source_bundle": [
+      {
+        "file": "scripts/build-statistical-levels.mjs",
+        "SHA256": "d26a5d548a0a0925f9336dc76c52eb89e7fd89c5d094c38100da0ed79bffeb97"
+      },
+      {
+        "file": "scripts/statistical-levels-offline.mjs",
+        "SHA256": "5a4193bc3937b36ff71f48a8277be9b7aa277091bff058545cd01034f5b335f1"
+      },
+      {
+        "file": "lib/statistical-levels/baseline-policy.mjs",
+        "SHA256": "cf6f2aa44d9711d37cccd02c28f396497d2c1620dfae72c5edec1d829d423523"
+      },
+      {
+        "file": "lib/statistical-levels/defect-repairs.mjs",
+        "SHA256": "5fee525b1a7e453dc149b91a92b5eb427f55c7231b031aae9f04cbde932925d1"
+      }
+    ],
+    "ledger_hash": "1a26f1f84a29b9073a9abcc56d440398b4816999a6c569171c4084162b6b8a7e"
   },
   "production_origin": "https://www.luiguiherrera.com",
   "qa_job_name": "Statistical Levels candidate QA",

@@ -64,7 +64,7 @@ export async function resolveCurrentAuthority(codeRoot = candidateRoot) {
     return fs.readFile(full);
   }
   const inputs = strictJson(await read('scripts/statistical-levels-release/source-inputs.json'));
-  need(inputs && !Array.isArray(inputs) && Object.keys(inputs).length === 78, 'CAPTURE_AUTHORITY_INPUTS');
+  need(inputs && !Array.isArray(inputs) && Object.keys(inputs).length === 86, 'CAPTURE_AUTHORITY_INPUTS');
   for (const file of Object.keys(inputs)) await read(file);
   const provenanceBytes = await read('lib/statistical-levels/generated-provenance.json');
   const provenance = strictJson(provenanceBytes);
@@ -308,6 +308,14 @@ export function fullProductContext(env = process.env) {
   const local = env.SL_LOCAL_QUALIFICATION_SUBJECT_SHA256;
   const role = local ? 'local' : 'hosted';
   let subject, run_id, run_attempt, native_admission_sha256;
+  const sourceWorkflows = {
+    'refs/heads/codex/ac-source-qualification-20261122': '.github/workflows/ci.yml',
+    'refs/heads/codex/ac-browser-qualification-20261122': '.github/workflows/ac-browser-qualification.yml'
+  };
+  const sourceRef = env.GITHUB_REF;
+  const sourceTests = !local && Object.hasOwn(sourceWorkflows, sourceRef) && env.GITHUB_EVENT_NAME === 'push' &&
+    env.GITHUB_REPOSITORY === 'luiguiHerrera/Luiguiherrera-web' &&
+    env.GITHUB_WORKFLOW_REF === 'luiguiHerrera/Luiguiherrera-web/' + sourceWorkflows[sourceRef] + '@' + sourceRef;
   if (local) {
     need(/^[a-f0-9]{64}$/.test(local) && !['GITHUB_SHA','CI_EVENT_SHA','GITHUB_EVENT_NAME','GITHUB_REF','GITHUB_RUN_ID','GITHUB_RUN_ATTEMPT'].some(k => env[k]), 'CAPTURE_LOCAL_CONTEXT_INVALID');
     subject = local; run_id = env.SL_FULL_PRODUCT_RUN_ID; run_attempt = env.SL_FULL_PRODUCT_RUN_ATTEMPT;
@@ -315,12 +323,13 @@ export function fullProductContext(env = process.env) {
   } else {
     subject = env.GITHUB_SHA; run_id = env.GITHUB_RUN_ID; run_attempt = env.GITHUB_RUN_ATTEMPT;
     need(typeof subject === 'string' && /^[a-f0-9]{40}$/.test(subject) && subject === env.CI_EVENT_SHA &&
-      ['push', 'workflow_run'].includes(env.GITHUB_EVENT_NAME) && env.GITHUB_REF === 'refs/heads/vercel-deployment', 'CAPTURE_HOSTED_CONTEXT_INVALID');
+      ['push', 'workflow_run'].includes(env.GITHUB_EVENT_NAME) && (env.GITHUB_REF === 'refs/heads/vercel-deployment' || sourceTests), 'CAPTURE_HOSTED_CONTEXT_INVALID');
     need(typeof run_id === 'string' && /^[1-9][0-9]*$/.test(run_id), 'CAPTURE_RUN_INVALID');
     if (env.GITHUB_EVENT_NAME === 'workflow_run') native_admission_sha256 = workflowRunCaptureAdmission(env);
   }
   need(typeof run_attempt === 'string' && /^[1-9][0-9]*$/.test(run_attempt), 'CAPTURE_ATTEMPT_INVALID');
   return { role, subject, run_id, run_attempt, origin, out,
+    ...(sourceTests ? {qualification_scope:'SOURCE_PRODUCT_TESTS_NOT_NATIVE_ADMISSION',release_authority_issued:false} : {}),
     ...(native_admission_sha256 ? {native_admission_sha256} : {}) };
 }
 async function directory(p) {

@@ -4,7 +4,7 @@ import fs from 'node:fs';
 import {createHash} from 'node:crypto';
 import {execFileSync} from 'node:child_process';
 import {fileURLToPath} from 'node:url';
-import {historicalPinnedBytes,historicalProbeRegion,exactWorkflowJob,historicalWorkflowPrefix,assertHistoricalWorkflow,withoutReceiptClass} from '../../statistical-levels-release/tests/semantic-closure-compat.mjs';
+import {historicalPinnedBytes,beforeAcRoutePaths,historicalProbeRegion,exactWorkflowJob,historicalWorkflowPrefix,assertHistoricalWorkflow,withoutReceiptClass} from '../../statistical-levels-release/tests/semantic-closure-compat.mjs';
 import {selectProbeTarget} from '../../statistical-levels-release/scripts/probe-core.mjs';
 const root=fileURLToPath(new URL('../../../',import.meta.url));
 const prefix='scripts/statistical-levels-release/';
@@ -15,7 +15,7 @@ const sha=b=>createHash('sha256').update(b).digest('hex');
 const files=['release-core.mjs','runtime-io.mjs','cli.mjs','invoke.mjs','browser-harness.mjs'];
 const wfPath='.github/workflows/statistical-levels-release.yml',workflow=read(wfPath).toString();
 test('compat exact historical pins keep DX bytes and bind each current R file',()=>{
- for(const name of files){const current=read(prefix+'scripts/'+name);assert.deepEqual(current,git(r,prefix+'scripts/'+name));assert.deepEqual(historicalPinnedBytes(name,current),git(old,prefix+'scripts/'+name));}
+ for(const name of files){const current=read(prefix+'scripts/'+name);assert.deepEqual(beforeAcRoutePaths(name,current),git(r,prefix+'scripts/'+name));assert.deepEqual(historicalPinnedBytes(name,current),git(old,prefix+'scripts/'+name));}
  assert.equal(sha(withoutReceiptClass(historicalPinnedBytes('release-core.mjs',read(prefix+'scripts/release-core.mjs')))),'a742b751bd6365b024ba4c84f605e4fd0584316dfd107114372d2bdda2427757');
 });
 test('compat every changed pinned implementation is rejected before projection',()=>{
@@ -23,7 +23,7 @@ test('compat every changed pinned implementation is rejected before projection',
 });
 test('compat ordinary unprojected pins still compare their actual bytes',()=>{
  const source=read(prefix+'policy.json');assert.equal(historicalPinnedBytes('policy.json',source),source);
- assert.equal(sha(source),'d9cf2b483bfea536ca6afdf160ed534e42a96bf175f5b7dd658b0d020b6d40f2');
+ assert.equal(sha(source),'8c0d0fe9dfd102506efa88db95d1d55e0f4bdfb8643c2c1f17185a6f3ac40a68');
  assert.notEqual(sha(historicalPinnedBytes('policy.json',Buffer.concat([source,Buffer.from('\n')]))),sha(source));
 });
 const declaration=read(prefix+'scripts/probe-core.mjs').toString().match(/const releaseInputs = \[[\s\S]*?\];/)[0];

@@ -1,4 +1,6 @@
 import test from 'node:test';
+import {execFileSync} from 'node:child_process';
+import {historicalPolicyBytes} from './semantic-closure-compat.mjs';
 import assert from 'node:assert/strict';
 import fs from 'node:fs/promises';
 import os from 'node:os';
@@ -47,6 +49,7 @@ async function fixture(t, operation = ADOPT) {
   for (const name of paths) await write(dir, name, await fs.readFile(path.join(root, name)));
   const provenance = JSON.parse(await fs.readFile(path.join(dir, provenancePath)));
   if (operation === ADOPT) {
+    await write(dir, ledgerPath, execFileSync('git',['show',P.baseline.production_git_sha+':'+ledgerPath],{cwd:root}));
     // Synthetic authenticated baseline: only this test process changes its policy pin.
     // The production policy file and all frozen identity values remain untouched.
     provenance.CONFIG = structuredClone(P.authority);
@@ -202,7 +205,7 @@ test('unknown operation cannot select either source authority', async () => {
 // Independent target and policy oracles for the explicitly authorized migration (reviewed fixture, not policy.json).
 const oldPolicyHash = migration.previous_policy_sha256;
 const newPolicyHash = migration.current_policy_sha256;
-const policyBytes = await fs.readFile(new URL('../policy.json', import.meta.url), 'utf8');
+const policyBytes = historicalPolicyBytes(await fs.readFile(new URL('../policy.json', import.meta.url), 'utf8'));
 const digest = bytes => createHash('sha256').update(bytes).digest('hex');
 const currentTarget = {
   operation: 'ADOPT_EXISTING_PRODUCTION_BASELINE', phase: 'production',

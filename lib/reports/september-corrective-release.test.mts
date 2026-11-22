@@ -294,6 +294,20 @@ function verifyCurrentProduction(read = readCurrent, productionRead = readProduc
   verifyEditorialProduction(read,publishedRead,authority,testSuccessor);
 }
 
+// The approved AC source is a separate current subject. The original report
+// manifests and their historical Git blobs below retain their original hashes.
+const acSharedStatisticalSuccessor: Record<string,string> = {
+  "lib/statistical-levels/contracts.test.ts": "90e7a1b8b66578312890ed3355c78ecdee4ea8c69057d02a29e945f2d4f656c9",
+  "lib/statistical-levels/interpretation.ts": "a17db978e134056a1b9045dd36ab2933fad6d9a384f73d2f874d54c8e65634f4",
+  "lib/statistical-levels/types.ts": "e0147fd4cab0191735b4a2490d78739434ab1d1d2915b118601b63493ad9d800"
+};
+function approvedCurrentStatisticalHash(file:string) {
+  if(!Object.hasOwn(acSharedStatisticalSuccessor,file)) return undefined;
+  const approved=catalogGitObject(['show',`919238949903ccc1cfc3093fefbdeb8d4d4ac16f:${file}`]);
+  assert.equal(digest(approved),acSharedStatisticalSuccessor[file],file);
+  return acSharedStatisticalSuccessor[file];
+}
+
 const correctedExports = new Set([
   'public/reports/manifest.json',
   'public/reports/segundo-informe-septiembre-2026.html',
@@ -337,7 +351,7 @@ function verifyPreservation(value: Preservation, read = readCurrent, historicalR
     // c60 contains the approved post-correction bytes; the independently pinned
     // baseline retains the earlier identity for exactly the four corrected exports.
     assert.equal(digest(historicalRead(entry.source_commit,entry.path)),entry.sha256,entry.path);
-    const expectedCurrent=entry.path==='public/reports/manifest.json' ? extraordinaryCurrentHashes[entry.path] : entry.sha256;
+    const expectedCurrent=approvedCurrentStatisticalHash(entry.path) ?? (entry.path==='public/reports/manifest.json' ? extraordinaryCurrentHashes[entry.path] : entry.sha256);
     assert.equal(digest(read(entry.path)),expectedCurrent,entry.path);
   }
   assert.deepEqual(value.historical_files.filter(e=>Object.hasOwn(generation.reports,e.path)).map(e=>e.path),['public/reports/manifest.json']);
@@ -347,6 +361,13 @@ function verifyPreservation(value: Preservation, read = readCurrent, historicalR
 test('composed execution preserves production reports and the approved execution data without rewriting historical evidence', () => {
   verifyPreservation(preservation);
 });
+
+for (const file of Object.keys(acSharedStatisticalSuccessor)) {
+  test(`approved AC shared source rejects current corruption: ${file}`,()=>{
+    verifyPreservation(preservation);
+    assert.throws(()=>verifyPreservation(preservation,p=>p===file?Buffer.concat([readCurrent(p),Buffer.from('corruption')]):readCurrent(p)));
+  });
+}
 
 for (const kind of ['WRONG_COMMIT','WRONG_TREE','WRONG_PARENT','WRONG_COMMIT_HASH','WRONG_MANIFEST_HASH','EXTRA_TEST_OVERRIDE','WRONG_TEST_OVERRIDE','OLD_MANIFEST_AS_CURRENT','MUTATED_PUBLISHED_MANIFEST','CURRENT_EXPORT_CORRUPTION','PUBLISHED_EXPORT_CORRUPTION','OTHER_REPORT_CODE_CORRUPTION','BOTH_CODE_COPIES_CORRUPTED','TEST_SUCCESSOR_CORRUPTION'] as const) {
   test(`published editorial generation rejects ${kind}`,()=>{

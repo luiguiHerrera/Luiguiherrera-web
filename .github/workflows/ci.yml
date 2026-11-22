@@ -2,6 +2,7 @@ name: CI
 
 on:
   push:
+    branches-ignore: [codex/ac-browser-qualification-20261122]
   pull_request:
   workflow_run:
     workflows: [Update statistical levels]
@@ -643,6 +644,14 @@ jobs:
           sys.path.insert(0,str(root/'scripts/statistical-levels-ci'))
           from admission import Git,reconciled_report_hashes
           current_report_hashes=reconciled_report_hashes(Git(root),subprocess.check_output(['git','rev-parse','HEAD']).decode().strip())
+          # Artifact selection only; feature-branch CI never becomes native admission.
+          import os
+          from admission import bootstrap,AC_PARENT,AC_PAYLOAD_SHA256
+          head=subprocess.check_output(['git','rev-parse','HEAD']).decode().strip()
+          admitted_root,_=bootstrap(Git(root),head)
+          if Git(root).parents(admitted_root)==[AC_PARENT] and os.environ.get('CI_EVIDENCE'):
+              assert head==os.environ['CI_EVENT_SHA']==os.environ['GITHUB_SHA']
+              (Path(os.environ['CI_EVIDENCE'])/'ac-source-subject.json').write_text(json.dumps({'head_sha':head,'root_sha':admitted_root,'payload_sha256':AC_PAYLOAD_SHA256,'role':'SOURCE_TEST_SELECTION_NOT_NATIVE_ADMISSION','release_authority_issued':False})+'\n')
           sha=lambda data:hashlib.sha256(data).hexdigest()
           def unique(p):
               def pairs(items):
@@ -652,7 +661,7 @@ jobs:
           manifest=unique(base/'source-manifest.json')
           tracked=subprocess.check_output(['git','ls-files','-z','scripts/statistical-levels-release/']).decode().rstrip('\0').split('\0')
           expected={str(Path(p).relative_to('scripts/statistical-levels-release')) for p in tracked}-{'SOURCE_SHA256SUMS','source-manifest.json','workflow-freeze.json'}
-          assert set(manifest)==expected and len(manifest)==111, 'BUNDLE_INVENTORY'
+          assert set(manifest)==expected and len(manifest)==(112 if 'scripts/qa-routes.mjs' in expected else 111), 'BUNDLE_INVENTORY'
           for name,digest in manifest.items():
               p=Path(name); assert not p.is_absolute() and '..' not in p.parts
               assert all(not parent.is_symlink() for parent in [base/p,*(base/p).parents])
@@ -660,8 +669,8 @@ jobs:
           assert (base/'source-manifest.json').read_text()==json.dumps(dict(sorted(manifest.items())),indent=2)+'\n'
           sums={**manifest,'source-manifest.json':sha((base/'source-manifest.json').read_bytes())}
           canonical=''.join(v+'  '+p+'\n' for p,v in sorted(sums.items()))
-          assert len(sums)==112 and (base/'SOURCE_SHA256SUMS').read_text()==canonical, 'SOURCE_SUMS'
-          inputs=unique(base/'source-inputs.json'); assert len(inputs)==78
+          assert len(sums)==len(manifest)+1 and (base/'SOURCE_SHA256SUMS').read_text()==canonical, 'SOURCE_SUMS'
+          inputs=unique(base/'source-inputs.json'); assert len(inputs)==86
           assert sha((base/'probe-source-inputs.json').read_bytes())=='d7a8470700b59ed501502e96cc10cba3de8f79824847ed72706f9942c8473621'
           for name,digest in inputs.items():
               p=Path(name); assert not p.is_absolute() and '..' not in p.parts
@@ -803,7 +812,7 @@ jobs:
           JS
           node scripts/statistical-levels-release/scripts/capture-full-product.mjs --origin "$SL_NEXT_LOCAL_ORIGIN" --out "$CI_EVIDENCE/full-product"
           node scripts/statistical-levels-release/scripts/capture-full-product.mjs --verify
-          if [[ -f "$CI_EVIDENCE/bounded-admission.json" ]]; then
+          if [[ -f "$CI_EVIDENCE/bounded-admission.json" || -f "$CI_EVIDENCE/ac-source-subject.json" ]]; then
             python3 scripts/statistical-levels-ci/historical-tests.py
             mapfile -t release_tests < <(find scripts/statistical-levels-release/tests -maxdepth 1 -name '*.test.mjs' ! -name 'probe-fixture-registry.test.mjs' ! -name 'g5-execution-preservation.test.mjs' | sort)
             test "${#release_tests[@]}" -eq 40
@@ -818,7 +827,7 @@ jobs:
         run: |
           set -euo pipefail
           node --import ./scripts/trends-test-register.mjs --experimental-test-module-mocks --experimental-strip-types --test --test-reporter=tap lib/reports/first-september-2026.test.mts lib/reports/second-september-2026.test.mts lib/reports/september-corrective-release.test.mts lib/reports/second-september-source-policy.test.mts | tee "$CI_EVIDENCE/reports.tap"
-          node --experimental-strip-types --test --test-reporter=tap lib/statistical-levels/baseline.test.mjs lib/statistical-levels/contracts.test.ts lib/statistical-levels/defect-repairs.test.ts scripts/statistical-levels-storage.test.mjs components/statistical-levels/interaction-presentation.test.ts | tee "$CI_EVIDENCE/product.tap"
+          node --experimental-strip-types --test --test-reporter=tap lib/statistical-levels/baseline.test.mjs lib/statistical-levels/contracts.test.ts lib/statistical-levels/defect-repairs.test.ts scripts/statistical-levels-storage.test.mjs components/statistical-levels/interaction-presentation.test.ts lib/statistical-levels/period-history.test.mjs | tee "$CI_EVIDENCE/product.tap"
 
       - name: Test extraordinary authority transition coverage
         shell: bash
@@ -840,7 +849,7 @@ jobs:
           ' two complete regenerations from archived raw have identical 81-file and provenance manifests'.strip()}
           for name,minimum in [('release',2141),('reports',56),('product',68)]:
               texts=[(out/(name+'.tap')).read_text()]
-              if name=='release' and (out/'bounded-admission.json').exists():
+              if name=='release' and ((out/'bounded-admission.json').exists() or (out/'ac-source-subject.json').exists()):
                   historical=json.loads((out/'historical-test-subject.json').read_text())
                   assert historical['test_source_sha']=='0004db585fb402c97d8470c31ea4e405f0905b7e' and historical['qualification_sha']==os.environ['GITHUB_SHA'], 'HISTORICAL_TEST_SUBJECT'
                   assert historical['historical_caller_mode']=='ACTUAL_LOCAL_G5_CALLER_NOT_HOSTED' and historical['native_admission_of_new_sha'] is False, 'HISTORICAL_TEST_ROLE'
@@ -848,6 +857,9 @@ jobs:
                   assert hashlib.sha256(historical_bytes).hexdigest()==historical['tap_sha256'] and historical['exit_code']==0, 'HISTORICAL_TEST_TAP'
                   texts.append(historical_bytes.decode())
                   summary['historical_test_subject']=historical
+              if (out/'ac-source-subject.json').exists():
+                  selection=json.loads((out/'ac-source-subject.json').read_text())
+                  assert selection['head_sha']==os.environ['GITHUB_SHA'] and selection['role']=='SOURCE_TEST_SELECTION_NOT_NATIVE_ADMISSION' and selection['release_authority_issued'] is False, 'AC_TEST_SELECTION_ROLE'
               counters=[]
               partitions=[]
               for log in texts:
@@ -865,7 +877,7 @@ jobs:
                   counters.append(counter)
                   source_sha=historical['test_source_sha'] if len(counters)==2 else os.environ['GITHUB_SHA']
                   partitions.append({'test_source_sha':source_sha,'log_sha256':hashlib.sha256(log.encode()).hexdigest(),'counts':counter,
-                      'test_files':2 if len(counters)==2 else (40 if name=='release' and len(texts)==2 else (42 if name=='release' else (4 if name=='reports' else 5)))})
+                      'test_files':2 if len(counters)==2 else (40 if name=='release' and len(texts)==2 else (42 if name=='release' else (4 if name=='reports' else 6)))})
               counts={key:sum(c[key] for c in counters) for key in counters[0]}
               text='\n'.join(texts)
               assert counts['tests']>=minimum and counts['fail']==counts['cancelled']==counts['todo']==0, (name,counts)

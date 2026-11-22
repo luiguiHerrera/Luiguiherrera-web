@@ -39,7 +39,8 @@ E_TREE=IDENTITY['tree'];X_TREE=git('rev-parse',X+'^{tree}').decode().strip()
 EDPL='dpl_OfflineEditorialFixture0001';R_SHA='c'*40
 SL={n:git('show',X+':'+n) for n in c.POLICY['allowlist']}
 BASE_TREE=tree(X);CURRENT_TREE=tree(EP)
-E_BLOBS={**SL,**{n:(PRODUCT/n).read_bytes() for n in a.EXTRAORDINARY_EDITORIAL_PATHS}}
+# The historical editorial commit keeps its own redirect configuration. AC has a different, independently pinned source subject.
+E_BLOBS={**SL,**{n:git('show',E+':'+n) for n in a.EXTRAORDINARY_EDITORIAL_PATHS}}
 E_ENTRIES={**CURRENT_TREE,**{n:{'mode':'100644','type':'blob','sha':blob(b)} for n,b in E_BLOBS.items()}}
 NOW=dt.datetime(2026,11,17,15,0,0,tzinfo=dt.timezone.utc)
 def iso(t):return t.isoformat().replace('+00:00','Z')

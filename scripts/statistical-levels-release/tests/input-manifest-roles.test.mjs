@@ -48,7 +48,7 @@ const currentMaterialBytes=await fs.readFile(new URL('source-inputs.json',closur
 const currentMaterialEntries=[...currentMaterialBytes.matchAll(/^  "([^"]+)": "([a-f0-9]{64})",?$/gm)].map(m=>[m[1],m[2]]);
 assert.equal(currentMaterialEntries.length,Object.keys(candidate).length,'duplicate or malformed material entry');
 test('historical Probe bytes are independently pinned exact 41 entries',async()=>{assert.equal(REGISTERED_PROBE_INPUT_SHA256,pin);assert.equal(digest(historicalBytes),pin);assert.equal(Object.keys(historical).length,41);assert.deepEqual(historicalBytes,historicalBlob('scripts/statistical-levels-release/source-inputs.json'));for(const [p,h]of Object.entries(historical)){assert.match(h,/^[a-f0-9]{64}$/);assert.equal(digest(historicalBlob(p)),h);}});
-test('current 78 material inputs retain all historical paths and hash actual candidate',async()=>{assertCurrentMaterialInputs(currentMaterialEntries);assert(Object.keys(historical).every(p=>Object.hasOwn(candidate,p)));for(const [p,h]of Object.entries(candidate))assert.equal(digest(await fs.readFile(path.join(root,p))),h,p);assert.notEqual(candidate['components/statistical-levels/StatLevelsLab.tsx'],historical['components/statistical-levels/StatLevelsLab.tsx']);});
+test('current 86 material inputs retain renamed historical routes and hash actual candidate',async()=>{assertCurrentMaterialInputs(currentMaterialEntries);assert(Object.keys(historical).every(p=>Object.hasOwn(candidate,currentPath(p))));for(const [p,h]of Object.entries(candidate))assert.equal(digest(await fs.readFile(path.join(root,p))),h,p);assert.notEqual(candidate['components/statistical-levels/StatLevelsLab.tsx'],historical['components/statistical-levels/StatLevelsLab.tsx']);});
 const cases={
  PROBE_MANIFEST_CHANGED:b=>Buffer.concat([b,Buffer.from(' ')]),
  PROBE_MANIFEST_PATH_ADDED:b=>Buffer.from(JSON.stringify({...JSON.parse(b),'added.ts':'a'.repeat(64)})),
@@ -94,8 +94,11 @@ test('changing a returned handle cannot change its manifest role',async()=>{cons
 test('historical component symlink cannot satisfy the real Probe verifier',async t=>{const dir=await historicalRoot(t),h=await readRegisteredProbeInputManifest(target),p=path.join(dir,'components/statistical-levels/StatLevelsLab.tsx');await fs.rename(p,p+'.real');await fs.symlink(p+'.real',p);await assert.rejects(verifyProbeInputs(dir,h,target),{message:'QA_INPUT_SYMLINK'});});
 test('historical component parent symlink cannot satisfy the real Probe verifier',async t=>{const dir=await historicalRoot(t),h=await readRegisteredProbeInputManifest(target),p=path.join(dir,'components');await fs.rename(p,p+'.real');await fs.symlink(p+'.real',p);await assert.rejects(verifyProbeInputs(dir,h,target),{message:'QA_INPUT_SYMLINK'});});
 
+const renamedMaterialPaths={"app/(es)/niveles-estadisticos/page.tsx": "app/(es)/analisiscuantitativo/page.tsx", "app/en/statistical-levels/page.tsx": "app/en/quantitative-analysis/page.tsx"};
+const additionalMaterialPaths=["app/sitemap.ts", "components/market/Sp500StatLevelsPreview.tsx", "lib/investor/entry-content.ts", "components/statistical-levels/StatisticalHelp.tsx", "components/statistical-levels/StatisticalOverview.tsx", "components/statistical-levels/statistical-levels-editorial.css", "lib/statistical-levels/period-history.ts", "public/images/statistical-levels/mountain-landscape.webp"];
+const currentPath=p=>renamedMaterialPaths[p]??p;
 function assertCurrentMaterialInputs(entries){
- assert.equal(entries.length,78);const names=entries.map(e=>e[0]);assert.equal(new Set(names).size,78);
- assert.equal(priorCurrentMaterialPaths.length,77);assert.deepEqual([...names].sort(),[...priorCurrentMaterialPaths,'vendor/braces-3.0.3-sl-backport.tgz'].sort());
+ assert.equal(entries.length,86);const names=entries.map(e=>e[0]);assert.equal(new Set(names).size,86);
+ assert.equal(priorCurrentMaterialPaths.length,77);assert.deepEqual([...names].sort(),[...priorCurrentMaterialPaths.map(currentPath),'vendor/braces-3.0.3-sl-backport.tgz',...additionalMaterialPaths].sort());
  assert.equal(entries.find(e=>e[0]==='vendor/braces-3.0.3-sl-backport.tgz')[1],'4e9550f8c4b0e4cfff73bd0c55cabbae0277acff892eb499313776f5a3e44428');
 }

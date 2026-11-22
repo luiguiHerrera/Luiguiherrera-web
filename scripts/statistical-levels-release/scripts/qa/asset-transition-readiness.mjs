@@ -36,7 +36,16 @@ export function assetTransitionReadinessExpression(target) {
     const context = [...interpretation.querySelectorAll('.sl-context span')];
     if (context.length !== 2 || !context[0].textContent.startsWith(ticker + ' · ')) return false;
     const options = root.querySelectorAll('#sl-options label select');
-    if (options.length !== 2 || options[0].value !== target.frequency || options[1].value !== target.window) return false;
+    const acRoute = ['/analisiscuantitativo', '/en/quantitative-analysis'].includes(location.pathname);
+    if (acRoute) {
+      const frequencies = root.querySelectorAll('#sl-frequency select');
+      const buttons = [...root.querySelectorAll('#sl-controls button')].filter(button => button.getAttribute('data-window') !== null);
+      const windows = ['1Y', '3Y', '5Y', '10Y', 'Full'];
+      if (options.length !== 0 || frequencies.length !== 1 || frequencies[0].value !== target.frequency || !visible(frequencies[0]) ||
+          buttons.length !== windows.length || buttons.some((button, index) => button.getAttribute('data-window') !== windows[index] || !visible(button)) ||
+          buttons.filter(button => button.getAttribute('aria-pressed') === 'true').length !== 1 ||
+          buttons.find(button => button.getAttribute('aria-pressed') === 'true').getAttribute('data-window') !== target.window) return false;
+    } else if (options.length !== 2 || options[0].value !== target.frequency || options[1].value !== target.window) return false;
     const regionContext = panel.querySelector('.sl-section-heading p')?.textContent.trim();
     if (!regionContext || regionContext !== context[1].textContent.split('·').slice(0, 2).map(part => part.trim()).join(' · ')) return false;
     const values = [...panel.querySelectorAll('dd')];
