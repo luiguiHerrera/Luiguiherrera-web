@@ -36,7 +36,16 @@ export async function generateMetadata({ params }: ReportPageProps): Promise<Met
     socialTitle: report.title,
     type: "article",
   });
-  return report.publishedAt ? metadata : { ...metadata, robots: { index: false, follow: false } };
+  const editionMetadata: Metadata = report.editionAt ? {
+    ...metadata,
+    other: {
+      "report:edition_date": report.editionAt,
+      "report:editorial_cutoff": report.editorialCutoffAt ?? "",
+      "report:market_cutoff": report.automaticDataCutoffAt ?? "",
+      ...(report.publishedAt ? { "report:web_published_at": report.publishedAt } : {}),
+    },
+  } : metadata;
+  return report.publishedAt ? editionMetadata : { ...editionMetadata, robots: { index: false, follow: false } };
 }
 
 export default async function MarketReportPage({ params }: ReportPageProps) {

@@ -8,6 +8,7 @@ type EditorialBylineProps = {
   linksOpenNewTab?: boolean;
   modifiedAt: string;
   publishedAt: string | null;
+  editionAt?: string;
 };
 
 export function EditorialByline({
@@ -18,6 +19,7 @@ export function EditorialByline({
   locale,
   modifiedAt,
   publishedAt,
+  editionAt,
 }: EditorialBylineProps) {
   const isSpanish = locale === "es";
 
@@ -29,14 +31,15 @@ export function EditorialByline({
           Luigui Herrera
         </a>
       </p>
+      {editionAt ? <p>{isSpanish ? "Edición" : "Edition"}: <time dateTime={editionAt}>{formatEditorialDate(editionAt, locale)}</time></p> : null}
       <p>
-        {isSpanish ? "Publicado" : "Published"}:{" "}
+        {editionAt ? (isSpanish ? "Publicación web" : "Web publication") : (isSpanish ? "Publicado" : "Published")}:{" "}
         {publishedAt ? <time dateTime={publishedAt}>{formatEditorialDate(publishedAt, locale)}</time> : <span>{isSpanish ? "Pendiente de publicación" : "Pending publication"}</span>}
       </p>
-      <p>
+      {!editionAt ? <p>
         {isSpanish ? "Actualizado" : "Updated"}:{" "}
         <time dateTime={modifiedAt}>{formatEditorialDate(modifiedAt, locale)}</time>
-      </p>
+      </p> : null}
       {editorialCutoffAt ? (
         <p>
           {isSpanish ? "Corte editorial" : "Editorial cutoff"}:{" "}

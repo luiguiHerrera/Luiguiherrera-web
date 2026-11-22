@@ -1,5 +1,6 @@
 import { secondOctober2026Report } from './second-october-2026.ts';
 import { firstNovember2026Report } from './first-november-2026.ts';
+import { secondNovember2026Report } from './second-november-2026.ts';
 import { firstOctober2026Report } from "./first-october-2026.ts";
 import { secondSeptember2026Report } from "./second-september-2026.ts";
 import { firstSeptember2026Report } from "./first-september-2026.ts";
@@ -206,6 +207,8 @@ export type MarketReport = {
   subtitle: string;
   dateLabel: string;
   publishedLabel?: string;
+  /** Editorial edition date; independent of the effective web publication. */
+  editionAt?: string;
   /** Null until an approved deployment date is assigned. Never use a market cutoff here. */
   publishedAt: string | null;
   modifiedAt: string;
@@ -2123,6 +2126,7 @@ export const marketReports: MarketReport[] = [
   { ...firstOctober2026Report, status: "archivado" },
   { ...secondOctober2026Report, status: "archivado" },
   firstNovember2026Report,
+  secondNovember2026Report,
 ];
 
 export const activeMarketReport = marketReports.find((report) => report.status === "actual") ?? marketReports[0];

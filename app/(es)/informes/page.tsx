@@ -88,7 +88,7 @@ function ReportGrid({
           </div>
           <h3 className="mt-3 text-xl font-semibold leading-tight text-ink">{report.title}</h3>
           <p className="mt-2 text-xs font-semibold uppercase text-muted">
-            {report.publishedAt ? <time dateTime={report.publishedAt}>{formatEditorialDate(report.publishedAt, "es")}</time> : <span>Pendiente de publicación</span>}
+            {report.editionAt ? <span>Edición del <time dateTime={report.editionAt}>{formatEditorialDate(report.editionAt, "es")}</time></span> : report.publishedAt ? <time dateTime={report.publishedAt}>{formatEditorialDate(report.publishedAt, "es")}</time> : <span>Pendiente de publicación</span>}
           </p>
           <p className="mt-4 text-sm leading-6 text-muted">{report.summary}</p>
           {report.pdfHref && report.htmlHref && report.markdownHref ? (
