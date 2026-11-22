@@ -12,7 +12,7 @@ class QuantitativeReleaseTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.g = MemoryGit()
-        cls.root = cls.g.real.text('rev-parse', 'HEAD')
+        cls.root = a.bootstrap(cls.g,cls.g.real.text('rev-parse', 'HEAD'))[0]
         cls.files = {p:cls.g.blob(cls.root, p) for p in a.AC_FILES}
         headers=cls.g('cat-file','commit',cls.root).decode().split('\n\n',1)[0].splitlines()
         cls.identity=headers[2][7:]

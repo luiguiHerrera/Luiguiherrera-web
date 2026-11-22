@@ -1300,6 +1300,42 @@ def technical_capture_identity(git):
             'release_authority_issued':False}
 
 
+AC_CI_PARENT = '9f5fef99d05044d7f72490f587899145cf44a62f'
+AC_CI_MESSAGE = 'Repair the native quantitative analysis input inventory'
+AC_CI_FILES = frozenset([".github/workflows/ac-browser-qualification.yml",".github/workflows/ci.yml","scripts/statistical-levels-ci/admission.py","scripts/statistical-levels-ci/authority-transition/ac_cases.py","scripts/statistical-levels-ci/authority-transition/ac_ci_cases.py","scripts/statistical-levels-ci/authority-transition/inventory.json"])
+AC_CI_PAYLOAD_SHA256 = '4a3108c6e420b2f23f5aa79693d2864b626ff39b3f167d79469fe0791420f7a3'
+AC_CI_PIN = rb"(?m)^(AC_CI_PAYLOAD_SHA256 = ')([a-f0-9]{64})('\n)"
+
+
+def validate_ac_ci(git, head):
+    need(git.parents(head) == [AC_CI_PARENT], 'AC_CI_PARENT')
+    validate_ac(git, AC_CI_PARENT)
+    delta(git, AC_CI_PARENT, head, AC_CI_FILES)
+    raw = git('cat-file','commit',head).decode()
+    headers = raw.split('\n\n',1)[0].splitlines()
+    need(len(headers) == 4 and headers[2].startswith('author ') and headers[3].startswith('committer '), 'AC_CI_HEADER')
+    author, committer = headers[2][7:], headers[3][10:]
+    identity = re.fullmatch(r'(.+) ([0-9]+) [+-][0-9]{4}', author)
+    need(author == committer and identity and digest(identity[1].encode()) == AC_GITHUB_AUTHOR_SHA256, 'AC_CI_HEADER')
+    lineage_header(git, head, git.text('rev-parse', head+'^{tree}'), AC_CI_PARENT, author, committer, AC_CI_MESSAGE, 'AC_CI_HEADER')
+    rows = []
+    for name in sorted(AC_CI_FILES):
+        data = git.blob(head,name)
+        if name == 'scripts/statistical-levels-ci/admission.py':
+            pins = re.findall(AC_CI_PIN,data)
+            need(len(pins) == 1 and pins[0][1].decode() == AC_CI_PAYLOAD_SHA256, 'AC_CI_PIN')
+            data = re.sub(AC_CI_PIN,lambda m:m[1]+b'0'*64+m[3],data)
+        elif name == 'scripts/statistical-levels-ci/authority-transition/inventory.json':
+            field = rb'("scripts/statistical-levels-ci/admission.py": ")[a-f0-9]{64}("[\n,])'
+            need(len(re.findall(field,data)) == 1, 'AC_CI_INVENTORY_PIN')
+            data = re.sub(field,lambda m:m[1]+b'0'*64+m[2],data)
+        rows.append({'path':name,'mode':'100644','sha256':digest(data)})
+    need(digest(json.dumps(rows,sort_keys=True,separators=(',',':')).encode()) == AC_CI_PAYLOAD_SHA256, 'AC_CI_PAYLOAD')
+    inventory = unique_json(git.blob(head,'scripts/statistical-levels-ci/authority-transition/inventory.json'))
+    for name,value in inventory['files'].items():
+        need(digest(git.blob(head,name)) == value, 'AC_CI_TEST_BYTES')
+
+
 def bootstrap(git, head):
     # Exact lineage transitions only. The editorial commit alone is never admitted; its CI failure is never reused.
     if LINEAGE_REGISTRY not in git.tree(head):
@@ -1319,6 +1355,11 @@ def bootstrap(git, head):
         cursor = parents[0]
     else:
         raise ValueError('LINEAGE_BOUND')
+    if git.parents(cursor) == [AC_CI_PARENT]:
+        validate_ac_ci(git, cursor)
+        current,start = git.tree(head),git.tree(cursor)
+        need(set(current) == set(start) and all(current[p] == start[p] for p in current if p not in data_paths), 'AC_CI_SUCCESSOR_CODE_CHANGED')
+        return AC_CI_PARENT,chain
     if git.parents(cursor) == [AC_PARENT]:
         validate_ac(git, cursor)
         current, start = git.tree(head), git.tree(cursor)
@@ -1782,7 +1823,7 @@ def admit(git, api, env, event):
         zod_root = git.parents(root) == [ZOD_BASE]
         lineage = lineage_entry(git, root)
         lineage_root = lineage is not None
-        expected_before = AC_BASE if ac_root else COMPAT_PARENT if catalog_root or technical_capture_root or next_security_root or compat_root else MEMORY_CI_BASE if memory_root else RUNTIME_CI_BASE if runtime_root else PUBLICATION_CI_REPAIR_BASE if publication_ci_repair_root else PUBLICATION_CLOSURE_BASE if closure_root else CI_REPAIR_BASE if repair_root else lineage['editorial']['sha'] if lineage_root else ZOD_BASE if zod_root else DURABILITY_BASE if durability_root else REPORT_CONTRACT_BASE if report_root else CAPTURE_RECOVERY_BASE if capture_root else SECURITY_BASE if security_root else REMOTE_BEFORE_RECONCILIATION if daily_root else BASE
+        expected_before = AC_CI_PARENT if ac_root and head != root else AC_BASE if ac_root else COMPAT_PARENT if catalog_root or technical_capture_root or next_security_root or compat_root else MEMORY_CI_BASE if memory_root else RUNTIME_CI_BASE if runtime_root else PUBLICATION_CI_REPAIR_BASE if publication_ci_repair_root else PUBLICATION_CLOSURE_BASE if closure_root else CI_REPAIR_BASE if repair_root else lineage['editorial']['sha'] if lineage_root else ZOD_BASE if zod_root else DURABILITY_BASE if durability_root else REPORT_CONTRACT_BASE if report_root else CAPTURE_RECOVERY_BASE if capture_root else SECURITY_BASE if security_root else REMOTE_BEFORE_RECONCILIATION if daily_root else BASE
         need(env['GITHUB_EVENT_NAME'] == 'push' and event['before'] == expected_before and event['after'] == head and event['ref'] == 'refs/heads/' + BRANCH and not event['forced'] and not event['deleted'] and not event['created'], 'BOOTSTRAP_EVENT')
         if ac_root or catalog_root or technical_capture_root or next_security_root or compat_root or memory_root or runtime_root or publication_ci_repair_root or closure_root or repair_root or daily_root or security_root or capture_root or report_root or durability_root or zod_root or lineage_root:
             recent_bytes = git.blob(root, CURRENT_DATA_EVIDENCE)
@@ -1792,7 +1833,7 @@ def admit(git, api, env, event):
             validate_data(git, recent['published_sha'], recent['source_sha'], recent['metadata_objects'])
             if ac_root:
                 mode, details = 'EXACT_AC_SOURCE_RELEASE', {
-                    'native_update':{'before':AC_BASE, 'after':head},
+                    'native_update':{'before':expected_before, 'after':head},
                     'source_commit':AC_SOURCE, 'archive_replay_commit':AC_PARENT,
                     'archive_replay_is_native_producer_receipt':False,
                     'new_hosted_qualification_required':True,
@@ -1800,6 +1841,9 @@ def admit(git, api, env, event):
                     'production_baseline_unchanged':True,
                     'authority_transition_required':True,
                     'release_authority_issued':False}
+                if head != root:
+                    mode = 'EXACT_AC_CI_INVENTORY_REPAIR'
+                    details['ci_inventory_repair'] = {'parent':AC_CI_PARENT,'failed_run_id':45052431528,'failed_run_reused':False}
             elif catalog_root:
                 mode,details = 'EXACT_CATALOG_CLOSURE_SUCCESSOR', {
                     'remote_before':COMPAT_PARENT,'technical_parent':CATALOG_PARENT,

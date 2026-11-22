@@ -34,12 +34,12 @@ jobs:
           import os,sys,json
           from pathlib import Path
           sys.path.insert(0,'scripts/statistical-levels-ci')
-          from admission import Git,bootstrap,need,REPO
+          from admission import Git,bootstrap,need,REPO,AC_CI_PARENT
           git=Git();head=git.text('rev-parse','HEAD')
           need(head==os.environ['GITHUB_SHA']==os.environ['CI_EVENT_SHA'],'SOURCE_TEST_SHA')
           need(os.environ['GITHUB_REPOSITORY']==REPO and os.environ['GITHUB_REF']=='refs/heads/codex/ac-browser-qualification-20261122','SOURCE_TEST_REF')
           root,chain=bootstrap(git,head)
-          need(root==head and not chain,'SOURCE_TEST_ROOT')
+          need(not chain and (root==head or (root==AC_CI_PARENT and git.parents(head)==[AC_CI_PARENT])),'SOURCE_TEST_ROOT')
           record={'scope':'SOURCE_PRODUCT_TESTS_NOT_NATIVE_ADMISSION','head_sha':head,'release_authority_issued':False}
           (Path(os.environ['CI_EVIDENCE'])/'source-tests.json').write_text(json.dumps(record)+'\n')
           print(json.dumps(record))
