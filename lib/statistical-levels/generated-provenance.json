@@ -5,13 +5,13 @@
   "RAW_ARCHIVE_RELATIVE_PATH": "statistical-levels/raw-authority/20261121T194625621Z-80cec654-070e-49f0-a354-7ab843fbf09d/",
   "RAW_ARCHIVE_MANIFEST_SHA256": "268cd9af6b7692c173c6459f515e724263e8b6f6c6005d2a8f99dc495b59c1a5",
   "RAW_MANIFEST_SHA256": "7f02d8ed6b0d66d6a3395a6397cf81155451e83772d50f4a91479f41dca08438",
-  "GENERATOR_COMMIT": "ebd06d2f63682125cff9ed3a4434b335e57dbefe",
+  "GENERATOR_COMMIT": "919238949903ccc1cfc3093fefbdeb8d4d4ac16f",
   "SOURCE_STATE": "COMMITTED",
-  "GENERATOR_SHA256": "b3b13aad4448c11fb5a067ddae3522ebd0cbbf8da81aca26ca1810216a852d3b",
+  "GENERATOR_SHA256": "d9577b71ee13555dc0e307cfc7cf3aa0529882a8498d67d03b39aabbab0604e1",
   "SOURCE_BUNDLE": [
     {
       "file": "scripts/build-statistical-levels.mjs",
-      "SHA256": "d26a5d548a0a0925f9336dc76c52eb89e7fd89c5d094c38100da0ed79bffeb97"
+      "SHA256": "6d14d4718f3512143622cf45a74a0f3239559eff4244b247bd4a58581bcc2989"
     },
     {
       "file": "scripts/statistical-levels-offline.mjs",
@@ -26,7 +26,7 @@
       "SHA256": "5fee525b1a7e453dc149b91a92b5eb427f55c7231b031aae9f04cbde932925d1"
     }
   ],
-  "CONFIG_SHA256": "1cecc123865fbd1df9eb2daa7f6c787e03e53bf0a0860048b8fb8df9e2673054",
+  "CONFIG_SHA256": "76d998ee8b5518dc7f0e4dbb18cecdae9f459b9210ec2e235c643ccd21ead61e",
   "CONFIG": {
     "BASELINE_ID": "20261121T194625621Z-80cec654-070e-49f0-a354-7ab843fbf09d",
     "SNAPSHOT_CUTOFF": "2026-11-21T19:49:49.829Z",
@@ -36,7 +36,7 @@
     "RAW_ARCHIVE_ACCESS_CLASS": "PRIVATE_S3_DURABLE",
     "SCHEMA_VERSION": "statistical-levels.snapshot.v3",
     "POLICY_VERSION": "completed-history-current-mark.v1",
-    "GENERATOR_COMMIT": "ebd06d2f63682125cff9ed3a4434b335e57dbefe",
+    "GENERATOR_COMMIT": "919238949903ccc1cfc3093fefbdeb8d4d4ac16f",
     "SOURCE_STATE": "COMMITTED",
     "GENERATED_AT": "2026-11-21T19:49:49.829Z",
     "HISTORICAL_DRIFT_CAUSE": "UNEXPLAINED",
@@ -49,15 +49,15 @@
   },
   "GENERATED_AT": "2026-11-21T19:49:49.829Z",
   "GENERATION_TIMESTAMP_SEMANTICS": "Assigned reproducible candidate build timestamp; actual execution times are retained separately in qualification evidence.",
-  "NODE_VERSION": "v22.23.5",
+  "NODE_VERSION": "v26.5.0",
   "snapshots": [
     {
       "FILE": "assets/AIQ.json",
-      "SNAPSHOT_SHA256": "20998a78e184232bc232ae496e7c2dbe78ea9428db4752887b61007e617d487b",
+      "SNAPSHOT_SHA256": "9221b72f01ac32a2f63f88be04456eae1a4ff81b8bb5ab9af9c90514836489c9",
       "SCHEMA_VERSION": "statistical-levels.snapshot.v3",
-      "GENERATOR_COMMIT": "ebd06d2f63682125cff9ed3a4434b335e57dbefe",
-      "GENERATOR_SHA256": "b3b13aad4448c11fb5a067ddae3522ebd0cbbf8da81aca26ca1810216a852d3b",
-      "CONFIG_SHA256": "1cecc123865fbd1df9eb2daa7f6c787e03e53bf0a0860048b8fb8df9e2673054",
+      "GENERATOR_COMMIT": "919238949903ccc1cfc3093fefbdeb8d4d4ac16f",
+      "GENERATOR_SHA256": "d9577b71ee13555dc0e307cfc7cf3aa0529882a8498d67d03b39aabbab0604e1",
+      "CONFIG_SHA256": "76d998ee8b5518dc7f0e4dbb18cecdae9f459b9210ec2e235c643ccd21ead61e",
       "GENERATED_AT": "2026-11-21T19:49:49.829Z",
       "INPUTS": [
         {
@@ -80,11 +80,11 @@
     },
     {
       "FILE": "assets/BOTZ.json",
-      "SNAPSHOT_SHA256": "bd61da629c23b5eb726fbf60a8cd1d76919c15b1992394ea17321ef4e98857e7",
+      "SNAPSHOT_SHA256": "28d9f6d8f3f4e6561f49ef45a4f2b91e498d2cdf1dca89518af96751abf65156",
       "SCHEMA_VERSION": "statistical-levels.snapshot.v3",
-      "GENERATOR_COMMIT": "ebd06d2f63682125cff9ed3a4434b335e57dbefe",
-      "GENERATOR_SHA256": "b3b13aad4448c11fb5a067ddae3522ebd0cbbf8da81aca26ca1810216a852d3b",
-      "CONFIG_SHA256": "1cecc123865fbd1df9eb2daa7f6c787e03e53bf0a0860048b8fb8df9e2673054",
+      "GENERATOR_COMMIT": "919238949903ccc1cfc3093fefbdeb8d4d4ac16f",
+      "GENERATOR_SHA256": "d9577b71ee13555dc0e307cfc7cf3aa0529882a8498d67d03b39aabbab0604e1",
+      "CONFIG_SHA256": "76d998ee8b5518dc7f0e4dbb18cecdae9f459b9210ec2e235c643ccd21ead61e",
       "GENERATED_AT": "2026-11-21T19:49:49.829Z",
       "INPUTS": [
         {
@@ -107,11 +107,11 @@
     },
     {
       "FILE": "assets/BTCUSD.json",
-      "SNAPSHOT_SHA256": "fb3eeac6dc1c9d92a565de23a692edf6864d16b87d3444c9eaa50c64144a5220",
+      "SNAPSHOT_SHA256": "a6c7b14dd836c86250f712c0983d5f836c658fd274431676687ea0641edb6ab0",
       "SCHEMA_VERSION": "statistical-levels.snapshot.v3",
-      "GENERATOR_COMMIT": "ebd06d2f63682125cff9ed3a4434b335e57dbefe",
-      "GENERATOR_SHA256": "b3b13aad4448c11fb5a067ddae3522ebd0cbbf8da81aca26ca1810216a852d3b",
-      "CONFIG_SHA256": "1cecc123865fbd1df9eb2daa7f6c787e03e53bf0a0860048b8fb8df9e2673054",
+      "GENERATOR_COMMIT": "919238949903ccc1cfc3093fefbdeb8d4d4ac16f",
+      "GENERATOR_SHA256": "d9577b71ee13555dc0e307cfc7cf3aa0529882a8498d67d03b39aabbab0604e1",
+      "CONFIG_SHA256": "76d998ee8b5518dc7f0e4dbb18cecdae9f459b9210ec2e235c643ccd21ead61e",
       "GENERATED_AT": "2026-11-21T19:49:49.829Z",
       "INPUTS": [
         {
@@ -134,11 +134,11 @@
     },
     {
       "FILE": "assets/CIBR.json",
-      "SNAPSHOT_SHA256": "7f8d2d0e84cb0da828dd5c44986f105fa3f2e4173cda75eb176059a0470e1348",
+      "SNAPSHOT_SHA256": "24a03ff1c76e05b1e741b982b2728a13bc1d269563a855a00860201337816f97",
       "SCHEMA_VERSION": "statistical-levels.snapshot.v3",
-      "GENERATOR_COMMIT": "ebd06d2f63682125cff9ed3a4434b335e57dbefe",
-      "GENERATOR_SHA256": "b3b13aad4448c11fb5a067ddae3522ebd0cbbf8da81aca26ca1810216a852d3b",
-      "CONFIG_SHA256": "1cecc123865fbd1df9eb2daa7f6c787e03e53bf0a0860048b8fb8df9e2673054",
+      "GENERATOR_COMMIT": "919238949903ccc1cfc3093fefbdeb8d4d4ac16f",
+      "GENERATOR_SHA256": "d9577b71ee13555dc0e307cfc7cf3aa0529882a8498d67d03b39aabbab0604e1",
+      "CONFIG_SHA256": "76d998ee8b5518dc7f0e4dbb18cecdae9f459b9210ec2e235c643ccd21ead61e",
       "GENERATED_AT": "2026-11-21T19:49:49.829Z",
       "INPUTS": [
         {
@@ -161,11 +161,11 @@
     },
     {
       "FILE": "assets/DIA.json",
-      "SNAPSHOT_SHA256": "6396ea45854b537b5c25989487b5a6024cda3e9d1555b782f16a9623fd139458",
+      "SNAPSHOT_SHA256": "5ad2ba3f8c9b986b485be1add9f8e827c98fc693e4dd34c0ff3bbafe6fa91463",
       "SCHEMA_VERSION": "statistical-levels.snapshot.v3",
-      "GENERATOR_COMMIT": "ebd06d2f63682125cff9ed3a4434b335e57dbefe",
-      "GENERATOR_SHA256": "b3b13aad4448c11fb5a067ddae3522ebd0cbbf8da81aca26ca1810216a852d3b",
-      "CONFIG_SHA256": "1cecc123865fbd1df9eb2daa7f6c787e03e53bf0a0860048b8fb8df9e2673054",
+      "GENERATOR_COMMIT": "919238949903ccc1cfc3093fefbdeb8d4d4ac16f",
+      "GENERATOR_SHA256": "d9577b71ee13555dc0e307cfc7cf3aa0529882a8498d67d03b39aabbab0604e1",
+      "CONFIG_SHA256": "76d998ee8b5518dc7f0e4dbb18cecdae9f459b9210ec2e235c643ccd21ead61e",
       "GENERATED_AT": "2026-11-21T19:49:49.829Z",
       "INPUTS": [
         {
@@ -188,11 +188,11 @@
     },
     {
       "FILE": "assets/EEM.json",
-      "SNAPSHOT_SHA256": "b5a24eac681ef543127b311c3fb1ffb9c2fdce25d596ef6157be56b0c1327463",
+      "SNAPSHOT_SHA256": "02ab5a281fef553286220519375bea250f147f01e1d4e5f8c9c62fd63c24b359",
       "SCHEMA_VERSION": "statistical-levels.snapshot.v3",
-      "GENERATOR_COMMIT": "ebd06d2f63682125cff9ed3a4434b335e57dbefe",
-      "GENERATOR_SHA256": "b3b13aad4448c11fb5a067ddae3522ebd0cbbf8da81aca26ca1810216a852d3b",
-      "CONFIG_SHA256": "1cecc123865fbd1df9eb2daa7f6c787e03e53bf0a0860048b8fb8df9e2673054",
+      "GENERATOR_COMMIT": "919238949903ccc1cfc3093fefbdeb8d4d4ac16f",
+      "GENERATOR_SHA256": "d9577b71ee13555dc0e307cfc7cf3aa0529882a8498d67d03b39aabbab0604e1",
+      "CONFIG_SHA256": "76d998ee8b5518dc7f0e4dbb18cecdae9f459b9210ec2e235c643ccd21ead61e",
       "GENERATED_AT": "2026-11-21T19:49:49.829Z",
       "INPUTS": [
         {
@@ -215,11 +215,11 @@
     },
     {
       "FILE": "assets/EFA.json",
-      "SNAPSHOT_SHA256": "224941f753e0f23accb7d7e432e097d412532e2994c835cb6bdcc21b77e66ae5",
+      "SNAPSHOT_SHA256": "b422f5f374875e5f386d16e1fd8d2467aaf2eb2ab2504eb68441f9c0e5d83673",
       "SCHEMA_VERSION": "statistical-levels.snapshot.v3",
-      "GENERATOR_COMMIT": "ebd06d2f63682125cff9ed3a4434b335e57dbefe",
-      "GENERATOR_SHA256": "b3b13aad4448c11fb5a067ddae3522ebd0cbbf8da81aca26ca1810216a852d3b",
-      "CONFIG_SHA256": "1cecc123865fbd1df9eb2daa7f6c787e03e53bf0a0860048b8fb8df9e2673054",
+      "GENERATOR_COMMIT": "919238949903ccc1cfc3093fefbdeb8d4d4ac16f",
+      "GENERATOR_SHA256": "d9577b71ee13555dc0e307cfc7cf3aa0529882a8498d67d03b39aabbab0604e1",
+      "CONFIG_SHA256": "76d998ee8b5518dc7f0e4dbb18cecdae9f459b9210ec2e235c643ccd21ead61e",
       "GENERATED_AT": "2026-11-21T19:49:49.829Z",
       "INPUTS": [
         {
@@ -242,11 +242,11 @@
     },
     {
       "FILE": "assets/ETHUSD.json",
-      "SNAPSHOT_SHA256": "6c4cf9da2e13ad1ba9431a616e4efb409e6ba5cb6eef422ae2c314e2138903e6",
+      "SNAPSHOT_SHA256": "5afb017225e147397f1af5d43f410b444a70db5cd9d02a741f6b7a3d06c3f8f9",
       "SCHEMA_VERSION": "statistical-levels.snapshot.v3",
-      "GENERATOR_COMMIT": "ebd06d2f63682125cff9ed3a4434b335e57dbefe",
-      "GENERATOR_SHA256": "b3b13aad4448c11fb5a067ddae3522ebd0cbbf8da81aca26ca1810216a852d3b",
-      "CONFIG_SHA256": "1cecc123865fbd1df9eb2daa7f6c787e03e53bf0a0860048b8fb8df9e2673054",
+      "GENERATOR_COMMIT": "919238949903ccc1cfc3093fefbdeb8d4d4ac16f",
+      "GENERATOR_SHA256": "d9577b71ee13555dc0e307cfc7cf3aa0529882a8498d67d03b39aabbab0604e1",
+      "CONFIG_SHA256": "76d998ee8b5518dc7f0e4dbb18cecdae9f459b9210ec2e235c643ccd21ead61e",
       "GENERATED_AT": "2026-11-21T19:49:49.829Z",
       "INPUTS": [
         {
@@ -269,11 +269,11 @@
     },
     {
       "FILE": "assets/EWJ.json",
-      "SNAPSHOT_SHA256": "f6103d9cef2b65a22c8c750fa38ddc2d7fd111afa2636210ce067ae898d28599",
+      "SNAPSHOT_SHA256": "28b680848206bbe774749d145af7af8e01e99444eb7e408ac383ac0ebf9ab2c1",
       "SCHEMA_VERSION": "statistical-levels.snapshot.v3",
-      "GENERATOR_COMMIT": "ebd06d2f63682125cff9ed3a4434b335e57dbefe",
-      "GENERATOR_SHA256": "b3b13aad4448c11fb5a067ddae3522ebd0cbbf8da81aca26ca1810216a852d3b",
-      "CONFIG_SHA256": "1cecc123865fbd1df9eb2daa7f6c787e03e53bf0a0860048b8fb8df9e2673054",
+      "GENERATOR_COMMIT": "919238949903ccc1cfc3093fefbdeb8d4d4ac16f",
+      "GENERATOR_SHA256": "d9577b71ee13555dc0e307cfc7cf3aa0529882a8498d67d03b39aabbab0604e1",
+      "CONFIG_SHA256": "76d998ee8b5518dc7f0e4dbb18cecdae9f459b9210ec2e235c643ccd21ead61e",
       "GENERATED_AT": "2026-11-21T19:49:49.829Z",
       "INPUTS": [
         {
@@ -296,11 +296,11 @@
     },
     {
       "FILE": "assets/FINX.json",
-      "SNAPSHOT_SHA256": "ca56db0e5a471b33a35529e5b9d48279018ef7a4505108a64c206ee7417d086b",
+      "SNAPSHOT_SHA256": "1b18924e6aeae888b53215717ef5b061098369f755f59113216fefe40221059b",
       "SCHEMA_VERSION": "statistical-levels.snapshot.v3",
-      "GENERATOR_COMMIT": "ebd06d2f63682125cff9ed3a4434b335e57dbefe",
-      "GENERATOR_SHA256": "b3b13aad4448c11fb5a067ddae3522ebd0cbbf8da81aca26ca1810216a852d3b",
-      "CONFIG_SHA256": "1cecc123865fbd1df9eb2daa7f6c787e03e53bf0a0860048b8fb8df9e2673054",
+      "GENERATOR_COMMIT": "919238949903ccc1cfc3093fefbdeb8d4d4ac16f",
+      "GENERATOR_SHA256": "d9577b71ee13555dc0e307cfc7cf3aa0529882a8498d67d03b39aabbab0604e1",
+      "CONFIG_SHA256": "76d998ee8b5518dc7f0e4dbb18cecdae9f459b9210ec2e235c643ccd21ead61e",
       "GENERATED_AT": "2026-11-21T19:49:49.829Z",
       "INPUTS": [
         {
@@ -323,11 +323,11 @@
     },
     {
       "FILE": "assets/FXI.json",
-      "SNAPSHOT_SHA256": "b8889c78b2e536b4a87a2a3e4b48fa2916c5fb07b3dac04cf75b1e9ea1d7875b",
+      "SNAPSHOT_SHA256": "3570ad3fbd8ef817daf71c02bd370c74eff9818b34c49354087d8ad1f0af96ad",
       "SCHEMA_VERSION": "statistical-levels.snapshot.v3",
-      "GENERATOR_COMMIT": "ebd06d2f63682125cff9ed3a4434b335e57dbefe",
-      "GENERATOR_SHA256": "b3b13aad4448c11fb5a067ddae3522ebd0cbbf8da81aca26ca1810216a852d3b",
-      "CONFIG_SHA256": "1cecc123865fbd1df9eb2daa7f6c787e03e53bf0a0860048b8fb8df9e2673054",
+      "GENERATOR_COMMIT": "919238949903ccc1cfc3093fefbdeb8d4d4ac16f",
+      "GENERATOR_SHA256": "d9577b71ee13555dc0e307cfc7cf3aa0529882a8498d67d03b39aabbab0604e1",
+      "CONFIG_SHA256": "76d998ee8b5518dc7f0e4dbb18cecdae9f459b9210ec2e235c643ccd21ead61e",
       "GENERATED_AT": "2026-11-21T19:49:49.829Z",
       "INPUTS": [
         {
@@ -350,11 +350,11 @@
     },
     {
       "FILE": "assets/GLD.json",
-      "SNAPSHOT_SHA256": "81cd390a60b1a6dc38eca630dd88de98ab75dfeaef7ede891aac0bd3356a8f33",
+      "SNAPSHOT_SHA256": "cd9df418efdf9a31de6d88d5c6c604ee1455639d1435c56020e7d06acae4a035",
       "SCHEMA_VERSION": "statistical-levels.snapshot.v3",
-      "GENERATOR_COMMIT": "ebd06d2f63682125cff9ed3a4434b335e57dbefe",
-      "GENERATOR_SHA256": "b3b13aad4448c11fb5a067ddae3522ebd0cbbf8da81aca26ca1810216a852d3b",
-      "CONFIG_SHA256": "1cecc123865fbd1df9eb2daa7f6c787e03e53bf0a0860048b8fb8df9e2673054",
+      "GENERATOR_COMMIT": "919238949903ccc1cfc3093fefbdeb8d4d4ac16f",
+      "GENERATOR_SHA256": "d9577b71ee13555dc0e307cfc7cf3aa0529882a8498d67d03b39aabbab0604e1",
+      "CONFIG_SHA256": "76d998ee8b5518dc7f0e4dbb18cecdae9f459b9210ec2e235c643ccd21ead61e",
       "GENERATED_AT": "2026-11-21T19:49:49.829Z",
       "INPUTS": [
         {
@@ -377,11 +377,11 @@
     },
     {
       "FILE": "assets/HYG.json",
-      "SNAPSHOT_SHA256": "f52faef24a194303adc65b9d93881e7c2ed60a62a3b57006053104a60614226e",
+      "SNAPSHOT_SHA256": "8956fd0a30b0a21a1939d6717c7c75ddbe678e26d44c78f971d88618eaf6b28b",
       "SCHEMA_VERSION": "statistical-levels.snapshot.v3",
-      "GENERATOR_COMMIT": "ebd06d2f63682125cff9ed3a4434b335e57dbefe",
-      "GENERATOR_SHA256": "b3b13aad4448c11fb5a067ddae3522ebd0cbbf8da81aca26ca1810216a852d3b",
-      "CONFIG_SHA256": "1cecc123865fbd1df9eb2daa7f6c787e03e53bf0a0860048b8fb8df9e2673054",
+      "GENERATOR_COMMIT": "919238949903ccc1cfc3093fefbdeb8d4d4ac16f",
+      "GENERATOR_SHA256": "d9577b71ee13555dc0e307cfc7cf3aa0529882a8498d67d03b39aabbab0604e1",
+      "CONFIG_SHA256": "76d998ee8b5518dc7f0e4dbb18cecdae9f459b9210ec2e235c643ccd21ead61e",
       "GENERATED_AT": "2026-11-21T19:49:49.829Z",
       "INPUTS": [
         {
@@ -404,11 +404,11 @@
     },
     {
       "FILE": "assets/IEF.json",
-      "SNAPSHOT_SHA256": "6bbf8e72edddfc3bcd2410d2a18651e453b4a3e9b3bc7e1e04752ee533c39b67",
+      "SNAPSHOT_SHA256": "fe0131452d0fe14758694701b32cda95bfad23b676e7c1faa2af7c12ca3e72a2",
       "SCHEMA_VERSION": "statistical-levels.snapshot.v3",
-      "GENERATOR_COMMIT": "ebd06d2f63682125cff9ed3a4434b335e57dbefe",
-      "GENERATOR_SHA256": "b3b13aad4448c11fb5a067ddae3522ebd0cbbf8da81aca26ca1810216a852d3b",
-      "CONFIG_SHA256": "1cecc123865fbd1df9eb2daa7f6c787e03e53bf0a0860048b8fb8df9e2673054",
+      "GENERATOR_COMMIT": "919238949903ccc1cfc3093fefbdeb8d4d4ac16f",
+      "GENERATOR_SHA256": "d9577b71ee13555dc0e307cfc7cf3aa0529882a8498d67d03b39aabbab0604e1",
+      "CONFIG_SHA256": "76d998ee8b5518dc7f0e4dbb18cecdae9f459b9210ec2e235c643ccd21ead61e",
       "GENERATED_AT": "2026-11-21T19:49:49.829Z",
       "INPUTS": [
         {
@@ -431,11 +431,11 @@
     },
     {
       "FILE": "assets/ITA.json",
-      "SNAPSHOT_SHA256": "47280a22d32a5a3b0d82abbcadfaeceffd840f8dd37710f25c4482b7811b2dab",
+      "SNAPSHOT_SHA256": "01c30baee2b320006f3cf9df2c878ac0a121f12003c7f1d10705a20305ef0ea9",
       "SCHEMA_VERSION": "statistical-levels.snapshot.v3",
-      "GENERATOR_COMMIT": "ebd06d2f63682125cff9ed3a4434b335e57dbefe",
-      "GENERATOR_SHA256": "b3b13aad4448c11fb5a067ddae3522ebd0cbbf8da81aca26ca1810216a852d3b",
-      "CONFIG_SHA256": "1cecc123865fbd1df9eb2daa7f6c787e03e53bf0a0860048b8fb8df9e2673054",
+      "GENERATOR_COMMIT": "919238949903ccc1cfc3093fefbdeb8d4d4ac16f",
+      "GENERATOR_SHA256": "d9577b71ee13555dc0e307cfc7cf3aa0529882a8498d67d03b39aabbab0604e1",
+      "CONFIG_SHA256": "76d998ee8b5518dc7f0e4dbb18cecdae9f459b9210ec2e235c643ccd21ead61e",
       "GENERATED_AT": "2026-11-21T19:49:49.829Z",
       "INPUTS": [
         {
@@ -458,11 +458,11 @@
     },
     {
       "FILE": "assets/IWM.json",
-      "SNAPSHOT_SHA256": "71c8c262429eff9272030f457c3b660af81900460a6ec9572b02d73ca1ecd7f3",
+      "SNAPSHOT_SHA256": "d4f75af865ea7b8856cf25f870f49db1f77e0dba2da664bd0b9132376d29fca1",
       "SCHEMA_VERSION": "statistical-levels.snapshot.v3",
-      "GENERATOR_COMMIT": "ebd06d2f63682125cff9ed3a4434b335e57dbefe",
-      "GENERATOR_SHA256": "b3b13aad4448c11fb5a067ddae3522ebd0cbbf8da81aca26ca1810216a852d3b",
-      "CONFIG_SHA256": "1cecc123865fbd1df9eb2daa7f6c787e03e53bf0a0860048b8fb8df9e2673054",
+      "GENERATOR_COMMIT": "919238949903ccc1cfc3093fefbdeb8d4d4ac16f",
+      "GENERATOR_SHA256": "d9577b71ee13555dc0e307cfc7cf3aa0529882a8498d67d03b39aabbab0604e1",
+      "CONFIG_SHA256": "76d998ee8b5518dc7f0e4dbb18cecdae9f459b9210ec2e235c643ccd21ead61e",
       "GENERATED_AT": "2026-11-21T19:49:49.829Z",
       "INPUTS": [
         {
@@ -485,11 +485,11 @@
     },
     {
       "FILE": "assets/LQD.json",
-      "SNAPSHOT_SHA256": "4d758d238fbe96a002181d694b691eea26a1174ac744594f333401785623f143",
+      "SNAPSHOT_SHA256": "3ebdc3247b1cc8f1404af187cbb55c7f9a05b45e2e6a02da2a0e689e1242e9dd",
       "SCHEMA_VERSION": "statistical-levels.snapshot.v3",
-      "GENERATOR_COMMIT": "ebd06d2f63682125cff9ed3a4434b335e57dbefe",
-      "GENERATOR_SHA256": "b3b13aad4448c11fb5a067ddae3522ebd0cbbf8da81aca26ca1810216a852d3b",
-      "CONFIG_SHA256": "1cecc123865fbd1df9eb2daa7f6c787e03e53bf0a0860048b8fb8df9e2673054",
+      "GENERATOR_COMMIT": "919238949903ccc1cfc3093fefbdeb8d4d4ac16f",
+      "GENERATOR_SHA256": "d9577b71ee13555dc0e307cfc7cf3aa0529882a8498d67d03b39aabbab0604e1",
+      "CONFIG_SHA256": "76d998ee8b5518dc7f0e4dbb18cecdae9f459b9210ec2e235c643ccd21ead61e",
       "GENERATED_AT": "2026-11-21T19:49:49.829Z",
       "INPUTS": [
         {
@@ -512,11 +512,11 @@
     },
     {
       "FILE": "assets/PAVE.json",
-      "SNAPSHOT_SHA256": "ef14be75ee8f5685725f0b7547347b39dcad65ad1ab5a29b8b19acf599d1d1fd",
+      "SNAPSHOT_SHA256": "b6427d0969e9f3b4925c26ac614595be297699fceaec1c132908c7b2dd341c81",
       "SCHEMA_VERSION": "statistical-levels.snapshot.v3",
-      "GENERATOR_COMMIT": "ebd06d2f63682125cff9ed3a4434b335e57dbefe",
-      "GENERATOR_SHA256": "b3b13aad4448c11fb5a067ddae3522ebd0cbbf8da81aca26ca1810216a852d3b",
-      "CONFIG_SHA256": "1cecc123865fbd1df9eb2daa7f6c787e03e53bf0a0860048b8fb8df9e2673054",
+      "GENERATOR_COMMIT": "919238949903ccc1cfc3093fefbdeb8d4d4ac16f",
+      "GENERATOR_SHA256": "d9577b71ee13555dc0e307cfc7cf3aa0529882a8498d67d03b39aabbab0604e1",
+      "CONFIG_SHA256": "76d998ee8b5518dc7f0e4dbb18cecdae9f459b9210ec2e235c643ccd21ead61e",
       "GENERATED_AT": "2026-11-21T19:49:49.829Z",
       "INPUTS": [
         {
@@ -539,11 +539,11 @@
     },
     {
       "FILE": "assets/PHO.json",
-      "SNAPSHOT_SHA256": "0b1061df39ef6a64d669a5bd124f4a2bec3ed892fa292cdafc0a981bceafd452",
+      "SNAPSHOT_SHA256": "2221c7872668830ba5f1bf2262afa94cb5283f2bee3278e64f909c7bc38ec6f1",
       "SCHEMA_VERSION": "statistical-levels.snapshot.v3",
-      "GENERATOR_COMMIT": "ebd06d2f63682125cff9ed3a4434b335e57dbefe",
-      "GENERATOR_SHA256": "b3b13aad4448c11fb5a067ddae3522ebd0cbbf8da81aca26ca1810216a852d3b",
-      "CONFIG_SHA256": "1cecc123865fbd1df9eb2daa7f6c787e03e53bf0a0860048b8fb8df9e2673054",
+      "GENERATOR_COMMIT": "919238949903ccc1cfc3093fefbdeb8d4d4ac16f",
+      "GENERATOR_SHA256": "d9577b71ee13555dc0e307cfc7cf3aa0529882a8498d67d03b39aabbab0604e1",
+      "CONFIG_SHA256": "76d998ee8b5518dc7f0e4dbb18cecdae9f459b9210ec2e235c643ccd21ead61e",
       "GENERATED_AT": "2026-11-21T19:49:49.829Z",
       "INPUTS": [
         {
@@ -566,11 +566,11 @@
     },
     {
       "FILE": "assets/QQQ.json",
-      "SNAPSHOT_SHA256": "cce78bd90769f794757c863fc1c8ba50cd61b0c735d663ce8f2341057bbe6f58",
+      "SNAPSHOT_SHA256": "67ee0e89aed937b294e9492b7ad80d1cd772c13453954cdcb0815d4bbed6c142",
       "SCHEMA_VERSION": "statistical-levels.snapshot.v3",
-      "GENERATOR_COMMIT": "ebd06d2f63682125cff9ed3a4434b335e57dbefe",
-      "GENERATOR_SHA256": "b3b13aad4448c11fb5a067ddae3522ebd0cbbf8da81aca26ca1810216a852d3b",
-      "CONFIG_SHA256": "1cecc123865fbd1df9eb2daa7f6c787e03e53bf0a0860048b8fb8df9e2673054",
+      "GENERATOR_COMMIT": "919238949903ccc1cfc3093fefbdeb8d4d4ac16f",
+      "GENERATOR_SHA256": "d9577b71ee13555dc0e307cfc7cf3aa0529882a8498d67d03b39aabbab0604e1",
+      "CONFIG_SHA256": "76d998ee8b5518dc7f0e4dbb18cecdae9f459b9210ec2e235c643ccd21ead61e",
       "GENERATED_AT": "2026-11-21T19:49:49.829Z",
       "INPUTS": [
         {
@@ -593,11 +593,11 @@
     },
     {
       "FILE": "assets/RSP.json",
-      "SNAPSHOT_SHA256": "f830cef3a965d53f5824f0093a33a61d16c794a2c4f872f918fa9b50fa0e8f11",
+      "SNAPSHOT_SHA256": "479cbc49406e09b82e269ebf58af9bc8863948bcd57c6fa852a1ba025d9bf19d",
       "SCHEMA_VERSION": "statistical-levels.snapshot.v3",
-      "GENERATOR_COMMIT": "ebd06d2f63682125cff9ed3a4434b335e57dbefe",
-      "GENERATOR_SHA256": "b3b13aad4448c11fb5a067ddae3522ebd0cbbf8da81aca26ca1810216a852d3b",
-      "CONFIG_SHA256": "1cecc123865fbd1df9eb2daa7f6c787e03e53bf0a0860048b8fb8df9e2673054",
+      "GENERATOR_COMMIT": "919238949903ccc1cfc3093fefbdeb8d4d4ac16f",
+      "GENERATOR_SHA256": "d9577b71ee13555dc0e307cfc7cf3aa0529882a8498d67d03b39aabbab0604e1",
+      "CONFIG_SHA256": "76d998ee8b5518dc7f0e4dbb18cecdae9f459b9210ec2e235c643ccd21ead61e",
       "GENERATED_AT": "2026-11-21T19:49:49.829Z",
       "INPUTS": [
         {
@@ -620,11 +620,11 @@
     },
     {
       "FILE": "assets/SHY.json",
-      "SNAPSHOT_SHA256": "0a0790dea8ef966b9e6579dd8d181600b358fbabad56e22d3a4ba4a531fbeeaf",
+      "SNAPSHOT_SHA256": "781ec5fd3537fc3eaca5b4a94a022f9155fea5bfeb80922c3e9ad73055c71ce6",
       "SCHEMA_VERSION": "statistical-levels.snapshot.v3",
-      "GENERATOR_COMMIT": "ebd06d2f63682125cff9ed3a4434b335e57dbefe",
-      "GENERATOR_SHA256": "b3b13aad4448c11fb5a067ddae3522ebd0cbbf8da81aca26ca1810216a852d3b",
-      "CONFIG_SHA256": "1cecc123865fbd1df9eb2daa7f6c787e03e53bf0a0860048b8fb8df9e2673054",
+      "GENERATOR_COMMIT": "919238949903ccc1cfc3093fefbdeb8d4d4ac16f",
+      "GENERATOR_SHA256": "d9577b71ee13555dc0e307cfc7cf3aa0529882a8498d67d03b39aabbab0604e1",
+      "CONFIG_SHA256": "76d998ee8b5518dc7f0e4dbb18cecdae9f459b9210ec2e235c643ccd21ead61e",
       "GENERATED_AT": "2026-11-21T19:49:49.829Z",
       "INPUTS": [
         {
@@ -647,11 +647,11 @@
     },
     {
       "FILE": "assets/SLV.json",
-      "SNAPSHOT_SHA256": "38fae999c7b816308e8c1372ddde3ac63ca98338c43de93beb6965503b41cc84",
+      "SNAPSHOT_SHA256": "6defac6dfc76f5889fabc8e92856d31201e766890d5bd7da81359b9b07d58d9a",
       "SCHEMA_VERSION": "statistical-levels.snapshot.v3",
-      "GENERATOR_COMMIT": "ebd06d2f63682125cff9ed3a4434b335e57dbefe",
-      "GENERATOR_SHA256": "b3b13aad4448c11fb5a067ddae3522ebd0cbbf8da81aca26ca1810216a852d3b",
-      "CONFIG_SHA256": "1cecc123865fbd1df9eb2daa7f6c787e03e53bf0a0860048b8fb8df9e2673054",
+      "GENERATOR_COMMIT": "919238949903ccc1cfc3093fefbdeb8d4d4ac16f",
+      "GENERATOR_SHA256": "d9577b71ee13555dc0e307cfc7cf3aa0529882a8498d67d03b39aabbab0604e1",
+      "CONFIG_SHA256": "76d998ee8b5518dc7f0e4dbb18cecdae9f459b9210ec2e235c643ccd21ead61e",
       "GENERATED_AT": "2026-11-21T19:49:49.829Z",
       "INPUTS": [
         {
@@ -674,11 +674,11 @@
     },
     {
       "FILE": "assets/SMH.json",
-      "SNAPSHOT_SHA256": "d0728f0fa5e10e9fc1d878fd8983f9f9012f666b2136a78534129dbcc6b22e21",
+      "SNAPSHOT_SHA256": "abb2aac45fd4fbc4fa9e24e4e0157d39c1dfcdb870dbf3fd7c315115030d9bd3",
       "SCHEMA_VERSION": "statistical-levels.snapshot.v3",
-      "GENERATOR_COMMIT": "ebd06d2f63682125cff9ed3a4434b335e57dbefe",
-      "GENERATOR_SHA256": "b3b13aad4448c11fb5a067ddae3522ebd0cbbf8da81aca26ca1810216a852d3b",
-      "CONFIG_SHA256": "1cecc123865fbd1df9eb2daa7f6c787e03e53bf0a0860048b8fb8df9e2673054",
+      "GENERATOR_COMMIT": "919238949903ccc1cfc3093fefbdeb8d4d4ac16f",
+      "GENERATOR_SHA256": "d9577b71ee13555dc0e307cfc7cf3aa0529882a8498d67d03b39aabbab0604e1",
+      "CONFIG_SHA256": "76d998ee8b5518dc7f0e4dbb18cecdae9f459b9210ec2e235c643ccd21ead61e",
       "GENERATED_AT": "2026-11-21T19:49:49.829Z",
       "INPUTS": [
         {
@@ -701,11 +701,11 @@
     },
     {
       "FILE": "assets/SPY.json",
-      "SNAPSHOT_SHA256": "865f8646d4980b7ffd989513623389b17e379d733fccd09f80acbe9a4453e543",
+      "SNAPSHOT_SHA256": "c661217168f947799d0e3cb4c52f83e76a32b7b1e0403f84913586eeaed32e18",
       "SCHEMA_VERSION": "statistical-levels.snapshot.v3",
-      "GENERATOR_COMMIT": "ebd06d2f63682125cff9ed3a4434b335e57dbefe",
-      "GENERATOR_SHA256": "b3b13aad4448c11fb5a067ddae3522ebd0cbbf8da81aca26ca1810216a852d3b",
-      "CONFIG_SHA256": "1cecc123865fbd1df9eb2daa7f6c787e03e53bf0a0860048b8fb8df9e2673054",
+      "GENERATOR_COMMIT": "919238949903ccc1cfc3093fefbdeb8d4d4ac16f",
+      "GENERATOR_SHA256": "d9577b71ee13555dc0e307cfc7cf3aa0529882a8498d67d03b39aabbab0604e1",
+      "CONFIG_SHA256": "76d998ee8b5518dc7f0e4dbb18cecdae9f459b9210ec2e235c643ccd21ead61e",
       "GENERATED_AT": "2026-11-21T19:49:49.829Z",
       "INPUTS": [
         {
@@ -728,11 +728,11 @@
     },
     {
       "FILE": "assets/TLT.json",
-      "SNAPSHOT_SHA256": "e250b18bf77be7833f46822f01368a1b5223f614f3089f94bde7cf7ecb80f8ca",
+      "SNAPSHOT_SHA256": "847017d5dea7930b4095846b6514ecdff7d841b80757d716b8d44395ea2280d4",
       "SCHEMA_VERSION": "statistical-levels.snapshot.v3",
-      "GENERATOR_COMMIT": "ebd06d2f63682125cff9ed3a4434b335e57dbefe",
-      "GENERATOR_SHA256": "b3b13aad4448c11fb5a067ddae3522ebd0cbbf8da81aca26ca1810216a852d3b",
-      "CONFIG_SHA256": "1cecc123865fbd1df9eb2daa7f6c787e03e53bf0a0860048b8fb8df9e2673054",
+      "GENERATOR_COMMIT": "919238949903ccc1cfc3093fefbdeb8d4d4ac16f",
+      "GENERATOR_SHA256": "d9577b71ee13555dc0e307cfc7cf3aa0529882a8498d67d03b39aabbab0604e1",
+      "CONFIG_SHA256": "76d998ee8b5518dc7f0e4dbb18cecdae9f459b9210ec2e235c643ccd21ead61e",
       "GENERATED_AT": "2026-11-21T19:49:49.829Z",
       "INPUTS": [
         {
@@ -755,11 +755,11 @@
     },
     {
       "FILE": "assets/USO.json",
-      "SNAPSHOT_SHA256": "219f277200d34f682ace195874c6f2dca0e77f5a1d5e879982cbefe3810cdb77",
+      "SNAPSHOT_SHA256": "05083d263c570509bbeba160f9a593c5cbb696f52636aef36ff98bae56910252",
       "SCHEMA_VERSION": "statistical-levels.snapshot.v3",
-      "GENERATOR_COMMIT": "ebd06d2f63682125cff9ed3a4434b335e57dbefe",
-      "GENERATOR_SHA256": "b3b13aad4448c11fb5a067ddae3522ebd0cbbf8da81aca26ca1810216a852d3b",
-      "CONFIG_SHA256": "1cecc123865fbd1df9eb2daa7f6c787e03e53bf0a0860048b8fb8df9e2673054",
+      "GENERATOR_COMMIT": "919238949903ccc1cfc3093fefbdeb8d4d4ac16f",
+      "GENERATOR_SHA256": "d9577b71ee13555dc0e307cfc7cf3aa0529882a8498d67d03b39aabbab0604e1",
+      "CONFIG_SHA256": "76d998ee8b5518dc7f0e4dbb18cecdae9f459b9210ec2e235c643ccd21ead61e",
       "GENERATED_AT": "2026-11-21T19:49:49.829Z",
       "INPUTS": [
         {
@@ -782,11 +782,11 @@
     },
     {
       "FILE": "assets/UUP.json",
-      "SNAPSHOT_SHA256": "6163382b668ba91aa73160b5d3fda115fa5fd948b82b6014a03de1a584c66e60",
+      "SNAPSHOT_SHA256": "058ba3c32d169d65e69411eff7a7176bc402d797b2f0587e904c10640a67ccba",
       "SCHEMA_VERSION": "statistical-levels.snapshot.v3",
-      "GENERATOR_COMMIT": "ebd06d2f63682125cff9ed3a4434b335e57dbefe",
-      "GENERATOR_SHA256": "b3b13aad4448c11fb5a067ddae3522ebd0cbbf8da81aca26ca1810216a852d3b",
-      "CONFIG_SHA256": "1cecc123865fbd1df9eb2daa7f6c787e03e53bf0a0860048b8fb8df9e2673054",
+      "GENERATOR_COMMIT": "919238949903ccc1cfc3093fefbdeb8d4d4ac16f",
+      "GENERATOR_SHA256": "d9577b71ee13555dc0e307cfc7cf3aa0529882a8498d67d03b39aabbab0604e1",
+      "CONFIG_SHA256": "76d998ee8b5518dc7f0e4dbb18cecdae9f459b9210ec2e235c643ccd21ead61e",
       "GENERATED_AT": "2026-11-21T19:49:49.829Z",
       "INPUTS": [
         {
@@ -809,11 +809,11 @@
     },
     {
       "FILE": "assets/VOO.json",
-      "SNAPSHOT_SHA256": "f9376f4385e1bfd4a7c30ba50d734b35bc749eb5157f9b6fbf16d79e7415fc51",
+      "SNAPSHOT_SHA256": "2e10697e0b49d8ce75df562d6160a5cb089892dc0d47c2d1939cc81ea1d5510b",
       "SCHEMA_VERSION": "statistical-levels.snapshot.v3",
-      "GENERATOR_COMMIT": "ebd06d2f63682125cff9ed3a4434b335e57dbefe",
-      "GENERATOR_SHA256": "b3b13aad4448c11fb5a067ddae3522ebd0cbbf8da81aca26ca1810216a852d3b",
-      "CONFIG_SHA256": "1cecc123865fbd1df9eb2daa7f6c787e03e53bf0a0860048b8fb8df9e2673054",
+      "GENERATOR_COMMIT": "919238949903ccc1cfc3093fefbdeb8d4d4ac16f",
+      "GENERATOR_SHA256": "d9577b71ee13555dc0e307cfc7cf3aa0529882a8498d67d03b39aabbab0604e1",
+      "CONFIG_SHA256": "76d998ee8b5518dc7f0e4dbb18cecdae9f459b9210ec2e235c643ccd21ead61e",
       "GENERATED_AT": "2026-11-21T19:49:49.829Z",
       "INPUTS": [
         {
@@ -836,11 +836,11 @@
     },
     {
       "FILE": "assets/XLB.json",
-      "SNAPSHOT_SHA256": "b9b7d7250624f2d61f2a7e9b9f6099ef6ad44eacaeac3a143e54be01ea0105f8",
+      "SNAPSHOT_SHA256": "d10e0bacfbddde0d09771748538deb0049630332a16c2adcf7f16df43a600429",
       "SCHEMA_VERSION": "statistical-levels.snapshot.v3",
-      "GENERATOR_COMMIT": "ebd06d2f63682125cff9ed3a4434b335e57dbefe",
-      "GENERATOR_SHA256": "b3b13aad4448c11fb5a067ddae3522ebd0cbbf8da81aca26ca1810216a852d3b",
-      "CONFIG_SHA256": "1cecc123865fbd1df9eb2daa7f6c787e03e53bf0a0860048b8fb8df9e2673054",
+      "GENERATOR_COMMIT": "919238949903ccc1cfc3093fefbdeb8d4d4ac16f",
+      "GENERATOR_SHA256": "d9577b71ee13555dc0e307cfc7cf3aa0529882a8498d67d03b39aabbab0604e1",
+      "CONFIG_SHA256": "76d998ee8b5518dc7f0e4dbb18cecdae9f459b9210ec2e235c643ccd21ead61e",
       "GENERATED_AT": "2026-11-21T19:49:49.829Z",
       "INPUTS": [
         {
@@ -863,11 +863,11 @@
     },
     {
       "FILE": "assets/XLC.json",
-      "SNAPSHOT_SHA256": "280fe2dc2b581b8188717ad759a21a5d2e6d93f31c276fc9462efef30ab489ed",
+      "SNAPSHOT_SHA256": "53e51523522e0b09204d70f4d568c72573782f3f0707024d12dcd3e7ae2cc735",
       "SCHEMA_VERSION": "statistical-levels.snapshot.v3",
-      "GENERATOR_COMMIT": "ebd06d2f63682125cff9ed3a4434b335e57dbefe",
-      "GENERATOR_SHA256": "b3b13aad4448c11fb5a067ddae3522ebd0cbbf8da81aca26ca1810216a852d3b",
-      "CONFIG_SHA256": "1cecc123865fbd1df9eb2daa7f6c787e03e53bf0a0860048b8fb8df9e2673054",
+      "GENERATOR_COMMIT": "919238949903ccc1cfc3093fefbdeb8d4d4ac16f",
+      "GENERATOR_SHA256": "d9577b71ee13555dc0e307cfc7cf3aa0529882a8498d67d03b39aabbab0604e1",
+      "CONFIG_SHA256": "76d998ee8b5518dc7f0e4dbb18cecdae9f459b9210ec2e235c643ccd21ead61e",
       "GENERATED_AT": "2026-11-21T19:49:49.829Z",
       "INPUTS": [
         {
@@ -890,11 +890,11 @@
     },
     {
       "FILE": "assets/XLE.json",
-      "SNAPSHOT_SHA256": "ce1c042690a7d53d5cfcade0447e082ad55a4afd325c8d4bf0bb5f736fb27fb1",
+      "SNAPSHOT_SHA256": "b6bddb117089dc8614091d7ecce0e276a9c2d62b221b2123e4f7aaa83f39d16a",
       "SCHEMA_VERSION": "statistical-levels.snapshot.v3",
-      "GENERATOR_COMMIT": "ebd06d2f63682125cff9ed3a4434b335e57dbefe",
-      "GENERATOR_SHA256": "b3b13aad4448c11fb5a067ddae3522ebd0cbbf8da81aca26ca1810216a852d3b",
-      "CONFIG_SHA256": "1cecc123865fbd1df9eb2daa7f6c787e03e53bf0a0860048b8fb8df9e2673054",
+      "GENERATOR_COMMIT": "919238949903ccc1cfc3093fefbdeb8d4d4ac16f",
+      "GENERATOR_SHA256": "d9577b71ee13555dc0e307cfc7cf3aa0529882a8498d67d03b39aabbab0604e1",
+      "CONFIG_SHA256": "76d998ee8b5518dc7f0e4dbb18cecdae9f459b9210ec2e235c643ccd21ead61e",
       "GENERATED_AT": "2026-11-21T19:49:49.829Z",
       "INPUTS": [
         {
@@ -917,11 +917,11 @@
     },
     {
       "FILE": "assets/XLF.json",
-      "SNAPSHOT_SHA256": "b79ab5e6c28d15be2b50993aa7bea0606a3f69c5ccd2654501cd737e5ec42b91",
+      "SNAPSHOT_SHA256": "2cfc4d2bdcb74d85abcdebf24ba941406501a10ecc20ec533f9246462c31b8c6",
       "SCHEMA_VERSION": "statistical-levels.snapshot.v3",
-      "GENERATOR_COMMIT": "ebd06d2f63682125cff9ed3a4434b335e57dbefe",
-      "GENERATOR_SHA256": "b3b13aad4448c11fb5a067ddae3522ebd0cbbf8da81aca26ca1810216a852d3b",
-      "CONFIG_SHA256": "1cecc123865fbd1df9eb2daa7f6c787e03e53bf0a0860048b8fb8df9e2673054",
+      "GENERATOR_COMMIT": "919238949903ccc1cfc3093fefbdeb8d4d4ac16f",
+      "GENERATOR_SHA256": "d9577b71ee13555dc0e307cfc7cf3aa0529882a8498d67d03b39aabbab0604e1",
+      "CONFIG_SHA256": "76d998ee8b5518dc7f0e4dbb18cecdae9f459b9210ec2e235c643ccd21ead61e",
       "GENERATED_AT": "2026-11-21T19:49:49.829Z",
       "INPUTS": [
         {
@@ -944,11 +944,11 @@
     },
     {
       "FILE": "assets/XLI.json",
-      "SNAPSHOT_SHA256": "7314e4ae161e3674129d93894fa2ad653943bd7a75d02275e391e4920b3aa76d",
+      "SNAPSHOT_SHA256": "6c71199cef83374de87866eda091e291a03741bc1e062c971d945e3c4a420012",
       "SCHEMA_VERSION": "statistical-levels.snapshot.v3",
-      "GENERATOR_COMMIT": "ebd06d2f63682125cff9ed3a4434b335e57dbefe",
-      "GENERATOR_SHA256": "b3b13aad4448c11fb5a067ddae3522ebd0cbbf8da81aca26ca1810216a852d3b",
-      "CONFIG_SHA256": "1cecc123865fbd1df9eb2daa7f6c787e03e53bf0a0860048b8fb8df9e2673054",
+      "GENERATOR_COMMIT": "919238949903ccc1cfc3093fefbdeb8d4d4ac16f",
+      "GENERATOR_SHA256": "d9577b71ee13555dc0e307cfc7cf3aa0529882a8498d67d03b39aabbab0604e1",
+      "CONFIG_SHA256": "76d998ee8b5518dc7f0e4dbb18cecdae9f459b9210ec2e235c643ccd21ead61e",
       "GENERATED_AT": "2026-11-21T19:49:49.829Z",
       "INPUTS": [
         {
@@ -971,11 +971,11 @@
     },
     {
       "FILE": "assets/XLK.json",
-      "SNAPSHOT_SHA256": "a44b7b202e2867e7db2293d62bdbc6847f49a28f9f5f765d4b39a6f987f4d17b",
+      "SNAPSHOT_SHA256": "043b2e2506df7aa81575e43afdea997885b692f93d42d548a0b26c7b21dc1cfa",
       "SCHEMA_VERSION": "statistical-levels.snapshot.v3",
-      "GENERATOR_COMMIT": "ebd06d2f63682125cff9ed3a4434b335e57dbefe",
-      "GENERATOR_SHA256": "b3b13aad4448c11fb5a067ddae3522ebd0cbbf8da81aca26ca1810216a852d3b",
-      "CONFIG_SHA256": "1cecc123865fbd1df9eb2daa7f6c787e03e53bf0a0860048b8fb8df9e2673054",
+      "GENERATOR_COMMIT": "919238949903ccc1cfc3093fefbdeb8d4d4ac16f",
+      "GENERATOR_SHA256": "d9577b71ee13555dc0e307cfc7cf3aa0529882a8498d67d03b39aabbab0604e1",
+      "CONFIG_SHA256": "76d998ee8b5518dc7f0e4dbb18cecdae9f459b9210ec2e235c643ccd21ead61e",
       "GENERATED_AT": "2026-11-21T19:49:49.829Z",
       "INPUTS": [
         {
@@ -998,11 +998,11 @@
     },
     {
       "FILE": "assets/XLP.json",
-      "SNAPSHOT_SHA256": "63f9d43856cf5b41b300e5de069a35774564c2707313c1c2117a20885ea4a617",
+      "SNAPSHOT_SHA256": "ac8e2e25e95cb3af767ed2f197008cec9771cd94a1be21641ac387c6a7263fa3",
       "SCHEMA_VERSION": "statistical-levels.snapshot.v3",
-      "GENERATOR_COMMIT": "ebd06d2f63682125cff9ed3a4434b335e57dbefe",
-      "GENERATOR_SHA256": "b3b13aad4448c11fb5a067ddae3522ebd0cbbf8da81aca26ca1810216a852d3b",
-      "CONFIG_SHA256": "1cecc123865fbd1df9eb2daa7f6c787e03e53bf0a0860048b8fb8df9e2673054",
+      "GENERATOR_COMMIT": "919238949903ccc1cfc3093fefbdeb8d4d4ac16f",
+      "GENERATOR_SHA256": "d9577b71ee13555dc0e307cfc7cf3aa0529882a8498d67d03b39aabbab0604e1",
+      "CONFIG_SHA256": "76d998ee8b5518dc7f0e4dbb18cecdae9f459b9210ec2e235c643ccd21ead61e",
       "GENERATED_AT": "2026-11-21T19:49:49.829Z",
       "INPUTS": [
         {
@@ -1025,11 +1025,11 @@
     },
     {
       "FILE": "assets/XLRE.json",
-      "SNAPSHOT_SHA256": "4e5d369959c41ff7bd0d61ae7b5977888545217882787e138bb2d565585da188",
+      "SNAPSHOT_SHA256": "52829e99b4e481c7e4254227a4d85cf7fb6aeacc4b655ae5be8b36c347879b5f",
       "SCHEMA_VERSION": "statistical-levels.snapshot.v3",
-      "GENERATOR_COMMIT": "ebd06d2f63682125cff9ed3a4434b335e57dbefe",
-      "GENERATOR_SHA256": "b3b13aad4448c11fb5a067ddae3522ebd0cbbf8da81aca26ca1810216a852d3b",
-      "CONFIG_SHA256": "1cecc123865fbd1df9eb2daa7f6c787e03e53bf0a0860048b8fb8df9e2673054",
+      "GENERATOR_COMMIT": "919238949903ccc1cfc3093fefbdeb8d4d4ac16f",
+      "GENERATOR_SHA256": "d9577b71ee13555dc0e307cfc7cf3aa0529882a8498d67d03b39aabbab0604e1",
+      "CONFIG_SHA256": "76d998ee8b5518dc7f0e4dbb18cecdae9f459b9210ec2e235c643ccd21ead61e",
       "GENERATED_AT": "2026-11-21T19:49:49.829Z",
       "INPUTS": [
         {
@@ -1052,11 +1052,11 @@
     },
     {
       "FILE": "assets/XLU.json",
-      "SNAPSHOT_SHA256": "097fde31ec78de1517f010cbfe244cc18018909edad1199a389a2147aa6b6735",
+      "SNAPSHOT_SHA256": "bc0e1bc820de755b0bb1ec3883b9a4bf155788eb7e98b7b90848d04ec3469d7a",
       "SCHEMA_VERSION": "statistical-levels.snapshot.v3",
-      "GENERATOR_COMMIT": "ebd06d2f63682125cff9ed3a4434b335e57dbefe",
-      "GENERATOR_SHA256": "b3b13aad4448c11fb5a067ddae3522ebd0cbbf8da81aca26ca1810216a852d3b",
-      "CONFIG_SHA256": "1cecc123865fbd1df9eb2daa7f6c787e03e53bf0a0860048b8fb8df9e2673054",
+      "GENERATOR_COMMIT": "919238949903ccc1cfc3093fefbdeb8d4d4ac16f",
+      "GENERATOR_SHA256": "d9577b71ee13555dc0e307cfc7cf3aa0529882a8498d67d03b39aabbab0604e1",
+      "CONFIG_SHA256": "76d998ee8b5518dc7f0e4dbb18cecdae9f459b9210ec2e235c643ccd21ead61e",
       "GENERATED_AT": "2026-11-21T19:49:49.829Z",
       "INPUTS": [
         {
@@ -1079,11 +1079,11 @@
     },
     {
       "FILE": "assets/XLV.json",
-      "SNAPSHOT_SHA256": "ed4827eed2a29a88f0d0a51881ce669d1699ba6e5e750b32429fcd2f41c2e5df",
+      "SNAPSHOT_SHA256": "0211c77fd44ee4b75e8472917805a550368eb1701babb395ef1f7ca02506438a",
       "SCHEMA_VERSION": "statistical-levels.snapshot.v3",
-      "GENERATOR_COMMIT": "ebd06d2f63682125cff9ed3a4434b335e57dbefe",
-      "GENERATOR_SHA256": "b3b13aad4448c11fb5a067ddae3522ebd0cbbf8da81aca26ca1810216a852d3b",
-      "CONFIG_SHA256": "1cecc123865fbd1df9eb2daa7f6c787e03e53bf0a0860048b8fb8df9e2673054",
+      "GENERATOR_COMMIT": "919238949903ccc1cfc3093fefbdeb8d4d4ac16f",
+      "GENERATOR_SHA256": "d9577b71ee13555dc0e307cfc7cf3aa0529882a8498d67d03b39aabbab0604e1",
+      "CONFIG_SHA256": "76d998ee8b5518dc7f0e4dbb18cecdae9f459b9210ec2e235c643ccd21ead61e",
       "GENERATED_AT": "2026-11-21T19:49:49.829Z",
       "INPUTS": [
         {
@@ -1106,11 +1106,11 @@
     },
     {
       "FILE": "assets/XLY.json",
-      "SNAPSHOT_SHA256": "d957ebccb33c341799abfff6ea7f1c68a67ceb60e07d76e9affaa9f2ee068c86",
+      "SNAPSHOT_SHA256": "c501260fe05608ccdb1cacfcdedf486646750cd4c8163f4f77cc5da53e64957a",
       "SCHEMA_VERSION": "statistical-levels.snapshot.v3",
-      "GENERATOR_COMMIT": "ebd06d2f63682125cff9ed3a4434b335e57dbefe",
-      "GENERATOR_SHA256": "b3b13aad4448c11fb5a067ddae3522ebd0cbbf8da81aca26ca1810216a852d3b",
-      "CONFIG_SHA256": "1cecc123865fbd1df9eb2daa7f6c787e03e53bf0a0860048b8fb8df9e2673054",
+      "GENERATOR_COMMIT": "919238949903ccc1cfc3093fefbdeb8d4d4ac16f",
+      "GENERATOR_SHA256": "d9577b71ee13555dc0e307cfc7cf3aa0529882a8498d67d03b39aabbab0604e1",
+      "CONFIG_SHA256": "76d998ee8b5518dc7f0e4dbb18cecdae9f459b9210ec2e235c643ccd21ead61e",
       "GENERATED_AT": "2026-11-21T19:49:49.829Z",
       "INPUTS": [
         {
@@ -1135,9 +1135,9 @@
       "FILE": "manifest.json",
       "SNAPSHOT_SHA256": "fc43515e4779f61ff1ed4ef014681cb93ae8f9b2a44ce118fef93520677531ac",
       "SCHEMA_VERSION": "statistical-levels.snapshot.v3",
-      "GENERATOR_COMMIT": "ebd06d2f63682125cff9ed3a4434b335e57dbefe",
-      "GENERATOR_SHA256": "b3b13aad4448c11fb5a067ddae3522ebd0cbbf8da81aca26ca1810216a852d3b",
-      "CONFIG_SHA256": "1cecc123865fbd1df9eb2daa7f6c787e03e53bf0a0860048b8fb8df9e2673054",
+      "GENERATOR_COMMIT": "919238949903ccc1cfc3093fefbdeb8d4d4ac16f",
+      "GENERATOR_SHA256": "d9577b71ee13555dc0e307cfc7cf3aa0529882a8498d67d03b39aabbab0604e1",
+      "CONFIG_SHA256": "76d998ee8b5518dc7f0e4dbb18cecdae9f459b9210ec2e235c643ccd21ead61e",
       "GENERATED_AT": "2026-11-21T19:49:49.829Z",
       "INPUTS": [
         {
@@ -1786,9 +1786,9 @@
       "FILE": "seasonality/AIQ.json",
       "SNAPSHOT_SHA256": "9d41623cfd185322665d9c430c206e17a4233bdafe92e521b80cf19dc7a81d44",
       "SCHEMA_VERSION": "statistical-levels.snapshot.v3",
-      "GENERATOR_COMMIT": "ebd06d2f63682125cff9ed3a4434b335e57dbefe",
-      "GENERATOR_SHA256": "b3b13aad4448c11fb5a067ddae3522ebd0cbbf8da81aca26ca1810216a852d3b",
-      "CONFIG_SHA256": "1cecc123865fbd1df9eb2daa7f6c787e03e53bf0a0860048b8fb8df9e2673054",
+      "GENERATOR_COMMIT": "919238949903ccc1cfc3093fefbdeb8d4d4ac16f",
+      "GENERATOR_SHA256": "d9577b71ee13555dc0e307cfc7cf3aa0529882a8498d67d03b39aabbab0604e1",
+      "CONFIG_SHA256": "76d998ee8b5518dc7f0e4dbb18cecdae9f459b9210ec2e235c643ccd21ead61e",
       "GENERATED_AT": "2026-11-21T19:49:49.829Z",
       "INPUTS": [
         {
@@ -1813,9 +1813,9 @@
       "FILE": "seasonality/BOTZ.json",
       "SNAPSHOT_SHA256": "9b9c94dd7ab311c7d58f48a2f0fc71ad561507753a333382cf8a0c82aa8fcdc2",
       "SCHEMA_VERSION": "statistical-levels.snapshot.v3",
-      "GENERATOR_COMMIT": "ebd06d2f63682125cff9ed3a4434b335e57dbefe",
-      "GENERATOR_SHA256": "b3b13aad4448c11fb5a067ddae3522ebd0cbbf8da81aca26ca1810216a852d3b",
-      "CONFIG_SHA256": "1cecc123865fbd1df9eb2daa7f6c787e03e53bf0a0860048b8fb8df9e2673054",
+      "GENERATOR_COMMIT": "919238949903ccc1cfc3093fefbdeb8d4d4ac16f",
+      "GENERATOR_SHA256": "d9577b71ee13555dc0e307cfc7cf3aa0529882a8498d67d03b39aabbab0604e1",
+      "CONFIG_SHA256": "76d998ee8b5518dc7f0e4dbb18cecdae9f459b9210ec2e235c643ccd21ead61e",
       "GENERATED_AT": "2026-11-21T19:49:49.829Z",
       "INPUTS": [
         {
@@ -1840,9 +1840,9 @@
       "FILE": "seasonality/BTCUSD.json",
       "SNAPSHOT_SHA256": "ca23601db29c3ba8dc33d33fe35a2c0fafa6dd724b187c349f4e5138ed2fab90",
       "SCHEMA_VERSION": "statistical-levels.snapshot.v3",
-      "GENERATOR_COMMIT": "ebd06d2f63682125cff9ed3a4434b335e57dbefe",
-      "GENERATOR_SHA256": "b3b13aad4448c11fb5a067ddae3522ebd0cbbf8da81aca26ca1810216a852d3b",
-      "CONFIG_SHA256": "1cecc123865fbd1df9eb2daa7f6c787e03e53bf0a0860048b8fb8df9e2673054",
+      "GENERATOR_COMMIT": "919238949903ccc1cfc3093fefbdeb8d4d4ac16f",
+      "GENERATOR_SHA256": "d9577b71ee13555dc0e307cfc7cf3aa0529882a8498d67d03b39aabbab0604e1",
+      "CONFIG_SHA256": "76d998ee8b5518dc7f0e4dbb18cecdae9f459b9210ec2e235c643ccd21ead61e",
       "GENERATED_AT": "2026-11-21T19:49:49.829Z",
       "INPUTS": [
         {
@@ -1867,9 +1867,9 @@
       "FILE": "seasonality/CIBR.json",
       "SNAPSHOT_SHA256": "744edabca88a4dc03bcbebb860e1b9ab89bdc33b7679fcd902f80be4c3224949",
       "SCHEMA_VERSION": "statistical-levels.snapshot.v3",
-      "GENERATOR_COMMIT": "ebd06d2f63682125cff9ed3a4434b335e57dbefe",
-      "GENERATOR_SHA256": "b3b13aad4448c11fb5a067ddae3522ebd0cbbf8da81aca26ca1810216a852d3b",
-      "CONFIG_SHA256": "1cecc123865fbd1df9eb2daa7f6c787e03e53bf0a0860048b8fb8df9e2673054",
+      "GENERATOR_COMMIT": "919238949903ccc1cfc3093fefbdeb8d4d4ac16f",
+      "GENERATOR_SHA256": "d9577b71ee13555dc0e307cfc7cf3aa0529882a8498d67d03b39aabbab0604e1",
+      "CONFIG_SHA256": "76d998ee8b5518dc7f0e4dbb18cecdae9f459b9210ec2e235c643ccd21ead61e",
       "GENERATED_AT": "2026-11-21T19:49:49.829Z",
       "INPUTS": [
         {
@@ -1894,9 +1894,9 @@
       "FILE": "seasonality/DIA.json",
       "SNAPSHOT_SHA256": "79ec0673c3715cb9188272e24199233ed7e007e7b9d03a80d133d0ce67369819",
       "SCHEMA_VERSION": "statistical-levels.snapshot.v3",
-      "GENERATOR_COMMIT": "ebd06d2f63682125cff9ed3a4434b335e57dbefe",
-      "GENERATOR_SHA256": "b3b13aad4448c11fb5a067ddae3522ebd0cbbf8da81aca26ca1810216a852d3b",
-      "CONFIG_SHA256": "1cecc123865fbd1df9eb2daa7f6c787e03e53bf0a0860048b8fb8df9e2673054",
+      "GENERATOR_COMMIT": "919238949903ccc1cfc3093fefbdeb8d4d4ac16f",
+      "GENERATOR_SHA256": "d9577b71ee13555dc0e307cfc7cf3aa0529882a8498d67d03b39aabbab0604e1",
+      "CONFIG_SHA256": "76d998ee8b5518dc7f0e4dbb18cecdae9f459b9210ec2e235c643ccd21ead61e",
       "GENERATED_AT": "2026-11-21T19:49:49.829Z",
       "INPUTS": [
         {
@@ -1921,9 +1921,9 @@
       "FILE": "seasonality/EEM.json",
       "SNAPSHOT_SHA256": "d70a2e4039f2851acbfe46d273d26e206db80b8ad64d18a82f80f354bcad97f2",
       "SCHEMA_VERSION": "statistical-levels.snapshot.v3",
-      "GENERATOR_COMMIT": "ebd06d2f63682125cff9ed3a4434b335e57dbefe",
-      "GENERATOR_SHA256": "b3b13aad4448c11fb5a067ddae3522ebd0cbbf8da81aca26ca1810216a852d3b",
-      "CONFIG_SHA256": "1cecc123865fbd1df9eb2daa7f6c787e03e53bf0a0860048b8fb8df9e2673054",
+      "GENERATOR_COMMIT": "919238949903ccc1cfc3093fefbdeb8d4d4ac16f",
+      "GENERATOR_SHA256": "d9577b71ee13555dc0e307cfc7cf3aa0529882a8498d67d03b39aabbab0604e1",
+      "CONFIG_SHA256": "76d998ee8b5518dc7f0e4dbb18cecdae9f459b9210ec2e235c643ccd21ead61e",
       "GENERATED_AT": "2026-11-21T19:49:49.829Z",
       "INPUTS": [
         {
@@ -1948,9 +1948,9 @@
       "FILE": "seasonality/EFA.json",
       "SNAPSHOT_SHA256": "c5d607f84625984f697b9c04b4aa8df5050aa7b7ddf9f802e89dbeef1f332e77",
       "SCHEMA_VERSION": "statistical-levels.snapshot.v3",
-      "GENERATOR_COMMIT": "ebd06d2f63682125cff9ed3a4434b335e57dbefe",
-      "GENERATOR_SHA256": "b3b13aad4448c11fb5a067ddae3522ebd0cbbf8da81aca26ca1810216a852d3b",
-      "CONFIG_SHA256": "1cecc123865fbd1df9eb2daa7f6c787e03e53bf0a0860048b8fb8df9e2673054",
+      "GENERATOR_COMMIT": "919238949903ccc1cfc3093fefbdeb8d4d4ac16f",
+      "GENERATOR_SHA256": "d9577b71ee13555dc0e307cfc7cf3aa0529882a8498d67d03b39aabbab0604e1",
+      "CONFIG_SHA256": "76d998ee8b5518dc7f0e4dbb18cecdae9f459b9210ec2e235c643ccd21ead61e",
       "GENERATED_AT": "2026-11-21T19:49:49.829Z",
       "INPUTS": [
         {
@@ -1975,9 +1975,9 @@
       "FILE": "seasonality/ETHUSD.json",
       "SNAPSHOT_SHA256": "f449ae28d540c1e901c3007dd58c16d38cee9d5bbd6f6f528e988e9a3e763b7f",
       "SCHEMA_VERSION": "statistical-levels.snapshot.v3",
-      "GENERATOR_COMMIT": "ebd06d2f63682125cff9ed3a4434b335e57dbefe",
-      "GENERATOR_SHA256": "b3b13aad4448c11fb5a067ddae3522ebd0cbbf8da81aca26ca1810216a852d3b",
-      "CONFIG_SHA256": "1cecc123865fbd1df9eb2daa7f6c787e03e53bf0a0860048b8fb8df9e2673054",
+      "GENERATOR_COMMIT": "919238949903ccc1cfc3093fefbdeb8d4d4ac16f",
+      "GENERATOR_SHA256": "d9577b71ee13555dc0e307cfc7cf3aa0529882a8498d67d03b39aabbab0604e1",
+      "CONFIG_SHA256": "76d998ee8b5518dc7f0e4dbb18cecdae9f459b9210ec2e235c643ccd21ead61e",
       "GENERATED_AT": "2026-11-21T19:49:49.829Z",
       "INPUTS": [
         {
@@ -2002,9 +2002,9 @@
       "FILE": "seasonality/EWJ.json",
       "SNAPSHOT_SHA256": "5775b794cc5bd09ce90dccd03a078e3a8491a182df9d78cee3ed2c18dcc99a5a",
       "SCHEMA_VERSION": "statistical-levels.snapshot.v3",
-      "GENERATOR_COMMIT": "ebd06d2f63682125cff9ed3a4434b335e57dbefe",
-      "GENERATOR_SHA256": "b3b13aad4448c11fb5a067ddae3522ebd0cbbf8da81aca26ca1810216a852d3b",
-      "CONFIG_SHA256": "1cecc123865fbd1df9eb2daa7f6c787e03e53bf0a0860048b8fb8df9e2673054",
+      "GENERATOR_COMMIT": "919238949903ccc1cfc3093fefbdeb8d4d4ac16f",
+      "GENERATOR_SHA256": "d9577b71ee13555dc0e307cfc7cf3aa0529882a8498d67d03b39aabbab0604e1",
+      "CONFIG_SHA256": "76d998ee8b5518dc7f0e4dbb18cecdae9f459b9210ec2e235c643ccd21ead61e",
       "GENERATED_AT": "2026-11-21T19:49:49.829Z",
       "INPUTS": [
         {
@@ -2029,9 +2029,9 @@
       "FILE": "seasonality/FINX.json",
       "SNAPSHOT_SHA256": "201dce73084d53dc6fa8ec6ebf86a6fa12f461af5dbe16acc32a47e7b969426a",
       "SCHEMA_VERSION": "statistical-levels.snapshot.v3",
-      "GENERATOR_COMMIT": "ebd06d2f63682125cff9ed3a4434b335e57dbefe",
-      "GENERATOR_SHA256": "b3b13aad4448c11fb5a067ddae3522ebd0cbbf8da81aca26ca1810216a852d3b",
-      "CONFIG_SHA256": "1cecc123865fbd1df9eb2daa7f6c787e03e53bf0a0860048b8fb8df9e2673054",
+      "GENERATOR_COMMIT": "919238949903ccc1cfc3093fefbdeb8d4d4ac16f",
+      "GENERATOR_SHA256": "d9577b71ee13555dc0e307cfc7cf3aa0529882a8498d67d03b39aabbab0604e1",
+      "CONFIG_SHA256": "76d998ee8b5518dc7f0e4dbb18cecdae9f459b9210ec2e235c643ccd21ead61e",
       "GENERATED_AT": "2026-11-21T19:49:49.829Z",
       "INPUTS": [
         {
@@ -2056,9 +2056,9 @@
       "FILE": "seasonality/FXI.json",
       "SNAPSHOT_SHA256": "f1ce706233dec8e44168e8d6731a78024c6642596a1602add40a5eb2bf0f1cad",
       "SCHEMA_VERSION": "statistical-levels.snapshot.v3",
-      "GENERATOR_COMMIT": "ebd06d2f63682125cff9ed3a4434b335e57dbefe",
-      "GENERATOR_SHA256": "b3b13aad4448c11fb5a067ddae3522ebd0cbbf8da81aca26ca1810216a852d3b",
-      "CONFIG_SHA256": "1cecc123865fbd1df9eb2daa7f6c787e03e53bf0a0860048b8fb8df9e2673054",
+      "GENERATOR_COMMIT": "919238949903ccc1cfc3093fefbdeb8d4d4ac16f",
+      "GENERATOR_SHA256": "d9577b71ee13555dc0e307cfc7cf3aa0529882a8498d67d03b39aabbab0604e1",
+      "CONFIG_SHA256": "76d998ee8b5518dc7f0e4dbb18cecdae9f459b9210ec2e235c643ccd21ead61e",
       "GENERATED_AT": "2026-11-21T19:49:49.829Z",
       "INPUTS": [
         {
@@ -2083,9 +2083,9 @@
       "FILE": "seasonality/GLD.json",
       "SNAPSHOT_SHA256": "1edc258572edae787cf3cbdaca7ee0b359c3cc396c9dea8d31de2e5d14fcd770",
       "SCHEMA_VERSION": "statistical-levels.snapshot.v3",
-      "GENERATOR_COMMIT": "ebd06d2f63682125cff9ed3a4434b335e57dbefe",
-      "GENERATOR_SHA256": "b3b13aad4448c11fb5a067ddae3522ebd0cbbf8da81aca26ca1810216a852d3b",
-      "CONFIG_SHA256": "1cecc123865fbd1df9eb2daa7f6c787e03e53bf0a0860048b8fb8df9e2673054",
+      "GENERATOR_COMMIT": "919238949903ccc1cfc3093fefbdeb8d4d4ac16f",
+      "GENERATOR_SHA256": "d9577b71ee13555dc0e307cfc7cf3aa0529882a8498d67d03b39aabbab0604e1",
+      "CONFIG_SHA256": "76d998ee8b5518dc7f0e4dbb18cecdae9f459b9210ec2e235c643ccd21ead61e",
       "GENERATED_AT": "2026-11-21T19:49:49.829Z",
       "INPUTS": [
         {
@@ -2110,9 +2110,9 @@
       "FILE": "seasonality/HYG.json",
       "SNAPSHOT_SHA256": "c9085ab863743cb6548c9ac29be403e834847f4b47ebeea7a6ce83edd7ec1c35",
       "SCHEMA_VERSION": "statistical-levels.snapshot.v3",
-      "GENERATOR_COMMIT": "ebd06d2f63682125cff9ed3a4434b335e57dbefe",
-      "GENERATOR_SHA256": "b3b13aad4448c11fb5a067ddae3522ebd0cbbf8da81aca26ca1810216a852d3b",
-      "CONFIG_SHA256": "1cecc123865fbd1df9eb2daa7f6c787e03e53bf0a0860048b8fb8df9e2673054",
+      "GENERATOR_COMMIT": "919238949903ccc1cfc3093fefbdeb8d4d4ac16f",
+      "GENERATOR_SHA256": "d9577b71ee13555dc0e307cfc7cf3aa0529882a8498d67d03b39aabbab0604e1",
+      "CONFIG_SHA256": "76d998ee8b5518dc7f0e4dbb18cecdae9f459b9210ec2e235c643ccd21ead61e",
       "GENERATED_AT": "2026-11-21T19:49:49.829Z",
       "INPUTS": [
         {
@@ -2137,9 +2137,9 @@
       "FILE": "seasonality/IEF.json",
       "SNAPSHOT_SHA256": "06d5a1282f7d445bdef325f80a812649ef015bcce94f1501959d3ec60d994140",
       "SCHEMA_VERSION": "statistical-levels.snapshot.v3",
-      "GENERATOR_COMMIT": "ebd06d2f63682125cff9ed3a4434b335e57dbefe",
-      "GENERATOR_SHA256": "b3b13aad4448c11fb5a067ddae3522ebd0cbbf8da81aca26ca1810216a852d3b",
-      "CONFIG_SHA256": "1cecc123865fbd1df9eb2daa7f6c787e03e53bf0a0860048b8fb8df9e2673054",
+      "GENERATOR_COMMIT": "919238949903ccc1cfc3093fefbdeb8d4d4ac16f",
+      "GENERATOR_SHA256": "d9577b71ee13555dc0e307cfc7cf3aa0529882a8498d67d03b39aabbab0604e1",
+      "CONFIG_SHA256": "76d998ee8b5518dc7f0e4dbb18cecdae9f459b9210ec2e235c643ccd21ead61e",
       "GENERATED_AT": "2026-11-21T19:49:49.829Z",
       "INPUTS": [
         {
@@ -2164,9 +2164,9 @@
       "FILE": "seasonality/ITA.json",
       "SNAPSHOT_SHA256": "62501a161e558d9d9a8eb5861c5bdaced39d9c670fd4d754f2869ddcc050785d",
       "SCHEMA_VERSION": "statistical-levels.snapshot.v3",
-      "GENERATOR_COMMIT": "ebd06d2f63682125cff9ed3a4434b335e57dbefe",
-      "GENERATOR_SHA256": "b3b13aad4448c11fb5a067ddae3522ebd0cbbf8da81aca26ca1810216a852d3b",
-      "CONFIG_SHA256": "1cecc123865fbd1df9eb2daa7f6c787e03e53bf0a0860048b8fb8df9e2673054",
+      "GENERATOR_COMMIT": "919238949903ccc1cfc3093fefbdeb8d4d4ac16f",
+      "GENERATOR_SHA256": "d9577b71ee13555dc0e307cfc7cf3aa0529882a8498d67d03b39aabbab0604e1",
+      "CONFIG_SHA256": "76d998ee8b5518dc7f0e4dbb18cecdae9f459b9210ec2e235c643ccd21ead61e",
       "GENERATED_AT": "2026-11-21T19:49:49.829Z",
       "INPUTS": [
         {
@@ -2191,9 +2191,9 @@
       "FILE": "seasonality/IWM.json",
       "SNAPSHOT_SHA256": "6fbbc374c17df2919203aeb499a84c4c76fe391b20a06027c3bb7599984dfc3b",
       "SCHEMA_VERSION": "statistical-levels.snapshot.v3",
-      "GENERATOR_COMMIT": "ebd06d2f63682125cff9ed3a4434b335e57dbefe",
-      "GENERATOR_SHA256": "b3b13aad4448c11fb5a067ddae3522ebd0cbbf8da81aca26ca1810216a852d3b",
-      "CONFIG_SHA256": "1cecc123865fbd1df9eb2daa7f6c787e03e53bf0a0860048b8fb8df9e2673054",
+      "GENERATOR_COMMIT": "919238949903ccc1cfc3093fefbdeb8d4d4ac16f",
+      "GENERATOR_SHA256": "d9577b71ee13555dc0e307cfc7cf3aa0529882a8498d67d03b39aabbab0604e1",
+      "CONFIG_SHA256": "76d998ee8b5518dc7f0e4dbb18cecdae9f459b9210ec2e235c643ccd21ead61e",
       "GENERATED_AT": "2026-11-21T19:49:49.829Z",
       "INPUTS": [
         {
@@ -2218,9 +2218,9 @@
       "FILE": "seasonality/LQD.json",
       "SNAPSHOT_SHA256": "90fdadba522eee1f76f9c9380f517adb2db079d3b5b1ec48c1e6a1b08978cad6",
       "SCHEMA_VERSION": "statistical-levels.snapshot.v3",
-      "GENERATOR_COMMIT": "ebd06d2f63682125cff9ed3a4434b335e57dbefe",
-      "GENERATOR_SHA256": "b3b13aad4448c11fb5a067ddae3522ebd0cbbf8da81aca26ca1810216a852d3b",
-      "CONFIG_SHA256": "1cecc123865fbd1df9eb2daa7f6c787e03e53bf0a0860048b8fb8df9e2673054",
+      "GENERATOR_COMMIT": "919238949903ccc1cfc3093fefbdeb8d4d4ac16f",
+      "GENERATOR_SHA256": "d9577b71ee13555dc0e307cfc7cf3aa0529882a8498d67d03b39aabbab0604e1",
+      "CONFIG_SHA256": "76d998ee8b5518dc7f0e4dbb18cecdae9f459b9210ec2e235c643ccd21ead61e",
       "GENERATED_AT": "2026-11-21T19:49:49.829Z",
       "INPUTS": [
         {
@@ -2245,9 +2245,9 @@
       "FILE": "seasonality/PAVE.json",
       "SNAPSHOT_SHA256": "690350d9696af47ef538ec402abd635a79fb35cfb302713a47728b50e1bb4b01",
       "SCHEMA_VERSION": "statistical-levels.snapshot.v3",
-      "GENERATOR_COMMIT": "ebd06d2f63682125cff9ed3a4434b335e57dbefe",
-      "GENERATOR_SHA256": "b3b13aad4448c11fb5a067ddae3522ebd0cbbf8da81aca26ca1810216a852d3b",
-      "CONFIG_SHA256": "1cecc123865fbd1df9eb2daa7f6c787e03e53bf0a0860048b8fb8df9e2673054",
+      "GENERATOR_COMMIT": "919238949903ccc1cfc3093fefbdeb8d4d4ac16f",
+      "GENERATOR_SHA256": "d9577b71ee13555dc0e307cfc7cf3aa0529882a8498d67d03b39aabbab0604e1",
+      "CONFIG_SHA256": "76d998ee8b5518dc7f0e4dbb18cecdae9f459b9210ec2e235c643ccd21ead61e",
       "GENERATED_AT": "2026-11-21T19:49:49.829Z",
       "INPUTS": [
         {
@@ -2272,9 +2272,9 @@
       "FILE": "seasonality/PHO.json",
       "SNAPSHOT_SHA256": "0c808f5edaf9ba780e7bbf79f86c1e2f0844c1b6ae401870bf880526c46693bf",
       "SCHEMA_VERSION": "statistical-levels.snapshot.v3",
-      "GENERATOR_COMMIT": "ebd06d2f63682125cff9ed3a4434b335e57dbefe",
-      "GENERATOR_SHA256": "b3b13aad4448c11fb5a067ddae3522ebd0cbbf8da81aca26ca1810216a852d3b",
-      "CONFIG_SHA256": "1cecc123865fbd1df9eb2daa7f6c787e03e53bf0a0860048b8fb8df9e2673054",
+      "GENERATOR_COMMIT": "919238949903ccc1cfc3093fefbdeb8d4d4ac16f",
+      "GENERATOR_SHA256": "d9577b71ee13555dc0e307cfc7cf3aa0529882a8498d67d03b39aabbab0604e1",
+      "CONFIG_SHA256": "76d998ee8b5518dc7f0e4dbb18cecdae9f459b9210ec2e235c643ccd21ead61e",
       "GENERATED_AT": "2026-11-21T19:49:49.829Z",
       "INPUTS": [
         {
@@ -2299,9 +2299,9 @@
       "FILE": "seasonality/QQQ.json",
       "SNAPSHOT_SHA256": "3dc0d8a331751e9b6b346264e3027267be0dedb8ec05387d1922a96be55fd29b",
       "SCHEMA_VERSION": "statistical-levels.snapshot.v3",
-      "GENERATOR_COMMIT": "ebd06d2f63682125cff9ed3a4434b335e57dbefe",
-      "GENERATOR_SHA256": "b3b13aad4448c11fb5a067ddae3522ebd0cbbf8da81aca26ca1810216a852d3b",
-      "CONFIG_SHA256": "1cecc123865fbd1df9eb2daa7f6c787e03e53bf0a0860048b8fb8df9e2673054",
+      "GENERATOR_COMMIT": "919238949903ccc1cfc3093fefbdeb8d4d4ac16f",
+      "GENERATOR_SHA256": "d9577b71ee13555dc0e307cfc7cf3aa0529882a8498d67d03b39aabbab0604e1",
+      "CONFIG_SHA256": "76d998ee8b5518dc7f0e4dbb18cecdae9f459b9210ec2e235c643ccd21ead61e",
       "GENERATED_AT": "2026-11-21T19:49:49.829Z",
       "INPUTS": [
         {
@@ -2326,9 +2326,9 @@
       "FILE": "seasonality/RSP.json",
       "SNAPSHOT_SHA256": "041ba569d5c22a5eb75a1e6e31fc31b8feaa774bb9433730f8bafc6ffb3d5ef4",
       "SCHEMA_VERSION": "statistical-levels.snapshot.v3",
-      "GENERATOR_COMMIT": "ebd06d2f63682125cff9ed3a4434b335e57dbefe",
-      "GENERATOR_SHA256": "b3b13aad4448c11fb5a067ddae3522ebd0cbbf8da81aca26ca1810216a852d3b",
-      "CONFIG_SHA256": "1cecc123865fbd1df9eb2daa7f6c787e03e53bf0a0860048b8fb8df9e2673054",
+      "GENERATOR_COMMIT": "919238949903ccc1cfc3093fefbdeb8d4d4ac16f",
+      "GENERATOR_SHA256": "d9577b71ee13555dc0e307cfc7cf3aa0529882a8498d67d03b39aabbab0604e1",
+      "CONFIG_SHA256": "76d998ee8b5518dc7f0e4dbb18cecdae9f459b9210ec2e235c643ccd21ead61e",
       "GENERATED_AT": "2026-11-21T19:49:49.829Z",
       "INPUTS": [
         {
@@ -2353,9 +2353,9 @@
       "FILE": "seasonality/SHY.json",
       "SNAPSHOT_SHA256": "6132894892d762db6ff424e28913afc1712bc1d893f2d39642ae09d45e018176",
       "SCHEMA_VERSION": "statistical-levels.snapshot.v3",
-      "GENERATOR_COMMIT": "ebd06d2f63682125cff9ed3a4434b335e57dbefe",
-      "GENERATOR_SHA256": "b3b13aad4448c11fb5a067ddae3522ebd0cbbf8da81aca26ca1810216a852d3b",
-      "CONFIG_SHA256": "1cecc123865fbd1df9eb2daa7f6c787e03e53bf0a0860048b8fb8df9e2673054",
+      "GENERATOR_COMMIT": "919238949903ccc1cfc3093fefbdeb8d4d4ac16f",
+      "GENERATOR_SHA256": "d9577b71ee13555dc0e307cfc7cf3aa0529882a8498d67d03b39aabbab0604e1",
+      "CONFIG_SHA256": "76d998ee8b5518dc7f0e4dbb18cecdae9f459b9210ec2e235c643ccd21ead61e",
       "GENERATED_AT": "2026-11-21T19:49:49.829Z",
       "INPUTS": [
         {
@@ -2380,9 +2380,9 @@
       "FILE": "seasonality/SLV.json",
       "SNAPSHOT_SHA256": "369a6d6413e66c473bf47e2bb17583ed882d2be97ff6aae1144e34c833358b26",
       "SCHEMA_VERSION": "statistical-levels.snapshot.v3",
-      "GENERATOR_COMMIT": "ebd06d2f63682125cff9ed3a4434b335e57dbefe",
-      "GENERATOR_SHA256": "b3b13aad4448c11fb5a067ddae3522ebd0cbbf8da81aca26ca1810216a852d3b",
-      "CONFIG_SHA256": "1cecc123865fbd1df9eb2daa7f6c787e03e53bf0a0860048b8fb8df9e2673054",
+      "GENERATOR_COMMIT": "919238949903ccc1cfc3093fefbdeb8d4d4ac16f",
+      "GENERATOR_SHA256": "d9577b71ee13555dc0e307cfc7cf3aa0529882a8498d67d03b39aabbab0604e1",
+      "CONFIG_SHA256": "76d998ee8b5518dc7f0e4dbb18cecdae9f459b9210ec2e235c643ccd21ead61e",
       "GENERATED_AT": "2026-11-21T19:49:49.829Z",
       "INPUTS": [
         {
@@ -2407,9 +2407,9 @@
       "FILE": "seasonality/SMH.json",
       "SNAPSHOT_SHA256": "f28b84198358a9fa67902e2d0336653515d6fc0d9aa8c09f5aa8a7480961d572",
       "SCHEMA_VERSION": "statistical-levels.snapshot.v3",
-      "GENERATOR_COMMIT": "ebd06d2f63682125cff9ed3a4434b335e57dbefe",
-      "GENERATOR_SHA256": "b3b13aad4448c11fb5a067ddae3522ebd0cbbf8da81aca26ca1810216a852d3b",
-      "CONFIG_SHA256": "1cecc123865fbd1df9eb2daa7f6c787e03e53bf0a0860048b8fb8df9e2673054",
+      "GENERATOR_COMMIT": "919238949903ccc1cfc3093fefbdeb8d4d4ac16f",
+      "GENERATOR_SHA256": "d9577b71ee13555dc0e307cfc7cf3aa0529882a8498d67d03b39aabbab0604e1",
+      "CONFIG_SHA256": "76d998ee8b5518dc7f0e4dbb18cecdae9f459b9210ec2e235c643ccd21ead61e",
       "GENERATED_AT": "2026-11-21T19:49:49.829Z",
       "INPUTS": [
         {
@@ -2434,9 +2434,9 @@
       "FILE": "seasonality/SPY.json",
       "SNAPSHOT_SHA256": "3548b1267a444e3a92965e81e1bf97595c13739ee601bccebe5ce1f82f365754",
       "SCHEMA_VERSION": "statistical-levels.snapshot.v3",
-      "GENERATOR_COMMIT": "ebd06d2f63682125cff9ed3a4434b335e57dbefe",
-      "GENERATOR_SHA256": "b3b13aad4448c11fb5a067ddae3522ebd0cbbf8da81aca26ca1810216a852d3b",
-      "CONFIG_SHA256": "1cecc123865fbd1df9eb2daa7f6c787e03e53bf0a0860048b8fb8df9e2673054",
+      "GENERATOR_COMMIT": "919238949903ccc1cfc3093fefbdeb8d4d4ac16f",
+      "GENERATOR_SHA256": "d9577b71ee13555dc0e307cfc7cf3aa0529882a8498d67d03b39aabbab0604e1",
+      "CONFIG_SHA256": "76d998ee8b5518dc7f0e4dbb18cecdae9f459b9210ec2e235c643ccd21ead61e",
       "GENERATED_AT": "2026-11-21T19:49:49.829Z",
       "INPUTS": [
         {
@@ -2461,9 +2461,9 @@
       "FILE": "seasonality/TLT.json",
       "SNAPSHOT_SHA256": "3ea7a79876916624f16325dfad54d5c3963cacf91ec1da8d0bd6286ffe3b93ca",
       "SCHEMA_VERSION": "statistical-levels.snapshot.v3",
-      "GENERATOR_COMMIT": "ebd06d2f63682125cff9ed3a4434b335e57dbefe",
-      "GENERATOR_SHA256": "b3b13aad4448c11fb5a067ddae3522ebd0cbbf8da81aca26ca1810216a852d3b",
-      "CONFIG_SHA256": "1cecc123865fbd1df9eb2daa7f6c787e03e53bf0a0860048b8fb8df9e2673054",
+      "GENERATOR_COMMIT": "919238949903ccc1cfc3093fefbdeb8d4d4ac16f",
+      "GENERATOR_SHA256": "d9577b71ee13555dc0e307cfc7cf3aa0529882a8498d67d03b39aabbab0604e1",
+      "CONFIG_SHA256": "76d998ee8b5518dc7f0e4dbb18cecdae9f459b9210ec2e235c643ccd21ead61e",
       "GENERATED_AT": "2026-11-21T19:49:49.829Z",
       "INPUTS": [
         {
@@ -2488,9 +2488,9 @@
       "FILE": "seasonality/USO.json",
       "SNAPSHOT_SHA256": "5b3a62c4e42302e1f60f8d66865bc873689a767801de5f03d988a2cc5581484d",
       "SCHEMA_VERSION": "statistical-levels.snapshot.v3",
-      "GENERATOR_COMMIT": "ebd06d2f63682125cff9ed3a4434b335e57dbefe",
-      "GENERATOR_SHA256": "b3b13aad4448c11fb5a067ddae3522ebd0cbbf8da81aca26ca1810216a852d3b",
-      "CONFIG_SHA256": "1cecc123865fbd1df9eb2daa7f6c787e03e53bf0a0860048b8fb8df9e2673054",
+      "GENERATOR_COMMIT": "919238949903ccc1cfc3093fefbdeb8d4d4ac16f",
+      "GENERATOR_SHA256": "d9577b71ee13555dc0e307cfc7cf3aa0529882a8498d67d03b39aabbab0604e1",
+      "CONFIG_SHA256": "76d998ee8b5518dc7f0e4dbb18cecdae9f459b9210ec2e235c643ccd21ead61e",
       "GENERATED_AT": "2026-11-21T19:49:49.829Z",
       "INPUTS": [
         {
@@ -2515,9 +2515,9 @@
       "FILE": "seasonality/UUP.json",
       "SNAPSHOT_SHA256": "09394f28254c600db35e0a156ce0162064278e3a7a7e1b0ca6fe4a29ba4dfea0",
       "SCHEMA_VERSION": "statistical-levels.snapshot.v3",
-      "GENERATOR_COMMIT": "ebd06d2f63682125cff9ed3a4434b335e57dbefe",
-      "GENERATOR_SHA256": "b3b13aad4448c11fb5a067ddae3522ebd0cbbf8da81aca26ca1810216a852d3b",
-      "CONFIG_SHA256": "1cecc123865fbd1df9eb2daa7f6c787e03e53bf0a0860048b8fb8df9e2673054",
+      "GENERATOR_COMMIT": "919238949903ccc1cfc3093fefbdeb8d4d4ac16f",
+      "GENERATOR_SHA256": "d9577b71ee13555dc0e307cfc7cf3aa0529882a8498d67d03b39aabbab0604e1",
+      "CONFIG_SHA256": "76d998ee8b5518dc7f0e4dbb18cecdae9f459b9210ec2e235c643ccd21ead61e",
       "GENERATED_AT": "2026-11-21T19:49:49.829Z",
       "INPUTS": [
         {
@@ -2542,9 +2542,9 @@
       "FILE": "seasonality/VOO.json",
       "SNAPSHOT_SHA256": "a28864b8e08ea7d284a8031adbbc9fe2c0b46191afe8ef021f46c07c03389187",
       "SCHEMA_VERSION": "statistical-levels.snapshot.v3",
-      "GENERATOR_COMMIT": "ebd06d2f63682125cff9ed3a4434b335e57dbefe",
-      "GENERATOR_SHA256": "b3b13aad4448c11fb5a067ddae3522ebd0cbbf8da81aca26ca1810216a852d3b",
-      "CONFIG_SHA256": "1cecc123865fbd1df9eb2daa7f6c787e03e53bf0a0860048b8fb8df9e2673054",
+      "GENERATOR_COMMIT": "919238949903ccc1cfc3093fefbdeb8d4d4ac16f",
+      "GENERATOR_SHA256": "d9577b71ee13555dc0e307cfc7cf3aa0529882a8498d67d03b39aabbab0604e1",
+      "CONFIG_SHA256": "76d998ee8b5518dc7f0e4dbb18cecdae9f459b9210ec2e235c643ccd21ead61e",
       "GENERATED_AT": "2026-11-21T19:49:49.829Z",
       "INPUTS": [
         {
@@ -2569,9 +2569,9 @@
       "FILE": "seasonality/XLB.json",
       "SNAPSHOT_SHA256": "6eded4df28dab9ba9e32655d089b3581458a72bff4a4af341df6f52c2c3c34f9",
       "SCHEMA_VERSION": "statistical-levels.snapshot.v3",
-      "GENERATOR_COMMIT": "ebd06d2f63682125cff9ed3a4434b335e57dbefe",
-      "GENERATOR_SHA256": "b3b13aad4448c11fb5a067ddae3522ebd0cbbf8da81aca26ca1810216a852d3b",
-      "CONFIG_SHA256": "1cecc123865fbd1df9eb2daa7f6c787e03e53bf0a0860048b8fb8df9e2673054",
+      "GENERATOR_COMMIT": "919238949903ccc1cfc3093fefbdeb8d4d4ac16f",
+      "GENERATOR_SHA256": "d9577b71ee13555dc0e307cfc7cf3aa0529882a8498d67d03b39aabbab0604e1",
+      "CONFIG_SHA256": "76d998ee8b5518dc7f0e4dbb18cecdae9f459b9210ec2e235c643ccd21ead61e",
       "GENERATED_AT": "2026-11-21T19:49:49.829Z",
       "INPUTS": [
         {
@@ -2596,9 +2596,9 @@
       "FILE": "seasonality/XLC.json",
       "SNAPSHOT_SHA256": "9907ed04197bbcee7d2ad3fd0e0532bd62cd02c564424d57c84442f31722c85b",
       "SCHEMA_VERSION": "statistical-levels.snapshot.v3",
-      "GENERATOR_COMMIT": "ebd06d2f63682125cff9ed3a4434b335e57dbefe",
-      "GENERATOR_SHA256": "b3b13aad4448c11fb5a067ddae3522ebd0cbbf8da81aca26ca1810216a852d3b",
-      "CONFIG_SHA256": "1cecc123865fbd1df9eb2daa7f6c787e03e53bf0a0860048b8fb8df9e2673054",
+      "GENERATOR_COMMIT": "919238949903ccc1cfc3093fefbdeb8d4d4ac16f",
+      "GENERATOR_SHA256": "d9577b71ee13555dc0e307cfc7cf3aa0529882a8498d67d03b39aabbab0604e1",
+      "CONFIG_SHA256": "76d998ee8b5518dc7f0e4dbb18cecdae9f459b9210ec2e235c643ccd21ead61e",
       "GENERATED_AT": "2026-11-21T19:49:49.829Z",
       "INPUTS": [
         {
@@ -2623,9 +2623,9 @@
       "FILE": "seasonality/XLE.json",
       "SNAPSHOT_SHA256": "d29e5d6b3851f94c65963845b2e744632ac44ba8204cae834e28e39aef4a47ec",
       "SCHEMA_VERSION": "statistical-levels.snapshot.v3",
-      "GENERATOR_COMMIT": "ebd06d2f63682125cff9ed3a4434b335e57dbefe",
-      "GENERATOR_SHA256": "b3b13aad4448c11fb5a067ddae3522ebd0cbbf8da81aca26ca1810216a852d3b",
-      "CONFIG_SHA256": "1cecc123865fbd1df9eb2daa7f6c787e03e53bf0a0860048b8fb8df9e2673054",
+      "GENERATOR_COMMIT": "919238949903ccc1cfc3093fefbdeb8d4d4ac16f",
+      "GENERATOR_SHA256": "d9577b71ee13555dc0e307cfc7cf3aa0529882a8498d67d03b39aabbab0604e1",
+      "CONFIG_SHA256": "76d998ee8b5518dc7f0e4dbb18cecdae9f459b9210ec2e235c643ccd21ead61e",
       "GENERATED_AT": "2026-11-21T19:49:49.829Z",
       "INPUTS": [
         {
@@ -2650,9 +2650,9 @@
       "FILE": "seasonality/XLF.json",
       "SNAPSHOT_SHA256": "3c897a292193bf63286be198f9f9c3b53be1d719e62e505f61cad03061ee9ae6",
       "SCHEMA_VERSION": "statistical-levels.snapshot.v3",
-      "GENERATOR_COMMIT": "ebd06d2f63682125cff9ed3a4434b335e57dbefe",
-      "GENERATOR_SHA256": "b3b13aad4448c11fb5a067ddae3522ebd0cbbf8da81aca26ca1810216a852d3b",
-      "CONFIG_SHA256": "1cecc123865fbd1df9eb2daa7f6c787e03e53bf0a0860048b8fb8df9e2673054",
+      "GENERATOR_COMMIT": "919238949903ccc1cfc3093fefbdeb8d4d4ac16f",
+      "GENERATOR_SHA256": "d9577b71ee13555dc0e307cfc7cf3aa0529882a8498d67d03b39aabbab0604e1",
+      "CONFIG_SHA256": "76d998ee8b5518dc7f0e4dbb18cecdae9f459b9210ec2e235c643ccd21ead61e",
       "GENERATED_AT": "2026-11-21T19:49:49.829Z",
       "INPUTS": [
         {
@@ -2677,9 +2677,9 @@
       "FILE": "seasonality/XLI.json",
       "SNAPSHOT_SHA256": "f3844642aca085575a1b1fb11a712b734d120a5ed6db5fc4f8c6ded9bd34e413",
       "SCHEMA_VERSION": "statistical-levels.snapshot.v3",
-      "GENERATOR_COMMIT": "ebd06d2f63682125cff9ed3a4434b335e57dbefe",
-      "GENERATOR_SHA256": "b3b13aad4448c11fb5a067ddae3522ebd0cbbf8da81aca26ca1810216a852d3b",
-      "CONFIG_SHA256": "1cecc123865fbd1df9eb2daa7f6c787e03e53bf0a0860048b8fb8df9e2673054",
+      "GENERATOR_COMMIT": "919238949903ccc1cfc3093fefbdeb8d4d4ac16f",
+      "GENERATOR_SHA256": "d9577b71ee13555dc0e307cfc7cf3aa0529882a8498d67d03b39aabbab0604e1",
+      "CONFIG_SHA256": "76d998ee8b5518dc7f0e4dbb18cecdae9f459b9210ec2e235c643ccd21ead61e",
       "GENERATED_AT": "2026-11-21T19:49:49.829Z",
       "INPUTS": [
         {
@@ -2704,9 +2704,9 @@
       "FILE": "seasonality/XLK.json",
       "SNAPSHOT_SHA256": "bd68a766ba671a3abb47184b4ad09a9dd80733b279f0149d8ec0fa0c418a50f2",
       "SCHEMA_VERSION": "statistical-levels.snapshot.v3",
-      "GENERATOR_COMMIT": "ebd06d2f63682125cff9ed3a4434b335e57dbefe",
-      "GENERATOR_SHA256": "b3b13aad4448c11fb5a067ddae3522ebd0cbbf8da81aca26ca1810216a852d3b",
-      "CONFIG_SHA256": "1cecc123865fbd1df9eb2daa7f6c787e03e53bf0a0860048b8fb8df9e2673054",
+      "GENERATOR_COMMIT": "919238949903ccc1cfc3093fefbdeb8d4d4ac16f",
+      "GENERATOR_SHA256": "d9577b71ee13555dc0e307cfc7cf3aa0529882a8498d67d03b39aabbab0604e1",
+      "CONFIG_SHA256": "76d998ee8b5518dc7f0e4dbb18cecdae9f459b9210ec2e235c643ccd21ead61e",
       "GENERATED_AT": "2026-11-21T19:49:49.829Z",
       "INPUTS": [
         {
@@ -2731,9 +2731,9 @@
       "FILE": "seasonality/XLP.json",
       "SNAPSHOT_SHA256": "f66a53fe022afb0c6126249611cdd6dde5e5413bd9122d48460cf5f51b211e77",
       "SCHEMA_VERSION": "statistical-levels.snapshot.v3",
-      "GENERATOR_COMMIT": "ebd06d2f63682125cff9ed3a4434b335e57dbefe",
-      "GENERATOR_SHA256": "b3b13aad4448c11fb5a067ddae3522ebd0cbbf8da81aca26ca1810216a852d3b",
-      "CONFIG_SHA256": "1cecc123865fbd1df9eb2daa7f6c787e03e53bf0a0860048b8fb8df9e2673054",
+      "GENERATOR_COMMIT": "919238949903ccc1cfc3093fefbdeb8d4d4ac16f",
+      "GENERATOR_SHA256": "d9577b71ee13555dc0e307cfc7cf3aa0529882a8498d67d03b39aabbab0604e1",
+      "CONFIG_SHA256": "76d998ee8b5518dc7f0e4dbb18cecdae9f459b9210ec2e235c643ccd21ead61e",
       "GENERATED_AT": "2026-11-21T19:49:49.829Z",
       "INPUTS": [
         {
@@ -2758,9 +2758,9 @@
       "FILE": "seasonality/XLRE.json",
       "SNAPSHOT_SHA256": "47dc2c8fdd7497ccc88d7f91dbc67eadd431442ff064c2363f0fd71aa8623c68",
       "SCHEMA_VERSION": "statistical-levels.snapshot.v3",
-      "GENERATOR_COMMIT": "ebd06d2f63682125cff9ed3a4434b335e57dbefe",
-      "GENERATOR_SHA256": "b3b13aad4448c11fb5a067ddae3522ebd0cbbf8da81aca26ca1810216a852d3b",
-      "CONFIG_SHA256": "1cecc123865fbd1df9eb2daa7f6c787e03e53bf0a0860048b8fb8df9e2673054",
+      "GENERATOR_COMMIT": "919238949903ccc1cfc3093fefbdeb8d4d4ac16f",
+      "GENERATOR_SHA256": "d9577b71ee13555dc0e307cfc7cf3aa0529882a8498d67d03b39aabbab0604e1",
+      "CONFIG_SHA256": "76d998ee8b5518dc7f0e4dbb18cecdae9f459b9210ec2e235c643ccd21ead61e",
       "GENERATED_AT": "2026-11-21T19:49:49.829Z",
       "INPUTS": [
         {
@@ -2785,9 +2785,9 @@
       "FILE": "seasonality/XLU.json",
       "SNAPSHOT_SHA256": "5da272a0c2070f7c061288a70d54ac0ac301731c62c79b3f0e4a80f116d3496d",
       "SCHEMA_VERSION": "statistical-levels.snapshot.v3",
-      "GENERATOR_COMMIT": "ebd06d2f63682125cff9ed3a4434b335e57dbefe",
-      "GENERATOR_SHA256": "b3b13aad4448c11fb5a067ddae3522ebd0cbbf8da81aca26ca1810216a852d3b",
-      "CONFIG_SHA256": "1cecc123865fbd1df9eb2daa7f6c787e03e53bf0a0860048b8fb8df9e2673054",
+      "GENERATOR_COMMIT": "919238949903ccc1cfc3093fefbdeb8d4d4ac16f",
+      "GENERATOR_SHA256": "d9577b71ee13555dc0e307cfc7cf3aa0529882a8498d67d03b39aabbab0604e1",
+      "CONFIG_SHA256": "76d998ee8b5518dc7f0e4dbb18cecdae9f459b9210ec2e235c643ccd21ead61e",
       "GENERATED_AT": "2026-11-21T19:49:49.829Z",
       "INPUTS": [
         {
@@ -2812,9 +2812,9 @@
       "FILE": "seasonality/XLV.json",
       "SNAPSHOT_SHA256": "ea880a73e1f0f71bab8693aa69a378f643ff760301e2b46630191d23b0437ad8",
       "SCHEMA_VERSION": "statistical-levels.snapshot.v3",
-      "GENERATOR_COMMIT": "ebd06d2f63682125cff9ed3a4434b335e57dbefe",
-      "GENERATOR_SHA256": "b3b13aad4448c11fb5a067ddae3522ebd0cbbf8da81aca26ca1810216a852d3b",
-      "CONFIG_SHA256": "1cecc123865fbd1df9eb2daa7f6c787e03e53bf0a0860048b8fb8df9e2673054",
+      "GENERATOR_COMMIT": "919238949903ccc1cfc3093fefbdeb8d4d4ac16f",
+      "GENERATOR_SHA256": "d9577b71ee13555dc0e307cfc7cf3aa0529882a8498d67d03b39aabbab0604e1",
+      "CONFIG_SHA256": "76d998ee8b5518dc7f0e4dbb18cecdae9f459b9210ec2e235c643ccd21ead61e",
       "GENERATED_AT": "2026-11-21T19:49:49.829Z",
       "INPUTS": [
         {
@@ -2839,9 +2839,9 @@
       "FILE": "seasonality/XLY.json",
       "SNAPSHOT_SHA256": "799c54d56341582480aa98eee9ab8a83ac11dc4cdb58343cb0d08e4ac247fbd1",
       "SCHEMA_VERSION": "statistical-levels.snapshot.v3",
-      "GENERATOR_COMMIT": "ebd06d2f63682125cff9ed3a4434b335e57dbefe",
-      "GENERATOR_SHA256": "b3b13aad4448c11fb5a067ddae3522ebd0cbbf8da81aca26ca1810216a852d3b",
-      "CONFIG_SHA256": "1cecc123865fbd1df9eb2daa7f6c787e03e53bf0a0860048b8fb8df9e2673054",
+      "GENERATOR_COMMIT": "919238949903ccc1cfc3093fefbdeb8d4d4ac16f",
+      "GENERATOR_SHA256": "d9577b71ee13555dc0e307cfc7cf3aa0529882a8498d67d03b39aabbab0604e1",
+      "CONFIG_SHA256": "76d998ee8b5518dc7f0e4dbb18cecdae9f459b9210ec2e235c643ccd21ead61e",
       "GENERATED_AT": "2026-11-21T19:49:49.829Z",
       "INPUTS": [
         {
