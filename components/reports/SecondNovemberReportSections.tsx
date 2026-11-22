@@ -103,7 +103,7 @@ function Assets({ section, comparison }: { section: ReportEditorialSection; comp
       const change = ticker ? row[3] : undefined;
       return <details key={g.title} open={i === 0} id={ticker?.toLowerCase() ?? "stockpicking"} className={`group min-w-0 scroll-mt-24 border border-line bg-white shadow-quiet open:border-petrol/40 ${styles.asset}`}>
         <summary className="grid cursor-pointer list-none items-center gap-4 border-l-[3px] border-petrol px-4 py-5 marker:hidden sm:grid-cols-[3rem_minmax(0,1fr)_auto] md:px-5">
-          <span aria-hidden="true" className="flex h-11 w-11 items-center justify-center bg-petrol text-xs font-semibold text-white">{ticker ?? "3.7"}</span>
+          <span aria-hidden="true" className="flex h-11 w-11 items-center justify-center bg-petrol text-xs font-semibold text-white">{ticker ?? "SP"}</span>
           <div className="min-w-0"><h3 className="text-lg font-semibold leading-snug text-ink">{g.title}</h3>{ticker ? <p className="mt-2 text-xs text-muted">Cierre 13/11 · <span className="font-medium tabular-nums text-ink">{row[2]} USD</span> · <span className={`font-semibold tabular-nums ${numericReturn(change!) < 0 ? "text-danger" : "text-petrol"}`}>{change}</span> en la quincena</p> : null}</div>
           <span className="flex items-center gap-2 text-xs font-semibold uppercase text-brass"><span className="details-open-label">Abrir +</span><span className="details-close-label">Cerrar −</span></span>
         </summary>
@@ -114,13 +114,13 @@ function Assets({ section, comparison }: { section: ReportEditorialSection; comp
 }
 
 function Routes({ block }: { block: TableBlock }) {
-  return <div className="grid gap-4" aria-label="Rutas condicionales por activo">{block.rows.map(([ticker, constructive, adverse]) => <article key={ticker} className="overflow-hidden border border-line bg-white shadow-quiet">
-    <h3 className="border-b border-line bg-petrol/[0.04] px-5 py-3 text-sm font-semibold tracking-wide text-petrol">{ticker}</h3>
+  return <div className="grid gap-4" aria-label="Rutas condicionales por activo">{block.rows.map(([ticker, constructive, adverse]) => <details key={ticker} className={`overflow-hidden border border-line bg-white shadow-quiet ${styles.route}`}>
+    <summary className="flex cursor-pointer list-none items-center justify-between gap-4 px-5 py-3 marker:hidden"><h3 className="font-semibold tracking-wide text-petrol">{ticker}</h3><span className={styles.routeToggle} aria-hidden="true" /></summary>
     <div className="grid md:grid-cols-2">
       <div className="border-l-[3px] border-sage bg-sage/[0.06] p-5"><h4 className="text-xs font-semibold uppercase tracking-wider text-petrol">{block.headers[1]}</h4><p className="mt-3 text-sm leading-7 text-ink">{constructive}</p></div>
       <div className="border-l-[3px] border-danger/60 bg-danger/[0.04] p-5"><h4 className="text-xs font-semibold uppercase tracking-wider text-danger">{block.headers[2]}</h4><p className="mt-3 text-sm leading-7 text-ink">{adverse}</p></div>
     </div>
-  </article>)}</div>;
+  </details>)}</div>;
 }
 
 function Watchlist({ block }: { block: TableBlock }) {

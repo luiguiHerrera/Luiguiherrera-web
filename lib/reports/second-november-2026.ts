@@ -692,7 +692,7 @@ export const secondNovember2026Report: MarketReport = {
             [
               "Concentración y amplitud",
               "Top 10; RSP/SPY; QQQ/SPY; 11 sectores; medias y máximos",
-              "[JPM AM](https://am.jpmorgan.com/content/jpm-am-aem/global-institutional/us/en/institutional/insights/portfolio-insights/asset-class-views/asset-allocation.html), índices, dashboard y series fechadas"
+              "[JPM AM](https://am.jpmorgan.com/content/jpm-am-aem/global-institutional/us/en/institutional/insights/portfolio-insights/asset-class-views/asset-allocation.html), índices, [dashboard](/dashboard) y [series fechadas](/reports/segundo-informe-noviembre-2026-weekly-levels.json)"
             ],
             [
               "IA y financiación",
@@ -749,7 +749,7 @@ export const secondNovember2026Report: MarketReport = {
         },
         {
           "kind": "paragraph",
-          "text": "Amplitud/sectores: [once ETF sectoriales](https://stockanalysis.com/etf/) sobre cinco sesiones completas entre cierres del 6 y 13 de noviembre. No es una exportación literal del dashboard."
+          "text": "Amplitud/sectores: [once ETF sectoriales](https://stockanalysis.com/etf/) sobre cinco sesiones completas entre cierres del 6 y 13 de noviembre. No es una exportación literal del [dashboard](/dashboard)."
         },
         {
           "kind": "paragraph",

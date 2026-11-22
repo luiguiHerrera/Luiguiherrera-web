@@ -431,10 +431,10 @@ function quantitativeMarkdown(panels: ReportQuantitativePanel[] = []) {
 }
 
 function editorialPlain(value: string) {
-  return value.replace(/\*\*/g, "").replace(/\*/g, "").replace(/\[([^\]]+)\]\((https?:\/\/[^)]+)\)/g, "$1");
+  return value.replace(/\*\*/g, "").replace(/\*/g, "").replace(/\[([^\]]+)\]\(((?:https?:\/\/|\/(?!\/))[^)]+)\)/g, "$1");
 }
 function editorialInlineHtml(value: string) {
-  return esc(value).replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>").replace(/\*([^*]+)\*/g, "<em>$1</em>").replace(/\[([^\]]+)\]\((https?:\/\/[^)]+)\)/g, '<a href="$2">$1</a>');
+  return esc(value).replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>").replace(/\*([^*]+)\*/g, "<em>$1</em>").replace(/\[([^\]]+)\]\(((?:https?:\/\/|\/(?!\/))[^)]+)\)/g, '<a href="$2">$1</a>');
 }
 function renderSectionHtml(section: ReportExportSection, model: ReportExportModel) {
   let body = "";

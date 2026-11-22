@@ -33,13 +33,12 @@
   inset: 0;
   z-index: -1;
   pointer-events: none;
-  background: linear-gradient(180deg, #10352f 0%, #10352ff0 40%, #10352f99 100%), url('/images/statistical-levels/mountain-landscape.webp') 63% bottom / auto 68% no-repeat;
+  background: linear-gradient(180deg, #10352f 0%, #10352ff0 34%, #10352f70 100%), url('/images/report-november-2026-map-compass.webp') 86% bottom / auto 74% no-repeat;
   opacity: .8;
 }
 
 .railBrand { text-align: center; }
-.railBrand > span { display: block; font: 40px/1 Georgia, 'Times New Roman', serif; letter-spacing: -8px; padding-right: 8px; }
-.railBrand > span > span { position: relative; top: 9px; font-size: 34px; }
+.railLogo { display: block; width: 44px; height: auto; margin: 0 auto; filter: brightness(0) invert(1); }
 .railBrand > p { margin: 15px 0 0; font: 10px/1.5 Georgia, 'Times New Roman', serif; text-transform: uppercase; letter-spacing: .17em; }
 .railBrand::after { content: ""; display: block; width: 64px; height: 1px; margin: 16px auto; background: linear-gradient(90deg, transparent, #c3a563, transparent); }
 .railEdition { padding: 0 8px 16px; }
@@ -77,19 +76,20 @@
   position: relative;
   isolation: isolate;
   margin-top: 0;
-  padding: 24px 0 26px;
+  padding: 28px clamp(20px, 2.3vw, 32px) 26px;
   border-top: 0;
   border-bottom-color: #d7c8aa;
+  border-radius: 9px;
+  overflow: hidden;
 }
 
 .cover::before {
   content: "";
   position: absolute;
   z-index: -1;
-  inset: -20px -16px 60px 32%;
-  opacity: .58;
+  inset: 0;
   pointer-events: none;
-  background: linear-gradient(90deg, #f7f4ed 0%, #f7f4ed7a 35%, transparent 75%), linear-gradient(0deg, #f7f4ed 0%, #f7f4ed00 68%), url('/images/statistical-levels/mountain-landscape.webp') right center / cover no-repeat;
+  background: linear-gradient(90deg, #fbf7ece8 0%, #fbf7ecd9 46%, #fbf7ec65 70%, #fbf7ec08 100%), linear-gradient(0deg, #f8f3e7ed 0%, #f8f3e7bb 22%, transparent 67%), url('/images/report-november-2026-map-compass.webp') right center / cover no-repeat;
 }
 
 .cover > div > div:first-child > p { color: #a27e37; font-size: 10px; letter-spacing: .15em; }
@@ -152,7 +152,7 @@
 .edition :global(#lectura-seguimiento nav a) { border-color: #d9cdb5; border-radius: 4px; font-size: 10px; background: #fffdf8; }
 .asset { border-radius: 10px; border-color: #e1d7c5; background: #fffdf9; box-shadow: 0 4px 18px #4a391708; }
 .asset > summary { grid-template-columns: 64px minmax(0, 1fr) auto; padding: 16px 20px 16px 14px; border-left: 0; }
-.asset > summary > span:first-child { width: 64px; height: 76px; border-radius: 6px; font: 25px Georgia, 'Times New Roman', serif; background: linear-gradient(0deg, #123d30a8, #123d30), url('/images/statistical-levels/mountain-landscape.webp') 70% bottom / auto 180px; }
+.asset > summary > span:first-child { width: 64px; height: 76px; border-radius: 6px; font: 25px Georgia, 'Times New Roman', serif; background: linear-gradient(0deg, #123d30a8, #123d30c9), url('/images/report-november-2026-map-compass.webp') 80% center / auto 130px; }
 .asset > summary h3 { font-size: 22px; font-weight: 500; line-height: 1.2; }
 .asset > summary p { font-size: 10px !important; line-height: 1.6 !important; }
 .asset > summary > span:last-child { font-size: 9px; letter-spacing: .07em; }
@@ -173,10 +173,19 @@
 .edition :global(#calendario [role=gridcell]) { background-color: #fffdf8; }
 .edition :global(#report-calendar-detail) { border-color: #e0d2b6; border-radius: 8px; background: linear-gradient(120deg, #faf5e9, #fffdf9); }
 .edition :global(#calendario aside:not(#report-calendar-detail)) { border-radius: 7px; background: #fffdf8; }
-.edition :global(#rutas-probables [aria-label] > article) { border-radius: 9px; border-color: #e2d7c3; box-shadow: 0 4px 16px #4a391705; }
-.edition :global(#rutas-probables article > h3) { font-size: 22px; padding: 13px 20px; background: #f3edde; border-color: #e2d7c3; }
-.edition :global(#rutas-probables article h4) { font-size: 9px; line-height: 1.7; letter-spacing: .1em; }
-.edition :global(#rutas-probables article p) { font-size: 13px; line-height: 1.85; }
+.route { border-radius: 9px; border-color: #e2d7c3; box-shadow: 0 4px 16px #4a391705; }
+.route > summary { min-height: 65px; padding: 15px 20px; background: #f3edde; }
+.route > summary::-webkit-details-marker { display: none; }
+.route > summary:hover { background: #eee5d2; }
+.route > summary:focus-visible { outline: 2px solid #a27e37; outline-offset: -4px; }
+.route > summary h3 { font-size: 22px; }
+.route[open] > summary { border-bottom: 1px solid #e2d7c3; }
+.routeToggle { width: 22px; height: 22px; position: relative; flex-shrink: 0; color: #967334; }
+.routeToggle::before, .routeToggle::after { content: ""; position: absolute; top: 10px; left: 4px; width: 14px; height: 1px; background: currentColor; }
+.routeToggle::after { transform: rotate(90deg); }
+.route[open] .routeToggle::after { transform: rotate(0deg); }
+.route h4 { font-size: 9px; line-height: 1.7; letter-spacing: .1em; }
+.route p { font-size: 13px; line-height: 1.85; }
 .edition :global(#lista-control article) { border-radius: 9px; border-color: #e3d8c6; padding: 22px; background: linear-gradient(140deg, #fffdf8, #faf6ed); box-shadow: 0 4px 15px #4a391705; }
 .edition :global(#lista-control article h3) { font-size: 22px; font-weight: 500; }
 .edition :global(#lista-control article dt) { font-size: 9px; letter-spacing: .12em; }
@@ -220,7 +229,7 @@
 @media (max-width: 650px) {
   .page { padding: 12px 16px 40px; }
   .cover { padding-top: 18px; }
-  .cover::before { inset: 0 -10px 90px 15%; opacity: .3; }
+  .cover::before { background: linear-gradient(90deg, #fbf7ecef, #fbf7ece0 55%, #fbf7eca6), url('/images/report-november-2026-map-compass.webp') 75% center / cover no-repeat; }
   .cover h1 { margin-top: 18px; font-size: 32px; }
   .cover h1 > em { margin-top: 8px; }
   .cover > div > div:nth-of-type(2) { gap: 5px 12px; font-size: 9px; }

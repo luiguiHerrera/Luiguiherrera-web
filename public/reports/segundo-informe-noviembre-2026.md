@@ -228,7 +228,7 @@ Una ruta favorable para un activo puede ser adversa para otro. Una caída de ren
 | Tema | Señal observable | Fuente preferida |
 | --- | --- | --- |
 | Beneficios y valoración | BPA, revisiones, guidance, PER forward | [FactSet](https://insight.factset.com/hubfs/Website/Resources%20Section/Research%20Desk/Earnings%20Insight/EarningsInsight_111326.pdf) y comunicados corporativos |
-| Concentración y amplitud | Top 10; RSP/SPY; QQQ/SPY; 11 sectores; medias y máximos | [JPM AM](https://am.jpmorgan.com/content/jpm-am-aem/global-institutional/us/en/institutional/insights/portfolio-insights/asset-class-views/asset-allocation.html), índices, dashboard y series fechadas |
+| Concentración y amplitud | Top 10; RSP/SPY; QQQ/SPY; 11 sectores; medias y máximos | [JPM AM](https://am.jpmorgan.com/content/jpm-am-aem/global-institutional/us/en/institutional/insights/portfolio-insights/asset-class-views/asset-allocation.html), índices, [dashboard](/dashboard) y [series fechadas](/reports/segundo-informe-noviembre-2026-weekly-levels.json) |
 | IA y financiación | Capex, FCF, deuda, spreads, resultados de NVIDIA | Filings, research bancario original |
 | Estados Unidos | FedWatch fechado, Treasury nominal/real, DXY, PCE, VIX | [Fed](https://www.federalreserve.gov/monetarypolicy/fomccalendars.htm), [Tesoro](https://home.treasury.gov/resource-center/data-chart-center/interest-rates/TextView?field_tdr_date_value_month=202611&type=daily_treasury_yield_curve), [BLS](https://www.bls.gov/schedule/2026/11_sched_list.htm), [BEA](https://www.bea.gov/news/schedule/), [Cboe](https://www.cboe.com/tradable-products/vix) |
 | Oro | WGC, GLD específico, CFTC/COMEX, TIPS, dólar | [WGC](https://www.gold.org/news-and-events/press-releases/central-bank-buying-and-etf-inflows-support-gold-demand-q3), [State Street](https://www.spdrgoldshares.com/usa/), [Tesoro](https://home.treasury.gov/resource-center/data-chart-center/interest-rates/TextView?field_tdr_date_value_month=202611&type=daily_treasury_yield_curve), CFTC |
@@ -242,7 +242,7 @@ Una ruta favorable para un activo puede ser adversa para otro. Una caída de ren
 
 Precios: cierres regulares USD de [ETF](https://stockanalysis.com/etf/), serie histórica específica de [BTC](https://www.investing.com/crypto/bitcoin/historical-data) y [ETH](https://es.investing.com/crypto/ethereum/eth-usd-historical-data); retorno de precio = (cierre_13nov / cierre_30oct − 1) × 100. Sin dividendos ni costes.
 
-Amplitud/sectores: [once ETF sectoriales](https://stockanalysis.com/etf/) sobre cinco sesiones completas entre cierres del 6 y 13 de noviembre. No es una exportación literal del dashboard.
+Amplitud/sectores: [once ETF sectoriales](https://stockanalysis.com/etf/) sobre cinco sesiones completas entre cierres del 6 y 13 de noviembre. No es una exportación literal del [dashboard](/dashboard).
 
 Fuentes primarias de macro: [Reserva Federal](https://www.federalreserve.gov/monetarypolicy/fomccalendars.htm), [BLS](https://www.bls.gov/schedule/2026/11_sched_list.htm), [BEA](https://www.bea.gov/news/schedule/), [Tesoro](https://home.treasury.gov/resource-center/data-chart-center/interest-rates/TextView?field_tdr_date_value_month=202611&type=daily_treasury_yield_curve), [Banco de Japón](https://www.boj.or.jp/en/mopo/outlook/index.htm), [autoridades chinas](https://www.stats.gov.cn/english/).
 

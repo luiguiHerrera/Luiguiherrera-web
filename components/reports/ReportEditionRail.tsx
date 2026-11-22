@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Image from "next/image";
 import type { ReportEditorialSection } from "@/lib/reports/report-editorial-sections";
 import styles from "./report-premium.module.css";
 
@@ -33,8 +34,8 @@ export function ReportEditionRail({ sections, monthLabel }: { sections: ReportEd
   </li>)}</ul>;
 
   return <aside className={styles.rail} aria-label="Navegación del informe">
-    <div className={styles.railBrand}><span aria-hidden="true">L<span>H</span></span><p>Luigui Herrera</p></div>
-    <div className={styles.railEdition}><p>Market Report</p><strong>{monthLabel}</strong><span>Segunda edición</span></div>
+    <div className={styles.railBrand}><Image src="/brand/luigui-herrera/v1/luigui-herrera-monograma-lh-transparent-lossless.webp" alt="" width={680} height={824} sizes="44px" className={styles.railLogo} /><p>Luigui Herrera</p></div>
+    <div className={styles.railEdition}><p>Informe de mercado</p><strong>{monthLabel}</strong><span>Segunda edición</span></div>
     <nav className={styles.desktopRail} aria-label="Índice de la edición">{navigation}</nav>
     <details className={styles.mobileRail}><summary>Recorrer esta edición <span aria-hidden="true">＋</span></summary><nav aria-label="Índice de la edición">{navigation}</nav></details>
   </aside>;
