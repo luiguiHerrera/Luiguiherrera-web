@@ -1,14 +1,15 @@
 type MetricHelpTooltipProps = {
   label: string;
   text: string;
+  locale?: 'es' | 'en';
 };
 
-export function MetricHelpTooltip({ label, text }: MetricHelpTooltipProps) {
+export function MetricHelpTooltip({ label, text, locale = 'es' }: MetricHelpTooltipProps) {
   return (
-    <span className="group relative inline-flex align-middle">
+    <span className="sl-metric-help group relative inline-flex align-middle">
       <button
         type="button"
-        aria-label={`Ayuda: ${label}`}
+        aria-label={`${locale === 'en' ? 'Help' : 'Ayuda'}: ${label}`}
         className="ml-1 inline-flex h-4 w-4 items-center justify-center rounded-full border border-line bg-panel text-[10px] font-semibold leading-none text-muted transition hover:border-petrol hover:text-petrol focus:outline-none focus:ring-2 focus:ring-petrol/20"
       >
         ?

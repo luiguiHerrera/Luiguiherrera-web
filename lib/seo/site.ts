@@ -216,18 +216,18 @@ const seoRouteContent: readonly Omit<SeoRouteDefinition, "alternatePathname">[] 
       "A weekly educational reading of market regime, ETFs, sectors, volatility, flows, statistical levels, seasonality and upcoming events.",
   },
   {
-    pathname: "/niveles-estadisticos",
+    pathname: "/analisiscuantitativo",
     language: "es",
-    title: "Niveles estadísticos | Percentiles, z-scores y estacionalidad",
+    title: "Análisis cuantitativo | Precio, riesgo y estacionalidad",
     description:
-      "Laboratorio de niveles estadísticos para comparar activos por percentil, z-score, extensión, rango histórico, drawdown y estacionalidad.",
+      "Analiza precio, niveles históricos, percentiles, drawdown y estacionalidad. Compara horizontes y correlaciones entre activos.",
   },
   {
-    pathname: "/en/statistical-levels",
+    pathname: "/en/quantitative-analysis",
     language: "en",
-    title: "Statistical levels | Percentiles, z-scores and seasonality",
+    title: "Quantitative analysis | Price, risk and seasonality",
     description:
-      "Compare assets with their own history using percentiles, z-scores, extensions, historical ranges, drawdowns and seasonality.",
+      "Analyze price, historical levels, percentiles, drawdown and seasonality. Compare horizons and correlations across assets.",
   },
   {
     pathname: "/tendencias",

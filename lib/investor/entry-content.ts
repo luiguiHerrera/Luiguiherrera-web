@@ -63,7 +63,7 @@ export const investorEntryContent: Record<"es" | "en", InvestorEntryContent> = {
           title: "Mira tus activos frente a su historia",
           description: "Compara tus activos con su historial y revisa niveles, rangos y caídas antes de decidir.",
           outcomes: ["Dónde se sitúa el precio frente a su historial.", "Qué rangos y caídas ha registrado.", "Cómo cambia su comportamiento según el periodo."],
-          time: "≈10–15 min", cta: "Ver estadísticas", href: "/niveles-estadisticos",
+          time: "≈10–15 min", cta: "Ver estadísticas", href: "/analisiscuantitativo",
         },
         {
           id: "trends", label: "Quiero explorar tendencias e ideas.",
@@ -129,7 +129,7 @@ export const investorEntryContent: Record<"es" | "en", InvestorEntryContent> = {
           title: "Start with your assets’ statistics",
           description: "Compare your assets with their history and review levels, ranges and drawdowns before deciding.",
           outcomes: ["Where the price stands relative to its history.", "The ranges and drawdowns it has experienced.", "How its behavior changes across periods."],
-          time: "≈10–15 min", cta: "View statistics", href: "/en/statistical-levels",
+          time: "≈10–15 min", cta: "View statistics", href: "/en/quantitative-analysis",
         },
         {
           id: "trends", label: "I want to explore trends and ideas.",

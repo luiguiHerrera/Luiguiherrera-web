@@ -317,8 +317,7 @@ export function ReturnHeatmap({ asset, frequency, locale = "es" }: ReturnHeatmap
       eyebrow={copy.eyebrow}
       title={localizedTitles[frequency].title}
       reading={localizedTitles[frequency].subtitle}
-      status={asset?.ticker ?? "n/d"}
-      defaultOpen={false}
+      collapsible={false}
       metrics={[
         { label: copy.frequency, value: localizedTitles[frequency].unit },
         { label: copy.visiblePeriods, value: String(points.length) },

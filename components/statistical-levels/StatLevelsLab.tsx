@@ -6,7 +6,6 @@ import { AssetSelector } from './AssetSelector';
 import { AssetStatCard } from './AssetStatCard';
 import { CalendarExtremesPanel } from './CalendarExtremesPanel';
 import { KeyStatisticalLevelsPanel } from './KeyStatisticalLevelsPanel';
-import { JpmSpxLevelsPanel } from './JpmSpxLevelsPanel';
 import { MovementSummaryTable } from './MovementSummaryTable';
 import { OpeningLocationPanel } from './OpeningLocationPanel';
 import { PeriodExplorerTable } from './PeriodExplorerTable';
@@ -15,11 +14,12 @@ import { UnderwaterDrawdownChart } from './UnderwaterDrawdownChart';
 import { HistoricalRange } from './HistoricalRange';
 import { CurrentMonthSeasonality } from './CurrentMonthSeasonality';
 import { StatisticalDisclosure } from './StatisticalDisclosure';
+import { StatisticalOverview } from './StatisticalOverview';
 import { displayStatName, displayStatTicker } from '@/lib/statistical-levels/display';
-import { shouldShowJpmSpxLevels } from '@/lib/market/jpm-spx-levels';
-import { extensionSample, frequencyName, historicalInterpretation, number, percent, percentileTranslation, windowName, zTranslation } from '@/lib/statistical-levels/interpretation';
+import { extensionSample, frequencyName, historicalInterpretation, number, percent, percentileTranslation, windowAvailabilityExplanation, windowName, zTranslation } from '@/lib/statistical-levels/interpretation';
 import type { AssetCategory, AssetStatRecord, AssetStatSummary, CorrelationMatrix, DailySeasonalityData, StatisticalFrequency, StatisticalLevelsCorrelation, StatisticalLevelsManifest, StatisticalWindow } from '@/lib/statistical-levels/types';
 import './statistical-levels.css';
+import './statistical-levels-editorial.css';
 
 const categoryOrder: AssetCategory[] = ['Índices / ETFs', 'Bonos', 'Oro y materias primas', 'Sectores', 'Temáticos', 'Cripto', 'Internacional'];
 const localizedCategoryLabels = {
@@ -101,15 +101,32 @@ function StatLevelsView({ asset, locale = 'es', manifest, seasonality, selection
   const ticker = displayStatTicker(asset.ticker);
   const sample = extensionSample(metric, frequency);
   const longMa = data.longMovingAverageKey;
-  return <div className="sl-page">
-    <header className="sl-heading"><p className="sl-eyebrow">{en ? 'Statistical levels' : 'Niveles estadísticos'}</p><h1>{en ? 'Where is this asset relative to its own history?' : '¿Dónde está este activo frente a su propia historia?'}</h1></header>
+  const pageRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const page = pageRef.current;
+    const header = document.querySelector('body > header');
+    const controls = page?.querySelector('#sl-controls');
+    if (!page || !header || !controls) return;
+    const measure = () => {
+      page.style.setProperty('--sl-header-height', `${header.getBoundingClientRect().height}px`);
+      page.style.setProperty('--sl-controls-height', `${controls.getBoundingClientRect().height}px`);
+    };
+    measure();
+    const observer = new ResizeObserver(measure);
+    observer.observe(header);
+    observer.observe(controls);
+    return () => observer.disconnect();
+  }, []);
+  return <div className="sl-page" ref={pageRef}>
+    <header className="sl-heading"><p className="sl-eyebrow">{en ? 'Quantitative analysis' : 'Análisis cuantitativo'}</p><h1>{en ? 'Where is this asset relative to its own history?' : '¿Dónde está este activo frente a su propia historia?'}</h1><p className="sl-heading-description">{en ? 'Explore the asset’s price, historical levels, risk and seasonality. Compare horizons and examine correlations with other assets.' : 'Explora el precio, los niveles históricos, el riesgo y la estacionalidad del activo. Compara horizontes y analiza sus correlaciones con otros activos.'}</p></header>
     {loadState === 'loading' ? <p role="status">{en ? 'Loading selected asset…' : 'Cargando el activo seleccionado…'}</p> : null}
     {loadState === 'error' ? <p role="alert">{en ? 'The asset could not be loaded. The previous labeled data is retained. Reload to obtain the current snapshot.' : 'No se pudo cargar el activo. Se mantienen los datos anteriores con su etiqueta. Recarga para obtener el snapshot actual.'}</p> : null}
     <div id="sl-controls" className="sl-controls">
       <AssetSelector catalog={manifest.catalog} locale={locale} query={query} selected={[asset.ticker]} setQuery={setQuery} selectAsset={ticker => navigate({ asset: ticker })} />
-      <div className="sl-period"><p className="sl-control-label">{en ? 'Period' : 'Periodo'}</p><div className="sl-period-buttons">{manifest.windows.filter(item => item !== 'Full').map(item => <button key={item} type="button" data-window={item} aria-pressed={window === item} onClick={() => navigate({ window: item })}>{windowName(item, locale)}</button>)}</div></div>
-      <details id="sl-options" className="sl-options"><summary>{en ? 'More options' : 'Más opciones'} <span aria-hidden="true">＋</span></summary><div className="sl-options-body"><label>{en ? 'Frequency' : 'Frecuencia'}<select aria-label={en ? 'Frequency' : 'Frecuencia'} value={frequency} onChange={event => navigate({ frequency: event.target.value as StatisticalFrequency })}>{manifest.frequencies.map(item => <option key={item} value={item}>{frequencyName(item, locale)}</option>)}</select></label><label>{en ? 'All periods' : 'Todos los periodos'}<select aria-label={en ? 'All periods' : 'Todos los periodos'} value={window} onChange={event => navigate({ window: event.target.value as StatisticalWindow })}>{manifest.windows.map(item => <option key={item} value={item}>{windowName(item, locale)}</option>)}</select></label><p>{en ? 'Price comparisons use this period and frequency. Opening levels use completed full history; seasonality has its own period.' : 'La comparación usa este periodo y frecuencia. Los niveles de apertura usan todo el historial completado; la estacionalidad tiene su propio periodo.'}</p></div></details>
+      <div className="sl-period"><p className="sl-control-label">{en ? 'Period' : 'Periodo'}</p><div className="sl-period-buttons">{manifest.windows.map(item => <button key={item} type="button" data-window={item} aria-pressed={window === item} onClick={() => navigate({ window: item })}>{windowName(item, locale)}</button>)}</div></div>
+      <label id="sl-frequency" className="sl-frequency"><span className="sl-control-label">{en ? 'Frequency' : 'Frecuencia'}</span><select aria-label={en ? 'Frequency' : 'Frecuencia'} value={frequency} onChange={event => navigate({ frequency: event.target.value as StatisticalFrequency })}>{manifest.frequencies.map(item => <option key={item} value={item}>{frequencyName(item, locale)}</option>)}</select></label>
     </div>
+    <StatisticalOverview asset={asset} frequency={frequency} window={window} manifest={manifest} locale={locale} />
     <section id="sl-interpretation" className="sl-interpretation" aria-live="polite">
       <div className="sl-context"><span>{ticker} · {displayStatName(asset.ticker, asset.name)}</span><span>{frequencyName(frequency, locale)} · {windowName(window, locale)} · {en ? 'Completed history through' : 'Historial completado hasta'} {data.lastDate ?? 'n/d'}</span></div>
       <h2>{historicalInterpretation(ticker, metric, frequency, locale)}</h2>
@@ -124,29 +141,46 @@ function StatLevelsView({ asset, locale = 'es', manifest, seasonality, selection
       <div><dt>Z-score</dt><dd>{metric.ma200ExtensionZScore !== null && metric.ma200ExtensionZScore > 0 ? '+' : ''}{number(metric.ma200ExtensionZScore)}</dd><p>{zTranslation(metric.ma200ExtensionZScore, locale)}</p></div>
       <div><dt>{en ? 'Sample' : 'Muestra'}</dt><dd>{sample}</dd><p>{en ? `Comparable extension observations, after the ${longMa} warm-up. ${metric.sessions} price periods in the window.` : `Observaciones comparables de extensión, tras formar ${longMa}. ${metric.sessions} periodos de precio en la ventana.`}</p></div>
     </dl></section>
-    <CurrentMonthSeasonality key={asset.ticker} data={seasonality} asOf={asset.lastDate ?? manifest.generatedAt} locale={locale} />
-    <section id="sl-risk" className="sl-section"><div className="sl-section-heading"><h2>{en ? 'How deep have the declines been?' : '¿Hasta dónde han llegado las caídas?'}</h2><p>{windowName(window, locale)} · {frequencyName(frequency, locale)}</p></div><dl className="sl-risk-metrics"><div><dt>{en ? 'Current drawdown' : 'Drawdown actual'}</dt><dd>{percent(metric.currentDrawdown)}</dd><p>{en ? 'Distance from the prior high within this window.' : 'Distancia desde el máximo previo de esta ventana.'}</p></div><div><dt>{en ? 'Maximum drawdown' : 'Drawdown máximo'}</dt><dd>{percent(metric.maxDrawdown)}</dd><p>{en ? 'Deepest observed decline within this window.' : 'La caída más profunda observada en esta ventana.'}</p></div></dl>
-      <StatisticalDisclosure id="sl-drawdown-history" title={en ? 'View drawdown history' : 'Ver historial de caídas'} note={en ? 'Dated series and its sample scope' : 'Serie con fechas y alcance de su muestra'}><UnderwaterDrawdownChart asset={asset} frequency={frequency} window={window} locale={locale} /></StatisticalDisclosure>
+    <CurrentMonthSeasonality key={asset.ticker} data={seasonality} asOf={asset.lastDate ?? manifest.generatedAt} locale={locale} window={window} />
+    <section id="sl-risk" className="sl-risk">
+      <StatisticalDisclosure id="sl-drawdown-history" title="Drawdown" note={en ? 'Declines from prior highs and their evolution over time' : 'Caídas desde máximos y su evolución en el tiempo'}>
+        <dl className="sl-risk-metrics"><div><dt>{en ? 'Current drawdown' : 'Drawdown actual'}</dt><dd>{percent(metric.currentDrawdown)}</dd><p>{en ? 'Distance from the prior high within this window.' : 'Distancia desde el máximo previo de esta ventana.'}</p></div><div><dt>{en ? 'Maximum drawdown' : 'Drawdown máximo'}</dt><dd>{percent(metric.maxDrawdown)}</dd><p>{en ? 'Deepest observed decline within this window.' : 'La caída más profunda observada en esta ventana.'}</p></div></dl>
+        <UnderwaterDrawdownChart asset={asset} frequency={frequency} window={window} locale={locale} showSummary={false} />
+      </StatisticalDisclosure>
     </section>
-    <StatisticalDisclosure id="sl-horizons" title={en ? 'Compare horizons' : 'Comparar horizontes'} note={en ? 'The same asset and frequency, across every available period' : 'El mismo activo y frecuencia en todos los periodos disponibles'}><div className="sl-table-scroll" tabIndex={0} role="region" aria-label={en ? 'Horizon comparison' : 'Comparación de horizontes'}><table className="sl-table"><thead><tr><th>{en ? 'Metric' : 'Métrica'}</th>{manifest.windows.map(item => <th key={item}>{windowName(item, locale)}</th>)}</tr></thead><tbody>{[
+    <StatisticalDisclosure id="sl-horizons" title={en ? 'Compare horizons' : 'Comparar horizontes'} note={en ? 'Extension and drawdown across different time horizons' : 'Extensión y drawdown en distintos horizontes de análisis'}><div className="sl-table-scroll" tabIndex={0} role="region" aria-label={en ? 'Horizon comparison' : 'Comparación de horizontes'}><table className="sl-table sl-horizon-table"><thead><tr><th scope="col">{en ? 'Metric' : 'Métrica'}</th>{manifest.windows.map(item => <th key={item} scope="col" data-selected={window === item} aria-current={window === item ? 'true' : undefined}>{windowName(item, locale)}</th>)}</tr></thead><tbody>{[
       [en ? 'Extension percentile' : 'Percentil de extensión', (m: typeof metric) => number(m.ma200ExtensionPercentile, 1)],
       ['Z-score', (m: typeof metric) => number(m.ma200ExtensionZScore)],
       [en ? 'Extension observations' : 'Observaciones de extensión', (m: typeof metric) => String(extensionSample(m, frequency))],
       [en ? 'Price periods' : 'Periodos de precio', (m: typeof metric) => String(m.sessions)],
       [en ? 'Current drawdown' : 'Drawdown actual', (m: typeof metric) => percent(m.currentDrawdown)],
       [en ? 'Maximum drawdown' : 'Drawdown máximo', (m: typeof metric) => percent(m.maxDrawdown)],
-      [en ? 'Available' : 'Disponible', (m: typeof metric) => m.available ? en ? 'Yes' : 'Sí' : en ? 'Insufficient history' : 'Historial insuficiente'],
-    ].map(([label, format]) => <tr key={String(label)}><th>{String(label)}</th>{manifest.windows.map(item => <td key={item}>{(format as (m: typeof metric) => string)(data.windows[item])}</td>)}</tr>)}</tbody></table></div><p className="sl-caption">{en ? 'All values are already calculated in the same snapshot. Unavailable horizons remain unavailable; no shorter sample substitutes for them.' : 'Todos los valores están precalculados en el mismo snapshot. Las ventanas no disponibles permanecen sin resultado; no se sustituyen por muestras más cortas.'}</p></StatisticalDisclosure>
-    <StatisticalDisclosure id="sl-quant" title={en ? 'Quantitative detail' : 'Detalle cuantitativo'} note={en ? 'Distributions, complete levels, seasonality, opening behavior and period history' : 'Distribuciones, niveles completos, estacionalidad, aperturas e historial de periodos'}>
-      <p className="sl-caption">{en ? `Selected frequency: ${frequencyName(frequency, locale)}. Change it in More options. Distributions, opening statistics and period history retain their full or recent sample, independently of the main horizon.` : `Frecuencia seleccionada: ${frequencyName(frequency, locale)}. Puedes cambiarla en Más opciones. Distribuciones, aperturas e historial mantienen su muestra completa o reciente, independiente del periodo principal.`}</p>
+      [en ? 'Available' : 'Disponible', (m: typeof metric) => m.available ? en ? 'Yes' : 'Sí' : en ? 'Insufficient sample' : 'Muestra insuficiente'],
+    ].map(([label, format]) => <tr key={String(label)}><th scope="row">{String(label)}</th>{manifest.windows.map(item => <td key={item} data-selected={window === item} data-unavailable={!data.windows[item].available} title={windowAvailabilityExplanation(data.windows[item], frequency, item, locale) ?? undefined}>{(format as (m: typeof metric) => string)(data.windows[item])}</td>)}</tr>)}</tbody></table></div><div className="sl-horizon-availability">{manifest.windows.map(item => { const explanation = windowAvailabilityExplanation(data.windows[item], frequency, item, locale); return explanation ? <p key={item} className="sl-caption">{explanation}</p> : null; })}</div><p className="sl-caption">{en ? 'Each column uses its own complete window. Unavailable results are not extrapolated or replaced with another sample.' : 'Cada columna usa su ventana completa. Los resultados no disponibles no se extrapolan ni se sustituyen por otra muestra.'}</p></StatisticalDisclosure>
+    <StatisticalDisclosure id="sl-quant" title={en ? 'Price and asset metrics' : 'Precio y métricas del activo'} note={en ? 'Price history, moving averages and risk metrics' : 'Evolución del precio, medias móviles y métricas de riesgo'}>
       <section id="sl-asset-statistics"><AssetStatCard asset={asset} frequency={frequency} window={window} locale={locale} /></section>
-      <section id="sl-levels"><KeyStatisticalLevelsPanel asset={asset} locale={locale} /></section>
-      <section id="sl-distributions"><MovementSummaryTable asset={asset} frequency={frequency} locale={locale} /></section>
-      <section id="sl-calendar"><AdvancedSeasonalityPanel data={seasonality} frequency={frequency} generatedAt={manifest.generatedAt} locale={locale} ticker={ticker} /></section>
-      {frequency !== 'daily' ? <><section id="sl-opening"><OpeningLocationPanel asset={asset} frequency={frequency} locale={locale} /></section><section id="sl-periods"><PeriodExplorerTable asset={asset} frequency={frequency} locale={locale} /></section></> : null}
-      {frequency !== 'monthly' ? <section id="sl-returns"><ReturnHeatmap asset={asset} frequency={frequency} locale={locale} /></section> : null}
-      {frequency === 'daily' ? <section id="sl-extremes"><CalendarExtremesPanel asset={asset} frequency={frequency} locale={locale} /></section> : null}
     </StatisticalDisclosure>
+    <StatisticalDisclosure id="sl-levels-disclosure" title={en ? 'Complete statistical levels' : 'Niveles estadísticos completos'} note={en ? 'Weekly and monthly extensions from the period opening' : 'Extensiones semanales y mensuales desde la apertura del periodo'}>
+      <section id="sl-levels"><KeyStatisticalLevelsPanel asset={asset} locale={locale} /></section>
+    </StatisticalDisclosure>
+    <StatisticalDisclosure id="sl-distributions-disclosure" title={en ? 'Movement distributions' : 'Distribución de movimientos'} note={en ? 'Averages, percentiles and extremes of price movements' : 'Promedios, percentiles y extremos de los movimientos del precio'}>
+      <section id="sl-distributions"><MovementSummaryTable asset={asset} frequency={frequency} locale={locale} /></section>
+    </StatisticalDisclosure>
+    <StatisticalDisclosure id="sl-calendar-disclosure" title={en ? 'Historical patterns and presidential cycle' : 'Patrones históricos y ciclo presidencial'} note={en ? 'Calendar samples, presidential phases and statistical metrics' : 'Muestras por calendario, fases presidenciales y métricas estadísticas'}>
+      <section id="sl-calendar"><AdvancedSeasonalityPanel data={seasonality} frequency={frequency} generatedAt={manifest.generatedAt} locale={locale} /></section>
+    </StatisticalDisclosure>
+    <StatisticalDisclosure id="sl-opening-disclosure" title={en ? 'Opening and closing location' : 'Ubicación de apertura y cierre'} note={en ? 'Open relative to the prior period and close within its own range' : 'Apertura frente al periodo previo y cierre dentro de su rango'}>
+      <section id="sl-opening"><OpeningLocationPanel key={`${asset.ticker}-${frequency}`} asset={asset} frequency={frequency} locale={locale} /></section>
+    </StatisticalDisclosure>
+    <StatisticalDisclosure id="sl-periods-disclosure" title={en ? 'Period history' : 'Historial de periodos'} note={en ? 'Prices and changes for each period, with filters and sorting' : 'Precios y variaciones de cada periodo, con filtros y ordenación'}>
+      <section id="sl-periods"><PeriodExplorerTable key={`${asset.ticker}-${frequency}`} asset={asset} frequency={frequency} locale={locale} /></section>
+    </StatisticalDisclosure>
+    <StatisticalDisclosure id="sl-returns-disclosure" title={en ? 'Historical returns' : 'Retornos históricos'} note={en ? 'Recent returns: the size and sequence of gains and declines' : 'Retornos recientes: magnitud y secuencia de subidas y caídas'}>
+      <section id="sl-returns"><ReturnHeatmap asset={asset} frequency={frequency} locale={locale} /></section>
+    </StatisticalDisclosure>
+    {frequency === 'daily' ? <StatisticalDisclosure id="sl-extremes-disclosure" title={en ? 'Calendar highs and lows' : 'Máximos y mínimos por calendario'} note={en ? 'Frequency and distribution of historical highs and lows' : 'Frecuencia y distribución de máximos y mínimos históricos'}>
+      <section id="sl-extremes"><CalendarExtremesPanel asset={asset} frequency={frequency} locale={locale} /></section>
+    </StatisticalDisclosure> : null}
     <StatisticalDisclosure id="sl-assets" title={en ? 'Compare assets' : 'Comparar activos'} note={en ? 'Up to 30 assets and their correlation matrix' : 'Hasta 30 activos y su matriz de correlación'}><p className="sl-notice">{en ? 'Asset summaries always use daily 5Y metrics. Correlations use the selected frequency and 3Y / 5Y / 10Y; 1Y and Full use All. Only completed returns on matching calendar dates are paired. Each cell shows the last matched completed observation. N is the number of valid matched pairs; at least 20 are required. Weekly keys use ISO weeks and monthly keys use calendar months.' : 'Los resúmenes de activos siempre usan métricas diarias de 5A. La correlación usa la frecuencia elegida y 3A / 5A / 10A; 1A y Todo el historial usan All. Solo se emparejan retornos completados de fechas coincidentes. Cada celda muestra la última observación completada común. N cuenta los pares válidos; se requieren al menos 20. Las claves semanales usan semanas ISO y las mensuales, meses de calendario.'}</p><ComparisonSection correlation={manifest.correlation} summaries={manifest.summaries} focusTicker={asset.ticker} frequency={frequency} window={window} locale={locale} /></StatisticalDisclosure>
     <StatisticalDisclosure id="sl-guide" title={en ? 'What do these levels mean?' : '¿Qué significan estos niveles?'} note={en ? 'A short guide, data sources and full methodology' : 'Guía breve, fuentes y metodología completa'}>
       <dl className="sl-guide-grid">{(en ? [
@@ -169,8 +203,7 @@ function StatLevelsView({ asset, locale = 'es', manifest, seasonality, selection
         ['Límites','Los niveles son descriptivos, dependen del historial disponible y no indican por sí solos cuándo comprar o vender ni son señales automáticas.'],
       ]).map(([term, definition]) => <div key={term}><dt>{term}</dt><dd>{definition}</dd></div>)}</dl>
       <div className="sl-provenance"><p>{en ? 'Source' : 'Fuente'}: <a href={manifest.sourceUrl} target="_blank" rel="noreferrer">{en ? 'Public market data · provider by availability · proprietary calculations' : 'Datos públicos de mercado · proveedor según disponibilidad · cálculos propios'}</a></p><p>{en ? 'Asset source' : 'Fuente del activo'}: {en ? asset.statusNote.replace('Datos públicos procesados vía','Public data processed via').replace('Sin datos suficientes desde fuentes públicas.','Not enough data from public sources.') : asset.statusNote}</p><p>{en ? 'Last market data' : 'Último dato de mercado'}: {manifest.generatedAt} · {en ? 'Asset as of' : 'Activo al'} {asset.lastDate ?? 'n/d'} · {en ? 'Snapshot generated' : 'Snapshot generado'}: {manifest.snapshotGeneratedAt ?? (en ? 'Not recorded in this snapshot' : 'No registrado en este snapshot')}</p><p>{en ? 'Data OK / limited history / unavailable' : 'Datos ok / historial limitado / no disponible'}: {manifest.statusCounts.ok} / {manifest.statusCounts.limited_history} / {manifest.statusCounts.unavailable}</p></div>
-      {asset.dataAuthority && asset.currentMark ? <div id="sl-authority" className="sl-provenance"><p>{en ? 'Current mark observed' : 'Marca actual observada'}: <time dateTime={asset.currentMark.timestamp}>{asset.currentMark.timestamp}</time></p><p>{en ? 'Completed history through' : 'Historial completado hasta'}: {en ? 'daily' : 'diario'} {asset.dataAuthority.lastCompletedObservation.daily} · {en ? 'weekly' : 'semanal'} {asset.dataAuthority.lastCompletedObservation.weekly} · {en ? 'monthly' : 'mensual'} {asset.dataAuthority.lastCompletedObservation.monthly}</p><p>{en ? 'Current marks are separate from completed distributions, seasonality and date-matched correlations.' : 'Las marcas actuales se separan de las distribuciones, la estacionalidad y las correlaciones de periodos completados.'}</p><details><summary>{en ? 'Baseline provenance' : 'Procedencia del baseline'}</summary><p>{en ? 'Cutoff' : 'Corte'}: {asset.dataAuthority.snapshotCutoff}</p><p className="break-all">{asset.dataAuthority.baselineId}</p><p className="break-all">Raw SHA256: {asset.dataAuthority.rawSha256}</p><p>{en ? 'Explicit baseline authority migration. The cause of historical drift remains unexplained.' : 'Migración explícita de autoridad del baseline. La causa del drift histórico sigue sin explicación.'}</p></details></div> : null}
-      {shouldShowJpmSpxLevels(asset.ticker) ? <JpmSpxLevelsPanel locale={locale} /> : null}
+      {asset.dataAuthority && asset.currentMark ? <div id="sl-authority" className="sl-provenance"><p>{en ? 'Current mark observed' : 'Marca actual observada'}: <time dateTime={asset.currentMark.timestamp}>{asset.currentMark.timestamp}</time></p><p>{en ? 'Completed history through' : 'Historial completado hasta'}: {en ? 'daily' : 'diario'} {asset.dataAuthority.lastCompletedObservation.daily} · {en ? 'weekly' : 'semanal'} {asset.dataAuthority.lastCompletedObservation.weekly} · {en ? 'monthly' : 'mensual'} {asset.dataAuthority.lastCompletedObservation.monthly}</p><p>{en ? 'Current marks are separate from completed distributions, seasonality and date-matched correlations.' : 'Las marcas actuales se separan de las distribuciones, la estacionalidad y las correlaciones de periodos completados.'}</p></div> : null}
       <a className="sl-method-link" href={en ? '/en/methodology' : '/metodologia'}>{en ? 'Read the full methodology' : 'Leer la metodología completa'} <span aria-hidden="true">↗</span></a>
     </StatisticalDisclosure>
     <p className="sl-footer-note">{en ? 'Educational reading. This is not financial advice or an execution instruction. Historical positioning only; it does not imply future direction.' : 'Lectura educativa. No constituye asesoría financiera ni instrucción operativa. No implica dirección futura; solo posición frente al historial.'}</p>

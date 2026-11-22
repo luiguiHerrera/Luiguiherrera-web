@@ -137,7 +137,7 @@ export function AssetStatCard({ asset, frequency, locale = "es", window }: Asset
           <div className="flex items-center justify-between gap-3">
             <p className="text-xs uppercase tracking-[0.12em] text-muted">
               {copy.classification}
-              <MetricHelpTooltip label={copy.extensionPercentile} text={copy.extensionHelp} />
+              <MetricHelpTooltip label={copy.extensionPercentile} text={copy.extensionHelp} locale={locale} />
             </p>
             <span className="bg-white px-2 py-1 text-xs font-semibold text-ink">{metric.available ? extensionLabel(metric.extensionLabel, locale) : locale === "en" ? "Not enough history" : "Historial insuficiente"}</span>
           </div>
@@ -149,7 +149,7 @@ export function AssetStatCard({ asset, frequency, locale = "es", window }: Asset
           <div className="flex items-center justify-between gap-3 text-xs">
             <span className="font-semibold uppercase tracking-[0.12em] text-muted">
               {copy.currentDrawdown}
-              <MetricHelpTooltip label={copy.currentDrawdown} text={copy.drawdownHelp} />
+              <MetricHelpTooltip label={copy.currentDrawdown} text={copy.drawdownHelp} locale={locale} />
             </span>
             <span className="font-semibold text-ink">{formatPercent(metric.currentDrawdown)}</span>
           </div>
@@ -171,14 +171,14 @@ export function AssetStatCard({ asset, frequency, locale = "es", window }: Asset
           <div key={label} className="border border-line bg-panelSoft p-3">
             <p className="text-[11px] uppercase tracking-[0.12em] text-muted">
               {label}
-              <MetricHelpTooltip label={label} text={metricHelp[label] ?? copy.defaultHelp} />
+              <MetricHelpTooltip label={label} text={metricHelp[label] ?? copy.defaultHelp} locale={locale} />
             </p>
             <p className="mt-2 text-sm font-semibold text-ink">{value}</p>
           </div>
         ))}
       </div>
 
-      <p className="mt-4 border-t border-line pt-4 text-xs leading-5 text-muted">
+      {frequencyData.status !== 'ok' ? <p className="mt-4 border-t border-line pt-4 text-xs leading-5 text-muted">
         {locale === "en"
           ? frequencyData.statusNote
               .replace("Historial suficiente para frecuencia", "Sufficient history for")
@@ -188,7 +188,7 @@ export function AssetStatCard({ asset, frequency, locale = "es", window }: Asset
               .replace("por semana", "weekly frequency")
               .replace("mensual", "monthly frequency")
           : frequencyData.statusNote}
-      </p>
+      </p> : null}
       <details id="sl-return-aliases" className="mt-4 border-t border-line pt-3">
         <summary className="cursor-pointer text-sm font-semibold">{locale === "en" ? "Daily returns: exact session counts" : "Retornos diarios: número exacto de sesiones"}</summary>
         <p className="mt-2 text-xs text-muted">{locale === "en" ? "Adjusted-close returns over observed daily sessions. These are session counts, including weekends for crypto, rather than calendar durations." : "Retornos de cierre ajustado sobre sesiones diarias observadas. Son cantidades de sesiones, incluidos fines de semana en cripto, y no duraciones de calendario."}</p>

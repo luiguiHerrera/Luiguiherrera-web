@@ -7,7 +7,7 @@ import { translatePathname, withSearch } from "@/lib/i18n/routes";
 
 export function LanguageSwitcher() {
   const pathname = usePathname();
-  const prefetch = pathname === "/niveles-estadisticos" || pathname === "/en/statistical-levels" ? false : undefined;
+  const prefetch = pathname === "/analisiscuantitativo" || pathname === "/en/quantitative-analysis" ? false : undefined;
   const searchParams = useSearchParams();
   const currentLocale = localeFromPathname(pathname);
   const search = searchParams.toString();

@@ -155,6 +155,16 @@ export type PeriodExplorerRow = {
   openingRangeCategory: OpeningRangeCategory | null;
 };
 
+// Complete explorer history, compact on the wire. Dates use UTC epoch days;
+// prices use cents, return ratios use 1/10,000 and closing location 1/1,000.
+// Codes index the existing extension labels and opening-range categories.
+export type PeriodHistoryRow = [
+  startDaysBeforeEnd: number, endEpochDay: number,
+  openCents: number | null, highCents: number | null, lowCents: number | null, closeCents: number | null,
+  changeBps: number | null, openGapBps: number | null, rangeBps: number | null, closeThousandths: number | null,
+  classification: 0 | 1 | 2 | 3 | 4, openingRange: 0 | 1 | 2 | null,
+];
+
 export type MlFeatureSet = {
   return_1p: number | null;
   return_4p: number | null;
@@ -285,6 +295,7 @@ export type FrequencyMetricSet = {
   calendarExtremes: CalendarFrequencyPoint[];
   newHighLow: NewHighLowStats;
   recentPeriods: PeriodExplorerRow[];
+  periodHistory?: PeriodHistoryRow[];
   mlFeatures: MlFeatureSet;
 };
 

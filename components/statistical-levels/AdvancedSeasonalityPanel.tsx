@@ -1,6 +1,6 @@
 "use client";
 
-import { useId, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { windowName } from "@/lib/statistical-levels/interpretation";
 import type {
   CalendarDaySeasonalityCell,
@@ -20,7 +20,6 @@ type AdvancedSeasonalityPanelProps = {
   frequency: StatisticalFrequency;
   generatedAt: string;
   locale?: "es" | "en";
-  ticker: string;
 };
 
 const windowOptions: SeasonalityWindow[] = ["3Y", "5Y", "10Y", "All"];
@@ -126,9 +125,7 @@ function labelForCell(cell: SeasonalityCell | undefined, locale: "es" | "en") {
   return months[cell.month - 1];
 }
 
-export function AdvancedSeasonalityPanel({ data, frequency, generatedAt, locale = "es", ticker }: AdvancedSeasonalityPanelProps) {
-  const [contextOpen, setContextOpen] = useState(true);
-  const contextId = useId();
+export function AdvancedSeasonalityPanel({ data, frequency, generatedAt, locale = "es" }: AdvancedSeasonalityPanelProps) {
   const [window, setWindow] = useState<SeasonalityWindow>("5Y");
   const [phase, setPhase] = useState<PresidentialCyclePhase>("all");
   const [metric, setMetric] = useState<SeasonalityMetric>("averageReturn");
@@ -148,12 +145,10 @@ export function AdvancedSeasonalityPanel({ data, frequency, generatedAt, locale 
   const sampleAverage = average(cells.map((cell) => cell.sampleSize));
   const copy = locale === "en"
     ? {
-        eyebrow: frequency === "monthly" ? "Monthly seasonality" : frequency === "weekly" ? "Weekly seasonality" : "Daily seasonality",
-        title: "Historical calendar patterns",
         reading: frequency === "monthly"
           ? "Historical patterns by calendar month for the selected asset."
           : frequency === "weekly"
-            ? "Groups completed weeks inside the selected month. Use the Daily tab for calendar-day analysis."
+            ? "Groups completed weeks inside the selected month. Select daily frequency for calendar-day analysis."
             : "Daily calendar view using historical daily data; it does not include intraday behavior.",
         window: "Window",
         presidentialCycle: "Presidential cycle",
@@ -179,12 +174,10 @@ export function AdvancedSeasonalityPanel({ data, frequency, generatedAt, locale 
         week: "Week",
       }
     : {
-        eyebrow: frequency === "monthly" ? "Estacionalidad mensual" : frequency === "weekly" ? "Estacionalidad por semana" : "Estacionalidad diaria",
-        title: "Patrones históricos por calendario",
         reading: frequency === "monthly"
           ? "Patrones históricos por mes calendario del activo seleccionado."
           : frequency === "weekly"
-            ? "Agrupa semanas completadas dentro del mes seleccionado. Para lectura por día calendario usa la pestaña Diario."
+            ? "Agrupa semanas completadas dentro del mes seleccionado. Para analizar días de calendario selecciona la frecuencia diaria."
             : "Lectura diaria por calendario. Usa días del mes y datos históricos diarios; no incluye comportamiento intradía.",
         window: "Ventana",
         presidentialCycle: "Ciclo presidencial",
@@ -211,26 +204,11 @@ export function AdvancedSeasonalityPanel({ data, frequency, generatedAt, locale 
       };
 
   return (
-    <section className="sl-patterns-context min-w-0" data-context-expanded={contextOpen}>
+    <section className="sl-patterns-context min-w-0">
       <div className="p-3.5 md:p-5">
-        <div className="flex flex-col gap-3.5 lg:flex-row lg:items-start lg:justify-between">
-          <div className="max-w-3xl">
-            <p className="text-xs font-semibold uppercase tracking-[0.16em] text-petrol">{copy.eyebrow} · {ticker}</p>
-            <h2 className="mt-2 text-lg font-semibold leading-snug text-ink md:text-2xl">{copy.title}</h2>
-            {contextOpen ? <p className="mt-3 text-sm leading-6 text-muted md:text-base md:leading-7">{copy.reading}{locale === "en" ? " Only completed UTC calendar periods enter the sample; the current day, ISO week or month is excluded." : " La muestra incluye solo periodos de calendario UTC completos; se excluye el día, la semana ISO o el mes en curso."}</p> : null}
-          </div>
-          <button type="button" className="sl-context-toggle" aria-expanded={contextOpen} aria-controls={contextId} onClick={() => setContextOpen(open => !open)}>
-            {locale === "en" ? contextOpen ? "Hide context" : "View full context" : contextOpen ? "Ocultar contexto" : "Ver contexto completo"}
-            <span aria-hidden="true">{contextOpen ? '↑' : '↓'}</span>
-          </button>
-        </div>
-        {!contextOpen ? <div className="sl-patterns-summary">
-          <p className="sl-eyebrow">{frequency === "monthly" ? locale === "en" ? "All calendar months" : "Todos los meses del calendario" : months[month - 1]} · {windowName(window === "All" ? "Full" : window, locale)} · {phase === "all" ? locale === "en" ? "All cycles" : "Todos los ciclos" : phaseOptions.find(item => item.key === phase)?.label} · {metricOptions.find(item => item.key === metric)?.label}</p>
-          <p>{locale === "en" ? `Calendar-${frequency === "monthly" ? "month" : frequency === "weekly" ? "week" : "day"} patterns using completed UTC periods only.` : `Patrones por ${frequency === "monthly" ? "mes" : frequency === "weekly" ? "semana" : "día"} de calendario usando solo periodos UTC completos.`}</p>
-          <p>{copy.averageN}: {sampleAverage === null ? "n/d" : sampleAverage.toFixed(0)} · {locale === "en" ? "across all calendar groups" : "entre todos los grupos del calendario"}{sampleAverage !== null && sampleAverage < 5 ? ` · ${copy.lowSample}` : ""}</p>
-        </div> : null}
+        <p className="max-w-3xl text-sm leading-6 text-muted">{copy.reading}{locale === "en" ? " Only completed UTC calendar periods enter the sample; the current day, ISO week or month is excluded." : " La muestra incluye solo periodos de calendario UTC completos; se excluye el día, la semana ISO o el mes en curso."}</p>
       </div>
-      <div id={contextId} hidden={!contextOpen}>
+      <div>
         <div className="px-3.5 pb-5 md:px-5">
           <div className="sl-pattern-controls grid gap-2.5 sm:grid-cols-2 xl:grid-cols-4">
             <Control label={copy.window} value={window} setValue={(value) => setWindow(value as SeasonalityWindow)} options={windowOptions.map((item) => [item, windowName(item === "All" ? "Full" : item, locale)])} />
@@ -254,7 +232,6 @@ export function AdvancedSeasonalityPanel({ data, frequency, generatedAt, locale 
           {frequency === "weekly" ? <WeeklyView cells={monthCells as CalendarWeekSeasonalityCell[]} copy={copy} locale={locale} metric={metric} month={month} monthNames={months} /> : null}
           {frequency === "daily" ? <DailyView cells={cells as CalendarDaySeasonalityCell[]} copy={copy} currentDay={currentDay} currentMonth={currentMonth} locale={locale} metric={metric} month={month} monthNames={months} /> : null}
 
-          <details className="sl-seasonality-values"><summary>{locale === "en" ? "Sample values · all metrics" : "Valores de la muestra · todas las métricas"}</summary><div className="sl-table-scroll" tabIndex={0} role="region" aria-label={locale === "en" ? "Seasonality values" : "Valores de estacionalidad"}><table className="sl-table"><thead><tr><th>{copy.month}</th><th>{copy.averageReturn}</th><th>{locale === "en" ? "Median" : "Mediana"}</th><th>Win rate</th><th>N</th></tr></thead><tbody>{(frequency === "monthly" ? cells : monthCells).map(cell => <tr key={cellKey(cell)}><th>{labelForCell(cell, locale)}</th><td>{formatPercent(cell.averageReturn)}</td><td>{formatPercent(cell.medianReturn)}</td><td>{formatMetric(cell.winRate, "winRate")}</td><td>{cell.sampleSize}{cell.sampleSize < 5 ? ` · ${copy.lowSample}` : ""}</td></tr>)}</tbody></table></div></details>
 
           <p className="border-t border-line pt-4 text-xs leading-5 text-muted">
             {copy.footer}
