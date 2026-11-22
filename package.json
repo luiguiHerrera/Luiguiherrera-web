@@ -22,7 +22,7 @@
   },
   "dependencies": {
     "exceljs": "^4.4.0",
-    "next": "16.4.2",
+    "next": "16.4.6",
     "react": "19.0.0",
     "react-dom": "19.0.0"
   },
@@ -33,7 +33,7 @@
     "autoprefixer": "10.4.20",
     "braces": "file:vendor/braces-3.0.3-sl-backport.tgz",
     "eslint": "^9.39.5",
-    "eslint-config-next": "16.3.6",
+    "eslint-config-next": "16.4.6",
     "postcss": "8.5.26",
     "tailwindcss": "3.4.17",
     "typescript": "5.6.3"
