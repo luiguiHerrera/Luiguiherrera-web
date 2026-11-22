@@ -13,6 +13,23 @@ export const percent = (value: number | null, digits = 1) => value === null || !
 export const number = (value: number | null, digits = 2) => value === null || !Number.isFinite(value)
   ? 'n/d' : value.toLocaleString('en-US', { minimumFractionDigits: digits, maximumFractionDigits: digits });
 
+// Explains the existing buildWindowMetric availability gate without changing it.
+export function windowAvailabilityExplanation(metric: WindowMetric, frequency: StatisticalFrequency, window: StatisticalWindow, locale: Locale) {
+  if (metric.available) return null;
+  const minimum = { daily: 252, weekly: 104, monthly: 36 }[frequency];
+  const periods = {
+    es: { daily: 'periodos diarios', weekly: 'periodos semanales', monthly: 'periodos mensuales' },
+    en: { daily: 'daily periods', weekly: 'weekly periods', monthly: 'monthly periods' },
+  }[locale][frequency];
+  const sample = `${windowName(window, locale)}: ${metric.sessions} ${periods}`;
+  if (metric.sessions < minimum) return locale === 'es'
+    ? `${sample}; el cálculo actual exige al menos ${minimum} para esta frecuencia. Esta ventana no se calcula.`
+    : `${sample}; the current calculation requires at least ${minimum} for this frequency. This window is not calculated.`;
+  return locale === 'es'
+    ? `${sample}; la muestra no cubre el horizonte completo. Esta ventana no se calcula.`
+    : `${sample}; the sample does not cover the full horizon. This window is not calculated.`;
+}
+
 // Counts the same rolling-MA observations as buildWindowMetric, not the price periods.
 export function extensionSample(metric: WindowMetric, frequency: StatisticalFrequency) {
   return metric.available ? Math.max(0, metric.sessions - ({ daily: 200, weekly: 40, monthly: 12 }[frequency]) + 1) : 0;

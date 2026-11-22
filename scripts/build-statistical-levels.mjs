@@ -962,6 +962,24 @@ function buildFrequencyMetrics(rows, frequency) {
   const rangeValues = moves.map((row) => row.range);
   const latestMove = moves.at(-1);
   const trendWindow = closes.slice(-Math.min(26, closes.length));
+  const changes = moves.map((row) => row.change);
+  const changeMean = mean(changes), changeSd = standardDeviation(changes);
+  // Same z-score and rounding as the recent sample; compute its reference once
+  // rather than scanning the entire history again for every exported period.
+  const explorerRow = (row) => ({
+    period: row.period, periodStart: row.periodStart, periodEnd: row.periodEnd,
+    open: clampPrecision(row.open, 2), high: clampPrecision(row.high, 2),
+    low: clampPrecision(row.low, 2), close: clampPrecision(row.close, 2),
+    change: clampPrecision(row.change), openGap: clampPrecision(row.openGap),
+    range: clampPrecision(row.range), closeLocation: clampPrecision(row.closeLocation, 3),
+    classification: extensionLabel(changeMean === null || changeSd === null || changeSd === 0 ? null : (row.change - changeMean) / changeSd),
+    openingRangeCategory: row.openingRangeCategory,
+  });
+  const classifications = ['Extensión negativa extrema', 'Extensión negativa', 'Zona media', 'Extensión positiva', 'Extensión positiva extrema'];
+  const openingRanges = ['Above previous range', 'Inside previous range', 'Below previous range'];
+  // Integer units preserve the already-rounded precision while avoiding repeated
+  // date strings and decimal prefixes in the downloaded history.
+  const units = (value, scale) => value === null ? null : Math.round(value * scale);
 
   return {
     status,
@@ -989,21 +1007,16 @@ function buildFrequencyMetrics(rows, frequency) {
     openingLocation: buildOpeningLocation(moves),
     calendarExtremes: buildCalendarExtremes(periodRows, frequency, config.newHighLowLookback),
     newHighLow: buildNewHighLow(periodRows, config.newHighLowLookback),
-    recentPeriods: moves.slice(-80).reverse().map((row) => ({
-      period: row.period,
-      periodStart: row.periodStart,
-      periodEnd: row.periodEnd,
-      open: clampPrecision(row.open, 2),
-      high: clampPrecision(row.high, 2),
-      low: clampPrecision(row.low, 2),
-      close: clampPrecision(row.close, 2),
-      change: clampPrecision(row.change),
-      openGap: clampPrecision(row.openGap),
-      range: clampPrecision(row.range),
-      closeLocation: clampPrecision(row.closeLocation, 3),
-      classification: extensionLabel(zScore(moves.map((item) => item.change), row.change)),
-      openingRangeCategory: row.openingRangeCategory,
-    })),
+    recentPeriods: moves.slice(-80).reverse().map(explorerRow),
+    periodHistory: [...moves].reverse().map((move) => {
+      const row = explorerRow(move);
+      const endDay = Date.parse(row.periodEnd) / 86_400_000;
+      return [endDay - Date.parse(row.periodStart) / 86_400_000, endDay,
+        ...[row.open, row.high, row.low, row.close].map(value => units(value, 100)),
+        ...[row.change, row.openGap, row.range].map(value => units(value, 10_000)), units(row.closeLocation, 1_000),
+        classifications.indexOf(row.classification),
+        row.openingRangeCategory === null ? null : openingRanges.indexOf(row.openingRangeCategory)];
+    }),
     mlFeatures: {
       return_1p: clampPrecision(rollingReturn(closes, 1)),
       return_4p: clampPrecision(rollingReturn(closes, 4)),
@@ -1040,6 +1053,7 @@ function buildUnavailableFrequency(periods = 0) {
     calendarExtremes: [],
     newHighLow: { lookback: 0, newHighCount: 0, newLowCount: 0, newHighRate: null, newLowRate: null },
     recentPeriods: [],
+    periodHistory: [],
     mlFeatures: {
       return_1p: null,
       return_4p: null,

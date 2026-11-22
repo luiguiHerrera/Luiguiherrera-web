@@ -74,6 +74,20 @@ with that downloaded archive and config. Compare all 81 hashes to the published
 sidecar. No provider request is needed. Access to the private archive is still
 required; public metadata grants no access.
 
+## Complete explorer history
+
+The generator exports `periodHistory` from the same completed, adjusted OHLC
+rows it already consumes. Each compact row contains start/end dates, OHLC,
+change, opening gap, range, closing location and the existing classification
+and opening-range codes. Dates are UTC epoch days with a start offset; numeric
+fields use integer units matching their existing rounded precision, decoded
+without further rounding. `recentPeriods` retains its original last 80 rows for
+the other panels. Older snapshots remain readable through that sample.
+The explorer filters and sorts the complete history before showing ten rows
+at a time. This adds no provider request, archived object, scheduled job or
+AWS resource. Generated asset JSON and browser memory use do increase;
+qualification checks the combined asset/seasonality response against 4.5 MB.
+
 ## Probe and failure behavior
 
 `probe-statistical-levels-storage.yml` is manual-only, branch-bound, and never

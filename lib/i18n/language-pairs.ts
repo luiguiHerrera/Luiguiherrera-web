@@ -12,7 +12,7 @@ export const bilingualRoutePairs = [
   { es: "/protege-tu-dinero", en: "/en/protect-your-money" },
   { es: "/dashboard", en: "/en/dashboard" },
   { es: "/informes", en: "/en/reports" },
-  { es: "/niveles-estadisticos", en: "/en/statistical-levels" },
+  { es: "/analisiscuantitativo", en: "/en/quantitative-analysis" },
   { es: "/tendencias", en: "/en/trends" },
   { es: trendsMethodologyPath("es"), en: trendsMethodologyPath("en") },
   ...trendCatalog.map((trend) => ({ es: trendPath(trend, "es"), en: trendPath(trend, "en") })),

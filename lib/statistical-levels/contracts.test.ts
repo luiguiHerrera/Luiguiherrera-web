@@ -3,7 +3,7 @@ import test from 'node:test';
 import { readFileSync } from 'node:fs';
 import ts from 'typescript';
 import { canonicalStatTicker, displayStatTicker } from './display.ts';
-import { extensionSample, historicalInterpretation, number, percent, percentileTranslation, zTranslation } from './interpretation.ts';
+import { extensionSample, historicalInterpretation, number, percent, percentileTranslation, windowAvailabilityExplanation, zTranslation } from './interpretation.ts';
 import type { AssetStatRecord, StatisticalFrequency } from './types.ts';
 const read = (path: string) => readFileSync(path,'utf8');
 const asset = (ticker: string) => JSON.parse(read(`lib/statistical-levels/generated/assets/${ticker}.json`)) as AssetStatRecord;
@@ -61,6 +61,27 @@ test('observation counts exactly exclude each long moving-average warm-up', () =
   }
   assert.equal(extensionSample({...spy.frequencies.daily.windows['5Y'],available:false},'daily'),0);
 });
+test('unavailable horizon copy explains the actual sample and canonical minimum without inventing metrics', () => {
+  const original = read('scripts/build-statistical-levels.mjs');
+  const config = new Function(`return (${original.match(/const frequencyConfig = (\{[\s\S]*?\n\});/)![1]})`)();
+  for (const frequency of manifest.frequencies as StatisticalFrequency[]) {
+    const before = JSON.stringify(spy.frequencies[frequency].windows);
+    for (const locale of ['es', 'en'] as const) {
+      const metric = spy.frequencies[frequency].windows['1Y'];
+      const reason = windowAvailabilityExplanation(metric, frequency, '1Y', locale);
+      if (metric.available) assert.equal(reason, null);
+      else {
+        assert.ok(reason?.includes(String(metric.sessions)));
+        assert.ok(reason?.includes(String(config[frequency].minPeriods)));
+      }
+      assert.equal(windowAvailabilityExplanation(spy.frequencies[frequency].windows['5Y'], frequency, '5Y', locale), null);
+      const partial = { ...spy.frequencies[frequency].windows['5Y'], available: false, sessions: config[frequency].minPeriods + 1 };
+      assert.match(windowAvailabilityExplanation(partial, frequency, '10Y', locale)!, locale === 'es' ? /no cubre el horizonte completo/ : /does not cover the full horizon/);
+    }
+    assert.equal(JSON.stringify(spy.frequencies[frequency].windows), before);
+  }
+  assert.match(windowAvailabilityExplanation(spy.frequencies.weekly.windows['1Y'], 'weekly', '1Y', 'es')!, /52 periodos semanales.*104/);
+});
 test('formatting and translations preserve null, sign and canonical precision', () => {
   assert.equal(number(null),'n/d');assert.equal(percent(null),'n/d');assert.equal(number(87,1),'87.0');assert.equal(number(1.2),'1.20');assert.equal(percent(.01234),'+1.2%');
   assert.match(percentileTranslation(87,'es'),/13.0%/);assert.match(percentileTranslation(87,'en'),/13.0%/);
@@ -87,8 +108,9 @@ test('every capability has an explicit destination, accessible selector and regr
   assert.equal(ledger.capabilities.length,87);
   const ids=new Set();
   for(const row of ledger.capabilities){assert.ok(!ids.has(row.ID));ids.add(row.ID);assert.ok(row.ACCESS_PATH);assert.ok(row.REGRESSION_TEST);assert.ok(row.REDESIGN_DESTINATION);assert.notEqual(row.REDESIGN_DESTINATION,'REMOVED');}
-  for(const id of ['sl-controls','sl-options','sl-interpretation','sl-unusual','sl-risk','sl-horizons','sl-quant','sl-assets','sl-guide'])assert.ok(source.includes(`id="${id}"`),id);
-  for(const component of ['AssetStatCard','UnderwaterDrawdownChart','KeyStatisticalLevelsPanel','AdvancedSeasonalityPanel','MovementSummaryTable','OpeningLocationPanel','PeriodExplorerTable','ReturnHeatmap','CalendarExtremesPanel','ComparisonSection','JpmSpxLevelsPanel']) assert.ok(source.includes(`<${component}`),component);
+  for(const id of ['sl-controls','sl-frequency','sl-interpretation','sl-unusual','sl-risk','sl-horizons','sl-quant','sl-assets','sl-guide'])assert.ok(source.includes(`id="${id}"`),id);
+  for(const component of ['AssetStatCard','UnderwaterDrawdownChart','KeyStatisticalLevelsPanel','AdvancedSeasonalityPanel','MovementSummaryTable','OpeningLocationPanel','PeriodExplorerTable','ReturnHeatmap','CalendarExtremesPanel','ComparisonSection']) assert.ok(source.includes(`<${component}`),component);
+  assert.doesNotMatch(source, /JpmSpxLevelsPanel|shouldShowJpmSpxLevels/); // Internal, never mounted in the public page.
 });
 test('all ten distributions and nine summary statistics stay available',()=>{
   const s=read('components/statistical-levels/MovementSummaryTable.tsx');
@@ -105,10 +127,27 @@ test('seasonality retains all frequency/cycle/window/metric filters, weekly win 
   const primary=read('components/statistical-levels/CurrentMonthSeasonality.tsx');assert.match(primary,/cell\?\.winRate != null/);assert.match(primary,/n \? percent/);
 });
 test('routes preserve SEO and full methodology and carry server-resolved freshness',()=>{
-  for(const [route,locale] of [['app/(es)/niveles-estadisticos/page.tsx','es'],['app/en/statistical-levels/page.tsx','en']]) {
+  for(const [route,locale] of [['app/(es)/analisiscuantitativo/page.tsx','es'],['app/en/quantitative-analysis/page.tsx','en']]) {
     const page=read(route);assert.match(page,/getRouteMetadata/);assert.match(page,/getStatisticalLevelsPageData/);assert.ok(page.includes(`locale="${locale}"`));assert.match(page,/stale=\{stale\}/);
   }
   assert.match(source,/\/en\/methodology/);assert.match(source,/\/metodologia/);assert.doesNotMatch(source,/new Date\(/);
+});
+test('quantitative analysis keeps reciprocal language routes, canonical metadata and permanent legacy redirects', async () => {
+  const { default: config } = await import('../../next.config.ts');
+  const { getTranslatedPathname } = await import('../i18n/language-pairs.ts');
+  const { getRouteMetadata } = await import('../seo/site.ts');
+  const redirects = await config.redirects!();
+  for (const [legacy, canonical, alternate, locale] of [
+    ['/niveles-estadisticos', '/analisiscuantitativo', '/en/quantitative-analysis', 'en'],
+    ['/en/statistical-levels', '/en/quantitative-analysis', '/analisiscuantitativo', 'es'],
+  ] as const) {
+    const redirect = redirects.find(item => item.source === legacy);
+    assert.ok(redirect && 'permanent' in redirect && redirect.permanent);
+    assert.equal(redirect.destination, canonical);
+    assert.ok(!redirect.destination.includes('?')); // Next forwards the incoming selection query intact.
+    assert.equal(getTranslatedPathname(canonical, locale), alternate);
+    assert.equal(getRouteMetadata(canonical).alternates?.canonical, `https://www.luiguiherrera.com${canonical}`);
+  }
 });
 test('no unqualified model or dead legacy widget is imported into the redesign',()=>{
   for(const name of ledger.unreachable_components) assert.ok(!source.includes(`import { ${name}`));

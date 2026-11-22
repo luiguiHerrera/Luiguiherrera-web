@@ -19,7 +19,7 @@ export async function TrendDetailPage({ definition, locale }: { definition: Tren
   const trend = getTrendDetail(definition, locale), copy = trendDetailCopy[locale], radar = trendsCopy[locale].radar;
   const capital = getPublicCapital(await getCapitalData(), definition.id);
   const companies = capital.views[0].rows;
-  const base = trendsPath(locale), pathname = trendPath(definition, locale), levels = locale === "es" ? "/niveles-estadisticos" : "/en/statistical-levels";
+  const base = trendsPath(locale), pathname = trendPath(definition, locale), levels = locale === "es" ? "/analisiscuantitativo" : "/en/quantitative-analysis";
   return <article data-trends-page className={`${styles.page} mx-auto max-w-7xl px-4 py-8 md:px-5 md:py-12`}>
     <TrendsAnalytics />
     <JsonLd data={[buildWebPageJsonLd({ pathname, name: trend.name, description: trend.short, language: locale }), buildBreadcrumbJsonLd(locale, [{ name: copy.home, pathname: locale === "es" ? "/" : "/en" }, { name: copy.back, pathname: base }, { name: trend.name, pathname }])]} />

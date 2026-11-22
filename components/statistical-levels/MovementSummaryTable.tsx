@@ -9,16 +9,16 @@ type MovementSummaryTableProps = {
 };
 
 const labels: Record<ChangeMoveMetric, string> = {
-  change: "change",
-  openGap: "openGap",
-  highExtensionFromOpen: "high desde apertura",
-  lowExtensionFromOpen: "low desde apertura",
-  highExtensionFromPrevClose: "high desde cierre previo",
-  lowExtensionFromPrevClose: "low desde cierre previo",
-  closeLocation: "closeLocation",
-  upperFade: "upperFade",
-  lowerRecovery: "lowerRecovery",
-  range: "range",
+  change: "Cambio del periodo",
+  openGap: "Brecha de apertura",
+  highExtensionFromOpen: "Máximo desde apertura",
+  lowExtensionFromOpen: "Mínimo desde apertura",
+  highExtensionFromPrevClose: "Máximo desde cierre previo",
+  lowExtensionFromPrevClose: "Mínimo desde cierre previo",
+  closeLocation: "Posición del cierre",
+  upperFade: "Retroceso desde el máximo",
+  lowerRecovery: "Recuperación desde el mínimo",
+  range: "Amplitud del periodo",
 };
 
 const help: Partial<Record<ChangeMoveMetric, string>> = {
@@ -83,7 +83,7 @@ export function MovementSummaryTable({ asset, frequency, locale = "es" }: Moveme
             <div key={metric} className="border border-line bg-panelSoft p-4">
               <p className="text-sm font-semibold text-ink">
                 {metricLabels[metric]}
-                {metricHelp[metric] ? <MetricHelpTooltip label={metricLabels[metric]} text={metricHelp[metric]} /> : null}
+                {metricHelp[metric] ? <MetricHelpTooltip label={metricLabels[metric]} text={metricHelp[metric]} locale={locale} /> : null}
               </p>
               <div className="relative mt-4 h-2 bg-white">
                 <div className="absolute top-1/2 h-px w-full -translate-y-1/2 bg-[#d8d2ca]" />
@@ -103,15 +103,15 @@ export function MovementSummaryTable({ asset, frequency, locale = "es" }: Moveme
           <thead className="text-muted">
             <tr className="border-b border-line">
               <th className="py-2.5 pr-4 font-medium">{locale === "en" ? "Metric" : "Métrica"}</th>
-              <th className="py-2.5 pr-4 font-medium">mean</th>
-              <th className="py-2.5 pr-4 font-medium">std</th>
+              <th className="py-2.5 pr-4 font-medium">{locale === "en" ? "Mean" : "Media"}</th>
+              <th className="py-2.5 pr-4 font-medium">{locale === "en" ? "Std. dev." : "Desv. típica"}</th>
               <th className="py-2.5 pr-4 font-medium">p10</th>
               <th className="py-2.5 pr-4 font-medium">p25</th>
               <th className="py-2.5 pr-4 font-medium">p50</th>
               <th className="py-2.5 pr-4 font-medium">p75</th>
               <th className="py-2.5 pr-4 font-medium">p90</th>
-              <th className="py-2.5 pr-4 font-medium">max</th>
-              <th className="py-2.5 pr-4 font-medium">min</th>
+              <th className="py-2.5 pr-4 font-medium">{locale === "en" ? "Maximum" : "Máximo"}</th>
+              <th className="py-2.5 pr-4 font-medium">{locale === "en" ? "Minimum" : "Mínimo"}</th>
             </tr>
           </thead>
           <tbody>
@@ -122,7 +122,7 @@ export function MovementSummaryTable({ asset, frequency, locale = "es" }: Moveme
                 <tr key={metric} className="border-b border-line/70">
                   <td className="py-3 pr-4 font-semibold text-ink">
                     {metricLabels[metric]}
-                    {metricHelp[metric] ? <MetricHelpTooltip label={metricLabels[metric]} text={metricHelp[metric]} /> : null}
+                    {metricHelp[metric] ? <MetricHelpTooltip label={metricLabels[metric]} text={metricHelp[metric]} locale={locale} /> : null}
                   </td>
                   <td className="py-3 pr-4 text-muted">{formatStat(row?.mean ?? null, isRatio)}</td>
                   <td className="py-3 pr-4 text-muted">{formatStat(row?.std ?? null, isRatio)}</td>

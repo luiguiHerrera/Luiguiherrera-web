@@ -227,7 +227,7 @@ function LevelLadder({ data, kind, locale, ticker }: { data: KeyStatisticalLevel
           rel="noopener noreferrer"
           className="mt-4 inline-flex border border-ink bg-ink px-3 py-2 text-xs font-semibold text-white transition hover:bg-panel hover:text-ink"
         >
-          {locale === "en" ? "View Monthly Statistical Levels script" : "Ver script Monthly Statistical Levels"}
+          {locale === "en" ? "Open Monthly Statistical Levels on TradingView" : "Abrir Monthly Statistical Levels en TradingView"}
         </a>
       ) : null}
     </div>

@@ -535,7 +535,7 @@ export const marketReports: MarketReport[] = [
         whyItMatters: "Ayuda a ubicar si el movimiento está en zona normal o estirada. Los niveles JPM/SPX, cuando existan, serán sobre SPX, no sobre el ETF.",
         reference: {
           label: "Niveles estadísticos",
-          href: "/niveles-estadisticos",
+          href: "/analisiscuantitativo",
         },
       },
       {
@@ -552,7 +552,7 @@ export const marketReports: MarketReport[] = [
         whyItMatters: "No predice, pero aporta contexto para no leer el mes en aislamiento.",
         reference: {
           label: "Niveles estadísticos",
-          href: "/niveles-estadisticos",
+          href: "/analisiscuantitativo",
         },
       },
     ],
@@ -1560,7 +1560,7 @@ export const marketReports: MarketReport[] = [
         whatWouldChange: "Correlación, VIX y deterioro de amplitud subiendo juntos trasladarían el daño al índice.",
         asOf: "31 de julio de 2026",
         source: "Goldman Sachs, datos de amplitud y lectura editorial del informe.",
-        href: "/niveles-estadisticos?asset=SPY",
+        href: "/analisiscuantitativo?asset=SPY",
         linkLabel: "Seguir niveles del S&P 500",
       },
       {

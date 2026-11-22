@@ -26,6 +26,12 @@ const securityHeaders = [
 ];
 
 const nextConfig: NextConfig = {
+  async redirects() {
+    return [
+      { source: "/niveles-estadisticos", destination: "/analisiscuantitativo", permanent: true },
+      { source: "/en/statistical-levels", destination: "/en/quantitative-analysis", permanent: true },
+    ];
+  },
   async headers() {
     return [
 {

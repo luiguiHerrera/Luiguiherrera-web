@@ -11,6 +11,7 @@ type ExpandableInsightCardProps = {
   metrics?: Array<{ label: string; value: string; tone?: "neutral" | "sage" | "brass" | "danger" }>;
   status?: string;
   defaultOpen?: boolean;
+  collapsible?: boolean;
   summaryExtra?: React.ReactNode;
   children: React.ReactNode;
   className?: string;
@@ -32,6 +33,7 @@ export function ExpandableInsightCard({
   metrics = [],
   status,
   defaultOpen = false,
+  collapsible = true,
   summaryExtra,
   children,
   className = "",
@@ -39,6 +41,7 @@ export function ExpandableInsightCard({
   titleClassName,
 }: ExpandableInsightCardProps) {
   const [open, setOpen] = useState(defaultOpen);
+  const expanded = !collapsible || open;
   const pathname = usePathname();
   const locale = localeFromPathname(pathname);
   const buttonLabel = locale === "en" ? (open ? "Collapse context" : "Expand context") : (open ? "Contraer contexto" : "Ampliar contexto");
@@ -58,14 +61,14 @@ export function ExpandableInsightCard({
                 {status}
               </span>
             ) : null}
-            <button
+            {collapsible ? <button
               type="button"
               onClick={() => setOpen((value) => !value)}
               aria-expanded={open}
               className="shrink-0 rounded-[4px] border border-petrol bg-petrol px-3 py-1.5 text-xs font-semibold text-white transition hover:bg-panel hover:text-petrol focus:outline-none focus:ring-2 focus:ring-petrol/20 md:px-4 md:py-2 md:text-sm"
             >
               {buttonLabel}
-            </button>
+            </button> : null}
           </div>
         </div>
 
@@ -82,7 +85,7 @@ export function ExpandableInsightCard({
         {summaryExtra ? <div className="mt-4 md:mt-5">{summaryExtra}</div> : null}
       </div>
 
-      {open ? <div className="border-t border-line/80 bg-paper/55 p-3.5 md:p-5">{children}</div> : null}
+      {expanded ? <div className="border-t border-line/80 bg-paper/55 p-3.5 md:p-5">{children}</div> : null}
     </section>
   );
 }

@@ -92,7 +92,7 @@ export function BudgetPlanner({ locale }: { locale: BudgetLocale }) {
           <Link className="inline-flex items-center justify-center rounded-[4px] border border-petrol/25 bg-white/70 px-4 py-2.5 text-sm font-semibold text-petrol transition hover:border-petrol hover:bg-white" href={locale === "es" ? "/diagnostico" : "/en/diagnostic"}>
             {locale === "es" ? "Ver diagnóstico de inversión" : "View investment diagnostic"}
           </Link>
-          <Link className="inline-flex items-center justify-center rounded-[4px] border border-petrol/25 bg-white/70 px-4 py-2.5 text-sm font-semibold text-petrol transition hover:border-petrol hover:bg-white" href={locale === "es" ? "/niveles-estadisticos" : "/en/statistical-levels"}>
+          <Link className="inline-flex items-center justify-center rounded-[4px] border border-petrol/25 bg-white/70 px-4 py-2.5 text-sm font-semibold text-petrol transition hover:border-petrol hover:bg-white" href={locale === "es" ? "/analisiscuantitativo" : "/en/quantitative-analysis"}>
             {locale === "es" ? "Explorar niveles estadísticos" : "Explore statistical levels"}
           </Link>
         </div>
