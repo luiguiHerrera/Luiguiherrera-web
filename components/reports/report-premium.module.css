@@ -18,7 +18,7 @@
   min-width: 0;
   max-height: calc(100dvh - 106px);
   overflow-y: auto;
-  padding: 28px 14px 36px;
+  padding: 22px 14px 24px;
   color: #f8f2e5;
   background: #10352f;
   border: 1px solid #23483f;
@@ -33,21 +33,21 @@
   inset: 0;
   z-index: -1;
   pointer-events: none;
-  background: linear-gradient(180deg, #10352f 0%, #10352ff0 44%, #10352f26 100%), url('/images/statistical-levels/mountain-landscape.webp') 63% bottom / auto 68% no-repeat;
+  background: linear-gradient(180deg, #10352f 0%, #10352ff0 40%, #10352f99 100%), url('/images/statistical-levels/mountain-landscape.webp') 63% bottom / auto 68% no-repeat;
   opacity: .8;
 }
 
 .railBrand { text-align: center; }
-.railBrand > span { display: block; font: 44px/1 Georgia, 'Times New Roman', serif; letter-spacing: -8px; padding-right: 8px; }
+.railBrand > span { display: block; font: 40px/1 Georgia, 'Times New Roman', serif; letter-spacing: -8px; padding-right: 8px; }
 .railBrand > span > span { position: relative; top: 9px; font-size: 34px; }
-.railBrand > p { margin: 20px 0 0; font: 10px/1.5 Georgia, 'Times New Roman', serif; text-transform: uppercase; letter-spacing: .17em; }
-.railBrand::after { content: ""; display: block; width: 64px; height: 1px; margin: 22px auto; background: linear-gradient(90deg, transparent, #c3a563, transparent); }
-.railEdition { padding: 0 10px 22px; }
+.railBrand > p { margin: 15px 0 0; font: 10px/1.5 Georgia, 'Times New Roman', serif; text-transform: uppercase; letter-spacing: .17em; }
+.railBrand::after { content: ""; display: block; width: 64px; height: 1px; margin: 16px auto; background: linear-gradient(90deg, transparent, #c3a563, transparent); }
+.railEdition { padding: 0 8px 16px; }
 .railEdition > p { font: italic 16px/1.5 Georgia, 'Times New Roman', serif; color: #e9dfc5; }
-.railEdition > strong { display: block; margin-top: 4px; font: 22px/1.2 Georgia, 'Times New Roman', serif; }
+.railEdition > strong { display: block; margin-top: 4px; font: 20px/1.2 Georgia, 'Times New Roman', serif; }
 .railEdition > span { display: block; margin-top: 8px; font-size: 10px; letter-spacing: .07em; color: #d9d9c9; }
 .railLinks { display: grid; gap: 3px; list-style: none; margin: 0; padding: 0; }
-.railLinks > li > a { display: flex; align-items: center; gap: 9px; min-height: 38px; padding: 8px 9px; border: 1px solid transparent; border-radius: 4px; font-size: 10.5px; line-height: 1.5; transition: background .2s, border-color .2s; }
+.railLinks > li > a { display: flex; align-items: center; gap: 9px; min-height: 38px; padding: 8px 9px; border: 1px solid transparent; border-radius: 4px; font-size: 11px; line-height: 1.5; transition: background .2s, border-color .2s; }
 .railLinks > li > a > span { font-size: 8px; color: #c3aa73; letter-spacing: .05em; }
 .railLinks > li > a:hover, .railLinks > li > a[aria-current] { border-color: #b49a5c80; background: linear-gradient(100deg, #9a7a4460, #9a7a4420); color: #fff8e9; }
 .railAssets { display: grid; grid-template-columns: 1fr 1fr; gap: 0 4px; padding: 5px 10px 8px 30px; list-style: none; }
