@@ -10,6 +10,9 @@ import { formatEvidenceConsultedAt, getCalendarConfig, getMonthGrid, isEventInMo
 type ReportMonthlyCalendarProps = {
   events: MarketReportCalendarItem[];
   report: MarketReport;
+  /** Historical editions show the recorded agenda without inventing event times. */
+  historical?: boolean;
+  detailPlacement?: "side" | "below";
 };
 
 const weekdays = ["Lun", "Mar", "Mié", "Jue", "Vie", "Sáb", "Dom"];
@@ -52,7 +55,7 @@ function ExternalMark() {
   return <span aria-hidden="true">↗</span>;
 }
 
-export function ReportMonthlyCalendar({ events, report }: ReportMonthlyCalendarProps) {
+export function ReportMonthlyCalendar({ events, report, historical = false, detailPlacement = "side" }: ReportMonthlyCalendarProps) {
   const calendarConfig = getCalendarConfig(report);
   const [selectedId, setSelectedId] = useState<string | null>(events[0] ? eventId(events[0]) : null);
   const rootRef = useRef<HTMLDivElement>(null);
@@ -98,7 +101,7 @@ export function ReportMonthlyCalendar({ events, report }: ReportMonthlyCalendarP
   }, []);
 
   return (
-    <div ref={rootRef} className="grid gap-4 xl:grid-cols-[minmax(0,1fr)_19rem]">
+    <div ref={rootRef} className={`grid gap-4 ${detailPlacement === "side" ? "xl:grid-cols-[minmax(0,1fr)_19rem]" : ""}`}>
       <div className="min-w-0 border border-line bg-panel" aria-label={`Calendario de ${calendarConfig.title}`}>
         <div className="flex flex-wrap items-center justify-between gap-3 border-b border-line px-4 py-3">
           <div>
@@ -106,7 +109,7 @@ export function ReportMonthlyCalendar({ events, report }: ReportMonthlyCalendarP
             <h3 className="mt-1 text-lg font-semibold text-ink">{calendarConfig.title}</h3>
           </div>
           <ul className="flex flex-wrap gap-2" aria-label="Leyenda del calendario">
-            {Object.entries(categoryLabels).map(([category, label]) => (
+            {Object.entries(categoryLabels).filter(([category]) => !historical || events.some(event => categoryFor(event) === category)).map(([category, label]) => (
               <li key={category} className={`border px-2 py-1 text-[10px] font-semibold uppercase ${categoryClasses[category as keyof typeof categoryClasses]}`}>
                 {label}
               </li>
@@ -147,7 +150,7 @@ export function ReportMonthlyCalendar({ events, report }: ReportMonthlyCalendarP
                         className={`min-h-8 min-w-0 w-full max-w-full overflow-hidden border px-1.5 py-1 text-left text-[10px] font-semibold leading-tight transition focus-visible:ring-2 focus-visible:ring-petrol/30 sm:min-h-0 ${categoryClasses[category]} ${active ? "ring-2 ring-petrol/25" : ""}`}
                         aria-controls="report-calendar-detail"
                         aria-expanded={active}
-                        aria-label={`${event.event}. ${event.displayTimeCest ?? "Hora por confirmar"}`}
+                        aria-label={historical ? `${event.dateLabel}. ${event.event}` : `${event.event}. ${event.displayTimeCest ?? "Hora por confirmar"}`}
                         onClick={() => selectEvent(eventId(event))}
                         onKeyDown={(keyboardEvent) => {
                           if (keyboardEvent.key === "Enter" || keyboardEvent.key === " ") {
@@ -156,6 +159,7 @@ export function ReportMonthlyCalendar({ events, report }: ReportMonthlyCalendarP
                           }
                         }}
                         onPointerEnter={() => selectEvent(eventId(event))}
+                        onFocus={historical ? () => selectEvent(eventId(event)) : undefined}
                         data-calendar-event={eventId(event)}
                       >
                         <span className="mx-auto block h-2 w-2 rounded-full bg-current sm:hidden" aria-hidden="true" />
@@ -171,7 +175,7 @@ export function ReportMonthlyCalendar({ events, report }: ReportMonthlyCalendarP
         </div>
       </div>
 
-      <aside id="report-calendar-detail" className="self-start border border-line bg-panelSoft p-4 xl:sticky xl:top-24" aria-live="polite">
+      <aside id="report-calendar-detail" className={`self-start border border-line bg-panelSoft p-4 ${detailPlacement === "side" ? "xl:sticky xl:top-24" : ""}`} aria-live="polite">
         {selected ? (
           <>
             <div className="flex items-start justify-between gap-3">
@@ -188,28 +192,28 @@ export function ReportMonthlyCalendar({ events, report }: ReportMonthlyCalendarP
                 <dt className="text-[10px] font-semibold uppercase text-brass">Fecha</dt>
                 <dd className="mt-1 text-ink">{selected.dateLabel}</dd>
               </div>
-              <div>
+              {!historical ? <div>
                 <dt className="text-[10px] font-semibold uppercase text-brass">Hora y zona</dt>
                 <dd className="mt-1 text-ink">
                   {selected.timeStatus === "tba"
                     ? `Hora por confirmar · ${selected.originalTimeZone ?? "Zona por confirmar"}`
                     : `${selected.originalTime} ${selected.originalTimeZone} · ${selected.displayTimeCest}`}
                 </dd>
-              </div>
+              </div> : null}
               <div>
                 <dt className="text-[10px] font-semibold uppercase text-brass">Por qué importa</dt>
                 <dd className="mt-1 leading-6 text-muted">{selected.whyItMatters}</dd>
               </div>
-              <div>
+              {!historical || selected.affectedAssets?.length ? <div>
                 <dt className="text-[10px] font-semibold uppercase text-brass">Activos o factores</dt>
                 <dd className="mt-2 flex flex-wrap gap-1.5">
                   {selected.affectedAssets?.map((asset) => <span key={asset} className="border border-line bg-panel px-2 py-1 text-xs text-ink">{asset}</span>)}
                 </dd>
-              </div>
-              <div>
+              </div> : null}
+              {!historical ? <div>
                 <dt className="text-[10px] font-semibold uppercase text-brass">Confirmación</dt>
                 <dd className="mt-1 text-ink">{confirmationLabel(selected)}</dd>
-              </div>
+              </div> : null}
               {selected.impliedMovePct !== undefined ? <div><dt className="text-[10px] font-semibold uppercase text-brass">Movimiento implícito esperado</dt><dd className="mt-1 text-ink">{selected.impliedMoveApproximate ? "≈" : ""}±{selected.impliedMovePct.toFixed(2).replace(".", ",")} % · {selected.impliedMoveProviderHref ? <ReportAnchor className="font-semibold text-petrol" href={selected.impliedMoveProviderHref} target="_blank" rel="noopener noreferrer">{selected.impliedMoveProvider} ↗</ReportAnchor> : selected.impliedMoveProvider}{selected.impliedMoveConsultedAt ? ` · consulta ${formatEvidenceConsultedAt(selected.impliedMoveConsultedAt)}` : ""}</dd></div> : null}
             </dl>
             <div className="mt-4 grid gap-2 border-t border-line pt-3">
@@ -228,7 +232,7 @@ export function ReportMonthlyCalendar({ events, report }: ReportMonthlyCalendarP
         ) : (
           <div className="py-6 text-center">
             <ReportParagraph className="text-sm font-semibold text-ink">Selecciona un evento</ReportParagraph>
-            <ReportParagraph className="mt-2 text-sm leading-6 text-muted">Usa un marcador del calendario para ver hora, fuente y activos relacionados.</ReportParagraph>
+            <ReportParagraph className="mt-2 text-sm leading-6 text-muted">{historical ? "Pasa el cursor, enfoca o toca un evento para consultar su relevancia y fuente." : "Usa un marcador del calendario para ver hora, fuente y activos relacionados."}</ReportParagraph>
           </div>
         )}
       </aside>

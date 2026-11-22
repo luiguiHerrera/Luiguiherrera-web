@@ -1,0 +1,144 @@
+{
+  "cutoff": "2026-11-13",
+  "methodology": "Weekly historical extensions already calculated in the archived snapshot; current week excluded from estimation. The price reference is the completed daily close of November 13, never the November 14 current mark.",
+  "assets": {
+    "SPY": {
+      "ticker": "SPY",
+      "asOf": "2026-11-13",
+      "weekStart": "2026-11-09",
+      "provider": "Yahoo Finance",
+      "referenceClose": 754.37,
+      "editorialClose": 754.37,
+      "open": 741.95,
+      "periods": 1763,
+      "levels": {
+        "WSHE": 764.86,
+        "WAHE": 753.59,
+        "WALE": 729.52,
+        "WSLE": 715.23
+      },
+      "source": {
+        "commit": "22488a6c6a66d45bb7b06a2bbf4b1fcc0de2a711",
+        "path": "lib/statistical-levels/generated/assets/SPY.json",
+        "sha256": "c64540dfcadc39f4c399a40932e3dcf05d9a964d5c035fb7ba54c8735bbbe270",
+        "capturedAt": "2026-11-14T15:18:32.785Z",
+        "lastCompletedWeek": "2026-11-06"
+      }
+    },
+    "GLD": {
+      "ticker": "GLD",
+      "asOf": "2026-11-13",
+      "weekStart": "2026-11-09",
+      "provider": "Yahoo Finance",
+      "referenceClose": 355.45,
+      "editorialClose": 355.45,
+      "open": 378.2,
+      "periods": 1147,
+      "levels": {
+        "WSHE": 390.07,
+        "WAHE": 384.31,
+        "WALE": 372.12,
+        "WSLE": 365.41
+      },
+      "source": {
+        "commit": "22488a6c6a66d45bb7b06a2bbf4b1fcc0de2a711",
+        "path": "lib/statistical-levels/generated/assets/GLD.json",
+        "sha256": "a32d42ad74b2d3527163677c99665f7e7a70ba900fd4df726f309dec6d834ec2",
+        "capturedAt": "2026-11-14T15:18:32.785Z",
+        "lastCompletedWeek": "2026-11-06"
+      }
+    },
+    "FXI": {
+      "ticker": "FXI",
+      "asOf": "2026-11-13",
+      "weekStart": "2026-11-09",
+      "provider": "Yahoo Finance",
+      "referenceClose": 33.48,
+      "editorialClose": 33.48,
+      "open": 34.68,
+      "periods": 1153,
+      "levels": {
+        "WSHE": 36.41,
+        "WAHE": 35.52,
+        "WALE": 33.78,
+        "WSLE": 32.78
+      },
+      "source": {
+        "commit": "22488a6c6a66d45bb7b06a2bbf4b1fcc0de2a711",
+        "path": "lib/statistical-levels/generated/assets/FXI.json",
+        "sha256": "c775dda148855608e9a2dfd96af7aa66e2bb071a186e06e1713fdb779f4ecb28",
+        "capturedAt": "2026-11-14T15:18:32.785Z",
+        "lastCompletedWeek": "2026-11-06"
+      }
+    },
+    "EWJ": {
+      "ticker": "EWJ",
+      "asOf": "2026-11-13",
+      "weekStart": "2026-11-09",
+      "provider": "Yahoo Finance",
+      "referenceClose": 91.76,
+      "editorialClose": 91.76,
+      "open": 90.12,
+      "periods": 1599,
+      "levels": {
+        "WSHE": 93.42,
+        "WAHE": 91.75,
+        "WALE": 88.42,
+        "WSLE": 86.63
+      },
+      "source": {
+        "commit": "22488a6c6a66d45bb7b06a2bbf4b1fcc0de2a711",
+        "path": "lib/statistical-levels/generated/assets/EWJ.json",
+        "sha256": "4864bd35e4827c8f49599f4522a892a4ca8ce14048ae81b154721ce69cd467fe",
+        "capturedAt": "2026-11-14T15:18:32.785Z",
+        "lastCompletedWeek": "2026-11-06"
+      }
+    },
+    "BTC": {
+      "ticker": "BTC",
+      "asOf": "2026-11-13",
+      "weekStart": "2026-11-09",
+      "provider": "Yahoo Finance",
+      "referenceClose": 68249.27,
+      "editorialClose": 68286.3,
+      "open": 74584.65,
+      "periods": 634,
+      "levels": {
+        "WSHE": 85560.14,
+        "WAHE": 79822.8,
+        "WALE": 69516.35,
+        "WSLE": 62499.25
+      },
+      "source": {
+        "commit": "22488a6c6a66d45bb7b06a2bbf4b1fcc0de2a711",
+        "path": "lib/statistical-levels/generated/assets/BTCUSD.json",
+        "sha256": "076b2991b991417ef6459c01b9f636f725d7d9fdf5f2032aaa8376d81496ad50",
+        "capturedAt": "2026-11-14T15:18:32.785Z",
+        "lastCompletedWeek": "2026-11-08"
+      }
+    },
+    "ETH": {
+      "ticker": "ETH",
+      "asOf": "2026-11-13",
+      "weekStart": "2026-11-09",
+      "provider": "Yahoo Finance",
+      "referenceClose": 1927.59,
+      "editorialClose": 1929.61,
+      "open": 2120.98,
+      "periods": 470,
+      "levels": {
+        "WSHE": 2497.67,
+        "WAHE": 2303.4,
+        "WALE": 1913.1,
+        "WSLE": 1640.32
+      },
+      "source": {
+        "commit": "22488a6c6a66d45bb7b06a2bbf4b1fcc0de2a711",
+        "path": "lib/statistical-levels/generated/assets/ETHUSD.json",
+        "sha256": "83e87ea3e67a5abcdbf482159c3cfbd142451bf09e369797eb59632bdaf91c7c",
+        "capturedAt": "2026-11-14T15:18:32.785Z",
+        "lastCompletedWeek": "2026-11-08"
+      }
+    }
+  }
+}

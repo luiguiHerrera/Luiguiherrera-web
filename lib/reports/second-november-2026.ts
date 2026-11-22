@@ -1,4 +1,4 @@
-// Transcribed from the approved PDF. Preserve historical text and source links.
+// Approved PDF text, with the presentation and removals requested in visual review.
 import type { MarketReport } from "./market-reports.ts";
 export const secondNovember2026Report: MarketReport = {
   "id": "segundo-informe-noviembre-2026",
@@ -24,7 +24,82 @@ export const secondNovember2026Report: MarketReport = {
   },
   "whatHappened": [],
   "assetReadings": [],
-  "calendar": [],
+  "calendar": [
+    {
+      "id": "noviembre-2026-1",
+      "dateLabel": "17 nov.",
+      "dateStart": "2026-11-17",
+      "event": "Resultados de NVIDIA; índice de precios de importación/exportación de EE. UU.",
+      "whyItMatters": "IA, expectativas empresariales, inflación de importación",
+      "category": "earnings",
+      "timeStatus": "tba",
+      "sourceLabel": "NVIDIA IR",
+      "sourceHref": "https://investor.nvidia.com/news/press-release-details/2026/NVIDIA-Sets-Conference-Call-for-Third-Quarter-Financial-Results/"
+    },
+    {
+      "id": "noviembre-2026-2",
+      "dateLabel": "18 nov.",
+      "dateStart": "2026-11-18",
+      "event": "Minutas de la reunión de la Fed de octubre",
+      "whyItMatters": "Tono y equilibrio de riesgos de política monetaria",
+      "category": "central-bank",
+      "timeStatus": "tba",
+      "sourceLabel": "Fed",
+      "sourceHref": "https://www.federalreserve.gov/newsevents/calendar.htm"
+    },
+    {
+      "id": "noviembre-2026-3",
+      "dateLabel": "25 nov.",
+      "dateStart": "2026-11-25",
+      "event": "PIB estadounidense 3T (segunda estimación), beneficios corporativos y PCE de octubre",
+      "whyItMatters": "Actividad, consumo e inflación",
+      "category": "macro",
+      "timeStatus": "tba",
+      "sourceLabel": "BEA",
+      "sourceHref": "https://www.bea.gov/news/schedule/"
+    },
+    {
+      "id": "noviembre-2026-4",
+      "dateLabel": "25 nov.",
+      "dateStart": "2026-11-25",
+      "event": "Beige Book de la Fed",
+      "whyItMatters": "Condiciones regionales y financiación",
+      "category": "central-bank",
+      "timeStatus": "tba",
+      "sourceLabel": "Fed",
+      "sourceHref": "https://www.federalreserve.gov/newsevents/calendar.htm"
+    },
+    {
+      "id": "noviembre-2026-5",
+      "dateLabel": "26 nov.",
+      "dateStart": "2026-11-26",
+      "event": "Thanksgiving, mercado estadounidense cerrado",
+      "whyItMatters": "Liquidez y actividad reducida",
+      "category": "other",
+      "timeStatus": "tba"
+    },
+    {
+      "id": "noviembre-2026-6",
+      "dateLabel": "27 nov.",
+      "dateStart": "2026-11-27",
+      "event": "Sesión bursátil estadounidense abreviada",
+      "whyItMatters": "Posible sensibilidad adicional a bajos volúmenes",
+      "category": "other",
+      "timeStatus": "tba"
+    },
+    {
+      "id": "noviembre-2026-7",
+      "dateLabel": "8–9 dic.",
+      "dateStart": "2026-12-08",
+      "event": "Reunión de la Fed",
+      "whyItMatters": "Decisión efectiva, distinta de probabilidades FedWatch",
+      "category": "central-bank",
+      "timeStatus": "tba",
+      "sourceLabel": "FOMC",
+      "sourceHref": "https://www.federalreserve.gov/monetarypolicy/fomccalendars.htm",
+      "dateEnd": "2026-12-10"
+    }
+  ],
   "watchlist": [],
   "sourcesNote": "",
   "disclaimer": "",
@@ -491,10 +566,6 @@ export const secondNovember2026Report: MarketReport = {
       "eyebrow": "Calendario y seguimiento",
       "blocks": [
         {
-          "kind": "paragraph",
-          "text": "En la segunda quincena prefiero concentrarme en los datos que pueden mover las expectativas sobre tipos, beneficios y liquidez. El calendario de la Fed y las próximas publicaciones empresariales nos permiten contrastar hipótesis concretas. También observaré cómo reaccionan los seis activos, porque una misma noticia puede favorecer a unos y presionar a otros. No convertiré semejanzas con el Nasdaq de los noventa ni episodios aislados de volatilidad en señales de inversión. La historia me ayuda a interpretar el contexto, pero no me resuelve este noviembre."
-        },
-        {
           "kind": "table",
           "headers": [
             "Fecha",
@@ -616,12 +687,12 @@ export const secondNovember2026Report: MarketReport = {
             [
               "Beneficios y valoración",
               "BPA, revisiones, guidance, PER forward",
-              "FactSet y comunicados corporativos"
+              "[FactSet](https://insight.factset.com/hubfs/Website/Resources%20Section/Research%20Desk/Earnings%20Insight/EarningsInsight_111326.pdf) y comunicados corporativos"
             ],
             [
               "Concentración y amplitud",
               "Top 10; RSP/SPY; QQQ/SPY; 11 sectores; medias y máximos",
-              "JPM AM, índices, dashboard y series fechadas"
+              "[JPM AM](https://am.jpmorgan.com/content/jpm-am-aem/global-institutional/us/en/institutional/insights/portfolio-insights/asset-class-views/asset-allocation.html), índices, dashboard y series fechadas"
             ],
             [
               "IA y financiación",
@@ -631,32 +702,32 @@ export const secondNovember2026Report: MarketReport = {
             [
               "Estados Unidos",
               "FedWatch fechado, Treasury nominal/real, DXY, PCE, VIX",
-              "Fed, Tesoro, BLS, BEA, Cboe"
+              "[Fed](https://www.federalreserve.gov/monetarypolicy/fomccalendars.htm), [Tesoro](https://home.treasury.gov/resource-center/data-chart-center/interest-rates/TextView?field_tdr_date_value_month=202611&type=daily_treasury_yield_curve), [BLS](https://www.bls.gov/schedule/2026/11_sched_list.htm), [BEA](https://www.bea.gov/news/schedule/), [Cboe](https://www.cboe.com/tradable-products/vix)"
             ],
             [
               "Oro",
               "WGC, GLD específico, CFTC/COMEX, TIPS, dólar",
-              "WGC, State Street, Tesoro, CFTC"
+              "[WGC](https://www.gold.org/news-and-events/press-releases/central-bank-buying-and-etf-inflows-support-gold-demand-q3), [State Street](https://www.spdrgoldshares.com/usa/), [Tesoro](https://home.treasury.gov/resource-center/data-chart-center/interest-rates/TextView?field_tdr_date_value_month=202611&type=daily_treasury_yield_curve), CFTC"
             ],
             [
               "China",
               "FXI y principales holdings, PMI, crédito, comercio",
-              "BlackRock, NBS/Aduanas, bancos"
+              "[BlackRock](https://www.ishares.com/us/products/239536/ishares-china-largecap-etf), [NBS](https://www.stats.gov.cn/english/)/Aduanas, bancos"
             ],
             [
               "Japón",
               "EWJ, USD/JPY, BoJ, JGB, beneficios financieros/industriales",
-              "BlackRock, BoJ, MUFG, JPM, IR"
+              "[BlackRock](https://www.ishares.com/us/products/239665/ishares-msci-japan-etf), [BoJ](https://www.boj.or.jp/en/mopo/outlook/index.htm), [MUFG](https://www.mufgresearch.com/fx/monthly-foreign-exchange-outlook-november-2026), [JPM](https://am.jpmorgan.com/content/jpm-am-aem/global-institutional/us/en/institutional/insights/portfolio-insights/asset-class-views/asset-allocation.html), IR"
             ],
             [
               "Bitcoin",
               "ETF spot diarios, liquidaciones, ventas empresariales",
-              "Farside, filings y fuentes de derivados"
+              "[Farside](https://farside.co.uk/btc/), filings y fuentes de derivados"
             ],
             [
               "Ethereum",
               "ETF 5/10 sesiones, ETH/BTC, actividad L1 y L2, comisiones/MEV, quema frente a emisión, staking",
-              "Farside, Bitwise, Ethereum Institutional, protocolo Ethereum, J.P. Morgan"
+              "[Farside](https://farside.co.uk/ethereum-etf-flow-all-data/), [Bitwise](https://bitwiseinvestments.com/crypto-market-insights/the-bitwise-staking-report-q4-2026), [Ethereum Institutional](https://www.ethereuminstitutional.org/research/state-of-the-ledger), [protocolo Ethereum](https://ethereum.org/es/what-is-ether/supply/), [J.P. Morgan](https://www.jpmorgan.com/payments/newsroom/jpm-coin-live-on-ethereum)"
             ],
             [
               "Stockpicking",
@@ -674,35 +745,31 @@ export const secondNovember2026Report: MarketReport = {
       "blocks": [
         {
           "kind": "paragraph",
-          "text": "Precios: cierres regulares USD de ETF, serie histórica específica de BTC y ETH; retorno de precio = (cierre_13nov / cierre_30oct − 1) × 100. Sin dividendos ni costes."
+          "text": "Precios: cierres regulares USD de [ETF](https://stockanalysis.com/etf/), serie histórica específica de [BTC](https://www.investing.com/crypto/bitcoin/historical-data) y [ETH](https://es.investing.com/crypto/ethereum/eth-usd-historical-data); retorno de precio = (cierre_13nov / cierre_30oct − 1) × 100. Sin dividendos ni costes."
         },
         {
           "kind": "paragraph",
-          "text": "Amplitud/sectores: once ETF sectoriales sobre cinco sesiones completas entre cierres del 6 y 13 de noviembre. No es una exportación literal del dashboard."
+          "text": "Amplitud/sectores: [once ETF sectoriales](https://stockanalysis.com/etf/) sobre cinco sesiones completas entre cierres del 6 y 13 de noviembre. No es una exportación literal del dashboard."
         },
         {
           "kind": "paragraph",
-          "text": "Fuentes primarias de macro: Reserva Federal, BLS, BEA, Tesoro, Banco de Japón, autoridades chinas."
+          "text": "Fuentes primarias de macro: [Reserva Federal](https://www.federalreserve.gov/monetarypolicy/fomccalendars.htm), [BLS](https://www.bls.gov/schedule/2026/11_sched_list.htm), [BEA](https://www.bea.gov/news/schedule/), [Tesoro](https://home.treasury.gov/resource-center/data-chart-center/interest-rates/TextView?field_tdr_date_value_month=202611&type=daily_treasury_yield_curve), [Banco de Japón](https://www.boj.or.jp/en/mopo/outlook/index.htm), [autoridades chinas](https://www.stats.gov.cn/english/)."
         },
         {
           "kind": "paragraph",
-          "text": "Fuentes financieras y de fondos: FactSet, J.P. Morgan, MUFG, Bank of America Institute, World Gold Council, BlackRock/State Street, Farside, Bitwise, Grayscale y Ethereum Institutional (Token Terminal)."
+          "text": "Fuentes financieras y de fondos: [FactSet](https://insight.factset.com/hubfs/Website/Resources%20Section/Research%20Desk/Earnings%20Insight/EarningsInsight_111326.pdf), [J.P. Morgan](https://am.jpmorgan.com/content/jpm-am-aem/global-institutional/us/en/institutional/insights/portfolio-insights/asset-class-views/asset-allocation.html), [MUFG](https://www.mufgresearch.com/fx/monthly-foreign-exchange-outlook-november-2026), [Bank of America Institute](https://institute.bankofamerica.com/content/dam/economic-insights/consumer-checkpoint-november-2026.pdf), [World Gold Council](https://www.gold.org/news-and-events/press-releases/central-bank-buying-and-etf-inflows-support-gold-demand-q3), [BlackRock](https://www.ishares.com/us/products/239536/ishares-china-largecap-etf)/[State Street](https://www.spdrgoldshares.com/usa/), [Farside](https://farside.co.uk/btc/), [Bitwise](https://bitwiseinvestments.com/crypto-market-insights/the-bitwise-staking-report-q4-2026), [Grayscale](https://www.grayscale.com/the-stack/ethereum-is-shaping-the-infrastructure-for-tokenized-finance) y [Ethereum Institutional](https://www.ethereuminstitutional.org/research/state-of-the-ledger) (Token Terminal)."
         },
         {
           "kind": "paragraph",
-          "text": "Fuentes secundarias identificadas: Reuters/LSEG para flujos o China, Kitco para una nota no accesible íntegramente de Goldman Sachs, Financial Times para posible regreso de Jensen Huang. Una opinión institucional debe conservar emisor, fecha y horizonte."
+          "text": "Fuentes secundarias identificadas: [Reuters/LSEG](https://www.reuters.com/business/finance/global-markets-flows-graphic-2026-11-13/) para flujos o China, [Kitco](https://www.kitco.com/news/article/2026-11-13/goldman-sachs-cuts-year-end-gold-price-target-4150oz-2027-target-4800oz) para una nota no accesible íntegramente de Goldman Sachs, [Financial Times](https://www.ft.com/content/45383d86-33c4-4d99-86e5-5e058d3567c1) para posible regreso de Jensen Huang."
         },
         {
           "kind": "paragraph",
-          "text": "Oro físico frente a GLD: USD/oz y precio por acción del ETF son magnitudes distintas. No trasladar objetivos entre ambas."
+          "text": "ETF cripto: flujos de [ETF spot](https://farside.co.uk/ethereum-etf-flow-all-data/) no equivalen a flujos totales del activo digital. No sumar indiscriminadamente sesiones ni mercados distintos."
         },
         {
           "kind": "paragraph",
-          "text": "ETF cripto: flujos de ETF spot no equivalen a flujos totales del activo digital. No sumar indiscriminadamente sesiones ni mercados distintos."
-        },
-        {
-          "kind": "paragraph",
-          "text": "ETH y su red: transacciones L1 y L2, transferencias de stablecoins, comisiones/MEV, quema, emisión y staking son variables diferentes; sus ventanas y fuentes deben declararse. ETH/BTC aquí se calcula con los mismos cierres diarios de ETH/USD y BTC/USD de la tabla 2.1, no con cotizaciones intradía de plataformas distintas."
+          "text": "ETH y su red: transacciones L1 y L2, transferencias de stablecoins, comisiones/MEV, [quema, emisión y staking](https://ethereum.org/es/what-is-ether/supply/) son variables diferentes; sus ventanas y fuentes deben declararse. ETH/BTC aquí se calcula con los mismos cierres diarios de ETH/USD y BTC/USD de la tabla 2.1, no con cotizaciones intradía de plataformas distintas."
         },
         {
           "kind": "paragraph",
@@ -710,7 +777,7 @@ export const secondNovember2026Report: MarketReport = {
         },
         {
           "kind": "paragraph",
-          "text": "• Escenarios: las rutas expresan condiciones que pueden confirmarse o debilitarse, no probabilidades calculadas ni niveles de precio para ejecutar operaciones."
+          "text": "Escenarios: las rutas expresan condiciones que pueden confirmarse o debilitarse, no probabilidades calculadas ni niveles de precio para ejecutar operaciones."
         },
         {
           "kind": "paragraph",
@@ -718,5 +785,16 @@ export const secondNovember2026Report: MarketReport = {
         }
       ]
     }
-  ]
+  ],
+  "presentation": {
+    "year": 2026,
+    "month": 11,
+    "locale": "es-ES",
+    "localizedTitle": "Segunda quincena · noviembre de 2026",
+    "calendarView": "remaining",
+    "calendarStartDate": "2026-11-16"
+  },
+  "htmlHref": "/reports/segundo-informe-noviembre-2026.html",
+  "markdownHref": "/reports/segundo-informe-noviembre-2026.md",
+  "calendarHref": "/reports/segundo-informe-noviembre-2026-calendar.ics"
 };

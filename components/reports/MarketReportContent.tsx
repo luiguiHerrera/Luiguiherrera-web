@@ -1,6 +1,7 @@
 import { ReportEditorialSections } from './ReportEditorialSections';
 import { SecondOctoberReportSections } from './SecondOctoberReportSections';
 import { NovemberReportSections } from './NovemberReportSections';
+import { SecondNovemberReportSections } from './SecondNovemberReportSections';
 import { ReportLink as Link, ReportAnchor, ReportParagraph, ReportText, ReportSourcePolicy } from "@/components/reports/ReportSourcePolicy";
 import { ReportSection } from "@/components/reports/ReportSection";
 import { ReportQuantitativePanels } from "@/components/reports/ReportQuantitativePanels";
@@ -164,7 +165,7 @@ export function MarketReportContent({
         ) : null}
       </section>
 
-      {report.presentation?.editorialLayout === 'november-2026' ? <NovemberReportSections report={report} /> : isSecondOctober && report.editorialSections ? <SecondOctoberReportSections report={report} /> : report.editorialSections ? <ReportEditorialSections preserveHierarchy={Boolean(report.editionAt)} sections={report.editorialSections} /> : <>
+      {report.id === "segundo-informe-noviembre-2026" ? <SecondNovemberReportSections report={report} /> : report.presentation?.editorialLayout === 'november-2026' ? <NovemberReportSections report={report} /> : isSecondOctober && report.editorialSections ? <SecondOctoberReportSections report={report} /> : report.editorialSections ? <ReportEditorialSections preserveHierarchy={Boolean(report.editionAt)} sections={report.editorialSections} /> : <>
       <section id={report.presentation?.contextTitle ? "contexto-general" : "contexto-por-activo"} className="grid scroll-mt-24 gap-6 py-8 md:py-10 lg:grid-cols-[0.34fr_1fr]">
         <div>
           <ReportParagraph className="text-xs font-semibold uppercase text-petrol">Qué pasó</ReportParagraph>

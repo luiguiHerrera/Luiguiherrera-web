@@ -582,7 +582,7 @@ function renderSectionHtml(section: ReportExportSection, model: ReportExportMode
   return `<section id="${section.id}" data-section="${section.id}"><h2>${esc(section.title)}</h2>${body}</section>`;
 }
 
-function renderHtml(model: ReportExportModel) {
+export function renderHtml(model: ReportExportModel) {
   const output = `<!doctype html>
 <html lang="es">
 <head>
@@ -906,7 +906,7 @@ ${section.disclaimer}`;
   }
 }
 
-function renderMarkdown(model: ReportExportModel) {
+export function renderMarkdown(model: ReportExportModel) {
   const metadata = [
     ...((model.status === "borrador" || !model.publishedAt) ? ["- Estado: Candidato editorial · sin publicar"] : []),
     `- Edición: ${model.editionName}`,
@@ -1061,7 +1061,7 @@ function foldIcsLine(line: string) {
   return lines.join("\r\n");
 }
 
-function renderIcs(model: ReportExportModel) {
+export function renderIcs(model: ReportExportModel) {
   assert(model.events.length, `${model.id}: no hay eventos verificables para ICS.`);
   const stamp = `${icsDate(model.modifiedAt)}T000000Z`;
   const lines = [
