@@ -117,6 +117,10 @@ async function bundledSource() {
 }
 
 export async function loadPublishedPage(selection: Selection) {
+  // The approved archive replay can include a fuller explorer at the same cutoff.
+  // Keep that immutable dataset until a genuinely newer producer release exists.
+  const bundledCutoff = Date.parse((await bundledStatisticalLevels.getManifest()).baseline?.cutoff ?? '');
+  const newerThanBundled = (cutoff: string) => !Number.isFinite(bundledCutoff) || Date.parse(cutoff) > bundledCutoff;
   if (liveDataEnabled()) {
     // A corrupt or briefly unavailable release must not displace the last usable one.
     let releases: Publication[] = [];
@@ -127,10 +131,10 @@ export async function loadPublishedPage(selection: Selection) {
     for (const entry of recent) {
       try {
         const { source, snapshot, cutoff } = await hostedSource(entry.revision, entry);
-        if (cutoff >= seedCutoff) return { data: await getStatisticalLevelsPageData(selection, source), snapshot };
+        if (cutoff >= seedCutoff && newerThanBundled(cutoff)) return { data: await getStatisticalLevelsPageData(selection, source), snapshot };
       } catch { console.error("Statistical Levels could not read verified release", entry.revision); }
     }
-    try {
+    if (newerThanBundled(seedCutoff)) try {
       const { source, snapshot } = await hostedSource(seed);
       return { data: await getStatisticalLevelsPageData(selection, source), snapshot };
     } catch { console.error("Statistical Levels archive unavailable. Using bundled snapshot."); }

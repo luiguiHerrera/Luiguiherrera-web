@@ -69,7 +69,7 @@
       "TEST_COVERAGE": "No dedicated Statistical Levels test at remote base; added: browser capability access + calculation equivalence",
       "CURRENT_STATUS": "CANONICAL",
       "REDESIGN_DESTINATION": "ADVANCED_OPTIONS",
-      "ACCESS_PATH": "#sl-options → Full",
+      "ACCESS_PATH": "#sl-controls [data-window=Full]",
       "REGRESSION_TEST": "lib/statistical-levels/contracts.test.ts; lib/statistical-levels/baseline.test.mjs + final three-way decomposition; scripts/qa-statistical-levels.mjs #sl-options",
       "PRESERVED": "YES",
       "FINAL_VISUAL_QUALIFICATION": "PASS_FINAL_REBASELINE_DATA_20260906"
@@ -87,7 +87,7 @@
       "TEST_COVERAGE": "No dedicated Statistical Levels test at remote base; added: browser capability access + calculation equivalence",
       "CURRENT_STATUS": "CANONICAL",
       "REDESIGN_DESTINATION": "ADVANCED_OPTIONS",
-      "ACCESS_PATH": "#sl-options → frequency",
+      "ACCESS_PATH": "#sl-frequency select",
       "REGRESSION_TEST": "lib/statistical-levels/contracts.test.ts; lib/statistical-levels/baseline.test.mjs + final three-way decomposition; scripts/qa-statistical-levels.mjs #sl-options",
       "PRESERVED": "YES",
       "FINAL_VISUAL_QUALIFICATION": "PASS_FINAL_REBASELINE_DATA_20260906"

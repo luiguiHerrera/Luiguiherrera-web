@@ -21,7 +21,7 @@ export function DrawdownInspection({ series, drawdowns, path, area, minDrawdown,
   const selected = active ?? 0;
   const text = drawdownInspectionText(series[selected].date, drawdowns[selected], locale);
   const x = series.length === 1 ? 0 : selected / (series.length - 1) * 100;
-  const y = 8 + Math.abs(drawdowns[selected]) / Math.abs(minDrawdown) * 82;
+  const y = Math.abs(drawdowns[selected]) / Math.abs(minDrawdown) * 90;
 
   useEffect(() => {
     const dismiss = (event: globalThis.PointerEvent) => {
@@ -66,7 +66,7 @@ export function DrawdownInspection({ series, drawdowns, path, area, minDrawdown,
       onKeyDown={navigate}>
       <svg viewBox="0 0 100 100" className="h-56 w-full" preserveAspectRatio="none" aria-hidden="true">
         <rect x="0" y="0" width="100" height="100" fill="#fbfaf8" />
-        <line x1="0" x2="100" y1="8" y2="8" stroke="#b8b2aa" strokeWidth="0.45" vectorEffect="non-scaling-stroke" />
+        <line x1="0" x2="100" y1="0" y2="0" stroke="#b8b2aa" strokeWidth="0.45" vectorEffect="non-scaling-stroke" />
         {area ? <path d={area} fill="#e6dece" /> : null}
         {path ? <path d={path} fill="none" stroke="#9a7a44" strokeWidth="1.4" vectorEffect="non-scaling-stroke" /> : null}
         {active !== null ? <line className="sl-drawdown-crosshair" x1={x} x2={x} y1="0" y2="100" stroke="#123b3d" strokeWidth="1" vectorEffect="non-scaling-stroke" /> : null}

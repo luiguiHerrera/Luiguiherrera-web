@@ -64,7 +64,7 @@ function HeaderLink({
 }) {
   const router = useRouter();
   const pathname = usePathname();
-  const prefetch = pathname === "/niveles-estadisticos" || pathname === "/en/statistical-levels" ? false : undefined;
+  const prefetch = pathname === "/analisiscuantitativo" || pathname === "/en/quantitative-analysis" ? false : undefined;
 
   function handleClick(event: MouseEvent<HTMLAnchorElement>) {
     if (event.currentTarget.target === "_blank" || event.ctrlKey || event.metaKey || !isDiagnosticHref(href)) return;
@@ -191,7 +191,7 @@ const personalFinancePaths = {
 
 function HeaderForPathname({ pathname }: { pathname: string }) {
   const [mobileOpen, setMobileOpen] = useState(false);
-  const prefetch = pathname === "/niveles-estadisticos" || pathname === "/en/statistical-levels" ? false : undefined;
+  const prefetch = pathname === "/analisiscuantitativo" || pathname === "/en/quantitative-analysis" ? false : undefined;
   const locale = localeFromPathname(pathname);
   const dictionary = getDictionary(locale);
   const hrefs = navHrefs[locale];

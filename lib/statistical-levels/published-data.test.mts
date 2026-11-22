@@ -75,4 +75,19 @@ test('a new verified run updates the lab while prior tabs retain their file hash
   otherActor = false;
   damaged = true;
   assert.equal((await loadPublishedPage({})).snapshot.id, old.snapshot.id);
+  // A live release at the replay's cutoff must not discard its complete explorer.
+  // Earlier releases and discovery failures must not roll the lab back either.
+  revisions = [first];
+  dates[first] = JSON.parse(original('manifest.json')).baseline.cutoff;
+  const replay = await loadPublishedPage({});
+  assert.equal(replay.snapshot.revision, undefined);
+  assert.ok(replay.data.asset.frequencies.daily.periodHistory!.length > 80);
+  const replaySource = await sourceForSnapshot(replay.snapshot.id, null);
+  assert.ok(replaySource);
+  const replayAsset = await replaySource.source.getAsset('QQQ');
+  assert.ok(replayAsset.frequencies.daily.periodHistory!.length > 80);
+  dates[first] = '2026-11-20T12:00:00.000Z';
+  assert.equal((await loadPublishedPage({})).snapshot.id, replay.snapshot.id);
+  revisions = [];
+  assert.equal((await loadPublishedPage({})).snapshot.id, replay.snapshot.id);
 });

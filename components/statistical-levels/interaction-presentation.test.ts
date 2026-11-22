@@ -6,6 +6,7 @@ import path from 'node:path';
 import ts from 'typescript';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { createElement, type ComponentType } from 'react';
+import type { PeriodExplorerRow } from '../../lib/statistical-levels/types.ts';
 import { returnBarGeometry, winRateWidth, nearestObservationIndex, drawdownInspectionText } from './interaction-presentation.ts';
 
 const require = createRequire(import.meta.url);
@@ -31,6 +32,30 @@ const seasonality = JSON.parse(readFileSync('lib/statistical-levels/generated/se
 const manifest = JSON.parse(readFileSync('lib/statistical-levels/generated/manifest.json', 'utf8'));
 const month = new Date(manifest.generatedAt + 'T00:00:00Z').getUTCMonth() + 1;
 
+test('opening percentile markers use the selected level frequency and stored move quantiles, independently of MA ranks', () => {
+  const Component = component('components/statistical-levels/HistoricalRange.tsx').HistoricalRange as ComponentType<Record<string, unknown>>;
+  const asset = JSON.parse(readFileSync('lib/statistical-levels/generated/assets/SPY.json', 'utf8'));
+  asset.keyStatisticalLevels.weekly.currentOpen = 100;
+  asset.frequencies.weekly.changeMoves.lowExtensionFromOpen.p10 = -.1;
+  asset.frequencies.weekly.changeMoves.highExtensionFromOpen.p90 = .2;
+  asset.frequencies.weekly.windows['5Y'].ma200ExtensionPercentile = 99;
+  asset.frequencies.daily.changeMoves.lowExtensionFromOpen.p10 = -.9;
+  const originalLevels = ['WALE', 'WAHE'].map(key => asset.keyStatisticalLevels.weekly.levels[key].toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }));
+  const before = JSON.stringify(asset);
+  for (const locale of ['es', 'en']) {
+    const html = renderToStaticMarkup(createElement(Component, { asset, frequency: 'weekly', locale }));
+    assert.ok(html.includes(locale === 'es' ? 'Mínimos desde apertura · P10: 90.00' : 'Lows from open · P10: 90.00'));
+    assert.ok(html.includes(locale === 'es' ? 'Máximos desde apertura · P90: 120.00' : 'Highs from open · P90: 120.00'));
+    assert.equal((html.match(/class="sl-opening-percentile"/g) ?? []).length, 10);
+    assert.ok(originalLevels.every(value => html.includes(value))); // Original mean levels remain intact.
+  }
+  assert.equal(JSON.stringify(asset), before);
+  asset.frequencies.weekly.changeMoves.lowExtensionFromOpen.p10 = null;
+  const missing = renderToStaticMarkup(createElement(Component, { asset, frequency: 'weekly', locale: 'es' }));
+  assert.equal((missing.match(/class="sl-opening-percentile"/g) ?? []).length, 9);
+  assert.ok(!missing.includes('Mínimos desde apertura · P10:'));
+});
+
 test('diverging bars encode geometry with a shared zero without changing source returns', () => {
   assert.deepEqual(returnBarGeometry(-.04, .04), { direction: 'negative', left: 0, width: 50 });
   assert.deepEqual(returnBarGeometry(.02, .04), { direction: 'positive', left: 50, width: 25 });
@@ -46,7 +71,7 @@ test('positive-week bar preserves the entire 0–100 scale including null', () =
 test('both locales preserve each weekly return, win rate, N and limited-sample warning', () => {
   const Component = component('components/statistical-levels/CurrentMonthSeasonality.tsx').CurrentMonthSeasonality as ComponentType<Record<string, unknown>>;
   for (const locale of ['es', 'en']) {
-    const html = renderToStaticMarkup(createElement(Component, { data: seasonality, asOf: manifest.generatedAt, locale }));
+    const html = renderToStaticMarkup(createElement(Component, { data: seasonality, asOf: manifest.generatedAt, locale, window: '5Y' }));
     for (let week = 1; week <= 5; week++) {
       const cell = seasonality.windows['5Y'].weekly.general.find((c: { month: number; weekOfMonth: number }) => c.month === month && c.weekOfMonth === week);
       const article = html.match(new RegExp(`<article[^>]*data-week="${week}"[\\s\\S]*?</article>`))![0];
@@ -61,6 +86,26 @@ test('both locales preserve each weekly return, win rate, N and limited-sample w
     }
   }
 });
+test('month seasonality uses the requested top-bar horizon and never substitutes a missing 1Y sample', () => {
+  const Component = component('components/statistical-levels/CurrentMonthSeasonality.tsx').CurrentMonthSeasonality as ComponentType<Record<string, unknown>>;
+  for (const locale of ['es', 'en']) {
+    for (const window of ['3Y', '5Y', '10Y', 'Full']) {
+      const html = renderToStaticMarkup(createElement(Component, { data: seasonality, asOf: manifest.generatedAt, locale, window }));
+      const expected = seasonality.windows[window === 'Full' ? 'All' : window];
+      for (let week = 1; week <= 5; week++) {
+        const cell = expected.weekly.general.find((c: { month: number; weekOfMonth: number }) => c.month === month && c.weekOfMonth === week);
+        const article = html.match(new RegExp(`<article[^>]*data-week="${week}"[\\s\\S]*?</article>`))![0];
+        assert.ok(article.includes(`N ${cell?.sampleSize ?? 0}`));
+        if (cell?.sampleSize && cell.averageReturn !== null) assert.ok(article.includes(weeklyReturnDisplay(cell.averageReturn)));
+      }
+      assert.ok(!html.includes('<select'));
+    }
+    const unavailable = renderToStaticMarkup(createElement(Component, { data: seasonality, asOf: manifest.generatedAt, locale, window: '1Y' }));
+    assert.ok(unavailable.includes(locale === 'es' ? 'no incluye estacionalidad' : 'does not include seasonality'));
+    assert.ok(!unavailable.includes('data-week=') && !unavailable.includes('sl-season-summary'));
+  }
+});
+
 test('micro-visuals use one neutral brand color for either direction and reduced low-N prominence', () => {
   const css = readFileSync('components/statistical-levels/statistical-levels.css', 'utf8');
   assert.match(css, /\.sl-return-fill \{[^}]*background:#123b3d/);
@@ -83,13 +128,13 @@ test('tooltip formats the actual observation with locale-aware date and percent'
   assert.deepEqual(drawdownInspectionText('2022-10-28', -.184, 'es'), { date: '28 oct 2022', value: '-18,4 %' });
   assert.deepEqual(drawdownInspectionText('2022-10-28', -.184, 'en'), { date: 'Oct 28, 2022', value: '-18.4%' });
 });
-test('every historical frequency starts expanded with all applicable controls and completed-period context', () => {
+test('historical patterns expose their controls directly without a second disclosure or duplicated heading', () => {
   const Component = component('components/statistical-levels/AdvancedSeasonalityPanel.tsx').AdvancedSeasonalityPanel as ComponentType<Record<string, unknown>>;
   for (const locale of ['es', 'en']) for (const frequency of ['daily', 'weekly', 'monthly']) {
     const html = renderToStaticMarkup(createElement(Component, { data: seasonality, frequency, generatedAt: manifest.generatedAt, ticker: 'SPY', locale }));
-    assert.ok(html.includes('aria-expanded="true"'));
+    assert.ok(!html.includes('sl-context-toggle') && !html.includes('Historical calendar patterns') && !html.includes('Patrones históricos por calendario'));
     assert.equal((html.match(/<select/g) ?? []).length, frequency === 'monthly' ? 3 : 4);
-    assert.ok(html.includes(locale === 'en' ? 'Hide context' : 'Ocultar contexto'));
+    assert.ok(!html.includes(locale === 'en' ? 'Hide context' : 'Ocultar contexto'));
     assert.ok(html.includes(locale === 'en' ? 'completed UTC calendar periods' : 'periodos de calendario UTC completos'));
     for (const value of ['3Y', '5Y', '10Y', 'All', 'midterm', 'medianReturn', 'sampleSize']) assert.ok(html.includes(`value="${value}"`));
   }
@@ -121,4 +166,75 @@ test('responsive drawdown copy has desktop keyboard guidance and touch-only mobi
     assert.doesNotMatch(mobile, /Keyboard|Teclado|Home|Inicio|Esc/);
     assert.ok(html.includes('role="slider"') && html.includes('tabindex="0"') && html.includes('aria-valuetext='));
   }
+});
+
+test('period labels keep monthly year/month and use the existing weekly closing-date buckets, including boundaries', () => {
+  const { formatExplorerPeriod } = component('components/statistical-levels/PeriodExplorerTable.tsx') as {
+    formatExplorerPeriod: (row: PeriodExplorerRow, frequency: string, locale: string) => string;
+  };
+  const row = JSON.parse(readFileSync('lib/statistical-levels/generated/assets/SPY.json', 'utf8')).frequencies.weekly.recentPeriods[0];
+  for (const [day, week] of [[1,1], [7,1], [8,2], [14,2], [15,3], [21,3], [22,4], [28,4], [29,5], [31,5]]) {
+    const period = { ...row, periodEnd: `2026-10-${String(day).padStart(2, '0')}` };
+    assert.equal(formatExplorerPeriod(period, 'weekly', 'es'), `${week}.ª semana · oct 2026`);
+    assert.ok(formatExplorerPeriod(period, 'weekly', 'en').includes('week · Oct 2026'));
+    assert.equal(formatExplorerPeriod(period, 'monthly', 'es'), 'oct 2026');
+    assert.equal(formatExplorerPeriod(period, 'monthly', 'en'), 'Oct 2026');
+    assert.equal(formatExplorerPeriod(period, 'daily', 'es'), row.period);
+  }
+});
+
+test('period sorting is numeric, keeps nulls last in both directions, and never mutates the snapshot', () => {
+  const { selectExplorerRows } = component('components/statistical-levels/PeriodExplorerTable.tsx') as {
+    selectExplorerRows: (rows: PeriodExplorerRow[], filter: string, columns: object, sort: object, locale: string) => PeriodExplorerRow[];
+  };
+  const sample = JSON.parse(readFileSync('lib/statistical-levels/generated/assets/SPY.json', 'utf8')).frequencies.weekly.recentPeriods[0];
+  const rows = [100, 9, null, 0, -2].map((close, index) => ({ ...sample, close, periodEnd: `2026-10-${10 + index}` }));
+  const before = JSON.stringify(rows);
+  assert.deepEqual(selectExplorerRows(rows, 'all', {}, { column: 'close', direction: 'asc' }, 'es').map(row => row.close), [-2, 0, 9, 100, null]);
+  assert.deepEqual(selectExplorerRows(rows, 'all', {}, { column: 'close', direction: 'desc' }, 'en').map(row => row.close), [100, 9, 0, -2, null]);
+  assert.deepEqual(selectExplorerRows(rows, 'all', { close: { min: '0', max: '9' } }, { column: 'close', direction: 'asc' }, 'es').map(row => row.close), [0, 9]);
+  assert.equal(JSON.stringify(rows), before);
+});
+
+test('period column filters combine real close dates, classification and percentage units across all available rows', () => {
+  const { selectExplorerRows } = component('components/statistical-levels/PeriodExplorerTable.tsx') as {
+    selectExplorerRows: (rows: PeriodExplorerRow[], filter: string, columns: object, sort: object, locale: string) => PeriodExplorerRow[];
+  };
+  const asset = JSON.parse(readFileSync('lib/statistical-levels/generated/assets/SPY.json', 'utf8'));
+  for (const frequency of ['daily', 'weekly', 'monthly']) {
+    const rows: PeriodExplorerRow[] = asset.frequencies[frequency].recentPeriods;
+    const sort = { column: 'period', direction: 'desc' };
+    assert.equal(selectExplorerRows(rows, 'all', {}, sort, 'es').length, rows.length); // No old 36-row cap.
+    const filters = { period: { min: '2026-01-01', max: '2026-09-30' }, change: { min: '-2', max: '2' }, classification: { value: 'Zona media' } };
+    const expected = rows.filter(row => row.periodEnd >= '2026-01-01' && row.periodEnd <= '2026-09-30' && row.change !== null && row.change * 100 >= -2 && row.change * 100 <= 2 && row.classification === 'Zona media');
+    assert.deepEqual(selectExplorerRows(rows, 'all', filters, sort, 'es'), expected);
+    assert.deepEqual(selectExplorerRows(rows, 'positive_extreme', {}, sort, 'en'), rows.filter(row => row.classification === 'Extensión positiva extrema'));
+    assert.deepEqual(selectExplorerRows(rows, 'all', { close: { min: '1000000' } }, sort, 'es'), []);
+  }
+});
+
+test('period explorer opens directly with extreme positives selected, all columns localized and exact dates retained', () => {
+  const Component = component('components/statistical-levels/PeriodExplorerTable.tsx').PeriodExplorerTable as ComponentType<Record<string, unknown>>;
+  const asset = JSON.parse(readFileSync('lib/statistical-levels/generated/assets/SPY.json', 'utf8'));
+  for (const locale of ['es', 'en']) for (const frequency of ['daily', 'weekly', 'monthly']) {
+    const html = renderToStaticMarkup(createElement(Component, { asset, frequency, locale }));
+    assert.ok(!html.includes('Ocultar explorador') && !html.includes('Show period explorer') && !html.includes('Focus asset'));
+    assert.ok(html.includes(`aria-pressed="true">${locale === 'es' ? 'Extensión positiva extrema' : 'Extreme positive extension'}`));
+    assert.equal((html.match(/scope="col"/g) ?? []).length, 10);
+    assert.ok(html.includes(locale === 'es' ? 'Ordenar por Apertura' : 'Sort by Open'));
+    for (const row of asset.frequencies[frequency].recentPeriods.filter((row: PeriodExplorerRow) => row.classification === 'Extensión positiva extrema').slice(0, 10)) {
+      assert.ok(html.includes(`dateTime="${row.periodEnd}"`) || html.includes(`datetime="${row.periodEnd}"`));
+      assert.ok(html.includes(`${row.periodStart} → ${row.periodEnd}`));
+    }
+  }
+});
+
+test('drawdown zero baseline starts at the chart edge and preserves the actual negative series', () => {
+  const Component = component('components/statistical-levels/UnderwaterDrawdownChart.tsx').UnderwaterDrawdownChart as ComponentType<Record<string, unknown>>;
+  const asset = JSON.parse(readFileSync('lib/statistical-levels/generated/assets/SPY.json', 'utf8'));
+  asset.frequencies.weekly.drawdownHistory = [{ date: '2026-10-02', close: 100 }, { date: '2026-10-09', close: 80 }, { date: '2026-10-16', close: 90 }];
+  asset.frequencies.weekly.windows['5Y'].sessions = 3;
+  const html = renderToStaticMarkup(createElement(Component, { asset, frequency: 'weekly', window: '5Y', locale: 'es' }));
+  assert.ok(html.includes('M 0.00 0.00 L 50.00 90.00 L 100.00 45.00 L 100 0 L 0 0 Z'));
+  assert.ok(html.includes('y1="0" y2="0"'));
 });

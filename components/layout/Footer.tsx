@@ -8,7 +8,7 @@ import { localeFromPathname } from "@/lib/i18n/locales";
 
 export function Footer() {
   const pathname = usePathname();
-  const prefetch = pathname === "/niveles-estadisticos" || pathname === "/en/statistical-levels" ? false : undefined;
+  const prefetch = pathname === "/analisiscuantitativo" || pathname === "/en/quantitative-analysis" ? false : undefined;
   const locale = localeFromPathname(pathname);
   const dictionary = getDictionary(locale);
   const methodologyHref = locale === "en" ? "/en/methodology" : "/metodologia";

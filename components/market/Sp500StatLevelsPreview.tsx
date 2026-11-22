@@ -94,7 +94,7 @@ function scalePosition(value: number | null, low: number | null, high: number | 
 
 export function Sp500StatLevelsPreview({ data, locale }: { data: Sp500StatLevelsPreviewData; locale: Locale }) {
   const text = copy[locale];
-  const labHref = locale === "en" ? "/en/statistical-levels?asset=SPY&frequency=weekly" : "/niveles-estadisticos?asset=SPY&frequency=weekly";
+  const labHref = locale === "en" ? "/en/quantitative-analysis?asset=SPY&frequency=weekly" : "/analisiscuantitativo?asset=SPY&frequency=weekly";
   const path = sparklinePath(data.sparkline);
   const pricePosition = scalePosition(data.latestClose, data.weeklyScale.low, data.weeklyScale.high);
 
