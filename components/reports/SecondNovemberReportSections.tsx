@@ -7,6 +7,7 @@ import { ReportEditorialInline } from "./ReportEditorialSections";
 import { ReportMonthlyCalendar } from "./ReportMonthlyCalendar";
 import { ReportQuantitativePanels } from "./ReportQuantitativePanels";
 import { ReportSourcePolicy } from "./ReportSourcePolicy";
+import styles from "./report-premium.module.css";
 
 type TableBlock = Extract<ReportEditorialBlock, { kind: "table" }>;
 type Asset = keyof typeof weeklySnapshot.assets;
@@ -19,7 +20,7 @@ function Text({ text }: { text: string }) {
 }
 
 function Chapter({ section, children }: { section: ReportEditorialSection; children: ReactNode }) {
-  return <section id={section.id} data-native-report-section={section.id} className="grid min-w-0 scroll-mt-24 gap-6 border-b border-line py-8 md:py-10 lg:grid-cols-[0.34fr_1fr]">
+  return <section id={section.id} data-native-report-section={section.id} className={styles.chapter}>
     <div className="min-w-0"><p className="text-xs font-semibold uppercase tracking-[0.14em] text-brass">{section.eyebrow}</p><h2 className="mt-2 text-2xl font-semibold leading-tight text-ink md:text-3xl">{section.title}</h2></div>
     <div className="grid min-w-0 gap-5">{children}</div>
   </section>;
@@ -64,7 +65,7 @@ function Rotation({ blocks }: { blocks: ReportEditorialBlock[] }) {
     <div className="flex flex-wrap items-center justify-between gap-3"><h3 className="text-xl font-semibold text-ink md:text-2xl">Rotación sectorial</h3><span className="border border-brass/30 bg-panelSoft px-3 py-2 text-sm font-semibold text-petrol">{sectors.filter(s => s.value > 0).length} de {sectors.length} sectores en positivo</span></div>
     <p className="mt-3 text-sm text-muted">Retorno del 06/11 al 13/11 · once ETF sectoriales.</p>
     <figure className="mt-5">
-      <ul className="grid gap-3 sm:grid-cols-2">{sectors.map(s => <li key={s.ticker} data-sector={s.ticker} className="border border-line bg-panelSoft/60 p-4 transition hover:border-petrol/35 hover:bg-white">
+      <ul className={styles.sectorGrid}>{sectors.map(s => <li key={s.ticker} data-sector={s.ticker} className="border border-line bg-panelSoft/60 p-4 transition hover:border-petrol/35 hover:bg-white">
         <div className="flex flex-wrap items-center justify-between gap-2"><span className="text-xs font-semibold text-petrol">{s.ticker} · {s.name}</span><strong className={`text-xl tabular-nums ${s.value < 0 ? "text-danger" : "text-petrol"}`}>{s.label}</strong></div>
         <div className="mt-4 h-1.5 bg-line/70" aria-hidden="true"><div className={`h-full ${s.value < 0 ? "bg-danger" : "bg-petrol"}`} style={{ width: `${Math.abs(s.value) / maximum * 100}%` }} /></div>
       </li>)}</ul>
@@ -100,13 +101,13 @@ function Assets({ section, comparison }: { section: ReportEditorialSection; comp
       const ticker = assetOrder[i];
       const row = comparison.rows[i];
       const change = ticker ? row[3] : undefined;
-      return <details key={g.title} id={ticker?.toLowerCase() ?? "stockpicking"} className="group min-w-0 scroll-mt-24 border border-line bg-white shadow-quiet open:border-petrol/40">
+      return <details key={g.title} open={i === 0} id={ticker?.toLowerCase() ?? "stockpicking"} className={`group min-w-0 scroll-mt-24 border border-line bg-white shadow-quiet open:border-petrol/40 ${styles.asset}`}>
         <summary className="grid cursor-pointer list-none items-center gap-4 border-l-[3px] border-petrol px-4 py-5 marker:hidden sm:grid-cols-[3rem_minmax(0,1fr)_auto] md:px-5">
           <span aria-hidden="true" className="flex h-11 w-11 items-center justify-center bg-petrol text-xs font-semibold text-white">{ticker ?? "3.7"}</span>
           <div className="min-w-0"><h3 className="text-lg font-semibold leading-snug text-ink">{g.title}</h3>{ticker ? <p className="mt-2 text-xs text-muted">Cierre 13/11 · <span className="font-medium tabular-nums text-ink">{row[2]} USD</span> · <span className={`font-semibold tabular-nums ${numericReturn(change!) < 0 ? "text-danger" : "text-petrol"}`}>{change}</span> en la quincena</p> : null}</div>
           <span className="flex items-center gap-2 text-xs font-semibold uppercase text-brass"><span className="details-open-label">Abrir +</span><span className="details-close-label">Cerrar −</span></span>
         </summary>
-        <div className="grid min-w-0 gap-4 border-t border-line px-4 py-5 md:px-6"><Blocks blocks={g.blocks} caption={g.title ?? section.title} />{ticker ? <WeeklyLevels ticker={ticker} /> : null}</div>
+        <div className={styles.assetBody}><div className={styles.assetNarrative}><Blocks blocks={g.blocks} caption={g.title ?? section.title} /></div>{ticker ? <WeeklyLevels ticker={ticker} /> : null}</div>
       </details>;
     })}
   </>;
@@ -133,15 +134,28 @@ function Sources({ section }: { section: ReportEditorialSection }) {
   return <div className="grid gap-3">{section.blocks.map((b, i) => b.kind === "paragraph" || b.kind === "source" ? <div key={i} className="border border-line bg-white px-5 py-4"><p className="text-sm leading-7 text-muted"><ReportEditorialInline text={b.text} /></p></div> : null)}</div>;
 }
 
+function ClosingStrip({ comparison }: { comparison: TableBlock }) {
+  return <section className={styles.closingStrip} aria-label="Lecturas al cierre del 13 de noviembre de 2026">
+    <div className={styles.closingHeading}><h2>Lecturas al cierre</h2><span>13/11/2026 · USD · variación desde el 30/10</span></div>
+    <dl>{comparison.rows.map(([ticker, , price, change]) => <div key={ticker}><dt>{ticker.replace("/USD", "")}</dt><dd>{price}<span>{change}</span></dd></div>)}</dl>
+  </section>;
+}
+
+function Context({ section }: { section: ReportEditorialSection }) {
+  const readings = groups(section);
+  return <><div className={styles.contextLead}><Blocks blocks={readings[0].blocks} caption={section.title} /></div><div className={styles.contextGrid}>{readings.slice(1).map(group => <section key={group.title}><h3>{group.title}</h3><div className="grid gap-4"><Blocks blocks={group.blocks} caption={group.title ?? section.title} /></div></section>)}</div></>;
+}
+
 export function SecondNovemberReportSections({ report }: { report: MarketReport }) {
   const sections = report.editorialSections!;
   const market = sections.find(s => s.id === "lecturas-mercado-cierre")!;
   const comparison = market.blocks.find((b): b is TableBlock => b.kind === "table")!;
   const december = report.calendar.find(e => e.dateStart?.startsWith("2026-12"));
   return <ReportSourcePolicy newTab>
-    <nav aria-label="Secciones del informe" className="border-b border-line py-4"><ul className="flex flex-wrap gap-x-5 gap-y-3 text-xs font-semibold text-petrol">{sections.map(s => <li key={s.id}><a href={`#${s.id}`} className="underline decoration-petrol/30 underline-offset-4">{s.eyebrow}</a></li>)}</ul></nav>
+    <ClosingStrip comparison={comparison} />
     {sections.map(section => <Chapter key={section.id} section={section}>
-      {section.id === "lecturas-mercado-cierre" ? groups(section).map((g, i) => i === 1 ? <Rotation key={i} blocks={g.blocks} /> : <div key={i} className="grid min-w-0 gap-5"><h3 className="text-xl font-semibold text-petrol">{g.title}</h3><Blocks blocks={g.blocks} caption={g.title ?? section.title} /></div>)
+      {section.id === "contexto-general" ? <Context section={section} />
+        : section.id === "lecturas-mercado-cierre" ? <div className={styles.marketGrid}>{groups(section).map((g, i) => i === 1 ? <Rotation key={i} blocks={g.blocks} /> : <div key={i} className={styles.comparison}><h3 className="text-xl font-semibold text-petrol">{g.title}</h3><Blocks blocks={g.blocks} caption={g.title ?? section.title} /></div>)}</div>
         : section.id === "lectura-seguimiento" ? <Assets section={section} comparison={comparison} />
         : section.id === "calendario" ? <>
           <ReportMonthlyCalendar historical detailPlacement="below" events={report.calendar.filter(e => e.dateStart?.startsWith("2026-11"))} report={report} />

@@ -13,6 +13,7 @@ import {
 import { getHistoricalAutomaticReadings } from "@/lib/reports/historical-automatic-readings";
 import { buildArticleJsonLd, buildBreadcrumbJsonLd, buildWebPageJsonLd } from "@/lib/seo/structured-data";
 import { absoluteUrl, buildSeoMetadata } from "@/lib/seo/site";
+import premiumStyles from "@/components/reports/report-premium.module.css";
 
 type ReportPageProps = {
   params: Promise<{ slug: string }>;
@@ -59,7 +60,7 @@ export default async function MarketReportPage({ params }: ReportPageProps) {
   const canonical = absoluteUrl(pathname);
 
   return (
-    <main className="mx-auto w-full max-w-7xl overflow-x-hidden px-4 py-8 md:px-5 md:py-14">
+    <main className={report.id === "segundo-informe-noviembre-2026" ? premiumStyles.page : "mx-auto w-full max-w-7xl overflow-x-hidden px-4 py-8 md:px-5 md:py-14"}>
       <JsonLd
         data={[
           buildWebPageJsonLd({
