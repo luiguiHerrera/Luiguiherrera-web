@@ -13,6 +13,9 @@ export type CapitalFlowAssetPreview = {
   sources: { name: string; url: string }[];
   vehicles: string[];
   notes: string[];
-  refreshMode?: 'snapshot';
+  refreshMode?: 'snapshot' | 'automatic';
+  refreshStatus?: 'current' | 'delayed' | 'unavailable';
+  retrievedAt?: string;
+  sourceHash?: string;
   comparisons?: { sessions: number; current: number | null; average: number | null; samples: number; referenceStart: string | null; referenceEnd: string | null }[];
 };

@@ -34,7 +34,7 @@ export async function DashboardContent({ locale = "es" }: { locale?: "es" | "en"
     locale === "es" ? getMcClellanData() : Promise.resolve(null),
   ]);
   const { btcEtfFlows, dashboardModules, gldFlowPressure, quantRisk, regimeSummary, sectorModule, sectorRotation, vix, vixTermStructure } = dashboardData;
-  const publishedFlows = locale === "es" ? getPublishedCapitalFlows() : [];
+  const publishedFlows = locale === "es" ? await getPublishedCapitalFlows() : [];
   const weeklyReportData = await buildWeeklyReportData(dashboardData);
   const remainingModules = dashboardModules.filter((module) => module.id !== "rates" && module.id !== "sectors" && module.id !== "vix" && module.id !== "btc-flows");
   const breadthValues = buildMarketBreadthValues(weeklyReportData, locale);
