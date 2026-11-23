@@ -7,7 +7,7 @@ import {CapitalFlowSourceError} from './capital-flows-source.mjs';
 
 export const ETH_ARCHIVE_TAG='dashboard-eth-flow-archive-v1';
 const BOOTSTRAP_DAY='2026-11-23';
-const getArchiveFeed=unstable_cache(()=>fetchEthFundFeed(),[ETH_ARCHIVE_TAG,'feed'],{revalidate:3600});
+const getArchiveFeed=unstable_cache(()=>fetchEthFundFeed(),[ETH_ARCHIVE_TAG,'feed'],{revalidate:process.env.NODE_ENV === 'development' ? false : 3600});
 const previousDay=(day:string)=>new Date(Date.parse(`${day}T12:00:00Z`)-86_400_000).toISOString().slice(0,10);
 
 // Dated internal entries retain prior observations across requests/deployments.

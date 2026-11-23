@@ -5,6 +5,7 @@ import type { CapitalFlowAssetPreview } from './capital-flows-preview-types';
 import { CAPITAL_FLOW_IDS, CapitalFlowSourceError, fetchCapitalFlowSource, latestClosedFlowSession } from './capital-flows-source.mjs';
 import {getEthAutomaticModel} from './get-eth-capital-flows';
 import {expectedEthFlowSession} from './eth-capital-flows-source.mjs';
+import {createDevelopmentSourceCache} from './development-source-cache.mjs';
 
 export const CAPITAL_FLOWS_CACHE_TAG = 'dashboard-capital-flows-automatic-v2';
 export const PUBLISHED_CAPITAL_FLOW_IDS = [...CAPITAL_FLOW_IDS, 'eth'];
@@ -13,14 +14,22 @@ export const fetchUncachedCapitalFlow = (id:string) => id==='eth' ? getEthAutoma
 const getCachedLegacyCapitalFlow = unstable_cache(
   (id: string) => fetchCapitalFlowSource(id),
   [CAPITAL_FLOWS_CACHE_TAG],
-  { revalidate: 3600, tags: [CAPITAL_FLOWS_CACHE_TAG] },
+  { revalidate: process.env.NODE_ENV === 'development' ? false : 3600, tags: [CAPITAL_FLOWS_CACHE_TAG] },
 );
 const getCachedEthCapitalFlow = unstable_cache(
   () => getEthAutomaticModel(),
   ['dashboard-eth-capital-flows-public-v1'],
-  {revalidate:3600,tags:[CAPITAL_FLOWS_CACHE_TAG]},
+  {revalidate:process.env.NODE_ENV === 'development' ? false : 3600,tags:[CAPITAL_FLOWS_CACHE_TAG]},
 );
-export const getCachedCapitalFlow = (id:string) => id==='eth' ? getCachedEthCapitalFlow() : getCachedLegacyCapitalFlow(id);
+const readPersistentCapitalFlow = (id:string) => id==='eth' ? getCachedEthCapitalFlow() : getCachedLegacyCapitalFlow(id);
+const getDevelopmentCapitalFlow = createDevelopmentSourceCache({
+  load: fetchUncachedCapitalFlow,
+  readPrevious: readPersistentCapitalFlow,
+  isSourceError: error => error instanceof CapitalFlowSourceError,
+});
+export const getCachedCapitalFlow = (id:string) => process.env.NODE_ENV === 'development'
+  ? getDevelopmentCapitalFlow(id)
+  : readPersistentCapitalFlow(id);
 
 export async function getPublishedCapitalFlows(): Promise<CapitalFlowAssetPreview[]> {
   return Promise.all(PUBLISHED_CAPITAL_FLOW_IDS.map(async id => {
