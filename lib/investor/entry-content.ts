@@ -55,7 +55,7 @@ export const investorEntryContent: Record<"es" | "en", InvestorEntryContent> = {
           outcomes: ["Qué está favoreciendo o frenando el entorno.", "Qué cambió y merece atención.", "Qué mirar después."],
           actions: [
             { label: "AHORA", product: "Dashboard", description: "Régimen, amplitud, volatilidad y flujos en una lectura rápida.", time: "≈5–10 min", cta: "Ver dashboard", href: "/dashboard" },
-            { label: "CONTEXTO", product: "Informes", description: "Qué cambió, qué merece atención y cómo interpretar el entorno.", time: "≈10–20 min", cta: "Leer informes", href: "/informes" },
+            { label: "CONTEXTO", product: "Informes", description: "Qué cambió, qué merece atención y cómo interpretar el entorno.", time: "≈10–20 min", cta: "Leer informes", href: "/analisisyperpectivas" },
           ],
         },
         {

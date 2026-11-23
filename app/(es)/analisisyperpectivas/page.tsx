@@ -2,9 +2,9 @@ import { ReportsArchive, type ArchiveReport } from "@/components/reports/Reports
 import { marketReports, reportDisplayName, reportHref } from "@/lib/reports/market-reports";
 import { getRouteMetadata } from "@/lib/seo/site";
 
-export const metadata = getRouteMetadata("/informes");
+export const metadata = getRouteMetadata("/analisisyperpectivas");
 
-export default function InformesPage() {
+export default function AnalisisYPerspectivasPage() {
   const reports: ArchiveReport[] = marketReports.map(report => {
     const context = report.editorialSections?.find(section => section.id === "contexto-general");
     const paragraph = context?.blocks.find(block => block.kind === "paragraph");

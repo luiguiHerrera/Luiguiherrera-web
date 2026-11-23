@@ -29,7 +29,7 @@ const routes: Record<string, RouteSchema> = {
   "/proteccion": { name: "Simulador de decisiones financieras", description: "Simulador educativo de decisiones financieras con casos sobre liquidez, deuda, productos, finca raíz, ETF y portafolio.", kind: "application", category: "FinanceApplication" },
   "/protege-tu-dinero": { name: "Alertas para tu dinero", description: "Checklist educativo de señales de alerta antes de evaluar una entidad, producto o propuesta de inversión.", kind: "application", category: "FinanceApplication" },
   "/dashboard": { name: "Dashboard de régimen de mercado", description: "Dashboard educativo para ordenar señales de régimen de mercado, volatilidad, rotación, amplitud, flujos BTC ETF y proxy GLD.", kind: "application", category: "EducationalApplication" },
-  "/informes": { name: "Informes de mercado", description: "Archivo de informes de mercado multi-activo.", kind: "collection" },
+  "/analisisyperpectivas": { name: "Análisis y perspectivas", description: "Archivo de informes de mercado multi-activo.", kind: "collection" },
   "/analisiscuantitativo": { name: "Análisis cuantitativo", description: "Análisis educativo de precio, niveles históricos, riesgo, estacionalidad, horizontes y correlaciones entre activos.", kind: "application", category: "EducationalApplication" },
   "/recursos": { name: "Recursos", description: "Catálogo de recursos públicos y scripts open-source para inversionistas.", kind: "collection" },
   "/metodologia": { name: "Metodología", description: "Trazabilidad de fuentes, límites y métodos de las herramientas educativas.", kind: "page" },

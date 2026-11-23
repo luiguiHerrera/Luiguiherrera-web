@@ -196,16 +196,16 @@ const seoRouteContent: readonly Omit<SeoRouteDefinition, "alternatePathname">[] 
       "An educational market regime dashboard covering sector rotation, breadth, VIX structure, Bitcoin ETF flows and a GLD flow-pressure proxy.",
   },
   {
-    pathname: "/informes",
+    pathname: "/analisisyperpectivas",
     language: "es",
-    title: "Archivo de informes | Luigui Herrera",
+    title: "Análisis y perspectivas | Luigui Herrera",
     description: "Archivo de informes de mercado multi-activo con lecturas editoriales por mes.",
     socialDescription: "Lecturas de mercado cargadas por mes, con informes actuales y archivados.",
   },
   {
     pathname: "/en/reports",
     language: "en",
-    title: "Market reports | Current report and archive",
+    title: "Reports | Luigui Herrera",
     description: "A clear view of what changed, what matters, and the context behind the market. Read the current English market report and browse available previous editions.",
   },
   {

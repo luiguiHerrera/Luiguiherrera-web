@@ -21,7 +21,7 @@ export const es = {
     ],
     investorItems: [
       { href: "/dashboard", label: "Dashboard de mercado", shortLabel: "Dashboard", description: "Volatilidad, rotación sectorial, flujos y lecturas cruzadas." },
-      { href: "/informes", label: "Informes de mercado", shortLabel: "Informes", description: "Lecturas de mercado, flujos, riesgo y activos multi-mercado." },
+      { href: "/analisisyperpectivas", label: "Análisis y perspectivas", shortLabel: "Análisis y perspectivas", description: "Lecturas de mercado, flujos, riesgo y activos multi-mercado." },
       { href: "/analisiscuantitativo", label: "Análisis cuantitativo", shortLabel: "Análisis", description: "Precio, niveles históricos, riesgo, estacionalidad y correlaciones." },
       { href: "/tendencias", label: "Tendencias", shortLabel: "Tendencias", description: "Mapas editoriales y vehículos observables." },
       { href: "/fragilidad-de-portafolio", label: "Fragilidad de portafolio", shortLabel: "Fragilidad", description: "Concentración, comportamiento histórico, stress y contrafactuales sin subir el portafolio." },

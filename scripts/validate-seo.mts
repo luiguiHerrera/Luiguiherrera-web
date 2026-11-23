@@ -39,7 +39,7 @@ const expectedStaticRoutes = [
   "/en/protect-your-money",
   "/dashboard",
   "/en/dashboard",
-  "/informes",
+  "/analisisyperpectivas",
   "/en/reports",
   "/en/weekly-report",
   "/analisiscuantitativo",

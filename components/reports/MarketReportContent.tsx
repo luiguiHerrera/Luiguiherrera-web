@@ -100,7 +100,7 @@ export function MarketReportContent({
     <article id={report.id} className={`scroll-mt-24 ${isPremiumEdition ? premiumStyles.edition : ""}`}>
       <Link
         className="inline-flex min-h-10 items-center border-b border-petrol/30 text-sm font-semibold text-petrol transition hover:border-petrol"
-        href="/informes"
+        href="/analisisyperpectivas"
       >
         ← Volver al archivo de informes
       </Link>

@@ -71,7 +71,7 @@ export default async function MarketReportPage({ params }: ReportPageProps) {
           }),
           buildBreadcrumbJsonLd("es", [
             { name: "Inicio", pathname: "/" },
-            { name: "Informes", pathname: "/informes" },
+            { name: "Análisis y perspectivas", pathname: "/analisisyperpectivas" },
             { name: reportDisplayName(report), pathname },
           ]),
           buildArticleJsonLd({
