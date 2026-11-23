@@ -1,4 +1,5 @@
-import { CapitalFlowPreviewCard } from "@/components/dashboard/CapitalFlowPreviewCard";
+import { CapitalFlowPreviewCard } from "@/components/dashboard/CapitalFlowCard";
+import type { CapitalFlowAssetPreview } from "@/lib/dashboard/capital-flows-preview-types";
 import { getPublishedCapitalFlows } from "@/lib/dashboard/get-published-capital-flows";
 import { BtcEtfFlowsModule } from "@/components/dashboard/BtcEtfFlowsModule";
 import { DashboardReadingGuide } from "@/components/dashboard/DashboardReadingGuide";
@@ -27,7 +28,8 @@ export default async function DashboardPage() {
   return <DashboardContent locale="es" />;
 }
 
-export async function DashboardContent({ locale = "es" }: { locale?: "es" | "en" }) {
+export async function DashboardContent({ locale = "es", previewEthFlows = false, ethFlowsPreviewData }: { locale?: "es" | "en"; previewEthFlows?:boolean; ethFlowsPreviewData?:CapitalFlowAssetPreview }) {
+  const showEthFlowsPreview = process.env.NODE_ENV === "development" && previewEthFlows && Boolean(ethFlowsPreviewData);
   const [dashboardData, mcClellan] = await Promise.all([
     getDashboardData(),
     locale === "es" ? getMcClellanData() : Promise.resolve(null),
@@ -155,9 +157,9 @@ export async function DashboardContent({ locale = "es" }: { locale?: "es" | "en"
             </details>
           </section>
         ) : null}
-        {publishedFlows.length || btcEtfFlows || gldFlowPressure ? (
+        {publishedFlows.length || btcEtfFlows || gldFlowPressure || showEthFlowsPreview ? (
           <section className="grid min-w-0 gap-3 [&>*]:min-w-0" aria-labelledby="capital-flows-section" data-capital-flows-section>
-            <details data-dashboard-section="flows">
+            <details data-dashboard-section="flows" open={showEthFlowsPreview || undefined}>
               <summary>
                 <h2 id="capital-flows-section" className="text-xs font-semibold uppercase tracking-[0.2em] text-petrol">{copy.capitalFlows}</h2>
                 <span data-dashboard-section-indicator aria-hidden="true" />
@@ -169,6 +171,7 @@ export async function DashboardContent({ locale = "es" }: { locale?: "es" | "en"
                     {gldFlowPressure ? <GldFlowPressureModule data={gldFlowPressure} locale={locale} /> : null}
                     {btcEtfFlows ? <BtcEtfFlowsModule data={btcEtfFlows} /> : null}
                   </>}
+                  {showEthFlowsPreview && ethFlowsPreviewData ? <CapitalFlowPreviewCard data={ethFlowsPreviewData} /> : null}
                 </div>
               </div>
             </details>
