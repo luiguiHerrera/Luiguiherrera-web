@@ -9,6 +9,7 @@ export async function GET() {
     asset: model.id, universe: model.vehicles, cutoffDate: model.cutoffDate,
     status: model.refreshStatus, retrievedAt: model.retrievedAt ?? null,
     sourceHash: model.sourceHash ?? null, sessions: model.points.length,
+    lastRefreshError: model.lastRefreshError ?? null,
     comparisons: model.comparisons?.map(({ sessions, current, average }) => ({ sessions, current, average })),
   })) }, { headers: { 'Cache-Control': 'no-store' } });
 }

@@ -22,7 +22,7 @@ export async function getPublishedCapitalFlows(): Promise<CapitalFlowAssetPrevie
       if (!(error instanceof CapitalFlowSourceError)) throw error;
       console.warn('[dashboard:capital-flows] Retained bundled validated cut', { asset: id, reason: error.message });
       const fallback = (snapshot as CapitalFlowAssetPreview[]).find(model => model.id === id)!;
-      return { ...fallback, refreshMode: 'automatic' as const, refreshStatus: 'unavailable' as const };
+      return { ...fallback, refreshMode: 'automatic' as const, refreshStatus: 'unavailable' as const, lastRefreshError: error.message };
     }
   }));
 }
