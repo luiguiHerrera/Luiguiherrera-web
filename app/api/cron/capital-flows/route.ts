@@ -1,7 +1,6 @@
 import { timingSafeEqual } from 'node:crypto';
 import { revalidatePath, revalidateTag } from 'next/cache';
-import { CAPITAL_FLOWS_CACHE_TAG, getCachedCapitalFlow } from '@/lib/dashboard/get-published-capital-flows';
-import { CAPITAL_FLOW_IDS, fetchCapitalFlowSource } from '@/lib/dashboard/capital-flows-source.mjs';
+import { CAPITAL_FLOWS_CACHE_TAG, getCachedCapitalFlow, PUBLISHED_CAPITAL_FLOW_IDS as CAPITAL_FLOW_IDS, fetchUncachedCapitalFlow } from '@/lib/dashboard/get-published-capital-flows';
 
 export const runtime = 'nodejs';
 export const maxDuration = 60;
@@ -15,7 +14,7 @@ export async function GET(request: Request) {
   }
   const results = await Promise.all(CAPITAL_FLOW_IDS.map(async id => {
     try {
-      const candidate = await fetchCapitalFlowSource(id);
+      const candidate = await fetchUncachedCapitalFlow(id);
       return { asset: id, validated: true, cutoffDate: candidate.cutoffDate };
     } catch {
       return { asset: id, validated: false, retainedPrevious: true };

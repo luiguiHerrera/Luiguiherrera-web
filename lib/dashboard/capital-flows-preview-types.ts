@@ -1,7 +1,7 @@
-import type { AggregatePoint, FundObservation } from './sp500-etf-flows.mjs';
+import type { AggregatePoint, FundObservation, FlowInterpretation } from './sp500-etf-flows.mjs';
 
 export type CapitalFlowAssetPreview = {
-  id: 'sp500' | 'gold' | 'btc';
+  id: 'sp500' | 'gold' | 'btc' | 'eth';
   title: string;
   eyebrow: string;
   description: string;
@@ -18,5 +18,11 @@ export type CapitalFlowAssetPreview = {
   retrievedAt?: string;
   sourceHash?: string;
   lastRefreshError?: string;
+  interpretations?: Record<number,FlowInterpretation>;
+  coverage?: {
+    reported:number; expected:number; firstDate:string|null; sourceFirstDate:string|null;
+    latestPartial:{date:string;reported:number;missing:string[]}|null;
+    funds:{ticker:string;flow:number|null}[]; updateNote:string;
+  };
   comparisons?: { sessions: number; current: number | null; average: number | null; samples: number; referenceStart: string | null; referenceEnd: string | null }[];
 };
