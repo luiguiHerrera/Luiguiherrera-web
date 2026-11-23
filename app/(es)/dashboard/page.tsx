@@ -177,7 +177,7 @@ export async function DashboardContent({ locale = "es" }: { locale?: "es" | "en"
         {remainingModules.map((module) => <DashboardModule key={module.id} {...module} locale={locale} />)}
       </div>
 
-      <aside role="note" className="mt-8 border-t border-brass/20 pt-5 text-[12px] leading-6 text-muted/80" data-dashboard-notice>
+      <aside role="note" className="mt-8 border-t border-line pt-5 text-[12px] leading-6 text-muted" data-dashboard-notice>
         <p className="max-w-4xl">{copy.finalDisclaimer}</p>
       </aside>
     </DashboardPresentation>

@@ -36,3 +36,11 @@ Se consultan las descargas públicas nominales de State Street y el JSON públic
 Referencias consultadas el 23/11/2026: `https://www.ssga.com/us/en/footer/terms-and-conditions`, `https://www.blackrock.com/corporate/compliance/terms-and-conditions`, metodología y licencia del dataset de TFTC. No se han solicitado permisos por mensajes ni contratado servicios. Coste incremental previsto: 0 €, dentro de las cuotas del alojamiento existente.
 
 La fecha visible es la del dato, no la de la petición. El calendario compartido soporta 2024–2028 y falla explícitamente fuera de ese intervalo. «Actualización automática» significa que se comprueba y recalcula sin intervención local; no garantiza que el proveedor publique a una hora exacta.
+
+## Validación
+
+36 pruebas de cálculo, importación y transporte correctas. TypeScript sin errores. Contraste independiente con Decimal en Python de los totales BTC de 1/5/20/60 sesiones y de la suma de cada desglose; no se confunden USD con millones de USD. El histórico completo contiene 719 sesiones válidas y no hay huecos en las 400 servidas. El nuevo lector de GLD reproduce exactamente sus puntos y métricas previos. El S&P 500 se recalcula íntegramente con SPY.
+
+Primera descarga alojada verificada en el preview `dpl_7B6Wi57rH1oLH2dtXf6jnUw1qoZy` el 23/11/2026 a las 21:14 UTC: los tres activos devuelven `current`, descarga efectiva y huella SHA-256; ninguna tarjeta procede del respaldo. Las entradas se vuelven a comprobar en producción. No se ha cambiado ningún workflow de GitHub ni la tarea o cálculo de McClellan.
+
+El aviso final del dashboard conserva exactamente el texto y pasa a nota editorial con una línea superior, sin caja ni fondo independiente. El cambio queda limitado al dashboard, sin alterar `DisclaimerBox` ni los avisos de otras páginas.
