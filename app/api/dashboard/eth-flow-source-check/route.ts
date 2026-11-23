@@ -12,7 +12,7 @@ export async function GET() {
     if (!response.ok) return Response.json({source:url,status:response.status,automatic:false},{status:502});
     const chunks:Uint8Array[]=[]; let size=0;
     if (!response.body) throw new Error('Empty source');
-    for await (const chunk of response.body) {size+=chunk.length;if(size>2_000_000)throw new Error('Oversized source');chunks.push(chunk);}
+    const reader=response.body.getReader(); try { for (;;) { const {value,done}=await reader.read(); if(done)break; size+=value.length; if(size>2_000_000)throw new Error('Oversized source');chunks.push(value); } } finally {await reader.cancel();}
     const model=buildEthFlowPreview({source:url,units:'USD millions',retrievedAt:new Date().toISOString(),rows:extractEthRows(Buffer.concat(chunks).toString('utf8'))});
     return Response.json({source:url,status:response.status,cutoffDate:model.cutoffDate,sessions:model.points.length,coverage:model.coverage,latest:model.points.at(-1)?.flow,automatic:true});
   } catch(error) {return Response.json({source:url,automatic:false,reason:error instanceof Error?error.message:'Unavailable'},{status:503});}
