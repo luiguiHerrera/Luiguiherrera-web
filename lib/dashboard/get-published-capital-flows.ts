@@ -4,7 +4,7 @@ import snapshot from './capital-flows-published.json';
 import type { CapitalFlowAssetPreview } from './capital-flows-preview-types';
 import { CAPITAL_FLOW_IDS, CapitalFlowSourceError, fetchCapitalFlowSource, latestClosedFlowSession } from './capital-flows-source.mjs';
 
-export const CAPITAL_FLOWS_CACHE_TAG = 'dashboard-capital-flows-automatic-v1';
+export const CAPITAL_FLOWS_CACHE_TAG = 'dashboard-capital-flows-automatic-v2';
 // Separate entries: failure of one provider cannot prevent the other assets refreshing.
 export const getCachedCapitalFlow = unstable_cache(
   (id: string) => fetchCapitalFlowSource(id),
