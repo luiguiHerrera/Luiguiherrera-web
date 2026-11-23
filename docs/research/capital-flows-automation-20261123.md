@@ -4,7 +4,7 @@ Autorización: «haz esa parte, no podemos dejar pendientes», después de publi
 
 ## Operación
 
-- Vercel Cron diario `0 7 * * *` (07:00 UTC; 08:00 Madrid en invierno, 09:00 en verano), ruta `/api/cron/capital-flows`, autenticada mediante el `CRON_SECRET` ya existente. La tarea de McClellan a las 17:00 UTC se conserva intacta.
+- Vercel Cron diario `0 7 * * *` (franja 07:00–07:59 UTC; 08:00–08:59 Madrid en invierno, 09:00–09:59 en verano, según la precisión del plan Hobby), ruta `/api/cron/capital-flows`, autenticada mediante el `CRON_SECRET` ya existente. La tarea de McClellan a las 17:00 UTC se conserva intacta.
 - Next Data Cache existente, mediante `unstable_cache`, una entrada por activo; revalidación adicional de una hora cuando hay visitas. No requiere el Mac, nuevos servicios, bases de datos, claves de proveedor ni dependencias.
 - Solo entran en caché descargas completas y validadas, al menos 400 flujos cerrados y 252 ventanas de comparación por temporalidad. Un candidato antiguo no sustituye al anterior: debe llegar a la última sesión cerrada con el margen conservador de una hora. Un fallo de refresco conserva la entrada anterior mediante stale-while-revalidate. En un arranque sin caché válida se sirve el corte de respaldo fechado y se identifica como «Último corte conservado».
 - Cada activo se valida por separado: una caída del proveedor de BTC no impide refrescar oro o SPY. El cron informa resultados parciales con HTTP 503, sin fabricar ceros.
@@ -18,6 +18,8 @@ Autorización: «haz esa parte, no podemos dejar pendientes», después de publi
 | S&P 500 | SPY | State Street, `https://www.ssga.com/library-content/products/fund-data/etfs/us/navhist-us-en-spy.xlsx` |
 | Oro | GLD | State Street, `https://www.ssga.com/library-content/products/fund-data/etfs/us/navhist-us-en-gld.xlsx` |
 | BTC | ETF spot estadounidenses publicados por Farside | `https://farside.co.uk/bitcoin-etf-flow-all-data/` |
+
+Farside responde HTTP 403 a la página HTML desde Vercel. Su propio documento anuncia mediante `link[rel="alternate"][type="application/json"]` la representación REST pública `https://farside.co.uk/wp-json/wp/v2/pages/1321`: contiene la misma tabla completa en `content.rendered`. Se usa este canal público, comprobando ID 1321 y enlace canónico del archivo, sin eludir retos, utilizar cookies privadas ni suplantar un navegador. El lector y los cálculos de las filas no cambian.
 
 **Cambio explícito:** el S&P 500 automático utiliza SPY en toda su historia, no el agregado previo SPY + IVV. BlackRock prohíbe copiar/monitorizar automáticamente su sitio sin permiso; no se incorpora ese descargador. IVV queda excluido, al igual que VOO. No se oculta ni se empalma el cambio de universo: consta en el contexto de la tarjeta y se recalculan importes, medias y observaciones.
 

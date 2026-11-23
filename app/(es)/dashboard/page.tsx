@@ -13,7 +13,6 @@ import { QuantRiskPanel } from "@/components/dashboard/QuantRiskPanel";
 import { SectorRotationChart, SectorRotationUnavailable } from "@/components/dashboard/SectorRotationChart";
 import { VixModule } from "@/components/dashboard/VixModule";
 import { VixTermStructureModule } from "@/components/dashboard/VixTermStructureModule";
-import { DisclaimerBox } from "@/components/ui/DisclaimerBox";
 import { getDashboardData } from "@/lib/dashboard/get-dashboard-data";
 import { formatCapitalFlowDate } from "@/lib/dashboard/capital-flows-presentation";
 import { buildMarketBreadthValues } from "@/lib/dashboard/market-breadth";
@@ -178,11 +177,9 @@ export async function DashboardContent({ locale = "es" }: { locale?: "es" | "en"
         {remainingModules.map((module) => <DashboardModule key={module.id} {...module} locale={locale} />)}
       </div>
 
-      <div className="mt-6">
-        <DisclaimerBox>
-          {copy.finalDisclaimer}
-        </DisclaimerBox>
-      </div>
+      <aside role="note" className="mt-8 border-t border-brass/20 pt-5 text-[12px] leading-6 text-muted/80" data-dashboard-notice>
+        <p className="max-w-4xl">{copy.finalDisclaimer}</p>
+      </aside>
     </DashboardPresentation>
   );
 }
