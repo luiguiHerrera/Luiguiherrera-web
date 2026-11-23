@@ -1,3 +1,5 @@
+import { CapitalFlowPreviewCard } from "@/components/dashboard/CapitalFlowPreviewCard";
+import { getPublishedCapitalFlows } from "@/lib/dashboard/get-published-capital-flows";
 import { BtcEtfFlowsModule } from "@/components/dashboard/BtcEtfFlowsModule";
 import { DashboardReadingGuide } from "@/components/dashboard/DashboardReadingGuide";
 import { DashboardModule } from "@/components/dashboard/DashboardModule";
@@ -32,6 +34,7 @@ export async function DashboardContent({ locale = "es" }: { locale?: "es" | "en"
     locale === "es" ? getMcClellanData() : Promise.resolve(null),
   ]);
   const { btcEtfFlows, dashboardModules, gldFlowPressure, quantRisk, regimeSummary, sectorModule, sectorRotation, vix, vixTermStructure } = dashboardData;
+  const publishedFlows = locale === "es" ? getPublishedCapitalFlows() : [];
   const weeklyReportData = await buildWeeklyReportData(dashboardData);
   const remainingModules = dashboardModules.filter((module) => module.id !== "rates" && module.id !== "sectors" && module.id !== "vix" && module.id !== "btc-flows");
   const breadthValues = buildMarketBreadthValues(weeklyReportData, locale);
@@ -153,7 +156,7 @@ export async function DashboardContent({ locale = "es" }: { locale?: "es" | "en"
             </details>
           </section>
         ) : null}
-        {btcEtfFlows || gldFlowPressure ? (
+        {publishedFlows.length || btcEtfFlows || gldFlowPressure ? (
           <section className="grid min-w-0 gap-3 [&>*]:min-w-0" aria-labelledby="capital-flows-section" data-capital-flows-section>
             <details data-dashboard-section="flows">
               <summary>
@@ -163,8 +166,10 @@ export async function DashboardContent({ locale = "es" }: { locale?: "es" | "en"
               <div data-dashboard-section-body>
                 <p className="mb-5 max-w-3xl text-sm leading-6 text-muted">{copy.capitalFlowsSubtitle}</p>
                 <div className="grid min-w-0 gap-4 md:gap-5 [&>*]:min-w-0">
-                  {gldFlowPressure ? <GldFlowPressureModule data={gldFlowPressure} locale={locale} /> : null}
-                  {btcEtfFlows ? <BtcEtfFlowsModule data={btcEtfFlows} /> : null}
+                  {publishedFlows.length ? publishedFlows.map(data => <CapitalFlowPreviewCard key={data.id} data={data} />) : <>
+                    {gldFlowPressure ? <GldFlowPressureModule data={gldFlowPressure} locale={locale} /> : null}
+                    {btcEtfFlows ? <BtcEtfFlowsModule data={btcEtfFlows} /> : null}
+                  </>}
                 </div>
               </div>
             </details>

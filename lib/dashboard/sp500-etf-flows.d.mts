@@ -1,0 +1,13 @@
+export type FundObservation = { date: string; nav: number; shares: number; assets?: number | null };
+export type FundPoint = FundObservation & { ticker: string; previousShares: number | null; splitFactor: number; deltaShares: number | null; flow: number | null; status: string };
+export type FundFlows = { ticker: string; points: FundPoint[]; audit: { received: number; invalid: string[]; unclosed: string[]; duplicates: string[]; anomalies: { date: string; reason: string }[]; gaps: string[] } };
+export type AggregatePoint = { date: string; flow: number | null; complete: boolean; funds: { ticker: string; flow: number | null }[] };
+export type FlowWindow = { total: number; positive: number; negative: number; zero: number; sessions: number; start: string; end: string };
+export type FlowInterpretation = { state: 'unavailable' | 'inflows' | 'outflows' | 'mixed'; current: FlowWindow | null; calibration: { windows: number; positiveThreshold?: number; negativeThreshold?: number; start?: string; end?: string } | null };
+export const INTERPRETATION_RULE: { percentile: number; minimumHistory: number; maximumHistory: number };
+export function quantile(values: number[], probability: number): number | null;
+export function buildFundFlows(ticker: string, observations: FundObservation[], options: { asOf: string; splits?: Record<string, number> }): FundFlows;
+export function aggregateFundFlows(funds: FundFlows[], included: string[]): { points: AggregatePoint[]; cutoffDate: string | null; lagging: string[] };
+export function flowWindow(points: AggregatePoint[], sessions: number, endIndex?: number): FlowWindow | null;
+export function interpretFlows(points: AggregatePoint[], sessions: number): FlowInterpretation;
+export function compareRevisions(previous: FundObservation[], current: FundObservation[]): { date: string; before: FundObservation; after: FundObservation }[];
