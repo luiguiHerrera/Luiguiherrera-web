@@ -13,3 +13,8 @@ const archivedSpanishPaths: Readonly<Record<string, string>> = {
 export function archivedReportSpanishPath(pathname: string) {
   return archivedSpanishPaths[pathname] ?? null;
 }
+
+export function englishReportPath(pathname: string) {
+  if (pathname === "/informes/segundo-informe-noviembre-2026") return "/en/weekly-report";
+  return Object.entries(archivedSpanishPaths).find(([, spanishPath]) => spanishPath === pathname)?.[0] ?? null;
+}
