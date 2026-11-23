@@ -111,13 +111,7 @@ export function MarketBreadthPanel({ locale, values, statisticalSource, sectorSo
           <h3 className={dashboardModuleTitleClassName}>{copy.title}</h3>
           <p className="mt-3 text-sm leading-6 text-muted md:text-base">{copy.description}</p>
         </div>
-        <DashboardDisclosureButton
-          controls={contextId}
-          expanded={contextOpen}
-          expandedLabel={copy.hideContext}
-          collapsedLabel={copy.showContext}
-          onClick={() => setContextOpen((open) => !open)}
-        />
+
       </div>
       <div className="mt-5 grid grid-cols-2 border-y border-line md:grid-cols-5" data-breadth-metrics>
         {metrics.map(([label, value], index) => (
@@ -127,6 +121,16 @@ export function MarketBreadthPanel({ locale, values, statisticalSource, sectorSo
           </div>
         ))}
       </div>
+      <div data-context-toggle>
+        <DashboardDisclosureButton
+          controls={contextId}
+          expanded={contextOpen}
+          expandedLabel={copy.hideContext}
+          collapsedLabel={copy.showContext}
+          onClick={() => setContextOpen((open) => !open)}
+        />
+      </div>
+
       {contextOpen ? (
         <div id={contextId} className="mt-5 border-t border-line pt-5" data-breadth-context>
           <div className="grid gap-x-8 gap-y-4 md:grid-cols-2">

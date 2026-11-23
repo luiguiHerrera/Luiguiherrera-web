@@ -11,6 +11,7 @@ test("dashboard chapter children use an explicit h3 module heading without chang
   const page = source("app/(es)/dashboard/page.tsx");
   const childModules = [
     "components/dashboard/VixModule.tsx",
+    "components/dashboard/QuantRiskPanel.tsx",
     "components/dashboard/VixTermStructureModule.tsx",
     "components/dashboard/GldFlowPressureModule.tsx",
     "components/dashboard/BtcEtfFlowsModule.tsx",
@@ -29,6 +30,5 @@ test("dashboard chapter children use an explicit h3 module heading without chang
 
 test("standalone dashboard modules retain top-level h2 headings", () => {
   assert.match(source("components/dashboard/IntegratedRegimeModule.tsx"), /<h2 className=\{dashboardModuleTitleClassName\}>/);
-  assert.match(source("components/dashboard/QuantRiskPanel.tsx"), /<h2 className=\{dashboardModuleTitleClassName\}>/);
   assert.match(source("components/dashboard/DashboardReadingGuide.tsx"), /<h2 id=/);
 });

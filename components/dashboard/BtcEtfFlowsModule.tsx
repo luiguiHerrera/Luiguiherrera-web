@@ -7,6 +7,7 @@ import {
   DashboardModuleHeading,
   DashboardDisclosureButton,
   DashboardStatus,
+  DashboardValueBar,
   dashboardModuleEyebrowClassName,
 } from "@/components/dashboard/DashboardPrimitives";
 import {
@@ -19,6 +20,8 @@ import {
   formatCapitalFlowUsdMillions,
 } from "@/lib/dashboard/capital-flows-presentation";
 import { translateDashboardText } from "@/lib/dashboard/translate-dashboard-copy";
+import { FlowWindowMetrics } from "@/components/dashboard/FlowWindowMetrics";
+import { DetailGrid } from "@/components/dashboard/DetailGrid";
 import type {
   BtcEtfFlowPoint,
   BtcEtfFlowsDashboardData,
@@ -73,27 +76,6 @@ function valueClass(value: number | null) {
   return "text-ink";
 }
 
-function primaryMetricCellClass(index: number) {
-  return [
-    "min-w-0 px-3 py-3 sm:px-4",
-    index === 0 ? "pl-0 sm:pl-0" : "",
-    index === 1 || index === 3 ? "border-l border-line" : "",
-    index >= 2 ? "border-t border-line sm:border-t-0" : "",
-    index === 2 ? "sm:border-l sm:border-line" : "",
-  ].join(" ");
-}
-
-function secondaryMetricCellClass(index: number) {
-  return [
-    "min-w-0 px-3 py-3 sm:px-4",
-    index === 0 ? "pl-0" : "border-t border-line",
-    index % 2 === 1 ? "sm:border-l sm:border-line" : "sm:border-l-0 sm:pl-0",
-    index < 2 ? "sm:border-t-0" : "",
-    index % 3 !== 0 ? "lg:border-l lg:border-line" : "lg:border-l-0 lg:pl-0",
-    index < 3 ? "lg:border-t-0" : "lg:border-t lg:border-line",
-  ].join(" ");
-}
-
 function buildChartData(history: BtcEtfFlowPoint[]) {
   const maxAbs = Math.max(...history.map((point) => Math.abs(point.totalNetFlow)), 1);
   const cumulative = history.reduce<number[]>((values, point) => {
@@ -135,9 +117,10 @@ function FlowBarChart({ history, locale }: { history: BtcEtfFlowPoint[]; locale:
   const active = activeIndex === null ? null : points[activeIndex];
   const latest = history.at(-1) ?? null;
   const middle = history.length ? history[Math.floor((history.length - 1) / 2)] : null;
+  const total = history.reduce((sum, point) => sum + point.totalNetFlow, 0);
 
   return (
-    <div className="min-w-0 bg-panelSoft px-3 py-4 sm:px-5 md:px-6 md:py-5" data-btc-flow-chart>
+    <div className="min-w-0 bg-panelSoft px-3 py-4 sm:px-5 md:px-6 md:py-5" data-btc-flow-chart data-flow-tone={total > 0 ? "positive" : total < 0 ? "negative" : "neutral"}>
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div>
           <p className="text-xs font-semibold uppercase tracking-[0.14em] text-brass">{locale === "en" ? "Recent sessions" : "Sesiones recientes"}</p>
@@ -165,19 +148,21 @@ function FlowBarChart({ history, locale }: { history: BtcEtfFlowPoint[]; locale:
                 />
               ))}
             </svg>
-            {points.map(({ point, cumulative, centerX }, index) => (
+            {points.map(({ point, cumulative, centerX, lineY }, index) => (
               <button
                 key={`${point.date}-${index}`}
                 type="button"
                 aria-label={`${formatCapitalFlowDate(point.date, locale)} · ${locale === "en" ? "daily net flow" : "flujo neto diario"} ${formatCapitalFlowUsdMillions(point.totalNetFlow, locale)} · ${locale === "en" ? "available cumulative" : "acumulado disponible"} ${formatCapitalFlowUsdMillions(cumulative, locale)}`}
-                className="absolute top-[8%] h-[84%] min-w-2 -translate-x-1/2 bg-transparent outline-none focus-visible:ring-2 focus-visible:ring-brass focus-visible:ring-offset-1"
+                className="absolute inset-y-0 min-w-2 -translate-x-1/2 bg-transparent outline-none focus-visible:ring-2 focus-visible:ring-brass focus-visible:ring-offset-1"
                 style={{ left: `${centerX}%`, width: `${Math.max(84 / points.length, 2)}%` }}
                 onMouseEnter={() => setHoveredIndex(index)}
                 onMouseLeave={() => setHoveredIndex(null)}
                 onFocus={() => setFocusedIndex(index)}
                 onBlur={() => setFocusedIndex(null)}
                 data-btc-chart-point
-              />
+              >
+                <span className="absolute left-1/2 h-2 w-2 -translate-x-1/2 -translate-y-1/2 rounded-full border border-[#7d8f9a] bg-panel" style={{ top: `${lineY / 78 * 100}%` }} aria-hidden="true" />
+              </button>
             ))}
             {active ? (
               <div
@@ -213,6 +198,7 @@ function RecentSessionsTable({ history, locale }: { history: BtcEtfFlowPoint[]; 
   const [open, setOpen] = useState(false);
   const tableId = useId();
   const rows = buildBtcRecentSessionRows(history);
+  const maxAbs = Math.max(...rows.map((row) => Math.abs(row.totalNetFlow)), 0.01);
 
   if (!rows.length) return null;
 
@@ -246,7 +232,12 @@ function RecentSessionsTable({ history, locale }: { history: BtcEtfFlowPoint[]; 
               {rows.map((row) => (
                 <tr key={row.date}>
                   <td className="py-2.5 pr-4 font-medium text-ink">{formatCapitalFlowDate(row.date, locale)}</td>
-                  <td className={`px-4 py-2.5 text-right font-semibold tabular-nums ${valueClass(row.totalNetFlow)}`}>{formatCapitalFlowUsdMillions(row.totalNetFlow, locale)}</td>
+                  <td className={`px-4 py-2.5 text-right font-semibold tabular-nums ${valueClass(row.totalNetFlow)}`}>
+                    <span className="ml-auto grid max-w-64 grid-cols-[minmax(4rem,1fr)_auto] items-center gap-4">
+                      <DashboardValueBar value={row.totalNetFlow} max={maxAbs} />
+                      <span>{formatCapitalFlowUsdMillions(row.totalNetFlow, locale)}</span>
+                    </span>
+                  </td>
                   <td className="py-2.5 pl-4 text-right">{flowDirectionLabel(row.totalNetFlow, locale)}</td>
                 </tr>
               ))}
@@ -280,31 +271,25 @@ export function BtcEtfFlowsModule({ assetLabel = "BTC", data }: BtcEtfFlowsModul
   const primaryMetrics = [
     {
       id: "latest",
-      label: locale === "en" ? "Latest net flow" : "Último flujo neto",
+      label: locale === "en" ? "1D · latest net flow" : "1D · último flujo neto",
       value: formatCapitalFlowUsdMillions(flows.latestTotalNetFlow, locale),
       valueClassName: valueClass(flows.latestTotalNetFlow),
     },
     {
-      id: "reading",
-      label: locale === "en" ? "Reading" : "Lectura",
-      value: t(flows.readingLabel),
-      valueClassName: flows.readingSeverity === "pending" ? "text-muted" : "text-ink",
-    },
-    {
       id: "rolling5d",
-      label: "Rolling 5D",
+      label: locale === "en" ? "5D · net flow" : "5D · flujo neto",
       value: formatCapitalFlowUsdMillions(flows.rolling5dNetFlow, locale),
       valueClassName: valueClass(flows.rolling5dNetFlow),
     },
     {
-      id: "streak",
-      label: locale === "en" ? "Streak" : "Racha",
-      value: t(flows.flowStreak.label),
-      valueClassName: "text-ink",
+      id: "rolling20d",
+      label: locale === "en" ? "20D · net flow" : "20D · flujo neto",
+      value: formatRollingFlow(flows.rolling20dNetFlow, locale),
+      valueClassName: valueClass(flows.rolling20dNetFlow),
     },
   ];
   const secondaryMetrics = [
-    ["rolling20d", "Rolling 20D", formatRollingFlow(flows.rolling20dNetFlow, locale)],
+    ["streak", locale === "en" ? "Streak" : "Racha", t(flows.flowStreak.label)],
     ["days", locale === "en" ? "Positive / negative days" : "Días positivos / negativos", positiveNegativeDaysLabel(flows, locale)],
     ["positive", locale === "en" ? "Largest positive contribution" : "Mayor aporte positivo", formatPositiveFundFlow(flows.largestInflowFundLatestDay, locale)],
     ["negative", locale === "en" ? "Largest negative contribution" : "Mayor aporte negativo", formatNegativeFundFlow(flows.largestOutflowFundLatestDay, locale)],
@@ -333,12 +318,30 @@ export function BtcEtfFlowsModule({ assetLabel = "BTC", data }: BtcEtfFlowsModul
               : locale === "en" ? "ETF flow pressure" : "Presión de flujos vía ETFs"}
           </DashboardModuleHeading>
           <p className="mt-3 text-sm leading-6 text-muted md:text-base">{t(flows.readingSubtext)}</p>
+          <p className="mt-2 text-sm font-medium text-ink" data-btc-reading>{t(flows.readingLabel)}</p>
           <div className="mt-3 flex flex-wrap items-baseline gap-x-3 gap-y-1 text-xs leading-5" data-btc-coverage-summary>
             <span className="font-semibold text-ink">{coverageCopy.label}</span>
             <span className="text-muted">{coverageCopy.detail}</span>
           </div>
         </div>
-        <DashboardDisclosureButton
+
+      </div>
+
+      <FlowWindowMetrics asset="btc" title={locale === "en" ? "Published net flows · USD millions" : "Flujos netos publicados · millones de USD"} metrics={primaryMetrics} />
+
+        <div className="mt-5" data-btc-analytical-detail>
+          <FlowBarChart history={flows.history} locale={locale} />
+
+          <section className="mt-5" data-flow-details>
+            <h4 className="text-xs font-semibold uppercase tracking-[0.14em] text-brass">{locale === "en" ? "Proxy detail" : "Detalle del proxy"}</h4>
+            <DetailGrid items={secondaryMetrics.map(([, label, value]) => [label, value])} />
+          </section>
+
+          <div className="mt-5"><RecentSessionsTable history={flows.history} locale={locale} /></div>
+        </div>
+
+      <div data-context-toggle>
+<DashboardDisclosureButton
           controls={contextId}
           expanded={contextOpen}
           expandedLabel={locale === "en" ? "Hide context" : "Ocultar contexto"}
@@ -347,35 +350,9 @@ export function BtcEtfFlowsModule({ assetLabel = "BTC", data }: BtcEtfFlowsModul
         />
       </div>
 
-      <div className="mt-5 grid grid-cols-2 border-y border-line sm:grid-cols-4" data-btc-primary-metrics>
-        {primaryMetrics.map((metric, index) => (
-          <div key={metric.id} className={primaryMetricCellClass(index)} data-btc-primary-metric={metric.id}>
-            <p className="text-[10px] font-semibold uppercase tracking-[0.1em] text-muted sm:text-[11px]">{metric.label}</p>
-            <p className={`mt-1.5 break-words text-sm font-semibold tabular-nums sm:text-base ${metric.valueClassName}`}>{metric.value}</p>
-          </div>
-        ))}
-      </div>
-
       {contextOpen ? (
         <div id={contextId} className="mt-5 border-t border-line pt-5" data-btc-context>
-          <FlowBarChart history={flows.history} locale={locale} />
-
-          <section className="mt-5">
-            <h4 className="text-xs font-semibold uppercase tracking-[0.14em] text-brass">{locale === "en" ? "Supporting detail" : "Detalle complementario"}</h4>
-            <div className="mt-3 grid border-y border-line sm:grid-cols-2 lg:grid-cols-3" data-btc-secondary-metrics>
-              {secondaryMetrics.map(([id, label, value], index) => (
-                <div
-                  key={id}
-                  className={secondaryMetricCellClass(index)}
-                >
-                  <p className="text-[10px] font-semibold uppercase tracking-[0.1em] text-muted sm:text-[11px]">{label}</p>
-                  <p className="mt-1.5 break-words text-sm font-semibold tabular-nums text-ink">{value}</p>
-                </div>
-              ))}
-            </div>
-          </section>
-
-          <div className="mt-5 grid gap-4 border-t border-line pt-5 text-sm leading-6 text-muted lg:grid-cols-2">
+          <div className="grid gap-4 text-sm leading-6 text-muted lg:grid-cols-2">
             <section className="border-l border-brass/50 pl-3">
               <h4 className="font-semibold text-ink">{locale === "en" ? "Prudent interpretation" : "Interpretación prudente"}</h4>
               <p className="mt-1.5">{t(flows.interpretation.how)}</p>
@@ -385,8 +362,6 @@ export function BtcEtfFlowsModule({ assetLabel = "BTC", data }: BtcEtfFlowsModul
               <p className="mt-1.5">{t(flows.interpretation.whatItDoesNotMean)}</p>
             </section>
           </div>
-
-          <RecentSessionsTable history={flows.history} locale={locale} />
 
           <div className="mt-5 flex flex-wrap gap-x-8 gap-y-3 border-t border-line pt-4 text-xs leading-5 text-muted" data-btc-source-metadata>
             <div>

@@ -57,7 +57,21 @@ export function DashboardDisclosureButton({
       className="inline-flex shrink-0 items-center gap-1.5 bg-transparent px-1 py-1 text-xs font-medium text-muted/80 transition-colors hover:text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brass focus-visible:ring-offset-2"
     >
       {expanded ? expandedLabel : collapsedLabel}
-      <span aria-hidden="true">{expanded ? "↑" : "↓"}</span>
+      <span aria-hidden="true" className="text-base">{expanded ? "−" : "+"}</span>
     </button>
+  );
+}
+
+export function DashboardValueBar({ value, max, signed = true }: { value: number | null; max: number; signed?: boolean }) {
+  const available = value !== null && Number.isFinite(value);
+  const width = available ? Math.min(Math.abs(value) / Math.max(max, 0.01), 1) * (signed ? 50 : 100) : 0;
+  return (
+    <span className="relative block h-3 w-full min-w-16" aria-hidden="true" data-value-bar>
+      <span className="absolute inset-x-0 top-1/2 h-px bg-line" />
+      {signed ? <span className="absolute inset-y-0 left-1/2 w-px bg-muted opacity-[0.45]" /> : null}
+      {available && value !== 0 ? (
+        <span className={`absolute top-1/2 h-1.5 -translate-y-1/2 rounded-sm ${value < 0 ? "bg-danger opacity-75" : "bg-sage"}`} style={{ width: `${width}%`, ...(signed && value < 0 ? { right: "50%" } : { left: signed ? "50%" : 0 }) }} />
+      ) : null}
+    </span>
   );
 }

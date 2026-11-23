@@ -8,6 +8,9 @@ import {
   dashboardModuleEyebrowClassName,
 } from "@/components/dashboard/DashboardPrimitives";
 import { capitalFlowTone, formatCapitalFlowDate } from "@/lib/dashboard/capital-flows-presentation";
+import { FlowWindowMetrics } from "@/components/dashboard/FlowWindowMetrics";
+import { DetailGrid } from "@/components/dashboard/DetailGrid";
+import { GldHistoryPanel, GldSessionsTable } from "@/components/dashboard/GldHistoryPanel";
 import { translateDashboardText } from "@/lib/dashboard/translate-dashboard-copy";
 import type { GldFlowPressure } from "@/lib/dashboard/types";
 
@@ -89,15 +92,19 @@ export function GldFlowPressureModule({ data, locale = "es" }: { data: GldFlowPr
       : isEnglish ? "Pending data" : "Dato pendiente";
   const statusTone = data.dataStatus === "available" ? "positive" : data.dataStatus === "delayed" ? "warning" : "neutral";
   const primaryMetrics = [
-    { label: "1D", value: formatPercent(data.oneDayShareChangePct, locale), raw: data.oneDayShareChangePct },
-    { label: "5D", value: formatPercent(data.fiveDayShareChangePct, locale), raw: data.fiveDayShareChangePct },
-    { label: "20D", value: formatPercent(data.twentyDayShareChangePct, locale), raw: data.twentyDayShareChangePct },
+    { id: "1d", label: "1D", value: formatUsd(data.oneDayImpliedPressureUsd, locale), valueClassName: metricValueClass(data.oneDayImpliedPressureUsd), detail: `${formatPercent(data.oneDayShareChangePct, locale)} · ${isEnglish ? "shares" : "participaciones"}` },
+    { id: "5d", label: "5D", value: formatUsd(data.fiveDayImpliedPressureUsd, locale), valueClassName: metricValueClass(data.fiveDayImpliedPressureUsd), detail: `${formatPercent(data.fiveDayShareChangePct, locale)} · ${isEnglish ? "shares" : "participaciones"}` },
+    { id: "20d", label: "20D", value: formatUsd(data.twentyDayImpliedPressureUsd, locale), valueClassName: metricValueClass(data.twentyDayImpliedPressureUsd), detail: `${formatPercent(data.twentyDayShareChangePct, locale)} · ${isEnglish ? "shares" : "participaciones"}` },
   ];
-  const secondaryMetrics = [
+  const number = (value: number | null) => value === null ? isEnglish ? "Pending" : "Dato pendiente" : new Intl.NumberFormat(isEnglish ? "en-US" : "es-ES").format(value);
+  const usdLevel = (value: number | null) => value === null ? isEnglish ? "Pending" : "Dato pendiente" : new Intl.NumberFormat(isEnglish ? "en-US" : "es-ES", { style: "currency", currency: "USD", maximumFractionDigits: 2 }).format(value);
+  const secondaryMetrics: [string, string][] = [
     [isEnglish ? "Shares 1D" : "Participaciones 1D", formatShares(data.oneDayShareChange, locale)],
     [isEnglish ? "Shares 5D" : "Participaciones 5D", formatShares(data.fiveDayShareChange, locale)],
     [isEnglish ? "Shares 20D" : "Participaciones 20D", formatShares(data.twentyDayShareChange, locale)],
-    [isEnglish ? "Approx. implied amount 5D" : "Importe implícito aprox. 5D", formatUsd(data.fiveDayImpliedPressureUsd, locale)],
+    ["NAV · USD", usdLevel(data.nav)],
+    [isEnglish ? "Shares outstanding" : "Participaciones en circulación", number(data.sharesOutstanding)],
+    [isEnglish ? "Net assets · USD" : "Activos netos · USD", usdLevel(data.totalNetAssets)],
   ];
 
   return (
@@ -119,9 +126,30 @@ export function GldFlowPressureModule({ data, locale = "es" }: { data: GldFlowPr
               ? "Estimates creation or redemption pressure from changes in GLD shares outstanding."
               : "Estima la presión de creación o reembolso a partir de cambios en las participaciones en circulación de GLD."}
           </p>
-          <p className="mt-2 text-sm font-semibold text-ink" data-gld-reading>{pressureLabel(data, locale)}</p>
         </div>
-        <DashboardDisclosureButton
+
+      </div>
+
+      <FlowWindowMetrics asset="gld" title={isEnglish ? "Approximate implied amount · USD" : "Importe implícito aproximado · USD"} metrics={primaryMetrics} />
+      <div className="mt-4 grid gap-4 border-b border-line pb-4 sm:grid-cols-2" data-flow-observation>
+        <div><p className="text-xs text-muted">{isEnglish ? "Observation" : "Observación"}</p><p className="mt-2 text-sm font-semibold text-ink" data-gld-reading>{pressureLabel(data, locale)}</p></div>
+        <div><p className="text-xs text-muted">{isEnglish ? "Updated" : "Actualización"}</p><p className="mt-2 text-sm font-medium text-ink">{formatCapitalFlowDate(data.asOf, locale)}</p></div>
+      </div>
+      <GldHistoryPanel history={data.history} locale={locale} />
+
+      <div className="mt-5 border-t border-line pt-5" data-gld-analysis>
+          <div className="grid gap-6">
+            <section data-flow-details>
+              <h4 className="text-xs font-semibold uppercase tracking-[0.14em] text-brass">{isEnglish ? "Proxy detail" : "Detalle del proxy"}</h4>
+              <DetailGrid items={secondaryMetrics} />
+            </section>
+          </div>
+      </div>
+
+      <GldSessionsTable history={data.history} locale={locale} />
+
+      <div data-context-toggle>
+<DashboardDisclosureButton
           controls={contextId}
           expanded={contextOpen}
           expandedLabel={isEnglish ? "Hide context" : "Ocultar contexto"}
@@ -130,31 +158,9 @@ export function GldFlowPressureModule({ data, locale = "es" }: { data: GldFlowPr
         />
       </div>
 
-      <div className="mt-5 grid grid-cols-3 border-y border-line" data-gld-primary-metrics>
-        {primaryMetrics.map((metric, index) => (
-          <div key={metric.label} className={`min-w-0 px-3 py-3 sm:px-4 ${index === 0 ? "pl-0 sm:pl-0" : "border-l border-line"}`}>
-            <p className="text-[10px] font-semibold uppercase tracking-[0.1em] text-muted sm:text-[11px]">{metric.label}</p>
-            <p className={`mt-1.5 break-words text-sm font-semibold tabular-nums sm:text-base ${metricValueClass(metric.raw)}`}>{metric.value}</p>
-          </div>
-        ))}
-      </div>
-
       {contextOpen ? (
         <div id={contextId} className="mt-5 border-t border-line pt-5" data-gld-context>
-          <div className="grid gap-6 lg:grid-cols-2">
-            <section>
-              <h4 className="text-xs font-semibold uppercase tracking-[0.14em] text-brass">{isEnglish ? "Proxy detail" : "Detalle del proxy"}</h4>
-              <div className="mt-3 grid grid-cols-2 border-y border-line" data-gld-secondary-metrics>
-                {secondaryMetrics.map(([label, value], index) => (
-                  <div key={label} className={`min-w-0 px-3 py-3 ${index % 2 === 0 ? "pl-0" : "border-l border-line"} ${index >= 2 ? "border-t border-line" : ""}`}>
-                    <p className="text-[10px] font-semibold uppercase tracking-[0.1em] text-muted sm:text-[11px]">{label}</p>
-                    <p className="mt-1.5 break-words text-sm font-semibold tabular-nums text-ink">{value}</p>
-                  </div>
-                ))}
-              </div>
-            </section>
-
-            <section className="grid content-start gap-4 text-sm leading-6 text-muted">
+            <section className="grid content-start gap-5 text-sm leading-6 text-muted lg:grid-cols-2" data-flow-interpretation>
               <div className="border-l border-brass/50 pl-3">
                 <h4 className="font-semibold text-ink">{isEnglish ? "Prudent interpretation" : "Interpretación prudente"}</h4>
                 <p className="mt-1.5">{pressureInterpretation(data, locale)}</p>
@@ -169,8 +175,6 @@ export function GldFlowPressureModule({ data, locale = "es" }: { data: GldFlowPr
                 </p>
               </div>
             </section>
-          </div>
-
           <div className="mt-5 grid gap-3 border-t border-line pt-4 text-xs leading-5 text-muted sm:grid-cols-2 lg:grid-cols-[0.8fr_0.7fr_0.8fr_1.5fr]" data-gld-source-metadata>
             <div>
               <span className="font-semibold uppercase tracking-[0.12em] text-brass">{isEnglish ? "Source" : "Fuente"}</span>

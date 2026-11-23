@@ -133,7 +133,7 @@ export function SectorDetailPanel({ sector, selectedPeriod, selectedRank, locale
       <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
         <div>
           <p className="text-xs font-semibold uppercase tracking-[0.16em] text-brass">{locale === "en" ? "Selected sector detail" : "Detalle del sector seleccionado"}</p>
-          <h3 className="mt-1 font-serif text-lg font-semibold text-ink">{t(sector.sectorName)}</h3>
+          <h4 className="mt-1 font-serif text-lg font-semibold text-ink">{t(sector.sectorName)}</h4>
           <p className="mt-1 text-sm text-muted">{sector.etfTicker} {locale === "en" ? "as sector proxy" : "como proxy sectorial"}</p>
         </div>
         <p className="text-sm font-semibold text-ink">
@@ -168,11 +168,6 @@ export function SectorDetailPanel({ sector, selectedPeriod, selectedRank, locale
         <MiniReturnChart label={t(selectedSeries?.label) || (locale === "en" ? "Available history" : "Historial disponible")} values={detailPoints} locale={locale} />
       </div>
 
-      <p className="mt-4 text-sm leading-6 text-muted">
-        {locale === "en"
-          ? "Trend is calculated on daily closes, comparing the first segment with the final segment of the displayed period. Sector proxy for context."
-          : "Tendencia calculada sobre cierres diarios, comparando el tramo inicial con el tramo final del periodo mostrado. Proxy sectorial para contexto, no personalizado."}
-      </p>
     </section>
   );
 }

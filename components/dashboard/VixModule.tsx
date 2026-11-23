@@ -62,8 +62,14 @@ function VixLineChart({ history, locale }: { history: VixHistoryPoint[]; locale:
   const latest = history.at(-1) ?? null;
   const middle = history.length ? history[Math.floor((history.length - 1) / 2)] : null;
 
+  // Visual position within the displayed range; not a new market signal.
+  const position = latest && min !== null && max !== null && max > min
+    ? (latest.value - min) / (max - min)
+    : null;
+  const tone = position === null ? "neutral" : position >= 0.75 ? "high" : position <= 0.25 ? "low" : "neutral";
+
   return (
-    <div className="min-w-0 bg-panelSoft px-3 py-4 sm:px-5 md:px-6 md:py-5" data-vix-spot-chart>
+    <div className="min-w-0 bg-panelSoft px-3 py-4 sm:px-5 md:px-6 md:py-5" data-vix-spot-chart data-tone={tone}>
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div>
           <p className="text-xs font-semibold uppercase tracking-[0.14em] text-brass">{locale === "en" ? "Recent evolution" : "Evolución reciente"}</p>
@@ -153,7 +159,7 @@ export function VixModule({ data }: VixModuleProps) {
   return (
     <section className="border border-line bg-panel px-4 py-5 shadow-[0_14px_32px_rgba(51,45,39,0.05)] sm:px-5 md:px-7 md:py-6" data-vix-spot-module>
       <div className="flex flex-wrap items-center justify-between gap-3">
-        <p className={dashboardModuleEyebrowClassName}>{locale === "en" ? "Current level" : "Nivel actual"}</p>
+        <p className={dashboardModuleEyebrowClassName}>{locale === "en" ? "Current VIX level" : "Nivel VIX actual"}</p>
         <span className="inline-flex items-center gap-2 text-[11px] font-normal text-muted/80" data-vix-spot-status>
           <span className={`h-1 w-1 rounded-full ${available && spot.dataStatus === "automated" ? "bg-[#6f8f7b]/70" : "bg-brass/70"}`} aria-hidden="true" />
           {status}
@@ -165,17 +171,7 @@ export function VixModule({ data }: VixModuleProps) {
           <DashboardModuleHeading headingLevel="h3">{locale === "en" ? "Volatility pressure" : "Presión de volatilidad"}</DashboardModuleHeading>
           <p className="mt-3 text-sm leading-6 text-muted md:text-base">{available ? t(spot.vixCompositeSubtext) : unavailable}</p>
         </div>
-        <button
-          type="button"
-          aria-expanded={contextOpen}
-          aria-controls={contextId}
-          onClick={() => setContextOpen((open) => !open)}
-          className="inline-flex shrink-0 items-center gap-1.5 self-start bg-transparent px-1 py-1 text-xs font-medium text-muted/80 transition-colors hover:text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brass focus-visible:ring-offset-2"
-          data-vix-spot-context-trigger
-        >
-          {contextOpen ? locale === "en" ? "Hide context" : "Ocultar contexto" : locale === "en" ? "Show context" : "Mostrar contexto"}
-          <span aria-hidden="true">{contextOpen ? "↑" : "↓"}</span>
-        </button>
+
       </div>
 
       <div className="mt-5 grid grid-cols-2 border-y border-line sm:grid-cols-4" data-vix-spot-metrics>
@@ -187,8 +183,7 @@ export function VixModule({ data }: VixModuleProps) {
         ))}
       </div>
 
-      {contextOpen ? (
-        <div id={contextId} className="mt-5" data-vix-spot-context>
+        <div className="mt-5" data-vix-spot-analysis data-vix-spot-analytical-detail>
           <div className="grid gap-5 xl:grid-cols-[0.42fr_0.58fr] xl:items-start">
             <div className="min-w-0">
               <p className="text-xs font-semibold uppercase tracking-[0.14em] text-brass">{locale === "en" ? "Analytical detail" : "Detalle analítico"}</p>
@@ -205,6 +200,24 @@ export function VixModule({ data }: VixModuleProps) {
             <VixLineChart history={available ? spot.history : []} locale={locale} />
           </div>
 
+        </div>
+
+      <div data-context-toggle>
+<button
+          type="button"
+          aria-expanded={contextOpen}
+          aria-controls={contextId}
+          onClick={() => setContextOpen((open) => !open)}
+          className="inline-flex shrink-0 items-center gap-1.5 self-start bg-transparent px-1 py-1 text-xs font-medium text-muted/80 transition-colors hover:text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brass focus-visible:ring-offset-2"
+          data-vix-spot-context-trigger
+        >
+          {contextOpen ? locale === "en" ? "Hide context" : "Ocultar contexto" : locale === "en" ? "Show context" : "Mostrar contexto"}
+          <span aria-hidden="true">{contextOpen ? "↑" : "↓"}</span>
+        </button>
+      </div>
+
+      {contextOpen ? (
+        <div id={contextId} className="mt-5" data-vix-spot-context>
           <div className="mt-4 grid gap-3 border-t border-line pt-4 text-sm leading-6 text-muted lg:grid-cols-2">
             <div className="bg-panelSoft/35 px-4 py-3"><h4 className="text-sm font-semibold text-ink">{locale === "en" ? "Prudent interpretation" : "Interpretación prudente"}</h4><p className="mt-1.5">{available ? t(spot.interpretation.how) : unavailable}</p></div>
             <div className="bg-panelSoft/35 px-4 py-3"><h4 className="text-sm font-semibold text-ink">{locale === "en" ? "What it does not mean" : "Qué NO significa"}</h4><p className="mt-1.5">{t(spot?.interpretation.whatItDoesNotMean)}</p></div>

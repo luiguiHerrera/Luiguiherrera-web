@@ -8,7 +8,7 @@ export function DashboardReadingGuide({ locale }: { locale: "es" | "en" }) {
   const contentId = useId();
   const copy = locale === "en"
     ? {
-        eyebrow: "Reading guide",
+        eyebrow: "Guide",
         title: "How to read this dashboard",
         description: "This dashboard combines market regime, sector rotation, market breadth, quantitative risk, implied volatility, and capital flows to provide complementary views of the market environment. No individual block—including VIX, GLD, or spot Bitcoin ETFs—is a buy or sell signal on its own; the readings gain context when they agree or diverge.",
         show: "Expand guide",
@@ -23,7 +23,7 @@ export function DashboardReadingGuide({ locale }: { locale: "es" | "en" }) {
         ],
       }
     : {
-        eyebrow: "Guía de lectura",
+        eyebrow: "Guía",
         title: "Cómo leer este dashboard",
         description: "Este dashboard combina régimen de mercado, rotación sectorial, amplitud de mercado, riesgo cuantitativo, volatilidad implícita y flujos de capital para ofrecer perspectivas complementarias del entorno. Ningún bloque —incluidos VIX, GLD y los ETF spot de Bitcoin— constituye por sí solo una señal de compra o venta; las lecturas ganan contexto cuando coinciden o divergen.",
         show: "Ampliar guía",
@@ -44,7 +44,6 @@ export function DashboardReadingGuide({ locale }: { locale: "es" | "en" }) {
         <div className="max-w-3xl">
           <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-brass">{copy.eyebrow}</p>
           <h2 id={`${contentId}-title`} className="mt-1.5 font-serif text-xl font-semibold text-ink md:text-2xl">{copy.title}</h2>
-          <p className="mt-2 text-sm leading-6 text-muted">{copy.description}</p>
         </div>
         <DashboardDisclosureButton
           controls={contentId}
@@ -57,6 +56,7 @@ export function DashboardReadingGuide({ locale }: { locale: "es" | "en" }) {
 
       {open ? (
         <div id={contentId} className="mt-4 grid gap-x-8 gap-y-4 border-t border-line pt-4 text-sm leading-6 text-muted md:grid-cols-2">
+          <p className="text-sm leading-6 text-muted md:col-span-2">{copy.description}</p>
           {copy.items.map(([label, value]) => (
             <section key={label} className="border-l border-petrol/20 pl-3">
               <h3 className="font-semibold text-ink">{label}</h3>
