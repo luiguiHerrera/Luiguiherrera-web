@@ -1,4 +1,5 @@
 import type { MetadataRoute } from "next";
+import englishArchive from "@/lib/reports/english-archive-catalogue.json";
 import { absoluteUrl, indexableRoutePaths, languageAlternates } from "@/lib/seo/site";
 import { marketReports, reportHref } from "@/lib/reports/market-reports";
 
@@ -29,5 +30,13 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: report.status === "actual" ? 0.85 : 0.65,
   }));
 
-  return [...mainRoutes, ...reportRoutes];
+  const englishReportRoutes = englishArchive.map(report => ({
+    url: absoluteUrl(report.href),
+    lastModified: new Date(report.modifiedAt),
+    changeFrequency: "monthly" as const,
+    priority: 0.65,
+    alternates: { languages: { en: absoluteUrl(report.href), es: absoluteUrl(report.spanishHref) } },
+  }));
+
+  return [...mainRoutes, ...reportRoutes, ...englishReportRoutes];
 }

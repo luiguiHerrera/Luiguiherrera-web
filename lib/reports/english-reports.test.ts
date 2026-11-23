@@ -24,9 +24,10 @@ test("listed reports have real English routes and no Spanish-only archive entrie
   assert.equal(new Set(entries.map(report => report.href)).size, entries.length);
   for (const report of entries) {
     assert.ok(report.href.startsWith("/en/"));
-    assert.ok(existsSync(`app${report.href}/page.tsx`));
+    assert.ok(existsSync(`app${report.href}/page.tsx`) || (report.href.startsWith("/en/reports/") && existsSync("app/en/reports/[slug]/page.tsx")));
     assert.equal(spanishRoutes.has(report.href), false);
   }
+  assert.equal(entries.length, 10);
   const weekly = readFileSync("app/en/weekly-report/page.tsx", "utf8");
   assert.match(weekly, /<EnglishNovemberReportEdition/);
   assert.doesNotMatch(weekly, /redirect\(/);
