@@ -5,6 +5,8 @@ import { DashboardPresentation } from "@/components/dashboard/DashboardPresentat
 import { GldFlowPressureModule } from "@/components/dashboard/GldFlowPressureModule";
 import { IntegratedRegimeModule } from "@/components/dashboard/IntegratedRegimeModule";
 import { MarketBreadthPanel } from "@/components/dashboard/MarketBreadthPanel";
+import { McClellanPreviewModule } from "@/components/dashboard/McClellanPreviewModule";
+import { getMcClellanData } from "@/lib/dashboard/get-mcclellan-data";
 import { QuantRiskPanel } from "@/components/dashboard/QuantRiskPanel";
 import { SectorRotationChart, SectorRotationUnavailable } from "@/components/dashboard/SectorRotationChart";
 import { VixModule } from "@/components/dashboard/VixModule";
@@ -16,7 +18,7 @@ import { buildMarketBreadthValues } from "@/lib/dashboard/market-breadth";
 import { getRouteMetadata } from "@/lib/seo/site";
 import { buildWeeklyReportData } from "@/lib/reports/build-weekly-report-data";
 
-export const revalidate = 86400;
+export const revalidate = 3600;
 
 export const metadata = getRouteMetadata("/dashboard");
 
@@ -25,7 +27,10 @@ export default async function DashboardPage() {
 }
 
 export async function DashboardContent({ locale = "es" }: { locale?: "es" | "en" }) {
-  const dashboardData = await getDashboardData();
+  const [dashboardData, mcClellan] = await Promise.all([
+    getDashboardData(),
+    locale === "es" ? getMcClellanData() : Promise.resolve(null),
+  ]);
   const { btcEtfFlows, dashboardModules, gldFlowPressure, quantRisk, regimeSummary, sectorModule, sectorRotation, vix, vixTermStructure } = dashboardData;
   const weeklyReportData = await buildWeeklyReportData(dashboardData);
   const remainingModules = dashboardModules.filter((module) => module.id !== "rates" && module.id !== "sectors" && module.id !== "vix" && module.id !== "btc-flows");
@@ -126,6 +131,7 @@ export async function DashboardContent({ locale = "es" }: { locale?: "es" | "en"
                     status: sectorRotation?.dataStatus ?? sectorModule.dataStatus,
                   }}
                 />
+                {mcClellan ? <McClellanPreviewModule data={mcClellan} /> : locale === "es" ? <section className="rounded border border-line p-6"><p className="text-xs uppercase tracking-widest text-brass">McClellan</p><h3 className="mt-3 font-serif text-2xl text-ink">Amplitud interna del S&amp;P 500</h3><p className="mt-3 text-sm text-muted">Datos no disponibles. La fuente se comprobará de nuevo automáticamente.</p></section> : null}
               </div>
             </div>
           </details>
