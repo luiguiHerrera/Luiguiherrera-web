@@ -1,25 +1,23 @@
 import { ReportsArchive, type ArchiveReport } from "@/components/reports/ReportsArchive";
 import { currentEnglishReport, englishReportsNewestFirst, previousEnglishReports } from "@/lib/reports/english-reports";
 import { getRouteMetadata } from "@/lib/seo/site";
-import { getStatisticalLevelsManifest } from "@/lib/statistical-levels/get-statistical-levels-data";
+import { secondNovember2026EnglishReport as edition } from "@/lib/reports/second-november-2026.en";
 
-export const revalidate = 86400;
 export const metadata = getRouteMetadata("/en/reports");
 
-export default async function ReportsPage() {
-  const { generatedAt: dataThrough } = await getStatisticalLevelsManifest();
-  const monthKey = dataThrough.slice(0, 7);
+export default function ReportsPage() {
   const reports: ArchiveReport[] = [
     {
-      id: "weekly-market-report",
+      id: edition.id,
       title: currentEnglishReport.title,
       label: "Current report",
       summary: currentEnglishReport.summary,
       excerpt: currentEnglishReport.summary,
-      monthKey,
-      monthLabel: monthKey,
-      dataThrough,
-      publishedAt: null,
+      monthKey: edition.monthKey,
+      monthLabel: edition.monthLabel,
+      dataThrough: edition.automaticDataCutoffAt,
+      editionAt: edition.editionAt,
+      publishedAt: edition.publishedAt,
       status: "actual",
       href: currentEnglishReport.href,
       downloads: [],

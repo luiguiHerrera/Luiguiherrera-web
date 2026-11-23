@@ -28,7 +28,7 @@ test("listed reports have real English routes and no Spanish-only archive entrie
     assert.equal(spanishRoutes.has(report.href), false);
   }
   const weekly = readFileSync("app/en/weekly-report/page.tsx", "utf8");
-  assert.match(weekly, /<WeeklyReportEdition data=\{reportData\}/);
+  assert.match(weekly, /<EnglishNovemberReportEdition/);
   assert.doesNotMatch(weekly, /redirect\(/);
 });
 

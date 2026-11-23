@@ -5,10 +5,12 @@ export type EnglishReportEntry = {
   summary: string;
 };
 
+import { secondNovember2026EnglishReport as report } from "./second-november-2026.en.ts";
+
 export const currentEnglishReport = {
   href: "/en/weekly-report",
-  title: "Weekly market report",
-  summary: "Market regime, ETFs, sectors, volatility and flows, with context, scenarios and watchpoints.",
+  title: report.title,
+  summary: report.summary,
 } as const;
 
 // The existing editorial archive is Spanish-only. Add an entry here only when
