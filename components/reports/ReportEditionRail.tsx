@@ -7,7 +7,8 @@ import styles from "./report-premium.module.css";
 
 const assets = ["SPY", "GLD", "FXI", "EWJ", "BTC", "ETH"];
 
-export function ReportEditionRail({ sections, monthLabel }: { sections: ReportEditorialSection[]; monthLabel: string }) {
+export function ReportEditionRail({ sections, monthLabel, locale = "es", editionLabel }: { sections: Pick<ReportEditorialSection, "id" | "eyebrow">[]; monthLabel: string; locale?: "es" | "en"; editionLabel?: string }) {
+  const isEnglish = locale === "en";
   const [active, setActive] = useState(sections[0]?.id);
   useEffect(() => {
     const observer = new IntersectionObserver(entries => {
@@ -33,10 +34,10 @@ export function ReportEditionRail({ sections, monthLabel }: { sections: ReportEd
     {section.id === "lectura-seguimiento" ? <ul className={styles.railAssets}>{assets.map(ticker => <li key={ticker}><a href={`#${ticker.toLowerCase()}`} onClick={() => navigate(ticker.toLowerCase())}>{ticker}</a></li>)}</ul> : null}
   </li>)}</ul>;
 
-  return <aside className={styles.rail} aria-label="Navegación del informe">
+  return <aside className={styles.rail} aria-label={isEnglish ? "Report navigation" : "Navegación del informe"}>
     <div className={styles.railBrand}><Image src="/brand/luigui-herrera/v1/luigui-herrera-monograma-lh-transparent-lossless.webp" alt="" width={680} height={824} sizes="44px" className={styles.railLogo} /><p>Luigui Herrera</p></div>
-    <div className={styles.railEdition}><p>Informe de mercado</p><strong>{monthLabel}</strong><span>Segunda edición</span></div>
-    <nav className={styles.desktopRail} aria-label="Índice de la edición">{navigation}</nav>
-    <details className={styles.mobileRail}><summary>Recorrer esta edición <span aria-hidden="true">＋</span></summary><nav aria-label="Índice de la edición">{navigation}</nav></details>
+    <div className={styles.railEdition}><p>{isEnglish ? "Market report" : "Informe de mercado"}</p><strong>{monthLabel}</strong><span>{editionLabel ?? (isEnglish ? "Second edition" : "Segunda edición")}</span></div>
+    <nav className={styles.desktopRail} aria-label={isEnglish ? "Edition contents" : "Índice de la edición"}>{navigation}</nav>
+    <details className={styles.mobileRail}><summary>{isEnglish ? "Browse this report" : "Recorrer esta edición"} <span aria-hidden="true">＋</span></summary><nav aria-label={isEnglish ? "Edition contents" : "Índice de la edición"}>{navigation}</nav></details>
   </aside>;
 }
