@@ -783,7 +783,9 @@ jobs:
           node --import ./scripts/trends-test-register.mjs --experimental-test-module-mocks --experimental-strip-types --test --test-reporter=tap \
             lib/portfolio-fragility/*.test.ts \
             lib/trends/trends.test.tsx lib/trends/research/*.test.tsx \
-            lib/statistical-levels/contracts.test.ts components/statistical-levels/interaction-presentation.test.ts \
+            lib/statistical-levels/baseline.test.mjs lib/statistical-levels/contracts.test.ts lib/statistical-levels/defect-repairs.test.ts \
+            scripts/statistical-levels-storage.test.mjs components/statistical-levels/interaction-presentation.test.ts \
+            lib/reports/first-september-2026.test.mts lib/reports/second-september-2026.test.mts lib/reports/second-september-source-policy.test.mts \
             lib/reports/english-reports.test.ts lib/reports/english-complete-archive.test.mjs \
             lib/reports/english-november-edition.test.mjs lib/reports/reports-archive.test.mjs \
             lib/reports/weekly-report-editorial.test.mjs
