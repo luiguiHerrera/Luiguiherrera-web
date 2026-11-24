@@ -123,8 +123,8 @@ This section is a complementary discovery aid, not an official indexing protocol
 
 ### Segundo informe de noviembre de 2026
 - Primary canonical editorial URL: https://www.luiguiherrera.com/informes/segundo-informe-noviembre-2026
-- Description: Beneficios sólidos, capital selectivo y condiciones financieras: lectura de SPY, GLD, FXI, EWJ, BTC y ETH al cierre del 13 de noviembre de 2026.
-- Published: 2026-11-17
+- Description: Beneficios sólidos, capital selectivo: el mercado que se esconde detrás del índice.
+- Published: 2026-11-23
 - Markdown auxiliary machine-readable representation: https://www.luiguiherrera.com/reports/segundo-informe-noviembre-2026.md
 - PDF human-readable download: https://www.luiguiherrera.com/reports/segundo-informe-noviembre-2026.pdf
 - Secondary downloadable HTML representation: https://www.luiguiherrera.com/reports/segundo-informe-noviembre-2026.html

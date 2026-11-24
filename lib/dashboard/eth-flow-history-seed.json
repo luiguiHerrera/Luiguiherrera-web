@@ -1,0 +1,448 @@
+{
+  "source": "https://growyourethereum.com/data/ethereum-etf-flows",
+  "license": "https://creativecommons.org/licenses/by/4.0/",
+  "creator": "GrowYourEthereum",
+  "generated": "2026-10-24",
+  "units": "USD",
+  "universe": [
+    "ETHA",
+    "ETHB",
+    "FETH",
+    "ETHW",
+    "TETH",
+    "ETHV",
+    "QETH",
+    "EZET",
+    "MSSE",
+    "ETHE",
+    "ETH"
+  ],
+  "sourceFirstDate": "2024-07-23",
+  "points": [
+    {
+      "date": "2026-07-28",
+      "flow": 14500000,
+      "complete": true,
+      "funds": []
+    },
+    {
+      "date": "2026-07-29",
+      "flow": -18600000,
+      "complete": true,
+      "funds": []
+    },
+    {
+      "date": "2026-07-30",
+      "flow": 13200000,
+      "complete": true,
+      "funds": []
+    },
+    {
+      "date": "2026-07-31",
+      "flow": 9000000,
+      "complete": true,
+      "funds": []
+    },
+    {
+      "date": "2026-08-03",
+      "flow": -11300000,
+      "complete": true,
+      "funds": []
+    },
+    {
+      "date": "2026-08-04",
+      "flow": 53700000,
+      "complete": true,
+      "funds": []
+    },
+    {
+      "date": "2026-08-05",
+      "flow": 60800000,
+      "complete": true,
+      "funds": []
+    },
+    {
+      "date": "2026-08-06",
+      "flow": 92100000,
+      "complete": true,
+      "funds": []
+    },
+    {
+      "date": "2026-08-07",
+      "flow": 49600000,
+      "complete": true,
+      "funds": []
+    },
+    {
+      "date": "2026-08-10",
+      "flow": -14600000,
+      "complete": true,
+      "funds": []
+    },
+    {
+      "date": "2026-08-11",
+      "flow": -1700000,
+      "complete": true,
+      "funds": []
+    },
+    {
+      "date": "2026-08-12",
+      "flow": 7400000,
+      "complete": true,
+      "funds": []
+    },
+    {
+      "date": "2026-08-13",
+      "flow": 6700000,
+      "complete": true,
+      "funds": []
+    },
+    {
+      "date": "2026-08-14",
+      "flow": 0,
+      "complete": true,
+      "funds": []
+    },
+    {
+      "date": "2026-08-17",
+      "flow": 30900000,
+      "complete": true,
+      "funds": []
+    },
+    {
+      "date": "2026-08-18",
+      "flow": 71400000,
+      "complete": true,
+      "funds": []
+    },
+    {
+      "date": "2026-08-19",
+      "flow": 189100000,
+      "complete": true,
+      "funds": []
+    },
+    {
+      "date": "2026-08-20",
+      "flow": 220700000,
+      "complete": true,
+      "funds": []
+    },
+    {
+      "date": "2026-08-21",
+      "flow": 184800000,
+      "complete": true,
+      "funds": []
+    },
+    {
+      "date": "2026-08-24",
+      "flow": 115600000,
+      "complete": true,
+      "funds": []
+    },
+    {
+      "date": "2026-08-25",
+      "flow": 179800000,
+      "complete": true,
+      "funds": []
+    },
+    {
+      "date": "2026-08-26",
+      "flow": 192400000,
+      "complete": true,
+      "funds": []
+    },
+    {
+      "date": "2026-08-27",
+      "flow": 234400000,
+      "complete": true,
+      "funds": []
+    },
+    {
+      "date": "2026-08-28",
+      "flow": 102100000,
+      "complete": true,
+      "funds": []
+    },
+    {
+      "date": "2026-08-31",
+      "flow": 87600000,
+      "complete": true,
+      "funds": []
+    },
+    {
+      "date": "2026-09-01",
+      "flow": 10900000,
+      "complete": true,
+      "funds": []
+    },
+    {
+      "date": "2026-09-02",
+      "flow": -48200000,
+      "complete": true,
+      "funds": []
+    },
+    {
+      "date": "2026-09-03",
+      "flow": 141400000,
+      "complete": true,
+      "funds": []
+    },
+    {
+      "date": "2026-09-04",
+      "flow": 26400000,
+      "complete": true,
+      "funds": []
+    },
+    {
+      "date": "2026-09-08",
+      "flow": -24300000,
+      "complete": true,
+      "funds": []
+    },
+    {
+      "date": "2026-09-09",
+      "flow": 34700000,
+      "complete": true,
+      "funds": []
+    },
+    {
+      "date": "2026-09-10",
+      "flow": -29900000,
+      "complete": true,
+      "funds": []
+    },
+    {
+      "date": "2026-09-11",
+      "flow": 216400000,
+      "complete": true,
+      "funds": []
+    },
+    {
+      "date": "2026-09-14",
+      "flow": 121100000,
+      "complete": true,
+      "funds": []
+    },
+    {
+      "date": "2026-09-15",
+      "flow": -142000000,
+      "complete": true,
+      "funds": []
+    },
+    {
+      "date": "2026-09-16",
+      "flow": -224100000,
+      "complete": true,
+      "funds": []
+    },
+    {
+      "date": "2026-09-17",
+      "flow": -39300000,
+      "complete": true,
+      "funds": []
+    },
+    {
+      "date": "2026-09-18",
+      "flow": 143700000,
+      "complete": true,
+      "funds": []
+    },
+    {
+      "date": "2026-09-21",
+      "flow": 270000000,
+      "complete": true,
+      "funds": []
+    },
+    {
+      "date": "2026-09-22",
+      "flow": 162200000,
+      "complete": true,
+      "funds": []
+    },
+    {
+      "date": "2026-09-23",
+      "flow": 104500000,
+      "complete": true,
+      "funds": []
+    },
+    {
+      "date": "2026-09-24",
+      "flow": 66100000,
+      "complete": true,
+      "funds": []
+    },
+    {
+      "date": "2026-09-25",
+      "flow": 87000000,
+      "complete": true,
+      "funds": []
+    },
+    {
+      "date": "2026-09-28",
+      "flow": 17100000,
+      "complete": true,
+      "funds": []
+    },
+    {
+      "date": "2026-09-29",
+      "flow": -2800000,
+      "complete": true,
+      "funds": []
+    },
+    {
+      "date": "2026-09-30",
+      "flow": -59600000,
+      "complete": true,
+      "funds": []
+    },
+    {
+      "date": "2026-10-01",
+      "flow": -55400000,
+      "complete": true,
+      "funds": []
+    },
+    {
+      "date": "2026-10-02",
+      "flow": -37400000,
+      "complete": true,
+      "funds": []
+    },
+    {
+      "date": "2026-10-05",
+      "flow": -50800000,
+      "complete": true,
+      "funds": []
+    },
+    {
+      "date": "2026-10-06",
+      "flow": -201900000,
+      "complete": true,
+      "funds": []
+    },
+    {
+      "date": "2026-10-07",
+      "flow": -160900000,
+      "complete": true,
+      "funds": []
+    },
+    {
+      "date": "2026-10-08",
+      "flow": -72500000,
+      "complete": true,
+      "funds": []
+    },
+    {
+      "date": "2026-10-09",
+      "flow": -56100000,
+      "complete": true,
+      "funds": []
+    },
+    {
+      "date": "2026-10-12",
+      "flow": -85400000,
+      "complete": true,
+      "funds": []
+    },
+    {
+      "date": "2026-10-13",
+      "flow": 24800000,
+      "complete": true,
+      "funds": []
+    },
+    {
+      "date": "2026-10-14",
+      "flow": -129500000,
+      "complete": true,
+      "funds": []
+    },
+    {
+      "date": "2026-10-15",
+      "flow": -60300000,
+      "complete": true,
+      "funds": []
+    },
+    {
+      "date": "2026-10-16",
+      "flow": -69700000,
+      "complete": true,
+      "funds": []
+    },
+    {
+      "date": "2026-10-19",
+      "flow": -103300000,
+      "complete": true,
+      "funds": []
+    },
+    {
+      "date": "2026-10-20",
+      "flow": -26100000,
+      "complete": true,
+      "funds": []
+    },
+    {
+      "date": "2026-10-21",
+      "flow": 14900000,
+      "complete": true,
+      "funds": []
+    },
+    {
+      "date": "2026-10-22",
+      "flow": -110600000,
+      "complete": true,
+      "funds": []
+    },
+    {
+      "date": "2026-10-23",
+      "flow": null,
+      "complete": false,
+      "funds": []
+    }
+  ],
+  "lastCompleteDate": "2026-10-22",
+  "latestFunds": [
+    {
+      "ticker": "ETHA",
+      "flow": -75500000
+    },
+    {
+      "ticker": "ETHB",
+      "flow": -17200000
+    },
+    {
+      "ticker": "FETH",
+      "flow": 2400000
+    },
+    {
+      "ticker": "ETHW",
+      "flow": 0
+    },
+    {
+      "ticker": "TETH",
+      "flow": 0
+    },
+    {
+      "ticker": "ETHV",
+      "flow": 0
+    },
+    {
+      "ticker": "QETH",
+      "flow": 0
+    },
+    {
+      "ticker": "EZET",
+      "flow": 0
+    },
+    {
+      "ticker": "MSSE",
+      "flow": 0
+    },
+    {
+      "ticker": "ETHE",
+      "flow": -9600000
+    },
+    {
+      "ticker": "ETH",
+      "flow": -10700000
+    }
+  ]
+}

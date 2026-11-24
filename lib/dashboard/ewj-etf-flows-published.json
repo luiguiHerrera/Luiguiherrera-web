@@ -1,0 +1,4456 @@
+{
+  "id": "ewj",
+  "title": "Japón · Flujos de EWJ",
+  "eyebrow": "RENTA VARIABLE JAPONESA",
+  "description": "Creaciones y reembolsos netos estimados de EWJ, expresados en USD.",
+  "kind": "estimated",
+  "metricBasis": "daily-sum",
+  "cutoffDate": "2026-11-20",
+  "points": [
+    {
+      "date": "2025-04-22",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2025-04-23",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2025-04-24",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2025-04-25",
+      "flow": -147988453.2,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": -147988453.2
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2025-04-28",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2025-04-29",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2025-04-30",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2025-05-01",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2025-05-02",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2025-05-05",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2025-05-06",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2025-05-07",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2025-05-08",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2025-05-09",
+      "flow": 129804296.4,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 129804296.4
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2025-05-12",
+      "flow": 76422457.65,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 76422457.65
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2025-05-13",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2025-05-14",
+      "flow": 64364949,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 64364949
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2025-05-15",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2025-05-16",
+      "flow": -217307202,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": -217307202
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2025-05-19",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2025-05-20",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2025-05-21",
+      "flow": 75721922.85000001,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 75721922.85000001
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2025-05-22",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2025-05-23",
+      "flow": -87618951.60000001,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": -87618951.60000001
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2025-05-27",
+      "flow": 67232804.39999999,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 67232804.39999999
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2025-05-28",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2025-05-29",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2025-05-30",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2025-06-02",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2025-06-03",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2025-06-04",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2025-06-05",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2025-06-06",
+      "flow": -88498684.8,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": -88498684.8
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2025-06-09",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2025-06-10",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2025-06-11",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2025-06-12",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2025-06-13",
+      "flow": -66051332.10000001,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": -66051332.10000001
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2025-06-16",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2025-06-17",
+      "flow": 75869166.45,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 75869166.45
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2025-06-18",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2025-06-20",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2025-06-23",
+      "flow": 151125044.70000002,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 151125044.70000002
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2025-06-24",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2025-06-25",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2025-06-26",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2025-06-27",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2025-06-30",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2025-07-01",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2025-07-02",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2025-07-03",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2025-07-07",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2025-07-08",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2025-07-09",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2025-07-10",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2025-07-11",
+      "flow": 151821287.1,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 151821287.1
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2025-07-14",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2025-07-15",
+      "flow": 85934005.2,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 85934005.2
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2025-07-16",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2025-07-17",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2025-07-18",
+      "flow": -32299117.650000002,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": -32299117.650000002
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2025-07-21",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2025-07-22",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2025-07-23",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2025-07-24",
+      "flow": 57309897.75,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 57309897.75
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2025-07-25",
+      "flow": -147622606.95000002,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": -147622606.95000002
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2025-07-28",
+      "flow": 144804494.25,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 144804494.25
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2025-07-29",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2025-07-30",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2025-07-31",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2025-08-01",
+      "flow": -133257969.00000001,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": -133257969.00000001
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2025-08-04",
+      "flow": -45144725.4,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": -45144725.4
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2025-08-05",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2025-08-06",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2025-08-07",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2025-08-08",
+      "flow": -105369252.3,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": -105369252.3
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2025-08-11",
+      "flow": -140103581.4,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": -140103581.4
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2025-08-12",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2025-08-13",
+      "flow": -59465264.25,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": -59465264.25
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2025-08-14",
+      "flow": -141771702.6,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": -141771702.6
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2025-08-15",
+      "flow": -132116824.95,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": -132116824.95
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2025-08-18",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2025-08-19",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2025-08-20",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2025-08-21",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2025-08-22",
+      "flow": -60281722.5,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": -60281722.5
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2025-08-25",
+      "flow": -118578471,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": -118578471
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2025-08-26",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2025-08-27",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2025-08-28",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2025-08-29",
+      "flow": -140544757.8,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": -140544757.8
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2025-09-02",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2025-09-03",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2025-09-04",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2025-09-05",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2025-09-08",
+      "flow": 121163731.49999999,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 121163731.49999999
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2025-09-09",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2025-09-10",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2025-09-11",
+      "flow": -12201564.6,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": -12201564.6
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2025-09-12",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2025-09-15",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2025-09-16",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2025-09-17",
+      "flow": -72903366.9,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": -72903366.9
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2025-09-18",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2025-09-19",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2025-09-22",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2025-09-23",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2025-09-24",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2025-09-25",
+      "flow": -72240497.1,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": -72240497.1
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2025-09-26",
+      "flow": -265668664.8,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": -265668664.8
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2025-09-29",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2025-09-30",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2025-10-01",
+      "flow": 12095369.549999999,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 12095369.549999999
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2025-10-02",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2025-10-03",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2025-10-06",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2025-10-07",
+      "flow": 159100065.15,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 159100065.15
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2025-10-08",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2025-10-09",
+      "flow": -576009308.4,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": -576009308.4
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2025-10-10",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2025-10-13",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2025-10-14",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2025-10-15",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2025-10-16",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2025-10-17",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2025-10-20",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2025-10-21",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2025-10-22",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2025-10-23",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2025-10-24",
+      "flow": 61888038.00000001,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 61888038.00000001
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2025-10-27",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2025-10-28",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2025-10-29",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2025-10-30",
+      "flow": 37279952.099999994,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 37279952.099999994
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2025-10-31",
+      "flow": 150540769.8,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 150540769.8
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2025-11-03",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2025-11-04",
+      "flow": 37215126,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 37215126
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2025-11-05",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2025-11-06",
+      "flow": 161587748.39999998,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 161587748.39999998
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2025-11-07",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2025-11-10",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2025-11-11",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2025-11-12",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2025-11-13",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2025-11-14",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2025-11-17",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2025-11-18",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2025-11-19",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2025-11-20",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2025-11-21",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2025-11-24",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2025-11-25",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2025-11-26",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2025-11-28",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2025-12-01",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2025-12-02",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2025-12-03",
+      "flow": -86794053.14999999,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": -86794053.14999999
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2025-12-04",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2025-12-05",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2025-12-08",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2025-12-09",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2025-12-10",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2025-12-11",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2025-12-12",
+      "flow": -62610585.74999999,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": -62610585.74999999
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2025-12-15",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2025-12-16",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2025-12-17",
+      "flow": 130953147.6,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 130953147.6
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2025-12-18",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2025-12-19",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2025-12-22",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2025-12-23",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2025-12-24",
+      "flow": 36427902.300000004,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 36427902.300000004
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2025-12-26",
+      "flow": 157870385.39999998,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 157870385.39999998
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2025-12-29",
+      "flow": 36477971.55,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 36477971.55
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2025-12-30",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2025-12-31",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2026-01-02",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2026-01-05",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2026-01-06",
+      "flow": 149570463.6,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 149570463.6
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2026-01-07",
+      "flow": 99435606,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 99435606
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2026-01-08",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2026-01-09",
+      "flow": 114117296.85,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 114117296.85
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2026-01-12",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2026-01-13",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2026-01-14",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2026-01-15",
+      "flow": 128584495.50000001,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 128584495.50000001
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2026-01-16",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2026-01-20",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2026-01-21",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2026-01-22",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2026-01-23",
+      "flow": -127238178,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": -127238178
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2026-01-26",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2026-01-27",
+      "flow": -115932744.45,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": -115932744.45
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2026-01-28",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2026-01-29",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2026-01-30",
+      "flow": -89815608.75,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": -89815608.75
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2026-02-02",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2026-02-03",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2026-02-04",
+      "flow": -25991764.2,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": -25991764.2
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2026-02-05",
+      "flow": 270503339.40000004,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 270503339.40000004
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2026-02-06",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2026-02-09",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2026-02-10",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2026-02-11",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2026-02-12",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2026-02-13",
+      "flow": 434756097.75,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 434756097.75
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2026-02-17",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2026-02-18",
+      "flow": 205813712.25,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 205813712.25
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2026-02-19",
+      "flow": 300655261.5,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 300655261.5
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2026-02-20",
+      "flow": 451205038.35,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 451205038.35
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2026-02-23",
+      "flow": 367524896.4,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 367524896.4
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2026-02-24",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2026-02-25",
+      "flow": 124294724.1,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 124294724.1
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2026-02-26",
+      "flow": 96487926.15,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 96487926.15
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2026-02-27",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2026-03-02",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2026-03-03",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2026-03-04",
+      "flow": 292069212.59999996,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 292069212.59999996
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2026-03-05",
+      "flow": 77050166.39999999,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 77050166.39999999
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2026-03-06",
+      "flow": -228230505.89999998,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": -228230505.89999998
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2026-03-09",
+      "flow": 232810380.9,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 232810380.9
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2026-03-10",
+      "flow": 77820053.39999999,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 77820053.39999999
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2026-03-11",
+      "flow": 231197916.6,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 231197916.6
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2026-03-12",
+      "flow": -37639598.85,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": -37639598.85
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2026-03-13",
+      "flow": 74862702.89999999,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 74862702.89999999
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2026-03-16",
+      "flow": 51011904,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 51011904
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2026-03-17",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2026-03-18",
+      "flow": 113220008.55000001,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 113220008.55000001
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2026-03-19",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2026-03-20",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2026-03-23",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2026-03-24",
+      "flow": -286832341.05,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": -286832341.05
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2026-03-25",
+      "flow": -101611276.8,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": -101611276.8
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2026-03-26",
+      "flow": -24774204.599999998,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": -24774204.599999998
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2026-03-27",
+      "flow": -330262494.75,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": -330262494.75
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2026-03-30",
+      "flow": -538491749.4,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": -538491749.4
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2026-03-31",
+      "flow": 253158090.00000003,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 253158090.00000003
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2026-04-01",
+      "flow": 259326807,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 259326807
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2026-04-02",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2026-04-06",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2026-04-07",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2026-04-08",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2026-04-09",
+      "flow": 449967900,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 449967900
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2026-04-10",
+      "flow": -79205605.19999999,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": -79205605.19999999
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2026-04-13",
+      "flow": 13256616.000000002,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 13256616.000000002
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2026-04-14",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2026-04-15",
+      "flow": 119803874.85000001,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 119803874.85000001
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2026-04-16",
+      "flow": 347554002.9,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 347554002.9
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2026-04-17",
+      "flow": 94274779.2,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 94274779.2
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2026-04-20",
+      "flow": 80292622.5,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 80292622.5
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2026-04-21",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2026-04-22",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2026-04-23",
+      "flow": 169404023.1,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 169404023.1
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2026-04-24",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2026-04-27",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2026-04-28",
+      "flow": 65630301,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 65630301
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2026-04-29",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2026-04-30",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2026-05-01",
+      "flow": -253060671.29999998,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": -253060671.29999998
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2026-05-04",
+      "flow": -372679360.2,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": -372679360.2
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2026-05-05",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2026-05-06",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2026-05-07",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2026-05-08",
+      "flow": -263229890.25000003,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": -263229890.25000003
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2026-05-11",
+      "flow": 606561694.2,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 606561694.2
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2026-05-12",
+      "flow": 68911984.5,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 68911984.5
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2026-05-13",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2026-05-14",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2026-05-15",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2026-05-18",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2026-05-19",
+      "flow": -67803624.75,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": -67803624.75
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2026-05-20",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2026-05-21",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2026-05-22",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2026-05-26",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2026-05-27",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2026-05-28",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2026-05-29",
+      "flow": -237578048.1,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": -237578048.1
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2026-06-01",
+      "flow": 70093602,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 70093602
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2026-06-02",
+      "flow": 70104738.75,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 70104738.75
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2026-06-03",
+      "flow": 380489699.70000005,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 380489699.70000005
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2026-06-04",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2026-06-05",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2026-06-08",
+      "flow": 27581786.400000002,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 27581786.400000002
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2026-06-09",
+      "flow": -149723702.7,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": -149723702.7
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2026-06-10",
+      "flow": 173410058.25,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 173410058.25
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2026-06-11",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2026-06-12",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2026-06-15",
+      "flow": 254015762.39999998,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 254015762.39999998
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2026-06-16",
+      "flow": 210463980.75,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 210463980.75
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2026-06-17",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2026-06-18",
+      "flow": 28920570.6,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 28920570.6
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2026-06-22",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2026-06-23",
+      "flow": 83211336,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 83211336
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2026-06-24",
+      "flow": 166303780.20000002,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 166303780.20000002
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2026-06-25",
+      "flow": -222686354.4,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": -222686354.4
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2026-06-26",
+      "flow": -111055273.19999999,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": -111055273.19999999
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2026-06-29",
+      "flow": -42194121.75,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": -42194121.75
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2026-06-30",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2026-07-01",
+      "flow": -41358875.400000006,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": -41358875.400000006
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2026-07-02",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2026-07-06",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2026-07-07",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2026-07-08",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2026-07-09",
+      "flow": -14070161.55,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": -14070161.55
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2026-07-10",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2026-07-13",
+      "flow": 27705577.2,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 27705577.2
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2026-07-14",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2026-07-15",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2026-07-16",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2026-07-17",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2026-07-20",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2026-07-21",
+      "flow": -125344253.25,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": -125344253.25
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2026-07-22",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2026-07-23",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2026-07-24",
+      "flow": -54476649.6,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": -54476649.6
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2026-07-27",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2026-07-28",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2026-07-29",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2026-07-30",
+      "flow": 41942348.55,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 41942348.55
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2026-07-31",
+      "flow": -96860687.69999999,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": -96860687.69999999
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2026-08-03",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2026-08-04",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2026-08-05",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2026-08-06",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2026-08-07",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2026-08-10",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2026-08-11",
+      "flow": -43228998,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": -43228998
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2026-08-12",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2026-08-13",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2026-08-14",
+      "flow": 29422843.2,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 29422843.2
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2026-08-17",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2026-08-18",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2026-08-19",
+      "flow": 99214445.39999999,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 99214445.39999999
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2026-08-20",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2026-08-21",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2026-08-24",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2026-08-25",
+      "flow": 57259070.4,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 57259070.4
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2026-08-26",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2026-08-27",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2026-08-28",
+      "flow": -57339407.4,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": -57339407.4
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2026-08-31",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2026-09-01",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2026-09-02",
+      "flow": 100683104.55,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 100683104.55
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2026-09-03",
+      "flow": 250087861.05,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 250087861.05
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2026-09-04",
+      "flow": -58839466.8,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": -58839466.8
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2026-09-08",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2026-09-09",
+      "flow": 72804433.5,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 72804433.5
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2026-09-10",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2026-09-11",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2026-09-14",
+      "flow": -29124235.5,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": -29124235.5
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2026-09-15",
+      "flow": -101427814.95,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": -101427814.95
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2026-09-16",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2026-09-17",
+      "flow": 44069521.5,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 44069521.5
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2026-09-18",
+      "flow": -43575641.099999994,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": -43575641.099999994
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2026-09-21",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2026-09-22",
+      "flow": -14811916.95,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": -14811916.95
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2026-09-23",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2026-09-24",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2026-09-25",
+      "flow": 88042203.89999999,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 88042203.89999999
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2026-09-28",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2026-09-29",
+      "flow": -204266036.1,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": -204266036.1
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2026-09-30",
+      "flow": 365434207.5,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 365434207.5
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2026-10-01",
+      "flow": 292751382,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 292751382
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2026-10-02",
+      "flow": -193067694.29999998,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": -193067694.29999998
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2026-10-05",
+      "flow": 74255635.5,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 74255635.5
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2026-10-06",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2026-10-07",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2026-10-08",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2026-10-09",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2026-10-12",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2026-10-13",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2026-10-14",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2026-10-15",
+      "flow": 200401244.4,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 200401244.4
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2026-10-16",
+      "flow": 42429278.699999996,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 42429278.699999996
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2026-10-19",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2026-10-20",
+      "flow": 142869013.5,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 142869013.5
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2026-10-21",
+      "flow": 71710122.75,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 71710122.75
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2026-10-22",
+      "flow": 28331980.5,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 28331980.5
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2026-10-23",
+      "flow": 126861894.89999999,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 126861894.89999999
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2026-10-26",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2026-10-27",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2026-10-28",
+      "flow": 85807042.19999999,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 85807042.19999999
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2026-10-29",
+      "flow": 42610313.25,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 42610313.25
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2026-10-30",
+      "flow": 69679209,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 69679209
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2026-11-02",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2026-11-03",
+      "flow": 221164761.6,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 221164761.6
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2026-11-04",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2026-11-05",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2026-11-06",
+      "flow": 157998475.8,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 157998475.8
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2026-11-09",
+      "flow": 13730424.3,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 13730424.3
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2026-11-10",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2026-11-11",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2026-11-12",
+      "flow": -95792708.55,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": -95792708.55
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2026-11-13",
+      "flow": 163956196.8,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 163956196.8
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2026-11-16",
+      "flow": 120907343.25,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 120907343.25
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2026-11-17",
+      "flow": 53133878.400000006,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 53133878.400000006
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2026-11-18",
+      "flow": 0,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 0
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2026-11-19",
+      "flow": 117132122.25,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": 117132122.25
+        }
+      ],
+      "complete": true
+    },
+    {
+      "date": "2026-11-20",
+      "flow": -112584470.4,
+      "funds": [
+        {
+          "ticker": "EWJ",
+          "flow": -112584470.4
+        }
+      ],
+      "complete": true
+    }
+  ],
+  "sources": [
+    {
+      "name": "iShares · BlackRock",
+      "url": "https://www.ishares.com/us/products/239665/ishares-msci-japan-etf-ewj"
+    }
+  ],
+  "vehicles": [
+    "EWJ"
+  ],
+  "retrievedAt": "2026-11-23T23:23:04.838Z",
+  "sourceHash": "87aae5cc4e83bb04d27b044dcf547bbb9bccaae84179c76ae1a297168afef96c",
+  "comparisons": [
+    {
+      "sessions": 1,
+      "current": -112584470.4,
+      "average": 25479477.188690487,
+      "samples": 252,
+      "referenceStart": "2025-11-19",
+      "referenceEnd": "2026-11-19"
+    },
+    {
+      "sessions": 5,
+      "current": 178588873.49999997,
+      "average": 120158047.12976183,
+      "samples": 252,
+      "referenceStart": "2025-11-07",
+      "referenceEnd": "2026-11-13"
+    },
+    {
+      "sessions": 20,
+      "current": 837742587.8999999,
+      "average": 408917693.81964314,
+      "samples": 252,
+      "referenceStart": "2025-09-26",
+      "referenceEnd": "2026-10-23"
+    }
+  ],
+  "notes": [
+    "EWJ es un ETF de renta variable japonesa cotizado en Estados Unidos. Sus flujos no representan el flujo total hacia Japón ni todos los fondos japoneses; las creaciones y los reembolsos pueden realizarse en especie.",
+    "Se utiliza NAV per Share de la hoja Historical. El NAV oficial incorpora valoración razonable al cierre estadounidense; no se utiliza Non-FV NAV, el precio de cotización, el volumen negociado ni la suma del valor de las posiciones.",
+    "La descarga oficial contiene 7727 observaciones entre 1996-03-12 y 2026-11-20. El cálculo utiliza el calendario estadounidense disponible desde 2024; el gráfico permite seleccionar 5, 20 o 60 sesiones.",
+    "Los importes de 5 y 20 sesiones suman los flujos diarios valorados con el NAV de cada sesión. Una sesión ausente interrumpe el cálculo; no se sustituye por cero ni se salta para completar una ventana.",
+    "Los posibles splits o cambios excepcionales se apartan hasta verificarlos. El reverse split 1 por 4 del 7 de noviembre de 2016 queda fuera del periodo calculado; no se aplica ningún factor supuesto."
+  ],
+  "refreshMode": "snapshot"
+}

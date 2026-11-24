@@ -1,0 +1,1749 @@
+[
+  {
+    "id": 7,
+    "name": "Financial digitization",
+    "slug": "digitalizacion-financiera",
+    "group": "Finance",
+    "snapshot": "I see more digital payments and financial services. I would look for networks that retain a share of volume after fraud and service costs. Fund movements show specific holdings; they do not prove why managers buy or sell. The United States and Europe are pushing faster payments and different rules. If volume grew without cash generation, I would examine where the value was going.",
+    "change": "I am interested in how mobile devices, software and payment networks reduce the steps needed to move money. An intermediary’s opportunity depends on the fee it retains after incentives, fraud, funding and compliance.",
+    "arguments": [
+      "Merchant acceptance and banking connections can create network effects and recurring use.",
+      "Account-to-account payments, competition and fee rules can reduce what an intermediary earns."
+    ],
+    "invalidation": "If transactions increased but net revenue and cash per transaction deteriorated persistently, I would reassess the thesis. I would also examine who absorbs fraud losses.",
+    "value": "I would examine networks whose acceptance, integration and scale are hard to replicate. A network’s power deserves attention, but it also invites regulation and alternatives. Its advantage interests me when it survives the cost of winning customers and providing the service.",
+    "evidence_text": "I would keep observed results, surveys and announced targets separate.",
+    "metrics": [
+      {
+        "id": "T07_M01",
+        "label": "Adults with a financial account worldwide",
+        "value": 74,
+        "unit": "%",
+        "period": "2021",
+        "kind": "observed",
+        "source": "S46",
+        "note": "",
+        "comparable_with": "",
+        "geo": "indicator-specific"
+      },
+      {
+        "id": "T07_M02",
+        "label": "Adults with a financial account worldwide",
+        "value": 79,
+        "unit": "%",
+        "period": "2024",
+        "kind": "observed",
+        "source": "S46",
+        "note": "",
+        "comparable_with": "",
+        "geo": "indicator-specific"
+      },
+      {
+        "id": "T07_M03",
+        "label": "Adults who own a mobile phone",
+        "value": 86,
+        "unit": "%",
+        "period": "2024",
+        "kind": "observed",
+        "source": "S46",
+        "note": "",
+        "comparable_with": "",
+        "geo": "indicator-specific"
+      },
+      {
+        "id": "T07_M04",
+        "label": "Customer payments settled through FedNow",
+        "value": 1505250,
+        "unit": "transactions",
+        "period": "2024",
+        "kind": "settled-payment records",
+        "source": "FB13",
+        "note": "These are settled payments, not people or revenue. The quarterly series is separate.",
+        "comparable_with": "",
+        "geo": "indicator-specific"
+      },
+      {
+        "id": "T07_M05",
+        "label": "Customer payments settled through FedNow",
+        "value": 8413402,
+        "unit": "transactions",
+        "period": "2025",
+        "kind": "settled-payment records",
+        "source": "FB13",
+        "note": "These are settled payments, not people or revenue. The quarterly series is separate.",
+        "comparable_with": "",
+        "geo": "indicator-specific"
+      },
+      {
+        "id": "T07_M06",
+        "label": "FedNow during 2026",
+        "value": 2728510,
+        "unit": "transactions",
+        "period": "Q1 2026",
+        "kind": "settled-payment records",
+        "source": "FB13",
+        "note": "I would not annualize automatically.",
+        "comparable_with": "",
+        "geo": "indicator-specific"
+      },
+      {
+        "id": "T07_M07",
+        "label": "FedNow during 2026",
+        "value": 4997811,
+        "unit": "transactions",
+        "period": "Q2 2026",
+        "kind": "settled-payment records",
+        "source": "FB13",
+        "note": "I would not annualize automatically.",
+        "comparable_with": "",
+        "geo": "indicator-specific"
+      },
+      {
+        "id": "T07_M08",
+        "label": "FedNow during 2026",
+        "value": 6376467,
+        "unit": "transactions",
+        "period": "Q3 2026",
+        "kind": "settled-payment records",
+        "source": "FB13",
+        "note": "I would not annualize automatically.",
+        "comparable_with": "",
+        "geo": "indicator-specific"
+      }
+    ],
+    "geography": [
+      {
+        "region": "United States",
+        "text": "I would add FedNow: 8,413,402 settled payments in 2025 versus 1,505,250 in 2024. This gives me a United States usage series; I would not present it as customer counts or revenue.",
+        "sources": [
+          "FB13"
+        ]
+      },
+      {
+        "region": "EU",
+        "text": "I would retain the DORA operational-resilience analysis and distinguish card networks, instant transfers and acquiring; each has its own pricing and risk.",
+        "sources": [
+          "S24"
+        ]
+      },
+      {
+        "region": "Global",
+        "text": "I would retain Global Findex as evidence of inclusion and keep it separate from providers’ commercial activity.",
+        "sources": [
+          "S08",
+          "S46"
+        ]
+      }
+    ],
+    "policy": [
+      {
+        "jurisdiction": "United States",
+        "status": "FedNow infrastructure and competition litigation",
+        "text": "FedNow adds an instant-payment channel; the DOJ case against Visa remains a legal proceeding, not a presumed conviction. I would examine substitution between channels, net fees and the court outcome.",
+        "sources": [
+          "FB13",
+          "FB16"
+        ]
+      },
+      {
+        "jurisdiction": "European Union",
+        "status": "financial operational resilience",
+        "text": "I would include DORA and the service’s operational responsibilities. An institution’s authorization and its provider’s resilience are related but distinct questions.",
+        "sources": [
+          "S24"
+        ]
+      }
+    ],
+    "chain": {
+      "nodes": [
+        {
+          "id": "client",
+          "label": "User and merchant"
+        },
+        {
+          "id": "bank",
+          "label": "Issuing and acquiring banks"
+        },
+        {
+          "id": "network",
+          "label": "Networks and instant payments"
+        },
+        {
+          "id": "software",
+          "label": "Processing and software"
+        },
+        {
+          "id": "risk",
+          "label": "Identity, fraud and reconciliation"
+        }
+      ],
+      "edges": [
+        {
+          "source": "client",
+          "target": "bank"
+        },
+        {
+          "source": "bank",
+          "target": "network"
+        },
+        {
+          "source": "bank",
+          "target": "software"
+        },
+        {
+          "source": "network",
+          "target": "risk"
+        },
+        {
+          "source": "software",
+          "target": "risk"
+        }
+      ],
+      "layout": "left-right",
+      "note": "I would show economic and operational relationships. Arrow widths are not proportional to money; the data do not provide amounts that would justify presenting these as measured flows."
+    },
+    "risks": [
+      {
+        "title": "The toll can fall",
+        "mechanism": "If transfers or regulation reduce fees, I can see more transactions but less revenue from each one.",
+        "evidence": "Visa identifies fee regulation and litigation; the DOJ maintains its case concerning Visa’s debit network.",
+        "watch": "If competitive pressure increased, I would examine net revenue per unit of volume, incentives and operating margin, rather than transactions alone.",
+        "sources": [
+          "FB15",
+          "FB16"
+        ],
+        "interpretation": "The economic mechanism and my monitoring trigger are my interpretation; the source supports the cited evidence."
+      },
+      {
+        "title": "Money in an app is not always a protected deposit",
+        "mechanism": "If an intermediary or its reconciliation process fails, I can lose access even while the bank remains open.",
+        "evidence": "The FDIC explains the Synapse case and that insurance covers bank failures, not the failure of every fintech.",
+        "watch": "For intermediated accounts, I would examine legal ownership, daily reconciliation and the actual conditions of coverage.",
+        "sources": [
+          "FB14"
+        ],
+        "interpretation": "The economic mechanism and my monitoring trigger are my interpretation; the source supports the cited evidence."
+      },
+      {
+        "title": "Fraud at payment speed",
+        "mechanism": "If a provider speeds up payments without prior controls, I would see less time to detect impersonation.",
+        "evidence": "FRFS offers payee controls, thresholds and network intelligence; FinCEN warns about synthetic identities.",
+        "watch": "If authorized-payment fraud increased, I would examine losses relative to volume, who bears reimbursement and the friction introduced by controls.",
+        "sources": [
+          "FB20",
+          "FB05"
+        ],
+        "interpretation": "The economic mechanism and my monitoring trigger are my interpretation; the source supports the cited evidence."
+      }
+    ],
+    "vehicles": [
+      {
+        "name": "Visa",
+        "ticker": "V",
+        "exchange": "NYSE",
+        "type": "equity",
+        "exposure": "Payment network and services",
+        "limitation": "If I chose this vehicle, I would examine its segment exposure, valuation and costs.",
+        "sources": [
+          "FB15"
+        ],
+        "verified_at": "2026-11-24"
+      },
+      {
+        "name": "Mastercard",
+        "ticker": "MA",
+        "exchange": "NYSE",
+        "type": "equity",
+        "exposure": "Payment network and services",
+        "limitation": "If I chose this vehicle, I would examine its segment exposure, valuation and costs.",
+        "sources": [
+          "FB17"
+        ],
+        "verified_at": "2026-11-24"
+      },
+      {
+        "name": "Adyen",
+        "ticker": "ADYEN",
+        "exchange": "Euronext Amsterdam",
+        "type": "equity",
+        "exposure": "Payments and acquiring platform",
+        "limitation": "If I chose this vehicle, I would examine its segment exposure, valuation and costs.",
+        "sources": [
+          "FB18"
+        ],
+        "verified_at": "2026-11-24"
+      },
+      {
+        "name": "Global X FinTech ETF",
+        "ticker": "FINX",
+        "exchange": "Nasdaq",
+        "type": "equity ETF",
+        "exposure": "Fintech basket spanning different businesses and geographies",
+        "limitation": "If I chose this vehicle, I would examine its segment exposure, valuation and costs.",
+        "sources": [
+          "FB19"
+        ],
+        "verified_at": "2026-11-24"
+      }
+    ],
+    "moat_reading": "I would distinguish network effects, merchant integration and licenses. Visa and Mastercard have extensive networks, but I would not treat all payments as a monopoly. The antitrust case against Visa itself shows how market power can attract pressure on fees.",
+    "moat_sources": [
+      "FB15",
+      "FB16",
+      "FB14",
+      "FB20",
+      "FB05"
+    ],
+    "chart": {
+      "type": "bar",
+      "title": "Adults with a financial account, worldwide",
+      "unit": "% of adults",
+      "rows": [
+        {
+          "period": "2021",
+          "value": 74,
+          "kind": "observed survey"
+        },
+        {
+          "period": "2024",
+          "value": 79,
+          "kind": "observed survey"
+        }
+      ],
+      "source": "S46",
+      "note": "Global Findex surveys; 2025 is the edition, not the observation year."
+    },
+    "additional_charts": [
+      {
+        "type": "bar",
+        "title": "Customer payments settled through FedNow",
+        "unit": "transactions",
+        "frequency": "annual",
+        "source": "FB13",
+        "rows": [
+          {
+            "period": "2024",
+            "value": 1505250
+          },
+          {
+            "period": "2025",
+            "value": 8413402
+          }
+        ],
+        "note": "These are settled payments, not people or revenue. The quarterly series is separate."
+      },
+      {
+        "type": "line",
+        "title": "FedNow during 2026",
+        "unit": "transactions",
+        "frequency": "quarterly",
+        "source": "FB13",
+        "rows": [
+          {
+            "period": "Q1 2026",
+            "value": 2728510
+          },
+          {
+            "period": "Q2 2026",
+            "value": 4997811
+          },
+          {
+            "period": "Q3 2026",
+            "value": 6376467
+          }
+        ],
+        "note": "I would not annualize automatically."
+      }
+    ],
+    "sources": [
+      "S08",
+      "S46",
+      "S24",
+      "FB13",
+      "FB15",
+      "FB17",
+      "FB18",
+      "FB19",
+      "FB16",
+      "FB14",
+      "FB20",
+      "FB05"
+    ],
+    "further_analysis": "If I included this trend, I would examine the vehicle’s exposure, its price, the cash it could generate and the specific risks I describe here. This profile does not include an individual valuation or an estimated return.",
+    "capital": {
+      "intro": "Here I compare who increased, reduced or maintained shareholdings between June 30 and September 30, 2026. The difference comes from reported share counts; it does not reveal the precise transaction, price or motive.",
+      "position_ids": [
+        "C001",
+        "C012",
+        "C021",
+        "C002"
+      ],
+      "all_position_ids": [
+        "C001",
+        "C012",
+        "C021",
+        "C002",
+        "C013",
+        "C016",
+        "C031"
+      ],
+      "event_ids": [],
+      "coverage_note": "I show a selected sample of managers and related assets. It does not represent every buyer and seller associated with this trend."
+    }
+  },
+  {
+    "id": 8,
+    "name": "Future consumption",
+    "slug": "consumo-del-futuro",
+    "group": "Consumption",
+    "snapshot": "I see more digital shopping habits and consumers moving between channels. I would look for brands, distribution and logistics that sustain profitable repeat purchases. United States and European figures measure different things; I would read each with its denominator. Funds provide examples of exposure. I focus on whether advertising, returns or discounts consume the gains from growth.",
+    "change": "Consumers move between stores, phones, platforms and subscriptions. I am interested in who brings them back without having to buy their attention again on every sale. Brand, service and the cost of reaching the customer matter here.",
+    "arguments": [
+      "A recognized brand or an efficient distribution network can support repeat purchases and lower costs per order.",
+      "Advertising, discounts and returns can increase sales while making profitability worse."
+    ],
+    "invalidation": "If repeat purchasing weakened and margins after advertising, logistics and returns fell persistently, I would reassess the thesis. Followers or visits would not compensate me for that loss.",
+    "value": "I would examine brands with pricing power and platforms that bring together buyers, sellers and logistics. I would not call a popular brand a monopoly; I would ask for evidence of retention, margins and genuine difficulty in replacing it.",
+    "evidence_text": "I would keep two panels: people shopping online in Europe and e-commerce’s share of United States sales. They measure habits and money; their denominators are different.",
+    "metrics": [
+      {
+        "id": "T08_M01",
+        "label": "EU internet users who purchased online",
+        "value": 62,
+        "unit": "%",
+        "period": "2015",
+        "kind": "observed",
+        "source": "S09",
+        "note": "",
+        "comparable_with": "",
+        "geo": "indicator-specific"
+      },
+      {
+        "id": "T08_M02",
+        "label": "EU internet users who purchased online",
+        "value": 78,
+        "unit": "%",
+        "period": "2025",
+        "kind": "observed",
+        "source": "S09",
+        "note": "",
+        "comparable_with": "",
+        "geo": "indicator-specific"
+      },
+      {
+        "id": "T08_M03",
+        "label": "United States online retail sales",
+        "value": 17.9,
+        "unit": "% of total sales",
+        "period": "Q3 2026",
+        "kind": "observed, seasonally adjusted",
+        "source": "ER15",
+        "note": "Not directly comparable with the 78% of European internet users who shop online.",
+        "comparable_with": "",
+        "geo": "indicator-specific"
+      }
+    ],
+    "geography": [
+      {
+        "region": "United States",
+        "text": "I add Census data: e-commerce represented 17.9% of retail sales in Q3 2026, seasonally adjusted. These are nominal sales, not counts of shoppers or real growth.",
+        "sources": [
+          "ER15"
+        ]
+      },
+      {
+        "region": "EU",
+        "text": "I include the DSA: platform responsibilities and seller traceability. I treat it as a cost and a competitive filter, not a guarantee that fraud or illegal products disappear.",
+        "sources": [
+          "ER16"
+        ]
+      }
+    ],
+    "policy": [
+      {
+        "jurisdiction": "United States",
+        "status": "consumer market and issuer risks",
+        "text": "I would compare Census growth with the costs, obligations and risks reported by operators. If rules or tariffs changed, I would examine the company and channel affected.",
+        "sources": [
+          "ER15",
+          "ER40",
+          "ER42"
+        ]
+      },
+      {
+        "jurisdiction": "European Union",
+        "status": "Digital Services Act",
+        "text": "The DSA imposes obligations on platforms, including seller traceability. I would examine compliance costs and the ability to differentiate a trustworthy service.",
+        "sources": [
+          "ER16"
+        ]
+      }
+    ],
+    "chain": {
+      "nodes": [
+        {
+          "id": "n1",
+          "label": "Discovery and audience"
+        },
+        {
+          "id": "n2",
+          "label": "Platform and commerce"
+        },
+        {
+          "id": "n3",
+          "label": "Payments and trust"
+        },
+        {
+          "id": "n4",
+          "label": "Logistics and delivery"
+        },
+        {
+          "id": "n5",
+          "label": "Repeat purchases and service"
+        }
+      ],
+      "edges": [
+        {
+          "source": "n1",
+          "target": "n2"
+        },
+        {
+          "source": "n2",
+          "target": "n3"
+        },
+        {
+          "source": "n3",
+          "target": "n4"
+        },
+        {
+          "source": "n4",
+          "target": "n5"
+        }
+      ],
+      "layout": "left-right",
+      "note": "I would show economic and operational relationships. Arrow widths are not proportional to money; the data do not provide amounts that would justify presenting these as measured flows."
+    },
+    "risks": [
+      {
+        "title": "Higher sales do not mean more retained profit",
+        "mechanism": "I can see commerce grow while margins deteriorate because of logistics, advertising and discounts.",
+        "evidence": "Amazon separates North America, International and AWS results; its risks include demand, labor costs and energy.",
+        "watch": "If sales grew but cash per order did not, I would examine contribution margin, acquisition cost and purchase frequency.",
+        "sources": [
+          "ER40"
+        ],
+        "interpretation": "The economic mechanism and my monitoring trigger are my interpretation; the source supports the cited evidence."
+      },
+      {
+        "title": "The platform takes on more responsibility",
+        "mechanism": "I factor in the costs of verifying sellers, handling complaints and removing products.",
+        "evidence": "The DSA requires transparency and due diligence from commerce platforms, with additional obligations depending on their scale.",
+        "watch": "If incidents recurred, I would examine regulatory measures, compliance costs and loss of user trust.",
+        "sources": [
+          "ER16"
+        ],
+        "interpretation": "The economic mechanism and my monitoring trigger are my interpretation; the source supports the cited evidence."
+      },
+      {
+        "title": "The merchant depends on third parties",
+        "mechanism": "I see fragility when payments, advertising or digital infrastructure can become more expensive without a quick alternative.",
+        "evidence": "Shopify identifies dependence on external providers, security threats and sensitivity to consumer spending and international trade.",
+        "watch": "If fees or channels changed, I would examine merchant retention, margin per transaction and the ability to pass on costs.",
+        "sources": [
+          "ER42"
+        ],
+        "interpretation": "The economic mechanism and my monitoring trigger are my interpretation; the source supports the cited evidence."
+      }
+    ],
+    "vehicles": [
+      {
+        "name": "Amazon",
+        "ticker": "AMZN",
+        "exchange": "Nasdaq",
+        "type": "equity",
+        "exposure": "Commerce, logistics, advertising and AWS; not pure consumption exposure.",
+        "limitation": "If I chose this vehicle, I would examine its segment exposure, valuation and costs.",
+        "sources": [
+          "ER40"
+        ],
+        "verified_at": "2026-11-24"
+      },
+      {
+        "name": "Shopify",
+        "ticker": "SHOP",
+        "exchange": "Nasdaq and TSX",
+        "type": "equity",
+        "exposure": "Commerce software and services; not the manufacturer of the product sold.",
+        "limitation": "If I chose this vehicle, I would examine its segment exposure, valuation and costs.",
+        "sources": [
+          "ER41"
+        ],
+        "verified_at": "2026-11-24"
+      }
+    ],
+    "moat_reading": "I would look for logistics density, integration with the merchant’s business and a recurring customer relationship. Amazon and Shopify have different models; AWS also affects AMZN. When valuing a platform, I would separate that activity’s profit from the rest of the group.",
+    "moat_sources": [
+      "ER40",
+      "ER42"
+    ],
+    "chart": {
+      "type": "bar",
+      "title": "Online purchases among EU internet users",
+      "unit": "% of internet users",
+      "rows": [
+        {
+          "period": "2015",
+          "value": 62,
+          "kind": "observed survey"
+        },
+        {
+          "period": "2025",
+          "value": 78,
+          "kind": "observed survey"
+        }
+      ],
+      "source": "S09",
+      "note": "Population: internet users aged 16–74, not the total population."
+    },
+    "additional_charts": [],
+    "sources": [
+      "S09",
+      "S43",
+      "ER15",
+      "ER16",
+      "ER40",
+      "ER42",
+      "ER41"
+    ],
+    "further_analysis": "If I included this trend, I would examine the vehicle’s exposure, its price, the cash it could generate and the specific risks I describe here. This profile does not include an individual valuation or an estimated return.",
+    "capital": {
+      "intro": "Here I compare who increased, reduced or maintained shareholdings between June 30 and September 30, 2026. The difference comes from reported share counts; it does not reveal the precise transaction, price or motive.",
+      "position_ids": [
+        "C014",
+        "C004",
+        "C009"
+      ],
+      "all_position_ids": [
+        "C014",
+        "C004",
+        "C009",
+        "C010"
+      ],
+      "event_ids": [],
+      "coverage_note": "I show a selected sample of managers and related assets. It does not represent every buyer and seller associated with this trend."
+    }
+  },
+  {
+    "id": 9,
+    "name": "Water and food",
+    "slug": "agua-y-alimentos",
+    "group": "Resources",
+    "snapshot": "I see pressure on water, networks and agricultural productivity. I would look for measurement, treatment and equipment that save resources under collectible contracts. The United States and Europe provide specific programs and rules; capital movements need to be read through actual exposure. Scarcity supports the need, but tariffs, funding and the agricultural cycle can prevent the supplier from capturing value.",
+    "change": "Usable water, food production and demand do not always coincide in the same place or at the same time. I am interested in investment that reduces leaks, improves treatment or produces with fewer inputs, and in who can pay for it.",
+    "arguments": [
+      "Network maintenance and agricultural efficiency address physical needs that do not disappear with a fashion.",
+      "Public-sector customers can be slow to pay, and farmers can cut investment when their margins fall."
+    ],
+    "invalidation": "If savings in water, energy or inputs did not justify the equipment’s cost, I would reassess the thesis. If a contract depended on an unviable tariff or subsidy, I would reassess its collectibility.",
+    "value": "I would examine installed equipment requiring service, consumables and certification, as well as operators with clear concessions. A network can be a local monopoly; its returns remain tied to tariffs, mandatory investment and service quality.",
+    "evidence_text": "I separate water stress, investment needs and efficiency outcomes. A country facing scarcity may need equipment while also struggling to finance it.",
+    "metrics": [
+      {
+        "id": "T09_M01",
+        "label": "Countries facing extremely high water stress",
+        "value": 25,
+        "unit": "countries",
+        "period": "2023",
+        "kind": "observed",
+        "source": "S10",
+        "note": "",
+        "comparable_with": "",
+        "geo": "indicator-specific"
+      },
+      {
+        "id": "T09_M02",
+        "label": "World population in countries facing extreme water stress",
+        "value": 25,
+        "unit": "% approximately",
+        "period": "2023",
+        "kind": "observed",
+        "source": "S10",
+        "note": "",
+        "comparable_with": "",
+        "geo": "indicator-specific",
+        "display_value": "approximately 25",
+        "display_unit": "%"
+      },
+      {
+        "id": "T09_M03",
+        "label": "Population exposed to high water stress at least one month per year",
+        "value": 50,
+        "unit": "% at least",
+        "period": "2023",
+        "kind": "observed",
+        "source": "S10",
+        "note": "",
+        "comparable_with": "",
+        "geo": "indicator-specific",
+        "display_value": "at least 50",
+        "display_unit": "%"
+      },
+      {
+        "id": "T09_M04",
+        "label": "United States drinking-water infrastructure needs",
+        "value": 625000,
+        "unit": "million USD, January 2021 prices",
+        "period": "20-year horizon, seventh survey",
+        "kind": "estimated infrastructure need",
+        "source": "ER17",
+        "note": "",
+        "comparable_with": "",
+        "geo": "indicator-specific"
+      },
+      {
+        "id": "T09_M05",
+        "label": "EU water-efficiency target",
+        "value": 10,
+        "unit": "%",
+        "period": "2030",
+        "kind": "policy target",
+        "source": "ER18",
+        "note": "",
+        "comparable_with": "",
+        "geo": "indicator-specific"
+      }
+    ],
+    "geography": [
+      {
+        "region": "United States",
+        "text": "I include the EPA estimate: USD 625,000 million of drinking-water infrastructure needs over 20 years, assessed in the seventh survey. This is an evaluated physical need, not an approved check.",
+        "sources": [
+          "ER17"
+        ]
+      },
+      {
+        "region": "EU",
+        "text": "I include the water-resilience strategy and its target of improving efficiency by 10% by 2030, alongside climate risks assessed by the EEA. I would not present that target as savings already achieved.",
+        "sources": [
+          "ER18",
+          "ER21"
+        ]
+      }
+    ],
+    "policy": [
+      {
+        "jurisdiction": "United States",
+        "status": "EPA needs assessments and program delivery",
+        "text": "Estimated drinking-water needs do not equal money disbursed. I would follow contract awards, construction and collection; EPA OIG provides evidence on grant-delivery problems.",
+        "sources": [
+          "ER17",
+          "ER19"
+        ]
+      },
+      {
+        "jurisdiction": "European Union",
+        "status": "efficiency strategy and target",
+        "text": "The water strategy seeks to improve efficiency toward 2030. I would distinguish the target, applicable regulation and funded contracts.",
+        "sources": [
+          "ER18"
+        ]
+      }
+    ],
+    "chain": {
+      "nodes": [
+        {
+          "id": "n1",
+          "label": "Water sources and soils"
+        },
+        {
+          "id": "n2",
+          "label": "Measurement and treatment"
+        },
+        {
+          "id": "n3",
+          "label": "Networks and irrigation"
+        },
+        {
+          "id": "n4",
+          "label": "Food production"
+        },
+        {
+          "id": "n5",
+          "label": "Reuse and maintenance"
+        }
+      ],
+      "edges": [
+        {
+          "source": "n1",
+          "target": "n2"
+        },
+        {
+          "source": "n2",
+          "target": "n3"
+        },
+        {
+          "source": "n3",
+          "target": "n4"
+        },
+        {
+          "source": "n4",
+          "target": "n5"
+        }
+      ],
+      "layout": "left-right",
+      "note": "I would show economic and operational relationships. Arrow widths are not proportional to money; the data do not provide amounts that would justify presenting these as measured flows."
+    },
+    "risks": [
+      {
+        "title": "The need exceeds the budget",
+        "mechanism": "I can have a necessary solution and a customer unable to finance it.",
+        "evidence": "The EPA quantifies needs; its Inspector General audits the delivery of grants for water projects.",
+        "watch": "If awarded projects failed to start, I would examine secured financing, municipal payments and the backlog that can actually be delivered.",
+        "sources": [
+          "ER17",
+          "ER19"
+        ],
+        "interpretation": "The economic mechanism and my monitoring trigger are my interpretation; the source supports the cited evidence."
+      },
+      {
+        "title": "The farmer cuts investment",
+        "mechanism": "I connect weak agricultural margins with fewer purchases of irrigation systems and machinery, even if they improve efficiency.",
+        "evidence": "For 2026, USDA projects lower real net farm income and higher production expenses; this is a sector forecast, not every farmer’s balance sheet.",
+        "watch": "If farm income came under pressure, I would examine equipment financing, dealer inventories and replacement orders.",
+        "sources": [
+          "ER20"
+        ],
+        "interpretation": "The economic mechanism and my monitoring trigger are my interpretation; the source supports the cited evidence."
+      },
+      {
+        "title": "Physical damage also hits the supplier",
+        "mechanism": "I see droughts and floods potentially increasing demand for adaptation while also damaging facilities, crops and collections.",
+        "evidence": "The EEA identifies risks to water, food and infrastructure; it does not justify converting every scarcity into corporate profitability.",
+        "watch": "If exposure were geographically concentrated, I would examine watersheds, permits, insurance and the exposure of plants and customers to extreme events.",
+        "sources": [
+          "ER21"
+        ],
+        "interpretation": "The economic mechanism and my monitoring trigger are my interpretation; the source supports the cited evidence."
+      }
+    ],
+    "vehicles": [
+      {
+        "name": "Xylem",
+        "ticker": "XYL",
+        "exchange": "NYSE",
+        "type": "equity",
+        "exposure": "Water equipment, measurement and solutions.",
+        "limitation": "If I chose this vehicle, I would examine its segment exposure, valuation and costs.",
+        "sources": [
+          "ER43"
+        ],
+        "verified_at": "2026-11-24"
+      },
+      {
+        "name": "Deere",
+        "ticker": "DE",
+        "exchange": "NYSE",
+        "type": "equity",
+        "exposure": "Machinery and precision agriculture; also construction and financing.",
+        "limitation": "If I chose this vehicle, I would examine its segment exposure, valuation and costs.",
+        "sources": [
+          "ER44"
+        ],
+        "verified_at": "2026-11-24"
+      }
+    ],
+    "moat_reading": "I would look for reliable measurement, certified processes and maintenance that customers need for years. Xylem can help me study equipment; Deere, precision agriculture. Water scarcity alone does not give suppliers pricing power, especially when the buyer is a public authority.",
+    "moat_sources": [
+      "ER17",
+      "ER43"
+    ],
+    "chart": {
+      "type": "kpi",
+      "title": "Global water stress, Aqueduct",
+      "unit": "population/countries",
+      "rows": [
+        {
+          "period": "Countries under extreme stress",
+          "value": 25,
+          "unit": "countries",
+          "kind": "WRI 2023 estimate"
+        },
+        {
+          "period": "Population in those countries",
+          "value": 25,
+          "unit": "%",
+          "kind": "WRI 2023 estimate"
+        },
+        {
+          "period": "High stress for at least one month",
+          "value": 50,
+          "unit": "% of people (minimum)",
+          "kind": "WRI 2023 estimate",
+          "display_value": "at least 50",
+          "display_unit": "% of people"
+        }
+      ],
+      "source": "S10",
+      "note": "I would show these three indicators in separate cards because their denominators differ."
+    },
+    "additional_charts": [],
+    "sources": [
+      "S10",
+      "S25",
+      "S44",
+      "ER17",
+      "ER18",
+      "ER21",
+      "ER19",
+      "ER20",
+      "ER43",
+      "ER44"
+    ],
+    "further_analysis": "If I included this trend, I would examine the vehicle’s exposure, its price, the cash it could generate and the specific risks I describe here. This profile does not include an individual valuation or an estimated return.",
+    "capital": {
+      "intro": "Here I compare who increased, reduced or maintained shareholdings between June 30 and September 30, 2026. The difference comes from reported share counts; it does not reveal the precise transaction, price or motive.",
+      "position_ids": [
+        "C034",
+        "C029",
+        "C004"
+      ],
+      "all_position_ids": [
+        "C034",
+        "C029",
+        "C004"
+      ],
+      "event_ids": [],
+      "coverage_note": "XYL provides water-equipment exposure, DE agricultural machinery and KR food distribution. I would keep those differences visible."
+    }
+  },
+  {
+    "id": 10,
+    "name": "Space",
+    "slug": "espacio",
+    "group": "Technology",
+    "snapshot": "I see more space activity and services already embedded in communications and observation. I would look for contracts, spectrum and recurring customers. Funds and public procurement help me follow capital; regulation differs by country and mission type. I focus on whether launching and replenishing a constellation costs more than its users pay.",
+    "change": "I am interested in the service coming from the satellite: connectivity, data, navigation or surveillance. Launch is one part of a chain that also needs ground stations, permits, maintenance and customers.",
+    "arguments": [
+      "Orbital infrastructure can support recurring services and applications that are hard to provide from the ground.",
+      "Replacing satellites, insuring launches and competing for customers can consume substantial capital before revenue stabilizes."
+    ],
+    "invalidation": "If utilization and renewals did not cover launch, replenishment and operation, I would reassess the thesis. More satellites in orbit would not solve that equation on their own.",
+    "value": "I would examine authorized spectrum, operating networks, contracts and data that customers cannot easily replace. A strong launch position does not imply control of the entire space value chain or ensure that any listed company captures that value.",
+    "evidence_text": "I separate satellites launched, service revenue and utilized capacity. Private operators’ share of launches is not a share of profits.",
+    "metrics": [
+      {
+        "id": "T10_M01",
+        "label": "Satellites launched by private operators",
+        "value": 23,
+        "unit": "%",
+        "period": "2010",
+        "kind": "observed",
+        "source": "S11",
+        "note": "",
+        "comparable_with": "",
+        "geo": "indicator-specific"
+      },
+      {
+        "id": "T10_M02",
+        "label": "Satellites launched by private operators",
+        "value": 88,
+        "unit": "%",
+        "period": "2025",
+        "kind": "observed",
+        "source": "S11",
+        "note": "",
+        "comparable_with": "",
+        "geo": "indicator-specific"
+      },
+      {
+        "id": "T10_M03",
+        "label": "Global space-economy revenue",
+        "value": 550,
+        "unit": "billion USD, lower bound",
+        "period": "2025",
+        "kind": "estimate",
+        "source": "S11",
+        "note": "Estimated range: USD 550–600 billion; depends on scope.",
+        "comparable_with": "",
+        "geo": "indicator-specific"
+      },
+      {
+        "id": "T10_M04",
+        "label": "Global space-economy revenue",
+        "value": 600,
+        "unit": "billion USD, upper bound",
+        "period": "2025",
+        "kind": "estimate",
+        "source": "S11",
+        "note": "I would retain the range rather than invent an exact point between its bounds.",
+        "comparable_with": "",
+        "geo": "indicator-specific"
+      },
+      {
+        "id": "T10_M05",
+        "label": "Global launches",
+        "value": 300,
+        "unit": "more than launches",
+        "period": "2025",
+        "kind": "observed lower bound",
+        "source": "ER22",
+        "note": "",
+        "comparable_with": "",
+        "geo": "indicator-specific",
+        "display_value": "more than 300",
+        "display_unit": "launches"
+      },
+      {
+        "id": "T10_M06",
+        "label": "Payloads placed in orbit globally",
+        "value": 4000,
+        "unit": "more than units",
+        "period": "2025",
+        "kind": "observed lower bound",
+        "source": "ER22",
+        "note": "",
+        "comparable_with": "",
+        "geo": "indicator-specific",
+        "display_value": "more than 4,000",
+        "display_unit": "units"
+      }
+    ],
+    "geography": [
+      {
+        "region": "United States",
+        "text": "I include GAO evidence on space debris and legal limits on its removal, alongside financial reports from United States-listed operators.",
+        "sources": [
+          "ER23",
+          "ER45",
+          "ER46"
+        ]
+      },
+      {
+        "region": "Europe",
+        "text": "I include ESA 2026: more than 300 launches and 4,000 payloads in 2025, alongside growing collision risks. This is European coverage of global activity, not only European launches.",
+        "sources": [
+          "ER22"
+        ]
+      }
+    ],
+    "policy": [
+      {
+        "jurisdiction": "United States",
+        "status": "legal limits and activity authorizations",
+        "text": "GAO describes limits and legal questions surrounding orbital-debris removal. I would examine rights, permits and liability for each mission before projecting revenue.",
+        "sources": [
+          "ER23"
+        ]
+      },
+      {
+        "jurisdiction": "Europe",
+        "status": "ESA assessment of global activity",
+        "text": "ESA documents pressure on the orbital environment. I would treat that assessment as physical evidence, not as an approved law or a general prohibition.",
+        "sources": [
+          "ER22"
+        ]
+      }
+    ],
+    "chain": {
+      "nodes": [
+        {
+          "id": "n1",
+          "label": "Components and manufacturing"
+        },
+        {
+          "id": "n2",
+          "label": "Launch"
+        },
+        {
+          "id": "n3",
+          "label": "Satellites and constellations"
+        },
+        {
+          "id": "n4",
+          "label": "Connectivity and data"
+        },
+        {
+          "id": "n5",
+          "label": "Customer services"
+        }
+      ],
+      "edges": [
+        {
+          "source": "n1",
+          "target": "n2"
+        },
+        {
+          "source": "n2",
+          "target": "n3"
+        },
+        {
+          "source": "n3",
+          "target": "n4"
+        },
+        {
+          "source": "n4",
+          "target": "n5"
+        }
+      ],
+      "layout": "left-right",
+      "note": "I would show economic and operational relationships. Arrow widths are not proportional to money; the data do not provide amounts that would justify presenting these as measured flows."
+    },
+    "risks": [
+      {
+        "title": "More traffic degrades a shared asset",
+        "mechanism": "I translate a collision into lost equipment, service interruption and higher replacement or insurance costs.",
+        "evidence": "ESA documents accumulating objects and collision risk; 100-year scenarios are models, not dates for an announced disaster.",
+        "watch": "If orbital density increased, I would examine maneuvers, end-of-life plans, redundancy and satellite-replacement capability.",
+        "sources": [
+          "ER22"
+        ],
+        "interpretation": "The economic mechanism and my monitoring trigger are my interpretation; the source supports the cited evidence."
+      },
+      {
+        "title": "Development and launches consume cash",
+        "mechanism": "I can see growing contracts while delivery capacity is delayed.",
+        "evidence": "Rocket Lab’s 10-Q shows R&D spending related to Neutron and new systems; backlog does not eliminate execution risk.",
+        "watch": "If milestones were postponed, I would examine cash, new share issues, advances and penalties before treating revenue as certain.",
+        "sources": [
+          "ER47"
+        ],
+        "interpretation": "The economic mechanism and my monitoring trigger are my interpretation; the source supports the cited evidence."
+      },
+      {
+        "title": "The legal framework lags the technology",
+        "mechanism": "I can encounter permits, liabilities and ownership rights over objects that obstruct new services.",
+        "evidence": "GAO notes potential obstacles under the Outer Space Treaty to removing or reusing debris.",
+        "watch": "For a business based on orbital cleanup, I would examine authorizations, liability and the contractual payer before assigning value to a demonstration.",
+        "sources": [
+          "ER23"
+        ],
+        "interpretation": "The economic mechanism and my monitoring trigger are my interpretation; the source supports the cited evidence."
+      }
+    ],
+    "vehicles": [
+      {
+        "name": "Rocket Lab",
+        "ticker": "RKLB",
+        "exchange": "Nasdaq",
+        "type": "equity",
+        "exposure": "Launch and space systems.",
+        "limitation": "If I chose this vehicle, I would examine its segment exposure, valuation and costs.",
+        "sources": [
+          "ER45"
+        ],
+        "verified_at": "2026-11-24"
+      },
+      {
+        "name": "Iridium Communications",
+        "ticker": "IRDM",
+        "exchange": "Nasdaq",
+        "type": "equity",
+        "exposure": "Satellite voice, data and connectivity services.",
+        "limitation": "If I chose this vehicle, I would examine its segment exposure, valuation and costs.",
+        "sources": [
+          "ER46"
+        ],
+        "verified_at": "2026-11-24"
+      }
+    ],
+    "moat_reading": "I would look for certified capability, operating history, customer access and recurring services. Iridium lets me study an operating network; Rocket Lab combines launch and space systems. If there were a technical advantage, I would check whether customers pay for it and whether it survives competition.",
+    "moat_sources": [
+      "ER45",
+      "ER46",
+      "ER47"
+    ],
+    "chart": {
+      "type": "bar",
+      "title": "Private operators’ share of satellites launched",
+      "unit": "% of satellites launched",
+      "rows": [
+        {
+          "period": "2010",
+          "value": 23,
+          "kind": "observed/OECD estimate"
+        },
+        {
+          "period": "2025",
+          "value": 88,
+          "kind": "observed/OECD estimate"
+        }
+      ],
+      "source": "S11",
+      "note": "Private share of satellite counts, not revenue or launch-provider market share."
+    },
+    "additional_charts": [],
+    "sources": [
+      "S11",
+      "ER23",
+      "ER45",
+      "ER46",
+      "ER22",
+      "ER47"
+    ],
+    "further_analysis": "If I included this trend, I would examine the vehicle’s exposure, its price, the cash it could generate and the specific risks I describe here. This profile does not include an individual valuation or an estimated return.",
+    "capital": {
+      "intro": "Here I compare who increased, reduced or maintained shareholdings between June 30 and September 30, 2026. The difference comes from reported share counts; it does not reveal the precise transaction, price or motive.",
+      "position_ids": [
+        "C022",
+        "C023"
+      ],
+      "all_position_ids": [
+        "C022",
+        "C023"
+      ],
+      "event_ids": [],
+      "coverage_note": "RKLB and IRDM announced a pending corporate transaction. I would not attribute the fund’s movements to thematic conviction without considering that transaction."
+    }
+  },
+  {
+    "id": 11,
+    "name": "Critical materials",
+    "slug": "materiales-criticos",
+    "group": "Resources",
+    "snapshot": "I see concentrated mineral supply chains and efforts to diversify them. I would examine refining, separation and contracts before focusing only on the mine. The United States and Europe already have specific policies; public capital and funds leave different traces. I focus on whether substitution, oversupply or high costs could turn a strategic mineral into a poor investment.",
+    "change": "Electronics, energy and defense need minerals processed to specific quality standards. I am interested in where the constraint lies: extraction, separation, refining or component manufacturing. Having the rock does not solve the whole chain.",
+    "arguments": [
+      "Supply concentration and supply security can support investment in alternative capacity.",
+      "High prices attract supply and substitution. A new plant may need permanent support if its cost remains above competitors’ costs."
+    ],
+    "invalidation": "If capacity grew faster than demand or prices failed to cover full costs over a meaningful cycle, I would reassess the thesis. I would also reassess it if the process failed to meet contracted quality.",
+    "value": "I would examine refining processes, technical know-how and contracts that secure demand. A country’s concentration is not a company’s monopoly. For an alternative producer, I would care about its costs without assuming perpetual subsidies.",
+    "evidence_text": "I read concentration by mineral and processing stage. A refining average does not let me assign the same dependence to copper, lithium and rare earths.",
+    "metrics": [
+      {
+        "id": "T11_M01",
+        "label": "Average share of the leading refining country, excluding rare earths",
+        "value": 70,
+        "unit": "%",
+        "period": "2023",
+        "kind": "observed",
+        "source": "S12",
+        "note": "",
+        "comparable_with": "",
+        "geo": "indicator-specific"
+      },
+      {
+        "id": "T11_M02",
+        "label": "Average share of the leading refining country, excluding rare earths",
+        "value": 72,
+        "unit": "%",
+        "period": "2025",
+        "kind": "observed",
+        "source": "S12",
+        "note": "",
+        "comparable_with": "",
+        "geo": "indicator-specific"
+      },
+      {
+        "id": "T11_M03",
+        "label": "CRMA extraction benchmark",
+        "value": 10,
+        "unit": "% of EU requirements",
+        "period": "2030",
+        "kind": "policy benchmark",
+        "source": "ER25",
+        "note": "",
+        "comparable_with": "",
+        "geo": "indicator-specific"
+      },
+      {
+        "id": "T11_M04",
+        "label": "CRMA processing benchmark",
+        "value": 40,
+        "unit": "% of EU requirements",
+        "period": "2030",
+        "kind": "policy benchmark",
+        "source": "ER25",
+        "note": "",
+        "comparable_with": "",
+        "geo": "indicator-specific"
+      },
+      {
+        "id": "T11_M05",
+        "label": "CRMA recycling benchmark",
+        "value": 25,
+        "unit": "% of EU requirements",
+        "period": "2030",
+        "kind": "policy benchmark",
+        "source": "ER25",
+        "note": "",
+        "comparable_with": "",
+        "geo": "indicator-specific"
+      }
+    ],
+    "geography": [
+      {
+        "region": "United States",
+        "text": "I include USGS 2026 for production, imports and dependence by mineral, and the DoD agreement with MP Materials as a case of specific state support. I would not extrapolate its terms to every miner.",
+        "sources": [
+          "ER24",
+          "ER49"
+        ]
+      },
+      {
+        "region": "EU",
+        "text": "I include the CRMA and its 2030 benchmarks: 10% extraction, 40% processing, 25% recycling and a maximum 65% dependence on a single third country. These are capacity and supply benchmarks, not company market shares already achieved.",
+        "sources": [
+          "ER25"
+        ]
+      }
+    ],
+    "policy": [
+      {
+        "jurisdiction": "United States",
+        "status": "specific supply support",
+        "text": "The DoD agreement with MP Materials combines financing and industrial conditions. I would analyze the instrument, counterparty and support duration; I would not turn it into an ordinary common-share purchase.",
+        "sources": [
+          "ER49",
+          "ER50"
+        ]
+      },
+      {
+        "jurisdiction": "European Union",
+        "status": "CRMA and 2030 benchmarks",
+        "text": "I would distinguish extraction, processing and recycling targets from capacity already built. For a company, I would examine the specific permit and contract.",
+        "sources": [
+          "ER25"
+        ]
+      }
+    ],
+    "chain": {
+      "nodes": [
+        {
+          "id": "n1",
+          "label": "Deposit and permits"
+        },
+        {
+          "id": "n2",
+          "label": "Extraction"
+        },
+        {
+          "id": "n3",
+          "label": "Refining and separation"
+        },
+        {
+          "id": "n4",
+          "label": "Materials and magnets"
+        },
+        {
+          "id": "n5",
+          "label": "Industry and recycling"
+        }
+      ],
+      "edges": [
+        {
+          "source": "n1",
+          "target": "n2"
+        },
+        {
+          "source": "n2",
+          "target": "n3"
+        },
+        {
+          "source": "n3",
+          "target": "n4"
+        },
+        {
+          "source": "n4",
+          "target": "n5"
+        }
+      ],
+      "layout": "left-right",
+      "note": "I would show economic and operational relationships. Arrow widths are not proportional to money; the data do not provide amounts that would justify presenting these as measured flows."
+    },
+    "risks": [
+      {
+        "title": "Demand grows and prices can still fall",
+        "mechanism": "I can be wrong if I extrapolate a high price while new capacity or substitutes change the balance.",
+        "evidence": "The IEA documents earlier declines, later rebounds and highly uneven investment across minerals; LFP batteries alter relative cobalt demand.",
+        "watch": "If new supply or chemistry changes emerged, I would examine unit costs, inventories and actual exposure to each mineral.",
+        "sources": [
+          "ER26",
+          "ER27"
+        ],
+        "interpretation": "The economic mechanism and my monitoring trigger are my interpretation; the source supports the cited evidence."
+      },
+      {
+        "title": "Concentration enables disruption",
+        "mechanism": "I translate export controls into higher costs or unavailable inputs, depending on the company’s position in the chain.",
+        "evidence": "USGS records trade dependence; the IEA identifies high refining concentration and regional price divergences.",
+        "watch": "If restrictions arose, I would examine origin country, refining stage, substitutes and supply contracts.",
+        "sources": [
+          "ER24",
+          "ER27"
+        ],
+        "interpretation": "The economic mechanism and my monitoring trigger are my interpretation; the source supports the cited evidence."
+      },
+      {
+        "title": "A strategic plant can take time to become profitable",
+        "mechanism": "I can pay for future capacity that needs more capital and time than expected.",
+        "evidence": "MP Materials describes projects subject to execution and financing; its Q3 2026 report records inventory and expansion costs.",
+        "watch": "If commissioning were slower than expected, I would examine metallurgical recovery, unit costs, funding needs and dilution.",
+        "sources": [
+          "ER49",
+          "ER50"
+        ],
+        "interpretation": "The economic mechanism and my monitoring trigger are my interpretation; the source supports the cited evidence."
+      }
+    ],
+    "vehicles": [
+      {
+        "name": "Freeport-McMoRan",
+        "ticker": "FCX",
+        "exchange": "NYSE",
+        "type": "equity",
+        "exposure": "Copper alongside other minerals; mining and geographic risks.",
+        "limitation": "If I chose this vehicle, I would examine its segment exposure, valuation and costs.",
+        "sources": [
+          "ER48"
+        ],
+        "verified_at": "2026-11-24"
+      },
+      {
+        "name": "MP Materials",
+        "ticker": "MP",
+        "exchange": "NYSE",
+        "type": "equity",
+        "exposure": "Rare earths, separation and magnets; expansion and public-contract risks.",
+        "limitation": "If I chose this vehicle, I would examine its segment exposure, valuation and costs.",
+        "sources": [
+          "ER50"
+        ],
+        "verified_at": "2026-11-24"
+      }
+    ],
+    "moat_reading": "I would separate geological reserves, refining and component manufacturing: the bottleneck can be far from the mine. Where there is state support, I would examine its conditions, duration and profitability without it. MP has no global monopoly; FCX offers different copper exposure.",
+    "moat_sources": [
+      "ER24",
+      "ER27",
+      "ER49"
+    ],
+    "chart": {
+      "type": "bar",
+      "title": "Average concentration in the leading refining country",
+      "unit": "% of refined supply",
+      "rows": [
+        {
+          "period": "2023",
+          "value": 70,
+          "kind": "IEA estimate"
+        },
+        {
+          "period": "2025",
+          "value": 72,
+          "kind": "IEA estimate"
+        }
+      ],
+      "source": "S12",
+      "note": "The IEA average excludes rare earths. I would not break it down by country without the necessary original data."
+    },
+    "additional_charts": [],
+    "sources": [
+      "S12",
+      "S26",
+      "S30",
+      "S40",
+      "ER24",
+      "ER49",
+      "ER25",
+      "ER26",
+      "ER27",
+      "ER50",
+      "ER48"
+    ],
+    "further_analysis": "If I included this trend, I would examine the vehicle’s exposure, its price, the cash it could generate and the specific risks I describe here. This profile does not include an individual valuation or an estimated return.",
+    "capital": {
+      "intro": "Here I compare who increased, reduced or maintained shareholdings between June 30 and September 30, 2026. The difference comes from reported share counts; it does not reveal the precise transaction, price or motive.",
+      "position_ids": [
+        "C030"
+      ],
+      "all_position_ids": [
+        "C030"
+      ],
+      "event_ids": [
+        "CAP_MP_DOD_2025"
+      ],
+      "coverage_note": "I show a selected sample of managers and related assets. It does not represent every buyer and seller associated with this trend."
+    }
+  },
+  {
+    "id": 12,
+    "name": "Education and the future of work",
+    "slug": "educacion-y-trabajo-del-futuro",
+    "group": "Consumption",
+    "snapshot": "I see a greater need to keep learning throughout working life. I would look for recognized credentials, employer integration and measurable outcomes. The United States and Europe provide different evidence and rules; listed exposure usually combines businesses. Funds show holdings, not educational quality. I focus on whether abundant, cheap content reduces pricing without improving employment or productivity.",
+    "change": "Tasks change, and initial education can fall short. I am interested in who helps people acquire a useful skill and demonstrate it to an employer, with sustainable economics for both learner and provider.",
+    "arguments": [
+      "Companies may need recurring training and credentials that lower the cost of assessing skills.",
+      "Free content and AI can make courses cheaper and make it difficult to charge for easily copied material."
+    ],
+    "invalidation": "If learners did not achieve observable improvements and retention failed to cover the cost of attracting and training them, I would reassess the thesis. Enrollment counts are not enough for me.",
+    "value": "I would examine assessment, accreditation and training integrated into work. The advantage may lie in recognition and employer relationships; a video library alone is less defensible.",
+    "evidence_text": "I separate enrollment, skills and employment. More students or greater demand for an occupation does not prove to me that an educational platform will earn more.",
+    "metrics": [
+      {
+        "id": "T12_M01",
+        "label": "Global gross tertiary-enrollment ratio",
+        "value": 19,
+        "unit": "%",
+        "period": "2000",
+        "kind": "observed",
+        "source": "S13",
+        "note": "",
+        "comparable_with": "",
+        "geo": "indicator-specific"
+      },
+      {
+        "id": "T12_M02",
+        "label": "Global gross tertiary-enrollment ratio",
+        "value": 44,
+        "unit": "%",
+        "period": "2024",
+        "kind": "observed",
+        "source": "S13",
+        "note": "",
+        "comparable_with": "",
+        "geo": "indicator-specific"
+      },
+      {
+        "id": "T12_M03",
+        "label": "Participation of adults aged 25–64 in education/training",
+        "value": 2.0,
+        "unit": "%",
+        "period": "2000",
+        "kind": "observed",
+        "source": "S13",
+        "note": "",
+        "comparable_with": "",
+        "geo": "indicator-specific"
+      },
+      {
+        "id": "T12_M04",
+        "label": "Participation of adults aged 25–64 in education/training",
+        "value": 2.4,
+        "unit": "%",
+        "period": "2024",
+        "kind": "observed",
+        "source": "S13",
+        "note": "",
+        "comparable_with": "",
+        "geo": "indicator-specific"
+      },
+      {
+        "id": "T12_M05",
+        "label": "United States data-scientist employment",
+        "value": 33.5,
+        "unit": "% change, 2024–2034",
+        "period": "2024-2034",
+        "kind": "projection",
+        "source": "ER28",
+        "note": "",
+        "comparable_with": "",
+        "geo": "indicator-specific"
+      },
+      {
+        "id": "T12_M06",
+        "label": "EU people aged 16–74 with basic digital skills",
+        "value": 60,
+        "unit": "% of people aged 16–74",
+        "period": "2025",
+        "kind": "rounded survey indicator",
+        "source": "ER29",
+        "note": "Not comparable with United States employment growth.",
+        "comparable_with": "",
+        "geo": "indicator-specific"
+      }
+    ],
+    "geography": [
+      {
+        "region": "United States",
+        "text": "I add BLS 2024–34 projections: 33.5% more data scientists and 28.5% more security analysts. This is a labor-market estimate; it does not measure educational platforms’ revenue.",
+        "sources": [
+          "ER28"
+        ]
+      },
+      {
+        "region": "EU",
+        "text": "I use Eurostat: approximately 60% of people aged 16–74 had at least basic digital skills in 2025. The indicator is based on reported activities, not a proficiency examination.",
+        "sources": [
+          "ER29"
+        ]
+      }
+    ],
+    "policy": [
+      {
+        "jurisdiction": "United States",
+        "status": "labor transformation and the education market",
+        "text": "I would use BLS as a labor-market projection and platform reports for business risks. I would not treat an employment projection as an approved public budget.",
+        "sources": [
+          "ER28",
+          "ER51",
+          "ER52"
+        ]
+      },
+      {
+        "jurisdiction": "European Union",
+        "status": "skills as a diagnostic indicator",
+        "text": "Eurostat helps measure the skills gap. If a provider depended on public funding or accreditation, I would examine the specific program and authority; the indicator does not prove that support has been awarded.",
+        "sources": [
+          "ER29"
+        ]
+      }
+    ],
+    "chain": {
+      "nodes": [
+        {
+          "id": "n1",
+          "label": "Skills needs"
+        },
+        {
+          "id": "n2",
+          "label": "Content and tools"
+        },
+        {
+          "id": "n3",
+          "label": "Distribution and teaching"
+        },
+        {
+          "id": "n4",
+          "label": "Assessment and credentials"
+        },
+        {
+          "id": "n5",
+          "label": "Employment and lifelong learning"
+        }
+      ],
+      "edges": [
+        {
+          "source": "n1",
+          "target": "n2"
+        },
+        {
+          "source": "n2",
+          "target": "n3"
+        },
+        {
+          "source": "n3",
+          "target": "n4"
+        },
+        {
+          "source": "n4",
+          "target": "n5"
+        }
+      ],
+      "layout": "left-right",
+      "note": "I would show economic and operational relationships. Arrow widths are not proportional to money; the data do not provide amounts that would justify presenting these as measured flows."
+    },
+    "risks": [
+      {
+        "title": "Content loses pricing power",
+        "mechanism": "I see pressure on generic courses if AI tools produce explanations and exercises at lower cost.",
+        "evidence": "Duolingo identifies competition and dependence on AI and external platforms; my conclusion about pricing pressure is an economic hypothesis, not a fact measured by BLS.",
+        "watch": "If conversion to paid plans fell, I would examine differentiation, learning outcomes and subscription renewals.",
+        "sources": [
+          "ER51"
+        ],
+        "interpretation": "The economic mechanism and my monitoring trigger are my interpretation; the source supports the cited evidence."
+      },
+      {
+        "title": "Registered users are not necessarily profitable customers",
+        "mechanism": "I can overestimate the business if I confuse cumulative registrations with frequent use and payment.",
+        "evidence": "Coursera and Duolingo report business results and risks; the Coursera–Udemy merger changed the business perimeter.",
+        "watch": "If growth accelerated sharply, I would separate organic growth, acquisitions, retention, margins and acquisition costs.",
+        "sources": [
+          "ER52",
+          "ER53",
+          "ER51"
+        ],
+        "interpretation": "The economic mechanism and my monitoring trigger are my interpretation; the source supports the cited evidence."
+      },
+      {
+        "title": "Training may not deliver the expected outcome",
+        "mechanism": "I can invest in a platform teaching skills whose demand or recognition changes.",
+        "evidence": "BLS projects different changes by occupation; an employment projection does not prove that a given course increases wages or job placement.",
+        "watch": "For employment-oriented courses, I would examine observed outcomes, how they were measured and whether the credential has value for employers.",
+        "sources": [
+          "ER28"
+        ],
+        "interpretation": "The economic mechanism and my monitoring trigger are my interpretation; the source supports the cited evidence."
+      }
+    ],
+    "vehicles": [
+      {
+        "name": "Coursera",
+        "ticker": "COUR",
+        "exchange": "NYSE",
+        "type": "equity",
+        "exposure": "Platform combined with Udemy since May 11, 2026. UDMY no longer trades independently.",
+        "limitation": "If I chose this vehicle, I would examine its segment exposure, valuation and costs.",
+        "sources": [
+          "ER53"
+        ],
+        "verified_at": "2026-11-24"
+      },
+      {
+        "name": "Duolingo",
+        "ticker": "DUOL",
+        "exchange": "Nasdaq",
+        "type": "equity",
+        "exposure": "Subscription- and advertising-funded learning; not representative of all vocational training.",
+        "limitation": "If I chose this vehicle, I would examine its segment exposure, valuation and costs.",
+        "sources": [
+          "ER51"
+        ],
+        "verified_at": "2026-11-24"
+      }
+    ],
+    "moat_reading": "I would look for credible assessment, employer integration and measurable outcomes. Distribution can help, but an easily copied catalog is not enough. If I highlighted Coursera, I would include Udemy within the group rather than as an independently listed stock.",
+    "moat_sources": [
+      "ER53",
+      "ER51"
+    ],
+    "chart": {
+      "type": "bar",
+      "title": "Global gross tertiary-enrollment ratio",
+      "unit": "% (gross ratio)",
+      "rows": [
+        {
+          "period": "2000",
+          "value": 19,
+          "kind": "observed/UNESCO estimate"
+        },
+        {
+          "period": "2024",
+          "value": 44,
+          "kind": "observed/UNESCO estimate"
+        }
+      ],
+      "source": "S13",
+      "note": "I would read this as a gross enrollment ratio, not as the share of adults holding a degree."
+    },
+    "additional_charts": [],
+    "sources": [
+      "S13",
+      "S21",
+      "S42",
+      "ER28",
+      "ER29",
+      "ER51",
+      "ER52",
+      "ER53"
+    ],
+    "further_analysis": "If I included this trend, I would examine the vehicle’s exposure, its price, the cash it could generate and the specific risks I describe here. This profile does not include an individual valuation or an estimated return.",
+    "capital": {
+      "intro": "Here I compare who increased, reduced or maintained shareholdings between June 30 and September 30, 2026. The difference comes from reported share counts; it does not reveal the precise transaction, price or motive.",
+      "position_ids": [
+        "C035",
+        "C008"
+      ],
+      "all_position_ids": [
+        "C035",
+        "C008"
+      ],
+      "event_ids": [
+        "CAP_COUR_UDEMY_2026"
+      ],
+      "coverage_note": "DUOL provides education exposure; MSFT is an indirect exposure to workplace tools. The SNB’s holding follows a passive mandate, not a declared education investment thesis."
+    }
+  }
+]

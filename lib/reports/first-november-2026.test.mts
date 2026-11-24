@@ -91,11 +91,11 @@ test('calendar preserves historical estimates, all-day semantics, evidence and U
 });
 
 test('archive and adjacent navigation introduce November without altering historical downloads', () => {
-  assert.equal(activeMarketReport.id, 'segundo-informe-noviembre-2026');
-  assert.equal(marketReports.length, 10);
+  assert.equal(activeMarketReport.id, report.id);
+  assert.equal(marketReports.length, 9);
   assert.equal(marketReports.filter(item => item.status === 'actual').length, 1);
   assert.equal(getAdjacentReports(report.id).previousReport?.id, 'segundo-informe-octubre-2026');
-  assert.equal(getAdjacentReports(report.id).nextReport?.id, 'segundo-informe-noviembre-2026');
+  assert.equal(getAdjacentReports(report.id).nextReport, null);
   assert.equal(getAdjacentReports('segundo-informe-octubre-2026').nextReport?.id, report.id);
   const files = execFileSync('git', ['ls-tree', '-r', '--name-only', base, 'public/reports'], { encoding: 'utf8' }).trim().split('\n').filter(file => /\.(html|md|pdf|ics)$/.test(file));
   assert.equal(files.length, 31);

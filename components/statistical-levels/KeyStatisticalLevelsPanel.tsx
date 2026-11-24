@@ -28,18 +28,25 @@ function formatPrice(value: number | null, ticker?: string) {
   return value.toLocaleString("en-US", { maximumFractionDigits, minimumFractionDigits: maximumFractionDigits });
 }
 
-function formatPercent(value: number | null) {
-  if (value === null) return "n/d";
-  return `${value > 0 ? "+" : ""}${(value * 100).toFixed(2)}%`;
+function formatPercent(value: number | null, locale: "es" | "en") {
+  if (value === null || !Number.isFinite(value)) return "n/d";
+  return new Intl.NumberFormat(locale === "es" ? "es-ES" : "en-US", { style: "percent", signDisplay: "exceptZero", minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(value);
 }
 
 const monthlyScriptUrl = "https://www.tradingview.com/script/89W4VF7T/";
 
 function levelTone(key: string) {
-  if (key.includes("SHE")) return "border-[#123b3d]/40 bg-[#123b3d]/10 text-[#123b3d]";
-  if (key.includes("AHE")) return "border-[#b6905b]/40 bg-[#b6905b]/10 text-[#76562d]";
-  if (key.includes("ALE")) return "border-[#b6905b]/40 bg-[#b6905b]/10 text-[#76562d]";
-  return "border-[#9a7a44]/40 bg-[#9a7a44]/10 text-[#76562d]";
+  return key.endsWith("HE")
+    ? "border-[#aac4af] bg-[#eaf2eb] text-[#41664d]"
+    : "border-[#d8b6b4] bg-[#f6e8e7] text-[#8a4d4c]";
+}
+
+function LevelDistances({ priceDistance, level, opening, locale }: { priceDistance: number | null; level: number | null; opening: number | null; locale: "es" | "en" }) {
+  const fromOpen = level !== null && Number.isFinite(level) && opening !== null && Number.isFinite(opening) && opening > 0 ? level / opening - 1 : null;
+  return <div className="mt-2 space-y-1 text-[11px] leading-4 text-muted">
+    <p><span className="font-medium">{formatPercent(priceDistance, locale)}</span> · {locale === "es" ? "precio actual vs. nivel" : "current price vs. level"}</p>
+    <p><span className="font-medium">{formatPercent(fromOpen, locale)}</span> · {locale === "es" ? "nivel desde apertura" : "level from open"}</p>
+  </div>;
 }
 
 function translateLevelText(value: string, locale: "es" | "en") {
@@ -54,7 +61,7 @@ function translateLevelText(value: string, locale: "es" | "en") {
     "Promedio inferior": "Lower average",
     "Extremo inferior": "Lower extreme",
     "Último cierre disponible": "Latest available close",
-    Referencia: "Reference",
+    "Acá estamos": "We are here",
     "Historial insuficiente": "Not enough history",
     "Selecciona un activo con historial suficiente.": "Select an asset with enough history.",
     "Historial insuficiente para calcular niveles de extensión.": "Not enough history to calculate extension levels.",
@@ -88,7 +95,7 @@ function LevelLadder({ data, kind, locale, ticker }: { data: KeyStatisticalLevel
         priceScale: "Price-ordered scale",
       }
     : {
-        weeklyLevels: "Niveles por semana",
+        weeklyLevels: "Niveles semanales",
         monthlyLevels: "Niveles mensuales",
         currentOpen: "Apertura actual",
         open: "Apertura",
@@ -123,7 +130,7 @@ function LevelLadder({ data, kind, locale, ticker }: { data: KeyStatisticalLevel
             key: copy.currentPrice,
             value: data.lastClose,
             description: translateLevelText("Último cierre disponible", locale),
-            group: translateLevelText("Referencia", locale),
+            group: translateLevelText("Acá estamos", locale),
             distance: null,
             tone: "border-ink bg-ink text-white",
             type: "price" as const,
@@ -133,7 +140,7 @@ function LevelLadder({ data, kind, locale, ticker }: { data: KeyStatisticalLevel
 
   if (!data.available) {
     return (
-      <div className="border border-line bg-panelSoft p-4">
+      <div className="sl-level-ladder rounded-[3px] border-[1.5px] border-[#bdb4a4] bg-panelSoft p-4 md:p-5">
         <p className="text-sm font-semibold text-ink">{kind === "weekly" ? copy.weeklyLevels : copy.monthlyLevels}</p>
         <p className="mt-2 text-sm leading-6 text-muted">{translateLevelText(data.statusNote, locale)}</p>
       </div>
@@ -141,11 +148,10 @@ function LevelLadder({ data, kind, locale, ticker }: { data: KeyStatisticalLevel
   }
 
   return (
-    <div className="border border-line bg-panelSoft p-4">
+    <div className="sl-level-ladder rounded-[3px] border-[1.5px] border-[#bdb4a4] bg-panelSoft p-4 md:p-5">
       <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
         <div>
-          <p className="text-xs font-semibold uppercase tracking-[0.14em] text-brass">{kind === "weekly" ? "Weekly" : "Monthly"}</p>
-          <h3 className="mt-1 text-lg font-semibold text-ink">{kind === "weekly" ? copy.weeklyLevels : copy.monthlyLevels}</h3>
+          <h3 className="text-xs font-semibold uppercase tracking-[0.14em] text-brass">{kind === "weekly" ? copy.weeklyLevels : copy.monthlyLevels}</h3>
           <p className="mt-1 text-sm text-muted">{translateLocation(data.location, kind, locale)}</p>
         </div>
         <div className="text-left sm:text-right">
@@ -169,8 +175,8 @@ function LevelLadder({ data, kind, locale, ticker }: { data: KeyStatisticalLevel
         </div>
       </div>
 
-      <div className="mt-5 max-w-full overflow-x-auto">
-        <div className="w-full min-w-[760px] border border-line bg-panel p-4">
+      <div className="mt-5 min-w-0 max-w-full">
+        <div className="w-full min-w-0 border border-line bg-panel p-4">
           <div className="flex items-center justify-between gap-4 text-[11px] font-semibold uppercase tracking-[0.12em] text-muted">
             <span>{formatPrice(min, ticker)}</span>
             <span>{copy.priceScale}</span>
@@ -179,11 +185,11 @@ function LevelLadder({ data, kind, locale, ticker }: { data: KeyStatisticalLevel
           <div className="mt-5">
             <div
               className="grid items-start gap-3"
-              style={{ gridTemplateColumns: `repeat(${Math.max(markers.length, 1)}, minmax(8.5rem, 1fr))` }}
+              style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(min(8.5rem, 100%), 1fr))' }}
             >
               {markers.map((marker) => (
                 <div key={marker.key} className="min-w-0 text-center">
-                  <div className={`mx-auto h-3 w-3 rotate-45 border ${marker.type === "price" ? "border-ink bg-ink" : "border-line bg-panelSoft"}`} />
+                  <div className={`mx-auto h-3 w-3 rotate-45 border ${marker.type === "price" ? "border-ink bg-ink" : marker.tone}`} />
                   <div className={`mx-auto h-8 w-px ${marker.type === "price" ? "bg-ink" : "bg-[#a8a29e]"}`} />
                   <div className="h-px bg-line" />
                   <div className="mt-3 min-w-0">
@@ -193,7 +199,7 @@ function LevelLadder({ data, kind, locale, ticker }: { data: KeyStatisticalLevel
                     <span className={`mt-2 inline-flex border px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.1em] ${marker.tone}`}>
                       {marker.group}
                     </span>
-                    {marker.distance !== null ? <p className="mt-1 text-[11px] text-muted">{formatPercent(marker.distance)}</p> : null}
+                    {marker.type === "level" ? <LevelDistances priceDistance={marker.distance} level={marker.value} opening={data.currentOpen} locale={locale} /> : null}
                   </div>
                 </div>
               ))}
@@ -204,7 +210,7 @@ function LevelLadder({ data, kind, locale, ticker }: { data: KeyStatisticalLevel
 
       <div className="mt-6 grid gap-2 sm:grid-cols-2">
         {labels.map(([key, description, group]) => (
-          <div key={key} className="flex items-center justify-between gap-3 border border-line bg-panel px-3 py-2 text-sm">
+          <div key={key} className="flex flex-col justify-between gap-3 border border-line bg-panel px-3 py-2 text-sm sm:flex-row sm:items-center">
             <div>
               <div className="flex flex-wrap items-center gap-2">
                 <p className="font-semibold text-ink">{key}</p>
@@ -212,9 +218,9 @@ function LevelLadder({ data, kind, locale, ticker }: { data: KeyStatisticalLevel
               </div>
               <p className="text-xs text-muted">{translateLevelText(description, locale)}</p>
             </div>
-            <div className="text-right">
+            <div className="text-left sm:text-right">
               <p className="font-semibold text-ink">{formatPrice(data.levels[key] ?? null, ticker)}</p>
-              <p className="text-xs text-muted">{formatPercent(data.distances[key] ?? null)}</p>
+              <LevelDistances priceDistance={data.distances[key] ?? null} level={data.levels[key] ?? null} opening={data.currentOpen} locale={locale} />
             </div>
           </div>
         ))}
@@ -252,7 +258,7 @@ export function KeyStatisticalLevelsPanel({ asset, frequency, locale = "es" }: K
             : "Extensiones históricas desde la apertura del periodo. No implican soporte, resistencia ni dirección futura."}
         </p>
       </div>
-      <div className={`mt-5 grid gap-4 ${ladders.length > 1 ? "xl:grid-cols-2" : ""}`}>
+      <div className="mt-5 grid grid-cols-1 gap-6">
         {ladders.map((kind) => (
           <LevelLadder
             key={kind}

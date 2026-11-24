@@ -1,3 +1,7 @@
+"use client";
+
+import { useState } from 'react';
+import { DashboardChartCursor } from './DashboardChartCursor';
 import type { SectorEtfSnapshot } from "@/lib/dashboard/types";
 import { translateDashboardText } from "@/lib/dashboard/translate-dashboard-copy";
 
@@ -45,6 +49,7 @@ function trendFromValues(values: number[]): SectorEtfSnapshot["trend"] {
 }
 
 function MiniReturnChart({ label, values, locale = "es" }: { label: string; values: number[]; locale?: "es" | "en" }) {
+  const [active, setActive] = useState<number | null>(null);
   if (values.length < 2) {
     return (
       <div className="bg-panel px-4 py-4 text-sm text-muted">
@@ -76,14 +81,24 @@ function MiniReturnChart({ label, values, locale = "es" }: { label: string; valu
   const finalX = chartRight;
   const finalY = chartBottom - ((finalValue - min) / range) * chartHeight;
   const yFor = (value: number) => chartBottom - ((value - min) / range) * chartHeight;
+  const inspected = active === null ? returns.length - 1 : Math.min(active, returns.length - 1);
+  const sessionsAgo = returns.length - 1 - inspected;
+  const sessionLabel = sessionsAgo === 0 ? (locale === 'en' ? 'Latest close' : 'Último cierre')
+    : locale === 'en' ? `${sessionsAgo} sessions ago` : `Hace ${sessionsAgo} ${sessionsAgo === 1 ? 'sesión' : 'sesiones'}`;
 
   return (
     <div className="bg-panel px-3 py-3">
       <div className="mb-2 flex items-center justify-between text-xs uppercase tracking-[0.12em] text-muted">
         <span>{label}</span>
-        <span className="font-semibold text-ink">{formatPercent(finalValue, locale)}</span>
+        <span className="font-semibold text-ink">{active === null ? '' : `${sessionLabel} · `}{formatPercent(returns[inspected], locale)}</span>
       </div>
-      <svg viewBox="0 0 190 92" className="h-32 w-full text-petrol" role="img" aria-label={locale === "en" ? "Cumulative return for the displayed daily closes" : "Retorno acumulado de los cierres diarios mostrados"}>
+      <svg viewBox="0 0 190 92" className="h-32 w-full text-petrol" role="img" aria-label={locale === "en" ? "Cumulative return for the displayed daily closes" : "Retorno acumulado de los cierres diarios mostrados"}
+        onPointerMove={event => {
+          const matrix = event.currentTarget.getScreenCTM();
+          if (!matrix) return;
+          const position = new DOMPoint(event.clientX, event.clientY).matrixTransform(matrix.inverse());
+          setActive(Math.max(0, Math.min(returns.length - 1, Math.round((position.x - chartLeft) / chartWidth * (returns.length - 1)))));
+        }} onPointerLeave={() => setActive(null)}>
         {[max, middle, min].map((tick) => (
           <g key={tick}>
             <line x1={chartLeft} x2={chartRight} y1={yFor(tick)} y2={yFor(tick)} stroke="currentColor" strokeOpacity="0.12" vectorEffect="non-scaling-stroke" />
@@ -101,6 +116,7 @@ function MiniReturnChart({ label, values, locale = "es" }: { label: string; valu
           return <circle key={`${index}-${value}`} cx={x} cy={y} r="1.2" fill="currentColor" opacity="0.55" />;
         })}
         <circle cx={finalX} cy={finalY} r="3" fill="currentColor" />
+        <DashboardChartCursor x={active === null ? null : chartLeft + inspected / (returns.length - 1) * chartWidth} y1={chartTop} y2={chartBottom} />
         <text x={chartLeft} y="88" className="fill-muted text-[9px]">-{values.length} {locale === "en" ? "sessions" : "sesiones"}</text>
         <text x={chartRight - 16} y="88" className="fill-muted text-[9px]">{locale === "en" ? "Today" : "Hoy"}</text>
       </svg>
@@ -133,7 +149,7 @@ export function SectorDetailPanel({ sector, selectedPeriod, selectedRank, locale
       <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
         <div>
           <p className="text-xs font-semibold uppercase tracking-[0.16em] text-brass">{locale === "en" ? "Selected sector detail" : "Detalle del sector seleccionado"}</p>
-          <h3 className="mt-1 font-serif text-lg font-semibold text-ink">{t(sector.sectorName)}</h3>
+          <h4 className="mt-1 font-serif text-lg font-semibold text-ink">{t(sector.sectorName)}</h4>
           <p className="mt-1 text-sm text-muted">{sector.etfTicker} {locale === "en" ? "as sector proxy" : "como proxy sectorial"}</p>
         </div>
         <p className="text-sm font-semibold text-ink">
@@ -168,11 +184,6 @@ export function SectorDetailPanel({ sector, selectedPeriod, selectedRank, locale
         <MiniReturnChart label={t(selectedSeries?.label) || (locale === "en" ? "Available history" : "Historial disponible")} values={detailPoints} locale={locale} />
       </div>
 
-      <p className="mt-4 text-sm leading-6 text-muted">
-        {locale === "en"
-          ? "Trend is calculated on daily closes, comparing the first segment with the final segment of the displayed period. Sector proxy for context."
-          : "Tendencia calculada sobre cierres diarios, comparando el tramo inicial con el tramo final del periodo mostrado. Proxy sectorial para contexto, no personalizado."}
-      </p>
     </section>
   );
 }

@@ -1,0 +1,12 @@
+import type {CapitalFlowAssetPreview} from './capital-flows-preview-types';
+import type {AggregatePoint} from './sp500-etf-flows.mjs';
+export type EthFeed={symbol:string;windowDays:number;days:{date:string;totalUsdM:number|null;status?:string;funds:{ticker:string;netFlowUsdM:number|null;issuer?:string}[]}[]};
+export type EthHistory={points:AggregatePoint[];sourceFirstDate?:string;[key:string]:unknown};
+export const ETH_MCP_URL:string;
+export const ETH_PUBLIC_SOURCE:string;
+export const ETH_HISTORY_SOURCE:string;
+export function expectedEthFlowSession(asOf?:string):string;
+export function fetchEthFundFeed(options?:{fetcher?:typeof fetch}):Promise<EthFeed>;
+export function parseEthFundFeed(feed:EthFeed,asOf:string):AggregatePoint[];
+export function mergeEthFlowHistory(previous:EthHistory,feed:EthFeed,asOf:string,through?:string):EthHistory;
+export function buildEthAutomaticModel(history:EthHistory,feed:EthFeed,asOf:string):CapitalFlowAssetPreview;

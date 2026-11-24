@@ -17,6 +17,8 @@ import admission as a
 from test_admission import Fixture, ModelAPI, ModelGit, ROOT, jsonbytes
 import test_daily_admission as daily_models
 
+HISTORICAL_ZOD_ROOT = 'e730774f7f920c57c414d792fe4a64cee62e1235'
+
 
 class ZodSecurityTests(unittest.TestCase):
     @classmethod
@@ -25,12 +27,12 @@ class ZodSecurityTests(unittest.TestCase):
         cls.temp = tempfile.TemporaryDirectory(prefix='sl-zod-security-model-')
         cls.directory = Path(cls.temp.name).resolve()
         f = cls.first = Fixture(cls.directory)
-        # The Zod epoch is historical once the lineage epoch exists: model its exact root from the real Zod root
-        # object (the current checkout's bytes of ZOD_FILES legitimately differ after a lineage rebind).
-        checkout = a.Git(ROOT)
-        lineage_root, _ = a.bootstrap(checkout, checkout.text('rev-parse', 'HEAD'))
-        zod_root, _ = a.zod_bootstrap(checkout, a.lineage_registry(checkout, lineage_root)[0]['parent'])
-        cls.content = {p: a.Git(ROOT).blob(zod_root, p) for p in a.ZOD_FILES}
+        cls.content = {p: (ROOT / p).read_bytes() for p in a.ZOD_FILES}
+        # This model replays the Zod-only repair, independently of later app upgrades.
+        a.need(f.git.parents(HISTORICAL_ZOD_ROOT) == [a.ZOD_BASE], 'ZOD_FIXTURE_PARENT')
+        cls.content['package-lock.json'] = f.git.blob(HISTORICAL_ZOD_ROOT, 'package-lock.json')
+        frozen_inputs = a.unique_json(cls.content['scripts/statistical-levels-release/source-inputs.json'])
+        a.need(a.digest(cls.content['package-lock.json']) == frozen_inputs['package-lock.json'], 'ZOD_FIXTURE_LOCK_HASH')
         cls.content[a.CI] = re.sub(a.ZOD_PIN, lambda m: m[1] + b'0' * 64 + m[2], cls.content[a.CI])
         rows = [{'path': p, 'mode': '100644', 'sha256': a.digest(cls.content[p])} for p in sorted(cls.content)]
         pin = a.digest(json.dumps(rows, sort_keys=True, separators=(',', ':')).encode())

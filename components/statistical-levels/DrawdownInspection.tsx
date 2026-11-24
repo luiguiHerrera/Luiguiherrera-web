@@ -69,7 +69,10 @@ export function DrawdownInspection({ series, drawdowns, path, area, minDrawdown,
         <line x1="0" x2="100" y1="0" y2="0" stroke="#b8b2aa" strokeWidth="0.45" vectorEffect="non-scaling-stroke" />
         {area ? <path d={area} fill="#e6dece" /> : null}
         {path ? <path d={path} fill="none" stroke="#9a7a44" strokeWidth="1.4" vectorEffect="non-scaling-stroke" /> : null}
-        {active !== null ? <line className="sl-drawdown-crosshair" x1={x} x2={x} y1="0" y2="100" stroke="#123b3d" strokeWidth="1" vectorEffect="non-scaling-stroke" /> : null}
+        {active !== null ? <>
+          <line className="sl-drawdown-crosshair sl-drawdown-level" x1="0" x2="100" y1={y} y2={y} stroke="#123b3d" strokeWidth="0.8" strokeDasharray="2 4" strokeLinecap="round" vectorEffect="non-scaling-stroke" pointerEvents="none" />
+          <line className="sl-drawdown-crosshair" x1={x} x2={x} y1="0" y2="100" stroke="#123b3d" strokeWidth="1" vectorEffect="non-scaling-stroke" pointerEvents="none" />
+        </> : null}
       </svg>
       {active !== null ? <>
         <span className="sl-drawdown-point" aria-hidden="true" style={{ left: `${x}%`, top: `${y}%` }} />

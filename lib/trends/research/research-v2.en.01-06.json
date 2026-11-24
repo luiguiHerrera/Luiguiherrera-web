@@ -1,0 +1,1992 @@
+[
+  {
+    "id": 1,
+    "name": "Artificial intelligence",
+    "slug": "inteligencia-artificial",
+    "group": "Technology",
+    "snapshot": "I see more AI use, but value depends on who turns that use into cash. I am interested in bottlenecks in chips, manufacturing and software. Capital is already leaving traces in fund disclosures; the risk is paying today for profits that still have to arrive.",
+    "change": "I see companies delegating analysis, content and programming tasks to models. The question I care about is how much time or money they save after paying for computing, integration and supervision. That is where the economic story begins.",
+    "arguments": [
+      "In favor, I see documented adoption and computing needs that translate into suppliers’ sales. If customers sustain those savings, there is a basis for recurring demand.",
+      "Against it, I see an infrastructure bill arriving before some of the benefits. Competition can pass savings through to customers and leave suppliers with less margin."
+    ],
+    "invalidation": "If customer savings and incremental revenue persistently fail to cover computing and integration, I would revisit the business thesis. If the business works but the price requires extraordinary results, I would revisit the vehicle and its valuation.",
+    "value": "I would start where switching suppliers really costs something: EUV lithography, advanced manufacturing and software ecosystems. Then I would work through margins, reinvestment and the price paid. An excellent company can still be a weak investment if I buy it as though nothing could go wrong.",
+    "evidence_text": "For Europe I have the Eurostat series. In the United States, Census finds 18% of businesses using AI in its reference period; employment-weighted, the figure is 32%. I would show them separately: their questions, periods and populations do not justify a Europe-versus-US race with two bars stripped of context.",
+    "metrics": [
+      {
+        "id": "T01_M01",
+        "label": "EU businesses using AI",
+        "value": 8.1,
+        "unit": "%",
+        "period": "2023",
+        "kind": "observed",
+        "source": "S01",
+        "note": "",
+        "comparable_with": "",
+        "geo": "indicator-specific"
+      },
+      {
+        "id": "T01_M02",
+        "label": "EU businesses using AI",
+        "value": 13.5,
+        "unit": "%",
+        "period": "2024",
+        "kind": "observed",
+        "source": "S01",
+        "note": "",
+        "comparable_with": "",
+        "geo": "indicator-specific"
+      },
+      {
+        "id": "T01_M03",
+        "label": "EU businesses using AI",
+        "value": 20.0,
+        "unit": "%",
+        "period": "2025",
+        "kind": "observed",
+        "source": "S01",
+        "note": "",
+        "comparable_with": "",
+        "geo": "indicator-specific"
+      },
+      {
+        "id": "T01_M04",
+        "label": "Surveyed organizations using AI",
+        "value": 88,
+        "unit": "%",
+        "period": "2025",
+        "kind": "survey",
+        "source": "S02",
+        "note": "The sample and methodology differ from Eurostat: do not combine the two series.",
+        "comparable_with": "",
+        "geo": "indicator-specific"
+      },
+      {
+        "id": "T01_M05",
+        "label": "Annual electricity consumption by data centers: growth",
+        "value": 17,
+        "unit": "%",
+        "period": "2025",
+        "kind": "estimate",
+        "source": "S31",
+        "note": "Not exclusively AI.",
+        "comparable_with": "",
+        "geo": "indicator-specific"
+      },
+      {
+        "id": "T01_M06",
+        "label": "US businesses using AI in a business function",
+        "value": 18,
+        "unit": "% of businesses",
+        "period": "November 2025 to January 2026",
+        "kind": "survey",
+        "source": "R_CENSUS",
+        "note": "BTOS; business-weighted measure. I do not splice this into Eurostat or older BTOS questions.",
+        "comparable_with": "",
+        "geo": "indicator-specific"
+      }
+    ],
+    "geography": [
+      {
+        "region": "United States",
+        "text": "Census estimates 18% by business and 32% by employment for November 2025 to January 2026. I would preserve the questionnaire change as a break in comparability.",
+        "sources": [
+          "R_CENSUS"
+        ]
+      },
+      {
+        "region": "European Union",
+        "text": "Eurostat puts use at 20% of covered businesses in 2025. I would preserve the threshold of at least ten persons employed and the covered sectors.",
+        "sources": [
+          "S01"
+        ]
+      }
+    ],
+    "policy": [
+      {
+        "jurisdiction": "United States",
+        "status": "proposed legislative framework",
+        "text": "The March 2026 framework proposes a national policy and infrastructure facilitation. If I analyzed a project, I would check the applicable federal or state rule and the specific permit; a White House announcement does not establish that a law has passed.",
+        "sources": [
+          "R_AI_US"
+        ]
+      },
+      {
+        "jurisdiction": "European Union",
+        "status": "entry into force announced July 27, 2026",
+        "text": "The Commission reports the AI Omnibus entering into force and extended timetables. For a high-risk application, I would review its category, enforceable date and compliance cost. I would not assume all obligations start at once.",
+        "sources": [
+          "R_AI_EU"
+        ]
+      }
+    ],
+    "chain": {
+      "nodes": [
+        {
+          "id": "euv",
+          "label": "EUV lithography",
+          "actors": [
+            "ASML"
+          ]
+        },
+        {
+          "id": "fab",
+          "label": "Manufacturing and packaging",
+          "actors": [
+            "TSMC"
+          ]
+        },
+        {
+          "id": "gpu",
+          "label": "Chips and platform",
+          "actors": [
+            "NVIDIA"
+          ]
+        },
+        {
+          "id": "power",
+          "label": "Electricity and data centers",
+          "actors": []
+        },
+        {
+          "id": "cloud",
+          "label": "Cloud and models",
+          "actors": [
+            "Microsoft"
+          ]
+        },
+        {
+          "id": "apps",
+          "label": "Applications",
+          "actors": []
+        },
+        {
+          "id": "client",
+          "label": "Business paying and using",
+          "actors": []
+        }
+      ],
+      "edges": [
+        {
+          "source": "euv",
+          "target": "fab"
+        },
+        {
+          "source": "fab",
+          "target": "gpu"
+        },
+        {
+          "source": "gpu",
+          "target": "cloud"
+        },
+        {
+          "source": "power",
+          "target": "cloud"
+        },
+        {
+          "source": "cloud",
+          "target": "apps"
+        },
+        {
+          "source": "apps",
+          "target": "client"
+        }
+      ],
+      "layout": "top-down",
+      "note": "I would show economic and operational relationships. Arrow widths are not proportional to money; there are no amounts that would justify presenting these as measured flows."
+    },
+    "risks": [
+      {
+        "title": "Investing faster than cash arrives",
+        "mechanism": "A data center is paid for before its full utilization is known. If revenue and savings take time, spending can consume cash even while sales grow.",
+        "evidence": "Microsoft reports USD 58,000 million of operating cash flow and USD 39,367 million of equipment payments from July to September 2026. The difference is USD 18,633 million, versus USD 25,663 million a year earlier; this is my consolidated calculation, not AI-only cash flow.",
+        "watch": "If investment keeps growing faster than operating cash flow, I would review utilization, purchase commitments and capital recovery.",
+        "sources": [
+          "S32"
+        ],
+        "interpretation": "The economic mechanism and my monitoring trigger are my interpretation; the source supports the cited evidence."
+      },
+      {
+        "title": "A bottleneck also concentrates fragility",
+        "mechanism": "Export licenses, manufacturing capacity or a sole supplier can slow deliveries and raise component costs. A commercial advantage does not remove that dependency.",
+        "evidence": "ASML identifies Carl Zeiss SMT as the sole supplier of critical optics. NVIDIA describes export restrictions, competition and dependence on third parties in its 10-Q.",
+        "watch": "If licenses tighten or lead times rise, I would review deliverable orders, inventories and customers’ real alternatives.",
+        "sources": [
+          "R_ASML",
+          "R_NVDA"
+        ],
+        "interpretation": "The economic mechanism and my monitoring trigger are my interpretation; the source supports the cited evidence."
+      },
+      {
+        "title": "The model works but the product does not pay off",
+        "mechanism": "Errors, sensitive data and supervision can consume the promised savings. Competitors or major customers’ own chips can also reduce the price a supplier charges.",
+        "evidence": "NIST documents risks specific to generative AI; NVIDIA acknowledges competition and technological change. These are identified mechanisms, not a numerical probability of failure.",
+        "watch": "If customers do not renew or cost per task does not fall, I would review net savings, margins and the ability to replace the supplier.",
+        "sources": [
+          "R_NIST_AI",
+          "R_NVDA"
+        ],
+        "interpretation": "The economic mechanism and my monitoring trigger are my interpretation; the source supports the cited evidence."
+      }
+    ],
+    "vehicles": [
+      {
+        "name": "NVIDIA",
+        "ticker": "NVDA",
+        "exchange": "Nasdaq",
+        "type": "equity",
+        "exposure": "Accelerators, networking and the software ecosystem",
+        "limitation": "I see dependence on major customers’ demand and export restrictions; I would not buy solely because of leadership.",
+        "sources": [
+          "R_NVDA"
+        ],
+        "verified_at": "2026-11-24"
+      },
+      {
+        "name": "TSMC",
+        "ticker": "TSM / 2330",
+        "exchange": "NYSE ADR / Taiwan Stock Exchange",
+        "type": "equity or ADR",
+        "exposure": "Advanced manufacturing and packaging",
+        "limitation": "The ADR represents shares in the same company; exposure includes markets beyond AI.",
+        "sources": [
+          "R_TSMC"
+        ],
+        "verified_at": "2026-11-24"
+      },
+      {
+        "name": "ASML",
+        "ticker": "ASML",
+        "exchange": "Nasdaq / Euronext Amsterdam",
+        "type": "equity",
+        "exposure": "Lithography equipment, including EUV",
+        "limitation": "The business includes lithography other than EUV; permits and customer concentration influence sales.",
+        "sources": [
+          "R_ASML"
+        ],
+        "verified_at": "2026-11-24"
+      },
+      {
+        "name": "Microsoft",
+        "ticker": "MSFT",
+        "exchange": "Nasdaq",
+        "type": "equity",
+        "exposure": "Cloud, applications and AI platforms",
+        "limitation": "Its consolidated revenue is not pure AI revenue.",
+        "sources": [
+          "S32"
+        ],
+        "verified_at": "2026-11-24"
+      },
+      {
+        "name": "iShares Semiconductor ETF",
+        "ticker": "SOXX",
+        "exchange": "Nasdaq",
+        "type": "equity ETF",
+        "exposure": "A basket of semiconductor companies",
+        "limitation": "I would review holdings and overlap: it diversifies issuers but retains sector risk.",
+        "sources": [
+          "R_SOXX",
+          "R_SOXX_SEC"
+        ],
+        "verified_at": "2026-11-24"
+      }
+    ],
+    "moat_reading": "I would start where switching suppliers really costs something: EUV lithography, advanced manufacturing and software ecosystems. Then I would work through margins, reinvestment and the price paid. An excellent company can still be a weak investment if I buy it as though nothing could go wrong.",
+    "moat_sources": [
+      "S32",
+      "R_ASML",
+      "R_NVDA",
+      "R_NIST_AI"
+    ],
+    "moats": [
+      {
+        "actor": "ASML",
+        "ticker": "ASML",
+        "node": "EUV lithography",
+        "advantage": "The only manufacturer of EUV systems, according to its annual report",
+        "qualification": "Technological exclusivity in a defined market; not across all chip manufacturing.",
+        "value_test": "I would look at delivery capacity, maintenance, pricing power and orders that can obtain a license.",
+        "erosion": "Export restrictions, optics dependency and technological change.",
+        "sources": [
+          "R_ASML"
+        ]
+      },
+      {
+        "actor": "TSMC",
+        "ticker": "TSM / 2330",
+        "node": "Advanced manufacturing",
+        "advantage": "Scale, manufacturing processes and customer relationships",
+        "qualification": "Leadership and entry barriers; I do not label this a monopoly. The cited 74% measures its advanced-wafer sales, not global market share.",
+        "value_test": "I would look at manufacturing yields, utilization, margins and returns on new fabs.",
+        "erosion": "Geographic risk, expansion costs and manufacturing alternatives.",
+        "sources": [
+          "R_TSMC"
+        ]
+      },
+      {
+        "actor": "NVIDIA",
+        "ticker": "NVDA",
+        "node": "Acceleration and platform",
+        "advantage": "Software ecosystem and integrated architecture",
+        "qualification": "My reading is a competitive advantage with switching costs; not an established monopoly across all AI.",
+        "value_test": "I would look at how much margin it retains when customers compare alternatives and develop their own chips.",
+        "erosion": "Competitors, more efficient models, in-house chips and export controls.",
+        "sources": [
+          "R_NVDA"
+        ]
+      }
+    ],
+    "chart": {
+      "type": "bar",
+      "title": "AI use among EU businesses",
+      "unit": "% of businesses",
+      "rows": [
+        {
+          "period": "2023",
+          "value": 8.1,
+          "kind": "observed"
+        },
+        {
+          "period": "2024",
+          "value": 13.5,
+          "kind": "observed"
+        },
+        {
+          "period": "2025",
+          "value": 20.0,
+          "kind": "observed"
+        }
+      ],
+      "source": "S01",
+      "note": "I would keep this series, which covers businesses with at least ten persons employed, separate from the Stanford survey."
+    },
+    "additional_charts": [],
+    "sources": [
+      "S01",
+      "S02",
+      "S31",
+      "S32",
+      "S21",
+      "R_CENSUS",
+      "R_AI_US",
+      "R_AI_EU",
+      "R_ASML",
+      "R_NVDA",
+      "R_NIST_AI",
+      "R_TSMC",
+      "R_SOXX",
+      "R_SOXX_SEC"
+    ],
+    "further_analysis": "If I were to include this trend, I would review the vehicle’s exposure, its price, the cash it can generate and the specific risks I describe here. This profile does not include an individual valuation or an estimated return.",
+    "capital": {
+      "intro": "Here I compare who increased, reduced or maintained shareholdings between June 30 and September 30, 2026. The difference comes from reported share counts; it does not reveal the exact trade, its price or the reason behind it.",
+      "position_ids": [
+        "C017",
+        "C018",
+        "C008"
+      ],
+      "all_position_ids": [
+        "C017",
+        "C018",
+        "C008",
+        "C009",
+        "C010"
+      ],
+      "event_ids": [],
+      "coverage_note": "I show a selected sample of managers and related assets. It does not represent every buyer and seller associated with the trend."
+    }
+  },
+  {
+    "id": 2,
+    "name": "Automation",
+    "slug": "automatizacion",
+    "group": "Technology",
+    "snapshot": "I see more industrial tasks being automated and demand that varies by country. I would look for suppliers embedded in the factory, with maintenance and demonstrable savings. Fund positions are a clue about capital, not a guarantee. The cycle and rules differ between the US and Europe; I focus on whether installation costs more than it saves.",
+    "change": "Automation interests me when it reduces errors, downtime or cost per unit. Sensors, control and software become part of the factory’s daily process. For the customer, the calculation includes installation, maintenance and staff training.",
+    "arguments": [
+      "I see demand when workers are scarce, errors are expensive or quality needs to be consistent. The installed base can sustain service and spare parts.",
+      "I also see a business tied to the industrial cycle. If a plant has spare capacity, it can postpone a technically sound improvement."
+    ],
+    "invalidation": "If actual savings stay below total installation and operating costs over several relevant cycles, I would revisit the supplier thesis. One weak quarter of orders, on its own, tells me less.",
+    "value": "I would look at the installed base, the cost of replacing the control system and the service that keeps a factory running. That integration can provide an advantage; then I would check whether it translates into margins and cash, and how much I am paying for it.",
+    "evidence_text": "I read robot installations as physical adoption. I would separate new units, the installed stock and forecasts, then compare regions within the same IFR statistics.",
+    "metrics": [
+      {
+        "id": "T02_M01",
+        "label": "Worldwide industrial robot installations",
+        "value": 552946,
+        "unit": "units",
+        "period": "2022",
+        "kind": "observed",
+        "source": "R_IFR_INDUSTRIAL",
+        "note": "",
+        "comparable_with": "",
+        "geo": "indicator-specific"
+      },
+      {
+        "id": "T02_M02",
+        "label": "Worldwide industrial robot installations",
+        "value": 603307,
+        "unit": "units",
+        "period": "2025",
+        "kind": "observed",
+        "source": "R_IFR_INDUSTRIAL",
+        "note": "",
+        "comparable_with": "",
+        "geo": "indicator-specific"
+      },
+      {
+        "id": "T02_M03",
+        "label": "Worldwide stock of industrial robots",
+        "value": 5079078,
+        "unit": "units",
+        "period": "2025",
+        "kind": "observed",
+        "source": "S03",
+        "note": "",
+        "comparable_with": "",
+        "geo": "indicator-specific"
+      },
+      {
+        "id": "T02_M04",
+        "label": "Forecast worldwide installations",
+        "value": 655000,
+        "unit": "units",
+        "period": "2026",
+        "kind": "forecast",
+        "source": "R_IFR_INDUSTRIAL",
+        "note": "Not an observation; do not combine with actual results without identifying the distinction.",
+        "comparable_with": "",
+        "geo": "indicator-specific"
+      },
+      {
+        "id": "T02_M05",
+        "label": "Industrial robots installed in the US",
+        "value": 38500,
+        "unit": "approximate units",
+        "period": "2025",
+        "kind": "rounded observation",
+        "source": "ER01",
+        "note": "Nearly 38,500; final IFR figure, not installed stock or service robots.",
+        "comparable_with": "",
+        "geo": "indicator-specific",
+        "display_value": "approximately 38,500",
+        "display_unit": "units"
+      }
+    ],
+    "geography": [
+      {
+        "region": "United States",
+        "text": "I use IFR’s final figure as my reference: nearly 38,500 industrial robots installed in 2025, up 12%. The preliminary June figure was superseded by the final September release.",
+        "sources": [
+          "ER01"
+        ]
+      },
+      {
+        "region": "European Union",
+        "text": "I see a different cycle: Germany installed fewer than 25,000 robots in 2025, down 8%. In addition, the main application of Machinery Regulation 2023/1230 starts on January 20, 2027; it includes AI- and software-related safety.",
+        "sources": [
+          "ER01",
+          "ER03"
+        ]
+      }
+    ],
+    "policy": [
+      {
+        "jurisdiction": "United States",
+        "status": "operational safety guidance",
+        "text": "I would include OSHA’s safety and integration requirements in project costs. If a proposal leaves out guarding or training, I would recalculate its return.",
+        "sources": [
+          "ER04"
+        ]
+      },
+      {
+        "jurisdiction": "European Union",
+        "status": "main application from January 20, 2027",
+        "text": "The Machinery Regulation has its own requirements and timetable. If I were designing an installation, I would review conformity, software and responsibilities before assuming it was ready to sell.",
+        "sources": [
+          "ER03"
+        ]
+      }
+    ],
+    "chain": {
+      "nodes": [
+        {
+          "id": "n1",
+          "label": "Sensors and components"
+        },
+        {
+          "id": "n2",
+          "label": "Control and software"
+        },
+        {
+          "id": "n3",
+          "label": "Plant integration"
+        },
+        {
+          "id": "n4",
+          "label": "Customer operations"
+        },
+        {
+          "id": "n5",
+          "label": "Service and updates"
+        }
+      ],
+      "edges": [
+        {
+          "source": "n1",
+          "target": "n2"
+        },
+        {
+          "source": "n2",
+          "target": "n3"
+        },
+        {
+          "source": "n3",
+          "target": "n4"
+        },
+        {
+          "source": "n4",
+          "target": "n5"
+        }
+      ],
+      "layout": "left-right",
+      "note": "I would show economic and operational relationships. Arrow widths are not proportional to money; there are no amounts that would justify presenting these as measured flows."
+    },
+    "risks": [
+      {
+        "title": "The customer postpones investment",
+        "mechanism": "I can be right about the need to automate and wrong about when orders arrive. Lower industrial activity lengthens payback and delays projects.",
+        "evidence": "IFR’s 2025 contrast between US growth and Germany’s decline shows that countries do not move through the cycle together.",
+        "watch": "If orders fall and inventories rise, I would review backlog, cancellations, collection times and actual savings per installation.",
+        "sources": [
+          "ER01"
+        ],
+        "interpretation": "The economic mechanism and my monitoring trigger are my interpretation; the source supports the cited evidence."
+      },
+      {
+        "title": "A digital failure can stop a factory",
+        "mechanism": "I translate a control failure into downtime, liability and lost trust, not just a pending update.",
+        "evidence": "Rockwell identifies industrial cybersecurity risks, sole suppliers and delays in qualifying alternatives in its 10-K. It does not claim every threat has materialized.",
+        "watch": "If incidents or repeated failures occur, I would review support costs, warranties, supplier concentration and contract renewals.",
+        "sources": [
+          "ER02"
+        ],
+        "interpretation": "The economic mechanism and my monitoring trigger are my interpretation; the source supports the cited evidence."
+      },
+      {
+        "title": "Safe installation costs money and time",
+        "mechanism": "I include the cost of integrating safeguards, validating the system and training operators in the robot’s total cost.",
+        "evidence": "OSHA describes integration and maintenance risks; the new European framework adds safety and conformity requirements.",
+        "watch": "If promised savings exclude integration or safety, I would recalculate investment payback with those costs included.",
+        "sources": [
+          "ER04",
+          "ER03"
+        ],
+        "interpretation": "The economic mechanism and my monitoring trigger are my interpretation; the source supports the cited evidence."
+      }
+    ],
+    "vehicles": [
+      {
+        "name": "Rockwell Automation",
+        "ticker": "ROK",
+        "exchange": "NYSE",
+        "type": "equity",
+        "exposure": "Industrial control, software and services.",
+        "limitation": "If I chose this vehicle, I would review segment exposure, valuation and costs.",
+        "sources": [
+          "ER02"
+        ],
+        "verified_at": "2026-11-24"
+      },
+      {
+        "name": "Siemens",
+        "ticker": "SIE",
+        "exchange": "Xetra",
+        "type": "equity",
+        "exposure": "Automation within a diversified group.",
+        "limitation": "If I chose this vehicle, I would review segment exposure, valuation and costs.",
+        "sources": [
+          "ER32"
+        ],
+        "verified_at": "2026-11-24"
+      },
+      {
+        "name": "Global X Robotics & Artificial Intelligence ETF",
+        "ticker": "BOTZ",
+        "exchange": "Nasdaq",
+        "type": "equity ETF",
+        "exposure": "A global basket mixing robotics, automation and AI; it would not replicate this profile alone.",
+        "limitation": "If I chose this vehicle, I would review segment exposure, valuation and costs.",
+        "sources": [
+          "ER58"
+        ],
+        "verified_at": "2026-11-24"
+      }
+    ],
+    "moat_reading": "I would look for an installed base, process knowledge, embedded software and recurring service. Rockwell and Siemens are candidates for examining those switching costs; I would not present them as monopolies. If margins improve, I would check whether that comes from productivity and retention or an exceptional cycle.",
+    "moat_sources": [
+      "ER02"
+    ],
+    "chart": {
+      "type": "bar",
+      "title": "Annual industrial robot installations",
+      "unit": "units",
+      "rows": [
+        {
+          "period": "2022",
+          "value": 552946,
+          "kind": "observed"
+        },
+        {
+          "period": "2025",
+          "value": 603307,
+          "kind": "observed"
+        },
+        {
+          "period": "2026",
+          "value": 655000,
+          "kind": "forecast"
+        }
+      ],
+      "source": "S03",
+      "note": "2026 is a forecast. I would leave 2023 and 2024 unfilled because this series does not supply those data.",
+      "sources": [
+        "R_IFR_INDUSTRIAL"
+      ]
+    },
+    "additional_charts": [],
+    "sources": [
+      "S03",
+      "S34",
+      "S21",
+      "ER01",
+      "ER03",
+      "ER02",
+      "ER04",
+      "ER32",
+      "ER58",
+      "R_IFR_INDUSTRIAL"
+    ],
+    "further_analysis": "If I were to include this trend, I would review the vehicle’s exposure, its price, the cash it can generate and the specific risks I describe here. This profile does not include an individual valuation or an estimated return.",
+    "capital": {
+      "intro": "Here I compare who increased, reduced or maintained shareholdings between June 30 and September 30, 2026. The difference comes from reported share counts; it does not reveal the exact trade, its price or the reason behind it.",
+      "position_ids": [
+        "C026",
+        "C027",
+        "C029"
+      ],
+      "all_position_ids": [
+        "C026",
+        "C027",
+        "C029",
+        "C008"
+      ],
+      "event_ids": [],
+      "coverage_note": "I show a selected sample of managers and related assets. It does not represent every buyer and seller associated with the trend."
+    }
+  },
+  {
+    "id": 3,
+    "name": "Energy and infrastructure",
+    "slug": "energia-e-infraestructura",
+    "group": "Resources",
+    "snapshot": "Electricity demand needs generation, grids and connections. I see potential value in equipment that is difficult to replace and assets with regulated revenue. Investment and disclosed positions identify specific actors, with limits. The US and Europe have different permits and tariffs; if returns do not cover debt and construction, the need for energy does not save the investment.",
+    "change": "I see more electricity demand and projects needing to connect. The bottleneck can be a substation, a transformer or a permit, even when generation capacity exists. That is why I follow the whole chain before choosing a technology.",
+    "arguments": [
+      "Grid renewal and the need for reliable supply can sustain demand for years.",
+      "Permits, financing and regulation can delay revenue or pass much of the benefit on to users."
+    ],
+    "invalidation": "If projects do not reach operation, utilization disappoints or the permitted tariff fails to cover the cost of capital, I would revisit the thesis. More announced investment would not be enough for me.",
+    "value": "I would look at equipment with difficult certification, recurring service and grids with territorial exclusivity. In a regulated monopoly, the question is what return the regulator allows. Having few rivals does not provide freedom to charge any price.",
+    "evidence_text": "I separate estimated investment, queued projects and operating assets. A connection request shows me intent; it does not yet establish generation, energy sales or returns.",
+    "metrics": [
+      {
+        "id": "T03_M01",
+        "label": "Forecast total worldwide energy investment",
+        "value": 3.4,
+        "unit": "trillion USD",
+        "period": "2026",
+        "kind": "estimate",
+        "source": "S04",
+        "note": "IEA estimate for 2026; not a final figure.",
+        "comparable_with": "",
+        "geo": "indicator-specific"
+      },
+      {
+        "id": "T03_M02",
+        "label": "Forecast worldwide clean energy investment",
+        "value": 2.2,
+        "unit": "trillion USD",
+        "period": "2026",
+        "kind": "estimate",
+        "source": "S04",
+        "note": "Includes generation, grids, efficiency and electrification.",
+        "comparable_with": "",
+        "geo": "indicator-specific"
+      },
+      {
+        "id": "T03_M03",
+        "label": "Forecast worldwide fossil fuel investment",
+        "value": 1.2,
+        "unit": "trillion USD",
+        "period": "2026",
+        "kind": "estimate",
+        "source": "S04",
+        "note": "Do not add subsets of the clean energy figure.",
+        "comparable_with": "",
+        "geo": "indicator-specific"
+      },
+      {
+        "id": "T03_M04",
+        "label": "US generation in the interconnection queue",
+        "value": 1312,
+        "unit": "GW",
+        "period": "2025",
+        "kind": "registered applications",
+        "source": "ER07",
+        "note": "",
+        "comparable_with": "",
+        "geo": "indicator-specific"
+      },
+      {
+        "id": "T03_M05",
+        "label": "US storage in the interconnection queue",
+        "value": 749,
+        "unit": "GW",
+        "period": "2025",
+        "kind": "registered applications",
+        "source": "ER07",
+        "note": "Power capacity, not energy in GWh; excludes loads and behind-the-meter installations.",
+        "comparable_with": "",
+        "geo": "indicator-specific"
+      }
+    ],
+    "geography": [
+      {
+        "region": "United States",
+        "text": "I include DOE’s preliminary 2026 transmission study and the Berkeley Lab queues: 1,312 GW of generation and 749 GW of storage were seeking connection at year-end 2025.",
+        "sources": [
+          "ER05",
+          "ER07"
+        ]
+      },
+      {
+        "region": "European Union",
+        "text": "I separate the estimated EUR 584,000 million needed for grids from financing already approved. The European December 2025 package contains proposals; I would not assume every measure is already applicable law.",
+        "sources": [
+          "ER06"
+        ]
+      }
+    ],
+    "policy": [
+      {
+        "jurisdiction": "United States",
+        "status": "programs and implementation subject to review",
+        "text": "GAO documents changes and pending funds in energy programs. I would distinguish authorization, contractual obligation and disbursement before attributing revenue to a supplier.",
+        "sources": [
+          "ER08"
+        ]
+      },
+      {
+        "jurisdiction": "European Union",
+        "status": "package including proposals and planning",
+        "text": "The grids package includes measures and proposals at different stages. I would review the asset’s permit, connection and remuneration, not just the announced scale of the need.",
+        "sources": [
+          "ER06"
+        ]
+      }
+    ],
+    "chain": {
+      "nodes": [
+        {
+          "id": "n1",
+          "label": "Generation and storage"
+        },
+        {
+          "id": "n2",
+          "label": "Electrical equipment"
+        },
+        {
+          "id": "n3",
+          "label": "Grids and connection"
+        },
+        {
+          "id": "n4",
+          "label": "Industrial and digital consumption"
+        },
+        {
+          "id": "n5",
+          "label": "Control and maintenance"
+        }
+      ],
+      "edges": [
+        {
+          "source": "n1",
+          "target": "n2"
+        },
+        {
+          "source": "n2",
+          "target": "n3"
+        },
+        {
+          "source": "n3",
+          "target": "n4"
+        },
+        {
+          "source": "n4",
+          "target": "n5"
+        }
+      ],
+      "layout": "left-right",
+      "note": "I would show economic and operational relationships. Arrow widths are not proportional to money; there are no amounts that would justify presenting these as measured flows."
+    },
+    "risks": [
+      {
+        "title": "The queue does not turn into revenue",
+        "mechanism": "I can overestimate demand if I treat every connection request as assured construction.",
+        "evidence": "Berkeley Lab estimates that only 13% of capacity seeking interconnection between 2000 and 2020 was operating by year-end 2025; the median for projects built in 2025 exceeded 5 years.",
+        "watch": "If announcements grow without construction, I would review signed agreements, connection milestones, withdrawals and nonrefundable deposits.",
+        "sources": [
+          "ER07"
+        ],
+        "interpretation": "The economic mechanism and my monitoring trigger are my interpretation; the source supports the cited evidence."
+      },
+      {
+        "title": "Political support changes before disbursement",
+        "mechanism": "I connect a pause in support with delays, higher accrued interest and cancellation risk.",
+        "evidence": "GAO documents reviews and pauses in IIJA/IRA funds at Agriculture and Energy following changes in federal priorities.",
+        "watch": "If regulations change, I would review funds actually disbursed and projects that remain profitable without subsidy.",
+        "sources": [
+          "ER08"
+        ],
+        "interpretation": "The economic mechanism and my monitoring trigger are my interpretation; the source supports the cited evidence."
+      },
+      {
+        "title": "Growth also consumes capital",
+        "mechanism": "I can see strong sales and weak cash flow if expanding factories and capacity consumes more cash than expected.",
+        "evidence": "DOE identifies expansion needs; Eaton reports results and execution risks within its industrial expansion. The need for grids does not establish the supplier’s return.",
+        "watch": "If backlog rises while cash flow weakens, I would review working capital, expansion costs, delivery dates and the ability to pass on cost overruns.",
+        "sources": [
+          "ER05",
+          "ER33"
+        ],
+        "interpretation": "The economic mechanism and my monitoring trigger are my interpretation; the source supports the cited evidence."
+      }
+    ],
+    "vehicles": [
+      {
+        "name": "Eaton",
+        "ticker": "ETN",
+        "exchange": "NYSE",
+        "type": "equity",
+        "exposure": "Electrical management; also other industrial activities.",
+        "limitation": "If I chose this vehicle, I would review segment exposure, valuation and costs.",
+        "sources": [
+          "ER33"
+        ],
+        "verified_at": "2026-11-24"
+      },
+      {
+        "name": "Schneider Electric",
+        "ticker": "SU",
+        "exchange": "Euronext Paris",
+        "type": "equity",
+        "exposure": "Electrical equipment, automation and energy management.",
+        "limitation": "If I chose this vehicle, I would review segment exposure, valuation and costs.",
+        "sources": [
+          "ER34"
+        ],
+        "verified_at": "2026-11-24"
+      }
+    ],
+    "moat_reading": "I would prioritize approved equipment, manufacturing capacity that is difficult to expand and service for an installed base. Eaton and Schneider are equipment candidates; a utility can have regulated territorial exclusivity, but its return depends on the regulator. I would not extend that exclusivity to all suppliers.",
+    "moat_sources": [
+      "ER06",
+      "ER33"
+    ],
+    "chart": {
+      "type": "bar",
+      "title": "Worldwide energy investment: 2026 estimate",
+      "unit": "trillion USD",
+      "rows": [
+        {
+          "period": "Clean energy",
+          "value": 2.2,
+          "kind": "2026 estimate"
+        },
+        {
+          "period": "Fossil fuels",
+          "value": 1.2,
+          "kind": "2026 estimate"
+        }
+      ],
+      "source": "S04",
+      "note": "IEA investment categories; estimated figures, not stock market flows."
+    },
+    "additional_charts": [],
+    "sources": [
+      "S04",
+      "S31",
+      "ER05",
+      "ER07",
+      "ER06",
+      "ER08",
+      "ER33",
+      "ER34"
+    ],
+    "further_analysis": "If I were to include this trend, I would review the vehicle’s exposure, its price, the cash it can generate and the specific risks I describe here. This profile does not include an individual valuation or an estimated return.",
+    "capital": {
+      "intro": "Here I compare who increased, reduced or maintained shareholdings between June 30 and September 30, 2026. The difference comes from reported share counts; it does not reveal the exact trade, its price or the reason behind it.",
+      "position_ids": [
+        "C011",
+        "C030",
+        "C006"
+      ],
+      "all_position_ids": [
+        "C011",
+        "C030",
+        "C006"
+      ],
+      "event_ids": [],
+      "coverage_note": "BN combines different businesses; CCJ provides uranium and NUE steel. I would not present these positions as pure purchases of electricity grid exposure."
+    }
+  },
+  {
+    "id": 4,
+    "name": "Health and longevity",
+    "slug": "salud-y-longevidad",
+    "group": "Health",
+    "snapshot": "I see an aging population and a growing need for diagnosis, treatment and care. I would look for demonstrated clinical benefits, reimbursable revenue and real barriers to copying the product. Funds show increases and reductions, not consensus. In the US and Europe, the payer changes the economics; patents, prices and litigation can reduce value even as demand grows.",
+    "change": "I am interested in how care changes with age: prevention, diagnosis, treatment and ongoing care. Aging describes a need. To turn that into a business, someone must demonstrate outcomes and someone must pay for them.",
+    "arguments": [
+      "Age and chronic illness can sustain recurring use of useful services and devices.",
+      "A product can work clinically yet receive an insufficient price. A trial can also fail, or patent protection can expire."
+    ],
+    "invalidation": "If a treatment does not provide a meaningful clinical improvement or the payer does not accept its cost, I would revisit the product thesis. If a patent expires, I would separately review how much business the company can defend.",
+    "value": "I would look at devices with associated training and consumables, diagnostics with proven usefulness and treatments protected by active patents. A barrier has an expiry date, substitutes and pricing rules; I would run those numbers before calling it a durable advantage.",
+    "evidence_text": "Demographics help me understand the need. To value a business, I would connect them with clinical outcomes, spending and reimbursement, preserving the distinction between observations and projections.",
+    "metrics": [
+      {
+        "id": "T04_M01",
+        "label": "Worldwide population aged 60 or over",
+        "value": 1.0,
+        "unit": "billion people",
+        "period": "2020",
+        "kind": "observed",
+        "source": "S05",
+        "note": "",
+        "comparable_with": "",
+        "geo": "indicator-specific",
+        "display_value": "1,000",
+        "display_unit": "million people",
+        "display_scale": 1000
+      },
+      {
+        "id": "T04_M02",
+        "label": "Worldwide population aged 60 or over",
+        "value": 1.4,
+        "unit": "billion people",
+        "period": "2030",
+        "kind": "projection",
+        "source": "S05",
+        "note": "",
+        "comparable_with": "",
+        "geo": "indicator-specific",
+        "display_value": "1,400",
+        "display_unit": "million people",
+        "display_scale": 1000
+      },
+      {
+        "id": "T04_M03",
+        "label": "Worldwide population aged 60 or over",
+        "value": 2.1,
+        "unit": "billion people",
+        "period": "2050",
+        "kind": "projection",
+        "source": "S05",
+        "note": "",
+        "comparable_with": "",
+        "geo": "indicator-specific",
+        "display_value": "2,100",
+        "display_unit": "million people",
+        "display_scale": 1000
+      },
+      {
+        "id": "T04_M04",
+        "label": "US health spending as a share of GDP",
+        "value": 18.0,
+        "unit": "%",
+        "period": "2024",
+        "kind": "historical record",
+        "source": "ER09",
+        "note": "",
+        "comparable_with": "",
+        "geo": "indicator-specific"
+      },
+      {
+        "id": "T04_M05",
+        "label": "US health spending as a share of GDP",
+        "value": 20.6,
+        "unit": "%",
+        "period": "2034",
+        "kind": "projection",
+        "source": "ER09",
+        "note": "",
+        "comparable_with": "",
+        "geo": "indicator-specific"
+      }
+    ],
+    "geography": [
+      {
+        "region": "United States",
+        "text": "I use CMS to gauge market size: observed healthcare spending was 18.0% of GDP in 2024; 20.6% in 2034 is a projection, not a figure already reached.",
+        "sources": [
+          "ER09"
+        ]
+      },
+      {
+        "region": "European Union",
+        "text": "I include joint clinical assessment from January 2025 for new oncology medicines and advanced therapies. Assessment does not automatically unify national prices or reimbursements.",
+        "sources": [
+          "ER10",
+          "ER62"
+        ]
+      }
+    ],
+    "policy": [
+      {
+        "jurisdiction": "United States",
+        "status": "Medicare price negotiation and FDA authorization",
+        "text": "I would include price negotiation and approval conditions in the product case. If its net price or indication changed, I would review margins and the size of the paying market.",
+        "sources": [
+          "ER11",
+          "ER12"
+        ]
+      },
+      {
+        "jurisdiction": "European Union",
+        "status": "joint clinical assessment from January 2025 for initial categories",
+        "text": "Joint clinical assessment does not set a single European price. I would review national reimbursement and the specific treatment category.",
+        "sources": [
+          "ER10",
+          "ER62"
+        ]
+      }
+    ],
+    "chain": {
+      "nodes": [
+        {
+          "id": "n1",
+          "label": "Research and data"
+        },
+        {
+          "id": "n2",
+          "label": "Trials and approval"
+        },
+        {
+          "id": "n3",
+          "label": "Manufacturing"
+        },
+        {
+          "id": "n4",
+          "label": "Payers and distribution"
+        },
+        {
+          "id": "n5",
+          "label": "Care and follow-up"
+        }
+      ],
+      "edges": [
+        {
+          "source": "n1",
+          "target": "n2"
+        },
+        {
+          "source": "n2",
+          "target": "n3"
+        },
+        {
+          "source": "n3",
+          "target": "n4"
+        },
+        {
+          "source": "n4",
+          "target": "n5"
+        }
+      ],
+      "layout": "left-right",
+      "note": "I would show economic and operational relationships. Arrow widths are not proportional to money; there are no amounts that would justify presenting these as measured flows."
+    },
+    "risks": [
+      {
+        "title": "The science does not confirm the promise",
+        "mechanism": "I could lose much of a company’s value if a trial fails to demonstrate sufficient safety or clinical benefit.",
+        "evidence": "The FDA distinguishes phases, objectives and suspension conditions; progressing to another phase does not equal approval.",
+        "watch": "If results are negative, I would review the primary endpoint, effect size, adverse events and remaining cash; I would not stop at the headline.",
+        "sources": [
+          "ER11"
+        ],
+        "interpretation": "The economic mechanism and my monitoring trigger are my interpretation; the source supports the cited evidence."
+      },
+      {
+        "title": "The payer captures the savings",
+        "mechanism": "I can see more patients with less revenue per treatment if reimbursement or the net price falls.",
+        "evidence": "The first negotiated Medicare prices began in 2026; in the EU, reimbursement decisions remain national.",
+        "watch": "If volumes rise without cash flow growth, I would review net prices, discounts, insurance coverage and payer concentration.",
+        "sources": [
+          "ER12",
+          "ER62"
+        ],
+        "interpretation": "The economic mechanism and my monitoring trigger are my interpretation; the source supports the cited evidence."
+      },
+      {
+        "title": "Too few products support too much value",
+        "mechanism": "I would consider patents, production capacity and therapeutic competition before assuming leadership lasts indefinitely.",
+        "evidence": "Lilly identifies dependence on a few product families, pricing pressure, patent expiry and manufacturing risks.",
+        "watch": "If concentration increases, I would review expiry dates, alternative treatments and how much expansion depends on a single product.",
+        "sources": [
+          "ER35"
+        ],
+        "interpretation": "The economic mechanism and my monitoring trigger are my interpretation; the source supports the cited evidence."
+      }
+    ],
+    "vehicles": [
+      {
+        "name": "Eli Lilly",
+        "ticker": "LLY",
+        "exchange": "NYSE",
+        "type": "equity",
+        "exposure": "Medicines; exposure concentrated by therapeutic families.",
+        "limitation": "If I chose this vehicle, I would review segment exposure, valuation and costs.",
+        "sources": [
+          "ER35"
+        ],
+        "verified_at": "2026-11-24"
+      },
+      {
+        "name": "Novo Nordisk",
+        "ticker": "NVO",
+        "exchange": "NYSE",
+        "type": "equity",
+        "exposure": "Novo Nordisk ADR; local NOVO B shares on Nasdaq Copenhagen.",
+        "limitation": "If I chose this vehicle, I would review segment exposure, valuation and costs.",
+        "sources": [
+          "ER36"
+        ],
+        "verified_at": "2026-11-24"
+      },
+      {
+        "name": "Intuitive Surgical",
+        "ticker": "ISRG",
+        "exchange": "Nasdaq",
+        "type": "equity",
+        "exposure": "Robotic surgery equipment and consumables.",
+        "limitation": "If I chose this vehicle, I would review segment exposure, valuation and costs.",
+        "sources": [
+          "ER57"
+        ],
+        "verified_at": "2026-11-24"
+      }
+    ],
+    "moat_reading": "I would look for useful intellectual property, difficult manufacturing processes, reproducible clinical evidence and distribution. Lilly or Novo may have advantages in specific products; that does not give them a monopoly over healthcare. In equipment, training and recurring consumables can sustain value if clinical benefits and pricing justify it.",
+    "moat_sources": [
+      "ER35",
+      "ER57"
+    ],
+    "chart": {
+      "type": "timeline",
+      "title": "Worldwide population aged 60+",
+      "unit": "billion people",
+      "rows": [
+        {
+          "period": "2020",
+          "value": 1.0,
+          "kind": "observed/baseline estimate",
+          "display_value": "1,000",
+          "display_unit": "million people",
+          "display_scale": 1000
+        },
+        {
+          "period": "2030",
+          "value": 1.4,
+          "kind": "projection",
+          "display_value": "1,400",
+          "display_unit": "million people",
+          "display_scale": 1000
+        },
+        {
+          "period": "2050",
+          "value": 2.1,
+          "kind": "projection",
+          "display_value": "2,100",
+          "display_unit": "million people",
+          "display_scale": 1000
+        }
+      ],
+      "source": "S05",
+      "note": "I would show future years as WHO projections, distinguished from observed data.",
+      "display_unit": "million people",
+      "display_scale": 1000
+    },
+    "additional_charts": [],
+    "sources": [
+      "S05",
+      "S38",
+      "ER09",
+      "ER10",
+      "ER62",
+      "ER11",
+      "ER12",
+      "ER35",
+      "ER57",
+      "ER36"
+    ],
+    "further_analysis": "If I were to include this trend, I would review the vehicle’s exposure, its price, the cash it can generate and the specific risks I describe here. This profile does not include an individual valuation or an estimated return.",
+    "capital": {
+      "intro": "Here I compare who increased, reduced or maintained shareholdings between June 30 and September 30, 2026. The difference comes from reported share counts; it does not reveal the exact trade, its price or the reason behind it.",
+      "position_ids": [
+        "C015",
+        "C003",
+        "C028"
+      ],
+      "all_position_ids": [
+        "C015",
+        "C003",
+        "C028"
+      ],
+      "event_ids": [
+        "CAP_ISRG_BUYBACK_Q32026",
+        "CAP_LLY_RICHMOND_2026"
+      ],
+      "coverage_note": "I show a selected sample of managers and related assets. It does not represent every buyer and seller associated with the trend."
+    }
+  },
+  {
+    "id": 5,
+    "name": "Cybersecurity",
+    "slug": "ciberseguridad",
+    "group": "Security",
+    "snapshot": "I see AI making some scams cheaper, with businesses and people more exposed. Complaints and surveys measure part of the problem; they do not predict how much of the population will become victims. I would examine identity, fraud prevention and response. Capital and rules help locate demand; I focus on whether more attacks translate into margins for any given supplier.",
+    "change": "AI makes fabricated messages, voices and documents more convincing. I am interested in how that combines with fast payments and criminal networks operating across countries. For a business, damage can arrive through a system or a deceived person.",
+    "arguments": [
+      "I see a persistent need to authenticate identities, protect systems and respond to incidents.",
+      "Customers may consolidate purchases into fewer platforms. A greater need for security does not ensure growth for every vendor."
+    ],
+    "invalidation": "If renewals and retention fall while the cost of protecting customers rises, I would revisit the supplier thesis. I would also revisit it if its products fail to reduce the risk they promise to control.",
+    "value": "I would look at who is integrated into identity, access and operations, and how much replacing them costs the customer. Integration and data can give a platform an advantage; that same concentration requires it to avoid becoming a single point of failure.",
+    "evidence_text": "I would show 22,364 complaints mentioning AI and USD 893.3 million in IC3-adjusted losses in 2025. These are received reports, not unique people. Gallup separately estimates the share of adults who experienced a scam; it does not attribute all those scams to AI.",
+    "metrics": [
+      {
+        "id": "T05_M01",
+        "label": "Observed incidents: public administration",
+        "value": 32,
+        "unit": "%",
+        "period": "2025",
+        "kind": "incident sample",
+        "source": "S06",
+        "note": "Share of incidents recorded by ENISA, not of all businesses.",
+        "comparable_with": "",
+        "geo": "indicator-specific"
+      },
+      {
+        "id": "T05_M02",
+        "label": "Observed incidents: business services",
+        "value": 8,
+        "unit": "%",
+        "period": "2025",
+        "kind": "incident sample",
+        "source": "S06",
+        "note": "",
+        "comparable_with": "",
+        "geo": "indicator-specific"
+      },
+      {
+        "id": "T05_M03",
+        "label": "Observed incidents: transport",
+        "value": 8,
+        "unit": "%",
+        "period": "2025",
+        "kind": "incident sample",
+        "source": "S06",
+        "note": "",
+        "comparable_with": "",
+        "geo": "indicator-specific"
+      },
+      {
+        "id": "T05_M04",
+        "label": "Observed incidents: manufacturing",
+        "value": 7,
+        "unit": "%",
+        "period": "2025",
+        "kind": "incident sample",
+        "source": "S06",
+        "note": "",
+        "comparable_with": "",
+        "geo": "indicator-specific"
+      },
+      {
+        "id": "T05_M05",
+        "label": "Observed incidents: banking/finance",
+        "value": 6,
+        "unit": "%",
+        "period": "2025",
+        "kind": "incident sample",
+        "source": "S06",
+        "note": "",
+        "comparable_with": "",
+        "geo": "indicator-specific"
+      },
+      {
+        "id": "T05_M06",
+        "label": "Complaints mentioning AI",
+        "value": 22364,
+        "unit": "complaints",
+        "period": "IC3 2025",
+        "kind": "complaint records",
+        "source": "FB02",
+        "note": "The report contains a reference to AI; not forensic attribution or unique people.",
+        "comparable_with": "",
+        "geo": "indicator-specific"
+      },
+      {
+        "id": "T05_M07",
+        "label": "IC3-adjusted losses with an AI descriptor",
+        "value": 893.346472,
+        "unit": "million USD",
+        "period": "IC3 2025",
+        "kind": "complaint records",
+        "source": "FB02",
+        "note": "",
+        "comparable_with": "",
+        "geo": "indicator-specific"
+      },
+      {
+        "id": "T05_M08",
+        "label": "% of adults personally victimized",
+        "value": 6,
+        "unit": "% of adults personally victimized",
+        "period": "Gallup on 2025",
+        "kind": "survey",
+        "source": "FB03",
+        "note": "",
+        "comparable_with": "",
+        "geo": "indicator-specific"
+      }
+    ],
+    "geography": [
+      {
+        "region": "United States",
+        "text": "I would combine IC3/FinCEN fraud evidence with risks and contracts disclosed by suppliers. FinCEN identifies deepfakes used to bypass identity checks; that provides a concrete need to measure.",
+        "sources": [
+          "FB02",
+          "FB05"
+        ]
+      },
+      {
+        "region": "European Union",
+        "text": "I would retain ENISA as an incident map and NIS2 as a framework for regulatory demand. A duty to protect does not automatically award the business to a company.",
+        "sources": [
+          "S06",
+          "FB12"
+        ]
+      },
+      {
+        "region": "Cross-border",
+        "text": "I would include the cost of pursuing and recovering funds across jurisdictions, without turning nationality into an explanation of crime.",
+        "sources": [
+          "FB06",
+          "FB07"
+        ]
+      }
+    ],
+    "policy": [
+      {
+        "jurisdiction": "United States",
+        "status": "FinCEN alert and anti-fraud response",
+        "text": "FinCEN describes deepfakes being used to bypass identity checks. I would look at intermediaries’ obligations and control effectiveness; an alert does not award revenue to a vendor.",
+        "sources": [
+          "FB05"
+        ]
+      },
+      {
+        "jurisdiction": "European Union",
+        "status": "NIS2 framework",
+        "text": "I would review the entity’s scope, national implementation and its suppliers’ responsibilities. Compliance needs can sustain spending, but they do not guarantee margins.",
+        "sources": [
+          "FB12"
+        ]
+      },
+      {
+        "jurisdiction": "India and cross-border networks",
+        "status": "applicable criminal offenses exist",
+        "text": "India has rules covering identity and impersonation. I focus on the ability to investigate, cooperate and recover funds when crime crosses several jurisdictions.",
+        "sources": [
+          "FB06",
+          "FB07"
+        ]
+      }
+    ],
+    "chain": {
+      "nodes": [
+        {
+          "id": "assets",
+          "label": "Data, identities and payments",
+          "capture": "Source of risk"
+        },
+        {
+          "id": "controls",
+          "label": "Identity and prevention",
+          "capture": "Licenses, integration and authentication"
+        },
+        {
+          "id": "platforms",
+          "label": "Endpoints, cloud and networks",
+          "capture": "Subscriptions"
+        },
+        {
+          "id": "response",
+          "label": "Response and services",
+          "capture": "Operating contracts"
+        },
+        {
+          "id": "outcome",
+          "label": "Losses and continuity",
+          "capture": "Outcome the customer pays for"
+        }
+      ],
+      "edges": [
+        {
+          "source": "assets",
+          "target": "controls"
+        },
+        {
+          "source": "assets",
+          "target": "platforms"
+        },
+        {
+          "source": "controls",
+          "target": "response"
+        },
+        {
+          "source": "platforms",
+          "target": "response"
+        },
+        {
+          "source": "response",
+          "target": "outcome"
+        }
+      ],
+      "layout": "left-right",
+      "note": "I would show economic and operational relationships. Arrow widths are not proportional to money; there are no amounts that would justify presenting these as measured flows."
+    },
+    "risks": [
+      {
+        "title": "The protector can also fail",
+        "mechanism": "If an update brings a customer to a halt, I would expect compensation, litigation and difficulties with renewals.",
+        "evidence": "CrowdStrike acknowledges continuing consequences of the July 19, 2024 incident in its October 2026 10-Q.",
+        "watch": "If discounts or departures increase, I would review retention, organic ARR and provisions before calling the platform strong.",
+        "sources": [
+          "FB08"
+        ],
+        "interpretation": "The economic mechanism and my monitoring trigger are my interpretation; the source supports the cited evidence."
+      },
+      {
+        "title": "More threats do not guarantee better margins",
+        "mechanism": "If purchasing concentrates into broad bundles, I would see pressure on smaller suppliers and potential integration costs.",
+        "evidence": "Fortinet discusses competition and business fluctuations; Palo Alto completed CyberArk in 2026.",
+        "watch": "If consolidation continues, I would review price per customer, cash margins and product integration costs.",
+        "sources": [
+          "FB09",
+          "FB10"
+        ],
+        "interpretation": "The economic mechanism and my monitoring trigger are my interpretation; the source supports the cited evidence."
+      },
+      {
+        "title": "AI against identity controls",
+        "mechanism": "If impersonation defeats verification, I would expect fraud, investigation and liability to increase.",
+        "evidence": "FinCEN documents synthetic documents and an increase in suspicious reports associated with deepfakes.",
+        "watch": "If someone offers me a miracle solution, I would review out-of-sample fraud prevented and false positives affecting real customers.",
+        "sources": [
+          "FB05"
+        ],
+        "interpretation": "The economic mechanism and my monitoring trigger are my interpretation; the source supports the cited evidence."
+      },
+      {
+        "title": "Limited cross-border recovery",
+        "mechanism": "Even where laws exist, I can have a crime, funds and perpetrators in different jurisdictions.",
+        "evidence": "UNODC describes fraud, laundering and corruption networks; India does have applicable criminal offenses.",
+        "watch": "In an international expansion, I would review freezing times, cooperation and recovery; I would not assume automatic impunity based on country.",
+        "sources": [
+          "FB06",
+          "FB07"
+        ],
+        "interpretation": "The economic mechanism and my monitoring trigger are my interpretation; the source supports the cited evidence."
+      }
+    ],
+    "vehicles": [
+      {
+        "name": "CrowdStrike",
+        "ticker": "CRWD",
+        "exchange": "Nasdaq",
+        "type": "equity",
+        "exposure": "Protection and security platform",
+        "limitation": "If I chose this vehicle, I would review segment exposure, valuation and costs.",
+        "sources": [
+          "FB08"
+        ],
+        "verified_at": "2026-11-24"
+      },
+      {
+        "name": "Palo Alto Networks",
+        "ticker": "PANW",
+        "exchange": "Nasdaq",
+        "type": "equity",
+        "exposure": "Platform, networks and identity following CyberArk",
+        "limitation": "If I chose this vehicle, I would review segment exposure, valuation and costs.",
+        "sources": [
+          "FB09"
+        ],
+        "verified_at": "2026-11-24"
+      },
+      {
+        "name": "Fortinet",
+        "ticker": "FTNT",
+        "exchange": "Nasdaq",
+        "type": "equity",
+        "exposure": "Network and platform security",
+        "limitation": "If I chose this vehicle, I would review segment exposure, valuation and costs.",
+        "sources": [
+          "FB10"
+        ],
+        "verified_at": "2026-11-24"
+      },
+      {
+        "name": "First Trust Nasdaq Cybersecurity ETF",
+        "ticker": "CIBR",
+        "exchange": "Nasdaq",
+        "type": "equity ETF",
+        "exposure": "A thematic basket with changing holdings",
+        "limitation": "If I chose this vehicle, I would review segment exposure, valuation and costs.",
+        "sources": [
+          "FB11"
+        ],
+        "verified_at": "2026-11-24"
+      }
+    ],
+    "moat_reading": "I would look for switching costs, useful telemetry, integration and response capability. These can provide an advantage, but I would not call a market with rival platforms and active consolidation a monopoly. The advantage would need to show up in renewals and profitability after compensation costs.",
+    "moat_sources": [
+      "FB08",
+      "FB09",
+      "FB10",
+      "FB05",
+      "FB06",
+      "FB07"
+    ],
+    "chart": {
+      "type": "kpi",
+      "title": "US fraud and AI: separate measures",
+      "rows": [
+        {
+          "period": "IC3 2025",
+          "value": 22364,
+          "unit": "complaints mentioning AI",
+          "kind": "complaint records",
+          "source": "FB02"
+        },
+        {
+          "period": "IC3 2025",
+          "value": 893.346472,
+          "unit": "million USD in IC3-adjusted losses",
+          "kind": "complaint records",
+          "source": "FB02"
+        },
+        {
+          "period": "Gallup on 2025",
+          "value": 6,
+          "unit": "% of adults personally victimized",
+          "kind": "survey",
+          "source": "FB03"
+        }
+      ],
+      "note": "I would keep complaint records and surveys separate. Neither measures all global fraud."
+    },
+    "additional_charts": [
+      {
+        "type": "bar",
+        "title": "Sectors in incidents analyzed by ENISA",
+        "unit": "% of observed incidents",
+        "rows": [
+          {
+            "period": "Public administration",
+            "value": 32,
+            "kind": "observed"
+          },
+          {
+            "period": "Business services",
+            "value": 8,
+            "kind": "observed"
+          },
+          {
+            "period": "Transport",
+            "value": 8,
+            "kind": "observed"
+          },
+          {
+            "period": "Manufacturing",
+            "value": 7,
+            "kind": "observed"
+          },
+          {
+            "period": "Finance",
+            "value": 6,
+            "kind": "observed"
+          }
+        ],
+        "source": "S06",
+        "note": "Selected categories, not adding up to 100%; data on observed incidents in 2025."
+      },
+      {
+        "type": "comparison_cards",
+        "title": "Observation and scenario",
+        "data": [
+          {
+            "label": "Gallup 2025 personal victims",
+            "value": 6,
+            "unit": "% of US adults",
+            "source": "FB03",
+            "kind": "survey"
+          },
+          {
+            "label": "Deloitte 2027",
+            "value": 40000000000,
+            "unit": "USD in US losses",
+            "source": "FB01",
+            "kind": "projection"
+          }
+        ],
+        "note": "I would show cards with their units kept separate: a victim survey and a loss projection. They do not share a comparable axis."
+      }
+    ],
+    "sources": [
+      "S06",
+      "S22",
+      "FB02",
+      "FB05",
+      "FB12",
+      "FB06",
+      "FB07",
+      "FB09",
+      "FB08",
+      "FB10",
+      "FB11",
+      "FB03",
+      "FB01",
+      "FB04",
+      "FB_GALLUP_REPORT"
+    ],
+    "further_analysis": "If I were to include this trend, I would review the vehicle’s exposure, its price, the cash it can generate and the specific risks I describe here. This profile does not include an individual valuation or an estimated return.",
+    "fraud_context": {
+      "status": "I have not located a JPMorgan source forecasting a high percentage of the population becoming victims in a future year.",
+      "likely_confusion": "The closest reference I found is Deloitte: USD 40,000 million of AI-enabled losses in the United States by 2027. JPMorgan does discuss 12% of scams involving AI/deepfakes in a 2026 survey.",
+      "publishable_first_person": "I find a Deloitte projection of USD 40,000 million in AI-enabled fraud losses in the United States for 2027. This is not a projection of a percentage of the population. Gallup records 6% of adults personally scammed in 2025 and 24% at some point in adult life. The 12% regarding AI refers to the household’s most costly scam described by respondents and their perception, not a confirmed technical attribution.",
+      "india_first_person": "I would not write that India has no laws or consequences: rules against impersonation and cybercrime do exist. I focus on the distance between having a law, arresting a perpetrator in another jurisdiction and recovering money. Cooperation, speed and tracing funds matter as much as the legal text.",
+      "source_ids": [
+        "FB01",
+        "FB03",
+        "FB04",
+        "FB_GALLUP_REPORT"
+      ],
+      "chart_rules": [
+        "I would separate observations and projections.",
+        "I would not add AI complaints to crypto complaints: they may overlap.",
+        "I would not mix annual prevalence of 6% with lifetime prevalence of 24%.",
+        "I would not convert complaint records into a percentage of the entire population.",
+        "I would show Deloitte 2027 as a scenario, not a current observation."
+      ]
+    },
+    "capital": {
+      "intro": "Here I compare who increased, reduced or maintained shareholdings between June 30 and September 30, 2026. The difference comes from reported share counts; it does not reveal the exact trade, its price or the reason behind it.",
+      "position_ids": [
+        "C032",
+        "C008"
+      ],
+      "all_position_ids": [
+        "C032",
+        "C008"
+      ],
+      "event_ids": [
+        "EV_FB_5_0"
+      ],
+      "coverage_note": "I show a selected sample of managers and related assets. It does not represent every buyer and seller associated with the trend."
+    }
+  },
+  {
+    "id": 6,
+    "name": "Defense and security",
+    "slug": "defensa-y-seguridad",
+    "group": "Security",
+    "snapshot": "I see more demand for defense, but I follow the path from budget to delivery. I would look for certified suppliers, scarce capacity and recurring maintenance. Public procurement and disclosed positions identify real capital. The US and Europe shape contracts and exports; I focus on whether delays and costs consume margins despite a large backlog.",
+    "change": "Defense needs ammunition, sensors, communications, aircraft and autonomous systems. I look at how much spending becomes executable contracts and which company can deliver without losing money.",
+    "arguments": [
+      "Long programs and maintenance can give hard-to-replace suppliers visibility on demand.",
+      "A public buyer can change priorities. A fixed-price contract can become a burden if production costs much more than expected."
+    ],
+    "invalidation": "If awards do not arrive or deliveries persistently consume cash, I would revisit the thesis. An approved budget does not solve that problem for me.",
+    "value": "I would look at certifications, production capacity and spare parts tied to installed platforms. Sometimes there is only one authorized supplier, but also a buyer with substantial bargaining power. The margin depends on that specific contract.",
+    "evidence_text": "I read military spending as aggregate public demand. To connect that story to a company, I would examine contracts, timelines, margins and cash collection.",
+    "metrics": [
+      {
+        "id": "T06_M01",
+        "label": "Worldwide military spending",
+        "value": 2887,
+        "unit": "billion USD",
+        "period": "2025",
+        "kind": "observed",
+        "source": "S07",
+        "note": "",
+        "comparable_with": "",
+        "geo": "indicator-specific"
+      },
+      {
+        "id": "T06_M02",
+        "label": "Real growth in worldwide military spending",
+        "value": 2.9,
+        "unit": "%",
+        "period": "2025 vs 2024",
+        "kind": "observed",
+        "source": "S07",
+        "note": "",
+        "comparable_with": "",
+        "geo": "indicator-specific"
+      },
+      {
+        "id": "T06_M03",
+        "label": "European military spending",
+        "value": 864,
+        "unit": "billion USD",
+        "period": "2025",
+        "kind": "observed",
+        "source": "S07",
+        "note": "",
+        "comparable_with": "",
+        "geo": "indicator-specific"
+      },
+      {
+        "id": "T06_M04",
+        "label": "Military spending as a share of world GDP",
+        "value": 2.5,
+        "unit": "%",
+        "period": "2025",
+        "kind": "observed",
+        "source": "S07",
+        "note": "",
+        "comparable_with": "",
+        "geo": "indicator-specific"
+      },
+      {
+        "id": "T06_M05",
+        "label": "SAFE loan ceiling",
+        "value": 150000,
+        "unit": "million EUR",
+        "period": "2025",
+        "kind": "legal capacity of the instrument",
+        "source": "ER14",
+        "note": "Not a disbursement or a purchase of shares.",
+        "comparable_with": "",
+        "geo": "indicator-specific"
+      }
+    ],
+    "geography": [
+      {
+        "region": "United States",
+        "text": "I include GAO’s 2026 assessment: major programs continue to show delays, and the average time to deliver capability exceeded 12 years in the portfolio assessed.",
+        "sources": [
+          "ER13"
+        ]
+      },
+      {
+        "region": "European Union",
+        "text": "I include SAFE: up to EUR 150,000 million in loans for investment and joint procurement. The instrument’s ceiling does not equal awarded contracts or executed spending.",
+        "sources": [
+          "ER14"
+        ]
+      }
+    ],
+    "policy": [
+      {
+        "jurisdiction": "United States",
+        "status": "budget and public procurement",
+        "text": "I would separate budgets, awards and deliveries. GAO and issuers show delays and cost risks; a strategic priority does not remove the buyer’s bargaining power.",
+        "sources": [
+          "ER13",
+          "ER61"
+        ]
+      },
+      {
+        "jurisdiction": "European Union",
+        "status": "SAFE instrument",
+        "text": "SAFE allows up to EUR 150,000 million in loans. I would distinguish that capacity from the contracts and disbursements actually reaching each manufacturer.",
+        "sources": [
+          "ER14"
+        ]
+      }
+    ],
+    "chain": {
+      "nodes": [
+        {
+          "id": "n1",
+          "label": "Certified components"
+        },
+        {
+          "id": "n2",
+          "label": "Systems and platforms"
+        },
+        {
+          "id": "n3",
+          "label": "Integration and testing"
+        },
+        {
+          "id": "n4",
+          "label": "Public procurement"
+        },
+        {
+          "id": "n5",
+          "label": "Maintenance and replenishment"
+        }
+      ],
+      "edges": [
+        {
+          "source": "n1",
+          "target": "n2"
+        },
+        {
+          "source": "n2",
+          "target": "n3"
+        },
+        {
+          "source": "n3",
+          "target": "n4"
+        },
+        {
+          "source": "n4",
+          "target": "n5"
+        }
+      ],
+      "layout": "left-right",
+      "note": "I would show economic and operational relationships. Arrow widths are not proportional to money; there are no amounts that would justify presenting these as measured flows."
+    },
+    "risks": [
+      {
+        "title": "The contract grows while the margin breaks",
+        "mechanism": "I translate delays and fixed prices into costs that the contractor may have to absorb.",
+        "evidence": "Lockheed reported unfavorable adjustments in 2026 due to production and delays in F-16s, C-130s and helicopters; GAO documents portfolio delays.",
+        "watch": "If backlog rises while margins fall, I would review contract type, loss provisions and cash conversion.",
+        "sources": [
+          "ER39",
+          "ER13"
+        ],
+        "interpretation": "The economic mechanism and my monitoring trigger are my interpretation; the source supports the cited evidence."
+      },
+      {
+        "title": "The main customer changes priorities",
+        "mechanism": "I see customer concentration when a budget depends on a few governments.",
+        "evidence": "Lockheed identifies budget uncertainty, continuing resolutions and government shutdowns; SAFE imposes eligibility and procurement conditions.",
+        "watch": "Following political announcements, I would review authorizations, actual appropriations and signed contracts before treating them as firm demand.",
+        "sources": [
+          "ER61",
+          "ER14"
+        ],
+        "interpretation": "The economic mechanism and my monitoring trigger are my interpretation; the source supports the cited evidence."
+      },
+      {
+        "title": "Technology arrives late",
+        "mechanism": "I could pay today for a capability that needs more testing and more capital than expected.",
+        "evidence": "GAO found programs that began rapid acquisition pathways with immature technologies.",
+        "watch": "If milestones are postponed, I would review technological maturity, customer acceptance and redesign risk; I would not assign the same value to a prototype as to a delivery.",
+        "sources": [
+          "ER13"
+        ],
+        "interpretation": "The economic mechanism and my monitoring trigger are my interpretation; the source supports the cited evidence."
+      }
+    ],
+    "vehicles": [
+      {
+        "name": "Lockheed Martin",
+        "ticker": "LMT",
+        "exchange": "NYSE",
+        "type": "equity",
+        "exposure": "Defense platforms and systems.",
+        "limitation": "If I chose this vehicle, I would review segment exposure, valuation and costs.",
+        "sources": [
+          "ER37"
+        ],
+        "verified_at": "2026-11-24"
+      },
+      {
+        "name": "RTX",
+        "ticker": "RTX",
+        "exchange": "NYSE",
+        "type": "equity",
+        "exposure": "Defense and commercial aviation; mixed exposure.",
+        "limitation": "If I chose this vehicle, I would review segment exposure, valuation and costs.",
+        "sources": [
+          "ER38"
+        ],
+        "verified_at": "2026-11-24"
+      }
+    ],
+    "moat_reading": "I would look for certifications, intellectual property, productive capacity and maintenance of installed platforms. Contracts can create lasting relationships, but the government retains bargaining power. I would not call an entire company a monopoly because it is the prime supplier on one program.",
+    "moat_sources": [
+      "ER13",
+      "ER39"
+    ],
+    "chart": {
+      "type": "kpi",
+      "title": "Worldwide military spending in 2025",
+      "unit": "billion USD",
+      "rows": [
+        {
+          "period": "World",
+          "value": 2887,
+          "kind": "observed/SIPRI estimate"
+        },
+        {
+          "period": "Europe (subset)",
+          "value": 864,
+          "kind": "observed/SIPRI estimate"
+        }
+      ],
+      "source": "S07",
+      "note": "Europe is included in the worldwide total. I would show the two figures separately, without adding them."
+    },
+    "additional_charts": [],
+    "sources": [
+      "S07",
+      "S23",
+      "S36",
+      "ER13",
+      "ER14",
+      "ER39",
+      "ER61",
+      "ER37",
+      "ER38"
+    ],
+    "further_analysis": "If I were to include this trend, I would review the vehicle’s exposure, its price, the cash it can generate and the specific risks I describe here. This profile does not include an individual valuation or an estimated return.",
+    "capital": {
+      "intro": "Here I compare who increased, reduced or maintained shareholdings between June 30 and September 30, 2026. The difference comes from reported share counts; it does not reveal the exact trade, its price or the reason behind it.",
+      "position_ids": [
+        "C024",
+        "C025"
+      ],
+      "all_position_ids": [
+        "C024",
+        "C025"
+      ],
+      "event_ids": [],
+      "coverage_note": "I show a selected sample of managers and related assets. It does not represent every buyer and seller associated with the trend."
+    }
+  }
+]

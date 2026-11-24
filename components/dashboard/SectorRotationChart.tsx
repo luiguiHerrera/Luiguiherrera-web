@@ -18,26 +18,36 @@ type SectorRotationChartProps = { data: SectorRotationData };
 
 export function SectorRotationUnavailable({ locale, module }: { locale: "es" | "en"; module: DashboardModuleData }) {
   const isEnglish = locale === "en";
+  const [contextOpen, setContextOpen] = useState(false);
+  const contextId = useId();
   return (
     <article className="min-w-0 border border-line bg-panel px-4 py-5 shadow-[0_14px_32px_rgba(51,45,39,0.05)] sm:px-5 md:px-7 md:py-6" data-sector-rotation-module data-sector-data-status="unavailable">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <p className={dashboardModuleEyebrowClassName}>{isEnglish ? "Sector rotation" : "Rotación sectorial"}</p>
         <DashboardStatus label={isEnglish ? "Data temporarily unavailable" : "Datos temporalmente no disponibles"} tone="neutral" />
       </div>
-      <div className="mt-3 max-w-3xl">
+      <div className="mt-3 flex flex-col items-start justify-between gap-4 lg:flex-row">
+        <div className="max-w-3xl">
         <h3 className={dashboardModuleTitleClassName}>{isEnglish ? "Relative sector map" : "Mapa relativo sectorial"}</h3>
         <p className="mt-3 text-sm leading-6 text-muted md:text-base">
           {isEnglish
             ? "A complete, valid snapshot for all 11 sector ETF proxies is not available. Rankings, returns, dispersion, and bars remain unavailable rather than using synthetic histories."
             : "No existe un snapshot completo y válido para los 11 proxies de ETFs sectoriales. Rankings, retornos, dispersión y barras permanecen no disponibles en lugar de usar historiales sintéticos."}
         </p>
+        </div>
+
       </div>
+      <div data-context-toggle>
+<DashboardDisclosureButton controls={contextId} expanded={contextOpen} collapsedLabel={isEnglish ? "Show context" : "Mostrar contexto"} expandedLabel={isEnglish ? "Hide context" : "Ocultar contexto"} onClick={() => setContextOpen((open) => !open)} />
+      </div>
+      {contextOpen ? <div id={contextId} data-rotation-context>
       <div className="mt-5 grid gap-3 border-y border-line py-4 text-sm leading-6 text-muted md:grid-cols-3">
         <div><p className="text-[11px] font-semibold uppercase tracking-[0.12em] text-brass">{isEnglish ? "Source" : "Fuente"}</p><a href={module.sourceUrl} target="_blank" rel="noreferrer" className="mt-1 block font-semibold text-ink underline-offset-4 hover:underline">Alpha Vantage</a></div>
         <div><p className="text-[11px] font-semibold uppercase tracking-[0.12em] text-brass">{isEnglish ? "Updated" : "Actualización"}</p><p className="mt-1 font-semibold text-ink">{isEnglish ? "Source temporarily unavailable" : module.lastUpdated}</p></div>
         <div><p className="text-[11px] font-semibold uppercase tracking-[0.12em] text-brass">{isEnglish ? "Frequency" : "Frecuencia"}</p><p className="mt-1 font-semibold text-ink">{isEnglish ? "Daily server-side snapshot" : module.updateFrequency}</p></div>
       </div>
       <p className="mt-4 text-xs leading-5 text-muted">{isEnglish ? "The module resumes only after all governed series pass date, close, freshness, and history validation." : module.reliabilityNote}</p>
+      </div> : null}
     </article>
   );
 }
@@ -216,13 +226,7 @@ export function SectorRotationChart({ data }: SectorRotationChartProps) {
           <h3 className={dashboardModuleTitleClassName}>{copy.title}</h3>
           <p className="mt-3 text-sm leading-6 text-muted md:text-base">{copy.description}</p>
         </div>
-        <DashboardDisclosureButton
-          controls={contextId}
-          expanded={contextOpen}
-          expandedLabel={copy.hideContext}
-          collapsedLabel={copy.showContext}
-          onClick={() => setContextOpen((open) => !open)}
-        />
+
       </div>
 
       <div className="mt-5 grid grid-cols-2 border-y border-line sm:grid-cols-4" data-rotation-metrics>
@@ -236,7 +240,9 @@ export function SectorRotationChart({ data }: SectorRotationChartProps) {
 
       <div className="mt-5">
         <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-          <p className="text-xs font-semibold uppercase tracking-[0.14em] text-brass">{copy.table}</p>
+          <div className="flex flex-wrap items-center gap-4">
+            <p className="text-xs font-semibold uppercase tracking-[0.14em] text-brass">{copy.table}</p>
+          </div>
           <div className="inline-flex w-fit border border-line bg-panelSoft p-1" role="group" aria-label={copy.window} data-sector-window-selector>
             {(Object.keys(periodConfig) as Period[]).map((option) => (
               <button
@@ -304,8 +310,7 @@ export function SectorRotationChart({ data }: SectorRotationChartProps) {
         })}
       </div>
 
-      {contextOpen ? (
-        <div id={contextId} className="mt-5 border-t border-line pt-5" data-rotation-context>
+        <div className="mt-5 border-t border-line pt-5" data-rotation-analysis data-rotation-analytical-detail>
           <div>
             <h4 className="text-xs font-semibold uppercase tracking-[0.14em] text-brass">{copy.traction}</h4>
             <p className="mt-2 max-w-3xl text-sm leading-6 text-muted">{copy.tractionBody}</p>
@@ -317,7 +322,7 @@ export function SectorRotationChart({ data }: SectorRotationChartProps) {
                     type="button"
                     onClick={() => setSelectedTicker(sector.etfTicker)}
                     aria-pressed={selectedSector?.etfTicker === sector.etfTicker}
-                    className="grid w-full grid-cols-[minmax(0,1fr)_auto_auto] items-center gap-3 border-b border-line px-2 py-2.5 text-left last:border-b-0 hover:bg-panelSoft/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-brass"
+                    className="grid w-full grid-cols-1 items-center gap-2 border-b border-line px-2 py-3 text-left last:border-b-0 hover:bg-panelSoft/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-brass sm:grid-cols-[minmax(0,1fr)_auto_auto] sm:gap-4"
                   >
                     <span><span className="block text-sm font-semibold text-ink">{sectorLabel(sector.sectorName)}</span><span className="text-xs text-muted">{sector.etfTicker}</span></span>
                     <span className="text-xs tabular-nums text-muted">{copy.rankMove}: #{priorRank} → #{currentRank} {tractionArrow(rankChange)}</span>
@@ -334,9 +339,22 @@ export function SectorRotationChart({ data }: SectorRotationChartProps) {
             </div>
           ) : null}
 
-          <div className="mt-5 grid gap-5 border-t border-line pt-4 lg:grid-cols-2">
-            <div><h4 className="text-sm font-semibold text-ink">{copy.methodology}</h4><p className="mt-2 text-sm leading-6 text-muted">{copy.body}</p></div>
-            <div><h4 className="text-sm font-semibold text-ink">{locale === "en" ? "Current reading" : "Lectura actual"}</h4><p className="mt-2 text-sm leading-6 text-muted">{t(data.metrics.interpretation)}</p></div>
+        </div>
+
+      <div data-context-toggle>
+<DashboardDisclosureButton
+          controls={contextId}
+          expanded={contextOpen}
+          expandedLabel={copy.hideContext}
+          collapsedLabel={copy.showContext}
+          onClick={() => setContextOpen((open) => !open)}
+        />
+      </div>
+      {contextOpen ? (
+        <div id={contextId} className="mt-5 border-t border-line pt-5" data-rotation-context>
+          <div className="grid gap-5 lg:grid-cols-2">
+            <div><h4 className="text-sm font-semibold text-ink">{copy.methodology}</h4><p className="mt-2 text-sm leading-6 text-muted">{copy.body}</p><p className="mt-2 text-sm leading-6 text-muted">{locale === "en" ? "Trend is calculated on daily closes, comparing the first segment with the final segment of the displayed period. Sector proxy for context." : "Tendencia calculada sobre cierres diarios, comparando el tramo inicial con el tramo final del periodo mostrado. Proxy sectorial para contexto, no personalizado."}</p></div>
+            <div><h4 className="text-sm font-semibold text-ink">{locale === "en" ? "Observation" : "Observación"}</h4><p className="mt-2 text-sm leading-6 text-muted">{t(data.metrics.interpretation)}</p></div>
           </div>
           <div className="mt-4 flex flex-wrap gap-x-8 gap-y-3 border-t border-line pt-3 text-xs text-muted">
             <div><span className="font-semibold uppercase tracking-[0.12em] text-brass">{copy.source}</span>{data.sourceUrl ? <a href={data.sourceUrl} className="ml-2 font-medium text-ink underline-offset-4 hover:underline" target="_blank" rel="noreferrer">{t(data.sourceName)}</a> : <span className="ml-2 font-medium text-ink">{t(data.sourceName)}</span>}</div>

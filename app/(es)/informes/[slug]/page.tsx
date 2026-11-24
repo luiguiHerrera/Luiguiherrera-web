@@ -13,6 +13,7 @@ import {
 import { getHistoricalAutomaticReadings } from "@/lib/reports/historical-automatic-readings";
 import { buildArticleJsonLd, buildBreadcrumbJsonLd, buildWebPageJsonLd } from "@/lib/seo/structured-data";
 import { absoluteUrl, buildSeoMetadata } from "@/lib/seo/site";
+import premiumStyles from "@/components/reports/report-premium.module.css";
 
 type ReportPageProps = {
   params: Promise<{ slug: string }>;
@@ -36,7 +37,16 @@ export async function generateMetadata({ params }: ReportPageProps): Promise<Met
     socialTitle: report.title,
     type: "article",
   });
-  return report.publishedAt ? metadata : { ...metadata, robots: { index: false, follow: false } };
+  const editionMetadata: Metadata = report.editionAt ? {
+    ...metadata,
+    other: {
+      "report:edition_date": report.editionAt,
+      "report:editorial_cutoff": report.editorialCutoffAt ?? "",
+      "report:market_cutoff": report.automaticDataCutoffAt ?? "",
+      ...(report.publishedAt ? { "report:web_published_at": report.publishedAt } : {}),
+    },
+  } : metadata;
+  return report.publishedAt ? editionMetadata : { ...editionMetadata, robots: { index: false, follow: false } };
 }
 
 export default async function MarketReportPage({ params }: ReportPageProps) {
@@ -50,7 +60,7 @@ export default async function MarketReportPage({ params }: ReportPageProps) {
   const canonical = absoluteUrl(pathname);
 
   return (
-    <main className="mx-auto w-full max-w-7xl overflow-x-hidden px-4 py-8 md:px-5 md:py-14">
+    <main className={report.id === "segundo-informe-noviembre-2026" ? premiumStyles.page : "mx-auto w-full max-w-7xl overflow-x-hidden px-4 py-8 md:px-5 md:py-14"}>
       <JsonLd
         data={[
           buildWebPageJsonLd({
@@ -61,7 +71,7 @@ export default async function MarketReportPage({ params }: ReportPageProps) {
           }),
           buildBreadcrumbJsonLd("es", [
             { name: "Inicio", pathname: "/" },
-            { name: "Informes", pathname: "/informes" },
+            { name: "Análisis y perspectivas", pathname: "/analisisyperpectivas" },
             { name: reportDisplayName(report), pathname },
           ]),
           buildArticleJsonLd({

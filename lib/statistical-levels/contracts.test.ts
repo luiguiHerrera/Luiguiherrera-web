@@ -128,7 +128,7 @@ test('seasonality retains all frequency/cycle/window/metric filters, weekly win 
 });
 test('routes preserve SEO and full methodology and carry server-resolved freshness',()=>{
   for(const [route,locale] of [['app/(es)/analisiscuantitativo/page.tsx','es'],['app/en/quantitative-analysis/page.tsx','en']]) {
-    const page=read(route);assert.match(page,/getRouteMetadata/);assert.match(page,/getStatisticalLevelsPageData/);assert.ok(page.includes(`locale="${locale}"`));assert.match(page,/stale=\{stale\}/);
+    const page=read(route);assert.match(page,/getRouteMetadata/);assert.match(page,/loadPublishedPage/);assert.ok(page.includes(`locale="${locale}"`));assert.match(page,/stale=\{stale\}/);
   }
   assert.match(source,/\/en\/methodology/);assert.match(source,/\/metodologia/);assert.doesNotMatch(source,/new Date\(/);
 });

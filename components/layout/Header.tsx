@@ -129,7 +129,7 @@ function DesktopDropdown({
         <button
           type="button"
           aria-expanded={open}
-          aria-label={`${label}: menú`}
+          aria-label={`${label}: ${pathname.startsWith('/en') ? 'menu' : 'menú'}`}
           className="inline-flex h-7 w-6 items-center justify-center rounded-[3px] text-muted transition hover:bg-paper hover:text-petrol focus-visible:text-petrol"
           onClick={() => setOpen(true)}
         >

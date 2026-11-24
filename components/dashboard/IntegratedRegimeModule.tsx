@@ -104,30 +104,23 @@ export function IntegratedRegimeModule({ data, locale, provenance }: IntegratedR
 
   return (
     <section className="border border-line bg-panel px-4 py-5 shadow-[0_14px_32px_rgba(51,45,39,0.05)] sm:px-5 md:px-7 md:py-6" data-regime-module>
-      <div className="flex flex-wrap items-center justify-between gap-3">
-        <p className={dashboardModuleEyebrowClassName}>{copy.eyebrow}</p>
-        <DashboardStatus label={t(dataStatusLabels[data.dataStatus])} tone={statusTone(data.dataStatus)} />
-      </div>
-
-      <div className="mt-3 flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
-        <div className="max-w-3xl">
-          <h2 className={dashboardModuleTitleClassName}>{copy.title}</h2>
-          <p className="mt-3 text-sm leading-6 text-muted md:text-base">{t(data.interpretation)}</p>
+      <div data-regime-heading>
+        <div>
+          <p className={dashboardModuleEyebrowClassName}>{copy.eyebrow}</p>
+          <div data-regime-title><h2 className={dashboardModuleTitleClassName}>{copy.title}</h2></div>
         </div>
-        <DashboardDisclosureButton
-          controls={contextId}
-          expanded={contextOpen}
-          collapsedLabel={copy.showContext}
-          expandedLabel={copy.hideContext}
-          onClick={() => setContextOpen((open) => !open)}
-        />
+        <div data-regime-actions>
+          <DashboardStatus label={t(dataStatusLabels[data.dataStatus])} tone={statusTone(data.dataStatus)} />
+
+        </div>
       </div>
 
-      <div className="mt-5 grid grid-cols-2 border-y border-line sm:grid-cols-4" data-regime-metrics>
-        {metrics.map((metric, index) => (
+      <div data-regime-metrics>
+        {metrics.map((metric) => (
           <div
             key={metric.label}
-            className={`min-w-0 px-3 py-3 sm:px-4 ${index === 0 ? "pl-0 sm:pl-0" : ""} ${index === 1 || index === 3 ? "border-l border-line" : ""} ${index >= 2 ? "border-t border-line sm:border-t-0" : ""} ${index === 2 ? "sm:border-l sm:border-line" : ""}`}
+            data-regime-metric
+            data-unavailable={metric.value === (isEnglish ? "Unavailable" : "No disponible") || undefined}
           >
             <p className="text-[10px] font-semibold uppercase tracking-[0.1em] text-muted sm:text-[11px]">{metric.label}</p>
             {metric.badge ? (
@@ -137,6 +130,18 @@ export function IntegratedRegimeModule({ data, locale, provenance }: IntegratedR
             )}
           </div>
         ))}
+      </div>
+
+      <p data-regime-interpretation>{t(data.interpretation)}</p>
+
+      <div data-context-toggle>
+        <DashboardDisclosureButton
+            controls={contextId}
+            expanded={contextOpen}
+            collapsedLabel={copy.showContext}
+            expandedLabel={copy.hideContext}
+            onClick={() => setContextOpen((open) => !open)}
+          />
       </div>
 
       {contextOpen ? (

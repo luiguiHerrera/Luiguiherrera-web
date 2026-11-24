@@ -236,8 +236,17 @@ export async function getStatisticalLevelsAssetSeasonality(ticker: string) {
   return readJsonFile<DailySeasonalityData>(path.join(seasonalityDir, `${ticker}.json`));
 }
 
-export async function getStatisticalLevelsPageData(searchParams: Record<string, string | string[] | undefined>) {
-  const manifest = await getStatisticalLevelsManifest();
+export const bundledStatisticalLevels = {
+  getManifest: getStatisticalLevelsManifest,
+  getAsset: getStatisticalLevelsAsset,
+  getSeasonality: getStatisticalLevelsAssetSeasonality,
+};
+
+export async function getStatisticalLevelsPageData(
+  searchParams: Record<string, string | string[] | undefined>,
+  source = bundledStatisticalLevels,
+) {
+  const manifest = await source.getManifest();
   const catalogTickers = new Set(manifest.catalog.map((asset) => asset.ticker));
   const requestedTicker = sanitizeTicker(searchParams.symbol ?? searchParams.asset, manifest.defaultAsset);
   const assetTicker = catalogTickers.has(requestedTicker) ? requestedTicker : manifest.defaultAsset;
@@ -245,8 +254,8 @@ export async function getStatisticalLevelsPageData(searchParams: Record<string, 
   const window = sanitizeWindow(searchParams.window, manifest.defaultWindow);
 
   const [asset, seasonality] = await Promise.all([
-    getStatisticalLevelsAsset(assetTicker),
-    getStatisticalLevelsAssetSeasonality(assetTicker),
+    source.getAsset(assetTicker),
+    source.getSeasonality(assetTicker),
   ]);
 
   return {

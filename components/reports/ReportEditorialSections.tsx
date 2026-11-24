@@ -5,10 +5,10 @@ import { ReportQuantitativePanels } from "./ReportQuantitativePanels";
 import type { ReportEditorialBlock, ReportEditorialSection } from "@/lib/reports/report-editorial-sections";
 
 export function ReportEditorialInline({ text }: { text: string }): ReactNode {
-  return text.split(/(\*\*[^*]+\*\*|\[[^\]]+\]\(https?:\/\/[^)]+\)|\*[^*]+\*)/g).map((part, i) => {
+  return text.split(/(\*\*[^*]+\*\*|\[[^\]]+\]\((?:https?:\/\/|\/(?!\/))[^)]+\)|\*[^*]+\*)/g).map((part, i) => {
     if (part.startsWith("**") && part.endsWith("**")) return <strong key={i}><ReportText>{part.slice(2, -2)}</ReportText></strong>;
     if (part.startsWith("*") && part.endsWith("*")) return <em key={i}><ReportText>{part.slice(1, -1)}</ReportText></em>;
-    const link = part.match(/^\[([^\]]+)\]\((https?:\/\/[^)]+)\)$/);
+    const link = part.match(/^\[([^\]]+)\]\(((?:https?:\/\/|\/(?!\/))[^)]+)\)$/);
     if (link) return <ReportAnchor key={i} href={link[2]} className="underline decoration-petrol/30 underline-offset-4 hover:text-petrol">{<ReportEditorialInline text={link[1]} />}</ReportAnchor>;
     return <ReportText key={i}>{part}</ReportText>;
   });
@@ -32,7 +32,15 @@ function Blocks({ blocks, title }: { blocks: ReportEditorialBlock[]; title: stri
     : <ReportParagraph key={index} className={block.kind === "source" ? "break-words text-xs leading-6 text-muted" : "text-sm leading-7 text-muted md:text-base"}><ReportEditorialInline text={block.text} /></ReportParagraph>
   )}</div>;
 }
-export function ReportEditorialSections({ sections }: { sections: ReportEditorialSection[] }) {
+function HierarchicalBlocks({ section }: { section: ReportEditorialSection }) {
+  return <div className="grid min-w-0 gap-4">{section.blocks.map((block, index) => {
+    if (block.kind !== "heading") return <Blocks key={index} blocks={[block]} title={section.title} />;
+    if (block.level === 4) return <h4 key={index} className="mt-3 border-l-2 border-brass pl-3 text-xs font-semibold uppercase text-brass">{block.text}</h4>;
+    const asset = section.id === "lectura-seguimiento" ? block.text.match(/^3\.[1-6]\. (SPY|GLD|FXI|EWJ|BTC|ETH)/)?.[1].toLowerCase() : undefined;
+    return <h3 key={index} id={asset} className="mt-5 scroll-mt-24 border-t border-line pt-6 text-xl font-semibold leading-tight text-ink md:text-2xl">{block.text}</h3>;
+  })}</div>;
+}
+export function ReportEditorialSections({ sections, preserveHierarchy = false }: { sections: ReportEditorialSection[]; preserveHierarchy?: boolean }) {
   return <>
     <nav aria-label="Secciones del informe" className="border-b border-line py-4">
       <ul className="flex flex-wrap gap-x-5 gap-y-3 text-xs font-semibold text-petrol">{sections.map(section => <li key={section.id}><a className="underline decoration-petrol/30 underline-offset-4" href={`#${section.id}`}>{section.eyebrow}</a></li>)}</ul>
@@ -42,7 +50,7 @@ export function ReportEditorialSections({ sections }: { sections: ReportEditoria
         <ReportParagraph className="text-xs font-semibold uppercase text-petrol">{section.eyebrow}</ReportParagraph>
         <h2 className="mt-2 text-2xl font-semibold leading-tight text-ink md:text-3xl">{section.title}</h2>
       </div>
-      <div className="grid min-w-0 gap-5">{groupEditorialBlocks(section).map((group, index) => {
+      <div className="grid min-w-0 gap-5">{preserveHierarchy ? <HierarchicalBlocks section={section} /> : groupEditorialBlocks(section).map((group, index) => {
         const title = group.title ?? section.title;
         const body = <Blocks blocks={group.blocks} title={title} />;
         if (!group.title) return <div key={index}>{body}</div>;

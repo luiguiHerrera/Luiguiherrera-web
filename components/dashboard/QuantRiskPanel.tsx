@@ -3,11 +3,11 @@
 import { useId, useState } from "react";
 import {
   DashboardDisclosureButton,
+  DashboardModuleHeading,
   DashboardStatus,
   dashboardModuleEyebrowClassName,
-  dashboardModuleTitleClassName,
 } from "@/components/dashboard/DashboardPrimitives";
-import { buildQuantRiskPresentation, type QuantRiskReadinessState } from "@/lib/dashboard/quant-risk-presentation";
+import { buildQuantRiskPresentation } from "@/lib/dashboard/quant-risk-presentation";
 import type { QuantRiskData } from "@/lib/dashboard/types";
 
 type QuantRiskPanelProps = {
@@ -25,12 +25,6 @@ function primaryMetricCellClass(index: number) {
   ].join(" ");
 }
 
-function readinessDotClass(state: QuantRiskReadinessState) {
-  if (state === "available") return "bg-sage/80";
-  if (state === "fallback") return "bg-brass/80";
-  return "bg-muted/45";
-}
-
 export function QuantRiskPanel({ data, locale = "es" }: QuantRiskPanelProps) {
   const [contextOpen, setContextOpen] = useState(false);
   const contextId = useId();
@@ -42,6 +36,7 @@ export function QuantRiskPanel({ data, locale = "es" }: QuantRiskPanelProps) {
       className="min-w-0 border border-line bg-panel px-4 py-5 shadow-[0_14px_32px_rgba(51,45,39,0.05)] sm:px-5 md:px-7 md:py-6"
       data-quant-risk-module
       data-quant-data-status={data.dataStatus}
+      data-quant-fragility={data.modelStatus !== "insufficient_data" && data.fragilityScore !== null ? data.fragilityLabel ?? undefined : undefined}
     >
       <div className="flex flex-wrap items-center justify-between gap-3">
         <p className={dashboardModuleEyebrowClassName}>{copy.eyebrow}</p>
@@ -50,16 +45,10 @@ export function QuantRiskPanel({ data, locale = "es" }: QuantRiskPanelProps) {
 
       <div className="mt-3 flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
         <div className="max-w-3xl">
-          <h2 className={dashboardModuleTitleClassName}>{copy.title}</h2>
+          <DashboardModuleHeading headingLevel="h3">{copy.title}</DashboardModuleHeading>
           <p className="mt-3 text-sm leading-6 text-muted md:text-base">{copy.description}</p>
         </div>
-        <DashboardDisclosureButton
-          controls={contextId}
-          expanded={contextOpen}
-          expandedLabel={copy.hideContext}
-          collapsedLabel={copy.showContext}
-          onClick={() => setContextOpen((open) => !open)}
-        />
+
       </div>
 
       <div className="mt-5 grid grid-cols-2 border-y border-line sm:grid-cols-4" data-quant-primary-metrics>
@@ -77,11 +66,9 @@ export function QuantRiskPanel({ data, locale = "es" }: QuantRiskPanelProps) {
         ))}
       </div>
 
-      {contextOpen ? (
-        <div id={contextId} className="mt-5 border-t border-line pt-5" data-quant-context>
-          <div className="grid gap-6 lg:grid-cols-2">
+      <div className="mt-5 grid gap-6 border-t border-line pt-5 sm:grid-cols-[1fr_0.65fr]" data-quant-analysis>
             <section>
-              <h3 className="text-xs font-semibold uppercase tracking-[0.14em] text-brass">{copy.dispersion}</h3>
+              <h4 className="text-xs font-semibold uppercase tracking-[0.14em] text-brass">{copy.dispersion}</h4>
               <div className="mt-3 grid grid-cols-2 border-y border-line" data-quant-dispersion>
                 {presentation.dispersion.map((metric, index) => (
                   <div key={metric.label} className={`min-w-0 px-3 py-3 ${index === 0 ? "pl-0" : "border-l border-line"}`}>
@@ -90,36 +77,32 @@ export function QuantRiskPanel({ data, locale = "es" }: QuantRiskPanelProps) {
                   </div>
                 ))}
               </div>
-              <div className="mt-4 border-l border-line pl-3 text-sm leading-6">
+            </section>
+              <div className="border-l border-line pl-3 text-sm leading-6">
                 <p className="font-semibold text-ink">{copy.modelState}</p>
                 <p className="mt-1 text-muted" data-quant-model-state>{presentation.modelState}</p>
               </div>
-            </section>
+      </div>
 
-            <section>
-              <h3 className="text-xs font-semibold uppercase tracking-[0.14em] text-brass">{copy.modelReliability}</h3>
-              <div className="mt-2 divide-y divide-line/70" data-quant-readiness>
-                {presentation.readiness.map((item) => (
-                  <div key={item.id} className="flex min-w-0 items-center justify-between gap-4 py-3 text-sm">
-                    <span className="font-semibold text-ink">{item.label}</span>
-                    <span className="inline-flex min-w-0 items-center gap-2 text-right text-muted">
-                      <span className={`h-1.5 w-1.5 shrink-0 rounded-full ${readinessDotClass(item.state)}`} aria-hidden="true" />
-                      <span className="break-words">{item.value}</span>
-                    </span>
-                  </div>
-                ))}
-              </div>
-            </section>
-          </div>
+      <div data-context-toggle>
+        <DashboardDisclosureButton
+          controls={contextId}
+          expanded={contextOpen}
+          expandedLabel={copy.hideContext}
+          collapsedLabel={copy.showContext}
+          onClick={() => setContextOpen((open) => !open)}
+        />
+      </div>
 
-          <div className="mt-5 grid gap-5 border-t border-line pt-5 lg:grid-cols-2">
+      {contextOpen ? (
+        <div id={contextId} className="mt-5 grid gap-5 border-t border-line pt-5 lg:grid-cols-2" data-quant-context>
             <section className="border-l border-brass/50 pl-3">
-              <h3 className="text-sm font-semibold text-ink">{copy.interpretation}</h3>
+              <h4 className="text-sm font-semibold text-ink">{copy.interpretation}</h4>
               <p className="mt-1.5 text-sm leading-6 text-muted">{presentation.interpretation}</p>
             </section>
 
             <section className="border-l border-petrol/20 pl-3">
-              <h3 className="text-sm font-semibold text-ink">{copy.sourceMethodology}</h3>
+              <h4 className="text-sm font-semibold text-ink">{copy.sourceMethodology}</h4>
               <dl className="mt-2 grid gap-2 text-xs leading-5 text-muted">
                 <div>
                   <dt className="inline font-semibold text-ink">{copy.source}: </dt>
@@ -134,7 +117,12 @@ export function QuantRiskPanel({ data, locale = "es" }: QuantRiskPanelProps) {
                 <div><dt className="inline font-semibold text-ink">{copy.model}: </dt><dd className="inline">{copy.modelScope}</dd></div>
               </dl>
             </section>
-          </div>
+            <section className="lg:col-span-2">
+              <h4 className="text-sm font-semibold text-ink">{copy.modelReliability}</h4>
+              <dl className="mt-3 grid gap-3 text-sm sm:grid-cols-3" data-quant-readiness>
+                {presentation.readiness.map((item) => <div key={item.id}><dt className="font-medium text-ink">{item.label}</dt><dd className="mt-1 text-muted">{item.value}</dd></div>)}
+              </dl>
+            </section>
         </div>
       ) : null}
     </section>

@@ -102,8 +102,14 @@ assert.equal(
   1,
   "El archivo debe exponer un único informe marcado como Actual.",
 );
-assert.equal(marketReports.find((report) => report.status === "actual")?.id, "segundo-informe-noviembre-2026");
-assert.equal(marketReports.find((report) => report.id === "primer-informe-noviembre-2026")?.status, "archivado");
+const latestPublishedReport = [...marketReports]
+  .filter((report) => report.publishedAt !== null)
+  .sort((left, right) => right.publishedAt!.localeCompare(left.publishedAt!))[0];
+assert.equal(
+  marketReports.find((report) => report.status === "actual")?.id,
+  latestPublishedReport?.id,
+  "El informe Actual debe corresponder a la edición publicada más reciente.",
+);
 assert.deepEqual(
   august.executiveSummary.map((item) => item.title),
   ["VOO", "GLD", "EWJ", "FXI", "BTC / ETH", "Stockpicking"],
@@ -716,8 +722,10 @@ for (const label of [
 const weeklyPage = read("app/en/weekly-report/page.tsx");
 const weeklyBuilder = read("lib/reports/build-weekly-report-data.ts");
 const weeklyComponent = read("components/reports/WeeklyReport.tsx");
-assert(weeklyPage.includes("buildWeeklyReportData"));
-assert(weeklyPage.includes("export const revalidate"));
+assert(weeklyPage.includes("EnglishNovemberReportEdition"), "La ruta inglesa debe conservar la edición editorial publicada.");
+assert(weeklyPage.includes("secondNovember2026EnglishReport"), "La ruta inglesa debe usar el informe versionado de noviembre.");
+assert(!weeklyPage.includes("buildWeeklyReportData"), "La edición publicada no debe regenerarse con datos actuales.");
+assert(!weeklyPage.includes("export const revalidate"), "La edición histórica no debe convertirse en un informe vivo.");
 assert(!weeklyPage.includes("datePublished"));
 assert(!weeklyPage.includes("dateModified"));
 assert(weeklyBuilder.includes("dataThrough"));

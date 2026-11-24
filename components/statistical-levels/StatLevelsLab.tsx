@@ -10,11 +10,14 @@ import { MovementSummaryTable } from './MovementSummaryTable';
 import { OpeningLocationPanel } from './OpeningLocationPanel';
 import { PeriodExplorerTable } from './PeriodExplorerTable';
 import { ReturnHeatmap } from './ReturnHeatmap';
-import { UnderwaterDrawdownChart } from './UnderwaterDrawdownChart';
+import { getDrawdownWindow, UnderwaterDrawdownChart } from './UnderwaterDrawdownChart';
 import { HistoricalRange } from './HistoricalRange';
 import { CurrentMonthSeasonality } from './CurrentMonthSeasonality';
 import { StatisticalDisclosure } from './StatisticalDisclosure';
 import { StatisticalOverview } from './StatisticalOverview';
+import { StatisticalPageHeading } from './StatisticalPageHeading';
+import { StatisticalLoading } from './StatisticalLoading';
+import { PercentileRangeBar } from './PercentileRangeBar';
 import { displayStatName, displayStatTicker } from '@/lib/statistical-levels/display';
 import { extensionSample, frequencyName, historicalInterpretation, number, percent, percentileTranslation, windowAvailabilityExplanation, windowName, zTranslation } from '@/lib/statistical-levels/interpretation';
 import type { AssetCategory, AssetStatRecord, AssetStatSummary, CorrelationMatrix, DailySeasonalityData, StatisticalFrequency, StatisticalLevelsCorrelation, StatisticalLevelsManifest, StatisticalWindow } from '@/lib/statistical-levels/types';
@@ -98,6 +101,7 @@ function StatLevelsView({ asset, locale = 'es', manifest, seasonality, selection
   const en = locale === 'en';
   const data = asset.frequencies[frequency];
   const metric = data.windows[window];
+  const drawdown = getDrawdownWindow(data, window);
   const ticker = displayStatTicker(asset.ticker);
   const sample = extensionSample(metric, frequency);
   const longMa = data.longMovingAverageKey;
@@ -118,7 +122,7 @@ function StatLevelsView({ asset, locale = 'es', manifest, seasonality, selection
     return () => observer.disconnect();
   }, []);
   return <div className="sl-page" ref={pageRef}>
-    <header className="sl-heading"><p className="sl-eyebrow">{en ? 'Quantitative analysis' : 'Análisis cuantitativo'}</p><h1>{en ? 'Where is this asset relative to its own history?' : '¿Dónde está este activo frente a su propia historia?'}</h1><p className="sl-heading-description">{en ? 'Explore the asset’s price, historical levels, risk and seasonality. Compare horizons and examine correlations with other assets.' : 'Explora el precio, los niveles históricos, el riesgo y la estacionalidad del activo. Compara horizontes y analiza sus correlaciones con otros activos.'}</p></header>
+    <StatisticalPageHeading locale={locale} />
     {loadState === 'loading' ? <p role="status">{en ? 'Loading selected asset…' : 'Cargando el activo seleccionado…'}</p> : null}
     {loadState === 'error' ? <p role="alert">{en ? 'The asset could not be loaded. The previous labeled data is retained. Reload to obtain the current snapshot.' : 'No se pudo cargar el activo. Se mantienen los datos anteriores con su etiqueta. Recarga para obtener el snapshot actual.'}</p> : null}
     <div id="sl-controls" className="sl-controls">
@@ -126,6 +130,8 @@ function StatLevelsView({ asset, locale = 'es', manifest, seasonality, selection
       <div className="sl-period"><p className="sl-control-label">{en ? 'Period' : 'Periodo'}</p><div className="sl-period-buttons">{manifest.windows.map(item => <button key={item} type="button" data-window={item} aria-pressed={window === item} onClick={() => navigate({ window: item })}>{windowName(item, locale)}</button>)}</div></div>
       <label id="sl-frequency" className="sl-frequency"><span className="sl-control-label">{en ? 'Frequency' : 'Frecuencia'}</span><select aria-label={en ? 'Frequency' : 'Frecuencia'} value={frequency} onChange={event => navigate({ frequency: event.target.value as StatisticalFrequency })}>{manifest.frequencies.map(item => <option key={item} value={item}>{frequencyName(item, locale)}</option>)}</select></label>
     </div>
+    <div className="sl-data-area" data-loading={loadState === 'loading'} aria-busy={loadState === 'loading'}>
+    <div className="sl-data-content" aria-hidden={loadState === 'loading' || undefined} inert={loadState === 'loading' || undefined}>
     <StatisticalOverview asset={asset} frequency={frequency} window={window} manifest={manifest} locale={locale} />
     <section id="sl-interpretation" className="sl-interpretation" aria-live="polite">
       <div className="sl-context"><span>{ticker} · {displayStatName(asset.ticker, asset.name)}</span><span>{frequencyName(frequency, locale)} · {windowName(window, locale)} · {en ? 'Completed history through' : 'Historial completado hasta'} {data.lastDate ?? 'n/d'}</span></div>
@@ -136,7 +142,11 @@ function StatLevelsView({ asset, locale = 'es', manifest, seasonality, selection
       {asset.status !== 'ok' ? <p className="sl-notice">{en ? 'Limited or unavailable asset history.' : 'Historial del activo limitado o no disponible.'}</p> : null}
     </section>
     <HistoricalRange asset={asset} frequency={frequency} locale={locale} />
-    <section id="sl-unusual" className="sl-section"><div className="sl-section-heading"><h2>{en ? 'How unusual is this extension?' : '¿Qué tan inusual es esta extensión?'}</h2><p>{frequencyName(frequency, locale)} · {windowName(window, locale)}</p></div><dl className="sl-metrics">
+    <section id="sl-unusual" className="sl-section"><div className="sl-section-heading"><h2>{en ? 'How unusual is this extension?' : '¿Qué tan inusual es esta extensión?'}</h2><p>{frequencyName(frequency, locale)} · {windowName(window, locale)}</p></div>
+    <div className="sl-extension-position">
+      <PercentileRangeBar label={en ? `Extension vs ${longMa} · percentile scale` : `Extensión frente a ${longMa} · escala de percentiles`} value={metric.available && sample >= 2 ? metric.ma200ExtensionPercentile : null} quartiles />
+      <p className="sl-caption">{en ? 'Last completed period' : 'Último periodo completado'}: {data.lastDate ?? 'n/d'}. {en ? 'The marker places the distance from the moving average within the selected history.' : 'La marca sitúa la distancia a la media móvil dentro del historial seleccionado.'}</p>
+    </div><dl className="sl-metrics">
       <div><dt>{en ? 'Percentile' : 'Percentil'}</dt><dd>{number(metric.ma200ExtensionPercentile, 1)}</dd><p>{percentileTranslation(metric.ma200ExtensionPercentile, locale)}</p></div>
       <div><dt>Z-score</dt><dd>{metric.ma200ExtensionZScore !== null && metric.ma200ExtensionZScore > 0 ? '+' : ''}{number(metric.ma200ExtensionZScore)}</dd><p>{zTranslation(metric.ma200ExtensionZScore, locale)}</p></div>
       <div><dt>{en ? 'Sample' : 'Muestra'}</dt><dd>{sample}</dd><p>{en ? `Comparable extension observations, after the ${longMa} warm-up. ${metric.sessions} price periods in the window.` : `Observaciones comparables de extensión, tras formar ${longMa}. ${metric.sessions} periodos de precio en la ventana.`}</p></div>
@@ -144,7 +154,11 @@ function StatLevelsView({ asset, locale = 'es', manifest, seasonality, selection
     <CurrentMonthSeasonality key={asset.ticker} data={seasonality} asOf={asset.lastDate ?? manifest.generatedAt} locale={locale} window={window} />
     <section id="sl-risk" className="sl-risk">
       <StatisticalDisclosure id="sl-drawdown-history" title="Drawdown" note={en ? 'Declines from prior highs and their evolution over time' : 'Caídas desde máximos y su evolución en el tiempo'}>
-        <dl className="sl-risk-metrics"><div><dt>{en ? 'Current drawdown' : 'Drawdown actual'}</dt><dd>{percent(metric.currentDrawdown)}</dd><p>{en ? 'Distance from the prior high within this window.' : 'Distancia desde el máximo previo de esta ventana.'}</p></div><div><dt>{en ? 'Maximum drawdown' : 'Drawdown máximo'}</dt><dd>{percent(metric.maxDrawdown)}</dd><p>{en ? 'Deepest observed decline within this window.' : 'La caída más profunda observada en esta ventana.'}</p></div></dl>
+        <dl className="sl-risk-metrics">
+          <div><dt>{en ? 'Current drawdown' : 'Drawdown actual'}</dt><dd>{percent(metric.currentDrawdown)}</dd><p>{en ? 'Distance from the prior high within this window.' : 'Distancia desde el máximo previo de esta ventana.'}</p></div>
+          <div><dt>{en ? 'Maximum drawdown' : 'Drawdown máximo'}</dt><dd>{percent(metric.maxDrawdown)}</dd><p>{en ? 'Deepest observed decline within this window.' : 'La caída más profunda observada en esta ventana.'}</p>{drawdown.maximumDate ? <p>{en ? 'Observed on' : 'Observado el'} <time dateTime={drawdown.maximumDate}>{new Intl.DateTimeFormat(en ? 'en-US' : 'es-ES', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' }).format(Date.parse(`${drawdown.maximumDate}T00:00:00Z`))}</time>.</p> : null}</div>
+          <div><dt>{en ? 'Average drawdown' : 'Drawdown promedio'}</dt><dd>{percent(drawdown.average)}</dd><p>{en ? 'Mean of the observations in this window, including periods at highs (0%).' : 'Media de las observaciones de esta ventana, incluidos los periodos en máximos (0 %).'}</p></div>
+        </dl>
         <UnderwaterDrawdownChart asset={asset} frequency={frequency} window={window} locale={locale} showSummary={false} />
       </StatisticalDisclosure>
     </section>
@@ -207,6 +221,9 @@ function StatLevelsView({ asset, locale = 'es', manifest, seasonality, selection
       <a className="sl-method-link" href={en ? '/en/methodology' : '/metodologia'}>{en ? 'Read the full methodology' : 'Leer la metodología completa'} <span aria-hidden="true">↗</span></a>
     </StatisticalDisclosure>
     <p className="sl-footer-note">{en ? 'Educational reading. This is not financial advice or an execution instruction. Historical positioning only; it does not imply future direction.' : 'Lectura educativa. No constituye asesoría financiera ni instrucción operativa. No implica dirección futura; solo posición frente al historial.'}</p>
+    </div>
+    {loadState === 'loading' ? <div className="sl-data-loading"><StatisticalLoading locale={locale} modulesOnly /></div> : null}
+    </div>
   </div>;
 }
 

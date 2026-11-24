@@ -35,6 +35,21 @@ function calculateDrawdowns(series: Array<{ close: number }>) {
   });
 }
 
+export function getDrawdownWindow(data: AssetStatRecord["frequencies"][StatisticalFrequency] | undefined, window: StatisticalWindow) {
+  const metric = data?.windows[window];
+  const history = data?.drawdownHistory ?? [];
+  const series = metric?.available && metric.sessions > 0 && history.length >= metric.sessions ? history.slice(-metric.sessions) : [];
+  const drawdowns = calculateDrawdowns(series);
+  const maximum = drawdowns.length ? Math.min(...drawdowns) : null;
+  return {
+    series,
+    drawdowns,
+    average: drawdowns.length ? drawdowns.reduce((sum, value) => sum + value, 0) / drawdowns.length : null,
+    // Use the first observation at the unrounded trough; a flat series has no decline date.
+    maximumDate: maximum !== null && maximum < 0 ? series[drawdowns.indexOf(maximum)].date : null,
+  };
+}
+
 function periodLabel(frequency: StatisticalFrequency, locale: "es" | "en") {
   if (locale === "en") {
     if (frequency === "daily") return "daily periods";
@@ -49,9 +64,7 @@ function periodLabel(frequency: StatisticalFrequency, locale: "es" | "en") {
 export function UnderwaterDrawdownChart({ asset, frequency, locale = "es", window, showSummary = true }: UnderwaterDrawdownChartProps) {
   const data = asset?.frequencies[frequency];
   const metric = data?.windows[window];
-  const history = data?.drawdownHistory ?? [];
-  const series = metric?.available ? history.slice(-metric.sessions) : [];
-  const drawdowns = calculateDrawdowns(series);
+  const { series, drawdowns } = getDrawdownWindow(data, window);
   const path = buildPath(drawdowns);
   const area = path ? `${path} L 100 0 L 0 0 Z` : "";
   const minDrawdown = Math.min(-0.01, ...drawdowns);

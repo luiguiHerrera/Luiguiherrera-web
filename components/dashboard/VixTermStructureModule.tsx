@@ -1,10 +1,13 @@
 "use client";
 
+import { DashboardChartCursor } from './DashboardChartCursor';
+
 import { useId, useState } from "react";
 import type { CSSProperties } from "react";
 import { usePathname } from "next/navigation";
-import { DashboardModuleHeading, dashboardModuleEyebrowClassName } from "@/components/dashboard/DashboardPrimitives";
+import { DashboardModuleHeading, DashboardValueBar, dashboardModuleEyebrowClassName } from "@/components/dashboard/DashboardPrimitives";
 import { translateDashboardText } from "@/lib/dashboard/translate-dashboard-copy";
+import { dashboardText } from "@/lib/dashboard/dashboard-localization";
 import type { VixTermStructureData, VixTermStructurePoint, VixTermStructureSourceStatus } from "@/lib/dashboard/types";
 
 type VixTermStructureModuleProps = {
@@ -154,7 +157,7 @@ function TermStructureChart({
   const activePoint = plottedPoints.find(({ point }) => point.label === activePointLabel);
 
   return (
-    <div className="min-w-0 bg-panelSoft px-3 py-4 sm:px-5 md:px-6 md:py-5" data-vix-chart>
+    <div className="min-w-0 bg-panelSoft px-3 py-4 sm:px-5 md:px-6 md:py-5" data-vix-chart data-vix-classification={data.classification}>
       <p className="text-xs font-semibold uppercase tracking-[0.14em] text-brass">
         {locale === "en" ? "Near curve" : "Curva cercana"}
       </p>
@@ -167,6 +170,7 @@ function TermStructureChart({
           {plottedPoints.length >= 2 ? (
             <path d={curvePath} fill="none" stroke="#6f8f7b" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" vectorEffect="non-scaling-stroke" />
           ) : null}
+          <DashboardChartCursor x={activePoint?.x} date={activePoint?.point.expirationDate ?? undefined} y1={12} y2={82} />
         </svg>
 
         {plottedPoints.map(({ point, x, y }) => {
@@ -189,6 +193,7 @@ function TermStructureChart({
                 aria-hidden="true"
                 className={`pointer-events-none block h-4 w-4 rounded-full border-2 border-[#47604f] transition-[transform,background-color,box-shadow] ${isActive ? "scale-125 bg-[#47604f] shadow-[0_0_0_4px_rgba(111,143,123,0.18)]" : "bg-panel shadow-[0_0_0_3px_rgba(251,250,248,0.78)] group-hover:scale-110"}`}
                 data-vix-point-marker
+                data-active={isActive}
               />
             </button>
           );
@@ -253,6 +258,7 @@ function TermStructureTable({
   onActivePointChange: (label: VixTermStructurePoint["label"] | null) => void;
 }) {
   const pending = locale === "en" ? "Pending" : "Pendiente";
+  const maxValue = Math.max(...data.points.map((point) => point.value ?? 0), 0.01);
 
   return (
     <div className="w-full max-w-full overflow-x-auto" data-vix-table>
@@ -282,7 +288,12 @@ function TermStructureTable({
               >
                 <th scope="row" className="px-3 py-3 font-semibold text-ink md:px-4">{point.label}</th>
                 <td className="px-3 py-3 font-medium text-muted md:px-4">{point.symbol ?? pending}</td>
-                <td className="px-3 py-3 text-right font-semibold tabular-nums text-ink md:px-4">{formatPointValue(point.value, locale)}</td>
+                <td className="px-3 py-3 text-right font-semibold tabular-nums text-ink md:px-4">
+                  <span className="grid grid-cols-[minmax(4rem,1fr)_auto] items-center gap-3">
+                    <DashboardValueBar value={point.value} max={maxValue} signed={false} />
+                    <span>{formatPointValue(point.value, locale)}</span>
+                  </span>
+                </td>
                 <td className="px-3 py-3 text-muted md:px-4">{formatContractMonth(point.contract, point.expirationDate, locale)}</td>
                 <td className="px-3 py-3 font-medium tabular-nums text-muted md:px-4">{formatFullExpiration(point.expirationDate, locale)}</td>
               </tr>
@@ -296,7 +307,7 @@ function TermStructureTable({
 
 export function VixTermStructureModule({ data }: VixTermStructureModuleProps) {
   const locale: Locale = usePathname().startsWith("/en") ? "en" : "es";
-  const t = (value: string | null | undefined) => locale === "en" ? translateDashboardText(value) : value ?? "";
+  const t = (value: string | null | undefined) => dashboardText(locale,value ?? "");
   const statusLabel = locale === "en" ? sourceStatusLabelsEn[data.sourceStatus] : sourceStatusLabels[data.sourceStatus];
   const [activePointLabel, setActivePointLabel] = useState<VixTermStructurePoint["label"] | null>(null);
   const [detailOpen, setDetailOpen] = useState(false);
@@ -313,7 +324,7 @@ export function VixTermStructureModule({ data }: VixTermStructureModuleProps) {
   return (
     <section className="border border-line bg-panel px-4 py-5 shadow-[0_14px_32px_rgba(51,45,39,0.05)] sm:px-5 md:px-7 md:py-6" data-vix-module>
       <div className="flex flex-wrap items-center justify-between gap-3">
-        <p className={dashboardModuleEyebrowClassName}>{locale === "en" ? "Term structure" : "Estructura temporal"}</p>
+        <p className={dashboardModuleEyebrowClassName}>{locale === "en" ? "VIX term structure" : "Estructura temporal VIX"}</p>
         <span className="inline-flex items-center gap-2 text-[11px] font-normal text-muted/80" data-vix-status>
           <span className="h-1 w-1 rounded-full bg-[#6f8f7b]/70" aria-hidden="true" />
           {statusLabel}
@@ -331,19 +342,7 @@ export function VixTermStructureModule({ data }: VixTermStructureModuleProps) {
           <p className="mt-3 text-sm leading-6 text-muted md:text-base">{formatInterpretation(data.interpretation, locale)}</p>
         </div>
 
-        <button
-          type="button"
-          aria-expanded={contextOpen}
-          aria-controls={contextId}
-          onClick={() => setContextOpen((open) => !open)}
-          className="inline-flex shrink-0 items-center gap-1.5 self-start bg-transparent px-1 py-1 text-xs font-medium text-muted/80 transition-colors hover:text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brass focus-visible:ring-offset-2"
-          data-vix-context-trigger
-        >
-          {contextOpen
-            ? locale === "en" ? "Hide context" : "Ocultar contexto"
-            : locale === "en" ? "Show context" : "Mostrar contexto"}
-          <span aria-hidden="true">{contextOpen ? "↑" : "↓"}</span>
-        </button>
+
       </div>
 
       <div className="mt-5 grid grid-cols-2 border-y border-line sm:grid-cols-4" data-vix-metrics>
@@ -383,6 +382,22 @@ export function VixTermStructureModule({ data }: VixTermStructureModuleProps) {
             <TermStructureTable data={data} locale={locale} activePointLabel={activePointLabel} onActivePointChange={setActivePointLabel} />
           </div>
         ) : null}
+      </div>
+
+      <div data-context-toggle>
+<button
+          type="button"
+          aria-expanded={contextOpen}
+          aria-controls={contextId}
+          onClick={() => setContextOpen((open) => !open)}
+          className="inline-flex shrink-0 items-center gap-1.5 self-start bg-transparent px-1 py-1 text-xs font-medium text-muted/80 transition-colors hover:text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brass focus-visible:ring-offset-2"
+          data-vix-context-trigger
+        >
+          {contextOpen
+            ? locale === "en" ? "Hide context" : "Ocultar contexto"
+            : locale === "en" ? "Show context" : "Mostrar contexto"}
+          <span aria-hidden="true">{contextOpen ? "↑" : "↓"}</span>
+        </button>
       </div>
 
       {contextOpen ? (

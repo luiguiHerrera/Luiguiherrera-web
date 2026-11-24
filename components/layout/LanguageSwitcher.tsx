@@ -4,6 +4,7 @@ import { PreserveReportLink as Link } from "./PreserveReportLink";
 import { usePathname, useSearchParams } from "next/navigation";
 import { localeFromPathname, type Locale } from "@/lib/i18n/locales";
 import { translatePathname, withSearch } from "@/lib/i18n/routes";
+import { archivedReportSpanishPath, englishReportPath } from "@/lib/reports/english-report-paths";
 
 export function LanguageSwitcher() {
   const pathname = usePathname();
@@ -13,6 +14,13 @@ export function LanguageSwitcher() {
   const search = searchParams.toString();
 
   function hrefFor(locale: Locale) {
+    if (pathname === "/en/weekly-report" && locale === "es") {
+      return withSearch("/informes/segundo-informe-noviembre-2026", search);
+    }
+    const archivedSpanishPath = locale === "es" ? archivedReportSpanishPath(pathname) : null;
+    if (archivedSpanishPath) return withSearch(archivedSpanishPath, search);
+    const englishPath = locale === "en" ? englishReportPath(pathname) : null;
+    if (englishPath) return withSearch(englishPath, search);
     return withSearch(translatePathname(pathname, locale), search);
   }
 

@@ -14,9 +14,92 @@ permissions:
   actions: read
 
 jobs:
+  scope:
+    name: Identify historical native qualification scope
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    outputs:
+      native: ${{ steps.scope.outputs.native }}
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Check scope without issuing qualification
+        id: scope
+        run: python3 scripts/statistical-levels-ci/workflow-scope.py
+
+  website:
+    name: Validate current website
+    if: ${{ github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    env:
+      NEXT_TELEMETRY_DISABLED: "1"
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v6
+        with:
+          node-version: "22.23.2"
+          cache: npm
+      - name: Bind website validation to the event commit
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
+          git diff --exit-code HEAD --
+          evidence="${RUNNER_TEMP:?}/statistical-levels-ci"
+          mkdir -p "$evidence"
+          printf 'CI_EVIDENCE=%s\n' "$evidence" >> "$GITHUB_ENV"
+      - name: Install dependencies
+        run: npm ci
+      - name: Audit high and critical dependencies
+        run: node scripts/statistical-levels-release/scripts/verify-braces-patch-attestation.cjs
+      - name: Test website isolation and daily producer contracts
+        shell: bash
+        run: |
+          set -euo pipefail
+          PYTHONPATH=scripts/statistical-levels-ci python3 -m unittest -v test_workflow_scope test_admission.WorkflowStructureTests test_daily_admission.DailyTests
+          node --test scripts/statistical-levels-ci/producer-receipt.test.mjs scripts/statistical-levels-daily.test.mjs scripts/statistical-levels-provider-durability.test.mjs
+      - name: Test current website contracts
+        shell: bash
+        run: |
+          set -euo pipefail
+          node --import ./scripts/trends-test-register.mjs --experimental-test-module-mocks --experimental-strip-types --test --test-reporter=tap \
+            lib/portfolio-fragility/*.test.ts \
+            lib/trends/trends.test.tsx lib/trends/research/*.test.tsx \
+            lib/dashboard/capital-flow-comparison.test.mjs lib/dashboard/capital-flows-source.test.mjs \
+            lib/dashboard/eth-capital-flows-source.test.mjs lib/dashboard/eth-etf-flows-preview.test.mjs \
+            lib/dashboard/sp500-etf-flows.test.mjs lib/dashboard/mcclellan-source.test.mjs lib/dashboard/mcclellan-reading.test.mjs \
+            lib/dashboard/development-source-cache.test.mjs lib/dashboard/dashboard-overview.test.ts \
+            lib/dashboard/gld-flow-history.test.ts lib/dashboard/quant-risk-presentation.test.ts lib/dashboard/regime-scoring.test.ts \
+            lib/statistical-levels/baseline.test.mjs lib/statistical-levels/contracts.test.ts lib/statistical-levels/defect-repairs.test.ts \
+            lib/statistical-levels/published-data.test.mts lib/statistical-levels/published-fetch.test.ts \
+            scripts/statistical-levels-storage.test.mjs components/statistical-levels/interaction-presentation.test.ts \
+            lib/reports/first-september-2026.test.mts lib/reports/second-september-2026.test.mts lib/reports/second-september-source-policy.test.mts \
+            lib/reports/english-reports.test.ts lib/reports/english-complete-archive.test.mjs \
+            lib/reports/english-november-edition.test.mjs lib/reports/reports-archive.test.mjs \
+            lib/reports/weekly-report-editorial.test.mjs
+      - name: Lint
+        run: npm run lint
+      - name: Validate editorial content
+        run: npm run validate:editorial
+      - name: Validate SEO
+        run: npm run validate:seo
+      - name: Build
+        run: npm run build
+
   validate:
+    needs: scope
     # An unchanged producer SHA is a no-op, never a new qualification PASS.
-    if: ${{ github.event_name != 'workflow_run' || (github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.head_sha != github.sha) }}
+    # Website success never grants native SL admission or publication authority.
+    if: ${{ needs.scope.outputs.native == 'true' && (github.event_name != 'workflow_run' || (github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.head_sha != github.sha)) }}
     runs-on: ubuntu-latest
     timeout-minutes: 90
     env:

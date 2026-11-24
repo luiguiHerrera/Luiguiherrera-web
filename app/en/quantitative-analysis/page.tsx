@@ -1,13 +1,11 @@
-import { createRuntimeSnapshot } from '@/lib/statistical-levels/runtime-snapshot';
+import { loadPublishedPage } from '@/lib/statistical-levels/published-data';
 import { StatLevelsLab } from '@/components/statistical-levels/StatLevelsLab';
-import { getStatisticalLevelsPageData, getStatisticalLevelsAsset, getStatisticalLevelsAssetSeasonality } from '@/lib/statistical-levels/get-statistical-levels-data';
 import { getRouteMetadata } from '@/lib/seo/site';
 
 export const metadata = getRouteMetadata('/en/quantitative-analysis');
 
 export default async function StatisticalLevelsPage({ searchParams }: { searchParams?: Promise<Record<string, string | string[] | undefined>> }) {
-  const data = await getStatisticalLevelsPageData(searchParams ? await searchParams : {});
-  const snapshot = await createRuntimeSnapshot(data.manifest, getStatisticalLevelsAsset, getStatisticalLevelsAssetSeasonality);
+  const { data, snapshot } = await loadPublishedPage(await searchParams ?? {});
   const marketDate = new Date(`${data.manifest.generatedAt}T00:00:00Z`).getTime();
   const now = new Date();
   const today = Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate());

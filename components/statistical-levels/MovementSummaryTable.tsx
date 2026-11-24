@@ -1,6 +1,7 @@
 import type { AssetStatRecord, ChangeMoveMetric, StatisticalFrequency } from "@/lib/statistical-levels/types";
 import { MetricHelpTooltip } from "@/components/ui/MetricHelpTooltip";
 import { displayStatTicker } from "@/lib/statistical-levels/display";
+import { frequencyName } from "@/lib/statistical-levels/interpretation";
 
 type MovementSummaryTableProps = {
   asset: AssetStatRecord | null;
@@ -22,10 +23,10 @@ const labels: Record<ChangeMoveMetric, string> = {
 };
 
 const help: Partial<Record<ChangeMoveMetric, string>> = {
-  change: "Cambio del periodo analizado.",
-  openGap: "Diferencia entre la apertura del periodo y el cierre previo.",
-  range: "Amplitud entre máximo y mínimo del periodo.",
-  closeLocation: "Posición del cierre dentro del rango. 0 cerca del mínimo y 1 cerca del máximo.",
+  change: "Variación porcentual entre el cierre de cada periodo y el cierre anterior.",
+  openGap: "Salto porcentual entre el cierre anterior y la siguiente apertura.",
+  range: "Distancia porcentual del mínimo al máximo de cada periodo.",
+  closeLocation: "Ubicación del cierre: 0 es el mínimo del periodo y 1 es el máximo.",
 };
 
 const englishLabels: Record<ChangeMoveMetric, string> = {
@@ -42,10 +43,10 @@ const englishLabels: Record<ChangeMoveMetric, string> = {
 };
 
 const englishHelp: Partial<Record<ChangeMoveMetric, string>> = {
-  change: "Change over the analyzed period.",
-  openGap: "Difference between the period open and the prior close.",
-  range: "Range between the period high and low.",
-  closeLocation: "Close position within the period range. 0 is near the low and 1 is near the high.",
+  change: "Percentage change from the previous close to each period’s close.",
+  openGap: "Percentage jump from the previous close to the next open.",
+  range: "Percentage distance from each period’s low to its high.",
+  closeLocation: "Close position: 0 is the period low and 1 is the high.",
 };
 
 const visibleMetrics: ChangeMoveMetric[] = ["change", "openGap", "highExtensionFromOpen", "lowExtensionFromOpen", "highExtensionFromPrevClose", "lowExtensionFromPrevClose", "closeLocation", "upperFade", "lowerRecovery", "range"];
@@ -61,6 +62,8 @@ export function MovementSummaryTable({ asset, frequency, locale = "es" }: Moveme
   const data = asset?.frequencies[frequency].changeMoves;
   const metricLabels = locale === "en" ? englishLabels : labels;
   const metricHelp = locale === "en" ? englishHelp : help;
+  const sampleLabel = `${frequencyName(frequency, locale)} · ${locale === "en" ? "full completed history" : "todo el historial completado"}`;
+  const description = (metric: ChangeMoveMetric, chart = false) => `${metricHelp[metric]} ${sampleLabel}.${chart ? locale === "en" ? " Green band: middle 50% (P25–P75). Dark line: median (P50). Ends: minimum and maximum." : " Franja verde: 50 % central (P25–P75). Línea oscura: mediana (P50). Extremos: mínimo y máximo." : ""}`;
   return (
     <section className="border border-line bg-panel p-4 md:p-5">
       <p className="text-xs font-semibold uppercase tracking-[0.18em] text-brass">{locale === "en" ? "Movement summary" : "Resumen de movimientos"}</p>
@@ -70,6 +73,7 @@ export function MovementSummaryTable({ asset, frequency, locale = "es" }: Moveme
           ? "Historical distribution of period moves. This is a statistical read of past behavior for context."
           : "Distribución histórica de cambios por periodo. Es una lectura estadística de comportamiento pasado; no implica dirección futura."}
       </p>
+      <p className="mt-1 text-xs text-muted">{sampleLabel}</p>
       <div className="mt-5 grid gap-4 lg:grid-cols-4">
         {miniMetrics.map((metric) => {
           const row = data?.[metric];
@@ -83,7 +87,7 @@ export function MovementSummaryTable({ asset, frequency, locale = "es" }: Moveme
             <div key={metric} className="border border-line bg-panelSoft p-4">
               <p className="text-sm font-semibold text-ink">
                 {metricLabels[metric]}
-                {metricHelp[metric] ? <MetricHelpTooltip label={metricLabels[metric]} text={metricHelp[metric]} locale={locale} /> : null}
+                {metricHelp[metric] ? <MetricHelpTooltip label={metricLabels[metric]} text={description(metric, true)} locale={locale} /> : null}
               </p>
               <div className="relative mt-4 h-2 bg-white">
                 <div className="absolute top-1/2 h-px w-full -translate-y-1/2 bg-[#d8d2ca]" />
@@ -105,13 +109,13 @@ export function MovementSummaryTable({ asset, frequency, locale = "es" }: Moveme
               <th className="py-2.5 pr-4 font-medium">{locale === "en" ? "Metric" : "Métrica"}</th>
               <th className="py-2.5 pr-4 font-medium">{locale === "en" ? "Mean" : "Media"}</th>
               <th className="py-2.5 pr-4 font-medium">{locale === "en" ? "Std. dev." : "Desv. típica"}</th>
+              <th className="py-2.5 pr-4 font-medium">{locale === "en" ? "Minimum" : "Mínimo"}</th>
               <th className="py-2.5 pr-4 font-medium">p10</th>
               <th className="py-2.5 pr-4 font-medium">p25</th>
               <th className="py-2.5 pr-4 font-medium">p50</th>
               <th className="py-2.5 pr-4 font-medium">p75</th>
               <th className="py-2.5 pr-4 font-medium">p90</th>
               <th className="py-2.5 pr-4 font-medium">{locale === "en" ? "Maximum" : "Máximo"}</th>
-              <th className="py-2.5 pr-4 font-medium">{locale === "en" ? "Minimum" : "Mínimo"}</th>
             </tr>
           </thead>
           <tbody>
@@ -122,23 +126,24 @@ export function MovementSummaryTable({ asset, frequency, locale = "es" }: Moveme
                 <tr key={metric} className="border-b border-line/70">
                   <td className="py-3 pr-4 font-semibold text-ink">
                     {metricLabels[metric]}
-                    {metricHelp[metric] ? <MetricHelpTooltip label={metricLabels[metric]} text={metricHelp[metric]} locale={locale} /> : null}
+                    {metricHelp[metric] ? <MetricHelpTooltip label={metricLabels[metric]} text={description(metric)} locale={locale} /> : null}
                   </td>
                   <td className="py-3 pr-4 text-muted">{formatStat(row?.mean ?? null, isRatio)}</td>
                   <td className="py-3 pr-4 text-muted">{formatStat(row?.std ?? null, isRatio)}</td>
+                  <td className="py-3 pr-4 text-muted">{formatStat(row?.min ?? null, isRatio)}</td>
                   <td className="py-3 pr-4 text-muted">{formatStat(row?.p10 ?? null, isRatio)}</td>
                   <td className="py-3 pr-4 text-muted">{formatStat(row?.p25 ?? null, isRatio)}</td>
                   <td className="py-3 pr-4 text-muted">{formatStat(row?.p50 ?? null, isRatio)}</td>
                   <td className="py-3 pr-4 text-muted">{formatStat(row?.p75 ?? null, isRatio)}</td>
                   <td className="py-3 pr-4 text-muted">{formatStat(row?.p90 ?? null, isRatio)}</td>
                   <td className="py-3 pr-4 text-muted">{formatStat(row?.max ?? null, isRatio)}</td>
-                  <td className="py-3 pr-4 text-muted">{formatStat(row?.min ?? null, isRatio)}</td>
                 </tr>
               );
             })}
           </tbody>
         </table>
       </div>
+      <p className="mt-3 text-xs text-muted">{locale === "en" ? "More detail in " : "Mayor detalle en "}<a href="#sl-periods-disclosure" className="underline decoration-brass/50 underline-offset-4 hover:text-brass">{locale === "en" ? "Period history" : "Historial de periodos"}</a>.</p>
     </section>
   );
 }

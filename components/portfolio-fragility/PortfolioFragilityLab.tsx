@@ -8,6 +8,7 @@ import { buildDemoHistory, parseHistoryCsv } from "@/lib/portfolio-fragility/dem
 import { createFormatters, type Locale } from "@/lib/portfolio-fragility/format";
 import { activeHistory, hasUnanalyzedChanges, initialSession, scenarioValues, sessionReducer, validateHistoryReplacement } from "@/lib/portfolio-fragility/session";
 import { type PortfolioPreview } from "@/lib/portfolio-fragility/holdings-input";
+import { absoluteUrl, getSeoRoute } from "@/lib/seo/site";
 import { p0Copy, type P0Copy } from "./copy";
 
 const card = "min-w-0 rounded-md border border-line bg-white/85 p-4";
@@ -75,7 +76,31 @@ export function PortfolioFragilityLab({ locale: initialLocale }: { locale: Local
     document.addEventListener("click", switchLanguage, true);
     return () => document.removeEventListener("click", switchLanguage, true);
   }, []);
-  useEffect(() => { document.documentElement.lang = locale; }, [locale]);
+  useEffect(() => {
+    if (pathname !== "/fragilidad-de-portafolio" && pathname !== "/en/portfolio-fragility") return;
+    const page = getSeoRoute(pathname);
+    if (!page) return;
+    // Native history keeps the portfolio in memory; it does not refresh Next's page metadata.
+    document.documentElement.lang = locale;
+    document.title = page.title;
+    document.head.querySelector('link[rel="canonical"]')?.setAttribute("href", absoluteUrl(pathname));
+    const socialTitle = page.socialTitle ?? page.title;
+    const socialDescription = page.socialDescription ?? page.description;
+    const values: Record<string, string> = {
+      description: page.description,
+      "og:title": socialTitle,
+      "og:description": socialDescription,
+      "og:url": absoluteUrl(pathname),
+      "og:locale": locale === "es" ? "es_ES" : "en_US",
+      "og:locale:alternate": locale === "es" ? "en_US" : "es_ES",
+      "twitter:title": socialTitle,
+      "twitter:description": socialDescription,
+    };
+    for (const [key, value] of Object.entries(values)) {
+      const attribute = key.startsWith("og:") ? "property" : "name";
+      document.head.querySelector(`meta[${attribute}="${key}"]`)?.setAttribute("content", value);
+    }
+  }, [locale, pathname]);
 
   const history = useMemo(() => activeHistory(state), [state.historyKind, state.importedHistory, state.demoHistory, state.portfolioSource]); // eslint-disable-line react-hooks/exhaustive-deps
   const analysis = useMemo(() => state.committed ? analyzePortfolioForDisplay(state.committed.holdings, history) : null, [state.committed, history]);

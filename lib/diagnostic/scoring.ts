@@ -443,7 +443,7 @@ function routeFor(scores: DiagnosticScores, flags: DiagnosticFlag[], locale: Dia
   }
   if (scores.knowledgeValidated >= 65 && scores.consistency >= 65) {
     return {
-      href: "/niveles-estadisticos",
+      href: "/analisiscuantitativo",
       label: locale === "es" ? "Explorar niveles estadísticos" : "Explore statistical levels",
       note: locale === "es"
         ? "Usa contexto histórico sin convertirlo en señal de compra o venta."

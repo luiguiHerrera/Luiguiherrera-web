@@ -1,0 +1,61 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Luigui Herrera//Market Report//EN
+CALSCALE:GREGORIAN
+BEGIN:VEVENT
+UID:second-november-2026-en-0@luiguiherrera.com
+DTSTAMP:20261123T000000Z
+DTSTART;VALUE=DATE:20261117
+SUMMARY:NVIDIA earnings\; US import/export price indices
+DESCRIPTION:AI\, corporate expectations and import inflation
+URL:https://investor.nvidia.com/news/press-release-details/2026/NVIDIA-Set
+ s-Conference-Call-for-Third-Quarter-Financial-Results/
+END:VEVENT
+BEGIN:VEVENT
+UID:second-november-2026-en-1@luiguiherrera.com
+DTSTAMP:20261123T000000Z
+DTSTART;VALUE=DATE:20261118
+SUMMARY:Minutes of the Fed's October meeting
+DESCRIPTION:Monetary-policy tone and balance of risks
+URL:https://www.federalreserve.gov/newsevents/calendar.htm
+END:VEVENT
+BEGIN:VEVENT
+UID:second-november-2026-en-2@luiguiherrera.com
+DTSTAMP:20261123T000000Z
+DTSTART;VALUE=DATE:20261125
+SUMMARY:US Q3 GDP (second estimate)\, corporate profits and October PCE
+DESCRIPTION:Activity\, consumption and inflation
+URL:https://www.bea.gov/news/schedule/
+END:VEVENT
+BEGIN:VEVENT
+UID:second-november-2026-en-3@luiguiherrera.com
+DTSTAMP:20261123T000000Z
+DTSTART;VALUE=DATE:20261125
+SUMMARY:Fed Beige Book
+DESCRIPTION:Regional conditions and financing
+URL:https://www.federalreserve.gov/newsevents/calendar.htm
+END:VEVENT
+BEGIN:VEVENT
+UID:second-november-2026-en-4@luiguiherrera.com
+DTSTAMP:20261123T000000Z
+DTSTART;VALUE=DATE:20261126
+SUMMARY:Thanksgiving\, US market closed
+DESCRIPTION:Reduced liquidity and activity
+END:VEVENT
+BEGIN:VEVENT
+UID:second-november-2026-en-5@luiguiherrera.com
+DTSTAMP:20261123T000000Z
+DTSTART;VALUE=DATE:20261127
+SUMMARY:Shortened US trading session
+DESCRIPTION:Potentially greater sensitivity to low volumes
+END:VEVENT
+BEGIN:VEVENT
+UID:second-november-2026-en-6@luiguiherrera.com
+DTSTAMP:20261123T000000Z
+DTSTART;VALUE=DATE:20261208
+DTEND;VALUE=DATE:20261210
+SUMMARY:Fed meeting
+DESCRIPTION:The actual decision\, distinct from FedWatch probabilities
+URL:https://www.federalreserve.gov/monetarypolicy/fomccalendars.htm
+END:VEVENT
+END:VCALENDAR

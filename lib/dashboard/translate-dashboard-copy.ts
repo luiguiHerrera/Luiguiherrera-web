@@ -1,6 +1,17 @@
 import type { DataStatus, RegimeBias } from "@/lib/dashboard/types";
 
 const phraseMap: Array<[RegExp, string]> = [
+  [/^Plano$/g, "Flat"],
+  [/^Fuerte contango$/g, "Strong contango"],
+  [/^Contango moderado$/g, "Moderate contango"],
+  [/^Backwardation moderada$/g, "Moderate backwardation"],
+  [/^Backwardation fuerte$/g, "Strong backwardation"],
+  [/La curva cercana está relativamente equilibrada\. No domina una lectura clara de estructura temporal\./g, "The near curve is relatively balanced. There is no clear term-structure bias."],
+  [/Los contratos cercanos cotizan por encima de vencimientos posteriores\. Suele aparecer en episodios de tensión o demanda elevada de cobertura inmediata\./g, "Near contracts trade above later expirations. This often appears during stress or strong demand for immediate protection."],
+  [/Estructura VIX pendiente de fuente automatizada estable\./g, "VIX structure is awaiting a stable automated source."],
+  [/Las lecturas de volatilidad y rotación apuntan a un entorno de presión elevada\./g, "Volatility and rotation point to an environment of elevated pressure."],
+  [/El mercado muestra deterioro en varias lecturas, pero aún no hay confirmación suficiente para clasificarlo como estrés\./g, "The market is deteriorating across several measures, but confirmation is not yet sufficient to classify it as stress."],
+  [/Lectura compuesta de volatilidad, rotación y flujos\./g, "Composite read of volatility, rotation, and flows."],
   [/Lectura compuesta no disponible: falta el pilar gobernado de rotación sectorial\. No se renormalizan los pesos restantes\./g, "Composite read unavailable: the governed sector-rotation pillar is missing. Remaining weights are not renormalized."],
   [/Pilar sectorial temporalmente no disponible; score y confianza quedan sin calcular\./g, "The sector pillar is temporarily unavailable; score and confidence remain uncalculated."],
   [/Lectura compuesta no disponible\./g, "Composite read unavailable."],

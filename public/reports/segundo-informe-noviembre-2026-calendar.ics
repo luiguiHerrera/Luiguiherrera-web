@@ -5,125 +5,78 @@ CALSCALE:GREGORIAN
 METHOD:PUBLISH
 X-WR-CALNAME:Segundo informe de noviembre de 2026
 BEGIN:VEVENT
-UID:segundo-informe-noviembre-2026-precios-de-importacion-y-exportacion-de-
- ee-uu@luigui-herrera
-DTSTAMP:20261117T000000Z
-DTSTART:20261117T133000Z
-SUMMARY:Segundo informe de noviembre de 2026: Precios de importación y exp
- ortación de EE. UU.
-DESCRIPTION:17 de noviembre. Fecha y hora confirmadas por fuente primaria. 
- 08:30 America/New_York / 14:30 CET (Madrid). Inflación de importación co
- rrespondiente a octubre. Fuente de fecha/hora: BLS\, calendario de noviemb
- re (https://www.bls.gov/schedule/2026/11_sched_list.htm).
+UID:segundo-informe-noviembre-2026-resultados-de-nvidia-indice-de-precios-d
+ e-importacion-exportacion-de-ee-uu@luigui-herrera
+DTSTAMP:20261123T000000Z
+DTSTART;VALUE=DATE:20261117
+DTEND;VALUE=DATE:20261118
+SUMMARY:Segundo informe de noviembre de 2026: Resultados de NVIDIA\; índic
+ e de precios de importación/exportación de EE. UU.
+DESCRIPTION:17 nov.. IA\, expectativas empresariales\, inflación de import
+ ación
 URL:https://www.luiguiherrera.com/informes/segundo-informe-noviembre-2026
 END:VEVENT
 BEGIN:VEVENT
-UID:segundo-informe-noviembre-2026-nvidia-resultados-del-tercer-trimestre-f
- iscal-2027@luigui-herrera
-DTSTAMP:20261117T000000Z
-DTSTART:20261117T212000Z
-SUMMARY:Segundo informe de noviembre de 2026: NVIDIA: resultados del tercer
-  trimestre fiscal 2027
-DESCRIPTION:17 de noviembre. Fecha y hora confirmadas por fuente primaria. 
- 16:20 America/New_York / 22:20 CET (Madrid). Resultados previstos después
-  del cierre regular\; no incluidos en el corte de mercado de esta edición
- . Fuente de fecha/hora: NVIDIA IR\, comunicado del 28 de octubre (https://
- investor.nvidia.com/news/press-release-details/2026/NVIDIA-Sets-Conference
- -Call-for-Third-Quarter-Financial-Results/).
+UID:segundo-informe-noviembre-2026-minutas-de-la-reunion-de-la-fed-de-octub
+ re@luigui-herrera
+DTSTAMP:20261123T000000Z
+DTSTART;VALUE=DATE:20261118
+DTEND;VALUE=DATE:20261119
+SUMMARY:Segundo informe de noviembre de 2026: Minutas de la reunión de la 
+ Fed de octubre
+DESCRIPTION:18 nov.. Tono y equilibrio de riesgos de política monetaria
 URL:https://www.luiguiherrera.com/informes/segundo-informe-noviembre-2026
 END:VEVENT
 BEGIN:VEVENT
-UID:segundo-informe-noviembre-2026-nvidia-conferencia-de-resultados@luigui-
- herrera
-DTSTAMP:20261117T000000Z
-DTSTART:20261117T220000Z
-SUMMARY:Segundo informe de noviembre de 2026: NVIDIA: conferencia de result
- ados
-DESCRIPTION:17 de noviembre. Fecha y hora confirmadas por fuente primaria. 
- 17:00 America/New_York / 23:00 CET (Madrid). La hora corresponde a la conf
- erencia\; el comunicado está previsto a las 16:20 ET. Fuente de fecha/hor
- a: NVIDIA IR\, comunicado del 28 de octubre (https://investor.nvidia.com/n
- ews/press-release-details/2026/NVIDIA-Sets-Conference-Call-for-Third-Quart
- er-Financial-Results/).
+UID:segundo-informe-noviembre-2026-beige-book-de-la-fed@luigui-herrera
+DTSTAMP:20261123T000000Z
+DTSTART;VALUE=DATE:20261125
+DTEND;VALUE=DATE:20261126
+SUMMARY:Segundo informe de noviembre de 2026: Beige Book de la Fed
+DESCRIPTION:25 nov.. Condiciones regionales y financiación
 URL:https://www.luiguiherrera.com/informes/segundo-informe-noviembre-2026
 END:VEVENT
 BEGIN:VEVENT
-UID:segundo-informe-noviembre-2026-minutas-de-la-reunion-del-fomc-de-octubr
- e@luigui-herrera
-DTSTAMP:20261117T000000Z
-DTSTART:20261118T190000Z
-SUMMARY:Segundo informe de noviembre de 2026: Minutas de la reunión del FO
- MC de octubre
-DESCRIPTION:18 de noviembre. Fecha y hora confirmadas por fuente primaria. 
- 14:00 America/New_York / 20:00 CET (Madrid). Tono y equilibrio de riesgos 
- de política monetaria. Fuente de fecha/hora: Reserva Federal\, calendario
-  de noviembre (https://www.federalreserve.gov/newsevents/2026-november.htm
- ).
+UID:segundo-informe-noviembre-2026-pib-estadounidense-3t-segunda-estimacion
+ -beneficios-corporativos-y-pce-de-octubre@luigui-herrera
+DTSTAMP:20261123T000000Z
+DTSTART;VALUE=DATE:20261125
+DTEND;VALUE=DATE:20261126
+SUMMARY:Segundo informe de noviembre de 2026: PIB estadounidense 3T (segund
+ a estimación)\, beneficios corporativos y PCE de octubre
+DESCRIPTION:25 nov.. Actividad\, consumo e inflación
 URL:https://www.luiguiherrera.com/informes/segundo-informe-noviembre-2026
 END:VEVENT
 BEGIN:VEVENT
-UID:segundo-informe-noviembre-2026-pib-3t-beneficios-corporativos-y-pce-de-
- octubre@luigui-herrera
-DTSTAMP:20261117T000000Z
-DTSTART:20261125T133000Z
-SUMMARY:Segundo informe de noviembre de 2026: PIB 3T\, beneficios corporati
- vos y PCE de octubre
-DESCRIPTION:25 de noviembre. Fecha y hora confirmadas por fuente primaria. 
- 08:30 America/New_York / 14:30 CET (Madrid). Segunda estimación del PIB y
-  Personal Income and Outlays. Agenda BEA actualizada el 16 de noviembre y 
- comprobada el 17. Fuente de fecha/hora: BEA\, calendario de publicaciones 
- (https://www.bea.gov/news/schedule/).
-URL:https://www.luiguiherrera.com/informes/segundo-informe-noviembre-2026
-END:VEVENT
-BEGIN:VEVENT
-UID:segundo-informe-noviembre-2026-beige-book-de-la-reserva-federal@luigui-
- herrera
-DTSTAMP:20261117T000000Z
-DTSTART:20261125T190000Z
-SUMMARY:Segundo informe de noviembre de 2026: Beige Book de la Reserva Fede
- ral
-DESCRIPTION:25 de noviembre. Fecha y hora confirmadas por fuente primaria. 
- 14:00 America/New_York / 20:00 CET (Madrid). Condiciones regionales y fina
- nciación. Fuente de fecha/hora: Reserva Federal\, calendario de noviembre
-  (https://www.federalreserve.gov/newsevents/2026-november.htm).
-URL:https://www.luiguiherrera.com/informes/segundo-informe-noviembre-2026
-END:VEVENT
-BEGIN:VEVENT
-UID:segundo-informe-noviembre-2026-thanksgiving-nyse-cerrado@luigui-herrera
-DTSTAMP:20261117T000000Z
+UID:segundo-informe-noviembre-2026-thanksgiving-mercado-estadounidense-cerr
+ ado@luigui-herrera
+DTSTAMP:20261123T000000Z
 DTSTART;VALUE=DATE:20261126
 DTEND;VALUE=DATE:20261127
-SUMMARY:Segundo informe de noviembre de 2026: Thanksgiving: NYSE cerrado
-DESCRIPTION:26 de noviembre. Fecha y hora confirmadas por fuente primaria. 
- Sesión cerrada America/New_York. Cierre del mercado bursátil\; cripto co
- ntinúa operando. Fuente de fecha/hora: NYSE\, calendario de negociación 
- (https://www.nyse.com/trade/hours-calendars).
+SUMMARY:Segundo informe de noviembre de 2026: Thanksgiving\, mercado estado
+ unidense cerrado
+DESCRIPTION:26 nov.. Liquidez y actividad reducida
 URL:https://www.luiguiherrera.com/informes/segundo-informe-noviembre-2026
 END:VEVENT
 BEGIN:VEVENT
-UID:segundo-informe-noviembre-2026-nyse-cierre-de-la-sesion-regular-abrevia
- da@luigui-herrera
-DTSTAMP:20261117T000000Z
-DTSTART:20261127T180000Z
-SUMMARY:Segundo informe de noviembre de 2026: NYSE: cierre de la sesión re
- gular abreviada
-DESCRIPTION:27 de noviembre. Fecha y hora confirmadas por fuente primaria. 
- 13:00 America/New_York / 19:00 CET (Madrid). Liquidez reducida después de
-  Thanksgiving\; no es una sesión completa. Fuente de fecha/hora: NYSE\, c
- alendario de negociación (https://www.nyse.com/trade/hours-calendars).
+UID:segundo-informe-noviembre-2026-sesion-bursatil-estadounidense-abreviada
+ @luigui-herrera
+DTSTAMP:20261123T000000Z
+DTSTART;VALUE=DATE:20261127
+DTEND;VALUE=DATE:20261128
+SUMMARY:Segundo informe de noviembre de 2026: Sesión bursátil estadounide
+ nse abreviada
+DESCRIPTION:27 nov.. Posible sensibilidad adicional a bajos volúmenes
 URL:https://www.luiguiherrera.com/informes/segundo-informe-noviembre-2026
 END:VEVENT
 BEGIN:VEVENT
-UID:segundo-informe-noviembre-2026-reunion-del-fomc@luigui-herrera
-DTSTAMP:20261117T000000Z
+UID:segundo-informe-noviembre-2026-reunion-de-la-fed@luigui-herrera
+DTSTAMP:20261123T000000Z
 DTSTART;VALUE=DATE:20261208
 DTEND;VALUE=DATE:20261210
-SUMMARY:Segundo informe de noviembre de 2026: Reunión del FOMC
-DESCRIPTION:8 y 9 de diciembre. Fecha confirmada · hora por confirmar. Hor
- a por confirmar (zona horaria por confirmar). Decisión del 9 de diciembre
- \; no se anticipa el resultado. Fuente de fecha/hora: Reserva Federal\, ca
- lendario del FOMC (https://www.federalreserve.gov/monetarypolicy/fomccalen
- dars.htm).
+SUMMARY:Segundo informe de noviembre de 2026: Reunión de la Fed
+DESCRIPTION:8–9 dic.. Decisión efectiva\, distinta de probabilidades Fed
+ Watch
 URL:https://www.luiguiherrera.com/informes/segundo-informe-noviembre-2026
 END:VEVENT
 END:VCALENDAR

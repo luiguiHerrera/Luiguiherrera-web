@@ -1,0 +1,28 @@
+name: Statistical Levels Web
+on:
+  push:
+    branches: [release/statistical-levels-web]
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm audit --audit-level=high
+      - run: npm run lint
+      - run: npm run validate:editorial
+      - run: npm run validate:seo
+      - run: npm run build
+      - name: Verify published data, asset selection and report isolation
+        run: >
+          node --import ./scripts/trends-test-register.mjs
+          --experimental-test-module-mocks --experimental-strip-types --test
+          lib/statistical-levels/published-data.test.mts
+          lib/reports/september-current-production-isolation.test.mts
+          scripts/statistical-levels-release/tests/statistical-levels-runtime.test.mjs

@@ -1,6 +1,9 @@
 import { ReportEditorialSections } from './ReportEditorialSections';
 import { SecondOctoberReportSections } from './SecondOctoberReportSections';
 import { NovemberReportSections } from './NovemberReportSections';
+import { SecondNovemberReportSections } from './SecondNovemberReportSections';
+import { ReportEditionRail } from './ReportEditionRail';
+import premiumStyles from './report-premium.module.css';
 import { ReportLink as Link, ReportAnchor, ReportParagraph, ReportText, ReportSourcePolicy } from "@/components/reports/ReportSourcePolicy";
 import { ReportSection } from "@/components/reports/ReportSection";
 import { ReportQuantitativePanels } from "@/components/reports/ReportQuantitativePanels";
@@ -67,6 +70,7 @@ export function MarketReportContent({
 }: MarketReportContentProps) {
   const calendar = getReportCalendar(report);
   const isSecondOctober = report.id === "segundo-informe-octubre-2026";
+  const isPremiumEdition = report.id === "segundo-informe-noviembre-2026";
   const hasCalendarDates = calendar.some((item) => item.dateStart);
   const sectionTitles = report.presentation?.sectionTitles;
   const calendarSectionLabel = sectionTitles?.calendar
@@ -92,16 +96,16 @@ export function MarketReportContent({
     ["crypto", "Cripto"],
   ] as const;
 
-  return (
-    <ReportSourcePolicy newTab={report.presentation?.linksOpenNewTab} sources={report.presentation?.sourceLinks}><article id={report.id} className="scroll-mt-24">
+  const content = (
+    <article id={report.id} className={`scroll-mt-24 ${isPremiumEdition ? premiumStyles.edition : ""}`}>
       <Link
         className="inline-flex min-h-10 items-center border-b border-petrol/30 text-sm font-semibold text-petrol transition hover:border-petrol"
-        href="/informes"
+        href="/analisisyperpectivas"
       >
         ← Volver al archivo de informes
       </Link>
 
-      <section className={`mt-6 grid gap-6 border-y border-line py-8 md:py-10 ${hasHeadlineSummary ? "lg:grid-cols-[0.34fr_1fr]" : ""}`}>
+      <section className={`mt-6 grid gap-6 border-y border-line py-8 md:py-10 ${isPremiumEdition ? premiumStyles.cover : ""} ${hasHeadlineSummary ? "lg:grid-cols-[0.34fr_1fr]" : ""}`}>
         <div>
           <div className="flex flex-wrap items-center gap-2">
             <ReportParagraph className="text-xs font-semibold uppercase text-petrol">{reportDisplayName(report)}</ReportParagraph>
@@ -109,20 +113,21 @@ export function MarketReportContent({
               {report.status === "borrador" || !report.publishedAt ? "Candidato editorial · sin publicar" : report.status === "actual" ? "Informe actual" : "Archivado"}
             </span>
           </div>
-          <h1 className="mt-2 text-3xl font-semibold leading-tight text-ink md:text-5xl">{isSecondOctober ? report.subtitle : report.title}</h1>
+          <h1 className="mt-2 text-3xl font-semibold leading-tight text-ink md:text-5xl">{isPremiumEdition ? <><span>{report.title.slice(0, report.title.indexOf(":") + 1)} </span><em>{report.title.slice(report.title.indexOf(":") + 1).trimStart()}</em></> : isSecondOctober ? report.subtitle : report.title}</h1>
           <EditorialByline
-            marketCutoffLabel={report.presentation?.editorialLayout === "november-2026" ? "Corte de mercado" : undefined}
+            marketCutoffLabel={report.editionAt || report.presentation?.editorialLayout === "november-2026" ? "Corte de mercado" : undefined}
             automaticDataCutoffAt={report.automaticDataCutoffAt}
             editorialCutoffAt={report.editorialCutoffAt}
             linksOpenNewTab={report.presentation?.linksOpenNewTab}
             locale="es"
             modifiedAt={report.modifiedAt}
             publishedAt={report.publishedAt}
+            editionAt={report.editionAt}
           />
           <ReportParagraph className="mt-4 text-base leading-7 text-muted">{isSecondOctober ? report.summary : report.subtitle}</ReportParagraph>
           {report.presentation?.prospectivePeriod ? <ReportParagraph className="mt-3 text-sm text-muted">Periodo prospectivo: {report.presentation.prospectivePeriod}</ReportParagraph> : null}
           <ReportExportLinks report={report} />
-          {report.approvedPdf && !isSecondOctober ? <p className="mt-3 text-xs leading-5 text-muted">La página web es la edición principal. El PDF conserva el original editorial aprobado del 19 de octubre, incluidas sus notas de borrador. Los datos y el análisis no se han actualizado después del corte.</p> : null}
+          {report.approvedPdf && !isSecondOctober ? <p className="mt-3 text-xs leading-5 text-muted">{report.editionAt ? `PDF original aprobado · ${report.approvedPdf.pages} páginas. El contenido conserva sus fechas de corte históricas.` : "La página web es la edición principal. El PDF conserva el original editorial aprobado del 19 de octubre, incluidas sus notas de borrador. Los datos y el análisis no se han actualizado después del corte."}</p> : null}
         </div>
         {hasHeadlineSummary ? (
           <div className="grid gap-6">
@@ -163,7 +168,7 @@ export function MarketReportContent({
         ) : null}
       </section>
 
-      {report.presentation?.editorialLayout === 'november-2026' ? <NovemberReportSections report={report} /> : isSecondOctober && report.editorialSections ? <SecondOctoberReportSections report={report} /> : report.editorialSections ? <ReportEditorialSections sections={report.editorialSections} /> : <>
+      {report.id === "segundo-informe-noviembre-2026" ? <SecondNovemberReportSections report={report} /> : report.presentation?.editorialLayout === 'november-2026' ? <NovemberReportSections report={report} /> : isSecondOctober && report.editorialSections ? <SecondOctoberReportSections report={report} /> : report.editorialSections ? <ReportEditorialSections preserveHierarchy={Boolean(report.editionAt)} sections={report.editorialSections} /> : <>
       <section id={report.presentation?.contextTitle ? "contexto-general" : "contexto-por-activo"} className="grid scroll-mt-24 gap-6 py-8 md:py-10 lg:grid-cols-[0.34fr_1fr]">
         <div>
           <ReportParagraph className="text-xs font-semibold uppercase text-petrol">Qué pasó</ReportParagraph>
@@ -384,8 +389,11 @@ export function MarketReportContent({
 
       </>}
       <ReportNavigation nextReport={nextReport} previousReport={previousReport} />
-    </article></ReportSourcePolicy>
+    </article>
   );
+  return <ReportSourcePolicy newTab={report.presentation?.linksOpenNewTab} sources={report.presentation?.sourceLinks}>
+    {isPremiumEdition ? <div className={premiumStyles.layout}><ReportEditionRail sections={report.editorialSections!} monthLabel={report.monthLabel} />{content}</div> : content}
+  </ReportSourcePolicy>;
 }
 
 function ReportExportLinks({ report }: { report: MarketReport }) {

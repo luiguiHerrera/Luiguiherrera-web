@@ -1,4 +1,6 @@
 import { ReportSection } from "@/components/reports/ReportSection";
+import styles from "./weekly-report-editorial.module.css";
+import type { ReactNode } from "react";
 import { ExpandableInsightCard } from "@/components/ui/ExpandableInsightCard";
 import { translateDashboardText, translateRegimeLabel } from "@/lib/dashboard/translate-dashboard-copy";
 import { hasVixObservation, vixTrendLabel } from "@/lib/dashboard/vix-presentation";
@@ -8,6 +10,7 @@ import type { DailySeasonalityCell, PresidentialCyclePhase } from "@/lib/statist
 type WeeklyReportProps = {
   data: WeeklyReportData;
   locale?: "es" | "en";
+  presentation?: "default" | "editorial";
 };
 
 const phaseLabels: Record<PresidentialCyclePhase, string> = {
@@ -71,7 +74,7 @@ function formatWeekLabel(value: string, locale: "es" | "en") {
   return locale === "en" ? translateDashboardText(value) : value;
 }
 
-export function WeeklyReport({ data, locale = "es" }: WeeklyReportProps) {
+export function WeeklyReport({ data, locale = "es", presentation = "default" }: WeeklyReportProps) {
   const copy = locale === "en"
     ? {
         report: "Weekly Report",
@@ -203,7 +206,7 @@ export function WeeklyReport({ data, locale = "es" }: WeeklyReportProps) {
       };
   const phases = locale === "en" ? englishPhaseLabels : phaseLabels;
   const months = locale === "en" ? englishMonthNames : monthNames;
-  const t = (value: string | null | undefined) => locale === "en" ? translateDashboardText(value) : value ?? "";
+  const t = (value: string | null | undefined) => locale === "en" ? (presentation === "editorial" ? editorialEnglish(value) : translateDashboardText(value)) : value ?? "";
   const vixSpot = hasVixObservation(data.volatility.vix?.spot) ? data.volatility.vix.spot : null;
   const watchItems = limitItems([
     data.volatility.termStructure?.classification ? `${locale === "en" ? "VIX curve" : "Curva VIX"}: ${t(data.volatility.termStructure.classification)}` : "",
@@ -213,8 +216,8 @@ export function WeeklyReport({ data, locale = "es" }: WeeklyReportProps) {
   const radarPreview = data.crossSignalRadar.slice(0, 3);
 
   return (
-    <div className="space-y-5 md:space-y-7">
-      <section className="border border-petrol/35 bg-panel p-4 shadow-[0_10px_30px_rgba(31,35,40,0.035)] md:p-8">
+    <div className={presentation === "editorial" ? styles.body : "space-y-5 md:space-y-7"}>
+      <section id={presentation === "editorial" ? "weekly-closing" : undefined} className={presentation === "editorial" ? styles.summary : "border border-petrol/35 bg-panel p-4 shadow-[0_10px_30px_rgba(31,35,40,0.035)] md:p-8"}>
         <div className="flex flex-wrap items-center gap-2">
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-brass">{copy.report}</p>
           <span className="border border-petrol/30 bg-white/70 px-2 py-1 text-[10px] font-semibold uppercase text-petrol">
@@ -241,7 +244,7 @@ export function WeeklyReport({ data, locale = "es" }: WeeklyReportProps) {
         </div>
       </section>
 
-      <ReportSection eyebrow="01" title={copy.executive}>
+      <ReportSection id={presentation === "editorial" ? "weekly-executive" : undefined} presentation={presentation} eyebrow="01" title={copy.executive}>
         <div className="grid gap-3 lg:grid-cols-3">
           <SignalList title={copy.helped} items={limitItems(data.executiveSummary.helped.map((signal) => `${t(signal.label)}: ${t(signal.detail)}`))} emptyLabel={copy.empty} />
           <SignalList title={copy.weighed} items={limitItems(data.executiveSummary.weighed.map((signal) => `${t(signal.label)}: ${t(signal.detail)}`))} emptyLabel={copy.empty} />
@@ -249,7 +252,7 @@ export function WeeklyReport({ data, locale = "es" }: WeeklyReportProps) {
         </div>
       </ReportSection>
 
-      <ReportSection eyebrow="02" title={copy.coreEtfs}>
+      <ReportSection id={presentation === "editorial" ? "weekly-etfs" : undefined} presentation={presentation} eyebrow="02" title={copy.coreEtfs}>
         <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-4">
           {data.coreEtfs.map((asset) => (
             <article key={asset.ticker} className="border border-line bg-panelSoft p-4">
@@ -270,7 +273,7 @@ export function WeeklyReport({ data, locale = "es" }: WeeklyReportProps) {
         </div>
       </ReportSection>
 
-      <ReportSection eyebrow="03" title={copy.sectors}>
+      <ReportSection id={presentation === "editorial" ? "weekly-sectors" : undefined} presentation={presentation} eyebrow="03" title={copy.sectors}>
         <div className="grid gap-3 lg:grid-cols-[0.75fr_0.75fr_1fr]">
           <SignalList title={copy.leaders} items={limitItems(data.sectors.leaders.map((sector) => `${sector.etfTicker} · ${t(sector.sectorName)}: ${formatSectorPercent(sector.return1w, locale)}`))} emptyLabel={copy.empty} />
           <SignalList title={copy.laggards} items={limitItems(data.sectors.laggards.map((sector) => `${sector.etfTicker} · ${t(sector.sectorName)}: ${formatSectorPercent(sector.return1w, locale)}`))} emptyLabel={copy.empty} />
@@ -282,8 +285,8 @@ export function WeeklyReport({ data, locale = "es" }: WeeklyReportProps) {
         </div>
       </ReportSection>
 
-      <div className="grid gap-5 lg:grid-cols-2">
-        <ReportSection eyebrow="04" title={copy.volatility}>
+      <div className={presentation === "editorial" ? styles.pair : "grid gap-5 lg:grid-cols-2"}>
+        <ReportSection id={presentation === "editorial" ? "weekly-volatility" : undefined} presentation={presentation} eyebrow="04" title={copy.volatility}>
           <div className="grid gap-2 sm:grid-cols-2">
             <Metric label={locale === "en" ? "VIX · last close" : "VIX · último cierre"} value={formatNumber(vixSpot?.latestVix, 1, locale)} emphasis />
             <Metric label={copy.vixMomentum} value={vixTrendLabel(vixSpot, locale)} />
@@ -295,7 +298,7 @@ export function WeeklyReport({ data, locale = "es" }: WeeklyReportProps) {
           </p>
         </ReportSection>
 
-        <ReportSection eyebrow="05" title={copy.flows}>
+        <ReportSection id={presentation === "editorial" ? "weekly-flows" : undefined} presentation={presentation} eyebrow="05" title={copy.flows}>
           <div className="grid gap-2 sm:grid-cols-2">
             <Metric label={copy.latestBtc} value={formatUsdMillions(data.flows.btcEtfFlows?.flows.latestTotalNetFlow, locale)} emphasis />
             <Metric label="BTC ETF 5D" value={formatUsdMillions(data.flows.btcEtfFlows?.flows.rolling5dNetFlow, locale)} />
@@ -308,7 +311,7 @@ export function WeeklyReport({ data, locale = "es" }: WeeklyReportProps) {
         </ReportSection>
       </div>
 
-      <ReportSection eyebrow="06" title={copy.levels}>
+      <ReportSection id={presentation === "editorial" ? "weekly-levels" : undefined} presentation={presentation} eyebrow="06" title={copy.levels}>
         <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-4">
           {data.statisticalLevels.map((asset) => (
             <article key={asset.ticker} className="border border-line bg-panelSoft p-4">
@@ -329,7 +332,7 @@ export function WeeklyReport({ data, locale = "es" }: WeeklyReportProps) {
         </div>
       </ReportSection>
 
-      <ReportSection eyebrow="07" title={copy.seasonality}>
+      <ReportSection id={presentation === "editorial" ? "weekly-seasonality" : undefined} presentation={presentation} eyebrow="07" title={copy.seasonality}>
         {data.seasonality ? (
           <div className="grid gap-4 lg:grid-cols-[0.7fr_1fr]">
             <EditorialNote
@@ -358,6 +361,7 @@ export function WeeklyReport({ data, locale = "es" }: WeeklyReportProps) {
         )}
       </ReportSection>
 
+      <WeeklyReportAnchor enabled={presentation === "editorial"} id="weekly-radar" className={styles.radar}>
       <ExpandableInsightCard
         eyebrow="08 · Radar"
         title={copy.crossReadings}
@@ -402,8 +406,9 @@ export function WeeklyReport({ data, locale = "es" }: WeeklyReportProps) {
           </table>
         </div>
       </ExpandableInsightCard>
+      </WeeklyReportAnchor>
 
-      <ReportSection eyebrow="09" title={copy.finalRead}>
+      <ReportSection id={presentation === "editorial" ? "weekly-final" : undefined} presentation={presentation} eyebrow="09" title={copy.finalRead}>
         <div className="grid gap-3 md:grid-cols-3">
           <EditorialNote title={copy.context} body={copy.contextBody} />
           <EditorialNote title={copy.risk} body={copy.riskBody} />
@@ -412,6 +417,21 @@ export function WeeklyReport({ data, locale = "es" }: WeeklyReportProps) {
       </ReportSection>
     </div>
   );
+}
+
+function WeeklyReportAnchor({ enabled, children, id, className }: { enabled: boolean; children: ReactNode; id: string; className: string }) {
+  return enabled ? <div id={id} className={className}>{children}</div> : <>{children}</>;
+}
+
+function editorialEnglish(value: string | null | undefined) {
+  const phrases = [
+    ["Las lecturas de volatilidad y rotación apuntan a un entorno de presión elevada.", "Volatility and rotation readings point to an environment of elevated pressure."],
+    ["La lectura sugiere una rotación defensiva.", "The reading suggests defensive rotation."],
+    ["Tensión: volatilidad por encima de rangos normales.", "Elevated: volatility above normal ranges."],
+    ["Backwardation fuerte", "Strong backwardation"],
+    ["Los contratos cercanos cotizan por encima de vencimientos posteriores. Suele aparecer en episodios de tensión o demanda elevada de cobertura inmediata.", "Near-term contracts trade above later maturities. This often appears during periods of stress or heightened demand for immediate hedging."],
+  ];
+  return translateDashboardText(phrases.reduce((text, [source, translation]) => text.replaceAll(source, translation), value ?? ""));
 }
 
 function Metric({ emphasis = false, label, value }: { emphasis?: boolean; label: string; value: string }) {

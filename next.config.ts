@@ -28,48 +28,21 @@ const securityHeaders = [
 const nextConfig: NextConfig = {
   async redirects() {
     return [
+      { source: "/informes", destination: "/analisisyperpectivas", permanent: true },
       { source: "/niveles-estadisticos", destination: "/analisiscuantitativo", permanent: true },
       { source: "/en/statistical-levels", destination: "/en/quantitative-analysis", permanent: true },
     ];
   },
   async headers() {
     return [
-{
-  "source": "/reports/segundo-informe-noviembre-2026.html",
-  "headers": [
-    {
-      "key": "Link",
-      "value": "<https://www.luiguiherrera.com/informes/segundo-informe-noviembre-2026>; rel=\"canonical\""
-    }
-  ]
-},
-{
-  "source": "/reports/segundo-informe-noviembre-2026.pdf",
-  "headers": [
-    {
-      "key": "Link",
-      "value": "<https://www.luiguiherrera.com/informes/segundo-informe-noviembre-2026>; rel=\"canonical\""
-    }
-  ]
-},
-{
-  "source": "/reports/segundo-informe-noviembre-2026.md",
-  "headers": [
-    {
-      "key": "X-Robots-Tag",
-      "value": "noindex, follow"
-    }
-  ]
-},
-{
-  "source": "/reports/segundo-informe-noviembre-2026-calendar.ics",
-  "headers": [
-    {
-      "key": "X-Robots-Tag",
-      "value": "noindex, follow"
-    }
-  ]
-},
+      ...["html", "pdf"].map((extension) => ({
+        source: `/reports/segundo-informe-noviembre-2026.${extension}`,
+        headers: [{ key: "Link", value: '<https://www.luiguiherrera.com/informes/segundo-informe-noviembre-2026>; rel="canonical"' }],
+      })),
+      ...[".md", "-calendar.ics"].map((suffix) => ({
+        source: `/reports/segundo-informe-noviembre-2026${suffix}`,
+        headers: [{ key: "X-Robots-Tag", value: "noindex, follow" }],
+      })),
 {
   "source": "/reports/primer-informe-noviembre-2026.html",
   "headers": [

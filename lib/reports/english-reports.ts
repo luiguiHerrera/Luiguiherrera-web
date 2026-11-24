@@ -1,3 +1,6 @@
+import catalogue from "./english-archive-catalogue.json" with { type: "json" };
+import { secondNovember2026EnglishReport as report } from "./second-november-2026.en.ts";
+
 export type EnglishReportEntry = {
   href: `/en/${string}`;
   title: string;
@@ -7,13 +10,16 @@ export type EnglishReportEntry = {
 
 export const currentEnglishReport = {
   href: "/en/weekly-report",
-  title: "Weekly market report",
-  summary: "Market regime, ETFs, sectors, volatility and flows, with context, scenarios and watchpoints.",
+  title: report.title,
+  summary: report.summary,
 } as const;
 
-// The existing editorial archive is Spanish-only. Add an entry here only when
-// its English detail page exists; never translate a title and link to Spanish.
-export const previousEnglishReports: readonly EnglishReportEntry[] = [];
+export const previousEnglishReports: readonly EnglishReportEntry[] = catalogue.map(edition => ({
+  href: edition.href as `/en/${string}`,
+  title: edition.title,
+  publishedAt: edition.publishedAt,
+  summary: edition.subtitle,
+}));
 
 export function englishReportsNewestFirst(reports: readonly EnglishReportEntry[]) {
   return [...reports].sort((a, b) => b.publishedAt.localeCompare(a.publishedAt));

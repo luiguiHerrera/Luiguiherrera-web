@@ -382,7 +382,7 @@ function isConservativePressureProfile(profile: ReturnType<typeof scoreDiagnosti
 function routeHref(locale: DiagnosticLocale, href: string) {
   if (locale === "es") return href;
   if (href === "/protege-tu-dinero") return "/en/protect-your-money";
-  if (href === "/niveles-estadisticos") return "/en/statistical-levels";
+  if (href === "/analisiscuantitativo") return "/en/quantitative-analysis";
   if (href === "/recursos") return "/en/resources";
   if (href.startsWith("/diagnostico")) return href.replace("/diagnostico", "/en/diagnostic");
   return href;

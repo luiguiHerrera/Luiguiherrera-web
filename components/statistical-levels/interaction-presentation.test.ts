@@ -14,9 +14,10 @@ const cache = new Map<string, { exports: Record<string, unknown> }>();
 function component(file: string): Record<string, unknown> {
   const absolute = path.resolve(file);
   if (cache.has(absolute)) return cache.get(absolute)!.exports;
+  const source = readFileSync(absolute, 'utf8');
   const loadedModule = { exports: {} };
   cache.set(absolute, loadedModule);
-  const code = ts.transpileModule(readFileSync(absolute, 'utf8'), { compilerOptions: { module: ts.ModuleKind.CommonJS, jsx: ts.JsxEmit.ReactJSX, esModuleInterop: true } }).outputText;
+  const code = ts.transpileModule(source, { compilerOptions: { module: ts.ModuleKind.CommonJS, jsx: ts.JsxEmit.ReactJSX, esModuleInterop: true } }).outputText;
   const load = (name: string): unknown => {
     if (!name.startsWith('.') && !name.startsWith('@/')) return require(name);
     const base = name.startsWith('@/') ? path.resolve(name.slice(2)) : path.resolve(path.dirname(absolute), name);
@@ -31,6 +32,21 @@ function component(file: string): Record<string, unknown> {
 const seasonality = JSON.parse(readFileSync('lib/statistical-levels/generated/seasonality/SPY.json', 'utf8'));
 const manifest = JSON.parse(readFileSync('lib/statistical-levels/generated/manifest.json', 'utf8'));
 const month = new Date(manifest.generatedAt + 'T00:00:00Z').getUTCMonth() + 1;
+
+test('extension rank 25.3 is placed at 25.3% of its own scale, with exact endpoints and no fabricated missing rank', () => {
+  const Component = component('components/statistical-levels/PercentileRangeBar.tsx').PercentileRangeBar as ComponentType<Record<string, unknown>>;
+  for (const value of [0, 25.3, 50, 100]) {
+    const html = renderToStaticMarkup(createElement(Component, { label: 'Extension vs MA40', value, quartiles: true }));
+    assert.ok(html.includes(`style="left:${value}%"`));
+    assert.ok(html.includes(`P${value.toFixed(1)}`));
+    for (const tick of [0, 25, 50, 75, 100]) assert.ok(html.includes(`>${tick}</span>`));
+  }
+  for (const value of [null, NaN, Infinity]) {
+    const html = renderToStaticMarkup(createElement(Component, { label: 'Extension vs MA40', value, quartiles: true }));
+    assert.ok(!html.includes('sl-percentile-current'));
+    assert.ok(html.includes('n/d'));
+  }
+});
 
 test('opening percentile markers use the selected level frequency and stored move quantiles, independently of MA ranks', () => {
   const Component = component('components/statistical-levels/HistoricalRange.tsx').HistoricalRange as ComponentType<Record<string, unknown>>;
@@ -50,10 +66,49 @@ test('opening percentile markers use the selected level frequency and stored mov
     assert.ok(originalLevels.every(value => html.includes(value))); // Original mean levels remain intact.
   }
   assert.equal(JSON.stringify(asset), before);
+  const originalPricePosition = renderToStaticMarkup(createElement(Component, { asset, frequency: 'weekly', locale: 'es' })).match(/class="sl-marker sl-marker-price" style="([^"]+)"/)![1];
+  asset.frequencies.weekly.windows['5Y'].ma200ExtensionPercentile = 25.3;
+  const rankChanged = renderToStaticMarkup(createElement(Component, { asset, frequency: 'weekly', locale: 'es' }));
+  assert.equal(rankChanged.match(/class="sl-marker sl-marker-price" style="([^"]+)"/)![1], originalPricePosition);
+  assert.ok(rankChanged.includes('Escala de precios'));
   asset.frequencies.weekly.changeMoves.lowExtensionFromOpen.p10 = null;
   const missing = renderToStaticMarkup(createElement(Component, { asset, frequency: 'weekly', locale: 'es' }));
   assert.equal((missing.match(/class="sl-opening-percentile"/g) ?? []).length, 9);
   assert.ok(!missing.includes('Mínimos desde apertura · P10:'));
+});
+
+test('the mark percentile ranks its opening move in the matching complete low or high sample, separately from MA extension', () => {
+  const { currentOpeningPercentile: rank, HistoricalRange: Component } = component('components/statistical-levels/HistoricalRange.tsx') as {
+    currentOpeningPercentile: typeof import('./HistoricalRange.tsx').currentOpeningPercentile;
+    HistoricalRange: ComponentType<Record<string, unknown>>;
+  };
+  const asset = JSON.parse(readFileSync('lib/statistical-levels/generated/assets/GLD.json', 'utf8'));
+  const data = asset.frequencies.weekly;
+  data.periodHistory = undefined;
+  data.periods = 5;
+  data.recentPeriods = [1, 2, 3, 4].map(move => ({ open: 100, high: 100 + move, low: 100 - move }));
+  asset.keyStatisticalLevels.weekly.currentOpen = 100;
+  asset.keyStatisticalLevels.weekly.lastClose = 98;
+  assert.deepEqual(rank(asset, 'weekly'), { value: 75, distribution: 'low', sample: 4 });
+  asset.frequencies.weekly.windows.Full.ma200ExtensionPercentile = 2.4;
+  for (const locale of ['es', 'en']) {
+    const html = renderToStaticMarkup(createElement(Component, { asset, frequency: 'weekly', locale }));
+    assert.ok(html.includes(`≈P75.0 · ${locale === 'es' ? 'mínimos' : 'lows'}`));
+    assert.ok(!html.includes('≈P2.4'));
+  }
+  asset.keyStatisticalLevels.weekly.lastClose = 103;
+  assert.deepEqual(rank(asset, 'weekly'), { value: 75, distribution: 'high', sample: 4 });
+  asset.keyStatisticalLevels.weekly.lastClose = 105;
+  assert.equal(rank(asset, 'weekly')!.value, 100);
+  asset.keyStatisticalLevels.weekly.lastClose = 95;
+  assert.equal(rank(asset, 'weekly')!.value, 0);
+  data.periods = 100;
+  assert.equal(rank(asset, 'weekly'), null); // Recent rows do not substitute for complete history.
+  data.periods = 5;
+  data.recentPeriods[0].low = null;
+  assert.equal(rank(asset, 'weekly'), null); // Missing prices are not zeros.
+  asset.keyStatisticalLevels.weekly.currentOpen = 0;
+  assert.equal(rank(asset, 'weekly'), null);
 });
 
 test('diverging bars encode geometry with a shared zero without changing source returns', () => {
@@ -237,4 +292,86 @@ test('drawdown zero baseline starts at the chart edge and preserves the actual n
   const html = renderToStaticMarkup(createElement(Component, { asset, frequency: 'weekly', window: '5Y', locale: 'es' }));
   assert.ok(html.includes('M 0.00 0.00 L 50.00 90.00 L 100.00 45.00 L 100 0 L 0 0 Z'));
   assert.ok(html.includes('y1="0" y2="0"'));
+});
+
+test('drawdown window average includes highs and dates the first unrounded trough within the selected window', () => {
+  const summarize = component('components/statistical-levels/UnderwaterDrawdownChart.tsx').getDrawdownWindow as typeof import('./UnderwaterDrawdownChart.tsx').getDrawdownWindow;
+  const data = JSON.parse(readFileSync('lib/statistical-levels/generated/assets/SPY.json', 'utf8')).frequencies.weekly;
+  data.drawdownHistory = [100, 80, 90, 100, 80].map((close, index) => ({ date: `2026-10-${String(index + 1).padStart(2, '0')}`, close }));
+  data.windows.Full.sessions = 5;
+  const full = summarize(data, 'Full');
+  assert.ok(Math.abs(full.average! - (-.1)) < 1e-12);
+  assert.equal(full.maximumDate, '2026-10-02');
+  data.windows['5Y'].sessions = 1;
+  const reset = summarize(data, '5Y');
+  assert.equal(reset.average, 0);
+  assert.equal(reset.maximumDate, null); // The selected window starts its own high-water mark.
+  data.windows['5Y'].available = false;
+  assert.equal(summarize(data, '5Y').average, null);
+  data.windows.Full.sessions = 6;
+  assert.equal(summarize(data, 'Full').maximumDate, null);
+  assert.equal(summarize(data, 'Full').average, null); // Truncated history is not a complete window.
+  assert.equal(summarize(undefined, 'Full').average, null);
+});
+
+test('drawdown summaries match the stored SPY daily, weekly and monthly windows without changing the source', () => {
+  const summarize = component('components/statistical-levels/UnderwaterDrawdownChart.tsx').getDrawdownWindow as typeof import('./UnderwaterDrawdownChart.tsx').getDrawdownWindow;
+  const asset = JSON.parse(readFileSync('lib/statistical-levels/generated/assets/SPY.json', 'utf8'));
+  const before = JSON.stringify(asset);
+  for (const frequency of ['daily', 'weekly', 'monthly']) {
+    const data = asset.frequencies[frequency];
+    for (const window of ['1Y', '3Y', '5Y', '10Y', 'Full'] as const) {
+      const summary = summarize(data, window);
+      const metric = data.windows[window];
+      if (!metric.available) { assert.equal(summary.average, null); continue; }
+      assert.equal(summary.series.length, metric.sessions);
+      assert.equal(Number(Math.min(...summary.drawdowns).toFixed(4)), metric.maxDrawdown);
+      assert.ok(summary.average! <= 0 && summary.average! >= metric.maxDrawdown - .00005);
+      assert.equal(summary.maximumDate, summary.series[summary.drawdowns.indexOf(Math.min(...summary.drawdowns))].date);
+    }
+  }
+  assert.equal(summarize(asset.frequencies.weekly, 'Full').maximumDate, '2009-03-06');
+  assert.equal(JSON.stringify(asset), before);
+});
+
+test('level distances distinguish the stored current-price comparison from the level’s move from opening in both locales', () => {
+  const Component = component('components/statistical-levels/KeyStatisticalLevelsPanel.tsx').KeyStatisticalLevelsPanel as ComponentType<Record<string, unknown>>;
+  const asset = JSON.parse(readFileSync('lib/statistical-levels/generated/assets/GLD.json', 'utf8'));
+  const levels = asset.keyStatisticalLevels.weekly;
+  levels.currentOpen = 100;
+  levels.lastClose = 90;
+  levels.levels.WSHE = 120;
+  levels.levels.WSLE = 80;
+  levels.distances.WSHE = -.25;
+  levels.distances.WSLE = .125;
+  const before = JSON.stringify(asset);
+  for (const locale of ['es', 'en']) {
+    const html = renderToStaticMarkup(createElement(Component, { asset, frequency: 'weekly', locale }));
+    const format = (value: number) => new Intl.NumberFormat(locale === 'es' ? 'es-ES' : 'en-US', { style: 'percent', signDisplay: 'exceptZero', minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(value);
+    for (const value of [-.25, .125]) assert.ok(html.includes(`${format(value)}</span> · ${locale === 'es' ? 'precio actual vs. nivel' : 'current price vs. level'}`));
+    for (const value of [.2, -.2]) assert.ok(html.includes(`${format(value)}</span> · ${locale === 'es' ? 'nivel desde apertura' : 'level from open'}`));
+  }
+  assert.equal(JSON.stringify(asset), before);
+});
+
+test('movement table keeps every source statistic aligned when minimum moves before P10, across frequencies and locales', () => {
+  const Component = component('components/statistical-levels/MovementSummaryTable.tsx').MovementSummaryTable as ComponentType<Record<string, unknown>>;
+  const asset = JSON.parse(readFileSync('lib/statistical-levels/generated/assets/GLD.json', 'utf8'));
+  const before = JSON.stringify(asset);
+  for (const locale of ['es', 'en']) for (const frequency of ['daily', 'weekly', 'monthly']) {
+    const html = renderToStaticMarkup(createElement(Component, { asset, frequency, locale }));
+    const headers = [...html.matchAll(/<th\b[^>]*>(.*?)<\/th>/g)].map(match => match[1]);
+    assert.deepEqual(headers, [locale === 'es' ? 'Métrica' : 'Metric', locale === 'es' ? 'Media' : 'Mean', locale === 'es' ? 'Desv. típica' : 'Std. dev.', locale === 'es' ? 'Mínimo' : 'Minimum', 'p10', 'p25', 'p50', 'p75', 'p90', locale === 'es' ? 'Máximo' : 'Maximum']);
+    const rows = [...html.match(/<tbody>([\s\S]*?)<\/tbody>/)![1].matchAll(/<tr\b[^>]*>([\s\S]*?)<\/tr>/g)];
+    const metrics = Object.keys(asset.frequencies[frequency].changeMoves);
+    assert.equal(rows.length, metrics.length);
+    for (const [index, row] of rows.entries()) {
+      const metric = metrics[index];
+      const source = asset.frequencies[frequency].changeMoves[metric];
+      const values = [...row[1].matchAll(/<td\b[^>]*>([\s\S]*?)<\/td>/g)].slice(1).map(match => match[1]);
+      assert.deepEqual(values, ['mean', 'std', 'min', 'p10', 'p25', 'p50', 'p75', 'p90', 'max'].map(key => source[key] === null ? 'n/d' : metric === 'closeLocation' ? source[key].toFixed(2) : `${source[key] > 0 ? '+' : ''}${(source[key] * 100).toFixed(2)}%`));
+    }
+    assert.ok(html.includes('href="#sl-periods-disclosure"'));
+  }
+  assert.equal(JSON.stringify(asset), before);
 });

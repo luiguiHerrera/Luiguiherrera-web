@@ -51,17 +51,16 @@ function groups(section: ReportEditorialSection) {
 }
 
 export function NovemberReportSections({ report }: { report: MarketReport }) {
-  const secondNovember = report.id === 'segundo-informe-noviembre-2026';
   const sections = report.editorialSections!;
   const assets = groups(sections[2]);
   return <>
     <ReportAssetAnchors />
-    <p className="py-4 text-xs leading-6 text-muted"><strong>Informe anterior:</strong> {secondNovember ? 'primer informe de noviembre, con datos al 30 de octubre de 2026.' : 'segundo informe de octubre, con datos al 16 de octubre de 2026.'}</p>
+    <p className="py-4 text-xs leading-6 text-muted"><strong>Informe anterior:</strong> segundo informe de octubre, con datos al 16 de octubre de 2026.</p>
     <nav aria-label="Secciones del informe" className="border-y border-line py-4"><ul className="flex flex-wrap gap-x-5 gap-y-3 text-xs font-semibold text-petrol">{sections.map(section => <li key={section.id}><a className="underline decoration-petrol/30 underline-offset-4" href={`#${section.id}`}>{section.eyebrow}</a></li>)}</ul></nav>
     {sections.map(section => <section key={section.id} id={section.id} data-native-report-section={section.id} className="grid min-w-0 scroll-mt-24 gap-6 border-b border-line py-8 md:py-10 lg:grid-cols-[0.34fr_1fr]">
       <div className="min-w-0"><p className="text-xs font-semibold uppercase tracking-[0.14em] text-petrol">{section.eyebrow}</p><h2 className="mt-2 text-2xl font-semibold leading-tight text-ink md:text-3xl">{section.title}</h2></div>
       <div className="grid min-w-0 gap-5">
-        {section.id === 'lecturas-mercado-cierre' ? <aside className="border-l-2 border-brass bg-panelSoft px-5 py-4"><p className="text-xs font-semibold uppercase text-brass">Datos congelados</p><p className="mt-2 text-sm leading-6 text-ink">{secondNovember ? 'Mercado: 13 de noviembre de 2026 · editorial: 15 de noviembre de 2026.' : 'Mercado: 30 de octubre de 2026 · editorial: 1 de noviembre de 2026.'} Las observaciones de cada fuente conservan su fecha.</p></aside> : null}
+        {section.id === 'lecturas-mercado-cierre' ? <aside className="border-l-2 border-brass bg-panelSoft px-5 py-4"><p className="text-xs font-semibold uppercase text-brass">Datos congelados</p><p className="mt-2 text-sm leading-6 text-ink">Mercado: 30 de octubre de 2026 · editorial: 1 de noviembre de 2026. Las observaciones de cada fuente conservan su fecha.</p></aside> : null}
         {section.id === 'lectura-seguimiento' ? <nav aria-label="Activos del informe" className="flex flex-wrap gap-2">{assets.map((group, index) => <a key={group.title} className="border border-line bg-panel px-3 py-2 text-xs font-semibold text-petrol hover:border-petrol" href={`#noviembre-${report.assetReadings[index].id}`}>{['SPY', 'GLD', 'FXI', 'EWJ', 'BTC', 'ETH', 'Stockpicking'][index]}</a>)}</nav> : null}
         {groups(section).map((group, index) => {
           const title = group.title ?? section.title;
@@ -72,7 +71,7 @@ export function NovemberReportSections({ report }: { report: MarketReport }) {
             : <Blocks key={position} blocks={[block]} caption={title} />)}</div>;
           return <div key={index} className="grid min-w-0 gap-5">{group.title ? <h3 className="mt-3 text-xl font-semibold text-ink">{group.title}</h3> : null}{content}</div>;
         })}
-        {section.id === 'estacionalidad-calendario' ? <Detail title="Explorar el calendario de noviembre"><p className="text-xs leading-6 text-muted">{secondNovember ? 'Agenda contrastada el 17 de noviembre con fuentes oficiales. El corte de mercado continúa en el día 13. Horarios de Nueva York y Madrid indicados por evento; la reunión de diciembre figura también en la tabla y en el calendario descargable.' : 'Fechas previstas al corte editorial del 1 de noviembre. Los eventos sin confirmación primaria se identifican como estimados y no tienen una hora asignada.'}</p><ReportMonthlyCalendar report={report} events={getReportCalendar(report).filter(item => item.dateStart?.startsWith('2026-11'))} /></Detail> : null}
+        {section.id === 'estacionalidad-calendario' ? <Detail title="Explorar el calendario de noviembre"><p className="text-xs leading-6 text-muted">Fechas previstas al corte editorial del 1 de noviembre. Los eventos sin confirmación primaria se identifican como estimados y no tienen una hora asignada.</p><ReportMonthlyCalendar report={report} events={getReportCalendar(report).filter(item => item.dateStart?.startsWith('2026-11'))} /></Detail> : null}
       </div>
     </section>)}
   </>;
