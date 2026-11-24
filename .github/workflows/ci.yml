@@ -582,6 +582,7 @@ jobs:
         run: npm run build
 
       - name: Verify canonical source bundle, sums, release pins, freeze and policy hashes
+        if: ${{ github.ref == 'refs/heads/vercel-deployment' && github.event_name != 'pull_request' }}
         shell: bash
         run: |
           set -euo pipefail
@@ -690,6 +691,7 @@ jobs:
           PYCODE
 
       - name: Install locked browser test dependencies
+        if: ${{ github.ref == 'refs/heads/vercel-deployment' && github.event_name != 'pull_request' }}
         shell: bash
         run: |
           set -euo pipefail
@@ -697,6 +699,7 @@ jobs:
           node scripts/statistical-levels-release/qa-dependencies/node_modules/playwright/cli.js install --with-deps chromium
 
       - name: Produce hosted qualification subject handoff
+        if: ${{ github.ref == 'refs/heads/vercel-deployment' && github.event_name != 'pull_request' }}
         shell: bash
         run: |
           set -euo pipefail
@@ -732,6 +735,7 @@ jobs:
         run: python3 scripts/statistical-levels-ci/admission.py capture
 
       - name: Run existing release, native proof, policy and security tests
+        if: ${{ github.ref == 'refs/heads/vercel-deployment' && github.event_name != 'pull_request' }}
         shell: bash
         run: |
           set -euo pipefail
@@ -764,13 +768,28 @@ jobs:
           node scripts/qa-statistical-levels-runtime.mjs "$SL_NEXT_LOCAL_ORIGIN" "$CI_EVIDENCE/runtime-product.json"
 
       - name: Run production correction and product contracts including synthetic storage failures
+        if: ${{ github.ref == 'refs/heads/vercel-deployment' && github.event_name != 'pull_request' }}
         shell: bash
         run: |
           set -euo pipefail
           node --import ./scripts/trends-test-register.mjs --experimental-test-module-mocks --experimental-strip-types --test --test-reporter=tap lib/reports/first-september-2026.test.mts lib/reports/second-september-2026.test.mts lib/reports/september-corrective-release.test.mts lib/reports/second-september-source-policy.test.mts | tee "$CI_EVIDENCE/reports.tap"
           node --experimental-strip-types --test --test-reporter=tap lib/statistical-levels/baseline.test.mjs lib/statistical-levels/contracts.test.ts lib/statistical-levels/defect-repairs.test.ts scripts/statistical-levels-storage.test.mjs components/statistical-levels/interaction-presentation.test.ts | tee "$CI_EVIDENCE/product.tap"
 
+      - name: Test current website contracts
+        if: ${{ github.ref != 'refs/heads/vercel-deployment' || github.event_name == 'pull_request' }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          node --import ./scripts/trends-test-register.mjs --experimental-test-module-mocks --experimental-strip-types --test --test-reporter=tap \
+            lib/portfolio-fragility/*.test.ts \
+            lib/trends/trends.test.tsx lib/trends/research/*.test.tsx \
+            lib/statistical-levels/contracts.test.ts components/statistical-levels/interaction-presentation.test.ts \
+            lib/reports/english-reports.test.ts lib/reports/english-complete-archive.test.mjs \
+            lib/reports/english-november-edition.test.mjs lib/reports/reports-archive.test.mjs \
+            lib/reports/weekly-report-editorial.test.mjs
+
       - name: Reject missing or skipped mandatory coverage and candidate drift
+        if: ${{ github.ref == 'refs/heads/vercel-deployment' && github.event_name != 'pull_request' }}
         shell: bash
         run: |
           set -euo pipefail
@@ -1106,6 +1125,7 @@ jobs:
         run: python3 scripts/statistical-levels-ci/admission.py final
 
       - name: Retain exact CI qualification metadata
+        if: ${{ github.ref == 'refs/heads/vercel-deployment' && github.event_name != 'pull_request' }}
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
         with:
           name: sl-ci-${{ github.run_id }}-${{ github.run_attempt }}

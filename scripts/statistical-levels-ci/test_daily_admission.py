@@ -48,6 +48,21 @@ class DailyTests(unittest.TestCase):
         api = ParentCIAPI(['success']);api.jobs[100]['steps'][1]['conclusion'] = 'skipped'
         with self.assertRaisesRegex(ValueError, 'MANDATORY_STEP'):a.parent_ci(api, api.sha)
 
+    def test_green_website_ci_without_native_release_proofs_never_qualifies_sl(self):
+        api = ParentCIAPI(['success'])
+        native_steps = {
+            'Authenticate fresh native capture handoff',
+            'Run existing release, native proof, policy and security tests',
+            'Reject missing or skipped mandatory coverage and candidate drift',
+            'Revalidate exact branch and emit bounded qualification evidence',
+        }
+        for step in api.jobs[100]['steps']:
+            if step['name'] in native_steps:
+                step['conclusion'] = 'skipped'
+        api.jobs[100]['steps'].append({'name': 'Test current website contracts', 'status': 'completed', 'conclusion': 'success'})
+        with self.assertRaisesRegex(ValueError, 'MANDATORY_STEP'):
+            a.parent_ci(api, api.sha)
+
     def fixture(self):
         repo = {'id': a.REPO_ID, 'full_name': a.REPO}
         prior = {'id': 123, 'run_attempt': 1, 'workflow_id': a.PRODUCER_ID, 'path': a.PRODUCER, 'repository': repo, 'head_repository': repo,

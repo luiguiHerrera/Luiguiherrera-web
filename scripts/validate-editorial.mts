@@ -715,8 +715,10 @@ for (const label of [
 const weeklyPage = read("app/en/weekly-report/page.tsx");
 const weeklyBuilder = read("lib/reports/build-weekly-report-data.ts");
 const weeklyComponent = read("components/reports/WeeklyReport.tsx");
-assert(weeklyPage.includes("buildWeeklyReportData"));
-assert(weeklyPage.includes("export const revalidate"));
+assert(weeklyPage.includes("EnglishNovemberReportEdition"), "La ruta inglesa debe conservar la edición editorial publicada.");
+assert(weeklyPage.includes("secondNovember2026EnglishReport"), "La ruta inglesa debe usar el informe versionado de noviembre.");
+assert(!weeklyPage.includes("buildWeeklyReportData"), "La edición publicada no debe regenerarse con datos actuales.");
+assert(!weeklyPage.includes("export const revalidate"), "La edición histórica no debe convertirse en un informe vivo.");
 assert(!weeklyPage.includes("datePublished"));
 assert(!weeklyPage.includes("dateModified"));
 assert(weeklyBuilder.includes("dataThrough"));
