@@ -118,3 +118,22 @@ for(const locale of ['es','en'] as const){
   for(const id of ids)visit(id);
  });
 }
+
+for (const locale of ['es', 'en'] as const) {
+ test(`${locale}: published profiles contain final analysis instead of drafting instructions`, () => {
+  const pages = new Map(trendCatalog.map(definition => [definition.id, renderToStaticMarkup(<TrendDetailPage definition={definition} locale={locale}/>)]));
+  const published = [...pages.values()].join('\n');
+  assert.doesNotMatch(published, /escribiría|inventaría ticker|(?:mostraría|mantendría) esta fila|añadiría FedNow|I would (?:not )?write|I would describe Bitcoin|I would not invent tickers|I would (?:show|keep) this row|I would add FedNow|I would show economic and operational relationships|I would retain the range rather than invent/iu);
+  assert.doesNotMatch(published, /investigación para Codex|research for Codex/iu);
+  const blockchain = pages.get('crypto')!;
+  assert.match(blockchain, /Bitcoin \(BTC\)/u);
+  assert.match(blockchain, /ether \(ETH\)/u);
+  assert.match(blockchain, locale === 'es' ? /evalúo su exposición económica real/u : /I assess its actual economic exposure/u);
+  const cyber = pages.get('cybersecurity')!;
+  assert.match(cyber, locale === 'es' ? /Me ocupa la distancia/u : /I focus on the distance/u);
+  assert.match(cyber, locale === 'es' ? /recuperar el dinero/u : /recovering money/u);
+  const fintech = pages.get('fintech')!;
+  assert.match(fintech, locale === 'es' ? /8\.413\.402 pagos/u : /8,413,402 payments/u);
+  assert.match(fintech, locale === 'es' ? /no mide clientes ni ingresos/u : /does not measure customer counts or revenue/u);
+ });
+}
