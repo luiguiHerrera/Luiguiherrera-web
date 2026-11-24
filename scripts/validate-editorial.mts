@@ -102,7 +102,14 @@ assert.equal(
   1,
   "El archivo debe exponer un único informe marcado como Actual.",
 );
-assert.equal(marketReports.find((report) => report.status === "actual")?.id, "primer-informe-noviembre-2026");
+const latestPublishedReport = [...marketReports]
+  .filter((report) => report.publishedAt !== null)
+  .sort((left, right) => right.publishedAt!.localeCompare(left.publishedAt!))[0];
+assert.equal(
+  marketReports.find((report) => report.status === "actual")?.id,
+  latestPublishedReport?.id,
+  "El informe Actual debe corresponder a la edición publicada más reciente.",
+);
 assert.deepEqual(
   august.executiveSummary.map((item) => item.title),
   ["VOO", "GLD", "EWJ", "FXI", "BTC / ETH", "Stockpicking"],
