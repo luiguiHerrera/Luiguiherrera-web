@@ -38,6 +38,7 @@ const copy = {
     volatility: "Volatilidad",
     termStructure: "Estructura temporal",
     curve: "Curva mensual VX",
+    cutoff: "Corte",
     unavailable: "No disponible",
     rotationDescriptions: {
       defensiva: "Los sectores defensivos lideran la lectura relativa.",
@@ -74,6 +75,7 @@ const copy = {
     volatility: "Volatility",
     termStructure: "Term structure",
     curve: "Monthly VX curve",
+    cutoff: "Data through",
     unavailable: "Unavailable",
     rotationDescriptions: {
       defensiva: "Defensive sectors lead the relative reading.",
@@ -95,6 +97,17 @@ const copy = {
 
 function localized(value: string | null | undefined, locale: Locale) {
   return locale === "en" ? translateDashboardText(value) : value ?? "";
+}
+
+function SourceDate({ value, locale }: { value: string | null | undefined; locale: Locale }) {
+  const date = value?.match(/\d{4}-\d{2}-\d{2}/)?.[0];
+  if (!date) return null;
+  const parsed = new Date(`${date}T00:00:00Z`);
+  if (!Number.isFinite(parsed.getTime()) || parsed.toISOString().slice(0, 10) !== date) return null;
+  const label = new Intl.DateTimeFormat(locale === "en" ? "en-US" : "es-ES", {
+    day: "numeric", month: "short", year: "numeric", timeZone: "UTC",
+  }).format(parsed);
+  return <p className="mt-2 text-xs text-muted" data-home-source-date>{copy[locale].cutoff}: <time dateTime={date}>{label}</time></p>;
 }
 
 function CredibilityIcon({ kind }: { kind: string }) {
@@ -213,11 +226,11 @@ export function HomeDashboardPreview({
                 <div className="grid grid-cols-2 gap-5 text-right">
                   <div>
                     <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-muted">{t.score}</p>
-                    <p className="mt-1 text-2xl font-semibold tabular-nums text-ink">{regimeSummary.regimeScore ?? "—"}</p>
+                    <p className="mt-1 text-xl font-semibold tabular-nums text-ink" data-home-regime-score>{regimeSummary.regimeScore === null ? t.unavailable : `${regimeSummary.regimeScore}/100`}</p>
                   </div>
                   <div>
                     <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-muted">{t.confidence}</p>
-                    <p className="mt-1 text-2xl font-semibold tabular-nums text-ink">{regimeSummary.confidence === null ? "—" : `${regimeSummary.confidence}%`}</p>
+                    <p className="mt-1 text-xl font-semibold tabular-nums text-ink" data-home-regime-confidence>{regimeSummary.confidence === null ? t.unavailable : `${regimeSummary.confidence}%`}</p>
                   </div>
                 </div>
               </div>
@@ -240,6 +253,7 @@ export function HomeDashboardPreview({
                   <span className="mt-1 h-2.5 w-2.5 rounded-full bg-sage shadow-[0_0_0_4px_rgba(111,143,130,0.12)]" aria-hidden="true" />
                 </div>
                 <p className="mt-3 text-sm leading-6 text-muted">{rotationDescription}</p>
+                {sectorRotation ? <SourceDate value={sectorRotation.lastUpdated} locale={locale} /> : null}
               </article>
 
               <article className="rounded-[6px] border border-line bg-white/95 p-4 shadow-[0_14px_34px_rgba(11,52,54,0.065)] transition duration-200 hover:-translate-y-0.5 md:p-5">
@@ -247,7 +261,7 @@ export function HomeDashboardPreview({
                   <div>
                     <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-brass">{t.volatility}</p>
                     <h3 className="mt-2 text-xl font-semibold tabular-nums text-ink">
-                      {spot ? formatHomePreviewNumber(spot.latestVix, locale) : t.unavailable}
+                      {spot ? formatHomePreviewNumber(spot.latestVix, locale, 2) : t.unavailable}
                       <span className="ml-2 text-sm font-medium text-muted">VIX</span>
                     </h3>
                   </div>
@@ -256,6 +270,7 @@ export function HomeDashboardPreview({
                   </span>
                 </div>
                 <p className="mt-3 text-sm leading-6 text-muted">{volatilityDescription}</p>
+                {spot ? <SourceDate value={spot.lastObservationDate} locale={locale} /> : null}
               </article>
             </div>
 
@@ -267,6 +282,7 @@ export function HomeDashboardPreview({
                 </div>
                 <span className="text-xs font-semibold text-petrol">{curveState}</span>
               </div>
+              {curve.points.length ? <SourceDate value={vixTermStructure?.lastUpdated} locale={locale} /> : null}
 
               {curve.points.length ? (
                 <>

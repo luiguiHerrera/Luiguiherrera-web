@@ -175,7 +175,7 @@ export const dashboardEnglishCopy: Record<string,string> = {
   "Backwardation moderada": "Moderate backwardation",
   "Backwardation fuerte": "Strong backwardation",
   "Pendiente": "Pending",
-  "Tensión": "Tension",
+  "Tensión": "Elevated",
   "El rebote de la amplitud ha girado a la baja": "The breadth rebound has turned down",
   "El saldo acumulado ha pasado a positivo": "The cumulative balance has turned positive",
   "El saldo acumulado ha pasado a negativo": "The cumulative balance has turned negative",

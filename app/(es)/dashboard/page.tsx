@@ -13,12 +13,9 @@ import { MarketBreadthPanel } from "@/components/dashboard/MarketBreadthPanel";
 import { McClellanPreviewModule } from "@/components/dashboard/McClellanPreviewModule";
 import { Sp500EtfFlowsModule } from "@/components/dashboard/Sp500EtfFlowsModule";
 import { CapitalFlowPreviewCard } from "@/components/dashboard/CapitalFlowCard";
-import { getPublishedCapitalFlows } from "@/lib/dashboard/get-published-capital-flows";
-import { getPublishedEwjFlows } from "@/lib/dashboard/get-ewj-capital-flows";
 import type { CapitalFlowAssetPreview } from "@/lib/dashboard/capital-flows-preview-types";
 import type { Sp500EtfFlowsPreviewData } from "@/lib/dashboard/sp500-etf-flows-types";
 import type { McClellanPreviewData } from "@/lib/dashboard/mcclellan-preview-types";
-import { getMcClellanData } from "@/lib/dashboard/get-mcclellan-data";
 import { QuantRiskPanel } from "@/components/dashboard/QuantRiskPanel";
 import { SectorRotationChart, SectorRotationUnavailable } from "@/components/dashboard/SectorRotationChart";
 import { VixModule } from "@/components/dashboard/VixModule";
@@ -29,11 +26,14 @@ import { buildMarketBreadthValues } from "@/lib/dashboard/market-breadth";
 import { getRouteMetadata } from "@/lib/seo/site";
 import { buildWeeklyReportData } from "@/lib/reports/build-weekly-report-data";
 
+import { connection } from "next/server";
+
 export const revalidate = 3600;
 
 export const metadata = getRouteMetadata("/dashboard");
 
 export default async function DashboardPage() {
+  await connection();
   return <DashboardContent locale="es" />;
 }
 
@@ -42,10 +42,11 @@ export async function DashboardContent({ locale = "es", previewMcClellan = false
   const showSp500FlowsPreview = process.env.NODE_ENV === "development" && previewSp500Flows;
   const showEthFlowsPreview = process.env.NODE_ENV === "development" && previewEthFlows && Boolean(ethFlowsPreviewData);
   const showEwjFlowsPreview = process.env.NODE_ENV === "development" && previewEwjFlows;
-  const publishedFlows = !showSp500FlowsPreview ? (await getPublishedCapitalFlows()).filter(data => !showEthFlowsPreview || data.id !== 'eth') : [];
-  const ewjFlows = (process.env.NODE_ENV === 'development' ? capitalFlowsPreviewData.find(data => data.id === 'ewj') : null) ?? getPublishedEwjFlows();
-  const mcclellanData = showMcClellanPreview ? mcclellanPreviewData : await getMcClellanData();
   const dashboardData = await getDashboardData();
+  const contextFlows = dashboardData.marketContext?.flows ?? [];
+  const publishedFlows = !showSp500FlowsPreview ? contextFlows.filter(data => data.id !== 'ewj' && (!showEthFlowsPreview || data.id !== 'eth')) : [];
+  const ewjFlows = (process.env.NODE_ENV === 'development' ? capitalFlowsPreviewData.find(data => data.id === 'ewj') : null) ?? contextFlows.find(data => data.id === 'ewj');
+  const mcclellanData = showMcClellanPreview ? mcclellanPreviewData : dashboardData.marketContext?.breadth;
   const { btcEtfFlows, dashboardModules, gldFlowPressure, quantRisk, regimeSummary, sectorModule, sectorRotation, vix, vixTermStructure } = dashboardData;
   const weeklyReportData = await buildWeeklyReportData(dashboardData);
   const remainingModules = dashboardModules.filter((module) => module.id !== "rates" && module.id !== "sectors" && module.id !== "vix" && module.id !== "btc-flows");
@@ -53,7 +54,7 @@ export async function DashboardContent({ locale = "es", previewMcClellan = false
   const flowModels = [
     ...(showSp500FlowsPreview ? capitalFlowsPreviewData.filter(data => data.id !== 'ewj') : publishedFlows),
     ...(showEthFlowsPreview && ethFlowsPreviewData ? [ethFlowsPreviewData] : []),
-    ewjFlows,
+    ...(ewjFlows ? [ewjFlows] : []),
   ];
   if (showSp500FlowsPreview) flowModels.unshift({
     id:'sp500', title:'', eyebrow:'', description:'', points:sp500FlowsPreviewData?.points ?? [],
@@ -81,10 +82,9 @@ export async function DashboardContent({ locale = "es", previewMcClellan = false
   const quantMetric = (id:string) => quantReady ? quantPresentation?.primaryMetrics.find(metric => metric.id === id)?.value ?? insufficient : insufficient;
   const spot = vix?.spot;
   const riskOverview: DashboardOverviewItem[] = [
-    { id:'vix', label:'VIX', value:hasVixObservation(spot) ? spot.latestVix.toFixed(2) : insufficient, detail:hasVixObservation(spot) ? t(spot.vixLevelLabel) : undefined, date:sourceDate(spot?.lastObservationDate) },
+    { id:'vix', label:'VIX', value:hasVixObservation(spot) ? new Intl.NumberFormat(locale, { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(spot.latestVix) : insufficient, detail:hasVixObservation(spot) ? t(spot.vixLevelLabel) : undefined, date:sourceDate(spot?.lastObservationDate) },
     { id:'curve', label:locale === 'en' ? 'VIX term structure' : 'Estructura del VIX', value:vixTermStructure && !['pending','unavailable'].includes(vixTermStructure.sourceStatus) ? t(vixTermStructure.classification) : insufficient, date:sourceDate(vixTermStructure?.lastUpdated) },
     { id:'ewma', label:locale === 'en' ? 'EWMA volatility' : 'Volatilidad EWMA', value:quantMetric('ewma'), date:quantReady ? sourceDate(quantRisk.lastUpdated) : undefined },
-    { id:'fragility', label:locale === 'en' ? 'Fragility' : 'Fragilidad', value:quantMetric('fragility'), date:quantReady ? sourceDate(quantRisk.lastUpdated) : undefined },
   ];
   const flowSummaryAsOf = new Date();
   const flowsOverview = flowOverviewItems(flowModels,locale,flowSummaryAsOf);
@@ -128,7 +128,7 @@ export async function DashboardContent({ locale = "es", previewMcClellan = false
         title={copy.title}
     >
 
-      <div className="mt-6 md:mt-8">
+      <div className="mt-6 md:mt-8" data-market-snapshot={dashboardData.marketContext?.id} data-market-captured-at={dashboardData.marketContext?.capturedAt}>
         <IntegratedRegimeModule
           data={regimeSummary}
           locale={locale}
@@ -229,7 +229,7 @@ export async function DashboardContent({ locale = "es", previewMcClellan = false
                     {btcEtfFlows ? <BtcEtfFlowsModule data={btcEtfFlows} /> : null}
                   </>}
                   {showEthFlowsPreview && ethFlowsPreviewData ? <CapitalFlowPreviewCard data={ethFlowsPreviewData} locale={locale} /> : null}
-                  <CapitalFlowPreviewCard data={ewjFlows} locale={locale} />
+                  {ewjFlows ? <CapitalFlowPreviewCard data={ewjFlows} locale={locale} /> : null}
                 </div>
               </div>
             </details>

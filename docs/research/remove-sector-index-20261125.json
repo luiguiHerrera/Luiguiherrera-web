@@ -1,0 +1,60 @@
+{
+  "status": "VALIDATED_CANDIDATE",
+  "production_base": "af4329a8ffdc02cc783421144a1d1b90862503e8",
+  "scope": "Remove retired in-house five-condition sector-fragility index; align ES/EN Home and Dashboard",
+  "changes": [
+    "Delete index calculation and current result fields, primary metric, overview tile and guide wording",
+    "Strip retired fields from older validated cache entries without mutating cached source histories",
+    "Use a locale-independent shared five-minute capture for Home ES/EN and Dashboard ES/EN; render pages around it at request time",
+    "Do not retain raw provider quota responses or rejected in-flight promises as 24-hour valid data",
+    "Preserve a fully validated delayed McClellan cut with its true source date and stale flag",
+    "Match Home/Dashboard score denominator, unavailable values, VIX precision and English state labels; show actual Home source cuts",
+    "Translate all formerly mixed-language VIX composite phrases fully"
+  ],
+  "unchanged": {
+    "existing_integrated_regime": "45% sector rotation / 40% VIX / 15% legacy BTC; original implementation byte-identical",
+    "proposed_regime_preview": "Not included in this production candidate",
+    "historical_report_content": "Immutable historical snapshots are preserved",
+    "portfolio_fragility_lab": "Separate product untouched"
+  },
+  "validation": {
+    "selected_web_tests": {
+      "passed": 408,
+      "skipped": 3,
+      "failed": 0
+    },
+    "build": "PASS",
+    "typecheck": "PASS in build after generated route types refreshed",
+    "lint": {
+      "errors": 0,
+      "existing_warnings": 26
+    },
+    "editorial": "PASS: 10 reports",
+    "SEO": "PASS: 85 routes and 37 language pairs",
+    "local_four_views_share_capture": true,
+    "local_risk_details": "Actual rendered metrics ewma/garch/correlation; retired index absent",
+    "local_source_limitation": "Sector quota response yields honest unavailable values; removal itself does not change the integrated regime math"
+  },
+  "preservation": {
+    "reports": {
+      "files": 52,
+      "byte_identical_to_production": true
+    },
+    "AC": {
+      "files": 82,
+      "byte_identical_to_production": true
+    },
+    "portfolio_fragility": {
+      "files": 12,
+      "byte_identical_to_production": true
+    },
+    "existing_regime": {
+      "files": 1,
+      "byte_identical_to_production": true
+    },
+    "daily_automation": {
+      "files": 1,
+      "byte_identical_to_production": true
+    }
+  }
+}

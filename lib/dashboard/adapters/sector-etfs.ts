@@ -1,4 +1,5 @@
 import { unstable_cache } from "next/cache.js";
+import { withoutRetiredSectorIndex } from "../risk-models.ts";
 import {
   buildSectorResult,
   buildUnavailableSectorResult,
@@ -63,7 +64,9 @@ async function fetchSectorHistory(
   let response: Response;
   try {
     response = await fetcher(url, {
-      next: { revalidate: REVALIDATE_SECONDS },
+      // HTTP 200 may contain a quota error. Only the validated sector snapshot
+      // below is cacheable; never retain the raw provider response for a day.
+      cache: "no-store",
       signal: AbortSignal.timeout(ALPHA_VANTAGE_TIMEOUT_MS),
     });
   } catch (error) {
@@ -147,7 +150,11 @@ export function createDailySectorCache(loader: () => Promise<SectorEtfsResult>, 
   return () => {
     const current = now();
     if (cached && current < cached.expiresAt) return cached.promise;
-    cached = { expiresAt: current + REVALIDATE_SECONDS * 1000, promise: loader() };
+    const promise = loader();
+    cached = { expiresAt: current + REVALIDATE_SECONDS * 1000, promise };
+    // A transient rejection is not a daily snapshot. Preserve single-flight
+    // reads, but allow recovery rather than retaining a full day of failure.
+    void promise.catch(() => { if (cached?.promise === promise) cached = null; });
     return cached.promise;
   };
 }
@@ -186,7 +193,8 @@ const getDailySectorSnapshot = createDailySectorCache(getPersistentSectorSnapsho
 
 // Cache callbacks must use this strict reader, never the presentation fallback.
 export async function getStrictSectorEtfsData() {
-  return requireCompleteSectorSnapshot(await getDailySectorSnapshot());
+  const snapshot = requireCompleteSectorSnapshot(await getDailySectorSnapshot());
+  return { ...snapshot, quantRisk: withoutRetiredSectorIndex(snapshot.quantRisk) };
 }
 
 export async function getSectorEtfsData(options?: SectorLoadOptions) {

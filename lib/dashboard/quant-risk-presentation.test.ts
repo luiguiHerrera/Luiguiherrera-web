@@ -2,6 +2,9 @@ import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import test from "node:test";
 import { buildQuantRiskPresentation } from "./quant-risk-presentation.ts";
+import { createElement } from "react";
+import { renderToStaticMarkup } from "react-dom/server";
+import { QuantRiskPanel } from "../../components/dashboard/QuantRiskPanel.tsx";
 import type { QuantRiskData } from "./types.ts";
 
 const automatedData: QuantRiskData = {
@@ -22,23 +25,37 @@ const automatedData: QuantRiskData = {
   defensiveGrowthCorrelation21d: 0.2,
   sectorDispersion1w: 3.4,
   sectorDispersion1m: 6.8,
-  fragilityScore: 20,
-  fragilityLabel: "Baja",
-  fragilityInterpretation: "La lectura cuantitativa muestra fragilidad baja.",
 };
 
-test("maps the four primary metrics to their existing analytical fields", () => {
-  const presentation = buildQuantRiskPresentation(automatedData, "es");
-  assert.deepEqual(
-    presentation.primaryMetrics.map(({ id, value }) => [id, value]),
-    [
-      ["fragility", "20/100 · Baja"],
-      ["ewma", "+7.1%"],
-      ["garch", "+7.3%"],
-      ["correlation", "0.12"],
-    ],
-  );
-  assert.equal(presentation.status, "Datos automatizados");
+test("preserves EWMA, GARCH, correlation and dispersion in both languages", () => {
+  for (const locale of ["es", "en"] as const) {
+    const presentation = buildQuantRiskPresentation(automatedData, locale);
+    assert.deepEqual(
+      presentation.primaryMetrics.map(({ id, value }) => [id, value]),
+      [["ewma", "+7.1%"], ["garch", "+7.3%"], ["correlation", "0.12"]],
+    );
+    assert.deepEqual(presentation.dispersion, [{ label: "1W", value: "+3.4%" }, { label: "1M", value: "+6.8%" }]);
+    assert.equal(presentation.status, locale === "es" ? "Datos automatizados" : "Automated data");
+  }
+});
+
+test("retired fields in a previous cached snapshot cannot reintroduce the index into either rendered panel", () => {
+  const legacyCachedData = {
+    ...automatedData,
+    fragilityScore: 80,
+    fragilityLabel: "Alta",
+    fragilityInterpretation: "La lectura cuantitativa muestra fragilidad alta.",
+  };
+  for (const locale of ["es", "en"] as const) {
+    const html = renderToStaticMarkup(createElement(QuantRiskPanel, { data: legacyCachedData, locale }));
+    assert.doesNotMatch(html, /fragility|fragilidad|80\/100/i);
+    assert.match(html, /data-quant-primary-metric="ewma"/);
+    assert.match(html, /data-quant-primary-metric="garch"/);
+    assert.match(html, /data-quant-primary-metric="correlation"/);
+    assert.match(html, /\+7\.1%/);
+    assert.match(html, /\+7\.3%/);
+    assert.match(html, /0\.12/);
+  }
 });
 
 test("keeps unavailable model-dependent values unavailable and demo state visible", () => {
@@ -49,8 +66,6 @@ test("keeps unavailable model-dependent values unavailable and demo state visibl
     ewmaVolAnnualized: null,
     garchVolForecast: null,
     averageCorrelation21d: null,
-    fragilityScore: 0,
-    fragilityLabel: "Baja",
     updateFrequency: "Automática server-side con caché diaria cuando exista fuente disponible",
   }, "en");
 
@@ -58,7 +73,6 @@ test("keeps unavailable model-dependent values unavailable and demo state visibl
   assert.equal(demo.primaryMetrics[0].value, "Not enough data");
   assert.equal(demo.primaryMetrics[1].value, "Not enough data");
   assert.equal(demo.primaryMetrics[2].value, "Not enough data");
-  assert.equal(demo.primaryMetrics[3].value, "Not enough data");
   assert.ok(demo.primaryMetrics.every((metric) => !metric.available));
   assert.match(demo.interpretation, /demo scenario/);
   assert.equal(demo.updateFrequency, "Automated server-side with a daily cache when a source is available");
@@ -89,8 +103,6 @@ test("presents unavailable real-sector history as insufficient rather than low r
     averageCorrelation21d: null,
     sectorDispersion1w: null,
     sectorDispersion1m: null,
-    fragilityScore: null,
-    fragilityLabel: null,
     reliabilityNote: "Los modelos no se calculan sin historiales sectoriales reales y completos.",
   }, "en");
   assert.equal(unavailable.status, "Data temporarily unavailable");
@@ -103,7 +115,7 @@ test("localizes the presentation and keeps the disclosure collapsed by default",
   const english = buildQuantRiskPresentation(automatedData, "en");
   assert.equal(english.copy.eyebrow, "Quantitative risk");
   assert.equal(english.copy.title, "Statistical conditions");
-  assert.equal(english.primaryMetrics[0].value, "20/100 · Low");
+  assert.equal(english.primaryMetrics[0].value, "+7.1%");
   assert.equal(english.sourceName, "Own calculations on sector ETF proxies via price provider");
 
   const component = readFileSync(new URL("../../components/dashboard/QuantRiskPanel.tsx", import.meta.url), "utf8");

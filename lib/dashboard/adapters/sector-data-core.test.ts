@@ -68,7 +68,7 @@ test("unavailable result contains no sector ranking or quantitative estimate", (
   assert.equal(result.module.dataStatus, "unavailable");
   assert.equal(result.module.observedData.length, 0);
   assert.equal(result.quantRisk.dataStatus, "unavailable");
-  assert.equal(result.quantRisk.fragilityScore, null);
+  assert.equal("fragilityScore" in result.quantRisk, false);
   assert.equal(result.quantRisk.sectorDispersion1w, null);
 });
 

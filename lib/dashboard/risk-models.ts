@@ -44,12 +44,6 @@ function defensiveGrowthCorrelation(sectors: SectorEtfSnapshot[], window: number
   return correlation(defensiveSeries.slice(-window), growthSeries.slice(-window));
 }
 
-function fragilityLabel(score: number) {
-  if (score >= 67) return "Alta";
-  if (score >= 34) return "Media";
-  return "Baja";
-}
-
 export function buildQuantRiskData(sectors: SectorEtfSnapshot[], metrics: SectorRotationMetrics, lastUpdated: string): QuantRiskData {
   const marketReturns = averageDailyMarketReturn(sectors);
   const ewmaVol = ewmaAnnualizedVolatility(marketReturns);
@@ -60,13 +54,6 @@ export function buildQuantRiskData(sectors: SectorEtfSnapshot[], metrics: Sector
   const defensiveGrowthCorr21 = defensiveGrowthCorrelation(sectors, 21);
   const garchStatus = classifyVolatility(garchVol ?? ewmaVol);
   const modelStatus = garchVol === null ? (ewmaVol === null ? "insufficient_data" : "fallback_ewma") : "estimated";
-
-  let score = 0;
-  if ((ewmaVol ?? 0) >= 0.18) score += 20;
-  if ((garchVol ?? ewmaVol ?? 0) >= 0.18) score += 20;
-  if ((averageCorr21 ?? 0) >= 0.65) score += 20;
-  if (metrics.sectorDispersion1w >= 4 || metrics.sectorDispersion1m >= 8) score += 20;
-  if (metrics.reading === "defensiva") score += 20;
 
   return {
     sourceName: "Cálculos propios sobre ETFs sectoriales vía proveedor de precios",
@@ -86,9 +73,6 @@ export function buildQuantRiskData(sectors: SectorEtfSnapshot[], metrics: Sector
     defensiveGrowthCorrelation21d: defensiveGrowthCorr21,
     sectorDispersion1w: metrics.sectorDispersion1w,
     sectorDispersion1m: metrics.sectorDispersion1m,
-    fragilityScore: Math.min(score, 100),
-    fragilityLabel: fragilityLabel(score),
-    fragilityInterpretation: `La lectura cuantitativa muestra fragilidad ${fragilityLabel(score).toLowerCase()}. Estos modelos estiman condiciones estadísticas de riesgo bajo supuestos históricos; no implican dirección futura del mercado.`,
   };
 }
 
@@ -111,8 +95,13 @@ export function buildUnavailableQuantRiskData(reason: string): QuantRiskData {
     defensiveGrowthCorrelation21d: null,
     sectorDispersion1w: null,
     sectorDispersion1m: null,
-    fragilityScore: null,
-    fragilityLabel: null,
-    fragilityInterpretation: "Datos insuficientes: no existe un historial sectorial real y completo para estimar el modelo.",
   };
+}
+
+// Older validated cache entries can outlive a deployment. Retire the former
+// composite without expiring valid price histories or reloading the provider.
+export function withoutRetiredSectorIndex(data: QuantRiskData): QuantRiskData {
+  const current = { ...data } as QuantRiskData & Record<string, unknown>;
+  for (const key of ["fragilityScore", "fragilityLabel", "fragilityInterpretation", "fragilityComponents", "fragilityUsesEwmaFallback"]) delete current[key];
+  return current;
 }

@@ -18,10 +18,7 @@ type QuantRiskPanelProps = {
 function primaryMetricCellClass(index: number) {
   return [
     "min-w-0 px-3 py-3 sm:px-4",
-    index === 0 ? "pl-0 sm:pl-0" : "",
-    index === 1 || index === 3 ? "border-l border-line" : "",
-    index >= 2 ? "border-t border-line sm:border-t-0" : "",
-    index === 2 ? "sm:border-l sm:border-line" : "",
+    index === 0 ? "pl-0 sm:pl-0" : "border-t border-line sm:border-l sm:border-t-0",
   ].join(" ");
 }
 
@@ -36,7 +33,6 @@ export function QuantRiskPanel({ data, locale = "es" }: QuantRiskPanelProps) {
       className="min-w-0 border border-line bg-panel px-4 py-5 shadow-[0_14px_32px_rgba(51,45,39,0.05)] sm:px-5 md:px-7 md:py-6"
       data-quant-risk-module
       data-quant-data-status={data.dataStatus}
-      data-quant-fragility={data.modelStatus !== "insufficient_data" && data.fragilityScore !== null ? data.fragilityLabel ?? undefined : undefined}
     >
       <div className="flex flex-wrap items-center justify-between gap-3">
         <p className={dashboardModuleEyebrowClassName}>{copy.eyebrow}</p>
@@ -51,7 +47,7 @@ export function QuantRiskPanel({ data, locale = "es" }: QuantRiskPanelProps) {
 
       </div>
 
-      <div className="mt-5 grid grid-cols-2 border-y border-line sm:grid-cols-4" data-quant-primary-metrics>
+      <div className="mt-5 grid grid-cols-1 border-y border-line sm:grid-cols-3" data-quant-primary-metrics>
         {presentation.primaryMetrics.map((metric, index) => (
           <div
             key={metric.id}

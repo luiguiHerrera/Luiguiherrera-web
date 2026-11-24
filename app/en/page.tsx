@@ -5,6 +5,7 @@ import { TypewriterPrinciples } from "@/components/home/TypewriterPrinciples";
 import { ToolCard } from "@/components/ui/ToolCard";
 import { getHomeDashboardPreviewData } from "@/lib/dashboard/get-home-dashboard-preview-data";
 import { getRouteMetadata } from "@/lib/seo/site";
+import { connection } from "next/server";
 
 const principles = [
   ["Understand the context", "Read the board before moving a piece."],
@@ -71,10 +72,11 @@ const homePathways = [
 export const metadata = getRouteMetadata("/en");
 
 export default async function EnglishHomePage() {
-  const { regimeSummary, sectorRotation, vix, vixTermStructure } = await getHomeDashboardPreviewData();
+  await connection();
+  const { regimeSummary, sectorRotation, vix, vixTermStructure, marketContext } = await getHomeDashboardPreviewData();
 
   return (
-    <div>
+    <div data-market-snapshot={marketContext?.id} data-market-captured-at={marketContext?.capturedAt}>
       <section className="estate-hero home-estate-hero relative overflow-hidden border-b border-line" data-home-hero>
         <div className="mx-auto grid min-h-[470px] max-w-7xl grid-cols-1 px-4 pb-48 pt-10 md:min-h-[650px] md:px-5 md:py-20 lg:grid-cols-[0.7fr_1fr] lg:items-center">
           <div className="relative z-20 max-w-2xl">

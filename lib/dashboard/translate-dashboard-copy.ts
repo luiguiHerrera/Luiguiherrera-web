@@ -1,6 +1,10 @@
 import type { DataStatus, RegimeBias } from "@/lib/dashboard/types";
 
 const phraseMap: Array<[RegExp, string]> = [
+  [/Lectura excepcional de presión de volatilidad\./g, "Exceptional volatility pressure."],
+  [/Mayor demanda implícita de protección\./g, "Greater implied demand for protection."],
+  [/Estrés de mercado por encima de rangos normales\./g, "Market stress above normal ranges."],
+  [/Volatilidad acercándose a zona de tensión\./g, "Volatility approaching an elevated range."],
   [/^Plano$/g, "Flat"],
   [/^Fuerte contango$/g, "Strong contango"],
   [/^Contango moderado$/g, "Moderate contango"],

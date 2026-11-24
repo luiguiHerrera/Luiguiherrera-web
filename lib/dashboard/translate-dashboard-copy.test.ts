@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 import { translateDashboardText } from "./translate-dashboard-copy.ts";
+import { dashboardText } from "./dashboard-localization.ts";
 
 test("translates dynamic dashboard copy without leaving mixed-language fragments", () => {
   const cases = [
@@ -83,4 +84,23 @@ test("translates all incomplete-regime explanation fields", () => {
     ["Lectura compuesta no disponible. Pilar VIX ausente o inválido. No se renormalizan los pesos restantes.", "Composite read unavailable. VIX pillar missing or invalid. Remaining weights are not renormalized."],
   ];
   for (const [source, expected] of cases) assert.equal(translateDashboardText(source), expected);
+});
+
+
+test("fully translates VIX composite descriptions before individual word replacements", () => {
+  const cases = [
+    ["Lectura excepcional de presión de volatilidad.", "Exceptional volatility pressure."],
+    ["Mayor demanda implícita de protección.", "Greater implied demand for protection."],
+    ["Estrés de mercado por encima de rangos normales.", "Market stress above normal ranges."],
+    ["Volatilidad acercándose a zona de tensión.", "Volatility approaching an elevated range."],
+  ];
+  for (const [spanish, english] of cases) assert.equal(translateDashboardText(spanish), english);
+});
+
+
+test("Home, dashboard overview and VIX detail use the same English state labels", () => {
+  for (const value of ["Tensión", "Plano", "Fuerte contango", "Contango moderado", "Backwardation fuerte", "Backwardation moderada"]) {
+    assert.equal(dashboardText("en", value), translateDashboardText(value));
+    assert.equal(dashboardText("es", value), value);
+  }
 });

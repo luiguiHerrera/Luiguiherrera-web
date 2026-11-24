@@ -16,7 +16,7 @@ export function DashboardReadingGuide({ locale }: { locale: "es" | "en" }) {
         items: [
           ["Integrated regime", "The integrated regime synthesizes several dimensions into one contextual reading; it is not a standalone trading instruction."],
           ["Rotation and breadth", "Sector rotation shows where leadership is concentrated, while market breadth shows how widely it is shared. Narrow leadership can describe a different environment from broad participation."],
-          ["Quantitative risk", "Quantitative risk organizes statistical fragility and historical conditions under explicit assumptions; it does not determine future outcomes."],
+          ["Quantitative risk", "EWMA and GARCH estimate volatility, while sector correlations and dispersion describe how returns move together or diverge. Each measure retains its own meaning and assumptions."],
           ["VIX and term structure", "VIX approximates the current level of implied volatility, while the futures term structure distinguishes contango from backwardation. They answer different questions."],
           ["Capital flows", "Capital flows add context about pressure toward GLD and spot Bitcoin ETFs. Proxies and sources have limits that should be read alongside their methodology."],
           ["Cross-reading", "Agreement or divergence between modules can be informative, but it does not trigger an automatic action."],
@@ -31,7 +31,7 @@ export function DashboardReadingGuide({ locale }: { locale: "es" | "en" }) {
         items: [
           ["Régimen integrado", "El régimen integrado sintetiza varias dimensiones en una lectura de contexto; no es una instrucción operativa independiente."],
           ["Rotación y amplitud", "La rotación sectorial muestra dónde se concentra el liderazgo y la amplitud de mercado indica cuánto participa. Un liderazgo estrecho puede describir un entorno distinto de una participación amplia."],
-          ["Riesgo cuantitativo", "El riesgo cuantitativo organiza fragilidad estadística y condiciones históricas bajo supuestos explícitos; no determina resultados futuros."],
+          ["Riesgo cuantitativo", "EWMA y GARCH estiman volatilidad, mientras las correlaciones y la dispersión sectorial describen cuánto se mueven juntos o divergen los retornos. Cada medida conserva su significado y sus supuestos."],
           ["VIX y estructura temporal", "El VIX aproxima el nivel actual de volatilidad implícita, mientras la estructura temporal de los futuros distingue contango de backwardation. Responden preguntas diferentes."],
           ["Flujos de capital", "Los flujos de capital aportan contexto sobre la presión hacia GLD y los ETF spot de Bitcoin. Los proxies y las fuentes tienen límites que deben leerse junto a su metodología."],
           ["Lectura cruzada", "La coincidencia o divergencia entre módulos puede ser informativa, pero no activa una acción automática."],

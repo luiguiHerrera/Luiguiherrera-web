@@ -26,6 +26,7 @@ export async function getMcClellanData() {
     return buildMcClellanData(await getCachedMcClellanSource());
   } catch (error) {
     if (!(error instanceof McClellanSourceError)) throw error;
+    if (error.validatedSource) return buildMcClellanData(error.validatedSource);
     console.warn("[dashboard:mcclellan] Source unavailable; no fabricated fallback");
     return null;
   }

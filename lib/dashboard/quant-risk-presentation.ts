@@ -11,7 +11,6 @@ const copy = {
     description: "Estos modelos aportan contexto estadístico sobre el riesgo bajo supuestos históricos; no predicen por sí solos el comportamiento del mercado.",
     showContext: "Mostrar contexto",
     hideContext: "Ocultar contexto",
-    fragility: "Fragilidad",
     ewma: "Volatilidad EWMA",
     garch: "Volatilidad GARCH",
     correlation: "Correlación promedio",
@@ -37,7 +36,6 @@ const copy = {
     description: "These models provide statistical context for risk under historical assumptions; they do not predict market behavior on their own.",
     showContext: "Show context",
     hideContext: "Hide context",
-    fragility: "Fragility",
     ewma: "EWMA volatility",
     garch: "GARCH volatility",
     correlation: "Average correlation",
@@ -96,12 +94,6 @@ function translateDynamic(value: string, locale: QuantRiskLocale) {
 
 export function buildQuantRiskPresentation(data: QuantRiskData, locale: QuantRiskLocale) {
   const labels = copy[locale];
-  const fragilityAvailable = data.modelStatus !== "insufficient_data";
-  const fragilityLabel = data.fragilityLabel === null
-    ? labels.insufficient
-    : locale === "en"
-      ? ({ Baja: "Low", Media: "Medium", Alta: "High" } as const)[data.fragilityLabel]
-      : data.fragilityLabel;
   const garchState: QuantRiskReadinessState = data.garchVolForecast === null || data.modelStatus === "insufficient_data"
     ? "insufficient"
     : data.modelStatus === "fallback_ewma" ? "fallback" : "available";
@@ -119,12 +111,6 @@ export function buildQuantRiskPresentation(data: QuantRiskData, locale: QuantRis
     status: statusLabels[locale][data.dataStatus],
     statusTone: data.dataStatus === "automated" ? "positive" as const : data.dataStatus === "demo" || data.dataStatus === "fallback" ? "warning" as const : "neutral" as const,
     primaryMetrics: [
-      {
-        id: "fragility",
-        label: labels.fragility,
-        value: fragilityAvailable ? `${data.fragilityScore}/100 · ${fragilityLabel}` : labels.insufficient,
-        available: fragilityAvailable,
-      },
       {
         id: "ewma",
         label: labels.ewma,

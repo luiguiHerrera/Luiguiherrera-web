@@ -1,4 +1,6 @@
 import type { DashboardModuleId } from "@/lib/analytics/trackEvent";
+import type { CapitalFlowAssetPreview } from "./capital-flows-preview-types";
+import type { McClellanPreviewData } from "./mcclellan-preview-types";
 
 export type DataStatus = "demo" | "manual" | "live_pending" | "automated" | "fallback" | "delayed" | "unavailable";
 
@@ -32,7 +34,6 @@ export type SectorLeadership = "defensiva" | "growth" | "cíclica" | "mixta";
 export type SectorDetailPeriod = "30d" | "63d" | "252d";
 export type VolatilityStatus = "normal" | "elevated" | "stress";
 export type GarchModelStatus = "estimated" | "fallback_ewma" | "insufficient_data";
-export type FragilityLabel = "Baja" | "Media" | "Alta";
 export type VixSeverity = "low" | "normal" | "watch" | "elevated" | "stress" | "extreme";
 export type VixTrend = "falling" | "stable" | "rising" | "rising_fast";
 export type VixCurveState = "contango" | "flat" | "backwardation" | "live_pending";
@@ -96,9 +97,6 @@ export type QuantRiskData = DashboardDataSource & {
   defensiveGrowthCorrelation21d: number | null;
   sectorDispersion1w: number | null;
   sectorDispersion1m: number | null;
-  fragilityScore: number | null;
-  fragilityLabel: FragilityLabel | null;
-  fragilityInterpretation: string;
 };
 
 export type VixHistoryPoint = {
@@ -351,6 +349,12 @@ export type CrossSignalRadarRow = DashboardDataSource & {
 };
 
 export type DashboardData = {
+  marketContext?: {
+    id: string;
+    capturedAt: string;
+    breadth: McClellanPreviewData | null;
+    flows: CapitalFlowAssetPreview[];
+  };
   dashboardModules: DashboardModuleData[];
   crossSignalRadar: CrossSignalRadarRow[];
   regimeSummary: RegimeSummary;
