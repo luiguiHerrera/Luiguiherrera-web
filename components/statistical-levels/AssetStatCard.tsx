@@ -46,8 +46,8 @@ const englishFrequencyLabels: Record<StatisticalFrequency, string> = {
 };
 
 function statusLabel(status: AssetStatRecord["status"], locale: "es" | "en") {
-  if (locale === "en") return status === "ok" ? "Data OK" : status === "limited_history" ? "Limited history" : "Unavailable";
-  return status === "ok" ? "ok" : status === "limited_history" ? "Historial limitado" : "No disponible";
+  if (locale === "en") return status === "ok" ? "Sufficient history" : status === "limited_history" ? "Limited history" : "Unavailable";
+  return status === "ok" ? "Historial suficiente" : status === "limited_history" ? "Historial limitado" : "No disponible";
 }
 
 function extensionLabel(value: string, locale: "es" | "en") {

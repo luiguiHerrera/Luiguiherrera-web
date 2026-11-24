@@ -10,7 +10,7 @@ import { MovementSummaryTable } from './MovementSummaryTable';
 import { OpeningLocationPanel } from './OpeningLocationPanel';
 import { PeriodExplorerTable } from './PeriodExplorerTable';
 import { ReturnHeatmap } from './ReturnHeatmap';
-import { UnderwaterDrawdownChart } from './UnderwaterDrawdownChart';
+import { getDrawdownWindow, UnderwaterDrawdownChart } from './UnderwaterDrawdownChart';
 import { HistoricalRange } from './HistoricalRange';
 import { CurrentMonthSeasonality } from './CurrentMonthSeasonality';
 import { StatisticalDisclosure } from './StatisticalDisclosure';
@@ -101,6 +101,7 @@ function StatLevelsView({ asset, locale = 'es', manifest, seasonality, selection
   const en = locale === 'en';
   const data = asset.frequencies[frequency];
   const metric = data.windows[window];
+  const drawdown = getDrawdownWindow(data, window);
   const ticker = displayStatTicker(asset.ticker);
   const sample = extensionSample(metric, frequency);
   const longMa = data.longMovingAverageKey;
@@ -153,7 +154,11 @@ function StatLevelsView({ asset, locale = 'es', manifest, seasonality, selection
     <CurrentMonthSeasonality key={asset.ticker} data={seasonality} asOf={asset.lastDate ?? manifest.generatedAt} locale={locale} window={window} />
     <section id="sl-risk" className="sl-risk">
       <StatisticalDisclosure id="sl-drawdown-history" title="Drawdown" note={en ? 'Declines from prior highs and their evolution over time' : 'Caídas desde máximos y su evolución en el tiempo'}>
-        <dl className="sl-risk-metrics"><div><dt>{en ? 'Current drawdown' : 'Drawdown actual'}</dt><dd>{percent(metric.currentDrawdown)}</dd><p>{en ? 'Distance from the prior high within this window.' : 'Distancia desde el máximo previo de esta ventana.'}</p></div><div><dt>{en ? 'Maximum drawdown' : 'Drawdown máximo'}</dt><dd>{percent(metric.maxDrawdown)}</dd><p>{en ? 'Deepest observed decline within this window.' : 'La caída más profunda observada en esta ventana.'}</p></div></dl>
+        <dl className="sl-risk-metrics">
+          <div><dt>{en ? 'Current drawdown' : 'Drawdown actual'}</dt><dd>{percent(metric.currentDrawdown)}</dd><p>{en ? 'Distance from the prior high within this window.' : 'Distancia desde el máximo previo de esta ventana.'}</p></div>
+          <div><dt>{en ? 'Maximum drawdown' : 'Drawdown máximo'}</dt><dd>{percent(metric.maxDrawdown)}</dd><p>{en ? 'Deepest observed decline within this window.' : 'La caída más profunda observada en esta ventana.'}</p>{drawdown.maximumDate ? <p>{en ? 'Observed on' : 'Observado el'} <time dateTime={drawdown.maximumDate}>{new Intl.DateTimeFormat(en ? 'en-US' : 'es-ES', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' }).format(new Date(`${drawdown.maximumDate}T00:00:00Z`))}</time>.</p> : null}</div>
+          <div><dt>{en ? 'Average drawdown' : 'Drawdown promedio'}</dt><dd>{percent(drawdown.average)}</dd><p>{en ? 'Mean of the observations in this window, including periods at highs (0%).' : 'Media de las observaciones de esta ventana, incluidos los periodos en máximos (0 %).'}</p></div>
+        </dl>
         <UnderwaterDrawdownChart asset={asset} frequency={frequency} window={window} locale={locale} showSummary={false} />
       </StatisticalDisclosure>
     </section>
