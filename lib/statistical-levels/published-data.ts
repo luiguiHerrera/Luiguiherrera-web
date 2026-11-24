@@ -2,6 +2,7 @@ import "server-only";
 import { createHash } from "node:crypto";
 import { bundledStatisticalLevels, getStatisticalLevelsPageData } from "./get-statistical-levels-data";
 import { createRuntimeSnapshot, runtimeDigest, SNAPSHOT_SCHEMA } from "./runtime-snapshot";
+import { readPublishedText as readText, publishedReadFailure } from "./published-fetch";
 import type { RuntimeSnapshot } from "./runtime-snapshot";
 import type { AssetStatRecord, DailySeasonalityData, StatisticalLevelsManifest } from "./types";
 
@@ -31,13 +32,6 @@ function liveDataEnabled() {
   return (process.env.STAT_LEVELS_LIVE_DATA ?? (process.env.VERCEL === "1" ? "true" : "false")) === "true";
 }
 
-async function readText(url: string, revalidate: number) {
-  const response = await fetch(url, { headers: { "User-Agent": "Statistical-Levels-Web" },
-    redirect: "error", signal: AbortSignal.timeout(8000), next: { revalidate } });
-  if (!response.ok) throw new Error("Dataset source returned " + response.status);
-  return response.text();
-}
-
 async function publications(): Promise<Publication[]> {
   const [runsText, pushesText] = await Promise.all([readText(runsUrl, 600), readText(activityUrl, 600)]);
   const runs: ProducerRun[] = JSON.parse(runsText).workflow_runs;
@@ -58,7 +52,7 @@ async function publications(): Promise<Publication[]> {
 
 async function verifyReceipt(publication: Publication) {
   const { run } = publication;
-  const result = JSON.parse(await readText(api + "/actions/runs/" + run.id + "/artifacts", 86400));
+  const result = JSON.parse(await readText(api + "/actions/runs/" + run.id + "/artifacts", 600));
   const named = result.artifacts.filter((a: ReceiptArtifact) => a.name === "sl-published-" + run.id + "-" + run.run_attempt &&
     !a.expired && a.workflow_run?.id === run.id && a.workflow_run.head_sha === run.head_sha && /^sha256:[a-f0-9]{64}$/.test(a.digest));
   if (named.length !== 1) throw new Error("Missing successful producer readback receipt");
@@ -126,18 +120,18 @@ export async function loadPublishedPage(selection: Selection) {
     let releases: Publication[] = [];
     try {
       releases = await publications();
-    } catch { console.error("Statistical Levels release list unavailable."); }
+    } catch (error) { console.error("Statistical Levels release list unavailable.", publishedReadFailure(error)); }
     const recent = releases.filter(entry => Date.parse(entry.push.timestamp) > Date.parse(seedCutoff)).slice(0, 3);
     for (const entry of recent) {
       try {
         const { source, snapshot, cutoff } = await hostedSource(entry.revision, entry);
         if (cutoff >= seedCutoff && newerThanBundled(cutoff)) return { data: await getStatisticalLevelsPageData(selection, source), snapshot };
-      } catch { console.error("Statistical Levels could not read verified release", entry.revision); }
+      } catch (error) { console.error("Statistical Levels could not read verified release", entry.revision, publishedReadFailure(error)); }
     }
     if (newerThanBundled(seedCutoff)) try {
       const { source, snapshot } = await hostedSource(seed);
       return { data: await getStatisticalLevelsPageData(selection, source), snapshot };
-    } catch { console.error("Statistical Levels archive unavailable. Using bundled snapshot."); }
+    } catch (error) { console.error("Statistical Levels archive unavailable. Using bundled snapshot.", publishedReadFailure(error)); }
   }
   const { source, snapshot } = await bundledSource();
   return { data: await getStatisticalLevelsPageData(selection, source), snapshot };

@@ -10,6 +10,7 @@ test('a new verified run updates the lab while prior tabs retain their file hash
   const first = 'a'.repeat(40), second = 'b'.repeat(40);
   const dates = { [first]: '2026-11-24T12:00:00.000Z', [second]: '2026-11-25T12:00:00.000Z' };
   let revisions = [first], damaged = false, missingReceipt = false, otherActor = false;
+  let discoveryFailures = 1;
   const originals = new Map<string,string>();
   function original(name: string) {
     let text = originals.get(name);
@@ -32,7 +33,10 @@ test('a new verified run updates the lab while prior tabs retain their file hash
     if (damaged && revision === second && name === 'assets/SPY.json') return '{}';
     return original(name);
   }
-  t.mock.method(globalThis, 'fetch', async (url: string) => {
+  t.mock.method(globalThis, 'fetch', async (url: string, options?: { next?: { revalidate?: number } }) => {
+    if (url.includes('/workflows/306145344/') && discoveryFailures-- > 0) {
+      return new Response('Temporary upstream failure', { status: 503 });
+    }
     const before = "f".repeat(40);
     const runId = (revision: string) => revision === first ? 10 : 20;
     const pushed = (revision: string) => dates[revision].replace("12:00:00","12:01:00");
@@ -40,6 +44,7 @@ test('a new verified run updates the lab while prior tabs retain their file hash
       before, after, actor:{id:otherActor && after === second ? 1 : 41898282}, ref:"refs/heads/vercel-deployment", activity_type:"push", timestamp:pushed(after)
     })));
     if (url.includes("/artifacts")) {
+      assert.equal(options?.next?.revalidate, 600, 'Mutable receipt listings must not be cached for a full day');
       const id = Number(url.split("/").at(-2));
       return Response.json({artifacts:missingReceipt && id === 20 ? [] : [{name:"sl-published-"+id+"-1",expired:false,digest:"sha256:"+"a".repeat(64),workflow_run:{id,head_sha:before}}]});
     }

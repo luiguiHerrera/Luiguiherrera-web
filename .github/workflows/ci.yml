@@ -793,6 +793,7 @@ jobs:
             lib/portfolio-fragility/*.test.ts \
             lib/trends/trends.test.tsx lib/trends/research/*.test.tsx \
             lib/statistical-levels/baseline.test.mjs lib/statistical-levels/contracts.test.ts lib/statistical-levels/defect-repairs.test.ts \
+            lib/statistical-levels/published-data.test.mts lib/statistical-levels/published-fetch.test.ts \
             scripts/statistical-levels-storage.test.mjs components/statistical-levels/interaction-presentation.test.ts \
             lib/reports/first-september-2026.test.mts lib/reports/second-september-2026.test.mts lib/reports/second-september-source-policy.test.mts \
             lib/reports/english-reports.test.ts lib/reports/english-complete-archive.test.mjs \
