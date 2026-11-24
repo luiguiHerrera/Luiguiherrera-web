@@ -1,0 +1,3940 @@
+{
+  "capital_positions": [
+    {
+      "actor": "Berkshire Hathaway",
+      "asset": "Bank of America",
+      "ticker": "BAC",
+      "cusip": "060505104",
+      "period_from": "2026-06-30",
+      "period_to": "2026-09-30",
+      "reported_at": "2026-11-16",
+      "quantity_from": 483394015,
+      "quantity_to": 455860908,
+      "delta": -27533107,
+      "delta_pct": -5.6958,
+      "unit": "shares",
+      "direction": "reduced",
+      "evidence_type": "net change in a reported 13F holding",
+      "themes": [
+        "financial digitization"
+      ],
+      "sources": [
+        "CAP_BH_Q2",
+        "CAP_BH_Q3"
+      ],
+      "limitation": "I compare share counts at two quarter ends. I do not know execution dates or prices, hedges, motives or intervening transactions. A change in market value is not a flow. These are reported long holdings, not a complete portfolio.",
+      "corporate_action_check": "Same CUSIP and share class. I have not applied corporate-action adjustments; the figure is a reported difference, with a comprehensive review of those events still outstanding.",
+      "comparison_eligible": true,
+      "id": "C001",
+      "theme_ids": [
+        7
+      ],
+      "display_direction": "Reduced"
+    },
+    {
+      "actor": "Berkshire Hathaway",
+      "asset": "Capital One",
+      "ticker": "COF",
+      "cusip": "14040H105",
+      "period_from": "2026-06-30",
+      "period_to": "2026-09-30",
+      "reported_at": "2026-11-16",
+      "quantity_from": 3000000,
+      "quantity_to": 1150000,
+      "delta": -1850000,
+      "delta_pct": -61.6667,
+      "unit": "shares",
+      "direction": "reduced",
+      "evidence_type": "net change in a reported 13F holding",
+      "themes": [
+        "financial digitization"
+      ],
+      "sources": [
+        "CAP_BH_Q2",
+        "CAP_BH_Q3"
+      ],
+      "limitation": "I compare share counts at two quarter ends. I do not know execution dates or prices, hedges, motives or intervening transactions. A change in market value is not a flow. These are reported long holdings, not a complete portfolio.",
+      "corporate_action_check": "Same CUSIP and share class. I have not applied corporate-action adjustments; the figure is a reported difference, with a comprehensive review of those events still outstanding.",
+      "comparison_eligible": true,
+      "id": "C002",
+      "theme_ids": [
+        7
+      ],
+      "display_direction": "Reduced"
+    },
+    {
+      "actor": "Berkshire Hathaway",
+      "asset": "DaVita",
+      "ticker": "DVA",
+      "cusip": "23918K108",
+      "period_from": "2026-06-30",
+      "period_to": "2026-09-30",
+      "reported_at": "2026-11-16",
+      "quantity_from": 28880209,
+      "quantity_to": 28697229,
+      "delta": -182980,
+      "delta_pct": -0.6336,
+      "unit": "shares",
+      "direction": "reduced",
+      "evidence_type": "net change in a reported 13F holding",
+      "themes": [
+        "health and longevity"
+      ],
+      "sources": [
+        "CAP_BH_Q2",
+        "CAP_BH_Q3"
+      ],
+      "limitation": "I compare share counts at two quarter ends. I do not know execution dates or prices, hedges, motives or intervening transactions. A change in market value is not a flow. These are reported long holdings, not a complete portfolio.",
+      "corporate_action_check": "Same CUSIP and share class. I have not applied corporate-action adjustments; the figure is a reported difference, with a comprehensive review of those events still outstanding.",
+      "comparison_eligible": true,
+      "id": "C003",
+      "theme_ids": [
+        4
+      ],
+      "display_direction": "Reduced"
+    },
+    {
+      "actor": "Berkshire Hathaway",
+      "asset": "Kroger",
+      "ticker": "KR",
+      "cusip": "501044101",
+      "period_from": "2026-06-30",
+      "period_to": "2026-09-30",
+      "reported_at": "2026-11-16",
+      "quantity_from": 39000000,
+      "quantity_to": 35000000,
+      "delta": -4000000,
+      "delta_pct": -10.2564,
+      "unit": "shares",
+      "direction": "reduced",
+      "evidence_type": "net change in a reported 13F holding",
+      "themes": [
+        "future consumption",
+        "water and food"
+      ],
+      "sources": [
+        "CAP_BH_Q2",
+        "CAP_BH_Q3"
+      ],
+      "limitation": "I compare share counts at two quarter ends. I do not know execution dates or prices, hedges, motives or intervening transactions. A change in market value is not a flow. These are reported long holdings, not a complete portfolio.",
+      "corporate_action_check": "Same CUSIP and share class. I have not applied corporate-action adjustments; the figure is a reported difference, with a comprehensive review of those events still outstanding.",
+      "comparison_eligible": true,
+      "id": "C004",
+      "theme_ids": [
+        8,
+        9
+      ],
+      "display_direction": "Reduced"
+    },
+    {
+      "actor": "Berkshire Hathaway",
+      "asset": "Lennar Class A",
+      "ticker": "LEN",
+      "cusip": "526057104",
+      "period_from": "2026-06-30",
+      "period_to": "2026-09-30",
+      "reported_at": "2026-11-16",
+      "quantity_from": 13111741,
+      "quantity_to": 26034436,
+      "delta": 12922695,
+      "delta_pct": 98.5582,
+      "unit": "shares",
+      "direction": "increased",
+      "evidence_type": "net change in a reported 13F holding",
+      "themes": [
+        "cities and infrastructure"
+      ],
+      "sources": [
+        "CAP_BH_Q2",
+        "CAP_BH_Q3"
+      ],
+      "limitation": "I compare share counts at two quarter ends. I do not know execution dates or prices, hedges, motives or intervening transactions. A change in market value is not a flow. These are reported long holdings, not a complete portfolio.",
+      "corporate_action_check": "Same CUSIP and share class. I have not applied corporate-action adjustments; the figure is a reported difference, with a comprehensive review of those events still outstanding.",
+      "comparison_eligible": true,
+      "id": "C005",
+      "theme_ids": [
+        13
+      ],
+      "display_direction": "Increased"
+    },
+    {
+      "actor": "Berkshire Hathaway",
+      "asset": "Nucor",
+      "ticker": "NUE",
+      "cusip": "670346105",
+      "period_from": "2026-06-30",
+      "period_to": "2026-09-30",
+      "reported_at": "2026-11-16",
+      "quantity_from": 1857752,
+      "quantity_to": 1580776,
+      "delta": -276976,
+      "delta_pct": -14.9092,
+      "unit": "shares",
+      "direction": "reduced",
+      "evidence_type": "net change in a reported 13F holding",
+      "themes": [
+        "industrial infrastructure",
+        "steel"
+      ],
+      "sources": [
+        "CAP_BH_Q2",
+        "CAP_BH_Q3"
+      ],
+      "limitation": "I compare share counts at two quarter ends. I do not know execution dates or prices, hedges, motives or intervening transactions. A change in market value is not a flow. These are reported long holdings, not a complete portfolio.",
+      "corporate_action_check": "Same CUSIP and share class. I have not applied corporate-action adjustments; the figure is a reported difference, with a comprehensive review of those events still outstanding.",
+      "comparison_eligible": true,
+      "id": "C006",
+      "theme_ids": [
+        3
+      ],
+      "display_direction": "Reduced"
+    },
+    {
+      "actor": "Berkshire Hathaway",
+      "asset": "Verisign",
+      "ticker": "VRSN",
+      "cusip": "92343E102",
+      "period_from": "2026-06-30",
+      "period_to": "2026-09-30",
+      "reported_at": "2026-11-16",
+      "quantity_from": 8989880,
+      "quantity_to": 5922136,
+      "delta": -3067744,
+      "delta_pct": -34.1244,
+      "unit": "shares",
+      "direction": "reduced",
+      "evidence_type": "net change in a reported 13F holding",
+      "themes": [
+        "cybersecurity",
+        "financial digitization"
+      ],
+      "sources": [
+        "CAP_BH_Q2",
+        "CAP_BH_Q3"
+      ],
+      "limitation": "I compare share counts at two quarter ends. I do not know execution dates or prices, hedges, motives or intervening transactions. A change in market value is not a flow. These are reported long holdings, not a complete portfolio.",
+      "corporate_action_check": "Same CUSIP and share class. I have not applied corporate-action adjustments; the figure is a reported difference, with a comprehensive review of those events still outstanding.",
+      "comparison_eligible": true,
+      "id": "C007",
+      "theme_ids": [],
+      "display_direction": "Reduced"
+    },
+    {
+      "actor": "Pershing Square Inc",
+      "asset": "Microsoft",
+      "ticker": "MSFT",
+      "cusip": "594918104",
+      "period_from": "2026-06-30",
+      "period_to": "2026-09-30",
+      "reported_at": "2026-11-16",
+      "quantity_from": 6206730,
+      "quantity_to": 4064779,
+      "delta": -2141951,
+      "delta_pct": -34.5101,
+      "unit": "shares",
+      "direction": "reduced",
+      "evidence_type": "net change in a reported 13F holding",
+      "themes": [
+        "artificial intelligence",
+        "automation",
+        "cybersecurity",
+        "education and the future of work"
+      ],
+      "sources": [
+        "CAP_PS_Q2",
+        "CAP_PS_Q3",
+        "CAP_PS_AMEND"
+      ],
+      "limitation": "I compare share counts at two quarter ends. I do not know execution dates or prices, hedges, motives or intervening transactions. A change in market value is not a flow. These are reported long holdings, not a complete portfolio.",
+      "corporate_action_check": "Same CUSIP and share class. I have not applied corporate-action adjustments; the figure is a reported difference, with a comprehensive review of those events still outstanding.",
+      "comparison_eligible": true,
+      "id": "C008",
+      "theme_ids": [
+        1,
+        2,
+        5,
+        12
+      ],
+      "display_direction": "Reduced"
+    },
+    {
+      "actor": "Pershing Square Inc",
+      "asset": "Amazon",
+      "ticker": "AMZN",
+      "cusip": "023135106",
+      "period_from": "2026-06-30",
+      "period_to": "2026-09-30",
+      "reported_at": "2026-11-16",
+      "quantity_from": 8563857,
+      "quantity_to": 8505779,
+      "delta": -58078,
+      "delta_pct": -0.6782,
+      "unit": "shares",
+      "direction": "reduced",
+      "evidence_type": "net change in a reported 13F holding",
+      "themes": [
+        "artificial intelligence",
+        "future consumption",
+        "robotics"
+      ],
+      "sources": [
+        "CAP_PS_Q2",
+        "CAP_PS_Q3",
+        "CAP_PS_AMEND"
+      ],
+      "limitation": "I compare share counts at two quarter ends. I do not know execution dates or prices, hedges, motives or intervening transactions. A change in market value is not a flow. These are reported long holdings, not a complete portfolio.",
+      "corporate_action_check": "Same CUSIP and share class. I have not applied corporate-action adjustments; the figure is a reported difference, with a comprehensive review of those events still outstanding.",
+      "comparison_eligible": true,
+      "id": "C009",
+      "theme_ids": [
+        1,
+        8,
+        14
+      ],
+      "display_direction": "Reduced"
+    },
+    {
+      "actor": "Pershing Square Inc",
+      "asset": "Meta Platforms",
+      "ticker": "META",
+      "cusip": "30303M102",
+      "period_from": "2026-06-30",
+      "period_to": "2026-09-30",
+      "reported_at": "2026-11-16",
+      "quantity_from": 3196062,
+      "quantity_to": 2833299,
+      "delta": -362763,
+      "delta_pct": -11.3503,
+      "unit": "shares",
+      "direction": "reduced",
+      "evidence_type": "net change in a reported 13F holding",
+      "themes": [
+        "artificial intelligence",
+        "future consumption"
+      ],
+      "sources": [
+        "CAP_PS_Q2",
+        "CAP_PS_Q3",
+        "CAP_PS_AMEND"
+      ],
+      "limitation": "I compare share counts at two quarter ends. I do not know execution dates or prices, hedges, motives or intervening transactions. A change in market value is not a flow. These are reported long holdings, not a complete portfolio.",
+      "corporate_action_check": "Same CUSIP and share class. I have not applied corporate-action adjustments; the figure is a reported difference, with a comprehensive review of those events still outstanding.",
+      "comparison_eligible": true,
+      "id": "C010",
+      "theme_ids": [
+        1,
+        8
+      ],
+      "display_direction": "Reduced"
+    },
+    {
+      "actor": "Pershing Square Inc",
+      "asset": "Brookfield Corporation",
+      "ticker": "BN",
+      "cusip": "11271J107",
+      "period_from": "2026-06-30",
+      "period_to": "2026-09-30",
+      "reported_at": "2026-11-16",
+      "quantity_from": 57481047,
+      "quantity_to": 51331099,
+      "delta": -6149948,
+      "delta_pct": -10.6991,
+      "unit": "shares",
+      "direction": "reduced",
+      "evidence_type": "net change in a reported 13F holding",
+      "themes": [
+        "energy and infrastructure",
+        "cities and infrastructure"
+      ],
+      "sources": [
+        "CAP_PS_Q2",
+        "CAP_PS_Q3",
+        "CAP_PS_AMEND"
+      ],
+      "limitation": "I compare share counts at two quarter ends. I do not know execution dates or prices, hedges, motives or intervening transactions. A change in market value is not a flow. These are reported long holdings, not a complete portfolio.",
+      "corporate_action_check": "Same CUSIP and share class. I have not applied corporate-action adjustments; the figure is a reported difference, with a comprehensive review of those events still outstanding.",
+      "comparison_eligible": true,
+      "id": "C011",
+      "theme_ids": [
+        3,
+        13
+      ],
+      "display_direction": "Reduced"
+    },
+    {
+      "actor": "Pershing Square Inc",
+      "asset": "Mastercard",
+      "ticker": "MA",
+      "cusip": "57636Q104",
+      "period_from": "2026-06-30",
+      "period_to": "2026-09-30",
+      "reported_at": "2026-11-16",
+      "quantity_from": 2124646,
+      "quantity_to": 1888419,
+      "delta": -236227,
+      "delta_pct": -11.1184,
+      "unit": "shares",
+      "direction": "reduced",
+      "evidence_type": "net change in a reported 13F holding",
+      "themes": [
+        "financial digitization"
+      ],
+      "sources": [
+        "CAP_PS_Q2",
+        "CAP_PS_Q3",
+        "CAP_PS_AMEND"
+      ],
+      "limitation": "I compare share counts at two quarter ends. I do not know execution dates or prices, hedges, motives or intervening transactions. A change in market value is not a flow. These are reported long holdings, not a complete portfolio.",
+      "corporate_action_check": "Same CUSIP and share class. I have not applied corporate-action adjustments; the figure is a reported difference, with a comprehensive review of those events still outstanding.",
+      "comparison_eligible": true,
+      "id": "C012",
+      "theme_ids": [
+        7
+      ],
+      "display_direction": "Reduced"
+    },
+    {
+      "actor": "Pershing Square Inc",
+      "asset": "Visa",
+      "ticker": "V",
+      "cusip": "92826C839",
+      "period_from": "2026-06-30",
+      "period_to": "2026-09-30",
+      "reported_at": "2026-11-16",
+      "quantity_from": 3270470,
+      "quantity_to": 2870720,
+      "delta": -399750,
+      "delta_pct": -12.223,
+      "unit": "shares",
+      "direction": "reduced",
+      "evidence_type": "net change in a reported 13F holding",
+      "themes": [
+        "financial digitization"
+      ],
+      "sources": [
+        "CAP_PS_Q2",
+        "CAP_PS_Q3",
+        "CAP_PS_AMEND"
+      ],
+      "limitation": "I compare share counts at two quarter ends. I do not know execution dates or prices, hedges, motives or intervening transactions. A change in market value is not a flow. These are reported long holdings, not a complete portfolio.",
+      "corporate_action_check": "Same CUSIP and share class. I have not applied corporate-action adjustments; the figure is a reported difference, with a comprehensive review of those events still outstanding.",
+      "comparison_eligible": true,
+      "id": "C013",
+      "theme_ids": [
+        7
+      ],
+      "display_direction": "Reduced"
+    },
+    {
+      "actor": "Pershing Square Inc",
+      "asset": "Netflix",
+      "ticker": "NFLX",
+      "cusip": "64110L106",
+      "period_from": "2026-06-30",
+      "period_to": "2026-09-30",
+      "reported_at": "2026-11-16",
+      "quantity_from": 13081465,
+      "quantity_to": 15412744,
+      "delta": 2331279,
+      "delta_pct": 17.8212,
+      "unit": "shares",
+      "direction": "increased",
+      "evidence_type": "net change in a reported 13F holding",
+      "themes": [
+        "future consumption"
+      ],
+      "sources": [
+        "CAP_PS_Q2",
+        "CAP_PS_Q3",
+        "CAP_PS_AMEND"
+      ],
+      "limitation": "I compare share counts at two quarter ends. I do not know execution dates or prices, hedges, motives or intervening transactions. A change in market value is not a flow. These are reported long holdings, not a complete portfolio.",
+      "corporate_action_check": "Same CUSIP and share class. I have not applied corporate-action adjustments; the figure is a reported difference, with a comprehensive review of those events still outstanding.",
+      "comparison_eligible": true,
+      "id": "C014",
+      "theme_ids": [
+        8
+      ],
+      "display_direction": "Increased"
+    },
+    {
+      "actor": "Pershing Square Inc",
+      "asset": "Alcon",
+      "ticker": "ALC",
+      "cusip": "H01301128",
+      "period_from": "2026-06-30",
+      "period_to": "2026-09-30",
+      "reported_at": "2026-11-16",
+      "quantity_from": null,
+      "quantity_to": 14736308,
+      "delta": null,
+      "delta_pct": null,
+      "unit": "shares",
+      "direction": "newly reported holding",
+      "evidence_type": "new holding visible in the public filing",
+      "themes": [
+        "health and longevity"
+      ],
+      "sources": [
+        "CAP_PS_Q2",
+        "CAP_PS_Q3",
+        "CAP_PS_AMEND",
+        "CAP_PS_AMEND_TABLE"
+      ],
+      "limitation": "I see a holding in the September table that does not appear in the public June table. I do not automatically equate it with a purchase from zero economic exposure: confidential information, thresholds or reporting changes may be involved. I show the current quantity without calculating a delta.",
+      "corporate_action_check": "Same CUSIP and share class. I have not applied corporate-action adjustments; the figure is a reported difference, with a comprehensive review of those events still outstanding.",
+      "comparison_eligible": false,
+      "id": "C015",
+      "theme_ids": [
+        4
+      ],
+      "newly_reported": true,
+      "display_direction": "New disclosure"
+    },
+    {
+      "actor": "Pershing Square Inc",
+      "asset": "Intercontinental Exchange",
+      "ticker": "ICE",
+      "cusip": "45866F104",
+      "period_from": "2026-06-30",
+      "period_to": "2026-09-30",
+      "reported_at": "2026-11-16",
+      "quantity_from": null,
+      "quantity_to": 6635899,
+      "delta": null,
+      "delta_pct": null,
+      "unit": "shares",
+      "direction": "newly reported holding",
+      "evidence_type": "new holding visible in the public filing",
+      "themes": [
+        "financial digitization"
+      ],
+      "sources": [
+        "CAP_PS_Q2",
+        "CAP_PS_Q3",
+        "CAP_PS_AMEND",
+        "CAP_PS_AMEND_TABLE"
+      ],
+      "limitation": "I see a holding in the September table that does not appear in the public June table. I do not automatically equate it with a purchase from zero economic exposure: confidential information, thresholds or reporting changes may be involved. I show the current quantity without calculating a delta.",
+      "corporate_action_check": "Same CUSIP and share class. I have not applied corporate-action adjustments; the figure is a reported difference, with a comprehensive review of those events still outstanding.",
+      "comparison_eligible": false,
+      "id": "C016",
+      "theme_ids": [
+        7
+      ],
+      "newly_reported": true,
+      "display_direction": "New disclosure"
+    },
+    {
+      "actor": "ARK Investment Management",
+      "asset": "NVIDIA",
+      "ticker": "NVDA",
+      "cusip": "67066G104",
+      "period_from": "2026-06-30",
+      "period_to": "2026-09-30",
+      "reported_at": "2026-11-13",
+      "quantity_from": 1381247,
+      "quantity_to": 2561223,
+      "delta": 1179976,
+      "delta_pct": 85.4283,
+      "unit": "shares",
+      "direction": "increased",
+      "evidence_type": "net change in a reported 13F holding",
+      "themes": [
+        "artificial intelligence"
+      ],
+      "sources": [
+        "CAP_ARK_Q2",
+        "CAP_ARK_Q3"
+      ],
+      "limitation": "I compare share counts at two quarter ends. I do not know execution dates or prices, hedges, motives or intervening transactions. A change in market value is not a flow. These are reported long holdings, not a complete portfolio. The manager also runs funds with inflows and outflows; the change does not demonstrate a purely discretionary bet.",
+      "corporate_action_check": "Same CUSIP and share class. I have not applied corporate-action adjustments; the figure is a reported difference, with a comprehensive review of those events still outstanding.",
+      "comparison_eligible": true,
+      "id": "C017",
+      "theme_ids": [
+        1
+      ],
+      "display_direction": "Increased"
+    },
+    {
+      "actor": "ARK Investment Management",
+      "asset": "Taiwan Semiconductor Manufacturing ADR",
+      "ticker": "TSM",
+      "cusip": "874039100",
+      "period_from": "2026-06-30",
+      "period_to": "2026-09-30",
+      "reported_at": "2026-11-13",
+      "quantity_from": 482286,
+      "quantity_to": 532668,
+      "delta": 50382,
+      "delta_pct": 10.4465,
+      "unit": "shares",
+      "direction": "increased",
+      "evidence_type": "net change in a reported 13F holding",
+      "themes": [
+        "artificial intelligence"
+      ],
+      "sources": [
+        "CAP_ARK_Q2",
+        "CAP_ARK_Q3"
+      ],
+      "limitation": "I compare share counts at two quarter ends. I do not know execution dates or prices, hedges, motives or intervening transactions. A change in market value is not a flow. These are reported long holdings, not a complete portfolio. The manager also runs funds with inflows and outflows; the change does not demonstrate a purely discretionary bet.",
+      "corporate_action_check": "Same CUSIP and share class. I have not applied corporate-action adjustments; the figure is a reported difference, with a comprehensive review of those events still outstanding.",
+      "comparison_eligible": true,
+      "id": "C018",
+      "theme_ids": [
+        1
+      ],
+      "display_direction": "Increased"
+    },
+    {
+      "actor": "ARK Investment Management",
+      "asset": "CrowdStrike",
+      "ticker": "CRWD",
+      "cusip": "22788C105",
+      "period_from": "2026-06-30",
+      "period_to": "2026-09-30",
+      "reported_at": "2026-11-13",
+      "quantity_from": 94500,
+      "quantity_to": 281295,
+      "delta": null,
+      "delta_pct": null,
+      "unit": "shares",
+      "direction": "comparison excluded",
+      "evidence_type": "two reported holdings with an unresolved share basis",
+      "themes": [
+        "cybersecurity"
+      ],
+      "sources": [
+        "CAP_ARK_Q2",
+        "CAP_ARK_Q3",
+        "CAP_CRWD_SPLIT"
+      ],
+      "limitation": "I retain the original quantities, but I would not turn them into a buying or selling signal until I can confirm a consistent basis. This row is excluded from arrows, percentage changes and rankings.",
+      "corporate_action_check": "A 4-for-1 split occurred between the two quarter ends. The Q2 row implies a price of USD 190.785 per share, so I do not assume whether the quantities already incorporate the adjustment. I apply no factor until that basis is resolved.",
+      "comparison_eligible": false,
+      "reported_market_value_from_usd": 18029183,
+      "reported_market_value_to_usd": 74472851,
+      "id": "C019",
+      "theme_ids": [
+        5
+      ],
+      "display_direction": "No comparison"
+    },
+    {
+      "actor": "ARK Investment Management",
+      "asset": "Coinbase Global",
+      "ticker": "COIN",
+      "cusip": "19260Q107",
+      "period_from": "2026-06-30",
+      "period_to": "2026-09-30",
+      "reported_at": "2026-11-13",
+      "quantity_from": 2511319,
+      "quantity_to": 2927800,
+      "delta": 416481,
+      "delta_pct": 16.5842,
+      "unit": "shares",
+      "direction": "increased",
+      "evidence_type": "net change in a reported 13F holding",
+      "themes": [
+        "blockchain"
+      ],
+      "sources": [
+        "CAP_ARK_Q2",
+        "CAP_ARK_Q3"
+      ],
+      "limitation": "I compare share counts at two quarter ends. I do not know execution dates or prices, hedges, motives or intervening transactions. A change in market value is not a flow. These are reported long holdings, not a complete portfolio. The manager also runs funds with inflows and outflows; the change does not demonstrate a purely discretionary bet.",
+      "corporate_action_check": "Same CUSIP and share class. I have not applied corporate-action adjustments; the figure is a reported difference, with a comprehensive review of those events still outstanding.",
+      "comparison_eligible": true,
+      "id": "C020",
+      "theme_ids": [
+        15
+      ],
+      "display_direction": "Increased"
+    },
+    {
+      "actor": "ARK Investment Management",
+      "asset": "Circle Internet Group",
+      "ticker": "CRCL",
+      "cusip": "172573107",
+      "period_from": "2026-06-30",
+      "period_to": "2026-09-30",
+      "reported_at": "2026-11-13",
+      "quantity_from": 4558162,
+      "quantity_to": 6857482,
+      "delta": 2299320,
+      "delta_pct": 50.444,
+      "unit": "shares",
+      "direction": "increased",
+      "evidence_type": "net change in a reported 13F holding",
+      "themes": [
+        "blockchain",
+        "financial digitization"
+      ],
+      "sources": [
+        "CAP_ARK_Q2",
+        "CAP_ARK_Q3"
+      ],
+      "limitation": "I compare share counts at two quarter ends. I do not know execution dates or prices, hedges, motives or intervening transactions. A change in market value is not a flow. These are reported long holdings, not a complete portfolio. The manager also runs funds with inflows and outflows; the change does not demonstrate a purely discretionary bet.",
+      "corporate_action_check": "Same CUSIP and share class. I have not applied corporate-action adjustments; the figure is a reported difference, with a comprehensive review of those events still outstanding.",
+      "comparison_eligible": true,
+      "id": "C021",
+      "theme_ids": [
+        7,
+        15
+      ],
+      "display_direction": "Increased"
+    },
+    {
+      "actor": "ARK Investment Management",
+      "asset": "Rocket Lab",
+      "ticker": "RKLB",
+      "cusip": "773121108",
+      "period_from": "2026-06-30",
+      "period_to": "2026-09-30",
+      "reported_at": "2026-11-13",
+      "quantity_from": 1631207,
+      "quantity_to": 3557458,
+      "delta": 1926251,
+      "delta_pct": 118.0875,
+      "unit": "shares",
+      "direction": "increased",
+      "evidence_type": "net change in a reported 13F holding",
+      "themes": [
+        "espacio"
+      ],
+      "sources": [
+        "CAP_ARK_Q2",
+        "CAP_ARK_Q3",
+        "CAP_SPACE_MERGER"
+      ],
+      "limitation": "I compare share counts at two quarter ends. I do not know execution dates or prices, hedges, motives or intervening transactions. A change in market value is not a flow. These are reported long holdings, not a complete portfolio. The manager also runs funds with inflows and outflows; the change does not demonstrate a purely discretionary bet. I would take the acquisition agreement between the two companies into account: the holding may reflect the corporate transaction, as well as other motives the 13F does not reveal.",
+      "corporate_action_check": "The agreement for Rocket Lab to acquire Iridium was still pending in the October 20, 2026 release, with closing expected in 2027. I compare the two securities separately at June 30 and September 30, without assuming the share exchange has already occurred.",
+      "comparison_eligible": true,
+      "id": "C022",
+      "theme_ids": [
+        10
+      ],
+      "display_direction": "Increased"
+    },
+    {
+      "actor": "ARK Investment Management",
+      "asset": "Iridium Communications",
+      "ticker": "IRDM",
+      "cusip": "46269C102",
+      "period_from": "2026-06-30",
+      "period_to": "2026-09-30",
+      "reported_at": "2026-11-13",
+      "quantity_from": 1215113,
+      "quantity_to": 79876,
+      "delta": -1135237,
+      "delta_pct": -93.4265,
+      "unit": "shares",
+      "direction": "reduced",
+      "evidence_type": "net change in a reported 13F holding",
+      "themes": [
+        "espacio"
+      ],
+      "sources": [
+        "CAP_ARK_Q2",
+        "CAP_ARK_Q3",
+        "CAP_SPACE_MERGER"
+      ],
+      "limitation": "I compare share counts at two quarter ends. I do not know execution dates or prices, hedges, motives or intervening transactions. A change in market value is not a flow. These are reported long holdings, not a complete portfolio. The manager also runs funds with inflows and outflows; the change does not demonstrate a purely discretionary bet. I would take the acquisition agreement between the two companies into account: the holding may reflect the corporate transaction, as well as other motives the 13F does not reveal.",
+      "corporate_action_check": "The agreement for Rocket Lab to acquire Iridium was still pending in the October 20, 2026 release, with closing expected in 2027. I compare the two securities separately at June 30 and September 30, without assuming the share exchange has already occurred.",
+      "comparison_eligible": true,
+      "id": "C023",
+      "theme_ids": [
+        10
+      ],
+      "display_direction": "Reduced"
+    },
+    {
+      "actor": "ARK Investment Management",
+      "asset": "Kratos Defense and Security Solutions",
+      "ticker": "KTOS",
+      "cusip": "50077B207",
+      "period_from": "2026-06-30",
+      "period_to": "2026-09-30",
+      "reported_at": "2026-11-13",
+      "quantity_from": 4672566,
+      "quantity_to": 5254442,
+      "delta": 581876,
+      "delta_pct": 12.453,
+      "unit": "shares",
+      "direction": "increased",
+      "evidence_type": "net change in a reported 13F holding",
+      "themes": [
+        "defense and security"
+      ],
+      "sources": [
+        "CAP_ARK_Q2",
+        "CAP_ARK_Q3"
+      ],
+      "limitation": "I compare share counts at two quarter ends. I do not know execution dates or prices, hedges, motives or intervening transactions. A change in market value is not a flow. These are reported long holdings, not a complete portfolio. The manager also runs funds with inflows and outflows; the change does not demonstrate a purely discretionary bet.",
+      "corporate_action_check": "Same CUSIP and share class. I have not applied corporate-action adjustments; the figure is a reported difference, with a comprehensive review of those events still outstanding.",
+      "comparison_eligible": true,
+      "id": "C024",
+      "theme_ids": [
+        6
+      ],
+      "display_direction": "Increased"
+    },
+    {
+      "actor": "ARK Investment Management",
+      "asset": "Lockheed Martin",
+      "ticker": "LMT",
+      "cusip": "539830109",
+      "period_from": "2026-06-30",
+      "period_to": "2026-09-30",
+      "reported_at": "2026-11-13",
+      "quantity_from": 14806,
+      "quantity_to": 12511,
+      "delta": -2295,
+      "delta_pct": -15.5005,
+      "unit": "shares",
+      "direction": "reduced",
+      "evidence_type": "net change in a reported 13F holding",
+      "themes": [
+        "defense and security"
+      ],
+      "sources": [
+        "CAP_ARK_Q2",
+        "CAP_ARK_Q3"
+      ],
+      "limitation": "I compare share counts at two quarter ends. I do not know execution dates or prices, hedges, motives or intervening transactions. A change in market value is not a flow. These are reported long holdings, not a complete portfolio. The manager also runs funds with inflows and outflows; the change does not demonstrate a purely discretionary bet.",
+      "corporate_action_check": "Same CUSIP and share class. I have not applied corporate-action adjustments; the figure is a reported difference, with a comprehensive review of those events still outstanding.",
+      "comparison_eligible": true,
+      "id": "C025",
+      "theme_ids": [
+        6
+      ],
+      "display_direction": "Reduced"
+    },
+    {
+      "actor": "ARK Investment Management",
+      "asset": "Teradyne",
+      "ticker": "TER",
+      "cusip": "880770102",
+      "period_from": "2026-06-30",
+      "period_to": "2026-09-30",
+      "reported_at": "2026-11-13",
+      "quantity_from": 644782,
+      "quantity_to": 646911,
+      "delta": 2129,
+      "delta_pct": 0.3302,
+      "unit": "shares",
+      "direction": "increased",
+      "evidence_type": "net change in a reported 13F holding",
+      "themes": [
+        "automation",
+        "robotics"
+      ],
+      "sources": [
+        "CAP_ARK_Q2",
+        "CAP_ARK_Q3"
+      ],
+      "limitation": "I compare share counts at two quarter ends. I do not know execution dates or prices, hedges, motives or intervening transactions. A change in market value is not a flow. These are reported long holdings, not a complete portfolio. The manager also runs funds with inflows and outflows; the change does not demonstrate a purely discretionary bet.",
+      "corporate_action_check": "Same CUSIP and share class. I have not applied corporate-action adjustments; the figure is a reported difference, with a comprehensive review of those events still outstanding.",
+      "comparison_eligible": true,
+      "id": "C026",
+      "theme_ids": [
+        2,
+        14
+      ],
+      "display_direction": "Increased"
+    },
+    {
+      "actor": "ARK Investment Management",
+      "asset": "Symbotic",
+      "ticker": "SYM",
+      "cusip": "87151X101",
+      "period_from": "2026-06-30",
+      "period_to": "2026-09-30",
+      "reported_at": "2026-11-13",
+      "quantity_from": 796749,
+      "quantity_to": 742917,
+      "delta": -53832,
+      "delta_pct": -6.7565,
+      "unit": "shares",
+      "direction": "reduced",
+      "evidence_type": "net change in a reported 13F holding",
+      "themes": [
+        "automation",
+        "robotics"
+      ],
+      "sources": [
+        "CAP_ARK_Q2",
+        "CAP_ARK_Q3"
+      ],
+      "limitation": "I compare share counts at two quarter ends. I do not know execution dates or prices, hedges, motives or intervening transactions. A change in market value is not a flow. These are reported long holdings, not a complete portfolio. The manager also runs funds with inflows and outflows; the change does not demonstrate a purely discretionary bet.",
+      "corporate_action_check": "Same CUSIP and share class. I have not applied corporate-action adjustments; the figure is a reported difference, with a comprehensive review of those events still outstanding.",
+      "comparison_eligible": true,
+      "id": "C027",
+      "theme_ids": [
+        2,
+        14
+      ],
+      "display_direction": "Reduced"
+    },
+    {
+      "actor": "ARK Investment Management",
+      "asset": "Intuitive Surgical",
+      "ticker": "ISRG",
+      "cusip": "46120E602",
+      "period_from": "2026-06-30",
+      "period_to": "2026-09-30",
+      "reported_at": "2026-11-13",
+      "quantity_from": 70375,
+      "quantity_to": 74399,
+      "delta": 4024,
+      "delta_pct": 5.7179,
+      "unit": "shares",
+      "direction": "increased",
+      "evidence_type": "net change in a reported 13F holding",
+      "themes": [
+        "robotics",
+        "health and longevity"
+      ],
+      "sources": [
+        "CAP_ARK_Q2",
+        "CAP_ARK_Q3"
+      ],
+      "limitation": "I compare share counts at two quarter ends. I do not know execution dates or prices, hedges, motives or intervening transactions. A change in market value is not a flow. These are reported long holdings, not a complete portfolio. The manager also runs funds with inflows and outflows; the change does not demonstrate a purely discretionary bet.",
+      "corporate_action_check": "Same CUSIP and share class. I have not applied corporate-action adjustments; the figure is a reported difference, with a comprehensive review of those events still outstanding.",
+      "comparison_eligible": true,
+      "id": "C028",
+      "theme_ids": [
+        4,
+        14
+      ],
+      "display_direction": "Increased"
+    },
+    {
+      "actor": "ARK Investment Management",
+      "asset": "Deere",
+      "ticker": "DE",
+      "cusip": "244199105",
+      "period_from": "2026-06-30",
+      "period_to": "2026-09-30",
+      "reported_at": "2026-11-13",
+      "quantity_from": 393025,
+      "quantity_to": 151701,
+      "delta": -241324,
+      "delta_pct": -61.4017,
+      "unit": "shares",
+      "direction": "reduced",
+      "evidence_type": "net change in a reported 13F holding",
+      "themes": [
+        "water and food",
+        "automation"
+      ],
+      "sources": [
+        "CAP_ARK_Q2",
+        "CAP_ARK_Q3"
+      ],
+      "limitation": "I compare share counts at two quarter ends. I do not know execution dates or prices, hedges, motives or intervening transactions. A change in market value is not a flow. These are reported long holdings, not a complete portfolio. The manager also runs funds with inflows and outflows; the change does not demonstrate a purely discretionary bet.",
+      "corporate_action_check": "Same CUSIP and share class. I have not applied corporate-action adjustments; the figure is a reported difference, with a comprehensive review of those events still outstanding.",
+      "comparison_eligible": true,
+      "id": "C029",
+      "theme_ids": [
+        2,
+        9
+      ],
+      "display_direction": "Reduced"
+    },
+    {
+      "actor": "ARK Investment Management",
+      "asset": "Cameco",
+      "ticker": "CCJ",
+      "cusip": "13321L108",
+      "period_from": "2026-06-30",
+      "period_to": "2026-09-30",
+      "reported_at": "2026-11-13",
+      "quantity_from": 361570,
+      "quantity_to": 338275,
+      "delta": -23295,
+      "delta_pct": -6.4427,
+      "unit": "shares",
+      "direction": "reduced",
+      "evidence_type": "net change in a reported 13F holding",
+      "themes": [
+        "critical materials",
+        "energy and infrastructure"
+      ],
+      "sources": [
+        "CAP_ARK_Q2",
+        "CAP_ARK_Q3"
+      ],
+      "limitation": "I compare share counts at two quarter ends. I do not know execution dates or prices, hedges, motives or intervening transactions. A change in market value is not a flow. These are reported long holdings, not a complete portfolio. The manager also runs funds with inflows and outflows; the change does not demonstrate a purely discretionary bet.",
+      "corporate_action_check": "Same CUSIP and share class. I have not applied corporate-action adjustments; the figure is a reported difference, with a comprehensive review of those events still outstanding.",
+      "comparison_eligible": true,
+      "id": "C030",
+      "theme_ids": [
+        3,
+        11
+      ],
+      "display_direction": "Reduced"
+    },
+    {
+      "actor": "ARK Investment Management",
+      "asset": "Block",
+      "ticker": "XYZ",
+      "cusip": "852234103",
+      "period_from": "2026-06-30",
+      "period_to": "2026-09-30",
+      "reported_at": "2026-11-13",
+      "quantity_from": 3097973,
+      "quantity_to": 4621881,
+      "delta": 1523908,
+      "delta_pct": 49.1905,
+      "unit": "shares",
+      "direction": "increased",
+      "evidence_type": "net change in a reported 13F holding",
+      "themes": [
+        "blockchain",
+        "financial digitization"
+      ],
+      "sources": [
+        "CAP_ARK_Q2",
+        "CAP_ARK_Q3"
+      ],
+      "limitation": "I compare share counts at two quarter ends. I do not know execution dates or prices, hedges, motives or intervening transactions. A change in market value is not a flow. These are reported long holdings, not a complete portfolio. The manager also runs funds with inflows and outflows; the change does not demonstrate a purely discretionary bet.",
+      "corporate_action_check": "Same CUSIP and share class. I have not applied corporate-action adjustments; the figure is a reported difference, with a comprehensive review of those events still outstanding.",
+      "comparison_eligible": true,
+      "id": "C031",
+      "theme_ids": [
+        7,
+        15
+      ],
+      "display_direction": "Increased"
+    },
+    {
+      "actor": "ARK Investment Management",
+      "asset": "Rubrik",
+      "ticker": "RBRK",
+      "cusip": "781154109",
+      "period_from": "2026-06-30",
+      "period_to": "2026-09-30",
+      "reported_at": "2026-11-13",
+      "quantity_from": 365426,
+      "quantity_to": 396164,
+      "delta": 30738,
+      "delta_pct": 8.4116,
+      "unit": "shares",
+      "direction": "increase in a reported holding",
+      "evidence_type": "net change in a reported 13F holding",
+      "themes": [
+        "cybersecurity"
+      ],
+      "sources": [
+        "CAP_ARK_Q2",
+        "CAP_ARK_Q3"
+      ],
+      "limitation": "I compare share counts at two quarter ends. I do not know execution dates or prices, hedges, motives or intervening transactions. A change in market value is not a flow. These are reported long holdings, not a complete portfolio. The manager also runs funds with inflows and outflows; the change does not demonstrate a purely discretionary bet.",
+      "corporate_action_check": "Same CUSIP and share class. I have not applied corporate-action adjustments; the figure is a reported difference, with a comprehensive review of those events still outstanding.",
+      "comparison_eligible": true,
+      "id": "C032",
+      "theme_ids": [
+        5
+      ],
+      "display_direction": "Increased"
+    },
+    {
+      "actor": "Swiss National Bank",
+      "asset": "IonQ",
+      "ticker": "IONQ",
+      "cusip": "46222L108",
+      "period_from": "2026-06-30",
+      "period_to": "2026-09-30",
+      "reported_at": "2026-11-12",
+      "quantity_from": 956548,
+      "quantity_to": 771600,
+      "delta": -184948,
+      "delta_pct": -19.3349,
+      "unit": "shares",
+      "direction": "reduction in a reported holding",
+      "evidence_type": "net change in a reported 13F holding",
+      "themes": [
+        "quantum computing"
+      ],
+      "sources": [
+        "CAP_SNB_Q2",
+        "CAP_SNB_Q3",
+        "CAP_SNB_MANDATE"
+      ],
+      "limitation": "I show the difference between two quarter ends without assigning dates, prices or motives to transactions. The SNB states that it manages equities passively by replicating broad indices: this change does not demonstrate a thematic bet. It represents neither its entire portfolio nor a money flow into the sector.",
+      "corporate_action_check": "Same CUSIP and share class. I have not applied corporate-action adjustments; the figure is a reported difference, with a comprehensive review of those events still outstanding.",
+      "comparison_eligible": true,
+      "id": "C033",
+      "theme_ids": [
+        16
+      ],
+      "display_direction": "Reduced"
+    },
+    {
+      "actor": "Swiss National Bank",
+      "asset": "Xylem",
+      "ticker": "XYL",
+      "cusip": "98419M100",
+      "period_from": "2026-06-30",
+      "period_to": "2026-09-30",
+      "reported_at": "2026-11-12",
+      "quantity_from": 685792,
+      "quantity_to": 650192,
+      "delta": -35600,
+      "delta_pct": -5.1911,
+      "unit": "shares",
+      "direction": "reduction in a reported holding",
+      "evidence_type": "net change in a reported 13F holding",
+      "themes": [
+        "water and water infrastructure"
+      ],
+      "sources": [
+        "CAP_SNB_Q2",
+        "CAP_SNB_Q3",
+        "CAP_SNB_MANDATE"
+      ],
+      "limitation": "I show the difference between two quarter ends without assigning dates, prices or motives to transactions. The SNB states that it manages equities passively by replicating broad indices: this change does not demonstrate a thematic bet. It represents neither its entire portfolio nor a money flow into the sector.",
+      "corporate_action_check": "Same CUSIP and share class. I have not applied corporate-action adjustments; the figure is a reported difference, with a comprehensive review of those events still outstanding.",
+      "comparison_eligible": true,
+      "id": "C034",
+      "theme_ids": [
+        9
+      ],
+      "display_direction": "Reduced"
+    },
+    {
+      "actor": "Swiss National Bank",
+      "asset": "Duolingo",
+      "ticker": "DUOL",
+      "cusip": "26603R106",
+      "period_from": "2026-06-30",
+      "period_to": "2026-09-30",
+      "reported_at": "2026-11-12",
+      "quantity_from": 77360,
+      "quantity_to": 79260,
+      "delta": 1900,
+      "delta_pct": 2.456,
+      "unit": "shares",
+      "direction": "increase in a reported holding",
+      "evidence_type": "net change in a reported 13F holding",
+      "themes": [
+        "education and training"
+      ],
+      "sources": [
+        "CAP_SNB_Q2",
+        "CAP_SNB_Q3",
+        "CAP_SNB_MANDATE"
+      ],
+      "limitation": "I show the difference between two quarter ends without assigning dates, prices or motives to transactions. The SNB states that it manages equities passively by replicating broad indices: this change does not demonstrate a thematic bet. It represents neither its entire portfolio nor a money flow into the sector.",
+      "corporate_action_check": "Same CUSIP and share class. I have not applied corporate-action adjustments; the figure is a reported difference, with a comprehensive review of those events still outstanding.",
+      "comparison_eligible": true,
+      "id": "C035",
+      "theme_ids": [
+        12
+      ],
+      "display_direction": "Increased"
+    },
+    {
+      "actor": "Swiss National Bank",
+      "asset": "D-Wave Quantum",
+      "ticker": "QBTS",
+      "cusip": "26740W109",
+      "period_from": "2026-06-30",
+      "period_to": "2026-09-30",
+      "reported_at": "2026-11-12",
+      "quantity_from": 717400,
+      "quantity_to": 717400,
+      "delta": 0,
+      "delta_pct": 0.0,
+      "unit": "shares",
+      "direction": "unchanged reported holding",
+      "evidence_type": "net change in a reported 13F holding",
+      "themes": [
+        "quantum computing"
+      ],
+      "sources": [
+        "CAP_SNB_Q2",
+        "CAP_SNB_Q3",
+        "CAP_SNB_MANDATE"
+      ],
+      "limitation": "I show the difference between two quarter ends without assigning dates, prices or motives to transactions. The SNB states that it manages equities passively by replicating broad indices: this change does not demonstrate a thematic bet. It represents neither its entire portfolio nor a money flow into the sector.",
+      "corporate_action_check": "Same CUSIP and share class. I have not applied corporate-action adjustments; the figure is a reported difference, with a comprehensive review of those events still outstanding.",
+      "comparison_eligible": true,
+      "id": "C036",
+      "theme_ids": [
+        16
+      ],
+      "display_direction": "Maintained"
+    }
+  ],
+  "capital_events": [
+    {
+      "id": "CAP_ISRG_BUYBACK_Q32026",
+      "actor": "Intuitive Surgical",
+      "action": "Executed repurchase of own shares",
+      "asset": "ISRG common shares",
+      "ticker": "ISRG",
+      "period": "Q3 2026",
+      "amount": 2.94,
+      "unit": "billion USD",
+      "shares": 7800000,
+      "buyer_type": "issuer",
+      "seller": "Counterparties not identified in the release",
+      "evidence": "The issuer reports repurchasing 7.8 million shares for USD 2.94 billion.",
+      "sources": [
+        "ER57"
+      ],
+      "limitation": "I would show this row as an issuer buyback, separate from 13F funds; I would infer neither who sold nor an entry signal.",
+      "theme_ids": [
+        4,
+        14
+      ]
+    },
+    {
+      "id": "CAP_MP_DOD_2025",
+      "actor": "U.S. Department of Defense",
+      "action": "Agreement to purchase convertible preferred shares and a warrant",
+      "asset": "MP Materials convertible preferred shares",
+      "ticker": "MP",
+      "period": "Announced 2025-07-10; closing expected 2025-07-11",
+      "amount": 400,
+      "unit": "million USD",
+      "buyer_type": "government primary financing",
+      "seller": "MP Materials as issuer",
+      "sources": [
+        "ER49"
+      ],
+      "limitation": "The cited source is the announcement. I would not label it a stock-market purchase or a current 2026 flow. To assert the exact closing date, I would use the closing filing; the 2026 balance sheet shows 400,000 preferred shares issued, but does not replace a complete reconstruction of the transaction.",
+      "theme_ids": [
+        11
+      ]
+    },
+    {
+      "id": "CAP_LLY_RICHMOND_2026",
+      "actor": "Eli Lilly",
+      "action": "Groundbreaking for an announced facility",
+      "asset": "Factory in Goochland County, Virginia",
+      "ticker": "LLY",
+      "period": "2026-10-22",
+      "amount": 5000,
+      "unit": "million USD of announced investment",
+      "buyer_type": "corporate project",
+      "seller": null,
+      "sources": [
+        "ER60"
+      ],
+      "limitation": "I would keep this row as announced investment in assets with a construction milestone, outside share purchases or sales; it is not total expenditure already incurred.",
+      "theme_ids": [
+        4
+      ]
+    },
+    {
+      "id": "CAP_COUR_UDEMY_2026",
+      "actor": "Coursera",
+      "action": "Completed business combination",
+      "asset": "Udemy",
+      "ticker": "COUR",
+      "period": "2026-05-11",
+      "exchange_ratio": 0.8,
+      "unit": "COUR shares per Udemy share",
+      "buyer_type": "corporate acquisition in stock",
+      "seller": "Former Udemy shareholders",
+      "sources": [
+        "ER53"
+      ],
+      "limitation": "I would show this as a corporate share exchange, not a cash inflow or a fund signal; UDMY stopped trading after closing.",
+      "theme_ids": [
+        12
+      ]
+    },
+    {
+      "actor": "Palo Alto Networks",
+      "action": "Strategic buyer",
+      "asset": "CyberArk",
+      "date": "2026-02-11",
+      "amount": null,
+      "unit": null,
+      "sources": [
+        "FB09"
+      ],
+      "note": "Completed acquisition; neither a public stock-market flow nor a recent fund purchase.",
+      "id": "EV_FB_5_0",
+      "theme_ids": [
+        5
+      ],
+      "limitation": "Completed acquisition; neither a public stock-market flow nor a recent fund purchase.",
+      "period": "2026-02-11",
+      "buyer_type": "corporate acquisition"
+    },
+    {
+      "actor": "IonQ",
+      "action": "Strategic buyer",
+      "asset": "Elisity",
+      "date": "2026-11-03",
+      "amount": null,
+      "unit": null,
+      "sources": [
+        "FB33"
+      ],
+      "note": "Completed acquisition, not a stock-market purchase by funds.",
+      "id": "EV_FB_16_0",
+      "theme_ids": [
+        16
+      ],
+      "limitation": "Completed acquisition, not a stock-market purchase by funds.",
+      "period": "2026-11-03",
+      "buyer_type": "corporate acquisition"
+    },
+    {
+      "actor": "Unidentified public-offering investors",
+      "action": "Primary financing received by IonQ",
+      "asset": "New IonQ shares",
+      "date": "2026-10",
+      "amount": 1990,
+      "unit": "million USD raised in the offering",
+      "sources": [
+        "FB33"
+      ],
+      "note": "Capital received by the issuer; not a verified list of institutional buyers or customer demand.",
+      "id": "EV_FB_16_1",
+      "theme_ids": [
+        16
+      ],
+      "limitation": "Capital received by the issuer; not a verified list of institutional buyers or customer demand.",
+      "period": "2026-10",
+      "buyer_type": "primary financing"
+    }
+  ],
+  "gold_capital_rows": [
+    {
+      "actor": "China",
+      "asset": "Official gold reserves",
+      "ticker": null,
+      "period_from": "2026-06-30",
+      "period_to": "2026-09-30",
+      "reported_at": "2026-11-03",
+      "quantity_from": null,
+      "quantity_to": null,
+      "delta": 63,
+      "unit": "tonnes",
+      "direction": "reported net buyer",
+      "evidence_type": "official change compiled by WGC from the IMF and central banks",
+      "sources": [
+        "ORO_WGC_Q3"
+      ],
+      "limitation": "I would show these rounded figures as a sample of countries. I would not add them up to reconstruct the estimated world total; they do not reveal individual transactions or their prices either."
+    },
+    {
+      "actor": "Poland",
+      "asset": "Official gold reserves",
+      "ticker": null,
+      "period_from": "2026-06-30",
+      "period_to": "2026-09-30",
+      "reported_at": "2026-11-03",
+      "quantity_from": null,
+      "quantity_to": null,
+      "delta": 40,
+      "unit": "tonnes",
+      "direction": "reported net buyer",
+      "evidence_type": "official change compiled by WGC from the IMF and central banks",
+      "sources": [
+        "ORO_WGC_Q3"
+      ],
+      "limitation": "I would show these rounded figures as a sample of countries. I would not add them up to reconstruct the estimated world total; they do not reveal individual transactions or their prices either."
+    },
+    {
+      "actor": "Kazakhstan",
+      "asset": "Official gold reserves",
+      "ticker": null,
+      "period_from": "2026-06-30",
+      "period_to": "2026-09-30",
+      "reported_at": "2026-11-03",
+      "quantity_from": null,
+      "quantity_to": null,
+      "delta": 14,
+      "unit": "tonnes",
+      "direction": "reported net buyer",
+      "evidence_type": "official change compiled by WGC from the IMF and central banks",
+      "sources": [
+        "ORO_WGC_Q3"
+      ],
+      "limitation": "I would show these rounded figures as a sample of countries. I would not add them up to reconstruct the estimated world total; they do not reveal individual transactions or their prices either."
+    },
+    {
+      "actor": "Uzbekistan",
+      "asset": "Official gold reserves",
+      "ticker": null,
+      "period_from": "2026-06-30",
+      "period_to": "2026-09-30",
+      "reported_at": "2026-11-03",
+      "quantity_from": null,
+      "quantity_to": null,
+      "delta": 14,
+      "unit": "tonnes",
+      "direction": "reported net buyer",
+      "evidence_type": "official change compiled by WGC from the IMF and central banks",
+      "sources": [
+        "ORO_WGC_Q3"
+      ],
+      "limitation": "I would show these rounded figures as a sample of countries. I would not add them up to reconstruct the estimated world total; they do not reveal individual transactions or their prices either."
+    },
+    {
+      "actor": "Czech Republic",
+      "asset": "Official gold reserves",
+      "ticker": null,
+      "period_from": "2026-06-30",
+      "period_to": "2026-09-30",
+      "reported_at": "2026-11-03",
+      "quantity_from": null,
+      "quantity_to": null,
+      "delta": 5,
+      "unit": "tonnes",
+      "direction": "reported net buyer",
+      "evidence_type": "official change compiled by WGC from the IMF and central banks",
+      "sources": [
+        "ORO_WGC_Q3"
+      ],
+      "limitation": "I would show these rounded figures as a sample of countries. I would not add them up to reconstruct the estimated world total; they do not reveal individual transactions or their prices either."
+    },
+    {
+      "actor": "Russia",
+      "asset": "Official gold reserves",
+      "ticker": null,
+      "period_from": "2026-06-30",
+      "period_to": "2026-09-30",
+      "reported_at": "2026-11-03",
+      "quantity_from": null,
+      "quantity_to": null,
+      "delta": -19,
+      "unit": "tonnes",
+      "direction": "reported net reduction",
+      "evidence_type": "official change compiled by WGC from the IMF and central banks",
+      "sources": [
+        "ORO_WGC_Q3"
+      ],
+      "limitation": "I would show these rounded figures as a sample of countries. I would not add them up to reconstruct the estimated world total; they do not reveal individual transactions or their prices either."
+    }
+  ],
+  "gold_direct_evidence": [
+    {
+      "actor": "People’s Bank of China / SAFE",
+      "period_from": "2026-06-30",
+      "period_to": "2026-09-30",
+      "quantity_from": 75.44,
+      "quantity_to": 77.47,
+      "delta": 2.03,
+      "unit": "million troy ounces",
+      "derived_tonnes": 63.1401,
+      "sources": [
+        "ORO_SAFE"
+      ],
+      "note": "The physical increase supports WGC’s rounded figure of +63 t. It is not USD revaluation."
+    },
+    {
+      "actor": "People’s Bank of China / SAFE",
+      "period_from": "2026-09-30",
+      "period_to": "2026-10-31",
+      "quantity_from": 77.47,
+      "quantity_to": 78.3,
+      "delta": 0.83,
+      "unit": "million troy ounces",
+      "derived_tonnes": 25.8159,
+      "sources": [
+        "ORO_SAFE"
+      ],
+      "note": "This update is later than the comparable Q3 cutoff. I would show it in a separate panel."
+    },
+    {
+      "actor": "U.S. Treasury",
+      "period_from": "2025-09-30",
+      "period_to": "2026-09-30",
+      "quantity_from": 261498927,
+      "quantity_to": 261498927,
+      "delta": 0,
+      "unit": "fine troy ounces",
+      "sources": [
+        "ORO_US"
+      ],
+      "note": "The official table shows an unchanged holding year over year. Having large reserves does not mean buying more."
+    },
+    {
+      "actor": "Czech National Bank",
+      "period_from": "2022-12-31",
+      "period_to": "2026-10-31",
+      "quantity_from": 12,
+      "quantity_to": 90,
+      "delta": null,
+      "unit": "tonnes",
+      "sources": [
+        "ORO_CNB"
+      ],
+      "note": "The starting point is approximate. I would not present the 78 t difference as an exact flow; the 100 t objective for 2028 remains a target."
+    }
+  ],
+  "capital_methodology": {
+    "voice": "I would use Dataroma as a radar and the original 13F as evidence. If the share count changes, I would show the net change; if only its dollar value changes, I would not call that a purchase or sale.",
+    "amendments": "I compare Pershing Q2 and Q3 under the same CIK, 2026053. The Q2 amendment, filed on November 16, adds a single row for Pershing Square Inc. and does not replace the earlier rows. I would not also add the subsidiary’s 13F-NT.",
+    "sample": "I present a selected sample of managers and companies. I would treat it neither as a ranking of the entire market nor as a measure of pure exposure to each trend.",
+    "needed_gap": "A comprehensive corporate-action review for all issuers remains outstanding. The figures are presented as reported changes, not confirmed transactions. CRWD is explicitly excluded until the share basis at the June cutoff is resolved.",
+    "snb": "The SNB passively replicates broad indices. I would use its positions as evidence of institutional holdings, without attributing a favorable or unfavorable view on a trend to it.",
+    "cutoff": "The cutoff is November 24, 2026. I distinguish observation, publication and access dates; future targets and estimates retain those labels."
+  },
+  "additional_vehicles": {
+    "as_of": "2026-11-24",
+    "purpose": "Annex of earlier candidates; a small visible selection on each page",
+    "sources": [
+      {
+        "id": "VA01",
+        "title": "ABB Share listing data",
+        "url": "https://www.abb.com/global/en/company/investors/equity-info/share-listing",
+        "web_ref": "turn276493916search0",
+        "date": "Verified 2026-11-24",
+        "type": "Official issuer or market source"
+      },
+      {
+        "id": "VA02",
+        "title": "ABB Update on divestment of ABB Robotics",
+        "url": "https://www.abb.com/global/en/news/140154/update-on-divestment-of-abb-robotics",
+        "web_ref": "turn719792377view0",
+        "date": "2026-11-05",
+        "type": "Official issuer or market source"
+      },
+      {
+        "id": "VA03",
+        "title": "FANUC Status of Share Buyback",
+        "url": "https://www.fanuc.co.jp/en/ir/announce_other/pdf/2026/notice20260805_e.pdf",
+        "web_ref": "turn276493916search8",
+        "date": "2026-08-05",
+        "type": "Official issuer or market source"
+      },
+      {
+        "id": "VA04",
+        "title": "FANUC Company profile",
+        "url": "https://www.fanuc.co.jp/en/profile/",
+        "web_ref": "turn907007964search2",
+        "date": "Verified 2026-11-24",
+        "type": "Official issuer or market source"
+      },
+      {
+        "id": "VA05",
+        "title": "National Grid London Stock Exchange listing",
+        "url": "https://www.londonstockexchange.com/en/quote/equity/NG~/national-grid-plc",
+        "web_ref": "turn808065687search5",
+        "date": "Verified 2026-11-24",
+        "type": "Official issuer or market source"
+      },
+      {
+        "id": "VA06",
+        "title": "National Grid ADR frequently asked questions",
+        "url": "https://www.nationalgrid.com/investors/shareholder-information/faqs",
+        "web_ref": "turn276493916search5",
+        "date": "Verified 2026-11-24",
+        "type": "Official issuer or market source"
+      },
+      {
+        "id": "VA07",
+        "title": "Iberdrola Share price and stock market information",
+        "url": "https://www.iberdrola.com/shareholders-investors/share/price",
+        "web_ref": "turn276493916search6",
+        "date": "Verified 2026-11-24",
+        "type": "Official issuer or market source"
+      },
+      {
+        "id": "VA08",
+        "title": "Iberdrola Nine months 2026 results",
+        "url": "https://www.iberdrola.com/press-room/news/detail/iberdrola-9m-2026-net-profit-up-10-to-5-8-billion-networks-growth-all-geographies",
+        "web_ref": "turn907007964search3",
+        "date": "2026-10-21",
+        "type": "Official issuer or market source"
+      },
+      {
+        "id": "VA09",
+        "title": "Stryker Third quarter 2026 results",
+        "url": "https://investors.stryker.com/press-releases/news-details/2026/Stryker-reports-third-quarter-2026-operating-results/default.aspx",
+        "web_ref": "turn719792377view2",
+        "date": "2026-10-29",
+        "type": "Official issuer or market source"
+      },
+      {
+        "id": "VA10",
+        "title": "Thales Half year liquidity contract statement",
+        "url": "https://live.euronext.com/en/products/equities/company-news/2026-07-06-thales-half-year-liquidity-contract-statement-30-june",
+        "web_ref": "turn428298979search5",
+        "date": "2026-07-06",
+        "type": "Official issuer or market source"
+      },
+      {
+        "id": "VA11",
+        "title": "Thales Euronext Paris market information",
+        "url": "https://live.euronext.com/fr/product/equities/FR0000121329-XPAR/market-information",
+        "web_ref": "turn428298979search4",
+        "date": "Verified 2026-11-24",
+        "type": "Official issuer or market source"
+      },
+      {
+        "id": "VA12",
+        "title": "About Thales",
+        "url": "https://careers.thalesgroup.com/global/en/about-thales",
+        "web_ref": "turn719792377search15",
+        "date": "Verified 2026-11-24",
+        "type": "Official issuer or market source"
+      },
+      {
+        "id": "VA13",
+        "title": "Rheinmetall Basic share information",
+        "url": "https://www.rheinmetall.com/en/investor-relations/share/basic-information",
+        "web_ref": "turn428298979search7",
+        "date": "Verified 2026-11-24",
+        "type": "Official issuer or market source"
+      },
+      {
+        "id": "VA14",
+        "title": "Rheinmetall Third quarter 2026 report",
+        "url": "https://www.rheinmetall.com/en/media/news-watch/news/2026/11/2026-11-05-rheinmetall-news-quarterly-statement-q3",
+        "web_ref": "turn719792377search1",
+        "date": "2026-11-05",
+        "type": "Official issuer or market source"
+      },
+      {
+        "id": "VA15",
+        "title": "Inditex Finance and ITX share",
+        "url": "https://www.inditex.com/itxcomweb/gp/en/investors/finance",
+        "web_ref": "turn428298979search8",
+        "date": "Verified 2026-11-24",
+        "type": "Official issuer or market source"
+      },
+      {
+        "id": "VA16",
+        "title": "Inditex Shareholder structure",
+        "url": "https://www.inditex.com/itxcomweb/gb/en/investors/corporate-governance/shareholder-structure",
+        "web_ref": "turn428298979search9",
+        "date": "Verified 2026-11-24",
+        "type": "Official issuer or market source"
+      },
+      {
+        "id": "VA17",
+        "title": "LVMH Investor frequently asked questions",
+        "url": "https://www.lvmh.com/en/investors/frequently-asked-questions",
+        "web_ref": "turn719792377view3",
+        "date": "Verified 2026-11-24",
+        "type": "Official issuer or market source"
+      },
+      {
+        "id": "VA18",
+        "title": "LVMH Third quarter 2026 revenue",
+        "url": "https://www.lvmh.com/en/publications/continued-growth-in-the-third-quarter-of-2026",
+        "web_ref": "turn544137650search2",
+        "date": "2026-10-12",
+        "type": "Official issuer or market source"
+      },
+      {
+        "id": "VA19",
+        "title": "MercadoLibre Third quarter 2026 results",
+        "url": "https://news.mercadolibre.com/en/financial-results-3erd-quarter-2026",
+        "web_ref": "turn544137650search5",
+        "date": "2026-11-04",
+        "type": "Official issuer or market source"
+      },
+      {
+        "id": "VA20",
+        "title": "Ecolab Third quarter 2026 results",
+        "url": "https://investor.ecolab.com/news/news-details/2026/Ecolab-Delivers-Strong-and-Accelerating-Operating-Performance-Reported-Diluted-EPS-1-95-Adjusted-Diluted-EPS-2-18-5-2026-Adjusted-Diluted-EPS-Outlook-8-10---8-20-8---9/default.aspx?easylinkbypass=true",
+        "web_ref": "turn544137650search6",
+        "date": "2026-10-27",
+        "type": "Official issuer or market source"
+      },
+      {
+        "id": "VA21",
+        "title": "Pentair Investor frequently asked questions",
+        "url": "https://investors.pentair.com/ir-resources/investor-faqs",
+        "web_ref": "turn544137650search9",
+        "date": "Verified 2026-11-24",
+        "type": "Official issuer or market source"
+      },
+      {
+        "id": "VA22",
+        "title": "Pentair Third quarter 2026 results",
+        "url": "https://investors.pentair.com/news-releases/news-release-details/pentair-reports-third-quarter-2026-results",
+        "web_ref": "turn544137650search8",
+        "date": "2026-10-27",
+        "type": "Official issuer or market source"
+      },
+      {
+        "id": "VA23",
+        "title": "Airbus Share price and information",
+        "url": "https://www.airbus.com/en/investors/share-price-and-information",
+        "web_ref": "turn699452385search0",
+        "date": "Verified 2026-11-24",
+        "type": "Official issuer or market source"
+      },
+      {
+        "id": "VA24",
+        "title": "Airbus Nine month 2026 results",
+        "url": "https://www.airbus.com/en/newsroom/press-releases/2026-10-airbus-reports-nine-month-9m-2026-results",
+        "web_ref": "turn907007964search0",
+        "date": "2026-10-28",
+        "type": "Official issuer or market source"
+      },
+      {
+        "id": "VA25",
+        "title": "Albemarle Third quarter 2026 results",
+        "url": "https://investors.albemarle.com/news-and-events/news/news-details/2026/Albemarle-Reports-Third-Quarter-2026-Results/default.aspx",
+        "web_ref": "turn699452385search2",
+        "date": "2026-11-04",
+        "type": "Official issuer or market source"
+      },
+      {
+        "id": "VA26",
+        "title": "Pearson London Stock Exchange listing",
+        "url": "https://www.londonstockexchange.com/en/quote/equity/PSON/company-page",
+        "web_ref": "turn808065687search6",
+        "date": "Verified 2026-11-24",
+        "type": "Official issuer or market source"
+      },
+      {
+        "id": "VA27",
+        "title": "Pearson Managing your ADR holding",
+        "url": "https://plc.pearson.com/en-GB/investors/shareholders/us-listing-adrs",
+        "web_ref": "turn699452385search3",
+        "date": "Verified 2026-11-24",
+        "type": "Official issuer or market source"
+      },
+      {
+        "id": "VA28",
+        "title": "VINCI Stock data",
+        "url": "https://www.vinci.com/en/finance/share/stock-data",
+        "web_ref": "turn699452385search1",
+        "date": "Verified 2026-11-24",
+        "type": "Official issuer or market source"
+      },
+      {
+        "id": "VA29",
+        "title": "VINCI Revenue and order intake September 2026",
+        "url": "https://www.vinci.com/en/newsroom/press-releases/further-growth-revenue-and-order-intake",
+        "web_ref": "turn907007964search1",
+        "date": "2026-10-22",
+        "type": "Official issuer or market source"
+      },
+      {
+        "id": "VA30",
+        "title": "Ferrovial Notice of effectiveness of Amsterdam delisting SEC Exhibit 99.1",
+        "url": "https://www.sec.gov/Archives/edgar/data/1468522/000146852226000062/delistingeffectiveness.htm",
+        "web_ref": "turn719792377view1",
+        "date": "2026-09-11",
+        "type": "Official issuer or market source"
+      },
+      {
+        "id": "VA31",
+        "title": "ABB NYSE delisting information",
+        "url": "https://www.abb.com/global/en/company/investors/equity-info/share-listing/nyse-delisting",
+        "web_ref": "turn276493916search1",
+        "date": "2023-05-23; verified 2026-11-24",
+        "type": "Official issuer source"
+      },
+      {
+        "id": "VA32",
+        "title": "Pearson Annual Report2025 ADR information",
+        "url": "https://plc.pearson.com/sites/pearson-corp/files/annual-reports/2025/pearson-annual-report-2025.pdf",
+        "web_ref": "turn699452385search7",
+        "date": "Financial year 2025; published in 2026",
+        "type": "Official issuer source"
+      }
+    ],
+    "trends": [
+      {
+        "trend_id": 2,
+        "trend_name": "Automation",
+        "vehicles": [
+          {
+            "name": "ABB",
+            "ticker": "ABBN",
+            "exchange": "SIX Swiss Exchange",
+            "type": "equity",
+            "exposure": "I would use it to study electrification and industrial automation.",
+            "limitation": "If I am seeking robotics exposure, I would review the business perimeter: the sale to SoftBank remains subject to conditions and faces a block on the Chinese business.",
+            "sources": [
+              "VA01",
+              "VA02",
+              "VA31"
+            ],
+            "alternative_listings": [
+              {
+                "ticker": "ABB",
+                "exchange": "Nasdaq Stockholm",
+                "instrument": "Ordinary share"
+              }
+            ],
+            "recent_changes": [
+              {
+                "date": "2026-11-05",
+                "fact": "ABB reported that China prohibited the acquisition of the robotics business in China. ABB and SoftBank were continuing to work on the transaction.",
+                "source": "VA02"
+              },
+              {
+                "date": "2023-05-23",
+                "fact": "ABB delisted its ADRs from the NYSE; ABBNY is an OTC-traded ADR, not a NYSE listing.",
+                "source": "VA31"
+              }
+            ],
+            "verified_at": "2026-11-24"
+          }
+        ]
+      },
+      {
+        "trend_id": 3,
+        "trend_name": "Energy and infrastructure",
+        "vehicles": [
+          {
+            "name": "National Grid",
+            "ticker": "NG.",
+            "exchange": "London Stock Exchange",
+            "type": "equity",
+            "exposure": "I would use it to study energy grids and regulated assets in the United Kingdom and United States.",
+            "limitation": "If the grid expands, I would review regulated returns, financing and execution; more assets do not guarantee more value per share.",
+            "sources": [
+              "VA05",
+              "VA06"
+            ],
+            "alternative_listings": [
+              {
+                "ticker": "NGG",
+                "exchange": "NYSE",
+                "instrument": "ADS; each ADS represents five ordinary shares"
+              }
+            ],
+            "recent_changes": [],
+            "verified_at": "2026-11-24"
+          },
+          {
+            "name": "Iberdrola",
+            "ticker": "IBE",
+            "exchange": "BME Mercado Continuo",
+            "type": "equity",
+            "exposure": "I would use it to study electricity grids, generation and energy retailing.",
+            "limitation": "If growth is driven by investment, I would review debt, allowed returns and each geography’s contribution; the exposure goes beyond renewables.",
+            "sources": [
+              "VA07",
+              "VA08"
+            ],
+            "alternative_listings": [],
+            "recent_changes": [],
+            "verified_at": "2026-11-24"
+          }
+        ]
+      },
+      {
+        "trend_id": 4,
+        "trend_name": "Health and longevity",
+        "vehicles": [
+          {
+            "name": "Stryker",
+            "ticker": "SYK",
+            "exchange": "NYSE",
+            "type": "equity",
+            "exposure": "I would use it to study medical technology, orthopedics, surgery and neurotechnology.",
+            "limitation": "If I am seeking longevity exposure, I would treat it as exposure to equipment and procedures; I would review hospital purchasing, regulation and integration costs.",
+            "sources": [
+              "VA09"
+            ],
+            "alternative_listings": [],
+            "recent_changes": [],
+            "verified_at": "2026-11-24"
+          }
+        ]
+      },
+      {
+        "trend_id": 6,
+        "trend_name": "Defense and security",
+        "vehicles": [
+          {
+            "name": "Thales",
+            "ticker": "HO",
+            "exchange": "Euronext Paris",
+            "type": "equity",
+            "exposure": "I would use it to study defense electronics, aerospace systems, cybersecurity and digital identity.",
+            "limitation": "If I attribute defense growth to it, I would separate its businesses and review its dependence on contract awards and system delivery.",
+            "sources": [
+              "VA10",
+              "VA11",
+              "VA12"
+            ],
+            "alternative_listings": [],
+            "recent_changes": [],
+            "verified_at": "2026-11-24"
+          },
+          {
+            "name": "Rheinmetall",
+            "ticker": "RHM",
+            "exchange": "Xetra",
+            "type": "equity",
+            "exposure": "I would use it to study ammunition, military vehicles, air defense and other defense systems.",
+            "limitation": "If the order book grows, I would review delivery acceptance, industrial capacity and contract mix; the report itself describes sales shifting because of delays.",
+            "sources": [
+              "VA13",
+              "VA14"
+            ],
+            "alternative_listings": [],
+            "recent_changes": [],
+            "verified_at": "2026-11-24"
+          }
+        ]
+      },
+      {
+        "trend_id": 8,
+        "trend_name": "Future consumption",
+        "vehicles": [
+          {
+            "name": "Inditex",
+            "ticker": "ITX",
+            "exchange": "BME Mercado Continuo",
+            "type": "equity",
+            "exposure": "I would use it to study fashion retailing and the coordination of stores, digital commerce and logistics.",
+            "limitation": "If online sales grow, I would separate new sales from shifts between channels and review inventories and margin; fashion spending remains discretionary.",
+            "sources": [
+              "VA15",
+              "VA16"
+            ],
+            "alternative_listings": [],
+            "recent_changes": [],
+            "verified_at": "2026-11-24"
+          },
+          {
+            "name": "LVMH",
+            "ticker": "MC",
+            "exchange": "Euronext Paris",
+            "type": "equity",
+            "exposure": "I would use it to study luxury brands, distribution and the ability to maintain prices.",
+            "limitation": "If I attribute brand power to it, I would review volumes, product mix and regional demand; its businesses do not all grow at the same pace.",
+            "sources": [
+              "VA17",
+              "VA18"
+            ],
+            "alternative_listings": [],
+            "recent_changes": [],
+            "verified_at": "2026-11-24"
+          },
+          {
+            "name": "MercadoLibre",
+            "ticker": "MELI",
+            "exchange": "Nasdaq",
+            "type": "equity",
+            "exposure": "I would use it to study e-commerce, logistics and financial services in Latin America.",
+            "limitation": "If it grows, I would separate commerce from fintech and review credit, currencies and logistics spending; this is not exposure to the U.S. consumer.",
+            "sources": [
+              "VA19"
+            ],
+            "alternative_listings": [],
+            "recent_changes": [],
+            "verified_at": "2026-11-24"
+          }
+        ]
+      },
+      {
+        "trend_id": 9,
+        "trend_name": "Water and food",
+        "vehicles": [
+          {
+            "name": "Ecolab",
+            "ticker": "ECL",
+            "exchange": "NYSE",
+            "type": "equity",
+            "exposure": "I would use it to study water treatment, hygiene and solutions for industrial and food-industry customers.",
+            "limitation": "If water demand rises, I would review which segment captures the revenue and the service and integration it requires; the group has several activities.",
+            "sources": [
+              "VA20"
+            ],
+            "alternative_listings": [],
+            "recent_changes": [],
+            "verified_at": "2026-11-24"
+          },
+          {
+            "name": "Pentair",
+            "ticker": "PNR",
+            "exchange": "NYSE",
+            "type": "equity",
+            "exposure": "I would use it to study water equipment and solutions for residential, commercial and industrial applications.",
+            "limitation": "If I link it to water scarcity, I would separate swimming pools and the residential cycle from treatment and infrastructure; its segments may move in different directions.",
+            "sources": [
+              "VA21",
+              "VA22"
+            ],
+            "alternative_listings": [],
+            "recent_changes": [],
+            "verified_at": "2026-11-24"
+          }
+        ]
+      },
+      {
+        "trend_id": 10,
+        "trend_name": "Space",
+        "vehicles": [
+          {
+            "name": "Airbus",
+            "ticker": "AIR",
+            "exchange": "Euronext Paris",
+            "type": "equity",
+            "exposure": "I would use it to study space systems within Airbus Defence and Space.",
+            "limitation": "If I am seeking space exposure, I would separate that activity from the group: commercial aviation and helicopters carry significant weight, and Defence and Space is not exclusively space either.",
+            "sources": [
+              "VA23",
+              "VA24"
+            ],
+            "alternative_listings": [],
+            "recent_changes": [],
+            "verified_at": "2026-11-24"
+          }
+        ]
+      },
+      {
+        "trend_id": 11,
+        "trend_name": "Critical materials",
+        "vehicles": [
+          {
+            "name": "Albemarle",
+            "ticker": "ALB",
+            "exchange": "NYSE",
+            "type": "equity",
+            "exposure": "I would use it to study lithium and specialty chemicals within its current portfolio.",
+            "limitation": "If lithium prices rise, I would review costs, contracts and capital discipline; a recovery in the mineral does not translate into the same growth in earnings.",
+            "sources": [
+              "VA25"
+            ],
+            "alternative_listings": [],
+            "recent_changes": [
+              {
+                "date": "2026-03-02",
+                "fact": "The Q3 2026 report states that Albemarle sold a 51% interest in the Ketjen refining catalysts business; year-over-year comparisons require allowing for that change in business perimeter.",
+                "source": "VA25"
+              }
+            ],
+            "verified_at": "2026-11-24"
+          }
+        ]
+      },
+      {
+        "trend_id": 12,
+        "trend_name": "Education and the future of work",
+        "vehicles": [
+          {
+            "name": "Pearson",
+            "ticker": "PSON",
+            "exchange": "London Stock Exchange",
+            "type": "equity",
+            "exposure": "I would use it to study assessments, certifications and learning.",
+            "limitation": "If I assess AI’s impact, I would review contract renewals and the value of credentials; I would not assume that more digital use guarantees more revenue.",
+            "sources": [
+              "VA26",
+              "VA27",
+              "VA32"
+            ],
+            "alternative_listings": [
+              {
+                "ticker": "PSO",
+                "exchange": "NYSE",
+                "instrument": "ADR; each ADR represents one ordinary share according to the 2025 annual report"
+              }
+            ],
+            "recent_changes": [],
+            "verified_at": "2026-11-24"
+          }
+        ]
+      },
+      {
+        "trend_id": 13,
+        "trend_name": "Cities and infrastructure",
+        "vehicles": [
+          {
+            "name": "VINCI",
+            "ticker": "DG",
+            "exchange": "Euronext Paris",
+            "type": "equity",
+            "exposure": "I would use it to study concessions, energy solutions and construction.",
+            "limitation": "If the order book grows, I would separate construction contracts from concessions and review traffic, financing and tax changes.",
+            "sources": [
+              "VA28",
+              "VA29"
+            ],
+            "alternative_listings": [],
+            "recent_changes": [],
+            "verified_at": "2026-11-24"
+          },
+          {
+            "name": "Ferrovial",
+            "ticker": "FER",
+            "exchange": "Nasdaq Global Select Market",
+            "type": "equity",
+            "exposure": "I would use it to study toll roads, airports and infrastructure development, with a strong presence in North America.",
+            "limitation": "If there are new projects, I would review committed capital, debt and traffic; I would distinguish Ferrovial’s economic interest from each asset’s total value.",
+            "sources": [
+              "VA30"
+            ],
+            "alternative_listings": [
+              {
+                "ticker": "FER",
+                "exchange": "BME Mercado Continuo",
+                "instrument": "Ordinary share"
+              }
+            ],
+            "recent_changes": [
+              {
+                "date": "2026-09-11",
+                "fact": "The Euronext Amsterdam delisting became effective. The company remains Dutch and is listed on Nasdaq and the Spanish stock exchanges.",
+                "source": "VA30"
+              }
+            ],
+            "verified_at": "2026-11-24"
+          }
+        ]
+      },
+      {
+        "trend_id": 14,
+        "trend_name": "Robotics",
+        "vehicles": [
+          {
+            "name": "FANUC",
+            "ticker": "6954",
+            "exchange": "Tokyo Stock Exchange Prime Market",
+            "type": "equity",
+            "exposure": "I would use it to study industrial robots, numerical controls, servomotors and automation machinery.",
+            "limitation": "If I am seeking robotics exposure, I would separate robots, factory automation and robomachines and review industrial orders and currency effects.",
+            "sources": [
+              "VA03",
+              "VA04"
+            ],
+            "alternative_listings": [],
+            "recent_changes": [],
+            "verified_at": "2026-11-24"
+          }
+        ]
+      }
+    ],
+    "notes": [
+      "I would use ticker and market together to avoid confusing ordinary shares, ADRs and data-provider symbols.",
+      "I would retain the limitations as my analytical reading. The references verify the listing, business and material changes; they are neither a valuation nor a recommendation.",
+      "I would not present ABBNY as a NYSE-listed security, or Ferrovial as currently listed in Amsterdam.",
+      "If I link candidates across trends, I would keep one company record to avoid duplicating capital movements."
+    ]
+  },
+  "political_disclosures": {
+    "text": "I would keep one layer for policy and legislation and another for transactions disclosed by public officials. If I include a transaction by Pelosi or another official, I would show the official document, beneficial owner, transaction date, publication date, amount range and asset class. I would neither attribute motives nor turn it into a buying signal. This package contains no reconstructed database of political transactions.",
+    "publication_note": "Before republishing disclosure data, I would review the document’s legal terms of use for this website.",
+    "sources": [
+      "S29"
+    ]
+  },
+  "capital_excluded_comparisons": [
+    {
+      "actor": "ARK Investment Management",
+      "ticker": "CRWD",
+      "period_from": "2026-06-30",
+      "period_to": "2026-09-30",
+      "quantity_from_raw": 94500,
+      "quantity_to_raw": 281295,
+      "delta": null,
+      "delta_pct": null,
+      "reason": "A 4-for-1 split occurred between the cutoffs, and the Q2 reporting basis remains unresolved. The implied value per share suggests that an adjustment may already have been incorporated; applying another factor could duplicate it.",
+      "ui_behavior": "I would show the warning and original quantities without an arrow, a buying or selling color, a percentage or a ranking.",
+      "sources": [
+        "CAP_ARK_Q2",
+        "CAP_ARK_Q3",
+        "CAP_CRWD_SPLIT"
+      ]
+    }
+  ],
+  "sources": {
+    "S01": {
+      "title": "Eurostat · business use of AI (2023–2025 data)",
+      "url": "https://ec.europa.eu/eurostat/web/products-eurostat-news/w/ddn-20251211-2",
+      "published_or_period": "11-12-2025"
+    },
+    "S02": {
+      "title": "Stanford HAI · AI Index 2026",
+      "url": "https://hai.stanford.edu/ai-index/2026-ai-index-report",
+      "published_or_period": "2026"
+    },
+    "S03": {
+      "title": "International Federation of Robotics · World Robotics 2026",
+      "url": "https://ifr.org/ifr-press-releases/news/five-million-robots-now-operate-in-factories-globally",
+      "published_or_period": "24-09-2026"
+    },
+    "S04": {
+      "title": "IEA · World Energy Investment 2026",
+      "url": "https://www.iea.org/reports/world-energy-investment-2026/regional-dashboards",
+      "published_or_period": "28-05-2026"
+    },
+    "S05": {
+      "title": "WHO · Ageing and health",
+      "url": "https://www.who.int/es/news-room/fact-sheets/detail/ageing-and-health",
+      "published_or_period": "01-10-2025"
+    },
+    "S06": {
+      "title": "ENISA · Threat Landscape 2026",
+      "url": "https://www.enisa.europa.eu/topics/cyber-threats/threat-landscape",
+      "published_or_period": "22-09-2026"
+    },
+    "S07": {
+      "title": "SIPRI · Trends in World Military Expenditure 2025",
+      "url": "https://www.sipri.org/publications/2026/sipri-fact-sheets/trends-world-military-expenditure-2025",
+      "published_or_period": "27-04-2026"
+    },
+    "S08": {
+      "title": "World Bank · Global Findex 2025",
+      "url": "https://www.worldbank.org/en/publication/globalfindex/report",
+      "published_or_period": "2025; 2024 surveys"
+    },
+    "S09": {
+      "title": "Eurostat · E-commerce by individuals",
+      "url": "https://ec.europa.eu/eurostat/statistics-explained/index.php?title=E-commerce_statistics_for_individuals",
+      "published_or_period": "02-2026; 2025 data"
+    },
+    "S10": {
+      "title": "World Resources Institute · Aqueduct water stress",
+      "url": "https://www.wri.org/insights/highest-water-stressed-countries",
+      "published_or_period": "16-08-2023"
+    },
+    "S11": {
+      "title": "OECD · Space Economy at a Glance 2026",
+      "url": "https://www.oecd.org/en/publications/2026/09/the-space-economy-at-a-glance-2026_92b228b7.html",
+      "published_or_period": "09-2026"
+    },
+    "S12": {
+      "title": "IEA · Global Critical Minerals Outlook 2026",
+      "url": "https://www.iea.org/reports/global-critical-minerals-outlook-2026/executive-summary",
+      "published_or_period": "16-07-2026"
+    },
+    "S13": {
+      "title": "UNESCO · GEM 2026 education monitoring",
+      "url": "https://www.unesco.org/reports/gem-report/en/2026-monitoring-sdg4",
+      "published_or_period": "2026; 2024 data"
+    },
+    "S14": {
+      "title": "UN · World Urbanization Prospects 2025",
+      "url": "https://www.un.org/en/desa/WUP-2025",
+      "published_or_period": "18-11-2025"
+    },
+    "S15": {
+      "title": "IFR Global Sales of Professional Service Robots Surge 24%",
+      "url": "https://ifr.org/ifr-press-releases/news/global-sales-of-professional-service-robots-surge-24-percent",
+      "published_or_period": "September 30, 2026; 2025 sales",
+      "accessed": "2026-11-24"
+    },
+    "S16": {
+      "title": "University of Cambridge · Digital Mining Industry Report",
+      "url": "https://www.jbs.cam.ac.uk/faculty-research/centres/alternative-finance/publications/cambridge-digital-mining-industry-report/",
+      "published_or_period": "04-28-2025; reference year 2024"
+    },
+    "S17": {
+      "title": "NIST · Neutral-atom quantum architecture",
+      "url": "https://www.nist.gov/publications/fault-tolerant-neutral-atom-architecture-universal-quantum-computation",
+      "published_or_period": "10-11-2025"
+    },
+    "S18": {
+      "title": "DOE · Quantum Genesis Q Competition",
+      "url": "https://www.energy.gov/science/articles/doe-launches-competition-accelerate-development-worlds-first-fault-tolerant",
+      "published_or_period": "17-09-2026"
+    },
+    "S19": {
+      "title": "IBM · Quantum Roadmap updated in 2026",
+      "url": "https://www.ibm.com/roadmaps/quantum/2030/",
+      "published_or_period": "03-2026"
+    },
+    "S20": {
+      "title": "SEC · Form 13F FAQs and filing deadlines",
+      "url": "https://www.sec.gov/rules-regulations/staff-guidance/frequently-asked-questions-about-form-13f",
+      "published_or_period": "06-03-2026"
+    },
+    "S21": {
+      "title": "European Commission · AI Act and AI Omnibus",
+      "url": "https://digital-strategy.ec.europa.eu/en/policies/regulatory-framework-ai",
+      "published_or_period": "Accessed 2026-11-24"
+    },
+    "S22": {
+      "title": "European Commission · NIS2 Directive",
+      "url": "https://digital-strategy.ec.europa.eu/en/policies/nis2-directive",
+      "published_or_period": "Accessed 2026-11-24"
+    },
+    "S23": {
+      "title": "European Commission · SAFE defense financing",
+      "url": "https://defence-industry-space.ec.europa.eu/eu-defence-industry/safe-security-action-europe_en",
+      "published_or_period": "Accessed 2026-11-24"
+    },
+    "S24": {
+      "title": "European Commission · DORA transposition monitoring",
+      "url": "https://finance.ec.europa.eu/regulation-and-supervision/financial-services-legislation/enforcement-and-infringements-banking-and-finance-law/monitoring-banking-and-finance-directives/digital-operational-resilience-financial-sector-directive_en",
+      "published_or_period": "19-11-2026"
+    },
+    "S25": {
+      "title": "European Commission · Water Resilience Strategy",
+      "url": "https://commission.europa.eu/topics/environment/water-resilience-strategy_es",
+      "published_or_period": "Revised 2026-06-29"
+    },
+    "S26": {
+      "title": "European Commission · Critical Raw Materials Act projects",
+      "url": "https://single-market-economy.ec.europa.eu/sectors/raw-materials/areas-specific-interest/critical-raw-materials/strategic-projects-under-crma/selected-projects_en",
+      "published_or_period": "Accessed 2026-11-24"
+    },
+    "S27": {
+      "title": "European Commission · TEN-T Regulation",
+      "url": "https://transport.ec.europa.eu/transport-themes/infrastructure-and-investment/trans-european-transport-network-ten-t_en",
+      "published_or_period": "Accessed 2026-11-24"
+    },
+    "S28": {
+      "title": "European Commission · European Quantum Strategy",
+      "url": "https://digital-strategy.ec.europa.eu/en/library/quantum-europe-strategy",
+      "published_or_period": "02-07-2025"
+    },
+    "S29": {
+      "title": "US Code, 5 USC 13107 · Use of financial disclosures",
+      "url": "https://uscode.house.gov/us/usc/t5/s13107/",
+      "published_or_period": "Accessed 2026-11-24"
+    },
+    "S30": {
+      "title": "USGS · Mineral Commodity Summaries 2026, CC0 data",
+      "url": "https://www.usgs.gov/data/mineral-commodity-summaries-2026-data-release",
+      "published_or_period": "18-09-2026"
+    },
+    "S31": {
+      "title": "IEA · Energy and AI, data centers",
+      "url": "https://www.iea.org/reports/key-questions-on-energy-and-ai/executive-summary",
+      "published_or_period": "16-04-2026"
+    },
+    "S32": {
+      "title": "Microsoft · FY2027 Q1 quarterly results",
+      "url": "https://www.microsoft.com/en-us/investor/earnings/fy-2027-q1/press-release-webcast",
+      "published_or_period": "28-10-2026"
+    },
+    "S33": {
+      "title": "IonQ · Form 10-Q for September 30, 2026",
+      "url": "https://www.sec.gov/Archives/edgar/data/1824920/000119312526449829/ionq-20260930.htm",
+      "published_or_period": "2026"
+    },
+    "S34": {
+      "title": "European Commission · Machinery policy",
+      "url": "https://single-market-economy.ec.europa.eu/sectors/mechanical-engineering/machinery_en",
+      "published_or_period": "Accessed 2026-11-24"
+    },
+    "S35": {
+      "title": "Eurostat · Digitalisation in Europe 2026",
+      "url": "https://ec.europa.eu/eurostat/web/interactive-publications/digitalisation-2026",
+      "published_or_period": "2026"
+    },
+    "S36": {
+      "title": "European Commission · SAFE news and financing Q4 2026",
+      "url": "https://defence-industry-space.ec.europa.eu/commission-invites-member-states-use-eur213-billion-under-safe-boost-defence-readiness-and-support-2026-10-29_en",
+      "published_or_period": "29-10-2026"
+    },
+    "S37": {
+      "title": "NIST · Post-quantum cryptography standards",
+      "url": "https://www.nist.gov/news-events/news/2024/08/announcing-approval-three-federal-information-processing-standards-fips",
+      "published_or_period": "13-08-2024"
+    },
+    "S38": {
+      "title": "UN · World Population Prospects 2024",
+      "url": "https://population.un.org/wpp/",
+      "published_or_period": "2024"
+    },
+    "S39": {
+      "title": "European Commission · TEN-T transport infrastructure regulation 2026",
+      "url": "https://transport.ec.europa.eu/news-events/news/work-plans-ten-t-european-coordinators-published-2026-09-30_en",
+      "published_or_period": "30-09-2026"
+    },
+    "S40": {
+      "title": "USGS · Mineral Commodity Summaries 2026",
+      "url": "https://www.usgs.gov/publications/mineral-commodity-summaries-2026",
+      "published_or_period": "06-02-2026"
+    },
+    "S41": {
+      "title": "European Commission · Quantum technology strategy",
+      "url": "https://digital-strategy.ec.europa.eu/en/policies/quantum",
+      "published_or_period": "Accessed 2026-11-24"
+    },
+    "S42": {
+      "title": "ILO · Employment and Social Trends 2026",
+      "url": "https://www.ilo.org/publications/flagship-reports/employment-and-social-trends-2026",
+      "published_or_period": "14-01-2026"
+    },
+    "S43": {
+      "title": "European Commission · Digital Services Act (DSA)",
+      "url": "https://digital-strategy.ec.europa.eu/en/policies/digital-services-act",
+      "published_or_period": "Accessed 2026-11-24"
+    },
+    "S44": {
+      "title": "FAO · AQUASTAT, water and agriculture",
+      "url": "https://www.fao.org/aquastat/en/overview/",
+      "published_or_period": "Accessed as a thematic reference"
+    },
+    "S45": {
+      "title": "European Commission · MiCA crypto-asset regulation",
+      "url": "https://finance.ec.europa.eu/digital-finance/crypto-assets_en",
+      "published_or_period": "Updated 2026-05-20"
+    },
+    "S46": {
+      "title": "World Bank · Global Findex results presentation",
+      "url": "https://www.worldbank.org/en/events/2025/09/30/global-findex-2025-connectivity-and-financial-inclusion-in-the-digital-economy",
+      "published_or_period": "30-09-2025"
+    },
+    "R_CENSUS": {
+      "title": "Census Bureau The Microstructure of AI Diffusion CES WP 26 25R",
+      "url": "https://www2.census.gov/ces/wp/2026/CES-WP-26-25R.pdf",
+      "published_or_period": "Revised October 2026; reference period November 2025 to January 2026",
+      "note": "Documento de investigación; 18% ponderado por empresas y 32% por empleo son métricas distintas. Cambio de pregunta impide empalme simple con serie anterior.",
+      "accessed": "2026-11-24"
+    },
+    "R_ASML": {
+      "title": "ASML Annual Report 2025 filed with the SEC",
+      "url": "https://www.sec.gov/Archives/edgar/data/937966/000162828026011377/asml-2025xannualxreportx.htm",
+      "published_or_period": "February 25, 2026; financial year 2025",
+      "note": "Empresa declara ser único fabricante de equipos EUV; también documenta dependencia de Carl Zeiss SMT y restricciones de exportación.",
+      "accessed": "2026-11-24"
+    },
+    "R_TSMC": {
+      "title": "TSMC Annual Report 2025",
+      "url": "https://investor.tsmc.com/static/annualReports/2025/english/index.html",
+      "published_or_period": "Financial year 2025; published 2026",
+      "note": "7nm y tecnologías más avanzadas representan 74% de ingresos por obleas propios; no es cuota mundial de mercado. TWSE2330 y NYSE TSM.",
+      "accessed": "2026-11-24"
+    },
+    "R_NVDA": {
+      "title": "NVIDIA Form 10-Q for the quarter ended July 26, 2026",
+      "url": "https://www.sec.gov/Archives/edgar/data/1045810/000104581026000075/nvda-20260726.htm",
+      "published_or_period": "Quarter ended July 26, 2026",
+      "note": "Riesgos de competencia, oferta, controles de exportación, demanda y clientes; NVDA Nasdaq.",
+      "accessed": "2026-11-24"
+    },
+    "R_NIST_AI": {
+      "title": "NIST Generative Artificial Intelligence Profile AI 600 1",
+      "url": "https://www.nist.gov/publications/artificial-intelligence-risk-management-framework-generative-artificial-intelligence",
+      "published_or_period": "July 26, 2024",
+      "note": "Marco voluntario de riesgos, no una ley ni una predicción de pérdidas.",
+      "accessed": "2026-11-24"
+    },
+    "R_AI_US": {
+      "title": "White House National AI Legislative Framework",
+      "url": "https://www.whitehouse.gov/releases/2026/03/president-donald-j-trump-unveils-national-ai-legislative-framework/",
+      "published_or_period": "March 20, 2026",
+      "note": "Propuesta de marco para actuación del Congreso; no equivale por sí misma a una ley aprobada.",
+      "accessed": "2026-11-24"
+    },
+    "R_AI_EU": {
+      "title": "European Commission AI Omnibus enters into force",
+      "url": "https://digital-strategy.ec.europa.eu/en/news/ai-omnibus-enters-force",
+      "published_or_period": "July 27, 2026",
+      "note": "Comunicación oficial de entrada en vigor y extensión de calendarios; una actividad concreta exige comprobar su clasificación.",
+      "accessed": "2026-11-24"
+    },
+    "R_SOXX": {
+      "title": "iShares Semiconductor ETF SOXX",
+      "url": "https://www.ishares.com/us/products/239705/ishares-semiconductor-etf-soxx",
+      "published_or_period": "Accessed November 24, 2026",
+      "note": "ETF de acciones de semiconductores; exposición sectorial, no un fondo puro de ingresos de IA.",
+      "accessed": "2026-11-24"
+    },
+    "R_SOXX_SEC": {
+      "title": "iShares Semiconductor ETF SOXX Summary Prospectus SEC",
+      "url": "https://www.sec.gov/Archives/edgar/data/1100663/000119312526327967/d132214d497k.htm",
+      "published_or_period": "2026",
+      "note": "Confirma ticker SOXX y Nasdaq; prospecto y riesgos del vehículo.",
+      "accessed": "2026-11-24"
+    },
+    "ER01": {
+      "title": "IFR World Robotics 2026 final industrial robot results",
+      "url": "https://ifr.org/ifr-press-releases/news/five-million-robots-now-operate-in-factories-globally",
+      "published_or_period": "2026-09-24",
+      "accessed": "2026-11-24",
+      "type": "primary"
+    },
+    "ER02": {
+      "title": "Rockwell Automation Form 10-K fiscal 2026",
+      "url": "https://www.sec.gov/Archives/edgar/data/1024478/000102447826000048/rok-20260930.htm",
+      "published_or_period": "Financial year ended 2026-09-30; filed in November 2026",
+      "accessed": "2026-11-24",
+      "type": "primary"
+    },
+    "ER03": {
+      "title": "European Commission Machinery Regulation",
+      "url": "https://single-market-economy.ec.europa.eu/sectors/mechanical-engineering/machinery_en",
+      "published_or_period": "Regulation 2023/1230; main application from 2027-01-20",
+      "accessed": "2026-11-24",
+      "type": "primary"
+    },
+    "ER04": {
+      "title": "OSHA Industrial Robot Systems and Industrial Robot System Safety",
+      "url": "https://www.osha.gov/otm/section-4-safety-hazards/chapter-4",
+      "published_or_period": "Manual current when accessed on November 24, 2026",
+      "accessed": "2026-11-24",
+      "type": "primary"
+    },
+    "ER05": {
+      "title": "DOE draft National Transmission Needs Study",
+      "url": "https://www.energy.gov/oe/national-transmission-needs-study",
+      "published_or_period": "July 2026 draft; page updated 2026-09-09",
+      "accessed": "2026-11-24",
+      "type": "primary"
+    },
+    "ER06": {
+      "title": "European Commission European grids",
+      "url": "https://energy.ec.europa.eu/topics/infrastructure/european-grids_en",
+      "published_or_period": "Page accessed November 24, 2026; package proposed 2025-12-10",
+      "accessed": "2026-11-24",
+      "type": "primary"
+    },
+    "ER07": {
+      "title": "Berkeley Lab Queued Up 2026",
+      "url": "https://eta.lbl.gov/publications/queued-2026-edition-characteristics",
+      "published_or_period": "2026 edition; observations through 2025",
+      "accessed": "2026-11-24",
+      "type": "primary"
+    },
+    "ER08": {
+      "title": "GAO Funding Status IIJA and IRA at Agriculture and Energy",
+      "url": "https://files.gao.gov/reports/GAO-26-109087/index.html",
+      "published_or_period": "2026-09-17",
+      "accessed": "2026-11-24",
+      "type": "primary"
+    },
+    "ER09": {
+      "title": "CMS National Health Expenditure Projections 2025-2034",
+      "url": "https://www.cms.gov/files/document/nhe-projections-forecast-summary.pdf",
+      "published_or_period": "June 2026; historical 2024 data; projections for 2025–2034",
+      "accessed": "2026-11-24",
+      "type": "primary"
+    },
+    "ER10": {
+      "title": "European Commission joint clinical assessments for medicines",
+      "url": "https://health.ec.europa.eu/health-technology-assessment/implementation-regulation-health-technology-assessment/joint-clinical-assessments-medicinal-products_en",
+      "published_or_period": "Initial application from 2025-01-12",
+      "accessed": "2026-11-24",
+      "type": "primary"
+    },
+    "ER11": {
+      "title": "FDA Drug Development and Review Definitions",
+      "url": "https://www.fda.gov/drugs/investigational-new-drug-application-ind/drug-development-and-review-definitions",
+      "published_or_period": "Accessed November 24, 2026",
+      "accessed": "2026-11-24",
+      "type": "primary"
+    },
+    "ER12": {
+      "title": "CMS Selected Drugs and Negotiated Prices",
+      "url": "https://www.cms.gov/initiatives/medicare-prescription-drug-affordability/overview/medicare-drug-price-negotiation-program/selected-drugs-negotiated-prices",
+      "published_or_period": "Data updated 2026-11-23; first prices effective from 2026-01-01",
+      "accessed": "2026-11-24",
+      "type": "primary"
+    },
+    "ER13": {
+      "title": "GAO Weapon Systems Annual Assessment",
+      "url": "https://www.gao.gov/products/gao-26-108457",
+      "published_or_period": "2026-07-02",
+      "accessed": "2026-11-24",
+      "type": "primary"
+    },
+    "ER14": {
+      "title": "Council of EU SAFE instrument",
+      "url": "https://www.consilium.europa.eu/policies/safe/",
+      "published_or_period": "Regulation in force from 2025-05-29",
+      "accessed": "2026-11-24",
+      "type": "primary"
+    },
+    "ER15": {
+      "title": "US Census Quarterly Retail E-Commerce Sales",
+      "url": "https://www.census.gov/retail/ecommerce.html",
+      "published_or_period": "2026-11-19; third quarter of 2026",
+      "accessed": "2026-11-24",
+      "type": "primary"
+    },
+    "ER16": {
+      "title": "European Commission Digital Services Act",
+      "url": "https://digital-strategy.ec.europa.eu/en/policies/digital-services-act",
+      "published_or_period": "Accessed November 24, 2026",
+      "accessed": "2026-11-24",
+      "type": "primary"
+    },
+    "ER17": {
+      "title": "EPA Seventh Drinking Water Infrastructure Needs Survey",
+      "url": "https://www.epa.gov/dwsrf/epas-7th-drinking-water-infrastructure-needs-survey-and-assessment",
+      "published_or_period": "Survey published in 2023; supplementary data updated in 2025",
+      "accessed": "2026-11-24",
+      "type": "primary"
+    },
+    "ER18": {
+      "title": "European Commission Water Resilience Strategy",
+      "url": "https://commission.europa.eu/topics/environment/water-resilience-strategy_en",
+      "published_or_period": "Page revised 2026-06-29",
+      "accessed": "2026-11-24",
+      "type": "primary"
+    },
+    "ER19": {
+      "title": "EPA OIG Audit of Water Earmark Grants FY 2022 and 2023",
+      "url": "https://www.epa.gov/system/files/documents/2026-07/_epaoig_20260721-26-p-0043_cert.pdf",
+      "published_or_period": "2026-07-21",
+      "accessed": "2026-11-24",
+      "type": "primary"
+    },
+    "ER20": {
+      "title": "USDA ERS Farm Sector Income Forecast",
+      "url": "https://www.ers.usda.gov/topics/farm-economy/farm-sector-income-finances/farm-sector-income-forecast",
+      "published_or_period": "2026 forecast; accessed before the next release",
+      "accessed": "2026-11-24",
+      "type": "primary"
+    },
+    "ER21": {
+      "title": "EEA European Climate Risk Assessment",
+      "url": "https://www.eea.europa.eu/en/analysis/publications/european-climate-risk-assessment",
+      "published_or_period": "2024-03-11",
+      "accessed": "2026-11-24",
+      "type": "primary"
+    },
+    "ER22": {
+      "title": "ESA Space Environment Report 2026",
+      "url": "https://www.esa.int/articles/esa-space-environment-report-2026",
+      "published_or_period": "2026-09-14; data through 2025",
+      "accessed": "2026-11-24",
+      "type": "primary"
+    },
+    "ER23": {
+      "title": "GAO Three Science and Technology Trends",
+      "url": "https://www.gao.gov/products/gao-26-108079",
+      "published_or_period": "2026-04-02",
+      "accessed": "2026-11-24",
+      "type": "primary"
+    },
+    "ER24": {
+      "title": "USGS Mineral Commodity Summaries 2026",
+      "url": "https://pubs.usgs.gov/publication/mcs2026",
+      "published_or_period": "2026-02-06; revisions through May 2026",
+      "accessed": "2026-11-24",
+      "type": "primary"
+    },
+    "ER25": {
+      "title": "EU Critical Raw Materials Act",
+      "url": "https://single-market-economy.ec.europa.eu/sectors/raw-materials/areas-specific-interest/critical-raw-materials/critical-raw-materials-act_en",
+      "published_or_period": "In force from 2024-05-23; benchmarks for 2030",
+      "accessed": "2026-11-24",
+      "type": "primary"
+    },
+    "ER26": {
+      "title": "IEA Global Critical Minerals Outlook 2026 executive summary",
+      "url": "https://www.iea.org/reports/global-critical-minerals-outlook-2026/executive-summary",
+      "published_or_period": "2026 edition",
+      "accessed": "2026-11-24",
+      "type": "primary"
+    },
+    "ER27": {
+      "title": "IEA Global Critical Minerals Outlook 2026 outlook",
+      "url": "https://www.iea.org/reports/global-critical-minerals-outlook-2026/outlook",
+      "published_or_period": "2026 edition",
+      "accessed": "2026-11-24",
+      "type": "primary"
+    },
+    "ER28": {
+      "title": "BLS Artificial intelligence IT and employment 2024-34",
+      "url": "https://www.bls.gov/opub/ted/2026/artificial-intelligence-information-technology-and-employment-2024-34.htm",
+      "published_or_period": "2026-07-16",
+      "accessed": "2026-11-24",
+      "type": "primary"
+    },
+    "ER29": {
+      "title": "Eurostat Skills for the digital age",
+      "url": "https://ec.europa.eu/eurostat/statistics-explained/index.php?title=Skills_for_the_digital_age",
+      "published_or_period": "Data extracted in January 2026; observations for 2025",
+      "accessed": "2026-11-24",
+      "type": "primary"
+    },
+    "ER30": {
+      "title": "GAO Funding status IIJA and IRA DOT EPA Interior NTIA",
+      "url": "https://files.gao.gov/reports/GAO-26-108434/index.html",
+      "published_or_period": "2026-07-22",
+      "accessed": "2026-11-24",
+      "type": "primary"
+    },
+    "ER31": {
+      "title": "European Commission TEN-T network",
+      "url": "https://transport.ec.europa.eu/transport-themes/infrastructure-and-investment/trans-european-transport-network-ten-t_en",
+      "published_or_period": "Regulation 2024/1679; targets 2030/2040/2050",
+      "accessed": "2026-11-24",
+      "type": "primary"
+    },
+    "ER32": {
+      "title": "Siemens share basic data",
+      "url": "https://www.siemens.com/lt-lt/company/investor-relations/share-bonds-rating/basic-data-key-share-figures/",
+      "published_or_period": "Accessed November 24, 2026",
+      "accessed": "2026-11-24",
+      "type": "primary"
+    },
+    "ER33": {
+      "title": "Eaton third-quarter 2026 results",
+      "url": "https://www.eaton.com/us/en-us/company/news-insights/news-releases/2026/eaton-reports-record-third-quarter-2026-results.html",
+      "published_or_period": "2026-11-03",
+      "accessed": "2026-11-24",
+      "type": "primary"
+    },
+    "ER34": {
+      "title": "Schneider Electric share information",
+      "url": "https://www.se.com/ww/en/about-us/investor-relations/share-information/share-price/",
+      "published_or_period": "Accessed November 24, 2026",
+      "accessed": "2026-11-24",
+      "type": "primary"
+    },
+    "ER35": {
+      "title": "Lilly third-quarter 2026 results and risks",
+      "url": "https://investor.lilly.com/news-releases/news-release-details/lilly-reports-third-quarter-2026-financial-results-raises-full",
+      "published_or_period": "2026-10-29",
+      "accessed": "2026-11-24",
+      "type": "primary"
+    },
+    "ER36": {
+      "title": "Novo Nordisk corporate governance share tickers",
+      "url": "https://www.novonordisk.com/about/corporate-governance.html",
+      "published_or_period": "Accessed November 24, 2026",
+      "accessed": "2026-11-24",
+      "type": "primary"
+    },
+    "ER37": {
+      "title": "Lockheed Martin third-quarter 2026 results",
+      "url": "https://investors.lockheedmartin.com/news-releases/news-release-details/lockheed-martin-reports-third-quarter-2026-financial-results/",
+      "published_or_period": "2026-10-22",
+      "accessed": "2026-11-24",
+      "type": "primary"
+    },
+    "ER38": {
+      "title": "RTX third-quarter 2026 results",
+      "url": "https://www.rtx.com/news/news-center/2026/10/20/rtx-reports-q3-2026-results",
+      "published_or_period": "2026-10-20",
+      "accessed": "2026-11-24",
+      "type": "primary"
+    },
+    "ER39": {
+      "title": "Lockheed Martin Form 10-Q Q3 2026",
+      "url": "https://investors.lockheedmartin.com/node/53341/xbrl-viewer",
+      "published_or_period": "2026-10-22; quarter ended 2026-09-27",
+      "accessed": "2026-11-24",
+      "type": "primary"
+    },
+    "ER40": {
+      "title": "Amazon third-quarter 2026 results",
+      "url": "https://ir.aboutamazon.com/news-release/news-release-details/2026/Amazon-com-Announces-Third-Quarter-Results/",
+      "published_or_period": "2026-10-29",
+      "accessed": "2026-11-24",
+      "type": "primary"
+    },
+    "ER41": {
+      "title": "Shopify stock information",
+      "url": "https://www.shopify.com/investors/stock-information",
+      "published_or_period": "Accessed November 24, 2026",
+      "accessed": "2026-11-24",
+      "type": "primary"
+    },
+    "ER42": {
+      "title": "Shopify third-quarter 2026 results and risks",
+      "url": "https://www.shopify.com/news/shopify-q3-2026-financial-results",
+      "published_or_period": "2026-11-03",
+      "accessed": "2026-11-24",
+      "type": "primary"
+    },
+    "ER43": {
+      "title": "Xylem third-quarter 2026 results",
+      "url": "https://www.xylem.com/en-us/resources/press-releases/xylem-reports-third-quarter-2026-results-and-announces-strategic-actions-to-accelerate-growth/",
+      "published_or_period": "2026-10-27",
+      "accessed": "2026-11-24",
+      "type": "primary"
+    },
+    "ER44": {
+      "title": "Deere stock information",
+      "url": "https://investor.deere.com/stock/default.aspx",
+      "published_or_period": "Accessed November 24, 2026",
+      "accessed": "2026-11-24",
+      "type": "primary"
+    },
+    "ER45": {
+      "title": "Rocket Lab third-quarter 2026 results",
+      "url": "https://investors.rocketlabcorp.com/news-releases/news-release-details/rocket-lab-announces-third-quarter-2026-financial-results-posts",
+      "published_or_period": "2026-11-09",
+      "accessed": "2026-11-24",
+      "type": "primary"
+    },
+    "ER46": {
+      "title": "Iridium third-quarter 2026 results",
+      "url": "https://investor.iridium.com/2026-10-20-Iridium-Announces-Third-Quarter-2026-Results",
+      "published_or_period": "2026-10-20",
+      "accessed": "2026-11-24",
+      "type": "primary"
+    },
+    "ER47": {
+      "title": "Rocket Lab Form 10-Q Q3 2026",
+      "url": "https://investors.rocketlabcorp.com/node/13516/ixbrl-viewer",
+      "published_or_period": "2026-11-09; quarter ended 2026-09-30",
+      "accessed": "2026-11-24",
+      "type": "primary"
+    },
+    "ER48": {
+      "title": "Freeport-McMoRan stock quote",
+      "url": "https://investors.fcx.com/investors/stock-and-dividend-information/stock-quote/default.aspx",
+      "published_or_period": "Accessed November 24, 2026",
+      "accessed": "2026-11-24",
+      "type": "primary"
+    },
+    "ER49": {
+      "title": "MP Materials DoD agreement",
+      "url": "https://investors.mpmaterials.com/investor-news/news-details/2025/MP-Materials-Announces-Transformational-Public-Private-Partnership-with-the-Department-of-Defense-to-Accelerate-U-S--Rare-Earth-Magnet-Independence/",
+      "published_or_period": "2025-07-10",
+      "accessed": "2026-11-24",
+      "type": "primary"
+    },
+    "ER50": {
+      "title": "MP Materials third-quarter 2026 results",
+      "url": "https://investors.mpmaterials.com/investor-news/news-details/2026/MP-Materials-Reports-Third-Quarter-2026-Results/default.aspx",
+      "published_or_period": "2026-11-06",
+      "accessed": "2026-11-24",
+      "type": "primary"
+    },
+    "ER51": {
+      "title": "Duolingo second-quarter 2026 results and risks",
+      "url": "https://investors.duolingo.com/news-releases/news-release-details/duolingo-reports-second-quarter-2026-results",
+      "published_or_period": "2026-08; quarter ended 2026-06-30",
+      "accessed": "2026-11-24",
+      "type": "primary"
+    },
+    "ER52": {
+      "title": "Coursera third-quarter 2026 results",
+      "url": "https://investor.coursera.com/news/news-details/2026/Coursera-Reports-Third-Quarter-2026-Financial-Results/default.aspx",
+      "published_or_period": "2026-10-29",
+      "accessed": "2026-11-24",
+      "type": "primary"
+    },
+    "ER53": {
+      "title": "Coursera completes Udemy combination",
+      "url": "https://investor.coursera.com/news/news-details/2026/Coursera-Completes-Combination-with-Udemy-to-Build-the-Worlds-Most-Comprehensive-Skills-Platform/",
+      "published_or_period": "2026-05-11",
+      "accessed": "2026-11-24",
+      "type": "primary"
+    },
+    "ER54": {
+      "title": "Caterpillar third-quarter 2026 results",
+      "url": "https://www.caterpillar.com/en/news/corporate-press-releases/h/3q26-results-caterpillar-inc.html/",
+      "published_or_period": "2026-10; third quarter of 2026",
+      "accessed": "2026-11-24",
+      "type": "primary"
+    },
+    "ER55": {
+      "title": "Vulcan Materials third-quarter 2026 results and risks",
+      "url": "https://www.vulcanmaterials.com/news-and-events/press-releases/2026/vulcan-reports-third-quarter-2026-results-122513",
+      "published_or_period": "2026-10-29",
+      "accessed": "2026-11-24",
+      "type": "primary"
+    },
+    "ER56": {
+      "title": "Teradyne third-quarter 2026 results",
+      "url": "https://investors.teradyne.com/news-events/press-releases/detail/455/teradyne-reports-third-quarter-2026-results",
+      "published_or_period": "2026-10-28",
+      "accessed": "2026-11-24",
+      "type": "primary"
+    },
+    "ER57": {
+      "title": "Intuitive Surgical third-quarter 2026 results",
+      "url": "https://isrg.intuitive.com/news-releases/news-release-details/intuitive-announces-third-quarter-earnings-6",
+      "published_or_period": "2026-10-20",
+      "accessed": "2026-11-24",
+      "type": "primary"
+    },
+    "ER58": {
+      "title": "Global X BOTZ official fund page",
+      "url": "https://www.globalxetfs.com/funds/botz",
+      "published_or_period": "Data as of 2026-11-23",
+      "accessed": "2026-11-24",
+      "type": "primary"
+    },
+    "ER59": {
+      "title": "Global X PAVE official fund page",
+      "url": "https://www.globalxetfs.com/funds/pave",
+      "published_or_period": "Data as of 2026-11-23",
+      "accessed": "2026-11-24",
+      "type": "primary"
+    },
+    "ER60": {
+      "title": "Lilly Richmond manufacturing groundbreaking",
+      "url": "https://investor.lilly.com/news-releases/news-release-details/lilly-breaks-ground-richmond-expand-american-manufacturing-next",
+      "published_or_period": "2026-10-22",
+      "accessed": "2026-11-24",
+      "type": "primary"
+    },
+    "ER61": {
+      "title": "Lockheed Martin FY 2025 results and budget risks",
+      "url": "https://news.lockheedmartin.com/2026-01-29-Lockheed-Martin-Reports-Fourth-Quarter-and-Full-Year-2025-Financial-Results",
+      "published_or_period": "2026-01-29",
+      "accessed": "2026-11-24",
+      "type": "primary"
+    },
+    "ER62": {
+      "title": "EU HTA joint clinical assessment factsheet",
+      "url": "https://health.ec.europa.eu/document/download/ced91156-ffe1-472d-85eb-aa6a91dd707e_en?filename=hta_htar_factsheet-jca_en.pdf",
+      "published_or_period": "2025-01",
+      "accessed": "2026-11-24",
+      "type": "primary"
+    },
+    "FB01": {
+      "publisher": "Deloitte Center for Financial Services",
+      "title": "Generative AI is expected to magnify the risk of deepfakes and other fraud in banking",
+      "date": "2024-05-29",
+      "url": "https://www.deloitte.com/global/en/insights/industry/financial-services/deepfake-banking-fraud-risk-on-the-rise.html",
+      "type": "proyección de consultora con metodología",
+      "fact": "Deloitte proyectó pérdidas estadounidenses por fraude habilitado por IA generativa de US$40.000 millones para 2027, frente a US$12.300 millones en 2023. Se construye asignando riesgo IA y escenarios de adopción a 26 tipos de fraude de IC3.",
+      "limit": "Es una proyección de pérdidas, no una observación ni un porcentaje futuro de personas estafadas; no es un estudio firmado por JPMorgan.",
+      "published_or_period": "2024-05-29",
+      "accessed": "2026-11-24"
+    },
+    "FB02": {
+      "publisher": "FBI IC3",
+      "title": "2025 IC3 Annual Report",
+      "date": "2026-04-06",
+      "url": "https://www.ic3.gov/AnnualReport/Reports/2025_IC3Report.pdf",
+      "type": "registro administrativo",
+      "fact": "22.364 quejas con descriptor AI Related y US$893.346.472 en pérdidas reportadas en 2025. La sección de IA está en la página impresa 39, página 39 del PDF.",
+      "limit": "Quejas voluntarias; descriptor puede solaparse con criptomonedas y otros tipos. No son todas las pérdidas de IA ni número único de víctimas ni prevalencia poblacional.",
+      "published_or_period": "2026-04-06",
+      "accessed": "2026-11-24"
+    },
+    "FB03": {
+      "publisher": "Gallup y Stop Scams Alliance",
+      "title": "Scam Victims Report Billions Lost and Harm to Mental Health",
+      "date": "2026-06-29",
+      "url": "https://news.gallup.com/poll/710984/scam-victims-report-billions-lost-harm-mental-health.aspx",
+      "type": "encuesta representativa",
+      "fact": "6% de adultos estadounidenses dicen haber sido estafados personalmente en 2025; 24% alguna vez en su vida adulta. Encuesta a 5.173 adultos del 8 de enero al 18 de febrero de 2026.",
+      "limit": "Autorreporte y horizontes distintos. No son porcentajes de fraude atribuible a IA ni pronósticos. El 12% de IA procede de la cita del estudio en JPMorgan, no es visible en el artículo de Gallup abierto.",
+      "published_or_period": "2026-06-29",
+      "accessed": "2026-11-24"
+    },
+    "FB04": {
+      "publisher": "JPMorganChase",
+      "title": "America needs a stronger scam prevention strategy",
+      "date": null,
+      "url": "https://www.jpmorganchase.com/newsroom/from-the-desk-of/america-needs-a-stronger-scam-prevention-strategy",
+      "type": "análisis bancario que cita encuesta",
+      "fact": "El banco cita una encuesta Gallup/Stop Scams Alliance: consumidores reportaron IA o deepfake en alrededor del 12% de las estafas. Expone fragmentación de prevención y persecución entre canales, sectores y países.",
+      "limit": "Es percepción reportada por encuestados; no una auditoría técnica de atribución IA. No proyecta un alto porcentaje futuro de la población.",
+      "published_or_period": null,
+      "accessed": "2026-11-24"
+    },
+    "FB05": {
+      "publisher": "FinCEN",
+      "title": "FinCEN Alert on Fraud Schemes Involving Deepfake Media Targeting Financial Institutions",
+      "date": "2024-11-13",
+      "url": "https://www.fincen.gov/system/files/shared/FinCEN-Alert-DeepFakes-Alert508FINAL.pdf",
+      "type": "alerta supervisora",
+      "fact": "Reporta incremento de SAR que describen deepfakes, incluidos documentos falsificados para eludir verificación de identidad. Aporta señales de alerta y obligaciones de reporte BSA.",
+      "limit": "No cuantifica incidencia total ni prueba eficacia comercial de un proveedor.",
+      "published_or_period": "2024-11-13",
+      "accessed": "2026-11-24"
+    },
+    "FB06": {
+      "publisher": "Ministerio de Electrónica y TI de India",
+      "title": "Government Strengthens Regulatory Framework to Address AI-Generated Deepfakes",
+      "date": "2026-08-06",
+      "url": "https://www.pib.gov.in/PressReleasePage.aspx?PRID=2295500&lang=1&reg=48",
+      "type": "fuente gubernamental",
+      "fact": "Expone las secciones 66C y 66D del IT Act sobre identidad y suplantación; BNS 319 sobre suplantación, 336 sobre falsificación y 111 sobre delincuencia organizada, además de obligaciones de intermediarios.",
+      "limit": "Existencia de leyes no mide tasa de condena, recuperación de fondos ni aplicación efectiva transfronteriza.",
+      "published_or_period": "2026-08-06",
+      "accessed": "2026-11-24"
+    },
+    "FB07": {
+      "publisher": "UNODC",
+      "title": "The nexus between cybercrime and corruption",
+      "date": "2025-10-21",
+      "url": "https://track.unodc.org/uploads/documents/AC-hubs-and-platforms/south-east-asia/2025.10.21_The_Nexus_Between_Cybercrime_and_Corruption.pdf",
+      "type": "informe multilateral",
+      "fact": "Describe centros de estafas, lavado, corrupción, trata y uso de IA/deepfakes. Documenta expansión fuera del Sudeste Asiático y servicios conectados con varias regiones.",
+      "limit": "No justifica imputar impunidad o delito a toda la población de un país.",
+      "published_or_period": "2025-10-21",
+      "accessed": "2026-11-24"
+    },
+    "FB08": {
+      "publisher": "CrowdStrike / SEC",
+      "title": "Form 10-Q quarter ended October 31, 2026",
+      "date": "2026-11-23",
+      "url": "https://www.sec.gov/Archives/edgar/data/1535527/000153552726000038/crwd-20261031.htm",
+      "type": "filing emisor",
+      "fact": "Reconoce costes, litigios, incentivos y riesgo de renovaciones relacionados con el incidente del 19 de julio de 2024. Permite sustentar el riesgo operativo del propio proveedor.",
+      "limit": "10-Q para el trimestre terminado el 31 de octubre de 2026, firmado el 23 de noviembre de 2026. Descripción de riesgo del emisor, no estimación probabilística independiente. El split 4 por 1 se distribuyó después del cierre del 1 de julio de 2026; cualquier comparación de acciones Q2/Q3 debe tenerlo en cuenta.",
+      "published_or_period": "2026-11-23",
+      "accessed": "2026-11-24"
+    },
+    "FB09": {
+      "publisher": "Palo Alto Networks",
+      "title": "Investor FAQs",
+      "date": null,
+      "url": "https://investors.paloaltonetworks.com/investor-resources/investor-faqs",
+      "type": "emisor",
+      "fact": "PANW cotiza en Nasdaq. La adquisición de CyberArk se completó el 11 de febrero de 2026.",
+      "limit": "CyberArk no debe presentarse como cotizada independiente actual sólo porque tuvo ticker CYBR.",
+      "published_or_period": null,
+      "accessed": "2026-11-24"
+    },
+    "FB10": {
+      "publisher": "Fortinet / SEC",
+      "title": "2025 Form 10-K",
+      "date": "2026-02-25",
+      "url": "https://www.sec.gov/Archives/edgar/data/1262039/000126203926000007/ftnt-20251231.htm",
+      "type": "filing emisor",
+      "fact": "FTNT cotiza en Nasdaq; describe riesgos de competencia, fluctuación de resultados, cadena de suministro y políticas comerciales.",
+      "limit": "No equiparar mayor número de ataques a beneficios garantizados.",
+      "published_or_period": "2026-02-25",
+      "accessed": "2026-11-24"
+    },
+    "FB11": {
+      "publisher": "First Trust",
+      "title": "First Trust Nasdaq Cybersecurity ETF CIBR",
+      "date": null,
+      "url": "https://www.ftportfolios.com/ETF/CIBR",
+      "type": "ficha oficial ETF",
+      "fact": "CIBR cotiza en Nasdaq y replica el Nasdaq CTA Cybersecurity Index.",
+      "limit": "Cartera y exposición cambian; es un ETF de acciones, no exposición directa a incidentes ni a gasto público.",
+      "published_or_period": null,
+      "accessed": "2026-11-24"
+    },
+    "FB12": {
+      "publisher": "Comisión Europea",
+      "title": "NIS2 Directive",
+      "date": null,
+      "url": "https://digital-strategy.ec.europa.eu/en/policies/nis2-directive",
+      "type": "regulación UE",
+      "fact": "Marco de ciberseguridad para 18 sectores críticos, gestión de riesgos y notificación. La página señala propuestas de enmienda de enero de 2026.",
+      "limit": "Yo distinguiría directiva, transposición nacional y enmienda propuesta.",
+      "published_or_period": null,
+      "accessed": "2026-11-24"
+    },
+    "FB13": {
+      "publisher": "Federal Reserve Financial Services",
+      "title": "FedNow Service Volume and Value Statistics",
+      "date": "2026-10-20",
+      "url": "https://www.frbservices.org/resources/financial-services/fednow-service-resources/fednow-service-volume-value-statistics/",
+      "type": "estadística operador",
+      "fact": "Pagos de clientes liquidados: 1.505.250 en 2024; 8.413.402 en 2025; 2.728.510 en Q1 2026, 4.997.811 en Q2 2026 y 6.376.467 en Q3 2026.",
+      "limit": "No son usuarios, ingresos ni capital invertido. No mezclar periodos anuales y trimestrales en la misma serie.",
+      "published_or_period": "2026-10-20",
+      "accessed": "2026-11-24"
+    },
+    "FB14": {
+      "publisher": "FDIC",
+      "title": "Requirements for Custodial Deposit Accounts with Transactional Features",
+      "date": "2024-09-17",
+      "url": "https://www.fdic.gov/news/speeches/2024/notice-proposed-rule-requirements-custodial-deposit-accounts-transactional",
+      "type": "supervisor caso histórico",
+      "fact": "El caso Synapse mostró bloqueo de fondos por registros incompletos o discrepantes. El seguro FDIC cubre la quiebra de un banco asegurado, no la de una fintech intermediaria.",
+      "limit": "La fuente es un discurso sobre una propuesta de 2024; usar sólo el mecanismo y el caso, sin afirmar que esa propuesta sea la ley vigente en 2026.",
+      "published_or_period": "2024-09-17",
+      "accessed": "2026-11-24"
+    },
+    "FB15": {
+      "publisher": "Visa / SEC",
+      "title": "2026 Form 10-K",
+      "date": "2026-11-05",
+      "url": "https://www.sec.gov/Archives/edgar/data/1403161/000140316126000134/v-20260930.htm",
+      "type": "filing emisor",
+      "fact": "La acción clase A de Visa cotiza como V en NYSE; describe riesgos de regulación de comisiones y litigios. En 2026 registró cargos adicionales por litigios de intercambio.",
+      "limit": "No afirmar resultado judicial futuro ni que una demanda prueba ilegalidad.",
+      "published_or_period": "2026-11-05",
+      "accessed": "2026-11-24"
+    },
+    "FB16": {
+      "publisher": "Departamento de Justicia EE. UU.",
+      "title": "U.S. v. Visa, Inc. 2024",
+      "date": "2025-07-07",
+      "url": "https://www.justice.gov/atr/case/us-v-visa-inc-2024",
+      "type": "expediente antitrust",
+      "fact": "Demanda civil sobre servicios de red de débito; el expediente incluye una decisión de junio de 2025 sobre la moción de desestimación.",
+      "limit": "Es una alegación procesal, no sentencia final de monopolización ilícita. No extrapolar cuota a todos los pagos globales.",
+      "published_or_period": "2025-07-07",
+      "accessed": "2026-11-24"
+    },
+    "FB17": {
+      "publisher": "Mastercard",
+      "title": "Investor Relations",
+      "date": null,
+      "url": "https://investor.mastercard.com/overview/default.aspx",
+      "type": "emisor",
+      "fact": "Mastercard cotiza con el símbolo MA en NYSE.",
+      "limit": "Negocio diversificado dentro de pagos y servicios; no exposición exclusiva a una tecnología.",
+      "published_or_period": null,
+      "accessed": "2026-11-24"
+    },
+    "FB18": {
+      "publisher": "Euronext",
+      "title": "ADYEN NL0012969182",
+      "date": null,
+      "url": "https://live.euronext.com/en/product/equities/NL0012969182-XAMS",
+      "type": "bolsa oficial",
+      "fact": "Adyen N.V., ticker ADYEN en Euronext Amsterdam, ISIN NL0012969182.",
+      "limit": "No usar sufijos de proveedores de precios como si fueran el ticker oficial del mercado.",
+      "published_or_period": null,
+      "accessed": "2026-11-24"
+    },
+    "FB19": {
+      "publisher": "Global X",
+      "title": "FinTech ETF FINX",
+      "date": null,
+      "url": "https://www.globalxetfs.com/funds/FINX",
+      "type": "ficha oficial ETF",
+      "fact": "FINX cotiza en Nasdaq; replica el Indxx Global FinTech Thematic Index.",
+      "limit": "Incluyevariosnegociosfintech, con riesgos y geografías distintos.",
+      "published_or_period": null,
+      "accessed": "2026-11-24"
+    },
+    "FB20": {
+      "publisher": "Federal Reserve Financial Services",
+      "title": "Payment Fraud Mitigation",
+      "date": null,
+      "url": "https://www.frbservices.org/resources/resource-centers/fraud-mitigation-resource-center/payment/",
+      "type": "operador",
+      "fact": "Herramientas de verificación de beneficiario, información previa, límites y listas negativas complementan controles internos.",
+      "limit": "La presencia de herramientas no demuestra eliminación del fraude ni garantiza proveedor ganador.",
+      "published_or_period": null,
+      "accessed": "2026-11-24"
+    },
+    "FB21": {
+      "publisher": "Circle / SEC",
+      "title": "Form 10-Q quarter ended September 30, 2026",
+      "date": "2026-11-04",
+      "url": "https://www.sec.gov/Archives/edgar/data/1876042/000187604226000311/crcl-20260930.htm",
+      "type": "filing emisor",
+      "fact": "USDC medio en Q3 2026: US$73.264 millones frente a US$67.842 millones en Q3 2025. Ingreso de reservas: US$657,624 millones frente a US$711,241 millones (−7,5%). Rendimiento: 3,5% frente a 4,2%.",
+      "limit": "USDC en circulación no equivale a volumen de pagos reales ni a capital de accionistas. Circle cotiza como CRCL en NYSE.",
+      "published_or_period": "2026-11-04",
+      "accessed": "2026-11-24"
+    },
+    "FB22": {
+      "publisher": "JPMorgan Payments",
+      "title": "Kinexys wins two Future of Finance Awards",
+      "date": "2026-08-12",
+      "url": "https://www.jpmorgan.com/payments/newsroom/kinexys-future-of-finance-awards-2026",
+      "type": "emisor dato comercial",
+      "fact": "Kinexys comunica más de US$4 billones acumulados y US$7.000 millones diarios medios en transacciones.",
+      "limit": "Dato corporativo declarado por el operador; volumen bruto no equivale a ingreso ni a flujos netos. La apertura devolvió 403; el contenido proviene del índice web de la fuente primaria.",
+      "published_or_period": "2026-08-12",
+      "accessed": "2026-11-24"
+    },
+    "FB23": {
+      "publisher": "Financial Stability Board",
+      "title": "The Financial Stability Implications of Tokenisation",
+      "date": "2024-10-22",
+      "url": "https://www.fsb.org/2024/10/the-financial-stability-implications-of-tokenisation/",
+      "type": "informe supervisor global",
+      "fact": "Riesgos de liquidez y vencimiento, apalancamiento, calidad de activos, interconexión y operación. En 2024 la escala era reducida; los efectos dependen del crecimiento.",
+      "limit": "El informe excluye CBDC y criptoactivos de su alcance; no usarlo como medición de todo el mercado en 2026.",
+      "published_or_period": "2024-10-22",
+      "accessed": "2026-11-24"
+    },
+    "FB24": {
+      "publisher": "ethereum.org",
+      "title": "Bridges",
+      "date": null,
+      "url": "https://ethereum.org/developers/docs/bridges/",
+      "type": "documentación técnica primaria",
+      "fact": "Riesgos de contratos, contrapartes, activos wrapped e interacción de redes.",
+      "limit": "No asumir auditoría elimina fallos.",
+      "published_or_period": null,
+      "accessed": "2026-11-24"
+    },
+    "FB25": {
+      "publisher": "ethereum.org",
+      "title": "Oracles",
+      "date": null,
+      "url": "https://ethereum.org/developers/docs/oracles/",
+      "type": "documentación técnica primaria",
+      "fact": "Los oráculos incorporan información externa; añaden riesgos de corrección, disponibilidad e incentivos.",
+      "limit": "Un ledger puede ser coherente y recibir datos erróneos.",
+      "published_or_period": null,
+      "accessed": "2026-11-24"
+    },
+    "FB26": {
+      "publisher": "Hyperledger Fabric",
+      "title": "Introduction",
+      "date": null,
+      "url": "https://hyperledger-fabric.readthedocs.io/en/latest/whatis.html",
+      "type": "documentación técnica primaria",
+      "fact": "Redes permissioned con participantes identificados y gobernanza; no precisan minería costosa ni necesariamente token público.",
+      "limit": "No equiparar blockchain empresarial a comprar criptoactivos.",
+      "published_or_period": null,
+      "accessed": "2026-11-24"
+    },
+    "FB27": {
+      "publisher": "OCC",
+      "title": "GENIUS Act Regulations Final Rule",
+      "date": "2026-10-21",
+      "url": "https://occ.gov/news-issuances/bulletins/2026/bulletin-2026-50.html",
+      "type": "regulación EE. UU.",
+      "fact": "OCC anuncia una regla final sobre payment stablecoins; tendrá efecto el 18 de enero de 2027.",
+      "limit": "Al 24 de noviembre de 2026 está publicada, pero todavía no es efectiva. No cubre todos los tokens ni garantiza rendimientos.",
+      "published_or_period": "2026-10-21",
+      "accessed": "2026-11-24"
+    },
+    "FB28": {
+      "publisher": "SEC",
+      "title": "SEC clarifies application of federal securities laws to crypto assets",
+      "date": "2026-03-17",
+      "url": "https://www.sec.gov/newsroom/press-releases/2026-30-sec-clarifies-application-federal-securities-laws-crypto-assets",
+      "type": "interpretación supervisor",
+      "fact": "Taxonomía de activos y transacciones; tratamiento de contratos de inversión, staking, minería y wrappers, con participación de CFTC.",
+      "limit": "Interpretación no equivale a aprobación comercial de todos los productos ni sustituye legislación.",
+      "published_or_period": "2026-03-17",
+      "accessed": "2026-11-24"
+    },
+    "FB29": {
+      "publisher": "ESMA",
+      "title": "Statement on end of MiCA transitional periods",
+      "date": "2026-04-17",
+      "url": "https://www.esma.europa.eu/sites/default/files/2026-04/ESMA75-113276571-1679_Statement_on_the_end_of_transitional_periods_under_MiCA.pdf",
+      "type": "regulación UE",
+      "fact": "El plazo máximo de transición de los CASP terminó el 1 de julio de 2026: autorización o cese y migración ordenada.",
+      "limit": "La licencia no garantiza solvencia futura ni precio del activo; comprobar entidad/servicio en registro.",
+      "published_or_period": "2026-04-17",
+      "accessed": "2026-11-24"
+    },
+    "FB30": {
+      "publisher": "Coinbase / SEC",
+      "title": "Form 10-Q quarter ended September 30, 2026",
+      "date": "2026-10-29",
+      "url": "https://www.sec.gov/Archives/edgar/data/1679788/000167978826000122/coin-20260930.htm",
+      "type": "filing emisor",
+      "fact": "COIN cotiza en Nasdaq; ingresos netos de Q3 2026 de aproximadamente US$1.200 millones, con US$590,2 millones de transacciones y US$570,2 millones de suscripciones y servicios.",
+      "limit": "No representa toda la blockchain; ingresos sensibles a actividad,tasas,competencia,custodia.",
+      "published_or_period": "2026-10-29",
+      "accessed": "2026-11-24"
+    },
+    "FB31": {
+      "publisher": "iShares",
+      "title": "iShares Bitcoin Trust ETF IBIT",
+      "date": null,
+      "url": "https://www.ishares.com/us/products/333011/ishares-bitcoin-trust-etf/",
+      "type": "ficha oficial ETP",
+      "fact": "IBIT busca reflejar el precio de Bitcoin; estructura trust/ETP no registrada bajo Investment Company Act de 1940.",
+      "limit": "No invierte en la cadena empresarial blockchain ni garantiza bajo riesgo.",
+      "published_or_period": null,
+      "accessed": "2026-11-24"
+    },
+    "FB32": {
+      "publisher": "iShares",
+      "title": "iShares Ethereum Trust ETF ETHA",
+      "date": null,
+      "url": "https://www.ishares.com/us/products/337614/ishares-bitcoin-trust-etf",
+      "type": "ficha oficial ETP",
+      "fact": "ETHA busca reflejar el precio de ether; estructura trust/ETP no registrada bajo Investment Company Act de 1940.",
+      "limit": "La URL devuelta contiene bitcoin, pero el identificador 337614 y el contenido corresponden al ETF de Ethereum. No inferir ingresos de staking.",
+      "published_or_period": null,
+      "accessed": "2026-11-24"
+    },
+    "FB33": {
+      "publisher": "IonQ / SEC",
+      "title": "Form 10-Q quarter ended September 30, 2026",
+      "date": "2026-11",
+      "url": "https://www.sec.gov/Archives/edgar/data/1824920/000119312526449829/ionq-20260930.htm",
+      "type": "filing emisor",
+      "fact": "Caja operativa consumida en nueve meses de 2026: US$570,318 millones. Oferta de acciones de octubre: US$1.990 millones de proceeds. Adquisición de Elisity completada el 3 de noviembre de 2026.",
+      "limit": "Caja consolidada incluye adquisiciones y negocios de foundry; no mercado cuántico puro ni flujo de clientes. No confundir dilución con fracaso seguro.",
+      "published_or_period": "2026-11",
+      "accessed": "2026-11-24"
+    },
+    "FB34": {
+      "publisher": "Rigetti / SEC",
+      "title": "Form 10-Q quarter ended September 30, 2026",
+      "date": "2026-11",
+      "url": "https://www.sec.gov/Archives/edgar/data/1838359/000110465926125161/rgti-20260930x10q.htm",
+      "type": "filing emisor",
+      "fact": "RGTI cotiza en Nasdaq Capital Market; advierte sobre supuestos de caja, hitos y capital futuro.",
+      "limit": "No extrapolar las proyecciones corporativas a resultados garantizados.",
+      "published_or_period": "2026-11",
+      "accessed": "2026-11-24"
+    },
+    "FB35": {
+      "publisher": "IBM",
+      "title": "Investor Relations General FAQs",
+      "date": null,
+      "url": "https://www.ibm.com/investor/help/general-faqs",
+      "type": "emisor",
+      "fact": "IBM cotiza en NYSE y NYSE Texas con el símbolo IBM.",
+      "limit": "Exposición corporativa diversificada, no participación económica exclusiva en cuántica.",
+      "published_or_period": null,
+      "accessed": "2026-11-24"
+    },
+    "FB36": {
+      "publisher": "Defiance ETFs",
+      "title": "QTUM Defiance Quantum ETF",
+      "date": null,
+      "url": "https://www.defianceetfs.com/qtum/",
+      "type": "ficha oficial ETF",
+      "fact": "QTUM cotiza en Nasdaq; sigue un índice de cuántica y machine learning que también incluye semiconductores y big data.",
+      "limit": "No es un ETF puro de hardware cuántico; la cartera cambia. No usar rentabilidad como evidencia técnica.",
+      "published_or_period": null,
+      "accessed": "2026-11-24"
+    },
+    "FB37": {
+      "publisher": "NIST",
+      "title": "A fault-tolerant neutral-atom architecture for universal quantum computation",
+      "date": "2025-11-10",
+      "url": "https://www.nist.gov/publications/fault-tolerant-neutral-atom-architecture-universal-quantum-computation",
+      "type": "investigación primaria",
+      "fact": "Hasta 448 átomos neutros en un experimento; corrección de errores con factor 2,14 ± 0,13 bajo umbral en un circuito específico.",
+      "limit": "No son 448 qubits lógicos comerciales ni una ventaja económica universal.",
+      "published_or_period": "2025-11-10",
+      "accessed": "2026-11-24"
+    },
+    "FB38": {
+      "publisher": "NIST",
+      "title": "Post-Quantum Cryptography project",
+      "date": null,
+      "url": "https://csrc.nist.gov/Projects/post-quantum-cryptography",
+      "type": "estándares EE. UU.",
+      "fact": "FIPS 203, 204 y 205 publicados en 2024; migración a algoritmos resistentes. Las computadoras criptanalíticamente relevantes siguen siendo futuras.",
+      "limit": "No predice fecha exacta de ruptura. La seguridad poscuántica es adopción de software, distinta del hardware cuántico.",
+      "published_or_period": null,
+      "accessed": "2026-11-24"
+    },
+    "FB39": {
+      "publisher": "Departamento de Energía EE. UU.",
+      "title": "DOE launches competition to accelerate development of fault-tolerant quantum computers",
+      "date": "2026-09-17",
+      "url": "https://www.energy.gov/science/articles/doe-launches-competition-accelerate-development-worlds-first-fault-tolerant",
+      "type": "programa público EE. UU.",
+      "fact": "Hasta US$215 millones previstos; US$2,5 millones identificados en FY2026 y el resto condicionado.",
+      "limit": "Referencia del paquete original, verificada previamente por root. No son US$215 millones desembolsados.",
+      "published_or_period": "2026-09-17",
+      "accessed": "2026-11-24"
+    },
+    "FB40": {
+      "publisher": "Quantinuum / SEC",
+      "title": "Form 10-Q quarter ended September 30, 2026",
+      "date": "2026-11",
+      "url": "https://www.sec.gov/Archives/edgar/data/2110105/000162828026072454/qnt-20260930.htm",
+      "type": "filing emisor",
+      "fact": "Quantinuum cotiza como QNT en Nasdaq Global Market desde su oferta inicial de junio de 2026.",
+      "limit": "No presentarla como empresa privada por referencias históricas; la estructura de capital requiere distinguir clases.",
+      "published_or_period": "2026-11",
+      "accessed": "2026-11-24"
+    },
+    "CAP_BH_Q2": {
+      "title": "Berkshire Hathaway 13F information table Q2 2026",
+      "url": "https://www.sec.gov/Archives/edgar/data/1067983/000119312526352200/xslForm13F_X02/56757.xml",
+      "published_at": "2026-08-14",
+      "period": "2026-06-30",
+      "note": "SEC original. Yo agrupo las filas por CUSIP y tipo de posición, sin sumar de nuevo las columnas de voto.",
+      "accessed_at": "2026-11-24",
+      "cutoff_status": "Disponible al corte del 24 de noviembre de 2026; no se utilizan observaciones posteriores.",
+      "published_or_period": "2026-08-14",
+      "accessed": "2026-11-24"
+    },
+    "CAP_BH_Q3": {
+      "title": "Berkshire Hathaway 13F information table Q3 2026",
+      "url": "https://www.sec.gov/Archives/edgar/data/1067983/000119312526463399/xslForm13F_X02/60471.xml",
+      "published_at": "2026-11-16",
+      "period": "2026-09-30",
+      "note": "SEC original. Yo agrupo las filas por CUSIP y tipo de posición, sin sumar de nuevo las columnas de voto.",
+      "accessed_at": "2026-11-24",
+      "cutoff_status": "Disponible al corte del 24 de noviembre de 2026; no se utilizan observaciones posteriores.",
+      "published_or_period": "2026-11-16",
+      "accessed": "2026-11-24"
+    },
+    "CAP_PS_Q2": {
+      "title": "Pershing Square Inc 13F information table Q2 2026",
+      "url": "https://www.sec.gov/Archives/edgar/data/2026053/000117266126003790/xslForm13F_X02/infotable.xml",
+      "published_at": "2026-08-14",
+      "period": "2026-06-30",
+      "note": "SEC original; mismo CIK 2026053 que Q3",
+      "accessed_at": "2026-11-24",
+      "cutoff_status": "Disponible al corte del 24 de noviembre de 2026; no se utilizan observaciones posteriores.",
+      "published_or_period": "2026-08-14",
+      "accessed": "2026-11-24"
+    },
+    "CAP_PS_Q3": {
+      "title": "Pershing Square Inc 13F information table Q3 2026",
+      "url": "https://www.sec.gov/Archives/edgar/data/2026053/000117266126005427/xslForm13F_X02/infotable.xml",
+      "published_at": "2026-11-16",
+      "period": "2026-09-30",
+      "note": "SEC original; mismo CIK 2026053 que Q2",
+      "accessed_at": "2026-11-24",
+      "cutoff_status": "Disponible al corte del 24 de noviembre de 2026; no se utilizan observaciones posteriores.",
+      "published_or_period": "2026-11-16",
+      "accessed": "2026-11-24"
+    },
+    "CAP_PS_AMEND": {
+      "title": "Pershing Square 13F HR A Q2 2026",
+      "url": "https://www.sec.gov/Archives/edgar/data/2026053/000117266126005426/xslForm13F_X02/primary_doc.xml",
+      "published_at": "2026-11-16",
+      "period": "2026-06-30",
+      "note": "La enmienda agrega una sola fila correspondiente a Pershing Square Inc.; no reexpresa ni sustituye las filas originales del trimestre. La tabla adjunta fue comprobada por separado.",
+      "accessed_at": "2026-11-24",
+      "cutoff_status": "Disponible al corte del 24 de noviembre de 2026; no se utilizan observaciones posteriores.",
+      "published_or_period": "2026-11-16",
+      "accessed": "2026-11-24"
+    },
+    "ORO_WGC_Q3": {
+      "title": "World Gold Council Central Banks Q3 2026",
+      "url": "https://www.gold.org/goldhub/research/gold-demand-trends/gold-demand-trends-q3-2026/central-banks",
+      "published_at": "2026-11-03",
+      "period": "2026-09-30",
+      "note": "Investigación sectorial; datos por país recopilados de IMF y bancos centrales; total global incluye estimaciones de compras no declaradas.",
+      "accessed_at": "2026-11-24",
+      "cutoff_status": "Disponible al corte del 24 de noviembre de 2026; no se utilizan observaciones posteriores.",
+      "published_or_period": "2026-11-03",
+      "accessed": "2026-11-24"
+    },
+    "ORO_WGC_2025": {
+      "title": "World Gold Council Central Banks Full Year 2025",
+      "url": "https://www.gold.org/goldhub/research/gold-demand-trends/gold-demand-trends-full-year-2025/central-banks",
+      "published_at": "2026-01-29",
+      "period": "2025-12-31",
+      "note": "Datos revisables. Esta edición estima 1.092,4 t para 2024 y 863,3 t para 2025. Yo conservaría ambas cifras de la misma edición para evitar mezclar revisiones.",
+      "accessed_at": "2026-11-24",
+      "cutoff_status": "Disponible al corte del 24 de noviembre de 2026; no se utilizan observaciones posteriores.",
+      "published_or_period": "2026-01-29",
+      "accessed": "2026-11-24"
+    },
+    "ORO_SAFE": {
+      "title": "SAFE China Official Reserve Assets 2026",
+      "url": "https://www.safe.gov.cn/safe/2026/0206/27116.html",
+      "published_at": "2026-11-07",
+      "period": "2026-10-31",
+      "note": "Fuente oficial de China. Yo uso la cantidad física, expresada en diez mil onzas, y la separo del valor en dólares y de la presentación en DEG.",
+      "accessed_at": "2026-11-24",
+      "cutoff_status": "Disponible al corte del 24 de noviembre de 2026; no se utilizan observaciones posteriores.",
+      "published_or_period": "2026-11-07",
+      "accessed": "2026-11-24"
+    },
+    "ORO_US": {
+      "title": "US Treasury FY 2026 Agency Financial Report",
+      "url": "https://home.treasury.gov/system/files/266/Treasury-FY-2026-AFR.pdf",
+      "published_at": "2026-11-16",
+      "period": "2026-09-30",
+      "note": "Informe emitido el 16 de noviembre de 2026. La tabla de oro declara 261.498.927 onzas troy finas tanto en 2025 como en 2026; el valor contable legal difiere del valor de mercado.",
+      "accessed_at": "2026-11-24",
+      "cutoff_status": "Disponible al corte del 24 de noviembre de 2026; no se utilizan observaciones posteriores.",
+      "published_or_period": "2026-11-16",
+      "accessed": "2026-11-24"
+    },
+    "ORO_US_DATA": {
+      "title": "US Treasury Owned Gold dataset",
+      "url": "https://fiscaldata.treasury.gov/datasets/status-report-government-gold-reserve/",
+      "published_at": "2026-11-03",
+      "period": "2026-10-31",
+      "note": "Datos oficiales por ubicación. Una onza troy equivale a 31,1034768 g. La valoración contable legal es de 42,222 USD por onza; yo la separaría del precio de mercado.",
+      "accessed_at": "2026-11-24",
+      "cutoff_status": "Disponible al corte del 24 de noviembre de 2026; no se utilizan observaciones posteriores.",
+      "published_or_period": "2026-11-03",
+      "accessed": "2026-11-24"
+    },
+    "ORO_ECB": {
+      "title": "ECB The international role of the euro June 2026",
+      "url": "https://www.ecb.europa.eu/press/other-publications/ire/html/ecb.ire202606.en.html",
+      "published_at": "2026-06-02",
+      "period": "2025 y primeros meses 2026",
+      "note": "El BCE analiza volatilidad, costos de almacenamiento y revalorización de reservas. Yo separaría compras, ventas y cambios de valoración.",
+      "accessed_at": "2026-11-24",
+      "cutoff_status": "Disponible al corte del 24 de noviembre de 2026; no se utilizan observaciones posteriores.",
+      "published_or_period": "2026-06-02",
+      "accessed": "2026-11-24"
+    },
+    "ORO_RISK": {
+      "title": "WGC Gold Mid Year Outlook 2026",
+      "url": "https://www.gold.org/goldhub/research/gold-mid-year-outlook-2026",
+      "published_at": "2026-07-01",
+      "period": "2026-06-26",
+      "note": "Son escenarios hipotéticos. Yo los usaría para entender la sensibilidad a los tipos de interés, el dólar y la demanda de refugio, sin convertirlos en un pronóstico firme.",
+      "accessed_at": "2026-11-24",
+      "cutoff_status": "Disponible al corte del 24 de noviembre de 2026; no se utilizan observaciones posteriores.",
+      "published_or_period": "2026-07-01",
+      "accessed": "2026-11-24"
+    },
+    "PLATA": {
+      "title": "Silver Institute November 2026 update",
+      "url": "https://silverinstitute.org/silver-market-set-for-sixth-consecutive-annual-deficit-in-2026/",
+      "published_at": "2026-11-12",
+      "period": "2026 estimación",
+      "note": "Metals Focus; cifras de 2026 son previsiones. Sustitución/ahorro en fotovoltaica limita demanda aunque aumenten otros usos.",
+      "accessed_at": "2026-11-24",
+      "cutoff_status": "Disponible al corte del 24 de noviembre de 2026; no se utilizan observaciones posteriores.",
+      "published_or_period": "2026-11-12",
+      "accessed": "2026-11-24"
+    },
+    "PGM": {
+      "title": "USGS Mineral Commodity Summaries 2026",
+      "url": "https://pubs.usgs.gov/periodicals/mcs2026/mcs2026.pdf",
+      "published_at": "2026-02-06",
+      "period": "2025 estimación",
+      "note": "El capítulo sobre metales del grupo del platino identifica los catalizadores de automóviles como principal uso doméstico de EE. UU. y documenta dependencia de importaciones.",
+      "accessed_at": "2026-11-24",
+      "cutoff_status": "Disponible al corte del 24 de noviembre de 2026; no se utilizan observaciones posteriores.",
+      "published_or_period": "2026-02-06",
+      "accessed": "2026-11-24"
+    },
+    "V_GLD": {
+      "title": "State Street SPDR Gold Shares GLD",
+      "url": "https://www.ssga.com/us/en/individual/etfs/spdr-gold-shares-gld",
+      "published_at": null,
+      "period": "2026-11-24",
+      "note": "GLD, NYSE Arca: trust con oro físico; gastos del 0,40 %. Vende oro para cubrir gastos; el instrumento no genera ingresos corrientes.",
+      "accessed_at": "2026-11-24",
+      "publication_note": "Página dinámica consultada al corte; no se atribuye una fecha de publicación no visible.",
+      "cutoff_status": "Disponible al corte del 24 de noviembre de 2026; no se utilizan observaciones posteriores.",
+      "published_or_period": null,
+      "accessed": "2026-11-24"
+    },
+    "V_IAU": {
+      "title": "iShares Gold Trust IAU",
+      "url": "https://www.ishares.com/us/products/239561/ishares-gold-trust-iau",
+      "published_at": null,
+      "period": "2026-11-23",
+      "note": "IAU NYSE Arca; comisión del patrocinador del 0,25 %; trust, no fondo registrado bajo la Investment Company Act de 1940",
+      "accessed_at": "2026-11-24",
+      "publication_note": "Página dinámica consultada al corte; no se atribuye una fecha de publicación no visible.",
+      "cutoff_status": "Disponible al corte del 24 de noviembre de 2026; no se utilizan observaciones posteriores.",
+      "published_or_period": null,
+      "accessed": "2026-11-24"
+    },
+    "V_SLV": {
+      "title": "iShares Silver Trust SLV",
+      "url": "https://www.ishares.com/us/products/239855/ishares-silver-trust-slv",
+      "published_at": null,
+      "period": "2026-11-23",
+      "note": "SLV NYSE Arca; comisión del patrocinador del 0,50 %; plata, no oro",
+      "accessed_at": "2026-11-24",
+      "publication_note": "Página dinámica consultada al corte; no se atribuye una fecha de publicación no visible.",
+      "cutoff_status": "Disponible al corte del 24 de noviembre de 2026; no se utilizan observaciones posteriores.",
+      "published_or_period": null,
+      "accessed": "2026-11-24"
+    },
+    "V_GDX": {
+      "title": "VanEck Gold Miners ETF GDX US",
+      "url": "https://www.vaneck.com/us/en/investments/gold-miners-etf-gdx/",
+      "published_at": null,
+      "period": "2026-11-23",
+      "note": "Versión estadounidense del ETF. La cartera publicada contiene NEM, AEM, B, FNV y WPM. Yo distinguiría esta versión de vehículos UCITS con nombres o tickers parecidos.",
+      "accessed_at": "2026-11-24",
+      "publication_note": "Página dinámica consultada al corte; no se atribuye una fecha de publicación no visible.",
+      "cutoff_status": "Disponible al corte del 24 de noviembre de 2026; no se utilizan observaciones posteriores.",
+      "published_or_period": null,
+      "accessed": "2026-11-24"
+    },
+    "V_WPM": {
+      "title": "Wheaton shareholder information",
+      "url": "https://wheatonpm.com/investor-centre/shareholder-information/default.aspx",
+      "published_at": null,
+      "period": "2026-11-23",
+      "note": "El emisor identifica WPM como símbolo de negociación en NYSE, TSX y LSE.",
+      "accessed_at": "2026-11-24",
+      "publication_note": "Página dinámica consultada al corte; no se atribuye una fecha de publicación no visible.",
+      "cutoff_status": "Disponible al corte del 24 de noviembre de 2026; no se utilizan observaciones posteriores.",
+      "published_or_period": null,
+      "accessed": "2026-11-24"
+    },
+    "CAP_ARK_Q2": {
+      "title": "ARK Investment Management 13F Q2 2026",
+      "url": "https://www.sec.gov/Archives/edgar/data/1697748/000110465926096910/xslForm13F_X02/infotable.xml",
+      "published_at": "2026-08-14",
+      "period": "2026-06-30",
+      "note": "SEC original CIK 1697748; posiciones consolidadas del gestor, no un ETF aislado.",
+      "accessed_at": "2026-11-24",
+      "cutoff_status": "Disponible al corte del 24 de noviembre de 2026; no se utilizan observaciones posteriores.",
+      "published_or_period": "2026-08-14",
+      "accessed": "2026-11-24"
+    },
+    "CAP_ARK_Q3": {
+      "title": "ARK Investment Management 13F Q3 2026",
+      "url": "https://www.sec.gov/Archives/edgar/data/1697748/000110465926126785/xslForm13F_X02/infotable.xml",
+      "published_at": "2026-11-13",
+      "period": "2026-09-30",
+      "note": "SEC original CIK 1697748; posiciones consolidadas del gestor, no un ETF aislado.",
+      "accessed_at": "2026-11-24",
+      "cutoff_status": "Disponible al corte del 24 de noviembre de 2026; no se utilizan observaciones posteriores.",
+      "published_or_period": "2026-11-13",
+      "accessed": "2026-11-24"
+    },
+    "ORO_CNB": {
+      "title": "Czech National Bank The CNBs gold",
+      "url": "https://www.cnb.cz/en/financial-markets/the-cnbs-gold/",
+      "published_at": null,
+      "period": "2026-10-31",
+      "note": "Fuente oficial: 90 t al cierre de octubre de 2026, unas 12 t al cierre de 2022 y objetivo de 100 t para 2028. Los depósitos y préstamos de oro pueden generar ingresos, con riesgo de contraparte.",
+      "accessed_at": "2026-11-24",
+      "publication_note": "Página dinámica consultada al corte; no se atribuye una fecha de publicación no visible.",
+      "cutoff_status": "Disponible al corte del 24 de noviembre de 2026; no se utilizan observaciones posteriores.",
+      "published_or_period": null,
+      "accessed": "2026-11-24"
+    },
+    "ORO_EU": {
+      "title": "CNB Due diligence gold supply chain EU2017/821",
+      "url": "https://www.cnb.cz/en/financial-markets/the-cnbs-gold/due-diligence-in-the-gold-supply-chain-in-accordance-with-regulation-eu-2017-821-of-the-european-parliament-and-of-the-council/",
+      "published_at": null,
+      "period": "norma vigente referenciada por CNB",
+      "note": "Fuente aplicadora oficial, obligaciones de origen responsable y cadena de suministro.",
+      "accessed_at": "2026-11-24",
+      "publication_note": "Página dinámica consultada al corte; no se atribuye una fecha de publicación no visible.",
+      "cutoff_status": "Disponible al corte del 24 de noviembre de 2026; no se utilizan observaciones posteriores.",
+      "published_or_period": null,
+      "accessed": "2026-11-24"
+    },
+    "ORO_OFAC": {
+      "title": "OFAC FAQ1070 imports of Russian gold",
+      "url": "https://ofac.treasury.gov/faqs/1070",
+      "published_at": "2023-12-22",
+      "period": "vigencia comprobada en listado de OFAC de 2026",
+      "note": "La regla limita las importaciones a EE. UU. de oro de origen ruso. Yo tendría en cuenta las excepciones, las licencias y el caso del oro situado fuera de Rusia antes del 28 de junio de 2022.",
+      "accessed_at": "2026-11-24",
+      "cutoff_status": "Disponible al corte del 24 de noviembre de 2026; no se utilizan observaciones posteriores.",
+      "published_or_period": "2023-12-22",
+      "accessed": "2026-11-24"
+    },
+    "ORO_OFAC_CURRENT": {
+      "title": "OFAC Russia sanctions program current list",
+      "url": "https://ofac.treasury.gov/sanctions-programs-and-country-information/russian-harmful-foreign-activities-sanctions",
+      "published_at": null,
+      "period": "2026",
+      "note": "Incluye determinación de oro en listado actual.",
+      "accessed_at": "2026-11-24",
+      "publication_note": "Página dinámica consultada al corte; no se atribuye una fecha de publicación no visible.",
+      "cutoff_status": "Disponible al corte del 24 de noviembre de 2026; no se utilizan observaciones posteriores.",
+      "published_or_period": null,
+      "accessed": "2026-11-24"
+    },
+    "V_WPM_MODEL": {
+      "title": "Wheaton Our Business Model",
+      "url": "https://www.wheatonpm.com/about/Our-Business-Model/default.aspx",
+      "published_at": null,
+      "period": "actual",
+      "note": "Descripción comercial del emisor: financiación inicial y pagos por entregas a cambio de una parte de la producción. Yo separaría el modelo contractual de cualquier promesa de rentabilidad.",
+      "accessed_at": "2026-11-24",
+      "publication_note": "Página dinámica consultada al corte; no se atribuye una fecha de publicación no visible.",
+      "cutoff_status": "Disponible al corte del 24 de noviembre de 2026; no se utilizan observaciones posteriores.",
+      "published_or_period": null,
+      "accessed": "2026-11-24"
+    },
+    "ORO_FNV_RISK": {
+      "title": "Franco Nevada Annual Information Form 2025",
+      "url": "https://www.sec.gov/Archives/edgar/data/1456346/000110465926032133/fnv-20251231xex99d1.htm",
+      "published_at": "2026-03",
+      "period": "2025 y eventos subsiguientes",
+      "note": "SEC original; secciones riesgo operativo de terceros, concentración, contraparte y derechos de stream.",
+      "accessed_at": "2026-11-24",
+      "cutoff_status": "Disponible al corte del 24 de noviembre de 2026; no se utilizan observaciones posteriores.",
+      "published_or_period": "2026-03",
+      "accessed": "2026-11-24"
+    },
+    "ORO_FNV_Q3": {
+      "title": "Franco Nevada Q3 2026 company release",
+      "url": "https://www.prnewswire.com/news-releases/franco-nevada-reports-q3-2026-results-302936997.html",
+      "published_at": "2026-11-11",
+      "period": "2026-09-30",
+      "note": "Comunicado del emisor: se reanudaron entregas procedentes de mineral almacenado en Cobre Panamá. Yo distinguiría esas entregas de una reanudación completa de la extracción; las guías siguen siendo proyecciones.",
+      "accessed_at": "2026-11-24",
+      "cutoff_status": "Disponible al corte del 24 de noviembre de 2026; no se utilizan observaciones posteriores.",
+      "published_or_period": "2026-11-11",
+      "accessed": "2026-11-24"
+    },
+    "ORO_DEMAND": {
+      "title": "WGC Gold Demand Trends Q3 2026",
+      "url": "https://www.gold.org/goldhub/research/gold-demand-trends/gold-demand-trends-q3-2026",
+      "published_at": "2026-11-03",
+      "period": "2026-09-30",
+      "note": "Tabla demanda por sector. Demanda de ETF: +211,2 t en el tercer trimestre y −47,3 t en el segundo. Consumo de joyería: 312,9 t en el tercer trimestre frente a 376,4 t un año antes.",
+      "accessed_at": "2026-11-24",
+      "cutoff_status": "Disponible al corte del 24 de noviembre de 2026; no se utilizan observaciones posteriores.",
+      "published_or_period": "2026-11-03",
+      "accessed": "2026-11-24"
+    },
+    "QNT_10Q": {
+      "title": "Quantinuum 10Q Q3 2026",
+      "url": "https://www.sec.gov/Archives/edgar/data/2110105/000162828026072454/qnt-20260930.htm",
+      "published_at": null,
+      "period": "2026-09-30",
+      "note": "Original abierto y comprobado. La portada registra QNT en Nasdaq; el informe declara el cierre de la oferta pública inicial el 5 de junio de 2026. Firmado el 9 de noviembre de 2026; no he confirmado la fecha exacta de aceptación EDGAR.",
+      "document_signed_at": "2026-11-09",
+      "accessed_at": "2026-11-24",
+      "cutoff_status": "Disponible al corte del 24 de noviembre de 2026; no se utilizan observaciones posteriores.",
+      "published_or_period": null,
+      "accessed": "2026-11-24"
+    },
+    "CAP_SNB_Q2": {
+      "title": "Swiss National Bank · Q2 2026 13F information table",
+      "url": "https://www.sec.gov/Archives/edgar/data/1582202/000158220226000007/xslForm13F_X02/InfoTable_Q22026.xml",
+      "published_at": "2026-08-11",
+      "period": "2026-06-30",
+      "note": "SEC original. CIK 1582202; acciones largas declaradas, sin opciones en las filas utilizadas.",
+      "accessed_at": "2026-11-24",
+      "cutoff_status": "Disponible al corte del 24 de noviembre de 2026; no se utilizan observaciones posteriores.",
+      "published_or_period": "2026-08-11",
+      "accessed": "2026-11-24"
+    },
+    "CAP_SNB_Q3": {
+      "title": "Swiss National Bank · Q3 2026 13F information table",
+      "url": "https://www.sec.gov/Archives/edgar/data/1582202/000158220226000008/xslForm13F_X02/InfoTable_Q32026.xml",
+      "published_at": "2026-11-12",
+      "period": "2026-09-30",
+      "note": "SEC original. CIK 1582202; acciones largas declaradas, sin opciones en las filas utilizadas.",
+      "accessed_at": "2026-11-24",
+      "cutoff_status": "Disponible al corte del 24 de noviembre de 2026; no se utilizan observaciones posteriores.",
+      "published_or_period": "2026-11-12",
+      "accessed": "2026-11-24"
+    },
+    "CAP_SNB_MANDATE": {
+      "title": "Swiss National Bank · Management of foreign exchange reserves",
+      "url": "https://www.snb.ch/en/the-snb/mandates-goals/investment-assets/reserves-bonds",
+      "published_at": null,
+      "period": "2026-09-30",
+      "note": "El banco central declara gestión pasiva de acciones mediante índices amplios. Sus cambios de posición no prueban una convicción temática ni una recomendación.",
+      "accessed_at": "2026-11-24",
+      "cutoff_status": "Disponible al corte del 24 de noviembre de 2026; no se utilizan observaciones posteriores.",
+      "publication_note": "Página dinámica consultada el 24 de noviembre de 2026, con datos de cartera al 30 de septiembre de 2026.",
+      "published_or_period": null,
+      "accessed": "2026-11-24"
+    },
+    "CAP_PS_AMEND_TABLE": {
+      "title": "Pershing Square · Q2 2026 13F amendment table",
+      "url": "https://www.sec.gov/Archives/edgar/data/2026053/000117266126005426/xslForm13F_X02/infotable.xml",
+      "published_at": "2026-11-16",
+      "period": "2026-06-30",
+      "note": "La única fila agregada corresponde a Pershing Square Inc., CUSIP 71531U102. No incorpora Alcon ni ICE.",
+      "accessed_at": "2026-11-24",
+      "cutoff_status": "Disponible al corte del 24 de noviembre de 2026; no se utilizan observaciones posteriores.",
+      "published_or_period": "2026-11-16",
+      "accessed": "2026-11-24"
+    },
+    "CAP_CRWD_SPLIT": {
+      "title": "CrowdStrike · Stock split note in the October 2026 10-Q",
+      "url": "https://www.sec.gov/Archives/edgar/data/1535527/000153552726000038/crwd-20261031.htm",
+      "published_at": "2026-11-23",
+      "period": "2026-10-31",
+      "note": "Desdoblamiento de cuatro acciones por una. Fecha de registro: 25 de junio; distribución: después del cierre del 1 de julio de 2026. La comparación ARK queda excluida porque la base de unidades del corte de junio no está resuelta.",
+      "accessed_at": "2026-11-24",
+      "cutoff_status": "Disponible al corte del 24 de noviembre de 2026; no se utilizan observaciones posteriores.",
+      "published_or_period": "2026-11-23",
+      "accessed": "2026-11-24"
+    },
+    "CAP_SPACE_MERGER": {
+      "title": "Iridium · Q3 2026 results and status of acquisition by Rocket Lab",
+      "url": "https://www.sec.gov/Archives/edgar/data/1418819/000141881926000053/pressreleaseq32026.htm",
+      "published_at": "2026-10-20",
+      "period": "2026-09-30",
+      "accessed_at": "2026-11-24",
+      "cutoff_status": "Disponible antes del corte del 24 de noviembre de 2026.",
+      "note": "Acuerdo del 28 de junio, aprobado por accionistas el 24 de septiembre. El emisor esperaba cerrar a mediados de 2027, sujeto a permisos y condiciones. Yo no lo presentaría como adquisición ya completada.",
+      "published_or_period": "2026-10-20",
+      "accessed": "2026-11-24"
+    },
+    "VA01": {
+      "title": "ABB Share listing data",
+      "url": "https://www.abb.com/global/en/company/investors/equity-info/share-listing",
+      "date": "Verified 2026-11-24",
+      "type": "Official issuer or market source"
+    },
+    "VA02": {
+      "title": "ABB Update on divestment of ABB Robotics",
+      "url": "https://www.abb.com/global/en/news/140154/update-on-divestment-of-abb-robotics",
+      "date": "2026-11-05",
+      "type": "Official issuer or market source"
+    },
+    "VA03": {
+      "title": "FANUC Status of Share Buyback",
+      "url": "https://www.fanuc.co.jp/en/ir/announce_other/pdf/2026/notice20260805_e.pdf",
+      "date": "2026-08-05",
+      "type": "Official issuer or market source"
+    },
+    "VA04": {
+      "title": "FANUC Company profile",
+      "url": "https://www.fanuc.co.jp/en/profile/",
+      "date": "Verified 2026-11-24",
+      "type": "Official issuer or market source"
+    },
+    "VA05": {
+      "title": "National Grid London Stock Exchange listing",
+      "url": "https://www.londonstockexchange.com/en/quote/equity/NG~/national-grid-plc",
+      "date": "Verified 2026-11-24",
+      "type": "Official issuer or market source"
+    },
+    "VA06": {
+      "title": "National Grid ADR frequently asked questions",
+      "url": "https://www.nationalgrid.com/investors/shareholder-information/faqs",
+      "date": "Verified 2026-11-24",
+      "type": "Official issuer or market source"
+    },
+    "VA07": {
+      "title": "Iberdrola Share price and stock market information",
+      "url": "https://www.iberdrola.com/shareholders-investors/share/price",
+      "date": "Verified 2026-11-24",
+      "type": "Official issuer or market source"
+    },
+    "VA08": {
+      "title": "Iberdrola Nine months 2026 results",
+      "url": "https://www.iberdrola.com/press-room/news/detail/iberdrola-9m-2026-net-profit-up-10-to-5-8-billion-networks-growth-all-geographies",
+      "date": "2026-10-21",
+      "type": "Official issuer or market source"
+    },
+    "VA09": {
+      "title": "Stryker Third quarter 2026 results",
+      "url": "https://investors.stryker.com/press-releases/news-details/2026/Stryker-reports-third-quarter-2026-operating-results/default.aspx",
+      "date": "2026-10-29",
+      "type": "Official issuer or market source"
+    },
+    "VA10": {
+      "title": "Thales Half year liquidity contract statement",
+      "url": "https://live.euronext.com/en/products/equities/company-news/2026-07-06-thales-half-year-liquidity-contract-statement-30-june",
+      "date": "2026-07-06",
+      "type": "Official issuer or market source"
+    },
+    "VA11": {
+      "title": "Thales Euronext Paris market information",
+      "url": "https://live.euronext.com/fr/product/equities/FR0000121329-XPAR/market-information",
+      "date": "Verified 2026-11-24",
+      "type": "Official issuer or market source"
+    },
+    "VA12": {
+      "title": "About Thales",
+      "url": "https://careers.thalesgroup.com/global/en/about-thales",
+      "date": "Verified 2026-11-24",
+      "type": "Official issuer or market source"
+    },
+    "VA13": {
+      "title": "Rheinmetall Basic share information",
+      "url": "https://www.rheinmetall.com/en/investor-relations/share/basic-information",
+      "date": "Verified 2026-11-24",
+      "type": "Official issuer or market source"
+    },
+    "VA14": {
+      "title": "Rheinmetall Third quarter 2026 report",
+      "url": "https://www.rheinmetall.com/en/media/news-watch/news/2026/11/2026-11-05-rheinmetall-news-quarterly-statement-q3",
+      "date": "2026-11-05",
+      "type": "Official issuer or market source"
+    },
+    "VA15": {
+      "title": "Inditex Finance and ITX share",
+      "url": "https://www.inditex.com/itxcomweb/gp/en/investors/finance",
+      "date": "Verified 2026-11-24",
+      "type": "Official issuer or market source"
+    },
+    "VA16": {
+      "title": "Inditex Shareholder structure",
+      "url": "https://www.inditex.com/itxcomweb/gb/en/investors/corporate-governance/shareholder-structure",
+      "date": "Verified 2026-11-24",
+      "type": "Official issuer or market source"
+    },
+    "VA17": {
+      "title": "LVMH Investor frequently asked questions",
+      "url": "https://www.lvmh.com/en/investors/frequently-asked-questions",
+      "date": "Verified 2026-11-24",
+      "type": "Official issuer or market source"
+    },
+    "VA18": {
+      "title": "LVMH Third quarter 2026 revenue",
+      "url": "https://www.lvmh.com/en/publications/continued-growth-in-the-third-quarter-of-2026",
+      "date": "2026-10-12",
+      "type": "Official issuer or market source"
+    },
+    "VA19": {
+      "title": "MercadoLibre Third quarter 2026 results",
+      "url": "https://news.mercadolibre.com/en/financial-results-3erd-quarter-2026",
+      "date": "2026-11-04",
+      "type": "Official issuer or market source"
+    },
+    "VA20": {
+      "title": "Ecolab Third quarter 2026 results",
+      "url": "https://investor.ecolab.com/news/news-details/2026/Ecolab-Delivers-Strong-and-Accelerating-Operating-Performance-Reported-Diluted-EPS-1-95-Adjusted-Diluted-EPS-2-18-5-2026-Adjusted-Diluted-EPS-Outlook-8-10---8-20-8---9/default.aspx?easylinkbypass=true",
+      "date": "2026-10-27",
+      "type": "Official issuer or market source"
+    },
+    "VA21": {
+      "title": "Pentair Investor frequently asked questions",
+      "url": "https://investors.pentair.com/ir-resources/investor-faqs",
+      "date": "Verified 2026-11-24",
+      "type": "Official issuer or market source"
+    },
+    "VA22": {
+      "title": "Pentair Third quarter 2026 results",
+      "url": "https://investors.pentair.com/news-releases/news-release-details/pentair-reports-third-quarter-2026-results",
+      "date": "2026-10-27",
+      "type": "Official issuer or market source"
+    },
+    "VA23": {
+      "title": "Airbus Share price and information",
+      "url": "https://www.airbus.com/en/investors/share-price-and-information",
+      "date": "Verified 2026-11-24",
+      "type": "Official issuer or market source"
+    },
+    "VA24": {
+      "title": "Airbus Nine month 2026 results",
+      "url": "https://www.airbus.com/en/newsroom/press-releases/2026-10-airbus-reports-nine-month-9m-2026-results",
+      "date": "2026-10-28",
+      "type": "Official issuer or market source"
+    },
+    "VA25": {
+      "title": "Albemarle Third quarter 2026 results",
+      "url": "https://investors.albemarle.com/news-and-events/news/news-details/2026/Albemarle-Reports-Third-Quarter-2026-Results/default.aspx",
+      "date": "2026-11-04",
+      "type": "Official issuer or market source"
+    },
+    "VA26": {
+      "title": "Pearson London Stock Exchange listing",
+      "url": "https://www.londonstockexchange.com/en/quote/equity/PSON/company-page",
+      "date": "Verified 2026-11-24",
+      "type": "Official issuer or market source"
+    },
+    "VA27": {
+      "title": "Pearson Managing your ADR holding",
+      "url": "https://plc.pearson.com/en-GB/investors/shareholders/us-listing-adrs",
+      "date": "Verified 2026-11-24",
+      "type": "Official issuer or market source"
+    },
+    "VA28": {
+      "title": "VINCI Stock data",
+      "url": "https://www.vinci.com/en/finance/share/stock-data",
+      "date": "Verified 2026-11-24",
+      "type": "Official issuer or market source"
+    },
+    "VA29": {
+      "title": "VINCI Revenue and order intake September 2026",
+      "url": "https://www.vinci.com/en/newsroom/press-releases/further-growth-revenue-and-order-intake",
+      "date": "2026-10-22",
+      "type": "Official issuer or market source"
+    },
+    "VA30": {
+      "title": "Ferrovial Notice of effectiveness of Amsterdam delisting SEC Exhibit 99.1",
+      "url": "https://www.sec.gov/Archives/edgar/data/1468522/000146852226000062/delistingeffectiveness.htm",
+      "date": "2026-09-11",
+      "type": "Official issuer or market source"
+    },
+    "VA31": {
+      "title": "ABB NYSE delisting information",
+      "url": "https://www.abb.com/global/en/company/investors/equity-info/share-listing/nyse-delisting",
+      "date": "2023-05-23; verified 2026-11-24",
+      "type": "Official issuer source"
+    },
+    "VA32": {
+      "title": "Pearson Annual Report2025 ADR information",
+      "url": "https://plc.pearson.com/sites/pearson-corp/files/annual-reports/2025/pearson-annual-report-2025.pdf",
+      "date": "Financial year 2025; published in 2026",
+      "type": "Official issuer source"
+    },
+    "FB_GALLUP_REPORT": {
+      "title": "Gallup and Stop Scams Alliance United States of Scams",
+      "url": "https://www.gallup.com/file/analytics/711833/Stop_Scams-Gallup-Report.pdf",
+      "published_or_period": "2026; January–February survey on experiences in 2025",
+      "accessed": "2026-11-24",
+      "note": "El 12% se refiere a percepción de IA en la estafa más costosa del hogar descrita; no a porcentaje de población ni verificación forense."
+    },
+    "FB_SEC_INTERPRETATION": {
+      "title": "SEC Application of the Federal Securities Laws to Certain Types of Crypto Assets and Certain Transactions Involving Crypto Assets",
+      "url": "https://www.sec.gov/rules-regulations/2026/03/s7-2026-09",
+      "published_or_period": "Issued March 17, 2026; effective March 23, 2026",
+      "accessed": "2026-11-24"
+    },
+    "R_IFR_INDUSTRIAL": {
+      "title": "IFR World Robotics 2026 Industrial Robots Executive Summary",
+      "url": "https://ifr.org/img/worldrobotics/Executive_Summary_WR_2026_-_Industrial_Robots.pdf",
+      "published_or_period": "September 2026; printed page 15",
+      "accessed": "2026-11-24"
+    },
+    "R_IFR_SAMPLE": {
+      "title": "IFR Market Presentation World Robotics Press Conference 2026",
+      "url": "https://ifr.org/downloads/press_docs/Market_Presentation_WR_Press_Conference_2026.pdf",
+      "published_or_period": "September 24, 2026; slide 28",
+      "accessed": "2026-11-24"
+    }
+  }
+}

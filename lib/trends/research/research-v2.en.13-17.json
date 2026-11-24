@@ -1,0 +1,1859 @@
+[
+  {
+    "id": 13,
+    "name": "Cities and infrastructure",
+    "slug": "ciudades-e-infraestructura",
+    "group": "Resources",
+    "snapshot": "I see cities and assets that need renewal. I would look for concessions, networks and maintenance with collectible revenue. The United States and Europe have different needs and permitting processes; fund holdings provide concrete evidence of exposure. Contractual exclusivity can help, but traffic, debt and cost overruns can hurt returns even when the project is necessary.",
+    "change": "I am interested in how transport, housing, water and urban services are financed and maintained. A city can need a project for years without that need immediately turning into cash for the contractor.",
+    "arguments": [
+      "Maintenance and long-term contracts can support demand and visibility.",
+      "Debt, competitive tenders and construction risk can leave little margin for shareholders."
+    ],
+    "invalidation": "If usage, tariffs or contracted payments failed to cover maintenance and the cost of capital, I would reassess the thesis. In construction, I would also check whether cost overruns can be passed on to the customer.",
+    "value": "I would look at concessions with clear rights, sufficient duration and verifiable demand. Exclusivity has conditions and an expiry date; I would distinguish the asset owner from the builder who takes on construction risk.",
+    "evidence_text": "I retain the source’s definitions of city and megacity. For an investment, I would examine payment capacity, contracts and maintenance of the specific asset.",
+    "metrics": [
+      {
+        "id": "T13_M01",
+        "label": "World population in cities, UN international definition",
+        "value": 20,
+        "unit": "%",
+        "period": "1950",
+        "kind": "observed",
+        "source": "S14",
+        "note": "",
+        "comparable_with": "",
+        "geo": "as specified by indicator"
+      },
+      {
+        "id": "T13_M02",
+        "label": "World population in cities, UN international definition",
+        "value": 45,
+        "unit": "%",
+        "period": "2025",
+        "kind": "observed",
+        "source": "S14",
+        "note": "",
+        "comparable_with": "",
+        "geo": "as specified by indicator"
+      },
+      {
+        "id": "T13_M03",
+        "label": "Number of megacities worldwide",
+        "value": 8,
+        "unit": "cities",
+        "period": "1975",
+        "kind": "observed",
+        "source": "S14",
+        "note": "",
+        "comparable_with": "",
+        "geo": "as specified by indicator"
+      },
+      {
+        "id": "T13_M04",
+        "label": "Number of megacities worldwide",
+        "value": 33,
+        "unit": "cities",
+        "period": "2025",
+        "kind": "observed",
+        "source": "S14",
+        "note": "",
+        "comparable_with": "",
+        "geo": "as specified by indicator"
+      }
+    ],
+    "geography": [
+      {
+        "region": "United States",
+        "text": "I include GAO’s work on IIJA/IRA: reviews, pending decisions and budget changes were still ongoing in 2026. Announcing, obligating and disbursing funds are different events.",
+        "sources": [
+          "ER30"
+        ]
+      },
+      {
+        "region": "EU",
+        "text": "I include TEN-T and its milestones for the core network in 2030, extended core network in 2040 and comprehensive network in 2050. These are infrastructure delivery horizons, not guaranteed revenue for a company.",
+        "sources": [
+          "ER31"
+        ]
+      }
+    ],
+    "policy": [
+      {
+        "jurisdiction": "United States",
+        "status": "IIJA and IRA programmes with implementation changes",
+        "text": "GAO documents pending decisions and changes. I would track contractual obligations and disbursements to understand which portion of spending could become cash for the supplier.",
+        "sources": [
+          "ER30"
+        ]
+      },
+      {
+        "jurisdiction": "European Union",
+        "status": "TEN-T network with phased milestones",
+        "text": "The 2030, 2040 and 2050 horizons cover different phases. I would examine the corridor, financing and contract before translating a target date into revenue.",
+        "sources": [
+          "ER31"
+        ]
+      }
+    ],
+    "chain": {
+      "nodes": [
+        {
+          "id": "n1",
+          "label": "Planning and financing"
+        },
+        {
+          "id": "n2",
+          "label": "Materials and equipment"
+        },
+        {
+          "id": "n3",
+          "label": "Engineering and construction"
+        },
+        {
+          "id": "n4",
+          "label": "Asset operation"
+        },
+        {
+          "id": "n5",
+          "label": "Maintenance and renewal"
+        }
+      ],
+      "edges": [
+        {
+          "source": "n1",
+          "target": "n2"
+        },
+        {
+          "source": "n2",
+          "target": "n3"
+        },
+        {
+          "source": "n3",
+          "target": "n4"
+        },
+        {
+          "source": "n4",
+          "target": "n5"
+        }
+      ],
+      "layout": "left-right",
+      "note": "I would show economic and operational relationships. Arrow widths are not proportional to money; the available figures do not support presenting these as measured flows."
+    },
+    "risks": [
+      {
+        "title": "The political timetable does not pay the bill",
+        "mechanism": "I translate slow permits and contract awards into financing costs and a backlog that takes time to monetise.",
+        "evidence": "GAO documents funds under review and differences between commitments and disbursements across several agencies.",
+        "watch": "If delays arose, I would review budget availability, contractual milestones and working-capital needs.",
+        "sources": [
+          "ER30"
+        ],
+        "interpretation": "The economic relationship and the signal I would monitor are my interpretation; the source supports the cited evidence."
+      },
+      {
+        "title": "Projects face local constraints",
+        "mechanism": "I consider permits, transport and material availability before projecting a national volume.",
+        "evidence": "Vulcan identifies risks involving reserve permits, transport, energy, water and labour.",
+        "watch": "If costs rose, I would review the distance to the site, logistics capacity and price-adjustment clauses.",
+        "sources": [
+          "ER55"
+        ],
+        "interpretation": "The economic relationship and the signal I would monitor are my interpretation; the source supports the cited evidence."
+      },
+      {
+        "title": "The private cycle offsets the public cycle",
+        "mechanism": "I can see strong public spending alongside less housing or commercial construction.",
+        "evidence": "Vulcan acknowledges sensitivity to residential and non-residential construction and public funding; its demand sources do not always move together.",
+        "watch": "If private construction declined, I would review the customer mix, utilisation and expansion discipline.",
+        "sources": [
+          "ER55"
+        ],
+        "interpretation": "The economic relationship and the signal I would monitor are my interpretation; the source supports the cited evidence."
+      }
+    ],
+    "vehicles": [
+      {
+        "name": "Caterpillar",
+        "ticker": "CAT",
+        "exchange": "NYSE",
+        "type": "equity",
+        "exposure": "Equipment; also mining, energy and financing.",
+        "limitation": "If I chose this vehicle, I would review its segment exposure, valuation and costs.",
+        "sources": [
+          "ER54"
+        ],
+        "verified_at": "2026-11-24"
+      },
+      {
+        "name": "Vulcan Materials",
+        "ticker": "VMC",
+        "exchange": "NYSE",
+        "type": "equity",
+        "exposure": "Aggregates and materials; local demand and transport costs.",
+        "limitation": "If I chose this vehicle, I would review its segment exposure, valuation and costs.",
+        "sources": [
+          "ER55"
+        ],
+        "verified_at": "2026-11-24"
+      },
+      {
+        "name": "Global X U.S. Infrastructure Development ETF",
+        "ticker": "PAVE",
+        "exchange": "Cboe BZX",
+        "type": "equity ETF",
+        "exposure": "A basket of companies exposed to US infrastructure; not a fund that directly finances public works.",
+        "limitation": "If I chose this vehicle, I would review its segment exposure, valuation and costs.",
+        "sources": [
+          "ER59"
+        ],
+        "verified_at": "2026-11-24"
+      }
+    ],
+    "moat_reading": "I would look for well-located aggregate reserves, hard-to-obtain permits and service density. Transport costs can create local pricing power, but I would not call it a national monopoly. I would compare that advantage with returns on capital and debt.",
+    "moat_sources": [
+      "ER55"
+    ],
+    "chart": {
+      "type": "bar",
+      "title": "Megacities worldwide (10 million people or more)",
+      "unit": "number of cities",
+      "rows": [
+        {
+          "period": "1975",
+          "value": 8,
+          "kind": "UN observed data"
+        },
+        {
+          "period": "2025",
+          "value": 33,
+          "kind": "UN observed data"
+        }
+      ],
+      "source": "S14",
+      "note": "Here I count megacities with at least ten million inhabitants. I would keep this measure separate from the percentage of the population living in urban areas."
+    },
+    "additional_charts": [],
+    "sources": [
+      "S14",
+      "S27",
+      "S39",
+      "ER30",
+      "ER31",
+      "ER55",
+      "ER54",
+      "ER59"
+    ],
+    "further_analysis": "If I added this trend to my portfolio, I would review the vehicle’s exposure, its price, the cash it can generate and the specific risks I describe here. This profile includes neither an individual valuation nor a return estimate.",
+    "capital": {
+      "intro": "Here I compare who increased, reduced or maintained shareholdings between June 30 and September 30, 2026. The difference comes from the reported number of shares; it does not reveal the exact transaction, price or motive.",
+      "position_ids": [
+        "C005",
+        "C011"
+      ],
+      "all_position_ids": [
+        "C005",
+        "C011"
+      ],
+      "event_ids": [],
+      "coverage_note": "I show a sample of related managers and assets. It does not represent every buyer and seller associated with the trend."
+    }
+  },
+  {
+    "id": 14,
+    "name": "Robotics",
+    "slug": "robotica",
+    "group": "Technology",
+    "snapshot": "I see robots performing specific tasks, beyond demonstrations. I would look for useful operating hours, repeatable installations and recurring service. The United States and Europe provide safety rules and commercial evidence; capital includes funds and issuer buybacks. I focus on whether maintenance, integration or legal liability consume the savings, and how little actual robotics a listed company may contain.",
+    "change": "A robot needs to work in the customer’s environment: moving, handling, cleaning or assisting safely. I look at actual availability and cost per task after installation, breakdowns and support.",
+    "arguments": [
+      "Repetitive tasks in well-defined environments can produce savings and an installed base that generates service revenue.",
+      "Open environments, safety and support can make it difficult to replicate a successful pilot at scale."
+    ],
+    "invalidation": "If useful working hours and renewals did not cover the total cost, I would reassess the thesis for that niche. An impressive video does not give me those metrics.",
+    "value": "I would examine patents, training, instruments, service and the cost of switching an installed platform. That advantage requires checking competition and litigation. I would also examine what percentage of the business actually comes from robots.",
+    "evidence_text": "I distinguish professional service robots, industrial robots and robotics-segment sales. The service figures relate to IFR’s sample, not an estimate of the entire industry. Mixing these populations can inflate the story without adding a single useful working hour.",
+    "metrics": [
+      {
+        "id": "T14_M01",
+        "label": "Professional service robot units sold",
+        "value": 250000,
+        "unit": "approx. units",
+        "period": "2025",
+        "kind": "IFR sample, approximate",
+        "source": "S15",
+        "note": "I would not extrapolate this sample to the whole industry or directly compare different survey waves.",
+        "comparable_with": "",
+        "geo": "IFR international sample of 238 producers",
+        "display_value": "almost 250,000",
+        "approximate": true,
+        "qualifier": "almost",
+        "display_unit": "units"
+      },
+      {
+        "id": "T14_M02",
+        "label": "Growth in the professional total published by IFR",
+        "value": 24,
+        "unit": "%",
+        "period": "2025 vs 2024",
+        "kind": "observed",
+        "source": "S15",
+        "note": "I would not extrapolate this sample to the whole industry or directly compare different survey waves.",
+        "comparable_with": "",
+        "geo": "IFR international sample of 238 producers"
+      },
+      {
+        "id": "T14_M03",
+        "label": "Transport and logistics robots sold",
+        "value": 117500,
+        "unit": "units",
+        "period": "2025",
+        "kind": "observed",
+        "source": "S15",
+        "note": "I would not extrapolate this sample to the whole industry or directly compare different survey waves.",
+        "comparable_with": "",
+        "geo": "IFR international sample of 238 producers"
+      },
+      {
+        "id": "T14_M04",
+        "label": "Transport/logistics share",
+        "value": 47,
+        "unit": "%",
+        "period": "2025",
+        "kind": "observed",
+        "source": "S15",
+        "note": "I would not extrapolate this sample to the whole industry or directly compare different survey waves.",
+        "comparable_with": "",
+        "geo": "IFR international sample of 238 producers"
+      },
+      {
+        "id": "T14_M05",
+        "label": "Teradyne robotics revenue",
+        "value": 96,
+        "unit": "million USD",
+        "period": "Q3 2026",
+        "kind": "reported segment data",
+        "source": "ER56",
+        "note": "",
+        "comparable_with": "",
+        "geo": "as specified by indicator"
+      },
+      {
+        "id": "T14_M06",
+        "label": "Teradyne total revenue",
+        "value": 1306,
+        "unit": "million USD",
+        "period": "Q3 2026",
+        "kind": "reported consolidated data",
+        "source": "ER56",
+        "note": "",
+        "comparable_with": "",
+        "geo": "as specified by indicator"
+      },
+      {
+        "id": "T14_M07",
+        "label": "Robotics as a share of Teradyne’s total",
+        "value": 7.3507,
+        "unit": "%",
+        "period": "Q3 2026",
+        "kind": "my calculation",
+        "source": "ER56",
+        "note": "96/1306*100; revenue exposure, not profit contribution or valuation.",
+        "comparable_with": "",
+        "geo": "as specified by indicator"
+      }
+    ],
+    "geography": [
+      {
+        "region": "United States",
+        "text": "I include OSHA on operating safety and the results of listed manufacturers. Teradyne recorded USD 96 million in robotics revenue out of USD 1,306 million of revenue in Q3 2026: approximately 7.35%, my calculation.",
+        "sources": [
+          "ER04",
+          "ER56"
+        ]
+      },
+      {
+        "region": "EU",
+        "text": "I include the Machinery Regulation and its main application date in January 2027. A collaborative robot is not exempt from application, integration and safety assessment.",
+        "sources": [
+          "ER03",
+          "ER04"
+        ]
+      }
+    ],
+    "policy": [
+      {
+        "jurisdiction": "United States",
+        "status": "integration safety and liability",
+        "text": "I would include OSHA and manufacturers’ legal risks in the total cost. A litigation settlement does not by itself demonstrate a monopoly or eliminate the risk of new claims.",
+        "sources": [
+          "ER04",
+          "ER57"
+        ]
+      },
+      {
+        "jurisdiction": "European Union",
+        "status": "Machinery Regulation with a 2027 timetable",
+        "text": "I would review the safety and conformity of the complete application. The collaborative-robot label does not replace that assessment.",
+        "sources": [
+          "ER03"
+        ]
+      }
+    ],
+    "chain": {
+      "nodes": [
+        {
+          "id": "n1",
+          "label": "Sensors and actuators"
+        },
+        {
+          "id": "n2",
+          "label": "Control and intelligence"
+        },
+        {
+          "id": "n3",
+          "label": "Robot and integration"
+        },
+        {
+          "id": "n4",
+          "label": "Productive use"
+        },
+        {
+          "id": "n5",
+          "label": "Service and consumables"
+        }
+      ],
+      "edges": [
+        {
+          "source": "n1",
+          "target": "n2"
+        },
+        {
+          "source": "n2",
+          "target": "n3"
+        },
+        {
+          "source": "n3",
+          "target": "n4"
+        },
+        {
+          "source": "n4",
+          "target": "n5"
+        }
+      ],
+      "layout": "left-right",
+      "note": "I would show economic and operational relationships. Arrow widths are not proportional to money; the available figures do not support presenting these as measured flows."
+    },
+    "risks": [
+      {
+        "title": "Actual returns fall short of the demonstration",
+        "mechanism": "I include integration, human supervision, maintenance and downtime in the cost per task.",
+        "evidence": "OSHA describes a system as including controls, sensors, end effectors and application conditions; selling the arm does not by itself solve the process.",
+        "watch": "If productive hours fell, I would review availability, human interventions and total cost against the alternative.",
+        "sources": [
+          "ER04"
+        ],
+        "interpretation": "The economic relationship and the signal I would monitor are my interpretation; the source supports the cited evidence."
+      },
+      {
+        "title": "The advantage brings costs and scrutiny",
+        "mechanism": "I consider safety, training, reimbursement and competition before projecting recurring revenue.",
+        "evidence": "Intuitive reported a USD 450 million GAAP charge for an antitrust litigation settlement in Q3 2026 and lists regulatory and competitive risks. The charge does not establish a legal monopoly.",
+        "watch": "If scrutiny or competitive alternatives increased, I would review consumables pricing, utilisation, litigation and hospital retention.",
+        "sources": [
+          "ER57"
+        ],
+        "interpretation": "The economic relationship and the signal I would monitor are my interpretation; the source supports the cited evidence."
+      },
+      {
+        "title": "The ticker tells a different story",
+        "mechanism": "I may buy a group whose profit depends more on another business than on robots.",
+        "evidence": "At Teradyne, robotics contributed USD 96 million of USD 1,306 million in Q3 2026 revenue; BOTZ combines several subthemes.",
+        "watch": "If I wanted robotics exposure, I would review segments, profits and the ETF’s holdings; the commercial name is not enough for me.",
+        "sources": [
+          "ER56",
+          "ER58"
+        ],
+        "interpretation": "The economic relationship and the signal I would monitor are my interpretation; the source supports the cited evidence."
+      }
+    ],
+    "vehicles": [
+      {
+        "name": "Teradyne",
+        "ticker": "TER",
+        "exchange": "Nasdaq",
+        "type": "equity",
+        "exposure": "Test equipment and robotics; robotics represented 7.35% of Q3 2026 sales.",
+        "limitation": "If I chose this vehicle, I would review its segment exposure, valuation and costs.",
+        "sources": [
+          "ER56"
+        ],
+        "verified_at": "2026-11-24"
+      },
+      {
+        "name": "Intuitive Surgical",
+        "ticker": "ISRG",
+        "exchange": "Nasdaq",
+        "type": "equity",
+        "exposure": "Robotic surgery, equipment and consumables.",
+        "limitation": "If I chose this vehicle, I would review its segment exposure, valuation and costs.",
+        "sources": [
+          "ER57"
+        ],
+        "verified_at": "2026-11-24"
+      },
+      {
+        "name": "Global X Robotics & Artificial Intelligence ETF",
+        "ticker": "BOTZ",
+        "exchange": "Nasdaq",
+        "type": "equity ETF",
+        "exposure": "A global basket of robotics and AI companies; includes other sectors.",
+        "limitation": "If I chose this vehicle, I would review its segment exposure, valuation and costs.",
+        "sources": [
+          "ER58"
+        ],
+        "verified_at": "2026-11-24"
+      }
+    ],
+    "moat_reading": "I would look for reliability, approved components, integration and recurring business. Intuitive allows me to study installations, training and consumables, alongside competitive risks and antitrust litigation. Teradyne offers a different model and partial thematic exposure. I would distinguish competitive advantage, market power and a legal monopoly.",
+    "moat_sources": [
+      "ER57",
+      "ER56"
+    ],
+    "chart": {
+      "type": "kpi",
+      "title": "Professional service robots in 2025",
+      "unit": "units and change",
+      "rows": [
+        {
+          "period": "Professional shipments",
+          "value": 250000,
+          "unit": "approx. units",
+          "kind": "IFR sample, approximate",
+          "display_value": "almost 250,000",
+          "approximate": true,
+          "qualifier": "almost",
+          "display_unit": "units"
+        },
+        {
+          "period": "Transport and logistics",
+          "value": 117500,
+          "unit": "units",
+          "kind": "IFR observed data"
+        },
+        {
+          "period": "Year-on-year growth",
+          "value": 24,
+          "unit": "%",
+          "kind": "change in the professional total published by IFR"
+        }
+      ],
+      "source": "S15",
+      "note": "I read these figures as sales collected in IFR’s sample, without extrapolating them to the entire market. The +24% is the change in the professional total published in this edition; I would not build a series by mixing surveys from different years. The sample includes 238 of 1,001 identified producers.",
+      "sources": [
+        "S15",
+        "R_IFR_SAMPLE"
+      ]
+    },
+    "additional_charts": [],
+    "sources": [
+      "S15",
+      "S34",
+      "S21",
+      "S03",
+      "ER04",
+      "ER56",
+      "ER03",
+      "ER57",
+      "ER58",
+      "R_IFR_SAMPLE"
+    ],
+    "further_analysis": "If I added this trend to my portfolio, I would review the vehicle’s exposure, its price, the cash it can generate and the specific risks I describe here. This profile includes neither an individual valuation nor a return estimate.",
+    "capital": {
+      "intro": "Here I compare who increased, reduced or maintained shareholdings between June 30 and September 30, 2026. The difference comes from the reported number of shares; it does not reveal the exact transaction, price or motive.",
+      "position_ids": [
+        "C028",
+        "C026",
+        "C027"
+      ],
+      "all_position_ids": [
+        "C028",
+        "C026",
+        "C027",
+        "C009"
+      ],
+      "event_ids": [
+        "CAP_ISRG_BUYBACK_Q32026"
+      ],
+      "coverage_note": "I show a sample of related managers and assets. It does not represent every buyer and seller associated with the trend."
+    }
+  },
+  {
+    "id": 15,
+    "name": "Blockchain",
+    "slug": "blockchain",
+    "group": "Finance",
+    "previous_slug": "bitcoin-y-criptoinfraestructura",
+    "snapshot": "I see blockchain as a complete infrastructure: networks, payments, contracts, tokenisation, custody and applications. I would distinguish who uses the network from who earns revenue. Funds, issuers and banks provide different evidence of capital. The United States and Europe have different frameworks; I focus on the risk that activity grows without the chosen token or company capturing sustainable value.",
+    "change": "I am interested in when a shared ledger allows value transfers, programmable agreements or asset settlement with less friction. Bitcoin, Ethereum, private networks and stablecoins solve different problems. In each case, I would ask who needs that architecture and who pays its costs.",
+    "arguments": [
+      "Programmable settlement and shared infrastructure can reduce friction in specific use cases.",
+      "A conventional database can solve other cases at lower cost. Using a network does not necessarily make its token appreciate."
+    ],
+    "invalidation": "If activity depended on subsidies, the customer did not pay or the right over a tokenised asset proved unenforceable, I would reassess the thesis. I would analyse the protocol, company, token and vehicle separately.",
+    "value": "I would examine distribution, liquidity, licences, custody and connections with real-world money and assets. On open networks, a competitor can copy part of the code; I would ask what cannot be copied easily and who keeps the revenue.",
+    "evidence_text": "I see higher average USDC and lower reserve income at Circle: +8% and −7.5% in Q3 2026 versus Q3 2025. This illustrates how interest rates affect one business line. I would not interpret it as a decline in total revenue or profit, both of which increased. Within blockchain, this case covers stablecoins, not the whole technology.",
+    "metrics": [
+      {
+        "id": "T15_M01",
+        "label": "Average USDC",
+        "value": 67842,
+        "unit": "USD million",
+        "period": "Q3 2025",
+        "kind": "issuer-reported",
+        "source": "FB21",
+        "note": "Average USDC outstanding and reserve income are different economic measures.",
+        "comparable_with": "",
+        "geo": "as specified by indicator"
+      },
+      {
+        "id": "T15_M02",
+        "label": "Average USDC",
+        "value": 73264,
+        "unit": "USD million",
+        "period": "Q3 2026",
+        "kind": "issuer-reported",
+        "source": "FB21",
+        "note": "Average USDC outstanding and reserve income are different economic measures.",
+        "comparable_with": "",
+        "geo": "as specified by indicator"
+      },
+      {
+        "id": "T15_M03",
+        "label": "Reserve income",
+        "value": 711.241,
+        "unit": "USD million",
+        "period": "Q3 2025",
+        "kind": "issuer-reported",
+        "source": "FB21",
+        "note": "Average USDC outstanding and reserve income are different economic measures.",
+        "comparable_with": "",
+        "geo": "as specified by indicator"
+      },
+      {
+        "id": "T15_M04",
+        "label": "Reserve income",
+        "value": 657.624,
+        "unit": "USD million",
+        "period": "Q3 2026",
+        "kind": "issuer-reported",
+        "source": "FB21",
+        "note": "Average USDC outstanding and reserve income are different economic measures.",
+        "comparable_with": "",
+        "geo": "as specified by indicator"
+      }
+    ],
+    "geography": [
+      {
+        "region": "United States",
+        "text": "I would distinguish the SEC/CFTC interpretation of March 2026 from the OCC stablecoin rule published in October 2026 and effective from January 18, 2027. Classifying an asset does not resolve every risk associated with its intermediary.",
+        "sources": [
+          "FB27",
+          "FB28"
+        ]
+      },
+      {
+        "region": "EU",
+        "text": "I would include MiCA and the end of the maximum CASP transitional period on July 1, 2026. When analysing a provider, I would examine the specific entity, service and authorisation.",
+        "sources": [
+          "FB29"
+        ]
+      },
+      {
+        "region": "Global",
+        "text": "I would compare public and permissioned networks; a banking network can capture efficiencies without creating demand for a listed token.",
+        "sources": [
+          "FB26",
+          "FB22"
+        ]
+      }
+    ],
+    "policy": [
+      {
+        "jurisdiction": "United States",
+        "status": "status described in the source and text",
+        "text": "I would distinguish the SEC/CFTC interpretation issued on March 17 and effective from March 23, 2026 from the OCC rule published in October 2026 and effective from January 18, 2027. At this research cutoff, that OCC rule was not yet effective. Classifying an asset does not resolve every intermediary risk.",
+        "sources": [
+          "FB27",
+          "FB28",
+          "FB_SEC_INTERPRETATION"
+        ]
+      },
+      {
+        "jurisdiction": "EU",
+        "status": "status described in the source and text",
+        "text": "I would include MiCA and the end of the maximum CASP transitional period on July 1, 2026. When analysing a provider, I would examine the specific entity, service and authorisation.",
+        "sources": [
+          "FB29"
+        ]
+      },
+      {
+        "jurisdiction": "Global",
+        "status": "status described in the source and text",
+        "text": "I would compare public and permissioned networks; a banking network can capture efficiencies without creating demand for a listed token.",
+        "sources": [
+          "FB26",
+          "FB22"
+        ]
+      }
+    ],
+    "chain": {
+      "nodes": [
+        {
+          "id": "net",
+          "label": "Networks and security"
+        },
+        {
+          "id": "exec",
+          "label": "Contracts and scalability"
+        },
+        {
+          "id": "asset",
+          "label": "Money and assets"
+        },
+        {
+          "id": "access",
+          "label": "Access and custody"
+        },
+        {
+          "id": "apps",
+          "label": "Users and applications"
+        },
+        {
+          "id": "trust",
+          "label": "Oracles, bridges and control"
+        }
+      ],
+      "edges": [
+        {
+          "source": "net",
+          "target": "exec"
+        },
+        {
+          "source": "exec",
+          "target": "asset"
+        },
+        {
+          "source": "asset",
+          "target": "access"
+        },
+        {
+          "source": "access",
+          "target": "apps"
+        },
+        {
+          "source": "trust",
+          "target": "exec"
+        },
+        {
+          "source": "trust",
+          "target": "asset"
+        },
+        {
+          "source": "trust",
+          "target": "access"
+        }
+      ],
+      "layout": "top-down",
+      "note": "I would show economic and operational relationships. Arrow widths are not proportional to money; the available figures do not support presenting these as measured flows."
+    },
+    "risks": [
+      {
+        "title": "The token does not always capture the value",
+        "mechanism": "If an application grows but the token has no clear economic right or value-capture mechanism, I can be right about the technology and wrong about the investment.",
+        "evidence": "Hyperledger shows permissioned enterprise systems; Coinbase reports service and transaction revenue, mechanisms that differ from an asset’s return.",
+        "watch": "If user numbers grew, I would examine net fees, token issuance, incentives and who receives the revenue.",
+        "sources": [
+          "FB26",
+          "FB30"
+        ],
+        "interpretation": "The economic relationship and the signal I would monitor are my interpretation; the source supports the cited evidence."
+      },
+      {
+        "title": "Interest rates and revenue sharing",
+        "mechanism": "If reserve yields fell or distribution costs rose, I could see lower profit despite more outstanding balances.",
+        "evidence": "Circle Q3 2026: average USDC +8%; reserve income −7.5%. The 10-Q explains the effect of interest rates.",
+        "watch": "If interest rates were cut, I would review income after distribution costs and dependence on interest income.",
+        "sources": [
+          "FB21"
+        ],
+        "interpretation": "The economic relationship and the signal I would monitor are my interpretation; the source supports the cited evidence."
+      },
+      {
+        "title": "The backing retains its risk",
+        "mechanism": "Tokenisation does not make the underlying asset liquid or solvent; I can face fast redemptions against slow-moving assets.",
+        "evidence": "FSB identifies liquidity and maturity mismatches, leverage and interconnectedness in tokenised assets.",
+        "watch": "If 24/7 liquidity were promised, I would examine reserves, the custodian, redemption rights and behaviour under stress.",
+        "sources": [
+          "FB23"
+        ],
+        "interpretation": "The economic relationship and the signal I would monitor are my interpretation; the source supports the cited evidence."
+      },
+      {
+        "title": "Failure can enter through a bridge or a data feed",
+        "mechanism": "A contract can execute the wrong instruction exactly as written; I would examine keys, oracles and bridges.",
+        "evidence": "Ethereum’s documentation describes contract failures, counterparty risks and the availability and accuracy of oracles.",
+        "watch": "For assets connected to several networks, I would examine the attack surface, upgrade control and third-party dependence.",
+        "sources": [
+          "FB24",
+          "FB25"
+        ],
+        "interpretation": "The economic relationship and the signal I would monitor are my interpretation; the source supports the cited evidence."
+      },
+      {
+        "title": "Regulation by product and jurisdiction",
+        "mechanism": "I would not assume that one licence or stablecoin rule covers every activity, token and customer.",
+        "evidence": "OCC has a rule with a future effective date; ESMA requires a transition to authorised providers; SEC distinguishes assets from transactions.",
+        "watch": "If the business expanded, I would review specific permissions, effective dates and compliance costs.",
+        "sources": [
+          "FB27",
+          "FB28",
+          "FB29"
+        ],
+        "interpretation": "The economic relationship and the signal I would monitor are my interpretation; the source supports the cited evidence."
+      }
+    ],
+    "vehicles": [
+      {
+        "name": "Coinbase Global",
+        "ticker": "COIN",
+        "exchange": "Nasdaq",
+        "type": "equity",
+        "exposure": "Intermediation, custody and services; not the entire blockchain ecosystem",
+        "limitation": "If I chose this vehicle, I would review its segment exposure, valuation and costs.",
+        "sources": [
+          "FB30"
+        ],
+        "verified_at": "2026-11-24"
+      },
+      {
+        "name": "Circle Internet Group",
+        "ticker": "CRCL",
+        "exchange": "NYSE",
+        "type": "equity",
+        "exposure": "Stablecoins and infrastructure; sensitivity to interest rates and distribution",
+        "limitation": "If I chose this vehicle, I would review its segment exposure, valuation and costs.",
+        "sources": [
+          "FB21"
+        ],
+        "verified_at": "2026-11-24"
+      },
+      {
+        "name": "iShares Bitcoin Trust ETF",
+        "ticker": "IBIT",
+        "exchange": "Nasdaq",
+        "type": "Bitcoin trust/ETP",
+        "exposure": "Bitcoin price; not a basket of blockchain companies",
+        "limitation": "If I chose this vehicle, I would review its segment exposure, valuation and costs.",
+        "sources": [
+          "FB31"
+        ],
+        "verified_at": "2026-11-24"
+      },
+      {
+        "name": "iShares Ethereum Trust ETF",
+        "ticker": "ETHA",
+        "exchange": "Nasdaq",
+        "type": "Ether trust/ETP",
+        "exposure": "Ether price; not an ownership interest in every application",
+        "limitation": "If I chose this vehicle, I would review its segment exposure, valuation and costs.",
+        "sources": [
+          "FB32"
+        ],
+        "verified_at": "2026-11-24"
+      }
+    ],
+    "moat_reading": "I would look for liquidity, distribution, licences, integration and switching costs; these are possible advantages, not proof of monopoly. An open protocol can grow while transferring economic rents to validators, distributors or users. Before buying the token, I would clarify what economic right it gives me.",
+    "moat_sources": [
+      "FB26",
+      "FB30",
+      "FB21",
+      "FB23",
+      "FB24",
+      "FB25",
+      "FB27",
+      "FB28",
+      "FB29"
+    ],
+    "chart": {
+      "type": "small_multiples",
+      "title": "Circle activity and reserve income",
+      "note": "Separate series; Q3 of each period; SEC data. I do not confuse balances with flows or income.",
+      "series": [
+        {
+          "label": "Average USDC",
+          "unit": "USD million",
+          "source": "FB21",
+          "rows": [
+            {
+              "period": "Q3 2025",
+              "value": 67842
+            },
+            {
+              "period": "Q3 2026",
+              "value": 73264
+            }
+          ]
+        },
+        {
+          "label": "Reserve income",
+          "unit": "USD million",
+          "source": "FB21",
+          "rows": [
+            {
+              "period": "Q3 2025",
+              "value": 711.241
+            },
+            {
+              "period": "Q3 2026",
+              "value": 657.624
+            }
+          ]
+        }
+      ]
+    },
+    "additional_charts": [
+      {
+        "type": "bar",
+        "title": "Sustainable energy in surveyed mining operations",
+        "unit": "% of reported energy mix",
+        "rows": [
+          {
+            "period": "2022",
+            "value": 37.6,
+            "kind": "survey estimate"
+          },
+          {
+            "period": "2024",
+            "value": 52.4,
+            "kind": "survey estimate"
+          }
+        ],
+        "source": "S16",
+        "note": "I would preserve each survey’s coverage and methodology. These figures do not represent an exact global share of the entire network’s energy consumption."
+      },
+      {
+        "type": "branching_diagram",
+        "title": "Blockchain and value capture",
+        "source_ids": [
+          "FB23",
+          "FB24",
+          "FB25",
+          "FB26"
+        ],
+        "note": "Conceptual diagram, not quantified flows. I would retain Bitcoin/mining as one sublayer, not the entire category.",
+        "data_ref": "trends[14].chain"
+      }
+    ],
+    "sources": [
+      "S16",
+      "S45",
+      "FB27",
+      "FB28",
+      "FB29",
+      "FB26",
+      "FB22",
+      "FB30",
+      "FB21",
+      "FB31",
+      "FB32",
+      "FB23",
+      "FB24",
+      "FB25",
+      "FB_SEC_INTERPRETATION"
+    ],
+    "further_analysis": "If I added this trend to my portfolio, I would review the vehicle’s exposure, its price, the cash it can generate and the specific risks I describe here. This profile includes neither an individual valuation nor a return estimate.",
+    "scope": [
+      {
+        "layer": "Networks and security",
+        "items": [
+          "Bitcoin and mining",
+          "Ethereum and validators",
+          "Other public networks",
+          "Permissioned networks"
+        ],
+        "economic_question": "I would examine who pays for security and how much of the costs or fees each participant captures."
+      },
+      {
+        "layer": "Execution and scalability",
+        "items": [
+          "Smart contracts",
+          "L2",
+          "Sequencers",
+          "Development and node infrastructure"
+        ],
+        "economic_question": "I would examine whether greater usage leaves sustainable revenue after costs, incentives and competition."
+      },
+      {
+        "layer": "Money and assets",
+        "items": [
+          "Stablecoins",
+          "Tokenised deposits",
+          "Tokenised securities and funds",
+          "Digitally represented real-world assets"
+        ],
+        "economic_question": "I would identify the backing, legal rights, redemption terms and recipient of interest income."
+      },
+      {
+        "layer": "Access and custody",
+        "items": [
+          "Exchanges",
+          "Intermediaries",
+          "Custodians",
+          "Digital wallets",
+          "ETP"
+        ],
+        "economic_question": "I would distinguish fees, custody and price exposure."
+      },
+      {
+        "layer": "Connectivity and control",
+        "items": [
+          "Oracles",
+          "Bridges",
+          "Identity",
+          "Compliance",
+          "Audit and security"
+        ],
+        "economic_question": "I would look for dependencies that are difficult to replace and failures that can spread."
+      },
+      {
+        "layer": "Applications",
+        "items": [
+          "Payments and remittances",
+          "DeFi",
+          "Collateral and settlement",
+          "Enterprise traceability",
+          "Digital identity and ownership"
+        ],
+        "economic_question": "I would require a verifiable improvement over a conventional database or payment network."
+      }
+    ],
+    "native_assets_note": "I would describe Bitcoin (BTC) and ether (ETH) as native assets, not equities. I would not invent tickers for networks, foundations or unlisted companies. For a diversified company operating a network, I would measure its actual economic exposure before using its shares as a substitute.",
+    "capital": {
+      "intro": "Here I compare who increased, reduced or maintained shareholdings between June 30 and September 30, 2026. The difference comes from the reported number of shares; it does not reveal the exact transaction, price or motive.",
+      "position_ids": [
+        "C020",
+        "C021",
+        "C031"
+      ],
+      "all_position_ids": [
+        "C020",
+        "C021",
+        "C031"
+      ],
+      "event_ids": [],
+      "coverage_note": "I show a sample of related managers and assets. It does not represent every buyer and seller associated with the trend."
+    }
+  },
+  {
+    "id": 16,
+    "name": "Quantum computing",
+    "slug": "computacion-cuantica",
+    "group": "Technology",
+    "snapshot": "I see experimental progress and capital entering quantum computing. I would look for reproducible milestones and customers willing to pay for a useful advantage. The United States and Europe finance and regulate parts of the chain; a roadmap remains a target. I focus on cash consumption, dilution and the possibility that classical computing solves the same problem first.",
+    "change": "Quantum computing seeks to solve certain classes of problems using a different architecture. I am interested in when it outperforms a classical alternative on a useful task at a competitive total cost. More qubits alone do not answer that question.",
+    "arguments": [
+      "Error correction and joint work with classical computing can open scientific and commercial applications.",
+      "Timelines can lengthen, and the company needs funding while useful applications emerge. Classical methods are also advancing."
+    ],
+    "invalidation": "If milestones could not be reproduced or the total cost remained uncompetitive for the chosen problem, I would reassess the commercial thesis. If cash ran out first, I would examine financing and dilution before anything else.",
+    "value": "I would examine intellectual property, control systems, cryogenics, integration and contracts. I would not yet treat a lasting commercial monopoly across all quantum computing as established. A laboratory advantage needs to become a customer advantage.",
+    "evidence_text": "I would keep observed results, surveys and announced targets separate.",
+    "metrics": [
+      {
+        "id": "T16_M01",
+        "label": "Neutral atoms used in an experiment",
+        "value": 448,
+        "unit": "atoms (up to)",
+        "period": "2025",
+        "kind": "experimental demonstration",
+        "source": "S17",
+        "note": "These are not 448 commercial logical qubits.",
+        "comparable_with": "",
+        "geo": "as specified by indicator",
+        "display_value": "up to 448",
+        "display_unit": "atoms"
+      },
+      {
+        "id": "T16_M02",
+        "label": "Below-threshold improvement in an experimental circuit",
+        "value": 2.14,
+        "unit": "factor (±0.13)",
+        "period": "2025",
+        "kind": "experimental demonstration",
+        "source": "S17",
+        "note": "",
+        "comparable_with": "",
+        "geo": "as specified by indicator",
+        "display_value": "2.14 ± 0.13",
+        "display_unit": "times"
+      },
+      {
+        "id": "T16_M03",
+        "label": "Planned DOE Quantum Genesis funding",
+        "value": 215,
+        "unit": "million USD, up to",
+        "period": "2026",
+        "kind": "planned announcement",
+        "source": "S18",
+        "note": "This does not mean funds are available or disbursed.",
+        "comparable_with": "",
+        "geo": "as specified by indicator",
+        "display_value": "up to 215",
+        "display_unit": "USD million"
+      },
+      {
+        "id": "T16_M04",
+        "label": "Identified DOE FY2026 funds",
+        "value": 2.5,
+        "unit": "million USD",
+        "period": "FY2026",
+        "kind": "identified budget",
+        "source": "S18",
+        "note": "",
+        "comparable_with": "",
+        "geo": "as specified by indicator"
+      },
+      {
+        "id": "T16_M05",
+        "label": "Planned IBM Starling qubits",
+        "value": 200,
+        "unit": "qubits (target)",
+        "period": "2029",
+        "kind": "corporate target",
+        "source": "S19",
+        "note": "",
+        "comparable_with": "",
+        "geo": "as specified by indicator",
+        "display_value": "200 (target)",
+        "display_unit": "qubits"
+      }
+    ],
+    "geography": [
+      {
+        "region": "United States",
+        "text": "I would retain NIST and DOE for results and public support, and add issuer filings to see how much reaching those results costs. Migration to post-quantum cryptography is a separate commercial track.",
+        "sources": [
+          "FB37",
+          "FB38",
+          "FB39",
+          "FB33"
+        ]
+      },
+      {
+        "region": "EU",
+        "text": "I would retain Europe’s quantum strategy as industrial policy and distinguish targets, funding calls and awarded contracts.",
+        "sources": [
+          "S28",
+          "S41"
+        ]
+      }
+    ],
+    "policy": [
+      {
+        "jurisdiction": "United States",
+        "status": "status described in the source and text",
+        "text": "I would retain NIST and DOE for results and public support, and add issuer filings to see how much reaching those results costs. Migration to post-quantum cryptography is a separate commercial track.",
+        "sources": [
+          "FB37",
+          "FB38",
+          "FB39",
+          "FB33"
+        ]
+      },
+      {
+        "jurisdiction": "EU",
+        "status": "status described in the source and text",
+        "text": "I would retain Europe’s quantum strategy as industrial policy and distinguish targets, funding calls and awarded contracts.",
+        "sources": [
+          "S28",
+          "S41"
+        ]
+      }
+    ],
+    "chain": {
+      "nodes": [
+        {
+          "id": "comp",
+          "label": "Control, photonics and equipment"
+        },
+        {
+          "id": "hard",
+          "label": "Physical hardware"
+        },
+        {
+          "id": "error",
+          "label": "Errors and software"
+        },
+        {
+          "id": "cloud",
+          "label": "Cloud and integration"
+        },
+        {
+          "id": "app",
+          "label": "Useful application"
+        }
+      ],
+      "edges": [
+        {
+          "source": "comp",
+          "target": "hard"
+        },
+        {
+          "source": "hard",
+          "target": "error"
+        },
+        {
+          "source": "error",
+          "target": "cloud"
+        },
+        {
+          "source": "cloud",
+          "target": "app"
+        }
+      ],
+      "layout": "left-right",
+      "note": "I would show economic and operational relationships. Arrow widths are not proportional to money; the available figures do not support presenting these as measured flows."
+    },
+    "risks": [
+      {
+        "title": "Physics does not follow the stock market’s timetable",
+        "mechanism": "If a manufacturer could not scale control and error correction, I would expect commercial usefulness to be delayed by years.",
+        "evidence": "NIST describes an experimental demonstration with 448 atoms, not 448 commercial logical qubits.",
+        "watch": "For a new milestone, I would examine logical errors, circuit depth and independent comparisons with classical computing.",
+        "sources": [
+          "FB37"
+        ],
+        "interpretation": "The economic relationship and the signal I would monitor are my interpretation; the source supports the cited evidence."
+      },
+      {
+        "title": "Time costs cash and shares",
+        "mechanism": "If development consumed cash before generating revenue, I would examine how dependent the company is on new funding rounds or share issues.",
+        "evidence": "IonQ used USD 570.318 million of operating cash in the first nine months of 2026 and reported a USD 1,990 million share offering in October.",
+        "watch": "If more financing were raised, I would examine available cash, normalised cash burn, diluted shares and organic revenue; consolidated cash includes acquired businesses.",
+        "sources": [
+          "FB33"
+        ],
+        "interpretation": "The economic relationship and the signal I would monitor are my interpretation; the source supports the cited evidence."
+      },
+      {
+        "title": "Another architecture may win",
+        "mechanism": "If another approach delivered a better cost per useful task, I could find today’s equipment obsolete.",
+        "evidence": "Rigetti warns about financing and execution assumptions; NIST’s work uses a different architecture.",
+        "watch": "In a commercial comparison, I would examine total cost per task and reproducibility, not a table of qubit counts without context.",
+        "sources": [
+          "FB34",
+          "FB37"
+        ],
+        "interpretation": "The economic relationship and the signal I would monitor are my interpretation; the source supports the cited evidence."
+      },
+      {
+        "title": "The vehicle’s name can mislead about exposure",
+        "mechanism": "If I bought a quantum fund that includes AI and chips, I would have a different sensitivity from the one I expected.",
+        "evidence": "QTUM includes quantum computing and machine learning under its index; IBM maintains a diversified business.",
+        "watch": "If I used an ETF, I would examine its holdings, revenue linked to the thesis and concentration.",
+        "sources": [
+          "FB36",
+          "FB35"
+        ],
+        "interpretation": "The economic relationship and the signal I would monitor are my interpretation; the source supports the cited evidence."
+      }
+    ],
+    "vehicles": [
+      {
+        "name": "IBM",
+        "ticker": "IBM",
+        "exchange": "NYSE / NYSE Texas",
+        "type": "equity",
+        "exposure": "Diversified company with a quantum programme",
+        "limitation": "If I chose this vehicle, I would review its segment exposure, valuation and costs.",
+        "sources": [
+          "FB35"
+        ],
+        "verified_at": "2026-11-24"
+      },
+      {
+        "name": "IonQ",
+        "ticker": "IONQ",
+        "exchange": "NYSE",
+        "type": "equity",
+        "exposure": "Quantum platform with a business perimeter expanded through acquisitions",
+        "limitation": "If I chose this vehicle, I would review its segment exposure, valuation and costs.",
+        "sources": [
+          "FB33"
+        ],
+        "verified_at": "2026-11-24"
+      },
+      {
+        "name": "Rigetti Computing",
+        "ticker": "RGTI",
+        "exchange": "Nasdaq Capital Market",
+        "type": "equity",
+        "exposure": "Quantum hardware and services",
+        "limitation": "If I chose this vehicle, I would review its segment exposure, valuation and costs.",
+        "sources": [
+          "FB34"
+        ],
+        "verified_at": "2026-11-24"
+      },
+      {
+        "name": "Defiance Quantum ETF",
+        "ticker": "QTUM",
+        "exchange": "Nasdaq",
+        "type": "equity ETF",
+        "exposure": "Quantum computing and machine learning with mixed exposure",
+        "limitation": "If I chose this vehicle, I would review its segment exposure, valuation and costs.",
+        "sources": [
+          "FB36"
+        ],
+        "verified_at": "2026-11-24"
+      },
+      {
+        "name": "Quantinuum",
+        "ticker": "QNT",
+        "exchange": "Nasdaq",
+        "type": "equity",
+        "exposure": "Quantum hardware and software",
+        "limitation": "I would distinguish technical milestones from financing and commercial revenue; a recent listing does not demonstrate profitability.",
+        "sources": [
+          "FB40"
+        ],
+        "verified_at": "2026-11-24"
+      }
+    ],
+    "moat_reading": "I would look for components and expertise that are difficult to replicate, but I would not yet treat any architecture as an established monopoly. A commercial advantage would need to survive another architecture or an improvement in classical software.",
+    "moat_sources": [
+      "FB37",
+      "FB33",
+      "FB34",
+      "FB36",
+      "FB35"
+    ],
+    "chart": {
+      "type": "timeline",
+      "title": "Quantum computing: demonstrated milestones and targets",
+      "unit": "heterogeneous milestones",
+      "rows": [
+        {
+          "period": "2025 · NIST experiment",
+          "value": 448,
+          "unit": "atoms, up to",
+          "kind": "demonstrated",
+          "source": "S17",
+          "display_value": "up to 448",
+          "display_unit": "atoms"
+        },
+        {
+          "period": "FY2026 · DOE",
+          "value": 2.5,
+          "unit": "identified USD million",
+          "kind": "identified funding",
+          "source": "S18"
+        },
+        {
+          "period": "2029 · IBM Starling",
+          "value": 200,
+          "unit": "target qubits",
+          "kind": "corporate target",
+          "source": "S19",
+          "display_value": "200 (target)",
+          "display_unit": "qubits"
+        }
+      ],
+      "source": "S17",
+      "note": "I would show these milestones on an annotated timeline: their figures measure different things and do not share a comparable scale."
+    },
+    "additional_charts": [
+      {
+        "type": "milestone_timeline",
+        "title": "Demonstrated, planned and funded",
+        "source_ids": [
+          "FB37",
+          "FB38",
+          "FB39"
+        ],
+        "note": "I would use the milestones already documented in the metrics table, with dates and status. Atoms, qubits and dollars would retain their units; they would not share a numerical axis.",
+        "data_ref": "trends[15].metrics"
+      }
+    ],
+    "sources": [
+      "S17",
+      "S18",
+      "S19",
+      "S28",
+      "S33",
+      "S37",
+      "S41",
+      "FB37",
+      "FB38",
+      "FB39",
+      "FB33",
+      "FB35",
+      "FB34",
+      "FB36"
+    ],
+    "further_analysis": "If I added this trend to my portfolio, I would review the vehicle’s exposure, its price, the cash it can generate and the specific risks I describe here. This profile includes neither an individual valuation nor a return estimate.",
+    "capital": {
+      "intro": "Here I compare who increased, reduced or maintained shareholdings between June 30 and September 30, 2026. The difference comes from the reported number of shares; it does not reveal the exact transaction, price or motive.",
+      "position_ids": [
+        "C033",
+        "C036"
+      ],
+      "all_position_ids": [
+        "C033",
+        "C036"
+      ],
+      "event_ids": [
+        "EV_FB_16_0",
+        "EV_FB_16_1"
+      ],
+      "coverage_note": "The SNB tracks broad indices. I would not attribute an opinion about the future of quantum computing to these changes."
+    }
+  },
+  {
+    "id": 17,
+    "name": "Precious metals",
+    "slug": "metales-preciosos",
+    "group": "Resources",
+    "snapshot": "I see monetary demand for gold that includes central-bank purchases. I would track tonnes bought and sold by country, separately from price effects. Silver and platinum-group metals have a different demand mix. Vehicles offer different exposures; I focus on the risk of assuming official purchases guarantee returns or that all metals follow the same cycle.",
+    "change": "I am interested in gold’s role as a reserve asset and a way to diversify official assets, alongside private investment and jewellery. For silver, platinum and palladium, I would also examine industrial demand and substitution. I would group them in one category while preserving those differences.",
+    "arguments": [
+      "Reserve purchases can support demand for several years and reflect decisions that do not depend on the usual consumer.",
+      "Central banks can also sell. The price may already anticipate some of the demand, and the metal itself does not generate cash flow."
+    ],
+    "invalidation": "If official purchases slowed or reversed on a sustained basis, I would reassess that support for the gold thesis. For each industrial metal, I would examine demand, substitution and marginal cost separately.",
+    "value": "I would distinguish physical metal, vehicles that hold it in custody, miners, and royalty or streaming businesses. Gold has no monopolist. In a company, I would look for quality reserves, costs or contracts that are difficult to replicate, and calculate how much of the metal’s price increase reaches cash flow.",
+    "evidence_text": "I track physical reserve purchases, investment and industrial demand separately. In gold, estimated total official purchases and the reported portion are not two amounts that can be added together.",
+    "geography": [
+      {
+        "region": "United States",
+        "text": "The Treasury reports 261,498,927 fine troy ounces in both September 2025 and September 2026. I read this as unchanged reserves, not new purchases.",
+        "sources": [
+          "ORO_US"
+        ]
+      },
+      {
+        "region": "Europe",
+        "text": "The Czech central bank publishes reserve accumulation and its target of 100 tonnes by 2028. I would distinguish the target from completed purchases.",
+        "sources": [
+          "ORO_CNB"
+        ]
+      },
+      {
+        "region": "China",
+        "text": "SAFE reports 75.44 million ounces in June and 77.47 million in September 2026. The increase equals approximately 63.14 tonnes, by my calculation.",
+        "sources": [
+          "ORO_SAFE"
+        ]
+      }
+    ],
+    "policy": [
+      {
+        "jurisdiction": "United States",
+        "status": "framework cited in the source",
+        "text": "OFAC maintains the prohibition on importing Russian-origin gold under Executive Order 14068, with defined exceptions and references to licences. If accepted origins or sanctions changed, I would examine counterparties, custody and delivery terms before attributing the change to global scarcity.",
+        "sources": [
+          "ORO_OFAC",
+          "ORO_OFAC_CURRENT"
+        ]
+      },
+      {
+        "jurisdiction": "European Union",
+        "status": "framework cited in the source",
+        "text": "The CNB links its purchases to gold supply-chain due diligence under Regulation (EU) 2017/821. I would see traceability as a condition of market access. It can favour accredited operators, although that alone does not prove pricing power.",
+        "sources": [
+          "ORO_EU",
+          "ORO_CNB"
+        ]
+      }
+    ],
+    "chain": {
+      "nodes": [
+        {
+          "id": "capital",
+          "label": "Financing and production rights"
+        },
+        {
+          "id": "mine",
+          "label": "Mining and recycling"
+        },
+        {
+          "id": "refine",
+          "label": "Refining and traceability"
+        },
+        {
+          "id": "vault",
+          "label": "Custody and trading"
+        },
+        {
+          "id": "reserve",
+          "label": "Central banks and investment"
+        },
+        {
+          "id": "industry",
+          "label": "Jewellery and industry"
+        }
+      ],
+      "edges": [
+        {
+          "source": "capital",
+          "target": "mine"
+        },
+        {
+          "source": "mine",
+          "target": "refine"
+        },
+        {
+          "source": "refine",
+          "target": "vault"
+        },
+        {
+          "source": "vault",
+          "target": "reserve"
+        },
+        {
+          "source": "refine",
+          "target": "industry"
+        }
+      ],
+      "note": "I would show the physical flow with arrows and financing as a different relationship; widths would not represent money without comparable data.",
+      "layout": "top-down"
+    },
+    "risks": [
+      {
+        "title": "Opportunity cost and a smaller safe-haven premium",
+        "mechanism": "Unlent physical gold pays no coupon. Higher real yields on other assets or lower safe-haven demand can weigh on its price; the correlation is not a fixed law.",
+        "evidence": "The ECB describes storage costs and the metal’s lack of ordinary income; WGC develops scenarios involving high interest rates and lower safe-haven demand.",
+        "watch": "If real interest rates rose while physical purchases slowed, I would examine whether the price still offered a margin of safety.",
+        "sources": [
+          "ORO_ECB",
+          "ORO_RISK"
+        ],
+        "interpretation": "The economic relationship and the signal I would monitor are my interpretation; the source supports the cited evidence."
+      },
+      {
+        "title": "Official purchases can be opaque or reversible",
+        "mechanism": "The estimated total does not reveal every buyer’s identity. Foreign-currency needs or strategy changes can turn buyers into sellers.",
+        "evidence": "WGC distinguishes 120 reported tonnes from an estimated 321.2 tonnes in the third quarter; the ECB documents sales and lending to meet liquidity needs during 2026.",
+        "watch": "I would track tonnes by country and revisions; I would not interpret a revaluation of reserves as a new flow.",
+        "sources": [
+          "ORO_WGC_Q3",
+          "ORO_ECB"
+        ],
+        "interpretation": "The economic relationship and the signal I would monitor are my interpretation; the source supports the cited evidence."
+      },
+      {
+        "title": "High prices destroy demand or encourage recycling",
+        "mechanism": "Industrial or jewellery buyers can reduce quantities, use less metal or substitute it. Some supply can come from existing inventories.",
+        "evidence": "Gold consumption for jewellery fell 17% year on year in the third quarter of 2026. Metals Focus identifies silver thrifting and substitution in photovoltaic applications.",
+        "watch": "If growth in sales value came only from price while ounces fell, I would separate the two before describing it as adoption.",
+        "sources": [
+          "ORO_DEMAND",
+          "PLATA"
+        ],
+        "interpretation": "The economic relationship and the signal I would monitor are my interpretation; the source supports the cited evidence."
+      },
+      {
+        "title": "The vehicle’s operating and sovereign risk",
+        "mechanism": "A miner faces permits, accidents, costs and depletion; a company financing that production depends on the operator and on contracts being enforceable.",
+        "evidence": "Franco-Nevada details counterparty risks and risks from third-party operations. Cobre Panamá shows that processing stockpiled ore and receiving some deliveries does not mean a mine has fully restarted.",
+        "watch": "If delays arose, I would examine cash flow, concentration, debt and contractual recovery for each asset.",
+        "sources": [
+          "ORO_FNV_RISK",
+          "ORO_FNV_Q3"
+        ],
+        "interpretation": "The economic relationship and the signal I would monitor are my interpretation; the source supports the cited evidence."
+      },
+      {
+        "title": "Custody and instrument costs",
+        "mechanism": "The product’s return differs from the metal’s because of expenses, spreads, premiums or discounts, and legal structure.",
+        "evidence": "GLD sells gold to pay expenses and warns that the gold represented by each share decreases. GLD, IAU and SLV are not funds registered under the Investment Company Act of 1940.",
+        "watch": "I would compare holder rights, the custodian, costs and spreads; the ticker alone does not explain what I am buying.",
+        "sources": [
+          "V_GLD",
+          "V_IAU",
+          "V_SLV"
+        ],
+        "interpretation": "The economic relationship and the signal I would monitor are my interpretation; the source supports the cited evidence."
+      }
+    ],
+    "vehicles": [
+      {
+        "name": "SPDR Gold Shares",
+        "ticker": "GLD",
+        "exchange": "NYSE Arca",
+        "type": "Physically backed gold trust",
+        "exposure": "Gold price less expenses",
+        "limitation": "I would monitor custody, spreads and the erosion of gold per share as expenses are paid.",
+        "sources": [
+          "V_GLD"
+        ],
+        "verified_at": "2026-11-24"
+      },
+      {
+        "name": "iShares Gold Trust",
+        "ticker": "IAU",
+        "exchange": "NYSE Arca",
+        "type": "Physically backed gold trust",
+        "exposure": "Gold price less expenses",
+        "limitation": "I would compare total cost and liquidity against my time horizon.",
+        "sources": [
+          "V_IAU"
+        ],
+        "verified_at": "2026-11-24"
+      },
+      {
+        "name": "iShares Silver Trust",
+        "ticker": "SLV",
+        "exchange": "NYSE Arca",
+        "type": "Physically backed silver trust",
+        "exposure": "Silver, with its own industrial sensitivity",
+        "limitation": "I would not use it as an equivalent to gold.",
+        "sources": [
+          "V_SLV"
+        ],
+        "verified_at": "2026-11-24"
+      },
+      {
+        "name": "VanEck Gold Miners ETF US",
+        "ticker": "GDX",
+        "exchange": "NYSE Arca",
+        "type": "Gold-mining equity ETF",
+        "exposure": "Operators and businesses linked to mining",
+        "limitation": "I would distinguish the metal price from costs, debt, permits and execution.",
+        "sources": [
+          "V_GDX"
+        ],
+        "verified_at": "2026-11-24"
+      },
+      {
+        "name": "Wheaton Precious Metals",
+        "ticker": "WPM",
+        "exchange": "NYSE; also TSX and LSE",
+        "type": "Equity in a metals streaming company",
+        "exposure": "Contracts over third-party production",
+        "limitation": "I would examine the counterparty, deliveries and the price paid for the contracts.",
+        "sources": [
+          "V_WPM",
+          "V_WPM_MODEL"
+        ],
+        "verified_at": "2026-11-24"
+      },
+      {
+        "name": "Franco-Nevada",
+        "ticker": "FNV",
+        "exchange": "NYSE; also TSX",
+        "type": "Equity in a royalty and streaming company",
+        "exposure": "Contracts and royalties; additional diversified exposure",
+        "limitation": "I would monitor asset concentration and operators’ decisions.",
+        "sources": [
+          "V_GDX",
+          "ORO_FNV_RISK",
+          "ORO_FNV_Q3"
+        ],
+        "verified_at": "2026-11-24"
+      }
+    ],
+    "moat_reading": "I would distinguish physical metal, vehicles that hold it in custody, miners, and royalty or streaming businesses. Gold has no monopolist. In a company, I would look for quality reserves, costs or contracts that are difficult to replicate, and calculate how much of the metal’s price increase reaches cash flow.",
+    "moat_sources": [
+      "V_WPM_MODEL",
+      "ORO_FNV_RISK",
+      "ORO_CNB"
+    ],
+    "moats": [
+      {
+        "segment": "Mining",
+        "barrier": "Quality reserves, permits, infrastructure and costs",
+        "proof_status": "Economic hypothesis to test for each asset; not a monopoly",
+        "risk": "Overpaying, depletion, royalties and costs"
+      },
+      {
+        "segment": "Streaming and royalties",
+        "barrier": "Long-lasting contracts, asset selection and access to capital",
+        "examples": [
+          "WPM",
+          "FNV"
+        ],
+        "sources": [
+          "V_WPM_MODEL",
+          "ORO_FNV_RISK"
+        ],
+        "proof_status": "Verified contractual model; advantage and valuation remain to be assessed for each issuer",
+        "risk": "Depends on the operator; does not control operations"
+      },
+      {
+        "segment": "Refining and custody",
+        "barrier": "Accreditation, scale, reputation and a counterparty network",
+        "sources": [
+          "ORO_CNB",
+          "V_GLD"
+        ],
+        "proof_status": "Plausible barriers; no verified universal market share",
+        "risk": "Counterparty concentration and traceability"
+      }
+    ],
+    "metrics": [
+      {
+        "id": "T17_M01",
+        "label": "Net official gold purchases",
+        "value": 1092.4,
+        "unit": "tonnes",
+        "period": "2024",
+        "kind": "revisable WGC estimate",
+        "source": "ORO_WGC_2025",
+        "note": "",
+        "comparable_with": "",
+        "geo": "as specified by indicator"
+      },
+      {
+        "id": "T17_M02",
+        "label": "Net official gold purchases",
+        "value": 863.3,
+        "unit": "tonnes",
+        "period": "2025",
+        "kind": "revisable WGC estimate",
+        "source": "ORO_WGC_2025",
+        "note": "",
+        "comparable_with": "",
+        "geo": "as specified by indicator"
+      },
+      {
+        "id": "T17_M03",
+        "label": "Estimated total official demand",
+        "value": 321.2,
+        "unit": "tonnes",
+        "period": "Q3 2026",
+        "kind": "WGC estimate",
+        "source": "ORO_WGC_Q3",
+        "note": "",
+        "comparable_with": "",
+        "geo": "as specified by indicator"
+      },
+      {
+        "id": "T17_M04",
+        "label": "Reported net purchases",
+        "value": 120,
+        "unit": "tonnes",
+        "period": "Q3 2026",
+        "kind": "WGC compiled and rounded data",
+        "source": "ORO_WGC_Q3",
+        "note": "Reported subset; I do not add it to estimated total demand.",
+        "comparable_with": "",
+        "geo": "as specified by indicator"
+      }
+    ],
+    "chart": {
+      "type": "diverging_bar",
+      "title": "Gold: reported changes by country in Q3 2026",
+      "unit": "tonnes",
+      "source": "ORO_WGC_Q3",
+      "rows": [
+        {
+          "period": "China",
+          "value": 63,
+          "kind": "compiled rounded change"
+        },
+        {
+          "period": "Poland",
+          "value": 40,
+          "kind": "compiled rounded change"
+        },
+        {
+          "period": "Kazakhstan",
+          "value": 14,
+          "kind": "compiled rounded change"
+        },
+        {
+          "period": "Uzbekistan",
+          "value": 14,
+          "kind": "compiled rounded change"
+        },
+        {
+          "period": "Czech Republic",
+          "value": 5,
+          "kind": "compiled rounded change"
+        },
+        {
+          "period": "Russia",
+          "value": -19,
+          "kind": "compiled rounded change"
+        }
+      ],
+      "note": "A sample of countries. Unreported purchases are not allocated; these bars do not reconstruct the global total."
+    },
+    "additional_charts": [
+      {
+        "type": "two_panel",
+        "title": "China accumulates; the United States maintains",
+        "data_ref": "gold_direct_evidence",
+        "note": "I would use separate panels with periods and units visible. I would not interpret increases in dollar value as purchases."
+      },
+      {
+        "type": "chain_diagram",
+        "title": "Where value is captured",
+        "data_ref": "trends[16].chain"
+      }
+    ],
+    "sources": [
+      "ORO_WGC_2025",
+      "ORO_WGC_Q3",
+      "ORO_US",
+      "PLATA",
+      "ORO_OFAC",
+      "ORO_OFAC_CURRENT",
+      "ORO_EU",
+      "ORO_CNB",
+      "V_GLD",
+      "V_IAU",
+      "V_SLV",
+      "V_GDX",
+      "V_WPM",
+      "V_WPM_MODEL",
+      "ORO_FNV_RISK",
+      "ORO_FNV_Q3",
+      "ORO_SAFE",
+      "ORO_DEMAND",
+      "ORO_ECB",
+      "PGM",
+      "ORO_RISK"
+    ],
+    "further_analysis": "If I chose a miner or a streaming business, I would examine the full cost, reserve life, contracts, debt and price paid. For metal held in custody, I would examine holder rights, custody, expenses and the vehicle’s availability.",
+    "capital": {
+      "intro": "I compare physical reserve changes and show who accumulates, reduces and maintains holdings. The country table comes from WGC; China and the United States are also checked against direct official data.",
+      "position_ids": [],
+      "all_position_ids": [],
+      "event_ids": [],
+      "country_data_ref": "gold_capital_rows",
+      "direct_data_ref": "gold_direct_evidence",
+      "coverage_note": "The unreported portion of official demand is not allocated to countries. I would keep tonnes, ounces and dollar valuations separate."
+    },
+    "glossary": [
+      {
+        "term": "Metals streaming",
+        "definition": "I would read it as financing in exchange for rights to buy part of future production on agreed terms. I would examine the upfront payment, the price per delivery and the operator’s ability to deliver.",
+        "sources": [
+          "V_WPM_MODEL"
+        ]
+      },
+      {
+        "term": "Royalties",
+        "definition": "I would read these as a contractual right to receive a portion of revenue, profit or another defined base from a mining operation. I would examine what is paid, for how long and what depends on the operator.",
+        "sources": [
+          "ORO_FNV_RISK"
+        ]
+      }
+    ],
+    "glossary_note": "I would distinguish two contracts: streaming gives rights to buy future production in exchange for financing; royalties give the right to receive a portion of an agreed base. In both cases, I would examine the terms and the operator’s delivery capacity."
+  }
+]
