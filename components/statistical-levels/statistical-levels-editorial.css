@@ -67,7 +67,7 @@
   backdrop-filter: blur(12px);
   box-shadow: 0 4px 14px #193d320a;
 }
-.sl-page > :is(section, details), .sl-disclosure-body :is(section, summary), .sl-opening-percentile { scroll-margin-top: calc(var(--sl-header-height) + var(--sl-controls-height) + 18px); }
+.sl-page > :is(section, details), .sl-data-content > :is(section, details), .sl-disclosure-body :is(section, summary), .sl-opening-percentile { scroll-margin-top: calc(var(--sl-header-height) + var(--sl-controls-height) + 18px); }
 .sl-controls .sl-control-label { color: var(--sl-ink); font-size: 13px; letter-spacing: .035em; text-transform: none; }
 .sl-asset-control summary { background: #fbf9f3; border-radius: 3px; min-height: 46px; }
 .sl-asset-control summary strong { font-weight: 600; }
@@ -169,6 +169,9 @@
 #sl-range, #sl-unusual { padding: 28px 24px 30px; }
 #sl-range .sl-section-heading h2, #sl-unusual .sl-section-heading h2 { font-family: var(--sl-serif); font-size: 28px; font-weight: 500; letter-spacing: -.03em; }
 #sl-range .sl-section-heading, #sl-unusual .sl-section-heading { margin-bottom: 16px; }
+.sl-range-scale-note { color: var(--sl-muted); font-size: 12px; margin: -4px 0 22px; }
+.sl-extension-position { padding: 4px 0 20px; }
+.sl-extension-position .sl-caption { margin-top: 14px; }
 #sl-range .sl-range-graphic { margin: 0 5px 8px; height: 112px; }
 #sl-range .sl-range-band { background: linear-gradient(90deg, #cbd0bf, #728d74); border-radius: 3px; height: 10px; top: 60px; }
 #sl-range .sl-marker-price span { background: #b79850; border: 2px solid #faf7ef; width: 13px; height: 13px; left: -6px; bottom: -1px; }

@@ -1,13 +1,14 @@
 type PercentileRangeBarProps = {
   label: string;
   value: number | null;
+  quartiles?: boolean;
 };
 
 function clamp(value: number) {
   return Math.max(0, Math.min(100, value));
 }
 
-export function PercentileRangeBar({ label, value }: PercentileRangeBarProps) {
+export function PercentileRangeBar({ label, value, quartiles = false }: PercentileRangeBarProps) {
   const position = value === null || !Number.isFinite(value) ? null : clamp(value);
   return (
     <div className="sl-percentile-range">
@@ -28,9 +29,7 @@ export function PercentileRangeBar({ label, value }: PercentileRangeBarProps) {
         ) : null}
       </div>
       <div className="mt-1 flex justify-between text-[10px] uppercase tracking-[0.08em] text-muted">
-        <span>0</span>
-        <span>50</span>
-        <span>100</span>
+        {(quartiles ? [0, 25, 50, 75, 100] : [0, 50, 100]).map(tick => <span key={tick}>{tick}</span>)}
       </div>
     </div>
   );

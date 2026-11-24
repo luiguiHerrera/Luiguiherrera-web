@@ -33,6 +33,7 @@ export function HistoricalRange({ asset, frequency, locale }: { asset: AssetStat
   const position = (value: number) => 5 + ((value - min) / (max - min || 1)) * 90;
   return <section id="sl-range" className="sl-section sl-range">
     <div className="sl-section-heading"><h2>{en ? 'Where it is now' : 'Dónde está ahora'}</h2><p>{kind === 'weekly' ? en ? 'Weekly levels' : 'Niveles semanales' : en ? 'Monthly levels' : 'Niveles mensuales'} · {en ? 'Full completed history' : 'Todo el historial completado'}</p></div>
+    <p className="sl-range-scale-note">{en ? 'Price scale · levels measured from the period opening' : 'Escala de precios · niveles desde la apertura del periodo'}</p>
     {valid ? <><div className="sl-range-graphic" role="group" aria-label={items.map(item => `${item.label}: ${number(item.value, asset.ticker === 'BTCUSD' ? 0 : 2)}`).join('. ')}>
       <div className="sl-range-axis" />
       <div className="sl-range-band" style={{ left: `${position(items[0].value!)}%`, width: `${position(items[3].value!) - position(items[0].value!)}%` }} />

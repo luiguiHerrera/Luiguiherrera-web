@@ -1,0 +1,34 @@
+.sl-loading-status { margin: -12px 0 20px; color: var(--sl-muted); font-size: 13px; letter-spacing: .015em; }
+.sl-loading-surface { position: relative; isolation: isolate; overflow: hidden; border: 1px solid #ded8cb80; border-radius: 5px; background: #fcfaf580; }
+.sl-loading-surface::after { content: ''; position: absolute; inset: 0; pointer-events: none; z-index: 1; background: linear-gradient(90deg, transparent, #fff9 50%, transparent); transform: translateX(-100%); animation: sl-loading-sweep 2.2s ease-in-out infinite; }
+.sl-loading-line, .sl-loading-number, .sl-loading-title, .sl-loading-input { display: block; border-radius: 3px; background: #193d3210; }
+.sl-loading-line { width: 68%; height: 10px; margin-bottom: 12px; }
+.sl-loading-line-short { width: 42%; }
+.sl-loading-line-long { width: 90%; }
+.sl-loading-number { width: 62%; height: 30px; margin: 16px 0; }
+.sl-loading-title { width: min(65%, 540px); height: 25px; margin: 8px 0 22px; }
+.sl-loading-input { height: 44px; width: 100%; }
+.sl-loading-controls { display: grid; grid-template-columns: 1.25fr 1.15fr .55fr; gap: 28px; padding: 20px 24px; }
+.sl-loading-overview { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 24px; padding: 28px; margin: 24px 0 0; background: #193d3209; }
+.sl-loading-overview > div + div { border-left: 1px solid #193d3210; padding-left: 24px; }
+.sl-loading-observation, .sl-loading-chart, .sl-loading-metrics { margin-top: 20px; padding: 26px; }
+.sl-loading-observation .sl-loading-title { width: 78%; }
+.sl-loading-axis { display: flex; justify-content: space-around; align-items: center; height: 100px; margin: 0 0 24px; background: linear-gradient(#193d3210, #193d3210) center / 100% 1px no-repeat; }
+.sl-loading-axis > span { width: 2px; height: 26px; background: #193d3210; }
+.sl-loading-columns { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 24px; }
+.sl-loading-metrics { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 28px; }
+.sl-loading-metrics > div + div { border-left: 1px solid #193d3210; padding-left: 28px; }
+.sl-data-area { position: relative; min-width: 0; }
+.sl-data-area[data-loading=true] > .sl-data-content { visibility: hidden; }
+.sl-data-loading { position: absolute; inset: 0; pointer-events: none; }
+@keyframes sl-loading-sweep { from { transform: translateX(-100%); } to { transform: translateX(100%); } }
+@media (max-width: 700px) {
+  .sl-loading-controls { grid-template-columns: 1fr 1fr; gap: 16px; padding: 16px; }
+  .sl-loading-controls > div:nth-child(2) { grid-column: 1 / -1; grid-row: 2; }
+  .sl-loading-overview, .sl-loading-columns { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; }
+  .sl-loading-overview > div + div { padding-left: 0; border: 0; }
+  .sl-loading-overview, .sl-loading-observation, .sl-loading-chart, .sl-loading-metrics { padding: 22px; }
+  .sl-loading-metrics { grid-template-columns: 1fr; gap: 20px; }
+  .sl-loading-metrics > div + div { padding: 20px 0 0; border-left: 0; border-top: 1px solid #193d3210; }
+}
+@media (prefers-reduced-motion: reduce) { .sl-loading-surface::after { animation: none; display: none; } }

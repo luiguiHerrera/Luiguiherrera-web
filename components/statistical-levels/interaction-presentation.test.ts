@@ -32,6 +32,21 @@ const seasonality = JSON.parse(readFileSync('lib/statistical-levels/generated/se
 const manifest = JSON.parse(readFileSync('lib/statistical-levels/generated/manifest.json', 'utf8'));
 const month = new Date(manifest.generatedAt + 'T00:00:00Z').getUTCMonth() + 1;
 
+test('extension rank 25.3 is placed at 25.3% of its own scale, with exact endpoints and no fabricated missing rank', () => {
+  const Component = component('components/statistical-levels/PercentileRangeBar.tsx').PercentileRangeBar as ComponentType<Record<string, unknown>>;
+  for (const value of [0, 25.3, 50, 100]) {
+    const html = renderToStaticMarkup(createElement(Component, { label: 'Extension vs MA40', value, quartiles: true }));
+    assert.ok(html.includes(`style="left:${value}%"`));
+    assert.ok(html.includes(`P${value.toFixed(1)}`));
+    for (const tick of [0, 25, 50, 75, 100]) assert.ok(html.includes(`>${tick}</span>`));
+  }
+  for (const value of [null, NaN, Infinity]) {
+    const html = renderToStaticMarkup(createElement(Component, { label: 'Extension vs MA40', value, quartiles: true }));
+    assert.ok(!html.includes('sl-percentile-current'));
+    assert.ok(html.includes('n/d'));
+  }
+});
+
 test('opening percentile markers use the selected level frequency and stored move quantiles, independently of MA ranks', () => {
   const Component = component('components/statistical-levels/HistoricalRange.tsx').HistoricalRange as ComponentType<Record<string, unknown>>;
   const asset = JSON.parse(readFileSync('lib/statistical-levels/generated/assets/SPY.json', 'utf8'));
@@ -50,6 +65,11 @@ test('opening percentile markers use the selected level frequency and stored mov
     assert.ok(originalLevels.every(value => html.includes(value))); // Original mean levels remain intact.
   }
   assert.equal(JSON.stringify(asset), before);
+  const originalPricePosition = renderToStaticMarkup(createElement(Component, { asset, frequency: 'weekly', locale: 'es' })).match(/class="sl-marker sl-marker-price" style="([^"]+)"/)![1];
+  asset.frequencies.weekly.windows['5Y'].ma200ExtensionPercentile = 25.3;
+  const rankChanged = renderToStaticMarkup(createElement(Component, { asset, frequency: 'weekly', locale: 'es' }));
+  assert.equal(rankChanged.match(/class="sl-marker sl-marker-price" style="([^"]+)"/)![1], originalPricePosition);
+  assert.ok(rankChanged.includes('Escala de precios'));
   asset.frequencies.weekly.changeMoves.lowExtensionFromOpen.p10 = null;
   const missing = renderToStaticMarkup(createElement(Component, { asset, frequency: 'weekly', locale: 'es' }));
   assert.equal((missing.match(/class="sl-opening-percentile"/g) ?? []).length, 9);
