@@ -38,7 +38,7 @@ function verifyHistoricalSnapshot(read=(file:string)=>readFileSync(file)) {
 }
 
 // Exercise the actual live orchestrator used by /dashboard with post-publication provider data.
-// Only test providers are mocked; report lookup/export and scoring are production code.
+// Providers and Next's persistent-cache boundary are isolated; report/export and scoring are real.
 test('critical canary: report remains 04/09 and its values while the real Dashboard loader advances to 08/09', async()=>{
   let live=json(base+'/dashboard-evidence.json');
   const before=JSON.stringify(buildReportExportModel(report));
@@ -50,6 +50,10 @@ test('critical canary: report remains 04/09 and its values while the real Dashbo
     ['gld-flow-pressure',{getGldFlowPressure:async()=>live.gldFlowPressure}],
   ] as const;
   for(const [name,namedExports] of modules) mock.module(`../dashboard/adapters/${name}.ts`,{namedExports});
+  mock.module('next/cache.js',{namedExports:{unstable_cache:(load:unknown)=>load}});
+  mock.module('../dashboard/get-mcclellan-data.ts',{namedExports:{getMcClellanData:async()=>null}});
+  mock.module('../dashboard/get-published-capital-flows.ts',{namedExports:{getPublishedCapitalFlows:async()=>[]}});
+  mock.module('../dashboard/get-ewj-capital-flows.ts',{namedExports:{getPublishedEwjFlows:()=>({id:'ewj'})}});
   const {getDashboardData}=await import('../dashboard/get-dashboard-data.ts');
   assert.equal((await getDashboardData()).gldFlowPressure?.asOf,'2026-09-04');
   live=structuredClone(live);

@@ -20,7 +20,9 @@ test("one real provider response per governed symbol produces full coverage", as
     apiKey: "test-key",
     now: Date.UTC(2026, 7, 31),
     sleep: async () => {},
-    fetcher: async (input) => {
+    fetcher: async (input, init) => {
+      assert.equal(init?.cache, "no-store");
+      assert.equal(init?.next, undefined);
       const symbol = new URL(String(input)).searchParams.get("symbol") ?? "";
       requested.push(symbol);
       return new Response(JSON.stringify(providerPayload(symbol)), { status: 200 });
@@ -55,6 +57,38 @@ test("daily cache shares one canonical snapshot within the refresh window", asyn
   assert.equal(calls, 1);
   clock += 24 * 60 * 60 * 1000 + 1;
   await getSnapshot();
+  assert.equal(calls, 2);
+});
+
+test("failed sector loads coalesce in flight and retry after recovery", async () => {
+  let calls = 0;
+  const read = createDailySectorCache(async () => {
+    calls++;
+    if (calls === 1) throw new Error("temporary provider failure");
+    return loadSectorEtfsData({ apiKey: "" });
+  }, () => 1000);
+  const first = read(), concurrent = read();
+  assert.equal(first, concurrent);
+  await assert.rejects(first, /temporary provider failure/);
+  await assert.rejects(concurrent, /temporary provider failure/);
+  await read();
+  assert.equal(calls, 2);
+});
+
+test("a failed older generation cannot evict the newer sector cache", async () => {
+  let clock = 0, calls = 0;
+  let rejectFirst!: (reason: Error) => void;
+  const read = createDailySectorCache(() => {
+    calls++;
+    return calls === 1 ? new Promise((_, reject) => { rejectFirst = reject; }) : loadSectorEtfsData({ apiKey: "" });
+  }, () => clock);
+  const first = read();
+  const rejected = assert.rejects(first, /older failure/);
+  clock += 86_400_001;
+  const newer = await read();
+  rejectFirst(new Error("older failure"));
+  await rejected;
+  assert.equal(await read(), newer);
   assert.equal(calls, 2);
 });
 

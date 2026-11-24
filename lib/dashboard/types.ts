@@ -1,4 +1,6 @@
 import type { DashboardModuleId } from "@/lib/analytics/trackEvent";
+import type { CapitalFlowAssetPreview } from "./capital-flows-preview-types";
+import type { McClellanPreviewData } from "./mcclellan-preview-types";
 
 export type DataStatus = "demo" | "manual" | "live_pending" | "automated" | "fallback" | "delayed" | "unavailable";
 
@@ -85,6 +87,8 @@ export type SectorRotationData = DashboardDataSource & {
 };
 
 export type QuantRiskData = DashboardDataSource & {
+  fragilityComponents?: { id: "ewma" | "garch" | "correlation" | "dispersion" | "leadership"; met: boolean; points: number }[];
+  fragilityUsesEwmaFallback?: boolean;
   ewmaVolAnnualized: number | null;
   ewmaVolChange: number | null;
   ewmaStatus: VolatilityStatus | null;
@@ -351,6 +355,12 @@ export type CrossSignalRadarRow = DashboardDataSource & {
 };
 
 export type DashboardData = {
+  marketContext?: {
+    id: string;
+    capturedAt: string;
+    breadth: McClellanPreviewData | null;
+    flows: CapitalFlowAssetPreview[];
+  };
   dashboardModules: DashboardModuleData[];
   crossSignalRadar: CrossSignalRadarRow[];
   regimeSummary: RegimeSummary;

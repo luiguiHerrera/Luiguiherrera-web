@@ -9,6 +9,7 @@ import {
 } from "@/components/dashboard/DashboardPrimitives";
 import { buildQuantRiskPresentation } from "@/lib/dashboard/quant-risk-presentation";
 import type { QuantRiskData } from "@/lib/dashboard/types";
+import { SectorFragilityExplanation } from "./SectorFragilityExplanation";
 
 type QuantRiskPanelProps = {
   data: QuantRiskData;
@@ -65,6 +66,8 @@ export function QuantRiskPanel({ data, locale = "es" }: QuantRiskPanelProps) {
           </div>
         ))}
       </div>
+
+      <details className="mt-4 border-b border-line pb-4"><summary className="cursor-pointer text-sm font-medium">{locale === "es" ? "Qué mide la fragilidad sectorial" : "What sector fragility measures"}</summary><div className="mt-4"><SectorFragilityExplanation data={data} locale={locale} /></div></details>
 
       <div className="mt-5 grid gap-6 border-t border-line pt-5 sm:grid-cols-[1fr_0.65fr]" data-quant-analysis>
             <section>

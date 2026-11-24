@@ -61,12 +61,14 @@ export function buildQuantRiskData(sectors: SectorEtfSnapshot[], metrics: Sector
   const garchStatus = classifyVolatility(garchVol ?? ewmaVol);
   const modelStatus = garchVol === null ? (ewmaVol === null ? "insufficient_data" : "fallback_ewma") : "estimated";
 
-  let score = 0;
-  if ((ewmaVol ?? 0) >= 0.18) score += 20;
-  if ((garchVol ?? ewmaVol ?? 0) >= 0.18) score += 20;
-  if ((averageCorr21 ?? 0) >= 0.65) score += 20;
-  if (metrics.sectorDispersion1w >= 4 || metrics.sectorDispersion1m >= 8) score += 20;
-  if (metrics.reading === "defensiva") score += 20;
+  const fragilityComponents: NonNullable<QuantRiskData["fragilityComponents"]> = [
+    { id: "ewma", met: (ewmaVol ?? 0) >= 0.18, points: 20 },
+    { id: "garch", met: (garchVol ?? ewmaVol ?? 0) >= 0.18, points: 20 },
+    { id: "correlation", met: (averageCorr21 ?? 0) >= 0.65, points: 20 },
+    { id: "dispersion", met: metrics.sectorDispersion1w >= 4 || metrics.sectorDispersion1m >= 8, points: 20 },
+    { id: "leadership", met: metrics.reading === "defensiva", points: 20 },
+  ];
+  const score = fragilityComponents.reduce((sum, item) => sum + (item.met ? item.points : 0), 0);
 
   return {
     sourceName: "Cálculos propios sobre ETFs sectoriales vía proveedor de precios",
@@ -87,6 +89,8 @@ export function buildQuantRiskData(sectors: SectorEtfSnapshot[], metrics: Sector
     sectorDispersion1w: metrics.sectorDispersion1w,
     sectorDispersion1m: metrics.sectorDispersion1m,
     fragilityScore: Math.min(score, 100),
+    fragilityComponents,
+    fragilityUsesEwmaFallback: garchVol === null && ewmaVol !== null,
     fragilityLabel: fragilityLabel(score),
     fragilityInterpretation: `La lectura cuantitativa muestra fragilidad ${fragilityLabel(score).toLowerCase()}. Estos modelos estiman condiciones estadísticas de riesgo bajo supuestos históricos; no implican dirección futura del mercado.`,
   };

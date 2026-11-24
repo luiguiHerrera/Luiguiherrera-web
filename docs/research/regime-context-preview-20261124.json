@@ -1,0 +1,118 @@
+{
+  "status": "PREVIEW_CANDIDATE",
+  "production_base": "af4329a8ffdc02cc783421144a1d1b90862503e8",
+  "branch": "codex/regime-preview-20261124",
+  "production_model_changed": false,
+  "routes": [
+    "/dashboard/preview-regimen",
+    "/en/dashboard/regime-preview"
+  ],
+  "methodology": {
+    "version": "market-context-preview-1",
+    "weights": null,
+    "primary_scope": "US equities",
+    "blocks": [
+      "S&P 500 RAMO/RASI as one breadth block",
+      "Existing VIX categories and current VX curve",
+      "Published SP500 proxy flow signs over complete 5/20 sessions"
+    ],
+    "flow_universe": "Display actual vehicle coverage; current SP500 feed contains SPY only",
+    "satellites": "Joint current BTC/ETH outflows can narrow broad support; gold and Japan context only",
+    "freshness": "At most one closed session behind for primary inputs; any lag forces partial and caps broad support. Older observations retained only as context. Existing one-hour close buffer.",
+    "validation": "Rules are provisional and not historically validated. No probability or score assigned."
+  },
+  "technical_fixes": [
+    "Share one five-minute Next data capture among Home ES/EN, Dashboard ES/EN and comparison routes; dynamically render pages around it",
+    "Release rejected sector single-flight promises and never cache raw HTTP-200 provider quota messages; only cache validated sector snapshots",
+    "Retain validated delayed McClellan source with its actual cutoff and stale flag, outside fresh-source cache",
+    "Rename ambiguous fragility to sector fragility and expose unchanged five-component heuristic, EWMA/GARCH duplication and fallback"
+  ],
+  "observed_sources": {
+    "breadth_cutoff": "2026-11-23",
+    "breadth_delayed": true,
+    "VIX_cutoff": "2026-11-23",
+    "equity_flow_cutoff": "2026-11-20",
+    "sector_cold_read": "Alpha Vantage daily quota exhausted; do not invent a fallback ranking"
+  },
+  "local_validation": {
+    "web_tests": {
+      "passed": 402,
+      "skipped": 3,
+      "failed": 0
+    },
+    "sector_cache_final": {
+      "passed": 6,
+      "failed": 0
+    },
+    "typescript": "PASS",
+    "lint": {
+      "errors": 0,
+      "preexisting_warnings": 26
+    },
+    "editorial": "10 reports PASS",
+    "SEO": "85 indexable routes and 37 reciprocal language pairs PASS",
+    "build": "PASS; one existing dynamic filesystem tracing warning",
+    "browser": "ES/EN comparison rendered; 390px mobile has document width=scrollWidth=390, tables scroll inside 358px containers",
+    "shared_capture": [
+      {
+        "route": "/",
+        "exit": 0,
+        "snapshot": "640c0ca9d7121b05d68bf9148c22ecad7d1c91542e07ab26e25db4038abc02ca",
+        "capturedAt": "2026-11-24T22:51:14.889Z"
+      },
+      {
+        "route": "/en",
+        "exit": 0,
+        "snapshot": "640c0ca9d7121b05d68bf9148c22ecad7d1c91542e07ab26e25db4038abc02ca",
+        "capturedAt": "2026-11-24T22:51:14.889Z"
+      },
+      {
+        "route": "/dashboard",
+        "exit": 0,
+        "snapshot": "640c0ca9d7121b05d68bf9148c22ecad7d1c91542e07ab26e25db4038abc02ca",
+        "capturedAt": "2026-11-24T22:51:14.889Z"
+      },
+      {
+        "route": "/en/dashboard",
+        "exit": 0,
+        "snapshot": "640c0ca9d7121b05d68bf9148c22ecad7d1c91542e07ab26e25db4038abc02ca",
+        "capturedAt": "2026-11-24T22:51:14.889Z"
+      },
+      {
+        "route": "/dashboard/preview-regimen",
+        "exit": 0,
+        "snapshot": "640c0ca9d7121b05d68bf9148c22ecad7d1c91542e07ab26e25db4038abc02ca",
+        "capturedAt": "2026-11-24T22:51:14.889Z"
+      },
+      {
+        "route": "/en/dashboard/regime-preview",
+        "exit": 0,
+        "snapshot": "640c0ca9d7121b05d68bf9148c22ecad7d1c91542e07ab26e25db4038abc02ca",
+        "capturedAt": "2026-11-24T22:51:14.889Z"
+      }
+    ]
+  },
+  "preservation": {
+    "reports": {
+      "files": 52,
+      "identical_to_production": true
+    },
+    "AC": {
+      "files": 82,
+      "identical_to_production": true
+    },
+    "PFL": {
+      "files": 12,
+      "identical_to_production": true
+    },
+    "legacy_regime": {
+      "files": 1,
+      "identical_to_production": true
+    },
+    "daily_workflow": {
+      "files": 1,
+      "identical_to_production": true
+    }
+  },
+  "release_boundary": "Comparison routes return 404 in VERCEL_ENV=production before reading sources, and are noindex. Only feature Preview will be deployed for review."
+}

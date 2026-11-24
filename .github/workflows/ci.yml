@@ -79,6 +79,7 @@ jobs:
             lib/dashboard/sp500-etf-flows.test.mjs lib/dashboard/mcclellan-source.test.mjs lib/dashboard/mcclellan-reading.test.mjs \
             lib/dashboard/development-source-cache.test.mjs lib/dashboard/dashboard-overview.test.ts \
             lib/dashboard/gld-flow-history.test.ts lib/dashboard/quant-risk-presentation.test.ts lib/dashboard/regime-scoring.test.ts \
+            lib/dashboard/regime-context-preview.test.ts lib/dashboard/shared-market-snapshot.test.mjs lib/dashboard/adapters/sector-etfs.test.ts lib/dashboard/risk-models.test.ts \
             lib/statistical-levels/baseline.test.mjs lib/statistical-levels/contracts.test.ts lib/statistical-levels/defect-repairs.test.ts \
             lib/statistical-levels/published-data.test.mts lib/statistical-levels/published-fetch.test.ts \
             scripts/statistical-levels-storage.test.mjs components/statistical-levels/interaction-presentation.test.ts \
