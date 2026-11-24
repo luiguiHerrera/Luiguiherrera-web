@@ -543,10 +543,19 @@ jobs:
           PYCODE
 
       - name: Test bounded CI admission and producer readback
+        if: ${{ github.ref == 'refs/heads/vercel-deployment' && github.event_name != 'pull_request' }}
         shell: bash
         run: |
           set -euo pipefail
           python3 -m unittest discover -s scripts/statistical-levels-ci -p 'test_*.py' -v
+          node --test scripts/statistical-levels-ci/producer-receipt.test.mjs scripts/statistical-levels-daily.test.mjs scripts/statistical-levels-provider-durability.test.mjs
+
+      - name: Test website CI isolation and producer contracts
+        if: ${{ github.ref != 'refs/heads/vercel-deployment' || github.event_name == 'pull_request' }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          PYTHONPATH=scripts/statistical-levels-ci python3 -m unittest -v test_admission.WorkflowStructureTests test_daily_admission.DailyTests
           node --test scripts/statistical-levels-ci/producer-receipt.test.mjs scripts/statistical-levels-daily.test.mjs scripts/statistical-levels-provider-durability.test.mjs
 
       - name: Install dependencies
