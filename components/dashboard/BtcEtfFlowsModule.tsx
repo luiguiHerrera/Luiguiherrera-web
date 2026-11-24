@@ -1,5 +1,7 @@
 "use client";
 
+import { DashboardChartCursor } from './DashboardChartCursor';
+
 import { useId, useState } from "react";
 import type { CSSProperties } from "react";
 import { usePathname } from "next/navigation";
@@ -147,6 +149,7 @@ function FlowBarChart({ history, locale }: { history: BtcEtfFlowPoint[]; locale:
                   fill={point.totalNetFlow > 0 ? "#6f8f7b" : point.totalNetFlow < 0 ? "#a86464" : "#a8a29e"}
                 />
               ))}
+              <DashboardChartCursor x={active?.centerX} date={active?.point.date} />
             </svg>
             {points.map(({ point, cumulative, centerX, lineY }, index) => (
               <button
@@ -314,10 +317,9 @@ export function BtcEtfFlowsModule({ assetLabel = "BTC", data }: BtcEtfFlowsModul
         <div className="max-w-3xl">
           <DashboardModuleHeading headingLevel="h3">
             {assetLabel === "BTC"
-              ? locale === "en" ? "Net flows for spot Bitcoin ETFs" : "Flujos netos de ETFs de BTC"
+              ? locale === "en" ? "Spot ETF flows" : "Flujos de ETF spot"
               : locale === "en" ? "ETF flow pressure" : "Presión de flujos vía ETFs"}
           </DashboardModuleHeading>
-          <p className="mt-3 text-sm leading-6 text-muted md:text-base">{t(flows.readingSubtext)}</p>
           <p className="mt-2 text-sm font-medium text-ink" data-btc-reading>{t(flows.readingLabel)}</p>
           <div className="mt-3 flex flex-wrap items-baseline gap-x-3 gap-y-1 text-xs leading-5" data-btc-coverage-summary>
             <span className="font-semibold text-ink">{coverageCopy.label}</span>

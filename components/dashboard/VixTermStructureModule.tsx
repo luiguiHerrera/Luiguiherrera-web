@@ -1,10 +1,13 @@
 "use client";
 
+import { DashboardChartCursor } from './DashboardChartCursor';
+
 import { useId, useState } from "react";
 import type { CSSProperties } from "react";
 import { usePathname } from "next/navigation";
 import { DashboardModuleHeading, DashboardValueBar, dashboardModuleEyebrowClassName } from "@/components/dashboard/DashboardPrimitives";
 import { translateDashboardText } from "@/lib/dashboard/translate-dashboard-copy";
+import { dashboardText } from "@/lib/dashboard/dashboard-localization";
 import type { VixTermStructureData, VixTermStructurePoint, VixTermStructureSourceStatus } from "@/lib/dashboard/types";
 
 type VixTermStructureModuleProps = {
@@ -167,6 +170,7 @@ function TermStructureChart({
           {plottedPoints.length >= 2 ? (
             <path d={curvePath} fill="none" stroke="#6f8f7b" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" vectorEffect="non-scaling-stroke" />
           ) : null}
+          <DashboardChartCursor x={activePoint?.x} date={activePoint?.point.expirationDate ?? undefined} y1={12} y2={82} />
         </svg>
 
         {plottedPoints.map(({ point, x, y }) => {
@@ -303,7 +307,7 @@ function TermStructureTable({
 
 export function VixTermStructureModule({ data }: VixTermStructureModuleProps) {
   const locale: Locale = usePathname().startsWith("/en") ? "en" : "es";
-  const t = (value: string | null | undefined) => locale === "en" ? translateDashboardText(value) : value ?? "";
+  const t = (value: string | null | undefined) => dashboardText(locale,value ?? "");
   const statusLabel = locale === "en" ? sourceStatusLabelsEn[data.sourceStatus] : sourceStatusLabels[data.sourceStatus];
   const [activePointLabel, setActivePointLabel] = useState<VixTermStructurePoint["label"] | null>(null);
   const [detailOpen, setDetailOpen] = useState(false);

@@ -1,7 +1,7 @@
 import type { AggregatePoint, FundObservation, FlowInterpretation } from './sp500-etf-flows.mjs';
 
 export type CapitalFlowAssetPreview = {
-  id: 'sp500' | 'gold' | 'btc' | 'eth';
+  id: 'sp500' | 'gold' | 'btc' | 'eth' | 'ewj';
   title: string;
   eyebrow: string;
   description: string;

@@ -120,12 +120,7 @@ export function GldFlowPressureModule({ data, locale = "es" }: { data: GldFlowPr
 
       <div className="mt-3 flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
         <div className="max-w-3xl">
-          <DashboardModuleHeading headingLevel="h3">{isEnglish ? "Flow-pressure proxy" : "Proxy de presión de flujos"}</DashboardModuleHeading>
-          <p className="mt-3 text-sm leading-6 text-muted md:text-base">
-            {isEnglish
-              ? "Estimates creation or redemption pressure from changes in GLD shares outstanding."
-              : "Estima la presión de creación o reembolso a partir de cambios en las participaciones en circulación de GLD."}
-          </p>
+          <DashboardModuleHeading headingLevel="h3">{isEnglish ? "GLD flows" : "Flujos de GLD"}</DashboardModuleHeading>
         </div>
 
       </div>

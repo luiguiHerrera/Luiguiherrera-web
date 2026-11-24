@@ -1,14 +1,23 @@
-import { CapitalFlowPreviewCard } from "@/components/dashboard/CapitalFlowCard";
-import type { CapitalFlowAssetPreview } from "@/lib/dashboard/capital-flows-preview-types";
-import { getPublishedCapitalFlows } from "@/lib/dashboard/get-published-capital-flows";
 import { BtcEtfFlowsModule } from "@/components/dashboard/BtcEtfFlowsModule";
 import { DashboardReadingGuide } from "@/components/dashboard/DashboardReadingGuide";
 import { DashboardModule } from "@/components/dashboard/DashboardModule";
 import { DashboardPresentation } from "@/components/dashboard/DashboardPresentation";
+import { DashboardSectionOverview } from "@/components/dashboard/DashboardSectionOverview";
+import { flowOverviewItems, flowMonthCaption, type DashboardOverviewItem } from "@/lib/dashboard/dashboard-overview";
+import { dashboardText } from "@/lib/dashboard/dashboard-localization";
+import { hasVixObservation } from "@/lib/dashboard/vix-presentation";
+import { buildQuantRiskPresentation } from "@/lib/dashboard/quant-risk-presentation";
 import { GldFlowPressureModule } from "@/components/dashboard/GldFlowPressureModule";
 import { IntegratedRegimeModule } from "@/components/dashboard/IntegratedRegimeModule";
 import { MarketBreadthPanel } from "@/components/dashboard/MarketBreadthPanel";
 import { McClellanPreviewModule } from "@/components/dashboard/McClellanPreviewModule";
+import { Sp500EtfFlowsModule } from "@/components/dashboard/Sp500EtfFlowsModule";
+import { CapitalFlowPreviewCard } from "@/components/dashboard/CapitalFlowCard";
+import { getPublishedCapitalFlows } from "@/lib/dashboard/get-published-capital-flows";
+import { getPublishedEwjFlows } from "@/lib/dashboard/get-ewj-capital-flows";
+import type { CapitalFlowAssetPreview } from "@/lib/dashboard/capital-flows-preview-types";
+import type { Sp500EtfFlowsPreviewData } from "@/lib/dashboard/sp500-etf-flows-types";
+import type { McClellanPreviewData } from "@/lib/dashboard/mcclellan-preview-types";
 import { getMcClellanData } from "@/lib/dashboard/get-mcclellan-data";
 import { QuantRiskPanel } from "@/components/dashboard/QuantRiskPanel";
 import { SectorRotationChart, SectorRotationUnavailable } from "@/components/dashboard/SectorRotationChart";
@@ -28,17 +37,61 @@ export default async function DashboardPage() {
   return <DashboardContent locale="es" />;
 }
 
-export async function DashboardContent({ locale = "es", previewEthFlows = false, ethFlowsPreviewData }: { locale?: "es" | "en"; previewEthFlows?:boolean; ethFlowsPreviewData?:CapitalFlowAssetPreview }) {
+export async function DashboardContent({ locale = "es", previewMcClellan = false, mcclellanPreviewData, previewSp500Flows = false, sp500FlowsPreviewData = null, capitalFlowsPreviewData = [], previewEthFlows = false, ethFlowsPreviewData, previewEwjFlows = false }: { locale?: "es" | "en"; previewMcClellan?: boolean; mcclellanPreviewData?: McClellanPreviewData; previewSp500Flows?: boolean; sp500FlowsPreviewData?: Sp500EtfFlowsPreviewData | null; capitalFlowsPreviewData?: CapitalFlowAssetPreview[]; previewEthFlows?:boolean; ethFlowsPreviewData?:CapitalFlowAssetPreview; previewEwjFlows?:boolean }) {
+  const showMcClellanPreview = process.env.NODE_ENV === "development" && previewMcClellan && Boolean(mcclellanPreviewData);
+  const showSp500FlowsPreview = process.env.NODE_ENV === "development" && previewSp500Flows;
   const showEthFlowsPreview = process.env.NODE_ENV === "development" && previewEthFlows && Boolean(ethFlowsPreviewData);
-  const [dashboardData, mcClellan] = await Promise.all([
-    getDashboardData(),
-    locale === "es" ? getMcClellanData() : Promise.resolve(null),
-  ]);
+  const showEwjFlowsPreview = process.env.NODE_ENV === "development" && previewEwjFlows;
+  const publishedFlows = !showSp500FlowsPreview ? (await getPublishedCapitalFlows()).filter(data => !showEthFlowsPreview || data.id !== 'eth') : [];
+  const ewjFlows = (process.env.NODE_ENV === 'development' ? capitalFlowsPreviewData.find(data => data.id === 'ewj') : null) ?? getPublishedEwjFlows();
+  const mcclellanData = showMcClellanPreview ? mcclellanPreviewData : await getMcClellanData();
+  const dashboardData = await getDashboardData();
   const { btcEtfFlows, dashboardModules, gldFlowPressure, quantRisk, regimeSummary, sectorModule, sectorRotation, vix, vixTermStructure } = dashboardData;
-  const publishedFlows = locale === "es" ? (await getPublishedCapitalFlows()).filter(data => !showEthFlowsPreview || data.id !== "eth") : [];
   const weeklyReportData = await buildWeeklyReportData(dashboardData);
   const remainingModules = dashboardModules.filter((module) => module.id !== "rates" && module.id !== "sectors" && module.id !== "vix" && module.id !== "btc-flows");
   const breadthValues = buildMarketBreadthValues(weeklyReportData, locale);
+  const flowModels = [
+    ...(showSp500FlowsPreview ? capitalFlowsPreviewData.filter(data => data.id !== 'ewj') : publishedFlows),
+    ...(showEthFlowsPreview && ethFlowsPreviewData ? [ethFlowsPreviewData] : []),
+    ewjFlows,
+  ];
+  if (showSp500FlowsPreview) flowModels.unshift({
+    id:'sp500', title:'', eyebrow:'', description:'', points:sp500FlowsPreviewData?.points ?? [],
+    cutoffDate:sp500FlowsPreviewData?.cutoffDate ?? null, metricBasis:'daily-sum', kind:'estimated',
+    vehicles:sp500FlowsPreviewData?.included ?? [], sources:[], notes:[],
+  });
+  const insufficient = locale === 'en' ? 'Not enough data' : 'Datos insuficientes';
+  const t = (value:string) => dashboardText(locale,value);
+  const sourceDate = (value:string | null | undefined) => {
+    if (!value) return undefined;
+    const iso = value.match(/\d{4}-\d{2}-\d{2}/)?.[0];
+    return t(formatCapitalFlowDate(iso ?? value.replace(/^[^:]+:\s*/,''),locale));
+  };
+  const sectorReady = sectorRotation && !['demo','fallback','unavailable','live_pending'].includes(sectorRotation.dataStatus);
+  const latestBreadth = mcclellanData?.points.at(-1);
+  const signed = (value:number | undefined) => value == null ? insufficient : new Intl.NumberFormat(locale === 'es' ? 'es-ES' : 'en-US',{maximumFractionDigits:1,minimumFractionDigits:1,signDisplay:'exceptZero'}).format(value);
+  const participationOverview: DashboardOverviewItem[] = [
+    { id:'positive-sectors', label:locale === 'en' ? 'Sectors advancing · 1W' : 'Sectores al alza · 1W', value:sectorReady ? breadthValues.positiveSectors : insufficient, date:sectorReady ? sourceDate(sectorRotation.lastUpdated) : undefined },
+    { id:'long-average', label:locale === 'en' ? 'Above long-term average' : 'Sobre la media de largo plazo', value:breadthValues.sectorsOverLongAverage, date:sourceDate(weeklyReportData.statisticalSource.updated) },
+    { id:'ramo', label:'RAMO', value:signed(latestBreadth?.oscillator), detail:locale === 'en' ? 'Participation momentum' : 'Impulso de la participación', date:sourceDate(mcclellanData?.cutoffDate) },
+    { id:'rasi', label:'RASI', value:signed(latestBreadth?.summation), detail:locale === 'en' ? 'Accumulated breadth' : 'Amplitud acumulada', date:sourceDate(mcclellanData?.cutoffDate) },
+  ];
+  const quantPresentation = quantRisk ? buildQuantRiskPresentation(quantRisk,locale) : null;
+  const quantReady = quantRisk && !['demo','fallback','unavailable','live_pending'].includes(quantRisk.dataStatus);
+  const quantMetric = (id:string) => quantReady ? quantPresentation?.primaryMetrics.find(metric => metric.id === id)?.value ?? insufficient : insufficient;
+  const spot = vix?.spot;
+  const riskOverview: DashboardOverviewItem[] = [
+    { id:'vix', label:'VIX', value:hasVixObservation(spot) ? spot.latestVix.toFixed(2) : insufficient, detail:hasVixObservation(spot) ? t(spot.vixLevelLabel) : undefined, date:sourceDate(spot?.lastObservationDate) },
+    { id:'curve', label:locale === 'en' ? 'VIX term structure' : 'Estructura del VIX', value:vixTermStructure && !['pending','unavailable'].includes(vixTermStructure.sourceStatus) ? t(vixTermStructure.classification) : insufficient, date:sourceDate(vixTermStructure?.lastUpdated) },
+    { id:'ewma', label:locale === 'en' ? 'EWMA volatility' : 'Volatilidad EWMA', value:quantMetric('ewma'), date:quantReady ? sourceDate(quantRisk.lastUpdated) : undefined },
+    { id:'fragility', label:locale === 'en' ? 'Fragility' : 'Fragilidad', value:quantMetric('fragility'), date:quantReady ? sourceDate(quantRisk.lastUpdated) : undefined },
+  ];
+  const flowSummaryAsOf = new Date();
+  const flowsOverview = flowOverviewItems(flowModels,locale,flowSummaryAsOf);
+  if (!flowModels.length) {
+    if (gldFlowPressure) flowsOverview.push({ id:'gold',label:locale === 'en' ? 'Gold' : 'Oro',value:locale === 'en' ? 'Not enough monthly data' : 'Datos mensuales insuficientes',date:sourceDate(gldFlowPressure.asOf) });
+    if (btcEtfFlows) flowsOverview.push({ id:'btc',label:'Bitcoin',value:locale === 'en' ? 'Not enough monthly data' : 'Datos mensuales insuficientes',date:sourceDate(btcEtfFlows.flows.latestDate) });
+  }
   const copy = locale === "en"
     ? {
         eyebrow: "Regime read",
@@ -111,9 +164,10 @@ export async function DashboardContent({ locale = "es", previewEthFlows = false,
 
       <div className="mt-6 space-y-4 md:mt-8 md:space-y-6">
         <section className="grid min-w-0 gap-3 [&>*]:min-w-0" aria-labelledby="market-participation-section" data-market-participation-section>
-          <details data-dashboard-section="participation">
+          <DashboardSectionOverview id="market-participation-section" title={copy.participationSection} items={participationOverview} />
+          <details data-dashboard-section="participation" data-detail-disclosure open={showMcClellanPreview || undefined}>
             <summary>
-              <h2 id="market-participation-section" className="text-xs font-semibold uppercase tracking-[0.2em] text-petrol">{copy.participationSection}</h2>
+              <span>{locale === 'en' ? 'View detail' : 'Ver detalle'}</span>
               <span data-dashboard-section-indicator aria-hidden="true" />
             </summary>
             <div data-dashboard-section-body>
@@ -135,16 +189,17 @@ export async function DashboardContent({ locale = "es", previewEthFlows = false,
                     status: sectorRotation?.dataStatus ?? sectorModule.dataStatus,
                   }}
                 />
-                {mcClellan ? <McClellanPreviewModule data={mcClellan} /> : locale === "es" ? <section className="rounded border border-line p-6"><p className="text-xs uppercase tracking-widest text-brass">McClellan</p><h3 className="mt-3 font-serif text-2xl text-ink">Amplitud interna del S&amp;P 500</h3><p className="mt-3 text-sm text-muted">Datos no disponibles. La fuente se comprobará de nuevo automáticamente.</p></section> : null}
+                {mcclellanData ? <McClellanPreviewModule data={mcclellanData} localPreview={showMcClellanPreview} locale={locale} /> : <section className="rounded border border-line p-6"><p className="text-xs uppercase tracking-widest text-brass">McClellan</p><h3 className="mt-3 font-serif text-2xl text-ink">{locale === 'en' ? 'Internal breadth of the S&P 500' : 'Amplitud interna del S&P 500'}</h3><p className="mt-3 text-sm text-muted">{locale === 'en' ? 'Data unavailable. The source will be checked again automatically.' : 'Datos no disponibles. La fuente se comprobará de nuevo automáticamente.'}</p></section>}
               </div>
             </div>
           </details>
         </section>
         {quantRisk || vix || vixTermStructure ? (
           <section className="grid min-w-0 gap-3 [&>*]:min-w-0" aria-labelledby="vix-volatility-section">
-            <details data-dashboard-section="vix">
+            <DashboardSectionOverview id="vix-volatility-section" title={copy.vixSection} items={riskOverview} />
+            <details data-dashboard-section="vix" data-detail-disclosure>
               <summary>
-                <h2 id="vix-volatility-section" className="text-xs font-semibold uppercase tracking-[0.2em] text-petrol">{copy.vixSection}</h2>
+                <span>{locale === 'en' ? 'View detail' : 'Ver detalle'}</span>
                 <span data-dashboard-section-indicator aria-hidden="true" />
               </summary>
               <div data-dashboard-section-body>
@@ -157,21 +212,24 @@ export async function DashboardContent({ locale = "es", previewEthFlows = false,
             </details>
           </section>
         ) : null}
-        {publishedFlows.length || btcEtfFlows || gldFlowPressure || showEthFlowsPreview ? (
+        {publishedFlows.length || btcEtfFlows || gldFlowPressure || showSp500FlowsPreview || showEthFlowsPreview || showEwjFlowsPreview ? (
           <section className="grid min-w-0 gap-3 [&>*]:min-w-0" aria-labelledby="capital-flows-section" data-capital-flows-section>
-            <details data-dashboard-section="flows" open={showEthFlowsPreview || undefined}>
+            <DashboardSectionOverview id="capital-flows-section" title={copy.capitalFlows} caption={flowMonthCaption(locale,flowSummaryAsOf)} items={flowsOverview} />
+            <details data-dashboard-section="flows" data-detail-disclosure open={showSp500FlowsPreview || showEthFlowsPreview || showEwjFlowsPreview || undefined}>
               <summary>
-                <h2 id="capital-flows-section" className="text-xs font-semibold uppercase tracking-[0.2em] text-petrol">{copy.capitalFlows}</h2>
+                <span>{locale === 'en' ? 'View detail' : 'Ver detalle'}</span>
                 <span data-dashboard-section-indicator aria-hidden="true" />
               </summary>
               <div data-dashboard-section-body>
                 <p className="mb-5 max-w-3xl text-sm leading-6 text-muted">{copy.capitalFlowsSubtitle}</p>
                 <div className="grid min-w-0 gap-4 md:gap-5 [&>*]:min-w-0">
-                  {publishedFlows.length ? publishedFlows.map(data => <CapitalFlowPreviewCard key={data.id} data={data} />) : <>
+                  {showSp500FlowsPreview ? <Sp500EtfFlowsModule data={sp500FlowsPreviewData} /> : null}
+                  {showSp500FlowsPreview ? capitalFlowsPreviewData.filter(data => data.id !== 'ewj').map(data => <CapitalFlowPreviewCard key={data.id} data={data} locale={locale} />) : publishedFlows.length ? publishedFlows.map(data => <CapitalFlowPreviewCard key={data.id} data={data} locale={locale} />) : <>
                     {gldFlowPressure ? <GldFlowPressureModule data={gldFlowPressure} locale={locale} /> : null}
                     {btcEtfFlows ? <BtcEtfFlowsModule data={btcEtfFlows} /> : null}
                   </>}
-                  {showEthFlowsPreview && ethFlowsPreviewData ? <CapitalFlowPreviewCard data={ethFlowsPreviewData} /> : null}
+                  {showEthFlowsPreview && ethFlowsPreviewData ? <CapitalFlowPreviewCard data={ethFlowsPreviewData} locale={locale} /> : null}
+                  <CapitalFlowPreviewCard data={ewjFlows} locale={locale} />
                 </div>
               </div>
             </details>

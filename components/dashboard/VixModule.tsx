@@ -1,5 +1,7 @@
 "use client";
 
+import { DashboardChartCursor } from './DashboardChartCursor';
+
 import { useId, useState } from "react";
 import type { CSSProperties } from "react";
 import { usePathname } from "next/navigation";
@@ -89,6 +91,7 @@ function VixLineChart({ history, locale }: { history: VixHistoryPoint[]; locale:
               <line x1="4" x2="96" y1="47" y2="47" stroke="#eee9e3" strokeWidth="0.6" vectorEffect="non-scaling-stroke" />
               <line x1="4" x2="96" y1="12" y2="12" stroke="#eee9e3" strokeWidth="0.6" vectorEffect="non-scaling-stroke" />
               <path d={path} fill="none" stroke="#6f8f7b" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" vectorEffect="non-scaling-stroke" />
+              <DashboardChartCursor x={active?.x} date={active?.point.date} y1={12} y2={82} />
             </svg>
             {points.map(({ point, x, y }, index) => (
               <button

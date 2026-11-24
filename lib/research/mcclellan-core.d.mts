@@ -1,3 +1,4 @@
+export function sessionDates(start:string, end:string):string[];
 export type ResearchPoint = {
   date: string;
   rana: number;

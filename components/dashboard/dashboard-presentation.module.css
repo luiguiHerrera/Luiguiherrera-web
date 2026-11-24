@@ -99,6 +99,10 @@
 .page [data-dashboard-section] > summary:hover h2 { color: #85662e; }
 .page [data-dashboard-section] > summary:focus-visible { outline: 2px solid var(--dashboard-gold); outline-offset: 4px; border-radius: 2px; }
 .page [data-dashboard-section-body] { min-width: 0; padding-bottom: 8px; }
+.page [data-dashboard-section][data-detail-disclosure] { border-top:0; }
+.page [data-dashboard-section][data-detail-disclosure] > summary { min-height:38px; padding:0 2px 8px; justify-content:flex-end; gap:12px; color:#697268; font-size:12px; }
+.page [data-dashboard-section][data-detail-disclosure] > summary:hover { color:#8a6329; }
+.page [data-detail-disclosure] [data-dashboard-section-indicator] { width:16px; font-size:19px; }
 
 .page [data-dashboard-section-body] > div > :is(section, article) {
   padding: 29px 32px 30px;

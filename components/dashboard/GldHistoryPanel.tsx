@@ -1,6 +1,7 @@
 "use client";
 
 import { useId, useState } from "react";
+import { DashboardChartCursor } from './DashboardChartCursor';
 import { DashboardDisclosureButton, DashboardValueBar } from "@/components/dashboard/DashboardPrimitives";
 import { formatCapitalFlowDate, formatCapitalFlowUsdMillions } from "@/lib/dashboard/capital-flows-presentation";
 import { buildGldFlowHistory } from "@/lib/dashboard/gld-flow-history";
@@ -48,6 +49,7 @@ export function GldHistoryPanel({ history, locale }: { history: GldFlowPressureP
                 return <rect key={point.date} x={point.x - step / 3} y={point.impliedFlowMillions > 0 ? 57 - height : 57} width={step * 2 / 3} height={Math.max(height, 0.5)} fill={point.impliedFlowMillions > 0 ? "#6f8f7b" : point.impliedFlowMillions < 0 ? "#a86464" : "#a8a29e"} rx="0.5" />;
               })}
               <path d={path} fill="none" stroke="#98753b" strokeWidth="1.5" vectorEffect="non-scaling-stroke" />
+              <DashboardChartCursor x={active === null ? null : points[active]?.x} date={active === null ? undefined : points[active]?.date} />
             </svg>
             {points.map((point, index) => <button key={point.date} type="button" aria-label={`${formatCapitalFlowDate(point.date, locale)} · ${isEnglish ? "estimated flow" : "flujo estimado"} ${formatCapitalFlowUsdMillions(point.impliedFlowMillions, locale)}`} className="absolute inset-y-0 -translate-x-1/2 bg-transparent" style={{ left: `${point.x}%`, width: `${step}%` }} onMouseEnter={() => setActive(index)} onMouseLeave={() => setActive(null)} onFocus={() => setActive(index)} onBlur={() => setActive(null)}>
               <span className="absolute left-1/2 h-2 w-2 -translate-x-1/2 -translate-y-1/2 rounded-full border border-[#98753b] bg-panel" style={{ top: `${point.y / 78 * 100}%` }} aria-hidden="true" />
