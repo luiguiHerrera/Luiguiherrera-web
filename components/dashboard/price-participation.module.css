@@ -6,6 +6,11 @@
 .windows span { display: flex; align-items: center; justify-content: center; min-width: 42px; min-height: 38px; padding: 7px 12px; border-radius: 2px; color: var(--pp-muted); font-size: 12px; }
 .windows input:checked + span { background: var(--pp-green); color: #fffdf9; }
 .windows input:focus-visible + span { outline: 2px solid var(--pp-gold); outline-offset: 3px; }
+.windows:disabled label { cursor: wait; }
+.windows:disabled span { opacity: .5; }
+.closeLabel { display: none; }
+.card > details[open] > summary .openLabel { display: none; }
+.card > details[open] > summary .closeLabel { display: inline; }
 .metricLabel { position: relative; display: flex; align-items: flex-start; gap: 4px; }
 .metricValue { display: flex; align-items: baseline; flex-wrap: wrap; gap: 6px; }
 .metricValue small { color: var(--pp-muted); font-family: inherit; font-size: 11px; letter-spacing: 0; }

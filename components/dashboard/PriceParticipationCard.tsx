@@ -1,6 +1,6 @@
 "use client";
 
-import { useId, useMemo, useState } from "react";
+import { useId, useMemo, useState, useSyncExternalStore } from "react";
 import { DashboardDisclosureButton } from "./DashboardPrimitives";
 import PriceParticipationChart from "./PriceParticipationChart";
 import { buildPriceParticipation, exportPriceParticipationCsv, PRICE_PARTICIPATION_WINDOWS } from "@/lib/dashboard/price-participation";
@@ -12,6 +12,9 @@ import { buildSectorParticipation } from "@/lib/dashboard/price-participation-se
 
 const BREADTH_SOURCE = "https://github.com/DeanFinancials/deanfi-data";
 const PAGE_SIZE = 20;
+const subscribeToClientReady = () => () => {};
+const clientReady = () => true;
+const serverReady = () => false;
 function number(value: number | null | undefined, locale: PriceParticipationLocale, digits = 2, signed = false) {
   if (value == null || !Number.isFinite(value)) return priceParticipationCopy[locale].unavailable;
   const displayed = Number(value.toFixed(digits)) === 0 ? 0 : value;
@@ -80,7 +83,7 @@ export default function PriceParticipationCard({ input, locale = "es" }: { input
   const copy = priceParticipationCopy[locale];
   const id = useId();
   const [sessions, setSessions] = useState<PriceParticipationWindow>(20);
-  const [expanded, setExpanded] = useState(false);
+  const interactive = useSyncExternalStore(subscribeToClientReady, clientReady, serverReady);
   const [context, setContext] = useState(false);
   const view = useMemo(() => input ? buildPriceParticipation(input, sessions) : null, [input, sessions]);
   const rows = view?.rows ?? [];
@@ -108,10 +111,10 @@ export default function PriceParticipationCard({ input, locale = "es" }: { input
     {view?.refreshStatus === "retained" ? <p className={styles.notice} role="status">{copy.retained}</p> : null}
     {lagged ? <p className={styles.notice}>{copy.lag} <span>{copy.priceThrough}: {date(view?.priceAvailableThrough, locale)} · {copy.breadthThrough}: {date(view?.breadthAvailableThrough, locale)}.</span></p> : null}
     {view?.breadth?.stale && !lagged ? <p className={styles.notice}>{copy.breadthPending}</p> : null}
-    <details data-detail-disclosure data-dashboard-section="price-participation" onToggle={event => setExpanded(event.currentTarget.open)}>
-      <summary><span>{expanded ? copy.close : copy.open}</span><span data-dashboard-section-indicator aria-hidden="true" /></summary>
+    <details data-detail-disclosure data-dashboard-section="price-participation">
+      <summary><span className={styles.openLabel}>{copy.open}</span><span className={styles.closeLabel}>{copy.close}</span><span data-dashboard-section-indicator aria-hidden="true" /></summary>
       <div className={styles.detail} id={`${id}-detail`} data-dashboard-section-body>
-    <div className={styles.controlsRow}><fieldset className={styles.windows}><legend>{copy.sessions}</legend>{PRICE_PARTICIPATION_WINDOWS.map(value => <label key={value}><input type="radio" name={`${id}-window`} checked={sessions === value} onChange={() => setSessions(value)} value={value} /><span>{value}</span></label>)}</fieldset><p>{view?.comparisonDate ? <>{copy.comparison}: {date(view.comparisonDate, locale)} {copy.through} {date(view.cutoffDate, locale)}</> : copy.insufficient}</p></div>
+    <div className={styles.controlsRow}><fieldset className={styles.windows} disabled={!interactive}><legend>{copy.sessions}</legend>{PRICE_PARTICIPATION_WINDOWS.map(value => <label key={value}><input type="radio" name={`${id}-window`} checked={sessions === value} onChange={() => setSessions(value)} value={value} /><span>{value}</span></label>)}</fieldset><p>{view?.comparisonDate ? <>{copy.comparison}: {date(view.comparisonDate, locale)} {copy.through} {date(view.cutoffDate, locale)}</> : copy.insufficient}</p></div>
       {view && view.cutoffDate ? <>
         {incomplete ? <p className={styles.notice}>{copy.insufficient}</p> : null}
         <div className={styles.sectionHeading}><h3>{copy.priceHistory}</h3><p>{copy.priceNote}</p><p className={styles.returnComparison}>{copy.return} · SPY: <strong data-price-tone={view.spy.returnPct !== null && view.spy.returnPct < 0 ? "negative" : undefined}>{number(view.spy.returnPct, locale, 2, true)}{view.spy.returnPct === null ? "" : "%"}</strong> · RSP: <strong data-price-tone={view.rsp.returnPct !== null && view.rsp.returnPct < 0 ? "negative" : undefined}>{number(view.rsp.returnPct, locale, 2, true)}{view.rsp.returnPct === null ? "" : "%"}</strong></p></div>
