@@ -84,10 +84,10 @@ export function buildRiskOverview({ quantRisk, vixSpot, vixTermStructure }: Risk
       },
     },
     {
-      id: "var95", label: english ? "Historical VaR95 · SPY" : "VaR95 histórico · SPY",
+      id: "var95", label: "VaR95",
       value: var95 === null ? unavailable : percent(var95 * 100),
       available: var95 !== null,
-      detail: english ? "One-session loss · 1,260 returns" : "Pérdida a una sesión · 1.260 retornos",
+      detail: english ? "SPY · One-session loss · 1,260 returns" : "SPY · Pérdida a una sesión · 1.260 retornos",
       date: var95 === null ? undefined : observationDate(spy?.lastUpdated, locale),
     },
     {

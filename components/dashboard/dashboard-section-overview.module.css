@@ -36,6 +36,7 @@
 }
 .item[data-overview-item="vix"] { background:linear-gradient(120deg,#f6f2e7,#f9f5eb); border-color:#e2dac8; }
 .item dt { min-height:30px; color:#596156; font-size:10px; font-weight:600; letter-spacing:.12em; line-height:1.65; text-transform:uppercase; }
+.item[data-overview-item="var95"] dt { text-transform:none; }
 .value { margin-top:7px; color:#193d32; font-family:var(--dashboard-serif,Georgia,serif); font-size:clamp(26px,2.45vw,36px); font-weight:500; line-height:1.25; overflow-wrap:anywhere; font-variant-numeric:tabular-nums; }
 .grid[data-columns="5"] .item { min-height:153px; padding:17px 14px 15px; }
 .grid[data-columns="5"] .item dt { min-height:17px; }

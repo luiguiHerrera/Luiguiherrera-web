@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState, type KeyboardEvent, type PointerEvent } from "react";
+import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState, type Dispatch, type KeyboardEvent, type PointerEvent, type ReactNode, type RefObject, type SetStateAction } from "react";
 import styles from "./price-participation.module.css";
 import chartStyles from "./price-participation-chart.module.css";
 
@@ -22,6 +22,42 @@ type Props = {
 
 const COLORS = ["#193d32", "#946f2e"];
 const LEFT = 18, RIGHT = 982, TOP = 18, BOTTOM = 236;
+
+type SharedInspection = {
+  date: string | null;
+  pinned: RefObject<boolean>;
+  setPinned: (value: boolean) => void;
+  setDate: Dispatch<SetStateAction<string | null>>;
+};
+const InspectionContext = createContext<SharedInspection | null>(null);
+
+/** Only charts inside this existing row share a date; every scale stays local. */
+export function SynchronizedPriceParticipationCharts({ children }: { children: ReactNode }) {
+  const [date, setDate] = useState<string | null>(null);
+  const pinned = useRef(false);
+  const group = useRef<HTMLDivElement>(null);
+  const setPinned = useCallback((value: boolean) => { pinned.current = value; }, []);
+  const inspection = useMemo(() => ({ date, pinned, setDate, setPinned }), [date, setPinned]);
+
+  useEffect(() => {
+    const dismiss = (event: globalThis.PointerEvent) => {
+      if (!group.current?.contains(event.target as Node)) {
+        pinned.current = false;
+        setDate(null);
+      }
+    };
+    document.addEventListener("pointerdown", dismiss);
+    return () => document.removeEventListener("pointerdown", dismiss);
+  }, []);
+
+  return <InspectionContext.Provider value={inspection}>
+    <div ref={group} className={styles.breadthCharts} data-synchronized-breadth
+      onPointerLeave={() => { if (!pinned.current) setDate(null); }}
+      onBlur={(event) => { if (!pinned.current && !event.currentTarget.contains(event.relatedTarget)) setDate(null); }}>
+      {children}
+    </div>
+  </InspectionContext.Provider>;
+}
 
 function formatDate(value: string, locale: "es" | "en") {
   return new Intl.DateTimeFormat(locale === "es" ? "es-ES" : "en-US", {
@@ -100,21 +136,35 @@ function geometryFor(series: readonly PriceParticipationChartSeries[], reference
 export default function PriceParticipationChart({ series, locale, id, title, unit, digits = 1, reference }: Props) {
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
   const surface = useRef<HTMLDivElement>(null);
-  const pinned = useRef(false);
+  const localPinned = useRef(false);
+  const inspection = useContext(InspectionContext);
+  const isPinned = () => inspection ? inspection.pinned.current : localPinned.current;
+  const setPinned = (value: boolean) => {
+    if (inspection) inspection.setPinned(value);
+    else localPinned.current = value;
+  };
   const geometry = useMemo(() => geometryFor(series, reference), [series, reference]);
-  const selected = Math.min(activeIndex ?? (geometry?.dates.length ?? 0) - 1, (geometry?.dates.length ?? 0) - 1);
+  const inspectedIndex = inspection
+    ? inspection.date === null ? null : geometry?.dates.indexOf(inspection.date) ?? -1
+    : activeIndex;
+  const selected = Math.min(inspectedIndex ?? (geometry?.dates.length ?? 0) - 1, (geometry?.dates.length ?? 0) - 1);
+  const select = (index: number | null) => {
+    if (inspection) inspection.setDate(index === null ? null : geometry?.dates[index] ?? null);
+    else setActiveIndex(index);
+  };
   const en = locale === "en";
   const help = en
     ? "Hover to inspect. Click or tap to pin. Keyboard: ← → move through dates; Home / End jump to the endpoints; Esc or a tap outside clears the selection."
     : "Pasa el cursor para consultar. Haz clic o toca para fijar. Teclado: ← → recorren fechas; Inicio / Fin van a los extremos; Esc o un toque fuera limpia la selección.";
 
   useEffect(() => {
+    if (inspection) return;
     const dismiss = (event: globalThis.PointerEvent) => {
-      if (!surface.current?.contains(event.target as Node)) { pinned.current = false; setActiveIndex(null); }
+      if (!surface.current?.contains(event.target as Node)) { localPinned.current = false; setActiveIndex(null); }
     };
     document.addEventListener("pointerdown", dismiss);
     return () => document.removeEventListener("pointerdown", dismiss);
-  }, []);
+  }, [inspection]);
 
   const inspect = (event: PointerEvent<HTMLDivElement>) => {
     if (!geometry) return;
@@ -123,7 +173,7 @@ export default function PriceParticipationChart({ series, locale, id, title, uni
     const fraction = Math.max(0, Math.min(1, ((event.clientX - bounds.left) / bounds.width * 1000 - LEFT) / (RIGHT - LEFT)));
     const target = geometry.firstTime + fraction * (geometry.lastTime - geometry.firstTime);
     const index = nearestPriceParticipationDate(geometry.timestamps, target);
-    if (index >= 0) setActiveIndex(index);
+    if (index >= 0) select(index);
   };
   const navigate = (event: KeyboardEvent<HTMLDivElement>) => {
     if (!geometry) return;
@@ -132,15 +182,15 @@ export default function PriceParticipationChart({ series, locale, id, title, uni
     else if (event.key === "ArrowRight") next = Math.min(geometry.dates.length - 1, selected + 1);
     else if (event.key === "Home") next = 0;
     else if (event.key === "End") next = geometry.dates.length - 1;
-    else if (event.key === "Escape") { event.preventDefault(); pinned.current = false; setActiveIndex(null); return; }
+    else if (event.key === "Escape") { event.preventDefault(); setPinned(false); select(null); return; }
     else return;
-    event.preventDefault(); pinned.current = false; setActiveIndex(next);
+    event.preventDefault(); setPinned(false); select(next);
   };
 
   if (!geometry || selected < 0) return <section className={styles.chart}><h4>{title}</h4><p className={styles.note}>{en ? "No observations available for this window." : "No hay observaciones disponibles en esta ventana."}</p></section>;
   const selectedDate = geometry.dates[selected];
   const valueText = `${formatDate(selectedDate, locale)} · ${geometry.lines.map((line) => `${line.label}: ${formatNumber(line.values[selected], locale, digits)} ${unit}`).join("; ")}`;
-  const inspecting = activeIndex !== null;
+  const inspecting = inspectedIndex !== null;
   const xPercent = geometry.xs[selected] / 10;
   const activeYs = geometry.lines.flatMap((line) => line.ys[selected] === null ? [] : [line.ys[selected]!]);
   const anchorY = activeYs.length ? Math.min(...activeYs) / 260 * 100 : 50;
@@ -156,11 +206,14 @@ export default function PriceParticipationChart({ series, locale, id, title, uni
       aria-valuemin={0} aria-valuemax={geometry.dates.length - 1} aria-valuenow={selected}
       aria-valuetext={valueText} aria-describedby={`${id}-help`}
       data-price-participation-chart data-selected-date={inspecting ? selectedDate : undefined}
-      onPointerMove={(event) => { if (event.pointerType === "mouse" && !pinned.current) inspect(event); }}
-      onPointerDown={(event) => { pinned.current = true; inspect(event); }}
-      onPointerLeave={() => { if (!pinned.current) setActiveIndex(null); }}
-      onFocus={() => setActiveIndex((index) => index ?? geometry.dates.length - 1)}
-      onBlur={() => { if (!pinned.current) setActiveIndex(null); }} onKeyDown={navigate}>
+      onPointerMove={(event) => { if (event.pointerType === "mouse" && !isPinned()) inspect(event); }}
+      onPointerDown={(event) => { setPinned(true); inspect(event); }}
+      onPointerLeave={() => { if (!inspection && !isPinned()) select(null); }}
+      onFocus={() => {
+        if (inspection) inspection.setDate((date) => date ?? geometry.dates[geometry.dates.length - 1]);
+        else setActiveIndex((index) => index ?? geometry.dates.length - 1);
+      }}
+      onBlur={() => { if (!inspection && !isPinned()) select(null); }} onKeyDown={navigate}>
       <svg viewBox="0 0 1000 260" preserveAspectRatio="none" aria-hidden="true">
         {shaded ? <>
           <defs>

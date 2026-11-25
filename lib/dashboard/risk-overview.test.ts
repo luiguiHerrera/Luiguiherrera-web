@@ -32,8 +32,8 @@ test("risk overview groups VIX with VX, EWMA with GARCH, then retains distinct S
   assert.equal(items[1].secondary?.value, "18,2%");
   assert.match(items[1].secondary?.detail ?? "", /Parámetros fijos/);
   assert.equal(items[2].value, "1,69%");
-  assert.match(items[2].label, /SPY/);
-  assert.match(items[2].detail ?? "", /Pérdida a una sesión/);
+  assert.equal(items[2].label, "VaR95");
+  assert.match(items[2].detail ?? "", /SPY · Pérdida a una sesión/);
   assert.equal(items[3].value, "63,83%");
   assert.match(items[3].detail ?? "", /Varianza explicada.*11 ETF.*500 sesiones.*2 componentes/);
   assert.equal(items.some(item => /ES95/.test(item.label)), false, "ES stays in the existing risk detail");
@@ -48,6 +48,8 @@ test("every measure keeps its own date instead of borrowing the newest source cu
   assert.equal(items[2].date, "Nov 24, 2026");
   assert.equal(items[3].date, "Nov 23, 2026");
   assert.equal(items[0].secondary?.value, "Flat");
+  assert.equal(items[2].label, "VaR95");
+  assert.match(items[2].detail ?? "", /SPY · One-session loss/);
 });
 
 test("VX retains the actual adapter's localized settlement date in both languages", () => {
