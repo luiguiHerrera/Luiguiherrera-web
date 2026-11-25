@@ -131,7 +131,7 @@ export async function DashboardContent({ locale = "es", previewMcClellan = false
     >
 
       <div className="mt-6 md:mt-8" data-market-snapshot={dashboardData.marketContext?.id} data-market-captured-at={dashboardData.marketContext?.capturedAt}>
-        {financialEnvironment !== undefined && <FinancialEnvironmentCard locale={locale} snapshot={financialEnvironment} />}
+        {financialEnvironment !== undefined ? <FinancialEnvironmentCard locale={locale} snapshot={financialEnvironment} /> : (
         <IntegratedRegimeModule
           data={regimeSummary}
           locale={locale}
@@ -161,6 +161,7 @@ export async function DashboardContent({ locale = "es", previewMcClellan = false
             }] : []),
           ]}
         />
+        )}
       </div>
 
       <DashboardReadingGuide locale={locale} />

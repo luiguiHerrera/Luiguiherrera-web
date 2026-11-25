@@ -40,3 +40,7 @@ If the cache has no valid entry and the source fails, the real bundled capture i
 ## Review adjustments
 
 Removed the public coverage/reconciliation panel and historical discrepancy notice; internal calculations, checks and official values remain intact. Added click/keyboard explanations to the three overview metrics. The methodology now uses the dashboard's Show/Hide context button. History inspection follows AC drawdown interaction, with a date/value tooltip on hover, touch and keyboard.
+
+## Visual replacement of the integrated-regime card
+
+When an OFR snapshot is supplied, Financial environment replaces the previous integrated-regime card instead of stacking both cards. The production dashboard continues on the existing branch until publication is approved. The OFR card adopts the previous card's deep green gradient, ivory editorial type, gold figures and subtle separators. Its expandable contribution/history/table surface remains light for detailed reading, as in the previous card's context section. Source values, calculations and the other dashboard modules are unchanged.
