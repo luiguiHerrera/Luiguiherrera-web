@@ -3,10 +3,11 @@
 import { useId, useMemo, useState } from "react";
 import { DashboardDisclosureButton, DashboardModuleHeading } from "./DashboardPrimitives";
 import { buildOfrFsiSummary, exportOfrFsiCsv, getOfrDelta20 } from "@/lib/dashboard/ofr-fsi";
-import type { OfrContribution, OfrFsiDataset, OfrFsiSnapshot, OfrObservation, OfrReconciliation, OfrSeriesKey } from "@/lib/dashboard/ofr-fsi";
+import type { OfrContribution, OfrFsiDataset, OfrFsiSnapshot, OfrObservation, OfrSeriesKey } from "@/lib/dashboard/ofr-fsi";
 import { ofrFsiCopy } from "@/lib/dashboard/ofr-fsi-copy";
 import type { OfrLocale } from "@/lib/dashboard/ofr-fsi-copy";
 import styles from "./financial-environment.module.css";
+import FinancialEnvironmentHistory from "./FinancialEnvironmentHistory";
 
 type HistoryWindow = "3m" | "1y" | "5y" | "all";
 type Dimension = "categories" | "regions";
@@ -55,6 +56,19 @@ function Choice<T extends string>({ name, legend, value, options, onChange }: {
   </fieldset>;
 }
 
+function MetricHelp({ label, text, locale }: { label: string; text: string; locale: OfrLocale }) {
+  const id = useId();
+  const [open, setOpen] = useState(false);
+  return <span className={styles.metricHelp}>
+    <button type="button" aria-label={`${locale === "en" ? "Help" : "Ayuda"}: ${label}`} aria-expanded={open} aria-controls={id} aria-describedby={open ? id : undefined}
+      onClick={() => setOpen(value => !value)} onBlur={() => setOpen(false)}
+      onKeyDown={event => { if (event.key === "Escape") { event.preventDefault(); setOpen(false); } }}>
+      <span aria-hidden="true">i</span>
+    </button>
+    <span id={id} role="tooltip" hidden={!open} className={styles.metricTooltip}>{text}</span>
+  </span>;
+}
+
 function Contributions({ entries, measure, locale, digits }: { entries: OfrContribution[]; measure: Measure; locale: OfrLocale; digits: number }) {
   const copy = ofrFsiCopy[locale];
   const values = entries.map((entry) => measure === "level" ? entry.value : entry.delta20);
@@ -75,56 +89,6 @@ function Contributions({ entries, measure, locale, digits }: { entries: OfrContr
       </div>;
     })}
     <p className={styles.barCaption}><span>−</span><span>0 · {copy.contributionPoints}</span><span>+</span></p>
-  </div>;
-}
-
-function Reconciliation({ current, change, locale, digits, count, changeCount, total }: { current: OfrReconciliation; change: OfrReconciliation; locale: OfrLocale; digits: number; count: number; changeCount: number; total: number }) {
-  const copy = ofrFsiCopy[locale];
-  const status = current.status === "incomplete" || change.status === "incomplete" ? "incomplete" : current.status === "mismatch" || change.status === "mismatch" ? "mismatch" : "reconciled";
-  return <details className={styles.smallDetails}>
-    <summary>{copy.reconciliation}<span>{copy.level}: {count}/{total} · Δ20: {changeCount}/{total}</span></summary>
-    <p>{copy[status]}</p>
-    <div className={styles.reconciliationGrid}>{([{ label: copy.level, item: current }, { label: copy.delta, item: change }]).map(({ label, item }) => <dl key={label}>
-      <dt className={styles.reconciliationTitle}>{label}</dt><dd />
-      <dt>{copy.published}</dt><dd>{number(item.expected, locale, digits, true)}</dd>
-      <dt>{copy.sum}</dt><dd>{number(item.sum, locale, digits, true)}</dd>
-      <dt>{copy.residual}</dt><dd>{number(item.residual, locale, digits + 1, true)}</dd>
-      <dt>{copy.tolerance}</dt><dd>{number(item.tolerance, locale, digits + 1)}</dd>
-    </dl>)}</div>
-  </details>;
-}
-
-function HistoryChart({ observations, locale, digits, id }: { observations: OfrObservation[]; locale: OfrLocale; digits: number; id: string }) {
-  const copy = ofrFsiCopy[locale];
-  const [selected, setSelected] = useState<number | null>(null);
-  const selectedIndex = Math.min(selected ?? observations.length - 1, observations.length - 1);
-  const active = observations[selectedIndex];
-  const values = observations.flatMap((row) => row.fsi === null ? [] : [row.fsi]);
-  if (!values.length) return <p className={styles.note}>{copy.chartEmpty}</p>;
-  const lower = Math.min(0, ...values), upper = Math.max(0, ...values);
-  const padding = Math.max((upper - lower) * 0.08, 0.1);
-  const min = lower - padding, max = upper + padding;
-  const firstTime = Date.parse(observations[0].date), lastTime = Date.parse(observations.at(-1)!.date);
-  const x = (row: OfrObservation) => 18 + (Date.parse(row.date) - firstTime) / Math.max(lastTime - firstTime, 1) * 964;
-  const y = (value: number) => 236 - (value - min) / (max - min) * 218;
-  const path = observations.map((row, index) => {
-    if (row.fsi === null) return "";
-    const connected = index > 0 && observations[index - 1].fsi !== null;
-    return `${connected ? "L" : "M"}${x(row).toFixed(2)},${y(row.fsi).toFixed(2)}`;
-  }).join(" ");
-  return <div className={styles.historyChart}>
-    <div className={styles.chartReadout} aria-live="polite"><time dateTime={active.date}>{date(active.date, locale)}</time><strong>{number(active.fsi, locale, digits)}</strong><span>{copy.points}</span></div>
-    <div className={styles.chartCanvas}>
-      <svg viewBox="0 0 1000 260" preserveAspectRatio="none" role="img" aria-labelledby={`${id}-chart-title ${id}-chart-desc`}>
-        <title id={`${id}-chart-title`}>{copy.history}</title><desc id={`${id}-chart-desc`}>{copy.historyDescription}</desc>
-        <line x1="18" x2="982" y1={y(0)} y2={y(0)} className={styles.zeroLine} vectorEffect="non-scaling-stroke" />
-        <path d={path} className={styles.historyLine} vectorEffect="non-scaling-stroke" />
-        {active.fsi !== null ? <><line x1={x(active)} x2={x(active)} y1="18" y2="236" className={styles.cursorLine} vectorEffect="non-scaling-stroke" /><circle cx={x(active)} cy={y(active.fsi)} r="3.5" className={styles.cursorPoint} vectorEffect="non-scaling-stroke" /></> : null}
-      </svg>
-      <span className={styles.zeroLabel} style={{ top: `${y(0) / 260 * 100}%` }}>{copy.zero}</span>
-    </div>
-    <div className={styles.chartDates}><span>{date(observations[0].date, locale)}</span><span>{date(observations.at(-1)?.date, locale)}</span></div>
-    <label className={styles.scrubber} htmlFor={`${id}-observation`}><span>{copy.inspect}</span><input id={`${id}-observation`} type="range" min="0" max={observations.length - 1} value={selectedIndex} onChange={(event) => setSelected(Number(event.target.value))} aria-valuetext={`${date(active.date, locale)}: ${number(active.fsi, locale, digits)} ${copy.points}`} /></label>
   </div>;
 }
 
@@ -165,6 +129,7 @@ export default function FinancialEnvironmentCard({ snapshot, locale = "es" }: { 
   const id = useId();
   const copy = ofrFsiCopy[locale];
   const [expanded, setExpanded] = useState(false);
+  const [contextOpen, setContextOpen] = useState(false);
   const [dimension, setDimension] = useState<Dimension>("categories");
   const [measure, setMeasure] = useState<Measure>("level");
   const [window, setWindow] = useState<HistoryWindow>("1y");
@@ -172,19 +137,16 @@ export default function FinancialEnvironmentCard({ snapshot, locale = "es" }: { 
   const observations = useMemo(() => snapshot ? historyWindow(snapshot.dataset, window) : [], [snapshot, window]);
   const digits = snapshot?.dataset.decimalPlaces ?? 3;
   const entries = summary ? dimension === "categories" ? summary.categoryContributions : summary.regionContributions : [];
-  const historicalIssues = summary?.historicalIssues.filter((issue) => observations.length && issue.date >= observations[0].date && issue.date <= observations.at(-1)!.date) ?? [];
   const increases = entries.filter((entry) => entry.delta20 !== null && entry.delta20 > 0).sort((a, b) => b.delta20! - a.delta20!);
   const decreases = entries.filter((entry) => entry.delta20 !== null && entry.delta20 < 0).sort((a, b) => a.delta20! - b.delta20!);
   const state = summary?.state ?? "unavailable";
-  const currentReconciliation = summary?.reconciliation[dimension];
-  const changeReconciliation = summary?.reconciliation[dimension === "categories" ? "categoryChanges" : "regionChanges"];
   return <section className={styles.card} aria-labelledby={`${id}-title`} data-financial-environment>
     <header className={styles.heading}><div><p className={styles.eyebrow}>{copy.subtitle}</p><DashboardModuleHeading headingLevel="h2"><span id={`${id}-title`}>{copy.title}</span></DashboardModuleHeading></div><a className={styles.sourceMark} href={SOURCE} target="_blank" rel="noreferrer">Office of Financial Research<span aria-hidden="true"> ↗</span></a></header>
     {snapshot?.refreshStatus === "retained" ? <p className={styles.refreshNotice} role="status">{copy.retained}</p> : null}
     <div className={styles.overview}>
-      <div className={styles.overviewItem}><h3>{copy.observed}</h3><p className={styles.mainValue}>{number(summary?.latest?.fsi, locale, digits)}</p><p className={styles.reading}>{copy.average[state]}</p><p className={styles.date}>{copy.date}: <time dateTime={summary?.latest?.date}>{date(summary?.latest?.date, locale)}</time></p></div>
-      <div className={styles.overviewItem}><h3>{copy.change}</h3><p className={styles.mainValue}>{number(summary?.delta20, locale, digits, true)}</p><p className={styles.reading}>{copy.trend[summary?.trend ?? "unavailable"]}<span className={styles.unit}> · {copy.points}</span></p><p className={styles.date}>{summary?.comparison ? `${date(summary.comparison.date, locale)} – ${date(summary.latest?.date, locale)}` : copy.comparisonUnavailable}</p></div>
-      <div className={styles.overviewItem}><h3>{copy.focus}</h3>{summary?.focusCategories.length ? <ul className={styles.focusList}>{summary.focusCategories.map((entry) => <li key={entry.key}><span>{copy.contributions[entry.key].label}</span><strong>{number(entry.value, locale, digits, true)}</strong></li>)}</ul> : <p className={styles.noFocus}>{summary?.coverage.categories === 5 ? copy.noPositive : copy.noFocus}</p>}<p className={styles.date}>{copy.focusNote}</p>{summary && summary.coverage.categories < 5 ? <p className={styles.note}>{copy.partialFocus}</p> : null}</div>
+      <div className={styles.overviewItem}><div className={styles.metricLabel}><h3>{copy.observed}</h3><MetricHelp label={copy.observed} text={copy.observedHelp} locale={locale} /></div><p className={styles.mainValue}>{number(summary?.latest?.fsi, locale, digits)}</p><p className={styles.reading}>{copy.average[state]}</p><p className={styles.date}>{copy.date}: <time dateTime={summary?.latest?.date}>{date(summary?.latest?.date, locale)}</time></p></div>
+      <div className={styles.overviewItem}><div className={styles.metricLabel}><h3>{copy.change}</h3><MetricHelp label={copy.change} text={copy.changeHelp} locale={locale} /></div><p className={styles.mainValue}>{number(summary?.delta20, locale, digits, true)}</p><p className={styles.reading}>{copy.trend[summary?.trend ?? "unavailable"]}<span className={styles.unit}> · {copy.points}</span></p><p className={styles.date}>{summary?.comparison ? `${date(summary.comparison.date, locale)} – ${date(summary.latest?.date, locale)}` : copy.comparisonUnavailable}</p></div>
+      <div className={styles.overviewItem}><div className={styles.metricLabel}><h3>{copy.focus}</h3><MetricHelp label={copy.focus} text={copy.focusHelp} locale={locale} /></div>{summary?.focusCategories.length ? <ul className={styles.focusList}>{summary.focusCategories.map((entry) => <li key={entry.key}><span>{copy.contributions[entry.key].label}</span><strong>{number(entry.value, locale, digits, true)}</strong></li>)}</ul> : <p className={styles.noFocus}>{summary?.coverage.categories === 5 ? copy.noPositive : copy.noFocus}</p>}<p className={styles.date}>{copy.focusNote}</p>{summary && summary.coverage.categories < 5 ? <p className={styles.note}>{copy.partialFocus}</p> : null}</div>
     </div>
     <div className={styles.disclosure}><p>{copy.lag}</p><DashboardDisclosureButton controls={`${id}-details`} expanded={expanded} collapsedLabel={copy.open} expandedLabel={copy.close} onClick={() => setExpanded(!expanded)} /></div>
     <div id={`${id}-details`} hidden={!expanded} className={styles.detail}>
@@ -193,12 +155,11 @@ export default function FinancialEnvironmentCard({ snapshot, locale = "es" }: { 
         <div className={styles.controls}><Choice name={`${id}-dimension`} legend={copy.dimension} value={dimension} options={[{ value: "categories", label: copy.categories }, { value: "regions", label: copy.regions }]} onChange={setDimension} /><Choice name={`${id}-measure`} legend={copy.representation} value={measure} options={[{ value: "level", label: copy.level }, { value: "change", label: copy.delta }]} onChange={setMeasure} /></div>
         <Contributions entries={entries} measure={measure} locale={locale} digits={digits} />
         <div className={styles.changeDrivers}><h3>{copy.changeDrivers}</h3><div className={styles.driversGrid}>{([{ entry: increases[0], title: copy.increaseDriver }, { entry: decreases[0], title: copy.decreaseDriver }]).filter(({ entry }) => entry).map(({ entry, title }) => <div key={entry.key}><p>{title}</p><span>{copy.contributions[entry.key].label}</span><strong>{number(entry.delta20, locale, digits, true)} <small>{copy.points}</small></strong></div>)}{!increases.length && !decreases.length ? <p className={styles.note}>{copy.noChangeDrivers}</p> : null}</div><p className={styles.note}>{copy.driversNote}</p></div>
-        {currentReconciliation && changeReconciliation ? <Reconciliation current={currentReconciliation} change={changeReconciliation} locale={locale} digits={digits} count={summary.coverage[dimension]} changeCount={summary.coverage[dimension === "categories" ? "categoryChanges" : "regionChanges"]} total={entries.length} /> : null}
-        <div className={styles.history}><div className={styles.historyHeading}><div><h3>{copy.history}</h3><p>{copy.historyNote}</p></div><Choice name={`${id}-window`} legend={copy.window} value={window} options={WINDOWS.map((value) => ({ value, label: copy.windows[value] }))} onChange={setWindow} /></div><HistoryChart key={window} observations={observations} locale={locale} digits={digits} id={id} /></div>
-        {historicalIssues.length ? <p className={styles.historicalNotice}>{copy.historicalIssue} {historicalIssues.map((issue) => `${date(issue.date, locale)} · ${issue.dimension === "categories" ? copy.categories : copy.regions} · ${copy.residual.toLowerCase()}: ${number(issue.residual, locale, digits, true)} ${copy.points}`).join("; ")}</p> : null}
+        <div className={styles.history}><div className={styles.historyHeading}><div><h3>{copy.history}</h3><p>{copy.historyNote}</p></div><Choice name={`${id}-window`} legend={copy.window} value={window} options={WINDOWS.map((value) => ({ value, label: copy.windows[value] }))} onChange={setWindow} /></div><FinancialEnvironmentHistory key={window} observations={observations} locale={locale} digits={digits} id={id} /></div>
         <DataTable key={`${window}-${dimension}`} dataset={snapshot.dataset} observations={observations} dimension={dimension} locale={locale} digits={digits} />
       </> : <p className={styles.note}>{copy.noData}</p>}
-      <details className={styles.methodology}><summary>{copy.methodology}</summary><p>{copy.methodologyText}</p><p>{copy.calculation}</p><p>{copy.lag} {copy.limitations}</p><p>{copy.underlying}</p><nav aria-label={copy.methodology}><a href={SOURCE} target="_blank" rel="noreferrer">{copy.source} ↗</a><a href={CSV} target="_blank" rel="noreferrer">{copy.rawData} ↗</a><a href={INDICATORS} target="_blank" rel="noreferrer">{copy.indicators} ↗</a></nav></details>
+      <div className={styles.contextDisclosure}><DashboardDisclosureButton controls={`${id}-context`} expanded={contextOpen} collapsedLabel={copy.showContext} expandedLabel={copy.hideContext} onClick={() => setContextOpen(value => !value)} /></div>
+      <div id={`${id}-context`} hidden={!contextOpen} className={styles.methodology}><p>{copy.methodologyText}</p><p>{copy.calculation}</p><p>{copy.lag} {copy.limitations}</p><p>{copy.underlying}</p><nav aria-label={copy.source}><a href={SOURCE} target="_blank" rel="noreferrer">{copy.source} ↗</a><a href={CSV} target="_blank" rel="noreferrer">{copy.rawData} ↗</a><a href={INDICATORS} target="_blank" rel="noreferrer">{copy.indicators} ↗</a></nav></div>
     </div>
   </section>;
 }

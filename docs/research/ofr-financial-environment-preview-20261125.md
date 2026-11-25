@@ -17,7 +17,7 @@ Verified 6,807 observations, 2000-01-03 through 2026-11-20. The bundled fallback
 
 Current FSI −0.449; comparison 2026-10-23, FSI −1.319; difference over 20 published sessions +0.870 index points. Current positive category: Volatility +0.906. Categories and regions reconcile separately at both endpoints and for changes within the source's three-decimal rounding budget.
 
-The official historical regional decomposition on 2018-11-01 has a residual of −0.108 points. The original values remain unchanged, with a note in windows containing this date. The 33 individual input series are not supplied by this implementation.
+The official historical regional decomposition on 2018-11-01 has a residual of −0.108 points. The original values remain unchanged, recorded by the internal model and tests. Technical reconciliation diagnostics are kept out of the reader interface. The 33 individual input series are not supplied by this implementation.
 
 ## Hosting and failure behavior
 
@@ -36,3 +36,7 @@ If the cache has no valid entry and the source fails, the real bundled capture i
 - Actual Next unstable_cache under App Router: failed refresh retention, late failed concurrent request cannot roll back a newer successful publication, cold outage backoff and recovery.
 - Browser: ES/EN switch preserves preview pairing, keyboard disclosure/radio arrows/history inspection, signed region/category changes, all-history anomaly notice, table pagination, full-window CSV download, 390px mobile contained table scrolling.
 - Full website contract suite: 435 tests, 431 passed, four expected skips. Full lint: zero errors, 26 pre-existing warnings. Editorial and SEO validators pass; production build passes.
+
+## Review adjustments
+
+Removed the public coverage/reconciliation panel and historical discrepancy notice; internal calculations, checks and official values remain intact. Added click/keyboard explanations to the three overview metrics. The methodology now uses the dashboard's Show/Hide context button. History inspection follows AC drawdown interaction, with a date/value tooltip on hover, touch and keyboard.
