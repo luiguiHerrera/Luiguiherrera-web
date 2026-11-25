@@ -14,6 +14,9 @@ export function LanguageSwitcher() {
   const search = searchParams.toString();
 
   function hrefFor(locale: Locale) {
+    if (pathname === "/dashboard/preview-riesgo" || pathname === "/en/dashboard/risk-preview") {
+      return withSearch(locale === "es" ? "/dashboard/preview-riesgo" : "/en/dashboard/risk-preview", search);
+    }
     if (pathname === "/dashboard/preview-precio-participacion" || pathname === "/en/dashboard/price-participation-preview") {
       return withSearch(locale === "es" ? "/dashboard/preview-precio-participacion" : "/en/dashboard/price-participation-preview", search);
     }
