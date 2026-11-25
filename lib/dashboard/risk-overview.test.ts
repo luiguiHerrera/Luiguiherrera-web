@@ -50,6 +50,30 @@ test("every measure keeps its own date instead of borrowing the newest source cu
   assert.equal(items[0].secondary?.value, "Flat");
 });
 
+test("VX retains the actual adapter's localized settlement date in both languages", () => {
+  const source = inputs();
+  for (const date of ["Último settlement disponible: 24 de nov de 2026", "Último settlement disponible:24 de nov de2026", "Último settlement disponible: 24 nov. 2026", "24 de noviembre de 2026"]) {
+    source.vixTermStructure.lastUpdated = date;
+    assert.equal(buildRiskOverview(source, "es")[0].secondary?.date, "24 nov 2026");
+    assert.equal(buildRiskOverview(source, "en")[0].secondary?.date, "Nov 24, 2026");
+    assert.equal(buildRiskOverview(source, "en")[0].date, "Nov 23, 2026");
+  }
+});
+
+test("all Spanish settlement month names resolve and impossible dates stay unavailable", () => {
+  const source = inputs();
+  const months = ["enero", "febrero", "marzo", "abril", "mayo", "junio", "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"];
+  const expected = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+  for (const [index, month] of months.entries()) {
+    source.vixTermStructure.lastUpdated = `Último settlement disponible: 05 de ${month} de 2026`;
+    assert.equal(buildRiskOverview(source, "en")[0].secondary?.date, `${expected[index]} 5, 2026`);
+  }
+  for (const date of ["31 de febrero de 2026", "29 feb 2025", "00 nov 2026", "32 nov 2026", "24 unknown 2026", "2026-02-30"]) {
+    source.vixTermStructure.lastUpdated = date;
+    assert.equal(buildRiskOverview(source, "en")[0].secondary?.date, undefined);
+  }
+});
+
 test("an EWMA fallback cannot appear under GARCH and independent historical risk remains visible", () => {
   const source = inputs();
   source.quantRisk.modelStatus = "fallback_ewma";

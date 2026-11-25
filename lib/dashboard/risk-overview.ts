@@ -10,7 +10,21 @@ type RiskOverviewInput = {
 };
 
 function observationDate(value: string | null | undefined, locale: DashboardLocale) {
-  const date = value?.match(/\d{4}-\d{2}-\d{2}/)?.[0];
+  let date = value?.match(/\d{4}-\d{2}-\d{2}/)?.[0];
+  // The existing VX adapter stores es-CO display dates in lastUpdated, while
+  // the other sources store ISO dates. Decode that existing source convention
+  // before formatting either language; never borrow the spot's date.
+  if (!date && value) {
+    const months: Record<string, string> = {
+      ene: "01", enero: "01", feb: "02", febrero: "02", mar: "03", marzo: "03",
+      abr: "04", abril: "04", may: "05", mayo: "05", jun: "06", junio: "06",
+      jul: "07", julio: "07", ago: "08", agosto: "08", sep: "09", sept: "09",
+      septiembre: "09", setiembre: "09", oct: "10", octubre: "10", nov: "11", noviembre: "11", dic: "12", diciembre: "12",
+    };
+    const formatted = value.toLowerCase().match(/(?:^|\D)(\d{1,2})\s+(?:de\s*)?([a-z]+)\.?\s+(?:de\s*)?(\d{4})(?:\D|$)/);
+    const month = formatted && months[formatted[2]];
+    if (formatted && month) date = `${formatted[3]}-${month}-${formatted[1].padStart(2, "0")}`;
+  }
   if (!date) return undefined;
   const instant = new Date(date + "T00:00:00Z");
   if (!Number.isFinite(instant.getTime()) || instant.toISOString().slice(0, 10) !== date) return undefined;

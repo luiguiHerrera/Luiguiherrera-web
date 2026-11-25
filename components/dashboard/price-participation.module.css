@@ -12,6 +12,7 @@
 .card > details[open] > summary .openLabel { display: none; }
 .card > details[open] > summary .closeLabel { display: inline; }
 .metricLabel { position: relative; display: flex; align-items: flex-start; gap: 4px; }
+.card [data-price-month] [data-overview-item] .metricLabel { min-height: 34px; }
 .metricValue { display: flex; align-items: baseline; flex-wrap: wrap; gap: 6px; }
 .metricValue small { color: var(--pp-muted); font-family: inherit; font-size: 11px; letter-spacing: 0; }
 .metricReturn { color: var(--pp-gold); font-weight: 500; }
