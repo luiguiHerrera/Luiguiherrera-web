@@ -191,6 +191,11 @@ test("old cached provider diagnostics stay outside both language interfaces", ()
   }
 });
 
+test("the unavailable Alpha Vantage source label is translated in English", () => {
+  const view = buildQuantRiskPresentation({ ...automatedData, sourceName: "Cálculos propios sobre ETFs sectoriales vía Alpha Vantage" }, "en");
+  assert.equal(view.sourceName, "Own calculations on sector ETFs via Alpha Vantage");
+});
+
 test("unavailable historical metrics explain the concrete data-quality issue in ES and EN", () => {
   const cases: [string, RegExp, RegExp][] = [
     ["XLK adjusted closes: 500/501; missing session 2026-11-23", /XLK: 500 de 501.*falta la sesión 2026-11-23/, /XLK: 500 of 501.*missing trading session 2026-11-23/],

@@ -139,6 +139,7 @@ function formatCorrelation(value: number | null, locale: QuantRiskLocale) {
 }
 
 function translateDynamic(value: string, locale: QuantRiskLocale) {
+  if (locale === "en" && value === "Cálculos propios sobre ETFs sectoriales vía Alpha Vantage") return "Own calculations on sector ETFs via Alpha Vantage";
   return locale === "en" ? translateDashboardText(value) : value;
 }
 
