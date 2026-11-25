@@ -44,3 +44,7 @@ Removed the public coverage/reconciliation panel and historical discrepancy noti
 ## Visual replacement of the integrated-regime card
 
 When an OFR snapshot is supplied, Financial environment replaces the previous integrated-regime card instead of stacking both cards. The production dashboard continues on the existing branch until publication is approved. The OFR card adopts the previous card's deep green gradient, ivory editorial type, gold figures and subtle separators. Its expandable contribution/history/table surface remains light for detailed reading, as in the previous card's context section. Source values, calculations and the other dashboard modules are unchanged.
+
+## Approved production activation — 25 November 2026
+
+The user explicitly approved publication after reviewing the green replacement card. The normal ES `/dashboard` and EN `/en/dashboard` routes now pass the same official OFR snapshot to the shared dashboard, replacing the integrated-regime card. The daily 17:15 UTC authenticated Vercel cron is activated by this release. No AC, report, Trends, home-page or other dashboard-module logic is changed. Preview-only routes remain noindex and unavailable in the production environment.

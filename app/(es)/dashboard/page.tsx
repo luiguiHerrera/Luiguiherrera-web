@@ -1,3 +1,4 @@
+import { getOfrFsiData } from "@/lib/dashboard/get-ofr-fsi-data";
 import FinancialEnvironmentCard from "@/components/dashboard/FinancialEnvironmentCard";
 import type { OfrFsiSnapshot } from "@/lib/dashboard/ofr-fsi";
 import { BtcEtfFlowsModule } from "@/components/dashboard/BtcEtfFlowsModule";
@@ -36,7 +37,7 @@ export const metadata = getRouteMetadata("/dashboard");
 
 export default async function DashboardPage() {
   await connection();
-  return <DashboardContent locale="es" />;
+  return <DashboardContent locale="es" financialEnvironment={await getOfrFsiData()} />;
 }
 
 export async function DashboardContent({ locale = "es", previewMcClellan = false, mcclellanPreviewData, previewSp500Flows = false, sp500FlowsPreviewData = null, capitalFlowsPreviewData = [], previewEthFlows = false, ethFlowsPreviewData, previewEwjFlows = false, financialEnvironment }: { locale?: "es" | "en"; previewMcClellan?: boolean; mcclellanPreviewData?: McClellanPreviewData; previewSp500Flows?: boolean; sp500FlowsPreviewData?: Sp500EtfFlowsPreviewData | null; capitalFlowsPreviewData?: CapitalFlowAssetPreview[]; previewEthFlows?:boolean; ethFlowsPreviewData?:CapitalFlowAssetPreview; previewEwjFlows?:boolean; financialEnvironment?:OfrFsiSnapshot | null }) {
