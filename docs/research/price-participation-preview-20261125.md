@@ -31,3 +31,7 @@ Sin modificación de OFR, AC, índices propios ni automatizaciones de producció
 El selector y las fechas de comparación pasan al interior del detalle. Las rentabilidades y barras sectoriales negativas usan rojo tenue, conservando los signos. Se restaura la selección de un sector, su cierre ajustado con unidad USD, rentabilidades de 5/20/60 sesiones, posición en el ranking y gráfico de cierres. El movimiento sectorial compara la ventana seleccionada con la ventana anterior adyacente de igual número de intervalos; se indican sus fechas y la variación de rentabilidad en puntos porcentuales. Si no hay datos comparables, se muestra como no disponible.
 
 Los gráficos recuperan líneas horizontales de mínimo y máximo observados. En RAMO/RASI, el relleno verde claro por encima de cero y rojo claro por debajo describe únicamente el signo del dato. No representa nuevos umbrales, riesgo ni señales operativas. Los valores ausentes siguen separando los tramos dibujados.
+
+## Ajuste de disposición del movimiento sectorial
+
+El movimiento se limita al ETF seleccionado y se integra a la derecha de su gráfico de precios; en móvil se apila debajo. Conserva ambos periodos, retornos, diferencia en puntos porcentuales y puestos de la cohorte comparable. Cambiar de ETF actualiza conjuntamente el gráfico y este detalle. Se retira la tabla global de movimientos del contenido visible; el modelo y los datos se conservan.

@@ -94,14 +94,20 @@
 .sectorStats dd { margin: 8px 0 0; color: var(--pp-green); font-family: var(--dashboard-serif, Georgia, serif); font-size: clamp(21px,2.3vw,30px); font-variant-numeric: tabular-nums; line-height: 1.3; overflow-wrap: anywhere; }
 .sectorStats dd small { color: var(--pp-muted); font-family: inherit; font-size: 11px; }
 .sectorStats .statNote { margin-top: 8px; color: var(--pp-muted); font-family: inherit; font-size: 10px; line-height: 1.7; }
-.selectedSector .chart { padding: 19px 0 0; border: 0; border-top: 1px solid var(--pp-line); border-radius: 0; }
-.movement { margin-top: 28px; padding-top: 25px; border-top: 1px solid var(--pp-line); }
-.movementPeriods { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin: 20px 0; }
+.selectedAnalysis { display: grid; grid-template-columns: minmax(0,1.8fr) minmax(275px,1fr); gap: 26px; margin-top: 24px; }
+.selectedChart { min-width: 0; }
+.selectedSector .chart { margin-top: 0; padding: 19px 0 0; border: 0; border-top: 1px solid var(--pp-line); border-radius: 0; }
+.movement { min-width: 0; padding: 18px 0 0 23px; border-top: 1px solid var(--pp-line); border-left: 1px solid var(--pp-line); }
+.movement h5 { margin: 0; color: var(--pp-green); font-family: var(--dashboard-serif, Georgia, serif); font-size: 22px; font-weight: 500; line-height: 1.3; }
+.movementPeriods { display: grid; gap: 11px; margin: 18px 0; }
 .movementPeriods dt { color: var(--pp-muted); font-size: 10px; line-height: 1.7; }
-.movementPeriods dd { margin: 5px 0 0; color: var(--pp-green); font-size: 12px; line-height: 1.7; }
-.sectorSelect { display: block; min-width: 175px; padding: 8px 10px; border: 1px solid transparent; border-radius: 3px; background: transparent; text-align: left; color: var(--pp-green); font-size: 12px; font-weight: 500; cursor: pointer; }
-.sectorSelect > span { display: block; margin-top: 3px; color: var(--pp-muted); font-size: 10px; font-weight: 400; }
-.sectorSelect:hover, .sectorSelect[aria-pressed="true"] { border-color: #d9ceb6; background: #f3f0e7; }
+.movementPeriods dd { margin: 3px 0 0; color: var(--pp-green); font-size: 11px; line-height: 1.7; }
+.movementMetrics { margin: 0; }
+.movementMetrics > div { display: flex; justify-content: space-between; align-items: baseline; gap: 14px; padding: 9px 0; border-top: 1px solid var(--pp-line); }
+.movementMetrics dt { max-width: 190px; color: var(--pp-muted); font-size: 11px; line-height: 1.6; }
+.movementMetrics dt small { display: block; font-size: 9px; }
+.movementMetrics dd { flex-shrink: 0; margin: 0; color: var(--pp-green); font-size: 13px; line-height: 1.6; font-variant-numeric: tabular-nums; }
+@media(max-width:960px) { .selectedAnalysis { grid-template-columns: 1fr; } .movement { padding: 20px 0 0; border-left: 0; } }
 
 .note { margin: 12px 0 0; color: var(--pp-muted); font-size: 11px; line-height: 1.7; }
 .dataDetails { margin-top: 22px; border-top: 1px solid var(--pp-line); }
@@ -158,7 +164,6 @@
   .sectorStats > div:nth-child(odd) { padding-left: 0; border-left: 0; }
   .sectorStats dd { font-size: 24px; }
   .movementPeriods { grid-template-columns: 1fr; gap: 13px; }
-  .sectorSelect { min-width: 145px; padding: 7px 5px; }
   .tableHeading { flex-direction: column; gap: 14px; }
   .download { min-height: 44px; }
   .tableScroll th, .tableScroll td { padding: 11px; }

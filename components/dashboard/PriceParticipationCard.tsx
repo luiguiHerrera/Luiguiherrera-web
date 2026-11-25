@@ -67,15 +67,27 @@ function SectorParticipationDetails({ input, view, locale, id }: { input: PriceP
     {selected ? <section className={styles.selectedSector} id={`${id}-selected-sector`} aria-labelledby={`${id}-selected-title`}>
       <p className={styles.selectionEyebrow}>{copy.selectedSector}</p><h4 id={`${id}-selected-title`}>{selected.ticker} · {copy.sectorsNames[selected.ticker]}</h4>
       <dl className={styles.sectorStats}><div><dt>{copy.adjustedClose}</dt><dd>{number(selected.close, locale)} <small>{copy.usd}</small></dd><dd className={styles.statNote}>{date(data.cutoffDate, locale)}</dd></div>{selected.windows.map(window => <div key={window.sessions}><dt>{window.sessions} {copy.session}</dt><dd data-price-tone={negative(window.returnPct)}>{number(window.returnPct, locale, 2, true)}{window.returnPct === null ? "" : "%"}</dd><dd className={styles.statNote}>{copy.rank}: {window.rank === null ? copy.unavailable : `${window.rank}/${window.covered}`}</dd></div>)}</dl>
-      <PriceParticipationChart key={`${view.sessions}-${selected.ticker}`} id={`${id}-sector-price`} title={`${selected.ticker} · ${copy.sectorPrice}`} series={[{ key: selected.ticker, label: selected.ticker, color: "#193d32", points: selected.points.map(point => ({ date: point.date, value: point.close })) }]} locale={locale} unit={copy.usd} digits={2} />
+      <div className={styles.selectedAnalysis}>
+        <div className={styles.selectedChart}><PriceParticipationChart key={`${view.sessions}-${selected.ticker}`} id={`${id}-sector-price`} title={`${selected.ticker} · ${copy.sectorPrice}`} series={[{ key: selected.ticker, label: selected.ticker, color: "#193d32", points: selected.points.map(point => ({ date: point.date, value: point.close })) }]} locale={locale} unit={copy.usd} digits={2} /></div>
+        <aside className={styles.movement} aria-labelledby={`${id}-movement-title`} data-selected-sector-movement={selected.ticker}>
+          <h5 id={`${id}-movement-title`}>{copy.movement} · {selected.ticker}</h5>
+          <dl className={styles.movementPeriods}>
+            <div><dt>{copy.previousWindow} · {view.sessions} {copy.session}</dt><dd>{date(data.previousComparisonDate, locale)} {copy.through} {date(data.previousCutoffDate, locale)}</dd></div>
+            <div><dt>{copy.currentWindow} · {view.sessions} {copy.session}</dt><dd>{date(data.comparisonDate, locale)} {copy.through} {date(data.cutoffDate, locale)}</dd></div>
+          </dl>
+          <dl className={styles.movementMetrics}>
+            <div><dt>{copy.previousReturn}</dt><dd data-price-tone={negative(selected.previousReturnPct)}>{number(selected.previousReturnPct, locale, 2, true)}{selected.previousReturnPct === null ? "" : "%"}</dd></div>
+            <div><dt>{copy.currentReturn}</dt><dd data-price-tone={negative(selected.returnPct)}>{number(selected.returnPct, locale, 2, true)}{selected.returnPct === null ? "" : "%"}</dd></div>
+            <div><dt>{copy.returnChange}<small>{copy.pp}</small></dt><dd data-price-tone={negative(selected.returnChangePp)}>{number(selected.returnChangePp, locale, 2, true)}</dd></div>
+            <div><dt>{copy.rank} · {copy.previousWindow} → {copy.currentWindow}</dt><dd>{selected.previousRank === null || selected.rank === null ? copy.unavailable : `${selected.previousRank} → ${selected.rank}`}</dd></div>
+            <div><dt>{copy.rankMovement}</dt><dd data-price-tone={negative(selected.rankChange)}>{number(selected.rankChange, locale, 0, true)}</dd></div>
+          </dl>
+          {selected.rank === null ? <p className={styles.note}>{copy.noMovement}</p> : null}
+          <p className={styles.note}>{copy.movementCoverage}: {data.rankingCohort.covered}/{data.rankingCohort.total}.</p>
+        </aside>
+      </div>
       <p className={styles.note}>{copy.rankNote}</p>
     </section> : null}
-    <section className={styles.movement} aria-labelledby={`${id}-movement-title`}>
-      <div className={styles.sectionHeading}><h3 id={`${id}-movement-title`}>{copy.movement}</h3><p>{copy.movementNote}</p></div>
-      <dl className={styles.movementPeriods}><div><dt>{copy.previousWindow} · {view.sessions} {copy.session}</dt><dd>{date(data.previousComparisonDate, locale)} {copy.through} {date(data.previousCutoffDate, locale)}</dd></div><div><dt>{copy.currentWindow} · {view.sessions} {copy.session}</dt><dd>{date(data.comparisonDate, locale)} {copy.through} {date(data.cutoffDate, locale)}</dd></div></dl>
-      {data.movements.length ? <div className={styles.tableScroll} tabIndex={0} role="region" aria-label={copy.movement}><table><caption className={styles.srOnly}>{copy.movement}. {copy.movementNote}</caption><thead><tr>{[copy.sector, copy.previousReturn, copy.currentReturn, `Δ · ${copy.pp}`, `${copy.rank} · ${copy.previousWindow} → ${copy.currentWindow}`, copy.rankMovement].map(label => <th key={label} scope="col">{label}</th>)}</tr></thead><tbody>{data.movements.map(sector => <tr key={sector.ticker} data-sector-movement={sector.ticker}><th scope="row"><button type="button" className={styles.sectorSelect} aria-pressed={selected?.ticker === sector.ticker} aria-controls={`${id}-selected-sector`} onClick={() => setSelectedTicker(sector.ticker)}>{sector.ticker}<span>{copy.sectorsNames[sector.ticker]}</span></button></th><td data-price-tone={negative(sector.previousReturnPct)}>{number(sector.previousReturnPct, locale, 2, true)}%</td><td data-price-tone={negative(sector.returnPct)}>{number(sector.returnPct, locale, 2, true)}%</td><td data-price-tone={negative(sector.returnChangePp)}>{number(sector.returnChangePp, locale, 2, true)}</td><td>{sector.previousRank} → {sector.rank}</td><td data-price-tone={negative(sector.rankChange)}>{number(sector.rankChange, locale, 0, true)}</td></tr>)}</tbody></table></div> : <p className={styles.note}>{copy.noMovement}</p>}
-      <p className={styles.note}>{copy.movementCoverage}: {data.rankingCohort.covered}/{data.rankingCohort.total}.</p>
-    </section>
   </div>;
 }
 
