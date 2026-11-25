@@ -102,6 +102,7 @@
 @media (max-width: 760px) {
   .windows span { min-height: 40px; min-width: 46px; }
   .metricTooltip { width: min(280px, calc(100vw - 80px)); padding: 11px; font-size: 11px; }
+  .card [data-overview-item="rsp-spy"] .metricTooltip, .card [data-overview-item="rasi"] .metricTooltip { left: auto; right: 0; }
   .breadthCharts { grid-template-columns: 1fr; gap: 0; }
   .sectionHeading h3 { font-size: 22px; }
   .chart { padding: 16px 12px; }
