@@ -1,6 +1,7 @@
 import PriceParticipationCard from "@/components/dashboard/PriceParticipationCard";
 import type { PriceParticipationPublication } from "@/lib/dashboard/price-participation-source";
 import { getOfrFsiData } from "@/lib/dashboard/get-ofr-fsi-data";
+import { getPriceParticipationData } from "@/lib/dashboard/get-price-participation-data";
 import FinancialEnvironmentCard from "@/components/dashboard/FinancialEnvironmentCard";
 import type { OfrFsiSnapshot } from "@/lib/dashboard/ofr-fsi";
 import { BtcEtfFlowsModule } from "@/components/dashboard/BtcEtfFlowsModule";
@@ -39,7 +40,8 @@ export const metadata = getRouteMetadata("/dashboard");
 
 export default async function DashboardPage() {
   await connection();
-  return <DashboardContent locale="es" financialEnvironment={await getOfrFsiData()} />;
+  const [financialEnvironment, priceParticipation] = await Promise.all([getOfrFsiData(), getPriceParticipationData()]);
+  return <DashboardContent locale="es" financialEnvironment={financialEnvironment} priceParticipation={priceParticipation} />;
 }
 
 export async function DashboardContent({ locale = "es", previewMcClellan = false, mcclellanPreviewData, previewSp500Flows = false, sp500FlowsPreviewData = null, capitalFlowsPreviewData = [], previewEthFlows = false, ethFlowsPreviewData, previewEwjFlows = false, financialEnvironment, priceParticipation }: { locale?: "es" | "en"; previewMcClellan?: boolean; mcclellanPreviewData?: McClellanPreviewData; previewSp500Flows?: boolean; sp500FlowsPreviewData?: Sp500EtfFlowsPreviewData | null; capitalFlowsPreviewData?: CapitalFlowAssetPreview[]; previewEthFlows?:boolean; ethFlowsPreviewData?:CapitalFlowAssetPreview; previewEwjFlows?:boolean; financialEnvironment?:OfrFsiSnapshot | null; priceParticipation?:PriceParticipationPublication | null }) {

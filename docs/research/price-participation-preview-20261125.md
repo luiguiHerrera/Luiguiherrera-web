@@ -35,3 +35,7 @@ Los gráficos recuperan líneas horizontales de mínimo y máximo observados. En
 ## Ajuste de disposición del movimiento sectorial
 
 El movimiento se limita al ETF seleccionado y se integra a la derecha de su gráfico de precios; en móvil se apila debajo. Conserva ambos periodos, retornos, diferencia en puntos porcentuales y puestos de la cohorte comparable. Cambiar de ETF actualiza conjuntamente el gráfico y este detalle. Se retira la tabla global de movimientos del contenido visible; el modelo y los datos se conservan.
+
+## Publicación aprobada — 25 noviembre 2026
+
+El usuario aprueba publicar la última revisión (bfbd2cc). Las rutas /dashboard y /en/dashboard incorporan el mismo getter y componente revisados en preview, con lectura paralela de OFR y precios. Precio y participación reemplaza el bloque anterior de participación y queda primero entre las secciones, después de la guía. La presentación aprobada, los cálculos, fuentes y automatizaciones no cambian. Las rutas temporales de preview siguen excluidas de producción.
