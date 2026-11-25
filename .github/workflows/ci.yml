@@ -78,6 +78,7 @@ jobs:
             lib/dashboard/eth-capital-flows-source.test.mjs lib/dashboard/eth-etf-flows-preview.test.mjs \
             lib/dashboard/sp500-etf-flows.test.mjs lib/dashboard/mcclellan-source.test.mjs lib/dashboard/mcclellan-reading.test.mjs \
             lib/dashboard/development-source-cache.test.mjs lib/dashboard/dashboard-overview.test.ts \
+            lib/dashboard/ofr-fsi.test.ts lib/dashboard/ofr-fsi-source.test.ts lib/dashboard/ofr-fsi-cache.test.mjs \
             lib/dashboard/gld-flow-history.test.ts lib/dashboard/translate-dashboard-copy.test.ts lib/dashboard/quant-risk-presentation.test.ts lib/dashboard/regime-scoring.test.ts \
             lib/dashboard/shared-market-snapshot.test.mjs lib/dashboard/home-dashboard-consistency.test.mjs lib/dashboard/adapters/sector-etfs.test.ts lib/dashboard/adapters/sector-data-core.test.ts lib/dashboard/risk-models.test.ts \
             lib/statistical-levels/baseline.test.mjs lib/statistical-levels/contracts.test.ts lib/statistical-levels/defect-repairs.test.ts \

@@ -14,6 +14,9 @@ export function LanguageSwitcher() {
   const search = searchParams.toString();
 
   function hrefFor(locale: Locale) {
+    if (pathname === "/dashboard/preview-entorno-financiero" || pathname === "/en/dashboard/financial-environment-preview") {
+      return withSearch(locale === "es" ? "/dashboard/preview-entorno-financiero" : "/en/dashboard/financial-environment-preview", search);
+    }
     if (pathname === "/en/weekly-report" && locale === "es") {
       return withSearch("/informes/segundo-informe-noviembre-2026", search);
     }

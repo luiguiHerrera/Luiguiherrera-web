@@ -1,3 +1,5 @@
+import FinancialEnvironmentCard from "@/components/dashboard/FinancialEnvironmentCard";
+import type { OfrFsiSnapshot } from "@/lib/dashboard/ofr-fsi";
 import { BtcEtfFlowsModule } from "@/components/dashboard/BtcEtfFlowsModule";
 import { DashboardReadingGuide } from "@/components/dashboard/DashboardReadingGuide";
 import { DashboardModule } from "@/components/dashboard/DashboardModule";
@@ -37,7 +39,7 @@ export default async function DashboardPage() {
   return <DashboardContent locale="es" />;
 }
 
-export async function DashboardContent({ locale = "es", previewMcClellan = false, mcclellanPreviewData, previewSp500Flows = false, sp500FlowsPreviewData = null, capitalFlowsPreviewData = [], previewEthFlows = false, ethFlowsPreviewData, previewEwjFlows = false }: { locale?: "es" | "en"; previewMcClellan?: boolean; mcclellanPreviewData?: McClellanPreviewData; previewSp500Flows?: boolean; sp500FlowsPreviewData?: Sp500EtfFlowsPreviewData | null; capitalFlowsPreviewData?: CapitalFlowAssetPreview[]; previewEthFlows?:boolean; ethFlowsPreviewData?:CapitalFlowAssetPreview; previewEwjFlows?:boolean }) {
+export async function DashboardContent({ locale = "es", previewMcClellan = false, mcclellanPreviewData, previewSp500Flows = false, sp500FlowsPreviewData = null, capitalFlowsPreviewData = [], previewEthFlows = false, ethFlowsPreviewData, previewEwjFlows = false, financialEnvironment }: { locale?: "es" | "en"; previewMcClellan?: boolean; mcclellanPreviewData?: McClellanPreviewData; previewSp500Flows?: boolean; sp500FlowsPreviewData?: Sp500EtfFlowsPreviewData | null; capitalFlowsPreviewData?: CapitalFlowAssetPreview[]; previewEthFlows?:boolean; ethFlowsPreviewData?:CapitalFlowAssetPreview; previewEwjFlows?:boolean; financialEnvironment?:OfrFsiSnapshot | null }) {
   const showMcClellanPreview = process.env.NODE_ENV === "development" && previewMcClellan && Boolean(mcclellanPreviewData);
   const showSp500FlowsPreview = process.env.NODE_ENV === "development" && previewSp500Flows;
   const showEthFlowsPreview = process.env.NODE_ENV === "development" && previewEthFlows && Boolean(ethFlowsPreviewData);
@@ -129,6 +131,7 @@ export async function DashboardContent({ locale = "es", previewMcClellan = false
     >
 
       <div className="mt-6 md:mt-8" data-market-snapshot={dashboardData.marketContext?.id} data-market-captured-at={dashboardData.marketContext?.capturedAt}>
+        {financialEnvironment !== undefined && <FinancialEnvironmentCard locale={locale} snapshot={financialEnvironment} />}
         <IntegratedRegimeModule
           data={regimeSummary}
           locale={locale}
