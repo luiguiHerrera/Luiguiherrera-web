@@ -25,3 +25,9 @@ Para corte 23 noviembre, las comparaciones de 5/20/60 sesiones son 16 noviembre 
 El modelo cuenta con pruebas de los extremos exactos, fechas duplicadas, valores ausentes, signos, precisión original, comparaciones, ranking, denominador, ausencia de fuentes, exportación y conservación de RAMO/RASI. La fuente se verifica por separado con pruebas sin credenciales ni red. Revisión visual y de interacción sobre preview alojado antes de entregar.
 
 Sin modificación de OFR, AC, índices propios ni automatizaciones de producción. Sin merge ni publicación de esta tarjeta en producción.
+
+## Segunda revisión visual — 25 noviembre
+
+El selector y las fechas de comparación pasan al interior del detalle. Las rentabilidades y barras sectoriales negativas usan rojo tenue, conservando los signos. Se restaura la selección de un sector, su cierre ajustado con unidad USD, rentabilidades de 5/20/60 sesiones, posición en el ranking y gráfico de cierres. El movimiento sectorial compara la ventana seleccionada con la ventana anterior adyacente de igual número de intervalos; se indican sus fechas y la variación de rentabilidad en puntos porcentuales. Si no hay datos comparables, se muestra como no disponible.
+
+Los gráficos recuperan líneas horizontales de mínimo y máximo observados. En RAMO/RASI, el relleno verde claro por encima de cero y rojo claro por debajo describe únicamente el signo del dato. No representa nuevos umbrales, riesgo ni señales operativas. Los valores ausentes siguen separando los tramos dibujados.
