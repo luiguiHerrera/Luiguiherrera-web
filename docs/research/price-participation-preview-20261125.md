@@ -1,6 +1,6 @@
 # Precio y participación — preview 25 noviembre 2026
 
-Alcance: nueva tarjeta después de Entorno financiero, en ES/EN. Solo las rutas de preview la incorporan y sustituyen el anterior bloque de participación; las rutas publicadas conservan su comportamiento. Las rutas de preview devuelven 404 si VERCEL_ENV=production y no se indexan.
+Alcance: nueva sección Precio y participación, en ES/EN. Sigue la misma presentación de Riesgo y Flujos de capital: título lateral, cuatro métricas en recuadros y detalle inferior. Es la primera sección de métricas después de la guía, antes de Riesgo y Flujos de capital; Entorno financiero conserva su posición destacada. Solo las rutas de preview la incorporan y sustituyen el anterior bloque de participación; las rutas publicadas conservan su comportamiento. Las rutas de preview devuelven 404 si VERCEL_ENV=production y no se indexan.
 
 ## Datos y cálculo
 

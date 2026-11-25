@@ -1,12 +1,13 @@
 "use client";
 
 import { useId, useMemo, useState } from "react";
-import { DashboardDisclosureButton, DashboardModuleHeading } from "./DashboardPrimitives";
+import { DashboardDisclosureButton } from "./DashboardPrimitives";
 import PriceParticipationChart from "./PriceParticipationChart";
 import { buildPriceParticipation, exportPriceParticipationCsv, PRICE_PARTICIPATION_WINDOWS } from "@/lib/dashboard/price-participation";
 import type { PriceParticipationInput, PriceParticipationView, PriceParticipationWindow } from "@/lib/dashboard/price-participation";
 import { priceParticipationCopy, type PriceParticipationLocale } from "@/lib/dashboard/price-participation-copy";
 import styles from "./price-participation.module.css";
+import overviewStyles from "./dashboard-section-overview.module.css";
 
 const BREADTH_SOURCE = "https://github.com/DeanFinancials/deanfi-data";
 const PAGE_SIZE = 20;
@@ -63,20 +64,23 @@ export default function PriceParticipationCard({ input, locale = "es" }: { input
   ));
   const incomplete = view?.warnings.some(code => code === "insufficient-history" || code === "missing-spy-endpoint" || code === "missing-rsp-endpoint");
   return <section className={styles.card} aria-labelledby={`${id}-title`} data-price-participation>
-    <header className={styles.heading}><div><p className={styles.eyebrow}>{copy.subtitle}</p><DashboardModuleHeading headingLevel="h2"><span id={`${id}-title`}>{copy.title}</span></DashboardModuleHeading></div><fieldset className={styles.windows}><legend>{copy.sessions}</legend>{PRICE_PARTICIPATION_WINDOWS.map(value => <label key={value}><input type="radio" name={`${id}-window`} checked={sessions === value} onChange={() => setSessions(value)} value={value} /><span>{value}</span></label>)}</fieldset></header>
-    <p className={styles.cutoff}>{copy.cutoff}: <time dateTime={view?.cutoffDate ?? undefined}>{date(view?.cutoffDate, locale)}</time></p>
+    <div className={overviewStyles.overview} data-dashboard-overview="price-participation">
+      <div className={overviewStyles.heading}><h2 id={`${id}-title`}>{copy.title}</h2><p>{copy.subtitle}<span className={styles.captionDate}>{copy.cutoff}: <time dateTime={view?.cutoffDate ?? undefined}>{date(view?.cutoffDate, locale)}</time></span></p></div>
+      <dl className={overviewStyles.grid} data-columns="4">
+        <div className={overviewStyles.item} data-overview-item="spy"><dt className={styles.metricLabel}>{copy.spy}<Help label={copy.spy} text={help.spy} locale={locale} /></dt><dd className={`${overviewStyles.value} ${styles.metricValue}`}>{number(view?.spy.close, locale)}<small>{copy.usd}</small></dd><dd className={overviewStyles.detail}>{copy.return}: <strong className={styles.metricReturn}>{number(view?.spy.returnPct, locale, 2, true)}{view?.spy.returnPct == null ? "" : "%"}</strong> · {sessions} {copy.session}</dd></div>
+        <div className={overviewStyles.item} data-overview-item="rsp-spy"><dt className={styles.metricLabel}>{copy.relative}<Help label={copy.relative} text={help.relative} locale={locale} /></dt><dd className={overviewStyles.value}>{number(view?.rsp.relativePp, locale, 2, true)}</dd><dd className={overviewStyles.detail}>{copy.pp}</dd></div>
+        <div className={overviewStyles.item} data-overview-item="ramo"><dt className={styles.metricLabel}>{copy.ramo}<Help label={copy.ramo} text={help.ramo} locale={locale} /></dt><dd className={overviewStyles.value}>{number(view?.breadth?.last?.oscillator, locale, 1, true)}</dd><dd className={overviewStyles.detail}>{copy.oscillatorPoints}</dd></div>
+        <div className={overviewStyles.item} data-overview-item="rasi"><dt className={styles.metricLabel}>{copy.rasi}<Help label={copy.rasi} text={help.rasi} locale={locale} /></dt><dd className={overviewStyles.value}>{number(view?.breadth?.last?.summation, locale, 1, true)}</dd><dd className={overviewStyles.detail}>{copy.summationPoints}</dd></div>
+      </dl>
+    </div>
     {!view ? <p className={styles.notice} role="status">{copy.noData}</p> : null}
     {view?.refreshStatus === "retained" ? <p className={styles.notice} role="status">{copy.retained}</p> : null}
     {lagged ? <p className={styles.notice}>{copy.lag} <span>{copy.priceThrough}: {date(view?.priceAvailableThrough, locale)} · {copy.breadthThrough}: {date(view?.breadthAvailableThrough, locale)}.</span></p> : null}
     {view?.breadth?.stale && !lagged ? <p className={styles.notice}>{copy.breadthPending}</p> : null}
-    <div className={styles.metrics}>
-      <div><h3 className={styles.metricLabel}>{copy.spy}<Help label={copy.spy} text={help.spy} locale={locale} /></h3><p className={styles.mainValue}>{number(view?.spy.close, locale)}<small>{copy.usd}</small></p><p className={styles.metricNote}>{copy.return}: <strong>{number(view?.spy.returnPct, locale, 2, true)}{view?.spy.returnPct == null ? "" : "%"}</strong> · {sessions} {copy.session}</p></div>
-      <div><h3 className={styles.metricLabel}>{copy.relative}<Help label={copy.relative} text={help.relative} locale={locale} /></h3><p className={styles.mainValue}>{number(view?.rsp.relativePp, locale, 2, true)}</p><p className={styles.metricNote}>{copy.pp}</p></div>
-      <div><h3 className={styles.metricLabel}>{copy.ramo}<Help label={copy.ramo} text={help.ramo} locale={locale} /></h3><p className={styles.mainValue}>{number(view?.breadth?.last?.oscillator, locale, 1, true)}</p><p className={styles.metricNote}>{copy.oscillatorPoints}</p></div>
-      <div><h3 className={styles.metricLabel}>{copy.rasi}<Help label={copy.rasi} text={help.rasi} locale={locale} /></h3><p className={styles.mainValue}>{number(view?.breadth?.last?.summation, locale, 1, true)}</p><p className={styles.metricNote}>{copy.summationPoints}</p></div>
-    </div>
-    <div className={styles.disclosure}><p>{view?.comparisonDate ? <>{copy.comparison}: {date(view.comparisonDate, locale)} {copy.through} {date(view.cutoffDate, locale)}</> : copy.insufficient}</p><DashboardDisclosureButton controls={`${id}-detail`} expanded={expanded} collapsedLabel={copy.open} expandedLabel={copy.close} onClick={() => setExpanded(value => !value)} /></div>
-    <div className={styles.detail} id={`${id}-detail`} hidden={!expanded}>
+    <div className={styles.controlsRow}><fieldset className={styles.windows}><legend>{copy.sessions}</legend>{PRICE_PARTICIPATION_WINDOWS.map(value => <label key={value}><input type="radio" name={`${id}-window`} checked={sessions === value} onChange={() => setSessions(value)} value={value} /><span>{value}</span></label>)}</fieldset><p>{view?.comparisonDate ? <>{copy.comparison}: {date(view.comparisonDate, locale)} {copy.through} {date(view.cutoffDate, locale)}</> : copy.insufficient}</p></div>
+    <details data-detail-disclosure data-dashboard-section="price-participation" onToggle={event => setExpanded(event.currentTarget.open)}>
+      <summary><span>{expanded ? copy.close : copy.open}</span><span data-dashboard-section-indicator aria-hidden="true" /></summary>
+      <div className={styles.detail} id={`${id}-detail`} data-dashboard-section-body>
       {view && view.cutoffDate ? <>
         {incomplete ? <p className={styles.notice}>{copy.insufficient}</p> : null}
         <div className={styles.sectionHeading}><h3>{copy.priceHistory}</h3><p>{copy.priceNote}</p><p className={styles.returnComparison}>{copy.return} · SPY: <strong>{number(view.spy.returnPct, locale, 2, true)}{view.spy.returnPct === null ? "" : "%"}</strong> · RSP: <strong>{number(view.rsp.returnPct, locale, 2, true)}{view.rsp.returnPct === null ? "" : "%"}</strong></p></div>
@@ -92,6 +96,7 @@ export default function PriceParticipationCard({ input, locale = "es" }: { input
       </> : <p className={styles.note}>{copy.noData}</p>}
       <div className={styles.contextDisclosure}><DashboardDisclosureButton controls={`${id}-context`} expanded={context} collapsedLabel={copy.showContext} expandedLabel={copy.hideContext} onClick={() => setContext(value => !value)} /></div>
       <div className={styles.context} id={`${id}-context`} hidden={!context}><h3>{copy.methodology}</h3><p>{copy.context}</p><p>{copy.calculation}</p><p>{copy.breadthCalculation}</p><p>{copy.breadthLimit}</p><p>{copy.limitations}</p><nav aria-label={copy.methodology}>{input?.authority.sourceUrl ? <a href={input.authority.sourceUrl} target="_blank" rel="noreferrer">{copy.source} ↗</a> : null}<a href={input?.breadth?.sourceCommit ? `${BREADTH_SOURCE}/blob/${input.breadth.sourceCommit}/advance-decline/ad_line_historical.json` : BREADTH_SOURCE} target="_blank" rel="noreferrer">{copy.breadthSource} · DeanFI ↗</a></nav></div>
-    </div>
+      </div>
+    </details>
   </section>;
 }

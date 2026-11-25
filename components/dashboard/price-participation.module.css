@@ -1,7 +1,4 @@
-.card { --pp-green: var(--dashboard-green, #193d32); --pp-gold: #87692d; --pp-muted: var(--dashboard-muted, #626c64); --pp-line: var(--dashboard-line, #ded8cb); min-width: 0; margin: 0 0 28px; padding: 29px 34px 0; border: 1px solid var(--pp-line); border-radius: 7px; background: #fffdf9; color: var(--pp-green); }
-.heading { display: flex; align-items: center; justify-content: space-between; gap: 24px; }
-.heading h2 { margin: 8px 0 0; color: var(--pp-green); font-family: var(--dashboard-serif, Georgia, serif); font-size: clamp(26px, 2.55vw, 35px); font-weight: 500; letter-spacing: -.028em; line-height: 1.3; }
-.eyebrow { margin: 0; color: #85662e; font-size: 10px; font-weight: 600; letter-spacing: .17em; text-transform: uppercase; }
+.card { --pp-green: var(--dashboard-green, #193d32); --pp-gold: #87692d; --pp-muted: var(--dashboard-muted, #626c64); --pp-line: var(--dashboard-line, #ded8cb); display: grid; gap: 12px; min-width: 0; color: var(--pp-green); }
 .windows { display: flex; gap: 3px; flex-shrink: 0; margin: 0; padding: 3px; border: 1px solid var(--pp-line); border-radius: 4px; }
 .windows legend { margin: 0 4px; padding: 0 5px; color: var(--pp-muted); font-size: 10px; text-align: center; }
 .windows label { position: relative; cursor: pointer; }
@@ -9,29 +6,23 @@
 .windows span { display: flex; align-items: center; justify-content: center; min-width: 42px; min-height: 38px; padding: 7px 12px; border-radius: 2px; color: var(--pp-muted); font-size: 12px; }
 .windows input:checked + span { background: var(--pp-green); color: #fffdf9; }
 .windows input:focus-visible + span { outline: 2px solid var(--pp-gold); outline-offset: 3px; }
-.cutoff { margin: 17px 0 0; color: var(--pp-muted); font-size: 11px; line-height: 1.7; }
-.cutoff time { color: var(--pp-green); }
-.metrics { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 0; padding: 30px 0 29px; }
-.metrics > div { min-width: 0; padding: 0 22px; border-left: 1px solid var(--pp-line); }
-.metrics > div:first-child { padding-left: 0; border-left: 0; }
-.metrics > div:last-child { padding-right: 0; }
-.metricLabel { position: relative; display: flex; align-items: center; gap: 6px; min-height: 24px; margin: 0; color: var(--pp-muted); font-size: 12px; font-weight: 400; line-height: 1.6; }
-.mainValue { display: flex; align-items: baseline; flex-wrap: wrap; gap: 7px; margin: 13px 0 8px; color: var(--pp-green); font-family: var(--dashboard-serif, Georgia, serif); font-size: clamp(26px, 2.8vw, 39px); font-weight: 500; line-height: 1.3; letter-spacing: -.025em; font-variant-numeric: lining-nums tabular-nums; overflow-wrap: anywhere; }
-.mainValue small { color: var(--pp-muted); font-family: inherit; font-size: 12px; letter-spacing: 0; }
-.metricNote { margin: 0; color: var(--pp-muted); font-size: 10px; line-height: 1.7; }
-.metricNote strong { color: var(--pp-gold); font-size: 11px; font-weight: 500; font-variant-numeric: tabular-nums; }
-.metricHelp { display: inline-flex; align-items: center; }
-.metricHelp button { display: inline-flex; align-items: center; justify-content: center; width: 28px; height: 28px; margin: -7px 0; padding: 0; border: 0; border-radius: 50%; background: transparent; color: var(--pp-muted); cursor: pointer; }
+.metricLabel { position: relative; display: flex; align-items: flex-start; gap: 4px; }
+.metricValue { display: flex; align-items: baseline; flex-wrap: wrap; gap: 6px; }
+.metricValue small { color: var(--pp-muted); font-family: inherit; font-size: 11px; letter-spacing: 0; }
+.metricReturn { color: var(--pp-gold); font-weight: 500; }
+.captionDate { display: block; margin-top: 6px; color: var(--pp-muted); font-size: 10px; line-height: 1.7; }
+.controlsRow { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px 24px; }
+.controlsRow > p { margin: 0; color: var(--pp-muted); font-size: 11px; line-height: 1.6; }
+.contextDisclosure button { min-height: 44px; color: var(--pp-green); }
+.metricHelp { display: inline-flex; align-items: center; flex-shrink: 0; text-transform: none; letter-spacing: normal; }
+.metricHelp button { display: inline-flex; align-items: center; justify-content: center; width: 24px; height: 24px; margin: -4px 0; padding: 0; border: 0; border-radius: 50%; background: transparent; color: var(--pp-muted); cursor: pointer; }
 .metricHelp button > span { display: inline-flex; align-items: center; justify-content: center; width: 15px; height: 15px; border: 1px solid currentColor; border-radius: 50%; font-family: Georgia, serif; font-size: 11px; line-height: 1; }
 .metricHelp button:hover { color: var(--pp-green); }
-.metricTooltip { position: absolute; top: calc(100% + 10px); left: 0; z-index: 30; width: min(320px, 100%); padding: 13px 15px; border: 1px solid var(--pp-line); border-radius: 4px; background: #fffdf9; color: var(--pp-green); box-shadow: 0 8px 24px #193d3215; font-size: 12px; font-weight: 400; line-height: 1.7; }
+.metricTooltip { position: absolute; top: calc(100% + 10px); left: 0; z-index: 30; width: min(320px, 100%); padding: 13px 15px; border: 1px solid var(--pp-line); border-radius: 4px; background: #fffdf9; color: var(--pp-green); box-shadow: 0 8px 24px #193d3215; font-size: 12px; font-weight: 400; line-height: 1.7; text-transform: none; letter-spacing: normal; }
 .metricTooltip[hidden] { display: none; }
-.disclosure { display: flex; align-items: center; justify-content: space-between; gap: 20px; border-top: 1px solid var(--pp-line); padding: 10px 0; }
-.disclosure p { margin: 0; color: var(--pp-muted); font-size: 11px; line-height: 1.6; }
-.disclosure button, .contextDisclosure button { min-height: 44px; color: var(--pp-green); }
-.detail { padding: 25px 0 29px; border-top: 1px solid var(--pp-line); }
-.detail[hidden], .context[hidden] { display: none; }
-.notice { margin: 15px 0 0; padding: 10px 13px; border-left: 2px solid var(--pp-gold); background: #f6f2e8; color: #655b44; font-size: 11px; line-height: 1.7; }
+.detail { padding: 20px 0 8px; }
+.context[hidden] { display: none; }
+.notice { margin: 0; padding: 10px 13px; border-left: 2px solid var(--pp-gold); background: #f6f2e8; color: #655b44; font-size: 11px; line-height: 1.7; }
 .notice span { display: block; margin-top: 3px; }
 .detail > .notice { margin: 0 0 20px; }
 .sectionHeading h3, .context h3 { margin: 0; font-family: var(--dashboard-serif, Georgia, serif); font-size: 23px; font-weight: 500; line-height: 1.35; letter-spacing: -.015em; }
@@ -107,23 +98,10 @@
 .context a { color: var(--pp-green); text-decoration: underline; text-underline-offset: 4px; }
 .card a:focus-visible, .card button:focus-visible, .card summary:focus-visible, .card input:focus-visible, .tableScroll:focus-visible { outline: 2px solid var(--pp-gold); outline-offset: 4px; }
 .srOnly { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
-@media (max-width: 1050px) { .card { padding: 25px 25px 0; } .metrics > div { padding-inline: 14px; } .metricLabel { font-size: 11px; } .mainValue { font-size: 30px; } .sectorColumnHead, .sectorRow { gap: 18px; } .breadthCharts { gap: 16px; } .chart { padding: 16px; } }
+@media (max-width: 1050px) { .sectorColumnHead, .sectorRow { gap: 18px; } .breadthCharts { gap: 16px; } .chart { padding: 16px; } }
 @media (max-width: 760px) {
-  .card { padding: 23px 20px 0; margin-bottom: 24px; }
-  .heading { flex-direction: column; align-items: flex-start; gap: 16px; }
-  .heading h2 { font-size: 29px; }
   .windows span { min-height: 40px; min-width: 46px; }
-  .cutoff { margin-top: 16px; }
-  .metrics { grid-template-columns: 1fr 1fr; gap: 23px 0; padding: 25px 0; }
-  .metrics > div { padding-inline: 15px; }
-  .metrics > div:nth-child(odd) { padding-left: 0; border-left: 0; }
-  .metrics > div:nth-child(even) { padding-right: 0; }
-  .metrics > div:nth-child(n+3) { padding-top: 20px; border-top: 1px solid var(--pp-line); }
-  .mainValue { font-size: 29px; }
   .metricTooltip { width: min(280px, calc(100vw - 80px)); padding: 11px; font-size: 11px; }
-  .metrics > div:nth-child(even) .metricTooltip { left: auto; right: 0; }
-  .disclosure { align-items: flex-start; flex-direction: column; gap: 4px; }
-  .disclosure button { align-self: flex-end; }
   .breadthCharts { grid-template-columns: 1fr; gap: 0; }
   .sectionHeading h3 { font-size: 22px; }
   .chart { padding: 16px 12px; }

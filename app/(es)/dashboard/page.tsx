@@ -165,12 +165,12 @@ export async function DashboardContent({ locale = "es", previewMcClellan = false
           ]}
         />
         )}
-        {priceParticipation !== undefined ? <div className="mt-6 md:mt-8"><PriceParticipationCard locale={locale} input={priceParticipation ? { ...priceParticipation, breadth: mcclellanData ?? null } : null} /></div> : null}
       </div>
 
       <DashboardReadingGuide locale={locale} />
 
       <div className="mt-6 space-y-4 md:mt-8 md:space-y-6">
+        {priceParticipation !== undefined ? <PriceParticipationCard locale={locale} input={priceParticipation ? { ...priceParticipation, breadth: mcclellanData ?? null } : null} /> : null}
         {priceParticipation === undefined ? <section className="grid min-w-0 gap-3 [&>*]:min-w-0" aria-labelledby="market-participation-section" data-market-participation-section>
           <DashboardSectionOverview id="market-participation-section" title={copy.participationSection} items={participationOverview} />
           <details data-dashboard-section="participation" data-detail-disclosure open={showMcClellanPreview || undefined}>
