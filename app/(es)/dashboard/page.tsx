@@ -1,3 +1,5 @@
+import PriceParticipationCard from "@/components/dashboard/PriceParticipationCard";
+import type { PriceParticipationPublication } from "@/lib/dashboard/price-participation-source";
 import { getOfrFsiData } from "@/lib/dashboard/get-ofr-fsi-data";
 import FinancialEnvironmentCard from "@/components/dashboard/FinancialEnvironmentCard";
 import type { OfrFsiSnapshot } from "@/lib/dashboard/ofr-fsi";
@@ -40,7 +42,7 @@ export default async function DashboardPage() {
   return <DashboardContent locale="es" financialEnvironment={await getOfrFsiData()} />;
 }
 
-export async function DashboardContent({ locale = "es", previewMcClellan = false, mcclellanPreviewData, previewSp500Flows = false, sp500FlowsPreviewData = null, capitalFlowsPreviewData = [], previewEthFlows = false, ethFlowsPreviewData, previewEwjFlows = false, financialEnvironment }: { locale?: "es" | "en"; previewMcClellan?: boolean; mcclellanPreviewData?: McClellanPreviewData; previewSp500Flows?: boolean; sp500FlowsPreviewData?: Sp500EtfFlowsPreviewData | null; capitalFlowsPreviewData?: CapitalFlowAssetPreview[]; previewEthFlows?:boolean; ethFlowsPreviewData?:CapitalFlowAssetPreview; previewEwjFlows?:boolean; financialEnvironment?:OfrFsiSnapshot | null }) {
+export async function DashboardContent({ locale = "es", previewMcClellan = false, mcclellanPreviewData, previewSp500Flows = false, sp500FlowsPreviewData = null, capitalFlowsPreviewData = [], previewEthFlows = false, ethFlowsPreviewData, previewEwjFlows = false, financialEnvironment, priceParticipation }: { locale?: "es" | "en"; previewMcClellan?: boolean; mcclellanPreviewData?: McClellanPreviewData; previewSp500Flows?: boolean; sp500FlowsPreviewData?: Sp500EtfFlowsPreviewData | null; capitalFlowsPreviewData?: CapitalFlowAssetPreview[]; previewEthFlows?:boolean; ethFlowsPreviewData?:CapitalFlowAssetPreview; previewEwjFlows?:boolean; financialEnvironment?:OfrFsiSnapshot | null; priceParticipation?:PriceParticipationPublication | null }) {
   const showMcClellanPreview = process.env.NODE_ENV === "development" && previewMcClellan && Boolean(mcclellanPreviewData);
   const showSp500FlowsPreview = process.env.NODE_ENV === "development" && previewSp500Flows;
   const showEthFlowsPreview = process.env.NODE_ENV === "development" && previewEthFlows && Boolean(ethFlowsPreviewData);
@@ -163,12 +165,13 @@ export async function DashboardContent({ locale = "es", previewMcClellan = false
           ]}
         />
         )}
+        {priceParticipation !== undefined ? <div className="mt-6 md:mt-8"><PriceParticipationCard locale={locale} input={priceParticipation ? { ...priceParticipation, breadth: mcclellanData ?? null } : null} /></div> : null}
       </div>
 
       <DashboardReadingGuide locale={locale} />
 
       <div className="mt-6 space-y-4 md:mt-8 md:space-y-6">
-        <section className="grid min-w-0 gap-3 [&>*]:min-w-0" aria-labelledby="market-participation-section" data-market-participation-section>
+        {priceParticipation === undefined ? <section className="grid min-w-0 gap-3 [&>*]:min-w-0" aria-labelledby="market-participation-section" data-market-participation-section>
           <DashboardSectionOverview id="market-participation-section" title={copy.participationSection} items={participationOverview} />
           <details data-dashboard-section="participation" data-detail-disclosure open={showMcClellanPreview || undefined}>
             <summary>
@@ -198,7 +201,7 @@ export async function DashboardContent({ locale = "es", previewMcClellan = false
               </div>
             </div>
           </details>
-        </section>
+        </section> : null}
         {quantRisk || vix || vixTermStructure ? (
           <section className="grid min-w-0 gap-3 [&>*]:min-w-0" aria-labelledby="vix-volatility-section">
             <DashboardSectionOverview id="vix-volatility-section" title={copy.vixSection} items={riskOverview} />

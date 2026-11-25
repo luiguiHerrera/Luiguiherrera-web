@@ -14,6 +14,9 @@ export function LanguageSwitcher() {
   const search = searchParams.toString();
 
   function hrefFor(locale: Locale) {
+    if (pathname === "/dashboard/preview-precio-participacion" || pathname === "/en/dashboard/price-participation-preview") {
+      return withSearch(locale === "es" ? "/dashboard/preview-precio-participacion" : "/en/dashboard/price-participation-preview", search);
+    }
     if (pathname === "/dashboard/preview-entorno-financiero" || pathname === "/en/dashboard/financial-environment-preview") {
       return withSearch(locale === "es" ? "/dashboard/preview-entorno-financiero" : "/en/dashboard/financial-environment-preview", search);
     }
