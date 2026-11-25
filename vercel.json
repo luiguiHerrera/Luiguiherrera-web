@@ -3,6 +3,7 @@
   "crons": [
     { "path": "/api/cron/mcclellan", "schedule": "0 17 * * *" },
     { "path": "/api/cron/capital-flows", "schedule": "0 7 * * *" },
-    { "path": "/api/cron/ofr-fsi", "schedule": "15 17 * * *" }
+    { "path": "/api/cron/ofr-fsi", "schedule": "15 17 * * *" },
+    { "path": "/api/cron/risk", "schedule": "15 23 * * *" }
   ]
 }

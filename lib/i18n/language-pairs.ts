@@ -11,6 +11,7 @@ export const bilingualRoutePairs = [
   { es: "/proteccion", en: "/en/protection" },
   { es: "/protege-tu-dinero", en: "/en/protect-your-money" },
   { es: "/dashboard", en: "/en/dashboard" },
+  { es: "/dashboard/preview-riesgo", en: "/en/dashboard/risk-preview" },
   { es: "/analisisyperpectivas", en: "/en/reports" },
   { es: "/analisiscuantitativo", en: "/en/quantitative-analysis" },
   { es: "/tendencias", en: "/en/trends" },

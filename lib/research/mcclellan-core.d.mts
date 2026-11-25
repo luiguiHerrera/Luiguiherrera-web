@@ -1,4 +1,6 @@
 export function sessionDates(start:string, end:string):string[];
+export function isSession(date:string):boolean;
+export function isClosed(date:string, instant:string):boolean;
 export type ResearchPoint = {
   date: string;
   rana: number;

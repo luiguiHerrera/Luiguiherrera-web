@@ -48,12 +48,13 @@ export function buildQuantRiskData(sectors: SectorEtfSnapshot[], metrics: Sector
   const marketReturns = averageDailyMarketReturn(sectors);
   const ewmaVol = ewmaAnnualizedVolatility(marketReturns);
   const priorEwmaVol = marketReturns.length > 42 ? ewmaAnnualizedVolatility(marketReturns.slice(0, -21)) : null;
-  const garchVol = garchOneOneForecast(marketReturns);
+  const garchCandidate = garchOneOneForecast(marketReturns);
+  const garchVol = garchCandidate !== null && Number.isFinite(garchCandidate) && garchCandidate >= 0 ? garchCandidate : null;
   const averageCorr21 = averageCorrelation(sectors.map((sector) => sector.dailyReturns), 21);
   const averageCorr63 = averageCorrelation(sectors.map((sector) => sector.dailyReturns), 63);
   const defensiveGrowthCorr21 = defensiveGrowthCorrelation(sectors, 21);
-  const garchStatus = classifyVolatility(garchVol ?? ewmaVol);
-  const modelStatus = garchVol === null ? (ewmaVol === null ? "insufficient_data" : "fallback_ewma") : "estimated";
+  const garchStatus = classifyVolatility(garchVol);
+  const modelStatus = garchVol === null ? "insufficient_data" : "estimated";
 
   return {
     sourceName: "Cálculos propios sobre ETFs sectoriales vía proveedor de precios",
@@ -65,7 +66,7 @@ export function buildQuantRiskData(sectors: SectorEtfSnapshot[], metrics: Sector
     ewmaVolAnnualized: toPercent(ewmaVol),
     ewmaVolChange: ewmaVol !== null && priorEwmaVol !== null ? (ewmaVol - priorEwmaVol) * 100 : null,
     ewmaStatus: classifyVolatility(ewmaVol),
-    garchVolForecast: toPercent(garchVol ?? ewmaVol),
+    garchVolForecast: toPercent(garchVol),
     garchStatus,
     modelStatus,
     averageCorrelation21d: averageCorr21,
@@ -78,12 +79,13 @@ export function buildQuantRiskData(sectors: SectorEtfSnapshot[], metrics: Sector
 
 export function buildUnavailableQuantRiskData(reason: string): QuantRiskData {
   return {
+    unavailabilityReason: reason,
     sourceName: "Cálculos propios sobre ETFs sectoriales vía Alpha Vantage",
     sourceUrl: "https://www.alphavantage.co/documentation/",
     lastUpdated: "Fuente sectorial temporalmente no disponible",
     updateFrequency: "Automática server-side con caché diaria; revisión periódica sugerida",
     dataStatus: "unavailable",
-    reliabilityNote: `Los modelos no se calculan sin historiales sectoriales reales y completos. Detalle técnico: ${reason}.`,
+    reliabilityNote: "Los modelos no se calculan sin historiales sectoriales reales y completos.",
     ewmaVolAnnualized: null,
     ewmaVolChange: null,
     ewmaStatus: null,
@@ -102,6 +104,12 @@ export function buildUnavailableQuantRiskData(reason: string): QuantRiskData {
 // composite without expiring valid price histories or reloading the provider.
 export function withoutRetiredSectorIndex(data: QuantRiskData): QuantRiskData {
   const current = { ...data } as QuantRiskData & Record<string, unknown>;
+  // Legacy caches may contain EWMA under the former GARCH fallback contract.
+  if (current.modelStatus === "fallback_ewma" || current.garchVolForecast === null || !Number.isFinite(current.garchVolForecast) || current.garchVolForecast < 0) {
+    current.garchVolForecast = null;
+    current.garchStatus = null;
+    current.modelStatus = "insufficient_data";
+  }
   for (const key of ["fragilityScore", "fragilityLabel", "fragilityInterpretation", "fragilityComponents", "fragilityUsesEwmaFallback"]) delete current[key];
   return current;
 }

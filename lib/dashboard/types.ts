@@ -1,6 +1,7 @@
 import type { DashboardModuleId } from "@/lib/analytics/trackEvent";
 import type { CapitalFlowAssetPreview } from "./capital-flows-preview-types";
 import type { McClellanPreviewData } from "./mcclellan-preview-types";
+import type { HistoricalRiskMetrics } from "./risk-metric-types";
 
 export type DataStatus = "demo" | "manual" | "live_pending" | "automated" | "fallback" | "delayed" | "unavailable";
 
@@ -86,6 +87,8 @@ export type SectorRotationData = DashboardDataSource & {
 };
 
 export type QuantRiskData = DashboardDataSource & {
+  historicalRisk?: HistoricalRiskMetrics;
+  unavailabilityReason?: string;
   ewmaVolAnnualized: number | null;
   ewmaVolChange: number | null;
   ewmaStatus: VolatilityStatus | null;

@@ -232,6 +232,7 @@ export function VixModule({ data }: VixModuleProps) {
             <div><span className="font-semibold uppercase tracking-[0.12em] text-brass">{locale === "en" ? "Frequency" : "Frecuencia"}</span><span className="ml-2 font-medium text-ink">{t(spot?.updateFrequency)}</span></div>
           </div>
           <p className="mt-3 text-xs leading-5 text-muted">{t(spot?.reliabilityNote)}</p>
+          <p className="mt-3 text-xs leading-5 text-muted">{locale === "en" ? "VIX is quoted in index points and represents annualized implied volatility over approximately 30 days. It is distinct from the monthly VX futures curve." : "El VIX se expresa en puntos del índice y representa volatilidad implícita anualizada a aproximadamente 30 días. Es distinto de la curva de futuros mensuales VX."}</p>
         </div>
       ) : null}
     </section>

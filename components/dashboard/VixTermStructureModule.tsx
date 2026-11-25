@@ -409,6 +409,7 @@ export function VixTermStructureModule({ data }: VixTermStructureModuleProps) {
           <div className="bg-panelSoft/35 px-4 py-3">
             <h4 className="text-sm font-semibold text-ink">{locale === "en" ? "Source and methodology" : "Fuente y metodología"}</h4>
             <p className="mt-1.5">{t(data.reliabilityNote)}</p>
+            <p className="mt-1.5">{locale === "en" ? "Settlement prices of monthly VX futures, in VIX index points, by contract expiry. This is a futures curve, not a series of volatility indices at different horizons." : "Precios de liquidación de futuros mensuales VX, en puntos del índice VIX, por vencimiento del contrato. Es una curva de futuros, distinta de los índices de volatilidad a diferentes horizontes."}</p>
           </div>
           <div className="flex flex-wrap gap-x-8 gap-y-3 border-t border-line pt-3 text-xs lg:col-span-2">
             <div>

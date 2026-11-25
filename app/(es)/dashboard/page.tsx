@@ -1,3 +1,5 @@
+import { getHistoricalRiskMetrics } from "@/lib/dashboard/get-historical-risk";
+import { buildUnavailableQuantRiskData } from "@/lib/dashboard/risk-models";
 import PriceParticipationCard from "@/components/dashboard/PriceParticipationCard";
 import type { PriceParticipationPublication } from "@/lib/dashboard/price-participation-source";
 import { getOfrFsiData } from "@/lib/dashboard/get-ofr-fsi-data";
@@ -44,17 +46,18 @@ export default async function DashboardPage() {
   return <DashboardContent locale="es" financialEnvironment={financialEnvironment} priceParticipation={priceParticipation} />;
 }
 
-export async function DashboardContent({ locale = "es", previewMcClellan = false, mcclellanPreviewData, previewSp500Flows = false, sp500FlowsPreviewData = null, capitalFlowsPreviewData = [], previewEthFlows = false, ethFlowsPreviewData, previewEwjFlows = false, financialEnvironment, priceParticipation }: { locale?: "es" | "en"; previewMcClellan?: boolean; mcclellanPreviewData?: McClellanPreviewData; previewSp500Flows?: boolean; sp500FlowsPreviewData?: Sp500EtfFlowsPreviewData | null; capitalFlowsPreviewData?: CapitalFlowAssetPreview[]; previewEthFlows?:boolean; ethFlowsPreviewData?:CapitalFlowAssetPreview; previewEwjFlows?:boolean; financialEnvironment?:OfrFsiSnapshot | null; priceParticipation?:PriceParticipationPublication | null }) {
+export async function DashboardContent({ locale = "es", previewMcClellan = false, mcclellanPreviewData, previewSp500Flows = false, sp500FlowsPreviewData = null, capitalFlowsPreviewData = [], previewEthFlows = false, ethFlowsPreviewData, previewEwjFlows = false, financialEnvironment, priceParticipation, previewRisk = false }: { locale?: "es" | "en"; previewMcClellan?: boolean; mcclellanPreviewData?: McClellanPreviewData; previewSp500Flows?: boolean; sp500FlowsPreviewData?: Sp500EtfFlowsPreviewData | null; capitalFlowsPreviewData?: CapitalFlowAssetPreview[]; previewEthFlows?:boolean; ethFlowsPreviewData?:CapitalFlowAssetPreview; previewEwjFlows?:boolean; financialEnvironment?:OfrFsiSnapshot | null; priceParticipation?:PriceParticipationPublication | null; previewRisk?:boolean }) {
   const showMcClellanPreview = process.env.NODE_ENV === "development" && previewMcClellan && Boolean(mcclellanPreviewData);
   const showSp500FlowsPreview = process.env.NODE_ENV === "development" && previewSp500Flows;
   const showEthFlowsPreview = process.env.NODE_ENV === "development" && previewEthFlows && Boolean(ethFlowsPreviewData);
   const showEwjFlowsPreview = process.env.NODE_ENV === "development" && previewEwjFlows;
-  const dashboardData = await getDashboardData();
+  const [dashboardData, historicalRisk] = await Promise.all([getDashboardData(), getHistoricalRiskMetrics()]);
   const contextFlows = dashboardData.marketContext?.flows ?? [];
   const publishedFlows = !showSp500FlowsPreview ? contextFlows.filter(data => data.id !== 'ewj' && (!showEthFlowsPreview || data.id !== 'eth')) : [];
   const ewjFlows = (process.env.NODE_ENV === 'development' ? capitalFlowsPreviewData.find(data => data.id === 'ewj') : null) ?? contextFlows.find(data => data.id === 'ewj');
   const mcclellanData = showMcClellanPreview ? mcclellanPreviewData : dashboardData.marketContext?.breadth;
-  const { btcEtfFlows, dashboardModules, gldFlowPressure, quantRisk, regimeSummary, sectorModule, sectorRotation, vix, vixTermStructure } = dashboardData;
+  const { btcEtfFlows, dashboardModules, gldFlowPressure, regimeSummary, sectorModule, sectorRotation, vix, vixTermStructure } = dashboardData;
+  const quantRisk = { ...(dashboardData.quantRisk ?? buildUnavailableQuantRiskData("sector history unavailable")), historicalRisk };
   const weeklyReportData = await buildWeeklyReportData(dashboardData);
   const remainingModules = dashboardModules.filter((module) => module.id !== "rates" && module.id !== "sectors" && module.id !== "vix" && module.id !== "btc-flows");
   const breadthValues = buildMarketBreadthValues(weeklyReportData, locale);
@@ -89,9 +92,9 @@ export async function DashboardContent({ locale = "es", previewMcClellan = false
   const quantMetric = (id:string) => quantReady ? quantPresentation?.primaryMetrics.find(metric => metric.id === id)?.value ?? insufficient : insufficient;
   const spot = vix?.spot;
   const riskOverview: DashboardOverviewItem[] = [
-    { id:'vix', label:'VIX', value:hasVixObservation(spot) ? new Intl.NumberFormat(locale, { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(spot.latestVix) : insufficient, detail:hasVixObservation(spot) ? t(spot.vixLevelLabel) : undefined, date:sourceDate(spot?.lastObservationDate) },
+    { id:'vix', label:'VIX', value:hasVixObservation(spot) ? new Intl.NumberFormat(locale, { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(spot.latestVix) : insufficient, detail:hasVixObservation(spot) ? `${t(spot.vixLevelLabel)} · ${locale === 'en' ? 'index points' : 'puntos del índice'}` : undefined, date:sourceDate(spot?.lastObservationDate) },
     { id:'curve', label:locale === 'en' ? 'VIX term structure' : 'Estructura del VIX', value:vixTermStructure && !['pending','unavailable'].includes(vixTermStructure.sourceStatus) ? t(vixTermStructure.classification) : insufficient, date:sourceDate(vixTermStructure?.lastUpdated) },
-    { id:'ewma', label:locale === 'en' ? 'EWMA volatility' : 'Volatilidad EWMA', value:quantMetric('ewma'), date:quantReady ? sourceDate(quantRisk.lastUpdated) : undefined },
+    { id:'ewma', label:locale === 'en' ? 'EWMA · Sector basket' : 'EWMA · Cesta sectorial', value:quantMetric('ewma'), detail:locale === 'en' ? 'Annualized volatility' : 'Volatilidad anualizada', date:quantReady ? sourceDate(quantRisk.lastUpdated) : undefined },
   ];
   const flowSummaryAsOf = new Date();
   const flowsOverview = flowOverviewItems(flowModels,locale,flowSummaryAsOf);
@@ -207,7 +210,7 @@ export async function DashboardContent({ locale = "es", previewMcClellan = false
         {quantRisk || vix || vixTermStructure ? (
           <section className="grid min-w-0 gap-3 [&>*]:min-w-0" aria-labelledby="vix-volatility-section">
             <DashboardSectionOverview id="vix-volatility-section" title={copy.vixSection} items={riskOverview} />
-            <details data-dashboard-section="vix" data-detail-disclosure>
+            <details data-dashboard-section="vix" data-detail-disclosure open={previewRisk || undefined}>
               <summary>
                 <span>{locale === 'en' ? 'View detail' : 'Ver detalle'}</span>
                 <span data-dashboard-section-indicator aria-hidden="true" />

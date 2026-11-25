@@ -113,8 +113,45 @@ export function QuantRiskPanel({ data, locale = "es" }: QuantRiskPanelProps) {
                 <div><dt className="inline font-semibold text-ink">{copy.model}: </dt><dd className="inline">{copy.modelScope}</dd></div>
               </dl>
             </section>
+            <section className="lg:col-span-2" data-quant-historical-metrics>
+              <h4 className="text-sm font-semibold text-ink">{copy.historicalMeasures}</h4>
+              <dl className="mt-3 grid gap-3 text-sm sm:grid-cols-3">
+                {presentation.historicalMetrics.map((metric) => (
+                  <div key={metric.id} data-quant-detail-metric={metric.id} data-available={metric.available ? "true" : "false"}>
+                    <dt className="font-medium text-ink">{metric.label}</dt>
+                    <dd className="mt-1 text-muted">
+                      <p className="text-sm font-semibold tabular-nums text-ink sm:text-base">{metric.value}</p>
+                      <p className="mt-1 text-xs leading-5">{metric.unit} · {metric.date}</p>
+                      <p className="mt-1.5 text-sm leading-6">{metric.help}</p>
+                      {metric.reason ? <p className="mt-1.5 text-xs leading-5">{metric.reason}</p> : null}
+                    </dd>
+                  </div>
+                ))}
+              </dl>
+              {presentation.historicalRetained ? <p className="mt-3 text-xs leading-5 text-muted">{copy.retained}</p> : null}
+            </section>
+            <section className="border-l border-brass/50 pl-3" data-quant-spy-methodology>
+              <h4 className="text-sm font-semibold text-ink">{copy.spyScope}</h4>
+              <p className="mt-1.5 text-sm leading-6 text-muted">{copy.spyMethod}</p>
+              <p className="mt-3 text-xs leading-5 text-muted">{presentation.spyWindow}{presentation.spyDateRange ? ` · ${presentation.spyDateRange}` : ""}</p>
+              <p className="mt-3 text-xs leading-5 text-muted">{copy.spyLimits}</p>
+            </section>
+            <section className="border-l border-petrol/20 pl-3" data-quant-absorption-methodology>
+              <h4 className="text-sm font-semibold text-ink">{copy.absorptionScope}</h4>
+              <p className="mt-1.5 text-sm leading-6 text-muted">{copy.absorptionMethod}</p>
+              <p className="mt-3 text-xs leading-5 text-muted">{presentation.absorptionWindow}{presentation.absorptionDateRange ? ` · ${presentation.absorptionDateRange}` : ""}</p>
+              <p className="mt-3 text-xs leading-5 text-muted">{copy.absorptionLimits}</p>
+              <a href="https://web.mit.edu/finlunch/Fall10/PCASystemicRisk.pdf" target="_blank" rel="noreferrer" className="mt-2 inline-block text-xs text-muted underline-offset-4 hover:text-ink hover:underline">Kritzman, Li, Page &amp; Rigobon · 2010</a>
+            </section>
+            <section className="lg:col-span-2 text-xs leading-5 text-muted" data-quant-history-source>
+              <p><span className="font-semibold text-ink">{copy.source}: </span>{presentation.historicalSourceUrl ? <a href={presentation.historicalSourceUrl} target="_blank" rel="noreferrer" className="underline-offset-4 hover:text-ink hover:underline">{presentation.historicalSource}</a> : presentation.historicalSource}</p>
+              {presentation.historicalAdjustment ? <p className="mt-1"><span className="font-semibold text-ink">{copy.sourceAdjustment}: </span>{presentation.historicalAdjustment}</p> : null}
+            </section>
             <section className="lg:col-span-2">
               <h4 className="text-sm font-semibold text-ink">{copy.modelReliability}</h4>
+              <p className="mt-1.5 text-sm leading-6 text-muted">{copy.volatilityMethod}</p>
+              <p className="mt-3 text-sm leading-6 text-muted">{copy.readingDistinctions}</p>
+              <a href="https://www.msci.com/research-and-insights/paper/1996-riskmetrics-technical-document" target="_blank" rel="noreferrer" className="mt-2 inline-block text-xs text-muted underline-offset-4 hover:text-ink hover:underline">RiskMetrics · 1996</a>
               <dl className="mt-3 grid gap-3 text-sm sm:grid-cols-3" data-quant-readiness>
                 {presentation.readiness.map((item) => <div key={item.id}><dt className="font-medium text-ink">{item.label}</dt><dd className="mt-1 text-muted">{item.value}</dd></div>)}
               </dl>
