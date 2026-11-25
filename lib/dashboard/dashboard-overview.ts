@@ -4,7 +4,8 @@ import { sessionDates } from '../research/mcclellan-core.mjs';
 import { formatCapitalFlowDate } from './capital-flows-presentation.ts';
 import type { DashboardLocale } from './dashboard-localization.ts';
 
-export type DashboardOverviewItem = { id: string; label: string; value: string; detail?: string; date?: string; tone?: 'positive' | 'negative' | 'neutral' };
+export type DashboardOverviewSecondary = { label: string; value: string; detail?: string; date?: string; available?: boolean };
+export type DashboardOverviewItem = { id: string; label: string; value: string; detail?: string; date?: string; tone?: 'positive' | 'negative' | 'neutral'; available?: boolean; secondary?: DashboardOverviewSecondary };
 const assetNames = { es:{sp500:'S&P 500',gold:'Oro',btc:'Bitcoin',eth:'Ethereum',ewj:'Japón'}, en:{sp500:'S&P 500',gold:'Gold',btc:'Bitcoin',eth:'Ethereum',ewj:'Japan'} };
 export function formatFlowAmount(value:number | null, locale:DashboardLocale = 'es') {
   if(value == null) return locale === 'en' ? 'No data' : 'Sin dato';

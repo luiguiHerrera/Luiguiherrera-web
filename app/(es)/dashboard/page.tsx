@@ -13,8 +13,7 @@ import { DashboardPresentation } from "@/components/dashboard/DashboardPresentat
 import { DashboardSectionOverview } from "@/components/dashboard/DashboardSectionOverview";
 import { flowOverviewItems, flowMonthCaption, type DashboardOverviewItem } from "@/lib/dashboard/dashboard-overview";
 import { dashboardText } from "@/lib/dashboard/dashboard-localization";
-import { hasVixObservation } from "@/lib/dashboard/vix-presentation";
-import { buildQuantRiskPresentation } from "@/lib/dashboard/quant-risk-presentation";
+import { buildRiskOverview } from "@/lib/dashboard/risk-overview";
 import { GldFlowPressureModule } from "@/components/dashboard/GldFlowPressureModule";
 import { IntegratedRegimeModule } from "@/components/dashboard/IntegratedRegimeModule";
 import { MarketBreadthPanel } from "@/components/dashboard/MarketBreadthPanel";
@@ -87,15 +86,7 @@ export async function DashboardContent({ locale = "es", previewMcClellan = false
     { id:'ramo', label:'RAMO', value:signed(latestBreadth?.oscillator), detail:locale === 'en' ? 'Participation momentum' : 'Impulso de la participación', date:sourceDate(mcclellanData?.cutoffDate) },
     { id:'rasi', label:'RASI', value:signed(latestBreadth?.summation), detail:locale === 'en' ? 'Accumulated breadth' : 'Amplitud acumulada', date:sourceDate(mcclellanData?.cutoffDate) },
   ];
-  const quantPresentation = quantRisk ? buildQuantRiskPresentation(quantRisk,locale) : null;
-  const quantReady = quantRisk && !['demo','fallback','unavailable','live_pending'].includes(quantRisk.dataStatus);
-  const quantMetric = (id:string) => quantReady ? quantPresentation?.primaryMetrics.find(metric => metric.id === id)?.value ?? insufficient : insufficient;
-  const spot = vix?.spot;
-  const riskOverview: DashboardOverviewItem[] = [
-    { id:'vix', label:'VIX', value:hasVixObservation(spot) ? new Intl.NumberFormat(locale, { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(spot.latestVix) : insufficient, detail:hasVixObservation(spot) ? `${t(spot.vixLevelLabel)} · ${locale === 'en' ? 'index points' : 'puntos del índice'}` : undefined, date:sourceDate(spot?.lastObservationDate) },
-    { id:'curve', label:locale === 'en' ? 'VIX term structure' : 'Estructura del VIX', value:vixTermStructure && !['pending','unavailable'].includes(vixTermStructure.sourceStatus) ? t(vixTermStructure.classification) : insufficient, date:sourceDate(vixTermStructure?.lastUpdated) },
-    { id:'ewma', label:locale === 'en' ? 'EWMA · Sector basket' : 'EWMA · Cesta sectorial', value:quantMetric('ewma'), detail:locale === 'en' ? 'Annualized volatility' : 'Volatilidad anualizada', date:quantReady ? sourceDate(quantRisk.lastUpdated) : undefined },
-  ];
+  const riskOverview = buildRiskOverview({ quantRisk, vixSpot: vix?.spot, vixTermStructure }, locale);
   const flowSummaryAsOf = new Date();
   const flowsOverview = flowOverviewItems(flowModels,locale,flowSummaryAsOf);
   if (!flowModels.length) {
@@ -175,7 +166,7 @@ export async function DashboardContent({ locale = "es", previewMcClellan = false
       <DashboardReadingGuide locale={locale} />
 
       <div className="mt-6 space-y-4 md:mt-8 md:space-y-6">
-        {priceParticipation !== undefined ? <PriceParticipationCard locale={locale} input={priceParticipation ? { ...priceParticipation, breadth: mcclellanData ?? null } : null} /> : null}
+        {priceParticipation !== undefined ? <PriceParticipationCard locale={locale} asOf={flowSummaryAsOf.toISOString()} input={priceParticipation ? { ...priceParticipation, breadth: mcclellanData ?? null } : null} /> : null}
         {priceParticipation === undefined ? <section className="grid min-w-0 gap-3 [&>*]:min-w-0" aria-labelledby="market-participation-section" data-market-participation-section>
           <DashboardSectionOverview id="market-participation-section" title={copy.participationSection} items={participationOverview} />
           <details data-dashboard-section="participation" data-detail-disclosure open={showMcClellanPreview || undefined}>

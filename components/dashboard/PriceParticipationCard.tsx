@@ -9,6 +9,7 @@ import { priceParticipationCopy, type PriceParticipationLocale } from "@/lib/das
 import styles from "./price-participation.module.css";
 import overviewStyles from "./dashboard-section-overview.module.css";
 import { buildSectorParticipation } from "@/lib/dashboard/price-participation-sectors";
+import { buildPriceParticipationMonthSummary } from "@/lib/dashboard/price-participation-month";
 
 const BREADTH_SOURCE = "https://github.com/DeanFinancials/deanfi-data";
 const PAGE_SIZE = 20;
@@ -23,6 +24,11 @@ function number(value: number | null | undefined, locale: PriceParticipationLoca
 function date(value: string | null | undefined, locale: PriceParticipationLocale) {
   if (!value) return priceParticipationCopy[locale].unavailable;
   return new Intl.DateTimeFormat(locale === "es" ? "es-ES" : "en-US", { day: "numeric", month: "short", year: "numeric", timeZone: "UTC" }).format(new Date(`${value}T00:00:00Z`));
+}
+function monthLabel(value: string | undefined, locale: PriceParticipationLocale) {
+  if (!value) return priceParticipationCopy[locale].currentMonth;
+  const formatted = new Intl.DateTimeFormat(locale === "es" ? "es-ES" : "en-US", { month: "long", year: "numeric", timeZone: "Europe/Madrid" }).format(new Date(`${value}-01T12:00:00Z`));
+  return formatted.charAt(0).toUpperCase() + formatted.slice(1);
 }
 function Help({ label, text, locale }: { label: string; text: string; locale: PriceParticipationLocale }) {
   const id = useId();
@@ -91,13 +97,16 @@ function SectorParticipationDetails({ input, view, locale, id }: { input: PriceP
   </div>;
 }
 
-export default function PriceParticipationCard({ input, locale = "es" }: { input: PriceParticipationInput | null; locale?: PriceParticipationLocale }) {
+export default function PriceParticipationCard({ input, locale = "es", asOf }: { input: PriceParticipationInput | null; locale?: PriceParticipationLocale; asOf?: string }) {
   const copy = priceParticipationCopy[locale];
   const id = useId();
   const [sessions, setSessions] = useState<PriceParticipationWindow>(20);
   const interactive = useSyncExternalStore(subscribeToClientReady, clientReady, serverReady);
   const [context, setContext] = useState(false);
   const view = useMemo(() => input ? buildPriceParticipation(input, sessions) : null, [input, sessions]);
+  const month = useMemo(() => input ? buildPriceParticipationMonthSummary(input, asOf) : null, [input, asOf]);
+  const monthCaption = monthLabel(month?.month, locale);
+  const sectorMonthAvailable = month?.status !== "unavailable" && (month?.participation.covered ?? 0) > 0;
   const rows = view?.rows ?? [];
   const priceSeries = [
     { key: "spy", label: "SPY", color: "#193d32", points: rows.map(row => ({ date: row.date, value: row.spyNormalized })) },
@@ -112,9 +121,10 @@ export default function PriceParticipationCard({ input, locale = "es" }: { input
   return <section className={styles.card} aria-labelledby={`${id}-title`} data-price-participation>
     <div className={overviewStyles.overview} data-dashboard-overview="price-participation">
       <div className={overviewStyles.heading}><h2 id={`${id}-title`}>{copy.title}</h2><p>{copy.subtitle}<span className={styles.captionDate}>{copy.cutoff}: <time dateTime={view?.cutoffDate ?? undefined}>{date(view?.cutoffDate, locale)}</time></span></p></div>
-      <dl className={overviewStyles.grid} data-columns="4">
-        <div className={overviewStyles.item} data-overview-item="spy"><dt className={styles.metricLabel}>{copy.spy}<Help label={copy.spy} text={help.spy} locale={locale} /></dt><dd className={`${overviewStyles.value} ${styles.metricValue}`}>{number(view?.spy.close, locale)}<small>{copy.usd}</small></dd><dd className={overviewStyles.detail}>{copy.return}: <strong className={styles.metricReturn} data-price-tone={view?.spy.returnPct != null && view.spy.returnPct < 0 ? "negative" : undefined}>{number(view?.spy.returnPct, locale, 2, true)}{view?.spy.returnPct == null ? "" : "%"}</strong> · {sessions} {copy.session}</dd></div>
-        <div className={overviewStyles.item} data-overview-item="rsp-spy"><dt className={styles.metricLabel}>{copy.relative}<Help label={copy.relative} text={help.relative} locale={locale} /></dt><dd className={overviewStyles.value} data-price-tone={view?.rsp.relativePp != null && view.rsp.relativePp < 0 ? "negative" : undefined}>{number(view?.rsp.relativePp, locale, 2, true)}</dd><dd className={overviewStyles.detail}>{copy.pp}</dd></div>
+      <dl className={overviewStyles.grid} data-columns="5" data-price-month={month?.month}>
+        <div className={overviewStyles.item} data-overview-item="spy"><dt className={styles.metricLabel}>{copy.spy}<Help label={copy.spy} text={help.spy} locale={locale} /></dt><dd className={`${overviewStyles.value} ${styles.metricValue}`}>{number(view?.spy.close, locale)}<small>{copy.usd}</small></dd><dd className={overviewStyles.detail}>{copy.return}: <strong className={styles.metricReturn} data-price-tone={month?.spyReturnPct != null && month.spyReturnPct < 0 ? "negative" : undefined}>{number(month?.spyReturnPct, locale, 2, true)}{month?.spyReturnPct == null ? "" : "%"}</strong></dd><dd className={overviewStyles.date}>{monthCaption}</dd></div>
+        <div className={overviewStyles.item} data-overview-item="rsp-spy"><dt className={styles.metricLabel}>{copy.relative}<Help label={copy.relative} text={help.relative} locale={locale} /></dt><dd className={overviewStyles.value} data-price-tone={month?.relativePp != null && month.relativePp < 0 ? "negative" : undefined}>{number(month?.relativePp, locale, 2, true)}</dd><dd className={overviewStyles.detail}>{copy.pp}</dd><dd className={overviewStyles.date}>{monthCaption}</dd></div>
+        <div className={overviewStyles.item} data-overview-item="sectors-month"><dt className={styles.metricLabel}>{copy.sectorsMonth}<Help label={copy.sectorsMonth} text={copy.sectorsMonthHelp} locale={locale} /></dt><dd className={`${overviewStyles.value} ${styles.sectorMonthCount}`}>{sectorMonthAvailable ? <><span data-price-tone="positive">+{month!.participation.positive}</span><span className={styles.sectorMonthDivider}>/</span><span data-price-tone="negative">−{month!.participation.negative}</span></> : copy.unavailable}</dd><dd className={overviewStyles.detail}>{copy.positiveNegative}{sectorMonthAvailable ? <span className={styles.monthCoverage}>{copy.coverage}: {month!.participation.covered}/{month!.participation.total}{month!.participation.flat ? ` · ${month!.participation.flat} ${copy.unchanged}` : ""}</span> : null}</dd><dd className={overviewStyles.date}>{monthCaption}</dd></div>
         <div className={overviewStyles.item} data-overview-item="ramo"><dt className={styles.metricLabel}>{copy.ramo}<Help label={copy.ramo} text={help.ramo} locale={locale} /></dt><dd className={overviewStyles.value} data-price-tone={view?.breadth?.last?.oscillator != null && view.breadth.last.oscillator < 0 ? "negative" : undefined}>{number(view?.breadth?.last?.oscillator, locale, 1, true)}</dd><dd className={overviewStyles.detail}>{copy.oscillatorPoints}</dd></div>
         <div className={overviewStyles.item} data-overview-item="rasi"><dt className={styles.metricLabel}>{copy.rasi}<Help label={copy.rasi} text={help.rasi} locale={locale} /></dt><dd className={overviewStyles.value} data-price-tone={view?.breadth?.last?.summation != null && view.breadth.last.summation < 0 ? "negative" : undefined}>{number(view?.breadth?.last?.summation, locale, 1, true)}</dd><dd className={overviewStyles.detail}>{copy.summationPoints}</dd></div>
       </dl>
@@ -132,7 +142,7 @@ export default function PriceParticipationCard({ input, locale = "es" }: { input
         </header>
       {view && view.cutoffDate ? <>
         {incomplete ? <p className={styles.notice}>{copy.insufficient}</p> : null}
-        <div className={styles.sectionHeading}><h3>{copy.priceHistory}</h3><p>{copy.priceNote}</p><p className={styles.returnComparison}>{copy.return} · SPY: <strong data-price-tone={view.spy.returnPct !== null && view.spy.returnPct < 0 ? "negative" : undefined}>{number(view.spy.returnPct, locale, 2, true)}{view.spy.returnPct === null ? "" : "%"}</strong> · RSP: <strong data-price-tone={view.rsp.returnPct !== null && view.rsp.returnPct < 0 ? "negative" : undefined}>{number(view.rsp.returnPct, locale, 2, true)}{view.rsp.returnPct === null ? "" : "%"}</strong></p></div>
+        <div className={`${styles.sectionHeading} ${styles.relativeSectionHeading}`}><div><h3>{copy.priceHistory}</h3><p>{copy.priceNote}</p><p className={styles.returnComparison}>{copy.return} · SPY: <strong data-price-tone={view.spy.returnPct !== null && view.spy.returnPct < 0 ? "negative" : undefined}>{number(view.spy.returnPct, locale, 2, true)}{view.spy.returnPct === null ? "" : "%"}</strong> · RSP: <strong data-price-tone={view.rsp.returnPct !== null && view.rsp.returnPct < 0 ? "negative" : undefined}>{number(view.rsp.returnPct, locale, 2, true)}{view.rsp.returnPct === null ? "" : "%"}</strong></p></div><dl className={styles.relativeReadout} data-price-relative-readout aria-live="polite"><dt>{copy.relative}</dt><dd data-price-tone={view.rsp.relativePp !== null && view.rsp.relativePp < 0 ? "negative" : undefined}>{number(view.rsp.relativePp, locale, 2, true)}</dd><dd className={styles.relativeReadoutUnit}>{copy.pp} · {sessions} {copy.session}</dd></dl></div>
         <PriceParticipationChart key={`${sessions}-price`} id={`${id}-price`} title="SPY / RSP" series={priceSeries} locale={locale} unit={copy.normalized} digits={2} reference={100} />
         <div className={styles.sectionHeading}><h3>{copy.breadthTitle}</h3><p>{copy.breadthNote}</p></div>
         <div className={styles.breadthCharts}><PriceParticipationChart key={`${sessions}-ramo`} id={`${id}-ramo`} title="RAMO" series={[{ key: "ramo", label: "RAMO", color: "#193d32", points: rows.map(row => ({ date: row.date, value: row.oscillator })) }]} locale={locale} unit={copy.oscillatorPoints} digits={1} reference={0} /><PriceParticipationChart key={`${sessions}-rasi`} id={`${id}-rasi`} title="RASI" series={[{ key: "rasi", label: "RASI", color: "#947337", points: rows.map(row => ({ date: row.date, value: row.summation })) }]} locale={locale} unit={copy.summationPoints} digits={1} reference={0} /></div>
@@ -140,7 +150,7 @@ export default function PriceParticipationCard({ input, locale = "es" }: { input
         <WindowTable key={sessions} view={view} locale={locale} />
       </> : <p className={styles.note}>{copy.noData}</p>}
       <div className={styles.contextDisclosure}><DashboardDisclosureButton controls={`${id}-context`} expanded={context} collapsedLabel={copy.showContext} expandedLabel={copy.hideContext} onClick={() => setContext(value => !value)} /></div>
-      <div className={styles.context} id={`${id}-context`} hidden={!context}><h3>{copy.methodology}</h3><p>{copy.context}</p><p>{copy.calculation}</p><p>{copy.breadthCalculation}</p><p>{copy.breadthLimit}</p><p>{copy.limitations}</p><nav aria-label={copy.methodology}>{input?.authority.sourceUrl ? <a href={input.authority.sourceUrl} target="_blank" rel="noreferrer">{copy.source} ↗</a> : null}<a href={input?.breadth?.sourceCommit ? `${BREADTH_SOURCE}/blob/${input.breadth.sourceCommit}/advance-decline/ad_line_historical.json` : BREADTH_SOURCE} target="_blank" rel="noreferrer">{copy.breadthSource} · DeanFI ↗</a></nav></div>
+      <div className={styles.context} id={`${id}-context`} hidden={!context}><h3>{copy.methodology}</h3><p>{copy.context}</p><p>{copy.calculation}</p><p>{copy.summaryCalculation}</p><p>{copy.breadthCalculation}</p><p>{copy.breadthLimit}</p><p>{copy.limitations}</p><nav aria-label={copy.methodology}>{input?.authority.sourceUrl ? <a href={input.authority.sourceUrl} target="_blank" rel="noreferrer">{copy.source} ↗</a> : null}<a href={input?.breadth?.sourceCommit ? `${BREADTH_SOURCE}/blob/${input.breadth.sourceCommit}/advance-decline/ad_line_historical.json` : BREADTH_SOURCE} target="_blank" rel="noreferrer">{copy.breadthSource} · DeanFI ↗</a></nav></div>
       </div>
     </details>
   </section>;

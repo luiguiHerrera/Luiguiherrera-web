@@ -16,6 +16,9 @@
 .metricValue small { color: var(--pp-muted); font-family: inherit; font-size: 11px; letter-spacing: 0; }
 .metricReturn { color: var(--pp-gold); font-weight: 500; }
 .captionDate { display: block; margin-top: 6px; color: var(--pp-muted); font-size: 10px; line-height: 1.7; }
+.sectorMonthCount { display: flex; flex-wrap: wrap; align-items: baseline; gap: 7px; }
+.sectorMonthDivider { color: var(--pp-muted); font-size: .7em; }
+.monthCoverage { display: block; margin-top: 4px; }
 .controlsRow { display: grid; grid-template-columns: minmax(0,1fr) auto; align-items: center; gap: 20px 30px; margin-bottom: 24px; padding-bottom: 21px; border-bottom: 1px solid var(--pp-line); }
 .controlsRow .windows { justify-self: end; }
 .windowHeading h3 { margin: 0; color: var(--pp-green); font-family: var(--dashboard-serif, Georgia, serif); font-size: 23px; font-weight: 500; line-height: 1.35; letter-spacing: -.015em; }
@@ -35,6 +38,11 @@
 .sectionHeading h3, .context h3 { margin: 0; font-family: var(--dashboard-serif, Georgia, serif); font-size: 23px; font-weight: 500; line-height: 1.35; letter-spacing: -.015em; }
 .returnComparison strong { color: var(--pp-gold); font-weight: 500; font-variant-numeric: tabular-nums; }
 .sectionHeading p { max-width: 800px; margin: 8px 0 0; color: var(--pp-muted); font-size: 11px; line-height: 1.75; }
+.relativeSectionHeading { display: grid; grid-template-columns: minmax(0,1fr) auto; align-items: center; gap: 24px; }
+.relativeReadout { min-width: 190px; margin: 0; text-align: right; }
+.relativeReadout dt { color: var(--pp-muted); font-size: 10px; font-weight: 500; letter-spacing: .1em; line-height: 1.6; text-transform: uppercase; }
+.relativeReadout dd { margin: 5px 0 0; color: var(--pp-green); font-family: var(--dashboard-serif, Georgia, serif); font-size: 34px; font-weight: 500; font-variant-numeric: tabular-nums; line-height: 1.25; }
+.relativeReadout .relativeReadoutUnit { color: var(--pp-muted); font-family: inherit; font-size: 11px; line-height: 1.6; }
 .detail > .chart + .sectionHeading { margin-top: 27px; padding-top: 25px; border-top: 1px solid var(--pp-line); }
 .breadthCharts { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
 .chart { min-width: 0; margin-top: 20px; padding: 20px; border: 1px solid #e4dfd3; border-radius: 4px; background: #fcfaf4; }
@@ -146,6 +154,10 @@
   .card [data-overview-item="rsp-spy"] .metricTooltip, .card [data-overview-item="rasi"] .metricTooltip { left: auto; right: 0; }
   .breadthCharts { grid-template-columns: 1fr; gap: 0; }
   .sectionHeading h3 { font-size: 22px; }
+  .relativeSectionHeading { grid-template-columns: minmax(0,1fr); gap: 17px; }
+  .relativeReadout { min-width: 0; text-align: left; }
+  .relativeReadout dd { font-size: 30px; }
+  .relativeReadout .relativeReadoutUnit { font-size: 10px; }
   .chart { padding: 16px 12px; }
   .chartHeading { gap: 10px; }
   .chartHeading h4 { font-size: 20px; }

@@ -45,6 +45,12 @@
 .detail { margin-top:8px; color:#626c64; font-size:11px; line-height:1.65; font-variant-numeric:tabular-nums; }
 .grid[data-columns="5"] .detail { font-size:10px; }
 .date { margin-top:auto; padding-top:12px; color:#7a8276; font-size:11px; line-height:1.6; }
+.item[data-overview-paired="true"] .date { margin-top:0; padding-top:4px; }
+.item[data-overview-paired="true"] .secondaryLabel { min-height:0; margin-top:12px; padding-top:11px; border-top:1px solid #e5e0d5; }
+.secondaryValue { margin-top:3px; color:#193d32; font-family:var(--dashboard-serif,Georgia,serif); font-size:clamp(20px,1.8vw,26px); font-weight:500; line-height:1.25; overflow-wrap:anywhere; font-variant-numeric:tabular-nums; }
+.secondaryDetail { margin-top:5px; color:#626c64; font-size:11px; line-height:1.65; }
+.secondaryDate { margin-top:3px; color:#7a8276; font-size:11px; line-height:1.6; }
+.item [data-overview-available="false"] { font-size:clamp(19px,1.7vw,24px); line-height:1.35; }
 @media(max-width:1100px) {
   .overview { grid-template-columns:1fr; gap:20px; padding-top:24px; }
   .heading { display:grid; grid-template-columns:1fr auto; align-items:baseline; gap:0 20px; padding:0; }
@@ -69,4 +75,7 @@
   .grid[data-columns="5"] .value { margin-top:13px; font-size:19px; }
   .detail,.grid[data-columns="5"] .detail { font-size:10px; }
   .date { font-size:10px; padding-top:10px; }
+  .secondaryValue { font-size:23px; }
+  .secondaryDetail,.secondaryDate { font-size:10px; }
+  .item [data-overview-available="false"] { font-size:20px; }
 }
