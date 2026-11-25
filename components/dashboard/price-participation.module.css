@@ -16,8 +16,10 @@
 .metricValue small { color: var(--pp-muted); font-family: inherit; font-size: 11px; letter-spacing: 0; }
 .metricReturn { color: var(--pp-gold); font-weight: 500; }
 .captionDate { display: block; margin-top: 6px; color: var(--pp-muted); font-size: 10px; line-height: 1.7; }
-.controlsRow { margin-bottom: 25px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px 24px; }
-.controlsRow > p { margin: 0; color: var(--pp-muted); font-size: 11px; line-height: 1.6; }
+.controlsRow { display: grid; grid-template-columns: minmax(0,1fr) auto; align-items: center; gap: 20px 30px; margin-bottom: 24px; padding-bottom: 21px; border-bottom: 1px solid var(--pp-line); }
+.controlsRow .windows { justify-self: end; }
+.windowHeading h3 { margin: 0; color: var(--pp-green); font-family: var(--dashboard-serif, Georgia, serif); font-size: 23px; font-weight: 500; line-height: 1.35; letter-spacing: -.015em; }
+.windowHeading p { margin: 7px 0 0; color: var(--pp-muted); font-size: 11px; line-height: 1.7; }
 .contextDisclosure button { min-height: 44px; color: var(--pp-green); }
 .metricHelp { display: inline-flex; align-items: center; flex-shrink: 0; text-transform: none; letter-spacing: normal; }
 .metricHelp button { display: inline-flex; align-items: center; justify-content: center; width: 24px; height: 24px; margin: -4px 0; padding: 0; border: 0; border-radius: 50%; background: transparent; color: var(--pp-muted); cursor: pointer; }
@@ -33,7 +35,7 @@
 .sectionHeading h3, .context h3 { margin: 0; font-family: var(--dashboard-serif, Georgia, serif); font-size: 23px; font-weight: 500; line-height: 1.35; letter-spacing: -.015em; }
 .returnComparison strong { color: var(--pp-gold); font-weight: 500; font-variant-numeric: tabular-nums; }
 .sectionHeading p { max-width: 800px; margin: 8px 0 0; color: var(--pp-muted); font-size: 11px; line-height: 1.75; }
-.detail > .sectionHeading:not(:first-child) { margin-top: 27px; padding-top: 25px; border-top: 1px solid var(--pp-line); }
+.detail > .chart + .sectionHeading { margin-top: 27px; padding-top: 25px; border-top: 1px solid var(--pp-line); }
 .breadthCharts { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
 .chart { min-width: 0; margin-top: 20px; padding: 20px; border: 1px solid #e4dfd3; border-radius: 4px; background: #fcfaf4; }
 .chartHeading { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; }
@@ -136,6 +138,9 @@
 .srOnly { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
 @media (max-width: 1050px) { .sectorColumnHead, .sectorRow { gap: 18px; } .breadthCharts { gap: 16px; } .chart { padding: 16px; } }
 @media (max-width: 760px) {
+  .controlsRow { grid-template-columns: minmax(0,1fr); gap: 14px; padding-bottom: 19px; }
+  .controlsRow .windows { justify-self: stretch; }
+  .controlsRow .windows label { flex: 1; }
   .windows span { min-height: 40px; min-width: 46px; }
   .metricTooltip { width: min(280px, calc(100vw - 80px)); padding: 11px; font-size: 11px; }
   .card [data-overview-item="rsp-spy"] .metricTooltip, .card [data-overview-item="rasi"] .metricTooltip { left: auto; right: 0; }

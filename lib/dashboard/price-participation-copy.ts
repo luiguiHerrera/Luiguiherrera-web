@@ -2,6 +2,7 @@ export type PriceParticipationLocale = "es" | "en";
 
 export const priceParticipationCopy = {
   es: {
+    analysisWindow: "Ventana de análisis", windowScope: "Común a precios, amplitud y sectores.",
     title: "Precio y participación", subtitle: "S&P 500", sessions: "Sesiones publicadas", session: "sesiones", cutoff: "Fecha común", comparison: "Comparación", through: "al",
     spy: "SPY · Precio ajustado", spyHelp: "Cierre ajustado de SPY en dólares estadounidenses. La variación compara los dos extremos de la ventana de sesiones seleccionada; no es una previsión.",
     relative: "RSP frente a SPY", relativeHelp: "Diferencia entre las rentabilidades de RSP (igual ponderación) y SPY (ponderación por capitalización), en puntos porcentuales. Un valor positivo indica que RSP avanzó más o retrocedió menos en esa ventana.",
@@ -25,6 +26,7 @@ export const priceParticipationCopy = {
     sectorsNames: { XLC: "Comunicación", XLY: "Consumo discrecional", XLP: "Consumo básico", XLE: "Energía", XLF: "Finanzas", XLV: "Salud", XLI: "Industria", XLB: "Materiales", XLRE: "Inmobiliario", XLK: "Tecnología", XLU: "Servicios públicos" },
   },
   en: {
+    analysisWindow: "Analysis window", windowScope: "Shared by prices, breadth and sectors.",
     title: "Price and participation", subtitle: "S&P 500", sessions: "Published sessions", session: "sessions", cutoff: "Common observation date", comparison: "Comparison", through: "to",
     spy: "SPY · Adjusted price", spyHelp: "SPY adjusted closing price in US dollars. The return compares the two endpoints of the selected session window; it is not a forecast.",
     relative: "RSP versus SPY", relativeHelp: "RSP's equal-weight return minus SPY's capitalization-weight return, in percentage points. A positive value means RSP rose more or fell less over that window.",

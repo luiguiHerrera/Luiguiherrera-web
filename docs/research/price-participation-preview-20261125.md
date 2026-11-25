@@ -39,3 +39,7 @@ El movimiento se limita al ETF seleccionado y se integra a la derecha de su grá
 ## Publicación aprobada — 25 noviembre 2026
 
 El usuario aprueba publicar la última revisión (bfbd2cc). Las rutas /dashboard y /en/dashboard incorporan el mismo getter y componente revisados en preview, con lectura paralela de OFR y precios. Precio y participación reemplaza el bloque anterior de participación y queda primero entre las secciones, después de la guía. La presentación aprobada, los cálculos, fuentes y automatizaciones no cambian. Las rutas temporales de preview siguen excluidas de producción.
+
+## Preview de posición del selector — posterior a publicación
+
+Se agrupa el selector en una cabecera interna del desplegable: título, alcance y fechas a la izquierda; sesiones a la derecha. En móvil, el control se distribuye bajo el título dentro de la misma cabecera. Conserva estado global, cálculos, datos y cierre nativo. Esta revisión visual se entrega únicamente en preview; producción permanece en 9236fc6 hasta nueva aprobación.

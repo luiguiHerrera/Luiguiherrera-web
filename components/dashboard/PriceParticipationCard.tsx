@@ -126,7 +126,10 @@ export default function PriceParticipationCard({ input, locale = "es" }: { input
     <details data-detail-disclosure data-dashboard-section="price-participation">
       <summary><span className={styles.openLabel}>{copy.open}</span><span className={styles.closeLabel}>{copy.close}</span><span data-dashboard-section-indicator aria-hidden="true" /></summary>
       <div className={styles.detail} id={`${id}-detail`} data-dashboard-section-body>
-    <div className={styles.controlsRow}><fieldset className={styles.windows} disabled={!interactive}><legend>{copy.sessions}</legend>{PRICE_PARTICIPATION_WINDOWS.map(value => <label key={value}><input type="radio" name={`${id}-window`} checked={sessions === value} onChange={() => setSessions(value)} value={value} /><span>{value}</span></label>)}</fieldset><p>{view?.comparisonDate ? <>{copy.comparison}: {date(view.comparisonDate, locale)} {copy.through} {date(view.cutoffDate, locale)}</> : copy.insufficient}</p></div>
+        <header className={styles.controlsRow}>
+          <div className={styles.windowHeading}><h3>{copy.analysisWindow}</h3><p>{copy.windowScope}</p><p>{view?.comparisonDate ? <>{copy.comparison}: {date(view.comparisonDate, locale)} {copy.through} {date(view.cutoffDate, locale)}</> : copy.insufficient}</p></div>
+          <fieldset className={styles.windows} disabled={!interactive}><legend>{copy.sessions}</legend>{PRICE_PARTICIPATION_WINDOWS.map(value => <label key={value}><input type="radio" name={`${id}-window`} checked={sessions === value} onChange={() => setSessions(value)} value={value} /><span>{value}</span></label>)}</fieldset>
+        </header>
       {view && view.cutoffDate ? <>
         {incomplete ? <p className={styles.notice}>{copy.insufficient}</p> : null}
         <div className={styles.sectionHeading}><h3>{copy.priceHistory}</h3><p>{copy.priceNote}</p><p className={styles.returnComparison}>{copy.return} · SPY: <strong data-price-tone={view.spy.returnPct !== null && view.spy.returnPct < 0 ? "negative" : undefined}>{number(view.spy.returnPct, locale, 2, true)}{view.spy.returnPct === null ? "" : "%"}</strong> · RSP: <strong data-price-tone={view.rsp.returnPct !== null && view.rsp.returnPct < 0 ? "negative" : undefined}>{number(view.rsp.returnPct, locale, 2, true)}{view.rsp.returnPct === null ? "" : "%"}</strong></p></div>
