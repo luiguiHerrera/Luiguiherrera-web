@@ -53,6 +53,7 @@ const copy = {
     model: "Modelo",
     modelScope: "11 ETF: XLB, XLC, XLE, XLF, XLI, XLK, XLP, XLRE, XLU, XLV y XLY. Retornos diarios de cierres sin ajustar de Alpha Vantage, con la ventana disponible del proveedor compacto; correlación promedio a 21 sesiones. ES/VaR y absorption ratio utilizan el histórico ajustado identificado por separado.",
     demoInterpretation: "Los modelos no disponen de historial automático suficiente. Las métricas dependientes del modelo permanecen como datos insuficientes y la dispersión visible procede del escenario demo.",
+    unavailableInterpretation: "El histórico sectorial completo no está disponible para EWMA y GARCH. Las pérdidas históricas de SPY y la concentración sectorial se muestran por separado, con sus propios datos y fechas.",
   },
   en: {
     eyebrow: "Quantitative risk",
@@ -102,6 +103,7 @@ const copy = {
     model: "Model",
     modelScope: "11 ETFs: XLB, XLC, XLE, XLF, XLI, XLK, XLP, XLRE, XLU, XLV and XLY. Alpha Vantage unadjusted daily close returns over the available compact-provider window; average correlation over 21 sessions. ES/VaR and the absorption ratio use the adjusted history identified separately.",
     demoInterpretation: "The models do not have enough automated history. Model-dependent metrics remain unavailable, and the visible dispersion comes from the demo scenario.",
+    unavailableInterpretation: "Complete sector history is unavailable for EWMA and GARCH. SPY historical losses and sector concentration are shown separately, with their own data and dates.",
   },
 } as const;
 
@@ -274,7 +276,7 @@ export function buildQuantRiskPresentation(data: QuantRiskData, locale: QuantRis
     ].map((item) => ({ ...item, value: readinessLabel(item.state) })),
     interpretation: data.dataStatus === "demo" || data.dataStatus === "fallback"
       ? labels.demoInterpretation
-      : translateDynamic(data.reliabilityNote, locale),
+      : data.dataStatus === "unavailable" ? labels.unavailableInterpretation : translateDynamic(data.reliabilityNote, locale),
     sourceName: translateDynamic(data.sourceName, locale),
     lastUpdated: translateDynamic(data.lastUpdated, locale),
     updateFrequency: translateDynamic(data.updateFrequency, locale),

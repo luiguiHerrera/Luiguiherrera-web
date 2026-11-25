@@ -112,7 +112,7 @@ test("presents unavailable real-sector history as insufficient rather than low r
   assert.equal(unavailable.status, "Data temporarily unavailable");
   assert.ok(unavailable.primaryMetrics.every((metric) => metric.available === false));
   assert.equal(unavailable.dispersion[0].value, "Not enough data");
-  assert.match(unavailable.interpretation, /not calculated without complete real sector histories/i);
+  assert.match(unavailable.interpretation, /complete sector history is unavailable/i);
 });
 
 test("localizes the presentation and keeps the disclosure collapsed by default", () => {
@@ -181,6 +181,14 @@ test("missing or unavailable historical windows do not display stale numeric fie
   assert.ok(unavailable.historicalMetrics.every((metric) => !metric.available && metric.value === "Not enough data"));
   assert.match(unavailable.spyWindow, /100 \/ 1,260/);
   assert.match(unavailable.absorptionWindow, /80 \/ 500/);
+});
+
+test("old cached provider diagnostics stay outside both language interfaces", () => {
+  for (const locale of ["es", "en"] as const) {
+    const view = buildQuantRiskPresentation({ ...automatedData, dataStatus: "unavailable", reliabilityNote: "Detalle técnico: internal provider failure" }, locale);
+    assert.doesNotMatch(view.interpretation, /Detalle técnico|internal provider failure/);
+    assert.match(view.interpretation, locale === "es" ? /histórico sectorial/ : /sector history/);
+  }
 });
 
 test("unavailable historical metrics explain the concrete data-quality issue in ES and EN", () => {
