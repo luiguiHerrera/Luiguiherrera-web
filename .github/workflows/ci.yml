@@ -75,7 +75,7 @@ jobs:
             lib/portfolio-fragility/*.test.ts \
             lib/trends/trends.test.tsx lib/trends/research/*.test.tsx \
             lib/dashboard/capital-flow-comparison.test.mjs lib/dashboard/capital-flows-source.test.mjs \
-            lib/dashboard/eth-capital-flows-source.test.mjs lib/dashboard/eth-etf-flows-preview.test.mjs \
+            lib/dashboard/eth-capital-flows-source.test.mjs lib/dashboard/eth-etf-flows-preview.test.mjs lib/dashboard/ewj-capital-flows*.test.mjs \
             lib/dashboard/sp500-etf-flows.test.mjs lib/dashboard/mcclellan-source.test.mjs lib/dashboard/mcclellan-reading.test.mjs \
             lib/dashboard/development-source-cache.test.mjs lib/dashboard/dashboard-overview.test.ts \
             lib/dashboard/price-participation*.test.ts lib/dashboard/price-participation-summary.test.mjs lib/dashboard/price-participation-sync.test.mjs \

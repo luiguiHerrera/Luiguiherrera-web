@@ -25,6 +25,7 @@ export async function GET(request: Request) {
     revalidateTag(CAPITAL_FLOWS_CACHE_TAG, 'max');
     await Promise.allSettled(CAPITAL_FLOW_IDS.map(id => getCachedCapitalFlow(id)));
     revalidatePath('/dashboard');
+    revalidatePath('/en/dashboard');
   }
   console.info('[dashboard:capital-flows:cron]', { results });
   return Response.json({ refreshRequested: results.some(result => result.validated), results },
