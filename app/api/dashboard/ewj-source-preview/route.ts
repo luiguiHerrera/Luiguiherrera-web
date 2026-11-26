@@ -25,5 +25,5 @@ export async function GET() {
   const bytes = Buffer.from(await response.arrayBuffer());
   if (bytes.length > 4_000_000) return Response.json({ error: 'Oversized source' }, { status: 502 });
   const data = JSON.parse(bytes.toString('utf8'));
-  return Response.json({ source, sourceHash: createHash('sha256').update(bytes).digest('hex'), bytes: bytes.length, schemaVersion: data.schemaVersion, shape: shape(data) }, { headers: { 'Cache-Control': 'no-store' } });
+  return Response.json({ source, sourceHash: createHash('sha256').update(new Uint8Array(bytes)).digest('hex'), bytes: bytes.length, schemaVersion: data.schemaVersion, shape: shape(data) }, { headers: { 'Cache-Control': 'no-store' } });
 }
