@@ -12,7 +12,6 @@ import { buildRegimeSummary } from "@/lib/dashboard/regime-scoring";
 import type { DashboardData } from "@/lib/dashboard/types";
 import { getMcClellanData } from "./get-mcclellan-data";
 import { getPublishedCapitalFlows } from "./get-published-capital-flows";
-import { getPublishedEwjFlows } from "./get-ewj-capital-flows";
 
 async function loadDashboardSnapshot(): Promise<DashboardData> {
   const [sectorEtfs, btcEtfFlows, vixData, vixTermStructure, gldFlowPressure, breadth, publishedFlows] = await Promise.all([
@@ -47,7 +46,7 @@ async function loadDashboardSnapshot(): Promise<DashboardData> {
     ethEtfFlows: null,
     gldFlowPressure,
   };
-  const flows = [...publishedFlows, getPublishedEwjFlows()];
+  const flows = publishedFlows;
   const id = createHash("sha256").update(JSON.stringify({ data, breadth, flows })).digest("hex");
   return { ...data, marketContext: { id, capturedAt: new Date().toISOString(), breadth, flows } };
 }

@@ -17,6 +17,7 @@ export type CapitalFlowAssetPreview = {
   refreshStatus?: 'current' | 'delayed' | 'unavailable';
   retrievedAt?: string;
   sourceHash?: string;
+  methodology?: string;
   lastRefreshError?: string;
   interpretations?: Record<number,FlowInterpretation>;
   coverage?: {
