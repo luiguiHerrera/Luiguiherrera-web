@@ -391,7 +391,9 @@ test('the actual lab sends one selected period to the opened chart, period summa
   // child still render their actual code and receive the actual selected props.
   const disclosure = component('components/statistical-levels/StatisticalDisclosure.tsx');
   const original = disclosure.StatisticalDisclosure;
-  disclosure.StatisticalDisclosure = ({ id, children }: { id: string; children: ReactNode }) => ['sl-quant', 'sl-periods-disclosure', 'sl-calendar-disclosure'].includes(id) ? createElement('section', { id }, children) : null;
+  disclosure.StatisticalDisclosure = function OpenSelectedDisclosure({ id, children }: { id: string; children: ReactNode }) {
+    return ['sl-quant', 'sl-periods-disclosure', 'sl-calendar-disclosure'].includes(id) ? createElement('section', { id }, children) : null;
+  };
   try {
   const Component = component('components/statistical-levels/StatLevelsLab.tsx').StatLevelsLab as ComponentType<Record<string, unknown>>;
   const recordedYear = (spyFixture.currentMark?.date ?? spyFixture.lastDate).slice(0, 4);
