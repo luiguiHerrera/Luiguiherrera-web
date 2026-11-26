@@ -101,6 +101,7 @@ test('loader: symbol precedence, aliases, sanitization, arrays, frequencies and 
     [{asset:'GLD',symbol:'btc/usdt',frequency:'daily',window:'All'},{asset:'BTCUSD',frequency:'daily',window:'Full'}],
     [{asset:['ETHUSDT','SPY'],frequency:['monthly','daily'],window:['10Y','1Y']},{asset:'ETHUSD',frequency:'monthly',window:'10Y'}],
     [{asset:'IBIT'},{asset:'SPY',frequency:'weekly',window:'5Y'}],
+    [{asset:'SPY',frequency:'monthly',window:'YTD'},{asset:'SPY',frequency:'monthly',window:'YTD'}],
   ] as const) assert.deepEqual((await get(params)).selection,expected);
   assert.equal(displayStatTicker('BTCUSD'),'BTC/USDT');
 });
@@ -118,9 +119,11 @@ test('all ten distributions and nine summary statistics stay available',()=>{
   for(const key of Object.keys(spy.frequencies.weekly.changeMoves)) assert.ok(visible.includes(`"${key}"`));
   for(const key of Object.keys(spy.frequencies.weekly.changeMoves.change)) assert.ok(s.includes(`row?.${key}`),key);
 });
-test('seasonality retains all frequency/cycle/window/metric filters, weekly win rate, N and nulls',()=>{
+test('seasonality follows the global window and retains cycle/metric filters, weekly win rate, N and nulls',()=>{
   const s=read('components/statistical-levels/AdvancedSeasonalityPanel.tsx');
-  for(const value of ['averageReturn','medianReturn','winRate','sampleSize','post_election','midterm','pre_election','election','3Y','5Y','10Y','All'])assert.ok(s.includes(`"${value}"`),value);
+  for(const value of ['averageReturn','medianReturn','winRate','sampleSize','post_election','midterm','pre_election','election'])assert.ok(s.includes(`"${value}"`),value);
+  assert.doesNotMatch(s, /setWindow|windowOptions/);
+  assert.match(source, /<AdvancedSeasonalityPanel asset=\{asset\} window=\{window\}/);
   const data=JSON.parse(read('lib/statistical-levels/generated/seasonality/ETHUSD.json'));
   for(const w of Object.values(data.windows) as Array<Record<string, {general:Array<{sampleSize:number;averageReturn:number|null;winRate:number|null}>}>>) for(const frequency of ['daily','weekly','monthly']) for(const cell of w[frequency].general){assert.ok(cell.sampleSize>0);assert.ok(cell.winRate===null||(cell.winRate>=0&&cell.winRate<=1));}
   assert.match(s,/sampleSize < 5/);

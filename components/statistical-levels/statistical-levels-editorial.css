@@ -72,7 +72,7 @@
 .sl-asset-control summary { background: #fbf9f3; border-radius: 3px; min-height: 46px; }
 .sl-asset-control summary strong { font-weight: 600; }
 .sl-asset-control summary b { font-weight: 400; color: var(--sl-muted); }
-.sl-period-buttons { grid-template-columns: repeat(4, minmax(36px, 1fr)) minmax(118px, 1.7fr); min-height: 46px; border-radius: 3px; overflow: hidden; }
+.sl-period-buttons { grid-template-columns: repeat(5, minmax(36px, 1fr)) minmax(118px, 1.7fr); min-height: 46px; border-radius: 3px; overflow: hidden; }
 .sl-period-buttons button { padding: 8px 5px; }
 .sl-frequency { display: grid; min-width: 0; }
 .sl-frequency select { min-height: 46px; border-radius: 3px; background: #fbf9f3; padding-right: 28px; }
@@ -261,7 +261,7 @@
   .sl-controls .sl-period { grid-column: 1 / -1; grid-row: 2; }
   .sl-controls .sl-control-label { margin-bottom: 4px; }
   .sl-controls .sl-picker-body { width: calc(100vw - 64px); max-height: min(60vh, calc(100dvh - var(--sl-header-height) - 120px)); }
-  .sl-period-buttons { grid-template-columns: repeat(4, minmax(30px, 1fr)) minmax(104px, 1.7fr); }
+  .sl-period-buttons { grid-template-columns: repeat(5, minmax(30px, 1fr)) minmax(104px, 1.7fr); }
   .sl-period-buttons button { font-size: 12px; }
   .sl-options > summary { justify-content: space-between; min-height: 36px; }
   .sl-options-body { grid-template-columns: minmax(0, 1fr); gap: 14px; }

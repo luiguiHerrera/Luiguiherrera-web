@@ -1,12 +1,13 @@
 import { DrawdownInspection } from "./DrawdownInspection";
 import { windowName } from "@/lib/statistical-levels/interpretation";
-import type { AssetStatRecord, StatisticalFrequency, StatisticalWindow } from "@/lib/statistical-levels/types";
+import type { AssetStatRecord, StatisticalFrequency } from "@/lib/statistical-levels/types";
+import { getAnalysisMetric, type AnalysisWindow } from "@/lib/statistical-levels/analysis-window";
 
 type UnderwaterDrawdownChartProps = {
   asset: AssetStatRecord | null;
   frequency: StatisticalFrequency;
   locale?: "es" | "en";
-  window: StatisticalWindow;
+  window: AnalysisWindow;
   showSummary?: boolean;
 };
 
@@ -35,9 +36,10 @@ function calculateDrawdowns(series: Array<{ close: number }>) {
   });
 }
 
-export function getDrawdownWindow(data: AssetStatRecord["frequencies"][StatisticalFrequency] | undefined, window: StatisticalWindow) {
-  const metric = data?.windows[window];
-  const history = data?.drawdownHistory ?? [];
+export function getDrawdownWindow(data: AssetStatRecord["frequencies"][StatisticalFrequency] | undefined, window: AnalysisWindow, frequency: StatisticalFrequency = "daily", asOf?: string | null) {
+  const metric = data ? getAnalysisMetric(data, frequency, window, asOf) : undefined;
+  const cutoff = [data?.lastDate, asOf?.slice(0, 10)].filter((date): date is string => Boolean(date)).sort()[0];
+  const history = (data?.drawdownHistory ?? []).filter(point => !cutoff || point.date <= cutoff);
   const series = metric?.available && metric.sessions > 0 && history.length >= metric.sessions ? history.slice(-metric.sessions) : [];
   const drawdowns = calculateDrawdowns(series);
   const maximum = drawdowns.length ? Math.min(...drawdowns) : null;
@@ -63,8 +65,9 @@ function periodLabel(frequency: StatisticalFrequency, locale: "es" | "en") {
 
 export function UnderwaterDrawdownChart({ asset, frequency, locale = "es", window, showSummary = true }: UnderwaterDrawdownChartProps) {
   const data = asset?.frequencies[frequency];
-  const metric = data?.windows[window];
-  const { series, drawdowns } = getDrawdownWindow(data, window);
+  const asOf = asset?.currentMark?.date ?? asset?.lastDate;
+  const metric = data ? getAnalysisMetric(data, frequency, window, asOf) : undefined;
+  const { series, drawdowns } = getDrawdownWindow(data, window, frequency, asOf);
   const path = buildPath(drawdowns);
   const area = path ? `${path} L 100 0 L 0 0 Z` : "";
   const minDrawdown = Math.min(-0.01, ...drawdowns);

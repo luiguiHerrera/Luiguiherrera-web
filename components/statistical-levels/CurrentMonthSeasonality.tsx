@@ -1,19 +1,19 @@
 'use client';
-import type { DailySeasonalityData, StatisticalWindow } from '@/lib/statistical-levels/types';
+import { useMemo } from 'react';
+import type { AssetStatRecord, DailySeasonalityData } from '@/lib/statistical-levels/types';
+import type { AnalysisWindow } from '@/lib/statistical-levels/analysis-window';
+import { analysisSeasonalityWindow } from '@/lib/statistical-levels/analysis-seasonality';
 import { returnBarGeometry, winRateWidth } from './interaction-presentation';
 import { percent, windowName } from '@/lib/statistical-levels/interpretation';
 
-export function CurrentMonthSeasonality({ data, asOf, locale, window }: { data: DailySeasonalityData; asOf: string; locale: 'es' | 'en'; window: StatisticalWindow }) {
+export function CurrentMonthSeasonality({ data, asset, asOf, locale, window }: { data: DailySeasonalityData; asset?: AssetStatRecord; asOf: string; locale: 'es' | 'en'; window: AnalysisWindow }) {
   const en = locale === 'en';
   const date = new Date(`${asOf}T00:00:00Z`);
   const month = date.getUTCMonth() + 1;
   const monthName = Number.isFinite(month) ? date.toLocaleDateString(en ? 'en-US' : 'es-ES', { month: 'long', timeZone: 'UTC' }) : 'n/d';
   const period = windowName(window, locale);
   const calendarMonth = monthName.charAt(0).toLocaleUpperCase(locale) + monthName.slice(1);
-  // Only use the requested horizon. The snapshot has no 1Y seasonality;
-  // do not silently replace it with a longer historical sample.
-  const seasonalityWindow = window === 'Full' ? 'All' : window === '1Y' ? null : window;
-  const windowData = seasonalityWindow ? data.windows[seasonalityWindow] ?? (seasonalityWindow === 'All' ? data.windows.Full : undefined) : undefined;
+  const windowData = useMemo(() => analysisSeasonalityWindow(data, asset, window, asOf), [data, asset, window, asOf]);
   const cells = windowData?.weekly?.general.filter(cell => cell.month === month) ?? [];
   const returnScale = Math.max(0, ...cells.filter(cell => cell.sampleSize > 0).map(cell => Math.abs(cell.averageReturn ?? 0)));
   const monthly = windowData?.monthly?.general.find(cell => cell.month === month);
@@ -43,10 +43,10 @@ export function CurrentMonthSeasonality({ data, asOf, locale, window }: { data: 
         <small>N {n}{n < 5 ? en ? ' · Limited sample' : ' · Muestra limitada' : ''}</small>
       </article>;
     })}</div>
-    <p className="sl-caption">{en ? 'Weeks are grouped by their closing date: days 1–7, 8–14, 15–21, 22–28 and 29–31. Historical samples contain only completed UTC calendar periods; the current week and month are excluded. Median, cycles and calendar detail are available below.' : 'Las semanas se agrupan por fecha de cierre: días 1–7, 8–14, 15–21, 22–28 y 29–31. Las muestras históricas contienen solo periodos de calendario UTC completos; se excluyen la semana y el mes en curso. Mediana, ciclos y detalle por calendario están disponibles más abajo.'}</p>
+    <p className="sl-caption">{en ? 'Selected period' : 'Periodo seleccionado'}: {period}. {en ? 'Weeks are grouped by their closing date: days 1–7, 8–14, 15–21, 22–28 and 29–31. Historical samples contain only completed UTC calendar periods; the current week and month are excluded. Median, cycles and calendar detail are available below.' : 'Las semanas se agrupan por fecha de cierre: días 1–7, 8–14, 15–21, 22–28 y 29–31. Las muestras históricas contienen solo periodos de calendario UTC completos; se excluyen la semana y el mes en curso. Mediana, ciclos y detalle por calendario están disponibles más abajo.'}</p>
     <p className="sl-caption">{en ? "Completed observations through" : "Observaciones completas hasta"}: {en ? "monthly" : "mensual"} {data.historicalSample?.completedThrough.monthly ?? "n/d"} · {en ? "weekly" : "semanal"} {data.historicalSample?.completedThrough.weekly ?? "n/d"}.</p>
     <p className="sl-disclaimer">{en ? 'Seasonality describes historical frequency, not what will happen this year.' : 'La estacionalidad describe frecuencia histórica, no lo que ocurrirá este año.'}</p>
-    </> : <p className="sl-notice" role="status">{en ? `This dataset does not include seasonality for the ${period} horizon. Select 3Y, 5Y, 10Y or full history in the top controls.` : `Este conjunto de datos no incluye estacionalidad para el horizonte de ${period}. Selecciona 3A, 5A, 10A o todo el historial en los controles superiores.`}</p>}
+    </> : <p className="sl-notice" role="status">{en ? `Seasonality is unavailable for the selected ${period} period in this dataset.` : `La estacionalidad no está disponible para el periodo seleccionado de ${period} en este conjunto de datos.`}</p>}
     </div></details>
   </section>;
 }

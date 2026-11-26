@@ -1,11 +1,11 @@
 import assert from 'node:assert/strict'; import { weeklyReturnDisplay } from '../../scripts/statistical-levels-release/scripts/qa/weekly-return-display-contract.mjs';
 import test from 'node:test';
-import { readFileSync } from 'node:fs';
+import { readFileSync, existsSync } from 'node:fs';
 import { createRequire } from 'node:module';
 import path from 'node:path';
 import ts from 'typescript';
 import { renderToStaticMarkup } from 'react-dom/server';
-import { createElement, type ComponentType } from 'react';
+import { createElement, type ComponentType, type ReactNode } from 'react';
 import type { PeriodExplorerRow } from '../../lib/statistical-levels/types.ts';
 import { returnBarGeometry, winRateWidth, nearestObservationIndex, drawdownInspectionText } from './interaction-presentation.ts';
 
@@ -17,11 +17,13 @@ function component(file: string): Record<string, unknown> {
   const source = readFileSync(absolute, 'utf8');
   const loadedModule = { exports: {} };
   cache.set(absolute, loadedModule);
-  const code = ts.transpileModule(source, { compilerOptions: { module: ts.ModuleKind.CommonJS, jsx: ts.JsxEmit.ReactJSX, esModuleInterop: true } }).outputText;
+  const code = ts.transpileModule(source, { compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2022, jsx: ts.JsxEmit.ReactJSX, esModuleInterop: true } }).outputText;
   const load = (name: string): unknown => {
+    if (name.endsWith('.css')) return {};
     if (!name.startsWith('.') && !name.startsWith('@/')) return require(name);
     const base = name.startsWith('@/') ? path.resolve(name.slice(2)) : path.resolve(path.dirname(absolute), name);
-    for (const suffix of ['.ts', '.tsx']) {
+    if (base.endsWith('.mjs')) return require(base);
+    for (const suffix of existsSync(base) ? [''] : ['.ts', '.tsx']) {
       try { return component(base + suffix); } catch (error) { if ((error as NodeJS.ErrnoException).code !== 'ENOENT') throw error; }
     }
     throw new Error(`Missing presentation module ${name}`);
@@ -29,6 +31,7 @@ function component(file: string): Record<string, unknown> {
   new Function('require', 'module', 'exports', code)(load, loadedModule, loadedModule.exports);
   return loadedModule.exports;
 }
+const spyFixture = JSON.parse(readFileSync('lib/statistical-levels/generated/assets/SPY.json', 'utf8'));
 const seasonality = JSON.parse(readFileSync('lib/statistical-levels/generated/seasonality/SPY.json', 'utf8'));
 const manifest = JSON.parse(readFileSync('lib/statistical-levels/generated/manifest.json', 'utf8'));
 const month = new Date(manifest.generatedAt + 'T00:00:00Z').getUTCMonth() + 1;
@@ -156,8 +159,14 @@ test('month seasonality uses the requested top-bar horizon and never substitutes
       assert.ok(!html.includes('<select'));
     }
     const unavailable = renderToStaticMarkup(createElement(Component, { data: seasonality, asOf: manifest.generatedAt, locale, window: '1Y' }));
-    assert.ok(unavailable.includes(locale === 'es' ? 'no incluye estacionalidad' : 'does not include seasonality'));
+    assert.ok(unavailable.includes(locale === 'es' ? 'no está disponible' : 'is unavailable'));
     assert.ok(!unavailable.includes('data-week=') && !unavailable.includes('sl-season-summary'));
+    for (const selected of ['1Y', 'YTD']) {
+      const available = renderToStaticMarkup(createElement(Component, { data: seasonality, asset: spyFixture, asOf: manifest.generatedAt, locale, window: selected }));
+      assert.equal((available.match(/data-week=/g) ?? []).length, 5);
+      assert.match(available, /N [01] · (Muestra limitada|Limited sample)/);
+      assert.ok(available.includes(selected === 'YTD' ? 'YTD' : locale === 'es' ? '1A' : '1Y'));
+    }
   }
 });
 
@@ -186,23 +195,24 @@ test('tooltip formats the actual observation with locale-aware date and percent'
 test('historical patterns expose their controls directly without a second disclosure or duplicated heading', () => {
   const Component = component('components/statistical-levels/AdvancedSeasonalityPanel.tsx').AdvancedSeasonalityPanel as ComponentType<Record<string, unknown>>;
   for (const locale of ['es', 'en']) for (const frequency of ['daily', 'weekly', 'monthly']) {
-    const html = renderToStaticMarkup(createElement(Component, { data: seasonality, frequency, generatedAt: manifest.generatedAt, ticker: 'SPY', locale }));
+    const html = renderToStaticMarkup(createElement(Component, { data: seasonality, asset: spyFixture, window: '5Y', frequency, generatedAt: manifest.generatedAt, locale }));
     assert.ok(!html.includes('sl-context-toggle') && !html.includes('Historical calendar patterns') && !html.includes('Patrones históricos por calendario'));
-    assert.equal((html.match(/<select/g) ?? []).length, frequency === 'monthly' ? 3 : 4);
+    assert.equal((html.match(/<select/g) ?? []).length, frequency === 'monthly' ? 2 : 3);
     assert.ok(!html.includes(locale === 'en' ? 'Hide context' : 'Ocultar contexto'));
     assert.ok(html.includes(locale === 'en' ? 'completed UTC calendar periods' : 'periodos de calendario UTC completos'));
-    for (const value of ['3Y', '5Y', '10Y', 'All', 'midterm', 'medianReturn', 'sampleSize']) assert.ok(html.includes(`value="${value}"`));
+    assert.ok(!html.includes('value="3Y"') && !html.includes('value="5Y"') && !html.includes('value="10Y"') && !html.includes('value="All"'));
+    for (const value of ['midterm', 'medianReturn', 'sampleSize']) assert.ok(html.includes(`value="${value}"`));
   }
 });
 
 test('expanded patterns show editable controls once and current average N as inline metadata', () => {
   const Component = component('components/statistical-levels/AdvancedSeasonalityPanel.tsx').AdvancedSeasonalityPanel as ComponentType<Record<string, unknown>>;
   for (const locale of ['es', 'en']) for (const frequency of ['daily', 'weekly', 'monthly']) {
-    const html = renderToStaticMarkup(createElement(Component, { data: seasonality, frequency, generatedAt: manifest.generatedAt, ticker: 'SPY', locale }));
+    const html = renderToStaticMarkup(createElement(Component, { data: seasonality, asset: spyFixture, window: '5Y', frequency, generatedAt: manifest.generatedAt, locale }));
     const cells = seasonality.windows['5Y'][frequency].general as Array<{ sampleSize: number }>;
     const averageN = (cells.reduce((sum, cell) => sum + cell.sampleSize, 0) / cells.length).toFixed(0);
     assert.doesNotMatch(html, /data-insight-metrics|data-insight-metric-value/);
-    assert.equal((html.match(/<select/g) ?? []).length, frequency === 'monthly' ? 3 : 4);
+    assert.equal((html.match(/<select/g) ?? []).length, frequency === 'monthly' ? 2 : 3);
     const metadata = html.match(/<p class="sl-caption sl-patterns-sample">([\s\S]*?)<\/p>/)![1];
     assert.ok(metadata.includes(`${locale === 'en' ? 'Average N' : 'N promedio'}: ${averageN}`));
     assert.ok(metadata.includes(locale === 'en' ? 'Completed periods only' : 'Solo periodos completos'));
@@ -374,4 +384,33 @@ test('movement table keeps every source statistic aligned when minimum moves bef
     assert.ok(html.includes('href="#sl-periods-disclosure"'));
   }
   assert.equal(JSON.stringify(asset), before);
+});
+
+test('the actual lab sends one selected period to the opened chart, period summary and patterns in ES/EN', () => {
+  // Open only the lazy host in this SSR harness; the real lab and every data
+  // child still render their actual code and receive the actual selected props.
+  const disclosure = component('components/statistical-levels/StatisticalDisclosure.tsx');
+  const original = disclosure.StatisticalDisclosure;
+  disclosure.StatisticalDisclosure = ({ id, children }: { id: string; children: ReactNode }) => ['sl-quant', 'sl-periods-disclosure', 'sl-calendar-disclosure'].includes(id) ? createElement('section', { id }, children) : null;
+  try {
+  const Component = component('components/statistical-levels/StatLevelsLab.tsx').StatLevelsLab as ComponentType<Record<string, unknown>>;
+  const recordedYear = (spyFixture.currentMark?.date ?? spyFixture.lastDate).slice(0, 4);
+  for (const locale of ['es', 'en']) for (const selected of ['3Y', 'YTD']) {
+    const frequency = 'weekly';
+    const prices = spyFixture.frequencies.weekly.drawdownHistory;
+    const visible = selected === '3Y' ? prices.slice(-156) : prices.filter((point: { date: string }) => point.date >= `${recordedYear}-01-01`);
+    const html = renderToStaticMarkup(createElement(Component, {
+      initial: { asset: spyFixture, manifest, seasonality, selection: { asset: 'SPY', frequency, window: selected } },
+      snapshot: { id: 'fixture' }, locale, stale: false,
+    }));
+    const rendered = html.replace(/<!--[\s\S]*?-->/g, '');
+    assert.ok(rendered.includes(`data-window="${selected}" aria-pressed="true"`));
+    assert.ok(rendered.includes(`MA40 · ${selected === 'YTD' ? 'YTD' : locale === 'es' ? '3A' : '3Y'} · ${visible[0].date} – ${visible.at(-1).date}`), JSON.stringify(rendered.match(/MA40[^<]{0,180}/g)));
+    const summary = rendered.match(/<dl class="sl-explorer-summary">([\s\S]*?)<\/dl>/)![1];
+    assert.ok(summary.includes(`${visible.length} ${locale === 'en' ? 'periods' : 'periodos'}`));
+    const patterns = rendered.match(/<p class="sl-caption sl-patterns-sample">([\s\S]*?)<\/p>/)![1];
+    assert.ok(patterns.includes(selected === 'YTD' ? 'YTD' : locale === 'es' ? '3A' : '3Y'));
+    assert.ok(!rendered.includes('El explorador usa su historial disponible, independientemente') && !rendered.includes('The explorer uses its available history, independently'));
+  }
+  } finally { disclosure.StatisticalDisclosure = original; }
 });

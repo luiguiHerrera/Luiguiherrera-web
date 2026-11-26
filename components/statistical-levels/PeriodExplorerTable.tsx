@@ -2,11 +2,13 @@
 
 import { useId, useMemo, useState } from "react";
 import { MetricHelpTooltip } from "@/components/ui/MetricHelpTooltip";
-import { explorerHistory } from "@/lib/statistical-levels/period-history";
+import { analysisExplorerHistory, analysisExplorerSummary } from "@/lib/statistical-levels/analysis-price-history";
+import type { AnalysisWindow } from "@/lib/statistical-levels/analysis-window";
+import { windowName } from "@/lib/statistical-levels/interpretation";
 import type { AssetStatRecord, PeriodExplorerRow, StatisticalFrequency } from "@/lib/statistical-levels/types";
 
 type Locale = "es" | "en";
-type Props = { asset: AssetStatRecord | null; frequency: StatisticalFrequency; locale?: Locale };
+type Props = { asset: AssetStatRecord | null; frequency: StatisticalFrequency; window?: AnalysisWindow; locale?: Locale };
 const filterOptions = [
   ["positive_extreme", "Extensión positiva extrema", "Extreme positive extension"],
   ["negative_extreme", "Extensión negativa extrema", "Extreme negative extension"],
@@ -48,6 +50,10 @@ function classificationLabel(value: string, locale: Locale) {
 
 function formatPercent(value: number | null) {
   return value === null ? "n/d" : `${value > 0 ? "+" : ""}${(value * 100).toFixed(2)}%`;
+}
+
+function formatRate(value: number | null) {
+  return value === null ? "n/d" : `${(value * 100).toFixed(2)}%`;
 }
 
 function formatNumber(value: number | null) {
@@ -101,7 +107,7 @@ export function selectExplorerRows(rows: PeriodExplorerRow[], filter: FilterKey,
   });
 }
 
-export function PeriodExplorerTable({ asset, frequency, locale = "es" }: Props) {
+export function PeriodExplorerTable({ asset, frequency, window = "Full", locale = "es" }: Props) {
   const en = locale === "en";
   const [filter, setFilter] = useState<FilterKey>("positive_extreme");
   const [sort, setSort] = useState<Sort>({ column: "period", direction: "desc" });
@@ -111,18 +117,14 @@ export function PeriodExplorerTable({ asset, frequency, locale = "es" }: Props) 
   const filterId = useId();
   const data = asset?.frequencies[frequency];
   const completeHistory = data?.periodHistory !== undefined;
-  const rows = useMemo(() => explorerHistory(data), [data]);
+  const asOf = asset?.currentMark?.date ?? asset?.lastDate;
+  const rows = useMemo(() => analysisExplorerHistory(data, frequency, window, asOf), [data, frequency, window, asOf]);
   const oldest = rows.at(-1);
   const newest = rows[0];
   const filteredRows = useMemo(() => selectExplorerRows(rows, filter, columnFilters, sort, locale), [rows, filter, columnFilters, sort, locale]);
   const visibleRows = filteredRows.slice(0, limit);
   const activeColumns = Object.values(columnFilters).filter(bounds => Object.values(bounds).some(Boolean)).length;
-  const summary = useMemo(() => ({
-    positiveRate: rows.length ? rows.filter(row => (row.change ?? 0) > 0).length / rows.length : null,
-    negativeRate: rows.length ? rows.filter(row => (row.change ?? 0) < 0).length / rows.length : null,
-    positiveExtreme: rows.filter(row => row.classification === "Extensión positiva extrema").length,
-    negativeExtreme: rows.filter(row => row.classification === "Extensión negativa extrema").length,
-  }), [rows]);
+  const summary = useMemo(() => analysisExplorerSummary(rows), [rows]);
   const headerHelp: Partial<Record<Column, string>> = {
     period: en ? "Weekly labels use the completed close date: days 1–7 = week 1, 8–14 = week 2, 15–21 = week 3, 22–28 = week 4 and 29–31 = week 5. Hover or focus a period to see its exact dates. Date filters use the close date." : "Las semanas se identifican por su fecha de cierre completado: días 1–7 = semana 1, 8–14 = semana 2, 15–21 = semana 3, 22–28 = semana 4 y 29–31 = semana 5. Pasa el cursor o enfoca un periodo para consultar las fechas exactas. Los filtros de fecha usan el cierre.",
     change: en ? "Change over the analyzed period." : "Cambio del periodo analizado.",
@@ -137,14 +139,14 @@ export function PeriodExplorerTable({ asset, frequency, locale = "es" }: Props) 
 
   return <section className="sl-period-explorer">
     <dl className="sl-explorer-summary">
-      <SummaryItem label={completeHistory ? en ? "Available history" : "Historial disponible" : en ? "Recent sample" : "Muestra reciente"} value={`${rows.length} ${en ? "periods" : "periodos"}`} />
-      <SummaryItem label={en ? "Positive / negative" : "Positivos / negativos"} value={`${formatPercent(summary.positiveRate)} / ${formatPercent(summary.negativeRate)}`} />
+      <SummaryItem label={completeHistory ? en ? "Selected history" : "Historial seleccionado" : en ? "Recent sample" : "Muestra reciente"} value={`${rows.length} ${en ? "periods" : "periodos"}`} />
+      <SummaryItem label={en ? "Positive / negative" : "Positivos / negativos"} value={`${formatRate(summary.positiveRate)} / ${formatRate(summary.negativeRate)}`} />
       <SummaryItem label={en ? "Extreme extensions" : "Extensiones extremas"} value={en ? `${summary.positiveExtreme} positive · ${summary.negativeExtreme} negative` : `${summary.positiveExtreme} ${summary.positiveExtreme === 1 ? "positiva" : "positivas"} · ${summary.negativeExtreme} ${summary.negativeExtreme === 1 ? "negativa" : "negativas"}`} />
     </dl>
     <p className="sl-caption sl-explorer-sample-note">
       {completeHistory ? en ? 'Completed periods with an available prior close' : 'Periodos completados con cierre previo disponible' : en ? 'Recent periods shown in the explorer' : 'Periodos recientes incluidos en el explorador'}
       {oldest && newest ? <>: <time dateTime={oldest.periodEnd}>{formatExplorerPeriod(oldest, frequency, locale)}</time> – <time dateTime={newest.periodEnd}>{formatExplorerPeriod(newest, frequency, locale)}</time></> : null}.
-      {' '}{en ? 'The explorer uses its available history, independently of the horizon selected above.' : 'El explorador usa su historial disponible, independientemente del horizonte seleccionado arriba.'}
+      {' '}{en ? `Selected period: ${windowName(window, locale)}. Summary and table use this same sample.` : `Periodo seleccionado: ${windowName(window, locale)}. El resumen y la tabla usan esta misma muestra.`}
     </p>
     <div className="sl-explorer-groups" aria-label={en ? "Period groups" : "Grupos de periodos"}>
       {filterOptions.map(([key, esLabel, enLabel]) => <button key={key} type="button" aria-pressed={filter === key} onClick={() => { setFilter(key); setLimit(PAGE_SIZE); }}>{en ? enLabel : esLabel}</button>)}

@@ -4,13 +4,16 @@ import { MetricHelpTooltip } from "@/components/ui/MetricHelpTooltip";
 import { PercentileRangeBar } from "@/components/statistical-levels/PercentileRangeBar";
 import { StatBandsChart } from "@/components/statistical-levels/StatBandsChart";
 import { displayStatName, displayStatTicker } from "@/lib/statistical-levels/display";
-import type { AssetStatRecord, StatisticalFrequency, StatisticalWindow } from "@/lib/statistical-levels/types";
+import { analysisPriceHistory } from "@/lib/statistical-levels/analysis-price-history";
+import { getAnalysisMetric, type AnalysisWindow } from "@/lib/statistical-levels/analysis-window";
+import { windowName } from "@/lib/statistical-levels/interpretation";
+import type { AssetStatRecord, StatisticalFrequency } from "@/lib/statistical-levels/types";
 
 type AssetStatCardProps = {
   asset: AssetStatRecord;
   frequency: StatisticalFrequency;
   locale?: "es" | "en";
-  window: StatisticalWindow;
+  window: AnalysisWindow;
 };
 
 function formatPercent(value: number | null) {
@@ -64,7 +67,9 @@ function extensionLabel(value: string, locale: "es" | "en") {
 
 export function AssetStatCard({ asset, frequency, locale = "es", window }: AssetStatCardProps) {
   const frequencyData = asset.frequencies[frequency];
-  const metric = frequencyData.windows[window];
+  const asOf = asset.currentMark?.date ?? asset.lastDate;
+  const metric = getAnalysisMetric(frequencyData, frequency, window, asOf);
+  const series = analysisPriceHistory(frequencyData, frequency, window, asOf);
   const longMa = frequencyData.longMovingAverageKey;
   const copy = locale === "en"
     ? {
@@ -128,8 +133,8 @@ export function AssetStatCard({ asset, frequency, locale = "es", window }: Asset
       </div>
 
       <div className="mt-5">
-        <StatBandsChart series={frequencyData.compactSeries} locale={locale} />
-        <p className="mt-1 text-xs text-muted">{frequencyData.longMovingAverageKey} · {frequencyData.compactSeries[0]?.date ?? "n/d"} – {frequencyData.compactSeries.at(-1)?.date ?? "n/d"}</p>
+        <StatBandsChart series={series} locale={locale} />
+        <p className="mt-1 text-xs text-muted">{frequencyData.longMovingAverageKey} · {windowName(window, locale)} · {series[0]?.date ?? "n/d"} – {series.at(-1)?.date ?? "n/d"}</p>
       </div>
 
       <div className="mt-5 grid gap-4 lg:grid-cols-[1fr_1fr]">

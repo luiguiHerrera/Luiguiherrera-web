@@ -8,7 +8,9 @@ const read=p=>fs.readFileSync(new URL(p,root),'utf8');
 const m={exports:{}};
 const display={exports:{}};
 new Function('module','exports',ts.transpileModule(read('lib/statistical-levels/display.ts'),{compilerOptions:{module:ts.ModuleKind.CommonJS,target:ts.ScriptTarget.ES2022}}).outputText)(display,display.exports);
-new Function('require','module','exports',ts.transpileModule(read('lib/statistical-levels/runtime-snapshot.ts'),{compilerOptions:{module:ts.ModuleKind.CommonJS,target:ts.ScriptTarget.ES2022}}).outputText)(id=>{assert.equal(id,'./display');return display.exports;},m,m.exports);
+const analysis={exports:{}};
+new Function('module','exports',ts.transpileModule(read('lib/statistical-levels/analysis-window.ts'),{compilerOptions:{module:ts.ModuleKind.CommonJS,target:ts.ScriptTarget.ES2022}}).outputText)(analysis,analysis.exports);
+new Function('require','module','exports',ts.transpileModule(read('lib/statistical-levels/runtime-snapshot.ts'),{compilerOptions:{module:ts.ModuleKind.CommonJS,target:ts.ScriptTarget.ES2022}}).outputText)(id=>{if(id==='./analysis-window')return analysis.exports;assert.equal(id,'./display');return display.exports;},m,m.exports);
 const api=m.exports,manifest=JSON.parse(read('lib/statistical-levels/generated/manifest.json'));
 const asset=t=>JSON.parse(read(`lib/statistical-levels/generated/assets/${t}.json`));
 const seasonality=t=>JSON.parse(read(`lib/statistical-levels/generated/seasonality/${t}.json`));
@@ -46,6 +48,7 @@ test('runtime component preserves transport isolation and legacy model restricti
 
 test('history restores the same aliases and defaults as initial SSR',()=>{
  assert.deepEqual(api.selectionFromRuntimeUrl(new URL('https://local.invalid/?symbol=BTC%2FUSDT&window=All&frequency=daily'),manifest),{asset:'BTCUSD',frequency:'daily',window:'Full'});
+ assert.deepEqual(api.selectionFromRuntimeUrl(new URL('https://local.invalid/?asset=SPY&frequency=monthly&window=YTD'),manifest),{asset:'SPY',frequency:'monthly',window:'YTD'});
  assert.deepEqual(api.selectionFromRuntimeUrl(new URL('https://local.invalid/?asset=UNKNOWN&frequency=unknown&window=unknown'),manifest),{asset:manifest.defaultAsset,frequency:manifest.defaultFrequency,window:manifest.defaultWindow});
 });
 
@@ -60,7 +63,7 @@ function controller(source=read('components/statistical-levels/StatLevelsLab.tsx
  const react={useState(value){const i=cursor++;if(!(i in hooks))hooks[i]=value;return [hooks[i],v=>{hooks[i]=v;}];},useRef(value){const i=cursor++;if(!(i in hooks))hooks[i]={current:value};return hooks[i];},useEffect(fn){cursor++;effects.push(fn);},useMemo:fn=>fn()};
  const runtime={...api,loadStatisticalLevelsRuntimeAsset(ticker,actualSnapshot){assert.equal(actualSnapshot,snapshot);let resolve;const promise=new Promise(r=>resolve=r);requests.push({ticker,resolve,finished:false});return promise;}};
  const mod={exports:{}};
- new Function('require','module','exports',ts.transpileModule(source,{compilerOptions:{module:ts.ModuleKind.CommonJS,target:ts.ScriptTarget.ES2022,jsx:ts.JsxEmit.ReactJSX}}).outputText)(id=>id==='react'?react:id==='react/jsx-runtime'?{jsx:(_type,props)=>props,jsxs:(_type,props)=>props}:id==='@/lib/statistical-levels/runtime-snapshot'?runtime:{},mod,mod.exports);
+ new Function('require','module','exports',ts.transpileModule(source,{compilerOptions:{module:ts.ModuleKind.CommonJS,target:ts.ScriptTarget.ES2022,jsx:ts.JsxEmit.ReactJSX}}).outputText)(id=>id==='react'?react:id==='react/jsx-runtime'?{jsx:(_type,props)=>props,jsxs:(_type,props)=>props}:id==='@/lib/statistical-levels/runtime-snapshot'?runtime:id==='@/lib/statistical-levels/analysis-window'?analysis.exports:{},mod,mod.exports);
  const initial={asset:{ticker:'SPY'},seasonality:{asset:'SPY'},selection:{asset:'SPY',frequency:'weekly',window:'5Y'},manifest};
  function render(){cursor=0;view=mod.exports.StatLevelsLab({initial,snapshot,stale:false});for(const fn of effects.splice(0))fn();return view;}
  render();const cache=hooks.find(x=>x?.current instanceof Map).current;
@@ -75,6 +78,8 @@ async function staleCompletions(h,count){
 }
 function local(h,next){const before=h.requests.length,assetBefore=h.view.asset,seasonalityBefore=h.view.seasonality;const expected={...h.view.selection,...next};h.navigate(next);assert.equal(h.requests.length,before,'same-asset control reached transport');assert.equal(h.view.asset,assetBefore);assert.equal(h.view.seasonality,seasonalityBefore);assert.deepEqual(h.view.selection,expected);assert.equal(h.view.loadState,'ready');assert.deepEqual(Object.fromEntries(new URL(globalThis.window.location.href).searchParams),expected);}
 const cacheCases=[
+ ['SAME_ASSET_YTD_ZERO_NETWORK',h=>local(h,{window:'YTD'})],
+ ['SAME_ASSET_YTD_FREQUENCY_ZERO_NETWORK',h=>{local(h,{window:'YTD'});local(h,{frequency:'monthly'});}],
  ['SAME_ASSET_CACHE_PRESENT_WINDOW_CHANGE_ZERO_NETWORK',h=>local(h,{window:'3Y'})],
  ['SAME_ASSET_CACHE_MISSING_WINDOW_CHANGE_ZERO_NETWORK',h=>{h.cache.clear();local(h,{window:'3Y'});} ],
  ['SAME_ASSET_CACHE_PRESENT_FREQUENCY_CHANGE_ZERO_NETWORK',h=>local(h,{frequency:'daily'})],
@@ -97,7 +102,7 @@ const cacheCases=[
  ['CURRENT_ASSET_STATE_SURVIVES_CACHE_CLEAR',h=>{h.cache.clear();local(h,{window:'3Y'});local(h,{frequency:'daily'});local(h,{window:'Full'});assert.equal(h.cache.size,0);} ],
 ];
 for(const [name,exercise]of cacheCases)test('cache invariant '+name,async()=>{const h=controller();try{await exercise(h);}finally{h.dispose();}});
-test('same-asset popstate uses committed payload with an empty cache',()=>{const h=controller();try{h.cache.clear();for(const next of [{asset:'SPY',frequency:'weekly',window:'3Y'},{asset:'SPY',frequency:'daily',window:'3Y'},{asset:'SPY',frequency:'daily',window:'Full'}]){h.pop(next);assert.deepEqual(h.view.selection,next);assert.equal(h.requests.length,0);assert.equal(h.history.length,0);}}finally{h.dispose();}});
+test('same-asset popstate uses committed payload with an empty cache',()=>{const h=controller();try{h.cache.clear();for(const next of [{asset:'SPY',frequency:'weekly',window:'YTD'},{asset:'SPY',frequency:'weekly',window:'3Y'},{asset:'SPY',frequency:'daily',window:'3Y'},{asset:'SPY',frequency:'daily',window:'Full'}]){h.pop(next);assert.deepEqual(h.view.selection,next);assert.equal(h.requests.length,0);assert.equal(h.history.length,0);}}finally{h.dispose();}});
 test('local branch is structurally before cache access and exits before transport',()=>{
  const source=read('components/statistical-levels/StatLevelsLab.tsx'),ast=ts.createSourceFile('component.tsx',source,ts.ScriptTarget.Latest,true,ts.ScriptKind.TSX);let navigate;
  function visit(n){if(ts.isFunctionDeclaration(n)&&n.name?.text==='navigate')navigate=n;ts.forEachChild(n,visit);}visit(ast);assert.ok(navigate);

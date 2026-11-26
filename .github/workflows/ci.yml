@@ -85,6 +85,7 @@ jobs:
             lib/dashboard/shared-market-snapshot.test.mjs lib/dashboard/home-dashboard-consistency.test.mjs lib/dashboard/adapters/sector-etfs.test.ts lib/dashboard/adapters/sector-data-core.test.ts lib/dashboard/risk-models.test.ts \
             lib/statistical-levels/baseline.test.mjs lib/statistical-levels/contracts.test.ts lib/statistical-levels/defect-repairs.test.ts \
             lib/statistical-levels/published-data.test.mts lib/statistical-levels/published-fetch.test.ts \
+            lib/statistical-levels/analysis-*.test.ts scripts/statistical-levels-release/tests/statistical-levels-runtime.test.mjs \
             scripts/statistical-levels-storage.test.mjs components/statistical-levels/interaction-presentation.test.ts \
             lib/reports/first-september-2026.test.mts lib/reports/second-september-2026.test.mts lib/reports/second-september-source-policy.test.mts \
             lib/reports/english-reports.test.ts lib/reports/english-complete-archive.test.mjs \

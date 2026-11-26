@@ -19,8 +19,9 @@ import { StatisticalPageHeading } from './StatisticalPageHeading';
 import { StatisticalLoading } from './StatisticalLoading';
 import { PercentileRangeBar } from './PercentileRangeBar';
 import { displayStatName, displayStatTicker } from '@/lib/statistical-levels/display';
+import { analysisWindows, getAnalysisMetric, type AnalysisWindow } from '@/lib/statistical-levels/analysis-window';
 import { extensionSample, frequencyName, historicalInterpretation, number, percent, percentileTranslation, windowAvailabilityExplanation, windowName, zTranslation } from '@/lib/statistical-levels/interpretation';
-import type { AssetCategory, AssetStatRecord, AssetStatSummary, CorrelationMatrix, DailySeasonalityData, StatisticalFrequency, StatisticalLevelsCorrelation, StatisticalLevelsManifest, StatisticalWindow } from '@/lib/statistical-levels/types';
+import type { AssetCategory, AssetStatRecord, AssetStatSummary, CorrelationMatrix, DailySeasonalityData, StatisticalFrequency, StatisticalLevelsCorrelation, StatisticalLevelsManifest } from '@/lib/statistical-levels/types';
 import './statistical-levels.css';
 import './statistical-levels-editorial.css';
 
@@ -35,7 +36,7 @@ const englishFrequencyLabels = { daily: 'Daily', weekly: 'Weekly', monthly: 'Mon
 type Props = {
   asset: AssetStatRecord; locale?: 'es' | 'en'; manifest: StatisticalLevelsManifest;
   seasonality: DailySeasonalityData;
-  selection: { asset: string; frequency: StatisticalFrequency; window: StatisticalWindow };
+  selection: { asset: string; frequency: StatisticalFrequency; window: AnalysisWindow };
   stale: boolean;
 };
 
@@ -50,7 +51,7 @@ export function StatLevelsLab({ initial, snapshot, locale = 'es', stale }: {init
   const navigateRef=useRef<(next:Partial<Props['selection']>,history:boolean)=>void>(()=>{});
   function navigate(next:Partial<Props['selection']>,history=true){
     const selection={...currentRef.current.selection,...next};
-    if(!initial.manifest.catalog.some(x=>x.ticker===selection.asset)||!initial.manifest.frequencies.includes(selection.frequency)||!initial.manifest.windows.includes(selection.window)){setLoadState('error');return;}
+    if(!initial.manifest.catalog.some(x=>x.ticker===selection.asset)||!initial.manifest.frequencies.includes(selection.frequency)||!analysisWindows(initial.manifest.windows).includes(selection.window)){setLoadState('error');return;}
     const sequence=++intent.current;
     function commit(data:{asset:AssetStatRecord;seasonality:DailySeasonalityData},consumed:LoadedRuntimeAsset|null){
       if(!alive.current||sequence!==intent.current)return;
@@ -100,8 +101,11 @@ function StatLevelsView({ asset, locale = 'es', manifest, seasonality, selection
   const { frequency, window } = selection;
   const en = locale === 'en';
   const data = asset.frequencies[frequency];
-  const metric = data.windows[window];
-  const drawdown = getDrawdownWindow(data, window);
+  const asOf = asset.currentMark?.date ?? asset.lastDate;
+  const windows = analysisWindows(manifest.windows);
+  const metricFor = (item: AnalysisWindow) => getAnalysisMetric(data, frequency, item, asOf);
+  const metric = metricFor(window);
+  const drawdown = getDrawdownWindow(data, window, frequency, asOf);
   const ticker = displayStatTicker(asset.ticker);
   const sample = extensionSample(metric, frequency);
   const longMa = data.longMovingAverageKey;
@@ -127,7 +131,7 @@ function StatLevelsView({ asset, locale = 'es', manifest, seasonality, selection
     {loadState === 'error' ? <p role="alert">{en ? 'The asset could not be loaded. The previous labeled data is retained. Reload to obtain the current snapshot.' : 'No se pudo cargar el activo. Se mantienen los datos anteriores con su etiqueta. Recarga para obtener el snapshot actual.'}</p> : null}
     <div id="sl-controls" className="sl-controls">
       <AssetSelector catalog={manifest.catalog} locale={locale} query={query} selected={[asset.ticker]} setQuery={setQuery} selectAsset={ticker => navigate({ asset: ticker })} />
-      <div className="sl-period"><p className="sl-control-label">{en ? 'Period' : 'Periodo'}</p><div className="sl-period-buttons">{manifest.windows.map(item => <button key={item} type="button" data-window={item} aria-pressed={window === item} onClick={() => navigate({ window: item })}>{windowName(item, locale)}</button>)}</div></div>
+      <div className="sl-period"><p className="sl-control-label">{en ? 'Period' : 'Periodo'}</p><div className="sl-period-buttons">{windows.map(item => <button key={item} type="button" data-window={item} aria-pressed={window === item} onClick={() => navigate({ window: item })}>{windowName(item, locale)}</button>)}</div></div>
       <label id="sl-frequency" className="sl-frequency"><span className="sl-control-label">{en ? 'Frequency' : 'Frecuencia'}</span><select aria-label={en ? 'Frequency' : 'Frecuencia'} value={frequency} onChange={event => navigate({ frequency: event.target.value as StatisticalFrequency })}>{manifest.frequencies.map(item => <option key={item} value={item}>{frequencyName(item, locale)}</option>)}</select></label>
     </div>
     <div className="sl-data-area" data-loading={loadState === 'loading'} aria-busy={loadState === 'loading'}>
@@ -151,7 +155,7 @@ function StatLevelsView({ asset, locale = 'es', manifest, seasonality, selection
       <div><dt>Z-score</dt><dd>{metric.ma200ExtensionZScore !== null && metric.ma200ExtensionZScore > 0 ? '+' : ''}{number(metric.ma200ExtensionZScore)}</dd><p>{zTranslation(metric.ma200ExtensionZScore, locale)}</p></div>
       <div><dt>{en ? 'Sample' : 'Muestra'}</dt><dd>{sample}</dd><p>{en ? `Comparable extension observations, after the ${longMa} warm-up. ${metric.sessions} price periods in the window.` : `Observaciones comparables de extensión, tras formar ${longMa}. ${metric.sessions} periodos de precio en la ventana.`}</p></div>
     </dl></section>
-    <CurrentMonthSeasonality key={asset.ticker} data={seasonality} asOf={asset.lastDate ?? manifest.generatedAt} locale={locale} window={window} />
+    <CurrentMonthSeasonality key={asset.ticker} asset={asset} data={seasonality} asOf={asOf ?? manifest.generatedAt} locale={locale} window={window} />
     <section id="sl-risk" className="sl-risk">
       <StatisticalDisclosure id="sl-drawdown-history" title="Drawdown" note={en ? 'Declines from prior highs and their evolution over time' : 'Caídas desde máximos y su evolución en el tiempo'}>
         <dl className="sl-risk-metrics">
@@ -162,7 +166,7 @@ function StatLevelsView({ asset, locale = 'es', manifest, seasonality, selection
         <UnderwaterDrawdownChart asset={asset} frequency={frequency} window={window} locale={locale} showSummary={false} />
       </StatisticalDisclosure>
     </section>
-    <StatisticalDisclosure id="sl-horizons" title={en ? 'Compare horizons' : 'Comparar horizontes'} note={en ? 'Extension and drawdown across different time horizons' : 'Extensión y drawdown en distintos horizontes de análisis'}><div className="sl-table-scroll" tabIndex={0} role="region" aria-label={en ? 'Horizon comparison' : 'Comparación de horizontes'}><table className="sl-table sl-horizon-table"><thead><tr><th scope="col">{en ? 'Metric' : 'Métrica'}</th>{manifest.windows.map(item => <th key={item} scope="col" data-selected={window === item} aria-current={window === item ? 'true' : undefined}>{windowName(item, locale)}</th>)}</tr></thead><tbody>{[
+    <StatisticalDisclosure id="sl-horizons" title={en ? 'Compare horizons' : 'Comparar horizontes'} note={en ? 'Extension and drawdown across different time horizons' : 'Extensión y drawdown en distintos horizontes de análisis'}><div className="sl-table-scroll" tabIndex={0} role="region" aria-label={en ? 'Horizon comparison' : 'Comparación de horizontes'}><table className="sl-table sl-horizon-table"><thead><tr><th scope="col">{en ? 'Metric' : 'Métrica'}</th>{windows.map(item => <th key={item} scope="col" data-selected={window === item} aria-current={window === item ? 'true' : undefined}>{windowName(item, locale)}</th>)}</tr></thead><tbody>{[
       [en ? 'Extension percentile' : 'Percentil de extensión', (m: typeof metric) => number(m.ma200ExtensionPercentile, 1)],
       ['Z-score', (m: typeof metric) => number(m.ma200ExtensionZScore)],
       [en ? 'Extension observations' : 'Observaciones de extensión', (m: typeof metric) => String(extensionSample(m, frequency))],
@@ -170,7 +174,7 @@ function StatLevelsView({ asset, locale = 'es', manifest, seasonality, selection
       [en ? 'Current drawdown' : 'Drawdown actual', (m: typeof metric) => percent(m.currentDrawdown)],
       [en ? 'Maximum drawdown' : 'Drawdown máximo', (m: typeof metric) => percent(m.maxDrawdown)],
       [en ? 'Available' : 'Disponible', (m: typeof metric) => m.available ? en ? 'Yes' : 'Sí' : en ? 'Insufficient sample' : 'Muestra insuficiente'],
-    ].map(([label, format]) => <tr key={String(label)}><th scope="row">{String(label)}</th>{manifest.windows.map(item => <td key={item} data-selected={window === item} data-unavailable={!data.windows[item].available} title={windowAvailabilityExplanation(data.windows[item], frequency, item, locale) ?? undefined}>{(format as (m: typeof metric) => string)(data.windows[item])}</td>)}</tr>)}</tbody></table></div><div className="sl-horizon-availability">{manifest.windows.map(item => { const explanation = windowAvailabilityExplanation(data.windows[item], frequency, item, locale); return explanation ? <p key={item} className="sl-caption">{explanation}</p> : null; })}</div><p className="sl-caption">{en ? 'Each column uses its own complete window. Unavailable results are not extrapolated or replaced with another sample.' : 'Cada columna usa su ventana completa. Los resultados no disponibles no se extrapolan ni se sustituyen por otra muestra.'}</p></StatisticalDisclosure>
+    ].map(([label, format]) => <tr key={String(label)}><th scope="row">{String(label)}</th>{windows.map(item => <td key={item} data-selected={window === item} data-unavailable={!metricFor(item).available} title={windowAvailabilityExplanation(metricFor(item), frequency, item, locale) ?? undefined}>{(format as (m: typeof metric) => string)(metricFor(item))}</td>)}</tr>)}</tbody></table></div><div className="sl-horizon-availability">{windows.map(item => { const explanation = windowAvailabilityExplanation(metricFor(item), frequency, item, locale); return explanation ? <p key={item} className="sl-caption">{explanation}</p> : null; })}</div><p className="sl-caption">{en ? 'Each column uses its own complete window. Unavailable results are not extrapolated or replaced with another sample.' : 'Cada columna usa su ventana completa. Los resultados no disponibles no se extrapolan ni se sustituyen por otra muestra.'}</p></StatisticalDisclosure>
     <StatisticalDisclosure id="sl-quant" title={en ? 'Price and asset metrics' : 'Precio y métricas del activo'} note={en ? 'Price history, moving averages and risk metrics' : 'Evolución del precio, medias móviles y métricas de riesgo'}>
       <section id="sl-asset-statistics"><AssetStatCard asset={asset} frequency={frequency} window={window} locale={locale} /></section>
     </StatisticalDisclosure>
@@ -181,13 +185,13 @@ function StatLevelsView({ asset, locale = 'es', manifest, seasonality, selection
       <section id="sl-distributions"><MovementSummaryTable asset={asset} frequency={frequency} locale={locale} /></section>
     </StatisticalDisclosure>
     <StatisticalDisclosure id="sl-calendar-disclosure" title={en ? 'Historical patterns and presidential cycle' : 'Patrones históricos y ciclo presidencial'} note={en ? 'Calendar samples, presidential phases and statistical metrics' : 'Muestras por calendario, fases presidenciales y métricas estadísticas'}>
-      <section id="sl-calendar"><AdvancedSeasonalityPanel data={seasonality} frequency={frequency} generatedAt={manifest.generatedAt} locale={locale} /></section>
+      <section id="sl-calendar"><AdvancedSeasonalityPanel asset={asset} window={window} data={seasonality} frequency={frequency} generatedAt={manifest.generatedAt} locale={locale} /></section>
     </StatisticalDisclosure>
     <StatisticalDisclosure id="sl-opening-disclosure" title={en ? 'Opening and closing location' : 'Ubicación de apertura y cierre'} note={en ? 'Open relative to the prior period and close within its own range' : 'Apertura frente al periodo previo y cierre dentro de su rango'}>
       <section id="sl-opening"><OpeningLocationPanel key={`${asset.ticker}-${frequency}`} asset={asset} frequency={frequency} locale={locale} /></section>
     </StatisticalDisclosure>
     <StatisticalDisclosure id="sl-periods-disclosure" title={en ? 'Period history' : 'Historial de periodos'} note={en ? 'Prices and changes for each period, with filters and sorting' : 'Precios y variaciones de cada periodo, con filtros y ordenación'}>
-      <section id="sl-periods"><PeriodExplorerTable key={`${asset.ticker}-${frequency}`} asset={asset} frequency={frequency} locale={locale} /></section>
+      <section id="sl-periods"><PeriodExplorerTable key={`${asset.ticker}-${frequency}-${window}`} asset={asset} frequency={frequency} window={window} locale={locale} /></section>
     </StatisticalDisclosure>
     <StatisticalDisclosure id="sl-returns-disclosure" title={en ? 'Historical returns' : 'Retornos históricos'} note={en ? 'Recent returns: the size and sequence of gains and declines' : 'Retornos recientes: magnitud y secuencia de subidas y caídas'}>
       <section id="sl-returns"><ReturnHeatmap asset={asset} frequency={frequency} locale={locale} /></section>
@@ -195,7 +199,7 @@ function StatLevelsView({ asset, locale = 'es', manifest, seasonality, selection
     {frequency === 'daily' ? <StatisticalDisclosure id="sl-extremes-disclosure" title={en ? 'Calendar highs and lows' : 'Máximos y mínimos por calendario'} note={en ? 'Frequency and distribution of historical highs and lows' : 'Frecuencia y distribución de máximos y mínimos históricos'}>
       <section id="sl-extremes"><CalendarExtremesPanel asset={asset} frequency={frequency} locale={locale} /></section>
     </StatisticalDisclosure> : null}
-    <StatisticalDisclosure id="sl-assets" title={en ? 'Compare assets' : 'Comparar activos'} note={en ? 'Up to 30 assets and their correlation matrix' : 'Hasta 30 activos y su matriz de correlación'}><p className="sl-notice">{en ? 'Asset summaries always use daily 5Y metrics. Correlations use the selected frequency and 3Y / 5Y / 10Y; 1Y and Full use All. Only completed returns on matching calendar dates are paired. Each cell shows the last matched completed observation. N is the number of valid matched pairs; at least 20 are required. Weekly keys use ISO weeks and monthly keys use calendar months.' : 'Los resúmenes de activos siempre usan métricas diarias de 5A. La correlación usa la frecuencia elegida y 3A / 5A / 10A; 1A y Todo el historial usan All. Solo se emparejan retornos completados de fechas coincidentes. Cada celda muestra la última observación completada común. N cuenta los pares válidos; se requieren al menos 20. Las claves semanales usan semanas ISO y las mensuales, meses de calendario.'}</p><ComparisonSection correlation={manifest.correlation} summaries={manifest.summaries} focusTicker={asset.ticker} frequency={frequency} window={window} locale={locale} /></StatisticalDisclosure>
+    <StatisticalDisclosure id="sl-assets" title={en ? 'Compare assets' : 'Comparar activos'} note={en ? 'Up to 30 assets and their correlation matrix' : 'Hasta 30 activos y su matriz de correlación'}><p className="sl-notice">{en ? 'Asset summaries always use daily 5Y metrics. Correlations use the selected frequency and 3Y / 5Y / 10Y; 1Y and Full use All. YTD correlations are not available in the published dataset. Only completed returns on matching calendar dates are paired. Each cell shows the last matched completed observation. N is the number of valid matched pairs; at least 20 are required. Weekly keys use ISO weeks and monthly keys use calendar months.' : 'Los resúmenes de activos siempre usan métricas diarias de 5A. La correlación usa la frecuencia elegida y 3A / 5A / 10A; 1A y Todo el historial usan All. La correlación YTD no está disponible en el conjunto publicado. Solo se emparejan retornos completados de fechas coincidentes. Cada celda muestra la última observación completada común. N cuenta los pares válidos; se requieren al menos 20. Las claves semanales usan semanas ISO y las mensuales, meses de calendario.'}</p><ComparisonSection correlation={manifest.correlation} summaries={manifest.summaries} focusTicker={asset.ticker} frequency={frequency} window={window} locale={locale} /></StatisticalDisclosure>
     <StatisticalDisclosure id="sl-guide" title={en ? 'What do these levels mean?' : '¿Qué significan estos niveles?'} note={en ? 'A short guide, data sources and full methodology' : 'Guía breve, fuentes y metodología completa'}>
       <dl className="sl-guide-grid">{(en ? [
         ['Extension','Distance from a moving average, or a period opening when describing the opening levels. These are different reference points.'],
@@ -240,7 +244,7 @@ function ComparisonSection({
   frequency: StatisticalFrequency;
   locale: "es" | "en";
   summaries: AssetStatSummary[];
-  window: StatisticalWindow;
+  window: AnalysisWindow;
 }) {
   const defaultTickers = useMemo(() => Array.from(new Set(["SPY", "QQQ", "IWM", "DIA", "TLT", "GLD", "BTCUSD", "ETHUSD", focusTicker])), [focusTicker]);
   const [query, setQuery] = useState("");
@@ -260,7 +264,7 @@ function ComparisonSection({
     }))
     .filter((group) => group.assets.length > 0);
   const correlationWindow = window === "3Y" || window === "5Y" || window === "10Y" ? window : "All";
-  const correlationMatrix = correlation?.[frequency]?.[correlationWindow] ?? null;
+  const correlationMatrix = window === "YTD" ? null : correlation?.[frequency]?.[correlationWindow] ?? null;
   const copy = locale === "en"
     ? {
         eyebrow: "Compare assets",

@@ -1,7 +1,8 @@
-import type { AssetStatRecord, StatisticalFrequency, StatisticalLevelsManifest, StatisticalWindow } from '@/lib/statistical-levels/types';
+import type { AssetStatRecord, StatisticalFrequency, StatisticalLevelsManifest } from '@/lib/statistical-levels/types';
 import { displayStatName, displayStatTicker } from '@/lib/statistical-levels/display';
 import { extensionSample, frequencyName, number, percent, windowName } from '@/lib/statistical-levels/interpretation';
 import { StatisticalHelp } from './StatisticalHelp';
+import { getAnalysisMetric, type AnalysisWindow } from '@/lib/statistical-levels/analysis-window';
 
 // Format only recorded dates. Never infer completion from today's calendar.
 function recordedDate(value: string | null | undefined, locale: 'es' | 'en') {
@@ -15,12 +16,12 @@ function recordedDate(value: string | null | undefined, locale: 'es' | 'en') {
 }
 
 export function StatisticalOverview({ asset, frequency, window, manifest, locale }: {
-  asset: AssetStatRecord; frequency: StatisticalFrequency; window: StatisticalWindow;
+  asset: AssetStatRecord; frequency: StatisticalFrequency; window: AnalysisWindow;
   manifest: StatisticalLevelsManifest; locale: 'es' | 'en';
 }) {
   const en = locale === 'en';
   const data = asset.frequencies[frequency];
-  const metric = data.windows[window];
+  const metric = getAnalysisMetric(data, frequency, window, asset.currentMark?.date ?? asset.lastDate);
   const sample = extensionSample(metric, frequency);
   const observed = asset.currentMark?.date ?? asset.lastDate;
   const mark = asset.currentMark?.value ?? asset.lastClose;

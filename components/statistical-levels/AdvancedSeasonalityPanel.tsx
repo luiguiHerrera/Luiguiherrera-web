@@ -2,13 +2,15 @@
 
 import { useMemo, useState } from "react";
 import { windowName } from "@/lib/statistical-levels/interpretation";
+import { analysisSeasonalityWindow } from "@/lib/statistical-levels/analysis-seasonality";
+import type { AnalysisWindow } from "@/lib/statistical-levels/analysis-window";
 import type {
+  AssetStatRecord,
   CalendarDaySeasonalityCell,
   CalendarMonthSeasonalityCell,
   CalendarWeekSeasonalityCell,
   DailySeasonalityData,
   PresidentialCyclePhase,
-  SeasonalityWindow,
   StatisticalFrequency,
 } from "@/lib/statistical-levels/types";
 
@@ -17,12 +19,13 @@ type SeasonalityCell = CalendarMonthSeasonalityCell | CalendarWeekSeasonalityCel
 
 type AdvancedSeasonalityPanelProps = {
   data: DailySeasonalityData | null;
+  asset: AssetStatRecord;
+  window: AnalysisWindow;
   frequency: StatisticalFrequency;
   generatedAt: string;
   locale?: "es" | "en";
 };
 
-const windowOptions: SeasonalityWindow[] = ["3Y", "5Y", "10Y", "All"];
 const spanishMetricOptions: Array<{ key: SeasonalityMetric; label: string }> = [
   { key: "averageReturn", label: "Promedio" },
   { key: "medianReturn", label: "Mediana" },
@@ -125,8 +128,7 @@ function labelForCell(cell: SeasonalityCell | undefined, locale: "es" | "en") {
   return months[cell.month - 1];
 }
 
-export function AdvancedSeasonalityPanel({ data, frequency, generatedAt, locale = "es" }: AdvancedSeasonalityPanelProps) {
-  const [window, setWindow] = useState<SeasonalityWindow>("5Y");
+export function AdvancedSeasonalityPanel({ data, asset, window, frequency, generatedAt, locale = "es" }: AdvancedSeasonalityPanelProps) {
   const [phase, setPhase] = useState<PresidentialCyclePhase>("all");
   const [metric, setMetric] = useState<SeasonalityMetric>("averageReturn");
   const [month, setMonth] = useState(monthFromGeneratedAt(generatedAt));
@@ -134,7 +136,8 @@ export function AdvancedSeasonalityPanel({ data, frequency, generatedAt, locale 
   const currentDay = dayFromGeneratedAt(generatedAt);
   const metricOptions = locale === "en" ? englishMetricOptions : spanishMetricOptions;
   const months = locale === "en" ? englishMonthNames : monthNames;
-  const windowData = data?.windows[window] ?? (window === "All" ? data?.windows.Full : null);
+  const asOf = asset?.currentMark?.date ?? asset?.lastDate ?? generatedAt;
+  const windowData = useMemo(() => analysisSeasonalityWindow(data, asset, window, asOf), [data, asset, window, asOf]);
   const dimension = frequency === "monthly" ? windowData?.monthly : frequency === "weekly" ? windowData?.weekly : windowData?.daily;
   const cells = useMemo(() => {
     if (!dimension) return [];
@@ -150,7 +153,6 @@ export function AdvancedSeasonalityPanel({ data, frequency, generatedAt, locale 
           : frequency === "weekly"
             ? "Groups completed weeks inside the selected month. Select daily frequency for calendar-day analysis."
             : "Daily calendar view using historical daily data; it does not include intraday behavior.",
-        window: "Window",
         presidentialCycle: "Presidential cycle",
         metric: "Metric",
         averageN: "Average N",
@@ -179,7 +181,6 @@ export function AdvancedSeasonalityPanel({ data, frequency, generatedAt, locale 
           : frequency === "weekly"
             ? "Agrupa semanas completadas dentro del mes seleccionado. Para analizar días de calendario selecciona la frecuencia diaria."
             : "Lectura diaria por calendario. Usa días del mes y datos históricos diarios; no incluye comportamiento intradía.",
-        window: "Ventana",
         presidentialCycle: "Ciclo presidencial",
         metric: "Métrica",
         averageN: "N promedio",
@@ -210,13 +211,12 @@ export function AdvancedSeasonalityPanel({ data, frequency, generatedAt, locale 
       </div>
       <div>
         <div className="px-3.5 pb-5 md:px-5">
-          <div className="sl-pattern-controls grid gap-2.5 sm:grid-cols-2 xl:grid-cols-4">
-            <Control label={copy.window} value={window} setValue={(value) => setWindow(value as SeasonalityWindow)} options={windowOptions.map((item) => [item, windowName(item === "All" ? "Full" : item, locale)])} />
+          <div className="sl-pattern-controls grid gap-2.5 sm:grid-cols-2 xl:grid-cols-3">
             <Control label={copy.presidentialCycle} value={phase} setValue={(value) => setPhase(value as PresidentialCyclePhase)} options={phaseOptions.map((item) => [item.key, item.label])} />
             <Control label={copy.metric} value={metric} setValue={(value) => setMetric(value as SeasonalityMetric)} options={metricOptions.map((item) => [item.key, item.label])} />
             {frequency !== "monthly" ? <Control label={copy.month} value={String(month)} setValue={(value) => setMonth(Number(value))} options={months.map((name, index) => [String(index + 1), name])} /> : null}
           </div>
-          <p className="sl-caption sl-patterns-sample">{copy.averageN}: {sampleAverage === null ? "n/d" : sampleAverage.toFixed(0)} · {locale === "en" ? "Completed periods only" : "Solo periodos completos"}{sampleAverage !== null && sampleAverage < 5 ? ` · ${copy.lowSample}` : ""}</p>
+          <p className="sl-caption sl-patterns-sample">{locale === "en" ? "Selected period" : "Periodo seleccionado"}: {windowName(window, locale)} · {copy.averageN}: {sampleAverage === null ? "n/d" : sampleAverage.toFixed(0)} · {locale === "en" ? "Completed periods only" : "Solo periodos completos"}{sampleAverage !== null && sampleAverage < 5 ? ` · ${copy.lowSample}` : ""}</p>
         </div>
         <div className="border-t border-line/80 p-3.5 md:p-5">
       {dimension ? (

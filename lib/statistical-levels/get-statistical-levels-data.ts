@@ -2,6 +2,7 @@ import "server-only";
 import { readFile } from "node:fs/promises";
 import path from "node:path";
 import { canonicalStatTicker } from "@/lib/statistical-levels/display";
+import type { AnalysisWindow } from "./analysis-window";
 import type {
   AssetManifestItem,
   AssetStatSummary,
@@ -18,7 +19,7 @@ const assetsDir = path.join(generatedDir, "assets");
 const seasonalityDir = path.join(generatedDir, "seasonality");
 
 const validFrequencies = new Set<StatisticalFrequency>(["daily", "weekly", "monthly"]);
-const validWindows = new Set<StatisticalWindow>(["1Y", "3Y", "5Y", "10Y", "Full"]);
+const validWindows = new Set<AnalysisWindow>(["YTD", "1Y", "3Y", "5Y", "10Y", "Full"]);
 const etfFlowOnlyTickers = new Set(["IBIT", "ETHA", "ETHE"]);
 
 async function readJsonFile<T>(filePath: string): Promise<T> {
@@ -219,7 +220,7 @@ function sanitizeFrequency(value: string | string[] | undefined, fallback: Stati
 
 function sanitizeWindow(value: string | string[] | undefined, fallback: StatisticalWindow) {
   const rawWindow = firstParam(value);
-  const window = (rawWindow === "All" ? "Full" : rawWindow) as StatisticalWindow | undefined;
+  const window = (rawWindow === "All" ? "Full" : rawWindow) as AnalysisWindow | undefined;
   return window && validWindows.has(window) ? window : fallback;
 }
 

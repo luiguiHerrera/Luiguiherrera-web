@@ -1,9 +1,10 @@
-import type { AssetStatRecord, DailySeasonalityData, StatisticalLevelsManifest, StatisticalFrequency, StatisticalWindow } from './types';
+import type { AssetStatRecord, DailySeasonalityData, StatisticalLevelsManifest, StatisticalFrequency } from './types';
 import { canonicalStatTicker } from './display';
+import { analysisWindows, type AnalysisWindow } from './analysis-window';
 
 export const RUNTIME_SCHEMA = 'statistical-levels.runtime-asset.v1';
 export const SNAPSHOT_SCHEMA = 'statistical-levels.runtime-snapshot.v1';
-export type RuntimeSelection = {asset:string;frequency:StatisticalFrequency;window:StatisticalWindow};
+export type RuntimeSelection = {asset:string;frequency:StatisticalFrequency;window:AnalysisWindow};
 export type RuntimeSnapshot = {schema:typeof SNAPSHOT_SCHEMA;id:string;manifest_sha256:string;revision?:string;records:Record<string,{asset:string;seasonality:string}>};
 export type RuntimeAsset = {schema:typeof RUNTIME_SCHEMA;ticker:string;snapshot:string;asset:AssetStatRecord;seasonality:DailySeasonalityData};
 export type LoadedRuntimeAsset = RuntimeAsset & {intent_identity:string;payload_identity:string};
@@ -86,6 +87,6 @@ export function selectionFromRuntimeUrl(url:URL,manifest:StatisticalLevelsManife
   const frequency=manifest.frequencies.includes(rawFrequency as StatisticalFrequency)?rawFrequency!:manifest.defaultFrequency;
   const rawWindow=url.searchParams.get('window');
   const normalizedWindow=rawWindow==='All'?'Full':rawWindow;
-  const window=manifest.windows.includes(normalizedWindow as StatisticalWindow)?normalizedWindow!:manifest.defaultWindow;
-  return {asset,frequency:frequency as StatisticalFrequency,window:window as StatisticalWindow};
+  const window=analysisWindows(manifest.windows).includes(normalizedWindow as AnalysisWindow)?normalizedWindow!:manifest.defaultWindow;
+  return {asset,frequency:frequency as StatisticalFrequency,window:window as AnalysisWindow};
 }

@@ -1,20 +1,21 @@
-import type { StatisticalFrequency, StatisticalWindow, WindowMetric } from './types.ts';
+import type { StatisticalFrequency, WindowMetric } from './types.ts';
+import type { AnalysisWindow } from './analysis-window.ts';
 
 type Locale = 'es' | 'en';
 export const frequencyName = (frequency: StatisticalFrequency, locale: Locale) => ({
   es: { daily: 'Diaria', weekly: 'Semanal', monthly: 'Mensual' },
   en: { daily: 'Daily', weekly: 'Weekly', monthly: 'Monthly' },
 })[locale][frequency];
-export const windowName = (window: StatisticalWindow, locale: Locale) => window === 'Full'
+export const windowName = (window: AnalysisWindow, locale: Locale) => window === 'Full'
   ? locale === 'es' ? 'Todo el historial' : 'Full history'
-  : locale === 'es' ? window.replace('Y', 'A') : window;
+  : window === 'YTD' ? 'YTD' : locale === 'es' ? window.replace('Y', 'A') : window;
 export const percent = (value: number | null, digits = 1) => value === null || !Number.isFinite(value)
   ? 'n/d' : `${value > 0 ? '+' : ''}${(value * 100).toFixed(digits)}%`;
 export const number = (value: number | null, digits = 2) => value === null || !Number.isFinite(value)
   ? 'n/d' : value.toLocaleString('en-US', { minimumFractionDigits: digits, maximumFractionDigits: digits });
 
 // Explains the existing buildWindowMetric availability gate without changing it.
-export function windowAvailabilityExplanation(metric: WindowMetric, frequency: StatisticalFrequency, window: StatisticalWindow, locale: Locale) {
+export function windowAvailabilityExplanation(metric: WindowMetric, frequency: StatisticalFrequency, window: AnalysisWindow, locale: Locale) {
   if (metric.available) return null;
   const minimum = { daily: 252, weekly: 104, monthly: 36 }[frequency];
   const periods = {
