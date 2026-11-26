@@ -15,6 +15,7 @@ export async function GET(request: Request) {
   const results = await Promise.all(CAPITAL_FLOW_IDS.map(async id => {
     try {
       const candidate = await fetchUncachedCapitalFlow(id);
+      if (candidate.lastRefreshError) return { asset: id, validated: false, retainedPrevious: true };
       return { asset: id, validated: true, cutoffDate: candidate.cutoffDate };
     } catch {
       return { asset: id, validated: false, retainedPrevious: true };
