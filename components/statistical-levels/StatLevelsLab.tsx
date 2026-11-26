@@ -47,6 +47,7 @@ export function StatLevelsLab({ initial, snapshot, locale = 'es', stale }: {init
   const alive=useRef(true);
   const cache=useRef(new Map<string,{asset:AssetStatRecord;seasonality:DailySeasonalityData}>([[snapshot.id+':'+initial.asset.ticker,{asset:initial.asset,seasonality:initial.seasonality}]]));
   const [loadState,setLoadState]=useState<'ready'|'loading'|'error'>('ready');
+  const [pendingAsset,setPendingAsset]=useState<string|null>(null);
   const [runtimeCommit,setRuntimeCommit]=useState<LoadedRuntimeAsset|null>(null);
   const navigateRef=useRef<(next:Partial<Props['selection']>,history:boolean)=>void>(()=>{});
   function navigate(next:Partial<Props['selection']>,history=true){
@@ -65,6 +66,7 @@ export function StatLevelsLab({ initial, snapshot, locale = 'es', stale }: {init
       currentRef.current=committed;
       setRuntimeCommit(consumed);
       setCurrent(committed);
+      setPendingAsset(null);
       setLoadState('ready');
     }
     // Local controls use the committed payload, independently of cache residency.
@@ -76,6 +78,7 @@ export function StatLevelsLab({ initial, snapshot, locale = 'es', stale }: {init
     const key=snapshot.id+':'+selection.asset;
     const hit=cache.current.get(key);
     if(hit){commit(hit,null);return;}
+    setPendingAsset(selection.asset);
     setLoadState('loading');
     void loadStatisticalLevelsRuntimeAsset(selection.asset,snapshot).then(result=>{
       // Four same-snapshot retrieval entries, oldest validated completion first.
@@ -83,7 +86,7 @@ export function StatLevelsLab({ initial, snapshot, locale = 'es', stale }: {init
       cache.current.delete(key);cache.current.set(key,{asset:result.asset,seasonality:result.seasonality});
       while(cache.current.size>4)cache.current.delete(cache.current.keys().next().value!);
       commit(result,result);
-    }).catch(()=>{if(alive.current&&sequence===intent.current)setLoadState('error');});
+    }).catch(()=>{if(alive.current&&sequence===intent.current){setPendingAsset(null);setLoadState('error');}});
   }
   useEffect(()=>{navigateRef.current=navigate;});
   useEffect(()=>{
@@ -92,10 +95,10 @@ export function StatLevelsLab({ initial, snapshot, locale = 'es', stale }: {init
     window.addEventListener('popstate',pop);
     return()=>{alive.current=false;window.removeEventListener('popstate',pop);};
   },[initial.manifest]);
-  return <StatLevelsView {...current} locale={locale} stale={stale} navigate={navigate} loadState={loadState} runtimeCommit={runtimeCommit} />;
+  return <StatLevelsView {...current} locale={locale} stale={stale} navigate={navigate} loadState={loadState} pendingAsset={pendingAsset} runtimeCommit={runtimeCommit} />;
 }
 
-function StatLevelsView({ asset, locale = 'es', manifest, seasonality, selection, stale, navigate, loadState, runtimeCommit }: Props & {navigate:(next:Partial<Props['selection']>)=>void;loadState:'ready'|'loading'|'error';runtimeCommit:LoadedRuntimeAsset|null}) {
+function StatLevelsView({ asset, locale = 'es', manifest, seasonality, selection, stale, navigate, loadState, pendingAsset, runtimeCommit }: Props & {navigate:(next:Partial<Props['selection']>)=>void;loadState:'ready'|'loading'|'error';pendingAsset:string|null;runtimeCommit:LoadedRuntimeAsset|null}) {
   void runtimeCommit; // The committed data owner retains the exact consumed payload object.
   const [query, setQuery] = useState('');
   const { frequency, window } = selection;
@@ -127,10 +130,10 @@ function StatLevelsView({ asset, locale = 'es', manifest, seasonality, selection
   }, []);
   return <div className="sl-page" ref={pageRef}>
     <StatisticalPageHeading locale={locale} />
-    {loadState === 'loading' ? <p role="status">{en ? 'Loading selected asset…' : 'Cargando el activo seleccionado…'}</p> : null}
+    {loadState === 'loading' ? <p role="status">{en ? 'Loading' : 'Cargando'} {displayStatTicker(pendingAsset ?? asset.ticker)}…</p> : null}
     {loadState === 'error' ? <p role="alert">{en ? 'The asset could not be loaded. The previous labeled data is retained. Reload to obtain the current snapshot.' : 'No se pudo cargar el activo. Se mantienen los datos anteriores con su etiqueta. Recarga para obtener el snapshot actual.'}</p> : null}
     <div id="sl-controls" className="sl-controls">
-      <AssetSelector catalog={manifest.catalog} locale={locale} query={query} selected={[asset.ticker]} setQuery={setQuery} selectAsset={ticker => navigate({ asset: ticker })} />
+      <AssetSelector catalog={manifest.catalog} locale={locale} query={query} selected={[pendingAsset ?? asset.ticker]} setQuery={setQuery} selectAsset={ticker => navigate({ asset: ticker })} />
       <div className="sl-period"><p className="sl-control-label">{en ? 'Period' : 'Periodo'}</p><div className="sl-period-buttons">{windows.map(item => <button key={item} type="button" data-window={item} aria-pressed={window === item} onClick={() => navigate({ window: item })}>{windowName(item, locale)}</button>)}</div></div>
       <label id="sl-frequency" className="sl-frequency"><span className="sl-control-label">{en ? 'Frequency' : 'Frecuencia'}</span><select aria-label={en ? 'Frequency' : 'Frecuencia'} value={frequency} onChange={event => navigate({ frequency: event.target.value as StatisticalFrequency })}>{manifest.frequencies.map(item => <option key={item} value={item}>{frequencyName(item, locale)}</option>)}</select></label>
     </div>

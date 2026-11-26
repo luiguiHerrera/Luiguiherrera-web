@@ -61,13 +61,13 @@ function controller(source=read('components/statistical-levels/StatLevelsLab.tsx
  const host={location:{href:'https://local.invalid/niveles-estadisticos?asset=SPY&frequency=weekly&window=5Y'},history:{pushState(_state,_title,path){history.push(path);host.location.href=new URL(path,host.location.href).href;}},addEventListener:(name,fn)=>listeners.set(name,fn),removeEventListener:name=>listeners.delete(name)};
  globalThis.window=host;
  const react={useState(value){const i=cursor++;if(!(i in hooks))hooks[i]=value;return [hooks[i],v=>{hooks[i]=v;}];},useRef(value){const i=cursor++;if(!(i in hooks))hooks[i]={current:value};return hooks[i];},useEffect(fn){cursor++;effects.push(fn);},useMemo:fn=>fn()};
- const runtime={...api,loadStatisticalLevelsRuntimeAsset(ticker,actualSnapshot){assert.equal(actualSnapshot,snapshot);let resolve;const promise=new Promise(r=>resolve=r);requests.push({ticker,resolve,finished:false});return promise;}};
+ const runtime={...api,loadStatisticalLevelsRuntimeAsset(ticker,actualSnapshot){assert.equal(actualSnapshot,snapshot);let resolve,reject;const promise=new Promise((r,j)=>{resolve=r;reject=j;});requests.push({ticker,resolve,reject,finished:false});return promise;}};
  const mod={exports:{}};
  new Function('require','module','exports',ts.transpileModule(source,{compilerOptions:{module:ts.ModuleKind.CommonJS,target:ts.ScriptTarget.ES2022,jsx:ts.JsxEmit.ReactJSX}}).outputText)(id=>id==='react'?react:id==='react/jsx-runtime'?{jsx:(_type,props)=>props,jsxs:(_type,props)=>props}:id==='@/lib/statistical-levels/runtime-snapshot'?runtime:id==='@/lib/statistical-levels/analysis-window'?analysis.exports:{},mod,mod.exports);
  const initial={asset:{ticker:'SPY'},seasonality:{asset:'SPY'},selection:{asset:'SPY',frequency:'weekly',window:'5Y'},manifest};
  function render(){cursor=0;view=mod.exports.StatLevelsLab({initial,snapshot,stale:false});for(const fn of effects.splice(0))fn();return view;}
  render();const cache=hooks.find(x=>x?.current instanceof Map).current;
- return {requests,history,cache,initial,render,get view(){return render();},navigate(next,push=true){render().navigate(next,push);return render();},async finish(index){const r=requests[index];assert.ok(r&&!r.finished);r.finished=true;r.resolve({asset:{ticker:r.ticker},seasonality:{asset:r.ticker},intent_identity:'intent-'+index});await Promise.resolve();await Promise.resolve();return render();},pop(selection){host.location.href='https://local.invalid/niveles-estadisticos?'+new URLSearchParams(selection);listeners.get('popstate')();return render();},dispose(){globalThis.window=previousWindow;}};
+ return {requests,history,cache,initial,render,get view(){return render();},navigate(next,push=true){render().navigate(next,push);return render();},async finish(index){const r=requests[index];assert.ok(r&&!r.finished);r.finished=true;r.resolve({asset:{ticker:r.ticker},seasonality:{asset:r.ticker},intent_identity:'intent-'+index});await Promise.resolve();await Promise.resolve();return render();},async fail(index){const r=requests[index];assert.ok(r&&!r.finished);r.finished=true;r.reject(new Error('Delayed asset failure'));await Promise.resolve();await Promise.resolve();return render();},pop(selection){host.location.href='https://local.invalid/niveles-estadisticos?'+new URLSearchParams(selection);listeners.get('popstate')();return render();},dispose(){globalThis.window=previousWindow;}};
 }
 async function staleCompletions(h,count){
  const tickers=manifest.catalog.map(x=>x.ticker).filter(t=>t!=='SPY').slice(0,count);assert.equal(tickers.length,count);
@@ -141,3 +141,44 @@ for(const [name,mutate]of [
  ['RSC traffic',w=>w.base.rsc='YES'],['prefetch traffic',w=>w.base.prefetch='YES'],
 ])test('security build witness rejects '+name,()=>{const w=securityWitness();mutate(w);assert.equal(runtimeFetchProven(w,'Fetch'),false);});
 test('security build witness cannot reclassify a non-Fetch resource',()=>assert.equal(runtimeFetchProven(securityWitness(),'Script'),false));
+
+
+test('pending selection identifies the requested asset immediately while data and URL retain their committed identity',async()=>{
+ const h=controller();try{
+  const previous=h.view;h.navigate({asset:'GLD'});
+  assert.equal(h.view.pendingAsset,'GLD');assert.equal(h.view.loadState,'loading');
+  assert.equal(h.view.asset,previous.asset);assert.equal(h.view.seasonality,previous.seasonality);
+  assert.equal(h.view.selection.asset,'SPY');assert.equal(h.history.length,0);
+  await h.finish(0);assert.equal(h.view.pendingAsset,null);assert.equal(h.view.asset.ticker,'GLD');assert.equal(h.view.loadState,'ready');
+ }finally{h.dispose();}
+});
+test('a failed latest asset restores the committed selector and retains labeled data',async()=>{
+ const h=controller();try{
+  h.navigate({asset:'GLD'});await h.fail(0);
+  assert.equal(h.view.pendingAsset,null);assert.equal(h.view.loadState,'error');
+  assert.equal(h.view.asset.ticker,'SPY');assert.equal(h.view.selection.asset,'SPY');assert.equal(h.history.length,0);
+ }finally{h.dispose();}
+});
+for(const oldResult of ['finish','fail'])test('stale '+oldResult+' cannot clear the newer pending selection',async()=>{
+ const h=controller();try{
+  h.navigate({asset:'GLD'});h.navigate({asset:'QQQ'});await h[oldResult](0);
+  assert.equal(h.view.pendingAsset,'QQQ');assert.equal(h.view.loadState,'loading');assert.equal(h.view.asset.ticker,'SPY');
+  await h.finish(1);assert.equal(h.view.pendingAsset,null);assert.equal(h.view.asset.ticker,'QQQ');
+ }finally{h.dispose();}
+});
+for(const cancel of ['asset','period','history'])test(cancel+' navigation clears the pending name when it restores the committed asset',async()=>{
+ const h=controller();try{
+  h.navigate({asset:'GLD'});
+  if(cancel==='asset')h.navigate({asset:'SPY'});
+  else if(cancel==='period')h.navigate({window:'YTD'});
+  else h.pop({asset:'SPY',frequency:'weekly',window:'3Y'});
+  assert.equal(h.view.pendingAsset,null);assert.equal(h.view.loadState,'ready');
+  await h.finish(0);assert.equal(h.view.pendingAsset,null);assert.equal(h.view.asset.ticker,'SPY');
+ }finally{h.dispose();}
+});
+test('a cached asset commits immediately without leaving a pending name or loading state',async()=>{
+ const h=controller();try{
+  h.navigate({asset:'GLD'});await h.finish(0);h.navigate({asset:'SPY'});h.navigate({asset:'GLD'});
+  assert.equal(h.requests.length,1);assert.equal(h.view.pendingAsset,null);assert.equal(h.view.loadState,'ready');assert.equal(h.view.asset.ticker,'GLD');
+ }finally{h.dispose();}
+});
