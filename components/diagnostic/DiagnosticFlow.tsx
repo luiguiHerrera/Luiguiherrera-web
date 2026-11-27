@@ -401,7 +401,8 @@ function ModeCard({ active, description, duration, onClick, questions, title }: 
     <button type="button" onClick={onClick} className={`estate-card border p-5 text-left transition md:p-6 ${active ? "border-petrol bg-[#eef3f2]" : "border-line hover:border-ink"}`}>
       <h3 className="text-xl font-semibold text-ink">{title}</h3>
       <p className="mt-3 text-sm leading-6 text-muted">{description}</p>
-      <p className="mt-5 border-t border-line pt-4 text-sm font-semibold text-ink">{questions}</p>\n      {duration ? <p className="mt-2 text-xs text-muted">{duration}</p> : null}
+      <p className="mt-5 border-t border-line pt-4 text-sm font-semibold text-ink">{questions}</p>
+      {duration ? <p className="mt-2 text-xs text-muted">{duration}</p> : null}
     </button>
   );
 }
