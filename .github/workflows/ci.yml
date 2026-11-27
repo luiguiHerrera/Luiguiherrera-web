@@ -82,7 +82,7 @@ jobs:
             lib/dashboard/ofr-fsi.test.ts lib/dashboard/ofr-fsi-source.test.ts lib/dashboard/ofr-fsi-cache.test.mjs \
             lib/dashboard/risk-overview.test.ts lib/dashboard/historical-risk.test.ts lib/dashboard/risk-history-source.test.ts lib/dashboard/get-historical-risk.test.mjs lib/dashboard/risk-history-cache.test.mjs \
             lib/dashboard/gld-flow-history.test.ts lib/dashboard/translate-dashboard-copy.test.ts lib/dashboard/quant-risk-presentation.test.ts lib/dashboard/regime-scoring.test.ts \
-            lib/dashboard/shared-market-snapshot.test.mjs lib/dashboard/home-dashboard-consistency.test.mjs lib/dashboard/adapters/sector-etfs.test.ts lib/dashboard/adapters/sector-data-core.test.ts lib/dashboard/risk-models.test.ts \
+            lib/dashboard/shared-market-snapshot.test.mjs lib/dashboard/home-dashboard-consistency.test.mjs lib/dashboard/adapters/sector-etfs.test.ts lib/dashboard/adapters/sector-data-core.test.ts lib/dashboard/sector-retention.test.ts lib/dashboard/risk-models.test.ts \
             lib/statistical-levels/baseline.test.mjs lib/statistical-levels/contracts.test.ts lib/statistical-levels/defect-repairs.test.ts \
             lib/statistical-levels/published-data.test.mts lib/statistical-levels/published-fetch.test.ts \
             scripts/statistical-levels-storage.test.mjs components/statistical-levels/interaction-presentation.test.ts \

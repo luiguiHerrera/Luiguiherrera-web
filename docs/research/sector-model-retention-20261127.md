@@ -1,0 +1,13 @@
+# Sector model continuity — 27 November 2026
+
+Scope: preserve the last valid EWMA, fixed-parameter GARCH, correlations and dispersion through Alpha Vantage quota/transport failures. Formula implementations and component layouts are unchanged.
+
+The sector publication now has a private persistent JSON file, separate from Next's aggregate dashboard cache. It reuses the project's existing private Blob store and SDKs. A complete provider candidate must retain eleven unique sector ETFs on one effective date, all existing source-history checks and complete model output. Backwards dates or incomplete candidates never replace a validated publication. Previously validated dated observations remain available after the former seven-day freshness boundary, explicitly marked as retained rather than current.
+
+A conditional file reservation precedes the daily provider pass. This shares the attempt across instances, languages and deployments, limiting repeated source calls after quota failures. A stalled reservation can be retried after five minutes. Completed attempts, including source failures, have the existing daily cadence. Cache entries accelerate reads; clearing them does not delete the private file. Preview and production use separate files and namespaces.
+
+The common dashboard cache now excludes the sector reader. The public read combines its common market capture with the independent sector publication. A partial sector response can no longer be stored inside the five-minute aggregate and hide an available retained result. The existing summary and context display the original date, a retained-cut label and an update notice in Spanish and English.
+
+Bootstrap evidence: `sector-risk-published.json` preserves the exact quantitative result already published by production commit `a0d35a2e468f7342ccf141128e1a4c3d7d0153da`, recovered from the loaded production document on 27 November. Its effective date is 25 November: EWMA 18.438774625801035%, GARCH 17.490960941838164%, correlation21 0.5047683897334677. The existing producer required all eleven aligned histories. This backup contains published model outputs, not reconstructed prices or synthetic sector rankings. A surviving complete legacy cache is migrated when available; future valid provider passes persist the complete sector snapshot. The initial model-only backup does not claim to restore individual histories or rankings that were not retained in the public document.
+
+Tests exercise quota failure, incomplete and backwards candidates, cold-instance recovery, seven-day aging, provider recovery, source/store failures, shared reservations, bilingual retained notices and aggregate-cache isolation. Existing source and presentation contracts remain in website CI.

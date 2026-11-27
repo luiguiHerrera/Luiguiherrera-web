@@ -1,6 +1,7 @@
 import type { DataStatus, RegimeBias } from "@/lib/dashboard/types";
 
 const phraseMap: Array<[RegExp, string]> = [
+  [/Se conserva el último corte sectorial validado con su fecha original\. Actualización pendiente: la fuente no ha devuelto un nuevo corte completo válido\./g, "The last validated sector snapshot is retained with its original date. Update pending: the source has not returned a new complete valid snapshot."],
   [/Lectura excepcional de presión de volatilidad\./g, "Exceptional volatility pressure."],
   [/Mayor demanda implícita de protección\./g, "Greater implied demand for protection."],
   [/Estrés de mercado por encima de rangos normales\./g, "Market stress above normal ranges."],

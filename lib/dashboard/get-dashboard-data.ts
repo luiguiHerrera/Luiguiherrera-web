@@ -13,9 +13,8 @@ import type { DashboardData } from "@/lib/dashboard/types";
 import { getMcClellanData } from "./get-mcclellan-data";
 import { getPublishedCapitalFlows } from "./get-published-capital-flows";
 
-async function loadDashboardSnapshot(): Promise<DashboardData> {
-  const [sectorEtfs, btcEtfFlows, vixData, vixTermStructure, gldFlowPressure, breadth, publishedFlows] = await Promise.all([
-    getSectorEtfsData(),
+async function loadCommonDashboardSnapshot() {
+  const [btcEtfFlows, vixData, vixTermStructure, gldFlowPressure, breadth, publishedFlows] = await Promise.all([
     getBtcEtfFlowsData(),
     getVixData(),
     getVixTermStructureData(),
@@ -23,35 +22,25 @@ async function loadDashboardSnapshot(): Promise<DashboardData> {
     getMcClellanData(),
     getPublishedCapitalFlows(),
   ]);
-  const regimeSummary = buildRegimeSummary({
-    btcEtfFlows,
-    sectorRotation: sectorEtfs.rotation,
-    vix: vixData,
-  });
-
-  const data: DashboardData = {
-    dashboardModules: [
-      sectorEtfs.module,
-      vixData.module,
-      btcEtfFlows.module,
-    ],
-    crossSignalRadar: getRadarRows(),
-    regimeSummary,
-    sectorModule: sectorEtfs.module,
-    sectorRotation: sectorEtfs.rotation,
-    quantRisk: sectorEtfs.quantRisk,
-    vix: vixData,
-    vixTermStructure,
-    btcEtfFlows,
-    ethEtfFlows: null,
-    gldFlowPressure,
-  };
-  const flows = publishedFlows;
-  const id = createHash("sha256").update(JSON.stringify({ data, breadth, flows })).digest("hex");
-  return { ...data, marketContext: { id, capturedAt: new Date().toISOString(), breadth, flows } };
+  return {btcEtfFlows,vixData,vixTermStructure,gldFlowPressure,breadth,publishedFlows,capturedAt:new Date().toISOString()};
 }
 
-// A single, locale-independent snapshot, including explicit partial availability.
-const getSharedDashboardSnapshot = unstable_cache(loadDashboardSnapshot,
-  ["dashboard-shared-market-snapshot-v3-no-sector-index"], { revalidate: 300, tags: ["dashboard-shared-market-snapshot"] });
-export const getDashboardData = cache(getSharedDashboardSnapshot);
+// Sector availability is read outside Next's aggregate cache. A partial result
+// can never become the five-minute authoritative source for both languages.
+const getSharedDashboardSnapshot=unstable_cache(loadCommonDashboardSnapshot,
+  ["dashboard-shared-market-snapshot-v4-independent-sectors"],{revalidate:300,tags:["dashboard-shared-market-snapshot"]});
+
+export const getDashboardData=cache(async():Promise<DashboardData>=>{
+  const [common,sectorEtfs]=await Promise.all([getSharedDashboardSnapshot(),getSectorEtfsData()]);
+  const {btcEtfFlows,vixData,vixTermStructure,gldFlowPressure,breadth,publishedFlows,capturedAt}=common;
+  const regimeSummary=buildRegimeSummary({btcEtfFlows,sectorRotation:sectorEtfs.rotation,vix:vixData});
+  const data:DashboardData={
+    dashboardModules:[sectorEtfs.module,vixData.module,btcEtfFlows.module],
+    crossSignalRadar:getRadarRows(),regimeSummary,sectorModule:sectorEtfs.module,
+    sectorRotation:sectorEtfs.rotation,quantRisk:sectorEtfs.quantRisk,vix:vixData,vixTermStructure,
+    btcEtfFlows,ethEtfFlows:null,gldFlowPressure,
+  };
+  const flows=publishedFlows;
+  const id=createHash("sha256").update(JSON.stringify({data,breadth,flows})).digest("hex");
+  return {...data,marketContext:{id,capturedAt,breadth,flows}};
+});

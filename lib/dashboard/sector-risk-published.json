@@ -1,0 +1,31 @@
+{
+  "schemaVersion": 1,
+  "cutoffDate": "2026-11-25",
+  "provenance": {
+    "kind": "validated-published-risk-result",
+    "url": "https://www.luiguiherrera.com/dashboard",
+    "producerCommit": "a0d35a2e468f7342ccf141128e1a4c3d7d0153da",
+    "recoveredOn": "2026-11-27",
+    "universe": ["XLK", "XLF", "XLV", "XLE", "XLY", "XLP", "XLI", "XLB", "XLU", "XLRE", "XLC"],
+    "note": "Exact published model output recovered from the loaded production document. Its producer required all eleven aligned sector histories. Individual price histories and sector rankings are not reconstructed from these metrics."
+  },
+  "quantRisk": {
+    "sourceName": "Cálculos propios sobre ETFs sectoriales vía proveedor de precios",
+    "sourceUrl": "https://www.alphavantage.co/documentation/",
+    "lastUpdated": "Automático con fuente pública: 2026-11-25",
+    "updateFrequency": "Automática server-side con caché diaria; revisión periódica sugerida",
+    "dataStatus": "automated",
+    "reliabilityNote": "Los modelos cuantitativos son sensibles a ventanas, supuestos y calidad de datos. No predicen dirección de mercado.",
+    "ewmaVolAnnualized": 18.438774625801035,
+    "ewmaVolChange": 11.091680375625003,
+    "ewmaStatus": "elevated",
+    "garchVolForecast": 17.490960941838164,
+    "garchStatus": "normal",
+    "modelStatus": "estimated",
+    "averageCorrelation21d": 0.5047683897334677,
+    "averageCorrelation63d": 0.36050240146388046,
+    "defensiveGrowthCorrelation21d": 0.4872729456155452,
+    "sectorDispersion1w": 6.3822418028601335,
+    "sectorDispersion1m": 23.693931353680064
+  }
+}

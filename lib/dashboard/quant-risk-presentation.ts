@@ -228,7 +228,7 @@ export function buildQuantRiskPresentation(data: QuantRiskData, locale: QuantRis
 
   return {
     copy: labels,
-    status: partialAvailability ? (locale === "en" ? "Partially available" : "Disponibilidad parcial") : statusLabels[locale][data.dataStatus],
+    status: data.refreshStatus === "retained" ? (locale === "en" ? "Last validated snapshot retained" : "Último corte conservado") : partialAvailability ? (locale === "en" ? "Partially available" : "Disponibilidad parcial") : statusLabels[locale][data.dataStatus],
     statusTone: data.dataStatus === "automated" ? "positive" as const : data.dataStatus === "demo" || data.dataStatus === "fallback" ? "warning" as const : "neutral" as const,
     primaryMetrics: [
       {

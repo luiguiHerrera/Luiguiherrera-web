@@ -1,4 +1,6 @@
 import { unstable_cache } from "next/cache.js";
+import {createPrivateSectorPublication} from "../private-sector-publication.ts";
+import publishedRisk from "../sector-risk-published.json";
 import { withoutRetiredSectorIndex } from "../risk-models.ts";
 import {
   buildSectorResult,
@@ -159,7 +161,7 @@ export function createDailySectorCache(loader: () => Promise<SectorEtfsResult>, 
   };
 }
 
-export function assertUsableSectorRotation(rotation: SectorEtfsResult["rotation"], now = Date.now()) {
+export function assertUsableSectorRotation(rotation: SectorEtfsResult["rotation"], now = Date.now(), allowStale = false) {
   const sectors = Array.isArray(rotation?.sectors) ? rotation.sectors : [];
   const expected = new Set<string>(SECTOR_ETFS.map(({ symbol }) => symbol));
   const actual = new Set(sectors.map(sector => sector?.etfTicker));
@@ -170,15 +172,21 @@ export function assertUsableSectorRotation(rotation: SectorEtfsResult["rotation"
       actual.size !== expected.size || [...actual].some(symbol => !expected.has(symbol)) ||
       dates.size !== 1 || !/^\d{4}-\d{2}-\d{2}$/.test(date) || !Number.isFinite(end) ||
       new Date(end).toISOString().slice(0, 10) !== date ||
-      end - now > 86_400_000 || now - end > SECTOR_STALE_AFTER_MS) {
+      end - now > 86_400_000 || !allowStale && now - end > SECTOR_STALE_AFTER_MS) {
     throw new SectorDataUnavailableError("Sector snapshot lacks complete, dated, fresh coverage; cache not updated");
   }
 }
 
-export function requireCompleteSectorSnapshot(result: SectorEtfsResult, now = Date.now()) {
-  assertUsableSectorRotation(result?.rotation, now);
+export function requireCompleteSectorSnapshot(result: SectorEtfsResult, now = Date.now(), allowStale = false) {
+  assertUsableSectorRotation(result?.rotation, now, allowStale);
   if (result?.module?.dataStatus !== "automated" || result?.quantRisk?.dataStatus !== "automated") {
     throw new SectorDataUnavailableError("Sector snapshot is unavailable; cache not updated");
+  }
+  const q=result.quantRisk;
+  if(![q.ewmaVolAnnualized,q.garchVolForecast,q.averageCorrelation21d,q.averageCorrelation63d,
+    q.defensiveGrowthCorrelation21d,q.sectorDispersion1w,q.sectorDispersion1m].every(value=>typeof value==='number'&&Number.isFinite(value))
+    ||q.ewmaVolAnnualized!<0||q.garchVolForecast!<0||q.modelStatus!=="estimated"){
+    throw new SectorDataUnavailableError("Sector model output is incomplete; cache not updated");
   }
   return result;
 }
@@ -189,12 +197,16 @@ const getPersistentSectorSnapshot = unstable_cache(
   { revalidate: REVALIDATE_SECONDS, tags: ["dashboard-sector-snapshot"] },
 );
 
-const getDailySectorSnapshot = createDailySectorCache(getPersistentSectorSnapshot);
+const seed={...buildUnavailableSectorResult("Historical sector rankings unavailable"),quantRisk:publishedRisk.quantRisk} as SectorEtfsResult;
+const getPublication=createPrivateSectorPublication({seed,
+  load:()=>loadSectorEtfsData(),readLegacy:getPersistentSectorSnapshot,
+  validate:requireCompleteSectorSnapshot,isSourceError:error=>error instanceof SectorDataUnavailableError,
+});
 
-// Cache callbacks must use this strict reader, never the presentation fallback.
 export async function getStrictSectorEtfsData() {
-  const snapshot = requireCompleteSectorSnapshot(await getDailySectorSnapshot());
-  return { ...snapshot, quantRisk: withoutRetiredSectorIndex(snapshot.quantRisk) };
+  const snapshot=await getPublication();
+  if(snapshot.quantRisk.dataStatus==='unavailable')throw new SectorDataUnavailableError('No validated sector backup');
+  return {...snapshot,quantRisk:withoutRetiredSectorIndex(snapshot.quantRisk)};
 }
 
 export async function getSectorEtfsData(options?: SectorLoadOptions) {

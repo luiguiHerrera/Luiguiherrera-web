@@ -9,6 +9,9 @@ export type RegimeLabel = "Risk-on constructivo" | "Risk-on selectivo" | "Neutra
 export type RegimeBias = "favorable" | "neutral" | "cautious" | "stress" | "unavailable";
 
 export type DashboardDataSource = {
+  refreshStatus?: "current" | "retained";
+  lastRefreshError?: string;
+  retrievedAt?: string;
   sourceName: string;
   sourceUrl?: string;
   lastUpdated: string;
