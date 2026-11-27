@@ -43,6 +43,7 @@ const copy = {
     delayed: "Datos retrasados",
     flows: "Flujos ETF · S&P 500",
     oneSession: "1 sesión",
+    estimated: "Estimado",
     flowDescription: "Flujo neto estimado · Creaciones menos reembolsos.",
     volatility: "Volatilidad",
     termStructure: "Estructura temporal",
@@ -78,6 +79,7 @@ const copy = {
     delayed: "Delayed data",
     flows: "ETF flows · S&P 500",
     oneSession: "1 session",
+    estimated: "Estimated",
     flowDescription: "Estimated net flow · Creations less redemptions.",
     volatility: "Volatility",
     termStructure: "Term structure",
@@ -245,7 +247,7 @@ export function HomeDashboardPreview({
                 <h3 className="mt-2 text-xl font-semibold tabular-nums text-ink" data-home-sp500-flow>
                   {flowAvailable ? formatFlowAmount(flowValue, locale) : t.unavailable}
                 </h3>
-                <p className="mt-3 text-sm leading-6 text-muted">{sp500?.vehicles.join(" · ") || t.flowDescription}</p>
+                <p className="mt-3 text-sm leading-6 text-muted">{sp500?.vehicles.length ? `${sp500.vehicles.join(" · ")} · ${t.estimated}` : t.flowDescription}</p>
                 {flowAvailable ? <SourceDate value={sp500?.cutoffDate} locale={locale} /> : null}
                 {flowAvailable && sp500?.refreshStatus && sp500.refreshStatus !== "current" ? <p className="mt-1 text-xs text-muted">{sp500.refreshStatus === "delayed" ? t.delayed : t.retained}</p> : null}
               </article>
@@ -276,7 +278,7 @@ export function HomeDashboardPreview({
                 </div>
                 <span className="text-xs font-semibold text-petrol">{curveState}</span>
               </div>
-              {curve.points.length ? <SourceDate value={vixTermStructure?.lastUpdated} locale={locale} /> : null}
+              {curve.points.length ? <SourceDate value={vixTermStructure?.settlementDate ?? vixTermStructure?.lastUpdated} locale={locale} /> : null}
 
               {curve.points.length ? (
                 <>
