@@ -85,7 +85,7 @@ export function InvestorGuidedRoute({ content }: { content: InvestorEntryContent
             <p className={styles.description}>{option.description}</p>
             <ul>
               {option.outcomes.map((outcome) => (
-                <li key={outcome}><span aria-hidden="true">✓</span>{outcome}</li>
+                <li key={outcome}>{outcome}</li>
               ))}
             </ul>
             {option.actions ? (
