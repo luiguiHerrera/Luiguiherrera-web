@@ -187,7 +187,6 @@ const translateResult: Record<string, string> = {
   "Inicial": "Initial",
   "Básico": "Basic",
   "Intermedio": "Intermediate",
-  "Validado alto": "High validated",
   "Alto en estas preguntas": "High on these questions",
   "Básica declarada": "Basic self-reported",
   "Intermedia declarada": "Intermediate self-reported",
@@ -238,7 +237,7 @@ const paiStageDescriptions: Record<PaiStage, { es: string; en: string }> = {
 };
 
 const paiLightLabels: Record<ReadinessLight, { es: string; en: string }> = {
-  red: { es: "Primero ordenar", en: "Organize first" },
+  red: { es: "Prioridad de revisión", en: "Priority for review" },
   yellow: { es: "Preparar antes de avanzar", en: "Prepare before moving forward" },
   green: { es: "Base más sólida", en: "Stronger base" },
 };

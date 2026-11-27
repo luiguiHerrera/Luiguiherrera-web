@@ -1,0 +1,117 @@
+[
+  {
+    "mode": "quick",
+    "answers": {
+      "capital_reference": "10000",
+      "products_known": [
+        "indexFunds"
+      ],
+      "income_stability": "very_stable",
+      "surplus_cash_flow": "consistent",
+      "expensive_debt": "none",
+      "goal_horizon_clarity": "clear",
+      "savings_share": "lt10",
+      "loss_life_effect": "none",
+      "emergency_months": "gt12",
+      "cash_need_12m": "very_low",
+      "declared_drop": "5",
+      "pressure_drop": "written_rule",
+      "slow_underperformance": "process",
+      "fast_gain": "rebalance",
+      "return_expectation": "3_6",
+      "bad_year": "normal",
+      "stock_basic": "loan",
+      "risk_return": "less_risk",
+      "diversification": "avoid_loss",
+      "bond_rates": "fixed",
+      "claim_vs_validate": "low",
+      "years_real": "gt8",
+      "real_drawdown": "no",
+      "process_docs": "summary",
+      "fomo_behavior": "wait",
+      "loss_recovery": "reduce",
+      "concentration": "lt10",
+      "plan_written": "yes",
+      "worst_real_drawdown_complete": "none",
+      "drawdown_action_complete": "not_lived"
+    },
+    "before": {
+      "declared": "Crecimiento moderado",
+      "pressure": "Crecimiento dinámico",
+      "text": "El perfil bajo presión (Crecimiento dinámico) queda por debajo del perfil declarado (Crecimiento moderado). Conviene diseñar el proceso desde la versión bajo presión."
+    },
+    "after": {
+      "declared": "Preservación",
+      "pressure": "Crecimiento dinámico",
+      "text": "Tus respuestas hipotéticas (Crecimiento dinámico) corresponden a una disposición al riesgo superior a la declarada (Preservación). Revisa si los escenarios reflejan tus límites; no es conducta real observada."
+    }
+  },
+  {
+    "mode": "complete",
+    "answers": {
+      "capital_reference": "10000",
+      "products_known": [
+        "indexFunds"
+      ],
+      "income_stability": "very_stable",
+      "surplus_cash_flow": "consistent",
+      "expensive_debt": "none",
+      "goal_horizon_clarity": "clear",
+      "savings_share": "lt10",
+      "loss_life_effect": "none",
+      "emergency_months": "gt12",
+      "cash_need_12m": "very_low",
+      "declared_drop": "5",
+      "pressure_drop": "written_rule",
+      "slow_underperformance": "process",
+      "fast_gain": "rebalance",
+      "return_expectation": "3_6",
+      "bad_year": "normal",
+      "stock_basic": "loan",
+      "risk_return": "less_risk",
+      "diversification": "avoid_loss",
+      "bond_rates": "fixed",
+      "claim_vs_validate": "low",
+      "years_real": "gt8",
+      "real_drawdown": "no",
+      "process_docs": "summary",
+      "fomo_behavior": "wait",
+      "loss_recovery": "reduce",
+      "concentration": "lt10",
+      "plan_written": "yes",
+      "real_money_products_complete": "stocks",
+      "decision_years_complete": "gt7",
+      "worst_real_drawdown_complete": "none",
+      "drawdown_action_complete": "not_lived",
+      "income_stability_complete": "untouched",
+      "known_expenses_complete": "none",
+      "horizon_conflict_complete": "avoid",
+      "single_position_30_complete": "not",
+      "large_position_down_complete": "review_size",
+      "winner_too_large_complete": "rebalance_rule",
+      "social_comparison_complete": "ignore",
+      "headline_stress_complete": "wait_rule",
+      "priority_tradeoff_complete": "avoid_forced",
+      "discomfort_tradeoff_complete": "slow",
+      "sacrifice_first_complete": "return",
+      "product_costs_complete": "all_in",
+      "liquidity_product_complete": "liquidity_mismatch",
+      "knowledge_source_complete": "stop",
+      "forecast_confidence_complete": "high",
+      "process_after_mistake_complete": "write",
+      "portfolio_role_complete": "defined",
+      "review_frequency_complete": "scheduled",
+      "final_consistency_plan_complete": "use"
+    },
+    "before": {
+      "declared": "Crecimiento dinámico",
+      "pressure": "Crecimiento dinámico",
+      "text": "El perfil declarado y el perfil bajo presión aparecen razonablemente alineados."
+    },
+    "after": {
+      "declared": "Preservación",
+      "pressure": "Crecimiento dinámico",
+      "text": "Tus respuestas hipotéticas (Crecimiento dinámico) corresponden a una disposición al riesgo superior a la declarada (Preservación). Revisa si los escenarios reflejan tus límites; no es conducta real observada."
+    }
+  }
+]

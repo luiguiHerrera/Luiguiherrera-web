@@ -211,7 +211,7 @@ function buildAlerts(scores: DiagnosticScores, flags: DiagnosticFlag[], locale: 
     if (flags.includes("fomo_entry")) alerts.push("Aparece sensibilidad a FOMO o comparación social.");
     if (flags.includes("overconfidence") || flags.includes("euphoria_sizing")) alerts.push("Las ganancias rápidas podrían empujar a aumentar tamaño demasiado pronto.");
     if (flags.includes("knowledge_gap_basic")) alerts.push("Hay brechas de conocimiento básico frente a lo declarado.");
-    if (flags.includes("product_mismatch")) alerts.push("La complejidad de productos marcados supera el conocimiento validado actual.");
+    if (flags.includes("product_mismatch")) alerts.push("Hay una brecha específica en un producto marcado; las respuestas sobre otros productos no la compensan.");
     if (flags.includes("loss_recovery_bias")) alerts.push("Tras pérdidas aparece riesgo de buscar recuperación rápida.");
     if (flags.includes("no_written_process")) alerts.push("Faltan reglas escritas para actuar durante caídas, subidas o estancamiento.");
     if (scores.expectationRealism < 45) alerts.push("Las expectativas de retorno podrían ser incompatibles con un proceso sostenible.");
@@ -229,7 +229,7 @@ function buildAlerts(scores: DiagnosticScores, flags: DiagnosticFlag[], locale: 
   if (flags.includes("fomo_entry")) alerts.push("FOMO or social comparison sensitivity appears.");
   if (flags.includes("overconfidence") || flags.includes("euphoria_sizing")) alerts.push("Fast gains could push position size too early.");
   if (flags.includes("knowledge_gap_basic")) alerts.push("Basic knowledge gaps appear versus what was declared.");
-  if (flags.includes("product_mismatch")) alerts.push("Selected product complexity exceeds current validated knowledge.");
+  if (flags.includes("product_mismatch")) alerts.push("There is a specific gap in a selected product; answers about other products do not remove it.");
   if (flags.includes("loss_recovery_bias")) alerts.push("After losses, there is risk of chasing a quick recovery.");
   if (flags.includes("no_written_process")) alerts.push("Written rules are missing for drawdowns, rallies or stagnation.");
   if (scores.expectationRealism < 45) alerts.push("Return expectations may be incompatible with a sustainable process.");
@@ -427,18 +427,18 @@ function expectationTensions(scores: DiagnosticScores, flags: DiagnosticFlag[], 
     if (flags.includes("social_pressure")) tensions.push("Comparación social frente a paciencia de proceso.");
     if (flags.includes("capital_concentration")) tensions.push("Tamaño del capital invertido frente a margen financiero disponible.");
     if (flags.includes("concentration_bias")) tensions.push("Convicción frente a concentración razonable.");
-    if (flags.includes("claims_knowledge") && flags.includes("knowledge_gap_basic")) tensions.push("Conocimiento declarado frente a conocimiento validado.");
+    if (flags.includes("claims_knowledge") && flags.includes("knowledge_gap_basic")) tensions.push("Conocimiento declarado frente a los conceptos comprobados en estas preguntas.");
     if (scores.fomoSensitivity > 65 && scores.consistency < 58) tensions.push("Deseo de participar frente a reglas previas insuficientes.");
-    return tensions.length ? tensions : ["Expectativas y conducta aparecen razonablemente alineadas para una primera lectura."];
+    return tensions.length ? tensions : ["No aparecen tensiones adicionales en estas preguntas sobre expectativas y escenarios."];
   }
 
   if (flags.includes("unrealistic_expectations")) tensions.push("High expected returns versus the real risk of negative years.");
   if (flags.includes("social_pressure")) tensions.push("Social comparison versus process patience.");
   if (flags.includes("capital_concentration")) tensions.push("Invested capital size versus available financial margin.");
   if (flags.includes("concentration_bias")) tensions.push("Conviction versus reasonable concentration.");
-  if (flags.includes("claims_knowledge") && flags.includes("knowledge_gap_basic")) tensions.push("Declared knowledge versus validated knowledge.");
+  if (flags.includes("claims_knowledge") && flags.includes("knowledge_gap_basic")) tensions.push("Declared knowledge versus concepts checked in these questions.");
   if (scores.fomoSensitivity > 65 && scores.consistency < 58) tensions.push("Desire to participate versus insufficient prior rules.");
-  return tensions.length ? tensions : ["Expectations and behavior appear reasonably aligned for a first read."];
+  return tensions.length ? tensions : ["No additional tensions appear in these questions about expectations and scenarios."];
 }
 
 function routeFor(scores: DiagnosticScores, flags: DiagnosticFlag[], pai: PaiReadiness, locale: DiagnosticLocale) {

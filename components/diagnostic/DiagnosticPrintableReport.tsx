@@ -89,7 +89,7 @@ const stageLabels: Record<PaiStage, Record<DiagnosticLocale, string>> = {
 };
 
 const lightLabels: Record<ReadinessLight, Record<DiagnosticLocale, string>> = {
-  red: { es: "Primero ordenar", en: "Organize first" },
+  red: { es: "Prioridad de revisión", en: "Priority for review" },
   yellow: { es: "Preparar antes de avanzar", en: "Prepare before moving forward" },
   green: { es: "Base más sólida", en: "Stronger base" },
 };
@@ -151,7 +151,6 @@ const translatedResultLabels: Record<string, string> = {
   "Inicial": "Initial",
   "Básico": "Basic",
   "Intermedio": "Intermediate",
-  "Validado alto": "High validated",
   "Alto en estas preguntas": "High on these questions",
   "Básica declarada": "Basic self-reported",
   "Intermedia declarada": "Intermediate self-reported",

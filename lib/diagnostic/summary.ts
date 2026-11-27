@@ -6,7 +6,7 @@ export function diagnosticSummaryText(result: DiagnosticResult, locale: Diagnost
   const es = locale === "es";
   const t = (spanish: string, english: string) => es ? spanish : english;
   const pai = result.paiReadiness;
-  const signal = { red: t("Primero ordenar", "Organize first"), yellow: t("Preparar antes de avanzar", "Prepare before moving forward"), green: t("Base más sólida", "Stronger base") };
+  const signal = { red: t("Prioridad de revisión", "Priority for review"), yellow: t("Preparar antes de avanzar", "Prepare before moving forward"), green: t("Base más sólida", "Stronger base") };
   const stage = { orden: t("Orden", "Order"), preparacion: t("Preparación", "Preparation"), expansion: t("Expansión", "Expansion") };
   return [
     t("Resumen educativo del diagnóstico", "Educational diagnostic summary"),
@@ -32,7 +32,7 @@ export function diagnosticSummaryText(result: DiagnosticResult, locale: Diagnost
       return "- " + item.label + " (" + scope[item.scope] + "): " + item.note;
     }), "",
     t("COMPROBACIONES POR PRODUCTO", "PRODUCT-SPECIFIC CHECKS"),
-    ...result.productChecks.map((item) => "- " + item.label + ": " + (item.response ?? "") + ". " + item.note), "",
+    ...result.productChecks.map((item) => "- " + item.label + ": " + (item.response ? item.response + ". " : "") + item.note), "",
     t("ALERTAS Y TENSIONES", "ALERTS AND TENSIONS"),
     ...[...result.alerts, ...result.expectationTensions].map((item) => "- " + item), "",
     t("SIGUIENTE PASO EDUCATIVO", "NEXT EDUCATIONAL STEP"), pai.nextEducationalStep,
