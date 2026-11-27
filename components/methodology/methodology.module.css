@@ -13,7 +13,7 @@
 .page p { text-wrap:pretty; }
 .page strong { font-weight:600; color:var(--method-green); }
 .hero { position:relative; isolation:isolate; min-height:300px; padding:56px 0 40px; display:flex; flex-direction:column; align-items:flex-start; justify-content:center; }
-.heroLandscape { position:absolute; z-index:-1; inset:0 -56px 0 30%; pointer-events:none; background:url("/images/statistical-levels/mountain-landscape.webp") 72% 47% / cover no-repeat; opacity:.72; mask-image:linear-gradient(90deg,transparent 1%,#000 70%),linear-gradient(180deg,#000 58%,transparent 100%); mask-composite:intersect; }
+.heroLandscape { position:absolute; z-index:-1; inset:0 -56px 0 30%; pointer-events:none; background:url("/images/methodology/methodology-study.webp") 72% 18% / cover no-repeat; opacity:.72; mask-image:linear-gradient(90deg,transparent 1%,#000 70%),linear-gradient(180deg,#000 58%,transparent 100%); mask-composite:intersect; }
 .heroCopy { max-width:760px; }
 .hero h1 { font-size:clamp(32px,3.25vw,46px); line-height:1.2; letter-spacing:-.045em; }
 .motto { margin-top:15px; font-size:18px; font-weight:500; line-height:1.55; }
