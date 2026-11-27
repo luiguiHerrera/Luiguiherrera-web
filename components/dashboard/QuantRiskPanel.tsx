@@ -125,7 +125,7 @@ export function QuantRiskPanel({ data, locale = "es" }: QuantRiskPanelProps) {
                       <p className="text-sm font-semibold tabular-nums text-ink sm:text-base">{metric.value}</p>
                       <p className="mt-1 text-xs leading-5">{metric.unit} · {metric.date}</p>
                       <p className="mt-1.5 text-sm leading-6">{metric.help}</p>
-                      {(['var95','absorption'].includes(metric.id)) ? (()=>{const ref=data.historicalRisk?.references?.[metric.id as 'var95'|'absorption']; const text=riskReferenceText(ref,locale);return text && ref ? <><p className="mt-2 text-xs leading-5" data-risk-history-detail>{text}</p><p className="text-xs leading-5">{ref.start}–{ref.end} · n={ref.observations}{ref.comparisonDate ? ` · Δ20: ${ref.comparisonDate}–${ref.cutoff}` : ''}</p></> : null;})() : null}
+                      {(['var95','absorption'].includes(metric.id)) ? (()=>{const ref=data.historicalRisk?.references?.[metric.id as 'var95'|'absorption']; const text=riskReferenceText(ref,locale,100,"pp",metric.id==="var95"?2:1);return text && ref ? <><p className="mt-2 text-xs leading-5" data-risk-history-detail>{text}</p><p className="text-xs leading-5">{ref.start}–{ref.end} · n={ref.observations}{ref.comparisonDate ? ` · Δ20: ${ref.comparisonDate}–${ref.cutoff}` : ''}</p></> : null;})() : null}
                       {metric.reason ? <p className="mt-1.5 text-xs leading-5">{metric.reason}</p> : null}
                     </dd>
                   </div>

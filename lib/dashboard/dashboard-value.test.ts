@@ -1,3 +1,4 @@
+import { buildVixDashboardData } from './adapters/vix.ts';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { participationReading, PARTICIPATION_READINGS } from './participation-reading.ts';
@@ -141,4 +142,13 @@ test('extended source parser retains downloaded older adjusted prices without ch
   const payload={chart:{result:[{meta:{symbol:'SPY',currency:'USD',exchangeTimezoneName:'America/New_York',dataGranularity:'1d'},timestamp:dates.map(d=>Date.parse(d+'T14:30Z')/1000),indicators:{adjclose:[{adjclose:dates.map((_,i)=>100+i)}]}}]}};
   assert.equal(parseRiskYahooChart(payload,'SPY',dates.at(-1)!,1261).length,1261);
   assert.equal(parseRiskYahooChart(payload,'SPY',dates.at(-1)!,1261,true).length,dates.length);
+});
+
+
+test('VIX delta uses its own published closes, including extended-hours dates outside the NYSE calendar',()=>{
+  const dates=[...riskSessionDates('2025-01-02','2026-11-25'),'2026-11-26'];
+  const spot=buildVixDashboardData(dates.map((date,i)=>({date,value:10+i/100}))).spot;
+  assert.equal(spot.historicalReference!.comparisonDate,dates.at(-21));
+  assert.ok(Math.abs(spot.historicalReference!.delta20!-.2)<1e-12);
+  assert.equal(spot.historicalReference!.observations,dates.length-1);
 });

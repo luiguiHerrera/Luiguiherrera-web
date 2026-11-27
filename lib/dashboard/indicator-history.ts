@@ -20,9 +20,9 @@ export function indicatorReference(points: IndicatorPoint[], cutoff: string, ses
     observations:previous.length, start:previous[0]?.date ?? null, end:previous.at(-1)?.date ?? null};
 }
 
-export function riskReferenceText(ref: IndicatorReference | null | undefined, locale: 'es'|'en', scale = 100, unit = 'pp') {
+export function riskReferenceText(ref: IndicatorReference | null | undefined, locale: 'es'|'en', scale = 100, unit = 'pp', digits = 1) {
   if (!ref || (ref.percentile === null && ref.delta20 === null)) return null;
-  const n = (v:number) => new Intl.NumberFormat(locale==='en'?'en-US':'es-ES',{maximumFractionDigits:1,minimumFractionDigits:1}).format(v).replace(/-/g,'−');
+  const n = (v:number) => new Intl.NumberFormat(locale==='en'?'en-US':'es-ES',{maximumFractionDigits:digits,minimumFractionDigits:digits}).format(v).replace(/-/g,'−');
   return [ref.delta20 === null ? null : `${ref.delta20>0?'+':''}${n(ref.delta20*scale)} ${unit} ${locale==='en'?'over 20 sessions':'en 20 sesiones'}`,
     ref.percentile === null ? null : `${locale==='en'?'Historical percentile':'Percentil histórico'} ${Math.round(ref.percentile)}`].filter(Boolean).join(' · ');
 }

@@ -56,8 +56,8 @@ export function buildRiskOverview({ quantRisk, vixSpot, vixTermStructure }: Risk
     ? absorption.ratio : null;
   const sectorDate = observationDate(quantRisk?.lastUpdated, locale);
 
-  const reference = (ref:IndicatorReference|null|undefined, scale=100, unit='pp') => {
-    const text=riskReferenceText(ref,locale,scale,unit);
+  const reference = (ref:IndicatorReference|null|undefined, scale=100, unit='pp', digits=1) => {
+    const text=riskReferenceText(ref,locale,scale,unit,digits);
     return text && ref ? {text,period:ref.percentile===null ? `${ref.comparisonDate}–${ref.cutoff}` : `${ref.start}–${ref.end} · n=${ref.observations}`} : undefined;
   };
   return [
@@ -89,7 +89,7 @@ export function buildRiskOverview({ quantRisk, vixSpot, vixTermStructure }: Risk
       },
     },
     {
-      id: "var95", reference:var95===null ? undefined : reference(quantRisk?.historicalRisk?.references?.var95), label: "VaR95",
+      id: "var95", reference:var95===null ? undefined : reference(quantRisk?.historicalRisk?.references?.var95,100,"pp",2), label: "VaR95",
       value: var95 === null ? unavailable : percent(var95 * 100),
       available: var95 !== null,
       detail: english ? "SPY · One-session loss · 1,260 returns" : "SPY · Pérdida a una sesión · 1.260 retornos",
