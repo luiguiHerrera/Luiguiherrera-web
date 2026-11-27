@@ -1,6 +1,7 @@
 "use client";
 
-import type { DiagnosticLocale } from "@/lib/diagnostic/types";
+import type { DiagnosticLocale, DiagnosticResult } from "@/lib/diagnostic/types";
+import { diagnosticSummaryText } from "@/lib/diagnostic/summary";
 
 const copy = {
   es: {
@@ -21,12 +22,22 @@ const copy = {
   },
 };
 
-export function DiagnosticReportActions({ locale }: { locale: DiagnosticLocale }) {
+export function DiagnosticReportActions({ locale, result }: { locale: DiagnosticLocale; result: DiagnosticResult }) {
   const text = copy[locale];
 
   function printSummary() {
     if (typeof window === "undefined" || typeof window.print !== "function") return;
     window.print();
+  }
+
+  function downloadSummary() {
+    const blob = new Blob([diagnosticSummaryText(result, locale)], { type: "text/plain;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = (locale === "es" ? "resumen-diagnostico-" : "diagnostic-summary-") + result.mode + ".txt";
+    link.click();
+    setTimeout(() => URL.revokeObjectURL(url), 0);
   }
 
   return (
@@ -40,6 +51,9 @@ export function DiagnosticReportActions({ locale }: { locale: DiagnosticLocale }
         className="mt-5 w-full border border-ink bg-ink px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-panel hover:text-ink"
       >
         {text.button}
+      </button>
+      <button type="button" onClick={downloadSummary} className="mt-3 w-full border border-line bg-panel px-4 py-2.5 text-sm font-semibold text-ink transition hover:border-ink">
+        {locale === "es" ? "Descargar resumen (.txt)" : "Download summary (.txt)"}
       </button>
       <p className="mt-3 text-xs leading-5 text-muted">{text.note}</p>
       <p className="mt-2 text-xs leading-5 text-muted">{text.printTip}</p>

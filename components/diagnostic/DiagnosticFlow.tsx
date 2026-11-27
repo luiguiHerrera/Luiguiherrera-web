@@ -653,7 +653,7 @@ function ResultScreen({ answers, locale, mode, restart, review }: { answers: Dia
       </section>
 
       <aside className="space-y-5">
-        <DiagnosticReportActions locale={locale} />
+        <DiagnosticReportActions locale={locale} result={result} />
 
         <section className="border border-line bg-panel p-6">
           <h3 className="text-xl font-semibold text-ink">{text.scores}</h3>
@@ -695,6 +695,9 @@ export function DiagnosticFlow({ initialMode, locale = "es" }: { initialMode?: D
 
   function start() {
     if (!mode) return;
+    const url = new URL(window.location.href);
+    url.searchParams.set("mode", mode);
+    window.history.replaceState(null, "", url.pathname + url.search + url.hash);
     setStarted(true);
     setCompleted(false);
     setIndex(0);

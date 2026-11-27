@@ -11,6 +11,7 @@ import EnPage from "../../app/en/diagnostic/page";
 import { scoreDiagnostic } from "./scoring";
 import { getQuestionCounts } from "./questions";
 import { patchAnswers } from "./scoring.fixtures";
+import { diagnosticSummaryText } from "./summary";
 
 for (const locale of ["es", "en"] as const) {
   test(`${locale}: start screen announces the actual base and maximum question counts`, () => {
@@ -42,9 +43,11 @@ for (const locale of ["es", "en"] as const) {
   });
 
   test(`${locale}: the summary action explicitly opens printing rather than claiming an automatic download`, () => {
-    const html = renderToStaticMarkup(<DiagnosticReportActions locale={locale} />);
+    const result = scoreDiagnostic(patchAnswers("quick", {}), "quick", locale);
+    const html = renderToStaticMarkup(<DiagnosticReportActions locale={locale} result={result} />);
     assert.match(html, locale === "es" ? /Imprimir \/ guardar PDF/ : /Print \/ save PDF/);
-    assert.doesNotMatch(html, /Descargar resumen|Download educational/);
+    assert.match(html, locale === "es" ? /Descargar resumen \(\.txt\)/ : /Download summary \(\.txt\)/);
+    assert.doesNotMatch(html, /Descargar resumen educativo como PDF|Download educational summary as PDF/);
   });
 }
 
@@ -53,7 +56,7 @@ test("print action invokes the browser print dialog locally", () => {
   const original = Object.getOwnPropertyDescriptor(globalThis, "window");
   Object.defineProperty(globalThis, "window", { configurable: true, value: { print: () => { calls++; } } });
   try {
-    const tree = DiagnosticReportActions({ locale: "es" });
+    const tree = DiagnosticReportActions({ locale: "es", result: scoreDiagnostic(patchAnswers("quick", {}), "quick") });
     const children = tree.props.children as React.ReactElement<{ onClick?: () => void }>[];
     const button = children.find((child) => child.type === "button")!;
     button.props.onClick!();
@@ -73,6 +76,19 @@ test("URL modes are allowlisted in both languages; restart tokens cannot fabrica
 });
 
 test("diagnostic sources contain no response transmission or persistent storage APIs", () => {
-  const files = ["components/diagnostic/DiagnosticFlow.tsx", "components/diagnostic/DiagnosticPrintableReport.tsx", "components/diagnostic/DiagnosticReportActions.tsx", "lib/diagnostic/scoring.ts", "lib/diagnostic/answers.ts", "lib/diagnostic/evidence.ts"];
+  const files = ["components/diagnostic/DiagnosticFlow.tsx", "components/diagnostic/DiagnosticPrintableReport.tsx", "components/diagnostic/DiagnosticReportActions.tsx", "lib/diagnostic/scoring.ts", "lib/diagnostic/answers.ts", "lib/diagnostic/evidence.ts", "lib/diagnostic/summary.ts"];
   for (const path of files) assert.doesNotMatch(readFileSync(path, "utf8"), /\bfetch\s*\(|XMLHttpRequest|sendBeacon|localStorage|sessionStorage|indexedDB|document\.cookie/);
+});
+
+test("plain-text export preserves every critical limitation and route in both languages", () => {
+  for (const locale of ["es", "en"] as const) {
+    const result = scoreDiagnostic(patchAnswers("complete", { products_known: ["options", "leverage"], options_check: "guaranteed", leverage_check: "interest_only", cash_need_12m: "certain" }), "complete", locale);
+    const text = diagnosticSummaryText(result, locale);
+    assert.ok(text.includes(result.methodologyNote));
+    assert.ok(text.includes(result.declaredLoss));
+    assert.ok(text.includes(result.pressureSummary));
+    assert.ok(text.includes(result.route.href));
+    for (const item of result.constraints) assert.ok(text.includes(item.note));
+    for (const item of result.productChecks) assert.ok(text.includes(item.note));
+  }
 });
