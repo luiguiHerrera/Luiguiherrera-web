@@ -51,6 +51,8 @@ export type SeoRouteDefinition = {
 };
 
 const seoRouteContent: readonly Omit<SeoRouteDefinition, "alternatePathname">[] = [
+  { pathname: "/sobre-mi", language: "es", title: "Sobre mí | Luigui Herrera", description: "Mi forma de entender los mercados, cuestionar los supuestos y poner el riesgo sobre la mesa." },
+  { pathname: "/en/about", language: "en", title: "About me | Luigui Herrera", description: "How I approach markets, question assumptions and put risk on the table." },
   ...(["es", "en"] as const).flatMap((language) => [
     { pathname: trendsMethodologyPath(language), language, title: language === "es" ? "Metodología de Tendencias | Evidencia y datos 13F" : "Trends methodology | Evidence and 13F data", description: language === "es" ? "Criterios editoriales, universo de gestores, tratamiento de enmiendas y límites de los datos SEC EDGAR." : "Editorial criteria, manager universe, amendment handling and the limits of SEC EDGAR data." },
     ...trendCatalog.map((trend) => ({ pathname: trendPath(trend, language), language, title: `${trend.name[language]} | ${language === "es" ? "Tendencias" : "Trends"}`, description: language === "es" ? `Analiza ${trend.name.es.toLowerCase()}: cambio, evidencia, cadena de valor, capital divulgado, vehículos y riesgos que podrían invalidar la hipótesis.` : `Explore ${trend.name.en.toLowerCase()}: change, evidence, the value chain, disclosed capital, vehicles and risks that could invalidate the hypothesis.` })),

@@ -10,6 +10,7 @@ export const en = {
       research: "Research",
       protection: "Protection",
       resources: "Resources",
+      about: "About me",
     },
     startItems: [
       { href: "/en/diagnostic?mode=quick", label: "Quick diagnostic", shortLabel: "Quick", description: "Compact read on horizon, liquidity, tolerance and biases." },
@@ -51,3 +52,4 @@ export const en = {
     legal: "Legal",
   },
 };
+

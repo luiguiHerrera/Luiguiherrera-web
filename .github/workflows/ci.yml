@@ -72,6 +72,7 @@ jobs:
         run: |
           set -euo pipefail
           node --import ./scripts/trends-test-register.mjs --experimental-test-module-mocks --experimental-strip-types --test --test-reporter=tap \
+            lib/about/about.test.tsx \
             lib/portfolio-fragility/*.test.ts \
             lib/trends/trends.test.tsx lib/trends/research/*.test.tsx \
             lib/dashboard/capital-flow-comparison.test.mjs lib/dashboard/capital-flows-source.test.mjs lib/dashboard/spy-flow-publication.test.mjs lib/dashboard/durable-flow-publication.test.mjs lib/dashboard/adapters/vix-term-structure.test.ts \

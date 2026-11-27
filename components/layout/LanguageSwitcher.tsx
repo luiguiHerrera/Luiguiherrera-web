@@ -38,7 +38,7 @@ export function LanguageSwitcher() {
       <Link
         prefetch={prefetch}
         href={hrefFor("es")}
-        className={`inline-flex min-h-11 min-w-11 items-center justify-center px-2 py-1.5 transition hover:text-petrol sm:px-2.5 lg:min-h-0 lg:min-w-0 ${currentLocale === "es" ? "bg-petrol text-white" : "text-muted"}`}
+        className={`inline-flex min-h-11 min-w-11 items-center justify-center px-2 py-1.5 transition hover:text-petrol sm:px-2.5 xl:min-h-0 xl:min-w-0 ${currentLocale === "es" ? "bg-petrol text-white" : "text-muted"}`}
         aria-current={currentLocale === "es" ? "page" : undefined}
       >
         ES
@@ -46,7 +46,7 @@ export function LanguageSwitcher() {
       <Link
         prefetch={prefetch}
         href={hrefFor("en")}
-        className={`inline-flex min-h-11 min-w-11 items-center justify-center px-2 py-1.5 transition hover:text-petrol sm:px-2.5 lg:min-h-0 lg:min-w-0 ${currentLocale === "en" ? "bg-petrol text-white" : "text-muted"}`}
+        className={`inline-flex min-h-11 min-w-11 items-center justify-center px-2 py-1.5 transition hover:text-petrol sm:px-2.5 xl:min-h-0 xl:min-w-0 ${currentLocale === "en" ? "bg-petrol text-white" : "text-muted"}`}
         aria-current={currentLocale === "en" ? "page" : undefined}
       >
         EN
@@ -54,3 +54,4 @@ export function LanguageSwitcher() {
     </div>
   );
 }
+

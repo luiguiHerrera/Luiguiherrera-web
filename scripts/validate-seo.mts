@@ -46,6 +46,8 @@ const expectedStaticRoutes = [
   "/en/quantitative-analysis",
   "/tendencias",
   "/en/trends",
+  "/sobre-mi",
+  "/en/about",
   "/recursos",
   "/en/resources",
   "/metodologia",

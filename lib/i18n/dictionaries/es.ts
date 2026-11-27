@@ -10,6 +10,7 @@ export const es = {
       research: "Investigación",
       protection: "Protección",
       resources: "Recursos",
+      about: "Sobre mí",
     },
     startItems: [
       { href: "/diagnostico?mode=quick", label: "Diagnóstico rápido", shortLabel: "Rápido", description: "Lectura compacta de horizonte, liquidez, tolerancia y sesgos." },
@@ -51,3 +52,4 @@ export const es = {
     legal: "Legal",
   },
 };
+

@@ -17,6 +17,7 @@ export const bilingualRoutePairs = [
   { es: trendsMethodologyPath("es"), en: trendsMethodologyPath("en") },
   ...trendCatalog.map((trend) => ({ es: trendPath(trend, "es"), en: trendPath(trend, "en") })),
   { es: "/recursos", en: "/en/resources" },
+  { es: "/sobre-mi", en: "/en/about" },
   { es: "/metodologia", en: "/en/methodology" },
   { es: "/investigacion", en: "/en/research" },
   { es: "/investigacion/td3", en: "/en/research/td3" },

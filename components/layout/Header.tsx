@@ -17,6 +17,7 @@ const navHrefs = {
     research: "/investigacion",
     protection: "/proteccion",
     resources: "/recursos",
+    about: "/sobre-mi",
   },
   en: {
     home: "/en",
@@ -25,6 +26,7 @@ const navHrefs = {
     research: "/en/research",
     protection: "/en/protection",
     resources: "/en/resources",
+    about: "/en/about",
   },
 };
 
@@ -209,6 +211,7 @@ function HeaderForPathname({ pathname }: { pathname: string }) {
     { href: hrefs.research, label: dictionary.layout.nav.research, items: dictionary.layout.researchItems },
     { href: hrefs.protection, label: dictionary.layout.nav.protection, items: dictionary.layout.protectionItems },
     { href: hrefs.resources, label: dictionary.layout.nav.resources, items: dictionary.layout.resourcesItems },
+    { href: hrefs.about, label: dictionary.layout.nav.about, items: [] },
   ].map((group) => ({
     ...group,
     isActive: group.isActive ?? (
@@ -231,7 +234,7 @@ function HeaderForPathname({ pathname }: { pathname: string }) {
             <MarketLabMark />
           </Link>
         </div>
-        <div className="flex items-center gap-2 lg:hidden">
+        <div className="flex items-center gap-2 xl:hidden">
           <LanguageSwitcher />
           <button
             type="button"
@@ -243,7 +246,7 @@ function HeaderForPathname({ pathname }: { pathname: string }) {
             {mobileOpen ? (locale === "en" ? "Close" : "Cerrar") : (locale === "en" ? "Menu" : "Menú")}
           </button>
         </div>
-        <div className="hidden min-w-0 items-center gap-3 lg:flex">
+        <div className="hidden min-w-0 items-center gap-3 xl:flex">
           <nav className="flex min-w-0 items-center gap-1.5 text-[13px] text-muted">
             {navGroups.map((group) => (
               group.items?.length ? (
@@ -262,7 +265,7 @@ function HeaderForPathname({ pathname }: { pathname: string }) {
         </div>
       </div>
       {mobileOpen ? (
-        <nav className="max-h-[calc(100vh-3.5rem)] overflow-y-auto border-t border-line bg-[#fffdf8] px-4 py-4 lg:hidden">
+        <nav className="max-h-[calc(100vh-3.5rem)] overflow-y-auto border-t border-line bg-[#fffdf8] px-4 py-4 xl:hidden">
           <div className="mx-auto grid max-w-7xl gap-2">
             {navGroups.map((group) => (
               <div key={group.href} className="border-b border-line/75 pb-2">

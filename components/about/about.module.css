@@ -1,0 +1,80 @@
+@font-face {
+  font-family: 'Reports Editorial';
+  src: url('/fonts/playfair-display-500.ttf') format('truetype');
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+}
+
+.page {
+  --about-green: #193d32;
+  --about-muted: #59645d;
+  --about-line: #d8d2c8;
+  color: var(--about-green);
+  background: var(--color-paper);
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: clamp(48px, 6vw, 88px) clamp(20px, 5vw, 72px) clamp(64px, 7vw, 100px);
+}
+.page :is(h1, h2, h3) { font-family: 'Reports Editorial', Georgia, 'Times New Roman', serif; font-weight: 500; }
+.page p { margin: 0; }
+.presentation { display: grid; grid-template-columns: minmax(0, 1.12fr) minmax(0, .88fr); gap: clamp(32px, 5vw, 72px); align-items: center; }
+.introduction { min-width: 0; }
+.introduction h1 { font-size: clamp(40px, 4.8vw, 66px); letter-spacing: -.035em; line-height: 1.13; margin: 0 0 26px; text-wrap: balance; }
+.introduction h1 span { display: block; }
+.education { font-size: 17px; line-height: 1.75; max-width: 38rem; }
+.education strong { font-weight: 600; }
+.prose { margin-top: 28px; }
+.prose p, .principles p, .closing p { font-size: 17px; line-height: 1.85; color: var(--about-muted); text-wrap: pretty; }
+.prose p + p { margin-top: 22px; }
+.profiles { display: flex; flex-wrap: wrap; gap: 22px 28px; padding: 0; margin: 34px 0 0; list-style: none; }
+.profiles li { min-width: 170px; }
+.profiles a { display: inline-flex; align-items: center; justify-content: center; gap: 12px; min-height: 50px; min-width: 174px; border: 1px solid var(--about-green); border-radius: 3px; padding: 11px 22px; color: var(--about-green); font-size: 16px; font-weight: 600; transition: background-color .18s ease, color .18s ease; }
+.profiles li:first-child a { background: var(--about-green); color: var(--color-paper); }
+.profiles a:hover { background: #e9ece5; }
+.profiles li:first-child a:hover { background: #254b3e; }
+.profiles a:focus-visible { outline: 2px solid var(--about-green); outline-offset: 5px; box-shadow: none; }
+.profiles svg { width: 21px; height: 21px; flex: none; }
+.profiles li > p { margin-top: 10px; color: var(--about-muted); font-size: 13px; line-height: 1.6; }
+.illustration { min-width: 0; align-self: stretch; display: flex; align-items: center; justify-content: center; }
+.illustration img { display: block; width: 100%; height: auto; max-height: 680px; object-fit: contain; }
+.thinking { margin-top: clamp(64px, 7vw, 104px); border-top: 1px solid var(--about-line); padding-top: 46px; }
+.page h2 { margin: 0; font-size: clamp(32px, 3.2vw, 43px); line-height: 1.2; letter-spacing: -.025em; }
+.principles { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); margin-top: 38px; }
+.principles > section { min-width: 0; padding: 0 34px; border-left: 1px solid var(--about-line); }
+.principles > section:first-child { border: 0; padding-left: 0; }
+.principles > section:last-child { padding-right: 0; }
+.principles h3 { font-size: clamp(23px, 2.1vw, 29px); line-height: 1.3; letter-spacing: -.02em; margin: 0 0 19px; text-wrap: balance; }
+.principles p { font-size: 16px; }
+.closing { margin-top: 60px; padding-top: 48px; border-top: 1px solid var(--about-line); }
+.closing > div { max-width: 760px; }
+.closing p { margin-top: 24px; }
+
+@media (max-width: 1023px) {
+  .presentation { grid-template-columns: 1fr; gap: 40px; }
+  .introduction { max-width: 700px; }
+  .introduction h1 { font-size: clamp(40px, 7vw, 62px); }
+  .illustration { width: min(100%, 500px); justify-self: center; }
+  .illustration img { max-height: 520px; }
+  .principles > section { padding: 0 22px; }
+}
+@media (max-width: 767px) {
+  .page { padding-top: 44px; }
+  .introduction h1 { font-size: clamp(37px, 8.8vw, 54px); margin-bottom: 24px; }
+  .education { font-size: 16px; }
+  .prose { margin-top: 25px; }
+  .prose p, .closing p { font-size: 16px; line-height: 1.85; }
+  .profiles { gap: 24px; }
+  .profiles li { min-width: 0; flex: 1 1 135px; }
+  .profiles a { min-width: 0; width: 100%; padding: 11px 14px; gap: 9px; }
+  .profiles li > p { font-size: 12px; }
+  .illustration { width: min(100%, 370px); }
+  .illustration img { max-height: 420px; }
+  .thinking { margin-top: 44px; padding-top: 34px; }
+  .principles { grid-template-columns: 1fr; margin-top: 28px; gap: 28px; }
+  .principles > section, .principles > section:first-child, .principles > section:last-child { padding: 0; border: 0; }
+  .principles > section + section { padding-top: 28px; border-top: 1px solid var(--about-line); }
+  .principles h3 { font-size: 27px; margin-bottom: 14px; }
+  .closing { margin-top: 38px; padding-top: 34px; }
+}
+@media (prefers-reduced-motion: reduce) { .profiles a { transition: none; } }
