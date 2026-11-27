@@ -22,7 +22,7 @@ const getCachedLegacyCapitalFlow = unstable_cache(
 );
 const getCachedEthCapitalFlow = unstable_cache(
   () => getEthAutomaticModel(),
-  ['dashboard-eth-capital-flows-durable-v4-review-recovery'],
+  ['dashboard-eth-capital-flows-durable-v5-strong-etag'],
   {revalidate:process.env.NODE_ENV === 'development' ? false : 3600,tags:[CAPITAL_FLOWS_CACHE_TAG]},
 );
 const getCachedEwjCapitalFlow = unstable_cache(
