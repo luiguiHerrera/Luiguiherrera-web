@@ -19,18 +19,18 @@ const copy = {
     continue: "Continuar",
     depthTitle: "Diagnóstico del inversionista",
     fullDescription: "Lectura más profunda de experiencia, conducta, liquidez, concentración y comprensión de productos.",
-    fullDuration: "15-20 minutos",
     fullTitle: "Diagnóstico completo",
     progress: "Progreso",
     question: "Pregunta",
     questionOf: "de",
     quickDescription: "Lectura inicial con preguntas adaptativas según productos marcados.",
-    quickDuration: "7-10 minutos",
     quickTitle: "Diagnóstico rápido",
     restart: "Volver al inicio del diagnóstico",
     seeResult: "Ver resultado",
     start: "Empezar",
     startDescription: "Explora capacidad financiera, tolerancia declarada, conocimientos y escenarios por separado.",
+    pace: "Responde a tu ritmo. Tómate el tiempo que necesites para pensar cada respuesta.",
+    educationalNotice: "Este ejercicio es educativo y orientativo. No determina ni certifica tu perfil inversor. Para una evaluación de idoneidad o conveniencia, acude a una entidad legalmente autorizada para prestar el servicio de inversión correspondiente.",
     storageNote: "Las respuestas viven solo en esta sesión del navegador. No se guardan, no se envían a servidores externos y al recargar se pierden.",
     selected: "Seleccionado",
     result: "Resultado educativo",
@@ -66,18 +66,18 @@ const copy = {
     continue: "Continue",
     depthTitle: "Investor diagnostic",
     fullDescription: "Deeper read across experience, behavior, liquidity, concentration and product understanding.",
-    fullDuration: "15-20 minutes",
     fullTitle: "Full diagnostic",
     progress: "Progress",
     question: "Question",
     questionOf: "of",
     quickDescription: "An initial read with adaptive questions according to selected products.",
-    quickDuration: "7-10 minutes",
     quickTitle: "Quick diagnostic",
     restart: "Return to the diagnostic start",
     seeResult: "View result",
     start: "Start",
     startDescription: "Explore financial capacity, stated tolerance, knowledge and scenarios separately.",
+    pace: "Answer at your own pace. Take the time you need to think through each response.",
+    educationalNotice: "This is an educational and indicative exercise. It does not determine or certify your investor profile. For a suitability or appropriateness assessment, consult a firm legally authorized to provide the relevant investment service.",
     storageNote: "Answers live only in this browser session. They are not stored, are not sent to external servers, and disappear on reload.",
     selected: "Selected",
     result: "Educational result",
@@ -396,11 +396,10 @@ function routeHref(locale: DiagnosticLocale, href: string) {
   return href;
 }
 
-function ModeCard({ active, description, duration, onClick, questions, title }: { active: boolean; description: string; duration: string; onClick: () => void; questions: string; title: string }) {
+function ModeCard({ active, description, onClick, questions, title }: { active: boolean; description: string; onClick: () => void; questions: string; title: string }) {
   return (
     <button type="button" onClick={onClick} className={`estate-card border p-5 text-left transition md:p-6 ${active ? "border-petrol bg-[#eef3f2]" : "border-line hover:border-ink"}`}>
-      <span className="text-xs font-semibold uppercase tracking-[0.16em] text-brass">{duration}</span>
-      <h3 className="mt-4 text-xl font-semibold text-ink">{title}</h3>
+      <h3 className="text-xl font-semibold text-ink">{title}</h3>
       <p className="mt-3 text-sm leading-6 text-muted">{description}</p>
       <p className="mt-5 border-t border-line pt-4 text-sm font-semibold text-ink">{questions}</p>
     </button>
@@ -421,14 +420,18 @@ function StartScreen({ locale, mode, setMode, start }: { locale: DiagnosticLocal
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-brass">{text.chooseDepth}</p>
           <h2 className="mt-3 text-2xl font-semibold leading-tight text-ink md:text-3xl">{text.depthTitle}</h2>
           <p className="mt-4 text-sm leading-7 text-muted">{text.startDescription}</p>
+          <p className="mt-4 text-sm leading-7 text-muted">{text.pace}</p>
         </div>
         <div className="grid gap-4 md:grid-cols-2">
-          <ModeCard active={mode === "quick"} description={text.quickDescription} duration={text.quickDuration} onClick={() => setMode("quick")} questions={countLabel("quick")} title={text.quickTitle} />
-          <ModeCard active={mode === "complete"} description={text.fullDescription} duration={text.fullDuration} onClick={() => setMode("complete")} questions={countLabel("complete")} title={text.fullTitle} />
+          <ModeCard active={mode === "quick"} description={text.quickDescription} onClick={() => setMode("quick")} questions={countLabel("quick")} title={text.quickTitle} />
+          <ModeCard active={mode === "complete"} description={text.fullDescription} onClick={() => setMode("complete")} questions={countLabel("complete")} title={text.fullTitle} />
         </div>
       </div>
       <div className="mt-8 flex flex-col gap-4 border-t border-line pt-6 md:flex-row md:items-center md:justify-between">
-        <p className="max-w-2xl text-sm leading-6 text-muted">{text.storageNote}</p>
+        <div className="max-w-3xl">
+          <p className="text-sm leading-6 text-ink">{text.educationalNotice}</p>
+          <p className="mt-3 text-xs leading-5 text-muted">{text.storageNote}</p>
+        </div>
         <button type="button" onClick={start} disabled={!canStart} className="w-fit border border-ink bg-ink px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-panel hover:text-ink disabled:cursor-not-allowed disabled:opacity-35">{text.start}</button>
       </div>
     </section>

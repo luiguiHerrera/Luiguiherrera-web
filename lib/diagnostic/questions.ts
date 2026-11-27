@@ -9,8 +9,8 @@ export const diagnosticQuestions: DiagnosticQuestion[] = [
     id: "capital_reference",
     block: "setup",
     mode: both,
-    prompt: t("Para que los escenarios sean realistas, elige una cantidad de referencia.", "To make scenarios realistic, choose a reference amount."),
-    helper: t("No guardamos este dato. Solo ajusta los ejemplos durante esta sesión.", "We do not store this. It only adjusts examples during this session."),
+    prompt: t("¿Qué cantidad estás considerando invertir?", "How much money are you considering investing?"),
+    helper: t("Elige una cifra aproximada del dinero que estás considerando invertir, no todo tu ahorro o patrimonio. Solo ajusta los escenarios de esta sesión; no se guarda. Si aún no tienes una cifra, elige ejemplos genéricos.", "Choose an approximate amount of the money you are considering investing, rather than your total savings or wealth. It only adjusts this session’s scenarios and is not stored. If you have not decided on an amount, choose generic examples."),
     options: [
       { id: "1000", label: t("1.000 €", "€1,000") },
       { id: "5000", label: t("5.000 €", "€5,000") },

@@ -21,6 +21,10 @@ for (const locale of ["es", "en"] as const) {
       assert.ok(html.includes(counts.base + " base · " + (locale === "es" ? "hasta " : "up to ") + counts.maximum));
     }
     assert.doesNotMatch(html, /29 (preguntas|base)|45-55 base/);
+    assert.doesNotMatch(html, /7-10|15-20/);
+    assert.match(html, locale === "es" ? /Responde a tu ritmo/ : /Answer at your own pace/);
+    assert.match(html, locale === "es" ? /No determina ni certifica tu perfil inversor/ : /does not determine or certify your investor profile/);
+    assert.match(html, locale === "es" ? /entidad legalmente autorizada/ : /firm legally authorized/);
   });
 
   for (const initialMode of ["quick", "complete"] as const) test(`${locale}/${initialMode}: direct entry has no result and cannot continue unanswered`, () => {
@@ -64,6 +68,18 @@ test("print action invokes the browser print dialog locally", () => {
   } finally {
     if (original) Object.defineProperty(globalThis, "window", original);
     else Reflect.deleteProperty(globalThis, "window");
+  }
+});
+
+test("both pages retain the four reading dimensions in server HTML inside a closed accessible disclosure", async () => {
+  for (const [Page, labels] of [[EsPage, ["Qué es", "Para qué sirve", "Límites", "Siguiente paso"]], [EnPage, ["What it is", "What it is for", "Limits", "Next step"]]] as const) {
+    const html = renderToStaticMarkup(await Page({ searchParams: Promise.resolve({}) }));
+    const disclosure = html.match(/<details[^>]*data-diagnostic-guide=""[^>]*>[\s\S]*?<\/details>/)?.[0];
+    assert.ok(disclosure, "guide content must be present without JavaScript");
+    assert.doesNotMatch(disclosure.match(/^<details[^>]*>/)![0], /\sopen(?:[\s=>])/);
+    assert.match(disclosure, /<summary/);
+    for (const label of labels) assert.ok(disclosure.includes(label));
+    assert.equal((disclosure.match(/<dd\b/g) ?? []).length, 4);
   }
 });
 

@@ -1,6 +1,6 @@
 import { DiagnosticFlow } from "@/components/diagnostic/DiagnosticFlow";
 import type { DiagnosticMode } from "@/lib/diagnostic/types";
-import { ReadingCard } from "@/components/seo/ReadingCard";
+import { DiagnosticReadingGuide } from "@/components/diagnostic/DiagnosticReadingGuide";
 import { InstitutionalHero } from "@/components/ui/InstitutionalHero";
 import { getRouteMetadata } from "@/lib/seo/site";
 
@@ -27,12 +27,7 @@ export default async function EnglishDiagnosticPage({ searchParams }: { searchPa
         title="Before reading the market, read the investor."
         variant="educational"
       />
-      <ReadingCard title="Reading card" items={[
-        { label: "What it is", value: "An educational investor diagnostic that organizes horizon, liquidity, experience, psychological tolerance, behavior and real capacity to take risk." },
-        { label: "What it is for", value: "It helps separate the desire to invest, emotional tolerance and financial capacity before making decisions." },
-        { label: "Limits", value: "It is not a regulatory suitability or appropriateness assessment and does not store personal answers." },
-        { label: "Next step", value: "Use the result as a conversation starting point and review protection, debt or market context as needed." },
-      ]} />
+      <DiagnosticReadingGuide locale="en" />
       <DiagnosticFlow key={`${initialMode ?? "none"}:${restartToken ?? ""}`} initialMode={initialMode} locale="en" />
     </div>
   );

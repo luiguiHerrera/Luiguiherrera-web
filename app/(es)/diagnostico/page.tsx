@@ -1,6 +1,6 @@
 import { DiagnosticFlow } from "@/components/diagnostic/DiagnosticFlow";
 import type { DiagnosticMode } from "@/lib/diagnostic/types";
-import { ReadingCard } from "@/components/seo/ReadingCard";
+import { DiagnosticReadingGuide } from "@/components/diagnostic/DiagnosticReadingGuide";
 import { InstitutionalHero } from "@/components/ui/InstitutionalHero";
 import { getRouteMetadata } from "@/lib/seo/site";
 
@@ -25,12 +25,7 @@ export default async function DiagnosticoPage({ searchParams }: { searchParams?:
         title="Antes de mirar el mercado, conviene mirar al inversionista."
         variant="educational"
       />
-      <ReadingCard title="Ficha de lectura" items={[
-        { label: "Qué es", value: "Un diagnóstico educativo del inversionista que ordena horizonte, liquidez, experiencia, tolerancia psicológica, comportamiento y capacidad real para asumir riesgo." },
-        { label: "Para qué sirve", value: "Sirve para diferenciar deseo de invertir, tolerancia emocional y capacidad financiera antes de tomar decisiones." },
-        { label: "Límites", value: "No es una evaluación regulatoria de idoneidad o conveniencia y no guarda respuestas personales." },
-        { label: "Siguiente paso", value: "Usar el resultado como punto de conversación y revisar protección, deudas o mercado según el caso." },
-      ]} />
+      <DiagnosticReadingGuide />
       <DiagnosticFlow key={`${initialMode ?? "none"}:${restartToken ?? ""}`} initialMode={initialMode} />
     </div>
   );
