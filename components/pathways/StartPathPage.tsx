@@ -2,7 +2,6 @@ import Image from "next/image";
 import Link from "next/link";
 import localFont from "next/font/local";
 import { PersonalFinanceGuidedRoute } from "./PersonalFinanceGuidedRoute";
-import { PersonalFinanceHeroCta } from "./PersonalFinanceHeroCta";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { es } from "@/lib/i18n/dictionaries/es";
 import { en } from "@/lib/i18n/dictionaries/en";
@@ -41,7 +40,6 @@ export function StartPathPage({ content }: { content: StartPathContent }) {
           <h1>{content.hero.title}</h1>
           <p className={styles.heroSupport}>{content.hero.subtitle}</p>
           <div className={styles.heroFoot}>
-            <PersonalFinanceHeroCta label={content.hero.primaryCta} />
             <p className={styles.microcopy}>{content.hero.privacy}</p>
           </div>
         </div>
