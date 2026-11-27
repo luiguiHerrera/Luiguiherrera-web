@@ -151,6 +151,7 @@
 }
 @media (max-width:479px) {
   .page { padding-inline:20px; }
+  .heroLandscape { right:-20px; }
   .principles { grid-template-columns:1fr; gap:21px; }
   .principles h3 { font-size:1.55rem; }
   .sectionHeading { align-items:flex-start; }
@@ -165,5 +166,5 @@
   .research { color:var(--method-green); background:transparent; margin:0; padding-inline:0; }
   .research :is(p,li) { color:var(--method-green); }
   .section,.research { break-inside:auto; }
-  .sectionHeading,summary { break-after:avoid; }
+  .sectionHeading,.module>summary { break-after:avoid; }
 }
