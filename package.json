@@ -41,6 +41,9 @@
     "typescript": "5.6.3"
   },
   "overrides": {
-    "braces": "$braces"
+    "braces": "$braces",
+    "@vercel/cli-config": {
+      "zod": "4.6.7"
+    }
   }
 }
