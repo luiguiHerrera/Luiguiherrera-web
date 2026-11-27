@@ -131,8 +131,8 @@ export default function PriceParticipationCard({ input, locale = "es", asOf }: {
         <div className={overviewStyles.item} data-overview-item="ramo"><dt className={styles.metricLabel}>{copy.ramo}<Help label={copy.ramo} text={help.ramo} locale={locale} /></dt><dd className={overviewStyles.value} data-price-tone={view?.breadth?.last?.oscillator != null && view.breadth.last.oscillator < 0 ? "negative" : undefined}>{number(view?.breadth?.last?.oscillator, locale, 1, true)}</dd><dd className={overviewStyles.detail}>{copy.oscillatorPoints}</dd></div>
         <div className={overviewStyles.item} data-overview-item="rasi"><dt className={styles.metricLabel}>{copy.rasi}<Help label={copy.rasi} text={help.rasi} locale={locale} /></dt><dd className={overviewStyles.value} data-price-tone={view?.breadth?.last?.summation != null && view.breadth.last.summation < 0 ? "negative" : undefined}>{number(view?.breadth?.last?.summation, locale, 1, true)}</dd><dd className={overviewStyles.detail}>{copy.summationPoints}</dd></div>
       </dl>
-      <p className={styles.notice} data-participation-reading={reading.id}>{PARTICIPATION_READINGS[reading.id][locale === "en" ? 1 : 0]}</p>
     </div>
+    <p className={overviewStyles.detail} data-participation-reading={reading.id}>{PARTICIPATION_READINGS[reading.id][locale === "en" ? 1 : 0]}</p>
     {!view ? <p className={styles.notice} role="status">{copy.noData}</p> : null}
     {view?.refreshStatus === "retained" ? <p className={styles.notice} role="status">{copy.retained}</p> : null}
     {lagged ? <p className={styles.notice}>{copy.lag} <span>{copy.priceThrough}: {date(view?.priceAvailableThrough, locale)} · {copy.breadthThrough}: {date(view?.breadthAvailableThrough, locale)}.</span></p> : null}
