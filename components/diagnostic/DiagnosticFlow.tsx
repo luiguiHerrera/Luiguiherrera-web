@@ -411,6 +411,7 @@ function StartScreen({ locale, mode, setMode, start }: { locale: DiagnosticLocal
   const canStart = Boolean(mode);
   const countLabel = (depth: DiagnosticMode) => {
     const counts = getQuestionCounts(depth);
+    if (depth === "quick") return locale === "es" ? counts.base + " preguntas" : counts.base + " questions";
     return locale === "es" ? counts.base + " base · hasta " + counts.maximum + " con adaptativas" : counts.base + " base · up to " + counts.maximum + " with adaptive questions";
   };
   return (
