@@ -27,10 +27,10 @@ const entryways = [
     description: "Risk, horizon and capacity.",
   },
   {
-    title: "Does this strategy make sense?",
+    title: "What evidence supports this idea?",
     label: "03",
     href: "/en/research",
-    description: "Reproducible models and backtests.",
+    description: "Hypotheses tested with academic rigor.",
   },
   {
     title: "What financial decision am I weighing?",
@@ -73,7 +73,7 @@ export const metadata = getRouteMetadata("/en");
 
 export default async function EnglishHomePage() {
   await connection();
-  const { regimeSummary, sectorRotation, vix, vixTermStructure, marketContext } = await getHomeDashboardPreviewData();
+  const { financialEnvironment, vix, vixTermStructure, marketContext } = await getHomeDashboardPreviewData();
 
   return (
     <div data-market-snapshot={marketContext?.id} data-market-captured-at={marketContext?.capturedAt}>
@@ -136,7 +136,7 @@ export default async function EnglishHomePage() {
 
       <section className="patrimonial-band border-b border-line" data-home-philosophy>
         <div className="mx-auto grid max-w-7xl gap-5 px-4 py-7 md:grid-cols-[0.35fr_1fr_0.95fr] md:items-start md:px-5 md:py-8">
-          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-petrol">Our philosophy</p>
+          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-petrol">My philosophy</p>
           <h2 className="border-l-2 border-brass/55 pl-5 text-lg font-medium leading-7 text-ink md:text-2xl md:leading-8">
             Markets change quickly. Risk does too. The edge is organizing information before deciding.
           </h2>
@@ -153,8 +153,8 @@ export default async function EnglishHomePage() {
 
       <HomeDashboardPreview
         locale="en"
-        regimeSummary={regimeSummary}
-        sectorRotation={sectorRotation}
+        financialEnvironment={financialEnvironment}
+        flows={marketContext?.flows}
         vix={vix}
         vixTermStructure={vixTermStructure}
       />

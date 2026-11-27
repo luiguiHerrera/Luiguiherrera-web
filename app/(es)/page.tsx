@@ -27,10 +27,10 @@ const entryways = [
     description: "Riesgo, horizonte y capacidad.",
   },
   {
-    title: "¿Tiene sentido esta estrategia?",
+    title: "¿Qué respalda esta idea?",
     label: "03",
     href: "/investigacion",
-    description: "Modelos y backtests reproducibles.",
+    description: "Verificación de hipótesis con rigor académico.",
   },
   {
     title: "¿Qué decisión financiera estoy evaluando?",
@@ -73,7 +73,7 @@ export const metadata = getRouteMetadata("/");
 
 export default async function Home() {
   await connection();
-  const { regimeSummary, sectorRotation, vix, vixTermStructure, marketContext } = await getHomeDashboardPreviewData();
+  const { financialEnvironment, vix, vixTermStructure, marketContext } = await getHomeDashboardPreviewData();
 
   return (
     <div data-market-snapshot={marketContext?.id} data-market-captured-at={marketContext?.capturedAt}>
@@ -133,7 +133,7 @@ export default async function Home() {
 
       <section className="patrimonial-band border-b border-line" data-home-philosophy>
         <div className="mx-auto grid max-w-7xl gap-5 px-4 py-7 md:grid-cols-[0.35fr_1fr_0.95fr] md:items-start md:px-5 md:py-8">
-          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-petrol">Nuestra filosofía</p>
+          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-petrol">Mi filosofía</p>
           <h2 className="border-l-2 border-brass/55 pl-5 text-lg font-medium leading-7 text-ink md:text-2xl md:leading-8">
             El mercado cambia rápido. El riesgo también. La ventaja está en ordenar la información antes de decidir.
           </h2>
@@ -150,8 +150,8 @@ export default async function Home() {
 
       <HomeDashboardPreview
         locale="es"
-        regimeSummary={regimeSummary}
-        sectorRotation={sectorRotation}
+        financialEnvironment={financialEnvironment}
+        flows={marketContext?.flows}
         vix={vix}
         vixTermStructure={vixTermStructure}
       />
