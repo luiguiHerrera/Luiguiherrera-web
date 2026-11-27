@@ -125,6 +125,7 @@ export type PaiMainWeakness =
   | "liquidity"
   | "expensive_debt"
   | "income_fragility"
+  | "low_surplus"
   | "low_emergency_fund"
   | "unclear_horizon"
   | "unrealistic_expectations"
@@ -149,9 +150,16 @@ export type PaiReadiness = {
 
 export type DiagnosticResult = {
   mode: DiagnosticMode;
-  profile: DiagnosticProfile;
   declaredProfile: DiagnosticProfile;
+  declaredLoss: string;
+  declaredToleranceScore: number;
   pressureProfile: DiagnosticProfile;
+  pressureScore: number;
+  pressureRelation: "lower" | "equal" | "higher";
+  constraints: DiagnosticConstraint[];
+  productChecks: DiagnosticProductCheck[];
+  methodologyNote: string;
+  experience: { label: string; note: string; score: number };
   summary: string;
   pressureSummary: string;
   expectationTensions: string[];
@@ -181,4 +189,23 @@ export type DiagnosticResult = {
   selectedProducts: DiagnosticProduct[];
   paiReadiness: PaiReadiness;
   disclaimer: string;
+};
+
+export type DiagnosticConstraint = {
+  id: string;
+  scope: "general" | "capital" | "product" | "learning";
+  severity: "attention" | "priority";
+  label: string;
+  note: string;
+  sources: string[];
+};
+
+export type DiagnosticProductCheck = {
+  product: DiagnosticProduct;
+  label: string;
+  complexity: number;
+  understanding: "supported" | "gap" | "uncertain" | "not_assessed";
+  questionId?: string;
+  response?: string;
+  note: string;
 };

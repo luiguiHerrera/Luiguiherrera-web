@@ -1,15 +1,15 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import { DisclaimerBox } from "@/components/ui/DisclaimerBox";
 import { DiagnosticPrintableReport } from "@/components/diagnostic/DiagnosticPrintableReport";
 import { DiagnosticReportActions } from "@/components/diagnostic/DiagnosticReportActions";
 import { ProgressBar } from "@/components/ui/ProgressBar";
-import { RiskPill } from "@/components/ui/RiskPill";
-import { getQuestionsForMode } from "@/lib/diagnostic/questions";
+import { diagnosticProgress, isAnswered, updateDiagnosticAnswer, validateDiagnosticAnswers } from "@/lib/diagnostic/answers";
+import { getQuestionCounts, getQuestionsForMode } from "@/lib/diagnostic/questions";
 import { scoreDiagnostic } from "@/lib/diagnostic/scoring";
-import { DIAGNOSTIC_PROFILE_LABELS, DIAGNOSTIC_PROFILES } from "@/lib/diagnostic/types";
+import { DIAGNOSTIC_PROFILE_LABELS } from "@/lib/diagnostic/types";
 import type { DiagnosticAnswers, DiagnosticFlag, DiagnosticLocale, DiagnosticMode, DiagnosticQuestion, DiagnosticScoreKey, PaiDimension, PaiMainWeakness, PaiStage, ReadinessLight } from "@/lib/diagnostic/types";
 
 const copy = {
@@ -20,29 +20,32 @@ const copy = {
     depthTitle: "Diagnóstico del inversionista",
     fullDescription: "Lectura más profunda de experiencia, conducta, liquidez, concentración y comprensión de productos.",
     fullDuration: "15-20 minutos",
-    fullQuestions: "45-55 base + adaptativas",
     fullTitle: "Diagnóstico completo",
     progress: "Progreso",
     question: "Pregunta",
     questionOf: "de",
-    quickDescription: "29 preguntas base más adaptativas según productos marcados.",
+    quickDescription: "Lectura inicial con preguntas adaptativas según productos marcados.",
     quickDuration: "7-10 minutos",
-    quickQuestions: "29 + adaptativas",
     quickTitle: "Diagnóstico rápido",
     restart: "Volver al inicio del diagnóstico",
     seeResult: "Ver resultado",
     start: "Empezar",
-    startDescription: "Perfil, expectativas y capacidad real antes de tomar riesgo. Tu perfil declarado importa, pero tu perfil bajo presión pesa más.",
+    startDescription: "Explora capacidad financiera, tolerancia declarada, conocimientos y escenarios por separado.",
     storageNote: "Las respuestas viven solo en esta sesión del navegador. No se guardan, no se envían a servidores externos y al recargar se pierden.",
     selected: "Seleccionado",
     result: "Resultado educativo",
-    declared: "Perfil declarado",
-    pressure: "Perfil bajo presión",
+    readings: "Capacidad, tolerancia y preparación",
+    review: "Revisar mis respuestas",
+    experience: "Experiencia declarada",
+    limits: "Limitaciones identificadas",
+    products: "Comprobaciones por producto",
+    declared: "Tolerancia declarada",
+    pressure: "Respuestas a escenarios hipotéticos",
     expectation: "Expectativas y tensiones",
     loss: "Capacidad de pérdida",
-    knowledge: "Conocimiento validado",
+    knowledge: "Conceptos comprobados",
     complexity: "Complejidad a revisar",
-    complexityNote: "La lectura compara productos marcados con comprensión validada, experiencia y conducta bajo presión.",
+    complexityNote: "La selección indica conocimiento o interés, no necesariamente uso. Consulta cada comprobación específica.",
     alerts: "Alertas principales",
     route: "Ruta sugerida dentro de la web",
     scores: "Mapa interno",
@@ -64,29 +67,32 @@ const copy = {
     depthTitle: "Investor diagnostic",
     fullDescription: "Deeper read across experience, behavior, liquidity, concentration and product understanding.",
     fullDuration: "15-20 minutes",
-    fullQuestions: "45-55 base + adaptive",
     fullTitle: "Full diagnostic",
     progress: "Progress",
     question: "Question",
     questionOf: "of",
-    quickDescription: "29 base questions plus adaptive questions depending on selected products.",
+    quickDescription: "An initial read with adaptive questions according to selected products.",
     quickDuration: "7-10 minutes",
-    quickQuestions: "29 + adaptive",
     quickTitle: "Quick diagnostic",
     restart: "Return to the diagnostic start",
     seeResult: "View result",
     start: "Start",
-    startDescription: "Profile, expectations and real capacity before taking risk. Your declared profile matters, but your profile under pressure matters more.",
+    startDescription: "Explore financial capacity, stated tolerance, knowledge and scenarios separately.",
     storageNote: "Answers live only in this browser session. They are not stored, are not sent to external servers, and disappear on reload.",
     selected: "Selected",
     result: "Educational result",
-    declared: "Declared profile",
-    pressure: "Profile under pressure",
+    readings: "Capacity, tolerance and readiness",
+    review: "Review my answers",
+    experience: "Self-reported experience",
+    limits: "Limitations identified",
+    products: "Product-specific checks",
+    declared: "Stated tolerance",
+    pressure: "Hypothetical scenario responses",
     expectation: "Expectations and tensions",
     loss: "Loss capacity",
-    knowledge: "Validated knowledge",
+    knowledge: "Concepts checked",
     complexity: "Complexity to review",
-    complexityNote: "This compares selected products with validated understanding, experience and behavior under pressure.",
+    complexityNote: "Selection indicates knowledge or interest, not necessarily use. Review each specific check.",
     alerts: "Main alerts",
     route: "Suggested path inside the website",
     scores: "Internal map",
@@ -115,8 +121,8 @@ const scoreLabels: Record<DiagnosticScoreKey, { es: string; en: string }> = {
   patience: { es: "Paciencia", en: "Patience" },
   fomoSensitivity: { es: "Sensibilidad FOMO", en: "FOMO sensitivity" },
   euphoriaRisk: { es: "Riesgo de euforia", en: "Euphoria risk" },
-  knowledgeValidated: { es: "Conocimiento validado", en: "Validated knowledge" },
-  experienceReal: { es: "Experiencia real", en: "Real experience" },
+  knowledgeValidated: { es: "Conceptos comprobados", en: "Concepts checked" },
+  experienceReal: { es: "Experiencia declarada", en: "Self-reported experience" },
   expectationRealism: { es: "Realismo de expectativas", en: "Expectation realism" },
   consistency: { es: "Consistencia", en: "Consistency" },
   productComplexity: { es: "Complejidad de productos", en: "Product complexity" },
@@ -132,16 +138,16 @@ const scoreDescriptions: Record<DiagnosticScoreKey, { es: string; en: string }> 
   financialCapacity: { es: "Margen financiero para asumir pérdidas sin afectar pagos importantes.", en: "Financial margin to absorb losses without affecting important payments." },
   liquidityStrength: { es: "Capacidad de cubrir imprevistos sin vender inversiones en mal momento.", en: "Ability to handle surprises without selling investments at a bad time." },
   timeHorizon: { es: "Tiempo durante el cual el dinero puede permanecer invertido sin necesidad cercana.", en: "How long the money can remain invested without near-term need." },
-  emotionalTolerance: { es: "Probable reacción ante caídas visibles con dinero real.", en: "Likely reaction to visible losses with real money." },
+  emotionalTolerance: { es: "Disposición a soportar caídas que declaras en la pregunta directa.", en: "Willingness to tolerate losses as stated in the direct question." },
   patience: { es: "Capacidad de sostener un plan durante periodos lentos o negativos.", en: "Ability to hold a plan through slow or negative periods." },
   fomoSensitivity: { es: "Tendencia a cambiar de plan por comparación o miedo a quedarse por fuera.", en: "Tendency to change plans due to comparison or fear of missing out." },
   euphoriaRisk: { es: "Tendencia a aumentar riesgo después de ganancias rápidas.", en: "Tendency to increase risk after quick gains." },
   knowledgeValidated: { es: "Comprensión demostrada sobre productos y riesgos, no solo declarada.", en: "Demonstrated understanding of products and risks, not only declared." },
   experienceReal: { es: "Contacto previo con inversiones reales y caídas vividas.", en: "Previous contact with real investments and lived drawdowns." },
   expectationRealism: { es: "Coherencia entre retorno esperado, pérdida tolerada, liquidez y horizonte.", en: "Consistency between expected return, tolerated loss, liquidity and horizon." },
-  consistency: { es: "Coherencia entre respuestas declaradas y comportamiento bajo presión.", en: "Alignment between stated answers and behavior under pressure." },
-  productComplexity: { es: "Relación entre productos marcados, comprensión y experiencia.", en: "Relationship between selected products, understanding and experience." },
-  overconfidence: { es: "Diferencia entre confianza declarada y comprensión validada.", en: "Gap between stated confidence and validated understanding." },
+  consistency: { es: "Patrones de respuestas sobre reglas y escenarios; no conducta observada.", en: "Response patterns about rules and scenarios; not observed behavior." },
+  productComplexity: { es: "Mayor complejidad entre los productos marcados; no demuestra comprensión.", en: "Highest complexity among selected products; this does not demonstrate understanding." },
+  overconfidence: { es: "Señales heurísticas de confianza excesiva en las respuestas; no es un rasgo medido.", en: "Heuristic signs of excessive confidence in the answers; this is not a measured trait." },
   calibration: { es: "Capacidad de reconocer cuándo algo no está claro.", en: "Ability to recognize when something is not clear." },
 };
 
@@ -182,6 +188,10 @@ const translateResult: Record<string, string> = {
   "Básico": "Basic",
   "Intermedio": "Intermediate",
   "Validado alto": "High validated",
+  "Alto en estas preguntas": "High on these questions",
+  "Básica declarada": "Basic self-reported",
+  "Intermedia declarada": "Intermediate self-reported",
+  "Amplia declarada": "Extensive self-reported",
   "Básica": "Basic",
   "Intermedia": "Intermediate",
   "Alta": "High",
@@ -237,6 +247,7 @@ const paiWeaknessLabels: Record<PaiMainWeakness, { es: string; en: string }> = {
   liquidity: { es: "liquidez", en: "liquidity" },
   expensive_debt: { es: "deuda cara", en: "high-cost debt" },
   income_fragility: { es: "ingresos frágiles", en: "income fragility" },
+  low_surplus: { es: "excedente insuficiente", en: "insufficient surplus" },
   low_emergency_fund: { es: "fondo de emergencia bajo", en: "low emergency fund" },
   unclear_horizon: { es: "horizonte poco claro", en: "unclear horizon" },
   unrealistic_expectations: { es: "expectativas exigentes", en: "demanding expectations" },
@@ -320,19 +331,19 @@ function renderQuestionText(question: DiagnosticQuestion, locale: DiagnosticLoca
 const genericQuestionHints = {
   es: [
     "Responde con lo que harías normalmente, no con lo que sonaría perfecto.",
-    "Elige la opción más cercana a tu reacción real.",
-    "No hay una respuesta ideal; la utilidad está en responder con honestidad.",
+    "Elige la opción más cercana a lo que crees que harías.",
+    "La utilidad está en describir tu situación y reconocer lo que no sabes.",
     "Piensa en tu comportamiento habitual, no en una versión perfecta de ti.",
-    "La respuesta sirve para conocerte mejor, no para aprobar un examen.",
+    "La respuesta aporta una referencia educativa, no una autorización para operar.",
     "Elige la opción que más se parezca a ti en una situación real.",
     "Responde con calma; buscamos aproximar tu reacción, no juzgarla.",
   ],
   en: [
     "Answer with what you would usually do, not with what sounds perfect.",
-    "Choose the option closest to your real reaction.",
-    "There is no ideal answer; the value is in answering honestly.",
+    "Choose the option closest to what you think you would do.",
+    "The value is in describing your situation and recognizing what you do not know.",
     "Think about your usual behavior, not a perfect version of yourself.",
-    "This is here to help you understand yourself, not to pass an exam.",
+    "The answer provides an educational reference, not authorization to trade.",
     "Choose the option that best resembles you in a real situation.",
     "Answer calmly; the goal is to approximate your reaction, not judge it.",
   ],
@@ -352,7 +363,7 @@ function hintIndex(questionId: string) {
 }
 
 function getQuestionHint(question: DiagnosticQuestion, locale: DiagnosticLocale) {
-  if (question.id === "capital_reference") return localText(locale, question.helper);
+  if (question.id === "capital_reference" || question.id === "products_known" || question.block === "financial") return localText(locale, question.helper);
   if (questionHasUnsureOption(question)) {
     return locale === "es"
       ? "Si no lo tienes claro, elegir “No estoy seguro” también es una respuesta útil."
@@ -371,13 +382,11 @@ function resultText(locale: DiagnosticLocale, value: string) {
 }
 
 function complexityText(locale: DiagnosticLocale, result: ReturnType<typeof scoreDiagnostic>) {
-  if (result.flags.includes("product_mismatch")) return complexityLabels.excessive[locale];
+  if (!result.selectedProducts.length) return locale === "es" ? "Sin selección" : "No selection";
+  if (result.flags.includes("product_mismatch")) return locale === "es" ? "Brecha por producto" : "Product-specific gap";
   return complexityLabels[result.complexity.band]?.[locale] ?? resultText(locale, result.complexity.band);
 }
 
-function isConservativePressureProfile(profile: ReturnType<typeof scoreDiagnostic>["pressureProfile"]) {
-  return profile === DIAGNOSTIC_PROFILES[0] || profile === DIAGNOSTIC_PROFILES[1];
-}
 
 function routeHref(locale: DiagnosticLocale, href: string) {
   if (locale === "es") return href;
@@ -402,6 +411,10 @@ function ModeCard({ active, description, duration, onClick, questions, title }: 
 function StartScreen({ locale, mode, setMode, start }: { locale: DiagnosticLocale; mode: DiagnosticMode | undefined; setMode: (mode: DiagnosticMode) => void; start: () => void }) {
   const text = copy[locale];
   const canStart = Boolean(mode);
+  const countLabel = (depth: DiagnosticMode) => {
+    const counts = getQuestionCounts(depth);
+    return locale === "es" ? counts.base + " base · hasta " + counts.maximum + " con adaptativas" : counts.base + " base · up to " + counts.maximum + " with adaptive questions";
+  };
   return (
     <section className="warm-section border border-line p-5 md:p-7">
       <div className="grid gap-8 lg:grid-cols-[0.74fr_1.26fr] lg:items-start">
@@ -411,8 +424,8 @@ function StartScreen({ locale, mode, setMode, start }: { locale: DiagnosticLocal
           <p className="mt-4 text-sm leading-7 text-muted">{text.startDescription}</p>
         </div>
         <div className="grid gap-4 md:grid-cols-2">
-          <ModeCard active={mode === "quick"} description={text.quickDescription} duration={text.quickDuration} onClick={() => setMode("quick")} questions={text.quickQuestions} title={text.quickTitle} />
-          <ModeCard active={mode === "complete"} description={text.fullDescription} duration={text.fullDuration} onClick={() => setMode("complete")} questions={text.fullQuestions} title={text.fullTitle} />
+          <ModeCard active={mode === "quick"} description={text.quickDescription} duration={text.quickDuration} onClick={() => setMode("quick")} questions={countLabel("quick")} title={text.quickTitle} />
+          <ModeCard active={mode === "complete"} description={text.fullDescription} duration={text.fullDuration} onClick={() => setMode("complete")} questions={countLabel("complete")} title={text.fullTitle} />
         </div>
       </div>
       <div className="mt-8 flex flex-col gap-4 border-t border-line pt-6 md:flex-row md:items-center md:justify-between">
@@ -423,9 +436,6 @@ function StartScreen({ locale, mode, setMode, start }: { locale: DiagnosticLocal
   );
 }
 
-function isAnswered(answer: string | string[] | undefined) {
-  return Array.isArray(answer) ? answer.length > 0 : Boolean(answer);
-}
 
 function QuestionScreen({ answer, answers, currentIndex, locale, mode, onAnswer, onBack, onNext, question, total }: {
   answer: string | string[] | undefined;
@@ -440,12 +450,17 @@ function QuestionScreen({ answer, answers, currentIndex, locale, mode, onAnswer,
   total: number;
 }) {
   const text = copy[locale];
-  const answered = isAnswered(answer);
-  const progress = ((currentIndex + (answered ? 1 : 0)) / total) * 100;
+  const answered = isAnswered(question, answer);
+  const progress = diagnosticProgress(answers, mode).percent;
   const selectedIds = Array.isArray(answer) ? answer : answer ? [answer] : [];
+  const heading = useRef<HTMLHeadingElement>(null);
+  useEffect(() => {
+    heading.current?.focus({ preventScroll: true });
+    heading.current?.scrollIntoView({ block: "start", behavior: "auto" });
+  }, [question.id]);
 
   return (
-    <section className="technical-surface border border-petrol/20 p-5 md:p-8">
+    <section className="technical-surface border border-petrol/20 p-5 md:p-8" data-diagnostic-question={question.id}>
       <div className="grid gap-6 lg:grid-cols-[0.72fr_0.28fr] lg:items-start">
         <div>
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-brass">{mode === "quick" ? text.quickTitle : text.fullTitle}</p>
@@ -454,11 +469,12 @@ function QuestionScreen({ answer, answers, currentIndex, locale, mode, onAnswer,
         <div>
           <div className="mb-2 flex justify-between text-xs text-muted"><span>{text.progress}</span><span>{Math.round(progress)}%</span></div>
           <ProgressBar value={progress} />
+          <p className="mt-2 text-xs leading-5 text-muted">{locale === "es" ? "El total se ajusta a los productos seleccionados." : "The total adjusts to the products selected."}</p>
         </div>
       </div>
 
       <div className="mt-8 max-w-4xl">
-        <h2 className="text-2xl font-semibold leading-tight text-ink md:text-4xl">{renderQuestionText(question, locale, answers, localText(locale, question.prompt))}</h2>
+        <h2 ref={heading} tabIndex={-1} className="scroll-mt-24 text-2xl font-semibold leading-tight text-ink md:text-4xl">{renderQuestionText(question, locale, answers, localText(locale, question.prompt))}</h2>
         <p className="mt-5 max-w-2xl text-base leading-7 text-muted">{getQuestionHint(question, locale)}</p>
       </div>
 
@@ -466,7 +482,7 @@ function QuestionScreen({ answer, answers, currentIndex, locale, mode, onAnswer,
         {question.options.map((option, index) => {
           const active = selectedIds.includes(option.id);
           return (
-            <button key={option.id} type="button" onClick={() => onAnswer(question, option.id)} className={`group grid gap-2 border px-5 py-4 text-left transition md:grid-cols-[2.25rem_1fr] md:items-start ${active ? "border-petrol bg-[#eef3f2] text-ink" : "border-line bg-panelSoft text-muted hover:border-ink hover:text-ink"}`}>
+            <button key={option.id} type="button" aria-pressed={active} data-option-id={option.id} onClick={() => onAnswer(question, option.id)} className={`group grid gap-2 border px-5 py-4 text-left transition md:grid-cols-[2.25rem_1fr] md:items-start ${active ? "border-petrol bg-[#eef3f2] text-ink" : "border-line bg-panelSoft text-muted hover:border-ink hover:text-ink"}`}>
               <span className={`flex h-8 w-8 items-center justify-center border text-sm font-semibold ${active ? "border-petrol text-petrol" : "border-line text-muted group-hover:border-ink group-hover:text-ink"}`}>
                 {question.multi && active ? "✓" : index + 1}
               </span>
@@ -509,10 +525,15 @@ function ScoreBar({ description, label, value }: { description: string; label: s
   );
 }
 
-function ResultScreen({ answers, locale, mode, restart }: { answers: DiagnosticAnswers; locale: DiagnosticLocale; mode: DiagnosticMode; restart: () => void }) {
+function ResultScreen({ answers, locale, mode, restart, review }: { answers: DiagnosticAnswers; locale: DiagnosticLocale; mode: DiagnosticMode; restart: () => void; review: () => void }) {
   const result = useMemo(() => scoreDiagnostic(answers, mode, locale), [answers, locale, mode]);
   const generatedAt = useMemo(() => new Date(), []);
   const text = copy[locale];
+  const heading = useRef<HTMLHeadingElement>(null);
+  useEffect(() => {
+    heading.current?.focus({ preventScroll: true });
+    heading.current?.scrollIntoView({ block: "start", behavior: "auto" });
+  }, []);
   const scoreEntries = Object.entries(result.scores) as Array<[DiagnosticScoreKey, number]>;
   const paiMatrix: Array<[PaiDimension, number]> = [
     ["producir", result.paiReadiness.producirScore],
@@ -522,15 +543,15 @@ function ResultScreen({ answers, locale, mode, restart }: { answers: DiagnosticA
 
   return (
     <>
-    <div className="no-print grid gap-6 xl:grid-cols-[1.05fr_0.95fr]">
+    <div className="no-print grid gap-6 xl:grid-cols-[1.05fr_0.95fr]" data-diagnostic-result={mode}>
       <section className="border border-line bg-panel p-5 md:p-7">
         <div className="flex flex-col gap-5 border-b border-line pb-6 md:flex-row md:items-start md:justify-between">
           <div>
             <p className="text-xs font-semibold uppercase tracking-[0.18em] text-brass">{text.result}</p>
-            <h2 className="mt-3 text-2xl font-semibold leading-tight text-ink md:text-3xl">{resultText(locale, result.profile)}</h2>
+            <h2 ref={heading} tabIndex={-1} className="mt-3 scroll-mt-24 text-2xl font-semibold leading-tight text-ink md:text-3xl">{text.readings}</h2>
             <p className="mt-4 max-w-2xl text-sm leading-7 text-muted">{result.summary}</p>
+            <p className="mt-3 max-w-2xl text-sm leading-7 text-muted">{result.methodologyNote}</p>
           </div>
-          <RiskPill label={resultText(locale, result.pressureProfile)} tone={isConservativePressureProfile(result.pressureProfile) ? "medium" : "low"} />
         </div>
 
         <div className="mt-6 border border-line bg-panelSoft p-5">
@@ -539,7 +560,7 @@ function ResultScreen({ answers, locale, mode, restart }: { answers: DiagnosticA
               <h3 className="text-xl font-semibold text-ink">{text.pai}</h3>
               <p className="mt-2 max-w-3xl text-sm leading-6 text-muted">{text.paiPrudence}</p>
             </div>
-            <span className={`w-fit border px-3 py-1.5 text-xs font-semibold uppercase tracking-[0.12em] ${paiLightClass(result.paiReadiness.light)}`}>
+            <span data-readiness-light={result.paiReadiness.light} className={`w-fit border px-3 py-1.5 text-xs font-semibold uppercase tracking-[0.12em] ${paiLightClass(result.paiReadiness.light)}`}>
               {paiLightLabels[result.paiReadiness.light][locale]}
             </span>
           </div>
@@ -568,7 +589,7 @@ function ResultScreen({ answers, locale, mode, restart }: { answers: DiagnosticA
                   <p className="text-sm font-semibold text-muted">{score}</p>
                 </div>
                 <div className="mt-3 h-1.5 bg-panelSoft"><div className="h-1.5 bg-[#6f8f7b]" style={{ width: `${score}%` }} /></div>
-                <p className="mt-3 text-sm font-semibold text-muted">{paiStatus(score, locale)}</p>
+                <p className="mt-3 text-sm font-semibold text-muted">{dimension === "invertir" && result.paiReadiness.light !== "green" ? (locale === "es" ? "Consulta las limitaciones; el índice no las elimina." : "Review the limitations; the index does not remove them.") : paiStatus(score, locale)}</p>
               </div>
             ))}
           </div>
@@ -581,16 +602,40 @@ function ResultScreen({ answers, locale, mode, restart }: { answers: DiagnosticA
         </div>
 
         <div className="mt-6 grid gap-4 md:grid-cols-3">
-          <div className="border border-line bg-panelSoft p-4"><p className="text-xs uppercase tracking-[0.14em] text-muted">{text.declared}</p><p className="mt-2 text-xl font-semibold text-ink">{resultText(locale, result.declaredProfile)}</p></div>
+          <div className="border border-line bg-panelSoft p-4"><p className="text-xs uppercase tracking-[0.14em] text-muted">{text.declared}</p><p className="mt-2 text-xl font-semibold text-ink">{resultText(locale, result.declaredProfile)}</p><p className="mt-2 text-sm leading-6 text-muted">{result.declaredLoss}</p></div>
           <div className="border border-line bg-panelSoft p-4"><p className="text-xs uppercase tracking-[0.14em] text-muted">{text.pressure}</p><p className="mt-2 text-xl font-semibold text-ink">{resultText(locale, result.pressureProfile)}</p></div>
           <div className="border border-line bg-panelSoft p-4"><p className="text-xs uppercase tracking-[0.14em] text-muted">{text.complexity}</p><p className="mt-2 text-xl font-semibold text-ink">{complexityText(locale, result)}</p><p className="mt-2 text-sm leading-6 text-muted">{text.complexityNote}</p></div>
         </div>
+
+        <p className="mt-4 text-sm leading-7 text-muted">{result.pressureSummary}</p>
 
         <div className="mt-6 grid gap-4 md:grid-cols-3">
           <div className="border border-line bg-panelSoft p-4"><p className="font-semibold text-ink">{text.loss}</p><p className="mt-2 text-2xl font-semibold text-ink">{resultText(locale, result.lossCapacity.label)}</p><p className="mt-2 text-sm leading-6 text-muted">{result.lossCapacity.note}</p></div>
           <div className="border border-line bg-panelSoft p-4"><p className="font-semibold text-ink">{text.knowledge}</p><p className="mt-2 text-2xl font-semibold text-ink">{resultText(locale, result.knowledge.label)}</p><p className="mt-2 text-sm leading-6 text-muted">{result.knowledge.note}</p></div>
           <div className="border border-line bg-panelSoft p-4"><p className="font-semibold text-ink">{text.route}</p><Link href={routeHref(locale, result.route.href)} target="_blank" rel="noopener noreferrer" className="mt-2 inline-block text-xl font-semibold text-ink underline-offset-4 hover:underline">{resultText(locale, result.route.label)}</Link><p className="mt-2 text-sm leading-6 text-muted">{result.route.note}</p><p className="mt-2 text-xs leading-5 text-muted">{text.routeNewTab}</p></div>
         </div>
+
+        <div className="mt-6 border border-line bg-panelSoft p-4">
+          <p className="font-semibold text-ink">{text.experience}</p>
+          <p className="mt-2 text-xl font-semibold text-ink">{resultText(locale, result.experience.label)}</p>
+          <p className="mt-2 text-sm leading-6 text-muted">{result.experience.note}</p>
+        </div>
+        {result.constraints.length > 0 ? <section className="mt-6 border border-line bg-panelSoft p-5" aria-label={text.limits}>
+          <h3 className="font-semibold text-ink">{text.limits}</h3>
+          <ul className="mt-4 space-y-4">{result.constraints.map((item) => <li key={item.id} data-constraint={item.id}>
+            <p className="font-semibold text-ink">{item.label} · {({general: {es:"Base financiera general",en:"General financial base"},capital:{es:"Capital evaluado",en:"Capital assessed"},product:{es:"Producto",en:"Product"},learning:{es:"Aprendizaje",en:"Learning"}})[item.scope][locale]}</p>
+            <p className="mt-1 text-sm leading-6 text-muted">{item.note}</p>
+          </li>)}</ul>
+        </section> : null}
+        {result.productChecks.length > 0 ? <details className="mt-6 border border-line bg-panelSoft p-5">
+          <summary className="cursor-pointer font-semibold text-ink">{text.products}</summary>
+          <p className="mt-3 text-sm leading-6 text-muted">{locale === "es" ? "Estas comprobaciones no acreditan experiencia por producto ni autorizan a utilizarlo." : "These checks do not establish experience with each product or authorize its use."}</p>
+          <ul className="mt-4 space-y-4">{result.productChecks.map((item) => <li key={item.product}>
+            <p className="font-semibold text-ink">{item.label}</p>
+            {item.response ? <p className="mt-1 text-sm leading-6 text-muted">{locale === "es" ? "Tu respuesta: " : "Your answer: "}{item.response}</p> : null}
+            <p className="mt-1 text-sm leading-6 text-muted">{item.note}</p>
+          </li>)}</ul>
+        </details> : <p className="mt-4 text-sm leading-6 text-muted">{result.complexity.note}</p>}
 
         <div className="mt-6 border border-line bg-panelSoft p-5">
           <h3 className="font-semibold text-ink">{text.expectation}</h3>
@@ -629,6 +674,7 @@ function ResultScreen({ answers, locale, mode, restart }: { answers: DiagnosticA
         <DisclaimerBox>{result.disclaimer}</DisclaimerBox>
 
         <p className="text-sm leading-6 text-muted">{text.restartNote}</p>
+        <button type="button" onClick={review} className="w-full border border-line px-4 py-2.5 text-sm font-semibold text-ink">{text.review}</button>
         <button type="button" onClick={restart} className="w-full border border-ink bg-ink px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-panel hover:text-ink">{text.restart}</button>
       </aside>
     </div>
@@ -663,12 +709,8 @@ export function DiagnosticFlow({ initialMode, locale = "es" }: { initialMode?: D
   }
 
   function updateAnswer(target: DiagnosticQuestion, value: string) {
-    setAnswers((current) => {
-      if (!target.multi) return { ...current, [target.id]: value };
-      const currentValues = Array.isArray(current[target.id]) ? current[target.id] as string[] : [];
-      const nextValues = currentValues.includes(value) ? currentValues.filter((item) => item !== value) : [...currentValues, value];
-      return { ...current, [target.id]: nextValues };
-    });
+    if (!mode) return;
+    setAnswers((current) => updateDiagnosticAnswer(current, target, value, mode));
   }
 
   function goBack() {
@@ -680,8 +722,10 @@ export function DiagnosticFlow({ initialMode, locale = "es" }: { initialMode?: D
   }
 
   function goNext() {
-    if (!question || !isAnswered(answers[question.id])) return;
+    if (!question || !isAnswered(question, answers[question.id]) || !mode) return;
     if (safeIndex >= questions.length - 1) {
+      const validation = validateDiagnosticAnswers(answers, mode);
+      if (!validation.valid) { setIndex(Math.max(0, questions.findIndex((item) => validation.issues.includes(item.id)))); return; }
       setCompleted(true);
       return;
     }
@@ -690,7 +734,7 @@ export function DiagnosticFlow({ initialMode, locale = "es" }: { initialMode?: D
 
   if (!started) return <StartScreen locale={locale} mode={mode} setMode={setMode} start={start} />;
   if (!mode) return <StartScreen locale={locale} mode={mode} setMode={setMode} start={start} />;
-  if (completed) return <ResultScreen answers={answers} locale={locale} mode={mode} restart={restart} />;
+  if (completed && validateDiagnosticAnswers(answers, mode).valid) return <ResultScreen answers={answers} locale={locale} mode={mode} restart={restart} review={() => { setCompleted(false); setIndex(0); }} />;
   if (!question) return null;
 
   return (

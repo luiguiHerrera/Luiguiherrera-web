@@ -1,7 +1,11 @@
 import { diagnosticQuestions, getQuestionsForMode, getSelectedProducts } from "@/lib/diagnostic/questions";
+import { DiagnosticValidationError, validateDiagnosticAnswers } from "./answers";
+import { assessProducts, financialConstraints, knowledgeQuestions, productComplexity, scenarioQuestions } from "./evidence";
 import { DIAGNOSTIC_PROFILE_LABELS, DIAGNOSTIC_PROFILES } from "@/lib/diagnostic/types";
 import type {
   ComplexityBand,
+  DiagnosticConstraint,
+  DiagnosticProductCheck,
   DiagnosticAnswers,
   DiagnosticFlag,
   DiagnosticLocale,
@@ -59,46 +63,36 @@ const defaults: DiagnosticScores = {
   calibration: 55,
 };
 
-const productComplexity: Record<DiagnosticProduct, number> = {
-  cash: 10,
-  bonds: 28,
-  indexFunds: 35,
-  individualStocks: 55,
-  sectorEtfs: 60,
-  crypto: 72,
-  options: 90,
-  leverage: 92,
-  shortSelling: 95,
-};
-
 const scoringCopy = {
   es: {
-    summary: (profile: DiagnosticProfile) =>
-      `Tu perfil declarado importa, pero la lectura final se apoya más en capacidad real, liquidez y conducta bajo presión. Resultado orientativo: ${DIAGNOSTIC_PROFILE_LABELS[profile].es}.`,
-    pressureAligned: "El perfil declarado y el perfil bajo presión aparecen razonablemente alineados.",
+    summary: "La capacidad financiera, la tolerancia que declaras y tus respuestas a escenarios se presentan por separado. No forman un perfil único ni predicen tu conducta real.",
+    pressureAligned: "La clasificación de las respuestas hipotéticas coincide con tu tolerancia declarada. Esa coincidencia no verifica cómo actuarás con dinero real.",
     pressureGap: (pressure: DiagnosticProfile, declared: DiagnosticProfile) =>
-      `El perfil bajo presión (${DIAGNOSTIC_PROFILE_LABELS[pressure].es}) queda por debajo del perfil declarado (${DIAGNOSTIC_PROFILE_LABELS[declared].es}). Conviene diseñar el proceso desde la versión bajo presión.`,
-    lossFragile: "Una pérdida relevante podría afectar caja, sueño o decisiones obligadas.",
-    lossBalanced: "La capacidad de pérdida parece menos restrictiva que la conducta y expectativas.",
-    knowledgeGap: "El conocimiento declarado no quedó totalmente confirmado por las preguntas espejo.",
-    knowledgeBalanced: "La lectura diferencia entre saber admitir límites y sobreestimar comprensión.",
-    complexityGap: "Hay productos marcados cuya complejidad exige más validación antes de usarlos con dinero relevante.",
-    complexityBalanced: "La complejidad razonable se estima desde productos marcados, experiencia y conocimiento validado.",
-    disclaimer: "Esta lectura es educativa. No determina si puedes o no invertir; te ayuda a ubicar qué parte de tu estructura conviene reforzar antes de tomar más riesgo.",
+      "Tus respuestas hipotéticas (" + DIAGNOSTIC_PROFILE_LABELS[pressure].es + ") corresponden a una disposición al riesgo inferior a la declarada (" + DIAGNOSTIC_PROFILE_LABELS[declared].es + "). Revisa esta diferencia; no es conducta real observada.",
+    pressureHigher: (pressure: DiagnosticProfile, declared: DiagnosticProfile) =>
+      "Tus respuestas hipotéticas (" + DIAGNOSTIC_PROFILE_LABELS[pressure].es + ") corresponden a una disposición al riesgo superior a la declarada (" + DIAGNOSTIC_PROFILE_LABELS[declared].es + "). Revisa si los escenarios reflejan tus límites; no es conducta real observada.",
+    lossFragile: "Una pérdida de este capital podría afectar gastos o decisiones. La tolerancia psicológica no elimina esa limitación.",
+    lossBalanced: "Estimación orientativa desde tus respuestas financieras; no mide tu disposición psicológica a asumir pérdidas.",
+    knowledgeGap: "Hay conceptos no confirmados en las preguntas. Admitir incertidumbre no equivale a sobreconfianza.",
+    knowledgeBalanced: "Resume únicamente las comprobaciones de conceptos; no acredita dominio completo ni experiencia por producto.",
+    complexityGap: "Revisa las brechas por producto. Otras respuestas correctas no eliminan una brecha específica.",
+    complexityBalanced: "Muestra la mayor complejidad entre los productos seleccionados, no una complejidad autorizada.",
+    disclaimer: "Herramienta exclusivamente educativa. No es una evaluación de idoneidad o conveniencia MiFID II, una recomendación personalizada ni una autorización para utilizar productos financieros.",
   },
   en: {
-    summary: (profile: DiagnosticProfile) =>
-      `Your declared profile matters, but the final read leans more on real capacity, liquidity and behavior under pressure. Indicative result: ${DIAGNOSTIC_PROFILE_LABELS[profile].en}.`,
-    pressureAligned: "The declared profile and the profile under pressure appear reasonably aligned.",
+    summary: "Financial capacity, stated tolerance and hypothetical scenario responses are presented separately. They do not form a single profile or predict actual behavior.",
+    pressureAligned: "The hypothetical-response classification matches stated tolerance. This does not establish how you will act with real money.",
     pressureGap: (pressure: DiagnosticProfile, declared: DiagnosticProfile) =>
-      `The profile under pressure (${DIAGNOSTIC_PROFILE_LABELS[pressure].en}) is below the declared profile (${DIAGNOSTIC_PROFILE_LABELS[declared].en}). The process should be designed from the under-pressure version.`,
-    lossFragile: "A relevant loss could affect cash, sleep or forced decisions.",
-    lossBalanced: "Loss capacity appears less restrictive than behavior and expectations.",
-    knowledgeGap: "Declared knowledge was not fully confirmed by the mirror questions.",
-    knowledgeBalanced: "The read separates knowing your limits from overestimating understanding.",
-    complexityGap: "Some selected products require more validation before using them with meaningful money.",
-    complexityBalanced: "Current complexity is estimated from selected products, experience and validated knowledge.",
-    disclaimer: "This is an educational read. It does not determine whether you can or cannot invest; it helps you identify which part of your structure may need work before taking more risk.",
+      "Your hypothetical responses (" + DIAGNOSTIC_PROFILE_LABELS[pressure].en + ") imply lower risk willingness than your stated tolerance (" + DIAGNOSTIC_PROFILE_LABELS[declared].en + "). Review this difference; it is not observed behavior.",
+    pressureHigher: (pressure: DiagnosticProfile, declared: DiagnosticProfile) =>
+      "Your hypothetical responses (" + DIAGNOSTIC_PROFILE_LABELS[pressure].en + ") imply higher risk willingness than your stated tolerance (" + DIAGNOSTIC_PROFILE_LABELS[declared].en + "). Consider whether the scenarios reflect your limits; it is not observed behavior.",
+    lossFragile: "Losing this capital could affect spending or decisions. Psychological tolerance does not remove this limitation.",
+    lossBalanced: "An indicative estimate from financial answers; it does not measure psychological willingness to bear losses.",
+    knowledgeGap: "Some concepts were not confirmed in the questions. Acknowledging uncertainty is not overconfidence.",
+    knowledgeBalanced: "This summarizes concept checks only; it does not establish complete mastery or experience with each product.",
+    complexityGap: "Review the product-specific gaps. Other correct answers do not remove a specific gap.",
+    complexityBalanced: "This shows the highest complexity among selected products, not an authorized complexity level.",
+    disclaimer: "An exclusively educational tool. This is not a MiFID II suitability or appropriateness assessment, a personalized recommendation or authorization to use financial products.",
   },
 };
 
@@ -131,26 +125,44 @@ function selectedOptions(answers: DiagnosticAnswers, mode: DiagnosticMode): Diag
   return options;
 }
 
-function averageScores(options: DiagnosticOption[], selectedProducts: DiagnosticProduct[]) {
+function averageScores(answers: DiagnosticAnswers, mode: DiagnosticMode, selectedProducts: DiagnosticProduct[]) {
   const buckets = Object.fromEntries(scoreKeys.map((key) => [key, [] as number[]])) as Record<DiagnosticScoreKey, number[]>;
-
-  for (const option of options) {
-    for (const key of scoreKeys) {
-      const value = option.scores?.[key];
-      if (typeof value === "number") buckets[key].push(value);
+  for (const question of getQuestionsForMode(mode, answers)) {
+    const raw = answers[question.id];
+    const ids = Array.isArray(raw) ? raw : [raw];
+    for (const option of question.options.filter((candidate) => ids.includes(candidate.id))) {
+      for (const key of scoreKeys) {
+        if (key === "productComplexity") continue;
+        if (question.id === "declared_drop" && key !== "emotionalTolerance") continue;
+        if (key === "emotionalTolerance" && question.id !== "declared_drop") continue;
+        if (key === "knowledgeValidated" && !knowledgeQuestions.has(question.id) && !question.id.endsWith("_check")) continue;
+        if (key === "experienceReal" && question.block !== "experience") continue;
+        const value = option.scores?.[key];
+        if (typeof value === "number") buckets[key].push(value);
+      }
     }
   }
-
-  for (const product of selectedProducts) buckets.productComplexity.push(productComplexity[product]);
-
-  return Object.fromEntries(scoreKeys.map((key) => {
+  const scores = Object.fromEntries(scoreKeys.map((key) => {
     const values = buckets[key];
-    const average = values.length ? values.reduce((sum, value) => sum + value, 0) / values.length : defaults[key];
-    return [key, clamp(average)];
+    return [key, clamp(values.length ? values.reduce((sum, value) => sum + value, 0) / values.length : defaults[key])];
   })) as DiagnosticScores;
+  scores.productComplexity = selectedProducts.length ? Math.max(...selectedProducts.map((product) => productComplexity[product])) : 0;
+  return scores;
 }
 
-function flagList(options: DiagnosticOption[], scores: DiagnosticScores, selectedProducts: DiagnosticProduct[]) {
+function hypotheticalScore(answers: DiagnosticAnswers, mode: DiagnosticMode) {
+  // Compare only the existing loss-response anchors with stated loss tolerance.
+  // Discipline, knowledge and financial strength are different constructs.
+  const values = getQuestionsForMode(mode, answers)
+    .filter((question) => scenarioQuestions.has(question.id))
+    .flatMap((question) => {
+      const value = question.options.find((option) => option.id === answers[question.id])?.scores?.emotionalTolerance;
+      return typeof value === "number" ? [value] : [];
+    });
+  return clamp(values.length ? values.reduce((sum, value) => sum + value, 0) / values.length : defaults.emotionalTolerance);
+}
+
+function flagList(options: DiagnosticOption[], scores: DiagnosticScores, productChecks: DiagnosticProductCheck[]) {
   const flags = new Set<DiagnosticFlag>();
   for (const option of options) for (const flag of option.flags ?? []) flags.add(flag);
 
@@ -158,9 +170,12 @@ function flagList(options: DiagnosticOption[], scores: DiagnosticScores, selecte
   if (scores.surplusCashFlow < 35) flags.add("low_surplus");
   if (scores.expensiveDebtControl < 35) flags.add("expensive_debt");
   if (scores.goalClarity < 35) flags.add("unclear_horizon");
-  if (flags.has("declared_high_tolerance") && flags.has("pressure_low_tolerance")) flags.add("panic_sell");
   if (flags.has("claims_knowledge") && scores.knowledgeValidated < 55) flags.add("knowledge_gap_basic");
-  if (selectedProducts.some((product) => productComplexity[product] >= 70) && scores.knowledgeValidated < 62) flags.add("product_mismatch");
+  if (options.some((option) => option.flags?.includes("humble_uncertainty") && typeof option.scores?.knowledgeValidated === "number")) flags.add("knowledge_gap_basic");
+  if (productChecks.some((product) => product.complexity >= 70 && (product.understanding === "gap" || product.understanding === "uncertain"))) {
+    flags.add("product_mismatch");
+    flags.add("knowledge_gap_complex");
+  }
   if (scores.liquidityStrength < 35 || scores.financialCapacity < 35 || scores.surplusCashFlow < 30) flags.add("liquidity_fragility");
   if (scores.fomoSensitivity > 70) flags.add("fomo_entry");
   if (scores.overconfidence > 72) flags.add("overconfidence");
@@ -168,19 +183,6 @@ function flagList(options: DiagnosticOption[], scores: DiagnosticScores, selecte
   return Array.from(flags);
 }
 
-function applyGates(rawScore: number, scores: DiagnosticScores, flags: DiagnosticFlag[]) {
-  let score = rawScore;
-  if (flags.includes("expensive_debt")) score = Math.min(score, 48);
-  if (flags.includes("low_emergency_fund")) score = Math.min(score, 50);
-  if (flags.includes("near_cash_need")) score = Math.min(score, 42);
-  if (flags.includes("liquidity_fragility")) score = Math.min(score, 46);
-  if (flags.includes("capital_concentration")) score = Math.min(score, 58);
-  if (flags.includes("panic_sell")) score = Math.min(score, 50);
-  if (flags.includes("product_mismatch")) score -= 8;
-  if (scores.consistency < 42) score -= 8;
-  if (scores.expectationRealism < 35) score -= 7;
-  return clamp(score);
-}
 
 function complexityBand(score: number): ComplexityBand {
   if (score < 30) return "Básica";
@@ -205,7 +207,7 @@ function buildAlerts(scores: DiagnosticScores, flags: DiagnosticFlag[], locale: 
     if (flags.includes("unclear_horizon")) alerts.push("Objetivo u horizonte poco claros: el dinero de corto plazo podría mezclarse con riesgo de mercado.");
     if (flags.includes("liquidity_fragility")) alerts.push("Fragilidad de liquidez: una pérdida podría afectar decisiones o gastos reales.");
     if (flags.includes("near_cash_need")) alerts.push("Horizonte y liquidez están en tensión: podrías necesitar el capital antes de que el plan madure.");
-    if (flags.includes("declared_high_tolerance") && flags.includes("pressure_low_tolerance")) alerts.push("La tolerancia declarada es mayor que la tolerancia mostrada bajo presión.");
+    if (flags.includes("declared_high_tolerance") && flags.includes("pressure_low_tolerance")) alerts.push("La tolerancia declarada y las respuestas hipotéticas a pérdidas merecen contrastarse; no son conducta observada.");
     if (flags.includes("fomo_entry")) alerts.push("Aparece sensibilidad a FOMO o comparación social.");
     if (flags.includes("overconfidence") || flags.includes("euphoria_sizing")) alerts.push("Las ganancias rápidas podrían empujar a aumentar tamaño demasiado pronto.");
     if (flags.includes("knowledge_gap_basic")) alerts.push("Hay brechas de conocimiento básico frente a lo declarado.");
@@ -214,7 +216,7 @@ function buildAlerts(scores: DiagnosticScores, flags: DiagnosticFlag[], locale: 
     if (flags.includes("no_written_process")) alerts.push("Faltan reglas escritas para actuar durante caídas, subidas o estancamiento.");
     if (scores.expectationRealism < 45) alerts.push("Las expectativas de retorno podrían ser incompatibles con un proceso sostenible.");
     if (!alerts.length) alerts.push("No aparecen tensiones dominantes, pero la lectura sigue siendo educativa.");
-    return alerts.slice(0, 8);
+    return alerts;
   }
 
   if (flags.includes("income_fragility")) alerts.push("Income fragility: separate financial stability from investing decisions.");
@@ -223,7 +225,7 @@ function buildAlerts(scores: DiagnosticScores, flags: DiagnosticFlag[], locale: 
   if (flags.includes("unclear_horizon")) alerts.push("Unclear goal or horizon: short-term money may be mixed with market risk.");
   if (flags.includes("liquidity_fragility")) alerts.push("Liquidity fragility: a loss could affect real spending or decisions.");
   if (flags.includes("near_cash_need")) alerts.push("Horizon and liquidity are in tension: you may need the capital before the plan matures.");
-  if (flags.includes("declared_high_tolerance") && flags.includes("pressure_low_tolerance")) alerts.push("Declared tolerance is higher than tolerance shown under pressure.");
+  if (flags.includes("declared_high_tolerance") && flags.includes("pressure_low_tolerance")) alerts.push("Stated tolerance and hypothetical loss responses deserve comparison; these are not observed behavior.");
   if (flags.includes("fomo_entry")) alerts.push("FOMO or social comparison sensitivity appears.");
   if (flags.includes("overconfidence") || flags.includes("euphoria_sizing")) alerts.push("Fast gains could push position size too early.");
   if (flags.includes("knowledge_gap_basic")) alerts.push("Basic knowledge gaps appear versus what was declared.");
@@ -232,7 +234,7 @@ function buildAlerts(scores: DiagnosticScores, flags: DiagnosticFlag[], locale: 
   if (flags.includes("no_written_process")) alerts.push("Written rules are missing for drawdowns, rallies or stagnation.");
   if (scores.expectationRealism < 45) alerts.push("Return expectations may be incompatible with a sustainable process.");
   if (!alerts.length) alerts.push("No dominant tensions appear, but the read remains educational.");
-  return alerts.slice(0, 8);
+  return alerts;
 }
 
 function weakestAreaFromScores(scores: Record<PaiDimension, number>): PaiDimension {
@@ -243,18 +245,23 @@ function weakestAreaFromScores(scores: Record<PaiDimension, number>): PaiDimensi
 function mainWeakness(scores: DiagnosticScores, flags: DiagnosticFlag[]): PaiMainWeakness {
   if (flags.includes("expensive_debt") || scores.expensiveDebtControl < 38) return "expensive_debt";
   if (flags.includes("low_emergency_fund")) return "low_emergency_fund";
+  if (flags.includes("low_surplus")) return "low_surplus";
   if (flags.includes("income_fragility") || scores.incomeStability < 40 || scores.surplusCashFlow < 32) return "income_fragility";
   if (flags.includes("near_cash_need") || flags.includes("liquidity_fragility") || scores.liquidityStrength < 42) return "liquidity";
   if (flags.includes("unclear_horizon") || scores.goalClarity < 42 || scores.timeHorizon < 42) return "unclear_horizon";
   if (flags.includes("unrealistic_expectations") || scores.expectationRealism < 42) return "unrealistic_expectations";
-  if (flags.includes("product_mismatch") || scores.knowledgeValidated < 45) return "low_product_understanding";
-  if (flags.includes("panic_sell") || flags.includes("fomo_entry") || flags.includes("loss_recovery_bias") || scores.consistency < 42) return "impulsivity";
+  if (flags.includes("product_mismatch") || flags.includes("knowledge_gap_basic") || flags.includes("knowledge_gap_complex") || scores.knowledgeValidated < 45) return "low_product_understanding";
+  if (flags.includes("panic_sell") || flags.includes("fomo_entry") || flags.includes("social_pressure") || flags.includes("overconfidence") || flags.includes("euphoria_sizing") || flags.includes("loss_recovery_bias") || scores.consistency < 42) return "impulsivity";
   if (flags.includes("concentration_bias") || flags.includes("capital_concentration")) return "concentration";
   return "none";
 }
 
 function educationalStep(weakness: PaiMainWeakness, locale: DiagnosticLocale) {
   const steps: Record<PaiMainWeakness, Record<DiagnosticLocale, string>> = {
+    low_surplus: {
+      es: "Revisa el presupuesto y el margen disponible antes de depender del mercado.",
+      en: "Review the budget and available surplus before relying on the market.",
+    },
     liquidity: {
       es: "Antes de aumentar riesgo, refuerza liquidez y separa dinero de corto plazo.",
       en: "Before taking more risk, reinforce liquidity and separate short-term money.",
@@ -306,7 +313,7 @@ function baseLimitNote(locale: DiagnosticLocale) {
     : "Even with signs of investment understanding, income/liquidity foundations limit readiness to take more risk.";
 }
 
-function buildPaiReadiness(scores: DiagnosticScores, flags: DiagnosticFlag[], locale: DiagnosticLocale): PaiReadiness {
+function buildPaiReadiness(scores: DiagnosticScores, flags: DiagnosticFlag[], locale: DiagnosticLocale, constraints: DiagnosticConstraint[]): PaiReadiness {
   const productFit = clamp(100 - Math.max(0, scores.productComplexity - scores.knowledgeValidated) * 1.25);
   const producirScore = clamp(
     scores.incomeStability * 0.36 +
@@ -322,16 +329,15 @@ function buildPaiReadiness(scores: DiagnosticScores, flags: DiagnosticFlag[], lo
     scores.financialCapacity * 0.12 +
     scores.consistency * 0.06,
   );
-  const invertirRawScore = clamp(
+  const invertirRawScore = clamp((
     scores.knowledgeValidated * 0.18 +
     scores.experienceReal * 0.14 +
-    scores.emotionalTolerance * 0.14 +
     scores.consistency * 0.14 +
     scores.expectationRealism * 0.14 +
     (100 - scores.fomoSensitivity) * 0.08 +
     (100 - scores.overconfidence) * 0.08 +
-    productFit * 0.1,
-  );
+    productFit * 0.1
+  ) / 0.86);
   const baseScore = Math.min(producirScore, administrarScore);
   let invertirScore = invertirRawScore;
 
@@ -386,6 +392,17 @@ function buildPaiReadiness(scores: DiagnosticScores, flags: DiagnosticFlag[], lo
     if (light === "green") light = "yellow";
   }
 
+  // Explicit restrictions override averages without introducing numerical cut-offs.
+  if (constraints.length || weakness !== "none" || flags.some((flag) => ["knowledge_gap_basic", "knowledge_gap_complex", "fomo_entry", "social_pressure", "overconfidence", "euphoria_sizing", "concentration_bias", "panic_sell", "loss_recovery_bias", "no_written_process"].includes(flag))) {
+    if (light === "green") light = "yellow";
+    if (stage === "expansion") stage = "preparacion";
+  }
+  if (constraints.some((item) => item.severity === "priority" && item.scope === "general")) { light = "red"; stage = "orden"; }
+  if (constraints.some((item) => item.severity === "priority" && item.scope === "capital")) {
+    light = "red";
+    if (stage === "expansion") stage = "preparacion";
+  }
+
   return {
     stage,
     light,
@@ -394,7 +411,9 @@ function buildPaiReadiness(scores: DiagnosticScores, flags: DiagnosticFlag[], lo
     invertirScore,
     invertirRawScore,
     investingCappedByBase,
-    baseLimitNote: investingCappedByBase ? baseLimitNote(locale) : null,
+    baseLimitNote: investingCappedByBase ? baseLimitNote(locale) : constraints.length ? (locale === "es"
+      ? "El índice Invertir resume recursos educativos. No elimina restricciones financieras, del capital evaluado o del producto."
+      : "The Invest index summarizes educational resources. It does not remove financial, capital-specific or product-specific restrictions.") : null,
     weakestArea,
     mainWeakness: weakness,
     nextEducationalStep: educationalStep(weakness, locale),
@@ -422,113 +441,55 @@ function expectationTensions(scores: DiagnosticScores, flags: DiagnosticFlag[], 
   return tensions.length ? tensions : ["Expectations and behavior appear reasonably aligned for a first read."];
 }
 
-function routeFor(scores: DiagnosticScores, flags: DiagnosticFlag[], locale: DiagnosticLocale) {
-  if (flags.includes("knowledge_gap_basic") || flags.includes("product_mismatch")) {
-    return {
-      href: "/protege-tu-dinero",
-      label: locale === "es" ? "Alertas para tu dinero" : "Money warning signs",
-      note: locale === "es"
-        ? "Refuerza alertas, complejidad y riesgos antes de aumentar productos."
-        : "Reinforce alerts, complexity and risks before adding products.",
-    };
-  }
-  if (flags.includes("fomo_entry") || flags.includes("overconfidence") || flags.includes("loss_recovery_bias")) {
-    return {
-      href: "/diagnostico?mode=quick",
-      label: locale === "es" ? "Repetir con calma" : "Repeat calmly",
-      note: locale === "es"
-        ? "Vuelve a responder cuando no haya presión de mercado o comparación social."
-        : "Answer again when market pressure or social comparison is not present.",
-    };
-  }
-  if (scores.knowledgeValidated >= 65 && scores.consistency >= 65) {
-    return {
-      href: "/analisiscuantitativo",
-      label: locale === "es" ? "Explorar niveles estadísticos" : "Explore statistical levels",
-      note: locale === "es"
-        ? "Usa contexto histórico sin convertirlo en señal de compra o venta."
-        : "Use historical context without turning it into a buy or sell signal.",
-    };
-  }
-  return {
-    href: "/recursos",
-    label: locale === "es" ? "Revisar recursos" : "Review resources",
-    note: locale === "es"
-      ? "Ordena conceptos y proceso antes de pasar a productos más complejos."
-      : "Organize concepts and process before moving to more complex products.",
-  };
+function routeFor(scores: DiagnosticScores, flags: DiagnosticFlag[], pai: PaiReadiness, locale: DiagnosticLocale) {
+  const es = locale === "es";
+  const route = (href: [string,string], label: [string,string], note: [string,string]) => ({ href: href[es ? 0 : 1], label: label[es ? 0 : 1], note: note[es ? 0 : 1] });
+  if (pai.mainWeakness === "expensive_debt") return route(["/deudas", "/en/debt"], ["Gestión de deudas", "Debt management"], ["Revisa deuda cara y pagos antes de evaluar más riesgo.", "Review high-cost debt and payments before evaluating more risk."]);
+  if (["liquidity", "low_emergency_fund", "income_fragility", "low_surplus", "unclear_horizon"].includes(pai.mainWeakness)) return route(["/presupuesto", "/en/budget"], ["Presupuesto personal", "Personal budget"], ["Revisa excedente, liquidez y dinero para imprevistos; separa el capital que podrías necesitar pronto.", "Review surplus, liquidity and emergency money; separate capital you may need soon."]);
+  if (["impulsivity", "unrealistic_expectations", "concentration"].includes(pai.mainWeakness)) return route(["/proteccion", "/en/protection"], ["Simulador de decisiones financieras", "Financial decision simulator"], ["Practica decisiones ante pérdidas, ganancias y presión social sin arriesgar capital.", "Practice decisions under losses, gains and social pressure without risking capital."]);
+  if (pai.mainWeakness === "low_product_understanding" || flags.includes("knowledge_gap_basic") || flags.includes("product_mismatch") || flags.includes("knowledge_gap_complex")) return route(["/protege-tu-dinero", "/en/protect-your-money"], ["Alertas para tu dinero", "Money warning signs"], ["Refuerza comprensión de riesgos y brechas por producto.", "Reinforce risk understanding and product-specific gaps."]);
+  if (flags.some((flag) => ["fomo_entry", "social_pressure", "overconfidence", "euphoria_sizing", "loss_recovery_bias", "no_written_process", "panic_sell"].includes(flag))) return route(["/proteccion", "/en/protection"], ["Simulador de decisiones financieras", "Financial decision simulator"], ["Practica reglas y decisiones con situaciones hipotéticas.", "Practice rules and decisions with hypothetical situations."]);
+  if (pai.light === "green" && scores.knowledgeValidated >= 65 && scores.consistency >= 65) return route(["/analisiscuantitativo", "/en/quantitative-analysis"], ["Explorar Análisis Cuantitativo", "Explore Quantitative Analysis"], ["Estudia contexto histórico. Esta ruta educativa no es una indicación de invertir.", "Study historical context. This educational route is not an indication to invest."]);
+  return route(["/recursos", "/en/resources"], ["Revisar recursos", "Review resources"], ["Refuerza conceptos y proceso según las necesidades identificadas.", "Reinforce concepts and process according to the needs identified."]);
 }
 
-export function scoreDiagnostic(answers: DiagnosticAnswers, mode: DiagnosticMode, locale: DiagnosticLocale = "es"): DiagnosticResult {
+export function scoreDiagnostic(input: DiagnosticAnswers, mode: DiagnosticMode, locale: DiagnosticLocale = "es"): DiagnosticResult {
+  const validation = validateDiagnosticAnswers(input, mode);
+  if (!validation.valid || (locale !== "es" && locale !== "en")) throw new DiagnosticValidationError(validation.issues.length ? validation.issues : ["locale"]);
+  const answers = validation.answers;
   const selectedProducts = getSelectedProducts(answers);
   const options = selectedOptions(answers, mode);
-  const scores = averageScores(options, selectedProducts);
-  const flags = flagList(options, scores, selectedProducts);
-
-  const declaredScore =
-    scores.emotionalTolerance * 0.34 +
-    scores.timeHorizon * 0.22 +
-    scores.financialCapacity * 0.18 +
-    scores.knowledgeValidated * 0.14 +
-    (100 - scores.fomoSensitivity) * 0.06 +
-    (100 - scores.overconfidence) * 0.06;
-
-  const pressureScore =
-    scores.emotionalTolerance * 0.22 +
-    scores.patience * 0.2 +
-    scores.consistency * 0.22 +
-    scores.liquidityStrength * 0.16 +
-    scores.expectationRealism * 0.12 +
-    (100 - scores.fomoSensitivity) * 0.08;
-
-  const gatedScore = applyGates(Math.min(declaredScore, pressureScore), scores, flags);
-  const profile = profileFromScore(gatedScore);
+  const scores = averageScores(answers, mode, selectedProducts);
+  const productChecks = assessProducts(answers, mode, selectedProducts, locale);
+  const flags = flagList(options, scores, productChecks);
+  const constraints = financialConstraints(answers, flags, productChecks, locale);
+  const declaredScore = scores.emotionalTolerance;
+  const pressureScore = hypotheticalScore(answers, mode);
   const declaredProfile = profileFromScore(declaredScore);
-  const pressureProfile = profileFromScore(applyGates(pressureScore, scores, flags));
-  const complexity = complexityBand(scores.productComplexity);
-  const knowledgeLabel = labelFromScore(scores.knowledgeValidated, ["Inicial", "Básico", "Intermedio", "Validado alto"]);
-  const lossLabel = labelFromScore((scores.financialCapacity + scores.liquidityStrength) / 2, ["Frágil", "Limitada", "Suficiente", "Robusta"]);
+  const pressureProfile = profileFromScore(pressureScore);
+  const difference = DIAGNOSTIC_PROFILES.indexOf(pressureProfile) - DIAGNOSTIC_PROFILES.indexOf(declaredProfile);
+  const pressureRelation = difference < 0 ? "lower" : difference > 0 ? "higher" : "equal";
   const text = scoringCopy[locale];
-  const route = routeFor(scores, flags, locale);
-  const paiReadiness = buildPaiReadiness(scores, flags, locale);
+  const paiReadiness = buildPaiReadiness(scores, flags, locale, constraints);
+  const route = routeFor(scores, flags, paiReadiness, locale);
+  const declaredQuestion = diagnosticQuestions.find((question) => question.id === "declared_drop")!;
+  const declaredLoss = declaredQuestion.options.find((option) => option.id === answers.declared_drop)!.label[locale];
+  const lossOption = diagnosticQuestions.find((question) => question.id === "loss_life_effect")!.options.find((option) => option.id === answers.loss_life_effect)!;
+  const lossScore = clamp(Math.min((scores.financialCapacity + scores.liquidityStrength) / 2, lossOption.scores!.financialCapacity!));
 
   return {
-    mode,
-    profile,
-    declaredProfile,
-    pressureProfile,
-    summary: text.summary(profile),
-    pressureSummary: declaredProfile === pressureProfile
-      ? text.pressureAligned
-      : text.pressureGap(pressureProfile, declaredProfile),
+    mode, declaredProfile, declaredLoss, declaredToleranceScore: declaredScore, pressureProfile, pressureScore, pressureRelation,
+    constraints, productChecks,
+    methodologyNote: locale === "es"
+      ? "Los valores de 0 a 100 son índices orientativos construidos con reglas heurísticas. No son probabilidades, predicciones ni una escala psicométrica validada. Las restricciones explícitas prevalecen sobre los promedios."
+      : "Values from 0 to 100 are indicative indices built with heuristic rules. They are not probabilities, predictions or a validated psychometric scale. Explicit restrictions take precedence over averages.",
+    summary: text.summary,
+    pressureSummary: pressureRelation === "equal" ? text.pressureAligned : pressureRelation === "lower" ? text.pressureGap(pressureProfile, declaredProfile) : text.pressureHigher(pressureProfile, declaredProfile),
     expectationTensions: expectationTensions(scores, flags, locale),
-    lossCapacity: {
-      label: lossLabel,
-      note: flags.includes("liquidity_fragility")
-        ? text.lossFragile
-        : text.lossBalanced,
-      score: clamp((scores.financialCapacity + scores.liquidityStrength) / 2),
-    },
-    knowledge: {
-      label: knowledgeLabel,
-      note: flags.includes("claims_knowledge") && flags.includes("knowledge_gap_basic")
-        ? text.knowledgeGap
-        : text.knowledgeBalanced,
-      score: scores.knowledgeValidated,
-    },
-    complexity: {
-      band: complexity,
-      note: flags.includes("product_mismatch")
-        ? text.complexityGap
-        : text.complexityBalanced,
-      score: scores.productComplexity,
-    },
-    alerts: buildAlerts(scores, flags, locale),
-    flags,
-    route,
-    scores,
-    selectedProducts,
-    paiReadiness,
-    disclaimer: text.disclaimer,
+    lossCapacity: { label: labelFromScore(lossScore, ["Frágil", "Limitada", "Suficiente", "Robusta"]), note: constraints.some((item) => item.id === "loss_capacity") ? text.lossFragile : text.lossBalanced, score: lossScore },
+    knowledge: { label: labelFromScore(scores.knowledgeValidated, ["Inicial", "Básico", "Intermedio", "Alto en estas preguntas"]), note: flags.includes("knowledge_gap_basic") ? text.knowledgeGap : text.knowledgeBalanced, score: scores.knowledgeValidated },
+    experience: { label: labelFromScore(scores.experienceReal, ["Inicial", "Básica declarada", "Intermedia declarada", "Amplia declarada"]), score: scores.experienceReal, note: locale === "es" ? "Experiencia declarada por ti, no verificada. No se mide experiencia por producto." : "Self-reported experience, not verified. Experience is not measured for each product." },
+    complexity: { band: complexityBand(scores.productComplexity), note: !selectedProducts.length ? (locale === "es" ? "No has seleccionado productos. Esto no activa preguntas adaptativas ni penaliza por sí mismo la preparación." : "No products were selected. This does not activate adaptive questions or penalize readiness by itself.") : flags.includes("product_mismatch") ? text.complexityGap : text.complexityBalanced, score: scores.productComplexity },
+    alerts: buildAlerts(scores, flags, locale), flags, route, scores, selectedProducts, paiReadiness, disclaimer: text.disclaimer,
   };
 }

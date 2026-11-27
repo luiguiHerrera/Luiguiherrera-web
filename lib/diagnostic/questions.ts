@@ -30,6 +30,7 @@ export const diagnosticQuestions: DiagnosticQuestion[] = [
     prompt: t("Marca los productos que conoces o considerarías usar con dinero real.", "Select the products you know or would consider using with real money."),
     helper: t("Esto activa preguntas adaptativas. No es una recomendación ni una validación.", "This activates adaptive questions. It is not a recommendation or validation."),
     options: [
+      { id: "none", label: t("Todavía no conozco estos productos o no he definido cuáles consideraría usar", "I do not know these products yet or have not decided which I would consider using") },
       { id: "cash", label: t("Liquidez / fondos monetarios", "Cash / money market funds"), products: ["cash"], scores: { productComplexity: 12 } },
       { id: "bonds", label: t("Bonos simples", "Simple bonds"), products: ["bonds"], scores: { productComplexity: 25 } },
       { id: "indexFunds", label: t("Fondos indexados diversificados", "Diversified index funds"), products: ["indexFunds"], scores: { productComplexity: 35 } },
@@ -116,10 +117,10 @@ export const diagnosticQuestions: DiagnosticQuestion[] = [
     block: "financial",
     mode: both,
     prompt: t("Tu inversión cae de {amount} a {amountMinus20} aproximadamente (-20%). ¿Qué tanto afectaría tu vida diaria?", "Your investment falls from {amount} to {amountMinus20}, approximately -20%. How much would it affect your daily life?"),
-    helper: t("Piensa en pagos, familia, sueño y decisiones obligadas, no solo en el porcentaje.", "Think about payments, family, sleep and forced decisions, not only the percentage."),
+    helper: t("Piensa en pagos, gastos familiares y ventas forzadas. La incomodidad emocional se explora por separado.", "Think about payments, family expenses and forced sales. Emotional discomfort is explored separately."),
     options: [
       { id: "none", label: t("Casi nada; tengo margen suficiente", "Almost nothing; I have enough margin"), scores: { financialCapacity: 88, liquidityStrength: 84, emotionalTolerance: 72 } },
-      { id: "annoying", label: t("Me molestaría, pero no cambiaría pagos importantes", "It would bother me, but not change important payments"), scores: { financialCapacity: 68, liquidityStrength: 65, emotionalTolerance: 58 } },
+      { id: "annoying", label: t("Tendría algo de margen, sin cambiar pagos importantes", "I would have some financial room without changing important payments"), scores: { financialCapacity: 68, liquidityStrength: 65, emotionalTolerance: 58 } },
       { id: "adjust", label: t("Tendría que ajustar algunos gastos", "I would need to adjust some expenses"), scores: { financialCapacity: 45, liquidityStrength: 42, emotionalTolerance: 42 }, flags: ["liquidity_fragility"] },
       { id: "uncomfortable", label: t("Me pondría en una situación incómoda", "It would put me in an uncomfortable situation"), scores: { financialCapacity: 28, liquidityStrength: 25, emotionalTolerance: 30 }, flags: ["liquidity_fragility"] },
       { id: "serious", label: t("Me afectaría seriamente", "It would seriously affect me"), scores: { financialCapacity: 12, liquidityStrength: 12, emotionalTolerance: 22 }, flags: ["liquidity_fragility"] },
@@ -854,7 +855,8 @@ export const diagnosticQuestions: DiagnosticQuestion[] = [
 function selectedProductSet(answers: DiagnosticAnswers) {
   const selected = new Set<DiagnosticProduct>();
   const raw = answers.products_known;
-  const ids = Array.isArray(raw) ? raw : raw ? [raw] : [];
+  const ids = Array.isArray(raw) ? raw : typeof raw === "string" ? [raw] : [];
+  if (ids.includes("none")) return selected;
   const productQuestion = diagnosticQuestions.find((question) => question.id === "products_known");
   for (const id of ids) {
     const option = productQuestion?.options.find((candidate) => candidate.id === id);
@@ -874,4 +876,12 @@ export function getQuestionsForMode(mode: DiagnosticMode, answers: DiagnosticAns
 
 export function getSelectedProducts(answers: DiagnosticAnswers) {
   return Array.from(selectedProductSet(answers));
+}
+
+export function getQuestionCounts(mode: DiagnosticMode) {
+  const products = diagnosticQuestions.find((question) => question.id === "products_known")!;
+  return {
+    base: getQuestionsForMode(mode).length,
+    maximum: getQuestionsForMode(mode, { products_known: products.options.filter((option) => option.products?.length).map((option) => option.id) }).length,
+  };
 }

@@ -4,20 +4,20 @@ import type { DiagnosticLocale } from "@/lib/diagnostic/types";
 
 const copy = {
   es: {
-    aria: "Descargar resumen educativo del diagnóstico",
-    button: "Descargar resumen educativo",
+    aria: "Imprimir o guardar el resumen educativo como PDF",
+    button: "Imprimir / guardar PDF",
     note: "Se genera desde esta sesión para que puedas conservar tu resultado. No es una evaluación regulatoria ni una recomendación de inversión.",
     printTip: "Para un PDF más limpio, desactiva “Encabezados y pies de página” y activa “Gráficos de fondo” en el cuadro de impresión.",
     title: "Conservar resultado",
-    text: "Puedes descargar un resumen educativo para revisarlo después. El archivo se genera desde esta sesión y no guarda tus respuestas en la web.",
+    text: "Abre el cuadro de impresión del navegador. Desde allí puedes imprimir o elegir Guardar como PDF. El resumen se genera en esta sesión, sin enviar respuestas.",
   },
   en: {
-    aria: "Download educational diagnostic summary",
-    button: "Download educational summary",
+    aria: "Print or save the educational summary as PDF",
+    button: "Print / save PDF",
     note: "Generated from this session so you can keep your result. It is not a regulatory assessment or an investment recommendation.",
     printTip: "For a cleaner PDF, disable “Headers and footers” and enable “Background graphics” in the print dialog.",
     title: "Keep your result",
-    text: "You can download an educational summary to review later. The file is generated from this session and your answers are not stored on the website.",
+    text: "Open the browser print dialog. From there you can print or choose Save as PDF. The summary is generated in this session without sending answers.",
   },
 };
 

@@ -1,0 +1,1267 @@
+{
+  "baseline": "55818571fe5f4c719a310d087dc5855fb26c17f2",
+  "audited": "c3532d95de137672f6508bb4c740943be65c8acb",
+  "inputs": "lib/diagnostic/scoring.fixtures.ts; fictional answers; beginner product none was not selectable in the baseline UI",
+  "cases": [
+    {
+      "case": "beginner",
+      "mode": "quick",
+      "before": {
+        "pai": {
+          "produce": 89,
+          "manage": 86,
+          "invest": 65,
+          "rawInvest": 65
+        },
+        "light": "yellow",
+        "stage": "preparacion",
+        "weakness": "low_product_understanding",
+        "route": "/protege-tu-dinero",
+        "declared": "Crecimiento dinámico",
+        "pressure": "Crecimiento dinámico",
+        "declaredScore": null,
+        "pressureScore": null,
+        "knowledge": 30,
+        "experience": 31,
+        "lossCapacity": 82
+      },
+      "after": {
+        "pai": {
+          "produce": 89,
+          "manage": 86,
+          "invest": 63,
+          "rawInvest": 63
+        },
+        "light": "yellow",
+        "stage": "preparacion",
+        "weakness": "low_product_understanding",
+        "route": "/protege-tu-dinero",
+        "declared": "Riesgo especulativo",
+        "pressure": "Crecimiento dinámico",
+        "declaredScore": 82,
+        "pressureScore": 68,
+        "knowledge": 27,
+        "experience": 31,
+        "lossCapacity": 82
+      }
+    },
+    {
+      "case": "unstable-income",
+      "mode": "quick",
+      "before": {
+        "pai": {
+          "produce": 61,
+          "manage": 85,
+          "invest": 75,
+          "rawInvest": 83
+        },
+        "light": "green",
+        "stage": "expansion",
+        "weakness": "income_fragility",
+        "route": "/analisiscuantitativo",
+        "declared": "Crecimiento dinámico",
+        "pressure": "Crecimiento dinámico",
+        "declaredScore": null,
+        "pressureScore": null,
+        "knowledge": 86,
+        "experience": 84,
+        "lossCapacity": 78
+      },
+      "after": {
+        "pai": {
+          "produce": 61,
+          "manage": 85,
+          "invest": 75,
+          "rawInvest": 85
+        },
+        "light": "yellow",
+        "stage": "preparacion",
+        "weakness": "income_fragility",
+        "route": "/presupuesto",
+        "declared": "Riesgo especulativo",
+        "pressure": "Crecimiento dinámico",
+        "declaredScore": 82,
+        "pressureScore": 68,
+        "knowledge": 89,
+        "experience": 84,
+        "lossCapacity": 78
+      }
+    },
+    {
+      "case": "no-surplus",
+      "mode": "quick",
+      "before": {
+        "pai": {
+          "produce": 60,
+          "manage": 83,
+          "invest": 75,
+          "rawInvest": 83
+        },
+        "light": "green",
+        "stage": "expansion",
+        "weakness": "income_fragility",
+        "route": "/analisiscuantitativo",
+        "declared": "Crecimiento dinámico",
+        "pressure": "Equilibrio prudente",
+        "declaredScore": null,
+        "pressureScore": null,
+        "knowledge": 86,
+        "experience": 84,
+        "lossCapacity": 73
+      },
+      "after": {
+        "pai": {
+          "produce": 60,
+          "manage": 83,
+          "invest": 75,
+          "rawInvest": 85
+        },
+        "light": "red",
+        "stage": "orden",
+        "weakness": "low_surplus",
+        "route": "/presupuesto",
+        "declared": "Riesgo especulativo",
+        "pressure": "Crecimiento dinámico",
+        "declaredScore": 82,
+        "pressureScore": 68,
+        "knowledge": 89,
+        "experience": 84,
+        "lossCapacity": 73
+      }
+    },
+    {
+      "case": "expensive-debt",
+      "mode": "quick",
+      "before": {
+        "pai": {
+          "produce": 86,
+          "manage": 64,
+          "invest": 75,
+          "rawInvest": 83
+        },
+        "light": "red",
+        "stage": "orden",
+        "weakness": "expensive_debt",
+        "route": "/analisiscuantitativo",
+        "declared": "Crecimiento dinámico",
+        "pressure": "Equilibrio prudente",
+        "declaredScore": null,
+        "pressureScore": null,
+        "knowledge": 86,
+        "experience": 84,
+        "lossCapacity": 74
+      },
+      "after": {
+        "pai": {
+          "produce": 86,
+          "manage": 64,
+          "invest": 75,
+          "rawInvest": 85
+        },
+        "light": "red",
+        "stage": "orden",
+        "weakness": "expensive_debt",
+        "route": "/deudas",
+        "declared": "Riesgo especulativo",
+        "pressure": "Crecimiento dinámico",
+        "declaredScore": 82,
+        "pressureScore": 68,
+        "knowledge": 89,
+        "experience": 84,
+        "lossCapacity": 74
+      }
+    },
+    {
+      "case": "no-emergency-fund",
+      "mode": "quick",
+      "before": {
+        "pai": {
+          "produce": 86,
+          "manage": 82,
+          "invest": 83,
+          "rawInvest": 83
+        },
+        "light": "yellow",
+        "stage": "expansion",
+        "weakness": "low_emergency_fund",
+        "route": "/analisiscuantitativo",
+        "declared": "Crecimiento dinámico",
+        "pressure": "Equilibrio prudente",
+        "declaredScore": null,
+        "pressureScore": null,
+        "knowledge": 86,
+        "experience": 84,
+        "lossCapacity": 71
+      },
+      "after": {
+        "pai": {
+          "produce": 86,
+          "manage": 82,
+          "invest": 85,
+          "rawInvest": 85
+        },
+        "light": "red",
+        "stage": "orden",
+        "weakness": "low_emergency_fund",
+        "route": "/presupuesto",
+        "declared": "Riesgo especulativo",
+        "pressure": "Crecimiento dinámico",
+        "declaredScore": 82,
+        "pressureScore": 68,
+        "knowledge": 89,
+        "experience": 84,
+        "lossCapacity": 71
+      }
+    },
+    {
+      "case": "near-capital-need",
+      "mode": "quick",
+      "before": {
+        "pai": {
+          "produce": 88,
+          "manage": 78,
+          "invest": 83,
+          "rawInvest": 83
+        },
+        "light": "green",
+        "stage": "expansion",
+        "weakness": "liquidity",
+        "route": "/analisiscuantitativo",
+        "declared": "Crecimiento dinámico",
+        "pressure": "Equilibrio prudente",
+        "declaredScore": null,
+        "pressureScore": null,
+        "knowledge": 86,
+        "experience": 84,
+        "lossCapacity": 77
+      },
+      "after": {
+        "pai": {
+          "produce": 88,
+          "manage": 78,
+          "invest": 85,
+          "rawInvest": 85
+        },
+        "light": "red",
+        "stage": "preparacion",
+        "weakness": "liquidity",
+        "route": "/presupuesto",
+        "declared": "Riesgo especulativo",
+        "pressure": "Crecimiento dinámico",
+        "declaredScore": 82,
+        "pressureScore": 68,
+        "knowledge": 89,
+        "experience": 84,
+        "lossCapacity": 77
+      }
+    },
+    {
+      "case": "capacity-high-tolerance-low",
+      "mode": "quick",
+      "before": {
+        "pai": {
+          "produce": 89,
+          "manage": 86,
+          "invest": 81,
+          "rawInvest": 81
+        },
+        "light": "green",
+        "stage": "expansion",
+        "weakness": "none",
+        "route": "/analisiscuantitativo",
+        "declared": "Crecimiento dinámico",
+        "pressure": "Crecimiento dinámico",
+        "declaredScore": null,
+        "pressureScore": null,
+        "knowledge": 86,
+        "experience": 84,
+        "lossCapacity": 82
+      },
+      "after": {
+        "pai": {
+          "produce": 89,
+          "manage": 86,
+          "invest": 85,
+          "rawInvest": 85
+        },
+        "light": "green",
+        "stage": "expansion",
+        "weakness": "none",
+        "route": "/analisiscuantitativo",
+        "declared": "Preservación",
+        "pressure": "Crecimiento dinámico",
+        "declaredScore": 25,
+        "pressureScore": 68,
+        "knowledge": 89,
+        "experience": 84,
+        "lossCapacity": 82
+      }
+    },
+    {
+      "case": "capacity-low-tolerance-high",
+      "mode": "quick",
+      "before": {
+        "pai": {
+          "produce": 25,
+          "manage": 73,
+          "invest": 45,
+          "rawInvest": 80
+        },
+        "light": "red",
+        "stage": "orden",
+        "weakness": "low_emergency_fund",
+        "route": "/analisiscuantitativo",
+        "declared": "Crecimiento dinámico",
+        "pressure": "Equilibrio prudente",
+        "declaredScore": null,
+        "pressureScore": null,
+        "knowledge": 86,
+        "experience": 84,
+        "lossCapacity": 45
+      },
+      "after": {
+        "pai": {
+          "produce": 25,
+          "manage": 73,
+          "invest": 45,
+          "rawInvest": 85
+        },
+        "light": "red",
+        "stage": "orden",
+        "weakness": "low_emergency_fund",
+        "route": "/presupuesto",
+        "declared": "Riesgo especulativo",
+        "pressure": "Crecimiento dinámico",
+        "declaredScore": 90,
+        "pressureScore": 68,
+        "knowledge": 89,
+        "experience": 84,
+        "lossCapacity": 12
+      }
+    },
+    {
+      "case": "experienced-fragile",
+      "mode": "quick",
+      "before": {
+        "pai": {
+          "produce": 19,
+          "manage": 47,
+          "invest": 45,
+          "rawInvest": 81
+        },
+        "light": "red",
+        "stage": "orden",
+        "weakness": "expensive_debt",
+        "route": "/analisiscuantitativo",
+        "declared": "Crecimiento moderado",
+        "pressure": "Equilibrio prudente",
+        "declaredScore": null,
+        "pressureScore": null,
+        "knowledge": 86,
+        "experience": 84,
+        "lossCapacity": 25
+      },
+      "after": {
+        "pai": {
+          "produce": 19,
+          "manage": 47,
+          "invest": 45,
+          "rawInvest": 85
+        },
+        "light": "red",
+        "stage": "orden",
+        "weakness": "expensive_debt",
+        "route": "/deudas",
+        "declared": "Riesgo especulativo",
+        "pressure": "Crecimiento dinámico",
+        "declaredScore": 82,
+        "pressureScore": 68,
+        "knowledge": 89,
+        "experience": 84,
+        "lossCapacity": 12
+      }
+    },
+    {
+      "case": "overconfident-knowledge-gap",
+      "mode": "quick",
+      "before": {
+        "pai": {
+          "produce": 89,
+          "manage": 86,
+          "invest": 74,
+          "rawInvest": 74
+        },
+        "light": "green",
+        "stage": "expansion",
+        "weakness": "none",
+        "route": "/protege-tu-dinero",
+        "declared": "Crecimiento dinámico",
+        "pressure": "Crecimiento dinámico",
+        "declaredScore": null,
+        "pressureScore": null,
+        "knowledge": 59,
+        "experience": 84,
+        "lossCapacity": 82
+      },
+      "after": {
+        "pai": {
+          "produce": 89,
+          "manage": 86,
+          "invest": 73,
+          "rawInvest": 73
+        },
+        "light": "yellow",
+        "stage": "preparacion",
+        "weakness": "low_product_understanding",
+        "route": "/protege-tu-dinero",
+        "declared": "Riesgo especulativo",
+        "pressure": "Crecimiento dinámico",
+        "declaredScore": 82,
+        "pressureScore": 68,
+        "knowledge": 55,
+        "experience": 84,
+        "lossCapacity": 82
+      }
+    },
+    {
+      "case": "leverage-gap",
+      "mode": "quick",
+      "before": {
+        "pai": {
+          "produce": 89,
+          "manage": 86,
+          "invest": 78,
+          "rawInvest": 78
+        },
+        "light": "yellow",
+        "stage": "preparacion",
+        "weakness": "low_product_understanding",
+        "route": "/protege-tu-dinero",
+        "declared": "Crecimiento dinámico",
+        "pressure": "Crecimiento dinámico",
+        "declaredScore": null,
+        "pressureScore": null,
+        "knowledge": 74,
+        "experience": 84,
+        "lossCapacity": 82
+      },
+      "after": {
+        "pai": {
+          "produce": 89,
+          "manage": 86,
+          "invest": 79,
+          "rawInvest": 79
+        },
+        "light": "yellow",
+        "stage": "preparacion",
+        "weakness": "low_product_understanding",
+        "route": "/protege-tu-dinero",
+        "declared": "Riesgo especulativo",
+        "pressure": "Crecimiento dinámico",
+        "declaredScore": 82,
+        "pressureScore": 68,
+        "knowledge": 74,
+        "experience": 84,
+        "lossCapacity": 82
+      }
+    },
+    {
+      "case": "options-gap",
+      "mode": "quick",
+      "before": {
+        "pai": {
+          "produce": 89,
+          "manage": 86,
+          "invest": 79,
+          "rawInvest": 79
+        },
+        "light": "yellow",
+        "stage": "preparacion",
+        "weakness": "low_product_understanding",
+        "route": "/protege-tu-dinero",
+        "declared": "Crecimiento dinámico",
+        "pressure": "Crecimiento dinámico",
+        "declaredScore": null,
+        "pressureScore": null,
+        "knowledge": 74,
+        "experience": 84,
+        "lossCapacity": 82
+      },
+      "after": {
+        "pai": {
+          "produce": 89,
+          "manage": 86,
+          "invest": 79,
+          "rawInvest": 79
+        },
+        "light": "yellow",
+        "stage": "preparacion",
+        "weakness": "low_product_understanding",
+        "route": "/protege-tu-dinero",
+        "declared": "Riesgo especulativo",
+        "pressure": "Crecimiento dinámico",
+        "declaredScore": 82,
+        "pressureScore": 68,
+        "knowledge": 74,
+        "experience": 84,
+        "lossCapacity": 82
+      }
+    },
+    {
+      "case": "fomo",
+      "mode": "quick",
+      "before": {
+        "pai": {
+          "produce": 89,
+          "manage": 87,
+          "invest": 77,
+          "rawInvest": 77
+        },
+        "light": "green",
+        "stage": "expansion",
+        "weakness": "impulsivity",
+        "route": "/diagnostico?mode=quick",
+        "declared": "Crecimiento dinámico",
+        "pressure": "Crecimiento dinámico",
+        "declaredScore": null,
+        "pressureScore": null,
+        "knowledge": 86,
+        "experience": 84,
+        "lossCapacity": 82
+      },
+      "after": {
+        "pai": {
+          "produce": 89,
+          "manage": 87,
+          "invest": 78,
+          "rawInvest": 78
+        },
+        "light": "yellow",
+        "stage": "preparacion",
+        "weakness": "impulsivity",
+        "route": "/proteccion",
+        "declared": "Riesgo especulativo",
+        "pressure": "Crecimiento dinámico",
+        "declaredScore": 82,
+        "pressureScore": 68,
+        "knowledge": 89,
+        "experience": 84,
+        "lossCapacity": 82
+      }
+    },
+    {
+      "case": "unrealistic-expectations",
+      "mode": "quick",
+      "before": {
+        "pai": {
+          "produce": 89,
+          "manage": 86,
+          "invest": 76,
+          "rawInvest": 76
+        },
+        "light": "yellow",
+        "stage": "preparacion",
+        "weakness": "unrealistic_expectations",
+        "route": "/analisiscuantitativo",
+        "declared": "Crecimiento dinámico",
+        "pressure": "Crecimiento dinámico",
+        "declaredScore": null,
+        "pressureScore": null,
+        "knowledge": 86,
+        "experience": 84,
+        "lossCapacity": 82
+      },
+      "after": {
+        "pai": {
+          "produce": 89,
+          "manage": 86,
+          "invest": 77,
+          "rawInvest": 77
+        },
+        "light": "yellow",
+        "stage": "preparacion",
+        "weakness": "unrealistic_expectations",
+        "route": "/proteccion",
+        "declared": "Riesgo especulativo",
+        "pressure": "Crecimiento dinámico",
+        "declaredScore": 82,
+        "pressureScore": 68,
+        "knowledge": 89,
+        "experience": 84,
+        "lossCapacity": 82
+      }
+    },
+    {
+      "case": "solid-experienced",
+      "mode": "quick",
+      "before": {
+        "pai": {
+          "produce": 89,
+          "manage": 86,
+          "invest": 83,
+          "rawInvest": 83
+        },
+        "light": "green",
+        "stage": "expansion",
+        "weakness": "none",
+        "route": "/analisiscuantitativo",
+        "declared": "Crecimiento dinámico",
+        "pressure": "Crecimiento dinámico",
+        "declaredScore": null,
+        "pressureScore": null,
+        "knowledge": 86,
+        "experience": 84,
+        "lossCapacity": 82
+      },
+      "after": {
+        "pai": {
+          "produce": 89,
+          "manage": 86,
+          "invest": 85,
+          "rawInvest": 85
+        },
+        "light": "green",
+        "stage": "expansion",
+        "weakness": "none",
+        "route": "/analisiscuantitativo",
+        "declared": "Riesgo especulativo",
+        "pressure": "Crecimiento dinámico",
+        "declaredScore": 82,
+        "pressureScore": 68,
+        "knowledge": 89,
+        "experience": 84,
+        "lossCapacity": 82
+      }
+    },
+    {
+      "case": "beginner",
+      "mode": "complete",
+      "before": {
+        "pai": {
+          "produce": 89,
+          "manage": 87,
+          "invest": 68,
+          "rawInvest": 68
+        },
+        "light": "green",
+        "stage": "expansion",
+        "weakness": "none",
+        "route": "/protege-tu-dinero",
+        "declared": "Crecimiento dinámico",
+        "pressure": "Crecimiento dinámico",
+        "declaredScore": null,
+        "pressureScore": null,
+        "knowledge": 47,
+        "experience": 32,
+        "lossCapacity": 83
+      },
+      "after": {
+        "pai": {
+          "produce": 89,
+          "manage": 87,
+          "invest": 65,
+          "rawInvest": 65
+        },
+        "light": "yellow",
+        "stage": "preparacion",
+        "weakness": "low_product_understanding",
+        "route": "/protege-tu-dinero",
+        "declared": "Riesgo especulativo",
+        "pressure": "Crecimiento dinámico",
+        "declaredScore": 82,
+        "pressureScore": 69,
+        "knowledge": 35,
+        "experience": 32,
+        "lossCapacity": 83
+      }
+    },
+    {
+      "case": "unstable-income",
+      "mode": "complete",
+      "before": {
+        "pai": {
+          "produce": 61,
+          "manage": 86,
+          "invest": 75,
+          "rawInvest": 82
+        },
+        "light": "green",
+        "stage": "expansion",
+        "weakness": "income_fragility",
+        "route": "/analisiscuantitativo",
+        "declared": "Crecimiento dinámico",
+        "pressure": "Crecimiento dinámico",
+        "declaredScore": null,
+        "pressureScore": null,
+        "knowledge": 86,
+        "experience": 80,
+        "lossCapacity": 79
+      },
+      "after": {
+        "pai": {
+          "produce": 61,
+          "manage": 86,
+          "invest": 75,
+          "rawInvest": 84
+        },
+        "light": "yellow",
+        "stage": "preparacion",
+        "weakness": "income_fragility",
+        "route": "/presupuesto",
+        "declared": "Riesgo especulativo",
+        "pressure": "Crecimiento dinámico",
+        "declaredScore": 82,
+        "pressureScore": 69,
+        "knowledge": 88,
+        "experience": 80,
+        "lossCapacity": 79
+      }
+    },
+    {
+      "case": "no-surplus",
+      "mode": "complete",
+      "before": {
+        "pai": {
+          "produce": 61,
+          "manage": 84,
+          "invest": 75,
+          "rawInvest": 82
+        },
+        "light": "green",
+        "stage": "expansion",
+        "weakness": "income_fragility",
+        "route": "/analisiscuantitativo",
+        "declared": "Crecimiento dinámico",
+        "pressure": "Equilibrio prudente",
+        "declaredScore": null,
+        "pressureScore": null,
+        "knowledge": 86,
+        "experience": 80,
+        "lossCapacity": 76
+      },
+      "after": {
+        "pai": {
+          "produce": 61,
+          "manage": 84,
+          "invest": 75,
+          "rawInvest": 84
+        },
+        "light": "red",
+        "stage": "orden",
+        "weakness": "low_surplus",
+        "route": "/presupuesto",
+        "declared": "Riesgo especulativo",
+        "pressure": "Crecimiento dinámico",
+        "declaredScore": 82,
+        "pressureScore": 69,
+        "knowledge": 88,
+        "experience": 80,
+        "lossCapacity": 76
+      }
+    },
+    {
+      "case": "expensive-debt",
+      "mode": "complete",
+      "before": {
+        "pai": {
+          "produce": 87,
+          "manage": 66,
+          "invest": 82,
+          "rawInvest": 82
+        },
+        "light": "red",
+        "stage": "orden",
+        "weakness": "expensive_debt",
+        "route": "/analisiscuantitativo",
+        "declared": "Crecimiento dinámico",
+        "pressure": "Equilibrio prudente",
+        "declaredScore": null,
+        "pressureScore": null,
+        "knowledge": 86,
+        "experience": 80,
+        "lossCapacity": 77
+      },
+      "after": {
+        "pai": {
+          "produce": 87,
+          "manage": 66,
+          "invest": 84,
+          "rawInvest": 84
+        },
+        "light": "red",
+        "stage": "orden",
+        "weakness": "expensive_debt",
+        "route": "/deudas",
+        "declared": "Riesgo especulativo",
+        "pressure": "Crecimiento dinámico",
+        "declaredScore": 82,
+        "pressureScore": 69,
+        "knowledge": 88,
+        "experience": 80,
+        "lossCapacity": 77
+      }
+    },
+    {
+      "case": "no-emergency-fund",
+      "mode": "complete",
+      "before": {
+        "pai": {
+          "produce": 87,
+          "manage": 84,
+          "invest": 82,
+          "rawInvest": 82
+        },
+        "light": "yellow",
+        "stage": "expansion",
+        "weakness": "low_emergency_fund",
+        "route": "/analisiscuantitativo",
+        "declared": "Crecimiento dinámico",
+        "pressure": "Equilibrio prudente",
+        "declaredScore": null,
+        "pressureScore": null,
+        "knowledge": 86,
+        "experience": 80,
+        "lossCapacity": 75
+      },
+      "after": {
+        "pai": {
+          "produce": 87,
+          "manage": 84,
+          "invest": 84,
+          "rawInvest": 84
+        },
+        "light": "red",
+        "stage": "orden",
+        "weakness": "low_emergency_fund",
+        "route": "/presupuesto",
+        "declared": "Riesgo especulativo",
+        "pressure": "Crecimiento dinámico",
+        "declaredScore": 82,
+        "pressureScore": 69,
+        "knowledge": 88,
+        "experience": 80,
+        "lossCapacity": 75
+      }
+    },
+    {
+      "case": "near-capital-need",
+      "mode": "complete",
+      "before": {
+        "pai": {
+          "produce": 88,
+          "manage": 83,
+          "invest": 82,
+          "rawInvest": 82
+        },
+        "light": "green",
+        "stage": "expansion",
+        "weakness": "liquidity",
+        "route": "/analisiscuantitativo",
+        "declared": "Crecimiento dinámico",
+        "pressure": "Equilibrio prudente",
+        "declaredScore": null,
+        "pressureScore": null,
+        "knowledge": 86,
+        "experience": 80,
+        "lossCapacity": 80
+      },
+      "after": {
+        "pai": {
+          "produce": 88,
+          "manage": 83,
+          "invest": 84,
+          "rawInvest": 84
+        },
+        "light": "red",
+        "stage": "preparacion",
+        "weakness": "liquidity",
+        "route": "/presupuesto",
+        "declared": "Riesgo especulativo",
+        "pressure": "Crecimiento dinámico",
+        "declaredScore": 82,
+        "pressureScore": 69,
+        "knowledge": 88,
+        "experience": 80,
+        "lossCapacity": 80
+      }
+    },
+    {
+      "case": "capacity-high-tolerance-low",
+      "mode": "complete",
+      "before": {
+        "pai": {
+          "produce": 89,
+          "manage": 87,
+          "invest": 81,
+          "rawInvest": 81
+        },
+        "light": "green",
+        "stage": "expansion",
+        "weakness": "none",
+        "route": "/analisiscuantitativo",
+        "declared": "Crecimiento dinámico",
+        "pressure": "Crecimiento dinámico",
+        "declaredScore": null,
+        "pressureScore": null,
+        "knowledge": 86,
+        "experience": 80,
+        "lossCapacity": 83
+      },
+      "after": {
+        "pai": {
+          "produce": 89,
+          "manage": 87,
+          "invest": 84,
+          "rawInvest": 84
+        },
+        "light": "green",
+        "stage": "expansion",
+        "weakness": "none",
+        "route": "/analisiscuantitativo",
+        "declared": "Preservación",
+        "pressure": "Crecimiento dinámico",
+        "declaredScore": 25,
+        "pressureScore": 69,
+        "knowledge": 88,
+        "experience": 80,
+        "lossCapacity": 83
+      }
+    },
+    {
+      "case": "capacity-low-tolerance-high",
+      "mode": "complete",
+      "before": {
+        "pai": {
+          "produce": 28,
+          "manage": 78,
+          "invest": 45,
+          "rawInvest": 81
+        },
+        "light": "red",
+        "stage": "orden",
+        "weakness": "low_emergency_fund",
+        "route": "/analisiscuantitativo",
+        "declared": "Crecimiento dinámico",
+        "pressure": "Equilibrio prudente",
+        "declaredScore": null,
+        "pressureScore": null,
+        "knowledge": 86,
+        "experience": 80,
+        "lossCapacity": 56
+      },
+      "after": {
+        "pai": {
+          "produce": 28,
+          "manage": 78,
+          "invest": 45,
+          "rawInvest": 84
+        },
+        "light": "red",
+        "stage": "orden",
+        "weakness": "low_emergency_fund",
+        "route": "/presupuesto",
+        "declared": "Riesgo especulativo",
+        "pressure": "Crecimiento dinámico",
+        "declaredScore": 90,
+        "pressureScore": 69,
+        "knowledge": 88,
+        "experience": 80,
+        "lossCapacity": 12
+      }
+    },
+    {
+      "case": "experienced-fragile",
+      "mode": "complete",
+      "before": {
+        "pai": {
+          "produce": 23,
+          "manage": 54,
+          "invest": 45,
+          "rawInvest": 82
+        },
+        "light": "red",
+        "stage": "orden",
+        "weakness": "expensive_debt",
+        "route": "/analisiscuantitativo",
+        "declared": "Crecimiento dinámico",
+        "pressure": "Equilibrio prudente",
+        "declaredScore": null,
+        "pressureScore": null,
+        "knowledge": 86,
+        "experience": 80,
+        "lossCapacity": 42
+      },
+      "after": {
+        "pai": {
+          "produce": 23,
+          "manage": 54,
+          "invest": 45,
+          "rawInvest": 84
+        },
+        "light": "red",
+        "stage": "orden",
+        "weakness": "expensive_debt",
+        "route": "/deudas",
+        "declared": "Riesgo especulativo",
+        "pressure": "Crecimiento dinámico",
+        "declaredScore": 82,
+        "pressureScore": 69,
+        "knowledge": 88,
+        "experience": 80,
+        "lossCapacity": 12
+      }
+    },
+    {
+      "case": "overconfident-knowledge-gap",
+      "mode": "complete",
+      "before": {
+        "pai": {
+          "produce": 89,
+          "manage": 87,
+          "invest": 77,
+          "rawInvest": 77
+        },
+        "light": "green",
+        "stage": "expansion",
+        "weakness": "none",
+        "route": "/protege-tu-dinero",
+        "declared": "Crecimiento dinámico",
+        "pressure": "Crecimiento dinámico",
+        "declaredScore": null,
+        "pressureScore": null,
+        "knowledge": 71,
+        "experience": 80,
+        "lossCapacity": 83
+      },
+      "after": {
+        "pai": {
+          "produce": 89,
+          "manage": 87,
+          "invest": 77,
+          "rawInvest": 77
+        },
+        "light": "yellow",
+        "stage": "preparacion",
+        "weakness": "low_product_understanding",
+        "route": "/protege-tu-dinero",
+        "declared": "Riesgo especulativo",
+        "pressure": "Crecimiento dinámico",
+        "declaredScore": 82,
+        "pressureScore": 69,
+        "knowledge": 66,
+        "experience": 80,
+        "lossCapacity": 83
+      }
+    },
+    {
+      "case": "leverage-gap",
+      "mode": "complete",
+      "before": {
+        "pai": {
+          "produce": 89,
+          "manage": 87,
+          "invest": 80,
+          "rawInvest": 80
+        },
+        "light": "yellow",
+        "stage": "preparacion",
+        "weakness": "low_product_understanding",
+        "route": "/protege-tu-dinero",
+        "declared": "Crecimiento dinámico",
+        "pressure": "Crecimiento dinámico",
+        "declaredScore": null,
+        "pressureScore": null,
+        "knowledge": 79,
+        "experience": 80,
+        "lossCapacity": 83
+      },
+      "after": {
+        "pai": {
+          "produce": 89,
+          "manage": 87,
+          "invest": 79,
+          "rawInvest": 79
+        },
+        "light": "yellow",
+        "stage": "preparacion",
+        "weakness": "low_product_understanding",
+        "route": "/protege-tu-dinero",
+        "declared": "Riesgo especulativo",
+        "pressure": "Crecimiento dinámico",
+        "declaredScore": 82,
+        "pressureScore": 69,
+        "knowledge": 78,
+        "experience": 80,
+        "lossCapacity": 83
+      }
+    },
+    {
+      "case": "options-gap",
+      "mode": "complete",
+      "before": {
+        "pai": {
+          "produce": 89,
+          "manage": 87,
+          "invest": 80,
+          "rawInvest": 80
+        },
+        "light": "yellow",
+        "stage": "preparacion",
+        "weakness": "low_product_understanding",
+        "route": "/protege-tu-dinero",
+        "declared": "Crecimiento dinámico",
+        "pressure": "Crecimiento dinámico",
+        "declaredScore": null,
+        "pressureScore": null,
+        "knowledge": 79,
+        "experience": 80,
+        "lossCapacity": 83
+      },
+      "after": {
+        "pai": {
+          "produce": 89,
+          "manage": 87,
+          "invest": 79,
+          "rawInvest": 79
+        },
+        "light": "yellow",
+        "stage": "preparacion",
+        "weakness": "low_product_understanding",
+        "route": "/protege-tu-dinero",
+        "declared": "Riesgo especulativo",
+        "pressure": "Crecimiento dinámico",
+        "declaredScore": 82,
+        "pressureScore": 69,
+        "knowledge": 78,
+        "experience": 80,
+        "lossCapacity": 83
+      }
+    },
+    {
+      "case": "fomo",
+      "mode": "complete",
+      "before": {
+        "pai": {
+          "produce": 89,
+          "manage": 87,
+          "invest": 79,
+          "rawInvest": 79
+        },
+        "light": "green",
+        "stage": "expansion",
+        "weakness": "impulsivity",
+        "route": "/diagnostico?mode=quick",
+        "declared": "Crecimiento dinámico",
+        "pressure": "Crecimiento dinámico",
+        "declaredScore": null,
+        "pressureScore": null,
+        "knowledge": 86,
+        "experience": 80,
+        "lossCapacity": 83
+      },
+      "after": {
+        "pai": {
+          "produce": 89,
+          "manage": 87,
+          "invest": 81,
+          "rawInvest": 81
+        },
+        "light": "yellow",
+        "stage": "preparacion",
+        "weakness": "impulsivity",
+        "route": "/proteccion",
+        "declared": "Riesgo especulativo",
+        "pressure": "Crecimiento dinámico",
+        "declaredScore": 82,
+        "pressureScore": 69,
+        "knowledge": 88,
+        "experience": 80,
+        "lossCapacity": 83
+      }
+    },
+    {
+      "case": "unrealistic-expectations",
+      "mode": "complete",
+      "before": {
+        "pai": {
+          "produce": 89,
+          "manage": 87,
+          "invest": 78,
+          "rawInvest": 78
+        },
+        "light": "yellow",
+        "stage": "preparacion",
+        "weakness": "unrealistic_expectations",
+        "route": "/analisiscuantitativo",
+        "declared": "Crecimiento dinámico",
+        "pressure": "Crecimiento dinámico",
+        "declaredScore": null,
+        "pressureScore": null,
+        "knowledge": 86,
+        "experience": 80,
+        "lossCapacity": 83
+      },
+      "after": {
+        "pai": {
+          "produce": 89,
+          "manage": 87,
+          "invest": 80,
+          "rawInvest": 80
+        },
+        "light": "yellow",
+        "stage": "preparacion",
+        "weakness": "unrealistic_expectations",
+        "route": "/proteccion",
+        "declared": "Riesgo especulativo",
+        "pressure": "Crecimiento dinámico",
+        "declaredScore": 82,
+        "pressureScore": 69,
+        "knowledge": 88,
+        "experience": 80,
+        "lossCapacity": 83
+      }
+    },
+    {
+      "case": "solid-experienced",
+      "mode": "complete",
+      "before": {
+        "pai": {
+          "produce": 89,
+          "manage": 87,
+          "invest": 82,
+          "rawInvest": 82
+        },
+        "light": "green",
+        "stage": "expansion",
+        "weakness": "none",
+        "route": "/analisiscuantitativo",
+        "declared": "Crecimiento dinámico",
+        "pressure": "Crecimiento dinámico",
+        "declaredScore": null,
+        "pressureScore": null,
+        "knowledge": 86,
+        "experience": 80,
+        "lossCapacity": 83
+      },
+      "after": {
+        "pai": {
+          "produce": 89,
+          "manage": 87,
+          "invest": 84,
+          "rawInvest": 84
+        },
+        "light": "green",
+        "stage": "expansion",
+        "weakness": "none",
+        "route": "/analisiscuantitativo",
+        "declared": "Riesgo especulativo",
+        "pressure": "Crecimiento dinámico",
+        "declaredScore": 82,
+        "pressureScore": 69,
+        "knowledge": 88,
+        "experience": 80,
+        "lossCapacity": 83
+      }
+    }
+  ]
+}
