@@ -123,7 +123,7 @@ for (const pathname of ["/en/weekly-report"]) {
   }
 }
 
-const expectedPairCount = 19 + trendCatalog.length + 1;
+const expectedPairCount = 20 + trendCatalog.length + 1;
 if (bilingualRoutePairs.length !== expectedPairCount) {
   errors.push(`Expected ${expectedPairCount} bilingual route pairs, found ${bilingualRoutePairs.length}`);
 }
