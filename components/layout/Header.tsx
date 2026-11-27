@@ -187,8 +187,8 @@ function pathMatches(pathname: string, href: string) {
 }
 
 const personalFinancePaths = {
-  es: ["/empezar", "/presupuesto", "/deudas", "/diagnostico"],
-  en: ["/en/start", "/en/budget", "/en/debt", "/en/diagnostic"],
+  es: ["/empezar", "/presupuesto", "/deudas", "/diagnostico", "/proteccion", "/protege-tu-dinero"],
+  en: ["/en/start", "/en/budget", "/en/debt", "/en/diagnostic", "/en/protection", "/en/protect-your-money"],
 } as const;
 
 function HeaderForPathname({ pathname }: { pathname: string }) {
