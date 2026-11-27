@@ -1,5 +1,7 @@
 "use client";
 
+import styles from "./PersonalFinanceEntry.module.css";
+
 type PersonalFinanceHeroCtaProps = {
   label: string;
 };
@@ -21,7 +23,7 @@ export function PersonalFinanceHeroCta({ label }: PersonalFinanceHeroCtaProps) {
     <button
       type="button"
       aria-controls="personal-finance-guided-route"
-      className="inline-flex min-h-12 items-center justify-center rounded-[4px] border border-petrol bg-petrol px-5 py-3 text-sm font-semibold text-white shadow-[0_12px_26px_rgba(11,52,54,0.14)] transition hover:bg-white hover:text-petrol focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-petrol"
+      className={styles.heroCta}
       onClick={moveToGuidedRoute}
     >
       {label}

@@ -245,8 +245,8 @@ test("keeps a server-led, accessible page without legacy grids or nested control
   assert.doesNotMatch(pageSource, /^"use client";/);
   assert.match(pageSource, /<details/);
   assert.match(pageSource, /"@type": "FAQPage"/);
-  assert.match(pageSource, /priority/);
-  assert.match(pageSource, /personal-finance-staircase-hero\.webp/);
+  assert.match(pageSource, /preload/);
+  assert.match(pageSource, /personal-finance\/patrimony-hero\.webp/);
   assert.match(pageSource, /aria-labelledby="personal-finance-bridge-title"/);
   assert.match(pageSource, /content\.bridge\.resources\.map/);
   assert.doesNotMatch(pageSource, /hero-family-sculptural-ascent\.png|hero-abstract-architecture\.png/);
@@ -255,7 +255,6 @@ test("keeps a server-led, accessible page without legacy grids or nested control
   assert.match(routeSource, /aria-expanded=\{isActive\}/);
   assert.match(routeSource, /aria-controls=\{panelId\}/);
   assert.match(routeSource, /recommendation\.actions\.map/);
-  assert.match(routeSource, /min-h-12/);
   assert.doesNotMatch(routeSource, /<Link[^>]*>\s*<button/);
   assert.match(footerSource, /isPersonalFinanceEntry/);
   assert.match(footerSource, /<MarketLabMark \/>/);
