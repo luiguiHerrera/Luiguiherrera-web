@@ -209,7 +209,6 @@ function HeaderForPathname({ pathname }: { pathname: string }) {
     },
     { href: hrefs.investor, label: dictionary.layout.nav.investor, items: dictionary.layout.investorItems },
     { href: hrefs.research, label: dictionary.layout.nav.research, items: dictionary.layout.researchItems },
-    { href: hrefs.protection, label: dictionary.layout.nav.protection, items: dictionary.layout.protectionItems },
     { href: hrefs.resources, label: dictionary.layout.nav.resources, items: dictionary.layout.resourcesItems },
     { href: hrefs.about, label: dictionary.layout.nav.about, items: [] },
   ].map((group) => ({
