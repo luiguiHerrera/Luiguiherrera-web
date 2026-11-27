@@ -24,7 +24,7 @@ const AboutPage = loaded.exports.AboutPage!;
 
 const approvedSpanish = [
   'Mi nombre es Luigui Herrera.',
-  'Ingeniero químico, máster en Economía, Finanzas y Computación y doctorando.',
+  'Ingeniero químico, máster en Economía, Finanzas y Computación, doctorando y asesor financiero certificado MiFID II.',
   'Veo los mercados como una figura de muchas dimensiones. Cada variable que calculo me da información sobre alguna de sus caras. El juego consiste en acercarme lo más posible a reconocer qué forma tiene la figura en ese momento de tiempo.',
   'Aquí comparto mis observaciones, el análisis que hay detrás y las herramientas que voy construyendo para ver esas caras con más claridad y poner mis ideas a prueba.',
   'Antes de sacar conclusiones, busco entender qué está pasando, qué puede aclararlo, qué información me falta y cuál es la manera más simple de explicarlo.',

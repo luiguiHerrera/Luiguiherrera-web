@@ -8,7 +8,7 @@ export const aboutLinks = [
 export const aboutContent = {
   es: {
     introduction: "Mi nombre es ", name: "Luigui Herrera.",
-    education: "Ingeniero químico, máster en Economía, Finanzas y Computación y doctorando.",
+    education: "Ingeniero químico, máster en Economía, Finanzas y Computación, doctorando y asesor financiero certificado MiFID II.",
     paragraphs: [
       "Veo los mercados como una figura de muchas dimensiones. Cada variable que calculo me da información sobre alguna de sus caras. El juego consiste en acercarme lo más posible a reconocer qué forma tiene la figura en ese momento de tiempo.",
       "Aquí comparto mis observaciones, el análisis que hay detrás y las herramientas que voy construyendo para ver esas caras con más claridad y poner mis ideas a prueba.",
@@ -30,7 +30,7 @@ export const aboutContent = {
   },
   en: {
     introduction: "My name is ", name: "Luigui Herrera.",
-    education: "Chemical engineer, master's degree in Economics, Finance and Computing, and doctoral student.",
+    education: "Chemical engineer, master's degree in Economics, Finance and Computer Science, doctoral student, and MiFID II certified financial adviser.",
     paragraphs: [
       "I see markets as a figure with many dimensions. Each variable I calculate gives me information about one of its faces. The game is to get as close as possible to recognizing what shape the figure has at that moment in time.",
       "Here I share my observations, the analysis behind them and the tools I am building to see those faces more clearly and put my ideas to the test.",
