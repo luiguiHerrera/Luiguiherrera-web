@@ -396,12 +396,12 @@ function routeHref(locale: DiagnosticLocale, href: string) {
   return href;
 }
 
-function ModeCard({ active, description, onClick, questions, title }: { active: boolean; description: string; onClick: () => void; questions: string; title: string }) {
+function ModeCard({ active, description, duration, onClick, questions, title }: { active: boolean; description: string; duration?: string; onClick: () => void; questions: string; title: string }) {
   return (
     <button type="button" onClick={onClick} className={`estate-card border p-5 text-left transition md:p-6 ${active ? "border-petrol bg-[#eef3f2]" : "border-line hover:border-ink"}`}>
       <h3 className="text-xl font-semibold text-ink">{title}</h3>
       <p className="mt-3 text-sm leading-6 text-muted">{description}</p>
-      <p className="mt-5 border-t border-line pt-4 text-sm font-semibold text-ink">{questions}</p>
+      <p className="mt-5 border-t border-line pt-4 text-sm font-semibold text-ink">{questions}</p>\n      {duration ? <p className="mt-2 text-xs text-muted">{duration}</p> : null}
     </button>
   );
 }
@@ -411,9 +411,10 @@ function StartScreen({ locale, mode, setMode, start }: { locale: DiagnosticLocal
   const canStart = Boolean(mode);
   const countLabel = (depth: DiagnosticMode) => {
     const counts = getQuestionCounts(depth);
-    if (depth === "quick") return locale === "es" ? counts.base + " preguntas" : counts.base + " questions";
+    if (depth === "quick") return locale === "es" ? counts.base + " preguntas, hasta " + counts.maximum + " con adaptativas" : counts.base + " questions, up to " + counts.maximum + " with adaptive questions";
     return locale === "es" ? counts.base + " base · hasta " + counts.maximum + " con adaptativas" : counts.base + " base · up to " + counts.maximum + " with adaptive questions";
   };
+  const quickDuration = locale === "es" ? "Tiempo estimado: 20–30 min" : "Estimated time: 20–30 min";
   return (
     <section className="warm-section border border-line p-5 md:p-7">
       <div className="grid gap-8 lg:grid-cols-[0.74fr_1.26fr] lg:items-start">
@@ -424,7 +425,7 @@ function StartScreen({ locale, mode, setMode, start }: { locale: DiagnosticLocal
           <p className="mt-4 text-sm leading-7 text-muted">{text.pace}</p>
         </div>
         <div className="grid gap-4 md:grid-cols-2">
-          <ModeCard active={mode === "quick"} description={text.quickDescription} onClick={() => setMode("quick")} questions={countLabel("quick")} title={text.quickTitle} />
+          <ModeCard active={mode === "quick"} description={text.quickDescription} duration={quickDuration} onClick={() => setMode("quick")} questions={countLabel("quick")} title={text.quickTitle} />
           <ModeCard active={mode === "complete"} description={text.fullDescription} onClick={() => setMode("complete")} questions={countLabel("complete")} title={text.fullTitle} />
         </div>
       </div>
