@@ -30,7 +30,7 @@ export const aboutContent = {
   },
   en: {
     introduction: "My name is ", name: "Luigui Herrera.",
-    education: "Chemical engineer, master's degree in Economics, Finance and Computing, doctoral student, and MiFID II certified financial adviser.",
+    education: "Chemical engineer, master's degree in Economics, Finance and Computer Science, doctoral student, and MiFID II certified financial adviser.",
     paragraphs: [
       "I see markets as a figure with many dimensions. Each variable I calculate gives me information about one of its faces. The game is to get as close as possible to recognizing what shape the figure has at that moment in time.",
       "Here I share my observations, the analysis behind them and the tools I am building to see those faces more clearly and put my ideas to the test.",
