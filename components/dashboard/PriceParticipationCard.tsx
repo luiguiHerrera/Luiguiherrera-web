@@ -1,4 +1,5 @@
 "use client";
+import { DashboardMetricHelp as Help } from "./DashboardMetricHelp";
 import { participationReading, PARTICIPATION_READINGS, PARTICIPATION_RULES } from '@/lib/dashboard/participation-reading';
 
 
@@ -31,12 +32,6 @@ function monthLabel(value: string | undefined, locale: PriceParticipationLocale)
   if (!value) return priceParticipationCopy[locale].currentMonth;
   const formatted = new Intl.DateTimeFormat(locale === "es" ? "es-ES" : "en-US", { month: "long", year: "numeric", timeZone: "Europe/Madrid" }).format(new Date(`${value}-01T12:00:00Z`));
   return formatted.charAt(0).toUpperCase() + formatted.slice(1);
-}
-function Help({ label, text, locale }: { label: string; text: string; locale: PriceParticipationLocale }) {
-  const id = useId();
-  const [open, setOpen] = useState(false);
-  return <span className={styles.metricHelp}><button type="button" aria-label={`${locale === "en" ? "Help" : "Ayuda"}: ${label}`} aria-expanded={open} aria-controls={id} aria-describedby={open ? id : undefined}
-    onClick={() => setOpen(value => !value)} onBlur={() => setOpen(false)} onKeyDown={event => { if (event.key === "Escape") { event.preventDefault(); setOpen(false); } }}><span aria-hidden="true">i</span></button><span id={id} role="tooltip" hidden={!open} className={styles.metricTooltip}>{text}</span></span>;
 }
 function WindowTable({ view, locale }: { view: PriceParticipationView; locale: PriceParticipationLocale }) {
   const copy = priceParticipationCopy[locale];
@@ -123,7 +118,7 @@ export default function PriceParticipationCard({ input, locale = "es", asOf }: {
   const incomplete = view?.warnings.some(code => code === "insufficient-history" || code === "missing-spy-endpoint" || code === "missing-rsp-endpoint");
   return <section className={styles.card} aria-labelledby={`${id}-title`} data-price-participation>
     <div className={overviewStyles.overview} data-dashboard-overview="price-participation">
-      <div className={overviewStyles.heading}><h2 id={`${id}-title`}>{copy.title}</h2><p>{copy.subtitle}<span className={styles.captionDate}>{copy.cutoff}: <time dateTime={view?.cutoffDate ?? undefined}>{date(view?.cutoffDate, locale)}</time></span></p></div>
+      <div className={overviewStyles.heading}><h2 id={`${id}-title`}>{copy.title}</h2><p>{copy.subtitle}<span className={styles.jointReading} data-participation-reading={reading.id}>{PARTICIPATION_READINGS[reading.id][locale === "en" ? 1 : 0]}</span><span className={styles.captionDate}>{copy.cutoff}: <time dateTime={view?.cutoffDate ?? undefined}>{date(view?.cutoffDate, locale)}</time></span></p></div>
       <dl className={overviewStyles.grid} data-columns="5" data-price-month={month?.month}>
         <div className={overviewStyles.item} data-overview-item="spy"><dt className={styles.metricLabel}>{copy.spy}<Help label={copy.spy} text={help.spy} locale={locale} /></dt><dd className={`${overviewStyles.value} ${styles.metricValue}`}>{number(view?.spy.close, locale)}<small>{copy.usd}</small></dd><dd className={overviewStyles.detail}>{copy.return}: <strong className={styles.metricReturn} data-price-tone={month?.spyReturnPct != null && month.spyReturnPct < 0 ? "negative" : undefined}>{number(month?.spyReturnPct, locale, 2, true)}{month?.spyReturnPct == null ? "" : "%"}</strong></dd><dd className={overviewStyles.date}>{monthCaption}</dd></div>
         <div className={overviewStyles.item} data-overview-item="rsp-spy"><dt className={styles.metricLabel}>{copy.relative}<Help label={copy.relative} text={help.relative} locale={locale} /></dt><dd className={overviewStyles.value} data-price-tone={month?.relativePp != null && month.relativePp < 0 ? "negative" : undefined}>{number(month?.relativePp, locale, 2, true)}</dd><dd className={overviewStyles.detail}>{copy.pp}</dd><dd className={overviewStyles.date}>{monthCaption}</dd></div>
@@ -132,7 +127,6 @@ export default function PriceParticipationCard({ input, locale = "es", asOf }: {
         <div className={overviewStyles.item} data-overview-item="rasi"><dt className={styles.metricLabel}>{copy.rasi}<Help label={copy.rasi} text={help.rasi} locale={locale} /></dt><dd className={overviewStyles.value} data-price-tone={view?.breadth?.last?.summation != null && view.breadth.last.summation < 0 ? "negative" : undefined}>{number(view?.breadth?.last?.summation, locale, 1, true)}</dd><dd className={overviewStyles.detail}>{copy.summationPoints}</dd></div>
       </dl>
     </div>
-    <p className={overviewStyles.detail} data-participation-reading={reading.id}>{PARTICIPATION_READINGS[reading.id][locale === "en" ? 1 : 0]}</p>
     {!view ? <p className={styles.notice} role="status">{copy.noData}</p> : null}
     {view?.refreshStatus === "retained" ? <p className={styles.notice} role="status">{copy.retained}</p> : null}
     {lagged ? <p className={styles.notice}>{copy.lag} <span>{copy.priceThrough}: {date(view?.priceAvailableThrough, locale)} · {copy.breadthThrough}: {date(view?.breadthAvailableThrough, locale)}.</span></p> : null}

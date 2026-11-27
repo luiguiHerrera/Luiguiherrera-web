@@ -1,4 +1,4 @@
-.card { --pp-green: var(--dashboard-green, #193d32); --pp-gold: #87692d; --pp-muted: var(--dashboard-muted, #626c64); --pp-line: var(--dashboard-line, #ded8cb); display: grid; gap: 12px; min-width: 0; color: var(--pp-green); }
+.card { --pp-green: var(--dashboard-green, #193d32); --pp-gold: #87692d; --pp-muted: var(--dashboard-muted, #626c64); --pp-line: var(--dashboard-line, #ded8cb); display: grid; gap: 12px; min-width: 0; color: var(--pp-green, #193d32); }
 .windows { display: flex; gap: 3px; flex-shrink: 0; margin: 0; padding: 3px; border: 1px solid var(--pp-line); border-radius: 4px; }
 .windows legend { margin: 0 4px; padding: 0 5px; color: var(--pp-muted); font-size: 10px; text-align: center; }
 .windows label { position: relative; cursor: pointer; }
@@ -24,12 +24,12 @@
 .controlsRow .windows { justify-self: end; }
 .windowHeading h3 { margin: 0; color: var(--pp-green); font-family: var(--dashboard-serif, Georgia, serif); font-size: 23px; font-weight: 500; line-height: 1.35; letter-spacing: -.015em; }
 .windowHeading p { margin: 7px 0 0; color: var(--pp-muted); font-size: 11px; line-height: 1.7; }
-.contextDisclosure button { min-height: 44px; color: var(--pp-green); }
+.contextDisclosure button { min-height: 44px; color: var(--pp-green, #193d32); }
 .metricHelp { display: inline-flex; align-items: center; flex-shrink: 0; text-transform: none; letter-spacing: normal; }
-.metricHelp button { display: inline-flex; align-items: center; justify-content: center; width: 24px; height: 24px; margin: -4px 0; padding: 0; border: 0; border-radius: 50%; background: transparent; color: var(--pp-muted); cursor: pointer; }
+.metricHelp button { display: inline-flex; align-items: center; justify-content: center; width: 24px; height: 24px; margin: -4px 0; padding: 0; border: 0; border-radius: 50%; background: transparent; color: var(--pp-muted, #626c64); cursor: pointer; }
 .metricHelp button > span { display: inline-flex; align-items: center; justify-content: center; width: 15px; height: 15px; border: 1px solid currentColor; border-radius: 50%; font-family: Georgia, serif; font-size: 11px; line-height: 1; }
-.metricHelp button:hover { color: var(--pp-green); }
-.metricTooltip { position: absolute; top: calc(100% + 10px); left: 0; z-index: 30; width: min(320px, 100%); padding: 13px 15px; border: 1px solid var(--pp-line); border-radius: 4px; background: #fffdf9; color: var(--pp-green); box-shadow: 0 8px 24px #193d3215; font-size: 12px; font-weight: 400; line-height: 1.7; text-transform: none; letter-spacing: normal; }
+.metricHelp button:hover { color: var(--pp-green, #193d32); }
+.metricTooltip { position: absolute; top: calc(100% + 10px); left: 0; z-index: 30; width: min(320px, 100%); padding: 13px 15px; border: 1px solid var(--pp-line, #e4dfd3); border-radius: 4px; background: #fffdf9; color: var(--pp-green, #193d32); box-shadow: 0 8px 24px #193d3215; font-size: 12px; font-weight: 400; line-height: 1.7; text-transform: none; letter-spacing: normal; }
 .metricTooltip[hidden] { display: none; }
 .detail { padding: 20px 0 8px; }
 .context[hidden] { display: none; }
@@ -187,3 +187,6 @@
   .tableScroll th, .tableScroll td { padding: 11px; }
   .pagination { justify-content: space-between; gap: 8px; }
 }
+
+
+.jointReading { display:block; margin-top:8px; color:var(--pp-muted, #626c64); font-size:11px; line-height:1.65; }

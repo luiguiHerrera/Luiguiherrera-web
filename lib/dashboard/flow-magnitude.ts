@@ -62,5 +62,5 @@ export function flowMagnitudeReferences(model:CapitalFlowAssetPreview) {
 }
 
 export function magnitudePercentileText(ref:FlowMagnitudeReference, locale:'es'|'en') {
-  return ref.percentile===null ? null : `${locale==='en'?'Magnitude percentile':'Percentil de magnitud'} ${Math.round(ref.percentile)}`;
+  return ref.percentile===null ? null : `${locale==='en'?'Percentile':'Percentil'} ${Math.round(ref.percentile)}`;
 }

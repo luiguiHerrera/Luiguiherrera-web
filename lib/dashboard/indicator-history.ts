@@ -24,5 +24,12 @@ export function riskReferenceText(ref: IndicatorReference | null | undefined, lo
   if (!ref || (ref.percentile === null && ref.delta20 === null)) return null;
   const n = (v:number) => new Intl.NumberFormat(locale==='en'?'en-US':'es-ES',{maximumFractionDigits:digits,minimumFractionDigits:digits}).format(v).replace(/-/g,'−');
   return [ref.delta20 === null ? null : `${ref.delta20>0?'+':''}${n(ref.delta20*scale)} ${unit} ${locale==='en'?'over 20 sessions':'en 20 sesiones'}`,
-    ref.percentile === null ? null : `${locale==='en'?'Historical percentile':'Percentil histórico'} ${Math.round(ref.percentile)}`].filter(Boolean).join(' · ');
+    ref.percentile === null ? null : `${locale==='en'?'Percentile':'Percentil'} ${Math.round(ref.percentile)}`].filter(Boolean).join(' · ');
+}
+
+/** Compact reference label; exact dates remain available in the existing detail. */
+export function referenceYears(start:string|null, end:string|null, observations:number) {
+  if(!start || !end)return `n=${observations}`;
+  const first=start.slice(0,4), last=end.slice(0,4);
+  return `${first===last ? first : `${first}–${last}`} · n=${observations}`;
 }

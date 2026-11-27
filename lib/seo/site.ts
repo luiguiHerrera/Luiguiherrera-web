@@ -250,14 +250,14 @@ const seoRouteContent: readonly Omit<SeoRouteDefinition, "alternatePathname">[] 
     language: "es",
     title: "Recursos para inversionistas | Scripts TradingView y herramientas",
     description:
-      "Catálogo de recursos públicos para inversionistas, incluyendo scripts open-source de TradingView para niveles estadísticos y contexto de mercado.",
+      "Herramientas open-source que he desarrollado para estudiar niveles estadísticos y contexto de mercado en TradingView.",
   },
   {
     pathname: "/en/resources",
     language: "en",
     title: "Investor resources | TradingView scripts and tools",
     description:
-      "A catalog of public investor resources, including open-source TradingView scripts for statistical levels and market context.",
+      "Open-source tools I have developed to study statistical levels and market context in TradingView.",
   },
   {
     pathname: "/metodologia",
@@ -427,3 +427,4 @@ export function getRouteMetadata(pathname: string): Metadata {
   if (!definition) throw new Error(`Missing SEO route definition for ${pathname}`);
   return buildSeoMetadata(definition);
 }
+

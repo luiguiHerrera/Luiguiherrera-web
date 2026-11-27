@@ -152,3 +152,15 @@ test('VIX delta uses its own published closes, including extended-hours dates ou
   assert.ok(Math.abs(spot.historicalReference!.delta20!-.2)<1e-12);
   assert.equal(spot.historicalReference!.observations,dates.length-1);
 });
+
+test('compact reference labels keep years and sample size without discarding calculation dates',async()=>{
+ const {referenceYears,riskReferenceText}=await import('./indicator-history.ts');
+ const {magnitudePercentileText}=await import('./flow-magnitude.ts');
+ assert.equal(referenceYears('2021-11-26','2026-11-25',1288),'2021–2026 · n=1288');
+ assert.equal(referenceYears('2026-08-03','2026-10-30',64),'2026 · n=64');
+ const ref={cutoff:'2026-11-26',current:26.8,delta20:9.6,comparisonDate:'2026-10-29',percentile:90,observations:1288,start:'2021-11-26',end:'2026-11-25'};
+ assert.equal(riskReferenceText(ref,'es',1,'pp'),'+9,6 pp en 20 sesiones · Percentil 90');
+ assert.equal(riskReferenceText(ref,'en',1,'pp'),'+9.6 pp over 20 sessions · Percentile 90');
+ assert.equal(magnitudePercentileText({percentile:56} as never,'es'),'Percentil 56');
+ assert.equal(ref.comparisonDate,'2026-10-29');
+});

@@ -1,5 +1,4 @@
 import { tradingViewScripts } from "@/lib/resources/tradingview-scripts";
-import { ReadingCard } from "@/components/seo/ReadingCard";
 import { InstitutionalHero } from "@/components/ui/InstitutionalHero";
 import { getRouteMetadata } from "@/lib/seo/site";
 
@@ -17,7 +16,7 @@ const toolCategories = [
     id: "python",
     name: "Python",
     status: "Próximamente",
-    description: "Research notebooks, simuladores y utilidades de análisis.",
+    description: "Cuadernos de investigación, simuladores y herramientas de análisis.",
     href: "#python",
   },
   {
@@ -48,9 +47,8 @@ export default function RecursosPage() {
     <div className="mx-auto max-w-7xl px-5 py-10 md:py-14">
       <InstitutionalHero
         chips={toolCategories.map((category) => category.name)}
-        description="Herramientas públicas para complementar tu proceso."
+        description="Herramientas que he desarrollado Open-Source."
         eyebrow="Recursos públicos"
-        note="Solo se publican recursos con enlace funcional o estado explícito."
         title="Recursos"
         variant="library"
       />
@@ -61,9 +59,6 @@ export default function RecursosPage() {
             <p className="text-xs font-semibold uppercase tracking-[0.18em] text-petrol">Tipos de herramienta</p>
             <h2 className="mt-2 text-2xl font-semibold text-ink md:text-3xl">Elige el lenguaje o plataforma</h2>
           </div>
-          <p className="max-w-xl text-sm leading-6 text-muted">
-            Hoy se publican solo herramientas con enlace funcional. El resto queda señalado como próximo sin enlaces falsos.
-          </p>
         </div>
 
         <div className="mt-6 grid gap-4 md:grid-cols-2 xl:grid-cols-5">
@@ -94,25 +89,15 @@ export default function RecursosPage() {
         </div>
       </section>
 
-      <ReadingCard className="reading-card-discreet" title="Ficha de lectura" items={[
-        { label: "Qué es", value: "Un catálogo de recursos públicos para inversionistas, incluyendo scripts open-source de TradingView y futuras herramientas educativas." },
-        { label: "Para qué sirve", value: "Sirve para encontrar herramientas reales publicadas sin enlaces falsos ni categorías infladas." },
-        { label: "Límites", value: "Los recursos son educativos y su disponibilidad depende de cada plataforma externa." },
-        { label: "Siguiente paso", value: "Explorar los scripts publicados o volver a mercado, niveles estadísticos y metodología." },
-      ]} />
 
       <section id="tradingview" className="mt-10 scroll-mt-28">
         <div className="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
           <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-petrol">TradingView</p>
-            <h2 className="mt-2 text-2xl font-semibold text-ink md:text-3xl">Scripts gratuitos de TradingView</h2>
+            <h2 className="text-2xl font-semibold text-ink md:text-3xl">TradingView</h2>
           </div>
-          <p className="max-w-xl text-sm leading-6 text-muted">
-            Catálogo compacto para reunir utilidades públicas del proceso.
-          </p>
         </div>
 
-        <div className="mt-6 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+        <div className="mt-6 grid gap-4 [grid-template-columns:repeat(auto-fit,minmax(min(100%,19rem),1fr))]">
           {tradingViewScripts.map((script) => (
             <article key={script.id} className="editorial-surface flex min-h-[15rem] flex-col rounded-[6px] border border-line p-5">
               <div className="flex items-start justify-between gap-4">
@@ -143,3 +128,4 @@ export default function RecursosPage() {
     </div>
   );
 }
+

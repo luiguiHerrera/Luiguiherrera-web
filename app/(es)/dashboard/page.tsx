@@ -200,7 +200,7 @@ export async function DashboardContent({ locale = "es", previewMcClellan = false
         </section> : null}
         {quantRisk || vix || vixTermStructure ? (
           <section className="grid min-w-0 gap-3 [&>*]:min-w-0" aria-labelledby="vix-volatility-section">
-            <DashboardSectionOverview id="vix-volatility-section" title={copy.vixSection} items={riskOverview} />
+            <DashboardSectionOverview id="vix-volatility-section" title={copy.vixSection} items={riskOverview} locale={locale} />
             <details data-dashboard-section="vix" data-detail-disclosure open={previewRisk || undefined}>
               <summary>
                 <span>{locale === 'en' ? 'View detail' : 'Ver detalle'}</span>
@@ -248,3 +248,4 @@ export async function DashboardContent({ locale = "es", previewMcClellan = false
     </DashboardPresentation>
   );
 }
+

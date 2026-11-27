@@ -1,4 +1,4 @@
-import { riskReferenceText, type IndicatorReference } from './indicator-history';
+import { riskReferenceText, referenceYears, type IndicatorReference } from './indicator-history';
 import { dashboardText, type DashboardLocale } from "./dashboard-localization.ts";
 import type { DashboardOverviewItem } from "./dashboard-overview.ts";
 import { hasVixObservation } from "./vix-presentation.ts";
@@ -58,30 +58,32 @@ export function buildRiskOverview({ quantRisk, vixSpot, vixTermStructure }: Risk
 
   const reference = (ref:IndicatorReference|null|undefined, scale=100, unit='pp', digits=1) => {
     const text=riskReferenceText(ref,locale,scale,unit,digits);
-    return text && ref ? {text,period:ref.percentile===null ? `${ref.comparisonDate}–${ref.cutoff}` : `${ref.start}–${ref.end} · n=${ref.observations}`} : undefined;
+    return text && ref ? {text,period:ref.percentile===null ? referenceYears(ref.comparisonDate,ref.cutoff,ref.observations) : referenceYears(ref.start,ref.end,ref.observations)} : undefined;
   };
   return [
     {
-      id: "vix", reference:spotAvailable ? reference(vixSpot.historicalReference,1,english?"pts":"puntos") : undefined, label: english ? "VIX and structure" : "VIX y estructura",
+      id: "vix", help:english ? "VIX expresses annualized S&P 500 implied volatility over roughly 30 days. Its change is stated in percentage points (pp) of that volatility, not as a return. The percentile ranks the level against previous closes; it is not a probability of a market decline. The reference shows years and n valid readings. Exact dates and calculations remain in View detail." : "El VIX expresa la volatilidad implícita anualizada del S&P 500 a unos 30 días. La variación se expresa en puntos porcentuales (pp) de esa volatilidad: no es una rentabilidad. El percentil compara el nivel con sus cierres anteriores; no es una probabilidad de caída. La referencia muestra los años y n de lecturas válidas. Las fechas exactas y el cálculo están en Ver detalle.", reference:spotAvailable ? reference(vixSpot.historicalReference,1,"pp") : undefined, label: english ? "VIX and structure" : "VIX y estructura",
       value: spotAvailable ? number(vixSpot.latestVix, 2) : unavailable,
       available: spotAvailable,
       detail: english ? `Index points${spotAvailable ? ` · ${dashboardText(locale, vixSpot.vixLevelLabel)}` : ""}` : `Puntos del índice${spotAvailable ? ` · ${vixSpot.vixLevelLabel}` : ""}`,
       date: spotAvailable ? observationDate(vixSpot.lastObservationDate, locale) : undefined,
       secondary: {
         label: english ? "VX futures structure" : "Estructura de futuros VX",
+        help:english ? "Shape of the verified monthly VX futures settlement curve. Contango and backwardation describe prices across maturities; they do not predict SPY returns. The settlement date belongs to the curve and can differ from the spot VIX date." : "Forma de la curva de liquidaciones verificadas de los futuros mensuales VX. Contango y backwardation describen los precios entre vencimientos; no predicen la rentabilidad de SPY. Su fecha de liquidación es propia y puede diferir de la del VIX al contado.",
         value: curveAvailable ? dashboardText(locale, vixTermStructure.classification) : unavailable,
         available: Boolean(curveAvailable),
         date: curveAvailable ? observationDate(vixTermStructure.lastUpdated, locale) : undefined,
       },
     },
     {
-      id: "ewma-garch", label: english ? "EWMA · Sector basket" : "EWMA · Cesta sectorial",
+      id: "ewma-garch", help:english ? "Annualized volatility of the equal-weight basket of 11 sector ETFs, with more weight on recent returns (λ = 0.94). It does not indicate market direction. A retained snapshot keeps its original date. No percentile is shown because a compatible retained history of the model outputs is unavailable." : "Volatilidad anualizada de la cesta equiponderada de los 11 ETF sectoriales, con más peso para los retornos recientes (λ = 0,94). No indica dirección del mercado. El corte conservado mantiene su fecha original. Se omite el percentil porque no existe una serie histórica retenida compatible.", label: english ? "EWMA · Sector basket" : "EWMA · Cesta sectorial",
       value: ewma === null ? unavailable : percent(ewma, 1),
       available: ewma !== null,
       detail: (english ? "Annualized volatility" : "Volatilidad anualizada") + (quantRisk?.refreshStatus === "retained" ? (english ? " · Retained snapshot" : " · Corte conservado") : ""),
       date: ewma === null ? undefined : sectorDate,
       secondary: {
         label: "GARCH(1,1)",
+        help:english ? "Annualized volatility forecast for the same sector basket with fixed α = 0.06 and β = 0.90. It models conditional variance, not market direction. A retained snapshot keeps its date; no historical percentile is inferred from a different model or universe." : "Estimación de volatilidad anualizada para la misma cesta sectorial, con α = 0,06 y β = 0,90 fijos. Modela la varianza condicional, no la dirección del mercado. El corte conservado mantiene su fecha; no se infiere un percentil histórico de otro modelo o universo.",
         value: garch === null ? unavailable : percent(garch, 1),
         available: garch !== null,
         detail: (english ? "Annualized · Fixed parameters" : "Anualizada · Parámetros fijos") + (quantRisk?.refreshStatus === "retained" ? (english ? " · Retained snapshot" : " · Corte conservado") : ""),
@@ -89,14 +91,14 @@ export function buildRiskOverview({ quantRisk, vixSpot, vixTermStructure }: Risk
       },
     },
     {
-      id: "var95", reference:var95===null ? undefined : reference(quantRisk?.historicalRisk?.references?.var95,100,"pp",2), label: "VaR95",
+      id: "var95", help:english ? "SPY one-day loss threshold estimated from 1,260 historical returns: the 95th percentile of losses. The Percentile shown below instead compares the current VaR with its own past values; it is not a probability of a market decline. Δ20 is the difference in pp from 20 sessions earlier. View detail retains exact dates and the method." : "Umbral de pérdida diaria de SPY estimado con 1.260 retornos históricos: corresponde al percentil 95 de sus pérdidas. El Percentil mostrado debajo compara el valor actual de ese VaR con sus valores pasados; es otra referencia, no una probabilidad de caída. Δ20 es la diferencia en pp respecto de 20 sesiones antes. Ver detalle conserva las fechas exactas y el método.", reference:var95===null ? undefined : reference(quantRisk?.historicalRisk?.references?.var95,100,"pp",2), label: "VaR95",
       value: var95 === null ? unavailable : percent(var95 * 100),
       available: var95 !== null,
       detail: english ? "SPY · One-session loss · 1,260 returns" : "SPY · Pérdida a una sesión · 1.260 retornos",
       date: var95 === null ? undefined : observationDate(spy?.lastUpdated, locale),
     },
     {
-      id: "absorption", reference:ratio===null ? undefined : reference(quantRisk?.historicalRisk?.references?.absorption), label: english ? "Sector absorption ratio" : "Absorption ratio sectorial",
+      id: "absorption", help:english ? "Share of the joint variance of 11 sector ETFs explained by the first two principal components. A higher value indicates greater concentration of that variation. It uses 500 sessions with exponential weighting and a 250-session half-life. Δ20 is in pp. The percentile ranks the indicator against its own history, not a probability of a market decline." : "Fracción de la varianza conjunta de los 11 ETF sectoriales explicada por los dos primeros componentes principales. Un valor mayor indica mayor concentración de esa variación. Usa 500 sesiones y ponderación exponencial con semivida 250. Δ20 se expresa en pp. El percentil compara el indicador con su propio histórico, no mide una probabilidad de caída.", reference:ratio===null ? undefined : reference(quantRisk?.historicalRisk?.references?.absorption), label: english ? "Sector absorption ratio" : "Absorption ratio sectorial",
       value: ratio === null ? unavailable : percent(ratio * 100),
       available: ratio !== null,
       detail: english ? "Variance explained · 11 ETFs · 500 sessions · 2 components" : "Varianza explicada · 11 ETF · 500 sesiones · 2 componentes",
@@ -104,4 +106,5 @@ export function buildRiskOverview({ quantRisk, vixSpot, vixTermStructure }: Risk
     },
   ];
 }
+
 

@@ -32,7 +32,7 @@ const routes: Record<string, RouteSchema> = {
   "/dashboard": { name: "Dashboard de régimen de mercado", description: "Dashboard educativo para ordenar señales de régimen de mercado, volatilidad, rotación, amplitud, flujos BTC ETF y proxy GLD.", kind: "application", category: "EducationalApplication" },
   "/analisisyperpectivas": { name: "Análisis y perspectivas", description: "Archivo de informes de mercado multi-activo.", kind: "collection" },
   "/analisiscuantitativo": { name: "Análisis cuantitativo", description: "Análisis educativo de precio, niveles históricos, riesgo, estacionalidad, horizontes y correlaciones entre activos.", kind: "application", category: "EducationalApplication" },
-  "/recursos": { name: "Recursos", description: "Catálogo de recursos públicos y scripts open-source para inversionistas.", kind: "collection" },
+  "/recursos": { name: "Recursos", description: "Herramientas open-source desarrolladas por Luigui Herrera para estudiar niveles estadísticos y contexto de mercado.", kind: "collection" },
   "/metodologia": { name: "Metodología", description: "Trazabilidad de fuentes, límites y métodos de las herramientas educativas.", kind: "page" },
   "/investigacion": { name: "Investigación cuantitativa", description: "Índice de estudios cuantitativos reproducibles con método, datos derivados y límites publicados.", kind: "collection" },
   "/investigacion/td3": { name: td3Editorial.es.headline, description: "Nota técnica de investigación sobre TD3, costes, cash, benchmarks y validación estadística.", kind: "tech", editorial: td3Editorial.es, about: td3About },
@@ -53,7 +53,7 @@ Object.assign(enRoutes, {
   "/en/dashboard": { name: "Market Regime Dashboard", description: "Educational dashboard organizing market regime, volatility, rotation, breadth, BTC ETF flows and a GLD proxy.", kind: "application", category: "EducationalApplication" },
   "/en/weekly-report": { name: "Weekly market report", description: "Multi-asset market-report archive.", kind: "collection" },
   "/en/quantitative-analysis": { name: "Quantitative analysis", description: "Educational analysis of price, historical levels, risk, seasonality, horizons and correlations across assets.", kind: "application", category: "EducationalApplication" },
-  "/en/resources": { name: "Resources", description: "Catalog of public resources and open-source scripts for investors.", kind: "collection" },
+  "/en/resources": { name: "Resources", description: "Open-source tools developed by Luigui Herrera to study statistical levels and market context.", kind: "collection" },
   "/en/methodology": { name: "Methodology", description: "Traceability for sources, limits and methods used by the educational tools.", kind: "page" },
   "/en/research": { name: "Quantitative research", description: "Index of reproducible quantitative studies with published methods, derived data and limits.", kind: "collection" },
   "/en/research/td3": { name: td3Editorial.en.headline, description: "Technical research note on TD3, costs, cash, benchmarks and statistical validation.", kind: "tech", editorial: td3Editorial.en, about: td3About },
@@ -86,3 +86,4 @@ export function RouteStructuredData() {
   }
   return <JsonLd data={schemas} />;
 }
+
