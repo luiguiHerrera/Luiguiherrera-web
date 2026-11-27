@@ -154,6 +154,8 @@ export type LegacyVixTermStructureData = DashboardDataSource & {
 };
 
 export type VixTermStructureData = {
+  settlementDate?: string | null;
+  retrievedAt?: string | null;
   source: string;
   sourceUrl?: string;
   sourceStatus: VixTermStructureSourceStatus;

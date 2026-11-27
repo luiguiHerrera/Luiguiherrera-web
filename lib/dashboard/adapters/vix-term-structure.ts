@@ -9,11 +9,9 @@ export type CboeSettlementRow = {
 };
 
 const CBOE_SETTLEMENT_SOURCE_URL = "https://www.cboe.com/markets/us/futures/market-statistics/settlement/futures/daily/";
-const CBOE_SETTLEMENT_CSV_URL = "https://www-api.cboe.com/us/futures/market_statistics/settlement/csv/";
 const MONTHLY_VX_SYMBOL_PATTERN = /^VX\/[FGHJKMNQUVXZ][0-9]$/;
 const MAX_MONTHLY_CONTRACTS = 9;
 const REQUEST_TIMEOUT_MS = 8000;
-const LOOKBACK_DAYS = 12;
 
 function logVixTermStructure(details: Record<string, unknown>) {
   console.info("[dashboard:vix-term-structure]", details);
@@ -49,24 +47,6 @@ function buildFallbackData(sourceStatus: VixTermStructureData["sourceStatus"], r
     reliabilityNote:
       "Fuente preparada sobre settlements diarios oficiales de Cboe CFE. Si la tabla no está disponible o cambia de formato, el módulo queda pendiente sin inventar datos.",
   };
-}
-
-function dateToQuery(date: Date) {
-  return date.toISOString().slice(0, 10);
-}
-
-function recentSettlementDates() {
-  const dates: string[] = [];
-  const cursor = new Date();
-  cursor.setUTCHours(12, 0, 0, 0);
-
-  for (let offset = 0; offset < LOOKBACK_DAYS; offset += 1) {
-    const date = new Date(cursor);
-    date.setUTCDate(cursor.getUTCDate() - offset);
-    dates.push(dateToQuery(date));
-  }
-
-  return dates;
 }
 
 function parseCsvRows(csv: string) {
@@ -201,24 +181,47 @@ export function selectMonthlyVixContracts(
     .slice(0, limit);
 }
 
-async function fetchSettlementCsv(date: string) {
-  const url = `${CBOE_SETTLEMENT_CSV_URL}?dt=${encodeURIComponent(date)}`;
-  const response = await fetch(url, {
-    headers: {
-      Accept: "text/csv,text/plain,*/*",
-      "Accept-Language": "en-US,en;q=0.9",
-      "User-Agent": "LuiguiHerreraDashboard/1.0 (market context dashboard)",
-    },
-    next: { revalidate: 21600 },
-    signal: AbortSignal.timeout(REQUEST_TIMEOUT_MS),
-  });
-  const text = await readObservedResponse(response, { sourceId: "VX_OFFICIAL", sourceVersion: "cboe-cfe-daily-csv/1.0.0", sourceUrl: url });
+function htmlText(html: string) {
+  return html.replace(/<!--[\s\S]*?-->/g, "").replace(/<[^>]*>/g, " ")
+    .replace(/&nbsp;|&#160;/g, " ").replace(/&amp;/g, "&").replace(/\s+/g, " ").trim();
+}
 
-  return {
-    status: response.status,
-    ok: response.ok,
-    text,
-  };
+/** Read the date and prices from the same official dated publication. The CSV
+ * endpoint silently substitutes its latest file for unknown requested dates. */
+export function parseCboeDailyPublications(html: string, asOf: string) {
+  const headings = [...html.matchAll(/<h3\b[^>]*>([\s\S]*?)<\/h3>/gi)];
+  const publications: {settlementDate: string; rows: CboeSettlementRow[]}[] = [];
+  for (let index = 0; index < headings.length; index++) {
+    const heading = headings[index];
+    const date = htmlText(heading[1]).match(/^Settlement Prices for (\d{4}-\d{2}-\d{2})$/)?.[1];
+    if (!date || !isIsoDate(date) || date > asOf.slice(0, 10)) continue;
+    const section = html.slice(heading.index! + heading[0].length, headings[index + 1]?.index ?? html.length);
+    // Require Cboe's own dated download link beside the publication heading.
+    const links = [...section.matchAll(/<a\b[^>]*href=["']([^"']+)["']/gi)];
+    const datedLink = links.some(match => {
+      try {
+        const url = new URL(match[1].replace(/&amp;/g, "&"), CBOE_SETTLEMENT_SOURCE_URL);
+        return url.origin === "https://www-api.cboe.com"
+          && /^\/us\/futures\/market_statistics\/settlement\/csv\/?$/.test(url.pathname)
+          && url.searchParams.get("dt") === date;
+      } catch { return false; }
+    });
+    if (!datedLink) continue;
+    const product = [...section.matchAll(/<h4\b[^>]*>([\s\S]*?)<\/h4>/gi)]
+      .find(match => /^VX\s*-\s*Cboe Volatility Index \(VX\) Futures$/.test(htmlText(match[1])));
+    if (!product) continue;
+    const table = section.slice(product.index! + product[0].length).match(/<table\b[^>]*>([\s\S]*?)<\/table>/i)?.[1];
+    if (!table) continue;
+    const rows: CboeSettlementRow[] = [];
+    for (const match of table.matchAll(/<tr\b[^>]*>([\s\S]*?)<\/tr>/gi)) {
+      const cells = [...match[1].matchAll(/<t[dh]\b[^>]*>([\s\S]*?)<\/t[dh]>/gi)].map(cell => htmlText(cell[1]));
+      const identity = cells[0]?.match(/^(VX(?:\d{2})?\/[FGHJKMNQUVXZ]\d)\s*-\s*(\d{4}-\d{2}-\d{2})$/);
+      if (!identity || cells.length !== 2) continue;
+      rows.push({product:"VX", symbol:identity[1], expirationDate:identity[2], price:parseSettlementPrice(cells[1])});
+    }
+    if (rows.length) publications.push({settlementDate:date, rows});
+  }
+  return publications.sort((a,b) => b.settlementDate.localeCompare(a.settlementDate));
 }
 
 function contractLabel(expirationDate: string) {
@@ -256,7 +259,7 @@ function interpretationFor(classification: VixTermStructureClassification) {
   return "Estructura VIX pendiente de fuente automatizada estable.";
 }
 
-export function buildDataFromContracts(contracts: CboeSettlementRow[], settlementDate: string): VixTermStructureData {
+export function buildDataFromContracts(contracts: CboeSettlementRow[], settlementDate: string, retrievedAt?: string): VixTermStructureData {
   const points: VixTermStructurePoint[] = contracts.slice(0, MAX_MONTHLY_CONTRACTS).map((contract, index) => ({
     label: `VX${index + 1}` as VixTermStructurePoint["label"],
     symbol: contract.symbol,
@@ -278,6 +281,8 @@ export function buildDataFromContracts(contracts: CboeSettlementRow[], settlemen
     sourceUrl: CBOE_SETTLEMENT_SOURCE_URL,
     sourceStatus: "automated",
     lastUpdated: `Último settlement disponible: ${formatSettlementDate(settlementDate)}`,
+    settlementDate,
+    retrievedAt: retrievedAt ?? null,
     points,
     m1m2Spread,
     m1m2SlopePct,
@@ -294,37 +299,25 @@ export function buildDataFromContracts(contracts: CboeSettlementRow[], settlemen
 
 export async function getVixTermStructureData(): Promise<VixTermStructureData> {
   try {
-    for (const date of recentSettlementDates()) {
-      const response = await fetchSettlementCsv(date);
-      const rows = response.ok ? parseCboeSettlements(response.text) : [];
-      const monthlyContracts = selectMonthlyVixContracts(rows, date, rows.length);
-      const selectedContracts = monthlyContracts.slice(0, MAX_MONTHLY_CONTRACTS);
-      const selectedSymbols = selectedContracts.map((row) => row.symbol);
-
-      logVixTermStructure({
-        source: "cboe_settlement",
-        status: response.status,
-        settlementDate: date,
-        monthlyContractsFound: monthlyContracts.length,
-        selectedSymbols,
-        sourceStatus: selectedContracts.length > 0 ? "automated" : "pending",
-      });
-
-      if (selectedContracts.length > 0) {
-        return buildDataFromContracts(selectedContracts, date);
-      }
-    }
-
-    return buildFallbackData("pending", "insufficient_monthly_vx_contracts");
-  } catch (error) {
-    logVixTermStructure({
-      source: "cboe_settlement",
-      reason: "request_or_parse_failed",
-      message: error instanceof Error ? error.message : "Unknown error",
-      monthlyContractsFound: 0,
-      selectedSymbols: [],
-      sourceStatus: "unavailable",
+    const response = await fetch(CBOE_SETTLEMENT_SOURCE_URL, {
+      headers: {Accept:"text/html", "User-Agent":"LuiguiHerreraDashboard/1.0 (market context dashboard)"},
+      next: {revalidate:21600}, signal:AbortSignal.timeout(REQUEST_TIMEOUT_MS),
     });
+    const html = await readObservedResponse(response, {sourceId:"VX_OFFICIAL",
+      sourceVersion:"cboe-cfe-dated-publication/2.0.0",sourceUrl:CBOE_SETTLEMENT_SOURCE_URL});
+    const retrievedAt = new Date().toISOString();
+    if (!response.ok) throw new Error(`Cboe publication HTTP ${response.status}`);
+    for (const publication of parseCboeDailyPublications(html, retrievedAt)) {
+      const selected = selectMonthlyVixContracts(publication.rows, publication.settlementDate);
+      if (!selected.some(row => row.price !== null)) continue;
+      logVixTermStructure({source:"cboe_settlement",settlementDate:publication.settlementDate,
+        retrievedAt,selectedSymbols:selected.map(row=>row.symbol),sourceStatus:"automated"});
+      return buildDataFromContracts(selected, publication.settlementDate, retrievedAt);
+    }
+    return buildFallbackData("pending", "dated_cboe_publication_unavailable");
+  } catch (error) {
+    logVixTermStructure({source:"cboe_settlement",reason:"request_or_parse_failed",
+      message:error instanceof Error?error.message:"Unknown error",sourceStatus:"unavailable"});
     return buildFallbackData("unavailable", "request_or_parse_failed");
   }
 }

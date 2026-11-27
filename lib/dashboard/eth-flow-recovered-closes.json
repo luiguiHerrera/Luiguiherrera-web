@@ -1,0 +1,26 @@
+{
+  "provenance": {
+    "publisher": "CryptoETF.today",
+    "source": "https://mcp.cryptoetf.today/mcp",
+    "tool": "get_fund_flows",
+    "asset": "eth",
+    "capturedFeedSha256": "c1b67f7d520ee3a9fffd86c0612470eef851a1c7dac8a74f0a799d5fca476643",
+    "providerUpdatedAt": "2026-11-23T22:22:17.148Z",
+    "restoredAt": "2026-11-27",
+    "note": "Aggregate chart observations recovered from the original retained response; all eleven fund contributions were validated. Full provider response is not redistributed."
+  },
+  "points": [
+    {
+      "date": "2026-10-26",
+      "flow": -88600000,
+      "complete": true,
+      "funds": []
+    },
+    {
+      "date": "2026-10-27",
+      "flow": -60200000,
+      "complete": true,
+      "funds": []
+    }
+  ]
+}

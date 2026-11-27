@@ -74,7 +74,7 @@ jobs:
           node --import ./scripts/trends-test-register.mjs --experimental-test-module-mocks --experimental-strip-types --test --test-reporter=tap \
             lib/portfolio-fragility/*.test.ts \
             lib/trends/trends.test.tsx lib/trends/research/*.test.tsx \
-            lib/dashboard/capital-flow-comparison.test.mjs lib/dashboard/capital-flows-source.test.mjs lib/dashboard/spy-flow-publication.test.mjs \
+            lib/dashboard/capital-flow-comparison.test.mjs lib/dashboard/capital-flows-source.test.mjs lib/dashboard/spy-flow-publication.test.mjs lib/dashboard/durable-flow-publication.test.mjs lib/dashboard/adapters/vix-term-structure.test.ts \
             lib/dashboard/eth-capital-flows-source.test.mjs lib/dashboard/eth-etf-flows-preview.test.mjs lib/dashboard/ewj-capital-flows*.test.mjs \
             lib/dashboard/sp500-etf-flows.test.mjs lib/dashboard/mcclellan-source.test.mjs lib/dashboard/mcclellan-reading.test.mjs \
             lib/dashboard/development-source-cache.test.mjs lib/dashboard/dashboard-overview.test.ts \

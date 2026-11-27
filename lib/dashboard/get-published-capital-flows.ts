@@ -12,8 +12,8 @@ import {createDevelopmentSourceCache} from './development-source-cache.mjs';
 
 export const CAPITAL_FLOWS_CACHE_TAG = 'dashboard-capital-flows-automatic-v2';
 export const PUBLISHED_CAPITAL_FLOW_IDS = [...CAPITAL_FLOW_IDS, 'eth', 'ewj'];
-export const fetchUncachedCapitalFlow = (id:string) => id==='sp500' ? getSpyAutomaticModel(true) : id==='eth' ? getEthAutomaticModel()
-  : id==='ewj' ? getEwjAutomaticModel() : fetchCapitalFlowSource(id);
+export const fetchUncachedCapitalFlow = (id:string) => id==='sp500' ? getSpyAutomaticModel(true) : id==='eth' ? getEthAutomaticModel(true)
+  : id==='ewj' ? getEwjAutomaticModel(true) : fetchCapitalFlowSource(id);
 // Separate entries: failure of one provider cannot prevent the other assets refreshing.
 const getCachedLegacyCapitalFlow = unstable_cache(
   (id: string) => fetchCapitalFlowSource(id),
@@ -22,12 +22,12 @@ const getCachedLegacyCapitalFlow = unstable_cache(
 );
 const getCachedEthCapitalFlow = unstable_cache(
   () => getEthAutomaticModel(),
-  ['dashboard-eth-capital-flows-public-v1'],
+  ['dashboard-eth-capital-flows-durable-v2'],
   {revalidate:process.env.NODE_ENV === 'development' ? false : 3600,tags:[CAPITAL_FLOWS_CACHE_TAG]},
 );
 const getCachedEwjCapitalFlow = unstable_cache(
   () => getEwjAutomaticModel(),
-  ['dashboard-ewj-capital-flows-etfiq-v1'],
+  ['dashboard-ewj-capital-flows-durable-v2'],
   {revalidate:process.env.NODE_ENV === 'development' ? false : 86400,tags:[CAPITAL_FLOWS_CACHE_TAG]},
 );
 const readPersistentCapitalFlow = (id:string) => id==='sp500' ? getSpyAutomaticModel() : id==='eth' ? getCachedEthCapitalFlow()

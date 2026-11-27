@@ -3,6 +3,8 @@ import { readFileSync } from "node:fs";
 import test from "node:test";
 import {
   buildDataFromContracts,
+  parseCboeDailyPublications,
+  getVixTermStructureData,
   parseCboeSettlements,
   selectMonthlyVixContracts,
   type CboeSettlementRow,
@@ -164,4 +166,38 @@ test("preserves VX1-VX2 classification and VX1-VX3 metrics after extending the c
   assert.equal(fullCurve.m1m2SlopePct, shortCurve.m1m2SlopePct);
   assert.equal(fullCurve.m1m3Spread, shortCurve.m1m3Spread);
   assert.equal(fullCurve.m1m3SlopePct, shortCurve.m1m3SlopePct);
+});
+
+function datedPublication(date:string,linkDate=date) {
+  const rows=[['VX48/Z6','2026-12-01',25.0258],['VX/Z6','2026-12-16',25.0258],['VX/F7','2027-01-20',24.2921],['VX/G7','2027-02-17',23.9679]];
+  return `<h3>Settlement Prices for <!-- -->${date}</h3>
+    <a href="https://www-api.cboe.com/us/futures/market_statistics/settlement/csv?dt=${linkDate}">Download this as CSV</a>
+    <h4>VX<!-- --> - <!-- -->Cboe Volatility Index (VX) Futures</h4>
+    <table><tbody><tr><th>Symbol - Expiration Date</th><th>Settlement Price</th></tr>
+    ${rows.map(([symbol,expiry,price])=>`<tr><td>${symbol}<!-- --> - <!-- -->${expiry}</td><td>${price}</td></tr>`).join('')}</tbody></table>`;
+}
+
+test('the effective date belongs to the official publication, independently of query day and unchanged prices',()=>{
+  const publications=parseCboeDailyPublications(datedPublication('2026-11-25')+datedPublication('2026-11-24'),'2026-11-27T02:00:00Z');
+  assert.deepEqual(publications.map(p=>p.settlementDate),['2026-11-25','2026-11-24']);
+  const model=buildDataFromContracts(selectMonthlyVixContracts(publications[0].rows,publications[0].settlementDate),'2026-11-25','2026-11-27T02:00:00Z');
+  assert.equal(model.settlementDate,'2026-11-25');assert.equal(model.retrievedAt,'2026-11-27T02:00:00Z');
+  assert.equal(model.points[0].value,25.0258);assert.equal(model.points[1].value,24.2921);
+  assert.match(model.lastUpdated!,/25/);assert.doesNotMatch(model.lastUpdated!,/27/);
+});
+test('future, invalid or mismatched publication dates are not accepted',()=>{
+  const asOf='2026-11-27T02:00:00Z';
+  assert.deepEqual(parseCboeDailyPublications(datedPublication('2026-11-28'),asOf),[]);
+  assert.deepEqual(parseCboeDailyPublications(datedPublication('2026-02-30'),asOf),[]);
+  assert.deepEqual(parseCboeDailyPublications(datedPublication('2026-11-27','2026-11-25'),asOf),[]);
+  assert.deepEqual(parseCboeDailyPublications(datedPublication('2026-11-25').replace('www-api.cboe.com','example.com'),asOf),[]);
+});
+test('the actual adapter uses the dated publication rather than probing CSVs with invented dates',async t=>{
+  const calls:string[]=[];
+  t.mock.method(globalThis,'fetch',async(url:string|URL|Request)=>{
+    calls.push(String(url));return new Response(datedPublication('2026-11-25'),{headers:{'Content-Type':'text/html'}});
+  });
+  const model=await getVixTermStructureData();
+  assert.equal(model.settlementDate,'2026-11-25');assert.ok(model.retrievedAt);
+  assert.equal(calls.length,1);assert.equal(calls[0],'https://www.cboe.com/markets/us/futures/market-statistics/settlement/futures/daily/');
 });

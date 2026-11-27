@@ -25,7 +25,8 @@
     "next": "16.4.6",
     "react": "19.0.0",
     "react-dom": "19.0.0",
-    "@vercel/functions": "3.4.1"
+    "@vercel/functions": "3.4.1",
+    "@vercel/blob": "2.9.0"
   },
   "devDependencies": {
     "@types/node": "20.14.10",
