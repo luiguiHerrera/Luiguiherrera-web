@@ -2,7 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import localFont from "next/font/local";
 import { JsonLd } from "@/components/seo/JsonLd";
-import { InvestorGuidedRoute, InvestorHeroCta } from "./InvestorGuidedRoute";
+import { InvestorGuidedRoute } from "./InvestorGuidedRoute";
 import { investorEntryContent } from "@/lib/investor/entry-content";
 import styles from "./InvestorEntry.module.css";
 
@@ -22,11 +22,10 @@ function BridgeVisual({ kind }: { kind: "resources" | "risk" }) {
       <path d="M29 35h17m15 0h27m14 0h12M51 58h18m15 0h49M29 81h17m38 0h27M51 103h39m15 0h28" stroke="currentColor" strokeWidth="2" opacity=".65" />
       <path d="M153 17v9m-4-4h8M165 82v9m-4-4h8" stroke="currentColor" opacity=".5" />
     </> : <>
-      <ellipse cx="92" cy="65" rx="72" ry="36" stroke="currentColor" opacity=".18" />
-      <ellipse cx="92" cy="65" rx="48" ry="36" stroke="currentColor" opacity=".12" />
-      <path d="m25 64 38-32 61 8 36 37-68 25-67-38Zm38-32 29 70 32-62-99 24 135 13-97-45Z" stroke="currentColor" opacity=".38" />
-      <path d="m63 32 61 8-32 62-29-70Z" fill="currentColor" opacity=".045" />
-      {[[25,64],[63,32],[124,40],[160,77],[92,102]].map(([cx,cy]) => <circle key={`${cx}-${cy}`} cx={cx} cy={cy} r="3" fill="currentColor" opacity=".7" />)}
+      <path d="m90 14 55 29-55 29-55-29 55-29Z" fill="currentColor" opacity=".045" />
+      <path d="m90 14 55 29v43l-55 29-55-29V43l55-29Z M35 43l55 29 55-29 M90 72v43" stroke="currentColor" opacity=".5" />
+      <path d="M90 14v43 M35 86l55-29 55 29" stroke="currentColor" strokeDasharray="3 5" opacity=".18" />
+      {[[90,14],[145,43],[145,86],[90,115],[35,86],[35,43],[90,72]].map(([cx,cy]) => <circle key={`${cx}-${cy}`} cx={cx} cy={cy} r="2.5" fill="currentColor" opacity=".7" />)}
     </>}
   </svg>;
 }
@@ -53,7 +52,6 @@ export function InvestorEntryPage({ locale }: { locale: "es" | "en" }) {
             <p className={styles.eyebrow}>{content.hero.eyebrow}</p>
             <h1>{content.hero.title}</h1>
             <p className={styles.heroSupport}>{content.hero.support}</p>
-            <InvestorHeroCta>{content.hero.cta}</InvestorHeroCta>
             <p className={styles.microcopy}>{content.hero.microcopy}</p>
           </div>
         </header>
