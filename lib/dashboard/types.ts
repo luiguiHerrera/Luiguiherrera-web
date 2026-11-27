@@ -1,3 +1,4 @@
+import type { IndicatorReference } from './indicator-history';
 import type { DashboardModuleId } from "@/lib/analytics/trackEvent";
 import type { CapitalFlowAssetPreview } from "./capital-flows-preview-types";
 import type { McClellanPreviewData } from "./mcclellan-preview-types";
@@ -129,6 +130,7 @@ export type VixTermStructureClassification =
   | "Pendiente";
 
 export type VixSpotData = DashboardDataSource & {
+  historicalReference?: IndicatorReference | null;
   lastObservationDate: string | null;
   latestVix: number | null;
   previousVix: number | null;
@@ -375,3 +377,4 @@ export type DashboardData = {
   ethEtfFlows: EtfFlowsDashboardData | null;
   gldFlowPressure: GldFlowPressure;
 };
+

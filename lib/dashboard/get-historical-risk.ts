@@ -11,7 +11,7 @@ export const HISTORICAL_RISK_CACHE_TAG = "dashboard-adjusted-risk-history-v1";
 // A throwing refresh cannot replace its last successful history with a failure.
 export const getCachedHistoricalRiskSource = unstable_cache(
   () => fetchHistoricalRiskSource(),
-  [HISTORICAL_RISK_CACHE_TAG],
+  [HISTORICAL_RISK_CACHE_TAG, "indicator-reference-v2"],
   { revalidate: 86400, tags: [HISTORICAL_RISK_CACHE_TAG] },
 );
 
@@ -24,3 +24,4 @@ export async function getHistoricalRiskMetrics(): Promise<HistoricalRiskMetrics>
     return { ...metricsFromRiskHistory(seed as RiskHistorySource), updateStatus: "retained" };
   }
 }
+

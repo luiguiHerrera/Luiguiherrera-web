@@ -1,4 +1,6 @@
 "use client";
+import { riskReferenceText } from '@/lib/dashboard/indicator-history';
+
 
 import { useId, useState } from "react";
 import {
@@ -123,11 +125,14 @@ export function QuantRiskPanel({ data, locale = "es" }: QuantRiskPanelProps) {
                       <p className="text-sm font-semibold tabular-nums text-ink sm:text-base">{metric.value}</p>
                       <p className="mt-1 text-xs leading-5">{metric.unit} · {metric.date}</p>
                       <p className="mt-1.5 text-sm leading-6">{metric.help}</p>
+                      {(['var95','absorption'].includes(metric.id)) ? (()=>{const ref=data.historicalRisk?.references?.[metric.id as 'var95'|'absorption']; const text=riskReferenceText(ref,locale);return text && ref ? <><p className="mt-2 text-xs leading-5" data-risk-history-detail>{text}</p><p className="text-xs leading-5">{ref.start}–{ref.end} · n={ref.observations}{ref.comparisonDate ? ` · Δ20: ${ref.comparisonDate}–${ref.cutoff}` : ''}</p></> : null;})() : null}
                       {metric.reason ? <p className="mt-1.5 text-xs leading-5">{metric.reason}</p> : null}
                     </dd>
                   </div>
                 ))}
               </dl>
+              <p className="mt-3 text-xs leading-5 text-muted">{locale==='en' ? 'Historical context reruns the same indicator with the same universe and parameters at each past cutoff. Percentiles use at least 252 prior valid readings from up to five calendar years; the current observation is excluded and ties are included. Δ20 uses the exact exchange session 20 sessions earlier. Dates and n describe indicator outputs, after model warm-up. A percentile is not a probability of a market decline. Overlapping rolling windows are not independent observations.' : 'El contexto histórico recalcula el mismo indicador, universo y parámetros en cada corte pasado. El percentil exige al menos 252 lecturas previas válidas de hasta cinco años naturales; excluye la observación actual e incluye empates. Δ20 usa la sesión bursátil exacta de 20 sesiones antes. Las fechas y n describen valores del indicador, después del calentamiento del modelo. El percentil no es una probabilidad de caída. Las ventanas móviles solapadas no son observaciones independientes.'}</p>
+              <p className="mt-2 text-xs leading-5 text-muted">{locale==='en' ? 'EWMA and GARCH: no comparable historical series of the current model outputs is retained. No percentile or 20-session change is inferred from other models or from adjusted prices with a different warm-up. If the adjusted-price backup only covers the current fixed window, historical context is also withheld for VaR95 and absorption ratio.' : 'EWMA y GARCH: no se conserva una serie histórica comparable de los resultados actuales de estos modelos. No se infiere un percentil ni una variación de 20 sesiones a partir de otros modelos o de precios ajustados con un calentamiento diferente. Si el respaldo de precios ajustados solo cubre la ventana fija actual, también se omite el contexto histórico de VaR95 y absorption ratio.'}</p>
               {presentation.historicalRetained ? <p className="mt-3 text-xs leading-5 text-muted">{copy.retained}</p> : null}
             </section>
             <section className="border-l border-brass/50 pl-3" data-quant-spy-methodology>
@@ -161,3 +166,4 @@ export function QuantRiskPanel({ data, locale = "es" }: QuantRiskPanelProps) {
     </section>
   );
 }
+

@@ -1,3 +1,4 @@
+import type { FlowMagnitudeReference } from './flow-magnitude';
 import type { AggregatePoint, FundObservation, FlowInterpretation } from './sp500-etf-flows.mjs';
 
 export type CapitalFlowAssetPreview = {
@@ -25,5 +26,9 @@ export type CapitalFlowAssetPreview = {
     latestPartial:{date:string;reported:number;missing:string[]}|null;
     funds:{ticker:string;flow:number|null}[]; updateNote:string;
   };
+  referenceUniverses?: Record<string,string[]>;
+  comparisonUniverse?: string[];
+  magnitudeReferences?: {cutoff:string|null;daily:FlowMagnitudeReference;monthly:FlowMagnitudeReference};
   comparisons?: { sessions: number; current: number | null; average: number | null; samples: number; referenceStart: string | null; referenceEnd: string | null }[];
 };
+

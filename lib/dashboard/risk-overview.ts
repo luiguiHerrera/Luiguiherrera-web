@@ -1,3 +1,4 @@
+import { riskReferenceText, type IndicatorReference } from './indicator-history';
 import { dashboardText, type DashboardLocale } from "./dashboard-localization.ts";
 import type { DashboardOverviewItem } from "./dashboard-overview.ts";
 import { hasVixObservation } from "./vix-presentation.ts";
@@ -55,9 +56,13 @@ export function buildRiskOverview({ quantRisk, vixSpot, vixTermStructure }: Risk
     ? absorption.ratio : null;
   const sectorDate = observationDate(quantRisk?.lastUpdated, locale);
 
+  const reference = (ref:IndicatorReference|null|undefined, scale=100, unit='pp') => {
+    const text=riskReferenceText(ref,locale,scale,unit);
+    return text && ref ? {text,period:ref.percentile===null ? `${ref.comparisonDate}–${ref.cutoff}` : `${ref.start}–${ref.end} · n=${ref.observations}`} : undefined;
+  };
   return [
     {
-      id: "vix", label: english ? "VIX and structure" : "VIX y estructura",
+      id: "vix", reference:spotAvailable ? reference(vixSpot.historicalReference,1,english?"pts":"puntos") : undefined, label: english ? "VIX and structure" : "VIX y estructura",
       value: spotAvailable ? number(vixSpot.latestVix, 2) : unavailable,
       available: spotAvailable,
       detail: english ? `Index points${spotAvailable ? ` · ${dashboardText(locale, vixSpot.vixLevelLabel)}` : ""}` : `Puntos del índice${spotAvailable ? ` · ${vixSpot.vixLevelLabel}` : ""}`,
@@ -84,14 +89,14 @@ export function buildRiskOverview({ quantRisk, vixSpot, vixTermStructure }: Risk
       },
     },
     {
-      id: "var95", label: "VaR95",
+      id: "var95", reference:var95===null ? undefined : reference(quantRisk?.historicalRisk?.references?.var95), label: "VaR95",
       value: var95 === null ? unavailable : percent(var95 * 100),
       available: var95 !== null,
       detail: english ? "SPY · One-session loss · 1,260 returns" : "SPY · Pérdida a una sesión · 1.260 retornos",
       date: var95 === null ? undefined : observationDate(spy?.lastUpdated, locale),
     },
     {
-      id: "absorption", label: english ? "Sector absorption ratio" : "Absorption ratio sectorial",
+      id: "absorption", reference:ratio===null ? undefined : reference(quantRisk?.historicalRisk?.references?.absorption), label: english ? "Sector absorption ratio" : "Absorption ratio sectorial",
       value: ratio === null ? unavailable : percent(ratio * 100),
       available: ratio !== null,
       detail: english ? "Variance explained · 11 ETFs · 500 sessions · 2 components" : "Varianza explicada · 11 ETF · 500 sesiones · 2 componentes",
@@ -99,3 +104,4 @@ export function buildRiskOverview({ quantRisk, vixSpot, vixTermStructure }: Risk
     },
   ];
 }
+

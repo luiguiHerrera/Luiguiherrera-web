@@ -10,7 +10,7 @@ import {getSpyAutomaticModel} from './get-spy-capital-flows';
 import {expectedEthFlowSession} from './eth-capital-flows-source.mjs';
 import {createDevelopmentSourceCache} from './development-source-cache.mjs';
 
-export const CAPITAL_FLOWS_CACHE_TAG = 'dashboard-capital-flows-automatic-v2';
+export const CAPITAL_FLOWS_CACHE_TAG = 'dashboard-capital-flows-automatic-v3-magnitude';
 export const PUBLISHED_CAPITAL_FLOW_IDS = [...CAPITAL_FLOW_IDS, 'eth', 'ewj'];
 export const fetchUncachedCapitalFlow = (id:string) => id==='sp500' ? getSpyAutomaticModel(true) : id==='eth' ? getEthAutomaticModel(true)
   : id==='ewj' ? getEwjAutomaticModel(true) : fetchCapitalFlowSource(id);
@@ -22,7 +22,7 @@ const getCachedLegacyCapitalFlow = unstable_cache(
 );
 const getCachedEthCapitalFlow = unstable_cache(
   () => getEthAutomaticModel(),
-  ['dashboard-eth-capital-flows-durable-v2'],
+  ['dashboard-eth-capital-flows-durable-v3-magnitude'],
   {revalidate:process.env.NODE_ENV === 'development' ? false : 3600,tags:[CAPITAL_FLOWS_CACHE_TAG]},
 );
 const getCachedEwjCapitalFlow = unstable_cache(
@@ -57,3 +57,4 @@ export async function getPublishedCapitalFlows(): Promise<CapitalFlowAssetPrevie
     }
   }));
 }
+

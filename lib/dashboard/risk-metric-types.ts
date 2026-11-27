@@ -1,5 +1,7 @@
+import type { IndicatorReference } from './indicator-history';
 /** Values remain decimal fractions until the presentation boundary. */
 export type HistoricalRiskMetrics = {
+  references?: {var95: IndicatorReference | null; absorption: IndicatorReference | null};
   spy: {
     status: "available" | "unavailable";
     es95: number | null;
@@ -25,3 +27,4 @@ export type HistoricalRiskMetrics = {
   updatedAt: string;
   updateStatus: "current" | "retained" | "unavailable";
 };
+

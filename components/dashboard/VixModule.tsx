@@ -1,4 +1,6 @@
 "use client";
+import { riskReferenceText } from '@/lib/dashboard/indicator-history';
+
 
 import { DashboardChartCursor } from './DashboardChartCursor';
 
@@ -150,7 +152,7 @@ export function VixModule({ data }: VixModuleProps) {
     [locale === "en" ? "VIX · last close" : "VIX · último cierre", formatNumber(available ? spot.latestVix : null, locale, 2)],
     [locale === "en" ? "Classification" : "Clasificación", available ? t(spot.vixCompositeLabel) : unavailable],
     ["Momentum", vixTrendLabel(spot, locale)],
-    [locale === "en" ? "Percentile" : "Percentil", percentile],
+    [locale === "en" ? "Percentile · Full source series" : "Percentil · Serie completa de la fuente", percentile],
   ];
   const detailMetrics = [
     [locale === "en" ? "1D change" : "Cambio 1D", formatChange(available ? spot.change1d : null, locale)],
@@ -162,7 +164,7 @@ export function VixModule({ data }: VixModuleProps) {
   return (
     <section className="border border-line bg-panel px-4 py-5 shadow-[0_14px_32px_rgba(51,45,39,0.05)] sm:px-5 md:px-7 md:py-6" data-vix-spot-module>
       <div className="flex flex-wrap items-center justify-between gap-3">
-        <p className={dashboardModuleEyebrowClassName}>{locale === "en" ? "Current VIX level" : "Nivel VIX actual"}</p>
+        <p className={dashboardModuleEyebrowClassName}>{locale === "en" ? "VIX close level" : "Nivel de cierre VIX"}</p>
         <span className="inline-flex items-center gap-2 text-[11px] font-normal text-muted/80" data-vix-spot-status>
           <span className={`h-1 w-1 rounded-full ${available && spot.dataStatus === "automated" ? "bg-[#6f8f7b]/70" : "bg-brass/70"}`} aria-hidden="true" />
           {status}
@@ -200,6 +202,7 @@ export function VixModule({ data }: VixModuleProps) {
                 ))}
               </div>
             </div>
+            {available && spot.historicalReference ? <div className="text-xs leading-5 text-muted" data-vix-history-reference><p>{riskReferenceText(spot.historicalReference,locale,1,locale==='en'?'pts':'puntos')}</p><p>{spot.historicalReference.start}–{spot.historicalReference.end} · n={spot.historicalReference.observations}</p><p>{locale==='en' ? 'Reference: up to five calendar years of prior VIX closes, minimum 252. The empirical percentile includes ties and excludes the current close. Δ20 compares exact exchange sessions; missing observations are not replaced. This descriptive rank is not a probability of a market decline. The existing composite reading retains its full-source percentile.' : 'Referencia: hasta cinco años naturales de cierres previos del VIX, mínimo 252. El percentil empírico incluye empates y excluye el cierre actual. Δ20 compara sesiones bursátiles exactas; los datos ausentes no se sustituyen. Este rango descriptivo no es una probabilidad de caída. La lectura compuesta existente conserva su percentil de la serie completa.'}</p></div> : null}
             <VixLineChart history={available ? spot.history : []} locale={locale} />
           </div>
 
@@ -238,3 +241,4 @@ export function VixModule({ data }: VixModuleProps) {
     </section>
   );
 }
+

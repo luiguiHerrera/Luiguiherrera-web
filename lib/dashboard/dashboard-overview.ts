@@ -1,3 +1,4 @@
+import { flowMagnitudeReferences, magnitudePercentileText } from './flow-magnitude';
 import type { CapitalFlowAssetPreview } from './capital-flows-preview-types';
 import { metricAt } from './capital-flow-comparison.mjs';
 import { sessionDates } from '../research/mcclellan-core.mjs';
@@ -5,7 +6,7 @@ import { formatCapitalFlowDate } from './capital-flows-presentation.ts';
 import type { DashboardLocale } from './dashboard-localization.ts';
 
 export type DashboardOverviewSecondary = { label: string; value: string; detail?: string; date?: string; available?: boolean };
-export type DashboardOverviewItem = { id: string; label: string; value: string; detail?: string; date?: string; tone?: 'positive' | 'negative' | 'neutral'; available?: boolean; secondary?: DashboardOverviewSecondary };
+export type DashboardOverviewItem = { id: string; label: string; value: string; detail?: string; date?: string; tone?: 'positive' | 'negative' | 'neutral'; available?: boolean; reference?: { text: string; period: string }; secondary?: DashboardOverviewSecondary };
 const assetNames = { es:{sp500:'S&P 500',gold:'Oro',btc:'Bitcoin',eth:'Ethereum',ewj:'Japón'}, en:{sp500:'S&P 500',gold:'Gold',btc:'Bitcoin',eth:'Ethereum',ewj:'Japan'} };
 export function formatFlowAmount(value:number | null, locale:DashboardLocale = 'es') {
   if(value == null) return locale === 'en' ? 'No data' : 'Sin dato';
@@ -36,9 +37,11 @@ export function flowOverviewItems(models:CapitalFlowAssetPreview[], locale:Dashb
     // Keep GLD's published endpoint-NAV convention; other assets sum daily flows.
     // A missing current-month session is insufficient data, never a zero or an older month.
     const observations = model.metricBasis === 'ending-nav' ? model.observations : undefined;
-    const current = complete ? metricAt(points,expected.length,points.length-1,observations) : null;
-    const daily = inMonth && points.at(-1)?.date === cutoff ? metricAt(points,1,points.length-1,observations) : null;
-    return {id:model.id,label:assetNames[locale][model.id],value:current == null ? (locale === 'en' ? 'Not enough monthly data' : 'Datos mensuales insuficientes') : formatFlowAmount(current,locale),
+    const ref = flowMagnitudeReferences(model).monthly;
+    const current = complete ? (model.metricBasis==='ending-nav' && !observations ? (ref.sessions===expected.length ? ref.current : null) : metricAt(points,expected.length,points.length-1,observations)) : null;
+    const daily = model.metricBasis==='ending-nav' && !observations ? (inMonth ? flowMagnitudeReferences(model).daily.current : null) : inMonth && points.at(-1)?.date === cutoff ? metricAt(points,1,points.length-1,observations) : null;
+    const percentileText = inMonth && current !== null ? magnitudePercentileText(ref,locale) : null;
+    return {reference:percentileText ? {text:`${percentileText} · ${locale==='en'?'MTD':'mes en curso'}`,period:`${ref.start}–${ref.end} · n=${ref.observations} · ${ref.sessions} ${locale==='en'?'sessions/month':'sesiones/mes'}`} : undefined,id:model.id,label:assetNames[locale][model.id],value:current == null ? (locale === 'en' ? 'Not enough monthly data' : 'Datos mensuales insuficientes') : formatFlowAmount(current,locale),
       detail:`1D${model.metricBasis === 'ending-nav' ? (locale === 'en' ? ' implied' : ' implícito') : ''} · ${formatFlowAmount(daily,locale)}`,
       date:cutoff ? formatCapitalFlowDate(cutoff,locale) : locale === 'en' ? 'No close available' : 'Sin cierre disponible',
       tone:current == null || current === 0 ? 'neutral' : current > 0 ? 'positive' : 'negative'};
@@ -49,3 +52,4 @@ export function flowCardTitle(model:CapitalFlowAssetPreview, locale:DashboardLoc
   const funds = new Intl.ListFormat(locale,{style:'long',type:'conjunction'}).format(model.vehicles);
   return locale === 'en' ? (funds ? `${funds} flows` : 'ETF flows') : (funds ? `Flujos de ${funds}` : 'Flujos de ETF');
 }
+

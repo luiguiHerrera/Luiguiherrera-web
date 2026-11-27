@@ -1,3 +1,5 @@
+import { indicatorReference } from '../indicator-history';
+import { sessionDates } from '../../research/mcclellan-core.mjs';
 import type { DashboardModuleData, LegacyVixTermStructureData, VixDashboardData, VixHistoryPoint, VixSpotData } from "@/lib/dashboard/types";
 
 type VixFetch = (input: string | URL | Request, init?: RequestInit) => Promise<Response>;
@@ -184,6 +186,7 @@ export function buildVixDashboardData(rawHistory: VixHistoryPoint[]): VixDashboa
     vixPercentile: percentile, vixLevelLabel: level.vixLevelLabel, vixSeverity: composite.vixSeverity, vixDescription: level.vixDescription,
     vixCompositeLabel: composite.vixCompositeLabel, vixCompositeSubtext: composite.vixCompositeSubtext, vixPercentileLabel: percentileLabelFor(percentile), vixTrend: trend,
     history: history.slice(-RECENT_SESSION_COUNT),
+    historicalReference: latest.date >= "2024-01-01" && latest.date <= "2028-12-31" ? indicatorReference(history, latest.date, sessionDates("2024-01-01", latest.date)) : null,
     interpretation: {
       lookingAt: "Último cierre disponible del VIX y cambios recientes de volatilidad implícita del S&P 500.",
       why: "El VIX resume expectativas de volatilidad implícita del S&P 500 a partir de opciones. Es una lectura de presión de riesgo, no una lectura de dirección del mercado.",
@@ -199,3 +202,4 @@ export async function getVixData(options: GetVixDataOptions = {}): Promise<VixDa
   if (history.length < MIN_ANALYTICAL_HISTORY) logVixSourceIssue("insufficient_valid_vix_history", { source: "FRED VIXCLS", validObservations: history.length });
   return buildVixDashboardData(history);
 }
+

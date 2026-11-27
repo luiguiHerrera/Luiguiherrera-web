@@ -1,4 +1,6 @@
 "use client";
+import { participationReading, PARTICIPATION_READINGS, PARTICIPATION_RULES } from '@/lib/dashboard/participation-reading';
+
 
 import { useId, useMemo, useState, useSyncExternalStore } from "react";
 import { DashboardDisclosureButton } from "./DashboardPrimitives";
@@ -105,6 +107,7 @@ export default function PriceParticipationCard({ input, locale = "es", asOf }: {
   const [context, setContext] = useState(false);
   const view = useMemo(() => input ? buildPriceParticipation(input, sessions) : null, [input, sessions]);
   const month = useMemo(() => input ? buildPriceParticipationMonthSummary(input, asOf) : null, [input, asOf]);
+  const reading = useMemo(() => participationReading(month, input), [month, input]);
   const monthCaption = monthLabel(month?.month, locale);
   const sectorMonthAvailable = month?.status !== "unavailable" && (month?.participation.covered ?? 0) > 0;
   const rows = view?.rows ?? [];
@@ -128,6 +131,7 @@ export default function PriceParticipationCard({ input, locale = "es", asOf }: {
         <div className={overviewStyles.item} data-overview-item="ramo"><dt className={styles.metricLabel}>{copy.ramo}<Help label={copy.ramo} text={help.ramo} locale={locale} /></dt><dd className={overviewStyles.value} data-price-tone={view?.breadth?.last?.oscillator != null && view.breadth.last.oscillator < 0 ? "negative" : undefined}>{number(view?.breadth?.last?.oscillator, locale, 1, true)}</dd><dd className={overviewStyles.detail}>{copy.oscillatorPoints}</dd></div>
         <div className={overviewStyles.item} data-overview-item="rasi"><dt className={styles.metricLabel}>{copy.rasi}<Help label={copy.rasi} text={help.rasi} locale={locale} /></dt><dd className={overviewStyles.value} data-price-tone={view?.breadth?.last?.summation != null && view.breadth.last.summation < 0 ? "negative" : undefined}>{number(view?.breadth?.last?.summation, locale, 1, true)}</dd><dd className={overviewStyles.detail}>{copy.summationPoints}</dd></div>
       </dl>
+      <p className={styles.notice} data-participation-reading={reading.id}>{PARTICIPATION_READINGS[reading.id][locale === "en" ? 1 : 0]}</p>
     </div>
     {!view ? <p className={styles.notice} role="status">{copy.noData}</p> : null}
     {view?.refreshStatus === "retained" ? <p className={styles.notice} role="status">{copy.retained}</p> : null}
@@ -136,6 +140,11 @@ export default function PriceParticipationCard({ input, locale = "es", asOf }: {
     <details data-detail-disclosure data-dashboard-section="price-participation">
       <summary><span className={styles.openLabel}>{copy.open}</span><span className={styles.closeLabel}>{copy.close}</span><span data-dashboard-section-indicator aria-hidden="true" /></summary>
       <div className={styles.detail} id={`${id}-detail`} data-dashboard-section-body>
+        <details className={styles.dataDetails} data-participation-rules><summary>{locale === "en" ? "Joint interpretation · Evidence and rules" : "Interpretación conjunta · Evidencia y reglas"}</summary>
+          <p className={styles.notice}>{locale === "en" ? "Month to date" : "Mes en curso"}: {date(reading.start,locale)}–{date(reading.end,locale)} · Δ RAMO {number(reading.ramoChange,locale,1,true)} · Δ RASI {number(reading.rasiChange,locale,1,true)}.</p>
+          <p className={styles.notice}>{locale === "en" ? "Changes compare the same monthly endpoints as SPY, RSP and the 11 sectors. A positive level does not imply improvement. Rules are applied in order; 8/11 and 5/11 are descriptive thresholds, not a predictive model. The 5/20/60 selector affects only the charts below." : "Las variaciones comparan los mismos extremos mensuales que SPY, RSP y los 11 sectores. Un nivel positivo no implica una mejora. Las reglas se aplican en orden; 8/11 y 5/11 son umbrales descriptivos, no un modelo predictivo. El selector 5/20/60 solo afecta a los gráficos inferiores."}</p>
+          <ol className="list-decimal space-y-2 pl-5 text-xs leading-5 text-muted">{PARTICIPATION_RULES[locale].map(rule=><li key={rule}>{rule}</li>)}</ol>
+        </details>
         <header className={styles.controlsRow}>
           <div className={styles.windowHeading}><h3>{copy.analysisWindow}</h3><p>{copy.windowScope}</p><p>{view?.comparisonDate ? <>{copy.comparison}: {date(view.comparisonDate, locale)} {copy.through} {date(view.cutoffDate, locale)}</> : copy.insufficient}</p></div>
           <fieldset className={styles.windows} disabled={!interactive}><legend>{copy.sessions}</legend>{PRICE_PARTICIPATION_WINDOWS.map(value => <label key={value}><input type="radio" name={`${id}-window`} checked={sessions === value} onChange={() => setSessions(value)} value={value} /><span>{value}</span></label>)}</fieldset>
@@ -155,3 +164,4 @@ export default function PriceParticipationCard({ input, locale = "es", asOf }: {
     </details>
   </section>;
 }
+

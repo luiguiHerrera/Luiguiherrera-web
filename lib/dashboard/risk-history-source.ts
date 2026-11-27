@@ -1,3 +1,4 @@
+import { buildRiskIndicatorReferences } from './risk-indicator-history.ts';
 import { createHash } from "node:crypto";
 import { isClosed, isSession } from "../research/mcclellan-core.mjs";
 import { historicalSpyRisk, sectorAbsorptionRatio, SECTOR_RISK_SYMBOLS, type RiskPriceHistory, type RiskPricePoint } from "./historical-risk.ts";
@@ -45,11 +46,12 @@ export type RiskHistorySource = {
   cutoffDate: string;
   spy: RiskPricePoint[];
   sectors: RiskPriceHistory[];
+  references?: HistoricalRiskMetrics["references"];
   provenance: { symbol: string; sha256: string; sourceUrl: string; adjustedClose: true }[];
 };
 
 /** Strictly consume the provider's adjusted field; raw quote.close is never a substitute. */
-export function parseRiskYahooChart(payload: unknown, symbol: string, cutoffDate: string, count: number): RiskPricePoint[] {
+export function parseRiskYahooChart(payload: unknown, symbol: string, cutoffDate: string, count: number, retainAvailableHistory = false): RiskPricePoint[] {
   const chart = (payload as { chart?: { error?: unknown; result?: Array<{ meta?: { symbol?: string; currency?: string; exchangeTimezoneName?: string; dataGranularity?: string }; timestamp?: number[]; indicators?: { adjclose?: { adjclose?: (number | null)[] }[] } }> } })?.chart;
   const result = chart?.result?.[0];
   const adjusted = result?.indicators?.adjclose?.[0]?.adjclose;
@@ -75,7 +77,7 @@ export function parseRiskYahooChart(payload: unknown, symbol: string, cutoffDate
   const indexed = new Map(rows.map(row => [row.date, row]));
   const missing = dates.filter(date => !indexed.has(date));
   if (dates.length !== count || missing.length) throw new RiskHistorySourceError(`${symbol} adjusted closes: ${count - missing.length}/${count}; missing session ${missing[0] ?? "calendar coverage"}`);
-  return dates.map(date => indexed.get(date)!);
+  return retainAvailableHistory ? rows.filter(row=>row.date >= "2020-01-01").sort((a,b)=>a.date.localeCompare(b.date)) : dates.map(date => indexed.get(date)!);
 }
 
 export function metricsFromRiskHistory(source: RiskHistorySource, asOf = new Date().toISOString()): HistoricalRiskMetrics {
@@ -88,6 +90,7 @@ export function metricsFromRiskHistory(source: RiskHistorySource, asOf = new Dat
   }
   const sessions = riskSessionDates("2020-01-01", source.cutoffDate);
   return {
+    references: source.references,
     spy: historicalSpyRisk(source.spy, sessions, source.cutoffDate),
     absorption: sectorAbsorptionRatio(source.sectors, sessions, source.cutoffDate),
     sourceName: RISK_HISTORY_SOURCE_NAME,
@@ -110,16 +113,18 @@ export async function fetchHistoricalRiskSource({ fetcher = fetch, asOf = new Da
       if (!response.ok) throw new RiskHistorySourceError(`Adjusted history HTTP ${response.status}`);
       const bytes = await response.text();
       if (bytes.length > 2_000_000) throw new RiskHistorySourceError("Adjusted source exceeds size limit");
-      const prices = parseRiskYahooChart(JSON.parse(bytes), symbol, cutoffDate, symbol === "SPY" ? 1261 : 501);
+      const prices = parseRiskYahooChart(JSON.parse(bytes), symbol, cutoffDate, symbol === "SPY" ? 1261 : 501, true);
       return { symbol, prices, provenance: { symbol, sha256: createHash("sha256").update(bytes).digest("hex"), sourceUrl, adjustedClose: true as const } };
     }));
     const source: RiskHistorySource = { schema: "dashboard-adjusted-risk-history.v1", acquiredAt: asOf, cutoffDate,
       spy: records[0].prices, sectors: records.slice(1).map(({ symbol, prices }) => ({ symbol, prices })), provenance: records.map(record => record.provenance) };
     const metrics = metricsFromRiskHistory(source, asOf);
     if (metrics.spy.status !== "available" || metrics.absorption.status !== "available") throw new RiskHistorySourceError("Adjusted history did not produce valid fixed-window risk metrics");
+    source.references = buildRiskIndicatorReferences(source, riskSessionDates("2020-01-01", cutoffDate));
     return source;
   } catch (error) {
     if (error instanceof RiskHistorySourceError || error instanceof Error && "digest" in error) throw error;
     throw new RiskHistorySourceError("Verified adjusted risk histories unavailable", { cause: error });
   }
 }
+
