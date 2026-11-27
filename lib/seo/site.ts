@@ -262,16 +262,16 @@ const seoRouteContent: readonly Omit<SeoRouteDefinition, "alternatePathname">[] 
   {
     pathname: "/metodologia",
     language: "es",
-    title: "Metodología | Fuentes, límites y trazabilidad",
+    title: "Metodología | Observar, cuantificar, cuestionar",
     description:
-      "Cómo se construyen las lecturas de mercado, qué datos usan, qué límites tienen y qué no promete la plataforma.",
+      "Mi forma de estudiar los mercados, construir herramientas y poner a prueba mis hipótesis.",
   },
   {
     pathname: "/en/methodology",
     language: "en",
-    title: "Methodology | Sources, limits and traceability",
+    title: "Methodology | Observe, quantify, question",
     description:
-      "How the market readings and tools are built, which data sources they use, what their limits are and what the platform does not promise.",
+      "My way of studying markets, building tools and putting my hypotheses to the test.",
   },
   {
     pathname: "/investigacion",
