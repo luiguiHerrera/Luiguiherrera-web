@@ -28,7 +28,7 @@ async function loadCommonDashboardSnapshot() {
 // Sector availability is read outside Next's aggregate cache. A partial result
 // can never become the five-minute authoritative source for both languages.
 const getSharedDashboardSnapshot=unstable_cache(loadCommonDashboardSnapshot,
-  ["dashboard-shared-market-snapshot-v4-independent-sectors"],{revalidate:300,tags:["dashboard-shared-market-snapshot"]});
+  ["dashboard-shared-market-snapshot-v5-historical-context"],{revalidate:300,tags:["dashboard-shared-market-snapshot"]});
 
 export const getDashboardData=cache(async():Promise<DashboardData>=>{
   const [common,sectorEtfs]=await Promise.all([getSharedDashboardSnapshot(),getSectorEtfsData()]);
@@ -44,3 +44,4 @@ export const getDashboardData=cache(async():Promise<DashboardData>=>{
   const id=createHash("sha256").update(JSON.stringify({data,breadth,flows})).digest("hex");
   return {...data,marketContext:{id,capturedAt,breadth,flows}};
 });
+
