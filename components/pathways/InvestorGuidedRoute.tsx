@@ -5,22 +5,6 @@ import { Fragment, useEffect, useRef, useState, type KeyboardEvent } from "react
 import type { InvestorEntryContent } from "@/lib/investor/entry-content";
 import styles from "./InvestorEntry.module.css";
 
-export function InvestorHeroCta({ children }: { children: React.ReactNode }) {
-  return (
-    <a className={styles.primaryCta} href="#investor-guided-route" onClick={(event) => {
-      const option = document.querySelector<HTMLButtonElement>("#investor-guided-route button[aria-expanded='true']");
-      if (!option) return;
-      event.preventDefault();
-      option.focus({ preventScroll: true });
-      document.getElementById("investor-guided-route")?.scrollIntoView({
-        behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "instant" : "smooth",
-      });
-    }}>
-      {children} <span aria-hidden="true">↓</span>
-    </a>
-  );
-}
-
 export function InvestorGuidedRoute({ content }: { content: InvestorEntryContent["guided"] }) {
   const [activeIndex, setActiveIndex] = useState(0);
   const optionRefs = useRef<Array<HTMLButtonElement | null>>([]);
@@ -85,7 +69,7 @@ export function InvestorGuidedRoute({ content }: { content: InvestorEntryContent
             <p className={styles.description}>{option.description}</p>
             <ul>
               {option.outcomes.map((outcome) => (
-                <li key={outcome}><span aria-hidden="true">✓</span>{outcome}</li>
+                <li key={outcome}>{outcome}</li>
               ))}
             </ul>
             {option.actions ? (

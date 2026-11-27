@@ -40,7 +40,7 @@ export const investorEntryContent: Record<"es" | "en", InvestorEntryContent> = {
       title: "Decide con criterio antes de mover capital",
       support: "Lee el régimen, revisa niveles y explora tendencias antes de mover capital.",
       cta: "Encontrar mi siguiente paso",
-      microcopy: "Sin registro · Herramientas educativas y datos trazables",
+      microcopy: "Herramientas educativas y datos trazables",
     },
     guided: {
       title: "¿Qué merece tu atención hoy?",
@@ -106,7 +106,7 @@ export const investorEntryContent: Record<"es" | "en", InvestorEntryContent> = {
       title: "Make informed decisions before moving capital",
       support: "Read the regime, review key levels and explore trends before moving capital.",
       cta: "Find my next step",
-      microcopy: "No sign-up · Educational tools and traceable data",
+      microcopy: "Educational tools and traceable data",
     },
     guided: {
       title: "What deserves your attention today?",
