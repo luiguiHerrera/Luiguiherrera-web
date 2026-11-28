@@ -3,6 +3,8 @@
 import type { DiagnosticLocale, DiagnosticProfile, DiagnosticResult, DiagnosticScoreKey, PaiDimension, PaiMainWeakness, PaiStage, ReadinessLight } from "@/lib/diagnostic/types";
 import { DIAGNOSTIC_PROFILE_LABELS } from "@/lib/diagnostic/types";
 
+import styles from "./diagnosticPrint.module.css";
+
 const origin = "luiguiherrera.com";
 
 function pagesOf<T>(items: T[]) {
@@ -175,7 +177,7 @@ const paiInsightLabels: Record<PaiDimension, Record<DiagnosticLocale, string>> =
 const internalMapGroups: Array<{ key: "financialBase" | "behavior" | "investmentPreparation"; scores: DiagnosticScoreKey[] }> = [
   {
     key: "financialBase",
-    scores: ["incomeStability", "surplusCashFlow", "expensiveDebtControl", "liquidityStrength", "timeHorizon"],
+    scores: ["incomeStability", "surplusCashFlow", "expensiveDebtControl", "goalClarity", "financialCapacity", "liquidityStrength", "timeHorizon"],
   },
   {
     key: "behavior",
@@ -237,7 +239,7 @@ function readableRoute(locale: DiagnosticLocale, href: string) {
 
 function ExecutiveItem({ label, value }: { label: string; value: string }) {
   return (
-    <div className="print-executive-item">
+    <div className={styles["print-executive-item"]}>
       <dt>{label}</dt>
       <dd>{value}</dd>
     </div>
@@ -246,16 +248,16 @@ function ExecutiveItem({ label, value }: { label: string; value: string }) {
 
 function Page({ children, generatedAt, headerTitle, title }: { children: React.ReactNode; generatedAt?: Date; headerTitle?: string; title?: string }) {
   return (
-    <section className="print-sheet">
+    <section className={styles["print-sheet"]}>
       {headerTitle || title ? (
-        <header className="print-section-header">
+        <header className={styles["print-section-header"]}>
           <p>{origin}</p>
           {headerTitle ? <p>{headerTitle}</p> : null}
           {generatedAt ? <p>{formatShortDate(generatedAt)}</p> : null}
         </header>
       ) : null}
       {title ? (
-        <header className="print-title-header">
+        <header className={styles["print-title-header"]}>
           {title ? <h2>{title}</h2> : null}
         </header>
       ) : null}
@@ -266,13 +268,13 @@ function Page({ children, generatedAt, headerTitle, title }: { children: React.R
 
 function ScoreBar({ label, value }: { label: string; value: number }) {
   return (
-    <div className="print-bar-row">
-      <div className="print-bar-label">
+    <div className={styles["print-bar-row"]}>
+      <div className={styles["print-bar-label"]}>
         <span>{label}</span>
         <strong>{value}</strong>
       </div>
-      <div className="print-bar-track">
-        <div className="print-bar-fill" style={{ width: `${value}%` }} />
+      <div className={styles["print-bar-track"]}>
+        <div className={styles["print-bar-fill"]} style={{ width: `${value}%` }} />
       </div>
     </div>
   );
@@ -280,7 +282,7 @@ function ScoreBar({ label, value }: { label: string; value: number }) {
 
 function KeyFact({ label, value }: { label: string; value: string }) {
   return (
-    <div className="print-key-fact">
+    <div className={styles["print-key-fact"]}>
       <dt>{label}</dt>
       <dd>{value}</dd>
     </div>
@@ -289,14 +291,14 @@ function KeyFact({ label, value }: { label: string; value: string }) {
 
 function PaiScoreCard({ insight, label, score, status }: { insight: string; label: string; score: number; status: string }) {
   return (
-    <div className="print-pai-card">
-      <div className="print-pai-card-top">
+    <div className={styles["print-pai-card"]}>
+      <div className={styles["print-pai-card-top"]}>
         <span>{label}</span>
         <strong>{score}</strong>
       </div>
       <em>{status}</em>
-      <div className="print-bar-track">
-        <div className="print-bar-fill" style={{ width: `${score}%` }} />
+      <div className={styles["print-bar-track"]}>
+        <div className={styles["print-bar-fill"]} style={{ width: `${score}%` }} />
       </div>
       <p>{insight}</p>
     </div>
@@ -310,7 +312,7 @@ function compactAlerts(result: DiagnosticResult, locale: DiagnosticLocale) {
     if (seen.has(alert)) return false;
     seen.add(alert);
     return true;
-  }).slice(0, 7).map((alert) => ({
+  }).map((alert) => ({
     category: alertCategory(locale, alert),
     text: alert,
   }));
@@ -354,26 +356,26 @@ export function DiagnosticPrintableReport({ generatedAt, locale, result }: { gen
   const capNote = result.paiReadiness.baseLimitNote;
 
   return (
-    <article className="print-only diagnostic-print-report" aria-label={locale === "es" ? "Resumen educativo del diagnóstico" : "Educational diagnostic summary"}>
+    <article className={styles.report} aria-label={locale === "es" ? "Resumen educativo del diagnóstico" : "Educational diagnostic summary"}>
       <Page>
-        <div className="print-cover">
-          <section className="print-cover-hero">
-            <div className="print-cover-topline">
-              <p className="print-brand">{origin}</p>
+        <div className={styles["print-cover"]}>
+          <section className={styles["print-cover-hero"]}>
+            <div className={styles["print-cover-topline"]}>
+              <p className={styles["print-brand"]}>{origin}</p>
               <p>{text.date}: {formatDate(locale, generatedAt)}</p>
             </div>
-            <div className="print-cover-title">
+            <div className={styles["print-cover-title"]}>
               <h1>{text.investorDiagnostic}</h1>
               <p>{text.summary}</p>
             </div>
-            <div className="print-cover-technical-line" />
+            <div className={styles["print-cover-technical-line"]} />
           </section>
-          <section className="print-cover-summary">
-            <div className="print-cover-notice">
+          <section className={styles["print-cover-summary"]}>
+            <div className={styles["print-cover-notice"]}>
               <span>{locale === "es" ? "Nota educativa" : "Educational note"}</span>
               <p>{text.educationalNotice}</p><p>{result.methodologyNote}</p>
             </div>
-            <dl className="print-cover-executive-table">
+            <dl className={styles["print-cover-executive-table"]}>
               <ExecutiveItem label={text.orientation} value={profileText(locale, result.declaredProfile)} />
               <ExecutiveItem label={text.stage} value={stageLabels[result.paiReadiness.stage][locale]} />
               <ExecutiveItem label={text.readinessSignal} value={lightLabels[result.paiReadiness.light][locale]} />
@@ -382,12 +384,12 @@ export function DiagnosticPrintableReport({ generatedAt, locale, result }: { gen
             </dl>
           </section>
         </div>
-      </Page>
 
-      <Page generatedAt={generatedAt} headerTitle={text.interiorBrief} title={text.investmentReadiness}>
-        <p className="print-kicker">{text.readinessSubtitle}</p>
-        <p className="print-copy">{text.intro}</p>
-        <div className="print-pai-row">
+        <h2 className={styles["print-inline-heading"]}>{text.investmentReadiness}</h2>
+        <p className={styles["print-kicker"]}>{text.readinessSubtitle}</p>
+        <p className={styles["print-copy"]}>{text.intro}</p>
+        <p className={styles["print-scale"]}>{locale === "es" ? "Índices orientativos · 0 a 100" : "Indicative indices · 0 to 100"}</p>
+        <div className={styles["print-pai-row"]}>
           {matrix.map(([dimension, score]) => (
             <PaiScoreCard
               key={dimension}
@@ -399,38 +401,40 @@ export function DiagnosticPrintableReport({ generatedAt, locale, result }: { gen
           ))}
         </div>
         {capNote ? (
-          <div className="print-reading-note">
+          <div className={styles["print-reading-note"]}>
             <span>{text.noteReading}</span>
             <p>{capNote}</p>
           </div>
         ) : null}
-        <div className="print-wide-next-step">
+        <div className={styles["print-wide-next-step"]}>
           <span>{text.nextStep}</span>
           <p>{result.paiReadiness.nextEducationalStep}</p>
         </div>
-        <p className="print-disclaimer-small">{text.disclaimer2}</p>
+        <p className={styles["print-disclaimer-small"]}>{text.disclaimer2}</p>
       </Page>
 
       <Page generatedAt={generatedAt} headerTitle={text.interiorBrief} title={text.profileTensions}>
-        <div className="print-profile-layout">
-          <div className="print-profile-summary">
-            <p className="print-copy">{text.profileNote}</p><p className="print-copy">{result.pressureSummary}</p>
-            <div className="print-profile-main">
+        <div className={styles["print-profile-layout"]}>
+          <div className={styles["print-profile-summary"]}>
+            <p className={styles["print-copy"]}>{result.summary}</p>
+            <p className={styles["print-copy"]}>{text.profileNote}</p><p className={styles["print-copy"]}>{result.pressureSummary}</p>
+            <div className={styles["print-profile-main"]}>
               <span>{text.orientation}</span>
-              <strong>{result.declaredLoss}</strong><p className="print-copy">{profileText(locale, result.declaredProfile)}</p>
+              <strong>{result.declaredLoss}</strong><p className={styles["print-copy"]}>{profileText(locale, result.declaredProfile)}</p>
             </div>
-            <dl className="print-key-facts">
+            <dl className={styles["print-key-facts"]}>
               <KeyFact label={text.underPressure} value={profileText(locale, result.pressureProfile)} />
               <KeyFact label={text.lossCapacity} value={localizedResultLabel(locale, result.lossCapacity.label)} />
               <KeyFact label={text.knowledge} value={localizedResultLabel(locale, result.knowledge.label)} />
               <KeyFact label={text.complexity} value={complexityText(locale, result)} />
               <KeyFact label={locale === "es" ? "Experiencia declarada" : "Self-reported experience"} value={localizedResultLabel(locale, result.experience.label)} />
             </dl>
+            <ul className={styles["print-notes"]}>{[result.lossCapacity.note, result.knowledge.note, result.experience.note, result.complexity.note].map((note) => <li key={note}>{note}</li>)}</ul>
           </div>
-          <div className="print-alert-panel">
+          <div className={styles["print-alert-panel"]}>
             <h3>{text.alerts}</h3>
-            <ul className="print-alert-list">
-              {alerts.map((alert, index) => (
+            <ul className={styles["print-alert-list"]}>
+              {alerts.slice(0, 5).map((alert, index) => (
                 <li key={alert.text}>
                   <span>{String(index + 1).padStart(2, "0")} {alert.category}</span>
                   <p>{alert.text}</p>
@@ -442,9 +446,10 @@ export function DiagnosticPrintableReport({ generatedAt, locale, result }: { gen
       </Page>
 
       <Page generatedAt={generatedAt} headerTitle={text.interiorBrief} title={text.internalMap}>
-        <div className="print-map-grid">
+        <p className={styles["print-scale"]}>{locale === "es" ? "Índices orientativos · 0 a 100" : "Indicative indices · 0 to 100"}</p>
+        <div className={styles["print-map-grid"]}>
           {internalMapGroups.map((group) => (
-            <div key={group.key} className="print-map-group">
+            <div key={group.key} className={styles["print-map-group"]}>
               <h3>{text[group.key]}</h3>
               {group.scores.map((key) => (
                 <ScoreBar key={key} label={scoreLabels[key][locale]} value={result.scores[key]} />
@@ -452,23 +457,29 @@ export function DiagnosticPrintableReport({ generatedAt, locale, result }: { gen
             </div>
           ))}
         </div>
-        <div className="print-route-card">
+        <div className={styles["print-route-card"]}>
           <span>{text.route}</span>
           <strong>{result.route.label}</strong>
           <p>{result.route.note}</p>
           <p>{text.routeNote}</p>
           <em>{readableRoute(locale, result.route.href)}</em>
         </div>
-        <footer className="print-footer">{text.footer}</footer>
+        <p className={styles["print-disclaimer-small"]}>{result.disclaimer}</p>
+        <footer className={styles["print-footer"]}>{text.footer}</footer>
       </Page>
+      {pagesOf(alerts.slice(5)).map((items, pageIndex) => (
+        <Page key={"alerts-" + pageIndex} generatedAt={generatedAt} headerTitle={text.interiorBrief} title={text.alerts}>
+          <ul className={styles["print-alert-list"]}>{items.map((item) => <li key={item.text}><span>{item.category}</span><p>{item.text}</p></li>)}</ul>
+        </Page>
+      ))}
       {pagesOf(result.constraints).map((items, pageIndex) => <Page key={"limits-" + pageIndex} generatedAt={generatedAt} headerTitle={text.interiorBrief} title={locale === "es" ? "Limitaciones identificadas" : "Limitations identified"}>
-        <p className="print-copy">{result.methodologyNote}</p>
-        <ul className="print-alert-list">{items.map((item) => <li key={item.id}><span>{item.label} · {({general:{es:"Base financiera general",en:"General financial base"},capital:{es:"Capital evaluado",en:"Capital assessed"},product:{es:"Producto",en:"Product"},learning:{es:"Aprendizaje",en:"Learning"}})[item.scope][locale]}</span><p>{item.note}</p></li>)}</ul>
-        <p className="print-disclaimer-small">{result.disclaimer}</p>
+        <p className={styles["print-copy"]}>{result.methodologyNote}</p>
+        <ul className={styles["print-alert-list"]}>{items.map((item) => <li key={item.id}><span>{item.label} · {({general:{es:"Base financiera general",en:"General financial base"},capital:{es:"Capital evaluado",en:"Capital assessed"},product:{es:"Producto",en:"Product"},learning:{es:"Aprendizaje",en:"Learning"}})[item.scope][locale]}</span><p>{item.note}</p></li>)}</ul>
+        <p className={styles["print-disclaimer-small"]}>{result.disclaimer}</p>
       </Page>)}
       {pagesOf(result.productChecks).map((items, pageIndex) => <Page key={"products-" + pageIndex} generatedAt={generatedAt} headerTitle={text.interiorBrief} title={locale === "es" ? "Comprobaciones por producto" : "Product-specific checks"}>
-        <p className="print-copy">{result.experience.note}</p>
-        <ul className="print-alert-list">{items.map((item) => <li key={item.product}><span>{item.label}</span><div><p>{item.response}</p><p>{item.note}</p></div></li>)}</ul>
+        <p className={styles["print-copy"]}>{result.experience.note}</p>
+        <ul className={styles["print-alert-list"]}>{items.map((item) => <li key={item.product}><span>{item.label}</span><div><p>{item.response}</p><p>{item.note}</p></div></li>)}</ul>
       </Page>)}
     </article>
   );

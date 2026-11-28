@@ -3,6 +3,8 @@
 import type { DiagnosticLocale, DiagnosticResult } from "@/lib/diagnostic/types";
 import { diagnosticSummaryText } from "@/lib/diagnostic/summary";
 
+import styles from "./diagnostic.module.css";
+
 const copy = {
   es: {
     aria: "Imprimir o guardar el resumen educativo como PDF",
@@ -41,22 +43,22 @@ export function DiagnosticReportActions({ locale, result }: { locale: Diagnostic
   }
 
   return (
-    <section className="border border-line bg-panel p-6">
-      <h3 className="font-semibold text-ink">{text.title}</h3>
-      <p className="mt-3 text-sm leading-6 text-muted">{text.text}</p>
+    <section className={styles.reportActions}>
+      <h3>{text.title}</h3>
+      <p>{text.text}</p>
       <button
         type="button"
         onClick={printSummary}
         aria-label={text.aria}
-        className="mt-5 w-full border border-ink bg-ink px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-panel hover:text-ink"
+        className={styles.primary}
       >
         {text.button}
       </button>
-      <button type="button" onClick={downloadSummary} className="mt-3 w-full border border-line bg-panel px-4 py-2.5 text-sm font-semibold text-ink transition hover:border-ink">
+      <button type="button" onClick={downloadSummary} className={styles.secondary}>
         {locale === "es" ? "Descargar resumen (.txt)" : "Download summary (.txt)"}
       </button>
-      <p className="mt-3 text-xs leading-5 text-muted">{text.note}</p>
-      <p className="mt-2 text-xs leading-5 text-muted">{text.printTip}</p>
+      <p>{text.note}</p>
+      <p>{text.printTip}</p>
     </section>
   );
 }

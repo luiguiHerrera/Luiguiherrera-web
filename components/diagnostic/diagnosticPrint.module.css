@@ -1,0 +1,94 @@
+.report { display: none; }
+
+@media print {
+  .report {
+    --print-ink: #19362e;
+    --print-muted: #435047;
+    --print-gold: #826334;
+    --print-line: #d1c7b7;
+    --print-display: "Diagnostic Display", Georgia, serif;
+    display: block;
+    color: var(--print-ink);
+    font: 10pt/1.42 system-ui, sans-serif;
+    print-color-adjust: exact;
+  }
+  .report, .report * { visibility: visible !important; }
+  .report h1, .report h2, .report h3 { font-family: var(--print-display); font-weight: 500; }
+  .report p, .report ul, .report dl { margin: 0; }
+  .report :is(p, li, dd) { overflow-wrap: anywhere; orphans: 3; widows: 3; }
+  .report :is(h1, h2, h3) { break-after: avoid; }
+  .print-sheet { break-after: page; }
+  .print-sheet:last-child { break-after: auto; }
+  .print-section-header, .print-cover-topline {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 3mm;
+    padding-bottom: 2.5mm;
+    border-bottom: 1px solid var(--print-gold);
+    color: var(--print-muted);
+    font-size: 8pt;
+  }
+  .print-brand { font-weight: 700; letter-spacing: .05em; }
+  .print-cover-title { padding: 8mm 0 4mm; }
+  .print-cover-title h1 { margin-bottom: 2mm; font-size: 32pt; line-height: 1.1; letter-spacing: -.035em; }
+  .print-cover-title p { color: var(--print-muted); font-size: 12pt; }
+  .print-cover-technical-line { width: 34mm; height: 1px; background: var(--print-gold); }
+  .print-cover-summary { margin-block: 5mm; }
+  .print-cover-notice, .print-reading-note, .print-route-card, .print-profile-main, .print-wide-next-step {
+    break-inside: avoid;
+    padding: 2.5mm 3mm;
+    border-left: 1.5pt solid var(--print-gold);
+    background: #f5f1e8;
+  }
+  .print-cover-notice span, .print-reading-note > span, .print-route-card > span, .print-wide-next-step > span, .print-profile-main > span, .print-scale {
+    color: var(--print-gold);
+    font-size: 8.5pt;
+    font-weight: 700;
+    letter-spacing: .035em;
+  }
+  .print-cover-notice p + p { margin-top: 1mm; }
+  .print-cover-executive-table, .print-key-facts { margin-top: 3mm !important; }
+  .print-executive-item, .print-key-fact {
+    display: grid;
+    grid-template-columns: 42mm minmax(0, 1fr);
+    gap: 3mm;
+    padding: 1.45mm 0;
+    border-bottom: 1px solid var(--print-line);
+    break-inside: avoid;
+  }
+  .print-executive-item dt, .print-key-fact dt { color: var(--print-muted); font-weight: 650; }
+  .print-title-header, .print-inline-heading { margin: 5mm 0 3mm; }
+  .print-title-header h2, .print-inline-heading { font-size: 22pt; line-height: 1.15; letter-spacing: -.025em; }
+  .print-kicker { margin-bottom: 1mm !important; font-size: 11pt; font-weight: 650; }
+  .print-copy { margin-bottom: 2mm !important; }
+  .print-scale { margin-top: 2mm !important; }
+  .print-pai-row, .print-map-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 4mm;
+    margin-block: 2mm 4mm;
+  }
+  .print-pai-card, .print-map-group { border-top: 1px solid var(--print-gold); padding-top: 2mm; break-inside: avoid; }
+  .print-pai-card-top, .print-bar-label { display: flex; justify-content: space-between; align-items: baseline; gap: 2mm; }
+  .print-pai-card-top strong { font-size: 17pt; line-height: 1.1; }
+  .print-pai-card em { color: var(--print-muted); font-size: 8.5pt; }
+  .print-pai-card p { margin-top: 1.2mm; color: var(--print-muted); font-size: 8.5pt; }
+  .print-bar-track { height: 1mm; margin-block: 1mm; background: #ddd9cf; }
+  .print-bar-fill { height: 100%; background: #527062; }
+  .print-reading-note, .print-wide-next-step { margin: 2mm 0; }
+  .print-disclaimer-small { margin-top: 3mm !important; padding-top: 2mm; border-top: 1px solid var(--print-line); color: var(--print-muted); font-size: 8.5pt; }
+  .print-profile-layout { display: grid; grid-template-columns: minmax(0,1.13fr) minmax(0,.87fr); gap: 6mm; }
+  .print-profile-main strong, .print-route-card strong { display: block; margin-block: 1mm; }
+  .print-key-fact { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 2mm; }
+  .print-notes { margin-top: 3mm !important; }
+  .print-notes li + li { margin-top: 1mm; }
+  .print-alert-panel h3, .print-map-group h3 { font-size: 12pt; margin-bottom: 2mm; }
+  .print-alert-list { display: grid; gap: 2mm; }
+  .print-alert-list li { break-inside: avoid; padding: 2mm 0; border-bottom: 1px solid var(--print-line); }
+  .print-alert-list li > span { display: block; margin-bottom: .5mm; color: var(--print-gold); font-size: 8.5pt; font-weight: 650; }
+  .print-bar-row { margin-top: 2.2mm; font-size: 8.5pt; }
+  .print-route-card { margin-top: 4mm; }
+  .print-route-card em { display: block; font-size: 8.5pt; }
+  .print-footer { margin-top: 3mm; font-size: 8.5pt; color: var(--print-muted); }
+}

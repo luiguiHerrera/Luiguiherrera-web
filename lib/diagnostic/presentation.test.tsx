@@ -18,10 +18,12 @@ for (const locale of ["es", "en"] as const) {
     const html = renderToStaticMarkup(<DiagnosticFlow locale={locale} />);
     for (const mode of ["quick", "complete"] as const) {
       const counts = getQuestionCounts(mode);
-      assert.ok(html.includes(counts.base + " base · " + (locale === "es" ? "hasta " : "up to ") + counts.maximum));
+      assert.ok(html.includes(counts.base + (locale === "es" ? " preguntas, hasta " : " questions, up to ") + counts.maximum));
     }
     assert.doesNotMatch(html, /29 (preguntas|base)|45-55 base/);
     assert.doesNotMatch(html, /7-10|15-20/);
+    assert.match(html, /20–30 min/);
+    assert.match(html, /40–60 min/);
     assert.match(html, locale === "es" ? /Responde a tu ritmo/ : /Answer at your own pace/);
     assert.match(html, locale === "es" ? /No determina ni certifica tu perfil inversor/ : /does not determine or certify your investor profile/);
     assert.match(html, locale === "es" ? /entidad legalmente autorizada/ : /firm legally authorized/);

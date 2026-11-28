@@ -1,11 +1,12 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import Link from "next/link";
 import { DisclaimerBox } from "@/components/ui/DisclaimerBox";
+import { DiagnosticReadingGuide } from "./DiagnosticReadingGuide";
 import { DiagnosticPrintableReport } from "@/components/diagnostic/DiagnosticPrintableReport";
 import { DiagnosticReportActions } from "@/components/diagnostic/DiagnosticReportActions";
-import { ProgressBar } from "@/components/ui/ProgressBar";
+import styles from "./diagnostic.module.css";
 import { diagnosticProgress, isAnswered, updateDiagnosticAnswer, validateDiagnosticAnswers } from "@/lib/diagnostic/answers";
 import { getQuestionCounts, getQuestionsForMode } from "@/lib/diagnostic/questions";
 import { scoreDiagnostic } from "@/lib/diagnostic/scoring";
@@ -262,12 +263,6 @@ function paiStatus(score: number, locale: DiagnosticLocale) {
   return locale === "es" ? "Zona de atención" : "Attention zone";
 }
 
-function paiLightClass(light: ReadinessLight) {
-  if (light === "green") return "border-[#6f8f7b] bg-[#eef3f2] text-[#2f5f48]";
-  if (light === "yellow") return "border-brass/60 bg-[#f7f1df] text-[#7a5a18]";
-  return "border-[#b66a5d] bg-[#f8e9e6] text-[#8a3f35]";
-}
-
 function localText(locale: DiagnosticLocale, text: { es: string; en: string }) {
   return text[locale];
 }
@@ -396,52 +391,92 @@ function routeHref(locale: DiagnosticLocale, href: string) {
   return href;
 }
 
-function ModeCard({ active, description, duration, onClick, questions, title }: { active: boolean; description: string; duration?: string; onClick: () => void; questions: string; title: string }) {
+function ModeCard({ active, description, duration, onClick, questions, title }: {
+  active: boolean; description: string; duration: string; onClick: () => void; questions: string; title: string;
+}) {
   return (
-    <button type="button" onClick={onClick} className={`estate-card border p-5 text-left transition md:p-6 ${active ? "border-petrol bg-[#eef3f2]" : "border-line hover:border-ink"}`}>
-      <h3 className="text-xl font-semibold text-ink">{title}</h3>
-      <p className="mt-3 text-sm leading-6 text-muted">{description}</p>
-      <p className="mt-5 border-t border-line pt-4 text-sm font-semibold text-ink">{questions}</p>
-      {duration ? <p className="mt-2 text-xs text-muted">{duration}</p> : null}
+    <button type="button" aria-pressed={active} onClick={onClick} className={styles.modeCard}>
+      <span className={styles.choiceMark} aria-hidden="true" />
+      <span className={styles.modeTitle}>{title}</span>
+      <span className={styles.modeDescription}>{description}</span>
+      <span className={styles.modeMeta}><strong>{questions}</strong><span>{duration}</span></span>
     </button>
   );
 }
 
-function StartScreen({ locale, mode, setMode, start }: { locale: DiagnosticLocale; mode: DiagnosticMode | undefined; setMode: (mode: DiagnosticMode) => void; start: () => void }) {
+function StartScreen({ locale, mode, setMode, start }: {
+  locale: DiagnosticLocale; mode?: DiagnosticMode; setMode: (mode: DiagnosticMode) => void; start: () => void;
+}) {
   const text = copy[locale];
-  const canStart = Boolean(mode);
-  const countLabel = (depth: DiagnosticMode) => {
-    const counts = getQuestionCounts(depth);
-    if (depth === "quick") return locale === "es" ? counts.base + " preguntas, hasta " + counts.maximum + " con adaptativas" : counts.base + " questions, up to " + counts.maximum + " with adaptive questions";
-    return locale === "es" ? counts.base + " preguntas, hasta " + counts.maximum + " con adaptativas" : counts.base + " questions, up to " + counts.maximum + " with adaptive questions";
-  };
-  const quickDuration = locale === "es" ? "Tiempo estimado: 20–30 min" : "Estimated time: 20–30 min";
-  const fullDuration = locale === "es" ? "Tiempo estimado: 40–60 min" : "Estimated time: 40–60 min";
+  const modes = [
+    { id: "quick", title: text.quickTitle, description: text.quickDescription, minutes: "20–30" },
+    { id: "complete", title: text.fullTitle, description: text.fullDescription, minutes: "40–60" },
+  ] as const;
   return (
-    <section className="warm-section border border-line p-5 md:p-7">
-      <div className="grid gap-8 lg:grid-cols-[0.74fr_1.26fr] lg:items-start">
-        <div>
-          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-brass">{text.chooseDepth}</p>
-          <h2 className="mt-3 text-2xl font-semibold leading-tight text-ink md:text-3xl">{text.depthTitle}</h2>
-          <p className="mt-4 text-sm leading-7 text-muted">{text.startDescription}</p>
-          <p className="mt-4 text-sm leading-7 text-muted">{text.pace}</p>
-        </div>
-        <div className="grid gap-4 md:grid-cols-2">
-          <ModeCard active={mode === "quick"} description={text.quickDescription} duration={quickDuration} onClick={() => setMode("quick")} questions={countLabel("quick")} title={text.quickTitle} />
-          <ModeCard active={mode === "complete"} description={text.fullDescription} duration={fullDuration} onClick={() => setMode("complete")} questions={countLabel("complete")} title={text.fullTitle} />
-        </div>
+    <section className={styles.start} aria-labelledby="diagnostic-depth">
+      <div className={styles.startCopy}>
+        <p className={styles.eyebrow}>{text.chooseDepth}</p>
+        <h2 id="diagnostic-depth" tabIndex={-1} className={styles.sectionTitle}>{text.depthTitle}</h2>
+        <p>{text.startDescription}</p>
+        <p>{text.pace}</p>
       </div>
-      <div className="mt-8 flex flex-col gap-4 border-t border-line pt-6 md:flex-row md:items-center md:justify-between">
-        <div className="max-w-3xl">
-          <p className="text-sm leading-6 text-ink">{text.educationalNotice}</p>
-          <p className="mt-3 text-xs leading-5 text-muted">{text.storageNote}</p>
+      <div className={styles.modeGrid}>
+        {modes.map(({ id, title, description, minutes }) => {
+          const { base, maximum } = getQuestionCounts(id);
+          const questions = locale === "es"
+            ? `${base} preguntas, hasta ${maximum} con adaptativas`
+            : `${base} questions, up to ${maximum} with adaptive questions`;
+          const duration = locale === "es" ? `Tiempo estimado: ${minutes} min` : `Estimated time: ${minutes} min`;
+          return <ModeCard key={id} active={mode === id} title={title} description={description} questions={questions} duration={duration} onClick={() => setMode(id)} />;
+        })}
+      </div>
+      <div className={styles.startFooter}>
+        <div>
+          <p>{text.educationalNotice}</p>
+          <p>{text.storageNote}</p>
         </div>
-        <button type="button" onClick={start} disabled={!canStart} className="w-fit border border-ink bg-ink px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-panel hover:text-ink disabled:cursor-not-allowed disabled:opacity-35">{text.start}</button>
+        <button type="button" onClick={start} disabled={!mode} className={styles.primary}>{text.start}</button>
       </div>
     </section>
   );
 }
 
+// These are the figures already used in the corresponding prompts and their generic fallbacks.
+const scenarioChanges: Record<string, number> = {
+  loss_life_effect: -20,
+  pressure_drop: -18,
+  fast_gain: 45,
+  large_position_down_complete: -40,
+};
+const scenarioShares: Record<string, number> = { stocks_check: 60, single_position_30_complete: 30 };
+
+function ScenarioGraphic({ id, answers, locale }: { id: string; answers: DiagnosticAnswers; locale: DiagnosticLocale }) {
+  const share = scenarioShares[id];
+  const change = scenarioChanges[id];
+  const amount = referenceAmount(answers);
+  if (share !== undefined) {
+    const label = `${share}%`;
+    return (
+      <div className={styles.scenarioShare} aria-hidden="true" data-diagnostic-scenario={id}>
+        <span className={styles.scenarioTrack}><span style={{ width: share + "%" }} /></span><strong>{label}</strong>
+      </div>
+    );
+  }
+  if (change === undefined) return null;
+  if (!amount || id === "large_position_down_complete") {
+    return <div className={styles.scenarioDelta} aria-hidden="true" data-diagnostic-scenario={id}>{change > 0 ? "+" : "−"}{Math.abs(change)}%</div>;
+  }
+  const ratio = (100 + change) / 100;
+  const after = amount * ratio;
+  const scale = Math.max(1, ratio);
+  return (
+    <div className={styles.scenarioLevels} aria-hidden="true" data-diagnostic-scenario={id}>
+      {[[amount, 1], [after, ratio]].map(([figure, fraction]) => (
+        <div key={figure}><span className={styles.scenarioTrack}><span style={{ width: fraction / scale * 100 + "%" }} /></span><strong>{formatMoney(locale, figure)}</strong></div>
+      ))}
+    </div>
+  );
+}
 
 function QuestionScreen({ answer, answers, currentIndex, locale, mode, onAnswer, onBack, onNext, question, total }: {
   answer: string | string[] | undefined;
@@ -457,88 +492,102 @@ function QuestionScreen({ answer, answers, currentIndex, locale, mode, onAnswer,
 }) {
   const text = copy[locale];
   const answered = isAnswered(question, answer);
-  const progress = diagnosticProgress(answers, mode).percent;
+  const { percent } = diagnosticProgress(answers, mode);
+  const progress = Math.round(percent);
   const selectedIds = Array.isArray(answer) ? answer : answer ? [answer] : [];
   const heading = useRef<HTMLHeadingElement>(null);
+
   useEffect(() => {
     heading.current?.focus({ preventScroll: true });
-    heading.current?.scrollIntoView({ block: "start", behavior: "auto" });
+    heading.current?.closest("section")?.scrollIntoView({ block: "start", behavior: "instant" });
   }, [question.id]);
 
   return (
-    <section className="technical-surface border border-petrol/20 p-5 md:p-8" data-diagnostic-question={question.id}>
-      <div className="grid gap-6 lg:grid-cols-[0.72fr_0.28fr] lg:items-start">
+    <section className={styles.question} data-diagnostic-question={question.id}>
+      <div className={styles.questionProgress}>
         <div>
-          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-brass">{mode === "quick" ? text.quickTitle : text.fullTitle}</p>
-          <p className="mt-4 text-sm font-semibold text-muted">{text.question} {currentIndex + 1} {text.questionOf} {total}</p>
+          <p className={styles.eyebrow}>{mode === "quick" ? text.quickTitle : text.fullTitle}</p>
+          <p>{text.question} {currentIndex + 1} {text.questionOf} {total}</p>
         </div>
         <div>
-          <div className="mb-2 flex justify-between text-xs text-muted"><span>{text.progress}</span><span>{Math.round(progress)}%</span></div>
-          <ProgressBar value={progress} />
-          <p className="mt-2 text-xs leading-5 text-muted">{locale === "es" ? "El total se ajusta a los productos seleccionados." : "The total adjusts to the products selected."}</p>
+          <p><span>{text.progress}</span> <strong>{progress}%</strong></p>
+          <progress aria-label={text.progress} max={100} value={percent} />
         </div>
+        <p className={styles.progressNote}>{locale === "es" ? "El total se ajusta a los productos seleccionados." : "The total adjusts to the products selected."}</p>
       </div>
-
-      <div className="mt-8 max-w-4xl">
-        <h2 ref={heading} tabIndex={-1} className="scroll-mt-24 text-2xl font-semibold leading-tight text-ink md:text-4xl">{renderQuestionText(question, locale, answers, localText(locale, question.prompt))}</h2>
-        <p className="mt-5 max-w-2xl text-base leading-7 text-muted">{getQuestionHint(question, locale)}</p>
-      </div>
-
-      <div className="mt-8 grid gap-3">
-        {question.options.map((option, index) => {
-          const active = selectedIds.includes(option.id);
-          return (
-            <button key={option.id} type="button" aria-pressed={active} data-option-id={option.id} onClick={() => onAnswer(question, option.id)} className={`group grid gap-2 border px-5 py-4 text-left transition md:grid-cols-[2.25rem_1fr] md:items-start ${active ? "border-petrol bg-[#eef3f2] text-ink" : "border-line bg-panelSoft text-muted hover:border-ink hover:text-ink"}`}>
-              <span className={`flex h-8 w-8 items-center justify-center border text-sm font-semibold ${active ? "border-petrol text-petrol" : "border-line text-muted group-hover:border-ink group-hover:text-ink"}`}>
-                {question.multi && active ? "✓" : index + 1}
-              </span>
+      <div key={question.id} className={styles.questionBody}>
+        <h1 id="diagnostic-question" ref={heading} tabIndex={-1}>{renderQuestionText(question, locale, answers, localText(locale, question.prompt))}</h1>
+        <p className={styles.questionHint}>{getQuestionHint(question, locale)}</p>
+        <ScenarioGraphic id={question.id} answers={answers} locale={locale} />
+        <div className={styles.options} role="group" aria-labelledby="diagnostic-question">
+          {question.options.map((option) => (
+            <button key={option.id} type="button" aria-pressed={selectedIds.includes(option.id)} data-option-id={option.id} data-multi={question.multi || undefined} onClick={() => onAnswer(question, option.id)} className={styles.option}>
+              <span className={styles.choiceMark} aria-hidden="true" />
               <span>
-                <span className="block font-semibold leading-6">{localText(locale, option.label)}</span>
-                {option.detail ? <span className="mt-1 block text-sm leading-6 text-muted">{localText(locale, option.detail)}</span> : null}
+                <span className={styles.optionLabel}>{localText(locale, option.label)}</span>
+                {option.detail ? <span className={styles.optionDetail}>{localText(locale, option.detail)}</span> : null}
               </span>
             </button>
-          );
-        })}
-      </div>
-
-      <div className="mt-8 flex flex-col-reverse justify-between gap-3 sm:flex-row">
-        <button type="button" onClick={onBack} className="border border-line bg-panel px-4 py-2.5 text-sm font-medium text-muted transition hover:border-ink hover:text-ink">{text.back}</button>
-        <button type="button" onClick={onNext} disabled={!answered} className="border border-ink bg-ink px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-panel hover:text-ink disabled:cursor-not-allowed disabled:opacity-35">
-          {currentIndex === total - 1 ? text.seeResult : text.continue}
-        </button>
+          ))}
+        </div>
+        <div className={styles.questionNav}>
+          <button type="button" onClick={onBack} className={styles.secondary}>{text.back}</button>
+          <button type="button" onClick={onNext} disabled={!answered} className={styles.primary}>
+            {currentIndex === total - 1 ? text.seeResult : text.continue}
+          </button>
+        </div>
       </div>
     </section>
   );
 }
 
 function ScoreBar({ description, label, value }: { description: string; label: string; value: number }) {
-  const accessibleLabel = `${label}: ${value}. ${description}`;
   return (
-    <div className="group relative border border-line bg-panelSoft p-3" aria-label={accessibleLabel} tabIndex={0}>
-      <div className="flex items-center justify-between gap-3">
-        <div className="flex min-w-0 items-center gap-2">
-          <p className="text-xs font-semibold uppercase tracking-[0.12em] text-muted">{label}</p>
-          <span aria-hidden="true" className="flex h-5 w-5 shrink-0 items-center justify-center border border-line bg-panel text-[0.7rem] font-semibold text-muted">?</span>
-        </div>
-        <p className="text-sm font-semibold text-ink">{value}</p>
-      </div>
-      <div className="mt-3 h-1.5 bg-panel"><div className="h-1.5 bg-[#6f8f7b]" style={{ width: `${value}%` }} /></div>
-      <div className="pointer-events-none absolute left-3 right-3 top-10 z-20 hidden border border-line bg-panel p-3 text-xs leading-5 text-muted shadow-sm md:group-hover:block md:group-focus:block md:group-focus-within:block">
-        {description}
-      </div>
-      <p className="mt-2 text-xs leading-5 text-muted md:hidden">{description}</p>
+    <div className={styles.scoreRow}>
+      <p><strong>{label}</strong><span>{value}</span></p>
+      <div className={styles.scoreTrack} aria-hidden="true"><span style={{ width: value + "%" }} /></div>
+      <p className={styles.scoreDescription}>{description}</p>
     </div>
   );
 }
 
+function ResultDetail({ title, children, count }: { title: string; children: ReactNode; count?: number }) {
+  return (
+    <details className={styles.detail}>
+      <summary><span>{title}</span>{count !== undefined ? <span className={styles.detailCount}>{count}</span> : null}</summary>
+      <div className={styles.detailBody}>{children}</div>
+    </details>
+  );
+}
+
+const scopeLabels = {
+  general: { es: "Base financiera general", en: "General financial base" },
+  capital: { es: "Capital evaluado", en: "Capital assessed" },
+  product: { es: "Producto", en: "Product" },
+  learning: { es: "Aprendizaje", en: "Learning" },
+};
+
+function ConstraintList({ items, locale }: { items: ReturnType<typeof scoreDiagnostic>["constraints"]; locale: DiagnosticLocale }) {
+  return (
+    <ul className={styles.readingList}>
+      {items.map((item) => (
+        <li key={item.id} data-constraint={item.id}>
+          <strong>{item.label} · {scopeLabels[item.scope][locale]}</strong>
+          <p>{item.note}</p>
+        </li>
+      ))}
+    </ul>
+  );
+}
+
 function ResultScreen({ answers, locale, mode, restart, review }: { answers: DiagnosticAnswers; locale: DiagnosticLocale; mode: DiagnosticMode; restart: () => void; review: () => void }) {
-  const result = useMemo(() => scoreDiagnostic(answers, mode, locale), [answers, locale, mode]);
+  const result = useMemo(() => scoreDiagnostic(answers, mode, locale), [answers, mode, locale]);
   const generatedAt = useMemo(() => new Date(), []);
   const text = copy[locale];
   const heading = useRef<HTMLHeadingElement>(null);
   useEffect(() => {
     heading.current?.focus({ preventScroll: true });
-    heading.current?.scrollIntoView({ block: "start", behavior: "auto" });
+    heading.current?.scrollIntoView({ block: "start", behavior: "instant" });
   }, []);
   const scoreEntries = Object.entries(result.scores) as Array<[DiagnosticScoreKey, number]>;
   const paiMatrix: Array<[PaiDimension, number]> = [
@@ -546,150 +595,135 @@ function ResultScreen({ answers, locale, mode, restart, review }: { answers: Dia
     ["administrar", result.paiReadiness.administrarScore],
     ["invertir", result.paiReadiness.invertirScore],
   ];
+  const priorities = result.constraints.filter((item) => item.severity === "priority");
+  const scale = locale === "es" ? "Índices orientativos · 0 a 100" : "Indicative indices · 0 to 100";
+  const methodTitle = locale === "es" ? "Metodología" : "Methodology";
+  const firstAlert = result.alerts[0];
 
   return (
     <>
-    <div className="no-print grid gap-6 xl:grid-cols-[1.05fr_0.95fr]" data-diagnostic-result={mode}>
-      <section className="border border-line bg-panel p-5 md:p-7">
-        <div className="flex flex-col gap-5 border-b border-line pb-6 md:flex-row md:items-start md:justify-between">
-          <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-brass">{text.result}</p>
-            <h2 ref={heading} tabIndex={-1} className="mt-3 scroll-mt-24 text-2xl font-semibold leading-tight text-ink md:text-3xl">{text.readings}</h2>
-            <p className="mt-4 max-w-2xl text-sm leading-7 text-muted">{result.summary}</p>
-            <p className="mt-3 max-w-2xl text-sm leading-7 text-muted">{result.methodologyNote}</p>
-          </div>
-        </div>
+      <div className={`no-print ${styles.results}`} data-diagnostic-result={mode}>
+        <header className={styles.resultHeader}>
+          <p className={styles.eyebrow}>{text.result}</p>
+          <h1 ref={heading} tabIndex={-1}>{text.readings}</h1>
+          <p>{result.summary}</p>
+        </header>
 
-        <div className="mt-6 border border-line bg-panelSoft p-5">
-          <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
-            <div>
-              <h3 className="text-xl font-semibold text-ink">{text.pai}</h3>
-              <p className="mt-2 max-w-3xl text-sm leading-6 text-muted">{text.paiPrudence}</p>
-            </div>
-            <span data-readiness-light={result.paiReadiness.light} className={`w-fit border px-3 py-1.5 text-xs font-semibold uppercase tracking-[0.12em] ${paiLightClass(result.paiReadiness.light)}`}>
-              {paiLightLabels[result.paiReadiness.light][locale]}
-            </span>
-          </div>
-
-          <div className="mt-5 grid gap-4 md:grid-cols-3">
-            <div className="border border-line bg-panel p-4">
-              <p className="text-xs uppercase tracking-[0.14em] text-muted">{text.paiStage}</p>
-              <p className="mt-2 text-2xl font-semibold text-ink">{paiStageLabels[result.paiReadiness.stage][locale]}</p>
-              <p className="mt-2 text-sm leading-6 text-muted">{paiStageDescriptions[result.paiReadiness.stage][locale]}</p>
-            </div>
-            <div className="border border-line bg-panel p-4">
-              <p className="text-xs uppercase tracking-[0.14em] text-muted">{text.paiLight}</p>
-              <p className="mt-2 text-2xl font-semibold text-ink">{paiLightLabels[result.paiReadiness.light][locale]}</p>
-            </div>
-            <div className="border border-line bg-panel p-4">
-              <p className="text-xs uppercase tracking-[0.14em] text-muted">{text.paiWeakness}</p>
-              <p className="mt-2 text-2xl font-semibold text-ink">{paiWeaknessLabels[result.paiReadiness.mainWeakness][locale]}</p>
+        <section className={styles.readiness} aria-labelledby="diagnostic-readiness">
+          <div className={styles.readinessHead}>
+            <div><h2 id="diagnostic-readiness" className={styles.sectionTitle}>{text.pai}</h2><p>{text.paiPrudence}</p></div>
+            <div className={styles.signal} data-readiness-light={result.paiReadiness.light}>
+              <span className={styles.signalDot} aria-hidden="true" />
+              <div><p className={styles.eyebrow}>{text.paiLight}</p><strong>{paiLightLabels[result.paiReadiness.light][locale]}</strong></div>
             </div>
           </div>
-
-          <div className="mt-4 grid gap-3 md:grid-cols-3">
+          <dl className={styles.readinessFacts}>
+            <div><dt>{text.paiStage}</dt><dd>{paiStageLabels[result.paiReadiness.stage][locale]}</dd><dd>{paiStageDescriptions[result.paiReadiness.stage][locale]}</dd></div>
+            <div><dt>{text.paiWeakness}</dt><dd>{paiWeaknessLabels[result.paiReadiness.mainWeakness][locale]}</dd></div>
+          </dl>
+          <p className={styles.eyebrow}>{scale}</p>
+          <div className={styles.scoreGrid}>
             {paiMatrix.map(([dimension, score]) => (
-              <div key={dimension} className="border border-line bg-panel p-4">
-                <div className="flex items-center justify-between gap-3">
-                  <p className="font-semibold text-ink">{paiDimensionLabels[dimension][locale]}</p>
-                  <p className="text-sm font-semibold text-muted">{score}</p>
-                </div>
-                <div className="mt-3 h-1.5 bg-panelSoft"><div className="h-1.5 bg-[#6f8f7b]" style={{ width: `${score}%` }} /></div>
-                <p className="mt-3 text-sm font-semibold text-muted">{dimension === "invertir" && result.paiReadiness.light !== "green" ? (locale === "es" ? "Consulta las limitaciones; el índice no las elimina." : "Review the limitations; the index does not remove them.") : paiStatus(score, locale)}</p>
-              </div>
+              <ScoreBar key={dimension} value={score} label={paiDimensionLabels[dimension][locale]} description={dimension === "invertir" && result.paiReadiness.light !== "green" ? (locale === "es" ? "Consulta las limitaciones; el índice no las elimina." : "Review the limitations; the index does not remove them.") : paiStatus(score, locale)} />
             ))}
           </div>
-
-          <div className="mt-4 border-l border-brass/60 pl-4">
-            <p className="text-xs font-semibold uppercase tracking-[0.14em] text-muted">{text.paiNextStep}</p>
-            <p className="mt-2 text-sm leading-6 text-ink">{result.paiReadiness.nextEducationalStep}</p>
-            {result.paiReadiness.baseLimitNote ? <p className="mt-2 text-sm leading-6 text-muted">{result.paiReadiness.baseLimitNote}</p> : null}
-          </div>
-        </div>
-
-        <div className="mt-6 grid gap-4 md:grid-cols-3">
-          <div className="border border-line bg-panelSoft p-4"><p className="text-xs uppercase tracking-[0.14em] text-muted">{text.declared}</p><p className="mt-2 text-xl font-semibold text-ink">{resultText(locale, result.declaredProfile)}</p><p className="mt-2 text-sm leading-6 text-muted">{result.declaredLoss}</p></div>
-          <div className="border border-line bg-panelSoft p-4"><p className="text-xs uppercase tracking-[0.14em] text-muted">{text.pressure}</p><p className="mt-2 text-xl font-semibold text-ink">{resultText(locale, result.pressureProfile)}</p></div>
-          <div className="border border-line bg-panelSoft p-4"><p className="text-xs uppercase tracking-[0.14em] text-muted">{text.complexity}</p><p className="mt-2 text-xl font-semibold text-ink">{complexityText(locale, result)}</p><p className="mt-2 text-sm leading-6 text-muted">{text.complexityNote}</p></div>
-        </div>
-
-        <p className="mt-4 text-sm leading-7 text-muted">{result.pressureSummary}</p>
-
-        <div className="mt-6 grid gap-4 md:grid-cols-3">
-          <div className="border border-line bg-panelSoft p-4"><p className="font-semibold text-ink">{text.loss}</p><p className="mt-2 text-2xl font-semibold text-ink">{resultText(locale, result.lossCapacity.label)}</p><p className="mt-2 text-sm leading-6 text-muted">{result.lossCapacity.note}</p></div>
-          <div className="border border-line bg-panelSoft p-4"><p className="font-semibold text-ink">{text.knowledge}</p><p className="mt-2 text-2xl font-semibold text-ink">{resultText(locale, result.knowledge.label)}</p><p className="mt-2 text-sm leading-6 text-muted">{result.knowledge.note}</p></div>
-          <div className="border border-line bg-panelSoft p-4"><p className="font-semibold text-ink">{text.route}</p><Link href={routeHref(locale, result.route.href)} target="_blank" rel="noopener noreferrer" className="mt-2 inline-block text-xl font-semibold text-ink underline-offset-4 hover:underline">{resultText(locale, result.route.label)}</Link><p className="mt-2 text-sm leading-6 text-muted">{result.route.note}</p><p className="mt-2 text-xs leading-5 text-muted">{text.routeNewTab}</p></div>
-        </div>
-
-        <div className="mt-6 border border-line bg-panelSoft p-4">
-          <p className="font-semibold text-ink">{text.experience}</p>
-          <p className="mt-2 text-xl font-semibold text-ink">{resultText(locale, result.experience.label)}</p>
-          <p className="mt-2 text-sm leading-6 text-muted">{result.experience.note}</p>
-        </div>
-        {result.constraints.length > 0 ? <section className="mt-6 border border-line bg-panelSoft p-5" aria-label={text.limits}>
-          <h3 className="font-semibold text-ink">{text.limits}</h3>
-          <ul className="mt-4 space-y-4">{result.constraints.map((item) => <li key={item.id} data-constraint={item.id}>
-            <p className="font-semibold text-ink">{item.label} · {({general: {es:"Base financiera general",en:"General financial base"},capital:{es:"Capital evaluado",en:"Capital assessed"},product:{es:"Producto",en:"Product"},learning:{es:"Aprendizaje",en:"Learning"}})[item.scope][locale]}</p>
-            <p className="mt-1 text-sm leading-6 text-muted">{item.note}</p>
-          </li>)}</ul>
-        </section> : null}
-        {result.productChecks.length > 0 ? <details className="mt-6 border border-line bg-panelSoft p-5">
-          <summary className="cursor-pointer font-semibold text-ink">{text.products}</summary>
-          <p className="mt-3 text-sm leading-6 text-muted">{locale === "es" ? "Estas comprobaciones no acreditan experiencia por producto ni autorizan a utilizarlo." : "These checks do not establish experience with each product or authorize its use."}</p>
-          <ul className="mt-4 space-y-4">{result.productChecks.map((item) => <li key={item.product}>
-            <p className="font-semibold text-ink">{item.label}</p>
-            {item.response ? <p className="mt-1 text-sm leading-6 text-muted">{locale === "es" ? "Tu respuesta: " : "Your answer: "}{item.response}</p> : null}
-            <p className="mt-1 text-sm leading-6 text-muted">{item.note}</p>
-          </li>)}</ul>
-        </details> : <p className="mt-4 text-sm leading-6 text-muted">{result.complexity.note}</p>}
-
-        <div className="mt-6 border border-line bg-panelSoft p-5">
-          <h3 className="font-semibold text-ink">{text.expectation}</h3>
-          <ul className="mt-4 grid gap-3 text-sm leading-6 text-muted">
-            {result.expectationTensions.map((item) => <li key={item} className="border-l border-brass/60 pl-4">{item}</li>)}
-          </ul>
-        </div>
-
-        <div className="mt-6 border border-line bg-panelSoft p-5">
-          <h3 className="font-semibold text-ink">{text.alerts}</h3>
-          <ul className="mt-4 grid gap-3 text-sm leading-6 text-muted">
-            {result.alerts.map((alert) => <li key={alert} className="border-l border-line pl-4">{alert}</li>)}
-          </ul>
-        </div>
-      </section>
-
-      <aside className="space-y-5">
-        <DiagnosticReportActions locale={locale} result={result} />
-
-        <section className="border border-line bg-panel p-6">
-          <h3 className="text-xl font-semibold text-ink">{text.scores}</h3>
-          <div className="mt-5 grid gap-3">
-            {scoreEntries.map(([key, value]) => <ScoreBar key={key} description={scoreDescriptions[key][locale]} label={scoreLabels[key][locale]} value={value} />)}
+          <div className={styles.nextStep}>
+            <p className={styles.eyebrow}>{text.paiNextStep}</p>
+            <p>{result.paiReadiness.nextEducationalStep}</p>
+            {result.paiReadiness.baseLimitNote ? <p>{result.paiReadiness.baseLimitNote}</p> : null}
           </div>
         </section>
 
-        <section className="border border-line bg-panel p-6">
-          <h3 className="font-semibold text-ink">{text.flags}</h3>
-          <div className="mt-4 flex flex-wrap gap-2">
-            {result.flags.length ? result.flags.map((flag) => (
-              <span key={flag} className="border border-line bg-panelSoft px-2.5 py-1 text-xs font-semibold text-muted">{flagLabels[flag][locale]}</span>
-            )) : <span className="text-sm text-muted">{text.noFlags}</span>}
-          </div>
+        <div className={styles.metrics}>
+          <section>
+            <h2>{scoreLabels.financialCapacity[locale]}</h2>
+            <p className={styles.metricValue}>{result.scores.financialCapacity}<small> / 100</small></p>
+            <p><strong>{text.loss} · {resultText(locale, result.lossCapacity.label)}</strong></p>
+            <p>{result.lossCapacity.note}</p>
+          </section>
+          <section>
+            <h2>{text.declared}</h2>
+            <p className={styles.metricValue}>{resultText(locale, result.declaredProfile)}</p>
+            <p>{result.declaredLoss}</p>
+          </section>
+          <section>
+            <h2>{text.pressure}</h2>
+            <p className={styles.metricValue}>{resultText(locale, result.pressureProfile)}</p>
+            <p>{result.pressureSummary}</p>
+          </section>
+        </div>
+
+        <section className={styles.route}>
+          <h2 className={styles.eyebrow}>{text.route}</h2>
+          <Link href={routeHref(locale, result.route.href)} target="_blank" rel="noopener noreferrer">{resultText(locale, result.route.label)}</Link>
+          <p>{result.route.note}</p>
+          <p>{text.routeNewTab}</p>
         </section>
 
+        {priorities.length || firstAlert ? (
+          <section className={styles.priority} aria-labelledby="diagnostic-priority">
+            <h2 id="diagnostic-priority" className={styles.sectionTitle}>{priorities.length ? text.limits : text.alerts}</h2>
+            {priorities.length ? <ConstraintList items={priorities} locale={locale} /> : null}
+            {firstAlert ? <p>{firstAlert}</p> : null}
+          </section>
+        ) : null}
+
+        <div className={styles.resultLower}>
+          <section className={styles.detailGroup} aria-label={locale === "es" ? "Lectura en profundidad" : "Detailed reading"}>
+            <h2 className={styles.sectionTitle}>{locale === "es" ? "Lectura en profundidad" : "Detailed reading"}</h2>
+            {result.constraints.length ? <ResultDetail title={text.limits} count={result.constraints.length}><ConstraintList items={result.constraints} locale={locale} /></ResultDetail> : null}
+            <ResultDetail title={text.products} count={result.productChecks.length}>
+              <p><strong>{text.complexity} · {complexityText(locale, result)}</strong></p>
+              <p>{text.complexityNote}</p>
+              {result.productChecks.length ? <>
+                <p>{locale === "es" ? "Estas comprobaciones no acreditan experiencia por producto ni autorizan a utilizarlo." : "These checks do not establish experience with each product or authorize its use."}</p>
+                <ul className={styles.readingList}>{result.productChecks.map((item) => <li key={item.product}>
+                  <strong>{item.label}</strong>
+                  {item.response ? <p>{locale === "es" ? "Tu respuesta: " : "Your answer: "}{item.response}</p> : null}
+                  <p>{item.note}</p>
+                </li>)}</ul>
+              </> : <p>{result.complexity.note}</p>}
+            </ResultDetail>
+            <ResultDetail title={text.experience}>
+              <p><strong>{resultText(locale, result.experience.label)}</strong></p><p>{result.experience.note}</p>
+            </ResultDetail>
+            <ResultDetail title={text.expectation} count={result.expectationTensions.length}>
+              <ul className={styles.readingList}>{result.expectationTensions.map((item) => <li key={item}>{item}</li>)}</ul>
+            </ResultDetail>
+            <ResultDetail title={text.alerts} count={result.alerts.length}>
+              <ul className={styles.readingList}>{result.alerts.map((alert) => <li key={alert}>{alert}</li>)}</ul>
+              <p><strong>{text.flags}</strong></p>
+              <ul className={styles.chips}>{result.flags.length ? result.flags.map((flag) => <li key={flag}>{flagLabels[flag][locale]}</li>) : <li>{text.noFlags}</li>}</ul>
+            </ResultDetail>
+            <ResultDetail title={text.scores}>
+              <p><strong>{text.knowledge} · {resultText(locale, result.knowledge.label)}</strong></p><p>{result.knowledge.note}</p>
+              <p>{result.methodologyNote}</p>
+              <div className={styles.scoreGrid}>
+                {scoreEntries.map(([key, value]) => <ScoreBar key={key} description={scoreDescriptions[key][locale]} label={scoreLabels[key][locale]} value={value} />)}
+              </div>
+            </ResultDetail>
+            <ResultDetail title={methodTitle}>
+              <p>{result.methodologyNote}</p>
+              <DiagnosticReadingGuide locale={locale} />
+            </ResultDetail>
+          </section>
+          <aside className={styles.actions}>
+            <DiagnosticReportActions locale={locale} result={result} />
+            <p>{text.restartNote}</p>
+            <button type="button" onClick={review} className={styles.secondary}>{text.review}</button>
+            <button type="button" onClick={restart} className={styles.secondary}>{text.restart}</button>
+          </aside>
+        </div>
         <DisclaimerBox>{result.disclaimer}</DisclaimerBox>
-
-        <p className="text-sm leading-6 text-muted">{text.restartNote}</p>
-        <button type="button" onClick={review} className="w-full border border-line px-4 py-2.5 text-sm font-semibold text-ink">{text.review}</button>
-        <button type="button" onClick={restart} className="w-full border border-ink bg-ink px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-panel hover:text-ink">{text.restart}</button>
-      </aside>
-    </div>
-    <DiagnosticPrintableReport generatedAt={generatedAt} locale={locale} result={result} />
+      </div>
+      <DiagnosticPrintableReport generatedAt={generatedAt} locale={locale} result={result} />
     </>
   );
 }
 
-export function DiagnosticFlow({ initialMode, locale = "es" }: { initialMode?: DiagnosticMode; locale?: DiagnosticLocale }) {
+export function DiagnosticFlow({ initialMode, locale = "es", entryContent }: {
+  initialMode?: DiagnosticMode; locale?: DiagnosticLocale; entryContent?: ReactNode;
+}) {
   const [mode, setMode] = useState<DiagnosticMode | undefined>(initialMode);
   const [started, setStarted] = useState(Boolean(initialMode));
   const [index, setIndex] = useState(0);
@@ -698,6 +732,15 @@ export function DiagnosticFlow({ initialMode, locale = "es" }: { initialMode?: D
   const questions = useMemo(() => mode ? getQuestionsForMode(mode, answers) : [], [answers, mode]);
   const safeIndex = Math.min(index, Math.max(0, questions.length - 1));
   const question = questions[safeIndex];
+  const wasStarted = useRef(started);
+  const entryFocus = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    if (wasStarted.current && !started) {
+      const heading = entryFocus.current?.querySelector<HTMLElement>("#diagnostic-depth");
+      heading?.focus();
+    }
+    wasStarted.current = started;
+  }, [started]);
 
   function start() {
     if (!mode) return;
@@ -741,8 +784,7 @@ export function DiagnosticFlow({ initialMode, locale = "es" }: { initialMode?: D
     setIndex((current) => current + 1);
   }
 
-  if (!started) return <StartScreen locale={locale} mode={mode} setMode={setMode} start={start} />;
-  if (!mode) return <StartScreen locale={locale} mode={mode} setMode={setMode} start={start} />;
+  if (!started || !mode) return <div className="no-print" ref={entryFocus}>{entryContent}<StartScreen locale={locale} mode={mode} setMode={setMode} start={start} /></div>;
   if (completed && validateDiagnosticAnswers(answers, mode).valid) return <ResultScreen answers={answers} locale={locale} mode={mode} restart={restart} review={() => { setCompleted(false); setIndex(0); }} />;
   if (!question) return null;
 
