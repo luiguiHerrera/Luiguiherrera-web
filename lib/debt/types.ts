@@ -1,97 +1,126 @@
 export type DebtKind = "card" | "personal" | "vehicle" | "mortgage" | "education" | "other";
+export type RateType = "nominal" | "effective" | "unknown";
+export type PayoffMethod = "avalanche" | "snowball";
 
+// Monetary inputs are integer minor units. Rates are annual percentages × 10,000.
 export type DebtInput = {
-  annualRate: number;
-  balance: number;
   id: string;
-  minimumPayment: number;
-  monthlyFee: number;
   name: string;
   type: DebtKind;
+  balance: number | null;
+  annualRate: number | null;
+  rateType: RateType;
+  minimumPayment: number | null;
+  minimumIncludesFees: boolean;
+  monthlyFee: number | null;
 };
 
 export type DebtProfileInput = {
-  availableDebtPayment: number;
-  emergencyFund: number;
-  fixedMonthlyExpenses: number;
-  liquidNetWorth: number;
-  monthlyNetIncome: number;
+  availableDebtPayment: number | null;
+  emergencyFund: number | null;
+  fixedMonthlyExpenses: number | null;
+  liquidNetWorth: number | null;
+  monthlyNetIncome: number | null;
 };
 
 export type ExtraContributionInput = {
-  amount: number;
+  amount: number | null;
   id: string;
   label?: string;
-  monthNumber: number;
-};
-
-export type DebtReference = {
-  adjustedAnnualCost: number;
-  annualRate: number;
-  balance: number;
-  id: string;
-  monthlyFee: number;
-  name: string;
+  monthNumber: number | null;
 };
 
 export type DebtSummary = {
-  cashAfterDebtPlan: number;
-  debtToLiquidNetWorth: number | null;
-  debtLoadStatus: "manageable" | "attention" | "high-pressure" | "high-fragility" | "strong-alert" | "incomplete";
+  totalDebt: bigint | null;
+  monthlyMinimums: bigint | null;
+  monthlyCashAfterExpenses: bigint | null;
+  cashAfterDebtPlan: bigint | null;
+  minimumPaymentGap: bigint | null;
   emergencyFundMonths: number | null;
-  estimatedMonthlyMargin: number;
-  fixedAndMinimumsToIncome: number | null;
-  minimumPaymentGap: number;
+  debtToLiquidNetWorth: number | null;
   minimumsToIncome: number | null;
-  monthlyCashAfterExpenses: number;
-  monthlyMinimums: number;
-  payoffStatus: "extra" | "minimums-only" | "below-minimums";
+  fixedAndMinimumsToIncome: number | null;
   plannedDebtToIncomeRatio: number | null;
+  debtLoadStatus: "manageable" | "attention" | "high-pressure" | "high-fragility" | "strong-alert" | "incomplete";
+  payoffStatus: "extra" | "minimums-only" | "below-minimums" | "incomplete";
   sustainabilityStatus: "sustainable" | "tight" | "deficit" | "incomplete";
-  totalDebt: number;
   weightedAnnualCost: number | null;
 };
 
-export type DebtReading = {
-  emergencyFundLabel: string;
-  fixedAndDebtLabel: string;
-  monthlyPressureLabel: string;
-};
-
-export type PayoffMethod = "avalanche" | "snowball";
-
-export type PayoffStep = {
-  adjustedAnnualCost: number;
-  annualRate: number;
+export type DebtReference = {
   id: string;
-  initialBalance: number;
-  minimumPayment: number;
   name: string;
-  payoffMonth: number | null;
-  priorityReason: "highest-adjusted-cost" | "lowest-balance";
+  balance: bigint;
+  annualRatePercent: number | null;
+  rateType: RateType;
+  annualizedInterestAndFees: number | null;
 };
+
+export type DebtCashMovement = {
+  id: string;
+  opening: bigint;
+  interest: bigint;
+  fees: bigint;
+  minimumDue: bigint;
+  minimumShortfall: bigint;
+  ordinaryPaid: bigint;
+  extraPaid: bigint;
+  interestPaid: bigint;
+  feesPaid: bigint;
+  principalPaid: bigint;
+  closing: bigint;
+  closingPrincipal: bigint;
+  closingInterest: bigint;
+  closingFees: bigint;
+  paidOff: boolean;
+};
+
+export type ContributionTrace = {
+  id: string;
+  label?: string;
+  month: number;
+  planned: bigint;
+  applied: bigint;
+  unused: bigint;
+  outsideHorizon: bigint;
+  unsimulated: bigint;
+};
+
+export type DebtPeriod = {
+  month: number;
+  debts: DebtCashMovement[];
+  totals: Omit<DebtCashMovement, "id" | "paidOff">;
+  ordinaryAvailable: bigint;
+  ordinaryUnused: bigint;
+  extraAvailable: bigint;
+  extraUnused: bigint;
+  priorityApplied: string[];
+  contributions: ContributionTrace[];
+};
+
+export type PayoffStatus = "paid" | "no-debt" | "horizon" | "data-missing" | "invalid-input" | "range-error";
 
 export type PayoffPlan = {
-  estimatedFeeCost: number;
-  estimatedInterestCost: number;
-  estimatedTotalPayment: number;
-  extraContributionsApplied: number;
-  firstDebtName: string | null;
-  initialPrincipal: number;
   method: PayoffMethod;
+  status: PayoffStatus;
   months: number | null;
-  order: string[];
-  liquidationSequence: PayoffStep[];
-  prioritySequence: PayoffStep[];
-  sequence: PayoffStep[];
-  totalInterestAndFees: number;
-  warning: string | null;
+  ledger: DebtPeriod[];
+  initialPrincipal: bigint | null;
+  endingBalance: bigint | null;
+  netBalanceReduction: bigint | null;
+  totals: Pick<DebtCashMovement, "ordinaryPaid" | "extraPaid" | "interest" | "fees" | "interestPaid" | "feesPaid" | "principalPaid"> | null;
+  costAccrued: bigint | null;
+  totalPayoffCost: bigint | null;
+  monthsBelowMinimum: number;
+  negativeAmortizationMonths: number;
+  initialPriority: string[];
+  liquidations: Array<{ id: string; month: number }>;
+  contributions: ContributionTrace[];
 };
 
 export type DebtPlanResult = {
-  avalanche: PayoffPlan;
-  reading: DebtReading;
-  references: DebtReference[];
-  snowball: PayoffPlan;
   summary: DebtSummary;
+  references: DebtReference[];
+  avalanche: PayoffPlan;
+  snowball: PayoffPlan;
 };
