@@ -19,11 +19,11 @@ export function BudgetComposition({ segments, income, scale, label, currency, lo
   locale: BudgetLocale;
 }) {
   const es = locale === "es";
-  const total = segments.reduce((sum, segment) => sum + segment.amount, 0n);
+  const total = segments.reduce((sum, segment) => sum + segment.amount, BigInt(0));
   const max = scale ?? (total > income ? total : income);
-  const width = (amount: bigint) => max > 0n ? Number(amount) / Number(max) * 100 : 0;
+  const width = (amount: bigint) => max > BigInt(0) ? Number(amount) / Number(max) * 100 : 0;
   const remainder = income - total;
-  const remainingLabel = remainder < 0n
+  const remainingLabel = remainder < BigInt(0)
     ? es ? "Exceso sobre el ingreso" : "Over income"
     : es ? "Sin asignar" : "Unallocated";
   const incomeLabel = es ? "Ingreso de referencia" : "Income benchmark";
@@ -35,16 +35,16 @@ export function BudgetComposition({ segments, income, scale, label, currency, lo
         <strong>{formatTargetMoney(total, locale, currency)}</strong>
       </div>
       <div className={styles.bar} aria-hidden="true">
-        {segments.filter(({ amount }) => amount > 0n).map(({ label, amount, color }) => (
+        {segments.filter(({ amount }) => amount > BigInt(0)).map(({ label, amount, color }) => (
           <span key={label} style={{ width: `${width(amount)}%`, backgroundColor: color }} title={label} />
         ))}
-        {remainder > 0n ? <span className={styles.unallocated} style={{ width: `${width(remainder)}%` }} /> : null}
+        {remainder > BigInt(0) ? <span className={styles.unallocated} style={{ width: `${width(remainder)}%` }} /> : null}
         <i className={styles.incomeMarker} style={{ left: `${width(income)}%` }} />
       </div>
       <p className={styles.compositionFoot}>
         <span>{incomeLabel} · {formatTargetMoney(income, locale, currency)}</span>
-        {remainder !== 0n ? (
-          <span data-excess={remainder < 0n}>{remainingLabel} · {formatTargetMoney(remainder < 0n ? -remainder : remainder, locale, currency)}</span>
+        {remainder !== BigInt(0) ? (
+          <span data-excess={remainder < BigInt(0)}>{remainingLabel} · {formatTargetMoney(remainder < BigInt(0) ? -remainder : remainder, locale, currency)}</span>
         ) : null}
       </p>
     </div>

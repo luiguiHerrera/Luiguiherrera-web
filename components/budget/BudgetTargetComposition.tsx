@@ -22,12 +22,12 @@ export function BudgetTargetComposition({ currentTotal, currency, locale, snapsh
   }));
   const current = snapshot.comparison.map((row, index) => ({
     ...target[index],
-    amount: row.currentAmountMinor ?? 0n,
+    amount: row.currentAmountMinor ?? BigInt(0),
   }));
   current.push({
     label: es ? "Sin clasificar" : "Unclassified",
     color: budgetCompositionColors[6],
-    amount: actualTotal - current.reduce((total, item) => total + item.amount, 0n),
+    amount: actualTotal - current.reduce((total, item) => total + item.amount, BigInt(0)),
   });
 
   return (
@@ -41,7 +41,7 @@ export function BudgetTargetComposition({ currentTotal, currency, locale, snapsh
           <li key={label}><i style={{ backgroundColor: color }} /><span>{label}</span><strong>{formatTargetMoney(amount, locale, currency)}</strong></li>
         ))}
       </ul>
-      {current[6].amount > 0n ? (
+      {current[6].amount > BigInt(0) ? (
         <p className={styles.figureCaption}>{current[6].label} · {es ? "situación actual" : "current"} · {formatTargetMoney(current[6].amount, locale, currency)}</p>
       ) : null}
     </figure>

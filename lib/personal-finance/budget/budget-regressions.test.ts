@@ -69,22 +69,22 @@ function smallExpense(frequency: SmallExpense["frequency"], amountMinor = 500): 
 test("a 100% allocation preserves the €300 basics gap and the ALP gap", () => {
   const snapshot = target(budget, { ...emptyTargetAllocation, clf: 6_000, essentials: 4_000 });
   assert.equal(snapshot.status, "exact");
-  assert.equal(snapshot.totalAllocatedMinor, 300_000n);
-  assert.equal(snapshot.amounts.essentials, 120_000n);
-  assert.equal(snapshot.essentialsShortfall?.amountMinor, 30_000n);
-  assert.equal(snapshot.alpShortfall?.amountMinor, 6_000n);
+  assert.equal(snapshot.totalAllocatedMinor, BigInt(300_000));
+  assert.equal(snapshot.amounts.essentials, BigInt(120_000));
+  assert.equal(snapshot.essentialsShortfall?.amountMinor, BigInt(30_000));
+  assert.equal(snapshot.alpShortfall?.amountMinor, BigInt(6_000));
   assert.equal(snapshot.isFinalViable, false);
   const scenario = buildTargetBudgetProjectionScenario(snapshot, "EUR");
   for (const horizon of [1, 12, 60] as const) {
-    assert.equal(projectBudgetScenario(scenario, horizon).totalAllocatedMinor, 300_000n * BigInt(horizon));
+    assert.equal(projectBudgetScenario(scenario, horizon).totalAllocatedMinor, BigInt(300_000) * BigInt(horizon));
   }
 });
 
 test("surplus, deficit, under 100%, and over 100% remain available to explore", () => {
   assert.equal(calculateBudget(budget).marginMinor, 150_000);
   assert.equal(calculateBudget({ ...budget, enjoymentMinor: 200_000 }).marginMinor, -50_000);
-  assert.equal(target(budget, { ...emptyTargetAllocation, essentials: 9_000 }).remainingMinor, 30_000n);
-  assert.equal(target(budget, { ...emptyTargetAllocation, essentials: 11_000 }).excessMinor, 30_000n);
+  assert.equal(target(budget, { ...emptyTargetAllocation, essentials: 9_000 }).remainingMinor, BigInt(30_000));
+  assert.equal(target(budget, { ...emptyTargetAllocation, essentials: 11_000 }).excessMinor, BigInt(30_000));
 });
 
 test("unknown, declared-zero, and positive emergency balances stay distinct", () => {
@@ -98,14 +98,14 @@ test("unknown, declared-zero, and positive emergency balances stay distinct", ()
   assert.equal(calculateBudget({ ...reportedPositive, essentialsMinor: 0, debtPaymentsMinor: 0 }).coverageMonths, null);
   const unknown = target(budget, emptyTargetAllocation).coverage;
   assert.equal(unknown.status, "unknown-balance");
-  assert.equal(unknown.targetAmountMinor, 450_000n);
+  assert.equal(unknown.targetAmountMinor, BigInt(450_000));
   assert.equal(unknown.shortfallMinor, null);
   assert.equal(unknown.monthlyContributionMinor, null);
   const zero = target(declaredZero, emptyTargetAllocation).coverage;
   assert.equal(zero.currentCoverageBasisPoints, 0);
-  assert.equal(zero.shortfallMinor, 450_000n);
-  assert.equal(zero.monthlyContributionMinor, 37_500n);
-  assert.equal(target(reportedPositive, emptyTargetAllocation).coverage.shortfallMinor, 150_000n);
+  assert.equal(zero.shortfallMinor, BigInt(450_000));
+  assert.equal(zero.monthlyContributionMinor, BigInt(37_500));
+  assert.equal(target(reportedPositive, emptyTargetAllocation).coverage.shortfallMinor, BigInt(150_000));
 });
 
 test("daily and weekly amounts accumulate on their annual cadence before rounding", () => {
@@ -121,11 +121,11 @@ test("daily and weekly amounts accumulate on their annual cadence before roundin
   const result = calculateBudget(input);
   const allocation = classifyCurrentAllocation(currentInput(input, result), { kind: "unclassified" });
   const scenario = buildCurrentBudgetProjectionScenario({ allocation, currency: "EUR", result });
-  const expected = [[1, 17_375n], [12, 208_500n], [60, 1_042_500n]] as const;
+  const expected = [[1, BigInt(17_375)], [12, BigInt(208_500)], [60, BigInt(1_042_500)]] as const;
   for (const [horizon, recurring] of expected) {
     const projected = projectBudgetScenario(scenario, horizon);
     assert.equal(projected.undifferentiatedMinor, recurring);
-    assert.equal(projected.totalAllocatedMinor, 160_000n * BigInt(horizon) + recurring);
+    assert.equal(projected.totalAllocatedMinor, BigInt(160_000) * BigInt(horizon) + recurring);
   }
   const dailyOnly = { ...budget, smallExpenses: [daily] };
   const dailyResult = calculateBudget(dailyOnly);
@@ -134,8 +134,8 @@ test("daily and weekly amounts accumulate on their annual cadence before roundin
     currency: "EUR",
     result: dailyResult,
   });
-  assert.equal(projectBudgetScenario(dailyScenario, 12).undifferentiatedMinor, 182_500n);
-  assert.equal(projectBudgetScenario(dailyScenario, 60).undifferentiatedMinor, 912_500n);
+  assert.equal(projectBudgetScenario(dailyScenario, 12).undifferentiatedMinor, BigInt(182_500));
+  assert.equal(projectBudgetScenario(dailyScenario, 60).undifferentiatedMinor, BigInt(912_500));
 });
 
 test("annual rounding can change the allocation status in either direction", () => {
@@ -164,7 +164,7 @@ test("locale, currency precision, and the supported high-value boundary are exac
   assert.equal(calculateBudget({ ...budget, monthlyIncomeMinor: max }).monthlyIncomeMinor, max);
   assert.throws(() => calculateBudget({ ...budget, essentialsMinor: max }), RangeError);
   const high = target({ ...budget, monthlyIncomeMinor: max }, { ...emptyTargetAllocation, essentials: 60_000 });
-  assert.equal(high.amounts.essentials, BigInt(max) * 6n);
+  assert.equal(high.amounts.essentials, BigInt(max) * BigInt(6));
   assert.match(formatMoney(high.amounts.essentials, "en", "EUR"), /540,431,955,284,459\.46/);
 });
 
@@ -172,8 +172,8 @@ test("changing the budget revalues percentages while educational 50/10 remains i
   const percentages = { ...emptyTargetAllocation, essentials: 4_000, clf: 6_000 };
   const changed = target({ ...budget, essentialsMinor: 150_000, monthlyIncomeMinor: 400_000 }, percentages);
   assert.deepEqual(changed.allocation, percentages);
-  assert.equal(changed.amounts.essentials, 160_000n);
-  assert.equal(changed.essentialsShortfall?.amountMinor, 10_000n);
+  assert.equal(changed.amounts.essentials, BigInt(160_000));
+  assert.equal(changed.essentialsShortfall?.amountMinor, BigInt(10_000));
   const educational = buildEducational5010BudgetProjectionScenario(changed.incomeMinor, "EUR");
-  assert.equal(projectBudgetScenario(educational, 60).categories[0].amountMinor, 12_000_000n);
+  assert.equal(projectBudgetScenario(educational, 60).categories[0].amountMinor, BigInt(12_000_000));
 });

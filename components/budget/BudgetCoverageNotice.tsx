@@ -15,10 +15,10 @@ export function BudgetCoverageNotice({ snapshot, currency, locale, partial }: {
   const es = locale === "es";
   const basics = snapshot.essentialsShortfall;
   const alp = snapshot.alpShortfall;
-  const basicsAmount = basics?.status === "ok" ? basics.amountMinor ?? 0n : 0n;
-  const alpAmount = alp?.status === "ok" ? alp.amountMinor ?? 0n : 0n;
-  const basicsGap = basicsAmount > 0n;
-  const alpGap = alpAmount > 0n;
+  const basicsAmount = basics?.status === "ok" ? basics.amountMinor ?? BigInt(0) : BigInt(0);
+  const alpAmount = alp?.status === "ok" ? alp.amountMinor ?? BigInt(0) : BigInt(0);
+  const basicsGap = basicsAmount > BigInt(0);
+  const alpGap = alpAmount > BigInt(0);
   if (!basicsGap && !alpGap && !partial) return null;
 
   return (

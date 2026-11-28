@@ -83,7 +83,7 @@ function ScenarioBar({ currency, locale, result, scale }: {
   const targetLabels = budgetTargetCopy[locale];
   const segments = result.categories.map((category, index) => ({
     label: targetLabels.categories[category.category].name,
-    amount: category.amountMinor ?? 0n,
+    amount: category.amountMinor ?? BigInt(0),
     color: budgetCompositionColors[index],
   }));
   segments.push({
@@ -322,7 +322,7 @@ export function BudgetProjection({
     const extent = result.totalAllocatedMinor > result.accumulatedIncomeMinor
       ? result.totalAllocatedMinor : result.accumulatedIncomeMinor;
     return extent > max ? extent : max;
-  }, 0n);
+  }, BigInt(0));
   const focusContext = selectProjectionFocusContext({ horizonMonths: horizon, visible });
   const primaryScenarioId = focusContext.scenarioId;
   const primaryResult = projected[primaryScenarioId];
@@ -435,7 +435,7 @@ export function BudgetProjection({
           {allocationCategories.map((category, index) => (
             <li key={category}><i style={{ backgroundColor: budgetCompositionColors[index] }} /><span>{targetLabels.categories[category].name}</span></li>
           ))}
-          {activeScenarios.some((scenarioId) => projected[scenarioId].undifferentiatedMinor > 0n) ? (
+          {activeScenarios.some((scenarioId) => projected[scenarioId].undifferentiatedMinor > BigInt(0)) ? (
             <li><i style={{ backgroundColor: budgetCompositionColors[6] }} /><span>{labels.undifferentiated}</span></li>
           ) : null}
         </ul>

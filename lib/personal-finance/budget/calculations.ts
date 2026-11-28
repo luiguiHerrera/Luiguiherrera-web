@@ -27,14 +27,14 @@ export function monthlyNonMonthlyAmount(expense: NonMonthlyExpense) {
 
 function annualSmallExpenseAmount(expense: SmallExpense) {
   const amount = BigInt(assertSafeMinor(expense.amountMinor));
-  if (expense.frequency === "daily") return amount * 365n;
-  if (expense.frequency === "weekly") return amount * 52n;
-  if (expense.frequency === "monthly") return amount * 12n;
-  return amount * 12n * BigInt(Math.max(0, expense.timesPerMonth));
+  if (expense.frequency === "daily") return amount * BigInt(365);
+  if (expense.frequency === "weekly") return amount * BigInt(52);
+  if (expense.frequency === "monthly") return amount * BigInt(12);
+  return amount * BigInt(12) * BigInt(Math.max(0, expense.timesPerMonth));
 }
 
 function monthlyAmountFromAnnual(annualMinor: bigint) {
-  return assertSafeMinor(Number((annualMinor + 6n) / 12n));
+  return assertSafeMinor(Number((annualMinor + BigInt(6)) / BigInt(12)));
 }
 
 export function monthlySmallExpenseAmount(expense: SmallExpense) {
@@ -49,7 +49,7 @@ export function calculateBudget(input: BudgetInput): BudgetResult {
   const monthlyNonMonthlyMinor = safeSum(input.nonMonthlyExpenses.map(monthlyNonMonthlyAmount));
   const smallExpensesAnnualMinor = input.smallExpenses.reduce(
     (total, expense) => total + annualSmallExpenseAmount(expense),
-    0n,
+    BigInt(0),
   );
   const monthlySmallExpensesMinor = monthlyAmountFromAnnual(smallExpensesAnnualMinor);
   const essentialsAndDebtMinor = safeSum([input.essentialsMinor, input.debtPaymentsMinor]);

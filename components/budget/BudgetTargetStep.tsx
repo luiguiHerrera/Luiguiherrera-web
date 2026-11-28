@@ -85,7 +85,7 @@ export function BudgetTargetStep({
   const provisionalSer = parsedSer.error === null && parsedSer.basisPoints !== null
     ? splitSerGivingAmount(amounts.serAndGiving, parsedSer.basisPoints)
     : null;
-  const serGivingHasTotal = amounts.serAndGiving > 0n;
+  const serGivingHasTotal = amounts.serAndGiving > BigInt(0);
   const visibleSer = serGivingHasTotal ? provisionalSer ?? snapshot.serGivingAmounts : null;
 
   function setValidation(key: string, invalid: boolean) {

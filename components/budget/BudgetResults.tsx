@@ -77,7 +77,7 @@ export function BudgetResults({
     label: String(label),
     amount: BigInt(amount),
     color: budgetCompositionColors[index],
-  })).filter(({ amount }) => amount > 0n);
+  })).filter(({ amount }) => amount > BigInt(0));
   const fundBalance = emptyBalance
     ? es ? "Saldo sin informar" : "Balance not provided"
     : `${labels.emergencyFund} · ${formatMoney(result.emergencyFundMinor!, locale, currency)}${result.emergencyFundMinor === 0 ? es ? " (cero declarado)" : " (declared zero)" : ""}`;
