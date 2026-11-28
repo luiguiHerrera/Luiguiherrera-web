@@ -84,7 +84,8 @@
   .print-notes { margin-top: 3mm !important; }
   .print-notes li + li { margin-top: 1mm; }
   .print-alert-panel h3, .print-map-group h3 { font-size: 12pt; margin-bottom: 2mm; }
-  .print-alert-list { display: grid; gap: 2mm; }
+  .print-alert-list { display: block; }
+  .print-alert-list li + li { margin-top: 1mm; }
   .print-alert-list li { break-inside: avoid; padding: 2mm 0; border-bottom: 1px solid var(--print-line); }
   .print-alert-list li > span { display: block; margin-bottom: .5mm; color: var(--print-gold); font-size: 8.5pt; font-weight: 650; }
   .print-bar-row { margin-top: 2.2mm; font-size: 8.5pt; }
