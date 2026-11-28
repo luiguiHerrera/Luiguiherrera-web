@@ -7,10 +7,6 @@ import styles from "./diagnosticPrint.module.css";
 
 const origin = "luiguiherrera.com";
 
-function pagesOf<T>(items: T[]) {
-  return Array.from({ length: Math.ceil(items.length / 5) }, (_, index) => items.slice(index * 5, index * 5 + 5));
-}
-
 const copy = {
   es: {
     alerts: "Alertas y tensiones principales",
@@ -467,20 +463,40 @@ export function DiagnosticPrintableReport({ generatedAt, locale, result }: { gen
         <p className={styles["print-disclaimer-small"]}>{result.disclaimer}</p>
         <footer className={styles["print-footer"]}>{text.footer}</footer>
       </Page>
-      {pagesOf(alerts.slice(5)).map((items, pageIndex) => (
-        <Page key={"alerts-" + pageIndex} generatedAt={generatedAt} headerTitle={text.interiorBrief} title={text.alerts}>
-          <ul className={styles["print-alert-list"]}>{items.map((item) => <li key={item.text}><span>{item.category}</span><p>{item.text}</p></li>)}</ul>
+      {alerts.length > 5 || result.constraints.length || result.productChecks.length ? (
+        <Page generatedAt={generatedAt} headerTitle={text.interiorBrief}>
+          {alerts.length > 5 ? (
+            <section>
+              <h2 className={styles["print-inline-heading"]}>{text.alerts}</h2>
+              <ul className={styles["print-alert-list"]}>{alerts.slice(5).map((item) => (
+                <li key={item.text}><span>{item.category}</span><p>{item.text}</p></li>
+              ))}</ul>
+            </section>
+          ) : null}
+          {result.constraints.length ? (
+            <section>
+              <h2 className={styles["print-inline-heading"]}>{locale === "es" ? "Limitaciones identificadas" : "Limitations identified"}</h2>
+              <p className={styles["print-copy"]}>{result.methodologyNote}</p>
+              <ul className={styles["print-alert-list"]}>{result.constraints.map((item) => (
+                <li key={item.id}>
+                  <span>{item.label} · {({ general: { es: "Base financiera general", en: "General financial base" }, capital: { es: "Capital evaluado", en: "Capital assessed" }, product: { es: "Producto", en: "Product" }, learning: { es: "Aprendizaje", en: "Learning" } })[item.scope][locale]}</span>
+                  <p>{item.note}</p>
+                </li>
+              ))}</ul>
+              <p className={styles["print-disclaimer-small"]}>{result.disclaimer}</p>
+            </section>
+          ) : null}
+          {result.productChecks.length ? (
+            <section>
+              <h2 className={styles["print-inline-heading"]}>{locale === "es" ? "Comprobaciones por producto" : "Product-specific checks"}</h2>
+              <p className={styles["print-copy"]}>{result.experience.note}</p>
+              <ul className={styles["print-alert-list"]}>{result.productChecks.map((item) => (
+                <li key={item.product}><span>{item.label}</span><p>{item.response}</p><p>{item.note}</p></li>
+              ))}</ul>
+            </section>
+          ) : null}
         </Page>
-      ))}
-      {pagesOf(result.constraints).map((items, pageIndex) => <Page key={"limits-" + pageIndex} generatedAt={generatedAt} headerTitle={text.interiorBrief} title={locale === "es" ? "Limitaciones identificadas" : "Limitations identified"}>
-        <p className={styles["print-copy"]}>{result.methodologyNote}</p>
-        <ul className={styles["print-alert-list"]}>{items.map((item) => <li key={item.id}><span>{item.label} · {({general:{es:"Base financiera general",en:"General financial base"},capital:{es:"Capital evaluado",en:"Capital assessed"},product:{es:"Producto",en:"Product"},learning:{es:"Aprendizaje",en:"Learning"}})[item.scope][locale]}</span><p>{item.note}</p></li>)}</ul>
-        <p className={styles["print-disclaimer-small"]}>{result.disclaimer}</p>
-      </Page>)}
-      {pagesOf(result.productChecks).map((items, pageIndex) => <Page key={"products-" + pageIndex} generatedAt={generatedAt} headerTitle={text.interiorBrief} title={locale === "es" ? "Comprobaciones por producto" : "Product-specific checks"}>
-        <p className={styles["print-copy"]}>{result.experience.note}</p>
-        <ul className={styles["print-alert-list"]}>{items.map((item) => <li key={item.product}><span>{item.label}</span><div><p>{item.response}</p><p>{item.note}</p></div></li>)}</ul>
-      </Page>)}
+      ) : null}
     </article>
   );
 }
