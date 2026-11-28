@@ -31,6 +31,13 @@ export type ExtraContributionInput = {
 };
 
 export type DebtSummary = {
+  ordinaryBudget: bigint | null;
+  minimumBasis: "calendar" | "declared" | "unknown";
+  economicCapacity: "sufficient" | "insufficient" | "unknown";
+  marginAfterMinimums: bigint | null;
+  reservedMarginStatus: "compatible" | "deficit" | "unknown";
+  emergencyReserveStatus: "limited" | "at-reference" | "unknown";
+  minimumMarginStatus: "comfortable" | "tight" | "deficit" | "unknown";
   totalDebt: bigint | null;
   monthlyMinimums: bigint | null;
   monthlyCashAfterExpenses: bigint | null;
@@ -118,8 +125,42 @@ export type PayoffPlan = {
   contributions: ContributionTrace[];
 };
 
+export type DebtCashFlowView = {
+  month: number;
+  ordinaryBudget: bigint | null;
+  ordinaryApplied: bigint | null;
+  ordinaryUnused: bigint | null;
+  extraordinaryApplied: bigint | null;
+  marginReserved: bigint | null;
+  marginAfterOrdinary: bigint | null;
+};
+
+export type DebtMinimumView = {
+  ordinaryShortfall: bigint;
+  coveredByExtra: bigint;
+  closingShortfall: bigint;
+  closingShortfalls: Array<{ id: string; amount: bigint }>;
+};
+
+export type DebtPeriodView = DebtCashFlowView & DebtMinimumView;
+
+export type DebtPlanAssessment = {
+  initialCashFlow: DebtCashFlowView;
+  periods: DebtPeriodView[];
+  coverage: "covered" | "shortfalls" | "unknown" | "none";
+  coverageIsPartial: boolean;
+  ordinaryShortfallMonths: number;
+  monthsFullyMadeUpByExtra: number;
+  closingShortfallMonths: number;
+  closingShortfallTotal: bigint;
+  extraAppliedToMinimums: bigint;
+  extraAppliedTotal: bigint;
+  hypotheticalPayoff: boolean;
+};
+
 export type DebtPlanResult = {
   summary: DebtSummary;
+  assessments: Record<PayoffMethod, DebtPlanAssessment>;
   references: DebtReference[];
   avalanche: PayoffPlan;
   snowball: PayoffPlan;

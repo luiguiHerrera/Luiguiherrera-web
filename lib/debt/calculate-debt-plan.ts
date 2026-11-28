@@ -1,5 +1,6 @@
 import { contractualMinimum, simulateDebtPlan, unavailablePlan, type AmortizableDebt, type ScheduledExtra } from "./amortization.ts";
 import { monthlyInterest, monthlyRate, validateDebtInputs } from "./debt-input.ts";
+import { assessDebtPlan } from "./interpret-debt-plan.ts";
 import type { DebtInput, DebtPlanResult, DebtProfileInput, DebtReference, DebtSummary, ExtraContributionInput, PayoffPlan } from "./types.ts";
 
 const zero = BigInt(0);
@@ -49,7 +50,8 @@ function buildReferences(active: DebtInput[]): DebtReference[] {
 }
 
 function summarize(
-  profile: DebtProfileInput, totalDebt: bigint | null, monthlyMinimums: bigint | null, references: DebtReference[],
+  profile: DebtProfileInput, totalDebt: bigint | null, monthlyMinimums: bigint | null,
+  references: DebtReference[], minimumBasis: DebtSummary["minimumBasis"],
 ): DebtSummary {
   const income = asMinor(profile.monthlyNetIncome);
   const expenses = asMinor(profile.fixedMonthlyExpenses);
@@ -60,7 +62,16 @@ function summarize(
   const obligations = knownSum([expenses, monthlyMinimums]);
   const minimumsToIncome = ratio(monthlyMinimums, income);
   const emergencyFundMonths = ratio(asMinor(profile.emergencyFund), obligations);
+  const marginAfterMinimums = difference(monthlyCashAfterExpenses, monthlyMinimums);
+  const knownCapacityShortfall = (monthlyCashAfterExpenses ?? zero) < zero || (marginAfterMinimums ?? zero) < zero;
   return {
+    ordinaryBudget: budget, minimumBasis, marginAfterMinimums,
+    economicCapacity: knownCapacityShortfall ? "insufficient" : marginAfterMinimums === null ? "unknown" : "sufficient",
+    reservedMarginStatus: cashAfterDebtPlan === null ? "unknown" : cashAfterDebtPlan < zero ? "deficit" : "compatible",
+    emergencyReserveStatus: emergencyFundMonths === null ? "unknown" : emergencyFundMonths < 3 ? "limited" : "at-reference",
+    minimumMarginStatus: knownCapacityShortfall ? "deficit" :
+      marginAfterMinimums === null || income === null ? "unknown" :
+      marginAfterMinimums * BigInt(10) <= income ? "tight" : "comfortable",
     totalDebt, monthlyMinimums, monthlyCashAfterExpenses, cashAfterDebtPlan, minimumPaymentGap, emergencyFundMonths,
     debtToLiquidNetWorth: ratio(totalDebt, asMinor(profile.liquidNetWorth)),
     minimumsToIncome,
@@ -72,13 +83,20 @@ function summarize(
       minimumsToIncome >= 0.6 ? "strong-alert" :
       minimumsToIncome > 0.5 ? "high-fragility" :
       minimumsToIncome > 0.4 ? "high-pressure" : minimumsToIncome > 0.3 ? "attention" : "manageable",
-    sustainabilityStatus: cashAfterDebtPlan === null || obligations === null || income === null ? "incomplete" :
-      cashAfterDebtPlan < zero || obligations > income ? "deficit" :
+    sustainabilityStatus: knownCapacityShortfall || (cashAfterDebtPlan ?? zero) < zero ? "deficit" :
+      cashAfterDebtPlan === null || obligations === null || income === null ? "incomplete" :
       cashAfterDebtPlan * BigInt(10) <= income || (minimumsToIncome ?? 0) > 0.3 || (emergencyFundMonths !== null && emergencyFundMonths < 3)
         ? "tight" : "sustainable",
     weightedAnnualCost: totalDebt === null || totalDebt === zero || references.some(r => r.annualizedInterestAndFees === null)
       ? null
       : references.reduce((total, ref) => total + ref.annualizedInterestAndFees! * Number(ref.balance) / Number(totalDebt), 0),
+  };
+}
+
+function withAssessment(summary: DebtSummary, references: DebtReference[], avalanche: PayoffPlan, snowball: PayoffPlan): DebtPlanResult {
+  return {
+    summary, references, avalanche, snowball,
+    assessments: { avalanche: assessDebtPlan(avalanche, summary), snowball: assessDebtPlan(snowball, summary) },
   };
 }
 
@@ -88,19 +106,18 @@ export function calculateDebtPlan(
   }: { extraContributions?: ExtraContributionInput[]; invalidProjectionInput?: boolean } = {},
 ): DebtPlanResult {
   const valid = validateDebtInputs(profile, debts, extraContributions);
-  if (!valid) return {
-    summary: summarize({ availableDebtPayment: null, emergencyFund: null, fixedMonthlyExpenses: null, liquidNetWorth: null, monthlyNetIncome: null }, null, null, []),
-    references: [],
-    avalanche: unavailablePlan("avalanche", "invalid-input", null, []),
-    snowball: unavailablePlan("snowball", "invalid-input", null, []),
-  };
+  if (!valid) return withAssessment(
+    summarize({ availableDebtPayment: null, emergencyFund: null, fixedMonthlyExpenses: null, liquidNetWorth: null, monthlyNetIncome: null }, null, null, [], "unknown"),
+    [], unavailablePlan("avalanche", "invalid-input", null, []), unavailablePlan("snowball", "invalid-input", null, []),
+  );
 
   const totalDebt = knownSum(debts.map(d => asMinor(d.balance)));
   const active = debts.filter(d => d.balance !== null && d.balance > 0);
   const terms = active.map(termsFromDebt);
   const monthlyMinimums = totalDebt === null ? null : knownSum(active.map((d, i) => declaredMinimum(d, terms[i])));
   const references = buildReferences(active);
-  const summary = summarize(profile, totalDebt, monthlyMinimums, references);
+  const minimumBasis = monthlyMinimums === null ? "unknown" : terms.some(term => term === null) ? "declared" : "calendar";
+  const summary = summarize(profile, totalDebt, monthlyMinimums, references, minimumBasis);
   const extras: ScheduledExtra[] = extraContributions.flatMap(e => (
     e.amount === null || e.monthNumber === null ? [] : [{ id: e.id, label: e.label, month: e.monthNumber, planned: BigInt(e.amount) }]
   ));
@@ -110,7 +127,7 @@ export function calculateDebtPlan(
   const build = (method: "avalanche" | "snowball") => missing || invalidProjectionInput
     ? unavailablePlan(method, invalidProjectionInput ? "invalid-input" : "data-missing", totalDebt, extras)
     : simulateDebtPlan(method, terms as AmortizableDebt[], BigInt(profile.availableDebtPayment ?? 0), extras);
-  return { summary, references, avalanche: build("avalanche"), snowball: build("snowball") };
+  return withAssessment(summary, references, build("avalanche"), build("snowball"));
 }
 
 export function compareDebtScenarios(reference: PayoffPlan, alternative: PayoffPlan) {

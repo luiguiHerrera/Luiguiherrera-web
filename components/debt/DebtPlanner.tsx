@@ -7,7 +7,7 @@ import type { DebtInput, DebtKind, DebtProfileInput, ExtraContributionInput, Pay
 import { supportedCurrencies, type BudgetCurrency, type BudgetLocale as Locale } from "@/lib/personal-finance/budget/types";
 import { formatMoney } from "@/lib/personal-finance/budget/validation";
 import { DebtField, Metric, fieldClass, fieldLabelClass } from "./DebtFields";
-import { formatDebtNumber, MethodDifference, PlanCard, ScenarioDifference, ScenarioFlags } from "./DebtPlanResults";
+import { formatDebtNumber, MethodDifference, PlanCard, ScenarioDifference, ScenarioReading, PlanOutcome } from "./DebtPlanResults";
 import { debtCopy } from "./debt-copy";
 
 const debtTypes: Array<{ label: Record<Locale, string>; value: DebtKind }> = [
@@ -147,10 +147,9 @@ export function DebtPlanner({ locale }: { locale: Locale }) {
   const format = (value: bigint | number | null) => value === null ? "—" : formatMoney(value, locale, currency);
   const pct = (value: number | null) => formatDebtNumber(value, locale, "percent");
   const annual = (value: number | null) => pct(value === null ? null : value / 100);
-  const trace = viewedResult[method].contributions.length > 0
-    ? viewedResult[method].contributions
-    : model.scenarioResults.extrasOnly?.[method].contributions ?? [];
-  const traceScenario = viewedResult[method].contributions.length > 0 ? effectiveScenario : "extrasOnly";
+  const traceScenario = effectiveScenario === "combined" ? "combined" : "extrasOnly";
+  const traceResult = model.scenarioResults[traceScenario];
+  const trace = traceResult?.[method].contributions ?? [];
 
   function updateDebt(key: string, patch: Partial<DebtDraft>) {
     setDebts(all => all.map(d => d.id === key ? { ...d, ...patch } : d));
@@ -244,7 +243,6 @@ export function DebtPlanner({ locale }: { locale: Locale }) {
           <Metric label={c.totalDebt} value={format(result.summary.totalDebt)} />
           <Metric label={c.totalMinimum} value={format(result.summary.monthlyMinimums)} />
           <Metric label={c.cashBefore} value={format(result.summary.monthlyCashAfterExpenses)} />
-          <Metric label={c.cashAfter} value={format(result.summary.cashAfterDebtPlan)} />
           <Metric label={c.minimumGap} value={format(result.summary.minimumPaymentGap)} />
           <Metric label={c.debtToIncome} value={pct(result.summary.minimumsToIncome)} />
           <Metric label={c.plannedToIncome} value={pct(result.summary.plannedDebtToIncomeRatio)} />
@@ -252,7 +250,7 @@ export function DebtPlanner({ locale }: { locale: Locale }) {
           <Metric label={c.debtToLiquidity} value={pct(result.summary.debtToLiquidNetWorth)} />
           <Metric label={c.coverage} value={formatDebtNumber(result.summary.emergencyFundMonths, locale)} helper={c.coverageHelp} />
         </div>
-        <ScenarioFlags summary={result.summary} locale={locale} />
+        <ScenarioReading result={result} method={method} locale={locale} money={format} />
         <p className="mt-3 text-sm text-muted">{result.summary.debtLoadStatus === "incomplete" ? c.unknown : c[result.summary.debtLoadStatus]}. {c.ratioNote}</p>
       </section>
 
@@ -300,12 +298,8 @@ export function DebtPlanner({ locale }: { locale: Locale }) {
           </label>
           <DebtField label={c[paymentMode]} locale={locale} text={paymentText} parsed={model.rangeError ? { value: null, error: "range" } : model.parsedPayment} onChange={setPaymentText} />
         </div>
-        <div className="mt-4 max-w-xs"><Metric label={c.scenarioPayment} value={format(model.alternate.availableDebtPayment)} /></div>
         {model.scenarioResults.monthlyOnly ? (
-          <>
-            <ScenarioFlags summary={model.scenarioResults.monthlyOnly.summary} locale={locale} />
-            <p className="mt-2 text-sm text-muted">{c[model.scenarioResults.monthlyOnly[method].status]}</p>
-          </>
+          <ScenarioReading result={model.scenarioResults.monthlyOnly} method={method} locale={locale} money={format} />
         ) : null}
       </section>
 
@@ -329,6 +323,7 @@ export function DebtPlanner({ locale }: { locale: Locale }) {
             </div>
           ))}
         </div>
+        {traceResult ? <PlanOutcome plan={traceResult[method]} assessment={traceResult.assessments[method]} locale={locale} money={format} /> : null}
         {trace.length ? (
           <details className="mt-4 border border-line bg-panelSoft p-3">
             <summary className="cursor-pointer font-semibold text-petrol">{c.additional} · {c[traceScenario]}</summary>
@@ -356,19 +351,17 @@ export function DebtPlanner({ locale }: { locale: Locale }) {
               <article key={key} className="min-w-0 border border-line bg-panelSoft p-3">
                 <button type="button" aria-pressed={effectiveScenario === key} className={effectiveScenario === key ? primary : secondary}
                   onClick={() => setScenario(key)}>{c[key]}</button>
-                <p className="mt-2 break-words text-sm text-muted">{c.scenarioPayment} · {format(key === "monthlyOnly" || key === "combined" ? model.alternate.availableDebtPayment : model.profile.availableDebtPayment)}</p>
-                <p className="mt-2 text-sm font-semibold text-ink">{c[simulation[method].status]}</p>
-                <ScenarioFlags summary={simulation.summary} locale={locale} />
-                <p className="mt-2 break-words text-sm text-muted">{c.cashAfter} · {format(simulation.summary.cashAfterDebtPlan)}</p>
-                <p className="mt-1 break-words text-sm text-muted">{c.minimumGap} · {format(simulation.summary.minimumPaymentGap)}</p>
-                {key !== "current" ? <ScenarioDifference reference={result[method]} alternative={simulation[method]} locale={locale} money={format} /> : null}
+                <ScenarioReading result={simulation} method={method} locale={locale} money={format} />
+                {key !== "current" ? <ScenarioDifference reference={result[method]} alternative={simulation[method]}
+                  referenceAssessment={result.assessments[method]} alternativeAssessment={simulation.assessments[method]}
+                  locale={locale} money={format} /> : null}
               </article>
             );
           })}
         </div>
         <div className="mt-5 grid gap-4 xl:grid-cols-2">
-          <PlanCard plan={viewedResult.avalanche} locale={locale} names={names} money={format} />
-          <PlanCard plan={viewedResult.snowball} locale={locale} names={names} money={format} />
+          <PlanCard plan={viewedResult.avalanche} assessment={viewedResult.assessments.avalanche} locale={locale} names={names} money={format} />
+          <PlanCard plan={viewedResult.snowball} assessment={viewedResult.assessments.snowball} locale={locale} names={names} money={format} />
         </div>
         <MethodDifference result={viewedResult} locale={locale} money={format} />
       </section>
